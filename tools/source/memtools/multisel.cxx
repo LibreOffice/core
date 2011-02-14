@@ -63,7 +63,7 @@ static void Print( const MultiSelection* pSel )
     }
     DbgOutf( "SelCount:     %4ld\n", pSel->nSelCount );
     DbgOutf( "SubCount:     %4ld\n", pSel->aSels.Count() );
-    for ( ULONG nPos = 0; nPos < pSel->aSels.Count(); ++nPos )
+    for ( sal_uIntPtr nPos = 0; nPos < pSel->aSels.Count(); ++nPos )
     {
         DbgOutf( "SubSel #%2ld:   %4ld-%4ld\n", nPos,
                  pSel->aSels.GetObject(nPos)->Min(),
@@ -93,10 +93,10 @@ void MultiSelection::ImplClear()
 
 // -----------------------------------------------------------------------
 
-ULONG MultiSelection::ImplFindSubSelection( long nIndex ) const
+sal_uIntPtr MultiSelection::ImplFindSubSelection( long nIndex ) const
 {
     // iterate through the sub selections
-    ULONG n = 0;
+    sal_uIntPtr n = 0;
     for ( ;
           n < aSels.Count() && nIndex > aSels.GetObject(n)->Max();
           ++n ) {} /* empty loop */
@@ -105,11 +105,11 @@ ULONG MultiSelection::ImplFindSubSelection( long nIndex ) const
 
 // -----------------------------------------------------------------------
 
-BOOL MultiSelection::ImplMergeSubSelections( ULONG nPos1, ULONG nPos2 )
+sal_Bool MultiSelection::ImplMergeSubSelections( sal_uIntPtr nPos1, sal_uIntPtr nPos2 )
 {
     // didn't a sub selection at nPos2 exist?
     if ( nPos2 >= aSels.Count() )
-        return FALSE;
+        return sal_False;
 
     // did the sub selections touch each other?
     if ( (aSels.GetObject(nPos1)->Max() + 1) == aSels.GetObject(nPos2)->Min() )
@@ -117,10 +117,10 @@ BOOL MultiSelection::ImplMergeSubSelections( ULONG nPos1, ULONG nPos2 )
         // merge them
         aSels.GetObject(nPos1)->Max() = aSels.GetObject(nPos2)->Max();
         delete aSels.Remove(nPos2);
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -129,8 +129,8 @@ MultiSelection::MultiSelection():
     aTotRange( 0, -1 ),
     nCurSubSel(0),
     nSelCount(0),
-    bCurValid(FALSE),
-    bSelectNew(FALSE)
+    bCurValid(sal_False),
+    bSelectNew(sal_False)
 {
 }
 
@@ -140,8 +140,8 @@ MultiSelection::MultiSelection( const UniString& rString, sal_Unicode cRange, sa
     aTotRange(0,RANGE_MAX),
     nCurSubSel(0),
     nSelCount(0),
-    bCurValid(FALSE),
-    bSelectNew(FALSE)
+    bCurValid(sal_False),
+    bSelectNew(sal_False)
 {
     // Dies ist nur ein Schnellschuss und sollte bald optimiert,
     // an die verschiedenen Systeme (UNIX etc.)
@@ -150,8 +150,8 @@ MultiSelection::MultiSelection( const UniString& rString, sal_Unicode cRange, sa
     UniString           aStr( rString );
     sal_Unicode*        pStr   = aStr.GetBufferAccess();
     sal_Unicode*        pOld = pStr;
-    BOOL                bReady = FALSE;
-    BOOL                bUntil = FALSE;
+    sal_Bool                bReady = sal_False;
+    sal_Bool                bUntil = sal_False;
     xub_StrLen          nCut   = 0;
 
     // Hier normieren wir den String, sodass nur Ziffern,
@@ -177,11 +177,11 @@ MultiSelection::MultiSelection( const UniString& rString, sal_Unicode cRange, sa
                 {
                     *pStr++ = ';';
                     nCut++;
-                    bReady = FALSE;
+                    bReady = sal_False;
                 }
                 *pStr++ = *pOld;
                 nCut++;
-                bUntil = FALSE;
+                bUntil = sal_False;
                 break;
 
             case '-':
@@ -193,12 +193,12 @@ MultiSelection::MultiSelection( const UniString& rString, sal_Unicode cRange, sa
                     {
                         *pStr++ = '-';
                         nCut++;
-                        bUntil = TRUE;
+                        bUntil = sal_True;
                     }
-                    bReady = FALSE;
+                    bReady = sal_False;
                 }
                 else
-                    bReady = TRUE;
+                    bReady = sal_True;
                 break;
 
             case ' ':
@@ -214,12 +214,12 @@ MultiSelection::MultiSelection( const UniString& rString, sal_Unicode cRange, sa
                     {
                         *pStr++ = '-';
                         nCut++;
-                        bUntil = TRUE;
+                        bUntil = sal_True;
                     }
-                    bReady = FALSE;
+                    bReady = sal_False;
                 }
                 else
-                    bReady = TRUE;
+                    bReady = sal_True;
                 break;
         }
 
@@ -233,7 +233,7 @@ MultiSelection::MultiSelection( const UniString& rString, sal_Unicode cRange, sa
     const sal_Unicode*  pCStr = aStr.GetBuffer();
     long                nPage = 1;
     long                nNum  = 1;
-    bUntil = FALSE;
+    bUntil = sal_False;
     while ( *pCStr )
     {
         switch ( *pCStr )
@@ -265,13 +265,13 @@ MultiSelection::MultiSelection( const UniString& rString, sal_Unicode cRange, sa
                     Select( nNum );
                 nPage = 0;
                 aNumStr.Erase();
-                bUntil = FALSE;
+                bUntil = sal_False;
                 break;
 
             case '-':
                 nPage = aNumStr.ToInt32();
                 aNumStr.Erase();
-                bUntil = TRUE;
+                bUntil = sal_True;
                 break;
         }
 
@@ -298,7 +298,7 @@ MultiSelection::MultiSelection( const MultiSelection& rOrig ) :
     aTotRange(rOrig.aTotRange),
     nSelCount(rOrig.nSelCount),
     bCurValid(rOrig.bCurValid),
-    bSelectNew(FALSE)
+    bSelectNew(sal_False)
 {
     if ( bCurValid )
     {
@@ -307,7 +307,7 @@ MultiSelection::MultiSelection( const MultiSelection& rOrig ) :
     }
 
     // copy the sub selections
-    for ( ULONG n = 0; n < rOrig.aSels.Count(); ++n )
+    for ( sal_uIntPtr n = 0; n < rOrig.aSels.Count(); ++n )
         aSels.Insert( new Range( *rOrig.aSels.GetObject(n) ), LIST_APPEND );
 }
 
@@ -317,8 +317,8 @@ MultiSelection::MultiSelection( const Range& rRange ):
     aTotRange(rRange),
     nCurSubSel(0),
     nSelCount(0),
-    bCurValid(FALSE),
-    bSelectNew(FALSE)
+    bCurValid(sal_False),
+    bSelectNew(sal_False)
 {
 }
 
@@ -348,7 +348,7 @@ MultiSelection& MultiSelection::operator= ( const MultiSelection& rOrig )
 
     // clear the old and copy the sub selections
     ImplClear();
-    for ( ULONG n = 0; n < rOrig.aSels.Count(); ++n )
+    for ( sal_uIntPtr n = 0; n < rOrig.aSels.Count(); ++n )
         aSels.Insert( new Range( *rOrig.aSels.GetObject(n) ), LIST_APPEND );
     nSelCount = rOrig.nSelCount;
 
@@ -357,24 +357,24 @@ MultiSelection& MultiSelection::operator= ( const MultiSelection& rOrig )
 
 // -----------------------------------------------------------------------
 
-BOOL MultiSelection::operator== ( MultiSelection& rWith )
+sal_Bool MultiSelection::operator== ( MultiSelection& rWith )
 {
     if ( aTotRange != rWith.aTotRange || nSelCount != rWith.nSelCount ||
          aSels.Count() != rWith.aSels.Count() )
-        return FALSE;
+        return sal_False;
 
     // compare the sub seletions
-    for ( ULONG n = 0; n < aSels.Count(); ++n )
+    for ( sal_uIntPtr n = 0; n < aSels.Count(); ++n )
         if ( *aSels.GetObject(n) != *rWith.aSels.GetObject(n) )
-            return FALSE;
-    return TRUE;
+            return sal_False;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-void MultiSelection::SelectAll( BOOL bSelect )
+void MultiSelection::SelectAll( sal_Bool bSelect )
 {
-    DBG(DbgOutf( "::SelectAll(%s)\n", bSelect ? "TRUE" : "FALSE" ));
+    DBG(DbgOutf( "::SelectAll(%s)\n", bSelect ? "sal_True" : "sal_False" ));
 
     ImplClear();
     if ( bSelect )
@@ -388,16 +388,16 @@ void MultiSelection::SelectAll( BOOL bSelect )
 
 // -----------------------------------------------------------------------
 
-BOOL MultiSelection::Select( long nIndex, BOOL bSelect )
+sal_Bool MultiSelection::Select( long nIndex, sal_Bool bSelect )
 {
     DBG_ASSERT( aTotRange.IsInside(nIndex), "selected index out of range" );
 
     // out of range?
     if ( !aTotRange.IsInside(nIndex) )
-        return FALSE;
+        return sal_False;
 
     // find the virtual target position
-    ULONG nSubSelPos = ImplFindSubSelection( nIndex );
+    sal_uIntPtr nSubSelPos = ImplFindSubSelection( nIndex );
 
     if ( bSelect )
     {
@@ -405,7 +405,7 @@ BOOL MultiSelection::Select( long nIndex, BOOL bSelect )
         if ( nSubSelPos < aSels.Count() &&
              aSels.GetObject(nSubSelPos)->IsInside( nIndex ) )
             // already selected, nothing to do
-            return FALSE;
+            return sal_False;
 
         // it will become selected
         ++nSelCount;
@@ -441,7 +441,7 @@ BOOL MultiSelection::Select( long nIndex, BOOL bSelect )
         {
             // not selected, nothing to do
             DBG(Print( this ));
-            return FALSE;
+            return sal_False;
         }
 
         // it will become deselected
@@ -453,7 +453,7 @@ BOOL MultiSelection::Select( long nIndex, BOOL bSelect )
             // remove the complete sub selection
             delete aSels.Remove( nSubSelPos );
             DBG(Print( this ));
-            return TRUE;
+            return sal_True;
         }
 
         // is it at the beginning of the found sub selection?
@@ -475,20 +475,20 @@ BOOL MultiSelection::Select( long nIndex, BOOL bSelect )
 
     DBG(Print( this ));
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-void MultiSelection::Select( const Range& rIndexRange, BOOL bSelect )
+void MultiSelection::Select( const Range& rIndexRange, sal_Bool bSelect )
 {
     Range* pRange;
     long nOld;
 
-    ULONG nTmpMin = rIndexRange.Min();
-    ULONG nTmpMax = rIndexRange.Max();
-    ULONG nCurMin = FirstSelected();
-    ULONG nCurMax = LastSelected();
+    sal_uIntPtr nTmpMin = rIndexRange.Min();
+    sal_uIntPtr nTmpMax = rIndexRange.Max();
+    sal_uIntPtr nCurMin = FirstSelected();
+    sal_uIntPtr nCurMax = LastSelected();
     DBG_ASSERT(aTotRange.IsInside(nTmpMax), "selected index out of range" );
     DBG_ASSERT(aTotRange.IsInside(nTmpMin), "selected index out of range" );
 
@@ -512,7 +512,7 @@ void MultiSelection::Select( const Range& rIndexRange, BOOL bSelect )
             if( nCurMin > (nTmpMax+1)  )
             {
                 pRange = new Range( rIndexRange );
-                aSels.Insert( pRange, (ULONG)0 );
+                aSels.Insert( pRange, (sal_uIntPtr)0 );
                 nSelCount += pRange->Len();
             }
             else
@@ -522,7 +522,7 @@ void MultiSelection::Select( const Range& rIndexRange, BOOL bSelect )
                 pRange->Min() = (long)nTmpMin;
                 nSelCount += ( nOld - nTmpMin );
             }
-            bCurValid = FALSE;
+            bCurValid = sal_False;
         }
         return;
     }
@@ -545,7 +545,7 @@ void MultiSelection::Select( const Range& rIndexRange, BOOL bSelect )
                 pRange->Max() = (long)nTmpMax;
                 nSelCount += ( nTmpMax - nOld );
             }
-            bCurValid = FALSE;
+            bCurValid = sal_False;
         }
         return;
     }
@@ -560,10 +560,10 @@ void MultiSelection::Select( const Range& rIndexRange, BOOL bSelect )
 
 // -----------------------------------------------------------------------
 
-BOOL MultiSelection::IsSelected( long nIndex ) const
+sal_Bool MultiSelection::IsSelected( long nIndex ) const
 {
     // find the virtual target position
-    ULONG nSubSelPos = ImplFindSubSelection( nIndex );
+    sal_uIntPtr nSubSelPos = ImplFindSubSelection( nIndex );
 
     return nSubSelPos < aSels.Count() &&
            aSels.GetObject(nSubSelPos)->IsInside(nIndex);
@@ -576,7 +576,7 @@ void MultiSelection::Insert( long nIndex, long nCount )
     DBG(DbgOutf( "::Insert(%ld, %ld)\n", nIndex, nCount ));
 
     // find the virtual target position
-    ULONG nSubSelPos = ImplFindSubSelection( nIndex );
+    sal_uIntPtr nSubSelPos = ImplFindSubSelection( nIndex );
 
     // did we need to shift the sub selections?
     if ( nSubSelPos < aSels.Count() )
@@ -608,14 +608,14 @@ void MultiSelection::Insert( long nIndex, long nCount )
         }
 
         // shift the sub selections behind the inserting position
-        for ( ULONG nPos = nSubSelPos; nPos < aSels.Count(); ++nPos )
+        for ( sal_uIntPtr nPos = nSubSelPos; nPos < aSels.Count(); ++nPos )
         {
             aSels.GetObject(nPos)->Min() += nCount;
             aSels.GetObject(nPos)->Max() += nCount;
         }
     }
 
-    bCurValid = FALSE;
+    bCurValid = sal_False;
     aTotRange.Max() += nCount;
     if ( bSelectNew )
         nSelCount += nCount;
@@ -630,7 +630,7 @@ void MultiSelection::Remove( long nIndex )
     DBG(DbgOutf( "::Remove(%ld)\n", nIndex ));
 
     // find the virtual target position
-    ULONG nSubSelPos = ImplFindSubSelection( nIndex );
+    sal_uIntPtr nSubSelPos = ImplFindSubSelection( nIndex );
 
     // did we remove from an existing sub selection?
     if ( nSubSelPos < aSels.Count() &&
@@ -649,13 +649,13 @@ void MultiSelection::Remove( long nIndex )
     }
 
     // shift the sub selections behind the removed index
-    for ( ULONG nPos = nSubSelPos; nPos < aSels.Count(); ++nPos )
+    for ( sal_uIntPtr nPos = nSubSelPos; nPos < aSels.Count(); ++nPos )
     {
         --( aSels.GetObject(nPos)->Min() );
         --( aSels.GetObject(nPos)->Max() );
     }
 
-    bCurValid = FALSE;
+    bCurValid = sal_False;
     aTotRange.Max() -= 1;
 
     DBG(Print( this ));
@@ -713,14 +713,14 @@ long MultiSelection::ImplBwdUnselected()
 
 // -----------------------------------------------------------------------
 
-long MultiSelection::FirstSelected( BOOL bInverse )
+long MultiSelection::FirstSelected( sal_Bool bInverse )
 {
     bInverseCur = bInverse;
     nCurSubSel = 0;
 
     if ( bInverseCur )
     {
-        bCurValid = nSelCount < ULONG(aTotRange.Len());
+        bCurValid = nSelCount < sal_uIntPtr(aTotRange.Len());
         if ( bCurValid )
         {
             nCurIndex = 0;
@@ -820,7 +820,7 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
         if( pRange->Max() < aTotRange.Min() )
         {
             delete pRange;
-            aSels.Remove( (ULONG)0 );
+            aSels.Remove( (sal_uIntPtr)0 );
         }
         else if( pRange->Min() < aTotRange.Min() )
         {
@@ -834,14 +834,14 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
     }
 
     // die obere Bereichsgrenze anpassen
-    ULONG nCount = aSels.Count();
+    sal_uIntPtr nCount = aSels.Count();
     while( nCount )
     {
         pRange = aSels.GetObject( nCount - 1 );
         if( pRange->Min() > aTotRange.Max() )
         {
             delete pRange;
-            aSels.Remove( (ULONG)(nCount - 1) );
+            aSels.Remove( (sal_uIntPtr)(nCount - 1) );
         }
         else if( pRange->Max() > aTotRange.Max() )
         {
@@ -863,7 +863,7 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
         pRange = aSels.Next();
     }
 
-    bCurValid = FALSE;
+    bCurValid = sal_False;
     nCurIndex = 0;
 }
 

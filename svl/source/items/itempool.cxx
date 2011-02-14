@@ -56,7 +56,7 @@ void SfxItemPool::RemoveSfxItemPoolUser(SfxItemPoolUser& rOldUser)
     }
 }
 
-const SfxPoolItem* SfxItemPool::GetPoolDefaultItem( USHORT nWhich ) const
+const SfxPoolItem* SfxItemPool::GetPoolDefaultItem( sal_uInt16 nWhich ) const
 {
     DBG_CHKTHIS(SfxItemPool, 0);
     const SfxPoolItem* pRet;
@@ -74,15 +74,15 @@ const SfxPoolItem* SfxItemPool::GetPoolDefaultItem( USHORT nWhich ) const
 
 // -----------------------------------------------------------------------
 
-inline FASTBOOL SfxItemPool::IsItemFlag_Impl( USHORT nPos, USHORT nFlag ) const
+inline FASTBOOL SfxItemPool::IsItemFlag_Impl( sal_uInt16 nPos, sal_uInt16 nFlag ) const
 {
-    USHORT nItemFlag = pItemInfos[nPos]._nFlags;
+    sal_uInt16 nItemFlag = pItemInfos[nPos]._nFlags;
     return nFlag == (nItemFlag & nFlag);
 }
 
 // -----------------------------------------------------------------------
 
-FASTBOOL SfxItemPool::IsItemFlag( USHORT nWhich, USHORT nFlag ) const
+FASTBOOL SfxItemPool::IsItemFlag( sal_uInt16 nWhich, sal_uInt16 nFlag ) const
 {
     for ( const SfxItemPool *pPool = this; pPool; pPool = pPool->pSecondary )
     {
@@ -90,7 +90,7 @@ FASTBOOL SfxItemPool::IsItemFlag( USHORT nWhich, USHORT nFlag ) const
             return pPool->IsItemFlag_Impl( pPool->GetIndex_Impl(nWhich), nFlag);
     }
     DBG_ASSERT( !IsWhich(nWhich), "unknown which-id" );
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -107,8 +107,8 @@ SfxItemPool::SfxItemPool
 (
     UniString const &   rName,          /* Name des Pools zur Idetifikation
                                            im File-Format */
-    USHORT              nStartWhich,    /* erste Which-Id des Pools */
-    USHORT              nEndWhich,      /* letzte Which-Id des Pools */
+    sal_uInt16              nStartWhich,    /* erste Which-Id des Pools */
+    sal_uInt16              nEndWhich,      /* letzte Which-Id des Pools */
 #ifdef TF_POOLABLE
     const SfxItemInfo*  pInfos,         /* SID-Map und Item-Flags */
 #endif
@@ -116,7 +116,7 @@ SfxItemPool::SfxItemPool
                                            wird direkt vom Pool referenziert,
                                            jedoch kein Eigent"umer"ubergang */
 #ifndef TF_POOLABLE
-    USHORT*             pSlotIdArray,   /* Zuordnung von Slot-Ids zu Which-Ids */
+    sal_uInt16*             pSlotIdArray,   /* Zuordnung von Slot-Ids zu Which-Ids */
 #endif
     FASTBOOL            bLoadRefCounts  /* Ref-Counts mitladen oder auf 1 setzen */
 )
@@ -148,8 +148,8 @@ SfxItemPool::SfxItemPool
     [Querverweise]
 
     <SfxItemPool::SetDefaults(SfxItemPool**)>
-    <SfxItemPool::ReleaseDefaults(SfxPoolItem**,USHORT,BOOL)>
-    <SfxItemPool::ReldaseDefaults(BOOL)>
+    <SfxItemPool::ReleaseDefaults(SfxPoolItem**,sal_uInt16,sal_Bool)>
+    <SfxItemPool::ReldaseDefaults(sal_Bool)>
 */
 
 :   aName(rName),
@@ -174,12 +174,12 @@ SfxItemPool::SfxItemPool
 
     pImp->eDefMetric = SFX_MAPUNIT_TWIP;
     pImp->nVersion = 0;
-    pImp->bStreaming = FALSE;
+    pImp->bStreaming = sal_False;
     pImp->nLoadingVersion = 0;
     pImp->nInitRefCount = 1;
     pImp->nVerStart = nStart;
     pImp->nVerEnd = nEnd;
-    pImp->bInSetItem = FALSE;
+    pImp->bInSetItem = sal_False;
     pImp->nStoringStart = nStartWhich;
     pImp->nStoringEnd = nEndWhich;
 
@@ -195,10 +195,10 @@ SfxItemPool::SfxItemPool
 SfxItemPool::SfxItemPool
 (
     const SfxItemPool&  rPool,                  //  von dieser Instanz kopieren
-    BOOL                bCloneStaticDefaults    /*  TRUE
+    sal_Bool                bCloneStaticDefaults    /*  sal_True
                                                     statische Defaults kopieren
 
-                                                    FALSE
+                                                    sal_False
                                                     statische Defaults
                                                     "ubernehehmen */
 )
@@ -233,12 +233,12 @@ SfxItemPool::SfxItemPool
     DBG_CTOR(SfxItemPool, 0);
     pImp->eDefMetric = rPool.pImp->eDefMetric;
     pImp->nVersion = rPool.pImp->nVersion;
-    pImp->bStreaming = FALSE;
+    pImp->bStreaming = sal_False;
     pImp->nLoadingVersion = 0;
     pImp->nInitRefCount = 1;
     pImp->nVerStart = rPool.pImp->nVerStart;
     pImp->nVerEnd = rPool.pImp->nVerEnd;
-    pImp->bInSetItem = FALSE;
+    pImp->bInSetItem = sal_False;
     pImp->nStoringStart = nStart;
     pImp->nStoringEnd = nEnd;
 
@@ -248,7 +248,7 @@ SfxItemPool::SfxItemPool
     if ( bCloneStaticDefaults )
     {
         SfxPoolItem **ppDefaults = new SfxPoolItem*[nEnd-nStart+1];
-        for ( USHORT n = 0; n <= nEnd - nStart; ++n )
+        for ( sal_uInt16 n = 0; n <= nEnd - nStart; ++n )
         {
             (*( ppDefaults + n )) = (*( rPool.ppStaticDefaults + n ))->Clone(this);
             (*( ppDefaults + n ))->SetKind( SFX_ITEMS_STATICDEFAULT );
@@ -260,7 +260,7 @@ SfxItemPool::SfxItemPool
         SetDefaults( rPool.ppStaticDefaults );
 
     // Pool Defaults kopieren
-    for ( USHORT n = 0; n <= nEnd - nStart; ++n )
+    for ( sal_uInt16 n = 0; n <= nEnd - nStart; ++n )
         if ( (*( rPool.ppPoolDefaults + n )) )
         {
             (*( ppPoolDefaults + n )) = (*( rPool.ppPoolDefaults + n ))->Clone(this);
@@ -295,7 +295,7 @@ void SfxItemPool::SetDefaults( SfxPoolItem **pDefaults )
         DBG_ASSERT( (*ppStaticDefaults)->GetRefCount() == 0 ||
                     IsDefaultItem( (*ppStaticDefaults) ),
                     "das sind keine statics" );
-        for ( USHORT n = 0; n <= nEnd - nStart; ++n )
+        for ( sal_uInt16 n = 0; n <= nEnd - nStart; ++n )
         {
             SFX_ASSERT( (*( ppStaticDefaults + n ))->Which() == n + nStart,
                         n + nStart, "static defaults not sorted" );
@@ -309,11 +309,11 @@ void SfxItemPool::SetDefaults( SfxPoolItem **pDefaults )
 
 void SfxItemPool::ReleaseDefaults
 (
-    BOOL    bDelete     /*  TRUE
+    sal_Bool    bDelete     /*  sal_True
                             l"oscht sowohl das Array als auch die einzelnen
                             statischen Defaults
 
-                            FALSE
+                            sal_False
                             l"oscht weder das Array noch die einzelnen
                             statischen Defaults */
 )
@@ -332,7 +332,7 @@ void SfxItemPool::ReleaseDefaults
     ReleaseDefaults( ppStaticDefaults, nEnd - nStart + 1, bDelete );
 
     // KSO (22.10.98): ppStaticDefaults zeigt auf geloeschten Speicher,
-    // wenn bDelete == TRUE.
+    // wenn bDelete == sal_True.
     if ( bDelete )
         ppStaticDefaults = 0;
 }
@@ -343,13 +343,13 @@ void SfxItemPool::ReleaseDefaults
 (
     SfxPoolItem**   pDefaults,  /*  freizugebende statische Defaults */
 
-    USHORT          nCount,     /*  Anzahl der statischen Defaults */
+    sal_uInt16          nCount,     /*  Anzahl der statischen Defaults */
 
-    BOOL            bDelete     /*  TRUE
+    sal_Bool            bDelete     /*  sal_True
                                     l"oscht sowohl das Array als auch die
                                     einzelnen statischen Defaults
 
-                                    FALSE
+                                    sal_False
                                     l"oscht weder das Array noch die
                                     einzelnen statischen Defaults */
 )
@@ -367,7 +367,7 @@ void SfxItemPool::ReleaseDefaults
 {
     DBG_ASSERT( pDefaults, "erst wollen, dann nichts geben..." );
 
-    for ( USHORT n = 0; n < nCount; ++n )
+    for ( sal_uInt16 n = 0; n < nCount; ++n )
     {
         SFX_ASSERT( IsStaticDefaultItem( *(pDefaults+n) ),
                     n, "das ist kein static-default" );
@@ -431,13 +431,13 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
             if ( pImp->ppPoolItems && pSecondary->pImp->ppPoolItems )
             {
                 // hat der master SetItems?
-                BOOL bHasSetItems = FALSE;
-                for ( USHORT i = 0; !bHasSetItems && i < nEnd-nStart; ++i )
+                sal_Bool bHasSetItems = sal_False;
+                for ( sal_uInt16 i = 0; !bHasSetItems && i < nEnd-nStart; ++i )
                     bHasSetItems = ppStaticDefaults[i]->ISA(SfxSetItem);
 
                 // abgehaengte Pools muessen leer sein
-                BOOL bOK = bHasSetItems;
-                for ( USHORT n = 0;
+                sal_Bool bOK = bHasSetItems;
+                for ( sal_uInt16 n = 0;
                       bOK && n <= pSecondary->nEnd - pSecondary->nStart;
                       ++n )
                 {
@@ -450,7 +450,7 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
                             if ( !(*ppHtArr) )
                             {
                                 DBG_ERROR( "old secondary pool must be empty" );
-                                bOK = FALSE;
+                                bOK = sal_False;
                                 break;
                             }
                     }
@@ -476,7 +476,7 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
 
 // -----------------------------------------------------------------------
 
-SfxMapUnit SfxItemPool::GetMetric( USHORT ) const
+SfxMapUnit SfxItemPool::GetMetric( sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxItemPool, 0);
 
@@ -555,7 +555,7 @@ void SfxItemPool::Delete()
     SfxPoolItemArray_Impl** ppItemArr = pImp->ppPoolItems;
     SfxPoolItem** ppDefaultItem = ppPoolDefaults;
     SfxPoolItem** ppStaticDefaultItem = ppStaticDefaults;
-    USHORT nArrCnt;
+    sal_uInt16 nArrCnt;
 
     //Erst die SetItems abraeumen
     HACK( "fuer Image, dort gibt es derzeit keine Statics - Bug" )
@@ -639,7 +639,7 @@ void SfxItemPool::Cleanup()
     SfxPoolItemArray_Impl** ppItemArr = pImp->ppPoolItems;
     SfxPoolItem** ppDefaultItem = ppPoolDefaults;
     SfxPoolItem** ppStaticDefaultItem = ppStaticDefaults;
-    USHORT nArrCnt;
+    sal_uInt16 nArrCnt;
 
     HACK( "fuer Image, dort gibt es derzeit keine Statics - Bug" )
     if ( ppStaticDefaults ) //HACK fuer Image, dort gibt es keine Statics!!
@@ -709,7 +709,7 @@ void SfxItemPool::SetPoolDefaultItem(const SfxPoolItem &rItem)
  * Resets the default of the given <Which-Id> back to the static default.
  * If a pool default exists it is removed.
  */
-void SfxItemPool::ResetPoolDefaultItem( USHORT nWhichId )
+void SfxItemPool::ResetPoolDefaultItem( sal_uInt16 nWhichId )
 {
     DBG_CHKTHIS(SfxItemPool, 0);
     if ( IsInRange(nWhichId) )
@@ -732,7 +732,7 @@ void SfxItemPool::ResetPoolDefaultItem( USHORT nWhichId )
 
 // -----------------------------------------------------------------------
 
-const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, USHORT nWhich )
+const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
 {
     DBG_ASSERT( !rItem.ISA(SfxSetItem) ||
                 0 != &((const SfxSetItem&)rItem).GetItemSet(),
@@ -743,7 +743,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, USHORT nWhich )
         nWhich = rItem.Which();
 
     // richtigen Secondary-Pool finden
-    BOOL bSID = nWhich > SFX_WHICH_MAX;
+    sal_Bool bSID = nWhich > SFX_WHICH_MAX;
     if ( !bSID && !IsInRange(nWhich) )
     {
         if ( pSecondary )
@@ -752,7 +752,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, USHORT nWhich )
     }
 
     // SID oder nicht poolable (neue Definition)?
-    USHORT nIndex = bSID ? USHRT_MAX : GetIndex_Impl(nWhich);
+    sal_uInt16 nIndex = bSID ? USHRT_MAX : GetIndex_Impl(nWhich);
     if ( USHRT_MAX == nIndex ||
          IsItemFlag_Impl( nIndex, SFX_ITEM_NOT_POOLABLE ) )
     {
@@ -773,7 +773,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, USHORT nWhich )
         *ppItemArr = new SfxPoolItemArray_Impl;
 
     SfxPoolItemArrayBase_Impl::iterator ppFree;
-    BOOL ppFreeIsSet = FALSE;
+    sal_Bool ppFreeIsSet = sal_False;
     SfxPoolItemArrayBase_Impl::iterator ppHtArray = (*ppItemArr)->begin();
     if ( IsItemFlag_Impl( nIndex, SFX_ITEM_POOLABLE ) )
     {
@@ -803,10 +803,10 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, USHORT nWhich )
                 }
             }
             else
-                if ( ppFreeIsSet == FALSE )
+                if ( ppFreeIsSet == sal_False )
                 {
                     ppFree = ppHtArray;
-                    ppFreeIsSet = TRUE;
+                    ppFreeIsSet = sal_True;
                 }
         }
     }
@@ -822,7 +822,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, USHORT nWhich )
             if ( !*ppHtArr )
             {
                 ppFree = ppHtArr;
-                ppFreeIsSet = TRUE;
+                ppFreeIsSet = sal_True;
                 break;
             }
 
@@ -849,7 +849,7 @@ const SfxPoolItem& SfxItemPool::Put( const SfxPoolItem& rItem, USHORT nWhich )
 #endif
     AddRef( *pNewItem, pImp->nInitRefCount );
     SfxPoolItem* pTemp = pNewItem;
-    if ( ppFreeIsSet == FALSE )
+    if ( ppFreeIsSet == sal_False )
         (*ppItemArr)->push_back( pTemp );
     else
     {
@@ -873,8 +873,8 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
                 "wo kommt denn hier ein Pool-Default her" );
 
     // richtigen Secondary-Pool finden
-    const USHORT nWhich = rItem.Which();
-    BOOL bSID = nWhich > SFX_WHICH_MAX;
+    const sal_uInt16 nWhich = rItem.Which();
+    sal_Bool bSID = nWhich > SFX_WHICH_MAX;
     if ( !bSID && !IsInRange(nWhich) )
     {
         if ( pSecondary )
@@ -886,7 +886,7 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
     }
 
     // SID oder nicht poolable (neue Definition)?
-    USHORT nIndex = bSID ? USHRT_MAX : GetIndex_Impl(nWhich);
+    sal_uInt16 nIndex = bSID ? USHRT_MAX : GetIndex_Impl(nWhich);
     if ( bSID || IsItemFlag_Impl( nIndex, SFX_ITEM_NOT_POOLABLE ) )
     {
         SFX_ASSERT( USHRT_MAX != nIndex ||
@@ -941,7 +941,7 @@ void SfxItemPool::Remove( const SfxPoolItem& rItem )
 
 // -----------------------------------------------------------------------
 
-const SfxPoolItem& SfxItemPool::GetDefaultItem( USHORT nWhich ) const
+const SfxPoolItem& SfxItemPool::GetDefaultItem( sal_uInt16 nWhich ) const
 {
     DBG_CHKTHIS(SfxItemPool, 0);
 
@@ -953,7 +953,7 @@ const SfxPoolItem& SfxItemPool::GetDefaultItem( USHORT nWhich ) const
     }
 
     DBG_ASSERT( ppStaticDefaults, "no defaults known - dont ask me for defaults" );
-    USHORT nPos = GetIndex_Impl(nWhich);
+    sal_uInt16 nPos = GetIndex_Impl(nWhich);
     SfxPoolItem *pDefault = *(ppPoolDefaults + nPos);
     if ( pDefault )
         return *pDefault;
@@ -981,17 +981,17 @@ void SfxItemPool::FreezeIdRanges()
 
 // -----------------------------------------------------------------------
 
-void SfxItemPool::FillItemIdRanges_Impl( USHORT*& pWhichRanges ) const
+void SfxItemPool::FillItemIdRanges_Impl( sal_uInt16*& pWhichRanges ) const
 {
     DBG_CHKTHIS(SfxItemPool, 0);
     DBG_ASSERT( !_pPoolRanges, "GetFrozenRanges() would be faster!" );
 
     const SfxItemPool *pPool;
-    USHORT nLevel = 0;
+    sal_uInt16 nLevel = 0;
     for( pPool = this; pPool; pPool = pPool->pSecondary )
         ++nLevel;
 
-    pWhichRanges = new USHORT[ 2*nLevel + 1 ];
+    pWhichRanges = new sal_uInt16[ 2*nLevel + 1 ];
 
     nLevel = 0;
     for( pPool = this; pPool; pPool = pPool->pSecondary )
@@ -1004,7 +1004,7 @@ void SfxItemPool::FillItemIdRanges_Impl( USHORT*& pWhichRanges ) const
 
 // -----------------------------------------------------------------------
 
-const SfxPoolItem *SfxItemPool::GetItem2(USHORT nWhich, sal_uInt32 nOfst) const
+const SfxPoolItem *SfxItemPool::GetItem2(sal_uInt16 nWhich, sal_uInt32 nOfst) const
 {
     DBG_CHKTHIS(SfxItemPool, 0);
 
@@ -1029,7 +1029,7 @@ const SfxPoolItem *SfxItemPool::GetItem2(USHORT nWhich, sal_uInt32 nOfst) const
 
 // -----------------------------------------------------------------------
 
-sal_uInt32 SfxItemPool::GetItemCount2(USHORT nWhich) const
+sal_uInt32 SfxItemPool::GetItemCount2(sal_uInt16 nWhich) const
 {
     DBG_CHKTHIS(SfxItemPool, 0);
 
@@ -1049,21 +1049,21 @@ sal_uInt32 SfxItemPool::GetItemCount2(USHORT nWhich) const
 
 // -----------------------------------------------------------------------
 
-USHORT SfxItemPool::GetWhich( USHORT nSlotId, BOOL bDeep ) const
+sal_uInt16 SfxItemPool::GetWhich( sal_uInt16 nSlotId, sal_Bool bDeep ) const
 {
     if ( !IsSlot(nSlotId) )
         return nSlotId;
 
 #ifdef TF_POOLABLE
-    USHORT nCount = nEnd - nStart + 1;
-    for ( USHORT nOfs = 0; nOfs < nCount; ++nOfs )
+    sal_uInt16 nCount = nEnd - nStart + 1;
+    for ( sal_uInt16 nOfs = 0; nOfs < nCount; ++nOfs )
         if ( pItemInfos[nOfs]._nSID == nSlotId )
             return nOfs + nStart;
 #else
     if ( pSlotIds )
     {
-        USHORT nCount = nEnd - nStart + 1;
-        for ( USHORT nOfs = 0; nOfs < nCount; ++nOfs )
+        sal_uInt16 nCount = nEnd - nStart + 1;
+        for ( sal_uInt16 nOfs = 0; nOfs < nCount; ++nOfs )
             if ( pSlotIds[nOfs] == nSlotId )
                 return nOfs + nStart;
     }
@@ -1075,7 +1075,7 @@ USHORT SfxItemPool::GetWhich( USHORT nSlotId, BOOL bDeep ) const
 
 // -----------------------------------------------------------------------
 
-USHORT SfxItemPool::GetSlotId( USHORT nWhich, BOOL bDeep ) const
+sal_uInt16 SfxItemPool::GetSlotId( sal_uInt16 nWhich, sal_Bool bDeep ) const
 {
     if ( !IsWhich(nWhich) )
         return nWhich;
@@ -1089,7 +1089,7 @@ USHORT SfxItemPool::GetSlotId( USHORT nWhich, BOOL bDeep ) const
     }
 #ifdef TF_POOLABLE
 
-    USHORT nSID = pItemInfos[nWhich - nStart]._nSID;
+    sal_uInt16 nSID = pItemInfos[nWhich - nStart]._nSID;
     return nSID ? nSID : nWhich;
 #else
     else if ( pSlotIds )
@@ -1100,21 +1100,21 @@ USHORT SfxItemPool::GetSlotId( USHORT nWhich, BOOL bDeep ) const
 
 // -----------------------------------------------------------------------
 
-USHORT SfxItemPool::GetTrueWhich( USHORT nSlotId, BOOL bDeep ) const
+sal_uInt16 SfxItemPool::GetTrueWhich( sal_uInt16 nSlotId, sal_Bool bDeep ) const
 {
     if ( !IsSlot(nSlotId) )
         return 0;
 
 #ifdef TF_POOLABLE
-    USHORT nCount = nEnd - nStart + 1;
-    for ( USHORT nOfs = 0; nOfs < nCount; ++nOfs )
+    sal_uInt16 nCount = nEnd - nStart + 1;
+    for ( sal_uInt16 nOfs = 0; nOfs < nCount; ++nOfs )
         if ( pItemInfos[nOfs]._nSID == nSlotId )
             return nOfs + nStart;
 #else
     if ( pSlotIds )
     {
-        USHORT nCount = nEnd - nStart + 1;
-        for ( USHORT nOfs = 0; nOfs < nCount; ++nOfs )
+        sal_uInt16 nCount = nEnd - nStart + 1;
+        for ( sal_uInt16 nOfs = 0; nOfs < nCount; ++nOfs )
             if ( pSlotIds[nOfs] == nSlotId )
                 return nOfs + nStart;
     }
@@ -1126,7 +1126,7 @@ USHORT SfxItemPool::GetTrueWhich( USHORT nSlotId, BOOL bDeep ) const
 
 // -----------------------------------------------------------------------
 
-USHORT SfxItemPool::GetTrueSlotId( USHORT nWhich, BOOL bDeep ) const
+sal_uInt16 SfxItemPool::GetTrueSlotId( sal_uInt16 nWhich, sal_Bool bDeep ) const
 {
     if ( !IsWhich(nWhich) )
         return 0;
@@ -1148,7 +1148,7 @@ USHORT SfxItemPool::GetTrueSlotId( USHORT nWhich, BOOL bDeep ) const
 #endif
 }
 // -----------------------------------------------------------------------
-void SfxItemPool::SetFileFormatVersion( USHORT nFileFormatVersion )
+void SfxItemPool::SetFileFormatVersion( sal_uInt16 nFileFormatVersion )
 
 /*  [Description]
 

@@ -178,7 +178,7 @@ namespace vclcanvas
 
             const ::Polygon& rPoly( rPolyPoly[0] );
 
-            USHORT nCount( rPoly.GetSize() );
+            sal_uInt16 nCount( rPoly.GetSize() );
             if( nCount < 4 )
                 return false;
 
@@ -389,7 +389,7 @@ namespace vclcanvas
                                         pAlphaWriteAccess->SetPixel( y, x,
                                                                      BitmapColor(
                                                                          255U -
-                                                                         static_cast<BYTE>(
+                                                                         static_cast<sal_uInt8>(
                                                                              nAlphaModulation*
                                                                              (255U
                                                                               - aAlphaMap[ pAlphaReadAccess->GetPixel(
@@ -400,15 +400,15 @@ namespace vclcanvas
                                                                                    nSrcX ) );
 
                                         aColor.SetRed(
-                                            static_cast<BYTE>(
+                                            static_cast<sal_uInt8>(
                                                 nRedModulation *
                                                 aColor.GetRed() + .5 ));
                                         aColor.SetGreen(
-                                            static_cast<BYTE>(
+                                            static_cast<sal_uInt8>(
                                                 nGreenModulation *
                                                 aColor.GetGreen() + .5 ));
                                         aColor.SetBlue(
-                                            static_cast<BYTE>(
+                                            static_cast<sal_uInt8>(
                                                 nBlueModulation *
                                                 aColor.GetBlue() + .5 ));
 
@@ -443,7 +443,7 @@ namespace vclcanvas
                                         pAlphaWriteAccess->SetPixel( y, x,
                                                                      BitmapColor(
                                                                          255U -
-                                                                         static_cast<BYTE>(
+                                                                         static_cast<sal_uInt8>(
                                                                              nAlphaModulation*255.0
                                                                              + .5 ) ) );
 
@@ -451,15 +451,15 @@ namespace vclcanvas
                                                                                    nSrcX ) );
 
                                         aColor.SetRed(
-                                            static_cast<BYTE>(
+                                            static_cast<sal_uInt8>(
                                                 nRedModulation *
                                                 aColor.GetRed() + .5 ));
                                         aColor.SetGreen(
-                                            static_cast<BYTE>(
+                                            static_cast<sal_uInt8>(
                                                 nGreenModulation *
                                                 aColor.GetGreen() + .5 ));
                                         aColor.SetBlue(
-                                            static_cast<BYTE>(
+                                            static_cast<sal_uInt8>(
                                                 nBlueModulation *
                                                 aColor.GetBlue() + .5 ));
 

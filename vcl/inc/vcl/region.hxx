@@ -70,7 +70,7 @@ private:
     SAL_DLLPRIVATE const ImplRegion*    ImplGetImplRegion() const { return mpImplRegion; }
     SAL_DLLPRIVATE ImplRegion*      ImplGetImplRegion() { return mpImplRegion; }
     SAL_DLLPRIVATE void             ImplBeginAddRect( );
-    SAL_DLLPRIVATE BOOL             ImplAddRect( const Rectangle& rRect );
+    SAL_DLLPRIVATE sal_Bool             ImplAddRect( const Rectangle& rRect );
     SAL_DLLPRIVATE void             ImplEndAddRect( );
     SAL_DLLPRIVATE void             ImplIntersectWithPolyPolygon( const Region& );
     SAL_DLLPRIVATE void             ImplExcludePolyPolygon( const Region& );
@@ -78,9 +78,9 @@ private:
     SAL_DLLPRIVATE void             ImplXOrPolyPolygon( const Region& );
 
 public: // public within vcl
-    VCL_PLUGIN_PUBLIC BOOL              ImplGetFirstRect( ImplRegionInfo& rImplRegionInfo,
+    VCL_PLUGIN_PUBLIC bool              ImplGetFirstRect( ImplRegionInfo& rImplRegionInfo,
                                           long& nX, long& nY, long& nWidth, long& nHeight ) const;
-    VCL_PLUGIN_PUBLIC BOOL              ImplGetNextRect( ImplRegionInfo& rImplRegionInfo,
+    VCL_PLUGIN_PUBLIC bool              ImplGetNextRect( ImplRegionInfo& rImplRegionInfo,
                                          long& nX, long& nY, long& nWidth, long& nHeight ) const;
 #ifdef DBG_UTIL
     friend const char*  ImplDbgTestRegion( const void* pObj );
@@ -98,48 +98,48 @@ public:
 
     void            Move( long nHorzMove, long nVertMove );
     void            Scale( double fScaleX, double fScaleY );
-    BOOL            Union( const Rectangle& rRegion );
-    BOOL            Intersect( const Rectangle& rRegion );
-    BOOL            Exclude( const Rectangle& rRegion );
-    BOOL            XOr( const Rectangle& rRegion );
-    BOOL            Union( const Region& rRegion );
-    BOOL            Intersect( const Region& rRegion );
-    BOOL            Exclude( const Region& rRegion );
-    BOOL            XOr( const Region& rRegion );
+    sal_Bool            Union( const Rectangle& rRegion );
+    sal_Bool            Intersect( const Rectangle& rRegion );
+    sal_Bool            Exclude( const Rectangle& rRegion );
+    sal_Bool            XOr( const Rectangle& rRegion );
+    sal_Bool            Union( const Region& rRegion );
+    sal_Bool            Intersect( const Region& rRegion );
+    sal_Bool            Exclude( const Region& rRegion );
+    sal_Bool            XOr( const Region& rRegion );
 
     RegionType      GetType() const;
-    BOOL            IsEmpty() const { return GetType() == REGION_EMPTY; };
-    BOOL            IsNull() const { return GetType() == REGION_NULL; };
+    sal_Bool            IsEmpty() const { return GetType() == REGION_EMPTY; };
+    sal_Bool            IsNull() const { return GetType() == REGION_NULL; };
 
     void            SetEmpty();
     void            SetNull();
 
     Rectangle       GetBoundRect() const;
 
-    BOOL            HasPolyPolygon() const;
+    sal_Bool            HasPolyPolygon() const;
     PolyPolygon     GetPolyPolygon() const;
-    // returns an empty polypolygon in case HasPolyPolygon is FALSE
+    // returns an empty polypolygon in case HasPolyPolygon is sal_False
     const basegfx::B2DPolyPolygon GetB2DPolyPolygon() const;
     // returns a PolyPolygon either copied from the set PolyPolygon region
     // or created from the constituent rectangles
     basegfx::B2DPolyPolygon ConvertToB2DPolyPolygon();
 
-    ULONG           GetRectCount() const;
+    sal_uLong           GetRectCount() const;
     RegionHandle    BeginEnumRects();
-    BOOL            GetEnumRects( RegionHandle hRegionHandle, Rectangle& rRect );
-    BOOL            GetNextEnumRect( RegionHandle hRegionHandle, Rectangle& rRect )
+    sal_Bool            GetEnumRects( RegionHandle hRegionHandle, Rectangle& rRect );
+    sal_Bool            GetNextEnumRect( RegionHandle hRegionHandle, Rectangle& rRect )
                         { return GetEnumRects( hRegionHandle, rRect ); }
     void            EndEnumRects( RegionHandle hRegionHandle );
 
-    BOOL            IsInside( const Point& rPoint ) const;
-    BOOL            IsInside( const Rectangle& rRect ) const;
-    BOOL            IsOver( const Rectangle& rRect ) const;
+    sal_Bool            IsInside( const Point& rPoint ) const;
+    sal_Bool            IsInside( const Rectangle& rRect ) const;
+    sal_Bool            IsOver( const Rectangle& rRect ) const;
 
     Region&         operator=( const Region& rRegion );
     Region&         operator=( const Rectangle& rRect );
 
-    BOOL            operator==( const Region& rRegion ) const;
-    BOOL            operator!=( const Region& rRegion ) const
+    sal_Bool            operator==( const Region& rRegion ) const;
+    sal_Bool            operator!=( const Region& rRegion ) const
                         { return !(Region::operator==( rRegion )); }
 
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, Region& rRegion );

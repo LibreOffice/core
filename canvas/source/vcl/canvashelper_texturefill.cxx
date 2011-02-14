@@ -88,7 +88,7 @@ namespace vclcanvas
                           const ::Size&         rTileSize,
                           const GraphicAttr&    rAttr)
         {
-            BOOL    bRet( false );
+            bool bRet( false );
             Point   aCurrPos;
             int     nX, nY;
 
@@ -101,10 +101,10 @@ namespace vclcanvas
                 {
                     // update return value. This method should return true, if
                     // at least one of the looped Draws succeeded.
-                    bRet |= rGraphic.Draw( &rOutDev,
+                    bRet |= ( sal_True == rGraphic.Draw( &rOutDev,
                                            aCurrPos,
                                            rTileSize,
-                                           &rAttr );
+                                           &rAttr ) );
 
                     aCurrPos.X() += rNextTileX.Width();
                     aCurrPos.Y() += rNextTileX.Height();
@@ -178,7 +178,7 @@ namespace vclcanvas
             // vertex values in the loop below (as ::Polygon is a
             // pimpl class, creating one every loop turn would really
             // stress the mem allocator)
-            ::Polygon aTempPoly( static_cast<USHORT>(5) );
+            ::Polygon aTempPoly( static_cast<sal_uInt16>(5) );
 
             OSL_ENSURE( nStepCount >= 3,
                         "fillLinearGradient(): stepcount smaller than 3" );
@@ -224,9 +224,9 @@ namespace vclcanvas
                 boost::tuples::tie(nIndex,fAlpha)=aLerper.lerp(double(i)/nStepCount);
 
                 rOutDev.SetFillColor(
-                    Color( (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
-                           (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
-                           (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
+                    Color( (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
+                           (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
+                           (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
 
                 // copy right egde of polygon to left edge (and also
                 // copy the closing point)
@@ -350,7 +350,7 @@ namespace vclcanvas
 
 
             const sal_uInt32 nNumPoints( aOuterPoly.count() );
-            ::Polygon        aTempPoly( static_cast<USHORT>(nNumPoints+1) );
+            ::Polygon        aTempPoly( static_cast<sal_uInt16>(nNumPoints+1) );
 
             // increase number of steps by one: polygonal gradients have
             // the outermost polygon rendered in rColor2, and the
@@ -391,9 +391,9 @@ namespace vclcanvas
 
                     // lerp color
                     rOutDev.SetFillColor(
-                        Color( (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
-                               (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
-                               (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
+                        Color( (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
+                               (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
+                               (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
 
                     // scale and render polygon, by interpolating between
                     // outer and inner polygon.
@@ -403,13 +403,13 @@ namespace vclcanvas
                         const ::basegfx::B2DPoint& rOuterPoint( aOuterPoly.getB2DPoint(p) );
                         const ::basegfx::B2DPoint& rInnerPoint( aInnerPoly.getB2DPoint(p) );
 
-                        aTempPoly[(USHORT)p] = ::Point(
+                        aTempPoly[(sal_uInt16)p] = ::Point(
                             basegfx::fround( fT*rInnerPoint.getX() + (1-fT)*rOuterPoint.getX() ),
                             basegfx::fround( fT*rInnerPoint.getY() + (1-fT)*rOuterPoint.getY() ) );
                     }
 
                     // close polygon explicitely
-                    aTempPoly[(USHORT)p] = aTempPoly[0];
+                    aTempPoly[(sal_uInt16)p] = aTempPoly[0];
 
                     // TODO(P1): compare with vcl/source/gdi/outdev4.cxx,
                     // OutputDevice::ImplDrawComplexGradient(), there's a note
@@ -428,7 +428,7 @@ namespace vclcanvas
                 // in the loop below (as ::Polygon is a pimpl class, creating
                 // one every loop turn would really stress the mem allocator)
                 ::PolyPolygon           aTempPolyPoly;
-                ::Polygon               aTempPoly2( static_cast<USHORT>(nNumPoints+1) );
+                ::Polygon               aTempPoly2( static_cast<sal_uInt16>(nNumPoints+1) );
 
                 aTempPoly2[0] = rBounds.TopLeft();
                 aTempPoly2[1] = rBounds.TopRight();
@@ -449,9 +449,9 @@ namespace vclcanvas
 
                     // lerp color
                     rOutDev.SetFillColor(
-                        Color( (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
-                               (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
-                               (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
+                        Color( (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
+                               (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
+                               (sal_uInt8)(basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
 
 #if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
                     if( i && !(i % 10) )
@@ -467,13 +467,13 @@ namespace vclcanvas
                         const ::basegfx::B2DPoint& rOuterPoint( aOuterPoly.getB2DPoint(p) );
                         const ::basegfx::B2DPoint& rInnerPoint( aInnerPoly.getB2DPoint(p) );
 
-                        aTempPoly[(USHORT)p] = ::Point(
+                        aTempPoly[(sal_uInt16)p] = ::Point(
                             basegfx::fround( fT*rInnerPoint.getX() + (1-fT)*rOuterPoint.getX() ),
                             basegfx::fround( fT*rInnerPoint.getY() + (1-fT)*rOuterPoint.getY() ) );
                     }
 
                     // close polygon explicitely
-                    aTempPoly[(USHORT)p] = aTempPoly[0];
+                    aTempPoly[(sal_uInt16)p] = aTempPoly[0];
 
                     // swap inner and outer polygon
                     aTempPolyPoly.Replace( aTempPolyPoly.GetObject( 1 ), 0 );
@@ -925,7 +925,7 @@ namespace vclcanvas
                         aGrfAttr.SetMirrorFlags(
                             ( aScale.getX() < 0.0 ? BMP_MIRROR_HORZ : 0 ) |
                             ( aScale.getY() < 0.0 ? BMP_MIRROR_VERT : 0 ) );
-                        aGrfAttr.SetRotation( static_cast< USHORT >(::basegfx::fround( nRotate*10.0 )) );
+                        aGrfAttr.SetRotation( static_cast< sal_uInt16 >(::basegfx::fround( nRotate*10.0 )) );
 
                         pGrfObj.reset( new GraphicObject( aBmpEx ) );
                     }
@@ -1054,7 +1054,7 @@ namespace vclcanvas
                             // equivalent to the origAlpha*modulateAlpha
                             // the DX canvas performs)
                             aGrfAttr.SetTransparency(
-                                static_cast< BYTE >(
+                                static_cast< sal_uInt8 >(
                                     ::basegfx::fround( 255.0*( 1.0 - textures[0].Alpha ) ) ) );
                         }
 
@@ -1125,7 +1125,7 @@ namespace vclcanvas
                                 aVDev.GetBitmap( aEmptyPoint,
                                                  aVDev.GetOutputSizePixel() ) );
 
-                            BYTE nCol( static_cast< BYTE >(
+                            sal_uInt8 nCol( static_cast< sal_uInt8 >(
                                            ::basegfx::fround( 255.0*( 1.0 - textures[0].Alpha ) ) ) );
                             AlphaMask aAlpha( aVDev.GetOutputSizePixel(),
                                               &nCol );

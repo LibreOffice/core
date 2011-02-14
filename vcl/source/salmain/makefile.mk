@@ -38,5 +38,4 @@ LIB1TARGET=$(LB)$/vclmain.lib
 LIB1ARCHIV=$(LB)$/libvclmain.a
 LIB1FILES=$(LB)$/salmain.lib
 
-
 .INCLUDE: target.mk

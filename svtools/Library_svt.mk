@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2009 by Sun Microsystems, Inc.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,12 +14,12 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.	If not, see
+# version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
@@ -70,6 +70,7 @@ $(eval $(call gb_Library_add_linked_libs,svt,\
     utl \
     vcl \
     vos3 \
+    $(gb_STDLIBS) \
 ))
 
 ifeq ($(SYSTEM_JPEG),YES)
@@ -290,26 +291,14 @@ $(eval $(call gb_Library_add_cobjects,svt,\
     svtools/source/filter.vcl/jpeg/jpegc \
 ))
 
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,svt,\
-    dl \
-    m \
-    pthread \
-))
-endif
-
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_linked_libs,svt,\
     advapi32 \
     gdi32 \
-    kernel32 \
-    msvcrt \
-    oldnames \
     ole32 \
     oleaut32 \
     user32 \
     uuid \
-    uwinapi \
 ))
 endif
 # vim: set noet sw=4 ts=4:

@@ -183,18 +183,18 @@ public:
     virtual void        drawPixel( long nX, long nY, SalColor nSalColor );
     virtual void        drawLine( long nX1, long nY1, long nX2, long nY2 );
     virtual void        drawRect( long nX, long nY, long nWidth, long nHeight );
-    virtual void        drawPolyLine( ULONG nPoints, const SalPoint* pPtAry );
-    virtual void        drawPolygon( ULONG nPoints, const SalPoint* pPtAry );
-    virtual void        drawPolyPolygon( ULONG nPoly, const ULONG* pPoints, PCONSTSALPOINT* pPtAry );
+    virtual void        drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry );
+    virtual void        drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry );
+    virtual void        drawPolyPolygon( sal_uLong nPoly, const sal_uLong* pPoints, PCONSTSALPOINT* pPtAry );
     virtual bool        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
-    virtual sal_Bool    drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
-    virtual sal_Bool    drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
-    virtual sal_Bool    drawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints, const SalPoint* const* pPtAry, const BYTE* const* pFlgAry );
+    virtual sal_Bool    drawPolyLineBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
+    virtual sal_Bool    drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry );
+    virtual sal_Bool    drawPolyPolygonBezier( sal_uLong nPoly, const sal_uLong* pPoints, const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry );
     virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, double fTransparency, const ::basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin );
 
     // CopyArea --> No RasterOp, but ClipRegion
     virtual void        copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
-                                  long nSrcHeight, USHORT nFlags );
+                                  long nSrcHeight, sal_uInt16 nFlags );
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
@@ -215,9 +215,9 @@ public:
 
     // invert --> ClipRegion (only Windows or VirDevs)
     virtual void        invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags);
-    virtual void        invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nFlags );
+    virtual void        invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInvert nFlags );
 
-    virtual BOOL        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize );
+    virtual sal_Bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize );
 
     virtual bool            drawAlphaBitmap( const SalTwoRect&,
                                              const SalBitmap& rSourceBitmap,
@@ -226,24 +226,24 @@ public:
     virtual bool            drawAlphaRect( long nX, long nY, long nWidth,
                                            long nHeight, sal_uInt8 nTransparency );
 
-    CGPoint*                makeCGptArray(ULONG nPoints, const SalPoint*  pPtAry);
+    CGPoint*                makeCGptArray(sal_uLong nPoints, const SalPoint*  pPtAry);
     // native widget rendering methods that require mirroring
-    virtual BOOL        hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                                              const Point& aPos, BOOL& rIsInside );
-    virtual BOOL        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
+    virtual sal_Bool        hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
+                                              const Point& aPos, sal_Bool& rIsInside );
+    virtual sal_Bool        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                            ControlState nState, const ImplControlValue& aValue,
                                            const rtl::OUString& aCaption );
-    virtual BOOL        drawNativeControlText( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
+    virtual sal_Bool        drawNativeControlText( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
                                                const rtl::OUString& aCaption );
-    virtual BOOL        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
+    virtual sal_Bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
                                                 const ImplControlValue& aValue, const rtl::OUString& aCaption,
                                                 Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
 
     // get device resolution
     virtual void            GetResolution( long& rDPIX, long& rDPIY );
     // get the depth of the device
-    virtual USHORT          GetBitCount();
+    virtual sal_uInt16          GetBitCount();
     // get the width of the device
     virtual long            GetGraphicsWidth() const;
 
@@ -268,12 +268,12 @@ public:
     // set the text color to a specific color
     virtual void            SetTextColor( SalColor nSalColor );
     // set the font
-    virtual USHORT         SetFont( ImplFontSelectData*, int nFallbackLevel );
+    virtual sal_uInt16         SetFont( ImplFontSelectData*, int nFallbackLevel );
     // get the current font's etrics
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
     // get kernign pairs of the current font
     // return only PairCount if (pKernPairs == NULL)
-    virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );
+    virtual sal_uLong           GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs );
     // get the repertoire of the current font
     virtual const ImplFontCharMap* GetImplFontCharMap() const;
     // graphics must fill supplied font list
@@ -294,7 +294,7 @@ public:
     //             rInfo: additional outgoing information
     // implementation note: encoding 0 with glyph id 0 should be added implicitly
     // as "undefined character"
-    virtual BOOL            CreateFontSubset( const rtl::OUString& rToFile,
+    virtual sal_Bool            CreateFontSubset( const rtl::OUString& rToFile,
                                               const ImplFontData* pFont,
                                               long* pGlyphIDs,
                                               sal_uInt8* pEncoding,
@@ -332,15 +332,15 @@ public:
                                             Int32Vector& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc );
 
-    virtual BOOL                    GetGlyphBoundRect( long nIndex, Rectangle& );
-    virtual BOOL                    GetGlyphOutline( long nIndex, basegfx::B2DPolyPolygon& );
+    virtual sal_Bool                    GetGlyphBoundRect( long nIndex, Rectangle& );
+    virtual sal_Bool                    GetGlyphOutline( long nIndex, basegfx::B2DPolyPolygon& );
 
     virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
     virtual void                     DrawServerFontLayout( const ServerFontLayout& );
     virtual bool                    supportsOperation( OutDevSupportType ) const;
 
     // Query the platform layer for control support
-    virtual BOOL IsNativeControlSupported( ControlType nType, ControlPart nPart );
+    virtual sal_Bool IsNativeControlSupported( ControlType nType, ControlPart nPart );
 
     virtual SystemGraphicsData    GetGraphicsData() const;
     virtual SystemFontData        GetSysFontData( int /* nFallbacklevel */ ) const;
@@ -375,8 +375,8 @@ private:
     CGContextRef    mxTargetContext;
     CGContextRef    mxMaskContext;
     CGContextRef    mxTempContext;
-    ULONG*          mpMaskBuffer;
-    ULONG*          mpTempBuffer;
+    sal_uLong*          mpMaskBuffer;
+    sal_uLong*          mpTempBuffer;
     int             mnBufferLongs;
     bool            mbIsEnabled;
 };

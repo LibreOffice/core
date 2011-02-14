@@ -39,15 +39,15 @@ class Window;
 // ------------------
 
 #define STANDARD_TEXT_FIRST                     STANDARD_TEXT_SERVICE_NOT_AVAILABLE
-#define STANDARD_TEXT_SERVICE_NOT_AVAILABLE     ((USHORT)0)
+#define STANDARD_TEXT_SERVICE_NOT_AVAILABLE     ((sal_uInt16)0)
 #define STANDARD_TEXT_LAST                      STANDARD_TEXT_SERVICE_NOT_AVAILABLE
 
-XubString VCL_DLLPUBLIC GetStandardText( USHORT nStdText );
+XubString VCL_DLLPUBLIC GetStandardText( sal_uInt16 nStdText );
 
 // -------------------------------------
 // - Hilfsmethoden fuer Standard-Texte -
 // -------------------------------------
 
-void VCL_DLLPUBLIC ShowServiceNotAvailableError( Window* pParent, const XubString& rServiceName, BOOL bError );
+void VCL_DLLPUBLIC ShowServiceNotAvailableError( Window* pParent, const XubString& rServiceName, sal_Bool bError );
 
 #endif  // _VCL_STDTEXT_HXX

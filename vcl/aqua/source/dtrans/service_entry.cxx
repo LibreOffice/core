@@ -34,6 +34,7 @@
 #include "DropTarget.hxx"
 #include "aqua_clipboard.hxx"
 #include "osl/diagnose.h"
+#include "vcl/svapp.hxx"
 
 using namespace ::osl;
 using namespace ::rtl;
@@ -46,6 +47,9 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 
 uno::Reference< XInterface > AquaSalInstance::CreateClipboard( const Sequence< Any >& i_rArguments )
 {
+    if ( Application::IsHeadlessModeEnabled() )
+        return SalInstance::CreateClipboard( i_rArguments );
+
     SalData* pSalData = GetSalData();
     if( ! pSalData->mxClipboard.is() )
         pSalData->mxClipboard = uno::Reference<XInterface>(static_cast< XClipboard* >(new AquaClipboard()), UNO_QUERY);
@@ -54,11 +58,17 @@ uno::Reference< XInterface > AquaSalInstance::CreateClipboard( const Sequence< A
 
 uno::Reference<XInterface> AquaSalInstance::CreateDragSource()
 {
+    if ( Application::IsHeadlessModeEnabled() )
+        return SalInstance::CreateDragSource();
+
     return uno::Reference<XInterface>(static_cast< XInitialization* >(new DragSource()), UNO_QUERY);
 }
 
 uno::Reference<XInterface> AquaSalInstance::CreateDropTarget()
 {
+    if ( Application::IsHeadlessModeEnabled() )
+        return SalInstance::CreateDropTarget();
+
     return uno::Reference<XInterface>(static_cast< XInitialization* >(new DropTarget()), UNO_QUERY);
 }
 

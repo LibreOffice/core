@@ -58,7 +58,7 @@ AlphaMask::AlphaMask( const AlphaMask& rAlphaMask ) :
 
 // -----------------------------------------------------------------------------
 
-AlphaMask::AlphaMask( const Size& rSizePixel, BYTE* pEraseTransparency ) :
+AlphaMask::AlphaMask( const Size& rSizePixel, sal_uInt8* pEraseTransparency ) :
     Bitmap( rSizePixel, 8, &Bitmap::GetGreyPalette( 256 ) )
 {
     if( pEraseTransparency )
@@ -107,14 +107,14 @@ Bitmap AlphaMask::GetBitmap() const
 
 // -----------------------------------------------------------------------------
 
-BOOL AlphaMask::Crop( const Rectangle& rRectPixel )
+sal_Bool AlphaMask::Crop( const Rectangle& rRectPixel )
 {
     return Bitmap::Crop( rRectPixel );
 }
 
 // -----------------------------------------------------------------------------
 
-BOOL AlphaMask::Expand( ULONG nDX, ULONG nDY, BYTE* pInitTransparency )
+sal_Bool AlphaMask::Expand( sal_uLong nDX, sal_uLong nDY, sal_uInt8* pInitTransparency )
 {
     Color aColor;
 
@@ -126,7 +126,7 @@ BOOL AlphaMask::Expand( ULONG nDX, ULONG nDY, BYTE* pInitTransparency )
 
 // -----------------------------------------------------------------------------
 
-BOOL AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
+sal_Bool AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
                            const AlphaMask* pAlphaSrc )
 {
     // Note: this code is copied from Bitmap::CopyPixel but avoids any palette lookups
@@ -134,7 +134,7 @@ BOOL AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
 
     const Size  aSizePix( GetSizePixel() );
     Rectangle   aRectDst( rRectDst );
-    BOOL        bRet = FALSE;
+    sal_Bool        bRet = sal_False;
 
     aRectDst.Intersection( Rectangle( Point(), aSizePix ) );
 
@@ -225,7 +225,7 @@ BOOL AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
                     }
 
                     ReleaseAccess( pWriteAcc );
-                    bRet = TRUE;
+                    bRet = sal_True;
                 }
             }
         }
@@ -237,26 +237,26 @@ BOOL AlphaMask::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
 
 // -----------------------------------------------------------------------------
 
-BOOL AlphaMask::Erase( BYTE cTransparency )
+sal_Bool AlphaMask::Erase( sal_uInt8 cTransparency )
 {
     return Bitmap::Erase( Color( cTransparency, cTransparency, cTransparency ) );
 }
 
 // -----------------------------------------------------------------------------
 
-BOOL AlphaMask::Invert()
+sal_Bool AlphaMask::Invert()
 {
     BitmapWriteAccess*  pAcc = AcquireWriteAccess();
-    BOOL                bRet = FALSE;
+    sal_Bool                bRet = sal_False;
 
     if( pAcc && pAcc->GetBitCount() == 8 )
     {
         BitmapColor aCol( 0 );
         const long  nWidth = pAcc->Width(), nHeight = pAcc->Height();
-        BYTE*       pMap = new BYTE[ 256 ];
+        sal_uInt8*      pMap = new sal_uInt8[ 256 ];
 
         for( long i = 0; i < 256; i++ )
-            pMap[ i ] = ~(BYTE) i;
+            pMap[ i ] = ~(sal_uInt8) i;
 
         for( long nY = 0L; nY < nHeight; nY++ )
         {
@@ -268,7 +268,7 @@ BOOL AlphaMask::Invert()
         }
 
         delete[] pMap;
-        bRet = TRUE;
+        bRet = sal_True;
     }
 
     if( pAcc )
@@ -279,16 +279,16 @@ BOOL AlphaMask::Invert()
 
 // -----------------------------------------------------------------------------
 
-BOOL AlphaMask::Mirror( ULONG nMirrorFlags )
+sal_Bool AlphaMask::Mirror( sal_uLong nMirrorFlags )
 {
     return Bitmap::Mirror( nMirrorFlags );
 }
 
 // -----------------------------------------------------------------------------
 
-BOOL AlphaMask::Scale( const Size& rNewSize, ULONG nScaleFlag )
+sal_Bool AlphaMask::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
 {
-    BOOL bRet = Bitmap::Scale( rNewSize, nScaleFlag );
+    sal_Bool bRet = Bitmap::Scale( rNewSize, nScaleFlag );
 
     if( bRet && ( nScaleFlag == BMP_SCALE_INTERPOLATE ) )
         Bitmap::Convert( BMP_CONVERSION_8BIT_GREYS );
@@ -298,9 +298,9 @@ BOOL AlphaMask::Scale( const Size& rNewSize, ULONG nScaleFlag )
 
 // -----------------------------------------------------------------------------
 
-BOOL AlphaMask::Scale( const double& rScaleX, const double& rScaleY, ULONG nScaleFlag )
+sal_Bool AlphaMask::Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag )
 {
-    BOOL bRet = Bitmap::Scale( rScaleX, rScaleY, nScaleFlag );
+    sal_Bool bRet = Bitmap::Scale( rScaleX, rScaleY, nScaleFlag );
 
     if( bRet && ( nScaleFlag == BMP_SCALE_INTERPOLATE ) )
         Bitmap::Convert( BMP_CONVERSION_8BIT_GREYS );
@@ -310,18 +310,18 @@ BOOL AlphaMask::Scale( const double& rScaleX, const double& rScaleY, ULONG nScal
 
 // -----------------------------------------------------------------------------
 
-BOOL AlphaMask::Rotate( long nAngle10, BYTE cFillTransparency )
+sal_Bool AlphaMask::Rotate( long nAngle10, sal_uInt8 cFillTransparency )
 {
     return Bitmap::Rotate( nAngle10, Color( cFillTransparency, cFillTransparency, cFillTransparency ) );
 }
 
 // -----------------------------------------------------------------------------
 
-BOOL AlphaMask::Replace( const Bitmap& rMask, BYTE cReplaceTransparency )
+sal_Bool AlphaMask::Replace( const Bitmap& rMask, sal_uInt8 cReplaceTransparency )
 {
     BitmapReadAccess*   pMaskAcc = ( (Bitmap&) rMask ).AcquireReadAccess();
     BitmapWriteAccess*  pAcc = AcquireWriteAccess();
-    BOOL                bRet = FALSE;
+    sal_Bool                bRet = sal_False;
 
     if( pMaskAcc && pAcc )
     {
@@ -344,14 +344,14 @@ BOOL AlphaMask::Replace( const Bitmap& rMask, BYTE cReplaceTransparency )
 
 // -----------------------------------------------------------------------------
 
-BOOL AlphaMask::Replace( BYTE cSearchTransparency, BYTE cReplaceTransparency, ULONG
+sal_Bool AlphaMask::Replace( sal_uInt8 cSearchTransparency, sal_uInt8 cReplaceTransparency, sal_uLong
 #ifdef DBG_UTIL
 nTol
 #endif
 )
 {
     BitmapWriteAccess*  pAcc = AcquireWriteAccess();
-    BOOL                bRet = FALSE;
+    sal_Bool                bRet = sal_False;
 
     DBG_ASSERT( !nTol, "AlphaMask::Replace: nTol not used yet" );
 
@@ -386,7 +386,7 @@ nTol
             }
         }
 
-        bRet = TRUE;
+        bRet = sal_True;
     }
 
     if( pAcc )
@@ -397,17 +397,17 @@ nTol
 
 // -----------------------------------------------------------------------------
 
-BOOL AlphaMask::Replace( BYTE* pSearchTransparencies, BYTE* pReplaceTransparencies,
-                         ULONG nColorCount, ULONG* pTols )
+sal_Bool AlphaMask::Replace( sal_uInt8* pSearchTransparencies, sal_uInt8* pReplaceTransparencies,
+                         sal_uLong nColorCount, sal_uLong* pTols )
 {
     Color*  pSearchColors = new Color[ nColorCount ];
     Color*  pReplaceColors = new Color[ nColorCount ];
-    BOOL    bRet;
+    sal_Bool    bRet;
 
-    for( ULONG i = 0; i < nColorCount; i++ )
+    for( sal_uLong i = 0; i < nColorCount; i++ )
     {
-        const BYTE cSearchTransparency = pSearchTransparencies[ i ];
-        const BYTE cReplaceTransparency = pReplaceTransparencies[ i ];
+        const sal_uInt8 cSearchTransparency = pSearchTransparencies[ i ];
+        const sal_uInt8 cReplaceTransparency = pReplaceTransparencies[ i ];
 
         pSearchColors[ i ] = Color( cSearchTransparency, cSearchTransparency, cSearchTransparency );
         pReplaceColors[ i ] = Color( cReplaceTransparency, cReplaceTransparency, cReplaceTransparency );

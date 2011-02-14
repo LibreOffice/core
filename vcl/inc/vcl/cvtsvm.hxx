@@ -98,14 +98,14 @@ private:
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void             ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf );
     SAL_DLLPRIVATE void             ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf );
-    SAL_DLLPRIVATE ULONG            ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
-                                          VirtualDevice& rSaveVDev, BOOL& rRop_0_1,
+    SAL_DLLPRIVATE sal_uLong            ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
+                                          VirtualDevice& rSaveVDev, sal_Bool& rRop_0_1,
                                           Color& rLineCol, Stack& rLineColStack,
                                           rtl_TextEncoding& rActualCharSet );
 //#endif
 
 public:
-                        SVMConverter( SvStream& rIStm, GDIMetaFile& rMtf, ULONG nConvertMode  );
+                        SVMConverter( SvStream& rIStm, GDIMetaFile& rMtf, sal_uLong nConvertMode  );
                         ~SVMConverter() {}
 
 private:

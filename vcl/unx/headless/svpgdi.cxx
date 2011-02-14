@@ -132,7 +132,7 @@ void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
     rDPIX = rDPIY = 96;
 }
 
-USHORT SvpSalGraphics::GetBitCount()
+sal_uInt16 SvpSalGraphics::GetBitCount()
 {
     return SvpElement::getBitCountFromScanlineFormat( m_aDevice->getScanlineFormat() );
 }
@@ -303,13 +303,13 @@ void SvpSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::drawPolyLine( ULONG nPoints, const SalPoint* pPtAry )
+void SvpSalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint* pPtAry )
 {
     if( m_bUseLineColor && nPoints )
     {
         B2DPolygon aPoly;
         aPoly.append( B2DPoint( pPtAry->mnX, pPtAry->mnY ), nPoints );
-        for( ULONG i = 1; i < nPoints; i++ )
+        for( sal_uLong i = 1; i < nPoints; i++ )
             aPoly.setB2DPoint( i, B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
         aPoly.setClosed( false );
         m_aDevice->drawPolygon( aPoly, m_aLineColor, m_aDrawMode, m_aClipMap );
@@ -317,13 +317,13 @@ void SvpSalGraphics::drawPolyLine( ULONG nPoints, const SalPoint* pPtAry )
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::drawPolygon( ULONG nPoints, const SalPoint* pPtAry )
+void SvpSalGraphics::drawPolygon( sal_uLong nPoints, const SalPoint* pPtAry )
 {
     if( ( m_bUseLineColor || m_bUseFillColor ) && nPoints )
     {
         B2DPolygon aPoly;
         aPoly.append( B2DPoint( pPtAry->mnX, pPtAry->mnY ), nPoints );
-        for( ULONG i = 1; i < nPoints; i++ )
+        for( sal_uLong i = 1; i < nPoints; i++ )
             aPoly.setB2DPoint( i, B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
         if( m_bUseFillColor )
         {
@@ -354,7 +354,7 @@ void SvpSalGraphics::drawPolyPolygon( sal_uInt32        nPoly,
                 PCONSTSALPOINT pPoints = pPtAry[nPolygon];
                 B2DPolygon aPoly;
                 aPoly.append( B2DPoint( pPoints->mnX, pPoints->mnY ), nPoints );
-                for( ULONG i = 1; i < nPoints; i++ )
+                for( sal_uInt32 i = 1; i < nPoints; i++ )
                     aPoly.setB2DPoint( i, B2DPoint( pPoints[i].mnX, pPoints[i].mnY ) );
 
                 aPolyPoly.append( aPoly );
@@ -382,16 +382,16 @@ bool SvpSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon&, double /*fTrans
         return false;
 }
 
-sal_Bool SvpSalGraphics::drawPolyLineBezier( ULONG,
+sal_Bool SvpSalGraphics::drawPolyLineBezier( sal_uLong,
                                              const SalPoint*,
-                                             const BYTE* )
+                                             const sal_uInt8* )
 {
     return sal_False;
 }
 
-sal_Bool SvpSalGraphics::drawPolygonBezier( ULONG,
+sal_Bool SvpSalGraphics::drawPolygonBezier( sal_uLong,
                                             const SalPoint*,
-                                            const BYTE* )
+                                            const sal_uInt8* )
 {
     return sal_False;
 }
@@ -399,7 +399,7 @@ sal_Bool SvpSalGraphics::drawPolygonBezier( ULONG,
 sal_Bool SvpSalGraphics::drawPolyPolygonBezier( sal_uInt32,
                                                 const sal_uInt32*,
                                                 const SalPoint* const*,
-                                                const BYTE* const* )
+                                                const sal_uInt8* const* )
 {
     return sal_False;
 }
@@ -416,7 +416,7 @@ void SvpSalGraphics::copyArea( long nDestX,
                                       long nSrcY,
                                       long nSrcWidth,
                                       long nSrcHeight,
-                                      USHORT /*nFlags*/ )
+                                      sal_uInt16 /*nFlags*/ )
 {
     B2IRange aSrcRect( nSrcX, nSrcY, nSrcX+nSrcWidth, nSrcY+nSrcHeight );
     B2IRange aDestRect( nDestX, nDestY, nDestX+nSrcWidth, nDestY+nSrcHeight );
@@ -532,21 +532,21 @@ void SvpSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
     dbgOut( m_aDevice );
 }
 
-void SvpSalGraphics::invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert /*nFlags*/ )
+void SvpSalGraphics::invert( sal_uLong nPoints, const SalPoint* pPtAry, SalInvert /*nFlags*/ )
 {
     // FIXME: handle SAL_INVERT_50 and SAL_INVERT_TRACKFRAME
     B2DPolygon aPoly;
     aPoly.append( B2DPoint( pPtAry->mnX, pPtAry->mnY ), nPoints );
-    for( ULONG i = 1; i < nPoints; i++ )
+    for( sal_uLong i = 1; i < nPoints; i++ )
         aPoly.setB2DPoint( i, B2DPoint( pPtAry[i].mnX, pPtAry[i].mnY ) );
     aPoly.setClosed( true );
     m_aDevice->fillPolyPolygon( B2DPolyPolygon(aPoly), basebmp::Color( 0xffffff ), DrawMode_XOR, m_aClipMap );
     dbgOut( m_aDevice );
 }
 
-BOOL SvpSalGraphics::drawEPS( long, long, long, long, void*, ULONG )
+sal_Bool SvpSalGraphics::drawEPS( long, long, long, long, void*, sal_uLong )
 {
-    return FALSE;
+    return sal_False;
 }
 
 SystemFontData SvpSalGraphics::GetSysFontData( int nFallbacklevel ) const

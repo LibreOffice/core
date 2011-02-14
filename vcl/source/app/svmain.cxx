@@ -113,12 +113,12 @@ public:
 
 ::vos::OSignalHandler::TSignalAction SAL_CALL ImplVCLExceptionHandler::signal( ::vos::OSignalHandler::TSignalInfo* pInfo )
 {
-    static BOOL bIn = FALSE;
+    static sal_Bool bIn = sal_False;
 
     // Wenn wir nocheinmal abstuerzen, verabschieden wir uns gleich
     if ( !bIn )
     {
-        USHORT nVCLException = 0;
+        sal_uInt16 nVCLException = 0;
 
         // UAE
         if ( (pInfo->Signal == osl_Signal_AccessViolation)     ||
@@ -144,7 +144,7 @@ public:
 
         if ( nVCLException )
         {
-            bIn = TRUE;
+            bIn = sal_True;
 
             ::vos::OGuard aLock(&Application::GetSolarMutex());
 
@@ -153,12 +153,12 @@ public:
             ImplSVData* pSVData = ImplGetSVData();
             if ( pSVData->mpApp )
             {
-                USHORT nOldMode = Application::GetSystemWindowMode();
+                sal_uInt16 nOldMode = Application::GetSystemWindowMode();
                 Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
                 pSVData->mpApp->Exception( nVCLException );
                 Application::SetSystemWindowMode( nOldMode );
             }
-            bIn = FALSE;
+            bIn = sal_False;
 
             return vos::OSignalHandler::TAction_CallNextHandler;
         }
@@ -168,7 +168,7 @@ public:
 }
 
 // =======================================================================
-BOOL ImplSVMain()
+sal_Bool ImplSVMain()
 {
     // The 'real' SVMain()
     RTL_LOGFILE_CONTEXT( aLog, "vcl (ss112471) ::SVMain" );
@@ -180,14 +180,14 @@ BOOL ImplSVMain()
     css::uno::Reference<XMultiServiceFactory> xMS;
 
 
-    BOOL bInit = InitVCL( xMS );
+    sal_Bool bInit = InitVCL( xMS );
 
     if( bInit )
     {
         // Application-Main rufen
-        pSVData->maAppData.mbInAppMain = TRUE;
+        pSVData->maAppData.mbInAppMain = sal_True;
         pSVData->mpApp->Main();
-        pSVData->maAppData.mbInAppMain = FALSE;
+        pSVData->maAppData.mbInAppMain = sal_False;
     }
 
     if( pSVData->mxDisplayConnection.is() )
@@ -204,7 +204,7 @@ BOOL ImplSVMain()
     css::uno::Reference< XComponent > xComponent(pSVData->mxAccessBridge, UNO_QUERY);
     if( xComponent.is() )
     {
-      ULONG nCount = Application::ReleaseSolarMutex();
+      sal_uLong nCount = Application::ReleaseSolarMutex();
       xComponent->dispose();
       Application::AcquireSolarMutex(nCount);
       pSVData->mxAccessBridge.clear();
@@ -214,12 +214,12 @@ BOOL ImplSVMain()
     return bInit;
 }
 
-BOOL SVMain()
+sal_Bool SVMain()
 {
     // #i47888# allow for alternative initialization as required for e.g. MacOSX
-    extern BOOL ImplSVMainHook( BOOL* );
+    extern sal_Bool ImplSVMainHook( sal_Bool* );
 
-    BOOL bInit;
+    sal_Bool bInit;
     if( ImplSVMainHook( &bInit ) )
         return bInit;
     else
@@ -267,12 +267,12 @@ Any SAL_CALL DesktopEnvironmentContext::getValueByName( const rtl::OUString& Nam
     return retVal;
 }
 
-BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
+sal_Bool InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
 {
     RTL_LOGFILE_CONTEXT( aLog, "vcl (ss112471) ::InitVCL" );
 
     if( pExceptionHandler != NULL )
-        return FALSE;
+        return sal_False;
 
     if( ! ImplGetSVData() )
         ImplInitSVData();
@@ -305,7 +305,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ ::CreateSalInstance" );
     pSVData->mpDefInst = CreateSalInstance();
     if ( !pSVData->mpDefInst )
-        return FALSE;
+        return sal_False;
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "} ::CreateSalInstance" );
 
     // Desktop Environment context (to be able to get value of "system.desktop-environment" as soon as possible)
@@ -329,7 +329,7 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 
     // Initialize global data
     pSVData->maGDIData.mpScreenFontList     = new ImplDevFontList;
-    pSVData->maGDIData.mpScreenFontCache    = new ImplFontCache( FALSE );
+    pSVData->maGDIData.mpScreenFontCache    = new ImplFontCache( sal_False );
     pSVData->maGDIData.mpGrfConverter       = new GraphicConverter;
 
     // Exception-Handler setzen
@@ -338,13 +338,13 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     // Debug-Daten initialisieren
     DBGGUI_INIT();
 
-    return TRUE;
+    return sal_True;
 }
 
 void DeInitVCL()
 {
     ImplSVData* pSVData = ImplGetSVData();
-    pSVData->mbDeInit = TRUE;
+    pSVData->mbDeInit = sal_True;
 
     vcl::DeleteOnDeinitBase::ImplDeleteOnDeInit();
 

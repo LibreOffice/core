@@ -133,7 +133,7 @@ LineInfo& LineInfo::operator=( const LineInfo& rLineInfo )
 
 // -----------------------------------------------------------------------
 
-BOOL LineInfo::operator==( const LineInfo& rLineInfo ) const
+sal_Bool LineInfo::operator==( const LineInfo& rLineInfo ) const
 {
     DBG_CHKTHIS( LineInfo, NULL );
     DBG_CHKOBJ( &rLineInfo, LineInfo, NULL );
@@ -175,7 +175,7 @@ void LineInfo::SetWidth( long nWidth )
 
 // -----------------------------------------------------------------------
 
-void LineInfo::SetDashCount( USHORT nDashCount )
+void LineInfo::SetDashCount( sal_uInt16 nDashCount )
 {
     DBG_CHKTHIS( LineInfo, NULL );
     ImplMakeUnique();
@@ -193,7 +193,7 @@ void LineInfo::SetDashLen( long nDashLen )
 
 // -----------------------------------------------------------------------
 
-void LineInfo::SetDotCount( USHORT nDotCount )
+void LineInfo::SetDotCount( sal_uInt16 nDotCount )
 {
     DBG_CHKTHIS( LineInfo, NULL );
     ImplMakeUnique();
@@ -236,7 +236,7 @@ void LineInfo::SetLineJoin(basegfx::B2DLineJoin eLineJoin)
 SvStream& operator>>( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
-    UINT16          nTmp16;
+    sal_uInt16          nTmp16;
 
     rIStm >> nTmp16; rImplLineInfo.meStyle = (LineStyle) nTmp16;
     rIStm >> rImplLineInfo.mnWidth;
@@ -265,7 +265,7 @@ SvStream& operator<<( SvStream& rOStm, const ImplLineInfo& rImplLineInfo )
     VersionCompat aCompat( rOStm, STREAM_WRITE, 3 );
 
     // version 1
-    rOStm << (UINT16) rImplLineInfo.meStyle << rImplLineInfo.mnWidth;
+    rOStm << (sal_uInt16) rImplLineInfo.meStyle << rImplLineInfo.mnWidth;
 
     // since version2
     rOStm << rImplLineInfo.mnDashCount << rImplLineInfo.mnDashLen;
@@ -273,7 +273,7 @@ SvStream& operator<<( SvStream& rOStm, const ImplLineInfo& rImplLineInfo )
     rOStm << rImplLineInfo.mnDistance;
 
     // since version3
-    rOStm << (UINT16) rImplLineInfo.meLineJoin;
+    rOStm << (sal_uInt16) rImplLineInfo.meLineJoin;
 
     return rOStm;
 }

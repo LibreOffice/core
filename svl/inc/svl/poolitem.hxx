@@ -143,7 +143,7 @@ enum SfxItemPresentation
 
 // -----------------------------------------------------------------------
 
-typedef USHORT SfxItemState;
+typedef sal_uInt16 SfxItemState;
 
 #define SFX_ITEM_UNKNOWN    0x0000
 
@@ -183,17 +183,17 @@ friend class SfxItemPoolCache;
 friend class SfxItemSet;
 friend class SfxVoidItem;
 
-    ULONG                    nRefCount;                    // Referenzzaehler
-    USHORT                   nWhich;
-    USHORT                   nKind;
+    sal_uLong                    nRefCount;                    // Referenzzaehler
+    sal_uInt16                   nWhich;
+    sal_uInt16                   nKind;
 
 private:
-    inline void              SetRefCount( ULONG n );
-    inline void              SetKind( USHORT n );
+    inline void              SetRefCount( sal_uLong n );
+    inline void              SetKind( sal_uInt16 n );
 public:
-    inline ULONG             AddRef( ULONG n = 1 ) const;
+    inline sal_uLong             AddRef( sal_uLong n = 1 ) const;
 private:
-    inline ULONG             ReleaseRef( ULONG n = 1 ) const;
+    inline sal_uLong             ReleaseRef( sal_uLong n = 1 ) const;
     SVL_DLLPRIVATE long      Delete_Impl(void*);
 
 #if 0
@@ -203,17 +203,17 @@ private:
 #endif
 
 protected:
-                             SfxPoolItem( USHORT nWhich = 0 );
+                             SfxPoolItem( sal_uInt16 nWhich = 0 );
                              SfxPoolItem( const SfxPoolItem& );
 
 public:
                              TYPEINFO();
     virtual                  ~SfxPoolItem();
 
-    void                     SetWhich( USHORT nId ) {
+    void                     SetWhich( sal_uInt16 nId ) {
                                 DBG_CHKTHIS(SfxPoolItem, 0);
                                 nWhich = nId; }
-    USHORT                   Which() const {
+    sal_uInt16                   Which() const {
                                  DBG_CHKTHIS(SfxPoolItem, 0);
                                  return nWhich; }
     virtual int              operator==( const SfxPoolItem& ) const = 0;
@@ -228,19 +228,19 @@ public:
                                     XubString &rText,
                                     const IntlWrapper * pIntlWrapper = 0 ) const;
 
-    virtual USHORT           GetVersion( USHORT nFileFormatVersion ) const;
+    virtual sal_uInt16           GetVersion( sal_uInt16 nFileFormatVersion ) const;
     virtual int              ScaleMetrics( long lMult, long lDiv );
     virtual int              HasMetrics() const;
 
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    virtual SfxPoolItem*     Create( SvStream &, USHORT nItemVersion ) const;
-    virtual SvStream&        Store( SvStream &, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*     Create( SvStream &, sal_uInt16 nItemVersion ) const;
+    virtual SvStream&        Store( SvStream &, sal_uInt16 nItemVersion ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const = 0;
 
-    ULONG                    GetRefCount() const { return nRefCount; }
-    inline USHORT            GetKind() const { return nKind; }
+    sal_uLong                    GetRefCount() const { return nRefCount; }
+    inline sal_uInt16            GetKind() const { return nKind; }
 
     /** Read in a Unicode string from a streamed byte string representation.
 
@@ -295,21 +295,21 @@ private:
 
 // -----------------------------------------------------------------------
 
-inline void SfxPoolItem::SetRefCount( ULONG n )
+inline void SfxPoolItem::SetRefCount( sal_uLong n )
 {
     DBG_CHKTHIS( SfxPoolItem, 0 );
     nRefCount = n;
     nKind = 0;
 }
 
-inline void SfxPoolItem::SetKind( USHORT n )
+inline void SfxPoolItem::SetKind( sal_uInt16 n )
 {
     DBG_CHKTHIS( SfxPoolItem, 0 );
     nRefCount = SFX_ITEMS_SPECIAL;
     nKind = n;
 }
 
-inline ULONG SfxPoolItem::AddRef( ULONG n ) const
+inline sal_uLong SfxPoolItem::AddRef( sal_uLong n ) const
 {
     DBG_CHKTHIS( SfxPoolItem, 0 );
     DBG_ASSERT( nRefCount <= SFX_ITEMS_MAXREF, "AddRef mit nicht-Pool-Item" );
@@ -317,7 +317,7 @@ inline ULONG SfxPoolItem::AddRef( ULONG n ) const
     return ( ((SfxPoolItem *)this)->nRefCount += n );
 }
 
-inline ULONG SfxPoolItem::ReleaseRef( ULONG n ) const
+inline sal_uLong SfxPoolItem::ReleaseRef( sal_uLong n ) const
 {
     DBG_CHKTHIS( SfxPoolItem, 0 );
     DBG_ASSERT( nRefCount <= SFX_ITEMS_MAXREF, "AddRef mit nicht-Pool-Item" );
@@ -360,8 +360,8 @@ class SVL_DLLPUBLIC SfxVoidItem: public SfxPoolItem
     SfxVoidItem & operator=( const SfxVoidItem& ); // not implemented.
 public:
                             TYPEINFO();
-                            SfxVoidItem( USHORT nWhich );
-                            SfxVoidItem( USHORT nWhich, SvStream & );
+                            SfxVoidItem( sal_uInt16 nWhich );
+                            SfxVoidItem( sal_uInt16 nWhich, SvStream & );
                             SfxVoidItem( const SfxVoidItem& );
                             ~SfxVoidItem();
 
@@ -375,7 +375,7 @@ public:
 
     // von sich selbst eine Kopie erzeugen
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-            void            SetWhich(USHORT nWh) { nWhich = nWh; }
+            void            SetWhich(sal_uInt16 nWh) { nWhich = nWh; }
 };
 
 // -----------------------------------------------------------------------
@@ -388,8 +388,8 @@ class SVL_DLLPUBLIC SfxSetItem: public SfxPoolItem
 
 public:
                             TYPEINFO();
-                            SfxSetItem( USHORT nWhich, SfxItemSet *pSet );
-                            SfxSetItem( USHORT nWhich, const SfxItemSet &rSet );
+                            SfxSetItem( sal_uInt16 nWhich, SfxItemSet *pSet );
+                            SfxSetItem( sal_uInt16 nWhich, const SfxItemSet &rSet );
                             SfxSetItem( const SfxSetItem&, SfxItemPool *pPool = 0 );
                             ~SfxSetItem();
 
@@ -403,8 +403,8 @@ public:
 
     // von sich selbst eine Kopie erzeugen
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const = 0;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nVersion) const = 0;
-    virtual SvStream&       Store(SvStream &, USHORT nVer) const;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVersion) const = 0;
+    virtual SvStream&       Store(SvStream &, sal_uInt16 nVer) const;
 
     const SfxItemSet&       GetItemSet() const
                             { return *pSet; }
@@ -423,7 +423,7 @@ friend class SfxItemSet;
 
 private:
                             TYPEINFO();
-                            SfxInvalidItem( USHORT nWhich, const SfxPoolItem &rDefault );
+                            SfxInvalidItem( sal_uInt16 nWhich, const SfxPoolItem &rDefault );
                             SfxInvalidItem( const SfxInvalidItem& );
     virtual                 ~SfxInvalidItem();
 
@@ -439,8 +439,8 @@ public:
 
     // von sich selbst eine Kopie erzeugen
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nVersion) const;
-    virtual SvStream&       Store(SvStream &, USHORT nVer ) const;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVersion) const;
+    virtual SvStream&       Store(SvStream &, sal_uInt16 nVer ) const;
 };
 #endif /* @@@ NOT USED @@@ */
 
@@ -449,7 +449,7 @@ public:
 
 class SVL_DLLPUBLIC SfxItemHandle
 {
-    USHORT      *pRef;
+    sal_uInt16      *pRef;
     SfxPoolItem *pItem;
 public:
     SfxItemHandle( SfxPoolItem& );

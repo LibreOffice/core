@@ -52,7 +52,7 @@ TOOLS_DLLPUBLIC rtl_TextEncoding GetExtendedTextEncoding( rtl_TextEncoding eEnco
 // is returned (normally windows-1252).
 TOOLS_DLLPUBLIC rtl_TextEncoding GetOneByteTextEncoding( rtl_TextEncoding eEncoding );
 
-TOOLS_DLLPUBLIC rtl_TextEncoding GetSOLoadTextEncoding( rtl_TextEncoding eEncoding, USHORT nVersion = SOFFICE_FILEFORMAT_50 );
-TOOLS_DLLPUBLIC rtl_TextEncoding GetSOStoreTextEncoding( rtl_TextEncoding eEncoding, USHORT nVersion = SOFFICE_FILEFORMAT_50 );
+TOOLS_DLLPUBLIC rtl_TextEncoding GetSOLoadTextEncoding( rtl_TextEncoding eEncoding, sal_uInt16 nVersion = SOFFICE_FILEFORMAT_50 );
+TOOLS_DLLPUBLIC rtl_TextEncoding GetSOStoreTextEncoding( rtl_TextEncoding eEncoding, sal_uInt16 nVersion = SOFFICE_FILEFORMAT_50 );
 
 #endif  // _TOOLS_TENCCVT_HXX
