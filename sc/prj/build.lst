@@ -9,7 +9,6 @@ sc	sc\res\imglst\apptbx					get	-	all	sc_resap NULL
 sc	sc\source\core\inc					get	-	all	sc_coinc NULL
 sc	sc\source\ui\inc					get	-	all	sc_uiinc NULL
 sc	sc\source\filter\inc					get	-	all	sc_fiinc NULL
-sc	sc\addin\inc						get	-	all	sc_adinc NULL
 sc	sc\sdi							nmake	-	all	sc_sdi sc_inc NULL
 sc	sc\source\core\data					nmake	-	all	sc_data sc_sdi sc_inc NULL
 sc	sc\source\core\src					nmake	-	all	sc_cosrc sc_sdi sc_inc NULL
@@ -43,9 +42,5 @@ sc	sc\source\filter\rtf					nmake	-	all	sc_rtf sc_sdi sc_inc NULL
 sc	sc\source\filter\html					nmake	-	all	sc_html sc_sdi sc_inc NULL
 sc	sc\source\filter\xml					nmake	-	all	sc_xml sc_sdi sc_inc NULL
 sc	sc\source\filter\xcl97					nmake	-	all	sc_xcl97 sc_sdi sc_inc NULL
-sc	sc\addin						nmake	-	all	sc_add sc_sdi sc_inc NULL
-sc	sc\addin\datefunc					nmake	-	all	sc_addfu sc_add sc_sdi sc_inc NULL
-sc	sc\addin\rot13						nmake	-	all	sc_adrot sc_add sc_sdi sc_inc NULL
-sc	sc\addin\util						nmake	-	all	sc_adutil sc_addfu sc_adrot sc_sdi sc_inc NULL
-sc	sc\util							nmake	-	all	sc_util sc_addfu sc_adrot sc_adutil sc_app sc_attr sc_cctrl sc_cosrc sc_data sc_dbgui sc_dif sc_docsh sc_drfnc sc_excel sc_form sc_html sc_lotus sc_qpro sc_misc sc_name sc_nvipi sc_opt sc_page sc_rtf sc_scalc sc_style sc_tool sc_uisrc sc_undo sc_unobj sc_view sc_xcl97 sc_xml sc_acc sc_ftools sc_inc sc_vba NULL
+sc	sc\util							nmake	-	all	sc_util sc_app sc_attr sc_cctrl sc_cosrc sc_data sc_dbgui sc_dif sc_docsh sc_drfnc sc_excel sc_form sc_html sc_lotus sc_qpro sc_misc sc_name sc_nvipi sc_opt sc_page sc_rtf sc_scalc sc_style sc_tool sc_uisrc sc_undo sc_unobj sc_view sc_xcl97 sc_xml sc_acc sc_ftools sc_inc sc_vba NULL
 sc	sc\qa\unit						nmake	-	all	sc_qa_cppunit sc_util NULL
