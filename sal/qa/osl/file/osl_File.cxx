@@ -6009,22 +6009,55 @@ namespace osl_Directory
     //########################################
     OUString get_test_path()
     {
-        OUString tmp;
-        FileBase::RC rc = FileBase::getTempDirURL(tmp);
+        static OUString test_path;
+        if (test_path.isEmpty())
+        {
+            OUString tmp;
+            FileBase::RC rc = FileBase::getTempDirURL(tmp);
 
-        CPPUNIT_ASSERT_MESSAGE
-        (
-        "Test path creation failed",
-        rc == FileBase::E_None
-        );
+            CPPUNIT_ASSERT_MESSAGE
+            (
+             "Getting the location of TMP dir failed",
+             rc == FileBase::E_None
+            );
 
-        OUStringBuffer b(tmp);
-        if (tmp.lastIndexOf('/') != (tmp.getLength() - 1))
-            b.appendAscii("/");
+            OUString system_path;
+            rc = FileBase::getSystemPathFromFileURL(tmp, system_path);
 
-        b.appendAscii(TEST_PATH_POSTFIX);
+            CPPUNIT_ASSERT_MESSAGE
+            (
+             "Cannot convert the TMP dir to system path",
+             rc == FileBase::E_None
+            );
 
-        return b.makeStringAndClear();
+            OString tmp_x(rtl::OUStringToOString(system_path, RTL_TEXTENCODING_UTF8 ));
+            if (tmp_x.lastIndexOf('/') != (tmp_x.getLength() - 1))
+                tmp_x += rtl::OString('/');
+
+#ifndef WNT
+            // FIXME would be nice to create unique dir even on Windows
+            tmp_x += rtl::OString("XXXXXX");
+            char *out = mkdtemp(const_cast<char*>(tmp_x.getStr()));
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+             "mkdtemp call failed",
+             out != NULL
+            );
+
+            tmp_x += rtl::OString('/');
+#endif
+            tmp_x += rtl::OString(TEST_PATH_POSTFIX);
+
+            rc = FileBase::getFileURLFromSystemPath(rtl::OStringToOUString(tmp_x, RTL_TEXTENCODING_UTF8), test_path);
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+             "Cannot convert the system path back to an URL",
+             rc == FileBase::E_None
+            );
+        }
+        return test_path;
     }
 
     //########################################
