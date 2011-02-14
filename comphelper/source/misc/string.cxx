@@ -160,7 +160,7 @@ sal_Int32 compareNatural( const ::rtl::OUString & rLHS, const ::rtl::OUString & 
         nRet = rCollator->compareSubstring(rLHS, nLHSLastNonDigitPos,
             nLHSChunkLen, rRHS, nRHSLastNonDigitPos, nRHSChunkLen);
         if (nRet != 0)
-            return nRet;
+            break;
 
         //Compare digit block as one number vs another
         nLHSLastNonDigitPos = rBI->endOfCharBlock(rLHS, nLHSFirstDigitPos,
@@ -182,8 +182,14 @@ sal_Int32 compareNatural( const ::rtl::OUString & rLHS, const ::rtl::OUString & 
 
         nRet = nLHS-nRHS;
         if (nRet != 0)
-            return nRet;
+            break;
     }
+
+    //Squeeze these down to -1, 0, 1 in case it gets casted to a StringCompare
+    if (nRet > 0)
+        nRet = 1;
+    else if (nRet < 0)
+        nRet = -1;
 
     return nRet;
 }
