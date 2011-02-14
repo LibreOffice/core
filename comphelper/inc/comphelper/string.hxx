@@ -166,7 +166,7 @@ public:
     NaturalStringSorter(
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rContext,
         const ::com::sun::star::lang::Locale &rLocale);
-    sal_Int32 compare(const rtl::OUString &rLHS, const rtl::OUString &rRHS)
+    sal_Int32 compare(const rtl::OUString &rLHS, const rtl::OUString &rRHS) const
     {
         return compareNatural(rLHS, rRHS, m_xCollator, m_xBI, m_aLocale);
     }
