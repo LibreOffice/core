@@ -158,7 +158,7 @@ public:
     virtual                 ~SVGActionWriter();
 
     const VirtualDevice&    GetVDev() const { return *mpVDev; }
-    BOOL                    HasDoublePoints() const { return mbDoublePoints; }
+    sal_Bool                    HasDoublePoints() const { return mbDoublePoints; }
 };
 
 #endif

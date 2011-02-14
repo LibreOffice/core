@@ -401,7 +401,7 @@ void SVGAttributeWriter::SetFontAttr( const Font& rFont )
         delete mpElemPaint, mpElemPaint = NULL;
         delete mpElemFont;
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, GetFontStyle( maCurFont = rFont ) );
-        mpElemFont = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
+        mpElemFont = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
     }
 }
 
@@ -413,7 +413,7 @@ void SVGAttributeWriter::SetPaintAttr( const Color& rLineColor, const Color& rFi
     {
         delete mpElemPaint;
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, GetPaintStyle( maCurLineColor = rLineColor, maCurFillColor = rFillColor ) );
-        mpElemPaint = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
+        mpElemPaint = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
     }
 }
 
@@ -522,7 +522,7 @@ void SVGActionWriter::ImplWriteLine( const Point& rPt1, const Point& rPt2, const
     }
 
     {
-        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemLine, TRUE, TRUE );
+        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemLine, sal_True, sal_True );
     }
 }
 
@@ -549,7 +549,7 @@ void SVGActionWriter::ImplWriteRect( const Rectangle& rRect, long nRadX, long nR
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, *pStyle );
 
     {
-        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemRect, TRUE, TRUE );
+        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemRect, sal_True, sal_True );
     }
 }
 
@@ -570,7 +570,7 @@ void SVGActionWriter::ImplWriteEllipse( const Point& rCenter, long nRadX, long n
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, *pStyle );
 
     {
-        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemEllipse, TRUE, TRUE );
+        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemEllipse, sal_True, sal_True );
     }
 }
 
@@ -587,7 +587,7 @@ void SVGActionWriter::ImplWritePolygon( const Polygon& rPoly, sal_Bool bLineOnly
         {
             FastString                  aStyle;
             FastString                  aPoints;
-            USHORT                      i = 0, nSize = rPoly.GetSize();
+            sal_uInt16                      i = 0, nSize = rPoly.GetSize();
             const NMSP_RTL::OUString    aBlank( B2UCONST( " " ) );
 
             // points
@@ -626,7 +626,7 @@ void SVGActionWriter::ImplWritePolygon( const Polygon& rPoly, sal_Bool bLineOnly
 
             {
                 // write polyline/polygon element
-                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, bLineOnly ? aXMLElemPolyLine : aXMLElemPolygon, TRUE, TRUE );
+                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, bLineOnly ? aXMLElemPolyLine : aXMLElemPolygon, sal_True, sal_True );
             }
         }
     }
@@ -651,8 +651,8 @@ void SVGActionWriter::ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bo
 
             for( long i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )
             {
-                const Polygon&  rPoly = rPolyPoly[ (USHORT) i ];
-                USHORT          n = 1, nSize = rPoly.GetSize();
+                const Polygon&  rPoly = rPolyPoly[ (sal_uInt16) i ];
+                sal_uInt16          n = 1, nSize = rPoly.GetSize();
 
                 if( nSize > 1 )
                 {
@@ -716,7 +716,7 @@ void SVGActionWriter::ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bo
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrD, aPathData.GetString() );
             {
                 // write polyline/polygon element
-                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemPath, TRUE, TRUE );
+                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemPath, sal_True, sal_True );
             }
         }
     }
@@ -729,7 +729,7 @@ void SVGActionWriter::ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const G
 {
     if( rPolyPoly.Count() )
     {
-        SvXMLElementExport  aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
+        SvXMLElementExport  aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
         FastString          aClipId;
         FastString          aClipStyle;
 
@@ -737,12 +737,12 @@ void SVGActionWriter::ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const G
         aClipId += NMSP_RTL::OUString::valueOf( ImplGetNextClipId() );
 
         {
-            SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, TRUE, TRUE );
+            SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, sal_True, sal_True );
 
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aClipId.GetString() );
 
             {
-                SvXMLElementExport aElemClipPath( mrExport, XML_NAMESPACE_NONE, aXMLElemClipPath, TRUE, TRUE );
+                SvXMLElementExport aElemClipPath( mrExport, XML_NAMESPACE_NONE, aXMLElemClipPath, sal_True, sal_True );
                 ImplWritePolyPolygon( rPolyPoly, sal_False );
             }
         }
@@ -756,7 +756,7 @@ void SVGActionWriter::ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const G
 
         {
             GDIMetaFile         aTmpMtf;
-            SvXMLElementExport  aElemG2( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
+            SvXMLElementExport  aElemG2( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
 
             mpVDev->AddGradientActions( rPolyPoly.GetBoundRect(), rGradient, aTmpMtf );
             ImplWriteActions( aTmpMtf, pStyle );
@@ -771,7 +771,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
                                      const NMSP_RTL::OUString* pStyle )
 {
     String  aText( rText ); aText.EraseLeadingChars( ' ' );
-    UINT32  nLen = aText.Len(), i;
+    sal_uInt32  nLen = aText.Len(), i;
 
     if( nLen )
     {
@@ -795,7 +795,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 
         if( nLen > 1 )
         {
-            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( aText.GetChar(  (USHORT) nLen - 1 ) );
+            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( aText.GetChar(  (sal_uInt16) nLen - 1 ) );
 
             if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
             {
@@ -861,7 +861,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
             aTransform += ')';
 
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
-            pTransform = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
+            pTransform = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True );
         }
 
         // add additional style if requested
@@ -872,7 +872,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 #ifdef _SVG_USE_TSPANS
         if( pDXArray )
         {
-            SvXMLElementExport          aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, TRUE, TRUE );
+            SvXMLElementExport          aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, sal_True, sal_True );
             FastString                  aTSpanX;
             const NMSP_RTL::OUString    aSpace( ' ' );
             long                        i, nX, nCount;
@@ -894,7 +894,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
                 {
                     try
                     {
-                        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTSpan, TRUE, TRUE );
+                        SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTSpan, sal_True, sal_True );
                         mrExport.GetDocHandler()->characters( NMSP_RTL::OUString( UniString( aText ) ) );
                     }
                     catch( ::com::sun::star::xml::sax::SAXException&  )
@@ -912,7 +912,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 
             try
             {
-                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, TRUE, TRUE );
+                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, sal_True, sal_True );
                 mrExport.GetDocHandler()->characters( NMSP_RTL::OUString( UniString( aText ) ) );
             }
             catch( ::com::sun::star::xml::sax::SAXException&  )
@@ -938,7 +938,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
                 aPoly[ 2 ].X() = aPoly[ 1 ].X(); aPoly[ 2 ].Y() = aPoly[ 0 ].Y() + nLineHeight - 1;
                 aPoly[ 3 ].X() = aPoly[ 0 ].X(); aPoly[ 3 ].Y() = aPoly[ 2 ].Y();
 
-                ImplWritePolygon( aPoly, FALSE );
+                ImplWritePolygon( aPoly, sal_False );
             }
 
             if( rFont.GetUnderline() )
@@ -950,7 +950,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
                 aPoly[ 2 ].X() = aPoly[ 1 ].X(); aPoly[ 2 ].Y() = aPoly[ 0 ].Y() + nLineHeight - 1;
                 aPoly[ 3 ].X() = aPoly[ 0 ].X(); aPoly[ 3 ].Y() = aPoly[ 2 ].Y();
 
-                ImplWritePolygon( aPoly, FALSE );
+                ImplWritePolygon( aPoly, sal_False );
             }
         }
 
@@ -1049,10 +1049,10 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf, const NMSP_RTL:
 {
     ImplAcquireContext();
 
-    for( ULONG i = 0, nCount = rMtf.GetActionCount(); i < nCount; i++ )
+    for( sal_uLong i = 0, nCount = rMtf.GetActionCount(); i < nCount; i++ )
     {
         const MetaAction*   pAction = rMtf.GetAction( i );
-        const USHORT        nType = pAction->GetType();
+        const sal_uInt16        nType = pAction->GetType();
 
         switch( nType )
         {
@@ -1253,7 +1253,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf, const NMSP_RTL:
                 const GDIMetaFile       aGDIMetaFile( pA->GetSubstitute() );
                 sal_Bool                bFound = sal_False;
 
-                for( ULONG j = 0, nCount2 = aGDIMetaFile.GetActionCount(); ( j < nCount2 ) && !bFound; j++ )
+                for( sal_uLong j = 0, nCount2 = aGDIMetaFile.GetActionCount(); ( j < nCount2 ) && !bFound; j++ )
                 {
                     const MetaAction* pSubstAct = aGDIMetaFile.GetAction( j );
 

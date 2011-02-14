@@ -117,15 +117,15 @@ protected:
     Window*             pWindow;
     DlgEdFunc*          pFunc;
     DlgEdMode           eMode;
-    USHORT              eActObj;
-    BOOL                bFirstDraw;
+    sal_uInt16              eActObj;
+    sal_Bool                bFirstDraw;
     Size                aGridSize;
-    BOOL                bGridVisible;
-    BOOL                bGridSnap;
-    BOOL                bCreateOK;
+    sal_Bool                bGridVisible;
+    sal_Bool                bGridSnap;
+    sal_Bool                bCreateOK;
     Timer               aPaintTimer;
     Rectangle           aPaintRect;
-    BOOL                bDialogModelChanged;
+    sal_Bool                bDialogModelChanged;
     Timer               aMarkTimer;
     long                mnPaintGuard;
 
@@ -167,33 +167,33 @@ public:
 
     void            ShowDialog();
 
-    BOOL            UnmarkDialog();
-    BOOL            RemarkDialog();
+    sal_Bool            UnmarkDialog();
+    sal_Bool            RemarkDialog();
 
-    void            SetDialogModelChanged( BOOL bChanged = TRUE ) { bDialogModelChanged = bChanged; }
-    BOOL            IsDialogModelChanged() const { return bDialogModelChanged; }
+    void            SetDialogModelChanged( sal_Bool bChanged = sal_True ) { bDialogModelChanged = bChanged; }
+    sal_Bool            IsDialogModelChanged() const { return bDialogModelChanged; }
 
-    BOOL            IsModified() const;
+    sal_Bool            IsModified() const;
     void            ClearModifyFlag();
 
     void            MouseButtonDown( const MouseEvent& rMEvt );
     void            MouseButtonUp( const MouseEvent& rMEvt );
     void            MouseMove( const MouseEvent& rMEvt );
     void            Paint( const Rectangle& rRect );
-    BOOL            KeyInput( const KeyEvent& rKEvt );
+    sal_Bool            KeyInput( const KeyEvent& rKEvt );
 
     void            SetMode( DlgEdMode eMode );
-    void            SetInsertObj( USHORT eObj );
-    USHORT          GetInsertObj() const;
+    void            SetInsertObj( sal_uInt16 eObj );
+    sal_uInt16          GetInsertObj() const;
     void            CreateDefaultObject();
     DlgEdMode       GetMode() const { return eMode; }
-    BOOL            IsCreateOK() const { return bCreateOK; }
+    sal_Bool            IsCreateOK() const { return bCreateOK; }
 
     void            Cut();
     void            Copy();
     void            Paste();
     void            Delete();
-    BOOL            IsPasteAllowed();
+    sal_Bool            IsPasteAllowed();
 
     void            ShowProperties();
     void            UpdatePropertyBrowserDelayed();

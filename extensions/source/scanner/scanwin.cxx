@@ -1001,7 +1001,7 @@ SEQ( ScannerContext ) SAL_CALL ScannerManager::getAvailableScanners() throw()
 
 // -----------------------------------------------------------------------------
 
-BOOL SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
+sal_Bool SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
     throw( ScannerException )
 {
     vos::OGuard                         aGuard( maProtector );

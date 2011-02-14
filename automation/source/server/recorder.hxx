@@ -52,15 +52,15 @@ private:
     String aKeyString;
     rtl::OString aKeyUniqueID;     // has to be remembered seperately since Window might be gone when needed
     Window* pKeyWin;
-    BOOL bKeyFollowFocus;
+    sal_Bool bKeyFollowFocus;
 
     AutoTimer aHookRefresh;
     void AddEventHooks();
     void RemoveEventHooks();
     DECL_LINK( HookRefreshHdl, void* );
 
-    void LogVCL( rtl::OString aParentID, USHORT nVCLWindowType, rtl::OString aID, String aMethod, USHORT aParam );
-    void LogVCL( rtl::OString aParentID, USHORT nVCLWindowType, rtl::OString aID, String aMethod );
+    void LogVCL( rtl::OString aParentID, sal_uInt16 nVCLWindowType, rtl::OString aID, String aMethod, sal_uInt16 aParam );
+    void LogVCL( rtl::OString aParentID, sal_uInt16 nVCLWindowType, rtl::OString aID, String aMethod );
 
     static MacroRecorder *pMacroRecorder;
 
@@ -69,15 +69,15 @@ private:
     void CheckDelete();
 
     // Actions to perform
-    BOOL m_bRecord;
-    BOOL m_bLog;
+    sal_Bool m_bRecord;
+    sal_Bool m_bLog;
 
 public:
 
-    void SetActionRecord( BOOL bRecord = TRUE ) { m_bRecord = bRecord; CheckDelete(); };
-    void SetActionLog( BOOL bLog = TRUE ) { m_bLog = bLog; CheckDelete(); };
+    void SetActionRecord( sal_Bool bRecord = sal_True ) { m_bRecord = bRecord; CheckDelete(); };
+    void SetActionLog( sal_Bool bLog = sal_True ) { m_bLog = bLog; CheckDelete(); };
 
     static MacroRecorder* GetMacroRecorder();
-    static BOOL HasMacroRecorder();
+    static sal_Bool HasMacroRecorder();
 };
 

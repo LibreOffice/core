@@ -98,7 +98,7 @@ MacSpellChecker::MacSpellChecker() :
     aDEncs = NULL;
     aDLocs = NULL;
     aDNames = NULL;
-    bDisposing = FALSE;
+    bDisposing = sal_False;
     pPropHelper = NULL;
     numdict = 0;
     NSApplicationLoad();
@@ -261,17 +261,17 @@ sal_Bool SAL_CALL MacSpellChecker::hasLocale(const Locale& rLocale)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (!aSuppLocales.getLength())
         getLocales();
 
-    INT32 nLen = aSuppLocales.getLength();
-    for (INT32 i = 0;  i < nLen;  ++i)
+    sal_Int32 nLen = aSuppLocales.getLength();
+    for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
         const Locale *pLocale = aSuppLocales.getConstArray();
         if (rLocale == pLocale[i])
         {
-            bRes = TRUE;
+            bRes = sal_True;
             break;
         }
     }
@@ -279,7 +279,7 @@ sal_Bool SAL_CALL MacSpellChecker::hasLocale(const Locale& rLocale)
 }
 
 
-INT16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocale )
+sal_Int16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocale )
 {
     rtl_TextEncoding aEnc;
 
@@ -287,7 +287,7 @@ INT16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLo
         // (note: mutex is held higher up in isValid)
 
 
-    INT16 nRes = -1;
+    sal_Int16 nRes = -1;
 
         // first handle smart quotes both single and double
     OUStringBuffer rBuf(rWord);
@@ -316,7 +316,7 @@ INT16 MacSpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLo
         }
 
         int aCount;
-        NSRange range = [macSpell checkSpellingOfString:aNSStr startingAt:0 language:aLang wrap:FALSE inSpellDocumentWithTag:macTag wordCount:&aCount];
+        NSRange range = [macSpell checkSpellingOfString:aNSStr startingAt:0 language:aLang wrap:sal_False inSpellDocumentWithTag:macTag wordCount:&aCount];
         int rVal = 0;
         if(range.length>0)
         {
@@ -347,13 +347,13 @@ sal_Bool SAL_CALL
     MutexGuard  aGuard( GetLinguMutex() );
 
      if (rLocale == Locale()  ||  !rWord.getLength())
-        return TRUE;
+        return sal_True;
 
     if (!hasLocale( rLocale ))
 #ifdef LINGU_EXCEPTIONS
         throw( IllegalArgumentException() );
 #else
-        return TRUE;
+        return sal_True;
 #endif
 
     // Get property values to be used.
@@ -366,10 +366,10 @@ sal_Bool SAL_CALL
     PropertyHelper_Spell &rHelper = GetPropHelper();
     rHelper.SetTmpPropVals( rProperties );
 
-    INT16 nFailure = GetSpellFailure( rWord, rLocale );
+    sal_Int16 nFailure = GetSpellFailure( rWord, rLocale );
     if (nFailure != -1)
     {
-        INT16 nLang = LocaleToLanguage( rLocale );
+        sal_Int16 nLang = LocaleToLanguage( rLocale );
         // postprocess result for errors that should be ignored
         if (   (!rHelper.IsSpellUpperCase()  && IsUpper( rWord, nLang ))
             || (!rHelper.IsSpellWithDigits() && HasDigits( rWord ))
@@ -393,7 +393,7 @@ Reference< XSpellAlternatives >
     Reference< XSpellAlternatives > xRes;
         // note: mutex is held by higher up by spell which covers both
 
-    INT16 nLang = LocaleToLanguage( rLocale );
+    sal_Int16 nLang = LocaleToLanguage( rLocale );
     int count;
     Sequence< OUString > aStr( 0 );
 
@@ -496,7 +496,7 @@ sal_Bool SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (!bDisposing && rxLstnr.is())
     {
         bRes = GetPropHelper().addLinguServiceEventListener( rxLstnr );
@@ -512,7 +512,7 @@ sal_Bool SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (!bDisposing && rxLstnr.is())
     {
         DBG_ASSERT( xPropHelper.is(), "xPropHelper non existent" );
@@ -539,7 +539,7 @@ void SAL_CALL
 
     if (!pPropHelper)
     {
-        INT32 nLen = rArguments.getLength();
+        sal_Int32 nLen = rArguments.getLength();
         if (2 == nLen)
         {
             Reference< XPropertySet >   xPropSet;
@@ -569,7 +569,7 @@ void SAL_CALL
 
     if (!bDisposing)
     {
-        bDisposing = TRUE;
+        bDisposing = sal_True;
         EventObject aEvtObj( (XSpellChecker *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
     }
@@ -618,10 +618,10 @@ sal_Bool SAL_CALL MacSpellChecker::supportsService( const OUString& ServiceName 
 
     Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
-    for( INT32 i = 0; i < aSNL.getLength(); i++ )
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
-            return TRUE;
-    return FALSE;
+            return sal_True;
+    return sal_False;
 }
 
 
