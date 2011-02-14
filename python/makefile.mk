@@ -161,6 +161,17 @@ $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE) : $(PYCONFIG)
 $(PYCONFIG) : $(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h
     -rm -f $@
     cat $(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h > $@
+# We know that the only thing guarded with #ifdef _DEBUG in PC/pyconfig.h is
+# the line defining Py_DEBUG.
+.IF "$(debug)"!=""
+# If Python is built with debugging, then the modules we build need to be built with
+# Py_DEBUG defined too because of the Py_InitModule4 redefining magic in modsupport.h
+    sed -e 's/^#ifdef _DEBUG$/#if 1/' <$@ >$@.new && mv $@.new $@
+.ELSE
+# Correspondingly, if Python is not built with debugging, it won't use the Py_InitModule4 redefining
+# magic, so our Python modules should not be built to provide that either.
+    sed -e 's/^#ifdef _DEBUG$/#if 0/' <$@ >$@.new && mv $@.new $@
+.ENDIF
 .ENDIF
 .ENDIF
 
