@@ -3446,7 +3446,7 @@ RTLFUNC(Rnd)
     else
     {
         double nRand = (double)rand();
-        nRand = ( nRand / (double)RAND_MAX );
+        nRand = ( nRand / ((double)RAND_MAX + 1.0));
         rPar.Get(0)->PutDouble( nRand );
     }
 }
