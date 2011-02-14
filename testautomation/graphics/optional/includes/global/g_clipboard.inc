@@ -30,15 +30,6 @@
 '* short description :
 '*
 '**************************************************************************************
-' #1 tiEditUndo
-' #1 tiEditRedo
-' #1 tiEditClipboard
-' #1 tiEditPasteSpecial_HTML
-' #1 tdEditPasteSpecial_Text
-' #1 tdEditPasteSpecial_Graphic
-' #1 tdEditPasteSpecial_Circle
-' #1 tiEditPasteSpecial
-'\*************************************************************************************
 
 testcase tiEditUndo
 
@@ -128,6 +119,7 @@ testcase tiEditUndo
     end if
     TabPositionAndSize.Cancel
     printlog "Close document"
+    Call hCloseDocument
     sLocaltestfile = hFileGetLocalPath( gTesttoolPath + "leer."+ExtensionString )
     printlog sLocaltestfile
     if (FileExists (sLocaltestfile)) then
@@ -136,10 +128,7 @@ testcase tiEditUndo
     else
         warnlog "File is missing."
     endif
-
-    printlog "Close document"
-    Call hCloseDocument						
-
+    					
 endcase 'tiEditUndo
 
 '-------------------------------------------------------------------------------

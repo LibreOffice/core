@@ -756,7 +756,7 @@ testcase tToolsOptionsImprovementProgram
             Active.ok()
         else
             if ( NOT bImportDialogHasBeenDisplayed ) then
-                warnlog( "#i97340# Show Data button enabled but no logged data found" )
+                warnlog( "#i116461# Show Data button enabled but no logged data found" )
             endif
         endif
 

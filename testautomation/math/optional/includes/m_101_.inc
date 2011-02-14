@@ -243,7 +243,7 @@ endcase
 testcase tFilePassword
    dim i,x as integer
    dim sTemp as string
-   const cFilterCount = 4
+   const cFilterCount = 3
    dim sFilterName as string
    dim sFilter as string
    dim sFilterExt() as string
@@ -269,7 +269,6 @@ testcase tFilePassword
    if x <> cFilterCount then warnlog " The Filter count is wrong! Have to be ("+cFilterCount+"), but are: "+x
 '   Check: (1): Open Office Formula (.oof)
 '   Check: (2): MathML 1.01 (.mml)
-'   Check: (5): StarMath 5.0 (.smf)
 '   Check: (6): StarOffice 6.0/7 Formula (.sxm)
 
 '/// check if any other then gMathFilter is password able; and if gMathFilter is password able ///'
