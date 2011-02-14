@@ -217,7 +217,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
             else
                 objID = oidString;
 
-            if ( objId.equals("2.5.29.17") )
+            if ( objID.equals("2.5.29.17") )
                 pExtn = (CertificateExtension_XmlSecImpl*) new SanExtensionImpl() ;
             else
                 pExtn = new CertificateExtension_XmlSecImpl() ;
@@ -226,7 +226,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
                 crit = sal_False ;
             else
                 crit = ( (*extns)->critical.data[0] == 0xFF ) ? sal_True : sal_False ;
-            pExtn->setCertExtn( (*extns)->value.data, (*extns)->value.len, (unsigned char*)objId.getStr(), objId.getLength(), crit ) ;
+            pExtn->setCertExtn( (*extns)->value.data, (*extns)->value.len, (unsigned char*)objID.getStr(), objID.getLength(), crit ) ;
 
             xExtns[len] = pExtn ;
         }

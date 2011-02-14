@@ -93,20 +93,6 @@ namespace {
         return length;
     }
 
-    static SECStatus DestroyGeneralName(CERTGeneralName *name)
-    {
-        CERTGeneralName    *first;
-        CERTGeneralName    *next = NULL;
-
-        first = name;
-        do {
-            next = CERT_GetNextGeneralName(name);
-            PORT_Free(name);
-            name = next;
-        } while (name != first);
-        return SECSuccess;
-
-    }
 }
 
 //Methods from XSanExtension
@@ -160,23 +146,16 @@ namespace {
                 case certX400Address: {
                     // unsupported
                     arrCertAltNameEntry[i].Type = ExtAltNameType_X400_ADDRESS;
-                    arrCertAltNameEntry[i].value <<= Any.VOID;
                     break;
                                       }
                 case certDirectoryName: {
+                    // unsupported
                     arrCertAltNameEntry[i].Type = ExtAltNameType_DIRECTORY_NAME;
-
-                    char * directoryName = CERT_NameToAscii(&current->name.directoryName);
-
-                    arrCertAltNameEntry[i].Value <<= ::rtl::OUString::createFromAscii(directoryName);
-
-                    PORT_Free(directoryName);
                     break;
                                         }
                 case certEDIPartyName:  {
                     // unsupported
                     arrCertAltNameEntry[i].Type = ExtAltNameType_EDI_PARTY_NAME;
-                    arrCertAltNameEntry[i].Value <<= Any.VOID;
                     break;
                                         }
                 case certURI:
@@ -195,13 +174,13 @@ namespace {
                                     }
                 case certRegisterID:
                     arrCertAltNameEntry[i].Type = ExtAltNameType_REGISTERED_ID;
-                    arrCertAltNameEntry[i].Value <<= ::rtl::OUString::createFromAscii(CERT_GetOidString(&current->name.other));
+
+
+                    rtl::OString nssOid = ::rtl::OString(CERT_GetOidString(&current->name.other));
+                    rtl::OString unoOid = removeOIDFromString(nssOid);
+                    arrCertAltNameEntry[i].Value <<= rtl::OStringToOUString( unoOid, RTL_TEXTENCODING_ASCII_US );
                     break;
             }
-
-
-            //    break;
-
             current = CERT_GetNextGeneralName(current);
         }
 
@@ -217,6 +196,17 @@ namespace {
     return m_Entries;
 }
 
+::rtl::OString SanExtensionImpl :: removeOIDFromString( const ::rtl::OString &oidString)
+    {
+        ::rtl::OString objID;
+        ::rtl::OString oid("OID.");
+        if (oidString.match(oid))
+            objID = oidString.copy(oid.getLength());
+        else
+            objID = oidString;
+        return objID;
+
+    }
 //Helper method
 void SanExtensionImpl :: setCertExtn( ::com::sun::star::uno::Sequence< sal_Int8 > extnId, ::com::sun::star::uno::Sequence< sal_Int8 > extnValue, sal_Bool critical ) {
     m_critical = critical ;

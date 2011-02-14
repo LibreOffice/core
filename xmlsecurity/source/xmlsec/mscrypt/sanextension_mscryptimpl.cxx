@@ -114,12 +114,6 @@ sal_Bool SAL_CALL SanExtensionImpl :: isCritical() throw( ::com::sun::star::uno:
             case CERT_ALT_NAME_DIRECTORY_NAME :
                 {
                     arrCertAltNameEntry[i].Type = ExtAltNameType_DIRECTORY_NAME;
-
-                    Sequence< sal_Int8 > directoryName( pEntry->DirectoryName.cbData ) ;
-                    for( unsigned int n = 0; n < pEntry->DirectoryName.cbData ; n++ )
-                        directoryName[n] = *( pEntry->DirectoryName.pbData + n ) ;
-
-                    arrCertAltNameEntry[i].Value <<= directoryName;
                     break;
                 }
             case CERT_ALT_NAME_URL :
