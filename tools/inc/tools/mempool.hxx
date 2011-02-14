@@ -41,9 +41,9 @@ class TOOLS_DLLPUBLIC FixedMemPool
     FixedMemPool_Impl * m_pImpl;
 
 public:
-                    FixedMemPool( USHORT nTypeSize,
-                                  USHORT nInitSize = 512,
-                                  USHORT nGrowSize = 256 );
+                    FixedMemPool( sal_uInt16 nTypeSize,
+                                  sal_uInt16 nInitSize = 512,
+                                  sal_uInt16 nGrowSize = 256 );
                     ~FixedMemPool();
 
     void*           Alloc();

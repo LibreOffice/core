@@ -53,12 +53,12 @@ enum FAT_ERROR
 struct StgLinkArg
 {
     String aFile;
-    ULONG nErr;
+    sal_uLong nErr;
 };
 
 class StgIo : public StgCache {
     void SetupStreams();            // load all internal streams
-    BOOL         bCopied;
+    sal_Bool         bCopied;
 public:
     StgIo();
    ~StgIo();
@@ -68,13 +68,13 @@ public:
     StgDataStrm* pDataFAT;          // small data FAT stream
     StgDataStrm* pDataStrm;         // small data stream
     short        GetDataPageSize(); // get the logical data page size
-    BOOL Load();                    // load a storage file
-    BOOL Init();                    // set up an empty file
-    BOOL CommitAll();               // commit everything (root commit)
+    sal_Bool Load();                    // load a storage file
+    sal_Bool Init();                    // set up an empty file
+    sal_Bool CommitAll();               // commit everything (root commit)
 
     static void SetErrorLink( const Link& );
     static const Link& GetErrorLink();
-    ULONG ValidateFATs( );
+    sal_uLong ValidateFATs( );
 };
 
 #endif

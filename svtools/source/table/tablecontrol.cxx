@@ -285,7 +285,7 @@ namespace svt { namespace table
     Reference<XAccessible> TableControl::CreateAccessibleControl( sal_Int32 _nIndex )
     {
         (void)_nIndex;
-        DBG_ASSERT( FALSE, "TableControl::CreateAccessibleControl: to be overwritten!" );
+        DBG_ASSERT( sal_False, "TableControl::CreateAccessibleControl: to be overwritten!" );
         return NULL;
     }
     ::rtl::OUString TableControl::GetAccessibleObjectName( AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const
@@ -455,7 +455,7 @@ void TableControl::GrabFocus()
     Control::GrabFocus();
 }
 // -----------------------------------------------------------------------------
-Reference< XAccessible > TableControl::GetAccessible( BOOL bCreate )
+Reference< XAccessible > TableControl::GetAccessible( sal_Bool bCreate )
 {
     return Control::GetAccessible( bCreate );
 }
@@ -564,13 +564,13 @@ void TableControl::commitGridControlEvent( sal_Int16 _nEventId, const Any& _rNew
          m_pAccessTable->m_pAccessible->commitEvent( _nEventId, _rNewValue, _rOldValue);
 }
 // -----------------------------------------------------------------------------
-Rectangle TableControl::calcHeaderRect(sal_Bool _bIsColumnBar,BOOL _bOnScreen)
+Rectangle TableControl::calcHeaderRect(sal_Bool _bIsColumnBar,sal_Bool _bOnScreen)
 {
     (void)_bOnScreen;
     return m_pImpl->calcHeaderRect(_bIsColumnBar);
 }
 // -----------------------------------------------------------------------------
-Rectangle TableControl::calcTableRect(BOOL _bOnScreen)
+Rectangle TableControl::calcTableRect(sal_Bool _bOnScreen)
 {
     (void)_bOnScreen;
     return m_pImpl->calcTableRect();

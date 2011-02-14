@@ -292,7 +292,7 @@ private:
     ::rtl::OUString             maActionCommand;
 
 protected:
-    void            ImplClickedOrToggled( BOOL bToggled );
+    void            ImplClickedOrToggled( sal_Bool bToggled );
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
 

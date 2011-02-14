@@ -250,7 +250,7 @@ void doTestCode()
     BitmapWriteAccess* pAcc = aTransMask.AcquireWriteAccess();
     for( int nX = 0; nX < 256; nX++ )
         for( int nY = 0; nY < 256; nY++ )
-            pAcc->SetPixel( nX, nY, BitmapColor( (BYTE)((nX+nY)/2) ) );
+            pAcc->SetPixel( nX, nY, BitmapColor( (sal_uInt8)((nX+nY)/2) ) );
     aTransMask.ReleaseAccess( pAcc );
     aTransMask.SetPrefMapMode( MAP_MM );
     aTransMask.SetPrefSize( Size( 10, 10 ) );
@@ -1440,17 +1440,17 @@ void PDFWriterImpl::PDFPage::convertRect( Rectangle& rRect ) const
 
 void PDFWriterImpl::PDFPage::appendPolygon( const Polygon& rPoly, OStringBuffer& rBuffer, bool bClose ) const
 {
-    USHORT nPoints = rPoly.GetSize();
+    sal_uInt16 nPoints = rPoly.GetSize();
     /*
      *  #108582# applications do weird things
      */
     sal_uInt32 nBufLen = rBuffer.getLength();
     if( nPoints > 0 )
     {
-        const BYTE* pFlagArray = rPoly.GetConstFlagAry();
+        const sal_uInt8* pFlagArray = rPoly.GetConstFlagAry();
         appendPoint( rPoly[0], rBuffer );
         rBuffer.append( " m\n" );
-        for( USHORT i = 1; i < nPoints; i++ )
+        for( sal_uInt16 i = 1; i < nPoints; i++ )
         {
             if( pFlagArray && pFlagArray[i] == POLY_CONTROL && nPoints-i > 2 )
             {
@@ -1561,8 +1561,8 @@ void PDFWriterImpl::PDFPage::appendPolygon( const basegfx::B2DPolygon& rPoly, OS
 
 void PDFWriterImpl::PDFPage::appendPolyPolygon( const PolyPolygon& rPolyPoly, OStringBuffer& rBuffer, bool bClose ) const
 {
-    USHORT nPolygons = rPolyPoly.Count();
-    for( USHORT n = 0; n < nPolygons; n++ )
+    sal_uInt16 nPolygons = rPolyPoly.Count();
+    for( sal_uInt16 n = 0; n < nPolygons; n++ )
         appendPolygon( rPolyPoly[n], rBuffer, bClose );
 }
 
@@ -2058,12 +2058,12 @@ bool PDFWriterImpl::compressStream( SvMemoryStream* pStream )
 {
 #ifndef DEBUG_DISABLE_PDFCOMPRESSION
     pStream->Seek( STREAM_SEEK_TO_END );
-    ULONG nEndPos = pStream->Tell();
+    sal_uLong nEndPos = pStream->Tell();
     pStream->Seek( STREAM_SEEK_TO_BEGIN );
     ZCodec* pCodec = new ZCodec( 0x4000, 0x4000 );
     SvMemoryStream aStream;
     pCodec->BeginCompression();
-    pCodec->Write( aStream, (const BYTE*)pStream->GetData(), nEndPos );
+    pCodec->Write( aStream, (const sal_uInt8*)pStream->GetData(), nEndPos );
     pCodec->EndCompression();
     delete pCodec;
     nEndPos = aStream.Tell();
@@ -2122,7 +2122,7 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
     sal_uInt64 nWritten;
     if( m_pCodec )
     {
-        m_pCodec->Write( *m_pMemStream, static_cast<const BYTE*>(pBuffer), (ULONG)nBytes );
+        m_pCodec->Write( *m_pMemStream, static_cast<const sal_uInt8*>(pBuffer), (sal_uLong)nBytes );
         nWritten = nBytes;
     }
     else
@@ -2173,7 +2173,7 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
         pVDev->SetMapMode( MAP_MM );
 
         m_pReferenceDevice->mpPDFWriter = this;
-        m_pReferenceDevice->ImplUpdateFontData( TRUE );
+        m_pReferenceDevice->ImplUpdateFontData( sal_True );
     }
     return m_pReferenceDevice;
 }
@@ -3863,7 +3863,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
     ZCodec* pCodec = new ZCodec( 0x4000, 0x4000 );
     SvMemoryStream aStream;
     pCodec->BeginCompression();
-    pCodec->Write( aStream, (const BYTE*)aContents.getStr(), aContents.getLength() );
+    pCodec->Write( aStream, (const sal_uInt8*)aContents.getStr(), aContents.getLength() );
     pCodec->EndCompression();
     delete pCodec;
 #endif
@@ -7027,7 +7027,7 @@ void PDFWriterImpl::drawRelief( SalLayout& rLayout, const String& rText, bool bT
 
     Font aSetFont = m_aCurrentPDFState.m_aFont;
     aSetFont.SetRelief( RELIEF_NONE );
-    aSetFont.SetShadow( FALSE );
+    aSetFont.SetShadow( sal_False );
 
     aSetFont.SetColor( aReliefColor );
     setTextLineColor( aReliefColor );
@@ -7064,8 +7064,8 @@ void PDFWriterImpl::drawShadow( SalLayout& rLayout, const String& rText, bool bT
         rFont.SetColor( Color( COL_LIGHTGRAY ) );
     else
         rFont.SetColor( Color( COL_BLACK ) );
-    rFont.SetShadow( FALSE );
-    rFont.SetOutline( FALSE );
+    rFont.SetShadow( sal_False );
+    rFont.SetOutline( sal_False );
     setFont( rFont );
     setTextLineColor( rFont.GetColor() );
     setOverlineColor( rFont.GetColor() );
@@ -7519,7 +7519,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
          )
         )
     {
-        BOOL bUnderlineAbove = OutputDevice::ImplIsUnderlineAbove( m_aCurrentPDFState.m_aFont );
+        sal_Bool bUnderlineAbove = OutputDevice::ImplIsUnderlineAbove( m_aCurrentPDFState.m_aFont );
         if( m_aCurrentPDFState.m_aFont.IsWordLineMode() )
         {
             Point aPos, aStartPt;
@@ -7572,7 +7572,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
         long                    nEmphYOff;
         long                    nEmphWidth;
         long                    nEmphHeight;
-        BOOL                    bEmphPolyLine;
+        sal_Bool                    bEmphPolyLine;
         FontEmphasisMark        nEmphMark;
 
         push( PUSH_ALL );
@@ -7653,7 +7653,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
 }
 
 void PDFWriterImpl::drawEmphasisMark( long nX, long nY,
-                                      const PolyPolygon& rPolyPoly, BOOL bPolyLine,
+                                      const PolyPolygon& rPolyPoly, sal_Bool bPolyLine,
                                       const Rectangle& rRect1, const Rectangle& rRect2 )
 {
     // TODO: pass nWidth as width of this mark
@@ -7723,7 +7723,7 @@ void PDFWriterImpl::drawTextArray( const Point& rPos, const String& rText, const
     }
 }
 
-void PDFWriterImpl::drawStretchText( const Point& rPos, ULONG nWidth, const String& rText, xub_StrLen nIndex, xub_StrLen nLen, bool bTextLines )
+void PDFWriterImpl::drawStretchText( const Point& rPos, sal_uLong nWidth, const String& rText, xub_StrLen nIndex, xub_StrLen nLen, bool bTextLines )
 {
     MARK( "drawStretchText" );
 
@@ -7739,7 +7739,7 @@ void PDFWriterImpl::drawStretchText( const Point& rPos, ULONG nWidth, const Stri
     }
 }
 
-void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, USHORT nStyle, bool bTextLines )
+void PDFWriterImpl::drawText( const Rectangle& rRect, const String& rOrigStr, sal_uInt16 nStyle, bool bTextLines )
 {
     long        nWidth          = rRect.GetWidth();
     long        nHeight         = rRect.GetHeight();
@@ -8283,17 +8283,17 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     while( m_pReferenceDevice->GetTextWidth( aStrikeout ) >= nWidth )
         aStrikeout.Erase( 0, 1 );
     aStrikeout.Append( aStrikeoutChar );
-    BOOL bShadow = m_aCurrentPDFState.m_aFont.IsShadow();
+    sal_Bool bShadow = m_aCurrentPDFState.m_aFont.IsShadow();
     if ( bShadow )
     {
         Font aFont = m_aCurrentPDFState.m_aFont;
-        aFont.SetShadow( FALSE );
+        aFont.SetShadow( sal_False );
         setFont( aFont );
         updateGraphicsState();
     }
 
     // strikeout string is left aligned non-CTL text
-    ULONG nOrigTLM = m_pReferenceDevice->GetLayoutMode();
+    sal_uLong nOrigTLM = m_pReferenceDevice->GetLayoutMode();
     m_pReferenceDevice->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG|TEXT_LAYOUT_COMPLEX_DISABLED );
     drawText( rPos, aStrikeout, 0, aStrikeout.Len(), false );
     m_pReferenceDevice->SetLayoutMode( nOrigTLM );
@@ -8301,7 +8301,7 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     if ( bShadow )
     {
         Font aFont = m_aCurrentPDFState.m_aFont;
-        aFont.SetShadow( TRUE );
+        aFont.SetShadow( sal_True );
         setFont( aFont );
         updateGraphicsState();
     }
@@ -8968,7 +8968,7 @@ void PDFWriterImpl::drawPolyLine( const Polygon& rPoly )
 {
     MARK( "drawPolyLine" );
 
-    USHORT nPoints = rPoly.GetSize();
+    sal_uInt16 nPoints = rPoly.GetSize();
     if( nPoints < 2 )
         return;
 
@@ -9161,7 +9161,7 @@ void PDFWriterImpl::drawPolyLine( const Polygon& rPoly, const PDFWriter::ExtLine
             aBoundRect.Right()  += nLW;
             aBoundRect.Bottom() += nLW;
         }
-        endTransparencyGroup( aBoundRect, (USHORT)(100.0*rInfo.m_fTransparency) );
+        endTransparencyGroup( aBoundRect, (sal_uInt16)(100.0*rInfo.m_fTransparency) );
     }
 }
 
@@ -9202,7 +9202,7 @@ void PDFWriterImpl::drawPixel( const Polygon& rPoints, const Color* pColors )
     if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) && ! pColors )
         return;
 
-    USHORT nPoints = rPoints.GetSize();
+    sal_uInt16 nPoints = rPoints.GetSize();
     OStringBuffer aLine( nPoints*40 );
     aLine.append( "q " );
     if( ! pColors )
@@ -9217,7 +9217,7 @@ void PDFWriterImpl::drawPixel( const Polygon& rPoints, const Color* pColors )
     aPixel.append( ' ' );
     appendDouble( 1.0/double(getReferenceDevice()->ImplGetDPIY()), aPixel );
     OString aPixelStr = aPixel.makeStringAndClear();
-    for( USHORT i = 0; i < nPoints; i++ )
+    for( sal_uInt16 i = 0; i < nPoints; i++ )
     {
         if( pColors )
         {
@@ -9249,7 +9249,7 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
 
     bool bFlateFilter = compressStream( rObject.m_pContentStream );
     rObject.m_pContentStream->Seek( STREAM_SEEK_TO_END );
-    ULONG nSize = rObject.m_pContentStream->Tell();
+    sal_uLong nSize = rObject.m_pContentStream->Tell();
     rObject.m_pContentStream->Seek( STREAM_SEEK_TO_BEGIN );
 #if OSL_DEBUG_LEVEL > 1
     {
@@ -9706,7 +9706,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
                 {
                     int nChar = 0;
                     //fill the encryption buffer
-                    for( USHORT i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
+                    for( sal_uInt16 i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
                     {
                         const BitmapColor& rColor = pAccess->GetPaletteColor( i );
                         m_pEncryptionBuffer[nChar++] = rColor.GetRed();
@@ -9717,7 +9717,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
                     rtl_cipher_encodeARCFOUR( m_aCipher, m_pEncryptionBuffer, nChar, m_pEncryptionBuffer, nChar );
                     //now queue the data for output
                     nChar = 0;
-                    for( USHORT i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
+                    for( sal_uInt16 i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
                     {
                         appendHex(m_pEncryptionBuffer[nChar++], aLine );
                         appendHex(m_pEncryptionBuffer[nChar++], aLine );
@@ -9727,7 +9727,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
             }
             else //no encryption requested (PDF/A-1a program flow drops here)
             {
-                for( USHORT i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
+                for( sal_uInt16 i = 0; i < pAccess->GetPaletteEntryCount(); i++ )
                 {
                     const BitmapColor& rColor = pAccess->GetPaletteColor( i );
                     appendHex( rColor.GetRed(), aLine );
@@ -10177,7 +10177,7 @@ void PDFWriterImpl::drawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch
         aPolyPoly.Optimize( POLY_OPTIMIZE_NO_SAME );
         push( PUSH_LINECOLOR );
         setLineColor( rHatch.GetColor() );
-        getReferenceDevice()->ImplDrawHatch( aPolyPoly, rHatch, FALSE );
+        getReferenceDevice()->ImplDrawHatch( aPolyPoly, rHatch, sal_False );
         pop();
     }
 }

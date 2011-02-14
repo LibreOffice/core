@@ -109,6 +109,16 @@ UnoControlDialogModel::~UnoControlDialogModel()
 {
 }
 
+UnoControlModel* UnoControlDialogModel::Clone() const
+{
+    // clone the container itself
+    UnoControlDialogModel* pClone = new UnoControlDialogModel( *this );
+
+    Clone_Impl(*pClone);
+
+    return pClone;
+}
+
 
 ::rtl::OUString UnoControlDialogModel::getServiceName( ) throw(RuntimeException)
 {

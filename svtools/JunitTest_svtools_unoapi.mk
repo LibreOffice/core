@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,26 +25,29 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
-PRJINC=..$/..$/inc
-PRJNAME=comphelper
-TARGET=evtattmgr
+$(eval $(call gb_JunitTest_JunitTest,svtools_unoapi))
 
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_JunitTest_set_defs,svtools_unoapi,\
+    $$(DEFS) \
+    -Dorg.openoffice.test.arg.sce=$(SRCDIR)/svtools/qa/unoapi/svtools.sce \
+    -Dorg.openoffice.test.arg.xcl=$(SRCDIR)/svtools/qa/unoapi/knownissues.xcl \
+    -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/svtools/qa/unoapi/testdocuments \
+))
 
-# --- Settings common for the whole project -----
+$(eval $(call gb_JunitTest_add_jars,svtools_unoapi,\
+    $(OUTDIR)/bin/OOoRunner.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(OUTDIR)/bin/test.jar \
+    $(OUTDIR)/bin/unoil.jar \
+    $(OUTDIR)/bin/jurt.jar \
+))
 
+$(eval $(call gb_JunitTest_add_sourcefiles,svtools_unoapi,\
+    svtools/qa/unoapi/Test \
+))
 
-# --- Settings ----------------------------------
+$(eval $(call gb_JunitTest_add_classes,svtools_unoapi,\
+    org.openoffice.svtools.qa.unoapi.Test \
+))
 
-.INCLUDE : settings.mk
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
-
-# --- Files -------------------------------------
-
-SLOFILES=	$(SLO)$/eventattachermgr.obj
-
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
-
+# vim: set noet sw=4 ts=4:

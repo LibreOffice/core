@@ -78,7 +78,7 @@ public:
     void            SetCommand( const SvtAcceleratorConfigItem& rItem );
 
                     // sets several or all configuration items
-                    // if bClear=FALSE, all items not in the sequence remain unchanged
+                    // if bClear=sal_False, all items not in the sequence remain unchanged
     void            SetItems( const SvtAcceleratorItemList& rItems, bool bClear );
 };
 

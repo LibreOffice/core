@@ -68,7 +68,7 @@ namespace svt
             FreeResource();
         }
 
-        inline BOOL IsAvailableRes( const ResId& _rId ) const
+        inline sal_Bool IsAvailableRes( const ResId& _rId ) const
         {
             return Resource::IsAvailableRes( _rId );
         }

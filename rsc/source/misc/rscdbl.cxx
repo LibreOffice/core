@@ -81,7 +81,7 @@ void FillSubList( RSCINST & rInst, REResourceList * pList )
 }
 
 void FillListObj( ObjNode * pObjNode, RscTop * pRscTop,
-                  REResourceList * pList, ULONG lFileKey )
+                  REResourceList * pList, sal_uLong lFileKey )
 {
     if( pObjNode ){
         if( pObjNode->GetFileKey() == lFileKey ){
@@ -104,7 +104,7 @@ void FillListObj( ObjNode * pObjNode, RscTop * pRscTop,
     };
 }
 
-void FillList( RscTop * pRscTop, REResourceList * pList, ULONG lFileKey ){
+void FillList( RscTop * pRscTop, REResourceList * pList, sal_uLong lFileKey ){
     if( pRscTop ){
         FillList( (RscTop*)pRscTop->Left(), pList, lFileKey );
 
@@ -114,6 +114,6 @@ void FillList( RscTop * pRscTop, REResourceList * pList, ULONG lFileKey ){
     };
 }
 
-void RscTypCont::FillNameIdList( REResourceList * pList, ULONG lFileKey ){
+void RscTypCont::FillNameIdList( REResourceList * pList, sal_uLong lFileKey ){
     FillList( pRoot, pList, lFileKey );
 }

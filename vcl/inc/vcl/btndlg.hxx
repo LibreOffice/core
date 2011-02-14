@@ -40,13 +40,13 @@ class PushButton;
 // - ButtonDialog-Types -
 // ----------------------
 
-#define BUTTONDIALOG_BUTTON_NOTFOUND            ((USHORT)0xFFFF)
+#define BUTTONDIALOG_BUTTON_NOTFOUND            ((sal_uInt16)0xFFFF)
 
-#define BUTTONDIALOG_DEFBUTTON                  ((USHORT)0x0001)
-#define BUTTONDIALOG_OKBUTTON                   ((USHORT)0x0002)
-#define BUTTONDIALOG_CANCELBUTTON               ((USHORT)0x0004)
-#define BUTTONDIALOG_HELPBUTTON                 ((USHORT)0x0008)
-#define BUTTONDIALOG_FOCUSBUTTON                ((USHORT)0x0010)
+#define BUTTONDIALOG_DEFBUTTON                  ((sal_uInt16)0x0001)
+#define BUTTONDIALOG_OKBUTTON                   ((sal_uInt16)0x0002)
+#define BUTTONDIALOG_CANCELBUTTON               ((sal_uInt16)0x0004)
+#define BUTTONDIALOG_HELPBUTTON                 ((sal_uInt16)0x0008)
+#define BUTTONDIALOG_FOCUSBUTTON                ((sal_uInt16)0x0010)
 
 // ----------------
 // - ButtonDialog -
@@ -59,14 +59,14 @@ private:
     Size                maPageSize;
     Size                maCtrlSize;
     long                mnButtonSize;
-    USHORT              mnCurButtonId;
-    USHORT              mnFocusButtonId;
-    BOOL                mbFormat;
+    sal_uInt16              mnCurButtonId;
+    sal_uInt16              mnFocusButtonId;
+    sal_Bool                mbFormat;
     Link                maClickHdl;
 
     SAL_DLLPRIVATE void             ImplInitButtonDialogData();
-    SAL_DLLPRIVATE PushButton*      ImplCreatePushButton( USHORT nBtnFlags );
-    SAL_DLLPRIVATE ImplBtnDlgItem*  ImplGetItem( USHORT nId ) const;
+    SAL_DLLPRIVATE PushButton*      ImplCreatePushButton( sal_uInt16 nBtnFlags );
+    SAL_DLLPRIVATE ImplBtnDlgItem*  ImplGetItem( sal_uInt16 nId ) const;
     DECL_DLLPRIVATE_LINK(           ImplClickHdl, PushButton* pBtn );
     SAL_DLLPRIVATE void             ImplPosControls();
 
@@ -90,25 +90,25 @@ public:
     void                SetPageSizePixel( const Size& rSize ) { maPageSize = rSize; }
     const Size&         GetPageSizePixel() const { return maPageSize; }
 
-    USHORT              GetCurButtonId() const { return mnCurButtonId; }
+    sal_uInt16              GetCurButtonId() const { return mnCurButtonId; }
 
-    void                AddButton( const XubString& rText, USHORT nId, USHORT nBtnFlags, long nSepPixel = 0 );
-    void                AddButton( StandardButtonType eType, USHORT nId, USHORT nBtnFlags, long nSepPixel = 0 );
-    void                AddButton( PushButton* pBtn, USHORT nId, USHORT nBtnFlags, long nSepPixel = 0 );
-    void                RemoveButton( USHORT nId );
+    void                AddButton( const XubString& rText, sal_uInt16 nId, sal_uInt16 nBtnFlags, long nSepPixel = 0 );
+    void                AddButton( StandardButtonType eType, sal_uInt16 nId, sal_uInt16 nBtnFlags, long nSepPixel = 0 );
+    void                AddButton( PushButton* pBtn, sal_uInt16 nId, sal_uInt16 nBtnFlags, long nSepPixel = 0 );
+    void                RemoveButton( sal_uInt16 nId );
     void                Clear();
-    USHORT              GetButtonCount() const;
-    USHORT              GetButtonId( USHORT nButton ) const;
-    PushButton*         GetPushButton( USHORT nId ) const;
-    void                SetButtonText( USHORT nId, const XubString& rText );
-    XubString           GetButtonText( USHORT nId ) const;
-    void                SetButtonHelpText( USHORT nId, const XubString& rText );
-    XubString           GetButtonHelpText( USHORT nId ) const;
-    void                SetButtonHelpId( USHORT nId, const rtl::OString& rHelpId );
-    rtl::OString        GetButtonHelpId( USHORT nId ) const;
+    sal_uInt16              GetButtonCount() const;
+    sal_uInt16              GetButtonId( sal_uInt16 nButton ) const;
+    PushButton*         GetPushButton( sal_uInt16 nId ) const;
+    void                SetButtonText( sal_uInt16 nId, const XubString& rText );
+    XubString           GetButtonText( sal_uInt16 nId ) const;
+    void                SetButtonHelpText( sal_uInt16 nId, const XubString& rText );
+    XubString           GetButtonHelpText( sal_uInt16 nId ) const;
+    void                SetButtonHelpId( sal_uInt16 nId, const rtl::OString& rHelpId );
+    rtl::OString        GetButtonHelpId( sal_uInt16 nId ) const;
 
-    void                SetFocusButton( USHORT nId = BUTTONDIALOG_BUTTON_NOTFOUND ) { mnFocusButtonId = nId; }
-    USHORT              GetFocusButton() const { return mnFocusButtonId; }
+    void                SetFocusButton( sal_uInt16 nId = BUTTONDIALOG_BUTTON_NOTFOUND ) { mnFocusButtonId = nId; }
+    sal_uInt16              GetFocusButton() const { return mnFocusButtonId; }
 
     void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
     const Link&         GetClickHdl() const { return maClickHdl; }

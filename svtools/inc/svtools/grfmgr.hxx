@@ -104,14 +104,14 @@ private:
     long            mnTopCrop;
     long            mnRightCrop;
     long            mnBottomCrop;
-    USHORT          mnRotate10;
+    sal_uInt16          mnRotate10;
     short           mnContPercent;
     short           mnLumPercent;
     short           mnRPercent;
     short           mnGPercent;
     short           mnBPercent;
-    BOOL            mbInvert;
-    BYTE            mcTransparency;
+    sal_Bool            mbInvert;
+    sal_uInt8           mcTransparency;
     GraphicDrawMode meDrawMode;
 
     void*           mpDummy;
@@ -121,14 +121,14 @@ public:
                     GraphicAttr();
                     ~GraphicAttr();
 
-    BOOL            operator==( const GraphicAttr& rAttr ) const;
-    BOOL            operator!=( const GraphicAttr& rAttr ) const { return !( *this == rAttr ); }
+    sal_Bool            operator==( const GraphicAttr& rAttr ) const;
+    sal_Bool            operator!=( const GraphicAttr& rAttr ) const { return !( *this == rAttr ); }
 
     void            SetDrawMode( GraphicDrawMode eDrawMode ) { meDrawMode = eDrawMode; }
     GraphicDrawMode GetDrawMode() const { return meDrawMode; }
 
-    void            SetMirrorFlags( ULONG nMirrFlags ) { mnMirrFlags = nMirrFlags; }
-    ULONG           GetMirrorFlags() const { return mnMirrFlags; }
+    void            SetMirrorFlags( sal_uLong nMirrFlags ) { mnMirrFlags = nMirrFlags; }
+    sal_uLong           GetMirrorFlags() const { return mnMirrFlags; }
 
     void            SetCrop( long nLeft_100TH_MM, long nTop_100TH_MM, long nRight_100TH_MM, long nBottom_100TH_MM )
                     {
@@ -140,8 +140,8 @@ public:
     long            GetRightCrop() const { return mnRightCrop; }
     long            GetBottomCrop() const { return mnBottomCrop; }
 
-    void            SetRotation( USHORT nRotate10 ) { mnRotate10 = nRotate10; }
-    USHORT          GetRotation() const { return mnRotate10; }
+    void            SetRotation( sal_uInt16 nRotate10 ) { mnRotate10 = nRotate10; }
+    sal_uInt16          GetRotation() const { return mnRotate10; }
 
     void            SetLuminance( short nLuminancePercent ) { mnLumPercent = nLuminancePercent; }
     short           GetLuminance() const { return mnLumPercent; }
@@ -161,22 +161,22 @@ public:
     void            SetGamma( double fGamma ) { mfGamma = fGamma; }
     double          GetGamma() const { return mfGamma; }
 
-    void            SetInvert( BOOL bInvert ) { mbInvert = bInvert; }
-    BOOL            IsInvert() const { return mbInvert; }
+    void            SetInvert( sal_Bool bInvert ) { mbInvert = bInvert; }
+    sal_Bool            IsInvert() const { return mbInvert; }
 
-    void            SetTransparency( BYTE cTransparency ) { mcTransparency = cTransparency; }
-    BYTE            GetTransparency() const { return mcTransparency; }
+    void            SetTransparency( sal_uInt8 cTransparency ) { mcTransparency = cTransparency; }
+    sal_uInt8           GetTransparency() const { return mcTransparency; }
 
-    BOOL            IsSpecialDrawMode() const { return( meDrawMode != GRAPHICDRAWMODE_STANDARD ); }
-    BOOL            IsMirrored() const { return( mnMirrFlags != 0UL ); }
-    BOOL            IsCropped() const
+    sal_Bool            IsSpecialDrawMode() const { return( meDrawMode != GRAPHICDRAWMODE_STANDARD ); }
+    sal_Bool            IsMirrored() const { return( mnMirrFlags != 0UL ); }
+    sal_Bool            IsCropped() const
                     {
                         return( mnLeftCrop != 0 || mnTopCrop != 0 ||
                                 mnRightCrop != 0 || mnBottomCrop != 0 );
                     }
-    BOOL            IsRotated() const { return( ( mnRotate10 % 3600 ) != 0 ); }
-    BOOL            IsTransparent() const { return( mcTransparency > 0 ); }
-    BOOL            IsAdjusted() const
+    sal_Bool            IsRotated() const { return( ( mnRotate10 % 3600 ) != 0 ); }
+    sal_Bool            IsTransparent() const { return( mcTransparency > 0 ); }
+    sal_Bool            IsAdjusted() const
                     {
                         return( mnLumPercent != 0 || mnContPercent != 0 || mnRPercent != 0 ||
                                 mnGPercent != 0 || mnBPercent != 0 || mfGamma != 1.0 || mbInvert );
@@ -202,7 +202,7 @@ private:
     GraphicAttr             maAttr;
     Size                    maPrefSize;
     MapMode                 maPrefMapMode;
-    ULONG                   mnSizeBytes;
+    sal_uLong                   mnSizeBytes;
     GraphicType             meType;
     GraphicManager*         mpMgr;
     String*                 mpLink;
@@ -210,17 +210,17 @@ private:
     String*                 mpUserData;
     Timer*                  mpSwapOutTimer;
     GrfSimpleCacheObj*      mpSimpleCache;
-    ULONG                   mnAnimationLoopCount;
+    sal_uLong                   mnAnimationLoopCount;
     void*                   mpDummy1;
     void*                   mpDummy2;
-    BOOL                    mbAutoSwapped   : 1;
-    BOOL                    mbTransparent   : 1;
-    BOOL                    mbAnimated      : 1;
-    BOOL                    mbEPS           : 1;
-    BOOL                    mbIsInSwapIn    : 1;
-    BOOL                    mbIsInSwapOut   : 1;
-    BOOL                    mbAlpha         : 1;
-    BOOL                    mbDummyFlag8    : 1;
+    sal_Bool                    mbAutoSwapped   : 1;
+    sal_Bool                    mbTransparent   : 1;
+    sal_Bool                    mbAnimated      : 1;
+    sal_Bool                    mbEPS           : 1;
+    sal_Bool                    mbIsInSwapIn    : 1;
+    sal_Bool                    mbIsInSwapOut   : 1;
+    sal_Bool                    mbAlpha         : 1;
+    sal_Bool                    mbDummyFlag8    : 1;
 
     void                    SVT_DLLPRIVATE ImplConstruct();
     void                    SVT_DLLPRIVATE ImplAssignGraphicData();
@@ -228,9 +228,9 @@ private:
                                                    const ByteString* pID = NULL,
                                                    const GraphicObject* pCopyObj = NULL );
     void                    SVT_DLLPRIVATE ImplAutoSwapIn();
-    BOOL                    SVT_DLLPRIVATE ImplIsAutoSwapped() const { return mbAutoSwapped; }
-    BOOL                    SVT_DLLPRIVATE ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
-                                               PolyPolygon& rClipPolyPoly, BOOL& bRectClipRegion ) const;
+    sal_Bool                    SVT_DLLPRIVATE ImplIsAutoSwapped() const { return mbAutoSwapped; }
+    sal_Bool                    SVT_DLLPRIVATE ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
+                                               PolyPolygon& rClipPolyPoly, sal_Bool& bRectClipRegion ) const;
 
     /** Render a given number of tiles in an optimized way
 
@@ -276,22 +276,22 @@ private:
     bool                    SVT_DLLPRIVATE ImplRenderTempTile( VirtualDevice& rVDev, int nExponent,
                                                 int nNumTilesX, int nNumTilesY,
                                                 const Size& rTileSizePixel,
-                                                const GraphicAttr* pAttr, ULONG nFlags );
+                                                const GraphicAttr* pAttr, sal_uLong nFlags );
 
     /// internally called by ImplRenderTempTile()
     bool                    SVT_DLLPRIVATE ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent, int nMSBFactor,
                                                      int nNumOrigTilesX, int nNumOrigTilesY,
                                                      int nRemainderTilesX, int nRemainderTilesY,
                                                      const Size& rTileSizePixel, const GraphicAttr* pAttr,
-                                                     ULONG nFlags, ImplTileInfo& rTileInfo );
+                                                     sal_uLong nFlags, ImplTileInfo& rTileInfo );
 
     bool                    SVT_DLLPRIVATE ImplDrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSizePixel,
-                                           const Size& rOffset, const GraphicAttr* pAttr, ULONG nFlags, int nTileCacheSize1D );
+                                           const Size& rOffset, const GraphicAttr* pAttr, sal_uLong nFlags, int nTileCacheSize1D );
 
     bool                    SVT_DLLPRIVATE ImplDrawTiled( OutputDevice& rOut, const Point& rPos,
                                            int nNumTilesX, int nNumTilesY,
                                            const Size& rTileSize,
-                                           const GraphicAttr* pAttr, ULONG nFlags );
+                                           const GraphicAttr* pAttr, sal_uLong nFlags );
 
     void                    SVT_DLLPRIVATE ImplTransformBitmap( BitmapEx&           rBmpEx,
                                                  const GraphicAttr& rAttr,
@@ -299,7 +299,7 @@ private:
                                                  const Size&        rCropRightBottom,
                                                  const Rectangle&   rCropRect,
                                                  const Size&        rDstSize,
-                                                 BOOL               bEnlarge ) const;
+                                                 sal_Bool               bEnlarge ) const;
 
                             DECL_LINK( ImplAutoSwapOutHdl, void* );
 
@@ -309,7 +309,7 @@ protected:
     virtual SvStream*       GetSwapStream() const;
 
     // !!! to be removed
-    virtual ULONG           GetReleaseFromCache() const;
+    virtual sal_uLong           GetReleaseFromCache() const;
 
     virtual void            Load( SvStream& );
     virtual void            Save( SvStream& );
@@ -327,14 +327,14 @@ public:
                             ~GraphicObject();
 
     GraphicObject&          operator=( const GraphicObject& rCacheObj );
-    BOOL                    operator==( const GraphicObject& rCacheObj ) const;
-    BOOL                    operator!=( const GraphicObject& rCacheObj ) const { return !( *this == rCacheObj ); }
+    sal_Bool                    operator==( const GraphicObject& rCacheObj ) const;
+    sal_Bool                    operator!=( const GraphicObject& rCacheObj ) const { return !( *this == rCacheObj ); }
 
-    BOOL                    HasSwapStreamHdl() const { return( mpSwapStreamHdl != NULL && mpSwapStreamHdl->IsSet() ); }
+    sal_Bool                    HasSwapStreamHdl() const { return( mpSwapStreamHdl != NULL && mpSwapStreamHdl->IsSet() ); }
     void                    SetSwapStreamHdl();
-    void                    SetSwapStreamHdl( const Link& rHdl, const ULONG nSwapOutTimeout = 0UL );
+    void                    SetSwapStreamHdl( const Link& rHdl, const sal_uLong nSwapOutTimeout = 0UL );
     Link                    GetSwapStreamHdl() const;
-    ULONG                   GetSwapOutTimeout() const { return( mpSwapOutTimer ? mpSwapOutTimer->GetTimeout() : 0 ); }
+    sal_uLong                   GetSwapOutTimeout() const { return( mpSwapOutTimer ? mpSwapOutTimer->GetTimeout() : 0 ); }
 
     void                    FireSwapInRequest();
     void                    FireSwapOutRequest();
@@ -342,8 +342,8 @@ public:
     void                    SetGraphicManager( const GraphicManager& rMgr );
     GraphicManager&         GetGraphicManager() const { return *mpMgr; }
 
-    BOOL                    IsCached( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                                      const GraphicAttr* pAttr = NULL, ULONG nFlags = GRFMGR_DRAW_STANDARD) const;
+    sal_Bool                    IsCached( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+                                      const GraphicAttr* pAttr = NULL, sal_uLong nFlags = GRFMGR_DRAW_STANDARD) const;
     void                    ReleaseFromCache();
 
     const Graphic&          GetGraphic() const;
@@ -381,12 +381,12 @@ public:
     void                    SetAttr( const GraphicAttr& rAttr );
     const GraphicAttr&      GetAttr() const { return maAttr; }
 
-    BOOL                    HasLink() const { return( mpLink != NULL && mpLink->Len() > 0 ); }
+    sal_Bool                    HasLink() const { return( mpLink != NULL && mpLink->Len() > 0 ); }
     void                    SetLink();
     void                    SetLink( const String& rLink );
     String                  GetLink() const;
 
-    BOOL                    HasUserData() const { return( mpUserData != NULL && mpUserData->Len() > 0 ); }
+    sal_Bool                    HasUserData() const { return( mpUserData != NULL && mpUserData->Len() > 0 ); }
     void                    SetUserData();
     void                    SetUserData( const String& rUserData );
     String                  GetUserData() const;
@@ -396,36 +396,36 @@ public:
     GraphicType             GetType() const { return meType; }
     const Size&             GetPrefSize() const { return maPrefSize; }
     const MapMode&          GetPrefMapMode() const { return maPrefMapMode; }
-    ULONG                   GetSizeBytes() const { return mnSizeBytes; }
-    ULONG                   GetChecksum() const;
-    BOOL                    IsTransparent() const { return mbTransparent; }
-    BOOL                    IsAlpha() const { return mbAlpha; }
-    BOOL                    IsAnimated() const { return mbAnimated; }
-    BOOL                    IsEPS() const { return mbEPS; }
+    sal_uLong                   GetSizeBytes() const { return mnSizeBytes; }
+    sal_uLong                   GetChecksum() const;
+    sal_Bool                    IsTransparent() const { return mbTransparent; }
+    sal_Bool                    IsAlpha() const { return mbAlpha; }
+    sal_Bool                    IsAnimated() const { return mbAnimated; }
+    sal_Bool                    IsEPS() const { return mbEPS; }
 
     void                    ResetAnimationLoopCount();
     List*                   GetAnimationInfoList() const;
     Link                    GetAnimationNotifyHdl() const { return maGraphic.GetAnimationNotifyHdl(); }
     void                    SetAnimationNotifyHdl( const Link& rLink );
 
-    BOOL                    SwapOut();
-    BOOL                    SwapOut( SvStream* pOStm );
-    BOOL                    SwapIn();
-    BOOL                    SwapIn( SvStream* pIStm );
+    sal_Bool                    SwapOut();
+    sal_Bool                    SwapOut( SvStream* pOStm );
+    sal_Bool                    SwapIn();
+    sal_Bool                    SwapIn( SvStream* pIStm );
 
-    BOOL                    IsInSwapIn() const { return mbIsInSwapIn; }
-    BOOL                    IsInSwapOut() const { return mbIsInSwapOut; }
-    BOOL                    IsInSwap() const { return( mbIsInSwapOut || mbIsInSwapOut ); }
-    BOOL                    IsSwappedOut() const { return( mbAutoSwapped || maGraphic.IsSwapOut() ); }
+    sal_Bool                    IsInSwapIn() const { return mbIsInSwapIn; }
+    sal_Bool                    IsInSwapOut() const { return mbIsInSwapOut; }
+    sal_Bool                    IsInSwap() const { return( mbIsInSwapOut || mbIsInSwapOut ); }
+    sal_Bool                    IsSwappedOut() const { return( mbAutoSwapped || maGraphic.IsSwapOut() ); }
     void                    SetSwapState();
 
-    BOOL                    Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
-                                  const GraphicAttr* pAttr = NULL, ULONG nFlags = GRFMGR_DRAW_STANDARD );
+    sal_Bool                    Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+                                  const GraphicAttr* pAttr = NULL, sal_uLong nFlags = GRFMGR_DRAW_STANDARD );
 
-    BOOL DrawWithPDFHandling( OutputDevice& rOutDev,
+    sal_Bool DrawWithPDFHandling( OutputDevice& rOutDev,
                               const Point& rPt, const Size& rSz,
                               const GraphicAttr* pGrfAttr = NULL,
-                              const ULONG nFlags = GRFMGR_DRAW_STANDARD );
+                              const sal_uLong nFlags = GRFMGR_DRAW_STANDARD );
 
     /** Draw the graphic repeatedly into the given output rectangle
 
@@ -458,14 +458,14 @@ public:
         is. This is useful if e.g. you want only a few, very large
         bitmap drawings appear on the outdev.
 
-        @return TRUE, if drawing completed successfully
+        @return sal_True, if drawing completed successfully
      */
-    BOOL                    DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSize,
+    sal_Bool                    DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSize,
                                        const Size& rOffset, const GraphicAttr* pAttr = NULL,
-                                       ULONG nFlags = GRFMGR_DRAW_STANDARD, int nTileCacheSize1D=128 );
+                                       sal_uLong nFlags = GRFMGR_DRAW_STANDARD, int nTileCacheSize1D=128 );
 
-    BOOL                    StartAnimation( OutputDevice* pOut, const Point& rPt, const Size& rSz, long nExtraData = 0L,
-                                            const GraphicAttr* pAttr = NULL, ULONG nFlags = GRFMGR_DRAW_STANDARD,
+    sal_Bool                    StartAnimation( OutputDevice* pOut, const Point& rPt, const Size& rSz, long nExtraData = 0L,
+                                            const GraphicAttr* pAttr = NULL, sal_uLong nFlags = GRFMGR_DRAW_STANDARD,
                                             OutputDevice* pFirstFrameOutDev = NULL );
 
     void                    StopAnimation( OutputDevice* pOut = NULL, long nExtraData = 0L );
@@ -493,33 +493,33 @@ private:
                     GraphicManager( const GraphicManager& ) {}
     GraphicManager& operator=( const GraphicManager& ) { return *this; }
 
-    BOOL            SVT_DLLPRIVATE ImplDraw( OutputDevice* pOut, const Point& rPt,
+    sal_Bool            SVT_DLLPRIVATE ImplDraw( OutputDevice* pOut, const Point& rPt,
                               const Size& rSz, GraphicObject& rObj,
                               const GraphicAttr& rAttr,
-                              const ULONG nFlags, BOOL& rCached );
+                              const sal_uLong nFlags, sal_Bool& rCached );
 
-    BOOL            SVT_DLLPRIVATE ImplCreateOutput( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+    sal_Bool            SVT_DLLPRIVATE ImplCreateOutput( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                       const BitmapEx& rBmpEx, const GraphicAttr& rAttr,
-                                      const ULONG nFlags, BitmapEx* pBmpEx = NULL );
-    BOOL            SVT_DLLPRIVATE ImplCreateOutput( OutputDevice* pOut,
+                                      const sal_uLong nFlags, BitmapEx* pBmpEx = NULL );
+    sal_Bool            SVT_DLLPRIVATE ImplCreateOutput( OutputDevice* pOut,
                                       const Point& rPt, const Size& rSz,
                                       const GDIMetaFile& rMtf, const GraphicAttr& rAttr,
-                                      const ULONG nFlags, GDIMetaFile& rOutMtf, BitmapEx& rOutBmpEx );
+                                      const sal_uLong nFlags, GDIMetaFile& rOutMtf, BitmapEx& rOutBmpEx );
 
-    BOOL            SVT_DLLPRIVATE ImplCreateScaled( const BitmapEx& rBmpEx,
+    sal_Bool            SVT_DLLPRIVATE ImplCreateScaled( const BitmapEx& rBmpEx,
                                       long* pMapIX, long* pMapFX, long* pMapIY, long* pMapFY,
                                       long nStartX, long nEndX, long nStartY, long nEndY,
                                       BitmapEx& rOutBmpEx );
 
-    BOOL            SVT_DLLPRIVATE ImplCreateRotatedScaled( const BitmapEx& rBmpEx,
-                                             USHORT nRot10, const Size& rOutSzPix, const Size& rUntSzPix,
+    sal_Bool            SVT_DLLPRIVATE ImplCreateRotatedScaled( const BitmapEx& rBmpEx,
+                                             sal_uInt16 nRot10, const Size& rOutSzPix, const Size& rUntSzPix,
                                              long* pMapIX, long* pMapFX, long* pMapIY, long* pMapFY,
                                              long nStartX, long nEndX, long nStartY, long nEndY,
                                              BitmapEx& rOutBmpEx );
 
-    static void     SVT_DLLPRIVATE ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, ULONG nAdjustmentFlags );
-    static void     SVT_DLLPRIVATE ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, ULONG nAdjustmentFlags );
-    static void     SVT_DLLPRIVATE ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr, ULONG nAdjustmentFlags );
+    static void     SVT_DLLPRIVATE ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, sal_uLong nAdjustmentFlags );
+    static void     SVT_DLLPRIVATE ImplAdjust( GDIMetaFile& rMtf, const GraphicAttr& rAttr, sal_uLong nAdjustmentFlags );
+    static void     SVT_DLLPRIVATE ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr, sal_uLong nAdjustmentFlags );
 
     static void     SVT_DLLPRIVATE ImplDraw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                               const GDIMetaFile& rMtf, const GraphicAttr& rAttr );
@@ -529,42 +529,42 @@ private:
                                      const ByteString* pID = NULL,
                                      const GraphicObject* pCopyObj = NULL );
     void            SVT_DLLPRIVATE ImplUnregisterObj( const GraphicObject& rObj );
-    inline BOOL     SVT_DLLPRIVATE ImplHasObjects() const { return( maObjList.Count() > 0UL ); }
+    inline sal_Bool     SVT_DLLPRIVATE ImplHasObjects() const { return( maObjList.Count() > 0UL ); }
 
                     // Only used in swap case by GraphicObject
     void            SVT_DLLPRIVATE ImplGraphicObjectWasSwappedOut( const GraphicObject& rObj );
-    BOOL            SVT_DLLPRIVATE ImplFillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute );
+    sal_Bool            SVT_DLLPRIVATE ImplFillSwappedGraphicObject( const GraphicObject& rObj, Graphic& rSubstitute );
     void            SVT_DLLPRIVATE ImplGraphicObjectWasSwappedIn( const GraphicObject& rObj );
 
     ByteString      SVT_DLLPRIVATE ImplGetUniqueID( const GraphicObject& rObj ) const;
 
 public:
 
-                    GraphicManager( ULONG nCacheSize = 10000000UL, ULONG nMaxObjCacheSize = 2400000UL );
+                    GraphicManager( sal_uLong nCacheSize = 10000000UL, sal_uLong nMaxObjCacheSize = 2400000UL );
                     ~GraphicManager();
 
-    void            SetMaxCacheSize( ULONG nNewCacheSize );
-    ULONG           GetMaxCacheSize() const;
+    void            SetMaxCacheSize( sal_uLong nNewCacheSize );
+    sal_uLong           GetMaxCacheSize() const;
 
-    void            SetMaxObjCacheSize( ULONG nNewMaxObjSize, BOOL bDestroyGreaterCached = FALSE );
-    ULONG           GetMaxObjCacheSize() const;
+    void            SetMaxObjCacheSize( sal_uLong nNewMaxObjSize, sal_Bool bDestroyGreaterCached = sal_False );
+    sal_uLong           GetMaxObjCacheSize() const;
 
-    ULONG           GetUsedCacheSize() const;
-    ULONG           GetFreeCacheSize() const;
+    sal_uLong           GetUsedCacheSize() const;
+    sal_uLong           GetFreeCacheSize() const;
 
-    void            SetCacheTimeout( ULONG nTimeoutSeconds );
-    ULONG           GetCacheTimeout() const;
+    void            SetCacheTimeout( sal_uLong nTimeoutSeconds );
+    sal_uLong           GetCacheTimeout() const;
 
     void            ClearCache();
 
     void            ReleaseFromCache( const GraphicObject& rObj );
 
-    BOOL            IsInCache( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+    sal_Bool            IsInCache( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                const GraphicObject& rObj, const GraphicAttr& rAttr ) const;
 
-    BOOL            DrawObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
+    sal_Bool            DrawObj( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                              GraphicObject& rObj, const GraphicAttr& rAttr,
-                             const ULONG nFlags, BOOL& rCached );
+                             const sal_uLong nFlags, sal_Bool& rCached );
 };
 
 #endif // _GRFMGR_HXX

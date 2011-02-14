@@ -46,8 +46,8 @@ private:
 public:
                             TYPEINFO();
 
-                            SfxDateTimeItem( USHORT nWhich );
-                            SfxDateTimeItem( USHORT nWhich,
+                            SfxDateTimeItem( sal_uInt16 nWhich );
+                            SfxDateTimeItem( sal_uInt16 nWhich,
                                              const DateTime& rDT );
                             SfxDateTimeItem( const SfxDateTimeItem& rCpy );
 
@@ -57,8 +57,8 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     using SfxPoolItem::Compare;
     virtual int             Compare( const SfxPoolItem &rWith ) const;
-    virtual SfxPoolItem*    Create( SvStream&, USHORT nItemVersion ) const;
-    virtual SvStream&       Store( SvStream&, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 nItemVersion ) const;
+    virtual SvStream&       Store( SvStream&, sal_uInt16 nItemVersion ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -74,10 +74,10 @@ public:
                                             "SetDateTime() with pooled item" );
                                 aDateTime = rDT; }
 
-    virtual BOOL PutValue  ( const com::sun::star::uno::Any& rVal,
-                             BYTE nMemberId = 0 );
-    virtual BOOL QueryValue( com::sun::star::uno::Any& rVal,
-                             BYTE nMemberId = 0 ) const;
+    virtual sal_Bool PutValue  ( const com::sun::star::uno::Any& rVal,
+                             sal_uInt8 nMemberId = 0 );
+    virtual sal_Bool QueryValue( com::sun::star::uno::Any& rVal,
+                             sal_uInt8 nMemberId = 0 ) const;
 };
 
 class SfxColumnDateTimeItem : public SfxDateTimeItem
@@ -85,8 +85,8 @@ class SfxColumnDateTimeItem : public SfxDateTimeItem
 public:
                             TYPEINFO();
 
-                            SfxColumnDateTimeItem( USHORT nWhich );
-                            SfxColumnDateTimeItem( USHORT nWhich,
+                            SfxColumnDateTimeItem( sal_uInt16 nWhich );
+                            SfxColumnDateTimeItem( sal_uInt16 nWhich,
                                              const DateTime& rDT );
                             SfxColumnDateTimeItem( const SfxDateTimeItem& rCpy );
 
