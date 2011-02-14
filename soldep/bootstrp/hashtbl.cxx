@@ -43,16 +43,16 @@ class HashItem
 public:
     HashItem() { m_Tag = TAG_EMPTY; m_pObject = NULL; }
 
-    BOOL IsDeleted() const
+    sal_Bool IsDeleted() const
     {   return m_Tag == TAG_DELETED; }
 
-    BOOL IsEmpty() const
+    sal_Bool IsEmpty() const
     {   return m_Tag == TAG_DELETED || m_Tag == TAG_EMPTY; }
 
-    BOOL IsFree() const
+    sal_Bool IsFree() const
     {   return m_Tag == TAG_EMPTY; }
 
-    BOOL IsUsed() const
+    sal_Bool IsUsed() const
     {   return m_Tag == TAG_USED; }
 
     void Delete()
@@ -78,7 +78,7 @@ public:
 /*static*/ double HashTable::m_defMaxLoadFactor = 0.8;
 /*static*/ double HashTable::m_defDefGrowFactor = 2.0;
 
-HashTable::HashTable(ULONG lSize, BOOL bOwner, double dMaxLoadFactor, double dGrowFactor)
+HashTable::HashTable(sal_uIntPtr lSize, sal_Bool bOwner, double dMaxLoadFactor, double dGrowFactor)
 {
     m_lSize          = lSize;
     m_bOwner         = bOwner;
@@ -107,7 +107,7 @@ HashTable::~HashTable()
     /*
     if (m_bOwner)
     {
-        for (ULONG i=0; i<GetSize(); i++)
+        for (sal_uIntPtr i=0; i<GetSize(); i++)
         {
             void *pObject = GetObjectAt(i);
 
@@ -121,7 +121,7 @@ HashTable::~HashTable()
     delete [] m_pData;
 }
 
-void* HashTable::GetObjectAt(ULONG lPos) const
+void* HashTable::GetObjectAt(sal_uIntPtr lPos) const
 // Gibt Objekt zurück, wenn es eines gibt, sonst NULL;
 {
     DBG_ASSERT(lPos<m_lSize, "HashTable::GetObjectAt()");
@@ -136,16 +136,16 @@ void HashTable::OnDeleteObject(void*)
     DBG_ERROR("HashTable::OnDeleteObject(void*) nicht überladen");
 }
 
-ULONG HashTable::Hash(ByteString const& Key) const
+sal_uIntPtr HashTable::Hash(ByteString const& Key) const
 {
     /*
-    ULONG lHash = 0;
-    ULONG i,n;
+    sal_uIntPtr lHash = 0;
+    sal_uIntPtr i,n;
 
     for (i=0,n=Key.Len(); i<n; i++)
     {
         lHash *= 256L;
-        lHash += (ULONG)(USHORT)Key.GetStr()[i];
+        lHash += (sal_uIntPtr)(sal_uInt16)Key.GetStr()[i];
         lHash %= m_lSize;
     }
     return lHash;
@@ -153,13 +153,13 @@ ULONG HashTable::Hash(ByteString const& Key) const
 
     // Hashfunktion von P.J. Weinberger
     // aus dem "Drachenbuch" von Aho/Sethi/Ullman
-    ULONG i,n;
-    ULONG h = 0;
-    ULONG g = 0;
+    sal_uIntPtr i,n;
+    sal_uIntPtr h = 0;
+    sal_uIntPtr g = 0;
 
     for (i=0,n=Key.Len(); i<n; i++)
     {
-        h = (h<<4) + (ULONG)(USHORT)Key.GetBuffer()[i];
+        h = (h<<4) + (sal_uIntPtr)(sal_uInt16)Key.GetBuffer()[i];
         g = h & 0xf0000000;
 
         if (g != 0)
@@ -172,15 +172,15 @@ ULONG HashTable::Hash(ByteString const& Key) const
     return h % m_lSize;
 }
 
-ULONG HashTable::DHash(ByteString const& Key, ULONG lOldHash) const
+sal_uIntPtr HashTable::DHash(ByteString const& Key, sal_uIntPtr lOldHash) const
 {
-    ULONG lHash = lOldHash;
-    ULONG i,n;
+    sal_uIntPtr lHash = lOldHash;
+    sal_uIntPtr i,n;
 
     for (i=0,n=Key.Len(); i<n; i++)
     {
         lHash *= 256L;
-        lHash += (ULONG)(USHORT)Key.GetBuffer()[i];
+        lHash += (sal_uIntPtr)(sal_uInt16)Key.GetBuffer()[i];
         lHash %= m_lSize;
     }
     return lHash;
@@ -196,19 +196,19 @@ ULONG HashTable::DHash(ByteString const& Key, ULONG lOldHash) const
 */
 }
 
-ULONG HashTable::Probe(ULONG lPos) const
+sal_uIntPtr HashTable::Probe(sal_uIntPtr lPos) const
 // gibt den Folgewert von lPos zurück
 {
     lPos++; if (lPos==m_lSize) lPos=0;
     return lPos;
 }
 
-BOOL HashTable::IsFull() const
+sal_Bool HashTable::IsFull() const
 {
     return m_lElem>=m_lSize;
 }
 
-BOOL HashTable::Insert(ByteString const& Key, void* pObject)
+sal_Bool HashTable::Insert(ByteString const& Key, void* pObject)
 // pre:  Key ist nicht im Dictionary enthalten, sonst return FALSE
 //       Dictionary ist nicht voll, sonst return FALSE
 // post: pObject ist unter Key im Dictionary; m_nElem wurde erhöht
@@ -218,13 +218,13 @@ BOOL HashTable::Insert(ByteString const& Key, void* pObject)
     if (IsFull())
     {
         DBG_ERROR("HashTable::Insert() is full");
-        return FALSE;
+        return sal_False;
     }
 
     if (FindPos(Key) != NULL )
-        return FALSE;
+        return sal_False;
 
-    ULONG     lPos  = Hash(Key);
+    sal_uIntPtr     lPos  = Hash(Key);
     HashItem *pItem = &m_pData[lPos];
 
     // first hashing
@@ -238,7 +238,7 @@ BOOL HashTable::Insert(ByteString const& Key, void* pObject)
         m_aStatistic.m_lSingleHash++;
         #endif
 
-        return TRUE;
+        return sal_True;
     }
 
     // double hashing
@@ -255,7 +255,7 @@ BOOL HashTable::Insert(ByteString const& Key, void* pObject)
         m_aStatistic.m_lDoubleHash++;
         #endif
 
-        return TRUE;
+        return sal_True;
     }
 
     // linear probing
@@ -273,7 +273,7 @@ BOOL HashTable::Insert(ByteString const& Key, void* pObject)
 
     pItem->SetObject(Key, pObject);
     m_lElem++;
-    return TRUE;
+    return sal_True;
 }
 
 HashItem* HashTable::FindPos(ByteString const& Key) const
@@ -285,7 +285,7 @@ HashItem* HashTable::FindPos(ByteString const& Key) const
 {
     // first hashing
     //
-    ULONG     lPos  = Hash(Key);
+    sal_uIntPtr     lPos  = Hash(Key);
     HashItem *pItem = &m_pData[lPos];
 
     if (pItem->IsUsed()
@@ -311,9 +311,9 @@ HashItem* HashTable::FindPos(ByteString const& Key) const
         //
         if (pItem->IsDeleted() || pItem->IsUsed())
         {
-            ULONG n      = 0;
-            BOOL  bFound = FALSE;
-            BOOL  bEnd   = FALSE;
+            sal_uIntPtr n      = 0;
+            sal_Bool  bFound = sal_False;
+            sal_Bool  bEnd   = sal_False;
 
             do
             {
@@ -397,10 +397,10 @@ void HashTable::SmartGrow()
     if (dLoadFactor <= m_dMaxLoadFactor)
         return; // nothing to grow
 
-    ULONG     lOldSize = m_lSize;              // alte Daten sichern
+    sal_uIntPtr     lOldSize = m_lSize;              // alte Daten sichern
     HashItem* pOldData = m_pData;
 
-    m_lSize = ULONG (m_dGrowFactor * m_lSize); // neue Größe
+    m_lSize = sal_uIntPtr (m_dGrowFactor * m_lSize); // neue Größe
     m_pData = new HashItem[m_lSize];           // neue Daten holen
 
     // kein Speicher:
@@ -417,7 +417,7 @@ void HashTable::SmartGrow()
 
     // Umkopieren der Daten
     //
-    for (ULONG i=0; i<lOldSize; i++)
+    for (sal_uIntPtr i=0; i<lOldSize; i++)
     {
         HashItem *pItem = &pOldData[i];
 
@@ -440,13 +440,13 @@ HashTableIterator::HashTableIterator(HashTable const& aTable)
 void* HashTableIterator::GetFirst()
 {
     m_lAt = 0;
-    return FindValidObject(TRUE /* forward */);
+    return FindValidObject(sal_True /* forward */);
 }
 
 void* HashTableIterator::GetLast()
 {
     m_lAt = m_aTable.GetSize() -1;
-    return FindValidObject(FALSE /* backward */);
+    return FindValidObject(sal_False /* backward */);
 }
 
 void* HashTableIterator::GetNext()
@@ -455,7 +455,7 @@ void* HashTableIterator::GetNext()
         return NULL;
 
     m_lAt++;
-    return FindValidObject(TRUE /* forward */);
+    return FindValidObject(sal_True /* forward */);
 }
 
 void* HashTableIterator::GetPrev()
@@ -464,16 +464,16 @@ void* HashTableIterator::GetPrev()
         return NULL;
 
     m_lAt--;
-    return FindValidObject(FALSE /* backward */);
+    return FindValidObject(sal_False /* backward */);
 }
 
-void* HashTableIterator::FindValidObject(BOOL bForward)
+void* HashTableIterator::FindValidObject(sal_Bool bForward)
 // Sucht nach einem vorhandenen Objekt ab der aktuellen
 // Position.
 //
 // pre:  ab inkl. m_lAt soll die Suche beginnen
 // post: if not found then
-//          if bForward == TRUE then
+//          if bForward == sal_True then
 //              m_lAt == m_aTable.GetSize() -1
 //          else
 //              m_lAt == 0

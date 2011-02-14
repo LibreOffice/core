@@ -33,9 +33,9 @@
 class SByteExtStringList : public SByteStringList
 {
     private:
-        BOOL        bDeleteStrings;
+        sal_Bool        bDeleteStrings;
     public:
-        SByteExtStringList(BOOL bDelete = TRUE) : bDeleteStrings (bDelete) {}
+        SByteExtStringList(sal_Bool bDelete = sal_True) : bDeleteStrings (bDelete) {}
         ~SByteExtStringList();
 };
 
