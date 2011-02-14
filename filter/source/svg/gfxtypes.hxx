@@ -174,7 +174,7 @@ struct State
         maViewport(),
         maViewBox(),
         maFontFamily(), // app-default
-        mnFontSize(12.0),
+        mnFontSize(0),
         maFontStyle(RTL_CONSTASCII_USTRINGPARAM("normal")),
         maFontVariant(RTL_CONSTASCII_USTRINGPARAM("normal")),
         mnFontWeight(400.0),

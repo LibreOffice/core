@@ -147,6 +147,7 @@ struct AnnotatingVisitor
                       StateMap&                                         rStateMap,
                       const State&                                       rInitialState,
                       const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler) :
+        mbSeenText(false),
         mnCurrStateId(0),
         maCurrState(),
         maParentStates(),
@@ -265,6 +266,13 @@ struct AnnotatingVisitor
                 maCurrState = maParentStates.back();
                 maCurrState.maTransform.identity();
                 maCurrState.maViewBox.reset();
+
+                // set default font size here to ensure writing styles for text
+                if( !mbSeenText && XML_TEXT == nTagId )
+                {
+                    maCurrState.mnFontSize = 12.0;
+                    mbSeenText = true;
+                }
 
                 // scan for style info
                 const sal_Int32 nNumAttrs( xAttributes->getLength() );
@@ -1161,6 +1169,7 @@ struct AnnotatingVisitor
         }
     }
 
+    bool                                       mbSeenText;
     sal_Int32                                  mnCurrStateId;
     State                                      maCurrState;
     std::vector<State>                         maParentStates;
