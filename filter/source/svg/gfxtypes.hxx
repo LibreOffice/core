@@ -275,6 +275,7 @@ inline bool operator==(const State& rLHS, const State& rRHS )
         rLHS.mbVisibility==rRHS.mbVisibility &&
         rLHS.meFillType==rRHS.meFillType &&
         rLHS.mnFillOpacity==rRHS.mnFillOpacity &&
+        rLHS.mnOpacity==rRHS.mnOpacity &&
         rLHS.meStrokeType==rRHS.meStrokeType &&
         rLHS.mnStrokeOpacity==rRHS.mnStrokeOpacity &&
         rLHS.meViewportFillType==rRHS.meViewportFillType &&
@@ -319,6 +320,7 @@ struct StateHash
             ^  size_t(rState.mbVisibility)
             ^  size_t(rState.meFillType)
             ^  size_t(rState.mnFillOpacity)
+            ^  size_t(rState.mnOpacity)
             ^  size_t(rState.meStrokeType)
             ^  size_t(rState.mnStrokeOpacity)
             ^  size_t(rState.meViewportFillType)
