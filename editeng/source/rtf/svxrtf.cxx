@@ -1144,18 +1144,6 @@ void SvxRTFParser::SetAttrInDoc( SvxRTFItemStackType & )
 {
 }
 
-#ifdef USED
-void SvxRTFParser::SaveState( int nToken )
-{
-    SvRTFParser::SaveState( nToken );
-}
-
-void SvxRTFParser::RestoreState()
-{
-    SvRTFParser::RestoreState();
-}
-#endif
-
 void SvxRTFParser::BuildWhichTbl()
 {
     if( aWhichMap.Count() )

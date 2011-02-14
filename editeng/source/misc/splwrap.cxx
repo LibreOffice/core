@@ -494,19 +494,9 @@ sal_Bool SvxSpellWrapper::SpellNext( )
         // Ein BODY_Bereich erledigt, Frage nach dem anderen BODY_Bereich
         WAIT_OFF();
 
-// Sobald im Dialog das DontWrapAround gesetzt werden kann, kann der
-// folgende #ifdef-Zweig aktiviert werden ...
-#ifdef USED
-        sal_Bool bDontWrapAround = IsHyphen() ?
-            pSpell->GetOptions() & DONT_WRAPAROUND :
-            pSpell->GetHyphOptions() & HYPH_DONT_WRAPAROUND;
-        if( bDontWrapAround )
-#else
         sal_uInt16 nResId = bReverse ? RID_SVXQB_BW_CONTINUE : RID_SVXQB_CONTINUE;
         QueryBox aBox( pWin, EditResId( nResId ) );
         if ( aBox.Execute() != RET_YES )
-#endif
-
         {
             // Verzicht auf den anderen Bereich, ggf. Frage nach Sonderbereich
             WAIT_ON();
