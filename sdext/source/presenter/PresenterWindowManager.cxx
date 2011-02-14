@@ -452,7 +452,7 @@ void SAL_CALL PresenterWindowManager::windowPaint (const awt::PaintEvent& rEvent
         }
         catch (RuntimeException&)
         {
-            OSL_ASSERT(FALSE);
+            OSL_ASSERT(sal_False);
         }
     }
 }
@@ -600,7 +600,7 @@ bool PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
         }
         catch (RuntimeException&)
         {
-            OSL_ASSERT(FALSE);
+            OSL_ASSERT(sal_False);
         }
     }
 
