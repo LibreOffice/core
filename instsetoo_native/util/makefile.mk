@@ -365,5 +365,9 @@ openofficeall: hack_msitemplates $(LOCALPYFILES) openoffice_$(ALLLANGSTRING:s/ /
 
 openofficedevall: hack_msitemplates $(LOCALPYFILES) openofficedev_$(ALLLANGSTRING:s/ /,/)$(PKGFORMAT:^".")
 
+sdkooall: hack_msitemplates $(LOCALPYFILES) sdkoo_$(ALLLANGSTRING:s/ /,/)$(PKGFORMAT:^".")
+
+sdkoodevall: hack_msitemplates $(LOCALPYFILES) sdkoodev_$(ALLLANGSTRING:s/ /,/)$(PKGFORMAT:^".")
+
 .ENDIF			# "$(OS)" == "WNT"
 
