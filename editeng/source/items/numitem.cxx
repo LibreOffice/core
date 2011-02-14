@@ -657,40 +657,6 @@ String SvxNumberFormat::CreateRomanString( ULONG nNo, BOOL bUpper )
     }
     return sRet;
 }
-#ifdef OLD_NUMBER_FORMATTING
-void SvxNumberFormat::GetCharStr( ULONG nNo, String& rStr ) const
-{
-    DBG_ASSERT( nNo, "0 ist eine ungueltige Nummer !!" );
-
-    const ULONG coDiff = 'Z' - 'A' +1;
-    char cAdd = (SVX_NUM_CHARS_UPPER_LETTER == eNumType ? 'A' : 'a') - 1;
-    ULONG nCalc;
-
-    do {
-        nCalc = nNo % coDiff;
-        if( !nCalc )
-            nCalc = coDiff;
-        rStr.Insert( sal_Unicode(cAdd + nCalc ), 0 );
-        nNo -= nCalc;
-        if( nNo )
-            nNo /= coDiff;
-    } while( nNo );
-}
-
-void SvxNumberFormat::GetCharStrN( ULONG nNo, String& rStr ) const
-{
-    DBG_ASSERT( nNo, "0 ist eine ungueltige Nummer !!" );
-
-    const ULONG coDiff = 'Z' - 'A' +1;
-    char cChar = (char)(--nNo % coDiff);
-    if( SVX_NUM_CHARS_UPPER_LETTER_N == eNumType )
-        cChar += 'A';
-    else
-        cChar += 'a';
-
-    rStr.Fill( (USHORT)(nNo / coDiff) + 1, sal_Unicode(cChar) );
-}
-#endif //OLD_NUMBER_FORMATTING
 
 const String&   SvxNumberFormat::GetCharFmtName()const
 {
