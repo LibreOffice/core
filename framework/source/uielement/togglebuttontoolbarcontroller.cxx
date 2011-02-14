@@ -85,7 +85,7 @@ ToggleButtonToolbarController::ToggleButtonToolbarController(
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
-    USHORT                                   nID,
+    sal_uInt16                                   nID,
     Style                                    eStyle,
     const ::rtl::OUString&                          aCommand ) :
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand ),
@@ -149,10 +149,10 @@ throw (::com::sun::star::uno::RuntimeException)
                 aPopup.CheckItem( sal_uInt16( i+1 ), sal_False );
         }
 
-        m_pToolbar->SetItemDown( m_nID, TRUE );
+        m_pToolbar->SetItemDown( m_nID, sal_True );
         aPopup.SetSelectHdl( LINK( this, ToggleButtonToolbarController, MenuSelectHdl ));
         aPopup.Execute( m_pToolbar, m_pToolbar->GetItemRect( m_nID ));
-        m_pToolbar->SetItemDown( m_nID, FALSE );
+        m_pToolbar->SetItemDown( m_nID, sal_False );
     }
 
     return xWindow;

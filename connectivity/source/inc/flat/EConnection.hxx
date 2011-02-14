@@ -38,6 +38,7 @@ namespace connectivity
         class OFlatConnection : public file::OConnection
         {
         private:
+            sal_Int32   m_nMaxRowsToScan;
             sal_Bool    m_bHeaderLine;          // column names in first row
             sal_Unicode m_cFieldDelimiter;      // look at the name
             sal_Unicode m_cStringDelimiter;     // delimiter for strings m_cStringDelimiter blabla m_cStringDelimiter
@@ -55,6 +56,7 @@ namespace connectivity
             inline sal_Unicode  getStringDelimiter()    const { return m_cStringDelimiter;  }
             inline sal_Unicode  getDecimalDelimiter()   const { return m_cDecimalDelimiter; }
             inline sal_Unicode  getThousandDelimiter()  const { return m_cThousandDelimiter;}
+            inline sal_Int32    getMaxRowsToScan()      const { return m_nMaxRowsToScan;}
             // XServiceInfo
             DECLARE_SERVICE_INFO();
 

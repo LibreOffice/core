@@ -64,7 +64,7 @@ class SdrTableRtfExporter
 {
 public:
     SdrTableRtfExporter( SvStream& rStrmP, SdrTableObj& rObj );
-    ULONG Write();
+    sal_uLong Write();
     void WriteRow( const Reference< XPropertySet >& xRowSet, sal_Int32 nRow, const std::vector< sal_Int32 >& aColumnStart );
     void WriteCell( sal_Int32 nCol, sal_Int32 nRow );
 
@@ -95,7 +95,7 @@ long HundMMToTwips( long nIn )
     return nRet;
 }
 
-ULONG SdrTableRtfExporter::Write()
+sal_uLong SdrTableRtfExporter::Write()
 {
     mrStrm << '{' << OOO_STRING_SVTOOLS_RTF_RTF;
     mrStrm << OOO_STRING_SVTOOLS_RTF_ANSI << RTFOutFuncs::sNewLine;
@@ -185,7 +185,7 @@ void SdrTableRtfExporter::WriteRow( const Reference< XPropertySet >& xRowSet, sa
     }
     mrStrm << OOO_STRING_SVTOOLS_RTF_PARD << OOO_STRING_SVTOOLS_RTF_PLAIN << OOO_STRING_SVTOOLS_RTF_INTBL << RTFOutFuncs::sNewLine;
 
-    ULONG nStrmPos = mrStrm.Tell();
+    sal_uLong nStrmPos = mrStrm.Tell();
     for( sal_Int32 nCol = 0; nCol < nColCount; nCol++ )
     {
         WriteCell( nCol, nRow );
@@ -232,7 +232,7 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
     }
 
     bool bResetPar, bResetAttr;
-    bResetPar = bResetAttr = FALSE;
+    bResetPar = bResetAttr = sal_False;
 
     SdrTextHorzAdjust eHAdj = xCell->GetTextHorizontalAdjust();
 

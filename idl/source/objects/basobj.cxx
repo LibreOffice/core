@@ -64,7 +64,7 @@ void SvMetaObject::Save( SvPersistStream & )
 |*    Beschreibung
 *************************************************************************/
 #ifdef IDL_COMPILER
-void SvMetaObject::WriteTab( SvStream & rOutStm, USHORT nTab )
+void SvMetaObject::WriteTab( SvStream & rOutStm, sal_uInt16 nTab )
 {
     while( nTab-- )
         rOutStm << "    ";
@@ -89,18 +89,18 @@ void SvMetaObject::WriteStars( SvStream & rOutStm )
 |*
 |*    Beschreibung
 *************************************************************************/
-BOOL SvMetaObject::TestAndSeekSpaceOnly( SvStream & rOutStm, ULONG nBegPos )
+sal_Bool SvMetaObject::TestAndSeekSpaceOnly( SvStream & rOutStm, sal_uLong nBegPos )
 {
     // keine leeren Klammern schreiben
-    ULONG nPos = rOutStm.Tell();
+    sal_uLong nPos = rOutStm.Tell();
     rOutStm.Seek( nBegPos );
-    BOOL bOnlySpace = TRUE;
+    sal_Bool bOnlySpace = sal_True;
     while( bOnlySpace && rOutStm.Tell() < nPos )
     {
         char c;
         rOutStm >> c;
         if( !isspace( c ) )
-            bOnlySpace = FALSE;
+            bOnlySpace = sal_False;
     }
     if( bOnlySpace )
         // nichts geschrieben
@@ -118,7 +118,7 @@ BOOL SvMetaObject::TestAndSeekSpaceOnly( SvStream & rOutStm, ULONG nBegPos )
 void SvMetaObject::Back2Delemitter( SvStream & rOutStm )
 {
     // keine leeren Klammern schreiben
-    ULONG nPos = rOutStm.Tell();
+    sal_uLong nPos = rOutStm.Tell();
     rOutStm.SeekRel( -1 );
     char c = 0;
     rOutStm >> c;
@@ -140,9 +140,9 @@ void SvMetaObject::Back2Delemitter( SvStream & rOutStm )
 |*
 |*    Beschreibung
 *************************************************************************/
-BOOL SvMetaObject::ReadSvIdl( SvIdlDataBase &, SvTokenStream & )
+sal_Bool SvMetaObject::ReadSvIdl( SvIdlDataBase &, SvTokenStream & )
 {
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -150,7 +150,7 @@ BOOL SvMetaObject::ReadSvIdl( SvIdlDataBase &, SvTokenStream & )
 |*
 |*    Beschreibung
 *************************************************************************/
-void SvMetaObject::WriteSvIdl( SvIdlDataBase &, SvStream &, USHORT /*nTab */ )
+void SvMetaObject::WriteSvIdl( SvIdlDataBase &, SvStream &, sal_uInt16 /*nTab */ )
 {
 }
 
@@ -159,7 +159,7 @@ void SvMetaObject::WriteSvIdl( SvIdlDataBase &, SvStream &, USHORT /*nTab */ )
 |*
 |*    Beschreibung
 *************************************************************************/
-void SvMetaObject::Write( SvIdlDataBase &, SvStream &, USHORT /*nTab */,
+void SvMetaObject::Write( SvIdlDataBase &, SvStream &, sal_uInt16 /*nTab */,
                              WriteType, WriteAttribute )
 {
 }
@@ -169,7 +169,7 @@ void SvMetaObject::Write( SvIdlDataBase &, SvStream &, USHORT /*nTab */,
 |*
 |*    Beschreibung
 *************************************************************************/
-void SvMetaObject::WriteCxx( SvIdlDataBase &, SvStream &, USHORT /*nTab */ )
+void SvMetaObject::WriteCxx( SvIdlDataBase &, SvStream &, sal_uInt16 /*nTab */ )
 {
 }
 
@@ -178,7 +178,7 @@ void SvMetaObject::WriteCxx( SvIdlDataBase &, SvStream &, USHORT /*nTab */ )
 |*
 |*    Beschreibung
 *************************************************************************/
-void SvMetaObject::WriteHxx( SvIdlDataBase &, SvStream &, USHORT /*nTab */ )
+void SvMetaObject::WriteHxx( SvIdlDataBase &, SvStream &, sal_uInt16 /*nTab */ )
 {
 }
 
@@ -198,7 +198,7 @@ SvMetaName::SvMetaName()
 void SvMetaName::Load( SvPersistStream & rStm )
 {
     SvMetaObject::Load( rStm );
-    BYTE nMask;
+    sal_uInt8 nMask;
     rStm >> nMask;
 
     if( nMask >= 0x20 )
@@ -217,7 +217,7 @@ void SvMetaName::Load( SvPersistStream & rStm )
 void SvMetaName::Save( SvPersistStream & rStm )
 {
     SvMetaObject::Save( rStm );
-    BYTE nMask = 0;
+    sal_uInt8 nMask = 0;
     if( aName.IsSet() )         nMask |= 0x01;
     if( aHelpContext.IsSet() )  nMask |= 0x02;
     if( aHelpText.IsSet() )     nMask |= 0x04;
@@ -237,10 +237,10 @@ void SvMetaName::Save( SvPersistStream & rStm )
 |*
 |*    Beschreibung
 *************************************************************************/
-BOOL SvMetaName::SetName( const ByteString & rName, SvIdlDataBase * )
+sal_Bool SvMetaName::SetName( const ByteString & rName, SvIdlDataBase * )
 {
     aName = rName;
-    return TRUE;
+    return sal_True;
 }
 
 #ifdef IDL_COMPILER
@@ -249,19 +249,19 @@ BOOL SvMetaName::SetName( const ByteString & rName, SvIdlDataBase * )
 |*
 |*    Beschreibung
 *************************************************************************/
-BOOL SvMetaName::ReadNameSvIdl( SvIdlDataBase & rBase,
+sal_Bool SvMetaName::ReadNameSvIdl( SvIdlDataBase & rBase,
                                 SvTokenStream & rInStm )
 {
-    UINT32 nTokPos = rInStm.Tell();
+    sal_uInt32 nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
     // Modulnamen lesen
     if( pTok->IsIdentifier() )
         if( SetName( pTok->GetString(), &rBase ) )
-            return TRUE;
+            return sal_True;
 
     rInStm.Seek( nTokPos );
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -272,7 +272,7 @@ BOOL SvMetaName::ReadNameSvIdl( SvIdlDataBase & rBase,
 void SvMetaName::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm )
 {
-    UINT32 nTokPos = rInStm.Tell();
+    sal_uInt32 nTokPos = rInStm.Tell();
     if( aName.ReadSvIdl( SvHash_Name(), rInStm ) )
     {
         if( !SetName( aName, &rBase ) )
@@ -296,7 +296,7 @@ void SvMetaName::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 void SvMetaName::DoReadContextSvIdl( SvIdlDataBase & rBase,
                                    SvTokenStream & rInStm, char cDel )
 {
-    UINT32 nBeginPos = 0; // kann mit Tell nicht vorkommen
+    sal_uInt32 nBeginPos = 0; // kann mit Tell nicht vorkommen
     while( nBeginPos != rInStm.Tell() )
     {
         nBeginPos = rInStm.Tell();
@@ -322,9 +322,9 @@ void SvMetaName::ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & )
 |*
 |*    Beschreibung
 *************************************************************************/
-BOOL SvMetaName::Test( SvIdlDataBase &, SvTokenStream & )
+sal_Bool SvMetaName::Test( SvIdlDataBase &, SvTokenStream & )
 {
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -332,7 +332,7 @@ BOOL SvMetaName::Test( SvIdlDataBase &, SvTokenStream & )
 |*
 |*    Beschreibung
 *************************************************************************/
-void SvMetaName::WriteContextSvIdl( SvIdlDataBase &, SvStream &, USHORT )
+void SvMetaName::WriteContextSvIdl( SvIdlDataBase &, SvStream &, sal_uInt16 )
 {
 }
 
@@ -346,7 +346,7 @@ void SvMetaName::WriteDescription( SvStream & rOutStm )
     rOutStm << "<DESCRIPTION>" << endl;
 
     ByteString aDesc( GetDescription() );
-    USHORT nPos = aDesc.Search( '\n' );
+    sal_uInt16 nPos = aDesc.Search( '\n' );
     while ( nPos != STRING_NOTFOUND )
     {
         rOutStm << aDesc.Copy( 0, nPos ).GetBuffer() << endl;
@@ -364,7 +364,7 @@ void SvMetaName::WriteDescription( SvStream & rOutStm )
 *************************************************************************/
 void SvMetaName::WriteAttributesSvIdl( SvIdlDataBase & rBase,
                                        SvStream & rOutStm,
-                                       USHORT nTab )
+                                       sal_uInt16 nTab )
 {
     if( aHelpContext.IsSet() || aHelpText.IsSet() || aConfigName.IsSet() )
     {
@@ -396,13 +396,13 @@ void SvMetaName::WriteAttributesSvIdl( SvIdlDataBase & rBase,
 |*
 |*    Beschreibung
 *************************************************************************/
-BOOL SvMetaName::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
+sal_Bool SvMetaName::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
-    UINT32 nTokPos = rInStm.Tell();
-    BOOL bOk = TRUE;
+    sal_uInt32 nTokPos = rInStm.Tell();
+    sal_Bool bOk = sal_True;
     if( rInStm.Read( '[' ) )
     {
-        UINT32 nBeginPos = 0; // kann mit Tell nicht vorkommen
+        sal_uInt32 nBeginPos = 0; // kann mit Tell nicht vorkommen
         while( nBeginPos != rInStm.Tell() )
         {
             nBeginPos = rInStm.Tell();
@@ -432,12 +432,12 @@ BOOL SvMetaName::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 |*    Beschreibung
 *************************************************************************/
 void SvMetaName::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
-                             USHORT nTab )
+                             sal_uInt16 nTab )
 {
-    ULONG nBeginPos = rOutStm.Tell();
+    sal_uLong nBeginPos = rOutStm.Tell();
     WriteTab( rOutStm, nTab );
     rOutStm << '[' << endl;
-    ULONG nOldPos = rOutStm.Tell();
+    sal_uLong nOldPos = rOutStm.Tell();
     WriteAttributesSvIdl( rBase, rOutStm, nTab +1 );
 
     // keine leeren Klammern schreiben
@@ -474,25 +474,25 @@ void SvMetaName::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
 |*    Beschreibung
 *************************************************************************/
 void SvMetaName::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
-                           USHORT nTab,
+                           sal_uInt16 nTab,
                          WriteType nT, WriteAttribute nA )
 {
-    ULONG nBeginPos = rOutStm.Tell();
+    sal_uLong nBeginPos = rOutStm.Tell();
     WriteTab( rOutStm, nTab );
     rOutStm << '[' << endl;
-    ULONG nOldPos = rOutStm.Tell();
+    sal_uLong nOldPos = rOutStm.Tell();
     WriteAttributes( rBase, rOutStm, nTab +1, nT, nA );
 
     // keine leeren Klammern schreiben
-    ULONG nPos = rOutStm.Tell();
+    sal_uLong nPos = rOutStm.Tell();
     rOutStm.Seek( nOldPos );
-    BOOL bOnlySpace = TRUE;
+    sal_Bool bOnlySpace = sal_True;
     while( bOnlySpace && rOutStm.Tell() < nPos )
     {
         char c;
         rOutStm >> c;
         if( !isspace( c ) )
-            bOnlySpace = FALSE;
+            bOnlySpace = sal_False;
     }
     if( bOnlySpace )
         // nichts geschrieben
@@ -511,7 +511,7 @@ void SvMetaName::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
 |*    Beschreibung
 *************************************************************************/
 void SvMetaName::WriteAttributes( SvIdlDataBase &, SvStream & rOutStm,
-                                USHORT nTab,
+                                sal_uInt16 nTab,
                                  WriteType, WriteAttribute )
 {
     if( GetHelpText().IsSet() || GetHelpContext().IsSet() )
@@ -540,7 +540,7 @@ void SvMetaName::WriteAttributes( SvIdlDataBase &, SvStream & rOutStm,
 |*    Beschreibung
 *************************************************************************/
 void SvMetaName::WriteContext( SvIdlDataBase &, SvStream &,
-                                USHORT,
+                                sal_uInt16,
                                  WriteType, WriteAttribute )
 {
 }
@@ -562,7 +562,7 @@ void SvMetaReference::Load( SvPersistStream & rStm )
 {
     SvMetaName::Load( rStm );
 
-    BYTE nMask;
+    sal_uInt8 nMask;
     rStm >> nMask;
     if( nMask >= 0x2 )
     {
@@ -583,7 +583,7 @@ void SvMetaReference::Save( SvPersistStream & rStm )
     SvMetaName::Save( rStm );
 
     // Maske erstellen
-    BYTE nMask = 0;
+    sal_uInt8 nMask = 0;
     if( aRef.Is() )
         nMask |= 0x01;
 
@@ -603,8 +603,8 @@ SV_IMPL_META_FACTORY1( SvMetaExtern, SvMetaReference );
 *************************************************************************/
 SvMetaExtern::SvMetaExtern()
     : pModule( NULL )
-    , bReadUUId( FALSE )
-    , bReadVersion( FALSE )
+    , bReadUUId( sal_False )
+    , bReadVersion( sal_False )
 {
 }
 
@@ -612,7 +612,7 @@ void SvMetaExtern::Load( SvPersistStream & rStm )
 {
     SvMetaReference::Load( rStm );
 
-    BYTE nMask;
+    sal_uInt8 nMask;
     rStm >> nMask;
     if( nMask >= 0x20 )
     {
@@ -623,8 +623,8 @@ void SvMetaExtern::Load( SvPersistStream & rStm )
     if( nMask & 0x01 ) rStm >> pModule;
     if( nMask & 0x02 ) rStm >> aUUId;
     if( nMask & 0x04 ) rStm >> aVersion;
-    if( nMask & 0x08 ) bReadUUId = TRUE;
-    if( nMask & 0x10 ) bReadVersion = TRUE;
+    if( nMask & 0x08 ) bReadUUId = sal_True;
+    if( nMask & 0x10 ) bReadVersion = sal_True;
 }
 
 void SvMetaExtern::Save( SvPersistStream & rStm )
@@ -632,7 +632,7 @@ void SvMetaExtern::Save( SvPersistStream & rStm )
     SvMetaReference::Save( rStm );
 
     // Maske erstellen
-    BYTE nMask = 0;
+    sal_uInt8 nMask = 0;
     if( pModule )                   nMask |= 0x01;
     if( aUUId != SvGlobalName() )   nMask |= 0x02;
     if( aVersion != SvVersion() )   nMask |= 0x04;
@@ -692,9 +692,9 @@ void SvMetaExtern::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 {
     SvMetaReference::ReadAttributesSvIdl( rBase, rInStm );
     if( aUUId.ReadSvIdl( rBase, rInStm ) )
-        bReadUUId = TRUE;
+        bReadUUId = sal_True;
     if( aVersion.ReadSvIdl( rInStm ) )
-        bReadVersion = TRUE;
+        bReadVersion = sal_True;
 }
 
 /*************************************************************************
@@ -703,7 +703,7 @@ void SvMetaExtern::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 |*    Beschreibung
 *************************************************************************/
 void SvMetaExtern::WriteAttributesSvIdl( SvIdlDataBase & rBase,
-                                         SvStream & rOutStm, USHORT nTab )
+                                         SvStream & rOutStm, sal_uInt16 nTab )
 {
     SvMetaReference::WriteAttributesSvIdl( rBase, rOutStm, nTab );
     if( bReadUUId || bReadVersion )
@@ -731,7 +731,7 @@ void SvMetaExtern::WriteAttributesSvIdl( SvIdlDataBase & rBase,
 |*
 |*    Beschreibung
 *************************************************************************/
-BOOL SvMetaExtern::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
+sal_Bool SvMetaExtern::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
     SetModule( rBase );
     GetUUId(); // Id wird angelegt
@@ -744,7 +744,7 @@ BOOL SvMetaExtern::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 |*    Beschreibung
 *************************************************************************/
 void SvMetaExtern::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
-                               USHORT nTab )
+                               sal_uInt16 nTab )
 {
     SvMetaReference::WriteSvIdl( rBase, rOutStm, nTab );
 }
@@ -755,7 +755,7 @@ void SvMetaExtern::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
 |*    Beschreibung
 *************************************************************************/
 void SvMetaExtern::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
-                        USHORT nTab,
+                        sal_uInt16 nTab,
                          WriteType nT, WriteAttribute nA )
 {
     SvMetaReference::Write( rBase, rOutStm, nTab, nT, nA );
@@ -767,7 +767,7 @@ void SvMetaExtern::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
 |*    Beschreibung
 *************************************************************************/
 void SvMetaExtern::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                     USHORT nTab,
+                                     sal_uInt16 nTab,
                                      WriteType nT, WriteAttribute nA )
 {
     SvMetaReference::WriteAttributes( rBase, rOutStm, nTab, nT, nA );

@@ -43,12 +43,12 @@ class AppBasEd : public AppEdit  {  // Editor-Window:
 using DockingWindow::Notify;
 
     SbModuleRef pMod;               // compile module
-    BOOL bCompiled;                 // TRUE if compiled
+    sal_Bool bCompiled;                 // sal_True if compiled
 protected:
     DECL_LINK( EditChange, void * );
 #define BREAKPOINTSWIDTH 15
     BreakpointWindow *pBreakpoints;
-    virtual USHORT ImplSave();              // Save file
+    virtual sal_uInt16 ImplSave();              // Save file
 
 public:
     TYPEINFO();
@@ -64,7 +64,7 @@ public:
     virtual void PostSaveAs();       // Postprocess of module...
     void Reload();
     void LoadSource();               // Load source for object
-    BOOL Compile();                  // Compile text
+    sal_Bool Compile();                  // Compile text
     void Run();                      // Run image
     void Disassemble();              // Disassemble image
     const String& GetModName() const { return pMod->GetName(); }

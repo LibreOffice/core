@@ -118,6 +118,7 @@ using namespace ::com::sun::star::container;
 #include <rtl/bootstrap.hxx>
 #include <vcl/svapp.hxx>
 #include <framework/interaction.hxx>
+#include <framework/documentundoguard.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -141,7 +142,6 @@ using namespace ::com::sun::star::container;
 #include <sfx2/ctrlitem.hxx>
 #include "arrdecl.hxx"
 #include <sfx2/module.hxx>
-#include <sfx2/macrconf.hxx>
 #include <sfx2/docfac.hxx>
 #include "helper.hxx"
 #include "doc.hrc"
@@ -1652,15 +1652,8 @@ SfxModule* SfxObjectShell::GetModule() const
     return GetFactory().GetModule();
 }
 
-sal_Bool SfxObjectShell::IsBasic(
-    const String & rCode, SbxObject * pVCtrl )
-{
-    if( !rCode.Len() ) return sal_False;
-    return SfxMacroConfig::IsBasic( pVCtrl, rCode, GetBasicManager() );
-}
-
 ErrCode SfxObjectShell::CallBasic( const String& rMacro,
-    const String& rBasic, SbxObject* pVCtrl, SbxArray* pArgs,
+    const String& rBasic, SbxArray* pArgs,
     SbxValue* pRet )
 {
     SfxApplication* pApp = SFX_APP();
@@ -1670,21 +1663,11 @@ ErrCode SfxObjectShell::CallBasic( const String& rMacro,
             return ERRCODE_IO_ACCESSDENIED;
     }
 
-    pApp->EnterBasicCall();
     BasicManager *pMgr = GetBasicManager();
     if( pApp->GetName() == rBasic )
         pMgr = pApp->GetBasicManager();
-    ErrCode nRet = SfxMacroConfig::Call( pVCtrl, rMacro, pMgr, pArgs, pRet );
-    pApp->LeaveBasicCall();
+    ErrCode nRet = SfxApplication::CallBasic( rMacro, pMgr, pArgs, pRet );
     return nRet;
-}
-
-ErrCode SfxObjectShell::Call( const String & rCode, sal_Bool bIsBasicReturn, SbxObject * pVCtrl )
-{
-    ErrCode nErr = ERRCODE_NONE;
-    if ( bIsBasicReturn )
-        CallBasic( rCode, String(), pVCtrl );
-    return nErr;
 }
 
 namespace
@@ -1740,15 +1723,17 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
             xScriptProvider.set( xScriptProviderFactory->createScriptProvider( makeAny( _rxScriptContext ) ), UNO_SET_THROW );
         }
 
+        // ry to protect the invocation context's undo manager (if present), just in case the script tampers with it
+        ::framework::DocumentUndoGuard aUndoGuard( _rxScriptContext.get() );
+
         // obtain the script, and execute it
         Reference< provider::XScript > xScript( xScriptProvider->getScript( _rScriptURL ), UNO_QUERY_THROW );
-
         aRet = xScript->invoke( aParams, aOutParamIndex, aOutParam );
     }
     catch ( const uno::Exception& )
     {
         aException = ::cppu::getCaughtException();
-        bCaughtException = TRUE;
+        bCaughtException = sal_True;
         nErr = ERRCODE_BASIC_INTERNAL_ERROR;
     }
 
@@ -1782,118 +1767,6 @@ ErrCode SfxObjectShell::CallXScript( const String& rScriptURL,
 }
 
 //-------------------------------------------------------------------------
-namespace {
-    using namespace ::com::sun::star::uno;
-
-    //.....................................................................
-    static SbxArrayRef lcl_translateUno2Basic( const void* _pAnySequence )
-    {
-        SbxArrayRef xReturn;
-        if ( _pAnySequence )
-        {
-            // in real it's a sequence of Any (by convention)
-            const Sequence< Any >* pArguments = static_cast< const Sequence< Any >* >( _pAnySequence );
-
-            // do we have arguments ?
-            if ( pArguments->getLength() )
-            {
-                // yep
-                xReturn = new SbxArray;
-                String sEmptyName;
-
-                // loop through the sequence
-                const Any* pArg     =           pArguments->getConstArray();
-                const Any* pArgEnd  = pArg  +   pArguments->getLength();
-
-                for ( sal_uInt16 nArgPos=1; pArg != pArgEnd; ++pArg, ++nArgPos )
-                    // and create a Sb object for every Any
-                    xReturn->Put( GetSbUnoObject( sEmptyName, *pArg ), nArgPos );
-            }
-        }
-        return xReturn;
-    }
-    //.....................................................................
-    void lcl_translateBasic2Uno( const SbxVariableRef& _rBasicValue, void* _pAny )
-    {
-        if ( _pAny )
-            *static_cast< Any* >( _pAny ) = sbxToUnoValue( _rBasicValue );
-    }
-}
-//-------------------------------------------------------------------------
-ErrCode SfxObjectShell::CallStarBasicScript( const String& _rMacroName, const String& _rLocation,
-    const void* _pArguments, void* _pReturn )
-{
-    OSL_TRACE("in CallSBS");
-    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
-
-    // the arguments for the call
-    SbxArrayRef xMacroArguments = lcl_translateUno2Basic( _pArguments );
-
-    // the return value
-    SbxVariableRef xReturn = _pReturn ? new SbxVariable : NULL;
-
-    // the location (document or application)
-    String sMacroLocation;
-    if ( _rLocation.EqualsAscii( "application" ) )
-        sMacroLocation = SFX_APP()->GetName();
-#ifdef DBG_UTIL
-    else
-        DBG_ASSERT( _rLocation.EqualsAscii( "document" ),
-            "SfxObjectShell::CallStarBasicScript: invalid (unknown) location!" );
-#endif
-
-    // call the script
-    ErrCode eError = CallBasic( _rMacroName, sMacroLocation, NULL, xMacroArguments, xReturn );
-
-    // translate the return value
-    lcl_translateBasic2Uno( xReturn, _pReturn );
-
-    // outta here
-    return eError;
-}
-
-//-------------------------------------------------------------------------
-ErrCode SfxObjectShell::CallScript(
-    const String & rScriptType,
-    const String & rCode,
-    const void *pArgs,
-    void *pRet
-)
-{
-    ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
-    ErrCode nErr = ERRCODE_NONE;
-    if( rScriptType.EqualsAscii( "StarBasic" ) )
-    {
-        // the arguments for the call
-        SbxArrayRef xMacroArguments = lcl_translateUno2Basic( pArgs );
-
-        // the return value
-        SbxVariableRef xReturn = pRet ? new SbxVariable : NULL;
-
-        // call the script
-        nErr = CallBasic( rCode, String(), NULL, xMacroArguments, xReturn );
-
-        // translate the return value
-        lcl_translateBasic2Uno( xReturn, pRet );
-
-        // did this fail because the method was not found?
-        if ( nErr == ERRCODE_BASIC_PROC_UNDEFINED )
-        {   // yep-> look in the application BASIC module
-            nErr = CallBasic( rCode, SFX_APP()->GetName(), NULL, xMacroArguments, xReturn );
-        }
-    }
-    else if( rScriptType.EqualsAscii( "JavaScript" ) )
-    {
-        DBG_ERROR( "JavaScript not allowed" );
-        return 0;
-    }
-    else
-    {
-        DBG_ERROR( "StarScript not allowed" );
-    }
-    return nErr;
-}
-
 SfxFrame* SfxObjectShell::GetSmartSelf( SfxFrame* pSelf, SfxMedium& /*rMedium*/ )
 {
     return pSelf;
@@ -1909,51 +1782,6 @@ SfxObjectShellFlags SfxObjectShell::GetFlags() const
 void SfxObjectShell::SetFlags( SfxObjectShellFlags eFlags )
 {
     pImp->eFlags = eFlags;
-}
-
-/*
-void SfxObjectShell::SetBaseURL( const String& rURL )
-{
-    pImp->aBaseURL = rURL;
-    pImp->bNoBaseURL = FALSE;
-}
-
-const String& SfxObjectShell::GetBaseURLForSaving() const
-{
-    if ( pImp->bNoBaseURL )
-        return String();
-    return GetBaseURL();
-}
-
-const String& SfxObjectShell::GetBaseURL() const
-{
-    if ( pImp->aBaseURL.Len() )
-        return pImp->aBaseURL;
-    return pMedium->GetBaseURL();
-}
-
-void SfxObjectShell::SetEmptyBaseURL()
-{
-    pImp->bNoBaseURL = TRUE;
-}
-*/
-String SfxObjectShell::QueryTitle( SfxTitleQuery eType ) const
-{
-    String aRet;
-
-    switch( eType )
-    {
-        case SFX_TITLE_QUERY_SAVE_NAME_PROPOSAL:
-        {
-            SfxMedium* pMed = GetMedium();
-            const INetURLObject aObj( pMed->GetName() );
-            aRet = aObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
-            if ( !aRet.Len() )
-                aRet = GetTitle( SFX_TITLE_CAPTION );
-            break;
-        }
-    }
-    return aRet;
 }
 
 void SfxHeaderAttributes_Impl::SetAttributes()
@@ -2106,7 +1934,7 @@ sal_Bool SfxObjectShell::IsSecure()
         if ( GetMedium()->GetContent().is() )
         {
             Any aAny( ::utl::UCBContentHelper::GetProperty( aURL.GetMainURL( INetURLObject::NO_DECODE ), String( RTL_CONSTASCII_USTRINGPARAM("IsProtected")) ) );
-            sal_Bool bIsProtected = FALSE;
+            sal_Bool bIsProtected = sal_False;
             if ( ( aAny >>= bIsProtected ) && bIsProtected )
                 return sal_False;
             else
@@ -2119,7 +1947,7 @@ sal_Bool SfxObjectShell::IsSecure()
         return sal_False;
 }
 
-void SfxObjectShell::SetWaitCursor( BOOL bSet ) const
+void SfxObjectShell::SetWaitCursor( sal_Bool bSet ) const
 {
     for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this ); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, this ) )
     {
@@ -2141,7 +1969,7 @@ String SfxObjectShell::GetAPIName() const
     return aName;
 }
 
-void SfxObjectShell::Invalidate( USHORT nId )
+void SfxObjectShell::Invalidate( sal_uInt16 nId )
 {
     for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this ); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, this ) )
         Invalidate_Impl( pFrame->GetBindings(), nId );
@@ -2164,7 +1992,7 @@ Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
 {
     Window* pWindow = 0;
     SfxItemSet* pSet = pLoadingMedium ? pLoadingMedium->GetItemSet() : GetMedium()->GetItemSet();
-    SFX_ITEMSET_ARG( pSet, pUnoItem, SfxUnoFrameItem, SID_FILLFRAME, FALSE );
+    SFX_ITEMSET_ARG( pSet, pUnoItem, SfxUnoFrameItem, SID_FILLFRAME, sal_False );
     if ( pUnoItem )
     {
         uno::Reference < frame::XFrame > xFrame( pUnoItem->GetFrame() );
@@ -2174,7 +2002,7 @@ Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
     if ( !pWindow )
     {
         SfxFrame* pFrame = 0;
-        SFX_ITEMSET_ARG( pSet, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE );
+        SFX_ITEMSET_ARG( pSet, pFrameItem, SfxFrameItem, SID_DOCFRAME, sal_False );
         if( pFrameItem && pFrameItem->GetFrame() )
             // get target frame from ItemSet
             pFrame = pFrameItem->GetFrame();
@@ -2208,7 +2036,7 @@ Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
     return pWindow;
 }
 
-String SfxObjectShell::UpdateTitle( SfxMedium* pMed, USHORT nDocViewNumber )
+String SfxObjectShell::UpdateTitle( SfxMedium* pMed, sal_uInt16 nDocViewNumber )
 {
     // Titel des Fensters
     String aTitle;
@@ -2249,29 +2077,29 @@ void SfxObjectShell::SetCreateMode_Impl( SfxObjectCreateMode nMode )
     eCreateMode = nMode;
 }
 
-BOOL SfxObjectShell::IsInPlaceActive()
+sal_Bool SfxObjectShell::IsInPlaceActive()
 {
     if ( eCreateMode != SFX_CREATE_MODE_EMBEDDED )
-        return FALSE;
+        return sal_False;
 
     SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
     return pFrame && pFrame->GetFrame().IsInPlace();
 }
 
-BOOL SfxObjectShell::IsUIActive()
+sal_Bool SfxObjectShell::IsUIActive()
 {
     if ( eCreateMode != SFX_CREATE_MODE_EMBEDDED )
-        return FALSE;
+        return sal_False;
 
     SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
     return pFrame && pFrame->GetFrame().IsInPlace() && pFrame->GetFrame().GetWorkWindow_Impl()->IsVisible_Impl();
 }
 
-void SfxObjectShell::UIActivate( BOOL )
+void SfxObjectShell::UIActivate( sal_Bool )
 {
 }
 
-void SfxObjectShell::InPlaceActivate( BOOL )
+void SfxObjectShell::InPlaceActivate( sal_Bool )
 {
 }
 

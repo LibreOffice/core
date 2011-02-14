@@ -105,14 +105,14 @@ private:
     SvxDrawOutlinerViewForwarder*   mpViewForwarder;    // if non-NULL, use GetViewModeTextForwarder text forwarder
     css::uno::Reference< css::linguistic2::XLinguServiceManager > m_xLinguServiceManager;
     Point                           maTextOffset;
-    BOOL                            mbDataValid;
-    BOOL                            mbDestroyed;
-    BOOL                            mbIsLocked;
-    BOOL                            mbNeedsUpdate;
-    BOOL                            mbOldUndoMode;
-    BOOL                            mbForwarderIsEditMode;      // have to reflect that, since ENDEDIT can happen more often
-    BOOL                            mbShapeIsEditMode;          // #104157# only true, if HINT_BEGEDIT was received
-    BOOL                            mbNotificationsDisabled;    // prevent EditEngine/Outliner notifications (e.g. when setting up forwarder)
+    sal_Bool                            mbDataValid;
+    sal_Bool                            mbDestroyed;
+    sal_Bool                            mbIsLocked;
+    sal_Bool                            mbNeedsUpdate;
+    sal_Bool                            mbOldUndoMode;
+    sal_Bool                            mbForwarderIsEditMode;      // have to reflect that, since ENDEDIT can happen more often
+    sal_Bool                            mbShapeIsEditMode;          // #104157# only true, if HINT_BEGEDIT was received
+    sal_Bool                            mbNotificationsDisabled;    // prevent EditEngine/Outliner notifications (e.g. when setting up forwarder)
 
     XInterface*                     mpOwner;
     SvxUnoTextRangeBaseList         maTextRanges;
@@ -122,7 +122,6 @@ private:
     SvxDrawOutlinerViewForwarder*   CreateViewForwarder();
 
     void                            SetupOutliner();
-    void                            UpdateOutliner();
 
     sal_Bool                        HasView() const { return mpView ? sal_True : sal_False; }
     sal_Bool                        IsEditMode() const
@@ -157,7 +156,7 @@ public:
     void                    lock();
     void                    unlock();
 
-    BOOL                    IsValid() const;
+    sal_Bool                    IsValid() const;
 
     Rectangle               GetVisArea();
     Point                   LogicToPixel( const Point&, const MapMode& rMapMode );
@@ -168,6 +167,8 @@ public:
     virtual void ObjectInDestruction(const SdrObject& rObject);
 
     void ChangeModel( SdrModel* pNewModel );
+
+    void                    UpdateOutliner();
 };
 
 //------------------------------------------------------------------------
@@ -182,14 +183,14 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject, SdrText* pText
     mpOutliner      ( NULL ),
     mpTextForwarder ( NULL ),
     mpViewForwarder ( NULL ),
-    mbDataValid     ( FALSE ),
-    mbDestroyed     ( FALSE ),
-    mbIsLocked      ( FALSE ),
-    mbNeedsUpdate   ( FALSE ),
-    mbOldUndoMode   ( FALSE ),
-    mbForwarderIsEditMode ( FALSE ),
-    mbShapeIsEditMode     ( FALSE ),
-    mbNotificationsDisabled ( FALSE ),
+    mbDataValid     ( sal_False ),
+    mbDestroyed     ( sal_False ),
+    mbIsLocked      ( sal_False ),
+    mbNeedsUpdate   ( sal_False ),
+    mbOldUndoMode   ( sal_False ),
+    mbForwarderIsEditMode ( sal_False ),
+    mbShapeIsEditMode     ( sal_False ),
+    mbNotificationsDisabled ( sal_False ),
     mpOwner( pOwner )
 {
     DBG_ASSERT( mpObject, "invalid pObject!" );
@@ -220,14 +221,14 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrText* pText
     mpOutliner      ( NULL ),
     mpTextForwarder ( NULL ),
     mpViewForwarder ( NULL ),
-    mbDataValid     ( FALSE ),
-    mbDestroyed     ( FALSE ),
-    mbIsLocked      ( FALSE ),
-    mbNeedsUpdate   ( FALSE ),
-    mbOldUndoMode   ( FALSE ),
-    mbForwarderIsEditMode ( FALSE ),
-    mbShapeIsEditMode     ( TRUE ),
-    mbNotificationsDisabled ( FALSE ),
+    mbDataValid     ( sal_False ),
+    mbDestroyed     ( sal_False ),
+    mbIsLocked      ( sal_False ),
+    mbNeedsUpdate   ( sal_False ),
+    mbOldUndoMode   ( sal_False ),
+    mbForwarderIsEditMode ( sal_False ),
+    mbShapeIsEditMode     ( sal_True ),
+    mbNotificationsDisabled ( sal_False ),
     mpOwner(0)
 {
     if( !mpText )
@@ -368,7 +369,7 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             case HINT_OBJCHG:
             {
-                mbDataValid = FALSE;                        // Text muss neu geholt werden
+                mbDataValid = sal_False;                        // Text muss neu geholt werden
 
                 if( HasView() )
                 {
@@ -400,7 +401,7 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         mpView->GetTextEditOutliner()->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
 
                     // #104157# Only now we're really in edit mode
-                    mbShapeIsEditMode = TRUE;
+                    mbShapeIsEditMode = sal_True;
 
                     Broadcast( *pSdrHint );
                 }
@@ -412,7 +413,7 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     Broadcast( *pSdrHint );
 
                     // #104157# We're no longer in edit mode
-                    mbShapeIsEditMode = FALSE;
+                    mbShapeIsEditMode = sal_False;
 
                     // remove as listener - outliner might outlive ourselves
                     if( mpView && mpView->GetTextEditOutliner() )
@@ -564,7 +565,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         if( mpOutliner == NULL )
         {
             SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
-            USHORT nOutlMode = OUTLINERMODE_TEXTOBJECT;
+            sal_uInt16 nOutlMode = OUTLINERMODE_TEXTOBJECT;
             if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_OUTLINETEXT )
                 nOutlMode = OUTLINERMODE_OUTLINEOBJECT;
 
@@ -637,7 +638,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             // #91254# put text to object and set EmptyPresObj to FALSE
             if( mpText && bOwnParaObj && pOutlinerParaObject && mpObject->IsEmptyPresObj() && pTextObj->IsRealyEdited() )
             {
-                mpObject->SetEmptyPresObj( FALSE );
+                mpObject->SetEmptyPresObj( sal_False );
                 static_cast< SdrTextObj* >( mpObject)->NbcSetOutlinerParaObjectForText( pOutlinerParaObject, mpText );
 
                 // #i103982# Here, due to mpObject->NbcSetOutlinerParaObjectForText, we LOSE ownership of the
@@ -678,7 +679,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             }
         }
 
-        mbDataValid = TRUE;
+        mbDataValid = sal_True;
 
         if( bOwnParaObj )
             delete pOutlinerParaObject;
@@ -911,9 +912,9 @@ void SvxTextEditSourceImpl::unlock()
     }
 }
 
-BOOL SvxTextEditSourceImpl::IsValid() const
+sal_Bool SvxTextEditSourceImpl::IsValid() const
 {
-    return mpView && mpWindow ? TRUE : FALSE;
+    return mpView && mpWindow ? sal_True : sal_False;
 }
 
 Rectangle SvxTextEditSourceImpl::GetVisArea()
@@ -1108,7 +1109,7 @@ void SvxTextEditSource::unlock()
     mpImpl->unlock();
 }
 
-BOOL SvxTextEditSource::IsValid() const
+sal_Bool SvxTextEditSource::IsValid() const
 {
     return mpImpl->IsValid();
 }
@@ -1146,4 +1147,9 @@ const SvxUnoTextRangeBaseList& SvxTextEditSource::getRanges() const
 void SvxTextEditSource::ChangeModel( SdrModel* pNewModel )
 {
     mpImpl->ChangeModel( pNewModel );
+}
+
+void SvxTextEditSource::UpdateOutliner()
+{
+    mpImpl->UpdateOutliner();
 }

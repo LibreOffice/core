@@ -33,7 +33,7 @@
 // Anzahl der Durchlaeufe. 0=Endlos.
 class SdrTextAniCountItem: public SfxUInt16Item {
 public:
-    SdrTextAniCountItem(UINT16 nVal=0): SfxUInt16Item(SDRATTR_TEXT_ANICOUNT,nVal) {}
+    SdrTextAniCountItem(sal_uInt16 nVal=0): SfxUInt16Item(SDRATTR_TEXT_ANICOUNT,nVal) {}
     SdrTextAniCountItem(SvStream& rIn): SfxUInt16Item(SDRATTR_TEXT_ANICOUNT,rIn)  {}
 };
 

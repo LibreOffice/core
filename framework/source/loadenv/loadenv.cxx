@@ -1017,7 +1017,7 @@ sal_Bool LoadEnv::impl_furtherDocsAllowed()
                                 ::comphelper::ConfigurationHelper::E_READONLY);
 
         // NIL means: count of allowed documents = infinite !
-        //     => return TRUE
+        //     => return sal_True
         if ( ! aVal.hasValue())
             bAllowed = sal_True;
         else
@@ -1707,7 +1707,7 @@ void LoadEnv::impl_reactForLoadingState()
     }
 
     // This max force an implicit closing of our target frame ...
-    // e.g. in case close(TRUE) was called before and the frame
+    // e.g. in case close(sal_True) was called before and the frame
     // kill itself if our external use-lock is released here!
     // Thats why we releas this lock AFTER ALL OPERATIONS on this frame
     // are finished. The frame itslef must handle then

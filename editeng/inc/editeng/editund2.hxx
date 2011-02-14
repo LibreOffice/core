@@ -33,7 +33,7 @@
 
 class ImpEditEngine;
 
-class EDITENG_DLLPUBLIC EditUndoManager : public SfxUndoManager
+class EDITENG_DLLPRIVATE EditUndoManager : public SfxUndoManager
 {
     using SfxUndoManager::Undo;
     using SfxUndoManager::Redo;
@@ -43,8 +43,8 @@ private:
 public:
                     EditUndoManager( ImpEditEngine* pImpEE );
 
-    virtual BOOL    Undo( USHORT nCount=1 );
-    virtual BOOL    Redo( USHORT nCount=1 );
+    virtual sal_Bool Undo();
+    virtual sal_Bool Redo();
 };
 
 // -----------------------------------------------------------------------
@@ -53,12 +53,12 @@ public:
 class EDITENG_DLLPUBLIC EditUndo : public SfxUndoAction
 {
 private:
-    USHORT          nId;
+    sal_uInt16          nId;
     ImpEditEngine*  pImpEE;
 
 public:
                     TYPEINFO();
-                    EditUndo( USHORT nI, ImpEditEngine* pImpEE );
+                    EditUndo( sal_uInt16 nI, ImpEditEngine* pImpEE );
     virtual         ~EditUndo();
 
     ImpEditEngine*  GetImpEditEngine() const    { return pImpEE; }
@@ -66,9 +66,9 @@ public:
     virtual void    Undo()      = 0;
     virtual void    Redo()      = 0;
 
-    virtual BOOL    CanRepeat(SfxRepeatTarget&) const;
+    virtual sal_Bool    CanRepeat(SfxRepeatTarget&) const;
     virtual String  GetComment() const;
-    virtual USHORT  GetId() const;
+    virtual sal_uInt16  GetId() const;
 };
 
 #endif  // _EDITUND2_HXX

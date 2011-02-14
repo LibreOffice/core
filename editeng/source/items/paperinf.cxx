@@ -42,9 +42,9 @@
     Beschreibung:   Ist der Printer gueltig
  --------------------------------------------------------------------*/
 
-inline BOOL IsValidPrinter( const Printer* pPtr )
+inline sal_Bool IsValidPrinter( const Printer* pPtr )
 {
-    return pPtr->GetName().Len() ? TRUE : FALSE;
+    return pPtr->GetName().Len() ? sal_True : sal_False;
 }
 
 //------------------------------------------------------------------------
