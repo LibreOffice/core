@@ -115,10 +115,6 @@ PRV_SV_IMPL_REF_COUNTERS( ClassName, Lock, OwnerLock( TRUE ),       \
     SV_DECL_REF(ClassName)                      \
     SV_IMPL_REF(ClassName)
 
-#define SV_DECL_IMPL_LOCK( ClassName )          \
-    SV_DECL_LOCK(ClassName)                     \
-    SV_IMPL_LOCK(ClassName)
-
 
 /************************** S v R e f L i s t ****************************/
 #define PRV_SV_DECL_REF_LIST(CN,EN,vis) \
@@ -316,10 +312,6 @@ public:\
 
 #define SV_IMPL_MEMBER_LIST(ClassName,EntryName)\
     PRV_SV_IMPL_MEMBER_LIST(ClassName,EntryName,SvRefBaseMemberList)
-
-#define SV_DECL_IMPL_MEMBER_LIST(ClassName,EntryName)\
-SV_DECL_MEMBER_LIST(ClassName,EntryName)\
-SV_IMPL_MEMBER_LIST(ClassName,EntryName)
 
 /************************** S v R e f B a s e ****************************/
 #define SV_NO_DELETE_REFCOUNT  0x80000000
