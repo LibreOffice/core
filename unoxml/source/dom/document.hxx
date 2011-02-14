@@ -344,7 +344,7 @@ namespace DOM
         }
         virtual Reference< XNode > SAL_CALL insertBefore(
                 const Reference< XNode >& newChild, const Reference< XNode >& refChild)
-            throw (DOMException)
+            throw (RuntimeException, DOMException)
         {
             return CNode::insertBefore(newChild, refChild);
         }
