@@ -1256,23 +1256,6 @@ namespace accessibility
             const beans::PropertyValue &rRunAttrib = pRunAttrib[k];
             aPropHashMap[ rRunAttrib.Name ] = rRunAttrib.Value; //!! should not only be the value !!
         }
-#ifdef TL_DEBUG
-        {
-            uno::Sequence< rtl::OUString > aNames(1);
-            aNames.getArray()[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharHeight"));
-            const rtl::OUString *pNames = aNames.getConstArray();
-            const uno::Sequence< beans::PropertyValue > aAttribs( getRunAttributes( nIndex, aNames ) );
-            const beans::PropertyValue *pAttribs = aAttribs.getConstArray();
-            double d1 = -1.0;
-            float  f1 = -1.0;
-            if (aAttribs.getLength())
-            {
-                uno::Any aAny( pAttribs[0].Value );
-                aAny >>= d1;
-                aAny >>= f1;
-            }
-        }
-#endif
 
         // get resulting sequence
         uno::Sequence< beans::PropertyValue > aRes;
