@@ -53,7 +53,7 @@ class CommandEvent;
 /**************************************************************************/
 
     void SmGetLeftSelectionPart(const ESelection aSelection,
-                                USHORT &nPara, USHORT &nPos);
+                                sal_uInt16 &nPara, sal_uInt16 &nPos);
 
 /**************************************************************************/
 
@@ -117,27 +117,27 @@ public:
     ESelection          GetSelection() const;
     void                SetSelection(const ESelection &rSel);
 
-    BOOL                IsEmpty() const;
-    BOOL                IsSelected() const;
-    BOOL                IsAllSelected() const;
+    sal_Bool                IsEmpty() const;
+    sal_Bool                IsSelected() const;
+    sal_Bool                IsAllSelected() const;
     void                Cut();
     void                Copy();
     void                Paste();
     void                Delete();
     void                SelectAll();
     void                InsertText(const String &rText);
-    void                InsertCommand(USHORT nCommand);
+    void                InsertCommand(sal_uInt16 nCommand);
     void                MarkError(const Point &rPos);
     void                SelNextMark();
     void                SelPrevMark();
-    BOOL                HasMark(const String &rText) const;
+    sal_Bool                HasMark(const String &rText) const;
 
     void                Flush();
     void                DeleteEditView( SmViewShell &rView );
 
     void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 
-    BOOL                HandleWheelCommands( const CommandEvent &rCEvt );
+    sal_Bool                HandleWheelCommands( const CommandEvent &rCEvt );
 
     // for Accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();

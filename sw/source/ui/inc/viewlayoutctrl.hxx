@@ -44,12 +44,12 @@ public:
 
     SFX_DECL_STATUSBAR_CONTROL();
 
-    SwViewLayoutControl( USHORT nSlotId, USHORT nId, StatusBar& rStb );
+    SwViewLayoutControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
     ~SwViewLayoutControl();
 
-    virtual void  StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void  StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual void  Paint( const UserDrawEvent& rEvt );
-    virtual BOOL  MouseButtonDown( const MouseEvent & );
+    virtual sal_Bool  MouseButtonDown( const MouseEvent & );
 };
 
 #endif

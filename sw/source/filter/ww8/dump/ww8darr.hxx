@@ -32,12 +32,12 @@ typedef void (*FnOut)( SvStream& rSt, short );
 
 struct SprmDumpInfo
 {
-    USHORT nId;
+    sal_uInt16 nId;
     FnOut  pOutFnc;
     char*  pName;
 };
 
-SprmDumpInfo& WW8GetSprmDumpInfo( USHORT nId );
+SprmDumpInfo& WW8GetSprmDumpInfo( sal_uInt16 nId );
 
 
 #endif

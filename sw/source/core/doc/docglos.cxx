@@ -108,16 +108,16 @@ static void lcl_copyDocumentProperties(
 /* -----------------22.07.99 11:47-------------------
     Description: inserts an AutoText block
  --------------------------------------------------*/
-BOOL SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
+sal_Bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
                             SwPaM& rPaM, SwCrsrShell* pShell )
 {
-    BOOL bRet = FALSE;
-    USHORT nIdx = rBlock.GetIndex( rEntry );
-    if( (USHORT) -1 != nIdx )
+    sal_Bool bRet = sal_False;
+    sal_uInt16 nIdx = rBlock.GetIndex( rEntry );
+    if( (sal_uInt16) -1 != nIdx )
     {
         // Bug #70238# ask the TextOnly-Flag before BeginGetDoc, because
         //              the method closed the Storage!
-        BOOL bSav_IsInsGlossary = mbInsOnlyTxtGlssry;
+        sal_Bool bSav_IsInsGlossary = mbInsOnlyTxtGlssry;
         mbInsOnlyTxtGlssry = rBlock.IsOnlyTextBlock( nIdx );
 
         if( rBlock.BeginGetDoc( nIdx ) )
@@ -192,7 +192,7 @@ BOOL SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
             UnlockExpFlds();
             if( !IsExpFldsLocked() )
                 UpdateExpFlds(NULL, true);
-            bRet = TRUE;
+            bRet = sal_True;
         }
         mbInsOnlyTxtGlssry = bSav_IsInsGlossary;
     }

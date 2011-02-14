@@ -59,12 +59,12 @@ class SwApplet_Impl
     String            sAlt;
 
 public:
-    static USHORT GetOptionType( const String& rName, BOOL bApplet );
-    SwApplet_Impl( SfxItemPool& rPool, USHORT nWhich1, USHORT nWhich2 );
+    static sal_uInt16 GetOptionType( const String& rName, sal_Bool bApplet );
+    SwApplet_Impl( SfxItemPool& rPool, sal_uInt16 nWhich1, sal_uInt16 nWhich2 );
     SwApplet_Impl( SfxItemSet& rSet ): aItemSet ( rSet) {}
     ~SwApplet_Impl();
     void CreateApplet( const String& rCode, const String& rName,
-                       BOOL bMayScript, const String& rCodeBase,
+                       sal_Bool bMayScript, const String& rCodeBase,
                        const String& rBaseURL );
 #ifdef SOLAR_JAVA
     sal_Bool CreateApplet( const String& rBaseURL );

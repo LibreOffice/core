@@ -67,13 +67,13 @@ using namespace ::com::sun::star::beans;
 
 /*--------------------------------------------------------------------
      Beschreibung: Ist das Datenbankfeld numerisch?
-     Anm: Im Fehlerfall wird TRUE returnt.
+     Anm: Im Fehlerfall wird sal_True returnt.
  --------------------------------------------------------------------*/
 
-BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
-                            BOOL bIsTable, const String& rFldName)
+sal_Bool SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
+                            sal_Bool bIsTable, const String& rFldName)
 {
-    BOOL bNumeric = TRUE;
+    sal_Bool bNumeric = sal_True;
 
     SwNewDBMgr* pDBMgr = pWrtShell ? pWrtShell->GetNewDBMgr() :
                             ::GetActiveView()->GetWrtShell().GetNewDBMgr();
@@ -174,7 +174,7 @@ BOOL SwFldMgr::IsDBNumeric( const String& rDBName, const String& rTblQryName,
                 case DataType::VARCHAR:
                 case DataType::LONGVARCHAR:
                 default:
-                    bNumeric = FALSE;
+                    bNumeric = sal_False;
             }
         }
     }

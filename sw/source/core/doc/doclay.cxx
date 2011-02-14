@@ -116,7 +116,7 @@ using ::rtl::OUString;
 #define DEF_FLY_WIDTH    2268   //Defaultbreite fuer FlyFrms    (2268 == 4cm)
 
 /* #109161# */
-static bool lcl_IsItemSet(const SwCntntNode & rNode, USHORT which)
+static bool lcl_IsItemSet(const SwCntntNode & rNode, sal_uInt16 which)
 {
     bool bResult = false;
 
@@ -314,9 +314,9 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
                 if ( pTbl )
                 {
                     std::vector<SwFrmFmt*> aToDeleteFrmFmts;
-                    const ULONG nNodeIdxOfFlyFmt( pCntntIdx->GetIndex() );
+                    const sal_uLong nNodeIdxOfFlyFmt( pCntntIdx->GetIndex() );
 
-                    for ( USHORT i = 0; i < pTbl->Count(); ++i )
+                    for ( sal_uInt16 i = 0; i < pTbl->Count(); ++i )
                     {
                         SwFrmFmt* pTmpFmt = (*pTbl)[i];
                         const SwFmtAnchor &rAnch = pTmpFmt->GetAnchor();
@@ -729,7 +729,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ULONG nNodeIdx = rAnchPos.nNode.GetIndex();
+        sal_uLong nNodeIdx = rAnchPos.nNode.GetIndex();
         xub_StrLen nCntIdx = rAnchPos.nContent.GetIndex();
         GetIDocumentUndoRedo().AppendUndo(
             new SwUndoInsLayFmt( pFmt, nNodeIdx, nCntIdx ));
@@ -742,7 +742,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
 SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
                                     const SwPosition* pAnchorPos,
                                     const SfxItemSet* pFlySet,
-                                    SwFrmFmt* pFrmFmt, BOOL bCalledFromShell )
+                                    SwFrmFmt* pFrmFmt, sal_Bool bCalledFromShell )
 {
     SwFlyFrmFmt* pFmt = 0;
     sal_Bool bCallMake = sal_True;
@@ -786,7 +786,7 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
 
         if (bCalledFromShell && !lcl_IsItemSet(*pNewTxtNd, RES_PARATR_ADJUST) &&
             SFX_ITEM_SET == pAnchorNode->GetSwAttrSet().
-            GetItemState(RES_PARATR_ADJUST, TRUE, &pItem))
+            GetItemState(RES_PARATR_ADJUST, sal_True, &pItem))
             static_cast<SwCntntNode *>(pNewTxtNd)->SetAttr(*pItem);
 
          pFmt = _MakeFlySection( *pAnchorPos, *pNewTxtNd,
@@ -858,7 +858,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                     rTbl.MakeCopy( this, aPos, *pSelBoxes );
                     // Don't delete a part of a table with row span!!
                     // You could delete the content instead -> ToDo
-                    //rTbl.DeleteSel( this, *pSelBoxes, 0, 0, TRUE, TRUE );
+                    //rTbl.DeleteSel( this, *pSelBoxes, 0, 0, sal_True, sal_True );
                 }
 
                 // wenn Tabelle im Rahmen, dann ohne nachfolgenden TextNode
@@ -889,9 +889,9 @@ if( GetIDocumentUndoRedo().DoesUndo() )
 */
                 // copy all Pams and then delete all
                 SwPaM* pTmp = (SwPaM*)&rPam;
-                BOOL bOldFlag = mbCopyIsMove;
+                sal_Bool bOldFlag = mbCopyIsMove;
                 bool const bOldUndo = GetIDocumentUndoRedo().DoesUndo();
-                mbCopyIsMove = TRUE;
+                mbCopyIsMove = sal_True;
                 GetIDocumentUndoRedo().DoUndo(false);
                 do {
                     if( pTmp->HasMark() &&
@@ -1056,7 +1056,7 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
 sal_Bool TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
                         RndStdIds nAnchorId )
 {
-    sal_Bool bOk = FALSE;
+    sal_Bool bOk = sal_False;
     const SwPaM* pTmp = pPam;
     do {
         const sal_uInt32 nFlyIndex = pFlyPos->nNode.GetIndex();
@@ -1231,7 +1231,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
         SwUndoInsertLabel *const pUndo,
         SwLabelType const eType, String const& rTxt, String const& rSeparator,
             const String& rNumberingSeparator,
-            const sal_Bool bBefore, const sal_uInt16 nId, const ULONG nNdIdx,
+            const sal_Bool bBefore, const sal_uInt16 nId, const sal_uLong nNdIdx,
             const String& rCharacterStyle,
             const sal_Bool bCpyBrd )
 {
@@ -1279,7 +1279,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
             {
                 SwStartNode *pSttNd = rDoc.GetNodes()[nNdIdx]->GetStartNode();
                 ASSERT( pSttNd, "Kein StartNode in InsertLabel." );
-                ULONG nNode;
+                sal_uLong nNode;
                 if( bBefore )
                 {
                     nNode = pSttNd->GetIndex();
@@ -1498,7 +1498,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 SwCharFmt* pCharFmt = rDoc.FindCharFmtByName(rCharacterStyle);
                 if( !pCharFmt )
                 {
-                    const USHORT nMyId = SwStyleNameMapper::GetPoolIdFromUIName(rCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
+                    const sal_uInt16 nMyId = SwStyleNameMapper::GetPoolIdFromUIName(rCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
                     pCharFmt = rDoc.GetCharFmtFromPool( nMyId );
                 }
                 if (pCharFmt)
@@ -1538,7 +1538,7 @@ SwFlyFrmFmt *
 SwDoc::InsertLabel(
         SwLabelType const eType, String const& rTxt, String const& rSeparator,
         String const& rNumberingSeparator,
-        sal_Bool const bBefore, sal_uInt16 const nId, ULONG const nNdIdx,
+        sal_Bool const bBefore, sal_uInt16 const nId, sal_uLong const nNdIdx,
         String const& rCharacterStyle,
         sal_Bool const bCpyBrd )
 {
@@ -1806,7 +1806,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 SwCharFmt * pCharFmt = rDoc.FindCharFmtByName(rCharacterStyle);
                 if ( !pCharFmt )
                 {
-                    const USHORT nMyId = SwStyleNameMapper::GetPoolIdFromUIName( rCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
+                    const sal_uInt16 nMyId = SwStyleNameMapper::GetPoolIdFromUIName( rCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
                     pCharFmt = rDoc.GetCharFmtFromPool( nMyId );
                 }
                 if ( pCharFmt )
@@ -1934,7 +1934,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
 
         if (GetRootFrm()->IsNeedGrammarCheck())
         {
-            BOOL bIsOnlineSpell = pSh->GetViewOptions()->IsOnlineSpell();
+            sal_Bool bIsOnlineSpell = pSh->GetViewOptions()->IsOnlineSpell();
 
             sal_Bool bIsAutoGrammar = sal_False;
             SvtLinguConfig().GetProperty( ::rtl::OUString::createFromAscii(
@@ -2324,7 +2324,7 @@ short SwDoc::GetTextDirection( const SwPosition& rPos,
 
             if( !pItem )
             {
-                const SwPageDesc* pPgDsc = pNd->FindPageDesc( FALSE );
+                const SwPageDesc* pPgDsc = pNd->FindPageDesc( sal_False );
                 if( pPgDsc )
                     pItem = &pPgDsc->GetMaster().GetFrmDir();
             }

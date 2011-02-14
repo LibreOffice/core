@@ -109,10 +109,10 @@ public:
     /// The common attribute that can be among the run properties.
     virtual void Redline( const SwRedlineData* pRedline );
 
-    virtual void FormatDrop( const SwTxtNode& rNode, const SwFmtDrop& rSwFmtDrop, USHORT nStyle, ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo, ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner );
+    virtual void FormatDrop( const SwTxtNode& rNode, const SwFmtDrop& rSwFmtDrop, sal_uInt16 nStyle, ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo, ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner );
 
     /// Output style.
-    virtual void ParagraphStyle( USHORT nStyle );
+    virtual void ParagraphStyle( sal_uInt16 nStyle );
 
     virtual void TableInfoCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
 
@@ -146,26 +146,26 @@ public:
     virtual void StartStyles();
 
     /// End of the styles table.
-    virtual void EndStyles( USHORT nNumberOfStyles );
+    virtual void EndStyles( sal_uInt16 nNumberOfStyles );
 
     /// Write default style.
-    virtual void DefaultStyle( USHORT nStyle );
+    virtual void DefaultStyle( sal_uInt16 nStyle );
 
     /// Start of a style in the styles table.
     virtual void StartStyle( const String& rName, bool bPapFmt,
-            USHORT nBase, USHORT nNext, USHORT nWwId, USHORT nId );
+            sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwId, sal_uInt16 nId );
 
     /// End of a style in the styles table.
     virtual void EndStyle();
 
     /// Start of (paragraph or run) properties of a style.
-    virtual void StartStyleProperties( bool bParProp, USHORT nStyle );
+    virtual void StartStyleProperties( bool bParProp, sal_uInt16 nStyle );
 
     /// End of (paragraph or run) properties of a style.
     virtual void EndStyleProperties( bool bParProp );
 
     /// Numbering rule and Id.
-    virtual void OutlineNumbering( BYTE nLvl, const SwNumFmt &rNFmt, const SwFmt &rFmt );
+    virtual void OutlineNumbering( sal_uInt8 nLvl, const SwNumFmt &rNFmt, const SwFmt &rFmt );
 
     /// Page break
     /// As a paragraph property - the paragraph should be on the next page.
@@ -173,7 +173,7 @@ public:
 
     /// Write a section break
     /// msword::ColumnBreak or msword::PageBreak
-    virtual void SectionBreak( BYTE nC, const WW8_SepInfo* pSectionInfo = NULL );
+    virtual void SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectionInfo = NULL );
 
     /// Start of the section properties.
     virtual void StartSection();
@@ -185,7 +185,7 @@ public:
     virtual void SectionFormProtection( bool bProtected );
 
     /// Numbering of the lines in the document.
-    virtual void SectionLineNumbering( ULONG nRestartNo, const SwLineNumberInfo& rLnNumInfo );
+    virtual void SectionLineNumbering( sal_uLong nRestartNo, const SwLineNumberInfo& rLnNumInfo );
 
     /// Has different headers/footers for the title page.
     virtual void SectionTitlePage();
@@ -199,27 +199,27 @@ public:
     /// The style of the page numbers.
     ///
     /// nPageRestartNumberr being 0 means no restart.
-    virtual void SectionPageNumbering( USHORT nNumType, USHORT nPageRestartNumber );
+    virtual void SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 nPageRestartNumber );
 
     /// The type of breaking.
-    virtual void SectionType( BYTE nBreakCode );
+    virtual void SectionType( sal_uInt8 nBreakCode );
 
     /// Definition of a numbering instance.
-    virtual void NumberingDefinition( USHORT nId, const SwNumRule &rRule );
+    virtual void NumberingDefinition( sal_uInt16 nId, const SwNumRule &rRule );
 
     /// Start of the abstract numbering definition instance.
-    virtual void StartAbstractNumbering( USHORT nId );
+    virtual void StartAbstractNumbering( sal_uInt16 nId );
 
     /// End of the abstract numbering definition instance.
     virtual void EndAbstractNumbering();
 
     /// All the numbering level information.
-    virtual void NumberingLevel( BYTE nLevel,
-        USHORT nStart,
-        USHORT nNumberingType,
+    virtual void NumberingLevel( sal_uInt8 nLevel,
+        sal_uInt16 nStart,
+        sal_uInt16 nNumberingType,
         SvxAdjust eAdjust,
-        const BYTE *pNumLvlPos,
-        BYTE nFollow,
+        const sal_uInt8 *pNumLvlPos,
+        sal_uInt8 nFollow,
         const wwFont *pFont,
         const SfxItemSet *pOutSet,
         sal_Int16 nIndentAt,
@@ -227,7 +227,7 @@ public:
         sal_Int16 nListTabPos,
         const String &rNumberingString );
 
-    void WriteField_Impl( const SwField* pFld, ww::eField eType, const String& rFldCmd, BYTE nMode );
+    void WriteField_Impl( const SwField* pFld, ww::eField eType, const String& rFldCmd, sal_uInt8 nMode );
     void WriteBookmarks_Impl( std::vector< rtl::OUString >& rStarts, std::vector< rtl::OUString >& rEnds );
     void WriteHeaderFooter_Impl( const SwFrmFmt& rFmt, bool bHeader, const sal_Char* pStr );
 
@@ -401,7 +401,7 @@ protected:
     virtual void FormatBox( const SvxBoxItem& );
 
     /// Sfx item RES_COL
-    virtual void FormatColumns_Impl( USHORT nCols, const SwFmtCol & rCol, bool bEven, SwTwips nPageSize );
+    virtual void FormatColumns_Impl( sal_uInt16 nCols, const SwFmtCol & rCol, bool bEven, SwTwips nPageSize );
 
     /// Sfx item RES_KEEP
     virtual void FormatKeep( const SvxFmtKeepItem& );
@@ -463,11 +463,11 @@ private:
      * Current style name and its ID.
      */
     String m_rStyleName;
-    USHORT m_nStyleId;
+    sal_uInt16 m_nStyleId;
     /*
      * Current list ID.
      */
-    USHORT m_nListId;
+    sal_uInt16 m_nListId;
     /*
      * This is needed because the call order is: run text, run properties, paragraph properties.
      * What we need is the opposite.

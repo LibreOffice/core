@@ -109,7 +109,7 @@
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-extern void lcl_CharDialog( SwWrtShell &rWrtSh, BOOL bUseDialog, USHORT nSlot,const SfxItemSet *pArgs, SfxRequest *pReq );
+extern void lcl_CharDialog( SwWrtShell &rWrtSh, sal_Bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq );
 
 
 /*--------------------------------------------------------------------------
@@ -177,10 +177,10 @@ LanguageType lcl_CheckLanguage(
         lang::Locale a3( SvxCreateLocale( aLangList[3] ) );
 #endif
 
-        INT32   nCount = sizeof(aLangList) / sizeof(aLangList[0]);
-        for (INT32 i = 0;  i < nCount;  i++)
+        sal_Int32   nCount = sizeof(aLangList) / sizeof(aLangList[0]);
+        for (sal_Int32 i = 0;  i < nCount;  i++)
         {
-            INT16 nTmpLang = aLangList[i];
+            sal_Int16 nTmpLang = aLangList[i];
             if (nTmpLang != LANGUAGE_NONE  &&  nTmpLang != LANGUAGE_DONTKNOW)
             {
                 if (xSpell->hasLanguage( nTmpLang ) &&
@@ -214,7 +214,7 @@ inline bool lcl_checkScriptType( sal_Int16 nScriptType, LanguageType nLang )
 
 void SwSpellPopup::fillLangPopupMenu(
     PopupMenu *pPopupMenu,
-    USHORT nLangItemIdStart,
+    sal_uInt16 nLangItemIdStart,
     uno::Sequence< OUString > aSeq,
     SwWrtShell* pWrtSh,
     std::map< sal_Int16, ::rtl::OUString > &rLangTable )
@@ -228,7 +228,7 @@ void SwSpellPopup::fillLangPopupMenu(
     std::set< OUString > aLangItems;
 
     OUString    aCurLang( aSeq[0] );
-    USHORT      nScriptType = static_cast< sal_Int16 >(aSeq[1].toInt32());
+    sal_uInt16      nScriptType = static_cast< sal_Int16 >(aSeq[1].toInt32());
     OUString    aKeyboardLang( aSeq[2] );
     OUString    aGuessedTextLang( aSeq[3] );
 
@@ -284,7 +284,7 @@ void SwSpellPopup::fillLangPopupMenu(
         uno::Sequence< lang::Locale > rLocales( xDocumentLanguages->getDocumentLanguages( nScriptType, nMaxCount ) );
         if (rLocales.getLength() > 0)
         {
-            for (USHORT i = 0; i < rLocales.getLength(); ++i)
+            for (sal_uInt16 i = 0; i < rLocales.getLength(); ++i)
             {
                 if (aLangItems.size() == (size_t)nMaxCount)
                     break;
@@ -296,7 +296,7 @@ void SwSpellPopup::fillLangPopupMenu(
     }
 
 
-    USHORT nItemId = nLangItemIdStart;
+    sal_uInt16 nItemId = nLangItemIdStart;
     const OUString sAsterix(RTL_CONSTASCII_USTRINGPARAM("*"));  // multiple languages in current selection
     const OUString sEmpty;  // 'no language found' from language guessing
     std::set< OUString >::const_iterator it;
@@ -313,7 +313,7 @@ void SwSpellPopup::fillLangPopupMenu(
             if (aEntryTxt == aCurLang)
             {
                 //make a check mark for the current language
-                pPopupMenu->CheckItem( nItemId, TRUE );
+                pPopupMenu->CheckItem( nItemId, sal_True );
             }
             rLangTable[ nItemId ] = aEntryTxt;
             ++nItemId;
@@ -427,9 +427,9 @@ bGrammarResults(false)
 
         InsertSeparator(0);
         bEnable = sal_True;
-        USHORT nAutoCorrItemId  = MN_AUTOCORR_START;
-        USHORT nItemId          = MN_SUGGESTION_START;
-        for (USHORT i = 0; i < nStringCount; ++i)
+        sal_uInt16 nAutoCorrItemId  = MN_AUTOCORR_START;
+        sal_uInt16 nItemId          = MN_SUGGESTION_START;
+        for (sal_uInt16 i = 0; i < nStringCount; ++i)
         {
             const String aEntry = aSuggestions[ i ];
             InsertItem( nItemId, aEntry, 0, i );
@@ -448,7 +448,7 @@ bGrammarResults(false)
     OUString aIgnoreSelection( String( SW_RES( STR_IGNORE_SELECTION ) ) );
     OUString aSpellingAndGrammar = RetrieveLabelFromCommand( C2U(".uno:SpellingAndGrammarDialog") );
     SetItemText( MN_SPELLING_DLG, aSpellingAndGrammar );
-    USHORT nItemPos = GetItemPos( MN_IGNORE_WORD );
+    sal_uInt16 nItemPos = GetItemPos( MN_IGNORE_WORD );
     InsertItem( MN_IGNORE_SELECTION, aIgnoreSelection, 0, nItemPos );
     SetHelpId( MN_IGNORE_SELECTION, HID_LINGU_IGNORE_SELECTION);
 
@@ -474,7 +474,7 @@ bGrammarResults(false)
     pMenu = GetPopupMenu(MN_ADD_TO_DIC);
 //    pMenu->CreateAutoMnemonics();
     pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);     //! necessary to retrieve the correct dictionary name in 'Execute' below
-    bEnable = FALSE;    // enable MN_ADD_TO_DIC?
+    bEnable = sal_False;    // enable MN_ADD_TO_DIC?
     uno::Reference< linguistic2::XDictionaryList >    xDicList( SvxGetDictionaryList() );
     if (xDicList.is())
     {
@@ -487,10 +487,10 @@ bGrammarResults(false)
 
         aDics = xDicList->getDictionaries();
         const uno::Reference< linguistic2::XDictionary >  *pDic = aDics.getConstArray();
-        USHORT nDicCount = static_cast< USHORT >(aDics.getLength());
+        sal_uInt16 nDicCount = static_cast< sal_uInt16 >(aDics.getLength());
 
-        USHORT nItemId = MN_DICTIONARIES_START;
-        for( USHORT i = 0; i < nDicCount; i++ )
+        sal_uInt16 nItemId = MN_DICTIONARIES_START;
+        for( sal_uInt16 i = 0; i < nDicCount; i++ )
         {
             uno::Reference< linguistic2::XDictionary >  xDicTmp( pDic[i], uno::UNO_QUERY );
             if (!xDicTmp.is() || SvxGetIgnoreAllList() == xDicTmp)
@@ -573,7 +573,7 @@ bGrammarResults(false)
 
     //////////////////////////////////////////////////////////////////////////////////
 
-    RemoveDisabledEntries( TRUE, TRUE );
+    RemoveDisabledEntries( sal_True, sal_True );
 }
 
 /*--------------------------------------------------------------------------
@@ -594,7 +594,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
 {
     nCheckedLanguage = SvxLocaleToLanguage( rResult.aLocale );
 
-    USHORT nPos = 0;
+    sal_uInt16 nPos = 0;
     OUString aMessageText( rResult.aErrors[ nErrorInResult ].aShortComment );
     InsertSeparator( nPos++ );
     InsertItem( MN_SHORT_COMMENT, aMessageText, MIB_NOSELECT, nPos++ );
@@ -616,7 +616,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
             aImage = Image( lcl_GetImageFromPngUrl( aSuggestionImageUrl ) );
         }
 
-        USHORT nItemId = MN_SUGGESTION_START;
+        sal_uInt16 nItemId = MN_SUGGESTION_START;
         for (sal_uInt16 i = 0;  i < nStringCount;  ++i)
         {
             const String aEntry = aSuggestions[ i ];
@@ -633,7 +633,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
     OUString aIgnoreSelection( String( SW_RES( STR_IGNORE_SELECTION ) ) );
     OUString aSpellingAndGrammar = RetrieveLabelFromCommand( C2U(".uno:SpellingAndGrammarDialog") );
     SetItemText( MN_SPELLING_DLG, aSpellingAndGrammar );
-    USHORT nItemPos = GetItemPos( MN_IGNORE_WORD );
+    sal_uInt16 nItemPos = GetItemPos( MN_IGNORE_WORD );
     InsertItem( MN_IGNORE_SELECTION, aIgnoreSelection, 0, nItemPos );
     SetHelpId( MN_IGNORE_SELECTION, HID_LINGU_IGNORE_SELECTION);
 
@@ -706,7 +706,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
 
     //////////////////////////////////////////////////////////////////////////////////
 
-    RemoveDisabledEntries( TRUE, TRUE );
+    RemoveDisabledEntries( sal_True, sal_True );
 }
 
 /*--------------------------------------------------------------------------
@@ -722,7 +722,7 @@ sal_uInt16  SwSpellPopup::Execute( const Rectangle& rWordPos, Window* pWin )
 /*-- 19.01.2006 08:15:48---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwSpellPopup::Execute( USHORT nId )
+void SwSpellPopup::Execute( sal_uInt16 nId )
 {
     if (nId == USHRT_MAX)
         return;
@@ -799,7 +799,7 @@ void SwSpellPopup::Execute( USHORT nId )
         {
             SvtLinguConfig().SetProperty( A2OU( UPN_IS_GRAMMAR_INTERACTIVE ), uno::makeAny( sal_True ));
         }
-        pSh->Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
+        pSh->Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
         {
             uno::Reference<linguistic2::XDictionaryList> xDictionaryList( SvxGetDictionaryList() );
             SvxDicListChgClamp aClamp( xDictionaryList );
@@ -833,7 +833,7 @@ void SwSpellPopup::Execute( USHORT nId )
 
             if (xDic.is())
             {
-                INT16 nAddRes = linguistic::AddEntryToDic( xDic, aWord, FALSE, aEmptyStr, LANGUAGE_NONE );
+                sal_Int16 nAddRes = linguistic::AddEntryToDic( xDic, aWord, sal_False, aEmptyStr, LANGUAGE_NONE );
                 // save modified user-dictionary if it is persistent
                 uno::Reference< frame::XStorable >  xSavDic( xDic, uno::UNO_QUERY );
                 if (xSavDic.is())
@@ -887,7 +887,7 @@ void SwSpellPopup::Execute( USHORT nId )
             pSh->Push();        // save cursor
             SwLangHelper::SelectCurrentPara( *pSh );
             SwLangHelper::SetLanguage( *pSh, aNewLangTxt, true, aCoreSet );
-            pSh->Pop( FALSE );  // restore cursor
+            pSh->Pop( sal_False );  // restore cursor
         }
         else if (nId == MN_SET_PARA_NONE)
         {
@@ -895,7 +895,7 @@ void SwSpellPopup::Execute( USHORT nId )
             pSh->Push();        // save cursor
             SwLangHelper::SelectCurrentPara( *pSh );
             SwLangHelper::SetLanguage_None( *pSh, true, aCoreSet );
-            pSh->Pop( FALSE );  // restore cursor
+            pSh->Pop( sal_False );  // restore cursor
         }
         else if (nId == MN_SET_PARA_RESET)
         {
@@ -903,7 +903,7 @@ void SwSpellPopup::Execute( USHORT nId )
             pSh->Push();        // save cursor
             SwLangHelper::SelectCurrentPara( *pSh );
             SwLangHelper::ResetLanguages( *pSh, true );
-            pSh->Pop( FALSE );  // restore cursor
+            pSh->Pop( sal_False );  // restore cursor
         }
         else if (nId == MN_SET_PARA_MORE)
         {
@@ -911,7 +911,7 @@ void SwSpellPopup::Execute( USHORT nId )
             SwLangHelper::SelectCurrentPara( *pSh );
             //Open Format/Character Dialog
             lcl_CharDialog( *pSh, true, nId, 0, 0 );
-            pSh->Pop( FALSE );  // restore cursor
+            pSh->Pop( sal_False );  // restore cursor
         }
 #if 0
         else if (nId == MN_SET_LANGUAGE_ALL_TEXT_START + nNumLanguageDocEntries - 1)

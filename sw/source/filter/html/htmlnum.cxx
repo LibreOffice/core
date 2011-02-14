@@ -307,9 +307,9 @@ void SwHTMLParser::NewNumBulList( int nToken )
 
     // den aktuellen Absatz erst einmal nicht numerieren
     {
-        BYTE nLvl = nLevel;
+        sal_uInt8 nLvl = nLevel;
         // --> OD 2008-04-02 #refactorlists#
-//        SetNoNum(&nLvl, TRUE); // #115962#
+//        SetNoNum(&nLvl, sal_True); // #115962#
 //        SetNodeNum( nLvl );
         SetNodeNum( nLvl, false );
         // <--
@@ -540,7 +540,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
 
     // --> OD 2008-04-02 #refactorlists#
 //    if( HTML_LISTHEADER_ON==nToken )
-//        SetNoNum(&nLevel, TRUE);
+//        SetNoNum(&nLevel, sal_True);
     const bool bCountedInList( HTML_LISTHEADER_ON==nToken ? false : true );
     // <--
 
@@ -721,7 +721,7 @@ void SwHTMLWriter::FillNextNumInfo()
 {
     pNextNumRuleInfo = 0;
 
-    ULONG nPos = pCurPam->GetPoint()->nNode.GetIndex() + 1;
+    sal_uLong nPos = pCurPam->GetPoint()->nNode.GetIndex() + 1;
 
     sal_Bool bTable = sal_False;
     do
@@ -795,7 +795,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                 bStartValue = sal_True;
                 if( rInfo.GetDepth() > 1 )
                 {
-                    ULONG nPos =
+                    sal_uLong nPos =
                         rWrt.pCurPam->GetPoint()->nNode.GetIndex() + 1;
                     do
                     {
@@ -938,7 +938,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             rWrt.Strm() << sOut.GetBuffer();
 
         if( rWrt.bCfgOutStyles )
-            OutCSS1_NumBulListStyleOpt( rWrt, *rInfo.GetNumRule(), (BYTE)i );
+            OutCSS1_NumBulListStyleOpt( rWrt, *rInfo.GetNumRule(), (sal_uInt8)i );
 
         rWrt.Strm() << '>';
 

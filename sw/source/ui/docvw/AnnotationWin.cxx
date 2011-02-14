@@ -89,7 +89,7 @@ void SwAnnotationWin::SetPostItText()
 {
     // get text from SwPostItField and insert into our textview
     Engine()->SetModifyHdl( Link() );
-    Engine()->EnableUndo( FALSE );
+    Engine()->EnableUndo( sal_False );
     mpFld = static_cast<SwPostItField*>(mpFmtFld->GetFld());
     if( mpFld->GetTextObject() )
         Engine()->SetText( *mpFld->GetTextObject() );
@@ -102,7 +102,7 @@ void SwAnnotationWin::SetPostItText()
 
     Engine()->ClearModifyFlag();
     Engine()->GetUndoManager().Clear();
-    Engine()->EnableUndo( TRUE );
+    Engine()->EnableUndo( sal_True );
     Engine()->SetModifyHdl( LINK( this, SwAnnotationWin, ModifyHdl ) );
     Invalidate();
 }
@@ -259,8 +259,8 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
 SvxLanguageItem SwAnnotationWin::GetLanguage(void)
 {
     // set initial language for outliner
-    USHORT nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( mpFld->GetLanguage() );
-    USHORT nLangWhichId = 0;
+    sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( mpFld->GetLanguage() );
+    sal_uInt16 nLangWhichId = 0;
     switch (nScriptType)
     {
         case SCRIPTTYPE_LATIN :    nLangWhichId = EE_CHAR_LANGUAGE ; break;
