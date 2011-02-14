@@ -1437,7 +1437,7 @@ USHORT ScRange::ParseCols( const String& rStr, ScDocument* pDoc,
     if( NULL == p )
         return 0;
 
-    pDoc = NULL; // make compiler shutup we may need this later
+    (void)pDoc; // make compiler shutup we may need this later
 
     switch (rDetails.eConv)
     {
@@ -1496,7 +1496,7 @@ USHORT ScRange::ParseRows( const String& rStr, ScDocument* pDoc,
     if( NULL == p )
         return 0;
 
-    pDoc = NULL; // make compiler shutup we may need this later
+    (void)pDoc; // make compiler shutup we may need this later
 
     switch (rDetails.eConv)
     {
