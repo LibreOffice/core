@@ -40,10 +40,10 @@ class ObjectWin;
 
 class SolDep : public Depper
 {
-    BOOL            mbBServer;          //call from build server
-    ULONG           mnMinDynXOffs;
-    ULONG           mnLevelOffset;
-    ULONG           mnXOffset;
+    sal_Bool            mbBServer;          //call from build server
+    sal_uIntPtr         mnMinDynXOffs;
+    sal_uIntPtr         mnLevelOffset;
+    sal_uIntPtr         mnXOffset;
     ObjWinList*     mpTravellerList;
 
     String      msSourceName;
@@ -51,7 +51,7 @@ class SolDep : public Depper
     ByteString  msVersionMinor;
     ByteString  msProject;
     ObjectWin*  mpFocusWin;
-    BOOL        mbIsHide;
+    sal_Bool        mbIsHide;
 
     GenericInformationList *mpStandLst;
 
@@ -60,15 +60,15 @@ class SolDep : public Depper
 
     SolarFileList* GetPrjListFromDir();
 
-    Point       CalcPos( USHORT nSet, USHORT nIndex );
-    ULONG       CalcXOffset( ULONG nObjectsToFit );
+    Point       CalcPos( sal_uInt16 nSet, sal_uInt16 nIndex );
+    sal_uIntPtr       CalcXOffset( sal_uIntPtr nObjectsToFit );
     double      CalcDistSum( ObjWinList* pObjList, DistType eDistType = TOPDOWN );
-    USHORT      Impl_Traveller( ObjectWin* pWin, USHORT nDepth );
+    sal_uInt16      Impl_Traveller( ObjectWin* pWin, sal_uInt16 nDepth );
     double      Impl_PermuteMin( ObjWinList& rObjList, Point* pPosArray, ObjWinList& rResultList,
-                    double dMinDist, ULONG nStart, ULONG nSize, DistType eDisType = TOPDOWN );
-    USHORT      Load( const ByteString& rFileName );
+                    double dMinDist, sal_uIntPtr nStart, sal_uIntPtr nSize, DistType eDisType = TOPDOWN );
+    sal_uInt16      Load( const ByteString& rFileName );
     void        WriteToErrorFile();
-    BOOL        MarkObjects( ObjectWin* pObjectWin );
+    sal_Bool        MarkObjects( ObjectWin* pObjectWin );
     void        InitContextMenueMainWnd();
     void        InitContextMenuePrjViewWnd(DepWin* pWin);
 protected:
@@ -80,36 +80,36 @@ protected:
 public:
     SolDep( Window* pBaseWindow );
     ~SolDep();
-    BOOL                IsHideMode() { return mbIsHide;};
+    sal_Bool                IsHideMode() { return mbIsHide;};
     void                ToggleHideDependency();
 
-    virtual ULONG       GetStart(SolIdMapper* pIdMapper, ObjectList* pObjList);
-            ULONG       GetStartPrj(SolIdMapper* pIdMapper, ObjectList* pObjList);
-    virtual USHORT      ReadSource( BOOL bUpdater = FALSE );
-    virtual USHORT      WriteSource();
-    virtual USHORT      OpenSource();
-    BOOL                GetVersion();
+    virtual sal_uIntPtr     GetStart(SolIdMapper* pIdMapper, ObjectList* pObjList);
+            sal_uIntPtr       GetStartPrj(SolIdMapper* pIdMapper, ObjectList* pObjList);
+    virtual sal_uInt16      ReadSource( sal_Bool bUpdater = sal_False );
+    virtual sal_uInt16      WriteSource();
+    virtual sal_uInt16      OpenSource();
+    sal_Bool                GetVersion();
     void                Init();
     void                Init( ByteString &rVersion, GenericInformationList *pVersionList = NULL );
-    BOOL                InitPrj( ByteString& rListName );
+    sal_Bool                InitPrj( ByteString& rListName );
 //        using Depper::AddObject;
-    virtual ULONG       AddObject( ByteString& rBodyText, BOOL Interact=TRUE );
-            ULONG       AddPrjObject( ByteString& rBodyText, BOOL Interact=TRUE );
-    virtual ObjectWin*  RemoveObject( USHORT nId, BOOL bDelete = TRUE );
+    virtual sal_uIntPtr     AddObject( ByteString& rBodyText, sal_Bool Interact=sal_True );
+            sal_uIntPtr     AddPrjObject( ByteString& rBodyText, sal_Bool Interact=sal_True );
+    virtual ObjectWin*  RemoveObject( sal_uInt16 nId, sal_Bool bDelete = sal_True );
     virtual void        RemoveAllObjects( ObjectList* pObjLst );
-    virtual USHORT      AddConnector( ObjectWin* pStartWin, ObjectWin* pEndWin );
-            USHORT      AddConnectorPrjView( ObjectWin* pStartWin, ObjectWin* pEndWin );
-    virtual USHORT      RemoveConnector( ObjectWin* pStartWin, ObjectWin* pEndWin );
-            USHORT      RemoveConnectorPrjView( ObjectWin* pStartWin, ObjectWin* pEndWin );
-            USHORT      AutoArrange( SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nTopId, ULONG nBottmId, ULONG aObjID );
-            USHORT      OptimizePos( SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nTopId, ULONG nBottmId, ULONG aObjID );
-    virtual BOOL        ViewContent( ByteString& rObjectName );
-    virtual USHORT      CloseWindow();
+    virtual sal_uInt16      AddConnector( ObjectWin* pStartWin, ObjectWin* pEndWin );
+            sal_uInt16      AddConnectorPrjView( ObjectWin* pStartWin, ObjectWin* pEndWin );
+    virtual sal_uInt16      RemoveConnector( ObjectWin* pStartWin, ObjectWin* pEndWin );
+            sal_uInt16      RemoveConnectorPrjView( ObjectWin* pStartWin, ObjectWin* pEndWin );
+            sal_uInt16      AutoArrange( SolIdMapper* pIdMapper, ObjectList* pObjLst, sal_uIntPtr nTopId, sal_uIntPtr nBottmId, sal_uIntPtr aObjID );
+            sal_uInt16      OptimizePos( SolIdMapper* pIdMapper, ObjectList* pObjLst, sal_uIntPtr nTopId, sal_uIntPtr nBottmId, sal_uIntPtr aObjID );
+    virtual sal_Bool        ViewContent( ByteString& rObjectName );
+    virtual sal_uInt16      CloseWindow();
     virtual void        ShowHelp();
     FloatingWindow*     GetTaskBarFrame() { return &maTaskBarFrame; }
     SoldepToolBox*      GetSoldepToolBox() { return &maToolBox; }
 
-            BOOL        FindProject();
+            sal_Bool        FindProject();
             void        Resize();
 };
 

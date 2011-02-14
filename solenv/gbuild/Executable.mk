@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2009 by Sun Microsystems, Inc.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,22 +14,20 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.	If not, see
+# version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
-
 # Executable class
 
 # defined by platform
-#  gb_Executable_TARGETTYPEFLAGS
 #  gb_Executable_Executable_platform
 
 .PHONY : $(call gb_Executable_get_clean_target,%)
@@ -50,7 +48,7 @@ endef
 
 define gb_Executable__Executable_impl
 $(call gb_LinkTarget_LinkTarget,$(2))
-$(call gb_LinkTarget_set_targettype_flags,$(2),$(gb_Executable_TARGETTYPEFLAGS) $(call gb_Executable_get_rpath,$(1)))
+$(call gb_LinkTarget_set_targettype,$(2),Executable)
 $(call gb_Executable_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
 $(call gb_Executable_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_Executable_Executable_platform,$(1),$(2))
@@ -73,6 +71,7 @@ $(eval $(foreach method,\
     add_objcxxobjects \
     add_exception_objects \
     add_noexception_objects \
+    add_generated_exception_objects \
     set_cflags \
     set_cxxflags \
     set_objcxxflags \

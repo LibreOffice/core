@@ -29,7 +29,7 @@
 # not follow any of the established nameschemes
 
 ifeq ($(OS),LINUX)
-gb_Library_FILENAMES := $(patsubst comphelper:libcomphelper%,comphelper:libcomphelp4%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst comphelper:libcomphelper%,comphelper:libcomphelp%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppuhelper:libcppuhelper%,cppuhelper:libuno_cppuhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppuhelper:libcppuhelper%,cppuhelper:libuno_cppuhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst jvmfwk:libuno_jvmfwk%,jvmfwk:libjvmfwk%,$(gb_Library_FILENAMES))
@@ -47,7 +47,7 @@ endif
 
 
 ifeq ($(OS),MACOSX)
-gb_Library_FILENAMES := $(patsubst comphelper:libcomphelper%,comphelper:libcomphelp4%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst comphelper:libcomphelper%,comphelper:libcomphelp%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppuhelper:libcppuhelper%,cppuhelper:libuno_cppuhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst jvmfwk:libuno_jvmfwk%,jvmfwk:libjvmfwk%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
@@ -64,6 +64,7 @@ endif
 ifeq ($(OS),WNT)
 ifneq ($(USE_MINGW),)
 gb_Library_FILENAMES := $(patsubst comphelper:icomphelper%,comphelper:icomphelp%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst cppunit:icppunit%,cppunit:libcppunit.dll$(gb_Library_IARCEXT),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cui:icui%,cui:icuin%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst i18nisolang1:ii18nisolang1%,i18nisolang1:ii18nisolang%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst i18nisolang1:iii18nisolang1%,i18nisolang1:iii18nisolang%,$(gb_Library_FILENAMES))
@@ -95,7 +96,8 @@ gb_Library_ILIBFILENAMES:=\
 gb_Library_DLLFILENAMES := $(filter-out $(foreach lib,$(gb_Library_ILIBFILENAMES),$(lib):%),$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES += $(foreach lib,$(gb_Library_ILIBFILENAMES),$(lib):$(PSDK_HOME)/lib/$(lib)$(gb_Library_ILIBEXT))
 
-gb_Library_DLLFILENAMES := $(patsubst comphelper:comphelper%,comphelper:comphelp4%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst comphelper:comphelper%,comphelper:comphelp%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst cppunit:cppunit%,cppunit:cygcppunit-1-12-1%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst icuuc:icuuc%,icuuc:icuuc40%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst ucbhelper:ucbhelper%,ucbhelper:ucbhelper4%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
@@ -107,6 +109,7 @@ endif
 
 else
 gb_Library_FILENAMES := $(patsubst comphelper:icomphelper%,comphelper:icomphelp%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst cppunit:icppunit%,cppunit:icppunit_dll%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cui:icui%,cui:icuin%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst i18nisolang1:ii18nisolang1%,i18nisolang1:ii18nisolang%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst i18nisolang1:iii18nisolang1%,i18nisolang1:iii18nisolang%,$(gb_Library_FILENAMES))
@@ -153,7 +156,7 @@ ifneq ($(gb_PRODUCT),$(true))
 gb_Library_FILENAMES := $(patsubst msvcrt:msvcrt%,msvcrt:msvcrtd%,$(gb_Library_FILENAMES))
 endif
 
-gb_Library_DLLFILENAMES := $(patsubst comphelper:comphelper%,comphelper:comphelp4%,$(gb_Library_DLLFILENAMES))
+gb_Library_DLLFILENAMES := $(patsubst comphelper:comphelper%,comphelper:comphelp%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst icuuc:icuuc%,icuuc:icuuc40%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst ucbhelper:ucbhelper%,ucbhelper:ucbhelper4%,$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
@@ -163,7 +166,7 @@ endif
 endif
 
 ifeq ($(OS),SOLARIS)
-gb_Library_FILENAMES := $(patsubst comphelper:libcomphelper%,comphelper:libcomphelp4%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst comphelper:libcomphelper%,comphelper:libcomphelp%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppuhelper:libcppuhelper%,cppuhelper:libuno_cppuhelper%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ucbhelper:libucbhelper%,ucbhelper:libucbhelper4%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst jvmfwk:libuno_jvmfwk%,jvmfwk:libjvmfwk%,$(gb_Library_FILENAMES))

@@ -165,7 +165,7 @@ SolSelectVersionDlg::SolSelectVersionDlg(
 {
     FreeResource();
     //Fill the ListBox with MWS versions (e.g. SRC680) from "stand.lst"
-    for ( ULONG i = 0; i < pStandLst->Count(); i++ ) {
+    for ( sal_uIntPtr i = 0; i < pStandLst->Count(); i++ ) {
         String sVersion( *pStandLst->GetObject( i ), RTL_TEXTENCODING_ASCII_US );
         maVersionListBox.InsertEntry( sVersion );
     }
@@ -252,9 +252,9 @@ SolFindProjectDlg::SolFindProjectDlg( Window *pParent, ObjWinList* pObjList )
     maCombobox.SetDropDownLineCount(15);
 //    SolDep* pSolDep = ((MyApp*)GetpApp())->GetSolDep();
 //    ObjWinList* pObjList = pSolDep->GetObjectList();
-    ULONG n = pObjList->Count();
+    sal_uIntPtr n = pObjList->Count();
     //Fill combobox
-    for (ULONG i=0; i<n; i++) {
+    for (sal_uIntPtr i=0; i<n; i++) {
         ByteString prjname = pObjList->GetObject( i )->GetBodyText();
         if (prjname != ByteString("null"))                                 //null_project
             maCombobox.InsertEntry( String(prjname,RTL_TEXTENCODING_UTF8) );

@@ -94,6 +94,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     icuuc \
     icule \
     graphite_dll \
+    cppunit \
 ))
 
 
@@ -121,6 +122,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     passwordcontainer \
     productregistration \
     vbaswobj \
+    msforms \
 ))
 
 
