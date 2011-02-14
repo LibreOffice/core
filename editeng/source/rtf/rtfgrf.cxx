@@ -41,38 +41,6 @@
 
 using namespace ::rtl;
 
-#ifndef DBG_UTIL
-#undef DEBUG_JP
-#endif
-
-#ifdef DEBUG_JP
-
-#include <tools/fsys.hxx>
-
-class GrfWindow : public WorkWindow
-{
-    Graphic aGrf;
-public:
-    GrfWindow( const Graphic& rGrf );
-    virtual void    Paint( const Rectangle& rRect );
-};
-
-GrfWindow::GrfWindow( const Graphic& rGrf )
-    : WorkWindow( NULL ),
-    aGrf( rGrf )
-{
-    SetPosSizePixel( Point( 100, 0 ), Size( 300, 300 ));
-    Show();
-    Invalidate();
-    Update();
-}
-
-void GrfWindow::Paint( const Rectangle& )
-{
-    aGrf.Draw( this, Point(0,0), GetSizePixel() );
-}
-#endif
-
 static BYTE aPal1[ 2 * 4 ] = {
         0x00, 0x00, 0x00, 0x00,             // Schwarz
         0xFF, 0xFF, 0xFF, 0x00              // Weiss
@@ -570,10 +538,6 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
         default:
             break;
         }
-
-#ifdef DEBUG_JP
-        new GrfWindow( rGrf );
-#endif
     }
     SetSrcEncoding( eOldEnc );
 
