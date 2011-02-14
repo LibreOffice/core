@@ -194,7 +194,6 @@ UDK_3_0_0 {
         rtl_locale_setDefault;
         rtl_str_getLength;
         rtl_str_compare;
-        rtl_str_compare_Numeric;
         rtl_str_compare_WithLength;
         rtl_str_shortenedCompare_WithLength;
         rtl_str_reverseCompare_WithLength;
@@ -252,7 +251,6 @@ UDK_3_0_0 {
         rtl_stringbuffer_newFromStr_WithLength;
         rtl_stringbuffer_newFromStringBuffer;
         rtl_ustr_compare;
-        rtl_ustr_compare_Numeric;
         rtl_ustr_compare_WithLength;
         rtl_ustr_shortenedCompare_WithLength;
         rtl_ustr_reverseCompare_WithLength;

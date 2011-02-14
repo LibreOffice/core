@@ -40,11 +40,9 @@ class Compare: public CppUnit::TestFixture
 {
 private:
     void equalsIgnoreAsciiCaseAscii();
-    void compareNumeric();
 
 CPPUNIT_TEST_SUITE(Compare);
 CPPUNIT_TEST(equalsIgnoreAsciiCaseAscii);
-CPPUNIT_TEST(compareNumeric);
 CPPUNIT_TEST_SUITE_END();
 };
 
@@ -70,60 +68,4 @@ void test::oustring::Compare::equalsIgnoreAsciiCaseAscii()
                    equalsIgnoreAsciiCaseAscii("abcd"));
 }
 
-void test::oustring::Compare::compareNumeric()
-{
-// --- Some generic tests to ensure we do not alter original behavior
-// outside what we want
-    CPPUNIT_ASSERT(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("ABC"))).compareToNumeric(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("ABC")))) == 0
-    );
-    // Case sensitivity
-    CPPUNIT_ASSERT(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("ABC"))).compareToNumeric(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("abc")))) < 0
-    );
-    // Reverse
-    CPPUNIT_ASSERT(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("abc"))).compareToNumeric(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("ABC")))) > 0
-    );
-    // First shorter
-    CPPUNIT_ASSERT(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("alongstring"))).compareToNumeric(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("alongerstring")))) > 0
-    );
-    // Second shorter
-    CPPUNIT_ASSERT(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("alongerstring"))).compareToNumeric(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("alongstring")))) < 0
-    );
-// -- Here we go on natural order, each one is followed by classic compare and the reverse comparison
-    // That's why we originally made the patch
-    CPPUNIT_ASSERT(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("Heading 9"))).compareToNumeric(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("Heading 10")))) < 0
-    );
-    // Original behavior
-    CPPUNIT_ASSERT(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("Heading 9"))).compareTo(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("Heading 10")))) > 0
-    );
-    CPPUNIT_ASSERT(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("Heading 10"))).compareToNumeric(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("Heading 9")))) > 0
-    );
-    // Harder
-    CPPUNIT_ASSERT(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("July, the 4th"))).compareToNumeric(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("July, the 10th")))) < 0
-    );
-    CPPUNIT_ASSERT(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("July, the 4th"))).compareTo(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("July, the 10th")))) > 0
-    );
-    CPPUNIT_ASSERT(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("July, the 10th"))).compareToNumeric(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("July, the 4th")))) > 0
-    );
-    // Hardest
-    CPPUNIT_ASSERT(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("abc08"))).compareToNumeric(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("abc010")))) < 0
-    );
-    CPPUNIT_ASSERT(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("abc08"))).compareTo(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("abc010")))) > 0
-    );
-    CPPUNIT_ASSERT(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("abc010"))).compareToNumeric(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("abc08")))) > 0
-    );
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

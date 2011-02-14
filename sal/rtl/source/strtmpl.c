@@ -60,8 +60,6 @@ inline void rtl_str_ImplCopy( IMPL_RTL_STRCODE* pDest,
     }                                                               \
 }
 
-#define IS_DIGIT(CHAR) (((CHAR) >= 48) && ((CHAR <= 57)))
-
 /* ======================================================================= */
 /* C-String functions which could be used without the String-Class         */
 /* ======================================================================= */
@@ -87,51 +85,6 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare )( const IMPL_RTL_STRCODE* pStr1,
         pStr1++;
         pStr2++;
     }
-
-    return nRet;
-}
-
-/* ----------------------------------------------------------------------- */
-
-sal_Int32 SAL_CALL IMPL_RTL_STRNAME( compare_Numeric )( const IMPL_RTL_STRCODE* pStr1,
-                                                        const IMPL_RTL_STRCODE* pStr2 )
-{
-    sal_Int32 nRet;
-    do {
-        while ( ((nRet = ((sal_Int32)(IMPL_RTL_USTRCODE(*pStr1)))-
-                         ((sal_Int32)(IMPL_RTL_USTRCODE(*pStr2)))) == 0) &&
-                *pStr2 )
-        {
-            pStr1++;
-            pStr2++;
-        }
-
-        if(*pStr1 && *pStr2)
-        {
-            IMPL_RTL_STRCODE   c1 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr1 );
-            IMPL_RTL_STRCODE   c2 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr2 );
-            sal_Int64   number1 = 0;
-            sal_Int64   number2 = 0;
-            if(IS_DIGIT(c1) && IS_DIGIT(c2))
-            {
-              do
-              {
-                number1 = number1 * 10 + (c1 - '0');
-                pStr1++;
-                c1 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr1 );
-              } while(IS_DIGIT(c1));
-
-              do
-              {
-                number2 = number2 * 10 + (c2 - '0');
-                pStr2++;
-                c2 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr2 );
-              } while(IS_DIGIT(c2));
-
-              nRet = number1 - number2;
-            }
-        }
-    } while(nRet == 0 && *pStr1 && *pStr2);
 
     return nRet;
 }
