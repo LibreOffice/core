@@ -1182,6 +1182,7 @@ void SalDisplay::ModifierMapping()
 XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
 {
     String aStrMap;
+    String aCustomKeyName;
 
     if( nKeyCode & KEY_MOD1 )
         aStrMap += GetKeyNameFromKeySym( nCtrlKeySym_ );
@@ -1334,13 +1335,13 @@ XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
             nKeySym = XK_grave;
             break;
         case KEY_BRACKETLEFT:
-            nKeySym = XK_bracketleft;
+            aCustomKeyName = '[';
             break;
         case KEY_BRACKETRIGHT:
-            nKeySym = XK_bracketright;
+            aCustomKeyName = ']';
             break;
         case KEY_SEMICOLON:
-            nKeySym = XK_semicolon;
+            aCustomKeyName = ';';
             break;
 
         default:
@@ -1359,6 +1360,14 @@ XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
         }
         else
             aStrMap.Erase();
+    }
+    else if (aCustomKeyName.Len())
+    {
+        // For semicolumn, bracket left and bracket right, it's better to use
+        // their keys than their names. (fdo#32891)
+        if (aStrMap.Len())
+            aStrMap += '+';
+        aStrMap += aCustomKeyName;
     }
     else
         aStrMap.Erase();
