@@ -42,6 +42,8 @@
 #include <comphelper/stlunosequence.hxx>
 #include <comphelper/stl_types.hxx>
 
+#include <com/sun/star/i18n/CharType.hpp>
+
 
 namespace comphelper { namespace string {
 
@@ -92,10 +94,12 @@ rtl::OUString searchAndReplaceAsciiL(
     return _source;
 }
 
+using namespace ::com::sun::star;
+
 // convert between sequence of string and comma separated string
 
 ::rtl::OUString convertCommaSeparated(
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > const& i_rSeq)
+    uno::Sequence< ::rtl::OUString > const& i_rSeq)
 {
     ::rtl::OUStringBuffer buf;
     ::comphelper::intersperse(
@@ -105,7 +109,7 @@ rtl::OUString searchAndReplaceAsciiL(
     return buf.makeStringAndClear();
 }
 
-::com::sun::star::uno::Sequence< ::rtl::OUString >
+uno::Sequence< ::rtl::OUString >
     convertCommaSeparated( ::rtl::OUString const& i_rString )
 {
     std::vector< ::rtl::OUString > vec;
@@ -118,64 +122,86 @@ rtl::OUString searchAndReplaceAsciiL(
           vec.push_back(kw);
       }
     } while (idx >= 0);
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > kws(vec.size());
+    uno::Sequence< ::rtl::OUString > kws(vec.size());
     std::copy(vec.begin(), vec.end(), stl_begin(kws));
     return kws;
 }
 
-#define IS_DIGIT(CHAR) (((CHAR) >= 48) && ((CHAR <= 57)))
 
-template<typename IMPL_RTL_STRCODE, typename IMPL_RTL_USTRCODE>
-    sal_Int32 SAL_CALL compareNaturalImpl(const IMPL_RTL_STRCODE* pStr1, const IMPL_RTL_STRCODE* pStr2)
+sal_Int32 compareNatural( const ::rtl::OUString & rLHS, const ::rtl::OUString & rRHS,
+    const uno::Reference< i18n::XCollator > &rCollator,
+    const uno::Reference< i18n::XBreakIterator > &rBI,
+    const lang::Locale &rLocale) SAL_THROW(())
 {
-    sal_Int32 nRet;
-    do {
-        while ( ((nRet = ((sal_Int32)(IMPL_RTL_USTRCODE(*pStr1)))-
-                         ((sal_Int32)(IMPL_RTL_USTRCODE(*pStr2)))) == 0) &&
-                *pStr2 )
-        {
-            pStr1++;
-            pStr2++;
-        }
+    sal_Int16 nRet = 0;
 
-        if(*pStr1 && *pStr2)
-        {
-            IMPL_RTL_STRCODE   c1 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr1 );
-            IMPL_RTL_STRCODE   c2 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr2 );
-            sal_Int64   number1 = 0;
-            sal_Int64   number2 = 0;
-            if(IS_DIGIT(c1) && IS_DIGIT(c2))
-            {
-              do
-              {
-                number1 = number1 * 10 + (c1 - '0');
-                pStr1++;
-                c1 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr1 );
-              } while(IS_DIGIT(c1));
+    sal_Int16 nLHSLastNonDigitPos = 0;
+    sal_Int16 nRHSLastNonDigitPos = 0;
+    sal_Int16 nLHSFirstDigitPos = 0;
+    sal_Int16 nRHSFirstDigitPos = 0;
 
-              do
-              {
-                number2 = number2 * 10 + (c2 - '0');
-                pStr2++;
-                c2 = (sal_Int32)IMPL_RTL_USTRCODE( *pStr2 );
-              } while(IS_DIGIT(c2));
+    while (nLHSFirstDigitPos < rLHS.getLength() || nRHSFirstDigitPos < rRHS.getLength())
+    {
+        sal_Int16 nLHSChunkLen;
+        sal_Int16 nRHSChunkLen;
 
-              nRet = number1 - number2;
-            }
-        }
-    } while(nRet == 0 && *pStr1 && *pStr2);
+        //Compare non digit block as normal strings
+        nLHSFirstDigitPos = rBI->nextCharBlock(rLHS, nLHSLastNonDigitPos,
+            rLocale, i18n::CharType::DECIMAL_DIGIT_NUMBER);
+        nRHSFirstDigitPos = rBI->nextCharBlock(rRHS, nRHSLastNonDigitPos,
+            rLocale, i18n::CharType::DECIMAL_DIGIT_NUMBER);
+        if (nLHSFirstDigitPos == -1)
+            nLHSFirstDigitPos = rLHS.getLength();
+        if (nRHSFirstDigitPos == -1)
+            nRHSFirstDigitPos = rRHS.getLength();
+        nLHSChunkLen = nLHSFirstDigitPos - nLHSLastNonDigitPos;
+        nRHSChunkLen = nRHSFirstDigitPos - nRHSLastNonDigitPos;
+
+        nRet = rCollator->compareSubstring(rLHS, nLHSLastNonDigitPos,
+            nLHSChunkLen, rRHS, nRHSLastNonDigitPos, nRHSChunkLen);
+        if (nRet != 0)
+            return nRet;
+
+        //Compare digit block as one number vs another
+        nLHSLastNonDigitPos = rBI->endOfCharBlock(rLHS, nLHSFirstDigitPos,
+            rLocale, i18n::CharType::DECIMAL_DIGIT_NUMBER);
+        nRHSLastNonDigitPos = rBI->endOfCharBlock(rRHS, nRHSFirstDigitPos,
+            rLocale, i18n::CharType::DECIMAL_DIGIT_NUMBER);
+        if (nLHSLastNonDigitPos == -1)
+            nLHSLastNonDigitPos = rLHS.getLength();
+        if (nRHSLastNonDigitPos == -1)
+            nRHSLastNonDigitPos = rRHS.getLength();
+        nLHSChunkLen = nLHSLastNonDigitPos - nLHSFirstDigitPos;
+        nRHSChunkLen = nRHSLastNonDigitPos - nRHSFirstDigitPos;
+
+        //To-Do: Possibly scale down those unicode codepoints that relate to
+        //numbers outside of the normal 0-9 range, e.g. see GetLocalizedChar in
+        //vcl
+        sal_Int32 nLHS = rLHS.copy(nLHSFirstDigitPos, nLHSChunkLen).toInt32();
+        sal_Int32 nRHS = rRHS.copy(nRHSFirstDigitPos, nRHSChunkLen).toInt32();
+
+        nRet = nLHS-nRHS;
+        if (nRet != 0)
+            return nRet;
+    }
 
     return nRet;
 }
 
-sal_Int32 compareNatural( const ::rtl::OUString & rLHS, const ::rtl::OUString & rRHS ) SAL_THROW(())
+NaturalStringSorter::NaturalStringSorter(
+    const uno::Reference< uno::XComponentContext > &rContext,
+    const lang::Locale &rLocale) : m_aLocale(rLocale)
 {
-    return compareNaturalImpl<sal_Unicode, sal_Unicode>(rLHS.pData->buffer, rRHS.pData->buffer);
-}
+    uno::Reference< lang::XMultiComponentFactory > xFactory(rContext->getServiceManager(),
+        uno::UNO_SET_THROW);
 
-sal_Int32 compareNatural( const ::rtl::OString & rLHS, const ::rtl::OString & rRHS ) SAL_THROW(())
-{
-    return compareNaturalImpl<sal_Char, unsigned char>(rLHS.pData->buffer, rRHS.pData->buffer);
+    m_xCollator = uno::Reference< i18n::XCollator >(xFactory->createInstanceWithContext(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.Collator")), rContext),
+            uno::UNO_QUERY_THROW);
+    m_xCollator->loadDefaultCollator(m_aLocale, 0);
+    m_xBI = uno::Reference< i18n::XBreakIterator >(xFactory->createInstanceWithContext(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")), rContext),
+            uno::UNO_QUERY_THROW);
 }
 
 } }
