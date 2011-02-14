@@ -3767,11 +3767,6 @@ uno::Reference< text::XTextRange > DomainMapper::GetCurrentTextRange()
     return pStyleSheets->getOrCreateCharStyle( rCharProperties );
 }
 
-ListsManager::Pointer DomainMapper::GetListTable( )
-{
-    return m_pImpl->GetListTable( );
-}
-
 StyleSheetTablePtr DomainMapper::GetStyleSheetTable( )
 {
     return m_pImpl->GetStyleSheetTable( );
