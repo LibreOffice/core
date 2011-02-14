@@ -99,15 +99,6 @@ typedef USHORT CM_InfoType;
 
 class CommunicationLink;
 
-/*#undef  PRV_SV_DECL_REF_LOCK
-#define PRV_SV_DECL_REF_LOCK(ClassName, Ref)    \
-protected:                                      \
-    ClassName * pObj;                           \
-public:                                         \
-PRV_SV_DECL_REF_SIGNATURE(ClassName, Ref)       \
-    inline               ClassName##Ref( void * pObjP ){ClassName##Ref ((ClassName *) pObjP);}          \
-*/
-
 SV_DECL_REF( CommunicationLink )
 
 class InfoString : public ByteString
