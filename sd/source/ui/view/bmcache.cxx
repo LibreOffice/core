@@ -60,13 +60,13 @@ BitmapCache::~BitmapCache()
 
 void BitmapCache::Remove( const SdPage* pPage )
 {
-    for( ULONG nPos = 0; nPos < aEntries.Count();  )
+    for( sal_uLong nPos = 0; nPos < aEntries.Count();  )
     {
         BitmapCacheEntry* pCand = (BitmapCacheEntry*) aEntries.GetObject( nPos );
 
         if( pCand->pPage == pPage )
         {
-            pCand = (BitmapCacheEntry*) aEntries.Remove((ULONG)nPos);
+            pCand = (BitmapCacheEntry*) aEntries.Remove((sal_uLong)nPos);
             delete pCand->pGraphicObject;
             delete pCand;
         }

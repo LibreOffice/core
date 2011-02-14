@@ -163,7 +163,7 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale )
     else
         rScale = Fraction( 1, 1 );
 
-    aNew.ReduceColors( (USHORT) aNmLayers.GetValue(), BMP_REDUCE_SIMPLE );
+    aNew.ReduceColors( (sal_uInt16) aNmLayers.GetValue(), BMP_REDUCE_SIMPLE );
 
     return aNew;
 }
@@ -172,7 +172,7 @@ Bitmap SdVectorizeDlg::GetPreparedBitmap( Bitmap& rBmp, Fraction& rScale )
 
 void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
 {
-    mpDocSh->SetWaitCursor( TRUE );
+    mpDocSh->SetWaitCursor( sal_True );
     aPrgs.SetValue( 0 );
 
     Fraction    aScale;
@@ -181,7 +181,7 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
     if( !!aTmp )
     {
         const Link aPrgsHdl( LINK( this, SdVectorizeDlg, ProgressHdl ) );
-        aTmp.Vectorize( rMtf, (BYTE) aMtReduce.GetValue(), BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES, &aPrgsHdl );
+        aTmp.Vectorize( rMtf, (sal_uInt8) aMtReduce.GetValue(), BMP_VECTORIZE_OUTER | BMP_VECTORIZE_REDUCE_EDGES, &aPrgsHdl );
 
         if( aCbFillHoles.IsChecked() )
         {
@@ -228,7 +228,7 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
 
                 aTmp.ReleaseAccess( pRAcc );
 
-                for( ULONG n = 0UL, nCount = rMtf.GetActionCount(); n < nCount; n++ )
+                for( sal_uLong n = 0UL, nCount = rMtf.GetActionCount(); n < nCount; n++ )
                     aNewMtf.AddAction( rMtf.GetAction( n )->Clone() );
 
                 aMap.SetScaleX( aMap.GetScaleX() * aScale );
@@ -240,7 +240,7 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
     }
 
     aPrgs.SetValue( 0 );
-    mpDocSh->SetWaitCursor( FALSE );
+    mpDocSh->SetWaitCursor( sal_False );
 }
 
 // -----------------------------------------------------------------------------
@@ -248,7 +248,7 @@ void SdVectorizeDlg::Calculate( Bitmap& rBmp, GDIMetaFile& rMtf )
 void SdVectorizeDlg::AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
                               long nPosX, long nPosY, long nWidth, long nHeight )
 {
-    ULONG           nSumR = 0UL, nSumG = 0UL, nSumB = 0UL;
+    sal_uLong           nSumR = 0UL, nSumG = 0UL, nSumB = 0UL;
     const long      nRight = nPosX + nWidth - 1L;
     const long      nBottom = nPosY + nHeight - 1L;
     const double    fMult = 1.0 / ( nWidth * nHeight );
@@ -265,9 +265,9 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
         }
     }
 
-    const Color aColor( (BYTE) FRound( nSumR * fMult ),
-                        (BYTE) FRound( nSumG * fMult ),
-                        (BYTE) FRound( nSumB * fMult ) );
+    const Color aColor( (sal_uInt8) FRound( nSumR * fMult ),
+                        (sal_uInt8) FRound( nSumG * fMult ),
+                        (sal_uInt8) FRound( nSumB * fMult ) );
 
     Rectangle   aRect( Point( nPosX, nPosY ), Size( nWidth + 1, nHeight + 1 ) );
     const Size& rMaxSize = rMtf.GetPrefSize();
@@ -280,8 +280,8 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
     if( aRect.Bottom() > ( rMaxSize.Height() - 1L ) )
         aRect.Bottom() = rMaxSize.Height() - 1L;
 
-    rMtf.AddAction( new MetaLineColorAction( aColor, TRUE ) );
-    rMtf.AddAction( new MetaFillColorAction( aColor, TRUE ) );
+    rMtf.AddAction( new MetaLineColorAction( aColor, sal_True ) );
+    rMtf.AddAction( new MetaFillColorAction( aColor, sal_True ) );
     rMtf.AddAction( new MetaRectAction( aRect ) );
 }
 
@@ -289,7 +289,7 @@ void SdVectorizeDlg::AddTile( BitmapReadAccess* pRAcc, GDIMetaFile& rMtf,
 
 IMPL_LINK( SdVectorizeDlg, ProgressHdl, void*, pData )
 {
-    aPrgs.SetValue( (USHORT)(ULONG) pData );
+    aPrgs.SetValue( (sal_uInt16)(sal_uLong) pData );
     return 0L;
 }
 
@@ -353,10 +353,10 @@ void SdVectorizeDlg::LoadSettings()
                                UniString::CreateFromAscii(
                                RTL_CONSTASCII_STRINGPARAM( SD_OPTION_VECTORIZE ) ),
                                SD_OPTION_LOAD ) );
-    UINT16              nLayers;
-    UINT16              nReduce;
-    UINT16              nFillHoles;
-    BOOL                bFillHoles;
+    sal_uInt16              nLayers;
+    sal_uInt16              nReduce;
+    sal_uInt16              nFillHoles;
+    sal_Bool                bFillHoles;
 
     if( xIStm.Is() )
     {
@@ -368,7 +368,7 @@ void SdVectorizeDlg::LoadSettings()
         nLayers = 8;
         nReduce = 0;
         nFillHoles = 32;
-        bFillHoles = FALSE;
+        bFillHoles = sal_False;
     }
 
     aNmLayers.SetValue( nLayers );
@@ -391,7 +391,7 @@ void SdVectorizeDlg::SaveSettings() const
     if( xOStm.Is() )
     {
         SdIOCompat aCompat( *xOStm, STREAM_WRITE, 1 );
-        *xOStm << (UINT16) aNmLayers.GetValue() << (UINT16) aMtReduce.GetValue();
-        *xOStm << (UINT16) aMtFillHoles.GetValue() << aCbFillHoles.IsChecked();
+        *xOStm << (sal_uInt16) aNmLayers.GetValue() << (sal_uInt16) aMtReduce.GetValue();
+        *xOStm << (sal_uInt16) aMtFillHoles.GetValue() << aCbFillHoles.IsChecked();
     }
 }

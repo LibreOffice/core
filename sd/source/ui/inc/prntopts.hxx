@@ -95,7 +95,7 @@ public:
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
 
-    virtual BOOL FillItemSet( SfxItemSet& );
+    virtual sal_Bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     void    SetDrawMode();

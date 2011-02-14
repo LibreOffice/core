@@ -106,9 +106,9 @@ SFX_IMPL_INTERFACE(DrawDocShell, SfxObjectShell, SdResId(0))
 
 namespace sd {
 
-#define POOL_BUFFER_SIZE                (USHORT)32768
-#define BASIC_BUFFER_SIZE               (USHORT)8192
-#define DOCUMENT_BUFFER_SIZE            (USHORT)32768
+#define POOL_BUFFER_SIZE                (sal_uInt16)32768
+#define BASIC_BUFFER_SIZE               (sal_uInt16)8192
+#define DOCUMENT_BUFFER_SIZE            (sal_uInt16)32768
 
 
 GraphicFilter* GetGrfFilter();
@@ -134,7 +134,7 @@ SFX_IMPL_OBJECTFACTORY(
 
 void DrawDocShell::Construct( bool bClipboard )
 {
-    mbInDestruction = FALSE;
+    mbInDestruction = sal_False;
     SetSlotFilter();     // setzt Filter zurueck
 
     mbOwnDocument = mpDoc == 0;
@@ -161,7 +161,7 @@ void DrawDocShell::Construct( bool bClipboard )
 \************************************************************************/
 
 DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
-                               BOOL bDataObject,
+                               sal_Bool bDataObject,
                                DocumentType eDocumentType) :
     SfxObjectShell( eMode == SFX_CREATE_MODE_INTERNAL ?  SFX_CREATE_MODE_EMBEDDED : eMode),
     mpDoc(NULL),
@@ -172,7 +172,7 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
     meDocType(eDocumentType),
     mpFilterSIDs(0),
     mbSdDataObj(bDataObject),
-    mbOwnPrinter(FALSE),
+    mbOwnPrinter(sal_False),
     mbNewDocument( sal_True )
 {
     Construct( eMode == SFX_CREATE_MODE_INTERNAL );
@@ -184,7 +184,7 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
 |*
 \************************************************************************/
 
-DrawDocShell::DrawDocShell( const sal_uInt64 nModelCreationFlags, BOOL bDataObject, DocumentType eDocumentType ) :
+DrawDocShell::DrawDocShell( const sal_uInt64 nModelCreationFlags, sal_Bool bDataObject, DocumentType eDocumentType ) :
     SfxObjectShell( nModelCreationFlags ),
     mpDoc(NULL),
     mpUndoManager(NULL),
@@ -194,10 +194,10 @@ DrawDocShell::DrawDocShell( const sal_uInt64 nModelCreationFlags, BOOL bDataObje
     meDocType(eDocumentType),
     mpFilterSIDs(0),
     mbSdDataObj(bDataObject),
-    mbOwnPrinter(FALSE),
+    mbOwnPrinter(sal_False),
     mbNewDocument( sal_True )
 {
-    Construct( FALSE );
+    Construct( sal_False );
 }
 
 /*************************************************************************
@@ -207,7 +207,7 @@ DrawDocShell::DrawDocShell( const sal_uInt64 nModelCreationFlags, BOOL bDataObje
 \************************************************************************/
 
 DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
-                               BOOL bDataObject,
+                               sal_Bool bDataObject,
                                DocumentType eDocumentType) :
     SfxObjectShell(eMode == SFX_CREATE_MODE_INTERNAL ?  SFX_CREATE_MODE_EMBEDDED : eMode),
     mpDoc(pDoc),
@@ -218,7 +218,7 @@ DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
     meDocType(eDocumentType),
     mpFilterSIDs(0),
     mbSdDataObj(bDataObject),
-    mbOwnPrinter(FALSE),
+    mbOwnPrinter(sal_False),
     mbNewDocument( sal_True )
 {
     Construct( eMode == SFX_CREATE_MODE_INTERNAL );
@@ -238,7 +238,7 @@ DrawDocShell::~DrawDocShell()
     // may be usefull in other places as well.
     Broadcast(SfxSimpleHint(SFX_HINT_DYING));
 
-    mbInDestruction = TRUE;
+    mbInDestruction = sal_True;
 
     SetDocShellFunction(0);
 
@@ -255,7 +255,7 @@ DrawDocShell::~DrawDocShell()
         delete mpDoc;
 
     // damit der Navigator das Verschwinden des Dokuments mitbekommt
-    SfxBoolItem     aItem(SID_NAVIGATOR_INIT, TRUE);
+    SfxBoolItem     aItem(SID_NAVIGATOR_INIT, sal_True);
     SfxViewFrame*   pFrame = mpViewShell ? mpViewShell->GetFrame() : GetFrame();
 
     if( !pFrame )
@@ -276,11 +276,11 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
 {
 
     SfxWhichIter aIter( rSet );
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
 
     while ( nWhich )
     {
-        USHORT nSlotId = SfxItemPool::IsWhich(nWhich)
+        sal_uInt16 nSlotId = SfxItemPool::IsWhich(nWhich)
             ? GetPool().GetSlotId(nWhich)
             : nWhich;
 
@@ -294,7 +294,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
 
             case SID_CLOSEDOC:
             {
-                BOOL bDisabled = FALSE;
+                sal_Bool bDisabled = sal_False;
                 if (bDisabled)
                 {
                     rSet.DisableItem(SID_CLOSEDOC);
@@ -308,7 +308,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
 
             case SID_SEARCH_OPTIONS:
             {
-                UINT16 nOpt = SEARCH_OPTIONS_SEARCH      |
+                sal_uInt16 nOpt = SEARCH_OPTIONS_SEARCH      |
                               SEARCH_OPTIONS_WHOLE_WORDS |
                               SEARCH_OPTIONS_BACKWARDS   |
                               SEARCH_OPTIONS_REG_EXP     |
@@ -357,7 +357,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
     }
 }
 
-void DrawDocShell::InPlaceActivate( BOOL bActive )
+void DrawDocShell::InPlaceActivate( sal_Bool bActive )
 {
     if( !bActive )
     {
@@ -437,7 +437,7 @@ void DrawDocShell::InPlaceActivate( BOOL bActive )
 |*
 \************************************************************************/
 
-void DrawDocShell::Activate( BOOL bMDI)
+void DrawDocShell::Activate( sal_Bool bMDI)
 {
     if (bMDI)
     {
@@ -452,7 +452,7 @@ void DrawDocShell::Activate( BOOL bMDI)
 |*
 \************************************************************************/
 
-void DrawDocShell::Deactivate( BOOL )
+void DrawDocShell::Deactivate( sal_Bool )
 {
 }
 
@@ -462,7 +462,7 @@ void DrawDocShell::Deactivate( BOOL )
 |*
 \************************************************************************/
 
-SfxUndoManager* DrawDocShell::GetUndoManager()
+::svl::IUndoManager* DrawDocShell::GetUndoManager()
 {
     return mpUndoManager;
 }
@@ -526,14 +526,14 @@ void DrawDocShell::ApplySlotFilter() const
                 pDispatcher->SetSlotFilter();
 
             if( pDispatcher->GetBindings() )
-                pDispatcher->GetBindings()->InvalidateAll( TRUE );
+                pDispatcher->GetBindings()->InvalidateAll( sal_True );
         }
 
         pTestViewShell = SfxViewShell::GetNext( *pTestViewShell );
     }
 }
 
-void DrawDocShell::SetModified( BOOL bSet /* = TRUE */ )
+void DrawDocShell::SetModified( sal_Bool bSet /* = sal_True */ )
 {
     SfxObjectShell::SetModified( bSet );
 
@@ -600,7 +600,7 @@ void DrawDocShell::ClearUndoBuffer()
         pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, false);
     }
 
-    SfxUndoManager* pUndoManager = GetUndoManager();
+    ::svl::IUndoManager* pUndoManager = GetUndoManager();
     if(pUndoManager && pUndoManager->GetUndoActionCount())
         pUndoManager->Clear();
 }

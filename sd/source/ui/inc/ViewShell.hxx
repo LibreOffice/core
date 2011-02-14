@@ -121,8 +121,8 @@ public:
     static const int MAX_VSPLIT_CNT = 1;
     static const int MIN_SCROLLBAR_SIZE = 50;
 
-    static const ULONG OUTPUT_DRAWMODE_COLOR = DRAWMODE_DEFAULT;
-    static const ULONG OUTPUT_DRAWMODE_GRAYSCALE
+    static const sal_uLong OUTPUT_DRAWMODE_COLOR = DRAWMODE_DEFAULT;
+    static const sal_uLong OUTPUT_DRAWMODE_GRAYSCALE
         = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL
         | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP
         | DRAWMODE_GRAYGRADIENT;
@@ -201,12 +201,12 @@ public:
     // Mouse- & Key-Events
     virtual void PrePaint();
     virtual void Paint (const Rectangle& rRect, ::sd::Window* pWin);
-    virtual BOOL KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
     virtual void MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void Command(const CommandEvent& rCEvt, ::sd::Window* pWin);
-    virtual BOOL RequestHelp( const HelpEvent& rEvt, ::sd::Window* pWin );
+    virtual sal_Bool RequestHelp( const HelpEvent& rEvt, ::sd::Window* pWin );
     virtual long Notify( NotifyEvent& rNEvt, ::sd::Window* pWin );
 
     virtual bool HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWin);
@@ -214,10 +214,10 @@ public:
     virtual void Draw(OutputDevice &rDev, const Region &rReg);
 
     virtual void SetUIUnit(FieldUnit eUnit);
-    virtual void SetDefTabHRuler( UINT16 nDefTab );
+    virtual void SetDefTabHRuler( sal_uInt16 nDefTab );
 
-    BOOL HasRuler (void);
-    void SetRuler(BOOL bRuler);
+    sal_Bool HasRuler (void);
+    void SetRuler(sal_Bool bRuler);
 
     /** Set internal values of all scroll bars that determine thumb size and
         position.  The external values like size and position of the scroll
@@ -229,13 +229,13 @@ public:
     virtual void    SetZoom(long nZoom);
     virtual void    SetZoomRect(const Rectangle& rZoomRect);
     void    InitWindows(const Point& rViewOrigin, const Size& rViewSize,
-                        const Point& rWinPos, BOOL bUpdate = FALSE);
+                        const Point& rWinPos, sal_Bool bUpdate = sal_False);
     void    InvalidateWindows();
     /** This method is still used by the OutlineViewShell to update the
         model according to the content of the outline view.  This in turn
         updates the previews in the slide sorter.
     */
-     virtual void UpdatePreview (SdPage* pPage, BOOL bInit = FALSE);
+     virtual void UpdatePreview (SdPage* pPage, sal_Bool bInit = sal_False);
 
     void    DrawMarkRect(const Rectangle& rRect) const;
 
@@ -255,7 +255,7 @@ public:
     virtual void  WriteUserData(String& rString);
     virtual void  ReadUserData(const String& rString);
 
-    virtual BOOL  ActivateObject(SdrOle2Obj* pObj, long nVerb);
+    virtual sal_Bool  ActivateObject(SdrOle2Obj* pObj, long nVerb);
 
     /** @returns
             current or selected page or 0. This method
@@ -273,7 +273,7 @@ public:
     FunctionReference GetOldFunction() const { return mxOldFunction; }
     bool HasOldFunction() const { return mxOldFunction.is(); }
     FunctionReference GetCurrentFunction() const { return mxCurrentFunction; }
-    bool HasCurrentFunction( USHORT nSID ) { return mxCurrentFunction.is() && (mxCurrentFunction->GetSlotID() == nSID ); }
+    bool HasCurrentFunction( sal_uInt16 nSID ) { return mxCurrentFunction.is() && (mxCurrentFunction->GetSlotID() == nSID ); }
     bool HasCurrentFunction() { return mxCurrentFunction.is(); }
 
     void SetCurrentFunction(const FunctionReference& xFunction);
@@ -282,26 +282,26 @@ public:
 
     void    SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
                             long nLeft, long nRight, long nUpper, long nLower,
-                            BOOL bScaleAll, Orientation eOrient, USHORT nPaperBin,
-                            BOOL bBackgroundFullSize );
+                            sal_Bool bScaleAll, Orientation eOrient, sal_uInt16 nPaperBin,
+                            sal_Bool bBackgroundFullSize );
 
-    void    SetStartShowWithDialog( BOOL bIn = TRUE ) { mbStartShowWithDialog = bIn; }
-    BOOL    IsStartShowWithDialog() const { return mbStartShowWithDialog; }
+    void    SetStartShowWithDialog( sal_Bool bIn = sal_True ) { mbStartShowWithDialog = bIn; }
+    sal_Bool    IsStartShowWithDialog() const { return mbStartShowWithDialog; }
 
-    USHORT GetPrintedHandoutPageNum (void) const { return mnPrintedHandoutPageNum; }
-    void SetPrintedHandoutPageNum (USHORT nPageNumber) {mnPrintedHandoutPageNum=nPageNumber; }
+    sal_uInt16 GetPrintedHandoutPageNum (void) const { return mnPrintedHandoutPageNum; }
+    void SetPrintedHandoutPageNum (sal_uInt16 nPageNumber) {mnPrintedHandoutPageNum=nPageNumber; }
 
-    USHORT GetPrintedHandoutPageCount(void) const { return mnPrintedHandoutPageCount; }
-    void SetPrintedHandoutPageCount (USHORT nPageCount) {mnPrintedHandoutPageCount=nPageCount; }
+    sal_uInt16 GetPrintedHandoutPageCount(void) const { return mnPrintedHandoutPageCount; }
+    void SetPrintedHandoutPageCount (sal_uInt16 nPageCount) {mnPrintedHandoutPageCount=nPageCount; }
 
-    virtual USHORT PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
+    virtual sal_uInt16 PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
 
     void GetMenuState(SfxItemSet& rSet);
 
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                 ::sd::Window* pTargetWindow, USHORT nPage, USHORT nLayer );
+                                 ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer );
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTargetHelper,
-                                  ::sd::Window* pTargetWindow, USHORT nPage, USHORT nLayer );
+                                  ::sd::Window* pTargetWindow, sal_uInt16 nPage, sal_uInt16 nLayer );
 
     virtual void WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
     virtual void ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
@@ -430,7 +430,7 @@ public:
         As a result the border is adapted.
     */
     virtual void ShowUIControls (bool bVisible = true);
-    BOOL IsPageFlipMode(void) const;
+    sal_Bool IsPageFlipMode(void) const;
 
     /** Set the given window as new parent window.  This is not possible for
         all views, so the return value tells the caller if the relocation
@@ -509,13 +509,13 @@ protected:
     Size        maViewSize;
     Size        maScrBarWH;
 
-    BOOL        mbCenterAllowed;          // wird an Fenster weitergegeben
+    sal_Bool        mbCenterAllowed;          // wird an Fenster weitergegeben
 
-    BOOL        mbStartShowWithDialog;  // Praesentation wurde ueber Dialog gestartet
-    USHORT      mnPrintedHandoutPageNum; // Page number of the handout page that is to be printed.
-    USHORT      mnPrintedHandoutPageCount; // Page count of the handout pages that are to be printed.
+    sal_Bool        mbStartShowWithDialog;  // Praesentation wurde ueber Dialog gestartet
+    sal_uInt16      mnPrintedHandoutPageNum; // Page number of the handout page that is to be printed.
+    sal_uInt16      mnPrintedHandoutPageCount; // Page count of the handout pages that are to be printed.
 
-    //af    BOOL        bPrintDirectSelected;       // Print only selected objects in direct print
+    //af    sal_Bool        bPrintDirectSelected;       // Print only selected objects in direct print
     //afString      sPageRange;                 // pagerange if selected objects in direct print
 
     /** Area covered by all windows, i.e. the area of the parent window
@@ -534,11 +534,11 @@ protected:
     ::std::auto_ptr<Implementation> mpImpl;
 
     // #96090# Support methods for centralized UNDO/REDO
-    virtual SfxUndoManager* ImpGetUndoManager (void) const;
+    virtual ::svl::IUndoManager* ImpGetUndoManager (void) const;
     void ImpGetUndoStrings(SfxItemSet &rSet) const;
     void ImpGetRedoStrings(SfxItemSet &rSet) const;
-    void ImpSidUndo(BOOL bDrawViewShell, SfxRequest& rReq);
-    void ImpSidRedo(BOOL bDrawViewShell, SfxRequest& rReq);
+    void ImpSidUndo(sal_Bool bDrawViewShell, SfxRequest& rReq);
+    void ImpSidRedo(sal_Bool bDrawViewShell, SfxRequest& rReq);
 
     DECL_LINK( HScrollHdl, ScrollBar * );
     DECL_LINK( VScrollHdl, ScrollBar * );
@@ -548,7 +548,7 @@ protected:
     virtual long VirtVScrollHdl(ScrollBar* pVScroll);
 
     // virtuelle Funktionen fuer Lineal-Handling
-    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, BOOL bIsFirst);
+    virtual SvxRuler* CreateHRuler(::sd::Window* pWin, sal_Bool bIsFirst);
     virtual SvxRuler* CreateVRuler(::sd::Window* pWin);
     virtual void UpdateHRuler();
     virtual void UpdateVRuler();
@@ -557,8 +557,8 @@ protected:
     // abgeleiteter Klassen (z.B. ein TabBar) zurueckgeben
     virtual long GetHCtrlWidth();
 
-    virtual void Activate(BOOL IsMDIActivate);
-    virtual void Deactivate(BOOL IsMDIActivate);
+    virtual void Activate(sal_Bool IsMDIActivate);
+    virtual void Deactivate(sal_Bool IsMDIActivate);
 
     virtual void SetZoomFactor( const Fraction &rZoomX,
                                 const Fraction &rZoomY );

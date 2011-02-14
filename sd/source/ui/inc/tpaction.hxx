@@ -95,7 +95,7 @@ private:
     SdDrawDocument*         mpDoc;
     XColorTable*            pColTab;
 
-    BOOL                    bTreeUpdated;
+    sal_Bool                    bTreeUpdated;
     List*                   pCurrentActions;
     String                  aLastFile;
     ::std::vector< long >   aVerbVector;
@@ -113,9 +113,9 @@ private:
     void                    SetActualClickAction( ::com::sun::star::presentation::ClickAction eCA );
     void                    SetActualAnimationEffect( ::com::sun::star::presentation::AnimationEffect eAE );
     void                    SetEditText( String const & rStr );
-    String                  GetEditText( BOOL bURL = FALSE );
-    USHORT                  GetClickActionSdResId( ::com::sun::star::presentation::ClickAction eCA );
-    USHORT                  GetAnimationEffectSdResId( ::com::sun::star::presentation::AnimationEffect eAE );
+    String                  GetEditText( sal_Bool bURL = sal_False );
+    sal_uInt16                  GetClickActionSdResId( ::com::sun::star::presentation::ClickAction eCA );
+    sal_uInt16                  GetAnimationEffectSdResId( ::com::sun::star::presentation::AnimationEffect eAE );
 
 public:
             SdTPAction( Window* pParent, const SfxItemSet& rInAttrs );
@@ -123,7 +123,7 @@ public:
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
 
-    virtual BOOL FillItemSet( SfxItemSet& );
+    virtual sal_Bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );

@@ -51,7 +51,7 @@ public:
     virtual ~LayerDialogContent (void);
 
 protected:
-    virtual BOOL Close (void);
+    virtual sal_Bool Close (void);
     virtual void Resize (void);
 
 private:

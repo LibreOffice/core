@@ -114,7 +114,7 @@ static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, boo
         int nPgNum = 0;
         Outliner* pOutl = pSdView->GetOutliner();
         long nPos = pInfo->GetPara();
-        ULONG nParaPos = 0;
+        sal_uLong nParaPos = 0;
 
         for( Paragraph* pPara = pOutl->GetParagraph( 0 ); pPara && nPos >= 0; pPara = pOutl->GetParagraph( ++nParaPos ), nPos-- )
         {
@@ -122,7 +122,7 @@ static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, boo
                 nPgNum++;
         }
 
-        pPage = pViewSh->GetDoc()->GetSdPage( (USHORT)nPgNum, PK_STANDARD );
+        pPage = pViewSh->GetDoc()->GetSdPage( (sal_uInt16)nPgNum, PK_STANDARD );
     }
     else
     {
@@ -261,7 +261,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                 {
                     nPgNum = (pPage->GetPageNum() - 1) / 2 + 1;
                 }
-                aRepresentation = pDoc->CreatePageNumValue((USHORT)nPgNum);
+                aRepresentation = pDoc->CreatePageNumValue((sal_uInt16)nPgNum);
             }
             else
             {
@@ -289,7 +289,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             bool bMasterView;
             SdPage* pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
 
-            USHORT nPageCount = 0;
+            sal_uInt16 nPageCount = 0;
 
             if( !bMasterView )
             {
@@ -299,7 +299,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                 }
                 else if( pDoc )
                 {
-                    nPageCount = (USHORT)pDoc->GetSdPageCount(PK_STANDARD);
+                    nPageCount = (sal_uInt16)pDoc->GetSdPageCount(PK_STANDARD);
                 }
             }
 
@@ -421,7 +421,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 |* virt. Methoden fuer Optionendialog
 |*
 \************************************************************************/
-SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
+SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
 {
     ::sd::FrameView* pFrameView = NULL;
     ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
@@ -474,7 +474,7 @@ SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
     // TP_OPTIONS_LAYOUT:
     pRet->Put( SdOptionsLayoutItem( ATTR_OPTIONS_LAYOUT, pOptions, pFrameView ) );
 
-    UINT16 nDefTab = 0;
+    sal_uInt16 nDefTab = 0;
     if( pFrameView)
         nDefTab = pDoc->GetDefaultTabulator();
     else
@@ -490,7 +490,7 @@ SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
     if( nMetric == (FieldUnit)0xffff )
         nMetric = GetFieldUnit();
 
-    pRet->Put( SfxUInt16Item( SID_ATTR_METRIC, (UINT16)nMetric ) );
+    pRet->Put( SfxUInt16Item( SID_ATTR_METRIC, (sal_uInt16)nMetric ) );
 
     // TP_OPTIONS_CONTENTS:
     pRet->Put( SdOptionsContentsItem( ATTR_OPTIONS_CONTENTS, pOptions, pFrameView ) );
@@ -501,7 +501,7 @@ SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
     {
         aSdOptionsMiscItem.GetOptionsMisc().SetSummationOfParagraphs( pDoc->IsSummationOfParagraphs() );
         aSdOptionsMiscItem.GetOptionsMisc().SetPrinterIndependentLayout (
-            (USHORT)pDoc->GetPrinterIndependentLayout());
+            (sal_uInt16)pDoc->GetPrinterIndependentLayout());
     }
     pRet->Put( aSdOptionsMiscItem );
 
@@ -510,10 +510,10 @@ SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
     pRet->Put( SdOptionsSnapItem( ATTR_OPTIONS_SNAP, pOptions, pFrameView ) );
 
     // TP_SCALE:
-    UINT32 nW = 10L;
-    UINT32 nH = 10L;
-    INT32  nX;
-    INT32  nY;
+    sal_uInt32 nW = 10L;
+    sal_uInt32 nH = 10L;
+    sal_Int32  nX;
+    sal_Int32  nY;
     if( pDocSh )
     {
         SdrPage* pPage = (SdrPage*) pDoc->GetSdPage(0, PK_STANDARD);
@@ -548,12 +548,12 @@ SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
 
     return pRet;
 }
-void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
+void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
 {
     const SfxPoolItem*  pItem = NULL;
-    BOOL bNewDefTab = FALSE;
-    BOOL bNewPrintOptions = FALSE;
-    BOOL bMiscOptions = FALSE;
+    sal_Bool bNewDefTab = sal_False;
+    sal_Bool bNewPrintOptions = sal_False;
+    sal_Bool bMiscOptions = sal_False;
 
     ::sd::FrameView* pFrameView = NULL;
     ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
@@ -581,7 +581,7 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
     SdOptions* pOptions = GetSdOptions(eDocType);
     // Raster
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS ,
-                            FALSE, (const SfxPoolItem**) &pItem ))
+                            sal_False, (const SfxPoolItem**) &pItem ))
     {
         const SdOptionsGridItem* pGridItem = (SdOptionsGridItem*) pItem;
         pGridItem->SetOptions( pOptions );
@@ -590,35 +590,35 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
     // Layout
     const SdOptionsLayoutItem* pLayoutItem = NULL;
     if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_LAYOUT,
-                            FALSE, (const SfxPoolItem**) &pLayoutItem ))
+                            sal_False, (const SfxPoolItem**) &pLayoutItem ))
     {
         pLayoutItem->SetOptions( pOptions );
     }
 
     // Metric
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC, FALSE, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC, sal_False, &pItem ) )
     {
         if( pDoc && eDocType == pDoc->GetDocumentType() )
             PutItem( *pItem );
         pOptions->SetMetric( ( (SfxUInt16Item*) pItem )->GetValue() );
     }
-    UINT16 nDefTab = pOptions->GetDefTab();
+    sal_uInt16 nDefTab = pOptions->GetDefTab();
     // Default-Tabulator
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_DEFTABSTOP, FALSE, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_DEFTABSTOP, sal_False, &pItem ) )
     {
         nDefTab = ( (SfxUInt16Item*) pItem )->GetValue();
         pOptions->SetDefTab( nDefTab );
 
-        bNewDefTab = TRUE;
+        bNewDefTab = sal_True;
     }
 
     // Massstab
-    if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_SCALE_X, FALSE, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_SCALE_X, sal_False, &pItem ) )
     {
-        INT32 nX = ( (SfxInt32Item*) pItem )->GetValue();
-        if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_SCALE_Y, FALSE, &pItem ) )
+        sal_Int32 nX = ( (SfxInt32Item*) pItem )->GetValue();
+        if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_SCALE_Y, sal_False, &pItem ) )
         {
-            INT32 nY = ( (SfxInt32Item*) pItem )->GetValue();
+            sal_Int32 nY = ( (SfxInt32Item*) pItem )->GetValue();
             pOptions->SetScale( nX, nY );
 
             // #92067# Apply to document only if doc type match
@@ -634,7 +634,7 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
     // Contents (Inhalte)
     const SdOptionsContentsItem* pContentsItem = NULL;
     if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_CONTENTS,
-                            FALSE, (const SfxPoolItem**) &pContentsItem ))
+                            sal_False, (const SfxPoolItem**) &pContentsItem ))
     {
         pContentsItem->SetOptions( pOptions );
     }
@@ -642,16 +642,16 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
     // Misc (Sonstiges)
     const SdOptionsMiscItem* pMiscItem = NULL;
     if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_MISC,
-                            FALSE, (const SfxPoolItem**) &pMiscItem ))
+                            sal_False, (const SfxPoolItem**) &pMiscItem ))
     {
         pMiscItem->SetOptions( pOptions );
-        bMiscOptions = TRUE;
+        bMiscOptions = sal_True;
     }
 
     // Fangen/Einrasten
     const SdOptionsSnapItem* pSnapItem = NULL;
     if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_SNAP,
-                            FALSE, (const SfxPoolItem**) &pSnapItem ))
+                            sal_False, (const SfxPoolItem**) &pSnapItem ))
     {
         pSnapItem->SetOptions( pOptions );
     }
@@ -665,14 +665,14 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
     // Drucken
     const SdOptionsPrintItem* pPrintItem = NULL;
     if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_PRINT,
-                            FALSE, (const SfxPoolItem**) &pPrintItem ))
+                            sal_False, (const SfxPoolItem**) &pPrintItem ))
     {
         pPrintItem->SetOptions( pOptions );
 
         // PrintOptionsSet setzen
         SdOptionsPrintItem aPrintItem( ATTR_OPTIONS_PRINT, pOptions );
         SfxFlagItem aFlagItem( SID_PRINTER_CHANGESTODOC );
-        USHORT      nFlags = 0;
+        sal_uInt16      nFlags = 0;
 
         nFlags =  (aPrintItem.GetOptionsPrint().IsWarningSize() ? SFX_PRINTER_CHG_SIZE : 0) |
                 (aPrintItem.GetOptionsPrint().IsWarningOrientation() ? SFX_PRINTER_CHG_ORIENTATION : 0);
@@ -682,7 +682,7 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
         aPrintSet.Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, aPrintItem.GetOptionsPrint().IsWarningPrinter() ) );
         aPrintSet.Put( aFlagItem );
 
-        bNewPrintOptions = TRUE;
+        bNewPrintOptions = sal_True;
     }
 
     // Nur, wenn auch der Dokumenttyp uebereinstimmt...
@@ -690,7 +690,7 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
     {
         if( bNewPrintOptions )
         {
-            pDocSh->GetPrinter(TRUE)->SetOptions( aPrintSet );
+            pDocSh->GetPrinter(sal_True)->SetOptions( aPrintSet );
         }
 
         // Am Model den DefTab setzen
@@ -699,11 +699,11 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
             SdDrawDocument* pDocument = pDocSh->GetDoc();
             pDocument->SetDefaultTabulator( nDefTab );
 
-            ::sd::Outliner* pOutl = pDocument->GetOutliner( FALSE );
+            ::sd::Outliner* pOutl = pDocument->GetOutliner( sal_False );
             if( pOutl )
                 pOutl->SetDefTab( nDefTab );
 
-            ::sd::Outliner* pInternalOutl = pDocument->GetInternalOutliner( FALSE );
+            ::sd::Outliner* pInternalOutl = pDocument->GetInternalOutliner( sal_False );
             if( pInternalOutl )
                 pInternalOutl->SetDefTab( nDefTab );
         }
@@ -714,16 +714,16 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
             sal_uInt32 nCntrl;
 
             SdDrawDocument* pDocument = pDocSh->GetDoc();
-            SdrOutliner& rOutl = pDocument->GetDrawOutliner( FALSE );
+            SdrOutliner& rOutl = pDocument->GetDrawOutliner( sal_False );
             nCntrl = rOutl.GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
             rOutl.SetControlWord( nCntrl | nSum );
-            ::sd::Outliner* pOutl = pDocument->GetOutliner( FALSE );
+            ::sd::Outliner* pOutl = pDocument->GetOutliner( sal_False );
             if( pOutl )
             {
                 nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
                 pOutl->SetControlWord( nCntrl | nSum );
             }
-            pOutl = pDocument->GetInternalOutliner( FALSE );
+            pOutl = pDocument->GetInternalOutliner( sal_False );
             if( pOutl )
             {
                 nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
@@ -760,10 +760,10 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
     }
 
     if( pViewShell && pViewShell->GetViewFrame() )
-        pViewShell->GetViewFrame()->GetBindings().InvalidateAll( TRUE );
+        pViewShell->GetViewFrame()->GetBindings().InvalidateAll( sal_True );
 }
 
-SfxTabPage* SdModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
+SfxTabPage* SdModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet )
 {
     SfxTabPage* pRet = NULL;
     SfxAllItemSet aSet(*(rSet.GetPool()));

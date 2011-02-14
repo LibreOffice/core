@@ -87,7 +87,7 @@ SFX_IMPL_INTERFACE(SdModule, SfxModule, SdResId(STR_APPLICATIONOBJECTBAR))
 \************************************************************************/
 
 SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
-:   SfxModule( SfxApplication::CreateResManager("sd"), FALSE,
+:   SfxModule( SfxApplication::CreateResManager("sd"), sal_False,
                   pFact1, pFact2, NULL ),
     pTransferClip(NULL),
     pTransferDrag(NULL),
@@ -96,7 +96,7 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     pDrawOptions(NULL),
     pSearchItem(NULL),
     pNumberFormatter( NULL ),
-    bWaterCan(FALSE),
+    bWaterCan(sal_False),
     mpResourceContainer(new ::sd::SdGlobalResourceContainer())
 {
     SetName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarDraw" ) ) );  // Nicht uebersetzen!
@@ -198,7 +198,7 @@ SdOptions* SdModule::GetSdOptions(DocumentType eDocType)
     }
     if( pOptions )
     {
-        UINT16 nMetric = pOptions->GetMetric();
+        sal_uInt16 nMetric = pOptions->GetMetric();
 
         ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
         SdDrawDocument* pDoc = NULL;
@@ -240,7 +240,7 @@ SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
             SvStream* pStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READWRITE );
 
             if( pStm )
-                xOptionStorage = new SvStorage( pStm, TRUE );
+                xOptionStorage = new SvStorage( pStm, sal_True );
         }
 
         if( DOCUMENT_TYPE_DRAW == eType )

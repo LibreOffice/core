@@ -121,9 +121,9 @@ TYPEINIT1(LayoutMenu, SfxShell);
 
 struct snewfoil_value_info
 {
-    USHORT mnBmpResId;
-    USHORT mnHCBmpResId;
-    USHORT mnStrResId;
+    sal_uInt16 mnBmpResId;
+    sal_uInt16 mnHCBmpResId;
+    sal_uInt16 mnStrResId;
     WritingMode meWritingMode;
     AutoLayout maAutoLayout;
 };
@@ -288,8 +288,8 @@ Size LayoutMenu::GetPreferredSize (void)
     Size aItemSize = CalcItemSizePixel (Size());
     Size aPreferredWindowSize = CalcWindowSizePixel (
         aItemSize,
-         (USHORT)mnPreferredColumnCount,
-        (USHORT)CalculateRowCount (aItemSize,mnPreferredColumnCount));
+         (sal_uInt16)mnPreferredColumnCount,
+        (sal_uInt16)CalculateRowCount (aItemSize,mnPreferredColumnCount));
     return aPreferredWindowSize;
 }
 
@@ -482,8 +482,8 @@ void LayoutMenu::Resize (void)
 
             int nRowCount = CalculateRowCount (aItemSize, nColumnCount);
 
-            SetColCount ((USHORT)nColumnCount);
-            SetLineCount ((USHORT)nRowCount);
+            SetColCount ((sal_uInt16)nColumnCount);
+            SetLineCount ((sal_uInt16)nRowCount);
         }
     }
 
@@ -500,7 +500,7 @@ void LayoutMenu::MouseButtonDown (const MouseEvent& rEvent)
     if (rEvent.IsRight())
     {
         ReleaseMouse();
-        USHORT nIndex = GetItemId (rEvent.GetPosPixel());
+        sal_uInt16 nIndex = GetItemId (rEvent.GetPosPixel());
         if (nIndex > 0)
             SelectItem(nIndex);
     }
@@ -712,7 +712,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
                 SfxRequest aRequest (mrBase.GetViewFrame(), SID_ASSIGN_LAYOUT);
                 aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATPAGE, ((*iPage)->GetPageNum()-1)/2));
                 aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
-                pMainViewShell->ExecuteSlot (aRequest, BOOL(FALSE));
+                pMainViewShell->ExecuteSlot (aRequest, sal_Bool(sal_False));
             }
     }
     while(false);
@@ -722,7 +722,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
 
 
 SfxRequest LayoutMenu::CreateRequest (
-    USHORT nSlotId,
+    sal_uInt16 nSlotId,
     AutoLayout aLayout)
 {
     SfxRequest aRequest (mrBase.GetViewFrame(), nSlotId);
@@ -730,10 +730,10 @@ SfxRequest LayoutMenu::CreateRequest (
     do
     {
         SdrLayerAdmin& rLayerAdmin (mrBase.GetDocument()->GetLayerAdmin());
-        BYTE aBackground (rLayerAdmin.GetLayerID(
-            String(SdResId(STR_LAYER_BCKGRND)), FALSE));
-        BYTE aBackgroundObject (rLayerAdmin.GetLayerID(
-            String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE));
+        sal_uInt8 aBackground (rLayerAdmin.GetLayerID(
+            String(SdResId(STR_LAYER_BCKGRND)), sal_False));
+        sal_uInt8 aBackgroundObject (rLayerAdmin.GetLayerID(
+            String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False));
         ViewShell* pViewShell = mrBase.GetMainViewShell().get();
         if (pViewShell == NULL)
             break;
@@ -832,7 +832,7 @@ void LayoutMenu::Fill (void)
 
 void LayoutMenu::Clear (void)
 {
-    for (USHORT nId=1; nId<=GetItemCount(); nId++)
+    for (sal_uInt16 nId=1; nId<=GetItemCount(); nId++)
         delete static_cast<AutoLayout*>(GetItemData(nId));
     ValueSet::Clear();
 }
@@ -884,7 +884,7 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                     // When the command event was not caused by a mouse
                     // event (for example a key press instead) then show the
                     // popup menu at the center of the current item.
-                    if (GetSelectItemId() != (USHORT)-1)
+                    if (GetSelectItemId() != (sal_uInt16)-1)
                     {
                         Rectangle aBBox (GetItemRect(GetSelectItemId()));
                         Point aPosition (aBBox.Center());
@@ -936,8 +936,8 @@ void LayoutMenu::UpdateSelection (void)
             break;
 
         // Find the entry of the menu for to the layout.
-        USHORT nItemCount (GetItemCount());
-        for (USHORT nId=1; nId<=nItemCount; nId++)
+        sal_uInt16 nItemCount (GetItemCount());
+        for (sal_uInt16 nId=1; nId<=nItemCount; nId++)
         {
             if (*static_cast<AutoLayout*>(GetItemData(nId)) == aLayout)
             {
