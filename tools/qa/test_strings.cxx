@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
@@ -86,3 +87,5 @@ void test::unistring::Compare::testCompareToNumeric()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(test::unistring::Compare);
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
