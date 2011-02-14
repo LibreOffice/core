@@ -767,7 +767,8 @@ BOOL ScDrawLayer::GetPrintArea( ScRange& rRange, BOOL bSetHor, BOOL bSetVer ) co
                 bFit = FALSE;
             if ( !bSetVer && ( aObjRect.Bottom() < nStartY || aObjRect.Top() > nEndY ) )
                 bFit = FALSE;
-            if ( bFit )
+            // #i104716# don't include hidden note objects
+            if ( bFit && pObject->GetLayer() != SC_LAYER_HIDDEN )
             {
                 if (bSetHor)
                 {
