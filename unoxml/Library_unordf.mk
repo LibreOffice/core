@@ -42,8 +42,10 @@ $(eval $(call gb_Library_add_linked_libs,unordf,\
     cppuhelper \
     cppu \
     sal \
+    stl \
     rdf \
     xslt \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,unordf,\

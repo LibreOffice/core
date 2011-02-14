@@ -45,7 +45,9 @@ $(eval $(call gb_Library_add_linked_libs,unoxml,\
     cppuhelper \
     cppu \
     sal \
+    stl \
     xml2 \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,unoxml,\
