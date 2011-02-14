@@ -75,7 +75,7 @@ friend class SfxHelpWindow_Impl;
 
     HelpHistoryList_Impl*       m_pHistory;
     SfxHelpWindow_Impl*         m_pWindow;
-    ULONG                       m_nCurPos;
+    sal_uIntPtr                     m_nCurPos;
     String                      m_aCurrentURL;
     com::sun::star::uno::Any    m_aViewData;
 

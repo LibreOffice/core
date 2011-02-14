@@ -120,7 +120,7 @@ struct DragAndDropInfo
     sal_uInt16          nCursorWidth;
     ESelection          aBeginDragSel;
     EditPaM             aDropDest;
-    USHORT              nOutlinerDropDest;
+    sal_uInt16              nOutlinerDropDest;
     ESelection          aDropSel;
     VirtualDevice*      pBackground;
     const SvxFieldItem* pField;
@@ -236,7 +236,7 @@ private:
 
 
     long                nInvMore;
-    ULONG               nControl;
+    sal_uLong               nControl;
     sal_uInt32          nTravelXPos;
     sal_uInt16          nExtraCursorFlags;
     sal_uInt16          nCursorBidiLevel;
@@ -287,13 +287,13 @@ public:
     void                ResetOutputArea( const Rectangle& rRec );
     const Rectangle&    GetOutputArea() const   { return aOutArea; }
 
-    BOOL            IsVertical() const;
+    sal_Bool            IsVertical() const;
 
-    BOOL            PostKeyEvent( const KeyEvent& rKeyEvent );
+    sal_Bool            PostKeyEvent( const KeyEvent& rKeyEvent );
 
-    BOOL            MouseButtonUp( const MouseEvent& rMouseEvent );
-    BOOL            MouseButtonDown( const MouseEvent& rMouseEvent );
-    BOOL            MouseMove( const MouseEvent& rMouseEvent );
+    sal_Bool            MouseButtonUp( const MouseEvent& rMouseEvent );
+    sal_Bool            MouseButtonDown( const MouseEvent& rMouseEvent );
+    sal_Bool            MouseMove( const MouseEvent& rMouseEvent );
     void            Command( const CommandEvent& rCEvt );
 
     void            CutCopy( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard, sal_Bool bCut );
@@ -330,7 +330,7 @@ public:
     void            AddDragAndDropListeners();
     void            RemoveDragAndDropListeners();
 
-    BOOL            IsBulletArea( const Point& rPos, sal_uInt16* pPara );
+    sal_Bool            IsBulletArea( const Point& rPos, sal_uInt16* pPara );
 
 //  Fuer die SelectionEngine...
     void            CreateAnchor();
@@ -345,9 +345,9 @@ public:
     void            CalcAnchorPoint();
     void            RecalcOutputArea();
 
-    void            ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, BOOL test );
-    void            ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, USHORT nShowCursorFlags = 0 );
-    Pair            Scroll( long ndX, long ndY, BYTE nRangeCheck = RGCHK_NEG );
+    void            ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sal_Bool test );
+    void            ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sal_uInt16 nShowCursorFlags = 0 );
+    Pair            Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck = RGCHK_NEG );
 
     void            SetInsertMode( sal_Bool bInsert );
     sal_Bool            IsInsertMode() const            { return ( ( nControl & EV_CNTRL_OVERWRITE ) == 0 ); }
@@ -453,9 +453,9 @@ private:
     sal_uInt16          nStretchX;
     sal_uInt16          nStretchY;
 
-    USHORT              nAsianCompressionMode;
-    BOOL                bKernAsianPunctuation;
-    BOOL                bAddExtLeading;
+    sal_uInt16              nAsianCompressionMode;
+    sal_Bool                bKernAsianPunctuation;
+    sal_Bool                bAddExtLeading;
 
     EEHorizontalTextDirection eDefaultHorizontalTextDirection;
 
@@ -538,14 +538,14 @@ private:
 
     EditPaM             GetPaM( Point aDocPos, sal_Bool bSmart = sal_True );
     EditPaM             GetPaM( ParaPortion* pPortion, Point aPos, sal_Bool bSmart = sal_True );
-    long                GetXPos( ParaPortion* pParaPortion, EditLine* pLine, USHORT nIndex, BOOL bPreferPortionStart = FALSE );
-    long                GetPortionXOffset( ParaPortion* pParaPortion, EditLine* pLine, USHORT nTextPortion );
-    USHORT              GetChar( ParaPortion* pParaPortion, EditLine* pLine, long nX, BOOL bSmart = TRUE );
+    long                GetXPos( ParaPortion* pParaPortion, EditLine* pLine, sal_uInt16 nIndex, sal_Bool bPreferPortionStart = sal_False );
+    long                GetPortionXOffset( ParaPortion* pParaPortion, EditLine* pLine, sal_uInt16 nTextPortion );
+    sal_uInt16              GetChar( ParaPortion* pParaPortion, EditLine* pLine, long nX, sal_Bool bSmart = sal_True );
     Range               GetInvalidYOffsets( ParaPortion* pPortion );
     Range               GetLineXPosStartEnd( ParaPortion* pParaPortion, EditLine* pLine );
 
-    void                SetParaAttrib( BYTE nFunc, EditSelection aSel, sal_uInt16 nValue );
-    sal_uInt16          GetParaAttrib( BYTE nFunc, EditSelection aSel );
+    void                SetParaAttrib( sal_uInt8 nFunc, EditSelection aSel, sal_uInt16 nValue );
+    sal_uInt16          GetParaAttrib( sal_uInt8 nFunc, EditSelection aSel );
     void                SetCharAttrib( EditSelection aSel, const SfxPoolItem& rItem );
     void                ParaAttribsToCharAttribs( ContentNode* pNode );
     void                GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) const;
@@ -553,12 +553,12 @@ private:
     EditTextObject*     CreateBinTextObject( EditSelection aSelection, SfxItemPool*, sal_Bool bAllowBigObjects = sal_False, sal_uInt16 nBigObjStart = 0 ) const;
     void                StoreBinTextObject( SvStream& rOStream, BinTextObject& rTextObject );
     EditSelection       InsertBinTextObject( BinTextObject&, EditPaM aPaM );
-    EditSelection       InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxDataObj, const String& rBaseURL, const EditPaM& rPaM, BOOL bUseSpecial );
+    EditSelection       InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxDataObj, const String& rBaseURL, const EditPaM& rPaM, sal_Bool bUseSpecial );
 
     EditPaM             Clear();
     EditPaM             RemoveText();
     EditPaM             RemoveText( EditSelection aEditSelection );
-    sal_Bool            CreateLines( USHORT nPara, sal_uInt32 nStartPosY );
+    sal_Bool            CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY );
     void                CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uInt32 nStartPosY );
     sal_Bool            FinishCreateLines( ParaPortion* pParaPortion );
     void                CalcCharPositions( ParaPortion* pParaPortion );
@@ -586,9 +586,9 @@ private:
 
     sal_Bool            ImpCheckRefMapMode();
 
-    BOOL                ImplHasText() const;
+    sal_Bool                ImplHasText() const;
 
-    void                ImpFindKashidas( ContentNode* pNode, USHORT nStart, USHORT nEnd, SvUShorts& rArray );
+    void                ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, SvUShorts& rArray );
 
     void                InsertContent( ContentNode* pNode, sal_uInt16 nPos );
     EditPaM             SplitContent( sal_uInt16 nNode, sal_uInt16 nSepPos );
@@ -601,8 +601,8 @@ private:
     EditPaM             PageDown( const EditPaM& rPaM, EditView* pView);
     EditPaM             CursorUp( const EditPaM& rPaM, EditView* pEditView );
     EditPaM             CursorDown( const EditPaM& rPaM, EditView* pEditView );
-    EditPaM             CursorLeft( const EditPaM& rPaM, USHORT nCharacterIteratorMode = ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL );
-    EditPaM             CursorRight( const EditPaM& rPaM, USHORT nCharacterIteratorMode = ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL );
+    EditPaM             CursorLeft( const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode = ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL );
+    EditPaM             CursorRight( const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode = ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL );
     EditPaM             CursorStartOfLine( const EditPaM& rPaM );
     EditPaM             CursorEndOfLine( const EditPaM& rPaM );
     EditPaM             CursorStartOfParagraph( const EditPaM& rPaM );
@@ -613,22 +613,22 @@ private:
     EditPaM             WordRight( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
     EditPaM             StartOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
     EditPaM             EndOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
-    EditSelection       SelectWord( const EditSelection& rCurSelection, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, BOOL bAcceptStartOfWord = TRUE );
+    EditSelection       SelectWord( const EditSelection& rCurSelection, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_Bool bAcceptStartOfWord = sal_True );
     EditSelection       SelectSentence( const EditSelection& rCurSel );
-    EditPaM             CursorVisualLeftRight( EditView* pEditView, const EditPaM& rPaM, USHORT nCharacterIteratorMode, BOOL bToLeft );
-    EditPaM             CursorVisualStartEnd( EditView* pEditView, const EditPaM& rPaM, BOOL bStart );
+    EditPaM             CursorVisualLeftRight( EditView* pEditView, const EditPaM& rPaM, sal_uInt16 nCharacterIteratorMode, sal_Bool bToLeft );
+    EditPaM             CursorVisualStartEnd( EditView* pEditView, const EditPaM& rPaM, sal_Bool bStart );
 
 
-    void                InitScriptTypes( USHORT nPara );
-    USHORT              GetScriptType( const EditPaM& rPaM, USHORT* pEndPos = NULL ) const;
-    USHORT              GetScriptType( const EditSelection& rSel ) const;
-    BOOL                IsScriptChange( const EditPaM& rPaM ) const;
-    BOOL                HasScriptType( USHORT nPara, USHORT nType ) const;
+    void                InitScriptTypes( sal_uInt16 nPara );
+    sal_uInt16              GetScriptType( const EditPaM& rPaM, sal_uInt16* pEndPos = NULL ) const;
+    sal_uInt16              GetScriptType( const EditSelection& rSel ) const;
+    sal_Bool                IsScriptChange( const EditPaM& rPaM ) const;
+    sal_Bool                HasScriptType( sal_uInt16 nPara, sal_uInt16 nType ) const;
 
-    BOOL                ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, USHORT nStartPos, sal_Int32* pDXArray, USHORT n100thPercentFromMax, BOOL bManipulateDXArray );
+    sal_Bool                ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, sal_uInt16 nStartPos, sal_Int32* pDXArray, sal_uInt16 n100thPercentFromMax, sal_Bool bManipulateDXArray );
     void                ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* pParaPortion, long nRemainingWidth );
 
-    void                ImplInitLayoutMode( OutputDevice* pOutDev, USHORT nPara, USHORT nIndex );
+    void                ImplInitLayoutMode( OutputDevice* pOutDev, sal_uInt16 nPara, sal_uInt16 nIndex );
     void                ImplInitDigitMode( OutputDevice* pOutDev, String* pString, xub_StrLen nStt, xub_StrLen nLen, LanguageType eLang );
 
     EditPaM             ReadText( SvStream& rInput, EditSelection aSel );
@@ -640,7 +640,7 @@ private:
     sal_uInt32          WriteRTF( SvStream& rOutput, EditSelection aSel );
     sal_uInt32          WriteXML( SvStream& rOutput, EditSelection aSel );
     sal_uInt32          WriteHTML( SvStream& rOutput, EditSelection aSel );
-    sal_uInt32          WriteBin( SvStream& rOutput, EditSelection aSel, BOOL bStoreUnicode = FALSE ) const;
+    sal_uInt32          WriteBin( SvStream& rOutput, EditSelection aSel, sal_Bool bStoreUnicode = sal_False ) const;
 
     void                WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput, sal_uInt16 nPara, sal_uInt16 nPos,
                         SvxFontTable& rFontTable, SvxColorList& rColorList );
@@ -665,12 +665,12 @@ private:
     Color               GetBackgroundColor() const { return maBackgroundColor; }
 
     Color               GetAutoColor() const;
-    void                EnableAutoColor( BOOL b ) { bUseAutoColor = b; }
-    BOOL                IsAutoColorEnabled() const { return bUseAutoColor; }
-    void                ForceAutoColor( BOOL b ) { bForceAutoColor = b; }
-    BOOL                IsForceAutoColor() const { return bForceAutoColor; }
+    void                EnableAutoColor( sal_Bool b ) { bUseAutoColor = b; }
+    sal_Bool                IsAutoColorEnabled() const { return bUseAutoColor; }
+    void                ForceAutoColor( sal_Bool b ) { bForceAutoColor = b; }
+    sal_Bool                IsForceAutoColor() const { return bForceAutoColor; }
 
-    inline VirtualDevice*   GetVirtualDevice( const MapMode& rMapMode, ULONG nDrawMode );
+    inline VirtualDevice*   GetVirtualDevice( const MapMode& rMapMode, sal_uLong nDrawMode );
     inline void             EraseVirtualDevice();
 
     DECL_LINK( StatusTimerHdl, Timer * );
@@ -697,7 +697,7 @@ private:
         the output string at hand. This is necessary for slideshow
         text effects.
      */
-    void ImplFillTextMarkingVector(const ::com::sun::star::lang::Locale& rLocale, EEngineData::TextMarkingVector& rTextMarkingVector, const String& rTxt, const USHORT nIdx, const USHORT nLen) const;
+    void ImplFillTextMarkingVector(const ::com::sun::star::lang::Locale& rLocale, EEngineData::TextMarkingVector& rTextMarkingVector, const String& rTxt, const sal_uInt16 nIdx, const sal_uInt16 nLen) const;
 
     SpellInfo *     CreateSpellInfo( const EditSelection &rSel, bool bMultipleDocs );
 
@@ -708,7 +708,7 @@ public:
                             ImpEditEngine( EditEngine* pEditEngine, SfxItemPool* pPool );
                             ~ImpEditEngine();
 
-    void                    InitDoc( BOOL bKeepParaAttribs );
+    void                    InitDoc( sal_Bool bKeepParaAttribs );
     EditDoc&                GetEditDoc()            { return aEditDoc; }
     const EditDoc&          GetEditDoc() const      { return aEditDoc; }
 
@@ -724,20 +724,20 @@ public:
     const Size&             GetPaperSize() const                    { return aPaperSize; }
     void                    SetPaperSize( const Size& rSz )         { aPaperSize = rSz; }
 
-    void                    SetVertical( BOOL bVertical );
-    BOOL                    IsVertical() const                      { return GetEditDoc().IsVertical(); }
+    void                    SetVertical( sal_Bool bVertical );
+    sal_Bool                    IsVertical() const                      { return GetEditDoc().IsVertical(); }
 
-    void                    SetFixedCellHeight( BOOL bUseFixedCellHeight );
-    BOOL                    IsFixedCellHeight() const { return GetEditDoc().IsFixedCellHeight(); }
+    void                    SetFixedCellHeight( sal_Bool bUseFixedCellHeight );
+    sal_Bool                    IsFixedCellHeight() const { return GetEditDoc().IsFixedCellHeight(); }
 
     void                        SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir ) { eDefaultHorizontalTextDirection = eHTextDir; }
     EEHorizontalTextDirection   GetDefaultHorizontalTextDirection() const { return eDefaultHorizontalTextDirection; }
 
 
-    void                    InitWritingDirections( USHORT nPara );
-    BOOL                    IsRightToLeft( USHORT nPara ) const;
-    BYTE                    GetRightToLeft( USHORT nPara, USHORT nChar, USHORT* pStart = NULL, USHORT* pEnd = NULL );
-    BOOL                    HasDifferentRTLLevels( const ContentNode* pNode );
+    void                    InitWritingDirections( sal_uInt16 nPara );
+    sal_Bool                    IsRightToLeft( sal_uInt16 nPara ) const;
+    sal_uInt8                    GetRightToLeft( sal_uInt16 nPara, sal_uInt16 nChar, sal_uInt16* pStart = NULL, sal_uInt16* pEnd = NULL );
+    sal_Bool                    HasDifferentRTLLevels( const ContentNode* pNode );
 
     void                    SetTextRanger( TextRanger* pRanger );
     TextRanger*             GetTextRanger() const { return pTextRanger; }
@@ -782,7 +782,7 @@ public:
     EditPaM         InsertText( const EditSelection& rCurEditSelection, sal_Unicode c, sal_Bool bOverwrite, sal_Bool bIsUserInput = sal_False );
     EditPaM         InsertText( EditSelection aCurEditSelection, const String& rStr );
     EditPaM         AutoCorrect( const EditSelection& rCurEditSelection, sal_Unicode c, sal_Bool bOverwrite );
-    EditPaM         DeleteLeftOrRight( const EditSelection& rEditSelection, BYTE nMode, BYTE nDelMode = DELMODE_SIMPLE );
+    EditPaM         DeleteLeftOrRight( const EditSelection& rEditSelection, sal_uInt8 nMode, sal_uInt8 nDelMode = DELMODE_SIMPLE );
     EditPaM         InsertParaBreak( EditSelection aEditSelection );
     EditPaM         InsertLineBreak( EditSelection aEditSelection );
     EditPaM         InsertTab( EditSelection aEditSelection );
@@ -803,18 +803,18 @@ public:
 
     sal_uInt32      CalcTextHeight();
     sal_uInt32      GetTextHeight() const;
-    sal_uInt32      CalcTextWidth( BOOL bIgnoreExtraSpace );
-    sal_uInt32      CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, BOOL bIgnoreExtraSpace );
+    sal_uInt32      CalcTextWidth( sal_Bool bIgnoreExtraSpace );
+    sal_uInt32      CalcLineWidth( ParaPortion* pPortion, EditLine* pLine, sal_Bool bIgnoreExtraSpace );
     sal_uInt16      GetLineCount( sal_uInt16 nParagraph ) const;
     sal_uInt16      GetLineLen( sal_uInt16 nParagraph, sal_uInt16 nLine ) const;
-    void            GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nParagraph, USHORT nLine ) const;
-    USHORT          GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const;
+    void            GetLineBoundaries( /*out*/sal_uInt16 &rStart, /*out*/sal_uInt16 &rEnd, sal_uInt16 nParagraph, sal_uInt16 nLine ) const;
+    sal_uInt16          GetLineNumberAtIndex( sal_uInt16 nPara, sal_uInt16 nIndex ) const;
     sal_uInt16      GetLineHeight( sal_uInt16 nParagraph, sal_uInt16 nLine );
     sal_uInt32      GetParaHeight( sal_uInt16 nParagraph );
 
-    SfxItemSet      GetAttribs( USHORT nPara, USHORT nStart, USHORT nEnd, sal_uInt8 nFlags = 0xFF ) const;
-    SfxItemSet      GetAttribs( EditSelection aSel, BOOL bOnlyHardAttrib = FALSE  );
-    void            SetAttribs( EditSelection aSel, const SfxItemSet& rSet, BYTE nSpecial = 0 );
+    SfxItemSet      GetAttribs( sal_uInt16 nPara, sal_uInt16 nStart, sal_uInt16 nEnd, sal_uInt8 nFlags = 0xFF ) const;
+    SfxItemSet      GetAttribs( EditSelection aSel, sal_Bool bOnlyHardAttrib = sal_False  );
+    void            SetAttribs( EditSelection aSel, const SfxItemSet& rSet, sal_uInt8 nSpecial = 0 );
     void            RemoveCharAttribs( EditSelection aSel, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich = 0 );
     void            RemoveCharAttribs( sal_uInt16 nPara, sal_uInt16 nWhich = 0, sal_Bool bRemoveFeatures = sal_False );
     void            SetFlatMode( sal_Bool bFlat );
@@ -859,8 +859,8 @@ public:
     inline void     IdleFormatAndUpdate( EditView* pCurView = 0 );
 
     svtools::ColorConfig& GetColorConfig();
-    BOOL            IsVisualCursorTravelingEnabled();
-    BOOL            DoVisualCursorTraveling( const ContentNode* pNode );
+    sal_Bool            IsVisualCursorTravelingEnabled();
+    sal_Bool            DoVisualCursorTraveling( const ContentNode* pNode );
 
     EditSelection           ConvertSelection( sal_uInt16 nStartPara, sal_uInt16 nStartPos, sal_uInt16 nEndPara, sal_uInt16 nEndPos ) const;
     inline EPaM             CreateEPaM( const EditPaM& rPaM );
@@ -922,7 +922,7 @@ public:
 
 
     LanguageType        GetLanguage( const EditSelection rSelection ) const;
-    LanguageType        GetLanguage( const EditPaM& rPaM, USHORT* pEndPos = NULL ) const;
+    LanguageType        GetLanguage( const EditPaM& rPaM, sal_uInt16* pEndPos = NULL ) const;
     ::com::sun::star::lang::Locale GetLocale( const EditPaM& rPaM ) const;
 
     void                DoOnlineSpelling( ContentNode* pThisNodeOnly = 0, sal_Bool bSpellAtCursorPos = sal_False, sal_Bool bInteruptable = sal_True );
@@ -934,14 +934,14 @@ public:
                         ImpSpell( EditView* pEditView );
 
     // text conversion functions
-    void                Convert( EditView* pEditView, LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont, INT32 nOptions, sal_Bool bIsInteractive, sal_Bool bMultipleDoc );
+    void                Convert( EditView* pEditView, LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont, sal_Int32 nOptions, sal_Bool bIsInteractive, sal_Bool bMultipleDoc );
     void                ImpConvert( rtl::OUString &rConvTxt, LanguageType &rConvTxtLang, EditView* pEditView, LanguageType nSrcLang, const ESelection &rConvRange,
                                     sal_Bool bAllowImplicitChangesForNotConvertibleText, LanguageType nTargetLang, const Font *pTargetFont );
     ConvInfo *          GetConvInfo() const { return pConvInfo; }
     sal_Bool            HasConvertibleTextPortion( LanguageType nLang );
     void                SetLanguageAndFont( const ESelection &rESel,
-                                LanguageType nLang, USHORT nLangWhichId,
-                                const Font *pFont,  USHORT nFontWhichId );
+                                LanguageType nLang, sal_uInt16 nLangWhichId,
+                                const Font *pFont,  sal_uInt16 nFontWhichId );
 
     // returns true if input sequence checking should be applied
     sal_Bool            IsInputSequenceCheckingRequired( sal_Unicode nChar, const EditSelection& rCurSel ) const;
@@ -985,7 +985,7 @@ public:
     sal_Int32               GetSpaceBeforeAndMinLabelWidth( const ContentNode *pNode, sal_Int32 *pnSpaceBefore = 0, sal_Int32 *pnMinLabelWidth = 0 ) const;
 
     const SvxLRSpaceItem&   GetLRSpaceItem( ContentNode* pNode );
-    SvxAdjust               GetJustification( USHORT nPara ) const;
+    SvxAdjust               GetJustification( sal_uInt16 nPara ) const;
 
     void                SetCharStretching( sal_uInt16 nX, sal_uInt16 nY );
     inline void         GetCharStretching( sal_uInt16& rX, sal_uInt16& rY );
@@ -1003,22 +1003,22 @@ public:
     void                SetAutoCompleteText( const String& rStr, sal_Bool bUpdateTipWindow );
 
     EditSelection       TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
-    short               ReplaceTextOnly( ContentNode* pNode, USHORT nCurrentStart, xub_StrLen nLen, const String& rText, const ::com::sun::star::uno::Sequence< sal_Int32 >& rOffsets );
+    short               ReplaceTextOnly( ContentNode* pNode, sal_uInt16 nCurrentStart, xub_StrLen nLen, const String& rText, const ::com::sun::star::uno::Sequence< sal_Int32 >& rOffsets );
 
 
-    void                SetAsianCompressionMode( USHORT n );
-    USHORT              GetAsianCompressionMode() const { return nAsianCompressionMode; }
+    void                SetAsianCompressionMode( sal_uInt16 n );
+    sal_uInt16              GetAsianCompressionMode() const { return nAsianCompressionMode; }
 
-    void                SetKernAsianPunctuation( BOOL b );
-    BOOL                IsKernAsianPunctuation() const { return bKernAsianPunctuation; }
+    void                SetKernAsianPunctuation( sal_Bool b );
+    sal_Bool                IsKernAsianPunctuation() const { return bKernAsianPunctuation; }
 
-    void                SetAddExtLeading( BOOL b );
-    BOOL                IsAddExtLeading() const { return bAddExtLeading; }
+    void                SetAddExtLeading( sal_Bool b );
+    sal_Bool                IsAddExtLeading() const { return bAddExtLeading; }
 
-    vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable( BOOL bGetInternal = TRUE ) const;
+    vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable( sal_Bool bGetInternal = sal_True ) const;
     void                SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
 
-    BOOL                mbLastTryMerge;
+    sal_Bool                mbLastTryMerge;
 
     /** sets a link that is called at the beginning of a drag operation at an edit view */
     void                SetBeginDropHdl( const Link& rLink ) { maBeginDropHdl = rLink; }
@@ -1029,8 +1029,8 @@ public:
     Link            GetEndDropHdl() const { return maEndDropHdl; }
 
     /// specifies if auto-correction should capitalize the first word or not (default is on)
-    void            SetFirstWordCapitalization( BOOL bCapitalize )  { bFirstWordCapitalization = bCapitalize; }
-    BOOL            IsFirstWordCapitalization() const   { return bFirstWordCapitalization; }
+    void            SetFirstWordCapitalization( sal_Bool bCapitalize )  { bFirstWordCapitalization = bCapitalize; }
+    sal_Bool            IsFirstWordCapitalization() const   { return bFirstWordCapitalization; }
 };
 
 inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )
@@ -1071,7 +1071,7 @@ inline EditSelection ImpEditEngine::CreateSel( const ESelection& rSel )
     return aSel;
 }
 
-inline VirtualDevice* ImpEditEngine::GetVirtualDevice( const MapMode& rMapMode, ULONG nDrawMode )
+inline VirtualDevice* ImpEditEngine::GetVirtualDevice( const MapMode& rMapMode, sal_uLong nDrawMode )
 {
     if ( !pVirtDev )
         pVirtDev = new VirtualDevice;
@@ -1206,7 +1206,7 @@ inline Cursor* ImpEditView::GetCursor()
 
 void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit );
 void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const MapUnit* pSourceUnit = NULL, const MapUnit* pDestUnit = NULL );
-BYTE GetCharTypeForCompression( xub_Unicode cChar );
+sal_uInt8 GetCharTypeForCompression( xub_Unicode cChar );
 Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin );
 
 #endif // _IMPEDIT_HXX

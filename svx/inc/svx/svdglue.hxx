@@ -64,25 +64,25 @@ class SdrObject;
 class SVX_DLLPUBLIC SdrGluePoint {
     // Bezugspunkt ist SdrObject::GetSnapRect().Center()
     // bNoPercent=FALSE: Position ist -5000..5000 (1/100)% bzw. 0..10000 (je nach Align)
-    // bNoPercent=TRUE : Position ist in log Einh, rel zum Bezugspunkt
+    // bNoPercent=sal_True : Position ist in log Einh, rel zum Bezugspunkt
     Point    aPos;
-    USHORT   nEscDir;
-    USHORT   nId;
-    USHORT   nAlign;
+    sal_uInt16   nEscDir;
+    sal_uInt16   nId;
+    sal_uInt16   nAlign;
     FASTBOOL bNoPercent:1;
     FASTBOOL bReallyAbsolute:1; // Temporaer zu setzen fuer Transformationen am Bezugsobjekt
     FASTBOOL bUserDefined:1; // #i38892#
 public:
-    SdrGluePoint(): nEscDir(SDRESC_SMART),nId(0),nAlign(0) { bNoPercent=FALSE; bReallyAbsolute=FALSE; bUserDefined=TRUE; }
-    SdrGluePoint(const Point& rNewPos, FASTBOOL bNewPercent=TRUE, USHORT nNewAlign=0): aPos(rNewPos),nEscDir(SDRESC_SMART),nId(0),nAlign(nNewAlign) { bNoPercent=!bNewPercent; bReallyAbsolute=FALSE; bUserDefined=TRUE; }
+    SdrGluePoint(): nEscDir(SDRESC_SMART),nId(0),nAlign(0) { bNoPercent=sal_False; bReallyAbsolute=sal_False; bUserDefined=sal_True; }
+    SdrGluePoint(const Point& rNewPos, FASTBOOL bNewPercent=sal_True, sal_uInt16 nNewAlign=0): aPos(rNewPos),nEscDir(SDRESC_SMART),nId(0),nAlign(nNewAlign) { bNoPercent=!bNewPercent; bReallyAbsolute=sal_False; bUserDefined=sal_True; }
     bool operator==(const SdrGluePoint& rCmpGP) const   { return aPos==rCmpGP.aPos && nEscDir==rCmpGP.nEscDir && nId==rCmpGP.nId && nAlign==rCmpGP.nAlign && bNoPercent==rCmpGP.bNoPercent && bReallyAbsolute==rCmpGP.bReallyAbsolute && bUserDefined==rCmpGP.bUserDefined; }
     bool operator!=(const SdrGluePoint& rCmpGP) const   { return !operator==(rCmpGP); }
     const Point& GetPos() const                             { return aPos; }
     void         SetPos(const Point& rNewPos)               { aPos=rNewPos; }
-    USHORT       GetEscDir() const                          { return nEscDir; }
-    void         SetEscDir(USHORT nNewEsc)                  { nEscDir=nNewEsc; }
-    USHORT       GetId() const                              { return nId; }
-    void         SetId(USHORT nNewId)                       { nId=nNewId; }
+    sal_uInt16       GetEscDir() const                          { return nEscDir; }
+    void         SetEscDir(sal_uInt16 nNewEsc)                  { nEscDir=nNewEsc; }
+    sal_uInt16       GetId() const                              { return nId; }
+    void         SetId(sal_uInt16 nNewId)                       { nId=nNewId; }
     bool         IsPercent() const                          { return !bNoPercent; }
     void         SetPercent(FASTBOOL bOn)                   { bNoPercent=!bOn; }
     // Temporaer zu setzen fuer Transformationen am Bezugsobjekt
@@ -93,12 +93,12 @@ public:
     FASTBOOL     IsUserDefined() const                   { return bUserDefined; }
     void         SetUserDefined(FASTBOOL bNew)           { bUserDefined = bNew; }
 
-    USHORT       GetAlign() const                           { return nAlign; }
-    void         SetAlign(USHORT nAlg)                      { nAlign=nAlg; }
-    USHORT       GetHorzAlign() const                       { return nAlign&0x00FF; }
-    void         SetHorzAlign(USHORT nAlg)                  { nAlign=(nAlign&0xFF00)|(nAlg&0x00FF); }
-    USHORT       GetVertAlign() const                       { return nAlign&0xFF00; }
-    void         SetVertAlign(USHORT nAlg)                  { nAlign=(nAlign&0x00FF)|(nAlg&0xFF00); }
+    sal_uInt16       GetAlign() const                           { return nAlign; }
+    void         SetAlign(sal_uInt16 nAlg)                      { nAlign=nAlg; }
+    sal_uInt16       GetHorzAlign() const                       { return nAlign&0x00FF; }
+    void         SetHorzAlign(sal_uInt16 nAlg)                  { nAlign=(nAlign&0xFF00)|(nAlg&0x00FF); }
+    sal_uInt16       GetVertAlign() const                       { return nAlign&0xFF00; }
+    void         SetVertAlign(sal_uInt16 nAlg)                  { nAlign=(nAlign&0x00FF)|(nAlg&0xFF00); }
     void         Draw(OutputDevice& rOut, const SdrObject* pObj) const;
     FASTBOOL     IsHit(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj) const;
     void         Invalidate(Window& rWin, const SdrObject* pObj) const;
@@ -106,8 +106,8 @@ public:
     void         SetAbsolutePos(const Point& rNewPos, const SdrObject& rObj);
     long         GetAlignAngle() const;
     void         SetAlignAngle(long nWink);
-    long         EscDirToAngle(USHORT nEsc) const;
-    USHORT       EscAngleToDir(long nWink) const;
+    long         EscDirToAngle(sal_uInt16 nEsc) const;
+    sal_uInt16       EscAngleToDir(long nWink) const;
     void         Rotate(const Point& rRef, long nWink, double sn, double cs, const SdrObject* pObj);
     void         Mirror(const Point& rRef1, const Point& rRef2, const SdrObject* pObj);
     void         Mirror(const Point& rRef1, const Point& rRef2, long nWink, const SdrObject* pObj);
@@ -119,22 +119,22 @@ public:
 class SVX_DLLPUBLIC SdrGluePointList {
     Container aList;
 protected:
-    SdrGluePoint* GetObject(USHORT i) const { return (SdrGluePoint*)(aList.GetObject(i)); }
+    SdrGluePoint* GetObject(sal_uInt16 i) const { return (SdrGluePoint*)(aList.GetObject(i)); }
 public:
     SdrGluePointList(): aList(1024,4,4) {}
     SdrGluePointList(const SdrGluePointList& rSrcList): aList(1024,4,4)     { *this=rSrcList; }
     ~SdrGluePointList()                                                     { Clear(); }
     void                Clear();
     void                operator=(const SdrGluePointList& rSrcList);
-    USHORT              GetCount() const                                    { return USHORT(aList.Count()); }
+    sal_uInt16              GetCount() const                                    { return sal_uInt16(aList.Count()); }
     // Beim Insert wird dem Objekt (also dem GluePoint) automatisch eine Id zugewiesen.
     // ReturnCode ist der Index des neuen GluePoints in der Liste
-    USHORT              Insert(const SdrGluePoint& rGP);
-    void                Delete(USHORT nPos)                                 { delete (SdrGluePoint*)aList.Remove(nPos); }
-    SdrGluePoint&       operator[](USHORT nPos)                             { return *GetObject(nPos); }
-    const SdrGluePoint& operator[](USHORT nPos) const                       { return *GetObject(nPos); }
-    USHORT              FindGluePoint(USHORT nId) const;
-    USHORT              HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj, FASTBOOL bBack=FALSE, FASTBOOL bNext=FALSE, USHORT nId0=0) const;
+    sal_uInt16              Insert(const SdrGluePoint& rGP);
+    void                Delete(sal_uInt16 nPos)                                 { delete (SdrGluePoint*)aList.Remove(nPos); }
+    SdrGluePoint&       operator[](sal_uInt16 nPos)                             { return *GetObject(nPos); }
+    const SdrGluePoint& operator[](sal_uInt16 nPos) const                       { return *GetObject(nPos); }
+    sal_uInt16              FindGluePoint(sal_uInt16 nId) const;
+    sal_uInt16              HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj, FASTBOOL bBack=sal_False, FASTBOOL bNext=sal_False, sal_uInt16 nId0=0) const;
     void                Invalidate(Window& rWin, const SdrObject* pObj) const;
     // Temporaer zu setzen fuer Transformationen am Bezugsobjekt
     void                SetReallyAbsolute(FASTBOOL bOn, const SdrObject& rObj);

@@ -55,7 +55,7 @@ enum SfxChildAlignment
 };
 
 // "Uberpr"uft, ob ein g"ultiges Alignment verwendet wird
-inline BOOL SfxChildAlignValid( SfxChildAlignment eAlign )
+inline sal_Bool SfxChildAlignValid( SfxChildAlignment eAlign )
 {
     return ( eAlign >= SFX_ALIGN_HIGHESTTOP && eAlign <= SFX_ALIGN_NOALIGNMENT );
 }

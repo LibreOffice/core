@@ -73,11 +73,11 @@ class SvxFontWorkControllerItem : public SfxControllerItem
     SvxFontWorkDialog  &rFontWorkDlg;
 
 protected:
-    virtual void StateChanged(USHORT nSID, SfxItemState eState,
+    virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState);
 
 public:
-    SvxFontWorkControllerItem(USHORT nId, SvxFontWorkDialog&, SfxBindings&);
+    SvxFontWorkControllerItem(sal_uInt16 nId, SvxFontWorkDialog&, SfxBindings&);
 };
 
 /*************************************************************************
@@ -89,7 +89,7 @@ public:
 class SVX_DLLPUBLIC SvxFontWorkChildWindow : public SfxChildWindow
 {
  public:
-    SvxFontWorkChildWindow(Window*, USHORT, SfxBindings*, SfxChildWinInfo*);
+    SvxFontWorkChildWindow(Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
     SFX_DECL_CHILDWINDOW(SvxFontWorkChildWindow);
 };
 
@@ -126,11 +126,11 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
 
     SfxBindings&    rBindings;
     Timer           aInputTimer;
-    BOOL            bUserZoomedIn;
+    sal_Bool            bUserZoomedIn;
 
-    USHORT          nLastStyleTbxId;
-    USHORT          nLastAdjustTbxId;
-    USHORT          nLastShadowTbxId;
+    sal_uInt16          nLastStyleTbxId;
+    sal_uInt16          nLastAdjustTbxId;
+    sal_uInt16          nLastShadowTbxId;
     long            nSaveShadowX;
     long            nSaveShadowY;
     long            nSaveShadowAngle;
@@ -164,7 +164,7 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     void SetShowForm_Impl(const XFormTextHideFormItem*);
     void SetOutline_Impl(const XFormTextOutlineItem*);
     void SetShadow_Impl(const XFormTextShadowItem*,
-                        BOOL bRestoreValues = FALSE);
+                        sal_Bool bRestoreValues = sal_False);
     void SetShadowColor_Impl(const XFormTextShadowColorItem*);
     void SetShadowXVal_Impl(const XFormTextShadowXValItem*);
     void SetShadowYVal_Impl(const XFormTextShadowYValItem*);
@@ -186,7 +186,7 @@ class SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     ~SvxFontWorkDialog();
 
     void SetColorTable(const XColorTable* pTable);
-    void SetActive(BOOL bActivate = TRUE);
+    void SetActive(sal_Bool bActivate = sal_True);
 
     void CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
                           const SfxItemSet& rAttr, SdrObject& rOldObj,

@@ -46,14 +46,14 @@ class SVX_DLLPUBLIC SdrObjListIter
 {
     List                        maObjList;
     sal_uInt32                  mnIndex;
-    BOOL                        mbReverse;
+    sal_Bool                        mbReverse;
 
-    void ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode, BOOL bUseZOrder);
+    void ImpProcessObjectList(const SdrObjList& rObjList, SdrIterMode eMode, sal_Bool bUseZOrder);
     void ImpProcessMarkList(const SdrMarkList& rMarkList, SdrIterMode eMode);
-    void ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, BOOL bUseZOrder);
+    void ImpProcessObj(SdrObject* pObj, SdrIterMode eMode, sal_Bool bUseZOrder);
 
 public:
-    SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode = IM_DEEPNOGROUPS, BOOL bReverse = FALSE);
+    SdrObjListIter(const SdrObjList& rObjList, SdrIterMode eMode = IM_DEEPNOGROUPS, sal_Bool bReverse = sal_False);
     /** This variant lets the user choose the order in which to travel over
         the objects.
         @param bUseZOrder
@@ -61,17 +61,17 @@ public:
             Otherwise the navigation position as returned by
             SdrObject::GetNavigationPosition() is used.
     */
-    SdrObjListIter(const SdrObjList& rObjList, BOOL bUseZOrder, SdrIterMode eMode = IM_DEEPNOGROUPS, BOOL bReverse = FALSE);
+    SdrObjListIter(const SdrObjList& rObjList, sal_Bool bUseZOrder, SdrIterMode eMode = IM_DEEPNOGROUPS, sal_Bool bReverse = sal_False);
 
     /* SJ: the following function can now be used with every
        SdrObject and is no longer limited to group objects */
-    SdrObjListIter(const SdrObject& rObj, SdrIterMode eMode = IM_DEEPNOGROUPS, BOOL bReverse = FALSE);
+    SdrObjListIter(const SdrObject& rObj, SdrIterMode eMode = IM_DEEPNOGROUPS, sal_Bool bReverse = sal_False);
 
     /** Iterates over a list of marked objects received from the SdrMarkView. */
-    SdrObjListIter(const SdrMarkList& rMarkList, SdrIterMode eMode = IM_DEEPNOGROUPS, BOOL bReverse = FALSE);
+    SdrObjListIter(const SdrMarkList& rMarkList, SdrIterMode eMode = IM_DEEPNOGROUPS, sal_Bool bReverse = sal_False);
 
     void Reset() { mnIndex = (mbReverse ? maObjList.Count() : 0L); }
-    BOOL IsMore() const { return (mbReverse ? mnIndex != 0 : ( mnIndex < maObjList.Count())); }
+    sal_Bool IsMore() const { return (mbReverse ? mnIndex != 0 : ( mnIndex < maObjList.Count())); }
     SdrObject* Next() { return (SdrObject*)maObjList.GetObject(mbReverse ? --mnIndex : mnIndex++); }
 
     sal_uInt32 Count() { return maObjList.Count(); }

@@ -39,14 +39,14 @@ class SvStream;
 class SFX2_DLLPUBLIC SfxControllerItem
 {
 private:
-    USHORT              nId;
+    sal_uInt16              nId;
     SfxControllerItem*  pNext; // zu benachrichtigendes weiteres ControllerItem
     SfxBindings*        pBindings;
 
 protected:
 //#if defined( DBG_UTIL ) && defined( _SOLAR__PRIVATE )
 #if defined( DBG_UTIL )
-    SAL_DLLPRIVATE void CheckConfigure_Impl( ULONG nType );
+    SAL_DLLPRIVATE void CheckConfigure_Impl( sal_uIntPtr nType );
 #endif
 
 public:
@@ -60,13 +60,13 @@ public:
                         }
 
                         SfxControllerItem(); // fuer arrays
-                        SfxControllerItem( USHORT nId, SfxBindings & );
+                        SfxControllerItem( sal_uInt16 nId, SfxBindings & );
     virtual             ~SfxControllerItem();
 
-    void                Bind( USHORT nNewId, SfxBindings * = 0);    // in SfxBindings registrieren
+    void                Bind( sal_uInt16 nNewId, SfxBindings * = 0);    // in SfxBindings registrieren
     void                UnBind();
     void                ReBind();
-    BOOL                IsBound() const;
+    sal_Bool                IsBound() const;
     void                UpdateSlot();
     void                ClearCache();
     void                SetBindings(SfxBindings &rBindings) { pBindings = &rBindings; }
@@ -74,10 +74,10 @@ public:
     SfxControllerItem*  GetItemLink();
     SfxControllerItem*  ChangeItemLink( SfxControllerItem* pNewLink );
 
-    void                SetId( USHORT nItemId );
-    USHORT              GetId() const { return nId; }
+    void                SetId( sal_uInt16 nItemId );
+    sal_uInt16              GetId() const { return nId; }
 
-    virtual void        StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
     virtual void        DeleteFloatingWindow();
 
@@ -86,9 +86,9 @@ public:
     static SfxItemState GetItemState( const SfxPoolItem* pState );
 
 //#if 0 // _SOLAR__PRIVATE
-    SAL_DLLPRIVATE BOOL IsBindable_Impl() const
+    SAL_DLLPRIVATE sal_Bool IsBindable_Impl() const
                         { return pBindings != NULL; }
-    SAL_DLLPRIVATE void BindInternal_Impl( USHORT nNewId, SfxBindings* );
+    SAL_DLLPRIVATE void BindInternal_Impl( sal_uInt16 nNewId, SfxBindings* );
 //#endif
 };
 
@@ -99,11 +99,11 @@ class SFX2_DLLPUBLIC SfxStatusForwarder: public SfxControllerItem
     SfxControllerItem*      pMaster;
 
 protected:
-    virtual void        StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
 
 public:
-                            SfxStatusForwarder( USHORT nSlotId,
+                            SfxStatusForwarder( sal_uInt16 nSlotId,
                                    SfxControllerItem&rMaster );
 };
 

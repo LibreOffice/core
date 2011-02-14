@@ -44,15 +44,15 @@ class ImpXPolygon
 {
 public:
     Point*          pPointAry;
-    BYTE*           pFlagAry;
+    sal_uInt8*           pFlagAry;
     Point*          pOldPointAry;
-    BOOL            bDeleteOldPoints;
-    USHORT          nSize;
-    USHORT          nResize;
-    USHORT          nPoints;
-    USHORT          nRefCount;
+    sal_Bool            bDeleteOldPoints;
+    sal_uInt16          nSize;
+    sal_uInt16          nResize;
+    sal_uInt16          nPoints;
+    sal_uInt16          nRefCount;
 
-    ImpXPolygon( USHORT nInitSize = 16, USHORT nResize=16 );
+    ImpXPolygon( sal_uInt16 nInitSize = 16, sal_uInt16 nResize=16 );
     ImpXPolygon( const ImpXPolygon& rImpXPoly );
     ~ImpXPolygon();
 
@@ -64,13 +64,13 @@ public:
         if ( bDeleteOldPoints )
         {
             delete[] (char*)pOldPointAry;
-            bDeleteOldPoints = FALSE;
+            bDeleteOldPoints = sal_False;
         }
     }
 
-    void Resize( USHORT nNewSize, BOOL bDeletePoints = TRUE );
-    void InsertSpace( USHORT nPos, USHORT nCount );
-    void Remove( USHORT nPos, USHORT nCount );
+    void Resize( sal_uInt16 nNewSize, sal_Bool bDeletePoints = sal_True );
+    void InsertSpace( sal_uInt16 nPos, sal_uInt16 nCount );
+    void Remove( sal_uInt16 nPos, sal_uInt16 nCount );
 };
 
 
@@ -89,9 +89,9 @@ class ImpXPolyPolygon
 {
 public:
     XPolygonList aXPolyList;
-    USHORT       nRefCount;
+    sal_uInt16       nRefCount;
 
-                 ImpXPolyPolygon( USHORT nInitSize = 16, USHORT nResize = 16 ) :
+                 ImpXPolyPolygon( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 ) :
                     aXPolyList( 1024, nInitSize, nResize )
                     { nRefCount = 1; }
                 ImpXPolyPolygon( const ImpXPolyPolygon& rImpXPolyPoly );

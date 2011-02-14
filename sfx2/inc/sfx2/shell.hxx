@@ -178,7 +178,7 @@ protected:
 
 #ifndef _SFXSH_HXX
     SAL_DLLPRIVATE void SetViewShell_Impl( SfxViewShell* pView );
-    SAL_DLLPRIVATE void Invalidate_Impl( SfxBindings& rBindings, USHORT nId );
+    SAL_DLLPRIVATE void Invalidate_Impl( SfxBindings& rBindings, sal_uInt16 nId );
     SAL_DLLPRIVATE SfxShellObject* GetShellObj_Impl() const;
     SAL_DLLPRIVATE void SetShellObj_Impl( SfxShellObject* pObj );
 #endif
@@ -208,10 +208,10 @@ public:
     static void                 EmptyExecStub(SfxShell *pShell, SfxRequest &);
     static void                 EmptyStateStub(SfxShell *pShell, SfxItemSet &);
 
-    const SfxPoolItem*          GetSlotState( USHORT nSlotId, const SfxInterface *pIF = 0, SfxItemSet *pStateSet = 0 );
+    const SfxPoolItem*          GetSlotState( sal_uInt16 nSlotId, const SfxInterface *pIF = 0, SfxItemSet *pStateSet = 0 );
     const SfxPoolItem*          ExecuteSlot( SfxRequest &rReq, const SfxInterface *pIF = 0 );
-    const SfxPoolItem*          ExecuteSlot( SfxRequest &rReq, BOOL bAsync );
-    ULONG                       ExecuteSlot( USHORT nSlot, USHORT nMemberId, SbxVariable& rRet, SbxBase* pArgs = 0 );
+    const SfxPoolItem*          ExecuteSlot( SfxRequest &rReq, sal_Bool bAsync );
+    sal_uIntPtr                       ExecuteSlot( sal_uInt16 nSlot, sal_uInt16 nMemberId, SbxVariable& rRet, SbxBase* pArgs = 0 );
 
     inline SfxItemPool&         GetPool() const;
     inline void                 SetPool( SfxItemPool *pNewPool ) ;
@@ -223,11 +223,11 @@ public:
     SfxRepeatTarget*            GetRepeatTarget() const;
     void                        SetRepeatTarget( SfxRepeatTarget *pTarget );
 
-    virtual void                Invalidate(USHORT nId = 0);
+    virtual void                Invalidate(sal_uInt16 nId = 0);
 
-    BOOL                        IsActive() const;
-    virtual void                Activate(BOOL bMDI);
-    virtual void                Deactivate(BOOL bMDI);
+    sal_Bool                        IsActive() const;
+    virtual void                Activate(sal_Bool bMDI);
+    virtual void                Deactivate(sal_Bool bMDI);
     virtual void                ParentActivate();
     virtual void                ParentDeactivate();
 
@@ -238,30 +238,30 @@ public:
     void                        UIFeatureChanged();
 
     // Items
-    const SfxPoolItem*          GetItem( USHORT nSlotId ) const;
+    const SfxPoolItem*          GetItem( sal_uInt16 nSlotId ) const;
     void                        PutItem( const SfxPoolItem& rItem );
-    void                        RemoveItem( USHORT nSlotId );
+    void                        RemoveItem( sal_uInt16 nSlotId );
 
     // TODO/CLEANUP: still needed?!
     void SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& aVerbs);
     const com::sun::star::uno::Sequence < com::sun::star::embed::VerbDescriptor >& GetVerbs() const;
     void                        VerbExec (SfxRequest&);
     void                        VerbState (SfxItemSet&);
-    SAL_DLLPRIVATE const SfxSlot* GetVerbSlot_Impl(USHORT nId) const;
+    SAL_DLLPRIVATE const SfxSlot* GetVerbSlot_Impl(sal_uInt16 nId) const;
 
-    void                        SetHelpId(ULONG nId);
-    ULONG                       GetHelpId() const;
+    void                        SetHelpId(sal_uIntPtr nId);
+    sal_uIntPtr                     GetHelpId() const;
     virtual SfxObjectShell*     GetObjectShell();
-    void                        SetDisableFlags( ULONG nFlags );
-    ULONG                       GetDisableFlags() const;
+    void                        SetDisableFlags( sal_uIntPtr nFlags );
+    sal_uIntPtr                     GetDisableFlags() const;
 
-    virtual SfxItemSet*         CreateItemSet( USHORT nId );
-    virtual void                ApplyItemSet( USHORT nId, const SfxItemSet& rSet );
+    virtual SfxItemSet*         CreateItemSet( sal_uInt16 nId );
+    virtual void                ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet );
 
 #ifndef _SFXSH_HXX
-    SAL_DLLPRIVATE FASTBOOL     CanExecuteSlot_Impl( const SfxSlot &rSlot );
-    SAL_DLLPRIVATE void DoActivate_Impl( SfxViewFrame *pFrame, BOOL bMDI);
-    SAL_DLLPRIVATE void DoDeactivate_Impl( SfxViewFrame *pFrame, BOOL bMDI);
+    SAL_DLLPRIVATE bool     CanExecuteSlot_Impl( const SfxSlot &rSlot );
+    SAL_DLLPRIVATE void DoActivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI);
+    SAL_DLLPRIVATE void DoDeactivate_Impl( SfxViewFrame *pFrame, sal_Bool bMDI);
 #endif
 };
 
@@ -336,7 +336,7 @@ inline void SfxShell::SetPool
             #Class, NameResId, GetInterfaceId(),                            \
             SuperClass::GetStaticInterface(),                               \
             a##Class##Slots_Impl[0],                                        \
-            (USHORT) (sizeof(a##Class##Slots_Impl) / sizeof(SfxSlot) ) );   \
+            (sal_uInt16) (sizeof(a##Class##Slots_Impl) / sizeof(SfxSlot) ) );   \
             InitInterface_Impl();                                           \
         }                                                                   \
         return pInterface;                                                  \
@@ -377,13 +377,13 @@ inline void SfxShell::SetPool
         GetStaticInterface()->RegisterObjectBar( nPos, rResId, nFeature )
 
 #define SFX_CHILDWINDOW_REGISTRATION(nId) \
-        GetStaticInterface()->RegisterChildWindow( nId, (BOOL) FALSE )
+        GetStaticInterface()->RegisterChildWindow( nId, (sal_Bool) sal_False )
 
 #define SFX_FEATURED_CHILDWINDOW_REGISTRATION(nId,nFeature) \
-        GetStaticInterface()->RegisterChildWindow( nId, (BOOL) FALSE, nFeature )
+        GetStaticInterface()->RegisterChildWindow( nId, (sal_Bool) sal_False, nFeature )
 
 #define SFX_CHILDWINDOW_CONTEXT_REGISTRATION(nId) \
-        GetStaticInterface()->RegisterChildWindow( nId, (BOOL) TRUE )
+        GetStaticInterface()->RegisterChildWindow( nId, (sal_Bool) sal_True )
 
 #define SFX_POPUPMENU_REGISTRATION(rResId) \
         GetStaticInterface()->RegisterPopupMenu( rResId )

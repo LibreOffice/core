@@ -164,11 +164,11 @@ namespace
 
 TYPEINIT1(SdrUnoObj, SdrRectObj);
 
-SdrUnoObj::SdrUnoObj(const String& rModelName, BOOL _bOwnUnoControlModel)
+SdrUnoObj::SdrUnoObj(const String& rModelName, sal_Bool _bOwnUnoControlModel)
 :   m_pImpl( new SdrUnoObjDataHolder ),
     bOwnUnoControlModel( _bOwnUnoControlModel )
 {
-    bIsUnoObj = TRUE;
+    bIsUnoObj = sal_True;
 
     m_pImpl->pEventListener = new SdrControlEventListenerImpl(this);
 
@@ -179,11 +179,11 @@ SdrUnoObj::SdrUnoObj(const String& rModelName, BOOL _bOwnUnoControlModel)
 
 SdrUnoObj::SdrUnoObj(const String& rModelName,
                      const uno::Reference< lang::XMultiServiceFactory >& rxSFac,
-                     BOOL _bOwnUnoControlModel)
+                     sal_Bool _bOwnUnoControlModel)
 :   m_pImpl( new SdrUnoObjDataHolder ),
     bOwnUnoControlModel( _bOwnUnoControlModel )
 {
-    bIsUnoObj = TRUE;
+    bIsUnoObj = sal_True;
 
     m_pImpl->pEventListener = new SdrControlEventListenerImpl(this);
 
@@ -227,26 +227,26 @@ void SdrUnoObj::SetPage(SdrPage* pNewPage)
 
 void SdrUnoObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bRotateFreeAllowed        =   FALSE;
-    rInfo.bRotate90Allowed          =   FALSE;
-    rInfo.bMirrorFreeAllowed        =   FALSE;
-    rInfo.bMirror45Allowed          =   FALSE;
-    rInfo.bMirror90Allowed          =   FALSE;
-    rInfo.bTransparenceAllowed = FALSE;
-    rInfo.bGradientAllowed = FALSE;
-    rInfo.bShearAllowed             =   FALSE;
-    rInfo.bEdgeRadiusAllowed        =   FALSE;
-    rInfo.bNoOrthoDesired           =   FALSE;
-    rInfo.bCanConvToPath            =   FALSE;
-    rInfo.bCanConvToPoly            =   FALSE;
-    rInfo.bCanConvToPathLineToArea  =   FALSE;
-    rInfo.bCanConvToPolyLineToArea  =   FALSE;
-    rInfo.bCanConvToContour = FALSE;
+    rInfo.bRotateFreeAllowed        =   sal_False;
+    rInfo.bRotate90Allowed          =   sal_False;
+    rInfo.bMirrorFreeAllowed        =   sal_False;
+    rInfo.bMirror45Allowed          =   sal_False;
+    rInfo.bMirror90Allowed          =   sal_False;
+    rInfo.bTransparenceAllowed = sal_False;
+    rInfo.bGradientAllowed = sal_False;
+    rInfo.bShearAllowed             =   sal_False;
+    rInfo.bEdgeRadiusAllowed        =   sal_False;
+    rInfo.bNoOrthoDesired           =   sal_False;
+    rInfo.bCanConvToPath            =   sal_False;
+    rInfo.bCanConvToPoly            =   sal_False;
+    rInfo.bCanConvToPathLineToArea  =   sal_False;
+    rInfo.bCanConvToPolyLineToArea  =   sal_False;
+    rInfo.bCanConvToContour = sal_False;
 }
 
-UINT16 SdrUnoObj::GetObjIdentifier() const
+sal_uInt16 SdrUnoObj::GetObjIdentifier() const
 {
-    return UINT16(OBJ_UNO);
+    return sal_uInt16(OBJ_UNO);
 }
 
 void SdrUnoObj::SetContextWritingMode( const sal_Int16 _nContextWritingMode )

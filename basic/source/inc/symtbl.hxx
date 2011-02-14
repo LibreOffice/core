@@ -58,12 +58,12 @@ class SbiStringPool {               // String-Pool
 public:
     SbiStringPool( SbiParser* );
    ~SbiStringPool();
-    USHORT GetSize() const { return aData.Count(); }
-    // AB 8.4.1999, Default wegen #64236 auf TRUE geaendert
-    // Wenn der Bug sauber behoben ist, wieder auf FALSE aendern.
-    short Add( const String&, BOOL=TRUE );
+    sal_uInt16 GetSize() const { return aData.Count(); }
+    // AB 8.4.1999, Default wegen #64236 auf sal_True geaendert
+    // Wenn der Bug sauber behoben ist, wieder auf sal_False aendern.
+    short Add( const String&, sal_Bool=sal_True );
     short Add( double, SbxDataType );
-    const String& Find( USHORT ) const;
+    const String& Find( sal_uInt16 ) const;
     SbiParser* GetParser() { return pParser; }
 };
 
@@ -80,8 +80,8 @@ protected:
     SbiSymPool* pParent;            // uebergeordneter Symbol-Pool
     SbiParser*  pParser;            // der Parser
     SbiSymScope eScope;             // Scope des Pools
-    USHORT     nProcId;             // aktuelles ProcId fuer STATIC-Variable
-    USHORT     nCur;                // Iterator
+    sal_uInt16     nProcId;             // aktuelles ProcId fuer STATIC-Variable
+    sal_uInt16     nCur;                // Iterator
 public:
     SbiSymPool( SbiStringPool&, SbiSymScope );
    ~SbiSymPool();
@@ -90,7 +90,7 @@ public:
 
     void   SetParent( SbiSymPool* p )   { pParent = p;      }
     void   SetProcId( short n )         { nProcId = n;      }
-    USHORT GetSize() const              { return aData.Count(); }
+    sal_uInt16 GetSize() const              { return aData.Count(); }
     SbiSymScope GetScope() const        { return eScope;    }
     void   SetScope( SbiSymScope s )    { eScope = s;       }
     SbiParser* GetParser()              { return pParser;   }
@@ -99,12 +99,12 @@ public:
     SbiProcDef* AddProc( const String& );// Prozedur hinzufuegen
     void Add( SbiSymDef* );             // Symbol uebernehmen
     SbiSymDef* Find( const String& ) const;// Variablenname
-    SbiSymDef* FindId( USHORT ) const;  // Variable per ID suchen
-    SbiSymDef* Get( USHORT ) const;     // Variable per Position suchen
+    SbiSymDef* FindId( sal_uInt16 ) const;  // Variable per ID suchen
+    SbiSymDef* Get( sal_uInt16 ) const;     // Variable per Position suchen
     SbiSymDef* First(), *Next();        // Iteratoren
 
-    UINT32 Define( const String& );     // Label definieren
-    UINT32 Reference( const String& );  // Label referenzieren
+    sal_uInt32 Define( const String& );     // Label definieren
+    sal_uInt32 Reference( const String& );  // Label referenzieren
     void   CheckRefs();                 // offene Referenzen suchen
 };
 
@@ -119,21 +119,21 @@ protected:
     SbiSymPool* pPool;              // Pool fuer Unterelemente
     short      nLen;                // Stringlaenge bei STRING*n
     short      nDims;               // Array-Dimensionen
-    USHORT     nId;                 // Symbol-Nummer
-    USHORT     nTypeId;             // String-ID des Datentyps (Dim X AS Dytentyp)
-    USHORT     nProcId;             // aktuelles ProcId fuer STATIC-Variable
-    USHORT     nPos;                // Positions-Nummer
-    UINT32     nChain;              // Backchain-Kette
-    BOOL       bNew     : 1;        // TRUE: Dim As New...
-    BOOL       bChained : 1;        // TRUE: Symbol ist in Code definiert
-    BOOL       bByVal   : 1;        // TRUE: ByVal-Parameter
-    BOOL       bOpt     : 1;        // TRUE: optionaler Parameter
-    BOOL       bStatic  : 1;        // TRUE: STATIC-Variable
-    BOOL       bAs      : 1;        // TRUE: Datentyp per AS XXX definiert
-    BOOL       bGlobal  : 1;        // TRUE: Global-Variable
-    BOOL       bParamArray : 1;     // TRUE: ParamArray parameter
-    BOOL       bWithEvents : 1;     // TRUE: Declared WithEvents
-    USHORT     nDefaultId;          // Symbol number of default value
+    sal_uInt16     nId;                 // Symbol-Nummer
+    sal_uInt16     nTypeId;             // String-ID des Datentyps (Dim X AS Dytentyp)
+    sal_uInt16     nProcId;             // aktuelles ProcId fuer STATIC-Variable
+    sal_uInt16     nPos;                // Positions-Nummer
+    sal_uInt32     nChain;              // Backchain-Kette
+    sal_Bool       bNew     : 1;        // sal_True: Dim As New...
+    sal_Bool       bChained : 1;        // sal_True: Symbol ist in Code definiert
+    sal_Bool       bByVal   : 1;        // sal_True: ByVal-Parameter
+    sal_Bool       bOpt     : 1;        // sal_True: optionaler Parameter
+    sal_Bool       bStatic  : 1;        // sal_True: STATIC-Variable
+    sal_Bool       bAs      : 1;        // sal_True: Datentyp per AS XXX definiert
+    sal_Bool       bGlobal  : 1;        // sal_True: Global-Variable
+    sal_Bool       bParamArray : 1;     // sal_True: ParamArray parameter
+    sal_Bool       bWithEvents : 1;     // sal_True: Declared WithEvents
+    sal_uInt16     nDefaultId;          // Symbol number of default value
     short      nFixedStringLength;  // String length in: Dim foo As String*Length
 public:
     SbiSymDef( const String& );
@@ -145,42 +145,42 @@ public:
     virtual void SetType( SbxDataType );
     const String& GetName();
     SbiSymScope GetScope() const;
-    USHORT     GetProcId() const{ return nProcId;   }
-    UINT32     GetAddr() const  { return nChain;    }
-    USHORT     GetId() const    { return nId;       }
-    USHORT     GetTypeId() const{ return nTypeId;   }
-    void       SetTypeId( USHORT n ) { nTypeId = n; eType = SbxOBJECT; }
-    USHORT     GetPos() const   { return nPos;      }
+    sal_uInt16     GetProcId() const{ return nProcId;   }
+    sal_uInt32     GetAddr() const  { return nChain;    }
+    sal_uInt16     GetId() const    { return nId;       }
+    sal_uInt16     GetTypeId() const{ return nTypeId;   }
+    void       SetTypeId( sal_uInt16 n ) { nTypeId = n; eType = SbxOBJECT; }
+    sal_uInt16     GetPos() const   { return nPos;      }
     void       SetLen( short n ){ nLen = n;         }
     short      GetLen() const   { return nLen;      }
     void       SetDims( short n ) { nDims = n;      }
     short      GetDims() const  { return nDims;     }
-    BOOL       IsDefined() const{ return bChained;  }
-    void       SetOptional()    { bOpt = TRUE;      }
-    void       SetParamArray()  { bParamArray = TRUE;       }
-    void       SetWithEvents()  { bWithEvents = TRUE;       }
-    void       SetByVal( BOOL bByVal_ = TRUE )
+    sal_Bool       IsDefined() const{ return bChained;  }
+    void       SetOptional()    { bOpt = sal_True;      }
+    void       SetParamArray()  { bParamArray = sal_True;       }
+    void       SetWithEvents()  { bWithEvents = sal_True;       }
+    void       SetByVal( sal_Bool bByVal_ = sal_True )
                 { bByVal = bByVal_; }
-    void       SetStatic( BOOL bAsStatic = TRUE )       { bStatic = bAsStatic;  }
-    void       SetNew()         { bNew = TRUE;      }
-    void       SetDefinedAs()   { bAs = TRUE;       }
-    void       SetGlobal(BOOL b){ bGlobal = b;  }
-    void       SetDefaultId( USHORT n ) { nDefaultId = n; }
-    USHORT     GetDefaultId( void ) { return nDefaultId; }
-    BOOL       IsOptional() const{ return bOpt;     }
-    BOOL       IsParamArray() const{ return bParamArray; }
-    BOOL       IsWithEvents() const{ return bWithEvents; }
-    BOOL       IsByVal() const  { return bByVal;    }
-    BOOL       IsStatic() const { return bStatic;   }
-    BOOL       IsNew() const    { return bNew;      }
-    BOOL       IsDefinedAs() const { return bAs;    }
-    BOOL       IsGlobal() const { return bGlobal;   }
+    void       SetStatic( sal_Bool bAsStatic = sal_True )       { bStatic = bAsStatic;  }
+    void       SetNew()         { bNew = sal_True;      }
+    void       SetDefinedAs()   { bAs = sal_True;       }
+    void       SetGlobal(sal_Bool b){ bGlobal = b;  }
+    void       SetDefaultId( sal_uInt16 n ) { nDefaultId = n; }
+    sal_uInt16     GetDefaultId( void ) { return nDefaultId; }
+    sal_Bool       IsOptional() const{ return bOpt;     }
+    sal_Bool       IsParamArray() const{ return bParamArray; }
+    sal_Bool       IsWithEvents() const{ return bWithEvents; }
+    sal_Bool       IsByVal() const  { return bByVal;    }
+    sal_Bool       IsStatic() const { return bStatic;   }
+    sal_Bool       IsNew() const    { return bNew;      }
+    sal_Bool       IsDefinedAs() const { return bAs;    }
+    sal_Bool       IsGlobal() const { return bGlobal;   }
     short      GetFixedStringLength( void ) const { return nFixedStringLength; }
     void       SetFixedStringLength( short n ) { nFixedStringLength = n; }
 
     SbiSymPool& GetPool();
-    UINT32     Define();        // Symbol in Code definieren
-    UINT32     Reference();     // Symbol in Code referenzieren
+    sal_uInt32     Define();        // Symbol in Code definieren
+    sal_uInt32     Reference();     // Symbol in Code referenzieren
 
 private:
     SbiSymDef( const SbiSymDef& );
@@ -192,14 +192,14 @@ class SbiProcDef : public SbiSymDef {   // Prozedur-Definition (aus Basic):
     SbiSymPool aLabels;             // lokale Sprungziele
     String aLibName;                // LIB "name"
     String aAlias;                  // ALIAS "name"
-    USHORT nLine1, nLine2;          // Zeilenbereich
+    sal_uInt16 nLine1, nLine2;          // Zeilenbereich
     PropertyMode mePropMode;        // Marks if this is a property procedure and which
     String maPropName;              // Property name if property procedure (!= proc name)
-    BOOL   bCdecl  : 1;             // TRUE: CDECL angegeben
-    BOOL   bPublic : 1;             // TRUE: proc ist PUBLIC
-    BOOL   mbProcDecl : 1;          // TRUE: instanciated by SbiParser::ProcDecl
+    sal_Bool   bCdecl  : 1;             // sal_True: CDECL angegeben
+    sal_Bool   bPublic : 1;             // sal_True: proc ist PUBLIC
+    sal_Bool   mbProcDecl : 1;          // sal_True: instanciated by SbiParser::ProcDecl
 public:
-    SbiProcDef( SbiParser*, const String&, BOOL bProcDecl=false );
+    SbiProcDef( SbiParser*, const String&, sal_Bool bProcDecl=false );
     virtual ~SbiProcDef();
     virtual SbiProcDef* GetProcDef();
     virtual void SetType( SbxDataType );
@@ -208,15 +208,15 @@ public:
     SbiSymPool& GetLocals()         { return GetPool();}
     String& GetLib()                { return aLibName; }
     String& GetAlias()              { return aAlias;   }
-    void SetPublic( BOOL b )        { bPublic = b;     }
-    BOOL IsPublic() const           { return bPublic;  }
-    void SetCdecl( BOOL b = TRUE)   { bCdecl = b;      }
-    BOOL IsCdecl() const            { return bCdecl;   }
-    BOOL IsUsedForProcDecl() const  { return mbProcDecl; }
-    void SetLine1( USHORT n )       { nLine1 = n;      }
-    USHORT GetLine1() const         { return nLine1;   }
-    void SetLine2( USHORT n )       { nLine2 = n;      }
-    USHORT GetLine2() const         { return nLine2;   }
+    void SetPublic( sal_Bool b )        { bPublic = b;     }
+    sal_Bool IsPublic() const           { return bPublic;  }
+    void SetCdecl( sal_Bool b = sal_True)   { bCdecl = b;      }
+    sal_Bool IsCdecl() const            { return bCdecl;   }
+    sal_Bool IsUsedForProcDecl() const  { return mbProcDecl; }
+    void SetLine1( sal_uInt16 n )       { nLine1 = n;      }
+    sal_uInt16 GetLine1() const         { return nLine1;   }
+    void SetLine2( sal_uInt16 n )       { nLine2 = n;      }
+    sal_uInt16 GetLine2() const         { return nLine2;   }
     PropertyMode getPropertyMode()  { return mePropMode; }
     void setPropertyMode( PropertyMode ePropMode );
     const String& GetPropName()     { return maPropName; }

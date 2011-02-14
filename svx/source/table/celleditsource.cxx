@@ -153,7 +153,7 @@ public:
     void                    lock();
     void                    unlock();
 
-    BOOL                    IsValid() const;
+    sal_Bool                    IsValid() const;
 
     Rectangle               GetVisArea();
     Point                   LogicToPixel( const Point&, const MapMode& rMapMode );
@@ -320,7 +320,7 @@ void CellEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             case HINT_OBJCHG:
             {
-                mbDataValid = FALSE;                        // Text muss neu geholt werden
+                mbDataValid = sal_False;                        // Text muss neu geholt werden
 
                 if( HasView() )
                 {
@@ -353,7 +353,7 @@ void CellEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         mpView->GetTextEditOutliner()->SetNotifyHdl( LINK(this, CellEditSourceImpl, NotifyHdl) );
 
                     // #104157# Only now we're really in edit mode
-                    mbShapeIsEditMode = TRUE;
+                    mbShapeIsEditMode = sal_True;
 
                     Broadcast( *pSdrHint );
                 }
@@ -367,7 +367,7 @@ void CellEditSourceImpl::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     Broadcast( *pSdrHint );
 
                     // #104157# We're no longer in edit mode
-                    mbShapeIsEditMode = FALSE;
+                    mbShapeIsEditMode = sal_False;
 
                     // remove as listener - outliner might outlive ourselves
                     if( mpView && mpView->GetTextEditOutliner() )
@@ -800,9 +800,9 @@ void CellEditSourceImpl::unlock()
     }
 }
 
-BOOL CellEditSourceImpl::IsValid() const
+sal_Bool CellEditSourceImpl::IsValid() const
 {
-    return mpView && mpWindow ? TRUE : FALSE;
+    return mpView && mpWindow ? sal_True : sal_False;
 }
 
 Rectangle CellEditSourceImpl::GetVisArea()
@@ -997,7 +997,7 @@ void CellEditSource::unlock()
 
 //------------------------------------------------------------------------
 
-BOOL CellEditSource::IsValid() const
+sal_Bool CellEditSource::IsValid() const
 {
     return mpImpl->IsValid();
 }

@@ -53,20 +53,20 @@ void __EXPORT EditSelFunctionSet::DestroyAnchor()
     // Nur bei Mehrfachselektion
 }
 
-BOOL __EXPORT EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL )
+sal_Bool __EXPORT EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool )
 {
     if ( pCurView )
         return pCurView->pImpEditView->SetCursorAtPoint( rPointPixel );
 
-    return FALSE;
+    return sal_False;
 }
 
-BOOL __EXPORT EditSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
+sal_Bool __EXPORT EditSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 {
     if ( pCurView )
         return pCurView->pImpEditView->IsSelectionAtPoint( rPointPixel );
 
-    return FALSE;
+    return sal_False;
 }
 
 void __EXPORT EditSelFunctionSet::DeselectAtPoint( const Point& )
@@ -96,7 +96,7 @@ EditSelectionEngine::EditSelectionEngine() : SelectionEngine( (Window*)0 )
     // Wegen Bug OV: (1994)
     // 1995: RangeSelection lassen, SingleSelection nur fuer ListBoxen geeignet!
     SetSelectionMode( RANGE_SELECTION );
-    EnableDrag( TRUE );
+    EnableDrag( sal_True );
 }
 
 void EditSelectionEngine::SetCurView( EditView* pNewView )

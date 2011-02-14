@@ -159,7 +159,7 @@ void SdrGluePoint::SetAlignAngle(long nWink)
     else if (nWink<33750) nAlign=SDRHORZALIGN_RIGHT |SDRVERTALIGN_BOTTOM;
 }
 
-long SdrGluePoint::EscDirToAngle(USHORT nEsc) const
+long SdrGluePoint::EscDirToAngle(sal_uInt16 nEsc) const
 {
     switch (nEsc) {
         case SDRESC_RIGHT : return 0;
@@ -170,7 +170,7 @@ long SdrGluePoint::EscDirToAngle(USHORT nEsc) const
     return 0;
 }
 
-USHORT SdrGluePoint::EscAngleToDir(long nWink) const
+sal_uInt16 SdrGluePoint::EscAngleToDir(long nWink) const
 {
     nWink=NormAngle360(nWink);
     if (nWink>=31500 || nWink<4500) return SDRESC_RIGHT;
@@ -190,8 +190,8 @@ void SdrGluePoint::Rotate(const Point& rRef, long nWink, double sn, double cs, c
         SetAlignAngle(GetAlignAngle()+nWink);
     }
     // Austrittsrichtungen drehen
-    USHORT nEscDir0=nEscDir;
-    USHORT nEscDir1=0;
+    sal_uInt16 nEscDir0=nEscDir;
+    sal_uInt16 nEscDir1=0;
     if ((nEscDir0&SDRESC_LEFT  )!=0) nEscDir1|=EscAngleToDir(EscDirToAngle(SDRESC_LEFT  )+nWink);
     if ((nEscDir0&SDRESC_TOP   )!=0) nEscDir1|=EscAngleToDir(EscDirToAngle(SDRESC_TOP   )+nWink);
     if ((nEscDir0&SDRESC_RIGHT )!=0) nEscDir1|=EscAngleToDir(EscDirToAngle(SDRESC_RIGHT )+nWink);
@@ -219,8 +219,8 @@ void SdrGluePoint::Mirror(const Point& rRef1, const Point& rRef2, long nWink, co
         SetAlignAngle(nAW);
     }
     // Austrittsrichtungen spiegeln
-    USHORT nEscDir0=nEscDir;
-    USHORT nEscDir1=0;
+    sal_uInt16 nEscDir0=nEscDir;
+    sal_uInt16 nEscDir1=0;
     if ((nEscDir0&SDRESC_LEFT)!=0) {
         long nEW=EscDirToAngle(SDRESC_LEFT);
         nEW+=2*(nWink-nEW);
@@ -260,7 +260,7 @@ void SdrGluePoint::Draw(OutputDevice& rOut, const SdrObject* pObj) const
     bool bMapMerk=rOut.IsMapModeEnabled();
     Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
     aPt=rOut.LogicToPixel(aPt);
-    rOut.EnableMapMode(FALSE);
+    rOut.EnableMapMode(sal_False);
     long x=aPt.X(),y=aPt.Y(); // Groesse erstmal fest auf 7 Pixel
 
     rOut.SetLineColor( aBackPenColor );
@@ -295,7 +295,7 @@ void SdrGluePoint::Invalidate(Window& rWin, const SdrObject* pObj) const
     bool bMapMerk=rWin.IsMapModeEnabled();
     Point aPt(pObj!=NULL ? GetAbsolutePos(*pObj) : GetPos());
     aPt=rWin.LogicToPixel(aPt);
-    rWin.EnableMapMode(FALSE);
+    rWin.EnableMapMode(sal_False);
     long x=aPt.X(),y=aPt.Y(); // Groesse erstmal fest auf 7 Pixel
 
     // #111096#
@@ -317,8 +317,8 @@ FASTBOOL SdrGluePoint::IsHit(const Point& rPnt, const OutputDevice& rOut, const 
 
 void SdrGluePointList::Clear()
 {
-    USHORT nAnz=GetCount();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=GetCount();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         delete GetObject(i);
     }
     aList.Clear();
@@ -327,8 +327,8 @@ void SdrGluePointList::Clear()
 void SdrGluePointList::operator=(const SdrGluePointList& rSrcList)
 {
     if (GetCount()!=0) Clear();
-    USHORT nAnz=rSrcList.GetCount();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rSrcList.GetCount();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         Insert(rSrcList[i]);
     }
 }
@@ -336,30 +336,30 @@ void SdrGluePointList::operator=(const SdrGluePointList& rSrcList)
 // Die Id's der Klebepunkte in der Liste sind stets streng monoton steigend!
 // Ggf. wird dem neuen Klebepunkt eine neue Id zugewiesen (wenn diese bereits
 // vergeben ist). Die Id 0 ist reserviert.
-USHORT SdrGluePointList::Insert(const SdrGluePoint& rGP)
+sal_uInt16 SdrGluePointList::Insert(const SdrGluePoint& rGP)
 {
     SdrGluePoint* pGP=new SdrGluePoint(rGP);
-    USHORT nId=pGP->GetId();
-    USHORT nAnz=GetCount();
-    USHORT nInsPos=nAnz;
-    USHORT nLastId=nAnz!=0 ? GetObject(nAnz-1)->GetId() : 0;
+    sal_uInt16 nId=pGP->GetId();
+    sal_uInt16 nAnz=GetCount();
+    sal_uInt16 nInsPos=nAnz;
+    sal_uInt16 nLastId=nAnz!=0 ? GetObject(nAnz-1)->GetId() : 0;
     DBG_ASSERT(nLastId>=nAnz,"SdrGluePointList::Insert(): nLastId<nAnz");
     FASTBOOL bHole=nLastId>nAnz;
     if (nId<=nLastId) {
         if (!bHole || nId==0) {
             nId=nLastId+1;
         } else {
-            FASTBOOL bBrk=FALSE;
-            for (USHORT nNum=0; nNum<nAnz && !bBrk; nNum++) {
+            FASTBOOL bBrk=sal_False;
+            for (sal_uInt16 nNum=0; nNum<nAnz && !bBrk; nNum++) {
                 const SdrGluePoint* pGP2=GetObject(nNum);
-                USHORT nTmpId=pGP2->GetId();
+                sal_uInt16 nTmpId=pGP2->GetId();
                 if (nTmpId==nId) {
                     nId=nLastId+1; // bereits vorhanden
-                    bBrk=TRUE;
+                    bBrk=sal_True;
                 }
                 if (nTmpId>nId) {
                     nInsPos=nNum; // Hier einfuegen (einsortieren)
-                    bBrk=TRUE;
+                    bBrk=sal_True;
                 }
             }
         }
@@ -371,35 +371,35 @@ USHORT SdrGluePointList::Insert(const SdrGluePoint& rGP)
 
 void SdrGluePointList::Invalidate(Window& rWin, const SdrObject* pObj) const
 {
-    USHORT nAnz=GetCount();
-    for (USHORT nNum=0; nNum<nAnz; nNum++) {
+    sal_uInt16 nAnz=GetCount();
+    for (sal_uInt16 nNum=0; nNum<nAnz; nNum++) {
         GetObject(nNum)->Invalidate(rWin,pObj);
     }
 }
 
-USHORT SdrGluePointList::FindGluePoint(USHORT nId) const
+sal_uInt16 SdrGluePointList::FindGluePoint(sal_uInt16 nId) const
 {
     // Hier noch einen optimaleren Suchalgorithmus implementieren.
     // Die Liste sollte stets sortiert sein!!!!
-    USHORT nAnz=GetCount();
-    USHORT nRet=SDRGLUEPOINT_NOTFOUND;
-    for (USHORT nNum=0; nNum<nAnz && nRet==SDRGLUEPOINT_NOTFOUND; nNum++) {
+    sal_uInt16 nAnz=GetCount();
+    sal_uInt16 nRet=SDRGLUEPOINT_NOTFOUND;
+    for (sal_uInt16 nNum=0; nNum<nAnz && nRet==SDRGLUEPOINT_NOTFOUND; nNum++) {
         const SdrGluePoint* pGP=GetObject(nNum);
         if (pGP->GetId()==nId) nRet=nNum;
     }
     return nRet;
 }
 
-USHORT SdrGluePointList::HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj, FASTBOOL bBack, FASTBOOL bNext, USHORT nId0) const
+sal_uInt16 SdrGluePointList::HitTest(const Point& rPnt, const OutputDevice& rOut, const SdrObject* pObj, FASTBOOL bBack, FASTBOOL bNext, sal_uInt16 nId0) const
 {
-    USHORT nAnz=GetCount();
-    USHORT nRet=SDRGLUEPOINT_NOTFOUND;
-    USHORT nNum=bBack ? 0 : nAnz;
+    sal_uInt16 nAnz=GetCount();
+    sal_uInt16 nRet=SDRGLUEPOINT_NOTFOUND;
+    sal_uInt16 nNum=bBack ? 0 : nAnz;
     while ((bBack ? nNum<nAnz : nNum>0) && nRet==SDRGLUEPOINT_NOTFOUND) {
         if (!bBack) nNum--;
         const SdrGluePoint* pGP=GetObject(nNum);
         if (bNext) {
-            if (pGP->GetId()==nId0) bNext=FALSE;
+            if (pGP->GetId()==nId0) bNext=sal_False;
         } else {
             if (pGP->IsHit(rPnt,rOut,pObj)) nRet=nNum;
         }
@@ -410,16 +410,16 @@ USHORT SdrGluePointList::HitTest(const Point& rPnt, const OutputDevice& rOut, co
 
 void SdrGluePointList::SetReallyAbsolute(FASTBOOL bOn, const SdrObject& rObj)
 {
-    USHORT nAnz=GetCount();
-    for (USHORT nNum=0; nNum<nAnz; nNum++) {
+    sal_uInt16 nAnz=GetCount();
+    for (sal_uInt16 nNum=0; nNum<nAnz; nNum++) {
         GetObject(nNum)->SetReallyAbsolute(bOn,rObj);
     }
 }
 
 void SdrGluePointList::Rotate(const Point& rRef, long nWink, double sn, double cs, const SdrObject* pObj)
 {
-    USHORT nAnz=GetCount();
-    for (USHORT nNum=0; nNum<nAnz; nNum++) {
+    sal_uInt16 nAnz=GetCount();
+    for (sal_uInt16 nNum=0; nNum<nAnz; nNum++) {
         GetObject(nNum)->Rotate(rRef,nWink,sn,cs,pObj);
     }
 }
@@ -433,16 +433,16 @@ void SdrGluePointList::Mirror(const Point& rRef1, const Point& rRef2, const SdrO
 
 void SdrGluePointList::Mirror(const Point& rRef1, const Point& rRef2, long nWink, const SdrObject* pObj)
 {
-    USHORT nAnz=GetCount();
-    for (USHORT nNum=0; nNum<nAnz; nNum++) {
+    sal_uInt16 nAnz=GetCount();
+    for (sal_uInt16 nNum=0; nNum<nAnz; nNum++) {
         GetObject(nNum)->Mirror(rRef1,rRef2,nWink,pObj);
     }
 }
 
 void SdrGluePointList::Shear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear, const SdrObject* pObj)
 {
-    USHORT nAnz=GetCount();
-    for (USHORT nNum=0; nNum<nAnz; nNum++) {
+    sal_uInt16 nAnz=GetCount();
+    for (sal_uInt16 nNum=0; nNum<nAnz; nNum++) {
         GetObject(nNum)->Shear(rRef,nWink,tn,bVShear,pObj);
     }
 }
