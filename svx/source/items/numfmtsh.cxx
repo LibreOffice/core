@@ -1840,13 +1840,12 @@ sal_Bool SvxNumberFormatShell::IsInTable(sal_uInt16 nPos,sal_Bool bTmpBanking,co
         if(nPos<nCount)
         {
             NfWSStringsDtor aWSStringsDtor;
-            sal_uInt16 nDefault;
 
             const NfCurrencyEntry* pTmpCurrencyEntry=rCurrencyTable[nPos];
 
             if ( pTmpCurrencyEntry!=NULL)
             {
-                nDefault = pFormatter->GetCurrencyFormatStrings( aWSStringsDtor,
+                pFormatter->GetCurrencyFormatStrings( aWSStringsDtor,
                                 *pTmpCurrencyEntry, bTmpBanking );
 
                 for(sal_uInt16 i=0;i<aWSStringsDtor.Count();i++)
