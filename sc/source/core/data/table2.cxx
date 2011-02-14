@@ -65,12 +65,12 @@
 // STATIC DATA -----------------------------------------------------------
 
 
-BOOL ScTable::SetOutlineTable( const ScOutlineTable* pNewOutline )
+sal_Bool ScTable::SetOutlineTable( const ScOutlineTable* pNewOutline )
 {
-    USHORT nOldSizeX = 0;
-    USHORT nOldSizeY = 0;
-    USHORT nNewSizeX = 0;
-    USHORT nNewSizeY = 0;
+    sal_uInt16 nOldSizeX = 0;
+    sal_uInt16 nOldSizeY = 0;
+    sal_uInt16 nNewSizeX = 0;
+    sal_uInt16 nNewSizeY = 0;
 
     if (pOutlineTable)
     {
@@ -107,22 +107,22 @@ void ScTable::SetSheetEvents( const ScSheetEvents* pNew )
     else
         pSheetEvents = NULL;
 
-    SetCalcNotification( FALSE );       // discard notifications before the events were set
+    SetCalcNotification( sal_False );       // discard notifications before the events were set
 
     if (IsStreamValid())
-        SetStreamValid(FALSE);
+        SetStreamValid(sal_False);
 }
 
 
-void ScTable::SetCalcNotification( BOOL bSet )
+void ScTable::SetCalcNotification( sal_Bool bSet )
 {
     bCalcNotification = bSet;
 }
 
 
-BOOL ScTable::TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCSIZE nSize )
+sal_Bool ScTable::TestInsertRow( SCCOL nStartCol, SCCOL nEndCol, SCSIZE nSize )
 {
-    BOOL bTest = TRUE;
+    sal_Bool bTest = sal_True;
 
     if ( nStartCol==0 && nEndCol==MAXCOL && pOutlineTable )
         bTest = pOutlineTable->TestInsertRow(nSize);
@@ -143,7 +143,7 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         if (mpRowHeights && pRowFlags)
         {
             mpRowHeights->insertSegment(nStartRow, nSize, false);
-            BYTE nNewFlags = pRowFlags->Insert( nStartRow, nSize);
+            sal_uInt8 nNewFlags = pRowFlags->Insert( nStartRow, nSize);
             // only copy manual size flag, clear all others
             if (nNewFlags && (nNewFlags != CR_MANUALSIZE))
                 pRowFlags->SetValue( nStartRow, nStartRow + nSize - 1,
@@ -182,7 +182,7 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
 
 
 void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE nSize,
-                            BOOL* pUndoOutline )
+                            sal_Bool* pUndoOutline )
 {
     IncRecalcLevel();
     InitializeNoteCaptions();
@@ -197,7 +197,7 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         if (pOutlineTable)
             if (pOutlineTable->DeleteRow( nStartRow, nSize ))
                 if (pUndoOutline)
-                    *pUndoOutline = TRUE;
+                    *pUndoOutline = sal_True;
 
         mpFilteredRows->removeSegment(nStartRow, nStartRow+nSize);
         mpHiddenRows->removeSegment(nStartRow, nStartRow+nSize);
@@ -226,15 +226,15 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
 }
 
 
-BOOL ScTable::TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize )
+sal_Bool ScTable::TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize )
 {
-    BOOL bTest = TRUE;
+    sal_Bool bTest = sal_True;
 
     if ( nStartRow==0 && nEndRow==MAXROW && pOutlineTable )
         bTest = pOutlineTable->TestInsertCol(nSize);
 
     if ( nSize > static_cast<SCSIZE>(MAXCOL) )
-        bTest = FALSE;
+        bTest = sal_False;
 
     for (SCCOL i=MAXCOL; (i+static_cast<SCCOL>(nSize)>MAXCOL) && bTest; i--)
         bTest = aCol[i].TestInsertCol(nStartRow, nEndRow);
@@ -294,14 +294,14 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
 
     if (nStartCol>0)                        // copy old attributes
     {
-        USHORT nWhichArray[2];
+        sal_uInt16 nWhichArray[2];
         nWhichArray[0] = ATTR_MERGE;
         nWhichArray[1] = 0;
 
         for (SCSIZE i=0; i<nSize; i++)
         {
             aCol[nStartCol-1].CopyToColumn( nStartRow, nEndRow, IDF_ATTRIB,
-                                                FALSE, aCol[nStartCol+i] );
+                                                sal_False, aCol[nStartCol+i] );
             aCol[nStartCol+i].RemoveFlags( nStartRow, nEndRow,
                                                 SC_MF_HOR | SC_MF_VER | SC_MF_AUTO );
             aCol[nStartCol+i].ClearItems( nStartRow, nEndRow, nWhichArray );
@@ -314,7 +314,7 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
 
 
 void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize,
-                            BOOL* pUndoOutline )
+                            sal_Bool* pUndoOutline )
 {
     IncRecalcLevel();
     InitializeNoteCaptions();
@@ -330,7 +330,7 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
         if (pOutlineTable)
             if (pOutlineTable->DeleteCol( nStartCol, nSize ))
                 if (pUndoOutline)
-                    *pUndoOutline = TRUE;
+                    *pUndoOutline = sal_True;
 
         SCCOL nRmSize = nStartCol + static_cast<SCCOL>(nSize);
         mpHiddenCols->removeSegment(nStartCol, nRmSize);
@@ -373,7 +373,7 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
 }
 
 
-void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nDelFlag)
+void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal_uInt16 nDelFlag)
 {
     if (nCol2 > MAXCOL) nCol2 = MAXCOL;
     if (nRow2 > MAXROW) nRow2 = MAXROW;
@@ -394,7 +394,7 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USH
         if ( IsProtected() && (nDelFlag & IDF_ATTRIB) )
         {
             ScPatternAttr aPattern(pDocument->GetPool());
-            aPattern.GetItemSet().Put( ScProtectionAttr( FALSE ) );
+            aPattern.GetItemSet().Put( ScProtectionAttr( sal_False ) );
             ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
         }
 
@@ -403,7 +403,7 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USH
 }
 
 
-void ScTable::DeleteSelection( USHORT nDelFlag, const ScMarkData& rMark )
+void ScTable::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark )
 {
     {   // scope for bulk broadcast
         ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM());
@@ -419,7 +419,7 @@ void ScTable::DeleteSelection( USHORT nDelFlag, const ScMarkData& rMark )
     {
         ScDocumentPool* pPool = pDocument->GetPool();
         SfxItemSet aSet( *pPool, ATTR_PATTERN_START, ATTR_PATTERN_END );
-        aSet.Put( ScProtectionAttr( FALSE ) );
+        aSet.Put( ScProtectionAttr( sal_False ) );
         SfxItemPoolCache aCache( pPool, &aSet );
         ApplySelectionCache( &aCache, rMark );
     }
@@ -428,7 +428,7 @@ void ScTable::DeleteSelection( USHORT nDelFlag, const ScMarkData& rMark )
 
 //  pTable = Clipboard
 void ScTable::CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                        ScTable* pTable, BOOL bKeepScenarioFlags, BOOL bCloneNoteCaptions)
+                        ScTable* pTable, sal_Bool bKeepScenarioFlags, sal_Bool bCloneNoteCaptions)
 {
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
@@ -477,8 +477,8 @@ void ScTable::CopyToClip(const ScRangeList& rRanges, ScTable* pTable,
 }
 
 void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            SCsCOL nDx, SCsROW nDy, USHORT nInsFlag,
-                            BOOL bAsLink, BOOL bSkipAttrForEmpty, ScTable* pTable)
+                            SCsCOL nDx, SCsROW nDy, sal_uInt16 nInsFlag,
+                            sal_Bool bAsLink, sal_Bool bSkipAttrForEmpty, ScTable* pTable)
 {
     SCCOL i;
 
@@ -506,7 +506,7 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     if ( pTable->pRowFlags->GetValue(j-nDy) & CR_MANUALSIZE )
                         pRowFlags->OrValue( j, CR_MANUALSIZE);
                     else
-                        pRowFlags->AndValue( j, sal::static_int_cast<BYTE>(~CR_MANUALSIZE));
+                        pRowFlags->AndValue( j, sal::static_int_cast<sal_uInt8>(~CR_MANUALSIZE));
                 }
             }
 
@@ -517,7 +517,7 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             if ( IsProtected() && (nInsFlag & IDF_ATTRIB) )
             {
                 ScPatternAttr aPattern(pDocument->GetPool());
-                aPattern.GetItemSet().Put( ScProtectionAttr( FALSE ) );
+                aPattern.GetItemSet().Put( ScProtectionAttr( sal_False ) );
                 ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
             }
         }
@@ -527,7 +527,7 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
 
 void ScTable::MixData( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            USHORT nFunction, BOOL bSkipEmpty, ScTable* pSrcTab )
+                            sal_uInt16 nFunction, sal_Bool bSkipEmpty, ScTable* pSrcTab )
 {
     for (SCCOL i=nCol1; i<=nCol2; i++)
         aCol[i].MixData( nRow1, nRow2, nFunction, bSkipEmpty, pSrcTab->aCol[i] );
@@ -535,8 +535,8 @@ void ScTable::MixData( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
 
 //  Markierung von diesem Dokument
-void ScTable::MixMarked( const ScMarkData& rMark, USHORT nFunction,
-                        BOOL bSkipEmpty, ScTable* pSrcTab )
+void ScTable::MixMarked( const ScMarkData& rMark, sal_uInt16 nFunction,
+                        sal_Bool bSkipEmpty, ScTable* pSrcTab )
 {
     for (SCCOL i=0; i<=MAXCOL; i++)
         aCol[i].MixMarked( rMark, nFunction, bSkipEmpty, pSrcTab->aCol[i] );
@@ -544,9 +544,9 @@ void ScTable::MixMarked( const ScMarkData& rMark, USHORT nFunction,
 
 
 void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                ScTable* pTransClip, USHORT nFlags, BOOL bAsLink )
+                                ScTable* pTransClip, sal_uInt16 nFlags, sal_Bool bAsLink )
 {
-    BOOL bWasCut = pDocument->IsCutMode();
+    sal_Bool bWasCut = pDocument->IsCutMode();
 
     ScDocument* pDestDoc = pTransClip->pDocument;
 
@@ -569,7 +569,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 aRef.nRow = nRow;
                 aRef.nTab = nTab;
                 aRef.InitFlags();                           // -> all absolute
-                aRef.SetFlag3D(TRUE);
+                aRef.SetFlag3D(sal_True);
                 aRef.CalcRelFromAbs( aDestPos );
                 ScTokenArray aArr;
                 aArr.AddSingleReference( aRef );
@@ -622,13 +622,13 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             if ( !IsDefaultItem( pPattern ) )
             {
                 const SfxItemSet& rSet = pPattern->GetItemSet();
-                if ( rSet.GetItemState( ATTR_MERGE, FALSE ) == SFX_ITEM_DEFAULT &&
-                     rSet.GetItemState( ATTR_MERGE_FLAG, FALSE ) == SFX_ITEM_DEFAULT &&
-                     rSet.GetItemState( ATTR_BORDER, FALSE ) == SFX_ITEM_DEFAULT )
+                if ( rSet.GetItemState( ATTR_MERGE, sal_False ) == SFX_ITEM_DEFAULT &&
+                     rSet.GetItemState( ATTR_MERGE_FLAG, sal_False ) == SFX_ITEM_DEFAULT &&
+                     rSet.GetItemState( ATTR_BORDER, sal_False ) == SFX_ITEM_DEFAULT )
                 {
                     // no borders or merge items involved - use pattern as-is
                     for (nRow = nAttrRow1; nRow<=nAttrRow2; nRow++)
-                        pTransClip->SetPattern( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), *pPattern, TRUE );
+                        pTransClip->SetPattern( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), *pPattern, sal_True );
                 }
                 else
                 {
@@ -662,7 +662,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     const ScMergeFlagAttr& rOldFlag = (const ScMergeFlagAttr&)rSet.Get(ATTR_MERGE_FLAG);
                     if (rOldFlag.IsOverlapped())
                     {
-                        INT16 nNewFlags = rOldFlag.GetValue() & ~( SC_MF_HOR | SC_MF_VER );
+                        sal_Int16 nNewFlags = rOldFlag.GetValue() & ~( SC_MF_HOR | SC_MF_VER );
                         if ( nNewFlags )
                             rNewSet.Put( ScMergeFlagAttr( nNewFlags ) );
                         else
@@ -671,7 +671,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
                     for (nRow = nAttrRow1; nRow<=nAttrRow2; nRow++)
                         pTransClip->SetPattern( static_cast<SCCOL>(nRow-nRow1),
-                                static_cast<SCROW>(nCol-nCol1), aNewPattern, TRUE);
+                                static_cast<SCROW>(nCol-nCol1), aNewPattern, sal_True);
                 }
             }
         }
@@ -718,9 +718,9 @@ void ScTable::StartListeningInArea( SCCOL nCol1, SCROW nRow1,
 
 
 void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            USHORT nFlags, BOOL bMarked, ScTable* pDestTab,
+                            sal_uInt16 nFlags, sal_Bool bMarked, ScTable* pDestTab,
                             const ScMarkData* pMarkData,
-                            BOOL bAsLink, BOOL bColRowFlags)
+                            sal_Bool bAsLink, sal_Bool bColRowFlags)
 {
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
@@ -736,8 +736,8 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
             bool bFlagChange = false;
 
-            BOOL bWidth  = (nRow1==0 && nRow2==MAXROW && pColWidth && pDestTab->pColWidth);
-            BOOL bHeight = (nCol1==0 && nCol2==MAXCOL && mpRowHeights && pDestTab->mpRowHeights);
+            sal_Bool bWidth  = (nRow1==0 && nRow2==MAXROW && pColWidth && pDestTab->pColWidth);
+            sal_Bool bHeight = (nCol1==0 && nCol2==MAXCOL && mpRowHeights && pDestTab->mpRowHeights);
 
             if (bWidth||bHeight)
             {
@@ -845,13 +845,13 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
 
 void ScTable::UndoToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            USHORT nFlags, BOOL bMarked, ScTable* pDestTab,
+                            sal_uInt16 nFlags, sal_Bool bMarked, ScTable* pDestTab,
                             const ScMarkData* pMarkData)
 {
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
-        BOOL bWidth  = (nRow1==0 && nRow2==MAXROW && pColWidth && pDestTab->pColWidth);
-        BOOL bHeight = (nCol1==0 && nCol2==MAXCOL && mpRowHeights && pDestTab->mpRowHeights);
+        sal_Bool bWidth  = (nRow1==0 && nRow2==MAXROW && pColWidth && pDestTab->pColWidth);
+        sal_Bool bHeight = (nCol1==0 && nCol2==MAXCOL && mpRowHeights && pDestTab->mpRowHeights);
 
         if (bWidth||bHeight)
             IncRecalcLevel();
@@ -862,7 +862,7 @@ void ScTable::UndoToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 aCol[i].UndoToColumn(nRow1, nRow2, nFlags, bMarked, pDestTab->aCol[i],
                                         pMarkData);
             else
-                aCol[i].CopyToColumn(0, MAXROW, IDF_FORMULA, FALSE, pDestTab->aCol[i]);
+                aCol[i].CopyToColumn(0, MAXROW, IDF_FORMULA, sal_False, pDestTab->aCol[i]);
         }
 
         if (bWidth||bHeight)
@@ -892,7 +892,7 @@ void ScTable::CopyUpdated( const ScTable* pPosTab, ScTable* pDestTab ) const
 
 void ScTable::InvalidateTableArea()
 {
-    bTableAreaValid = FALSE;
+    bTableAreaValid = sal_False;
 }
 
 void ScTable::InvalidatePageBreaks()
@@ -916,7 +916,7 @@ void ScTable::CopyScenarioFrom( const ScTable* pSrcTab )
         aCol[i].CopyScenarioFrom( pSrcTab->aCol[i] );
 }
 
-void ScTable::MarkScenarioIn( ScMarkData& rDestMark, USHORT nNeededBits ) const
+void ScTable::MarkScenarioIn( ScMarkData& rDestMark, sal_uInt16 nNeededBits ) const
 {
     DBG_ASSERT( bScenario, "bScenario == FALSE" );
 
@@ -927,7 +927,7 @@ void ScTable::MarkScenarioIn( ScMarkData& rDestMark, USHORT nNeededBits ) const
         aCol[i].MarkScenarioIn( rDestMark );
 }
 
-BOOL ScTable::HasScenarioRange( const ScRange& rRange ) const
+sal_Bool ScTable::HasScenarioRange( const ScRange& rRange ) const
 {
     DBG_ASSERT( bScenario, "bScenario == FALSE" );
 
@@ -944,16 +944,16 @@ BOOL ScTable::HasScenarioRange( const ScRange& rRange ) const
 
     if (pList)
     {
-        ULONG nCount = pList->Count();
-        for ( ULONG j = 0; j < nCount; j++ )
+        sal_uLong nCount = pList->Count();
+        for ( sal_uLong j = 0; j < nCount; j++ )
         {
             ScRange* pR = pList->GetObject( j );
             if ( pR->Intersects( aTabRange ) )
-                return TRUE;
+                return sal_True;
         }
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 void ScTable::InvalidateScenarioRanges()
@@ -971,19 +971,19 @@ const ScRangeList* ScTable::GetScenarioRanges() const
         ((ScTable*)this)->pScenarioRanges = new ScRangeList;
         ScMarkData aMark;
         MarkScenarioIn( aMark, 0 );     // immer
-        aMark.FillRangeListWithMarks( pScenarioRanges, FALSE );
+        aMark.FillRangeListWithMarks( pScenarioRanges, sal_False );
     }
     return pScenarioRanges;
 }
 
-BOOL ScTable::TestCopyScenarioTo( const ScTable* pDestTab ) const
+sal_Bool ScTable::TestCopyScenarioTo( const ScTable* pDestTab ) const
 {
     DBG_ASSERT( bScenario, "bScenario == FALSE" );
 
     if (!pDestTab->IsProtected())
-        return TRUE;
+        return sal_True;
 
-    BOOL bOk = TRUE;
+    sal_Bool bOk = sal_True;
     for (SCCOL i=0; i<=MAXCOL && bOk; i++)
         bOk = aCol[i].TestCopyScenarioTo( pDestTab->aCol[i] );
     return bOk;
@@ -1001,7 +1001,7 @@ void ScTable::PutCell( SCCOL nCol, SCROW nRow, ScBaseCell* pCell )
 }
 
 
-void ScTable::PutCell( SCCOL nCol, SCROW nRow, ULONG nFormatIndex, ScBaseCell* pCell )
+void ScTable::PutCell( SCCOL nCol, SCROW nRow, sal_uLong nFormatIndex, ScBaseCell* pCell )
 {
     if (ValidColRow(nCol,nRow))
     {
@@ -1022,7 +1022,7 @@ void ScTable::PutCell( const ScAddress& rPos, ScBaseCell* pCell )
 }
 
 
-//UNUSED2009-05 void ScTable::PutCell( const ScAddress& rPos, ULONG nFormatIndex, ScBaseCell* pCell )
+//UNUSED2009-05 void ScTable::PutCell( const ScAddress& rPos, sal_uLong nFormatIndex, ScBaseCell* pCell )
 //UNUSED2009-05 {
 //UNUSED2009-05     if (pCell)
 //UNUSED2009-05         aCol[rPos.Col()].Insert( rPos.Row(), nFormatIndex, pCell );
@@ -1031,14 +1031,14 @@ void ScTable::PutCell( const ScAddress& rPos, ScBaseCell* pCell )
 //UNUSED2009-05 }
 
 
-BOOL ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const String& rString,
+sal_Bool ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const String& rString,
                          SvNumberFormatter* pFormatter, bool bDetectNumberFormat )
 {
     if (ValidColRow(nCol,nRow))
         return aCol[nCol].SetString(
             nRow, nTabP, rString, pDocument->GetAddressConvention(), pFormatter, bDetectNumberFormat );
     else
-        return FALSE;
+        return sal_False;
 }
 
 
@@ -1076,7 +1076,7 @@ double ScTable::GetValue( SCCOL nCol, SCROW nRow )
 
 
 void ScTable::GetFormula( SCCOL nCol, SCROW nRow, String& rFormula,
-                          BOOL bAsciiExport )
+                          sal_Bool bAsciiExport )
 {
     if (ValidColRow(nCol,nRow))
         aCol[nCol].GetFormula( nRow, rFormula, bAsciiExport );
@@ -1176,46 +1176,46 @@ void ScTable::GetLastDataPos(SCCOL& rCol, SCROW& rRow) const
 }
 
 
-BOOL ScTable::HasData( SCCOL nCol, SCROW nRow )
+sal_Bool ScTable::HasData( SCCOL nCol, SCROW nRow )
 {
     if (ValidColRow(nCol,nRow))
         return aCol[nCol].HasDataAt( nRow );
     else
-        return FALSE;
+        return sal_False;
 }
 
 
-BOOL ScTable::HasStringData( SCCOL nCol, SCROW nRow )
+sal_Bool ScTable::HasStringData( SCCOL nCol, SCROW nRow )
 {
     if (ValidColRow(nCol,nRow))
         return aCol[nCol].HasStringData( nRow );
     else
-        return FALSE;
+        return sal_False;
 }
 
 
-BOOL ScTable::HasValueData( SCCOL nCol, SCROW nRow )
+sal_Bool ScTable::HasValueData( SCCOL nCol, SCROW nRow )
 {
     if (ValidColRow(nCol,nRow))
         return aCol[nCol].HasValueData( nRow );
     else
-        return FALSE;
+        return sal_False;
 }
 
 
-BOOL ScTable::HasStringCells( SCCOL nStartCol, SCROW nStartRow,
+sal_Bool ScTable::HasStringCells( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow ) const
 {
     if ( ValidCol(nEndCol) )
         for ( SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++ )
             if (aCol[nCol].HasStringCells(nStartRow, nEndRow))
-                return TRUE;
+                return sal_True;
 
-    return FALSE;
+    return sal_False;
 }
 
 
-//UNUSED2008-05  USHORT ScTable::GetErrCode( SCCOL nCol, SCROW nRow ) const
+//UNUSED2008-05  sal_uInt16 ScTable::GetErrCode( SCCOL nCol, SCROW nRow ) const
 //UNUSED2008-05  {
 //UNUSED2008-05      if (ValidColRow( nCol, nRow ))
 //UNUSED2008-05          return aCol[nCol].GetErrCode( nRow );
@@ -1232,8 +1232,8 @@ void ScTable::SetDirtyVar()
 
 void ScTable::SetDirty()
 {
-    BOOL bOldAutoCalc = pDocument->GetAutoCalc();
-    pDocument->SetAutoCalc( FALSE );    // Mehrfachberechnungen vermeiden
+    sal_Bool bOldAutoCalc = pDocument->GetAutoCalc();
+    pDocument->SetAutoCalc( sal_False );    // Mehrfachberechnungen vermeiden
     for (SCCOL i=0; i<=MAXCOL; i++)
         aCol[i].SetDirty();
     pDocument->SetAutoCalc( bOldAutoCalc );
@@ -1242,8 +1242,8 @@ void ScTable::SetDirty()
 
 void ScTable::SetDirty( const ScRange& rRange )
 {
-    BOOL bOldAutoCalc = pDocument->GetAutoCalc();
-    pDocument->SetAutoCalc( FALSE );    // Mehrfachberechnungen vermeiden
+    sal_Bool bOldAutoCalc = pDocument->GetAutoCalc();
+    pDocument->SetAutoCalc( sal_False );    // Mehrfachberechnungen vermeiden
     SCCOL nCol2 = rRange.aEnd.Col();
     for (SCCOL i=rRange.aStart.Col(); i<=nCol2; i++)
         aCol[i].SetDirty( rRange );
@@ -1253,8 +1253,8 @@ void ScTable::SetDirty( const ScRange& rRange )
 
 void ScTable::SetTableOpDirty( const ScRange& rRange )
 {
-    BOOL bOldAutoCalc = pDocument->GetAutoCalc();
-    pDocument->SetAutoCalc( FALSE );    // no multiple recalculation
+    sal_Bool bOldAutoCalc = pDocument->GetAutoCalc();
+    pDocument->SetAutoCalc( sal_False );    // no multiple recalculation
     SCCOL nCol2 = rRange.aEnd.Col();
     for (SCCOL i=rRange.aStart.Col(); i<=nCol2; i++)
         aCol[i].SetTableOpDirty( rRange );
@@ -1264,8 +1264,8 @@ void ScTable::SetTableOpDirty( const ScRange& rRange )
 
 void ScTable::SetDirtyAfterLoad()
 {
-    BOOL bOldAutoCalc = pDocument->GetAutoCalc();
-    pDocument->SetAutoCalc( FALSE );    // Mehrfachberechnungen vermeiden
+    sal_Bool bOldAutoCalc = pDocument->GetAutoCalc();
+    pDocument->SetAutoCalc( sal_False );    // Mehrfachberechnungen vermeiden
     for (SCCOL i=0; i<=MAXCOL; i++)
         aCol[i].SetDirtyAfterLoad();
     pDocument->SetAutoCalc( bOldAutoCalc );
@@ -1274,8 +1274,8 @@ void ScTable::SetDirtyAfterLoad()
 
 void ScTable::SetRelNameDirty()
 {
-    BOOL bOldAutoCalc = pDocument->GetAutoCalc();
-    pDocument->SetAutoCalc( FALSE );    // Mehrfachberechnungen vermeiden
+    sal_Bool bOldAutoCalc = pDocument->GetAutoCalc();
+    pDocument->SetAutoCalc( sal_False );    // Mehrfachberechnungen vermeiden
     for (SCCOL i=0; i<=MAXCOL; i++)
         aCol[i].SetRelNameDirty();
     pDocument->SetAutoCalc( bOldAutoCalc );
@@ -1332,7 +1332,7 @@ void ScTable::ResetChanged( const ScRange& rRange )
 
 //  Attribute
 
-const SfxPoolItem* ScTable::GetAttr( SCCOL nCol, SCROW nRow, USHORT nWhich ) const
+const SfxPoolItem* ScTable::GetAttr( SCCOL nCol, SCROW nRow, sal_uInt16 nWhich ) const
 {
     if (ValidColRow(nCol,nRow))
         return aCol[nCol].GetAttr( nRow, nWhich );
@@ -1341,7 +1341,7 @@ const SfxPoolItem* ScTable::GetAttr( SCCOL nCol, SCROW nRow, USHORT nWhich ) con
 }
 
 
-ULONG ScTable::GetNumberFormat( SCCOL nCol, SCROW nRow ) const
+sal_uLong ScTable::GetNumberFormat( SCCOL nCol, SCROW nRow ) const
 {
     if (ValidColRow(nCol,nRow))
         return aCol[nCol].GetNumberFormat( nRow );
@@ -1371,7 +1371,7 @@ const ScPatternAttr* ScTable::GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, S
 }
 
 
-bool ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USHORT nMask ) const
+bool ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal_uInt16 nMask ) const
 {
     bool bFound = false;
     for (SCCOL i=nCol1; i<=nCol2 && !bFound; i++)
@@ -1380,7 +1380,7 @@ bool ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USH
 }
 
 
-//UNUSED2009-05 BOOL ScTable::HasLines( const ScRange& rRange, Rectangle& rSizes ) const
+//UNUSED2009-05 sal_Bool ScTable::HasLines( const ScRange& rRange, Rectangle& rSizes ) const
 //UNUSED2009-05 {
 //UNUSED2009-05     SCCOL nCol1 = rRange.aStart.Col();
 //UNUSED2009-05     SCROW nRow1 = rRange.aStart.Row();
@@ -1389,34 +1389,34 @@ bool ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, USH
 //UNUSED2009-05     PutInOrder( nCol1, nCol2 );
 //UNUSED2009-05     PutInOrder( nRow1, nRow2 );
 //UNUSED2009-05
-//UNUSED2009-05     BOOL bFound = FALSE;
+//UNUSED2009-05     sal_Bool bFound = sal_False;
 //UNUSED2009-05     for (SCCOL i=nCol1; i<=nCol2; i++)
 //UNUSED2009-05         if (aCol[i].HasLines( nRow1, nRow2, rSizes, (i==nCol1), (i==nCol2) ))
-//UNUSED2009-05             bFound = TRUE;
+//UNUSED2009-05             bFound = sal_True;
 //UNUSED2009-05
 //UNUSED2009-05     return bFound;
 //UNUSED2009-05 }
 
 
-BOOL ScTable::HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const
+sal_Bool ScTable::HasAttribSelection( const ScMarkData& rMark, sal_uInt16 nMask ) const
 {
-    BOOL bFound=FALSE;
+    sal_Bool bFound=sal_False;
     for (SCCOL i=0; i<=MAXCOL && !bFound; i++)
         bFound |= aCol[i].HasAttribSelection( rMark, nMask );
     return bFound;
 }
 
 
-BOOL ScTable::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
+sal_Bool ScTable::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                            SCCOL& rEndCol, SCROW& rEndRow,
-                           BOOL bRefresh, BOOL bAttrs )
+                           sal_Bool bRefresh, sal_Bool bAttrs )
 {
     if (!(ValidCol(nStartCol) && ValidCol(rEndCol)))
     {
         DBG_ERRORFILE("ScTable::ExtendMerge: invalid column number");
-        return FALSE;
+        return sal_False;
     }
-    BOOL bFound=FALSE;
+    sal_Bool bFound=sal_False;
     SCCOL nOldEndX = rEndCol;
     SCROW nOldEndY = rEndRow;
     for (SCCOL i=nStartCol; i<=nOldEndX; i++)
@@ -1425,14 +1425,14 @@ BOOL ScTable::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
 }
 
 
-BOOL ScTable::IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bIgnoreNotes ) const
+sal_Bool ScTable::IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bIgnoreNotes ) const
 {
     if (!(ValidCol(nCol1) && ValidCol(nCol2)))
     {
         DBG_ERRORFILE("ScTable::IsBlockEmpty: invalid column number");
-        return FALSE;
+        return sal_False;
     }
-    BOOL bEmpty = TRUE;
+    sal_Bool bEmpty = sal_True;
     for (SCCOL i=nCol1; i<=nCol2 && bEmpty; i++)
         bEmpty = aCol[i].IsEmptyBlock( nRow1, nRow2, bIgnoreNotes );
     return bEmpty;
@@ -1444,10 +1444,10 @@ SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCO
 {
     //  Rueckgabe = neues nArrY
 
-    BYTE nRotDir = pPattern->GetRotateDir( pCondSet );
+    sal_uInt8 nRotDir = pPattern->GetRotateDir( pCondSet );
     if ( nRotDir != SC_ROTDIR_NONE )
     {
-        BOOL bHit = TRUE;
+        sal_Bool bHit = sal_True;
         if ( nCol+1 < nX1 )                             // column to the left
             bHit = ( nRotDir != SC_ROTDIR_LEFT );
         else if ( nCol > nX2+1 )                        // column to the right
@@ -1475,7 +1475,7 @@ SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCO
             {
                 if (!RowHidden(nRow))
                 {
-                    BOOL bHitOne = TRUE;
+                    sal_Bool bHitOne = sal_True;
                     if ( nCol > nX2+1 )
                     {
                         // reicht die gedrehte Zelle bis in den sichtbaren Bereich?
@@ -1489,7 +1489,7 @@ SCSIZE ScTable::FillMaxRot( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCCO
                             nWidth += GetColWidth( nTouchedCol );
                         }
                         if ( nTouchedCol > nX2 )
-                            bHitOne = FALSE;
+                            bHitOne = sal_False;
                     }
 
                     if (bHitOne)
@@ -1532,13 +1532,13 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
             while ( pPattern )
             {
                 const SfxPoolItem* pCondItem;
-                if ( pPattern->GetItemSet().GetItemState( ATTR_CONDITIONAL, TRUE, &pCondItem )
+                if ( pPattern->GetItemSet().GetItemState( ATTR_CONDITIONAL, sal_True, &pCondItem )
                         == SFX_ITEM_SET )
                 {
                     //  alle Formate durchgehen, damit die Zellen nicht einzeln
                     //  angeschaut werden muessen
 
-                    ULONG nIndex = ((const SfxUInt32Item*)pCondItem)->GetValue();
+                    sal_uLong nIndex = ((const SfxUInt32Item*)pCondItem)->GetValue();
                     ScConditionalFormatList* pList = pDocument->GetCondFormList();
                     ScStyleSheetPool* pStylePool = pDocument->GetStyleSheetPool();
                     if (pList && pStylePool && nIndex)
@@ -1546,8 +1546,8 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
                         const ScConditionalFormat* pFormat = pList->GetFormat(nIndex);
                         if ( pFormat )
                         {
-                            USHORT nEntryCount = pFormat->Count();
-                            for (USHORT nEntry=0; nEntry<nEntryCount; nEntry++)
+                            sal_uInt16 nEntryCount = pFormat->Count();
+                            for (sal_uInt16 nEntry=0; nEntry<nEntryCount; nEntry++)
                             {
                                 String aStyleName = pFormat->GetEntry(nEntry)->GetStyle();
                                 if (aStyleName.Len())
@@ -1577,62 +1577,62 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
     }
 }
 
-BOOL ScTable::HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
+sal_Bool ScTable::HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
 {
     // nix:0, mitte:1, unten:2, links:4, oben:8, rechts:16, offen:32
-    USHORT nEdges;
+    sal_uInt16 nEdges;
 
     if ( nCol1 == nCol2 )
     {   // linke und rechte Spalte
-        const USHORT n = 4 | 16;
+        const sal_uInt16 n = 4 | 16;
         nEdges = aCol[nCol1].GetBlockMatrixEdges( nRow1, nRow2, n );
         // nicht (4 und 16) oder 1 oder 32
         if ( nEdges && (((nEdges & n) != n) || (nEdges & 33)) )
-            return TRUE;        // linke oder rechte Kante fehlt oder offen
+            return sal_True;        // linke oder rechte Kante fehlt oder offen
     }
     else
     {   // linke Spalte
         nEdges = aCol[nCol1].GetBlockMatrixEdges( nRow1, nRow2, 4 );
         // nicht 4 oder 1 oder 32
         if ( nEdges && (((nEdges & 4) != 4) || (nEdges & 33)) )
-            return TRUE;        // linke Kante fehlt oder offen
+            return sal_True;        // linke Kante fehlt oder offen
         // rechte Spalte
         nEdges = aCol[nCol2].GetBlockMatrixEdges( nRow1, nRow2, 16 );
         // nicht 16 oder 1 oder 32
         if ( nEdges && (((nEdges & 16) != 16) || (nEdges & 33)) )
-            return TRUE;        // rechte Kante fehlt oder offen
+            return sal_True;        // rechte Kante fehlt oder offen
     }
 
     if ( nRow1 == nRow2 )
     {   // obere und untere Zeile
-        BOOL bOpen = FALSE;
-        const USHORT n = 2 | 8;
+        sal_Bool bOpen = sal_False;
+        const sal_uInt16 n = 2 | 8;
         for ( SCCOL i=nCol1; i<=nCol2; i++)
         {
             nEdges = aCol[i].GetBlockMatrixEdges( nRow1, nRow1, n );
             if ( nEdges )
             {
                 if ( (nEdges & n) != n )
-                    return TRUE;        // obere oder untere Kante fehlt
+                    return sal_True;        // obere oder untere Kante fehlt
                 if ( nEdges & 4 )
-                    bOpen = TRUE;       // linke Kante oeffnet, weitersehen
+                    bOpen = sal_True;       // linke Kante oeffnet, weitersehen
                 else if ( !bOpen )
-                    return TRUE;        // es gibt was, was nicht geoeffnet wurde
+                    return sal_True;        // es gibt was, was nicht geoeffnet wurde
                 if ( nEdges & 16 )
-                    bOpen = FALSE;      // rechte Kante schliesst
+                    bOpen = sal_False;      // rechte Kante schliesst
             }
         }
         if ( bOpen )
-            return TRUE;                // es geht noch weiter
+            return sal_True;                // es geht noch weiter
     }
     else
     {
-        USHORT j, n;
+        sal_uInt16 j, n;
         SCROW nR;
         // erst obere Zeile, dann untere Zeile
         for ( j=0, nR=nRow1, n=8; j<2; j++, nR=nRow2, n=2 )
         {
-            BOOL bOpen = FALSE;
+            sal_Bool bOpen = sal_False;
             for ( SCCOL i=nCol1; i<=nCol2; i++)
             {
                 nEdges = aCol[i].GetBlockMatrixEdges( nR, nR, n );
@@ -1641,61 +1641,61 @@ BOOL ScTable::HasBlockMatrixFragment( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCR
                     // in oberere Zeile keine obere Kante bzw.
                     // in unterer Zeile keine untere Kante
                     if ( (nEdges & n) != n )
-                        return TRUE;
+                        return sal_True;
                     if ( nEdges & 4 )
-                        bOpen = TRUE;       // linke Kante oeffnet, weitersehen
+                        bOpen = sal_True;       // linke Kante oeffnet, weitersehen
                     else if ( !bOpen )
-                        return TRUE;        // es gibt was, was nicht geoeffnet wurde
+                        return sal_True;        // es gibt was, was nicht geoeffnet wurde
                     if ( nEdges & 16 )
-                        bOpen = FALSE;      // rechte Kante schliesst
+                        bOpen = sal_False;      // rechte Kante schliesst
                 }
             }
             if ( bOpen )
-                return TRUE;                // es geht noch weiter
+                return sal_True;                // es geht noch weiter
         }
     }
-    return FALSE;
+    return sal_False;
 }
 
 
-BOOL ScTable::HasSelectionMatrixFragment( const ScMarkData& rMark ) const
+sal_Bool ScTable::HasSelectionMatrixFragment( const ScMarkData& rMark ) const
 {
-    BOOL bFound=FALSE;
+    sal_Bool bFound=sal_False;
     for (SCCOL i=0; i<=MAXCOL && !bFound; i++)
         bFound |= aCol[i].HasSelectionMatrixFragment(rMark);
     return bFound;
 }
 
 
-BOOL ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
-            SCROW nRow2, BOOL* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
+sal_Bool ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
+            SCROW nRow2, sal_Bool* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
 {
     if ( !ValidColRow( nCol2, nRow2 ) )
     {
         DBG_ERRORFILE("IsBlockEditable: invalid column or row");
         if (pOnlyNotBecauseOfMatrix)
-            *pOnlyNotBecauseOfMatrix = FALSE;
-        return FALSE;
+            *pOnlyNotBecauseOfMatrix = sal_False;
+        return sal_False;
     }
 
-    BOOL bIsEditable = TRUE;
+    sal_Bool bIsEditable = sal_True;
     if ( nLockCount )
-        bIsEditable = FALSE;
+        bIsEditable = sal_False;
     else if ( IsProtected() && !pDocument->IsScenario(nTab) )
     {
-        if((bIsEditable = !HasAttrib( nCol1, nRow1, nCol2, nRow2, HASATTR_PROTECTED )) != FALSE)
+        if((bIsEditable = !HasAttrib( nCol1, nRow1, nCol2, nRow2, HASATTR_PROTECTED )) != sal_False)
         {
             // If Sheet is protected and cells are not protected then
             // check the active scenario protect flag if this range is
             // on the active scenario range. Note the 'copy back' must also
             // be set to apply protection.
-            USHORT nScenTab = nTab+1;
+            sal_uInt16 nScenTab = nTab+1;
             while(pDocument->IsScenario(nScenTab))
             {
                 ScRange aEditRange(nCol1, nRow1, nScenTab, nCol2, nRow2, nScenTab);
                 if(pDocument->IsActiveScenario(nScenTab) && pDocument->HasScenarioRange(nScenTab, aEditRange))
                 {
-                    USHORT nFlags;
+                    sal_uInt16 nFlags;
                     pDocument->GetScenarioFlags(nScenTab,nFlags);
                     bIsEditable = !((nFlags & SC_SCENARIO_PROTECT) && (nFlags & SC_SCENARIO_TWOWAY));
                     break;
@@ -1719,7 +1719,7 @@ BOOL ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
             ScRange aEditRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab);
             if(pDocument->HasScenarioRange(nTab, aEditRange))
             {
-                USHORT nFlags;
+                sal_uInt16 nFlags;
                 pDocument->GetScenarioFlags(nTab,nFlags);
                 bIsEditable = !(nFlags & SC_SCENARIO_PROTECT);
             }
@@ -1729,46 +1729,46 @@ BOOL ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
     {
         if ( HasBlockMatrixFragment( nCol1, nRow1, nCol2, nRow2 ) )
         {
-            bIsEditable = FALSE;
+            bIsEditable = sal_False;
             if ( pOnlyNotBecauseOfMatrix )
-                *pOnlyNotBecauseOfMatrix = TRUE;
+                *pOnlyNotBecauseOfMatrix = sal_True;
         }
         else if ( pOnlyNotBecauseOfMatrix )
-            *pOnlyNotBecauseOfMatrix = FALSE;
+            *pOnlyNotBecauseOfMatrix = sal_False;
     }
     else if ( pOnlyNotBecauseOfMatrix )
-        *pOnlyNotBecauseOfMatrix = FALSE;
+        *pOnlyNotBecauseOfMatrix = sal_False;
     return bIsEditable;
 }
 
 
-BOOL ScTable::IsSelectionEditable( const ScMarkData& rMark,
-            BOOL* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
+sal_Bool ScTable::IsSelectionEditable( const ScMarkData& rMark,
+            sal_Bool* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
 {
-    BOOL bIsEditable = TRUE;
+    sal_Bool bIsEditable = sal_True;
     if ( nLockCount )
-        bIsEditable = FALSE;
+        bIsEditable = sal_False;
     else if ( IsProtected() && !pDocument->IsScenario(nTab) )
     {
-        if((bIsEditable = !HasAttribSelection( rMark, HASATTR_PROTECTED )) != FALSE)
+        if((bIsEditable = !HasAttribSelection( rMark, HASATTR_PROTECTED )) != sal_False)
         {
             // If Sheet is protected and cells are not protected then
             // check the active scenario protect flag if this area is
             // in the active scenario range.
             ScRangeList aRanges;
-            rMark.FillRangeListWithMarks( &aRanges, FALSE );
-            ULONG nRangeCount = aRanges.Count();
+            rMark.FillRangeListWithMarks( &aRanges, sal_False );
+            sal_uLong nRangeCount = aRanges.Count();
             SCTAB nScenTab = nTab+1;
             while(pDocument->IsScenario(nScenTab) && bIsEditable)
             {
                 if(pDocument->IsActiveScenario(nScenTab))
                 {
-                    for (ULONG i=0; i<nRangeCount && bIsEditable; i++)
+                    for (sal_uLong i=0; i<nRangeCount && bIsEditable; i++)
                     {
                         ScRange aRange = *aRanges.GetObject(i);
                         if(pDocument->HasScenarioRange(nScenTab, aRange))
                         {
-                            USHORT nFlags;
+                            sal_uInt16 nFlags;
                             pDocument->GetScenarioFlags(nScenTab,nFlags);
                             bIsEditable = !((nFlags & SC_SCENARIO_PROTECT) && (nFlags & SC_SCENARIO_TWOWAY));
                         }
@@ -1791,14 +1791,14 @@ BOOL ScTable::IsSelectionEditable( const ScMarkData& rMark,
         if(pDocument->IsTabProtected(nActualTab))
         {
             ScRangeList aRanges;
-            rMark.FillRangeListWithMarks( &aRanges, FALSE );
-            ULONG nRangeCount = aRanges.Count();
-            for (ULONG i=0; i<nRangeCount && bIsEditable; i++)
+            rMark.FillRangeListWithMarks( &aRanges, sal_False );
+            sal_uLong nRangeCount = aRanges.Count();
+            for (sal_uLong i=0; i<nRangeCount && bIsEditable; i++)
             {
                 ScRange aRange = *aRanges.GetObject(i);
                 if(pDocument->HasScenarioRange(nTab, aRange))
                 {
-                    USHORT nFlags;
+                    sal_uInt16 nFlags;
                     pDocument->GetScenarioFlags(nTab,nFlags);
                     bIsEditable = !(nFlags & SC_SCENARIO_PROTECT);
                 }
@@ -1809,15 +1809,15 @@ BOOL ScTable::IsSelectionEditable( const ScMarkData& rMark,
     {
         if ( HasSelectionMatrixFragment( rMark ) )
         {
-            bIsEditable = FALSE;
+            bIsEditable = sal_False;
             if ( pOnlyNotBecauseOfMatrix )
-                *pOnlyNotBecauseOfMatrix = TRUE;
+                *pOnlyNotBecauseOfMatrix = sal_True;
         }
         else if ( pOnlyNotBecauseOfMatrix )
-            *pOnlyNotBecauseOfMatrix = FALSE;
+            *pOnlyNotBecauseOfMatrix = sal_False;
     }
     else if ( pOnlyNotBecauseOfMatrix )
-        *pOnlyNotBecauseOfMatrix = FALSE;
+        *pOnlyNotBecauseOfMatrix = sal_False;
     return bIsEditable;
 }
 
@@ -1840,7 +1840,7 @@ void ScTable::UnlockTable()
 }
 
 
-void ScTable::MergeSelectionPattern( ScMergePatternState& rState, const ScMarkData& rMark, BOOL bDeep ) const
+void ScTable::MergeSelectionPattern( ScMergePatternState& rState, const ScMarkData& rMark, sal_Bool bDeep ) const
 {
     for (SCCOL i=0; i<=MAXCOL; i++)
         aCol[i].MergeSelectionPattern( rState, rMark, bDeep );
@@ -1848,7 +1848,7 @@ void ScTable::MergeSelectionPattern( ScMergePatternState& rState, const ScMarkDa
 
 
 void ScTable::MergePatternArea( ScMergePatternState& rState, SCCOL nCol1, SCROW nRow1,
-                                                    SCCOL nCol2, SCROW nRow2, BOOL bDeep ) const
+                                                    SCCOL nCol2, SCROW nRow2, sal_Bool bDeep ) const
 {
     for (SCCOL i=nCol1; i<=nCol2; i++)
         aCol[i].MergePatternArea( rState, nRow1, nRow2, bDeep );
@@ -1941,7 +1941,7 @@ void ScTable::ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData& 
 
 
 void ScTable::ApplySelectionLineStyle( const ScMarkData& rMark,
-                            const SvxBorderLine* pLine, BOOL bColorOnly )
+                            const SvxBorderLine* pLine, sal_Bool bColorOnly )
 {
     if ( bColorOnly && !pLine )
         return;
@@ -1960,12 +1960,12 @@ const ScStyleSheet* ScTable::GetStyle( SCCOL nCol, SCROW nRow ) const
 }
 
 
-const ScStyleSheet* ScTable::GetSelectionStyle( const ScMarkData& rMark, BOOL& rFound ) const
+const ScStyleSheet* ScTable::GetSelectionStyle( const ScMarkData& rMark, sal_Bool& rFound ) const
 {
-    rFound = FALSE;
+    rFound = sal_False;
 
-    BOOL    bEqual = TRUE;
-    BOOL    bColFound;
+    sal_Bool    bEqual = sal_True;
+    sal_Bool    bColFound;
 
     const ScStyleSheet* pStyle = NULL;
     const ScStyleSheet* pNewStyle;
@@ -1976,9 +1976,9 @@ const ScStyleSheet* ScTable::GetSelectionStyle( const ScMarkData& rMark, BOOL& r
             pNewStyle = aCol[i].GetSelectionStyle( rMark, bColFound );
             if (bColFound)
             {
-                rFound = TRUE;
+                rFound = sal_True;
                 if ( !pNewStyle || ( pStyle && pNewStyle != pStyle ) )
-                    bEqual = FALSE;                                             // unterschiedliche
+                    bEqual = sal_False;                                             // unterschiedliche
                 pStyle = pNewStyle;
             }
         }
@@ -1987,13 +1987,13 @@ const ScStyleSheet* ScTable::GetSelectionStyle( const ScMarkData& rMark, BOOL& r
 }
 
 
-const ScStyleSheet* ScTable::GetAreaStyle( BOOL& rFound, SCCOL nCol1, SCROW nRow1,
+const ScStyleSheet* ScTable::GetAreaStyle( sal_Bool& rFound, SCCOL nCol1, SCROW nRow1,
                                                     SCCOL nCol2, SCROW nRow2 ) const
 {
-    rFound = FALSE;
+    rFound = sal_False;
 
-    BOOL    bEqual = TRUE;
-    BOOL    bColFound;
+    sal_Bool    bEqual = sal_True;
+    sal_Bool    bColFound;
 
     const ScStyleSheet* pStyle = NULL;
     const ScStyleSheet* pNewStyle;
@@ -2003,9 +2003,9 @@ const ScStyleSheet* ScTable::GetAreaStyle( BOOL& rFound, SCCOL nCol1, SCROW nRow
         pNewStyle = aCol[i].GetAreaStyle(bColFound, nRow1, nRow2);
         if (bColFound)
         {
-            rFound = TRUE;
+            rFound = sal_True;
             if ( !pNewStyle || ( pStyle && pNewStyle != pStyle ) )
-                bEqual = FALSE;                                             // unterschiedliche
+                bEqual = sal_False;                                             // unterschiedliche
             pStyle = pNewStyle;
         }
     }
@@ -2014,17 +2014,17 @@ const ScStyleSheet* ScTable::GetAreaStyle( BOOL& rFound, SCCOL nCol1, SCROW nRow
 }
 
 
-BOOL ScTable::IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyles ) const
+sal_Bool ScTable::IsStyleSheetUsed( const ScStyleSheet& rStyle, sal_Bool bGatherAllStyles ) const
 {
-    BOOL bIsUsed = FALSE;
+    sal_Bool bIsUsed = sal_False;
 
     for ( SCCOL i=0; i<=MAXCOL; i++ )
     {
         if ( aCol[i].IsStyleSheetUsed( rStyle, bGatherAllStyles ) )
         {
             if ( !bGatherAllStyles )
-                return TRUE;
-            bIsUsed = TRUE;
+                return sal_True;
+            bIsUsed = sal_True;
         }
     }
 
@@ -2032,7 +2032,7 @@ BOOL ScTable::IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyle
 }
 
 
-void ScTable::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, BOOL bRemoved,
+void ScTable::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, sal_Bool bRemoved,
                                 OutputDevice* pDev,
                                 double nPPTX, double nPPTY,
                                 const Fraction& rZoomX, const Fraction& rZoomY )
@@ -2051,17 +2051,17 @@ void ScTable::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, BOOL bRem
 
         SCROW nEndRow = aData.mnRow2;
         if (aData.mbValue)
-            SetOptimalHeight(nRow, nEndRow, 0, pDev, nPPTX, nPPTY, rZoomX, rZoomY, FALSE);
+            SetOptimalHeight(nRow, nEndRow, 0, pDev, nPPTX, nPPTY, rZoomX, rZoomY, sal_False);
 
         nRow = nEndRow + 1;
     }
 }
 
 
-BOOL ScTable::ApplyFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                                    INT16 nFlags )
+sal_Bool ScTable::ApplyFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
+                                    sal_Int16 nFlags )
 {
-    BOOL bChanged = FALSE;
+    sal_Bool bChanged = sal_False;
     if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))
         for (SCCOL i = nStartCol; i <= nEndCol; i++)
             bChanged |= aCol[i].ApplyFlags(nStartRow, nEndRow, nFlags);
@@ -2069,10 +2069,10 @@ BOOL ScTable::ApplyFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW
 }
 
 
-BOOL ScTable::RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                                    INT16 nFlags )
+sal_Bool ScTable::RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
+                                    sal_Int16 nFlags )
 {
-    BOOL bChanged = FALSE;
+    sal_Bool bChanged = sal_False;
     if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))
         for (SCCOL i = nStartCol; i <= nEndCol; i++)
             bChanged |= aCol[i].RemoveFlags(nStartRow, nEndRow, nFlags);
@@ -2080,7 +2080,7 @@ BOOL ScTable::RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
 }
 
 
-void ScTable::SetPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr, BOOL bPutToPool )
+void ScTable::SetPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr, sal_Bool bPutToPool )
 {
     if (ValidColRow(nCol,nRow))
         aCol[nCol].SetPattern( nRow, rAttr, bPutToPool );
@@ -2101,14 +2101,14 @@ void ScTable::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& r
 }
 
 
-void ScTable::ChangeSelectionIndent( BOOL bIncrement, const ScMarkData& rMark )
+void ScTable::ChangeSelectionIndent( sal_Bool bIncrement, const ScMarkData& rMark )
 {
     for (SCCOL i=0; i<=MAXCOL; i++)
         aCol[i].ChangeSelectionIndent( bIncrement, rMark );
 }
 
 
-void ScTable::ClearSelectionItems( const USHORT* pWhich, const ScMarkData& rMark )
+void ScTable::ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark )
 {
     for (SCCOL i=0; i<=MAXCOL; i++)
         aCol[i].ClearSelectionItems( pWhich, rMark );
@@ -2117,7 +2117,7 @@ void ScTable::ClearSelectionItems( const USHORT* pWhich, const ScMarkData& rMark
 
 //  Spaltenbreiten / Zeilenhoehen
 
-void ScTable::SetColWidth( SCCOL nCol, USHORT nNewWidth )
+void ScTable::SetColWidth( SCCOL nCol, sal_uInt16 nNewWidth )
 {
     if (VALIDCOL(nCol) && pColWidth)
     {
@@ -2147,7 +2147,7 @@ void ScTable::SetColWidth( SCCOL nCol, USHORT nNewWidth )
 }
 
 
-void ScTable::SetRowHeight( SCROW nRow, USHORT nNewHeight )
+void ScTable::SetRowHeight( SCROW nRow, sal_uInt16 nNewHeight )
 {
     if (VALIDROW(nRow) && mpRowHeights)
     {
@@ -2211,10 +2211,10 @@ bool lcl_pixelSizeChanged(
 
 }
 
-BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeight,
+sal_Bool ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNewHeight,
                                     double /* nPPTX */, double nPPTY )
 {
-    BOOL bChanged = FALSE;
+    sal_Bool bChanged = sal_False;
     if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && mpRowHeights)
     {
         IncRecalcLevel();
@@ -2225,18 +2225,18 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
             nNewHeight = ScGlobal::nStdRowHeight;
         }
 
-        BOOL bSingle = FALSE;   // TRUE = process every row for its own
+        sal_Bool bSingle = sal_False;   // sal_True = process every row for its own
         ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
         if (pDrawLayer)
             if (pDrawLayer->HasObjectsInRows( nTab, nStartRow, nEndRow ))
-                bSingle = TRUE;
+                bSingle = sal_True;
 
         if (bSingle)
         {
             ScFlatUInt16RowSegments::RangeData aData;
             mpRowHeights->getRangeData(nStartRow, aData);
             if (nNewHeight == aData.mnValue && nEndRow <= aData.mnRow2)
-                bSingle = FALSE;    // no difference in this range
+                bSingle = sal_False;    // no difference in this range
         }
         if (bSingle)
         {
@@ -2266,9 +2266,9 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
             {
                 SCROW nMid = (nStartRow+nEndRow) / 2;
                 if (SetRowHeightRange( nStartRow, nMid, nNewHeight, 1.0, 1.0 ))
-                    bChanged = TRUE;
+                    bChanged = sal_True;
                 if (SetRowHeightRange( nMid+1, nEndRow, nNewHeight, 1.0, 1.0 ))
-                    bChanged = TRUE;
+                    bChanged = sal_True;
             }
         }
         else
@@ -2302,7 +2302,7 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
     return bChanged;
 }
 
-void ScTable::SetRowHeightOnly( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeight )
+void ScTable::SetRowHeightOnly( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nNewHeight )
 {
     if (!ValidRow(nStartRow) || !ValidRow(nEndRow) || !mpRowHeights)
         return;
@@ -2313,14 +2313,14 @@ void ScTable::SetRowHeightOnly( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeigh
     mpRowHeights->setValue(nStartRow, nEndRow, nNewHeight);
 }
 
-void ScTable::SetManualHeight( SCROW nStartRow, SCROW nEndRow, BOOL bManual )
+void ScTable::SetManualHeight( SCROW nStartRow, SCROW nEndRow, sal_Bool bManual )
 {
     if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && pRowFlags)
     {
         if (bManual)
             pRowFlags->OrValue( nStartRow, nEndRow, CR_MANUALSIZE);
         else
-            pRowFlags->AndValue( nStartRow, nEndRow, sal::static_int_cast<BYTE>(~CR_MANUALSIZE));
+            pRowFlags->AndValue( nStartRow, nEndRow, sal::static_int_cast<sal_uInt8>(~CR_MANUALSIZE));
     }
     else
     {
@@ -2329,7 +2329,7 @@ void ScTable::SetManualHeight( SCROW nStartRow, SCROW nEndRow, BOOL bManual )
 }
 
 
-USHORT ScTable::GetColWidth( SCCOL nCol ) const
+sal_uInt16 ScTable::GetColWidth( SCCOL nCol ) const
 {
     DBG_ASSERT(VALIDCOL(nCol),"Falsche Spaltennummer");
 
@@ -2341,22 +2341,22 @@ USHORT ScTable::GetColWidth( SCCOL nCol ) const
             return pColWidth[nCol];
     }
     else
-        return (USHORT) STD_COL_WIDTH;
+        return (sal_uInt16) STD_COL_WIDTH;
 }
 
 
-USHORT ScTable::GetOriginalWidth( SCCOL nCol ) const        // immer die eingestellte
+sal_uInt16 ScTable::GetOriginalWidth( SCCOL nCol ) const        // immer die eingestellte
 {
     DBG_ASSERT(VALIDCOL(nCol),"Falsche Spaltennummer");
 
     if (VALIDCOL(nCol) && pColWidth)
         return pColWidth[nCol];
     else
-        return (USHORT) STD_COL_WIDTH;
+        return (sal_uInt16) STD_COL_WIDTH;
 }
 
 
-USHORT ScTable::GetCommonWidth( SCCOL nEndCol )
+sal_uInt16 ScTable::GetCommonWidth( SCCOL nEndCol )
 {
     //  get the width that is used in the largest continuous column range (up to nEndCol)
 
@@ -2366,8 +2366,8 @@ USHORT ScTable::GetCommonWidth( SCCOL nEndCol )
         nEndCol = MAXCOL;
     }
 
-    USHORT nMaxWidth = 0;
-    USHORT nMaxCount = 0;
+    sal_uInt16 nMaxWidth = 0;
+    sal_uInt16 nMaxCount = 0;
     SCCOL nRangeStart = 0;
     while ( nRangeStart <= nEndCol )
     {
@@ -2376,8 +2376,8 @@ USHORT ScTable::GetCommonWidth( SCCOL nEndCol )
             ++nRangeStart;
         if ( nRangeStart <= nEndCol )
         {
-            USHORT nThisCount = 0;
-            USHORT nThisWidth = pColWidth[nRangeStart];
+            sal_uInt16 nThisCount = 0;
+            sal_uInt16 nThisWidth = pColWidth[nRangeStart];
             SCCOL nRangeEnd = nRangeStart;
             while ( nRangeEnd <= nEndCol && pColWidth[nRangeEnd] == nThisWidth )
             {
@@ -2403,7 +2403,7 @@ USHORT ScTable::GetCommonWidth( SCCOL nEndCol )
 }
 
 
-USHORT ScTable::GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero ) const
+sal_uInt16 ScTable::GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero ) const
 {
     DBG_ASSERT(VALIDROW(nRow),"Invalid row number");
 
@@ -2441,18 +2441,18 @@ USHORT ScTable::GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, bool
             *pStartRow = nRow;
         if (pEndRow)
             *pEndRow = nRow;
-        return (USHORT) ScGlobal::nStdRowHeight;
+        return (sal_uInt16) ScGlobal::nStdRowHeight;
     }
 }
 
 
-ULONG ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow ) const
+sal_uLong ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow ) const
 {
     DBG_ASSERT(VALIDROW(nStartRow) && VALIDROW(nEndRow),"Falsche Zeilennummer");
 
     if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && mpRowHeights)
     {
-        ULONG nHeight = 0;
+        sal_uLong nHeight = 0;
         SCROW nRow = nStartRow;
         while (nRow <= nEndRow)
         {
@@ -2468,17 +2468,17 @@ ULONG ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow ) const
         return nHeight;
     }
     else
-        return (ULONG) ((nEndRow - nStartRow + 1) * ScGlobal::nStdRowHeight);
+        return (sal_uLong) ((nEndRow - nStartRow + 1) * ScGlobal::nStdRowHeight);
 }
 
 
-ULONG ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale ) const
+sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale ) const
 {
     DBG_ASSERT(VALIDROW(nStartRow) && VALIDROW(nEndRow),"Falsche Zeilennummer");
 
     if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && mpRowHeights)
     {
-        ULONG nHeight = 0;
+        sal_uLong nHeight = 0;
         SCROW nRow = nStartRow;
         while (nRow <= nEndRow)
         {
@@ -2488,25 +2488,25 @@ ULONG ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale
                 if (nLastRow > nEndRow)
                     nLastRow = nEndRow;
                 sal_uInt32 nThisHeight = mpRowHeights->getSumValue(nRow, nLastRow);
-                nHeight += static_cast<ULONG>(nThisHeight * fScale);
+                nHeight += static_cast<sal_uLong>(nThisHeight * fScale);
             }
             nRow = nLastRow + 1;
         }
         return nHeight;
     }
     else
-        return (ULONG) ((nEndRow - nStartRow + 1) * ScGlobal::nStdRowHeight * fScale);
+        return (sal_uLong) ((nEndRow - nStartRow + 1) * ScGlobal::nStdRowHeight * fScale);
 }
 
 
-USHORT ScTable::GetOriginalHeight( SCROW nRow ) const       // non-0 even if hidden
+sal_uInt16 ScTable::GetOriginalHeight( SCROW nRow ) const       // non-0 even if hidden
 {
     DBG_ASSERT(VALIDROW(nRow),"wrong row number");
 
     if (VALIDROW(nRow) && mpRowHeights)
         return mpRowHeights->getValue(nRow);
     else
-        return (USHORT) ScGlobal::nStdRowHeight;
+        return (sal_uInt16) ScGlobal::nStdRowHeight;
 }
 
 
@@ -2657,7 +2657,7 @@ void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, bool bShow, bool bSetFlags)
         if (nEndRow > nRow2)
             nEndRow = nRow2;
 
-        BOOL bChanged = ( bWasVis != bShow );
+        sal_Bool bChanged = ( bWasVis != bShow );
         if ( bChanged && bSetFlags )
         {
             ScDrawLayer* pDrawLayer = pDocument->GetDrawLayer();
@@ -2717,7 +2717,7 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
         if (nEndRow > nRow2)
             nEndRow = nRow2;
 
-        BOOL bChanged = ( bWasVis != bShow );
+        sal_Bool bChanged = ( bWasVis != bShow );
         if ( bChanged && bHasObjects )
         {
             if (pDrawLayer)
@@ -2773,7 +2773,7 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
 }
 
 
-void ScTable::SetColFlags( SCCOL nCol, BYTE nNewFlags )
+void ScTable::SetColFlags( SCCOL nCol, sal_uInt8 nNewFlags )
 {
     if (VALIDCOL(nCol) && pColFlags)
         pColFlags[nCol] = nNewFlags;
@@ -2784,7 +2784,7 @@ void ScTable::SetColFlags( SCCOL nCol, BYTE nNewFlags )
 }
 
 
-void ScTable::SetRowFlags( SCROW nRow, BYTE nNewFlags )
+void ScTable::SetRowFlags( SCROW nRow, sal_uInt8 nNewFlags )
 {
     if (VALIDROW(nRow) && pRowFlags)
         pRowFlags->SetValue( nRow, nNewFlags);
@@ -2795,7 +2795,7 @@ void ScTable::SetRowFlags( SCROW nRow, BYTE nNewFlags )
 }
 
 
-void ScTable::SetRowFlags( SCROW nStartRow, SCROW nEndRow, BYTE nNewFlags )
+void ScTable::SetRowFlags( SCROW nStartRow, SCROW nEndRow, sal_uInt8 nNewFlags )
 {
     if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && pRowFlags)
         pRowFlags->SetValue( nStartRow, nEndRow, nNewFlags);
@@ -2806,7 +2806,7 @@ void ScTable::SetRowFlags( SCROW nStartRow, SCROW nEndRow, BYTE nNewFlags )
 }
 
 
-BYTE ScTable::GetColFlags( SCCOL nCol ) const
+sal_uInt8 ScTable::GetColFlags( SCCOL nCol ) const
 {
     if (VALIDCOL(nCol) && pColFlags)
         return pColFlags[nCol];
@@ -2815,7 +2815,7 @@ BYTE ScTable::GetColFlags( SCCOL nCol ) const
 }
 
 
-BYTE ScTable::GetRowFlags( SCROW nRow ) const
+sal_uInt8 ScTable::GetRowFlags( SCROW nRow ) const
 {
     if (VALIDROW(nRow) && pRowFlags)
         return pRowFlags->GetValue(nRow);
@@ -2829,7 +2829,7 @@ SCROW ScTable::GetLastFlaggedRow() const
     SCROW nLastFound = 0;
     if (pRowFlags)
     {
-        SCROW nRow = pRowFlags->GetLastAnyBitAccess( 0, sal::static_int_cast<BYTE>(CR_ALL) );
+        SCROW nRow = pRowFlags->GetLastAnyBitAccess( 0, sal::static_int_cast<sal_uInt8>(CR_ALL) );
         if (ValidRow(nRow))
             nLastFound = nRow;
     }
@@ -2887,24 +2887,24 @@ SCROW ScTable::GetLastChangedRow() const
 }
 
 
-BOOL ScTable::UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, BOOL bShow )
+sal_Bool ScTable::UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, sal_Bool bShow )
 {
     if (pOutlineTable && pColFlags)
     {
-        ScBitMaskCompressedArray< SCCOLROW, BYTE> aArray( MAXCOL, pColFlags, MAXCOLCOUNT);
+        ScBitMaskCompressedArray< SCCOLROW, sal_uInt8> aArray( MAXCOL, pColFlags, MAXCOLCOUNT);
         return pOutlineTable->GetColArray()->ManualAction( nStartCol, nEndCol, bShow, *this, true );
     }
     else
-        return FALSE;
+        return sal_False;
 }
 
 
-BOOL ScTable::UpdateOutlineRow( SCROW nStartRow, SCROW nEndRow, BOOL bShow )
+sal_Bool ScTable::UpdateOutlineRow( SCROW nStartRow, SCROW nEndRow, sal_Bool bShow )
 {
     if (pOutlineTable && pRowFlags)
         return pOutlineTable->GetRowArray()->ManualAction( nStartRow, nEndRow, bShow, *this, false );
     else
-        return FALSE;
+        return sal_False;
 }
 
 
@@ -2978,13 +2978,13 @@ short DiffSign( T a, T b )
 
 void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
 {
-    BOOL bSizeChanged = FALSE;
-    BOOL bMissed      = FALSE;
+    sal_Bool bSizeChanged = sal_False;
+    sal_Bool bMissed      = sal_False;
 
     SCCOL nCol;
     SCROW nRow;
     SCROW i;
-    BOOL bFound;
+    sal_Bool bFound;
     ScOutlineArray* pArray;
     ScBaseCell* pCell;
     ScRange aRef;
@@ -2997,9 +2997,9 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
                             // Zeilen
 
     SCROW   nCount = nEndRow-nStartRow+1;
-    BOOL*   pUsed = new BOOL[nCount];
+    sal_Bool*   pUsed = new sal_Bool[nCount];
     for (i=0; i<nCount; i++)
-        pUsed[i] = FALSE;
+        pUsed[i] = sal_False;
     for (nCol=nStartCol; nCol<=nEndCol; nCol++)
         if (!aCol[nCol].IsEmptyData())
             aCol[nCol].FindUsed( nStartRow, nEndRow, pUsed );
@@ -3008,7 +3008,7 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
     for (nRow=nStartRow; nRow<=nEndRow; nRow++)
         if (pUsed[nRow-nStartRow])
         {
-            bFound = FALSE;
+            bFound = sal_False;
             for (nCol=nStartCol; nCol<=nEndCol && !bFound; nCol++)
                 if (!aCol[nCol].IsEmptyData())
                 {
@@ -3024,10 +3024,10 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
                                     if (pArray->Insert( aRef.aStart.Row(), aRef.aEnd.Row(), bSizeChanged ))
                                     {
 //                                      ApplyPatternArea( nStartCol, nRow, nEndCol, nRow, aBoldPattern );
-                                        bFound = TRUE;
+                                        bFound = sal_True;
                                     }
                                     else
-                                        bMissed = TRUE;
+                                        bMissed = sal_True;
                                 }
                 }
         }
@@ -3041,7 +3041,7 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
     {
         if (!aCol[nCol].IsEmptyData())
         {
-            bFound = FALSE;
+            bFound = sal_False;
             ScColumnIterator aIter( &aCol[nCol], nStartRow, nEndRow );
             while ( aIter.Next( nRow, pCell ) && !bFound )
             {
@@ -3055,10 +3055,10 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
                             if (pArray->Insert( aRef.aStart.Col(), aRef.aEnd.Col(), bSizeChanged ))
                             {
 //                              ApplyPatternArea( nCol, nStartRow, nCol, nEndRow, aBoldPattern );
-                                bFound = TRUE;
+                                bFound = sal_True;
                             }
                             else
-                                bMissed = TRUE;
+                                bMissed = sal_True;
                         }
             }
         }
@@ -3075,7 +3075,7 @@ void ScTable::CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW n
     ScAddress aSrc( nStartCol, nStartRow, nTab );
     ScAddress aDest( nDestCol, nDestRow, nDestTab );
     ScRange aRange( aSrc, aDest );
-    BOOL bThisTab = ( nDestTab == nTab );
+    sal_Bool bThisTab = ( nDestTab == nTab );
     SCROW nDestY = nDestRow;
     for (SCROW nRow=nStartRow; nRow<=nEndRow; nRow++)
     {
@@ -3102,12 +3102,12 @@ void ScTable::CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW n
             if (bThisTab)
             {
                 PutCell( nDestX, nDestY, pCell );
-                SetPattern( nDestX, nDestY, *GetPattern( nCol, nRow ), TRUE );
+                SetPattern( nDestX, nDestY, *GetPattern( nCol, nRow ), sal_True );
             }
             else
             {
                 pDocument->PutCell( aDest, pCell );
-                pDocument->SetPattern( aDest, *GetPattern( nCol, nRow ), TRUE );
+                pDocument->SetPattern( aDest, *GetPattern( nCol, nRow ), sal_True );
             }
 
             ++nDestX;
@@ -3117,7 +3117,7 @@ void ScTable::CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW n
 }
 
 
-BOOL ScTable::RefVisible(ScFormulaCell* pCell)
+sal_Bool ScTable::RefVisible(ScFormulaCell* pCell)
 {
     ScRange aRef;
 
@@ -3131,12 +3131,12 @@ BOOL ScTable::RefVisible(ScFormulaCell* pCell)
                 nEndRow = ::std::numeric_limits<SCROW>::max();
 
             if (!ValidRow(nEndRow) || nEndRow < aRef.aEnd.Row())
-                return TRUE;    // at least partly visible
-            return FALSE;       // completely invisible
+                return sal_True;    // at least partly visible
+            return sal_False;       // completely invisible
         }
     }
 
-    return TRUE;                        // irgendwie anders
+    return sal_True;                        // irgendwie anders
 }
 
 
@@ -3173,13 +3173,13 @@ void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos
     // #i102616# actions that modify the draw page size count as sheet modification
     // (exception: InitDrawLayer)
     if (bResetStreamValid && IsStreamValid())
-        SetStreamValid(FALSE);
+        SetStreamValid(sal_False);
 }
 
 
-ULONG ScTable::GetRowOffset( SCROW nRow ) const
+sal_uLong ScTable::GetRowOffset( SCROW nRow ) const
 {
-    ULONG n = 0;
+    sal_uLong n = 0;
     if ( mpHiddenRows && mpRowHeights )
     {
         if (nRow == 0)
@@ -3200,7 +3200,7 @@ ULONG ScTable::GetRowOffset( SCROW nRow ) const
     return n;
 }
 
-SCROW ScTable::GetRowForHeight(ULONG nHeight) const
+SCROW ScTable::GetRowForHeight(sal_uLong nHeight) const
 {
     sal_uInt32 nSum = 0;
 
@@ -3227,9 +3227,9 @@ SCROW ScTable::GetRowForHeight(ULONG nHeight) const
 }
 
 
-ULONG ScTable::GetColOffset( SCCOL nCol ) const
+sal_uLong ScTable::GetColOffset( SCCOL nCol ) const
 {
-    ULONG n = 0;
+    sal_uLong n = 0;
     if ( pColWidth )
     {
         SCCOL i;

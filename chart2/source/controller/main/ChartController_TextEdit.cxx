@@ -193,10 +193,10 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
     DBG_ASSERT( pFact, "No dialog factory" );
 
     SfxAllItemSet aSet( m_pDrawModelWrapper->GetItemPool() );
-    aSet.Put( SfxBoolItem( FN_PARAM_1, FALSE ) );
+    aSet.Put( SfxBoolItem( FN_PARAM_1, sal_False ) );
 
     //set fixed current font
-    aSet.Put( SfxBoolItem( FN_PARAM_2, TRUE ) ); //maybe not necessary in future
+    aSet.Put( SfxBoolItem( FN_PARAM_2, sal_True ) ); //maybe not necessary in future
 
     Font aCurFont = m_pDrawViewWrapper->getOutliner()->GetRefDevice()->GetFont();
     aSet.Put( SvxFontItem( aCurFont.GetFamily(), aCurFont.GetName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), SID_ATTR_CHAR_FONT ) );
@@ -208,7 +208,7 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
         const SfxItemSet* pSet = pDlg->GetOutputItemSet();
         const SfxPoolItem* pItem=0;
         String aString;
-        if ( pSet && pSet->GetItemState( SID_CHARMAP, TRUE, &pItem) == SFX_ITEM_SET &&
+        if ( pSet && pSet->GetItemState( SID_CHARMAP, sal_True, &pItem) == SFX_ITEM_SET &&
              pItem->ISA(SfxStringItem) )
                 aString = dynamic_cast<const SfxStringItem*>(pItem)->GetValue();
 
@@ -222,7 +222,7 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
 
         // prevent flicker
         pOutlinerView->HideCursor();
-        pOutliner->SetUpdateMode(FALSE);
+        pOutliner->SetUpdateMode(sal_False);
 
         // delete current selection by inserting empty String, so current
         // attributes become unique (sel. has to be erased anyway)
@@ -230,7 +230,7 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
 
         //SfxUndoManager& rUndoMgr =  pOutliner->GetUndoManager();
         //rUndoMgr.EnterListAction( String( SchResId( STR_UNDO_INSERT_SPECCHAR )), String( SchResId( STR_UNDO_INSERT_SPECCHAR )));
-        pOutlinerView->InsertText(aString, TRUE);
+        pOutlinerView->InsertText(aString, sal_True);
 
         ESelection aSel = pOutlinerView->GetSelection();
         aSel.nStartPara = aSel.nEndPara;
@@ -240,7 +240,7 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
         //rUndoMgr.LeaveListAction();
 
         // show changes
-        pOutliner->SetUpdateMode(TRUE);
+        pOutliner->SetUpdateMode(sal_True);
         pOutlinerView->ShowCursor();
     }
 

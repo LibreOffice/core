@@ -63,8 +63,8 @@ SFX_IMPL_TOOLBOX_CONTROL( ScZoomSliderControl, SvxZoomSliderItem );
 // -----------------------------------------------------------------------
 
 ScZoomSliderControl::ScZoomSliderControl(
-    USHORT     nSlotId,
-    USHORT     nId,
+    sal_uInt16     nSlotId,
+    sal_uInt16     nId,
     ToolBox&   rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx )
 {
@@ -80,10 +80,10 @@ __EXPORT ScZoomSliderControl::~ScZoomSliderControl()
 
 // -----------------------------------------------------------------------
 
-void ScZoomSliderControl::StateChanged( USHORT /*nSID*/, SfxItemState eState,
+void ScZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState,
                                        const SfxPoolItem* pState )
 {
-    USHORT                  nId  = GetId();
+    sal_uInt16                  nId  = GetId();
     ToolBox&                rTbx = GetToolBox();
     ScZoomSliderWnd*        pBox = (ScZoomSliderWnd*)(rTbx.GetItemWindow( nId ));
     DBG_ASSERT( pBox ,"Control not found!" );
@@ -122,19 +122,19 @@ Window* ScZoomSliderControl::CreateItemWindow( Window *pParent )
 
 struct ScZoomSliderWnd::ScZoomSliderWnd_Impl
 {
-    USHORT                   mnCurrentZoom;
-    USHORT                   mnMinZoom;
-    USHORT                   mnMaxZoom;
-    USHORT                   mnSliderCenter;
+    sal_uInt16                   mnCurrentZoom;
+    sal_uInt16                   mnMinZoom;
+    sal_uInt16                   mnMaxZoom;
+    sal_uInt16                   mnSliderCenter;
     std::vector< long >      maSnappingPointOffsets;
-    std::vector< USHORT >    maSnappingPointZooms;
+    std::vector< sal_uInt16 >    maSnappingPointZooms;
     Image                    maSliderButton;
     Image                    maIncreaseButton;
     Image                    maDecreaseButton;
     bool                     mbValuesSet;
     bool                     mbOmitPaint;
 
-    ScZoomSliderWnd_Impl( USHORT nCurrentZoom ) :
+    ScZoomSliderWnd_Impl( sal_uInt16 nCurrentZoom ) :
         mnCurrentZoom( nCurrentZoom ),
         mnMinZoom( 10 ),
         mnMaxZoom( 400 ),
@@ -167,11 +167,11 @@ const long nSnappingPointsMinDist = nSnappingEpsilon; // minimum distance of two
 
 // -----------------------------------------------------------------------
 
-USHORT ScZoomSliderWnd::Offset2Zoom( long nOffset ) const
+sal_uInt16 ScZoomSliderWnd::Offset2Zoom( long nOffset ) const
 {
     Size aSliderWindowSize = GetOutputSizePixel();
     const long nControlWidth = aSliderWindowSize.Width();
-    USHORT nRet = 0;
+    sal_uInt16 nRet = 0;
 
     if( nOffset < nSliderXOffset )
         return mpImpl->mnMinZoom;
@@ -179,7 +179,7 @@ USHORT ScZoomSliderWnd::Offset2Zoom( long nOffset ) const
         return mpImpl->mnMaxZoom;
 
     // check for snapping points:
-    USHORT nCount = 0;
+    sal_uInt16 nCount = 0;
     std::vector< long >::iterator aSnappingPointIter;
     for ( aSnappingPointIter = mpImpl->maSnappingPointOffsets.begin();
         aSnappingPointIter != mpImpl->maSnappingPointOffsets.end();
@@ -204,7 +204,7 @@ USHORT ScZoomSliderWnd::Offset2Zoom( long nOffset ) const
             const long nHalfSliderWidth     = nControlWidth/2 - nSliderXOffset;
             const long nZoomPerSliderPixel  = (1000 * nFirstHalfRange) / nHalfSliderWidth;
             const long nOffsetToSliderLeft  = nOffset - nSliderXOffset;
-            nRet = mpImpl->mnMinZoom + USHORT( nOffsetToSliderLeft * nZoomPerSliderPixel / 1000 );
+            nRet = mpImpl->mnMinZoom + sal_uInt16( nOffsetToSliderLeft * nZoomPerSliderPixel / 1000 );
         }
         else
         {
@@ -213,7 +213,7 @@ USHORT ScZoomSliderWnd::Offset2Zoom( long nOffset ) const
             const long nHalfSliderWidth         = nControlWidth/2 - nSliderXOffset;
             const long nZoomPerSliderPixel      = 1000 * nSecondHalfRange / nHalfSliderWidth;
             const long nOffsetToSliderCenter    = nOffset - nControlWidth/2;
-            nRet = mpImpl->mnSliderCenter + USHORT( nOffsetToSliderCenter * nZoomPerSliderPixel / 1000 );
+            nRet = mpImpl->mnSliderCenter + sal_uInt16( nOffsetToSliderCenter * nZoomPerSliderPixel / 1000 );
         }
     }
 
@@ -228,7 +228,7 @@ USHORT ScZoomSliderWnd::Offset2Zoom( long nOffset ) const
 
 // -----------------------------------------------------------------------
 
-long ScZoomSliderWnd::Zoom2Offset( USHORT nCurrentZoom ) const
+long ScZoomSliderWnd::Zoom2Offset( sal_uInt16 nCurrentZoom ) const
 {
     Size aSliderWindowSize = GetOutputSizePixel();
     const long nControlWidth = aSliderWindowSize.Width();
@@ -258,14 +258,14 @@ long ScZoomSliderWnd::Zoom2Offset( USHORT nCurrentZoom ) const
 
 
 ScZoomSliderWnd::ScZoomSliderWnd( Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame , USHORT nCurrentZoom ):
+                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame , sal_uInt16 nCurrentZoom ):
                 Window( pParent ),
                 mpImpl( new ScZoomSliderWnd_Impl( nCurrentZoom ) ),
                 aLogicalSize( 115, 40 ),
                 m_xDispatchProvider( rDispatchProvider ),
                 m_xFrame( _xFrame )
 {
-    BOOL bIsHC                  = GetSettings().GetStyleSettings().GetHighContrastMode();
+    sal_Bool bIsHC                  = GetSettings().GetStyleSettings().GetHighContrastMode();
     mpImpl->maSliderButton      = Image( SVX_RES( bIsHC ? RID_SVXBMP_SLIDERBUTTON_HC : RID_SVXBMP_SLIDERBUTTON ) );
     mpImpl->maIncreaseButton    = Image( SVX_RES( bIsHC ? RID_SVXBMP_SLIDERINCREASE_HC : RID_SVXBMP_SLIDERINCREASE ) );
     mpImpl->maDecreaseButton    = Image( SVX_RES( bIsHC ? RID_SVXBMP_SLIDERDECREASE_HC : RID_SVXBMP_SLIDERDECREASE ) );
@@ -400,20 +400,20 @@ void ScZoomSliderWnd::UpdateFromItem( const SvxZoomSliderItem* pZoomSliderItem )
        mpImpl->maSnappingPointZooms.clear();
 
        // get all snapping points:
-       std::set< USHORT > aTmpSnappingPoints;
-       for ( USHORT j = 0; j < rSnappingPoints.getLength(); ++j )
+       std::set< sal_uInt16 > aTmpSnappingPoints;
+       for ( sal_uInt16 j = 0; j < rSnappingPoints.getLength(); ++j )
        {
            const sal_Int32 nSnappingPoint = rSnappingPoints[j];
-           aTmpSnappingPoints.insert( (USHORT)nSnappingPoint );
+           aTmpSnappingPoints.insert( (sal_uInt16)nSnappingPoint );
        }
 
        // remove snapping points that are to close to each other:
-       std::set< USHORT >::iterator aSnappingPointIter;
+       std::set< sal_uInt16 >::iterator aSnappingPointIter;
        long nLastOffset = 0;
 
        for ( aSnappingPointIter = aTmpSnappingPoints.begin(); aSnappingPointIter != aTmpSnappingPoints.end(); ++aSnappingPointIter )
        {
-           const USHORT nCurrent = *aSnappingPointIter;
+           const sal_uInt16 nCurrent = *aSnappingPointIter;
            const long nCurrentOffset = Zoom2Offset( nCurrent );
 
            if ( nCurrentOffset - nLastOffset >= nSnappingPointsMinDist )

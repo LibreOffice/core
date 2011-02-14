@@ -307,16 +307,16 @@
 
 void __EXPORT ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    BOOL bDataChanged = FALSE;
+    sal_Bool bDataChanged = sal_False;
 
     if (rHint.ISA(SfxSimpleHint))
     {
-        ULONG nSlot = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nSlot = ((const SfxSimpleHint&)rHint).GetId();
         switch ( nSlot )
         {
             case FID_DATACHANGED:
             case SID_SCPRINTOPTIONS:
-                bDataChanged = TRUE;
+                bDataChanged = sal_True;
                 break;
             case SC_HINT_DRWLAYER_NEW:
                 {
@@ -331,20 +331,20 @@ void __EXPORT ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         if ( ((const ScPaintHint&)rHint).GetPrintFlag() )
         {
-            USHORT nParts = ((const ScPaintHint&)rHint).GetParts();
+            sal_uInt16 nParts = ((const ScPaintHint&)rHint).GetParts();
             if (nParts & ( PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE ))
-                bDataChanged = TRUE;
+                bDataChanged = sal_True;
         }
     }
     else if (rHint.ISA(SdrHint))
     {
         // SdrHints are no longer used for invalidating, thus react on objectchange instead
         if(HINT_OBJCHG == ((const SdrHint&)rHint).GetKind())
-            bDataChanged = TRUE;
+            bDataChanged = sal_True;
     }
 
     if (bDataChanged)
-        pPreview->DataChanged(TRUE);
+        pPreview->DataChanged(sal_True);
 }
 
 

@@ -39,9 +39,9 @@ class ScFormulaCell;
 struct ScFormulaRecursionEntry
 {
     ScFormulaCell*  pCell;
-    BOOL            bOldRunning;
+    sal_Bool            bOldRunning;
     ScFormulaResult aPreviousResult;
-    ScFormulaRecursionEntry( ScFormulaCell* p, BOOL bR,
+    ScFormulaRecursionEntry( ScFormulaCell* p, sal_Bool bR,
             const ScFormulaResult & rRes ) :
         pCell(p), bOldRunning(bR), aPreviousResult( rRes)
     {
@@ -57,8 +57,8 @@ class ScRecursionHelper
     ScFormulaRecursionList::iterator    aInsertPos;
     ScFormulaRecursionList::iterator    aLastIterationStart;
     ScRecursionInIterationStack         aRecursionInIterationStack;
-    USHORT                              nRecursionCount;
-    USHORT                              nIteration;
+    sal_uInt16                              nRecursionCount;
+    sal_uInt16                              nIteration;
     bool                                bInRecursionReturn;
     bool                                bDoingRecursion;
     bool                                bInIterationReturn;
@@ -81,7 +81,7 @@ class ScRecursionHelper
     public:
 
     ScRecursionHelper() { Init(); }
-    USHORT  GetRecursionCount() const       { return nRecursionCount; }
+    sal_uInt16  GetRecursionCount() const       { return nRecursionCount; }
     void    IncRecursionCount()             { ++nRecursionCount; }
     void    DecRecursionCount()             { --nRecursionCount; }
     /// A pure recursion return, no iteration.
@@ -96,7 +96,7 @@ class ScRecursionHelper
     }
     bool    IsDoingRecursion() const        { return bDoingRecursion; }
     void    SetDoingRecursion( bool b )     { bDoingRecursion = b; }
-    void    Insert( ScFormulaCell* p, BOOL bOldRunning,
+    void    Insert( ScFormulaCell* p, sal_Bool bOldRunning,
                     const ScFormulaResult & rRes )
     {
         aRecursionFormulas.insert( aInsertPos, ScFormulaRecursionEntry( p,
@@ -118,7 +118,7 @@ class ScRecursionHelper
         bInIterationReturn = b;
     }
     bool    IsDoingIteration() const        { return nIteration > 0; }
-    USHORT  GetIteration() const            { return nIteration; }
+    sal_uInt16  GetIteration() const            { return nIteration; }
     bool &  GetConvergingReference()        { return bConverging; }
     void    StartIteration()
     {

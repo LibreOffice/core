@@ -106,7 +106,7 @@ sal_Int32 lcl_getRowInData( long nRow )
     return static_cast< sal_Int32 >( nRow );
 }
 
-sal_Int32 lcl_getColumnInData( USHORT nCol )
+sal_Int32 lcl_getColumnInData( sal_uInt16 nCol )
 {
     return static_cast< sal_Int32 >( nCol ) - 1;
 }
@@ -216,7 +216,7 @@ private:
     DECL_LINK( SeriesNameChanged, void * );
     DECL_LINK( SeriesNameEdited, void * );
 
-    /// @param bHC </TRUE> for hight-contrast image
+    /// @param bHC </sal_True> for hight-contrast image
     static Image GetChartTypeImage(
         const Reference< chart2::XChartType > & xChartType,
         bool bSwapXAndYAxis,
@@ -477,13 +477,13 @@ bool lcl_SeriesHeaderHasFocus(
 }
 
 sal_Int32 lcl_getColumnInDataOrHeader(
-    USHORT nCol, const ::std::vector< ::boost::shared_ptr< ::chart::impl::SeriesHeader > > & rSeriesHeader )
+    sal_uInt16 nCol, const ::std::vector< ::boost::shared_ptr< ::chart::impl::SeriesHeader > > & rSeriesHeader )
 {
     sal_Int32 nColIdx = 0;
     bool bHeaderHasFocus( lcl_SeriesHeaderHasFocus( rSeriesHeader, &nColIdx ));
 
     if( bHeaderHasFocus )
-        nColIdx = lcl_getColumnInData( static_cast< USHORT >( rSeriesHeader[nColIdx]->GetStartColumn()));
+        nColIdx = lcl_getColumnInData( static_cast< sal_uInt16 >( rSeriesHeader[nColIdx]->GetStartColumn()));
     else
         nColIdx = lcl_getColumnInData( nCol );
 
@@ -508,7 +508,7 @@ DataBrowser::DataBrowser( Window* pParent, const ResId& rId, bool bLiveUpdate ) 
     double fNan;
     ::rtl::math::setNan( & fNan );
     m_aNumberEditField.SetDefaultValue( fNan );
-    m_aNumberEditField.TreatAsNumber( TRUE );
+    m_aNumberEditField.TreatAsNumber( sal_True );
     RenewTable();
     SetClean();
 }
@@ -584,10 +584,10 @@ void DataBrowser::RenewTable()
         return;
 
     long   nOldRow     = GetCurRow();
-    USHORT nOldColId   = GetCurColumnId();
+    sal_uInt16 nOldColId   = GetCurColumnId();
 
-    BOOL bLastUpdateMode = GetUpdateMode();
-    SetUpdateMode( FALSE );
+    sal_Bool bLastUpdateMode = GetUpdateMode();
+    SetUpdateMode( sal_False );
 
     if( IsModified() )
         SaveModified();
@@ -615,7 +615,7 @@ void DataBrowser::RenewTable()
 
     RowInserted( 1, nRowCountLocal );
     GoToRow( ::std::min( nOldRow, GetRowCount() - 1 ));
-    GoToColumnId( ::std::min( nOldColId, static_cast< USHORT >( ColCount() - 1 )));
+    GoToColumnId( ::std::min( nOldColId, static_cast< sal_uInt16 >( ColCount() - 1 )));
 
     Window * pWin = this->GetParent();
     if( !pWin )
@@ -672,7 +672,7 @@ String DataBrowser::GetRowString( sal_Int32 nRow ) const
     return String::CreateFromInt32( nRow + 1 );
 }
 
-String DataBrowser::GetCellText( long nRow, USHORT nColumnId ) const
+String DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
 {
     String aResult;
 
@@ -724,7 +724,7 @@ String DataBrowser::GetCellText( long nRow, USHORT nColumnId ) const
     return aResult;
 }
 
-double DataBrowser::GetCellNumber( long nRow, USHORT nColumnId ) const
+double DataBrowser::GetCellNumber( long nRow, sal_uInt16 nColumnId ) const
 {
     double fResult;
     ::rtl::math::setNan( & fResult );
@@ -741,8 +741,8 @@ double DataBrowser::GetCellNumber( long nRow, USHORT nColumnId ) const
 
 void DataBrowser::Resize()
 {
-    BOOL bLastUpdateMode = GetUpdateMode();
-    SetUpdateMode( FALSE );
+    sal_Bool bLastUpdateMode = GetUpdateMode();
+    SetUpdateMode( sal_False );
 
     ::svt::EditBrowseBox::Resize();
     ImplAdjustHeaderControls();
@@ -1256,10 +1256,10 @@ sal_Int16 DataBrowser::GetFirstVisibleColumNumber() const
     return GetFirstVisibleColNumber();
 }
 
-void DataBrowser::ColumnResized( USHORT nColId )
+void DataBrowser::ColumnResized( sal_uInt16 nColId )
 {
-    BOOL bLastUpdateMode = GetUpdateMode();
-    SetUpdateMode( FALSE );
+    sal_Bool bLastUpdateMode = GetUpdateMode();
+    SetUpdateMode( sal_False );
 
     EditBrowseBox::ColumnResized( nColId );
     ImplAdjustHeaderControls();
@@ -1270,8 +1270,8 @@ void DataBrowser::ColumnResized( USHORT nColId )
 
 void DataBrowser::EndScroll()
 {
-    BOOL bLastUpdateMode = GetUpdateMode();
-    SetUpdateMode( FALSE );
+    sal_Bool bLastUpdateMode = GetUpdateMode();
+    SetUpdateMode( sal_False );
 
     EditBrowseBox::EndScroll();
     RenewSeriesHeaders();
@@ -1400,8 +1400,8 @@ IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit*, pEdit )
 
 sal_Int32 DataBrowser::GetTotalWidth() const
 {
-    ULONG nWidth = 0;
-    for ( USHORT nCol = 0; nCol < ColCount(); ++nCol )
+    sal_uLong nWidth = 0;
+    for ( sal_uInt16 nCol = 0; nCol < ColCount(); ++nCol )
         nWidth += GetColumnWidth( nCol );
     return static_cast< sal_Int32 >( nWidth );
 }

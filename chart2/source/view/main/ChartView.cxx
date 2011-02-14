@@ -202,7 +202,7 @@ void SAL_CALL ChartView::initialize( const uno::Sequence< uno::Any >& aArguments
         m_pDrawModelWrapper = ::boost::shared_ptr< DrawModelWrapper >( new DrawModelWrapper( m_xCC ) );
         m_xShapeFactory = m_pDrawModelWrapper->getShapeFactory();
         m_xDrawPage = m_pDrawModelWrapper->getMainDrawPage();
-        StartListening( m_pDrawModelWrapper->getSdrModel(), FALSE /*bPreventDups*/ );
+        StartListening( m_pDrawModelWrapper->getSdrModel(), sal_False /*bPreventDups*/ );
         // \--
     }
 }
@@ -211,7 +211,7 @@ ChartView::~ChartView()
 {
     if( m_pDrawModelWrapper.get() )
     {
-        EndListening( m_pDrawModelWrapper->getSdrModel(), FALSE /*bAllDups*/ );
+        EndListening( m_pDrawModelWrapper->getSdrModel(), sal_False /*bAllDups*/ );
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
         m_pDrawModelWrapper.reset();
     }
@@ -2494,7 +2494,7 @@ void ChartView::createShapes()
         // /--
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
         // #i12587# support for shapes in chart
-        m_pDrawModelWrapper->getSdrModel().EnableUndo( FALSE );
+        m_pDrawModelWrapper->getSdrModel().EnableUndo( sal_False );
         m_pDrawModelWrapper->clearMainDrawPage();
         // \--
     }
@@ -2658,7 +2658,7 @@ void ChartView::createShapes()
     if ( m_pDrawModelWrapper )
     {
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-        m_pDrawModelWrapper->getSdrModel().EnableUndo( TRUE );
+        m_pDrawModelWrapper->getSdrModel().EnableUndo( sal_True );
     }
 
 #if OSL_DEBUG_LEVEL > 0
