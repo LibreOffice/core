@@ -921,11 +921,6 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
     s_xCurrentComponent = _rxComponent;
     if ( pAppMgr )
         pAppMgr->SetGlobalUNOConstant( "ThisComponent", makeAny( _rxComponent ) );
-
-#if OSL_DEBUG_LEVEL > 0
-    const char* pComponentImplName = _rxComponent.get() ? typeid( *_rxComponent.get() ).name() : "void";
-    OSL_TRACE( "current component is a %s\n", pComponentImplName );
-#endif
 }
 
 Reference< XInterface > SfxObjectShell::GetCurrentComponent()
