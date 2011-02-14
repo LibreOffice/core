@@ -40,19 +40,14 @@ class SfxFilter;
 #include <sfx2/module.hxx>
 #include <sfx2/docfac.hxx>
 
-//-------------------------------------------------------------------------
-
+/**
+ * This class is a wrapper for a Load-On-Demand-DLL. One instance per
+ * SfxApplication will be created for the runtime of
+ * SfxApplication-subclass::Main().
+ *
+ * Remember: Do export this class! It is used by the application.
+ */
 class ScDLL
-
-/*  [Description]
-
-    This class is a wrapper for a Load-On-Demand-DLL. One instance
-    per SfxApplication will be created for the runtime of
-    SfxApplication-subclass::Main().
-
-    Remember: Do export this class! It is used by the application.
-*/
-
 {
 public:
                     // Ctor/Dtor must be linked to the application
