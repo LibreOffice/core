@@ -305,22 +305,6 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const P
     sal_Bool bMetafile = pOutDev->GetConnectMetaFile() ? sal_True : sal_False;
     Region aOldRegion = pOutDev->GetClipRegion();
 
-#ifdef EDIT_PRINTER_LOG
-    if ( pOutDev->GetOutDevType() == OUTDEV_PRINTER )
-    {
-        SvFileStream aLog( "d:\\editprn.log", STREAM_WRITE );
-        aLog.Seek( STREAM_SEEK_TO_END );
-        aLog << '' << endl << "Printing: ";
-        aLog << GetText( "\n\r" ).GetStr();
-        aLog << endl << endl;
-         aLog << "Ref-Device: " << String( (sal_uInt32)GetRefDevice() ).GetStr() << " Type=" << String( (sal_uInt16)GetRefDevice()->GetOutDevType() ).GetStr() << ", MapX=" << String( GetRefDevice()->GetMapMode().GetScaleX().GetNumerator() ).GetStr() << "/" << String( GetRefDevice()->GetMapMode().GetScaleX().GetDenominator() ).GetStr() <<endl;
-        aLog << "Paper-Width: " << String( GetPaperSize().Width() ).GetStr() << ",\tOut-Width: " << String( rOutRect.GetWidth() ).GetStr() << ",\tCalculated: " << String( CalcTextWidth() ).GetStr() << endl;
-        aLog << "Paper-Height: " << String( GetPaperSize().Height() ).GetStr() << ",\tOut-Height: " << String( rOutRect.GetHeight() ).GetStr() << ",\tCalculated: " << String( GetTextHeight() ).GetStr() << endl;
-
-        aLog << endl;
-    }
-#endif
-
     // Wenn es eine gab => Schnittmenge !
     // Bei der Metafileaufzeichnung Push/Pop verwenden.
     if ( bMetafile )
@@ -926,17 +910,6 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                 if ( rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
                 {
                     EditDbg::ShowEditEngineData( this );
-                    #ifdef EDIT_PRINTER_LOG
-                        SvFileStream aLog( "d:\\editprn.log", STREAM_WRITE );
-                        aLog.Seek( STREAM_SEEK_TO_END );
-                        aLog << '' << endl << "Debug: ";
-                        aLog << GetText( "\n\r" ).GetStr();
-                        aLog << endl << endl;
-                        aLog << "Ref-Device: " << String( (sal_uInt32)GetRefDevice() ).GetStr() << " Type=" << String( (sal_uInt16)GetRefDevice()->GetOutDevType() ).GetStr() << ", MapX=" << String( GetRefDevice()->GetMapMode().GetScaleX().GetNumerator() ).GetStr() << "/" << String( GetRefDevice()->GetMapMode().GetScaleX().GetDenominator() ).GetStr() <<endl;
-                        aLog << "Paper-Width: " << String( GetPaperSize().Width() ).GetStr() << ",\tCalculated: " << String( CalcTextWidth() ).GetStr() << endl;
-                        aLog << "Paper-Height: " << String( GetPaperSize().Height() ).GetStr() << ",\tCalculated: " << String( GetTextHeight() ).GetStr() << endl;
-                        aLog << endl;
-                    #endif
                 }
                 bDone = FALSE;
             }
