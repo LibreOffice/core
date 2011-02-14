@@ -598,13 +598,6 @@ void SbiDisas::OffOp( String& rText )
 }
 
 // Data type
-#ifdef HP9000 // TODO: remove this!
-static char* SbiDisas_TypeOp_pTypes[13] = {
-    "Empty","Null","Integer","Long","Single","Double",
-    "Currency","Date","String","Object","Error","Boolean",
-    "Variant" };
-#define pTypes SbiDisas_TypeOp_pTypes
-#endif
 void SbiDisas::TypeOp( String& rText )
 {
     // From 1996-01-19: type can contain flag for BYVAL (StepARGTYP)
@@ -615,12 +608,6 @@ void SbiDisas::TypeOp( String& rText )
     }
     if( nOp1 < 13 )
     {
-#ifndef HP9000
-        static char pTypes[][13] = {
-            "Empty","Null","Integer","Long","Single","Double",
-            "Currency","Date","String","Object","Error","Boolean",
-            "Variant" };
-#endif
         rText.AppendAscii( pTypes[ nOp1 ] );
     }
     else
@@ -629,9 +616,6 @@ void SbiDisas::TypeOp( String& rText )
         rText += (USHORT)nOp1;
     }
 }
-#ifdef HP9000
-#undef pTypes
-#endif
 
 // TRUE-Label, condition Opcode
 void SbiDisas::CaseOp( String& rText )

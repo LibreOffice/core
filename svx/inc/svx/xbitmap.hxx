@@ -39,7 +39,7 @@
 // class XOBitmap
 //---------------
 
-#if defined HP9000 || defined SINIX
+#if defined SINIX
 static Size aXOBitmapDefaultSize( 8, 8 );
 #endif
 
@@ -59,7 +59,7 @@ public:
     XOBitmap();
     XOBitmap( const GraphicObject& rGraphicObject, XBitmapStyle eStyle = XBITMAP_TILE );
     XOBitmap( const Bitmap& rBitmap, XBitmapStyle eStyle = XBITMAP_TILE );
-#if defined HP9000 || defined SINIX
+#if defined SINIX
     XOBitmap( const USHORT* pArray, const Color& aPixelColor,
              const Color& aBckgrColor, const Size& rSize = aXOBitmapDefaultSize,
              XBitmapStyle eStyle = XBITMAP_TILE );
