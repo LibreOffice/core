@@ -1,3 +1,4 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -1308,3 +1309,4 @@ void OGLTransitionImpl::makeNewsflash()
     OverallOperations.push_back(new SRotate(basegfx::B3DVector(0,0,1),basegfx::B3DVector(0.2,0.2,0),1080,true,0,1));
 }
 
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
