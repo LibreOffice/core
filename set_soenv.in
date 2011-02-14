@@ -1496,9 +1496,11 @@ else
 
 #
 print "done\n";
+$gb_REPOS = $SRC_ROOT;
+
 if ('@WITH_LANG@' ne "")
 {
-    $gb_REPOS = $SRC_ROOT." ".$SOURCE_ROOT_DIR."/l10n";
+    $gb_REPOS .= " ".$SOURCE_ROOT_DIR."/l10n";
 }
 
 #
