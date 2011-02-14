@@ -88,7 +88,7 @@ public:
     virtual void    AddWindow(::sd::Window* pWin) { pSlideView->AddWindowToPaintView((OutputDevice*) pWin); }
     virtual void    RemoveWindow(::sd::Window* pWin) { pSlideView->DeleteWindowFromPaintView((OutputDevice*) pWin); }
 
-    virtual BOOL    KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
+    virtual sal_Bool    KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin);
     virtual void    MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void    MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void    MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin);
@@ -106,7 +106,7 @@ public:
     void            GetMenuState(SfxItemSet &rSet);
     void            GetAttrState(SfxItemSet &rSet);
 
-    void            SetPagesPerRow( USHORT nPagesPerRow );
+    void            SetPagesPerRow( sal_uInt16 nPagesPerRow );
 
     void            ExecStatusBar(SfxRequest& rReq);
     void            GetStatusBarState(SfxItemSet& rSet);
@@ -121,7 +121,7 @@ public:
     virtual void    SetZoom(long nZoom);
     virtual void    SetZoomRect(const Rectangle& rZoomRect);
 
-    virtual BOOL    HasSelection( BOOL bText = TRUE ) const;
+    virtual sal_Bool    HasSelection( sal_Bool bText = sal_True ) const;
 
     /** Draw the rectangle arround the specified slide that indicates whether
         the slide is selected or not.  When not selected the rectangle is
@@ -133,8 +133,8 @@ public:
         @param nPage
             When the page number is invalid then the call is ignored.
     */
-    void            DrawSelectionRect( USHORT nPage );
-    void            DrawFocusRect( USHORT nPage );
+    void            DrawSelectionRect( sal_uInt16 nPage );
+    void            DrawFocusRect( sal_uInt16 nPage );
 
     virtual void    WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
     virtual void    ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
@@ -145,12 +145,12 @@ public:
 
     void            SelectionHasChanged();
     void            PageLayoutHasChanged();
-    void            FocusHasChanged( USHORT nOldFocusPage, USHORT nNewFocusPage );
-    void            PageVisibilityHasChanged( USHORT nPage, BOOL bVisible );
+    void            FocusHasChanged( sal_uInt16 nOldFocusPage, sal_uInt16 nNewFocusPage );
+    void            PageVisibilityHasChanged( sal_uInt16 nPage, sal_Bool bVisible );
 
     /** On activation the preview is turned off.
     */
-    virtual void Activate (BOOL IsMDIActivate);
+    virtual void Activate (sal_Bool IsMDIActivate);
 
 protected:
     virtual Size    GetOptimalSizePixel() const;
@@ -162,12 +162,12 @@ private:
     SlideView* pSlideView;
     Point           aDisplayPos;
     Size            aDisplaySize;
-    USHORT          nCurFocusPage;
+    sal_uInt16          nCurFocusPage;
     bool            bSetInitialZoomFactor;
     bool            bInitializeWinPos;
 
     void            Construct(SdDrawDocument* pDoc);
-    void            ImplDrawFocusRect( USHORT nPage, BOOL bVisible );
+    void            ImplDrawFocusRect( sal_uInt16 nPage, sal_Bool bVisible );
 };
 
 } // end of namespace sd

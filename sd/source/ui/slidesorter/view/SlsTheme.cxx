@@ -59,9 +59,9 @@ ColorData HGBAdapt (
     const sal_Int32 nNewSaturation,
     const sal_Int32 nNewBrightness)
 {
-    USHORT nHue (0);
-    USHORT nSaturation (0);
-    USHORT nBrightness (0);
+    sal_uInt16 nHue (0);
+    sal_uInt16 nSaturation (0);
+    sal_uInt16 nBrightness (0);
     Color(aColorData).RGBtoHSB(nHue, nSaturation, nBrightness);
     return Color::HSBtoRGB(
         nHue,
@@ -260,13 +260,13 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
     {
         case Font_PageNumber:
             pFont.reset(new Font(Application::GetSettings().GetStyleSettings().GetAppFont()));
-            pFont->SetTransparent(TRUE);
+            pFont->SetTransparent(sal_True);
             pFont->SetWeight(WEIGHT_BOLD);
             break;
 
         case Font_PageCount:
             pFont.reset(new Font(Application::GetSettings().GetStyleSettings().GetAppFont()));
-            pFont->SetTransparent(TRUE);
+            pFont->SetTransparent(sal_True);
             pFont->SetWeight(WEIGHT_NORMAL);
             {
                 const Size aSize (pFont->GetSize());
@@ -276,7 +276,7 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
 
         case Font_Button:
             pFont.reset(new Font(Application::GetSettings().GetStyleSettings().GetAppFont()));
-            pFont->SetTransparent(TRUE);
+            pFont->SetTransparent(sal_True);
             pFont->SetWeight(WEIGHT_BOLD);
             {
                 const Size aSize (pFont->GetSize());
@@ -517,7 +517,7 @@ Theme::GradientDescriptor& Theme::GetGradient (const GradientColorType eType)
 
 
 
-void Theme::InitializeIcon (const IconType eType, USHORT nResourceId)
+void Theme::InitializeIcon (const IconType eType, sal_uInt16 nResourceId)
 {
     if (eType>=0 && size_t(eType)<maIcons.size())
     {

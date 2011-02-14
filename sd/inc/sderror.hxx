@@ -49,12 +49,12 @@
 
 #ifndef __RSC
 
-inline FASTBOOL IsWarning( ULONG nErr )
+inline FASTBOOL IsWarning( sal_uLong nErr )
 {
     return 0 != ( nErr & ERRCODE_WARNING_MASK & nErr );
 }
 
-inline FASTBOOL IsError( ULONG nErr )
+inline FASTBOOL IsError( sal_uLong nErr )
 {
     return nErr && 0 == ( ERRCODE_WARNING_MASK & nErr );
 }

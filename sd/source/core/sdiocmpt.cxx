@@ -35,12 +35,12 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-old_SdrDownCompat::old_SdrDownCompat(SvStream& rNewStream, UINT16 nNewMode)
+old_SdrDownCompat::old_SdrDownCompat(SvStream& rNewStream, sal_uInt16 nNewMode)
 :   rStream(rNewStream),
     nSubRecSiz(0),
     nSubRecPos(0),
     nMode(nNewMode),
-    bOpen(FALSE)
+    bOpen(sal_False)
 {
     OpenSubRecord();
 }
@@ -77,7 +77,7 @@ void old_SdrDownCompat::OpenSubRecord()
         Write();
     }
 
-    bOpen = TRUE;
+    bOpen = sal_True;
 }
 
 void old_SdrDownCompat::CloseSubRecord()
@@ -85,11 +85,11 @@ void old_SdrDownCompat::CloseSubRecord()
     if(rStream.GetError())
         return;
 
-    UINT32 nAktPos(rStream.Tell());
+    sal_uInt32 nAktPos(rStream.Tell());
 
     if(nMode == STREAM_READ)
     {
-        UINT32 nReadAnz(nAktPos - nSubRecPos);
+        sal_uInt32 nReadAnz(nAktPos - nSubRecPos);
         if(nReadAnz != nSubRecSiz)
         {
             rStream.Seek(nSubRecPos + nSubRecSiz);
@@ -103,7 +103,7 @@ void old_SdrDownCompat::CloseSubRecord()
         rStream.Seek(nAktPos);
     }
 
-    bOpen = FALSE;
+    bOpen = sal_False;
 }
 
 /*************************************************************************
@@ -112,7 +112,7 @@ void old_SdrDownCompat::CloseSubRecord()
 |*
 \************************************************************************/
 
-SdIOCompat::SdIOCompat(SvStream& rNewStream, USHORT nNewMode, UINT16 nVer)
+SdIOCompat::SdIOCompat(SvStream& rNewStream, sal_uInt16 nNewMode, sal_uInt16 nVer)
 :   old_SdrDownCompat(rNewStream, nNewMode), nVersion(nVer)
 {
     if (nNewMode == STREAM_WRITE)

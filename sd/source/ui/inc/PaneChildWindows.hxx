@@ -39,11 +39,11 @@ class PaneChildWindow
 public:
     PaneChildWindow (
         ::Window* pParentWindow,
-        USHORT nId,
+        sal_uInt16 nId,
         SfxBindings* pBindings,
         SfxChildWinInfo* pInfo,
-        const USHORT nDockWinTitleResId,
-        const USHORT nTitleBarResId,
+        const sal_uInt16 nDockWinTitleResId,
+        const sal_uInt16 nTitleBarResId,
         SfxChildAlignment eAlignment);
     virtual ~PaneChildWindow (void);
 };
@@ -55,7 +55,7 @@ class LeftPaneImpressChildWindow
     : public PaneChildWindow
 {
 public:
-    LeftPaneImpressChildWindow (::Window*, USHORT, SfxBindings*, SfxChildWinInfo*);
+    LeftPaneImpressChildWindow (::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
 
     SFX_DECL_CHILDWINDOW(LeftPaneImpressChildWindow);
 };
@@ -67,7 +67,7 @@ class LeftPaneDrawChildWindow
     : public PaneChildWindow
 {
 public:
-    LeftPaneDrawChildWindow (::Window*, USHORT, SfxBindings*, SfxChildWinInfo*);
+    LeftPaneDrawChildWindow (::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
 
     SFX_DECL_CHILDWINDOW(LeftPaneDrawChildWindow);
 };
@@ -84,7 +84,7 @@ class ToolPanelChildWindow  :public PaneChildWindow
 public:
     ToolPanelChildWindow(
         ::Window* i_pParentWindow,
-        USHORT i_nId,
+        sal_uInt16 i_nId,
         SfxBindings* i_pBindings,
         SfxChildWinInfo* i_pChildWindowInfo );
 

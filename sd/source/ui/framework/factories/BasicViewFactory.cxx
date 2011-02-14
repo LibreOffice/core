@@ -622,7 +622,7 @@ void BasicViewFactory::ActivateCenterView (
     // have to request a resize now.
     rpDescriptor->mpViewShell->UIFeatureChanged();
     if (mpBase->GetDocShell()->IsInPlaceActive())
-        mpBase->GetViewFrame()->Resize(TRUE);
+        mpBase->GetViewFrame()->Resize(sal_True);
 
     mpBase->GetDrawController().SetSubController(
         rpDescriptor->mpViewShell->CreateSubController());

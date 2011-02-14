@@ -46,12 +46,12 @@ public:
     void        InsertZoomRect(const Rectangle& rRect);
     Rectangle   GetNextZoomRect();
     Rectangle   GetPreviousZoomRect();
-    BOOL        IsNextPossible() const;
-    BOOL        IsPreviousPossible() const;
+    sal_Bool        IsNextPossible() const;
+    sal_Bool        IsPreviousPossible() const;
 
 private:
     ViewShell*  mpViewShell;
-    ULONG       mnCurPos;
+    sal_uLong       mnCurPos;
 };
 
 } // end of namespace sd

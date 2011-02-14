@@ -80,7 +80,7 @@ FunctionReference FuLine::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::
 
 void FuLine::DoExecute( SfxRequest& rReq )
 {
-    BOOL        bHasMarked = mpView->AreObjectsMarked();
+    sal_Bool        bHasMarked = mpView->AreObjectsMarked();
 
     const SfxItemSet* pArgs = rReq.GetArgs();
 
@@ -102,7 +102,7 @@ void FuLine::DoExecute( SfxRequest& rReq )
         }
 
         // Attribute wurden geaendert, Listboxes in Objectbars muessen aktualisiert werden
-        static USHORT SidArray[] = {
+        static sal_uInt16 SidArray[] = {
                         SID_ATTR_LINE_STYLE,
                         SID_ATTR_LINE_DASH,
                         SID_ATTR_LINE_WIDTH,
