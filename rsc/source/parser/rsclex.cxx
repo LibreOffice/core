@@ -295,7 +295,7 @@ int MakeToken( YYSTYPE * pTokenVal ){
     return( c1 );
 }
 
-#if defined( RS6000 ) || defined( HP9000 ) || defined( SCO )
+#if defined( RS6000 ) || defined( SCO )
 extern "C" int yylex()
 #else
 int yylex()
@@ -314,7 +314,7 @@ int yylex()
 /****************** yyerror **********************************************/
 #ifdef RS6000
 extern "C" void yyerror( char* pMessage )
-#elif defined HP9000 || defined SCO || defined SOLARIS
+#elif defined SCO || defined SOLARIS
 extern "C" void yyerror( const char* pMessage )
 #else
 void yyerror( char* pMessage )
