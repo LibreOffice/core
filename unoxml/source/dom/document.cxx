@@ -489,7 +489,8 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_Mutex);
 
-        OString const oData(OUStringToOString(data, RTL_TEXTENCODING_UTF8));
+        OString const oData(
+                ::rtl::OUStringToOString(data, RTL_TEXTENCODING_UTF8));
         xmlChar const*const pData =
             reinterpret_cast<xmlChar const*>(oData.getStr());
         xmlNodePtr const pText =
