@@ -291,7 +291,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     {   // nothing 'til now ... have to change this ....
         // the attributes
         Reference< XPropertySetInfo > xPSI( xSet->getPropertySetInfo(), UNO_SET_THROW );
-        INT32 nPropertyAttributes = 0;
+        sal_Int32 nPropertyAttributes = 0;
         try
         {
             if ( xPSI->hasPropertyByName( _rEvent.PropertyName ) )

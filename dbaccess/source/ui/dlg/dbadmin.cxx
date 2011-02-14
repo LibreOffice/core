@@ -108,7 +108,7 @@ short ODbAdminDialog::Ok()
 }
 
 //-------------------------------------------------------------------------
-void ODbAdminDialog::PageCreated(USHORT _nId, SfxTabPage& _rPage)
+void ODbAdminDialog::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
 {
     // register ourself as modified listener
     static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory(m_pImpl->getORB());
@@ -123,7 +123,7 @@ void ODbAdminDialog::PageCreated(USHORT _nId, SfxTabPage& _rPage)
 }
 
 // -----------------------------------------------------------------------------
-void ODbAdminDialog::addDetailPage(USHORT _nPageId, USHORT _nTextId, CreateTabPage _pCreateFunc)
+void ODbAdminDialog::addDetailPage(sal_uInt16 _nPageId, sal_uInt16 _nTextId, CreateTabPage _pCreateFunc)
 {
     // open our own resource block, as the page titles are strings local to this block
     LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);

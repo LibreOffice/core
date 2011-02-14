@@ -43,7 +43,7 @@ namespace dbaui
 //=========================================================================
 //= OConnectionURLEdit
 //=========================================================================
-OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId,BOOL _bShowPrefix)
+OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId,sal_Bool _bShowPrefix)
     :Edit(_pParent, _rResId)
     ,m_pTypeCollection(NULL)
     ,m_pForcedPrefix(NULL)
@@ -146,7 +146,7 @@ String OConnectionURLEdit::GetText() const
     return Edit::GetText();
 }
 // -----------------------------------------------------------------------------
-void OConnectionURLEdit::ShowPrefix(BOOL _bShowPrefix)
+void OConnectionURLEdit::ShowPrefix(sal_Bool _bShowPrefix)
 {
     m_bShowPrefix = _bShowPrefix;
     if ( m_pForcedPrefix )

@@ -65,7 +65,7 @@ namespace dbaui
         HelpButton      aPB_HELP;
 
     public:
-        DlgSize( Window * pParent, sal_Int32 nVal, BOOL bRow, sal_Int32 _nAlternativeStandard = -1 );
+        DlgSize( Window * pParent, sal_Int32 nVal, sal_Bool bRow, sal_Int32 _nAlternativeStandard = -1 );
         ~DlgSize();
 
         sal_Int32 GetValue();

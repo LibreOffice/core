@@ -167,9 +167,9 @@ OTableConnectionData* OQueryTableConnectionData::NewInstance() const
     return new OQueryTableConnectionData();
 }
 // -----------------------------------------------------------------------------
-BOOL OQueryTableConnectionData::Update()
+sal_Bool OQueryTableConnectionData::Update()
 {
-    return TRUE;
+    return sal_True;
 }
 // -----------------------------------------------------------------------------
 
