@@ -2500,7 +2500,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
         for( ; p->pName; ++p, ++i )
         {
             // set the name
-            const SwPropNameLen& rPropNm = GetPropName( (USHORT)(long)p->pName );
+            const SwPropNameLen& rPropNm = GetPropName( (sal_uInt16)(long)p->pName );
             p->pName = rPropNm.pName;
             p->nNameLen = rPropNm.nNameLen;
             // get the cppu type from the comphelper

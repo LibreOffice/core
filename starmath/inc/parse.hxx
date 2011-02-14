@@ -124,11 +124,11 @@ struct SmToken
     sal_Unicode     cMathChar;
 
     // parse-help info
-    ULONG           nGroup;
-    USHORT          nLevel;
+    sal_uLong       nGroup;
+    sal_uInt16      nLevel;
 
     // token position
-    USHORT          nRow;
+    sal_uInt16      nRow;
     xub_StrLen      nCol;
 
     SmToken();
@@ -185,10 +185,10 @@ class SmParser
     LanguageType    m_nLang;
     xub_StrLen      m_nBufferIndex,
                     m_nTokenIndex;
-    USHORT          m_Row,
+    sal_uInt16          m_Row,
                     m_nColOff;
     SmConvert       m_eConversion;
-    BOOL            m_bImportSymNames,
+    sal_Bool        m_bImportSymNames,
                     m_bExportSymNames;
 
     // map of used symbols (used to reduce file size by exporting only actually used symbols)
@@ -200,14 +200,14 @@ class SmParser
 
 protected:
 #if OSL_DEBUG_LEVEL
-    BOOL            IsDelimiter( const String &rTxt, xub_StrLen nPos );
+    sal_Bool            IsDelimiter( const String &rTxt, xub_StrLen nPos );
 #endif
     void            NextToken();
     xub_StrLen      GetTokenIndex() const   { return m_nTokenIndex; }
-    void            Insert(const String &rText, USHORT nPos);
-    void            Replace( USHORT nPos, USHORT nLen, const String &rText );
+    void            Insert(const String &rText, sal_uInt16 nPos);
+    void            Replace( sal_uInt16 nPos, sal_uInt16 nLen, const String &rText );
 
-    inline BOOL     TokenInGroup(ULONG nGroup);
+    inline sal_Bool     TokenInGroup(sal_uLong nGroup);
 
     // grammar
     void    Table();
@@ -216,7 +216,7 @@ protected:
     void    Relation();
     void    Sum();
     void    Product();
-    void    SubSup(ULONG nActiveGroup);
+    void    SubSup(sal_uLong nActiveGroup);
     void    OpSubSup();
     void    Power();
     void    Blank();
@@ -232,7 +232,7 @@ protected:
     void    FontSize();
     void    Color();
     void    Brace();
-    void    Bracebody(BOOL bIsLeftRight);
+    void    Bracebody(sal_Bool bIsLeftRight);
     void    Function();
     void    Binom();
     void    Stack();
@@ -259,25 +259,25 @@ public:
     SmConvert    GetConversion() const              { return m_eConversion; }
     void         SetConversion(SmConvert eConv)     { m_eConversion = eConv; }
 
-    BOOL         IsImportSymbolNames() const        { return m_bImportSymNames; }
-    void         SetImportSymbolNames(BOOL bVal)    { m_bImportSymNames = bVal; }
-    BOOL         IsExportSymbolNames() const        { return m_bExportSymNames; }
-    void         SetExportSymbolNames(BOOL bVal)    { m_bExportSymNames = bVal; }
+    sal_Bool     IsImportSymbolNames() const        { return m_bImportSymNames; }
+    void         SetImportSymbolNames(sal_Bool bVal)    { m_bImportSymNames = bVal; }
+    sal_Bool     IsExportSymbolNames() const        { return m_bExportSymNames; }
+    void         SetExportSymbolNames(sal_Bool bVal)    { m_bExportSymNames = bVal; }
 
-    USHORT       AddError(SmParseError Type, SmNode *pNode);
+    sal_uInt16       AddError(SmParseError Type, SmNode *pNode);
 
     const SmErrorDesc * NextError();
     const SmErrorDesc * PrevError();
-    const SmErrorDesc * GetError(USHORT i = 0xFFFF);
+    const SmErrorDesc * GetError(sal_uInt16 i = 0xFFFF);
 
     bool    IsUsedSymbol( const String &rSymbolName ) const { return m_aUsedSymbols.find( rSymbolName ) != m_aUsedSymbols.end(); }
     std::set< rtl::OUString >   GetUsedSymbols() const      { return m_aUsedSymbols; }
 };
 
 
-inline BOOL SmParser::TokenInGroup(ULONG nGroup)
+inline sal_Bool SmParser::TokenInGroup(sal_uLong nGroup)
 {
-    return (m_aCurToken.nGroup & nGroup) ? TRUE : FALSE;
+    return (m_aCurToken.nGroup & nGroup) ? sal_True : sal_False;
 }
 
 

@@ -116,12 +116,12 @@ namespace
         const xub_StrLen nCntIdx)
     {
         for(int nb = 0; nb < 2; ++nb)
-            if(&((pPam)->GetBound(BOOL(nb)).nNode.GetNode()) == pOldNode)
+            if(&((pPam)->GetBound(sal_Bool(nb)).nNode.GetNode()) == pOldNode)
             {
-                (pPam)->GetBound(BOOL(nb)).nNode = rNewPos.nNode;
-                (pPam)->GetBound(BOOL(nb)).nContent.Assign(
+                (pPam)->GetBound(sal_Bool(nb)).nNode = rNewPos.nNode;
+                (pPam)->GetBound(sal_Bool(nb)).nContent.Assign(
                     const_cast<SwIndexReg*>(rNewPos.nContent.GetIdxReg()),
-                    nCntIdx + (pPam)->GetBound(BOOL(nb)).nContent.GetIndex());
+                    nCntIdx + (pPam)->GetBound(sal_Bool(nb)).nContent.GetIndex());
             }
     }
 }
@@ -158,7 +158,7 @@ void PaMCorrAbs( const SwPaM& rRange,
     {
         SwUnoCrsrTbl& rTbl = const_cast<SwUnoCrsrTbl&>(pDoc->GetUnoCrsrTbl());
 
-        for( USHORT n = 0; n < rTbl.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rTbl.Count(); ++n )
         {
             SwUnoCrsr *const pUnoCursor = rTbl[ n ];
 
@@ -201,7 +201,7 @@ void PaMCorrAbs( const SwPaM& rRange,
 void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
     const SwPosition& rNewPos,
     const xub_StrLen nOffset,
-    BOOL bMoveCrsr)
+    sal_Bool bMoveCrsr)
 {
     SwCntntNode *const pCntntNode( rOldNode.GetNode().GetCntntNode() );
     SwPaM const aPam(rOldNode, 0,
@@ -212,7 +212,7 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
     getIDocumentMarkAccess()->correctMarksAbsolute(rOldNode, rNewPos, nOffset);
     {   // fix redlines
         SwRedlineTbl& rTbl = *pRedlineTbl;
-        for( USHORT n = 0; n < rTbl.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rTbl.Count(); ++n )
         {
             // is on position ??
             lcl_PaMCorrAbs(*rTbl[ n ], *aPam.Start(), *aPam.End(), aNewPos);
@@ -227,7 +227,7 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
 
 void SwDoc::CorrAbs(const SwPaM& rRange,
     const SwPosition& rNewPos,
-    BOOL bMoveCrsr)
+    sal_Bool bMoveCrsr)
 {
     SwPosition aStart(*rRange.Start());
     SwPosition aEnd(*rRange.End());
@@ -242,7 +242,7 @@ void SwDoc::CorrAbs(const SwPaM& rRange,
 void SwDoc::CorrAbs(const SwNodeIndex& rStartNode,
      const SwNodeIndex& rEndNode,
      const SwPosition& rNewPos,
-     BOOL bMoveCrsr)
+     sal_Bool bMoveCrsr)
 {
     _DelBookmarks(rStartNode, rEndNode);
 
@@ -291,7 +291,7 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
     }
     {
         SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
-        for( USHORT n = 0; n < rTbl.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rTbl.Count(); ++n )
         {
             FOREACHPAM_START( rTbl[ n ] )
                 lcl_PaMCorrRel1( PCURCRSR, pOldNode, aNewPos, nCntIdx );
@@ -312,14 +312,14 @@ void PaMCorrRel( const SwNodeIndex &rOldNode,
 void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
     const SwPosition& rNewPos,
     const xub_StrLen nOffset,
-    BOOL bMoveCrsr)
+    sal_Bool bMoveCrsr)
 {
     getIDocumentMarkAccess()->correctMarksRelative(rOldNode, rNewPos, nOffset);
 
     { // dann die Redlines korrigieren
         SwRedlineTbl& rTbl = *pRedlineTbl;
         SwPosition aNewPos(rNewPos);
-        for( USHORT n = 0; n < rTbl.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rTbl.Count(); ++n )
         {
             // liegt auf der Position ??
             lcl_PaMCorrRel1( rTbl[ n ], &rOldNode.GetNode(), aNewPos, aNewPos.nContent.GetIndex() + nOffset );

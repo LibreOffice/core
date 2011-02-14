@@ -58,7 +58,7 @@ class SwUndoAttr : public SwUndo, private SwUndRng
     const ::std::auto_ptr<SwHistory> m_pHistory;    // History for Undo
     ::std::auto_ptr<SwRedlineData> m_pRedlineData;  // Redlining
     ::std::auto_ptr<SwRedlineSaveDatas> m_pRedlineSaveData;
-    ULONG m_nNodeIndex;                             // Offset: for Redlining
+    sal_uLong m_nNodeIndex;                             // Offset: for Redlining
     const SetAttrMode m_nInsertFlags;               // insert flags
 
     void RemoveIdx( SwDoc& rDoc );
@@ -73,7 +73,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
     virtual void RepeatImpl( ::sw::RepeatContext & );
 
-    void SaveRedlineData( const SwPaM& rPam, BOOL bInsCntnt );
+    void SaveRedlineData( const SwPaM& rPam, sal_Bool bInsCntnt );
 
     SwHistory& GetHistory() { return *m_pHistory; }
 
@@ -83,11 +83,11 @@ class SwUndoResetAttr : public SwUndo, private SwUndRng
 {
     const ::std::auto_ptr<SwHistory> m_pHistory;
     SvUShortsSort m_Ids;
-    const USHORT m_nFormatId;             // Format-Id for Redo
+    const sal_uInt16 m_nFormatId;             // Format-Id for Redo
 
 public:
-    SwUndoResetAttr( const SwPaM&, USHORT nFmtId );
-    SwUndoResetAttr( const SwPosition&, USHORT nFmtId );
+    SwUndoResetAttr( const SwPaM&, sal_uInt16 nFmtId );
+    SwUndoResetAttr( const SwPosition&, sal_uInt16 nFmtId );
 
     virtual ~SwUndoResetAttr();
 
@@ -106,8 +106,8 @@ class SwUndoFmtAttr : public SwUndo
     friend class SwUndoDefaultAttr;
     SwFmt * m_pFmt;
     ::std::auto_ptr<SfxItemSet> m_pOldSet;    // old attributes
-    ULONG m_nNodeIndex;
-    const USHORT m_nFmtWhich;
+    sal_uLong m_nNodeIndex;
+    const sal_uInt16 m_nFmtWhich;
     const bool m_bSaveDrawPt;
 
     bool IsFmtInDoc( SwDoc* );   //is the attribute format still in the Doc?
@@ -154,7 +154,7 @@ class SwUndoFmtResetAttr : public SwUndo
 {
     public:
         SwUndoFmtResetAttr( SwFmt& rChangedFormat,
-                            const USHORT nWhichId );
+                            const sal_uInt16 nWhichId );
         ~SwUndoFmtResetAttr();
 
         virtual void UndoImpl( ::sw::UndoRedoContext & );
@@ -164,7 +164,7 @@ class SwUndoFmtResetAttr : public SwUndo
         // format at which a certain attribute is reset.
         SwFmt * const m_pChangedFormat;
         // which ID of the reset attribute
-        const USHORT m_nWhichId;
+        const sal_uInt16 m_nWhichId;
         // old attribute which has been reset - needed for undo.
         ::std::auto_ptr<SfxPoolItem> m_pOldItem;
 };
@@ -172,7 +172,7 @@ class SwUndoFmtResetAttr : public SwUndo
 
 class SwUndoDontExpandFmt : public SwUndo
 {
-    const ULONG m_nNodeIndex;
+    const sal_uLong m_nNodeIndex;
     const xub_StrLen m_nContentIndex;
 
 public:
@@ -206,7 +206,7 @@ class SwUndoMoveLeftMargin : public SwUndo, private SwUndRng
     const bool m_bModulus;
 
 public:
-    SwUndoMoveLeftMargin( const SwPaM&, BOOL bRight, BOOL bModulus );
+    SwUndoMoveLeftMargin( const SwPaM&, sal_Bool bRight, sal_Bool bModulus );
 
     virtual ~SwUndoMoveLeftMargin();
 
@@ -243,12 +243,12 @@ class SwUndoChangeFootNote : public SwUndo, private SwUndRng
 {
     const ::std::auto_ptr<SwHistory> m_pHistory;
     const String m_Text;
-    const USHORT m_nNumber;
+    const sal_uInt16 m_nNumber;
     const bool m_bEndNote;
 
 public:
     SwUndoChangeFootNote( const SwPaM& rRange, const String& rTxt,
-                          USHORT nNum, bool bIsEndNote );
+                          sal_uInt16 nNum, bool bIsEndNote );
     virtual ~SwUndoChangeFootNote();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );

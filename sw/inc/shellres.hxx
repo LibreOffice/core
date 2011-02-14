@@ -95,8 +95,8 @@ struct SW_DLLPUBLIC ShellResource : public Resource
     // returns for the specific filter the new names of pagedescs
     // This method is for the old code of the specific filters with
     // now localized names
-    String GetPageDescName( USHORT nNo, BOOL bFirst = FALSE,
-                                        BOOL bFollow = FALSE );
+    String GetPageDescName( sal_uInt16 nNo, sal_Bool bFirst = sal_False,
+                                        sal_Bool bFollow = sal_False );
 
     ShellResource();
     ~ShellResource();

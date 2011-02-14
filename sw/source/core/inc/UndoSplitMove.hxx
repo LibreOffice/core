@@ -35,13 +35,13 @@ class SwUndoSplitNode: public SwUndo
 {
     SwHistory* pHistory;
     SwRedlineData* pRedlData;
-    ULONG nNode;
+    sal_uLong nNode;
     xub_StrLen nCntnt;
-    BOOL bTblFlag : 1;
-    BOOL bChkTblStt : 1;
+    sal_Bool bTblFlag : 1;
+    sal_Bool bChkTblStt : 1;
 
 public:
-    SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos, BOOL bChkTbl );
+    SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos, sal_Bool bChkTbl );
 
     virtual ~SwUndoSplitNode();
 
@@ -49,7 +49,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
     virtual void RepeatImpl( ::sw::RepeatContext & );
 
-    void SetTblFlag()       { bTblFlag = TRUE; }
+    void SetTblFlag()       { bTblFlag = sal_True; }
 };
 
 
@@ -58,12 +58,12 @@ class SwUndoMove : public SwUndo, private SwUndRng, private SwUndoSaveCntnt
     // nDest.. - destination range of move (after move!)
     // nIns..  - source Position of move (after move!)
     // nMv..   - destination position of move (before move!); for REDO
-    ULONG nDestSttNode, nDestEndNode, nInsPosNode, nMvDestNode;
+    sal_uLong nDestSttNode, nDestEndNode, nInsPosNode, nMvDestNode;
     xub_StrLen nDestSttCntnt, nDestEndCntnt, nInsPosCntnt, nMvDestCntnt;
 
-    USHORT nFtnStt; // StartPos of Footnotes in History
+    sal_uInt16 nFtnStt; // StartPos of Footnotes in History
 
-    BOOL bJoinNext : 1,
+    sal_Bool bJoinNext : 1,
          bJoinPrev : 1,
          bMoveRange : 1;
 
@@ -79,13 +79,13 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     /// set the destination range after the move
-    void SetDestRange( const SwPaM&, const SwPosition&, BOOL, BOOL );
+    void SetDestRange( const SwPaM&, const SwPosition&, sal_Bool, sal_Bool );
     void SetDestRange( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
                         const SwNodeIndex& rInsPos );
 
-    BOOL IsMoveRange() const        { return bMoveRange; }
-    ULONG GetEndNode() const        { return nEndNode; }
-    ULONG GetDestSttNode() const    { return nDestSttNode; }
+    sal_Bool IsMoveRange() const        { return bMoveRange; }
+    sal_uLong GetEndNode() const        { return nEndNode; }
+    sal_uLong GetDestSttNode() const    { return nDestSttNode; }
     xub_StrLen GetDestSttCntnt() const  { return nDestSttCntnt; }
 
     void SetMoveRedlines( bool b )       { bMoveRedlines = b; }

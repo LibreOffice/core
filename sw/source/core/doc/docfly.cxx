@@ -70,7 +70,7 @@
 #include <undoflystrattr.hxx>
 // <--
 
-extern USHORT GetHtmlMode( const SwDocShell* );
+extern sal_uInt16 GetHtmlMode( const SwDocShell* );
 
 
 using namespace ::com::sun::star;
@@ -78,13 +78,13 @@ using namespace ::com::sun::star;
 /*-----------------17.02.98 08:35-------------------
 
 --------------------------------------------------*/
-USHORT SwDoc::GetFlyCount( FlyCntType eType ) const
+sal_uInt16 SwDoc::GetFlyCount( FlyCntType eType ) const
 {
     const SwSpzFrmFmts& rFmts = *GetSpzFrmFmts();
-    USHORT nSize = rFmts.Count();
-    USHORT nCount = 0;
+    sal_uInt16 nSize = rFmts.Count();
+    sal_uInt16 nCount = 0;
     const SwNodeIndex* pIdx;
-    for ( USHORT i = 0; i < nSize; i++)
+    for ( sal_uInt16 i = 0; i < nSize; i++)
     {
         const SwFrmFmt* pFlyFmt = rFmts[ i ];
         if( RES_FLYFRMFMT == pFlyFmt->Which()
@@ -123,14 +123,14 @@ USHORT SwDoc::GetFlyCount( FlyCntType eType ) const
 
 --------------------------------------------------*/
 // If you change this, also update SwXFrameEnumeration in unocoll.
-SwFrmFmt* SwDoc::GetFlyNum( USHORT nIdx, FlyCntType eType )
+SwFrmFmt* SwDoc::GetFlyNum( sal_uInt16 nIdx, FlyCntType eType )
 {
     SwSpzFrmFmts& rFmts = *GetSpzFrmFmts();
     SwFrmFmt* pRetFmt = 0;
-    USHORT nSize = rFmts.Count();
+    sal_uInt16 nSize = rFmts.Count();
     const SwNodeIndex* pIdx;
-    USHORT nCount = 0;
-    for( USHORT i = 0; !pRetFmt && i < nSize; ++i )
+    sal_uInt16 nCount = 0;
+    for( sal_uInt16 i = 0; !pRetFmt && i < nSize; ++i )
     {
         SwFrmFmt* pFlyFmt = rFmts[ i ];
         if( RES_FLYFRMFMT == pFlyFmt->Which()
@@ -182,7 +182,7 @@ Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
         case FLY_AS_CHAR:
             if( pFlyFmt && rAnch.GetCntntAnchor() )
             {
-                const SwFrm* pOld = ((SwFlyFrmFmt*)pFlyFmt)->GetFrm( &aRet, FALSE );
+                const SwFrm* pOld = ((SwFlyFrmFmt*)pFlyFmt)->GetFrm( &aRet, sal_False );
                 if( pOld )
                     aRet = pOld->Frm().Pos();
             }
@@ -194,7 +194,7 @@ Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
             {
                 const SwPosition *pPos = rAnch.GetCntntAnchor();
                 const SwCntntNode* pNd = pPos->nNode.GetNode().GetCntntNode();
-                const SwFrm* pOld = pNd ? pNd->GetFrm( &aRet, 0, FALSE ) : 0;
+                const SwFrm* pOld = pNd ? pNd->GetFrm( &aRet, 0, sal_False ) : 0;
                 if( pOld )
                     aRet = pOld->Frm().Pos();
             }
@@ -205,7 +205,7 @@ Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
             {
                 const SwFlyFrmFmt* pFmt = (SwFlyFrmFmt*)rAnch.GetCntntAnchor()->
                                                 nNode.GetNode().GetFlyFmt();
-                const SwFrm* pOld = pFmt ? pFmt->GetFrm( &aRet, FALSE ) : 0;
+                const SwFrm* pOld = pFmt ? pFmt->GetFrm( &aRet, sal_False ) : 0;
                 if( pOld )
                     aRet = pOld->Frm().Pos();
             }
@@ -213,9 +213,9 @@ Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
 
         case FLY_AT_PAGE:
             {
-                USHORT nPgNum = rAnch.GetPageNum();
+                sal_uInt16 nPgNum = rAnch.GetPageNum();
                 const SwPageFrm *pPage = (SwPageFrm*)rDoc.GetRootFrm()->Lower();
-                for( USHORT i = 1; (i <= nPgNum) && pPage; ++i,
+                for( sal_uInt16 i = 1; (i <= nPgNum) && pPage; ++i,
                                     pPage = (const SwPageFrm*)pPage->GetNext() )
                     if( i == nPgNum )
                     {
@@ -234,7 +234,7 @@ Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
 #define IGNOREANCHOR 1
 #define DONTMAKEFRMS 2
 
-sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms )
+sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, sal_Bool bNewFrms )
 {
     //Ankerwechsel sind fast immer in alle 'Richtungen' erlaubt.
     //Ausnahme: Absatz- bzw. Zeichengebundene Rahmen duerfen wenn sie in
@@ -308,10 +308,10 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
             pNd->InsertItem( aFmt, pPos->nContent.GetIndex(), 0 );
         }
 
-        if( SFX_ITEM_SET != rSet.GetItemState( RES_VERT_ORIENT, FALSE, &pItem ))
+        if( SFX_ITEM_SET != rSet.GetItemState( RES_VERT_ORIENT, sal_False, &pItem ))
         {
             SwFmtVertOrient aOldV( rFmt.GetVertOrient() );
-            BOOL bSet = TRUE;
+            sal_Bool bSet = sal_True;
             switch( aOldV.GetVertOrient() )
             {
             case text::VertOrientation::LINE_TOP:     aOldV.SetVertOrient( text::VertOrientation::TOP );   break;
@@ -319,7 +319,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
             case text::VertOrientation::LINE_BOTTOM:  aOldV.SetVertOrient( text::VertOrientation::BOTTOM); break;
             case text::VertOrientation::NONE:         aOldV.SetVertOrient( text::VertOrientation::CENTER); break;
             default:
-                bSet = FALSE;
+                bSet = sal_False;
             }
             if( bSet )
                 rSet.Put( aOldV );
@@ -337,7 +337,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
             //Chg: Wenn sich in den Positionsattributen lediglich die
             //Ausrichtung veraendert (text::RelOrientation::FRAME vs. text::RelOrientation::PRTAREA), dann wird die
             //Position ebenfalls korrigiert.
-            if( SFX_ITEM_SET != rSet.GetItemState( RES_HORI_ORIENT, FALSE, &pItem ))
+            if( SFX_ITEM_SET != rSet.GetItemState( RES_HORI_ORIENT, sal_False, &pItem ))
                 pItem = 0;
 
             SwFmtHoriOrient aOldH( rFmt.GetHoriOrient() );
@@ -358,7 +358,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
                 rSet.Put( aOldH );
             }
 
-            if( SFX_ITEM_SET != rSet.GetItemState( RES_VERT_ORIENT, FALSE, &pItem ))
+            if( SFX_ITEM_SET != rSet.GetItemState( RES_VERT_ORIENT, sal_False, &pItem ))
                 pItem = 0;
             SwFmtVertOrient aOldV( rFmt.GetVertOrient() );
 
@@ -392,7 +392,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
 
 static bool
 lcl_SetFlyFrmAttr(SwDoc & rDoc,
-        sal_Int8 (SwDoc::*pSetFlyFrmAnchor)(SwFrmFmt &, SfxItemSet &, BOOL),
+        sal_Int8 (SwDoc::*pSetFlyFrmAnchor)(SwFrmFmt &, SfxItemSet &, sal_Bool),
         SwFrmFmt & rFlyFmt, SfxItemSet & rSet)
 {
     // #i32968# Inserting columns in the frame causes MakeFrmFmt to put two
@@ -400,17 +400,17 @@ lcl_SetFlyFrmAttr(SwDoc & rDoc,
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     //Ist das Ankerattribut dabei? Falls ja ueberlassen wir die Verarbeitung
-    //desselben einer Spezialmethode. Sie Returnt TRUE wenn der Fly neu
+    //desselben einer Spezialmethode. Sie Returnt sal_True wenn der Fly neu
     //erzeugt werden muss (z.B. weil ein Wechsel des FlyTyps vorliegt).
     sal_Int8 const nMakeFrms =
-        (SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, FALSE ))
-             ?  (rDoc.*pSetFlyFrmAnchor)( rFlyFmt, rSet, FALSE )
+        (SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, sal_False ))
+             ?  (rDoc.*pSetFlyFrmAnchor)( rFlyFmt, rSet, sal_False )
              :  DONTMAKEFRMS;
 
     const SfxPoolItem* pItem;
     SfxItemIter aIter( rSet );
     SfxItemSet aTmpSet( rDoc.GetAttrPool(), aFrmFmtSetRange );
-    USHORT nWhich = aIter.GetCurItem()->Which();
+    sal_uInt16 nWhich = aIter.GetCurItem()->Which();
     do {
         switch( nWhich )
         {
@@ -430,7 +430,7 @@ lcl_SetFlyFrmAttr(SwDoc & rDoc,
 
         default:
             if( !IsInvalidItem( aIter.GetCurItem() ) && ( SFX_ITEM_SET !=
-                rFlyFmt.GetAttrSet().GetItemState( nWhich, TRUE, &pItem ) ||
+                rFlyFmt.GetAttrSet().GetItemState( nWhich, sal_True, &pItem ) ||
                 *pItem != *aIter.GetCurItem() ))
                 aTmpSet.Put( *aIter.GetCurItem() );
             break;
@@ -450,10 +450,10 @@ lcl_SetFlyFrmAttr(SwDoc & rDoc,
     return aTmpSet.Count() || MAKEFRMS == nMakeFrms;
 }
 
-BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
+sal_Bool SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
 {
     if( !rSet.Count() )
-        return FALSE;
+        return sal_False;
 
     ::std::auto_ptr<SwUndoFmtAttrHelper> pSaveUndo;
 
@@ -528,16 +528,16 @@ void SwDoc::SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
 // <--
 
 /***************************************************************************
- *  Methode     :   BOOL SwDoc::SetFrmFmtToFly( SwFlyFrm&, SwFrmFmt& )
+ *  Methode     :   sal_Bool SwDoc::SetFrmFmtToFly( SwFlyFrm&, SwFrmFmt& )
  *  Beschreibung:
  *  Erstellt    :   OK 14.04.94 15:40
  *  Aenderung   :   JP 23.04.98
  ***************************************************************************/
 
-BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
-                            SfxItemSet* pSet, BOOL bKeepOrient )
+sal_Bool SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
+                            SfxItemSet* pSet, sal_Bool bKeepOrient )
 {
-    BOOL bChgAnchor = FALSE, bFrmSz = FALSE;
+    sal_Bool bChgAnchor = sal_False, bFrmSz = sal_False;
 
     const SwFmtFrmSize aFrmSz( rFmt.GetFrmSize() );
     const SwFmtVertOrient aVert( rFmt.GetVertOrient() );
@@ -567,20 +567,20 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
 
         // 1. wenn nicht automatisch -> ignorieren, sonst -> wech
         // 2. wech damit, MB!
-        if( SFX_ITEM_SET == rNewFmt.GetAttrSet().GetItemState( RES_FRM_SIZE, FALSE ))
+        if( SFX_ITEM_SET == rNewFmt.GetAttrSet().GetItemState( RES_FRM_SIZE, sal_False ))
         {
             rFmt.ResetFmtAttr( RES_FRM_SIZE );
-            bFrmSz = TRUE;
+            bFrmSz = sal_True;
         }
 
         const SfxItemSet* pAsk = pSet;
         if( !pAsk ) pAsk = &rNewFmt.GetAttrSet();
-        if( SFX_ITEM_SET == pAsk->GetItemState( RES_ANCHOR, FALSE, &pItem )
+        if( SFX_ITEM_SET == pAsk->GetItemState( RES_ANCHOR, sal_False, &pItem )
             && ((SwFmtAnchor*)pItem)->GetAnchorId() !=
                 rFmt.GetAnchor().GetAnchorId() )
         {
             if( pSet )
-                bChgAnchor = MAKEFRMS == SetFlyFrmAnchor( rFmt, *pSet, FALSE );
+                bChgAnchor = MAKEFRMS == SetFlyFrmAnchor( rFmt, *pSet, sal_False );
             else
             {
                 //JP 23.04.98: muss den FlyFmt-Range haben, denn im SetFlyFrmAnchor
@@ -588,7 +588,7 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
                 SfxItemSet aFlySet( *rNewFmt.GetAttrSet().GetPool(),
                                     rNewFmt.GetAttrSet().GetRanges() );
                 aFlySet.Put( *pItem );
-                bChgAnchor = MAKEFRMS == SetFlyFrmAnchor( rFmt, aFlySet, FALSE);
+                bChgAnchor = MAKEFRMS == SetFlyFrmAnchor( rFmt, aFlySet, sal_False);
             }
         }
     }
@@ -657,8 +657,8 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
 
     GetIDocumentUndoRedo().StartUndo( UNDO_INSATTR, NULL );
 
-    BOOL bUnmark = FALSE;
-    for ( USHORT i = 0; i < _rMrkList.GetMarkCount(); ++i )
+    sal_Bool bUnmark = sal_False;
+    for ( sal_uInt16 i = 0; i < _rMrkList.GetMarkCount(); ++i )
     {
         SdrObject* pObj = _rMrkList.GetMark( i )->GetMarkedSdrObj();
         if ( !pObj->ISA(SwVirtFlyDrawObj) )
@@ -749,7 +749,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                         // OD 20.06.2003 #108784# - consider that drawing objects
                         // can be in header/footer. Thus, <GetFrm()> by left-top-corner
                         pTxtFrm = aPos.nNode.GetNode().
-                                        GetCntntNode()->GetFrm( &aPt, 0, FALSE );
+                                        GetCntntNode()->GetFrm( &aPt, 0, sal_False );
                     }
                     const SwFrm *pTmp = ::FindAnchor( pTxtFrm, aPt );
                     pNewAnchorFrm = pTmp->FindFlyFrm();
@@ -932,16 +932,16 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
     if( !pTxtNd )
         return SW_CHAIN_NOT_FOUND;
 
-    const ULONG nFlySttNd = pCntIdx->GetIndex();
+    const sal_uLong nFlySttNd = pCntIdx->GetIndex();
     if( 2 != ( pCntIdx->GetNode().EndOfSectionIndex() - nFlySttNd ) ||
         pTxtNd->GetTxt().Len() )
         return SW_CHAIN_NOT_EMPTY;
 
-    USHORT nArrLen = GetSpzFrmFmts()->Count();
-    for( USHORT n = 0; n < nArrLen; ++n )
+    sal_uInt16 nArrLen = GetSpzFrmFmts()->Count();
+    for( sal_uInt16 n = 0; n < nArrLen; ++n )
     {
         const SwFmtAnchor& rAnchor = (*GetSpzFrmFmts())[ n ]->GetAnchor();
-        ULONG nTstSttNd;
+        sal_uLong nTstSttNd;
         // OD 11.12.2003 #i20622# - to-frame anchored objects are allowed.
         if ( ((rAnchor.GetAnchorId() == FLY_AT_PARA) ||
               (rAnchor.GetAnchorId() == FLY_AT_CHAR)) &&
@@ -963,14 +963,14 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
     // both in the same fly, header, footer or on the page?
     const SwFmtAnchor &rSrcAnchor = rSource.GetAnchor(),
                       &rDstAnchor = rDest.GetAnchor();
-    ULONG nEndOfExtras = GetNodes().GetEndOfExtras().GetIndex();
-    BOOL bAllowed = FALSE;
+    sal_uLong nEndOfExtras = GetNodes().GetEndOfExtras().GetIndex();
+    sal_Bool bAllowed = sal_False;
     if ( FLY_AT_PAGE == rSrcAnchor.GetAnchorId() )
     {
         if ( (FLY_AT_PAGE == rDstAnchor.GetAnchorId()) ||
             ( rDstAnchor.GetCntntAnchor() &&
               rDstAnchor.GetCntntAnchor()->nNode.GetIndex() > nEndOfExtras ))
-            bAllowed = TRUE;
+            bAllowed = sal_True;
     }
     else if( rSrcAnchor.GetCntntAnchor() && rDstAnchor.GetCntntAnchor() )
     {
@@ -989,7 +989,7 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
                 pSttNd == rDstIdx.GetNode().FindHeaderStartNode() ) ||
             ( !pSttNd && rDstIdx.GetIndex() > nEndOfExtras &&
                             rSrcIdx.GetIndex() > nEndOfExtras ))
-            bAllowed = TRUE;
+            bAllowed = sal_True;
     }
 
     return bAllowed ? SW_CHAIN_OK : SW_CHAIN_WRONG_AREA;

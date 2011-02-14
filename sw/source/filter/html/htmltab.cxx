@@ -2735,7 +2735,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         if( GetBGBrush() )
             pSwTable->GetFrmFmt()->SetFmtAttr( *GetBGBrush() );
 
-        ((SwTable *)pSwTable)->SetRowsToRepeat( static_cast< USHORT >(nHeadlineRepeat) );
+        ((SwTable *)pSwTable)->SetRowsToRepeat( static_cast< sal_uInt16 >(nHeadlineRepeat) );
         ((SwTable *)pSwTable)->GCLines();
 
         sal_Bool bIsInFlyFrame = pContext && pContext->GetFrmFmt();
@@ -3496,15 +3496,15 @@ HTMLTableCnts *SwHTMLParser::InsertTableContents(
 {
     // eine neue Section anlegen, der PaM steht dann darin
     const SwStartNode *pStNd =
-        InsertTableSection( static_cast< USHORT >(bHead ? RES_POOLCOLL_TABLE_HDLN
+        InsertTableSection( static_cast< sal_uInt16 >(bHead ? RES_POOLCOLL_TABLE_HDLN
                                            : RES_POOLCOLL_TABLE) );
 
     if( GetNumInfo().GetNumRule() )
     {
         // 1. Absatz auf nicht numeriert setzen
-        BYTE nLvl = GetNumInfo().GetLevel();
+        sal_uInt8 nLvl = GetNumInfo().GetLevel();
         // --> OD 2008-04-02 #refactorlists#
-//        SetNoNum(&nLvl, TRUE);
+//        SetNoNum(&nLvl, sal_True);
 //        SetNodeNum( nLvl);
         SetNodeNum( nLvl, false );
     }
@@ -4203,7 +4203,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                 !pSaveStruct->IsInSection(),
                 "Section oder nicht, das ist hier die Frage" );
         const SwStartNode *pStNd =
-            InsertTableSection( static_cast< USHORT >(pSaveStruct->IsHeaderCell()
+            InsertTableSection( static_cast< sal_uInt16 >(pSaveStruct->IsHeaderCell()
                                         ? RES_POOLCOLL_TABLE_HDLN
                                         : RES_POOLCOLL_TABLE ));
         const SwEndNode *pEndNd = pStNd->EndOfSectionNode();

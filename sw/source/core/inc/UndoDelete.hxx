@@ -55,26 +55,26 @@ class SwUndoDelete
 
     String sTableName;
 
-    ULONG nNode;
-    ULONG nNdDiff;           // difference of Nodes before/after Delete
-    ULONG nSectDiff;         // diff. of Nodes before/after Move w/ SectionNodes
-    ULONG nReplaceDummy;     // diff. to a temporary dummy object
-    USHORT nSetPos;
+    sal_uLong nNode;
+    sal_uLong nNdDiff;           // difference of Nodes before/after Delete
+    sal_uLong nSectDiff;         // diff. of Nodes before/after Move w/ SectionNodes
+    sal_uLong nReplaceDummy;     // diff. to a temporary dummy object
+    sal_uInt16 nSetPos;
 
-    BOOL bGroup : 1;         // TRUE: is already Grouped; see CanGrouping()
-    BOOL bBackSp : 1;        // TRUE: if Grouped and preceding content deleted
-    BOOL bJoinNext: 1;       // TRUE: if range is selected forwards
-    BOOL bTblDelLastNd : 1;  // TRUE: TextNode following Table inserted/deleted
-    BOOL bDelFullPara : 1;   // TRUE: entire Nodes were deleted
-    BOOL bResetPgDesc : 1;   // TRUE: reset PgDsc on following node
-    BOOL bResetPgBrk : 1;    // TRUE: reset PgBreak on following node
-    BOOL bFromTableCopy : 1; // TRUE: called by SwUndoTblCpyTbl
+    sal_Bool bGroup : 1;         // TRUE: is already Grouped; see CanGrouping()
+    sal_Bool bBackSp : 1;        // TRUE: if Grouped and preceding content deleted
+    sal_Bool bJoinNext: 1;       // TRUE: if range is selected forwards
+    sal_Bool bTblDelLastNd : 1;  // TRUE: TextNode following Table inserted/deleted
+    sal_Bool bDelFullPara : 1;   // TRUE: entire Nodes were deleted
+    sal_Bool bResetPgDesc : 1;   // TRUE: reset PgDsc on following node
+    sal_Bool bResetPgBrk : 1;    // TRUE: reset PgBreak on following node
+    sal_Bool bFromTableCopy : 1; // TRUE: called by SwUndoTblCpyTbl
 
-    BOOL SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
+    sal_Bool SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
                     SwTxtNode* pSttTxtNd, SwTxtNode* pEndTxtNd );
 public:
     SwUndoDelete( SwPaM&,
-            BOOL bFullPara = FALSE, BOOL bCalledByTblCpy = FALSE );
+            sal_Bool bFullPara = sal_False, sal_Bool bCalledByTblCpy = sal_False );
     virtual ~SwUndoDelete();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );
@@ -95,18 +95,18 @@ public:
     */
     virtual SwRewriter GetRewriter() const;
 
-    BOOL CanGrouping( SwDoc*, const SwPaM& );
+    sal_Bool CanGrouping( SwDoc*, const SwPaM& );
 
-    void SetTblDelLastNd()      { bTblDelLastNd = TRUE; }
+    void SetTblDelLastNd()      { bTblDelLastNd = sal_True; }
 
     // for PageDesc/PageBreak Attributes of a table
-    void SetPgBrkFlags( BOOL bPageBreak, BOOL bPageDesc )
+    void SetPgBrkFlags( sal_Bool bPageBreak, sal_Bool bPageDesc )
         { bResetPgDesc = bPageDesc; bResetPgBrk = bPageBreak; }
 
     void SetTableName(const String & rName);
 
     // SwUndoTblCpyTbl needs this information:
-    BOOL IsDelFullPara() const { return bDelFullPara; }
+    sal_Bool IsDelFullPara() const { return bDelFullPara; }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwUndoDelete)
 };

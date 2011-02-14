@@ -47,7 +47,7 @@
 
 
 
-SwBorderDlg::SwBorderDlg(Window* pParent, SfxItemSet& rSet, USHORT nType) :
+SwBorderDlg::SwBorderDlg(Window* pParent, SfxItemSet& rSet, sal_uInt16 nType) :
 
     SfxSingleTabDialog(pParent, rSet, 0)
 

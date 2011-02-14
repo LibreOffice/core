@@ -60,12 +60,12 @@ using namespace ::com::sun::star::i18n;
  *
  *
  */
-USHORT SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
-                            USHORT nMode )
+sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
+                            sal_uInt16 nMode )
 {
     const SwPaM *_pStartCrsr = (SwPaM*)rPam.GetNext(),
                 *__pStartCrsr = _pStartCrsr;
-    BOOL bCheckEmpty = &rPam != _pStartCrsr;
+    sal_Bool bCheckEmpty = &rPam != _pStartCrsr;
     do {
         const SwPosition* pStt = _pStartCrsr->Start(),
                         * pEnd = pStt == _pStartCrsr->GetPoint()
@@ -106,18 +106,18 @@ USHORT SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
     return rList.Count();
 }
 
-USHORT SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
-                            USHORT nMode )
+sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
+                            sal_uInt16 nMode )
 {
     GetIDocumentUndoRedo().StartUndo( UNDO_SETRUBYATTR, NULL );
     SvUShortsSort aDelArr;
     aDelArr.Insert( RES_TXTATR_CJK_RUBY );
 
-    USHORT nListEntry = 0;
+    sal_uInt16 nListEntry = 0;
 
     const SwPaM *_pStartCrsr = (SwPaM*)rPam.GetNext(),
                 *__pStartCrsr = _pStartCrsr;
-    BOOL bCheckEmpty = &rPam != _pStartCrsr;
+    sal_Bool bCheckEmpty = &rPam != _pStartCrsr;
     do {
         const SwPosition* pStt = _pStartCrsr->Start(),
                         * pEnd = pStt == _pStartCrsr->GetPoint()
@@ -146,7 +146,7 @@ USHORT SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         }
                         else
                         {
-                            ResetAttrs( aPam, TRUE, &aDelArr );
+                            ResetAttrs( aPam, sal_True, &aDelArr );
                         }
                     }
 
@@ -195,7 +195,7 @@ USHORT SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
     return nListEntry;
 }
 
-BOOL SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, USHORT )
+sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt16 )
 {
     // Point must be the startposition, Mark is optional the end position
     SwPosition* pPos = rPam.GetPoint();
@@ -203,7 +203,7 @@ BOOL SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, USHORT )
     const String* pTxt = &pTNd->GetTxt();
     xub_StrLen nStart = pPos->nContent.GetIndex(), nEnd = pTxt->Len();
 
-    BOOL bHasMark = rPam.HasMark();
+    sal_Bool bHasMark = rPam.HasMark();
     if( bHasMark )
     {
         // in the same node?
@@ -219,7 +219,7 @@ BOOL SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, USHORT )
 
     // ----- search the start
     // --- look where a ruby attribut starts
-    USHORT nHtIdx = USHRT_MAX;
+    sal_uInt16 nHtIdx = USHRT_MAX;
     const SwpHints* pHts = pTNd->GetpSwpHints();
     const SwTxtAttr* pAttr = 0;
     if( pHts )
@@ -249,7 +249,7 @@ BOOL SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, USHORT )
                             *pTxt, nStart,
                             pBreakIt->GetLocale( pTNd->GetLang( nStart )),
                             WordType::ANYWORD_IGNOREWHITESPACES,
-                            TRUE ).startPos;
+                            sal_True ).startPos;
         if( nWordStt < nStart && -1 != nWordStt )
         {
             nStart = (xub_StrLen)nWordStt;
@@ -257,7 +257,7 @@ BOOL SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, USHORT )
         }
     }
 
-    BOOL bAlphaNum = FALSE;
+    sal_Bool bAlphaNum = sal_False;
     long nWordEnd = nEnd;
     CharClass& rCC = GetAppCharClass();
     while(  nStart < nEnd )
@@ -277,14 +277,14 @@ BOOL SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, USHORT )
         }
 
         sal_Int32 nChType = rCC.getType( *pTxt, nStart );
-        BOOL bIgnoreChar = FALSE, bIsAlphaNum = FALSE, bChkNxtWrd = FALSE;
+        sal_Bool bIgnoreChar = sal_False, bIsAlphaNum = sal_False, bChkNxtWrd = sal_False;
         switch( nChType )
         {
         case UnicodeType::UPPERCASE_LETTER:
         case UnicodeType::LOWERCASE_LETTER:
         case UnicodeType::TITLECASE_LETTER:
         case UnicodeType::DECIMAL_DIGIT_NUMBER:
-                bChkNxtWrd = bIsAlphaNum = TRUE;
+                bChkNxtWrd = bIsAlphaNum = sal_True;
                 break;
 
         case UnicodeType::SPACE_SEPARATOR:
@@ -292,12 +292,12 @@ BOOL SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, USHORT )
 /*??*/  case UnicodeType::PRIVATE_USE:
         case UnicodeType::START_PUNCTUATION:
         case UnicodeType::END_PUNCTUATION:
-            bIgnoreChar = TRUE;
+            bIgnoreChar = sal_True;
             break;
 
 
         case UnicodeType::OTHER_LETTER:
-            bChkNxtWrd = TRUE;
+            bChkNxtWrd = sal_True;
             // no break!
 //      case UnicodeType::UNASSIGNED:
 //      case UnicodeType::MODIFIER_LETTER:
@@ -321,7 +321,7 @@ BOOL SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, USHORT )
 //      case UnicodeType::INITIAL_PUNCTUATION:
 //      case UnicodeType::FINAL_PUNCTUATION:
         default:
-                bIsAlphaNum = FALSE;
+                bIsAlphaNum = sal_False;
                 break;
         }
 
@@ -341,7 +341,7 @@ BOOL SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, USHORT )
                             *pTxt, nStart,
                             pBreakIt->GetLocale( pTNd->GetLang( nStart )),
                             WordType::ANYWORD_IGNOREWHITESPACES,
-                            TRUE ).endPos;
+                            sal_True ).endPos;
                 if( 0 > nWordEnd || nWordEnd > nEnd || nWordEnd == nStart )
                     nWordEnd = nEnd;
             }
