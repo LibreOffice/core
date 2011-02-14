@@ -216,7 +216,7 @@ IMPL_LINK_INLINE_END( SvxMessDialog, Button2Hdl, Button *, EMPTYARG )
 
 /*************************************************************************/
 
-void SvxMessDialog::SetButtonText( USHORT nBtnId, const String& rNewTxt )
+void SvxMessDialog::SetButtonText( sal_uInt16 nBtnId, const String& rNewTxt )
 {
     switch ( nBtnId )
     {

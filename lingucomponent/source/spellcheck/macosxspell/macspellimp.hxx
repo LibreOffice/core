@@ -87,7 +87,7 @@ class MacSpellChecker :
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
     Reference< XPropertyChangeListener >    xPropHelper;
     linguistic::PropertyHelper_Spell *      pPropHelper;
-    BOOL                                    bDisposing;
+    sal_Bool                                    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     MacSpellChecker(const MacSpellChecker &);
@@ -99,7 +99,7 @@ class MacSpellChecker :
         return pPropHelper ? *pPropHelper : GetPropHelper_Impl();
     }
 
-    INT16   GetSpellFailure( const OUString &rWord, const Locale &rLocale );
+    sal_Int16   GetSpellFailure( const OUString &rWord, const Locale &rLocale );
     Reference< XSpellAlternatives > GetProposals( const OUString &rWord, const Locale &rLocale );
 
 public:

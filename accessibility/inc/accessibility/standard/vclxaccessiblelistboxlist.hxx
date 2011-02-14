@@ -95,15 +95,15 @@ protected:
 
 private:
     sal_Int32   m_nLastTopEntry;
-    USHORT      m_nLastSelectedPos;
+    sal_uInt16      m_nLastSelectedPos;
     bool        m_bDisableProcessEvent;
 
     void UpdateEntryRange_Impl (void);
     using VCLXAccessibleList::UpdateSelection_Impl;
     void UpdateSelection_Impl (void);
     using VCLXAccessibleList::checkEntrySelected;
-    BOOL checkEntrySelected(ListBox* _pListBox,
-                            USHORT _nPos,
+    sal_Bool checkEntrySelected(ListBox* _pListBox,
+                            sal_uInt16 _nPos,
                             ::com::sun::star::uno::Any& _rNewValue,
                             ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& _rxNewAcc);
 };
