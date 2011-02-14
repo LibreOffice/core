@@ -38,7 +38,7 @@ global const cExtensionFileName = &quot;TestExtension.oxt&quot;
 global const cDocNew = 0, cDocSaveOpen8 = 1, cDocSaveOpenXML = 2, cDocClose = 3
 global const cDBService = 0, cDBOpen = 1, cDBInsert = 2, cDBDelete = 3, cDBSeek = 4, cDBClose = 5
 global const cEXTService = 0, cEXTInstall = 1, cEXTUninstall = 2
-global const cOtherSetupDoc = 0, cOtherWriteStatus = 1
+global const cTestClosureSetupDoc = 0, cTestClosureWriteStatus = 1
 global const cLogfileFailed = 255
 
 global const cStWriter = 0, cStCalc = 1, cStPraesentation = 2, cStZeichnen = 3
@@ -54,7 +54,7 @@ global const frmWriter = 1, frmCalc = 2, frmImpress = 4
 global const frmMath = 5, frmChart = 7, frmHyperText = 8, frmDraw = 9
 global const frmDataBase = 10, frmJava = 13
 global const frmExtension = 14
-global const frmTestGlue = 15
+global const frmTestClosure = 15
 
 Global gCurrentDocTest As Integer
 Global gCurrentTestCase As Integer
@@ -139,11 +139,23 @@ Sub AssertionHandler( sMessage as String )
 End Sub
 
 Sub Main
-    gCurrentDocTest = frmTestGlue
-    gCurrentTestCase = cOtherSetupDoc
-
     On Local Error Goto MainError
-    CaptureAssertions( &quot;AssertionHandler&quot; )
+
+    gCurrentDocTest = frmTestClosure
+    gCurrentTestCase = cLogfileFailed
+
+    DeleteAllSavedFiles()
+    DeleteAllLogFiles()
+    SetupWorkPath()
+
+    if GetSystem (sWorkPath) = &quot;windows&quot; then
+        sWorkPath = ConvertPathToWin (sWorkPath)
+    end if
+
+    LocalTestLog% = OpenLogDat( GetLogFileName( gCurrentDocTest ) )
+
+    gCurrentTestCase = cTestClosureSetupDoc
+    CaptureAssertions( "AssertionHandler" )
 
     call SetGlobalDoc
 
@@ -158,10 +170,13 @@ Sub Main
 
     LogTestResult( GetTestGlueDescription( gCurrentTestCase ), TRUE )
 
+    Dim nPreserveFileHandle%
+    nPreserveFileHandle% = LocalTestLog%
     Call Test_10er.Main
+    LocalTestLog% = nPreserveFileHandle%
 
-    gCurrentDocTest = frmTestGlue
-    gCurrentTestCase = cOtherWriteStatus
+    gCurrentDocTest = frmTestClosure
+    gCurrentTestCase = cTestClosureWriteStatus
     if bShowTable then
         call CreateStatusTable2
         call CreateStatusTable
@@ -170,7 +185,13 @@ Sub Main
             &apos; do this LogTestResult call before CreateSecondState, since the latter accesses (and displays) the result
         call CreateSecondState
         gOutputDoc.CurrentController.ViewCursor.JumpToFirstPage
-    end if
+    Else
+        LogTestResult( GetTestGlueDescription( gCurrentTestCase ), TRUE )
+    End If
+
+    &apos; print the &apos;test complete&apos; marker
+    Print #LocalTestLog%, &quot;---&quot;
+    LocalTestLog% = 0
 
     gOutputDoc.setModified( bWasModified )
 
@@ -178,15 +199,22 @@ Sub Main
     Exit Sub
 
 MainError:
-    LogTestResult( GetTestGlueDescription( gCurrentTestCase ), FALSE )
+    If ( gCurrentTestCase = cLogfileFailed ) then
+        LogTestResult( &quot;&quot;, False )
+        Exit Sub
+    else
+        LogTestResult( &quot;testclosure &quot; + GetTestGlueDescription( gCurrentTestCase ), FALSE )
+        Close #LocalTestLog%
+        LocalTestLog = 0
+    End If
 End Sub
 
 Function GetTestGlueDescription( nTestCase as Integer )
     Select Case ( nTestCase )
-        case cOtherSetupDoc
-            GetTestGlueDescription = &quot;setup test document&quot;
-        case cOtherWriteStatus
-            GetTestGlueDescription = &quot;write test status&quot;
+        case cTestClosureSetupDoc
+            GetTestGlueDescription = &quot;setup&quot;
+        case cTestClosureWriteStatus
+            GetTestGlueDescription = &quot;write_status&quot;
         case Else
             GetTestGlueDescription = &quot;&quot;
     End Select
@@ -259,8 +287,8 @@ Sub CreateStatusTable2
     tableRows2(cEXTUninstall ) = &quot;uninstall&quot;
 
     dim tableRows3(1) as string
-    tableRows3(cOtherSetupDoc ) = &quot;setup test&quot;
-    tableRows3(cOtherWriteStatus ) = &quot;write test result&quot;
+    tableRows3(cTestClosureSetupDoc ) = &quot;setup test&quot;
+    tableRows3(cTestClosureWriteStatus ) = &quot;write test result&quot;
 
     aDoc = gOutputDoc
 
@@ -380,24 +408,29 @@ Sub LogTestResult( sTestCaseDescription as String, bSuccess as Boolean )
     If ( gCurrentTestCase = cLogfileFailed ) Then
         Dim sAnnotation as String
         sAnnotation = &quot;creating logfile &apos;&quot; + GetLogFileName( gCurrentDocTest ) + &quot;&apos; failed&quot;
-        LogState( FALSE, sAnnotation, MainFileChannel )
-        SetStatus( 0, FALSE, sAnnotation )
+        LogState( FALSE, sAnnotation, GlobalTestLog )
+        RecordTestCaseStatus( 0, FALSE, sAnnotation )
     Else
-        If ( LocalFileChannel &lt;&gt; 0 ) Then
-            LogState( bSuccess, sTestCaseDescription, LocalFileChannel )
+        bSuccess = RecordTestCaseStatus( gCurrentTestCase, bSuccess, sTestCaseDescription )
+        If ( LocalTestLog &lt;&gt; 0 ) Then
+            LogState( bSuccess, sTestCaseDescription, LocalTestLog )
         EndIf
-        if ( MainFileChannel &lt;&gt; 0 ) Then
-            LogState( bSuccess, sTestCaseDescription, MainFileChannel )
+        if ( GlobalTestLog &lt;&gt; 0 ) Then
+            LogState( bSuccess, sTestCaseDescription, GlobalTestLog )
         EndIf
-        SetStatus( gCurrentTestCase, bSuccess, sTestCaseDescription )
     End If
 End Sub
 
-Sub SetStatus( nAction as Integer, bState as Boolean, sFailureAnnotation as String )
+Function RecordTestCaseStatus( nAction as Integer, bState as Boolean, sFailureAnnotation as String ) as Boolean
     Dim nStatusType as Integer
     Dim nState as integer
     nStatusType = GetStatusType( gCurrentDocTest )
-    If nStatusType = cStNone then Exit Sub
+    If nStatusType = cStNone then Exit Function
+
+  If ( gErrorState( nStatusType, nAction ) = cLogFalse ) Then
+    &apos; don't overwrite a previous &quot;failed&quot; state for this test
+    bState = FALSE
+  End If
 
     if bState then
         nState = cLogTrue
@@ -405,17 +438,14 @@ Sub SetStatus( nAction as Integer, bState as Boolean, sFailureAnnotation as Stri
         nState = cLogFalse
     end If
 
-  If ( gErrorState( nStatusType, nAction ) = cLogFalse ) Then
-    &apos; don't overwrite a previous &quot;failed&quot; state for this this
-    nState = cLogFalse
-  End If
-
     gErrorState (nStatusType, nAction) = nState
 
     If ( nState = cLogFalse ) And ( sFailureAnnotation &lt;&gt; &quot;&quot; ) Then
         gTestCaseAnnotations( nStatusType, nAction ) = gTestCaseAnnotations( nStatusType, nAction ) + sFailureAnnotation + chr(13)
     End If
-end Sub
+
+    RecordTestCaseStatus = bState
+End Function
 
 Function GetStatusType (nDocType as Integer) as Integer
     Select Case ( nDocType )
@@ -435,7 +465,7 @@ Function GetStatusType (nDocType as Integer) as Integer
             GetStatusType = cStChart &apos; chart
         case frmJava
             GetStatusType = cStJava &apos;Java
-        case frmTestGlue
+        case frmTestClosure
             GetStatusType = cStTestGlue &apos; test framework
         case frmDataBase
             GetStatusType = cStDataBase &apos;DataBase

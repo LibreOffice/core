@@ -42,7 +42,7 @@ Sub TestExtensions
     On Local Error GoTo EXTERROR
 
     gCurrentTestCase = cLogfileFailed
-    LocalFileChannel% = OpenLogDat (GetLogFileName(gCurrentDocTest))
+    LocalTestLog% = OpenLogDat (GetLogFileName(gCurrentDocTest))
 
     sCurrentMessage = cMessageExtensionService
     gCurrentTestCase = cEXTService
@@ -59,8 +59,8 @@ Sub TestExtensions
 
     LogTestResult( &quot;Extension &quot;+ cMessageExtensionService, not IsNull (ext_mgr) )
     if (IsNull(ext_mgr)) then
-        Close #LocalFileChannel%
-        LocalFileChannel = 0
+        Close #LocalTestLog%
+        LocalTestLog = 0
         Exit Sub
     End If
 
@@ -79,8 +79,8 @@ Sub TestExtensions
     bResult = (oTestExtension.getImplementationName = sImplementationNameString)
     LogTestResult( &quot;Extension &quot;+ cMessageExtensionInstall, bResult )
     if (not bResult) then
-        Close #LocalFileChannel%
-        LocalFileChannel = 0
+        Close #LocalTestLog%
+        LocalTestLog = 0
         Exit Sub
     End If
 
@@ -96,19 +96,19 @@ Sub TestExtensions
     &apos;The service must not be available anymore. Therefor isNull must return true.
     LogTestResult( &quot;Extension &quot;+ cMessageExtensionUninstall, IsNull (oTestExtension) )
 
-    Print #LocalFileChannel, &quot;---&quot;
-    Close #LocalFileChannel%
-    LocalFileChannel = 0
+    Print #LocalTestLog, &quot;---&quot;
+    Close #LocalTestLog%
+    LocalTestLog = 0
     Exit Sub &apos; Without error
 
     EXTERROR:
     If ( gCurrentTestCase = cLogfileFailed ) then
-        LogTestResult( "", False )
+        LogTestResult( &quot; &quot;, False )
         Exit Sub
     else
         LogTestResult( &quot;Extension &quot;+ sCurrentMessage, False )
-        Close #LocalFileChannel%
-        LocalFileChannel = 0
+        Close #LocalTestLog%
+        LocalTestLog = 0
     End If
     Exit Sub &apos; With error
 

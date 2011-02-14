@@ -36,7 +36,7 @@ const sSDrawLogFileName = &quot;sdrwlog.dat&quot;, sJavaLogFileName = &quot;java
 const sSDBLogFileName = &quot;dblog.dat&quot;, sExtLogFileName = &quot;extlog.dat&quot;
 const sTestGlueLogFileName = &quot;testclosure.log&quot;
 const sLogFileName = &quot;smoketest.log&quot;
-const cTempFileName = &quot;ttt&quot;
+const cTempFileName = &quot;smoketest_file&quot;
 
 const cMessageSaveOpen8Doc = &quot;Save/Open open Documents (8.0)&quot;
 const cMessageSaveOpenXMLDoc = &quot;Save/Open Document XML (6/7)&quot;
@@ -45,8 +45,8 @@ const cMessageCloseDoc = &quot;Close Document&quot;
 
 Global sWorkPath$
 Global sWorkPathURL$
-Global LocalFileChannel%
-Global MainFileChannel%
+Global LocalTestLog%
+Global GlobalTestLog%
 
 Sub Main
     call TestAllDocs()
@@ -141,15 +141,13 @@ Function OpenLogDat (sFileName as String) as Integer
     OpenLogDat = LocaleFileChannel%
 end Function
 
-Function GetWorkPath as string
-    sTemp = &quot;$(userpath)/temp/&quot;
-    GetWorkPath = CreateUnoService(&quot;com.sun.star.config.SpecialConfigManager&quot;).SubstituteVariables(sTemp)
-End Function
+Sub SetupWorkPath
+    Dim configManager as Object
+    configManager = CreateUnoService( &quot;com.sun.star.config.SpecialConfigManager&quot; )
 
-Function GetWorkURL as string
-    sTemp = &quot;$(userurl)/temp/&quot;
-    GetWorkURL = CreateUnoService(&quot;com.sun.star.config.SpecialConfigManager&quot;).SubstituteVariables(sTemp)
-End Function
+    sWorkPath = configManager.SubstituteVariables( &quot;$(userpath)/temp/&quot; )
+    sWorkPathURL = configManager.SubstituteVariables( &quot;$(userurl)/temp/&quot; )
+End Sub
 
 Function GetSystem (sTmpWorkPath as string) as string
     GetSystem = &quot;&quot;
@@ -178,13 +176,6 @@ Sub TestAllDocs()
 DIM sDocURL as String, sDocPath as String
 DIM nStrPos as Long
 
-    sWorkPath = GetWorkPath
-    sWorkPathURL = GetWorkURL
-
-    if GetSystem (sWorkPath) = &quot;windows&quot; then
-        sWorkPath = ConvertPathToWin (sWorkPath)
-    end if
-
     &apos;search ExtensionURL
     sDocURL = gOutputDoc.URL
     CompatibilityMode(true)
@@ -192,9 +183,7 @@ DIM nStrPos as Long
     CompatibilityMode(false)
     sExtensionURL = Left (sDocURL, nStrPos)
 
-    call DeleteAllSavedFiles()
-    call DeleteAllLogFiles()
-    MainFileChannel = OpenLogDat (sLogFileName)
+    GlobalTestLog = OpenLogDat (sLogFileName)
     call WriteTestSequence
     if bMakeWriterTest then
     gCurrentDocTest = frmWriter
@@ -237,47 +226,47 @@ DIM nStrPos as Long
         call Test_Ext.TestExtensions
     end if
 
-    Close #MainFileChannel
-    MainFileChannel = 0
+    Close #GlobalTestLog
+    GlobalTestLog = 0
 end Sub
 
 Sub WriteTestSequence
-    Print #MainFileChannel, &quot;Sequence of testing&quot;
+    Print #GlobalTestLog, &quot;Sequence of testing&quot;
 
     if bMakeWriterTest then
-        WriteTests (&quot;writer  : &quot;, true, MainFileChannel)
+        WriteTests (&quot;writer  : &quot;, true, GlobalTestLog)
     end if
     if bMakeCalcTest then
-        WriteTests (&quot;calc    : &quot;, true, MainFileChannel)
+        WriteTests (&quot;calc    : &quot;, true, GlobalTestLog)
     end if
     if bMakeImpressTest then
-        WriteTests (&quot;impress : &quot;, true, MainFileChannel)
+        WriteTests (&quot;impress : &quot;, true, GlobalTestLog)
     end if
     if bMakeDrawTest then
-        WriteTests (&quot;draw    : &quot;, true, MainFileChannel)
+        WriteTests (&quot;draw    : &quot;, true, GlobalTestLog)
     end if
     if bMakeHTMLTest then
-        WriteTests (&quot;HTML    : &quot;, true, MainFileChannel)
+        WriteTests (&quot;HTML    : &quot;, true, GlobalTestLog)
     end if
     if bMakeChartTest then
-        WriteTests (&quot;chart   : &quot;, false, MainFileChannel)
+        WriteTests (&quot;chart   : &quot;, false, GlobalTestLog)
     end if
     if bMakeMathTest then
-        WriteTests (&quot;math    : &quot;, false, MainFileChannel)
+        WriteTests (&quot;math    : &quot;, false, GlobalTestLog)
     end if
     if bMakeJavaTest then
-        WriteTests (&quot;Java    : &quot;, false, MainFileChannel)
+        WriteTests (&quot;Java    : &quot;, false, GlobalTestLog)
     end if
     if bMakeDBTest then
-        WriteDBTests (&quot;Database    : &quot;, MainFileChannel)
+        WriteDBTests (&quot;Database    : &quot;, GlobalTestLog)
     end if
     if bMakeExtensionTest then
-        WriteExtensionTests (&quot;Extension   : &quot;, MainFileChannel)
+        WriteExtensionTests (&quot;Extension   : &quot;, GlobalTestLog)
   end if
 
-  Print #MainFileChannel, &quot;testclosure : setup, write_status&quot;
+  Print #GlobalTestLog, &quot;testclosure : setup, write_status&quot;
 
-  Print #MainFileChannel
+  Print #GlobalTestLog
   end Sub
 
   Sub WriteTests (sText as string, bTestAll as boolean)
@@ -302,7 +291,7 @@ Sub WriteTestSequence
 
     sWriteStr = sWriteStr + &quot;, close&quot;
 
-    Print #MainFileChannel, sWriteStr
+    Print #GlobalTestLog, sWriteStr
 end Sub
 
 Sub WriteDBTests (sText as string, nFileChannel as integer)
@@ -336,7 +325,7 @@ Sub MakeDocTest
 
     On Local Error GoTo DOCTESTERROR
     gCurrentTestCase = cLogfileFailed
-    LocalFileChannel% = OpenLogDat (GetLogFileName(gCurrentDocTest))
+    LocalTestLog% = OpenLogDat (GetLogFileName(gCurrentDocTest))
     gCurrentTestCase = cDocNew
     oDoc = LoadDoc (&quot;private:factory/&quot; + GetDocFilter(gCurrentDocTest or cFltNewDoc))
     LogTestResult( GetDocFilter(gCurrentDocTest or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, not IsNull (oDoc) )
@@ -381,19 +370,19 @@ Sub MakeDocTest
         end if
 
     end If
-    Print #LocalFileChannel, &quot;---&quot;
-    Close #LocalFileChannel%
-    LocalFileChannel = 0
+    Print #LocalTestLog, &quot;---&quot;
+    Close #LocalTestLog%
+    LocalTestLog = 0
     Exit Sub &apos; Without error
 
     DOCTESTERROR:
     If ( gCurrentTestCase = cLogfileFailed ) then
-        LogTestResult( "", False )
+        LogTestResult( &quot; &quot;, False )
         Exit Sub
     else
         LogTestResult( GetDocFilter(gCurrentDocTest or cFltNewDoc)+&quot; &quot;+ GetErrorMessage(gCurrentTestCase), False )
-        Close #LocalFileChannel%
-        LocalFileChannel = 0
+        Close #LocalTestLog%
+        LocalTestLog = 0
     End If
     Exit Sub &apos; With error
 End Sub
@@ -403,7 +392,7 @@ Sub MakeNewDoc
     Dim bSuccess as Boolean
     On Local Error GoTo DOCTESTERROR2
     gCurrentTestCase = cLogfileFailed
-    LocalFileChannel% = OpenLogDat (GetLogFileName(gCurrentDocTest))
+    LocalTestLog% = OpenLogDat (GetLogFileName(gCurrentDocTest))
     gCurrentTestCase = cDocNew
 &apos;  oDoc = Documents.Add(GetDocFilter(gCurrentDocTest))
     oDoc = LoadDoc (&quot;private:factory/&quot; + GetDocFilter(gCurrentDocTest or cFltNewDoc))
@@ -413,19 +402,19 @@ Sub MakeNewDoc
         bSuccess = CloseDoc( oDoc )
         LogTestResult( GetDocFilter(gCurrentDocTest)+&quot; &quot;+ cMessageCloseDoc, bSuccess )
     end If
-    Print #LocalFileChannel, &quot;---&quot;
-    Close #LocalFileChannel%
-    LocalFileChannel = 0
+    Print #LocalTestLog, &quot;---&quot;
+    Close #LocalTestLog%
+    LocalTestLog = 0
     Exit Sub &apos; Without error
 
     DOCTESTERROR2:
     If ( gCurrentTestCase = cLogfileFailed ) then
-        LogTestResult( "", False )
+        LogTestResult( &quot; &quot;, False )
         Exit Sub
     else
         LogTestResult( GetDocFilter(gCurrentDocTest or cFltNewDoc)+&quot; &quot;+ GetErrorMessage(gCurrentTestCase), False )
-        Close #LocalFileChannel%
-        LocalFileChannel = 0
+        Close #LocalTestLog%
+        LocalTestLog = 0
     End If
     Exit Sub &apos; With error
 End Sub
@@ -439,7 +428,7 @@ Sub MakeChartTest
   Dim bSuccess as Boolean
   On Local Error GoTo CHARTTESTERROR
   gCurrentTestCase = cLogfileFailed
-  LocalFileChannel% = OpenLogDat (GetLogFileName(gCurrentDocTest))
+  LocalTestLog% = OpenLogDat (GetLogFileName(gCurrentDocTest))
   gCurrentTestCase = cDocNew
   oDoc = LoadDoc (&quot;private:factory/&quot; + GetDocFilter(frmCalc or cFltNewDoc))
     if not IsNull (oDoc) then
@@ -452,19 +441,19 @@ Sub MakeChartTest
     else
         LogTestResult( GetDocFilter(frmCalc or cFltNewDoc)+&quot; &quot;+ cMessageNewDoc, FALSE )
     End if
-    Print #LocalFileChannel, &quot;---&quot;
-    Close #LocalFileChannel%
-    LocalFileChannel = 0
+    Print #LocalTestLog, &quot;---&quot;
+    Close #LocalTestLog%
+    LocalTestLog = 0
     Exit Sub &apos; Without error
 
     CHARTTESTERROR:
     If ( gCurrentTestCase = cLogfileFailed ) then
-        LogTestResult( "", False )
+        LogTestResult( &quot; &quot;, False )
         Exit Sub
     else
         LogTestResult( GetDocFilter(gCurrentDocTest or cFltNewDoc)+&quot; &quot;+ GetErrorMessage(gCurrentTestCase), FALSE )
-        Close #LocalFileChannel%
-        LocalFileChannel = 0
+        Close #LocalTestLog%
+        LocalTestLog = 0
     End If
     Exit Sub &apos; With error
 End Sub
@@ -566,7 +555,7 @@ Function GetLogFileName (DocType as Integer) as String
             GetLogFileName = sSChartLogFileName &apos; chart
         case frmJava
             GetLogFileName = sJavaLogFileName &apos;Java
-        case frmOther
+        case frmTestClosure
             GetLogFileName = sTestGlueLogFileName &apos; test framework
         case frmDataBase
             GetLogFileName = sSDBLogFileName &apos;Database
@@ -602,14 +591,14 @@ End Function
 Function TestJava
     Dim oObj as Object
     gCurrentTestCase = cLogfileFailed
-    LocalFileChannel% = OpenLogDat (GetLogFileName(gCurrentDocTest))
+    LocalTestLog% = OpenLogDat (GetLogFileName(gCurrentDocTest))
     gCurrentTestCase = cDocNew
     oObj = createUnoService( cUnoJavaLoader )
     LogTestResult( &quot;Java &quot;+ cMessageNewDoc, not IsNull (oObj) )
 
-    Print #LocalFileChannel, &quot;---&quot;
-    Close #LocalFileChannel%
-    LocalFileChannel = 0
+    Print #LocalTestLog, &quot;---&quot;
+    Close #LocalTestLog%
+    LocalTestLog = 0
 
     TestJava = not IsNull (oObj)
 End Function

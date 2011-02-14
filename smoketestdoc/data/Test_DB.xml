@@ -46,7 +46,7 @@ Sub TestDB
     On Local Error GoTo DBERROR
 
     gCurrentTestCase = cLogfileFailed
-    LocalFileChannel% = OpenLogDat (GetLogFileName(gCurrentDocTest))
+    LocalTestLog% = OpenLogDat (GetLogFileName(gCurrentDocTest))
 
     gCurrentTestCase = cDBService
     sCurrentMessage = cMessageDatabaseService + &quot; &quot; + cUnoDatabaseContext
@@ -63,8 +63,8 @@ Sub TestDB
 
     LogTestResult( &quot;Database &quot;+ cMessageDatabaseOpen, not IsNull (oDBConnection) )
     if (IsNull(oDBConnection)) then
-       Close #LocalFileChannel%
-        LocalFileChannel = 0
+       Close #LocalTestLog%
+        LocalTestLog = 0
         Exit Sub
     End If
 
@@ -128,19 +128,19 @@ Sub TestDB
     oDBConnection.Dispose()
     LogTestResult( &quot;Database &quot;+ cMessageDatabaseClose, True )
 
-    Print #LocalFileChannel, &quot;---&quot;
-    Close #LocalFileChannel%
-    LocalFileChannel = 0
+    Print #LocalTestLog, &quot;---&quot;
+    Close #LocalTestLog%
+    LocalTestLog = 0
     Exit Sub &apos; Without error
 
     DBERROR:
     If ( gCurrentTestCase = cLogfileFailed ) then
-        LogTestResult( "", False )
+        LogTestResult( &quot; &quot;, False )
         Exit Sub
     else
         LogTestResult( &quot;Database &quot;+ sCurrentMessage, FALSE )
-        Close #LocalFileChannel%
-        LocalFileChannel = 0
+        Close #LocalTestLog%
+        LocalTestLog = 0
     End If
     Exit Sub &apos; With error
 End Sub
