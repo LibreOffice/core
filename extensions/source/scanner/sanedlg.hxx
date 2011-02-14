@@ -52,10 +52,10 @@ private:
     Rectangle       maPreviewRect;
     Point           maTopLeft, maBottomRight;
     Point           maMinTopLeft, maMaxBottomRight;
-    BOOL            mbDragEnable;
-    BOOL            mbIsDragging;
+    sal_Bool            mbDragEnable;
+    sal_Bool            mbIsDragging;
     int             mnDragMode;
-    BOOL            mbDragDrawn;
+    sal_Bool            mbDragDrawn;
     DragDirection   meDragDirection;
 
     MapMode         maMapMode;
@@ -115,7 +115,7 @@ private:
     DECL_LINK( OptionsBoxSelectHdl, SvTreeListBox* );
 
     void SaveState();
-    BOOL LoadState();
+    sal_Bool LoadState();
 
     void InitDevices();
     void InitFields();
@@ -132,10 +132,10 @@ private:
     void DrawDrag();
     Point GetPixelPos( const Point& );
     Point GetLogicPos( const Point& );
-    void UpdateScanArea( BOOL );
+    void UpdateScanArea( sal_Bool );
 
     // helper
-    BOOL SetAdjustedNumericalValue( const char* pOption, double fValue, int nElement = 0 );
+    sal_Bool SetAdjustedNumericalValue( const char* pOption, double fValue, int nElement = 0 );
 
     virtual void Paint( const Rectangle& );
     virtual void MouseMove( const MouseEvent& rMEvt );
