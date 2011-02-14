@@ -37,6 +37,7 @@ sub search_bugs($$$$)
         $line =~ s/\(?$bug_orig\)?[:,]?\s*//;
         %{$pdata->{$piece}{$commit_id}{'bugs'}} = () if (! defined %{$pdata->{$piece}{$commit_id}{'bugs'}});
         $pdata->{$piece}{$commit_id}{'bugs'}{$bug} = 1;
+        $pdata->{$piece}{$commit_id}{'flags'}{'bug'} = 1;
     }
 
     return $line;
@@ -67,7 +68,7 @@ sub load_git_log($$$$)
     my $commit_id;
     my $summary;
 
-    print "Analyzing log from the git repo: $piece...\n";
+    print STDERR "Analyzing log from the git repo: $piece...\n";
 
     open (GIT, "$cmd 2>&1|") || die "Can't run $cmd: $!";
     %{$pdata->{$piece}} = ();
@@ -79,6 +80,7 @@ sub load_git_log($$$$)
             $commit_id = "$1";
             $summary=undef;
             %{$pdata->{$piece}{"$commit_id"}} = ();
+            %{$pdata->{$piece}{"$commit_id"}{'flags'}} = ();
             next;
         }
 
@@ -155,12 +157,30 @@ sub load_data($$$$)
     }
 }
 
-sub print_summary_in_stat($$$$)
+sub print_summary_in_stat($$$$$$$)
 {
-    my ($summary, $pbugs, $pauthors, $prefix) = @_;
+    my ($summary, $pprint_filters, $ppiece_title, $pflags, $pbugs, $pauthors, $prefix) = @_;
 
     return if ( $summary eq "" );
+    
+    # do we want to print this summary at all?
+    my $print;
+    if (%{$pprint_filters}) {
+        foreach my $flag (keys %{$pprint_filters}) {
+            $print = 1 if (defined $pflags->{$flag});
+        }
+    } else {
+        $print = 1;
+    }
+    return unless (defined $print);
 
+    # print piece title if not done yet
+    if (defined ${$ppiece_title}) {
+        print "${$ppiece_title}\n";
+        ${$ppiece_title} = undef;
+    }
+
+    # finally print the summary line
     my $bugs = "";
     if ( %{$pbugs} ) {
         $bugs = " (" . join (", ", keys %{$pbugs}) . ")";
@@ -171,39 +191,45 @@ sub print_summary_in_stat($$$$)
         $authors = " [" . join (", ", keys %{$pauthors}) . "]";
     }
 
-# print only entries with bug numbers
-#    print $prefix . $summary . $bugs . $authors . "\n" if ($bugs ne "");
     print $prefix . $summary . $bugs . $authors . "\n";
 }
 
-sub print_weekly_stat($)
+sub print_weekly_stat($$)
 {
-    my $pdata = shift;
+    my ($pdata, $pprint_filters) = @_;
 
     foreach my $piece ( sort { $a cmp $b } keys %{$pdata}) {
         # check if this peice has any entries at all
+        my $piece_title = "+ $piece";
         if ( %{$pdata->{$piece}} ) {
-            print "+ $piece\n";
             my $old_summary="";
             my %authors = ();
             my %bugs = ();
+            my %flags = ();
             foreach my $id ( sort { $pdata->{$piece}{$a}{'summary'} cmp $pdata->{$piece}{$b}{'summary'} } keys %{$pdata->{$piece}}) {
                 my $summary = $pdata->{$piece}{$id}{'summary'};
                 if ($summary ne $old_summary) {
-                    print_summary_in_stat($old_summary, \%bugs, \%authors, "    + ");
+                    print_summary_in_stat($old_summary, $pprint_filters, \$piece_title, \%flags, \%bugs, \%authors, "    + ");
                     $old_summary = $summary;
                     %authors = ();
                     %bugs = ();
+                    %flags = ();
                 }
+                # collect bug numbers
                 if (defined $pdata->{$piece}{$id}{'bugs'}) {
                     foreach my $bug (keys %{$pdata->{$piece}{$id}{'bugs'}}) {
                         $bugs{$bug} = 1;
                     }
                 }
+                # collect author names
                 my $author = $pdata->{$piece}{$id}{'author'}{'name'};
                 $authors{$author} = 1;
+                # collect flags
+                foreach my $flag ( keys %{$pdata->{$piece}{$id}{'flags'}} ) {
+                    $flags{$flag} = 1;
+                }
             }
-            print_summary_in_stat($old_summary, \%bugs, \%authors, "    + ");
+            print_summary_in_stat($old_summary, $pprint_filters, \$piece_title, \%flags, \%bugs, \%authors, "    + ");
         }
     }
 }
@@ -221,6 +247,7 @@ sub usage()
           "     --help          print this help\n" .
           "     --no-pieces     read changes just from the main repository, ignore other cloned repos\n" .
           "     --piece=<piece> summarize just chnages from the given piece\n" .
+          "     --bugs          print just bug fixes\n" .
           "      topdir         directory with the libreoffice/bootstrap clone; the piece repos\n" .
           "                     must be cloned in the main-repo-root/clone/<piece> subdirectories\n" .
           "      git_log_param  extra parameters passed to the git log command to define\n" .
@@ -240,6 +267,7 @@ my $piece;
 my $top_dir;
 my @git_args;
 my %data;
+my %print_filters = ();
 
 foreach my $arg (@ARGV) {
     if ($arg eq '--help') {
@@ -249,6 +277,8 @@ foreach my $arg (@ARGV) {
         $piece = "bootstrap";
     } elsif ($arg =~ m/--piece=(.*)/) {
 	$piece = $1;
+    } elsif ($arg eq '--bugs') {
+        $print_filters{'bug'} = 1;
     } else {
         if (! defined $top_dir) {
             $top_dir=$arg;
@@ -263,4 +293,4 @@ foreach my $arg (@ARGV) {
 (-f "$top_dir/.git/config") || die "Error: can't find $top_dir/.git/config\n";
 
 load_data(\%data, $top_dir,$piece, \@git_args);
-print_weekly_stat(\%data);
+print_weekly_stat(\%data, \%print_filters);
