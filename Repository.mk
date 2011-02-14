@@ -54,6 +54,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     fwk \
     fwl \
     fwm \
+    i18npaper \
     lng \
     msfilter \
     msword \
@@ -87,6 +88,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     icuuc \
+    cppunit \
 ))
 
 
@@ -113,6 +115,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     passwordcontainer \
     productregistration \
     vbaswobj \
+    msforms \
 ))
 
 
@@ -128,6 +131,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     salcpprt \
     vclmain \
     zlib \
+    vclmain \
 ))
 
 # vim: set noet sw=4 ts=4:

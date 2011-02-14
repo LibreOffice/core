@@ -41,16 +41,16 @@ class HashItem;
 
 class HashTable
 {
-    ULONG     m_lSize;
-    ULONG     m_lElem;
+    sal_uIntPtr     m_lSize;
+    sal_uIntPtr     m_lElem;
     HashItem *m_pData;
     double    m_dMaxLoadFactor;
     double    m_dGrowFactor;
-    BOOL      m_bOwner;
+    sal_Bool      m_bOwner;
 
-    ULONG Hash(ByteString const& Key) const;
-    ULONG DHash(ByteString const& Key, ULONG lHash) const;
-    ULONG Probe(ULONG lPos) const;
+    sal_uIntPtr Hash(ByteString const& Key) const;
+    sal_uIntPtr DHash(ByteString const& Key, sal_uIntPtr lHash) const;
+    sal_uIntPtr Probe(sal_uIntPtr lPos) const;
 
     HashItem* FindPos(ByteString const& Key) const;
     void      SmartGrow();
@@ -61,9 +61,9 @@ class HashTable
 private:
     struct
     {
-        ULONG m_lSingleHash;
-        ULONG m_lDoubleHash;
-        ULONG m_lProbe;
+        sal_uIntPtr m_lSingleHash;
+        sal_uIntPtr m_lDoubleHash;
+        sal_uIntPtr m_lProbe;
     }
         m_aStatistic;
 #endif
@@ -73,7 +73,7 @@ protected:
 
     virtual void OnDeleteObject(void* pObject);
 
-    void* GetObjectAt(ULONG lPos) const;
+    void* GetObjectAt(sal_uIntPtr lPos) const;
 
 // Default-Werte
 public:
@@ -83,19 +83,19 @@ public:
 public:
     HashTable
     (
-        ULONG   lSize,
-        BOOL    bOwner,
+        sal_uIntPtr lSize,
+        sal_Bool    bOwner,
         double  dMaxLoadFactor = HashTable::m_defMaxLoadFactor /* 0.8 */,
         double  dGrowFactor = HashTable::m_defDefGrowFactor /* 2.0 */
     );
 
     virtual ~HashTable();
 
-    BOOL  IsFull() const;
-    ULONG GetSize() const { return m_lSize; }
+    sal_Bool  IsFull() const;
+    sal_uIntPtr GetSize() const { return m_lSize; }
 
     void* Find   (ByteString const& Key) const;
-    BOOL  Insert (ByteString const& Key, void* pObject);
+    sal_Bool  Insert (ByteString const& Key, void* pObject);
     void* Delete (ByteString const& Key);
 };
 
@@ -105,10 +105,10 @@ public:
 //
 class HashTableIterator
 {
-    ULONG            m_lAt;
+    sal_uIntPtr          m_lAt;
     HashTable const& m_aTable;
 
-    void* FindValidObject(BOOL bForward);
+    void* FindValidObject(sal_Bool bForward);
 
 protected:
     void* GetFirst(); // Interation _ohne_ Sortierung
@@ -128,7 +128,7 @@ public:
     public:                                                             \
         ClassName                                                       \
         (                                                               \
-            ULONG   lSize,                                              \
+            sal_uIntPtr lSize,                                              \
             double  dMaxLoadFactor = HashTable::m_defMaxLoadFactor,     \
             double  dGrowFactor = HashTable::m_defDefGrowFactor         \
         )                                                               \
@@ -138,7 +138,7 @@ public:
         { return (ObjType) HashTable::Find(ByteString(Key)); }              \
                                                                         \
         using HashTable::Insert;                                        \
-        BOOL Insert (KeyType const& Key, ObjType Object)                \
+        sal_Bool Insert (KeyType const& Key, ObjType Object)                \
         { return HashTable::Insert(ByteString(Key), (void*) Object); }      \
                                                                         \
         ObjType  Delete (KeyType const&Key)                             \
@@ -147,11 +147,11 @@ public:
 
 // HashTable OHNE Owner-Verhalten
 #define DECLARE_HASHTABLE(ClassName,KeyType,ObjType)                 \
-    DECLARE_HASHTABLE_INTERN(ClassName,FALSE,KeyType,ObjType)
+    DECLARE_HASHTABLE_INTERN(ClassName,sal_False,KeyType,ObjType)
 
 // HashTable MIT Owner-Verhalten
 #define DECLARE_HASHTABLE_OWNER(ClassName,KeyType,ObjType)           \
-    DECLARE_HASHTABLE_INTERN(ClassName##2,TRUE,KeyType,ObjType)      \
+    DECLARE_HASHTABLE_INTERN(ClassName##2,sal_True,KeyType,ObjType)      \
     class ClassName : public ClassName##2                            \
     {                                                                \
     protected:                                                       \
@@ -159,7 +159,7 @@ public:
     public:                                                          \
         ClassName                                                    \
         (                                                            \
-            ULONG   lSize,                                           \
+            sal_uIntPtr lSize,                                           \
             double  dMaxLoadFactor = HashTable::m_defMaxLoadFactor,  \
             double  dGrowFactor = HashTable::m_defDefGrowFactor      \
         )                                                            \
@@ -173,7 +173,7 @@ public:
                                                                      \
     ClassName::~ClassName()                                          \
     {                                                                \
-        for (ULONG i=0; i<GetSize(); i++)                            \
+        for (sal_uIntPtr i=0; i<GetSize(); i++)                            \
         {                                                            \
             void *pObject = GetObjectAt(i);                          \
             if (pObject != NULL)                                     \
