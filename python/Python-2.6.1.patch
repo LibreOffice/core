@@ -1,4 +1,4 @@
---- misc/Python-2.6.1/Include/pyport.h	Wed Jun 11 09:41:16 2008
+--- misc/build/Python-2.6.1/Include/pyport.h	Wed Jun 11 09:41:16 2008
 +++ misc/build/Python-2.6.1/Include/pyport.h	Fri Apr 17 09:02:52 2009
 @@ -449,11 +449,6 @@
  in platform-specific #ifdefs.
@@ -12,8 +12,25 @@
  #ifdef __BEOS__
  /* Unchecked */
  /* It's in the libs, but not the headers... - [cjh] */
---- misc/Python-2.6.1/PCbuild/pcbuild.sln	2008-06-27 04:30:34.000000000 +0200
+--- misc/build/Python-2.6.1/PCbuild/pcbuild.sln	2008-06-27 04:30:34.000000000 +0200
 +++ misc/build/Python-2.6.1/PCbuild/pcbuild.sln	2009-03-09 22:48:14.546329900 +0100
+@@ -15,16 +15,6 @@
+ 		{C73F0EC1-358B-4177-940F-0846AC8B04CD} = {C73F0EC1-358B-4177-940F-0846AC8B04CD}
+ 	EndProjectSection
+ EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pythonw", "pythonw.vcproj", "{F4229CC3-873C-49AE-9729-DD308ED4CD4A}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+-	EndProjectSection
+-EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "w9xpopen", "w9xpopen.vcproj", "{E9E0A1F6-0009-4E8C-B8F8-1B8F5D49A058}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{6DE10744-E396-40A5-B4E2-1B69AA7C8D31} = {6DE10744-E396-40A5-B4E2-1B69AA7C8D31}
+-	EndProjectSection
+-EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "make_buildinfo", "make_buildinfo.vcproj", "{C73F0EC1-358B-4177-940F-0846AC8B04CD}"
+ EndProject
+ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{553EC33E-9816-4996-A660-5D6186A0B0B3}"
 @@ -38,12 +38,6 @@
  		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
  	EndProjectSection
@@ -62,10 +79,12 @@
  Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "select", "select.vcproj", "{18CAE28C-B454-46C1-87A0-493D91D97F03}"
  	ProjectSection(ProjectDependencies) = postProject
  		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
-@@ -114,17 +114,6 @@
+@@ -114,19 +114,6 @@
+ 		{CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26} = {CF7AC3D1-E2DF-41D2-BEA6-1E2556CDEA26}
+ 	EndProjectSection
  EndProject
- Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bdist_wininst", "bdist_wininst.vcproj", "{EB1C19C1-1F18-421E-9735-CAEE69DC6A3C}"
- EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bdist_wininst", "bdist_wininst.vcproj", "{EB1C19C1-1F18-421E-9735-CAEE69DC6A3C}"
+-EndProject
 -Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "_hashlib", "_hashlib.vcproj", "{447F05A8-F581-4CAC-A466-5AC7936E207E}"
 -	ProjectSection(ProjectDependencies) = postProject
 -		{B11D750F-CD1F-4A96-85CE-E69A5C5259F9} = {B11D750F-CD1F-4A96-85CE-E69A5C5259F9}
@@ -138,6 +157,15 @@
  		{28B5D777-DDF2-4B6B-B34F-31D938813856}.Debug|Win32.ActiveCfg = Debug|Win32
  		{28B5D777-DDF2-4B6B-B34F-31D938813856}.Debug|Win32.Build.0 = Debug|Win32
  		{28B5D777-DDF2-4B6B-B34F-31D938813856}.Debug|x64.ActiveCfg = Debug|x64
+@@ -448,7 +448,7 @@
+ 		{D06B6426-4762-44CC-8BAD-D79052507F2F}.Release|x64.ActiveCfg = Release|x64
+ 		{D06B6426-4762-44CC-8BAD-D79052507F2F}.Release|x64.Build.0 = Release|x64
+ 		{EB1C19C1-1F18-421E-9735-CAEE69DC6A3C}.Debug|Win32.ActiveCfg = Release|Win32
+-		{EB1C19C1-1F18-421E-9735-CAEE69DC6A3C}.Debug|x64.ActiveCfg = Release|x64
++		{EB1C19C1-1F18-421E-9735-CAEE69DC6A3C}.Debug|x64.ActiveCfg = Debug|x64
+ 		{EB1C19C1-1F18-421E-9735-CAEE69DC6A3C}.PGInstrument|Win32.ActiveCfg = Release|Win32
+ 		{EB1C19C1-1F18-421E-9735-CAEE69DC6A3C}.PGInstrument|x64.ActiveCfg = Release|x64
+ 		{EB1C19C1-1F18-421E-9735-CAEE69DC6A3C}.PGUpdate|Win32.ActiveCfg = Release|Win32
 --- misc/build/Python-2.6.1/PCbuild/make_versioninfo.vcproj
 +++ misc/build/Python-2.6.1/PCbuild/make_versioninfo.vcproj
 @@ -124,6 +124,8 @@
@@ -209,7 +237,240 @@
 -		Value="$(HOST_PYTHON)"
 -	/>
  </VisualStudioPropertySheet>
---- misc/Python-2.6.1/Lib/test/test_threading.py.bak	2009-03-12 07:59:17.000000000 +0000
+--- misc/build/Python-2.6.1/PCbuild/debug.vsprops
++++ misc/build/Python-2.6.1/PCbuild/debug.vsprops
+@@ -10,6 +10,6 @@
+ 	/>
+ 	<UserMacro
+ 		Name="KillPythonExe"
+-		Value="$(OutDir)\kill_python_d.exe"
++		Value="$(OutDir)\kill_python.exe"
+ 	/>
+ </VisualStudioPropertySheet>
+--- misc/build/Python-2.6.1/PCbuild/kill_python.vcproj
++++ misc/build/Python-2.6.1/PCbuild/kill_python.vcproj
+@@ -54,7 +54,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				OutputFile="$(OutDir)\$(ProjectName)_d.exe"
++				OutputFile="$(OutDir)\$(ProjectName).exe"
+ 				SubSystem="1"
+ 			/>
+ 			<Tool
+@@ -115,7 +115,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				OutputFile="$(OutDir)\$(ProjectName)_d.exe"
++				OutputFile="$(OutDir)\$(ProjectName).exe"
+ 				SubSystem="1"
+ 			/>
+ 			<Tool
+--- misc/build/Python-2.6.1/PCbuild/make_versioninfo.vcproj
++++ misc/build/Python-2.6.1/PCbuild/make_versioninfo.vcproj
+@@ -179,7 +179,7 @@
+ 			<Tool
+ 				Name="VCCustomBuildTool"
+ 				Description="Build PC/pythonnt_rc(_d).h"
+-				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;make_versioninfo_d.exe &gt; ..\PC\pythonnt_rc_d.h&#x0D;&#x0A;"
++				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;make_versioninfo.exe &gt; ..\PC\pythonnt_rc_d.h&#x0D;&#x0A;"
+ 				Outputs="$(SolutionDir)..\PC\pythonnt_rc_d.h"
+ 			/>
+ 			<Tool
+@@ -214,7 +214,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				OutputFile="$(SolutionDir)make_versioninfo_d.exe"
++				OutputFile="$(SolutionDir)make_versioninfo.exe"
+ 				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
+ 				SubSystem="1"
+ 				BaseAddress="0x1d000000"
+@@ -239,7 +239,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCPostBuildEventTool"
+-				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;make_versioninfo_d.exe &gt; ..\PC\python_nt_d.h&#x0D;&#x0A;"
++				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;make_versioninfo.exe &gt; ..\PC\python_nt_d.h&#x0D;&#x0A;"
+ 			/>
+ 		</Configuration>
+ 		<Configuration
+@@ -253,7 +253,7 @@
+ 			<Tool
+ 				Name="VCCustomBuildTool"
+ 				Description="Build PC/pythonnt_rc(_d).h"
+-				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;make_versioninfo_d.exe &gt; ..\PC\pythonnt_rc_d.h&#x0D;&#x0A;"
++				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;make_versioninfo.exe &gt; ..\PC\pythonnt_rc_d.h&#x0D;&#x0A;"
+ 				Outputs="$(SolutionDir)..\PC\pythonnt_rc_d.h"
+ 			/>
+ 			<Tool
+@@ -286,7 +286,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				OutputFile="$(SolutionDir)make_versioninfo_d.exe"
++				OutputFile="$(SolutionDir)make_versioninfo.exe"
+ 				ProgramDatabaseFile="$(TargetDir)$(TargetName).pdb"
+ 				SubSystem="1"
+ 			/>
+@@ -310,7 +310,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCPostBuildEventTool"
+-				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;make_versioninfo_d.exe &gt; ..\PC\python_nt_d.h&#x0D;&#x0A;"
++				CommandLine="cd $(SolutionDir)&#x0D;&#x0A;make_versioninfo.exe &gt; ..\PC\python_nt_d.h&#x0D;&#x0A;"
+ 			/>
+ 		</Configuration>
+ 	</Configurations>
+--- misc/build/Python-2.6.1/PCbuild/pyd_d.vsprops
++++ misc/build/Python-2.6.1/PCbuild/pyd_d.vsprops
+@@ -15,13 +15,13 @@
+ 		InlineFunctionExpansion="0"
+ 		EnableIntrinsicFunctions="false"
+ 		PreprocessorDefinitions="Py_BUILD_CORE_MODULE"
+-		RuntimeLibrary="3"
++		RuntimeLibrary="2"
+ 	/>
+ 	<Tool
+ 		Name="VCLinkerTool"
+-		OutputFile="$(OutDir)\$(ProjectName)_d.pyd"
++		OutputFile="$(OutDir)\$(ProjectName).pyd"
+ 		LinkIncremental="1"
+-		ProgramDatabaseFile="$(OutDir)\$(ProjectName)_d.pdb"
++		ProgramDatabaseFile="$(OutDir)\$(ProjectName).pdb"
+ 		ImportLibrary="$(OutDir)\$(TargetName).lib"
+ 		GenerateManifest="false"
+ 	/>
+@@ -31,6 +31,6 @@
+ 	/>
+ 	<UserMacro
+ 		Name="PythonExe"
+-		Value="$(SolutionDir)python_d.exe"
++		Value="$(SolutionDir)python.exe"
+ 	/>
+ </VisualStudioPropertySheet>
+--- misc/build/Python-2.6.1/PCbuild/python.vcproj
++++ misc/build/Python-2.6.1/PCbuild/python.vcproj
+@@ -191,7 +191,7 @@
+ 				EnableIntrinsicFunctions="false"
+ 				AdditionalIncludeDirectories=""
+ 				PreprocessorDefinitions="_CONSOLE"
+-				RuntimeLibrary="3"
++				RuntimeLibrary="2"
+ 				BrowseInformation="1"
+ 				CompileAs="0"
+ 			/>
+@@ -209,7 +209,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				OutputFile="$(OutDir)\python_d.exe"
++				OutputFile="$(OutDir)\python.exe"
+ 				SubSystem="1"
+ 				StackReserveSize="2000000"
+ 				BaseAddress="0x1d000000"
+@@ -266,7 +266,7 @@
+ 				EnableIntrinsicFunctions="false"
+ 				AdditionalIncludeDirectories=""
+ 				PreprocessorDefinitions="_CONSOLE"
+-				RuntimeLibrary="3"
++				RuntimeLibrary="2"
+ 				BrowseInformation="1"
+ 				CompileAs="0"
+ 			/>
+@@ -284,9 +284,9 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				OutputFile="$(OutDir)\python_d.exe"
++				OutputFile="$(OutDir)\python.exe"
+ 				SubSystem="1"
+-				StackReserveSize="2100000"
++				StackReserveSize="2000000"
+ 				BaseAddress="0x1d000000"
+ 			/>
+ 			<Tool
+--- misc/build/Python-2.6.1/PCbuild/pythoncore.vcproj
++++ misc/build/Python-2.6.1/PCbuild/pythoncore.vcproj
+@@ -198,7 +198,7 @@
+ 				EnableIntrinsicFunctions="false"
+ 				AdditionalIncludeDirectories="..\Python;..\Modules\zlib"
+ 				PreprocessorDefinitions="_USRDLL;Py_BUILD_CORE;Py_ENABLE_SHARED;WIN32"
+-				RuntimeLibrary="3"
++				RuntimeLibrary="2"
+ 			/>
+ 			<Tool
+ 				Name="VCManagedResourceCompilerTool"
+@@ -217,11 +217,11 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="getbuildinfo.o"
+-				OutputFile="$(OutDir)\$(PyDllName)_d.dll"
++				OutputFile="$(OutDir)\$(PyDllName).dll"
+ 				IgnoreDefaultLibraryNames="libc"
+-				ProgramDatabaseFile="$(OutDir)$(PyDllName)_d.pdb"
++				ProgramDatabaseFile="$(OutDir)$(PyDllName).pdb"
+ 				BaseAddress="0x1e000000"
+-				ImportLibrary="$(OutDir)$(PyDllName)_d.lib"
++				ImportLibrary="$(OutDir)$(PyDllName).lib"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+@@ -276,7 +276,7 @@
+ 				EnableIntrinsicFunctions="false"
+ 				AdditionalIncludeDirectories="..\Python;..\Modules\zlib"
+ 				PreprocessorDefinitions="_USRDLL;Py_BUILD_CORE;Py_ENABLE_SHARED;WIN32"
+-				RuntimeLibrary="3"
++				RuntimeLibrary="2"
+ 			/>
+ 			<Tool
+ 				Name="VCManagedResourceCompilerTool"
+@@ -295,11 +295,11 @@
+ 			<Tool
+ 				Name="VCLinkerTool"
+ 				AdditionalDependencies="getbuildinfo.o"
+-				OutputFile="$(OutDir)\$(PyDllName)_d.dll"
++				OutputFile="$(OutDir)\$(PyDllName).dll"
+ 				IgnoreDefaultLibraryNames="libc"
+-				ProgramDatabaseFile="$(OutDir)$(PyDllName)_d.pdb"
++				ProgramDatabaseFile="$(OutDir)$(PyDllName).pdb"
+ 				BaseAddress="0x1e000000"
+-				ImportLibrary="$(OutDir)$(PyDllName)_d.lib"
++				ImportLibrary="$(OutDir)$(PyDllName).lib"
+ 			/>
+ 			<Tool
+ 				Name="VCALinkTool"
+--- misc/build/Python-2.6.1/PCbuild/make_buildinfo.c
++++ misc/build/Python-2.6.1/PCbuild/make_buildinfo.c
+@@ -65,7 +65,7 @@
+ 		strcat_s(command, CMD_SIZE, "-MD ");
+ 	}
+ 	else if (strcmp(argv[1], "Debug") == 0) {
+-		strcat_s(command, CMD_SIZE, "-D_DEBUG -MDd ");
++		strcat_s(command, CMD_SIZE, "-D_DEBUG -MD ");
+ 	}
+ 	else if (strcmp(argv[1], "ReleaseItanium") == 0) {
+ 		strcat_s(command, CMD_SIZE, "-MD /USECL:MS_ITANIUM ");
+--- misc/build/Python-2.6.1/Objects/exceptions.c
++++ misc/build/Python-2.6.1/Objects/exceptions.c
+@@ -2158,8 +2158,6 @@
+ #if defined _MSC_VER && _MSC_VER >= 1400 && defined(__STDC_SECURE_LIB__)
+     /* Set CRT argument error handler */
+     prevCrtHandler = _set_invalid_parameter_handler(InvalidParameterHandler);
+-    /* turn off assertions in debug mode */
+-    prevCrtReportMode = _CrtSetReportMode(_CRT_ASSERT, 0);
+ #endif
+ }
+ 
+@@ -2170,6 +2170,5 @@
+ #if defined _MSC_VER && _MSC_VER >= 1400 && defined(__STDC_SECURE_LIB__)
+     /* reset CRT error handling */
+     _set_invalid_parameter_handler(prevCrtHandler);
+-    _CrtSetReportMode(_CRT_ASSERT, prevCrtReportMode);
+ #endif
+ }
+--- misc/build/Python-2.6.1/Lib/test/test_threading.py.bak	2009-03-12 07:59:17.000000000 +0000
 +++ misc/build/Python-2.6.1/Lib/test/test_threading.py	2009-03-12 10:48:04.000000000 +0000
 @@ -382,7 +382,7 @@
              return
@@ -221,9 +482,9 @@
                                   ' due to known OS bugs on'), sys.platform
              return
 
---- misc/Python-2.6.1/Modules/_ctypes/libffi/configure.orig	2008-05-24 00:06:50.000000000 +0900
+--- misc/build/Python-2.6.1/Modules/_ctypes/libffi/configure.orig	2008-05-24 00:06:50.000000000 +0900
 +++ misc/build/Python-2.6.1/Modules/_ctypes/libffi/configure	2008-10-09 20:24:02.000000000 +0900
-@@ -4725,7 +4725,7 @@
+@@ -4725,6 +4725,6 @@
    rm -rf conftest*
    ;;
  
@@ -232,7 +493,7 @@
  s390*-*linux*|sparc*-*linux*)
    # Find out which ABI we are using.
 
---- misc/Python-2.6.1/Python/thread_pthread.h.orig	2006-06-13 16:04:24.000000000 +0100
+--- misc/build/Python-2.6.1/Python/thread_pthread.h.orig	2006-06-13 16:04:24.000000000 +0100
 +++ misc/build/Python-2.6.1/Python/thread_pthread.h	2009-03-12 10:55:49.000000000 +0000
 @@ -26,13 +26,18 @@
  #endif
@@ -294,7 +555,7 @@
  #if defined(THREAD_STACK_SIZE) || defined(PTHREAD_SYSTEM_SCHED_SUPPORTED)
  	pthread_attr_destroy(&attrs);
  #endif
---- misc/Python-2.6.1/configure	2008-11-17 02:57:10.000000000 +0900
+--- misc/build/Python-2.6.1/configure	2008-11-17 02:57:10.000000000 +0900
 +++ misc/build/Python-2.6.1/configure	2009-03-23 21:18:42.000000000 +0900
 @@ -4110,11 +4110,6 @@
  	  LDLIBRARY='libpython$(VERSION).so'
@@ -308,7 +569,7 @@
  	  INSTSONAME="$LDLIBRARY".$SOVERSION
  	  ;;
      hp*|HP*)
---- misc/Python-2.6.1/configure	Sun Nov 16 18:57:10 2008
+--- misc/build/Python-2.6.1/configure	Sun Nov 16 18:57:10 2008
 +++ misc/build/Python-2.6.1/configure	Thu Apr 16 15:16:03 2009
 @@ -4102,7 +4102,7 @@
            ;;
@@ -319,3 +580,18 @@
  	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
  	  INSTSONAME="$LDLIBRARY".$SOVERSION
            ;;
+--- misc/build/Python-2.6.1/PC/pyconfig.h
++++ misc/build/Python-2.6.1/PC/pyconfig.h
+@@ -322,11 +322,7 @@
+ 			/* So MSVC users need not specify the .lib file in
+ 			their Makefile (other compilers are generally
+ 			taken care of by distutils.) */
+-#			ifdef _DEBUG
+-#				pragma comment(lib,"python26_d.lib")
+-#			else
+-#				pragma comment(lib,"python26.lib")
+-#			endif /* _DEBUG */
++#			pragma comment(lib,"python26.lib")
+ #		endif /* _MSC_VER */
+ #	endif /* Py_BUILD_CORE */
+ #endif /* MS_COREDLL */

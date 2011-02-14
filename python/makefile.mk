@@ -124,13 +124,19 @@ ARCH=Win32
 ARCH=x64
 .ENDIF
 
+.IF "$(debug)"!=""
+CONF=Debug
+.ELSE
+CONF=Release
+.ENDIF
+
 # Build python executable and then runs a minimal script. Running the minimal script
 # ensures that certain *.pyc files are generated which would otherwise be created on
 # solver during registration in insetoo_native
 .IF "$(CCNUMVER)" >= "001600000000"
-BUILD_ACTION=MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /ToolsVersion:4.0
+BUILD_ACTION=MSBuild.exe pcbuild.sln /t:Build /p:Configuration=$(CONF) /ToolsVersion:4.0
 .ELSE
-BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe pcbuild.sln "Release|$(ARCH)"
+BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe pcbuild.sln "$(CONF)|$(ARCH)"
 .ENDIF
 .ENDIF
 .ENDIF
