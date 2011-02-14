@@ -53,9 +53,9 @@
 
 // forwards -> galwrap.cxx (wg. CLOOKs)
 
-USHORT  GallerySGA_FORMAT_GRAPHIC();
+sal_uInt16  GallerySGA_FORMAT_GRAPHIC();
 Graphic GalleryGetGraphic       ();
-BOOL    GalleryIsLinkage        ();
+sal_Bool    GalleryIsLinkage        ();
 String  GalleryGetFullPath      ();
 String  GalleryGetFilterName    ();
 
@@ -63,7 +63,7 @@ String  GalleryGetFilterName    ();
 
 class SvxIMapDlg;
 
-USHORT          ScIMapChildWindowId();
+sal_uInt16          ScIMapChildWindowId();
 SvxIMapDlg*     ScGetIMapDlg();
 const void*     ScIMapDlgGetObj( SvxIMapDlg* pDlg );
 const ImageMap& ScIMapDlgGetMap( SvxIMapDlg* pDlg );
@@ -72,7 +72,7 @@ const ImageMap& ScIMapDlgGetMap( SvxIMapDlg* pDlg );
 
 void ScTabViewShell::ExecChildWin(SfxRequest& rReq)
 {
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     switch(nSlot)
     {
         case SID_GALLERY:
@@ -99,12 +99,12 @@ void ScTabViewShell::GetChildWinState( SfxItemSet& rSet )
 {
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GALLERY ) )
     {
-        USHORT nId = GalleryChildWindow::GetChildWindowId();
+        sal_uInt16 nId = GalleryChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_GALLERY, GetViewFrame()->HasChildWindow( nId ) ) );
     }
     else if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_AVMEDIA_PLAYER ) )
     {
-        USHORT nId = ::avmedia::MediaPlayer::GetChildWindowId();
+        sal_uInt16 nId = ::avmedia::MediaPlayer::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_AVMEDIA_PLAYER, GetViewFrame()->HasChildWindow( nId ) ) );
     }
 }
@@ -118,10 +118,10 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
     if ( pArgs )
     {
         const SfxPoolItem* pItem = NULL;
-        SfxItemState eState = pArgs->GetItemState(SID_GALLERY_FORMATS, TRUE, &pItem);
+        SfxItemState eState = pArgs->GetItemState(SID_GALLERY_FORMATS, sal_True, &pItem);
         if ( eState == SFX_ITEM_SET )
         {
-            UINT32 nFormats = ((const SfxUInt32Item*)pItem)->GetValue();
+            sal_uInt32 nFormats = ((const SfxUInt32Item*)pItem)->GetValue();
 
             /******************************************************************
             * Graphik einfuegen
@@ -178,13 +178,13 @@ String __EXPORT ScTabViewShell::GetDescription() const
 
 void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
 {
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     switch(nSlot)
     {
         case SID_IMAP:
         {
             SfxViewFrame* pThisFrame = GetViewFrame();
-            USHORT nId = ScIMapChildWindowId();
+            sal_uInt16 nId = ScIMapChildWindowId();
             pThisFrame->ToggleChildWindow( nId );
             GetViewFrame()->GetBindings().Invalidate( SID_IMAP );
 
@@ -238,7 +238,7 @@ void ScTabViewShell::ExecImageMap( SfxRequest& rReq )
 void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
 {
     SfxWhichIter aIter(rSet);
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
     while ( nWhich )
     {
         switch ( nWhich )
@@ -247,15 +247,15 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
                 {
                     //  Disabled wird nicht mehr...
 
-                    BOOL bThere = FALSE;
+                    sal_Bool bThere = sal_False;
                     SfxViewFrame* pThisFrame = GetViewFrame();
-                    USHORT nId = ScIMapChildWindowId();
+                    sal_uInt16 nId = ScIMapChildWindowId();
                     if ( pThisFrame->KnowsChildWindow(nId) )
                         if ( pThisFrame->HasChildWindow(nId) )
-                            bThere = TRUE;
+                            bThere = sal_True;
 
                     ObjectSelectionType eType=GetCurObjectSelectionType();
-                    BOOL bEnable=(eType==OST_OleObject) ||(eType==OST_Graphic);
+                    sal_Bool bEnable=(eType==OST_OleObject) ||(eType==OST_Graphic);
                     if(!bThere && !bEnable)
                     {
                        rSet.DisableItem( nWhich );
@@ -269,7 +269,7 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
 
             case SID_IMAP_EXEC:
                 {
-                    BOOL bDisable = TRUE;
+                    sal_Bool bDisable = sal_True;
 
                     SdrView* pDrView = GetSdrView();
                     if ( pDrView )
@@ -278,7 +278,7 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
                         if ( rMarkList.GetMarkCount() == 1 )
                             if ( ScIMapDlgGetObj(ScGetIMapDlg()) ==
                                         (void*) rMarkList.GetMark(0)->GetMarkedSdrObj() )
-                                bDisable = FALSE;
+                                bDisable = sal_False;
                     }
 
                     rSet.Put( SfxBoolItem( SID_IMAP_EXEC, bDisable ) );

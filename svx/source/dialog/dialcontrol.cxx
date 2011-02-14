@@ -78,7 +78,7 @@ DialControlBmp::DialControlBmp( Window& rParent ) :
     mrParent( rParent ),
     mbEnabled( true )
 {
-    EnableRTL( FALSE );
+    EnableRTL( sal_False );
 }
 
 void DialControlBmp::InitBitmap( const Size& rSize, const Font& rFont )
@@ -183,7 +183,7 @@ void DialControlBmp::DrawBackground()
     SetFillColor();
     Erase();
 
-    EnableRTL( TRUE ); // #107807# draw 3D effect in correct direction
+    EnableRTL( sal_True ); // #107807# draw 3D effect in correct direction
 
     sal_uInt8 nDiff = mbEnabled ? 0x18 : 0x10;
     Color aColor;
@@ -210,7 +210,7 @@ void DialControlBmp::DrawBackground()
     SetFillColor( aColor );
     DrawPie( maRect, maRect.TopLeft(), maRect.LeftCenter() );
 
-    EnableRTL( FALSE );
+    EnableRTL( sal_False );
 
     // *** calibration ***
 
@@ -277,7 +277,7 @@ void DialControl_Impl::Init( const Size& rWinSize, const Font& rWinFont )
 
     mnCenterX = maWinSize.Width() / 2;
     mnCenterY = maWinSize.Height() / 2;
-    maWinFont.SetTransparent( TRUE );
+    maWinFont.SetTransparent( sal_True );
 
     maBmpEnabled.DrawBackground( maWinSize, true );
     maBmpDisabled.DrawBackground( maWinSize, false );
@@ -451,7 +451,7 @@ const Link& DialControl::GetModifyHdl() const
 void DialControl::Init( const Size& rWinSize, const Font& rWinFont )
 {
     mpImpl->Init( rWinSize, rWinFont );
-    EnableRTL( FALSE ); // #107807# don't mirror mouse handling
+    EnableRTL( sal_False ); // #107807# don't mirror mouse handling
     SetOutputSizePixel( mpImpl->maWinSize );
     SetBackground();
 }

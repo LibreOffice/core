@@ -219,7 +219,7 @@ void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointe
 
         const SwTable *pTable = pInner->getTable( );
         const SwTableLines& rLines = pTable->GetTabLines( );
-        USHORT nLinesCount = rLines.Count( );
+        sal_uInt16 nLinesCount = rLines.Count( );
 
         if ( pInner->isEndOfCell() )
         {
@@ -420,7 +420,7 @@ void DocxAttributeOutput::DoWriteBookmarks()
         const OString& rName = *it;
 
         // Output the bookmark
-        USHORT nId = m_nNextMarkId++;
+        sal_uInt16 nId = m_nNextMarkId++;
         m_rOpenedMarksIds[rName] = nId;
         m_pSerializer->singleElementNS( XML_w, XML_bookmarkStart,
             FSNS( XML_w, XML_id ), OString::valueOf( sal_Int32( nId ) ).getStr(  ),
@@ -436,10 +436,10 @@ void DocxAttributeOutput::DoWriteBookmarks()
         const OString& rName = *it;
 
         // Get the id of the bookmark
-        std::map< OString, USHORT >::iterator pPos = m_rOpenedMarksIds.find( rName );
+        std::map< OString, sal_uInt16 >::iterator pPos = m_rOpenedMarksIds.find( rName );
         if ( pPos != m_rOpenedMarksIds.end(  ) )
         {
-            USHORT nId = ( *pPos ).second;
+            sal_uInt16 nId = ( *pPos ).second;
             m_pSerializer->singleElementNS( XML_w, XML_bookmarkEnd,
                 FSNS( XML_w, XML_id ), OString::valueOf( sal_Int32( nId ) ).getStr(  ),
                 FSEND );
@@ -585,7 +585,7 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
     // should be visible
     if ( rInfos.pField )
     {
-        USHORT nSubType = rInfos.pField->GetSubType( );
+        sal_uInt16 nSubType = rInfos.pField->GetSubType( );
         bool bIsSetField = rInfos.pField->GetTyp( )->Which( ) == RES_SETEXPFLD;
         bool bShowRef = ( !bIsSetField || ( nSubType & nsSwExtendedSubType::SUB_INVISIBLE ) ) ? false : true;
 
@@ -958,12 +958,12 @@ void DocxAttributeOutput::EndRedline()
     m_pRedlineData = NULL;
 }
 
-void DocxAttributeOutput::FormatDrop( const SwTxtNode& /*rNode*/, const SwFmtDrop& /*rSwFmtDrop*/, USHORT /*nStyle*/, ww8::WW8TableNodeInfo::Pointer_t /*pTextNodeInfo*/, ww8::WW8TableNodeInfoInner::Pointer_t )
+void DocxAttributeOutput::FormatDrop( const SwTxtNode& /*rNode*/, const SwFmtDrop& /*rSwFmtDrop*/, sal_uInt16 /*nStyle*/, ww8::WW8TableNodeInfo::Pointer_t /*pTextNodeInfo*/, ww8::WW8TableNodeInfoInner::Pointer_t )
 {
-    OSL_TRACE( "TODO DocxAttributeOutput::FormatDrop( const SwTxtNode& rNode, const SwFmtDrop& rSwFmtDrop, USHORT nStyle )\n" );
+    OSL_TRACE( "TODO DocxAttributeOutput::FormatDrop( const SwTxtNode& rNode, const SwFmtDrop& rSwFmtDrop, sal_uInt16 nStyle )\n" );
 }
 
-void DocxAttributeOutput::ParagraphStyle( USHORT nStyle )
+void DocxAttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
 {
     OString aStyleId( "style" );
     aStyleId += OString::valueOf( sal_Int32( nStyle ) );
@@ -1008,13 +1008,13 @@ static OString impl_ConvertColor( const Color &rColor )
     return color;
 }
 
-static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, const SvxBorderLine* pBorderLine, USHORT nDist )
+static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, const SvxBorderLine* pBorderLine, sal_uInt16 nDist )
 {
     FastAttributeList* pAttr = pSerializer->createAttrList();
 
-    USHORT inW = pBorderLine->GetInWidth();
-    USHORT outW = pBorderLine->GetOutWidth();
-    USHORT nWidth  = inW + outW;
+    sal_uInt16 inW = pBorderLine->GetInWidth();
+    sal_uInt16 outW = pBorderLine->GetOutWidth();
+    sal_uInt16 nWidth  = inW + outW;
 
     // Compute val attribute value
     // Can be one of:
@@ -1044,8 +1044,8 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
 
     // The unit is the 8th of point
     nWidth = sal_Int32( nWidth / 2.5 );
-    USHORT nMinWidth = 2;
-    USHORT nMaxWidth = 96;
+    sal_uInt16 nMinWidth = 2;
+    sal_uInt16 nMaxWidth = 96;
 
     if ( nWidth > nMaxWidth )
         nWidth = nMaxWidth;
@@ -1067,16 +1067,16 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
 
 static void impl_pageBorders( FSHelperPtr pSerializer, const SvxBoxItem& rBox )
 {
-    static const USHORT aBorders[] =
+    static const sal_uInt16 aBorders[] =
     {
         BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
     };
 
-    static const USHORT aXmlElements[] =
+    static const sal_uInt16 aXmlElements[] =
     {
         XML_top, XML_left, XML_bottom, XML_right
     };
-    const USHORT* pBrd = aBorders;
+    const sal_uInt16* pBrd = aBorders;
     for( int i = 0; i < 4; ++i, ++pBrd )
     {
         const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
@@ -1117,7 +1117,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     SwWriteTableRow *pRow = aRows[ pTableTextNodeInfoInner->getRow( ) ];
     SwWriteTableCell *pCell = pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
 
-    USHORT nColSpan = pCell->GetColSpan();
+    sal_uInt16 nColSpan = pCell->GetColSpan();
     if ( nColSpan > 1 )
         m_pSerializer->singleElementNS( XML_w, XML_gridSpan,
                 FSNS( XML_w, XML_val ), OString::valueOf( sal_Int32( nColSpan ) ).getStr(),
@@ -1135,16 +1135,16 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     // Cell margins
     m_pSerializer->startElementNS( XML_w, XML_tcMar, FSEND );
     const SvxBoxItem& rBox = pFmt->GetBox( );
-    static const USHORT aBorders[] =
+    static const sal_uInt16 aBorders[] =
     {
         BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT
     };
 
-    static const USHORT aXmlElements[] =
+    static const sal_uInt16 aXmlElements[] =
     {
         XML_top, XML_left, XML_bottom, XML_right
     };
-    const USHORT* pBrd = aBorders;
+    const sal_uInt16* pBrd = aBorders;
     for( int i = 0; i < 4; ++i, ++pBrd )
     {
         sal_Int32 nDist = sal_Int32( rBox.GetDistance( *pBrd ) );
@@ -1177,8 +1177,8 @@ void DocxAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t
     if( pLayout && pLayout->IsExportable() )
         m_pTableWrt = new SwWriteTable( pLayout );
     else
-        m_pTableWrt = new SwWriteTable( pTable->GetTabLines(), (USHORT)nPageSize,
-                (USHORT)nTblSz, false);
+        m_pTableWrt = new SwWriteTable( pTable->GetTabLines(), (sal_uInt16)nPageSize,
+                (sal_uInt16)nTblSz, false);
 }
 
 void DocxAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
@@ -1460,16 +1460,16 @@ void DocxAttributeOutput::StartStyles()
             FSEND );
 }
 
-void DocxAttributeOutput::EndStyles( USHORT /*nNumberOfStyles*/ )
+void DocxAttributeOutput::EndStyles( sal_uInt16 /*nNumberOfStyles*/ )
 {
     m_pSerializer->endElementNS( XML_w, XML_styles );
 }
 
-void DocxAttributeOutput::DefaultStyle( USHORT nStyle )
+void DocxAttributeOutput::DefaultStyle( sal_uInt16 nStyle )
 {
     // are these the values of enum ww::sti (see ../inc/wwstyles.hxx)?
 #if OSL_DEBUG_LEVEL > 0
-    OSL_TRACE( "TODO DocxAttributeOutput::DefaultStyle( USHORT nStyle )- %d\n", nStyle );
+    OSL_TRACE( "TODO DocxAttributeOutput::DefaultStyle( sal_uInt16 nStyle )- %d\n", nStyle );
 #else
     (void) nStyle; // to quiet the warning
 #endif
@@ -1708,7 +1708,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
 }
 
 void DocxAttributeOutput::StartStyle( const String& rName, bool bPapFmt,
-        USHORT nBase, USHORT nNext, USHORT /*nWwId*/, USHORT nId )
+        sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 /*nWwId*/, sal_uInt16 nId )
 {
     OString aStyle( "style" );
 
@@ -1738,7 +1738,7 @@ void DocxAttributeOutput::EndStyle()
     m_pSerializer->endElementNS( XML_w, XML_style );
 }
 
-void DocxAttributeOutput::StartStyleProperties( bool bParProp, USHORT /*nStyle*/ )
+void DocxAttributeOutput::StartStyleProperties( bool bParProp, sal_uInt16 /*nStyle*/ )
 {
     if ( bParProp )
     {
@@ -1766,7 +1766,7 @@ void DocxAttributeOutput::EndStyleProperties( bool bParProp )
     }
 }
 
-void DocxAttributeOutput::OutlineNumbering( BYTE nLvl, const SwNumFmt& /*rNFmt*/, const SwFmt& /*rFmt*/ )
+void DocxAttributeOutput::OutlineNumbering( sal_uInt8 nLvl, const SwNumFmt& /*rNFmt*/, const SwFmt& /*rFmt*/ )
 {
     if ( nLvl >= WW8ListManager::nMaxLevel )
         nLvl = WW8ListManager::nMaxLevel - 1;
@@ -1786,7 +1786,7 @@ void DocxAttributeOutput::PageBreakBefore( bool bBreak )
                 FSEND );
 }
 
-void DocxAttributeOutput::SectionBreak( BYTE nC, const WW8_SepInfo* pSectionInfo )
+void DocxAttributeOutput::SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectionInfo )
 {
     switch ( nC )
     {
@@ -1861,7 +1861,7 @@ void DocxAttributeOutput::SectionFormProtection( bool bProtected )
                 FSNS( XML_w, XML_val ), "off", FSEND );
 }
 
-void DocxAttributeOutput::SectionLineNumbering( ULONG /*nRestartNo*/, const SwLineNumberInfo& /*rLnNumInfo*/ )
+void DocxAttributeOutput::SectionLineNumbering( sal_uLong /*nRestartNo*/, const SwLineNumberInfo& /*rLnNumInfo*/ )
 {
     // see 2.6.8 lnNumType (Line Numbering Settings)
 #if OSL_DEBUG_LEVEL > 0
@@ -1907,7 +1907,7 @@ void DocxAttributeOutput::SectionBiDi( bool bBiDi )
         m_pSerializer->singleElementNS( XML_w, XML_bidi, FSEND );
 }
 
-static OString impl_NumberingType( USHORT nNumberingType )
+static OString impl_NumberingType( sal_uInt16 nNumberingType )
 {
     OString aType;
 
@@ -1931,7 +1931,7 @@ static OString impl_NumberingType( USHORT nNumberingType )
     return aType;
 }
 
-void DocxAttributeOutput::SectionPageNumbering( USHORT nNumType, USHORT nPageRestartNumber )
+void DocxAttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 nPageRestartNumber )
 {
     // FIXME Not called properly with page styles like "First Page"
 
@@ -1955,7 +1955,7 @@ void DocxAttributeOutput::SectionPageNumbering( USHORT nNumType, USHORT nPageRes
 #endif
 }
 
-void DocxAttributeOutput::SectionType( BYTE nBreakCode )
+void DocxAttributeOutput::SectionType( sal_uInt8 nBreakCode )
 {
     /*  break code:   0 No break, 1 New column
         2 New page, 3 Even page, 4 Odd page
@@ -2041,7 +2041,7 @@ void DocxAttributeOutput::FontPitchType( FontPitch ePitch ) const
                 FSEND );
 }
 
-void DocxAttributeOutput::NumberingDefinition( USHORT nId, const SwNumRule &rRule )
+void DocxAttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &rRule )
 {
     // nId is the same both for abstract numbering definition as well as the
     // numbering definition itself
@@ -2067,7 +2067,7 @@ void DocxAttributeOutput::NumberingDefinition( USHORT nId, const SwNumRule &rRul
     m_pSerializer->endElementNS( XML_w, XML_num );
 }
 
-void DocxAttributeOutput::StartAbstractNumbering( USHORT nId )
+void DocxAttributeOutput::StartAbstractNumbering( sal_uInt16 nId )
 {
     m_pSerializer->startElementNS( XML_w, XML_abstractNum,
             FSNS( XML_w, XML_abstractNumId ), OString::valueOf( sal_Int32( nId ) ).getStr(),
@@ -2079,12 +2079,12 @@ void DocxAttributeOutput::EndAbstractNumbering()
     m_pSerializer->endElementNS( XML_w, XML_abstractNum );
 }
 
-void DocxAttributeOutput::NumberingLevel( BYTE nLevel,
-        USHORT nStart,
-        USHORT nNumberingType,
+void DocxAttributeOutput::NumberingLevel( sal_uInt8 nLevel,
+        sal_uInt16 nStart,
+        sal_uInt16 nNumberingType,
         SvxAdjust eAdjust,
-        const BYTE * /*pNumLvlPos*/,
-        BYTE nFollow,
+        const sal_uInt8 * /*pNumLvlPos*/,
+        sal_uInt8 nFollow,
         const wwFont *pFont,
         const SfxItemSet *pOutSet,
         sal_Int16 nIndentAt,
@@ -2546,7 +2546,7 @@ void DocxAttributeOutput::TextCharFormat( const SwFmtCharFmt& )
 
 void DocxAttributeOutput::RefField( const SwField&  rFld, const String& rRef )
 {
-    USHORT nType = rFld.GetTyp( )->Which( );
+    sal_uInt16 nType = rFld.GetTyp( )->Which( );
     if ( nType == RES_GETEXPFLD )
     {
         String sCmd = FieldString( ww::eREF );
@@ -2598,7 +2598,7 @@ void DocxAttributeOutput::WriteExpand( const SwField* pFld )
     m_rExport.OutputField( pFld, ww::eUNKNOWN, sCmd );
 }
 
-void DocxAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField eType, const String& rFldCmd, BYTE nMode )
+void DocxAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField eType, const String& rFldCmd, sal_uInt8 nMode )
 {
     struct FieldInfos infos;
     infos.pField = pFld;
@@ -2611,8 +2611,8 @@ void DocxAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField eType
 
     if ( pFld )
     {
-        USHORT nType = pFld->GetTyp( )->Which( );
-        USHORT nSubType = pFld->GetSubType();
+        sal_uInt16 nType = pFld->GetTyp( )->Which( );
+        sal_uInt16 nSubType = pFld->GetSubType();
 
         // TODO Any other field types here ?
         if ( ( nType == RES_SETEXPFLD ) && ( nSubType & nsSwGetSetExpType::GSE_STRING ) )
@@ -2894,7 +2894,7 @@ void DocxAttributeOutput::ParaNumRule_Impl( const SwTxtNode* /*pTxtNd*/, sal_Int
 
 void DocxAttributeOutput::ParaScriptSpace( const SfxBoolItem& rScriptSpace )
 {
-    USHORT nXmlElement = 0;
+    sal_uInt16 nXmlElement = 0;
 
     switch ( rScriptSpace.Which( ) )
     {
@@ -2997,7 +2997,7 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
             m_pSpacingAttrList = m_pSerializer->createAttrList();
 
 
-        USHORT nLDist, nRDist;
+        sal_uInt16 nLDist, nRDist;
         const SfxPoolItem* pItem = m_rExport.HasItem( RES_BOX );
         if ( pItem )
         {
@@ -3006,8 +3006,8 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
         }
         else
             nLDist = nRDist = 0;
-        nLDist = nLDist + (USHORT)rLRSpace.GetLeft();
-        nRDist = nRDist + (USHORT)rLRSpace.GetRight();
+        nLDist = nLDist + (sal_uInt16)rLRSpace.GetLeft();
+        nRDist = nRDist + (sal_uInt16)rLRSpace.GetRight();
 
         m_pSpacingAttrList->add( FSNS( XML_w, XML_left ), OString::valueOf( sal_Int32( nLDist ) ) );
         m_pSpacingAttrList->add( FSNS( XML_w, XML_right ), OString::valueOf( sal_Int32( nRDist ) ) );
@@ -3143,7 +3143,7 @@ void DocxAttributeOutput::FormatBox( const SvxBoxItem& rBox )
     }
 }
 
-void DocxAttributeOutput::FormatColumns_Impl( USHORT nCols, const SwFmtCol& rCol, bool bEven, SwTwips nPageSize )
+void DocxAttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFmtCol& rCol, bool bEven, SwTwips nPageSize )
 {
     // Get the columns attributes
     FastAttributeList *pColsAttrList = m_pSerializer->createAttrList();
@@ -3154,7 +3154,7 @@ void DocxAttributeOutput::FormatColumns_Impl( USHORT nCols, const SwFmtCol& rCol
     const char* pEquals = "false";
     if ( bEven )
     {
-        USHORT nWidth = rCol.GetGutterWidth( true );
+        sal_uInt16 nWidth = rCol.GetGutterWidth( true );
         pColsAttrList->add( FSNS( XML_w, XML_space ),
                OString::valueOf( sal_Int32( nWidth ) ).getStr( ) );
 
@@ -3173,16 +3173,16 @@ void DocxAttributeOutput::FormatColumns_Impl( USHORT nCols, const SwFmtCol& rCol
     const SwColumns & rColumns = rCol.GetColumns(  );
     if ( !bEven )
     {
-        for ( USHORT n = 0; n < nCols; ++n )
+        for ( sal_uInt16 n = 0; n < nCols; ++n )
         {
             FastAttributeList *pColAttrList = m_pSerializer->createAttrList();
-            USHORT nWidth = rCol.CalcPrtColWidth( n, ( USHORT ) nPageSize );
+            sal_uInt16 nWidth = rCol.CalcPrtColWidth( n, ( sal_uInt16 ) nPageSize );
             pColAttrList->add( FSNS( XML_w, XML_w ),
                     OString::valueOf( sal_Int32( nWidth ) ).getStr( ) );
 
             if ( n + 1 != nCols )
             {
-                USHORT nSpacing = rColumns[n]->GetRight( ) + rColumns[n + 1]->GetLeft( );
+                sal_uInt16 nSpacing = rColumns[n]->GetRight( ) + rColumns[n + 1]->GetLeft( );
                 pColAttrList->add( FSNS( XML_w, XML_space ),
                     OString::valueOf( sal_Int32( nSpacing ) ).getStr( ) );
             }

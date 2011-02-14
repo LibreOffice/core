@@ -47,7 +47,7 @@ using ::xmloff::token::XML_HEADER_FOOTER_PROPERTIES;
 //------------------------------------------------------------------
 
 PageHeaderFooterContext::PageHeaderFooterContext( SvXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>&,
@@ -68,7 +68,7 @@ PageHeaderFooterContext::~PageHeaderFooterContext()
 {
 }
 
-SvXMLImportContext *PageHeaderFooterContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *PageHeaderFooterContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )

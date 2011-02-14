@@ -33,43 +33,43 @@
 #include "document.hxx"
 
 
-static const INT32 nInt32Min = 0x80000000;
-static const INT32 nInt32Max = 0x7fffffff;
+static const sal_Int32 nInt32Min = 0x80000000;
+static const sal_Int32 nInt32Max = 0x7fffffff;
 
 
 class ScBigAddress
 {
-    INT32   nRow;
-    INT32   nCol;
-    INT32   nTab;
+    sal_Int32   nRow;
+    sal_Int32   nCol;
+    sal_Int32   nTab;
 
 public:
             ScBigAddress() : nRow(0), nCol(0), nTab(0) {}
-            ScBigAddress( INT32 nColP, INT32 nRowP, INT32 nTabP )
+            ScBigAddress( sal_Int32 nColP, sal_Int32 nRowP, sal_Int32 nTabP )
                 : nRow( nRowP ), nCol( nColP ), nTab( nTabP ) {}
             ScBigAddress( const ScBigAddress& r )
                 : nRow( r.nRow ), nCol( r.nCol ), nTab( r.nTab ) {}
             ScBigAddress( const ScAddress& r )
                 : nRow( r.Row() ), nCol( r.Col() ), nTab( r.Tab() ) {}
 
-    INT32   Col() const { return nCol; }
-    INT32   Row() const { return nRow; }
-    INT32   Tab() const { return nTab; }
+    sal_Int32   Col() const { return nCol; }
+    sal_Int32   Row() const { return nRow; }
+    sal_Int32   Tab() const { return nTab; }
 
-    void    Set( INT32 nColP, INT32 nRowP, INT32 nTabP )
+    void    Set( sal_Int32 nColP, sal_Int32 nRowP, sal_Int32 nTabP )
                 { nCol = nColP; nRow = nRowP; nTab = nTabP; }
-    void    SetCol( INT32 nColP ) { nCol = nColP; }
-    void    SetRow( INT32 nRowP ) { nRow = nRowP; }
-    void    SetTab( INT32 nTabP ) { nTab = nTabP; }
-    void    IncCol( INT32 n = 1 ) { nCol += n; }
-    void    IncRow( INT32 n = 1 ) { nRow += n; }
-    void    IncTab( INT32 n = 1 ) { nTab += n; }
+    void    SetCol( sal_Int32 nColP ) { nCol = nColP; }
+    void    SetRow( sal_Int32 nRowP ) { nRow = nRowP; }
+    void    SetTab( sal_Int32 nTabP ) { nTab = nTabP; }
+    void    IncCol( sal_Int32 n = 1 ) { nCol += n; }
+    void    IncRow( sal_Int32 n = 1 ) { nRow += n; }
+    void    IncTab( sal_Int32 n = 1 ) { nTab += n; }
 
-    void    GetVars( INT32& nColP, INT32& nRowP, INT32& nTabP ) const
+    void    GetVars( sal_Int32& nColP, sal_Int32& nRowP, sal_Int32& nTabP ) const
                 { nColP = nCol; nRowP = nRow; nTabP = nTab; }
 
     inline void     PutInOrder( ScBigAddress& r );
-    inline BOOL     IsValid( const ScDocument* ) const;
+    inline sal_Bool     IsValid( const ScDocument* ) const;
     inline ScAddress    MakeAddress() const;
 
     ScBigAddress&   operator=( const ScBigAddress& r )
@@ -88,7 +88,7 @@ public:
 
 inline void ScBigAddress::PutInOrder( ScBigAddress& r )
 {
-    INT32 nTmp;
+    sal_Int32 nTmp;
     if ( r.nCol < nCol )
     {
         nTmp = r.nCol;
@@ -110,7 +110,7 @@ inline void ScBigAddress::PutInOrder( ScBigAddress& r )
 }
 
 
-inline BOOL ScBigAddress::IsValid( const ScDocument* pDoc ) const
+inline sal_Bool ScBigAddress::IsValid( const ScDocument* pDoc ) const
 {   //! Min/Max sind ok, kennzeichnen ganze Col/Row/Tab
     return
         ((0 <= nCol && nCol <= MAXCOL)
@@ -186,32 +186,32 @@ public:
                         : aStart( r ), aEnd( r ) {}
                     ScBigRange( const ScAddress& r )
                         : aStart( r ), aEnd( r ) {}
-                    ScBigRange( INT32 nCol, INT32 nRow, INT32 nTab )
+                    ScBigRange( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nTab )
                         : aStart( nCol, nRow, nTab ), aEnd( aStart ) {}
-                    ScBigRange( INT32 nCol1, INT32 nRow1, INT32 nTab1,
-                            INT32 nCol2, INT32 nRow2, INT32 nTab2 )
+                    ScBigRange( sal_Int32 nCol1, sal_Int32 nRow1, sal_Int32 nTab1,
+                            sal_Int32 nCol2, sal_Int32 nRow2, sal_Int32 nTab2 )
                         : aStart( nCol1, nRow1, nTab1 ),
                         aEnd( nCol2, nRow2, nTab2 ) {}
 
-    void    Set( INT32 nCol1, INT32 nRow1, INT32 nTab1,
-                     INT32 nCol2, INT32 nRow2, INT32 nTab2 )
+    void    Set( sal_Int32 nCol1, sal_Int32 nRow1, sal_Int32 nTab1,
+                     sal_Int32 nCol2, sal_Int32 nRow2, sal_Int32 nTab2 )
                 { aStart.Set( nCol1, nRow1, nTab1 );
                     aEnd.Set( nCol2, nRow2, nTab2 ); }
 
-    void    GetVars( INT32& nCol1, INT32& nRow1, INT32& nTab1,
-                     INT32& nCol2, INT32& nRow2, INT32& nTab2 ) const
+    void    GetVars( sal_Int32& nCol1, sal_Int32& nRow1, sal_Int32& nTab1,
+                     sal_Int32& nCol2, sal_Int32& nRow2, sal_Int32& nTab2 ) const
                 { aStart.GetVars( nCol1, nRow1, nTab1 );
                     aEnd.GetVars( nCol2, nRow2, nTab2 ); }
 
-    BOOL    IsValid( const ScDocument* pDoc ) const
+    sal_Bool    IsValid( const ScDocument* pDoc ) const
                 { return aStart.IsValid( pDoc ) && aEnd.IsValid( pDoc ); }
     inline ScRange  MakeRange() const
                     { return ScRange( aStart.MakeAddress(),
                         aEnd.MakeAddress() ); }
 
-    inline BOOL In( const ScBigAddress& ) const;    // ist Address& in Range?
-    inline BOOL In( const ScBigRange& ) const;      // ist Range& in Range?
-    inline BOOL Intersects( const ScBigRange& ) const;  // ueberschneiden sich zwei Ranges?
+    inline sal_Bool In( const ScBigAddress& ) const;    // ist Address& in Range?
+    inline sal_Bool In( const ScBigRange& ) const;      // ist Range& in Range?
+    inline sal_Bool Intersects( const ScBigRange& ) const;  // ueberschneiden sich zwei Ranges?
 
     ScBigRange&     operator=( const ScBigRange& r )
                         { aStart = r.aStart; aEnd = r.aEnd; return *this; }
@@ -225,7 +225,7 @@ public:
 };
 
 
-inline BOOL ScBigRange::In( const ScBigAddress& rAddr ) const
+inline sal_Bool ScBigRange::In( const ScBigAddress& rAddr ) const
 {
     return
         aStart.Col() <= rAddr.Col() && rAddr.Col() <= aEnd.Col() &&
@@ -234,7 +234,7 @@ inline BOOL ScBigRange::In( const ScBigAddress& rAddr ) const
 }
 
 
-inline BOOL ScBigRange::In( const ScBigRange& r ) const
+inline sal_Bool ScBigRange::In( const ScBigRange& r ) const
 {
     return
         aStart.Col() <= r.aStart.Col() && r.aEnd.Col() <= aEnd.Col() &&
@@ -243,7 +243,7 @@ inline BOOL ScBigRange::In( const ScBigRange& r ) const
 }
 
 
-inline BOOL ScBigRange::Intersects( const ScBigRange& r ) const
+inline sal_Bool ScBigRange::Intersects( const ScBigRange& r ) const
 {
     return !(
         Min( aEnd.Col(), r.aEnd.Col() ) < Max( aStart.Col(), r.aStart.Col() )

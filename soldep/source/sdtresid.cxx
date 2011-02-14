@@ -42,7 +42,7 @@ SolDevDll::~SolDevDll()
     delete pResMgr;
 }
 
-DtSodResId::DtSodResId( USHORT nId ) :
+DtSodResId::DtSodResId( sal_uInt16 nId ) :
 ResId(nId, *(*(SolDevDll**)GetAppData( SHL_SCH ))->GetResMgr())
 {
 }

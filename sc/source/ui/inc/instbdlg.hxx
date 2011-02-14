@@ -73,13 +73,13 @@ public:
 
     virtual short   Execute();      // ueberladen, um Dialog-Parent zu setzen
 
-    BOOL            GetTablesFromFile() { return aBtnFromFile.IsChecked(); }
-    BOOL            GetTablesAsLink()   { return aBtnLink.IsChecked(); }
+    sal_Bool            GetTablesFromFile() { return aBtnFromFile.IsChecked(); }
+    sal_Bool            GetTablesAsLink()   { return aBtnLink.IsChecked(); }
 
-    const String*   GetFirstTable( USHORT* pN = NULL );
-    const String*   GetNextTable( USHORT* pN = NULL );
+    const String*   GetFirstTable( sal_uInt16* pN = NULL );
+    const String*   GetNextTable( sal_uInt16* pN = NULL );
     ScDocShell*     GetDocShellTables() { return pDocShTables; }
-    BOOL            IsTableBefore() { return aBtnBefore.IsChecked(); }
+    sal_Bool            IsTableBefore() { return aBtnBefore.IsChecked(); }
     SCTAB           GetTableCount() { return nTableCount;}
 
 private:
@@ -109,7 +109,7 @@ private:
     SfxObjectShellRef       aDocShTablesRef;
 
     bool                bMustClose;
-    USHORT              nSelTabIndex;   // fuer GetFirstTable() / GetNextTable()
+    sal_uInt16              nSelTabIndex;   // fuer GetFirstTable() / GetNextTable()
     String              aStrCurSelTable;
     SCTAB               nTableCount;
 

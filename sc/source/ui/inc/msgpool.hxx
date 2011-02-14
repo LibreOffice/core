@@ -69,7 +69,7 @@ protected:
     virtual ~ScMessagePool();
 public:
 
-    virtual SfxMapUnit              GetMetric( USHORT nWhich ) const;
+    virtual SfxMapUnit              GetMetric( sal_uInt16 nWhich ) const;
 };
 
 

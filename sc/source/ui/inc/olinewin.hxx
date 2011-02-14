@@ -208,7 +208,7 @@ private:
                                     long nLevelStart, long nEntryStart,
                                     long nLevelEnd, long nEntryEnd );
     /** Draws the specified image unpressed. */
-    void                        DrawImageRel( long nLevelPos, long nEntryPos, USHORT nId );
+    void                        DrawImageRel( long nLevelPos, long nEntryPos, sal_uInt16 nId );
     /** Draws a pressed or unpressed border. */
     void                        DrawBorderRel( size_t nLevel, size_t nEntry, bool bPressed );
 

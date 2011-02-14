@@ -71,7 +71,7 @@ void SwTblField::CalcField( SwTblCalcPara& rCalcPara )
 
 
 SwTblField::SwTblField( SwTblFieldType* pInitType, const String& rFormel,
-                        USHORT nType, ULONG nFmt )
+                        sal_uInt16 nType, sal_uLong nFmt )
     : SwValueField( pInitType, nFmt ), SwTableFormula( rFormel ),
     sExpand( '0' ), nSubType(nType)
 {
@@ -153,12 +153,12 @@ String SwTblField::Expand() const
     return aStr;
 }
 
-USHORT SwTblField::GetSubType() const
+sal_uInt16 SwTblField::GetSubType() const
 {
     return nSubType;
 }
 
-void SwTblField::SetSubType(USHORT nType)
+void SwTblField::SetSubType(sal_uInt16 nType)
 {
     nSubType = nType;
 }
@@ -190,14 +190,14 @@ void SwTblField::SetPar2(const String& rStr)
 /*-----------------04.03.98 10:33-------------------
 
 --------------------------------------------------*/
-BOOL SwTblField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+sal_Bool SwTblField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
     switch ( nWhichId )
     {
     case FIELD_PROP_PAR2:
         {
-            USHORT nOldSubType = nSubType;
+            sal_uInt16 nOldSubType = nSubType;
             SwTblField* pThis = (SwTblField*)this;
             pThis->nSubType |= nsSwExtendedSubType::SUB_CMD;
             rAny <<= rtl::OUString( Expand() );
@@ -206,7 +206,7 @@ BOOL SwTblField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         break;
     case FIELD_PROP_BOOL1:
         {
-            BOOL bFormula = 0 != (nsSwExtendedSubType::SUB_CMD & nSubType);
+            sal_Bool bFormula = 0 != (nsSwExtendedSubType::SUB_CMD & nSubType);
             rAny.setValue(&bFormula, ::getBooleanCppuType());
         }
         break;
@@ -224,9 +224,9 @@ BOOL SwTblField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 /*-----------------04.03.98 10:33-------------------
 
 --------------------------------------------------*/
-BOOL SwTblField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+sal_Bool SwTblField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
     String sTmp;
     switch ( nWhichId )
     {

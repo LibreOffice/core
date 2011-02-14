@@ -402,7 +402,7 @@ namespace drawinglayer
             // define various other FontAttribute
             aRetval.SetAlign(ALIGN_BASELINE);
             aRetval.SetCharSet(rFontAttribute.getSymbol() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE);
-            aRetval.SetVertical(rFontAttribute.getVertical() ? TRUE : FALSE);
+            aRetval.SetVertical(rFontAttribute.getVertical() ? sal_True : sal_False);
             aRetval.SetWeight(static_cast<FontWeight>(rFontAttribute.getWeight()));
             aRetval.SetItalic(rFontAttribute.getItalic() ? ITALIC_NORMAL : ITALIC_NONE);
             aRetval.SetOutline(rFontAttribute.getOutline());

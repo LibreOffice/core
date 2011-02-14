@@ -109,19 +109,19 @@ public:
     virtual             ~Graphic();
 
     Graphic&            operator=( const Graphic& rGraphic );
-    BOOL                operator==( const Graphic& rGraphic ) const;
-    BOOL                operator!=( const Graphic& rGraphic ) const;
-    BOOL                operator!() const;
+    sal_Bool                operator==( const Graphic& rGraphic ) const;
+    sal_Bool                operator!=( const Graphic& rGraphic ) const;
+    sal_Bool                operator!() const;
 
     void                Clear();
 
     GraphicType         GetType() const;
     void                SetDefaultType();
-    BOOL                IsSupportedGraphic() const;
+    sal_Bool                IsSupportedGraphic() const;
 
-    BOOL                IsTransparent() const;
-    BOOL                IsAlpha() const;
-    BOOL                IsAnimated() const;
+    sal_Bool                IsTransparent() const;
+    sal_Bool                IsAlpha() const;
+    sal_Bool                IsAnimated() const;
 
     // #i102089# Access of Bitmap potentially will have to rasterconvert the Graphic
     // if it is a MetaFile. To be able to control this conversion it is necessary to
@@ -144,7 +144,7 @@ public:
 
     Size                GetSizePixel( const OutputDevice* pRefDevice = NULL ) const;
 
-    ULONG               GetSizeBytes() const;
+    sal_uLong               GetSizeBytes() const;
 
     void                Draw( OutputDevice* pOutDev,
                               const Point& rDestPt ) const;
@@ -173,12 +173,12 @@ public:
     void                SetAnimationNotifyHdl( const Link& rLink );
     Link                GetAnimationNotifyHdl() const;
 
-    ULONG               GetAnimationLoopCount() const;
+    sal_uLong               GetAnimationLoopCount() const;
     void                ResetAnimationLoopCount();
 
     List*               GetAnimationInfoList() const;
 
-    ULONG               GetChecksum() const;
+    sal_uLong               GetChecksum() const;
 
 public:
 
@@ -187,26 +187,26 @@ public:
 
 public:
 
-    static USHORT       GetGraphicsCompressMode( SvStream& rIStm );
+    static sal_uInt16       GetGraphicsCompressMode( SvStream& rIStm );
 
-    void                SetDocFileName( const String& rName, ULONG nFilePos );
+    void                SetDocFileName( const String& rName, sal_uLong nFilePos );
     const String&       GetDocFileName() const;
-    ULONG               GetDocFilePos() const;
+    sal_uLong               GetDocFilePos() const;
 
-    BOOL                ReadEmbedded( SvStream& rIStream, BOOL bSwap = FALSE );
-    BOOL                WriteEmbedded( SvStream& rOStream );
+    sal_Bool                ReadEmbedded( SvStream& rIStream, sal_Bool bSwap = sal_False );
+    sal_Bool                WriteEmbedded( SvStream& rOStream );
 
-    BOOL                SwapOut();
-    BOOL                SwapOut( SvStream* pOStm );
-    BOOL                SwapIn();
-    BOOL                SwapIn( SvStream* pIStm );
-    BOOL                IsSwapOut() const;
+    sal_Bool                SwapOut();
+    sal_Bool                SwapOut( SvStream* pOStm );
+    sal_Bool                SwapIn();
+    sal_Bool                SwapIn( SvStream* pIStm );
+    sal_Bool                IsSwapOut() const;
 
     void                SetLink( const GfxLink& );
     GfxLink             GetLink() const;
-    BOOL                IsLink() const;
+    sal_Bool                IsLink() const;
 
-    BOOL                ExportNative( SvStream& rOStream ) const;
+    sal_Bool                ExportNative( SvStream& rOStream ) const;
 
     friend VCL_DLLPUBLIC SvStream&    operator<<( SvStream& rOStream, const Graphic& rGraphic );
     friend VCL_DLLPUBLIC SvStream&    operator>>( SvStream& rIStream, Graphic& rGraphic );

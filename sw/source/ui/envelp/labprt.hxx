@@ -76,7 +76,7 @@ public:
     virtual void ActivatePage(const SfxItemSet& rSet);
     virtual int  DeactivatePage(SfxItemSet* pSet = 0);
             void FillItem(SwLabItem& rItem);
-    virtual BOOL FillItemSet(SfxItemSet& rSet);
+    virtual sal_Bool FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
     inline Printer* GetPrt() { return (pPrinter); }
 };

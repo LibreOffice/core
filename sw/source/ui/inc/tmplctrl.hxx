@@ -40,13 +40,13 @@ class SwTemplateControl : public SfxStatusBarControl
 protected:
     virtual void    Command( const CommandEvent& rCEvt );
 public:
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
     virtual void    Paint( const UserDrawEvent& rEvt );
 
     SFX_DECL_STATUSBAR_CONTROL();
 
-    SwTemplateControl( USHORT nSlotId, USHORT nId, StatusBar& rStb );
+    SwTemplateControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
     ~SwTemplateControl();
 
 private:

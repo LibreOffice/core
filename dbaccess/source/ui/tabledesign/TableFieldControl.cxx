@@ -123,7 +123,7 @@ void OTableFieldControl::DeactivateAggregate( EControlType eType )
     }
 }
 // -----------------------------------------------------------------------------
-void OTableFieldControl::SetModified(BOOL bModified)
+void OTableFieldControl::SetModified(sal_Bool bModified)
 {
     GetCtrl()->GetView()->getController().setModified(bModified);
 }

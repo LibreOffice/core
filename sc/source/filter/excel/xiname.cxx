@@ -143,7 +143,7 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
     // find an unused name
     String aOrigName( maScName );
     sal_Int32 nCounter = 0;
-    USHORT nDummy;
+    sal_uInt16 nDummy;
     while( rRangeNames.SearchName( maScName, nDummy ) )
         maScName.Assign( aOrigName ).Append( ' ' ).Append( String::CreateFromInt32( ++nCounter ) );
 
@@ -232,7 +232,7 @@ XclImpNameManager::XclImpNameManager( const XclImpRoot& rRoot ) :
 
 void XclImpNameManager::ReadName( XclImpStream& rStrm )
 {
-    ULONG nCount = maNameList.Count();
+    sal_uLong nCount = maNameList.Count();
     if( nCount < 0xFFFF )
         maNameList.Append( new XclImpName( rStrm, static_cast< sal_uInt16 >( nCount + 1 ) ) );
 }

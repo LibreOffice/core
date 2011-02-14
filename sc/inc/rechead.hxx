@@ -133,11 +133,11 @@ class ScMultipleReadHeader
 {
 private:
     SvStream&       rStream;
-    BYTE*           pBuf;
+    sal_uInt8*          pBuf;
     SvMemoryStream* pMemStream;
-    ULONG           nEndPos;
-    ULONG           nEntryEnd;
-    ULONG           nTotalEnd;
+    sal_uLong           nEndPos;
+    sal_uLong           nEntryEnd;
+    sal_uLong           nTotalEnd;
 
 public:
     ScMultipleReadHeader(SvStream& rNewStream);
@@ -145,7 +145,7 @@ public:
 
     void    StartEntry();
     void    EndEntry();
-    ULONG   BytesLeft() const;
+    sal_uLong   BytesLeft() const;
 };
 
 class ScMultipleWriteHeader
@@ -153,9 +153,9 @@ class ScMultipleWriteHeader
 private:
     SvStream&       rStream;
     SvMemoryStream  aMemStream;
-    ULONG           nDataPos;
+    sal_uLong           nDataPos;
     sal_uInt32      nDataSize;
-    ULONG           nEntryStart;
+    sal_uLong           nEntryStart;
 
 public:
     ScMultipleWriteHeader(SvStream& rNewStream, sal_uInt32 nDefault = 0);

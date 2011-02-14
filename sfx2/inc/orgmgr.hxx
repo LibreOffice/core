@@ -44,8 +44,8 @@ public:
     SfxObjectList();
     ~SfxObjectList();
 
-    const String&   GetBaseName( USHORT nId ) const;
-    const String&   GetFileName( USHORT nId ) const;
+    const String&   GetBaseName( sal_uInt16 nId ) const;
+    const String&   GetFileName( sal_uInt16 nId ) const;
 };
 
 class IntlWrapper;
@@ -66,8 +66,8 @@ private:
     SfxDocumentTemplates*       pTemplates;
     SfxOrganizeListBox_Impl*    pLeftBox;
     SfxOrganizeListBox_Impl*    pRightBox;
-    BOOL                        bDeleteTemplates    :1;
-    BOOL                        bModified           :1;
+    sal_Bool                        bDeleteTemplates    :1;
+    sal_Bool                        bModified           :1;
 
     SfxOrganizeListBox_Impl*    GetOther( SfxOrganizeListBox_Impl* );
 
@@ -77,27 +77,27 @@ public:
                     SfxDocumentTemplates* pTempl = NULL );
     ~SfxOrganizeMgr();
 
-    BOOL    Copy( USHORT nTargetRegion, USHORT nTargetIdx, USHORT nSourceRegion, USHORT nSourceIdx );
-    BOOL    Move( USHORT nTargetRegion, USHORT nTargetIdx, USHORT nSourceRegion, USHORT nSourceIdx );
-    BOOL    Delete( SfxOrganizeListBox_Impl* pCaller, USHORT nRegion, USHORT nIdx );
-    BOOL    InsertDir( SfxOrganizeListBox_Impl* pCaller, const String& rName, USHORT nRegion );
-    BOOL    SetName( const String& rName, USHORT nRegion, USHORT nIdx = USHRT_MAX );
-    BOOL    CopyTo( USHORT nRegion, USHORT nIdx, const String& rName ) const;
-    BOOL    CopyFrom( SfxOrganizeListBox_Impl* pCaller, USHORT nRegion, USHORT nIdx, String& rName );
+    sal_Bool    Copy( sal_uInt16 nTargetRegion, sal_uInt16 nTargetIdx, sal_uInt16 nSourceRegion, sal_uInt16 nSourceIdx );
+    sal_Bool    Move( sal_uInt16 nTargetRegion, sal_uInt16 nTargetIdx, sal_uInt16 nSourceRegion, sal_uInt16 nSourceIdx );
+    sal_Bool    Delete( SfxOrganizeListBox_Impl* pCaller, sal_uInt16 nRegion, sal_uInt16 nIdx );
+    sal_Bool    InsertDir( SfxOrganizeListBox_Impl* pCaller, const String& rName, sal_uInt16 nRegion );
+    sal_Bool    SetName( const String& rName, sal_uInt16 nRegion, sal_uInt16 nIdx = USHRT_MAX );
+    sal_Bool    CopyTo( sal_uInt16 nRegion, sal_uInt16 nIdx, const String& rName ) const;
+    sal_Bool    CopyFrom( SfxOrganizeListBox_Impl* pCaller, sal_uInt16 nRegion, sal_uInt16 nIdx, String& rName );
 
-    BOOL    Rescan();
-    BOOL    InsertFile( SfxOrganizeListBox_Impl* pCaller, const String& rFileName );
+    sal_Bool    Rescan();
+    sal_Bool    InsertFile( SfxOrganizeListBox_Impl* pCaller, const String& rFileName );
 
-    BOOL    IsModified() const { return bModified ? TRUE : FALSE; }
+    sal_Bool    IsModified() const { return bModified ? sal_True : sal_False; }
 
     const SfxDocumentTemplates* GetTemplates() const { return pTemplates; }
     SfxObjectList&              GetObjectList() { return *pImpl->pDocList; }
     const SfxObjectList&        GetObjectList() const { return *pImpl->pDocList; }
 
-    SfxObjectShellRef   CreateObjectShell( USHORT nIdx );
-    SfxObjectShellRef   CreateObjectShell( USHORT nRegion, USHORT nIdx );
-    BOOL                DeleteObjectShell( USHORT );
-    BOOL                DeleteObjectShell( USHORT, USHORT );
+    SfxObjectShellRef   CreateObjectShell( sal_uInt16 nIdx );
+    SfxObjectShellRef   CreateObjectShell( sal_uInt16 nRegion, sal_uInt16 nIdx );
+    sal_Bool                DeleteObjectShell( sal_uInt16 );
+    sal_Bool                DeleteObjectShell( sal_uInt16, sal_uInt16 );
     void                SaveAll( Window* pParent );
 };
 

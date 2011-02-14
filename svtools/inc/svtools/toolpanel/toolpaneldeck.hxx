@@ -177,7 +177,7 @@ namespace svt
         virtual void GetFocus();
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-                     GetComponentInterface( BOOL i_bCreate );
+                     GetComponentInterface( sal_Bool i_bCreate );
 
     private:
         ::std::auto_ptr< ToolPanelDeck_Impl >   m_pImpl;

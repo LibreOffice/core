@@ -795,7 +795,7 @@ public:
     operator String();
     String getString ();
     rtl::OUString getOUString ();
-    String GetToken (USHORT i, sal_Char c);
+    String GetToken (sal_uInt16 i, sal_Char c);
 };
 
 class InPlugImpl;

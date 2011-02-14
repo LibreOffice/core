@@ -35,10 +35,10 @@
 // -----------
 
 #define COMPAT_FORMAT( char1, char2, char3, char4 ) \
-    ((ULONG)((((ULONG)(char)(char1)))|              \
-    (((ULONG)(char)(char2))<<8UL)|                  \
-    (((ULONG)(char)(char3))<<16UL)|                 \
-    ((ULONG)(char)(char4))<<24UL))
+    ((sal_uLong)((((sal_uLong)(char)(char1)))|              \
+    (((sal_uLong)(char)(char2))<<8UL)|                  \
+    (((sal_uLong)(char)(char3))<<16UL)|                 \
+    ((sal_uLong)(char)(char4))<<24UL))
 
 
 class SvStream;
@@ -50,21 +50,21 @@ class SvStream;
 class ImplCompat
 {
     SvStream*   mpRWStm;
-    UINT32      mnCompatPos;
-    UINT32      mnTotalSize;
-    UINT16      mnStmMode;
-    UINT16      mnVersion;
+    sal_uInt32      mnCompatPos;
+    sal_uInt32      mnTotalSize;
+    sal_uInt16      mnStmMode;
+    sal_uInt16      mnVersion;
 
                 ImplCompat() {}
                 ImplCompat( const ImplCompat& rCompat ) {}
     ImplCompat& operator=( const ImplCompat& rCompat ) { return *this; }
-    BOOL        operator==( const ImplCompat& rCompat ) { return FALSE; }
+    sal_Bool        operator==( const ImplCompat& rCompat ) { return sal_False; }
 
 public:
-                ImplCompat( SvStream& rStm, USHORT nStreamMode, UINT16 nVersion = 1 );
+                ImplCompat( SvStream& rStm, sal_uInt16 nStreamMode, sal_uInt16 nVersion = 1 );
                 ~ImplCompat();
 
-    UINT16      GetVersion() const { return mnVersion; }
+    sal_uInt16      GetVersion() const { return mnVersion; }
 };
 
 #endif // _SV_SVCOMPAT_HXX

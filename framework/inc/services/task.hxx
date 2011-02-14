@@ -591,8 +591,8 @@ class Task  :   public css::frame::XTask    ,   // => XFrame => XComponent
     protected:
 
         // But some values are neede by derived classes!
-//        sal_Bool            m_bIsPlugIn         ;   /// In objects of these class this member is set to FALSE.
-                                                    /// But in derived class PlugInFrame it's overwrited with TRUE!
+//        sal_Bool            m_bIsPlugIn         ;   /// In objects of these class this member is set to sal_False.
+                                                    /// But in derived class PlugInFrame it's overwrited with sal_True!
 
     private:
 

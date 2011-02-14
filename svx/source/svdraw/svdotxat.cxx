@@ -122,7 +122,7 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt,
             if (aSiz.Height()<2) aSiz.Height()=2; // Mindestgroesse 2
 
             // #101684#
-            BOOL bInEditMode = IsInEditMode();
+            sal_Bool bInEditMode = IsInEditMode();
 
             if(!bInEditMode)
             {
@@ -143,7 +143,7 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt,
             } else {
                 Outliner& rOutliner=ImpGetDrawOutliner();
                 rOutliner.SetPaperSize(aSiz);
-                rOutliner.SetUpdateMode(TRUE);
+                rOutliner.SetUpdateMode(sal_True);
                 // !!! hier sollte ich wohl auch noch mal die Optimierung mit
                 // bPortionInfoChecked usw einbauen
                 OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
@@ -172,8 +172,8 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt,
             if (nHgt<1) nHgt=1; // nVDist kann auch negativ sein
             long nWdtGrow=nWdt-(rR.Right()-rR.Left());
             long nHgtGrow=nHgt-(rR.Bottom()-rR.Top());
-            if (nWdtGrow==0) bWdtGrow=FALSE;
-            if (nHgtGrow==0) bHgtGrow=FALSE;
+            if (nWdtGrow==0) bWdtGrow=sal_False;
+            if (nHgtGrow==0) bHgtGrow=sal_False;
             if (bWdtGrow || bHgtGrow) {
                 if (bWdtGrow) {
                     SdrTextHorzAdjust eHAdj=GetTextHorizontalAdjust();
@@ -203,11 +203,11 @@ FASTBOOL SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt,
                     aD2-=aD1;
                     rR.Move(aD2.X(),aD2.Y());
                 }
-                return TRUE;
+                return sal_True;
             }
         }
     }
-    return FALSE;
+    return sal_False;
 }
 
 FASTBOOL SdrTextObj::NbcAdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOOL bWdt)
@@ -262,22 +262,22 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
             const EditTextObject& rTextObj=pOutlinerParaObject->GetTextObject();
             XubString aStyleName;
             SfxStyleFamily eStyleFam;
-            USHORT nParaAnz=rTextObj.GetParagraphCount();
+            sal_uInt16 nParaAnz=rTextObj.GetParagraphCount();
 
-            for(UINT16 nParaNum(0); nParaNum < nParaAnz; nParaNum++)
+            for(sal_uInt16 nParaNum(0); nParaNum < nParaAnz; nParaNum++)
             {
                 rTextObj.GetStyleSheet(nParaNum, aStyleName, eStyleFam);
 
                 if(aStyleName.Len())
                 {
-                    XubString aFam = UniString::CreateFromInt32((UINT16)eStyleFam);
+                    XubString aFam = UniString::CreateFromInt32((sal_uInt16)eStyleFam);
                     aFam.Expand(5);
 
                     aStyleName += sal_Unicode('|');
                     aStyleName += aFam;
 
-                    BOOL bFnd(FALSE);
-                    UINT32 nNum(aStyles.Count());
+                    sal_Bool bFnd(sal_False);
+                    sal_uInt32 nNum(aStyles.Count());
 
                     while(!bFnd && nNum > 0)
                     {
@@ -295,7 +295,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
         }
 
         // nun die Strings im Container durch StyleSheet* ersetzten
-        ULONG nNum=aStyles.Count();
+        sal_uIntPtr nNum=aStyles.Count();
         while (nNum>0) {
             nNum--;
             XubString* pName=(XubString*)aStyles.GetObject(nNum);
@@ -306,8 +306,8 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
             aFam.Erase(0,1);
             aFam.EraseTrailingChars();
 
-            // UNICODE: USHORT nFam=USHORT(aFam);
-            UINT16 nFam = (UINT16)aFam.ToInt32();
+            // UNICODE: sal_uInt16 nFam=sal_uInt16(aFam);
+            sal_uInt16 nFam = (sal_uInt16)aFam.ToInt32();
 
             SfxStyleFamily eFam=(SfxStyleFamily)nFam;
             SfxStyleSheetBase* pStyleBase=pStylePool->Find(*pName,eFam);
@@ -323,7 +323,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
         nNum=GetBroadcasterCount();
         while (nNum>0) {
             nNum--;
-            SfxBroadcaster* pBroadcast=GetBroadcasterJOE((USHORT)nNum);
+            SfxBroadcaster* pBroadcast=GetBroadcasterJOE((sal_uInt16)nNum);
             SfxStyleSheet* pStyle=PTR_CAST(SfxStyleSheet,pBroadcast);
             if (pStyle!=NULL && pStyle!=GetStyleSheet()) { // Sonderbehandlung fuer den StyleSheet des Objekts
                 if (aStyles.GetPos(pStyle)==CONTAINER_ENTRY_NOTFOUND) {
@@ -337,7 +337,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
             nNum--;
             SfxStyleSheet* pStyle=(SfxStyleSheet*)aStyles.GetObject(nNum);
             // StartListening soll selbst nachsehen, ob hier nicht evtl. schon gehorcht wird
-            StartListening(*pStyle,TRUE);
+            StartListening(*pStyle,sal_True);
         }
     }
 }
@@ -383,13 +383,13 @@ void SdrTextObj::NbcResizeTextAttributes(const Fraction& xFact, const Fraction& 
             if (nAbsHgt>0xFFFF) nAbsHgt=0xFFFF;
 
             // und nun attributieren
-            SetObjectItem(SvxCharScaleWidthItem( (USHORT) nRelWdt, EE_CHAR_FONTWIDTH));
-            SetObjectItem(SvxFontHeightItem(nAbsHgt,(USHORT)nRelHgt, EE_CHAR_FONTHEIGHT));
+            SetObjectItem(SvxCharScaleWidthItem( (sal_uInt16) nRelWdt, EE_CHAR_FONTWIDTH));
+            SetObjectItem(SvxFontHeightItem(nAbsHgt,(sal_uInt16)nRelHgt, EE_CHAR_FONTHEIGHT));
             // Zeichen- und Absatzattribute innerhalb des OutlinerParaObjects
             Outliner& rOutliner=ImpGetDrawOutliner();
             rOutliner.SetPaperSize(Size(LONG_MAX,LONG_MAX));
             rOutliner.SetText(*pOutlinerParaObject);
-            rOutliner.DoStretchChars((USHORT)nX,(USHORT)nY);
+            rOutliner.DoStretchChars((sal_uInt16)nX,(sal_uInt16)nY);
             OutlinerParaObject* pNewPara=rOutliner.CreateParaObject();
             NbcSetOutlinerParaObject(pNewPara);
             rOutliner.Clear();
@@ -452,7 +452,7 @@ bool SdrTextObj::HasText() const
     if( pOPO )
     {
         const EditTextObject& rETO = pOPO->GetTextObject();
-        USHORT nParaCount = rETO.GetParagraphCount();
+        sal_uInt16 nParaCount = rETO.GetParagraphCount();
 
         if( nParaCount > 0 )
             bHasText = (nParaCount > 1) || (rETO.GetText( 0 ).Len() != 0);

@@ -46,9 +46,9 @@ class SVX_DLLPUBLIC SvxPostItAuthorItem: public SfxStringItem
 public:
     TYPEINFO();
 
-    SvxPostItAuthorItem( USHORT nWhich  );
+    SvxPostItAuthorItem( sal_uInt16 nWhich  );
 
-    SvxPostItAuthorItem( const String& rAuthor, USHORT nWhich  );
+    SvxPostItAuthorItem( const String& rAuthor, sal_uInt16 nWhich  );
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -78,9 +78,9 @@ class SVX_DLLPUBLIC SvxPostItDateItem: public SfxStringItem
 public:
     TYPEINFO();
 
-    SvxPostItDateItem( USHORT nWhich  );
+    SvxPostItDateItem( sal_uInt16 nWhich  );
 
-    SvxPostItDateItem( const String& rDate, USHORT nWhich  );
+    SvxPostItDateItem( const String& rDate, sal_uInt16 nWhich  );
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -109,9 +109,9 @@ class SVX_DLLPUBLIC SvxPostItTextItem: public SfxStringItem
 public:
     TYPEINFO();
 
-    SvxPostItTextItem( USHORT nWhich  );
+    SvxPostItTextItem( sal_uInt16 nWhich  );
 
-    SvxPostItTextItem( const String& rText, USHORT nWhich  );
+    SvxPostItTextItem( const String& rText, sal_uInt16 nWhich  );
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

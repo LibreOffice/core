@@ -51,9 +51,9 @@ struct NotifyInfo
     String  aMarkURL;
     String  aMarkAltText;
     String  aMarkTarget;
-    BOOL    bNewObj;
-    BOOL    bOneMarked;
-    BOOL    bActivated;
+    sal_Bool    bNewObj;
+    sal_Bool    bOneMarked;
+    sal_Bool    bActivated;
 };
 
 
@@ -61,8 +61,8 @@ struct NotifyPosSize
 {
     Size    aPictureSize;
     Point   aMousePos;
-    BOOL    bPictureSize;
-    BOOL    bMousePos;
+    sal_Bool    bPictureSize;
+    sal_Bool    bMousePos;
 };
 
 
@@ -74,10 +74,10 @@ struct NotifyPosSize
 
 #define SVD_IMAP_USERDATA   0x0001
 
-const UINT32 IMapInventor = UINT32('I') * 0x00000001+
-                            UINT32('M') * 0x00000100+
-                            UINT32('A') * 0x00010000+
-                            UINT32('P') * 0x01000000;
+const sal_uInt32 IMapInventor = sal_uInt32('I') * 0x00000001+
+                            sal_uInt32('M') * 0x00000100+
+                            sal_uInt32('A') * 0x00010000+
+                            sal_uInt32('P') * 0x01000000;
 
 
 typedef boost::shared_ptr< IMapObject > IMapObjectPtr;
@@ -181,7 +181,7 @@ protected:
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     void                CreateImageMap();
-    void                ReplaceImageMap( const ImageMap& rNewImageMap, BOOL bScaleToGraphic );
+    void                ReplaceImageMap( const ImageMap& rNewImageMap, sal_Bool bScaleToGraphic );
 
     void                ClearTargetList();
 
@@ -190,19 +190,19 @@ protected:
     SdrObject*          GetSdrObj( const IMapObject* pIMapObj ) const;
     SdrObject*          GetHitSdrObj( const Point& rPosPixel ) const;
 
-    void                UpdateInfo( BOOL bNewObj );
+    void                UpdateInfo( sal_Bool bNewObj );
 
 public:
 
                         IMapWindow( Window* pParent, const ResId& rResId, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rxDocumentFrame );
                         ~IMapWindow();
 
-    BOOL                ReplaceActualIMapInfo( const NotifyInfo& rNewInfo );
+    sal_Bool                ReplaceActualIMapInfo( const NotifyInfo& rNewInfo );
 
     void                SetImageMap( const ImageMap& rImageMap );
     const ImageMap&     GetImageMap();
 
-    void                SetCurrentObjState( BOOL bActive );
+    void                SetCurrentObjState( sal_Bool bActive );
     void                DoMacroAssign();
     void                DoPropertyDialog();
 

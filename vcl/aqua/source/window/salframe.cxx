@@ -61,7 +61,7 @@ AquaSalFrame* AquaSalFrame::s_pCaptureFrame = NULL;
 
 // =======================================================================
 
-AquaSalFrame::AquaSalFrame( SalFrame* pParent, ULONG salFrameStyle ) :
+AquaSalFrame::AquaSalFrame( SalFrame* pParent, sal_uLong salFrameStyle ) :
     mpWindow(nil),
     mpView(nil),
     mpDockMenuEntry(nil),
@@ -291,7 +291,7 @@ void AquaSalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalFrame::PostEvent( void *pData )
+sal_Bool AquaSalFrame::PostEvent( void *pData )
 {
     GetSalData()->mpFirstInstance->PostUserEvent( this, SALEVENT_USEREVENT, pData );
     return TRUE;
@@ -310,7 +310,7 @@ void AquaSalFrame::SetTitle(const XubString& rTitle)
     [mpWindow setTitle: pTitle];
 
     // create an entry in the dock menu
-    const ULONG nAppWindowStyle = (SAL_FRAME_STYLE_CLOSEABLE | SAL_FRAME_STYLE_MOVEABLE);
+    const sal_uLong nAppWindowStyle = (SAL_FRAME_STYLE_CLOSEABLE | SAL_FRAME_STYLE_MOVEABLE);
     if( mpParent == NULL &&
         (mnStyle & nAppWindowStyle) == nAppWindowStyle )
     {
@@ -336,7 +336,7 @@ void AquaSalFrame::SetTitle(const XubString& rTitle)
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::SetIcon( USHORT )
+void AquaSalFrame::SetIcon( sal_uInt16 )
 {
 }
 
@@ -415,7 +415,7 @@ void AquaSalFrame::SendPaintEvent( const Rectangle* pRect )
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::Show(BOOL bVisible, BOOL bNoActivate)
+void AquaSalFrame::Show(sal_Bool bVisible, sal_Bool bNoActivate)
 {
     if ( !mpWindow )
         return;
@@ -478,7 +478,7 @@ void AquaSalFrame::Show(BOOL bVisible, BOOL bNoActivate)
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::Enable( BOOL bEnable )
+void AquaSalFrame::Enable( sal_Bool bEnable )
 {
 }
 
@@ -621,7 +621,7 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
     // get new geometry
     UpdateFrameGeometry();
 
-    USHORT nEvent = 0;
+    sal_uInt16 nEvent = 0;
     if( pState->mnMask & (SAL_FRAMESTATE_MASK_X | SAL_FRAMESTATE_MASK_X) )
     {
         mbPositioned = true;
@@ -649,7 +649,7 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalFrame::GetWindowState( SalFrameState* pState )
+sal_Bool AquaSalFrame::GetWindowState( SalFrameState* pState )
 {
     if ( !mpWindow )
         return FALSE;
@@ -726,7 +726,7 @@ void AquaSalFrame::SetScreenNumber(unsigned int nScreen)
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay )
+void AquaSalFrame::ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay )
 {
     if ( !mpWindow )
         return;
@@ -839,7 +839,7 @@ public:
     }
 };
 
-void AquaSalFrame::StartPresentation( BOOL bStart )
+void AquaSalFrame::StartPresentation( sal_Bool bStart )
 {
     if ( !mpWindow )
         return;
@@ -863,13 +863,13 @@ void AquaSalFrame::StartPresentation( BOOL bStart )
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::SetAlwaysOnTop( BOOL bOnTop )
+void AquaSalFrame::SetAlwaysOnTop( sal_Bool bOnTop )
 {
 }
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::ToTop(USHORT nFlags)
+void AquaSalFrame::ToTop(sal_uInt16 nFlags)
 {
     if ( !mpWindow )
         return;
@@ -1035,18 +1035,18 @@ void AquaSalFrame::SetInputContext( SalInputContext* pContext )
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::EndExtTextInput( USHORT nFlags )
+void AquaSalFrame::EndExtTextInput( sal_uInt16 nFlags )
 {
 }
 
 // -----------------------------------------------------------------------
 
-XubString AquaSalFrame::GetKeyName( USHORT nKeyCode )
+XubString AquaSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 {
-    static std::map< USHORT, rtl::OUString > aKeyMap;
+    static std::map< sal_uInt16, rtl::OUString > aKeyMap;
     if( aKeyMap.empty() )
     {
-        USHORT i;
+        sal_uInt16 i;
         for( i = KEY_A; i <= KEY_Z; i++ )
             aKeyMap[ i ] = rtl::OUString( sal_Unicode( 'A' + (i - KEY_A) ) );
         for( i = KEY_0; i <= KEY_9; i++ )
@@ -1107,8 +1107,8 @@ XubString AquaSalFrame::GetKeyName( USHORT nKeyCode )
 
     rtl::OUStringBuffer aResult( 16 );
 
-    USHORT nUnmodifiedCode = (nKeyCode & KEY_CODE);
-    std::map< USHORT, rtl::OUString >::const_iterator it = aKeyMap.find( nUnmodifiedCode );
+    sal_uInt16 nUnmodifiedCode = (nKeyCode & KEY_CODE);
+    std::map< sal_uInt16, rtl::OUString >::const_iterator it = aKeyMap.find( nUnmodifiedCode );
     if( it != aKeyMap.end() )
     {
         if( (nKeyCode & KEY_SHIFT) != 0 )
@@ -1128,7 +1128,7 @@ XubString AquaSalFrame::GetKeyName( USHORT nKeyCode )
 
 // -----------------------------------------------------------------------
 
-XubString AquaSalFrame::GetSymbolKeyName( const XubString&, USHORT nKeyCode )
+XubString AquaSalFrame::GetSymbolKeyName( const XubString&, sal_uInt16 nKeyCode )
 {
     return GetKeyName( nKeyCode );
 }
@@ -1349,7 +1349,7 @@ void AquaSalFrame::Beep( SoundType eSoundType )
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, USHORT nFlags)
+void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags)
 {
     if ( !mpWindow )
         return;
@@ -1357,7 +1357,7 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, USHOR
     // #i113170# may not be the main thread if called from UNO API
     SalData::ensureThreadAutoreleasePool();
 
-    USHORT nEvent = 0;
+    sal_uInt16 nEvent = 0;
 
     if( [mpWindow isMiniaturized] )
         [mpWindow deminiaturize: NSApp]; // expand the window
@@ -1552,7 +1552,7 @@ bool AquaSalFrame::SetPluginParent( SystemParentData* pNewParent )
     return sal_False;
 }
 
-BOOL AquaSalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode& )
+sal_Bool AquaSalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode& )
 {
     // not supported yet
     return FALSE;
@@ -1669,7 +1669,7 @@ void AquaSalFrame::UpdateFrameGeometry()
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::CaptureMouse( BOOL bCapture )
+void AquaSalFrame::CaptureMouse( sal_Bool bCapture )
 {
     /* Remark:
        we'll try to use a pidgin version of capture mouse
@@ -1719,7 +1719,7 @@ void AquaSalFrame::ResetClipRegion()
     }
 }
 
-void AquaSalFrame::BeginSetClipRegion( ULONG nRects )
+void AquaSalFrame::BeginSetClipRegion( sal_uLong nRects )
 {
     if ( !mpWindow )
     {

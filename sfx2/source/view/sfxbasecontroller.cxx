@@ -424,7 +424,7 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const EV
     SfxViewShell* pShell = m_pController->GetViewShell_Impl();
     if  ( m_pController !=  NULL &&  pShell )
     {
-        BOOL bCanClose = (BOOL) pShell->PrepareClose( FALSE );
+        sal_Bool bCanClose = (sal_Bool) pShell->PrepareClose( sal_False );
         if ( !bCanClose )
         {
             if ( bDeliverOwnership && ( !pShell->GetWindow() || !pShell->GetWindow()->IsReallyVisible() ) )
@@ -514,7 +514,7 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::frameAction( const FRAMEACT
         if ( aEvent.Action == ::com::sun::star::frame::FrameAction_FRAME_UI_ACTIVATED )
         {
             if ( !m_pController->GetViewShell_Impl()->GetUIActiveIPClient_Impl() )
-                m_pController->GetViewShell_Impl()->GetViewFrame()->MakeActive_Impl( FALSE );
+                m_pController->GetViewShell_Impl()->GetViewFrame()->MakeActive_Impl( sal_False );
         }
         else if ( aEvent.Action == ::com::sun::star::frame::FrameAction_CONTEXT_CHANGED )
         {
@@ -698,7 +698,7 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( ::com::
         for ( const SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell ); !bOther && pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell ) )
             bOther = (pFrame != pActFrame);
 
-        BOOL bRet = bOther || pDocShell->PrepareClose();
+        sal_Bool bRet = bOther || pDocShell->PrepareClose();
         if ( bRet )
         {
             ConnectSfxFrame_Impl( E_DISCONNECT );
@@ -795,7 +795,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
             {
                 SfxViewFrame *pFrame = m_pData->m_pViewShell->GetViewFrame();
                 if ( eSearchFlags & ( ::com::sun::star::frame::FrameSearchFlag::CREATE ))
-                    pFrame->SetChildWindow( SID_BROWSER, TRUE );
+                    pFrame->SetChildWindow( SID_BROWSER, sal_True );
                 SfxChildWindow* pChildWin = pFrame->GetChildWindow( SID_BROWSER );
                 REFERENCE < XFRAME > xFrame;
                 if ( pChildWin )
@@ -866,7 +866,7 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
             }
             else if ( aURL.Protocol.compareToAscii( "slot:" ) == COMPARE_EQUAL )
             {
-                USHORT nId = (USHORT) aURL.Path.toInt32();
+                sal_uInt16 nId = (sal_uInt16) aURL.Path.toInt32();
 
                 pAct = m_pData->m_pViewShell->GetViewFrame() ;
                 if (nId >= SID_VERB_START && nId <= SID_VERB_END)
@@ -1206,10 +1206,10 @@ throw (::com::sun::star::uno::RuntimeException)
     SfxSlotPool*  pPool = &SfxSlotPool::GetSlotPool( pViewFrame );
 
     SfxSlotPool* pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
-    const ULONG nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
+    const sal_uIntPtr nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
 
     // Gruppe anw"ahlen ( Gruppe 0 ist intern )
-    for ( USHORT i=0; i<pSlotPool->GetGroupCount(); i++ )
+    for ( sal_uInt16 i=0; i<pSlotPool->GetGroupCount(); i++ )
     {
         String aName = pSlotPool->SeekGroup( i );
         const SfxSlot* pSfxSlot = pSlotPool->FirstSlot();
@@ -1238,14 +1238,14 @@ throw (::com::sun::star::uno::RuntimeException)
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pData->m_pViewShell )
     {
-        const ULONG nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
+        const sal_uIntPtr nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
 
         SfxViewFrame* pViewFrame( m_pData->m_pViewShell->GetFrame() );
         SfxSlotPool*  pPool( &SfxSlotPool::GetSlotPool( pViewFrame ));
         rtl::OUString aCmdPrefix( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
 
         SfxSlotPool* pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
-        for ( USHORT i=0; i<pSlotPool->GetGroupCount(); i++ )
+        for ( sal_uInt16 i=0; i<pSlotPool->GetGroupCount(); i++ )
         {
             String aName = pSlotPool->SeekGroup( i );
             const SfxSlot* pSfxSlot = pSlotPool->FirstSlot();
@@ -1278,17 +1278,17 @@ throw (::com::sun::star::uno::RuntimeException)
     return aSeq;
 }
 
-BOOL SfxBaseController::HandleEvent_Impl( NotifyEvent& rEvent )
+sal_Bool SfxBaseController::HandleEvent_Impl( NotifyEvent& rEvent )
 {
     return m_pData->m_aUserInputInterception.handleNotifyEvent( rEvent );
 }
 
-BOOL SfxBaseController::HasKeyListeners_Impl()
+sal_Bool SfxBaseController::HasKeyListeners_Impl()
 {
     return m_pData->m_aUserInputInterception.hasKeyHandlers();
 }
 
-BOOL SfxBaseController::HasMouseClickListeners_Impl()
+sal_Bool SfxBaseController::HasMouseClickListeners_Impl()
 {
     return m_pData->m_aUserInputInterception.hasMouseClickListeners();
 }
@@ -1367,15 +1367,15 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
             if ( !rFrame.IsMarkedHidden_Impl() )
             {
                 if ( rDoc.IsHelpDocument() || ( nPluginMode == 2 ) )
-                    pViewFrame->GetDispatcher()->HideUI( TRUE );
+                    pViewFrame->GetDispatcher()->HideUI( sal_True );
                 else
-                    pViewFrame->GetDispatcher()->HideUI( FALSE );
+                    pViewFrame->GetDispatcher()->HideUI( sal_False );
 
                 if ( rFrame.IsInPlace() )
                     pViewFrame->LockAdjustPosSizePixel();
 
                 if ( nPluginMode == 3 )
-                    rFrame.GetWorkWindow_Impl()->SetInternalDockingAllowed( FALSE );
+                    rFrame.GetWorkWindow_Impl()->SetInternalDockingAllowed( sal_False );
 
                 if ( !rFrame.IsInPlace() )
                     pViewFrame->GetDispatcher()->Update_Impl();
@@ -1390,7 +1390,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                     // force resize for OLE server to fix layout problems of writer and math
                     // see i53651
                     if ( nPluginMode == 3 )
-                        pViewFrame->Resize( TRUE );
+                        pViewFrame->Resize( sal_True );
                 }
             }
             else
@@ -1403,7 +1403,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
             pViewFrame->UpdateTitle();
 
             if ( !rFrame.IsInPlace() )
-                pViewFrame->Resize( TRUE );
+                pViewFrame->Resize( sal_True );
 
             // if there's a JumpMark given, then, well, jump to it
             ::comphelper::NamedValueCollection aViewArgs( getCreationArguments() );
@@ -1466,7 +1466,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                         Sequence< PropertyValue > aViewData;
                         OSL_VERIFY( xViewData->getByIndex( nViewDataIndex ) >>= aViewData );
                         if ( aViewData.getLength() > 0 )
-                            m_pData->m_pViewShell->ReadUserDataSequence( aViewData, TRUE );
+                            m_pData->m_pViewShell->ReadUserDataSequence( aViewData, sal_True );
                     }
                 }
                 catch( const Exception& )

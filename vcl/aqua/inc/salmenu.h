@@ -58,32 +58,32 @@ public: // for OOStatusView
 private:
     std::vector< MenuBarButtonEntry >   maButtons;
 
-    MenuBarButtonEntry* findButtonItem( USHORT i_nItemId );
+    MenuBarButtonEntry* findButtonItem( sal_uInt16 i_nItemId );
     void releaseButtonEntry( MenuBarButtonEntry& i_rEntry );
     static void statusLayout();
 public:
     AquaSalMenu( bool bMenuBar );
     virtual ~AquaSalMenu();
 
-    virtual BOOL VisibleMenuBar();  // must return TRUE to actually DISPLAY native menu bars
+    virtual sal_Bool VisibleMenuBar();  // must return TRUE to actually DISPLAY native menu bars
                                     // otherwise only menu messages are processed (eg, OLE on Windows)
 
     virtual void InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos );
     virtual void RemoveItem( unsigned nPos );
     virtual void SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos );
     virtual void SetFrame( const SalFrame* pFrame );
-    virtual void CheckItem( unsigned nPos, BOOL bCheck );
-    virtual void EnableItem( unsigned nPos, BOOL bEnable );
+    virtual void CheckItem( unsigned nPos, sal_Bool bCheck );
+    virtual void EnableItem( unsigned nPos, sal_Bool bEnable );
     virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const XubString& rText );
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage);
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName );
     virtual void GetSystemMenuData( SystemMenuData* pData );
-    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, ULONG nFlags);
+    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags);
     virtual bool AddMenuBarButton( const SalMenuButtonItem& );
-    virtual void RemoveMenuBarButton( USHORT nId );
-    virtual Rectangle GetMenuBarButtonRectPixel( USHORT i_nItemId, SalFrame* i_pReferenceFrame );
+    virtual void RemoveMenuBarButton( sal_uInt16 nId );
+    virtual Rectangle GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame );
 
-    int getItemIndexByPos( USHORT nPos ) const;
+    int getItemIndexByPos( sal_uInt16 nPos ) const;
     const AquaSalFrame* getFrame() const;
 
     void setMainMenu();
@@ -111,7 +111,7 @@ public:
     AquaSalMenuItem( const SalItemParams* );
     virtual ~AquaSalMenuItem();
 
-    USHORT              mnId;                 // Item ID
+    sal_uInt16          mnId;                 // Item ID
     Menu*               mpVCLMenu;            // VCL Menu into which this MenuItem is inserted
     AquaSalMenu*        mpParentMenu;         // The menu in which this menu item is inserted
     AquaSalMenu*        mpSubMenu;            // Sub menu of this item (if defined)

@@ -44,20 +44,20 @@
 struct SfxItemPropertyMapEntry
 {
     const char*                         pName;
-    USHORT                              nNameLen;
-    USHORT                              nWID;
+    sal_uInt16                              nNameLen;
+    sal_uInt16                              nWID;
     const com::sun::star::uno::Type*    pType;
     long                                nFlags;
-    BYTE                                nMemberId;
+    sal_uInt8                                nMemberId;
 
 };
 
 struct SfxItemPropertySimpleEntry
 {
-    USHORT                              nWID;
+    sal_uInt16                              nWID;
     const com::sun::star::uno::Type*    pType;
     long                                nFlags;
-    BYTE                                nMemberId;
+    sal_uInt8                                nMemberId;
 
     SfxItemPropertySimpleEntry() :
         nWID( 0 ),
@@ -65,8 +65,8 @@ struct SfxItemPropertySimpleEntry
         nFlags( 0 ),
         nMemberId( 0 ){}
 
-    SfxItemPropertySimpleEntry(USHORT _nWID, const com::sun::star::uno::Type* _pType,
-                               long _nFlags, BYTE _nMemberId) :
+    SfxItemPropertySimpleEntry(sal_uInt16 _nWID, const com::sun::star::uno::Type* _pType,
+                               long _nFlags, sal_uInt8 _nMemberId) :
         nWID(      _nWID ),
         pType(     _pType ),
         nFlags(    _nFlags ),
@@ -116,7 +116,7 @@ class SVL_DLLPUBLIC SfxItemPropertySet
     SfxItemPropertyMap                                                              m_aMap;
     mutable com::sun::star::uno::Reference<com::sun::star::beans::XPropertySetInfo> m_xInfo;
 protected:
-    virtual BOOL            FillItem(SfxItemSet& rSet, USHORT nWhich, BOOL bGetProperty) const;
+    virtual sal_Bool            FillItem(SfxItemSet& rSet, sal_uInt16 nWhich, sal_Bool bGetProperty) const;
 
 public:
                             SfxItemPropertySet( const SfxItemPropertyMapEntry *pMap ) :

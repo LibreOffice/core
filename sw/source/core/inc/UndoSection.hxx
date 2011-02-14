@@ -52,12 +52,12 @@ private:
     const ::std::auto_ptr<SfxItemSet> m_pAttrSet;
     ::std::auto_ptr<SwHistory> m_pHistory;
     ::std::auto_ptr<SwRedlineData> m_pRedlData;
-    ULONG m_nSectionNodePos;
+    sal_uLong m_nSectionNodePos;
     bool m_bSplitAtStart : 1;
     bool m_bSplitAtEnd : 1;
     bool m_bUpdateFtn : 1;
 
-    void Join( SwDoc& rDoc, ULONG nNode );
+    void Join( SwDoc& rDoc, sal_uLong nNode );
 
 public:
     SwUndoInsSection(SwPaM const&, SwSectionData const&,
@@ -69,7 +69,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
     virtual void RepeatImpl( ::sw::RepeatContext & );
 
-    void SetSectNdPos(ULONG const nPos)     { m_nSectionNodePos = nPos; }
+    void SetSectNdPos(sal_uLong const nPos)     { m_nSectionNodePos = nPos; }
     void SaveSplitNode(SwTxtNode *const pTxtNd, bool const bAtStart);
     void SetUpdtFtnFlag(bool const bFlag)   { m_bUpdateFtn = bFlag; }
 };

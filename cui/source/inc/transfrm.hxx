@@ -49,27 +49,27 @@ class SdrView;
 
 /** put this into the nAnchorTypes parameter of the SvxTransformTabDialog c'tor
     to disable the size controls */
-const USHORT SVX_OBJ_NORESIZE = 0x0100;
+const sal_uInt16 SVX_OBJ_NORESIZE = 0x0100;
 
 /** put this into the nAnchorTypes parameter of the SvxTransformTabDialog c'tor
     to disable the protect controls */
-const USHORT SVX_OBJ_NOPROTECT = 0x0200;
+const sal_uInt16 SVX_OBJ_NOPROTECT = 0x0200;
 
 class SvxTransformTabDialog : public SfxTabDialog
 {
 private:
     const SdrView*      pView;
 
-    USHORT              nAnchorCtrls;
+    sal_uInt16              nAnchorCtrls;
     Link                aValidateLink;
 
-    virtual void        PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void        PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 
 public:
 
             SvxTransformTabDialog( Window* pParent, const SfxItemSet* pAttr,
                             const SdrView* pView,
-                            USHORT nAnchorTypes = 0);
+                            sal_uInt16 nAnchorTypes = 0);
             ~SvxTransformTabDialog();
 
             //link for the Writer to validate positions
@@ -171,9 +171,9 @@ public:
     SvxPositionSizeTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
 
     static SfxTabPage* Create( Window*, const SfxItemSet& );
-    static USHORT*     GetRanges();
+    static sal_uInt16*     GetRanges();
 
-    virtual BOOL FillItemSet( SfxItemSet& );
+    virtual sal_Bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );
@@ -184,7 +184,7 @@ public:
     void         Construct();
     void         SetView( const SdrView* pSdrView ) { mpView = pSdrView; }
 
-//  void         ShowAnchorCtrls(USHORT nAnchorCtrls); // Writer-spezifische Controls anzeigen
+//  void         ShowAnchorCtrls(sal_uInt16 nAnchorCtrls); // Writer-spezifische Controls anzeigen
     virtual void FillUserData();
 
     void        DisableResize();
@@ -236,9 +236,9 @@ public:
          SvxAngleTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
 
     static SfxTabPage* Create( Window*, const SfxItemSet& );
-    static USHORT*     GetRanges();
+    static sal_uInt16*     GetRanges();
 
-    virtual BOOL FillItemSet( SfxItemSet& );
+    virtual sal_Bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );
@@ -285,9 +285,9 @@ public:
          SvxSlantTabPage( Window* pParent, const SfxItemSet& rInAttrs  );
 
     static SfxTabPage* Create( Window*, const SfxItemSet& );
-    static USHORT*     GetRanges();
+    static sal_uInt16*     GetRanges();
 
-    virtual BOOL FillItemSet( SfxItemSet& );
+    virtual sal_Bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual void ActivatePage( const SfxItemSet& rSet );

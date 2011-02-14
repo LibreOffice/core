@@ -110,7 +110,7 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
 
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xIn ) );
 
-    ULONG nError = sal::static_int_cast< ULONG >(-1);
+    sal_uLong nError = sal::static_int_cast< sal_uLong >(-1);
 
     // prepare ParserInputSource
     xml::sax::InputSource aParserInput;
@@ -162,9 +162,9 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     }
 }
 
-BOOL IsConvDic( const String &rFileURL, INT16 &nLang, sal_Int16 &nConvType )
+sal_Bool IsConvDic( const String &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType )
 {
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
 
     if (rFileURL.Len() == 0)
         return bRes;
@@ -205,9 +205,9 @@ BOOL IsConvDic( const String &rFileURL, INT16 &nLang, sal_Int16 &nConvType )
 
 ConvDic::ConvDic(
         const String &rName,
-        INT16 nLang,
+        sal_Int16 nLang,
         sal_Int16 nConvType,
-             BOOL bBiDirectional,
+             sal_Bool bBiDirectional,
         const String &rMainURL) :
     aFlushListeners( GetLinguMutex() )
 {
@@ -222,30 +222,30 @@ ConvDic::ConvDic(
         pConvPropType = std::auto_ptr< PropTypeMap >( new PropTypeMap );
 
     nMaxLeftCharCount = nMaxRightCharCount = 0;
-    bMaxCharCountIsValid = TRUE;
+    bMaxCharCountIsValid = sal_True;
 
-    bNeedEntries = TRUE;
-    bIsModified  = bIsActive = FALSE;
-    bIsReadonly = FALSE;
+    bNeedEntries = sal_True;
+    bIsModified  = bIsActive = sal_False;
+    bIsReadonly = sal_False;
 
     if( rMainURL.Len() > 0 )
     {
-        BOOL bExists = FALSE;
+        sal_Bool bExists = sal_False;
         bIsReadonly = IsReadOnly( rMainURL, &bExists );
 
         if( !bExists )  // new empty dictionary
         {
-            bNeedEntries = FALSE;
+            bNeedEntries = sal_False;
             //! create physical representation of an **empty** dictionary
             //! that could be found by the dictionary-list implementation
             // (Note: empty dictionaries are not just empty files!)
             Save();
-            bIsReadonly = IsReadOnly( rMainURL );   // will be FALSE if Save was succesfull
+            bIsReadonly = IsReadOnly( rMainURL );   // will be sal_False if Save was succesfull
         }
     }
     else
     {
-        bNeedEntries = FALSE;
+        bNeedEntries = sal_False;
     }
 }
 
@@ -260,12 +260,12 @@ void ConvDic::Load()
     DBG_ASSERT( !bIsModified, "dictionary is modified. Really do 'Load'?" );
 
     //!! prevent function from being called recursively via HasEntry, AddEntry
-    bNeedEntries = FALSE;
+    bNeedEntries = sal_False;
     ConvDicXMLImport *pImport = new ConvDicXMLImport( this, aMainURL );
     //!! keep a first reference to ensure the lifetime of the object !!
     uno::Reference< XInterface > xRef( (document::XFilter *) pImport, UNO_QUERY );
     ReadThroughDic( aMainURL, *pImport );    // will implicitly add the entries
-    bIsModified = FALSE;
+    bIsModified = sal_False;
 }
 
 
@@ -326,7 +326,7 @@ void ConvDic::Save()
         sal_Bool bRet = pExport->Export();     // write entries to file
         DBG_ASSERT( !pStream->GetError(), "I/O error while writing to stream" );
         if (bRet)
-            bIsModified = FALSE;
+            bIsModified = sal_False;
     }
     DBG_ASSERT( !bIsModified, "dictionary still modified after save. Save failed?" );
 }
@@ -348,7 +348,7 @@ ConvMap::iterator ConvDic::GetEntry( ConvMap &rMap, const rtl::OUString &rFirstT
 }
 
 
-BOOL ConvDic::HasEntry( const OUString &rLeftText, const OUString &rRightText )
+sal_Bool ConvDic::HasEntry( const OUString &rLeftText, const OUString &rRightText )
 {
     if (bNeedEntries)
         Load();
@@ -375,7 +375,7 @@ void ConvDic::AddEntry( const OUString &rLeftText, const OUString &rRightText )
             nMaxRightCharCount  = (sal_Int16) rRightText.getLength();
     }
 
-    bIsModified = TRUE;
+    bIsModified = sal_True;
 }
 
 
@@ -395,8 +395,8 @@ void ConvDic::RemoveEntry( const OUString &rLeftText, const OUString &rRightText
         pFromRight->erase( aRightIt );
     }
 
-    bIsModified = TRUE;
-    bMaxCharCountIsValid = FALSE;
+    bIsModified = sal_True;
+    bMaxCharCountIsValid = sal_False;
 }
 
 
@@ -447,11 +447,11 @@ void SAL_CALL ConvDic::clear(  )
     aFromLeft .clear();
     if (pFromRight.get())
         pFromRight->clear();
-    bNeedEntries    = FALSE;
-    bIsModified     = TRUE;
+    bNeedEntries    = sal_False;
+    bIsModified     = sal_True;
     nMaxLeftCharCount       = 0;
     nMaxRightCharCount      = 0;
-    bMaxCharCountIsValid    = TRUE;
+    bMaxCharCountIsValid    = sal_True;
 }
 
 
@@ -477,14 +477,14 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversions(
     pair< ConvMap::iterator, ConvMap::iterator > aRange =
             rConvMap.equal_range( aLookUpText );
 
-    INT32 nCount = 0;
+    sal_Int32 nCount = 0;
     ConvMap::iterator aIt;
     for (aIt = aRange.first;  aIt != aRange.second;  ++aIt)
         ++nCount;
 
     uno::Sequence< OUString > aRes( nCount );
     OUString *pRes = aRes.getArray();
-    INT32 i = 0;
+    sal_Int32 i = 0;
     for (aIt = aRange.first;  aIt != aRange.second;  ++aIt)
         pRes[i++] = (*aIt).second;
 
@@ -492,19 +492,19 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversions(
 }
 
 
-static BOOL lcl_SeqHasEntry(
+static sal_Bool lcl_SeqHasEntry(
     const OUString *pSeqStart,  // first element to check
-    INT32 nToCheck,             // number of elements to check
+    sal_Int32 nToCheck,             // number of elements to check
     const OUString &rText)
 {
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (pSeqStart && nToCheck > 0)
     {
         const OUString *pDone = pSeqStart + nToCheck;   // one behind last to check
         while (!bRes && pSeqStart != pDone)
         {
             if (*pSeqStart++ == rText)
-                bRes = TRUE;
+                bRes = sal_True;
         }
     }
     return bRes;
@@ -527,7 +527,7 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversionEntries(
     uno::Sequence< OUString > aRes( rConvMap.size() );
     OUString *pRes = aRes.getArray();
     ConvMap::iterator aIt = rConvMap.begin();
-    INT32 nIdx = 0;
+    sal_Int32 nIdx = 0;
     while (aIt != rConvMap.end())
     {
         OUString aCurEntry( (*aIt).first );
@@ -612,7 +612,7 @@ sal_Int16 SAL_CALL ConvDic::getMaxCharCount( ConversionDirection eDirection )
             }
         }
 
-        bMaxCharCountIsValid = TRUE;
+        bMaxCharCountIsValid = sal_True;
     }
     sal_Int16 nRes = eDirection == ConversionDirection_FROM_LEFT ?
             nMaxLeftCharCount : nMaxRightCharCount;

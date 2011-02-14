@@ -44,9 +44,9 @@
 
 struct ImplBtnDlgItem
 {
-    USHORT              mnId;
-    BOOL                mbOwnButton;
-    BOOL                mbDummyAlign;
+    sal_uInt16              mnId;
+    sal_Bool                mbOwnButton;
+    sal_Bool                mbDummyAlign;
     long                mnSepSize;
     PushButton*         mpPushButton;
 };
@@ -61,7 +61,7 @@ void ButtonDialog::ImplInitButtonDialogData()
     mnButtonSize            = 0;
     mnCurButtonId           = 0;
     mnFocusButtonId         = BUTTONDIALOG_BUTTON_NOTFOUND;
-    mbFormat                = TRUE;
+    mbFormat                = sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -110,7 +110,7 @@ ButtonDialog::~ButtonDialog()
 
 // -----------------------------------------------------------------------
 
-PushButton* ButtonDialog::ImplCreatePushButton( USHORT nBtnFlags )
+PushButton* ButtonDialog::ImplCreatePushButton( sal_uInt16 nBtnFlags )
 {
     PushButton* pBtn;
     WinBits     nStyle = 0;
@@ -134,7 +134,7 @@ PushButton* ButtonDialog::ImplCreatePushButton( USHORT nBtnFlags )
 
 // -----------------------------------------------------------------------
 
-ImplBtnDlgItem* ButtonDialog::ImplGetItem( USHORT nId ) const
+ImplBtnDlgItem* ButtonDialog::ImplGetItem( sal_uInt16 nId ) const
 {
     ImplBtnDlgItem* pItem = mpItemList->First();
     while ( pItem )
@@ -258,7 +258,7 @@ void ButtonDialog::ImplPosControls()
 
     SetOutputSizePixel( aDlgSize );
 
-    mbFormat = FALSE;
+    mbFormat = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -331,13 +331,13 @@ void ButtonDialog::Click()
 
 // -----------------------------------------------------------------------
 
-void ButtonDialog::AddButton( const XubString& rText, USHORT nId,
-                              USHORT nBtnFlags, long nSepPixel )
+void ButtonDialog::AddButton( const XubString& rText, sal_uInt16 nId,
+                              sal_uInt16 nBtnFlags, long nSepPixel )
 {
     // PageItem anlegen
     ImplBtnDlgItem* pItem   = new ImplBtnDlgItem;
     pItem->mnId             = nId;
-    pItem->mbOwnButton      = TRUE;
+    pItem->mbOwnButton      = sal_True;
     pItem->mnSepSize        = nSepPixel;
     pItem->mpPushButton     = ImplCreatePushButton( nBtnFlags );
     if ( rText.Len() )
@@ -349,18 +349,18 @@ void ButtonDialog::AddButton( const XubString& rText, USHORT nId,
     if ( nBtnFlags & BUTTONDIALOG_FOCUSBUTTON )
         mnFocusButtonId = nId;
 
-    mbFormat = TRUE;
+    mbFormat = sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-void ButtonDialog::AddButton( StandardButtonType eType, USHORT nId,
-                              USHORT nBtnFlags, long nSepPixel )
+void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
+                              sal_uInt16 nBtnFlags, long nSepPixel )
 {
     // PageItem anlegen
     ImplBtnDlgItem* pItem   = new ImplBtnDlgItem;
     pItem->mnId             = nId;
-    pItem->mbOwnButton      = TRUE;
+    pItem->mbOwnButton      = sal_True;
     pItem->mnSepSize        = nSepPixel;
 
     if ( eType == BUTTON_OK )
@@ -386,18 +386,18 @@ void ButtonDialog::AddButton( StandardButtonType eType, USHORT nId,
     // In die Liste eintragen
     mpItemList->Insert( pItem, LIST_APPEND );
 
-    mbFormat = TRUE;
+    mbFormat = sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-void ButtonDialog::AddButton( PushButton* pBtn, USHORT nId,
-                              USHORT nBtnFlags, long nSepPixel )
+void ButtonDialog::AddButton( PushButton* pBtn, sal_uInt16 nId,
+                              sal_uInt16 nBtnFlags, long nSepPixel )
 {
     // PageItem anlegen
     ImplBtnDlgItem* pItem   = new ImplBtnDlgItem;
     pItem->mnId             = nId;
-    pItem->mbOwnButton      = FALSE;
+    pItem->mbOwnButton      = sal_False;
     pItem->mnSepSize        = nSepPixel;
     pItem->mpPushButton     = pBtn;
 
@@ -407,12 +407,12 @@ void ButtonDialog::AddButton( PushButton* pBtn, USHORT nId,
     // In die View-Liste eintragen
     mpItemList->Insert( pItem, LIST_APPEND );
 
-    mbFormat = TRUE;
+    mbFormat = sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-void ButtonDialog::RemoveButton( USHORT nId )
+void ButtonDialog::RemoveButton( sal_uInt16 nId )
 {
     ImplBtnDlgItem* pItem = mpItemList->First();
     while ( pItem )
@@ -424,7 +424,7 @@ void ButtonDialog::RemoveButton( USHORT nId )
                 delete pItem->mpPushButton;
             delete pItem;
             mpItemList->Remove();
-            mbFormat = TRUE;
+            mbFormat = sal_True;
             break;
         }
 
@@ -449,29 +449,29 @@ void ButtonDialog::Clear()
     }
 
     mpItemList->Clear();
-    mbFormat = TRUE;
+    mbFormat = sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-USHORT ButtonDialog::GetButtonCount() const
+sal_uInt16 ButtonDialog::GetButtonCount() const
 {
-    return (USHORT)mpItemList->Count();
+    return (sal_uInt16)mpItemList->Count();
 }
 
 // -----------------------------------------------------------------------
 
-USHORT ButtonDialog::GetButtonId( USHORT nButton ) const
+sal_uInt16 ButtonDialog::GetButtonId( sal_uInt16 nButton ) const
 {
     if ( nButton < mpItemList->Count() )
-        return (USHORT)mpItemList->GetObject( nButton )->mnId;
+        return (sal_uInt16)mpItemList->GetObject( nButton )->mnId;
     else
         return BUTTONDIALOG_BUTTON_NOTFOUND;
 }
 
 // -----------------------------------------------------------------------
 
-PushButton* ButtonDialog::GetPushButton( USHORT nId ) const
+PushButton* ButtonDialog::GetPushButton( sal_uInt16 nId ) const
 {
     ImplBtnDlgItem* pItem = ImplGetItem( nId );
 
@@ -483,20 +483,20 @@ PushButton* ButtonDialog::GetPushButton( USHORT nId ) const
 
 // -----------------------------------------------------------------------
 
-void ButtonDialog::SetButtonText( USHORT nId, const XubString& rText )
+void ButtonDialog::SetButtonText( sal_uInt16 nId, const XubString& rText )
 {
     ImplBtnDlgItem* pItem = ImplGetItem( nId );
 
     if ( pItem )
     {
         pItem->mpPushButton->SetText( rText );
-        mbFormat = TRUE;
+        mbFormat = sal_True;
     }
 }
 
 // -----------------------------------------------------------------------
 
-XubString ButtonDialog::GetButtonText( USHORT nId ) const
+XubString ButtonDialog::GetButtonText( sal_uInt16 nId ) const
 {
     ImplBtnDlgItem* pItem = ImplGetItem( nId );
 
@@ -508,7 +508,7 @@ XubString ButtonDialog::GetButtonText( USHORT nId ) const
 
 // -----------------------------------------------------------------------
 
-void ButtonDialog::SetButtonHelpText( USHORT nId, const XubString& rText )
+void ButtonDialog::SetButtonHelpText( sal_uInt16 nId, const XubString& rText )
 {
     ImplBtnDlgItem* pItem = ImplGetItem( nId );
 
@@ -518,7 +518,7 @@ void ButtonDialog::SetButtonHelpText( USHORT nId, const XubString& rText )
 
 // -----------------------------------------------------------------------
 
-XubString ButtonDialog::GetButtonHelpText( USHORT nId ) const
+XubString ButtonDialog::GetButtonHelpText( sal_uInt16 nId ) const
 {
     ImplBtnDlgItem* pItem = ImplGetItem( nId );
 
@@ -530,7 +530,7 @@ XubString ButtonDialog::GetButtonHelpText( USHORT nId ) const
 
 // -----------------------------------------------------------------------
 
-void ButtonDialog::SetButtonHelpId( USHORT nId, const rtl::OString& rHelpId )
+void ButtonDialog::SetButtonHelpId( sal_uInt16 nId, const rtl::OString& rHelpId )
 {
     ImplBtnDlgItem* pItem = ImplGetItem( nId );
 
@@ -540,7 +540,7 @@ void ButtonDialog::SetButtonHelpId( USHORT nId, const rtl::OString& rHelpId )
 
 // -----------------------------------------------------------------------
 
-rtl::OString ButtonDialog::GetButtonHelpId( USHORT nId ) const
+rtl::OString ButtonDialog::GetButtonHelpId( sal_uInt16 nId ) const
 {
     ImplBtnDlgItem* pItem = ImplGetItem( nId );
 

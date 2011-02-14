@@ -101,8 +101,8 @@ ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,
     pFormat         ( pAutoFormat ),
     pSelFmtData     ( pSelFormatData ),
     nIndex          ( 0 ),
-    bCoreDataChanged( FALSE ),
-    bFmtInserted    ( FALSE )
+    bCoreDataChanged( sal_False ),
+    bFmtInserted    ( sal_False )
 {
     Init();
     pWndPreview->NotifyChange( (*pFormat)[0] );
@@ -120,7 +120,7 @@ __EXPORT ScAutoFormatDlg::~ScAutoFormatDlg()
 
 void ScAutoFormatDlg::Init()
 {
-    USHORT nCount;
+    sal_uInt16 nCount;
     String aEntry;
 
     aLbFormat    .SetSelectHdl( LINK( this, ScAutoFormatDlg, SelFmtHdl ) );
@@ -148,7 +148,7 @@ void ScAutoFormatDlg::Init()
 
     nCount = pFormat->GetCount();
 
-    for ( USHORT i = 0; i < nCount; i++ )
+    for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
         ((*pFormat)[i])->GetName( aEntry );
         aLbFormat.InsertEntry( aEntry );
@@ -168,7 +168,7 @@ void ScAutoFormatDlg::Init()
     {
         aBtnAdd.Disable();
         aBtnRemove.Disable();
-        bFmtInserted = TRUE;
+        bFmtInserted = sal_True;
     }
 }
 
@@ -219,7 +219,7 @@ IMPL_LINK_INLINE_END( ScAutoFormatDlg, DblClkHdl, void *, EMPTYARG )
 IMPL_LINK( ScAutoFormatDlg, CheckHdl, Button *, pBtn )
 {
     ScAutoFormatData* pData  = (*pFormat)[nIndex];
-    BOOL              bCheck = ((CheckBox*)pBtn)->IsChecked();
+    sal_Bool              bCheck = ((CheckBox*)pBtn)->IsChecked();
 
     if ( pBtn == &aBtnNumFormat )
         pData->SetIncludeValueFormat( bCheck );
@@ -237,7 +237,7 @@ IMPL_LINK( ScAutoFormatDlg, CheckHdl, Button *, pBtn )
     if ( !bCoreDataChanged )
     {
         aBtnCancel.SetText( aStrClose );
-        bCoreDataChanged = TRUE;
+        bCoreDataChanged = sal_True;
     }
 
     pWndPreview->NotifyChange( pData );
@@ -254,7 +254,7 @@ IMPL_LINK( ScAutoFormatDlg, AddHdl, void *, EMPTYARG )
         String              aStrStandard( SfxResId(STR_STANDARD) );
         String              aFormatName;
         ScStringInputDlg*   pDlg;
-        BOOL                bOk = FALSE;
+        sal_Bool                bOk = sal_False;
 
         while ( !bOk )
         {
@@ -278,7 +278,7 @@ IMPL_LINK( ScAutoFormatDlg, AddHdl, void *, EMPTYARG )
 
                     if ( bFmtInserted )
                     {
-                        USHORT nAt = pFormat->IndexOf( pNewData );
+                        sal_uInt16 nAt = pFormat->IndexOf( pNewData );
 
                         aLbFormat.InsertEntry( aFormatName, nAt );
                         aLbFormat.SelectEntry( aFormatName );
@@ -287,11 +287,11 @@ IMPL_LINK( ScAutoFormatDlg, AddHdl, void *, EMPTYARG )
                         if ( !bCoreDataChanged )
                         {
                             aBtnCancel.SetText( aStrClose );
-                            bCoreDataChanged = TRUE;
+                            bCoreDataChanged = sal_True;
                         }
 
                         SelFmtHdl( 0 );
-                        bOk = TRUE;
+                        bOk = sal_True;
                     }
                     else
                         delete pNewData;
@@ -300,7 +300,7 @@ IMPL_LINK( ScAutoFormatDlg, AddHdl, void *, EMPTYARG )
 
                 if ( !bFmtInserted )
                 {
-                    USHORT nRet = ErrorBox( this,
+                    sal_uInt16 nRet = ErrorBox( this,
                                             WinBits( WB_OK_CANCEL | WB_DEF_OK),
                                             ScGlobal::GetRscString(STR_INVALID_AFNAME)
                                           ).Execute();
@@ -309,7 +309,7 @@ IMPL_LINK( ScAutoFormatDlg, AddHdl, void *, EMPTYARG )
                 }
             }
             else
-                bOk = TRUE;
+                bOk = sal_True;
 
             delete pDlg;
         }
@@ -341,7 +341,7 @@ IMPL_LINK( ScAutoFormatDlg, RemoveHdl, void *, EMPTYARG )
             if ( !bCoreDataChanged )
             {
                 aBtnCancel.SetText( aStrClose );
-                bCoreDataChanged = TRUE;
+                bCoreDataChanged = sal_True;
             }
 
             pFormat->AtFree( nIndex ); // in der Core loeschen
@@ -358,7 +358,7 @@ IMPL_LINK( ScAutoFormatDlg, RemoveHdl, void *, EMPTYARG )
 
 IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, EMPTYARG )
 {
-    BOOL bOk = FALSE;
+    sal_Bool bOk = sal_False;
     while( !bOk )
     {
 
@@ -372,9 +372,9 @@ IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, EMPTYARG )
                                          HID_SC_REN_AFMT_DLG, HID_SC_REN_AFMT_NAME );
         if( pDlg->Execute() == RET_OK )
         {
-            BOOL bFmtRenamed = FALSE;
+            sal_Bool bFmtRenamed = sal_False;
             pDlg->GetInputString( aFormatName );
-            USHORT n;
+            sal_uInt16 n;
 
             if ( aFormatName.Len() > 0 )
             {
@@ -400,29 +400,29 @@ IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, EMPTYARG )
 
                     pFormat->Insert( pNewData);
 
-                    USHORT nCount = pFormat->GetCount();
+                    sal_uInt16 nCount = pFormat->GetCount();
 
-                    aLbFormat.SetUpdateMode(FALSE);
+                    aLbFormat.SetUpdateMode(sal_False);
                     aLbFormat.Clear();
-                    for ( USHORT i = 0; i < nCount; i++ )
+                    for ( sal_uInt16 i = 0; i < nCount; i++ )
                     {
                         ((*pFormat)[i])->GetName( aEntry );
                         aLbFormat.InsertEntry( aEntry );
                     }
 
-                    aLbFormat.SetUpdateMode( TRUE);
+                    aLbFormat.SetUpdateMode( sal_True);
                     aLbFormat.SelectEntry( aFormatName);
 
                     if ( !bCoreDataChanged )
                     {
                         aBtnCancel.SetText( aStrClose );
-                        bCoreDataChanged = TRUE;
+                        bCoreDataChanged = sal_True;
                     }
 
 
                     SelFmtHdl( 0 );
-                    bOk = TRUE;
-                    bFmtRenamed = TRUE;
+                    bOk = sal_True;
+                    bFmtRenamed = sal_True;
                 }
             }
             if( !bFmtRenamed )
@@ -434,7 +434,7 @@ IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, EMPTYARG )
             }
         }
         else
-            bOk = TRUE;
+            bOk = sal_True;
         delete pDlg;
     }
 

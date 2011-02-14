@@ -88,33 +88,33 @@ void SvxXConnectionPreview::Construct()
     DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
 
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-    ULONG nMarkCount = rMarkList.GetMarkCount();
+    sal_uIntPtr nMarkCount = rMarkList.GetMarkCount();
 
     if( nMarkCount >= 1 )
     {
-        BOOL bFound = FALSE;
+        sal_Bool bFound = sal_False;
         const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
 
-        for( USHORT i = 0; i < nMarkCount && !bFound; i++ )
+        for( sal_uInt16 i = 0; i < nMarkCount && !bFound; i++ )
         {
             pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
-            UINT32 nInv = pObj->GetObjInventor();
-            UINT16 nId = pObj->GetObjIdentifier();
+            sal_uInt32 nInv = pObj->GetObjInventor();
+            sal_uInt16 nId = pObj->GetObjIdentifier();
             if( nInv == SdrInventor && nId == OBJ_EDGE )
             {
-                bFound = TRUE;
+                bFound = sal_True;
                 SdrEdgeObj* pTmpEdgeObj = (SdrEdgeObj*) pObj;
                 pEdgeObj = (SdrEdgeObj*) pTmpEdgeObj->Clone();
 
-                SdrObjConnection& rConn1 = (SdrObjConnection&)pEdgeObj->GetConnection( TRUE );
-                SdrObjConnection& rConn2 = (SdrObjConnection&)pEdgeObj->GetConnection( FALSE );
+                SdrObjConnection& rConn1 = (SdrObjConnection&)pEdgeObj->GetConnection( sal_True );
+                SdrObjConnection& rConn2 = (SdrObjConnection&)pEdgeObj->GetConnection( sal_False );
 
-                rConn1 = pTmpEdgeObj->GetConnection( TRUE );
-                rConn2 = pTmpEdgeObj->GetConnection( FALSE );
+                rConn1 = pTmpEdgeObj->GetConnection( sal_True );
+                rConn2 = pTmpEdgeObj->GetConnection( sal_False );
 
-                SdrObject* pTmpObj1 = pTmpEdgeObj->GetConnectedNode( TRUE );
-                SdrObject* pTmpObj2 = pTmpEdgeObj->GetConnectedNode( FALSE );
+                SdrObject* pTmpObj1 = pTmpEdgeObj->GetConnectedNode( sal_True );
+                SdrObject* pTmpObj2 = pTmpEdgeObj->GetConnectedNode( sal_False );
 
                 // #110094#
                 // potential memory leak here (!). Create SdrObjList only when there is
@@ -128,13 +128,13 @@ void SvxXConnectionPreview::Construct()
                 {
                     SdrObject* pObj1 = pTmpObj1->Clone();
                     pObjList->InsertObject( pObj1 );
-                    pEdgeObj->ConnectToNode( TRUE, pObj1 );
+                    pEdgeObj->ConnectToNode( sal_True, pObj1 );
                 }
                 if( pTmpObj2 )
                 {
                     SdrObject* pObj2 = pTmpObj2->Clone();
                     pObjList->InsertObject( pObj2 );
-                    pEdgeObj->ConnectToNode( FALSE, pObj2 );
+                    pEdgeObj->ConnectToNode( sal_False, pObj2 );
                 }
                 pObjList->InsertObject( pEdgeObj );
             }
@@ -210,7 +210,7 @@ void SvxXConnectionPreview::Construct()
         Fraction aFrac2( aSize.Height(), aRect.GetHeight() );
         Fraction aMaxFrac( aFrac1 > aFrac2 ? aFrac1 : aFrac2 );
         Fraction aMinFrac( aFrac1 <= aFrac2 ? aFrac1 : aFrac2 );
-        BOOL bChange = (BOOL) ( (double)aMinFrac > 1.0 );
+        sal_Bool bChange = (sal_Bool) ( (double)aMinFrac > 1.0 );
         aMapMode.SetScaleX( aMinFrac );
         aMapMode.SetScaleY( aMinFrac );
 
@@ -297,7 +297,7 @@ void SvxXConnectionPreview::SetAttributes( const SfxItemSet& rInAttrs )
 |*
 *************************************************************************/
 
-USHORT SvxXConnectionPreview::GetLineDeltaAnz()
+sal_uInt16 SvxXConnectionPreview::GetLineDeltaAnz()
 {
     const SfxItemSet& rSet = pEdgeObj->GetMergedItemSet();
     sal_uInt16 nCount(0);
@@ -316,9 +316,9 @@ USHORT SvxXConnectionPreview::GetLineDeltaAnz()
 
 void SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    BOOL bZoomIn  = rMEvt.IsLeft() && !rMEvt.IsShift();
-    BOOL bZoomOut = rMEvt.IsRight() || rMEvt.IsShift();
-    BOOL bCtrl    = rMEvt.IsMod1();
+    sal_Bool bZoomIn  = rMEvt.IsLeft() && !rMEvt.IsShift();
+    sal_Bool bZoomOut = rMEvt.IsRight() || rMEvt.IsShift();
+    sal_Bool bCtrl    = rMEvt.IsMod1();
 
     if( bZoomIn || bZoomOut )
     {

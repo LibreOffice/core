@@ -311,7 +311,7 @@ sal_Bool PropBrw::Close()
 
     m_pDesignView->getController().executeUnChecked(SID_PROPERTYBROWSER_LAST_PAGE,uno::Sequence< beans::PropertyValue>());
 
-    return TRUE;
+    return sal_True;
 }
 
 //----------------------------------------------------------------------------
@@ -545,8 +545,8 @@ void PropBrw::Update( OSectionView* pNewView )
 
         uno::Sequence< Reference<uno::XInterface> > aMarkedObjects;
         OViewsWindow* pViews = m_pView->getReportSection()->getSectionWindow()->getViewsWindow();
-        const USHORT nSectionCount = pViews->getSectionCount();
-        for (USHORT i = 0; i < nSectionCount; ++i)
+        const sal_uInt16 nSectionCount = pViews->getSectionCount();
+        for (sal_uInt16 i = 0; i < nSectionCount; ++i)
         {
             ::boost::shared_ptr<OSectionWindow> pSectionWindow = pViews->getSectionWindow(i);
             if ( pSectionWindow )

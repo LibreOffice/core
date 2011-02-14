@@ -46,7 +46,7 @@ class Window;
 class SfxItemSet;
 
 typedef void* (*CreateSvxBrushTabPage)(Window *pParent, const SfxItemSet &rAttrSet);
-typedef USHORT* (*GetSvxBrushTabPageRanges)();
+typedef sal_uInt16* (*GetSvxBrushTabPageRanges)();
 
 class Graphic;
 class String;

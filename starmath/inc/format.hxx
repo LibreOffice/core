@@ -34,7 +34,7 @@
 #include <types.hxx>
 
 
-#define SM_FMT_VERSION_51   ((BYTE) 0x01)
+#define SM_FMT_VERSION_51   ((sal_uInt8) 0x01)
 #define SM_FMT_VERSION_NOW  SM_FMT_VERSION_51
 
 #define FNTNAME_TIMES   "Times New Roman"
@@ -98,19 +98,19 @@
 
 enum SmHorAlign { AlignLeft, AlignCenter, AlignRight };
 
-String GetDefaultFontName( LanguageType nLang, USHORT nIdent );
+String GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent );
 
 class SmFormat : public SfxBroadcaster
 {
     SmFace      vFont[FNT_END + 1];
-    BOOL        bDefaultFont[FNT_END + 1];
+    sal_Bool        bDefaultFont[FNT_END + 1];
     Size        aBaseSize;
     long        nVersion;
-    USHORT      vSize[SIZ_END + 1];
-    USHORT      vDist[DIS_END + 1];
+    sal_uInt16      vSize[SIZ_END + 1];
+    sal_uInt16      vDist[DIS_END + 1];
     SmHorAlign  eHorAlign;
-    INT16       nGreekCharStyle;
-    BOOL        bIsTextmode,
+    sal_Int16       nGreekCharStyle;
+    sal_Bool        bIsTextmode,
                 bScaleNormalBrackets;
 
 public:
@@ -120,30 +120,30 @@ public:
     const Size &    GetBaseSize() const             { return aBaseSize; }
     void            SetBaseSize(const Size &rSize)  { aBaseSize = rSize; }
 
-    const SmFace &  GetFont(USHORT nIdent) const { return vFont[nIdent]; }
-    void            SetFont(USHORT nIdent, const SmFace &rFont, BOOL bDefault = FALSE);
-    void            SetFontSize(USHORT nIdent, const Size &rSize)   { vFont[nIdent].SetSize( rSize ); }
+    const SmFace &  GetFont(sal_uInt16 nIdent) const { return vFont[nIdent]; }
+    void            SetFont(sal_uInt16 nIdent, const SmFace &rFont, sal_Bool bDefault = sal_False);
+    void            SetFontSize(sal_uInt16 nIdent, const Size &rSize)   { vFont[nIdent].SetSize( rSize ); }
 
-    void            SetDefaultFont(USHORT nIdent, BOOL bVal)    { bDefaultFont[nIdent] = bVal; }
-    BOOL            IsDefaultFont(USHORT nIdent) const   { return bDefaultFont[nIdent]; }
+    void            SetDefaultFont(sal_uInt16 nIdent, sal_Bool bVal)    { bDefaultFont[nIdent] = bVal; }
+    sal_Bool            IsDefaultFont(sal_uInt16 nIdent) const   { return bDefaultFont[nIdent]; }
 
-    USHORT          GetRelSize(USHORT nIdent) const         { return vSize[nIdent]; }
-    void            SetRelSize(USHORT nIdent, USHORT nVal)  { vSize[nIdent] = nVal;}
+    sal_uInt16          GetRelSize(sal_uInt16 nIdent) const         { return vSize[nIdent]; }
+    void            SetRelSize(sal_uInt16 nIdent, sal_uInt16 nVal)  { vSize[nIdent] = nVal;}
 
-    USHORT          GetDistance(USHORT nIdent) const            { return vDist[nIdent]; }
-    void            SetDistance(USHORT nIdent, USHORT nVal) { vDist[nIdent] = nVal; }
+    sal_uInt16          GetDistance(sal_uInt16 nIdent) const            { return vDist[nIdent]; }
+    void            SetDistance(sal_uInt16 nIdent, sal_uInt16 nVal) { vDist[nIdent] = nVal; }
 
     SmHorAlign      GetHorAlign() const             { return eHorAlign; }
     void            SetHorAlign(SmHorAlign eAlign)  { eHorAlign = eAlign; }
 
-    BOOL            IsTextmode() const     { return bIsTextmode; }
-    void            SetTextmode(BOOL bVal) { bIsTextmode = bVal; }
+    sal_Bool            IsTextmode() const     { return bIsTextmode; }
+    void            SetTextmode(sal_Bool bVal) { bIsTextmode = bVal; }
 
-    INT16           GetGreekCharStyle() const     { return nGreekCharStyle; }
-    void            SetGreekCharStyle(INT16 nVal) { nGreekCharStyle = nVal; }
+    sal_Int16           GetGreekCharStyle() const     { return nGreekCharStyle; }
+    void            SetGreekCharStyle(sal_Int16 nVal) { nGreekCharStyle = nVal; }
 
-    BOOL            IsScaleNormalBrackets() const     { return bScaleNormalBrackets; }
-    void            SetScaleNormalBrackets(BOOL bVal) { bScaleNormalBrackets = bVal; }
+    sal_Bool            IsScaleNormalBrackets() const     { return bScaleNormalBrackets; }
+    void            SetScaleNormalBrackets(sal_Bool bVal) { bScaleNormalBrackets = bVal; }
 
     long            GetVersion() const { return nVersion; }
 
@@ -152,8 +152,8 @@ public:
 
     SmFormat &      operator = (const SmFormat &rFormat);
 
-    BOOL            operator == (const SmFormat &rFormat) const;
-    inline BOOL     operator != (const SmFormat &rFormat) const;
+    sal_Bool            operator == (const SmFormat &rFormat) const;
+    inline sal_Bool     operator != (const SmFormat &rFormat) const;
 
     void RequestApplyChanges() const
     {
@@ -162,7 +162,7 @@ public:
 
 };
 
-inline BOOL    SmFormat::operator != (const SmFormat &rFormat) const
+inline sal_Bool    SmFormat::operator != (const SmFormat &rFormat) const
 {
     return !(*this == rFormat);
 }

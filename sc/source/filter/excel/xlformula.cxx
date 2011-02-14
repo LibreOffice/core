@@ -600,7 +600,7 @@ void XclTokenArrayIterator::Init()
 
 void XclTokenArrayIterator::Init( const ScTokenArray& rScTokArr, bool bSkipSpaces )
 {
-    USHORT nTokArrLen = rScTokArr.GetLen();
+    sal_uInt16 nTokArrLen = rScTokArr.GetLen();
     mppScTokenBeg = static_cast< const FormulaToken* const* >( nTokArrLen ? rScTokArr.GetArray() : 0 );
     mppScTokenEnd = mppScTokenBeg ? (mppScTokenBeg + nTokArrLen) : 0;
     mppScToken = (mppScTokenBeg != mppScTokenEnd) ? mppScTokenBeg : 0;

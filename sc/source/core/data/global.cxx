@@ -135,19 +135,19 @@ SvNumberFormatter* ScGlobal::pEnglishFormatter = NULL;
 double          ScGlobal::nScreenPPTX           = 96.0;
 double          ScGlobal::nScreenPPTY           = 96.0;
 
-USHORT          ScGlobal::nDefFontHeight        = 240;
-USHORT          ScGlobal::nStdRowHeight         = 257;
+sal_uInt16          ScGlobal::nDefFontHeight        = 240;
+sal_uInt16          ScGlobal::nStdRowHeight         = 257;
 
 long            ScGlobal::nLastRowHeightExtra   = 0;
 long            ScGlobal::nLastColWidthExtra    = STD_EXTRA_WIDTH;
 
-static USHORT nPPTZoom = 0;     // ScreenZoom used to determine nScreenPPTX/Y
+static sal_uInt16 nPPTZoom = 0;     // ScreenZoom used to determine nScreenPPTX/Y
 
 
 class SfxViewShell;
 SfxViewShell* pScActiveViewShell = NULL;            //! als Member !!!!!
-USHORT nScClickMouseModifier = 0;                   //! dito
-USHORT nScFillModeMouseModifier = 0;                //! dito
+sal_uInt16 nScClickMouseModifier = 0;                   //! dito
+sal_uInt16 nScFillModeMouseModifier = 0;                //! dito
 
 // Hack: ScGlobal::GetUserList() muss InitAppOptions in der UI aufrufen,
 //       damit UserList aus Cfg geladen wird
@@ -160,11 +160,11 @@ void global_InitAppOptions();
 //
 //========================================================================
 
-BOOL ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
+sal_Bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
                                const SfxItemSet&  rOldAttrs,
-                               const USHORT       nWhich )
+                               const sal_uInt16       nWhich )
 {
-    BOOL                bInvalidate = FALSE;
+    sal_Bool                bInvalidate = sal_False;
     const SfxItemState  eNewState   = rNewAttrs.GetItemState( nWhich );
     const SfxItemState  eOldState   = rOldAttrs.GetItemState( nWhich );
 
@@ -190,14 +190,14 @@ BOOL ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
                     ? rNewAttrs.Get( nWhich )
                     : rNewAttrs.GetPool()->GetDefaultItem( nWhich );
 
-        bInvalidate = sal::static_int_cast<BOOL>(rNewItem != rOldItem);
+        bInvalidate = sal::static_int_cast<sal_Bool>(rNewItem != rOldItem);
     }
 
     return bInvalidate;
 }
 
-ULONG ScGlobal::GetStandardFormat( SvNumberFormatter& rFormatter,
-        ULONG nFormat, short nType )
+sal_uLong ScGlobal::GetStandardFormat( SvNumberFormatter& rFormatter,
+        sal_uLong nFormat, short nType )
 {
     const SvNumberformat* pFormat = rFormatter.GetEntry( nFormat );
     if ( pFormat )
@@ -205,8 +205,8 @@ ULONG ScGlobal::GetStandardFormat( SvNumberFormatter& rFormatter,
     return rFormatter.GetStandardFormat( nType, eLnge );
 }
 
-ULONG ScGlobal::GetStandardFormat( double fNumber, SvNumberFormatter& rFormatter,
-        ULONG nFormat, short nType )
+sal_uLong ScGlobal::GetStandardFormat( double fNumber, SvNumberFormatter& rFormatter,
+        sal_uLong nFormat, short nType )
 {
     const SvNumberformat* pFormat = rFormatter.GetEntry( nFormat );
     if ( pFormat )
@@ -231,7 +231,7 @@ SvNumberFormatter* ScGlobal::GetEnglishFormatter()
 
 //------------------------------------------------------------------------
 
-BOOL ScGlobal::CheckWidthInvalidate( BOOL& bNumFormatChanged,
+sal_Bool ScGlobal::CheckWidthInvalidate( sal_Bool& bNumFormatChanged,
                                      const SfxItemSet& rNewAttrs,
                                      const SfxItemSet& rOldAttrs )
 {
@@ -347,7 +347,7 @@ void ScGlobal::SetUserList( const ScUserList* pNewList )
     }
 }
 
-const String& ScGlobal::GetRscString( USHORT nIndex )
+const String& ScGlobal::GetRscString( sal_uInt16 nIndex )
 {
     DBG_ASSERT( nIndex < STR_COUNT, "ScGlobal::GetRscString - invalid string index");
     if( !ppRscString[ nIndex ] )
@@ -390,7 +390,7 @@ const String& ScGlobal::GetRscString( USHORT nIndex )
     return *ppRscString[ nIndex ];
 }
 
-String ScGlobal::GetErrorString(USHORT nErrNumber)
+String ScGlobal::GetErrorString(sal_uInt16 nErrNumber)
 {
     String sResStr;
     switch (nErrNumber)
@@ -416,7 +416,7 @@ String ScGlobal::GetErrorString(USHORT nErrNumber)
     return sResStr;
 }
 
-String ScGlobal::GetLongErrorString(USHORT nErrNumber)
+String ScGlobal::GetLongErrorString(sal_uInt16 nErrNumber)
 {
     switch (nErrNumber)
     {
@@ -546,7 +546,7 @@ void ScGlobal::Init()
     pLocaleData = pSysLocale->GetLocaleDataPtr();
 
     ppRscString = new String *[ STR_COUNT ];
-    for( USHORT nC = 0 ; nC < STR_COUNT ; nC++ ) ppRscString[ nC ] = NULL;
+    for( sal_uInt16 nC = 0 ; nC < STR_COUNT ; nC++ ) ppRscString[ nC ] = NULL;
 
     pEmptyBrushItem = new SvxBrushItem( Color( COL_TRANSPARENT ), ATTR_BACKGROUND );
     pButtonBrushItem = new SvxBrushItem( Color(), ATTR_BACKGROUND );
@@ -571,7 +571,7 @@ void ScGlobal::Init()
 
 void ScGlobal::UpdatePPT( OutputDevice* pDev )
 {
-    USHORT nCurrentZoom = Application::GetSettings().GetStyleSettings().GetScreenZoom();
+    sal_uInt16 nCurrentZoom = Application::GetSettings().GetStyleSettings().GetScreenZoom();
     if ( nCurrentZoom != nPPTZoom )
     {
         //  Screen PPT values must be updated when ScreenZoom has changed.
@@ -621,12 +621,12 @@ void ScGlobal::InitTextHeight(SfxItemPool* pPool)
     Font aDefFont;
     pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, &aVirtWindow);        // font color doesn't matter here
     aVirtWindow.SetFont(aDefFont);
-    nDefFontHeight = (USHORT) aVirtWindow.PixelToLogic(Size(0, aVirtWindow.GetTextHeight()),
+    nDefFontHeight = (sal_uInt16) aVirtWindow.PixelToLogic(Size(0, aVirtWindow.GetTextHeight()),
                                 MAP_TWIP).Height();
 
     const SvxMarginItem* pMargin = (const SvxMarginItem*)&pPattern->GetItem(ATTR_MARGIN);
 
-    nStdRowHeight = (USHORT) ( nDefFontHeight +
+    nStdRowHeight = (sal_uInt16) ( nDefFontHeight +
                                 pMargin->GetTopMargin() + pMargin->GetBottomMargin()
                                 - STD_ROWHEIGHT_DIFF );
 }
@@ -642,7 +642,7 @@ void ScGlobal::Clear()
     DELETEZ(pAddInCollection);
     DELETEZ(pUserList);
 
-    for( USHORT nC = 0 ; nC < STR_COUNT ; nC++ )
+    for( sal_uInt16 nC = 0 ; nC < STR_COUNT ; nC++ )
         if( ppRscString ) delete ppRscString[ nC ];
     delete[] ppRscString;
     ppRscString = NULL;
@@ -889,33 +889,33 @@ const sal_Unicode* ScGlobal::FindUnquoted( const sal_Unicode* pString, sal_Unico
 
 //------------------------------------------------------------------------
 
-BOOL ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
+sal_Bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
                                const EditTextObject* pObj2 )
 {
     if ( pObj1 == pObj2 )               // both empty or the same object
-        return TRUE;
+        return sal_True;
 
     if ( pObj1 && pObj2 )
     {
         //  first test for equal text content
-        USHORT nParCount = pObj1->GetParagraphCount();
+        sal_uInt16 nParCount = pObj1->GetParagraphCount();
         if ( nParCount != pObj2->GetParagraphCount() )
-            return FALSE;
-        for (USHORT nPar=0; nPar<nParCount; nPar++)
+            return sal_False;
+        for (sal_uInt16 nPar=0; nPar<nParCount; nPar++)
             if ( pObj1->GetText(nPar) != pObj2->GetText(nPar) )
-                return FALSE;
+                return sal_False;
 
         SvMemoryStream  aStream1;
         SvMemoryStream  aStream2;
         pObj1->Store( aStream1 );
         pObj2->Store( aStream2 );
-        ULONG nSize = aStream1.Tell();
+        sal_uLong nSize = aStream1.Tell();
         if ( aStream2.Tell() == nSize )
-            if ( !memcmp( aStream1.GetData(), aStream2.GetData(), (USHORT) nSize ) )
-                return TRUE;
+            if ( !memcmp( aStream1.GetData(), aStream2.GetData(), (sal_uInt16) nSize ) )
+                return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
@@ -943,8 +943,8 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
     SfxFrameItem aFrm( SID_DOCFRAME, pFrame );
     SfxStringItem aReferer( SID_REFERER, aReferName );
 
-    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, FALSE );
-    SfxBoolItem aBrowsing( SID_BROWSE, TRUE );
+    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_False );
+    SfxBoolItem aBrowsing( SID_BROWSE, sal_True );
 
     //  kein SID_SILENT mehr wegen Bug #42525# (war angeblich sowieso falsch)
 
@@ -960,19 +960,19 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
 
 //------------------------------------------------------------------------
 
-BOOL ScGlobal::IsSystemRTL()
+sal_Bool ScGlobal::IsSystemRTL()
 {
     return MsLangId::isRightToLeft( Application::GetSettings().GetLanguage() );
 }
 
-BYTE ScGlobal::GetDefaultScriptType()
+sal_uInt8 ScGlobal::GetDefaultScriptType()
 {
     //  Used when text contains only WEAK characters.
     //  Script type of office language is used then (same as GetEditDefaultLanguage,
     //  to get consistent behavior of text in simple cells and EditEngine,
     //  also same as GetAppLanguage() in Writer)
 
-    return (BYTE) SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguage() );
+    return (sal_uInt8) SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguage() );
 }
 
 LanguageType ScGlobal::GetEditDefaultLanguage()
@@ -982,7 +982,7 @@ LanguageType ScGlobal::GetEditDefaultLanguage()
     return Application::GetSettings().GetLanguage();
 }
 
-USHORT ScGlobal::GetScriptedWhichID( BYTE nScriptType, USHORT nWhich )
+sal_uInt16 ScGlobal::GetScriptedWhichID( sal_uInt8 nScriptType, sal_uInt16 nWhich )
 {
     switch ( nScriptType )
     {
@@ -1074,16 +1074,16 @@ USHORT ScGlobal::GetScriptedWhichID( BYTE nScriptType, USHORT nWhich )
 
 void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
 {
-    DBG_ASSERT( rSet.GetItemState( ATTR_LANGUAGE_FORMAT, FALSE ) == SFX_ITEM_DEFAULT,
+    DBG_ASSERT( rSet.GetItemState( ATTR_LANGUAGE_FORMAT, sal_False ) == SFX_ITEM_DEFAULT,
         "ScGlobal::AddLanguage - language already added");
 
     const SfxPoolItem* pHardItem;
-    if ( rSet.GetItemState( ATTR_VALUE_FORMAT, FALSE, &pHardItem ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( ATTR_VALUE_FORMAT, sal_False, &pHardItem ) == SFX_ITEM_SET )
     {
         const SvNumberformat* pHardFormat = rFormatter.GetEntry(
             ((const SfxUInt32Item*)pHardItem)->GetValue() );
 
-        ULONG nParentFmt = 0;   // pool default
+        sal_uLong nParentFmt = 0;   // pool default
         const SfxItemSet* pParent = rSet.GetParent();
         if ( pParent )
             nParentFmt = ((const SfxUInt32Item&)pParent->Get( ATTR_VALUE_FORMAT )).GetValue();
@@ -1113,7 +1113,7 @@ public:
     ScFuncRes( ResId&, ScFuncDesc*, bool & rbSuppressed );
 
 private:
-    USHORT GetNum();
+    sal_uInt16 GetNum();
 };
 
 //--------------------------------------------------------------------
@@ -1125,20 +1125,20 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
     pDesc->nCategory = GetNum();
     pDesc->sHelpId = ReadByteStringRes();       //! Hack, see scfuncs.src
     pDesc->nArgCount = GetNum();
-    USHORT nArgs = pDesc->nArgCount;
+    sal_uInt16 nArgs = pDesc->nArgCount;
     if (nArgs >= VAR_ARGS)
         nArgs -= VAR_ARGS - 1;
     if (nArgs)
     {
         pDesc->pDefArgFlags = new ScFuncDesc::ParameterFlags[nArgs];
-        for (USHORT i = 0; i < nArgs; i++)
+        for (sal_uInt16 i = 0; i < nArgs; i++)
         {
             pDesc->pDefArgFlags[i].bOptional = (bool)GetNum();
         }
     }
     // Need to read the value from the resource even if nArgs==0 to advance the
     // resource position pointer, so this can't be in the if(nArgs) block above.
-    USHORT nSuppressed = GetNum();
+    sal_uInt16 nSuppressed = GetNum();
     if (nSuppressed)
     {
         if (nSuppressed > nArgs)
@@ -1147,9 +1147,9 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
                     aRes.GetId(), (int)nSuppressed, (int)nArgs);
             nSuppressed = nArgs;    // sanitize
         }
-        for (USHORT i=0; i < nSuppressed; ++i)
+        for (sal_uInt16 i=0; i < nSuppressed; ++i)
         {
-            USHORT nParam = GetNum();
+            sal_uInt16 nParam = GetNum();
             if (nParam < nArgs)
             {
                 if (pDesc->nArgCount >= VAR_ARGS && nParam == nArgs-1)
@@ -1178,7 +1178,7 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
     {
         pDesc->ppDefArgNames = new String*[nArgs];
         pDesc->ppDefArgDescs = new String*[nArgs];
-        for (USHORT i = 0; i < nArgs; i++)
+        for (sal_uInt16 i = 0; i < nArgs; i++)
         {
             pDesc->ppDefArgNames[i] = new String(ScResId(2*(i+1)  ));
             pDesc->ppDefArgDescs[i] = new String(ScResId(2*(i+1)+1));
@@ -1190,7 +1190,7 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
 
 //------------------------------------------------------------------------
 
-USHORT ScFuncRes::GetNum()
+sal_uInt16 ScFuncRes::GetNum()
 {
     return ReadShortRes();
 }
@@ -1205,7 +1205,7 @@ private:
 public:
         ScResourcePublisher( const ScResId& rId ) : Resource( rId ) {}
         ~ScResourcePublisher() { FreeResource(); }
-    BOOL            IsAvailableRes( const ResId& rId ) const
+    sal_Bool            IsAvailableRes( const ResId& rId ) const
                         { return Resource::IsAvailableRes( rId ); }
 
 };
@@ -1217,17 +1217,17 @@ ScFunctionList::ScFunctionList() :
     ScFuncDesc*     pDesc   = NULL;
     xub_StrLen      nStrLen = 0;
     FuncCollection* pFuncColl;
-    USHORT i,j;
-    USHORT nDescBlock[] =
+    sal_uInt16 i,j;
+    sal_uInt16 nDescBlock[] =
     {
         RID_SC_FUNCTION_DESCRIPTIONS1,
         RID_SC_FUNCTION_DESCRIPTIONS2
     };
-    const USHORT nBlocks = sizeof(nDescBlock) / sizeof(USHORT);
+    const sal_uInt16 nBlocks = sizeof(nDescBlock) / sizeof(sal_uInt16);
 
     aFunctionList.Clear();
 
-    for ( USHORT k = 0; k < nBlocks; k++ )
+    for ( sal_uInt16 k = 0; k < nBlocks; k++ )
     {
         ::std::auto_ptr<ScResourcePublisher> pBlock( new ScResourcePublisher( ScResId( nDescBlock[k] ) ) );
         // Browse for all possible OpCodes. This is not the fastest method, but
@@ -1262,7 +1262,7 @@ ScFunctionList::ScFunctionList() :
         }
     }
 
-    USHORT nNextId = SC_OPCODE_LAST_OPCODE_ID + 1;      // FuncID for AddIn functions
+    sal_uInt16 nNextId = SC_OPCODE_LAST_OPCODE_ID + 1;      // FuncID for AddIn functions
 
     // Auswertung AddIn-Liste
     String aDefArgNameValue(RTL_CONSTASCII_STRINGPARAM("value"));
@@ -1283,7 +1283,7 @@ ScFunctionList::ScFunctionList() :
     {
         pDesc = new ScFuncDesc;
         FuncData *pAddInFuncData = (FuncData*)pFuncColl->At(i);
-        USHORT nArgs = pAddInFuncData->GetParamCount() - 1;
+        sal_uInt16 nArgs = pAddInFuncData->GetParamCount() - 1;
         pAddInFuncData->GetParamDesc( aArgName, aArgDesc, 0 );
           pDesc->nFIndex     = nNextId++;               //  ??? OpCode vergeben
           pDesc->nCategory   = ID_FUNCTION_GRP_ADDINS;
@@ -1428,11 +1428,11 @@ ScFuncDesc::~ScFuncDesc()
 
 void ScFuncDesc::Clear()
 {
-    USHORT nArgs = nArgCount;
+    sal_uInt16 nArgs = nArgCount;
     if (nArgs >= VAR_ARGS) nArgs -= VAR_ARGS-1;
     if (nArgs)
     {
-        for (USHORT i=0; i<nArgs; i++ )
+        for (sal_uInt16 i=0; i<nArgs; i++ )
         {
             delete ppDefArgNames[i];
             delete ppDefArgDescs[i];
@@ -1471,9 +1471,9 @@ String ScFuncDesc::GetParamList() const
     {
         if ( nArgCount < VAR_ARGS )
         {
-            USHORT nLastSuppressed = nArgCount;
-            USHORT nLastAdded = nArgCount;
-            for ( USHORT i=0; i<nArgCount; i++ )
+            sal_uInt16 nLastSuppressed = nArgCount;
+            sal_uInt16 nLastAdded = nArgCount;
+            for ( sal_uInt16 i=0; i<nArgCount; i++ )
             {
                 if (pDefArgFlags[i].bSuppress)
                     nLastSuppressed = i;
@@ -1496,8 +1496,8 @@ String ScFuncDesc::GetParamList() const
         }
         else
         {
-            USHORT nFix = nArgCount - VAR_ARGS;
-            for ( USHORT nArg = 0; nArg < nFix; nArg++ )
+            sal_uInt16 nFix = nArgCount - VAR_ARGS;
+            for ( sal_uInt16 nArg = 0; nArg < nFix; nArg++ )
             {
                 if (!pDefArgFlags[nArg].bSuppress)
                 {
@@ -1566,7 +1566,7 @@ String ScFuncDesc::GetSignature() const
 
         if ( nArgCount > 0 && aIter != aEnd )
         {
-            BOOL bLastArg = ( aIter->getLength() == 0 );
+            sal_Bool bLastArg = ( aIter->getLength() == 0 );
 
             while( aIter != aEnd && !bLastArg )
             {
@@ -1589,16 +1589,16 @@ String ScFuncDesc::GetSignature() const
 
 //------------------------------------------------------------------------
 
-USHORT ScFuncDesc::GetSuppressedArgCount() const
+sal_uInt16 ScFuncDesc::GetSuppressedArgCount() const
 {
     if (!bHasSuppressedArgs || !pDefArgFlags)
         return nArgCount;
 
-    USHORT nArgs = nArgCount;
+    sal_uInt16 nArgs = nArgCount;
     if (nArgs >= VAR_ARGS)
         nArgs -= VAR_ARGS - 1;
-    USHORT nCount = nArgs;
-    for (USHORT i=0; i < nArgs; ++i)
+    sal_uInt16 nCount = nArgs;
+    for (sal_uInt16 i=0; i < nArgs; ++i)
     {
         if (pDefArgFlags[i].bSuppress)
             --nCount;
@@ -1638,7 +1638,7 @@ xub_StrLen ScFuncDesc::getSuppressedArgumentCount() const
 }
 // -----------------------------------------------------------------------------
 //
-void ScFuncDesc::fillVisibleArgumentMapping(::std::vector<USHORT>& _rArguments) const
+void ScFuncDesc::fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const
 {
     if (!bHasSuppressedArgs || !pDefArgFlags)
     {
@@ -1647,10 +1647,10 @@ void ScFuncDesc::fillVisibleArgumentMapping(::std::vector<USHORT>& _rArguments) 
     }
 
     _rArguments.reserve( nArgCount);
-    USHORT nArgs = nArgCount;
+    sal_uInt16 nArgs = nArgCount;
     if (nArgs >= VAR_ARGS)
         nArgs -= VAR_ARGS - 1;
-    for (USHORT i=0; i < nArgs; ++i)
+    for (sal_uInt16 i=0; i < nArgs; ++i)
     {
         if (!pDefArgFlags[i].bSuppress)
             _rArguments.push_back(i);
@@ -1665,7 +1665,7 @@ void ScFuncDesc::initArgumentInfo()  const
     if ( bIncomplete && pFuncName )
     {
         ScUnoAddInCollection& rAddIns = *ScGlobal::GetAddInCollection();
-        String aIntName = rAddIns.FindFunction( *pFuncName, TRUE );         // pFuncName is upper-case
+        String aIntName = rAddIns.FindFunction( *pFuncName, sal_True );         // pFuncName is upper-case
 
         if ( aIntName.Len() )
         {
@@ -1678,7 +1678,7 @@ void ScFuncDesc::initArgumentInfo()  const
         if ( bIncomplete )
         {
             DBG_ERRORFILE( "couldn't initialize add-in function" );
-            const_cast<ScFuncDesc*>(this)->bIncomplete = FALSE;         // even if there was an error, don't try again
+            const_cast<ScFuncDesc*>(this)->bIncomplete = sal_False;         // even if there was an error, don't try again
         }
     }
 }
@@ -1723,19 +1723,19 @@ ScFunctionMgr::ScFunctionMgr()
         pCurCatList ( NULL )
 {
     DBG_ASSERT( pFuncList, "Funktionsliste nicht gefunden." );
-    ULONG       nCount  = pFuncList->GetCount();
+    sal_uLong       nCount  = pFuncList->GetCount();
     const ScFuncDesc*   pDesc;
     List*       pRootList;
-    ULONG       n;
+    sal_uLong       n;
 
-    for ( USHORT i=0; i<MAX_FUNCCAT; i++ )                  // Kategorie-Listen erstellen
+    for ( sal_uInt16 i=0; i<MAX_FUNCCAT; i++ )                  // Kategorie-Listen erstellen
         aCatLists[i] = new List;
 
     pRootList = aCatLists[0];                               // Gesamtliste ("Alle") erstellen
     CollatorWrapper* pCaseCollator = ScGlobal::GetCaseCollator();
     for ( n=0; n<nCount; n++ )
     {
-        ULONG nTmpCnt=0;
+        sal_uLong nTmpCnt=0;
         pDesc = pFuncList->GetFunction(n);
         for (nTmpCnt = 0; nTmpCnt < n; nTmpCnt++)
         {
@@ -1761,7 +1761,7 @@ ScFunctionMgr::ScFunctionMgr()
 
 ScFunctionMgr::~ScFunctionMgr()
 {
-    for (USHORT i = 0; i < MAX_FUNCCAT; i++)
+    for (sal_uInt16 i = 0; i < MAX_FUNCCAT; i++)
         delete aCatLists[i];
 //  delete pFuncList;       // Macht spaeter die App
 }
@@ -1780,7 +1780,7 @@ const ScFuncDesc* ScFunctionMgr::Get( const String& rFName ) const
 
 //------------------------------------------------------------------------
 
-const ScFuncDesc* ScFunctionMgr::Get( USHORT nFIndex ) const
+const ScFuncDesc* ScFunctionMgr::Get( sal_uInt16 nFIndex ) const
 {
     const ScFuncDesc*   pDesc;
     for (pDesc = First(0); pDesc; pDesc = Next())
@@ -1791,7 +1791,7 @@ const ScFuncDesc* ScFunctionMgr::Get( USHORT nFIndex ) const
 
 //------------------------------------------------------------------------
 
-const ScFuncDesc*   ScFunctionMgr::First( USHORT nCategory ) const
+const ScFuncDesc*   ScFunctionMgr::First( sal_uInt16 nCategory ) const
 {
     DBG_ASSERT( nCategory < MAX_FUNCCAT, "Unbekannte Kategorie" );
 
@@ -1840,12 +1840,12 @@ void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::
 #define LRU_MAX 10
 
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
-    USHORT nLRUFuncCount = Min( rAppOpt.GetLRUFuncListCount(), (USHORT)LRU_MAX );
-    USHORT* pLRUListIds = rAppOpt.GetLRUFuncList();
+    sal_uInt16 nLRUFuncCount = Min( rAppOpt.GetLRUFuncListCount(), (sal_uInt16)LRU_MAX );
+    sal_uInt16* pLRUListIds = rAppOpt.GetLRUFuncList();
 
     if ( pLRUListIds )
     {
-        for ( USHORT i=0; i<nLRUFuncCount; i++ )
+        for ( sal_uInt16 i=0; i<nLRUFuncCount; i++ )
             _rLastRUFunctions.push_back( Get( pLRUListIds[i] ) );
     }
 }
@@ -1859,7 +1859,7 @@ String ScFunctionMgr::GetCategoryName(sal_uInt32 _nCategoryNumber )
     } // if ( _nCategoryNumber >= SC_FUNCGROUP_COUNT )
 
     ::std::auto_ptr<ScResourcePublisher> pCategories( new ScResourcePublisher( ScResId( RID_FUNCTION_CATEGORIES ) ) );
-    return String(ScResId((USHORT)_nCategoryNumber));
+    return String(ScResId((sal_uInt16)_nCategoryNumber));
 }
 sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToken _eToken) const
 {

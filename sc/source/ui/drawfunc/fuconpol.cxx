@@ -73,12 +73,12 @@ FuConstPolygon::~FuConstPolygon()
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool __EXPORT FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     SdrViewEvent aVEvt;
     (void)pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
@@ -86,15 +86,15 @@ BOOL __EXPORT FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
     {
         // Texteingabe hier nicht zulassen
         aVEvt.eEvent = SDREVENT_BEGDRAGOBJ;
-        pView->EnableExtendedMouseEventDispatcher(FALSE);
+        pView->EnableExtendedMouseEventDispatcher(sal_False);
     }
     else
     {
-        pView->EnableExtendedMouseEventDispatcher(TRUE);
+        pView->EnableExtendedMouseEventDispatcher(sal_True);
     }
 
     if ( pView->MouseButtonDown(rMEvt, pWindow) )
-        bReturn = TRUE;
+        bReturn = sal_True;
 
     return bReturn;
 }
@@ -105,10 +105,10 @@ BOOL __EXPORT FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstPolygon::MouseMove(const MouseEvent& rMEvt)
+sal_Bool __EXPORT FuConstPolygon::MouseMove(const MouseEvent& rMEvt)
 {
     pView->MouseMove(rMEvt, pWindow);
-    BOOL bReturn = FuConstruct::MouseMove(rMEvt);
+    sal_Bool bReturn = FuConstruct::MouseMove(rMEvt);
     return bReturn;
 }
 
@@ -118,13 +118,13 @@ BOOL __EXPORT FuConstPolygon::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool __EXPORT FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    BOOL bReturn = FALSE;
-    BOOL bSimple = FALSE;
+    sal_Bool bReturn = sal_False;
+    sal_Bool bSimple = sal_False;
 
     SdrViewEvent aVEvt;
     (void)pView->PickAnything(rMEvt, SDRMOUSEBUTTONUP, aVEvt);
@@ -133,11 +133,11 @@ BOOL __EXPORT FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 
     if (aVEvt.eEvent == SDREVENT_ENDCREATE)
     {
-        bReturn = TRUE;
-        bSimple = TRUE;         // Doppelklick nicht weiterreichen
+        bReturn = sal_True;
+        bSimple = sal_True;         // Doppelklick nicht weiterreichen
     }
 
-    BOOL bParent;
+    sal_Bool bParent;
     if (bSimple)
         bParent = FuConstruct::SimpleMouseButtonUp(rMEvt);
     else
@@ -150,14 +150,14 @@ BOOL __EXPORT FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
 |* FALSE.
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstPolygon::KeyInput(const KeyEvent& rKEvt)
+sal_Bool __EXPORT FuConstPolygon::KeyInput(const KeyEvent& rKEvt)
 {
-    BOOL bReturn = FuConstruct::KeyInput(rKEvt);
+    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
 
     return(bReturn);
 }
@@ -170,7 +170,7 @@ BOOL __EXPORT FuConstPolygon::KeyInput(const KeyEvent& rKEvt)
 
 void FuConstPolygon::Activate()
 {
-    pView->EnableExtendedMouseEventDispatcher(TRUE);
+    pView->EnableExtendedMouseEventDispatcher(sal_True);
 
     SdrObjKind eKind;
 
@@ -221,7 +221,7 @@ void FuConstPolygon::Activate()
         break;
     }
 
-    pView->SetCurrentObj(sal::static_int_cast<UINT16>(eKind));
+    pView->SetCurrentObj(sal::static_int_cast<sal_uInt16>(eKind));
 
     pView->SetEditMode(SDREDITMODE_CREATE);
 
@@ -242,7 +242,7 @@ void FuConstPolygon::Deactivate()
 {
     pView->SetEditMode(SDREDITMODE_EDIT);
 
-    pView->EnableExtendedMouseEventDispatcher(FALSE);
+    pView->EnableExtendedMouseEventDispatcher(sal_False);
 
     FuConstruct::Deactivate();
 

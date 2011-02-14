@@ -194,15 +194,15 @@ public:
     void InitSpaceAdd();     // Creates pLLSpaceAdd if necessary
     void CreateSpaceAdd( const long nInit = 0 );
     inline void FinishSpaceAdd() { delete pLLSpaceAdd; pLLSpaceAdd = NULL; }
-    inline USHORT GetLLSpaceAddCount() const { return sal::static_int_cast< USHORT >(pLLSpaceAdd->size()); }
-    inline void SetLLSpaceAdd( long nNew, USHORT nIdx )
+    inline sal_uInt16 GetLLSpaceAddCount() const { return sal::static_int_cast< sal_uInt16 >(pLLSpaceAdd->size()); }
+    inline void SetLLSpaceAdd( long nNew, sal_uInt16 nIdx )
     {
         if ( nIdx == GetLLSpaceAddCount() )
             pLLSpaceAdd->push_back( nNew );
         else
             (*pLLSpaceAdd)[ nIdx ] = nNew;
     }
-    inline long GetLLSpaceAdd( USHORT nIdx ) { return (*pLLSpaceAdd)[ nIdx ]; }
+    inline long GetLLSpaceAdd( sal_uInt16 nIdx ) { return (*pLLSpaceAdd)[ nIdx ]; }
     inline void RemoveFirstLLSpaceAdd() { pLLSpaceAdd->erase( pLLSpaceAdd->begin() ); }
     inline std::vector<long>* GetpLLSpaceAdd() const { return pLLSpaceAdd; }
 

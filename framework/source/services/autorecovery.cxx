@@ -233,7 +233,7 @@ static const sal_Int32       GIVE_UP_RETRY                          =   1; // in
 // should be flushed an exception ... so the special error handler for this scenario is triggered
 // #define TRIGGER_FULL_DISC_CHECK
 
-// force "return FALSE" for the method impl_enoughDiscSpace().
+// force "return sal_False" for the method impl_enoughDiscSpace().
 // #define SIMULATE_FULL_DISC
 
 //-----------------------------------------------
@@ -927,7 +927,7 @@ void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent
     else
     if (aEvent.EventName.equals(EVENT_ON_UNLOAD))
     {
-        implts_deregisterDocument(xDocument, sal_True); // TRUE => stop listening for disposing() !
+        implts_deregisterDocument(xDocument, sal_True); // sal_True => stop listening for disposing() !
     }
 }
 
@@ -1022,7 +1022,7 @@ void SAL_CALL AutoRecovery::disposing(const css::lang::EventObject& aEvent)
     css::uno::Reference< css::frame::XModel > xDocument(aEvent.Source, css::uno::UNO_QUERY);
     if (xDocument.is())
     {
-        implts_deregisterDocument(xDocument, sal_False); // FALSE => dont call removeEventListener() .. because it's not needed here
+        implts_deregisterDocument(xDocument, sal_False); // sal_False => dont call removeEventListener() .. because it's not needed here
         return;
     }
 
@@ -1576,7 +1576,7 @@ void AutoRecovery::implts_updateTimer()
        )
         return;
 
-    ULONG nMilliSeconds = 0;
+    sal_uLong nMilliSeconds = 0;
     if (m_eTimerType == AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL)
     {
         nMilliSeconds = (m_nAutoSaveTimeIntervall*60000); // [min] => 60.000 ms
@@ -1910,7 +1910,7 @@ void AutoRecovery::implts_deregisterDocument(const css::uno::Reference< css::fra
 
     AutoRecovery::st_impl_removeFile(aInfo.OldTempURL);
     AutoRecovery::st_impl_removeFile(aInfo.NewTempURL);
-    implts_flushConfigItem(aInfo, sal_True); // TRUE => remove it from config
+    implts_flushConfigItem(aInfo, sal_True); // sal_True => remove it from config
 }
 
 //-----------------------------------------------
@@ -1951,7 +1951,7 @@ void AutoRecovery::implts_updateModifiedState(const css::uno::Reference< css::fr
     {
         AutoRecovery::TDocumentInfo& rInfo = *pIt;
 
-        // use TRUE as fallback ... so we recognize every document on EmergencySave/AutoRecovery!
+        // use sal_True as fallback ... so we recognize every document on EmergencySave/AutoRecovery!
         sal_Bool bModified = sal_True;
         css::uno::Reference< css::util::XModifiable > xModify(xDocument, css::uno::UNO_QUERY);
         if (xModify.is())
@@ -3301,7 +3301,7 @@ void AutoRecovery::implts_cleanUpWorkingEntry(const DispatchParams& aParams)
 
         AutoRecovery::st_impl_removeFile(rInfo.OldTempURL);
         AutoRecovery::st_impl_removeFile(rInfo.NewTempURL);
-        implts_flushConfigItem(rInfo, sal_True); // TRUE => remove it from xml config!
+        implts_flushConfigItem(rInfo, sal_True); // sal_True => remove it from xml config!
 
         m_lDocCache.erase(pIt);
         break; /// !!! pIt is not defined any longer ... further this function has finished it's work
@@ -3382,7 +3382,7 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
                     sal_Bool bRecoveryData = ((sal_Bool)(m_lDocCache.size()>0));
 
                     // exists session data ... => then we cant say, that these
-                    // data are valid for recovery. So we have to return FALSE then!
+                    // data are valid for recovery. So we have to return sal_False then!
                     if (bSessionData)
                         bRecoveryData = sal_False;
 

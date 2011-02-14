@@ -126,7 +126,7 @@ void lcl_initOutliner( SdrOutliner* pTargetOutliner, SdrOutliner* pSourceOutline
     //if( bInit )
     {
         pTargetOutliner->EraseVirtualDevice();
-        pTargetOutliner->SetUpdateMode(FALSE);
+        pTargetOutliner->SetUpdateMode(sal_False);
         pTargetOutliner->SetEditTextObjectPool( pSourceOutliner->GetEditTextObjectPool() );
         pTargetOutliner->SetDefTab( pSourceOutliner->GetDefTab() );
     }
@@ -140,7 +140,7 @@ void lcl_initOutliner( SdrOutliner* pTargetOutliner, SdrOutliner* pSourceOutline
     pTargetOutliner->SetDefaultLanguage( pSourceOutliner->GetDefaultLanguage() );
     pTargetOutliner->SetHyphenator( pSourceOutliner->GetHyphenator() );
 
-    USHORT nX, nY;
+    sal_uInt16 nX, nY;
     pSourceOutliner->GetGlobalCharStretching( nX, nY );
     pTargetOutliner->SetGlobalCharStretching( nX, nY );
 
@@ -234,8 +234,8 @@ void DrawViewWrapper::SetMarkHandles()
 SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
 {
     SdrObject* pRet = NULL;
-    //ULONG nOptions =SDRSEARCH_DEEP|SDRSEARCH_PASS2BOUND|SDRSEARCH_PASS3NEAREST;
-    ULONG nOptions = SDRSEARCH_DEEP | SDRSEARCH_TESTMARKABLE;
+    //sal_uLong nOptions =SDRSEARCH_DEEP|SDRSEARCH_PASS2BOUND|SDRSEARCH_PASS3NEAREST;
+    sal_uLong nOptions = SDRSEARCH_DEEP | SDRSEARCH_TESTMARKABLE;
 
     SdrPageView* pSdrPageView = this->GetPageView();
     this->SdrView::PickObj(rPnt, lcl_getHitTolerance( this->GetFirstOutputDevice() ), pRet, pSdrPageView, nOptions);

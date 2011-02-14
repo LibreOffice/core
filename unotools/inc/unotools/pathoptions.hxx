@@ -101,7 +101,7 @@ public:
     const String&   GetUIConfigPath() const;
     const String&   GetFingerprintPath() const;
 
-    BOOL            IsPathReadonly(Pathes ePath)const;
+    sal_Bool            IsPathReadonly(Pathes ePath)const;
     const String&   GetPath(Pathes ePath) const;
 
     // set the pathes

@@ -548,7 +548,7 @@ sal_Int32 SAL_CALL AccessibleTreeNode::getForeground (void)
 {
     ThrowIfDisposed();
     svtools::ColorConfig aColorConfig;
-    UINT32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
+    sal_uInt32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
     return static_cast<sal_Int32>(nColor);
 }
 
@@ -559,7 +559,7 @@ sal_Int32 SAL_CALL AccessibleTreeNode::getBackground (void)
     throw (RuntimeException)
 {
     ThrowIfDisposed();
-    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
 

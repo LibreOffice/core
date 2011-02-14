@@ -256,8 +256,8 @@ class FWE_DLLPUBLIC PreventDuplicateInteraction : private ThreadHelpBase2
                         - the interaction itself, so it can be analyzed further
 
             @return     [boolean]
-                        TRUE if the queried interaction could be found.
-                        FALSE otherwise.
+                        sal_True if the queried interaction could be found.
+                        sal_False otherwise.
 
             @threadsafe yes
         */

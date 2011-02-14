@@ -50,7 +50,7 @@ public:
 
     virtual void EndElement();
 
-    virtual BOOL IsTransient() const;
+    virtual sal_Bool IsTransient() const;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -71,7 +71,7 @@ public:
 
     virtual void EndElement();
 
-    virtual BOOL IsTransient() const;
+    virtual sal_Bool IsTransient() const;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ public:
 
     virtual void EndElement();
 
-    virtual BOOL IsTransient() const;
+    virtual sal_Bool IsTransient() const;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -119,7 +119,7 @@ public:
 
     virtual void EndElement();
 
-    virtual BOOL IsTransient() const;
+    virtual sal_Bool IsTransient() const;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -140,7 +140,7 @@ public:
 
     virtual void EndElement();
 
-    virtual BOOL IsTransient() const;
+    virtual sal_Bool IsTransient() const;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -161,7 +161,7 @@ public:
 
     virtual void EndElement();
 
-    virtual BOOL IsTransient() const;
+    virtual sal_Bool IsTransient() const;
 };
 
 #endif  // _XMLOFF_FILLSTYLECONTEXTS_HXX_

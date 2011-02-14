@@ -37,7 +37,7 @@ class SC_DLLPUBLIC ScUserListData : public ScDataObject
 {
 friend class ScUserList;
     String  aStr;
-    USHORT  nTokenCount;
+    sal_uInt16  nTokenCount;
     String* pSubStrings;
     String* pUpperSub;
 
@@ -52,9 +52,9 @@ public:
 
     const   String&         GetString() const { return aStr; }
             void            SetString( const String& rStr);
-            USHORT          GetSubCount() const;
-            BOOL            GetSubIndex(const String& rSubStr, USHORT& rIndex) const;
-            String          GetSubStr(USHORT nIndex) const;
+            sal_uInt16          GetSubCount() const;
+            sal_Bool            GetSubIndex(const String& rSubStr, sal_uInt16& rIndex) const;
+            String          GetSubStr(sal_uInt16 nIndex) const;
             StringCompare   Compare(const String& rSubStr1, const String& rSubStr2) const;
             StringCompare   ICompare(const String& rSubStr1, const String& rSubStr2) const;
 };
@@ -63,28 +63,28 @@ public:
 class SC_DLLPUBLIC ScUserList : public ScCollection
 {
 public:
-                    ScUserList( USHORT nLim = 4, USHORT nDel = 4);
+                    ScUserList( sal_uInt16 nLim = 4, sal_uInt16 nDel = 4);
                     ScUserList( const ScUserList& rUserList ) : ScCollection ( rUserList ) {}
 
     virtual ScDataObject*       Clone() const;
 
             ScUserListData* GetData( const String& rSubStr ) const;
             /// If the list in rStr is already inserted
-            BOOL            HasEntry( const String& rStr ) const;
+            sal_Bool            HasEntry( const String& rStr ) const;
 
-    inline  ScUserListData* operator[]( const USHORT nIndex) const;
+    inline  ScUserListData* operator[]( const sal_uInt16 nIndex) const;
     inline  ScUserList&     operator= ( const ScUserList& r );
-            BOOL            operator==( const ScUserList& r ) const;
-    inline  BOOL            operator!=( const ScUserList& r ) const;
+            sal_Bool            operator==( const ScUserList& r ) const;
+    inline  sal_Bool            operator!=( const ScUserList& r ) const;
 };
 
 inline  ScUserList& ScUserList::operator=( const ScUserList& r )
     { return (ScUserList&)ScCollection::operator=( r ); }
 
-inline ScUserListData* ScUserList::operator[]( const USHORT nIndex) const
+inline ScUserListData* ScUserList::operator[]( const sal_uInt16 nIndex) const
     { return (ScUserListData*)At(nIndex); }
 
-inline BOOL ScUserList::operator!=( const ScUserList& r ) const
+inline sal_Bool ScUserList::operator!=( const ScUserList& r ) const
     { return !operator==( r ); }
 
 #endif

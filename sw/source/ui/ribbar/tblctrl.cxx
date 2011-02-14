@@ -51,8 +51,8 @@ SFX_IMPL_TOOLBOX_CONTROL( SwTableOptimizeCtrl, SfxUInt16Item );
 
 
 SwTableOptimizeCtrl::SwTableOptimizeCtrl(
-    USHORT nSlotId,
-    USHORT nId,
+    sal_uInt16 nSlotId,
+    sal_uInt16 nId,
     ToolBox& rTbx ) :
         SfxToolBoxControl( nSlotId, nId, rTbx )
 {

@@ -101,7 +101,7 @@ void SwFEShell::EndAllActionAndCall()
 #*  Update      :  MA 02. May. 95
 #***********************************************************************/
 
-Point SwFEShell::GetCntntPos( const Point& rPoint, BOOL bNext ) const
+Point SwFEShell::GetCntntPos( const Point& rPoint, sal_Bool bNext ) const
 {
     SET_CURR_SHELL( (ViewShell*)this );
     return GetLayout()->GetNextPrevCntntPos( rPoint, bNext );
@@ -133,10 +133,10 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
     if( !pFrm )
         return GetLayout()->Frm();
 
-    BOOL  bFrm  = TRUE;
+    sal_Bool  bFrm  = sal_True;
     switch ( eType )
     {
-        case RECT_PAGE_PRT:         bFrm = FALSE; /* no break */
+        case RECT_PAGE_PRT:         bFrm = sal_False; /* no break */
         case RECT_PAGE :            pFrm = pFrm->FindPageFrm();
                                     break;
 
@@ -145,7 +145,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
                                     pFrm->Calc();
                                     break;
 
-        case RECT_FLY_PRT_EMBEDDED: bFrm = FALSE; /* no break */
+        case RECT_FLY_PRT_EMBEDDED: bFrm = sal_False; /* no break */
         case RECT_FLY_EMBEDDED:     pFrm = xObj.is() ? FindFlyFrm( xObj )
                                                 : pFrm->IsFlyFrm()
                                                     ? pFrm
@@ -156,22 +156,22 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
         case RECT_OUTTABSECTION :   if( pFrm->IsInTab() )
                                         pFrm = pFrm->FindTabFrm();
                                     else {
-                                        ASSERT( FALSE, "Missing Table" );
+                                        ASSERT( sal_False, "Missing Table" );
                                     }
                                     /* KEIN BREAK */
         case RECT_SECTION_PRT:
         case RECT_SECTION:          if( pFrm->IsInSct() )
                                         pFrm = pFrm->FindSctFrm();
                                     else {
-                                        ASSERT( FALSE, "Missing section" );
+                                        ASSERT( sal_False, "Missing section" );
                                     }
 
                                     if( RECT_OUTTABSECTION_PRT == eType ||
                                         RECT_SECTION_PRT == eType )
-                                        bFrm = FALSE;
+                                        bFrm = sal_False;
                                     break;
 
-        case RECT_HEADERFOOTER_PRT: bFrm = FALSE; /* no break */
+        case RECT_HEADERFOOTER_PRT: bFrm = sal_False; /* no break */
         case RECT_HEADERFOOTER:     if( 0 == (pFrm = pFrm->FindFooterOrHeader()) )
                                         return GetLayout()->Frm();
                                     break;
@@ -184,7 +184,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
 }
 
 
-USHORT SwFEShell::GetPageNumber( const Point &rPoint ) const
+sal_uInt16 SwFEShell::GetPageNumber( const Point &rPoint ) const
 {
     const SwFrm *pPage = GetLayout()->Lower();
     while ( pPage && !pPage->Frm().IsInside( rPoint ) )
@@ -196,13 +196,13 @@ USHORT SwFEShell::GetPageNumber( const Point &rPoint ) const
 }
 
 
-BOOL SwFEShell::GetPageNumber( long nYPos, BOOL bAtCrsrPos, USHORT& rPhyNum, USHORT& rVirtNum, String &rDisplay) const
+sal_Bool SwFEShell::GetPageNumber( long nYPos, sal_Bool bAtCrsrPos, sal_uInt16& rPhyNum, sal_uInt16& rVirtNum, String &rDisplay) const
 {
     const SwFrm *pPage;
 
     if ( bAtCrsrPos )                   //Seite vom Crsr besorgen
     {
-        pPage = GetCurrFrm( FALSE );
+        pPage = GetCurrFrm( sal_False );
         if ( pPage )
             pPage = pPage->FindPageFrm();
     }
@@ -241,7 +241,7 @@ BOOL SwFEShell::GetPageNumber( long nYPos, BOOL bAtCrsrPos, USHORT& rPhyNum, USH
 
 bool SwFEShell::IsDirectlyInSection() const
 {
-    SwFrm* pFrm = GetCurrFrm( FALSE );
+    SwFrm* pFrm = GetCurrFrm( sal_False );
     return pFrm && pFrm->GetUpper() && pFrm->GetUpper()->IsSctFrm();
 }
 
@@ -254,9 +254,9 @@ bool SwFEShell::IsDirectlyInSection() const
 |*
 *************************************************************************/
 
-USHORT SwFEShell::GetFrmType( const Point *pPt, BOOL bStopAtFly ) const
+sal_uInt16 SwFEShell::GetFrmType( const Point *pPt, sal_Bool bStopAtFly ) const
 {
-    USHORT nReturn = FRMTYPE_NONE;
+    sal_uInt16 nReturn = FRMTYPE_NONE;
     const SwFrm *pFrm;
     if ( pPt )
     {
@@ -267,7 +267,7 @@ USHORT SwFEShell::GetFrmType( const Point *pPt, BOOL bStopAtFly ) const
         pFrm = pNd->GetFrm( pPt );
     }
     else
-        pFrm = GetCurrFrm( FALSE );
+        pFrm = GetCurrFrm( sal_False );
     while ( pFrm )
     {
         switch ( pFrm->GetType() )
@@ -330,7 +330,7 @@ USHORT SwFEShell::GetFrmType( const Point *pPt, BOOL bStopAtFly ) const
 |*
 *************************************************************************/
 
-void SwFEShell::ShGetFcs( BOOL bUpdate )
+void SwFEShell::ShGetFcs( sal_Bool bUpdate )
 {
     ::SetShell( this );
     SwCrsrShell::ShGetFcs( bUpdate );
@@ -365,7 +365,7 @@ void SwFEShell::ShLooseFcs()
 |*
 *************************************************************************/
 
-USHORT SwFEShell::GetPhyPageNum()
+sal_uInt16 SwFEShell::GetPhyPageNum()
 {
     SwFrm *pFrm = GetCurrFrm();
     if ( pFrm )
@@ -373,7 +373,7 @@ USHORT SwFEShell::GetPhyPageNum()
     return 0;
 }
 
-USHORT SwFEShell::GetVirtPageNum( const BOOL bCalcFrm )
+sal_uInt16 SwFEShell::GetVirtPageNum( const sal_Bool bCalcFrm )
 {
     SwFrm *pFrm = GetCurrFrm( bCalcFrm );
     if ( pFrm )
@@ -386,14 +386,14 @@ USHORT SwFEShell::GetVirtPageNum( const BOOL bCalcFrm )
 |*  void lcl_SetAPageOffset()
 |*  void SwFEShell::SetNewPageOffset()
 |*  void SwFEShell::SetPageOffset()
-|*  USHORT SwFEShell::GetPageOffset() const
+|*  sal_uInt16 SwFEShell::GetPageOffset() const
 |*
 |*  Ersterstellung      OK 07.07.93 08:20
 |*  Letzte Aenderung    MA 30. Mar. 95
 |*
 *************************************************************************/
 
-void lcl_SetAPageOffset( USHORT nOffset, SwPageFrm* pPage, SwFEShell* pThis )
+void lcl_SetAPageOffset( sal_uInt16 nOffset, SwPageFrm* pPage, SwFEShell* pThis )
 {
     pThis->StartAllAction();
     ASSERT( pPage->FindFirstBodyCntnt(),
@@ -402,7 +402,7 @@ void lcl_SetAPageOffset( USHORT nOffset, SwPageFrm* pPage, SwFEShell* pThis )
     SwFmtPageDesc aDesc( pPage->GetPageDesc() );
     aDesc.SetNumOffset( nOffset );
 
-    SwFrm *pFrm = pThis->GetCurrFrm( FALSE );
+    SwFrm *pFrm = pThis->GetCurrFrm( sal_False );
     if ( pFrm->IsInTab() )
         pThis->GetDoc()->SetAttr( aDesc, *pFrm->FindTabFrm()->GetFmt() );
     else
@@ -413,16 +413,16 @@ void lcl_SetAPageOffset( USHORT nOffset, SwPageFrm* pPage, SwFEShell* pThis )
     pThis->EndAllAction();
 }
 
-void SwFEShell::SetNewPageOffset( USHORT nOffset )
+void SwFEShell::SetNewPageOffset( sal_uInt16 nOffset )
 {
-    GetLayout()->SetVirtPageNum( TRUE );
-    const SwPageFrm *pPage = GetCurrFrm( FALSE )->FindPageFrm();
+    GetLayout()->SetVirtPageNum( sal_True );
+    const SwPageFrm *pPage = GetCurrFrm( sal_False )->FindPageFrm();
     lcl_SetAPageOffset( nOffset, (SwPageFrm*)pPage, this );
 }
 
-void SwFEShell::SetPageOffset( USHORT nOffset )
+void SwFEShell::SetPageOffset( sal_uInt16 nOffset )
 {
-    const SwPageFrm *pPage = GetCurrFrm( FALSE )->FindPageFrm();
+    const SwPageFrm *pPage = GetCurrFrm( sal_False )->FindPageFrm();
     const SwRootFrm* pLayout = GetLayout();
     while ( pPage )
     {
@@ -434,7 +434,7 @@ void SwFEShell::SetPageOffset( USHORT nOffset )
             const SwFmtPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
             if ( rPgDesc.GetNumOffset() )
             {
-                pLayout->SetVirtPageNum( TRUE );
+                pLayout->SetVirtPageNum( sal_True );
                 lcl_SetAPageOffset( nOffset, (SwPageFrm*)pPage, this );
                 break;
             }
@@ -443,7 +443,7 @@ void SwFEShell::SetPageOffset( USHORT nOffset )
     }
 }
 
-USHORT SwFEShell::GetPageOffset() const
+sal_uInt16 SwFEShell::GetPageOffset() const
 {
     const SwPageFrm *pPage = GetCurrFrm()->FindPageFrm();
     while ( pPage )
@@ -453,7 +453,7 @@ USHORT SwFEShell::GetPageOffset() const
         {
             if ( pFlow->IsInTab() )
                 pFlow = pFlow->FindTabFrm();
-            const USHORT nOffset = pFlow->GetAttrSet()->GetPageDesc().GetNumOffset();
+            const sal_uInt16 nOffset = pFlow->GetAttrSet()->GetPageDesc().GetNumOffset();
             if ( nOffset )
                 return nOffset;
         }
@@ -473,18 +473,18 @@ USHORT SwFEShell::GetPageOffset() const
 
 void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
                              const String& rNumberSeparator,
-                             const BOOL bBefore, const USHORT nId,
+                             const sal_Bool bBefore, const sal_uInt16 nId,
                              const String& rCharacterStyle,
-                             const BOOL bCpyBrd )
+                             const sal_Bool bCpyBrd )
 {
     //NodeIndex der CrsrPosition besorgen, den Rest kann das Dokument
     //selbst erledigen.
-    SwCntntFrm *pCnt = LTYPE_DRAW==eType ? 0 : GetCurrFrm( FALSE );
+    SwCntntFrm *pCnt = LTYPE_DRAW==eType ? 0 : GetCurrFrm( sal_False );
     if( LTYPE_DRAW==eType || pCnt )
     {
         StartAllAction();
 
-        ULONG nIdx = 0;
+        sal_uLong nIdx = 0;
         SwFlyFrmFmt* pFlyFmt = 0;
         switch( eType )
         {
@@ -518,7 +518,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
                 // local list to perform the corresponding action for each object
                 std::vector<SdrObject*> aDrawObjs;
                 {
-                    for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
+                    for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
                     {
                         SdrObject* pDrawObj = rMrkList.GetMark(i)->GetMarkedSdrObj();
                         aDrawObjs.push_back( pDrawObj );
@@ -554,7 +554,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
         SwFlyFrm* pFrm;
         const Point aPt( GetCrsrDocPos() );
         if( pFlyFmt && 0 != ( pFrm = pFlyFmt->GetFrm( &aPt )))
-            SelectFlyFrm( *pFrm, TRUE );
+            SelectFlyFrm( *pFrm, sal_True );
 
         EndAllActionAndCall();
     }
@@ -568,19 +568,19 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
 #*  Update      :  ??
 #***********************************************************************/
 
-BOOL SwFEShell::Sort(const SwSortOptions& rOpt)
+sal_Bool SwFEShell::Sort(const SwSortOptions& rOpt)
 {
     if( !HasSelection() )
-        return FALSE;
+        return sal_False;
 
     SET_CURR_SHELL( this );
-    BOOL bRet;
+    sal_Bool bRet;
     StartAllAction();
     if(IsTableMode())
     {
         // Tabelle sortieren
         // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
-        SwFrm *pFrm = GetCurrFrm( FALSE );
+        SwFrm *pFrm = GetCurrFrm( sal_False );
         ASSERT( pFrm->FindTabFrm(), "Crsr nicht in Tabelle." );
 
         // lasse ueber das Layout die Boxen suchen
@@ -611,7 +611,7 @@ BOOL SwFEShell::Sort(const SwSortOptions& rOpt)
             SwPosition* pEnd   = pPam->End();
 
             SwNodeIndex aPrevIdx( pStart->nNode, -1 );
-            ULONG nOffset = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
+            sal_uLong nOffset = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
             xub_StrLen nCntStt  = pStart->nContent.GetIndex();
 
             // Das Sortieren
@@ -647,10 +647,10 @@ BOOL SwFEShell::Sort(const SwSortOptions& rOpt)
 |
 |*************************************************************************/
 
-USHORT SwFEShell::_GetCurColNum( const SwFrm *pFrm,
+sal_uInt16 SwFEShell::_GetCurColNum( const SwFrm *pFrm,
                                 SwGetCurColNumPara* pPara ) const
 {
-    USHORT nRet = 0;
+    sal_uInt16 nRet = 0;
     while ( pFrm )
     {
         pFrm = pFrm->GetUpper();
@@ -690,15 +690,15 @@ USHORT SwFEShell::_GetCurColNum( const SwFrm *pFrm,
     return nRet;
 }
 
-USHORT SwFEShell::GetCurColNum( SwGetCurColNumPara* pPara ) const
+sal_uInt16 SwFEShell::GetCurColNum( SwGetCurColNumPara* pPara ) const
 {
     ASSERT( GetCurrFrm(), "Crsr geparkt?" );
     return _GetCurColNum( GetCurrFrm(), pPara );
 }
 
-USHORT SwFEShell::GetCurOutColNum( SwGetCurColNumPara* pPara ) const
+sal_uInt16 SwFEShell::GetCurOutColNum( SwGetCurColNumPara* pPara ) const
 {
-    USHORT nRet = 0;
+    sal_uInt16 nRet = 0;
     SwFrm* pFrm = GetCurrFrm();
     ASSERT( pFrm, "Crsr geparkt?" );
     if( pFrm )
@@ -714,13 +714,13 @@ USHORT SwFEShell::GetCurOutColNum( SwGetCurColNumPara* pPara ) const
 
 SwFEShell::SwFEShell( SwDoc& rDoc, Window *pWindow, const SwViewOption *pOptions )
     : SwEditShell( rDoc, pWindow, pOptions ),
-    pChainFrom( 0 ), pChainTo( 0 ), bCheckForOLEInCaption( FALSE )
+    pChainFrom( 0 ), pChainTo( 0 ), bCheckForOLEInCaption( sal_False )
 {
 }
 
 SwFEShell::SwFEShell( SwEditShell& rShell, Window *pWindow )
     : SwEditShell( rShell, pWindow ),
-    pChainFrom( 0 ), pChainTo( 0 ), bCheckForOLEInCaption( FALSE )
+    pChainFrom( 0 ), pChainTo( 0 ), bCheckForOLEInCaption( sal_False )
 {
 }
 
@@ -772,8 +772,8 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
     _bMirror = _bMirror && !pPage->OnRightPage();
 
     Point aPos;
-    BOOL bVertic = FALSE;
-    BOOL bRTL = FALSE;
+    sal_Bool bVertic = sal_False;
+    sal_Bool bRTL = sal_False;
 
     if ((FLY_AT_PAGE == _nAnchorId) || (FLY_AT_FLY == _nAnchorId)) // LAYER_IMPL
     {
@@ -800,7 +800,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
 
         if( bVert )
         {
-            bVertic = TRUE;
+            bVertic = sal_True;
             _bMirror = false; // no mirroring in vertical environment
             switch ( _eHoriRelOrient )
             {
@@ -1100,7 +1100,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                                          0;
         if( bVert )
         {
-            bVertic = TRUE;
+            bVertic = sal_True;
             _bMirror = false;
 
             switch ( _eHoriRelOrient )
@@ -1239,10 +1239,10 @@ Size SwFEShell::GetGraphicDefaultSize() const
 /* -----------------------------12.08.2002 12:51------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwFEShell::IsFrmVertical(BOOL bEnvironment, BOOL& bRTL) const
+sal_Bool SwFEShell::IsFrmVertical(sal_Bool bEnvironment, sal_Bool& bRTL) const
 {
-    BOOL bVert = FALSE;
-    bRTL = FALSE;
+    sal_Bool bVert = sal_False;
+    bRTL = sal_False;
 
     if ( Imp()->HasDrawView() )
     {

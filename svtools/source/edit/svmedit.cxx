@@ -65,11 +65,11 @@ private:
     ExtTextEngine*  mpExtTextEngine;
     ExtTextView*    mpExtTextView;
 
-    BOOL            mbInMBDown;
-    BOOL            mbFocusSelectionHide;
-    BOOL            mbIgnoreTab;
-    BOOL            mbActivePopup;
-    BOOL            mbSelectOnTab;
+    sal_Bool            mbInMBDown;
+    sal_Bool            mbFocusSelectionHide;
+    sal_Bool            mbIgnoreTab;
+    sal_Bool            mbActivePopup;
+    sal_Bool            mbSelectOnTab;
 
 public:
                     TextWindow( Window* pParent );
@@ -91,17 +91,17 @@ public:
     virtual void    GetFocus();
     virtual void    LoseFocus();
 
-    BOOL            IsAutoFocusHide() const { return mbFocusSelectionHide; }
-    void            SetAutoFocusHide( BOOL bAutoHide ) { mbFocusSelectionHide = bAutoHide; }
+    sal_Bool            IsAutoFocusHide() const { return mbFocusSelectionHide; }
+    void            SetAutoFocusHide( sal_Bool bAutoHide ) { mbFocusSelectionHide = bAutoHide; }
 
-    BOOL            IsIgnoreTab() const { return mbIgnoreTab; }
-    void            SetIgnoreTab( BOOL bIgnore ) { mbIgnoreTab = bIgnore; }
+    sal_Bool            IsIgnoreTab() const { return mbIgnoreTab; }
+    void            SetIgnoreTab( sal_Bool bIgnore ) { mbIgnoreTab = bIgnore; }
 
     void            DisableSelectionOnFocus() {mbSelectOnTab = sal_False;}
 
     virtual
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-    GetComponentInterface(BOOL bCreate = TRUE);
+    GetComponentInterface(sal_Bool bCreate = sal_True);
 };
 
 
@@ -131,17 +131,17 @@ public:
                 ImpSvMEdit( MultiLineEdit* pSvMultiLineEdit, WinBits nWinStyle );
                 ~ImpSvMEdit();
 
-    void        SetModified( BOOL bMod );
-    BOOL        IsModified() const;
+    void        SetModified( sal_Bool bMod );
+    sal_Bool        IsModified() const;
 
-    void        SetReadOnly( BOOL bRdOnly );
-    BOOL        IsReadOnly() const;
+    void        SetReadOnly( sal_Bool bRdOnly );
+    sal_Bool        IsReadOnly() const;
 
     void        SetMaxTextLen( xub_StrLen nLen );
     xub_StrLen  GetMaxTextLen() const;
 
-    void        SetInsertMode( BOOL bInsert );
-    BOOL        IsInsertMode() const;
+    void        SetInsertMode( sal_Bool bInsert );
+    sal_Bool        IsInsertMode() const;
 
     void        InsertText( const String& rStr );
     String      GetSelected() const;
@@ -163,13 +163,13 @@ public:
     void        Resize();
     void        GetFocus();
 
-    BOOL        HandleCommand( const CommandEvent& rCEvt );
+    sal_Bool        HandleCommand( const CommandEvent& rCEvt );
 
-    void        Enable( BOOL bEnable );
+    void        Enable( sal_Bool bEnable );
 
     Size        CalcMinimumSize() const;
-    Size        CalcSize( USHORT nColumns, USHORT nLines ) const;
-    void        GetMaxVisColumnsAndLines( USHORT& rnCols, USHORT& rnLines ) const;
+    Size        CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
+    void        GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 
     void        SetAlign( WinBits nWinStyle );
 
@@ -197,27 +197,27 @@ ImpSvMEdit::ImpSvMEdit( MultiLineEdit* pEdt, WinBits nWinStyle )
 
 void ImpSvMEdit::ImpUpdateSrollBarVis( WinBits nWinStyle )
 {
-    const BOOL bHaveVScroll = (NULL != mpVScrollBar);
-    const BOOL bHaveHScroll = (NULL != mpHScrollBar);
-    const BOOL bHaveScrollBox = (NULL != mpScrollBox);
+    const sal_Bool bHaveVScroll = (NULL != mpVScrollBar);
+    const sal_Bool bHaveHScroll = (NULL != mpHScrollBar);
+    const sal_Bool bHaveScrollBox = (NULL != mpScrollBox);
 
-          BOOL bNeedVScroll = ( nWinStyle & WB_VSCROLL ) == WB_VSCROLL;
-    const BOOL bNeedHScroll = ( nWinStyle & WB_HSCROLL ) == WB_HSCROLL;
+          sal_Bool bNeedVScroll = ( nWinStyle & WB_VSCROLL ) == WB_VSCROLL;
+    const sal_Bool bNeedHScroll = ( nWinStyle & WB_HSCROLL ) == WB_HSCROLL;
 
-    const BOOL bAutoVScroll = ( nWinStyle & WB_AUTOVSCROLL ) == WB_AUTOVSCROLL;
+    const sal_Bool bAutoVScroll = ( nWinStyle & WB_AUTOVSCROLL ) == WB_AUTOVSCROLL;
     if ( !bNeedVScroll && bAutoVScroll )
     {
         TextEngine& rEngine( *mpTextWindow->GetTextEngine() );
-        ULONG nOverallTextHeight(0);
-        for ( ULONG i=0; i<rEngine.GetParagraphCount(); ++i )
+        sal_uLong nOverallTextHeight(0);
+        for ( sal_uLong i=0; i<rEngine.GetParagraphCount(); ++i )
             nOverallTextHeight += rEngine.GetTextHeight( i );
-        if ( nOverallTextHeight > (ULONG)mpTextWindow->GetOutputSizePixel().Height() )
+        if ( nOverallTextHeight > (sal_uLong)mpTextWindow->GetOutputSizePixel().Height() )
             bNeedVScroll = true;
     }
 
-    const BOOL bNeedScrollBox = bNeedVScroll && bNeedHScroll;
+    const sal_Bool bNeedScrollBox = bNeedVScroll && bNeedHScroll;
 
-    BOOL bScrollbarsChanged = false;
+    sal_Bool bScrollbarsChanged = false;
     if ( bHaveVScroll != bNeedVScroll )
     {
         delete mpVScrollBar;
@@ -268,22 +268,22 @@ void ImpSvMEdit::InitFromStyle( WinBits nWinStyle )
     SetAlign( nWinStyle );
 
     if ( nWinStyle & WB_NOHIDESELECTION )
-        mpTextWindow->SetAutoFocusHide( FALSE );
+        mpTextWindow->SetAutoFocusHide( sal_False );
     else
-        mpTextWindow->SetAutoFocusHide( TRUE );
+        mpTextWindow->SetAutoFocusHide( sal_True );
 
     if ( nWinStyle & WB_READONLY )
-        mpTextWindow->GetTextView()->SetReadOnly( TRUE );
+        mpTextWindow->GetTextView()->SetReadOnly( sal_True );
     else
-        mpTextWindow->GetTextView()->SetReadOnly( FALSE );
+        mpTextWindow->GetTextView()->SetReadOnly( sal_False );
 
     if ( nWinStyle & WB_IGNORETAB )
     {
-        mpTextWindow->SetIgnoreTab( TRUE );
+        mpTextWindow->SetIgnoreTab( sal_True );
     }
     else
     {
-        mpTextWindow->SetIgnoreTab( FALSE );
+        mpTextWindow->SetIgnoreTab( sal_False );
         // #103667# MultiLineEdit has the flag, but focusable window also needs this flag
         WinBits nStyle = mpTextWindow->GetStyle();
         nStyle |= WINDOW_DLGCTRL_MOD1TAB;
@@ -304,14 +304,14 @@ void ImpSvMEdit::ImpSetScrollBarRanges()
 {
     if ( mpVScrollBar )
     {
-        ULONG nTextHeight = mpTextWindow->GetTextEngine()->GetTextHeight();
+        sal_uLong nTextHeight = mpTextWindow->GetTextEngine()->GetTextHeight();
         mpVScrollBar->SetRange( Range( 0, (long)nTextHeight-1 ) );
     }
     if ( mpHScrollBar )
     {
-//      ULONG nTextWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
+//      sal_uLong nTextWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
         // Es gibt kein Notify bei Breiten-Aenderung...
-//      ULONG nW = Max( (ULONG)mpTextWindow->GetOutputSizePixel().Width()*5, (ULONG)nTextWidth );
+//      sal_uLong nW = Max( (sal_uLong)mpTextWindow->GetOutputSizePixel().Width()*5, (sal_uLong)nTextWidth );
 //      mpHScrollBar->SetRange( Range( 0, (long)nW ) );
         mpHScrollBar->SetRange( Range( 0, (long)mnTextWidth-1 ) );
     }
@@ -364,7 +364,7 @@ IMPL_LINK( ImpSvMEdit, ScrollHdl, ScrollBar*, pCurScrollBar )
         nDiffX = mpTextWindow->GetTextView()->GetStartDocPos().X() - pCurScrollBar->GetThumbPos();
 
     mpTextWindow->GetTextView()->Scroll( nDiffX, nDiffY );
-    // mpTextWindow->GetTextView()->ShowCursor( FALSE, TRUE );
+    // mpTextWindow->GetTextView()->ShowCursor( sal_False, sal_True );
 
     return 0;
 }
@@ -378,7 +378,7 @@ IMPL_LINK( ImpSvMEdit, ScrollHdl, ScrollBar*, pCurScrollBar )
 
 void ImpSvMEdit::SetAlign( WinBits nWinStyle )
 {
-    BOOL bRTL = Application::GetSettings().GetLayoutRTL();
+    sal_Bool bRTL = Application::GetSettings().GetLayoutRTL();
     mpTextWindow->GetTextEngine()->SetRightToLeft( bRTL );
 
     if ( nWinStyle & WB_CENTER )
@@ -395,28 +395,28 @@ void ImpSvMEdit::SetTextWindowOffset( const Point& rOffset )
     Resize();
 }
 
-void ImpSvMEdit::SetModified( BOOL bMod )
+void ImpSvMEdit::SetModified( sal_Bool bMod )
 {
     mpTextWindow->GetTextEngine()->SetModified( bMod );
 }
 
-BOOL ImpSvMEdit::IsModified() const
+sal_Bool ImpSvMEdit::IsModified() const
 {
     return mpTextWindow->GetTextEngine()->IsModified();
 }
 
-void ImpSvMEdit::SetInsertMode( BOOL bInsert )
+void ImpSvMEdit::SetInsertMode( sal_Bool bInsert )
 {
     mpTextWindow->GetTextView()->SetInsertMode( bInsert );
 }
 
-void ImpSvMEdit::SetReadOnly( BOOL bRdOnly )
+void ImpSvMEdit::SetReadOnly( sal_Bool bRdOnly )
 {
     mpTextWindow->GetTextView()->SetReadOnly( bRdOnly );
     // Farbe anpassen ???????????????????????????
 }
 
-BOOL ImpSvMEdit::IsReadOnly() const
+sal_Bool ImpSvMEdit::IsReadOnly() const
 {
     return mpTextWindow->GetTextView()->IsReadOnly();
 }
@@ -533,10 +533,10 @@ void ImpSvMEdit::Paste()
 
 void ImpSvMEdit::SetText( const String& rStr )
 {
-    BOOL bWasModified = mpTextWindow->GetTextEngine()->IsModified();
+    sal_Bool bWasModified = mpTextWindow->GetTextEngine()->IsModified();
     mpTextWindow->GetTextEngine()->SetText( rStr );
     if ( !bWasModified )
-        mpTextWindow->GetTextEngine()->SetModified( FALSE );
+        mpTextWindow->GetTextEngine()->SetModified( sal_False );
 
     mpTextWindow->GetTextView()->SetSelection( TextSelection() );
 
@@ -593,7 +593,7 @@ void ImpSvMEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             if ( mpHScrollBar )
             {
-                ULONG nWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
+                sal_uLong nWidth = mpTextWindow->GetTextEngine()->CalcTextWidth();
                 if ( nWidth != mnTextWidth )
                 {
                     mnTextWidth = sal::static_int_cast< xub_StrLen >(nWidth);
@@ -625,9 +625,9 @@ void ImpSvMEdit::SetSelection( const Selection& rSelection )
 
     long nEnd = Max( aNewSelection.Min(), aNewSelection.Max() );
     TextSelection aTextSel;
-    ULONG nPara = 0;
-    USHORT nChar = 0;
-    USHORT x = 0;
+    sal_uLong nPara = 0;
+    sal_uInt16 nChar = 0;
+    sal_uInt16 x = 0;
     while ( x <= nEnd )
     {
         if ( x == aNewSelection.Min() )
@@ -656,7 +656,7 @@ const Selection& ImpSvMEdit::GetSelection() const
 
     ExtTextEngine* pExtTextEngine = mpTextWindow->GetTextEngine();
     // Absaetze davor:
-    ULONG n;
+    sal_uLong n;
     for ( n = 0; n < aTextSel.GetStart().GetPara(); n++ )
     {
         maSelection.Min() += pExtTextEngine->GetTextLen( n );
@@ -691,7 +691,7 @@ Size ImpSvMEdit::CalcMinimumSize() const
     return aSz;
 }
 
-Size ImpSvMEdit::CalcSize( USHORT nColumns, USHORT nLines ) const
+Size ImpSvMEdit::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 {
     static const sal_Unicode sampleText[] = { 'X', '\0' };
 
@@ -718,16 +718,16 @@ Size ImpSvMEdit::CalcSize( USHORT nColumns, USHORT nLines ) const
     return aSz;
 }
 
-void ImpSvMEdit::GetMaxVisColumnsAndLines( USHORT& rnCols, USHORT& rnLines ) const
+void ImpSvMEdit::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
 {
     static const sal_Unicode sampleText[] = { 'x', '\0' };
     Size aOutSz = mpTextWindow->GetOutputSizePixel();
     Size aCharSz( mpTextWindow->GetTextWidth( sampleText ), mpTextWindow->GetTextHeight() );
-    rnCols = (USHORT) (aOutSz.Width()/aCharSz.Width());
-    rnLines = (USHORT) (aOutSz.Height()/aCharSz.Height());
+    rnCols = (sal_uInt16) (aOutSz.Width()/aCharSz.Width());
+    rnLines = (sal_uInt16) (aOutSz.Height()/aCharSz.Height());
 }
 
-void ImpSvMEdit::Enable( BOOL bEnable )
+void ImpSvMEdit::Enable( sal_Bool bEnable )
 {
     mpTextWindow->Enable( bEnable );
     if ( mpHScrollBar )
@@ -736,15 +736,15 @@ void ImpSvMEdit::Enable( BOOL bEnable )
         mpVScrollBar->Enable( bEnable );
 }
 
-BOOL ImpSvMEdit::HandleCommand( const CommandEvent& rCEvt )
+sal_Bool ImpSvMEdit::HandleCommand( const CommandEvent& rCEvt )
 {
-    BOOL bDone = FALSE;
+    sal_Bool bDone = sal_False;
     if ( ( rCEvt.GetCommand() == COMMAND_WHEEL ) ||
          ( rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL ) ||
          ( rCEvt.GetCommand() == COMMAND_AUTOSCROLL ) )
     {
         mpTextWindow->HandleScrollCommand( rCEvt, mpHScrollBar, mpVScrollBar );
-        bDone = TRUE;
+        bDone = sal_True;
     }
     return bDone;
 }
@@ -752,12 +752,12 @@ BOOL ImpSvMEdit::HandleCommand( const CommandEvent& rCEvt )
 
 TextWindow::TextWindow( Window* pParent ) : Window( pParent )
 {
-    mbInMBDown = FALSE;
-    mbSelectOnTab = TRUE;
-    mbFocusSelectionHide = FALSE;
-    mbIgnoreTab = FALSE;
-    mbActivePopup = FALSE;
-    mbSelectOnTab = TRUE;
+    mbInMBDown = sal_False;
+    mbSelectOnTab = sal_True;
+    mbFocusSelectionHide = sal_False;
+    mbIgnoreTab = sal_False;
+    mbActivePopup = sal_False;
+    mbSelectOnTab = sal_True;
 
     SetPointer( Pointer( POINTER_TEXT ) );
 
@@ -768,7 +768,7 @@ TextWindow::TextWindow( Window* pParent ) : Window( pParent )
     mpExtTextEngine->SetLocale( GetSettings().GetLocale() );
     mpExtTextView = new ExtTextView( mpExtTextEngine, this );
     mpExtTextEngine->InsertView( mpExtTextView );
-    mpExtTextEngine->EnableUndo( TRUE );
+    mpExtTextEngine->EnableUndo( sal_True );
     mpExtTextView->ShowCursor();
 
     Color aBackgroundColor = GetSettings().GetStyleSettings().GetWorkspaceColor();
@@ -790,11 +790,11 @@ void TextWindow::MouseMove( const MouseEvent& rMEvt )
 
 void TextWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    mbInMBDown = TRUE;  // Dann im GetFocus nicht alles selektieren wird
+    mbInMBDown = sal_True;  // Dann im GetFocus nicht alles selektieren wird
     mpExtTextView->MouseButtonDown( rMEvt );
     Window::MouseButtonDown( rMEvt );
     GrabFocus();
-    mbInMBDown = FALSE;
+    mbInMBDown = sal_False;
 }
 
 void TextWindow::MouseButtonUp( const MouseEvent& rMEvt )
@@ -805,29 +805,29 @@ void TextWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
 void TextWindow::KeyInput( const KeyEvent& rKEvent )
 {
-    BOOL bDone = FALSE;
-    USHORT nCode = rKEvent.GetKeyCode().GetCode();
+    sal_Bool bDone = sal_False;
+    sal_uInt16 nCode = rKEvent.GetKeyCode().GetCode();
     if ( nCode == com::sun::star::awt::Key::SELECT_ALL ||
          ( (nCode == KEY_A) && rKEvent.GetKeyCode().IsMod1() && !rKEvent.GetKeyCode().IsMod2() )
        )
     {
         mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFF, 0xFFFF ) ) );
-        bDone = TRUE;
+        bDone = sal_True;
     }
     else if ( (nCode == KEY_S) && rKEvent.GetKeyCode().IsShift() && rKEvent.GetKeyCode().IsMod1() )
     {
         if ( Edit::GetGetSpecialCharsFunction() )
         {
             // Damit die Selektion erhalten bleibt
-            mbActivePopup = TRUE;
+            mbActivePopup = sal_True;
             XubString aChars = Edit::GetGetSpecialCharsFunction()( this, GetFont() );
             if ( aChars.Len() )
             {
                 mpExtTextView->InsertText( aChars );
-                mpExtTextView->GetTextEngine()->SetModified( TRUE );
+                mpExtTextView->GetTextEngine()->SetModified( sal_True );
             }
-            mbActivePopup = FALSE;
-            bDone = TRUE;
+            mbActivePopup = sal_False;
+            bDone = sal_True;
         }
     }
     else if ( nCode == KEY_TAB )
@@ -863,33 +863,33 @@ void TextWindow::Command( const CommandEvent& rCEvt )
             pPopup->SetMenuFlags( MENU_FLAG_HIDEDISABLEDENTRIES );
         if ( !mpExtTextView->HasSelection() )
         {
-            pPopup->EnableItem( SV_MENU_EDIT_CUT, FALSE );
-            pPopup->EnableItem( SV_MENU_EDIT_COPY, FALSE );
-            pPopup->EnableItem( SV_MENU_EDIT_DELETE, FALSE );
+            pPopup->EnableItem( SV_MENU_EDIT_CUT, sal_False );
+            pPopup->EnableItem( SV_MENU_EDIT_COPY, sal_False );
+            pPopup->EnableItem( SV_MENU_EDIT_DELETE, sal_False );
         }
         if ( mpExtTextView->IsReadOnly() )
         {
-            pPopup->EnableItem( SV_MENU_EDIT_CUT, FALSE );
-            pPopup->EnableItem( SV_MENU_EDIT_PASTE, FALSE );
-            pPopup->EnableItem( SV_MENU_EDIT_DELETE, FALSE );
-            pPopup->EnableItem( SV_MENU_EDIT_INSERTSYMBOL, FALSE );
+            pPopup->EnableItem( SV_MENU_EDIT_CUT, sal_False );
+            pPopup->EnableItem( SV_MENU_EDIT_PASTE, sal_False );
+            pPopup->EnableItem( SV_MENU_EDIT_DELETE, sal_False );
+            pPopup->EnableItem( SV_MENU_EDIT_INSERTSYMBOL, sal_False );
         }
         if ( !mpExtTextView->GetTextEngine()->HasUndoManager() || !mpExtTextView->GetTextEngine()->GetUndoManager().GetUndoActionCount() )
         {
-            pPopup->EnableItem( SV_MENU_EDIT_UNDO, FALSE );
+            pPopup->EnableItem( SV_MENU_EDIT_UNDO, sal_False );
         }
 //      if ( ( maSelection.Min() == 0 ) && ( maSelection.Max() == maText.Len() ) )
 //      {
-//          pPopup->EnableItem( SV_MENU_EDIT_SELECTALL, FALSE );
+//          pPopup->EnableItem( SV_MENU_EDIT_SELECTALL, sal_False );
 //      }
         if ( !Edit::GetGetSpecialCharsFunction() )
         {
-            USHORT nPos = pPopup->GetItemPos( SV_MENU_EDIT_INSERTSYMBOL );
+            sal_uInt16 nPos = pPopup->GetItemPos( SV_MENU_EDIT_INSERTSYMBOL );
             pPopup->RemoveItem( nPos );
             pPopup->RemoveItem( nPos-1 );
         }
 
-        mbActivePopup = TRUE;
+        mbActivePopup = sal_True;
         Point aPos = rCEvt.GetMousePosPixel();
         if ( !rCEvt.IsMouseEvent() )
         {
@@ -898,26 +898,26 @@ void TextWindow::Command( const CommandEvent& rCEvt )
             aPos = Point( aSize.Width()/2, aSize.Height()/2 );
         }
 //      pPopup->RemoveDisabledEntries();
-        USHORT n = pPopup->Execute( this, aPos );
+        sal_uInt16 n = pPopup->Execute( this, aPos );
         Edit::DeletePopupMenu( pPopup );
         switch ( n )
         {
             case SV_MENU_EDIT_UNDO:     mpExtTextView->Undo();
-                                        mpExtTextEngine->SetModified( TRUE );
+                                        mpExtTextEngine->SetModified( sal_True );
                                         mpExtTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
                                         break;
             case SV_MENU_EDIT_CUT:      mpExtTextView->Cut();
-                                        mpExtTextEngine->SetModified( TRUE );
+                                        mpExtTextEngine->SetModified( sal_True );
                                         mpExtTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
                                         break;
             case SV_MENU_EDIT_COPY:     mpExtTextView->Copy();
                                         break;
             case SV_MENU_EDIT_PASTE:    mpExtTextView->Paste();
-                                        mpExtTextEngine->SetModified( TRUE );
+                                        mpExtTextEngine->SetModified( sal_True );
                                         mpExtTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
                                         break;
             case SV_MENU_EDIT_DELETE:   mpExtTextView->DeleteSelected();
-                                        mpExtTextEngine->SetModified( TRUE );
+                                        mpExtTextEngine->SetModified( sal_True );
                                         mpExtTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
                                         break;
             case SV_MENU_EDIT_SELECTALL:    mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFFFFFF, 0xFFFF ) ) );
@@ -928,13 +928,13 @@ void TextWindow::Command( const CommandEvent& rCEvt )
                     if ( aChars.Len() )
                     {
                         mpExtTextView->InsertText( aChars );
-                        mpExtTextEngine->SetModified( TRUE );
+                        mpExtTextEngine->SetModified( sal_True );
                         mpExtTextEngine->Broadcast( TextHint( TEXT_HINT_MODIFIED ) );
                     }
                 }
                 break;
         }
-        mbActivePopup = FALSE;
+        mbActivePopup = sal_False;
     }
     else
     {
@@ -948,19 +948,19 @@ void TextWindow::GetFocus()
     Window::GetFocus();
     if ( !mbActivePopup )
     {
-        BOOL bGotoCursor = !mpExtTextView->IsReadOnly();
+        sal_Bool bGotoCursor = !mpExtTextView->IsReadOnly();
         if ( mbFocusSelectionHide && IsReallyVisible() && !mpExtTextView->IsReadOnly()
                 && ( mbSelectOnTab &&
                     (!mbInMBDown || ( GetSettings().GetStyleSettings().GetSelectionOptions() & SELECTION_OPTION_FOCUS ) )) )
         {
             // Alles selektieren, aber nicht scrollen
-            BOOL bAutoScroll = mpExtTextView->IsAutoScroll();
-            mpExtTextView->SetAutoScroll( FALSE );
+            sal_Bool bAutoScroll = mpExtTextView->IsAutoScroll();
+            mpExtTextView->SetAutoScroll( sal_False );
             mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( 0xFFFF, 0xFFFF ) ) );
             mpExtTextView->SetAutoScroll( bAutoScroll );
-            bGotoCursor = FALSE;
+            bGotoCursor = sal_False;
         }
-        mpExtTextView->SetPaintSelection( TRUE );
+        mpExtTextView->SetPaintSelection( sal_True );
         mpExtTextView->ShowCursor( bGotoCursor );
     }
 }
@@ -970,12 +970,12 @@ void TextWindow::LoseFocus()
     Window::LoseFocus();
 
     if ( mbFocusSelectionHide && !mbActivePopup )
-        mpExtTextView->SetPaintSelection( FALSE );
+        mpExtTextView->SetPaintSelection( sal_False );
 }
 
 // virtual
 ::css::uno::Reference< ::css::awt::XWindowPeer >
-TextWindow::GetComponentInterface(BOOL bCreate)
+TextWindow::GetComponentInterface(sal_Bool bCreate)
 {
     ::css::uno::Reference< ::css::awt::XWindowPeer > xPeer(
         Window::GetComponentInterface(false));
@@ -992,10 +992,10 @@ MultiLineEdit::MultiLineEdit( Window* pParent, WinBits nWinStyle )
 {
     SetType( WINDOW_MULTILINEEDIT );
     pImpSvMEdit = new ImpSvMEdit( this, nWinStyle );
-    ImplInitSettings( TRUE, TRUE, TRUE );
+    ImplInitSettings( sal_True, sal_True, sal_True );
     pUpdateDataTimer = 0;
 
-    SetCompoundControl( TRUE );
+    SetCompoundControl( sal_True );
     SetStyle( ImplInitStyle( nWinStyle ) );
 }
 
@@ -1005,10 +1005,10 @@ MultiLineEdit::MultiLineEdit( Window* pParent, const ResId& rResId )
     SetType( WINDOW_MULTILINEEDIT );
     WinBits nWinStyle = rResId.GetWinBits();
     pImpSvMEdit = new ImpSvMEdit( this, nWinStyle );
-    ImplInitSettings( TRUE, TRUE, TRUE );
+    ImplInitSettings( sal_True, sal_True, sal_True );
     pUpdateDataTimer = 0;
 
-    USHORT nMaxLen = Edit::GetMaxTextLen();
+    sal_uInt16 nMaxLen = Edit::GetMaxTextLen();
     if ( nMaxLen )
         SetMaxTextLen( nMaxLen );
 
@@ -1017,7 +1017,7 @@ MultiLineEdit::MultiLineEdit( Window* pParent, const ResId& rResId )
     if ( IsVisible() )
         pImpSvMEdit->Resize();
 
-    SetCompoundControl( TRUE );
+    SetCompoundControl( sal_True );
     SetStyle( ImplInitStyle( nWinStyle ) );
 
     // Base Edit ctor could call Show already, but that would cause problems
@@ -1052,7 +1052,7 @@ WinBits MultiLineEdit::ImplInitStyle( WinBits nStyle )
 }
 
 
-void MultiLineEdit::ImplInitSettings( BOOL /*bFont*/, BOOL /*bForeground*/, BOOL bBackground )
+void MultiLineEdit::ImplInitSettings( sal_Bool /*bFont*/, sal_Bool /*bForeground*/, sal_Bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -1084,7 +1084,7 @@ void MultiLineEdit::ImplInitSettings( BOOL /*bFont*/, BOOL /*bForeground*/, BOOL
     {
         if( IsPaintTransparent() )
         {
-            pImpSvMEdit->GetTextWindow()->SetPaintTransparent( TRUE );
+            pImpSvMEdit->GetTextWindow()->SetPaintTransparent( sal_True );
             pImpSvMEdit->GetTextWindow()->SetBackground();
             pImpSvMEdit->GetTextWindow()->SetControlBackground();
             SetBackground();
@@ -1126,20 +1126,20 @@ void MultiLineEdit::UpdateData()
 
 void MultiLineEdit::SetModifyFlag()
 {
-    pImpSvMEdit->SetModified( TRUE );
+    pImpSvMEdit->SetModified( sal_True );
 }
 
 void MultiLineEdit::ClearModifyFlag()
 {
-    pImpSvMEdit->SetModified( FALSE );
+    pImpSvMEdit->SetModified( sal_False );
 }
 
-BOOL MultiLineEdit::IsModified() const
+sal_Bool MultiLineEdit::IsModified() const
 {
     return pImpSvMEdit->IsModified();
 }
 
-void MultiLineEdit::EnableUpdateData( ULONG nTimeout )
+void MultiLineEdit::EnableUpdateData( sal_uLong nTimeout )
 {
     if ( !nTimeout )
         DisableUpdateData();
@@ -1154,7 +1154,7 @@ void MultiLineEdit::EnableUpdateData( ULONG nTimeout )
     }
 }
 
-void MultiLineEdit::SetReadOnly( BOOL bReadOnly )
+void MultiLineEdit::SetReadOnly( sal_Bool bReadOnly )
 {
     pImpSvMEdit->SetReadOnly( bReadOnly );
     Edit::SetReadOnly( bReadOnly );
@@ -1168,7 +1168,7 @@ void MultiLineEdit::SetReadOnly( BOOL bReadOnly )
     SetStyle( nStyle );
 }
 
-BOOL MultiLineEdit::IsReadOnly() const
+sal_Bool MultiLineEdit::IsReadOnly() const
 {
     return pImpSvMEdit->IsReadOnly();
 }
@@ -1299,7 +1299,7 @@ Size MultiLineEdit::CalcAdjustedSize( const Size& rPrefSize ) const
     return aSz;
 }
 
-Size MultiLineEdit::CalcSize( USHORT nColumns, USHORT nLines ) const
+Size MultiLineEdit::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 {
     Size aSz = pImpSvMEdit->CalcSize( nColumns, nLines );
 
@@ -1310,7 +1310,7 @@ Size MultiLineEdit::CalcSize( USHORT nColumns, USHORT nLines ) const
     return aSz;
 }
 
-void MultiLineEdit::GetMaxVisColumnsAndLines( USHORT& rnCols, USHORT& rnLines ) const
+void MultiLineEdit::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
 {
     pImpSvMEdit->GetMaxVisColumnsAndLines( rnCols, rnLines );
 }
@@ -1320,7 +1320,7 @@ void MultiLineEdit::StateChanged( StateChangedType nType )
     if( nType == STATE_CHANGE_ENABLE )
     {
         pImpSvMEdit->Enable( IsEnabled() );
-        ImplInitSettings( TRUE, FALSE, FALSE );
+        ImplInitSettings( sal_True, sal_False, sal_False );
     }
     else if( nType == STATE_CHANGE_READONLY )
     {
@@ -1329,23 +1329,23 @@ void MultiLineEdit::StateChanged( StateChangedType nType )
     else if ( nType == STATE_CHANGE_ZOOM )
     {
         pImpSvMEdit->GetTextWindow()->SetZoom( GetZoom() );
-        ImplInitSettings( TRUE, FALSE, FALSE );
+        ImplInitSettings( sal_True, sal_False, sal_False );
         Resize();
     }
     else if ( nType == STATE_CHANGE_CONTROLFONT )
     {
-        ImplInitSettings( TRUE, FALSE, FALSE );
+        ImplInitSettings( sal_True, sal_False, sal_False );
         Resize();
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
     {
-        ImplInitSettings( FALSE, TRUE, FALSE );
+        ImplInitSettings( sal_False, sal_True, sal_False );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( FALSE, FALSE, TRUE );
+        ImplInitSettings( sal_False, sal_False, sal_True );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_STYLE )
@@ -1357,7 +1357,7 @@ void MultiLineEdit::StateChanged( StateChangedType nType )
     {
         if( IsPaintTransparent() )
         {
-            pImpSvMEdit->GetTextWindow()->SetPaintTransparent( TRUE );
+            pImpSvMEdit->GetTextWindow()->SetPaintTransparent( sal_True );
             pImpSvMEdit->GetTextWindow()->SetBackground();
             pImpSvMEdit->GetTextWindow()->SetControlBackground();
             SetBackground();
@@ -1373,7 +1373,7 @@ void MultiLineEdit::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        ImplInitSettings( TRUE, TRUE, TRUE );
+        ImplInitSettings( sal_True, sal_True, sal_True );
         Resize();
         Invalidate();
     }
@@ -1381,14 +1381,14 @@ void MultiLineEdit::DataChanged( const DataChangedEvent& rDCEvt )
         Control::DataChanged( rDCEvt );
 }
 
-void MultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags )
+void MultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
-    ImplInitSettings( TRUE, TRUE, TRUE );
+    ImplInitSettings( sal_True, sal_True, sal_True );
 
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
     Font aFont = pImpSvMEdit->GetTextWindow()->GetDrawPixelFont( pDev );
-    aFont.SetTransparent( TRUE );
+    aFont.SetTransparent( sal_True );
     OutDevType eOutDevType = pDev->GetOutDevType();
 
     pDev->Push();
@@ -1399,8 +1399,8 @@ void MultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSi
     // Border/Background
     pDev->SetLineColor();
     pDev->SetFillColor();
-    BOOL bBorder = !(nFlags & WINDOW_DRAW_NOBORDER ) && (GetStyle() & WB_BORDER);
-    BOOL bBackground = !(nFlags & WINDOW_DRAW_NOBACKGROUND) && IsControlBackground();
+    sal_Bool bBorder = !(nFlags & WINDOW_DRAW_NOBORDER ) && (GetStyle() & WB_BORDER);
+    sal_Bool bBackground = !(nFlags & WINDOW_DRAW_NOBACKGROUND) && IsControlBackground();
     if ( bBorder || bBackground )
     {
         Rectangle aRect( aPos, aSize );
@@ -1434,7 +1434,7 @@ void MultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSi
 
     XubString aText = GetText();
     Size aTextSz( pDev->GetTextWidth( aText ), pDev->GetTextHeight() );
-    ULONG nLines = (ULONG) (aSize.Height() / aTextSz.Height());
+    sal_uLong nLines = (sal_uLong) (aSize.Height() / aTextSz.Height());
     if ( !nLines )
         nLines = 1;
     aTextSz.Height() = nLines*aTextSz.Height();
@@ -1588,24 +1588,24 @@ ScrollBar* MultiLineEdit::GetVScrollBar() const
     return pImpSvMEdit->GetVScrollBar();
 }
 
-void MultiLineEdit::EnableFocusSelectionHide( BOOL bHide )
+void MultiLineEdit::EnableFocusSelectionHide( sal_Bool bHide )
 {
     pImpSvMEdit->GetTextWindow()->SetAutoFocusHide( bHide );
 }
 
-BOOL MultiLineEdit::IsFocusSelectionHideEnabled() const
+sal_Bool MultiLineEdit::IsFocusSelectionHideEnabled() const
 {
     return pImpSvMEdit->GetTextWindow()->IsAutoFocusHide();
 }
 
 
-void MultiLineEdit::SetLeftMargin( USHORT n )
+void MultiLineEdit::SetLeftMargin( sal_uInt16 n )
 {
     if ( GetTextEngine() )
         GetTextEngine()->SetLeftMargin( n );
 }
 
-USHORT MultiLineEdit::GetLeftMargin() const
+sal_uInt16 MultiLineEdit::GetLeftMargin() const
 {
     if ( GetTextEngine() )
         return GetTextEngine()->GetLeftMargin();
@@ -1613,7 +1613,7 @@ USHORT MultiLineEdit::GetLeftMargin() const
         return 0;
 }
 
-void MultiLineEdit::SetRightToLeft( BOOL bRightToLeft )
+void MultiLineEdit::SetRightToLeft( sal_Bool bRightToLeft )
 {
     if ( GetTextEngine() )
     {
@@ -1622,9 +1622,9 @@ void MultiLineEdit::SetRightToLeft( BOOL bRightToLeft )
     }
 }
 
-BOOL MultiLineEdit::IsRightToLeft() const
+sal_Bool MultiLineEdit::IsRightToLeft() const
 {
-    BOOL bRightToLeft = FALSE;
+    sal_Bool bRightToLeft = sal_False;
 
     if ( GetTextEngine() )
         bRightToLeft = GetTextEngine()->IsRightToLeft();
@@ -1634,7 +1634,7 @@ BOOL MultiLineEdit::IsRightToLeft() const
 
 // virtual
 ::css::uno::Reference< ::css::awt::XWindowPeer >
-MultiLineEdit::GetComponentInterface(BOOL bCreate)
+MultiLineEdit::GetComponentInterface(sal_Bool bCreate)
 {
     ::css::uno::Reference< ::css::awt::XWindowPeer > xPeer(
         Edit::GetComponentInterface(false));

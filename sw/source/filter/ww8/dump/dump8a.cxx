@@ -60,73 +60,73 @@ SvStorageStreamRef xDataStream;     // ist bei Ver6-7 mit xStrm identisch,
 
 typedef void (*FNDumpData)( void* );
 
-BOOL DumpChar( BYTE c );
+sal_Bool DumpChar( sal_uInt8 c );
 void DumpShortPlainText( WW8_CP nStartCp, long nTextLen, char* pName );
 void DumpPlainText( WW8_CP nStartCp, long nTextLen, char* pName );
-void DumpSprms( BYTE nVersion, SvStream& rSt, short nLen );
+void DumpSprms( sal_uInt8 nVersion, SvStream& rSt, short nLen );
 
 
-BOOL WW8ReadINT32( SvStream& rStrm, INT32& rTarget )
+sal_Bool WW8ReadINT32( SvStream& rStrm, sal_Int32& rTarget )
 {
       rStrm >> rTarget;
-      return TRUE;
+      return sal_True;
 
 
       SVBT32 nData;
-      BOOL bOk = TRUE;
+      sal_Bool bOk = sal_True;
       if( 4 == rStrm.Read( &nData, 4 ) )
               rTarget = SVBT32ToUInt32( nData );
       else
-              bOk = FALSE;
+              bOk = sal_False;
       return bOk;
 }
 
-BOOL WW8ReadINT16( SvStream& rStrm, INT16& rTarget )
+sal_Bool WW8ReadINT16( SvStream& rStrm, sal_Int16& rTarget )
 {
       rStrm >> rTarget;
-      return TRUE;
+      return sal_True;
 
 
       SVBT16 nData;
-      BOOL bOk = TRUE;
+      sal_Bool bOk = sal_True;
       if( 2 == rStrm.Read( &nData, 2 ) )
       {
               rTarget = SVBT16ToShort( nData );
       }
       else
-              bOk = FALSE;
+              bOk = sal_False;
       return bOk;
 }
 
-BOOL WW8ReadBYTE( SvStream& rStrm, BYTE& rTarget )
+sal_Bool WW8ReadBYTE( SvStream& rStrm, sal_uInt8& rTarget )
 {
       rStrm >> rTarget;
-      return TRUE;
+      return sal_True;
 
 
       SVBT8 nData;
-      BOOL bOk = TRUE;
+      sal_Bool bOk = sal_True;
       if( 1 == rStrm.Read( &nData, 1 ) )
               rTarget = SVBT8ToByte( nData );
       else
-              bOk = FALSE;
+              bOk = sal_False;
       return bOk;
 }
 
-BOOL WW8ReadUINT32( SvStream& rStrm, UINT32& rTarget )
-     { return WW8ReadINT32( rStrm, (INT32&) rTarget ); }
+sal_Bool WW8ReadUINT32( SvStream& rStrm, sal_uInt32& rTarget )
+     { return WW8ReadINT32( rStrm, (sal_Int32&) rTarget ); }
 
-BOOL WW8ReadUINT16( SvStream& rStrm, UINT16& rTarget )
-     { return WW8ReadINT16( rStrm, (INT16&) rTarget ); }
+sal_Bool WW8ReadUINT16( SvStream& rStrm, sal_uInt16& rTarget )
+     { return WW8ReadINT16( rStrm, (sal_Int16&) rTarget ); }
 
 
-static void Dump_LVL( UINT16 nLevel )
+static void Dump_LVL( sal_uInt16 nLevel )
 {
     indent( *pOut, *xTableStream );
 
     long nStart, dxaSpace, dxaIndent;
-    BYTE nfc, nFlags, ixchFollow, cbChpx, cbPapx;
-    BYTE aOfsNumsXCH[nWW8MaxListLevel];
+    sal_uInt8 nfc, nFlags, ixchFollow, cbChpx, cbPapx;
+    sal_uInt8 aOfsNumsXCH[nWW8MaxListLevel];
     *xTableStream >> nStart >> nfc >> nFlags;
     xTableStream->Read( aOfsNumsXCH, 9 );
     *xTableStream >> ixchFollow >> dxaSpace >> dxaIndent
@@ -135,7 +135,7 @@ static void Dump_LVL( UINT16 nLevel )
 
     *pOut << " Level: " << nLevel << endl1;
     *pOut << indent2 << "  Start: " << nStart
-                    << " Fmt: " << (USHORT)nfc
+                    << " Fmt: " << (sal_uInt16)nfc
                     << " Follow: ";
     if( 0 == ixchFollow ) *pOut << "tab";
     else if( 1 == ixchFollow ) *pOut << "blank";
@@ -143,24 +143,24 @@ static void Dump_LVL( UINT16 nLevel )
     *pOut << endl1  << indent2<< "  dxSpace: " << dxaSpace
         << " dxaIndent: " << dxaIndent << " LevelCharPos: ";
 
-    for( BYTE x = 0; x < nWW8MaxListLevel; ++x )
-        *pOut << (USHORT)aOfsNumsXCH[ x ] << ", ";
+    for( sal_uInt8 x = 0; x < nWW8MaxListLevel; ++x )
+        *pOut << (sal_uInt16)aOfsNumsXCH[ x ] << ", ";
     *pOut << endl1;
 
     if( cbPapx )
     {
-        ULONG nXPos = xTableStream->Tell();
+        sal_uLong nXPos = xTableStream->Tell();
         DumpSprms( pWwFib->nVersion, *xTableStream, cbPapx );
         xTableStream->Seek( nXPos + cbPapx );
     }
     if( cbChpx )
     {
-        ULONG nXPos = xTableStream->Tell();
+        sal_uLong nXPos = xTableStream->Tell();
         DumpSprms( pWwFib->nVersion, *xTableStream, cbChpx );
         xTableStream->Seek( nXPos + cbChpx );
     }
 
-    USHORT nStrLen, nC;
+    sal_uInt16 nStrLen, nC;
     *xTableStream >> nStrLen;
     char* pStr = new char[ nStrLen+1 ], *p = pStr;
     while( nStrLen-- )
@@ -177,14 +177,14 @@ static void DumpNumList()
 {
     if( pWwFib->lcbSttbListNames )
     {
-        ULONG nOldPos = xTableStream->Tell();
+        sal_uLong nOldPos = xTableStream->Tell();
         xTableStream->Seek( pWwFib->fcSttbListNames );
 
         *pOut << endl1;
         begin( *pOut, *xTableStream ) << "ListNames, Size ";
 
-        UINT16 nDummy;
-        UINT32 nCount;
+        sal_uInt16 nDummy;
+        sal_uInt32 nCount;
         *xTableStream >> nDummy >> nCount;
 
         *pOut << nCount << ", Dummy: " << nDummy << endl1;
@@ -192,7 +192,7 @@ static void DumpNumList()
         *pOut << indent2;
         for( ; nCount; --nCount )
         {
-            UINT16 nLen, nC;
+            sal_uInt16 nLen, nC;
             *xTableStream >> nLen;
             char * pChar = new char[ nLen + 1 ], *p = pChar;
             while( nLen-- )
@@ -213,29 +213,29 @@ static void DumpNumList()
 
     if( pWwFib->lcbPlcfLst )
     {
-        ULONG nOldPos = xTableStream->Tell();
+        sal_uLong nOldPos = xTableStream->Tell();
         xTableStream->Seek( pWwFib->fcPlcfLst );
 
         *pOut << endl1;
         begin( *pOut, *xTableStream ) << "LiST Data on File, Size ";
 
-        UINT16 nCount;
+        sal_uInt16 nCount;
         *xTableStream >> nCount;
         *pOut << nCount << endl1;
 
-        ULONG nLVLPos = pWwFib->fcPlcfLst + ( nCount * 0x1c ) + 2;
+        sal_uLong nLVLPos = pWwFib->fcPlcfLst + ( nCount * 0x1c ) + 2;
 
         // 1.1 alle LST einlesen
-        for( UINT16 nList = 0; nList < nCount; nList++ )
+        for( sal_uInt16 nList = 0; nList < nCount; nList++ )
         {
             indent( *pOut, *xTableStream );
 
-            BYTE nByte;
-            UINT32 nLstId, nTplId;
+            sal_uInt8 nByte;
+            sal_uInt32 nLstId, nTplId;
             *xTableStream >> nLstId >> nTplId;
 
-            USHORT aStyleIdArr[ nWW8MaxListLevel ];
-            for( USHORT nLevel = 0; nLevel < nWW8MaxListLevel; nLevel++ )
+            sal_uInt16 aStyleIdArr[ nWW8MaxListLevel ];
+            for( sal_uInt16 nLevel = 0; nLevel < nWW8MaxListLevel; nLevel++ )
                 *xTableStream >> aStyleIdArr[ nLevel ];
             *xTableStream >> nByte;
             xTableStream->SeekRel( 1 );     // Dummy ueberlesen
@@ -251,7 +251,7 @@ static void DumpNumList()
             if( 2 & nByte ) *pOut << " <restart at new section>";
             if( 3 & nByte ) *pOut << endl1;
 
-            ULONG nTmpPos = xTableStream->Tell();
+            sal_uLong nTmpPos = xTableStream->Tell();
             xTableStream->Seek( nLVLPos );
 
             // 1.2 alle LVL aller aLST einlesen
@@ -268,38 +268,38 @@ static void DumpNumList()
 
     if( pWwFib->lcbPlfLfo )
     {
-        ULONG nOldPos = xTableStream->Tell();
+        sal_uLong nOldPos = xTableStream->Tell();
         xTableStream->Seek( pWwFib->fcPlfLfo );
 
         *pOut << endl1;
         begin( *pOut, *xTableStream ) << "List Format Override, Size ";
 
-        UINT32 nCount, nLstId;
+        sal_uInt32 nCount, nLstId;
         *xTableStream >> nCount;
         *pOut << nCount << endl1;
 
-        ULONG nLVLPos = pWwFib->fcPlfLfo + ( nCount * 0x10 ) + 4;
+        sal_uLong nLVLPos = pWwFib->fcPlfLfo + ( nCount * 0x10 ) + 4;
 
         for( ; nCount; --nCount )
         {
             indent( *pOut, *xTableStream );
 
-            BYTE nLevels;
+            sal_uInt8 nLevels;
             *xTableStream >> nLstId;
             xTableStream->SeekRel( 8 );
             *xTableStream >> nLevels;
             xTableStream->SeekRel( 3 );
 
             *pOut << "ListId: " << nLstId
-                << " Override Levels: " << (USHORT)nLevels << endl1;
+                << " Override Levels: " << (sal_uInt16)nLevels << endl1;
 
-            ULONG nTmpPos = xTableStream->Tell();
+            sal_uLong nTmpPos = xTableStream->Tell();
             xTableStream->Seek( nLVLPos );
 
-            for( BYTE nLvl = 0; nLvl < nLevels; ++nLvl )
+            for( sal_uInt8 nLvl = 0; nLvl < nLevels; ++nLvl )
             {
-                UINT32 nStartAt;
-                BYTE nFlags;
+                sal_uInt32 nStartAt;
+                sal_uInt8 nFlags;
                 do {
                     *xTableStream >> nFlags;
                 } while( 0xFF == nFlags  );
@@ -337,9 +337,9 @@ static void DumpBookLow()
     *pOut << endl1;
 
     WW8PLCFspecial aStarts( &xStrm, pWwFib->fcPlcfbkf, pWwFib->lcbPlcfbkf, 4 );
-    WW8PLCFspecial aEnds(   &xStrm, pWwFib->fcPlcfbkl, pWwFib->lcbPlcfbkl, 0, -1, TRUE );
+    WW8PLCFspecial aEnds(   &xStrm, pWwFib->fcPlcfbkl, pWwFib->lcbPlcfbkl, 0, -1, sal_True );
 
-    USHORT i = 0;
+    sal_uInt16 i = 0;
     while( 1 ){
         long nStart = aStarts.GetPos( i );
         if( nStart >= LONG_MAX )
@@ -350,7 +350,7 @@ static void DumpBookLow()
         const void* p = aStarts.GetData( i );
         if( p ){
             *pOut << ", EndIdx: ";
-            USHORT nEndIdx = *((USHORT*)p);
+            sal_uInt16 nEndIdx = *((sal_uInt16*)p);
             *pOut << nEndIdx;
             long nEnd = aEnds.GetPos( nEndIdx );
             *pOut << ", End: " << hex6 << nEnd << hex
@@ -375,7 +375,7 @@ static void DumpBookHigh()
 
     *pOut << indent1 << begin1 << "Bookmarks High" << endl1;
 
-    USHORT i = 0;
+    sal_uInt16 i = 0;
     while( 1 )
     {
         long nPos = aBook.Where();
@@ -396,20 +396,20 @@ static void DumpBookHigh()
     *pOut << end2 << "Bookmarks High" << endl1 << endl1;
 }
 
-static BOOL DumpField3( WW8PLCFspecial& rPlc )
+static sal_Bool DumpField3( WW8PLCFspecial& rPlc )
 {
     WW8FieldDesc aF;
 
-    BOOL bOk = WW8GetFieldPara( pWwFib->nVersion, rPlc, aF );
+    sal_Bool bOk = WW8GetFieldPara( pWwFib->nVersion, rPlc, aF );
     if( !bOk )
     {
         *pOut << "       " << indent1 << "no WW8GetFieldPara()" << endl1;
-        return FALSE;
+        return sal_False;
     }
     *pOut << "       " << indent1 << begin1 << "Field Cp: " << hex
           << aF.nSCode << ", Len: " << aF.nLCode << "; Cp: " << aF.nSRes
-          << ", Len: "<< aF.nLRes << ", Typ: " << dec << (USHORT)aF.nId
-          << ", Options: " << hex << (USHORT)aF.nOpt;
+          << ", Len: "<< aF.nLRes << ", Typ: " << dec << (sal_uInt16)aF.nId
+          << ", Options: " << hex << (sal_uInt16)aF.nOpt;
     if( aF.bCodeNest )
         *pOut << " Code Nested";
     if( aF.bResNest )
@@ -418,49 +418,49 @@ static BOOL DumpField3( WW8PLCFspecial& rPlc )
     DumpShortPlainText( aF.nSCode, aF.nLCode, "Code" );
     DumpShortPlainText( aF.nSRes, aF.nLRes, "Result" );
     *pOut << "       " << end1 << "Field" << endl1;
-    return TRUE;
+    return sal_True;
 }
 
-static BOOL DumpField2( WW8PLCFspecial& rPlc )
+static sal_Bool DumpField2( WW8PLCFspecial& rPlc )
 {
     WW8_CP nSCode, nECode, nSRes, nERes;
     void* pData;
     if( !rPlc.Get( nSCode, pData ) )                // Ende des Plc1 ?
-        return FALSE;
+        return sal_False;
     rPlc++;
 
-    if( ((BYTE*)pData)[0] != 19 ){
-        *pOut << "Field Error, " << (USHORT)((BYTE*)pData)[0] << endl1;
-        return TRUE;    // nicht abbrechen
+    if( ((sal_uInt8*)pData)[0] != 19 ){
+        *pOut << "Field Error, " << (sal_uInt16)((sal_uInt8*)pData)[0] << endl1;
+        return sal_True;    // nicht abbrechen
     }
 
     *pOut << "       " << indent1 << begin1 << "Field" << " Cp: " << hex
-          << nSCode << " Typ: " << dec << (USHORT)((BYTE*)pData)[1] << endl1;
+          << nSCode << " Typ: " << dec << (sal_uInt16)((sal_uInt8*)pData)[1] << endl1;
 
     if( !rPlc.Get( nECode, pData ) )            // Ende des Plc1 ?
-        return FALSE;
+        return sal_False;
 
     DumpShortPlainText( nSCode, nECode - nSCode, "Code" );  // Code, bei nested abgeschnitten
     nSRes = nECode;                             // Default
 
 
-    while( ((BYTE*)pData)[0] == 19 ){           // immer noch neue (nested) Anfaenge ?
+    while( ((sal_uInt8*)pData)[0] == 19 ){          // immer noch neue (nested) Anfaenge ?
         DumpField2( rPlc );                     // nested Field im Beschreibungsteil
         if( !rPlc.Get( nSRes, pData ) )         // Ende des Plc1 ?
-            return FALSE;
+            return sal_False;
     }
 
-    if( ((BYTE*)pData)[0] == 20 ){              // Field Separator ?
+    if( ((sal_uInt8*)pData)[0] == 20 ){             // Field Separator ?
         rPlc++;
         *pOut << "       " << indent1 << "Field Seperator" << " Cp: " << hex << nSRes
-              << ", Flags = 0x" << hex << (USHORT)((BYTE*)pData)[1] << dec << endl1;
+              << ", Flags = 0x" << hex << (sal_uInt16)((sal_uInt8*)pData)[1] << dec << endl1;
         if( !rPlc.Get( nERes, pData ) )         // Ende des Plc1 ?
-            return FALSE;
+            return sal_False;
 
-        while( ((BYTE*)pData)[0] == 19 ){       // immer noch neue (nested) Anfaenge ?
+        while( ((sal_uInt8*)pData)[0] == 19 ){      // immer noch neue (nested) Anfaenge ?
             DumpField2( rPlc );                 // nested Field im Resultatteil
             if( !rPlc.Get( nERes, pData ) )     // Ende des Plc1 ?
-                return FALSE;
+                return sal_False;
         }
         DumpShortPlainText( nSRes, nERes - nSRes, "Result" );   // Result, bei nested incl. nested Field
 
@@ -469,15 +469,15 @@ static BOOL DumpField2( WW8PLCFspecial& rPlc )
     }
 
     rPlc++;
-    if( ((BYTE*)pData)[0] == 21 ){              // Field Ende ?
+    if( ((sal_uInt8*)pData)[0] == 21 ){             // Field Ende ?
         *pOut << "       " << end1 << " Field " << " Cp: " << hex << nERes
-              << ", Flags = 0x" << hex << (USHORT)((BYTE*)pData)[1] << dec << endl1;
+              << ", Flags = 0x" << hex << (sal_uInt16)((sal_uInt8*)pData)[1] << dec << endl1;
     }else{
         *pOut << "       Unknown Field Type" << endl1;
         *pOut << "       " << end1 << " Field " << endl1;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 static void DumpField1( WW8_FC nPos, long nLen, char* pName )
@@ -515,7 +515,7 @@ static void DumpFonts()
 {
     WW8Fonts aFonts( *xTableStream, *pWwFib );
 
-    USHORT i;
+    sal_uInt16 i;
 
     *pOut << endl1;
     *pOut << 'T' << hex6 << pWwFib->fcSttbfffn << dec2 << ' ' << indent1 << begin1 << "FFNs" << endl1;
@@ -551,7 +551,7 @@ static void DumpFonts()
 class DFib: public WW8Fib
 {
 public:
-    DFib( SvStream& rStrm, BYTE nVersion ) : WW8Fib( rStrm, nVersion ) {}
+    DFib( SvStream& rStrm, sal_uInt8 nVersion ) : WW8Fib( rStrm, nVersion ) {}
     void Dump();
 };
 
@@ -573,7 +573,7 @@ void DFib::Dump()
     *pOut << "\tfGlsy: " << (fGlsy ? '1' : '0') << endl1;
     *pOut << "\tfComplex: " << (fComplex ? '1' : '0') << endl1;
     *pOut << "\tfHasPic: " << (fHasPic ? '1' : '0') << endl1;
-    *pOut << "\tcQuickSaves: " << (USHORT)cQuickSaves  << endl1;
+    *pOut << "\tcQuickSaves: " << (sal_uInt16)cQuickSaves  << endl1;
     *pOut << "\tfEncrypted: " << (fEncrypted ? '1' : '0') << endl1;
     *pOut << "\tfWhichTblStm: " << (fWhichTblStm ? '1' : '0') << endl1;
     *pOut << "\tfExtChar: " << (fExtChar ? '1' : '0') << endl1;
@@ -763,11 +763,11 @@ void DFib::Dump()
 
 class DStyle: public WW8Style
 {
-    BYTE nVersion;
+    sal_uInt8 nVersion;
 public:
     DStyle( SvStream& rStream, WW8Fib& rFib )
             : WW8Style( rStream, rFib ){ nVersion = rFib.nVersion; }
-    void Dump1Style( USHORT nNr );
+    void Dump1Style( sal_uInt16 nNr );
     void Dump();
 };
 
@@ -783,9 +783,9 @@ static void DumpIt( SvStream& rSt, short nLen )
         return;
     }
     while ( nLen  ){
-        BYTE c;
+        sal_uInt8 c;
         xStrm->Read( &c, sizeof(c) );
-        *pOut << "<0x" << hex2 << (USHORT)c << dec2 << "> ";
+        *pOut << "<0x" << hex2 << (sal_uInt16)c << dec2 << "> ";
         nLen--;
     }
     *pOut << endl1;
@@ -798,14 +798,14 @@ static void DumpItSmall( SvStream& rStrm, short nLen )
 
     while ( nLen  )
     {
-        BYTE c;
+        sal_uInt8 c;
 
         rStrm.Read( &c, sizeof(c) );
 
         if( c <= 9 )
-            *pOut << (USHORT)c;
+            *pOut << (sal_uInt16)c;
         else
-            *pOut << "0x" << hex2 << (USHORT)c << dec2;
+            *pOut << "0x" << hex2 << (sal_uInt16)c << dec2;
 
         nLen--;
 
@@ -814,17 +814,17 @@ static void DumpItSmall( SvStream& rStrm, short nLen )
     }
 }
 
-static short DumpSprm( BYTE nVersion, SvStream& rSt, short nSprmsLen )
+static short DumpSprm( sal_uInt8 nVersion, SvStream& rSt, short nSprmsLen )
 {
     long nSprmPos = rSt.Tell();
-    BYTE nDelta;
+    sal_uInt8 nDelta;
 
     indent( *pOut, rSt );
 
-    BYTE x[512];
+    sal_uInt8 x[512];
     rSt.Read( x, 512 );                 // Token und folgende lesen
 
-    USHORT nId = WW8GetSprmId( nVersion, x, &nDelta );
+    sal_uInt16 nId = WW8GetSprmId( nVersion, x, &nDelta );
 
     short nSprmL = WW8GetSprmSizeBrutto( nVersion, x, &nId );
     short nSprmNL = WW8GetSprmSizeNetto( nVersion, x, &nId );
@@ -835,7 +835,7 @@ static short DumpSprm( BYTE nVersion, SvStream& rSt, short nSprmsLen )
 
     // Ausgabe: Token in Dez
     if( 8 > nVersion )
-        *pOut << (USHORT)x[0];
+        *pOut << (sal_uInt16)x[0];
     else
         *pOut << hex << nId << dec;
     *pOut << '/' << nSprmL;  // Laenge incl. alles in Dez
@@ -857,7 +857,7 @@ static short DumpSprm( BYTE nVersion, SvStream& rSt, short nSprmsLen )
     return nSprmsLen;
 }
 
-void DumpSprms( BYTE nVersion, SvStream& rSt, short nLen )
+void DumpSprms( sal_uInt8 nVersion, SvStream& rSt, short nLen )
 {
     if( nLen <= 1 || rSt.IsEof() ){
         return;
@@ -871,12 +871,12 @@ void DumpSprms( BYTE nVersion, SvStream& rSt, short nLen )
 }
 
 // DumpMemSprm() dumpt ein 2-Byte-Sprm, der im WW8_PCD eingebaut ist
-static void DumpMemSprm( BYTE nVersion, INT16* pSprm )
+static void DumpMemSprm( sal_uInt8 nVersion, sal_Int16* pSprm )
 {
-    BYTE* p = (BYTE*)pSprm;
-    USHORT nId = WW8GetSprmId( nVersion, p, 0 );
+    sal_uInt8* p = (sal_uInt8*)pSprm;
+    sal_uInt16 nId = WW8GetSprmId( nVersion, p, 0 );
 
-    *pOut << (USHORT)p[0];                      // Ausgabe: Token in Dez
+    *pOut << (sal_uInt16)p[0];                      // Ausgabe: Token in Dez
     *pOut << '/' << WW8GetSprmSizeBrutto( nVersion, p, &nId );   // Laenge incl. alles in Dez
     *pOut << '/' << WW8GetSprmSizeNetto(  nVersion, p, &nId );    // Laenge excl Token in Dez
 
@@ -889,9 +889,9 @@ static void DumpMemSprm( BYTE nVersion, INT16* pSprm )
 //-----------------------------------------
 //          Hilfsroutinen: SEPX
 //-----------------------------------------
-void DumpSepx( BYTE nVersion, long nPos )
+void DumpSepx( sal_uInt8 nVersion, long nPos )
 {
-    USHORT nLen;
+    sal_uInt16 nLen;
     xStrm->Seek( nPos );
     begin( *pOut, *xStrm ) << "Sepx, Len: ";
     xStrm->Read( &nLen, 2 );
@@ -928,7 +928,7 @@ static void DumpPhe( WW8_PHE_Base& rPhe )
         *pOut << indent2 << "dxaCol: " << (short)SVBT16ToShort( rPhe.dxaCol );
         if( rPhe.aBits1 & 0x4 )
         {
-            *pOut << ", total height: " << (USHORT)SVBT16ToShort( rPhe.dyl );
+            *pOut << ", total height: " << (sal_uInt16)SVBT16ToShort( rPhe.dyl );
         }
         else
         {
@@ -945,7 +945,7 @@ static char* NameTab[PLCF_END+4]={ "chpx", "papx", "sepx", "head",
                                     "FootnoteRef", "EndnoteRef",
                                     "AnnotationRef" };
 
-void DumpFkp( BYTE nVersion, long nPos, short nItemSize, ePLCFT ePlc )
+void DumpFkp( sal_uInt8 nVersion, long nPos, short nItemSize, ePLCFT ePlc )
 {
     char nElem;
 
@@ -955,11 +955,11 @@ void DumpFkp( BYTE nVersion, long nPos, short nItemSize, ePLCFT ePlc )
 
     *pOut << 'D' << hex6 << nPos << dec2 << ' ' << indent1 << begin1 << "Fkp.";
     *pOut << NameTab[ePlc] << ", ";
-    *pOut << (USHORT)nElem << " Elements" << endl1;
+    *pOut << (sal_uInt16)nElem << " Elements" << endl1;
 
     int i;
     WW8_FC aF[2];
-    BYTE c;
+    sal_uInt8 c;
     long nStartOfs = nPos + ( nElem + 1 ) * 4;  // bei dieser Pos faengt Offset-Array an
     short nOfs;
     WW8_PHE_Base aPhe;
@@ -1165,22 +1165,22 @@ void DumpDop( WW8Fib& rFib )
 
 struct WW8_PCD1
 {
-    BYTE aBits1;
-    BYTE aBits2;
-//  INT16 fNoParaLast : 1;  // when 1, means that piece contains no end of parag
-//  BYTE fPaphNil : 1;      // used internally by Word
-//  BYTE fCopied : 1;       // used internally by Word
+    sal_uInt8 aBits1;
+    sal_uInt8 aBits2;
+//  sal_Int16 fNoParaLast : 1;  // when 1, means that piece contains no end of parag
+//  sal_uInt8 fPaphNil : 1;     // used internally by Word
+//  sal_uInt8 fCopied : 1;      // used internally by Word
     //          *   int :5
-//  BYTE aBits2;            // fn int:8, used internally by Word
-    INT32 fc;               // file offset of beginning of piece. The size of th
-    INT16 prm;              // PRM contains either a single sprm or else an inde
+//  sal_uInt8 aBits2;           // fn int:8, used internally by Word
+    sal_Int32 fc;               // file offset of beginning of piece. The size of th
+    sal_Int16 prm;              // PRM contains either a single sprm or else an inde
 };
 
 #ifdef __WW8_NEEDS_PACK
 #  pragma pack()
 #endif
 
-static void DumpPLCFPcd( BYTE nVersion, long nPos, long nLen )
+static void DumpPLCFPcd( sal_uInt8 nVersion, long nPos, long nLen )
 {
     WW8PLCF aPlc( &xTableStream, nPos , nLen, 8 );
 
@@ -1197,12 +1197,12 @@ static void DumpPLCFPcd( BYTE nVersion, long nPos, long nLen )
         *pOut << indent2 << " Cp: " << hex6 << start << ".." << hex6 << ende;
 
         WW8_PCD1* p = (WW8_PCD1*) pData;
-        *pOut << ", Bits: " << hex2  <<  (USHORT)p->aBits1 << ' '
-              << hex2 << (USHORT)p->aBits2;
+        *pOut << ", Bits: " << hex2  <<  (sal_uInt16)p->aBits1 << ' '
+              << hex2 << (sal_uInt16)p->aBits2;
         *pOut << ", FcStart: ";
         if( 8 <= nVersion )
         {
-            BOOL bUniCode;
+            sal_Bool bUniCode;
             *pOut << hex6
                   << WW8PLCFx_PCD::TransformPieceAddress( p->fc, bUniCode );
             if( bUniCode )
@@ -1227,7 +1227,7 @@ static void DumpPLCFPcd( BYTE nVersion, long nPos, long nLen )
     end( *pOut, *xTableStream ) << "Plcx.Pcd" << endl1;
 }
 
-static void DumpPcd( BYTE nVersion, long nPos, long nLen )
+static void DumpPcd( sal_uInt8 nVersion, long nPos, long nLen )
 {
     long nLen1 = nLen;
     xTableStream->Seek( nPos );
@@ -1239,8 +1239,8 @@ static void DumpPcd( BYTE nVersion, long nPos, long nLen )
 
     long i = 0;
     while (1){
-        BYTE c;
-        INT16 cb;
+        sal_uInt8 c;
+        sal_Int16 cb;
 
         xTableStream->Read( &c, 1 );
         nLen1 --;
@@ -1258,7 +1258,7 @@ static void DumpPcd( BYTE nVersion, long nPos, long nLen )
 //      *pOut << "       " << indent1 << "grpprl: " << cb << "Bytes ueberlesen";
 //      *pOut << endl1;
     }
-    INT32 nLen2;
+    sal_Int32 nLen2;
     xTableStream->Read( &nLen2, 4 );
     nLen1 -= 4;
     if( nLen1 != nLen2 )
@@ -1300,10 +1300,10 @@ static void DumpPLCF( long nPos, long nLen, ePLCFT ePlc )
             break;
     default:// Programm-Fehler!
                     /*
-                        ACHTUNG: im FILTER nicht "FALSE" sondern "!this()" schreiben,
+                        ACHTUNG: im FILTER nicht "sal_False" sondern "!this()" schreiben,
                                             da sonst Warning unter OS/2
                     */
-                    ASSERT( FALSE, "Es wurde vergessen, nVersion zu kodieren!" );
+                    ASSERT( sal_False, "Es wurde vergessen, nVersion zu kodieren!" );
                     return;
     }
 
@@ -1345,16 +1345,16 @@ static void DumpPLCF( long nPos, long nLen, ePLCFT ePlc )
                         switch( pWwFib->nVersion )
                         {
                         case 6:
-                        case 7: nPo = *((USHORT*)pData);
+                        case 7: nPo = *((sal_uInt16*)pData);
                                         break;
-                        case 8: nPo = *((UINT32*)pData);
+                        case 8: nPo = *((sal_uInt32*)pData);
                                         break;
                         default:// Programm-Fehler!
                                         /*
-                                            ACHTUNG: im FILTER nicht "FALSE" sondern "!this()" schreiben,
+                                            ACHTUNG: im FILTER nicht "sal_False" sondern "!this()" schreiben,
                                                                 da sonst Warning unter OS/2
                                         */
-                                        ASSERT( FALSE, "Es wurde vergessen, nVersion zu kodieren!" );
+                                        ASSERT( sal_False, "Es wurde vergessen, nVersion zu kodieren!" );
                                         return;
                         }
 
@@ -1372,7 +1372,7 @@ static void DumpPLCF( long nPos, long nLen, ePLCFT ePlc )
         case PLCF_END+2:
             {
                 *pOut << " Cp: " << hex << start;
-                USHORT nFlags= *((USHORT*)pData);
+                sal_uInt16 nFlags= *((sal_uInt16*)pData);
                 *pOut << ", Flags: 0x" << nFlags << dec << endl1;
             }
             break;
@@ -1381,7 +1381,7 @@ static void DumpPLCF( long nPos, long nLen, ePLCFT ePlc )
             {
                 *pOut << " Cp: " << hex << start << ", Initial: \"";
                 const char* p = (char*)pData;
-                BYTE n = *p++;
+                sal_uInt8 n = *p++;
                 while( n-- )
                 {
                     if( 8 == pWwFib->nVersion )
@@ -1390,7 +1390,7 @@ static void DumpPLCF( long nPos, long nLen, ePLCFT ePlc )
                 }
 
                 long nBkmkId;
-                USHORT nId;
+                sal_uInt16 nId;
                 if( 8 == pWwFib->nVersion )
                 {
                     nId = SVBT16ToShort( ((WW8_ATRD*)pData)->ibst );
@@ -1420,7 +1420,7 @@ static void DumpPLCF( long nPos, long nLen, ePLCFT ePlc )
 static void DumpPlainText1( WW8_CP nStartCp, long nTextLen )
 {
     long l;
-    BYTE c;
+    sal_uInt8 c;
 
 
     xStrm->Seek( pSBase->WW8Cp2Fc( nStartCp ) );
@@ -1462,11 +1462,11 @@ void DumpPlainText( WW8_CP nStartCp, long nTextLen, char* pName )
 //              Text mit Attributen
 //-----------------------------------------
 
-BOOL DumpChar( BYTE c )
+sal_Bool DumpChar( sal_uInt8 c )
 {
     if ( ( c >= 32 ) && ( c <= 127 ) ){
         *pOut << c;
-        return FALSE;
+        return sal_False;
     }else{
         switch (c){
         case 0xe4:                          // dt. Umlaute
@@ -1475,15 +1475,15 @@ BOOL DumpChar( BYTE c )
         case 0xdf:
         case 0xc4:
         case 0xd6:
-        case 0xdc: *pOut << c; return FALSE;
+        case 0xdc: *pOut << c; return sal_False;
 
         case 0xd: *pOut << "<CR>";
-                  return TRUE;
+                  return sal_True;
         case 0x7:
-        case 0xc:  *pOut << "<0x" << hex2 << (USHORT)c << dec2 << '>';
-                  return TRUE;
-        default:  *pOut << "<0x" << hex2 << (USHORT)c << dec2 << '>';
-                  return FALSE;
+        case 0xc:  *pOut << "<0x" << hex2 << (sal_uInt16)c << dec2 << '>';
+                  return sal_True;
+        default:  *pOut << "<0x" << hex2 << (sal_uInt16)c << dec2 << '>';
+                  return sal_False;
         }
     }
 }
@@ -1645,7 +1645,7 @@ static void DumpDrawObjects( const char* pNm, long nStart, long nLen,
               << pNm << ", Len: " << nLen
               << ", " << aPLCF.GetIMax() << " Elements" << endl1;
 
-        for( USHORT i = 0; i < aPLCF.GetIMax(); ++i )
+        for( sal_uInt16 i = 0; i < aPLCF.GetIMax(); ++i )
         {
             long nCp = aPLCF.GetPos( i );
             if( nCp >= LONG_MAX )
@@ -1660,7 +1660,7 @@ static void DumpDrawObjects( const char* pNm, long nStart, long nLen,
                 *pOut << " top: " << *pFSPA++;
                 *pOut << " right: " << *pFSPA++;
                 *pOut << " bottom: " << *pFSPA++;
-                USHORT* pU = (USHORT*)pFSPA;
+                sal_uInt16* pU = (sal_uInt16*)pFSPA;
                 *pOut << " flags: 0x" << hex << *pU++;
                 pFSPA = (long*)pU;
                 *pOut << " xTxbx: " << dec << *pFSPA;
@@ -1668,7 +1668,7 @@ static void DumpDrawObjects( const char* pNm, long nStart, long nLen,
             else
             {
                 *pOut << " FC of DO: 0x" << *pFSPA++;
-                *pOut << " ctcbx: " << dec << *(USHORT*)pFSPA;
+                *pOut << " ctcbx: " << dec << *(sal_uInt16*)pFSPA;
             }
 
             *pOut << endl1;
@@ -1690,13 +1690,13 @@ static void DumpTxtboxBrks( const char* pNm, long nStart, long nLen,
               << pNm << ", Len: " << nLen
               << ", " << aPLCF.GetIMax() << " Elements" << endl1;
 
-        for( USHORT i = 0; i < aPLCF.GetIMax(); ++i )
+        for( sal_uInt16 i = 0; i < aPLCF.GetIMax(); ++i )
         {
             long nCp = aPLCF.GetPos( i );
             if( nCp >= LONG_MAX )
                 break;
 
-            USHORT* pBKD = (USHORT*)aPLCF.GetData( i );
+            sal_uInt16* pBKD = (sal_uInt16*)aPLCF.GetData( i );
             *pOut << indent2 << i << ".Cp: 0x" << hex << nCp + nOffset
                   << " itxbxs: 0x" << *pBKD++;
             *pOut << " dcpDepend: 0x" << *pBKD++;
@@ -1747,20 +1747,20 @@ static void DumpFdoa( WW8ScannerBase* pBase )
                     /*nOffset*/0 );
 }
 
-BOOL ReadEsherRec( SvStream& rStrm, UINT8& rVer, UINT16& rInst,
-                    UINT16& rFbt, UINT32& rLength )
+sal_Bool ReadEsherRec( SvStream& rStrm, sal_uInt8& rVer, sal_uInt16& rInst,
+                    sal_uInt16& rFbt, sal_uInt32& rLength )
 {
-    UINT16 aBits;
-    if( !WW8ReadUINT16( rStrm, aBits ) ) return FALSE;
+    sal_uInt16 aBits;
+    if( !WW8ReadUINT16( rStrm, aBits ) ) return sal_False;
     rVer  =  aBits & 0x000F;
     rInst = (aBits & 0xFFF0) >> 4;
     //----------------------------------------------
-    if( !WW8ReadUINT16( rStrm, rFbt ) ) return FALSE;
+    if( !WW8ReadUINT16( rStrm, rFbt ) ) return sal_False;
     //----------------------------------------------
     return WW8ReadUINT32( rStrm, rLength );
 }
 
-const char* _GetShapeTypeNm( UINT16 nId )
+const char* _GetShapeTypeNm( sal_uInt16 nId )
 {
     const char* aNmArr[ 202 + 2 + 1 ] = {
 /*   0*/    "NotPrimitive","Rectangle","RoundRectangle","Ellipse","Diamond","IsocelesTriangle","RightTriangle","Parallelogram","Trapezoid","Hexagon",
@@ -1790,8 +1790,8 @@ const char* _GetShapeTypeNm( UINT16 nId )
     return aNmArr[ nId ];
 }
 
-void DumpEscherProp( UINT16 nId, BOOL bBid, BOOL bComplex, UINT32 nOp,
-                        UINT32& rStreamOffset )
+void DumpEscherProp( sal_uInt16 nId, sal_Bool bBid, sal_Bool bComplex, sal_uInt32 nOp,
+                        sal_uInt32& rStreamOffset )
 {
     const char* pRecNm = 0;
     switch( nId )
@@ -2096,11 +2096,11 @@ void DumpEscherProp( UINT16 nId, BOOL bBid, BOOL bComplex, UINT32 nOp,
 
     *pOut   << " Id: " << dec << nId << " (=0x" << hex << nId << ')';
     if( bBid )
-        *pOut << " Bid: 0x" << (UINT16)bBid;
+        *pOut << " Bid: 0x" << (sal_uInt16)bBid;
 
     if( bComplex )
     {
-        *pOut << " Cmpl: 0x" << (UINT16)bComplex;
+        *pOut << " Cmpl: 0x" << (sal_uInt16)bComplex;
         // ....
         rStreamOffset += nOp;
     }
@@ -2110,8 +2110,8 @@ void DumpEscherProp( UINT16 nId, BOOL bBid, BOOL bComplex, UINT32 nOp,
     *pOut << dec << endl1;
 }
 
-void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
-                    UINT16 nFbt, UINT32 nLength )
+void DumpEscherRec( sal_uLong nPos, sal_uInt8 nVer, sal_uInt16 nInst,
+                    sal_uInt16 nFbt, sal_uInt32 nLength )
 {
     const char* pRecNm = 0;
     switch( nFbt )
@@ -2157,16 +2157,16 @@ void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
     else
         *pOut << "Record:";
     *pOut << " Id: 0x" << hex << nFbt << " Instance: 0x" << nInst
-          << " Version: 0x" << (UINT16)nVer << " Laenge: 0x" << nLength
+          << " Version: 0x" << (sal_uInt16)nVer << " Laenge: 0x" << nLength
           << dec << endl1;
 
     switch( nFbt )
     {
     case 0xf00b:        // DFF_msofbtOPT
         {
-            UINT16 nId; UINT32 nOp, nStreamOffset = nInst * 6;
-            BOOL bBid, bComplex;
-            for( UINT16 n = 0; n < nInst; ++n )
+            sal_uInt16 nId; sal_uInt32 nOp, nStreamOffset = nInst * 6;
+            sal_Bool bBid, bComplex;
+            for( sal_uInt16 n = 0; n < nInst; ++n )
             {
                 if( !WW8ReadUINT16( *xTableStream, nId ) ||
                     !WW8ReadUINT32( *xTableStream, nOp ))
@@ -2184,7 +2184,7 @@ void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
     case 0xF010:        // DFF_msofbtClientAnchor
     case 0xF011:        // DFF_msofbtClientData
         {
-            UINT32 nData;
+            sal_uInt32 nData;
             if( 4 == nLength && WW8ReadUINT32( *xTableStream, nData ))
                 *pOut << "      " << indent1 << " Data: "
                       << hex << nData << dec << endl1;
@@ -2193,7 +2193,7 @@ void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
 
     case 0xf00a:        // DFF_msofbtSp
         {
-            UINT32 nId, nData;
+            sal_uInt32 nId, nData;
             if( WW8ReadUINT32( *xTableStream, nId ) &&
                 WW8ReadUINT32( *xTableStream, nData ))
             {
@@ -2208,7 +2208,7 @@ void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
     case 0xf009:        // DFF_msofbtSpgr
     case 0xf00f:        // DFF_msofbtChildAnchor
         {
-            UINT32 nL, nT, nR, nB;
+            sal_uInt32 nL, nT, nR, nB;
             if( WW8ReadUINT32( *xTableStream, nL ) &&
                 WW8ReadUINT32( *xTableStream, nT ) &&
                 WW8ReadUINT32( *xTableStream, nR ) &&
@@ -2222,7 +2222,7 @@ void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
 
     case 0xf006:    //ESCHER_Dgg
         {
-            UINT32 spidMax,     // The current maximum shape ID
+            sal_uInt32 spidMax,     // The current maximum shape ID
                    cidcl,       // The number of ID clusters (FIDCLs)
                    cspSaved,    // The total number of shapes saved
                                  // (including deleted shapes, if undo
@@ -2242,10 +2242,10 @@ void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
                       << dec << endl1;
 
 
-                UINT32 dgid,    // DG owning the SPIDs in this cluster
+                sal_uInt32 dgid,    // DG owning the SPIDs in this cluster
                           cspidCur;  // number of SPIDs used so far
 
-                for( UINT32 n = 1; n < cidcl; ++n )
+                for( sal_uInt32 n = 1; n < cidcl; ++n )
                 {
                     if( !WW8ReadUINT32( *xTableStream, dgid ) ||
                         !WW8ReadUINT32( *xTableStream, cspidCur ))
@@ -2265,13 +2265,13 @@ void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
             if( 3 < nLength )
             {
                 *pOut << "      " << indent1 << " Data:" << hex;
-                UINT8 nParam;
-                for( UINT32 n = 0; n < nLength; ++n )
+                sal_uInt8 nParam;
+                for( sal_uInt32 n = 0; n < nLength; ++n )
                 {
                     if( !WW8ReadBYTE( *xTableStream, nParam ) )
                         break;
 
-                    UINT16 nHexParam = nParam;
+                    sal_uInt16 nHexParam = nParam;
                     *pOut << " 0x" << nHexParam;
                 }
                 *pOut << dec << endl1;
@@ -2313,7 +2313,7 @@ void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
                 }
 
                 static char __READONLY_DATA sHex[17] = { "0123456789abcdef" };
-                BYTE c;
+                sal_uInt8 c;
                 *xTableStream >> c;
                 *pOut << sHex[ ( c & 0xf0 ) >> 4 ] << sHex[ c & 0x0f ] << ' ';
                 --nLength;
@@ -2327,17 +2327,17 @@ void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
 }
 
 
-void DumpEscherRecs( ULONG nPos, UINT32 nLength )
+void DumpEscherRecs( sal_uLong nPos, sal_uInt32 nLength )
 {
     begin( *pOut, *xTableStream ) << endl1;
 
-    UINT16 nOldFbt = 0;
-    ULONG nReadLen = 0;
+    sal_uInt16 nOldFbt = 0;
+    sal_uLong nReadLen = 0;
     while( nReadLen < nLength )
     {
-        UINT8 nVer;
-        UINT16 nInst, nFbt;
-        UINT32 nRecLen;
+        sal_uInt8 nVer;
+        sal_uInt16 nInst, nFbt;
+        sal_uInt32 nRecLen;
 
         if( !::ReadEsherRec( *xTableStream, nVer, nInst, nFbt, nRecLen ))
             break;
@@ -2362,7 +2362,7 @@ void DumpEscherRecs( ULONG nPos, UINT32 nLength )
         ::DumpEscherRec( nPos + nReadLen, nVer, nInst,
                         nFbt, nRecLen );
 
-        nReadLen += 2 * sizeof( UINT32 );
+        nReadLen += 2 * sizeof( sal_uInt32 );
         switch( nFbt )
         {
         case 0xF000:
@@ -2386,14 +2386,14 @@ void DumpDrawing()
 {
     if( pWwFib->lcbDggInfo )
     {
-        ULONG nOldPos = xTableStream->Tell(), nReadLen = 0;
+        sal_uLong nOldPos = xTableStream->Tell(), nReadLen = 0;
         xTableStream->Seek( pWwFib->fcDggInfo );
 
         *pOut << endl << hex6 << pWwFib->fcDggInfo << dec2 <<  ' ' << indent1
               << begin1 << "Escher (DggInfo): Len: " << pWwFib->lcbDggInfo
               << endl1;
 
-        ::DumpEscherRecs( pWwFib->fcDggInfo, (ULONG)pWwFib->lcbDggInfo );
+        ::DumpEscherRecs( pWwFib->fcDggInfo, (sal_uLong)pWwFib->lcbDggInfo );
 
         end( *pOut, *xTableStream ) << endl1 << endl1;
         xTableStream->Seek( nOldPos );
@@ -2405,10 +2405,10 @@ void DumpDrawing()
 //      Hilfroutinen fuer Styles
 //-----------------------------------------
 
-static short DumpStyleUPX( BYTE nVersion, short nLen, BOOL bPAP )
+static short DumpStyleUPX( sal_uInt8 nVersion, short nLen, sal_Bool bPAP )
 {
     short cbUPX;
-    BOOL bEmpty;
+    sal_Bool bEmpty;
 
 
     if( nLen <= 0 ){
@@ -2442,7 +2442,7 @@ static short DumpStyleUPX( BYTE nVersion, short nLen, BOOL bPAP )
 
     if( bPAP )
     {
-        USHORT id;
+        sal_uInt16 id;
 
         xTableStream->Read( &id, 2 );
         cbUPX-=  2;
@@ -2452,7 +2452,7 @@ static short DumpStyleUPX( BYTE nVersion, short nLen, BOOL bPAP )
 
     *pOut << endl1;
 
-    ULONG nPos = xTableStream->Tell();              // falls etwas falsch interpretiert
+    sal_uLong nPos = xTableStream->Tell();              // falls etwas falsch interpretiert
                                         // wird, gehts danach wieder richtig
     DumpSprms( nVersion, *xTableStream, cbUPX );
 
@@ -2470,7 +2470,7 @@ static short DumpStyleUPX( BYTE nVersion, short nLen, BOOL bPAP )
     return nLen;
 }
 
-static void DumpStyleGrupx( BYTE nVersion, short nLen, BOOL bPara )
+static void DumpStyleGrupx( sal_uInt8 nVersion, short nLen, sal_Bool bPara )
 {
     if( nLen <= 0 )
         return;
@@ -2478,13 +2478,13 @@ static void DumpStyleGrupx( BYTE nVersion, short nLen, BOOL bPara )
 
     begin( *pOut, *xTableStream ) << "Grupx, Len:" << nLen << endl1;
 
-    if( bPara ) nLen = DumpStyleUPX( nVersion, nLen, TRUE );    // Grupx.Papx
-    DumpStyleUPX( nVersion, nLen, FALSE );                                      // Grupx.Chpx
+    if( bPara ) nLen = DumpStyleUPX( nVersion, nLen, sal_True );    // Grupx.Papx
+    DumpStyleUPX( nVersion, nLen, sal_False );                                      // Grupx.Chpx
 
     end( *pOut, *xTableStream ) << "Grupx" << endl1;
 }
 
-static void PrintStyleId( USHORT nId )
+static void PrintStyleId( sal_uInt16 nId )
 {
     switch ( nId ){
     case 0xffe: *pOut << "User "; break;
@@ -2497,7 +2497,7 @@ static void PrintStyleId( USHORT nId )
 //              Styles
 //-----------------------------------------
 
-void DStyle::Dump1Style( USHORT nNr )
+void DStyle::Dump1Style( sal_uInt16 nNr )
 {
     short nSkip, cbStd;
     String aStr;
@@ -2554,7 +2554,7 @@ void DStyle::Dump()
     *pOut << ", BuildIn:" << nVerBuiltInNamesWhenSaved;
     *pOut << ", StdFnt:"  << ftcStandardChpStsh << endl1;
 
-    USHORT i;
+    sal_uInt16 i;
     for( i=0; i<cstd; i++ )
         Dump1Style( i );
 
@@ -2582,7 +2582,7 @@ int PrepareConvert( String& rName, String& rOutName, String& rMess )
         return 1;
     }
 
-    ULONG nL;
+    sal_uLong nL;
     if ( xStrm->Read( &nL, sizeof( nL ) ) == 0 ){
         rMess.AppendAscii( "Kann aus StorageStream \"WordDocument\" in ");
         rMess += rName;
@@ -2615,9 +2615,9 @@ int PrepareConvert( String& rName, String& rOutName, String& rMess )
     return 0;
 }
 
-int DoConvert( const String& rName, BYTE nVersion )
+int DoConvert( const String& rName, sal_uInt8 nVersion )
 {
-    ULONG nL;
+    sal_uLong nL;
     if ( xStrm->Read( &nL, sizeof( nL ) ) == 0 ){
         return 1;
     }
@@ -2650,10 +2650,10 @@ int DoConvert( const String& rName, BYTE nVersion )
                     break;
     default:// Programm-Fehler!
                     /*
-                        ACHTUNG: im FILTER nicht "FALSE" sondern "!this()" schreiben,
+                        ACHTUNG: im FILTER nicht "sal_False" sondern "!this()" schreiben,
                                             da sonst Warning unter OS/2
                     */
-                    ASSERT( FALSE, "Es wurde vergessen, nVersion zu kodieren!" );
+                    ASSERT( sal_False, "Es wurde vergessen, nVersion zu kodieren!" );
                     return 1;
     }
 

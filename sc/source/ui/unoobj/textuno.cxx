@@ -75,7 +75,7 @@ const SvxItemPropertySet * lcl_GetHdFtPropertySet()
         SVX_UNOEDIT_NUMBERING_PROPERTIE,    // for completeness of service ParagraphProperties
         {0,0,0,0,0,0}
     };
-    static BOOL bTwipsSet = FALSE;
+    static sal_Bool bTwipsSet = sal_False;
 
     if (!bTwipsSet)
     {
@@ -95,7 +95,7 @@ const SvxItemPropertySet * lcl_GetHdFtPropertySet()
 
             ++pEntry;
         }
-        bTwipsSet = TRUE;
+        bTwipsSet = sal_True;
     }
     static SvxItemPropertySet aHdFtPropertySet_Impl( aHdFtPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return &aHdFtPropertySet_Impl;
@@ -140,7 +140,7 @@ void ScHeaderFooterContentObj::RemoveListener( SfxListener& rListener )
     rListener.EndListening( aBC );
 }
 
-void ScHeaderFooterContentObj::UpdateText( USHORT nPart, EditEngine& rSource )
+void ScHeaderFooterContentObj::UpdateText( sal_uInt16 nPart, EditEngine& rSource )
 {
     EditTextObject* pNew = rSource.CreateTextObject();
     switch (nPart)
@@ -231,13 +231,13 @@ ScHeaderFooterContentObj* ScHeaderFooterContentObj::getImplementation(
 //------------------------------------------------------------------------
 
 ScHeaderFooterTextData::ScHeaderFooterTextData( ScHeaderFooterContentObj& rContent,
-                                                    USHORT nP ) :
+                                                    sal_uInt16 nP ) :
     rContentObj( rContent ),
     nPart( nP ),
     pEditEngine( NULL ),
     pForwarder( NULL ),
-    bDataValid( FALSE ),
-    bInUpdate( FALSE )
+    bDataValid( sal_False ),
+    bInUpdate( sal_False )
 {
     rContentObj.acquire();              // must not go away
     rContentObj.AddListener( *this );
@@ -262,7 +262,7 @@ void ScHeaderFooterTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
         if ( ((const ScHeaderFooterChangedHint&)rHint).GetPart() == nPart )
         {
             if (!bInUpdate)             // not for own updates
-                bDataValid = FALSE;     // text has to be fetched again
+                bDataValid = sal_False;     // text has to be fetched again
         }
     }
 }
@@ -273,9 +273,9 @@ SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
     {
         SfxItemPool* pEnginePool = EditEngine::CreatePool();
         pEnginePool->FreezeIdRanges();
-        ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool, TRUE );
+        ScHeaderEditEngine* pHdrEngine = new ScHeaderEditEngine( pEnginePool, sal_True );
 
-        pHdrEngine->EnableUndo( FALSE );
+        pHdrEngine->EnableUndo( sal_False );
         pHdrEngine->SetRefMapMode( MAP_TWIP );
 
         //  default font must be set, independently of document
@@ -313,7 +313,7 @@ SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
     if (pData)
         pEditEngine->SetText(*pData);
 
-    bDataValid = TRUE;
+    bDataValid = sal_True;
     return pForwarder;
 }
 
@@ -321,18 +321,18 @@ void ScHeaderFooterTextData::UpdateData()
 {
     if ( pEditEngine )
     {
-        bInUpdate = TRUE;   // don't reset bDataValid during UpdateText
+        bInUpdate = sal_True;   // don't reset bDataValid during UpdateText
 
         rContentObj.UpdateText( nPart, *pEditEngine );
 
-        bInUpdate = FALSE;
+        bInUpdate = sal_False;
     }
 }
 
 //------------------------------------------------------------------------
 
 ScHeaderFooterTextObj::ScHeaderFooterTextObj( ScHeaderFooterContentObj& rContent,
-                                                USHORT nP ) :
+                                                sal_uInt16 nP ) :
     aTextData( rContent, nP ),
     pUnoText( NULL )
 {
@@ -401,7 +401,7 @@ rtl::OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeExce
     rtl::OUString aRet;
     const EditTextObject* pData;
 
-    USHORT nPart = aTextData.GetPart();
+    sal_uInt16 nPart = aTextData.GetPart();
     ScHeaderFooterContentObj& rContentObj = aTextData.GetContentObj();
 
     if (nPart == SC_HDFT_LEFT)
@@ -413,7 +413,7 @@ rtl::OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeExce
     if (pData)
     {
         // for pure text, no font info is needed in pool defaults
-        ScHeaderEditEngine aEditEngine( EditEngine::CreatePool(), TRUE );
+        ScHeaderEditEngine aEditEngine( EditEngine::CreatePool(), sal_True );
 
         ScHeaderFieldData aData;
         FillDummyFieldData( aData );
@@ -431,7 +431,7 @@ void SAL_CALL ScHeaderFooterTextObj::setString( const rtl::OUString& aText ) thr
     String aString(aText);
 
     // for pure text, no font info is needed in pool defaults
-    ScHeaderEditEngine aEditEngine( EditEngine::CreatePool(), TRUE );
+    ScHeaderEditEngine aEditEngine( EditEngine::CreatePool(), sal_True );
     aEditEngine.SetText( aString );
 
     aTextData.GetContentObj().UpdateText( aTextData.GetPart(), aEditEngine );
@@ -504,7 +504,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
             aSelection.nEndPos = aSelection.nStartPos + 1;
             pHeaderField->InitDoc( &aTextData.GetContentObj(), aTextData.GetPart(), aSelection );
 
-            //  #91431# for bAbsorb=FALSE, the new selection must be behind the inserted content
+            //  #91431# for bAbsorb=sal_False, the new selection must be behind the inserted content
             //  (the xml filter relies on this)
             if (!bAbsorb)
                 aSelection.nStartPos = aSelection.nEndPos;
@@ -943,7 +943,7 @@ ScSimpleEditSourceHelper::ScSimpleEditSourceHelper()
     pEnginePool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
     pEnginePool->FreezeIdRanges();
 
-    pEditEngine = new ScFieldEditEngine( pEnginePool, NULL, TRUE );     // TRUE: become owner of pool
+    pEditEngine = new ScFieldEditEngine( pEnginePool, NULL, sal_True );     // TRUE: become owner of pool
     pForwarder = new SvxEditEngineForwarder( *pEditEngine );
     pOriginalSource = new ScSimpleEditSource( pForwarder );
 }
@@ -988,10 +988,10 @@ ScCellTextData::ScCellTextData(ScDocShell* pDocSh, const ScAddress& rP) :
     pEditEngine( NULL ),
     pForwarder( NULL ),
     pOriginalSource( NULL ),
-    bDataValid( FALSE ),
-    bInUpdate( FALSE ),
-    bDirty( FALSE ),
-    bDoUpdate( TRUE )
+    bDataValid( sal_False ),
+    bInUpdate( sal_False ),
+    bDirty( sal_False ),
+    bDoUpdate( sal_True )
 {
     if (pDocShell)
         pDocShell->GetDocument()->AddUnoObject(*this);
@@ -1043,12 +1043,12 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         {
             SfxItemPool* pEnginePool = EditEngine::CreatePool();
             pEnginePool->FreezeIdRanges();
-            pEditEngine = new ScFieldEditEngine( pEnginePool, NULL, TRUE );
+            pEditEngine = new ScFieldEditEngine( pEnginePool, NULL, sal_True );
         }
-        //  currently, GetPortions doesn't work if UpdateMode is FALSE,
+        //  currently, GetPortions doesn't work if UpdateMode is sal_False,
         //  this will be fixed (in EditEngine) by src600
-//      pEditEngine->SetUpdateMode( FALSE );
-        pEditEngine->EnableUndo( FALSE );
+//      pEditEngine->SetUpdateMode( sal_False );
+        pEditEngine->EnableUndo( sal_False );
         if (pDocShell)
             pEditEngine->SetRefDevice(pDocShell->GetRefDevice());
         else
@@ -1086,7 +1086,7 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
         }
     }
 
-    bDataValid = TRUE;
+    bDataValid = sal_True;
     return pForwarder;
 }
 
@@ -1101,17 +1101,17 @@ void ScCellTextData::UpdateData()
             //  or things like attributes after the text would be lost
             //  (are not stored in the cell)
 
-            bInUpdate = TRUE;   // prevents bDataValid from being reset
+            bInUpdate = sal_True;   // prevents bDataValid from being reset
 
             ScDocFunc aFunc(*pDocShell);
-            aFunc.PutData( aCellPos, *pEditEngine, FALSE, TRUE );   // always as text
+            aFunc.PutData( aCellPos, *pEditEngine, sal_False, sal_True );   // always as text
 
-            bInUpdate = FALSE;
-            bDirty = FALSE;
+            bInUpdate = sal_False;
+            bDirty = sal_False;
         }
     }
     else
-        bDirty = TRUE;
+        bDirty = sal_True;
 }
 
 void ScCellTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -1124,7 +1124,7 @@ void ScCellTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
     else if ( rHint.ISA( SfxSimpleHint ) )
     {
-        ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
         if ( nId == SFX_HINT_DYING )
         {
             pDocShell = NULL;                       // invalid now
@@ -1135,7 +1135,7 @@ void ScCellTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
         else if ( nId == SFX_HINT_DATACHANGED )
         {
             if (!bInUpdate)                         // not for own UpdateData calls
-                bDataValid = FALSE;                 // text has to be read from the cell again
+                bDataValid = sal_False;                 // text has to be read from the cell again
         }
     }
 }

@@ -399,7 +399,7 @@ void Cell::mergeContent( const CellRef& xSourceCell )
     if( xSourceCell->hasText() )
     {
         SdrOutliner& rOutliner=rTableObj.ImpGetDrawOutliner();
-        rOutliner.SetUpdateMode(TRUE);
+        rOutliner.SetUpdateMode(sal_True);
 
         if( hasText() )
         {
@@ -657,7 +657,7 @@ sal_Int32 Cell::getMinimumHeight()
     {
         Outliner& rOutliner=rTableObj.ImpGetDrawOutliner();
         rOutliner.SetPaperSize(aSize);
-        rOutliner.SetUpdateMode(TRUE);
+        rOutliner.SetUpdateMode(sal_True);
         ForceOutlinerParaObject( OUTLINERMODE_TEXTOBJECT );
 
         if( GetOutlinerParaObject() )
@@ -1417,7 +1417,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
                 case XATTR_FILLHATCH:
                 case XATTR_LINEDASH:
                     {
-                        NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((USHORT)pMap->nWID);
+                        NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
                         if( ( pItem == NULL ) || ( pItem->GetName().Len() == 0) )
                             eState = PropertyState_DEFAULT_VALUE;
                     }
@@ -1432,7 +1432,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
                 case XATTR_LINESTART:
                 case XATTR_FILLFLOATTRANSPARENCE:
                     {
-                        NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((USHORT)pMap->nWID);
+                        NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
                         if( ( pItem == NULL ) )
                             eState = PropertyState_DEFAULT_VALUE;
                     }

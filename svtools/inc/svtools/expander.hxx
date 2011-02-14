@@ -52,9 +52,9 @@ private:
         Image                   aActiveImage;
         Rectangle               maFocusRect;
         ImageList               maExpanderImages;
-        BOOL                    mbIsExpanded;
-        BOOL                    mbHasFocusRect;
-        BOOL                    mbIsInMouseDown;
+        sal_Bool                    mbIsExpanded;
+        sal_Bool                    mbHasFocusRect;
+        sal_Bool                    mbIsInMouseDown;
         Link                    maToggleHdl;
         SvExpanderStateType eType;
 
@@ -75,9 +75,9 @@ public:
         SvExpander( Window* pParent, WinBits nStyle = 0 );
         SvExpander( Window* pParent, const ResId& rResId );
 
-        BOOL            IsExpanded() {return mbIsExpanded;}
+        sal_Bool            IsExpanded() {return mbIsExpanded;}
 
-        void            SetToExpanded(BOOL bFlag=TRUE);
+        void            SetToExpanded(sal_Bool bFlag=sal_True);
 
         void            SetExpanderImage( SvExpanderStateType eType);
         Image           GetExpanderImage(SvExpanderStateType eType);

@@ -77,7 +77,7 @@ void ODriversSettings::getSupportedIndirectSettings( const ::rtl::OUString& _sUR
         }
     }
 #endif
-    typedef ::std::pair<USHORT, ::rtl::OUString> TProperties;
+    typedef ::std::pair<sal_uInt16, ::rtl::OUString> TProperties;
     TProperties aProps[] = { TProperties(DSID_SHOWDELETEDROWS,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShowDeleted")))
                             ,TProperties(DSID_CHARSET,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharSet")))
                             ,TProperties(DSID_FIELDDELIMITER,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FieldDelimiter")))

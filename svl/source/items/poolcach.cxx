@@ -84,7 +84,7 @@ SfxItemPoolCache::~SfxItemPoolCache()
 
 //------------------------------------------------------------------------
 
-const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, BOOL bNew )
+const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, sal_Bool bNew )
 {
     DBG_CHKTHIS(SfxItemPoolCache, 0);
     DBG_ASSERT( pPool == rOrigItem.GetItemSet().GetPool(), "invalid Pool" );

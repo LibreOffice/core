@@ -44,19 +44,19 @@ static const sal_Char pStrFix[] = "FIX";
 
 ScImportOptions::ScImportOptions( const String& rStr )
 {
-    bFixedWidth = FALSE;
+    bFixedWidth = sal_False;
     nFieldSepCode = 0;
     if ( rStr.GetTokenCount(',') >= 3 )
     {
         String aToken( rStr.GetToken( 0, ',' ) );
         if( aToken.EqualsIgnoreCaseAscii( pStrFix ) )
-            bFixedWidth = TRUE;
+            bFixedWidth = sal_True;
         else
             nFieldSepCode = (sal_Unicode) aToken.ToInt32();
         nTextSepCode  = (sal_Unicode) rStr.GetToken(1,',').ToInt32();
         aStrFont      = rStr.GetToken(2,',');
         eCharSet      = ScGlobal::GetCharsetValue(aStrFont);
-        bSaveAsShown  = (rStr.GetToken( 3, ',' ).ToInt32() ? TRUE : FALSE);
+        bSaveAsShown  = (rStr.GetToken( 3, ',' ).ToInt32() ? sal_True : sal_False);
     }
 }
 

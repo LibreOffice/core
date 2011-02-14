@@ -64,8 +64,8 @@ void SwEditShell::InsertGlossary( SwTextBlocks& rGlossary, const String& rStr )
  ******************************************************************************/
 
 
-USHORT SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const String& rName, const String& rShortName,
-                                    BOOL bSaveRelFile, const String* pOnlyTxt )
+sal_uInt16 SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const String& rName, const String& rShortName,
+                                    sal_Bool bSaveRelFile, const String* pOnlyTxt )
 {
     SwDoc* pGDoc = rBlks.GetDoc();
 
@@ -77,7 +77,7 @@ USHORT SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const String& rName, cons
     }
     rBlks.SetBaseURL( sBase );
 
-    USHORT nRet;
+    sal_uInt16 nRet;
 
     if( pOnlyTxt )
         nRet = rBlks.PutText( rShortName, rName, *pOnlyTxt );
@@ -92,17 +92,17 @@ USHORT SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const String& rName, cons
             nRet = rBlks.PutDoc();
         }
         else
-            nRet = (USHORT) -1;
+            nRet = (sal_uInt16) -1;
     }
 
     return nRet;
 }
 
-USHORT SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
+sal_uInt16 SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
                                     const String& rName,
                                     const String& rShortName,
-                                    BOOL bSaveRelFile,
-                                    BOOL bOnlyTxt )
+                                    sal_Bool bSaveRelFile,
+                                    sal_Bool bOnlyTxt )
 {
     StartAllAction();
 
@@ -116,7 +116,7 @@ USHORT SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
         sBase = aURL.GetMainURL( INetURLObject::NO_DECODE );
     }
     rBlock.SetBaseURL( sBase );
-    USHORT nRet = USHRT_MAX;
+    sal_uInt16 nRet = USHRT_MAX;
 
     if( bOnlyTxt )
     {
@@ -179,7 +179,7 @@ USHORT SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
  ******************************************************************************/
 
 
-BOOL SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
+sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
 {
     ASSERT( pInsDoc, "kein Ins.Dokument"  );
 
@@ -196,7 +196,7 @@ BOOL SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
         (*pSttNd)--;
     }
 
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     SET_CURR_SHELL( this );
 
     pInsDoc->LockExpFlds();
@@ -215,22 +215,22 @@ BOOL SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
             ->GetSttNd()->FindTableNode() ))
         {
             // teste ob der TabellenName kopiert werden kann
-            BOOL bCpyTblNm = aBoxes.Count() == pTblNd->GetTable().GetTabSortBoxes().Count();
+            sal_Bool bCpyTblNm = aBoxes.Count() == pTblNd->GetTable().GetTabSortBoxes().Count();
             if( bCpyTblNm )
             {
                 const String& rTblName = pTblNd->GetTable().GetFrmFmt()->GetName();
                 const SwFrmFmts& rTblFmts = *pInsDoc->GetTblFrmFmts();
-                for( USHORT n = rTblFmts.Count(); n; )
+                for( sal_uInt16 n = rTblFmts.Count(); n; )
                     if( rTblFmts[ --n ]->GetName() == rTblName )
                     {
-                        bCpyTblNm = FALSE;
+                        bCpyTblNm = sal_False;
                         break;
                     }
             }
-            bRet = pInsDoc->InsCopyOfTbl( aPos, aBoxes, 0, bCpyTblNm, FALSE );
+            bRet = pInsDoc->InsCopyOfTbl( aPos, aBoxes, 0, bCpyTblNm, sal_False );
         }
         else
-            bRet = FALSE;
+            bRet = sal_False;
     }
     else
     {
@@ -276,13 +276,13 @@ BOOL SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
 
 /*------------------------------------------------------------------------
  Beschreibung:  Text innerhalb der Selektion erfragen
- Returnwert:    liefert FALSE, wenn der selektierte Bereich
+ Returnwert:    liefert sal_False, wenn der selektierte Bereich
                 zu gross ist, um in den Stringpuffer kopiert zu werden.
 ------------------------------------------------------------------------*/
 
-BOOL SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
+sal_Bool SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     GetCrsr();  // ggfs. alle Cursor erzeugen lassen
     if( IsSelOnePara() )
     {
@@ -304,7 +304,7 @@ BOOL SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
                             RTL_CONSTASCII_STRINGPARAM( "\015\012" ));
 #endif
         }
-        bRet = TRUE;
+        bRet = sal_True;
     }
     else if( IsSelection() )
     {
@@ -320,18 +320,18 @@ BOOL SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
         {
                 // Selektierte Bereiche in ein ASCII Dokument schreiben
             SwWriter aWriter( aStream, *this);
-            xWrt->SetShowProgress( FALSE );
+            xWrt->SetShowProgress( sal_False );
 
             switch( nHndlParaBrk )
             {
             case GETSELTXT_PARABRK_TO_BLANK:
-                xWrt->bASCII_ParaAsBlanc = TRUE;
-                xWrt->bASCII_NoLastLineEnd = TRUE;
+                xWrt->bASCII_ParaAsBlanc = sal_True;
+                xWrt->bASCII_NoLastLineEnd = sal_True;
                 break;
 
             case GETSELTXT_PARABRK_TO_ONLYCR:
-                xWrt->bASCII_ParaAsCR = TRUE;
-                xWrt->bASCII_NoLastLineEnd = TRUE;
+                xWrt->bASCII_ParaAsCR = sal_True;
+                xWrt->bASCII_NoLastLineEnd = sal_True;
                 break;
             }
 
@@ -339,7 +339,7 @@ BOOL SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
             SwAsciiOptions aAsciiOpt( xWrt->GetAsciiOptions() );
             aAsciiOpt.SetCharSet( RTL_TEXTENCODING_UCS2 );
             xWrt->SetAsciiOptions( aAsciiOpt );
-            xWrt->bUCS2_WithStartChar = FALSE;
+            xWrt->bUCS2_WithStartChar = sal_False;
 
             long lLen;
             if( !IsError( aWriter.Write( xWrt ) ) &&
@@ -364,7 +364,7 @@ BOOL SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
         }
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 

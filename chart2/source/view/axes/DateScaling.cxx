@@ -177,13 +177,13 @@ double SAL_CALL InverseDateScaling::doScaling( double value )
                     fYear--;
                     fMonth=12.0;
                 }
-                aDate.SetYear( static_cast<USHORT>(fYear) );
-                aDate.SetMonth( static_cast<USHORT>(fMonth) );
+                aDate.SetYear( static_cast<sal_uInt16>(fYear) );
+                aDate.SetMonth( static_cast<sal_uInt16>(fMonth) );
                 aDate.SetDay( 1 );
                 double fMonthCount = (fYear*lcl_fNumberOfMonths)+fMonth;
                 double fDay = (value-fMonthCount)*aDate.GetDaysInMonth();
                 fDay += 1.0;
-                aDate.SetDay( static_cast<USHORT>(::rtl::math::round(fDay)) );
+                aDate.SetDay( static_cast<sal_uInt16>(::rtl::math::round(fDay)) );
                 fResult = aDate - m_aNullDate;
                 break;
         }

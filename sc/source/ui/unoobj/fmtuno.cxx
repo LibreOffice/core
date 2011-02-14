@@ -137,7 +137,7 @@ ScCondFormatEntryItem::ScCondFormatEntryItem() :
 //------------------------------------------------------------------------
 
 ScTableConditionalFormat::ScTableConditionalFormat(
-        ScDocument* pDoc, ULONG nKey, FormulaGrammar::Grammar eGrammar)
+        ScDocument* pDoc, sal_uLong nKey, FormulaGrammar::Grammar eGrammar)
 {
     //  Eintrag aus dem Dokument lesen...
 
@@ -153,8 +153,8 @@ ScTableConditionalFormat::ScTableConditionalFormat(
                 if (pDoc->IsInExternalReferenceMarking())
                     pFormat->MarkUsedExternalReferences();
 
-                USHORT nEntryCount = pFormat->Count();
-                for (USHORT i=0; i<nEntryCount; i++)
+                sal_uInt16 nEntryCount = pFormat->Count();
+                for (sal_uInt16 i=0; i<nEntryCount; i++)
                 {
                     ScCondFormatEntryItem aItem;
                     const ScCondFormatEntry* pFormatEntry = pFormat->GetEntry(i);
@@ -190,8 +190,8 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
     //  ScConditionalFormat = Core-Struktur, muss leer sein
 
     DBG_ASSERT( rFormat.IsEmpty(), "FillFormat: Format nicht leer" );
-    USHORT nCount = (USHORT)aEntries.Count();
-    for (USHORT i=0; i<nCount; i++)
+    sal_uInt16 nCount = (sal_uInt16)aEntries.Count();
+    for (sal_uInt16 i=0; i<nCount; i++)
     {
         ScTableConditionalEntry* pEntry = (ScTableConditionalEntry*)aEntries.GetObject(i);
         if ( !pEntry )
@@ -243,7 +243,7 @@ void ScTableConditionalFormat::AddEntry_Impl(const ScCondFormatEntryItem& aEntry
 
 // XSheetConditionalFormat
 
-ScTableConditionalEntry* ScTableConditionalFormat::GetObjectByIndex_Impl(USHORT nIndex) const
+ScTableConditionalEntry* ScTableConditionalFormat::GetObjectByIndex_Impl(sal_uInt16 nIndex) const
 {
     return (ScTableConditionalEntry*)aEntries.GetObject(nIndex);
 }
@@ -388,7 +388,7 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XSheetConditionalEntry> xEntry(GetObjectByIndex_Impl((USHORT)nIndex));
+    uno::Reference<sheet::XSheetConditionalEntry> xEntry(GetObjectByIndex_Impl((sal_uInt16)nIndex));
     if (xEntry.is())
         return uno::makeAny(xEntry);
     else
@@ -429,7 +429,7 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByName( const rtl::OUString& aNam
     for (long i=0; i<nCount; i++)
         if ( aName == lcl_GetEntryNameFromIndex(i) )
         {
-            xEntry.set(GetObjectByIndex_Impl((USHORT)i));
+            xEntry.set(GetObjectByIndex_Impl((sal_uInt16)i));
             break;
         }
 
@@ -462,9 +462,9 @@ sal_Bool SAL_CALL ScTableConditionalFormat::hasByName( const rtl::OUString& aNam
     long nCount = aEntries.Count();
     for (long i=0; i<nCount; i++)
         if ( aName == lcl_GetEntryNameFromIndex(i) )
-            return TRUE;
+            return sal_True;
 
-    return FALSE;
+    return sal_False;
 }
 
 // XUnoTunnel
@@ -607,30 +607,30 @@ void SAL_CALL ScTableConditionalEntry::setStyleName( const rtl::OUString& aStyle
 
 //------------------------------------------------------------------------
 
-ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
+ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, sal_uLong nKey,
                                             const formula::FormulaGrammar::Grammar eGrammar) :
     aPropSet( lcl_GetValidatePropertyMap() )
 {
     //  Eintrag aus dem Dokument lesen...
 
-    BOOL bFound = FALSE;
+    sal_Bool bFound = sal_False;
     if ( pDoc && nKey )
     {
         const ScValidationData* pData = pDoc->GetValidationEntry( nKey );
         if (pData)
         {
-            nMode = sal::static_int_cast<USHORT>( pData->GetOperation() );
+            nMode = sal::static_int_cast<sal_uInt16>( pData->GetOperation() );
             aSrcPos = pData->GetValidSrcPos();  // #b4974740# valid pos for expressions
             aExpr1 = pData->GetExpression( aSrcPos, 0, 0, eGrammar );
             aExpr2 = pData->GetExpression( aSrcPos, 1, 0, eGrammar );
             meGrammar1 = meGrammar2 = eGrammar;
-            nValMode = sal::static_int_cast<USHORT>( pData->GetDataMode() );
+            nValMode = sal::static_int_cast<sal_uInt16>( pData->GetDataMode() );
             bIgnoreBlank = pData->IsIgnoreBlank();
             nShowList = pData->GetListType();
             bShowInput = pData->GetInput( aInputTitle, aInputMessage );
             ScValidErrorStyle eStyle;
             bShowError = pData->GetErrMsg( aErrorTitle, aErrorMessage, eStyle );
-            nErrorStyle = sal::static_int_cast<USHORT>( eStyle );
+            nErrorStyle = sal::static_int_cast<sal_uInt16>( eStyle );
 
             // During save to XML, sheet::ValidationType_ANY formulas are not
             // saved, even if in the list, see
@@ -639,7 +639,7 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
             if (nValMode != SC_VALID_ANY && pDoc->IsInExternalReferenceMarking())
                 pData->MarkUsedExternalReferences();
 
-            bFound = TRUE;
+            bFound = sal_True;
         }
     }
     if (!bFound)
@@ -694,10 +694,10 @@ void ScTableValidationObj::ClearData_Impl()
 {
     nMode        = SC_COND_NONE;
     nValMode     = SC_VALID_ANY;
-    bIgnoreBlank = TRUE;
+    bIgnoreBlank = sal_True;
     nShowList    = sheet::TableValidationVisibility::UNSORTED;
-    bShowInput   = FALSE;
-    bShowError   = FALSE;
+    bShowInput   = sal_False;
+    bShowError   = sal_False;
     nErrorStyle  = SC_VALERR_STOP;
     aSrcPos.Set(0,0,0);
     aExpr1.Erase();
@@ -728,7 +728,7 @@ void SAL_CALL ScTableValidationObj::setOperator( sheet::ConditionOperator nOpera
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    nMode = sal::static_int_cast<USHORT>( lcl_ConditionOperatorToMode( nOperator ) );
+    nMode = sal::static_int_cast<sal_uInt16>( lcl_ConditionOperatorToMode( nOperator ) );
 }
 
 rtl::OUString SAL_CALL ScTableValidationObj::getFormula1() throw(uno::RuntimeException)

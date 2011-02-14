@@ -48,9 +48,9 @@ MnemonicGenerator::MnemonicGenerator()
 
 // -----------------------------------------------------------------------
 
-USHORT MnemonicGenerator::ImplGetMnemonicIndex( sal_Unicode c )
+sal_uInt16 MnemonicGenerator::ImplGetMnemonicIndex( sal_Unicode c )
 {
-    static USHORT const aImplMnemonicRangeTab[MNEMONIC_RANGES*2] =
+    static sal_uInt16 const aImplMnemonicRangeTab[MNEMONIC_RANGES*2] =
     {
         MNEMONIC_RANGE_1_START, MNEMONIC_RANGE_1_END,
         MNEMONIC_RANGE_2_START, MNEMONIC_RANGE_2_END,
@@ -58,8 +58,8 @@ USHORT MnemonicGenerator::ImplGetMnemonicIndex( sal_Unicode c )
         MNEMONIC_RANGE_4_START, MNEMONIC_RANGE_4_END
     };
 
-    USHORT nMnemonicIndex = 0;
-    for ( USHORT i = 0; i < MNEMONIC_RANGES; i++ )
+    sal_uInt16 nMnemonicIndex = 0;
+    for ( sal_uInt16 i = 0; i < MNEMONIC_RANGES; i++ )
     {
         if ( (c >= aImplMnemonicRangeTab[i*2]) &&
              (c <= aImplMnemonicRangeTab[i*2+1]) )
@@ -106,7 +106,7 @@ void MnemonicGenerator::RegisterMnemonic( const XubString& rKey )
     sal_Unicode cMnemonic = ImplFindMnemonic( aKey );
     if ( cMnemonic )
     {
-        USHORT nMnemonicIndex = ImplGetMnemonicIndex( cMnemonic );
+        sal_uInt16 nMnemonicIndex = ImplGetMnemonicIndex( cMnemonic );
         if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
             maMnemonics[nMnemonicIndex] = 0;
     }
@@ -118,7 +118,7 @@ void MnemonicGenerator::RegisterMnemonic( const XubString& rKey )
         {
             sal_Unicode c = aKey.GetChar( nIndex );
 
-            USHORT nMnemonicIndex = ImplGetMnemonicIndex( c );
+            sal_uInt16 nMnemonicIndex = ImplGetMnemonicIndex( c );
             if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
             {
                 if ( maMnemonics[nMnemonicIndex] && (maMnemonics[nMnemonicIndex] < 0xFF) )
@@ -132,24 +132,24 @@ void MnemonicGenerator::RegisterMnemonic( const XubString& rKey )
 
 // -----------------------------------------------------------------------
 
-BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
+sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
 {
     if ( !rKey.Len() || ImplFindMnemonic( rKey ) )
-        return FALSE;
+        return sal_False;
 
     const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILocale();
     uno::Reference < i18n::XCharacterClassification > xCharClass = GetCharClass();
 
     // Don't crash even when we don't have access to i18n service
     if ( !xCharClass.is() )
-        return FALSE;
+        return sal_False;
 
     XubString aKey = xCharClass->toUpper( rKey, 0, rKey.Len(), rLocale );
 
-    BOOL bChanged = FALSE;
+    sal_Bool bChanged = sal_False;
     xub_StrLen nLen = aKey.Len();
 
-    BOOL bCJK = FALSE;
+    sal_Bool bCJK = sal_False;
     switch( Application::GetSettings().GetUILanguage() )
     {
         case LANGUAGE_JAPANESE:
@@ -160,7 +160,7 @@ BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
         case LANGUAGE_CHINESE_MACAU:
         case LANGUAGE_KOREAN:
         case LANGUAGE_KOREAN_JOHAB:
-            bCJK = TRUE;
+            bCJK = sal_True;
             break;
         default:
             break;
@@ -172,8 +172,8 @@ BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
     // #110720#, avoid CJK-style mnemonics for latin-only strings that do not contain useful mnemonic chars
     if( bCJK )
     {
-        BOOL bLatinOnly = TRUE;
-        BOOL bMnemonicIndexFound = FALSE;
+        sal_Bool bLatinOnly = sal_True;
+        sal_Bool bMnemonicIndexFound = sal_False;
         sal_Unicode     c;
         xub_StrLen      nIndex;
 
@@ -183,19 +183,19 @@ BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
             if ( ((c >= 0x3000) && (c <= 0xD7FF)) ||    // cjk
                  ((c >= 0xFF61) && (c <= 0xFFDC)) )     // halfwidth forms
             {
-                bLatinOnly = FALSE;
+                bLatinOnly = sal_False;
                 break;
             }
             if( ImplGetMnemonicIndex( c ) != MNEMONIC_INDEX_NOTFOUND )
-                bMnemonicIndexFound = TRUE;
+                bMnemonicIndexFound = sal_True;
         }
         if( bLatinOnly && !bMnemonicIndexFound )
-            return FALSE;
+            return sal_False;
     }
 
 
     int             nCJK = 0;
-    USHORT          nMnemonicIndex;
+    sal_uInt16          nMnemonicIndex;
     sal_Unicode     c;
     xub_StrLen      nIndex = 0;
     if( !bCJK )
@@ -225,7 +225,7 @@ BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
                 {
                     maMnemonics[nMnemonicIndex] = 0;
                     rKey.Insert( MNEMONIC_CHAR, nIndex );
-                    bChanged = TRUE;
+                    bChanged = sal_True;
                     break;
                 }
             }
@@ -246,8 +246,8 @@ BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
         // 2) search for a unique/uncommon character
         if ( !bChanged )
         {
-            USHORT      nBestCount = 0xFFFF;
-            USHORT      nBestMnemonicIndex = 0;
+            sal_uInt16      nBestCount = 0xFFFF;
+            sal_uInt16      nBestMnemonicIndex = 0;
             xub_StrLen  nBestIndex = 0;
             nIndex = 0;
             do
@@ -277,7 +277,7 @@ BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
             {
                 maMnemonics[nBestMnemonicIndex] = 0;
                 rKey.Insert( MNEMONIC_CHAR, nBestIndex );
-                bChanged = TRUE;
+                bChanged = sal_True;
             }
         }
     }
@@ -325,7 +325,7 @@ BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
                             nIndex--;
                     }
                     rKey.Insert( aStr, nIndex );
-                    bChanged = TRUE;
+                    bChanged = sal_True;
                     break;
                 }
             }
@@ -350,7 +350,7 @@ BOOL MnemonicGenerator::CreateMnemonic( XubString& rKey )
 //            {
 //                maMnemonics[nMnemonicIndex] = 0;
 //                rKey.Insert( MNEMONIC_CHAR, nIndex );
-//                bChanged = TRUE;
+//                bChanged = sal_True;
 //                break;
 //            }
 //

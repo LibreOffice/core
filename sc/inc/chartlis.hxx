@@ -75,9 +75,9 @@ private:
 
     ScChartUnoData* pUnoData;
     ScDocument*     pDoc;
-    BOOL            bUsed;  // fuer ScChartListenerCollection::FreeUnused
-    BOOL            bDirty;
-    BOOL            bSeriesRangesScheduled;
+    sal_Bool            bUsed;  // fuer ScChartListenerCollection::FreeUnused
+    sal_Bool            bDirty;
+    sal_Bool            bSeriesRangesScheduled;
 
                     // not implemented
     ScChartListener& operator=( const ScChartListener& );
@@ -98,34 +98,34 @@ public:
     com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >  GetUnoListener() const;
     com::sun::star::uno::Reference< com::sun::star::chart::XChartData >                     GetUnoSource() const;
 
-    BOOL            IsUno() const   { return (pUnoData != NULL); }
+    sal_Bool            IsUno() const   { return (pUnoData != NULL); }
 
     virtual void    Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
     void            StartListeningTo();
     void            EndListeningTo();
     void            ChangeListening( const ScRangeListRef& rRangeListRef,
-                                    BOOL bDirty = FALSE );
+                                    sal_Bool bDirty = sal_False );
     void            Update();
     ScRangeListRef  GetRangeList() const;
     void            SetRangeList( const ScRangeListRef& rNew );
     void            SetRangeList( const ScRange& rNew );
-    BOOL            IsUsed() const { return bUsed; }
-    void            SetUsed( BOOL bFlg ) { bUsed = bFlg; }
-    BOOL            IsDirty() const { return bDirty; }
-    void            SetDirty( BOOL bFlg ) { bDirty = bFlg; }
+    sal_Bool            IsUsed() const { return bUsed; }
+    void            SetUsed( sal_Bool bFlg ) { bUsed = bFlg; }
+    sal_Bool            IsDirty() const { return bDirty; }
+    void            SetDirty( sal_Bool bFlg ) { bDirty = bFlg; }
 
     void            UpdateChartIntersecting( const ScRange& rRange );
 
     // if chart series ranges are to be updated later on (e.g. DeleteTab, InsertTab)
-    void            ScheduleSeriesRanges()      { bSeriesRangesScheduled = TRUE; }
+    void            ScheduleSeriesRanges()      { bSeriesRangesScheduled = sal_True; }
     void            UpdateScheduledSeriesRanges();
     void            UpdateSeriesRanges();
 
     ExternalRefListener* GetExtRefListener();
     void            SetUpdateQueue();
 
-    BOOL            operator==( const ScChartListener& );
-    BOOL            operator!=( const ScChartListener& r )
+    sal_Bool            operator==( const ScChartListener& );
+    sal_Bool            operator!=( const ScChartListener& r )
                         { return !operator==( r ); }
 };
 
@@ -176,7 +176,7 @@ public:
 
     void            ChangeListening( const String& rName,
                                     const ScRangeListRef& rRangeListRef,
-                                    BOOL bDirty = FALSE );
+                                    sal_Bool bDirty = sal_False );
     // FreeUnused nur wie in ScDocument::UpdateChartListenerCollection verwenden!
     void            FreeUnused();
     void            FreeUno( const com::sun::star::uno::Reference< com::sun::star::chart::XChartDataChangeEventListener >& rListener,
@@ -185,14 +185,14 @@ public:
     void            UpdateDirtyCharts();
     void SC_DLLPUBLIC SetDirty();
     void            SetDiffDirty( const ScChartListenerCollection&,
-                        BOOL bSetChartRangeLists = FALSE );
+                        sal_Bool bSetChartRangeLists = sal_False );
 
     void            SetRangeDirty( const ScRange& rRange );     // z.B. Zeilen/Spalten
 
     void            UpdateScheduledSeriesRanges();
     void            UpdateChartsContainingTab( SCTAB nTab );
 
-    BOOL            operator==( const ScChartListenerCollection& );
+    sal_Bool            operator==( const ScChartListenerCollection& );
 
     /**
      * Start listening on hide/show change within specified cell range.  A

@@ -142,8 +142,8 @@ IMPL_LINK( SvxConfigFunctionListBox_Impl, TimerHdl, Timer*, EMPTYARG)
 
 void SvxConfigFunctionListBox_Impl::ClearAll()
 {
-    USHORT nCount = aArr.Count();
-    for ( USHORT i=0; i<nCount; i++ )
+    sal_uInt16 nCount = aArr.Count();
+    for ( sal_uInt16 i=0; i<nCount; i++ )
     {
         SvxGroupInfo_Impl *pData = aArr[i];
         delete pData;
@@ -248,8 +248,8 @@ SvxConfigGroupListBox_Impl::~SvxConfigGroupListBox_Impl()
 
 void SvxConfigGroupListBox_Impl::ClearAll()
 {
-    USHORT nCount = aArr.Count();
-    for ( USHORT i=0; i<nCount; i++ )
+    sal_uInt16 nCount = aArr.Count();
+    for ( sal_uInt16 i=0; i<nCount; i++ )
     {
         SvxGroupInfo_Impl *pData = aArr[i];
         delete pData;
@@ -326,12 +326,12 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
             Sequence< Reference< browse::XBrowseNode > > children =
                 _rxRootNode->getChildNodes();
 
-            BOOL bIsRootNode = _rxRootNode->getName().equalsAscii("Root");
+            sal_Bool bIsRootNode = _rxRootNode->getName().equalsAscii("Root");
 
             /* To mimic current starbasic behaviour we
             need to make sure that only the current document
             is displayed in the config tree. Tests below
-            set the bDisplay flag to FALSE if the current
+            set the bDisplay flag to sal_False if the current
             node is a first level child of the Root and is NOT
             either the current document, user or share */
             OUString sCurrentDocTitle;
@@ -348,7 +348,7 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                 if ( !theChild.is() )
                     continue;
                 ::rtl::OUString sUIName = theChild->getName();
-                BOOL bDisplay = TRUE;
+                sal_Bool bDisplay = sal_True;
 
                 if  (   bIsRootNode
                     ||  ( m_bShowSlots && _pParentEntry && ( GetModel()->GetDepth( _pParentEntry ) == 0 ) )
@@ -368,7 +368,7 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                     }
                     else if ( !sUIName.equals( sCurrentDocTitle ) )
                     {
-                        bDisplay = FALSE;
+                        bDisplay = sal_False;
                     }
                 }
 
@@ -400,7 +400,7 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                     * way to determine if a basic lib had children
                     * without having to ask for them (which forces
                     * the library to be loaded */
-                    pNewEntry->EnableChildsOnDemand( TRUE );
+                    pNewEntry->EnableChildsOnDemand( sal_True );
                 }
                 else
                 {
@@ -413,7 +413,7 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                     {
                         if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
                         {
-                            pNewEntry->EnableChildsOnDemand( TRUE );
+                            pNewEntry->EnableChildsOnDemand( sal_True );
                             break;
                         }
                     }
@@ -429,7 +429,7 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
 
 void SvxConfigGroupListBox_Impl::Init()
 {
-    SetUpdateMode(FALSE);
+    SetUpdateMode(sal_False);
     ClearAll();
 
     Reference< XComponentContext > xContext;
@@ -579,7 +579,7 @@ void SvxConfigGroupListBox_Impl::Init()
 
                 SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
                 pNewEntry->SetUserData( pInfo );
-                pNewEntry->EnableChildsOnDemand( TRUE );
+                pNewEntry->EnableChildsOnDemand( sal_True );
                 aArr.Insert( pInfo, aArr.Count() );
             }
             else
@@ -589,7 +589,7 @@ void SvxConfigGroupListBox_Impl::Init()
         }
     }
     MakeVisible( GetEntry( 0,0 ) );
-    SetUpdateMode( TRUE );
+    SetUpdateMode( sal_True );
 }
 
 Image SvxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > node, Reference< XComponentContext > xCtx, bool bIsRootNode, bool bHighContrast )
@@ -719,12 +719,12 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
 {
     SvLBoxEntry *pEntry = FirstSelected();
     SvxGroupInfo_Impl *pInfo = (SvxGroupInfo_Impl*) pEntry->GetUserData();
-    pFunctionListBox->SetUpdateMode(FALSE);
+    pFunctionListBox->SetUpdateMode(sal_False);
     pFunctionListBox->ClearAll();
     if ( pInfo->nKind != SVX_CFGGROUP_FUNCTION &&
              pInfo->nKind != SVX_CFGGROUP_SCRIPTCONTAINER )
     {
-        pFunctionListBox->SetUpdateMode(TRUE);
+        pFunctionListBox->SetUpdateMode(sal_True);
         return;
     }
 
@@ -895,31 +895,31 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
     if ( pFunctionListBox->GetEntryCount() )
         pFunctionListBox->Select( pFunctionListBox->GetEntry( 0, 0 ) );
 
-    pFunctionListBox->SetUpdateMode(TRUE);
+    pFunctionListBox->SetUpdateMode(sal_True);
 }
 
-BOOL SvxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
+sal_Bool SvxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
 {
-    BOOL bRet = SvTreeListBox::Expand( pParent );
+    sal_Bool bRet = SvTreeListBox::Expand( pParent );
     if ( bRet )
     {
         // Wieviele Entries k"onnen angezeigt werden ?
-        ULONG nEntries = GetOutputSizePixel().Height() / GetEntryHeight();
+        sal_uLong nEntries = GetOutputSizePixel().Height() / GetEntryHeight();
 
         // Wieviele Kinder sollen angezeigt werden ?
-        ULONG nChildCount = GetVisibleChildCount( pParent );
+        sal_uLong nChildCount = GetVisibleChildCount( pParent );
 
         // Passen alle Kinder und der parent gleichzeitig in die View ?
         if ( nChildCount+1 > nEntries )
         {
             // Wenn nicht, wenigstens parent ganz nach oben schieben
-            MakeVisible( pParent, TRUE );
+            MakeVisible( pParent, sal_True );
         }
         else
         {
             // An welcher relativen ViewPosition steht der aufzuklappende parent
             SvLBoxEntry *pEntry = GetFirstEntryInView();
-            ULONG nParentPos = 0;
+            sal_uLong nParentPos = 0;
             while ( pEntry && pEntry != pParent )
             {
                 nParentPos++;
@@ -938,7 +938,7 @@ BOOL SvxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
 void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
 {
     SvxGroupInfo_Impl *pInfo = (SvxGroupInfo_Impl*) pEntry->GetUserData();
-    pInfo->bWasOpened = TRUE;
+    pInfo->bWasOpened = sal_True;
     switch ( pInfo->nKind )
     {
         case SVX_CFGGROUP_SCRIPTCONTAINER:
@@ -965,7 +965,7 @@ void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
  */
 
 SvxScriptSelectorDialog::SvxScriptSelectorDialog(
-  Window* pParent, BOOL bShowSlots, const Reference< frame::XFrame >& xFrame )
+  Window* pParent, sal_Bool bShowSlots, const Reference< frame::XFrame >& xFrame )
     :
     ModelessDialog( pParent, CUI_RES( RID_DLG_SCRIPTSELECTOR ) ),
     aDialogDescription( this, CUI_RES( TXT_SELECTOR_DIALOG_DESCRIPTION ) ),
@@ -1022,7 +1022,7 @@ void SvxScriptSelectorDialog::ResizeControls()
     Size s, news;
     long gap;
 
-    USHORT style = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP |
+    sal_uInt16 style = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP |
                    TEXT_DRAW_LEFT | TEXT_DRAW_WORDBREAK;
 
     // get dimensions of dialog instructions control
@@ -1115,12 +1115,12 @@ SvxScriptSelectorDialog::UpdateUI()
             aCommands.GetHelpText( aCommands.FirstSelected() );
         aDescriptionText.SetText( rMessage );
 
-        aOKButton.Enable( TRUE );
+        aOKButton.Enable( sal_True );
     }
     else
     {
         aDescriptionText.SetText( String() );
-        aOKButton.Enable( FALSE );
+        aOKButton.Enable( sal_False );
     }
 }
 
@@ -1130,7 +1130,7 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
     {
         // If we are displaying Slot API commands then the dialog is being
         // run from Tools/Configure and we should not close it, just hide it
-        if ( m_bShowSlots == FALSE )
+        if ( m_bShowSlots == sal_False )
         {
             EndDialog( RET_CANCEL );
         }
@@ -1145,7 +1145,7 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
 
         // If we are displaying Slot API commands then this the dialog is being
         // run from Tools/Configure and we should not close it
-        if ( m_bShowSlots == FALSE )
+        if ( m_bShowSlots == sal_False )
         {
             EndDialog( RET_OK );
         }

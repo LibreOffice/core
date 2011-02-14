@@ -36,7 +36,7 @@ using namespace rtl;
 
 class SvI18NMapEntry_Impl
 {
-    USHORT          nKind;
+    sal_uInt16          nKind;
     OUString        aName;
     OUString        aNewName;
 
@@ -44,25 +44,25 @@ public:
 
     const OUString& GetNewName() const { return aNewName; }
 
-    SvI18NMapEntry_Impl( USHORT nKnd, const OUString& rName,
+    SvI18NMapEntry_Impl( sal_uInt16 nKnd, const OUString& rName,
                          const OUString& rNewName ) :
         nKind( nKnd ),
         aName( rName ),
         aNewName( rNewName )
     {}
 
-    SvI18NMapEntry_Impl( USHORT nKnd, const OUString& rName ) :
+    SvI18NMapEntry_Impl( sal_uInt16 nKnd, const OUString& rName ) :
         nKind( nKnd ),
         aName( rName )
     {}
 
-    BOOL operator==( const SvI18NMapEntry_Impl& r ) const
+    sal_Bool operator==( const SvI18NMapEntry_Impl& r ) const
     {
         return nKind == r.nKind &&
                aName == r.aName;
     }
 
-    BOOL operator<( const SvI18NMapEntry_Impl& r ) const
+    sal_Bool operator<( const SvI18NMapEntry_Impl& r ) const
     {
         return nKind < r.nKind ||
                ( nKind == r.nKind &&
@@ -76,13 +76,13 @@ SV_IMPL_OP_PTRARR_SORT( SvI18NMap_Impl, SvI18NMapEntry_ImplPtr )
 
 // ---------------------------------------------------------------------
 
-SvI18NMapEntry_Impl *SvI18NMap::_Find( USHORT nKind,
+SvI18NMapEntry_Impl *SvI18NMap::_Find( sal_uInt16 nKind,
                                      const OUString& rName ) const
 {
     SvI18NMapEntry_Impl *pRet = 0;
     SvI18NMapEntry_Impl aTst( nKind, rName );
 
-    USHORT nPos;
+    sal_uInt16 nPos;
     if( pImpl->Seek_Entry( &aTst, &nPos ) )
     {
         pRet = (*pImpl)[nPos];
@@ -102,7 +102,7 @@ SvI18NMap::~SvI18NMap()
     delete pImpl;
 }
 
-void SvI18NMap::Add( USHORT nKind, const OUString& rName,
+void SvI18NMap::Add( sal_uInt16 nKind, const OUString& rName,
                      const OUString& rNewName )
 {
     SvI18NMapEntry_Impl *pEntry = _Find( nKind, rName );
@@ -114,7 +114,7 @@ void SvI18NMap::Add( USHORT nKind, const OUString& rName,
     }
 }
 
-const OUString& SvI18NMap::Get( USHORT nKind, const OUString& rName ) const
+const OUString& SvI18NMap::Get( sal_uInt16 nKind, const OUString& rName ) const
 {
     SvI18NMapEntry_Impl *pEntry = _Find( nKind, rName );
     if( pEntry )

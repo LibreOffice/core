@@ -469,8 +469,8 @@ bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                 if( pHints && pHints->HasFtn() ) //...with footnotes
                 {
                     bUpdateFtn = sal_True; // Heureka
-                    USHORT nCount = pHints->Count();
-                    for( USHORT i = 0; i < nCount; ++i )
+                    sal_uInt16 nCount = pHints->Count();
+                    for( sal_uInt16 i = 0; i < nCount; ++i )
                     {
                         SwTxtAttr *pAttr = pHints->GetTextHint( i );
                         if ( pAttr->Which() == RES_TXTATR_FTN )
@@ -793,8 +793,8 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
     sal_Unicode c;
     String aStr;
 
-    BOOL bOldExpFlg = pNode->IsIgnoreDontExpand();
-    pNode->SetIgnoreDontExpand( TRUE );
+    sal_Bool bOldExpFlg = pNode->IsIgnoreDontExpand();
+    pNode->SetIgnoreDontExpand( sal_True );
 
     for( xub_StrLen nCnt = 0; nCnt < rStr.Len(); ++nCnt )
     {
@@ -1219,7 +1219,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
         pSaveInsPos = new SwNodeIndex( rRange.aStart, -1 );
 
     // verschiebe die Nodes
-    BOOL bNoDelFrms = 0 != (DOC_NO_DELFRMS & eMvFlags);
+    sal_Bool bNoDelFrms = 0 != (DOC_NO_DELFRMS & eMvFlags);
     if( GetNodes()._MoveNodes( rRange, GetNodes(), rPos, !bNoDelFrms ) )
     {
         aIdx++;     // wieder auf alte Position
@@ -1287,7 +1287,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
 
 /* #107318# Convert list of ranges of whichIds to a corresponding list
     of whichIds*/
-SvUShorts * lcl_RangesToUShorts(USHORT * pRanges)
+SvUShorts * lcl_RangesToUShorts(sal_uInt16 * pRanges)
 {
     SvUShorts * pResult = new SvUShorts();
 
@@ -1296,7 +1296,7 @@ SvUShorts * lcl_RangesToUShorts(USHORT * pRanges)
     {
         ASSERT(pRanges[i+1] != 0, "malformed ranges");
 
-        for (USHORT j = pRanges[i]; j < pRanges[i+1]; j++)
+        for (sal_uInt16 j = pRanges[i]; j < pRanges[i+1]; j++)
             pResult->Insert(j, pResult->Count());
 
         i += 2;
@@ -1868,7 +1868,7 @@ void lcl_syncGrammarError( SwTxtNode &rTxtNode, linguistic2::ProofreadingResult&
         return;
     SwGrammarMarkUp* pWrong = rTxtNode.GetGrammarCheck();
     linguistic2::SingleProofreadingError* pArray = rResult.aErrors.getArray();
-    USHORT i, j = 0;
+    sal_uInt16 i, j = 0;
     if( pWrong )
     {
         for( i = 0; i < rResult.aErrors.getLength(); ++i )
@@ -1909,8 +1909,8 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                             pEndPos->nNode.GetNode().GetTxtNode(), pEndPos->nContent,
                             bGrammarCheck );
 
-    ULONG nCurrNd = pSttPos->nNode.GetIndex();
-    ULONG nEndNd = pEndPos->nNode.GetIndex();
+    sal_uLong nCurrNd = pSttPos->nNode.GetIndex();
+    sal_uLong nEndNd = pEndPos->nNode.GetIndex();
 
     uno::Any aRet;
     if( nCurrNd <= nEndNd )
@@ -2243,7 +2243,7 @@ bool SwDoc::ReplaceRange( SwPaM& rPam, const String& rStr,
     ::std::vector<xub_StrLen> Breaks;
 
     SwPaM aPam( *rPam.GetMark(), *rPam.GetPoint() );
-    aPam.Normalize(FALSE);
+    aPam.Normalize(sal_False);
     if (aPam.GetPoint()->nNode != aPam.GetMark()->nNode)
     {
         aPam.Move(fnMoveBackward);
@@ -2567,7 +2567,7 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
 
     /* #i9185# This whould lead to a segmentation fault if not catched
        above. */
-    ULONG nNextNd = rEnd.nNode.GetIndex() + 1;
+    sal_uLong nNextNd = rEnd.nNode.GetIndex() + 1;
     SwTableNode *const pTblNd = GetNodes()[ nNextNd ]->GetTableNode();
 
     if( pTblNd && pNd->IsCntntNode() )
@@ -2670,10 +2670,10 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
             }
         }
 
-        SwCntntNode *pTmpNode = rPam.GetBound( TRUE ).nNode.GetNode().GetCntntNode();
-        rPam.GetBound( TRUE ).nContent.Assign( pTmpNode, 0 );
-        pTmpNode = rPam.GetBound( FALSE ).nNode.GetNode().GetCntntNode();
-        rPam.GetBound( FALSE ).nContent.Assign( pTmpNode, 0 );
+        SwCntntNode *pTmpNode = rPam.GetBound( sal_True ).nNode.GetNode().GetCntntNode();
+        rPam.GetBound( sal_True ).nContent.Assign( pTmpNode, 0 );
+        pTmpNode = rPam.GetBound( sal_False ).nNode.GetNode().GetCntntNode();
+        rPam.GetBound( sal_False ).nContent.Assign( pTmpNode, 0 );
         GetNodes().Delete( aRg.aStart, nNodeDiff+1 );
     }
     rPam.DeleteMark();
@@ -2693,7 +2693,7 @@ void SwDoc::TransliterateText(
 
     const SwPosition* pStt = rPaM.Start(),
                        * pEnd = rPaM.End();
-    ULONG nSttNd = pStt->nNode.GetIndex(),
+    sal_uLong nSttNd = pStt->nNode.GetIndex(),
           nEndNd = pEnd->nNode.GetIndex();
     xub_StrLen nSttCnt = pStt->nContent.GetIndex(),
                nEndCnt = pEnd->nContent.GetIndex();
@@ -2709,7 +2709,7 @@ void SwDoc::TransliterateText(
                         pTNd->GetTxt(), nSttCnt,
                         pBreakIt->GetLocale( pTNd->GetLang( nSttCnt ) ),
                         WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
-                        TRUE );
+                        sal_True );
 
         if( aBndry.startPos < nSttCnt && nSttCnt < aBndry.endPos )
         {
@@ -2767,7 +2767,7 @@ void SwDoc::checkRedlining(RedlineMode_t& _rReadlineMode)
         && !((_rReadlineMode & nsRedlineMode_t::REDLINE_SHOW_DELETE) == nsRedlineMode_t::REDLINE_SHOW_DELETE) )
     {
         WarningBox aWarning( pParent,SW_RES(MSG_DISABLE_READLINE_QUESTION));
-        USHORT nResult = aWarning.Execute();
+        sal_uInt16 nResult = aWarning.Execute();
         mbReadlineChecked = sal_True;
         if ( nResult == RET_YES )
         {
@@ -2786,8 +2786,8 @@ void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat ) const
     const SwPosition* pEnd = pStt == rPaM.GetPoint() ? rPaM.GetMark()
                                                      : rPaM.GetPoint();
 
-    const ULONG nSttNd = pStt->nNode.GetIndex();
-    const ULONG nEndNd = pEnd->nNode.GetIndex();
+    const sal_uLong nSttNd = pStt->nNode.GetIndex();
+    const sal_uLong nEndNd = pEnd->nNode.GetIndex();
 
     const xub_StrLen nSttCnt = pStt->nContent.GetIndex();
     const xub_StrLen nEndCnt = pEnd->nContent.GetIndex();

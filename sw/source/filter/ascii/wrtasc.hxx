@@ -39,7 +39,7 @@ class SwASCWriter : public Writer
 {
     String sLineEnd;
 
-    virtual ULONG WriteStream();
+    virtual sal_uLong WriteStream();
 
 public:
     SwASCWriter( const String& rFilterName );

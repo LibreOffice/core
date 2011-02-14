@@ -68,21 +68,21 @@ class SotStorage;
 class BasicError
 {
 private:
-    ULONG   nErrorId;
-    USHORT  nReason;
+    sal_uIntPtr nErrorId;
+    sal_uInt16  nReason;
     String  aErrStr;
 
 public:
             BasicError();
             BasicError( const BasicError& rErr );
-            BasicError( ULONG nId, USHORT nR, const String& rErrStr );
+            BasicError( sal_uIntPtr nId, sal_uInt16 nR, const String& rErrStr );
 
-    ULONG   GetErrorId() const                  { return nErrorId; }
-    USHORT  GetReason() const                   { return nReason; }
+    sal_uIntPtr     GetErrorId() const                  { return nErrorId; }
+    sal_uInt16  GetReason() const                   { return nReason; }
     String  GetErrorStr()                       { return aErrStr; }
 
-    void    SetErrorId( ULONG n )               { nErrorId = n; }
-    void    SetReason( USHORT n )               { nReason = n; }
+    void    SetErrorId( sal_uIntPtr n )             { nErrorId = n; }
+    void    SetReason( sal_uInt16 n )               { nReason = n; }
     void    SetErrorStr( const String& rStr)    { aErrStr = rStr; }
 };
 
@@ -146,33 +146,33 @@ private:
 
     String              aName;
     String              maStorageName;
-    BOOL                bBasMgrModified;
-    BOOL                mbDocMgr;
+    sal_Bool                bBasMgrModified;
+    sal_Bool                mbDocMgr;
 
     BasicManagerImpl*   mpImpl;
 
     void                Init();
 
 protected:
-    BOOL            ImpLoadLibary( BasicLibInfo* pLibInfo ) const;
-    BOOL            ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, BOOL bInfosOnly = FALSE ) const;
+    sal_Bool            ImpLoadLibary( BasicLibInfo* pLibInfo ) const;
+    sal_Bool            ImpLoadLibary( BasicLibInfo* pLibInfo, SotStorage* pCurStorage, sal_Bool bInfosOnly = sal_False ) const;
     void            ImpCreateStdLib( StarBASIC* pParentFromStdLib );
     void            ImpMgrNotLoaded(  const String& rStorageName  );
     BasicLibInfo*   CreateLibInfo();
-    void            LoadBasicManager( SotStorage& rStorage, const String& rBaseURL, BOOL bLoadBasics = TRUE );
+    void            LoadBasicManager( SotStorage& rStorage, const String& rBaseURL, sal_Bool bLoadBasics = sal_True );
     void            LoadOldBasicManager( SotStorage& rStorage );
-    BOOL            ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) const;
-    BOOL            ImplEncryptStream( SvStream& rStream ) const;
+    sal_Bool            ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) const;
+    sal_Bool            ImplEncryptStream( SvStream& rStream ) const;
     BasicLibInfo*   FindLibInfo( StarBASIC* pBasic ) const;
-    void            CheckModules( StarBASIC* pBasic, BOOL bReference ) const;
-    void            SetFlagToAllLibs( short nFlag, BOOL bSet ) const;
+    void            CheckModules( StarBASIC* pBasic, sal_Bool bReference ) const;
+    void            SetFlagToAllLibs( short nFlag, sal_Bool bSet ) const;
                     BasicManager(); // Nur zum anpassen von Pfaden bei 'Speichern unter'.
                     ~BasicManager();
 
 public:
                     TYPEINFO();
-                    BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBASIC* pParentFromStdLib = NULL, String* pLibPath = NULL, BOOL bDocMgr = FALSE );
-                    BasicManager( StarBASIC* pStdLib, String* pLibPath = NULL, BOOL bDocMgr = FALSE );
+                    BasicManager( SotStorage& rStorage, const String& rBaseURL, StarBASIC* pParentFromStdLib = NULL, String* pLibPath = NULL, sal_Bool bDocMgr = sal_False );
+                    BasicManager( StarBASIC* pStdLib, String* pLibPath = NULL, sal_Bool bDocMgr = sal_False );
 
     /** deletes the given BasicManager instance
 
@@ -189,12 +189,12 @@ public:
     String          GetName() const                         { return aName; }
 
 
-    USHORT          GetLibCount() const;
-    StarBASIC*      GetLib( USHORT nLib ) const;
+    sal_uInt16          GetLibCount() const;
+    StarBASIC*      GetLib( sal_uInt16 nLib ) const;
     StarBASIC*      GetLib( const String& rName ) const;
-    USHORT          GetLibId( const String& rName ) const;
+    sal_uInt16          GetLibId( const String& rName ) const;
 
-    String          GetLibName( USHORT nLib );
+    String          GetLibName( sal_uInt16 nLib );
 
     /** announces the library containers which belong to this BasicManager
 
@@ -208,14 +208,14 @@ public:
     const ::com::sun::star::uno::Reference< com::sun::star::script::XPersistentLibraryContainer >&
                     GetScriptLibraryContainer()  const;
 
-    BOOL            LoadLib( USHORT nLib );
-    BOOL            RemoveLib( USHORT nLib, BOOL bDelBasicFromStorage );
+    sal_Bool            LoadLib( sal_uInt16 nLib );
+    sal_Bool            RemoveLib( sal_uInt16 nLib, sal_Bool bDelBasicFromStorage );
 
     // Modify-Flag wird nur beim Speichern zurueckgesetzt.
-    BOOL            IsModified() const;
-    BOOL            IsBasicModified() const;
+    sal_Bool            IsModified() const;
+    sal_Bool            IsBasicModified() const;
 
-    BOOL            HasErrors();
+    sal_Bool            HasErrors();
     void            ClearErrors();
     BasicError*     GetFirstError();
     BasicError*     GetNextError();
@@ -245,14 +245,14 @@ public:
     ErrCode         ExecuteMacro( String const& i_fullyQualifiedName, String const& i_commaSeparatedArgs, SbxValue* i_retValue );
 
 private:
-    BOOL            IsReference( USHORT nLib );
+    sal_Bool            IsReference( sal_uInt16 nLib );
 
-    BOOL            SetLibName( USHORT nLib, const String& rName );
+    sal_Bool            SetLibName( sal_uInt16 nLib, const String& rName );
 
     StarBASIC*      GetStdLib() const;
-    StarBASIC*      AddLib( SotStorage& rStorage, const String& rLibName, BOOL bReference );
-    BOOL            RemoveLib( USHORT nLib );
-    BOOL            HasLib( const String& rName ) const;
+    StarBASIC*      AddLib( SotStorage& rStorage, const String& rLibName, sal_Bool bReference );
+    sal_Bool            RemoveLib( sal_uInt16 nLib );
+    sal_Bool            HasLib( const String& rName ) const;
 
     StarBASIC*      CreateLibForLibContainer( const String& rLibName,
                         const com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >&

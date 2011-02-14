@@ -1342,7 +1342,7 @@ namespace xmloff
             // we don't want say form url targets to be resolved
             // using ResolveGraphicObjectURL
             if ( 0 == _rLocalName.compareToAscii( s_pImageDataAttributeName ) )
-                sAdjustedValue = m_rContext.getGlobalContext().ResolveGraphicObjectURL( _rValue, FALSE );
+                sAdjustedValue = m_rContext.getGlobalContext().ResolveGraphicObjectURL( _rValue, sal_False );
             else
                 sAdjustedValue = m_rContext.getGlobalContext().GetAbsoluteReference( _rValue );
             return OImagePositionImport::handleAttribute( _nNamespaceKey, _rLocalName, sAdjustedValue );
@@ -1518,7 +1518,7 @@ namespace xmloff
                 }
             }
 
-            // additionally, we need to set the "RichText" property of our element to TRUE
+            // additionally, we need to set the "RichText" property of our element to sal_True
             // (the presence of the text:p is used as indicator for the value of the RichText property)
             sal_Bool bHasRichTextProperty = sal_False;
             if ( m_xInfo.is() )

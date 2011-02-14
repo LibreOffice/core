@@ -66,14 +66,14 @@ protected:
                         CheckAlignment(SfxChildAlignment,SfxChildAlignment);
 
     virtual void        Resize();
-    virtual BOOL        PrepareToggleFloatingMode();
+    virtual sal_Bool        PrepareToggleFloatingMode();
     virtual void        ToggleFloatingMode();
     virtual void        StartDocking();
-    virtual BOOL        Docking( const Point& rPos, Rectangle& rRect );
-    virtual void        EndDocking( const Rectangle& rRect, BOOL bFloatMode );
+    virtual sal_Bool        Docking( const Point& rPos, Rectangle& rRect );
+    virtual void        EndDocking( const Rectangle& rRect, sal_Bool bFloatMode );
     virtual void        Resizing( Size& rSize );
     virtual void        Paint( const Rectangle& rRect );
-    virtual BOOL        Close();
+    virtual sal_Bool        Close();
     virtual void        Move();
 
 //#if 0 // _SOLAR__PRIVATE
@@ -100,7 +100,7 @@ public:
     const Rectangle&    GetInnerRect() const                    { return aInnerRect; }
     const Rectangle&    GetOuterRect() const                    { return aOuterRect; }
     SfxBindings&        GetBindings() const                     { return *pBindings; }
-    USHORT              GetType() const                         { return pMgr->GetType(); }
+    sal_uInt16              GetType() const                         { return pMgr->GetType(); }
     SfxChildAlignment   GetAlignment() const                    { return pMgr->GetAlignment(); }
     void                SetAlignment(SfxChildAlignment eAlign)  { pMgr->SetAlignment(eAlign); }
     Size                GetFloatingSize() const                 { return aFloatSize; }
@@ -109,20 +109,20 @@ public:
     void                SetMinOutputSizePixel( const Size& rSize );
     Size                GetMinOutputSizePixel() const;
     virtual long        Notify( NotifyEvent& rNEvt );
-    virtual void        FadeIn( BOOL );
-    void                AutoShow( BOOL bShow = TRUE );
+    virtual void        FadeIn( sal_Bool );
+    void                AutoShow( sal_Bool bShow = sal_True );
     DECL_LINK( TimerHdl, Timer* );
 
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void Initialize_Impl();
-    SAL_DLLPRIVATE USHORT GetWinBits_Impl() const;
+    SAL_DLLPRIVATE sal_uInt16 GetWinBits_Impl() const;
     SAL_DLLPRIVATE void SetItemSize_Impl( const Size& rSize );
     SAL_DLLPRIVATE void Disappear_Impl();
     SAL_DLLPRIVATE void Reappear_Impl();
-    SAL_DLLPRIVATE BOOL IsAutoHide_Impl() const;
-    SAL_DLLPRIVATE BOOL IsPinned_Impl() const;
-    SAL_DLLPRIVATE void AutoShow_Impl( BOOL bShow = TRUE );
-    SAL_DLLPRIVATE void Pin_Impl( BOOL bPinned );
+    SAL_DLLPRIVATE sal_Bool IsAutoHide_Impl() const;
+    SAL_DLLPRIVATE sal_Bool IsPinned_Impl() const;
+    SAL_DLLPRIVATE void AutoShow_Impl( sal_Bool bShow = sal_True );
+    SAL_DLLPRIVATE void Pin_Impl( sal_Bool bPinned );
     SAL_DLLPRIVATE SfxSplitWindow* GetSplitWindow_Impl() const;
     SAL_DLLPRIVATE void ReleaseChildWindow_Impl();
 //#endif
@@ -132,7 +132,7 @@ class SfxDockingWrapper : public SfxChildWindow
 {
     public:
         SfxDockingWrapper( Window* pParent ,
-                           USHORT nId ,
+                           sal_uInt16 nId ,
                            SfxBindings* pBindings ,
                            SfxChildWinInfo* pInfo );
 

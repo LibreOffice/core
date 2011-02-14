@@ -116,7 +116,7 @@ using ::com::sun::star::sdb::application::NamedDatabaseObject;
 #define SPACEBETWEENENTRIES     4
 
 // -----------------------------------------------------------------------------
-TaskEntry::TaskEntry( const sal_Char* _pAsciiUNOCommand, USHORT _nHelpID, USHORT _nTitleResourceID, bool _bHideWhenDisabled )
+TaskEntry::TaskEntry( const sal_Char* _pAsciiUNOCommand, sal_uInt16 _nHelpID, sal_uInt16 _nTitleResourceID, bool _bHideWhenDisabled )
     :sUNOCommand( ::rtl::OUString::createFromAscii( _pAsciiUNOCommand ) )
     ,nHelpID( _nHelpID )
     ,sTitle( ModuleRes( _nTitleResourceID ) )
@@ -131,7 +131,7 @@ OCreationList::OCreationList( OTasksWindow& _rParent )
     ,m_pMouseDownEntry( NULL )
     ,m_pLastActiveEntry( NULL )
 {
-    USHORT nSize = SPACEBETWEENENTRIES;
+    sal_uInt16 nSize = SPACEBETWEENENTRIES;
     SetSpaceBetweenEntries(nSize);
     SetSelectionMode( NO_SELECTION );
     SetExtendedWinBits( EWB_NO_AUTO_CURENTRY );
@@ -161,7 +161,7 @@ void OCreationList::PreparePaint( SvLBoxEntry* _pEntry )
         {
             // draw a selection background
             bool bIsMouseDownEntry = ( _pEntry == m_pMouseDownEntry );
-            DrawSelectionBackground( GetBoundingRect( _pEntry ), bIsMouseDownEntry ? 1 : 2, FALSE, TRUE, FALSE );
+            DrawSelectionBackground( GetBoundingRect( _pEntry ), bIsMouseDownEntry ? 1 : 2, sal_False, sal_True, sal_False );
 
             if ( bIsMouseDownEntry )
             {
@@ -352,7 +352,7 @@ bool OCreationList::setCurrentEntryInvalidate( SvLBoxEntry* _pEntry )
 // -----------------------------------------------------------------------------
 void OCreationList::updateHelpText()
 {
-    USHORT nHelpTextId = 0;
+    sal_uInt16 nHelpTextId = 0;
     if ( GetCurEntry() )
         nHelpTextId = reinterpret_cast< TaskEntry* >( GetCurEntry()->GetUserData() )->nHelpID;
     m_rTaskWindow.setHelpText( nHelpTextId );
@@ -471,7 +471,7 @@ void OTasksWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_B
     m_aDescription.SetControlFont(aFont);
 }
 // -----------------------------------------------------------------------------
-void OTasksWindow::setHelpText(USHORT _nId)
+void OTasksWindow::setHelpText(sal_uInt16 _nId)
 {
     DBG_CHKTHIS(OTasksWindow,NULL);
     if ( _nId )
@@ -569,7 +569,7 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
     }
 
     m_aCreation.Show();
-    m_aCreation.SelectAll(FALSE);
+    m_aCreation.SelectAll(sal_False);
     m_aHelpText.Show();
     m_aDescription.Show();
     m_aFL.Show();

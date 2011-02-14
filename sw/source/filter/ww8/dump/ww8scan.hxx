@@ -72,16 +72,16 @@ class  SvUShortsSort;
 
 
 String WW8ReadPString( SvStream& rStrm, rtl_TextEncoding eEnc,
-                       BOOL bAtEndSeekRel1 = TRUE );
+                       sal_Bool bAtEndSeekRel1 = sal_True );
 
 // Folgende Methode liest einen 2-byter-UNICODE-String ein:
 // - falls bAtEndSeekRel1 gesetzt ist, wird am Ende genau EIN Byte uebersprungen,
 // - falls nChars (die Zeichen-Anzahl, NICHT die Byte-Anzahl) nicht gesetzt ist,
-//   wird das erste USHORT als Lannengenangabe interpretiert,
+//   wird das erste sal_uInt16 als Lannengenangabe interpretiert,
 //   ansonsten als erstes String-Zeichen genommen.
 String WW8Read_xstz(SvStream& rStrm,
-                    USHORT nChars,
-                    BOOL   bAtEndSeekRel1);
+                    sal_uInt16 nChars,
+                    sal_Bool   bAtEndSeekRel1);
 
 
 // read array of strings (see MS documentation: STring TaBle stored in File)
@@ -90,17 +90,17 @@ String WW8Read_xstz(SvStream& rStrm,
 // attention: the *extra data* of each string are SKIPPED and ignored
 
 /*  to be optimized like this:    */
-void WW8ReadSTTBF(  BOOL bVer8, SvStream& rStrm,
-                    UINT32 nStart, INT32 nLen, USHORT nSkip,
+void WW8ReadSTTBF(  sal_Bool bVer8, SvStream& rStrm,
+                    sal_uInt32 nStart, sal_Int32 nLen, sal_uInt16 nSkip,
                     rtl_TextEncoding eCS,
                     SvStrings &rArray, SvStrings* pExtraArray = 0 );
 
 
 
-USHORT WW8GetSprmId(        BYTE nVersion, BYTE* pSp,   BYTE*   pDelta = 0 );
-short WW8GetSprmSizeNetto(  BYTE nVersion, BYTE* pSprm, USHORT* pId );
-short WW8GetSprmSizeBrutto( BYTE nVersion, BYTE* pSprm, USHORT* pId );
-BYTE WW8SprmDataOfs( USHORT nId );
+sal_uInt16 WW8GetSprmId(        sal_uInt8 nVersion, sal_uInt8* pSp,   sal_uInt8*   pDelta = 0 );
+short WW8GetSprmSizeNetto(  sal_uInt8 nVersion, sal_uInt8* pSprm, sal_uInt16* pId );
+short WW8GetSprmSizeBrutto( sal_uInt8 nVersion, sal_uInt8* pSprm, sal_uInt16* pId );
+sal_uInt8 WW8SprmDataOfs( sal_uInt16 nId );
 
 struct WW8FieldDesc
 {
@@ -109,23 +109,23 @@ struct WW8FieldDesc
     long nLCode;            // Laenge
     WW8_CP nSRes;           // Anfang Ergebnis
     long nLRes;             // Laenge ( == 0, falls kein Ergebnis )
-    USHORT nId;             // WW-Id fuer Felder
-    BYTE nOpt;              // WW-Flags ( z.B.: vom User geaendert )
-    BOOL bCodeNest:1;       // Befehl rekursiv verwendet
-    BOOL bResNest:1;        // Befehl in Resultat eingefuegt
+    sal_uInt16 nId;             // WW-Id fuer Felder
+    sal_uInt8 nOpt;             // WW-Flags ( z.B.: vom User geaendert )
+    sal_Bool bCodeNest:1;       // Befehl rekursiv verwendet
+    sal_Bool bResNest:1;        // Befehl in Resultat eingefuegt
 };
 
-BOOL WW8GetFieldPara( BYTE nVersion, WW8PLCFspecial& rPLCF, WW8FieldDesc& rF );
+sal_Bool WW8GetFieldPara( sal_uInt8 nVersion, WW8PLCFspecial& rPLCF, WW8FieldDesc& rF );
 
 
 struct WW8PLCFxSave1
 {
-    ULONG nPLCFxPos;
-    ULONG nPLCFxPos2;       // fuer PLCF_Cp_Fkp: PieceIter-Pos
+    sal_uLong nPLCFxPos;
+    sal_uLong nPLCFxPos2;       // fuer PLCF_Cp_Fkp: PieceIter-Pos
     long nPLCFxMemOfs;
     WW8_CP nAttrStart;
     WW8_CP nAttrEnd;
-    BOOL   bLineEnd;
+    sal_Bool   bLineEnd;
 };
 
 
@@ -135,25 +135,25 @@ struct WW8PLCFxSave1
 */
 class WW8PLCFspecial        // Iterator fuer PLCFs
 {
-    INT32* pPLCF_PosArray;  // Pointer auf Pos-Array und auf ganze Struktur
-    BYTE*  pPLCF_Contents;  // Pointer auf Inhalts-Array-Teil des Pos-Array
+    sal_Int32* pPLCF_PosArray;  // Pointer auf Pos-Array und auf ganze Struktur
+    sal_uInt8*  pPLCF_Contents; // Pointer auf Inhalts-Array-Teil des Pos-Array
     long nIMax;         // Anzahl der Elemente
     long nIdx;          // Merker, wo wir gerade sind
     long nStru;
 
 public:
     WW8PLCFspecial( SvStream* pSt, long nFilePos, long nPLCF,
-          long nStruct, long nStartPos = -1, BOOL bNoEnd = FALSE );
+          long nStruct, long nStartPos = -1, sal_Bool bNoEnd = sal_False );
     ~WW8PLCFspecial(){ delete( pPLCF_PosArray ); pPLCF_PosArray = 0; }
-    ULONG GetIdx() const { return (ULONG)nIdx; }
-    void SetIdx( ULONG nI ) { nIdx = (long)nI; }    // geht ueber Nummer
+    sal_uLong GetIdx() const { return (sal_uLong)nIdx; }
+    void SetIdx( sal_uLong nI ) { nIdx = (long)nI; }    // geht ueber Nummer
     long GetIMax(){ return nIMax; }
-    BOOL SeekPos( long nPos );          // geht ueber FC- bzw. CP-Wert
+    sal_Bool SeekPos( long nPos );          // geht ueber FC- bzw. CP-Wert
                                                                     // bzw. naechste groesseren Wert
-    BOOL SeekPosExact( long nPos );
+    sal_Bool SeekPosExact( long nPos );
     long Where() { return ( nIdx >= nIMax ) ? LONG_MAX : pPLCF_PosArray[nIdx]; }
-    BOOL Get( long& rStart, void*& rpValue );
-    BOOL GetData( long nIdx, long& rPos, void*& rpValue );
+    sal_Bool Get( long& rStart, void*& rpValue );
+    sal_Bool GetData( long nIdx, long& rPos, void*& rpValue );
 
     const void* GetData( long nIdx ) const {
         return ( nIdx >= nIMax ) ? 0 : (const void*)&pPLCF_Contents[nIdx * nStru]; }
@@ -173,26 +173,26 @@ public:
 class WW8SprmIter
 {
     // these members will be updated
-    BYTE*   pSprms;     // remaining part of the SPRMs ( == start of akt. SPRM)
-    BYTE*   pAktParams; // start of akt. SPRM's parameters
-    USHORT  nAktId;
+    sal_uInt8*  pSprms;     // remaining part of the SPRMs ( == start of akt. SPRM)
+    sal_uInt8*  pAktParams; // start of akt. SPRM's parameters
+    sal_uInt16  nAktId;
     short   nAktSizeBrutto;
 
     // these members will *not* be updated by UpdateMyMembers()
-    BYTE    nVersion;
-    BYTE    nDelta;
+    sal_uInt8    nVersion;
+    sal_uInt8    nDelta;
     short   nRemLen;    // length of remaining SPRMs (including akt. SPRM)
 
     void UpdateMyMembers();
 public:
-    WW8SprmIter( BYTE* pSprms_, short nLen_, BYTE nVersion_ );
-    void   SetSprms( BYTE* pSprms_, short nLen_ );
-    BYTE*  operator ++( int );
-    BYTE*  GetSprms()     const { return ( pSprms && (0 < nRemLen) )
+    WW8SprmIter( sal_uInt8* pSprms_, short nLen_, sal_uInt8 nVersion_ );
+    void   SetSprms( sal_uInt8* pSprms_, short nLen_ );
+    sal_uInt8*  operator ++( int );
+    sal_uInt8*  GetSprms()     const { return ( pSprms && (0 < nRemLen) )
                                 ? pSprms
                                 : 0; }
-    BYTE*  GetAktParams() const { return pAktParams; }
-    USHORT GetAktId()     const { return nAktId; }
+    sal_uInt8*  GetAktParams() const { return pAktParams; }
+    sal_uInt16 GetAktId()     const { return nAktId; }
 };
 
 
@@ -202,8 +202,8 @@ public:
 */
 class WW8PLCF                       // Iterator fuer PLCFs
 {
-    INT32* pPLCF_PosArray;  // Pointer auf Pos-Array und auf ganze Struktur
-    BYTE* pPLCF_Contents;       // Pointer auf Inhalts-Array-Teil des Pos-Array
+    sal_Int32* pPLCF_PosArray;  // Pointer auf Pos-Array und auf ganze Struktur
+    sal_uInt8* pPLCF_Contents;      // Pointer auf Inhalts-Array-Teil des Pos-Array
     long nIMax;                         // Anzahl der Elemente
     long nIdx;
     long nStru;
@@ -227,12 +227,12 @@ public:
         long nStruct, long nStartPos, long nPN, long ncpN );
 
     ~WW8PLCF(){ delete( pPLCF_PosArray ); pPLCF_PosArray = 0; }
-    ULONG GetIdx() const { return (ULONG)nIdx; }
-    void SetIdx( ULONG nI ) { nIdx = (long)nI; }
+    sal_uLong GetIdx() const { return (sal_uLong)nIdx; }
+    void SetIdx( sal_uLong nI ) { nIdx = (long)nI; }
     long GetIMax(){ return nIMax; }
-    BOOL SeekPos( long nPos );
+    sal_Bool SeekPos( long nPos );
     long Where();
-    BOOL Get( long& rStart, long& rEnd, void*& rpValue );
+    sal_Bool Get( long& rStart, long& rEnd, void*& rpValue );
     WW8PLCF& operator ++( int ) { if( nIdx < nIMax ) nIdx++; return *this; }
 
     const void* GetData( long nIdx ) const {
@@ -240,7 +240,7 @@ public:
 };
 
 
-DECLARE_TABLE( WW8Pcd_FC_sortArr, INT32 )
+DECLARE_TABLE( WW8Pcd_FC_sortArr, sal_Int32 )
 
 
 /*
@@ -250,15 +250,15 @@ class WW8PLCFpcd
 {
 friend class WW8PLCFpcd_Iter;
     WW8Pcd_FC_sortArr aFC_sort; // sorted PCD entries by FC
-    INT32* pPLCF_PosArray;  // Pointer auf Pos-Array und auf ganze Struktur
-    BYTE*  pPLCF_Contents;  // Pointer auf Inhalts-Array-Teil des Pos-Array
+    sal_Int32* pPLCF_PosArray;  // Pointer auf Pos-Array und auf ganze Struktur
+    sal_uInt8*  pPLCF_Contents; // Pointer auf Inhalts-Array-Teil des Pos-Array
     long nIMax;
     long nStru;
 
 public:
     WW8PLCFpcd( SvStream* pSt, long nFilePos, long nPLCF, long nStruct );
     ~WW8PLCFpcd(){ delete( pPLCF_PosArray ); }
-    ULONG FindIdx( WW8_FC nFC ) const;
+    sal_uLong FindIdx( WW8_FC nFC ) const;
 };
 
 /*
@@ -272,14 +272,14 @@ class WW8PLCFpcd_Iter
 public:
     WW8PLCFpcd_Iter( WW8PLCFpcd& rPLCFpcd, long nStartPos = -1 );
 //  ~WW8PLCFpcd_Iter() {}
-    ULONG GetIdx() const { return (ULONG)nIdx; }
-    void SetIdx( ULONG nI ) { nIdx = (long)nI; }
+    sal_uLong GetIdx() const { return (sal_uLong)nIdx; }
+    void SetIdx( sal_uLong nI ) { nIdx = (long)nI; }
     long GetIMax(){ return rPLCF.nIMax; }
-    BOOL SeekPos( long nPos );
-//  BOOL SeekMaxMainFC( WW8Fib& rWwF, long& rMaxPosData );
+    sal_Bool SeekPos( long nPos );
+//  sal_Bool SeekMaxMainFC( WW8Fib& rWwF, long& rMaxPosData );
     long Where();
-    BOOL Get( long& rStart, long& rEnd, void*& rpValue );
-    ULONG FindIdx( WW8_FC nFC ) const { return rPLCF.FindIdx( nFC ); }
+    sal_Bool Get( long& rStart, long& rEnd, void*& rpValue );
+    sal_uLong FindIdx( WW8_FC nFC ) const { return rPLCF.FindIdx( nFC ); }
     WW8PLCFpcd_Iter& operator ++( int ) { if( nIdx < rPLCF.nIMax ) nIdx++; return *this; }
 };
 
@@ -291,28 +291,28 @@ enum ePLCFT{ CHP=0, PAP, SEP, /*HED, FNR, ENR,*/ PLCF_END };
 */
 class WW8PLCFx              // virtueller Iterator fuer Piece Table Exceptions
 {
-    BYTE nVersion;              // Versionsnummer des FIB
-    BOOL bIsSprm;               // PLCF von Sprms oder von anderem ( Footnote, ... )
+    sal_uInt8 nVersion;             // Versionsnummer des FIB
+    sal_Bool bIsSprm;               // PLCF von Sprms oder von anderem ( Footnote, ... )
 
 public:
-    WW8PLCFx( BYTE nFibVersion, BOOL bSprm )
+    WW8PLCFx( sal_uInt8 nFibVersion, sal_Bool bSprm )
         { bIsSprm = bSprm; nVersion = nFibVersion; }
     virtual ~WW8PLCFx() {}
-    BOOL IsSprm() { return bIsSprm; }
-    virtual ULONG GetIdx() const = 0;
-    virtual void SetIdx( ULONG nIdx ) = 0;
-    virtual ULONG GetIdx2() const;
-    virtual void SetIdx2( ULONG nIdx );
-    virtual BOOL SeekPos( WW8_CP nCpPos ) = 0;
+    sal_Bool IsSprm() { return bIsSprm; }
+    virtual sal_uLong GetIdx() const = 0;
+    virtual void SetIdx( sal_uLong nIdx ) = 0;
+    virtual sal_uLong GetIdx2() const;
+    virtual void SetIdx2( sal_uLong nIdx );
+    virtual sal_Bool SeekPos( WW8_CP nCpPos ) = 0;
     virtual long Where() = 0;
-//  virtual BYTE* GetSprms( long& rStart, long& rEnd, long& rLen );
+//  virtual sal_uInt8* GetSprms( long& rStart, long& rEnd, long& rLen );
     virtual void GetSprms( WW8PLCFxDesc* p );
     virtual long GetNoSprms( long& rStart, long&, long& rLen );
     virtual WW8PLCFx& operator ++( int ) = 0;
-    virtual USHORT GetIstd() const { return 0xffff; }
+    virtual sal_uInt16 GetIstd() const { return 0xffff; }
     virtual void Save(          WW8PLCFxSave1& rSave ) const;
     virtual void Restore( const WW8PLCFxSave1& rSave );
-    BYTE GetVersion() const { return nVersion; }
+    sal_uInt8 GetVersion() const { return nVersion; }
 };
 
 enum eCutT { CUT_NONE = 0, CUT_START, CUT_END, CUT_BOTH };
@@ -321,17 +321,17 @@ class WW8PLCFx_PCDAttrs : public WW8PLCFx
 {
     WW8PLCFpcd_Iter* pPcdI;
     WW8PLCFx_PCD* pPcd;
-    BYTE** pGrpprls;            // Attribute an Piece-Table
+    sal_uInt8** pGrpprls;           // Attribute an Piece-Table
     SVBT32 aShortSprm;          // mini storage: can contain ONE sprm with
                                 // 1 byte param
-    UINT16 nGrpprls;            // Attribut Anzahl davon
+    sal_uInt16 nGrpprls;            // Attribut Anzahl davon
 
 public:
-    WW8PLCFx_PCDAttrs( BYTE nVersion, WW8PLCFx_PCD* pPLCFx_PCD, WW8ScannerBase* pBase );
+    WW8PLCFx_PCDAttrs( sal_uInt8 nVersion, WW8PLCFx_PCD* pPLCFx_PCD, WW8ScannerBase* pBase );
     virtual ~WW8PLCFx_PCDAttrs();
-    virtual ULONG GetIdx() const;
-    virtual void SetIdx( ULONG nI );
-    virtual BOOL SeekPos( WW8_CP nCpPos );
+    virtual sal_uLong GetIdx() const;
+    virtual void SetIdx( sal_uLong nI );
+    virtual sal_Bool SeekPos( WW8_CP nCpPos );
     virtual long Where();
     virtual void GetSprms( WW8PLCFxDesc* p );
     virtual WW8PLCFx& operator ++( int );
@@ -342,15 +342,15 @@ public:
 class WW8PLCFx_PCD : public WW8PLCFx            // Iterator fuer Piece Table
 {
     WW8PLCFpcd_Iter* pPcdI;
-    BOOL bVer67;
+    sal_Bool bVer67;
 
 public:
-    WW8PLCFx_PCD( BYTE nVersion, WW8PLCFpcd* pPLCFpcd, WW8_CP nStartCp, BOOL bVer67P );
+    WW8PLCFx_PCD( sal_uInt8 nVersion, WW8PLCFpcd* pPLCFpcd, WW8_CP nStartCp, sal_Bool bVer67P );
     virtual ~WW8PLCFx_PCD();
-    virtual ULONG GetIMax() const;
-    virtual ULONG GetIdx() const;
-    virtual void SetIdx( ULONG nI );
-    virtual BOOL SeekPos( WW8_CP nCpPos );
+    virtual sal_uLong GetIMax() const;
+    virtual sal_uLong GetIdx() const;
+    virtual void SetIdx( sal_uLong nI );
+    virtual sal_Bool SeekPos( WW8_CP nCpPos );
     virtual long Where();
 //  virtual void GetSprms( WW8PLCFxDesc* p );
     virtual long GetNoSprms( long& rStart, long&, long& rLen );
@@ -360,14 +360,14 @@ public:
     eCutT AktPieceFc2Cp( long& rStartPos, long& rEndPos );
     WW8PLCFpcd_Iter* GetPLCFIter() { return pPcdI; }
 
-    static INT32 TransformPieceAddress(long nfc, BOOL& bIsUnicodeAddress)
+    static sal_Int32 TransformPieceAddress(long nfc, sal_Bool& bIsUnicodeAddress)
     {
         bIsUnicodeAddress = 0 == (0x40000000 & nfc);
         return bIsUnicodeAddress
             ?  nfc
             : (nfc & 0x3fffFFFF) / 2;
     }
-    BOOL IsVersion67() const { return bVer67; }
+    sal_Bool IsVersion67() const { return bVer67; }
 };
 
 
@@ -381,54 +381,54 @@ class WW8PLCFx_Fc_FKP : public WW8PLCFx     // Iterator fuer Piece Table Excepti
         {
             struct WW8Grpprl
             {
-                BYTE*  pData;
-                USHORT nLen;
-                USHORT nIStd; // nur bei Fkp.Papx gueltig (aktuelle Style-Nr)
-                BOOL   bMustDelete;
+                sal_uInt8*  pData;
+                sal_uInt16 nLen;
+                sal_uInt16 nIStd; // nur bei Fkp.Papx gueltig (aktuelle Style-Nr)
+                sal_Bool   bMustDelete;
             };
 
             WW8Grpprl* pGrpprl;     // Pointer of Meta Array (pointing
 
-            BYTE* pFkp;         // gesamter Fkp
+            sal_uInt8* pFkp;            // gesamter Fkp
 
             long nItemSize;     // entweder 1 Byte oder ein komplettes BX
             long nFilePos;      // Offset in Stream where last read of 52 bytes took place
             short nIdx;         // Pos-Merker
             ePLCFT ePLCF;
-            BYTE nIMax;         // Anzahl der Eintraege
-            BYTE nVersion;
+            sal_uInt8 nIMax;        // Anzahl der Eintraege
+            sal_uInt8 nVersion;
 
         public:
-            WW8Fkp( BYTE nFibVer, SvStream* pFKPStrm, SvStream* pDataStrm,
+            WW8Fkp( sal_uInt8 nFibVer, SvStream* pFKPStrm, SvStream* pDataStrm,
                     long _nFilePos, long nItemSiz,
                     ePLCFT ePl, WW8_FC nStartFc = -1 );
             ~WW8Fkp();
             long GetFilePos() const { return nFilePos; }
-            ULONG GetIdx() const { return (ULONG)nIdx; }
-            void SetIdx( ULONG nI );
-            BOOL SeekPos( long nPos );
+            sal_uLong GetIdx() const { return (sal_uLong)nIdx; }
+            void SetIdx( sal_uLong nI );
+            sal_Bool SeekPos( long nPos );
             WW8_FC Where() { return (  nIdx<nIMax)
                                      ? ((WW8_FC*)pFkp)[nIdx]
                                      : LONG_MAX; }
             WW8Fkp& operator ++( int ) { if( nIdx < nIMax ) nIdx++;
                                          return *this; }
-            BYTE* Get( WW8_FC& rStart, WW8_FC& rEnd, short& rLen );
-            USHORT GetIstd() const { return pGrpprl[ nIdx ].nIStd; }
+            sal_uInt8* Get( WW8_FC& rStart, WW8_FC& rEnd, short& rLen );
+            sal_uInt16 GetIstd() const { return pGrpprl[ nIdx ].nIStd; }
 
             /*
                 liefert einen echten Pointer auf das Sprm vom Typ nId,
                 falls ein solches im Fkp drin ist.
             */
-            BYTE* GetLenAndIStdAndSprms(short& rLen);
+            sal_uInt8* GetLenAndIStdAndSprms(short& rLen);
 
             /*
                 ruft GetLenAndIStdAndSprms() auf...
             */
-            BYTE* HasSprm( USHORT nId );
+            sal_uInt8* HasSprm( sal_uInt16 nId );
 
-            ULONG GetParaHeight() const;    // fuer Header/Footer bei Papx-Fkps
+            sal_uLong GetParaHeight() const;    // fuer Header/Footer bei Papx-Fkps
 
-            BYTE GetVersion() const { return nVersion; }
+            sal_uInt8 GetVersion() const { return nVersion; }
         };
 
 
@@ -439,7 +439,7 @@ class WW8PLCFx_Fc_FKP : public WW8PLCFx     // Iterator fuer Piece Table Excepti
     WW8Fkp* pFkp;
     WW8_FC nStartFc;
 
-    BOOL NewFkp();
+    sal_Bool NewFkp();
 
 protected:
     ePLCFT ePLCF;
@@ -449,17 +449,17 @@ public:
                      WW8Fib& rFib, ePLCFT ePl, WW8_FC nStartFcL,
                      WW8PLCFx_PCDAttrs* pPLCFx_PCD );
     virtual ~WW8PLCFx_Fc_FKP();
-    virtual ULONG GetIdx() const;
-    virtual void SetIdx( ULONG nIdx );
-    virtual BOOL SeekPos( WW8_FC nFcPos );
+    virtual sal_uLong GetIdx() const;
+    virtual void SetIdx( sal_uLong nIdx );
+    virtual sal_Bool SeekPos( WW8_FC nFcPos );
     virtual WW8_FC Where();
-    BYTE* GetSprms( WW8_FC& rStart, WW8_FC& rEnd, long& rLen );
+    sal_uInt8* GetSprms( WW8_FC& rStart, WW8_FC& rEnd, long& rLen );
     virtual WW8PLCFx& operator ++( int );
-    virtual USHORT GetIstd() const;
+    virtual sal_uInt16 GetIstd() const;
     void GetPCDSprms( WW8PLCFxDesc& rDesc );
-    BYTE* HasSprm( USHORT nId );
-    ULONG GetParaHeight() const;
-    BOOL HasFkp() { return (0 != pFkp); }
+    sal_uInt8* HasSprm( sal_uInt16 nId );
+    sal_uLong GetParaHeight() const;
+    sal_Bool HasFkp() { return (0 != pFkp); }
 };
 
 // Iterator fuer Piece Table Exceptions of Fkps arbeitet auf CPs (High-Level)
@@ -468,8 +468,8 @@ class WW8PLCFx_Cp_FKP : public WW8PLCFx_Fc_FKP
     const WW8ScannerBase& rSBase;
     WW8PLCFx_PCD* pPcd;
     WW8_CP nAttrStart, nAttrEnd;
-    BOOL bLineEnd : 1;
-    BOOL bComplex : 1;
+    sal_Bool bLineEnd : 1;
+    sal_Bool bComplex : 1;
 
     void SearchParaEnd( long nOldEndCp );
 
@@ -478,12 +478,12 @@ public:
                         rBase,  ePLCFT ePl );
     virtual ~WW8PLCFx_Cp_FKP();
     void ResetAttrStartEnd();
-    ULONG GetPCDIMax() const;
-    ULONG GetPCDIdx() const;
-    void SetPCDIdx( ULONG nIdx );
-    virtual ULONG GetIdx2() const;
-    virtual void  SetIdx2( ULONG nIdx );
-    virtual BOOL SeekPos( WW8_CP nCpPos );
+    sal_uLong GetPCDIMax() const;
+    sal_uLong GetPCDIdx() const;
+    void SetPCDIdx( sal_uLong nIdx );
+    virtual sal_uLong GetIdx2() const;
+    virtual void  SetIdx2( sal_uLong nIdx );
+    virtual sal_Bool SeekPos( WW8_CP nCpPos );
     virtual WW8_CP Where();
     virtual void GetSprms( WW8PLCFxDesc* p );
     virtual WW8PLCFx& operator ++( int );
@@ -497,26 +497,26 @@ class WW8PLCFx_SEPX : public WW8PLCFx           // Iterator fuer Piece Table Exc
 {
     SvStream* pStrm;
     WW8PLCF* pPLCF;
-    BYTE* pSprms;
-    USHORT nArrMax;
-    UINT16 nSprmSiz;
+    sal_uInt8* pSprms;
+    sal_uInt16 nArrMax;
+    sal_uInt16 nSprmSiz;
 
 public:
     WW8PLCFx_SEPX( SvStream* pSt, SvStream* pTblxySt, WW8Fib& rFib, WW8_CP nStartCp );
     virtual ~WW8PLCFx_SEPX();
-    virtual ULONG GetIdx() const;
-    virtual void SetIdx( ULONG nIdx );
+    virtual sal_uLong GetIdx() const;
+    virtual void SetIdx( sal_uLong nIdx );
     long GetIMax() const { return ( pPLCF ) ? pPLCF->GetIMax() : 0; }
-    virtual BOOL SeekPos( WW8_CP nCpPos );
+    virtual sal_Bool SeekPos( WW8_CP nCpPos );
     virtual long Where();
     virtual void GetSprms( WW8PLCFxDesc* p );
     virtual WW8PLCFx& operator ++( int );
-    BYTE* HasSprm( USHORT nId ) const;
-    BYTE* HasSprm( USHORT nId, BYTE n2nd ) const;
-    BYTE* HasSprm( USHORT nId, BYTE* pOtherSprms, long nOtherSprmSiz ) const;
-    BOOL Find4Sprms(USHORT nId1, USHORT nId2, USHORT nId3, USHORT nId4,
-                    BYTE*& p1,   BYTE*& p2,   BYTE*& p3,   BYTE*& p4 ) const;
-    BOOL CompareSprms( BYTE* pOtherSprms,
+    sal_uInt8* HasSprm( sal_uInt16 nId ) const;
+    sal_uInt8* HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const;
+    sal_uInt8* HasSprm( sal_uInt16 nId, sal_uInt8* pOtherSprms, long nOtherSprmSiz ) const;
+    sal_Bool Find4Sprms(sal_uInt16 nId1, sal_uInt16 nId2, sal_uInt16 nId3, sal_uInt16 nId4,
+                    sal_uInt8*& p1,   sal_uInt8*& p2,   sal_uInt8*& p3,   sal_uInt8*& p4 ) const;
+    sal_Bool CompareSprms( sal_uInt8* pOtherSprms,
                        long nOtherSprmSiz,
                        const SvUShortsSort* pIgnoreSprms = 0 ) const;
 };
@@ -528,13 +528,13 @@ class WW8PLCFx_SubDoc : public WW8PLCFx
     WW8PLCF* pTxt;
 
 public:
-    WW8PLCFx_SubDoc( SvStream* pSt, BYTE nVersion, WW8_CP nStartCp,
+    WW8PLCFx_SubDoc( SvStream* pSt, sal_uInt8 nVersion, WW8_CP nStartCp,
                     long nFcRef, long nLenRef,
                     long nFcTxt, long nLenTxt, long nStruc = 0 );
     virtual ~WW8PLCFx_SubDoc();
-    virtual ULONG GetIdx() const;
-    virtual void SetIdx( ULONG nIdx );
-    virtual BOOL SeekPos( WW8_CP nCpPos );
+    virtual sal_uLong GetIdx() const;
+    virtual void SetIdx( sal_uLong nIdx );
+    virtual sal_Bool SeekPos( WW8_CP nCpPos );
     virtual long Where();
 
     // liefert Reference Descriptoren
@@ -547,7 +547,7 @@ public:
     /*
         liefert Angabe, wo Kopf und Fusszeilen-Text zu finden ist
     */
-    BOOL Get( long& rStart, void*& rpValue );
+    sal_Bool Get( long& rStart, void*& rpValue );
     virtual long GetNoSprms( long& rStart, long&, long& rLen );
     virtual WW8PLCFx& operator ++( int );
     long Count() { return ( pRef ) ? pRef->GetIMax() : 0; }
@@ -561,13 +561,13 @@ class WW8PLCFx_FLD : public WW8PLCFx            // Iterator fuer Fuss- und Endno
 public:
     WW8PLCFx_FLD( SvStream* pSt, WW8Fib& rMyFib, short nType, WW8_CP nStartCp );
     virtual ~WW8PLCFx_FLD();
-    virtual ULONG GetIdx() const;
-    virtual void SetIdx( ULONG nIdx );
-    virtual BOOL SeekPos( WW8_CP nCpPos );
+    virtual sal_uLong GetIdx() const;
+    virtual void SetIdx( sal_uLong nIdx );
+    virtual sal_Bool SeekPos( WW8_CP nCpPos );
     virtual long Where();
     virtual long GetNoSprms( long& rStart, long&, long& rLen );
     virtual WW8PLCFx& operator ++( int );
-    BOOL GetPara( long nIdx, WW8FieldDesc& rF );
+    sal_Bool GetPara( long nIdx, WW8FieldDesc& rF );
 };
 
 enum eBookStatus { BOOK_NORMAL = 0, BOOK_IGNORE = 0x1, BOOK_ONLY_REF = 0x2 };
@@ -578,16 +578,16 @@ class WW8PLCFx_Book : public WW8PLCFx           // Iterator fuer Booknotes
     SvStrings aBookNames;               // Name
     eBookStatus* pStatus;
     long nIMax;                         // Anzahl der Booknotes
-    USHORT nIsEnd;
+    sal_uInt16 nIsEnd;
 public:
     WW8PLCFx_Book( SvStream* pSt, SvStream* pTblSt, WW8Fib& rFib, WW8_CP nStartCp );
     virtual ~WW8PLCFx_Book();
     long GetIMax(){ return nIMax; }
-    virtual ULONG GetIdx() const;
-    virtual void SetIdx( ULONG nI );
-    virtual ULONG GetIdx2() const;
-    virtual void SetIdx2( ULONG nIdx );
-    virtual BOOL SeekPos( WW8_CP nCpPos );
+    virtual sal_uLong GetIdx() const;
+    virtual void SetIdx( sal_uLong nI );
+    virtual sal_uLong GetIdx2() const;
+    virtual void SetIdx2( sal_uLong nIdx );
+    virtual sal_Bool SeekPos( WW8_CP nCpPos );
     virtual long Where();
     virtual long GetNoSprms( long& rStart, long& rEnd, long& rLen );
     virtual WW8PLCFx& operator ++( int );
@@ -599,9 +599,9 @@ public:
     WW8_CP GetStartPos() const
         { return ( nIsEnd ) ? LONG_MAX : pBook[0]->Where(); }
     long GetLen() const;
-    BOOL GetIsEnd() const { return ( nIsEnd ) ? TRUE : FALSE; }
+    sal_Bool GetIsEnd() const { return ( nIsEnd ) ? sal_True : sal_False; }
     long GetHandle() const;
-    BOOL SetStatus( WW8_CP nStartRegion, WW8_CP nEndRegion, const String& rName,
+    sal_Bool SetStatus( WW8_CP nStartRegion, WW8_CP nEndRegion, const String& rName,
                     eBookStatus eStat );
     eBookStatus GetStatus() const;
 };
@@ -615,11 +615,11 @@ struct WW8PLCFManResult
     long nMemLen;       // Laenge dazu
     long nCp2OrIdx;     // footnote-textpos oder Index in PLCF
     WW8_CP nAktCp;      // wird nur vom Aufrufer benutzt
-    BYTE* pMemPos;      // Mem-Pos fuer Sprms
-    USHORT nSprmId;     // Sprm-Id ( 0 = ungueltige Id -> ueberspringen! )
+    sal_uInt8* pMemPos;     // Mem-Pos fuer Sprms
+    sal_uInt16 nSprmId;     // Sprm-Id ( 0 = ungueltige Id -> ueberspringen! )
                                         // (2..255) oder Pseudo-Sprm-Id (256..260)
                                         // bzw. ab Winword-Ver8 die Sprm-Id (800..)
-    BYTE nFlags;        // Absatz- oder Section-Anfang
+    sal_uInt8 nFlags;       // Absatz- oder Section-Anfang
 };
 
 #define MAN_ANZ_PLCF 12
@@ -648,14 +648,14 @@ struct WW8PLCFxDesc
 {
     WW8PLCFx* pPLCFx;
     UShortStk* pIdStk;// Speicher fuer Attr-Id fuer Attr-Ende(n)
-    BYTE* pMemPos;      // wo liegen die Sprm(s)
+    sal_uInt8* pMemPos;     // wo liegen die Sprm(s)
     long nStartPos;
     long nEndPos;
     long nCp2OrIdx;     // wo liegen die NoSprm(s)
     long nSprmsLen;     // wie viele Bytes fuer weitere Sprms / Laenge Fussnote
     long nCpOfs;        // fuer Offset Header .. Footnote
-    BOOL bFirstSprm;    // fuer Erkennung erster Sprm einer Gruppe
-    BOOL bRealLineEnd;  // FALSE bei Pap-Piece-Ende
+    sal_Bool bFirstSprm;    // fuer Erkennung erster Sprm einer Gruppe
+    sal_Bool bRealLineEnd;  // sal_False bei Pap-Piece-Ende
     void Save(          WW8PLCFxSave1& rSave ) const;
     void Restore( const WW8PLCFxSave1& rSave );
 };
@@ -669,7 +669,7 @@ class WW8PLCFMan
 
     long nLineEnd;                  // zeigt *hinter* das <CR>
     long nLastWhereIdxCp;           // last result of WhereIdx()
-    USHORT nPLCF;                   // so viele PLCFe werden verwaltet
+    sal_uInt16 nPLCF;                   // so viele PLCFe werden verwaltet
     short nManType;
 
     WW8PLCFxDesc aD[MAN_ANZ_PLCF];
@@ -679,10 +679,10 @@ class WW8PLCFMan
     WW8PLCFspecial *pFdoa, *pTxbx, *pTxbxBkd;
 
     WW8Fib* pWwFib;
-    USHORT* pNoAttrScan; // Attribute komplett(!) ignorieren, die ueber n CPs
+    sal_uInt16* pNoAttrScan; // Attribute komplett(!) ignorieren, die ueber n CPs
                         // aufgespannt sind; z.B. bei Char #7 (Zellen-/Zeilenende)
 
-    short WhereIdx( BOOL* pbStart, long* pPos );
+    short WhereIdx( sal_Bool* pbStart, long* pPos );
     void AdjustEnds(    WW8PLCFxDesc& rDesc );
     void GetNewSprms(   WW8PLCFxDesc& rDesc );
     void GetNewNoSprms( WW8PLCFxDesc& rDesc );
@@ -690,8 +690,8 @@ class WW8PLCFMan
     void GetSprmEnd( short nIdx, WW8PLCFManResult* pRes );
     void GetNoSprmStart( short nIdx, WW8PLCFManResult* pRes );
     void GetNoSprmEnd( short nIdx, WW8PLCFManResult* pRes );
-    void AdvSprm(   short nIdx, BOOL bStart );
-    void AdvNoSprm( short nIdx, BOOL bStart );
+    void AdvSprm(   short nIdx, sal_Bool bStart );
+    void AdvNoSprm( short nIdx, sal_Bool bStart );
 
 public:
     WW8PLCFMan( WW8ScannerBase* pBase, short nType, long nStartCp );
@@ -703,9 +703,9 @@ public:
     */
     long Where();
 
-    BOOL Get( WW8PLCFManResult* pResult );
+    sal_Bool Get( WW8PLCFManResult* pResult );
     WW8PLCFMan& operator ++( int );
-    USHORT GetColl() const; // liefert aktuellen Style
+    sal_uInt16 GetColl() const; // liefert aktuellen Style
     WW8PLCFx_FLD* GetFld() const;
     WW8PLCFx_SubDoc* GetEdn() const { return (WW8PLCFx_SubDoc*)pEdn->pPLCFx; }
     WW8PLCFx_SubDoc* GetFtn() const { return (WW8PLCFx_SubDoc*)pFtn->pPLCFx; }
@@ -716,12 +716,12 @@ public:
     /*
         fragt, ob *aktueller Absatz* einen Sprm diesen Typs hat
     */
-    BYTE* HasParaSprm( USHORT nId ) const;
+    sal_uInt8* HasParaSprm( sal_uInt16 nId ) const;
 
     /*
         fragt, ob *aktueller Textrun* einen Sprm diesen Typs hat
     */
-    BYTE* HasCharSprm( USHORT nId ) const;
+    sal_uInt8* HasCharSprm( sal_uInt16 nId ) const;
 
     WW8PLCFx_Cp_FKP* GetChpPLCF(){ return (WW8PLCFx_Cp_FKP*)pChp->pPLCFx; }
     WW8PLCFx_Cp_FKP* GetPapPLCF(){ return (WW8PLCFx_Cp_FKP*)pPap->pPLCFx; }
@@ -740,7 +740,7 @@ public:
 
 class WW8ScannerBase
 {
-friend WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs( BYTE nVersion, WW8PLCFx_PCD* pPLCFx_PCD, WW8ScannerBase* pBase );
+friend WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs( sal_uInt8 nVersion, WW8PLCFx_PCD* pPLCFx_PCD, WW8ScannerBase* pBase );
 friend WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream*, SvStream*, SvStream*,
                                         const WW8ScannerBase&, ePLCFT );
 
@@ -779,9 +779,9 @@ friend class SwWw8ImplReader;
     WW8PLCFpcd_Iter*    pPieceIter; // fuer FastSave ( Iterator dazu )
     WW8PLCFx_PCD*       pPLCFx_PCD;     // dito
     WW8PLCFx_PCDAttrs*  pPLCFx_PCDAttrs;
-    BYTE**              pPieceGrpprls;  // Attribute an Piece-Table
-    UINT16              nPieceGrpprls;  // Anzahl davon
-    USHORT              nNoAttrScan;    // Attribute komplett(!) ignorieren, die ueber n CPs
+    sal_uInt8**                 pPieceGrpprls;  // Attribute an Piece-Table
+    sal_uInt16              nPieceGrpprls;  // Anzahl davon
+    sal_uInt16              nNoAttrScan;    // Attribute komplett(!) ignorieren, die ueber n CPs
                                         // aufgespannt sind; z.B. bei Char #7 (Zellen-/Zeilenende)
 
     WW8PLCFpcd* OpenPieceTable( SvStream* pStr, WW8Fib* pWwF );
@@ -791,16 +791,16 @@ public:
     WW8ScannerBase( SvStream* pSt, SvStream* pTblSt, SvStream* pDataSt,
                     WW8Fib* pWwF );
     ~WW8ScannerBase();
-    BOOL AreThereFootnotes() { return pFtnPLCF->Count() > 0; };
-    BOOL AreThereEndnotes()  { return pEdnPLCF->Count() > 0; };
+    sal_Bool AreThereFootnotes() { return pFtnPLCF->Count() > 0; };
+    sal_Bool AreThereEndnotes()  { return pEdnPLCF->Count() > 0; };
     static DateTime WW8DTTM2DateTime(long lDTTM);
 
     WW8_CP WW8Fc2Cp( WW8_FC nFcPos ) const ;
-    WW8_FC WW8Cp2Fc( WW8_CP nCpPos, BOOL* pIsUnicode = 0,
-                     WW8_CP* pNextPieceCp = 0, BOOL* pTestFlag = 0 ) const;
-    void SetNoAttrScan( USHORT nValue ) { nNoAttrScan = nValue; };
+    WW8_FC WW8Cp2Fc( WW8_CP nCpPos, sal_Bool* pIsUnicode = 0,
+                     WW8_CP* pNextPieceCp = 0, sal_Bool* pTestFlag = 0 ) const;
+    void SetNoAttrScan( sal_uInt16 nValue ) { nNoAttrScan = nValue; };
 
-    USHORT WW8ReadString( SvStream& rStrm, String& rStr,
+    sal_uInt16 WW8ReadString( SvStream& rStrm, String& rStr,
                             WW8_CP nAktStartCp, long nTotalLen,
                             rtl_TextEncoding eEnc ) const;
 };
@@ -816,84 +816,84 @@ public:
         von uns verlangte Programm-Version:
         in Ctor wird geprueft, ob sie zu nFib passt
     */
-    BYTE nVersion;  // 6 steht fuer "WinWord 6 oder WinWord 95",
+    sal_uInt8 nVersion; // 6 steht fuer "WinWord 6 oder WinWord 95",
                                     // 7 steht fuer "nur WinWord 95"
                                     // 8 steht fuer "nur WinWord 97"
     /*
         Fehlerstatus
     */
-    ULONG nFibError;
+    sal_uLong nFibError;
     /*
         vom Ctor aus dem FIB gelesene Daten
         (entspricht nur ungefaehr der tatsaechlichen Struktur
          des Winword-FIB)
     */
-    UINT16 wIdent;      // 0x0 int magic number
-    UINT16 nFib;        // 0x2 FIB version written
-    UINT16 nProduct;    // 0x4 product version written by
-    INT16 lid;          // 0x6 language stamp---localized version;
+    sal_uInt16 wIdent;      // 0x0 int magic number
+    sal_uInt16 nFib;        // 0x2 FIB version written
+    sal_uInt16 nProduct;    // 0x4 product version written by
+    sal_Int16 lid;          // 0x6 language stamp---localized version;
     WW8_PN pnNext;          // 0x8
 
-    UINT16 fDot :1;     // 0xa 0001
-    UINT16 fGlsy :1;
-    UINT16 fComplex :1; // 0004 when 1, file is in complex, fast-saved format.
-    UINT16 fHasPic :1;  // 0008 file contains 1 or more pictures
-    UINT16 cQuickSaves :4; // 00F0 count of times file was quicksaved
-    UINT16 fEncrypted :1; //0100 1 if file is encrypted, 0 if not
-    UINT16 fWhichTblStm :1; //0200 When 0, this fib refers to the table stream
+    sal_uInt16 fDot :1;     // 0xa 0001
+    sal_uInt16 fGlsy :1;
+    sal_uInt16 fComplex :1; // 0004 when 1, file is in complex, fast-saved format.
+    sal_uInt16 fHasPic :1;  // 0008 file contains 1 or more pictures
+    sal_uInt16 cQuickSaves :4; // 00F0 count of times file was quicksaved
+    sal_uInt16 fEncrypted :1; //0100 1 if file is encrypted, 0 if not
+    sal_uInt16 fWhichTblStm :1; //0200 When 0, this fib refers to the table stream
                                                     // named "0Table", when 1, this fib refers to the
                                                     // table stream named "1Table". Normally, a file
                                                     // will have only one table stream, but under unusual
                                                     // circumstances a file may have table streams with
                                                     // both names. In that case, this flag must be used
                                                     // to decide which table stream is valid.
-    // UINT16 u1 :2;
-    UINT16 fExtChar :1; // 1000 =1, when using extended character set in file
-    // UINT16 u2 :3;
+    // sal_uInt16 u1 :2;
+    sal_uInt16 fExtChar :1; // 1000 =1, when using extended character set in file
+    // sal_uInt16 u2 :3;
 
-    UINT16 nFibBack;    // 0xc
-    INT16 lKey1;            // 0xe  file encrypted key, only valid if fEncrypted.
-    INT16 lKey2;            // 0x10  key in 2 Portionen wg. Misalignment
-    UINT8 envr;         // 0x12 environment in which file was created
+    sal_uInt16 nFibBack;    // 0xc
+    sal_Int16 lKey1;            // 0xe  file encrypted key, only valid if fEncrypted.
+    sal_Int16 lKey2;            // 0x10  key in 2 Portionen wg. Misalignment
+    sal_uInt8 envr;         // 0x12 environment in which file was created
                                     //      0 created by Win Word / 1 created by Mac Word
-    BYTE fMac              :1;          // 0x13 when 1, this file was last saved in the Mac environment
-    BYTE fEmptySpecial     :1;
-    BYTE fLoadOverridePage :1;
-    BYTE fFuturesavedUndo  :1;
-    BYTE fWord97Saved      :1;
-    BYTE :3;
+    sal_uInt8 fMac              :1;         // 0x13 when 1, this file was last saved in the Mac environment
+    sal_uInt8 fEmptySpecial     :1;
+    sal_uInt8 fLoadOverridePage :1;
+    sal_uInt8 fFuturesavedUndo  :1;
+    sal_uInt8 fWord97Saved      :1;
+    sal_uInt8 :3;
 
-    UINT16 chse;        // 0x14 default extended character set id for text in document stream. (overidden by chp.chse)
+    sal_uInt16 chse;        // 0x14 default extended character set id for text in document stream. (overidden by chp.chse)
                         //      0 = ANSI  / 256 Macintosh character set.
-    UINT16 chseTables;  // 0x16 default extended character set id for text in
+    sal_uInt16 chseTables;  // 0x16 default extended character set id for text in
                         //      internal data structures: 0 = ANSI, 256 = Macintosh
     WW8_FC fcMin;           // 0x18 file offset of first character of text
     WW8_FC fcMac;           // 0x1c file offset of last character of text + 1
 
     // Einschub fuer WW8 *****************************************************
-    UINT16 csw;             // Count of fields in the array of "shorts"
+    sal_uInt16 csw;             // Count of fields in the array of "shorts"
 
     // Marke: "rgsw" Beginning of the array of shorts
-    UINT16 wMagicCreated;                   // unique number Identifying the File's creator
+    sal_uInt16 wMagicCreated;                   // unique number Identifying the File's creator
                                                                 // 0x6A62 is the creator ID for Word and is reserved.
                                                                 // Other creators should choose a different value.
-    UINT16 wMagicRevised;                   // identifies the File's last modifier
-  UINT16 wMagicCreatedPrivate;  // private data
-    UINT16 wMagicRevisedPrivate;    // private data
+    sal_uInt16 wMagicRevised;                   // identifies the File's last modifier
+  sal_uInt16 wMagicCreatedPrivate;  // private data
+    sal_uInt16 wMagicRevisedPrivate;    // private data
     /*
-    INT16  pnFbpChpFirst_W6;            // not used
-    INT16  pnChpFirst_W6;                   // not used
-    INT16  cpnBteChp_W6;                    // not used
-    INT16  pnFbpPapFirst_W6;            // not used
-    INT16  pnPapFirst_W6;                   // not used
-    INT16  cpnBtePap_W6;                    // not used
-    INT16  pnFbpLvcFirst_W6;            // not used
-    INT16  pnLvcFirst_W6;                   // not used
-    INT16  cpnBteLvc_W6;                    // not used
+    sal_Int16  pnFbpChpFirst_W6;            // not used
+    sal_Int16  pnChpFirst_W6;                   // not used
+    sal_Int16  cpnBteChp_W6;                    // not used
+    sal_Int16  pnFbpPapFirst_W6;            // not used
+    sal_Int16  pnPapFirst_W6;                   // not used
+    sal_Int16  cpnBtePap_W6;                    // not used
+    sal_Int16  pnFbpLvcFirst_W6;            // not used
+    sal_Int16  pnLvcFirst_W6;                   // not used
+    sal_Int16  cpnBteLvc_W6;                    // not used
     */
-    INT16  lidFE;                                   // Language id if document was written by Far East version
+    sal_Int16  lidFE;                                   // Language id if document was written by Far East version
                                                                 // of Word (i.e. FIB.fFarEast is on)
-    UINT16 clw;                                     // Number of fields in the array of longs
+    sal_uInt16 clw;                                     // Number of fields in the array of longs
 
     // Ende des Einschubs fuer WW8 *******************************************
 
@@ -911,7 +911,7 @@ public:
     WW8_CP ccpHdrTxbx;      // 0x50 length of header textbox subdocument text stream
 
     // Einschub fuer WW8 *****************************************************
-    INT32  pnFbpChpFirst;   // when there was insufficient memory for Word to expand
+    sal_Int32  pnFbpChpFirst;   // when there was insufficient memory for Word to expand
                                                 // the PLCFbte at save time, the PLCFbte is written
                                                 // to the file in a linked list of 512-byte pieces
                                                 // starting with this pn.
@@ -919,13 +919,13 @@ public:
     // folgende Felder existieren zwar so in der Datei,
     // wir benutzen jedoch unten deklarierte General-Variablen
     // fuer Ver67 und Ver8 gemeinsam.
-    INT32  pnChpFirst;      // the page number of the lowest numbered page in the
+    sal_Int32  pnChpFirst;      // the page number of the lowest numbered page in the
                                                         // document that records CHPX FKP information
-    INT32  cpnBteChp;           // count of CHPX FKPs recorded in file. In non-complex
+    sal_Int32  cpnBteChp;           // count of CHPX FKPs recorded in file. In non-complex
                                                         // files if the number of entries in the PLCFbteChpx
                                                         // is less than this, the PLCFbteChpx is incomplete.
     */
-    INT32  pnFbpPapFirst;   // when there was insufficient memory for Word to expand
+    sal_Int32  pnFbpPapFirst;   // when there was insufficient memory for Word to expand
                                                 // the PLCFbte at save time, the PLCFbte is written to
                                                 // the file in a linked list of 512-byte pieces
                                                 // starting with this pn
@@ -933,24 +933,24 @@ public:
     // folgende Felder existieren zwar so in der Datei,
     // wir benutzen jedoch unten deklarierte General-Variablen
     // fuer Ver67 und Ver8 gemeinsam.
-    INT32  pnPapFirst;      // the page number of the lowest numbered page in the
+    sal_Int32  pnPapFirst;      // the page number of the lowest numbered page in the
                                                         // document that records PAPX FKP information
-    INT32  cpnBtePap;       // count of PAPX FKPs recorded in file. In non-complex
+    sal_Int32  cpnBtePap;       // count of PAPX FKPs recorded in file. In non-complex
                                                         // files if the number of entries in the PLCFbtePapx is
                                                         // less than this, the PLCFbtePapx is incomplete.
     */
-    INT32  pnFbpLvcFirst;   // when there was insufficient memory for Word to expand
+    sal_Int32  pnFbpLvcFirst;   // when there was insufficient memory for Word to expand
                                                 // the PLCFbte at save time, the PLCFbte is written to
                                                 // the file in a linked list of 512-byte pieces
                                                 // starting with this pn
-    INT32  pnLvcFirst;          // the page number of the lowest numbered page in the
+    sal_Int32  pnLvcFirst;          // the page number of the lowest numbered page in the
                                                 // document that records LVC FKP information
-    INT32  cpnBteLvc;           // count of LVC FKPs recorded in file. In non-complex
+    sal_Int32  cpnBteLvc;           // count of LVC FKPs recorded in file. In non-complex
                                                 // files if the number of entries in the PLCFbtePapx is
                                                 // less than this, the PLCFbtePapx is incomplete.
-    INT32  fcIslandFirst;   // ?
-    INT32  fcIslandLim;     // ?
-    UINT16 cfclcb;              // Number of fields in the array of FC/LCB pairs.
+    sal_Int32  fcIslandFirst;   // ?
+    sal_Int32  fcIslandLim;     // ?
+    sal_uInt16 cfclcb;              // Number of fields in the array of FC/LCB pairs.
 
     // Ende des Einschubs fuer WW8 *******************************************
 
@@ -958,133 +958,133 @@ public:
     WW8_FC fcStshfOrig;     // file offset of original allocation for STSH in table
                                                 // stream. During fast save Word will attempt to reuse
                                                 // this allocation if STSH is small enough to fit.
-    INT32 lcbStshfOrig; // 0x5c count of bytes of original STSH allocation
+    sal_Int32 lcbStshfOrig; // 0x5c count of bytes of original STSH allocation
     WW8_FC fcStshf;         // 0x60 file offset of STSH in file.
-    INT32 lcbStshf;     // 0x64 count of bytes of current STSH allocation
+    sal_Int32 lcbStshf;     // 0x64 count of bytes of current STSH allocation
     WW8_FC fcPlcffndRef;    // 0x68 file offset of footnote reference PLCF.
-    INT32 lcbPlcffndRef;    // 0x6c count of bytes of footnote reference PLCF
+    sal_Int32 lcbPlcffndRef;    // 0x6c count of bytes of footnote reference PLCF
                         //      == 0 if no footnotes defined in document.
 
     WW8_FC fcPlcffndTxt;    // 0x70 file offset of footnote text PLCF.
-    INT32 lcbPlcffndTxt;    // 0x74 count of bytes of footnote text PLCF.
+    sal_Int32 lcbPlcffndTxt;    // 0x74 count of bytes of footnote text PLCF.
                         //      == 0 if no footnotes defined in document
 
     WW8_FC fcPlcfandRef;    // 0x78 file offset of annotation reference PLCF.
-    INT32 lcbPlcfandRef;    // 0x7c count of bytes of annotation reference PLCF.
+    sal_Int32 lcbPlcfandRef;    // 0x7c count of bytes of annotation reference PLCF.
 
     WW8_FC fcPlcfandTxt;    // 0x80 file offset of annotation text PLCF.
-    INT32 lcbPlcfandTxt;    // 0x84 count of bytes of the annotation text PLCF
+    sal_Int32 lcbPlcfandTxt;    // 0x84 count of bytes of the annotation text PLCF
 
     WW8_FC fcPlcfsed;       // 8x88 file offset of section descriptor PLCF.
-    INT32 lcbPlcfsed;   // 0x8c count of bytes of section descriptor PLCF.
+    sal_Int32 lcbPlcfsed;   // 0x8c count of bytes of section descriptor PLCF.
 
     WW8_FC fcPlcfpad;       // 0x90 file offset of paragraph descriptor PLCF
-    INT32 lcbPlcfpad;   // 0x94 count of bytes of paragraph descriptor PLCF.
+    sal_Int32 lcbPlcfpad;   // 0x94 count of bytes of paragraph descriptor PLCF.
                         // ==0 if file was never viewed in Outline view.
                         // Should not be written by third party creators
 
     WW8_FC fcPlcfphe;       // 0x98 file offset of PLCF of paragraph heights.
-    INT32 lcbPlcfphe;   // 0x9c count of bytes of paragraph height PLCF.
+    sal_Int32 lcbPlcfphe;   // 0x9c count of bytes of paragraph height PLCF.
                         // ==0 when file is non-complex.
 
     WW8_FC fcSttbfglsy;     // 0xa0 file offset of glossary string table.
-    INT32 lcbSttbfglsy; // 0xa4 count of bytes of glossary string table.
+    sal_Int32 lcbSttbfglsy; // 0xa4 count of bytes of glossary string table.
                         //      == 0 for non-glossary documents.
                         //      !=0 for glossary documents.
 
     WW8_FC fcPlcfglsy;      // 0xa8 file offset of glossary PLCF.
-    INT32 lcbPlcfglsy;  // 0xac count of bytes of glossary PLCF.
+    sal_Int32 lcbPlcfglsy;  // 0xac count of bytes of glossary PLCF.
                         //      == 0 for non-glossary documents.
                         //      !=0 for glossary documents.
 
     WW8_FC fcPlcfhdd;       // 0xb0 byte offset of header PLCF.
-    INT32 lcbPlcfhdd;   // 0xb4 count of bytes of header PLCF.
+    sal_Int32 lcbPlcfhdd;   // 0xb4 count of bytes of header PLCF.
                         //      == 0 if document contains no headers
 
     WW8_FC fcPlcfbteChpx;   // 0xb8 file offset of character property bin table.PLCF.
-    INT32 lcbPlcfbteChpx;// 0xbc count of bytes of character property bin table PLCF.
+    sal_Int32 lcbPlcfbteChpx;// 0xbc count of bytes of character property bin table PLCF.
 
     WW8_FC fcPlcfbtePapx;   // 0xc0 file offset of paragraph property bin table.PLCF.
-    INT32 lcbPlcfbtePapx;// 0xc4 count of bytes of paragraph  property bin table PLCF.
+    sal_Int32 lcbPlcfbtePapx;// 0xc4 count of bytes of paragraph  property bin table PLCF.
 
     WW8_FC fcPlcfsea;       // 0xc8 file offset of PLCF reserved for private use. The SEA is 6 bytes long.
-    INT32 lcbPlcfsea;   // 0xcc count of bytes of private use PLCF.
+    sal_Int32 lcbPlcfsea;   // 0xcc count of bytes of private use PLCF.
 
     WW8_FC fcSttbfffn;      // 0xd0 file offset of font information STTBF. See the FFN file structure definition.
-    INT32 lcbSttbfffn;  // 0xd4 count of bytes in sttbfffn.
+    sal_Int32 lcbSttbfffn;  // 0xd4 count of bytes in sttbfffn.
 
     WW8_FC fcPlcffldMom;    // 0xd8 offset in doc stream to the PLCF of field positions in the main document.
-    INT32 lcbPlcffldMom;    // 0xdc
+    sal_Int32 lcbPlcffldMom;    // 0xdc
 
     WW8_FC fcPlcffldHdr;    // 0xe0 offset in doc stream to the PLCF of field positions in the header subdocument.
-    INT32 lcbPlcffldHdr;    // 0xe4
+    sal_Int32 lcbPlcffldHdr;    // 0xe4
 
     WW8_FC fcPlcffldFtn;    // 0xe8 offset in doc stream to the PLCF of field positions in the footnote subdocument.
-    INT32 lcbPlcffldFtn;    // 0xec
+    sal_Int32 lcbPlcffldFtn;    // 0xec
 
     WW8_FC fcPlcffldAtn;    // 0xf0 offset in doc stream to the PLCF of field positions in the annotation subdocument.
-    INT32 lcbPlcffldAtn;    // 0xf4
+    sal_Int32 lcbPlcffldAtn;    // 0xf4
 
     WW8_FC fcPlcffldMcr;    // 0xf8 offset in doc stream to the PLCF of field positions in the macro subdocument.
-    INT32 lcbPlcffldMcr;    // 9xfc
+    sal_Int32 lcbPlcffldMcr;    // 9xfc
 
     WW8_FC fcSttbfbkmk; // 0x100 offset in document stream of the STTBF that records bookmark names in the main document
-    INT32 lcbSttbfbkmk; // 0x104
+    sal_Int32 lcbSttbfbkmk; // 0x104
 
     WW8_FC fcPlcfbkf;   // 0x108 offset in document stream of the PLCF that records the beginning CP offsets of bookmarks in the main document. See BKF
-    INT32 lcbPlcfbkf;   // 0x10c
+    sal_Int32 lcbPlcfbkf;   // 0x10c
 
     WW8_FC fcPlcfbkl;   // 0x110 offset in document stream of the PLCF that records the ending CP offsets of bookmarks recorded in the main document. See the BKL structure definition.
-    INT32 lcbPlcfbkl;   // 0x114 INT32
+    sal_Int32 lcbPlcfbkl;   // 0x114 sal_Int32
 
     WW8_FC fcCmds;      // 0x118 FC
-    INT32 lcbCmds;      // 0x11c
+    sal_Int32 lcbCmds;      // 0x11c
 
     WW8_FC fcPlcfmcr;       // 0x120 FC
-    INT32 lcbPlcfmcr;       // 0x124
+    sal_Int32 lcbPlcfmcr;       // 0x124
 
     WW8_FC fcSttbfmcr;  // 0x128 FC
-    INT32 lcbSttbfmcr;  // 0x12c
+    sal_Int32 lcbSttbfmcr;  // 0x12c
 
     WW8_FC fcPrDrvr;        // 0x130 file offset of the printer driver information (names of drivers, port etc...)
-    INT32 lcbPrDrvr;        // 0x134 count of bytes of the printer driver information (names of drivers, port etc...)
+    sal_Int32 lcbPrDrvr;        // 0x134 count of bytes of the printer driver information (names of drivers, port etc...)
 
     WW8_FC fcPrEnvPort; // 0x138 file offset of the print environment in portrait mode.
-    INT32 lcbPrEnvPort; // 0x13c count of bytes of the print environment in portrait mode.
+    sal_Int32 lcbPrEnvPort; // 0x13c count of bytes of the print environment in portrait mode.
 
     WW8_FC fcPrEnvLand; // 0x140 file offset of the print environment in landscape mode.
-    INT32 lcbPrEnvLand; // 0x144 count of bytes of the print environment in landscape mode.
+    sal_Int32 lcbPrEnvLand; // 0x144 count of bytes of the print environment in landscape mode.
 
     WW8_FC fcWss;       // 0x148 file offset of Window Save State data structure. See WSS.
-    INT32 lcbWss;       // 0x14c count of bytes of WSS. ==0 if unable to store the window state.
+    sal_Int32 lcbWss;       // 0x14c count of bytes of WSS. ==0 if unable to store the window state.
 
     WW8_FC fcDop;       // 0x150 file offset of document property data structure.
-    INT32 lcbDop;       // 0x154 count of bytes of document properties.
+    sal_Int32 lcbDop;       // 0x154 count of bytes of document properties.
         // cbDOP is 84 when nFib < 103
 
 
     WW8_FC fcSttbfAssoc;    // 0x158 offset to STTBF of associated strings. See STTBFASSOC.
-    INT32 cbSttbfAssoc; // 0x15C
+    sal_Int32 cbSttbfAssoc; // 0x15C
 
     WW8_FC fcClx;           // 0x160 file  offset of beginning of information for complex files.
-    INT32 lcbClx;       // 0x164 count of bytes of complex file information. 0 if file is non-complex.
+    sal_Int32 lcbClx;       // 0x164 count of bytes of complex file information. 0 if file is non-complex.
 
     WW8_FC fcPlcfpgdFtn;    // 0x168 file offset of page descriptor PLCF for footnote subdocument.
-    INT32 lcbPlcfpgdFtn;    // 0x16C count of bytes of page descriptor PLCF for footnote subdocument.
+    sal_Int32 lcbPlcfpgdFtn;    // 0x16C count of bytes of page descriptor PLCF for footnote subdocument.
                         //  ==0 if document has not been paginated. The length of the PGD is 8 bytes.
 
     WW8_FC fcAutosaveSource;    // 0x170 file offset of the name of the original file.
-    INT32 lcbAutosaveSource;    // 0x174 count of bytes of the name of the original file.
+    sal_Int32 lcbAutosaveSource;    // 0x174 count of bytes of the name of the original file.
 
     WW8_FC fcGrpStAtnOwners;    // 0x178 group of strings recording the names of the owners of annotations
-    INT32 lcbGrpStAtnOwners;    // 0x17C count of bytes of the group of strings
+    sal_Int32 lcbGrpStAtnOwners;    // 0x17C count of bytes of the group of strings
 
     WW8_FC fcSttbfAtnbkmk;  // 0x180 file offset of the sttbf that records names of bookmarks in the annotation subdocument
-    INT32 lcbSttbfAtnbkmk;  // 0x184 length in bytes of the sttbf that records names of bookmarks in the annotation subdocument
+    sal_Int32 lcbSttbfAtnbkmk;  // 0x184 length in bytes of the sttbf that records names of bookmarks in the annotation subdocument
 
     // Einschubs fuer WW67 ***************************************************
 
-    // INT16 wSpare4Fib;    // Reserve, muss hier nicht deklariert werden
+    // sal_Int16 wSpare4Fib;    // Reserve, muss hier nicht deklariert werden
 
     /*
     // folgende Felder existieren zwar so in der Datei,
@@ -1108,118 +1108,118 @@ public:
     WW8_FC fcPlcfdoaMom;    // 0x192 file offset of the  FDOA (drawn object) PLCF for main document.
                         //  ==0 if document has no drawn objects. The length of the FDOA is 6 bytes.
                         // ab Ver8 unused
-    INT32 lcbPlcfdoaMom;    // 0x196 length in bytes of the FDOA PLCF of the main document
+    sal_Int32 lcbPlcfdoaMom;    // 0x196 length in bytes of the FDOA PLCF of the main document
                                                 // ab Ver8 unused
     WW8_FC fcPlcfdoaHdr;    // 0x19A file offset of the  FDOA (drawn object) PLCF for the header document.
                         //  ==0 if document has no drawn objects. The length of the FDOA is 6 bytes.
                         // ab Ver8 unused
-    INT32 lcbPlcfdoaHdr;    // 0x19E length in bytes of the FDOA PLCF of the header document
+    sal_Int32 lcbPlcfdoaHdr;    // 0x19E length in bytes of the FDOA PLCF of the header document
                                                 // ab Ver8 unused
 
     WW8_FC fcPlcfspaMom;        // offset in table stream of the FSPA PLCF for main document.
                                                 // == 0 if document has no office art objects
                                                         // war in Ver67 nur leere Reserve
-    INT32 lcbPlcfspaMom;        // length in bytes of the FSPA PLCF of the main document
+    sal_Int32 lcbPlcfspaMom;        // length in bytes of the FSPA PLCF of the main document
                                                         // war in Ver67 nur leere Reserve
     WW8_FC fcPlcfspaHdr;        // offset in table stream of the FSPA PLCF for header document.
                                                 // == 0 if document has no office art objects
                                                         // war in Ver67 nur leere Reserve
-    INT32 lcbPlcfspaHdr;        // length in bytes of the FSPA PLCF of the header document
+    sal_Int32 lcbPlcfspaHdr;        // length in bytes of the FSPA PLCF of the header document
                                                         // war in Ver67 nur leere Reserve
 
     WW8_FC fcPlcfAtnbkf;    // 0x1B2 file offset of BKF (bookmark first) PLCF of the annotation subdocument
-    INT32 lcbPlcfAtnbkf;    // 0x1B6 length in bytes of BKF (bookmark first) PLCF of the annotation subdocument
+    sal_Int32 lcbPlcfAtnbkf;    // 0x1B6 length in bytes of BKF (bookmark first) PLCF of the annotation subdocument
 
     WW8_FC fcPlcfAtnbkl;    // 0x1BA file offset of BKL (bookmark last) PLCF of the annotation subdocument
-    INT32 lcbPlcfAtnbkl;    // 0x1BE length in bytes of BKL (bookmark first) PLCF of the annotation subdocument
+    sal_Int32 lcbPlcfAtnbkl;    // 0x1BE length in bytes of BKL (bookmark first) PLCF of the annotation subdocument
 
     WW8_FC fcPms;       // 0x1C2 file offset of PMS (Print Merge State) information block
-    INT32 lcbPMS;       // 0x1C6 length in bytes of PMS
+    sal_Int32 lcbPMS;       // 0x1C6 length in bytes of PMS
 
     WW8_FC fcFormFldSttbf;  // 0x1CA file offset of form field Sttbf which contains strings used in form field dropdown controls
-    INT32 lcbFormFldSttbf;  // 0x1CE length in bytes of form field Sttbf
+    sal_Int32 lcbFormFldSttbf;  // 0x1CE length in bytes of form field Sttbf
 
     WW8_FC fcPlcfendRef;    // 0x1D2 file offset of PLCFendRef which points to endnote references in the main document stream
-    INT32 lcbPlcfendRef;    // 0x1D6
+    sal_Int32 lcbPlcfendRef;    // 0x1D6
 
     WW8_FC fcPlcfendTxt;    // 0x1DA file offset of PLCFendRef which points to endnote text  in the endnote document
                         //       stream which corresponds with the PLCFendRef
-    INT32 lcbPlcfendTxt;    // 0x1DE
+    sal_Int32 lcbPlcfendTxt;    // 0x1DE
 
     WW8_FC fcPlcffldEdn;    // 0x1E2 offset to PLCF of field positions in the endnote subdoc
-    INT32 lcbPlcffldEdn;    // 0x1E6
+    sal_Int32 lcbPlcffldEdn;    // 0x1E6
 
     WW8_FC  fcPlcfpgdEdn;   // 0x1EA offset to PLCF of page boundaries in the endnote subdoc.
-    INT32 lcbPlcfpgdEdn;        // 0x1EE
+    sal_Int32 lcbPlcfpgdEdn;        // 0x1EE
 
 
     WW8_FC fcDggInfo;           // offset in table stream of the office art object table data.
                                                 // The format of office art object table data is found in a separate document.
                                                         // war in Ver67 nur leere Reserve
-    INT32 lcbDggInfo;           // length in bytes of the office art object table data
+    sal_Int32 lcbDggInfo;           // length in bytes of the office art object table data
                                                         // war in Ver67 nur leere Reserve
 
     WW8_FC fcSttbfRMark;        // 0x1fa offset to STTBF that records the author abbreviations...
-    INT32 lcbSttbfRMark;        // 0x1fe
+    sal_Int32 lcbSttbfRMark;        // 0x1fe
     WW8_FC fcSttbfCaption;  // 0x202 offset to STTBF that records caption titles...
-    INT32 lcbSttbfCaption;  // 0x206
+    sal_Int32 lcbSttbfCaption;  // 0x206
     WW8_FC fcSttbAutoCaption;   // offset in table stream to the STTBF that records the object names and
                                                         // indices into the caption STTBF for objects which get auto captions.
-    INT32 lcbSttbAutoCaption;   // 0x20e
+    sal_Int32 lcbSttbAutoCaption;   // 0x20e
 
     WW8_FC fcPlcfwkb;       // 0x212 offset to PLCF that describes the boundaries of contributing documents...
-    INT32 lcbPlcfwkb;       // 0x216
+    sal_Int32 lcbPlcfwkb;       // 0x216
 
     WW8_FC fcPlcfspl;       // offset in table stream of PLCF (of SPLS structures) that records spell check state
                                                         // war in Ver67 nur leere Reserve
-    INT32 lcbPlcfspl;                   // war in Ver67 nur leere Reserve
+    sal_Int32 lcbPlcfspl;                   // war in Ver67 nur leere Reserve
 
     WW8_FC fcPlcftxbxTxt;   // 0x222 ...PLCF of beginning CP in the text box subdoc
-    INT32 lcbPlcftxbxTxt;   // 0x226
+    sal_Int32 lcbPlcftxbxTxt;   // 0x226
     WW8_FC fcPlcffldTxbx;   // 0x22a ...PLCF of field boundaries recorded in the textbox subdoc.
-    INT32 lcbPlcffldTxbx;   // 0x22e
+    sal_Int32 lcbPlcffldTxbx;   // 0x22e
     WW8_FC fcPlcfHdrtxbxTxt;// 0x232 ...PLCF of beginning CP in the header text box subdoc
-    INT32 lcbPlcfHdrtxbxTxt;// 0x236
+    sal_Int32 lcbPlcfHdrtxbxTxt;// 0x236
     WW8_FC fcPlcffldHdrTxbx;// 0x23a ...PLCF of field boundaries recorded in the header textbox subdoc.
-    INT32 lcbPlcffldHdrTxbx;// 0x23e
+    sal_Int32 lcbPlcffldHdrTxbx;// 0x23e
 
     /*
         spezielle Listenverwaltung fuer WW8
     */
     WW8_FC fcPlcfLst;       // 0x02e2 offset in the table stream of list format information.
-    INT32 lcbPlcfLst;       // 0x02e6 length
+    sal_Int32 lcbPlcfLst;       // 0x02e6 length
     WW8_FC fcPlfLfo;        // 0x02ea offset in the table stream of list format override information.
-    INT32 lcbPlfLfo;        // 0x02ee length
+    sal_Int32 lcbPlfLfo;        // 0x02ee length
     /*
         spezielle Break-Verwaltung fuer Text-Box-Stories in WW8
     */
     WW8_FC fcPlcftxbxBkd;   // 0x02f2 PLCF fuer TextBox-Break-Deskriptoren im Maintext
-    INT32 lcbPlcftxbxBkd;   // 0x02f6
+    sal_Int32 lcbPlcftxbxBkd;   // 0x02f6
     WW8_FC fcPlcfHdrtxbxBkd;// 0x02fa PLCF fuer TextBox-Break-Deskriptoren im Header-/Footer-Bereich
-    INT32 lcbPlcfHdrtxbxBkd;// 0x02fe
+    sal_Int32 lcbPlcfHdrtxbxBkd;// 0x02fe
 
     // 0x302 - 372 == ignore
     /*
         ListNames (skip to here!)
     */
     WW8_FC fcSttbListNames;// 0x0372 PLCF for Listname Table
-    INT32 lcbSttbListNames;// 0x0376
+    sal_Int32 lcbSttbListNames;// 0x0376
     /*
         General-Varaiblen, die fuer Ver67 und Ver8 verwendet werden,
         obwohl sie in der jeweiligen DATEI verschiedene Groesse haben:
     */
-    INT32 pnChpFirst;
-    INT32 pnPapFirst;
-    INT32 cpnBteChp;
-    INT32 cpnBtePap;
+    sal_Int32 pnChpFirst;
+    sal_Int32 pnPapFirst;
+    sal_Int32 cpnBteChp;
+    sal_Int32 cpnBtePap;
     /*
         nun wird lediglich noch ein Ctor benoetigt
     */
-    WW8Fib( SvStream& rStrm, BYTE nWantedVersion,UINT32 nOffset=0 );
+    WW8Fib( SvStream& rStrm, sal_uInt8 nWantedVersion,sal_uInt32 nOffset=0 );
 
     /* leider falsch, man braucht auch noch einen fuer den Export */
-    WW8Fib( BYTE nVersion = 6 );
-    BOOL Write( SvStream& rStrm );
+    WW8Fib( sal_uInt8 nVersion = 6 );
+    sal_Bool Write( SvStream& rStrm );
 };
 
 
@@ -1232,21 +1232,21 @@ protected:
     long nStyleLen;
 //  WW8_STSHI* pStishi;
 
-    UINT16  cstd;                               // Count of styles in stylesheet
-    UINT16  cbSTDBaseInFile;        // Length of STD Base as stored in a file
-    UINT16  fStdStylenamesWritten : 1;  // Are built-in stylenames stored?
-    UINT16  : 15;                   // Spare flags
-    UINT16  stiMaxWhenSaved;        // Max sti known when this file was written
-    UINT16  istdMaxFixedWhenSaved;  // How many fixed-index istds are there?
-    UINT16  nVerBuiltInNamesWhenSaved;  // Current version of built-in stylenames
-    UINT16  ftcStandardChpStsh;     // ftc used by StandardChpStsh for this document
+    sal_uInt16  cstd;                               // Count of styles in stylesheet
+    sal_uInt16  cbSTDBaseInFile;        // Length of STD Base as stored in a file
+    sal_uInt16  fStdStylenamesWritten : 1;  // Are built-in stylenames stored?
+    sal_uInt16  : 15;                   // Spare flags
+    sal_uInt16  stiMaxWhenSaved;        // Max sti known when this file was written
+    sal_uInt16  istdMaxFixedWhenSaved;  // How many fixed-index istds are there?
+    sal_uInt16  nVerBuiltInNamesWhenSaved;  // Current version of built-in stylenames
+    sal_uInt16  ftcStandardChpStsh;     // ftc used by StandardChpStsh for this document
 
 public:
     WW8Style( SvStream& rSt, WW8Fib& rFibPara );
 //  ~WW8Style(){ delete( pStishi ); pStishi = 0; }
     WW8_STD* Read1STDFixed( short& rSkip, short* pcbStd );
     WW8_STD* Read1Style( short& rSkip, String* pString, short* pcbStd );
-    const UINT16 GetCount() const { return cstd; }
+    const sal_uInt16 GetCount() const { return cstd; }
 };
 
 
@@ -1255,12 +1255,12 @@ class WW8Fonts
 protected:
     WW8_FFN* pFontA;        // Array of Pointers to Font Description
     // Hilfs-Vari
-    USHORT nMax;        // Array-Groesse
+    sal_uInt16 nMax;        // Array-Groesse
 public:
     WW8Fonts( SvStream& rSt, WW8Fib& rFib );
     ~WW8Fonts(){ if( pFontA ) delete [] pFontA; }
-    const WW8_FFN* GetFont( USHORT nNum ) const;
-    USHORT GetMax() const { return nMax; }
+    const WW8_FFN* GetFont( sal_uInt16 nNum ) const;
+    sal_uInt16 GetMax() const { return nMax; }
 };
 
 
@@ -1272,180 +1272,180 @@ public:
     /*
         Fehlerstatus
     */
-    ULONG nDopError;
+    sal_uLong nDopError;
     /*
         vom Ctor aus dem FIB gelesene Daten
         (entspricht nur ungefaehr der tatsaechlichen Struktur
          des Winword-FIB)
     */
     // Initialisier-Dummy:
-    BYTE    nDataStart;
+    sal_uInt8    nDataStart;
     //-------------------------
-    UINT16  fFacingPages : 1;   // 1 when facing pages should be printed
-    UINT16  fWidowControl : 1;  // 1 when widow control is in effect. 0 when widow control disabled.
-    UINT16  fPMHMainDoc : 1;    // 1 when doc is a main doc for Print Merge Helper, 0 when not; default=0
-    UINT16  grfSuppression : 2; // 0 Default line suppression storage; 0= form letter line suppression; 1= no line suppression; default=0
-    UINT16  fpc : 2;            // 1 footnote position code: 0 as endnotes, 1 at bottom of page, 2 immediately beneath text
-    UINT16  : 1;                // 0 unused
+    sal_uInt16  fFacingPages : 1;   // 1 when facing pages should be printed
+    sal_uInt16  fWidowControl : 1;  // 1 when widow control is in effect. 0 when widow control disabled.
+    sal_uInt16  fPMHMainDoc : 1;    // 1 when doc is a main doc for Print Merge Helper, 0 when not; default=0
+    sal_uInt16  grfSuppression : 2; // 0 Default line suppression storage; 0= form letter line suppression; 1= no line suppression; default=0
+    sal_uInt16  fpc : 2;            // 1 footnote position code: 0 as endnotes, 1 at bottom of page, 2 immediately beneath text
+    sal_uInt16  : 1;                // 0 unused
     //-------------------------
-    UINT16  grpfIhdt : 8;           // 0 specification of document headers and footers. See explanation under Headers and Footers topic.
+    sal_uInt16  grpfIhdt : 8;           // 0 specification of document headers and footers. See explanation under Headers and Footers topic.
     //-------------------------
-    UINT16  rncFtn : 2;         // 0 restart index for footnotes, 0 don't restart note numbering, 1 section, 2 page
-    UINT16  nFtn : 14;          // 1 initial footnote number for document
-    UINT16  fOutlineDirtySave : 1; // when 1, indicates that information in the hPLCFpad should be refreshed since outline has been dirtied
-    UINT16  : 7;                //   reserved
-    UINT16  fOnlyMacPics : 1;   //   when 1, Word believes all pictures recorded in the document were created on a Macintosh
-    UINT16  fOnlyWinPics : 1;   //   when 1, Word believes all pictures recorded in the document were created in Windows
-    UINT16  fLabelDoc : 1;      //   when 1, document was created as a print merge labels document
-    UINT16  fHyphCapitals : 1;  //   when 1, Word is allowed to hyphenate words that are capitalized. When 0, capitalized may not be hyphenated
-    UINT16  fAutoHyphen : 1;    //   when 1, Word will hyphenate newly typed text as a background task
-    UINT16  fFormNoFields : 1;
-    UINT16  fLinkStyles : 1;    //   when 1, Word will merge styles from its template
-    UINT16  fRevMarking : 1;    //   when 1, Word will mark revisions as the document is edited
-    UINT16  fBackup : 1;        //   always make backup when document saved when 1.
-    UINT16  fExactCWords : 1;
-    UINT16  fPagHidden : 1;     //
-    UINT16  fPagResults : 1;
-    UINT16  fLockAtn : 1;       //   when 1, annotations are locked for editing
-    UINT16  fMirrorMargins : 1; //   swap margins on left/right pages when 1.
-    UINT16  fReadOnlyRecommended : 1;// user has recommended that this doc be opened read-only when 1
-    UINT16  fDfltTrueType : 1;  //   when 1, use TrueType fonts by default (flag obeyed only when doc was created by WinWord 2.x)
-    UINT16  fPagSuppressTopSpacing : 1;//when 1, file created with SUPPRESSTOPSPACING=YES in win.ini. (flag obeyed only when doc was created by WinWord 2.x).
-    UINT16  fProtEnabled : 1;   //   when 1, document is protected from edit operations
-    UINT16  fDispFormFldSel : 1;//   when 1, restrict selections to occur only within form fields
-    UINT16  fRMView : 1;        //   when 1, show revision markings on screen
-    UINT16  fRMPrint : 1;       //   when 1, print revision marks when document is printed
-    UINT16  fWriteReservation : 1;
-    UINT16  fLockRev : 1;       //   when 1, the current revision marking state is locked
-    UINT16  fEmbedFonts : 1;    //   when 1, document contains embedded True Type fonts
+    sal_uInt16  rncFtn : 2;         // 0 restart index for footnotes, 0 don't restart note numbering, 1 section, 2 page
+    sal_uInt16  nFtn : 14;          // 1 initial footnote number for document
+    sal_uInt16  fOutlineDirtySave : 1; // when 1, indicates that information in the hPLCFpad should be refreshed since outline has been dirtied
+    sal_uInt16  : 7;                //   reserved
+    sal_uInt16  fOnlyMacPics : 1;   //   when 1, Word believes all pictures recorded in the document were created on a Macintosh
+    sal_uInt16  fOnlyWinPics : 1;   //   when 1, Word believes all pictures recorded in the document were created in Windows
+    sal_uInt16  fLabelDoc : 1;      //   when 1, document was created as a print merge labels document
+    sal_uInt16  fHyphCapitals : 1;  //   when 1, Word is allowed to hyphenate words that are capitalized. When 0, capitalized may not be hyphenated
+    sal_uInt16  fAutoHyphen : 1;    //   when 1, Word will hyphenate newly typed text as a background task
+    sal_uInt16  fFormNoFields : 1;
+    sal_uInt16  fLinkStyles : 1;    //   when 1, Word will merge styles from its template
+    sal_uInt16  fRevMarking : 1;    //   when 1, Word will mark revisions as the document is edited
+    sal_uInt16  fBackup : 1;        //   always make backup when document saved when 1.
+    sal_uInt16  fExactCWords : 1;
+    sal_uInt16  fPagHidden : 1;     //
+    sal_uInt16  fPagResults : 1;
+    sal_uInt16  fLockAtn : 1;       //   when 1, annotations are locked for editing
+    sal_uInt16  fMirrorMargins : 1; //   swap margins on left/right pages when 1.
+    sal_uInt16  fReadOnlyRecommended : 1;// user has recommended that this doc be opened read-only when 1
+    sal_uInt16  fDfltTrueType : 1;  //   when 1, use TrueType fonts by default (flag obeyed only when doc was created by WinWord 2.x)
+    sal_uInt16  fPagSuppressTopSpacing : 1;//when 1, file created with SUPPRESSTOPSPACING=YES in win.ini. (flag obeyed only when doc was created by WinWord 2.x).
+    sal_uInt16  fProtEnabled : 1;   //   when 1, document is protected from edit operations
+    sal_uInt16  fDispFormFldSel : 1;//   when 1, restrict selections to occur only within form fields
+    sal_uInt16  fRMView : 1;        //   when 1, show revision markings on screen
+    sal_uInt16  fRMPrint : 1;       //   when 1, print revision marks when document is printed
+    sal_uInt16  fWriteReservation : 1;
+    sal_uInt16  fLockRev : 1;       //   when 1, the current revision marking state is locked
+    sal_uInt16  fEmbedFonts : 1;    //   when 1, document contains embedded True Type fonts
     //    compatability options
-    UINT16 copts_fNoTabForInd : 1;          //    when 1, don�t add automatic tab stops for hanging indent
-    UINT16 copts_fNoSpaceRaiseLower : 1;        //    when 1, don�t add extra space for raised or lowered characters
-    UINT16 copts_fSupressSpbfAfterPgBrk : 1;    // when 1, supress the paragraph Space Before and Space After options after a page break
-    UINT16 copts_fWrapTrailSpaces : 1;      //    when 1, wrap trailing spaces at the end of a line to the next line
-    UINT16 copts_fMapPrintTextColor : 1;        //    when 1, print colors as black on non-color printers
-    UINT16 copts_fNoColumnBalance : 1;      //    when 1, don�t balance columns for Continuous Section starts
-    UINT16 copts_fConvMailMergeEsc : 1;
-    UINT16 copts_fSupressTopSpacing : 1;        //    when 1, supress extra line spacing at top of page
-    UINT16 copts_fOrigWordTableRules : 1;   //    when 1, combine table borders like Word 5.x for the Macintosh
-    UINT16 copts_fTransparentMetafiles : 1; //    when 1, don�t blank area between metafile pictures
-    UINT16 copts_fShowBreaksInFrames : 1;   //    when 1, show hard page or column breaks in frames
-    UINT16 copts_fSwapBordersFacingPgs : 1; //    when 1, swap left and right pages on odd facing pages
+    sal_uInt16 copts_fNoTabForInd : 1;          //    when 1, don�t add automatic tab stops for hanging indent
+    sal_uInt16 copts_fNoSpaceRaiseLower : 1;        //    when 1, don�t add extra space for raised or lowered characters
+    sal_uInt16 copts_fSupressSpbfAfterPgBrk : 1;    // when 1, supress the paragraph Space Before and Space After options after a page break
+    sal_uInt16 copts_fWrapTrailSpaces : 1;      //    when 1, wrap trailing spaces at the end of a line to the next line
+    sal_uInt16 copts_fMapPrintTextColor : 1;        //    when 1, print colors as black on non-color printers
+    sal_uInt16 copts_fNoColumnBalance : 1;      //    when 1, don�t balance columns for Continuous Section starts
+    sal_uInt16 copts_fConvMailMergeEsc : 1;
+    sal_uInt16 copts_fSupressTopSpacing : 1;        //    when 1, supress extra line spacing at top of page
+    sal_uInt16 copts_fOrigWordTableRules : 1;   //    when 1, combine table borders like Word 5.x for the Macintosh
+    sal_uInt16 copts_fTransparentMetafiles : 1; //    when 1, don�t blank area between metafile pictures
+    sal_uInt16 copts_fShowBreaksInFrames : 1;   //    when 1, show hard page or column breaks in frames
+    sal_uInt16 copts_fSwapBordersFacingPgs : 1; //    when 1, swap left and right pages on odd facing pages
 
-    INT16  dxaTab;              // 720 twips    default tab width
-    UINT16 wSpare;              //
-    UINT16 dxaHotZ;         //      width of hyphenation hot zone measured in twips
-    UINT16 cConsecHypLim;       //      number of lines allowed to have consecutive hyphens
-    UINT16 wSpare2;         //      reserved
-    INT32   dttmCreated;        // DTTM date and time document was created
-    INT32   dttmRevised;        // DTTM date and time document was last revised
-    INT32   dttmLastPrint;      // DTTM date and time document was last printed
-    INT16   nRevision;          //      number of times document has been revised since its creation
-    INT32   tmEdited;           //      time document was last edited
-    INT32   cWords;             //      count of words tallied by last Word Count execution
-    INT32   cCh;                //      count of characters tallied by last Word Count execution
-    INT16   cPg;                //      count of pages tallied by last Word Count execution
-    INT32   cParas;             //      count of paragraphs tallied by last Word Count execution
-    UINT16 rncEdn : 2;          //      restart endnote number code: 0 don�t restart endnote numbering, 1 section, 2 page
-    UINT16 nEdn : 14;           //      beginning endnote number
-    UINT16 epc : 2;         //      endnote position code: 0 at end of section, 3 at end of document
-    // UINT16 nfcFtnRef : 4;        //      number format code for auto footnotes: 0 Arabic, 1 Upper case Roman, 2 Lower case Roman
+    sal_Int16  dxaTab;              // 720 twips    default tab width
+    sal_uInt16 wSpare;              //
+    sal_uInt16 dxaHotZ;         //      width of hyphenation hot zone measured in twips
+    sal_uInt16 cConsecHypLim;       //      number of lines allowed to have consecutive hyphens
+    sal_uInt16 wSpare2;         //      reserved
+    sal_Int32   dttmCreated;        // DTTM date and time document was created
+    sal_Int32   dttmRevised;        // DTTM date and time document was last revised
+    sal_Int32   dttmLastPrint;      // DTTM date and time document was last printed
+    sal_Int16   nRevision;          //      number of times document has been revised since its creation
+    sal_Int32   tmEdited;           //      time document was last edited
+    sal_Int32   cWords;             //      count of words tallied by last Word Count execution
+    sal_Int32   cCh;                //      count of characters tallied by last Word Count execution
+    sal_Int16   cPg;                //      count of pages tallied by last Word Count execution
+    sal_Int32   cParas;             //      count of paragraphs tallied by last Word Count execution
+    sal_uInt16 rncEdn : 2;          //      restart endnote number code: 0 don�t restart endnote numbering, 1 section, 2 page
+    sal_uInt16 nEdn : 14;           //      beginning endnote number
+    sal_uInt16 epc : 2;         //      endnote position code: 0 at end of section, 3 at end of document
+    // sal_uInt16 nfcFtnRef : 4;        //      number format code for auto footnotes: 0 Arabic, 1 Upper case Roman, 2 Lower case Roman
                                 //      3 Upper case Letter, 4 Lower case Letter
                                 // ersetzt durch gleichlautendes Feld unten
-    // UINT16 nfcEdnRef : 4;        //      number format code for auto endnotes: 0 Arabic, 1 Upper case Roman, 2 Lower case Roman
+    // sal_uInt16 nfcEdnRef : 4;        //      number format code for auto endnotes: 0 Arabic, 1 Upper case Roman, 2 Lower case Roman
                                 //      3 Upper case Letter, 4 Lower case Letter
                                 // ersetzt durch gleichlautendes Feld unten
-    UINT16 fPrintFormData : 1;  //      only print data inside of form fields
-    UINT16 fSaveFormData : 1;   //      only save document data that is inside of a form field.
-    UINT16 fShadeFormData : 1;  //      shade form fields
-    UINT16 : 2;             //      reserved
-    UINT16 fWCFtnEdn : 1;       //      when 1, include footnotes and endnotes in word count
-    INT32   cLines;             //      count of lines tallied by last Word Count operation
-    INT32   cWordsFtnEnd;       //      count of words in footnotes and endnotes tallied by last Word Count operation
-    INT32   cChFtnEdn;          //      count of characters in footnotes and endnotes tallied by last Word Count operation
-    INT16   cPgFtnEdn;          //      count of pages in footnotes and endnotes tallied by last Word Count operation
-    INT32   cParasFtnEdn;       //      count of paragraphs in footnotes and endnotes tallied by last Word Count operation
-    INT32   cLinesFtnEdn;       //      count of paragraphs in footnotes and endnotes tallied by last Word Count operation
-    INT32   lKeyProtDoc;        //      document protection password key, only valid if dop.fProtEnabled, dop.fLockAtn or dop.fLockRev are 1.
-    UINT16  wvkSaved : 3;       //      document view kind: 0 Normal view, 1 Outline view, 2 Page View
-    UINT16  wScaleSaved : 9;    //
-    UINT16  zkSaved : 2;
+    sal_uInt16 fPrintFormData : 1;  //      only print data inside of form fields
+    sal_uInt16 fSaveFormData : 1;   //      only save document data that is inside of a form field.
+    sal_uInt16 fShadeFormData : 1;  //      shade form fields
+    sal_uInt16 : 2;             //      reserved
+    sal_uInt16 fWCFtnEdn : 1;       //      when 1, include footnotes and endnotes in word count
+    sal_Int32   cLines;             //      count of lines tallied by last Word Count operation
+    sal_Int32   cWordsFtnEnd;       //      count of words in footnotes and endnotes tallied by last Word Count operation
+    sal_Int32   cChFtnEdn;          //      count of characters in footnotes and endnotes tallied by last Word Count operation
+    sal_Int16   cPgFtnEdn;          //      count of pages in footnotes and endnotes tallied by last Word Count operation
+    sal_Int32   cParasFtnEdn;       //      count of paragraphs in footnotes and endnotes tallied by last Word Count operation
+    sal_Int32   cLinesFtnEdn;       //      count of paragraphs in footnotes and endnotes tallied by last Word Count operation
+    sal_Int32   lKeyProtDoc;        //      document protection password key, only valid if dop.fProtEnabled, dop.fLockAtn or dop.fLockRev are 1.
+    sal_uInt16  wvkSaved : 3;       //      document view kind: 0 Normal view, 1 Outline view, 2 Page View
+    sal_uInt16  wScaleSaved : 9;    //
+    sal_uInt16  zkSaved : 2;
 
     // hier sollte bei nFib < 103   Schluss sein, sonst ist Datei fehlerhaft!
 
     /*
         bei nFib >= 103 gehts weiter:
     */
-    UINT32 fNoTabForInd                             :1; // see above in compatability options
-    UINT32 fNoSpaceRaiseLower                   :1; // see above
-    UINT32 fSupressSpbfAfterPageBreak   :1; // see above
-    UINT32 fWrapTrailSpaces                     :1; // see above
-    UINT32 fMapPrintTextColor                   :1; // see above
-    UINT32 fNoColumnBalance                     :1; // see above
-    UINT32 fConvMailMergeEsc                    :1; // see above
-    UINT32 fSupressTopSpacing                   :1; // see above
-    UINT32 fOrigWordTableRules              :1; // see above
-    UINT32 fTransparentMetafiles            :1; // see above
-    UINT32 fShowBreaksInFrames              :1; // see above
-    UINT32 fSwapBordersFacingPgs            :1; // see above
-    UINT32                                                      :4; // reserved
-    UINT32 fSuppressTopSpacingMac5      :1; // Suppress extra line spacing at top
+    sal_uInt32 fNoTabForInd                             :1; // see above in compatability options
+    sal_uInt32 fNoSpaceRaiseLower                   :1; // see above
+    sal_uInt32 fSupressSpbfAfterPageBreak   :1; // see above
+    sal_uInt32 fWrapTrailSpaces                     :1; // see above
+    sal_uInt32 fMapPrintTextColor                   :1; // see above
+    sal_uInt32 fNoColumnBalance                     :1; // see above
+    sal_uInt32 fConvMailMergeEsc                    :1; // see above
+    sal_uInt32 fSupressTopSpacing                   :1; // see above
+    sal_uInt32 fOrigWordTableRules              :1; // see above
+    sal_uInt32 fTransparentMetafiles            :1; // see above
+    sal_uInt32 fShowBreaksInFrames              :1; // see above
+    sal_uInt32 fSwapBordersFacingPgs            :1; // see above
+    sal_uInt32                                                      :4; // reserved
+    sal_uInt32 fSuppressTopSpacingMac5      :1; // Suppress extra line spacing at top
                                                                                 // of page like MacWord 5.x
-    UINT32 fTruncDxaExpand                      :1; // Expand/Condense by whole number of points
-    UINT32 fPrintBodyBeforeHdr              :1; // Print body text before header/footer
-    UINT32 fNoLeading                                   :1; // Don't add extra spacebetween rows of text
-    UINT32                                                      :1; // reserved
-    UINT32 fMWSmallCaps                             :1; // Use larger small caps like MacWord 5.x
-    UINT32                                                   :10;// reserved
+    sal_uInt32 fTruncDxaExpand                      :1; // Expand/Condense by whole number of points
+    sal_uInt32 fPrintBodyBeforeHdr              :1; // Print body text before header/footer
+    sal_uInt32 fNoLeading                                   :1; // Don't add extra spacebetween rows of text
+    sal_uInt32                                                      :1; // reserved
+    sal_uInt32 fMWSmallCaps                             :1; // Use larger small caps like MacWord 5.x
+    sal_uInt32                                                   :10;// reserved
 
     // hier sollte bei nFib <= 105  Schluss sein, sonst ist Datei fehlerhaft!
 
     /*
         bei nFib > 105 gehts weiter:
     */
-    INT16   adt;                            // Autoformat Document Type:
+    sal_Int16   adt;                            // Autoformat Document Type:
                                                     // 0 for normal. 1 for letter, and 2 for email.
     WW8_DOPTYPOGRAPHY doptypography;    // siehe WW8STRUC.HXX
     WW8_DOGRID        dogrid;                   // siehe WW8STRUC.HXX
-    UINT16                      :1; // reserved
-    UINT16 lvl                  :4; // Which outline levels are showing in outline view
-    UINT16                      :4; // reserved
-    UINT16 fHtmlDoc             :1; // This file is based upon an HTML file
-    UINT16                      :1; // reserved
-    UINT16 fSnapBorder          :1; // Snap table and page borders to page border
-    UINT16 fIncludeHeader       :1; // Place header inside page border
-    UINT16 fIncludeFooter       :1; // Place footer inside page border
-    UINT16 fForcePageSizePag    :1; // Are we in online view
-    UINT16 fMinFontSizePag      :1; // Are we auto-promoting
+    sal_uInt16                      :1; // reserved
+    sal_uInt16 lvl                  :4; // Which outline levels are showing in outline view
+    sal_uInt16                      :4; // reserved
+    sal_uInt16 fHtmlDoc             :1; // This file is based upon an HTML file
+    sal_uInt16                      :1; // reserved
+    sal_uInt16 fSnapBorder          :1; // Snap table and page borders to page border
+    sal_uInt16 fIncludeHeader       :1; // Place header inside page border
+    sal_uInt16 fIncludeFooter       :1; // Place footer inside page border
+    sal_uInt16 fForcePageSizePag    :1; // Are we in online view
+    sal_uInt16 fMinFontSizePag      :1; // Are we auto-promoting
                                                                 // fonts to >= hpsZoonFontPag?
-    UINT16 fHaveVersions            :1; // versioning is turned on
-    UINT16 fAutoVersion             :1; // autoversioning is enabled
-    UINT16                                   :14;   // reserved
+    sal_uInt16 fHaveVersions            :1; // versioning is turned on
+    sal_uInt16 fAutoVersion             :1; // autoversioning is enabled
+    sal_uInt16                                   :14;   // reserved
     // hier 12 Byte ueberspringen: ASUMI
-    INT32 cChWS;
-    INT32 cChWSFtnEdn;
-    INT32 grfDocEvents;
+    sal_Int32 cChWS;
+    sal_Int32 cChWSFtnEdn;
+    sal_Int32 grfDocEvents;
     // hier 4+30+8 Bytes ueberspringen
-    INT32 cDBC;
-    INT32 cDBCFtnEdn;
+    sal_Int32 cDBC;
+    sal_Int32 cDBCFtnEdn;
     // hier 4 Bytes ueberspringen
-    INT16 nfcFtnRef;
-    INT16 nfcEdnRef;
-    INT16 hpsZoonFontPag;
-    INT16 dywDispPag;
+    sal_Int16 nfcFtnRef;
+    sal_Int16 nfcEdnRef;
+    sal_Int16 hpsZoonFontPag;
+    sal_Int16 dywDispPag;
 
     // 2. Initialisier-Dummy:
-    BYTE    nDataEnd;
+    sal_uInt8    nDataEnd;
 
     /*
         nun wird lediglich noch ein Ctor benoetigt,
         dem die FIB-Nummer uebergeben werden muss
     */
-    WW8Dop( SvStream& rSt, INT16 nFib, INT32 nPos, INT32 nSize );
+    WW8Dop( SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_Int32 nSize );
 
     /* leider falsch, man braucht auch noch einen fuer den Export */
     WW8Dop();
-    BOOL Write( SvStream& rStrm, WW8Fib& rFib );
+    sal_Bool Write( SvStream& rStrm, WW8Fib& rFib );
 };
 
 
@@ -1454,13 +1454,13 @@ inline short WW8SkipOdd(SvStream* pSt )
 #if defined HP9000 || defined SINIX
     short bRet = pSt->Tell() & 0x1;
     if (bRet) {
-        UINT8 c;
+        sal_uInt8 c;
         pSt->Read( &c, 1 );
     }
     return bRet;
 #else
     if ( pSt->Tell() & 0x1 ){
-        UINT8 c;
+        sal_uInt8 c;
         pSt->Read( &c, 1 );
         return 1;
     }
@@ -1478,9 +1478,9 @@ class WW8PLCF_HdFt
 public:
     WW8PLCF_HdFt( SvStream* pSt, WW8Fib& rFib, WW8Dop& rDop );
 //  ~WW8PLCF_HdFt() {}
-    BOOL GetTextPos( BYTE grpfIhdt, BYTE nWhich, WW8_CP& rStart, long& rLen );
-    BOOL GetTextPosExact( short nIdx, WW8_CP& rStart, long& rLen );
-    void UpdateIndex( BYTE grpfIhdt );
+    sal_Bool GetTextPos( sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rStart, long& rLen );
+    sal_Bool GetTextPosExact( short nIdx, WW8_CP& rStart, long& rLen );
+    void UpdateIndex( sal_uInt8 grpfIhdt );
 };
 
 

@@ -190,7 +190,7 @@ namespace svt { namespace table
 
     void setCursorAtCurrentCell(const Point& rPoint);
     /** checks whether the vector with the selected rows contains the current row*/
-    BOOL    isRowSelected(const ::std::vector<RowPos>& selectedRows, RowPos current);
+    sal_Bool    isRowSelected(const ::std::vector<RowPos>& selectedRows, RowPos current);
 
     bool    isRowSelected(RowPos current);
     /** returns the position of the current row in the selection vector */
@@ -344,8 +344,8 @@ namespace svt { namespace table
        virtual void BeginDrag();
        virtual void CreateAnchor();
        virtual void DestroyAnchor();
-       virtual BOOL SetCursorAtPoint(const Point& rPoint, BOOL bDontSelectAtCursor);
-       virtual BOOL IsSelectionAtPoint( const Point& rPoint );
+       virtual sal_Bool SetCursorAtPoint(const Point& rPoint, sal_Bool bDontSelectAtCursor);
+       virtual sal_Bool IsSelectionAtPoint( const Point& rPoint );
        virtual void DeselectAtPoint( const Point& rPoint );
        virtual void DeselectAll();
     };

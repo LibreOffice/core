@@ -129,7 +129,7 @@ void ORTFReader::NextToken( int nToken )
                 {
 
                     int nTmpToken2 = GetNextToken();
-                    sal_Bool bNext = TRUE;
+                    sal_Bool bNext = sal_True;
                     do
                     {
                         Color aColor;
@@ -193,7 +193,7 @@ void ORTFReader::NextToken( int nToken )
                     eraseTokens();
                 }
 
-                m_bInTbl = TRUE; // jetzt befinden wir uns in einer Tabellenbeschreibung
+                m_bInTbl = sal_True; // jetzt befinden wir uns in einer Tabellenbeschreibung
                 break;
             case RTF_TEXTTOKEN:
             case RTF_SINGLECHAR:
@@ -250,7 +250,7 @@ void ORTFReader::NextToken( int nToken )
                 }
                 break;
             case RTF_INTBL:
-                m_bInTbl = TRUE;
+                m_bInTbl = sal_True;
                 break;
             case RTF_TEXTTOKEN:
             case RTF_SINGLECHAR:
@@ -295,7 +295,7 @@ sal_Bool ORTFReader::CreateTable(int nToken)
                 if(m_bInTbl)
                     aColumnName.Erase();
 
-                m_bInTbl = TRUE;
+                m_bInTbl = sal_True;
                 break;
             case RTF_TEXTTOKEN:
             case RTF_SINGLECHAR:

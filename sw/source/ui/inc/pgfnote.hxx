@@ -50,9 +50,9 @@ class SwFootNotePage: public SfxTabPage
 {
 public:
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
-    static USHORT* GetRanges();
+    static sal_uInt16* GetRanges();
 
-    virtual BOOL FillItemSet(SfxItemSet &rSet);
+    virtual sal_Bool FillItemSet(SfxItemSet &rSet);
     virtual void Reset(const SfxItemSet &rSet);
 
 private:

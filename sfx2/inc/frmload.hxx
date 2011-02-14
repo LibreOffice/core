@@ -96,7 +96,7 @@ private:
                         ) const;
 
     sal_Bool            impl_createNewDocWithSlotParam(
-                            const USHORT _nSlotID,
+                            const sal_uInt16 _nSlotID,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& i_rxFrame,
                             const bool i_bHidden
                         );
@@ -109,7 +109,7 @@ private:
                             ::comphelper::NamedValueCollection& io_rDescriptor
                         ) const;
 
-    USHORT              impl_findSlotParam(
+    sal_uInt16              impl_findSlotParam(
                             const ::rtl::OUString& i_rFactoryURL
                         ) const;
 

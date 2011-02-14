@@ -58,7 +58,7 @@ public:
 
     void            SetFont( const Font& rFont );
 
-    void            SelectCharacter( sal_uInt32 cNew, BOOL bFocus = FALSE );
+    void            SelectCharacter( sal_uInt32 cNew, sal_Bool bFocus = sal_False );
     sal_UCS4        GetSelectCharacter() const;
 
     Link            GetDoubleClickHdl() const { return aDoubleClkHdl; }
@@ -76,12 +76,12 @@ public:
     int                         FirstInView( void) const;
     int                         LastInView( void) const;
     int                         PixelToMapIndex( const Point&) const;
-    void                        SelectIndex( int index, BOOL bFocus = FALSE );
+    void                        SelectIndex( int index, sal_Bool bFocus = sal_False );
     void                        DeSelect();
-    inline sal_Bool             IsSelected(USHORT _nPos) const { return _nPos == nSelectedIndex; }
-    inline USHORT               GetSelectIndexId() const { return sal::static_int_cast<USHORT>(nSelectedIndex); }
-    USHORT                      GetRowPos(USHORT _nPos) const;
-    USHORT                      GetColumnPos(USHORT _nPos) const;
+    inline sal_Bool             IsSelected(sal_uInt16 _nPos) const { return _nPos == nSelectedIndex; }
+    inline sal_uInt16               GetSelectIndexId() const { return sal::static_int_cast<sal_uInt16>(nSelectedIndex); }
+    sal_uInt16                      GetRowPos(sal_uInt16 _nPos) const;
+    sal_uInt16                      GetColumnPos(sal_uInt16 _nPos) const;
 
     void                        ImplFireAccessibleEvent( short nEventId,
                                                          const ::com::sun::star::uno::Any& rOldValue,
@@ -119,7 +119,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xAccessible;
     long            nX;
     long            nY;
-    BOOL            bDrag;
+    sal_Bool            bDrag;
 
     sal_Int32       nSelectedIndex;
 
@@ -130,7 +130,7 @@ private:
 
 private:
     void            DrawChars_Impl( int n1, int n2);
-    void            InitSettings( BOOL bForeground, BOOL bBackground);
+    void            InitSettings( sal_Bool bForeground, sal_Bool bBackground);
     // abstraction layers are: Unicode<->MapIndex<->Pixel
     Point           MapIndexToPixel( int) const;
     DECL_LINK( VscrollHdl, ScrollBar* );

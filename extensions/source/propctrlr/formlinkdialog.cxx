@@ -356,7 +356,7 @@ namespace pcr
         // in all rows, there must be either two valid selections, or none at all
         // If there is at least one row with exactly one valid selection, then the
         // OKButton needs to be disabled
-        BOOL bEnable = TRUE;
+        sal_Bool bEnable = sal_True;
 
         const FieldLinkRow* aRows[] = {
             m_aRow1.get(), m_aRow2.get(), m_aRow3.get(), m_aRow4.get()
@@ -368,7 +368,7 @@ namespace pcr
             if  (  aRows[ i ]->GetFieldName( FieldLinkRow::eDetailField, sNotInterestedInRightNow )
                 != aRows[ i ]->GetFieldName( FieldLinkRow::eMasterField, sNotInterestedInRightNow )
                 )
-                bEnable = FALSE;
+                bEnable = sal_False;
         }
 
         m_aOK.Enable( bEnable );

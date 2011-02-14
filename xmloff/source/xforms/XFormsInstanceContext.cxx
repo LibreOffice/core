@@ -72,7 +72,7 @@ static SvXMLTokenMapEntry aAttributes[] =
 
 XFormsInstanceContext::XFormsInstanceContext(
     SvXMLImport& rImport,
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     Reference<XPropertySet> xModel ) :
         TokenContext( rImport, nPrefix, rLocalName, aAttributes, aEmptyMap ),
@@ -86,7 +86,7 @@ XFormsInstanceContext::~XFormsInstanceContext()
 }
 
 SvXMLImportContext* XFormsInstanceContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList>& )
 {

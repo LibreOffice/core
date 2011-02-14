@@ -41,32 +41,32 @@ class SVX_DLLPUBLIC XDash
 {
 protected:
     XDashStyle  eDash;
-    USHORT      nDots;
-    ULONG       nDotLen;
-    USHORT      nDashes;
-    ULONG       nDashLen;
-    ULONG       nDistance;
+    sal_uInt16      nDots;
+    sal_uIntPtr       nDotLen;
+    sal_uInt16      nDashes;
+    sal_uIntPtr       nDashLen;
+    sal_uIntPtr       nDistance;
 
 public:
           XDash(XDashStyle eDash = XDASH_RECT,
-                USHORT nDots = 1, ULONG nDotLen = 20,
-                USHORT nDashes = 1, ULONG nDashLen = 20, ULONG nDistance = 20);
+                sal_uInt16 nDots = 1, sal_uIntPtr nDotLen = 20,
+                sal_uInt16 nDashes = 1, sal_uIntPtr nDashLen = 20, sal_uIntPtr nDistance = 20);
 
     bool operator==(const XDash& rDash) const;
 
     void SetDashStyle(XDashStyle eNewStyle) { eDash = eNewStyle; }
-    void SetDots(USHORT nNewDots)           { nDots = nNewDots; }
-    void SetDotLen(ULONG nNewDotLen)        { nDotLen = nNewDotLen; }
-    void SetDashes(USHORT nNewDashes)       { nDashes = nNewDashes; }
-    void SetDashLen(ULONG nNewDashLen)      { nDashLen = nNewDashLen; }
-    void SetDistance(ULONG nNewDistance)    { nDistance = nNewDistance; }
+    void SetDots(sal_uInt16 nNewDots)           { nDots = nNewDots; }
+    void SetDotLen(sal_uIntPtr nNewDotLen)        { nDotLen = nNewDotLen; }
+    void SetDashes(sal_uInt16 nNewDashes)       { nDashes = nNewDashes; }
+    void SetDashLen(sal_uIntPtr nNewDashLen)      { nDashLen = nNewDashLen; }
+    void SetDistance(sal_uIntPtr nNewDistance)    { nDistance = nNewDistance; }
 
     XDashStyle  GetDashStyle() const        { return eDash; }
-    USHORT      GetDots() const             { return nDots; }
-    ULONG       GetDotLen() const           { return nDotLen; }
-    USHORT      GetDashes() const           { return nDashes; }
-    ULONG       GetDashLen() const          { return nDashLen; }
-    ULONG       GetDistance() const         { return nDistance; }
+    sal_uInt16      GetDots() const             { return nDots; }
+    sal_uIntPtr       GetDotLen() const           { return nDotLen; }
+    sal_uInt16      GetDashes() const           { return nDashes; }
+    sal_uIntPtr       GetDashLen() const          { return nDashLen; }
+    sal_uIntPtr       GetDistance() const         { return nDistance; }
 
     // XDash is translated into an array of doubles which describe the lengths of the
     // dashes, dots and empty passages. It returns the complete length of the full DashDot

@@ -42,7 +42,7 @@
 SFX_IMPL_DOCKINGWINDOW( SfxNavigatorWrapper , SID_NAVIGATOR );
 
 SfxNavigatorWrapper::SfxNavigatorWrapper( Window* pParentWnd ,
-                                                USHORT nId ,
+                                                sal_uInt16 nId ,
                                                 SfxBindings* pBindings ,
                                                 SfxChildWinInfo* pInfo )
                     : SfxChildWindow( pParentWnd , nId )
@@ -55,7 +55,7 @@ SfxNavigatorWrapper::SfxNavigatorWrapper( Window* pParentWnd ,
     pWindow->SetOutputSizePixel( Size( 270, 240 ) );
 
     ( ( SfxDockingWindow* ) pWindow )->Initialize( pInfo );
-    SetHideNotDelete( TRUE );
+    SetHideNotDelete( sal_True );
 }
 
 SfxNavigator::SfxNavigator( SfxBindings* pBind ,
@@ -88,13 +88,13 @@ void SfxNavigator::Resizing( Size &rSize )
         pCon->Resizing( rSize );
 }
 
-BOOL SfxNavigator::Close()
+sal_Bool SfxNavigator::Close()
 {
     SfxChildWindowContext *pCon = GetChildWindow_Impl()->GetContext_Impl();
     DBG_ASSERT( pCon, "Kein Context!" );
     if ( !pCon || pCon->Close() )
         return SfxDockingWindow::Close();
     else
-        return FALSE;
+        return sal_False;
 }
 

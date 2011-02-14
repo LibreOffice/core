@@ -181,7 +181,7 @@ ShellResource::ShellResource()
     sPageDescFollowName(    SW_RES(STR_PAGEDESC_FOLLOWNAME)),
     sPageDescName(          SW_RES(STR_PAGEDESC_NAME))
 {
-    const USHORT nCount = FLD_DOCINFO_END - FLD_DOCINFO_BEGIN;
+    const sal_uInt16 nCount = FLD_DOCINFO_END - FLD_DOCINFO_BEGIN;
 
     KeyCode aCode( KEY_SPACE );
     KeyCode aModifiedCode( KEY_SPACE, KEY_MOD1 );
@@ -190,7 +190,7 @@ ShellResource::ShellResource()
     aModStr.SearchAndReplaceAllAscii( "+", String() );
     aHyperlinkClick.SearchAndReplaceAllAscii( "%s", aModStr );
 
-    for(USHORT i = 0; i < nCount; ++i)
+    for(sal_uInt16 i = 0; i < nCount; ++i)
     {
         String* pNew = new SW_RESSTR(FLD_DOCINFO_BEGIN + i);
         aDocInfoLst.Insert(pNew, aDocInfoLst.Count());
@@ -205,7 +205,7 @@ ShellResource::~ShellResource()
         delete pAutoFmtNameLst, pAutoFmtNameLst = 0;
 }
 
-String ShellResource::GetPageDescName( USHORT nNo, BOOL bIsFirst, BOOL bFollow )
+String ShellResource::GetPageDescName( sal_uInt16 nNo, sal_Bool bIsFirst, sal_Bool bFollow )
 {
     String sRet( bIsFirst ? sPageDescFirstName
                           : bFollow ? sPageDescFollowName
@@ -222,7 +222,7 @@ SwGlossaries* GetGlossaries()
     return (pGlossaries);
 }
 
-BOOL HasGlossaryList()
+sal_Bool HasGlossaryList()
 {
     return pGlossaryList != 0;
 }
@@ -250,7 +250,7 @@ void ShellResource::_GetAutoFmtNameLst() const
 ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( SvStringsDtor& rLst )
     : Resource( ResId(RID_SHELLRES_AUTOFMTSTRS, *pSwResMgr) )
 {
-    for( USHORT n = 0; n < STR_AUTOFMTREDL_END; ++n )
+    for( sal_uInt16 n = 0; n < STR_AUTOFMTREDL_END; ++n )
     {
         String* p = new String( ResId( n + 1, *pSwResMgr) );
         if(STR_AUTOFMTREDL_TYPO == n)
@@ -279,13 +279,13 @@ const String&   SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
     if(!pAuthFieldNameList)
     {
         pAuthFieldNameList = new SvStringsDtor(AUTH_FIELD_END, 1);
-        for(USHORT i = 0; i < AUTH_FIELD_END; i++)
+        for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
         {
             String*  pTmp = new String(SW_RES(STR_AUTH_FIELD_START + i));
             pAuthFieldNameList->Insert(pTmp, pAuthFieldNameList->Count());
         }
     }
-    return *pAuthFieldNameList->GetObject( static_cast< USHORT >(eType) );
+    return *pAuthFieldNameList->GetObject( static_cast< sal_uInt16 >(eType) );
 }
 /* -----------------16.09.99 12:29-------------------
 
@@ -295,12 +295,12 @@ const String&   SwAuthorityFieldType::GetAuthTypeName(ToxAuthorityType eType)
     if(!pAuthFieldTypeList)
     {
         pAuthFieldTypeList = new SvStringsDtor(AUTH_TYPE_END, 1);
-        for(USHORT i = 0; i < AUTH_TYPE_END; i++)
+        for(sal_uInt16 i = 0; i < AUTH_TYPE_END; i++)
             pAuthFieldTypeList->Insert(
                 new String(SW_RES(STR_AUTH_TYPE_START + i)),
                                     pAuthFieldTypeList->Count());
     }
-    return *pAuthFieldTypeList->GetObject( static_cast< USHORT >(eType) );
+    return *pAuthFieldTypeList->GetObject( static_cast< sal_uInt16 >(eType) );
 }
 
 

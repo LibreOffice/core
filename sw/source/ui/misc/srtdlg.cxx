@@ -60,25 +60,25 @@
 SV_IMPL_PTRARR( _FndBoxes, _FndBox* )
 SV_IMPL_PTRARR( _FndLines, _FndLine* )
 
-static BOOL bCheck1 = TRUE;
-static BOOL bCheck2 = FALSE;
-static BOOL bCheck3 = FALSE;
+static sal_Bool bCheck1 = sal_True;
+static sal_Bool bCheck2 = sal_False;
+static sal_Bool bCheck3 = sal_False;
 
-static USHORT nCol1 = 1;
-static USHORT nCol2 = 1;
-static USHORT nCol3 = 1;
+static sal_uInt16 nCol1 = 1;
+static sal_uInt16 nCol2 = 1;
+static sal_uInt16 nCol3 = 1;
 
-static USHORT nType1 = 0;
-static USHORT nType2 = 0;
-static USHORT nType3 = 0;
+static sal_uInt16 nType1 = 0;
+static sal_uInt16 nType2 = 0;
+static sal_uInt16 nType3 = 0;
 
-static USHORT nLang = LANGUAGE_NONE;
+static sal_uInt16 nLang = LANGUAGE_NONE;
 
-static BOOL   bAsc1  = TRUE;
-static BOOL   bAsc2  = TRUE;
-static BOOL   bAsc3  = TRUE;
-static BOOL   bCol   = FALSE;
-static BOOL   bCsSens= FALSE;
+static sal_Bool   bAsc1  = sal_True;
+static sal_Bool   bAsc2  = sal_True;
+static sal_Bool   bAsc3  = sal_True;
+static sal_Bool   bCol   = sal_False;
+static sal_Bool   bCsSens= sal_False;
 
 static sal_Unicode    cDeli  = '\t';
 
@@ -90,7 +90,7 @@ using ::rtl::OUString;
 void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
 {
     void* pDel;
-    for( USHORT n = 0, nEnd = rLstBox.GetEntryCount(); n < nEnd; ++n )
+    for( sal_uInt16 n = 0, nEnd = rLstBox.GetEntryCount(); n < nEnd; ++n )
         if( 0 != ( pDel = rLstBox.GetEntryData( n )) )
             delete (String*)pDel;
     rLstBox.Clear();
@@ -102,11 +102,11 @@ void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
  --------------------------------------------------------------------*/
 
 
-BOOL lcl_GetSelTbl( SwWrtShell &rSh, USHORT& rX, USHORT& rY )
+sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 {
     const SwTableNode* pTblNd = rSh.IsCrsrInTbl();
     if( !pTblNd )
-        return FALSE;
+        return sal_False;
 
     _FndBox aFndBox( 0, 0 );
 
@@ -120,10 +120,10 @@ BOOL lcl_GetSelTbl( SwWrtShell &rSh, USHORT& rX, USHORT& rY )
     }
     rX = aFndBox.GetLines().Count();
     if( !rX )
-        return FALSE;
+        return sal_False;
 
     rY = aFndBox.GetLines()[0]->GetBoxes().Count();
-    return TRUE;
+    return sal_True;
 }
 
 /*--------------------------------------------------------------------
@@ -192,14 +192,14 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
         aColumnRB.Check(bCol);
         aColLbl.SetText(bCol ? aRowTxt : aColTxt);
         aRowRB.Check(!bCol);
-        aDelimTabRB.Enable(FALSE);
-        aDelimFreeRB.Enable(FALSE);
-        aDelimEdt.Enable(FALSE);
+        aDelimTabRB.Enable(sal_False);
+        aDelimFreeRB.Enable(sal_False);
+        aDelimEdt.Enable(sal_False);
     }
     else
     {
-        aColumnRB.Enable(FALSE);
-        aRowRB.Check(TRUE);
+        aColumnRB.Enable(sal_False);
+        aRowRB.Check(sal_True);
         aColLbl.SetText(aColTxt);
     }
 
@@ -227,9 +227,9 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
 
     // first initialise the language, then select the
     if( LANGUAGE_NONE == nLang || LANGUAGE_DONTKNOW == nLang )
-        nLang = (USHORT)GetAppLanguage();
+        nLang = (sal_uInt16)GetAppLanguage();
 
-    aLangLB.SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN, TRUE, FALSE);
+    aLangLB.SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN, sal_True, sal_False);
     aLangLB.SelectLanguage( nLang );
 
     LanguageHdl( 0 );
@@ -248,7 +248,7 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
     if(!aDelimTabRB.IsChecked())
     {
         aDelimEdt.SetText(cDeli);
-        aDelimFreeRB.Check(TRUE);
+        aDelimFreeRB.Check(sal_True);
         DelimHdl(&aDelimFreeRB);
     }
     else
@@ -257,7 +257,7 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
     FreeResource();
     if( ::lcl_GetSelTbl( rSh, nX, nY) )
     {
-        USHORT nMax = aRowRB.IsChecked()? nY : nX;
+        sal_uInt16 nMax = aRowRB.IsChecked()? nY : nX;
         aColEdt1.SetMax(nMax);
         aColEdt2.SetMax(nMax);
         aColEdt3.SetMax(nMax);
@@ -295,9 +295,9 @@ void SwSortDlg::Apply()
     bCheck2 = aKeyCB2.IsChecked();
     bCheck3 = aKeyCB3.IsChecked();
 
-    nCol1 = (USHORT)aColEdt1.GetValue();
-    nCol2 = (USHORT)aColEdt2.GetValue();
-    nCol3 = (USHORT)aColEdt3.GetValue();
+    nCol1 = (sal_uInt16)aColEdt1.GetValue();
+    nCol2 = (sal_uInt16)aColEdt2.GetValue();
+    nCol3 = (sal_uInt16)aColEdt3.GetValue();
 
     nType1 = aTypDLB1.GetSelectEntryPos();
     nType2 = aTypDLB2.GetSelectEntryPos();
@@ -361,9 +361,9 @@ void SwSortDlg::Apply()
     aOptions.bTable = rSh.IsTableMode();
     aOptions.bIgnoreCase = !bCsSens;
 
-    BOOL bRet;
+    sal_Bool bRet;
     {
-        SwWait aWait( *rSh.GetView().GetDocShell(), TRUE );
+        SwWait aWait( *rSh.GetView().GetDocShell(), sal_True );
         rSh.StartAllAction();
         if( 0 != (bRet = rSh.Sort( aOptions )))
             rSh.SetModified();
@@ -379,7 +379,7 @@ void SwSortDlg::Apply()
  * --------------------------------------------------*/
 IMPL_LINK( SwSortDlg, DelimHdl, RadioButton*, pButton )
 {
-    BOOL bEnable = pButton == &aDelimFreeRB && aDelimFreeRB.IsEnabled();
+    sal_Bool bEnable = pButton == &aDelimFreeRB && aDelimFreeRB.IsEnabled();
     aDelimEdt.Enable( bEnable );
     aDelimPB.Enable( bEnable );
     return 0;
@@ -396,7 +396,7 @@ IMPL_LINK( SwSortDlg, DelimCharHdl, PushButton*, EMPTYARG )
             rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
         if( RET_OK == pMap->Execute() )
         {
-            SFX_ITEMSET_ARG( pMap->GetOutputItemSet(), pItem, SfxInt32Item, SID_ATTR_CHAR, FALSE );
+            SFX_ITEMSET_ARG( pMap->GetOutputItemSet(), pItem, SfxInt32Item, SID_ATTR_CHAR, sal_False );
             if ( pItem )
                 aDelimEdt.SetText( sal_Unicode ( pItem->GetValue() ) );
         }
@@ -427,7 +427,7 @@ IMPL_LINK( SwSortDlg, CheckHdl, CheckBox *, pCheck )
     else if(!aKeyCB1.IsChecked() &&
                 !aKeyCB2.IsChecked() &&
                     !aKeyCB3.IsChecked())
-        pCheck->Check(TRUE);
+        pCheck->Check(sal_True);
     return 0;
 }
 
@@ -440,11 +440,11 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
     if( !pColRes )
         pColRes = new CollatorRessource();
 
-    const USHORT nLstBoxCnt = 3;
+    const sal_uInt16 nLstBoxCnt = 3;
     ListBox* aLstArr[ nLstBoxCnt ] = { &aTypDLB1, &aTypDLB2, &aTypDLB3 };
-    USHORT* aTypeArr[ nLstBoxCnt ] = { &nType1, &nType2, &nType3 };
+    sal_uInt16* aTypeArr[ nLstBoxCnt ] = { &nType1, &nType2, &nType3 };
     String aOldStrArr[ nLstBoxCnt ];
-    USHORT n;
+    sal_uInt16 n;
 
     void* pUserData;
     for( n = 0; n < nLstBoxCnt; ++n )
@@ -455,7 +455,7 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
         ::lcl_ClearLstBoxAndDelUserData( *pL );
     }
 
-    USHORT nInsPos;
+    sal_uInt16 nInsPos;
     String sAlg, sUINm;
     for( long nCnt = 0, nEnd = aSeq.getLength(); nCnt <= nEnd; ++nCnt )
     {

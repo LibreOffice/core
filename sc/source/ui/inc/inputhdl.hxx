@@ -69,38 +69,38 @@ private:
     TypedScStrCollection*       pFormulaData;
     TypedScStrCollection*       pFormulaDataPara;
     Window*                 pTipVisibleParent;
-    ULONG                   nTipVisible;
+    sal_uLong                   nTipVisible;
     Window*                 pTipVisibleSecParent;
-    ULONG                   nTipVisibleSec;
+    sal_uLong                   nTipVisibleSec;
     String                  aManualTip;
     String                  aAutoSearch;
-    USHORT                  nAutoPos;
-    BOOL                    bUseTab;                    // Blaettern moeglich
+    sal_uInt16                  nAutoPos;
+    sal_Bool                    bUseTab;                    // Blaettern moeglich
 
-    BOOL                    bTextValid;                 // Text noch nicht in Edit-Engine
+    sal_Bool                    bTextValid;                 // Text noch nicht in Edit-Engine
     String                  aCurrentText;
 
     String                  aFormText;                  // fuer Funktions-Autopilot
     xub_StrLen              nFormSelStart;              // Selektion fuer Funktions-Autopilot
     xub_StrLen              nFormSelEnd;
 
-    USHORT                  nAutoPar;                   // autom.parentheses than can be overwritten
+    sal_uInt16                  nAutoPar;                   // autom.parentheses than can be overwritten
 
     ScAddress               aCursorPos;
     ScInputMode             eMode;
-    BOOL                    bModified;
-    BOOL                    bSelIsRef;
-    BOOL                    bFormulaMode;
-    BOOL                    bInRangeUpdate;
-    BOOL                    bParenthesisShown;
-    BOOL                    bCreatingFuncView;
-    BOOL                    bInEnterHandler;
-    BOOL                    bCommandErrorShown;
-    BOOL                    bInOwnChange;
+    sal_Bool                    bModified;
+    sal_Bool                    bSelIsRef;
+    sal_Bool                    bFormulaMode;
+    sal_Bool                    bInRangeUpdate;
+    sal_Bool                    bParenthesisShown;
+    sal_Bool                    bCreatingFuncView;
+    sal_Bool                    bInEnterHandler;
+    sal_Bool                    bCommandErrorShown;
+    sal_Bool                    bInOwnChange;
 
-    BOOL                    bProtected;
-    BOOL                    bCellHasPercentFormat;
-    ULONG                   nValidation;
+    sal_Bool                    bProtected;
+    sal_Bool                    bCellHasPercentFormat;
+    sal_uLong                   nValidation;
     SvxCellHorJustify       eAttrAdjust;
 
     Fraction                aScaleX;                    // fuer Ref-MapMode
@@ -111,21 +111,21 @@ private:
 
     const ScPatternAttr*    pLastPattern;
     SfxItemSet*             pEditDefaults;
-    BOOL                    bLastIsSymbol;
+    sal_Bool                    bLastIsSymbol;
 
     ScInputHdlState*        pLastState;
     Timer*                  pDelayTimer;
 
     ScRangeFindList*        pRangeFindList;
 
-    static BOOL             bAutoComplete;              // aus App-Optionen
-    static BOOL             bOptLoaded;
+    static sal_Bool             bAutoComplete;              // aus App-Optionen
+    static sal_Bool             bOptLoaded;
 
 #ifdef _INPUTHDL_CXX
 private:
     void            UpdateActiveView();
     void            SyncViews( EditView* pSourceView = NULL );
-    BOOL            StartTable( sal_Unicode cTyped, BOOL bFromCommand );
+    sal_Bool            StartTable( sal_Unicode cTyped, sal_Bool bFromCommand );
     void            RemoveSelection();
     void            UpdateFormulaMode();
     void            InvalidateAttribs();
@@ -133,11 +133,11 @@ private:
     DECL_LINK(      DelayTimer, Timer* );
     void            GetColData();
     void            UseColData();
-    void            NextAutoEntry( BOOL bBack );
+    void            NextAutoEntry( sal_Bool bBack );
     void            UpdateAdjust( sal_Unicode cTyped );
     void            GetFormulaData();
     void            UseFormulaData();
-    void            NextFormulaEntry( BOOL bBack );
+    void            NextFormulaEntry( sal_Bool bBack );
     void            PasteFunctionData();
     void            PasteManualTip();
     EditView*       GetFuncEditView();
@@ -148,7 +148,7 @@ private:
     void            UpdateAutoCorrFlag();
     void            ResetAutoPar();
     void            AutoParAdded();
-    BOOL            CursorAtClosingPar();
+    sal_Bool            CursorAtClosingPar();
     void            SkipClosingPar();
     DECL_LINK( ModifyHdl, void* );
     DECL_LINK( ShowHideTipVisibleParentListener, VclWindowEvent* );
@@ -160,39 +160,39 @@ public:
     virtual         ~ScInputHandler();
 
     void            SetMode( ScInputMode eNewMode );
-    BOOL            IsInputMode() const { return (eMode != SC_INPUT_NONE); }
-    BOOL            IsEditMode() const  { return (eMode != SC_INPUT_NONE &&
+    sal_Bool            IsInputMode() const { return (eMode != SC_INPUT_NONE); }
+    sal_Bool            IsEditMode() const  { return (eMode != SC_INPUT_NONE &&
                                                   eMode != SC_INPUT_TYPE); }
-    BOOL            IsTopMode() const   { return (eMode == SC_INPUT_TOP);  }
+    sal_Bool            IsTopMode() const   { return (eMode == SC_INPUT_TOP);  }
 
     const String&   GetEditString();
     const String&   GetFormString() const   { return aFormText; }
 
     const ScAddress& GetCursorPos() const   { return aCursorPos; }
 
-    BOOL            GetTextAndFields( ScEditEngineDefaulter& rDestEngine );
+    sal_Bool            GetTextAndFields( ScEditEngineDefaulter& rDestEngine );
 
-    BOOL            KeyInput( const KeyEvent& rKEvt, BOOL bStartEdit = FALSE );
-    void            EnterHandler( BYTE nBlockMode = 0 );
+    sal_Bool            KeyInput( const KeyEvent& rKEvt, sal_Bool bStartEdit = sal_False );
+    void            EnterHandler( sal_uInt8 nBlockMode = 0 );
     void            CancelHandler();
     void            SetReference( const ScRange& rRef, ScDocument* pDoc );
     void            AddRefEntry();
 
-    BOOL            InputCommand( const CommandEvent& rCEvt, BOOL bForce );
+    sal_Bool            InputCommand( const CommandEvent& rCEvt, sal_Bool bForce );
 
-    void            InsertFunction( const String& rFuncName, BOOL bAddPar = TRUE );
+    void            InsertFunction( const String& rFuncName, sal_Bool bAddPar = sal_True );
     void            ClearText();
 
     void            InputSelection( EditView* pView );
-    void            InputChanged( EditView* pView, BOOL bFromNotify = FALSE );
+    void            InputChanged( EditView* pView, sal_Bool bFromNotify = sal_False );
 
     void            ViewShellGone(ScTabViewShell* pViewSh);
     void            SetRefViewShell(ScTabViewShell* pRefVsh) {pRefViewSh=pRefVsh;}
 
 
-    void            NotifyChange( const ScInputHdlState* pState, BOOL bForce = FALSE,
+    void            NotifyChange( const ScInputHdlState* pState, sal_Bool bForce = sal_False,
                                     ScTabViewShell* pSourceSh = NULL,
-                                    BOOL bStopEditing = TRUE);
+                                    sal_Bool bStopEditing = sal_True);
     void            UpdateCellAdjust( SvxCellHorJustify eJust );
 
     void            ResetDelayTimer(); //BugId 54702
@@ -210,21 +210,21 @@ public:
     EditView*       GetTableView()      { return pTableView; }
     EditView*       GetTopView()        { return pTopView; }
 
-    BOOL            DataChanging( sal_Unicode cTyped = 0, BOOL bFromCommand = FALSE );
-    void            DataChanged( BOOL bFromTopNotify = FALSE );
+    sal_Bool            DataChanging( sal_Unicode cTyped = 0, sal_Bool bFromCommand = sal_False );
+    void            DataChanged( sal_Bool bFromTopNotify = sal_False );
 
-    BOOL            TakesReturn() const     { return ( nTipVisible != 0 ); }
+    sal_Bool            TakesReturn() const     { return ( nTipVisible != 0 ); }
 
-    void            SetModified()       { bModified = TRUE; }
+    void            SetModified()       { bModified = sal_True; }
 
-    BOOL            GetSelIsRef() const     { return bSelIsRef; }
-    void            SetSelIsRef(BOOL bSet)  { bSelIsRef = bSet; }
+    sal_Bool            GetSelIsRef() const     { return bSelIsRef; }
+    void            SetSelIsRef(sal_Bool bSet)  { bSelIsRef = bSet; }
 
     void            ShowRefFrame();
 
     ScRangeFindList* GetRangeFindList()     { return pRangeFindList; }
 
-    void            UpdateRange( USHORT nIndex, const ScRange& rNew );
+    void            UpdateRange( sal_uInt16 nIndex, const ScRange& rNew );
 
     // Kommunikation mit Funktionsautopilot
     void            InputGetSelection       ( xub_StrLen& rStart, xub_StrLen& rEnd );
@@ -232,19 +232,19 @@ public:
     void            InputReplaceSelection   ( const String& rStr );
     String          InputGetFormulaStr      ();
 
-    BOOL            IsFormulaMode() const                   { return bFormulaMode; }
+    sal_Bool            IsFormulaMode() const                   { return bFormulaMode; }
     ScInputWindow*  GetInputWindow()                        { return pInputWin; }
     void            SetInputWindow( ScInputWindow* pNew )   { pInputWin = pNew; }
-    void            StopInputWinEngine( BOOL bAll );
+    void            StopInputWinEngine( sal_Bool bAll );
 
-    BOOL            IsInEnterHandler() const                { return bInEnterHandler; }
-    BOOL            IsInOwnChange() const                   { return bInOwnChange; }
+    sal_Bool            IsInEnterHandler() const                { return bInEnterHandler; }
+    sal_Bool            IsInOwnChange() const                   { return bInOwnChange; }
 
-    BOOL            IsModalMode( SfxObjectShell* pDocSh );
+    sal_Bool            IsModalMode( SfxObjectShell* pDocSh );
 
     void            ForgetLastPattern();
 
-    void            UpdateSpellSettings( BOOL bFromStartTab = FALSE );
+    void            UpdateSpellSettings( sal_Bool bFromStartTab = sal_False );
 
     void            FormulaPreview();
 
@@ -253,7 +253,7 @@ public:
                     // eigentlich private, fuer SID_INPUT_SUM public
     void            InitRangeFinder( const String& rFormula );
 
-    static void     SetAutoComplete(BOOL bSet)  { bAutoComplete = bSet; }
+    static void     SetAutoComplete(sal_Bool bSet)  { bAutoComplete = bSet; }
 };
 
 //========================================================================

@@ -59,32 +59,32 @@ private:
     };
     ScAddInDocs*    pDocs;              // Liste der benutzenden Dokumente
     FuncData*       pFuncData;          // Zeiger auf die Daten in der Collection
-    ULONG           nHandle;            // wird von double auf ULONG gecasted
+    sal_uLong           nHandle;            // wird von double auf sal_uLong gecasted
     ParamType       eType;              // PTR_DOUBLE oder PTR_STRING Ergebnis
-    BOOL            bValid;             // ob Wert gueltig
+    sal_Bool            bValid;             // ob Wert gueltig
 
 public:
                     // cTor nur wenn ScAddInAsync::Get fehlschlaegt!
                     // nIndex: Index aus der FunctionCollection
-                    ScAddInAsync( ULONG nHandle, USHORT nIndex,
+                    ScAddInAsync( sal_uLong nHandle, sal_uInt16 nIndex,
                                     ScDocument* pDoc );
                     // default-cTor nur fuer das eine globale aSeekObj !!!
                     ScAddInAsync();
     virtual         ~ScAddInAsync();
-    static ScAddInAsync*    Get( ULONG nHandle );
-    static void     CallBack( ULONG nHandle, void* pData );
+    static ScAddInAsync*    Get( sal_uLong nHandle );
+    static void     CallBack( sal_uLong nHandle, void* pData );
     static void     RemoveDocument( ScDocument* pDocument );
-    BOOL            IsValid() const         { return bValid; }
+    sal_Bool            IsValid() const         { return bValid; }
     ParamType       GetType() const         { return eType; }
     double          GetValue() const        { return nVal; }
     const String&   GetString() const       { return *pStr; }
-    BOOL            HasDocument( ScDocument* pDoc ) const
+    sal_Bool            HasDocument( ScDocument* pDoc ) const
                         { return pDocs->Seek_Entry( pDoc ); }
     void            AddDocument( ScDocument* pDoc ) { pDocs->Insert( pDoc ); }
 
     // Vergleichsoperatoren fuer PtrArrSort
-    BOOL operator < ( const ScAddInAsync& r ) { return nHandle <  r.nHandle; }
-    BOOL operator ==( const ScAddInAsync& r ) { return nHandle == r.nHandle; }
+    sal_Bool operator < ( const ScAddInAsync& r ) { return nHandle <  r.nHandle; }
+    sal_Bool operator ==( const ScAddInAsync& r ) { return nHandle == r.nHandle; }
 };
 
 

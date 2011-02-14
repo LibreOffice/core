@@ -66,13 +66,13 @@ private:
 
     Link            aCheckPasswordHdl;
 
-    BOOL            bEmpty;
+    sal_Bool            bEmpty;
 
     DECL_LINK( ButtonHdl, OKButton * );
     DECL_LINK( EditModifyHdl, Edit * );
 
 public:
-                    SvxPasswordDialog( Window* pParent, BOOL bAllowEmptyPasswords = FALSE, BOOL bDisableOldPassword = FALSE );
+                    SvxPasswordDialog( Window* pParent, sal_Bool bAllowEmptyPasswords = sal_False, sal_Bool bDisableOldPassword = sal_False );
                     ~SvxPasswordDialog();
 
     String          GetOldPassword() const { return aOldPasswdED.GetText(); }

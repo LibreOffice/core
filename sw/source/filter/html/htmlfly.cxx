@@ -77,25 +77,25 @@ using namespace ::com::sun::star;
 
 ////////////////////////////////////////////////////////////
 
-const ULONG HTML_FRMOPTS_IMG_ALL        =
+const sal_uLong HTML_FRMOPTS_IMG_ALL        =
     HTML_FRMOPT_ALT |
     HTML_FRMOPT_SIZE |
     HTML_FRMOPT_ANYSIZE |
     HTML_FRMOPT_BORDER |
     HTML_FRMOPT_NAME;
-const ULONG HTML_FRMOPTS_IMG_CNTNR      =
+const sal_uLong HTML_FRMOPTS_IMG_CNTNR      =
     HTML_FRMOPTS_IMG_ALL |
     HTML_FRMOPT_ABSSIZE;
-const ULONG HTML_FRMOPTS_IMG            =
+const sal_uLong HTML_FRMOPTS_IMG            =
     HTML_FRMOPTS_IMG_ALL |
     HTML_FRMOPT_ALIGN |
     HTML_FRMOPT_SPACE |
     HTML_FRMOPT_BRCLEAR;
-const ULONG HTML_FRMOPTS_IMG_CSS1       =
+const sal_uLong HTML_FRMOPTS_IMG_CSS1       =
     HTML_FRMOPT_S_ALIGN |
     HTML_FRMOPT_S_SPACE;
 
-const ULONG HTML_FRMOPTS_DIV            =
+const sal_uLong HTML_FRMOPTS_DIV            =
     HTML_FRMOPT_ID |
     HTML_FRMOPT_S_ALIGN |
     HTML_FRMOPT_S_SIZE |
@@ -107,22 +107,22 @@ const ULONG HTML_FRMOPTS_DIV            =
     HTML_FRMOPT_BRCLEAR |
     HTML_FRMOPT_DIR;
 
-const ULONG HTML_FRMOPTS_MULTICOL       =
+const sal_uLong HTML_FRMOPTS_MULTICOL       =
     HTML_FRMOPT_ID |
     HTML_FRMOPT_WIDTH |
     HTML_FRMOPT_ANYSIZE |
     HTML_FRMOPT_ABSSIZE |
     HTML_FRMOPT_DIR;
-const ULONG HTML_FRMOPTS_MULTICOL_CNTNR =
+const sal_uLong HTML_FRMOPTS_MULTICOL_CNTNR =
     HTML_FRMOPTS_MULTICOL;
-const ULONG HTML_FRMOPTS_MULTICOL_CSS1  =
+const sal_uLong HTML_FRMOPTS_MULTICOL_CSS1  =
     HTML_FRMOPT_S_ALIGN |
     HTML_FRMOPT_S_SIZE |
     HTML_FRMOPT_S_SPACE |
     HTML_FRMOPT_S_BORDER|
     HTML_FRMOPT_S_BACKGROUND;
 
-const ULONG HTML_FRMOPTS_SPACER         =
+const sal_uLong HTML_FRMOPTS_SPACER         =
     HTML_FRMOPT_ALIGN |
     HTML_FRMOPT_SIZE |
     HTML_FRMOPT_ANYSIZE |
@@ -130,7 +130,7 @@ const ULONG HTML_FRMOPTS_SPACER         =
     HTML_FRMOPT_MARGINSIZE |
     HTML_FRMOPT_ABSSIZE;
 
-const ULONG HTML_FRMOPTS_CNTNR          =
+const sal_uLong HTML_FRMOPTS_CNTNR          =
     HTML_FRMOPT_S_ALIGN |
     HTML_FRMOPT_S_SPACE |
     HTML_FRMOPT_S_WIDTH |
@@ -141,15 +141,15 @@ const ULONG HTML_FRMOPTS_CNTNR          =
 
 static Writer& OutHTML_FrmFmtTableNode( Writer& rWrt, const SwFrmFmt& rFrmFmt );
 static Writer& OutHTML_FrmFmtAsMulticol( Writer& rWrt, const SwFrmFmt& rFmt,
-                                         BOOL bInCntnr );
+                                         sal_Bool bInCntnr );
 static Writer& OutHTML_FrmFmtAsSpacer( Writer& rWrt, const SwFrmFmt& rFmt );
 static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
-                                          const SwFrmFmt& rFrmFmt, BOOL bSpan );
+                                          const SwFrmFmt& rFrmFmt, sal_Bool bSpan );
 static Writer& OutHTML_FrmFmtAsImage( Writer& rWrt, const SwFrmFmt& rFmt,
-                                      BOOL bInCntnr );
+                                      sal_Bool bInCntnr );
 
 static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFmt,
-                                      BOOL bInCntnr );
+                                      sal_Bool bInCntnr );
 
 static Writer& OutHTML_FrmFmtAsMarquee( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                         const SdrObject& rSdrObj    );
@@ -176,7 +176,7 @@ static HTMLOutEvent __FAR_DATA aIMapEventTable[] =
 
 SV_IMPL_OP_PTRARR_SORT( SwHTMLPosFlyFrms, SwHTMLPosFlyFrmPtr )
 
-USHORT SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
+sal_uInt16 SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
                                    const SdrObject*& rpSdrObj )
 {
     SwHTMLFrmType eType;
@@ -212,7 +212,7 @@ USHORT SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
         eType = HTML_FRMTYPE_TEXT;
 
         const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
-        ULONG nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
+        sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
         const SwNode* pNd = pDoc->GetNodes()[ nStt ];
 
         if( pNd->IsGrfNode() )
@@ -227,12 +227,12 @@ USHORT SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
         }
         else
         {
-            ULONG nEnd = pDoc->GetNodes()[nStt-1]->EndOfSectionIndex();
+            sal_uLong nEnd = pDoc->GetNodes()[nStt-1]->EndOfSectionIndex();
 
             const SfxPoolItem* pItem;
             const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
             if( SFX_ITEM_SET == rItemSet.GetItemState( RES_COL,
-                                                       TRUE, &pItem ) &&
+                                                       sal_True, &pItem ) &&
                 ((const SwFmtCol *)pItem)->GetNumCols() > 1 )
             {
                 // spaltiger Rahmen
@@ -241,7 +241,7 @@ USHORT SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
             else if( pNd->IsTableNode() )
             {
                 const SwTableNode *pTblNd = pNd->GetTableNode();
-                ULONG nTblEnd = pTblNd->EndOfSectionIndex();
+                sal_uLong nTblEnd = pTblNd->EndOfSectionIndex();
 
                 if( nTblEnd+1 == nEnd )
                 {
@@ -258,17 +258,17 @@ USHORT SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
             {
                 const SwTxtNode *pTxtNd = pNd->GetTxtNode();
 
-                BOOL bEmpty = FALSE;
+                sal_Bool bEmpty = sal_False;
                 if( nStt==nEnd-1 && !pTxtNd->Len() )
                 {
                     // leerer Rahmen? Nur wenn kein Rahmen am
                     // Text- oder Start-Node verankert ist.
-                    bEmpty = TRUE;
+                    bEmpty = sal_True;
                     if( pHTMLPosFlyFrms )
                     {
-                        for( USHORT i=0; i<pHTMLPosFlyFrms->Count(); i++ )
+                        for( sal_uInt16 i=0; i<pHTMLPosFlyFrms->Count(); i++ )
                         {
-                            ULONG nIdx = (*pHTMLPosFlyFrms)[i]
+                            sal_uLong nIdx = (*pHTMLPosFlyFrms)[i]
                                                 ->GetNdIndex().GetIndex();
                             bEmpty = (nIdx != nStt) && (nIdx != nStt-1);
                             if( !bEmpty || nIdx > nStt )
@@ -284,7 +284,7 @@ USHORT SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
                     /// or its background color is not "no fill"/"auto fill".
                     if( GPOS_NONE != rBrush.GetGraphicPos() ||
                         rBrush.GetColor() != COL_TRANSPARENT )
-                        bEmpty = FALSE;
+                        bEmpty = sal_False;
                 }
                 if( bEmpty )
                 {
@@ -305,7 +305,7 @@ USHORT SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
         }
     }
 
-    return static_cast< USHORT >(eType);
+    return static_cast< sal_uInt16 >(eType);
 }
 
 void SwHTMLWriter::CollectFlyFrms()
@@ -313,11 +313,11 @@ void SwHTMLWriter::CollectFlyFrms()
     ASSERT( HTML_CFG_MAX+1 == MAX_BROWSERS,
             "number of browser configurations has changed" );
 
-    BYTE nSz = (BYTE)Min( pDoc->GetSpzFrmFmts()->Count(), USHORT(255) );
+    sal_uInt8 nSz = (sal_uInt8)Min( pDoc->GetSpzFrmFmts()->Count(), sal_uInt16(255) );
     SwPosFlyFrms aFlyPos( nSz, nSz );
-    pDoc->GetAllFlyFmts( aFlyPos, bWriteAll ? 0 : pCurPam, TRUE );
+    pDoc->GetAllFlyFmts( aFlyPos, bWriteAll ? 0 : pCurPam, sal_True );
 
-    for( USHORT i=0; i< aFlyPos.Count(); i++ )
+    for( sal_uInt16 i=0; i< aFlyPos.Count(); i++ )
     {
         const SwFrmFmt& rFrmFmt = aFlyPos[i]->GetFmt();
         const SdrObject *pSdrObj = 0;
@@ -325,7 +325,7 @@ void SwHTMLWriter::CollectFlyFrms()
         const SwCntntNode *pACNd;
         SwHTMLFrmType eType = (SwHTMLFrmType)GuessFrmType( rFrmFmt, pSdrObj );
 
-        BYTE nMode;
+        sal_uInt8 nMode;
         const SwFmtAnchor& rAnchor = rFrmFmt.GetAnchor();
         sal_Int16 eHoriRel = rFrmFmt.GetHoriOrient().GetRelationOrient();
         switch( rAnchor.GetAnchorId() )
@@ -375,21 +375,21 @@ void SwHTMLWriter::CollectFlyFrms()
     }
 }
 
-BOOL SwHTMLWriter::OutFlyFrm( ULONG nNdIdx, xub_StrLen nCntntIdx, BYTE nPos,
+sal_Bool SwHTMLWriter::OutFlyFrm( sal_uLong nNdIdx, xub_StrLen nCntntIdx, sal_uInt8 nPos,
                               HTMLOutContext *pContext )
 {
-    BOOL bFlysLeft = FALSE; // Noch Flys an aktueller Node-Position da?
+    sal_Bool bFlysLeft = sal_False; // Noch Flys an aktueller Node-Position da?
 
     // OutFlyFrm kan rekursiv aufgerufen werden. Deshalb muss man
     // manchmal wieder von vorne anfangen, nachdem ein Fly ausgegeben
     // wurde.
-    BOOL bRestart = TRUE;
+    sal_Bool bRestart = sal_True;
     while( pHTMLPosFlyFrms && bRestart )
     {
-        bFlysLeft = bRestart = FALSE;
+        bFlysLeft = bRestart = sal_False;
 
         // suche nach dem Anfang der FlyFrames
-        USHORT i;
+        sal_uInt16 i;
 
         for( i = 0; i < pHTMLPosFlyFrms->Count() &&
             (*pHTMLPosFlyFrms)[i]->GetNdIndex().GetIndex() < nNdIdx; i++ )
@@ -411,7 +411,7 @@ BOOL SwHTMLWriter::OutFlyFrm( ULONG nNdIdx, xub_StrLen nCntntIdx, BYTE nPos,
                 {
                     delete pHTMLPosFlyFrms;
                     pHTMLPosFlyFrms = 0;
-                    bRestart = TRUE;    // nicht wirklich, nur raus
+                    bRestart = sal_True;    // nicht wirklich, nur raus
                                         // aus der Schleife
                 }
 
@@ -429,14 +429,14 @@ BOOL SwHTMLWriter::OutFlyFrm( ULONG nNdIdx, xub_StrLen nCntntIdx, BYTE nPos,
                 case HTML_OUT_SPAN:
                 case HTML_OUT_MULTICOL:
                 case HTML_OUT_TBLNODE:
-                    bRestart = TRUE; // Hier wird's evtl rekursiv
+                    bRestart = sal_True; // Hier wird's evtl rekursiv
                     break;
                 }
                 delete pPosFly;
             }
             else
             {
-                bFlysLeft = TRUE;
+                bFlysLeft = sal_True;
             }
         }
     }
@@ -444,11 +444,11 @@ BOOL SwHTMLWriter::OutFlyFrm( ULONG nNdIdx, xub_StrLen nCntntIdx, BYTE nPos,
     return bFlysLeft;
 }
 
-void SwHTMLWriter::OutFrmFmt( BYTE nMode, const SwFrmFmt& rFrmFmt,
+void SwHTMLWriter::OutFrmFmt( sal_uInt8 nMode, const SwFrmFmt& rFrmFmt,
                               const SdrObject *pSdrObject )
 {
-    BYTE nCntnrMode = SwHTMLPosFlyFrm::GetOutCntnr( nMode );
-    BYTE nOutMode = SwHTMLPosFlyFrm::GetOutFn(nMode);
+    sal_uInt8 nCntnrMode = SwHTMLPosFlyFrm::GetOutCntnr( nMode );
+    sal_uInt8 nOutMode = SwHTMLPosFlyFrm::GetOutFn(nMode);
     const sal_Char *pCntnrStr = 0;
     if( HTML_CNTNR_NONE != nCntnrMode )
     {
@@ -466,7 +466,7 @@ void SwHTMLWriter::OutFrmFmt( BYTE nMode, const SwFrmFmt& rFrmFmt,
         Strm() << sOut.GetBuffer();
 
         // Fuer Nicht-Zeichenobekte eine Breite ausgeben
-        ULONG nFrmFlags = HTML_FRMOPTS_CNTNR;
+        sal_uLong nFrmFlags = HTML_FRMOPTS_CNTNR;
 
         // Fuer spaltige Rahmen koennen wir auch noch den Hintergrund ausgeben.
         if( HTML_OUT_MULTICOL == nOutMode )
@@ -480,7 +480,7 @@ void SwHTMLWriter::OutFrmFmt( BYTE nMode, const SwFrmFmt& rFrmFmt,
         if( HTML_CNTNR_DIV == nCntnrMode )
         {
             IncIndentLevel();
-            bLFPossible = TRUE;
+            bLFPossible = sal_True;
         }
     }
 
@@ -534,11 +534,11 @@ void SwHTMLWriter::OutFrmFmt( BYTE nMode, const SwFrmFmt& rFrmFmt,
         DecIndentLevel();
         if( bLFPossible )
             OutNewLine();
-        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, FALSE );
-        bLFPossible = TRUE;
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, sal_False );
+        bLFPossible = sal_True;
     }
     else if( HTML_CNTNR_SPAN == nCntnrMode )
-        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_span, FALSE );
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_span, sal_False );
 }
 
 
@@ -604,7 +604,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     if( (nFrmOpts & HTML_FRMOPT_ALIGN) && !pStr &&
         ( (nFrmOpts & HTML_FRMOPT_S_ALIGN) == 0 ||
           (FLY_AS_CHAR == eAnchorId) ) &&
-        SFX_ITEM_SET == rItemSet.GetItemState( RES_VERT_ORIENT, TRUE, &pItem ))
+        SFX_ITEM_SET == rItemSet.GetItemState( RES_VERT_ORIENT, sal_True, &pItem ))
     {
         switch( ((SwFmtVertOrient*)pItem)->GetVertOrient() )
         {
@@ -627,7 +627,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     // HSPACE und VSPACE
     Size aTwipSpc( 0, 0 );
     if( (nFrmOpts & (HTML_FRMOPT_SPACE|HTML_FRMOPT_MARGINSIZE)) &&
-        SFX_ITEM_SET == rItemSet.GetItemState( RES_LR_SPACE, TRUE, &pItem ))
+        SFX_ITEM_SET == rItemSet.GetItemState( RES_LR_SPACE, sal_True, &pItem ))
     {
         aTwipSpc.Width() =
             ( ((SvxLRSpaceItem*)pItem)->GetLeft() +
@@ -635,12 +635,12 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
         nDfltLeftMargin = nDfltRightMargin = aTwipSpc.Width();
     }
     if( (nFrmOpts & (HTML_FRMOPT_SPACE|HTML_FRMOPT_MARGINSIZE)) &&
-        SFX_ITEM_SET == rItemSet.GetItemState( RES_UL_SPACE, TRUE, &pItem ))
+        SFX_ITEM_SET == rItemSet.GetItemState( RES_UL_SPACE, sal_True, &pItem ))
     {
         aTwipSpc.Height()  =
             ( ((SvxULSpaceItem*)pItem)->GetUpper() +
                 ((SvxULSpaceItem*)pItem)->GetLower() ) / 2;
-        nDfltTopMargin = nDfltBottomMargin = (USHORT)aTwipSpc.Height();
+        nDfltTopMargin = nDfltBottomMargin = (sal_uInt16)aTwipSpc.Height();
     }
 
     if( (nFrmOpts & HTML_FRMOPT_SPACE) &&
@@ -682,7 +682,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     }
 
     if( !(nFrmOpts & HTML_FRMOPT_ABSSIZE) &&
-        SFX_ITEM_SET == rItemSet.GetItemState( RES_BOX, TRUE, &pItem ))
+        SFX_ITEM_SET == rItemSet.GetItemState( RES_BOX, sal_True, &pItem ))
     {
         const SvxBoxItem* pBoxItem = (const SvxBoxItem*)pItem;
 
@@ -695,13 +695,13 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     // WIDTH und/oder HEIGHT
     // ATT_VAR_SIZE/ATT_MIN_SIZE nur ausgeben, wenn ANYSIZE gesezut ist
     if( (nFrmOpts & HTML_FRMOPT_SIZE) &&
-        SFX_ITEM_SET == rItemSet.GetItemState( RES_FRM_SIZE, TRUE, &pItem ) &&
+        SFX_ITEM_SET == rItemSet.GetItemState( RES_FRM_SIZE, sal_True, &pItem ) &&
         ( (nFrmOpts & HTML_FRMOPT_ANYSIZE) ||
           ATT_FIX_SIZE == ((const SwFmtFrmSize *)pItem)->GetHeightSizeType()) )
     {
         const SwFmtFrmSize *pFSItem = (const SwFmtFrmSize *)pItem;
-        BYTE nPrcWidth = pFSItem->GetWidthPercent();
-        BYTE nPrcHeight = pFSItem->GetHeightPercent();
+        sal_uInt8 nPrcWidth = pFSItem->GetWidthPercent();
+        sal_uInt8 nPrcHeight = pFSItem->GetHeightPercent();
 
         // Groesse des Objekts Twips ohne Raender
         Size aTwipSz( (nPrcWidth ? 0
@@ -758,13 +758,13 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     if( (nFrmOpts & HTML_FRMOPT_BRCLEAR) &&
         ((FLY_AT_PARA == rFrmFmt.GetAnchor().GetAnchorId()) ||
          (FLY_AT_CHAR == rFrmFmt.GetAnchor().GetAnchorId())) &&
-        SFX_ITEM_SET == rItemSet.GetItemState( RES_SURROUND, TRUE, &pItem ))
+        SFX_ITEM_SET == rItemSet.GetItemState( RES_SURROUND, sal_True, &pItem ))
     {
         const SwFmtSurround* pSurround = (const SwFmtSurround*)pItem;
         sal_Int16 eHoriOri =    rFrmFmt.GetHoriOrient().GetHoriOrient();
         pStr = 0;
         SwSurround eSurround = pSurround->GetSurround();
-        BOOL bAnchorOnly = pSurround->IsAnchorOnly();
+        sal_Bool bAnchorOnly = pSurround->IsAnchorOnly();
         switch( eHoriOri )
         {
         case text::HoriOrientation::RIGHT:
@@ -778,7 +778,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
                 case SURROUND_LEFT:
                 case SURROUND_PARALLEL:
                     if( bAnchorOnly )
-                        bClearRight = TRUE;
+                        bClearRight = sal_True;
                     break;
                 default:
                     ;
@@ -799,7 +799,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
                 case SURROUND_RIGHT:
                 case SURROUND_PARALLEL:
                     if( bAnchorOnly )
-                        bClearLeft = TRUE;
+                        bClearLeft = sal_True;
                     break;
                 default:
                     ;
@@ -832,7 +832,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     {
         SwFmtINetFmt *pINetFmt =
             rHTMLWrt.aINetFmts[ rHTMLWrt.aINetFmts.Count()-1 ];
-        OutHTML_INetFmt( rWrt, *pINetFmt, FALSE );
+        OutHTML_INetFmt( rWrt, *pINetFmt, sal_False );
     }
 
     String aGrfNm( rGrfName );
@@ -847,7 +847,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     // das URL-Attribut nur beruecksichtigen, wenn keine Image-Map
     // uebergeben wurde
     if( !pAltImgMap &&
-        SFX_ITEM_SET == rItemSet.GetItemState( RES_URL, TRUE, &pItem ))
+        SFX_ITEM_SET == rItemSet.GetItemState( RES_URL, sal_True, &pItem ))
     {
         pURLItem = (const SwFmtURL *)pItem;
     }
@@ -873,17 +873,17 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             (aIMapName = aNameBase)
                 += String::CreateFromInt32( rHTMLWrt.nImgMapCnt );
 
-        BOOL bFound;
+        sal_Bool bFound;
         do
         {
-            bFound = FALSE;
-            for( USHORT i=0; i<rHTMLWrt.aImgMapNames.Count(); i++ )
+            bFound = sal_False;
+            for( sal_uInt16 i=0; i<rHTMLWrt.aImgMapNames.Count(); i++ )
             {
                 // TODO: Unicode: Comparison is case insensitive for ASCII
                 // characters only now!
                 if( aIMapName.EqualsIgnoreCaseAscii(*rHTMLWrt.aImgMapNames[i]) )
                 {
-                    bFound = TRUE;
+                    bFound = sal_True;
                     break;
                 }
             }
@@ -896,7 +896,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 
         } while( bFound );
 
-        BOOL bScale = FALSE;
+        sal_Bool bScale = sal_False;
         //Size aGrfSize( rNode.GetTwipSize() );
         Fraction aScaleX( 1, 1 );
         Fraction aScaleY( 1, 1 );
@@ -917,7 +917,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             if( rRealSize.Width() != nWidth )
             {
                 aScaleX = Fraction( nWidth, rRealSize.Width() );
-                bScale = TRUE;
+                bScale = sal_True;
             }
         }
         if( !rFrmSize.GetHeightPercent() && rRealSize.Height() )
@@ -933,7 +933,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             if( rRealSize.Height() != nHeight )
             {
                 aScaleY = Fraction( nHeight, rRealSize.Height() );
-                bScale = TRUE;
+                bScale = sal_True;
             }
         }
 
@@ -948,7 +948,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 
         if( rHTMLWrt.bLFPossible )
         {
-            rHTMLWrt.OutNewLine( TRUE );
+            rHTMLWrt.OutNewLine( sal_True );
             rHTMLWrt.GetIndentString( aIndMap );
             rHTMLWrt.GetIndentString( aIndArea, 1 );
 #if defined(UNX)
@@ -985,7 +985,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 
     // wenn meoglich vor der Grafik einen Zeilen-Umbruch ausgeben
     if( rHTMLWrt.bLFPossible )
-        rHTMLWrt.OutNewLine( TRUE );
+        rHTMLWrt.OutNewLine( sal_True );
 
     // Attribute die ausserhelb der Grafik geschreiben werden muessen sammeln
     ByteString sOut;
@@ -997,7 +997,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 
     // URL -> <A>...<IMG ... >...</A>
     const SvxMacroItem *pMacItem = 0;
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_FRMMACRO, TRUE, &pItem ))
+    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_FRMMACRO, sal_True, &pItem ))
         pMacItem = (const SvxMacroItem *)pItem;
 
     if( pURLItem || pMacItem )
@@ -1011,7 +1011,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             aName = pURLItem->GetName();
             aTarget = pURLItem->GetTargetFrameName();
         }
-        BOOL bEvents = pMacItem && pMacItem->GetMacroTable().Count();
+        sal_Bool bEvents = pMacItem && pMacItem->GetMacroTable().Count();
 
         if( aMapURL.Len() || aName.Len() || aTarget.Len() || bEvents )
         {
@@ -1067,9 +1067,9 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     }
 
     // Umrandung -> <FONT COLOR = ...>...<IMG ... >...</FONT>
-    USHORT nBorderWidth = 0;
+    sal_uInt16 nBorderWidth = 0;
     if( (nFrmOpts & HTML_FRMOPT_BORDER) &&
-        SFX_ITEM_SET == rItemSet.GetItemState( RES_BOX, TRUE, &pItem ))
+        SFX_ITEM_SET == rItemSet.GetItemState( RES_BOX, sal_True, &pItem ))
     {
         Size aTwipBorder( 0, 0 );
         const SvxBoxItem* pBoxItem = (const SvxBoxItem*)pItem;
@@ -1121,7 +1121,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
                 aPixelBorder.Height() = 0;
 
             nBorderWidth =
-                (USHORT)(aPixelBorder.Width() + aPixelBorder.Height());
+                (sal_uInt16)(aPixelBorder.Width() + aPixelBorder.Height());
         }
 
         if( pColBorderLine )
@@ -1144,7 +1144,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 
     // Events
     sOut.Erase();
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_FRMMACRO, TRUE, &pItem ))
+    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_FRMMACRO, sal_True, &pItem ))
     {
         const SvxMacroTableDtor& rMacTable =
             ((const SvxMacroItem *)pItem)->GetMacroTable();
@@ -1190,7 +1190,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         // werden muss
         SwFmtINetFmt *pINetFmt =
             rHTMLWrt.aINetFmts[ rHTMLWrt.aINetFmts.Count()-1 ];
-        OutHTML_INetFmt( rWrt, *pINetFmt, TRUE );
+        OutHTML_INetFmt( rWrt, *pINetFmt, sal_True );
     }
 
     return rHTMLWrt;
@@ -1220,7 +1220,7 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
                 // Grafik als (JPG-)File speichern
                 if( rHTMLWrt.GetOrigFileName() )
                     rGrfName = *rHTMLWrt.GetOrigFileName();
-                USHORT nErr = XOutBitmap::WriteGraphic( *pGrf,  rGrfName,
+                sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf,  rGrfName,
                         String::CreateFromAscii("JPG"),
                         (XOUTBMP_USE_GIF_IF_SENSIBLE |
                          XOUTBMP_USE_NATIVE_IF_POSSIBLE));
@@ -1324,11 +1324,11 @@ static Writer& OutHTML_FrmFmtTableNode( Writer& rWrt, const SwFrmFmt& rFrmFmt )
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
     const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
-    ULONG nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
-    ULONG nEnd = rHTMLWrt.pDoc->GetNodes()[nStt-1]->EndOfSectionIndex();
+    sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
+    sal_uLong nEnd = rHTMLWrt.pDoc->GetNodes()[nStt-1]->EndOfSectionIndex();
 
     String aCaption;
-    BOOL bTopCaption = FALSE;
+    sal_Bool bTopCaption = sal_False;
 
     // Nicht const, weil GetTable spater mal nicht const ist
     SwNode *pNd = rHTMLWrt.pDoc->GetNodes()[ nStt ];
@@ -1337,13 +1337,13 @@ static Writer& OutHTML_FrmFmtTableNode( Writer& rWrt, const SwFrmFmt& rFrmFmt )
     if( !pTblNd && pTxtNd )
     {
         // Tabelle mit Ueberschrift
-        bTopCaption = TRUE;
+        bTopCaption = sal_True;
         pTblNd = rHTMLWrt.pDoc->GetNodes()[nStt+1]->GetTableNode();
     }
     ASSERT( pTblNd, "Rahmen enthaelt keine Tabelle" );
     if( pTblNd )
     {
-        ULONG nTblEnd = pTblNd->EndOfSectionIndex();
+        sal_uLong nTblEnd = pTblNd->EndOfSectionIndex();
         ASSERT( nTblEnd == nEnd - 1 ||
                 (nTblEnd == nEnd - 2 && !bTopCaption),
                 "Ungeuelter Rahmen-Inhalt fuer Tabelle" );
@@ -1368,7 +1368,7 @@ static Writer& OutHTML_FrmFmtTableNode( Writer& rWrt, const SwFrmFmt& rFrmFmt )
 
 static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
                                           const SwFrmFmt& rFrmFmt,
-                                          BOOL bInCntnr )
+                                          sal_Bool bInCntnr )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -1387,18 +1387,18 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
     const SwFmtCol& rFmtCol = rFrmFmt.GetCol();
 
     // die Anzahl der Spalten als COLS ausgeben
-    USHORT nCols = rFmtCol.GetNumCols();
+    sal_uInt16 nCols = rFmtCol.GetNumCols();
     if( nCols )
         (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_cols) += '=')
             += ByteString::CreateFromInt32( nCols );
 
     // die Gutter-Breite (Minimalwert) als GUTTER
-    USHORT nGutter = rFmtCol.GetGutterWidth( TRUE );
+    sal_uInt16 nGutter = rFmtCol.GetGutterWidth( sal_True );
     if( nGutter!=USHRT_MAX )
     {
         if( nGutter && Application::GetDefaultDevice() )
         {
-            nGutter = (USHORT)Application::GetDefaultDevice()
+            nGutter = (sal_uInt16)Application::GetDefaultDevice()
                             ->LogicToPixel( Size(nGutter,0),
                                             MapMode(MAP_TWIP) ).Width();
         }
@@ -1409,7 +1409,7 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
     rWrt.Strm() << sOut.GetBuffer();
 
     // WIDTH
-    ULONG nFrmFlags = bInCntnr ? HTML_FRMOPTS_MULTICOL_CNTNR
+    sal_uLong nFrmFlags = bInCntnr ? HTML_FRMOPTS_MULTICOL_CNTNR
                                 : HTML_FRMOPTS_MULTICOL;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bInCntnr )
         nFrmFlags |= HTML_FRMOPTS_MULTICOL_CSS1;
@@ -1420,11 +1420,11 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
 
     rWrt.Strm() << '>';
 
-    rHTMLWrt.bLFPossible = TRUE;
+    rHTMLWrt.bLFPossible = sal_True;
     rHTMLWrt.IncIndentLevel();  // den Inhalt von Multicol einruecken;
 
     const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
-    ULONG nStt = rFlyCntnt.GetCntntIdx()->GetIndex();
+    sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex();
     const SwStartNode* pSttNd = rWrt.pDoc->GetNodes()[nStt]->GetStartNode();
     ASSERT( pSttNd, "Wo ist der Start-Node" );
 
@@ -1443,8 +1443,8 @@ static Writer & OutHTML_FrmFmtAsMulticol( Writer& rWrt,
     rHTMLWrt.DecIndentLevel();  // den Inhalt von Multicol einruecken;
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_multicol, FALSE );
-    rHTMLWrt.bLFPossible = TRUE;
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_multicol, sal_False );
+    rHTMLWrt.bLFPossible = sal_True;
 
     return rWrt;
 }
@@ -1455,7 +1455,7 @@ static Writer& OutHTML_FrmFmtAsSpacer( Writer& rWrt, const SwFrmFmt& rFrmFmt )
 
     // wenn meoglich vor der Grafik einen Zeilen-Umbruch ausgeben
     if( rHTMLWrt.bLFPossible )
-        rHTMLWrt.OutNewLine( TRUE );
+        rHTMLWrt.OutNewLine( sal_True );
 
     ByteString sOut('<');
     ((((sOut += OOO_STRING_SVTOOLS_HTML_spacer) += ' ') += OOO_STRING_SVTOOLS_HTML_O_type) += '=')
@@ -1475,7 +1475,7 @@ static Writer& OutHTML_FrmFmtAsSpacer( Writer& rWrt, const SwFrmFmt& rFrmFmt )
 }
 
 static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
-                                          const SwFrmFmt& rFrmFmt, BOOL bSpan)
+                                          const SwFrmFmt& rFrmFmt, sal_Bool bSpan)
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -1500,7 +1500,7 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
 
     rWrt.Strm() << sOut.GetBuffer();
     ByteString aEndTags;
-    ULONG nFrmFlags = HTML_FRMOPTS_DIV;
+    sal_uLong nFrmFlags = HTML_FRMOPTS_DIV;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_BORDER_NONE ) )
        nFrmFlags |= HTML_FRMOPT_S_NOBORDER;
     rHTMLWrt.OutFrmFmtOptions( rFrmFmt, aEmptyStr, aEndTags, nFrmFlags );
@@ -1508,10 +1508,10 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
     rWrt.Strm() << '>';
 
     rHTMLWrt.IncIndentLevel();  // den Inhalt einruecken
-    rHTMLWrt.bLFPossible = TRUE;
+    rHTMLWrt.bLFPossible = sal_True;
 
     const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
-    ULONG nStt = rFlyCntnt.GetCntntIdx()->GetIndex();
+    sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex();
 
     // Am Start-Node verankerte Rahmen-gebundene Rahmen ausgeben
     rHTMLWrt.OutFlyFrm( nStt, 0, HTML_POS_ANY );
@@ -1532,7 +1532,7 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
     rHTMLWrt.DecIndentLevel();  // den Inhalt von Multicol einruecken;
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), pStr, FALSE );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), pStr, sal_False );
 
     if( aEndTags.Len() )
         rWrt.Strm() << aEndTags.GetBuffer();
@@ -1541,7 +1541,7 @@ static Writer& OutHTML_FrmFmtAsDivOrSpan( Writer& rWrt,
 }
 
 static Writer & OutHTML_FrmFmtAsImage( Writer& rWrt, const SwFrmFmt& rFrmFmt,
-                                       BOOL /*bInCntnr*/ )
+                                       sal_Bool /*bInCntnr*/ )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -1574,12 +1574,12 @@ static Writer & OutHTML_FrmFmtAsImage( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
 
 static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
-                                      BOOL bInCntnr )
+                                      sal_Bool bInCntnr )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
     const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
-    ULONG nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
+    sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
     SwGrfNode *pGrfNd = rHTMLWrt.pDoc->GetNodes()[ nStt ]->GetGrfNode();
     ASSERT( pGrfNd, "Grf-Node erwartet" );
     if( !pGrfNd )
@@ -1593,9 +1593,9 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         // Grafik als File-Referenz speichern (als JPEG-Grafik speichern)
         if( rHTMLWrt.GetOrigFileName() )
             aGrfNm = *rHTMLWrt.GetOrigFileName();
-        pGrfNd->SwapIn( TRUE );
+        pGrfNd->SwapIn( sal_True );
 
-        ULONG nFlags = XOUTBMP_USE_GIF_IF_SENSIBLE |
+        sal_uLong nFlags = XOUTBMP_USE_GIF_IF_SENSIBLE |
                        XOUTBMP_USE_NATIVE_IF_POSSIBLE;
         switch( rMirror.GetValue() )
         {
@@ -1611,7 +1611,7 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         aMM100Size = OutputDevice::LogicToLogic( rSize.GetSize(),
                         MapMode( MAP_TWIP ), MapMode( MAP_100TH_MM ));
 
-        USHORT nErr = XOutBitmap::WriteGraphic( pGrfNd->GetGrf(), aGrfNm,
+        sal_uInt16 nErr = XOutBitmap::WriteGraphic( pGrfNd->GetGrf(), aGrfNm,
                 String::CreateFromAscii("JPG"), nFlags, &aMM100Size );
         if( nErr )              // fehlerhaft, da ist nichts auszugeben
         {
@@ -1629,7 +1629,7 @@ static Writer& OutHTML_FrmFmtGrfNode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             rWrt.CopyLocalFileToINet( aGrfNm );
     }
 
-    ULONG nFrmFlags = bInCntnr ? HTML_FRMOPTS_IMG_CNTNR : HTML_FRMOPTS_IMG;
+    sal_uLong nFrmFlags = bInCntnr ? HTML_FRMOPTS_IMG_CNTNR : HTML_FRMOPTS_IMG;
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) && !bInCntnr )
         nFrmFlags |= HTML_FRMOPTS_IMG_CSS1;
     OutHTML_Image( rWrt, rFrmFmt, aGrfNm, pGrfNd->GetTitle(),
@@ -1649,21 +1649,21 @@ static Writer& OutHTML_FrmFmtAsMarquee( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     const SfxItemSet& rFmtItemSet = rFrmFmt.GetAttrSet();
     SfxItemSet aItemSet( *rFmtItemSet.GetPool(), RES_CHRATR_BEGIN,
                                                  RES_CHRATR_END );
-    SwHTMLWriter::GetEEAttrsFromDrwObj( aItemSet, &rSdrObj, TRUE );
-    BOOL bCfgOutStylesOld = rHTMLWrt.bCfgOutStyles;
-    rHTMLWrt.bCfgOutStyles = FALSE;
-    rHTMLWrt.bTxtAttr = TRUE;
-    rHTMLWrt.bTagOn = TRUE;
-    Out_SfxItemSet( aHTMLAttrFnTab, rWrt, aItemSet, FALSE );
-    rHTMLWrt.bTxtAttr = FALSE;
+    SwHTMLWriter::GetEEAttrsFromDrwObj( aItemSet, &rSdrObj, sal_True );
+    sal_Bool bCfgOutStylesOld = rHTMLWrt.bCfgOutStyles;
+    rHTMLWrt.bCfgOutStyles = sal_False;
+    rHTMLWrt.bTxtAttr = sal_True;
+    rHTMLWrt.bTagOn = sal_True;
+    Out_SfxItemSet( aHTMLAttrFnTab, rWrt, aItemSet, sal_False );
+    rHTMLWrt.bTxtAttr = sal_False;
 
     OutHTML_DrawFrmFmtAsMarquee( rHTMLWrt,
                                  (const SwDrawFrmFmt &)rFrmFmt,
                                  rSdrObj );
-    rHTMLWrt.bTxtAttr = TRUE;
-    rHTMLWrt.bTagOn = FALSE;
-    Out_SfxItemSet( aHTMLAttrFnTab, rWrt, aItemSet, FALSE );
-    rHTMLWrt.bTxtAttr = FALSE;
+    rHTMLWrt.bTxtAttr = sal_True;
+    rHTMLWrt.bTagOn = sal_False;
+    Out_SfxItemSet( aHTMLAttrFnTab, rWrt, aItemSet, sal_False );
+    rHTMLWrt.bTxtAttr = sal_False;
     rHTMLWrt.bCfgOutStyles = bCfgOutStylesOld;
 
     return rWrt;
@@ -1672,7 +1672,7 @@ static Writer& OutHTML_FrmFmtAsMarquee( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 //-----------------------------------------------------------------------
 
 Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
-                              BOOL bHeader )
+                              sal_Bool bHeader )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -1689,7 +1689,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     // <DL> bzw. </DL> immer einer Absatz-Abstand entsteht, wird der
     // ggf. abgezogen.
     const SvxULSpaceItem& rULSpace = rFrmFmt.GetULSpace();
-    USHORT nSize = bHeader ? rULSpace.GetLower() : rULSpace.GetUpper();
+    sal_uInt16 nSize = bHeader ? rULSpace.GetLower() : rULSpace.GetUpper();
     rHTMLWrt.nHeaderFooterSpace = nSize;
 
     ByteString aSpacer;
@@ -1697,7 +1697,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         nSize > HTML_PARSPACE && Application::GetDefaultDevice() )
     {
         nSize -= HTML_PARSPACE;
-        nSize = (INT16)Application::GetDefaultDevice()
+        nSize = (sal_Int16)Application::GetDefaultDevice()
             ->LogicToPixel( Size(nSize,0), MapMode(MAP_TWIP) ).Width();
 
         ((((((((aSpacer = OOO_STRING_SVTOOLS_HTML_spacer) += ' ')
@@ -1706,7 +1706,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     }
 
     const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
-    ULONG nStt = rFlyCntnt.GetCntntIdx()->GetIndex();
+    sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex();
     const SwStartNode* pSttNd = rWrt.pDoc->GetNodes()[nStt]->GetStartNode();
     ASSERT( pSttNd, "Wo ist der Start-Node" );
 
@@ -1724,9 +1724,9 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                 pSttNd->EndOfSectionIndex() );
 
         if( bHeader )
-            rHTMLWrt.bOutHeader = TRUE;
+            rHTMLWrt.bOutHeader = sal_True;
         else
-            rHTMLWrt.bOutFooter = TRUE;
+            rHTMLWrt.bOutFooter = sal_True;
 
         rHTMLWrt.Out_SwDoc( rWrt.pCurPam );
     }
@@ -1739,7 +1739,7 @@ Writer& OutHTML_HeaderFooter( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 
     rHTMLWrt.DecIndentLevel();  // den Inhalt von Multicol einruecken;
     rHTMLWrt.OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_division, FALSE );
+    HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_division, sal_False );
 
     rHTMLWrt.nHeaderFooterSpace = 0;
 
@@ -1802,14 +1802,14 @@ void SwHTMLWriter::AddLinkTarget( const String& rURL )
     else if( sCmp.EqualsAscii( pMarkToOutline ) )
     {
         // Hier brauchen wir Position und Name. Deshalb sortieren wir
-        // ein USHORT und ein String-Array selbst
+        // ein sal_uInt16 und ein String-Array selbst
         String aOutline( aURL.Copy( 0, nPos-1 ) );
         SwPosition aPos( *pCurPam->GetPoint() );
         if( pDoc->GotoOutline( aPos, aOutline ) )
         {
-            ULONG nIdx = aPos.nNode.GetIndex();
+            sal_uLong nIdx = aPos.nNode.GetIndex();
 
-            USHORT nIns=0;
+            sal_uInt16 nIns=0;
             while( nIns < aOutlineMarkPoss.Count() &&
                    aOutlineMarkPoss[nIns] < nIdx )
                 nIns++;
@@ -1859,7 +1859,7 @@ void SwHTMLWriter::CollectLinkTargets()
             const ImageMap *pIMap = pURL->GetMap();
             if( pIMap )
             {
-                for( USHORT i=0; i<pIMap->GetIMapObjectCount(); i++ )
+                for( sal_uInt16 i=0; i<pIMap->GetIMapObjectCount(); i++ )
                 {
                     const IMapObject* pObj = pIMap->GetIMapObject( i );
                     if( pObj )
@@ -1876,7 +1876,7 @@ void SwHTMLWriter::CollectLinkTargets()
 
 SwHTMLPosFlyFrm::SwHTMLPosFlyFrm( const SwPosFlyFrm& rPosFly,
                                   const SdrObject *pSdrObj,
-                                  BYTE nOutMode ) :
+                                  sal_uInt8 nOutMode ) :
     pFrmFmt( &rPosFly.GetFmt() ),
     pSdrObject( pSdrObj ),
     pNdIdx( new SwNodeIndex( rPosFly.GetNdIndex() ) ),
@@ -1908,7 +1908,7 @@ SwHTMLPosFlyFrm::SwHTMLPosFlyFrm( const SwPosFlyFrm& rPosFly,
     }
 }
 
-BOOL SwHTMLPosFlyFrm::operator<( const SwHTMLPosFlyFrm& rFrm ) const
+sal_Bool SwHTMLPosFlyFrm::operator<( const SwHTMLPosFlyFrm& rFrm ) const
 {
     if( pNdIdx->GetIndex() == rFrm.pNdIdx->GetIndex() )
     {

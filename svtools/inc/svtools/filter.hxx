@@ -44,7 +44,7 @@
 
 struct ImplDirEntryHelper
 {
-    static BOOL Exists( const INetURLObject& rObj );
+    static sal_Bool Exists( const INetURLObject& rObj );
     static void Kill( const String& rStr );
 };
 
@@ -64,8 +64,8 @@ class Graphic;
 
 #define GRFILTER_OUTHINT_GREY       1
 
-#define GRFILTER_FORMAT_NOTFOUND    ((USHORT)0xFFFF)
-#define GRFILTER_FORMAT_DONTKNOW    ((USHORT)0xFFFF)
+#define GRFILTER_FORMAT_NOTFOUND    ((sal_uInt16)0xFFFF)
+#define GRFILTER_FORMAT_DONTKNOW    ((sal_uInt16)0xFFFF)
 
 #define GRFILTER_I_FLAGS_SET_LOGSIZE_FOR_JPEG       00000001
 #define GRFILTER_I_FLAGS_DONT_SET_LOGSIZE_FOR_JPEG  00000002
@@ -107,32 +107,32 @@ class Graphic;
 //  unterstuetzten Grafik-Fileformate
 // ------------------------------------
 
-#define GFF_NOT ( (USHORT)0x0000 )
-#define GFF_BMP ( (USHORT)0x0001 )
-#define GFF_GIF ( (USHORT)0x0002 )
-#define GFF_JPG ( (USHORT)0x0003 )
-#define GFF_PCD ( (USHORT)0x0004 )
-#define GFF_PCX ( (USHORT)0x0005 )
-#define GFF_PNG ( (USHORT)0x0006 )
-#define GFF_TIF ( (USHORT)0x0007 )
-#define GFF_XBM ( (USHORT)0x0008 )
-#define GFF_XPM ( (USHORT)0x0009 )
-#define GFF_PBM ( (USHORT)0x000a )
-#define GFF_PGM ( (USHORT)0x000b )
-#define GFF_PPM ( (USHORT)0x000c )
-#define GFF_RAS ( (USHORT)0x000d )
-#define GFF_TGA ( (USHORT)0x000e )
-#define GFF_PSD ( (USHORT)0x000f )
-#define GFF_EPS ( (USHORT)0x0010 )
-#define GFF_DXF ( (USHORT)0x00f1 )
-#define GFF_MET ( (USHORT)0x00f2 )
-#define GFF_PCT ( (USHORT)0x00f3 )
-#define GFF_SGF ( (USHORT)0x00f4 )
-#define GFF_SVM ( (USHORT)0x00f5 )
-#define GFF_WMF ( (USHORT)0x00f6 )
-#define GFF_SGV ( (USHORT)0x00f7 )
-#define GFF_EMF ( (USHORT)0x00f8 )
-#define GFF_XXX ( (USHORT)0xffff )
+#define GFF_NOT ( (sal_uInt16)0x0000 )
+#define GFF_BMP ( (sal_uInt16)0x0001 )
+#define GFF_GIF ( (sal_uInt16)0x0002 )
+#define GFF_JPG ( (sal_uInt16)0x0003 )
+#define GFF_PCD ( (sal_uInt16)0x0004 )
+#define GFF_PCX ( (sal_uInt16)0x0005 )
+#define GFF_PNG ( (sal_uInt16)0x0006 )
+#define GFF_TIF ( (sal_uInt16)0x0007 )
+#define GFF_XBM ( (sal_uInt16)0x0008 )
+#define GFF_XPM ( (sal_uInt16)0x0009 )
+#define GFF_PBM ( (sal_uInt16)0x000a )
+#define GFF_PGM ( (sal_uInt16)0x000b )
+#define GFF_PPM ( (sal_uInt16)0x000c )
+#define GFF_RAS ( (sal_uInt16)0x000d )
+#define GFF_TGA ( (sal_uInt16)0x000e )
+#define GFF_PSD ( (sal_uInt16)0x000f )
+#define GFF_EPS ( (sal_uInt16)0x0010 )
+#define GFF_DXF ( (sal_uInt16)0x00f1 )
+#define GFF_MET ( (sal_uInt16)0x00f2 )
+#define GFF_PCT ( (sal_uInt16)0x00f3 )
+#define GFF_SGF ( (sal_uInt16)0x00f4 )
+#define GFF_SVM ( (sal_uInt16)0x00f5 )
+#define GFF_WMF ( (sal_uInt16)0x00f6 )
+#define GFF_SGV ( (sal_uInt16)0x00f7 )
+#define GFF_EMF ( (sal_uInt16)0x00f8 )
+#define GFF_XXX ( (sal_uInt16)0xffff )
 
 // ---------------------
 // - GraphicDescriptor -
@@ -145,38 +145,38 @@ class SVT_DLLPUBLIC GraphicDescriptor
     String              aPathExt;
     Size                aPixSize;
     Size                aLogSize;
-    USHORT              nBitsPerPixel;
-    USHORT              nPlanes;
-    USHORT              nFormat;
-    BOOL                bCompressed;
-    BOOL                bOwnStream;
+    sal_uInt16              nBitsPerPixel;
+    sal_uInt16              nPlanes;
+    sal_uInt16              nFormat;
+    sal_Bool                bCompressed;
+    sal_Bool                bOwnStream;
 
     void                ImpConstruct();
 
-    BOOL                ImpDetectBMP( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectGIF( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectJPG( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectPCD( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectPCX( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectPNG( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectTIF( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectXBM( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectXPM( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectPBM( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectPGM( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectPPM( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectRAS( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectTGA( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectPSD( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectEPS( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectDXF( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectMET( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectPCT( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectSGF( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectSVM( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectWMF( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectSGV( SvStream& rStm, BOOL bExtendedInfo );
-    BOOL                ImpDetectEMF( SvStream& rStm, BOOL bExtendedInfo );
+    sal_Bool                ImpDetectBMP( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectGIF( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectJPG( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectPCD( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectPCX( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectPNG( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectTIF( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectXBM( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectXPM( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectPBM( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectPGM( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectPPM( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectRAS( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectTGA( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectPSD( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectEPS( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectDXF( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectMET( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectPCT( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectSGF( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectSVM( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectWMF( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectSGV( SvStream& rStm, sal_Bool bExtendedInfo );
+    sal_Bool                ImpDetectEMF( SvStream& rStm, sal_Bool bExtendedInfo );
 
     GraphicDescriptor( const GraphicDescriptor& );
     GraphicDescriptor& operator=( const GraphicDescriptor& );
@@ -200,14 +200,14 @@ public:
     virtual ~GraphicDescriptor();
 
     // Startet die Detektion;
-    // bei bExtendedInfo == TRUE werden soweit wie moeglich
+    // bei bExtendedInfo == sal_True werden soweit wie moeglich
     // Daten aus dem jeweiligen FileHeader ermittelt
     // ( Groesse, Farbtiefe usw. )
-    virtual BOOL    Detect( BOOL bExtendedInfo = FALSE );
+    virtual sal_Bool    Detect( sal_Bool bExtendedInfo = sal_False );
 
     // liefert das Fileformat nach erfolgreicher  Detektion zurueck;
     // wenn kein Format erkannt wurde, ist das Formart GFF_NOT
-    USHORT          GetFileFormat() const { return nFormat; }
+    sal_uInt16          GetFileFormat() const { return nFormat; }
 
     // liefert die Pixel-Bildgroesse oder 0-Size zurueck
     const Size&     GetSizePixel() const { return (Size&) aPixSize; }
@@ -216,13 +216,13 @@ public:
     const Size&     GetSize_100TH_MM() const { return (Size&) aLogSize; }
 
     // liefert die Bits/Pixel oder 0 zurueck
-    USHORT          GetBitsPerPixel() const { return nBitsPerPixel; }
+    sal_uInt16          GetBitsPerPixel() const { return nBitsPerPixel; }
 
     // liefert die Anzahl der Planes oder 0 zurueck
-    USHORT          GetPlanes() const { return nPlanes; }
+    sal_uInt16          GetPlanes() const { return nPlanes; }
 
     // zeigt an, ob das Bild evtl. komprimiert (wie auch immer) ist
-    BOOL            IsCompressed() const { return bCompressed; }
+    sal_Bool            IsCompressed() const { return bCompressed; }
 
     // gibt die Filternummer des Filters zurueck,
     // der im GraphicFilter zum Lesen dieses Formats
@@ -236,8 +236,8 @@ public:
 
 struct FilterErrorEx
 {
-    ULONG   nFilterError;
-    ULONG   nStreamError;
+    sal_uLong   nFilterError;
+    sal_uLong   nStreamError;
     long    nDummy1;
     long    nDummy2;
     long    nDummy3;
@@ -257,7 +257,7 @@ class SVT_DLLPUBLIC GraphicFilter
 private:
 
     void            ImplInit();
-    ULONG           ImplSetError( ULONG nError, const SvStream* pStm = NULL );
+    sal_uLong           ImplSetError( sal_uLong nError, const SvStream* pStm = NULL );
     sal_uInt16      ImpTestOrFindFormat( const String& rPath, SvStream& rStream, sal_uInt16& rFormat );
 
                     DECL_LINK( FilterCallback, ConvertData* pData );
@@ -285,73 +285,73 @@ public:
 
     void            SetFilterPath( const String& rFilterPath ) { aFilterPath = rFilterPath; };
 
-    USHORT          GetImportFormatCount();
-    USHORT          GetImportFormatNumber( const String& rFormatName );
-    USHORT          GetImportFormatNumberForMediaType( const String& rMediaType );
-    USHORT          GetImportFormatNumberForShortName( const String& rShortName );
+    sal_uInt16          GetImportFormatCount();
+    sal_uInt16          GetImportFormatNumber( const String& rFormatName );
+    sal_uInt16          GetImportFormatNumberForMediaType( const String& rMediaType );
+    sal_uInt16          GetImportFormatNumberForShortName( const String& rShortName );
     sal_uInt16      GetImportFormatNumberForTypeName( const String& rType );
-    String          GetImportFormatName( USHORT nFormat );
-    String          GetImportFormatTypeName( USHORT nFormat );
-    String          GetImportFormatMediaType( USHORT nFormat );
-    String          GetImportFormatShortName( USHORT nFormat );
-    String          GetImportOSFileType( USHORT nFormat );
-    String          GetImportWildcard( USHORT nFormat, sal_Int32 nEntry = 0 );
-    BOOL            IsImportPixelFormat( USHORT nFormat );
+    String          GetImportFormatName( sal_uInt16 nFormat );
+    String          GetImportFormatTypeName( sal_uInt16 nFormat );
+    String          GetImportFormatMediaType( sal_uInt16 nFormat );
+    String          GetImportFormatShortName( sal_uInt16 nFormat );
+    String          GetImportOSFileType( sal_uInt16 nFormat );
+    String          GetImportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
+    sal_Bool            IsImportPixelFormat( sal_uInt16 nFormat );
 
-    USHORT          GetExportFormatCount();
-    USHORT          GetExportFormatNumber( const String& rFormatName );
-    USHORT          GetExportFormatNumberForMediaType( const String& rShortName );
-    USHORT          GetExportFormatNumberForShortName( const String& rShortName );
+    sal_uInt16          GetExportFormatCount();
+    sal_uInt16          GetExportFormatNumber( const String& rFormatName );
+    sal_uInt16          GetExportFormatNumberForMediaType( const String& rShortName );
+    sal_uInt16          GetExportFormatNumberForShortName( const String& rShortName );
     sal_uInt16      GetExportFormatNumberForTypeName( const String& rType );
-    String          GetExportFormatName( USHORT nFormat );
-    String          GetExportFormatTypeName( USHORT nFormat );
-    String          GetExportFormatMediaType( USHORT nFormat );
-    String          GetExportFormatShortName( USHORT nFormat );
-    String          GetExportOSFileType( USHORT nFormat );
-    String          GetExportWildcard( USHORT nFormat, sal_Int32 nEntry = 0 );
-    BOOL            IsExportPixelFormat( USHORT nFormat );
+    String          GetExportFormatName( sal_uInt16 nFormat );
+    String          GetExportFormatTypeName( sal_uInt16 nFormat );
+    String          GetExportFormatMediaType( sal_uInt16 nFormat );
+    String          GetExportFormatShortName( sal_uInt16 nFormat );
+    String          GetExportOSFileType( sal_uInt16 nFormat );
+    String          GetExportWildcard( sal_uInt16 nFormat, sal_Int32 nEntry = 0 );
+    sal_Bool            IsExportPixelFormat( sal_uInt16 nFormat );
 
-    BOOL            HasImportDialog( USHORT nFormat );
-    BOOL            DoImportDialog( Window* pWindow, USHORT nFormat );
+    sal_Bool            HasImportDialog( sal_uInt16 nFormat );
+    sal_Bool            DoImportDialog( Window* pWindow, sal_uInt16 nFormat );
 
-    BOOL            HasExportDialog( USHORT nFormat );
-    BOOL            DoExportDialog( Window* pWindow, USHORT nFormat );
-    BOOL            DoExportDialog( Window* pWindow, USHORT nFormat, FieldUnit eFieldUnit );
+    sal_Bool            HasExportDialog( sal_uInt16 nFormat );
+    sal_Bool            DoExportDialog( Window* pWindow, sal_uInt16 nFormat );
+    sal_Bool            DoExportDialog( Window* pWindow, sal_uInt16 nFormat, FieldUnit eFieldUnit );
 
-    USHORT          ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
-                                    USHORT nFormat = GRFILTER_FORMAT_DONTKNOW,
+    sal_uInt16          ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
+                                    sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
                                         const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL );
-    USHORT          ExportGraphic( const Graphic& rGraphic, const String& rPath,
-                                    SvStream& rOStm, USHORT nFormat = GRFILTER_FORMAT_DONTKNOW,
+    sal_uInt16          ExportGraphic( const Graphic& rGraphic, const String& rPath,
+                                    SvStream& rOStm, sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
                                         const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL );
     long            GetExportGraphicHint() const { return nExpGraphHint; }
 
-    USHORT          CanImportGraphic( const INetURLObject& rPath,
-                                      USHORT nFormat = GRFILTER_FORMAT_DONTKNOW,
-                                      USHORT * pDeterminedFormat = NULL);
+    sal_uInt16          CanImportGraphic( const INetURLObject& rPath,
+                                      sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
+                                      sal_uInt16 * pDeterminedFormat = NULL);
 
-    USHORT          ImportGraphic( Graphic& rGraphic, const INetURLObject& rPath,
-                                   USHORT nFormat = GRFILTER_FORMAT_DONTKNOW,
-                                   USHORT * pDeterminedFormat = NULL, sal_uInt32 nImportFlags = 0 );
+    sal_uInt16          ImportGraphic( Graphic& rGraphic, const INetURLObject& rPath,
+                                   sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
+                                   sal_uInt16 * pDeterminedFormat = NULL, sal_uInt32 nImportFlags = 0 );
 
-    USHORT          CanImportGraphic( const String& rPath, SvStream& rStream,
-                                      USHORT nFormat = GRFILTER_FORMAT_DONTKNOW,
-                                      USHORT * pDeterminedFormat = NULL);
+    sal_uInt16          CanImportGraphic( const String& rPath, SvStream& rStream,
+                                      sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
+                                      sal_uInt16 * pDeterminedFormat = NULL);
 
-    USHORT          ImportGraphic( Graphic& rGraphic, const String& rPath,
+    sal_uInt16          ImportGraphic( Graphic& rGraphic, const String& rPath,
                                    SvStream& rStream,
-                                   USHORT nFormat = GRFILTER_FORMAT_DONTKNOW,
-                                   USHORT * pDeterminedFormat = NULL, sal_uInt32 nImportFlags = 0 );
+                                   sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
+                                   sal_uInt16 * pDeterminedFormat = NULL, sal_uInt32 nImportFlags = 0 );
 
-    USHORT          ImportGraphic( Graphic& rGraphic, const String& rPath,
+    sal_uInt16          ImportGraphic( Graphic& rGraphic, const String& rPath,
                                    SvStream& rStream,
-                                   USHORT nFormat,
-                                   USHORT * pDeterminedFormat, sal_uInt32 nImportFlags,
+                                   sal_uInt16 nFormat,
+                                   sal_uInt16 * pDeterminedFormat, sal_uInt32 nImportFlags,
                                    com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData );
 
-    BOOL            Setup( USHORT nFormat );
+    sal_Bool            Setup( sal_uInt16 nFormat );
 
-    void            Abort() { bAbort = TRUE; }
+    void            Abort() { bAbort = sal_True; }
 
     const FilterErrorEx&    GetLastError() const;
     void                    ResetLastError();
@@ -361,15 +361,15 @@ public:
     static int      LoadGraphic( const String& rPath, const String& rFilter,
                      Graphic& rGraphic,
                      GraphicFilter* pFilter = NULL,
-                     USHORT* pDeterminedFormat = NULL );
+                     sal_uInt16* pDeterminedFormat = NULL );
 };
 
 // ------------------------------------
 // - Windows Metafile Lesen/Schreiben -
 // ------------------------------------
 
-SVT_DLLPUBLIC BOOL ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem* pConfigItem );
-SVT_DLLPUBLIC BOOL WriteWindowMetafile( SvStream& rStream, const GDIMetaFile& rMTF );
-SVT_DLLPUBLIC BOOL WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF );
+SVT_DLLPUBLIC sal_Bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem* pConfigItem );
+SVT_DLLPUBLIC sal_Bool WriteWindowMetafile( SvStream& rStream, const GDIMetaFile& rMTF );
+SVT_DLLPUBLIC sal_Bool WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF );
 
 #endif  //_FILTER_HXX

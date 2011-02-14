@@ -80,7 +80,7 @@ INetMessage::~INetMessage (void)
 void INetMessage::ListCleanup_Impl (void)
 {
     // Cleanup.
-    ULONG i, n = m_aHeaderList.Count();
+    sal_uIntPtr i, n = m_aHeaderList.Count();
     for (i = 0; i < n; i++)
         delete ((HEADERFIELD*)(m_aHeaderList.GetObject(i)));
     m_aHeaderList.Clear();
@@ -97,7 +97,7 @@ void INetMessage::ListCopy (const INetMessage &rMsg)
         ListCleanup_Impl();
 
         // Copy.
-        ULONG i, n = rMsg.GetHeaderCount();
+        sal_uIntPtr i, n = rMsg.GetHeaderCount();
         for (i = 0; i < n; i++)
         {
             HEADERFIELD *p = (HEADERFIELD*)(rMsg.m_aHeaderList.GetObject(i));
@@ -113,7 +113,7 @@ void INetMessage::SetHeaderField_Impl (
     INetMIME::HeaderFieldType  eType,
     const ByteString          &rName,
     const UniString           &rValue,
-    ULONG                     &rnIndex)
+    sal_uIntPtr                     &rnIndex)
 {
     INetMIMEStringOutputSink aSink (0, STRING_MAXLEN);
     INetMIME::writeHeaderFieldBody (
@@ -125,10 +125,10 @@ void INetMessage::SetHeaderField_Impl (
 /*
  * SetHeaderField.
  */
-ULONG INetMessage::SetHeaderField (
-    const UniString& rName, const UniString& rValue, ULONG nIndex)
+sal_uIntPtr INetMessage::SetHeaderField (
+    const UniString& rName, const UniString& rValue, sal_uIntPtr nIndex)
 {
-    ULONG nResult = nIndex;
+    sal_uIntPtr nResult = nIndex;
     SetHeaderField_Impl (
         INetMIME::HEADER_FIELD_TEXT,
         ByteString (rName, RTL_TEXTENCODING_ASCII_US), rValue,
@@ -139,10 +139,10 @@ ULONG INetMessage::SetHeaderField (
 /*
  * SetHeaderField.
  */
-ULONG INetMessage::SetHeaderField (
-    const INetMessageHeader &rHeader, ULONG nIndex)
+sal_uIntPtr INetMessage::SetHeaderField (
+    const INetMessageHeader &rHeader, sal_uIntPtr nIndex)
 {
-    ULONG nResult = nIndex;
+    sal_uIntPtr nResult = nIndex;
     SetHeaderField_Impl (rHeader, nResult);
     return nResult;
 }
@@ -156,7 +156,7 @@ SvStream& INetMessage::operator<< (SvStream& rStrm) const
     rStrm << static_cast<sal_uInt32>(m_nDocSize);
     rStrm.WriteByteString (m_aDocName, RTL_TEXTENCODING_UTF8);
 
-    ULONG i, n = m_aHeaderList.Count();
+    sal_uIntPtr i, n = m_aHeaderList.Count();
     rStrm << static_cast<sal_uInt32>(n);
 
     for (i = 0; i < n; i++)
@@ -182,7 +182,7 @@ SvStream& INetMessage::operator>> (SvStream& rStrm)
     m_nDocSize = nTemp;
     rStrm.ReadByteString (m_aDocName, RTL_TEXTENCODING_UTF8);
 
-    ULONG i, n = 0;
+    sal_uIntPtr i, n = 0;
     rStrm >> nTemp;
     n = nTemp;
 
@@ -205,7 +205,7 @@ SvStream& INetMessage::operator>> (SvStream& rStrm)
 INetMessageHeaderIterator::INetMessageHeaderIterator (
     const INetMessage& rMsg, const UniString& rHdrName)
 {
-    ULONG i, n = rMsg.GetHeaderCount();
+    sal_uIntPtr i, n = rMsg.GetHeaderCount();
     for (i = 0; i < n; i++)
     {
         if (rHdrName.CompareIgnoreCaseToAscii (rMsg.GetHeaderName(i)) == 0)
@@ -219,7 +219,7 @@ INetMessageHeaderIterator::INetMessageHeaderIterator (
 
 INetMessageHeaderIterator::~INetMessageHeaderIterator (void)
 {
-    ULONG i, n = aValueList.Count();
+    sal_uIntPtr i, n = aValueList.Count();
     for (i = 0; i < n; i++)
         delete ((UniString*)(aValueList.GetObject(i)));
     aValueList.Clear();
@@ -291,14 +291,14 @@ enum _ImplINetRFC822MessageHeaderState
 INetRFC822Message::INetRFC822Message (void)
     : INetMessage()
 {
-    for (USHORT i = 0; i < INETMSG_RFC822_NUMHDR; i++)
+    for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
         m_nIndex[i] = LIST_ENTRY_NOTFOUND;
 }
 
 INetRFC822Message::INetRFC822Message (const INetRFC822Message& rMsg)
     : INetMessage (rMsg)
 {
-    for (USHORT i = 0; i < INETMSG_RFC822_NUMHDR; i++)
+    for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
         m_nIndex[i] = rMsg.m_nIndex[i];
 }
 
@@ -311,7 +311,7 @@ INetRFC822Message& INetRFC822Message::operator= (const INetRFC822Message& rMsg)
     {
         INetMessage::operator= (rMsg);
 
-        for (USHORT i = 0; i < INETMSG_RFC822_NUMHDR; i++)
+        for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
             m_nIndex[i] = rMsg.m_nIndex[i];
     }
     return *this;
@@ -358,28 +358,28 @@ static const sal_Char *wkdays[7] =
 /*
  * GenerateDateField.
  */
-BOOL INetRFC822Message::GenerateDateField (
+sal_Bool INetRFC822Message::GenerateDateField (
     const DateTime& rDateTime, UniString& rDateFieldW)
 {
     // Check arguments.
     if (!rDateTime.IsValid()       ||
         (rDateTime.GetSec()  > 59) ||
         (rDateTime.GetMin()  > 59) ||
-        (rDateTime.GetHour() > 23)    ) return FALSE;
+        (rDateTime.GetHour() > 23)    ) return sal_False;
 
     // Prepare output string.
     ByteString rDateField;
 
     // Insert Date.
-    rDateField += wkdays[(USHORT)(rDateTime.GetDayOfWeek())];
+    rDateField += wkdays[(sal_uInt16)(rDateTime.GetDayOfWeek())];
     rDateField += ", ";
 
-    USHORT nNum = rDateTime.GetDay();
+    sal_uInt16 nNum = rDateTime.GetDay();
     if (nNum < 10) rDateField += '0';
     rDateField += ByteString::CreateFromInt32(nNum);
     rDateField += ' ';
 
-    rDateField += months[(USHORT)(rDateTime.GetMonth() - 1)];
+    rDateField += months[(sal_uInt16)(rDateTime.GetMonth() - 1)];
     rDateField += ' ';
 
     rDateField += ByteString::CreateFromInt32(rDateTime.GetYear());
@@ -403,47 +403,47 @@ BOOL INetRFC822Message::GenerateDateField (
 
     // Done.
     rDateFieldW = UniString (rDateField, RTL_TEXTENCODING_ASCII_US);
-    return TRUE;
+    return sal_True;
 }
 
 /*
  * ParseDateField and local helper functions.
  */
-static USHORT ParseNumber (const ByteString& rStr, USHORT& nIndex)
+static sal_uInt16 ParseNumber (const ByteString& rStr, sal_uInt16& nIndex)
 {
-    USHORT n = nIndex;
+    sal_uInt16 n = nIndex;
     while ((n < rStr.Len()) && ascii_isDigit(rStr.GetChar(n))) n++;
 
     ByteString aNum (rStr.Copy (nIndex, (n - nIndex)));
     nIndex = n;
 
-    return (USHORT)(aNum.ToInt32());
+    return (sal_uInt16)(aNum.ToInt32());
 }
 
-static USHORT ParseMonth (const ByteString& rStr, USHORT& nIndex)
+static sal_uInt16 ParseMonth (const ByteString& rStr, sal_uInt16& nIndex)
 {
-    USHORT n = nIndex;
+    sal_uInt16 n = nIndex;
     while ((n < rStr.Len()) && ascii_isLetter(rStr.GetChar(n))) n++;
 
     ByteString aMonth (rStr.Copy (nIndex, 3));
     nIndex = n;
 
-    USHORT i;
+    sal_uInt16 i;
     for (i = 0; i < 12; i++)
         if (aMonth.CompareIgnoreCaseToAscii (months[i]) == 0) break;
     return (i + 1);
 }
 
-BOOL INetRFC822Message::ParseDateField (
+sal_Bool INetRFC822Message::ParseDateField (
     const UniString& rDateFieldW, DateTime& rDateTime)
 {
     ByteString rDateField (rDateFieldW, RTL_TEXTENCODING_ASCII_US);
-    if (rDateField.Len() == 0) return FALSE;
+    if (rDateField.Len() == 0) return sal_False;
 
     if (rDateField.Search (':') != STRING_NOTFOUND)
     {
         // Some DateTime format.
-        USHORT nIndex = 0;
+        sal_uInt16 nIndex = 0;
 
         // Skip over <Wkd> or <Weekday>, leading and trailing space.
         while ((nIndex < rDateField.Len()) &&
@@ -463,7 +463,7 @@ BOOL INetRFC822Message::ParseDateField (
         if (ascii_isLetter (rDateField.GetChar(nIndex)))
         {
             // Format: ctime().
-            if ((rDateField.Len() - nIndex) < 20) return FALSE;
+            if ((rDateField.Len() - nIndex) < 20) return sal_False;
 
             rDateTime.SetMonth  (ParseMonth  (rDateField, nIndex)); nIndex++;
             rDateTime.SetDay    (ParseNumber (rDateField, nIndex)); nIndex++;
@@ -473,19 +473,19 @@ BOOL INetRFC822Message::ParseDateField (
             rDateTime.SetSec    (ParseNumber (rDateField, nIndex)); nIndex++;
             rDateTime.Set100Sec (0);
 
-            USHORT nYear = ParseNumber (rDateField, nIndex);
+            sal_uInt16 nYear = ParseNumber (rDateField, nIndex);
             if (nYear < 100) nYear += 1900;
             rDateTime.SetYear   (nYear);
         }
         else
         {
             // Format: RFC1036 or RFC1123.
-            if ((rDateField.Len() - nIndex) < 17) return FALSE;
+            if ((rDateField.Len() - nIndex) < 17) return sal_False;
 
             rDateTime.SetDay    (ParseNumber (rDateField, nIndex)); nIndex++;
             rDateTime.SetMonth  (ParseMonth  (rDateField, nIndex)); nIndex++;
 
-            USHORT nYear  = ParseNumber (rDateField, nIndex);  nIndex++;
+            sal_uInt16 nYear  = ParseNumber (rDateField, nIndex);  nIndex++;
             if (nYear < 100) nYear += 1900;
             rDateTime.SetYear   (nYear);
 
@@ -498,8 +498,8 @@ BOOL INetRFC822Message::ParseDateField (
                 (rDateField.GetChar(nIndex) == '-')    )
             {
                 // Offset from GMT: "(+|-)HHMM".
-                BOOL   bEast   = (rDateField.GetChar(nIndex++) == '+');
-                USHORT nOffset = ParseNumber (rDateField, nIndex);
+                sal_Bool   bEast   = (rDateField.GetChar(nIndex++) == '+');
+                sal_uInt16 nOffset = ParseNumber (rDateField, nIndex);
                 if (nOffset > 0)
                 {
                     Time aDiff;
@@ -532,7 +532,7 @@ BOOL INetRFC822Message::ParseDateField (
     else
     {
         // Junk.
-        return FALSE;
+        return sal_False;
     }
 
     return (rDateTime.IsValid() &&
@@ -545,15 +545,15 @@ BOOL INetRFC822Message::ParseDateField (
  * SetHeaderField.
  * (Header Field Parser).
  */
-ULONG INetRFC822Message::SetHeaderField (
-    const INetMessageHeader &rHeader, ULONG nNewIndex)
+sal_uIntPtr INetRFC822Message::SetHeaderField (
+    const INetMessageHeader &rHeader, sal_uIntPtr nNewIndex)
 {
     ByteString aName (rHeader.GetName());
     const sal_Char *pData = aName.GetBuffer();
     const sal_Char *pStop = pData + aName.Len() + 1;
     const sal_Char *check = "";
 
-    ULONG       nIdx     = LIST_APPEND;
+    sal_uIntPtr       nIdx     = LIST_APPEND;
     int         eState   = INETMSG_RFC822_BEGIN;
     int         eOkState = INETMSG_RFC822_OK;
 
@@ -921,7 +921,7 @@ SvStream& INetRFC822Message::operator<< (SvStream& rStrm) const
 {
     INetMessage::operator<< (rStrm);
 
-    for (USHORT i = 0; i < INETMSG_RFC822_NUMHDR; i++)
+    for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
         rStrm << static_cast<sal_uInt32>(m_nIndex[i]);
 
     return rStrm;
@@ -935,7 +935,7 @@ SvStream& INetRFC822Message::operator>> (SvStream& rStrm)
     INetMessage::operator>> (rStrm);
 
     sal_uInt32 nTemp;
-    for (USHORT i = 0; i < INETMSG_RFC822_NUMHDR; i++)
+    for (sal_uInt16 i = 0; i < INETMSG_RFC822_NUMHDR; i++)
     {
         rStrm >> nTemp;
         m_nIndex[i] = nTemp;
@@ -999,9 +999,9 @@ INetMIMEMessage::INetMIMEMessage (void)
     : INetRFC822Message (),
       pParent       (NULL),
       nNumChildren  (0),
-      bHeaderParsed (FALSE)
+      bHeaderParsed (sal_False)
 {
-    for (USHORT i = 0; i < INETMSG_MIME_NUMHDR; i++)
+    for (sal_uInt16 i = 0; i < INETMSG_MIME_NUMHDR; i++)
         m_nIndex[i] = LIST_ENTRY_NOTFOUND;
 }
 
@@ -1058,7 +1058,7 @@ void INetMIMEMessage::CopyImp (const INetMIMEMessage& rMsg)
 {
     bHeaderParsed = rMsg.bHeaderParsed;
 
-    USHORT i;
+    sal_uInt16 i;
     for (i = 0; i < INETMSG_MIME_NUMHDR; i++)
         m_nIndex[i] = rMsg.m_nIndex[i];
 
@@ -1092,15 +1092,15 @@ INetMIMEMessage *INetMIMEMessage::CreateMessage (
  * SetHeaderField.
  * (Header Field Parser).
  */
-ULONG INetMIMEMessage::SetHeaderField (
-    const INetMessageHeader &rHeader, ULONG nNewIndex)
+sal_uIntPtr INetMIMEMessage::SetHeaderField (
+    const INetMessageHeader &rHeader, sal_uIntPtr nNewIndex)
 {
     ByteString aName (rHeader.GetName());
     const sal_Char *pData = aName.GetBuffer();
     const sal_Char *pStop = pData + aName.Len() + 1;
     const sal_Char *check = "";
 
-    ULONG      nIdx     = LIST_APPEND;
+    sal_uIntPtr      nIdx     = LIST_APPEND;
     int        eState   = INETMSG_MIME_BEGIN;
     int        eOkState = INETMSG_MIME_OK;
 
@@ -1328,11 +1328,11 @@ void INetMIMEMessage::GetDefaultContentType (String& rContentType)
 /*
  * EnableAttachChild.
  */
-BOOL INetMIMEMessage::EnableAttachChild (INetMessageContainerType eType)
+sal_Bool INetMIMEMessage::EnableAttachChild (INetMessageContainerType eType)
 {
     // Check context.
     if (IsContainer())
-        return FALSE;
+        return sal_False;
 
     // Setup Content-Type header field.
     ByteString aContentType;
@@ -1392,14 +1392,14 @@ BOOL INetMIMEMessage::EnableAttachChild (INetMessageContainerType eType)
     SetContentTransferEncoding (String (CONSTASCII_STRINGPARAM("7bit")));
 
     // Done.
-    return TRUE;
+    return sal_True;
 }
 
 /*
  * AttachChild.
  */
-BOOL INetMIMEMessage::AttachChild (
-    INetMIMEMessage& rChildMsg, BOOL bOwner)
+sal_Bool INetMIMEMessage::AttachChild (
+    INetMIMEMessage& rChildMsg, sal_Bool bOwner)
 {
     if (IsContainer() /*&& rChildMsg.GetContentType().Len() */)
     {
@@ -1407,21 +1407,21 @@ BOOL INetMIMEMessage::AttachChild (
         aChildren.Insert (&rChildMsg, LIST_APPEND);
         nNumChildren = aChildren.Count();
 
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 /*
  * DetachChild.
  */
-BOOL INetMIMEMessage::DetachChild (
-    ULONG nIndex, INetMIMEMessage& rChildMsg) const
+sal_Bool INetMIMEMessage::DetachChild (
+    sal_uIntPtr nIndex, INetMIMEMessage& rChildMsg) const
 {
     if (IsContainer())
     {
         // Check document stream.
-        if (GetDocumentLB() == NULL) return FALSE;
+        if (GetDocumentLB() == NULL) return sal_False;
         SvStream *pDocStrm = new SvStream (GetDocumentLB());
 
         // Initialize message buffer.
@@ -1496,7 +1496,7 @@ BOOL INetMIMEMessage::DetachChild (
                          * Compare buffered line with part/close delimiter.
                          * Increment current part index upon match.
                          */
-                        USHORT nLen = (USHORT)(aLineBuf.Tell() & 0xffff);
+                        sal_uInt16 nLen = (sal_uInt16)(aLineBuf.Tell() & 0xffff);
                         if (nLen == aDelim.Len())
                         {
                             if (aDelim.CompareTo ((const sal_Char *) aLineBuf.GetData(), nLen)
@@ -1522,7 +1522,7 @@ BOOL INetMIMEMessage::DetachChild (
                     pMsgRead = pMsgWrite = pMsgBuffer;
 
                     // Read document stream.
-                    ULONG nRead = pDocStrm->Read (
+                    sal_uIntPtr nRead = pDocStrm->Read (
                         pMsgBuffer, sizeof (pMsgBuffer));
                     if (nRead > 0)
                     {
@@ -1541,7 +1541,7 @@ BOOL INetMIMEMessage::DetachChild (
                         {
                             // Requested part not found.
                             delete pDocStrm;
-                            return FALSE;
+                            return sal_False;
                         }
                     }
                 }
@@ -1581,7 +1581,7 @@ BOOL INetMIMEMessage::DetachChild (
                     pMsgRead = pMsgWrite = pMsgBuffer;
 
                     // Read document stream.
-                    ULONG nRead = pDocStrm->Read (
+                    sal_uIntPtr nRead = pDocStrm->Read (
                         pMsgBuffer, sizeof (pMsgBuffer));
                     if (nRead > 0)
                     {
@@ -1600,9 +1600,9 @@ BOOL INetMIMEMessage::DetachChild (
         // Done.
         if (pDocStrm) delete pDocStrm;
         if (pMsgStrm) delete pMsgStrm;
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 /*
@@ -1612,7 +1612,7 @@ SvStream& INetMIMEMessage::operator<< (SvStream& rStrm) const
 {
     INetRFC822Message::operator<< (rStrm);
 
-    for (USHORT i = 0; i < INETMSG_MIME_NUMHDR; i++)
+    for (sal_uInt16 i = 0; i < INETMSG_MIME_NUMHDR; i++)
         rStrm << static_cast<sal_uInt32>(m_nIndex[i]);
 
 #ifdef ENABLE_BYTESTRING_STREAM_OPERATORS
@@ -1633,7 +1633,7 @@ SvStream& INetMIMEMessage::operator>> (SvStream& rStrm)
     INetRFC822Message::operator>> (rStrm);
 
     sal_uInt32 nTemp;
-    for (USHORT i = 0; i < INETMSG_MIME_NUMHDR; i++)
+    for (sal_uInt16 i = 0; i < INETMSG_MIME_NUMHDR; i++)
     {
         rStrm >> nTemp;
         m_nIndex[i] = nTemp;

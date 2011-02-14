@@ -52,7 +52,7 @@ TYPEINIT1_FACTORY( SvxPageItem, SfxPoolItem , new  SvxPageItem(0));
     Beschreibung: Konstruktor
  --------------------------------------------------------------------*/
 
-SvxPageItem::SvxPageItem( const USHORT nId ) : SfxPoolItem( nId ),
+SvxPageItem::SvxPageItem( const sal_uInt16 nId ) : SfxPoolItem( nId ),
 
     eNumType    ( SVX_ARABIC ),
     bLandscape  ( sal_False ),
@@ -94,7 +94,7 @@ int SvxPageItem::operator==( const SfxPoolItem& rAttr ) const
              eUse       == rItem.eUse );
 }
 
-inline XubString GetUsageText( const USHORT eU )
+inline XubString GetUsageText( const sal_uInt16 eU )
 {
     if ( eU & SVX_PAGE_LEFT )
         return SVX_RESSTR(RID_SVXITEMS_PAGE_USAGE_LEFT);
@@ -164,7 +164,7 @@ SfxItemPresentation SvxPageItem::GetPresentation
 }
 
 //------------------------------------------------------------------------
-sal_Bool SvxPageItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SvxPageItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -201,7 +201,7 @@ sal_Bool SvxPageItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return sal_True;
 }
 //------------------------------------------------------------------------
-sal_Bool SvxPageItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+sal_Bool SvxPageItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     switch( nMemberId )
     {
@@ -244,12 +244,12 @@ sal_Bool SvxPageItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* SvxPageItem::Create( SvStream& rStream, USHORT ) const
+SfxPoolItem* SvxPageItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
     XubString sStr;
-    BYTE eType;
+    sal_uInt8 eType;
     sal_Bool bLand;
-    USHORT nUse;
+    sal_uInt16 nUse;
 
     // UNICODE: rStream >> sStr;
     rStream.ReadByteString( sStr );
@@ -268,12 +268,12 @@ SfxPoolItem* SvxPageItem::Create( SvStream& rStream, USHORT ) const
 
 //------------------------------------------------------------------------
 
-SvStream& SvxPageItem::Store( SvStream &rStrm, USHORT /*nItemVersion*/ ) const
+SvStream& SvxPageItem::Store( SvStream &rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     // UNICODE: rStrm << aDescName;
     rStrm.WriteByteString(aDescName);
 
-    rStrm << (BYTE)eNumType << bLandscape << eUse;
+    rStrm << (sal_uInt8)eNumType << bLandscape << eUse;
     return rStrm;
 }
 
@@ -281,7 +281,7 @@ SvStream& SvxPageItem::Store( SvStream &rStrm, USHORT /*nItemVersion*/ ) const
     Beschreibung:   HeaderFooterSet
  --------------------------------------------------------------------*/
 
-SvxSetItem::SvxSetItem( const USHORT nId, const SfxItemSet& rSet ) :
+SvxSetItem::SvxSetItem( const sal_uInt16 nId, const SfxItemSet& rSet ) :
 
     SfxSetItem( nId, rSet )
 {
@@ -293,7 +293,7 @@ SvxSetItem::SvxSetItem( const SvxSetItem& rItem ) :
 {
 }
 
-SvxSetItem::SvxSetItem( const USHORT nId, SfxItemSet* _pSet ) :
+SvxSetItem::SvxSetItem( const sal_uInt16 nId, SfxItemSet* _pSet ) :
 
     SfxSetItem( nId, _pSet )
 {
@@ -318,7 +318,7 @@ SfxItemPresentation SvxSetItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-SfxPoolItem* SvxSetItem::Create(SvStream &rStrm, USHORT /*nVersion*/) const
+SfxPoolItem* SvxSetItem::Create(SvStream &rStrm, sal_uInt16 /*nVersion*/) const
 {
     SfxItemSet* _pSet = new SfxItemSet( *GetItemSet().GetPool(),
                                        GetItemSet().GetRanges() );
@@ -328,7 +328,7 @@ SfxPoolItem* SvxSetItem::Create(SvStream &rStrm, USHORT /*nVersion*/) const
     return new SvxSetItem( Which(), *_pSet );
 }
 
-SvStream& SvxSetItem::Store(SvStream &rStrm, USHORT nItemVersion) const
+SvStream& SvxSetItem::Store(SvStream &rStrm, sal_uInt16 nItemVersion) const
 {
     GetItemSet().Store( rStrm, nItemVersion );
 

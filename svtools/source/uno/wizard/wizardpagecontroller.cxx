@@ -75,7 +75,7 @@ namespace svt { namespace uno
         try
         {
             m_xWizardPage.set( m_xController->createPage(
-                Reference< XWindow >( i_rParent.GetComponentInterface( TRUE ), UNO_QUERY_THROW ),
+                Reference< XWindow >( i_rParent.GetComponentInterface( sal_True ), UNO_QUERY_THROW ),
                 m_nPageId
             ), UNO_SET_THROW );
 

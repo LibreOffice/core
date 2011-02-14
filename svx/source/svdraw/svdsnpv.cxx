@@ -203,29 +203,29 @@ void ImplHelpLineOverlay::SetPosition(const basegfx::B2DPoint& rNewPosition)
 void SdrSnapView::ClearVars()
 {
     nMagnSizPix=4;
-    bSnapEnab=TRUE;
-    bGridSnap=TRUE;
-    bSnapTo1Pix=TRUE;
-    bBordSnap=TRUE;
-    bHlplSnap=TRUE;
-    bOFrmSnap=TRUE;
-    bOPntSnap=FALSE;
-    bOConSnap=TRUE;
-    bMoveMFrmSnap=TRUE;
-    bMoveOFrmSnap=TRUE;
-    bMoveOPntSnap=TRUE;
-    bMoveOConSnap=TRUE;
-    bMoveSnapOnlyTopLeft=FALSE;
-    bOrtho=FALSE;
-    bBigOrtho=TRUE;
+    bSnapEnab=sal_True;
+    bGridSnap=sal_True;
+    bSnapTo1Pix=sal_True;
+    bBordSnap=sal_True;
+    bHlplSnap=sal_True;
+    bOFrmSnap=sal_True;
+    bOPntSnap=sal_False;
+    bOConSnap=sal_True;
+    bMoveMFrmSnap=sal_True;
+    bMoveOFrmSnap=sal_True;
+    bMoveOPntSnap=sal_True;
+    bMoveOConSnap=sal_True;
+    bMoveSnapOnlyTopLeft=sal_False;
+    bOrtho=sal_False;
+    bBigOrtho=sal_True;
     nSnapAngle=1500;
-    bAngleSnapEnab=FALSE;
-    bMoveOnlyDragging=FALSE;
-    bSlantButShear=FALSE;
-    bCrookNoContortion=FALSE;
+    bAngleSnapEnab=sal_False;
+    bMoveOnlyDragging=sal_False;
+    bSlantButShear=sal_False;
+    bCrookNoContortion=sal_False;
     eCrookMode=SDRCROOK_ROTATE;
-    bHlplFixed=FALSE;
-    bEliminatePolyPoints=FALSE;
+    bHlplFixed=sal_False;
+    bEliminatePolyPoints=sal_False;
     nEliminatePolyPointLimitAngle=0;
 
     // #114409#-1 Migrate PageOrigin
@@ -257,7 +257,7 @@ SdrSnapView::~SdrSnapView()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL SdrSnapView::IsAction() const
+sal_Bool SdrSnapView::IsAction() const
 {
     return IsSetPageOrg() || IsDragHelpLine() || SdrPaintView::IsAction();
 }
@@ -317,14 +317,14 @@ Point SdrSnapView::GetSnapPos(const Point& rPnt, const SdrPageView* pPV) const
 }
 
 #define NOT_SNAPPED 0x7FFFFFFF
-USHORT SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
+sal_uInt16 SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
 {
     if (!bSnapEnab) return SDRSNAP_NOTSNAPPED;
-    BOOL bPVOfs=FALSE;
+    sal_Bool bPVOfs=sal_False;
     long x=rPnt.X();
     long y=rPnt.Y();
     if (pPV==NULL) {
-        bPVOfs=TRUE;
+        bPVOfs=sal_True;
         pPV=GetSdrPageView();
         if (pPV==NULL) return SDRSNAP_NOTSNAPPED;
     }
@@ -337,8 +337,8 @@ USHORT SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
     if (bHlplVisible && bHlplSnap && !IsDragHelpLine())
     {
         const SdrHelpLineList& rHLL=pPV->GetHelpLines();
-        USHORT nAnz=rHLL.GetCount();
-        for (USHORT i=nAnz; i>0;) {
+        sal_uInt16 nAnz=rHLL.GetCount();
+        for (sal_uInt16 i=nAnz; i>0;) {
             i--;
             const SdrHelpLine& rHL=rHLL[i];
             const Point& rPos=rHL.GetPos();
@@ -381,11 +381,11 @@ USHORT SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
         a=y- ys     ; if (Abs(a)<=my) { dy1=-a; if (Abs(dy1)<Abs(dy)) dy=dy1; } // rechte Papierkante
     }
     if (bOFrmSnap || bOPntSnap /*|| (bConnVisible && bOConSnap)*/) {
-        ULONG nMaxPointSnapCount=200;
-        ULONG nMaxFrameSnapCount=200;
+        sal_uIntPtr nMaxPointSnapCount=200;
+        sal_uIntPtr nMaxFrameSnapCount=200;
 
         // #97981# go back to IM_DEEPNOGROUPS runthrough for snap to object comparisons
-        SdrObjListIter aIter(*pPV->GetPage(),/*IM_FLAT*/IM_DEEPNOGROUPS,TRUE);
+        SdrObjListIter aIter(*pPV->GetPage(),/*IM_FLAT*/IM_DEEPNOGROUPS,sal_True);
 
         while (aIter.IsMore() && (nMaxPointSnapCount>0 || nMaxFrameSnapCount>0)) {
             SdrObject* pO=aIter.Next();
@@ -461,7 +461,7 @@ USHORT SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
             dy = 0;
         }
     }
-    BOOL bRet=SDRSNAP_NOTSNAPPED;
+    sal_Bool bRet=SDRSNAP_NOTSNAPPED;
     if (dx==NOT_SNAPPED) dx=0; else bRet|=SDRSNAP_XSNAPPED;
     if (dy==NOT_SNAPPED) dy=0; else bRet|=SDRSNAP_YSNAPPED;
     rPnt.X()=x+dx;
@@ -472,7 +472,7 @@ USHORT SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
 void SdrSnapView::CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBestXSnap, long& nBestYSnap, bool& bXSnapped, bool& bYSnapped) const
 {
     Point aPt(rPt);
-    USHORT nRet=SnapPos(aPt,pPV);
+    sal_uInt16 nRet=SnapPos(aPt,pPV);
     aPt-=rPt;
     if ((nRet & SDRSNAP_XSNAPPED) !=0) {
         if (bXSnapped) {
@@ -481,7 +481,7 @@ void SdrSnapView::CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBes
             }
         } else {
             nBestXSnap=aPt.X();
-            bXSnapped=TRUE;
+            bXSnapped=sal_True;
         }
     }
     if ((nRet & SDRSNAP_YSNAPPED) !=0) {
@@ -491,17 +491,17 @@ void SdrSnapView::CheckSnap(const Point& rPt, const SdrPageView* pPV, long& nBes
             }
         } else {
             nBestYSnap=aPt.Y();
-            bYSnapped=TRUE;
+            bYSnapped=sal_True;
         }
     }
 }
 
-USHORT SdrSnapView::SnapRect(const Rectangle& rRect, const SdrPageView* pPV, long& rDX, long& rDY) const
+sal_uInt16 SdrSnapView::SnapRect(const Rectangle& rRect, const SdrPageView* pPV, long& rDX, long& rDY) const
 {
     long nBestXSnap=0;
     long nBestYSnap=0;
-    bool bXSnapped=FALSE;
-    bool bYSnapped=FALSE;
+    bool bXSnapped=sal_False;
+    bool bYSnapped=sal_False;
     CheckSnap(rRect.TopLeft()    ,pPV,nBestXSnap,nBestYSnap,bXSnapped,bYSnapped);
     if (!bMoveSnapOnlyTopLeft) {
         CheckSnap(rRect.TopRight()   ,pPV,nBestXSnap,nBestYSnap,bXSnapped,bYSnapped);
@@ -510,7 +510,7 @@ USHORT SdrSnapView::SnapRect(const Rectangle& rRect, const SdrPageView* pPV, lon
     }
     rDX=nBestXSnap;
     rDY=nBestYSnap;
-    USHORT nRet=0;
+    sal_uInt16 nRet=0;
     if (bXSnapped) nRet+=SDRSNAP_XSNAPPED;
     if (bYSnapped) nRet+=SDRSNAP_YSNAPPED;
     return nRet;
@@ -575,7 +575,7 @@ void SdrSnapView::BrkSetPageOrg()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-sal_Bool SdrSnapView::PickHelpLine(const Point& rPnt, short nTol, const OutputDevice& rOut, USHORT& rnHelpLineNum, SdrPageView*& rpPV) const
+sal_Bool SdrSnapView::PickHelpLine(const Point& rPnt, short nTol, const OutputDevice& rOut, sal_uInt16& rnHelpLineNum, SdrPageView*& rpPV) const
 {
     rpPV=NULL;
     nTol=ImpGetHitTolLogic(nTol,&rOut);
@@ -584,7 +584,7 @@ sal_Bool SdrSnapView::PickHelpLine(const Point& rPnt, short nTol, const OutputDe
     if(pPV)
     {
         Point aPnt(rPnt);
-        USHORT nIndex=pPV->GetHelpLines().HitTest(aPnt,USHORT(nTol),rOut);
+        sal_uInt16 nIndex=pPV->GetHelpLines().HitTest(aPnt,sal_uInt16(nTol),rOut);
         if (nIndex!=SDRHELPLINE_NOTFOUND) {
             rpPV=pPV;
             rnHelpLineNum=nIndex;
@@ -595,7 +595,7 @@ sal_Bool SdrSnapView::PickHelpLine(const Point& rPnt, short nTol, const OutputDe
 }
 
 // start HelpLine drag for new HelpLine
-sal_Bool SdrSnapView::BegDragHelpLine(USHORT nHelpLineNum, SdrPageView* pPV)
+sal_Bool SdrSnapView::BegDragHelpLine(sal_uInt16 nHelpLineNum, SdrPageView* pPV)
 {
     sal_Bool bRet(sal_False);
 

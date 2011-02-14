@@ -105,7 +105,7 @@ throw( uno::RuntimeException )
 {
     uno::Reference< plugin::XPluginManager > xPMgr( mxFact->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.plugin.PluginManager") ), uno::UNO_QUERY );
     if (!xPMgr.is() )
-        return FALSE;
+        return sal_False;
 
     if ( SvtMiscOptions().IsPluginsEnabled() )
     {
@@ -115,10 +115,10 @@ throw( uno::RuntimeException )
         pWin->SetBackground();
         pWin->Show();
 
-        ULONG nCount = maCmdList.Count();
+        sal_uIntPtr nCount = maCmdList.Count();
         uno::Sequence < ::rtl::OUString > aCmds( nCount ), aArgs( nCount );
         ::rtl::OUString *pCmds = aCmds.getArray(), *pArgs = aArgs.getArray();
-        for( ULONG i = 0; i < nCount; i++ )
+        for( sal_uIntPtr i = 0; i < nCount; i++ )
         {
             SvCommand & rCmd = maCmdList.GetObject( i );
             pCmds[i] = rCmd.GetCommand();
@@ -136,7 +136,7 @@ throw( uno::RuntimeException )
             {
                 pWin->xWindow = xWindow;
                 pWin->Resize();
-                xWindow->setVisible( TRUE );
+                xWindow->setVisible( sal_True );
             }
 
             try
@@ -165,10 +165,10 @@ throw( uno::RuntimeException )
         // we must destroy the plugin before the parent is destroyed
         xWindow->addEventListener( this );
         xFrame->setComponent( xWindow, uno::Reference < frame::XController >() );
-        return mxPlugin.is() ? TRUE : FALSE;
+        return mxPlugin.is() ? sal_True : sal_False;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 void SAL_CALL PluginObject::cancel() throw( com::sun::star::uno::RuntimeException )

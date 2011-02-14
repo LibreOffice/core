@@ -529,7 +529,7 @@ LRESULT CALLBACK CWinFileOpenImpl::SubClassFunc(
             reinterpret_cast<WNDPROC>(pImpl->m_pfnOldDlgProc),
             hWnd,wMessage,wParam,lParam);
 
-        pImpl->onWMShow((BOOL)wParam);
+        pImpl->onWMShow((sal_Bool)wParam);
         break;
 
     case WM_NCDESTROY:
@@ -610,7 +610,7 @@ BOOL CALLBACK CWinFileOpenImpl::EnumChildWndProc(HWND hWnd, LPARAM lParam)
 
     OSL_ASSERT(pImpl);
 
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
 
     switch(enumParam->m_action)
     {
@@ -843,7 +843,7 @@ void CWinFileOpenImpl::onWMSize()
 //
 //-----------------------------------------------------------------------------------------
 
-void CWinFileOpenImpl::onWMShow(BOOL bShow)
+void CWinFileOpenImpl::onWMShow(sal_Bool bShow)
 {
     m_Preview->notifyParentShow(bShow);
 }

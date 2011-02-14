@@ -24,13 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-//========================================================================
-// Resource-Id's f"ur die OFA
-//
-// (C) 1998 - 2000 StarOffice Software Entw. GmbH, Hamburg, Germany
-// $Author: rt $ $Date: 2008-04-11 02:44:40 $ $Revision: 1.5 $
-// $Logfile:   T:/offmgr/inc/app.hrv  $ $Workfile:   APP.HRC  $
-//------------------------------------------------------------------------
+
+// Resource-Id's for OFA
+
 #ifndef _OFF_APP_HRC
 #define _OFF_APP_HRC
 

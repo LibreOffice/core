@@ -81,7 +81,7 @@ namespace dbaui
 
     public:
         static  SfxTabPage* Create( Window* pParent, const SfxItemSet& _rAttrSet );
-        virtual BOOL        FillItemSet (SfxItemSet& _rCoreAttrs);
+        virtual sal_Bool        FillItemSet (SfxItemSet& _rCoreAttrs);
 
         virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
 

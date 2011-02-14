@@ -131,7 +131,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
                 Window* pWindow = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
                 if ( pWindow )
                 {
-                    ULONG nStyles = WinBits( WB_LEFT | WB_3DLOOK );
+                    sal_uLong nStyles = WinBits( WB_LEFT | WB_3DLOOK );
 
                     pStatusBar = new FrameworkStatusBar( pWindow, nStyles );
                     pStatusBarManager = new StatusBarManager( m_xServiceFactory, xFrame, m_aResourceURL, pStatusBar );

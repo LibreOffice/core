@@ -72,7 +72,7 @@ namespace vcl
 
 // ------------------------------------------------------------------------------
 
-static const BYTE mpDefaultColorTable[ 256 ] =
+static const sal_uInt8 mpDefaultColorTable[ 256 ] =
 {   0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
     0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f,
     0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2d, 0x2e, 0x2f,
@@ -111,11 +111,11 @@ private:
     AlphaMask*          mpAlphaMask;
     BitmapWriteAccess*  mpMaskAcc;
     ZCodec*             mpZCodec;
-    BYTE*               mpInflateInBuf; // as big as the size of a scanline + alphachannel + 1
-    BYTE*               mpScanPrior;    // pointer to the latest scanline
-    BYTE*               mpTransTab;     // for transparency in images with palette colortype
-    BYTE*               mpScanCurrent;  // pointer into the current scanline
-    BYTE*               mpColorTable;   //
+    sal_uInt8*              mpInflateInBuf; // as big as the size of a scanline + alphachannel + 1
+    sal_uInt8*              mpScanPrior;    // pointer to the latest scanline
+    sal_uInt8*              mpTransTab;     // for transparency in images with palette colortype
+    sal_uInt8*              mpScanCurrent;  // pointer into the current scanline
+    sal_uInt8*              mpColorTable;   //
     sal_Size            mnStreamSize;   // estimate of PNG file size
     sal_uInt32          mnChunkType;    // Type of current PNG chunk
     sal_Int32           mnChunkLen;     // Length of current PNG chunk
@@ -131,28 +131,28 @@ private:
     sal_uInt32          mnYAdd;         // the increment for input images Y coords for the current pass
     int                 mnPreviewShift; // shift to convert orig image coords into preview image coords
     int                 mnPreviewMask;  // == ((1 << mnPreviewShift) - 1)
-    USHORT              mnIStmOldMode;
-    USHORT              mnTargetDepth;      // pixel depth of target bitmap
-    BYTE                mnTransRed;
-    BYTE                mnTransGreen;
-    BYTE                mnTransBlue;
-    BYTE                mnPngDepth;     // pixel depth of PNG data
-    BYTE                mnColorType;
-    BYTE                mnCompressionType;
-    BYTE                mnFilterType;
-    BYTE                mnInterlaceType;
+    sal_uInt16              mnIStmOldMode;
+    sal_uInt16              mnTargetDepth;      // pixel depth of target bitmap
+    sal_uInt8               mnTransRed;
+    sal_uInt8               mnTransGreen;
+    sal_uInt8               mnTransBlue;
+    sal_uInt8               mnPngDepth;     // pixel depth of PNG data
+    sal_uInt8               mnColorType;
+    sal_uInt8               mnCompressionType;
+    sal_uInt8               mnFilterType;
+    sal_uInt8               mnInterlaceType;
     BitmapColor         mcTranspColor;  // transparency mask's transparency "color"
     BitmapColor         mcOpaqueColor;  // transparency mask's opaque "color"
-    BOOL                mbTransparent;  // graphic includes an tRNS Chunk or an alpha Channel
-    BOOL                mbAlphaChannel; // is true for ColorType 4 and 6
-    BOOL                mbRGBTriple;
-    BOOL                mbPalette;      // FALSE if we need a Palette
-    BOOL                mbGrayScale;
-    BOOL                mbzCodecInUse;
-    BOOL                mbStatus;
-    BOOL                mbIDAT;         // TRUE if finished with enough IDAT chunks
-    BOOL                mbGamma;        // TRUE if Gamma Correction available
-    BOOL                mbpHYs;         // TRUE if pysical size of pixel available
+    sal_Bool                mbTransparent;  // graphic includes an tRNS Chunk or an alpha Channel
+    sal_Bool                mbAlphaChannel; // is true for ColorType 4 and 6
+    sal_Bool                mbRGBTriple;
+    sal_Bool                mbPalette;      // sal_False if we need a Palette
+    sal_Bool                mbGrayScale;
+    sal_Bool                mbzCodecInUse;
+    sal_Bool                mbStatus;
+    sal_Bool                mbIDAT;         // sal_True if finished with enough IDAT chunks
+    sal_Bool                mbGamma;        // sal_True if Gamma Correction available
+    sal_Bool                mbpHYs;         // sal_True if pysical size of pixel available
     sal_Bool            mbIgnoreGammaChunk;
 
     bool                ReadNextChunk();
@@ -160,20 +160,20 @@ private:
     void                SkipRemainingChunks();
 
     void                ImplSetPixel( sal_uInt32 y, sal_uInt32 x, const BitmapColor & );
-    void                ImplSetPixel( sal_uInt32 y, sal_uInt32 x, BYTE nPalIndex );
-    void                ImplSetTranspPixel( sal_uInt32 y, sal_uInt32 x, const BitmapColor &, BOOL bTrans );
-    void                ImplSetAlphaPixel( sal_uInt32 y, sal_uInt32 x, BYTE nPalIndex, BYTE nAlpha );
-    void                ImplSetAlphaPixel( sal_uInt32 y, sal_uInt32 x, const BitmapColor&, BYTE nAlpha );
+    void                ImplSetPixel( sal_uInt32 y, sal_uInt32 x, sal_uInt8 nPalIndex );
+    void                ImplSetTranspPixel( sal_uInt32 y, sal_uInt32 x, const BitmapColor &, sal_Bool bTrans );
+    void                ImplSetAlphaPixel( sal_uInt32 y, sal_uInt32 x, sal_uInt8 nPalIndex, sal_uInt8 nAlpha );
+    void                ImplSetAlphaPixel( sal_uInt32 y, sal_uInt32 x, const BitmapColor&, sal_uInt8 nAlpha );
     void                ImplReadIDAT();
     bool                ImplPreparePass();
     void                ImplApplyFilter();
     void                ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd );
-    BOOL                ImplReadTransparent();
+    sal_Bool                ImplReadTransparent();
     void                ImplGetGamma();
     void                ImplGetBackground();
-    BYTE                ImplScaleColor();
-    BOOL                ImplReadHeader( const Size& rPreviewSizeHint );
-    BOOL                ImplReadPalette();
+    sal_uInt8               ImplScaleColor();
+    sal_Bool                ImplReadHeader( const Size& rPreviewSizeHint );
+    sal_Bool                ImplReadPalette();
     void                ImplGetGrayPalette( sal_uInt16 );
     sal_uInt32          ImplReadsal_uInt32();
 
@@ -202,8 +202,8 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mpTransTab      ( NULL ),
     mpColorTable    ( (sal_uInt8*) mpDefaultColorTable ),
     mbzCodecInUse   ( sal_False ),
-    mbStatus( TRUE),
-    mbIDAT( FALSE ),
+    mbStatus( sal_True),
+    mbIDAT( sal_False ),
     mbGamma             ( sal_False ),
     mbpHYs              ( sal_False ),
     mbIgnoreGammaChunk  ( sal_False )
@@ -383,7 +383,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
 
             case PNGCHUNK_gAMA :                                // the gamma chunk must precede
             {                                                   // the 'IDAT' and also the 'PLTE'(if available )
-                if ( !mbIgnoreGammaChunk && ( mbIDAT == FALSE ) )
+                if ( !mbIgnoreGammaChunk && ( mbIDAT == sal_False ) )
                     ImplGetGamma();
             }
             break;
@@ -404,7 +404,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
 
             case PNGCHUNK_bKGD :                                // the background chunk must appear
             {
-                if ( ( mbIDAT == FALSE ) && mbPalette )         // before the 'IDAT' and after the
+                if ( ( mbIDAT == sal_False ) && mbPalette )         // before the 'IDAT' and after the
                     ImplGetBackground();                        // PLTE(if available ) chunk.
             }
             break;
@@ -412,7 +412,7 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
             case PNGCHUNK_IDAT :
             {
                 if ( !mpInflateInBuf )  // taking care that the header has properly been read
-                    mbStatus = FALSE;
+                    mbStatus = sal_False;
                 else if ( !mbIDAT )     // the gfx is finished, but there may be left a zlibCRC of about 4Bytes
                     ImplReadIDAT();
             }
@@ -490,27 +490,27 @@ BitmapEx PNGReaderImpl::GetBitmapEx( const Size& rPreviewSizeHint )
 
 // ------------------------------------------------------------------------
 
-BOOL PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
+sal_Bool PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
 {
     if( mnChunkLen < 13 )
-        return FALSE;
+        return sal_False;
 
     maOrigSize.Width()  = ImplReadsal_uInt32();
     maOrigSize.Height() = ImplReadsal_uInt32();
 
     if ( !maOrigSize.Width() || !maOrigSize.Height() )
-        return FALSE;
+        return sal_False;
 
     mnPngDepth = *(maDataIter++);
     mnColorType = *(maDataIter++);
 
     mnCompressionType = *(maDataIter++);
     if( mnCompressionType != 0 )    // unknown compression type
-        return FALSE;
+        return sal_False;
 
     mnFilterType = *(maDataIter++);
     if( mnFilterType != 0 )         // unknown filter type
-        return FALSE;
+        return sal_False;
 
     mnInterlaceType = *(maDataIter++);
     switch ( mnInterlaceType ) // filter type valid ?
@@ -522,12 +522,12 @@ BOOL PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
             mnPass = 0;
             break;
         default:
-            return FALSE;
+            return sal_False;
     }
 
-    mbPalette = TRUE;
-    mbIDAT = mbAlphaChannel = mbTransparent = FALSE;
-    mbGrayScale = mbRGBTriple = FALSE;
+    mbPalette = sal_True;
+    mbIDAT = mbAlphaChannel = mbTransparent = sal_False;
+    mbGrayScale = mbRGBTriple = sal_False;
     mnTargetDepth = mnPngDepth;
     sal_uInt64 nScansize64 = ( ( static_cast< sal_uInt64 >( maOrigSize.Width() ) * mnPngDepth ) + 7 ) >> 3;
 
@@ -540,7 +540,7 @@ BOOL PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
             {
                 case 2 : // 2bit target not available -> use four bits
                     mnTargetDepth = 4;  // we have to expand the bitmap
-                    mbGrayScale = TRUE;
+                    mbGrayScale = sal_True;
                     break;
                 case 16 :
                     mnTargetDepth = 8;  // we have to reduce the bitmap
@@ -548,17 +548,17 @@ BOOL PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
                 case 1 :
                 case 4 :
                 case 8 :
-                    mbGrayScale = TRUE;
+                    mbGrayScale = sal_True;
                     break;
                 default :
-                    return FALSE;
+                    return sal_False;
             }
         }
         break;
 
         case 2 :    // each pixel is an RGB triple
         {
-            mbRGBTriple = TRUE;
+            mbRGBTriple = sal_True;
             nScansize64 *= 3;
             switch ( mnPngDepth )
             {
@@ -567,7 +567,7 @@ BOOL PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
                     mnTargetDepth = 24;
                     break;
                 default :
-                    return FALSE;
+                    return sal_False;
             }
         }
         break;
@@ -582,10 +582,10 @@ BOOL PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
                 case 1 :
                 case 4 :
                 case 8 :
-                    mbPalette = FALSE;
+                    mbPalette = sal_False;
                     break;
                 default :
-                    return FALSE;
+                    return sal_False;
             }
         }
         break;
@@ -593,25 +593,25 @@ BOOL PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
         case 4 :    // each pixel is a grayscale sample followed by an alpha sample
         {
             nScansize64 *= 2;
-            mbAlphaChannel = TRUE;
+            mbAlphaChannel = sal_True;
             switch ( mnPngDepth )
             {
                 case 16 :
                     mnTargetDepth = 8;  // we have to reduce the bitmap
                 case 8 :
-                    mbGrayScale = TRUE;
+                    mbGrayScale = sal_True;
                     break;
                 default :
-                    return FALSE;
+                    return sal_False;
             }
         }
         break;
 
         case 6 :    // each pixel is an RGB triple followed by an alpha sample
         {
-            mbRGBTriple = TRUE;
+            mbRGBTriple = sal_True;
             nScansize64 *= 4;
-            mbAlphaChannel = TRUE;
+            mbAlphaChannel = sal_True;
             switch (mnPngDepth )
             {
                 case 16 :           // we have to reduce the bitmap
@@ -619,13 +619,13 @@ BOOL PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
                     mnTargetDepth = 24;
                     break;
                 default :
-                    return FALSE;
+                    return sal_False;
             }
         }
         break;
 
         default :
-            return FALSE;
+            return sal_False;
     }
 
     mnBPP = static_cast< sal_uInt32 >( nScansize64 / maOrigSize.Width() );
@@ -635,17 +635,17 @@ BOOL PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
     nScansize64++;       // each scanline includes one filterbyte
 
     if ( nScansize64 > SAL_MAX_UINT32 )
-        return FALSE;
+        return sal_False;
 
     mnScansize = static_cast< sal_uInt32 >( nScansize64 );
 
     // TODO: switch between both scanlines instead of copying
-    mpInflateInBuf = new (std::nothrow) BYTE[ mnScansize ];
+    mpInflateInBuf = new (std::nothrow) sal_uInt8[ mnScansize ];
     mpScanCurrent = mpInflateInBuf;
-    mpScanPrior = new (std::nothrow) BYTE[ mnScansize ];
+    mpScanPrior = new (std::nothrow) sal_uInt8[ mnScansize ];
 
     if ( !mpInflateInBuf || !mpScanPrior )
-        return FALSE;
+        return sal_False;
 
     // calculate target size from original size and the preview hint
     if( rPreviewSizeHint.Width() || rPreviewSizeHint.Height() )
@@ -684,7 +684,7 @@ BOOL PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
     mpBmp = new Bitmap( maTargetSize, mnTargetDepth );
     mpAcc = mpBmp->AcquireWriteAccess();
     if( !mpAcc )
-        return FALSE;
+        return sal_False;
 
     mpBmp->SetSourceSizePixel( maOrigSize );
 
@@ -694,7 +694,7 @@ BOOL PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
         mpAlphaMask->Erase( 128 );
         mpMaskAcc = mpAlphaMask->AcquireWriteAccess();
         if( !mpMaskAcc )
-            return FALSE;
+            return sal_False;
     }
 
     if ( mbGrayScale )
@@ -702,7 +702,7 @@ BOOL PNGReaderImpl::ImplReadHeader( const Size& rPreviewSizeHint )
 
     ImplPreparePass();
 
-    return TRUE;
+    return sal_True;
 }
 
 // ------------------------------------------------------------------------
@@ -722,38 +722,38 @@ void PNGReaderImpl::ImplGetGrayPalette( sal_uInt16 nBitDepth )
 
     mpAcc->SetPaletteEntryCount( nPaletteEntryCount );
     for ( sal_uInt32 i = 0, nStart = 0; nStart < 256; i++, nStart += nAdd )
-        mpAcc->SetPaletteColor( (USHORT)i, BitmapColor( mpColorTable[ nStart ],
+        mpAcc->SetPaletteColor( (sal_uInt16)i, BitmapColor( mpColorTable[ nStart ],
             mpColorTable[ nStart ], mpColorTable[ nStart ] ) );
 }
 
 // ------------------------------------------------------------------------
 
-BOOL PNGReaderImpl::ImplReadPalette()
+sal_Bool PNGReaderImpl::ImplReadPalette()
 {
     sal_uInt16 nCount = static_cast<sal_uInt16>( mnChunkLen / 3 );
 
     if ( ( ( mnChunkLen % 3 ) == 0 ) && ( ( 0 < nCount ) && ( nCount <= 256 ) ) && mpAcc )
     {
-        mbPalette = TRUE;
-        mpAcc->SetPaletteEntryCount( (USHORT) nCount );
+        mbPalette = sal_True;
+        mpAcc->SetPaletteEntryCount( (sal_uInt16) nCount );
 
         for ( sal_uInt16 i = 0; i < nCount; i++ )
         {
-            BYTE nRed =   mpColorTable[ *maDataIter++ ];
-            BYTE nGreen = mpColorTable[ *maDataIter++ ];
-            BYTE nBlue =  mpColorTable[ *maDataIter++ ];
+            sal_uInt8 nRed =   mpColorTable[ *maDataIter++ ];
+            sal_uInt8 nGreen = mpColorTable[ *maDataIter++ ];
+            sal_uInt8 nBlue =  mpColorTable[ *maDataIter++ ];
             mpAcc->SetPaletteColor( i, Color( nRed, nGreen, nBlue ) );
         }
     }
     else
-        mbStatus = FALSE;
+        mbStatus = sal_False;
 
     return mbStatus;
 }
 
 // ------------------------------------------------------------------------
 
-BOOL PNGReaderImpl::ImplReadTransparent()
+sal_Bool PNGReaderImpl::ImplReadTransparent()
 {
     bool bNeedAlpha = false;
 
@@ -792,7 +792,7 @@ BOOL PNGReaderImpl::ImplReadTransparent()
             {
                 if ( mnChunkLen <= 256 )
                 {
-                    mpTransTab = new BYTE [ 256 ];
+                    mpTransTab = new sal_uInt8 [ 256 ];
                     rtl_fillMemory( mpTransTab, 256, 0xff );
                     rtl_copyMemory( mpTransTab, &(*maDataIter), mnChunkLen );
                     maDataIter += mnChunkLen;
@@ -820,13 +820,13 @@ BOOL PNGReaderImpl::ImplReadTransparent()
         }
         mbTransparent = (mpMaskAcc != NULL);
         if( !mbTransparent )
-            return FALSE;
+            return sal_False;
         mcOpaqueColor = BitmapColor( 0x00 );
         mcTranspColor = BitmapColor( 0xFF );
         mpMaskAcc->Erase( 0x00 );
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 // ------------------------------------------------------------------------
@@ -842,7 +842,7 @@ void PNGReaderImpl::ImplGetGamma()
 
     if ( fInvGamma != 1.0 )
     {
-        mbGamma = TRUE;
+        mbGamma = sal_True;
 
         if ( mpColorTable == mpDefaultColorTable )
             mpColorTable = new sal_uInt8[ 256 ];
@@ -865,10 +865,10 @@ void PNGReaderImpl::ImplGetBackground()
         {
             if ( mnChunkLen == 1 )
             {
-                UINT16 nCol = *maDataIter++;
+                sal_uInt16 nCol = *maDataIter++;
                 if ( nCol < mpAcc->GetPaletteEntryCount() )
                 {
-                    mpAcc->Erase( mpAcc->GetPaletteColor( (BYTE)nCol ) );
+                    mpAcc->Erase( mpAcc->GetPaletteColor( (sal_uInt8)nCol ) );
                     break;
                 }
             }
@@ -927,9 +927,9 @@ void PNGReaderImpl::ImplReadIDAT()
 {
     if( mnChunkLen > 0 )
     {
-        if ( mbzCodecInUse == FALSE )
+        if ( mbzCodecInUse == sal_False )
         {
-            mbzCodecInUse = TRUE;
+            mbzCodecInUse = sal_True;
             mpZCodec->BeginCompression( ZCODEC_PNG_DEFAULT );
         }
         mpZCodec->SetBreak( mnChunkLen );
@@ -942,7 +942,7 @@ void PNGReaderImpl::ImplReadIDAT()
             sal_Int32 nRead = mpZCodec->ReadAsynchron( aIStrm, mpScanCurrent, nToRead );
             if ( nRead < 0 )
             {
-                mbStatus = FALSE;
+                mbStatus = sal_False;
                 break;
             }
             if ( nRead < nToRead )
@@ -973,7 +973,7 @@ void PNGReaderImpl::ImplReadIDAT()
     if( mbIDAT )
     {
         mpZCodec->EndCompression();
-        mbzCodecInUse = FALSE;
+        mbzCodecInUse = sal_False;
     }
 }
 
@@ -1048,9 +1048,9 @@ bool PNGReaderImpl::ImplPreparePass()
 void PNGReaderImpl::ImplApplyFilter()
 {
     OSL_ASSERT( mnScansize >= mnBPP + 1 );
-    const BYTE* const pScanEnd = mpInflateInBuf + mnScansize;
+    const sal_uInt8* const pScanEnd = mpInflateInBuf + mnScansize;
 
-    BYTE nFilterType = *mpInflateInBuf; // the filter type may change each scanline
+    sal_uInt8 nFilterType = *mpInflateInBuf; // the filter type may change each scanline
     switch ( nFilterType )
     {
         default: // unknown Scanline Filter Type
@@ -1060,26 +1060,26 @@ void PNGReaderImpl::ImplApplyFilter()
 
         case 1: // Scanline Filter Type "Sub"
         {
-            BYTE* p1 = mpInflateInBuf + 1;
-            const BYTE* p2 = p1;
+            sal_uInt8* p1 = mpInflateInBuf + 1;
+            const sal_uInt8* p2 = p1;
             p1 += mnBPP;
 
             // use left pixels
             do
-                *p1 = static_cast<BYTE>( *p1 + *(p2++) );
+                *p1 = static_cast<sal_uInt8>( *p1 + *(p2++) );
             while( ++p1 < pScanEnd );
         }
         break;
 
         case 2: // Scanline Filter Type "Up"
         {
-            BYTE* p1 = mpInflateInBuf + 1;
-            const BYTE* p2 = mpScanPrior + 1;
+            sal_uInt8* p1 = mpInflateInBuf + 1;
+            const sal_uInt8* p2 = mpScanPrior + 1;
 
             // use pixels from prior line
             while( p1 < pScanEnd )
             {
-                *p1 = static_cast<BYTE>( *p1 + *(p2++) );
+                *p1 = static_cast<sal_uInt8>( *p1 + *(p2++) );
                 ++p1;
             }
         }
@@ -1087,18 +1087,18 @@ void PNGReaderImpl::ImplApplyFilter()
 
         case 3: // Scanline Filter Type "Average"
         {
-            BYTE* p1 = mpInflateInBuf + 1;
-            const BYTE* p2 = mpScanPrior + 1;
-            const BYTE* p3 = p1;
+            sal_uInt8* p1 = mpInflateInBuf + 1;
+            const sal_uInt8* p2 = mpScanPrior + 1;
+            const sal_uInt8* p3 = p1;
 
             // use one pixel from prior line
             for( int n = mnBPP; --n >= 0; ++p1, ++p2)
-                *p1 = static_cast<BYTE>( *p1 + (*p2 >> 1) );
+                *p1 = static_cast<sal_uInt8>( *p1 + (*p2 >> 1) );
 
             // predict by averaging the left and prior line pixels
             while( p1 < pScanEnd )
             {
-                *p1 = static_cast<BYTE>( *p1 + ((*(p2++) + *(p3++)) >> 1) );
+                *p1 = static_cast<sal_uInt8>( *p1 + ((*(p2++) + *(p3++)) >> 1) );
                 ++p1;
             }
         }
@@ -1106,14 +1106,14 @@ void PNGReaderImpl::ImplApplyFilter()
 
         case 4: // Scanline Filter Type "PaethPredictor"
         {
-            BYTE* p1 = mpInflateInBuf + 1;
-            const BYTE* p2 = mpScanPrior + 1;
-            const BYTE* p3 = p1;
-            const BYTE* p4 = p2;
+            sal_uInt8* p1 = mpInflateInBuf + 1;
+            const sal_uInt8* p2 = mpScanPrior + 1;
+            const sal_uInt8* p3 = p1;
+            const sal_uInt8* p4 = p2;
 
             // use one pixel from prior line
             for( int n = mnBPP; --n >= 0; ++p1)
-                *p1 = static_cast<BYTE>( *p1 + *(p2++) );
+                *p1 = static_cast<sal_uInt8>( *p1 + *(p2++) );
 
             // predict by using the left and the prior line pixels
             while( p1 < pScanEnd )
@@ -1138,7 +1138,7 @@ void PNGReaderImpl::ImplApplyFilter()
                 if( npa > npc )
                     na = nc;
 
-                *p1 = static_cast<BYTE>( *p1 + na );
+                *p1 = static_cast<sal_uInt8>( *p1 + na );
                 ++p1;
             }
         }
@@ -1164,7 +1164,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
     // => TODO; also do this for nX here instead of in the ImplSet*Pixel() methods
     const sal_uInt32 nY = mnYpos >> mnPreviewShift;
 
-    const BYTE* pTmp = mpInflateInBuf + 1;
+    const sal_uInt8* pTmp = mpInflateInBuf + 1;
     if ( mpAcc->HasPalette() ) // alphachannel is not allowed by pictures including palette entries
     {
         switch ( mpAcc->GetBitCount() )
@@ -1175,12 +1175,12 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                 {
                     for ( sal_Int32 nX = nXStart, nShift = 0; nX < maOrigSize.Width(); nX += nXAdd )
                     {
-                        BYTE nCol;
+                        sal_uInt8 nCol;
                         nShift = (nShift - 1) & 7;
                         if ( nShift == 0 )
                             nCol = *(pTmp++);
                         else
-                            nCol = static_cast<BYTE>( *pTmp >> nShift );
+                            nCol = static_cast<sal_uInt8>( *pTmp >> nShift );
                         nCol &= 1;
 
                         ImplSetAlphaPixel( nY, nX, nCol, mpTransTab[ nCol ] );
@@ -1192,11 +1192,11 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                     {
                         nShift = (nShift - 1) & 7;
 
-                        BYTE nCol;
+                        sal_uInt8 nCol;
                         if ( nShift == 0 )
                             nCol = *(pTmp++);
                         else
-                            nCol = static_cast<BYTE>( *pTmp >> nShift );
+                            nCol = static_cast<sal_uInt8>( *pTmp >> nShift );
                         nCol &= 1;
 
                         ImplSetPixel( nY, nX, nCol );
@@ -1228,7 +1228,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
                     {
                         for ( sal_Int32 nX = nXStart, nXIndex = 0; nX < maOrigSize.Width(); nX += nXAdd, nXIndex++ )
                         {
-                            BYTE nCol;
+                            sal_uInt8 nCol;
                             switch( nXIndex & 3 )
                             {
                                 case 0 :
@@ -1350,7 +1350,7 @@ void PNGReaderImpl::ImplDrawScanline( sal_uInt32 nXStart, sal_uInt32 nXAdd )
             break;
 
             default :
-                mbStatus = FALSE;
+                mbStatus = sal_False;
             break;
         }
     }
@@ -1476,7 +1476,7 @@ void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, const BitmapColo
 
 // ------------------------------------------------------------------------
 
-void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, BYTE nPalIndex )
+void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, sal_uInt8 nPalIndex )
 {
     // TODO: get preview mode checks out of inner loop
     if( nX & mnPreviewMask )
@@ -1488,7 +1488,7 @@ void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, BYTE nPalIndex )
 
 // ------------------------------------------------------------------------
 
-void PNGReaderImpl::ImplSetTranspPixel( sal_uInt32 nY, sal_uInt32 nX, const BitmapColor& rBitmapColor, BOOL bTrans )
+void PNGReaderImpl::ImplSetTranspPixel( sal_uInt32 nY, sal_uInt32 nX, const BitmapColor& rBitmapColor, sal_Bool bTrans )
 {
     // TODO: get preview mode checks out of inner loop
     if( nX & mnPreviewMask )
@@ -1506,7 +1506,7 @@ void PNGReaderImpl::ImplSetTranspPixel( sal_uInt32 nY, sal_uInt32 nX, const Bitm
 // ------------------------------------------------------------------------
 
 void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
-    BYTE nPalIndex, BYTE nAlpha )
+    sal_uInt8 nPalIndex, sal_uInt8 nAlpha )
 {
     // TODO: get preview mode checks out of inner loop
     if( nX & mnPreviewMask )
@@ -1520,7 +1520,7 @@ void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
 // ------------------------------------------------------------------------
 
 void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
-    const BitmapColor& rBitmapColor, BYTE nAlpha )
+    const BitmapColor& rBitmapColor, sal_uInt8 nAlpha )
 {
     // TODO: get preview mode checks out of inner loop
     if( nX & mnPreviewMask )

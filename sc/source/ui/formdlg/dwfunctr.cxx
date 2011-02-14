@@ -75,7 +75,7 @@ SFX_IMPL_DOCKINGWINDOW( ScFunctionChildWindow, FID_FUNCTION_BOX )
 #************************************************************************/
 
 __EXPORT ScFunctionChildWindow::ScFunctionChildWindow( Window* pParentP,
-                                    USHORT nId,
+                                    sal_uInt16 nId,
                                     SfxBindings* pBindings,
                                     SfxChildWinInfo* pInfo ) :
     SfxChildWindow( pParentP, nId )
@@ -124,13 +124,13 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
 
     eSfxNewAlignment=GetAlignment();
     eSfxOldAlignment=eSfxNewAlignment;
-    aFiFuncDesc.SetUpdateMode(TRUE);
+    aFiFuncDesc.SetUpdateMode(sal_True);
     pAllFuncList=&aFuncList;
     aDDFuncList.Disable();
     aDDFuncList.Hide();
     nArgs=0;
     nDockMode=0;
-    bSizeFlag=FALSE;
+    bSizeFlag=sal_False;
     aCatBox.SetDropDownLineCount(9);
     Font aFont=aFiFuncDesc.GetFont();
     aFont.SetColor(Color(COL_BLACK));
@@ -150,7 +150,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
 
     Link a3Link=LINK( this, ScFunctionDockWin, SetSplitHdl);
     aPrivatSplit.SetCtrModifiedHdl(a3Link);
-    StartListening( *pBindingsP, TRUE );
+    StartListening( *pBindingsP, sal_True );
 
     Point aTopLeft=aCatBox.GetPosPixel();
     //String aString=aCatBox.GetEntry( 0)+String("www");
@@ -165,7 +165,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
                 GetOutputSizePixel().Height()-2*aTxtSize.Height());
     aPrivatSplit.SetYRange(aYRange);
     SelHdl(&aCatBox);
-    bInit=TRUE;
+    bInit=sal_True;
 }
 
 /*************************************************************************
@@ -205,10 +205,10 @@ __EXPORT ScFunctionDockWin::~ScFunctionDockWin()
 void ScFunctionDockWin::InitLRUList()
 {
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
-    USHORT nLRUFuncCount = Min( rAppOpt.GetLRUFuncListCount(), (USHORT)LRU_MAX );
-    USHORT* pLRUListIds = rAppOpt.GetLRUFuncList();
+    sal_uInt16 nLRUFuncCount = Min( rAppOpt.GetLRUFuncListCount(), (sal_uInt16)LRU_MAX );
+    sal_uInt16* pLRUListIds = rAppOpt.GetLRUFuncList();
 
-    USHORT i;
+    sal_uInt16 i;
     for ( i=0; i<LRU_MAX; i++ )
         aLRUList[i] = NULL;
 
@@ -219,7 +219,7 @@ void ScFunctionDockWin::InitLRUList()
             aLRUList[i] = pFuncMgr->Get( pLRUListIds[i] );
     }
 
-    USHORT  nSelPos   = aCatBox.GetSelectEntryPos();
+    sal_uInt16  nSelPos   = aCatBox.GetSelectEntryPos();
 
     if(nSelPos == 0)
         UpdateFunctionList();
@@ -265,7 +265,7 @@ void ScFunctionDockWin::UpdateLRUList()
 
 void ScFunctionDockWin::SetSize()
 {
-    USHORT nSelEntry=0;
+    sal_uInt16 nSelEntry=0;
     SfxChildAlignment  aChildAlign=eSfxOldAlignment;//GetAlignment();
     short nNewDockMode;
     switch(aChildAlign)
@@ -343,16 +343,16 @@ void ScFunctionDockWin::SetSize()
 
 void ScFunctionDockWin::SetLeftRightSize()
 {
-    if(bSizeFlag==FALSE)
+    if(bSizeFlag==sal_False)
     {
-        bSizeFlag=TRUE;
+        bSizeFlag=sal_True;
 
         Size aDiffSize=GetSizePixel();
         Size aNewSize=GetOutputSizePixel();
         aDiffSize.Width()-=aNewSize.Width();
         aDiffSize.Height()-=aNewSize.Height();
 
-        //@ SetUpdateMode( FALSE);
+        //@ SetUpdateMode( sal_False);
 
         String aString = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ww"));
 
@@ -373,8 +373,8 @@ void ScFunctionDockWin::SetLeftRightSize()
         aNewSize.Width()+=aDiffSize.Width();
         aNewSize.Height()+=aDiffSize.Height();
         //SetSizePixel(aNewSize);
-        //@ SetUpdateMode( TRUE);
-        bSizeFlag=FALSE;
+        //@ SetUpdateMode( sal_True);
+        bSizeFlag=sal_False;
     }
 
 }
@@ -395,9 +395,9 @@ void ScFunctionDockWin::SetLeftRightSize()
 
 void ScFunctionDockWin::SetTopBottonSize()
 {
-    if(bSizeFlag==FALSE)
+    if(bSizeFlag==sal_False)
     {
-        bSizeFlag=TRUE;
+        bSizeFlag=sal_True;
         Size aDiffSize=GetSizePixel();
         Size aNewSize=GetOutputSizePixel();
         aDiffSize.Width()-=aNewSize.Width();
@@ -409,8 +409,8 @@ void ScFunctionDockWin::SetTopBottonSize()
         aNewSize.Width()+=aDiffSize.Width();
         aNewSize.Height()+=aDiffSize.Height();
         //SetSizePixel(aNewSize);
-        //@ SetUpdateMode( TRUE);
-        bSizeFlag=FALSE;
+        //@ SetUpdateMode( sal_True);
+        bSizeFlag=sal_False;
     }
 }
 
@@ -431,7 +431,7 @@ void ScFunctionDockWin::SetTopBottonSize()
 
 void ScFunctionDockWin::SetMyWidthLeRi(Size &aNewSize)
 {
-    if((ULONG)aNewSize.Width()<nMinWidth)   aNewSize.Width()=nMinWidth;
+    if((sal_uLong)aNewSize.Width()<nMinWidth)   aNewSize.Width()=nMinWidth;
 
     Size aCDSize=aCatBox.GetSizePixel();
     Size aFLSize=aFuncList.GetSizePixel();
@@ -471,7 +471,7 @@ void ScFunctionDockWin::SetMyWidthLeRi(Size &aNewSize)
 
 void ScFunctionDockWin::SetMyHeightLeRi(Size &aNewSize)
 {
-    if((ULONG)aNewSize.Height()<nMinHeight) aNewSize.Height()=nMinHeight;
+    if((sal_uLong)aNewSize.Height()<nMinHeight) aNewSize.Height()=nMinHeight;
 
     Size aFLSize=aFuncList.GetSizePixel();
     Size aSplitterSize=aPrivatSplit.GetSizePixel();
@@ -520,7 +520,7 @@ void ScFunctionDockWin::SetMyHeightLeRi(Size &aNewSize)
 
 void ScFunctionDockWin::SetMyWidthToBo(Size &aNewSize)
 {
-    if((ULONG)aNewSize.Width()<nMinWidth)   aNewSize.Width()=nMinWidth;
+    if((sal_uLong)aNewSize.Width()<nMinWidth)   aNewSize.Width()=nMinWidth;
 
     Size aCDSize=aCatBox.GetSizePixel();
     Size aDdFLSize=aDDFuncList.GetSizePixel();
@@ -561,7 +561,7 @@ void ScFunctionDockWin::SetMyWidthToBo(Size &aNewSize)
 
 void ScFunctionDockWin::SetMyHeightToBo(Size &aNewSize)
 {
-    if((ULONG)aNewSize.Height()<nMinHeight) aNewSize.Height()=nMinHeight;
+    if((sal_uLong)aNewSize.Height()<nMinHeight) aNewSize.Height()=nMinHeight;
 
     Size aFDSize=aFiFuncDesc.GetSizePixel();
 
@@ -644,8 +644,8 @@ void ScFunctionDockWin::SetDescription()
 
 void __EXPORT ScFunctionDockWin::Resizing( Size& rNewSize )
 {
-    if((ULONG)rNewSize.Width()<nMinWidth) rNewSize.Width()=nMinWidth;
-    if((ULONG)rNewSize.Height()<nMinHeight) rNewSize.Height()=nMinHeight;
+    if((sal_uLong)rNewSize.Width()<nMinWidth) rNewSize.Width()=nMinWidth;
+    if((sal_uLong)rNewSize.Height()<nMinHeight) rNewSize.Height()=nMinHeight;
 
 }
 
@@ -663,9 +663,9 @@ void __EXPORT ScFunctionDockWin::Resizing( Size& rNewSize )
 #*
 #************************************************************************/
 
-BOOL __EXPORT ScFunctionDockWin::Close()
+sal_Bool __EXPORT ScFunctionDockWin::Close()
 {
-    SfxBoolItem aItem( FID_FUNCTION_BOX, FALSE );
+    SfxBoolItem aItem( FID_FUNCTION_BOX, sal_False );
 
     GetBindings().GetDispatcher()->Execute( FID_FUNCTION_BOX,
                                 SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
@@ -673,7 +673,7 @@ BOOL __EXPORT ScFunctionDockWin::Close()
 
     SfxDockingWindow::Close();
 
-    return( TRUE );
+    return( sal_True );
 }
 
 
@@ -703,7 +703,7 @@ SfxChildAlignment __EXPORT ScFunctionDockWin::CheckAlignment(SfxChildAlignment /
     }
     else
     {
-        bInit=FALSE;
+        bInit=sal_False;
         eSfxOldAlignment=aChildAlign;
         eSfxNewAlignment=aChildAlign;
     }
@@ -815,12 +815,12 @@ void __EXPORT ScFunctionDockWin::Resize()
 
 void ScFunctionDockWin::UpdateFunctionList()
 {
-    USHORT  nSelPos   = aCatBox.GetSelectEntryPos();
-    USHORT  nCategory = ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
+    sal_uInt16  nSelPos   = aCatBox.GetSelectEntryPos();
+    sal_uInt16  nCategory = ( LISTBOX_ENTRY_NOTFOUND != nSelPos )
                             ? (nSelPos-1) : 0;
 
     pAllFuncList->Clear();
-    pAllFuncList->SetUpdateMode( FALSE );
+    pAllFuncList->SetUpdateMode( sal_False );
 
     if ( nSelPos > 0 )
     {
@@ -837,7 +837,7 @@ void ScFunctionDockWin::UpdateFunctionList()
     }
     else // LRU-Liste
     {
-        for ( USHORT i=0; i<LRU_MAX && aLRUList[i]; i++ )
+        for ( sal_uInt16 i=0; i<LRU_MAX && aLRUList[i]; i++ )
         {
             const ScFuncDesc* pDesc = aLRUList[i];
             pAllFuncList->SetEntryData(
@@ -848,7 +848,7 @@ void ScFunctionDockWin::UpdateFunctionList()
 
 
     //------------------------------------------------------
-    pAllFuncList->SetUpdateMode( TRUE );
+    pAllFuncList->SetUpdateMode( sal_True );
 
     if ( pAllFuncList->GetEntryCount() > 0 )
     {
@@ -877,7 +877,7 @@ void ScFunctionDockWin::UpdateFunctionList()
 #*
 #************************************************************************/
 
-void ScFunctionDockWin::DoEnter(BOOL /* bOk */) //@@ ???
+void ScFunctionDockWin::DoEnter(sal_Bool /* bOk */) //@@ ???
 {
     String aFirstArgStr;
     String aParaStr;
@@ -919,8 +919,8 @@ void ScFunctionDockWin::DoEnter(BOOL /* bOk */) //@@ ???
                 if ( nArgs != VAR_ARGS )
                 {   // no VarArgs or Fix plus VarArgs, but not VarArgs only
                     String aArgSep = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( "; " ));
-                    USHORT nFix = ( nArgs < VAR_ARGS ? nArgs : nArgs - VAR_ARGS + 1 );
-                    for ( USHORT nArg = 1;
+                    sal_uInt16 nFix = ( nArgs < VAR_ARGS ? nArgs : nArgs - VAR_ARGS + 1 );
+                    for ( sal_uInt16 nArg = 1;
                             nArg < nFix && !pDesc->pDefArgFlags[nArg].bOptional; nArg++ )
                     {
                         if (!pDesc->pDefArgFlags[nArg].bSuppress)
@@ -948,7 +948,7 @@ void ScFunctionDockWin::DoEnter(BOOL /* bOk */) //@@ ???
                 if(nArgs>0)
                 {
                     pHdl->InsertFunction(aString);
-                    pEdView->InsertText(aArgStr,TRUE);
+                    pEdView->InsertText(aArgStr,sal_True);
                     ESelection  aESel=pEdView->GetSelection();
                     aESel.nEndPos=aESel.nStartPos+aFirstArgStr.Len();
                     pEdView->SetSelection(aESel);
@@ -957,7 +957,7 @@ void ScFunctionDockWin::DoEnter(BOOL /* bOk */) //@@ ???
                 else
                 {
                     aString.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "()" ));
-                    pEdView->InsertText(aString,FALSE);
+                    pEdView->InsertText(aString,sal_False);
                     pHdl->DataChanged();
                 }
             }
@@ -1030,7 +1030,7 @@ IMPL_LINK( ScFunctionDockWin, SetSelectionHdl, void*, pCtrl )
     if ((ImageButton *)pCtrl == &aInsertButton ||
         (ListBox *)pCtrl == &aFuncList)
     {
-        DoEnter(TRUE);          // Uebernimmt die Eingabe
+        DoEnter(sal_True);          // Uebernimmt die Eingabe
     }
     //...
 
@@ -1133,10 +1133,10 @@ void ScFunctionDockWin::Initialize(SfxChildWinInfo *pInfo)
     if ( aStr.Len())
     {
         aSplitterInitPos=aPrivatSplit.GetPosPixel();
-        aSplitterInitPos.Y()=(USHORT) aStr.ToInt32();
+        aSplitterInitPos.Y()=(sal_uInt16) aStr.ToInt32();
         xub_StrLen n1 = aStr.Search(';');
         aStr.Erase(0, n1+1);
-        USHORT nSelPos=sal::static_int_cast<USHORT>( aStr.ToInt32() );
+        sal_uInt16 nSelPos=sal::static_int_cast<sal_uInt16>( aStr.ToInt32() );
         aCatBox.SelectEntryPos(nSelPos);
         SelHdl(&aCatBox);
 

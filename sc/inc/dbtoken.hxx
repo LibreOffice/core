@@ -37,17 +37,17 @@
 // aA - dump old/new token array
 // uU - dump old/new UPN array
 
-BOOL DbgToken( char );
+sal_Bool DbgToken( char );
 ScTokenArray* DbgMakeTokenArray
-    ( ScDocument* pDoc, SCTAB nTab, const String& r, USHORT& rErr );
-void DbgDumpTokenArray( const BYTE* pArr, USHORT nLen, const char* pMsg );
+    ( ScDocument* pDoc, SCTAB nTab, const String& r, sal_uInt16& rErr );
+void DbgDumpTokenArray( const sal_uInt8* pArr, sal_uInt16 nLen, const char* pMsg );
 void DbgDelTokenArray( ScTokenArray* );
 formula::StackVar DbgInterpret( ScDocument* pDok, const ScTokenArray* pToken,
                        SCCOL nCOL, SCROW nROW, SCTAB nTAB,
                                   formula::StackVar eformula::StackVar,
                                   char* &rStringErgPtr,
                                   double& rDoubleErg,
-                                  USHORT& rError,
+                                  sal_uInt16& rError,
                                   ScMatrix** ppMat);
 
 #endif

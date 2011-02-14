@@ -86,10 +86,10 @@ namespace rptui
         inline OScrollWindowHelper* getScrollWindow() const { return m_pParent; }
 
         void            SetMode( DlgEdMode m_eMode );
-        void            SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
+        void            SetInsertObj( sal_uInt16 eObj,const ::rtl::OUString& _sShapeType = ::rtl::OUString());
         rtl::OUString   GetInsertObjString() const;
-        void            setGridSnap(BOOL bOn);
-        void            setDragStripes(BOOL bOn);
+        void            setGridSnap(sal_Bool bOn);
+        void            setDragStripes(sal_Bool bOn);
 
         /** copies the current selection in this section
         */
@@ -99,7 +99,7 @@ namespace rptui
         *
         * \return <TRUE/> if paste is allowed
         */
-        BOOL IsPasteAllowed() const;
+        sal_Bool IsPasteAllowed() const;
 
         /** paste a new control in this section
         */
@@ -116,7 +116,7 @@ namespace rptui
 
         /** returns <TRUE/> when a object is marked
         */
-        BOOL HasSelection() const;
+        sal_Bool HasSelection() const;
 
         Point           getThumbPos() const;
 
@@ -124,7 +124,7 @@ namespace rptui
         *
         * \param _nPosition Zero based.
         */
-        void            removeSection(USHORT _nPosition);
+        void            removeSection(sal_uInt16 _nPosition);
 
         /** adds a new section at position _nPosition.
             If the section is <NULL/> nothing happens.
@@ -132,9 +132,9 @@ namespace rptui
         */
         void            addSection(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection
                                     ,const ::rtl::OUString& _sColorEntry
-                                    ,USHORT _nPosition = USHRT_MAX);
+                                    ,sal_uInt16 _nPosition = USHRT_MAX);
 
-        USHORT          getSectionCount() const;
+        sal_uInt16          getSectionCount() const;
 
         /** turns the grid on or off
         *

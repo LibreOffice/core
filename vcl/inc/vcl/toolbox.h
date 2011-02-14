@@ -78,8 +78,8 @@ struct ImplToolItem
     ToolBoxItemType     meType;
     ToolBoxItemBits     mnBits;
     TriState            meState;
-    USHORT              mnId;
-    BOOL                mbEnabled:1,
+    sal_uInt16              mnId;
+    sal_Bool                mbEnabled:1,
                         mbVisible:1,
                         mbEmptyBtn:1,
                         mbShowWindow:1,
@@ -87,11 +87,11 @@ struct ImplToolItem
                         mbVisibleText:1;    // indicates if text will definitely be drawn, influences dropdown pos
 
                         ImplToolItem();
-                        ImplToolItem( USHORT nItemId, const Image& rImage,
+                        ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
                                       ToolBoxItemBits nItemBits );
-                        ImplToolItem( USHORT nItemId, const XubString& rTxt,
+                        ImplToolItem( sal_uInt16 nItemId, const XubString& rTxt,
                                       ToolBoxItemBits nItemBits );
-                        ImplToolItem( USHORT nItemId, const Image& rImage,
+                        ImplToolItem( sal_uInt16 nItemId, const Image& rImage,
                                       const XubString& rTxt,
                                       ToolBoxItemBits nItemBits );
                         ~ImplToolItem();
@@ -103,18 +103,18 @@ struct ImplToolItem
     // the default size is the precomputed size for standard items
     // ie those that are just ordinary buttons (no windows or text etc.)
     // bCheckMaxWidth indicates that item windows must not exceed maxWidth in which case they will be painted as buttons
-    Size                GetSize( BOOL bHorz, BOOL bCheckMaxWidth, long maxWidth, const Size& rDefaultSize );
+    Size                GetSize( sal_Bool bHorz, sal_Bool bCheckMaxWidth, long maxWidth, const Size& rDefaultSize );
 
     // only useful for buttons: returns if the text or image part or both can be drawn according to current button drawing style
-    void DetermineButtonDrawStyle( ButtonType eButtonType, BOOL& rbImage, BOOL& rbText ) const;
+    void DetermineButtonDrawStyle( ButtonType eButtonType, sal_Bool& rbImage, sal_Bool& rbText ) const;
 
     // returns the rectangle which contains the drop down arrow
     // or an empty rect if there is none
     // bHorz denotes the toolbox alignment
-    Rectangle   GetDropDownRect( BOOL bHorz ) const;
+    Rectangle   GetDropDownRect( sal_Bool bHorz ) const;
 
-    // returns TRUE if the toolbar item is currently clipped, which can happen for docked toolbars
-    BOOL IsClipped() const;
+    // returns sal_True if the toolbar item is currently clipped, which can happen for docked toolbars
+    sal_Bool IsClipped() const;
 };
 
 namespace vcl
@@ -122,8 +122,8 @@ namespace vcl
 
 struct ToolBoxLayoutData : public ControlLayoutData
 {
-    std::vector< USHORT >               m_aLineItemIds;
-    std::vector< USHORT >               m_aLineItemPositions;
+    std::vector< sal_uInt16 >               m_aLineItemIds;
+    std::vector< sal_uInt16 >               m_aLineItemPositions;
 };
 
 
@@ -149,8 +149,8 @@ struct ImplToolBoxPrivateData
 
     // the optional custom menu
     PopupMenu*  mpMenu;
-    USHORT      maMenuType;
-    ULONG       mnEventId;
+    sal_uInt16      maMenuType;
+    sal_uIntPtr       mnEventId;
 
     // called when menu button is clicked and before the popup menu is executed
     Link        maMenuButtonHdl;
@@ -165,7 +165,7 @@ struct ImplToolBoxPrivateData
     vcl::IImageListProvider* mpImageListProvider;
     vcl::ImageListType       meImageListType;
 
-    BOOL    mbIsLocked:1,           // keeps last lock state from ImplDockingWindowWrapper
+    sal_Bool    mbIsLocked:1,           // keeps last lock state from ImplDockingWindowWrapper
             mbAssumeDocked:1,       // only used during calculations to override current floating/popup mode
             mbAssumeFloating:1,
             mbAssumePopupMode:1,

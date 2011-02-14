@@ -78,7 +78,7 @@ class SW_DLLPUBLIC SwAsciiOptions
 {
     String sFont;
     rtl_TextEncoding eCharSet;
-    USHORT nLanguage;
+    sal_uInt16 nLanguage;
     LineEnd eCRLF_Flag;
 
 public:
@@ -89,8 +89,8 @@ public:
     rtl_TextEncoding GetCharSet() const { return eCharSet; }
     void SetCharSet( rtl_TextEncoding nVal ) { eCharSet = nVal; }
 
-    USHORT GetLanguage() const { return nLanguage; }
-    void SetLanguage( USHORT nVal ) { nLanguage = nVal; }
+    sal_uInt16 GetLanguage() const { return nLanguage; }
+    void SetLanguage( sal_uInt16 nVal ) { nLanguage = nVal; }
 
     LineEnd GetParaFlags() const { return eCRLF_Flag; }
     void SetParaFlags( LineEnd eVal ) { eCRLF_Flag = eVal; }
@@ -122,35 +122,35 @@ class SwgReaderOption
     SwAsciiOptions aASCIIOpts;
     union
     {
-        BOOL bFmtsOnly;
+        sal_Bool bFmtsOnly;
         struct
         {
-            BOOL bFrmFmts: 1;
-            BOOL bPageDescs: 1;
-            BOOL bTxtFmts: 1;
-            BOOL bNumRules: 1;
-            BOOL bMerge:1;
+            sal_Bool bFrmFmts: 1;
+            sal_Bool bPageDescs: 1;
+            sal_Bool bTxtFmts: 1;
+            sal_Bool bNumRules: 1;
+            sal_Bool bMerge:1;
         }  Fmts;
     } What;
 
 public:
     void ResetAllFmtsOnly() { What.bFmtsOnly = 0; }
-    BOOL IsFmtsOnly() const { return What.bFmtsOnly; }
+    sal_Bool IsFmtsOnly() const { return What.bFmtsOnly; }
 
-    BOOL IsFrmFmts() const { return What.Fmts.bFrmFmts; }
-    void SetFrmFmts( const BOOL bNew) { What.Fmts.bFrmFmts = bNew; }
+    sal_Bool IsFrmFmts() const { return What.Fmts.bFrmFmts; }
+    void SetFrmFmts( const sal_Bool bNew) { What.Fmts.bFrmFmts = bNew; }
 
-    BOOL IsPageDescs() const { return What.Fmts.bPageDescs; }
-    void SetPageDescs( const BOOL bNew) { What.Fmts.bPageDescs = bNew; }
+    sal_Bool IsPageDescs() const { return What.Fmts.bPageDescs; }
+    void SetPageDescs( const sal_Bool bNew) { What.Fmts.bPageDescs = bNew; }
 
-    BOOL IsTxtFmts() const { return What.Fmts.bTxtFmts; }
-    void SetTxtFmts( const BOOL bNew) { What.Fmts.bTxtFmts = bNew; }
+    sal_Bool IsTxtFmts() const { return What.Fmts.bTxtFmts; }
+    void SetTxtFmts( const sal_Bool bNew) { What.Fmts.bTxtFmts = bNew; }
 
-    BOOL IsNumRules() const { return What.Fmts.bNumRules; }
-    void SetNumRules( const BOOL bNew) { What.Fmts.bNumRules = bNew; }
+    sal_Bool IsNumRules() const { return What.Fmts.bNumRules; }
+    void SetNumRules( const sal_Bool bNew) { What.Fmts.bNumRules = bNew; }
 
-    BOOL IsMerge() const { return What.Fmts.bMerge; }
-    void SetMerge( const BOOL bNew ) { What.Fmts.bMerge = bNew; }
+    sal_Bool IsMerge() const { return What.Fmts.bMerge; }
+    void SetMerge( const sal_Bool bNew ) { What.Fmts.bMerge = bNew; }
 
     const SwAsciiOptions& GetASCIIOpts() const { return aASCIIOpts; }
     void SetASCIIOpts( const SwAsciiOptions& rOpts ) { aASCIIOpts = rOpts; }
@@ -192,13 +192,13 @@ public:
     /*
      * Nur SwReader::Read(...) ist die Export-Schnittstelle!!!
      */
-    BOOL NeedsPasswd( const Reader& );
-    BOOL CheckPasswd( const String&, const Reader& );
-    ULONG Read( const Reader& );
+    sal_Bool NeedsPasswd( const Reader& );
+    sal_Bool CheckPasswd( const String&, const Reader& );
+    sal_uLong Read( const Reader& );
 
     // ask for glossaries
-    BOOL HasGlossaries( const Reader& );
-    BOOL ReadGlossaries( const Reader&, SwTextBlocks&, BOOL bSaveRelFiles );
+    sal_Bool HasGlossaries( const Reader& );
+    sal_Bool ReadGlossaries( const Reader&, SwTextBlocks&, sal_Bool bSaveRelFiles );
 
     const String&       GetBaseURL() const { return sBaseURL;}
 
@@ -233,13 +233,13 @@ protected:
     SfxMedium* pMedium;     // wer ein Medium haben will (W4W)
 
     SwgReaderOption aOpt;
-    BOOL bInsertMode : 1;
-    BOOL bTmplBrowseMode : 1;
-    BOOL bReadUTF8: 1;      // Stream als UTF-8 interpretieren
-    BOOL bBlockMode: 1;
-    BOOL bOrganizerMode : 1;
-    BOOL bHasAskTemplateName : 1;
-    BOOL bIgnoreHTMLComments : 1;
+    sal_Bool bInsertMode : 1;
+    sal_Bool bTmplBrowseMode : 1;
+    sal_Bool bReadUTF8: 1;      // Stream als UTF-8 interpretieren
+    sal_Bool bBlockMode: 1;
+    sal_Bool bOrganizerMode : 1;
+    sal_Bool bHasAskTemplateName : 1;
+    sal_Bool bIgnoreHTMLComments : 1;
 
     virtual String GetTemplateName() const;
 
@@ -262,35 +262,35 @@ public:
 
     // Die Filter-Vorlage laden, setzen und wieder freigeben
     SwDoc* GetTemplateDoc();
-    BOOL SetTemplate( SwDoc& rDoc );
+    sal_Bool SetTemplate( SwDoc& rDoc );
     void ClearTemplate();
     void SetTemplateName( const String& rDir );
     void MakeHTMLDummyTemplateDoc();
 
-    BOOL IsReadUTF8() const { return bReadUTF8; }
-    void SetReadUTF8( BOOL bSet ) { bReadUTF8 = bSet; }
+    sal_Bool IsReadUTF8() const { return bReadUTF8; }
+    void SetReadUTF8( sal_Bool bSet ) { bReadUTF8 = bSet; }
 
-    BOOL IsBlockMode() const { return bBlockMode; }
-    void SetBlockMode( BOOL bSet ) { bBlockMode = bSet; }
+    sal_Bool IsBlockMode() const { return bBlockMode; }
+    void SetBlockMode( sal_Bool bSet ) { bBlockMode = bSet; }
 
-    BOOL IsOrganizerMode() const { return bOrganizerMode; }
-    void SetOrganizerMode( BOOL bSet ) { bOrganizerMode = bSet; }
+    sal_Bool IsOrganizerMode() const { return bOrganizerMode; }
+    void SetOrganizerMode( sal_Bool bSet ) { bOrganizerMode = bSet; }
 
-    void SetIgnoreHTMLComments( BOOL bSet ) { bIgnoreHTMLComments = bSet; }
+    void SetIgnoreHTMLComments( sal_Bool bSet ) { bIgnoreHTMLComments = bSet; }
 
-    virtual BOOL HasGlossaries() const;
-    virtual BOOL ReadGlossaries( SwTextBlocks&, BOOL bSaveRelFiles ) const;
+    virtual sal_Bool HasGlossaries() const;
+    virtual sal_Bool ReadGlossaries( SwTextBlocks&, sal_Bool bSaveRelFiles ) const;
 
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
-    virtual USHORT GetSectionList( SfxMedium& rMedium,
+    virtual sal_uInt16 GetSectionList( SfxMedium& rMedium,
                                     SvStrings& rStrings ) const;
 
     SotStorageRef getSotStorageRef() { return pStg; };
     void setSotStorageRef(SotStorageRef pStgRef) { pStg = pStgRef; };
 
 private:
-    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &)=0;
+    virtual sal_uLong Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &)=0;
 
     // alle die die Streams / Storages nicht geoeffnet brauchen,
     // muessen die Methode ueberladen (W4W!!)
@@ -300,14 +300,14 @@ private:
 class AsciiReader: public Reader
 {
     friend class SwReader;
-    virtual ULONG Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+    virtual sal_uLong Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 public:
     AsciiReader(): Reader() {}
 };
 
 /*class SwgReader: public Reader
 {
-    virtual ULONG Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+    virtual sal_uLong Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 };
 */
 class SW_DLLPUBLIC StgReader : public Reader
@@ -315,7 +315,7 @@ class SW_DLLPUBLIC StgReader : public Reader
     String aFltName;
 
 protected:
-    ULONG OpenMainStream( SotStorageStreamRef& rRef, USHORT& rBuffSize );
+    sal_uLong OpenMainStream( SotStorageStreamRef& rRef, sal_uInt16& rBuffSize );
 
 public:
     virtual int GetReaderType();
@@ -327,7 +327,7 @@ public:
 /*class Sw3Reader : public StgReader
 {
     Sw3Io* pIO;
-    virtual ULONG Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+    virtual sal_uLong Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 public:
     Sw3Reader() : pIO( 0 ) {}
 
@@ -335,7 +335,7 @@ public:
 
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
-    virtual USHORT GetSectionList( SfxMedium& rMedium,
+    virtual sal_uInt16 GetSectionList( SfxMedium& rMedium,
                                 SvStrings& rStrings ) const;
 };*/
 
@@ -353,7 +353,7 @@ class SW_DLLPUBLIC SwTextBlocks
 //  friend class Sw2TextBlocks;
 //  friend class Sw3IoImp;
     SwImpBlocks* pImp;
-    ULONG        nErr;
+    sal_uLong        nErr;
 
 public:
     SwTextBlocks( const String& );
@@ -365,43 +365,43 @@ public:
     void   ClearDoc();                  // Doc-Inhalt loeschen
     const  String& GetName();
     void   SetName( const String& );
-    ULONG GetError() const { return nErr; }
+    sal_uLong GetError() const { return nErr; }
 
     String GetBaseURL() const;
     void   SetBaseURL( const String& rURL );
 
-    BOOL   IsOld() const;
-    ULONG  ConvertToNew();              // Textbausteine konvertieren
+    sal_Bool   IsOld() const;
+    sal_uLong  ConvertToNew();              // Textbausteine konvertieren
 
-    USHORT GetCount() const;                        // Anzahl Textbausteine ermitteln
-    USHORT GetIndex( const String& ) const;         // Index fuer Kurznamen ermitteln
-    USHORT GetLongIndex( const String& ) const;     //Index fuer Langnamen ermitteln
-    const  String& GetShortName( USHORT ) const;    // Kurzname fuer Index zurueck
-    const  String& GetLongName( USHORT ) const;     // Langname fuer Index zurueck
+    sal_uInt16 GetCount() const;                        // Anzahl Textbausteine ermitteln
+    sal_uInt16 GetIndex( const String& ) const;         // Index fuer Kurznamen ermitteln
+    sal_uInt16 GetLongIndex( const String& ) const;     //Index fuer Langnamen ermitteln
+    const  String& GetShortName( sal_uInt16 ) const;    // Kurzname fuer Index zurueck
+    const  String& GetLongName( sal_uInt16 ) const;     // Langname fuer Index zurueck
 
-    BOOL   Delete( USHORT );            // Loeschen
-    USHORT Rename( USHORT, const String*, const String* ); // Umbenennen
-    ULONG  CopyBlock( SwTextBlocks& rSource, String& rSrcShort,
+    sal_Bool   Delete( sal_uInt16 );            // Loeschen
+    sal_uInt16 Rename( sal_uInt16, const String*, const String* ); // Umbenennen
+    sal_uLong  CopyBlock( SwTextBlocks& rSource, String& rSrcShort,
                                     const String& rLong ); // Block kopieren
 
-    BOOL   BeginGetDoc( USHORT );           // Textbaustein einlesen
+    sal_Bool   BeginGetDoc( sal_uInt16 );           // Textbaustein einlesen
     void   EndGetDoc();                     // Textbaustein wieder loslassen
 
-    BOOL   BeginPutDoc( const String&, const String& ); // Speichern Beginn
-    USHORT PutDoc();                                // Speichern Ende
+    sal_Bool   BeginPutDoc( const String&, const String& ); // Speichern Beginn
+    sal_uInt16 PutDoc();                                // Speichern Ende
 
-    USHORT PutText( const String&, const String&, const String& ); // Speichern( Kurzn., Text)
+    sal_uInt16 PutText( const String&, const String&, const String& ); // Speichern( Kurzn., Text)
 
-    BOOL IsOnlyTextBlock( USHORT ) const;
-    BOOL IsOnlyTextBlock( const String& rShort ) const;
+    sal_Bool IsOnlyTextBlock( sal_uInt16 ) const;
+    sal_Bool IsOnlyTextBlock( const String& rShort ) const;
 
     const String& GetFileName() const;      // Dateiname von pImp
-    BOOL IsReadOnly() const;                // ReadOnly-Flag von pImp
+    sal_Bool IsReadOnly() const;                // ReadOnly-Flag von pImp
 
-    BOOL GetMacroTable( USHORT nIdx, SvxMacroTableDtor& rMacroTbl );
-    BOOL SetMacroTable( USHORT nIdx, const SvxMacroTableDtor& rMacroTbl );
+    sal_Bool GetMacroTable( sal_uInt16 nIdx, SvxMacroTableDtor& rMacroTbl );
+    sal_Bool SetMacroTable( sal_uInt16 nIdx, const SvxMacroTableDtor& rMacroTbl );
 
-    BOOL StartPutMuchBlockEntries();
+    sal_Bool StartPutMuchBlockEntries();
     void EndPutMuchBlockEntries();
 };
 
@@ -418,7 +418,7 @@ SW_DLLPUBLIC SwRead SwGetReaderXML();
 // END source/filter/basflt/fltini.cxx
 
 
-extern BOOL SetHTMLTemplate( SwDoc &rDoc ); //Fuer Vorlagen aus HTML.vor laden shellio.cxx
+extern sal_Bool SetHTMLTemplate( SwDoc &rDoc ); //Fuer Vorlagen aus HTML.vor laden shellio.cxx
 
 
 /*  */
@@ -442,7 +442,7 @@ class SW_DLLPUBLIC Writer
     String          sBaseURL;
 
     void _AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont );
-    void _AddFontItems( SfxItemPool& rPool, USHORT nWhichId );
+    void _AddFontItems( SfxItemPool& rPool, sal_uInt16 nWhichId );
 
     ::std::auto_ptr<Writer_Impl> m_pImpl;
 
@@ -452,13 +452,13 @@ protected:
     const String* pOrigFileName;
 
     void ResetWriter();
-    BOOL CopyNextPam( SwPaM ** );
+    sal_Bool CopyNextPam( SwPaM ** );
 
     void PutNumFmtFontsInAttrPool();
-    void PutEditEngFontsInAttrPool( BOOL bIncl_CJK_CTL = TRUE );
+    void PutEditEngFontsInAttrPool( sal_Bool bIncl_CJK_CTL = sal_True );
     void PutCJKandCTLFontsInAttrPool();
 
-    virtual ULONG WriteStream() = 0;
+    virtual sal_uLong WriteStream() = 0;
     void                SetBaseURL( const String& rURL ) { sBaseURL = rURL; }
 
     IDocumentSettingAccess* getIDocumentSettingAccess();
@@ -470,33 +470,33 @@ protected:
 public:
     SwDoc* pDoc;
     SwPaM* pCurPam;
-    BOOL bWriteAll : 1;
-    BOOL bShowProgress : 1;
-    BOOL bWriteClipboardDoc : 1;
-    BOOL bWriteOnlyFirstTable : 1;
-    BOOL bASCII_ParaAsCR : 1;
-    BOOL bASCII_ParaAsBlanc : 1;
-    BOOL bASCII_NoLastLineEnd : 1;
-    BOOL bUCS2_WithStartChar : 1;
-    BOOL bExportPargraphNumbering : 1;
+    sal_Bool bWriteAll : 1;
+    sal_Bool bShowProgress : 1;
+    sal_Bool bWriteClipboardDoc : 1;
+    sal_Bool bWriteOnlyFirstTable : 1;
+    sal_Bool bASCII_ParaAsCR : 1;
+    sal_Bool bASCII_ParaAsBlanc : 1;
+    sal_Bool bASCII_NoLastLineEnd : 1;
+    sal_Bool bUCS2_WithStartChar : 1;
+    sal_Bool bExportPargraphNumbering : 1;
 
-    BOOL bBlock : 1;
-    BOOL bOrganizerMode : 1;
+    sal_Bool bBlock : 1;
+    sal_Bool bOrganizerMode : 1;
 
     Writer();
     virtual ~Writer();
 
-    virtual ULONG Write( SwPaM&, SfxMedium&, const String* = 0 );
-            ULONG Write( SwPaM&, SvStream&,  const String* = 0 );
-    virtual ULONG Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* = 0, SfxMedium* = 0 );
-    virtual ULONG Write( SwPaM&, SotStorage&, const String* = 0 );
+    virtual sal_uLong Write( SwPaM&, SfxMedium&, const String* = 0 );
+            sal_uLong Write( SwPaM&, SvStream&,  const String* = 0 );
+    virtual sal_uLong Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* = 0, SfxMedium* = 0 );
+    virtual sal_uLong Write( SwPaM&, SotStorage&, const String* = 0 );
 
     virtual void SetPasswd( const String& );
     virtual void SetVersion( const String&, long );
-    virtual BOOL IsStgWriter() const;
-//  virtual BOOL IsSw3Writer() const;
+    virtual sal_Bool IsStgWriter() const;
+//  virtual sal_Bool IsSw3Writer() const;
 
-    void SetShowProgress( BOOL bFlag = FALSE )  { bShowProgress = bFlag; }
+    void SetShowProgress( sal_Bool bFlag = sal_False )  { bShowProgress = bFlag; }
 
     const String* GetOrigFileName() const       { return pOrigFileName; }
 
@@ -511,38 +511,38 @@ public:
     // OtherPos of the bookmarks also inserted.
     void CreateBookmarkTbl();
     // search alle Bookmarks in the range and return it in the Array
-    USHORT GetBookmarks( const SwCntntNode& rNd,
+    sal_uInt16 GetBookmarks( const SwCntntNode& rNd,
                         xub_StrLen nStt, xub_StrLen nEnd,
                         SvPtrarr& rArr );
 
     // lege einen neuen PaM an der Position an
     static SwPaM * NewSwPaM(SwDoc & rDoc,
-                            ULONG const nStartIdx, ULONG const nEndIdx);
+                            sal_uLong const nStartIdx, sal_uLong const nEndIdx);
 
     // kopiere ggfs. eine lokale Datei ins Internet
-    BOOL CopyLocalFileToINet( String& rFileNm );
+    sal_Bool CopyLocalFileToINet( String& rFileNm );
 
     // Stream-spezifische Routinen, im Storage-Writer NICHT VERWENDEN!
 
     // Optimierung der Ausgabe auf den Stream.
     SvStream& OutLong( SvStream& rStrm, long nVal );
-    SvStream& OutULong( SvStream& rStrm, ULONG nVal );
+    SvStream& OutULong( SvStream& rStrm, sal_uLong nVal );
 
     // Hex-Zahl ausgeben, default ist 2.stellige Zahl
-    SvStream& OutHex( SvStream& rStrm, ULONG nHex, BYTE nLen = 2 );
+    SvStream& OutHex( SvStream& rStrm, sal_uLong nHex, sal_uInt8 nLen = 2 );
     // 4-st. Hex-Zahl ausgeben
-    inline SvStream& OutHex4( SvStream& rStrm, USHORT nHex )
+    inline SvStream& OutHex4( SvStream& rStrm, sal_uInt16 nHex )
         {   return OutHex( rStrm, nHex, 4 ); }
 
-    inline SvStream& OutHex( USHORT nHex, BYTE nLen = 2 )      { return OutHex( Strm(), nHex, nLen ); }
-    inline SvStream& OutHex4( USHORT nHex )     { return OutHex( Strm(), nHex, 4 ); }
+    inline SvStream& OutHex( sal_uInt16 nHex, sal_uInt8 nLen = 2 )      { return OutHex( Strm(), nHex, nLen ); }
+    inline SvStream& OutHex4( sal_uInt16 nHex )     { return OutHex( Strm(), nHex, 4 ); }
     inline SvStream& OutLong( long nVal )       { return OutLong( Strm(), nVal ); }
-    inline SvStream& OutULong( ULONG nVal )     { return OutULong( Strm(), nVal ); }
+    inline SvStream& OutULong( sal_uLong nVal )     { return OutULong( Strm(), nVal ); }
 
     void SetStream(SvStream *const pStream);
     SvStream& Strm();
 
-    void SetOrganizerMode( BOOL bSet ) { bOrganizerMode = bSet; }
+    void SetOrganizerMode( sal_Bool bSet ) { bOrganizerMode = bSet; }
 };
 
 #ifndef SW_DECL_WRITER_DEFINED
@@ -560,19 +560,19 @@ protected:
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStg;
 
     // Fehler beim Aufruf erzeugen
-    virtual ULONG WriteStream();
-    virtual ULONG WriteStorage() = 0;
-    virtual ULONG WriteMedium( SfxMedium& ) = 0;
+    virtual sal_uLong WriteStream();
+    virtual sal_uLong WriteStorage() = 0;
+    virtual sal_uLong WriteMedium( SfxMedium& ) = 0;
 
     using Writer::Write;
 
 public:
     StgWriter() : Writer() {}
 
-    virtual BOOL IsStgWriter() const;
+    virtual sal_Bool IsStgWriter() const;
 
-    virtual ULONG Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* = 0, SfxMedium* = 0 );
-    virtual ULONG Write( SwPaM&, SotStorage&, const String* = 0 );
+    virtual sal_uLong Write( SwPaM&, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, const String* = 0, SfxMedium* = 0 );
+    virtual sal_uLong Write( SwPaM&, SotStorage&, const String* = 0 );
 
     SotStorage& GetStorage() const       { return *pStg; }
 };
@@ -580,15 +580,15 @@ public:
 /*class Sw3Writer : public StgWriter
 {
     Sw3Io* pIO;
-    BOOL bSaveAs : 1;
+    sal_Bool bSaveAs : 1;
 
-    virtual ULONG WriteStorage();
-    virtual ULONG WriteMedium( SfxMedium& );
+    virtual sal_uLong WriteStorage();
+    virtual sal_uLong WriteMedium( SfxMedium& );
 
 public:
-    Sw3Writer() : pIO( 0 ), bSaveAs( FALSE ) {}
+    Sw3Writer() : pIO( 0 ), bSaveAs( sal_False ) {}
 
-    virtual BOOL IsSw3Writer() const;
+    virtual sal_Bool IsSw3Writer() const;
 };
 
 */
@@ -609,22 +609,22 @@ class SwWriter
 
     //String sBaseURL;
 
-    BOOL bWriteAll;
+    sal_Bool bWriteAll;
 
 public:
-    ULONG Write( WriterRef& rxWriter, const String* = 0);
+    sal_uLong Write( WriterRef& rxWriter, const String* = 0);
 
-    SwWriter( SvStream&, SwCrsrShell &,BOOL bWriteAll = FALSE );
+    SwWriter( SvStream&, SwCrsrShell &,sal_Bool bWriteAll = sal_False );
     SwWriter( SvStream&, SwDoc & );
-    SwWriter( SvStream&, SwPaM &, BOOL bWriteAll = FALSE );
+    SwWriter( SvStream&, SwPaM &, sal_Bool bWriteAll = sal_False );
 
-//  SwWriter( SotStorage&, SwCrsrShell &,BOOL bWriteAll = FALSE );
+//  SwWriter( SotStorage&, SwCrsrShell &,sal_Bool bWriteAll = sal_False );
     SwWriter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, SwDoc& );
-//  SwWriter( SotStorage&, SwPaM&, BOOL bWriteAll = FALSE );
+//  SwWriter( SotStorage&, SwPaM&, sal_Bool bWriteAll = sal_False );
 
-    SwWriter( SfxMedium&, SwCrsrShell &,BOOL bWriteAll = FALSE );
+    SwWriter( SfxMedium&, SwCrsrShell &,sal_Bool bWriteAll = sal_False );
     SwWriter( SfxMedium&, SwDoc & );
-//  SwWriter( SfxMedium&, SwPaM&, BOOL bWriteAll = FALSE );
+//  SwWriter( SfxMedium&, SwPaM&, sal_Bool bWriteAll = sal_False );
 
     //const String&       GetBaseURL() const { return sBaseURL;}
 };
@@ -635,17 +635,17 @@ public:
 
 typedef Reader* (*FnGetReader)();
 typedef void (*FnGetWriter)(const String&, const String& rBaseURL, WriterRef&);
-ULONG SaveOrDelMSVBAStorage( SfxObjectShell&, SotStorage&, BOOL, const String& );
-ULONG GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
+sal_uLong SaveOrDelMSVBAStorage( SfxObjectShell&, SotStorage&, sal_Bool, const String& );
+sal_uLong GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
 
 struct SwReaderWriterEntry
 {
     Reader* pReader;
     FnGetReader fnGetReader;
     FnGetWriter fnGetWriter;
-    BOOL bDelReader;
+    sal_Bool bDelReader;
 
-    SwReaderWriterEntry( const FnGetReader fnReader, const FnGetWriter fnWriter, BOOL bDel )
+    SwReaderWriterEntry( const FnGetReader fnReader, const FnGetWriter fnWriter, sal_Bool bDel )
         : pReader( NULL ), fnGetReader( fnReader ), fnGetWriter( fnWriter ), bDelReader( bDel )
     {}
 

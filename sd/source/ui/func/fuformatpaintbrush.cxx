@@ -105,7 +105,7 @@ static void unmarkimpl( SdrView* pView )
     pView->UnMarkAll();
 }
 
-BOOL FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
 {
     if(mpView&&mpWindow)
     {
@@ -116,7 +116,7 @@ BOOL FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
         {
             SdrObject* pPickObj=0;
             SdrPageView* pPV=0;
-            USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+            sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
             mpView->PickObj( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ),nHitLog, pPickObj, pPV, SDRSEARCH_PICKMARKABLE);
 
             if( (pPickObj != 0) && !pPickObj->IsEmptyPresObj() )
@@ -152,18 +152,18 @@ BOOL FuFormatPaintBrush::MouseButtonDown(const MouseEvent& rMEvt)
 
         if( aVEvt.pObj )
         {
-            USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
-            BOOL bToggle = FALSE;
-            mpView->MarkObj(mpWindow->PixelToLogic( rMEvt.GetPosPixel() ), nHitLog, bToggle, FALSE);
-            return TRUE;
+            sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+            sal_Bool bToggle = sal_False;
+            mpView->MarkObj(mpWindow->PixelToLogic( rMEvt.GetPosPixel() ), nHitLog, bToggle, sal_False);
+            return sal_True;
         }
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL FuFormatPaintBrush::MouseMove(const MouseEvent& rMEvt)
+sal_Bool FuFormatPaintBrush::MouseMove(const MouseEvent& rMEvt)
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = sal_False;
     if( mpWindow && mpView )
     {
         if ( mpView->IsTextEdit() )
@@ -173,10 +173,10 @@ BOOL FuFormatPaintBrush::MouseMove(const MouseEvent& rMEvt)
         }
         else
         {
-            USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+            sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
             SdrObject* pObj=0;
             SdrPageView* pPV=0;
-            BOOL bOverMarkableObject = mpView->PickObj( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ),nHitLog, pObj, pPV, SDRSEARCH_PICKMARKABLE);
+            sal_Bool bOverMarkableObject = mpView->PickObj( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ),nHitLog, pObj, pPV, SDRSEARCH_PICKMARKABLE);
 
             if(bOverMarkableObject && HasContentForThisType(pObj->GetObjInventor(),pObj->GetObjIdentifier()) )
                 mpWindow->SetPointer(Pointer(POINTER_FILL));
@@ -187,7 +187,7 @@ BOOL FuFormatPaintBrush::MouseMove(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-BOOL FuFormatPaintBrush::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool FuFormatPaintBrush::MouseButtonUp(const MouseEvent& rMEvt)
 {
     if( mpItemSet.get() && mpView && mpView->AreObjectsMarked() )
     {
@@ -209,19 +209,19 @@ BOOL FuFormatPaintBrush::MouseButtonUp(const MouseEvent& rMEvt)
             mpViewShell->GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
 
         if( mbPermanent )
-            return TRUE;
+            return sal_True;
     }
 
     implcancel();
-    return TRUE;
+    return sal_True;
 }
 
-BOOL FuFormatPaintBrush::KeyInput(const KeyEvent& rKEvt)
+sal_Bool FuFormatPaintBrush::KeyInput(const KeyEvent& rKEvt)
 {
     if( (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE) && mpViewShell )
     {
         implcancel();
-        return TRUE;
+        return sal_True;
     }
     return FuPoor::KeyInput(rKEvt);
 }
@@ -231,8 +231,8 @@ void FuFormatPaintBrush::Activate()
     mbOldIsQuickTextEditMode = mpViewShell->GetFrameView()->IsQuickEdit();
     if( !mbOldIsQuickTextEditMode  )
     {
-        mpViewShell->GetFrameView()->SetQuickEdit(TRUE);
-        mpView->SetQuickTextEditMode(TRUE);
+        mpViewShell->GetFrameView()->SetQuickEdit(sal_True);
+        mpView->SetQuickTextEditMode(sal_True);
     }
 }
 
@@ -240,12 +240,12 @@ void FuFormatPaintBrush::Deactivate()
 {
     if( !mbOldIsQuickTextEditMode  )
     {
-        mpViewShell->GetFrameView()->SetQuickEdit(FALSE);
-        mpView->SetQuickTextEditMode(FALSE);
+        mpViewShell->GetFrameView()->SetQuickEdit(sal_False);
+        mpView->SetQuickTextEditMode(sal_False);
     }
 }
 
-bool FuFormatPaintBrush::HasContentForThisType( UINT32 nObjectInventor, UINT16 nObjectIdentifier ) const
+bool FuFormatPaintBrush::HasContentForThisType( sal_uInt32 nObjectInventor, sal_uInt16 nObjectIdentifier ) const
 {
     if( mpItemSet.get() == 0 )
         return false;
@@ -265,7 +265,7 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
         {
             String sLabel( mpViewShell->GetViewShellBase().RetrieveLabelFromCommand( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FormatPaintbrush" ) ) ) );
             mpDoc->BegUndo( sLabel );
-            mpDoc->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoAttrObject(*pObj,FALSE,TRUE));
+            mpDoc->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoAttrObject(*pObj,sal_False,sal_True));
         }
 
         mpView->ApplyFormatPaintBrush( *mpItemSet.get(), bNoCharacterFormats, bNoParagraphFormats );
@@ -280,7 +280,7 @@ void FuFormatPaintBrush::Paste( bool bNoCharacterFormats, bool bNoParagraphForma
 /* static */ void FuFormatPaintBrush::GetMenuState( DrawViewShell& rDrawViewShell, SfxItemSet &rSet )
 {
     const SdrMarkList& rMarkList = rDrawViewShell.GetDrawView()->GetMarkedObjectList();
-    const ULONG nMarkCount = rMarkList.GetMarkCount();
+    const sal_uLong nMarkCount = rMarkList.GetMarkCount();
 
     if( nMarkCount == 1 )
     {

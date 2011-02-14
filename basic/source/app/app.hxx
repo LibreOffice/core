@@ -67,7 +67,7 @@ public:
 
     void  LoadIniFile();
     void  SetFocus();
-    void  Wait( BOOL );
+    void  Wait( sal_Bool );
     DECL_LINK( LateInit, void * );
 
 #ifdef DBG_UTIL
@@ -76,7 +76,7 @@ public:
 };
 
 
-typedef USHORT FileType;
+typedef sal_uInt16 FileType;
 
 #define FT_NO_FILE              (FileType)0x00  // An error has occurred ...
 #define FT_BASIC_SOURCE         (FileType)0x01
@@ -95,16 +95,16 @@ class BasicFrame : public WorkWindow, public SfxBroadcaster, public SfxListener
 using SystemWindow::Notify;
 using Window::Command;
 
-virtual BOOL Close();
-    BOOL CloseAll();          // Close all windows
-    BOOL CompileAll();        // Compile all texts
+virtual sal_Bool Close();
+    sal_Bool CloseAll();          // Close all windows
+    sal_Bool CompileAll();        // Compile all texts
     AutoTimer aLineNum;       // Show the line numbers
 virtual void Resize();
 virtual void Move();
 virtual void GetFocus();
     void LoadLibrary();
     void SaveLibrary();
-    BOOL bIsAutoRun;
+    sal_Bool bIsAutoRun;
     DisplayHidDlg* pDisplayHidDlg;
 
 //  BreakPoint *pRunToCursorBP;
@@ -114,8 +114,8 @@ virtual void GetFocus();
 
 
     Timer aCheckFiles;      // Checks the files for changes
-    BOOL bAutoReload;
-    BOOL bAutoSave;
+    sal_Bool bAutoReload;
+    sal_Bool bAutoSave;
     DECL_LINK( CheckAllFiles, Timer* );
 
     MyBasicRef  pBasic;             // BASIC-Engine
@@ -131,16 +131,16 @@ virtual void GetFocus();
     FloatingExecutionStatus *pExecutionStatus;
 
 public:
-    BOOL IsAutoRun();
-    void SetAutoRun( BOOL bAuto );
-    BOOL bInBreak;                  // TRUE if in Break-Handler
+    sal_Bool IsAutoRun();
+    void SetAutoRun( sal_Bool bAuto );
+    sal_Bool bInBreak;                  // sal_True if in Break-Handler
     StatusLine* pStatus;            // Status line
     EditList*   pList;              // List of edit windows
     AppWin*     pWork;              // Current edit window
     BasicPrinter* pPrn;             // Printer
-    BOOL bDisas;                    // TRUE: disassemble
-    USHORT nFlags;                  // Debugging-Flags
-    USHORT nMaximizedWindows;       // Number of maximized windows
+    sal_Bool bDisas;                    // sal_True: disassemble
+    sal_uInt16 nFlags;                  // Debugging-Flags
+    sal_uInt16 nMaximizedWindows;       // Number of maximized windows
     void FocusWindow( AppWin *pWin );
     void WinMax_Restore();
     void WinShow_Hide();
@@ -162,25 +162,25 @@ public:
     MsgEdit* GetMsgTree( String aLogFileName );
     DECL_LINK( Log, TTLogMsg * );
     DECL_LINK( WinInfo, WinInfoRec * );
-    BOOL LoadFile( String aFilename );
-    long Command( short,BOOL=FALSE );  // Command handler
+    sal_Bool LoadFile( String aFilename );
+    long Command( short,sal_Bool=sal_False );  // Command handler
     virtual void Command( const CommandEvent& rCEvt );      // Command handler
-    BOOL SaveAll();                 // Save all windows
-    BOOL QueryFileName( String& rName, FileType nFileType, BOOL bSave ); // Query for filename
+    sal_Bool SaveAll();                 // Save all windows
+    sal_Bool QueryFileName( String& rName, FileType nFileType, sal_Bool bSave ); // Query for filename
     DECL_LINK( ModuleWinExists, String* );
     DECL_LINK( WriteString, String* );
     AppBasEd* CreateModuleWin( SbModule* pMod );
     AppBasEd* FindModuleWin( const String& );
     AppError* FindErrorWin( const String& );
     AppWin* FindWin( const String& );
-    AppWin* FindWin( USHORT nWinId );
+    AppWin* FindWin( sal_uInt16 nWinId );
     AppWin* IsWinValid( AppWin* pMaybeWin );
-    USHORT BreakHandler();          // Break-Handler-Callback
+    sal_uInt16 BreakHandler();          // Break-Handler-Callback
 
     void SetEditVar( SbxVariable *pVar ){ pEditVar = pVar;}
     SbxVariable* GetEditVar(){ return pEditVar;}
-    BOOL IsAutoReload() { return bAutoReload; }
-    BOOL IsAutoSave() { return bAutoSave; }
+    sal_Bool IsAutoReload() { return bAutoReload; }
+    sal_Bool IsAutoSave() { return bAutoSave; }
     void LoadIniFile();
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );

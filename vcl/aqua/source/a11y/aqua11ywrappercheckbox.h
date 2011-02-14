@@ -34,7 +34,7 @@
 {
 }
 -(id)valueAttribute;
--(MacOSBOOL)accessibilityIsAttributeSettable:(NSString *)attribute;
+-(BOOL)accessibilityIsAttributeSettable:(NSString *)attribute;
 -(NSArray *)accessibilityAttributeNames;
 @end
 

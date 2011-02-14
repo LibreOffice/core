@@ -51,12 +51,12 @@
  * cmc
  * */
 
-BYTE VBA_Impl::ReadPString(SvStorageStreamRef &xVBAProject)
+sal_uInt8 VBA_Impl::ReadPString(SvStorageStreamRef &xVBAProject)
 {
-    UINT16 idlen;
-    BYTE type=0;
+    sal_uInt16 idlen;
+    sal_uInt8 type=0;
     *xVBAProject >> idlen;
-    BYTE out;
+    sal_uInt8 out;
     int i=0;
     if (idlen < 6)
     {
@@ -88,12 +88,12 @@ BYTE VBA_Impl::ReadPString(SvStorageStreamRef &xVBAProject)
 
 void VBA_Impl::ConfirmFixedOctect(SvStorageStreamRef &xVBAProject)
 {
-    static const BYTE stest[8] =
+    static const sal_uInt8 stest[8] =
         {
         0x06, 0x02, 0x01, 0x00, 0x08, 0x02, 0x00, 0x00
         };
 
-    BYTE test[8];
+    sal_uInt8 test[8];
     xVBAProject->Read(test,8);
     if (memcmp(stest,test,8) != 0)
         DBG_WARNING("Found a different octect, please report");
@@ -101,8 +101,8 @@ void VBA_Impl::ConfirmFixedOctect(SvStorageStreamRef &xVBAProject)
 
 void VBA_Impl::Confirm12Zeros(SvStorageStreamRef &xVBAProject)
 {
-    static const BYTE stest[12]={0};
-    BYTE test[12];
+    static const sal_uInt8 stest[12]={0};
+    sal_uInt8 test[12];
     xVBAProject->Read(test,12);
     if (memcmp(stest,test,12) != 0)
         DBG_WARNING("Found a Non Zero block, please report");
@@ -110,8 +110,8 @@ void VBA_Impl::Confirm12Zeros(SvStorageStreamRef &xVBAProject)
 
 void VBA_Impl::ConfirmHalfWayMarker(SvStorageStreamRef &xVBAProject)
 {
-    static const BYTE stest[12]={0,0,0,0,0,0,0,0,0,0,1,0};
-    BYTE test[12];
+    static const sal_uInt8 stest[12]={0,0,0,0,0,0,0,0,0,0,1,0};
+    sal_uInt8 test[12];
     xVBAProject->Read(test,12);
     if (memcmp(stest,test,12) != 0)
         DBG_WARNING("Found a different halfway marker, please report");
@@ -119,14 +119,14 @@ void VBA_Impl::ConfirmHalfWayMarker(SvStorageStreamRef &xVBAProject)
 
 void VBA_Impl::ConfirmFixedMiddle(SvStorageStreamRef &xVBAProject)
 {
-    static const BYTE stest[20] =
+    static const sal_uInt8 stest[20] =
     {
         0x00, 0x00, 0xe1, 0x2e, 0x45, 0x0d, 0x8f, 0xe0,
         0x1a, 0x10, 0x85, 0x2e, 0x02, 0x60, 0x8c, 0x4d,
         0x0b, 0xb4, 0x00, 0x00
     };
 
-    BYTE test[20];
+    sal_uInt8 test[20];
     xVBAProject->Read(test,20);
     if (memcmp(stest,test,20) != 0)
     {
@@ -137,14 +137,14 @@ void VBA_Impl::ConfirmFixedMiddle(SvStorageStreamRef &xVBAProject)
 
 void VBA_Impl::ConfirmFixedMiddle2(SvStorageStreamRef &xVBAProject)
 {
-    static const BYTE stest[20] =
+    static const sal_uInt8 stest[20] =
     {
         0x00, 0x00, 0x2e, 0xc9, 0x27, 0x8e, 0x64, 0x12,
         0x1c, 0x10, 0x8a, 0x2f, 0x04, 0x02, 0x24, 0x00,
         0x9c, 0x02, 0x00, 0x00
     };
 
-    BYTE test[20];
+    sal_uInt8 test[20];
     xVBAProject->Read(test,20);
     if (memcmp(stest,test,20) != 0)
         {
@@ -154,7 +154,7 @@ void VBA_Impl::ConfirmFixedMiddle2(SvStorageStreamRef &xVBAProject)
 }
 
 
-void VBA_Impl::Output( int nLen, const BYTE *pData)
+void VBA_Impl::Output( int nLen, const sal_uInt8 *pData)
 {
     sVBAString += String( (const sal_Char *)pData, nLen );
 /*
@@ -180,28 +180,28 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
     //*pOut << hex;
-    BYTE header[30] =
+    sal_uInt8 header[30] =
     {
         0xcc, 0x61, 0x5e, 0x00, 0x00, 0x01, 0x00, 0xff,
         0x07, 0x04, 0x00, 0x00, 0x09, 0x04, 0x00, 0x00,
         0xe4, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00, 0x01, 0x00
     };
-    BYTE headerin[30];
+    sal_uInt8 headerin[30];
 
     xVBAProject->Read(headerin,30);
     if (memcmp(header,headerin,30) != 0)
         DBG_WARNING("Warning VBA header is different, please report");
-    UINT16 value;
+    sal_uInt16 value;
     *xVBAProject >> value;
     //*pOut << "Trigger value 1 is " << value << endl;
-    UINT16 svalue;
+    sal_uInt16 svalue;
     *xVBAProject >> svalue;
     if (svalue != 0x02)
         DBG_WARNING("Warning VBA number is different, please report");
 
     int count=0;
-    BYTE testc=0;
+    sal_uInt8 testc=0;
 
     //*pOut << "Other strings after the middle are..." << endl;
     //There appears to be almost any number of strings acceptable
@@ -269,7 +269,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     //*pOut << "testc is " << testc << endl;
     //*pOut << "position is " << xVBAProject->Tell() << endl;
 
-    UINT16 nModules;
+    sal_uInt16 nModules;
     *xVBAProject >> nModules;
 
     //begin section, this section isn't really 100% correct
@@ -279,7 +279,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     //*pOut << "position is " << xVBAProject->Tell() << endl;
     ConfirmFixedOctect(xVBAProject);
 
-    UINT16 junksize;
+    sal_uInt16 junksize;
     while(junksize != 0xFFFF)
     {
         xVBAProject->Read(&junksize,2); // usually 18 02, sometimes 1e 02
@@ -288,7 +288,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
         //  << junksize << endl;
     }
 
-    UINT16 ftest;
+    sal_uInt16 ftest;
     *xVBAProject >> ftest;
     if (ftest != 0xFFFF)
         xVBAProject->SeekRel(ftest);
@@ -306,8 +306,8 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     int i;
     for (i=0;i<nOffsets;i++)
         {
-        BYTE discard;
-        UINT16 len;
+        sal_uInt8 discard;
+        sal_uInt16 len;
         *xVBAProject >> len;
         int j;
         for (j=0;j<len/2;j++)
@@ -339,7 +339,7 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
         //end section
 
         xVBAProject->SeekRel(8);
-        BYTE no_of_octects;
+        sal_uInt8 no_of_octects;
         *xVBAProject >> no_of_octects;
         for(j=0;j<no_of_octects;j++)
             xVBAProject->SeekRel(8);
@@ -354,10 +354,10 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
     return(nOffsets);
     }
 
-BOOL VBA_Impl::Open( const String &rToplevel,const String &rSublevel )
+sal_Bool VBA_Impl::Open( const String &rToplevel,const String &rSublevel )
 {
     /* beginning test for vba stuff */
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     SvStorageRef xMacros= xStor->OpenStorage(rToplevel);
     if( !xMacros.Is() || SVSTREAM_OK != xMacros->GetError() )
     {
@@ -373,14 +373,14 @@ BOOL VBA_Impl::Open( const String &rToplevel,const String &rSublevel )
         else
         {
             if (ReadVBAProject(xVBA))
-                bRet = TRUE;
+                bRet = sal_True;
         }
     }
     /* end test for vba stuff */
     return bRet;
 }
 
-const String &VBA_Impl::Decompress( UINT16 nIndex, int *pOverflow)
+const String &VBA_Impl::Decompress( sal_uInt16 nIndex, int *pOverflow)
 {
     SvStorageStreamRef xVBAStream;
     sVBAString.Erase();
@@ -419,14 +419,14 @@ const String &VBA_Impl::Decompress( UINT16 nIndex, int *pOverflow)
 
 int VBA_Impl::DecompressVBA( int nIndex, SvStorageStreamRef &xVBAStream )
 {
-    BYTE leadbyte;
+    sal_uInt8 leadbyte;
     unsigned int pos = 0;
 
     //*pOut << "jumping to " << hex << offsets[nIndex].offset << endl;
     xVBAStream->Seek(pOffsets[nIndex].nOffset+3);
 
     int len;
-    UINT16 token;
+    sal_uInt16 token;
     int distance, shift, clean=1;
 
     while(xVBAStream->Read(&leadbyte,1))

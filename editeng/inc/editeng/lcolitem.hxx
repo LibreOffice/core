@@ -42,9 +42,9 @@ class EDITENG_DLLPUBLIC SvxLineColorItem : public SvxColorItem
 public:
     TYPEINFO();
 
-    SvxLineColorItem( const USHORT nId  );
-    SvxLineColorItem( const Color& aColor, const USHORT nId  );
-    SvxLineColorItem( SvStream& rStrm, const USHORT nId  );
+    SvxLineColorItem( const sal_uInt16 nId  );
+    SvxLineColorItem( const Color& aColor, const sal_uInt16 nId  );
+    SvxLineColorItem( SvStream& rStrm, const sal_uInt16 nId  );
     SvxLineColorItem( const SvxLineColorItem& rCopy );
     ~SvxLineColorItem();
 

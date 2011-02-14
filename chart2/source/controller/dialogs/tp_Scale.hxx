@@ -51,7 +51,7 @@ public:
     ScaleTabPage( Window* pParent, const SfxItemSet& rInAttrs );
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rInAttrs );
-    virtual BOOL FillItemSet( SfxItemSet& rOutAttrs );
+    virtual sal_Bool FillItemSet( SfxItemSet& rOutAttrs );
     virtual void Reset( const SfxItemSet& rInAttrs );
     using TabPage::DeactivatePage;
     virtual int DeactivatePage( SfxItemSet* pItemSet = NULL );
@@ -136,7 +136,7 @@ private:
 
         @return false, if nResIdMessage was 0, true otherwise
      */
-    bool ShowWarning( USHORT nResIdMessage, Control* pControl = NULL );
+    bool ShowWarning( sal_uInt16 nResIdMessage, Control* pControl = NULL );
 };
 
 //.............................................................................

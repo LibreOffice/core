@@ -63,20 +63,20 @@ enum SvIconViewTextMode
 class SvIcnVwDataEntry : public SvViewDataEntry
 {
 friend class SvImpIconView;
-    USHORT      nIcnVwFlags;
+    sal_uInt16      nIcnVwFlags;
     SvIconViewTextMode eTextMode;
 public:
     Rectangle   aRect;              // Bounding-Rect des Entries
     Rectangle   aGridRect;          // gesetzt im Grid-Modus
     Size        aTextSize;          // nur gesetzt im Grid-Modus
-    USHORT      nX,nY;              // fuer Tastatursteuerung
+    sal_uInt16      nX,nY;              // fuer Tastatursteuerung
                 SvIcnVwDataEntry();
     virtual     ~SvIcnVwDataEntry();
 
-    BOOL        IsEntryPosLocked() const { return (BOOL)((nIcnVwFlags & ICNVW_FLAG_POS_LOCKED) !=0); }
-    void        ClearVwFlags( USHORT nMask ) { nIcnVwFlags &= (~nMask); }
-    void        SetVwFlags( USHORT nMask ) { nIcnVwFlags |= nMask; }
-    USHORT      GetVwFlags() const { return nIcnVwFlags; }
+    sal_Bool        IsEntryPosLocked() const { return (sal_Bool)((nIcnVwFlags & ICNVW_FLAG_POS_LOCKED) !=0); }
+    void        ClearVwFlags( sal_uInt16 nMask ) { nIcnVwFlags &= (~nMask); }
+    void        SetVwFlags( sal_uInt16 nMask ) { nIcnVwFlags |= nMask; }
+    sal_uInt16      GetVwFlags() const { return nIcnVwFlags; }
     SvIconViewTextMode GetTextMode() const { return eTextMode; }
 };
 
@@ -89,7 +89,7 @@ class SvIconView : public SvLBox
     SvImpIconView*  pImp;
     Image           aCollapsedEntryBmp;
     Image           aExpandedEntryBmp;
-    USHORT          nIcnVwFlags;
+    sal_uInt16          nIcnVwFlags;
     void            SetModel( SvLBoxTreeList* );
 
 protected:
@@ -121,15 +121,15 @@ public:
     void DisconnectFromModel();
 
     SvLBoxEntry*    InsertEntry( const XubString& rText, SvLBoxEntry* pParent = 0,
-                        BOOL bChildsOnDemand = FALSE,
-                        ULONG nPos=LIST_APPEND );
+                        sal_Bool bChildsOnDemand = sal_False,
+                        sal_uLong nPos=LIST_APPEND );
 
     SvLBoxEntry*    InsertEntry( const XubString& rText,
                         const Image& rExpandedEntryBmp,
                         const Image& rCollapsedEntryBmp,
                         SvLBoxEntry* pParent = 0,
-                        BOOL bChildsOnDemand = FALSE,
-                        ULONG nPos = LIST_APPEND );
+                        sal_Bool bChildsOnDemand = sal_False,
+                        sal_uLong nPos = LIST_APPEND );
 
     const Image&    GetDefaultExpandedEntryBmp() const { return aExpandedEntryBmp;}
     const Image&    GetDefaultCollapsedEntryBmp() const { return aCollapsedEntryBmp;}
@@ -146,7 +146,7 @@ public:
 
     virtual SvLBoxEntry* CloneEntry( SvLBoxEntry* pSource );
 
-    virtual USHORT  IsA();
+    virtual sal_uInt16  IsA();
 
     virtual void    RequestingChilds( SvLBoxEntry* pParent );
 
@@ -158,7 +158,7 @@ public:
     virtual void    Resize();
     virtual void    GetFocus();
     virtual void    LoseFocus();
-    void            SetUpdateMode( BOOL );
+    void            SetUpdateMode( sal_Bool );
 
     using SvListView::SetModel;
     virtual void    SetModel( SvLBoxTreeList*, SvLBoxEntry* pParent );
@@ -166,40 +166,40 @@ public:
     virtual void    ModelHasInserted( SvListEntry* pEntry );
     virtual void    ModelHasInsertedTree( SvListEntry* pEntry );
     virtual void    ModelIsMoving(SvListEntry* pSource,
-                        SvListEntry* pTargetParent, ULONG nChildPos );
+                        SvListEntry* pTargetParent, sal_uLong nChildPos );
     virtual void    ModelHasMoved(SvListEntry* pSource );
     virtual void    ModelIsRemoving( SvListEntry* pEntry );
     virtual void    ModelHasRemoved( SvListEntry* pEntry );
     virtual void    ModelHasEntryInvalidated( SvListEntry* pEntry );
 
-    virtual void    ShowTargetEmphasis( SvLBoxEntry*, BOOL bShow );
+    virtual void    ShowTargetEmphasis( SvLBoxEntry*, sal_Bool bShow );
     using Window::GetDropTarget;
     virtual SvLBoxEntry* GetDropTarget( const Point& );
     virtual Region  GetDragRegion() const;
     // NotifyMoving/Copying ueberladen, da wir bei GetDropTarget
     // einen "magic pointer" zurueckgeben, falls in einen leeren
     // Bereich auf der IconView gedroppt wird.
-    virtual BOOL    NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-                        SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos);
-    virtual BOOL    NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-                        SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos);
+    virtual sal_Bool    NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+                        SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos);
+    virtual sal_Bool    NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+                        SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos);
 
     // gibt TopLeft des BoundingRects zurueck
     // Konvertierung in Fensterposition: MapMode.Origin addieren
     Point           GetEntryPosition( SvLBoxEntry* ) const;
     void            SetEntryPosition( SvLBoxEntry*, const Point& rDocPos);
     void            SetEntryPosition( SvLBoxEntry*, const Point& rDocPos,
-                                      BOOL bAdjustAtGrid );
+                                      sal_Bool bAdjustAtGrid );
 
     void            SetFont( const Font& rFont );
     void            SetDefaultFont();
 
     using SvLBox::GetEntry;
-    SvLBoxEntry*    GetEntry( const Point& rPixPos, BOOL  ) const;
+    SvLBoxEntry*    GetEntry( const Point& rPixPos, sal_Bool  ) const;
     // Gibt den naechsten ueber pCurEntry liegenden Eintrag (ZOrder)
-    SvLBoxEntry*    GetNextEntry( const Point& rPixPos, SvLBoxEntry* pCurEntry, BOOL  ) const;
+    SvLBoxEntry*    GetNextEntry( const Point& rPixPos, SvLBoxEntry* pCurEntry, sal_Bool  ) const;
     // Gibt den naechsten unter pCurEntry liegenden Eintrag (ZOrder)
-    SvLBoxEntry*    GetPrevEntry( const Point& rPixPos, SvLBoxEntry* pCurEntry, BOOL  ) const;
+    SvLBoxEntry*    GetPrevEntry( const Point& rPixPos, SvLBoxEntry* pCurEntry, sal_Bool  ) const;
 
     SvLBoxEntry*    GetEntryFromLogicPos( const Point& rDocPos ) const;
 
@@ -213,8 +213,8 @@ public:
     void            SetSelectionMode( SelectionMode );
 
     using SvListView::Select;
-    BOOL            Select( SvLBoxEntry* pEntry, BOOL bSelect=TRUE );
-    void            SelectAll( BOOL bSelect, BOOL bPaint=TRUE );
+    sal_Bool            Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
+    void            SelectAll( sal_Bool bSelect, sal_Bool bPaint=sal_True );
     virtual void    SetCurEntry( SvLBoxEntry* _pEntry );
     virtual SvLBoxEntry*
                     GetCurEntry() const;
@@ -222,28 +222,28 @@ public:
     // logische Koordinaten
     void            SelectRect(
                         const Rectangle& rRect,
-                        BOOL bAdd = FALSE,
+                        sal_Bool bAdd = sal_False,
                         // die Schnittmenge mit rRect wird invertiert
-                        // wird bei bAdd == FALSE ignoriert
+                        // wird bei bAdd == sal_False ignoriert
                         SvPtrarr* pOtherRects = 0,
                         short nBorderOffs = -5 );
-    ULONG           GetSelectionCount() const;
+    sal_uLong           GetSelectionCount() const;
 
     virtual void    Arrange();
     void            SetSpaceBetweenEntries( long nHor, long Ver );
     long            GetHorSpaceBetweenEntries();
     long            GetVerSpaceBetweenEntries();
 
-    void            EnableInplaceEditing( BOOL bEnable );
+    void            EnableInplaceEditing( sal_Bool bEnable );
     void            EditEntry( SvLBoxEntry* pEntry = 0 );
-    virtual BOOL    EditingEntry( SvLBoxEntry* pEntry, Selection& );
-    virtual BOOL    EditedEntry( SvLBoxEntry*, const XubString& rNewText );
+    virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& );
+    virtual sal_Bool    EditedEntry( SvLBoxEntry*, const XubString& rNewText );
 
     void            SetCurParent( SvLBoxEntry* pNewParent );
     SvLBoxEntry*    GetCurParent() const;
 
-    virtual void    ModelNotification( USHORT nActionId, SvListEntry* pEntry1,
-                        SvListEntry* pEntry2, ULONG nPos );
+    virtual void    ModelNotification( sal_uInt16 nActionId, SvListEntry* pEntry1,
+                        SvListEntry* pEntry2, sal_uLong nPos );
 
     // 0,0: Grid-Modus ausschalten
     void            SetGrid( long nDX, long nDY );
@@ -253,7 +253,7 @@ public:
     // nDeltaX < 0 : View bewegt sich auf dem Doc nach links
     // nDeltaX > 0 : View bewegt sich auf dem Doc nach rechts
     using Window::Scroll;
-    virtual void    Scroll( long nDeltaX, long nDeltaY, USHORT nFlags = 0 );
+    virtual void    Scroll( long nDeltaX, long nDeltaY, sal_uInt16 nFlags = 0 );
 
     virtual void    PrepareCommandEvent( const CommandEvent& );
     virtual void    StartDrag( sal_Int8 nAction, const Point& );
@@ -271,14 +271,14 @@ public:
                         const Point& rRefPosPixel,
                         long& rScrollX,
                         long& rScrollY,
-                        BOOL bInDragDrop = FALSE,
-                        USHORT nBorderWidth = 10 );
+                        sal_Bool bInDragDrop = sal_False,
+                        sal_uInt16 nBorderWidth = 10 );
 
     using Window::EndTracking;
     void            EndTracking();
     void            AdjustAtGrid( SvLBoxEntry* pEntry = 0 );
-    void            LockEntryPos( SvLBoxEntry* pEntry, BOOL bLock = TRUE );
-    BOOL            IsEntryPosLocked( const SvLBoxEntry* pEntry ) const;
+    void            LockEntryPos( SvLBoxEntry* pEntry, sal_Bool bLock = sal_True );
+    sal_Bool            IsEntryPosLocked( const SvLBoxEntry* pEntry ) const;
 
     void            SetTextMode( SvIconViewTextMode, SvLBoxEntry* pEntry = 0 );
     SvIconViewTextMode GetTextMode( const SvLBoxEntry* pEntry = 0 ) const;

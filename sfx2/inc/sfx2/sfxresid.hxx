@@ -34,7 +34,7 @@
 class SFX2_DLLPUBLIC SfxResId: public ResId
 {
 public:
-    SfxResId( USHORT nId );
+    SfxResId( sal_uInt16 nId );
     static ResMgr* GetResMgr();
     static void DeleteResMgr();
 };
@@ -45,7 +45,7 @@ class SfxSimpleResId
     String m_sText;
 
 public:
-    SfxSimpleResId(USHORT nID);
+    SfxSimpleResId(sal_uInt16 nID);
 
     String getText() const { return m_sText; }
 

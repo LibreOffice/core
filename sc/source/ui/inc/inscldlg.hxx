@@ -50,7 +50,7 @@ private:
     HelpButton      aBtnHelp;
 
 public:
-            ScInsertCellDlg( Window* pParent,BOOL bDisallowCellMove = FALSE );
+            ScInsertCellDlg( Window* pParent,sal_Bool bDisallowCellMove = sal_False );
             ~ScInsertCellDlg();
 
     InsCellCmd GetInsCellCmd() const;

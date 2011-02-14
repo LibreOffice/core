@@ -129,7 +129,7 @@ namespace dxcanvas
 
             aFont.SetAlign( ALIGN_BASELINE );
             aFont.SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==com::sun::star::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
-            aFont.SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? TRUE : FALSE );
+            aFont.SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? sal_True : sal_False );
             aFont.SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
             aFont.SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
 
@@ -261,7 +261,7 @@ namespace dxcanvas
 
         aFont.SetAlign( ALIGN_BASELINE );
         aFont.SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==com::sun::star::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
-        aFont.SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? TRUE : FALSE );
+        aFont.SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? sal_True : sal_False );
         aFont.SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
         aFont.SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
 
@@ -301,8 +301,8 @@ namespace dxcanvas
             return geometry::RealRectangle2D( 0, nAboveBaseline,
                                               aVirtualDevice.GetTextWidth(
                                                   rText.Text,
-                                                  ::canvas::tools::numeric_cast<USHORT>(rText.StartPosition),
-                                                  ::canvas::tools::numeric_cast<USHORT>(rText.Length) ),
+                                                  ::canvas::tools::numeric_cast<sal_uInt16>(rText.StartPosition),
+                                                  ::canvas::tools::numeric_cast<sal_uInt16>(rText.Length) ),
                                               nBelowBaseline );
         }
     }

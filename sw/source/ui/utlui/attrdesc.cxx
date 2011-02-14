@@ -88,7 +88,7 @@ static sal_Char __READONLY_DATA sKomma[] = ", ";
         SfxItemIter aIter( *this );
         const IntlWrapper rInt( ::comphelper::getProcessServiceFactory(),
                                     GetAppLanguage() );
-        while( TRUE )
+        while( sal_True )
         {
             aIter.GetCurItem()->GetPresentation( ePres, eCoreMetric,
                                                  ePresMetric, aStr,
@@ -284,7 +284,7 @@ SfxItemPresentation SwRegisterItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            USHORT nId = GetValue() ? STR_REGISTER_ON : STR_REGISTER_OFF;
+            sal_uInt16 nId = GetValue() ? STR_REGISTER_ON : STR_REGISTER_OFF;
             rText = SW_RESSTR( nId );
             return ePres;
         }
@@ -347,7 +347,7 @@ SfxItemPresentation SwParaConnectBorderItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            USHORT nId = GetValue() ? STR_CONNECT_BORDER_ON : STR_CONNECT_BORDER_OFF;
+            sal_uInt16 nId = GetValue() ? STR_CONNECT_BORDER_ON : STR_CONNECT_BORDER_OFF;
             rText = SW_RESSTR( nId );
             return ePres;
         }
@@ -398,7 +398,7 @@ SfxItemPresentation SwFmtFrmSize::GetPresentation
             {
                 rText += ',';
                 rText += ' ';
-                const USHORT nId = ATT_FIX_SIZE == eFrmHeightType ?
+                const sal_uInt16 nId = ATT_FIX_SIZE == eFrmHeightType ?
                                         STR_FRM_FIXEDHEIGHT : STR_FRM_MINHEIGHT;
                 rText += SW_RESSTR( nId );
                 rText += ' ';
@@ -441,7 +441,7 @@ SfxItemPresentation SwFmtHeader::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            const USHORT nId = GetHeaderFmt() ? STR_HEADER : STR_NO_HEADER;
+            const sal_uInt16 nId = GetHeaderFmt() ? STR_HEADER : STR_NO_HEADER;
             rText = SW_RESSTR( nId );
             return ePres;
         }
@@ -471,7 +471,7 @@ SfxItemPresentation SwFmtFooter::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            const USHORT nId = GetFooterFmt() ? STR_FOOTER : STR_NO_FOOTER;
+            const sal_uInt16 nId = GetFooterFmt() ? STR_FOOTER : STR_NO_FOOTER;
             rText = SW_RESSTR( nId );
             return ePres;
         }
@@ -498,7 +498,7 @@ SfxItemPresentation SwFmtSurround::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            USHORT nId = 0;
+            sal_uInt16 nId = 0;
             switch ( (SwSurround)GetValue() )
             {
                 case SURROUND_NONE:
@@ -558,7 +558,7 @@ SfxItemPresentation SwFmtVertOrient::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            USHORT nId = 0;
+            sal_uInt16 nId = 0;
             switch ( GetVertOrient() )
             {
                 case text::VertOrientation::NONE:
@@ -619,7 +619,7 @@ SfxItemPresentation SwFmtHoriOrient::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            USHORT nId = 0;
+            sal_uInt16 nId = 0;
             switch ( GetHoriOrient() )
             {
                 case text::HoriOrientation::NONE:
@@ -679,7 +679,7 @@ SfxItemPresentation SwFmtAnchor::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            USHORT nId = 0;
+            sal_uInt16 nId = 0;
             switch ( GetAnchorId() )
             {
                 case FLY_AT_PARA:
@@ -752,7 +752,7 @@ SfxItemPresentation SwFmtCol::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            USHORT nCnt = GetNumCols();
+            sal_uInt16 nCnt = GetNumCols();
             if ( nCnt > 1 )
             {
                 rText = String::CreateFromInt32(nCnt);
@@ -760,7 +760,7 @@ SfxItemPresentation SwFmtCol::GetPresentation
                 rText += SW_RESSTR( STR_COLUMNS );
                 if ( COLADJ_NONE != GetLineAdj() )
                 {
-                    USHORT nWdth = USHORT(GetLineWidth());
+                    sal_uInt16 nWdth = sal_uInt16(GetLineWidth());
                     rText += ' ';
                     rText += SW_RESSTR( STR_LINE_WIDTH );
                     rText += ' ';
@@ -923,7 +923,7 @@ SfxItemPresentation SwFmtFtnEndAtTxtEnd::GetPresentation
 //  String      sPrefix;
 //  String      sSuffix;
 //  SvxNumberType   aFmt;
-//  USHORT      nOffset;
+//  sal_uInt16      nOffset;
 //                      rText +=
                     }
                     break;
@@ -1026,7 +1026,7 @@ SfxItemPresentation SwTextGridItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            USHORT nId = 0;
+            sal_uInt16 nId = 0;
 
             switch ( GetGridType() )
             {
@@ -1092,7 +1092,7 @@ SfxItemPresentation SwMirrorGrf::GetPresentation(
     case SFX_ITEM_PRESENTATION_NAMELESS:
     case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            USHORT nId;
+            sal_uInt16 nId;
             switch( GetValue() )
             {
             case RES_MIRROR_GRAPH_DONT:     nId = STR_NO_MIRROR;    break;
@@ -1197,7 +1197,7 @@ SfxItemPresentation SwChannelGrf::GetPresentation(
     case SFX_ITEM_PRESENTATION_COMPLETE:
         if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
         {
-            USHORT nId;
+            sal_uInt16 nId;
             switch ( Which() )
             {
             case RES_GRFATR_CHANNELR:   nId = STR_CHANNELR; break;
@@ -1257,7 +1257,7 @@ SfxItemPresentation SwInvertGrf::GetPresentation(
     case SFX_ITEM_PRESENTATION_COMPLETE:
         if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
         {
-            USHORT nId = 0 != GetValue() ? STR_INVERT : STR_INVERT_NOT;
+            sal_uInt16 nId = 0 != GetValue() ? STR_INVERT : STR_INVERT_NOT;
             rText = SW_RESSTR( nId );
         }
         break;
@@ -1303,7 +1303,7 @@ SfxItemPresentation SwDrawModeGrf::GetPresentation(
     case SFX_ITEM_PRESENTATION_COMPLETE:
         if( SFX_ITEM_PRESENTATION_COMPLETE == ePres )
         {
-            USHORT nId;
+            sal_uInt16 nId;
             switch ( GetValue() )
             {
 
@@ -1336,7 +1336,7 @@ SfxItemPresentation SwFmtFollowTextFlow::GetPresentation( SfxItemPresentation eP
         break;
         case SFX_ITEM_PRESENTATION_COMPLETE:
             {
-                USHORT nId = GetValue() ? STR_FOLLOW_TEXT_FLOW : STR_DONT_FOLLOW_TEXT_FLOW;
+                sal_uInt16 nId = GetValue() ? STR_FOLLOW_TEXT_FLOW : STR_DONT_FOLLOW_TEXT_FLOW;
                 rText = SW_RESSTR( nId );
             }
         break;

@@ -152,17 +152,17 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
             do {
                 if( pONd && pONd->GetTxtColl() )
                 {
-                    BYTE nPrevLvl = nLevel;
+                    sal_uInt8 nPrevLvl = nLevel;
 
                     // --> OD 2008-04-02 #refactorlists#
 //                    nLevel = GetRealLevel( pONd->GetTxtColl()->
 //                                            GetOutlineLevel() );
                     //ASSERT( pONd->GetOutlineLevel() >= 0 && pONd->GetOutlineLevel() < MAXLEVEL,   //#outline level,zhaojianwei
                     //        "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect -> please inform OD." );
-                    //nLevel = static_cast<BYTE>(pONd->GetOutlineLevel());
+                    //nLevel = static_cast<sal_uInt8>(pONd->GetOutlineLevel());
                     ASSERT( pONd->GetAttrOutlineLevel() >= 0 && pONd->GetAttrOutlineLevel() <= MAXLEVEL,
                             "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect -> please inform OD." );
-                    nLevel = static_cast<BYTE>(pONd->GetAttrOutlineLevel());                            //<-end,zhaojianwei
+                    nLevel = static_cast<sal_uInt8>(pONd->GetAttrOutlineLevel());                           //<-end,zhaojianwei
                     // <--
 
                     if( nPrevLvl < nLevel )
@@ -197,7 +197,7 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
             SwNumRule* pRule( pTxtNd->GetNumRule() );
             if ( pTxtNd->IsCountedInList() && pRule )
             {
-                const SwNumFmt& rNFmt = pRule->Get( static_cast<USHORT>(pTxtNd->GetActualListLevel()) );
+                const SwNumFmt& rNFmt = pRule->Get( static_cast<sal_uInt16>(pTxtNd->GetActualListLevel()) );
                 sPost = rNFmt.GetSuffix();
                 sPre = rNFmt.GetPrefix();
             }
@@ -229,7 +229,7 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
 /*-----------------05.03.98 16:19-------------------
 
 --------------------------------------------------*/
-BOOL SwChapterField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+sal_Bool SwChapterField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -265,9 +265,9 @@ BOOL SwChapterField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 /*-----------------05.03.98 16:19-------------------
 
 --------------------------------------------------*/
-BOOL SwChapterField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+sal_Bool SwChapterField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
     switch( nWhichId )
     {
     case FIELD_PROP_BYTE1:
@@ -277,7 +277,7 @@ BOOL SwChapterField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         if(nTmp >= 0 && nTmp < MAXLEVEL)
             nLevel = nTmp;
         else
-            bRet = FALSE;
+            bRet = sal_False;
         break;
     }
 
@@ -303,7 +303,7 @@ BOOL SwChapterField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 
     default:
         DBG_ERROR("illegal property");
-        bRet = FALSE;
+        bRet = sal_False;
     }
     return bRet;
 }

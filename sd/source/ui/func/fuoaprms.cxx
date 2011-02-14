@@ -97,8 +97,8 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
     ::svl::IUndoManager* pUndoMgr = mpViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager();
 
     const SdrMarkList& rMarkList  = mpView->GetMarkedObjectList();
-    ULONG        nCount     = rMarkList.GetMarkCount();
-    ULONG        nObject    = 0;
+    sal_uLong        nCount     = rMarkList.GetMarkCount();
+    sal_uLong        nObject    = 0;
 
     short nAnimationSet     = ATTR_MISSING;
     short nEffectSet        = ATTR_MISSING;
@@ -120,26 +120,26 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
 
 
-//    BOOL bDontKnow   = FALSE;
+//    sal_Bool bDontKnow   = sal_False;
 
                                     // defaulten (fuer Undo-Aktion)
     presentation::AnimationEffect eEffect         = presentation::AnimationEffect_NONE;
     presentation::AnimationEffect eTextEffect     = presentation::AnimationEffect_NONE;
     presentation::AnimationSpeed  eSpeed          = presentation::AnimationSpeed_MEDIUM;
-    BOOL            bActive         = FALSE;
-    BOOL            bFadeOut        = FALSE;
+    sal_Bool            bActive         = sal_False;
+    sal_Bool            bFadeOut        = sal_False;
     Color           aFadeColor      = COL_LIGHTGRAY;
-    BOOL            bInvisible      = FALSE;
-    BOOL            bSoundOn        = FALSE;
+    sal_Bool            bInvisible      = sal_False;
+    sal_Bool            bSoundOn        = sal_False;
     String          aSound;
-    BOOL            bPlayFull       = FALSE;
+    sal_Bool            bPlayFull       = sal_False;
     presentation::ClickAction     eClickAction    = presentation::ClickAction_NONE;
     String          aBookmark;
 
     presentation::AnimationEffect eSecondEffect   = presentation::AnimationEffect_NONE;
     presentation::AnimationSpeed  eSecondSpeed    = presentation::AnimationSpeed_MEDIUM;
-    BOOL            bSecondSoundOn  = FALSE;
-    BOOL            bSecondPlayFull = FALSE;
+    sal_Bool            bSecondSoundOn  = sal_False;
+    sal_Bool            bSecondPlayFull = sal_False;
 
 
     SdAnimationInfo* pInfo;
@@ -257,7 +257,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         }
         else
         {
-            if (nAnimationSet == ATTR_SET && bActive == TRUE)
+            if (nAnimationSet == ATTR_SET && bActive == sal_True)
                 nAnimationSet = ATTR_MIXED;
 
             if (nEffectSet == ATTR_SET && eEffect != presentation::AnimationEffect_NONE)
@@ -269,22 +269,22 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             if (nSpeedSet == ATTR_SET)
                 nSpeedSet = ATTR_MIXED;
 
-            if (nFadeOutSet == ATTR_SET && bFadeOut == TRUE)
+            if (nFadeOutSet == ATTR_SET && bFadeOut == sal_True)
                 nFadeOutSet = ATTR_MIXED;
 
             if (nFadeColorSet == ATTR_SET)
                 nFadeColorSet = ATTR_MIXED;
 
-            if (nInvisibleSet == ATTR_SET && bInvisible == TRUE)
+            if (nInvisibleSet == ATTR_SET && bInvisible == sal_True)
                 nInvisibleSet = ATTR_MIXED;
 
-            if (nSoundOnSet == ATTR_SET && bSoundOn == TRUE)
+            if (nSoundOnSet == ATTR_SET && bSoundOn == sal_True)
                 nSoundOnSet = ATTR_MIXED;
 
             if (nSoundFileSet == ATTR_SET)
                 nSoundFileSet = ATTR_MIXED;
 
-            if (nPlayFullSet == ATTR_SET && bPlayFull == TRUE)
+            if (nPlayFullSet == ATTR_SET && bPlayFull == sal_True)
                 nPlayFullSet = ATTR_MIXED;
 
             if (nClickActionSet == ATTR_SET && eClickAction != presentation::ClickAction_NONE)
@@ -299,10 +299,10 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             if (nSecondSpeedSet == ATTR_SET)
                 nSecondSpeedSet = ATTR_MIXED;
 
-            if (nSecondSoundOnSet == ATTR_SET && bSecondSoundOn == TRUE)
+            if (nSecondSoundOnSet == ATTR_SET && bSecondSoundOn == sal_True)
                 nSecondSoundOnSet = ATTR_MIXED;
 
-            if (nSecondPlayFullSet == ATTR_SET && bSecondPlayFull == TRUE)
+            if (nSecondPlayFullSet == ATTR_SET && bSecondPlayFull == sal_True)
                 nSecondPlayFullSet = ATTR_MIXED;
         }
     }
@@ -371,24 +371,24 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         else if (nAnimationSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ANIMATION_ACTIVE);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_ACTIVE, FALSE));
+            aSet.Put(SfxBoolItem(ATTR_ANIMATION_ACTIVE, sal_False));
 
         if (nEffectSet == ATTR_SET)
-            aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_EFFECT, (USHORT)eEffect));
+            aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_EFFECT, (sal_uInt16)eEffect));
         else if (nEffectSet == ATTR_MIXED)
             aSet.InvalidateItem( ATTR_ANIMATION_EFFECT );
         else
             aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_EFFECT, presentation::AnimationEffect_NONE));
 
         if (nTextEffectSet == ATTR_SET)
-            aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_TEXTEFFECT, (USHORT)eTextEffect));
+            aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_TEXTEFFECT, (sal_uInt16)eTextEffect));
         else if (nTextEffectSet == ATTR_MIXED)
             aSet.InvalidateItem( ATTR_ANIMATION_TEXTEFFECT );
         else
             aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_TEXTEFFECT, presentation::AnimationEffect_NONE));
 
         if (nSpeedSet == ATTR_SET)
-            aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_SPEED, (USHORT)eSpeed));
+            aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_SPEED, (sal_uInt16)eSpeed));
         else
             aSet.InvalidateItem(ATTR_ANIMATION_SPEED);
 
@@ -397,7 +397,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         else if (nFadeOutSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ANIMATION_FADEOUT);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_FADEOUT, FALSE));
+            aSet.Put(SfxBoolItem(ATTR_ANIMATION_FADEOUT, sal_False));
 
         if (nFadeColorSet == ATTR_SET)
             aSet.Put(SvxColorItem(aFadeColor, ATTR_ANIMATION_COLOR));
@@ -411,14 +411,14 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         else if (nInvisibleSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ANIMATION_INVISIBLE);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_INVISIBLE, FALSE));
+            aSet.Put(SfxBoolItem(ATTR_ANIMATION_INVISIBLE, sal_False));
 
         if (nSoundOnSet == ATTR_SET)
             aSet.Put(SfxBoolItem(ATTR_ANIMATION_SOUNDON, bSoundOn));
         else if (nSoundOnSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ANIMATION_SOUNDON);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_SOUNDON, FALSE));
+            aSet.Put(SfxBoolItem(ATTR_ANIMATION_SOUNDON, sal_False));
 
         if (nSoundFileSet == ATTR_SET)
             aSet.Put(SfxStringItem(ATTR_ANIMATION_SOUNDFILE, aSound));
@@ -430,10 +430,10 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         else if (nPlayFullSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ANIMATION_PLAYFULL);
         else
-            aSet.Put(SfxBoolItem(ATTR_ANIMATION_PLAYFULL, FALSE));
+            aSet.Put(SfxBoolItem(ATTR_ANIMATION_PLAYFULL, sal_False));
 
         if (nClickActionSet == ATTR_SET)
-            aSet.Put(SfxAllEnumItem(ATTR_ACTION, (USHORT)eClickAction));
+            aSet.Put(SfxAllEnumItem(ATTR_ACTION, (sal_uInt16)eClickAction));
         else if (nClickActionSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ACTION);
         else
@@ -445,14 +445,14 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             aSet.InvalidateItem(ATTR_ACTION_FILENAME);
 
         if (nSecondEffectSet == ATTR_SET)
-            aSet.Put(SfxAllEnumItem(ATTR_ACTION_EFFECT, (USHORT)eSecondEffect));
+            aSet.Put(SfxAllEnumItem(ATTR_ACTION_EFFECT, (sal_uInt16)eSecondEffect));
         else if (nSecondEffectSet == ATTR_MIXED)
             aSet.InvalidateItem( ATTR_ACTION_EFFECT );
         else
             aSet.Put(SfxAllEnumItem(ATTR_ACTION_EFFECT, presentation::AnimationEffect_NONE));
 
         if (nSecondSpeedSet == ATTR_SET)
-            aSet.Put(SfxAllEnumItem(ATTR_ACTION_EFFECTSPEED, (USHORT)eSecondSpeed));
+            aSet.Put(SfxAllEnumItem(ATTR_ACTION_EFFECTSPEED, (sal_uInt16)eSecondSpeed));
         else
             aSet.InvalidateItem(ATTR_ACTION_EFFECTSPEED);
 
@@ -461,19 +461,19 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         else if (nSecondSoundOnSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ACTION_SOUNDON);
         else
-            aSet.Put(SfxBoolItem(ATTR_ACTION_SOUNDON, FALSE));
+            aSet.Put(SfxBoolItem(ATTR_ACTION_SOUNDON, sal_False));
 
         if (nSecondPlayFullSet == ATTR_SET)
             aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, bSecondPlayFull));
         else if (nPlayFullSet == ATTR_MIXED)
             aSet.InvalidateItem(ATTR_ACTION_PLAYFULL);
         else
-            aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, FALSE));
+            aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, sal_False));
 
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         SfxAbstractDialog* pDlg = pFact ? pFact->CreatSdActionDialog( NULL, &aSet, mpView ) : 0;
 
-        USHORT nResult = pDlg ? pDlg->Execute() : RET_CANCEL;
+        sal_uInt16 nResult = pDlg ? pDlg->Execute() : RET_CANCEL;
 
         if( nResult == RET_OK )
         {
@@ -706,11 +706,11 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 
             pInfo = mpDoc->GetAnimationInfo(pObject);
 
-            BOOL bCreated = FALSE;
+            sal_Bool bCreated = sal_False;
             if( !pInfo )
             {
                 pInfo = SdDrawDocument::GetShapeUserData(*pObject,true);
-                bCreated = TRUE;
+                bCreated = sal_True;
             }
 
             // das Pfadobjekt fuer 'an Kurve entlang'?
@@ -731,7 +731,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 //              pAction->SetPathObj(pInfo->mpPathObj, pInfo->mpPathObj);
                 pAction->SetClickAction(pInfo->meClickAction, pInfo->meClickAction);
                 pAction->SetBookmark(pInfo->GetBookmark(), pInfo->GetBookmark());
-//              pAction->SetInvisibleInPres(pInfo->mbInvisibleInPresentation, TRUE);
+//              pAction->SetInvisibleInPres(pInfo->mbInvisibleInPresentation, sal_True);
                 pAction->SetVerb(pInfo->mnVerb, pInfo->mnVerb);
                 pAction->SetSecondEffect(pInfo->meSecondEffect, pInfo->meSecondEffect);
                 pAction->SetSecondSpeed(pInfo->meSecondSpeed, pInfo->meSecondSpeed);
@@ -739,7 +739,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 pAction->SetSecondPlayFull(pInfo->mbSecondPlayFull, pInfo->mbSecondPlayFull);
                 pUndoGroup->AddAction(pAction);
 
-//              pInfo->mbInvisibleInPresentation = TRUE;
+//              pInfo->mbInvisibleInPresentation = sal_True;
             }
             else
             {
@@ -762,7 +762,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 pAction->SetBookmark(pInfo->GetBookmark(), aBookmark);
 //              pAction->SetInvisibleInPres(pInfo->mbInvisibleInPresentation,
 //                                          pInfo->mbInvisibleInPresentation);
-                pAction->SetVerb(pInfo->mnVerb, (USHORT)pInfo->GetBookmark().ToInt32() );
+                pAction->SetVerb(pInfo->mnVerb, (sal_uInt16)pInfo->GetBookmark().ToInt32() );
                 pAction->SetSecondEffect(pInfo->meSecondEffect, eSecondEffect);
                 pAction->SetSecondSpeed(pInfo->meSecondSpeed, eSecondSpeed);
                 pAction->SetSecondSoundOn(pInfo->mbSecondSoundOn, bSecondSoundOn);
@@ -823,7 +823,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 //                  pInfo->mSetPath(pPath);
 
                 if (eClickAction == presentation::ClickAction_VERB)
-                    pInfo->mnVerb = (USHORT)aBookmark.ToInt32();
+                    pInfo->mnVerb = (sal_uInt16)aBookmark.ToInt32();
             }
         }
         // Undo Gruppe dem Undo Manager uebergeben

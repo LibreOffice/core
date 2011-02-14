@@ -271,7 +271,7 @@ IMPL_LINK( OCollectionView, Save_Click, PushButton*, EMPTYARG )
                 // xNameContainer->removeByName(sName);
             }
             m_aName.SetText(sName);
-            EndDialog( TRUE );
+            EndDialog( sal_True );
         }
     }
     catch( const Exception& )
@@ -358,7 +358,7 @@ IMPL_LINK( OCollectionView, Dbl_Click_FileView, SvtFileView*, EMPTYARG )
 // -----------------------------------------------------------------------------
 void OCollectionView::initCurrentPath()
 {
-    BOOL bEnable = FALSE;
+    sal_Bool bEnable = sal_False;
     try
     {
         if ( m_xContent.is() )

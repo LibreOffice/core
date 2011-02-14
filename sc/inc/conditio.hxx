@@ -74,7 +74,7 @@ class SC_DLLPUBLIC ScConditionEntry
 {
                                         // gespeicherte Daten:
     ScConditionMode     eOp;
-    USHORT              nOptions;
+    sal_uInt16              nOptions;
     double              nVal1;          // eingegeben oder berechnet
     double              nVal2;
     String              aStrVal1;       // eingegeben oder berechnet
@@ -83,8 +83,8 @@ class SC_DLLPUBLIC ScConditionEntry
     String              aStrNmsp2;      // namespace to be used on (re)compilation, e.g. in XML import
     formula::FormulaGrammar::Grammar eTempGrammar1;  // grammar to be used on (re)compilation, e.g. in XML import
     formula::FormulaGrammar::Grammar eTempGrammar2;  // grammar to be used on (re)compilation, e.g. in XML import
-    BOOL                bIsStr1;        // um auch leere Strings zu erkennen
-    BOOL                bIsStr2;
+    sal_Bool                bIsStr1;        // um auch leere Strings zu erkennen
+    sal_Bool                bIsStr2;
     ScTokenArray*       pFormula1;      // eingegebene Formel
     ScTokenArray*       pFormula2;
     ScAddress           aSrcPos;        // source position for formulas
@@ -93,20 +93,20 @@ class SC_DLLPUBLIC ScConditionEntry
     ScFormulaCell*      pFCell1;
     ScFormulaCell*      pFCell2;
     ScDocument*         pDoc;
-    BOOL                bRelRef1;
-    BOOL                bRelRef2;
-    BOOL                bFirstRun;
+    sal_Bool                bRelRef1;
+    sal_Bool                bRelRef2;
+    sal_Bool                bFirstRun;
 
     void    MakeCells( const ScAddress& rPos );
     void    Compile( const String& rExpr1, const String& rExpr2,
                         const String& rExprNmsp1, const String& rExprNmsp2,
                         formula::FormulaGrammar::Grammar eGrammar1,
                         formula::FormulaGrammar::Grammar eGrammar2,
-                        BOOL bTextToReal );
+                        sal_Bool bTextToReal );
     void    Interpret( const ScAddress& rPos );
 
-    BOOL    IsValid( double nArg ) const;
-    BOOL    IsValidStr( const String& rArg ) const;
+    sal_Bool    IsValid( double nArg ) const;
+    sal_Bool    IsValidStr( const String& rArg ) const;
 
 public:
             ScConditionEntry( ScConditionMode eOper,
@@ -125,11 +125,11 @@ public:
 
     int             operator== ( const ScConditionEntry& r ) const;
 
-    BOOL            IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) const;
+    sal_Bool            IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) const;
 
     ScConditionMode GetOperation() const        { return eOp; }
-    BOOL            IsIgnoreBlank() const       { return ( nOptions & SC_COND_NOBLANKS ) == 0; }
-    void            SetIgnoreBlank(BOOL bSet);
+    sal_Bool            IsIgnoreBlank() const       { return ( nOptions & SC_COND_NOBLANKS ) == 0; }
+    void            SetIgnoreBlank(sal_Bool bSet);
     ScAddress       GetSrcPos() const           { return aSrcPos; }
 
     ScAddress       GetValidSrcPos() const;     // adjusted to allow textual representation of expressions
@@ -139,10 +139,10 @@ public:
     void            SetFormula1( const ScTokenArray& rArray );
     void            SetFormula2( const ScTokenArray& rArray );
 
-    String          GetExpression( const ScAddress& rCursor, USHORT nPos, ULONG nNumFmt = 0,
+    String          GetExpression( const ScAddress& rCursor, sal_uInt16 nPos, sal_uLong nNumFmt = 0,
                                     const formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
 
-    ScTokenArray*   CreateTokenArry( USHORT nPos ) const;
+    ScTokenArray*   CreateTokenArry( sal_uInt16 nPos ) const;
 
     void            CompileAll();
     void            CompileXML();
@@ -210,8 +210,8 @@ class SC_DLLPUBLIC ScConditionalFormat
     ScRangeList*        pAreas;             // Bereiche fuer Paint
     sal_uInt32          nKey;               // Index in Attributen
     ScCondFormatEntry** ppEntries;
-    USHORT              nEntryCount;
-    BOOL                bIsUsed;            // temporaer beim Speichern
+    sal_uInt16              nEntryCount;
+    sal_Bool                bIsUsed;            // temporaer beim Speichern
 
 public:
             ScConditionalFormat(sal_uInt32 nNewKey, ScDocument* pDocument);
@@ -223,8 +223,8 @@ public:
 
     void            AddEntry( const ScCondFormatEntry& rNew );
 
-    BOOL            IsEmpty() const         { return (nEntryCount == 0); }
-    USHORT          Count() const           { return nEntryCount; }
+    sal_Bool            IsEmpty() const         { return (nEntryCount == 0); }
+    sal_uInt16          Count() const           { return nEntryCount; }
 
     void            CompileAll();
     void            CompileXML();
@@ -235,11 +235,11 @@ public:
 
     void            SourceChanged( const ScAddress& rAddr );
 
-    const ScCondFormatEntry* GetEntry( USHORT nPos ) const;
+    const ScCondFormatEntry* GetEntry( sal_uInt16 nPos ) const;
 
     const String&   GetCellStyle( ScBaseCell* pCell, const ScAddress& rPos ) const;
 
-    BOOL            EqualEntries( const ScConditionalFormat& r ) const;
+    sal_Bool            EqualEntries( const ScConditionalFormat& r ) const;
 
     void            DoRepaint( const ScRange* pModified );
     void            InvalidateArea();
@@ -247,15 +247,15 @@ public:
     sal_uInt32      GetKey() const          { return nKey; }
     void            SetKey(sal_uInt32 nNew) { nKey = nNew; }    // nur wenn nicht eingefuegt!
 
-    void            SetUsed(BOOL bSet)      { bIsUsed = bSet; }
-    BOOL            IsUsed() const          { return bIsUsed; }
+    void            SetUsed(sal_Bool bSet)      { bIsUsed = bSet; }
+    sal_Bool            IsUsed() const          { return bIsUsed; }
 
     bool            MarkUsedExternalReferences() const;
 
     //  sortiert (per PTRARR) nach Index
     //  operator== nur fuer die Sortierung
-    BOOL operator ==( const ScConditionalFormat& r ) const  { return nKey == r.nKey; }
-    BOOL operator < ( const ScConditionalFormat& r ) const  { return nKey <  r.nKey; }
+    sal_Bool operator ==( const ScConditionalFormat& r ) const  { return nKey == r.nKey; }
+    sal_Bool operator < ( const ScConditionalFormat& r ) const  { return nKey <  r.nKey; }
 };
 
 //
@@ -293,7 +293,7 @@ public:
      *  references are marked now. */
     bool    MarkUsedExternalReferences() const;
 
-    BOOL    operator==( const ScConditionalFormatList& r ) const;       // fuer Ref-Undo
+    sal_Bool    operator==( const ScConditionalFormatList& r ) const;       // fuer Ref-Undo
 };
 
 #endif

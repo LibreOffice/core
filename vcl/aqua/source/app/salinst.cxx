@@ -71,9 +71,9 @@
 using namespace std;
 using namespace ::com::sun::star;
 
-extern BOOL ImplSVMain();
+extern sal_Bool ImplSVMain();
 
-static BOOL* gpbInit = 0;
+static sal_Bool* gpbInit = 0;
 static NSMenu* pDockMenu = nil;
 static bool bNoSVMain = true;
 static bool bLeftMain = false;
@@ -207,7 +207,7 @@ static void initNSApp()
         [NSApp activateIgnoringOtherApps: YES];
 }
 
-BOOL ImplSVMainHook( BOOL * pbInit )
+sal_Bool ImplSVMainHook( sal_Bool * pbInit )
 {
     gpbInit = pbInit;
 
@@ -402,7 +402,7 @@ sal_Bool SalYieldMutex::tryToAcquire()
 
 // some convenience functions regarding the yield mutex, aka solar mutex
 
-BOOL ImplSalYieldMutexTryToAcquire()
+sal_Bool ImplSalYieldMutexTryToAcquire()
 {
     AquaSalInstance* pInst = (AquaSalInstance*) GetSalData()->mpFirstInstance;
     if ( pInst )
@@ -513,7 +513,7 @@ void AquaSalInstance::wakeupYield()
 
 // -----------------------------------------------------------------------
 
-void AquaSalInstance::PostUserEvent( AquaSalFrame* pFrame, USHORT nType, void* pData )
+void AquaSalInstance::PostUserEvent( AquaSalFrame* pFrame, sal_uInt16 nType, void* pData )
 {
     osl_acquireMutex( maUserEventListMutex );
     maUserEvents.push_back( SalUserEvent( pFrame, pData, nType ) );
@@ -532,14 +532,14 @@ vos::IMutex* AquaSalInstance::GetYieldMutex()
 
 // -----------------------------------------------------------------------
 
-ULONG AquaSalInstance::ReleaseYieldMutex()
+sal_uLong AquaSalInstance::ReleaseYieldMutex()
 {
     SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     if ( pYieldMutex->GetThreadId() ==
          vos::OThread::getCurrentIdentifier() )
     {
-        ULONG nCount = pYieldMutex->GetAcquireCount();
-        ULONG n = nCount;
+        sal_uLong nCount = pYieldMutex->GetAcquireCount();
+        sal_uLong n = nCount;
         while ( n )
         {
             pYieldMutex->release();
@@ -554,7 +554,7 @@ ULONG AquaSalInstance::ReleaseYieldMutex()
 
 // -----------------------------------------------------------------------
 
-void AquaSalInstance::AcquireYieldMutex( ULONG nCount )
+void AquaSalInstance::AcquireYieldMutex( sal_uLong nCount )
 {
     SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     while ( nCount )
@@ -601,7 +601,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         break;
     case AppExecuteSVMain:
     {
-        BOOL bResult = ImplSVMain();
+        sal_Bool bResult = ImplSVMain();
         if( gpbInit )
             *gpbInit = bResult;
         [NSApp stop: NSApp];
@@ -711,7 +711,7 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
     bool bDispatchUser = true;
     while( bDispatchUser )
     {
-        ULONG nCount = ReleaseYieldMutex();
+        sal_uLong nCount = ReleaseYieldMutex();
 
         // get one user event
         osl_acquireMutex( maUserEventListMutex );
@@ -752,7 +752,7 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
         bool bHadEvent = false;
         do
         {
-            ULONG nCount = ReleaseYieldMutex();
+            sal_uLong nCount = ReleaseYieldMutex();
 
             pEvent = [NSApp nextEventMatchingMask: NSAnyEventMask untilDate: nil
                             inMode: NSDefaultRunLoopMode dequeue: YES];
@@ -769,7 +769,7 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
         // if we had no event yet, wait for one if requested
         if( bWait && ! bHadEvent )
         {
-            ULONG nCount = ReleaseYieldMutex();
+            sal_uLong nCount = ReleaseYieldMutex();
 
             NSDate* pDt = AquaSalTimer::pRunningTimer ? [AquaSalTimer::pRunningTimer fireDate] : [NSDate distantFuture];
             pEvent = [NSApp nextEventMatchingMask: NSAnyEventMask untilDate: pDt
@@ -813,7 +813,7 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
         // has dispatched an event, cop out at 200 ms
         osl_resetCondition( maWaitingYieldCond );
         TimeValue aVal = { 0, 200000000 };
-        ULONG nCount = ReleaseYieldMutex();
+        sal_uLong nCount = ReleaseYieldMutex();
         osl_waitCondition( maWaitingYieldCond, &aVal );
         AcquireYieldMutex( nCount );
     }
@@ -844,7 +844,7 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
 // -----------------------------------------------------------------------
 
-bool AquaSalInstance::AnyInput( USHORT nType )
+bool AquaSalInstance::AnyInput( sal_uInt16 nType )
 {
     if( nType & INPUT_APPEVENT )
     {
@@ -890,14 +890,14 @@ bool AquaSalInstance::AnyInput( USHORT nType )
 
 // -----------------------------------------------------------------------
 
-SalFrame* AquaSalInstance::CreateChildFrame( SystemParentData* pSystemParentData, ULONG nSalFrameStyle )
+SalFrame* AquaSalInstance::CreateChildFrame( SystemParentData* pSystemParentData, sal_uLong nSalFrameStyle )
 {
     return NULL;
 }
 
 // -----------------------------------------------------------------------
 
-SalFrame* AquaSalInstance::CreateFrame( SalFrame* pParent, ULONG nSalFrameStyle )
+SalFrame* AquaSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nSalFrameStyle )
 {
     SalData::ensureThreadAutoreleasePool();
 
@@ -914,7 +914,7 @@ void AquaSalInstance::DestroyFrame( SalFrame* pFrame )
 
 // -----------------------------------------------------------------------
 
-SalObject* AquaSalInstance::CreateObject( SalFrame* pParent, SystemWindowData* /* pWindowData */, BOOL /* bShow */ )
+SalObject* AquaSalInstance::CreateObject( SalFrame* pParent, SystemWindowData* /* pWindowData */, sal_Bool /* bShow */ )
 {
     // SystemWindowData is meaningless on Mac OS X
     AquaSalObject *pObject = NULL;

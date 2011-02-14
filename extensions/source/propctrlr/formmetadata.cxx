@@ -38,7 +38,7 @@
 #include "propctrlr.hrc"
 #include <svtools/localresaccess.hxx>
 #include <tools/debug.hxx>
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 
 #include <algorithm>
 #include <functional>

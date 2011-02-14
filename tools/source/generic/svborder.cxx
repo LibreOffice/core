@@ -42,7 +42,7 @@ SvBorder::SvBorder( const Rectangle & rOuter, const Rectangle & rInner )
         aInner.Justify();
 
     OSL_ENSURE( aOuter.IsInside( aInner ),
-                "SvBorder::SvBorder: FALSE == aOuter.IsInside( aInner )" );
+                "SvBorder::SvBorder: sal_False == aOuter.IsInside( aInner )" );
     nTop    = aInner.Top()    - aOuter.Top();
     nRight  = aOuter.Right()  - aInner.Right();
     nBottom = aOuter.Bottom() - aInner.Bottom();

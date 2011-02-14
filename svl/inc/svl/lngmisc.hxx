@@ -45,29 +45,29 @@
 namespace linguistic
 {
 
-inline BOOL IsHyphen( sal_Unicode cChar )
+inline sal_Bool IsHyphen( sal_Unicode cChar )
 {
     return cChar == SVT_SOFT_HYPHEN  ||  cChar == SVT_HARD_HYPHEN;
 }
 
 
-inline BOOL IsControlChar( sal_Unicode cChar )
+inline sal_Bool IsControlChar( sal_Unicode cChar )
 {
     return cChar < (sal_Unicode) ' ';
 }
 
 
-inline BOOL HasHyphens( const rtl::OUString &rTxt )
+inline sal_Bool HasHyphens( const rtl::OUString &rTxt )
 {
     return  rTxt.indexOf( SVT_SOFT_HYPHEN ) != -1  ||
             rTxt.indexOf( SVT_HARD_HYPHEN ) != -1;
 }
 
-SVL_DLLPUBLIC INT32 GetNumControlChars( const rtl::OUString &rTxt );
-SVL_DLLPUBLIC BOOL  RemoveHyphens( rtl::OUString &rTxt );
-SVL_DLLPUBLIC BOOL  RemoveControlChars( rtl::OUString &rTxt );
+SVL_DLLPUBLIC sal_Int32 GetNumControlChars( const rtl::OUString &rTxt );
+SVL_DLLPUBLIC sal_Bool  RemoveHyphens( rtl::OUString &rTxt );
+SVL_DLLPUBLIC sal_Bool  RemoveControlChars( rtl::OUString &rTxt );
 
-SVL_DLLPUBLIC BOOL  ReplaceControlChars( rtl::OUString &rTxt, sal_Char aRplcChar = ' ' );
+SVL_DLLPUBLIC sal_Bool  ReplaceControlChars( rtl::OUString &rTxt, sal_Char aRplcChar = ' ' );
 
 SVL_DLLPUBLIC String GetThesaurusReplaceText( const String &rText );
 

@@ -59,7 +59,7 @@ class ScAccessibleEditObject;
 class ScHFEditPage : public SfxTabPage
 {
 public:
-    virtual BOOL    FillItemSet ( SfxItemSet& rCoreSet );
+    virtual sal_Bool    FillItemSet ( SfxItemSet& rCoreSet );
     virtual void    Reset       ( const SfxItemSet& rCoreSet );
 
     void            SetNumType(SvxNumType eNumType);
@@ -67,9 +67,9 @@ public:
 
 protected:
                 ScHFEditPage( Window*           pParent,
-                              USHORT            nResId,
+                              sal_uInt16            nResId,
                               const SfxItemSet& rCoreSet,
-                              USHORT            nWhich, bool bHeader );
+                              sal_uInt16            nWhich, bool bHeader );
     virtual     ~ScHFEditPage();
 
 private:
@@ -93,7 +93,7 @@ private:
     FixedInfo       aFtInfo;
     ScPopupMenu     aPopUpFile;
 
-    USHORT          nWhich;
+    sal_uInt16          nWhich;
     String          aCmdArr[6];
 
 private:
@@ -119,7 +119,7 @@ class ScRightHeaderEditPage : public ScHFEditPage
 {
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rCoreSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
 private:
     ScRightHeaderEditPage( Window* pParent, const SfxItemSet& rSet );
@@ -131,7 +131,7 @@ class ScLeftHeaderEditPage : public ScHFEditPage
 {
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rCoreSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
 private:
     ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& rSet );
@@ -143,7 +143,7 @@ class ScRightFooterEditPage : public ScHFEditPage
 {
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rCoreSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
 private:
     ScRightFooterEditPage( Window* pParent, const SfxItemSet& rSet );
@@ -155,7 +155,7 @@ class ScLeftFooterEditPage : public ScHFEditPage
 {
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rCoreSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
 private:
     ScLeftFooterEditPage( Window* pParent, const SfxItemSet& rSet );

@@ -48,8 +48,8 @@ private:
     EditView*   pEditView;
     ScViewData* pViewData;
     TransferableClipboardListener* pClipEvtLstnr;
-    BOOL        bPastePossible;
-    BOOL        bIsInsertMode;
+    sal_Bool        bPastePossible;
+    sal_Bool        bIsInsertMode;
 
     const SvxURLField* GetURLField();
     ScInputHandler* GetMyInputHdl();
@@ -77,7 +77,7 @@ public:
     void    ExecuteUndo(SfxRequest& rReq);
     void    GetUndoState(SfxItemSet &rSet);
 
-    String  GetSelectionText( BOOL bWholeWord );
+    String  GetSelectionText( sal_Bool bWholeWord );
 };
 
 

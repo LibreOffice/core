@@ -76,7 +76,7 @@ class ObjectStack {
         ObjectStack ()   { pRoot = NULL; }
 
         const RSCINST & Top  ()     { return pRoot->aInst; }
-        BOOL        IsEmpty()   { return( pRoot == NULL ); }
+        sal_Bool        IsEmpty()   { return( pRoot == NULL ); }
         void        IncTupelRec() { pRoot->nTupelRec++; }
         void        DecTupelRec() { pRoot->nTupelRec--; }
         sal_uInt32  TupelRecCount() const { return pRoot->nTupelRec; }

@@ -38,7 +38,7 @@
 // =======================================================================
 
 static HBITMAP ImplCreateVirDevBitmap( HDC hDC, long nDX, long nDY,
-                                       USHORT nBitCount )
+                                       sal_uInt16 nBitCount )
 {
     HBITMAP hBitmap;
 
@@ -78,14 +78,14 @@ static HBITMAP ImplCreateVirDevBitmap( HDC hDC, long nDX, long nDY,
 
 SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
                                                        long nDX, long nDY,
-                                                       USHORT nBitCount,
+                                                       sal_uInt16 nBitCount,
                                                        const SystemGraphicsData* pData )
 {
     WinSalGraphics* pGraphics = static_cast<WinSalGraphics*>(pSGraphics);
 
     HDC     hDC = NULL;
     HBITMAP hBmp = NULL;
-    BOOL    bOk = FALSE;
+    sal_Bool    bOk = FALSE;
 
     if( pData )
     {
@@ -226,7 +226,7 @@ void WinSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 
 // -----------------------------------------------------------------------
 
-BOOL WinSalVirtualDevice::SetSize( long nDX, long nDY )
+sal_Bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
 {
     if( mbForeignDC || !mhBmp )
         return TRUE;    // ???

@@ -45,8 +45,8 @@ class ScTpCalcOptions : public SfxTabPage
 public:
     static  SfxTabPage* Create          ( Window*               pParent,
                                           const SfxItemSet&     rCoreSet );
-    static  USHORT*     GetRanges       ();
-    virtual BOOL        FillItemSet     ( SfxItemSet& rCoreSet );
+    static  sal_uInt16*     GetRanges       ();
+    virtual sal_Bool        FillItemSet     ( SfxItemSet& rCoreSet );
     virtual void        Reset           ( const SfxItemSet& rCoreSet );
     using SfxTabPage::DeactivatePage;
     virtual int         DeactivatePage  ( SfxItemSet* pSet = NULL );
@@ -83,7 +83,7 @@ private:
 
     ScDocOptions*   pOldOptions;
     ScDocOptions*   pLocalOptions;
-    USHORT          nWhichCalc;
+    sal_uInt16          nWhichCalc;
 
 #ifdef _TPCALC_CXX
 private:

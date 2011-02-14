@@ -37,7 +37,7 @@ SdrUndoAction*  GetSdrUndoAction    ( ScDocument* pDoc );
 void            DoSdrUndoAction     ( SdrUndoAction* pUndoAction, ScDocument* pDoc );
 void            RedoSdrUndoAction   ( SdrUndoAction* pUndoAction );
 void            DeleteSdrUndoAction ( SdrUndoAction* pUndoAction );
-void            EnableDrawAdjust    ( ScDocument* pDoc, BOOL bEnable );
+void            EnableDrawAdjust    ( ScDocument* pDoc, sal_Bool bEnable );
 
 
 

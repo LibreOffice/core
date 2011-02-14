@@ -47,8 +47,8 @@ class ScColRowLabelDlg : public ModalDialog
 {
 public:
             ScColRowLabelDlg( Window* pParent,
-                              BOOL bCol = FALSE,
-                              BOOL bRow = FALSE )
+                              sal_Bool bCol = sal_False,
+                              sal_Bool bRow = sal_False )
                 : ModalDialog( pParent, ScResId( RID_SCDLG_CHARTCOLROW ) ),
                   aFlColRow  ( this, ScResId(6) ),
                   aBtnRow    ( this, ScResId(2) ),
@@ -62,8 +62,8 @@ public:
                     aBtnRow.Check( bRow );
                 }
 
-    BOOL IsCol() { return aBtnCol.IsChecked(); }
-    BOOL IsRow() { return aBtnRow.IsChecked(); }
+    sal_Bool IsCol() { return aBtnCol.IsChecked(); }
+    sal_Bool IsRow() { return aBtnRow.IsChecked(); }
 
 private:
     FixedLine       aFlColRow;

@@ -61,7 +61,7 @@ public:
     static SfxTabPage*  Create( Window* pParent,
                                 const SfxItemSet& rAttrSet );
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
 
@@ -73,9 +73,9 @@ class OfaMSFilterTabPage2 : public SfxTabPage
         using SvTreeListBox::SetCheckButtonState;
         using SvxSimpleTable::SetTabs;
 
-        void            CheckEntryPos(ULONG nPos, USHORT nCol, BOOL bChecked);
-        SvButtonState   GetCheckButtonState( SvLBoxEntry*, USHORT nCol ) const;
-        void            SetCheckButtonState( SvLBoxEntry*, USHORT nCol, SvButtonState );
+        void            CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked);
+        SvButtonState   GetCheckButtonState( SvLBoxEntry*, sal_uInt16 nCol ) const;
+        void            SetCheckButtonState( SvLBoxEntry*, sal_uInt16 nCol, SvButtonState );
     protected:
         virtual void    SetTabs();
         virtual void    HBarClick();
@@ -105,7 +105,7 @@ public:
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
 

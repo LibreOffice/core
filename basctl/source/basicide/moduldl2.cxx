@@ -127,15 +127,15 @@ public:
 class BasicLibLBoxString : public SvLBoxString
 {
 public:
-    BasicLibLBoxString( SvLBoxEntry* pEntry, USHORT nFlags, const String& rTxt ) :
+    BasicLibLBoxString( SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& rTxt ) :
         SvLBoxString( pEntry, nFlags, rTxt ) {}
 
-    virtual void Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags, SvLBoxEntry* pEntry );
+    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
 };
 
 //----------------------------------------------------------------------------
 
-void BasicLibLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT, SvLBoxEntry* pEntry )
+void BasicLibLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, SvLBoxEntry* pEntry )
 {
     // Change text color if library is read only:
     bool bReadOnly = false;
@@ -210,7 +210,7 @@ void BasicCheckBox::Init()
 
 //----------------------------------------------------------------------------
 
-void BasicCheckBox::SetMode( USHORT n )
+void BasicCheckBox::SetMode( sal_uInt16 n )
 {
     nMode = n;
 
@@ -222,7 +222,7 @@ void BasicCheckBox::SetMode( USHORT n )
 
 //----------------------------------------------------------------------------
 
-SvLBoxEntry* BasicCheckBox::DoInsertEntry( const String& rStr, ULONG nPos )
+SvLBoxEntry* BasicCheckBox::DoInsertEntry( const String& rStr, sal_uLong nPos )
 {
     return SvTabListBox::InsertEntryToColumn( rStr, nPos, 0 );
 }
@@ -231,8 +231,8 @@ SvLBoxEntry* BasicCheckBox::DoInsertEntry( const String& rStr, ULONG nPos )
 
 SvLBoxEntry* BasicCheckBox::FindEntry( const String& rName )
 {
-    ULONG nCount = GetEntryCount();
-    for ( ULONG i = 0; i < nCount; i++ )
+    sal_uLong nCount = GetEntryCount();
+    for ( sal_uLong i = 0; i < nCount; i++ )
     {
         SvLBoxEntry* pEntry = GetEntry( i );
         DBG_ASSERT( pEntry, "pEntry?!" );
@@ -244,7 +244,7 @@ SvLBoxEntry* BasicCheckBox::FindEntry( const String& rName )
 
 //----------------------------------------------------------------------------
 
-void BasicCheckBox::CheckEntryPos( ULONG nPos, BOOL bCheck )
+void BasicCheckBox::CheckEntryPos( sal_uLong nPos, sal_Bool bCheck )
 {
     if ( nPos < GetEntryCount() )
     {
@@ -260,11 +260,11 @@ void BasicCheckBox::CheckEntryPos( ULONG nPos, BOOL bCheck )
 
 //----------------------------------------------------------------------------
 
-BOOL BasicCheckBox::IsChecked( ULONG nPos ) const
+sal_Bool BasicCheckBox::IsChecked( sal_uLong nPos ) const
 {
     if ( nPos < GetEntryCount() )
         return (GetCheckButtonState( GetEntry( nPos ) ) == SV_BUTTON_CHECKED);
-    return FALSE;
+    return sal_False;
 }
 
 //----------------------------------------------------------------------------
@@ -276,8 +276,8 @@ void BasicCheckBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt, const
     if ( nMode == LIBMODE_MANAGER )
     {
         // initialize all columns with own string class (column 0 == bitmap)
-        USHORT nCount = pEntry->ItemCount();
-        for ( USHORT nCol = 1; nCol < nCount; ++nCol )
+        sal_uInt16 nCount = pEntry->ItemCount();
+        for ( sal_uInt16 nCol = 1; nCol < nCount; ++nCol )
         {
             SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nCol );
             BasicLibLBoxString* pStr = new BasicLibLBoxString( pEntry, 0, pCol->GetText() );
@@ -288,10 +288,10 @@ void BasicCheckBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt, const
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
+sal_Bool __EXPORT BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 {
     if ( nMode != LIBMODE_MANAGER )
-        return FALSE;
+        return sal_False;
 
     DBG_ASSERT( pEntry, "Kein Eintrag?" );
 
@@ -300,7 +300,7 @@ BOOL __EXPORT BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
     if ( aLibName.EqualsIgnoreCaseAscii( "Standard" ) )
     {
         ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_CANNOTCHANGENAMESTDLIB ) ) ).Execute();
-        return FALSE;
+        return sal_False;
     }
 
     // check, if library is readonly
@@ -311,11 +311,11 @@ BOOL __EXPORT BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
          ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) && !xDlgLibContainer->isLibraryLink( aOULibName ) ) )
     {
         ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_LIBISREADONLY ) ) ).Execute();
-        return FALSE;
+        return sal_False;
     }
 
     // i24094: Password verification necessary for renaming
-    BOOL bOK = TRUE;
+    sal_Bool bOK = sal_True;
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
     {
         // check password
@@ -327,29 +327,29 @@ BOOL __EXPORT BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
             bOK = QueryPassword( xModLibContainer1, aLibName, aPassword );
         }
         if ( !bOK )
-            return FALSE;
+            return sal_False;
     }
 
     // TODO: check if library is reference/link
 
     // Prueffen, ob Referenz...
     /*
-    USHORT nLib = pBasMgr->GetLibId( GetEntryText( pEntry, 0 ) );
+    sal_uInt16 nLib = pBasMgr->GetLibId( GetEntryText( pEntry, 0 ) );
     DBG_ASSERT( nLib != LIB_NOTFOUND, "LibId ?!" );
     if ( pBasMgr->IsReference( nLib ) )
     {
         ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_CANNOTCHANGENAMEREFLIB ) ) ).Execute();
-        return FALSE;
+        return sal_False;
     }
     */
-    return TRUE;
+    return sal_True;
 }
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
+sal_Bool __EXPORT BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
 {
-    BOOL bValid = ( rNewText.Len() <= 30 ) && BasicIDE::IsValidSbxName( rNewText );
+    sal_Bool bValid = ( rNewText.Len() <= 30 ) && BasicIDE::IsValidSbxName( rNewText );
     String aCurText( GetEntryText( pEntry, 0 ) );
     if ( bValid && ( aCurText != rNewText ) )
     {
@@ -381,12 +381,12 @@ BOOL __EXPORT BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNe
         catch ( container::ElementExistException& )
         {
             ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_SBXNAMEALLREADYUSED ) ) ).Execute();
-            return FALSE;
+            return sal_False;
         }
         catch ( container::NoSuchElementException& )
         {
             DBG_UNHANDLED_EXCEPTION();
-            return FALSE;
+            return sal_False;
         }
     }
 
@@ -418,7 +418,7 @@ IMPL_LINK(NewObjectDialog, OkButtonHandler, Button *, EMPTYARG)
     return 0;
 }
 
-NewObjectDialog::NewObjectDialog(Window * pParent, USHORT nMode,
+NewObjectDialog::NewObjectDialog(Window * pParent, sal_uInt16 nMode,
                                  bool bCheckName)
     : ModalDialog( pParent, IDEResId( RID_DLG_NEWLIB ) ),
         aText( this, IDEResId( RID_FT_NEWLIB ) ),
@@ -520,7 +520,7 @@ LibPage::LibPage( Window * pParent )
     aBasicsBox.SetSelectHdl( LINK( this, LibPage, BasicSelectHdl ) );
 
     aLibBox.SetMode( LIBMODE_MANAGER );
-    aLibBox.EnableInplaceEditing( TRUE );
+    aLibBox.EnableInplaceEditing( sal_True );
     aLibBox.SetStyle( WB_HSCROLL | WB_BORDER | WB_TABSTOP );
     aCloseButton.GrabFocus();
 
@@ -538,8 +538,8 @@ LibPage::LibPage( Window * pParent )
 
 LibPage::~LibPage()
 {
-    USHORT nCount = aBasicsBox.GetEntryCount();
-    for ( USHORT i = 0; i < nCount; ++i )
+    sal_uInt16 nCount = aBasicsBox.GetEntryCount();
+    for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         BasicDocumentEntry* pEntry = (BasicDocumentEntry*)aBasicsBox.GetEntryData( i );
         delete pEntry;
@@ -713,19 +713,19 @@ IMPL_LINK( LibPage, ButtonHdl, Button *, pButton )
             Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
             if ( xPasswd.is() )
             {
-                BOOL bProtected = xPasswd->isLibraryPasswordProtected( aOULibName );
+                sal_Bool bProtected = xPasswd->isLibraryPasswordProtected( aOULibName );
 
                 // change password dialog
-                SvxPasswordDialog* pDlg = new SvxPasswordDialog( this, TRUE, !bProtected );
+                SvxPasswordDialog* pDlg = new SvxPasswordDialog( this, sal_True, !bProtected );
                 pDlg->SetCheckPasswordHdl( LINK( this, LibPage, CheckPasswordHdl ) );
 
                 if ( pDlg->Execute() == RET_OK )
                 {
-                    BOOL bNewProtected = xPasswd->isLibraryPasswordProtected( aOULibName );
+                    sal_Bool bNewProtected = xPasswd->isLibraryPasswordProtected( aOULibName );
 
                     if ( bNewProtected != bProtected )
                     {
-                        ULONG nPos = (ULONG)aLibBox.GetModel()->GetAbsPos( pCurEntry );
+                        sal_uLong nPos = (sal_uLong)aLibBox.GetModel()->GetAbsPos( pCurEntry );
                         aLibBox.GetModel()->Remove( pCurEntry );
                         ImpInsertLibEntry( aLibName, nPos );
                         aLibBox.SetCurEntry( aLibBox.GetEntry( nPos ) );
@@ -910,8 +910,8 @@ void LibPage::InsertLib()
                         ( xDlgLibContImport.is() && xDlgLibContImport->hasByName( aOULibName ) && xDlgLibContImport->isLibraryLink( aOULibName ) ) ) )
                 {
                     SvLBoxEntry* pEntry = pLibDlg->GetLibBox().DoInsertEntry( aLibName );
-                    USHORT nPos = (USHORT) pLibDlg->GetLibBox().GetModel()->GetAbsPos( pEntry );
-                    pLibDlg->GetLibBox().CheckEntryPos( nPos, TRUE);
+                    sal_uInt16 nPos = (sal_uInt16) pLibDlg->GetLibBox().GetModel()->GetAbsPos( pEntry );
+                    pLibDlg->GetLibBox().CheckEntryPos( nPos, sal_True);
                 }
             }
 
@@ -919,22 +919,22 @@ void LibPage::InsertLib()
                 InfoBox( this, String( IDEResId( RID_STR_NOLIBINSTORAGE ) ) ).Execute();
             else
             {
-                BOOL bChanges = FALSE;
+                sal_Bool bChanges = sal_False;
                 String aExtension( aURLObj.getExtension() );
                 String aLibExtension( String::CreateFromAscii( "xlb" ) );
                 String aContExtension( String::CreateFromAscii( "xlc" ) );
 
                 // disable reference checkbox for documents and sbls
                 if ( aExtension != aLibExtension && aExtension != aContExtension )
-                    pLibDlg->EnableReference( FALSE );
+                    pLibDlg->EnableReference( sal_False );
 
                 if ( pLibDlg->Execute() )
                 {
-                    ULONG nNewPos = aLibBox.GetEntryCount();
-                    BOOL bRemove = FALSE;
-                    BOOL bReplace = pLibDlg->IsReplace();
-                    BOOL bReference = pLibDlg->IsReference();
-                    for ( USHORT nLib = 0; nLib < pLibDlg->GetLibBox().GetEntryCount(); nLib++ )
+                    sal_uLong nNewPos = aLibBox.GetEntryCount();
+                    sal_Bool bRemove = sal_False;
+                    sal_Bool bReplace = pLibDlg->IsReplace();
+                    sal_Bool bReference = pLibDlg->IsReference();
+                    for ( sal_uInt16 nLib = 0; nLib < pLibDlg->GetLibBox().GetEntryCount(); nLib++ )
                     {
                         if ( pLibDlg->GetLibBox().IsChecked( nLib ) )
                         {
@@ -971,7 +971,7 @@ void LibPage::InsertLib()
                                     }
 
                                     // remove existing libraries
-                                    bRemove = TRUE;
+                                    bRemove = sal_True;
                                 }
                                 else
                                 {
@@ -989,14 +989,14 @@ void LibPage::InsertLib()
                             }
 
                             // check, if the library is password protected
-                            BOOL bOK = FALSE;
+                            sal_Bool bOK = sal_False;
                             String aPassword;
                             if ( xModLibContImport.is() && xModLibContImport->hasByName( aOULibName ) )
                             {
                                 Reference< script::XLibraryContainerPassword > xPasswd( xModLibContImport, UNO_QUERY );
                                 if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) && !bReference )
                                 {
-                                    bOK = QueryPassword( xModLibContImp, aLibName, aPassword, TRUE, TRUE );
+                                    bOK = QueryPassword( xModLibContImp, aLibName, aPassword, sal_True, sal_True );
 
                                     if ( !bOK )
                                     {
@@ -1043,7 +1043,7 @@ void LibPage::InsertLib()
                                     ::rtl::OUString aModStorageURL( aModStorageURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
                                     // create library link
-                                    xModLib = Reference< container::XNameContainer >( xModLibContainer->createLibraryLink( aOULibName, aModStorageURL, TRUE ), UNO_QUERY);
+                                    xModLib = Reference< container::XNameContainer >( xModLibContainer->createLibraryLink( aOULibName, aModStorageURL, sal_True ), UNO_QUERY);
                                 }
                                 else
                                 {
@@ -1112,7 +1112,7 @@ void LibPage::InsertLib()
                                     ::rtl::OUString aDlgStorageURL( aDlgStorageURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
                                     // create library link
-                                    xDlgLib = Reference< container::XNameContainer >( xDlgLibContainer->createLibraryLink( aOULibName, aDlgStorageURL, TRUE ), UNO_QUERY);
+                                    xDlgLib = Reference< container::XNameContainer >( xDlgLibContainer->createLibraryLink( aOULibName, aDlgStorageURL, sal_True ), UNO_QUERY);
                                 }
                                 else
                                 {
@@ -1148,7 +1148,7 @@ void LibPage::InsertLib()
 
                             // insert listbox entry
                             ImpInsertLibEntry( aLibName, aLibBox.GetEntryCount() );
-                            bChanges = TRUE;
+                            bChanges = sal_True;
                         }
                     }
 
@@ -1178,7 +1178,7 @@ void LibPage::Export( void )
 
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
     {
-        BOOL bOK = TRUE;
+        sal_Bool bOK = sal_True;
 
         // check password
         Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
@@ -1450,14 +1450,14 @@ void LibPage::DeleteCurrent()
     String aLibName( aLibBox.GetEntryText( pCurEntry, 0 ) );
 
     // check, if library is link
-    BOOL bIsLibraryLink = FALSE;
+    sal_Bool bIsLibraryLink = sal_False;
     ::rtl::OUString aOULibName( aLibName );
     Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
     Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
     if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLink( aOULibName ) ) ||
          ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryLink( aOULibName ) ) )
     {
-        bIsLibraryLink = TRUE;
+        bIsLibraryLink = sal_True;
     }
 
     if ( QueryDelLib( aLibName, bIsLibraryLink, this ) )
@@ -1487,7 +1487,7 @@ void LibPage::DeleteCurrent()
 
 //----------------------------------------------------------------------------
 
-void LibPage::EndTabDialog( USHORT nRet )
+void LibPage::EndTabDialog( sal_uInt16 nRet )
 {
     DBG_ASSERT( pTabDlg, "TabDlg nicht gesetzt!" );
     if ( pTabDlg )
@@ -1516,7 +1516,7 @@ void LibPage::FillListBox()
 void LibPage::InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
     String aEntryText( rDocument.getTitle( eLocation ) );
-    USHORT nPos = aBasicsBox.InsertEntry( aEntryText, LISTBOX_APPEND );
+    sal_uInt16 nPos = aBasicsBox.InsertEntry( aEntryText, LISTBOX_APPEND );
     aBasicsBox.SetEntryData( nPos, new BasicDocumentEntry( rDocument, eLocation ) );
 }
 
@@ -1524,7 +1524,7 @@ void LibPage::InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocati
 
 void LibPage::SetCurLib()
 {
-    USHORT nSelPos = aBasicsBox.GetSelectEntryPos();
+    sal_uInt16 nSelPos = aBasicsBox.GetSelectEntryPos();
     BasicDocumentEntry* pEntry = (BasicDocumentEntry*)aBasicsBox.GetEntryData( nSelPos );
     if ( pEntry )
     {
@@ -1562,10 +1562,10 @@ void LibPage::SetCurLib()
 
 //----------------------------------------------------------------------------
 
-SvLBoxEntry* LibPage::ImpInsertLibEntry( const String& rLibName, ULONG nPos )
+SvLBoxEntry* LibPage::ImpInsertLibEntry( const String& rLibName, sal_uLong nPos )
 {
     // check, if library is password protected
-    BOOL bProtected = FALSE;
+    sal_Bool bProtected = sal_False;
     ::rtl::OUString aOULibName( rLibName );
     Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
@@ -1616,14 +1616,14 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
     String aLibName;
     String aLibStdName( String( RTL_CONSTASCII_USTRINGPARAM( "Library" ) ) );
     //String aLibStdName( IDEResId( RID_STR_STDLIBNAME ) );
-    BOOL bValid = FALSE;
-    USHORT i = 1;
+    sal_Bool bValid = sal_False;
+    sal_uInt16 i = 1;
     while ( !bValid )
     {
         aLibName = aLibStdName;
         aLibName += String::CreateFromInt32( i );
         if ( !rDocument.hasLibrary( E_SCRIPTS, aLibName ) && !rDocument.hasLibrary( E_DIALOGS, aLibName ) )
-            bValid = TRUE;
+            bValid = sal_True;
         i++;
     }
 
@@ -1667,7 +1667,7 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                 // create a module
                 String aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
                 ::rtl::OUString sModuleCode;
-                if ( !rDocument.createModule( aLibName, aModName, TRUE, sModuleCode ) )
+                if ( !rDocument.createModule( aLibName, aModName, sal_True, sModuleCode ) )
                     throw Exception();
 
                 SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, BASICIDE_TYPE_MODULE );
@@ -1690,10 +1690,10 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                         pEntry = pBasicBox->GetParent( pEntry );
                     }
 
-                    USHORT nMode = pBasicBox->GetMode();
+                    sal_uInt16 nMode = pBasicBox->GetMode();
                     bool bDlgMode = ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES );
-                    USHORT nId = bDlgMode ? RID_IMG_DLGLIB : RID_IMG_MODLIB;
-                    USHORT nIdHC = bDlgMode ? RID_IMG_DLGLIB_HC : RID_IMG_MODLIB_HC;
+                    sal_uInt16 nId = bDlgMode ? RID_IMG_DLGLIB : RID_IMG_MODLIB;
+                    sal_uInt16 nIdHC = bDlgMode ? RID_IMG_DLGLIB_HC : RID_IMG_MODLIB_HC;
                     SvLBoxEntry* pNewLibEntry = pBasicBox->AddEntry(
                         aLibName,
                         Image( IDEResId( nId ) ),

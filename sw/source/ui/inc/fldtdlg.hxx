@@ -41,16 +41,16 @@ class SwFldDlg: public SfxTabDialog
 {
     SwChildWinWrapper*  m_pChildWin;
     SfxBindings*        m_pBindings;
-    BOOL                m_bHtmlMode;
-    BOOL                m_bDataBaseMode;
+    sal_Bool                m_bHtmlMode;
+    sal_Bool                m_bDataBaseMode;
 
-    virtual BOOL        Close();
-    virtual SfxItemSet* CreateInputItemSet( USHORT nId );
+    virtual sal_Bool        Close();
+    virtual SfxItemSet* CreateInputItemSet( sal_uInt16 nId );
     virtual void        Activate();
-    virtual void        PageCreated(USHORT nId, SfxTabPage& rPage);
+    virtual void        PageCreated(sal_uInt16 nId, SfxTabPage& rPage);
 
-    void                ReInitTabPage( USHORT nPageId,
-                                        BOOL bOnlyActivate = FALSE );
+    void                ReInitTabPage( sal_uInt16 nPageId,
+                                        sal_Bool bOnlyActivate = sal_False );
 
 public:
     SwFldDlg(SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent);
@@ -60,7 +60,7 @@ public:
 
     void                Initialize(SfxChildWinInfo *pInfo);
     void                ReInitDlg();
-    void                EnableInsert(BOOL bEnable);
+    void                EnableInsert(sal_Bool bEnable);
     void                InsertHdl();
     void                ActivateDatabasePage();
 };

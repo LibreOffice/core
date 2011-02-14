@@ -125,8 +125,8 @@ void MorphDlg::LoadSettings()
     SvStorageStreamRef  xIStm( SD_MOD()->GetOptionStream( UniString::CreateFromAscii(
                                RTL_CONSTASCII_STRINGPARAM( SD_OPTION_MORPHING ) ),
                                SD_OPTION_LOAD ) );
-    UINT16              nSteps;
-    BOOL                bOrient, bAttrib;
+    sal_uInt16              nSteps;
+    sal_Bool                bOrient, bAttrib;
 
     if( xIStm.Is() )
     {
@@ -137,7 +137,7 @@ void MorphDlg::LoadSettings()
     else
     {
         nSteps = 16;
-        bOrient = bAttrib = TRUE;
+        bOrient = bAttrib = sal_True;
     }
 
     aMtfSteps.SetValue( nSteps );
@@ -157,7 +157,7 @@ void MorphDlg::SaveSettings() const
     {
         SdIOCompat aCompat( *xOStm, STREAM_WRITE, 1 );
 
-        *xOStm << (UINT16) aMtfSteps.GetValue()
+        *xOStm << (sal_uInt16) aMtfSteps.GetValue()
                << aCbxOrientation.IsChecked()
                << aCbxAttributes.IsChecked();
     }

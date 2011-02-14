@@ -39,25 +39,25 @@ class SwWrtShell;
 class SwTemplateDlg: public SfxStyleDialog
 {
 
-    USHORT      nType;
-    USHORT      nHtmlMode;
+    sal_uInt16      nType;
+    sal_uInt16      nHtmlMode;
     SwWrtShell* pWrtShell;
-    BOOL        bNewStyle;
+    sal_Bool        bNewStyle;
 
     DECL_LINK( NumOptionsHdl, PushButton* );
 
 public:
     SwTemplateDlg(  Window*             pParent,
                     SfxStyleSheetBase&  rBase,
-                    USHORT              nRegion,
-                    BOOL                bColumn = FALSE,
+                    sal_uInt16              nRegion,
+                    sal_Bool                bColumn = sal_False,
                     SwWrtShell*         pActShell = 0,
-                    BOOL                bNew = FALSE );
+                    sal_Bool                bNew = sal_False );
 
     ~SwTemplateDlg();
     const SfxItemSet* GetRefreshedSet();
 
-    virtual void PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
     virtual short Ok();
 };
 

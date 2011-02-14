@@ -72,22 +72,22 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------
 
-BOOL __EXPORT ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
+sal_Bool __EXPORT ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::InitNew" );
 
-    BOOL bRet = SfxObjectShell::InitNew( xStor );
+    sal_Bool bRet = SfxObjectShell::InitNew( xStor );
 
     aDocument.MakeTable(0);
     //  zusaetzliche Tabellen werden von der ersten View angelegt,
-    //  wenn bIsEmpty dann noch TRUE ist
+    //  wenn bIsEmpty dann noch sal_True ist
 
     if( bRet )
     {
         Size aSize( (long) ( STD_COL_WIDTH           * HMM_PER_TWIPS * OLE_STD_CELLS_X ),
                     (long) ( ScGlobal::nStdRowHeight * HMM_PER_TWIPS * OLE_STD_CELLS_Y ) );
         // hier muss auch der Start angepasst werden
-        SetVisAreaOrSize( Rectangle( Point(), aSize ), TRUE );
+        SetVisAreaOrSize( Rectangle( Point(), aSize ), sal_True );
     }
 
     aDocument.SetDrawDefaults();        // drawing layer defaults that are set only in InitNew
@@ -129,13 +129,13 @@ BOOL __EXPORT ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xSt
 
 //------------------------------------------------------------------
 
-BOOL ScDocShell::IsEmpty() const
+sal_Bool ScDocShell::IsEmpty() const
 {
     return bIsEmpty;
 }
 
 
-void ScDocShell::SetEmpty(BOOL bSet)
+void ScDocShell::SetEmpty(sal_Bool bSet)
 {
     bIsEmpty = bSet;
 }
@@ -211,7 +211,7 @@ void ScDocShell::InitItems()
         if ( !aDocument.IsValidAsianCompression() )
         {
             // set compression mode from configuration if not already set (e.g. XML import)
-            aDocument.SetAsianCompression( sal::static_int_cast<BYTE>( aAsian.GetCharDistanceCompression() ) );
+            aDocument.SetAsianCompression( sal::static_int_cast<sal_uInt8>( aAsian.GetCharDistanceCompression() ) );
         }
 
         if ( !aDocument.IsValidAsianKerning() )
@@ -257,7 +257,7 @@ ScDrawLayer* ScDocShell::MakeDrawLayer()
         InitItems();                                            // incl. Undo und Basic
         Broadcast( SfxSimpleHint( SC_HINT_DRWLAYER_NEW ) );
         if (nDocumentLock)
-            pDrawLayer->setLock(TRUE);
+            pDrawLayer->setLock(sal_True);
     }
     return pDrawLayer;
 }

@@ -58,7 +58,7 @@ SvxB3DVectorItem::~SvxB3DVectorItem()
 
 // -----------------------------------------------------------------------
 
-SvxB3DVectorItem::SvxB3DVectorItem( USHORT _nWhich, const basegfx::B3DVector& rVal ) :
+SvxB3DVectorItem::SvxB3DVectorItem( sal_uInt16 _nWhich, const basegfx::B3DVector& rVal ) :
     SfxPoolItem( _nWhich ),
     aVal( rVal )
 {
@@ -67,7 +67,7 @@ SvxB3DVectorItem::SvxB3DVectorItem( USHORT _nWhich, const basegfx::B3DVector& rV
 
 // -----------------------------------------------------------------------
 
-SvxB3DVectorItem::SvxB3DVectorItem( USHORT _nWhich, SvStream& rStream ) :
+SvxB3DVectorItem::SvxB3DVectorItem( sal_uInt16 _nWhich, SvStream& rStream ) :
     SfxPoolItem( _nWhich )
 {
     DBG_CTOR(SvxB3DVectorItem, 0);
@@ -105,7 +105,7 @@ SfxPoolItem* SvxB3DVectorItem::Clone( SfxItemPool* /*pPool*/ ) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxB3DVectorItem::Create(SvStream &rStream, USHORT /*nVersion*/) const
+SfxPoolItem* SvxB3DVectorItem::Create(SvStream &rStream, sal_uInt16 /*nVersion*/) const
 {
     DBG_CHKTHIS(SvxB3DVectorItem, 0);
     basegfx::B3DVector aStr;
@@ -118,7 +118,7 @@ SfxPoolItem* SvxB3DVectorItem::Create(SvStream &rStream, USHORT /*nVersion*/) co
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxB3DVectorItem::Store(SvStream &rStream, USHORT /*nItemVersion*/) const
+SvStream& SvxB3DVectorItem::Store(SvStream &rStream, sal_uInt16 /*nItemVersion*/) const
 {
     DBG_CHKTHIS(SvxB3DVectorItem, 0);
 
@@ -133,7 +133,7 @@ SvStream& SvxB3DVectorItem::Store(SvStream &rStream, USHORT /*nItemVersion*/) co
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
+sal_Bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     drawing::Direction3D aDirection;
 
@@ -148,7 +148,7 @@ sal_Bool SvxB3DVectorItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) cons
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
+sal_Bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     drawing::Direction3D aDirection;
     if(!(rVal >>= aDirection))
@@ -162,7 +162,7 @@ sal_Bool SvxB3DVectorItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
 
 // -----------------------------------------------------------------------
 
-USHORT SvxB3DVectorItem::GetVersion (USHORT nFileFormatVersion) const
+sal_uInt16 SvxB3DVectorItem::GetVersion (sal_uInt16 nFileFormatVersion) const
 {
     return (nFileFormatVersion == SOFFICE_FILEFORMAT_31) ? USHRT_MAX : 0;
 }

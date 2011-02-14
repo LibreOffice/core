@@ -60,7 +60,7 @@ class SFX2_DLLPUBLIC LinkManager
 
     SfxObjectShell *pPersist; // LinkMgr muss vor SfxObjectShell freigegeben werden
 protected:
-    BOOL        InsertLink( SvBaseLink* pLink, USHORT nObjType, USHORT nUpdateType,
+    sal_Bool        InsertLink( SvBaseLink* pLink, sal_uInt16 nObjType, sal_uInt16 nUpdateType,
                             const String* pName = 0 );
 public:
 
@@ -78,30 +78,30 @@ public:
     void        SetPersist( SfxObjectShell * p )   { pPersist = p; }
 
     void        Remove( SvBaseLink *pLink );
-    void        Remove( USHORT nPos, USHORT nCnt = 1 );
-    BOOL        Insert( SvBaseLink* pLink );
+    void        Remove( sal_uInt16 nPos, sal_uInt16 nCnt = 1 );
+    sal_Bool        Insert( SvBaseLink* pLink );
 
                 // den Link mit einem SvLinkSource verbinden und in die Liste eintragen
-    BOOL        InsertDDELink( SvBaseLink*,
+    sal_Bool        InsertDDELink( SvBaseLink*,
                         const String& rServer,
                         const String& rTopic,
                         const String& rItem );
 
                 // falls am Link schon alles eingestellt ist !
-    BOOL        InsertDDELink( SvBaseLink* );
+    sal_Bool        InsertDDELink( SvBaseLink* );
 
     // den Link mit einem PseudoObject verbinden und in die Liste eintragen
-    BOOL InsertFileLink( sfx2::SvBaseLink&,
-                        USHORT nFileType,
+    sal_Bool InsertFileLink( sfx2::SvBaseLink&,
+                        sal_uInt16 nFileType,
                         const String& rTxt,
                         const String* pFilterNm = 0,
                         const String* pRange = 0 );
 
             // falls am Link schon alles eingestellt ist !
-    BOOL InsertFileLink( sfx2::SvBaseLink& );
+    sal_Bool InsertFileLink( sfx2::SvBaseLink& );
 
                 // erfrage die Strings fuer den Dialog
-    BOOL GetDisplayNames( const SvBaseLink *,
+    sal_Bool GetDisplayNames( const SvBaseLink *,
                                     String* pType,
                                     String* pFile = 0,
                                     String* pLink = 0,
@@ -109,9 +109,9 @@ public:
 
     SvLinkSourceRef CreateObj( SvBaseLink* );
 
-    void        UpdateAllLinks( BOOL bAskUpdate = TRUE,
-                                BOOL bCallErrHdl = TRUE,
-                                BOOL bUpdateGrfLinks = FALSE,
+    void        UpdateAllLinks( sal_Bool bAskUpdate = sal_True,
+                                sal_Bool bCallErrHdl = sal_True,
+                                sal_Bool bUpdateGrfLinks = sal_False,
                                 Window* pParentWin = 0 );
 
                 // Liste aller Links erfragen (z.B. fuer Verknuepfungs-Dialog)
@@ -122,9 +122,9 @@ public:
                 // Liste der zu serviereden Links erfragen
     const SvLinkSources& GetServers() const { return aServerTbl; }
                 // einen zu servierenden Link eintragen/loeschen
-    BOOL        InsertServer( SvLinkSource* rObj );
+    sal_Bool        InsertServer( SvLinkSource* rObj );
     void        RemoveServer( SvLinkSource* rObj );
-    void        RemoveServer( USHORT nPos, USHORT nCnt = 1 )
+    void        RemoveServer( sal_uInt16 nPos, sal_uInt16 nCnt = 1 )
                 {   aServerTbl.Remove( nPos, nCnt ); }
 
     // eine Uebertragung wird abgebrochen, also alle DownloadMedien canceln
@@ -136,11 +136,11 @@ public:
     // dann die entsprechenden Informationen als String.
     // Wird zur Zeit fuer FileObject in Verbindung mit JavaScript benoetigt
     // - das braucht Informationen ueber Load/Abort/Error
-    static ULONG  RegisterStatusInfoId();
+    static sal_uIntPtr  RegisterStatusInfoId();
 
     // if the mimetype says graphic/bitmap/gdimetafile then get the
     // graphic from the Any. Return says no errors
-    static BOOL GetGraphicFromAny( const String& rMimeType,
+    static sal_Bool GetGraphicFromAny( const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue,
                                 Graphic& rGrf );
 

@@ -299,7 +299,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
     catch( Exception& )
     {
         SfxErrorContext aEc( ERRCTX_SFX_LOADBASIC, aFile );
-        ULONG nErrorCode = ERRCODE_IO_GENERAL;
+        sal_uIntPtr nErrorCode = ERRCODE_IO_GENERAL;
         ErrorHandler::HandleError( nErrorCode );
     }
 
@@ -653,7 +653,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                         throw uno::RuntimeException();
 
                     SvMemoryStream aMemStream;
-                    /*BOOL bStore = */pMod->StoreBinaryData( aMemStream );
+                    /*sal_Bool bStore = */pMod->StoreBinaryData( aMemStream );
 
                     sal_Int32 nSize = (sal_Int32)aMemStream.Tell();
                     Sequence< sal_Int8 > aBinSeq( nSize );
@@ -794,7 +794,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                                             embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
                         SvMemoryStream aMemStream;
-                        /*BOOL bStore = */pMod->StoreBinaryData( aMemStream );
+                        /*sal_Bool bStore = */pMod->StoreBinaryData( aMemStream );
 
                         sal_Int32 nSize = (sal_Int32)aMemStream.Tell();
                         Sequence< sal_Int8 > aBinSeq( nSize );
@@ -951,7 +951,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                 if( !pMod )
                 {
                     pMod = pBasicLib->MakeModule( aElementName, String() );
-                    pBasicLib->SetModified( FALSE );
+                    pBasicLib->SetModified( sal_False );
                 }
 
                 //OUString aCodeStreamName( RTL_CONSTASCII_USTRINGPARAM("code.bin") );
@@ -973,7 +973,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                         throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), nError );
                     }
 
-                    /*BOOL bRet = */pMod->LoadBinaryData( *pStream );
+                    /*sal_Bool bRet = */pMod->LoadBinaryData( *pStream );
                     // TODO: Check return value
 
                     delete pStream;
@@ -1063,7 +1063,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                         if( !pMod )
                         {
                             pMod = pBasicLib->MakeModule( aElementName, String() );
-                            pBasicLib->SetModified( FALSE );
+                            pBasicLib->SetModified( sal_False );
                         }
 
                         try {
@@ -1082,7 +1082,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                                                                     nError );
                             }
 
-                            /*BOOL bRet = */pMod->LoadBinaryData( *pStream );
+                            /*sal_Bool bRet = */pMod->LoadBinaryData( *pStream );
                             // TODO: Check return value
 
                             delete pStream;

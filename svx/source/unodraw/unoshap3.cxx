@@ -394,7 +394,7 @@ bool Svx3DSceneObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
             double fCamFocal =
                 (double)((const SfxUInt32Item&)rSceneSet.Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
 
-            aCam.SetAutoAdjustProjection(FALSE);
+            aCam.SetAutoAdjustProjection(sal_False);
             aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
             basegfx::B3DPoint aLookAt;
             basegfx::B3DPoint aCamPos(0.0, 0.0, fCamPosZ);

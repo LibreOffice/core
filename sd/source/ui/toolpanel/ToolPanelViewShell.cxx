@@ -523,7 +523,7 @@ ToolPanelViewShell::ToolPanelViewShell( SfxViewFrame* pFrame, ViewShellBase& rVi
     // create the former here, the latter is still created on demand, when somebody requests it.
     // #i113671# / 2010-09-17 / frank.schoenheit@oracle.com
     if (mpContentWindow.get())
-        mpContentWindow->GetAccessible( TRUE );
+        mpContentWindow->GetAccessible( sal_True );
 
     // For accessibility we have to shortly hide the content window.  This
     // triggers the construction of a new accessibility object for the new
@@ -881,7 +881,7 @@ void ToolPanelViewShell_Impl::ConnectToDockingWindow()
 // ---------------------------------------------------------------------------------------------------------------------
 Reference< XAccessible > ToolPanelViewShell_Impl::CreateAccessible( ::sd::Window& i_rWindow )
 {
-    Reference< XAccessible > xAccessible( GetToolPanelDeck().GetAccessible( FALSE ) );
+    Reference< XAccessible > xAccessible( GetToolPanelDeck().GetAccessible( sal_False ) );
     if ( !xAccessible.is() )
     {
         // determine the XAccessible which is the parent of the to-be-created object
@@ -889,7 +889,7 @@ Reference< XAccessible > ToolPanelViewShell_Impl::CreateAccessible( ::sd::Window
         OSL_ENSURE( pAccessibleParent, "ToolPanelViewShell_Impl::CreateAccessible: illegal accessible parent provided by the sd::Window!" );
         GetToolPanelDeck().SetAccessibleParentWindow( pAccessibleParent );
 
-        xAccessible = GetToolPanelDeck().GetAccessible( TRUE );
+        xAccessible = GetToolPanelDeck().GetAccessible( sal_True );
         ENSURE_OR_RETURN( xAccessible.is(), "ToolPanelViewShell_Impl::CreateAccessible: illegal ToolPanelDeck accessible!", NULL );
         OSL_ENSURE( xAccessible->getAccessibleContext().is()
                 &&  xAccessible->getAccessibleContext()->getAccessibleParent() == pAccessibleParent->GetAccessible(),

@@ -25,13 +25,6 @@
  *
  ************************************************************************/
 
-#ifndef BOOL
-# define MOZ_BOOL
-
-# define BOOL mozBOOL
-# define Bool mozBooL
-#endif
-
 // Turn off DEBUG Assertions
 #ifdef _DEBUG
     #define _DEBUG_WAS_DEFINED _DEBUG

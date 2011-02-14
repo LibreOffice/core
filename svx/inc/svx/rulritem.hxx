@@ -44,8 +44,8 @@ class SVX_DLLPUBLIC SvxLongLRSpaceItem : public SfxPoolItem
   protected:
 
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual String           GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -60,7 +60,7 @@ private:
 
 public:
     TYPEINFO();
-    SvxLongLRSpaceItem(long lLeft, long lRight, USHORT nId);
+    SvxLongLRSpaceItem(long lLeft, long lRight, sal_uInt16 nId);
     SvxLongLRSpaceItem(const SvxLongLRSpaceItem &);
     SvxLongLRSpaceItem();
 
@@ -80,8 +80,8 @@ class SVX_DLLPUBLIC SvxLongULSpaceItem : public SfxPoolItem
   protected:
 
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual String           GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -96,7 +96,7 @@ private:
 
 public:
     TYPEINFO();
-    SvxLongULSpaceItem(long lUpper, long lLower, USHORT nId);
+    SvxLongULSpaceItem(long lUpper, long lLower, sal_uInt16 nId);
     SvxLongULSpaceItem(const SvxLongULSpaceItem &);
     SvxLongULSpaceItem();
 
@@ -115,8 +115,8 @@ class SVX_DLLPUBLIC SvxPagePosSizeItem : public SfxPoolItem
     long lHeight;
 protected:
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual String           GetValueText() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -145,13 +145,13 @@ struct SvxColumnDescription
 {
     long nStart;                    /* Spaltenbeginn */
     long nEnd;                      /* Spaltenende */
-    BOOL   bVisible;                   /* Sichtbarkeit */
+    sal_Bool   bVisible;                   /* Sichtbarkeit */
 
     long nEndMin;         //min. possible position of end
     long nEndMax;         //max. possible position of end
 
     SvxColumnDescription():
-        nStart(0), nEnd(0), bVisible(TRUE), nEndMin(0), nEndMax(0) {}
+        nStart(0), nEnd(0), bVisible(sal_True), nEndMin(0), nEndMax(0) {}
 
     SvxColumnDescription(const SvxColumnDescription &rCopy) :
         nStart(rCopy.nStart), nEnd(rCopy.nEnd),
@@ -159,13 +159,13 @@ struct SvxColumnDescription
         nEndMin(rCopy.nEndMin), nEndMax(rCopy.nEndMax)
          {}
 
-    SvxColumnDescription(long start, long end, BOOL bVis = TRUE):
+    SvxColumnDescription(long start, long end, sal_Bool bVis = sal_True):
         nStart(start), nEnd(end),
         bVisible(bVis),
         nEndMin(0), nEndMax(0) {}
 
     SvxColumnDescription(long start, long end,
-                        long endMin, long endMax, BOOL bVis = TRUE):
+                        long endMin, long endMax, sal_Bool bVis = sal_True):
         nStart(start), nEnd(end),
         bVisible(bVis),
         nEndMin(endMin), nEndMax(endMax)
@@ -194,9 +194,9 @@ class SVX_DLLPUBLIC SvxColumnItem : public SfxPoolItem
     long    nLeft,      // Linker Rand bei Tabelle
            nRight;      // Rechter Rand bei Tabelle; bei Spalten immer gleich
                         // zum umgebenden Rahmen
-    USHORT nActColumn;  // die aktuelle Spalte
-    BOOL    bTable;     // Tabelle?
-    BOOL    bOrtho;     // Gleichverteilte Spalten
+    sal_uInt16 nActColumn;  // die aktuelle Spalte
+    sal_Bool    bTable;     // Tabelle?
+    sal_Bool    bOrtho;     // Gleichverteilte Spalten
 
     void DeleteAndDestroyColumns();
 
@@ -210,47 +210,47 @@ protected:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 public:
     TYPEINFO();
     // rechter Rand des umgebenden Rahmens
     // nLeft, nRight jeweils der Abstand zum umgebenden Rahmen
-    SvxColumnItem(USHORT nAct = 0); // Spalten
-    SvxColumnItem(USHORT nActCol,
-                  USHORT nLeft, USHORT nRight = 0); // Tabelle mit Raendern
+    SvxColumnItem(sal_uInt16 nAct = 0); // Spalten
+    SvxColumnItem(sal_uInt16 nActCol,
+                  sal_uInt16 nLeft, sal_uInt16 nRight = 0); // Tabelle mit Raendern
     SvxColumnItem(const SvxColumnItem &);
     ~SvxColumnItem();
 
     const SvxColumnItem &operator=(const SvxColumnItem &);
 
-    USHORT Count() const { return aColumns.Count(); }
-    SvxColumnDescription &operator[](USHORT i)
+    sal_uInt16 Count() const { return aColumns.Count(); }
+    SvxColumnDescription &operator[](sal_uInt16 i)
         { return *(SvxColumnDescription*)aColumns[i]; }
-    const SvxColumnDescription &operator[](USHORT i) const
+    const SvxColumnDescription &operator[](sal_uInt16 i) const
         { return *(SvxColumnDescription*)aColumns[i]; }
-    void Insert(const SvxColumnDescription &rDesc, USHORT nPos) {
+    void Insert(const SvxColumnDescription &rDesc, sal_uInt16 nPos) {
         SvxColumnDescription* pDesc = new SvxColumnDescription(rDesc);
         aColumns.Insert(pDesc, nPos);
     }
     void   Append(const SvxColumnDescription &rDesc) { Insert(rDesc, Count()); }
     void   SetLeft(long left) { nLeft = left; }
     void   SetRight(long right) { nRight = right; }
-    void   SetActColumn(USHORT nCol) { nActColumn = nCol; }
+    void   SetActColumn(sal_uInt16 nCol) { nActColumn = nCol; }
 
-    USHORT GetActColumn() const { return nActColumn; }
-    BOOL   IsFirstAct() const { return nActColumn == 0; }
-    BOOL   IsLastAct() const { return nActColumn == Count()-1; }
+    sal_uInt16 GetActColumn() const { return nActColumn; }
+    sal_Bool   IsFirstAct() const { return nActColumn == 0; }
+    sal_Bool   IsLastAct() const { return nActColumn == Count()-1; }
     long GetLeft() { return nLeft; }
     long GetRight() { return nRight; }
 
-    BOOL   IsTable() const { return bTable; }
+    sal_Bool   IsTable() const { return bTable; }
 
-    BOOL   CalcOrtho() const;
-    void   SetOrtho(BOOL bVal) { bOrtho = bVal; }
-    BOOL   IsOrtho () const { return FALSE ; }
+    sal_Bool   CalcOrtho() const;
+    void   SetOrtho(sal_Bool bVal) { bOrtho = bVal; }
+    sal_Bool   IsOrtho () const { return sal_False ; }
 
-    BOOL IsConsistent() const  { return nActColumn < aColumns.Count(); }
+    sal_Bool IsConsistent() const  { return nActColumn < aColumns.Count(); }
     long   GetVisibleRight() const;// rechter sichtbare Rand der aktuellen Spalte
 };
 
@@ -263,7 +263,7 @@ private:
     long   nEndX;                      /* Ende in X-Richtung */
     long   nStartY;                    /* Beginn in Y-Richtung */
     long   nEndY;                      /* Ende in Y-Richtung */
-    BOOL   bLimits;                    /* Grenzwertkontrolle durch die Applikation */
+    sal_Bool   bLimits;                    /* Grenzwertkontrolle durch die Applikation */
 protected:
     virtual int              operator==( const SfxPoolItem& ) const;
 
@@ -274,18 +274,18 @@ protected:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 private:
     SVX_DLLPRIVATE const SvxObjectItem &operator=(const SvxObjectItem &); // n.i.
 public:
     TYPEINFO();
     SvxObjectItem(long nStartX, long nEndX,
                   long nStartY, long nEndY,
-                  BOOL bLimits = FALSE);
+                  sal_Bool bLimits = sal_False);
     SvxObjectItem(const SvxObjectItem &);
 
-    BOOL   HasLimits() const { return bLimits; }
+    sal_Bool   HasLimits() const { return bLimits; }
 
     long   GetStartX() const { return nStartX; }
     long   GetEndX() const { return nEndX; }

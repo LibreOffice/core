@@ -41,7 +41,7 @@ namespace textconversiondlgs
 class TextConversionDlgs_ResId : public ResId
 {
  public:
-    TextConversionDlgs_ResId(USHORT nId);
+    TextConversionDlgs_ResId(sal_uInt16 nId);
 };
 
 //.............................................................................

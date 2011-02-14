@@ -149,8 +149,8 @@ X11SalInstance::~X11SalInstance()
 
 struct PredicateReturn
 {
-    USHORT  nType;
-    BOOL    bRet;
+    sal_uInt16  nType;
+    sal_Bool    bRet;
 };
 
 extern "C" {
@@ -161,7 +161,7 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
     if ( pPre->bRet )
         return False;
 
-    USHORT nType;
+    sal_uInt16 nType;
 
     switch( pEvent->type )
     {
@@ -187,29 +187,29 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
     }
 
     if ( (nType & pPre->nType) || ( ! nType && (pPre->nType & INPUT_OTHER) ) )
-        pPre->bRet = TRUE;
+        pPre->bRet = sal_True;
 
     return False;
 }
 }
 
-bool X11SalInstance::AnyInput(USHORT nType)
+bool X11SalInstance::AnyInput(sal_uInt16 nType)
 {
     X11SalData *pSalData = GetX11SalData();
     Display *pDisplay  = pSalData->GetDisplay()->GetDisplay();
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if( (nType & INPUT_TIMER) &&
         pSalData->GetDisplay()->GetXLib()->CheckTimeout( false ) )
     {
-        bRet = TRUE;
+        bRet = sal_True;
     }
     else if (XPending(pDisplay) )
     {
         PredicateReturn aInput;
         XEvent          aEvent;
 
-        aInput.bRet     = FALSE;
+        aInput.bRet     = sal_False;
         aInput.nType    = nType;
 
         XCheckIfEvent(pDisplay, &aEvent, ImplPredicateEvent,
@@ -227,14 +227,14 @@ vos::IMutex* X11SalInstance::GetYieldMutex()
 
 // -----------------------------------------------------------------------
 
-ULONG X11SalInstance::ReleaseYieldMutex()
+sal_uLong X11SalInstance::ReleaseYieldMutex()
 {
     SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     if ( pYieldMutex->GetThreadId() ==
          vos::OThread::getCurrentIdentifier() )
     {
-        ULONG nCount = pYieldMutex->GetAcquireCount();
-        ULONG n = nCount;
+        sal_uLong nCount = pYieldMutex->GetAcquireCount();
+        sal_uLong n = nCount;
         while ( n )
         {
             pYieldMutex->release();
@@ -249,7 +249,7 @@ ULONG X11SalInstance::ReleaseYieldMutex()
 
 // -----------------------------------------------------------------------
 
-void X11SalInstance::AcquireYieldMutex( ULONG nCount )
+void X11SalInstance::AcquireYieldMutex( sal_uLong nCount )
 {
     SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     while ( nCount )
@@ -288,14 +288,14 @@ void* X11SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
     return pDisplay ? (void*)pDisplay : (void*)"";
 }
 
-SalFrame *X11SalInstance::CreateFrame( SalFrame *pParent, ULONG nSalFrameStyle )
+SalFrame *X11SalInstance::CreateFrame( SalFrame *pParent, sal_uLong nSalFrameStyle )
 {
     SalFrame *pFrame = new X11SalFrame( pParent, nSalFrameStyle );
 
     return pFrame;
 }
 
-SalFrame* X11SalInstance::CreateChildFrame( SystemParentData* pParentData, ULONG nStyle )
+SalFrame* X11SalInstance::CreateChildFrame( SystemParentData* pParentData, sal_uLong nStyle )
 {
     SalFrame* pFrame = new X11SalFrame( NULL, nStyle, pParentData );
 

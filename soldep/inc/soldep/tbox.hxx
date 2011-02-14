@@ -34,13 +34,13 @@
 class SoldepToolBox : public ToolBox
 {
 protected:
-//  USHORT          nBuildServerToolBoxId;
-    BOOL            bDockable;
-    BOOL            bCloseMode;
-    BOOL            bOldFloatMode;
-    BOOL            bBoxIsVisible;
-    BOOL            bPin;
-    BOOL            bPinable;
+//  sal_uInt16          nBuildServerToolBoxId;
+    sal_Bool            bDockable;
+    sal_Bool            bCloseMode;
+    sal_Bool            bOldFloatMode;
+    sal_Bool            bBoxIsVisible;
+    sal_Bool            bPin;
+    sal_Bool            bPinable;
 
     PopupMenu       aMenu;
 
@@ -56,7 +56,7 @@ protected:
     void            InitContextMenu();
 
 public:
-                    SoldepToolBox( Window* pParent, const ResId& aId, BOOL bDAble = TRUE );
+                    SoldepToolBox( Window* pParent, const ResId& aId, sal_Bool bDAble = sal_True );
                     ~SoldepToolBox();
 
     virtual void    Command( const CommandEvent& rCEvt);
@@ -69,8 +69,8 @@ public:
     virtual void    ToggleFloatingMode();
 //  void            SetFloatingWindow( FloatingWindow* pFW) { ToolBox::mpFloatWin = pFW; }
     virtual void    StartDocking();
-    virtual void    EndDocking( const Rectangle& rRect, BOOL bFloatMode );
-    virtual BOOL    Close();
+    virtual void    EndDocking( const Rectangle& rRect, sal_Bool bFloatMode );
+    virtual sal_Bool    Close();
     virtual void    CloseDockingMode();
 
                     //Called when toolbar droped
@@ -89,12 +89,12 @@ public:
     Link            GetMouseDownHdl() { return aMouseDownHdl; }
     void            SetResizeHdl(const Link& rLink) { aResizeHdl = rLink; }
 
-    BOOL            IsBoxVisible() { return bBoxIsVisible; }
+    sal_Bool            IsBoxVisible() { return bBoxIsVisible; }
 
-    void            EnablePin( BOOL bEnable = TRUE ) { bPinable = bEnable; Invalidate(); }
-    BOOL            GetPin();
+    void            EnablePin( sal_Bool bEnable = sal_True ) { bPinable = bEnable; Invalidate(); }
+    sal_Bool            GetPin();
     void            TogglePin();
-    void            SetPin(BOOL bP);
+    void            SetPin(sal_Bool bP);
     PopupMenu       *GetContextMenu();
     DECL_LINK( MenuSelectHdl, Menu * );
 };

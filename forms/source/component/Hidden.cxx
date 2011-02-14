@@ -171,7 +171,7 @@ void SAL_CALL OHiddenModel::write(const Reference<XObjectOutputStream>& _rxOutSt
 void SAL_CALL OHiddenModel::read(const Reference<XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException)
 {
     // Version
-    UINT16 nVersion = _rxInStream->readShort();
+    sal_uInt16 nVersion = _rxInStream->readShort();
 
     // Name
     DBG_ASSERT(nVersion != 1, "OHiddenModel::read : this version is obsolete !");

@@ -28,11 +28,11 @@
 #ifndef _SV_LSTBOX_H
 #define _SV_LSTBOX_H
 
-#define LISTBOX_APPEND              ((USHORT)0xFFFF)
-#define LISTBOX_ENTRY_NOTFOUND      ((USHORT)0xFFFF)
-#define LISTBOX_ERROR               ((USHORT)0xFFFF)
+#define LISTBOX_APPEND              ((sal_uInt16)0xFFFF)
+#define LISTBOX_ENTRY_NOTFOUND      ((sal_uInt16)0xFFFF)
+#define LISTBOX_ERROR               ((sal_uInt16)0xFFFF)
 
-#define LISTBOX_USERDRAW_SELECTED   ((USHORT)0x0001)
+#define LISTBOX_USERDRAW_SELECTED   ((sal_uInt16)0x0001)
 
 // --------------------------------------------------------------------
 

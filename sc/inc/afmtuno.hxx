@@ -67,7 +67,7 @@ class ScAutoFormatsObj : public ::cppu::WeakImplHelper4<
                             ::com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScAutoFormatObj*        GetObjectByIndex_Impl(USHORT nIndex);
+    ScAutoFormatObj*        GetObjectByIndex_Impl(sal_uInt16 nIndex);
     ScAutoFormatObj*        GetObjectByName_Impl(const ::rtl::OUString& aName);
 
 public:
@@ -144,19 +144,19 @@ class ScAutoFormatObj : public ::cppu::WeakImplHelper6<
 {
 private:
     SfxItemPropertySet      aPropSet;
-    USHORT                  nFormatIndex;
+    sal_uInt16                  nFormatIndex;
 
-    ScAutoFormatFieldObj*   GetObjectByIndex_Impl(USHORT nIndex);
+    ScAutoFormatFieldObj*   GetObjectByIndex_Impl(sal_uInt16 nIndex);
 
 public:
-                            ScAutoFormatObj(USHORT nIndex);
+                            ScAutoFormatObj(sal_uInt16 nIndex);
     virtual                 ~ScAutoFormatObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
                             // per getImplementation gerufen:
     sal_Bool                IsInserted() const      { return nFormatIndex != SC_AFMTOBJ_INVALID; }
-    void                    InitFormat( USHORT nNewIndex );
+    void                    InitFormat( sal_uInt16 nNewIndex );
 
                             // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
@@ -246,11 +246,11 @@ class ScAutoFormatFieldObj : public ::cppu::WeakImplHelper2<
 {
 private:
     SfxItemPropertySet      aPropSet;
-    USHORT                  nFormatIndex;
-    USHORT                  nFieldIndex;
+    sal_uInt16                  nFormatIndex;
+    sal_uInt16                  nFieldIndex;
 
 public:
-                            ScAutoFormatFieldObj(USHORT nFormat, USHORT nField);
+                            ScAutoFormatFieldObj(sal_uInt16 nFormat, sal_uInt16 nField);
     virtual                 ~ScAutoFormatFieldObj();
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );

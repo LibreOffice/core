@@ -881,7 +881,7 @@ void SwXMLImport::endDocument( void )
         if( !pPos->nContent.GetIndex() )
         {
             SwTxtNode* pCurrNd;
-            ULONG nNodeIdx = pPos->nNode.GetIndex();
+            sal_uLong nNodeIdx = pPos->nNode.GetIndex();
             pDoc = pPaM->GetDoc();
 
             DBG_ASSERT( pPos->nNode.GetNode().IsCntntNode(),
@@ -961,9 +961,9 @@ void SwXMLImport::endDocument( void )
         // Notify math objects. If we are in the package filter this will
         // be done by the filter object itself
         if( IsInsertMode() )
-            pDoc->PrtOLENotify( FALSE );
+            pDoc->PrtOLENotify( sal_False );
         else if ( pDoc->IsOLEPrtNotifyPending() )
-            pDoc->PrtOLENotify( TRUE );
+            pDoc->PrtOLENotify( sal_True );
     }
 
     // SJ: #i49801# -> now permitting repaints
@@ -1216,7 +1216,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     const PropertyValue* pValues = aConfigProps.getConstArray();
 
     SvtSaveOptions aSaveOpt;
-    BOOL bIsUserSetting = aSaveOpt.IsLoadUserSettings(),
+    sal_Bool bIsUserSetting = aSaveOpt.IsLoadUserSettings(),
          bSet = bIsUserSetting;
 
     // for some properties we don't want to use the application

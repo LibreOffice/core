@@ -236,7 +236,7 @@ static const char* _crlf()
 }
 
 // This method exists because we want to load the file as own segment
-BOOL SbModule::Disassemble( String& rText )
+sal_Bool SbModule::Disassemble( String& rText )
 {
     rText.Erase();
     if( pImage )
@@ -244,7 +244,7 @@ BOOL SbModule::Disassemble( String& rText )
         SbiDisas aDisas( this, pImage );
         aDisas.Disas( rText );
     }
-    return BOOL( rText.Len() != 0 );
+    return sal_Bool( rText.Len() != 0 );
 }
 
 SbiDisas::SbiDisas( SbModule* p, const SbiImage* q ) : rImg( *q ), pMod( p )
@@ -278,23 +278,23 @@ SbiDisas::SbiDisas( SbModule* p, const SbiImage* q ) : rImg( *q ), pMod( p )
     }
     nOff = 0;
     // Add the publics
-    for( USHORT i = 0; i < pMod->GetMethods()->Count(); i++ )
+    for( sal_uInt16 i = 0; i < pMod->GetMethods()->Count(); i++ )
     {
         SbMethod* pMeth = PTR_CAST(SbMethod,pMod->GetMethods()->Get( i ));
         if( pMeth )
         {
-            USHORT nPos = (USHORT) (pMeth->GetId());
+            sal_uInt16 nPos = (sal_uInt16) (pMeth->GetId());
             cLabels[ nPos >> 3 ] |= ( 1 << ( nPos & 7 ) );
         }
     }
 }
 
 // Read current opcode
-BOOL SbiDisas::Fetch()
+sal_Bool SbiDisas::Fetch()
 {
     nPC = nOff;
     if( nOff >= rImg.GetCodeSize() )
-        return FALSE;
+        return sal_False;
     const unsigned char* p = (const unsigned char*)( rImg.GetCode() + nOff );
     eOp = (SbiOpcode) ( *p++ & 0xFF );
     if( eOp <= SbOP0_END )
@@ -302,29 +302,29 @@ BOOL SbiDisas::Fetch()
         nOp1 = nOp2 = 0;
         nParts = 1;
         nOff++;
-        return TRUE;
+        return sal_True;
     }
     else if( eOp <= SbOP1_END )
     {
         nOff += 5;
         if( nOff > rImg.GetCodeSize() )
-            return FALSE;
+            return sal_False;
         nOp1 = *p++; nOp1 |= *p++ << 8; nOp1 |= *p++ << 16; nOp1 |= *p++ << 24;
         nParts = 2;
-        return TRUE;
+        return sal_True;
     }
     else if( eOp <= SbOP2_END )
     {
         nOff += 9;
         if( nOff > rImg.GetCodeSize() )
-            return FALSE;
+            return sal_False;
         nOp1 = *p++; nOp1 |= *p++ << 8; nOp1 |= *p++ << 16; nOp1 |= *p++ << 24;
         nOp2 = *p++; nOp2 |= *p++ << 8; nOp2 |= *p++ << 16; nOp2 |= *p++ << 24;
         nParts = 3;
-        return TRUE;
+        return sal_True;
     }
     else
-        return FALSE;
+        return sal_False;
 }
 
 void SbiDisas::Disas( SvStream& r )
@@ -351,7 +351,7 @@ void SbiDisas::Disas( String& r )
     aText.ConvertLineEnd();
 }
 
-BOOL SbiDisas::DisasLine( String& rText )
+sal_Bool SbiDisas::DisasLine( String& rText )
 {
     char cBuf[ 100 ];
     const char* pMask[] = {
@@ -361,7 +361,7 @@ BOOL SbiDisas::DisasLine( String& rText )
         "%08" SAL_PRIXUINT32 " %02X %08X %08X " };
     rText.Erase();
     if( !Fetch() )
-        return FALSE;
+        return sal_False;
 
 #ifdef DBG_TRACE_BASIC
     String aTraceStr_STMNT;
@@ -373,8 +373,8 @@ BOOL SbiDisas::DisasLine( String& rText )
         // Find line
         String aSource = rImg.aOUSource;
         nLine = nOp1;
-        USHORT n = 0;
-        USHORT l = (USHORT)nLine;
+        sal_uInt16 n = 0;
+        sal_uInt16 l = (sal_uInt16)nLine;
         while( --l ) {
             n = aSource.SearchAscii( "\n", n );
             if( n == STRING_NOTFOUND ) break;
@@ -383,16 +383,16 @@ BOOL SbiDisas::DisasLine( String& rText )
         // Show position
         if( n != STRING_NOTFOUND )
         {
-            USHORT n2 = aSource.SearchAscii( "\n", n );
+            sal_uInt16 n2 = aSource.SearchAscii( "\n", n );
             if( n2 == STRING_NOTFOUND ) n2 = aSource.Len() - n;
             String s( aSource.Copy( n, n2 - n + 1 ) );
-            BOOL bDone;
+            sal_Bool bDone;
             do {
-                bDone = TRUE;
+                bDone = sal_True;
                 n = s.Search( '\r' );
-                if( n != STRING_NOTFOUND ) bDone = FALSE, s.Erase( n, 1 );
+                if( n != STRING_NOTFOUND ) bDone = sal_False, s.Erase( n, 1 );
                 n = s.Search( '\n' );
-                if( n != STRING_NOTFOUND ) bDone = FALSE, s.Erase( n, 1 );
+                if( n != STRING_NOTFOUND ) bDone = sal_False, s.Erase( n, 1 );
             } while( !bDone );
 //          snprintf( cBuf, sizeof(cBuf), pMask[ 0 ], nPC );
 //          rText += cBuf;
@@ -412,7 +412,7 @@ BOOL SbiDisas::DisasLine( String& rText )
     {
         // Public?
         ByteString aByteMethName;
-        for( USHORT i = 0; i < pMod->GetMethods()->Count(); i++ )
+        for( sal_uInt16 i = 0; i < pMod->GetMethods()->Count(); i++ )
         {
             SbMethod* pMeth = PTR_CAST(SbMethod,pMod->GetMethods()->Get( i ));
             if( pMeth )
@@ -442,7 +442,7 @@ BOOL SbiDisas::DisasLine( String& rText )
         rText += ':';
         rText.AppendAscii( _crlf() );
     }
-    snprintf( cBuf, sizeof(cBuf), pMask[ nParts ], nPC, (USHORT) eOp, nOp1, nOp2 );
+    snprintf( cBuf, sizeof(cBuf), pMask[ nParts ], nPC, (sal_uInt16) eOp, nOp1, nOp2 );
 
     String aPCodeStr;
     aPCodeStr.AppendAscii( cBuf );
@@ -466,13 +466,13 @@ BOOL SbiDisas::DisasLine( String& rText )
     dbg_RegisterTraceTextForPC( pMod, nPC, aTraceStr_STMNT, aPCodeStr );
 #endif
 
-    return TRUE;
+    return sal_True;
 }
 
 // Read from StringPool
 void SbiDisas::StrOp( String& rText )
 {
-    String aStr = rImg.GetString( (USHORT)nOp1 );
+    String aStr = rImg.GetString( (sal_uInt16)nOp1 );
     ByteString aByteString( aStr, RTL_TEXTENCODING_ASCII_US );
     const char* p = aByteString.GetBuffer();
     if( p )
@@ -484,7 +484,7 @@ void SbiDisas::StrOp( String& rText )
     else
     {
         rText.AppendAscii( "?String? " );
-        rText += (USHORT)nOp1;
+        rText += (sal_uInt16)nOp1;
     }
 }
 
@@ -538,7 +538,7 @@ void SbiDisas::ResumeOp( String& rText )
 }
 
 // print Prompt
-// FALSE/TRUE
+// sal_False/TRUE
 void SbiDisas::PromptOp( String& rText )
 {
     if( nOp1 )
@@ -570,16 +570,16 @@ void SbiDisas::CharOp( String& rText )
         rText += '\'';
     else
         rText.AppendAscii( "char " ),
-        rText += (USHORT)nOp1;
+        rText += (sal_uInt16)nOp1;
 }
 
 // Print var: String-ID and type
 void SbiDisas::VarOp( String& rText )
 {
-    rText += rImg.GetString( (USHORT)(nOp1 & 0x7FFF) );
+    rText += rImg.GetString( (sal_uInt16)(nOp1 & 0x7FFF) );
     rText.AppendAscii( "\t; " );
     // The type
-    UINT32 n = nOp1;
+    sal_uInt32 n = nOp1;
     nOp1 = nOp2;
     TypeOp( rText );
     if( n & 0x8000 )
@@ -589,7 +589,7 @@ void SbiDisas::VarOp( String& rText )
 // Define variable: String-ID and type
 void SbiDisas::VarDefOp( String& rText )
 {
-    rText += rImg.GetString( (USHORT)(nOp1 & 0x7FFF) );
+    rText += rImg.GetString( (sal_uInt16)(nOp1 & 0x7FFF) );
     rText.AppendAscii( "\t; " );
     // The Typ
     nOp1 = nOp2;
@@ -602,7 +602,7 @@ void SbiDisas::OffOp( String& rText )
     rText += String::CreateFromInt32( nOp1 & 0x7FFF );
     rText.AppendAscii( "\t; " );
     // The type
-    UINT32 n = nOp1;
+    sal_uInt32 n = nOp1;
     nOp1 = nOp2;
     TypeOp( rText );
     if( n & 0x8000 )
@@ -638,14 +638,14 @@ void SbiDisas::TypeOp( String& rText )
     else
     {
         rText.AppendAscii( "type " );
-        rText += (USHORT)nOp1;
+        rText += (sal_uInt16)nOp1;
     }
 }
 #ifdef HP9000
 #undef pTypes
 #endif
 
-// TRUE-Label, condition Opcode
+// sal_True-Label, condition Opcode
 void SbiDisas::CaseOp( String& rText )
 {
     LblOp( rText );
@@ -658,8 +658,8 @@ void SbiDisas::StmntOp( String& rText )
 {
     rText += String::CreateFromInt32( nOp1 );
     rText += ',';
-    UINT32 nCol = nOp2 & 0xFF;
-    UINT32 nFor = nOp2 / 0x100;
+    sal_uInt32 nCol = nOp2 & 0xFF;
+    sal_uInt32 nFor = nOp2 / 0x100;
     rText += String::CreateFromInt32( nCol );
     rText.AppendAscii( " (For-Level: " );
     rText += String::CreateFromInt32( nFor );

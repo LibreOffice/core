@@ -44,13 +44,13 @@ class EDITENG_DLLPUBLIC SvxPropSizeItem : public SfxUInt16Item
 public:
     TYPEINFO();
 
-    SvxPropSizeItem( const USHORT nPercent /*= 100*/,
-                 const USHORT nID  );
+    SvxPropSizeItem( const sal_uInt16 nPercent /*= 100*/,
+                 const sal_uInt16 nID  );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&       Store(SvStream &, USHORT nItemVersion) const;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

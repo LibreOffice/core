@@ -37,10 +37,10 @@ class SvxVertCTLTextTbxCtrl : public SfxToolBoxControl
 {
     sal_Bool bCheckVertical; //determines whether vertical mode or CTL mode has to be checked
 public:
-    SvxVertCTLTextTbxCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxVertCTLTextTbxCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxVertCTLTextTbxCtrl();
 
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
     void    SetVert(sal_Bool bSet) {bCheckVertical = bSet;}
 
@@ -52,7 +52,7 @@ class SVX_DLLPUBLIC SvxCTLTextTbxCtrl : public SvxVertCTLTextTbxCtrl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxCTLTextTbxCtrl(USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxCTLTextTbxCtrl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 /* -----------------------------12.09.2002 11:50------------------------------
 
@@ -61,7 +61,7 @@ class SVX_DLLPUBLIC SvxVertTextTbxCtrl : public SvxVertCTLTextTbxCtrl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxVertTextTbxCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxVertTextTbxCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 
 #endif

@@ -45,12 +45,12 @@ FileControl::FileControl( Window* pParent, WinBits nStyle, FileControlMode nFlag
     mnInternalFlags( FILECTRL_ORIGINALBUTTONTEXT )
 {
     maButton.SetClickHdl( LINK( this, FileControl, ButtonHdl ) );
-    mbOpenDlg = TRUE;
+    mbOpenDlg = sal_True;
 
     maButton.Show();
     maEdit.Show();
 
-    SetCompoundControl( TRUE );
+    SetCompoundControl( sal_True );
 
     SetStyle( ImplInitStyle( GetStyle() ) );
 }
@@ -154,7 +154,7 @@ void FileControl::Resize()
 
     if( mnInternalFlags & FILECTRL_INRESIZE )
         return;
-    mnInternalFlags |= FILECTRL_INRESIZE;//InResize = TRUE
+    mnInternalFlags |= FILECTRL_INRESIZE;//InResize = sal_True
 
     Size aOutSz = GetOutputSizePixel();
     long nButtonTextWidth = maButton.GetTextWidth( maButtonText );
@@ -163,7 +163,7 @@ void FileControl::Resize()
         ( mnFlags & FILECTRL_RESIZEBUTTONBYPATHLEN
         ? ( maEdit.GetTextWidth( maEdit.GetText() )
             <= aOutSz.Width() - nButtonTextWidth - ButtonBorder )
-        : TRUE ) )
+        : sal_True ) )
        )
     {
         maButton.SetText( maButtonText );
@@ -179,7 +179,7 @@ void FileControl::Resize()
     maEdit.SetPosSizePixel( 0, 0, aOutSz.Width()-nButtonWidth, aOutSz.Height() );
     maButton.SetPosSizePixel( aOutSz.Width()-nButtonWidth, 0, nButtonWidth, aOutSz.Height() );
 
-    mnInternalFlags &= ~FILECTRL_INRESIZE; //InResize = FALSE
+    mnInternalFlags &= ~FILECTRL_INRESIZE; //InResize = sal_False
 }
 
 // -----------------------------------------------------------------------
@@ -200,7 +200,7 @@ void FileControl::GetFocus()
 
 // -----------------------------------------------------------------------
 
-void FileControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags )
+void FileControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
     WinBits nOldEditStyle = GetEdit().GetStyle();
     if ( GetStyle() & WB_BORDER )

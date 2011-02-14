@@ -225,7 +225,7 @@ class CloseDispatcher : public css::lang::XTypeProvider
                     We need it to implement the CLOSE_DOC semantic.
 
             @return [boolean]
-                    TRUE if closing was successfully.
+                    sal_True if closing was successfully.
          */
         sal_Bool implts_prepareFrameForClosing(const css::uno::Reference< css::frame::XFrame >& xFrame                ,
                                                      sal_Bool                                   bAllowSuspend         ,
@@ -245,7 +245,7 @@ class CloseDispatcher : public css::lang::XTypeProvider
                     frame is closed ....
 
             @return [bool]
-                    TRUE if closing was successfully.
+                    sal_True if closing was successfully.
          */
         sal_Bool implts_closeFrame();
 
@@ -254,7 +254,7 @@ class CloseDispatcher : public css::lang::XTypeProvider
                     as new component of our m_xCloseFrame.
 
             @return [bool]
-                    TRUE if operation was successfully.
+                    sal_True if operation was successfully.
          */
         sal_Bool implts_establishBackingMode();
 
@@ -268,7 +268,7 @@ class CloseDispatcher : public css::lang::XTypeProvider
                     Because he should know, that such things will happen :-)
 
             @return [bool]
-                    TRUE if termination of the application was started ...
+                    sal_True if termination of the application was started ...
          */
         sal_Bool implts_terminateApplication();
 

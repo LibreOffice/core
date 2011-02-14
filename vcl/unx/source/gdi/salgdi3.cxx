@@ -169,7 +169,7 @@ X11SalGraphics::GetFontGC()
     {
         XSetForeground( pDisplay, pFontGC_, nTextPixel_ );
         SetClipRegion( pFontGC_ );
-        bFontGC_ = TRUE;
+        bFontGC_ = sal_True;
     }
 
     return pFontGC_;
@@ -966,9 +966,9 @@ const ImplFontCharMap* X11SalGraphics::GetImplFontCharMap() const
 //
 // ----------------------------------------------------------------------------
 
-USHORT X11SalGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
+sal_uInt16 X11SalGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
 {
-    USHORT nRetVal = 0;
+    sal_uInt16 nRetVal = 0;
     if( !setFont( pEntry, nFallbackLevel ) )
         nRetVal |= SAL_SETFONT_BADFONT;
     if( bPrinter_ || (mpServerFont[ nFallbackLevel ] != NULL) )
@@ -985,7 +985,7 @@ X11SalGraphics::SetTextColor( SalColor nSalColor )
     {
         nTextColor_     = nSalColor;
         nTextPixel_     = GetPixel( nSalColor );
-        bFontGC_        = FALSE;
+        bFontGC_        = sal_False;
     }
 }
 
@@ -1218,15 +1218,15 @@ X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric, int nFallbackLevel )
 
 // ---------------------------------------------------------------------------
 
-ULONG
-X11SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData *pKernPairs )
+sal_uLong
+X11SalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData *pKernPairs )
 {
     if( ! bPrinter_ )
     {
         if( mpServerFont[0] != NULL )
         {
             ImplKernPairData* pTmpKernPairs;
-            ULONG nGotPairs = mpServerFont[0]->GetKernPairs( &pTmpKernPairs );
+            sal_uLong nGotPairs = mpServerFont[0]->GetKernPairs( &pTmpKernPairs );
             for( unsigned int i = 0; i < nPairs && i < nGotPairs; ++i )
                 pKernPairs[ i ] = pTmpKernPairs[ i ];
             delete[] pTmpKernPairs;
@@ -1238,40 +1238,40 @@ X11SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData *pKernPairs )
 
 // ---------------------------------------------------------------------------
 
-BOOL X11SalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
+sal_Bool X11SalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
-        return FALSE;
+        return sal_False;
 
     ServerFont* pSF = mpServerFont[ nLevel ];
     if( !pSF )
-        return FALSE;
+        return sal_False;
 
     nGlyphIndex &= ~GF_FONTMASK;
     const GlyphMetric& rGM = pSF->GetGlyphMetric( nGlyphIndex );
     rRect = Rectangle( rGM.GetOffset(), rGM.GetSize() );
-    return TRUE;
+    return sal_True;
 }
 
 // ---------------------------------------------------------------------------
 
-BOOL X11SalGraphics::GetGlyphOutline( long nGlyphIndex,
+sal_Bool X11SalGraphics::GetGlyphOutline( long nGlyphIndex,
     ::basegfx::B2DPolyPolygon& rPolyPoly )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
-        return FALSE;
+        return sal_False;
 
     ServerFont* pSF = mpServerFont[ nLevel ];
     if( !pSF )
-        return FALSE;
+        return sal_False;
 
     nGlyphIndex &= ~GF_FONTMASK;
     if( pSF->GetGlyphOutline( nGlyphIndex, rPolyPoly ) )
-        return TRUE;
+        return sal_True;
 
-    return FALSE;
+    return sal_False;
 }
 
 //--------------------------------------------------------------------------
@@ -1332,7 +1332,7 @@ SystemFontData X11SalGraphics::GetSysFontData( int nFallbacklevel ) const
 
 //--------------------------------------------------------------------------
 
-BOOL X11SalGraphics::CreateFontSubset(
+sal_Bool X11SalGraphics::CreateFontSubset(
                                    const rtl::OUString& rToFile,
                                    const ImplFontData* pFont,
                                    sal_Int32* pGlyphIDs,

@@ -207,7 +207,7 @@ void SAL_CALL CDIBPreview::setImage(sal_Int16 aImageFormat, const Any& aImage)
 
     aGuard.clear();
 
-    InvalidateRect(m_Hwnd,NULL,FALSE);
+    InvalidateRect(m_Hwnd,NULL,sal_False);
     UpdateWindow(m_Hwnd);
 }
 
@@ -248,7 +248,7 @@ void SAL_CALL CDIBPreview::onPaint(HWND hWnd, HDC hDC)
 {
     BITMAPFILEHEADER*  pbmfh;
     BITMAPINFO      *  pbmi;
-    BYTE            *  pBits;
+    sal_uInt8            *  pBits;
     int                cxDib;
     int                cyDib;
 
@@ -262,7 +262,7 @@ void SAL_CALL CDIBPreview::onPaint(HWND hWnd, HDC hDC)
              (pbmfh->bfType == ('B' | ('M' << 8))) )
         {
             pbmi  = reinterpret_cast<BITMAPINFO*>((pbmfh + 1));
-            pBits = reinterpret_cast<BYTE*>(((DWORD)pbmfh) + pbmfh->bfOffBits);
+            pBits = reinterpret_cast<sal_uInt8*>(((DWORD)pbmfh) + pbmfh->bfOffBits);
 
             cxDib =      pbmi->bmiHeader.biWidth;
             cyDib = abs (pbmi->bmiHeader.biHeight);

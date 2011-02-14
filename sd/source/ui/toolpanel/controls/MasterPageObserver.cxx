@@ -194,8 +194,8 @@ void MasterPageObserver::Implementation::RegisterDocument (
 {
     // Gather the names of all the master pages in the given document.
     MasterPageContainer::data_type aMasterPageSet;
-    USHORT nMasterPageCount = rDocument.GetMasterSdPageCount(PK_STANDARD);
-    for (USHORT nIndex=0; nIndex<nMasterPageCount; nIndex++)
+    sal_uInt16 nMasterPageCount = rDocument.GetMasterSdPageCount(PK_STANDARD);
+    for (sal_uInt16 nIndex=0; nIndex<nMasterPageCount; nIndex++)
     {
         SdPage* pMasterPage = rDocument.GetMasterSdPage (nIndex, PK_STANDARD);
         if (pMasterPage != NULL)
@@ -330,9 +330,9 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
     SdDrawDocument& rDocument)
 {
     // Create a set of names of the master pages used by the given document.
-    USHORT nMasterPageCount = rDocument.GetMasterSdPageCount(PK_STANDARD);
+    sal_uInt16 nMasterPageCount = rDocument.GetMasterSdPageCount(PK_STANDARD);
     ::std::set<String> aCurrentMasterPages;
-    for (USHORT nIndex=0; nIndex<nMasterPageCount; nIndex++)
+    for (sal_uInt16 nIndex=0; nIndex<nMasterPageCount; nIndex++)
     {
         SdPage* pMasterPage = rDocument.GetMasterSdPage (nIndex, PK_STANDARD);
         if (pMasterPage != NULL)

@@ -83,7 +83,7 @@ void lcl_fillNamespaceContainer( const SvXMLNamespaceMap&,
 
 XFormsSubmissionContext::XFormsSubmissionContext(
     SvXMLImport& rImport,
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XPropertySet>& xModel ) :
         TokenContext( rImport, nPrefix, rLocalName, aAttributeMap, aEmptyMap ),

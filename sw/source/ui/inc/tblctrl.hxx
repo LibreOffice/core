@@ -41,7 +41,7 @@ class SwTableOptimizeCtrl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SwTableOptimizeCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SwTableOptimizeCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SwTableOptimizeCtrl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;

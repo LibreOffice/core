@@ -66,7 +66,7 @@ namespace unotools
         bool                                           m_bSwap;
         bool                                           m_bPalette;
 
-        SAL_DLLPRIVATE void setComponentInfo( ULONG redShift, ULONG greenShift, ULONG blueShift );
+        SAL_DLLPRIVATE void setComponentInfo( sal_uLong redShift, sal_uLong greenShift, sal_uLong blueShift );
 
         virtual ~VclCanvasBitmap();
 

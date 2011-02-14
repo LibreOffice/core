@@ -40,7 +40,7 @@ SFX_IMPL_CHILDWINDOWCONTEXT(NavigatorChildWindow, SID_NAVIGATOR)
 
 NavigatorChildWindow::NavigatorChildWindow (
     ::Window* pParent,
-    USHORT nId,
+    sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* )
     : SfxChildWindowContext( nId )

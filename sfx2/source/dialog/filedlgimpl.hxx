@@ -84,7 +84,7 @@ namespace sfx2
         SfxFilterFlags              m_nMustFlags;
         SfxFilterFlags              m_nDontFlags;
 
-        ULONG                       mnPostUserEventId;
+        sal_uIntPtr                     mnPostUserEventId;
 
         ErrCode                     mnError;
 

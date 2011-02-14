@@ -103,7 +103,7 @@ public:
     virtual EscherExHostAppData* StartShape(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& rxShape,
                             const Rectangle* pChildAnchor );
-    virtual void                EndShape( UINT16 nShapeType, UINT32 nShapeID );
+    virtual void                EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID );
     virtual EscherExHostAppData*    EnterAdditionalTextGroup();
 
                                 /// Flush and merge PicStream into EscherStream
@@ -141,7 +141,7 @@ private:
         XclEscherHostAppData*   pCurrAppData;
         XclEscherClientData*    pTheClientData; // always the same
         XclEscherClientTextbox* pAdditionalText;
-        USHORT                  nAdditionalText;
+        sal_uInt16                  nAdditionalText;
     sal_uInt32          mnNextKey;
     bool                mbIsRootDff;
 };
@@ -151,13 +151,13 @@ private:
 class XclEscherHostAppData : public EscherExHostAppData
 {
 private:
-        BOOL                bStackedGroup;
+        sal_Bool                bStackedGroup;
 
 public:
-                                XclEscherHostAppData() : bStackedGroup( FALSE )
+                                XclEscherHostAppData() : bStackedGroup( sal_False )
                                     {}
-    inline  void                SetStackedGroup( BOOL b )   { bStackedGroup = b; }
-    inline  BOOL                IsStackedGroup() const  { return bStackedGroup; }
+    inline  void                SetStackedGroup( sal_Bool b )   { bStackedGroup = b; }
+    inline  sal_Bool                IsStackedGroup() const  { return bStackedGroup; }
 };
 
 

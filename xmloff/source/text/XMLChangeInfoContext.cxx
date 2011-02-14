@@ -69,7 +69,7 @@ void XMLChangeInfoContext::StartElement(const Reference<XAttributeList> &)
 }
 
 SvXMLImportContext* XMLChangeInfoContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList >& xAttrList )
 {

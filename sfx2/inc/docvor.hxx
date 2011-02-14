@@ -66,27 +66,27 @@ friend class SfxOrganizeDlg_Impl;
     SfxOrganizeMgr*         pMgr;
     SfxOrganizeDlg_Impl*    pDlg;
 
-    static BOOL             bDropMoveOk;
+    static sal_Bool             bDropMoveOk;
 
     DECL_LINK( OnAsyncExecuteDrop, ExecuteDropEvent* );
 
 protected:
-    virtual BOOL EditingEntry( SvLBoxEntry* pEntry, Selection & );
-    virtual BOOL EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
-    virtual BOOL NotifyMoving(SvLBoxEntry *pSource,
+    virtual sal_Bool EditingEntry( SvLBoxEntry* pEntry, Selection & );
+    virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
+    virtual sal_Bool NotifyMoving(SvLBoxEntry *pSource,
                             SvLBoxEntry* pTarget,
-                            SvLBoxEntry *&pNewParent, ULONG &);
-    virtual BOOL NotifyCopying(SvLBoxEntry *pSource,
+                            SvLBoxEntry *&pNewParent, sal_uIntPtr &);
+    virtual sal_Bool NotifyCopying(SvLBoxEntry *pSource,
                             SvLBoxEntry* pTarget,
-                            SvLBoxEntry *&pNewParent, ULONG &);
+                            SvLBoxEntry *&pNewParent, sal_uIntPtr &);
     virtual void RequestingChilds( SvLBoxEntry* pParent );
     virtual long ExpandingHdl();
-    virtual BOOL Select( SvLBoxEntry* pEntry, BOOL bSelect=TRUE );
+    virtual sal_Bool Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
 
         using SvLBox::ExecuteDrop;
     // new d&d
     virtual DragDropMode    NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* );
-    virtual BOOL            NotifyAcceptDrop( SvLBoxEntry* );
+    virtual sal_Bool            NotifyAcceptDrop( SvLBoxEntry* );
     virtual sal_Int8        AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt );
     virtual void            DragFinished( sal_Int8 nDropAction );
@@ -105,34 +105,34 @@ public:
     inline void SetBitmaps(
                     const Image &rOFolderBmp, const Image &rCFolderBmp, const Image &rODocBmp, const Image &rCDocBmp,
                     const Image &rOFolderBmpHC, const Image &rCFolderBmpHC, const Image &rODocBmpHC, const Image &rCDocBmpHC );
-    const Image &GetClosedBmp(USHORT nLevel) const;
-    const Image &GetOpenedBmp(USHORT nLevel) const;
+    const Image &GetClosedBmp(sal_uInt16 nLevel) const;
+    const Image &GetOpenedBmp(sal_uInt16 nLevel) const;
 
     virtual PopupMenu*  CreateContextMenu();
 
 private:
-    BOOL IsStandard_Impl( SvLBoxEntry *) const;
-    BOOL MoveOrCopyTemplates(SvLBox *pSourceBox,
+    sal_Bool IsStandard_Impl( SvLBoxEntry *) const;
+    sal_Bool MoveOrCopyTemplates(SvLBox *pSourceBox,
                             SvLBoxEntry *pSource,
                             SvLBoxEntry* pTarget,
                             SvLBoxEntry *&pNewParent,
-                            ULONG &rIdx,
-                            BOOL bCopy);
-    BOOL MoveOrCopyContents(SvLBox *pSourceBox,
+                            sal_uIntPtr &rIdx,
+                            sal_Bool bCopy);
+    sal_Bool MoveOrCopyContents(SvLBox *pSourceBox,
                             SvLBoxEntry *pSource,
                             SvLBoxEntry* pTarget,
                             SvLBoxEntry *&pNewParent,
-                            ULONG &rIdx,
-                            BOOL bCopy);
-    inline USHORT       GetDocLevel() const;
+                            sal_uIntPtr &rIdx,
+                            sal_Bool bCopy);
+    inline sal_uInt16       GetDocLevel() const;
     SfxObjectShellRef   GetObjectShell( const Path& );
-    BOOL                IsUniqName_Impl( const String &rText,
+    sal_Bool                IsUniqName_Impl( const String &rText,
                                          SvLBoxEntry* pParent, SvLBoxEntry* pEntry = 0 ) const;
-    USHORT              GetLevelCount_Impl( SvLBoxEntry* pParent ) const;
+    sal_uInt16              GetLevelCount_Impl( SvLBoxEntry* pParent ) const;
 
     SvLBoxEntry*        InsertEntryByBmpType( const XubString& rText, BMPTYPE eBmpType,
-                            SvLBoxEntry* pParent = NULL, BOOL bChildsOnDemand = FALSE,
-                            ULONG nPos = LIST_APPEND, void* pUserData = NULL );
+                            SvLBoxEntry* pParent = NULL, sal_Bool bChildsOnDemand = sal_False,
+                            sal_uIntPtr nPos = LIST_APPEND, void* pUserData = NULL );
 };
 
 #endif // _SFX_HXX

@@ -93,9 +93,9 @@ using ::rtl::OUStringBuffer;
 
 ////////////////////////////////////////////////////////////
 
-ULONG SmXMLImportWrapper::Import(SfxMedium &rMedium)
+sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
 {
-    ULONG nError = ERRCODE_SFX_DOLOADFAILED;
+    sal_uLong nError = ERRCODE_SFX_DOLOADFAILED;
 
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory(
         utl::getProcessServiceFactory());
@@ -203,7 +203,7 @@ ULONG SmXMLImportWrapper::Import(SfxMedium &rMedium)
         if (xStatusIndicator.is())
             xStatusIndicator->setValue(nSteps++);
 
-        ULONG nWarn = ReadThroughComponent(
+        sal_uLong nWarn = ReadThroughComponent(
             rMedium.GetStorage(), xModelComp, "meta.xml", "Meta.xml",
             xServiceFactory, xInfoSet,
                 (bOASIS ? "com.sun.star.comp.Math.XMLOasisMetaImporter"
@@ -244,7 +244,7 @@ ULONG SmXMLImportWrapper::Import(SfxMedium &rMedium)
             xStatusIndicator->setValue(nSteps++);
 
         nError = ReadThroughComponent( xInputStream, xModelComp,
-            xServiceFactory, xInfoSet, "com.sun.star.comp.Math.XMLImporter", FALSE );
+            xServiceFactory, xInfoSet, "com.sun.star.comp.Math.XMLImporter", sal_False );
     }
 
     if (xStatusIndicator.is())
@@ -254,7 +254,7 @@ ULONG SmXMLImportWrapper::Import(SfxMedium &rMedium)
 
 
 /// read a component (file + filter version)
-ULONG SmXMLImportWrapper::ReadThroughComponent(
+sal_uLong SmXMLImportWrapper::ReadThroughComponent(
     Reference<io::XInputStream> xInputStream,
     Reference<XComponent> xModelComponent,
     Reference<lang::XMultiServiceFactory> & rFactory,
@@ -262,7 +262,7 @@ ULONG SmXMLImportWrapper::ReadThroughComponent(
     const sal_Char* pFilterName,
     sal_Bool bEncrypted )
 {
-    ULONG nError = ERRCODE_SFX_DOLOADFAILED;
+    sal_uLong nError = ERRCODE_SFX_DOLOADFAILED;
     DBG_ASSERT(xInputStream.is(), "input stream missing");
     DBG_ASSERT(xModelComponent.is(), "document missing");
     DBG_ASSERT(rFactory.is(), "factory missing");
@@ -358,7 +358,7 @@ ULONG SmXMLImportWrapper::ReadThroughComponent(
 }
 
 
-ULONG SmXMLImportWrapper::ReadThroughComponent(
+sal_uLong SmXMLImportWrapper::ReadThroughComponent(
     const uno::Reference< embed::XStorage >& xStorage,
     Reference<XComponent> xModelComponent,
     const sal_Char* pStreamName,
@@ -596,8 +596,8 @@ void SmXMLImport::endDocument(void)
 
             // Convert symbol names
             SmParser &rParser = pDocShell->GetParser();
-            BOOL bVal = rParser.IsImportSymbolNames();
-            rParser.SetImportSymbolNames( TRUE );
+            sal_Bool bVal = rParser.IsImportSymbolNames();
+            rParser.SetImportSymbolNames( sal_True );
             SmNode *pTmpTree = rParser.Parse( aText );
             aText = rParser.GetText();
             delete pTmpTree;
@@ -853,7 +853,7 @@ public:
 class SmXMLRowContext_Impl : public SmXMLDocContext_Impl
 {
 protected:
-    ULONG nElementCount;
+    sal_uLong nElementCount;
 
 public:
     SmXMLRowContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
@@ -1221,7 +1221,7 @@ void SmXMLFencedContext_Impl::EndElement()
     aToken.aText = ',';
     aToken.eType = TIDENT;
 
-    ULONG i = rNodeStack.Count() - nElementCount;
+    sal_uLong i = rNodeStack.Count() - nElementCount;
     if (rNodeStack.Count() - nElementCount > 1)
         i += rNodeStack.Count() - 1 - nElementCount;
     aRelationArray.resize(i);
@@ -1629,7 +1629,7 @@ void SmXMLSubContext_Impl::GenericEndElement(SmTokenType eType, SmSubSup eSubSup
     // initialize subnodes array
     SmNodeArray  aSubNodes;
     aSubNodes.resize(1 + SUBSUP_NUM_ENTRIES);
-    for (ULONG i = 1;  i < aSubNodes.size();  i++)
+    for (sal_uLong i = 1;  i < aSubNodes.size();  i++)
         aSubNodes[i] = NULL;
 
     aSubNodes[eSubSup+1] = rNodeStack.Pop();
@@ -1691,7 +1691,7 @@ void SmXMLSubSupContext_Impl::GenericEndElement(SmTokenType eType,
     // initialize subnodes array
     SmNodeArray  aSubNodes;
     aSubNodes.resize(1 + SUBSUP_NUM_ENTRIES);
-    for (ULONG i = 1;  i < aSubNodes.size();  i++)
+    for (sal_uLong i = 1;  i < aSubNodes.size();  i++)
         aSubNodes[i] = NULL;
 
     aSubNodes[aSup+1] = rNodeStack.Pop();
@@ -1859,7 +1859,7 @@ public:
     SmXMLMultiScriptsContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName) :
         SmXMLSubSupContext_Impl(rImport,nPrefix,rLName),
-        bHasPrescripts(FALSE) {}
+        bHasPrescripts(sal_False) {}
 
     void EndElement();
     void MiddleElement();
@@ -2021,17 +2021,17 @@ class SmXMLFlatDocContext_Impl
 {
 public:
     SmXMLFlatDocContext_Impl( SmXMLImport& i_rImport,
-        USHORT i_nPrefix, const OUString & i_rLName,
+        sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
         const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder);
 
     virtual ~SmXMLFlatDocContext_Impl();
 
-    virtual SvXMLImportContext *CreateChildContext(USHORT i_nPrefix, const OUString& i_rLocalName, const uno::Reference<xml::sax::XAttributeList>& i_xAttrList);
+    virtual SvXMLImportContext *CreateChildContext(sal_uInt16 i_nPrefix, const OUString& i_rLocalName, const uno::Reference<xml::sax::XAttributeList>& i_xAttrList);
 };
 
 SmXMLFlatDocContext_Impl::SmXMLFlatDocContext_Impl( SmXMLImport& i_rImport,
-        USHORT i_nPrefix, const OUString & i_rLName,
+        sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
         const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder) :
     SvXMLImportContext(i_rImport, i_nPrefix, i_rLName),
@@ -2046,7 +2046,7 @@ SmXMLFlatDocContext_Impl::~SmXMLFlatDocContext_Impl()
 }
 
 SvXMLImportContext *SmXMLFlatDocContext_Impl::CreateChildContext(
-    USHORT i_nPrefix, const OUString& i_rLocalName,
+    sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
 {
     // behave like meta base class iff we encounter office:meta
@@ -2239,7 +2239,7 @@ SvXMLImportContext *SmXMLDocContext_Impl::CreateChildContext(
 
     const SvXMLTokenMap& rTokenMap = GetSmImport().GetPresLayoutElemTokenMap();
 
-    //UINT32 nTest = rTokenMap.Get(nPrefix, rLocalName);
+    //sal_uInt32 nTest = rTokenMap.Get(nPrefix, rLocalName);
 
     switch(rTokenMap.Get(nPrefix, rLocalName))
     {
@@ -2342,7 +2342,7 @@ void SmXMLDocContext_Impl::EndElement()
     ContextArray.resize(1);
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
 
-    for (ULONG i=0;i< 1;i++)
+    for (sal_uLong i=0;i< 1;i++)
         ContextArray[i] = rNodeStack.Pop();
 
     SmToken aDummy;
@@ -2351,9 +2351,9 @@ void SmXMLDocContext_Impl::EndElement()
     rNodeStack.Push(pSNode);
 
     SmNodeArray  LineArray;
-    ULONG n = rNodeStack.Count();
+    sal_uLong n = rNodeStack.Count();
     LineArray.resize(n);
-    for (ULONG j = 0; j < n; j++)
+    for (sal_uLong j = 0; j < n; j++)
         LineArray[n - (j + 1)] = rNodeStack.Pop();
     SmStructureNode *pSNode2 = new SmTableNode(aDummy);
     pSNode2->SetSubNodes(LineArray);
@@ -2429,12 +2429,12 @@ void SmXMLRowContext_Impl::EndElement()
 {
     SmNodeArray aRelationArray;
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    ULONG nSize = rNodeStack.Count()-nElementCount;
+    sal_uLong nSize = rNodeStack.Count()-nElementCount;
 
     if (nSize > 0)
     {
         aRelationArray.resize(nSize);
-        for (ULONG j=rNodeStack.Count()-nElementCount;j > 0;j--)
+        for (sal_uLong j=rNodeStack.Count()-nElementCount;j > 0;j--)
             aRelationArray[j-1] = rNodeStack.Pop();
 
 
@@ -2633,7 +2633,7 @@ void SmXMLMultiScriptsContext_Impl::MiddleElement()
         aToken.nGroup = 0;
         aToken.nLevel = 0;
         aToken.eType = TRSUB;
-        ULONG nFinalCount = rNodeStack.Count()-nElementCount-1;
+        sal_uLong nFinalCount = rNodeStack.Count()-nElementCount-1;
 
         SmNodeStack aReverseStack;
         while (rNodeStack.Count()-nElementCount)
@@ -2642,14 +2642,14 @@ void SmXMLMultiScriptsContext_Impl::MiddleElement()
             aReverseStack.Push(pThing);
         }
 
-        for (ULONG nCount=0;nCount < nFinalCount;nCount+=2)
+        for (sal_uLong nCount=0;nCount < nFinalCount;nCount+=2)
         {
             SmSubSupNode *pNode = new SmSubSupNode(aToken);
 
             // initialize subnodes array
             SmNodeArray  aSubNodes;
             aSubNodes.resize(1 + SUBSUP_NUM_ENTRIES);
-            for (ULONG i = 1;  i < aSubNodes.size();  i++)
+            for (sal_uLong i = 1;  i < aSubNodes.size();  i++)
                 aSubNodes[i] = NULL;
 
             /*On each loop the base and its sub sup pair becomes the
@@ -2683,11 +2683,11 @@ void SmXMLTableContext_Impl::EndElement()
     SmNodeStack aReverseStack;
     aExpressionArray.resize(rNodeStack.Count()-nElementCount);
 
-    ULONG nRows = rNodeStack.Count()-nElementCount;
-    USHORT nCols = 0;
+    sal_uLong nRows = rNodeStack.Count()-nElementCount;
+    sal_uInt16 nCols = 0;
 
     SmStructureNode *pArray;
-    for (ULONG i=rNodeStack.Count()-nElementCount;i > 0;i--)
+    for (sal_uLong i=rNodeStack.Count()-nElementCount;i > 0;i--)
     {
         pArray = (SmStructureNode *)rNodeStack.Pop();
         if (pArray->GetNumSubNodes() == 0)
@@ -2713,11 +2713,11 @@ void SmXMLTableContext_Impl::EndElement()
         aReverseStack.Push(pArray);
     }
     aExpressionArray.resize(nCols*nRows);
-    ULONG j=0;
+    sal_uLong j=0;
     while (aReverseStack.Count())
     {
         pArray = (SmStructureNode *)aReverseStack.Pop();
-        for (USHORT i=0;i<pArray->GetNumSubNodes();i++)
+        for (sal_uInt16 i=0;i<pArray->GetNumSubNodes();i++)
             aExpressionArray[j++] = pArray->GetSubNode(i);
     }
 
@@ -2728,7 +2728,7 @@ void SmXMLTableContext_Impl::EndElement()
     aToken.eType = TMATRIX;
     SmMatrixNode *pSNode = new SmMatrixNode(aToken);
     pSNode->SetSubNodes(aExpressionArray);
-    pSNode->SetRowCol(static_cast<USHORT>(nRows),nCols);
+    pSNode->SetRowCol(static_cast<sal_uInt16>(nRows),nCols);
     rNodeStack.Push(pSNode);
 }
 
@@ -2791,19 +2791,19 @@ void SmXMLMultiScriptsContext_Impl::EndElement()
         aToken.nGroup = 0;
         aToken.nLevel = 0;
         aToken.eType = TLSUB;
-        ULONG nFinalCount = rNodeStack.Count()-nElementCount-1;
+        sal_uLong nFinalCount = rNodeStack.Count()-nElementCount-1;
 
         SmNodeStack aReverseStack;
         while (rNodeStack.Count()-nElementCount)
             aReverseStack.Push(rNodeStack.Pop());
-        for (ULONG nCount=0;nCount < nFinalCount;nCount+=2)
+        for (sal_uLong nCount=0;nCount < nFinalCount;nCount+=2)
         {
             SmSubSupNode *pNode = new SmSubSupNode(aToken);
 
             // initialize subnodes array
             SmNodeArray  aSubNodes;
             aSubNodes.resize(1 + SUBSUP_NUM_ENTRIES);
-            for (ULONG i = 1;  i < aSubNodes.size();  i++)
+            for (sal_uLong i = 1;  i < aSubNodes.size();  i++)
                 aSubNodes[i] = NULL;
 
             /*On each loop the base and its sub sup pair becomes the
@@ -2834,7 +2834,7 @@ void SmXMLActionContext_Impl::EndElement()
      first pushed one*/
 
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    for (ULONG i=rNodeStack.Count()-nElementCount;i > 1;i--)
+    for (sal_uLong i=rNodeStack.Count()-nElementCount;i > 1;i--)
     {
         delete rNodeStack.Pop();
     }

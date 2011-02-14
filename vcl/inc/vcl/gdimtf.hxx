@@ -49,8 +49,8 @@ class Gradient;
 // - GDIMetaFile-Types -
 // ---------------------
 
-#define GDI_METAFILE_END                ((ULONG)0xFFFFFFFF)
-#define GDI_METAFILE_LABEL_NOTFOUND     ((ULONG)0xFFFFFFFF)
+#define GDI_METAFILE_END                ((sal_uLong)0xFFFFFFFF)
+#define GDI_METAFILE_LABEL_NOTFOUND     ((sal_uLong)0xFFFFFFFF)
 
 #ifndef METAFILE_END
 #define METAFILE_END                    GDI_METAFILE_END
@@ -105,8 +105,8 @@ private:
     GDIMetaFile*    pNext;
     OutputDevice*   pOutDev;
     ImpLabelList*   pLabelList;
-    BOOL            bPause;
-    BOOL            bRecord;
+    sal_Bool            bPause;
+    sal_Bool            bRecord;
 
 //#if 0 // _SOLAR__PRIVATE
 
@@ -140,7 +140,7 @@ private:
 
 protected:
 
-    virtual void    Linker( OutputDevice* pOut, BOOL bLink );
+    virtual void    Linker( OutputDevice* pOut, sal_Bool bLink );
     virtual long    Hook();
 
 public:
@@ -151,12 +151,12 @@ public:
     using List::operator==;
     using List::operator!=;
     GDIMetaFile&    operator=( const GDIMetaFile& rMtf );
-    BOOL            operator==( const GDIMetaFile& rMtf ) const;
-    BOOL            operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
+    sal_Bool            operator==( const GDIMetaFile& rMtf ) const;
+    sal_Bool            operator!=( const GDIMetaFile& rMtf ) const { return !( *this == rMtf ); }
 
     void            Clear();
     sal_Bool        IsEqual( const GDIMetaFile& rMtf ) const;
-    BOOL            Mirror( ULONG nMirrorFlags );
+    sal_Bool            Mirror( sal_uLong nMirrorFlags );
     void            Move( long nX, long nY );
     // additional Move method getting specifics how to handle MapMode( MAP_PIXEL )
     void            Move( long nX, long nY, long nDPIX, long nDPIY );
@@ -175,52 +175,52 @@ public:
 
     void            Adjust( short nLuminancePercent = 0, short nContrastPercent = 0,
                             short nChannelRPercent = 0, short nChannelGPercent = 0,
-                            short nChannelBPercent = 0, double fGamma = 1.0, BOOL bInvert = FALSE );
+                            short nChannelBPercent = 0, double fGamma = 1.0, sal_Bool bInvert = sal_False );
     void            Convert( MtfConversion eConversion );
-    void            ReplaceColors( const Color& rSearchColor, const Color& rReplaceColor, ULONG nTol = 0 );
+    void            ReplaceColors( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol = 0 );
     void            ReplaceColors( const Color* pSearchColors, const Color* rReplaceColors,
-                                   ULONG nColorCount, ULONG* pTols = NULL );
+                                   sal_uLong nColorCount, sal_uLong* pTols = NULL );
 
     GDIMetaFile     GetMonochromeMtf( const Color& rCol ) const;
 
     void            Record( OutputDevice* pOutDev );
-    BOOL            IsRecord() const { return bRecord; }
+    sal_Bool            IsRecord() const { return bRecord; }
 
-    void            Play( GDIMetaFile& rMtf, ULONG nPos = GDI_METAFILE_END );
-    void            Play( OutputDevice* pOutDev, ULONG nPos = GDI_METAFILE_END );
+    void            Play( GDIMetaFile& rMtf, sal_uLong nPos = GDI_METAFILE_END );
+    void            Play( OutputDevice* pOutDev, sal_uLong nPos = GDI_METAFILE_END );
     void            Play( OutputDevice* pOutDev, const Point& rPos,
-                          const Size& rSize, ULONG nPos = GDI_METAFILE_END );
+                          const Size& rSize, sal_uLong nPos = GDI_METAFILE_END );
 
-    void            Pause( BOOL bPause );
-    BOOL            IsPause() const { return bPause; }
+    void            Pause( sal_Bool bPause );
+    sal_Bool            IsPause() const { return bPause; }
 
     void            Stop();
 
     void            WindStart();
     void            WindEnd();
-    void            Wind( ULONG nAction );
+    void            Wind( sal_uLong nAction );
     void            WindPrev();
     void            WindNext();
 
-    ULONG           GetActionCount() const { return Count(); }
+    sal_uLong           GetActionCount() const { return Count(); }
     void            AddAction( MetaAction* pAction );
-    void            AddAction( MetaAction* pAction, ULONG nPos );
-    void            RemoveAction( ULONG nPos );
-    MetaAction*     CopyAction( ULONG nPos ) const;
+    void            AddAction( MetaAction* pAction, sal_uLong nPos );
+    void            RemoveAction( sal_uLong nPos );
+    MetaAction*     CopyAction( sal_uLong nPos ) const;
     MetaAction*     GetCurAction() const { return (MetaAction*) GetCurObject(); }
-    MetaAction*     GetAction( ULONG nAction ) const { return (MetaAction*) GetObject( nAction ); }
+    MetaAction*     GetAction( sal_uLong nAction ) const { return (MetaAction*) GetObject( nAction ); }
     MetaAction*     FirstAction() { return (MetaAction*) First(); }
     MetaAction*     NextAction() {  return (MetaAction*) Next(); }
-    MetaAction*     ReplaceAction( MetaAction* pAction, ULONG nAction ) { return (MetaAction*) Replace( pAction, nAction ); }
+    MetaAction*     ReplaceAction( MetaAction* pAction, sal_uLong nAction ) { return (MetaAction*) Replace( pAction, nAction ); }
 
-    ULONG           GetActionPos( const String& rLabel );
-    BOOL            InsertLabel( const String& rLabel, ULONG nActionPos );
+    sal_uLong           GetActionPos( const String& rLabel );
+    sal_Bool            InsertLabel( const String& rLabel, sal_uLong nActionPos );
     void            RemoveLabel( const String& rLabel );
     void            RenameLabel( const String& rLabel, const String& rNewLabel );
-    ULONG           GetLabelCount() const;
-    String          GetLabel( ULONG nLabel );
+    sal_uLong           GetLabelCount() const;
+    String          GetLabel( sal_uLong nLabel );
 
-    BOOL            SaveStatus();
+    sal_Bool            SaveStatus();
 
     const Size&     GetPrefSize() const { return aPrefSize; }
     void            SetPrefSize( const Size& rSize ) { aPrefSize = rSize; }
@@ -231,8 +231,8 @@ public:
     void            SetHookHdl( const Link& rLink ) { aHookHdlLink = rLink; }
     const Link&     GetHookHdl() const { return aHookHdlLink; }
 
-    ULONG           GetChecksum() const;
-    ULONG           GetSizeBytes() const;
+    sal_uLong           GetChecksum() const;
+    sal_uLong           GetSizeBytes() const;
 
     // Methoden zum Lesen und Schreiben des neuen Formats;
     // die Read-Methode kann auch das alte Format lesen
@@ -244,7 +244,7 @@ public:
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, GDIMetaFile& rGDIMetaFile );
     friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile );
 
-    BOOL           CreateThumbnail( sal_uInt32 nMaximumExtent, BitmapEx& rBmpEx, const BitmapEx* pOverlay = NULL, const Rectangle* pOverlayRect = NULL ) const;
+    sal_Bool           CreateThumbnail( sal_uInt32 nMaximumExtent, BitmapEx& rBmpEx, const BitmapEx* pOverlay = NULL, const Rectangle* pOverlayRect = NULL ) const;
 };
 
 #endif // _SV_GDIMTF_HXX

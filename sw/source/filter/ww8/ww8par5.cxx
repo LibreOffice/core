@@ -272,10 +272,10 @@ xub_StrLen _ReadFieldParams::FindNextStringPiece(const xub_StrLen nStart)
 
 
 // read parameters "1-3" or 1-3 with both values between 1 and nMax
-bool _ReadFieldParams::GetTokenSttFromTo(USHORT* pFrom, USHORT* pTo, USHORT nMax)
+bool _ReadFieldParams::GetTokenSttFromTo(sal_uInt16* pFrom, sal_uInt16* pTo, sal_uInt16 nMax)
 {
-    USHORT nStart = 0;
-    USHORT nEnd   = 0;
+    sal_uInt16 nStart = 0;
+    sal_uInt16 nEnd   = 0;
     xub_StrLen n = GoToTokenParam();
     if( STRING_NOTFOUND != n )
     {
@@ -286,8 +286,8 @@ bool _ReadFieldParams::GetTokenSttFromTo(USHORT* pFrom, USHORT* pTo, USHORT nMax
         String sStart( sParams.GetToken(0, '-', nIndex) );
         if( STRING_NOTFOUND != nIndex )
         {
-            nStart = static_cast<USHORT>(sStart.ToInt32());
-            nEnd   = static_cast<USHORT>(sParams.Copy(nIndex).ToInt32());
+            nStart = static_cast<sal_uInt16>(sStart.ToInt32());
+            nEnd   = static_cast<sal_uInt16>(sParams.Copy(nIndex).ToInt32());
         }
     }
     if( pFrom ) *pFrom = nStart;
@@ -543,14 +543,14 @@ static SvxExtNumType GetNumberPara(String& rStr, bool bAllowPageDesc = false)
 
 
 
-bool SwWW8ImplReader::ForceFieldLanguage(SwField &rFld, USHORT nLang)
+bool SwWW8ImplReader::ForceFieldLanguage(SwField &rFld, sal_uInt16 nLang)
 {
     bool bRet(false);
 
     const SvxLanguageItem *pLang =
         (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE);
     ASSERT(pLang, "impossible");
-    USHORT nDefault =  pLang ? pLang->GetValue() : LANGUAGE_ENGLISH_US;
+    sal_uInt16 nDefault =  pLang ? pLang->GetValue() : LANGUAGE_ENGLISH_US;
 
     if (nLang != nDefault)
     {
@@ -562,12 +562,12 @@ bool SwWW8ImplReader::ForceFieldLanguage(SwField &rFld, USHORT nLang)
     return bRet;
 }
 
-String GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, USHORT nLang)
+String GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, sal_uInt16 nLang)
 {
     //Get the system date in the correct final language layout, convert to
     //a known language and modify the 2 digit year part to be 4 digit, and
     //convert back to the correct language layout.
-    ULONG nIndex = pFormatter->GetFormatIndex(NF_DATE_SYSTEM_SHORT, nLang);
+    sal_uLong nIndex = pFormatter->GetFormatIndex(NF_DATE_SYSTEM_SHORT, nLang);
 
     SvNumberformat aFormat = const_cast<SvNumberformat &>
         (*(pFormatter->GetEntry(nIndex)));
@@ -587,17 +587,17 @@ String GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, USHORT nLang)
 }
 
 short SwWW8ImplReader::GetTimeDatePara(String& rStr, sal_uInt32& rFormat,
-    USHORT &rLang, int nWhichDefault, bool bHijri)
+    sal_uInt16 &rLang, int nWhichDefault, bool bHijri)
 {
     bool bRTL = false;
     if (pPlcxMan && !bVer67)
     {
-        const BYTE *pResult = pPlcxMan->HasCharSprm(0x85A);
+        const sal_uInt8 *pResult = pPlcxMan->HasCharSprm(0x85A);
         if (pResult && *pResult)
             bRTL = true;
     }
     RES_CHRATR eLang = bRTL ? RES_CHRATR_CTL_LANGUAGE : RES_CHRATR_LANGUAGE;
-    const SvxLanguageItem *pLang = (SvxLanguageItem*)GetFmtAttr( static_cast< USHORT >(eLang));
+    const SvxLanguageItem *pLang = (SvxLanguageItem*)GetFmtAttr( static_cast< sal_uInt16 >(eLang));
     ASSERT(pLang, "impossible");
     rLang = pLang ? pLang->GetValue() : LANGUAGE_ENGLISH_US;
 
@@ -627,8 +627,8 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, sal_uInt32& rFormat,
         if (bHijri)
             sParams.Insert(CREATE_CONST_ASC("[~hijri]"), 0);
 
-        UINT16 nCheckPos = 0;
-        INT16 nType = NUMBERFORMAT_DEFINED;
+        sal_uInt16 nCheckPos = 0;
+        sal_Int16 nType = NUMBERFORMAT_DEFINED;
         rFormat = 0;
 
         pFormatter->PutandConvertEntry(sParams, nCheckPos, nType, rFormat,
@@ -637,7 +637,7 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, sal_uInt32& rFormat,
         return bHasTime ? NUMBERFORMAT_DATETIME : NUMBERFORMAT_DATE;
     }
 
-    ULONG nFmtIdx =
+    sal_uLong nFmtIdx =
         sw::ms::MSDateTimeFormatToSwFormat(sParams, pFormatter, rLang, bHijri);
     short nNumFmtType = NUMBERFORMAT_UNDEFINED;
     if (nFmtIdx)
@@ -947,9 +947,9 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     if (bNested)
         return 0;
 
-    USHORT n = ( aF.nId <= eMax ) ? aF.nId : static_cast< USHORT >(eMax); // alle > 91 werden 92
-    USHORT nI = n / 32;                     // # des UINT32
-    ULONG nMask = 1 << ( n % 32 );          // Maske fuer Bits
+    sal_uInt16 n = ( aF.nId <= eMax ) ? aF.nId : static_cast< sal_uInt16 >(eMax); // alle > 91 werden 92
+    sal_uInt16 nI = n / 32;                     // # des sal_uInt32
+    sal_uLong nMask = 1 << ( n % 32 );          // Maske fuer Bits
 
     if( nFieldTagAlways[nI] & nMask )       // Flag: Tag it
         return Read_F_Tag( &aF );           // Resultat nicht als Text
@@ -1115,7 +1115,7 @@ void SwWW8ImplReader::MakeTagString( String& rStr, const String& rOrg )
         rStr.Erase( MAX_FIELDLEN - 4 );
 }
 
-void SwWW8ImplReader::InsertTagField( const USHORT nId, const String& rTagText )
+void SwWW8ImplReader::InsertTagField( const sal_uInt16 nId, const String& rTagText )
 {
     String aName( CREATE_CONST_ASC( "WwFieldTag" ) );
     if( SwFltGetFlag( nFieldFlags, SwFltControlStack::TAGS_DO_ID ) ) // Nummer?
@@ -1133,7 +1133,7 @@ void SwWW8ImplReader::InsertTagField( const USHORT nId, const String& rTagText )
         SwFieldType* pFT = rDoc.InsertFldType(
                                 SwSetExpFieldType( &rDoc, aName, nsSwGetSetExpType::GSE_STRING ) );
         SwSetExpField aFld( (SwSetExpFieldType*)pFT, rTagText );                            // SUB_INVISIBLE
-        USHORT nSubType = ( SwFltGetFlag( nFieldFlags, SwFltControlStack::TAGS_VISIBLE ) ) ? 0 : nsSwExtendedSubType::SUB_INVISIBLE;
+        sal_uInt16 nSubType = ( SwFltGetFlag( nFieldFlags, SwFltControlStack::TAGS_VISIBLE ) ) ? 0 : nsSwExtendedSubType::SUB_INVISIBLE;
         aFld.SetSubType(nSubType | nsSwGetSetExpType::GSE_STRING);
 
         rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
@@ -1276,7 +1276,7 @@ long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
     If there was no bookmark associated with this set field, then we create a
     pseudo one and insert it in the document.
     */
-    USHORT nIndex;
+    sal_uInt16 nIndex;
     pPlcxMan->GetBook()->MapName(rOrigName);
     String sName = pPlcxMan->GetBook()->GetBookmark(
         pF->nSCode, pF->nSCode + pF->nLen, nIndex);
@@ -1496,9 +1496,9 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
 
 eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
 {
-    USHORT nSub=0;
+    sal_uInt16 nSub=0;
     // RegInfoFormat, DefaultFormat fuer DocInfoFelder
-    USHORT nReg = DI_SUB_AUTHOR;
+    sal_uInt16 nReg = DI_SUB_AUTHOR;
     bool bDateTime = false;
 
     if( 85 == pF->nId )
@@ -1575,11 +1575,11 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
             = "REVISIONNUMBER";
         static const sal_Char* aName54 // Spanish
             = "SNUBBEL BUBBEL";
-        static const USHORT nFldCnt  = 5;
+        static const sal_uInt16 nFldCnt  = 5;
 
         // additional fields are to be coded soon!   :-)
 
-        static const USHORT nLangCnt = 4;
+        static const sal_uInt16 nLangCnt = 4;
         static const sal_Char *aNameSet_26[nFldCnt][nLangCnt+1] =
         {
             {aName10, aName11, aName12, aName13, aName14},
@@ -1590,8 +1590,8 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
         };
 
         bool bFldFound= false;
-        USHORT nFIdx;
-        for(USHORT nLIdx=1; !bFldFound && (nLangCnt > nLIdx); ++nLIdx)
+        sal_uInt16 nFIdx;
+        for(sal_uInt16 nLIdx=1; !bFldFound && (nLangCnt > nLIdx); ++nLIdx)
         {
             for(nFIdx = 0;  !bFldFound && (nFldCnt  > nFIdx); ++nFIdx)
             {
@@ -1670,7 +1670,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
 
     sal_uInt32 nFormat = 0;
 
-    USHORT nLang(0);
+    sal_uInt16 nLang(0);
     if (bDateTime)
     {
         short nDT = GetTimeDatePara(rStr, nFormat, nLang, pF->nId);
@@ -1747,7 +1747,7 @@ eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, String& rStr )
 
     sal_uInt32 nFormat = 0;
 
-    USHORT nLang(0);
+    sal_uInt16 nLang(0);
     short nDT = GetTimeDatePara(rStr, nFormat, nLang, ww::eDATE, bHijri);
 
     if( NUMBERFORMAT_UNDEFINED == nDT )             // no D/T-Formatstring
@@ -1814,7 +1814,7 @@ eF_ResT SwWW8ImplReader::Read_F_FileName(WW8FieldDesc*, String &rStr)
 
 eF_ResT SwWW8ImplReader::Read_F_Anz( WW8FieldDesc* pF, String& rStr )
 {                                               // SeitenZahl - Feld
-    USHORT nSub = DS_PAGE;
+    sal_uInt16 nSub = DS_PAGE;
     switch ( pF->nId ){
     case 27: nSub = DS_WORD; break;             // Wordzahl
     case 28: nSub = DS_CHAR; break;             // Zeichenzahl
@@ -1837,7 +1837,7 @@ eF_ResT SwWW8ImplReader::Read_F_CurPage( WW8FieldDesc*, String& rStr )
         rDoc.InsertPoolItem( *pPaM, SwFmtFld( aFld ), 0 );
 
         static const sal_Char aDelim[] = "-.:\x97\x96";
-        BYTE nDelim = nPgChpDelim;
+        sal_uInt8 nDelim = nPgChpDelim;
         if( nDelim > 4 )
             nDelim = 0;
 
@@ -2501,9 +2501,9 @@ void SwWW8ImplReader::Read_SubF_Combined( _ReadFieldParams& rReadParam)
 
 void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
 {
-    USHORT nJustificationCode=0;
+    sal_uInt16 nJustificationCode=0;
     String sFontName;
-    UINT32 nFontSize=0;
+    sal_uInt32 nFontSize=0;
     String sRuby;
     String sText;
     long nRet;
@@ -2517,12 +2517,12 @@ void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
                 if( sTemp.EqualsIgnoreCaseAscii( "jc", 0, 2 ) )
                 {
                     sTemp.Erase(0,2);
-                    nJustificationCode = static_cast<USHORT>(sTemp.ToInt32());
+                    nJustificationCode = static_cast<sal_uInt16>(sTemp.ToInt32());
                 }
                 else if( sTemp.EqualsIgnoreCaseAscii( "hps", 0, 3 ) )
                 {
                     sTemp.Erase(0,3);
-                    nFontSize= static_cast<UINT32>(sTemp.ToInt32());
+                    nFontSize= static_cast<sal_uInt32>(sTemp.ToInt32());
                 }
                 else if( sTemp.EqualsIgnoreCaseAscii( "Font:", 0, 5 ) )
                 {
@@ -2600,7 +2600,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
         SwFmtRuby aRuby(sRuby);
         const SwCharFmt *pCharFmt=0;
         //Make a guess at which of asian of western we should be setting
-        USHORT nScript;
+        sal_uInt16 nScript;
         if (pBreakIt->GetBreakIter().is())
             nScript = pBreakIt->GetBreakIter()->getScriptType(sRuby, 0);
         else
@@ -2688,7 +2688,7 @@ bool SwWW8ImplReader::AddExtraOutlinesAsExtraStyles(SwTOXBase& rBase)
     bool bExtras = false;
     //This is the case if the winword outline numbering is set while the
     //writer one is not
-    for (USHORT nI = 0; nI < nColls; ++nI)
+    for (sal_uInt16 nI = 0; nI < nColls; ++nI)
     {
         SwWW8StyInf& rSI = pCollA[nI];
         if (rSI.IsOutline())
@@ -2724,7 +2724,7 @@ static void EnsureMaxLevelForTemplates(SwTOXBase& rBase)
     //Word included.
     if ((rBase.GetLevel() != MAXLEVEL) && (nsSwTOXElement::TOX_TEMPLATE & rBase.GetCreateType()))
     {
-        for (USHORT nI = MAXLEVEL; nI > 0; --nI)
+        for (sal_uInt16 nI = MAXLEVEL; nI > 0; --nI)
         {
             String sStyles(rBase.GetStyleNames(nI-1));
             if (rBase.GetStyleNames(nI-1).Len())
@@ -2767,12 +2767,12 @@ void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader, SwTOXBase& rBase,
             else while( STRING_NOTFOUND != nIndex )
             {
                 xub_StrLen nOldIndex=nIndex;
-                USHORT nLevel = static_cast<USHORT>(
+                sal_uInt16 nLevel = static_cast<sal_uInt16>(
                     sParams.GetToken(0, ';', nIndex).ToInt32());
                 if( STRING_NOTFOUND == nIndex )
                 {
                     nIndex = nOldIndex;
-                    nLevel = static_cast<USHORT>(
+                    nLevel = static_cast<sal_uInt16>(
                         sParams.GetToken(0, ',', nIndex).ToInt32());
                 }
 
@@ -2805,9 +2805,9 @@ void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader, SwTOXBase& rBase,
     }
 }
 
-USHORT wwSectionManager::CurrentSectionColCount() const
+sal_uInt16 wwSectionManager::CurrentSectionColCount() const
 {
-    USHORT nIndexCols = 1;
+    sal_uInt16 nIndexCols = 1;
     if (!maSegments.empty())
         nIndexCols = maSegments.back().maSep.ccolM1 + 1;
     return nIndexCols;
@@ -2829,10 +2829,10 @@ bool wwSectionManager::WillHavePageDescHere(SwNodeIndex aIdx) const
     return bRet;
 }
 
-USHORT lcl_GetMaxValidWordTOCLevel(const SwForm &rForm)
+sal_uInt16 lcl_GetMaxValidWordTOCLevel(const SwForm &rForm)
 {
     // GetFormMax() returns level + 1, hence the -1
-    USHORT nRet = rForm.GetFormMax()-1;
+    sal_uInt16 nRet = rForm.GetFormMax()-1;
 
     // If the max of this type of TOC is greater than the max of a word
     // possible toc, then clip to the word max
@@ -2871,9 +2871,9 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
             break;
     }
 
-    USHORT nCreateOf = (eTox == TOX_CONTENT) ? nsSwTOXElement::TOX_OUTLINELEVEL : nsSwTOXElement::TOX_MARK;
+    sal_uInt16 nCreateOf = (eTox == TOX_CONTENT) ? nsSwTOXElement::TOX_OUTLINELEVEL : nsSwTOXElement::TOX_MARK;
 
-    USHORT nIndexCols = 1;
+    sal_uInt16 nIndexCols = 1;
 
     const SwTOXType* pType = rDoc.GetTOXType( eTox, 0 );
     SwForm aOrigForm(eTox);
@@ -2882,7 +2882,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     switch( eTox ){
     case TOX_INDEX:
         {
-            USHORT eOptions = nsSwTOIOptions::TOI_SAME_ENTRY | nsSwTOIOptions::TOI_CASE_SENSITIVE;
+            sal_uInt16 eOptions = nsSwTOIOptions::TOI_SAME_ENTRY | nsSwTOIOptions::TOI_CASE_SENSITIVE;
 
             // TOX_OUTLINELEVEL setzen wir genau dann, wenn
             // die Parameter \o in 1 bis 9 liegen
@@ -2904,7 +2904,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                             if( sParams.Len() )
                             {
                                 nIndexCols =
-                                    static_cast<USHORT>(sParams.ToInt32());
+                                    static_cast<sal_uInt16>(sParams.ToInt32());
                             }
                         }
                     }
@@ -2919,9 +2919,9 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
 
                             // Attention: if TOX_CONTENT brave
                             //            GetFormMax() returns MAXLEVEL + 1  !!
-                            USHORT nEnd = aForm.GetFormMax()-1;
+                            sal_uInt16 nEnd = aForm.GetFormMax()-1;
 
-                            for(USHORT nLevel = 1;
+                            for(sal_uInt16 nLevel = 1;
                                    nLevel <= nEnd;
                                    ++nLevel)
                             {
@@ -2987,8 +2987,8 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
             // die Parameter \o in 1 bis 9 liegen
             // oder der Parameter \f existiert
             // oder GARKEINE Switches Parameter angegeben sind.
-            USHORT eCreateFrom = 0;
-            USHORT nMaxLevel = 0;
+            sal_uInt16 eCreateFrom = 0;
+            sal_uInt16 nMaxLevel = 0;
             long nRet;
             _ReadFieldParams aReadParam( rStr );
             while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
@@ -3007,7 +3007,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                     break;
                 case 'o':
                     {
-                        USHORT nVal;
+                        sal_uInt16 nVal;
                         if( !aReadParam.GetTokenSttFromTo(0, &nVal, WW8ListManager::nMaxLevel) )
                             nVal = lcl_GetMaxValidWordTOCLevel(aOrigForm);
                         if( nMaxLevel < nVal )
@@ -3020,7 +3020,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                     break;
                 case 'l':
                     {
-                        USHORT nVal;
+                        sal_uInt16 nVal;
                         if( aReadParam.GetTokenSttFromTo(0, &nVal, WW8ListManager::nMaxLevel) )
                         {
                             if( nMaxLevel < nVal )
@@ -3044,9 +3044,9 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
 
                             // Attention: if TOX_CONTENT brave
                             //            GetFormMax() returns MAXLEVEL + 1  !!
-                            USHORT nEnd = aForm.GetFormMax()-1;
+                            sal_uInt16 nEnd = aForm.GetFormMax()-1;
 
-                            for(USHORT nLevel = 1;
+                            for(sal_uInt16 nLevel = 1;
                                    nLevel <= nEnd;
                                    ++nLevel)
                             {
@@ -3092,7 +3092,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                 case 'n': // don't print page numbers
                     {
                         // read START and END param
-                        USHORT nStart, nEnd;
+                        sal_uInt16 nStart, nEnd;
                         if( !aReadParam.GetTokenSttFromTo(  &nStart, &nEnd,
                             WW8ListManager::nMaxLevel ) )
                         {
@@ -3104,7 +3104,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                         if (aForm.GetFormMax() <= nEnd)
                             nEnd = aForm.GetFormMax()-1;
                         for (
-                              USHORT nLevel = nStart; nLevel <= nEnd;
+                              sal_uInt16 nLevel = nStart; nLevel <= nEnd;
                               ++nLevel
                             )
                         {
@@ -3157,12 +3157,12 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
             if (bIsHyperlink)
             {
                 SwForm aForm(pBase->GetTOXForm());
-                USHORT nEnd = aForm.GetFormMax()-1;
+                sal_uInt16 nEnd = aForm.GetFormMax()-1;
                 SwFormToken aLinkStart(TOKEN_LINK_START);
                 SwFormToken aLinkEnd(TOKEN_LINK_END);
 
                 // -> #i21237#
-                for(USHORT nLevel = 1; nLevel <= nEnd; ++nLevel)
+                for(sal_uInt16 nLevel = 1; nLevel <= nEnd; ++nLevel)
                 {
                     SwFormTokens aPattern = aForm.GetPattern(nLevel);
 
@@ -3187,7 +3187,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                     {
                         //If we would be created from outlines, either explictly or by default
                         //then see if we need extra styles added to the outlines
-                        USHORT eEffectivelyFrom = eCreateFrom ? eCreateFrom : nsSwTOXElement::TOX_OUTLINELEVEL;
+                        sal_uInt16 eEffectivelyFrom = eCreateFrom ? eCreateFrom : nsSwTOXElement::TOX_OUTLINELEVEL;
                         if (eEffectivelyFrom & nsSwTOXElement::TOX_OUTLINELEVEL)
                         {
                             if (AddExtraOutlinesAsExtraStyles(*pBase))
@@ -3199,7 +3199,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                             // currently have no clue how to obtain the tab stop position.
                             // It is _not_ set at the paragraph style.
                             SwForm* pForm = 0;
-                            for (USHORT nI = 0; nI < nColls; ++nI)
+                            for (sal_uInt16 nI = 0; nI < nColls; ++nI)
                             {
                                 const SwWW8StyInf& rSI = pCollA[nI];
                                 if (rSI.IsOutlineNumbered())
@@ -3256,10 +3256,10 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                         */
                         SwForm aOldForm( pBase->GetTOXForm() );
                         SwForm aForm( eType );
-                        USHORT nEnd = aForm.GetFormMax()-1;
+                        sal_uInt16 nEnd = aForm.GetFormMax()-1;
 
                         // -> #i21237#
-                        for(USHORT nLevel = 1; nLevel <= nEnd; ++nLevel)
+                        for(sal_uInt16 nLevel = 1; nLevel <= nEnd; ++nLevel)
                         {
                             SwFormTokens aPattern = aOldForm.GetPattern(nLevel);
 
@@ -3297,7 +3297,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     // #i21237#
     // propagate tab stops from paragraph styles used in TOX to
     // patterns of the TOX
-    pBase->AdjustTabStops(rDoc, TRUE);
+    pBase->AdjustTabStops(rDoc, sal_True);
 
     //#i10028# inserting a toc implicltly acts like a parabreak
     //in word and writer
@@ -3454,7 +3454,7 @@ void lcl_ImportTox(SwDoc &rDoc, SwPaM &rPaM, const String &rStr, bool bIdx)
 {
     TOXTypes eTox = ( !bIdx ) ? TOX_CONTENT : TOX_INDEX;    // Default
 
-    USHORT nLevel = 1;
+    sal_uInt16 nLevel = 1;
 
     xub_StrLen n;
     String sFldTxt;
@@ -3490,7 +3490,7 @@ void lcl_ImportTox(SwDoc &rDoc, SwPaM &rPaM, const String &rStr, bool bIdx)
                     && sParams.GetChar( 0 ) > '0'
                     && sParams.GetChar( 0 ) <= '9' )
                 {
-                    nLevel = (USHORT)sParams.ToInt32();
+                    nLevel = (sal_uInt16)sParams.ToInt32();
                 }
             }
             break;
@@ -3538,7 +3538,7 @@ void SwWW8ImplReader::ImportTox( int nFldId, String aStr )
     lcl_ImportTox(rDoc, *pPaM, aStr, bIdx);
 }
 
-void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
+void SwWW8ImplReader::Read_FldVanish( sal_uInt16, const sal_uInt8*, short nLen )
 {
     //Meaningless in a style
     if (pAktColl || !pPlcxMan)
@@ -3549,7 +3549,7 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
     // Vorsicht: Bei Feldnamen mit Umlauten geht das MEMICMP nicht!
     const static sal_Char *aFldNames[] = {  "\x06""INHALT", "\x02""XE", // dt.
                                             "\x02""TC"  };              // us
-    const static BYTE  aFldId[] = { 9, 4, 9 };
+    const static sal_uInt8  aFldId[] = { 9, 4, 9 };
 
     if( nLen < 0 )
     {
@@ -3568,7 +3568,7 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
     WW8_CP nStartCp = pPlcxMan->Where() + pPlcxMan->GetCpOfs();
 
     String sFieldName;
-    USHORT nFieldLen = pSBase->WW8ReadString( *pStrm, sFieldName, nStartCp,
+    sal_uInt16 nFieldLen = pSBase->WW8ReadString( *pStrm, sFieldName, nStartCp,
         nChunk, eStructCharSet );
     nStartCp+=nFieldLen;
 
@@ -3614,7 +3614,7 @@ void SwWW8ImplReader::Read_FldVanish( USHORT, const BYTE*, short nLen )
     for( int i = 0; i < 3; i++ )
     {
         const sal_Char* pName = aFldNames[i];
-        USHORT nNameLen = *pName++;
+        sal_uInt16 nNameLen = *pName++;
         if( sFieldName.EqualsIgnoreCaseAscii( pName, nC, nNameLen ) )
         {
             ImportTox( aFldId[i], sFieldName.Copy( nC + nNameLen ) );

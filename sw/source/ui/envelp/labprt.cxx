@@ -125,7 +125,7 @@ IMPL_LINK( SwLabPrtPage, CountHdl, Button *, pButton )
         aPrinterInfo.SetText(pPrinter->GetName());
         return 0;
     }
-    const BOOL bEnable = pButton == &aSingleButton;
+    const sal_Bool bEnable = pButton == &aSingleButton;
     aColText .Enable(bEnable);
     aColField.Enable(bEnable);
     aRowText .Enable(bEnable);
@@ -168,7 +168,7 @@ int SwLabPrtPage::DeactivatePage(SfxItemSet* _pSet)
     if ( _pSet )
         FillItemSet(*_pSet);
 
-    return TRUE;
+    return sal_True;
 }
 
 // --------------------------------------------------------------------------
@@ -178,8 +178,8 @@ int SwLabPrtPage::DeactivatePage(SfxItemSet* _pSet)
 void SwLabPrtPage::FillItem(SwLabItem& rItem)
 {
     rItem.bPage = aPageButton.IsChecked();
-    rItem.nCol  = (USHORT) aColField.GetValue();
-    rItem.nRow  = (USHORT) aRowField.GetValue();
+    rItem.nCol  = (sal_uInt16) aColField.GetValue();
+    rItem.nRow  = (sal_uInt16) aRowField.GetValue();
     rItem.bSynchron = aSynchronCB.IsChecked() && aSynchronCB.IsEnabled();
 }
 
@@ -187,14 +187,14 @@ void SwLabPrtPage::FillItem(SwLabItem& rItem)
 
 
 
-BOOL SwLabPrtPage::FillItemSet(SfxItemSet& rSet)
+sal_Bool SwLabPrtPage::FillItemSet(SfxItemSet& rSet)
 {
     SwLabItem aItem;
     GetParent()->GetLabItem(aItem);
     FillItem(aItem);
     rSet.Put(aItem);
 
-    return TRUE;
+    return sal_True;
 }
 
 // --------------------------------------------------------------------------

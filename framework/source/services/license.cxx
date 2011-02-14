@@ -243,7 +243,7 @@ static sal_Bool _parseDateTime(const ::rtl::OUString& aString, DateTime& aDateTi
     sal_Int32 nMinute = aTimeString.getToken(0, ':', nIndex).toInt32();
     sal_Int32 nSecond = aTimeString.getToken(0, ':', nIndex).toInt32();
 
-    Date tmpDate((USHORT)nDay, (USHORT)nMonth, (USHORT)nYear);
+    Date tmpDate((sal_uInt16)nDay, (sal_uInt16)nMonth, (sal_uInt16)nYear);
     Time tmpTime(nHour, nMinute, nSecond);
     DateTime tmpDateTime(tmpDate, tmpTime);
     if (aString.indexOf(aUTCString) < 0)
@@ -439,7 +439,7 @@ LicenseDialog::LicenseDialog(const ::rtl::OUString & aLicensePath, ResMgr *pResM
     aArrow(this, ResId(IMG_ARROW, *pResMgr)),
     aStrAccept( ResId(LICENSE_ACCEPT, *pResMgr) ),
     aStrNotAccept( ResId(LICENSE_NOTACCEPT, *pResMgr) ),
-    bEndReached(FALSE)
+    bEndReached(sal_False)
 {
     FreeResource();
 
@@ -502,7 +502,7 @@ IMPL_LINK( LicenseDialog, PageDownHdl, PushButton *, EMPTYARG )
 
 IMPL_LINK( LicenseDialog, EndReachedHdl, LicenseView *, EMPTYARG )
 {
-    bEndReached = TRUE;
+    bEndReached = sal_True;
 
     EnableControls();
 
@@ -532,7 +532,7 @@ void LicenseDialog::EnableControls()
 {
     if( !bEndReached &&
         ( aLicenseML.IsEndReached() || !aLicenseML.GetText().Len() ) )
-        bEndReached = TRUE;
+        bEndReached = sal_True;
 
     if ( bEndReached )
     {
@@ -583,20 +583,20 @@ void LicenseView::ScrollDown( ScrollType eScroll )
         pScroll->DoScrollAction( eScroll );
 }
 
-BOOL LicenseView::IsEndReached() const
+sal_Bool LicenseView::IsEndReached() const
 {
-    BOOL bEndReached;
+    sal_Bool bEndReached;
 
     ExtTextView*    pView = GetTextView();
     ExtTextEngine*  pEdit = GetTextEngine();
-    ULONG           nHeight = pEdit->GetTextHeight();
+    sal_uLong           nHeight = pEdit->GetTextHeight();
     Size            aOutSize = pView->GetWindow()->GetOutputSizePixel();
     Point           aBottom( 0, aOutSize.Height() );
 
-    if ( (ULONG) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
-        bEndReached = TRUE;
+    if ( (sal_uLong) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
+        bEndReached = sal_True;
     else
-        bEndReached = FALSE;
+        bEndReached = sal_False;
 
     return bEndReached;
 }
@@ -605,8 +605,8 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.IsA( TYPE(TextHint) ) )
     {
-        BOOL    bLastVal = EndReached();
-        ULONG   nId = ((const TextHint&)rHint).GetId();
+        sal_Bool    bLastVal = EndReached();
+        sal_uLong   nId = ((const TextHint&)rHint).GetId();
 
         if ( nId == TEXT_HINT_PARAINSERTED )
         {

@@ -30,7 +30,7 @@
 #include <filter/msfilter/escherex.hxx>
 
 // ---------------------------------------------------------------------------------------------
-// Werte fuer den ULONG im PPT_PST_TextHeaderAtom
+// Werte fuer den sal_uLong im PPT_PST_TextHeaderAtom
 enum PPT_TextHeader
 {
     PPTTH_TITLE,
@@ -62,12 +62,12 @@ class PptEscherEx : public EscherEx
                 PptEscherEx( SvStream& rOut );
                 ~PptEscherEx();
 
-        void    OpenContainer( UINT16 n_EscherContainer, int nRecInstance = 0 );
+        void    OpenContainer( sal_uInt16 n_EscherContainer, int nRecInstance = 0 );
         void    CloseContainer();
 
         sal_uInt32 EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClientData );
 
-        UINT32  DrawingGroupContainerSize();
+        sal_uInt32  DrawingGroupContainerSize();
         void    WriteDrawingGroupContainer( SvStream& rSt );
 
         using EscherEx::EnterGroup;

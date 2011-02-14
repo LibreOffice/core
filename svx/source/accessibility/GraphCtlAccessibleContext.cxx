@@ -558,7 +558,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getForeground (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     svtools::ColorConfig aColorConfig;
-    UINT32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
+    sal_uInt32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
     return static_cast<sal_Int32>(nColor);
 }
 
@@ -568,7 +568,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getForeground (void)
 sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getBackground (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
 

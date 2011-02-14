@@ -59,7 +59,7 @@ public:
     SvxImprovementPage( Window* pParent );
     ~SvxImprovementPage();
 
-    inline bool     IsYesChecked() const { return m_aYesRB.IsChecked() != FALSE; }
+    inline bool     IsYesChecked() const { return m_aYesRB.IsChecked() != sal_False; }
 
     inline String   GetPageText() const { return GetText(); }
     inline String   GetInvitationText() const { return m_aInvitationFT.GetText(); }

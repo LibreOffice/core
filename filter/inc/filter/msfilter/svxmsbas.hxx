@@ -54,7 +54,7 @@ class MSFILTER_DLLPUBLIC SvxImportMSVBasic
 {
 public:
     SvxImportMSVBasic( SfxObjectShell &rDocS, SotStorage &rRoot,
-                        BOOL bImportCode = TRUE, BOOL bCopyStorage = TRUE )
+                        sal_Bool bImportCode = sal_True, sal_Bool bCopyStorage = sal_True )
         :   xRoot(&rRoot), rDocSh(rDocS),
             bImport(bImportCode), bCopy(bCopyStorage)
         {}
@@ -63,35 +63,35 @@ public:
     // bit 0 = 1 -> any code is imported to the SO-Basic
     // bit 1 = 1 -> the VBA - storage is copy to the ObjectShell storage
     int Import( const String& rStorageName, const String &rSubStorageName,
-                BOOL bAsComment=TRUE, BOOL bStripped=TRUE );
+                sal_Bool bAsComment=sal_True, sal_Bool bStripped=sal_True );
     int Import( const String& rStorageName, const String &rSubStorageName,
                 const std::vector< String >& codeNames,
-                BOOL bAsComment=TRUE, BOOL bStripped=TRUE );
+                sal_Bool bAsComment=sal_True, sal_Bool bStripped=sal_True );
 
     // only for the export - copy or delete the saved VBA-macro-storage
     // form the ObjectShell
     // - returns a warning code if a modified basic exist, in all other
     //   cases return ERRCODE_NONE.
-    ULONG SaveOrDelMSVBAStorage( BOOL bSaveInto, const String& rStorageName );
+    sal_uLong SaveOrDelMSVBAStorage( sal_Bool bSaveInto, const String& rStorageName );
 
     // check if the MS-VBA-Storage exist in the RootStorage of the DocShell.
     // If it exist, then return the WarningId for loosing the information.
-    static ULONG GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
+    static sal_uLong GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
 
     static String GetMSBasicStorageName();
 private:
     SotStorageRef xRoot;
     SfxObjectShell &rDocSh;
-    BOOL bImport;
-    BOOL bCopy;
+    sal_Bool bImport;
+    sal_Bool bCopy;
 
-    MSFILTER_DLLPRIVATE BOOL ImportCode_Impl( const String& rStorageName,
+    MSFILTER_DLLPRIVATE sal_Bool ImportCode_Impl( const String& rStorageName,
                           const String &rSubStorageName,
                           const std::vector< String >& codeNames,
-                          BOOL bAsComment, BOOL bStripped);
+                          sal_Bool bAsComment, sal_Bool bStripped);
     MSFILTER_DLLPRIVATE bool ImportForms_Impl(const String& rStorageName,
         const String &rSubStorageName);
-    MSFILTER_DLLPRIVATE BOOL CopyStorage_Impl( const String& rStorageName,
+    MSFILTER_DLLPRIVATE sal_Bool CopyStorage_Impl( const String& rStorageName,
                            const String &rSubStorageName);
 };
 

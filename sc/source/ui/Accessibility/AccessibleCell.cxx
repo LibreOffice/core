@@ -179,7 +179,7 @@ Rectangle ScAccessibleCell::GetBoundingBox(void) const
         mpViewShell->GetViewData()->GetMergeSizePixel(
             maCellAddress.Col(), maCellAddress.Row(), nSizeX, nSizeY);
         aCellRect.SetSize(Size(nSizeX, nSizeY));
-        aCellRect.SetPos(mpViewShell->GetViewData()->GetScrPos(maCellAddress.Col(), maCellAddress.Row(), meSplitPos, TRUE));
+        aCellRect.SetPos(mpViewShell->GetViewData()->GetScrPos(maCellAddress.Col(), maCellAddress.Row(), meSplitPos, sal_True));
 
         Window* pWindow = mpViewShell->GetWindowByPos(meSplitPos);
         if (pWindow)

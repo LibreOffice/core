@@ -43,11 +43,11 @@ static Color aDefaultColor = 0L;
 static Wallpaper* pDefaultWallpaper = 0L;
 
 // Initialize static class member
-BOOL ObjectWin::msbHideMode = FALSE;
-ULONG ObjectWin::msnGlobalViewMask = 0;
+sal_Bool ObjectWin::msbHideMode = sal_False;
+sal_uIntPtr ObjectWin::msnGlobalViewMask = 0;
 
 
-UINT32 aColorMap[] = {
+sal_uInt32 aColorMap[] = {
     RGB_COLORDATA( 0xFF, 0xFF, 0x80 ),             //MARKMODE_DEFAULT    0
     COL_GREEN,              //MARKMODE_DEPENDING  1
     COL_RED,                //MARKMODE_NEEDED     2
@@ -80,12 +80,12 @@ ObjectWin::ObjectWin( Window* pParent, WinBits nWinStyle )
                 mnObjectId( 0 ),
                 mnMarkMode( 0 ),
                 mnViewMask( 0 ),
-                mbVisible( FALSE ),
-                mbMenuExecute( FALSE ),
-                mbVisited( FALSE ),
+                mbVisible( sal_False ),
+                mbMenuExecute( sal_False ),
+                mbVisited( sal_False ),
                 mnRootDist( 0 ),
                 mnHeadDist( 0 ),
-                mbFixed( FALSE )
+                mbFixed( sal_False )
 {
     SetBackground( Wallpaper( aColorMap[0] ));
 
@@ -129,13 +129,13 @@ ObjectWin::~ObjectWin()
     }
 }
 
-void ObjectWin::SetHideMode(BOOL bHide)
+void ObjectWin::SetHideMode(sal_Bool bHide)
 {
     msbHideMode = bHide;
     mConnections.GetObject(0)->SetHideMode(msbHideMode);
 }
 
-BOOL ObjectWin::ToggleHideMode()
+sal_Bool ObjectWin::ToggleHideMode()
 {
     msbHideMode = !msbHideMode;
     mConnections.GetObject(0)->SetHideMode(msbHideMode);
@@ -143,20 +143,20 @@ BOOL ObjectWin::ToggleHideMode()
 }
 
 /*****************************************************************************/
-void ObjectWin::SetViewMask( ULONG nMask )
+void ObjectWin::SetViewMask( sal_uIntPtr nMask )
 /*****************************************************************************/
 {
     mnViewMask = nMask;
     // Compares
     if ( mnViewMask & msnGlobalViewMask) {
-        mbVisible = TRUE;
+        mbVisible = sal_True;
         Show();
     }
     else {
         Hide();
-        mbVisible = FALSE;
+        mbVisible = sal_False;
     }
-    for ( ULONG i = 0; i < mConnections.Count(); i++ )
+    for ( sal_uIntPtr i = 0; i < mConnections.Count(); i++ )
         mConnections.GetObject( i )->UpdateVisibility();
 }
 
@@ -189,7 +189,7 @@ ByteString& ObjectWin::GetTipText()
 }
 
 /*****************************************************************************/
-Point ObjectWin::GetFixPoint( const Point& rRefPoint, BOOL bUseRealPos )
+Point ObjectWin::GetFixPoint( const Point& rRefPoint, sal_Bool bUseRealPos )
 /*****************************************************************************/
 {
     Point aLocalPoint;
@@ -201,8 +201,8 @@ Point ObjectWin::GetFixPoint( const Point& rRefPoint, BOOL bUseRealPos )
     Size aLocalSize = GetSizePixel();
     Point aRetPoint;
 
-    USHORT nRefX = aLocalPoint.X() + aLocalSize.Width() / 2 ;
-    USHORT nRefY = aLocalPoint.Y() + aLocalSize.Height() / 2 ;
+    sal_uInt16 nRefX = aLocalPoint.X() + aLocalSize.Width() / 2 ;
+    sal_uInt16 nRefY = aLocalPoint.Y() + aLocalSize.Height() / 2 ;
 
     // always false...
     //if ( nRefX < 0 ) nRefX = 0;
@@ -279,14 +279,14 @@ void ObjectWin::AddConnector( Connector* pNewCon )
 }
 
 /*****************************************************************************/
-BOOL ObjectWin::ConnectionExistsInAnyDirection( ObjectWin *pWin )
+sal_Bool ObjectWin::ConnectionExistsInAnyDirection( ObjectWin *pWin )
 /*****************************************************************************/
 {
-    for ( ULONG i = 0; i < mConnections.Count(); i++ )
+    for ( sal_uIntPtr i = 0; i < mConnections.Count(); i++ )
         if ( mConnections.GetObject( i )->GetOtherWin( this ) == pWin )
-            return TRUE;
+            return sal_True;
 
-    return FALSE;
+    return sal_False;
 }
 
 /*****************************************************************************/
@@ -297,10 +297,10 @@ void ObjectWin::RemoveConnector( Connector* pOldCon )
 }
 
 /*****************************************************************************/
-Connector* ObjectWin::GetConnector( ULONG nIndex )
+Connector* ObjectWin::GetConnector( sal_uIntPtr nIndex )
 /*****************************************************************************/
 {
-    ULONG nConCount = mConnections.Count();
+    sal_uIntPtr nConCount = mConnections.Count();
 
     if ( nIndex < nConCount )
         return mConnections.GetObject( nIndex );
@@ -308,15 +308,15 @@ Connector* ObjectWin::GetConnector( ULONG nIndex )
 }
 
 /*****************************************************************************/
-Connector* ObjectWin::GetConnector( ULONG nStartId, ULONG nEndId )
+Connector* ObjectWin::GetConnector( sal_uIntPtr nStartId, sal_uIntPtr nEndId )
 /*****************************************************************************/
 {
     if ( mnObjectId != nStartId )
         return NULL;
 
-    USHORT i;
+    sal_uInt16 i;
     Connector* pCon;
-    ULONG nConCount = mConnections.Count();
+    sal_uIntPtr nConCount = mConnections.Count();
 
     for ( i = 0; i < nConCount; i++ )
     {
@@ -330,16 +330,16 @@ Connector* ObjectWin::GetConnector( ULONG nStartId, ULONG nEndId )
 void ObjectWin::SetAllConnectorsUnvisible()
 {
     Connector* pCon;
-    ULONG nConCount = mConnections.Count();
-    for ( ULONG i = 0; i < nConCount; i++ )
+    sal_uIntPtr nConCount = mConnections.Count();
+    for ( sal_uIntPtr i = 0; i < nConCount; i++ )
     {
         pCon = mConnections.GetObject( i );
-        if (pCon) pCon->SetVisibility( FALSE );
+        if (pCon) pCon->SetVisibility( sal_False );
     }
 }
 
 /*****************************************************************************/
-void ObjectWin::SetMarkMode( ULONG nMarkMode )
+void ObjectWin::SetMarkMode( sal_uIntPtr nMarkMode )
 /*****************************************************************************/
 {
     //Wallpaper aWallpaper;
@@ -367,12 +367,12 @@ void ObjectWin::SetMarkMode( ULONG nMarkMode )
 }
 
 /*****************************************************************************/
-void ObjectWin::UnsetMarkMode( ULONG nMarkMode )
+void ObjectWin::UnsetMarkMode( sal_uIntPtr nMarkMode )
 /*****************************************************************************/
 {
     //Wallpaper aWallpaper;
 
-    ULONG nOldMode = mnMarkMode;
+    sal_uIntPtr nOldMode = mnMarkMode;
     mnMarkMode &= ( !nMarkMode );
 
     if ( nOldMode != mnMarkMode ) {
@@ -398,14 +398,14 @@ void ObjectWin::UnsetMarkMode( ULONG nMarkMode )
 }
 
 /*****************************************************************************/
-void ObjectWin::MarkNeeded( BOOL bReset )
+void ObjectWin::MarkNeeded( sal_Bool bReset )
 /*****************************************************************************/
 {
     Connector* pCon;
     ObjectWin* pWin;
 
-    ULONG nConCount = mConnections.Count();
-    ULONG i;
+    sal_uIntPtr nConCount = mConnections.Count();
+    sal_uIntPtr i;
 
     for ( i = 0; i < nConCount; i++ )
     {
@@ -426,7 +426,7 @@ void ObjectWin::MarkNeeded( BOOL bReset )
 }
 
 /*****************************************************************************/
-void ObjectWin::MarkDepending( BOOL bReset )
+void ObjectWin::MarkDepending( sal_Bool bReset )
 /*****************************************************************************/
 {
     //if ( !bReset )
@@ -435,8 +435,8 @@ void ObjectWin::MarkDepending( BOOL bReset )
     Connector* pCon;
     ObjectWin* pWin;
 
-    ULONG nConCount = mConnections.Count();
-    ULONG i;
+    sal_uIntPtr nConCount = mConnections.Count();
+    sal_uIntPtr i;
 
     for ( i = 0; i < nConCount; i++ )
     {
@@ -559,7 +559,7 @@ void ObjectWin::MouseButtonUp( const MouseEvent& rMEvt )
     }
     else if ( rMEvt.IsRight() )
     {
-        USHORT i;
+        sal_uInt16 i;
 
         while ( mnPopupStaticItems < mpPopup->GetItemCount() )
         {
@@ -574,7 +574,7 @@ void ObjectWin::MouseButtonUp( const MouseEvent& rMEvt )
                 mpPopup->InsertItem( mnPopupStaticItems + i + 1, String( ((mConnections.GetObject( i ))->GetOtherWin( this ))->GetBodyText(), RTL_TEXTENCODING_UTF8 ));
             }
         }
-        mbMenuExecute = TRUE;
+        mbMenuExecute = sal_True;
         mpPopup->Execute( GetParent(), rMEvt.GetPosPixel() + GetPosPixel());
     }
 }
@@ -585,7 +585,7 @@ void ObjectWin::MouseMove( const MouseEvent& rMEvt )
 {
     if ( IsMouseCaptured() )
     {
-        USHORT i;
+        sal_uInt16 i;
 
         Point aNewWinPos( GetPosPixel() + rMEvt.GetPosPixel() - maMouseOffset );
 
@@ -613,28 +613,28 @@ void ObjectWin::MouseMove( const MouseEvent& rMEvt )
 }
 
 /*****************************************************************************/
-USHORT ObjectWin::Save( SvFileStream& rOutFile )
+sal_uInt16 ObjectWin::Save( SvFileStream& rOutFile )
 /*****************************************************************************/
 {
     return 0;
 }
 
 /*****************************************************************************/
-USHORT ObjectWin::Load( SvFileStream& rInFile )
+sal_uInt16 ObjectWin::Load( SvFileStream& rInFile )
 /*****************************************************************************/
 {
     return 0;
 }
 
 /*****************************************************************************/
-void ObjectWin::SetId( ULONG nId )
+void ObjectWin::SetId( sal_uIntPtr nId )
 /*****************************************************************************/
 {
     mnObjectId = nId;
 }
 
 /*****************************************************************************/
-ULONG ObjectWin::GetId()
+sal_uIntPtr ObjectWin::GetId()
 /*****************************************************************************/
 {
     return mnObjectId;
@@ -644,7 +644,7 @@ ULONG ObjectWin::GetId()
 void ObjectWin::UpdateConnectors()
 /*****************************************************************************/
 {
-    USHORT i;
+    sal_uInt16 i;
 
     for ( i = 0; i < mConnections.Count(); i++ )
     {
@@ -654,17 +654,17 @@ void ObjectWin::UpdateConnectors()
 
 IMPL_LINK( ObjectWin, PopupSelected, PopupMenu*, mpPopup_l )
 {
-    USHORT nItemId = mpPopup_l->GetCurItemId();
+    sal_uInt16 nItemId = mpPopup_l->GetCurItemId();
 
     switch( nItemId )
     {
         case OBJWIN_EDIT_TEXT :
-            DBG_ASSERT( FALSE,"edit");
+            DBG_ASSERT( sal_False,"edit");
                 break;
         case OBJWIN_REMOVE_WIN :
 //          DBG_ASSERT( FALSE,"remove");
 //          DBG_ASSERT( mpDepperDontuseme,"remove");
-            //mpDepperDontuseme->RemoveObject(mpDepperDontuseme->mpObjectList, ( USHORT ) GetId());
+            //mpDepperDontuseme->RemoveObject(mpDepperDontuseme->mpObjectList, ( sal_uInt16 ) GetId());
                 break;
         case OBJWIN_ADD_CONNECTOR :
 //          DBG_ASSERT( FALSE,"add con");
@@ -676,7 +676,7 @@ IMPL_LINK( ObjectWin, PopupSelected, PopupMenu*, mpPopup_l )
 //          TBD: CallEventListener
                 break;
         default :
-//          DBG_ASSERT( FALSE, String (nItemId) );
+//          DBG_ASSERT( sal_False, String (nItemId) );
             Connector* pCon = mConnections.GetObject( nItemId - mnPopupStaticItems - 1);
             pCon = 0;
 //          delete pCon;
@@ -717,24 +717,24 @@ void ObjectWin::LoseFocus()
     if ( !mbMenuExecute && !msbHideMode ) {
         UnsetMarkMode( MARKMODE_SELECTED );
         UnsetMarkMode( MARKMODE_ACTIVATED );
-        MarkNeeded( TRUE );
-        MarkDepending( TRUE );
+        MarkNeeded( sal_True );
+        MarkDepending( sal_True );
     }
     else
-        mbMenuExecute = FALSE;
+        mbMenuExecute = sal_False;
 }
 
 /*****************************************************************************/
 IMPL_LINK( ObjectWin, PopupDeactivated, PopupMenu*, mpPopup_l )
 /*****************************************************************************/
 {
-    mbMenuExecute = FALSE;
+    mbMenuExecute = sal_False;
 
     if ( !HasFocus()) {
         UnsetMarkMode( MARKMODE_SELECTED );
         UnsetMarkMode( MARKMODE_ACTIVATED );
-           MarkNeeded( TRUE );
-        MarkDepending( TRUE );
+           MarkNeeded( sal_True );
+        MarkDepending( sal_True );
     }
 
     return 0;
@@ -763,9 +763,9 @@ void ObjectList::ResetSelectedObject()
 {
 //    return;
 
-    ULONG nCount_l = Count();
+    sal_uIntPtr nCount_l = Count();
     ObjectWin* pObjectWin = NULL;
-    for (ULONG i=0; i < nCount_l; i++ )
+    for (sal_uIntPtr i=0; i < nCount_l; i++ )
     {
         pObjectWin = GetObject( i );
         pObjectWin->UnsetMarkMode( MARKMODE_SELECTED );
@@ -781,8 +781,8 @@ void ObjectList::ResetSelectedObject()
 ObjectWin* ObjectList::GetPtrByName( const ByteString& rText )
 /*****************************************************************************/
 {
-    ULONG i = 0;
-    ULONG nCount_l = Count();
+    sal_uIntPtr i = 0;
+    sal_uIntPtr nCount_l = Count();
     ObjectWin* pObjectWin = NULL;
     while ( i < nCount_l )
     {
@@ -797,7 +797,7 @@ ObjectWin* ObjectList::GetPtrByName( const ByteString& rText )
 ObjectList* ObjectList::FindTopLevelModules()
 {
     ObjectList* pList = new ObjectList;
-    for ( USHORT i=0; i<Count(); i++ )
+    for ( sal_uInt16 i=0; i<Count(); i++ )
     {
        ObjectWin* pObjectWin = GetObject( i );
        if ( pObjectWin->IsTop() )
@@ -807,15 +807,15 @@ ObjectList* ObjectList::FindTopLevelModules()
     return pList;
 }
 
-BOOL ObjectWin::IsTop()
+sal_Bool ObjectWin::IsTop()
 {
-    ULONG nConCount = mConnections.Count();
-    for ( ULONG i = 0; i < nConCount; i++ )
+    sal_uIntPtr nConCount = mConnections.Count();
+    for ( sal_uIntPtr i = 0; i < nConCount; i++ )
     {
         Connector* pCon = mConnections.GetObject( i );
         if ( pCon && pCon->IsStart( this) )
-            return FALSE;
+            return sal_False;
     }
 
-    return TRUE;
+    return sal_True;
 }

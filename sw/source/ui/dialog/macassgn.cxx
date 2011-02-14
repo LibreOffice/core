@@ -66,9 +66,9 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
     // const SfxItemSet& rSet = rPg.GetItemSet();
     SfxEventNamesItem aItem(SID_EVENTCONFIG);
 
-    BOOL bHtmlMode = FALSE;
-    USHORT nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
-    bHtmlMode = nHtmlMode & HTMLMODE_ON ? TRUE : FALSE;
+    sal_Bool bHtmlMode = sal_False;
+    sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
+    bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
 
     switch( eType )
     {
@@ -131,10 +131,10 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
 }
 
 
-BOOL SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
+sal_Bool SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
                                     SvxMacroItem*& rpINetItem )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     SfxItemSet aSet( rSh.GetAttrPool(), RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG, 0 );
     SvxMacroItem aItem( RES_FRMMACRO );
     if( !rpINetItem )
@@ -153,10 +153,10 @@ BOOL SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
     {
         const SfxItemSet* pOutSet = pMacroDlg->GetOutputItemSet();
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pOutSet->GetItemState( RES_FRMMACRO, FALSE, &pItem ))
+        if( SFX_ITEM_SET == pOutSet->GetItemState( RES_FRMMACRO, sal_False, &pItem ))
         {
             rpINetItem->SetMacroTable( ((SvxMacroItem*)pItem)->GetMacroTable() );
-            bRet = TRUE;
+            bRet = sal_True;
         }
     }
     return bRet;

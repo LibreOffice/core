@@ -49,9 +49,9 @@
 
 ////////////////////////////////////////////////////////////
 
-static USHORT  GetImageListRID( USHORT nCategoryRID, BOOL bHighContrast )
+static sal_uInt16  GetImageListRID( sal_uInt16 nCategoryRID, sal_Bool bHighContrast )
 {
-    USHORT nRes = 0xFFFF;
+    sal_uInt16 nRes = 0xFFFF;
     switch (nCategoryRID)
     {
         case RID_UNBINOPS_CAT       : nRes = RID_IL_UNBINOPS; break;
@@ -72,7 +72,7 @@ static USHORT  GetImageListRID( USHORT nCategoryRID, BOOL bHighContrast )
 }
 
 
-static sal_Int16  GetToolBoxCategoriesIndex( USHORT nCategoryRID )
+static sal_Int16  GetToolBoxCategoriesIndex( sal_uInt16 nCategoryRID )
 {
     sal_Int16 nIdx = -1;
     switch (nCategoryRID)
@@ -93,9 +93,9 @@ static sal_Int16  GetToolBoxCategoriesIndex( USHORT nCategoryRID )
 }
 
 
-static USHORT  GetCategoryRID( USHORT nResId )
+static sal_uInt16  GetCategoryRID( sal_uInt16 nResId )
 {
-    USHORT nRes = 0xFFFF;
+    sal_uInt16 nRes = 0xFFFF;
     switch (nResId)
     {
         case RID_IL_UNBINOPS        :
@@ -147,7 +147,7 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,
 
     aToolBoxCat.SetClickHdl(LINK(this, SmToolBoxWindow, CategoryClickHdl));
 
-    USHORT i;
+    sal_uInt16 i;
     for (i = 0;  i < NUM_TBX_CATEGORIES;  ++i)
     {
         ToolBox *pBox = new ToolBox(this, SmResId( TOOLBOX_CAT_A + i ));
@@ -188,7 +188,7 @@ SmViewShell * SmToolBoxWindow::GetView()
 }
 
 
-const ImageList * SmToolBoxWindow::GetImageList( USHORT nResId, BOOL bHighContrast )
+const ImageList * SmToolBoxWindow::GetImageList( sal_uInt16 nResId, sal_Bool bHighContrast )
 {
     // creates the image list via its resource id and stores that
     // list for later use in the respective array.
@@ -196,7 +196,7 @@ const ImageList * SmToolBoxWindow::GetImageList( USHORT nResId, BOOL bHighContra
     const ImageList *pIL = 0;
 
     // get index to use
-    USHORT nCategoryRID = GetCategoryRID( nResId );
+    sal_uInt16 nCategoryRID = GetCategoryRID( nResId );
     sal_Int16 nIndex = GetToolBoxCategoriesIndex( nCategoryRID );
     if (nIndex == -1 && (nResId == RID_IL_CATALOG || nResId == RID_ILH_CATALOG))
         nIndex = NUM_TBX_CATEGORIES;
@@ -214,9 +214,9 @@ const ImageList * SmToolBoxWindow::GetImageList( USHORT nResId, BOOL bHighContra
 }
 
 
-void SmToolBoxWindow::ApplyImageLists( USHORT nCategoryRID )
+void SmToolBoxWindow::ApplyImageLists( sal_uInt16 nCategoryRID )
 {
-    BOOL bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
+    sal_Bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     // set image list for toolbox 'catalog'
     const ImageList *pImageList = GetImageList( bHighContrast ? RID_ILH_CATALOG : RID_IL_CATALOG, bHighContrast );
@@ -226,7 +226,7 @@ void SmToolBoxWindow::ApplyImageLists( USHORT nCategoryRID )
 
     // set image list for active (visible) category of 'catalog'
     sal_Int16 nIdx = GetToolBoxCategoriesIndex( nCategoryRID );
-    USHORT nResId = GetImageListRID( nCategoryRID, bHighContrast );
+    sal_uInt16 nResId = GetImageListRID( nCategoryRID, bHighContrast );
     pImageList = GetImageList( nResId, bHighContrast );
     DBG_ASSERT( pImageList && nIdx >= 0, "image list or index missing" );
     if (pImageList && nIdx >= 0)
@@ -243,21 +243,21 @@ void SmToolBoxWindow::DataChanged( const DataChangedEvent &rEvt )
 
 void SmToolBoxWindow::StateChanged( StateChangedType nStateChange )
 {
-    static BOOL bSetPosition = TRUE;
+    static sal_Bool bSetPosition = sal_True;
     if (STATE_CHANGE_INITSHOW == nStateChange)
     {
         SetCategory( nActiveCategoryRID == USHRT_MAX ? RID_UNBINOPS_CAT : nActiveCategoryRID );
 
         // calculate initial position to be used after creation of the window...
         AdjustPosSize( bSetPosition );
-        bSetPosition = FALSE;
+        bSetPosition = sal_False;
     }
     //... otherwise the base class will remember the last position of the window
     SfxFloatingWindow::StateChanged( nStateChange );
 }
 
 
-void SmToolBoxWindow::AdjustPosSize( BOOL bSetPos )
+void SmToolBoxWindow::AdjustPosSize( sal_Bool bSetPos )
 {
     Size aCatSize( aToolBoxCat.CalcWindowSizePixel( 2 ) );
     Size aCmdSize( pToolBoxCmd->CalcWindowSizePixel( 4 /* see nLines in SetCategory*/ ) );
@@ -302,14 +302,14 @@ void SmToolBoxWindow::AdjustPosSize( BOOL bSetPos )
 }
 
 
-BOOL SmToolBoxWindow::Close()
+sal_Bool SmToolBoxWindow::Close()
 {
     SmViewShell *pViewSh = GetView();
     if (pViewSh)
         pViewSh->GetViewFrame()->GetDispatcher()->Execute(
                 SID_TOOLBOX, SFX_CALLMODE_STANDARD,
-                new SfxBoolItem(SID_TOOLBOX, FALSE), 0L);
-    return TRUE;
+                new SfxBoolItem(SID_TOOLBOX, sal_False), 0L);
+    return sal_True;
 }
 
 void SmToolBoxWindow::GetFocus()
@@ -319,12 +319,12 @@ void SmToolBoxWindow::GetFocus()
     aToolBoxCat.GrabFocus();
 }
 
-void SmToolBoxWindow::SetCategory(USHORT nCategoryRID)
+void SmToolBoxWindow::SetCategory(sal_uInt16 nCategoryRID)
 {
     if (nCategoryRID != nActiveCategoryRID)
         ApplyImageLists( nCategoryRID );
 
-    USHORT nLines;
+    sal_uInt16 nLines;
     // check for valid resource id
     switch (nCategoryRID)
     {
@@ -358,9 +358,9 @@ void SmToolBoxWindow::SetCategory(USHORT nCategoryRID)
     SetOutputSizePixel( aWndSize );
 
     if (nActiveCategoryRID)
-        aToolBoxCat.CheckItem(nActiveCategoryRID, FALSE);
+        aToolBoxCat.CheckItem(nActiveCategoryRID, sal_False);
     nActiveCategoryRID = nCategoryRID;
-    aToolBoxCat.CheckItem(nActiveCategoryRID, TRUE);
+    aToolBoxCat.CheckItem(nActiveCategoryRID, sal_True);
 
     pToolBoxCmd->Show();
 }
@@ -370,7 +370,7 @@ IMPL_LINK( SmToolBoxWindow, CategoryClickHdl, ToolBox*, pToolBox)
 {
     int nItemId = pToolBox->GetCurItemId();
     if (nItemId != 0)
-        SetCategory( sal::static_int_cast< USHORT >(nItemId) );
+        SetCategory( sal::static_int_cast< sal_uInt16 >(nItemId) );
     return 0;
 }
 
@@ -391,7 +391,7 @@ IMPL_LINK( SmToolBoxWindow, CmdSelectHdl, ToolBox*, pToolBox)
 SFX_IMPL_FLOATINGWINDOW(SmToolBoxWrapper, SID_TOOLBOXWINDOW);
 
 SmToolBoxWrapper::SmToolBoxWrapper(Window *pParentWindow,
-                                   USHORT nId, SfxBindings* pBindings,
+                                   sal_uInt16 nId, SfxBindings* pBindings,
                                    SfxChildWinInfo *pInfo) :
     SfxChildWindow(pParentWindow, nId)
 {

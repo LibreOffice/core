@@ -41,7 +41,7 @@ class Window;
 // - Cursor-Styles -
 // -----------------
 
-#define CURSOR_SHADOW                   ((USHORT)0x0001)
+#define CURSOR_SHADOW                   ((sal_uInt16)0x0001)
 #define CURSOR_DIRECTION_NONE           ((unsigned char)0x00)
 #define CURSOR_DIRECTION_LTR            ((unsigned char)0x01)
 #define CURSOR_DIRECTION_RTL            ((unsigned char)0x02)
@@ -60,8 +60,8 @@ private:
     Size            maSize;             // Groesse
     Point           maPos;              // Position
     short           mnOrientation;      // Rotation
-    USHORT          mnStyle;            // Style
-    BOOL            mbVisible;          // Ist Cursor sichtbar
+    sal_uInt16          mnStyle;            // Style
+    sal_Bool            mbVisible;          // Ist Cursor sichtbar
     unsigned char   mnDirection;        // indicates direction
 
 //#if 0 // _SOLAR__PRIVATE
@@ -69,7 +69,7 @@ public:
     SAL_DLLPRIVATE void         ImplDraw();
     SAL_DLLPRIVATE void         ImplRestore();
     DECL_DLLPRIVATE_LINK(       ImplTimerHdl, AutoTimer* );
-    SAL_DLLPRIVATE void         ImplShow( BOOL bDrawDirect = TRUE );
+    SAL_DLLPRIVATE void         ImplShow( sal_Bool bDrawDirect = sal_True );
     SAL_DLLPRIVATE void         ImplHide();
     SAL_DLLPRIVATE void         ImplNew();
 //#endif
@@ -79,12 +79,12 @@ public:
                     Cursor( const Cursor& rCursor );
                     ~Cursor();
 
-    void            SetStyle( USHORT nStyle );
-    USHORT          GetStyle() const { return mnStyle; }
+    void            SetStyle( sal_uInt16 nStyle );
+    sal_uInt16          GetStyle() const { return mnStyle; }
 
     void            Show();
     void            Hide();
-    BOOL            IsVisible() const { return mbVisible; }
+    sal_Bool            IsVisible() const { return mbVisible; }
 
     void            SetWindow( Window* pWindow );
     Window*         GetWindow() const { return mpWindow; }
@@ -111,8 +111,8 @@ public:
     unsigned char   GetDirection() const { return mnDirection; }
 
     Cursor&         operator=( const Cursor& rCursor );
-    BOOL            operator==( const Cursor& rCursor ) const;
-    BOOL            operator!=( const Cursor& rCursor ) const
+    sal_Bool            operator==( const Cursor& rCursor ) const;
+    sal_Bool            operator!=( const Cursor& rCursor ) const
                         { return !(Cursor::operator==( rCursor )); }
 };
 

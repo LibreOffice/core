@@ -99,13 +99,13 @@ SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
     }
 }
 
-bool SwEditShell::Undo(USHORT const nCount)
+bool SwEditShell::Undo(sal_uInt16 const nCount)
 {
     SET_CURR_SHELL( this );
 
     // #105332# current undo state was not saved
     ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     StartAllAction();
     {
@@ -132,7 +132,7 @@ bool SwEditShell::Undo(USHORT const nCount)
         RedlineMode_t eOld = GetDoc()->GetRedlineMode();
 
         try {
-            for (USHORT i = 0; i < nCount; ++i)
+            for (sal_uInt16 i = 0; i < nCount; ++i)
             {
                 bRet = GetDoc()->GetIDocumentUndoRedo().Undo()
                     || bRet;
@@ -156,11 +156,11 @@ bool SwEditShell::Undo(USHORT const nCount)
     return bRet;
 }
 
-bool SwEditShell::Redo(USHORT const nCount)
+bool SwEditShell::Redo(sal_uInt16 const nCount)
 {
     SET_CURR_SHELL( this );
 
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     // #105332# undo state was not saved
     ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
@@ -183,7 +183,7 @@ bool SwEditShell::Redo(USHORT const nCount)
         RedlineMode_t eOld = GetDoc()->GetRedlineMode();
 
         try {
-            for (USHORT i = 0; i < nCount; ++i)
+            for (sal_uInt16 i = 0; i < nCount; ++i)
             {
                 bRet = GetDoc()->GetIDocumentUndoRedo().Redo()
                     || bRet;
@@ -207,11 +207,11 @@ bool SwEditShell::Redo(USHORT const nCount)
 }
 
 
-bool SwEditShell::Repeat(USHORT const nCount)
+bool SwEditShell::Repeat(sal_uInt16 const nCount)
 {
     SET_CURR_SHELL( this );
 
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     StartAllAction();
 
     try {
@@ -238,7 +238,7 @@ void lcl_SelectSdrMarkList( SwEditShell* pShell,
     if( pShell->ISA( SwFEShell ) )
     {
         SwFEShell* pFEShell = static_cast<SwFEShell*>( pShell );
-        for( USHORT i = 0; i < pSdrMarkList->GetMarkCount(); ++i )
+        for( sal_uInt16 i = 0; i < pSdrMarkList->GetMarkCount(); ++i )
             pFEShell->SelectObj( Point(),
                                  (i==0) ? 0 : SW_ADD_SELECT,
                                  pSdrMarkList->GetMark( i )->GetMarkedSdrObj() );

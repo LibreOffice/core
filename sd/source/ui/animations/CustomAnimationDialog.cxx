@@ -132,7 +132,7 @@ public:
     virtual Control* getControl();
 
 private:
-    std::map< USHORT, rtl::OUString > maPropertyValues;
+    std::map< sal_uInt16, rtl::OUString > maPropertyValues;
     ListBox* mpControl;
 };
 
@@ -172,7 +172,7 @@ void PresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId )
 
             while( aIter != aEnd )
             {
-                USHORT nPos = mpControl->InsertEntry( rPresets.getUINameForProperty( (*aIter) ) );
+                sal_uInt16 nPos = mpControl->InsertEntry( rPresets.getUINameForProperty( (*aIter) ) );
                 if( (*aIter) == aPropertyValue )
                     mpControl->SelectEntryPos( nPos );
                 maPropertyValues[nPos] = (*aIter++);
@@ -180,7 +180,7 @@ void PresetPropertyBox::setValue( const Any& rValue, const OUString& rPresetId )
         }
         else
         {
-            mpControl->Enable( FALSE );
+            mpControl->Enable( sal_False );
         }
     }
 }
@@ -244,7 +244,7 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, Window* pParent, con
     if ( !pColorTable )
     {
         pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
-        bKillTable = TRUE;
+        bKillTable = sal_True;
     }
 
     sal_Int32 nColor = 0;
@@ -253,7 +253,7 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, Window* pParent, con
     for ( long i = 0; i < pColorTable->Count(); i++ )
     {
         XColorEntry* pEntry = pColorTable->GetColor(i);
-        USHORT nPos = mpControl->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+        sal_uInt16 nPos = mpControl->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         if( pEntry->GetColor().GetRGBColor() == (sal_uInt32)nColor )
             mpControl->SelectEntryPos( nPos );
     }
@@ -335,7 +335,7 @@ FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, Window* pParent, const
 
     if(!pFontList)
     {
-        pFontList = new FontList( Application::GetDefaultDevice(), NULL, FALSE );
+        pFontList = new FontList( Application::GetDefaultDevice(), NULL, sal_False );
         bMustDelete = true;
     }
 
@@ -594,7 +594,7 @@ TransparencyPropertyBox::TransparencyPropertyBox( sal_Int32 nControlType, Window
     mpMetric->SetMax( 100 );
 
     mpMenu = new PopupMenu();
-    for( USHORT i = 25; i < 101; i += 25 )
+    for( sal_uInt16 i = 25; i < 101; i += 25 )
     {
         String aStr( String::CreateFromInt32( i ) );
         aStr += sal_Unicode('%');
@@ -624,7 +624,7 @@ TransparencyPropertyBox::~TransparencyPropertyBox()
 void TransparencyPropertyBox::updateMenu()
 {
     sal_Int64 nValue = mpMetric->GetValue();
-    for( USHORT i = 25; i < 101; i += 25 )
+    for( sal_uInt16 i = 25; i < 101; i += 25 )
         mpMenu->CheckItem( i, nValue == i );
 }
 
@@ -1264,10 +1264,10 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
     if ( !pColorTable )
     {
         pColorTable = new XColorTable( SvtPathOptions().GetPalettePath() );
-        bKillTable = TRUE;
+        bKillTable = sal_True;
     }
 
-    mpCLBDimColor->SetUpdateMode( FALSE );
+    mpCLBDimColor->SetUpdateMode( sal_False );
 
     for ( long i = 0; i < pColorTable->Count(); i++ )
     {
@@ -1275,7 +1275,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
         mpCLBDimColor->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
     }
 
-    mpCLBDimColor->SetUpdateMode( TRUE );
+    mpCLBDimColor->SetUpdateMode( sal_True );
 
     if ( bKillTable )
         delete pColorTable;
@@ -1400,7 +1400,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
         sal_Bool bHasAfterEffect = sal_False;
         pSet->getPropertyValue( nHandleHasAfterEffect ) >>= bHasAfterEffect;
 
-        USHORT nPos = 0;
+        sal_uInt16 nPos = 0;
         if( bHasAfterEffect )
         {
             nPos++;
@@ -1414,7 +1414,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
                 sal_Int32 nColor = 0;
                 aDimColor >>= nColor;
                 Color aColor( nColor );
-                USHORT nColorPos = mpCLBDimColor->GetEntryPos( aColor );
+                sal_uInt16 nColorPos = mpCLBDimColor->GetEntryPos( aColor );
                 if ( LISTBOX_ENTRY_NOTFOUND != nColorPos )
                     mpCLBDimColor->SelectEntryPos( nColorPos );
                 else
@@ -1439,7 +1439,7 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
     {
         if( pSet->getPropertyState( nHandleIterateType ) != STLPropertyState_AMBIGUOUS)
         {
-            USHORT nPos = LISTBOX_ENTRY_NOTFOUND;
+            sal_uInt16 nPos = LISTBOX_ENTRY_NOTFOUND;
 
             sal_Int32 nIterateType = 0;
             pSet->getPropertyValue( nHandleIterateType ) >>= nIterateType;
@@ -1462,16 +1462,16 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
     }
     else
     {
-        mpFTTextAnim->Enable( FALSE );
-        mpLBTextAnim->Enable( FALSE );
-        mpMFTextDelay->Enable( FALSE );
-        mpFTTextDelay->Enable( FALSE );
+        mpFTTextAnim->Enable( sal_False );
+        mpLBTextAnim->Enable( sal_False );
+        mpMFTextDelay->Enable( sal_False );
+        mpFTTextDelay->Enable( sal_False );
 
     }
 
     if( pSet->getPropertyState( nHandleSoundURL ) != STLPropertyState_AMBIGUOUS )
     {
-        USHORT nPos = 0;
+        sal_uInt16 nPos = 0;
 
         const Any aValue( pSet->getPropertyValue( nHandleSoundURL ) );
 
@@ -1488,20 +1488,20 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
             {
                 const String aTmp( aSoundURL );
 
-                ULONG i;
+                sal_uLong i;
                 for( i = 0; i < maSoundList.Count(); i++ )
                 {
                     String* pString = (String*)maSoundList.GetObject( i );
                     if( *pString == aTmp )
                     {
-                        nPos = (USHORT)i+2;
+                        nPos = (sal_uInt16)i+2;
                         break;
                     }
                 }
 
                 if( nPos == 0 )
                 {
-                    nPos = (USHORT)maSoundList.Count()+2;
+                    nPos = (sal_uInt16)maSoundList.Count()+2;
                     maSoundList.Insert( new String( aTmp ), LIST_APPEND );
                     INetURLObject aURL( aTmp );
                     nPos = mpLBSound->InsertEntry( aURL.GetBase(), nPos );
@@ -1549,7 +1549,7 @@ CustomAnimationEffectTabPage::~CustomAnimationEffectTabPage()
 
 void CustomAnimationEffectTabPage::updateControlStates()
 {
-    USHORT nPos = mpLBAfterEffect->GetSelectEntryPos();
+    sal_uInt16 nPos = mpLBAfterEffect->GetSelectEntryPos();
     mpCLBDimColor->Enable( nPos == 1 );
     mpFTDimColor->Enable( nPos == 1 );
 
@@ -1568,7 +1568,7 @@ IMPL_LINK( CustomAnimationEffectTabPage, implSelectHdl, Control*, pControl )
 {
     if( pControl == mpLBAfterEffect )
     {
-        USHORT nPos = static_cast<ListBox*>( mpLBAfterEffect )->GetSelectEntryPos();
+        sal_uInt16 nPos = static_cast<ListBox*>( mpLBAfterEffect )->GetSelectEntryPos();
         if( nPos == 1 )
         {
             if( mpCLBDimColor->GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
@@ -1582,7 +1582,7 @@ IMPL_LINK( CustomAnimationEffectTabPage, implSelectHdl, Control*, pControl )
     }
     else if( pControl == mpLBSound )
     {
-        USHORT nPos = mpLBSound->GetSelectEntryPos();
+        sal_uInt16 nPos = mpLBSound->GetSelectEntryPos();
         if( nPos == (mpLBSound->GetEntryCount() - 1) )
         {
             openSoundFileDialog();
@@ -1648,7 +1648,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
             pSet->setPropertyValue( nHandleDecelerate, makeAny( fTemp ) );
     }
 
-    USHORT nPos = mpLBAfterEffect->GetSelectEntryPos();
+    sal_uInt16 nPos = mpLBAfterEffect->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         sal_Bool bAfterEffect = nPos != 0;
@@ -1759,7 +1759,7 @@ void CustomAnimationEffectTabPage::fillSoundListBox()
 
     mpLBSound->InsertEntry( String( SdResId( STR_CUSTOMANIMATION_NO_SOUND ) ) );
     mpLBSound->InsertEntry( String( SdResId( STR_CUSTOMANIMATION_STOP_PREVIOUS_SOUND ) ) );
-    for( ULONG i = 0; i < maSoundList.Count(); i++ )
+    for( sal_uLong i = 0; i < maSoundList.Count(); i++ )
     {
         String* pString = (String*)maSoundList.GetObject( i );
         INetURLObject aURL( *pString );
@@ -1834,8 +1834,8 @@ void CustomAnimationEffectTabPage::openSoundFileDialog()
                 String aStr; aStr += sal_Unicode('%');
                 aStrWarning.SearchAndReplace( aStr , aFile );
                 WarningBox aWarningBox( NULL, WB_3DLOOK | WB_RETRY_CANCEL, aStrWarning );
-                aWarningBox.SetModalInputMode (TRUE);
-                bQuitLoop = aWarningBox.Execute()==RET_RETRY ? FALSE : TRUE;
+                aWarningBox.SetModalInputMode (sal_True);
+                bQuitLoop = aWarningBox.Execute()==RET_RETRY ? sal_False : sal_True;
 
                 bValidSoundFile=false;
             }
@@ -1850,12 +1850,12 @@ void CustomAnimationEffectTabPage::openSoundFileDialog()
     if( !bValidSoundFile )
         nPos = 0;
 
-    mpLBSound->SelectEntryPos( (USHORT) nPos );
+    mpLBSound->SelectEntryPos( (sal_uInt16) nPos );
 }
 
 void CustomAnimationEffectTabPage::onSoundPreview()
 {
-    const USHORT nPos = mpLBSound->GetSelectEntryPos();
+    const sal_uInt16 nPos = mpLBSound->GetSelectEntryPos();
 
     if( nPos >= 2 ) try
     {
@@ -1928,7 +1928,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
     {
         sal_Int16 nStart = 0;
         pSet->getPropertyValue( nHandleStart ) >>= nStart;
-        USHORT nPos = 0;
+        sal_uInt16 nPos = 0;
         switch( nStart )
         {
             case EffectNodeType::WITH_PREVIOUS:     nPos = 1; break;
@@ -1959,7 +1959,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
         }
         else
         {
-            USHORT nPos = LISTBOX_ENTRY_NOTFOUND;
+            sal_uInt16 nPos = LISTBOX_ENTRY_NOTFOUND;
 
             if( fDuration == 5.0 )
                 nPos = 0;
@@ -1988,7 +1988,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
             if( aRepeatCount.hasValue() )
                 aRepeatCount >>= fRepeat;
 
-            USHORT nPos = LISTBOX_ENTRY_NOTFOUND;
+            sal_uInt16 nPos = LISTBOX_ENTRY_NOTFOUND;
 
             if( fRepeat == 0 )
                 nPos = 0;
@@ -2023,7 +2023,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
         sal_Int16 nFill = 0;
         if( pSet->getPropertyValue( nHandleRewind ) >>= nFill )
         {
-            mpCBXRewind->Check( (nFill == AnimationFill::REMOVE) ? TRUE : FALSE );
+            mpCBXRewind->Check( (nFill == AnimationFill::REMOVE) ? sal_True : sal_False );
         }
         else
         {
@@ -2065,7 +2065,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
             }
 
             String aDescription( getShapeDescription( xShape, true ) );
-            USHORT nPos = mpLBTrigger->InsertEntry( aDescription );
+            sal_uInt16 nPos = mpLBTrigger->InsertEntry( aDescription );
 
             mpLBTrigger->SetEntryData( nPos, (void*)nShape );
             if( xShape == xTrigger )
@@ -2082,8 +2082,8 @@ IMPL_LINK( CustomAnimationDurationTabPage, implControlHdl, Control*, pControl )
 {
     if( pControl == mpLBTrigger.get() )
     {
-        mpRBClickSequence->Check( FALSE );
-        mpRBInteractive->Check( TRUE );
+        mpRBClickSequence->Check( sal_False );
+        mpRBInteractive->Check( sal_True );
     }
 
     return 0;
@@ -2091,7 +2091,7 @@ IMPL_LINK( CustomAnimationDurationTabPage, implControlHdl, Control*, pControl )
 
 void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
 {
-    USHORT nPos = mpLBStart->GetSelectEntryPos();
+    sal_uInt16 nPos = mpLBStart->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         sal_Int16 nStart;
@@ -2291,7 +2291,7 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, 
     {
         sal_Int32 nTextGrouping = 0;
         if( pSet->getPropertyValue( nHandleTextGrouping ) >>= nTextGrouping )
-            maLBGroupText.SelectEntryPos( (USHORT)(nTextGrouping + 1) );
+            maLBGroupText.SelectEntryPos( (sal_uInt16)(nTextGrouping + 1) );
     }
 
     if( pSet->getPropertyState( nHandleHasVisibleShape ) != STLPropertyState_AMBIGUOUS )
@@ -2323,7 +2323,7 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, 
     }
     else
     {
-        maCBXAnimateForm.Enable( FALSE );
+        maCBXAnimateForm.Enable( sal_False );
     }
 
     maCBXReverse.SetState( STATE_DONTKNOW );
@@ -2345,7 +2345,7 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, 
         sal_Int32 nPos = 6;
         while( (nPos > 2) && (nPos > nMaxParaDepth) )
         {
-            maLBGroupText.RemoveEntry( (USHORT)nPos );
+            maLBGroupText.RemoveEntry( (sal_uInt16)nPos );
             nPos--;
         }
     }
@@ -2355,7 +2355,7 @@ CustomAnimationTextAnimTabPage::CustomAnimationTextAnimTabPage(Window* pParent, 
 
 void CustomAnimationTextAnimTabPage::update( STLPropertySet* pSet )
 {
-    USHORT nPos = maLBGroupText.GetSelectEntryPos();
+    sal_uInt16 nPos = maLBGroupText.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         sal_Int32 nTextGrouping = nPos - 1;
@@ -2404,7 +2404,7 @@ void CustomAnimationTextAnimTabPage::update( STLPropertySet* pSet )
 
 void CustomAnimationTextAnimTabPage::updateControlStates()
 {
-    USHORT nPos = maLBGroupText.GetSelectEntryPos();
+    sal_uInt16 nPos = maLBGroupText.GetSelectEntryPos();
 
     maCBXGroupAuto.Enable( nPos > 1 );
     maMFGroupAuto.Enable( nPos > 1 );
@@ -2412,12 +2412,12 @@ void CustomAnimationTextAnimTabPage::updateControlStates()
 
     if( !mbHasVisibleShapes && nPos > 0 )
     {
-        maCBXAnimateForm.Check(FALSE);
-        maCBXAnimateForm.Enable(FALSE);
+        maCBXAnimateForm.Check(sal_False);
+        maCBXAnimateForm.Enable(sal_False);
     }
     else
     {
-        maCBXAnimateForm.Enable(TRUE);
+        maCBXAnimateForm.Enable(sal_True);
     }
 }
 
@@ -2429,7 +2429,7 @@ IMPL_LINK( CustomAnimationTextAnimTabPage, implSelectHdl, Control*, EMPTYARG )
 
 // --------------------------------------------------------------------
 
-CustomAnimationDialog::CustomAnimationDialog( Window* pParent, STLPropertySet* pSet, USHORT nPage /* = 0 */  )
+CustomAnimationDialog::CustomAnimationDialog( Window* pParent, STLPropertySet* pSet, sal_uInt16 nPage /* = 0 */  )
 : TabDialog( pParent, SdResId( DLG_CUSTOMANIMATION ) ), mpSet( pSet ), mpResultSet( 0 )
 {
     mpTabControl = new TabControl( this, SdResId( 1 ) );

@@ -182,7 +182,7 @@ String MacrosMenuController::RetrieveLabelFromCommand( const String& aCmdURL )
     return framework::RetrieveLabelFromCommand(aCmdURL,m_xServiceManager,m_xUICommandLabels,m_xFrame,m_aModuleIdentifier,bModuleIdentified,"Label");
 }
 
-void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, USHORT startItemId )
+void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 startItemId )
 {
     const String aCmdBase = String::CreateFromAscii( ".uno:ScriptOrganizer?ScriptOrganizer.Language:string=" );
     const String ellipsis = String::CreateFromAscii( "..." );
@@ -190,7 +190,7 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, USHORT startIt
     ::rtl::OUString::createFromAscii("com.sun.star.script.provider.ScriptProviderFor" );
     const ::rtl::OUString languageProviderName =
         ::rtl::OUString::createFromAscii("com.sun.star.script.provider.LanguageScriptProvider" );
-    USHORT itemId = startItemId;
+    sal_uInt16 itemId = startItemId;
     Reference< XContentEnumerationAccess > xEnumAccess = Reference< XContentEnumerationAccess >( m_xServiceManager, UNO_QUERY_THROW );
     Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( languageProviderName );
 

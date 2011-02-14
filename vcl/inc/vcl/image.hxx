@@ -46,7 +46,7 @@ namespace com { namespace sun { namespace star { namespace graphic { class XGrap
 // -----------
 
 #define IMAGE_STDBTN_COLOR          Color( 0xC0, 0xC0, 0xC0 )
-#define IMAGELIST_IMAGE_NOTFOUND    ((USHORT)0xFFFF)
+#define IMAGELIST_IMAGE_NOTFOUND    ((sal_uInt16)0xFFFF)
 
 // -----------------------
 // - ImageColorTransform -
@@ -86,14 +86,14 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > GetXGraphic() const;
 
     Image           GetColorTransformedImage( ImageColorTransform eColorTransform ) const;
-    static void     GetColorTransformArrays( ImageColorTransform eColorTransform, Color*& rpSrcColor, Color*& rpDstColor, ULONG& rColorCount );
+    static void     GetColorTransformArrays( ImageColorTransform eColorTransform, Color*& rpSrcColor, Color*& rpDstColor, sal_uLong& rColorCount );
 
     void            Invert();
 
-    BOOL            operator!() const { return( !mpImplData ? true : false ); }
+    sal_Bool            operator!() const { return( !mpImplData ? true : false ); }
     Image&          operator=( const Image& rImage );
-    BOOL            operator==( const Image& rImage ) const;
-    BOOL            operator!=( const Image& rImage ) const { return !(Image::operator==( rImage )); }
+    sal_Bool            operator==( const Image& rImage ) const;
+    sal_Bool            operator!=( const Image& rImage ) const { return !(Image::operator==( rImage )); }
 
 private:
 
@@ -109,7 +109,7 @@ private:
 class VCL_DLLPUBLIC ImageList
 {
 public:
-                    ImageList( USHORT nInit = 8, USHORT nGrow = 4 );
+                    ImageList( sal_uInt16 nInit = 8, sal_uInt16 nGrow = 4 );
                     ImageList( const ResId& rResId );
                     ImageList( const ::std::vector< ::rtl::OUString >& rNameVector,
                                const ::rtl::OUString& rPrefix,
@@ -121,57 +121,57 @@ public:
     void                    InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
                                    const std::vector< rtl::OUString > &rNameVector );
     void                    InsertFromHorizontalBitmap( const ResId& rResId,
-                                    USHORT       nCount,
+                                    sal_uInt16       nCount,
                                     const Color *pNonAlphaMaskColor,
                                     const Color *pSearchColors = NULL,
                                     const Color *pReplaceColors = NULL,
-                                    ULONG        nColorCount = 0);
+                                    sal_uLong        nColorCount = 0);
     BitmapEx        GetAsHorizontalStrip() const;
-    USHORT          GetImageCount() const;
+    sal_uInt16          GetImageCount() const;
     Size            GetImageSize() const;
 
-    void            AddImage( USHORT nNewId, const Image& rImage );
+    void            AddImage( sal_uInt16 nNewId, const Image& rImage );
     void            AddImage( const ::rtl::OUString& rImageName, const Image& rImage );
 
-    void            ReplaceImage( USHORT nId, const Image& rImage );
+    void            ReplaceImage( sal_uInt16 nId, const Image& rImage );
     void            ReplaceImage( const ::rtl::OUString& rImageName, const Image& rImage );
 
-    void            ReplaceImage( USHORT nId, USHORT nReplaceId );
+    void            ReplaceImage( sal_uInt16 nId, sal_uInt16 nReplaceId );
     void            ReplaceImage( const ::rtl::OUString& rImageName, const ::rtl::OUString& rReplaceName );
 
-    void            RemoveImage( USHORT nId );
+    void            RemoveImage( sal_uInt16 nId );
     void            RemoveImage( const ::rtl::OUString& rImageName );
 
-    Image           GetImage( USHORT nId ) const;
+    Image           GetImage( sal_uInt16 nId ) const;
     Image           GetImage( const ::rtl::OUString& rImageName ) const;
 
-    USHORT          GetImagePos( USHORT nId ) const;
-    bool            HasImageAtPos( USHORT nId ) const;
-    USHORT          GetImagePos( const ::rtl::OUString& rImageName ) const;
+    sal_uInt16          GetImagePos( sal_uInt16 nId ) const;
+    bool            HasImageAtPos( sal_uInt16 nId ) const;
+    sal_uInt16          GetImagePos( const ::rtl::OUString& rImageName ) const;
 
-    USHORT          GetImageId( USHORT nPos ) const;
-    void            GetImageIds( ::std::vector< USHORT >& rIds ) const;
+    sal_uInt16          GetImageId( sal_uInt16 nPos ) const;
+    void            GetImageIds( ::std::vector< sal_uInt16 >& rIds ) const;
 
-    ::rtl::OUString GetImageName( USHORT nPos ) const;
+    ::rtl::OUString GetImageName( sal_uInt16 nPos ) const;
     void            GetImageNames( ::std::vector< ::rtl::OUString >& rNames ) const;
 
     ImageList&      operator=( const ImageList& rImageList );
-    BOOL            operator==( const ImageList& rImageList ) const;
-    BOOL            operator!=( const ImageList& rImageList ) const { return !(ImageList::operator==( rImageList )); }
+    sal_Bool            operator==( const ImageList& rImageList ) const;
+    sal_Bool            operator!=( const ImageList& rImageList ) const { return !(ImageList::operator==( rImageList )); }
 
 private:
 
     ImplImageList*  mpImplData;
-    USHORT          mnInitSize;
-    USHORT          mnGrowSize;
+    sal_uInt16          mnInitSize;
+    sal_uInt16          mnGrowSize;
 
     SAL_DLLPRIVATE void    ImplInitBitmapEx( const ::rtl::OUString& rUserImageName,
                                              const ::std::vector< ::rtl::OUString >& rImageNames,
                                              const ::rtl::OUString& rSymbolsStyle,
                                              BitmapEx& rBmpEx,
                                              const Color* pMaskColor ) const;
-    SAL_DLLPRIVATE void    ImplInit( USHORT nItems, const Size &rSize );
-    SAL_DLLPRIVATE USHORT  ImplGetImageId( const ::rtl::OUString& rImageName ) const;
+    SAL_DLLPRIVATE void    ImplInit( sal_uInt16 nItems, const Size &rSize );
+    SAL_DLLPRIVATE sal_uInt16  ImplGetImageId( const ::rtl::OUString& rImageName ) const;
     SAL_DLLPRIVATE void    ImplMakeUnique();
 };
 

@@ -72,9 +72,9 @@ struct SbxParamInfo
     const String aName;          // Name of the parameter
     SbxBaseRef   aTypeRef;       // Object, if object type
     SbxDataType  eType;          // Data type
-    UINT16       nFlags;         // Flag-Bits
-    UINT32       nUserData;      // IDs etc.
-    SbxParamInfo( const String& s, SbxDataType t, USHORT n, SbxBase* b = NULL )
+    sal_uInt16       nFlags;         // Flag-Bits
+    sal_uInt32       nUserData;      // IDs etc.
+    SbxParamInfo( const String& s, SbxDataType t, sal_uInt16 n, SbxBase* b = NULL )
     : aName( s ), aTypeRef( b ), eType( t ), nFlags( n ), nUserData( 0 ) {}
     ~SbxParamInfo() {}
 };
@@ -97,27 +97,27 @@ class SbxInfo : public SvRefBase
 
     String          aComment;
     String          aHelpFile;
-    UINT32          nHelpId;
+    sal_uInt32          nHelpId;
     SbxParams       aParams;
 
 protected:
-    BOOL LoadData( SvStream&, USHORT );
-    BOOL StoreData( SvStream& ) const;
+    sal_Bool LoadData( SvStream&, sal_uInt16 );
+    sal_Bool StoreData( SvStream& ) const;
     virtual ~SbxInfo();
 public:
     SbxInfo();
-    SbxInfo( const String&, UINT32 );
+    SbxInfo( const String&, sal_uInt32 );
 
-    void                AddParam( const String&, SbxDataType, USHORT=SBX_READ );
+    void                AddParam( const String&, SbxDataType, sal_uInt16=SBX_READ );
     void                AddParam( const SbxParamInfo& );
-    const SbxParamInfo* GetParam( USHORT n ) const; // index starts with 1!
+    const SbxParamInfo* GetParam( sal_uInt16 n ) const; // index starts with 1!
     const String&       GetComment() const              { return aComment; }
     const String&       GetHelpFile() const             { return aHelpFile; }
-    UINT32              GetHelpId() const               { return nHelpId;   }
+    sal_uInt32              GetHelpId() const               { return nHelpId;   }
 
     void                SetComment( const String& r )   { aComment = r; }
     void                SetHelpFile( const String& r )  { aHelpFile = r; }
-    void                SetHelpId( UINT32 nId )         { nHelpId = nId; }
+    void                SetHelpId( sal_uInt32 nId )         { nHelpId = nId; }
 };
 
 #endif
@@ -130,7 +130,7 @@ class SbxHint : public SfxSimpleHint
     SbxVariable* pVar;
 public:
     TYPEINFO();
-    SbxHint( ULONG n, SbxVariable* v ) : SfxSimpleHint( n ), pVar( v ) {}
+    SbxHint( sal_uIntPtr n, SbxVariable* v ) : SfxSimpleHint( n ), pVar( v ) {}
     SbxVariable* GetVar() const { return pVar; }
 };
 
@@ -144,7 +144,7 @@ class SbxAlias : public SbxVariable, public SfxListener
 {
     SbxVariableRef xAlias;
     virtual ~SbxAlias();
-    virtual void Broadcast( ULONG );
+    virtual void Broadcast( sal_uIntPtr );
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType );
 public:
@@ -173,7 +173,7 @@ class SbxArray : public SbxBase
     friend class SbMethod;
     friend class SbClassModuleObject;
     friend SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj );
-    void PutDirect( SbxVariable* pVar, UINT32 nIdx );
+    void PutDirect( SbxVariable* pVar, sal_uInt32 nIdx );
 
     SbxArrayImpl* mpSbxArrayImpl; // Impl data
     SbxVarRefs*   pData;          // The variables
@@ -181,8 +181,8 @@ class SbxArray : public SbxBase
 protected:
     SbxDataType eType;            // Data type of the array
     virtual ~SbxArray();
-    virtual BOOL LoadData( SvStream&, USHORT );
-    virtual BOOL StoreData( SvStream& ) const;
+    virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
+    virtual sal_Bool StoreData( SvStream& ) const;
 
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_ARRAY,1);
@@ -191,28 +191,28 @@ public:
     SbxArray( const SbxArray& );
     SbxArray& operator=( const SbxArray& );
     virtual void Clear();
-    USHORT Count() const;
+    sal_uInt16 Count() const;
     virtual SbxDataType GetType() const;
     virtual SbxClassType GetClass() const;
-    SbxVariableRef& GetRef( USHORT );
-    SbxVariable* Get( USHORT );
-    void Put( SbxVariable*, USHORT );
-    void Insert( SbxVariable*, USHORT );
-    void Remove( USHORT );
+    SbxVariableRef& GetRef( sal_uInt16 );
+    SbxVariable* Get( sal_uInt16 );
+    void Put( SbxVariable*, sal_uInt16 );
+    void Insert( SbxVariable*, sal_uInt16 );
+    void Remove( sal_uInt16 );
     void Remove( SbxVariable* );
     void Merge( SbxArray* );
-    const String& GetAlias( USHORT );
-    void PutAlias( const String&, USHORT );
-    SbxVariable* FindUserData( UINT32 nUserData );
+    const String& GetAlias( sal_uInt16 );
+    void PutAlias( const String&, sal_uInt16 );
+    SbxVariable* FindUserData( sal_uInt32 nUserData );
     virtual SbxVariable* Find( const String&, SbxClassType );
 
     // Additional methods for 32-bit indices
-    UINT32 Count32() const;
-    SbxVariableRef& GetRef32( UINT32 );
-    SbxVariable* Get32( UINT32 );
-    void Put32( SbxVariable*, UINT32 );
-    void Insert32( SbxVariable*, UINT32 );
-    void Remove32( UINT32 );
+    sal_uInt32 Count32() const;
+    SbxVariableRef& GetRef32( sal_uInt32 );
+    SbxVariable* Get32( sal_uInt32 );
+    void Put32( SbxVariable*, sal_uInt32 );
+    void Insert32( SbxVariable*, sal_uInt32 );
+    void Remove32( sal_uInt32 );
 };
 
 #endif
@@ -231,15 +231,15 @@ class SbxDimArray : public SbxArray
 
     SbxDim* pFirst, *pLast;               // Links to Dimension table
     short   nDim;                         // Number of dimensions
-    void   AddDimImpl32( INT32, INT32, BOOL bAllowSize0 );
+    void   AddDimImpl32( sal_Int32, sal_Int32, sal_Bool bAllowSize0 );
     bool mbHasFixedSize;
 protected:
-    USHORT  Offset( const short* );
-    UINT32  Offset32( const INT32* );
-    USHORT  Offset( SbxArray* );
-    UINT32  Offset32( SbxArray* );
-    virtual BOOL LoadData( SvStream&, USHORT );
-    virtual BOOL StoreData( SvStream& ) const;
+    sal_uInt16  Offset( const short* );
+    sal_uInt32  Offset32( const sal_Int32* );
+    sal_uInt16  Offset( SbxArray* );
+    sal_uInt32  Offset32( SbxArray* );
+    virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
+    virtual sal_Bool StoreData( SvStream& ) const;
     virtual ~SbxDimArray();
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_DIMARRAY,1);
@@ -261,17 +261,17 @@ public:
     short  GetDims() const { return nDim;  }
     void   AddDim( short, short );
     void   unoAddDim( short, short );
-    BOOL   GetDim( short, short&, short& ) const;
+    sal_Bool   GetDim( short, short&, short& ) const;
 
     using SbxArray::GetRef32;
-    SbxVariableRef& GetRef32( const INT32* );
+    SbxVariableRef& GetRef32( const sal_Int32* );
     using SbxArray::Get32;
-    SbxVariable* Get32( const INT32* );
+    SbxVariable* Get32( const sal_Int32* );
     using SbxArray::Put32;
-    void Put32( SbxVariable*, const INT32* );
-    void   AddDim32( INT32, INT32 );
-    void   unoAddDim32( INT32, INT32 );
-    BOOL   GetDim32( INT32, INT32&, INT32& ) const;
+    void Put32( SbxVariable*, const sal_Int32* );
+    void   AddDim32( sal_Int32, sal_Int32 );
+    void   unoAddDim32( sal_Int32, sal_Int32 );
+    sal_Bool   GetDim32( sal_Int32, sal_Int32&, sal_Int32& ) const;
         bool hasFixedSize() { return mbHasFixedSize; };
         void setHasFixedSize( bool bHasFixedSize ) {mbHasFixedSize = bHasFixedSize; };
 };
@@ -286,7 +286,7 @@ class SbxCollection : public SbxObject
     void Initialize();
 protected:
     virtual ~SbxCollection();
-    virtual BOOL LoadData( SvStream&, USHORT );
+    virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType );
     // Overridable methods (why not pure virtual?):
@@ -300,7 +300,7 @@ public:
     SbxCollection( const String& rClassname );
     SbxCollection( const SbxCollection& );
     SbxCollection& operator=( const SbxCollection& );
-    virtual SbxVariable* FindUserData( UINT32 nUserData );
+    virtual SbxVariable* FindUserData( sal_uInt32 nUserData );
     virtual SbxVariable* Find( const String&, SbxClassType );
     virtual void Clear();
 };
@@ -314,17 +314,17 @@ class SbxStdCollection : public SbxCollection
 {
 protected:
     String aElemClass;
-    BOOL   bAddRemoveOk;
+    sal_Bool   bAddRemoveOk;
     virtual ~SbxStdCollection();
-    virtual BOOL LoadData( SvStream&, USHORT );
-    virtual BOOL StoreData( SvStream& ) const;
+    virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
+    virtual sal_Bool StoreData( SvStream& ) const;
     virtual void CollAdd( SbxArray* pPar );
     virtual void CollRemove( SbxArray* pPar );
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_FIXCOLLECTION,1);
     TYPEINFO();
     SbxStdCollection
-        ( const String& rClassname, const String& rElemClass, BOOL=TRUE );
+        ( const String& rClassname, const String& rElemClass, sal_Bool=sal_True );
     SbxStdCollection( const SbxStdCollection& );
     SbxStdCollection& operator=( const SbxStdCollection& );
     virtual void Insert( SbxVariable* );

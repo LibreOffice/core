@@ -66,10 +66,10 @@ class SvListEntry;
 class SvTreeEntryList : public List // SvEntryListStd
 {
 public:
-    SvTreeEntryList(USHORT nInitPos=16, USHORT nResize=16 )
+    SvTreeEntryList(sal_uInt16 nInitPos=16, sal_uInt16 nResize=16 )
             : List( nInitPos, nResize )
     {}
-    SvTreeEntryList(USHORT BlockSize, USHORT InitSize, USHORT Resize )
+    SvTreeEntryList(sal_uInt16 BlockSize, sal_uInt16 InitSize, sal_uInt16 Resize )
         : List(BlockSize, InitSize, Resize )
     {}
 
@@ -84,8 +84,8 @@ friend class SvListView;
 private:
     SvListEntry*        pParent;
     SvTreeEntryList*    pChilds;
-    ULONG               nAbsPos;
-    ULONG               nListPos;
+    sal_uLong               nAbsPos;
+    sal_uLong               nListPos;
 
     void                SetListPositions();
     void                InvalidateChildrensListPositions()
@@ -96,14 +96,14 @@ public:
                         SvListEntry();
                         SvListEntry( const SvListEntry& );
     virtual             ~SvListEntry();
-    BOOL                HasChilds() { return (BOOL)(pChilds!=0); }
-    BOOL                HasChildListPos() const
+    sal_Bool                HasChilds() { return (sal_Bool)(pChilds!=0); }
+    sal_Bool                HasChildListPos() const
     {
         if( pParent && !(pParent->nListPos & 0x80000000) )
-            return TRUE;
-        else return FALSE;
+            return sal_True;
+        else return sal_False;
     }
-    ULONG               GetChildListPos() const
+    sal_uLong               GetChildListPos() const
     {
         if( pParent && (pParent->nListPos & 0x80000000) )
             pParent->SetListPositions();
@@ -119,26 +119,26 @@ class SvViewData
 friend class SvTreeList;
 friend class SvListView;
 
-    ULONG       nVisPos;
+    sal_uLong       nVisPos;
 protected:
-    USHORT      nFlags;
+    sal_uInt16      nFlags;
 public:
     SvViewData();
     SvViewData( const SvViewData& );
     virtual ~SvViewData();
 
-    BOOL IsSelected() const { return (BOOL)(nFlags&SVLISTENTRYFLAG_SELECTED)!=0; }
-    BOOL IsExpanded() const { return (BOOL)(nFlags&SVLISTENTRYFLAG_EXPANDED)!=0; }
-    BOOL HasFocus() const { return (BOOL)(nFlags&SVLISTENTRYFLAG_FOCUSED)!=0; }
-    void SetFocus( BOOL bFocus)
+    sal_Bool IsSelected() const { return (sal_Bool)(nFlags&SVLISTENTRYFLAG_SELECTED)!=0; }
+    sal_Bool IsExpanded() const { return (sal_Bool)(nFlags&SVLISTENTRYFLAG_EXPANDED)!=0; }
+    sal_Bool HasFocus() const { return (sal_Bool)(nFlags&SVLISTENTRYFLAG_FOCUSED)!=0; }
+    void SetFocus( sal_Bool bFocus)
     {
         if ( !bFocus )
             nFlags &= (~SVLISTENTRYFLAG_FOCUSED);
         else
             nFlags |= SVLISTENTRYFLAG_FOCUSED;
     }
-    BOOL IsCursored() const { return (BOOL)(nFlags&SVLISTENTRYFLAG_CURSORED)!=0; }
-    void SetCursored( BOOL bCursored )
+    sal_Bool IsCursored() const { return (sal_Bool)(nFlags&SVLISTENTRYFLAG_CURSORED)!=0; }
+    void SetCursored( sal_Bool bCursored )
     {
         if ( !bCursored )
             nFlags &= (~SVLISTENTRYFLAG_CURSORED);
@@ -146,7 +146,7 @@ public:
             nFlags |= SVLISTENTRYFLAG_CURSORED;
     }
 
-    USHORT GetFlags() const { return nFlags; }
+    sal_uInt16 GetFlags() const { return nFlags; }
 
     void SetSelectable( bool bSelectable )
     {
@@ -174,38 +174,38 @@ class SVT_DLLPUBLIC SvTreeList
     friend class SvListView;
 
     List            aViewList;
-    ULONG           nEntryCount;
+    sal_uLong           nEntryCount;
 
     Link            aCloneLink;
     Link            aCompareLink;
     SvSortMode      eSortMode;
 
-    USHORT          nRefCount;
+    sal_uInt16          nRefCount;
 
-    BOOL            bAbsPositionsValid;
+    sal_Bool            bAbsPositionsValid;
 
     SvListEntry*    FirstVisible() const { return First(); }
-    SvListEntry*    NextVisible( const SvListView*,SvListEntry* pEntry, USHORT* pDepth=0 ) const;
-    SvListEntry*    PrevVisible( const SvListView*,SvListEntry* pEntry, USHORT* pDepth=0 ) const;
-    SvListEntry*    LastVisible( const SvListView*,USHORT* pDepth=0 ) const;
-    SvListEntry*    NextVisible( const SvListView*,SvListEntry* pEntry, USHORT& rDelta ) const;
-    SvListEntry*    PrevVisible( const SvListView*,SvListEntry* pEntry, USHORT& rDelta ) const;
+    SvListEntry*    NextVisible( const SvListView*,SvListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
+    SvListEntry*    PrevVisible( const SvListView*,SvListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
+    SvListEntry*    LastVisible( const SvListView*,sal_uInt16* pDepth=0 ) const;
+    SvListEntry*    NextVisible( const SvListView*,SvListEntry* pEntry, sal_uInt16& rDelta ) const;
+    SvListEntry*    PrevVisible( const SvListView*,SvListEntry* pEntry, sal_uInt16& rDelta ) const;
 
-    BOOL            IsEntryVisible( const SvListView*,SvListEntry* pEntry ) const;
-    SvListEntry*    GetEntryAtVisPos( const SvListView*,ULONG nVisPos ) const;
-    ULONG           GetVisiblePos( const SvListView*,SvListEntry* pEntry ) const;
-    ULONG           GetVisibleCount( const SvListView* ) const;
-    ULONG           GetVisibleChildCount( const SvListView*,SvListEntry* pParent ) const;
+    sal_Bool            IsEntryVisible( const SvListView*,SvListEntry* pEntry ) const;
+    SvListEntry*    GetEntryAtVisPos( const SvListView*,sal_uLong nVisPos ) const;
+    sal_uLong           GetVisiblePos( const SvListView*,SvListEntry* pEntry ) const;
+    sal_uLong           GetVisibleCount( const SvListView* ) const;
+    sal_uLong           GetVisibleChildCount( const SvListView*,SvListEntry* pParent ) const;
 
     SvListEntry*    FirstSelected( const SvListView*) const;
     SvListEntry*    NextSelected( const SvListView*,SvListEntry* pEntry ) const;
     SvListEntry*    PrevSelected( const SvListView*,SvListEntry* pEntry ) const;
     SvListEntry*    LastSelected( const SvListView*) const;
 
-    BOOL            Select( SvListView*,SvListEntry* pEntry, BOOL bSelect=TRUE );
-    ULONG           SelectChilds( SvListView*,SvListEntry* pParent, BOOL bSelect );
-    void            SelectAll( SvListView*,BOOL bSelect ); // ruft nicht Select-Hdl
-    ULONG           GetChildSelectionCount( const SvListView*,SvListEntry* pParent ) const;
+    sal_Bool            Select( SvListView*,SvListEntry* pEntry, sal_Bool bSelect=sal_True );
+    sal_uLong           SelectChilds( SvListView*,SvListEntry* pParent, sal_Bool bSelect );
+    void            SelectAll( SvListView*,sal_Bool bSelect ); // ruft nicht Select-Hdl
+    sal_uLong           GetChildSelectionCount( const SvListView*,SvListEntry* pParent ) const;
 
     void            Expand( SvListView*,SvListEntry* pParent );
     void            Collapse( SvListView*,SvListEntry* pParent );
@@ -214,12 +214,12 @@ class SVT_DLLPUBLIC SvTreeList
     SVT_DLLPRIVATE void             SetAbsolutePositions();
     SVT_DLLPRIVATE SvTreeEntryList*CloneChilds( SvTreeEntryList* pChilds,
                                  SvListEntry* pNewParent,
-                                 ULONG& nCloneCount ) const;
+                                 sal_uLong& nCloneCount ) const;
     SVT_DLLPRIVATE void         SetListPositions( SvTreeEntryList* );
 
     // rPos wird bei SortModeNone nicht geaendert
     SVT_DLLPRIVATE void         GetInsertionPos( SvListEntry* pEntry, SvListEntry* pParent,
-                        ULONG& rPos );
+                        sal_uLong& rPos );
     SVT_DLLPRIVATE void         ResortChilds( SvListEntry* pParent );
 //#endif /* _SOLAR__PRIVATE */
 
@@ -234,57 +234,57 @@ public:
 
     void            InsertView( SvListView* );
     void            RemoveView( SvListView* );
-    ULONG           GetViewCount() const { return aViewList.Count(); }
-    SvListView*     GetView(ULONG nPos) const {return (SvListView*)aViewList.GetObject(nPos);}
-    void            Broadcast( USHORT nActionId, SvListEntry* pEntry1=0,
-                        SvListEntry* pEntry2=0, ULONG nPos=0 );
+    sal_uLong           GetViewCount() const { return aViewList.Count(); }
+    SvListView*     GetView(sal_uLong nPos) const {return (SvListView*)aViewList.GetObject(nPos);}
+    void            Broadcast( sal_uInt16 nActionId, SvListEntry* pEntry1=0,
+                        SvListEntry* pEntry2=0, sal_uLong nPos=0 );
     // informiert alle Listener
     void            InvalidateEntry( SvListEntry* );
 
-    ULONG           GetEntryCount() const { return nEntryCount; }
+    sal_uLong           GetEntryCount() const { return nEntryCount; }
     SvListEntry*    First() const;
-    SvListEntry*    Next( SvListEntry* pEntry, USHORT* pDepth=0 ) const;
-    SvListEntry*    Prev( SvListEntry* pEntry, USHORT* pDepth=0 ) const;
-    SvListEntry*    Last( USHORT* pDepth=0 ) const;
+    SvListEntry*    Next( SvListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
+    SvListEntry*    Prev( SvListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
+    SvListEntry*    Last( sal_uInt16* pDepth=0 ) const;
 
     SvListEntry*    FirstChild( SvListEntry* pParent ) const;
     SvListEntry*    NextSibling( SvListEntry* pEntry ) const;
     SvListEntry*    PrevSibling( SvListEntry* pEntry ) const;
     SvListEntry*    LastSibling( SvListEntry* pEntry ) const;
 
-    ULONG           Insert( SvListEntry* pEntry,SvListEntry* pPar,ULONG nPos=LIST_APPEND);
-    ULONG           Insert( SvListEntry* pEntry,ULONG nRootPos = LIST_APPEND ) { return Insert(pEntry, pRootItem, nRootPos ); }
+    sal_uLong           Insert( SvListEntry* pEntry,SvListEntry* pPar,sal_uLong nPos=LIST_APPEND);
+    sal_uLong           Insert( SvListEntry* pEntry,sal_uLong nRootPos = LIST_APPEND ) { return Insert(pEntry, pRootItem, nRootPos ); }
     void            InsertTree( SvListEntry* pTree, SvListEntry* pTarget );
     void            InsertTree( SvListEntry* pTree, SvListEntry* pTargetParent,
-                                ULONG nListPos );
+                                sal_uLong nListPos );
     // Entries muessen im gleichen Model stehen!
     void            Move( SvListEntry* pSource, SvListEntry* pTarget );
     // erzeugt ggf. Child-List
-    ULONG           Move( SvListEntry* pSource, SvListEntry* pTargetParent,
-                          ULONG nListPos);
+    sal_uLong           Move( SvListEntry* pSource, SvListEntry* pTargetParent,
+                          sal_uLong nListPos);
     void            Copy( SvListEntry* pSource, SvListEntry* pTarget );
-    ULONG           Copy( SvListEntry* pSource, SvListEntry* pTargetParent,
-                          ULONG nListPos);
+    sal_uLong           Copy( SvListEntry* pSource, SvListEntry* pTargetParent,
+                          sal_uLong nListPos);
 
-    BOOL            Remove( SvListEntry* pEntry );
+    sal_Bool            Remove( SvListEntry* pEntry );
     void            Clear();
 
-    BOOL            HasChilds( SvListEntry* pEntry ) const;
-    BOOL            HasParent( SvListEntry* pEntry ) const  { return (BOOL)(pEntry->pParent!=pRootItem); }
-    BOOL            IsChild( SvListEntry* pParent, SvListEntry* pChild ) const;
-    BOOL            IsInChildList( SvListEntry* pParent, SvListEntry* pChild) const;
-    SvListEntry*    GetEntry( SvListEntry* pParent, ULONG nPos ) const;
-    SvListEntry*    GetEntry( ULONG nRootPos ) const;
-    SvListEntry*    GetEntryAtAbsPos( ULONG nAbsPos ) const;
+    sal_Bool            HasChilds( SvListEntry* pEntry ) const;
+    sal_Bool            HasParent( SvListEntry* pEntry ) const  { return (sal_Bool)(pEntry->pParent!=pRootItem); }
+    sal_Bool            IsChild( SvListEntry* pParent, SvListEntry* pChild ) const;
+    sal_Bool            IsInChildList( SvListEntry* pParent, SvListEntry* pChild) const;
+    SvListEntry*    GetEntry( SvListEntry* pParent, sal_uLong nPos ) const;
+    SvListEntry*    GetEntry( sal_uLong nRootPos ) const;
+    SvListEntry*    GetEntryAtAbsPos( sal_uLong nAbsPos ) const;
     SvListEntry*    GetParent( SvListEntry* pEntry ) const;
     SvListEntry*    GetRootLevelParent( SvListEntry* pEntry ) const;
     SvTreeEntryList* GetChildList( SvListEntry* pParent ) const;
 
-    ULONG           GetAbsPos( SvListEntry* pEntry ) const;
-    ULONG           GetRelPos( SvListEntry* pChild ) const { return pChild->GetChildListPos(); }
-    ULONG           GetChildCount( SvListEntry* pParent ) const;
-    USHORT          GetDepth( SvListEntry* pEntry ) const;
-    BOOL            IsAtRootDepth( SvListEntry* pEntry ) const { return (BOOL)(pEntry->pParent==pRootItem); }
+    sal_uLong           GetAbsPos( SvListEntry* pEntry ) const;
+    sal_uLong           GetRelPos( SvListEntry* pChild ) const { return pChild->GetChildListPos(); }
+    sal_uLong           GetChildCount( SvListEntry* pParent ) const;
+    sal_uInt16          GetDepth( SvListEntry* pEntry ) const;
+    sal_Bool            IsAtRootDepth( SvListEntry* pEntry ) const { return (sal_Bool)(pEntry->pParent==pRootItem); }
 
     // das Model ruft zum Clonen von Entries den Clone-Link auf,
     // damit man sich nicht vom Model ableiten muss, wenn man
@@ -292,14 +292,14 @@ public:
     // Deklaration des Clone-Handlers:
     // DECL_LINK(CloneHdl,SvListEntry*);
     // der Handler muss einen SvListEntry* zurueckgeben
-    SvListEntry*    Clone( SvListEntry* pEntry, ULONG& nCloneCount ) const;
+    SvListEntry*    Clone( SvListEntry* pEntry, sal_uLong& nCloneCount ) const;
     void            SetCloneLink( const Link& rLink ) { aCloneLink=rLink; }
     const Link&     GetCloneLink() const { return aCloneLink; }
     virtual SvListEntry* CloneEntry( SvListEntry* ) const; // ruft den Clone-Link
     virtual SvListEntry* CreateEntry() const; // zum 'new'en von Entries
 
-    USHORT          GetRefCount() const { return nRefCount; }
-    void            SetRefCount( USHORT nRef ) { nRefCount = nRef; }
+    sal_uInt16          GetRefCount() const { return nRefCount; }
+    void            SetRefCount( sal_uInt16 nRef ) { nRefCount = nRef; }
 
     void            SetSortMode( SvSortMode eMode ) { eSortMode = eMode; }
     SvSortMode      GetSortMode() const { return eSortMode; }
@@ -315,9 +315,9 @@ class SVT_DLLPUBLIC SvListView
 {
     friend class SvTreeList;
 
-    ULONG           nVisibleCount;
-    ULONG           nSelectionCount;
-    BOOL            bVisPositionsValid;
+    sal_uLong           nVisibleCount;
+    sal_uLong           nSelectionCount;
+    sal_Bool            bVisPositionsValid;
 
 //#if 0 // _SOLAR__PRIVATE
     SVT_DLLPRIVATE void         InitTable();
@@ -329,8 +329,8 @@ protected:
     Table           aDataTable;  // Mapping SvListEntry -> ViewData
     SvTreeList*     pModel;
 
-    void ActionMoving( SvListEntry* pEntry,SvListEntry* pTargetPrnt,ULONG nChildPos);
-    void ActionMoved( SvListEntry* pEntry,SvListEntry* pTargetPrnt,ULONG nChildPos);
+    void ActionMoving( SvListEntry* pEntry,SvListEntry* pTargetPrnt,sal_uLong nChildPos);
+    void ActionMoved( SvListEntry* pEntry,SvListEntry* pTargetPrnt,sal_uLong nChildPos);
     void ActionInserted( SvListEntry* pEntry );
     void ActionInsertedTree( SvListEntry* pEntry );
     void ActionRemoving( SvListEntry* pEntry );
@@ -345,40 +345,40 @@ public:
     void            Clear();
     SvTreeList*     GetModel() const { return pModel; }
     virtual void    SetModel( SvTreeList* );
-    virtual void    ModelNotification( USHORT nActionId, SvListEntry* pEntry1,
-                        SvListEntry* pEntry2, ULONG nPos );
+    virtual void    ModelNotification( sal_uInt16 nActionId, SvListEntry* pEntry1,
+                        SvListEntry* pEntry2, sal_uLong nPos );
 
-    ULONG           GetVisibleCount() const { return pModel->GetVisibleCount( (SvListView*)this );}
+    sal_uLong           GetVisibleCount() const { return pModel->GetVisibleCount( (SvListView*)this );}
     SvListEntry*    FirstVisible() const { return pModel->FirstVisible(); }
-    SvListEntry*    NextVisible( SvListEntry* pEntry, USHORT* pDepth=0 ) const {return pModel->NextVisible(this,pEntry,pDepth); }
-    SvListEntry*    PrevVisible( SvListEntry* pEntry, USHORT* pDepth=0 ) const {return pModel->PrevVisible(this,pEntry,pDepth); }
-    SvListEntry*    LastVisible( USHORT* pDepth=0 ) const { return pModel->LastVisible(this,pDepth);}
-    SvListEntry*    NextVisible( SvListEntry* pEntry, USHORT& rDelta ) const { return pModel->NextVisible(this,pEntry,rDelta); }
-    SvListEntry*    PrevVisible( SvListEntry* pEntry, USHORT& rDelta ) const { return pModel->PrevVisible(this,pEntry,rDelta); }
+    SvListEntry*    NextVisible( SvListEntry* pEntry, sal_uInt16* pDepth=0 ) const {return pModel->NextVisible(this,pEntry,pDepth); }
+    SvListEntry*    PrevVisible( SvListEntry* pEntry, sal_uInt16* pDepth=0 ) const {return pModel->PrevVisible(this,pEntry,pDepth); }
+    SvListEntry*    LastVisible( sal_uInt16* pDepth=0 ) const { return pModel->LastVisible(this,pDepth);}
+    SvListEntry*    NextVisible( SvListEntry* pEntry, sal_uInt16& rDelta ) const { return pModel->NextVisible(this,pEntry,rDelta); }
+    SvListEntry*    PrevVisible( SvListEntry* pEntry, sal_uInt16& rDelta ) const { return pModel->PrevVisible(this,pEntry,rDelta); }
 
-    ULONG           GetSelectionCount() const { return nSelectionCount; }
+    sal_uLong           GetSelectionCount() const { return nSelectionCount; }
     SvListEntry*    FirstSelected() const { return pModel->FirstSelected(this);}
     SvListEntry*    NextSelected( SvListEntry* pEntry ) const { return pModel->NextSelected(this,pEntry); }
     SvListEntry*    PrevSelected( SvListEntry* pEntry ) const { return pModel->PrevSelected(this,pEntry); }
     SvListEntry*    LastSelected() const { return pModel->LastSelected(this); }
-    SvListEntry*    GetEntryAtVisPos( ULONG nVisPos ) const { return pModel->GetEntryAtVisPos((SvListView*)this,nVisPos); }
-    ULONG           GetVisiblePos( SvListEntry* pEntry ) const { return pModel->GetVisiblePos((SvListView*)this,pEntry); }
+    SvListEntry*    GetEntryAtVisPos( sal_uLong nVisPos ) const { return pModel->GetEntryAtVisPos((SvListView*)this,nVisPos); }
+    sal_uLong           GetVisiblePos( SvListEntry* pEntry ) const { return pModel->GetVisiblePos((SvListView*)this,pEntry); }
 
-    ULONG           GetVisibleChildCount(SvListEntry* pParent ) const { return pModel->GetVisibleChildCount((SvListView*)this,pParent); }
-    ULONG           GetChildSelectionCount( SvListEntry* pParent ) const { return pModel->GetChildSelectionCount((SvListView*)this,pParent); }
+    sal_uLong           GetVisibleChildCount(SvListEntry* pParent ) const { return pModel->GetVisibleChildCount((SvListView*)this,pParent); }
+    sal_uLong           GetChildSelectionCount( SvListEntry* pParent ) const { return pModel->GetChildSelectionCount((SvListView*)this,pParent); }
     void            Expand( SvListEntry* pParent ) { pModel->Expand((SvListView*)this,pParent); }
     void            Collapse( SvListEntry* pParent ) { pModel->Collapse((SvListView*)this,pParent); }
-    BOOL            Select( SvListEntry* pEntry, BOOL bSelect=TRUE ) { return pModel->Select((SvListView*)this,pEntry,bSelect); }
-    ULONG           SelectChilds( SvListEntry* pParent, BOOL bSelect ) { return pModel->SelectChilds((SvListView*)this,pParent, bSelect); }
+    sal_Bool            Select( SvListEntry* pEntry, sal_Bool bSelect=sal_True ) { return pModel->Select((SvListView*)this,pEntry,bSelect); }
+    sal_uLong           SelectChilds( SvListEntry* pParent, sal_Bool bSelect ) { return pModel->SelectChilds((SvListView*)this,pParent, bSelect); }
     // ruft nicht Select-Hdl
-    virtual void    SelectAll( BOOL bSelect, BOOL ) { pModel->SelectAll((SvListView*)this, bSelect); }
-    BOOL            IsEntryVisible( SvListEntry* pEntry ) const { return pModel->IsEntryVisible((SvListView*)this,pEntry); }
-    BOOL            IsExpanded( SvListEntry* pEntry ) const;
-    BOOL            IsSelected( SvListEntry* pEntry ) const;
-    BOOL            HasEntryFocus( SvListEntry* pEntry ) const;
-    void            SetEntryFocus( SvListEntry* pEntry, BOOL bFocus ) const;
+    virtual void    SelectAll( sal_Bool bSelect, sal_Bool ) { pModel->SelectAll((SvListView*)this, bSelect); }
+    sal_Bool            IsEntryVisible( SvListEntry* pEntry ) const { return pModel->IsEntryVisible((SvListView*)this,pEntry); }
+    sal_Bool            IsExpanded( SvListEntry* pEntry ) const;
+    sal_Bool            IsSelected( SvListEntry* pEntry ) const;
+    sal_Bool            HasEntryFocus( SvListEntry* pEntry ) const;
+    void            SetEntryFocus( SvListEntry* pEntry, sal_Bool bFocus ) const;
     SvViewData*     GetViewData( SvListEntry* pEntry ) const;
-    BOOL            HasViewData() const { return aDataTable.Count() > 1;}   // eine ROOT gibts immer
+    sal_Bool            HasViewData() const { return aDataTable.Count() > 1;}   // eine ROOT gibts immer
     virtual SvViewData* CreateViewData( SvListEntry* pEntry );
     virtual void InitViewData( SvViewData*, SvListEntry* pEntry );
 
@@ -386,38 +386,38 @@ public:
     virtual void    ModelHasInserted( SvListEntry* pEntry );
     virtual void    ModelHasInsertedTree( SvListEntry* pEntry );
     virtual void    ModelIsMoving( SvListEntry* pSource, SvListEntry* pTargetParent,
-                                ULONG nPos  );
+                                sal_uLong nPos  );
     virtual void    ModelHasMoved( SvListEntry* pSource );
     virtual void    ModelIsRemoving( SvListEntry* pEntry );
     virtual void    ModelHasRemoved( SvListEntry* pEntry );
     virtual void    ModelHasEntryInvalidated( SvListEntry* pEntry );
 };
 
-inline BOOL SvListView::IsExpanded( SvListEntry* pEntry ) const
+inline sal_Bool SvListView::IsExpanded( SvListEntry* pEntry ) const
 {
     DBG_ASSERT(pEntry,"IsExpanded:No Entry");
-    SvViewData* pData = (SvViewData*)aDataTable.Get( (ULONG)pEntry );
+    SvViewData* pData = (SvViewData*)aDataTable.Get( (sal_uLong)pEntry );
     DBG_ASSERT(pData,"Entry not in Table");
     return pData->IsExpanded();
 }
-inline BOOL SvListView::IsSelected( SvListEntry* pEntry ) const
+inline sal_Bool SvListView::IsSelected( SvListEntry* pEntry ) const
 {
     DBG_ASSERT(pEntry,"IsExpanded:No Entry");
-    SvViewData* pData = (SvViewData*)aDataTable.Get( (ULONG)pEntry );
+    SvViewData* pData = (SvViewData*)aDataTable.Get( (sal_uLong)pEntry );
     DBG_ASSERT(pData,"Entry not in Table");
     return pData->IsSelected();
 }
-inline BOOL SvListView::HasEntryFocus( SvListEntry* pEntry ) const
+inline sal_Bool SvListView::HasEntryFocus( SvListEntry* pEntry ) const
 {
     DBG_ASSERT(pEntry,"IsExpanded:No Entry");
-    SvViewData* pData = (SvViewData*)aDataTable.Get( (ULONG)pEntry );
+    SvViewData* pData = (SvViewData*)aDataTable.Get( (sal_uLong)pEntry );
     DBG_ASSERT(pData,"Entry not in Table");
     return pData->HasFocus();
 }
-inline void SvListView::SetEntryFocus( SvListEntry* pEntry, BOOL bFocus ) const
+inline void SvListView::SetEntryFocus( SvListEntry* pEntry, sal_Bool bFocus ) const
 {
     DBG_ASSERT(pEntry,"SetEntryFocus:No Entry");
-    SvViewData* pData = (SvViewData*)aDataTable.Get( (ULONG)pEntry );
+    SvViewData* pData = (SvViewData*)aDataTable.Get( (sal_uLong)pEntry );
     DBG_ASSERT(pData,"Entry not in Table");
     pData->SetFocus(bFocus);
 }
@@ -425,22 +425,22 @@ inline void SvListView::SetEntryFocus( SvListEntry* pEntry, BOOL bFocus ) const
 inline SvViewData* SvListView::GetViewData( SvListEntry* pEntry ) const
 {
 #ifndef DBG_UTIL
-    return (SvViewData*)aDataTable.Get( (ULONG)pEntry );
+    return (SvViewData*)aDataTable.Get( (sal_uLong)pEntry );
 #else
-    SvViewData* pResult = (SvViewData*)aDataTable.Get( (ULONG)pEntry );
+    SvViewData* pResult = (SvViewData*)aDataTable.Get( (sal_uLong)pEntry );
     DBG_ASSERT(pResult,"Entry not in model or wrong view");
     return pResult;
 #endif
 }
 
-inline BOOL SvTreeList::HasChilds( SvListEntry* pEntry ) const
+inline sal_Bool SvTreeList::HasChilds( SvListEntry* pEntry ) const
 {
     if ( !pEntry )
         pEntry = pRootItem;
-    return (BOOL)(pEntry->pChilds != 0);
+    return (sal_Bool)(pEntry->pChilds != 0);
 }
 
-inline SvListEntry* SvTreeList::GetEntry( SvListEntry* pParent, ULONG nPos ) const
+inline SvListEntry* SvTreeList::GetEntry( SvListEntry* pParent, sal_uLong nPos ) const
 {   if ( !pParent )
         pParent = pRootItem;
     SvListEntry* pRet = 0;
@@ -449,7 +449,7 @@ inline SvListEntry* SvTreeList::GetEntry( SvListEntry* pParent, ULONG nPos ) con
     return pRet;
 }
 
-inline SvListEntry* SvTreeList::GetEntry( ULONG nRootPos ) const
+inline SvListEntry* SvTreeList::GetEntry( sal_uLong nRootPos ) const
 {
     SvListEntry* pRet;
     if ( nEntryCount )
@@ -480,18 +480,18 @@ class ClassName : public SvTreeList                                         \
 public:                                                                     \
     Type        First() const                                               \
                     { return (Type)SvTreeList::First(); }                     \
-    Type        Next( SvListEntry* pEntry, USHORT* pDepth=0 ) const           \
+    Type        Next( SvListEntry* pEntry, sal_uInt16* pDepth=0 ) const           \
                     { return (Type)SvTreeList::Next(pEntry,pDepth); }         \
-    Type        Prev( SvListEntry* pEntry, USHORT* pDepth=0 ) const           \
+    Type        Prev( SvListEntry* pEntry, sal_uInt16* pDepth=0 ) const           \
                     { return (Type)SvTreeList::Prev(pEntry,pDepth); }         \
-    Type        Last( USHORT* pDepth=0 ) const                              \
+    Type        Last( sal_uInt16* pDepth=0 ) const                              \
                     { return (Type)SvTreeList::Last(pDepth); }              \
                                                                             \
-    Type        Clone( SvListEntry* pEntry, ULONG& nCloneCount ) const        \
+    Type        Clone( SvListEntry* pEntry, sal_uLong& nCloneCount ) const        \
                     { return (Type)SvTreeList::Clone(pEntry,nCloneCount); }   \
-    Type        GetEntry( SvListEntry* pParent, ULONG nPos ) const            \
+    Type        GetEntry( SvListEntry* pParent, sal_uLong nPos ) const            \
                     { return (Type)SvTreeList::GetEntry(pParent,nPos); }      \
-    Type        GetEntry( ULONG nRootPos ) const                            \
+    Type        GetEntry( sal_uLong nRootPos ) const                            \
                     { return (Type)SvTreeList::GetEntry(nRootPos); }          \
     Type        GetParent( SvListEntry* pEntry ) const                        \
                     { return (Type)SvTreeList::GetParent(pEntry); }           \
@@ -507,7 +507,7 @@ public:                                                                     \
     using SvTreeList::LastSibling;                                             \
     Type        LastSibling( Type pEntry ) const                            \
                     { return (Type)SvTreeList::LastSibling(pEntry); }           \
-    Type        GetEntryAtAbsPos( ULONG nAbsPos ) const                     \
+    Type        GetEntryAtAbsPos( sal_uLong nAbsPos ) const                     \
                     { return (Type)SvTreeList::GetEntryAtAbsPos( nAbsPos); }    \
 };
 

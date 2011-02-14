@@ -298,7 +298,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    void NavigatorTreeModel::Insert(FmEntryData* pEntry, ULONG nRelPos, sal_Bool bAlterModel)
+    void NavigatorTreeModel::Insert(FmEntryData* pEntry, sal_uLong nRelPos, sal_Bool bAlterModel)
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::Insert" );
         if (IsListening(*m_pFormModel))
@@ -872,7 +872,7 @@ namespace svxform
         FmNavRequestSelectHint rshRequestSelection;
         sal_Bool bIsMixedSelection = sal_False;
 
-        for (ULONG i=0; (i<mlMarked.GetMarkCount()) && !bIsMixedSelection; i++)
+        for (sal_uLong i=0; (i<mlMarked.GetMarkCount()) && !bIsMixedSelection; i++)
         {
             SdrObject* pobjCurrent = mlMarked.GetMark(i)->GetMarkedSdrObj();
             bIsMixedSelection |= !InsertFormComponent(rshRequestSelection, pobjCurrent);

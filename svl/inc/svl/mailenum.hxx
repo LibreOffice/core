@@ -85,10 +85,10 @@ enum MailAction
 
 // Textformat zum Versenden von Nachrichten ------------------------------
 
-#define TXTFORMAT_ASCII     ((BYTE)0x01)
-#define TXTFORMAT_HTML      ((BYTE)0x02)
-#define TXTFORMAT_RTF       ((BYTE)0x04)
-#define TXTFORMAT_OFFICE    ((BYTE)0x08)
+#define TXTFORMAT_ASCII     ((sal_uInt8)0x01)
+#define TXTFORMAT_HTML      ((sal_uInt8)0x02)
+#define TXTFORMAT_RTF       ((sal_uInt8)0x04)
+#define TXTFORMAT_OFFICE    ((sal_uInt8)0x08)
 
 
 #endif

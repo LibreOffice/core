@@ -83,7 +83,7 @@ public:
     const std::vector<DisplayMonitor>& getMonitors()
     { initMonitors(); return m_aMonitors;}
 
-    BOOL handleMonitorCallback( sal_IntPtr /*HMONITOR*/,
+    sal_Bool handleMonitorCallback( sal_IntPtr /*HMONITOR*/,
                                 sal_IntPtr /*HDC*/,
                                 sal_IntPtr /*LPRECT*/ );
 };

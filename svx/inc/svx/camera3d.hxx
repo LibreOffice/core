@@ -86,7 +86,7 @@ class SVX_DLLPUBLIC Camera3D : public Viewport3D
     // Um den Blickpunkt drehen, Position wird dabei veraendert
     void RotateAroundLookAt(double fHAngle, double fVAngle);
 
-    void SetAutoAdjustProjection(FASTBOOL bAdjust = TRUE)
+    void SetAutoAdjustProjection(FASTBOOL bAdjust = sal_True)
         { bAutoAdjustProjection = bAdjust; }
     FASTBOOL IsAutoAdjustProjection() const { return bAutoAdjustProjection; }
 };

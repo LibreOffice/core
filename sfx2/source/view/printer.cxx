@@ -50,16 +50,16 @@
 
 struct SfxPrinter_Impl
 {
-    BOOL                mbAll;
-    BOOL                mbSelection;
-    BOOL                mbFromTo;
-    BOOL                mbRange;
+    sal_Bool            mbAll;
+    sal_Bool            mbSelection;
+    sal_Bool            mbFromTo;
+    sal_Bool            mbRange;
 
     SfxPrinter_Impl() :
-        mbAll       ( TRUE ),
-        mbSelection ( TRUE ),
-        mbFromTo    ( TRUE ),
-        mbRange     ( TRUE ) {}
+        mbAll       ( sal_True ),
+        mbSelection ( sal_True ),
+        mbFromTo    ( sal_True ),
+        mbRange     ( sal_True ) {}
     ~SfxPrinter_Impl() {}
 };
 

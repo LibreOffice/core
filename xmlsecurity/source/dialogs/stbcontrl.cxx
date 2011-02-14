@@ -74,19 +74,19 @@ SFX_IMPL_STATUSBAR_CONTROL( XmlSecStatusBarControl, SfxBoolItem );
 class FunctionPopup_Impl : public PopupMenu
 {
 public:
-    FunctionPopup_Impl( USHORT nCheck );
+    FunctionPopup_Impl( sal_uInt16 nCheck );
 
-    USHORT          GetSelected() const { return nSelected; }
+    sal_uInt16          GetSelected() const { return nSelected; }
 
 private:
-    USHORT          nSelected;
+    sal_uInt16          nSelected;
 
     virtual void    Select();
 };
 
 // -----------------------------------------------------------------------
 
-FunctionPopup_Impl::FunctionPopup_Impl( USHORT nCheck ) :
+FunctionPopup_Impl::FunctionPopup_Impl( sal_uInt16 nCheck ) :
     PopupMenu( ResId( RID_SVXMNU_PSZ_FUNC, DIALOG_MGR() ) ),
     nSelected( 0 )
 {
@@ -113,7 +113,7 @@ struct XmlSecStatusBarControl::XmlSecStatusBarControl_Impl
 };
 
 
-XmlSecStatusBarControl::XmlSecStatusBarControl( USHORT _nId, StatusBar& _rStb, SfxBindings& _rBind )
+XmlSecStatusBarControl::XmlSecStatusBarControl( sal_uInt16 _nId, StatusBar& _rStb, SfxBindings& _rBind )
     :SfxStatusBarControl( _nId, _rStb, _rBind )
 
     ,mpImpl( new XmlSecStatusBarControl_Impl )
@@ -127,7 +127,7 @@ XmlSecStatusBarControl::~XmlSecStatusBarControl()
     delete mpImpl;
 }
 
-void XmlSecStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void XmlSecStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     GetStatusBar().SetHelpText( GetId(), String() );    // necessary ?
     GetStatusBar().SetHelpId( GetId(), nSID );          // necessary ?

@@ -61,10 +61,10 @@ public:
     virtual SdrPage* Clone() const;
     using SdrPage::Clone;
 
-    virtual void    InsertObject(SdrObject* pObj, ULONG nPos = CONTAINER_APPEND,
+    virtual void    InsertObject(SdrObject* pObj, sal_uLong nPos = CONTAINER_APPEND,
                                     const SdrInsertReason* pReason=NULL);
 
-    virtual SdrObject* RemoveObject(ULONG nObjNum);
+    virtual SdrObject* RemoveObject(sal_uLong nObjNum);
 
     // Zugriff auf alle Formulare
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& GetForms( bool _bForceCreate = true ) const;

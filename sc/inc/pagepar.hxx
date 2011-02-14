@@ -35,40 +35,40 @@
 
 struct ScPageTableParam
 {
-    BOOL    bCellContent;
-    BOOL    bNotes;
-    BOOL    bGrid;
-    BOOL    bHeaders;
-    BOOL    bCharts;
-    BOOL    bObjects;
-    BOOL    bDrawings;
-    BOOL    bFormulas;
-    BOOL    bNullVals;
-    BOOL    bTopDown;
-    BOOL    bLeftRight;
-    BOOL    bSkipEmpty;
-    BOOL    bScaleNone;
-    BOOL    bScaleAll;
-    BOOL    bScaleTo;
-    BOOL    bScalePageNum;
-    USHORT  nScaleAll;
-    USHORT  nScaleWidth;
-    USHORT  nScaleHeight;
-    USHORT  nScalePageNum;
-    USHORT  nFirstPageNo;
+    sal_Bool    bCellContent;
+    sal_Bool    bNotes;
+    sal_Bool    bGrid;
+    sal_Bool    bHeaders;
+    sal_Bool    bCharts;
+    sal_Bool    bObjects;
+    sal_Bool    bDrawings;
+    sal_Bool    bFormulas;
+    sal_Bool    bNullVals;
+    sal_Bool    bTopDown;
+    sal_Bool    bLeftRight;
+    sal_Bool    bSkipEmpty;
+    sal_Bool    bScaleNone;
+    sal_Bool    bScaleAll;
+    sal_Bool    bScaleTo;
+    sal_Bool    bScalePageNum;
+    sal_uInt16  nScaleAll;
+    sal_uInt16  nScaleWidth;
+    sal_uInt16  nScaleHeight;
+    sal_uInt16  nScalePageNum;
+    sal_uInt16  nFirstPageNo;
 
     ScPageTableParam();
     ~ScPageTableParam();
 
-    BOOL                operator==  ( const ScPageTableParam& r ) const;
+    sal_Bool                operator==  ( const ScPageTableParam& r ) const;
     void                Reset       ();
 };
 
 struct ScPageAreaParam
 {
-    BOOL    bPrintArea;
-    BOOL    bRepeatRow;
-    BOOL    bRepeatCol;
+    sal_Bool    bPrintArea;
+    sal_Bool    bRepeatRow;
+    sal_Bool    bRepeatCol;
     ScRange aPrintArea;
     ScRange aRepeatRow;
     ScRange aRepeatCol;
@@ -76,7 +76,7 @@ struct ScPageAreaParam
     ScPageAreaParam();
     ~ScPageAreaParam();
 
-    BOOL                operator==  ( const ScPageAreaParam& r ) const;
+    sal_Bool                operator==  ( const ScPageAreaParam& r ) const;
     void                Reset       ();
 };
 

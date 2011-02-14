@@ -1545,7 +1545,7 @@ LocalizedString::operator String()
     return getImpl ().maString;
 }
 
-String LocalizedString::GetToken (USHORT i, sal_Char c)
+String LocalizedString::GetToken (sal_uInt16 i, sal_Char c)
 {
     return getString ().GetToken (i, c);
 }

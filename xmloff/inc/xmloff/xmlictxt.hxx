@@ -46,7 +46,7 @@ class XMLOFF_DLLPUBLIC SvXMLImportContext : public SvRefBase
 
     SvXMLImport& mrImport;
 
-    USHORT       mnPrefix;
+    sal_uInt16       mnPrefix;
     ::rtl::OUString maLocalName;
 
     SvXMLNamespaceMap   *mpRewindMap;
@@ -63,14 +63,14 @@ protected:
 public:
     TYPEINFO();
 
-    USHORT GetPrefix() const { return mnPrefix; }
+    sal_uInt16 GetPrefix() const { return mnPrefix; }
     const ::rtl::OUString& GetLocalName() const { return maLocalName; }
 
     // A contexts constructor does anything that is required if an element
     // starts. Namespace processing has been done already.
     // Note that virtual methods cannot be used inside constructors. Use
     // StartElement instead if this is required.
-    SvXMLImportContext( SvXMLImport& rImport, USHORT nPrfx,
+    SvXMLImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName );
 
     // A contexts destructor does anything that is required if an element
@@ -81,7 +81,7 @@ public:
 
     // Create a childs element context. By default, the import's
     // CreateContext method is called to create a new default context.
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const ::rtl::OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 

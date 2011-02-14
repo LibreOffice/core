@@ -151,7 +151,7 @@ void SbxBasicFormater::ShowError( char * sErrMsg )
 // um eine Position zu gr"osseren Indizes, d.h. es wird Platz f"ur
 // ein neues (einzuf"ugendes) Zeichen geschafft.
 // ACHTUNG: der String MUSS gross genug sein !
-inline void SbxBasicFormater::ShiftString( String& sStrg, USHORT nStartPos )
+inline void SbxBasicFormater::ShiftString( String& sStrg, sal_uInt16 nStartPos )
 {
     sStrg.Erase( nStartPos,1 );
 }
@@ -174,7 +174,7 @@ void SbxBasicFormater::AppendDigit( String& sStrg, short nDigit )
 // verschiebt den Dezimal-Punkt um eine Stelle nach links
 void SbxBasicFormater::LeftShiftDecimalPoint( String& sStrg )
 {
-    USHORT nPos = sStrg.Search( cDecPoint );
+    sal_uInt16 nPos = sStrg.Search( cDecPoint );
 
     if( nPos!=STRING_NOTFOUND )
     {
@@ -188,13 +188,13 @@ void SbxBasicFormater::LeftShiftDecimalPoint( String& sStrg )
 // es wird ein Flag zur"uckgeliefert, falls ein Overflow auftrat,
 // d.h. 99.99 --> 100.00, d.h. ein Gr"ossenordung ge"andert wurde
 // (geschieht beim Runden einer 9).
-void SbxBasicFormater::StrRoundDigit( String& sStrg, short nPos, BOOL& bOverflow )
+void SbxBasicFormater::StrRoundDigit( String& sStrg, short nPos, sal_Bool& bOverflow )
 {
     // wurde ggf ein falscher Index uebergeben --> Aufruf ignorieren
     if( nPos<0 )
         return;
 
-    bOverflow = FALSE;
+    bOverflow = sal_False;
     // "uberspringe den Dezimalpunkt und Tausender-Trennzeichen
     sal_Unicode c = sStrg.GetChar( nPos );
     if( nPos>0 && (c == cDecPoint || c == cThousandSep) )
@@ -218,7 +218,7 @@ void SbxBasicFormater::StrRoundDigit( String& sStrg, short nPos, BOOL& bOverflow
         ShiftString( sStrg,0 );
         // f"uhrende 1 einf"ugen: z.B. 99.99 f"ur 0.0
         sStrg.SetChar( 0, '1' );
-        bOverflow = TRUE;
+        bOverflow = sal_True;
     }
     else
     {
@@ -243,7 +243,7 @@ void SbxBasicFormater::StrRoundDigit( String& sStrg, short nPos, BOOL& bOverflow
             ShiftString( sStrg,nPos+1 );
             // f"uhrende 1 einf"ugen
             sStrg.SetChar( nPos+1, '1' );
-            bOverflow = TRUE;
+            bOverflow = sal_True;
         }
     }
 }
@@ -251,7 +251,7 @@ void SbxBasicFormater::StrRoundDigit( String& sStrg, short nPos, BOOL& bOverflow
 // rundet in einem String die Ziffer an der angegebenen Stelle
 void SbxBasicFormater::StrRoundDigit( String& sStrg, short nPos )
 {
-    BOOL bOverflow;
+    sal_Bool bOverflow;
 
     StrRoundDigit( sStrg,nPos,bOverflow );
 }
@@ -302,7 +302,7 @@ void SbxBasicFormater::InitExp( double _dNewExp )
 
 // bestimmt die Ziffer an der angegebenen Stelle (gedacht zur Anwendung im
 // Scan-Durchlauf)
-short SbxBasicFormater::GetDigitAtPosScan( short nPos, BOOL& bFoundFirstDigit )
+short SbxBasicFormater::GetDigitAtPosScan( short nPos, sal_Bool& bFoundFirstDigit )
 {
     // Versuch eine gr"ossere Ziffer zu lesen,
     // z.B. Stelle 4 in 1.234,
@@ -312,18 +312,18 @@ short SbxBasicFormater::GetDigitAtPosScan( short nPos, BOOL& bFoundFirstDigit )
         return _NO_DIGIT;
     // bestimme den Index der Stelle in dem Number-String:
     // "uberlese das Vorzeichen
-    USHORT no = 1;
+    sal_uInt16 no = 1;
     // falls notwendig den Dezimal-Punkt "uberlesen:
     if( nPos<nNumExp )
         no++;
     no += nNumExp-nPos;
     // Abfrage der ersten (g"ultigen) Ziffer der Zahl --> Flag setzen
     if( nPos==nNumExp )
-        bFoundFirstDigit = TRUE;
+        bFoundFirstDigit = sal_True;
     return (short)(sSciNumStrg.GetChar( no ) - ASCII_0);
 }
 
-short SbxBasicFormater::GetDigitAtPosExpScan( short nPos, BOOL& bFoundFirstDigit )
+short SbxBasicFormater::GetDigitAtPosExpScan( short nPos, sal_Bool& bFoundFirstDigit )
 {
     // ist die abgefragte Stelle zu gross f"ur den Exponenten ?
     if( nPos>nExpExp )
@@ -331,11 +331,11 @@ short SbxBasicFormater::GetDigitAtPosExpScan( short nPos, BOOL& bFoundFirstDigit
 
     // bestimme den Index der Stelle in dem Number-String:
     // "uberlese das Vorzeichen
-    USHORT no = 1;
+    sal_uInt16 no = 1;
     no += nExpExp-nPos;
     // Abfrage der ersten (g"ultigen) Ziffer der Zahl --> Flag setzen
     if( nPos==nExpExp )
-        bFoundFirstDigit = TRUE;
+        bFoundFirstDigit = sal_True;
     return (short)(sNumExpStrg.GetChar( no ) - ASCII_0);
 }
 
@@ -343,7 +343,7 @@ short SbxBasicFormater::GetDigitAtPosExpScan( short nPos, BOOL& bFoundFirstDigit
 // Zahl ggf. NICHT normiert (z.B. 1.2345e-03) dargestellt werden soll,
 // sondern eventuell 123.345e-3 !
 short SbxBasicFormater::GetDigitAtPosExpScan( double dNewExponent, short nPos,
-                                              BOOL& bFoundFirstDigit )
+                                              sal_Bool& bFoundFirstDigit )
 {
     // neuer Exponent wurde "ubergeben, aktualisiere
     // die tempor"aren Klassen-Variablen
@@ -381,7 +381,7 @@ TODO: ggf einen 'intelligenten' Peek-Parser um Rundungsfehler bei
 //
 // ACHTUNG: anscheinend gibt es manchmal noch Probleme mit Rundungs-Fehlern!
 short SbxBasicFormater::GetDigitAtPos( double dNumber, short nPos,
-                                double& dNextNumber, BOOL& bFoundFirstDigit )
+                                double& dNextNumber, sal_Bool& bFoundFirstDigit )
 // ACHTUNG: nPos kann auch negativ werden, f"ur Stellen nach dem Dezimal-Punkt
 {
     double dTemp = dNumber;
@@ -400,7 +400,7 @@ short SbxBasicFormater::GetDigitAtPos( double dNumber, short nPos,
     if( nMaxDigit<nPos && !bFoundFirstDigit && nPos>=0 )
         return _NO_DIGIT;
     // Ziffer gefunden, setze Flag:
-    bFoundFirstDigit = TRUE;
+    bFoundFirstDigit = sal_True;
     for( short i=nMaxDigit; i>=nPos; i-- )
     {
         double dI = (double)i;
@@ -432,14 +432,14 @@ short SbxBasicFormater::RoundDigit( double dNumber )
 // und liefert diesen zur"uck.
 // Somit wird ein neuer String erzeugt, der vom Aufrufer wieder freigegeben
 // werden muss
-String SbxBasicFormater::GetPosFormatString( const String& sFormatStrg, BOOL & bFound )
+String SbxBasicFormater::GetPosFormatString( const String& sFormatStrg, sal_Bool & bFound )
 {
-    bFound = FALSE;     // default...
-    USHORT nPos = sFormatStrg.Search( FORMAT_SEPARATOR );
+    bFound = sal_False;     // default...
+    sal_uInt16 nPos = sFormatStrg.Search( FORMAT_SEPARATOR );
 
     if( nPos!=STRING_NOTFOUND )
     {
-        bFound = TRUE;
+        bFound = sal_True;
         // der Format-String f"ur die positiven Zahlen ist alles
         // vor dem ersten ';'
         return sFormatStrg.Copy( 0,nPos );
@@ -451,10 +451,10 @@ String SbxBasicFormater::GetPosFormatString( const String& sFormatStrg, BOOL & b
 }
 
 // siehe auch GetPosFormatString()
-String SbxBasicFormater::GetNegFormatString( const String& sFormatStrg, BOOL & bFound )
+String SbxBasicFormater::GetNegFormatString( const String& sFormatStrg, sal_Bool & bFound )
 {
-    bFound = FALSE;     // default...
-    USHORT nPos = sFormatStrg.Search( FORMAT_SEPARATOR );
+    bFound = sal_False;     // default...
+    sal_uInt16 nPos = sFormatStrg.Search( FORMAT_SEPARATOR );
 
     if( nPos!=STRING_NOTFOUND )
     {
@@ -464,7 +464,7 @@ String SbxBasicFormater::GetNegFormatString( const String& sFormatStrg, BOOL & b
         String sTempStrg = sFormatStrg.Copy( nPos+1 );
         // und suche darin ggf. ein weiteres ';'
         nPos = sTempStrg.Search( FORMAT_SEPARATOR );
-        bFound = TRUE;
+        bFound = sal_True;
         if( nPos==STRING_NOTFOUND )
             // keins gefunden, liefere alles...
             return sTempStrg;
@@ -478,10 +478,10 @@ String SbxBasicFormater::GetNegFormatString( const String& sFormatStrg, BOOL & b
 }
 
 // siehe auch GetPosFormatString()
-String SbxBasicFormater::Get0FormatString( const String& sFormatStrg, BOOL & bFound )
+String SbxBasicFormater::Get0FormatString( const String& sFormatStrg, sal_Bool & bFound )
 {
-    bFound = FALSE;     // default...
-    USHORT nPos = sFormatStrg.Search( FORMAT_SEPARATOR );
+    bFound = sal_False;     // default...
+    sal_uInt16 nPos = sFormatStrg.Search( FORMAT_SEPARATOR );
 
     if( nPos!=STRING_NOTFOUND )
     {
@@ -493,7 +493,7 @@ String SbxBasicFormater::Get0FormatString( const String& sFormatStrg, BOOL & bFo
         nPos = sTempStrg.Search( FORMAT_SEPARATOR );
         if( nPos!=STRING_NOTFOUND )
         {
-            bFound = TRUE;
+            bFound = sal_True;
             sTempStrg = sTempStrg.Copy( nPos+1 );
             nPos = sTempStrg.Search( FORMAT_SEPARATOR );
             if( nPos==STRING_NOTFOUND )
@@ -510,10 +510,10 @@ String SbxBasicFormater::Get0FormatString( const String& sFormatStrg, BOOL & bFo
 }
 
 // siehe auch GetPosFormatString()
-String SbxBasicFormater::GetNullFormatString( const String& sFormatStrg, BOOL & bFound )
+String SbxBasicFormater::GetNullFormatString( const String& sFormatStrg, sal_Bool & bFound )
 {
-    bFound = FALSE;     // default...
-    USHORT nPos = sFormatStrg.Search( FORMAT_SEPARATOR );
+    bFound = sal_False;     // default...
+    sal_uInt16 nPos = sFormatStrg.Search( FORMAT_SEPARATOR );
 
     if( nPos!=STRING_NOTFOUND )
     {
@@ -530,7 +530,7 @@ String SbxBasicFormater::GetNullFormatString( const String& sFormatStrg, BOOL & 
             nPos = sTempStrg.Search( FORMAT_SEPARATOR );
             if( nPos!=STRING_NOTFOUND )
             {
-                bFound = TRUE;
+                bFound = sal_True;
                 return sTempStrg.Copy( nPos+1 );
             }
         }
@@ -547,11 +547,11 @@ short SbxBasicFormater::AnalyseFormatString( const String& sFormatStrg,
                 short& nNoOfDigitsLeft, short& nNoOfDigitsRight,
                 short& nNoOfOptionalDigitsLeft,
                 short& nNoOfExponentDigits, short& nNoOfOptionalExponentDigits,
-                BOOL& bPercent, BOOL& bCurrency, BOOL& bScientific,
-                BOOL& bGenerateThousandSeparator,
+                sal_Bool& bPercent, sal_Bool& bCurrency, sal_Bool& bScientific,
+                sal_Bool& bGenerateThousandSeparator,
                 short& nMultipleThousandSeparators )
 {
-    USHORT nLen;
+    sal_uInt16 nLen;
     short nState = 0;
 
     nLen = sFormatStrg.Len();
@@ -561,9 +561,9 @@ short SbxBasicFormater::AnalyseFormatString( const String& sFormatStrg,
     nNoOfOptionalDigitsLeft = 0;
     nNoOfExponentDigits = 0;
     nNoOfOptionalExponentDigits = 0;
-    bPercent = FALSE;
-    bCurrency = FALSE;
-    bScientific = FALSE;
+    bPercent = sal_False;
+    bCurrency = sal_False;
+    bScientific = sal_False;
     // ab 11.7.97: sobald ein Komma in dem Format String gefunden wird,
     // werden alle 3 Zehnerpotenzen markiert (d.h. tausender, milionen, ...)
     // bisher wurde nur an den gesetzten Position ein Tausender-Separator
@@ -572,7 +572,7 @@ short SbxBasicFormater::AnalyseFormatString( const String& sFormatStrg,
     bGenerateThousandSeparator = sFormatStrg.Search( ',' ) != STRING_NOTFOUND;
     nMultipleThousandSeparators = 0;
     // und untersuche den Format-String nach den gew"unschten Informationen
-    for( USHORT i=0; i<nLen; i++ )
+    for( sal_uInt16 i=0; i<nLen; i++ )
     {
         sal_Unicode c = sFormatStrg.GetChar( i );
         switch( c ) {
@@ -615,7 +615,7 @@ short SbxBasicFormater::AnalyseFormatString( const String& sFormatStrg,
                     return -1;  // ERROR: zu viele Dezimal-Punkte
                 break;
             case '%':
-                bPercent = TRUE;
+                bPercent = sal_True;
                 /* old:
                 bPercent++;
                 if( bPercent>1 )
@@ -623,7 +623,7 @@ short SbxBasicFormater::AnalyseFormatString( const String& sFormatStrg,
                 */
                 break;
             case '(':
-                bCurrency = TRUE;
+                bCurrency = sal_True;
                 break;
             case ',':
             {
@@ -639,7 +639,7 @@ short SbxBasicFormater::AnalyseFormatString( const String& sFormatStrg,
                 if( nNoOfDigitsLeft > 0 || nNoOfDigitsRight > 0 )
                 {
                      nState = -1;   // breche jetzt das Z"ahlen der Stellen ab
-                    bScientific = TRUE;
+                    bScientific = sal_True;
                 }
                 /* old:
                 bScientific++;
@@ -654,7 +654,7 @@ short SbxBasicFormater::AnalyseFormatString( const String& sFormatStrg,
                 i++;
                 break;
             case CREATE_1000SEP_CHAR:
-                bGenerateThousandSeparator = TRUE;
+                bGenerateThousandSeparator = sal_True;
                 break;
         }
     }
@@ -665,12 +665,12 @@ short SbxBasicFormater::AnalyseFormatString( const String& sFormatStrg,
 // erzeugt werden soll
 void SbxBasicFormater::ScanFormatString( double dNumber,
                                 const String& sFormatStrg, String& sReturnStrg,
-                                BOOL bCreateSign )
+                                sal_Bool bCreateSign )
 {
     short   /*nErr,*/nNoOfDigitsLeft,nNoOfDigitsRight,nNoOfOptionalDigitsLeft,
             nNoOfExponentDigits,nNoOfOptionalExponentDigits,
             nMultipleThousandSeparators;
-    BOOL    bPercent,bCurrency,bScientific,bGenerateThousandSeparator;
+    sal_Bool    bPercent,bCurrency,bScientific,bGenerateThousandSeparator;
 
     // Initialisiere den Return-String
     sReturnStrg = String();
@@ -721,12 +721,12 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
         double dExponent;
         short i,nLen;
         short nState,nDigitPos,nExponentPos,nMaxDigit,nMaxExponentDigit;
-        BOOL bFirstDigit,bFirstExponentDigit,bFoundFirstDigit,
+        sal_Bool bFirstDigit,bFirstExponentDigit,bFoundFirstDigit,
              bIsNegative,bZeroSpaceOn, bSignHappend,bDigitPosNegative;
 
         // Initialisierung der Arbeits-Variablen
-        bSignHappend = FALSE;
-        bFoundFirstDigit = FALSE;
+        bSignHappend = sal_False;
+        bFoundFirstDigit = sal_False;
         bIsNegative = dNumber<0.0;
         nLen = sFormatStrg.Len();
         dExponent = get_number_of_digits( dNumber );
@@ -750,8 +750,8 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
             // hier ben"otigt man keine Exponent-Daten !
             bDigitPosNegative = (nDigitPos < 0);
         }
-        bFirstDigit = TRUE;
-        bFirstExponentDigit = TRUE;
+        bFirstDigit = sal_True;
+        bFirstExponentDigit = sal_True;
         nState = 0; // 0 --> Mantisse; 1 --> Exponent
         bZeroSpaceOn = 0;
 
@@ -781,14 +781,14 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                     // Behandlung der Mantisse
                         if( bFirstDigit )
                         {
-                            //org:bFirstDigit = FALSE;
+                            //org:bFirstDigit = sal_False;
                             // ggf. Vorzeichen erzeugen
                             // Bem.: bei bCurrency soll das negative
                             //       Vorzeichen durch () angezeigt werden
                             if( bIsNegative && !bCreateSign/*!bCurrency*/ && !bSignHappend )
                             {
                                 // nur einmal ein Vorzeichen ausgeben
-                                bSignHappend = TRUE;
+                                bSignHappend = sal_True;
                                 StrAppendChar( sReturnStrg,'-' );
                             }
                             // hier jetzt "uberz"ahlige Stellen ausgeben,
@@ -806,7 +806,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                                     // wurde wirklich eine Ziffer eingefuegt ?
                                     if( nTempDigit!=_NO_DIGIT )
                                         // jetzt wurde wirklich eine Ziffer ausgegeben, Flag setzen
-                                        bFirstDigit = FALSE;
+                                        bFirstDigit = sal_False;
                                     // muss ggf. ein Tausender-Trennzeichen erzeugt werden?
                                     if( bGenerateThousandSeparator && ( c=='0' || nMaxDigit>=nDigitPos ) && j>0 && (j % 3 == 0) )
                                         StrAppendChar( sReturnStrg,cThousandSep );
@@ -818,7 +818,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                         {
                             AppendDigit( sReturnStrg,0 );       // Ja
                             // jetzt wurde wirklich eine Ziffer ausgegeben, Flag setzen
-                            bFirstDigit = FALSE;
+                            bFirstDigit = sal_False;
                             bZeroSpaceOn = 1;
                             // BEM.: bei Visual-Basic schaltet die erste 0 f"ur alle
                             //       nachfolgenden # (bis zum Dezimal-Punkt) die 0 ein,
@@ -838,7 +838,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                             // wurde wirklich eine Ziffer eingefuegt ?
                             if( nTempDigit!=_NO_DIGIT )
                                 // jetzt wurde wirklich eine Ziffer ausgegeben, Flag setzen
-                                bFirstDigit = FALSE;
+                                bFirstDigit = sal_False;
                             // muss ggf. ein Tausender-Trennzeichen erzeugt werden?
                             if( bGenerateThousandSeparator && ( c=='0' || nMaxDigit>=nDigitPos ) && nDigitPos>0 && (nDigitPos % 3 == 0) )
                                 StrAppendChar( sReturnStrg,cThousandSep );
@@ -852,7 +852,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                         if( bFirstExponentDigit )
                         {
                             // Vorzeichen wurde schon bei e/E ausgegeben
-                            bFirstExponentDigit = FALSE;
+                            bFirstExponentDigit = sal_False;
                             if( nMaxExponentDigit>nExponentPos )
                             // hier jetzt "uberz"ahlige Stellen ausgeben,
                             // d.h. vom Format-String nicht erfasste Stellen
@@ -913,7 +913,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                             break;
                         }
 
-                        BOOL bOverflow = FALSE;
+                        sal_Bool bOverflow = sal_False;
 #ifdef _with_sprintf
                         short nNextDigit = GetDigitAtPosScan( nDigitPos,bFoundFirstDigit );
 #else
@@ -1047,7 +1047,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
 
 String SbxBasicFormater::BasicFormatNull( String sFormatStrg )
 {
-    BOOL bNullFormatFound;
+    sal_Bool bNullFormatFound;
     String sNullFormatStrg = GetNullFormatString( sFormatStrg,bNullFormatFound );
 
     if( bNullFormatFound )
@@ -1059,7 +1059,7 @@ String SbxBasicFormater::BasicFormatNull( String sFormatStrg )
 
 String SbxBasicFormater::BasicFormat( double dNumber, String sFormatStrg )
 {
-    BOOL bPosFormatFound,bNegFormatFound,b0FormatFound;
+    sal_Bool bPosFormatFound,bNegFormatFound,b0FormatFound;
 
     // analysiere Format-String auf vordefinierte Formate:
     if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_GENERALNUMBER ) )
@@ -1108,7 +1108,7 @@ String SbxBasicFormater::BasicFormat( double dNumber, String sFormatStrg )
             // verwende String fuer positive Werte
             sTempStrg = sPosFormatStrg;
         }
-        ScanFormatString( dNumber, sTempStrg, sReturnStrg,/*bCreateSign=*/FALSE );
+        ScanFormatString( dNumber, sTempStrg, sReturnStrg,/*bCreateSign=*/sal_False );
     }
     else
     {
@@ -1137,32 +1137,32 @@ String SbxBasicFormater::BasicFormat( double dNumber, String sFormatStrg )
         {
             ScanFormatString( dNumber,
                     (/*sPosFormatStrg!=EMPTYFORMATSTRING*/bPosFormatFound ? sPosFormatStrg : sFormatStrg),
-                    sReturnStrg,/*bCreateSign=*/FALSE );
+                    sReturnStrg,/*bCreateSign=*/sal_False );
         }
     }
     return sReturnStrg;
 }
 
-BOOL SbxBasicFormater::isBasicFormat( String sFormatStrg )
+sal_Bool SbxBasicFormater::isBasicFormat( String sFormatStrg )
 {
     if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_GENERALNUMBER ) )
-        return TRUE;
+        return sal_True;
     if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_CURRENCY ) )
-        return TRUE;
+        return sal_True;
     if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_FIXED ) )
-        return TRUE;
+        return sal_True;
     if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_STANDARD ) )
-        return TRUE;
+        return sal_True;
     if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_PERCENT ) )
-        return TRUE;
+        return sal_True;
     if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_SCIENTIFIC ) )
-        return TRUE;
+        return sal_True;
     if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_YESNO ) )
-        return TRUE;
+        return sal_True;
     if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_TRUEFALSE ) )
-        return TRUE;
+        return sal_True;
     if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_ONOFF ) )
-        return TRUE;
-    return FALSE;
+        return sal_True;
+    return sal_False;
 }
 

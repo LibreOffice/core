@@ -115,7 +115,7 @@
 /** States for BuildServer projects and directories
 */
 #ifndef BuildStatus
-#define BuildStatus USHORT
+#define BuildStatus sal_uInt16
 #endif
 #define BS_DROPED                   0   /// project is waiting for dispatching
 #define BS_BUILD                    1   /// project/directory is building

@@ -61,43 +61,43 @@ const sal_Char *linker_dummy = "";
 static const sal_Char __FAR_DATA sAutoTblFmtName[] = "autotbl.fmt";
 
 // bis SO5PF
-const USHORT AUTOFORMAT_ID_X        = 9501;
-const USHORT AUTOFORMAT_ID_358      = 9601;
-const USHORT AUTOFORMAT_DATA_ID_X   = 9502;
+const sal_uInt16 AUTOFORMAT_ID_X        = 9501;
+const sal_uInt16 AUTOFORMAT_ID_358      = 9601;
+const sal_uInt16 AUTOFORMAT_DATA_ID_X   = 9502;
 
 // ab SO5
 //! in nachfolgenden Versionen muss der Betrag dieser IDs groesser sein
-const USHORT AUTOFORMAT_ID_504      = 9801;
-const USHORT AUTOFORMAT_DATA_ID_504 = 9802;
+const sal_uInt16 AUTOFORMAT_ID_504      = 9801;
+const sal_uInt16 AUTOFORMAT_DATA_ID_504 = 9802;
 
-const USHORT AUTOFORMAT_ID_552      = 9901;
-const USHORT AUTOFORMAT_DATA_ID_552 = 9902;
+const sal_uInt16 AUTOFORMAT_ID_552      = 9901;
+const sal_uInt16 AUTOFORMAT_DATA_ID_552 = 9902;
 
 // --- from 641 on: CJK and CTL font settings
-const USHORT AUTOFORMAT_ID_641      = 10001;
-const USHORT AUTOFORMAT_DATA_ID_641 = 10002;
+const sal_uInt16 AUTOFORMAT_ID_641      = 10001;
+const sal_uInt16 AUTOFORMAT_DATA_ID_641 = 10002;
 
 // --- from 680/dr14 on: diagonal frame lines
-const USHORT AUTOFORMAT_ID_680DR14      = 10011;
-const USHORT AUTOFORMAT_DATA_ID_680DR14 = 10012;
+const sal_uInt16 AUTOFORMAT_ID_680DR14      = 10011;
+const sal_uInt16 AUTOFORMAT_DATA_ID_680DR14 = 10012;
 
 // --- from 680/dr25 on: #21549# store strings as UTF-8
-const USHORT AUTOFORMAT_ID_680DR25      = 10021;
-const USHORT AUTOFORMAT_DATA_ID_680DR25 = 10022;
+const sal_uInt16 AUTOFORMAT_ID_680DR25      = 10021;
+const sal_uInt16 AUTOFORMAT_DATA_ID_680DR25 = 10022;
 
 // --- from DEV300/overline2 on: #5991# overline support
-const USHORT AUTOFORMAT_ID_300OVRLN      = 10031;
-const USHORT AUTOFORMAT_DATA_ID_300OVRLN = 10032;
+const sal_uInt16 AUTOFORMAT_ID_300OVRLN      = 10031;
+const sal_uInt16 AUTOFORMAT_DATA_ID_300OVRLN = 10032;
 
 // aktuelle Version
-const USHORT AUTOFORMAT_ID          = AUTOFORMAT_ID_300OVRLN;
-const USHORT AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_300OVRLN;
+const sal_uInt16 AUTOFORMAT_ID          = AUTOFORMAT_ID_300OVRLN;
+const sal_uInt16 AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_300OVRLN;
 
 
 #ifdef READ_OLDVERS
-const USHORT AUTOFORMAT_OLD_ID_OLD  = 4201;
-const USHORT AUTOFORMAT_OLD_DATA_ID = 4202;
-const USHORT AUTOFORMAT_OLD_ID_NEW  = 4203;
+const sal_uInt16 AUTOFORMAT_OLD_ID_OLD  = 4201;
+const sal_uInt16 AUTOFORMAT_OLD_DATA_ID = 4202;
+const sal_uInt16 AUTOFORMAT_OLD_ID_NEW  = 4203;
 #endif
 
 
@@ -106,34 +106,34 @@ const USHORT AUTOFORMAT_OLD_ID_NEW  = 4203;
 struct ScAfVersions
 {
 public:
-    USHORT nFontVersion;
-    USHORT nFontHeightVersion;
-    USHORT nWeightVersion;
-    USHORT nPostureVersion;
-    USHORT nUnderlineVersion;
-    USHORT nOverlineVersion;
-    USHORT nCrossedOutVersion;
-    USHORT nContourVersion;
-    USHORT nShadowedVersion;
-    USHORT nColorVersion;
-    USHORT nBoxVersion;
-    USHORT nLineVersion;
-    USHORT nBrushVersion;
+    sal_uInt16 nFontVersion;
+    sal_uInt16 nFontHeightVersion;
+    sal_uInt16 nWeightVersion;
+    sal_uInt16 nPostureVersion;
+    sal_uInt16 nUnderlineVersion;
+    sal_uInt16 nOverlineVersion;
+    sal_uInt16 nCrossedOutVersion;
+    sal_uInt16 nContourVersion;
+    sal_uInt16 nShadowedVersion;
+    sal_uInt16 nColorVersion;
+    sal_uInt16 nBoxVersion;
+    sal_uInt16 nLineVersion;
+    sal_uInt16 nBrushVersion;
 
-    USHORT nAdjustVersion;
+    sal_uInt16 nAdjustVersion;
 
-    USHORT nHorJustifyVersion;
-    USHORT nVerJustifyVersion;
-    USHORT nOrientationVersion;
-    USHORT nMarginVersion;
-    USHORT nBoolVersion;
-    USHORT nInt32Version;
-    USHORT nRotateModeVersion;
+    sal_uInt16 nHorJustifyVersion;
+    sal_uInt16 nVerJustifyVersion;
+    sal_uInt16 nOrientationVersion;
+    sal_uInt16 nMarginVersion;
+    sal_uInt16 nBoolVersion;
+    sal_uInt16 nInt32Version;
+    sal_uInt16 nRotateModeVersion;
 
-    USHORT nNumFmtVersion;
+    sal_uInt16 nNumFmtVersion;
 
     ScAfVersions();
-    void Load( SvStream& rStream, USHORT nVer );
+    void Load( SvStream& rStream, sal_uInt16 nVer );
     static void Write(SvStream& rStream);
 };
 
@@ -163,7 +163,7 @@ ScAfVersions::ScAfVersions() :
 {
 }
 
-void ScAfVersions::Load( SvStream& rStream, USHORT nVer )
+void ScAfVersions::Load( SvStream& rStream, sal_uInt16 nVer )
 {
     rStream >> nFontVersion;
     rStream >> nFontHeightVersion;
@@ -220,7 +220,7 @@ void ScAfVersions::Write(SvStream& rStream)
     rStream << SfxInt32Item(ATTR_ROTATE_VALUE).GetVersion(SOFFICE_FILEFORMAT_40);
     rStream << SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD,0).GetVersion(SOFFICE_FILEFORMAT_40);
 
-    rStream << (USHORT)0;       // Num-Format
+    rStream << (sal_uInt16)0;       // Num-Format
 }
 
 //  ---------------------------------------------------------------------------
@@ -312,7 +312,7 @@ void ScAutoFormatDataField::SetAdjust( const SvxAdjustItem& rAdjust )
     aItem = *(ItemType*)pNew;               \
     delete pNew;
 
-BOOL ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersions, USHORT nVer )
+sal_Bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersions, sal_uInt16 nVer )
 {
     SfxPoolItem* pNew;
     SvxOrientationItem aOrientation( SVX_ORIENTATION_STANDARD, 0 );
@@ -396,7 +396,7 @@ BOOL ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersio
 }
 
 #ifdef READ_OLDVERS
-BOOL ScAutoFormatDataField::LoadOld( SvStream& rStream, const ScAfVersions& rVersions )
+sal_Bool ScAutoFormatDataField::LoadOld( SvStream& rStream, const ScAfVersions& rVersions )
 {
     SfxPoolItem* pNew;
     SvxOrientationItem aOrientation( SVX_ORIENTATION_STANDARD, 0 );
@@ -429,7 +429,7 @@ BOOL ScAutoFormatDataField::LoadOld( SvStream& rStream, const ScAfVersions& rVer
 }
 #endif
 
-BOOL ScAutoFormatDataField::Save( SvStream& rStream )
+sal_Bool ScAutoFormatDataField::Save( SvStream& rStream )
 {
     SvxOrientationItem aOrientation( aRotateAngle.GetValue(), aStacked.GetValue(), 0 );
 
@@ -491,10 +491,10 @@ ScAutoFormatData::ScAutoFormatData()
     bIncludeJustify =
     bIncludeFrame =
     bIncludeBackground =
-    bIncludeWidthHeight = TRUE;
+    bIncludeWidthHeight = sal_True;
 
     ppDataField = new ScAutoFormatDataField*[ 16 ];
-    for( USHORT nIndex = 0; nIndex < 16; ++nIndex )
+    for( sal_uInt16 nIndex = 0; nIndex < 16; ++nIndex )
         ppDataField[ nIndex ] = new ScAutoFormatDataField;
 }
 
@@ -510,32 +510,32 @@ ScAutoFormatData::ScAutoFormatData( const ScAutoFormatData& rData ) :
         bIncludeWidthHeight( rData.bIncludeWidthHeight )
 {
     ppDataField = new ScAutoFormatDataField*[ 16 ];
-    for( USHORT nIndex = 0; nIndex < 16; ++nIndex )
+    for( sal_uInt16 nIndex = 0; nIndex < 16; ++nIndex )
         ppDataField[ nIndex ] = new ScAutoFormatDataField( rData.GetField( nIndex ) );
 }
 
 ScAutoFormatData::~ScAutoFormatData()
 {
-    for( USHORT nIndex = 0; nIndex < 16; ++nIndex )
+    for( sal_uInt16 nIndex = 0; nIndex < 16; ++nIndex )
         delete ppDataField[ nIndex ];
     delete[] ppDataField;
 }
 
-ScAutoFormatDataField& ScAutoFormatData::GetField( USHORT nIndex )
+ScAutoFormatDataField& ScAutoFormatData::GetField( sal_uInt16 nIndex )
 {
     DBG_ASSERT( nIndex < 16, "ScAutoFormatData::GetField - illegal index" );
     DBG_ASSERT( ppDataField && ppDataField[ nIndex ], "ScAutoFormatData::GetField - no data" );
     return *ppDataField[ nIndex ];
 }
 
-const ScAutoFormatDataField& ScAutoFormatData::GetField( USHORT nIndex ) const
+const ScAutoFormatDataField& ScAutoFormatData::GetField( sal_uInt16 nIndex ) const
 {
     DBG_ASSERT( nIndex < 16, "ScAutoFormatData::GetField - illegal index" );
     DBG_ASSERT( ppDataField && ppDataField[ nIndex ], "ScAutoFormatData::GetField - no data" );
     return *ppDataField[ nIndex ];
 }
 
-const SfxPoolItem* ScAutoFormatData::GetItem( USHORT nIndex, USHORT nWhich ) const
+const SfxPoolItem* ScAutoFormatData::GetItem( sal_uInt16 nIndex, sal_uInt16 nWhich ) const
 {
     const ScAutoFormatDataField& rField = GetField( nIndex );
     switch( nWhich )
@@ -573,7 +573,7 @@ const SfxPoolItem* ScAutoFormatData::GetItem( USHORT nIndex, USHORT nWhich ) con
     return NULL;
 }
 
-void ScAutoFormatData::PutItem( USHORT nIndex, const SfxPoolItem& rItem )
+void ScAutoFormatData::PutItem( sal_uInt16 nIndex, const SfxPoolItem& rItem )
 {
     ScAutoFormatDataField& rField = GetField( nIndex );
     switch( rItem.Which() )
@@ -610,21 +610,21 @@ void ScAutoFormatData::PutItem( USHORT nIndex, const SfxPoolItem& rItem )
     }
 }
 
-void ScAutoFormatData::CopyItem( USHORT nToIndex, USHORT nFromIndex, USHORT nWhich )
+void ScAutoFormatData::CopyItem( sal_uInt16 nToIndex, sal_uInt16 nFromIndex, sal_uInt16 nWhich )
 {
     const SfxPoolItem* pItem = GetItem( nFromIndex, nWhich );
     if( pItem )
         PutItem( nToIndex, *pItem );
 }
 
-const ScNumFormatAbbrev& ScAutoFormatData::GetNumFormat( USHORT nIndex ) const
+const ScNumFormatAbbrev& ScAutoFormatData::GetNumFormat( sal_uInt16 nIndex ) const
 {
     return GetField( nIndex ).GetNumFormat();
 }
 
-BOOL ScAutoFormatData::IsEqualData( USHORT nIndex1, USHORT nIndex2 ) const
+sal_Bool ScAutoFormatData::IsEqualData( sal_uInt16 nIndex1, sal_uInt16 nIndex2 ) const
 {
-    BOOL bEqual = TRUE;
+    sal_Bool bEqual = sal_True;
     const ScAutoFormatDataField& rField1 = GetField( nIndex1 );
     const ScAutoFormatDataField& rField2 = GetField( nIndex2 );
 
@@ -681,7 +681,7 @@ BOOL ScAutoFormatData::IsEqualData( USHORT nIndex1, USHORT nIndex2 ) const
     return bEqual;
 }
 
-void ScAutoFormatData::FillToItemSet( USHORT nIndex, SfxItemSet& rItemSet, ScDocument& rDoc ) const
+void ScAutoFormatData::FillToItemSet( sal_uInt16 nIndex, SfxItemSet& rItemSet, ScDocument& rDoc ) const
 {
     const ScAutoFormatDataField& rField = GetField( nIndex );
 
@@ -756,7 +756,7 @@ void ScAutoFormatData::FillToItemSet( USHORT nIndex, SfxItemSet& rItemSet, ScDoc
         rItemSet.Put( rField.GetBackground() );
 }
 
-void ScAutoFormatData::GetFromItemSet( USHORT nIndex, const SfxItemSet& rItemSet, const ScNumFormatAbbrev& rNumFormat )
+void ScAutoFormatData::GetFromItemSet( sal_uInt16 nIndex, const SfxItemSet& rItemSet, const ScNumFormatAbbrev& rNumFormat )
 {
     ScAutoFormatDataField& rField = GetField( nIndex );
 
@@ -791,10 +791,10 @@ void ScAutoFormatData::GetFromItemSet( USHORT nIndex, const SfxItemSet& rItemSet
     rField.SetRotateMode    ( (const SvxRotateModeItem&)    rItemSet.Get( ATTR_ROTATE_MODE ) );
 }
 
-BOOL ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
+sal_Bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
 {
-    BOOL    bRet = TRUE;
-    USHORT  nVer = 0;
+    sal_Bool    bRet = sal_True;
+    sal_uInt16  nVer = 0;
     rStream >> nVer;
     bRet = 0 == rStream.GetError();
     if( bRet && (nVer == AUTOFORMAT_DATA_ID_X ||
@@ -806,7 +806,7 @@ BOOL ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
         if( AUTOFORMAT_DATA_ID_552 <= nVer )
         {
             rStream >> nStrResId;
-            USHORT nId = RID_SVXSTR_TBLAFMT_BEGIN + nStrResId;
+            sal_uInt16 nId = RID_SVXSTR_TBLAFMT_BEGIN + nStrResId;
             if( RID_SVXSTR_TBLAFMT_BEGIN <= nId &&
                 nId < RID_SVXSTR_TBLAFMT_END )
             {
@@ -816,7 +816,7 @@ BOOL ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
                 nStrResId = USHRT_MAX;
         }
 
-        BOOL b;
+        sal_Bool b;
         rStream >> b; bIncludeFont = b;
         rStream >> b; bIncludeJustify = b;
         rStream >> b; bIncludeFrame = b;
@@ -825,25 +825,25 @@ BOOL ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
         rStream >> b; bIncludeWidthHeight = b;
 
         bRet = 0 == rStream.GetError();
-        for( USHORT i = 0; bRet && i < 16; ++i )
+        for( sal_uInt16 i = 0; bRet && i < 16; ++i )
             bRet = GetField( i ).Load( rStream, rVersions, nVer );
     }
     else
-        bRet = FALSE;
+        bRet = sal_False;
     return bRet;
 }
 
 #ifdef READ_OLDVERS
-BOOL ScAutoFormatData::LoadOld( SvStream& rStream, const ScAfVersions& rVersions )
+sal_Bool ScAutoFormatData::LoadOld( SvStream& rStream, const ScAfVersions& rVersions )
 {
-    BOOL    bRet = TRUE;
-    USHORT  nVal = 0;
+    sal_Bool    bRet = sal_True;
+    sal_uInt16  nVal = 0;
     rStream >> nVal;
     bRet = (rStream.GetError() == 0);
     if (bRet && (nVal == AUTOFORMAT_OLD_DATA_ID))
     {
         rStream.ReadByteString( aName, rStream.GetStreamCharSet() );
-        BOOL b;
+        sal_Bool b;
         rStream >> b; bIncludeFont = b;
         rStream >> b; bIncludeJustify = b;
         rStream >> b; bIncludeFrame = b;
@@ -852,19 +852,19 @@ BOOL ScAutoFormatData::LoadOld( SvStream& rStream, const ScAfVersions& rVersions
         rStream >> b; bIncludeWidthHeight = b;
 
         bRet = 0 == rStream.GetError();
-        for (USHORT i=0; bRet && i < 16; i++)
+        for (sal_uInt16 i=0; bRet && i < 16; i++)
             bRet = GetField( i ).LoadOld( rStream, rVersions );
     }
     else
-        bRet = FALSE;
+        bRet = sal_False;
     return bRet;
 }
 #endif
 
-BOOL ScAutoFormatData::Save(SvStream& rStream)
+sal_Bool ScAutoFormatData::Save(SvStream& rStream)
 {
-    USHORT nVal = AUTOFORMAT_DATA_ID;
-    BOOL b;
+    sal_uInt16 nVal = AUTOFORMAT_DATA_ID;
+    sal_Bool b;
     rStream << nVal;
     // --- from 680/dr25 on: #21549# store strings as UTF-8
     rStream.WriteByteString( aName, RTL_TEXTENCODING_UTF8 );
@@ -880,7 +880,7 @@ BOOL ScAutoFormatData::Save(SvStream& rStream)
         if( 0 != aIniVal.ToInt32() )
         {
             // check Name for ResId
-            for( USHORT nId = RID_SVXSTR_TBLAFMT_BEGIN;
+            for( sal_uInt16 nId = RID_SVXSTR_TBLAFMT_BEGIN;
                         RID_SVXSTR_TBLAFMT_END > nId; ++nId )
             {
                 String s( SVX_RES( nId ) );
@@ -902,8 +902,8 @@ BOOL ScAutoFormatData::Save(SvStream& rStream)
     rStream << ( b = bIncludeValueFormat );
     rStream << ( b = bIncludeWidthHeight );
 
-    BOOL bRet = 0 == rStream.GetError();
-    for (USHORT i = 0; bRet && (i < 16); i++)
+    sal_Bool bRet = 0 == rStream.GetError();
+    for (sal_uInt16 i = 0; bRet && (i < 16); i++)
         bRet = GetField( i ).Save( rStream );
 
     return bRet;
@@ -912,9 +912,9 @@ BOOL ScAutoFormatData::Save(SvStream& rStream)
 //---------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
 
-ScAutoFormat::ScAutoFormat(USHORT nLim, USHORT nDel, BOOL bDup):
+ScAutoFormat::ScAutoFormat(sal_uInt16 nLim, sal_uInt16 nDel, sal_Bool bDup):
     ScSortedCollection        (nLim, nDel, bDup),
-    bSaveLater              (FALSE)
+    bSaveLater              (sal_False)
 {
     //  create default autoformat
     ScAutoFormatData* pData = new ScAutoFormatData;
@@ -960,7 +960,7 @@ ScAutoFormat::ScAutoFormat(USHORT nLim, USHORT nDel, BOOL bDup):
     SvxBrushItem aGray70Back( Color(0x4d, 0x4d, 0x4d), ATTR_BACKGROUND );
     SvxBrushItem aGray20Back( Color(0xcc, 0xcc, 0xcc), ATTR_BACKGROUND );
 
-    for (USHORT i=0; i<16; i++)
+    for (sal_uInt16 i=0; i<16; i++)
     {
         pData->PutItem( i, aBox );
         pData->PutItem( i, aFontItem );
@@ -999,7 +999,7 @@ ScAutoFormat::ScAutoFormat(USHORT nLim, USHORT nDel, BOOL bDup):
 
 ScAutoFormat::ScAutoFormat(const ScAutoFormat& rAutoFormat) :
     ScSortedCollection (rAutoFormat),
-    bSaveLater       (FALSE)
+    bSaveLater       (sal_False)
 {}
 
 ScAutoFormat::~ScAutoFormat()
@@ -1011,7 +1011,7 @@ ScAutoFormat::~ScAutoFormat()
         Save();
 }
 
-void ScAutoFormat::SetSaveLater( BOOL bSet )
+void ScAutoFormat::SetSaveLater( sal_Bool bSet )
 {
     bSaveLater = bSet;
 }
@@ -1030,9 +1030,9 @@ short ScAutoFormat::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
     return (short) ScGlobal::GetpTransliteration()->compareString( aStr1, aStr2 );
 }
 
-BOOL ScAutoFormat::Load()
+sal_Bool ScAutoFormat::Load()
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
 
     INetURLObject aURL;
     SvtPathOptions aPathOpt;
@@ -1040,14 +1040,14 @@ BOOL ScAutoFormat::Load()
     aURL.setFinalSlash();
     aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( sAutoTblFmtName ) ) );
 
-    SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_READ, TRUE );
+    SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_READ, sal_True );
     SvStream* pStream = aMedium.GetInStream();
     bRet = (pStream && pStream->GetError() == 0);
     if (bRet)
     {
         SvStream& rStream = *pStream;
         // Achtung hier muss ein allgemeiner Header gelesen werden
-        USHORT nVal = 0;
+        sal_uInt16 nVal = 0;
         rStream >> nVal;
         bRet = 0 == rStream.GetError();
 
@@ -1058,13 +1058,13 @@ BOOL ScAutoFormat::Load()
             if( nVal == AUTOFORMAT_ID_358 ||
                     (AUTOFORMAT_ID_504 <= nVal && nVal <= AUTOFORMAT_ID) )
             {
-                UINT16 nFileVers = SOFFICE_FILEFORMAT_40;
-                BYTE nChrSet, nCnt;
+                sal_uInt16 nFileVers = SOFFICE_FILEFORMAT_40;
+                sal_uInt8 nChrSet, nCnt;
                 long nPos = rStream.Tell();
                 rStream >> nCnt >> nChrSet;
 //              if( 4 <= nCnt )
 //                  rStream >> nFileVers;
-                if( rStream.Tell() != ULONG(nPos + nCnt) )
+                if( rStream.Tell() != sal_uLong(nPos + nCnt) )
                 {
                     DBG_ERRORFILE( "Der Header enthaelt mehr/neuere Daten" );
                     rStream.Seek( nPos + nCnt );
@@ -1079,10 +1079,10 @@ BOOL ScAutoFormat::Load()
                 aVersions.Load( rStream, nVal );        // Item-Versionen
 
                 ScAutoFormatData* pData;
-                USHORT nAnz = 0;
+                sal_uInt16 nAnz = 0;
                 rStream >> nAnz;
                 bRet = (rStream.GetError() == 0);
-                for (USHORT i=0; bRet && (i < nAnz); i++)
+                for (sal_uInt16 i=0; bRet && (i < nAnz); i++)
                 {
                     pData = new ScAutoFormatData();
                     bRet = pData->Load(rStream, aVersions);
@@ -1116,10 +1116,10 @@ BOOL ScAutoFormat::Load()
                     AUTOFORMAT_OLD_ID_NEW == nVal )
                 {
                     ScAutoFormatData* pData;
-                    USHORT nAnz = 0;
+                    sal_uInt16 nAnz = 0;
                     rStream >> nAnz;
                     bRet = 0 == rStream.GetError();
-                    for( USHORT i=0; bRet && (i < nAnz); ++i )
+                    for( sal_uInt16 i=0; bRet && (i < nAnz); ++i )
                     {
                         pData = new ScAutoFormatData();
                         bRet = pData->LoadOld( rStream, aVersions );
@@ -1127,18 +1127,18 @@ BOOL ScAutoFormat::Load()
                     }
                 }
                 else
-                    bRet = FALSE;
+                    bRet = sal_False;
             }
 #endif
         }
     }
-    bSaveLater = FALSE;
+    bSaveLater = sal_False;
     return bRet;
 }
 
-BOOL ScAutoFormat::Save()
+sal_Bool ScAutoFormat::Save()
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
 
     INetURLObject aURL;
     SvtPathOptions aPathOpt;
@@ -1146,7 +1146,7 @@ BOOL ScAutoFormat::Save()
     aURL.setFinalSlash();
     aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( sAutoTblFmtName ) ) );
 
-    SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_WRITE, TRUE );
+    SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_WRITE, sal_True );
     SvStream* pStream = aMedium.GetOutStream();
     bRet = (pStream && pStream->GetError() == 0);
     if (bRet)
@@ -1155,35 +1155,35 @@ BOOL ScAutoFormat::Save()
         rStream.SetVersion( SOFFICE_FILEFORMAT_40 );
 
         // Achtung hier muss ein allgemeiner Header gespeichert werden
-        USHORT nVal = AUTOFORMAT_ID;
+        sal_uInt16 nVal = AUTOFORMAT_ID;
         rStream << nVal
-                << (BYTE)2      // Anzahl von Zeichen des Headers incl. diesem
-                << (BYTE)::GetSOStoreTextEncoding(
-                    gsl_getSystemTextEncoding(), sal::static_int_cast<USHORT>(rStream.GetVersion()) );
-//              << (BYTE)4      // Anzahl von Zeichen des Headers incl. diesem
-//              << (BYTE)::GetStoreCharSet(::GetSystemCharSet())
+                << (sal_uInt8)2         // Anzahl von Zeichen des Headers incl. diesem
+                << (sal_uInt8)::GetSOStoreTextEncoding(
+                    gsl_getSystemTextEncoding(), sal::static_int_cast<sal_uInt16>(rStream.GetVersion()) );
+//              << (sal_uInt8)4         // Anzahl von Zeichen des Headers incl. diesem
+//              << (sal_uInt8)::GetStoreCharSet(::GetSystemCharSet())
 //              << (UNIT16)SOFFICE_FILEFORMAT_NOW;
         ScAfVersions::Write(rStream);           // Item-Versionen
 
         bRet = (rStream.GetError() == 0);
         //-----------------------------------------------------------
-        rStream << (USHORT)(nCount - 1);
+        rStream << (sal_uInt16)(nCount - 1);
         bRet = (rStream.GetError() == 0);
-        for (USHORT i=1; bRet && (i < nCount); i++)
+        for (sal_uInt16 i=1; bRet && (i < nCount); i++)
             bRet = ((ScAutoFormatData*)pItems[i])->Save(rStream);
         rStream.Flush();
 
         aMedium.Commit();
     }
-    bSaveLater = FALSE;
+    bSaveLater = sal_False;
     return bRet;
 }
 
-USHORT ScAutoFormat::FindIndexPerName( const String& rName ) const
+sal_uInt16 ScAutoFormat::FindIndexPerName( const String& rName ) const
 {
     String              aName;
 
-    for( USHORT i=0; i<nCount ; i++ )
+    for( sal_uInt16 i=0; i<nCount ; i++ )
     {
         ScAutoFormatData* pItem = (ScAutoFormatData*)pItems[i];
         pItem->GetName( aName );

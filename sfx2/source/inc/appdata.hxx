@@ -126,11 +126,11 @@ public:
     SfxProgress*                        pProgress;
     ISfxTemplateCommon*                 pTemplateCommon;
 
-    USHORT                              nDocModalMode;              // counts documents in modal mode
-    USHORT                              nAutoTabPageId;
-    USHORT                              nRescheduleLocks;
-    USHORT                              nInReschedule;
-    USHORT                              nAsynchronCalls;
+    sal_uInt16                              nDocModalMode;              // counts documents in modal mode
+    sal_uInt16                              nAutoTabPageId;
+    sal_uInt16                              nRescheduleLocks;
+    sal_uInt16                              nInReschedule;
+    sal_uInt16                              nAsynchronCalls;
 
     rtl::Reference< sfx2::appl::ImeStatusWindow > m_xImeStatusWindow;
 
@@ -152,19 +152,19 @@ public:
     SfxDispatcher*              pAppDispat;     // Dispatcher falls kein Doc
     SfxInterface**              pInterfaces;
 
-    USHORT                      nDocNo;             // Laufende Doc-Nummer (AutoName)
-    USHORT                      nInterfaces;
+    sal_uInt16                      nDocNo;             // Laufende Doc-Nummer (AutoName)
+    sal_uInt16                      nInterfaces;
 
-    BOOL                        bDispatcherLocked:1;    // nichts ausf"uhren
-    BOOL                        bDowning:1;   // TRUE ab Exit und danach
-    BOOL                        bInQuit : 1;
-    BOOL                        bInvalidateOnUnlock : 1;
-    BOOL                        bODFVersionWarningLater : 1;
+    sal_Bool                        bDispatcherLocked:1;    // nichts ausf"uhren
+    sal_Bool                        bDowning:1;   // sal_True ab Exit und danach
+    sal_Bool                        bInQuit : 1;
+    sal_Bool                        bInvalidateOnUnlock : 1;
+    sal_Bool                        bODFVersionWarningLater : 1;
 
                                 SfxAppData_Impl( SfxApplication* );
                                 ~SfxAppData_Impl();
 
-    void                        UpdateApplicationSettings( BOOL bDontHide );
+    void                        UpdateApplicationSettings( sal_Bool bDontHide );
     SfxDocumentTemplates*       GetDocumentTemplates();
     void                        DeInitDDE();
 

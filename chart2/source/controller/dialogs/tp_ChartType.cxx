@@ -228,7 +228,7 @@ void Dim3DLookResourceGroup::fillControls( const ChartTypeParameter& rParameter 
 void Dim3DLookResourceGroup::fillParameter( ChartTypeParameter& rParameter )
 {
     rParameter.b3DLook = m_aCB_3DLook.IsChecked();
-    USHORT nPos = m_aLB_Scheme.GetSelectEntryPos();
+    sal_uInt16 nPos = m_aLB_Scheme.GetSelectEntryPos();
     if( POS_3DSCHEME_SIMPLE == nPos )
         rParameter.eThreeDLookScheme = ThreeDLookScheme_Simple;
     else if( POS_3DSCHEME_REALISTIC == nPos )
@@ -707,7 +707,7 @@ IMPL_LINK( SplineResourceGroup, SplineDetailsDialogHdl, void*, EMPTYARG )
     ChartTypeParameter aOldParameter;
     getSplinePropertiesDialog().fillParameter( aOldParameter, m_aCB_Splines.IsChecked() );
 
-    BOOL bOldSmoothLines = m_aCB_Splines.IsChecked();
+    sal_Bool bOldSmoothLines = m_aCB_Splines.IsChecked();
     m_aCB_Splines.Check();
     if( RET_OK == getSplinePropertiesDialog().Execute() )
     {
@@ -768,7 +768,7 @@ void GeometryResourceGroup::setPosition( const Point& rPoint )
 
 void GeometryResourceGroup::fillControls( const ChartTypeParameter& rParameter )
 {
-    USHORT nGeometry3D = static_cast<USHORT>(rParameter.nGeometry3D);
+    sal_uInt16 nGeometry3D = static_cast<sal_uInt16>(rParameter.nGeometry3D);
     m_aGeometryResources.SelectEntryPos(nGeometry3D);
     m_aGeometryResources.Enable(rParameter.b3DLook);
 }
@@ -1090,7 +1090,7 @@ void ChartTypeTabPage::fillAllControls( const ChartTypeParameter& rParameter, bo
         bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
         m_pCurrentMainType->fillSubTypeList( m_aSubTypeList, bIsHighContrast, rParameter );
     }
-    m_aSubTypeList.SelectItem( static_cast<USHORT>( rParameter.nSubTypeIndex) );
+    m_aSubTypeList.SelectItem( static_cast<sal_uInt16>( rParameter.nSubTypeIndex) );
     m_pAxisTypeResourceGroup->fillControls( rParameter );
     m_pDim3DLookResourceGroup->fillControls( rParameter );
     m_pStackingResourceGroup->fillControls( rParameter );
@@ -1115,7 +1115,7 @@ void ChartTypeTabPage::initializePage()
 
     ::std::vector< ChartTypeDialogController* >::iterator             aIter = m_aChartTypeDialogControllerList.begin();
     const ::std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
-    for( USHORT nM=0; aIter != aEnd; aIter++, nM++ )
+    for( sal_uInt16 nM=0; aIter != aEnd; aIter++, nM++ )
     {
         if( (*aIter)->isSubType(aServiceName) )
         {

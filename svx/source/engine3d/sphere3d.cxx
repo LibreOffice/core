@@ -117,7 +117,7 @@ void E3dSphereObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 |*
 \************************************************************************/
 
-UINT16 E3dSphereObj::GetObjIdentifier() const
+sal_uInt16 E3dSphereObj::GetObjIdentifier() const
 {
     return E3D_SPHEREOBJ_ID;
 }
@@ -128,7 +128,7 @@ UINT16 E3dSphereObj::GetObjIdentifier() const
 |*
 \************************************************************************/
 
-SdrObject *E3dSphereObj::DoConvertToPolyObj(BOOL /*bBezier*/) const
+SdrObject *E3dSphereObj::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
 {
     return NULL;
 }

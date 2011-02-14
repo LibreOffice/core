@@ -82,22 +82,22 @@
 
 void SdrObjEditView::ImpClearVars()
 {
-    bQuickTextEditMode=TRUE;
-    bMacroMode=TRUE;
+    bQuickTextEditMode=sal_True;
+    bMacroMode=sal_True;
     pTextEditOutliner=NULL;
     pTextEditOutlinerView=NULL;
     pTextEditPV=NULL;
     pTextEditWin=NULL;
     pTextEditCursorMerker=NULL;
     pEditPara=NULL;
-    bTextEditNewObj=FALSE;
-    bMacroDown=FALSE;
+    bTextEditNewObj=sal_False;
+    bMacroDown=sal_False;
     pMacroObj=NULL;
     pMacroPV=NULL;
     pMacroWin=NULL;
     nMacroTol=0;
-    bTextEditDontDelete=FALSE;
-    bTextEditOnlyOneView=FALSE;
+    bTextEditDontDelete=sal_False;
+    bTextEditOnlyOneView=sal_False;
 }
 
 SdrObjEditView::SdrObjEditView(SdrModel* pModel1, OutputDevice* pOut):
@@ -117,7 +117,7 @@ SdrObjEditView::~SdrObjEditView()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL SdrObjEditView::IsAction() const
+sal_Bool SdrObjEditView::IsAction() const
 {
     return IsMacroObj() || SdrGlueEditView::IsAction();
 }
@@ -185,10 +185,10 @@ void SdrObjEditView::ModelHasChanged()
     if (IsTextEdit()) {
         SdrTextObj* pTextObj=dynamic_cast<SdrTextObj*>( mxTextEditObj.get() );
         if (pTextObj!=NULL) {
-            ULONG nOutlViewAnz=pTextEditOutliner->GetViewCount();
-            BOOL bAreaChg=FALSE;
-            BOOL bAnchorChg=FALSE;
-            BOOL bColorChg=FALSE;
+            sal_uIntPtr nOutlViewAnz=pTextEditOutliner->GetViewCount();
+            sal_Bool bAreaChg=sal_False;
+            sal_Bool bAnchorChg=sal_False;
+            sal_Bool bColorChg=sal_False;
             bool bContourFrame=pTextObj->IsContourTextFrame();
             EVAnchorMode eNewAnchor(ANCHOR_VCENTER_HCENTER);
             Rectangle aOldArea(aMinTextEditArea);
@@ -212,34 +212,34 @@ void SdrObjEditView::ModelHasChanged()
                     pTextEditOutliner->GetMinAutoPaperSize()!=aPaperMin1 || pTextEditOutliner->GetMaxAutoPaperSize()!=aPaperMax1) {
                     aTextEditArea=aEditArea1;
                     aMinTextEditArea=aMinArea1;
-                    pTextEditOutliner->SetUpdateMode(FALSE);
+                    pTextEditOutliner->SetUpdateMode(sal_False);
                     pTextEditOutliner->SetMinAutoPaperSize(aPaperMin1);
                     pTextEditOutliner->SetMaxAutoPaperSize(aPaperMax1);
                     pTextEditOutliner->SetPaperSize(Size(0,0)); // Damit der Outliner neu formatiert
                     if (!bContourFrame) {
                         pTextEditOutliner->ClearPolygon();
-                        ULONG nStat=pTextEditOutliner->GetControlWord();
+                        sal_uIntPtr nStat=pTextEditOutliner->GetControlWord();
                         nStat|=EE_CNTRL_AUTOPAGESIZE;
                         pTextEditOutliner->SetControlWord(nStat);
                     } else {
-                        ULONG nStat=pTextEditOutliner->GetControlWord();
+                        sal_uIntPtr nStat=pTextEditOutliner->GetControlWord();
                         nStat&=~EE_CNTRL_AUTOPAGESIZE;
                         pTextEditOutliner->SetControlWord(nStat);
                         Rectangle aAnchorRect;
                         pTextObj->TakeTextAnchorRect(aAnchorRect);
-                        pTextObj->ImpSetContourPolygon(*pTextEditOutliner,aAnchorRect, TRUE);
+                        pTextObj->ImpSetContourPolygon(*pTextEditOutliner,aAnchorRect, sal_True);
                     }
-                    for (ULONG nOV=0; nOV<nOutlViewAnz; nOV++) {
+                    for (sal_uIntPtr nOV=0; nOV<nOutlViewAnz; nOV++) {
                         OutlinerView* pOLV=pTextEditOutliner->GetView(nOV);
-                        ULONG nStat0=pOLV->GetControlWord();
-                        ULONG nStat=nStat0;
+                        sal_uIntPtr nStat0=pOLV->GetControlWord();
+                        sal_uIntPtr nStat=nStat0;
                         // AutoViewSize nur wenn nicht KontourFrame.
                         if (!bContourFrame) nStat|=EV_CNTRL_AUTOSIZE;
                         else nStat&=~EV_CNTRL_AUTOSIZE;
                         if (nStat!=nStat0) pOLV->SetControlWord(nStat);
                     }
-                    pTextEditOutliner->SetUpdateMode(TRUE);
-                    bAreaChg=TRUE;
+                    pTextEditOutliner->SetUpdateMode(sal_True);
+                    bAreaChg=sal_True;
                 }
             }
             if (pTextEditOutlinerView!=NULL) { // Fuellfarbe und Anker checken
@@ -267,13 +267,13 @@ void SdrObjEditView::ModelHasChanged()
             // again on ModelHasChanged().
             if (bContourFrame || bAreaChg || bAnchorChg || bColorChg)
             {
-                for (ULONG nOV=0; nOV<nOutlViewAnz; nOV++)
+                for (sal_uIntPtr nOV=0; nOV<nOutlViewAnz; nOV++)
                 {
                     OutlinerView* pOLV=pTextEditOutliner->GetView(nOV);
                     { // Alten OutlinerView-Bereich invalidieren
                         Window* pWin=pOLV->GetWindow();
                         Rectangle aTmpRect(aOldArea);
-                        USHORT nPixSiz=pOLV->GetInvalidateMore()+1;
+                        sal_uInt16 nPixSiz=pOLV->GetInvalidateMore()+1;
                         Size aMore(pWin->PixelToLogic(Size(nPixSiz,nPixSiz)));
                         aTmpRect.Left()-=aMore.Width();
                         aTmpRect.Right()+=aMore.Width();
@@ -322,7 +322,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
         aBlankRect.Union(aMinTextEditArea);
         Rectangle aPixRect(pWin->LogicToPixel(aBlankRect));
         aBlankRect.Intersection(rRect);
-        rOutlView.GetOutliner()->SetUpdateMode(TRUE); // Bugfix #22596#
+        rOutlView.GetOutliner()->SetUpdateMode(sal_True); // Bugfix #22596#
         rOutlView.Paint(aBlankRect);
 
         if(!bModifyMerk)
@@ -359,7 +359,7 @@ void SdrObjEditView::ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectang
             aOuterPix.Bottom()+=nPixSiz;
 
             bool bMerk(pWin->IsMapModeEnabled());
-            pWin->EnableMapMode(FALSE);
+            pWin->EnableMapMode(sal_False);
             PolyPolygon aPolyPoly( 2 );
 
             svtools::ColorConfig aColorConfig;
@@ -419,32 +419,32 @@ void SdrObjEditView::ImpInvalidateOutlinerView(OutlinerView& rOutlView) const
             aOuterPix.Bottom()+=nPixSiz;
 
             bool bMerk(pWin->IsMapModeEnabled());
-            pWin->EnableMapMode(FALSE);
+            pWin->EnableMapMode(sal_False);
             pWin->Invalidate(aOuterPix);
             pWin->EnableMapMode(bMerk);
         }
     }
 }
 
-OutlinerView* SdrObjEditView::ImpMakeOutlinerView(Window* pWin, BOOL /*bNoPaint*/, OutlinerView* pGivenView) const
+OutlinerView* SdrObjEditView::ImpMakeOutlinerView(Window* pWin, sal_Bool /*bNoPaint*/, OutlinerView* pGivenView) const
 {
     // Hintergrund
     Color aBackground(GetTextEditBackgroundColor(*this));
     SdrTextObj* pText = dynamic_cast< SdrTextObj * >( mxTextEditObj.get() );
-    BOOL bTextFrame=pText!=NULL && pText->IsTextFrame();
-    BOOL bContourFrame=pText!=NULL && pText->IsContourTextFrame();
+    sal_Bool bTextFrame=pText!=NULL && pText->IsTextFrame();
+    sal_Bool bContourFrame=pText!=NULL && pText->IsContourTextFrame();
     // OutlinerView erzeugen
     OutlinerView* pOutlView=pGivenView;
-    pTextEditOutliner->SetUpdateMode(FALSE);
+    pTextEditOutliner->SetUpdateMode(sal_False);
     if (pOutlView==NULL) pOutlView=new OutlinerView(pTextEditOutliner,pWin);
     else pOutlView->SetWindow(pWin);
     // Scrollen verbieten
-    ULONG nStat=pOutlView->GetControlWord();
+    sal_uIntPtr nStat=pOutlView->GetControlWord();
     nStat&=~EV_CNTRL_AUTOSCROLL;
     // AutoViewSize nur wenn nicht KontourFrame.
     if (!bContourFrame) nStat|=EV_CNTRL_AUTOSIZE;
     if (bTextFrame) {
-        USHORT nPixSiz=aHdl.GetHdlSize()*2+1;
+        sal_uInt16 nPixSiz=aHdl.GetHdlSize()*2+1;
         nStat|=EV_CNTRL_INVONEMORE;
         pOutlView->SetInvalidateMore(nPixSiz);
     }
@@ -456,12 +456,12 @@ OutlinerView* SdrObjEditView::ImpMakeOutlinerView(Window* pWin, BOOL /*bNoPaint*
         pTextEditOutliner->SetFixedCellHeight(((const SdrTextFixedCellHeightItem&)pText->GetMergedItem(SDRATTR_TEXT_USEFIXEDCELLHEIGHT)).GetValue());
     }
     pOutlView->SetOutputArea(aTextEditArea);
-    pTextEditOutliner->SetUpdateMode(TRUE);
+    pTextEditOutliner->SetUpdateMode(sal_True);
     ImpInvalidateOutlinerView(*pOutlView);
     return pOutlView;
 }
 
-BOOL SdrObjEditView::IsTextEditFrame() const
+sal_Bool SdrObjEditView::IsTextEditFrame() const
 {
     SdrTextObj* pText = dynamic_cast< SdrTextObj* >( mxTextEditObj.get() );
     return pText!=NULL && pText->IsTextFrame();
@@ -489,7 +489,7 @@ IMPL_LINK(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI)
     if (pTextObj!=NULL) {
         Color* pTxtCol=NULL;
         Color* pFldCol=NULL;
-        bOk=pTextObj->CalcFieldValue(pFI->GetField(),pFI->GetPara(),pFI->GetPos(),TRUE,pTxtCol,pFldCol,rStr);
+        bOk=pTextObj->CalcFieldValue(pFI->GetField(),pFI->GetPara(),pFI->GetPos(),sal_True,pTxtCol,pFldCol,rStr);
         if (bOk) {
             if (pTxtCol!=NULL) {
                 pFI->SetTxtColor(*pTxtCol);
@@ -507,7 +507,7 @@ IMPL_LINK(SdrObjEditView,ImpOutlinerCalcFieldValueHdl,EditFieldInfo*,pFI)
     Link aDrawOutlLink=rDrawOutl.GetCalcFieldValueHdl();
     if (!bOk && aDrawOutlLink.IsSet()) {
         aDrawOutlLink.Call(pFI);
-        bOk = (BOOL)rStr.Len();
+        bOk = (sal_Bool)rStr.Len();
     }
     if (!bOk && aOldCalcFieldValueLink.IsSet()) {
         return aOldCalcFieldValueLink.Call(pFI);
@@ -525,7 +525,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
     SdrEndTextEdit();
 
     if( dynamic_cast< SdrTextObj* >( pObj ) == 0 )
-        return FALSE; // currently only possible with text objects
+        return sal_False; // currently only possible with text objects
 
     if(bGrabFocus && pWin)
     {
@@ -606,7 +606,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
             pTextEditOutliner->ForceAutoColor( aOptions.GetIsAutomaticFontColor() );
         }
 
-        BOOL bEmpty = mxTextEditObj->GetOutlinerParaObject()==NULL;
+        sal_Bool bEmpty = mxTextEditObj->GetOutlinerParaObject()==NULL;
 
         aOldCalcFieldValueLink=pTextEditOutliner->GetCalcFieldValueHdl();
         // Der FieldHdl muss von SdrBeginTextEdit gesetzt sein, da dor ein UpdateFields gerufen wird.
@@ -624,7 +624,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
             SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mxTextEditObj.get() );
             DBG_ASSERT( pTextObj, "svx::SdrObjEditView::BegTextEdit(), no text object?" );
             if( !pTextObj )
-                return FALSE;
+                return sal_False;
 
             // #111096# Switch off evtl. running TextAnimation
             pTextObj->SetTextAnimationAllowed(sal_False);
@@ -632,7 +632,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
             // alten Cursor merken
             if (pTextEditOutliner->GetViewCount()!=0)
             {
-                OutlinerView* pTmpOLV=pTextEditOutliner->RemoveView(ULONG(0));
+                OutlinerView* pTmpOLV=pTextEditOutliner->RemoveView(sal_uIntPtr(0));
                 if(pTmpOLV!=NULL && pTmpOLV!=pGivenOutlinerView)
                     delete pTmpOLV;
             }
@@ -644,8 +644,8 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
 
             Rectangle aTextRect;
             Rectangle aAnchorRect;
-            pTextObj->TakeTextRect(*pTextEditOutliner, aTextRect, TRUE,
-                &aAnchorRect /* #97097# Give TRUE here, not FALSE */);
+            pTextObj->TakeTextRect(*pTextEditOutliner, aTextRect, sal_True,
+                &aAnchorRect /* #97097# Give sal_True here, not sal_False */);
 
             if ( !pTextObj->IsContourTextFrame() )
             {
@@ -664,7 +664,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
             aMinTextEditArea.Move(aPvOfs.X(),aPvOfs.Y());
             pTextEditCursorMerker=pWin->GetCursor();
 
-            aHdl.SetMoveOutside(TRUE);
+            aHdl.SetMoveOutside(sal_True);
 
             // #i72757#
             // Since IsMarkHdlWhenTextEdit() is ignored, it is necessary
@@ -674,7 +674,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
             pTextEditOutlinerView=ImpMakeOutlinerView(pWin,!bEmpty,pGivenOutlinerView);
 
             // check if this view is already inserted
-            ULONG i2,nCount = pTextEditOutliner->GetViewCount();
+            sal_uIntPtr i2,nCount = pTextEditOutliner->GetViewCount();
             for( i2 = 0; i2 < nCount; i2++ )
             {
                 if( pTextEditOutliner->GetView(i2) == pTextEditOutlinerView )
@@ -684,8 +684,8 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
             if( i2 == nCount )
                 pTextEditOutliner->InsertView(pTextEditOutlinerView,0);
 
-            aHdl.SetMoveOutside(FALSE);
-            aHdl.SetMoveOutside(TRUE);
+            aHdl.SetMoveOutside(sal_False);
+            aHdl.SetMoveOutside(sal_True);
             //OLMRefreshAllIAOManagers();
 
             // alle Wins als OutlinerView beim Outliner anmelden
@@ -786,7 +786,7 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
     //HMHif (bMarkHdlWhenTextEdit) {
     //HMH    HideMarkHdl();
     //HMH}
-    aHdl.SetMoveOutside(FALSE);
+    aHdl.SetMoveOutside(sal_False);
     //HMHShowMarkHdl();
 
     return sal_False;
@@ -819,7 +819,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
 
     if (pTEOutliner!=NULL)
     {
-        BOOL bModified=pTEOutliner->IsModified();
+        sal_Bool bModified=pTEOutliner->IsModified();
         if (pTEOutlinerView!=NULL)
         {
             pTEOutlinerView->HideCursor();
@@ -873,7 +873,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
             }
             // Loeschung des gesamten TextObj checken
             SdrUndoAction* pDelUndo=NULL;
-            BOOL bDelObj=FALSE;
+            sal_Bool bDelObj=sal_False;
             SdrTextObj* pTextObj=PTR_CAST(SdrTextObj,pTEObj);
             if (pTextObj!=NULL && bTextEditNewObj)
             {
@@ -937,11 +937,11 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
             AdjustMarkHdl();
         }
         // alle OutlinerViews loeschen
-        for (ULONG i=pTEOutliner->GetViewCount(); i>0;)
+        for (sal_uIntPtr i=pTEOutliner->GetViewCount(); i>0;)
         {
             i--;
             OutlinerView* pOLV=pTEOutliner->GetView(i);
-            USHORT nMorePix=pOLV->GetInvalidateMore() + 10; // solaris aw033 test #i#
+            sal_uInt16 nMorePix=pOLV->GetInvalidateMore() + 10; // solaris aw033 test #i#
             Window* pWin=pOLV->GetWindow();
             Rectangle aRect(pOLV->GetOutputArea());
             pTEOutliner->RemoveView(i);
@@ -980,7 +980,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(sal_Bool bDontDeleteReally)
 //HMH        if (bMarkHdlWhenTextEdit) {
 //HMH            HideMarkHdl();
 //HMH        }
-        aHdl.SetMoveOutside(FALSE);
+        aHdl.SetMoveOutside(sal_False);
         if (eRet!=SDRENDTEXTEDIT_UNCHANGED)
 //HMH       {
 //HMH            ShowMarkHdl(); // Handles kommen ansonsten via Broadcast
@@ -1032,8 +1032,8 @@ OutlinerView* SdrObjEditView::ImpFindOutlinerView(Window* pWin) const
     if (pWin==NULL) return NULL;
     if (pTextEditOutliner==NULL) return NULL;
     OutlinerView* pNewView=NULL;
-    ULONG nWinAnz=pTextEditOutliner->GetViewCount();
-    for (ULONG i=0; i<nWinAnz && pNewView==NULL; i++) {
+    sal_uIntPtr nWinAnz=pTextEditOutliner->GetViewCount();
+    for (sal_uIntPtr i=0; i<nWinAnz && pNewView==NULL; i++) {
         OutlinerView* pView=pTextEditOutliner->GetView(i);
         if (pView->GetWindow()==pWin) pNewView=pView;
     }
@@ -1060,9 +1060,9 @@ void SdrObjEditView::SetTextEditWin(Window* pWin)
     }
 }
 
-BOOL SdrObjEditView::IsTextEditHit(const Point& rHit, short nTol) const
+sal_Bool SdrObjEditView::IsTextEditHit(const Point& rHit, short nTol) const
 {
-    BOOL bOk=FALSE;
+    sal_Bool bOk=sal_False;
     if(mxTextEditObj.is())
     {
         nTol=ImpGetHitTolLogic(nTol,NULL);
@@ -1098,9 +1098,9 @@ BOOL SdrObjEditView::IsTextEditHit(const Point& rHit, short nTol) const
     return bOk;
 }
 
-BOOL SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
+sal_Bool SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
 {
-    BOOL bOk=FALSE;
+    sal_Bool bOk=sal_False;
     if(mxTextEditObj.is())
     {
         SdrTextObj* pText= dynamic_cast<SdrTextObj*>(mxTextEditObj.get());
@@ -1109,7 +1109,7 @@ BOOL SdrObjEditView::IsTextEditFrameHit(const Point& rHit) const
         {
             Window* pWin=pOLV->GetWindow();
             if (pText!=NULL && pText->IsTextFrame() && pOLV!=NULL && pWin!=NULL) {
-                USHORT nPixSiz=pOLV->GetInvalidateMore();
+                sal_uInt16 nPixSiz=pOLV->GetInvalidateMore();
                 Rectangle aEditArea(aMinTextEditArea);
                 aEditArea.Union(pOLV->GetOutputArea());
                 if (!aEditArea.IsInside(rHit)) {
@@ -1146,7 +1146,7 @@ void SdrObjEditView::AddTextEditOfs(MouseEvent& rMEvt) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL SdrObjEditView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
+sal_Bool SdrObjEditView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
 {
     if(pTextEditOutlinerView)
     {
@@ -1175,16 +1175,16 @@ BOOL SdrObjEditView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
             if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
 #endif
             ImpMakeTextCursorAreaVisible();
-            return TRUE;
+            return sal_True;
         }
     }
     return SdrGlueEditView::KeyInput(rKEvt,pWin);
 }
 
-BOOL SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, Window* pWin)
+sal_Bool SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, Window* pWin)
 {
     if (pTextEditOutlinerView!=NULL) {
-        BOOL bPostIt=pTextEditOutliner->IsInSelectionMode();
+        sal_Bool bPostIt=pTextEditOutliner->IsInSelectionMode();
         if (!bPostIt) {
             Point aPt(rMEvt.GetPosPixel());
             if (pWin!=NULL) aPt=pWin->PixelToLogic(aPt);
@@ -1206,17 +1206,17 @@ BOOL SdrObjEditView::MouseButtonDown(const MouseEvent& rMEvt, Window* pWin)
                 if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
 #endif
                 ImpMakeTextCursorAreaVisible();
-                return TRUE;
+                return sal_True;
             }
         }
     }
     return SdrGlueEditView::MouseButtonDown(rMEvt,pWin);
 }
 
-BOOL SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, Window* pWin)
+sal_Bool SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, Window* pWin)
 {
     if (pTextEditOutlinerView!=NULL) {
-        BOOL bPostIt=pTextEditOutliner->IsInSelectionMode();
+        sal_Bool bPostIt=pTextEditOutliner->IsInSelectionMode();
         if (!bPostIt) {
             Point aPt(rMEvt.GetPosPixel());
             if (pWin!=NULL) aPt=pWin->PixelToLogic(aPt);
@@ -1237,18 +1237,18 @@ BOOL SdrObjEditView::MouseButtonUp(const MouseEvent& rMEvt, Window* pWin)
                 if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
 #endif
                 ImpMakeTextCursorAreaVisible();
-                return TRUE;
+                return sal_True;
             }
         }
     }
     return SdrGlueEditView::MouseButtonUp(rMEvt,pWin);
 }
 
-BOOL SdrObjEditView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
+sal_Bool SdrObjEditView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
 {
     if (pTextEditOutlinerView!=NULL) {
-        BOOL bSelMode=pTextEditOutliner->IsInSelectionMode();
-        BOOL bPostIt=bSelMode;
+        sal_Bool bSelMode=pTextEditOutliner->IsInSelectionMode();
+        sal_Bool bPostIt=bSelMode;
         if (!bPostIt) {
             Point aPt(rMEvt.GetPosPixel());
             if (pWin!=NULL) aPt=pWin->PixelToLogic(aPt);
@@ -1269,21 +1269,21 @@ BOOL SdrObjEditView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
                 if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
 #endif
                 ImpMakeTextCursorAreaVisible();
-                return TRUE;
+                return sal_True;
             }
         }
     }
     return SdrGlueEditView::MouseMove(rMEvt,pWin);
 }
 
-BOOL SdrObjEditView::Command(const CommandEvent& rCEvt, Window* pWin)
+sal_Bool SdrObjEditView::Command(const CommandEvent& rCEvt, Window* pWin)
 {
-    // solange bis die OutlinerView einen BOOL zurueckliefert
+    // solange bis die OutlinerView einen sal_Bool zurueckliefert
     // bekommt sie nur COMMAND_STARTDRAG
     if (pTextEditOutlinerView!=NULL)
     {
         if (rCEvt.GetCommand()==COMMAND_STARTDRAG) {
-            BOOL bPostIt=pTextEditOutliner->IsInSelectionMode() || !rCEvt.IsMouseEvent();
+            sal_Bool bPostIt=pTextEditOutliner->IsInSelectionMode() || !rCEvt.IsMouseEvent();
             if (!bPostIt && rCEvt.IsMouseEvent()) {
                 Point aPt(rCEvt.GetMousePosPixel());
                 if (pWin!=NULL) aPt=pWin->PixelToLogic(aPt);
@@ -1307,19 +1307,19 @@ BOOL SdrObjEditView::Command(const CommandEvent& rCEvt, Window* pWin)
                 if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
 #endif
                 ImpMakeTextCursorAreaVisible();
-                return TRUE;
+                return sal_True;
             }
         }
         else // if (rCEvt.GetCommand() == COMMAND_VOICE )
         {
             pTextEditOutlinerView->Command(rCEvt);
-            return TRUE;
+            return sal_True;
         }
     }
     return SdrGlueEditView::Command(rCEvt,pWin);
 }
 
-BOOL SdrObjEditView::Cut(ULONG nFormat)
+sal_Bool SdrObjEditView::Cut(sal_uIntPtr nFormat)
 {
     if (pTextEditOutliner!=NULL) {
         pTextEditOutlinerView->Cut();
@@ -1327,23 +1327,23 @@ BOOL SdrObjEditView::Cut(ULONG nFormat)
         if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
 #endif
         ImpMakeTextCursorAreaVisible();
-        return TRUE;
+        return sal_True;
     } else {
         return SdrGlueEditView::Cut(nFormat);
     }
 }
 
-BOOL SdrObjEditView::Yank(ULONG nFormat)
+sal_Bool SdrObjEditView::Yank(sal_uIntPtr nFormat)
 {
     if (pTextEditOutliner!=NULL) {
         pTextEditOutlinerView->Copy();
-        return TRUE;
+        return sal_True;
     } else {
         return SdrGlueEditView::Yank(nFormat);
     }
 }
 
-BOOL SdrObjEditView::Paste(Window* pWin, ULONG nFormat)
+sal_Bool SdrObjEditView::Paste(Window* pWin, sal_uIntPtr nFormat)
 {
     if (pTextEditOutliner!=NULL) {
         if (pWin!=NULL) {
@@ -1358,7 +1358,7 @@ BOOL SdrObjEditView::Paste(Window* pWin, ULONG nFormat)
         if (pItemBrowser!=NULL) pItemBrowser->SetDirty();
 #endif
         ImpMakeTextCursorAreaVisible();
-        return TRUE;
+        return sal_True;
     } else {
         return SdrGlueEditView::Paste(pWin,nFormat);
     }
@@ -1366,9 +1366,9 @@ BOOL SdrObjEditView::Paste(Window* pWin, ULONG nFormat)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL SdrObjEditView::ImpIsTextEditAllSelected() const
+sal_Bool SdrObjEditView::ImpIsTextEditAllSelected() const
 {
-    BOOL bRet=FALSE;
+    sal_Bool bRet=sal_False;
     if (pTextEditOutliner!=NULL && pTextEditOutlinerView!=NULL)
     {
         if(SdrTextObj::HasTextImpl( pTextEditOutliner ) )
@@ -1377,25 +1377,25 @@ BOOL SdrObjEditView::ImpIsTextEditAllSelected() const
             Paragraph* pLastPara=pTextEditOutliner->GetParagraph( nParaAnz > 1 ? nParaAnz - 1 : 0 );
 
             ESelection aESel(pTextEditOutlinerView->GetSelection());
-            if (aESel.nStartPara==0 && aESel.nStartPos==0 && aESel.nEndPara==USHORT(nParaAnz-1))
+            if (aESel.nStartPara==0 && aESel.nStartPos==0 && aESel.nEndPara==sal_uInt16(nParaAnz-1))
             {
                 XubString aStr(pTextEditOutliner->GetText(pLastPara));
 
                 if(aStr.Len() == aESel.nEndPos)
-                    bRet = TRUE;
+                    bRet = sal_True;
             }
             // und nun auch noch fuer den Fall, das rueckwaerts selektiert wurde
-            if (!bRet && aESel.nEndPara==0 && aESel.nEndPos==0 && aESel.nStartPara==USHORT(nParaAnz-1))
+            if (!bRet && aESel.nEndPara==0 && aESel.nEndPos==0 && aESel.nStartPara==sal_uInt16(nParaAnz-1))
             {
                 XubString aStr(pTextEditOutliner->GetText(pLastPara));
 
                 if(aStr.Len() == aESel.nStartPos)
-                    bRet = TRUE;
+                    bRet = sal_True;
             }
         }
         else
         {
-            bRet=TRUE;
+            bRet=sal_True;
         }
     }
     return bRet;
@@ -1414,9 +1414,9 @@ void SdrObjEditView::ImpMakeTextCursorAreaVisible()
     }
 }
 
-USHORT SdrObjEditView::GetScriptType() const
+sal_uInt16 SdrObjEditView::GetScriptType() const
 {
-    USHORT nScriptType = 0;
+    sal_uInt16 nScriptType = 0;
 
     if( IsTextEdit() )
     {
@@ -1448,11 +1448,11 @@ USHORT SdrObjEditView::GetScriptType() const
 }
 
 /* new interface src537 */
-BOOL SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr) const
+sal_Bool SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr) const
 {
     if( mxSelectionController.is() )
         if( mxSelectionController->GetAttributes( rTargetSet, bOnlyHardAttr ) )
-            return TRUE;
+            return sal_True;
 
     if(IsTextEdit())
     {
@@ -1472,8 +1472,8 @@ BOOL SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr) c
         if(pTextEditOutlinerView)
         {
             // FALSE= InvalidItems nicht al Default, sondern als "Loecher" betrachten
-            rTargetSet.Put(pTextEditOutlinerView->GetAttribs(), FALSE);
-            rTargetSet.Put( SvxScriptTypeItem( pTextEditOutlinerView->GetSelectedScriptType() ), FALSE );
+            rTargetSet.Put(pTextEditOutlinerView->GetAttribs(), sal_False);
+            rTargetSet.Put( SvxScriptTypeItem( pTextEditOutlinerView->GetSelectedScriptType() ), sal_False );
         }
 
         if(GetMarkedObjectCount()==1 && GetMarkedObjectByIndex(0)==mxTextEditObj.get())
@@ -1481,7 +1481,7 @@ BOOL SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr) c
             MergeNotPersistAttrFromMarked(rTargetSet, bOnlyHardAttr);
         }
 
-        return TRUE;
+        return sal_True;
     }
     else
     {
@@ -1489,11 +1489,11 @@ BOOL SdrObjEditView::GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr) c
     }
 }
 
-BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
+sal_Bool SdrObjEditView::SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll)
 {
-    BOOL bRet=FALSE;
-    BOOL bTextEdit=pTextEditOutlinerView!=NULL && mxTextEditObj.is();
-    BOOL bAllTextSelected=ImpIsTextEditAllSelected();
+    sal_Bool bRet=sal_False;
+    sal_Bool bTextEdit=pTextEditOutlinerView!=NULL && mxTextEditObj.is();
+    sal_Bool bAllTextSelected=ImpIsTextEditAllSelected();
     SfxItemSet* pModifiedSet=NULL;
     const SfxItemSet* pSet=&rSet;
     //const SvxAdjustItem* pParaJust=NULL;
@@ -1513,16 +1513,16 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
     {
 #ifdef DBG_UTIL
         {
-            BOOL bHasEEFeatureItems=FALSE;
+            sal_Bool bHasEEFeatureItems=sal_False;
             SfxItemIter aIter(rSet);
             const SfxPoolItem* pItem=aIter.FirstItem();
             while (!bHasEEFeatureItems && pItem!=NULL)
             {
                 if (!IsInvalidItem(pItem))
                 {
-                    USHORT nW=pItem->Which();
+                    sal_uInt16 nW=pItem->Which();
                     if (nW>=EE_FEATURE_START && nW<=EE_FEATURE_END)
-                        bHasEEFeatureItems=TRUE;
+                        bHasEEFeatureItems=sal_True;
                 }
 
                 pItem=aIter.NextItem();
@@ -1537,8 +1537,8 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
         }
 #endif
 
-        BOOL bOnlyEEItems;
-        BOOL bNoEEItems=!SearchOutlinerItems(*pSet,bReplaceAll,&bOnlyEEItems);
+        sal_Bool bOnlyEEItems;
+        sal_Bool bNoEEItems=!SearchOutlinerItems(*pSet,bReplaceAll,&bOnlyEEItems);
         // alles selektiert? -> Attrs auch an den Rahmen
         // und falls keine EEItems, dann Attrs nur an den Rahmen
         if (bAllTextSelected || bNoEEItems)
@@ -1572,7 +1572,7 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
                 mxTextEditObj->SetMergedItemSetAndBroadcast(*pSet, bReplaceAll);
 
                 FlushComeBackTimer(); // Damit ModeHasChanged sofort kommt
-                bRet=TRUE;
+                bRet=sal_True;
             }
         }
         else if (!bOnlyEEItems)
@@ -1580,15 +1580,15 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
             // sonst Set ggf. splitten
             // Es wird nun ein ItemSet aSet gemacht, in den die EE_Items von
             // *pSet nicht enhalten ist (ansonsten ist es eine Kopie).
-            USHORT* pNewWhichTable=RemoveWhichRange(pSet->GetRanges(),EE_ITEMS_START,EE_ITEMS_END);
+            sal_uInt16* pNewWhichTable=RemoveWhichRange(pSet->GetRanges(),EE_ITEMS_START,EE_ITEMS_END);
             SfxItemSet aSet(pMod->GetItemPool(),pNewWhichTable);
             /*90353*/ delete[] pNewWhichTable;
             SfxWhichIter aIter(aSet);
-            USHORT nWhich=aIter.FirstWhich();
+            sal_uInt16 nWhich=aIter.FirstWhich();
             while (nWhich!=0)
             {
                 const SfxPoolItem* pItem;
-                SfxItemState eState=pSet->GetItemState(nWhich,FALSE,&pItem);
+                SfxItemState eState=pSet->GetItemState(nWhich,sal_False,&pItem);
                 if (eState==SFX_ITEM_SET) aSet.Put(*pItem);
                 nWhich=aIter.NextWhich();
             }
@@ -1617,14 +1617,14 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
                 }
             }
             FlushComeBackTimer();
-            bRet=TRUE;
+            bRet=sal_True;
         }
         if(!bNoEEItems)
         {
             // und nun die Attribute auch noch an die EditEngine
             if (bReplaceAll) {
                 // Am Outliner kann man leider nur alle Attribute platthauen
-                pTextEditOutlinerView->RemoveAttribs( TRUE );
+                pTextEditOutlinerView->RemoveAttribs( sal_True );
             }
             pTextEditOutlinerView->SetAttribs(rSet);
 
@@ -1635,7 +1635,7 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
 
             ImpMakeTextCursorAreaVisible();
         }
-        bRet=TRUE;
+        bRet=sal_True;
     }
     if (pModifiedSet!=NULL)
         delete pModifiedSet;
@@ -1663,12 +1663,12 @@ SfxStyleSheet* SdrObjEditView::GetStyleSheet() const
     return pSheet;
 }
 
-BOOL SdrObjEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr)
+sal_Bool SdrObjEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr)
 {
     if( mxSelectionController.is() )
     {
         if( mxSelectionController->SetStyleSheet( pStyleSheet, bDontRemoveHardAttr ) )
-            return TRUE;
+            return sal_True;
     }
 
     // if we are currently in edit mode we must also set the stylesheet
@@ -1678,8 +1678,8 @@ BOOL SdrObjEditView::SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveH
     {
         Outliner* pOutliner = pTextEditOutlinerView->GetOutliner();
 
-        const ULONG nParaCount = pOutliner->GetParagraphCount();
-        ULONG nPara;
+        const sal_uIntPtr nParaCount = pOutliner->GetParagraphCount();
+        sal_uIntPtr nPara;
         for( nPara = 0; nPara < nParaCount; nPara++ )
         {
             pOutliner->SetStyleSheet( nPara, pStyleSheet );
@@ -1697,7 +1697,7 @@ void SdrObjEditView::AddWindowToPaintView(OutputDevice* pNewWin)
 
     if(mxTextEditObj.is() && !bTextEditOnlyOneView && pNewWin->GetOutDevType()==OUTDEV_WINDOW)
     {
-        OutlinerView* pOutlView=ImpMakeOutlinerView((Window*)pNewWin,FALSE,NULL);
+        OutlinerView* pOutlView=ImpMakeOutlinerView((Window*)pNewWin,sal_False,NULL);
         pTextEditOutliner->InsertView(pOutlView);
     }
 }
@@ -1708,7 +1708,7 @@ void SdrObjEditView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
 
     if(mxTextEditObj.is() && !bTextEditOnlyOneView && pOldWin->GetOutDevType()==OUTDEV_WINDOW)
     {
-        for (ULONG i=pTextEditOutliner->GetViewCount(); i>0;) {
+        for (sal_uIntPtr i=pTextEditOutliner->GetViewCount(); i>0;) {
             i--;
             OutlinerView* pOLV=pTextEditOutliner->GetView(i);
             if (pOLV && pOLV->GetWindow()==(Window*)pOldWin) {
@@ -1718,7 +1718,7 @@ void SdrObjEditView::DeleteWindowFromPaintView(OutputDevice* pOldWin)
     }
 }
 
-BOOL SdrObjEditView::IsTextEditInSelectionMode() const
+sal_Bool SdrObjEditView::IsTextEditInSelectionMode() const
 {
     return pTextEditOutliner!=NULL && pTextEditOutliner->IsInSelectionMode();
 }
@@ -1735,17 +1735,17 @@ BOOL SdrObjEditView::IsTextEditInSelectionMode() const
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-BOOL SdrObjEditView::BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj, SdrPageView* pPV, Window* pWin)
+sal_Bool SdrObjEditView::BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj, SdrPageView* pPV, Window* pWin)
 {
-    BOOL bRet=FALSE;
+    sal_Bool bRet=sal_False;
     BrkMacroObj();
     if (pObj!=NULL && pPV!=NULL && pWin!=NULL && pObj->HasMacro()) {
         nTol=ImpGetHitTolLogic(nTol,NULL);
         pMacroObj=pObj;
         pMacroPV=pPV;
         pMacroWin=pWin;
-        bMacroDown=FALSE;
-        nMacroTol=USHORT(nTol);
+        bMacroDown=sal_False;
+        nMacroTol=sal_uInt16(nTol);
         aMacroDownPos=rPnt;
         MovMacroObj(rPnt);
     }
@@ -1764,7 +1764,7 @@ void SdrObjEditView::ImpMacroUp(const Point& rUpPos)
         aHitRec.pPageView=pMacroPV;
         aHitRec.pOut=pMacroWin;
         pMacroObj->PaintMacro(*pMacroWin,Rectangle(),aHitRec);
-        bMacroDown=FALSE;
+        bMacroDown=sal_False;
     }
 }
 
@@ -1778,10 +1778,10 @@ void SdrObjEditView::ImpMacroDown(const Point& rDownPos)
         aHitRec.nTol=nMacroTol;
         aHitRec.pVisiLayer=&pMacroPV->GetVisibleLayers();
         aHitRec.pPageView=pMacroPV;
-        aHitRec.bDown=TRUE;
+        aHitRec.bDown=sal_True;
         aHitRec.pOut=pMacroWin;
         pMacroObj->PaintMacro(*pMacroWin,Rectangle(),aHitRec);
-        bMacroDown=TRUE;
+        bMacroDown=sal_True;
     }
 }
 
@@ -1796,7 +1796,7 @@ void SdrObjEditView::MovMacroObj(const Point& rPnt)
         aHitRec.pPageView=pMacroPV;
         aHitRec.bDown=bMacroDown;
         aHitRec.pOut=pMacroWin;
-        BOOL bDown=pMacroObj->IsMacroHit(aHitRec);
+        sal_Bool bDown=pMacroObj->IsMacroHit(aHitRec);
         if (bDown) ImpMacroDown(rPnt);
         else ImpMacroUp(rPnt);
     }
@@ -1812,7 +1812,7 @@ void SdrObjEditView::BrkMacroObj()
     }
 }
 
-BOOL SdrObjEditView::EndMacroObj()
+sal_Bool SdrObjEditView::EndMacroObj()
 {
     if (pMacroObj!=NULL && bMacroDown) {
         ImpMacroUp(aMacroDownPos);
@@ -1822,7 +1822,7 @@ BOOL SdrObjEditView::EndMacroObj()
         aHitRec.nTol=nMacroTol;
         aHitRec.pVisiLayer=&pMacroPV->GetVisibleLayers();
         aHitRec.pPageView=pMacroPV;
-        aHitRec.bDown=TRUE;
+        aHitRec.bDown=sal_True;
         aHitRec.pOut=pMacroWin;
         bool bRet=pMacroObj->DoMacro(aHitRec);
         pMacroObj=NULL;
@@ -1831,7 +1831,7 @@ BOOL SdrObjEditView::EndMacroObj()
         return bRet;
     } else {
         BrkMacroObj();
-        return FALSE;
+        return sal_False;
     }
 }
 
@@ -1924,7 +1924,7 @@ void SdrObjEditView::OnEndPasteOrDrop( PasteOrDropInfos* )
     // applications can derive from these virtual methods to do something before a drop or paste operation
 }
 
-bool SdrObjEditView::SupportsFormatPaintbrush( UINT32 nObjectInventor, UINT16 nObjectIdentifier ) const
+bool SdrObjEditView::SupportsFormatPaintbrush( sal_uInt32 nObjectInventor, sal_uInt16 nObjectIdentifier ) const
 {
     if( nObjectInventor != SdrInventor && nObjectInventor != E3dInventor )
         return false;
@@ -1974,9 +1974,9 @@ bool SdrObjEditView::SupportsFormatPaintbrush( UINT32 nObjectInventor, UINT16 nO
     }
 }
 
-static const USHORT* GetFormatRangeImpl( bool bTextOnly )
+static const sal_uInt16* GetFormatRangeImpl( bool bTextOnly )
 {
-    static const USHORT gRanges[] = {
+    static const sal_uInt16 gRanges[] = {
         SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,
         SDRATTR_GRAF_FIRST, SDRATTR_GRAF_LAST,
         SDRATTR_TABLE_FIRST, SDRATTR_TABLE_LAST,
@@ -2006,7 +2006,7 @@ bool SdrObjEditView::TakeFormatPaintBrush( boost::shared_ptr< SfxItemSet >& rFor
         }
         else
         {
-            const BOOL bOnlyHardAttr = FALSE;
+            const sal_Bool bOnlyHardAttr = sal_False;
             rFormatSet->Put( GetAttrFromMarked(bOnlyHardAttr) );
         }
         return true;
@@ -2015,14 +2015,14 @@ bool SdrObjEditView::TakeFormatPaintBrush( boost::shared_ptr< SfxItemSet >& rFor
     return false;
 }
 
-static SfxItemSet CreatePaintSet( const USHORT *pRanges, SfxItemPool& rPool, const SfxItemSet& rSourceSet, const SfxItemSet& rTargetSet, bool bNoCharacterFormats, bool bNoParagraphFormats )
+static SfxItemSet CreatePaintSet( const sal_uInt16 *pRanges, SfxItemPool& rPool, const SfxItemSet& rSourceSet, const SfxItemSet& rTargetSet, bool bNoCharacterFormats, bool bNoParagraphFormats )
 {
     SfxItemSet aPaintSet( rPool, pRanges );
 
     while( *pRanges )
     {
-        USHORT nWhich = *pRanges++;
-        const USHORT nLastWhich = *pRanges++;
+        sal_uInt16 nWhich = *pRanges++;
+        const sal_uInt16 nLastWhich = *pRanges++;
 
         if( bNoCharacterFormats && (nWhich == EE_CHAR_START) )
             continue;
@@ -2091,7 +2091,7 @@ void SdrObjEditView::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoChar
             // All formating items (see ranges above) that are unequal in selected shape and
             // the format paintbrush are hard set on the selected shape.
 
-            const USHORT* pRanges = rFormatSet.GetRanges();
+            const sal_uInt16* pRanges = rFormatSet.GetRanges();
             bool bTextOnly = true;
 
             while( *pRanges )
@@ -2107,7 +2107,7 @@ void SdrObjEditView::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoChar
             if( !bTextOnly )
             {
                 SfxItemSet aPaintSet( CreatePaintSet( GetFormatRangeImpl(false), *rShapeSet.GetPool(), rFormatSet, rShapeSet, bNoCharacterFormats, bNoParagraphFormats ) );
-                const BOOL bReplaceAll = FALSE;
+                const sal_Bool bReplaceAll = sal_False;
                 SetAttrToMarked(aPaintSet, bReplaceAll);
             }
 
@@ -2135,7 +2135,7 @@ void SdrObjEditView::ApplyFormatPaintBrush( SfxItemSet& rFormatSet, bool bNoChar
                 if( !aSel.HasRange() )
                     pOLV->SetSelection( rEditEngine.GetWord( aSel, com::sun::star::i18n::WordType::DICTIONARY_WORD ) );
 
-                const BOOL bRemoveParaAttribs = !bNoParagraphFormats;
+                const sal_Bool bRemoveParaAttribs = !bNoParagraphFormats;
                 pOLV->RemoveAttribsKeepLanguages( bRemoveParaAttribs );
                 SfxItemSet aSet( pOLV->GetAttribs() );
                 SfxItemSet aPaintSet( CreatePaintSet(GetFormatRangeImpl(true), *aSet.GetPool(), rFormatSet, aSet, bNoCharacterFormats, bNoParagraphFormats ) );

@@ -91,7 +91,7 @@ public:
 
     virtual void                    SetNoSelection() = 0;
     virtual void                    SelectAll() = 0;
-    virtual void                    SelectRow( long _nRow, BOOL _bSelect = TRUE, BOOL bExpand = TRUE ) = 0;
+    virtual void                    SelectRow( long _nRow, sal_Bool _bSelect = sal_True, sal_Bool bExpand = sal_True ) = 0;
     virtual void                    SelectColumn( sal_uInt16 _nColumnPos, sal_Bool _bSelect = sal_True ) = 0;
     virtual sal_Int32               GetSelectedRowCount() const = 0;
     virtual sal_Int32               GetSelectedColumnCount() const = 0;
@@ -103,11 +103,11 @@ public:
 
     /** @return  <TRUE/>, if the cell is visible. */
     virtual sal_Bool                IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const = 0;
-    virtual String                  GetAccessibleCellText( long _nRow, USHORT _nColumnPos ) const = 0;
+    virtual String                  GetAccessibleCellText( long _nRow, sal_uInt16 _nColumnPos ) const = 0;
 
-    virtual Rectangle               calcHeaderRect( sal_Bool _bIsColumnBar, BOOL _bOnScreen = TRUE ) = 0;
-    virtual Rectangle               calcTableRect( BOOL _bOnScreen = TRUE ) = 0;
-    virtual Rectangle               GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumnPos, BOOL _bIsHeader, BOOL _bOnScreen = TRUE ) = 0;
+    virtual Rectangle               calcHeaderRect( sal_Bool _bIsColumnBar, sal_Bool _bOnScreen = sal_True ) = 0;
+    virtual Rectangle               calcTableRect( sal_Bool _bOnScreen = sal_True ) = 0;
+    virtual Rectangle               GetFieldRectPixelAbs( sal_Int32 _nRow, sal_uInt16 _nColumnPos, sal_Bool _bIsHeader, sal_Bool _bOnScreen = sal_True ) = 0;
 
     virtual XACC                    CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) = 0;
     virtual XACC                    CreateAccessibleRowHeader( sal_Int32 _nRow ) = 0;
@@ -129,12 +129,12 @@ public:
     virtual void                    GrabTableFocus() = 0;
 
     // OutputDevice
-    virtual BOOL                    GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector ) = 0;
+    virtual sal_Bool                    GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector ) = 0;
 
     // Window
     virtual Rectangle               GetWindowExtentsRelative( Window *pRelativeWindow ) const = 0;
     virtual void                    GrabFocus() = 0;
-    virtual XACC                    GetAccessible( BOOL bCreate = TRUE ) = 0;
+    virtual XACC                    GetAccessible( sal_Bool bCreate = sal_True ) = 0;
     virtual Window*                 GetAccessibleParentWindow() const = 0;
     virtual Window*                 GetWindowInstance() = 0;
 

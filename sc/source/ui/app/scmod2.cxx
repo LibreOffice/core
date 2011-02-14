@@ -50,8 +50,8 @@ using namespace com::sun::star;
 //------------------------------------------------------------------
 
 // static
-void ScModule::GetSpellSettings( USHORT& rDefLang, USHORT& rCjkLang, USHORT& rCtlLang,
-                                    BOOL& rAutoSpell )
+void ScModule::GetSpellSettings( sal_uInt16& rDefLang, sal_uInt16& rCjkLang, sal_uInt16& rCtlLang,
+                                    sal_Bool& rAutoSpell )
 {
     //  use SvtLinguConfig instead of service LinguProperties to avoid
     //  loading the linguistic component
@@ -67,7 +67,7 @@ void ScModule::GetSpellSettings( USHORT& rDefLang, USHORT& rCjkLang, USHORT& rCt
 }
 
 // static
-void ScModule::SetAutoSpellProperty( BOOL bSet )
+void ScModule::SetAutoSpellProperty( sal_Bool bSet )
 {
     //  use SvtLinguConfig instead of service LinguProperties to avoid
     //  loading the linguistic component
@@ -81,15 +81,15 @@ void ScModule::SetAutoSpellProperty( BOOL bSet )
 
 
 // static
-BOOL ScModule::HasThesaurusLanguage( USHORT nLang )
+sal_Bool ScModule::HasThesaurusLanguage( sal_uInt16 nLang )
 {
     if ( nLang == LANGUAGE_NONE )
-        return FALSE;
+        return sal_False;
 
     lang::Locale aLocale;
     SvxLanguageToLocale( aLocale, nLang );
 
-    BOOL bHasLang = FALSE;
+    sal_Bool bHasLang = sal_False;
     try
     {
         uno::Reference< linguistic2::XThesaurus > xThes(LinguMgr::GetThesaurus());

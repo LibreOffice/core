@@ -51,8 +51,8 @@
 //   tables                     holds the nameaccess for the tables
 //     table                    holds the table
 
-#define CONTAINER_QUERIES       ULONG( 0 )
-#define CONTAINER_TABLES        ULONG( 1 )
+#define CONTAINER_QUERIES       sal_uLong( 0 )
+#define CONTAINER_TABLES        sal_uLong( 1 )
 
 namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
 

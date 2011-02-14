@@ -43,14 +43,14 @@ class SVL_DLLPUBLIC SfxVisibilityItem: public SfxPoolItem
 public:
     TYPEINFO();
 
-    SfxVisibilityItem(USHORT which = 0, sal_Bool bVisible = sal_True):
+    SfxVisibilityItem(sal_uInt16 which = 0, sal_Bool bVisible = sal_True):
         SfxPoolItem(which)
     {
         m_nValue.bVisible = bVisible;
         DBG_CTOR(SfxVisibilityItem, 0);
     }
 
-    SfxVisibilityItem(USHORT which, SvStream & rStream);
+    SfxVisibilityItem(sal_uInt16 which, SvStream & rStream);
 
     SfxVisibilityItem(const SfxVisibilityItem & rItem):
         SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
@@ -69,25 +69,25 @@ public:
                                                 const IntlWrapper * = 0)
         const;
 
-    virtual BOOL QueryValue( com::sun::star::uno::Any& rVal,
-                             BYTE nMemberId = 0 ) const;
+    virtual sal_Bool QueryValue( com::sun::star::uno::Any& rVal,
+                             sal_uInt8 nMemberId = 0 ) const;
 
-    virtual BOOL PutValue( const com::sun::star::uno::Any& rVal,
-                           BYTE nMemberId = 0 );
+    virtual sal_Bool PutValue( const com::sun::star::uno::Any& rVal,
+                           sal_uInt8 nMemberId = 0 );
 
-    virtual SfxPoolItem * Create(SvStream & rStream, USHORT) const;
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
 
-    virtual SvStream & Store(SvStream & rStream, USHORT) const;
+    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const;
 
-    virtual USHORT GetValueCount() const;
+    virtual sal_uInt16 GetValueCount() const;
 
-    virtual UniString GetValueTextByVal(BOOL bTheValue) const;
+    virtual UniString GetValueTextByVal(sal_Bool bTheValue) const;
 
-    BOOL GetValue() const { return m_nValue.bVisible; }
+    sal_Bool GetValue() const { return m_nValue.bVisible; }
 
-    void SetValue(BOOL bVisible) { m_nValue.bVisible = bVisible; }
+    void SetValue(sal_Bool bVisible) { m_nValue.bVisible = bVisible; }
 };
 
 #endif // _SFXVISIBILITYITEM_HXX

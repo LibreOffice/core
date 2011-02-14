@@ -98,7 +98,7 @@ namespace vclcanvas
             // clip output to actual update region (otherwise a)
             // wouldn't save much render time, and b) will clutter
             // scrolled sprite content outside this area)
-            rOutDev.EnableMapMode( FALSE );
+            rOutDev.EnableMapMode( sal_False );
             rOutDev.SetClipRegion( rRequestedArea );
 
             // repaint affected sprite directly to output device (at
@@ -318,7 +318,7 @@ namespace vclcanvas
             // but repaint everything (or caller requested that)
 
             maVDev->SetOutputSizePixel( aOutDevSize );
-            maVDev->EnableMapMode( FALSE );
+            maVDev->EnableMapMode( sal_False );
             maVDev->DrawOutDev( aEmptyPoint, aOutDevSize,
                                 aEmptyPoint, aOutDevSize,
                                 rBackOutDev );
@@ -332,7 +332,7 @@ namespace vclcanvas
                     _1 ) );
 
             // flush to screen
-            rOutDev.EnableMapMode( FALSE );
+            rOutDev.EnableMapMode( sal_False );
             rOutDev.SetClipRegion();
             rOutDev.DrawOutDev( aEmptyPoint, aOutDevSize,
                                 aEmptyPoint, aOutDevSize,
@@ -577,7 +577,7 @@ namespace vclcanvas
         }
 
         // paint background
-        maVDev->EnableMapMode( FALSE );
+        maVDev->EnableMapMode( sal_False );
         maVDev->SetClipRegion();
         maVDev->DrawOutDev( aEmptyPoint, aOutputSize,
                             aOutputPosition, aOutputSize,
@@ -594,7 +594,7 @@ namespace vclcanvas
                                         _1 ) );
 
         // flush to screen
-        rOutDev.EnableMapMode( FALSE );
+        rOutDev.EnableMapMode( sal_False );
         rOutDev.DrawOutDev( aOutputPosition, aOutputSize,
                             aEmptyPoint, aOutputSize,
                             *maVDev );

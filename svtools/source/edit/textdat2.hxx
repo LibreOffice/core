@@ -56,35 +56,35 @@ class TextView;
 class TETextPortion
 {
 private:
-    USHORT      nLen;
+    sal_uInt16      nLen;
     long        nWidth;
-    BYTE        nKind;
-    BYTE        nRightToLeft;
+    sal_uInt8       nKind;
+    sal_uInt8        nRightToLeft;
 
                 TETextPortion()             { nLen = 0; nKind = PORTIONKIND_TEXT; nWidth = -1; nRightToLeft = 0;}
 
 public:
-                TETextPortion( USHORT nL )  {
+                TETextPortion( sal_uInt16 nL )  {
                                                 nLen = nL;
                                                 nKind = PORTIONKIND_TEXT;
                                                 nWidth= -1;
                                                 nRightToLeft = 0;
                                             }
 
-    USHORT      GetLen() const              { return nLen; }
-    USHORT&     GetLen()                    { return nLen; }
+    sal_uInt16      GetLen() const              { return nLen; }
+    sal_uInt16&     GetLen()                    { return nLen; }
 
     long        GetWidth()const             { return nWidth; }
     long&       GetWidth()                  { return nWidth; }
 
-    BYTE        GetKind() const             { return nKind; }
-    BYTE&       GetKind()                   { return nKind; }
+    sal_uInt8       GetKind() const             { return nKind; }
+    sal_uInt8&      GetKind()                   { return nKind; }
 
-    BYTE        GetRightToLeft() const      { return nRightToLeft; }
-    BYTE&       GetRightToLeft()            { return nRightToLeft; }
-    BOOL        IsRightToLeft() const       { return (nRightToLeft&1); }
+    sal_uInt8       GetRightToLeft() const      { return nRightToLeft; }
+    sal_uInt8&      GetRightToLeft()            { return nRightToLeft; }
+    sal_Bool        IsRightToLeft() const       { return (nRightToLeft&1); }
 
-    BOOL        HasValidSize() const        { return nWidth != (-1); }
+    sal_Bool        HasValidSize() const        { return nWidth != (-1); }
 };
 
 
@@ -99,17 +99,17 @@ public:
             ~TETextPortionList();
 
     void    Reset();
-    USHORT  FindPortion( USHORT nCharPos, USHORT& rPortionStart, BOOL bPreferStartingPortion = FALSE );
-    USHORT  GetPortionStartIndex( USHORT nPortion );
-    void    DeleteFromPortion( USHORT nDelFrom );
+    sal_uInt16  FindPortion( sal_uInt16 nCharPos, sal_uInt16& rPortionStart, sal_Bool bPreferStartingPortion = sal_False );
+    sal_uInt16  GetPortionStartIndex( sal_uInt16 nPortion );
+    void    DeleteFromPortion( sal_uInt16 nDelFrom );
 };
 
 struct TEWritingDirectionInfo
 {
-    BYTE    nType;
-    USHORT  nStartPos;
-    USHORT  nEndPos;
-    TEWritingDirectionInfo( BYTE _Type, USHORT _Start, USHORT _End )
+    sal_uInt8    nType;
+    sal_uInt16  nStartPos;
+    sal_uInt16  nEndPos;
+    TEWritingDirectionInfo( sal_uInt8 _Type, sal_uInt16 _Start, sal_uInt16 _End )
     {
         nType = _Type;
         nStartPos = _Start;
@@ -122,65 +122,65 @@ SV_DECL_VARARR( TEWritingDirectionInfos, TEWritingDirectionInfo, 0, 4 )
 class TextLine
 {
 private:
-    USHORT          mnStart;
-    USHORT          mnEnd;
-    USHORT          mnStartPortion;
-    USHORT          mnEndPortion;
+    sal_uInt16          mnStart;
+    sal_uInt16          mnEnd;
+    sal_uInt16          mnStartPortion;
+    sal_uInt16          mnEndPortion;
 
     short           mnStartX;
 
-    BOOL            mbInvalid;  // fuer geschickte Formatierung/Ausgabe
+    sal_Bool            mbInvalid;  // fuer geschickte Formatierung/Ausgabe
 
 public:
                     TextLine()  {
                                     mnStart = mnEnd = 0;
                                     mnStartPortion = mnEndPortion = 0;
                                     mnStartX = 0;
-                                    mbInvalid = TRUE;
+                                    mbInvalid = sal_True;
                                 }
 
-    BOOL            IsIn( USHORT nIndex ) const
+    sal_Bool            IsIn( sal_uInt16 nIndex ) const
                         { return ( (nIndex >= mnStart ) && ( nIndex < mnEnd ) ); }
 
-    BOOL            IsIn( USHORT nIndex, BOOL bInclEnd ) const
+    sal_Bool            IsIn( sal_uInt16 nIndex, sal_Bool bInclEnd ) const
                         { return ( ( nIndex >= mnStart ) && ( bInclEnd ? ( nIndex <= mnEnd ) : ( nIndex < mnEnd ) ) ); }
 
-    void            SetStart( USHORT n )            { mnStart = n; }
-    USHORT          GetStart() const                { return mnStart; }
-    USHORT&         GetStart()                      { return mnStart; }
+    void            SetStart( sal_uInt16 n )            { mnStart = n; }
+    sal_uInt16          GetStart() const                { return mnStart; }
+    sal_uInt16&         GetStart()                      { return mnStart; }
 
-    void            SetEnd( USHORT n )              { mnEnd = n; }
-    USHORT          GetEnd() const                  { return mnEnd; }
-    USHORT&         GetEnd()                        { return mnEnd; }
+    void            SetEnd( sal_uInt16 n )              { mnEnd = n; }
+    sal_uInt16          GetEnd() const                  { return mnEnd; }
+    sal_uInt16&         GetEnd()                        { return mnEnd; }
 
-    void            SetStartPortion( USHORT n )     { mnStartPortion = n; }
-    USHORT          GetStartPortion() const         { return mnStartPortion; }
-    USHORT&         GetStartPortion()               { return mnStartPortion; }
+    void            SetStartPortion( sal_uInt16 n )     { mnStartPortion = n; }
+    sal_uInt16          GetStartPortion() const         { return mnStartPortion; }
+    sal_uInt16&         GetStartPortion()               { return mnStartPortion; }
 
-    void            SetEndPortion( USHORT n )       { mnEndPortion = n; }
-    USHORT          GetEndPortion() const           { return mnEndPortion; }
-    USHORT&         GetEndPortion()                 { return mnEndPortion; }
+    void            SetEndPortion( sal_uInt16 n )       { mnEndPortion = n; }
+    sal_uInt16          GetEndPortion() const           { return mnEndPortion; }
+    sal_uInt16&         GetEndPortion()                 { return mnEndPortion; }
 
-    USHORT          GetLen() const                  { return mnEnd - mnStart; }
+    sal_uInt16          GetLen() const                  { return mnEnd - mnStart; }
 
-    BOOL            IsInvalid() const               { return mbInvalid; }
-    BOOL            IsValid() const                 { return !mbInvalid; }
-    void            SetInvalid()                    { mbInvalid = TRUE; }
-    void            SetValid()                      { mbInvalid = FALSE; }
+    sal_Bool            IsInvalid() const               { return mbInvalid; }
+    sal_Bool            IsValid() const                 { return !mbInvalid; }
+    void            SetInvalid()                    { mbInvalid = sal_True; }
+    void            SetValid()                      { mbInvalid = sal_False; }
 
-    BOOL            IsEmpty() const                 { return (mnEnd > mnStart) ? FALSE : TRUE; }
+    sal_Bool            IsEmpty() const                 { return (mnEnd > mnStart) ? sal_False : sal_True; }
 
     short           GetStartX() const               { return mnStartX; }
     void            SetStartX( short n )            { mnStartX = n; }
 
-    inline BOOL operator == ( const TextLine& rLine ) const;
-    inline BOOL operator != ( const TextLine& rLine ) const;
+    inline sal_Bool operator == ( const TextLine& rLine ) const;
+    inline sal_Bool operator != ( const TextLine& rLine ) const;
 };
 
 typedef TextLine* TextLinePtr;
  SV_DECL_PTRARR_DEL( TextLines, TextLinePtr, 1, 4 )
 
-inline BOOL TextLine::operator == ( const TextLine& rLine ) const
+inline sal_Bool TextLine::operator == ( const TextLine& rLine ) const
 {
     return (    ( mnStart == rLine.mnStart ) &&
                 ( mnEnd == rLine.mnEnd ) &&
@@ -188,7 +188,7 @@ inline BOOL TextLine::operator == ( const TextLine& rLine ) const
                 ( mnEndPortion == rLine.mnEndPortion ) );
 }
 
-inline BOOL TextLine::operator != ( const TextLine& rLine ) const
+inline sal_Bool TextLine::operator != ( const TextLine& rLine ) const
 {
     return !( *this == rLine );
 }
@@ -205,11 +205,11 @@ private:
     TEWritingDirectionInfos maWritingDirectionInfos;
 
 
-    USHORT              mnInvalidPosStart;
+    sal_uInt16              mnInvalidPosStart;
     short               mnInvalidDiff;
 
-    BOOL                mbInvalid;
-    BOOL                mbSimple;   // nur lineares Tippen
+    sal_Bool                mbInvalid;
+    sal_Bool                mbSimple;   // nur lineares Tippen
 
 
                         TEParaPortion( const TEParaPortion& ) {;}
@@ -219,15 +219,15 @@ public:
                         ~TEParaPortion();
 
 
-    BOOL                IsInvalid() const           { return mbInvalid; }
-    BOOL                IsSimpleInvalid() const     { return mbSimple; }
-    void                SetNotSimpleInvalid()       { mbSimple = FALSE; }
-    void                SetValid()                  { mbInvalid = FALSE; mbSimple = TRUE;}
+    sal_Bool                IsInvalid() const           { return mbInvalid; }
+    sal_Bool                IsSimpleInvalid() const     { return mbSimple; }
+    void                SetNotSimpleInvalid()       { mbSimple = sal_False; }
+    void                SetValid()                  { mbInvalid = sal_False; mbSimple = sal_True;}
 
-    void                MarkInvalid( USHORT nStart, short nDiff);
-    void                MarkSelectionInvalid( USHORT nStart, USHORT nEnd );
+    void                MarkInvalid( sal_uInt16 nStart, short nDiff);
+    void                MarkSelectionInvalid( sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    USHORT              GetInvalidPosStart() const  { return mnInvalidPosStart; }
+    sal_uInt16              GetInvalidPosStart() const  { return mnInvalidPosStart; }
     short               GetInvalidDiff() const      { return mnInvalidDiff; }
 
     TextNode*           GetNode() const             { return mpNode; }
@@ -236,8 +236,8 @@ public:
     TEWritingDirectionInfos& GetWritingDirectionInfos() { return maWritingDirectionInfos; }
 
 
-    USHORT              GetLineNumber( USHORT nIndex, BOOL bInclEnd );
-    void                CorrectValuesBehindLastFormattedLine( USHORT nLastFormattedLine );
+    sal_uInt16              GetLineNumber( sal_uInt16 nIndex, sal_Bool bInclEnd );
+    void                CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormattedLine );
 };
 
 
@@ -262,9 +262,9 @@ public:
 
     virtual void    CreateAnchor();
 
-    virtual BOOL    SetCursorAtPoint( const Point& rPointPixel, BOOL bDontSelectAtCursor = FALSE );
+    virtual sal_Bool    SetCursorAtPoint( const Point& rPointPixel, sal_Bool bDontSelectAtCursor = sal_False );
 
-    virtual BOOL    IsSelectionAtPoint( const Point& rPointPixel );
+    virtual sal_Bool    IsSelectionAtPoint( const Point& rPointPixel );
     virtual void    DeselectAll();
 
     virtual void    DeselectAtPoint( const Point& );
@@ -276,13 +276,13 @@ class IdleFormatter : public Timer
 {
 private:
     TextView*   mpView;
-    USHORT      mnRestarts;
+    sal_uInt16      mnRestarts;
 
 public:
                 IdleFormatter();
                 ~IdleFormatter();
 
-    void        DoIdleFormat( TextView* pV, USHORT nMaxRestarts );
+    void        DoIdleFormat( TextView* pV, sal_uInt16 nMaxRestarts );
     void        ForceTimeout();
     TextView*   GetView()       { return mpView; }
 };
@@ -292,14 +292,14 @@ struct TextDDInfo
     Cursor          maCursor;
     TextPaM         maDropPos;
 
-    BOOL            mbStarterOfDD;
-    BOOL            mbVisCursor;
+    sal_Bool            mbStarterOfDD;
+    sal_Bool            mbVisCursor;
 
     TextDDInfo()
     {
         maCursor.SetStyle( CURSOR_SHADOW );
-        mbStarterOfDD = FALSE;
-        mbVisCursor = FALSE;
+        mbStarterOfDD = sal_False;
+        mbVisCursor = sal_False;
     }
 };
 

@@ -51,13 +51,13 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxClipBoardControl, SfxVoidItem /*SfxUInt16Item*/ );
 
 
 SvxClipBoardControl::SvxClipBoardControl(
-        USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+        sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
 
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     pClipboardFmtItem( 0 ),
      pPopup     (0),
     nItemId     (nId),
-    bDisabled( FALSE )
+    bDisabled( sal_False )
 {
     addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ClipboardFormatItems" )));
     ToolBox& rBox = GetToolBox();
@@ -83,25 +83,25 @@ SfxPopupWindow* SvxClipBoardControl::CreatePopupWindow()
         else
             pPopup = new PopupMenu;
 
-        USHORT nCount = pFmtItem->Count();
-        for (USHORT i = 0;  i < nCount;  ++i)
+        sal_uInt16 nCount = pFmtItem->Count();
+        for (sal_uInt16 i = 0;  i < nCount;  ++i)
         {
-            ULONG nFmtID =  pFmtItem->GetClipbrdFormatId( i );
+            sal_uIntPtr nFmtID =  pFmtItem->GetClipbrdFormatId( i );
             String aFmtStr( pFmtItem->GetClipbrdFormatName( i ) );
             if (!aFmtStr.Len())
               aFmtStr = SvPasteObjectHelper::GetSotFormatUIName( nFmtID );
-            pPopup->InsertItem( (USHORT)nFmtID, aFmtStr );
+            pPopup->InsertItem( (sal_uInt16)nFmtID, aFmtStr );
         }
 
         ToolBox& rBox = GetToolBox();
-        USHORT nId = GetId();
-        rBox.SetItemDown( nId, TRUE );
+        sal_uInt16 nId = GetId();
+        rBox.SetItemDown( nId, sal_True );
 
         pPopup->Execute( &rBox, rBox.GetItemRect( nId ),
             (rBox.GetAlign() == WINDOWALIGN_TOP || rBox.GetAlign() == WINDOWALIGN_BOTTOM) ?
                 POPUPMENU_EXECUTE_DOWN : POPUPMENU_EXECUTE_RIGHT );
 
-        rBox.SetItemDown( nId, FALSE );
+        rBox.SetItemDown( nId, sal_False );
 
         SfxUInt32Item aItem( SID_CLIPBOARD_FORMAT_ITEMS, pPopup->GetCurItemId() );
 
@@ -126,7 +126,7 @@ SfxPopupWindowType SvxClipBoardControl::GetPopupWindowType() const
 }
 
 
-void SvxClipBoardControl::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SvxClipBoardControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     if ( SID_CLIPBOARD_FORMAT_ITEMS == nSID )
     {

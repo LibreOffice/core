@@ -37,7 +37,7 @@ struct ESelection;
 
 namespace SwLangHelper
 {
-    extern USHORT GetLanguageStatus( OutlinerView* pOLV, SfxItemSet& rSet );
+    extern sal_uInt16 GetLanguageStatus( OutlinerView* pOLV, SfxItemSet& rSet );
     extern bool SetLanguageStatus( OutlinerView* pOLV, SfxRequest &rReq, SwView &rView, SwWrtShell &rSh );
 
     extern void SetLanguage( SwWrtShell &rWrtSh, const String &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet );
@@ -58,10 +58,10 @@ namespace SwLangHelper
     extern String GetTextForLanguageGuessing( EditEngine* rEditEngine, ESelection aDocSelection );
     extern String GetTextForLanguageGuessing( SwWrtShell &rSh );
 
-    extern LanguageType GetLanguage( SfxItemSet aSet, USHORT nLangWhichId );
-    extern LanguageType GetLanguage( SwWrtShell &rSh, USHORT nLangWhichId );
+    extern LanguageType GetLanguage( SfxItemSet aSet, sal_uInt16 nLangWhichId );
+    extern LanguageType GetLanguage( SwWrtShell &rSh, sal_uInt16 nLangWhichId );
 
-    extern LanguageType GetCurrentLanguage( SfxItemSet aSet, USHORT nScriptType );
+    extern LanguageType GetCurrentLanguage( SfxItemSet aSet, sal_uInt16 nScriptType );
     extern LanguageType GetCurrentLanguage( SwWrtShell &rSh );
 }
 

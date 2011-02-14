@@ -176,7 +176,7 @@ bool IsUserWordbook( const ::rtl::OUString& rFile )
                 bRet = true;
             else
             {
-                USHORT nLen;
+                sal_uInt16 nLen;
                 pStream->Seek (nSniffPos);
                 *pStream >> nLen;
                 if ( nLen < MAX_HEADER_LENGTH )

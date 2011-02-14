@@ -116,7 +116,7 @@ bool RegressionEquationItemConverter::ApplyItemSet( const SfxItemSet & rItemSet 
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const USHORT * RegressionEquationItemConverter::GetWhichPairs() const
+const sal_uInt16 * RegressionEquationItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nRegEquationWhichPairs;
@@ -135,7 +135,7 @@ bool RegressionEquationItemConverter::GetItemProperty( tWhichIdType nWhichId, tP
 }
 
 bool RegressionEquationItemConverter::ApplySpecialItem(
-    USHORT nWhichId, const SfxItemSet & rItemSet )
+    sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     bool bChanged = false;
@@ -166,7 +166,7 @@ bool RegressionEquationItemConverter::ApplySpecialItem(
 }
 
 void RegressionEquationItemConverter::FillSpecialItem(
-    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
     switch( nWhichId )

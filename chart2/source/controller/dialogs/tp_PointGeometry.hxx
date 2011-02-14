@@ -43,7 +43,7 @@ public:
     virtual ~SchLayoutTabPage();
 
     static SfxTabPage* Create(Window* pParent, const SfxItemSet& rInAttrs);
-    virtual BOOL FillItemSet(SfxItemSet& rOutAttrs);
+    virtual sal_Bool FillItemSet(SfxItemSet& rOutAttrs);
     virtual void Reset(const SfxItemSet& rInAttrs);
 
 private:

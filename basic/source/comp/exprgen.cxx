@@ -75,12 +75,12 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
             case SbxINTEGER: pGen->Gen( _CONST,  (short) nVal ); break;
             case SbxSTRING:
             {
-                USHORT nStringId = pGen->GetParser()->aGblStrings.Add( aStrVal, TRUE );
+                sal_uInt16 nStringId = pGen->GetParser()->aGblStrings.Add( aStrVal, sal_True );
                 pGen->Gen( _SCONST, nStringId ); break;
             }
             default:
             {
-                USHORT nStringId = pGen->GetParser()->aGblStrings.Add( nVal, eType );
+                sal_uInt16 nStringId = pGen->GetParser()->aGblStrings.Add( nVal, eType );
                 pGen->Gen( _NUMBER, nStringId );
             }
         }
@@ -174,7 +174,7 @@ void SbiExprNode::GenElement( SbiOpcode eOp )
     // Das ID ist entweder die Position oder das String-ID
     // Falls das Bit 0x8000 gesetzt ist, hat die Variable
     // eine Parameterliste.
-    USHORT nId = ( eOp == _PARAM ) ? pDef->GetPos() : pDef->GetId();
+    sal_uInt16 nId = ( eOp == _PARAM ) ? pDef->GetPos() : pDef->GetId();
     // Parameterliste aufbauen
     if( aVar.pPar && aVar.pPar->GetSize() )
     {
@@ -182,7 +182,7 @@ void SbiExprNode::GenElement( SbiOpcode eOp )
         aVar.pPar->Gen();
     }
 
-    pGen->Gen( eOp, nId, sal::static_int_cast< UINT16 >( GetType() ) );
+    pGen->Gen( eOp, nId, sal::static_int_cast< sal_uInt16 >( GetType() ) );
 
     if( aVar.pvMorePar )
     {
@@ -207,7 +207,7 @@ void SbiExprList::Gen()
     {
         pParser->aGen.Gen( _ARGC );
         // AB 10.1.96: Typ-Anpassung bei DECLARE
-        USHORT nCount = 1 /*, nParAnz = 0*/;
+        sal_uInt16 nCount = 1 /*, nParAnz = 0*/;
 //      SbiSymPool* pPool = NULL;
         for( SbiExpression* pExpr = pFirst; pExpr; pExpr = pExpr->pNext,nCount++ )
         {
@@ -215,7 +215,7 @@ void SbiExprList::Gen()
             if( pExpr->GetName().Len() )
             {
                 // named arg
-                USHORT nSid = pParser->aGblStrings.Add( pExpr->GetName() );
+                sal_uInt16 nSid = pParser->aGblStrings.Add( pExpr->GetName() );
                 pParser->aGen.Gen( _ARGN, nSid );
 
                 /* TODO: Check after Declare concept change
@@ -226,7 +226,7 @@ void SbiExprList::Gen()
                     pParser->Error( SbERR_NO_NAMED_ARGS );
 
                     // Spaeter, wenn Named Args bei DECLARE moeglich
-                    //for( USHORT i = 1 ; i < nParAnz ; i++ )
+                    //for( sal_uInt16 i = 1 ; i < nParAnz ; i++ )
                     //{
                     //  SbiSymDef* pDef = pPool->Get( i );
                     //  const String& rName = pDef->GetName();
@@ -260,7 +260,7 @@ void SbiExpression::Gen( RecursiveMode eRecMode )
         pParser->aGen.Gen( _BYVAL );
     if( bBased )
     {
-        USHORT uBase = pParser->nBase;
+        sal_uInt16 uBase = pParser->nBase;
         if( pParser->IsCompatible() )
             uBase |= 0x8000;        // #109275 Flag compatiblity
         pParser->aGen.Gen( _BASED, uBase );

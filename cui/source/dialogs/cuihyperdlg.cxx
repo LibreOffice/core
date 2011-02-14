@@ -48,7 +48,7 @@ using ::com::sun::star::frame::XFrame;
 //#                                                                      #
 //########################################################################
 
-SvxHlinkCtrl::SvxHlinkCtrl( USHORT _nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg )
+SvxHlinkCtrl::SvxHlinkCtrl( sal_uInt16 _nId, SfxBindings & rBindings, SvxHpLinkDlg* pDlg )
 : SfxControllerItem ( _nId, rBindings )
   ,aOnlineForwarder  ( SID_INTERNET_ONLINE , *this )
   ,aRdOnlyForwarder  ( SID_READONLY_MODE, *this )
@@ -56,7 +56,7 @@ SvxHlinkCtrl::SvxHlinkCtrl( USHORT _nId, SfxBindings & rBindings, SvxHpLinkDlg* 
     pParent = pDlg;
 }
 
-void SvxHlinkCtrl::StateChanged( USHORT nSID, SfxItemState eState,
+void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                  const SfxPoolItem* pState )
 {
     if ( eState == SFX_ITEM_AVAILABLE )
@@ -75,7 +75,7 @@ void SvxHlinkCtrl::StateChanged( USHORT nSID, SfxItemState eState,
             break;
             case SID_READONLY_MODE :
             {
-                pParent->SetReadOnlyMode( ( (SfxBoolItem*)pState)->GetValue() == TRUE );
+                pParent->SetReadOnlyMode( ( (SfxBoolItem*)pState)->GetValue() == sal_True );
             }
             break;
         }
@@ -146,7 +146,7 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     SetInputSet (mpItemSet);
 
     // Init Dialog
-    Start (FALSE);
+    Start (sal_False);
 
     pBindings->Update( SID_READONLY_MODE );
 
@@ -173,12 +173,12 @@ SvxHpLinkDlg::~SvxHpLinkDlg ()
 |*
 |************************************************************************/
 
-BOOL SvxHpLinkDlg::Close()
+sal_Bool SvxHpLinkDlg::Close()
 {
     GetDispatcher()->Execute( SID_HYPERLINK_DIALOG,
                               SFX_CALLMODE_ASYNCHRON |
                               SFX_CALLMODE_RECORD);
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -205,13 +205,13 @@ void SvxHpLinkDlg::Move()
         // Size of Extrawindow
         Size aExtraWndSize( pCurrentPage->GetSizeExtraWnd() );
 
-        BOOL bDoInvalid ;
+        sal_Bool bDoInvalid ;
         if( aDlgPos.X()+(1.02*aDlgSize.Width())+aExtraWndSize.Width() > aWindowSize.Width() )
         {
             if( aDlgPos.X() - ( 0.02*aDlgSize.Width() ) - aExtraWndSize.Width() < 0 )
             {
                 // Pos Extrawindow anywhere
-                bDoInvalid = pCurrentPage->MoveToExtraWnd( Point( 1, long(1.1*aDlgPos.Y()) ), TRUE );
+                bDoInvalid = pCurrentPage->MoveToExtraWnd( Point( 1, long(1.1*aDlgPos.Y()) ), sal_True );
             }
             else
             {
@@ -305,9 +305,9 @@ IMPL_LINK ( SvxHpLinkDlg, ClickCloseHdl_Impl, void *, EMPTYARG )
 |*
 |************************************************************************/
 
-USHORT SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
+sal_uInt16 SvxHpLinkDlg::SetPage ( SvxHyperlinkItem* pItem )
 {
-    USHORT nPageId = RID_SVXPAGE_HYPERLINK_INTERNET;
+    sal_uInt16 nPageId = RID_SVXPAGE_HYPERLINK_INTERNET;
 
     String aStrURL ( pItem->GetURL() );
     INetURLObject aURL ( aStrURL );
@@ -401,7 +401,7 @@ void SvxHpLinkDlg::SetReadOnlyMode( sal_Bool bRdOnly )
 |*
 |************************************************************************/
 
-void SvxHpLinkDlg::PageCreated( USHORT /*nId*/, IconChoicePage& rPage )
+void SvxHpLinkDlg::PageCreated( sal_uInt16 /*nId*/, IconChoicePage& rPage )
 {
     SvxHyperlinkTabPageBase& rHyperlinkPage = dynamic_cast< SvxHyperlinkTabPageBase& >( rPage );
     Reference< XFrame > xDocumentFrame;

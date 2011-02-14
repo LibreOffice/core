@@ -39,19 +39,19 @@ class BigPtrEntry
 {
     friend class BigPtrArray;
     BlockInfo* pBlock;
-    USHORT nOffset;
+    sal_uInt16 nOffset;
 public:
     virtual ~BigPtrEntry() {}
 protected:
     BigPtrEntry() : pBlock(0), nOffset(0) {}
 
-    inline ULONG GetPos() const;
+    inline sal_uLong GetPos() const;
     inline BigPtrArray& GetArray() const;
 };
 typedef BigPtrEntry* ElementPtr;
 
 
-typedef BOOL (*FnForEach)( const ElementPtr&, void* pArgs );
+typedef sal_Bool (*FnForEach)( const ElementPtr&, void* pArgs );
 
 // 1000 Eintr„ge pro Block = etwas weniger als 4K
 #define MAXENTRY 1000
@@ -67,51 +67,51 @@ typedef BOOL (*FnForEach)( const ElementPtr&, void* pArgs );
 struct BlockInfo {                  // Block-Info:
     BigPtrArray* pBigArr;           // in diesem Array steht der Block
     ElementPtr* pData;              // Datenblock
-    ULONG nStart, nEnd;             // Start- und EndIndex
-    USHORT nElem;                   // Anzahl Elemente
+    sal_uLong nStart, nEnd;             // Start- und EndIndex
+    sal_uInt16 nElem;                   // Anzahl Elemente
 };
 
 class SW_DLLPUBLIC BigPtrArray
 {
     BlockInfo** ppInf;              // Block-Infos
-    ULONG       nSize;              // Anzahl Elemente
-    USHORT      nMaxBlock;          // akt. max Anzahl Bloecke
-    USHORT      nBlock;             // Anzahl Bloecke
-    USHORT      nCur;               // letzter Block
+    sal_uLong       nSize;              // Anzahl Elemente
+    sal_uInt16      nMaxBlock;          // akt. max Anzahl Bloecke
+    sal_uInt16      nBlock;             // Anzahl Bloecke
+    sal_uInt16      nCur;               // letzter Block
 
-    USHORT      Index2Block( ULONG ) const; // Blocksuche
-    BlockInfo*  InsBlock( USHORT );         // Block einfuegen
-    void        BlockDel( USHORT );         // es wurden Bloecke geloescht
-    void        UpdIndex( USHORT );         // Indexe neu berechnen
+    sal_uInt16      Index2Block( sal_uLong ) const; // Blocksuche
+    BlockInfo*  InsBlock( sal_uInt16 );         // Block einfuegen
+    void        BlockDel( sal_uInt16 );         // es wurden Bloecke geloescht
+    void        UpdIndex( sal_uInt16 );         // Indexe neu berechnen
 
 protected:
     // fuelle alle Bloecke auf.
     // Der short gibt in Prozent an, wie voll die Bloecke werden sollen.
     // Der ReturnWert besagt, das irgendetwas "getan" wurde
-    USHORT Compress( short = COMPRESSLVL );
+    sal_uInt16 Compress( short = COMPRESSLVL );
 
 public:
     BigPtrArray();
     ~BigPtrArray();
 
-    ULONG Count() const { return nSize; }
+    sal_uLong Count() const { return nSize; }
 
-    void Insert( const ElementPtr& r, ULONG pos );
-    void Remove( ULONG pos, ULONG n = 1 );
-    void Move( ULONG from, ULONG to );
-    void Replace( ULONG pos, const ElementPtr& r);
+    void Insert( const ElementPtr& r, sal_uLong pos );
+    void Remove( sal_uLong pos, sal_uLong n = 1 );
+    void Move( sal_uLong from, sal_uLong to );
+    void Replace( sal_uLong pos, const ElementPtr& r);
 
-    ElementPtr operator[]( ULONG ) const;
+    ElementPtr operator[]( sal_uLong ) const;
     void ForEach( FnForEach fn, void* pArgs = NULL )
     {
         ForEach( 0, nSize, fn, pArgs );
     }
-    void ForEach( ULONG nStart, ULONG nEnd, FnForEach fn, void* pArgs = NULL );
+    void ForEach( sal_uLong nStart, sal_uLong nEnd, FnForEach fn, void* pArgs = NULL );
 };
 
 
 
-inline ULONG BigPtrEntry::GetPos() const
+inline sal_uLong BigPtrEntry::GetPos() const
 {
     DBG_ASSERT( this == pBlock->pData[ nOffset ], "Element nicht im Block" );
     return pBlock->nStart + nOffset;

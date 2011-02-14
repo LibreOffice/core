@@ -86,11 +86,11 @@ void DragAndDropContext::GetPagesFromBookmarks (
     if (pDocument == NULL)
         return;
 
-    for (ULONG nIndex=0,nCount=rBookmarks.Count(); nIndex<nCount; ++nIndex)
+    for (sal_uLong nIndex=0,nCount=rBookmarks.Count(); nIndex<nCount; ++nIndex)
     {
         const String sPageName (*static_cast<String*>(rBookmarks.GetObject(nIndex)));
-        BOOL bIsMasterPage (FALSE);
-        const USHORT nPageIndex (pDocument->GetPageByName(sPageName, bIsMasterPage));
+        sal_Bool bIsMasterPage (sal_False);
+        const sal_uInt16 nPageIndex (pDocument->GetPageByName(sPageName, bIsMasterPage));
         if (nPageIndex == SDRPAGE_NOTFOUND)
             continue;
 

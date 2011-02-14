@@ -37,7 +37,7 @@
 /************************************************************************
 |*    SvClassManager::Register()
 *************************************************************************/
-void SvClassManager::Register( USHORT nClassId, SvCreateInstancePersist pFunc )
+void SvClassManager::Register( sal_uInt16 nClassId, SvCreateInstancePersist pFunc )
 {
 #ifdef DBG_UTIL
     SvCreateInstancePersist p;
@@ -50,7 +50,7 @@ void SvClassManager::Register( USHORT nClassId, SvCreateInstancePersist pFunc )
 /************************************************************************
 |*    SvClassManager::Get()
 *************************************************************************/
-SvCreateInstancePersist SvClassManager::Get( USHORT nClassId )
+SvCreateInstancePersist SvClassManager::Get( sal_uInt16 nClassId )
 {
     Map::const_iterator i(aAssocTable.find(nClassId));
     return i == aAssocTable.end() ? 0 : i->second;
@@ -63,32 +63,32 @@ TYPEINIT0( SvRttiBase );
 
 SvPersistBaseMemberList::SvPersistBaseMemberList(){}
 SvPersistBaseMemberList::SvPersistBaseMemberList(
-    USHORT nInitSz, USHORT nResize )
+    sal_uInt16 nInitSz, sal_uInt16 nResize )
     : SuperSvPersistBaseMemberList( nInitSz, nResize ){}
 
-#define PERSIST_LIST_VER        (BYTE)0
-#define PERSIST_LIST_DBGUTIL    (BYTE)0x80
+#define PERSIST_LIST_VER        (sal_uInt8)0
+#define PERSIST_LIST_DBGUTIL    (sal_uInt8)0x80
 
 /************************************************************************
 |*    SvPersistBaseMemberList::WriteOnlyStreamedObjects()
 *************************************************************************/
 void SvPersistBaseMemberList::WriteObjects( SvPersistStream & rStm,
-                                            BOOL bOnlyStreamed ) const
+                                            sal_Bool bOnlyStreamed ) const
 {
 #ifdef STOR_NO_OPTIMIZE
-    rStm << (BYTE)(PERSIST_LIST_VER | PERSIST_LIST_DBGUTIL);
-    UINT32 nObjPos = rStm.WriteDummyLen();
+    rStm << (sal_uInt8)(PERSIST_LIST_VER | PERSIST_LIST_DBGUTIL);
+    sal_uInt32 nObjPos = rStm.WriteDummyLen();
 #else
-    BYTE bTmp = PERSIST_LIST_VER;
+    sal_uInt8 bTmp = PERSIST_LIST_VER;
     rStm << bTmp;
 #endif
-    UINT32 nCountMember = Count();
-    ULONG  nCountPos = rStm.Tell();
-    UINT32 nWriteCount = 0;
+    sal_uInt32 nCountMember = Count();
+    sal_uIntPtr  nCountPos = rStm.Tell();
+    sal_uInt32 nWriteCount = 0;
     rStm << nCountMember;
     //bloss die Liste nicht veraendern,
     //wegen Seiteneffekten beim Save
-    for( ULONG n = 0; n < nCountMember; n++ )
+    for( sal_uIntPtr n = 0; n < nCountMember; n++ )
     {
         SvPersistBase * pObj = GetObject( n );
         if( !bOnlyStreamed || rStm.IsStreamed( pObj ) )
@@ -100,7 +100,7 @@ void SvPersistBaseMemberList::WriteObjects( SvPersistStream & rStm,
     if( nWriteCount != nCountMember )
     {
         // nicht alle Objekte geschrieben, Count anpassen
-        ULONG nPos = rStm.Tell();
+        sal_uIntPtr nPos = rStm.Tell();
         rStm.Seek( nCountPos );
         rStm << nWriteCount;
         rStm.Seek( nPos );
@@ -126,7 +126,7 @@ SvPersistStream& operator << ( SvPersistStream & rStm,
 SvPersistStream& operator >> ( SvPersistStream & rStm,
                                SvPersistBaseMemberList & rLst )
 {
-    BYTE nVer;
+    sal_uInt8 nVer;
     rStm >> nVer;
 
     if( (nVer & ~PERSIST_LIST_DBGUTIL) != PERSIST_LIST_VER )
@@ -135,13 +135,13 @@ SvPersistStream& operator >> ( SvPersistStream & rStm,
         DBG_ERROR( "persist list, false version" );
     }
 
-    UINT32 nObjLen(0), nObjPos(0);
+    sal_uInt32 nObjLen(0), nObjPos(0);
     if( nVer & PERSIST_LIST_DBGUTIL )
         nObjLen = rStm.ReadLen( &nObjPos );
 
     sal_uInt32 nCount;
     rStm >> nCount;
-    for( ULONG n = 0; n < nCount && rStm.GetError() == SVSTREAM_OK; n++ )
+    for( sal_uIntPtr n = 0; n < nCount && rStm.GetError() == SVSTREAM_OK; n++ )
     {
         SvPersistBase * pObj;
         rStm >> pObj;
@@ -168,7 +168,7 @@ SvPersistStream::SvPersistStream
                                gespeichert werdn k"onnen */
     SvStream * pStream,     /* Dieser Stream wird als Medium genommen, auf
                                dem der PersistStream arbeitet */
-    UINT32 nStartIdxP       /* Ab diesem Index werden die Id's f"ur
+    sal_uInt32 nStartIdxP       /* Ab diesem Index werden die Id's f"ur
                                die Objekte vergeben, er muss gr"osser
                                als Null sein. */
 )
@@ -187,7 +187,7 @@ SvPersistStream::SvPersistStream
 */
 {
     DBG_ASSERT( nStartIdx != 0, "zero index not allowed" );
-    bIsWritable = TRUE;
+    bIsWritable = sal_True;
     if( pStm )
     {
         SetVersion( pStm->GetVersion() );
@@ -225,7 +225,7 @@ SvPersistStream::SvPersistStream
     wenn das erste aus dieser Hierarchie benutzt werden soll.
 */
 {
-    bIsWritable = TRUE;
+    bIsWritable = sal_True;
     if( pStm )
     {
         SetVersion( pStm->GetVersion() );
@@ -279,14 +279,14 @@ void SvPersistStream::SetStream
 }
 
 //=========================================================================
-USHORT SvPersistStream::IsA() const
+sal_uInt16 SvPersistStream::IsA() const
 /*  [Beschreibung]
 
     Gibt den Identifier dieses Streamklasse zur"uck.
 
     [R"uckgabewert]
 
-    USHORT      ID_PERSISTSTREAM wird zur"uckgegeben.
+    sal_uInt16      ID_PERSISTSTREAM wird zur"uckgegeben.
 
 
     [Querverweise]
@@ -311,10 +311,10 @@ void SvPersistStream::ResetError()
 /*************************************************************************
 |*    SvPersistStream::GetData()
 *************************************************************************/
-ULONG SvPersistStream::GetData( void* pData, ULONG nSize )
+sal_uIntPtr SvPersistStream::GetData( void* pData, sal_uIntPtr nSize )
 {
     DBG_ASSERT( pStm, "stream not set" );
-    ULONG nRet = pStm->Read( pData, nSize );
+    sal_uIntPtr nRet = pStm->Read( pData, nSize );
     SetError( pStm->GetError() );
     return nRet;
 }
@@ -322,10 +322,10 @@ ULONG SvPersistStream::GetData( void* pData, ULONG nSize )
 /*************************************************************************
 |*    SvPersistStream::PutData()
 *************************************************************************/
-ULONG SvPersistStream::PutData( const void* pData, ULONG nSize )
+sal_uIntPtr SvPersistStream::PutData( const void* pData, sal_uIntPtr nSize )
 {
     DBG_ASSERT( pStm, "stream not set" );
-    ULONG nRet = pStm->Write( pData, nSize );
+    sal_uIntPtr nRet = pStm->Write( pData, nSize );
     SetError( pStm->GetError() );
     return nRet;
 }
@@ -333,10 +333,10 @@ ULONG SvPersistStream::PutData( const void* pData, ULONG nSize )
 /*************************************************************************
 |*    SvPersistStream::Seek()
 *************************************************************************/
-ULONG SvPersistStream::SeekPos( ULONG nPos )
+sal_uIntPtr SvPersistStream::SeekPos( sal_uIntPtr nPos )
 {
     DBG_ASSERT( pStm, "stream not set" );
-    ULONG nRet = pStm->Seek( nPos );
+    sal_uIntPtr nRet = pStm->Seek( nPos );
     SetError( pStm->GetError() );
     return nRet;
 }
@@ -351,15 +351,15 @@ void SvPersistStream::FlushData()
 /*************************************************************************
 |*    SvPersistStream::GetCurMaxIndex()
 *************************************************************************/
-ULONG SvPersistStream::GetCurMaxIndex( const SvPersistUIdx & rIdx ) const
+sal_uIntPtr SvPersistStream::GetCurMaxIndex( const SvPersistUIdx & rIdx ) const
 {
     // const  bekomme ich nicht den hoechsten Index
     SvPersistUIdx * p = (SvPersistUIdx *)&rIdx;
     // alten merken
-    ULONG nCurIdx = p->GetCurIndex();
+    sal_uIntPtr nCurIdx = p->GetCurIndex();
     p->Last();
     // Bereiche nicht ueberschneiden, deshalb nur groessere Indexe
-    ULONG nMaxIdx = p->GetCurIndex();
+    sal_uIntPtr nMaxIdx = p->GetCurIndex();
     // wieder herstellen
     p->Seek( nCurIdx );
     return nMaxIdx;
@@ -368,9 +368,9 @@ ULONG SvPersistStream::GetCurMaxIndex( const SvPersistUIdx & rIdx ) const
 /*************************************************************************
 |*    SvPersistStream::GetIndex()
 *************************************************************************/
-ULONG SvPersistStream::GetIndex( SvPersistBase * pObj ) const
+sal_uIntPtr SvPersistStream::GetIndex( SvPersistBase * pObj ) const
 {
-    ULONG nId = (ULONG)aPTable.Get( (ULONG)pObj );
+    sal_uIntPtr nId = (sal_uIntPtr)aPTable.Get( (sal_uIntPtr)pObj );
     if( !nId && pRefStm )
         return pRefStm->GetIndex( pObj );
     return nId;
@@ -379,7 +379,7 @@ ULONG SvPersistStream::GetIndex( SvPersistBase * pObj ) const
 /*************************************************************************
 |*    SvPersistStream::GetObject)
 *************************************************************************/
-SvPersistBase * SvPersistStream::GetObject( ULONG nIdx ) const
+SvPersistBase * SvPersistStream::GetObject( sal_uIntPtr nIdx ) const
 {
     if( nIdx >= nStartIdx )
         return aPUIdx.Get( nIdx );
@@ -393,7 +393,7 @@ SvPersistBase * SvPersistStream::GetObject( ULONG nIdx ) const
 #define LEN_2           0x40
 #define LEN_4           0x20
 #define LEN_5           0x10
-UINT32 SvPersistStream::ReadCompressed
+sal_uInt32 SvPersistStream::ReadCompressed
 (
     SvStream & rStm /* Aus diesem Stream werden die komprimierten Daten
                        gelesen */
@@ -405,14 +405,14 @@ UINT32 SvPersistStream::ReadCompressed
 
     [R"uckgabewert]
 
-    UINT32      Das nicht komprimierte Wort wird zur"uckgegeben.
+    sal_uInt32      Das nicht komprimierte Wort wird zur"uckgegeben.
 
     [Querverweise]
 
 */
 {
-    UINT32 nRet(0);
-    BYTE    nMask;
+    sal_uInt32 nRet(0);
+    sal_uInt8   nMask;
     rStm >> nMask;
     if( nMask & LEN_1 )
         nRet = ~LEN_1 & nMask;
@@ -430,7 +430,7 @@ UINT32 SvPersistStream::ReadCompressed
         rStm >> nMask;
         nRet |= nMask;
         nRet <<= 16;
-        USHORT n;
+        sal_uInt16 n;
         rStm >> n;
         nRet |= n;
     }
@@ -456,7 +456,7 @@ void SvPersistStream::WriteCompressed
 (
     SvStream & rStm,/* Aus diesem Stream werden die komprimierten Daten
                        gelesen */
-    UINT32 nVal     /* Dieser Wert wird komprimiert geschrieben */
+    sal_uInt32 nVal     /* Dieser Wert wird komprimiert geschrieben */
 )
 /*  [Beschreibung]
 
@@ -474,30 +474,30 @@ void SvPersistStream::WriteCompressed
 {
 #ifdef STOR_NO_OPTIMIZE
     if( nVal < 0x80 )
-        rStm << (BYTE)(LEN_1 | nVal);
+        rStm << (sal_uInt8)(LEN_1 | nVal);
     else if( nVal < 0x4000 )
     {
-        rStm << (BYTE)(LEN_2 | (nVal >> 8));
-        rStm << (BYTE)nVal;
+        rStm << (sal_uInt8)(LEN_2 | (nVal >> 8));
+        rStm << (sal_uInt8)nVal;
     }
     else if( nVal < 0x20000000 )
     {
-        // hoechstes BYTE
-        rStm << (BYTE)(LEN_4 | (nVal >> 24));
-        // 2. hoechstes BYTE
-        rStm << (BYTE)(nVal >> 16);
-        rStm << (USHORT)(nVal);
+        // hoechstes sal_uInt8
+        rStm << (sal_uInt8)(LEN_4 | (nVal >> 24));
+        // 2. hoechstes sal_uInt8
+        rStm << (sal_uInt8)(nVal >> 16);
+        rStm << (sal_uInt16)(nVal);
     }
     else
 #endif
     {
-        rStm << (BYTE)LEN_5;
+        rStm << (sal_uInt8)LEN_5;
         rStm << nVal;
     }
 }
 
 //=========================================================================
-UINT32 SvPersistStream::WriteDummyLen()
+sal_uInt32 SvPersistStream::WriteDummyLen()
 /*  [Beschreibung]
 
     Die Methode schreibt 4 Byte in den Stream und gibt die Streamposition
@@ -505,11 +505,11 @@ UINT32 SvPersistStream::WriteDummyLen()
 
     [R"uckgabewert]
 
-    UINT32      Die Position hinter der L"angenangabe wird zur"uckgegeben.
+    sal_uInt32      Die Position hinter der L"angenangabe wird zur"uckgegeben.
 
     [Beispiel]
 
-    UINT32 nObjPos = rStm.WriteDummyLen();
+    sal_uInt32 nObjPos = rStm.WriteDummyLen();
     ...
     // Daten schreiben
     ...
@@ -522,13 +522,13 @@ UINT32 SvPersistStream::WriteDummyLen()
 */
 {
 #ifdef DBG_UTIL
-    UINT32 nPos = Tell();
+    sal_uInt32 nPos = Tell();
 #endif
-    UINT32 n0 = 0;
+    sal_uInt32 n0 = 0;
     *this << n0; // wegen Sun sp
     // keine Assertion bei Streamfehler
     DBG_ASSERT( GetError() != SVSTREAM_OK
-                  || (sizeof( UINT32 ) == Tell() -nPos),
+                  || (sizeof( sal_uInt32 ) == Tell() -nPos),
                 "keine 4-Byte fuer Langenangabe" );
     return Tell();
 }
@@ -536,20 +536,20 @@ UINT32 SvPersistStream::WriteDummyLen()
 //=========================================================================
 void SvPersistStream::WriteLen
 (
-    UINT32 nObjPos  /* die Position + 4, an der die L"ange geschrieben
+    sal_uInt32 nObjPos  /* die Position + 4, an der die L"ange geschrieben
                        wird. */
 )
 /*  [Beschreibung]
 
     Die Methode schreibt die Differenz zwischen der aktuellen und
-     nObjPos als UINT32 an die Position nObjPos -4 im Stream. Danach
+     nObjPos als sal_uInt32 an die Position nObjPos -4 im Stream. Danach
     wird der Stream wieder auf die alte Position gestellt.
 
     [Beispiel]
 
     Die Differenz enth"alt nicht die L"angenangabe.
 
-    UINT32 nObjPos = rStm.WriteDummyLen();
+    sal_uInt32 nObjPos = rStm.WriteDummyLen();
     ...
     // Daten schreiben
     ...
@@ -561,19 +561,19 @@ void SvPersistStream::WriteLen
     <SvPersistStream::ReadLen>, <SvPersistStream::WriteDummyLen>
 */
 {
-    UINT32 nPos = Tell();
-    UINT32 nLen = nPos - nObjPos;
+    sal_uInt32 nPos = Tell();
+    sal_uInt32 nLen = nPos - nObjPos;
     // die Laenge mu� im stream 4-Byte betragen
-    Seek( nObjPos - sizeof( UINT32 ) );
+    Seek( nObjPos - sizeof( sal_uInt32 ) );
     // Laenge schreiben
     *this << nLen;
     Seek( nPos );
 }
 
 //=========================================================================
-UINT32 SvPersistStream::ReadLen
+sal_uInt32 SvPersistStream::ReadLen
 (
-    UINT32 * pTestPos   /* Die Position des Streams, nach dem Lesen der
+    sal_uInt32 * pTestPos   /* Die Position des Streams, nach dem Lesen der
                            L"ange, wird zur"uckgegeben. Es darf auch NULL
                            "ubergeben werden. */
 )
@@ -583,7 +583,7 @@ UINT32 SvPersistStream::ReadLen
     und <SvPersistStream::WriteLen> geschrieben wurde.
 */
 {
-    UINT32 nLen;
+    sal_uInt32 nLen;
     *this >> nLen;
     if( pTestPos )
         *pTestPos = Tell();
@@ -593,15 +593,15 @@ UINT32 SvPersistStream::ReadLen
 //=========================================================================
 // Dateirormat abw"arts kompatibel
 #ifdef STOR_NO_OPTIMIZE
-#define P_VER       (BYTE)0x00
+#define P_VER       (sal_uInt8)0x00
 #else
-#define P_VER       (BYTE)0x01
+#define P_VER       (sal_uInt8)0x01
 #endif
-#define P_VER_MASK  (BYTE)0x0F
-#define P_ID_0      (BYTE)0x80
-#define P_OBJ       (BYTE)0x40
-#define P_DBGUTIL   (BYTE)0x20
-#define P_ID        (BYTE)0x10
+#define P_VER_MASK  (sal_uInt8)0x0F
+#define P_ID_0      (sal_uInt8)0x80
+#define P_OBJ       (sal_uInt8)0x40
+#define P_DBGUTIL   (sal_uInt8)0x20
+#define P_ID        (sal_uInt8)0x10
 #ifdef STOR_NO_OPTIMIZE
 #define P_STD   P_DBGUTIL
 #else
@@ -611,9 +611,9 @@ UINT32 SvPersistStream::ReadLen
 static void WriteId
 (
     SvStream & rStm,
-    BYTE nHdr,
-    UINT32 nId,
-    USHORT nClassId
+    sal_uInt8 nHdr,
+    sal_uInt32 nId,
+    sal_uInt16 nClassId
 )
 {
 #ifdef STOR_NO_OPTIMIZE
@@ -624,12 +624,12 @@ static void WriteId
     {
         if( (nHdr & P_OBJ) || nId != 0 )
         { // Id nur bei Zeiger, oder DBGUTIL
-            rStm << (BYTE)(nHdr);
+            rStm << (sal_uInt8)(nHdr);
             SvPersistStream::WriteCompressed( rStm, nId );
         }
         else
         { // NULL Pointer
-            rStm << (BYTE)(nHdr | P_ID_0);
+            rStm << (sal_uInt8)(nHdr | P_ID_0);
             return;
         }
     }
@@ -646,9 +646,9 @@ static void WriteId
 static void ReadId
 (
     SvStream & rStm,
-    BYTE & nHdr,
-    UINT32 & nId,
-    USHORT & nClassId
+    sal_uInt8 & nHdr,
+    sal_uInt32 & nId,
+    sal_uInt16 & nClassId
 )
 {
     nClassId = 0;
@@ -668,19 +668,19 @@ static void ReadId
             nId = SvPersistStream::ReadCompressed( rStm );
 
         if( (nHdr & P_DBGUTIL) || (nHdr & P_OBJ) )
-            nClassId = (USHORT)SvPersistStream::ReadCompressed( rStm );
+            nClassId = (sal_uInt16)SvPersistStream::ReadCompressed( rStm );
     }
 }
 
 //=========================================================================
 void SvPersistStream::WriteObj
 (
-    BYTE nHdr,
+    sal_uInt8 nHdr,
     SvPersistBase * pObj
 )
 {
 #ifdef STOR_NO_OPTIMIZE
-    UINT32 nObjPos = 0;
+    sal_uInt32 nObjPos = 0;
     if( nHdr & P_DBGUTIL )
         // Position fuer Laenge merken
         nObjPos = WriteDummyLen();
@@ -698,17 +698,17 @@ SvPersistStream& SvPersistStream::WritePointer
     SvPersistBase * pObj
 )
 {
-    BYTE nP = P_STD;
+    sal_uInt8 nP = P_STD;
 
     if( pObj )
     {
-        ULONG nId = GetIndex( pObj );
+        sal_uIntPtr nId = GetIndex( pObj );
         if( nId )
             nP |= P_ID;
         else
         {
             nId = aPUIdx.Insert( pObj );
-            aPTable.Insert( (ULONG)pObj, (void *)nId );
+            aPTable.Insert( (sal_uIntPtr)pObj, (void *)nId );
             nP |= P_OBJ;
         }
         WriteId( *this, nP, nId, pObj->GetClassId() );
@@ -723,15 +723,15 @@ SvPersistStream& SvPersistStream::WritePointer
 }
 
 //=========================================================================
-UINT32 SvPersistStream::ReadObj
+sal_uInt32 SvPersistStream::ReadObj
 (
     SvPersistBase * &   rpObj,
-    BOOL                bRegister
+    sal_Bool                bRegister
 )
 {
-    BYTE    nHdr;
-    UINT32  nId = 0;
-    USHORT  nClassId;
+    sal_uInt8   nHdr;
+    sal_uInt32  nId = 0;
+    sal_uInt16  nClassId;
 
     rpObj = NULL;   // Spezifikation: Im Fehlerfall 0.
     ReadId( *this, nHdr, nId, nClassId );
@@ -751,7 +751,7 @@ UINT32 SvPersistStream::ReadObj
                         "object already exist" );
             SvCreateInstancePersist pFunc = rClassMgr.Get( nClassId );
 
-            UINT32 nObjLen(0), nObjPos(0);
+            sal_uInt32 nObjLen(0), nObjPos(0);
             if( nHdr & P_DBGUTIL )
                 nObjLen = ReadLen( &nObjPos );
             if( !pFunc )
@@ -772,9 +772,9 @@ UINT32 SvPersistStream::ReadObj
             if( bRegister )
             {
                 // unbedingt erst in Tabelle eintragen
-                ULONG nNewId = aPUIdx.Insert( rpObj );
+                sal_uIntPtr nNewId = aPUIdx.Insert( rpObj );
                 // um den gleichen Zustand, wie nach dem Speichern herzustellen
-                aPTable.Insert( (ULONG)rpObj, (void *)nNewId );
+                aPTable.Insert( (sal_uIntPtr)rpObj, (void *)nNewId );
                 DBG_ASSERT( !(nHdr & P_DBGUTIL) || nId == nNewId,
                             "read write id conflict: not the same" );
             }
@@ -809,7 +809,7 @@ SvPersistStream& SvPersistStream::ReadPointer
     SvPersistBase * & rpObj
 )
 {
-    ReadObj( rpObj, TRUE );
+    ReadObj( rpObj, sal_True );
     return *this;
 }
 
@@ -843,14 +843,14 @@ SvStream& operator <<
     SvStream * pOldStm = rThis.GetStream();
     rThis.SetStream( &rStm );
 
-    BYTE bTmp = 0;
+    sal_uInt8 bTmp = 0;
     rThis << bTmp;    // Version
-    UINT32 nCount = (UINT32)rThis.aPUIdx.Count();
+    sal_uInt32 nCount = (sal_uInt32)rThis.aPUIdx.Count();
     rThis << nCount;
     SvPersistBase * pEle = rThis.aPUIdx.First();
-    for( UINT32 i = 0; i < nCount; i++ )
+    for( sal_uInt32 i = 0; i < nCount; i++ )
     {
-        BYTE nP = P_OBJ | P_ID | P_STD;
+        sal_uInt8 nP = P_OBJ | P_ID | P_STD;
         WriteId( rThis, nP, rThis.aPUIdx.GetCurIndex(),
                         pEle->GetClassId() );
         rThis.WriteObj( nP, pEle );
@@ -870,23 +870,23 @@ SvStream& operator >>
     SvStream * pOldStm = rThis.GetStream();
     rThis.SetStream( &rStm );
 
-    BYTE nVers;
+    sal_uInt8 nVers;
     rThis >> nVers;    // Version
     if( 0 == nVers )
     {
-        UINT32 nCount = 0;
+        sal_uInt32 nCount = 0;
         rThis >> nCount;
-        for( UINT32 i = 0; i < nCount; i++ )
+        for( sal_uInt32 i = 0; i < nCount; i++ )
         {
             SvPersistBase * pEle;
             // Lesen, ohne in die Tabellen einzutragen
-            UINT32 nId = rThis.ReadObj( pEle, FALSE );
+            sal_uInt32 nId = rThis.ReadObj( pEle, sal_False );
             if( rThis.GetError() )
                 break;
 
             // Die Id eines Objektes wird nie modifiziert
             rThis.aPUIdx.Insert( nId, pEle );
-            rThis.aPTable.Insert( (ULONG)pEle, (void *)nId );
+            rThis.aPTable.Insert( (sal_uIntPtr)pEle, (void *)nId );
         }
     }
     else
@@ -897,19 +897,19 @@ SvStream& operator >>
 }
 
 //=========================================================================
-ULONG SvPersistStream::InsertObj( SvPersistBase * pObj )
+sal_uIntPtr SvPersistStream::InsertObj( SvPersistBase * pObj )
 {
-    ULONG nId = aPUIdx.Insert( pObj );
-    aPTable.Insert( (ULONG)pObj, (void *)nId );
+    sal_uIntPtr nId = aPUIdx.Insert( pObj );
+    aPTable.Insert( (sal_uIntPtr)pObj, (void *)nId );
     return nId;
 }
 
 //=========================================================================
-ULONG SvPersistStream::RemoveObj( SvPersistBase * pObj )
+sal_uIntPtr SvPersistStream::RemoveObj( SvPersistBase * pObj )
 {
-    ULONG nIdx = GetIndex( pObj );
+    sal_uIntPtr nIdx = GetIndex( pObj );
     aPUIdx.Remove( nIdx );
-    aPTable.Remove( (ULONG)pObj );
+    aPTable.Remove( (sal_uIntPtr)pObj );
     return nIdx;
 }
 

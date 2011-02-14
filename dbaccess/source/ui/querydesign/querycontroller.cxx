@@ -238,13 +238,13 @@ namespace dbaui
     namespace
     {
         // -----------------------------------------------------------------------------
-        String lcl_getObjectResourceString( USHORT _nResId, sal_Int32 _nCommandType )
+        String lcl_getObjectResourceString( sal_uInt16 _nResId, sal_Int32 _nCommandType )
         {
             String sMessageText = String( ModuleRes( _nResId ) );
             String sObjectType;
             {
                 LocalResourceAccess aLocalRes( RSC_QUERY_OBJECT_TYPE, RSC_RESOURCE );
-                sObjectType = String( ModuleRes( (USHORT)( _nCommandType + 1 ) ) );
+                sObjectType = String( ModuleRes( (sal_uInt16)( _nCommandType + 1 ) ) );
             }
             sMessageText.SearchAndReplace( String::CreateFromAscii( "$object$" ), sObjectType );
             return sMessageText;

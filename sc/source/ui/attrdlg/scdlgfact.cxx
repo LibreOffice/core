@@ -119,7 +119,7 @@ IMPL_ABSTDLG_BASE(AbstractScTextImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl); //add for ScAttrDlg, ScHFEditDlg, ScStyleDlg, ScSubTotalDlg,ScCharDlg, ScParagraphDlg, ScValidationDlg, ScSortDlg
 
 // AbstractTabDialog_Impl begin
-void AbstractTabDialog_Impl::SetCurPageId( USHORT nId )
+void AbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
     pDlg->SetCurPageId( nId );
 }
@@ -129,7 +129,7 @@ const SfxItemSet* AbstractTabDialog_Impl::GetOutputItemSet() const
     return pDlg->GetOutputItemSet();
 }
 //add by CHINA001
-const USHORT* AbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
+const sal_uInt16* AbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return pDlg->GetInputRanges( pItem );
 }
@@ -154,7 +154,7 @@ namespace layout
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl); //add for ScAttrDlg, ScHFEditDlg, ScStyleDlg, ScSubTotalDlg,ScCharDlg, ScParagraphDlg, ScValidationDlg, ScSortDlg
 
 // AbstractTabDialog_Impl begin
-void AbstractTabDialog_Impl::SetCurPageId( USHORT nId )
+void AbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
     pDlg->SetCurPageId( nId );
 }
@@ -164,7 +164,7 @@ const SfxItemSet* AbstractTabDialog_Impl::GetOutputItemSet() const
     return pDlg->GetOutputItemSet();
 }
 //add by CHINA001
-const USHORT* AbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
+const sal_uInt16* AbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return pDlg->GetInputRanges( pItem );
 }
@@ -205,7 +205,7 @@ void AbstractScImportAsciiDlg_Impl::SaveParameters()
 // AbstractScImportAsciiDlg_Impl end
 
 //AbstractScAutoFormatDlg_Impl begin
-USHORT AbstractScAutoFormatDlg_Impl::GetIndex() const
+sal_uInt16 AbstractScAutoFormatDlg_Impl::GetIndex() const
 {
     return pDlg->GetIndex();
 }
@@ -220,11 +220,11 @@ String AbstractScAutoFormatDlg_Impl::GetCurrFormatName()
 
 
 //AbstractScColRowLabelDlg_Impl begin
-BOOL  AbstractScColRowLabelDlg_Impl::IsCol()
+sal_Bool  AbstractScColRowLabelDlg_Impl::IsCol()
 {
     return  pDlg->IsCol();
 }
-BOOL AbstractScColRowLabelDlg_Impl::IsRow()
+sal_Bool AbstractScColRowLabelDlg_Impl::IsRow()
 {
     return pDlg->IsRow();
 }
@@ -244,12 +244,12 @@ void AbstractScDataPilotDatabaseDlg_Impl::GetValues( ScImportSourceDesc& rDesc )
 
 //AbstractScDataPilotSourceTypeDlg_Impl begin
 
-BOOL AbstractScDataPilotSourceTypeDlg_Impl::IsDatabase() const
+sal_Bool AbstractScDataPilotSourceTypeDlg_Impl::IsDatabase() const
 {
     return pDlg->IsDatabase();
 }
 
-BOOL AbstractScDataPilotSourceTypeDlg_Impl::IsExternal() const
+sal_Bool AbstractScDataPilotSourceTypeDlg_Impl::IsExternal() const
 {
     return pDlg->IsExternal();
 }
@@ -294,7 +294,7 @@ void AbstractScDeleteContentsDlg_Impl::DisableObjects()
 {
     pDlg->DisableObjects();
 }
-USHORT   AbstractScDeleteContentsDlg_Impl::GetDelContentsCmdBits() const
+sal_uInt16   AbstractScDeleteContentsDlg_Impl::GetDelContentsCmdBits() const
 {
     return pDlg->GetDelContentsCmdBits();
 }
@@ -332,14 +332,14 @@ String  AbstractScFillSeriesDlg_Impl::GetStartStr() const
 {
     return pDlg->GetStartStr();
 }
-void    AbstractScFillSeriesDlg_Impl::SetEdStartValEnabled(BOOL bFlag)
+void    AbstractScFillSeriesDlg_Impl::SetEdStartValEnabled(sal_Bool bFlag)
 {
     pDlg->SetEdStartValEnabled(bFlag);
 }
 //add for AbstractScFillSeriesDlg_Impl end
 
 //add for AbstractScGroupDlg_Impl begin
-BOOL AbstractScGroupDlg_Impl::GetColsChecked() const
+sal_Bool AbstractScGroupDlg_Impl::GetColsChecked() const
 {
     return pDlg->GetColsChecked();
 }
@@ -356,39 +356,39 @@ InsCellCmd  AbstractScInsertCellDlg_Impl::GetInsCellCmd() const
 
 
 //add for AbstractScInsertContentsDlg_Impl begin
-USHORT AbstractScInsertContentsDlg_Impl::GetInsContentsCmdBits() const
+sal_uInt16 AbstractScInsertContentsDlg_Impl::GetInsContentsCmdBits() const
 {
     return pDlg->GetInsContentsCmdBits();
 }
 
 
-USHORT  AbstractScInsertContentsDlg_Impl::GetFormulaCmdBits() const
+sal_uInt16  AbstractScInsertContentsDlg_Impl::GetFormulaCmdBits() const
 {
     return pDlg->GetFormulaCmdBits();
 }
-BOOL    AbstractScInsertContentsDlg_Impl::IsSkipEmptyCells() const
+sal_Bool    AbstractScInsertContentsDlg_Impl::IsSkipEmptyCells() const
 {
     return pDlg->IsSkipEmptyCells();
 }
-BOOL    AbstractScInsertContentsDlg_Impl::IsLink() const
+sal_Bool    AbstractScInsertContentsDlg_Impl::IsLink() const
 {
     return pDlg->IsLink();
 }
-void    AbstractScInsertContentsDlg_Impl::SetFillMode( BOOL bSet )
+void    AbstractScInsertContentsDlg_Impl::SetFillMode( sal_Bool bSet )
 {
     pDlg->SetFillMode( bSet );
 }
 
-void    AbstractScInsertContentsDlg_Impl::SetOtherDoc( BOOL bSet )
+void    AbstractScInsertContentsDlg_Impl::SetOtherDoc( sal_Bool bSet )
 {
     pDlg->SetOtherDoc( bSet );
 }
 
-BOOL    AbstractScInsertContentsDlg_Impl::IsTranspose() const
+sal_Bool    AbstractScInsertContentsDlg_Impl::IsTranspose() const
 {
     return pDlg->IsTranspose();
 }
-void    AbstractScInsertContentsDlg_Impl::SetChangeTrack( BOOL bSet )
+void    AbstractScInsertContentsDlg_Impl::SetChangeTrack( sal_Bool bSet )
 {
     pDlg->SetChangeTrack( bSet );
 }
@@ -405,16 +405,16 @@ InsCellCmd  AbstractScInsertContentsDlg_Impl::GetMoveMode()
 
 
 //add for AbstractScInsertTableDlg_Impl begin
-BOOL AbstractScInsertTableDlg_Impl::GetTablesFromFile()
+sal_Bool AbstractScInsertTableDlg_Impl::GetTablesFromFile()
 {
     return pDlg->GetTablesFromFile();
 }
 
-BOOL    AbstractScInsertTableDlg_Impl::GetTablesAsLink()
+sal_Bool    AbstractScInsertTableDlg_Impl::GetTablesAsLink()
 {
     return pDlg->GetTablesAsLink();
 }
-const String*   AbstractScInsertTableDlg_Impl::GetFirstTable( USHORT* pN )
+const String*   AbstractScInsertTableDlg_Impl::GetFirstTable( sal_uInt16* pN )
 {
     return pDlg->GetFirstTable( pN );
 }
@@ -422,15 +422,15 @@ ScDocShell*     AbstractScInsertTableDlg_Impl::GetDocShellTables()
 {
     return pDlg->GetDocShellTables();
 }
-BOOL    AbstractScInsertTableDlg_Impl::IsTableBefore()
+sal_Bool    AbstractScInsertTableDlg_Impl::IsTableBefore()
 {
     return pDlg->IsTableBefore();
 }
-USHORT  AbstractScInsertTableDlg_Impl::GetTableCount()
+sal_uInt16  AbstractScInsertTableDlg_Impl::GetTableCount()
 {
     return pDlg->GetTableCount();
 }
-const String*   AbstractScInsertTableDlg_Impl::GetNextTable( USHORT* pN )
+const String*   AbstractScInsertTableDlg_Impl::GetNextTable( sal_uInt16* pN )
 {
     return pDlg->GetNextTable( pN );
 }
@@ -446,7 +446,7 @@ String AbstractScSelEntryDlg_Impl::GetSelectEntry() const
 //add for AbstractScLinkedAreaDlg_Impl begin
 void AbstractScLinkedAreaDlg_Impl::InitFromOldLink( const String& rFile, const String& rFilter,
                                         const String& rOptions, const String& rSource,
-                                        ULONG nRefresh )
+                                        sal_uLong nRefresh )
 {
     pDlg->InitFromOldLink( rFile, rFilter, rOptions, rSource, nRefresh);
 }
@@ -467,7 +467,7 @@ String  AbstractScLinkedAreaDlg_Impl::GetSource()
 {
     return pDlg->GetSource();
 }
-ULONG   AbstractScLinkedAreaDlg_Impl::GetRefresh()
+sal_uLong   AbstractScLinkedAreaDlg_Impl::GetRefresh()
 {
     return pDlg->GetRefresh();
 }
@@ -483,31 +483,31 @@ long AbstractScMetricInputDlg_Impl::GetInputValue( FieldUnit eUnit ) const
 //add for AbstractScMetricInputDlg_Impl end
 
 //add for AbstractScMoveTableDlg_Impl begin
-USHORT AbstractScMoveTableDlg_Impl::GetSelectedDocument() const //add for ScMoveTableDlg
+sal_uInt16 AbstractScMoveTableDlg_Impl::GetSelectedDocument() const //add for ScMoveTableDlg
 {
     return pDlg->GetSelectedDocument();
 }
 
-USHORT  AbstractScMoveTableDlg_Impl::GetSelectedTable() const
+sal_uInt16  AbstractScMoveTableDlg_Impl::GetSelectedTable() const
 {
     return pDlg->GetSelectedTable();
 }
-BOOL    AbstractScMoveTableDlg_Impl::GetCopyTable() const
+sal_Bool    AbstractScMoveTableDlg_Impl::GetCopyTable() const
 {
     return pDlg->GetCopyTable();
 }
-void    AbstractScMoveTableDlg_Impl::SetCopyTable(BOOL bFla)
+void    AbstractScMoveTableDlg_Impl::SetCopyTable(sal_Bool bFla)
 {
     return pDlg->SetCopyTable( bFla );
 }
-void    AbstractScMoveTableDlg_Impl::EnableCopyTable(BOOL bFlag)
+void    AbstractScMoveTableDlg_Impl::EnableCopyTable(sal_Bool bFlag)
 {
     return pDlg->EnableCopyTable( bFlag);
 }
 //add for AbstractScMoveTableDlg_Impl end
 
 //add for AbstractScNameCreateDlg_Impl begin
-USHORT AbstractScNameCreateDlg_Impl::GetFlags() const  //add for ScNameCreateDlg
+sal_uInt16 AbstractScNameCreateDlg_Impl::GetFlags() const  //add for ScNameCreateDlg
 {
     return pDlg->GetFlags();
 }
@@ -529,7 +529,7 @@ const ScQueryItem&   AbstractScPivotFilterDlg_Impl::GetOutputItem()  //add for S
 //add for AbstractScPivotFilterDlg_Impl end
 
 //add for AbstractScDPFunctionDlg_Impl begin
-USHORT AbstractScDPFunctionDlg_Impl::GetFuncMask() const //add for ScDPFunctionDlg
+sal_uInt16 AbstractScDPFunctionDlg_Impl::GetFuncMask() const //add for ScDPFunctionDlg
 {
      return pDlg->GetFuncMask();
 }
@@ -540,7 +540,7 @@ USHORT AbstractScDPFunctionDlg_Impl::GetFuncMask() const //add for ScDPFunctionD
 //add for AbstractScDPFunctionDlg_Impl end
 
 //add for AbstractScDPSubtotalDlg_Impl begin
-USHORT AbstractScDPSubtotalDlg_Impl::GetFuncMask() const //add for ScDPSubtotalDlg
+sal_uInt16 AbstractScDPSubtotalDlg_Impl::GetFuncMask() const //add for ScDPSubtotalDlg
 {
      return pDlg->GetFuncMask();
 }
@@ -574,13 +574,13 @@ String AbstractScDPShowDetailDlg_Impl::GetDimensionName() const
 
 //add for AbstractScNewScenarioDlg_Impl begin
 void AbstractScNewScenarioDlg_Impl::SetScenarioData( const String& rName, const String& rComment,
-                            const Color& rColor, USHORT nFlags )
+                            const Color& rColor, sal_uInt16 nFlags )
 {
     pDlg->SetScenarioData(rName,rComment, rColor,nFlags);
 }
 
 void AbstractScNewScenarioDlg_Impl::GetScenarioData( String& rName, String& rComment,
-                            Color& rColor, USHORT& rFlags ) const
+                            Color& rColor, sal_uInt16& rFlags ) const
 {
     pDlg->GetScenarioData( rName,rComment,rColor,rFlags);
 }
@@ -588,12 +588,12 @@ void AbstractScNewScenarioDlg_Impl::GetScenarioData( String& rName, String& rCom
 //add for AbstractScNewScenarioDlg_Impl end
 
 //add for  AbstractScShowTabDlg_Impl begin
-void AbstractScShowTabDlg_Impl::Insert( const String& rString, BOOL bSelected )  //add for ScShowTabDlg
+void AbstractScShowTabDlg_Impl::Insert( const String& rString, sal_Bool bSelected )  //add for ScShowTabDlg
 {
     pDlg->Insert( rString, bSelected);
 }
 
-USHORT  AbstractScShowTabDlg_Impl::GetSelectEntryCount() const
+sal_uInt16  AbstractScShowTabDlg_Impl::GetSelectEntryCount() const
 {
     return pDlg->GetSelectEntryCount();
 }
@@ -603,11 +603,11 @@ void    AbstractScShowTabDlg_Impl::SetDescription(
 {
     pDlg->SetDescription( rTitle, rFixedText, sDlgHelpId, sLbHelpId );
 }
-USHORT  AbstractScShowTabDlg_Impl::GetSelectEntryPos(USHORT nPos) const
+sal_uInt16  AbstractScShowTabDlg_Impl::GetSelectEntryPos(sal_uInt16 nPos) const
 {
     return pDlg->GetSelectEntryPos( nPos);
 }
-String   AbstractScShowTabDlg_Impl::GetSelectEntry(USHORT nPos) const
+String   AbstractScShowTabDlg_Impl::GetSelectEntry(sal_uInt16 nPos) const
 {
         return pDlg->GetSelectEntry(nPos);
 }
@@ -713,8 +713,8 @@ AbstractScAutoFormatDlg * ScAbstractDialogFactory_Impl::CreateScAutoFormatDlg( W
 
 AbstractScColRowLabelDlg *  ScAbstractDialogFactory_Impl::CreateScColRowLabelDlg(Window* pParent, //add for ScColRowLabelDlg
                                                                 int nId,
-                                                                BOOL bCol ,
-                                                                BOOL bRow)
+                                                                sal_Bool bCol ,
+                                                                sal_Bool bRow)
 {
     ScColRowLabelDlg* pDlg=NULL;
     switch ( nId )
@@ -739,7 +739,7 @@ VclAbstractDialog *  ScAbstractDialogFactory_Impl::CreateScColOrRowDlg(Window*  
                                                     const String&   rStrTitle,
                                                     const String&   rStrLabel,
                                                     int nId,
-                                                    BOOL                bColDefault)
+                                                    sal_Bool                bColDefault)
 {
     Dialog * pDlg=NULL;
     switch ( nId )
@@ -799,7 +799,7 @@ AbstractScDataPilotDatabaseDlg *  ScAbstractDialogFactory_Impl::CreateScDataPilo
 
 //add for ScDataPilotSourceTypeDlg begin
 AbstractScDataPilotSourceTypeDlg* ScAbstractDialogFactory_Impl::CreateScDataPilotSourceTypeDlg( Window* pParent,
-                                                                                               BOOL bEnableExternal,
+                                                                                               sal_Bool bEnableExternal,
                                                                                                int nId )
 {
     ScDataPilotSourceTypeDlg * pDlg=NULL;
@@ -844,7 +844,7 @@ AbstractScDataPilotServiceDlg* ScAbstractDialogFactory_Impl::CreateScDataPilotSe
 
 //add for ScDeleteCellDlg begin
 AbstractScDeleteCellDlg* ScAbstractDialogFactory_Impl::CreateScDeleteCellDlg( Window* pParent, int nId,
-                                                                             BOOL bDisallowCellMove )
+                                                                             sal_Bool bDisallowCellMove )
 {
     ScDeleteCellDlg * pDlg=NULL;
     switch ( nId )
@@ -865,7 +865,7 @@ AbstractScDeleteCellDlg* ScAbstractDialogFactory_Impl::CreateScDeleteCellDlg( Wi
 
 //add for ScDeleteContentsDlg begin
 AbstractScDeleteContentsDlg* ScAbstractDialogFactory_Impl::CreateScDeleteContentsDlg(Window* pParent,int nId, //add for ScDeleteContentsDlg
-                                                                 USHORT  nCheckDefaults )
+                                                                 sal_uInt16  nCheckDefaults )
 {
     ScDeleteContentsDlg * pDlg=NULL;
     switch ( nId )
@@ -893,7 +893,7 @@ AbstractScFillSeriesDlg* ScAbstractDialogFactory_Impl::CreateScFillSeriesDlg( Wi
                                                             String          aStartStr,
                                                             double          fStep,
                                                             double          fMax,
-                                                            USHORT          nPossDir,
+                                                            sal_uInt16          nPossDir,
                                                             int nId)
 {
     ScFillSeriesDlg * pDlg=NULL;
@@ -915,10 +915,10 @@ AbstractScFillSeriesDlg* ScAbstractDialogFactory_Impl::CreateScFillSeriesDlg( Wi
 
 //add for ScGroupDlg begin
 AbstractScGroupDlg* ScAbstractDialogFactory_Impl::CreateAbstractScGroupDlg( Window* pParent,
-                                                            USHORT  nResId,
+                                                            sal_uInt16  nResId,
                                                             int nId,
-                                                            BOOL    bUnGroup ,
-                                                            BOOL    bRows   )
+                                                            sal_Bool    bUnGroup ,
+                                                            sal_Bool    bRows   )
 {
     ScGroupDlg * pDlg=NULL;
     switch ( nId )
@@ -942,7 +942,7 @@ AbstractScGroupDlg* ScAbstractDialogFactory_Impl::CreateAbstractScGroupDlg( Wind
 //add for ScInsertCellDlg begin
 AbstractScInsertCellDlg * ScAbstractDialogFactory_Impl::CreateScInsertCellDlg( Window* pParent, //add for ScInsertCellDlg
                                                                 int nId,
-                                                            BOOL bDisallowCellMove )
+                                                            sal_Bool bDisallowCellMove )
 {
     ScInsertCellDlg * pDlg=NULL;
     switch ( nId )
@@ -964,7 +964,7 @@ AbstractScInsertCellDlg * ScAbstractDialogFactory_Impl::CreateScInsertCellDlg( W
 //add for ScInsertContentsDlg begin
 AbstractScInsertContentsDlg * ScAbstractDialogFactory_Impl::CreateScInsertContentsDlg( Window*      pParent,
                                                                                     int nId,
-                                                                                    USHORT          nCheckDefaults,
+                                                                                    sal_uInt16          nCheckDefaults,
                                                                                     const String*   pStrTitle )
 {
     ScInsertContentsDlg * pDlg=NULL;
@@ -1005,7 +1005,7 @@ AbstractScInsertTableDlg * ScAbstractDialogFactory_Impl::CreateScInsertTableDlg 
 
 // add for ScSelEntryDlg begin
 AbstractScSelEntryDlg * ScAbstractDialogFactory_Impl::CreateScSelEntryDlg ( Window* pParent,
-                                                            USHORT  nResId,
+                                                            sal_uInt16  nResId,
                                                         const String& aTitle,
                                                         const String& aLbTitle,
                                                                 List&   aEntryList,
@@ -1049,12 +1049,12 @@ AbstractScLinkedAreaDlg * ScAbstractDialogFactory_Impl::CreateScLinkedAreaDlg ( 
 
 //add for ScMetricInputDlg begin
 AbstractScMetricInputDlg * ScAbstractDialogFactory_Impl::CreateScMetricInputDlg (  Window*      pParent,
-                                                                USHORT      nResId,     // Ableitung fuer jeden Dialog!
+                                                                sal_uInt16      nResId,     // Ableitung fuer jeden Dialog!
                                                                 long            nCurrent,
                                                                 long            nDefault,
                                                                 int nId ,
                                                                 FieldUnit       eFUnit,
-                                                                USHORT      nDecimals,
+                                                                sal_uInt16      nDecimals,
                                                                 long            nMaximum ,
                                                                 long            nMinimum,
                                                                 long            nFirst,
@@ -1102,7 +1102,7 @@ AbstractScMoveTableDlg * ScAbstractDialogFactory_Impl::CreateScMoveTableDlg(  Wi
 
 
 //add for ScNameCreateDlg begin
-AbstractScNameCreateDlg * ScAbstractDialogFactory_Impl::CreateScNameCreateDlg ( Window * pParent, USHORT nFlags, int nId )
+AbstractScNameCreateDlg * ScAbstractDialogFactory_Impl::CreateScNameCreateDlg ( Window * pParent, sal_uInt16 nFlags, int nId )
 {
     ScNameCreateDlg * pDlg=NULL;
     switch ( nId )
@@ -1123,7 +1123,7 @@ AbstractScNameCreateDlg * ScAbstractDialogFactory_Impl::CreateScNameCreateDlg ( 
 
 //add for ScNamePasteDlg begin
  AbstractScNamePasteDlg * ScAbstractDialogFactory_Impl::CreateScNamePasteDlg ( Window * pParent, const ScRangeName* pList,
-                                                            int nId , BOOL bInsList )
+                                                            int nId , sal_Bool bInsList )
 {
     ScNamePasteDlg * pDlg=NULL;
     switch ( nId )
@@ -1143,7 +1143,7 @@ AbstractScNameCreateDlg * ScAbstractDialogFactory_Impl::CreateScNameCreateDlg ( 
 
 //add for ScPivotFilterDlg begin
 AbstractScPivotFilterDlg * ScAbstractDialogFactory_Impl::CreateScPivotFilterDlg ( Window* pParent,
-                                                                const SfxItemSet&   rArgSet, USHORT nSourceTab , int nId )
+                                                                const SfxItemSet&   rArgSet, sal_uInt16 nSourceTab , int nId )
 {
     ScPivotFilterDlg * pDlg=NULL;
     switch ( nId )
@@ -1229,7 +1229,7 @@ AbstractScDPDateGroupDlg * ScAbstractDialogFactory_Impl::CreateScDPDateGroupDlg(
 
 //add for ScDPShowDetailDlg begin
 AbstractScDPShowDetailDlg * ScAbstractDialogFactory_Impl::CreateScDPShowDetailDlg (
-        Window* pParent, int nId, ScDPObject& rDPObj, USHORT nOrient )
+        Window* pParent, int nId, ScDPObject& rDPObj, sal_uInt16 nOrient )
 {
     if( nId == RID_SCDLG_DPSHOWDETAIL )
         return new AbstractScDPShowDetailDlg_Impl( new ScDPShowDetailDlg( pParent, rDPObj, nOrient ) );
@@ -1240,7 +1240,7 @@ AbstractScDPShowDetailDlg * ScAbstractDialogFactory_Impl::CreateScDPShowDetailDl
 //add for ScNewScenarioDlg begin
 AbstractScNewScenarioDlg * ScAbstractDialogFactory_Impl::CreateScNewScenarioDlg ( Window* pParent, const String& rName,
                                                                 int nId,
-                                                                BOOL bEdit , BOOL bSheetProtected )
+                                                                sal_Bool bEdit , sal_Bool bSheetProtected )
 {
     ScNewScenarioDlg * pDlg=NULL;
     switch ( nId )
@@ -1331,12 +1331,12 @@ return 0;
 //add for ScImportOptionsDlg begin
 AbstractScImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScImportOptionsDlg ( Window*               pParent,
                                                                     int nId,
-                                                                    BOOL                    bAscii,
+                                                                    sal_Bool                    bAscii,
                                                                     const ScImportOptions*  pOptions,
                                                                     const String*           pStrTitle,
-                                                                    BOOL                    bMultiByte,
-                                                                    BOOL                    bOnlyDbtoolsEncodings,
-                                                                    BOOL                    bImport )
+                                                                    sal_Bool                    bMultiByte,
+                                                                    sal_Bool                    bOnlyDbtoolsEncodings,
+                                                                    sal_Bool                    bImport )
 {
     ScImportOptionsDlg * pDlg=NULL;
     switch ( nId )
@@ -1389,7 +1389,7 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScHFEditDlg( SfxViewF
                                                                         const SfxItemSet&   rCoreSet,
                                                                         const String&       rPageStyle,
                                                                         int nId,
-                                                                        USHORT              nResId )
+                                                                        sal_uInt16              nResId )
 {
     SfxTabDialog* pDlg=NULL;
     switch ( nId )
@@ -1410,7 +1410,7 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScHFEditDlg( SfxViewF
 //add for ScStyleDlg begin
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScStyleDlg( Window*              pParent,
                                                                         SfxStyleSheetBase&  rStyleBase,
-                                                                        USHORT              nRscId,
+                                                                        sal_uInt16              nRscId,
                                                                         int nId)
 {
     SfxTabDialog* pDlg=NULL;
@@ -1544,7 +1544,7 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSortDlg( Window*   
 
 //add for ScSortDlg end
 //------------------ Factories for TabPages--------------------
-CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( USHORT nId )
+CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId )
 {
     switch ( nId )
     {
@@ -1577,7 +1577,7 @@ CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( USHORT nId )
     return 0;
 }
 
-GetTabPageRanges ScAbstractDialogFactory_Impl::GetTabPageRangesFunc( USHORT nId )
+GetTabPageRanges ScAbstractDialogFactory_Impl::GetTabPageRangesFunc( sal_uInt16 nId )
 {
     switch ( nId )
     {

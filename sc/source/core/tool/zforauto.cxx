@@ -54,7 +54,7 @@ ScNumFormatAbbrev::ScNumFormatAbbrev(const ScNumFormatAbbrev& aFormat) :
 {
 }
 
-ScNumFormatAbbrev::ScNumFormatAbbrev(ULONG nFormat,
+ScNumFormatAbbrev::ScNumFormatAbbrev(sal_uLong nFormat,
                                      SvNumberFormatter& rFormatter)
 {
     PutFormatIndex(nFormat, rFormatter);
@@ -62,7 +62,7 @@ ScNumFormatAbbrev::ScNumFormatAbbrev(ULONG nFormat,
 
 void ScNumFormatAbbrev::Load( SvStream& rStream, CharSet eByteStrSet )
 {
-    USHORT nSysLang, nLang;
+    sal_uInt16 nSysLang, nLang;
     rStream.ReadByteString( sFormatstring, eByteStrSet );
     rStream >> nSysLang >> nLang;
     eLnge = (LanguageType) nLang;
@@ -74,10 +74,10 @@ void ScNumFormatAbbrev::Load( SvStream& rStream, CharSet eByteStrSet )
 void ScNumFormatAbbrev::Save( SvStream& rStream, CharSet eByteStrSet ) const
 {
     rStream.WriteByteString( sFormatstring, eByteStrSet );
-    rStream << (USHORT) eSysLnge << (USHORT) eLnge;
+    rStream << (sal_uInt16) eSysLnge << (sal_uInt16) eLnge;
 }
 
-void ScNumFormatAbbrev::PutFormatIndex(ULONG nFormat,
+void ScNumFormatAbbrev::PutFormatIndex(sal_uLong nFormat,
                                        SvNumberFormatter& rFormatter)
 {
     const SvNumberformat* pFormat = rFormatter.GetEntry(nFormat);
@@ -96,10 +96,10 @@ void ScNumFormatAbbrev::PutFormatIndex(ULONG nFormat,
     }
 }
 
-ULONG ScNumFormatAbbrev::GetFormatIndex( SvNumberFormatter& rFormatter)
+sal_uLong ScNumFormatAbbrev::GetFormatIndex( SvNumberFormatter& rFormatter)
 {
     short nType;
-    BOOL bNewInserted;
+    sal_Bool bNewInserted;
     xub_StrLen nCheckPos;
     return rFormatter.GetIndexPuttingAndConverting( sFormatstring, eLnge,
             eSysLnge, nType, bNewInserted, nCheckPos);

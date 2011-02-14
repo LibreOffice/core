@@ -84,14 +84,14 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
 
         SfxItemSet aNewAttr( mpViewShell->GetPool(),
                              EE_ITEMS_START, EE_ITEMS_END );
-        aNewAttr.Put( aEditAttr, FALSE );
+        aNewAttr.Put( aEditAttr, sal_False );
 
         // Dialog hochfahren und ausfuehren
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdOutlineBulletTabDlg( NULL, &aNewAttr, mpView ) : 0;
         if( pDlg )
         {
-            USHORT nResult = pDlg->Execute();
+            sal_uInt16 nResult = pDlg->Execute();
 
             switch( nResult )
             {

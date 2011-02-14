@@ -56,14 +56,14 @@ enum SimDepthType
 
 struct SimColor
 {
-    BYTE cBlue;
-    BYTE cGreen;
-    BYTE cRed;
+    sal_uInt8 cBlue;
+    sal_uInt8 cGreen;
+    sal_uInt8 cRed;
 };
 
 // ------------------------------------------------------------------------
 
-inline BOOL operator==( const SimColor& rCol1, const SimColor& rCol2 )
+inline sal_Bool operator==( const SimColor& rCol1, const SimColor& rCol2 )
 {
     return ( ( rCol1.cRed == rCol2.cRed ) &&
              ( rCol1.cGreen == rCol2.cGreen ) &&
@@ -76,7 +76,7 @@ inline BOOL operator==( const SimColor& rCol1, const SimColor& rCol2 )
 
 struct SimPalette
 {
-    ULONG       nColors;
+    sal_uIntPtr     nColors;
     SimColor    aColorArray[ 256 ];
 };
 
@@ -102,39 +102,39 @@ private:
     SimPalette*         pPal2;
     SimPalette*         pPal3;
     SimPalette*         pPal4;
-    ULONG               nWidth1;
-    ULONG               nWidth2;
-    ULONG               nWidth3;
-    ULONG               nWidth4;
-    ULONG               nHeight1;
-    ULONG               nHeight2;
-    ULONG               nHeight3;
-    ULONG               nHeight4;
-    ULONG               nAlignedWidth1;
-    ULONG               nAlignedWidth2;
-    ULONG               nAlignedWidth3;
-    ULONG               nAlignedWidth4;
-    ULONG               nWhichOrg;
+    sal_uIntPtr             nWidth1;
+    sal_uIntPtr             nWidth2;
+    sal_uIntPtr             nWidth3;
+    sal_uIntPtr             nWidth4;
+    sal_uIntPtr             nHeight1;
+    sal_uIntPtr             nHeight2;
+    sal_uIntPtr             nHeight3;
+    sal_uIntPtr             nHeight4;
+    sal_uIntPtr             nAlignedWidth1;
+    sal_uIntPtr             nAlignedWidth2;
+    sal_uIntPtr             nAlignedWidth3;
+    sal_uIntPtr             nAlignedWidth4;
+    sal_uIntPtr             nWhichOrg;
     SimDepthType        eOrgDepth;
     SimDepthType        eUndoDepth;
     SimDepthType        eRedoDepth;
-    BOOL                bIsUndo;
-    BOOL                bIsRedo;
-    BOOL                bCreateUndo;
-    BOOL                bValid;
-    BOOL                bDitherAll;
+    sal_Bool                bIsUndo;
+    sal_Bool                bIsRedo;
+    sal_Bool                bCreateUndo;
+    sal_Bool                bValid;
+    sal_Bool                bDitherAll;
 
-    HPBYTE              BitmapToArray24( const Bitmap& rBitmap, ULONG* pWidth,
-                                         ULONG* pHeight, ULONG* pAlignedWidth,
+    HPBYTE              BitmapToArray24( const Bitmap& rBitmap, sal_uIntPtr* pWidth,
+                                         sal_uIntPtr* pHeight, sal_uIntPtr* pAlignedWidth,
                                          SfxViewFrame *pFrame = NULL );
-    BOOL                Array24ToBitmap( HPBYTE pArray, Bitmap &rBitmap,
-                                         const ULONG nWidth, const ULONG nHeight,
-                                         const ULONG nColorCount = 256,
-                                         ULONG nLast = 0, SfxProgress* pProgress = NULL );
+    sal_Bool                Array24ToBitmap( HPBYTE pArray, Bitmap &rBitmap,
+                                         const sal_uIntPtr nWidth, const sal_uIntPtr nHeight,
+                                         const sal_uIntPtr nColorCount = 256,
+                                         sal_uIntPtr nLast = 0, SfxProgress* pProgress = NULL );
 
     Bitmap              CreateSaveBitmap( const SimDepthType eDepth, SfxViewFrame *pFrame = NULL );
 
-    HPBYTE              CreateArray24( ULONG nWidth, ULONG nHeight );
+    HPBYTE              CreateArray24( sal_uIntPtr nWidth, sal_uIntPtr nHeight );
     void                DeleteArray( HPBYTE pArray );
 
                         SvImageBase(const SvImageBase& rSvImageBase);
@@ -144,23 +144,23 @@ public:
 
                         SvImageBase();
                         SvImageBase( const Bitmap& rBitmap,
-                                     const ULONG nColorCount = 256,
-                                     ULONG nLast = 0, SfxProgress* pProgress = NULL );
+                                     const sal_uIntPtr nColorCount = 256,
+                                     sal_uIntPtr nLast = 0, SfxProgress* pProgress = NULL );
                         ~SvImageBase();
 
-    BOOL                IsValid() { return bValid; }
+    sal_Bool                IsValid() { return bValid; }
 
-    ULONG               GetOrgWidth() const { return nWhichOrg == 1 ? nWidth1 : nWidth2; }
-    ULONG               GetDestWidth() const { return nWhichOrg == 1 ? nWidth2 : nWidth1; }
+    sal_uIntPtr             GetOrgWidth() const { return nWhichOrg == 1 ? nWidth1 : nWidth2; }
+    sal_uIntPtr             GetDestWidth() const { return nWhichOrg == 1 ? nWidth2 : nWidth1; }
 
-    ULONG               GetOrgHeight() const { return nWhichOrg == 1 ? nHeight1 : nHeight2; }
-    ULONG               GetDestHeight() const { return nWhichOrg == 1 ? nHeight2 : nHeight1; }
+    sal_uIntPtr             GetOrgHeight() const { return nWhichOrg == 1 ? nHeight1 : nHeight2; }
+    sal_uIntPtr             GetDestHeight() const { return nWhichOrg == 1 ? nHeight2 : nHeight1; }
 
-    ULONG               GetOrgAlignedWidth() const { return nWhichOrg == 1 ? nAlignedWidth1 : nAlignedWidth2; }
-    ULONG               GetDestAlignedWidth() const { return nWhichOrg == 1 ? nAlignedWidth2 : nAlignedWidth1; }
+    sal_uIntPtr             GetOrgAlignedWidth() const { return nWhichOrg == 1 ? nAlignedWidth1 : nAlignedWidth2; }
+    sal_uIntPtr             GetDestAlignedWidth() const { return nWhichOrg == 1 ? nAlignedWidth2 : nAlignedWidth1; }
 
-    ULONG               GetOrgAlignedSize() const { return GetOrgAlignedWidth() * GetOrgHeight(); }
-    ULONG               GetDestAlignedSize() const { return GetDestAlignedWidth() * GetDestHeight(); }
+    sal_uIntPtr             GetOrgAlignedSize() const { return GetOrgAlignedWidth() * GetOrgHeight(); }
+    sal_uIntPtr             GetDestAlignedSize() const { return GetDestAlignedWidth() * GetDestHeight(); }
 
     // Farbtiefe des Ausgangsbildes ermitteln und setzen
     SimDepthType        GetDepth() const { return eOrgDepth; }
@@ -174,10 +174,10 @@ public:
     void                SetRedoDepth(const SimDepthType eDepth) { eRedoDepth = eDepth; }
 
     // Vor- und Ruecklauf der Bildverarbeitung
-    BOOL                BeginProcessing( BOOL bUndo = TRUE );
+    sal_Bool                BeginProcessing( sal_Bool bUndo = sal_True );
     void                EndProcessing();
 
-    BOOL                BeginProcessingExt(ULONG nWidth, ULONG nHeight, BOOL bUndo = TRUE);
+    sal_Bool                BeginProcessingExt(sal_uIntPtr nWidth, sal_uIntPtr nHeight, sal_Bool bUndo = sal_True);
     void                EndProcessingExt() { EndProcessing(); }
 
     // Zeiger auf Arrays zur Verfuegung stellen
@@ -185,12 +185,12 @@ public:
     HPBYTE              GetDestPointer() { return pDestArray; }
 
     // DIB-Erzeugung fuer Anzeige
-    BOOL                CreateOutBitmap( const ULONG nColorCount = 256, ULONG nLast = 0,
+    sal_Bool                CreateOutBitmap( const sal_uIntPtr nColorCount = 256, sal_uIntPtr nLast = 0,
                                          SfxProgress* pProgress = NULL );
 
     // Undo-Verwaltung
-    BOOL                DoUndo( SfxProgress* pProgress = NULL );
-    BOOL                DoRedo( SfxProgress* pProgress = NULL );
+    sal_Bool                DoUndo( SfxProgress* pProgress = NULL );
+    sal_Bool                DoRedo( SfxProgress* pProgress = NULL );
 
     // DIB-Rueckgabe fuer Anzeige
     const Bitmap&       GetOutBitmap() const;
@@ -207,6 +207,6 @@ public:
 // - DitherBitmap -
 // ----------------
 
-BOOL DitherBitmap( Bitmap& rBitmap, BOOL bDitherAlways = FALSE );
+sal_Bool DitherBitmap( Bitmap& rBitmap, sal_Bool bDitherAlways = sal_False );
 
 #endif // _SVIMBASE_HXX

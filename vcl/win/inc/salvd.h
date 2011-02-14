@@ -45,16 +45,16 @@ public:
     HBITMAP                 mhDefBmp;               // Default Bitmap
     WinSalGraphics*         mpGraphics;             // current VirDev graphics
     WinSalVirtualDevice*    mpNext;                 // next VirDev
-    USHORT                  mnBitCount;             // BitCount (0 or 1)
-    BOOL                    mbGraphics;             // is Graphics used
-    BOOL                    mbForeignDC;            // uses a foreign DC instead of a bitmap
+    sal_uInt16                  mnBitCount;             // BitCount (0 or 1)
+    sal_Bool                    mbGraphics;             // is Graphics used
+    sal_Bool                    mbForeignDC;            // uses a foreign DC instead of a bitmap
 
     WinSalVirtualDevice();
     virtual ~WinSalVirtualDevice();
 
     virtual SalGraphics*            GetGraphics();
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
-    virtual BOOL                    SetSize( long nNewDX, long nNewDY );
+    virtual sal_Bool                    SetSize( long nNewDX, long nNewDY );
     virtual void                    GetSize( long& rWidth, long& rHeight );
 };
 

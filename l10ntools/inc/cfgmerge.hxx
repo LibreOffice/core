@@ -76,13 +76,13 @@ public:
     CfgStack() : CfgStackList( 10, 10 ) {}
     ~CfgStack();
 
-    ULONG Push( CfgStackData *pStackData );
+    sal_uLong Push( CfgStackData *pStackData );
     CfgStackData *Push( const ByteString &rTag, const ByteString &rId );
     CfgStackData *Pop() { return Remove( Count() - 1 ); }
 
-    CfgStackData *GetStackData( ULONG nPos = LIST_APPEND );
+    CfgStackData *GetStackData( sal_uLong nPos = LIST_APPEND );
 
-    ByteString GetAccessPath( ULONG nPos = LIST_APPEND );
+    ByteString GetAccessPath( sal_uLong nPos = LIST_APPEND );
 };
 
 //
@@ -101,7 +101,7 @@ protected:
     CfgStack aStack;
     CfgStackData *pStackData;
 
-    BOOL bLocalize;
+    sal_Bool bLocalize;
 
     virtual void WorkOnText(
         ByteString &rText,
@@ -121,7 +121,7 @@ private:
         const ByteString &rIsoLang,
         const ByteString &rResTyp );
 
-BOOL IsTokenClosed( const ByteString &rToken );
+sal_Bool IsTokenClosed( const ByteString &rToken );
 
 public:
     CfgParser();
@@ -181,9 +181,9 @@ private:
     std::vector<ByteString> aLanguages;
     ResData *pResData;
 
-    BOOL bGerman;
+    sal_Bool bGerman;
     ByteString sFilename;
-    BOOL bEnglish;
+    sal_Bool bEnglish;
 
 protected:
     void WorkOnText(

@@ -44,7 +44,7 @@ protected:
 
     static VirtDevServerFont*   CreateFont( const ImplFontSelectData& );
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
-    virtual ULONG               GetKernPairs( ImplKernPairData** ) const;
+    virtual sal_uLong               GetKernPairs( ImplKernPairData** ) const;
     virtual int                 GetGlyphKernValue( int, int ) const;
 
     virtual int                 GetGlyphIndex( sal_Unicode ) const;

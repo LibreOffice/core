@@ -137,24 +137,24 @@ namespace toolkit
             sal_Int32 nWhiteLuminance = Color( COL_WHITE ).GetLuminance();
 
             Color aLightShadow( nBackgroundColor );
-            aLightShadow.IncreaseLuminance( (UINT8)( ( nWhiteLuminance - nBackgroundLuminance ) * 2 / 3 ) );
+            aLightShadow.IncreaseLuminance( (sal_uInt8)( ( nWhiteLuminance - nBackgroundLuminance ) * 2 / 3 ) );
             aStyleSettings.SetLightBorderColor( aLightShadow );
 
             Color aLight( nBackgroundColor );
-            aLight.IncreaseLuminance( (UINT8)( ( nWhiteLuminance - nBackgroundLuminance ) * 1 / 3 ) );
+            aLight.IncreaseLuminance( (sal_uInt8)( ( nWhiteLuminance - nBackgroundLuminance ) * 1 / 3 ) );
             aStyleSettings.SetLightColor( aLight );
 
             Color aShadow( nBackgroundColor );
-            aShadow.DecreaseLuminance( (UINT8)( nBackgroundLuminance * 1 / 3 ) );
+            aShadow.DecreaseLuminance( (sal_uInt8)( nBackgroundLuminance * 1 / 3 ) );
             aStyleSettings.SetShadowColor( aShadow );
 
             Color aDarkShadow( nBackgroundColor );
-            aDarkShadow.DecreaseLuminance( (UINT8)( nBackgroundLuminance * 2 / 3 ) );
+            aDarkShadow.DecreaseLuminance( (sal_uInt8)( nBackgroundLuminance * 2 / 3 ) );
             aStyleSettings.SetDarkShadowColor( aDarkShadow );
         }
 
         aSettings.SetStyleSettings( aStyleSettings );
-        _pWindow->SetSettings( aSettings, TRUE );
+        _pWindow->SetSettings( aSettings, sal_True );
     }
 
     Any getButtonLikeFaceColor( const Window* _pWindow )
@@ -1143,7 +1143,7 @@ void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::
                 sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
                 {
-                    BOOL b = n ? sal_True : sal_False;
+                    sal_Bool b = n ? sal_True : sal_False;
                     if ( pButton->IsRadioCheckEnabled() )
                         pButton->Check( b );
                     else
@@ -1312,11 +1312,11 @@ void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
                 aEvent.ActionCommand = maActionCommand;
                 maActionListeners.actionPerformed( aEvent );
             }
-            ImplClickedOrToggled( FALSE );
+            ImplClickedOrToggled( sal_False );
             break;
 
         case VCLEVENT_RADIOBUTTON_TOGGLE:
-            ImplClickedOrToggled( TRUE );
+            ImplClickedOrToggled( sal_True );
             break;
 
         default:
@@ -1325,7 +1325,7 @@ void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
     }
 }
 
-void VCLXRadioButton::ImplClickedOrToggled( BOOL bToggled )
+void VCLXRadioButton::ImplClickedOrToggled( sal_Bool bToggled )
 {
     // In the formulars, RadioChecked is not enabled, call itemStateChanged only for click
     // In the dialog editor, RadioChecked is enabled, call itemStateChanged only for bToggled
@@ -1718,14 +1718,14 @@ void VCLXListBox::selectItemsPos( const ::com::sun::star::uno::Sequence<sal_Int1
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox )
     {
-        BOOL bChanged = FALSE;
+        sal_Bool bChanged = sal_False;
         for ( sal_uInt16 n = (sal_uInt16)aPositions.getLength(); n; )
         {
-            USHORT nPos = (USHORT) aPositions.getConstArray()[--n];
+            sal_uInt16 nPos = (sal_uInt16) aPositions.getConstArray()[--n];
             if ( pBox->IsEntryPosSelected( nPos ) != bSelect )
             {
                 pBox->SelectEntryPos( nPos, bSelect );
-                bChanged = TRUE;
+                bChanged = sal_True;
             }
         }
 
@@ -3260,7 +3260,7 @@ void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::co
                 }
                 AllSettings aSettings( pScrollBar->GetSettings() );
                 StyleSettings aStyle( aSettings.GetStyleSettings() );
-                ULONG nDragOptions = aStyle.GetDragFullOptions();
+                sal_uLong nDragOptions = aStyle.GetDragFullOptions();
                 if ( bDo )
                     nDragOptions |= DRAGFULL_OPTION_SCROLL;
                 else

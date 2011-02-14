@@ -36,7 +36,7 @@
 namespace comphelper
 {
 
-/** Note: virtual const USHORT * GetWhichPairs() const; is still pure virtual
+/** Note: virtual const sal_uInt16 * GetWhichPairs() const; is still pure virtual
  */
 class MultipleItemConverter : public ItemConverter
 {

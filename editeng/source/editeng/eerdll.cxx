@@ -97,7 +97,7 @@ GlobalEditData::~GlobalEditData()
     // DefItems zerstoeren...
     // Oder einfach stehen lassen, da sowieso App-Ende?!
     if ( ppDefItems )
-        SfxItemPool::ReleaseDefaults( ppDefItems, EDITITEMCOUNT, TRUE );
+        SfxItemPool::ReleaseDefaults( ppDefItems, EDITITEMCOUNT, sal_True );
     delete pStdRefDevice;
 }
 
@@ -108,16 +108,16 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems = new SfxPoolItem*[EDITITEMCOUNT];
 
         // Absatzattribute:
-        SvxNumRule aTmpNumRule( 0, 0, FALSE );
+        SvxNumRule aTmpNumRule( 0, 0, sal_False );
 
         ppDefItems[0]  = new SvxFrameDirectionItem( FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR );
         ppDefItems[1]  = new SvXMLAttrContainerItem( EE_PARA_XMLATTRIBS );
-        ppDefItems[2]  = new SfxBoolItem( EE_PARA_HANGINGPUNCTUATION, FALSE );
-        ppDefItems[3]  = new SfxBoolItem( EE_PARA_FORBIDDENRULES, TRUE );
-        ppDefItems[4]  = new SvxScriptSpaceItem( TRUE, EE_PARA_ASIANCJKSPACING );
+        ppDefItems[2]  = new SfxBoolItem( EE_PARA_HANGINGPUNCTUATION, sal_False );
+        ppDefItems[3]  = new SfxBoolItem( EE_PARA_FORBIDDENRULES, sal_True );
+        ppDefItems[4]  = new SvxScriptSpaceItem( sal_True, EE_PARA_ASIANCJKSPACING );
         ppDefItems[5]  = new SvxNumBulletItem( aTmpNumRule, EE_PARA_NUMBULLET );
-        ppDefItems[6]  = new SfxBoolItem( EE_PARA_HYPHENATE, FALSE );
-        ppDefItems[7]  = new SfxBoolItem( EE_PARA_BULLETSTATE, TRUE );
+        ppDefItems[6]  = new SfxBoolItem( EE_PARA_HYPHENATE, sal_False );
+        ppDefItems[7]  = new SfxBoolItem( EE_PARA_BULLETSTATE, sal_True );
         ppDefItems[8]  = new SvxLRSpaceItem( EE_PARA_OUTLLRSPACE );
         ppDefItems[9]  = new SfxInt16Item( EE_PARA_OUTLLEVEL, -1 );
         ppDefItems[10]  = new SvxBulletItem( EE_PARA_BULLET );
@@ -136,12 +136,12 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[21] = new SvxUnderlineItem( UNDERLINE_NONE, EE_CHAR_UNDERLINE );
         ppDefItems[22] = new SvxCrossedOutItem( STRIKEOUT_NONE, EE_CHAR_STRIKEOUT );
         ppDefItems[23] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC );
-        ppDefItems[24] = new SvxContourItem( FALSE, EE_CHAR_OUTLINE );
-        ppDefItems[25] = new SvxShadowedItem( FALSE, EE_CHAR_SHADOW );
+        ppDefItems[24] = new SvxContourItem( sal_False, EE_CHAR_OUTLINE );
+        ppDefItems[25] = new SvxShadowedItem( sal_False, EE_CHAR_SHADOW );
         ppDefItems[26] = new SvxEscapementItem( 0, 100, EE_CHAR_ESCAPEMENT );
-        ppDefItems[27] = new SvxAutoKernItem( FALSE, EE_CHAR_PAIRKERNING );
+        ppDefItems[27] = new SvxAutoKernItem( sal_False, EE_CHAR_PAIRKERNING );
         ppDefItems[28] = new SvxKerningItem( 0, EE_CHAR_KERNING );
-        ppDefItems[29] = new SvxWordLineModeItem( FALSE, EE_CHAR_WLM );
+        ppDefItems[29] = new SvxWordLineModeItem( sal_False, EE_CHAR_WLM );
         ppDefItems[30] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE );
         ppDefItems[31] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CJK );
         ppDefItems[32] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CTL );
@@ -217,7 +217,7 @@ OutputDevice* GlobalEditData::GetStdRefDevice()
     return pStdRefDevice;
 }
 
-EditResId::EditResId( USHORT nId ):
+EditResId::EditResId( sal_uInt16 nId ):
     ResId( nId, *EE_DLL()->GetResMgr() )
 {
 }

@@ -163,12 +163,12 @@ namespace dbaui
         Splitter*               m_pSplitter;
         SvLBoxTreeList*         m_pTreeModel;           // contains the datasources of the registry
         SvLBoxEntry*            m_pCurrentlyDisplayed;
-        ULONG                   m_nAsyncDrop;
+        sal_uLong                   m_nAsyncDrop;
 
-        sal_Int16               m_nBorder;              // TRUE when border should be shown
+        sal_Int16               m_nBorder;              // sal_True when border should be shown
 
         sal_Bool                m_bQueryEscapeProcessing : 1;   // the escape processing flag of the query currently loaded (if any)
-        sal_Bool                m_bShowMenu;            // if TRUE the menu should be visible otherwise not
+        sal_Bool                m_bShowMenu;            // if sal_True the menu should be visible otherwise not
         sal_Bool                m_bInSuspend;
         sal_Bool                m_bEnableBrowser;
         ::boost::optional< bool >

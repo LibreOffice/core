@@ -43,7 +43,7 @@ class SbiDdeControl
 private:
     DECL_LINK( Data, DdeData* );
     SbError GetLastErr( DdeConnection* );
-    INT16 GetFreeChannel();
+    sal_Int16 GetFreeChannel();
     DdeConnections* pConvList;
     String aData;
 
@@ -53,12 +53,12 @@ public:
     ~SbiDdeControl();
 
     SbError Initiate( const String& rService, const String& rTopic,
-                     INT16& rnHandle );
-    SbError Terminate( INT16 nChannel );
+                     sal_Int16& rnHandle );
+    SbError Terminate( sal_Int16 nChannel );
     SbError TerminateAll();
-    SbError Request( INT16 nChannel, const String& rItem, String& rResult );
-    SbError Execute( INT16 nChannel, const String& rCommand );
-    SbError Poke( INT16 nChannel, const String& rItem, const String& rData );
+    SbError Request( sal_Int16 nChannel, const String& rItem, String& rResult );
+    SbError Execute( sal_Int16 nChannel, const String& rCommand );
+    SbError Poke( sal_Int16 nChannel, const String& rItem, const String& rData );
 };
 
 #endif

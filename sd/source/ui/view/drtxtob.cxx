@@ -166,8 +166,8 @@ TextObjectBar::~TextObjectBar()
 void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 {
     SfxWhichIter        aIter( rSet );
-    USHORT              nWhich = aIter.FirstWhich();
-    BOOL                bTemplate = FALSE;
+    sal_uInt16              nWhich = aIter.FirstWhich();
+    sal_Bool                bTemplate = sal_False;
     SfxItemSet          aAttrSet( mpView->GetDoc()->GetPool() );
     SvtLanguageOptions  aLangOpt;
     sal_Bool            bDisableParagraphTextDirection = !aLangOpt.IsCTLFontEnabled();
@@ -177,7 +177,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
     while ( nWhich )
     {
-        USHORT nSlotId = SfxItemPool::IsWhich(nWhich)
+        sal_uInt16 nSlotId = SfxItemPool::IsWhich(nWhich)
             ? GetPool().GetSlotId(nWhich)
             : nWhich;
 
@@ -189,9 +189,9 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             case SID_ATTR_CHAR_POSTURE:
             {
                 SvxScriptSetItem aSetItem( nSlotId, GetPool() );
-                aSetItem.GetItemSet().Put( aAttrSet, FALSE );
+                aSetItem.GetItemSet().Put( aAttrSet, sal_False );
 
-                USHORT nScriptType = mpView->GetScriptType();
+                sal_uInt16 nScriptType = mpView->GetScriptType();
 
                 if( (nSlotId == SID_ATTR_CHAR_FONT) || (nSlotId == SID_ATTR_CHAR_FONTHEIGHT) )
                 {
@@ -235,7 +235,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 {
                     rSet.Put( SfxTemplateItem( nWhich, String() ) );
                 }
-                bTemplate = TRUE;
+                bTemplate = sal_True;
             }
             break;
 
@@ -244,10 +244,10 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             case SID_OUTLINE_UP:
             case SID_OUTLINE_DOWN:
             {
-                BOOL bDisableLeft     = TRUE;
-                BOOL bDisableRight    = TRUE;
-                BOOL bDisableUp       = TRUE;
-                BOOL bDisableDown     = TRUE;
+                sal_Bool bDisableLeft     = sal_True;
+                sal_Bool bDisableRight    = sal_True;
+                sal_Bool bDisableUp       = sal_True;
+                sal_Bool bDisableDown     = sal_True;
                 OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
 
                 if (mpView->ISA(OutlineView))
@@ -256,7 +256,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         mpViewShell->GetActiveWindow());
                 }
 
-                BOOL bOutlineViewSh = mpViewShell->ISA(OutlineViewShell);
+                sal_Bool bOutlineViewSh = mpViewShell->ISA(OutlineViewShell);
 
                 if (pOLV &&
                     ( pOLV->GetOutliner()->GetMode() == OUTLINERMODE_OUTLINEOBJECT || bOutlineViewSh ) )
@@ -267,7 +267,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     Paragraph* pPara = (Paragraph*) pList->First();
 
                     // #96539# find out if we are a OutlineView
-                    BOOL bIsOutlineView(OUTLINERMODE_OUTLINEVIEW == pOLV->GetOutliner()->GetMode());
+                    sal_Bool bIsOutlineView(OUTLINERMODE_OUTLINEVIEW == pOLV->GetOutliner()->GetMode());
 
                     // #96539# This is ONLY for OutlineViews
                     if(bIsOutlineView)
@@ -278,7 +278,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         if(pOutl->GetAbsPos(pPara) > 1 || ( pOutl->HasParaFlag(pPara,PARAFLAG_ISPAGE) && pOutl->GetAbsPos(pPara) > 0 ) )
                         {
                             // Nicht ganz oben
-                            bDisableUp = FALSE;
+                            bDisableUp = sal_False;
                         }
                     }
                     else
@@ -287,25 +287,25 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         if(pOutl->GetAbsPos(pPara) > 0)
                         {
                             // Nicht ganz oben
-                            bDisableUp = FALSE;
+                            bDisableUp = sal_False;
                         }
                     }
 
                     while (pPara)
                     {
-                        sal_Int16 nDepth = pOutl->GetDepth( (USHORT) pOutl->GetAbsPos( pPara ) );
+                        sal_Int16 nDepth = pOutl->GetDepth( (sal_uInt16) pOutl->GetAbsPos( pPara ) );
 
                         if (nDepth > 0 || (bOutlineViewSh && (nDepth <= 0) && !pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE )) )
                         {
                             // Nicht minimale Tiefe
-                            bDisableLeft = FALSE;
+                            bDisableLeft = sal_False;
                         }
 
                         if( (nDepth < pOLV->GetOutliner()->GetMaxDepth() && ( !bOutlineViewSh || pOutl->GetAbsPos(pPara) != 0 )) ||
                             (bOutlineViewSh && (nDepth <= 0) && pOutl->HasParaFlag( pPara, PARAFLAG_ISPAGE ) && pOutl->GetAbsPos(pPara) != 0) )
                         {
                             // Nicht maximale Tiefe und nicht ganz oben
-                            bDisableRight = FALSE;
+                            bDisableRight = sal_False;
                         }
 
                         pPara = static_cast<Paragraph*>( pList->Next() );
@@ -315,7 +315,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                          ( pOutl->GetParagraphCount() > 1 || !bOutlineViewSh) )
                     {
                         // Nicht letzter Absatz
-                        bDisableDown = FALSE;
+                        bDisableDown = sal_False;
                     }
 
                     // #96250# and #78665#
@@ -328,7 +328,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         && !pOutl->HasParaFlag( pOutl->GetParagraph(1), PARAFLAG_ISPAGE ) )
                     {
                         // Needs to be disabled
-                        bDisableDown = TRUE;
+                        bDisableDown = sal_True;
                     }
 
                     delete pList;
@@ -355,13 +355,13 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 }
                 else
                 {
-                    BOOL bLeftToRight = TRUE;
+                    sal_Bool bLeftToRight = sal_True;
 
                     SdrOutliner* pOutl = mpView->GetTextEditOutliner();
                     if( pOutl )
                     {
                         if( pOutl->IsVertical() )
-                            bLeftToRight = FALSE;
+                            bLeftToRight = sal_False;
                     }
                     else
                         bLeftToRight = ( (const SvxWritingModeItem&) aAttrSet.Get( SDRATTR_TEXTDIRECTION ) ).GetValue() == com::sun::star::text::WritingMode_LR_TB;
@@ -415,7 +415,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 
-    rSet.Put( aAttrSet, FALSE ); // <- FALSE, damit DontCare-Status uebernommen wird
+    rSet.Put( aAttrSet, sal_False ); // <- sal_False, damit DontCare-Status uebernommen wird
 
 
     // die sind im Gliederungsmodus disabled
@@ -443,17 +443,17 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         {
             ESelection aSel = pOLV->GetSelection();
             aSel.Adjust();
-            ULONG nStartPara = aSel.nStartPara;
-            ULONG nEndPara = aSel.nEndPara;
+            sal_uLong nStartPara = aSel.nStartPara;
+            sal_uLong nEndPara = aSel.nEndPara;
             if( !aSel.HasRange() )
             {
                 nStartPara = 0;
                 nEndPara = pOLV->GetOutliner()->GetParagraphCount() - 1;
             }
             long nUpper = 0L;
-            for( ULONG nPara = nStartPara; nPara <= nEndPara; nPara++ )
+            for( sal_uLong nPara = nStartPara; nPara <= nEndPara; nPara++ )
             {
-                const SfxItemSet& rItems = pOLV->GetOutliner()->GetParaAttribs( (USHORT)nPara );
+                const SfxItemSet& rItems = pOLV->GetOutliner()->GetParaAttribs( (sal_uInt16)nPara );
                 const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) rItems.Get( EE_PARA_ULSPACE );
                 nUpper = Max( nUpper, (long)rItem.GetUpper() );
             }
@@ -472,16 +472,16 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
         switch( eAdj )
         {
             case SVX_ADJUST_LEFT:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, TRUE ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_LEFT, sal_True ) );
             break;
             case SVX_ADJUST_CENTER:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, TRUE ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_CENTER, sal_True ) );
             break;
             case SVX_ADJUST_RIGHT:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, TRUE ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_RIGHT, sal_True ) );
             break;
             case SVX_ADJUST_BLOCK:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, TRUE ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_ADJUST_BLOCK, sal_True ) );
             break;
             default:
             break;
@@ -506,13 +506,13 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 break;
 
                 case FRMDIR_HORI_LEFT_TOP:
-                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, TRUE ) );
-                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, FALSE ) );
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, sal_True ) );
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, sal_False ) );
                 break;
 
                 case FRMDIR_HORI_RIGHT_TOP:
-                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, FALSE ) );
-                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, TRUE ) );
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_LEFT_TO_RIGHT, sal_False ) );
+                    rSet.Put( SfxBoolItem( SID_ATTR_PARA_RIGHT_TO_LEFT, sal_True ) );
                 break;
 
                 // #107865#
@@ -543,26 +543,26 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
             if (aBulletState.GetValue() != 0)
             {
-                rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, TRUE));
+                rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, sal_True));
             }
             else
             {
-                rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, FALSE));
+                rSet.Put(SfxBoolItem(FN_NUM_BULLET_ON, sal_False));
             }
         }
 */
-        USHORT nLineSpace = (USHORT) ( (const SvxLineSpacingItem&) aAttrSet.
+        sal_uInt16 nLineSpace = (sal_uInt16) ( (const SvxLineSpacingItem&) aAttrSet.
                             Get( EE_PARA_SBL ) ).GetPropLineSpace();
         switch( nLineSpace )
         {
             case 100:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_10, TRUE ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_10, sal_True ) );
             break;
             case 150:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_15, TRUE ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_15, sal_True ) );
             break;
             case 200:
-                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_20, TRUE ) );
+                rSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_20, sal_True ) );
             break;
         }
     }
@@ -572,9 +572,9 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                     aAttrSet.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
 
     if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
-        rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, TRUE ) );
+        rSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, sal_True ) );
     else if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
-        rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, TRUE ) );
+        rSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, sal_True ) );
 }
 
 /*************************************************************************

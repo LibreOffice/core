@@ -69,7 +69,7 @@ namespace dbaui
         void fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList );
         void fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList );
 
-        BOOL FillItemSet( SfxItemSet& _rCoreAttrs );
+        sal_Bool FillItemSet( SfxItemSet& _rCoreAttrs );
         void implInitControls( const SfxItemSet& _rSet );
 
         bool canAdvance() const;

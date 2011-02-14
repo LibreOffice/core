@@ -34,7 +34,7 @@
 static ::rtl::OString polyToString( const Polygon& rPoly )
 {
     ::rtl::OString aStr;
-    USHORT nVertex;
+    sal_uInt16 nVertex;
     for(nVertex=0; nVertex<rPoly.GetSize(); ++nVertex)
     {
         aStr += "(";
@@ -66,7 +66,7 @@ static ::rtl::OString polyToString( const Polygon& rPoly )
 static ::rtl::OString polyPolyToString( const PolyPolygon& rPolyPoly )
 {
     ::rtl::OString aStr;
-    USHORT nPoly;
+    sal_uInt16 nPoly;
     for(nPoly=0; nPoly<rPolyPoly.Count(); ++nPoly)
     {
         const Polygon& rPoly = rPolyPoly[nPoly];
@@ -327,9 +327,9 @@ SvStream& operator<<( SvStream& rOStm, const SvtGraphicStroke& rClass )
     rClass.maEndArrow.Write( rOStm );
     rOStm << rClass.mfTransparency;
     rOStm << rClass.mfStrokeWidth;
-    UINT16 nTmp = sal::static_int_cast<UINT16>( rClass.maCapType );
+    sal_uInt16 nTmp = sal::static_int_cast<sal_uInt16>( rClass.maCapType );
     rOStm << nTmp;
-    nTmp = sal::static_int_cast<UINT16>( rClass.maJoinType );
+    nTmp = sal::static_int_cast<sal_uInt16>( rClass.maJoinType );
     rOStm << nTmp;
     rOStm << rClass.mfMiterLimit;
 
@@ -350,7 +350,7 @@ SvStream& operator>>( SvStream& rIStm, SvtGraphicStroke& rClass )
     rClass.maEndArrow.Read( rIStm );
     rIStm >> rClass.mfTransparency;
     rIStm >> rClass.mfStrokeWidth;
-    UINT16 nTmp;
+    sal_uInt16 nTmp;
     rIStm >> nTmp;
     rClass.maCapType = SvtGraphicStroke::CapType(nTmp);
     rIStm >> nTmp;
@@ -706,19 +706,19 @@ SvStream& operator<<( SvStream& rOStm, const SvtGraphicFill& rClass )
     rClass.maPath.Write( rOStm );
     rOStm << rClass.maFillColor;
     rOStm << rClass.mfTransparency;
-    UINT16 nTmp = sal::static_int_cast<UINT16>( rClass.maFillRule );
+    sal_uInt16 nTmp = sal::static_int_cast<sal_uInt16>( rClass.maFillRule );
     rOStm << nTmp;
-    nTmp = sal::static_int_cast<UINT16>( rClass.maFillType );
+    nTmp = sal::static_int_cast<sal_uInt16>( rClass.maFillType );
     rOStm << nTmp;
     int i;
     for(i=0; i<SvtGraphicFill::Transform::MatrixSize; ++i)
         rOStm << rClass.maFillTransform.matrix[i];
     nTmp = rClass.mbTiling;
     rOStm << nTmp;
-    nTmp = sal::static_int_cast<UINT16>( rClass.maHatchType );
+    nTmp = sal::static_int_cast<sal_uInt16>( rClass.maHatchType );
     rOStm << nTmp;
     rOStm << rClass.maHatchColor;
-    nTmp = sal::static_int_cast<UINT16>( rClass.maGradientType );
+    nTmp = sal::static_int_cast<sal_uInt16>( rClass.maGradientType );
     rOStm << nTmp;
     rOStm << rClass.maGradient1stColor;
     rOStm << rClass.maGradient2ndColor;
@@ -735,7 +735,7 @@ SvStream& operator>>( SvStream& rIStm, SvtGraphicFill& rClass )
     rClass.maPath.Read( rIStm );
     rIStm >> rClass.maFillColor;
     rIStm >> rClass.mfTransparency;
-    UINT16 nTmp;
+    sal_uInt16 nTmp;
     rIStm >> nTmp;
     rClass.maFillRule = SvtGraphicFill::FillRule( nTmp );
     rIStm >> nTmp;

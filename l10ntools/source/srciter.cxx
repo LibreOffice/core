@@ -40,7 +40,7 @@
 SourceTreeIterator::SourceTreeIterator(
     const ByteString &rRootDirectory, const ByteString &rVersion , bool bLocal_in )
 /*****************************************************************************/
-                : bInExecute( FALSE ) , bLocal( bLocal_in )
+                : bInExecute( sal_False ) , bLocal( bLocal_in )
 {
     (void) rVersion ;
 
@@ -103,31 +103,31 @@ void SourceTreeIterator::ExecuteDirectory( transex::Directory& aDirectory )
         aDirectory.readDirectory();
         OnExecuteDirectory( aDirectory.getFullName() );
         if ( aDirectory.getSubDirectories().size() )
-            for ( ULONG i=0;i < aDirectory.getSubDirectories().size();i++ )
+            for ( sal_uLong i=0;i < aDirectory.getSubDirectories().size();i++ )
                 ExecuteDirectory( aDirectory.getSubDirectories()[ i ] );
     }
 }
 
 /*****************************************************************************/
-BOOL SourceTreeIterator::StartExecute()
+sal_Bool SourceTreeIterator::StartExecute()
 /*****************************************************************************/
 {
 
-    bInExecute = TRUE;                  // FIXME
+    bInExecute = sal_True;                  // FIXME
     ExecuteDirectory( aRootDirectory );
 
     if ( bInExecute ) {                 // FIXME
-        bInExecute = FALSE;
-        return TRUE;
+        bInExecute = sal_False;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 /*****************************************************************************/
 void SourceTreeIterator::EndExecute()
 /*****************************************************************************/
 {
-    bInExecute = FALSE;
+    bInExecute = sal_False;
 }
 
 /*****************************************************************************/

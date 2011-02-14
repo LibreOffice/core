@@ -95,7 +95,7 @@ public:
     // ICustomAnimationListController
     virtual void onSelect();
     virtual void onDoubleClick();
-    virtual void onContextMenu( USHORT nSelectedPopupEntry );
+    virtual void onContextMenu( sal_uInt16 nSelectedPopupEntry );
 
     void addUndo();
 
@@ -109,7 +109,7 @@ private:
     void updateMotionPathTags();
     void markShapesFromSelectedEffects();
 
-    void showOptions( USHORT nPage = 0 );
+    void showOptions( sal_uInt16 nPage = 0 );
     void moveSelection( bool bUp );
     void onPreview( bool bForcePreview );
 

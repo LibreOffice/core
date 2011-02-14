@@ -37,8 +37,8 @@
 #define PRV_SV_DECL_OWNER_LIST(ClassName,Type)                            \
     List  aTypes;                                                         \
 public:                                                                   \
-                        ClassName( USHORT nInitSize = 16,                 \
-                                   USHORT nReSize = 16 )                  \
+                        ClassName( sal_uInt16 nInitSize = 16,                 \
+                                   sal_uInt16 nReSize = 16 )                  \
                             : aTypes( nInitSize, nReSize ) {}             \
                         ClassName( const ClassName & rObj )               \
                         { *this = rObj; }                                 \
@@ -50,18 +50,18 @@ public:                                                                   \
                         { delete (Type *)aTypes.Remove(); }               \
     void                Remove( Type * pObj )                             \
                         { delete (Type *)aTypes.Remove( pObj ); }         \
-    void                Remove( ULONG nPos )                              \
+    void                Remove( sal_uIntPtr nPos )                              \
                         { delete (Type *)aTypes.Remove( nPos ); }         \
-    Type &              Insert( const Type &, ULONG nPos );               \
+    Type &              Insert( const Type &, sal_uIntPtr nPos );               \
     Type &              Insert( const Type & rType )                      \
                         { return Insert( rType, aTypes.GetCurPos() ); }   \
     Type &              Append( const Type & rType )                      \
                         { return Insert( rType, LIST_APPEND ); }          \
-    Type &              GetObject( ULONG nPos ) const                     \
+    Type &              GetObject( sal_uIntPtr nPos ) const                     \
                         { return *(Type *)aTypes.GetObject( nPos ); }     \
-    Type &              operator []( ULONG nPos ) const                   \
+    Type &              operator []( sal_uIntPtr nPos ) const                   \
                         { return *(Type *)aTypes.GetObject( nPos ); }     \
-    ULONG               Count() const { return aTypes.Count(); }
+    sal_uIntPtr               Count() const { return aTypes.Count(); }
 
 #define PRV_SV_IMPL_OWNER_LIST(ClassName,Type)                          \
 ClassName & ClassName::operator = ( const ClassName & rObj )            \
@@ -69,7 +69,7 @@ ClassName & ClassName::operator = ( const ClassName & rObj )            \
     if( this != &rObj )                                                 \
     {                                                                   \
         Clear();                                                        \
-        for( ULONG i = 0; i < rObj.Count(); i++ )                       \
+        for( sal_uIntPtr i = 0; i < rObj.Count(); i++ )                       \
             Append( rObj.GetObject( i ) );                              \
     }                                                                   \
     return *this;                                                       \
@@ -84,7 +84,7 @@ void ClassName::Clear()                                                 \
     }                                                                   \
     aTypes.Clear();                                                     \
 }                                                                       \
-Type & ClassName::Insert( const Type & rType, ULONG nPos )              \
+Type & ClassName::Insert( const Type & rType, sal_uIntPtr nPos )              \
 {                                                                       \
     Type * pType = new Type( rType );                                   \
     aTypes.Insert( pType, nPos );                                       \

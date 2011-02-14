@@ -42,6 +42,7 @@ CFLAGS+= -DENABLE_LAYOUT=1 -I../$(PRJ)/layout/inc -I../$(PRJ)/layout/$(INPATH)/i
 
 SRS1NAME=dialogs
 SRC1FILES =  \
+        about.src \
         charmap.src \
         commonlingui.src \
         cuiimapdlg.src \
@@ -72,6 +73,7 @@ SRC1FILES =  \
 
 
 SLOFILES+=\
+        $(SLO)$/about.obj \
         $(SLO)$/commonlingui.obj \
         $(SLO)$/cuicharmap.obj \
         $(SLO)$/cuifmsearch.obj \

@@ -154,7 +154,7 @@ long IDEBaseWindow::Notify( NotifyEvent& rNEvt )
     {
         KeyEvent aKEvt = *rNEvt.GetKeyEvent();
         KeyCode aCode = aKEvt.GetKeyCode();
-        USHORT nCode = aCode.GetCode();
+        sal_uInt16 nCode = aCode.GetCode();
 
         switch ( nCode )
         {
@@ -188,14 +188,14 @@ void __EXPORT IDEBaseWindow::StoreData()
 {
 }
 
-BOOL __EXPORT IDEBaseWindow::CanClose()
+sal_Bool __EXPORT IDEBaseWindow::CanClose()
 {
-    return TRUE;
+    return sal_True;
 }
 
-BOOL __EXPORT IDEBaseWindow::AllowUndo()
+sal_Bool __EXPORT IDEBaseWindow::AllowUndo()
 {
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -228,13 +228,13 @@ String IDEBaseWindow::CreateQualifiedName()
     return aName;
 }
 
-void IDEBaseWindow::SetReadOnly( BOOL )
+void IDEBaseWindow::SetReadOnly( sal_Bool )
 {
 }
 
-BOOL IDEBaseWindow::IsReadOnly()
+sal_Bool IDEBaseWindow::IsReadOnly()
 {
-    return FALSE;
+    return sal_False;
 }
 
 void __EXPORT IDEBaseWindow::BasicStarted()
@@ -245,14 +245,14 @@ void __EXPORT IDEBaseWindow::BasicStopped()
 {
 }
 
-BOOL __EXPORT IDEBaseWindow::IsModified()
+sal_Bool __EXPORT IDEBaseWindow::IsModified()
 {
-    return TRUE;
+    return sal_True;
 }
 
-BOOL __EXPORT IDEBaseWindow::IsPasteAllowed()
+sal_Bool __EXPORT IDEBaseWindow::IsPasteAllowed()
 {
-    return FALSE;
+    return sal_False;
 }
 
 Window* __EXPORT IDEBaseWindow::GetLayoutWindow()
@@ -269,9 +269,9 @@ BreakPointList::BreakPointList()
 {}
 
 BreakPointList::BreakPointList(BreakPointList const & rList):
-    BreakPL( sal::static_int_cast<USHORT>( rList.Count() ))
+    BreakPL( sal::static_int_cast<sal_uInt16>( rList.Count() ))
 {
-    for (ULONG i = 0; i < rList.Count(); ++i)
+    for (sal_uLong i = 0; i < rList.Count(); ++i)
         Insert(new BreakPoint(*rList.GetObject(i)), i);
 }
 
@@ -289,7 +289,7 @@ void BreakPointList::reset()
 void BreakPointList::transfer(BreakPointList & rList)
 {
     reset();
-    for (ULONG i = 0; i < rList.Count(); ++i)
+    for (sal_uLong i = 0; i < rList.Count(); ++i)
         Insert(rList.GetObject(i), i);
     rList.Clear();
 }
@@ -319,12 +319,12 @@ void BreakPointList::SetBreakPointsInBasic( SbModule* pModule )
     while ( pBrk )
     {
         if ( pBrk->bEnabled )
-            pModule->SetBP( (USHORT)pBrk->nLine );
+            pModule->SetBP( (sal_uInt16)pBrk->nLine );
         pBrk = Next();
     }
 }
 
-BreakPoint* BreakPointList::FindBreakPoint( ULONG nLine )
+BreakPoint* BreakPointList::FindBreakPoint( sal_uLong nLine )
 {
     BreakPoint* pBrk = First();
     while ( pBrk )
@@ -340,18 +340,18 @@ BreakPoint* BreakPointList::FindBreakPoint( ULONG nLine )
 
 
 
-void BreakPointList::AdjustBreakPoints( ULONG nLine, BOOL bInserted )
+void BreakPointList::AdjustBreakPoints( sal_uLong nLine, sal_Bool bInserted )
 {
     BreakPoint* pBrk = First();
     while ( pBrk )
     {
-        BOOL bDelBrk = FALSE;
+        sal_Bool bDelBrk = sal_False;
         if ( pBrk->nLine == nLine )
         {
             if ( bInserted )
                 pBrk->nLine++;
             else
-                bDelBrk = TRUE;
+                bDelBrk = sal_True;
         }
         else if ( pBrk->nLine > nLine )
         {
@@ -363,7 +363,7 @@ void BreakPointList::AdjustBreakPoints( ULONG nLine, BOOL bInserted )
 
         if ( bDelBrk )
         {
-            ULONG n = GetCurPos();
+            sal_uLong n = GetCurPos();
             delete Remove( pBrk );
             pBrk = Seek( n );
         }
@@ -388,7 +388,7 @@ void IDEBaseWindow::Deactivating()
 {
 }
 
-USHORT __EXPORT IDEBaseWindow::GetSearchOptions()
+sal_uInt16 __EXPORT IDEBaseWindow::GetSearchOptions()
 {
     return 0;
 }
@@ -403,11 +403,11 @@ BasicDockingWindow::BasicDockingWindow( Window* pParent ) :
 
 
 
-BOOL __EXPORT BasicDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
+sal_Bool __EXPORT BasicDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
 {
     ModulWindowLayout* pLayout = (ModulWindowLayout*)GetParent();
     Rectangle aTmpRec( rRect );
-    BOOL bDock = IsDockingPrevented() ? FALSE : pLayout->IsToBeDocked( this, rPos, aTmpRec );
+    sal_Bool bDock = IsDockingPrevented() ? sal_False : pLayout->IsToBeDocked( this, rPos, aTmpRec );
     if ( bDock )
     {
         rRect.SetSize( aTmpRec.GetSize() );
@@ -422,13 +422,13 @@ BOOL __EXPORT BasicDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
 
 
 
-void __EXPORT BasicDockingWindow::EndDocking( const Rectangle& rRect, BOOL bFloatMode )
+void __EXPORT BasicDockingWindow::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
 {
     if ( bFloatMode )
         DockingWindow::EndDocking( rRect, bFloatMode );
     else
     {
-        SetFloatingMode( FALSE );
+        SetFloatingMode( sal_False );
         ModulWindowLayout* pLayout = (ModulWindowLayout*)GetParent();
         pLayout->DockaWindow( this );
     }
@@ -450,7 +450,7 @@ void __EXPORT BasicDockingWindow::ToggleFloatingMode()
 
 
 
-BOOL __EXPORT BasicDockingWindow::PrepareToggleFloatingMode()
+sal_Bool __EXPORT BasicDockingWindow::PrepareToggleFloatingMode()
 {
     if ( IsFloatingMode() )
     {
@@ -458,7 +458,7 @@ BOOL __EXPORT BasicDockingWindow::PrepareToggleFloatingMode()
         aFloatingPosAndSize.SetPos( GetParent()->OutputToScreenPixel( GetPosPixel() ) );
         aFloatingPosAndSize.SetSize( GetSizePixel() );
     }
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -509,18 +509,18 @@ IMPL_LINK_INLINE_END( ExtendedEdit, EditAccHdl, Accelerator *, pAcc )
 
 struct TabBarDDInfo
 {
-    ULONG   npTabBar;
-    USHORT  nPage;
+    sal_uLong   npTabBar;
+    sal_uInt16  nPage;
 
     TabBarDDInfo() { npTabBar = 0; nPage = 0; }
-    TabBarDDInfo( ULONG _npTabBar, USHORT _nPage ) { npTabBar = _npTabBar; nPage = _nPage; }
+    TabBarDDInfo( sal_uLong _npTabBar, sal_uInt16 _nPage ) { npTabBar = _npTabBar; nPage = _nPage; }
 };
 
 
 BasicIDETabBar::BasicIDETabBar( Window* pParent ) :
     TabBar( pParent, WinBits( WB_3DLOOK | WB_SCROLL | WB_BORDER | WB_SIZEABLE | WB_DRAG ) )
 {
-    EnableEditMode( TRUE );
+    EnableEditMode( sal_True );
 
     SetHelpId( HID_BASICIDE_TABBAR );
 }
@@ -558,9 +558,9 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
         PopupMenu aPopup( IDEResId( RID_POPUP_TABBAR ) );
         if ( GetPageCount() == 0 )
         {
-            aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, FALSE );
-            aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, FALSE );
-            aPopup.EnableItem( SID_BASICIDE_HIDECURPAGE, FALSE );
+            aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, sal_False );
+            aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, sal_False );
+            aPopup.EnableItem( SID_BASICIDE_HIDECURPAGE, sal_False );
         }
 
         if ( StarBASIC::IsRunning() )
@@ -580,9 +580,9 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
             if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
                  ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
             {
-                aPopup.EnableItem( aPopup.GetItemId( 0 ), FALSE );
-                aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, FALSE );
-                aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, FALSE );
+                aPopup.EnableItem( aPopup.GetItemId( 0 ), sal_False );
+                aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, sal_False );
+                aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, sal_False );
                 aPopup.RemoveDisabledEntries();
             }
              if ( aDocument.isInVBAMode() )
@@ -601,8 +601,8 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
                             SbModule* pActiveModule = (SbModule*)pBasic->FindModule( pWin->GetName() );
                             if( pActiveModule && ( pActiveModule->GetModuleType() == script::ModuleType::DOCUMENT ) )
                             {
-                                aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, FALSE );
-                                aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, FALSE );
+                                aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, sal_False );
+                                aPopup.EnableItem( SID_BASICIDE_RENAMECURRENT, sal_False );
                             }
                         }
                     }
@@ -620,7 +620,7 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
 
 long BasicIDETabBar::AllowRenaming()
 {
-    BOOL bValid = BasicIDE::IsValidSbxName( GetEditText() );
+    sal_Bool bValid = BasicIDE::IsValidSbxName( GetEditText() );
 
     if ( !bValid )
         ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();
@@ -656,13 +656,13 @@ void BasicIDETabBar::Sort()
         TabBarSortHelper aTabBarSortHelper;
         ::std::vector<TabBarSortHelper> aModuleList;
         ::std::vector<TabBarSortHelper> aDialogList;
-        USHORT nPageCount = GetPageCount();
-        USHORT i;
+        sal_uInt16 nPageCount = GetPageCount();
+        sal_uInt16 i;
 
         // create module and dialog lists for sorting
         for ( i = 0; i < nPageCount; i++)
         {
-            USHORT nId = GetPageId( i );
+            sal_uInt16 nId = GetPageId( i );
             aTabBarSortHelper.nPageId = nId;
             aTabBarSortHelper.aPageText = GetPageText( nId );
             IDEBaseWindow* pWin = aIDEWindowTable.Get( nId );
@@ -682,8 +682,8 @@ void BasicIDETabBar::Sort()
         ::std::sort( aDialogList.begin() , aDialogList.end() );
 
 
-        USHORT nModules = sal::static_int_cast<USHORT>( aModuleList.size() );
-        USHORT nDialogs = sal::static_int_cast<USHORT>( aDialogList.size() );
+        sal_uInt16 nModules = sal::static_int_cast<sal_uInt16>( aModuleList.size() );
+        sal_uInt16 nDialogs = sal::static_int_cast<sal_uInt16>( aDialogList.size() );
 
         // move module pages to new positions
         for (i = 0; i < nModules; i++)
@@ -699,7 +699,7 @@ void BasicIDETabBar::Sort()
     }
 }
 
-void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, BOOL bEraseTrailingEmptyLines )
+void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, sal_Bool bEraseTrailingEmptyLines )
 {
     sal_Int32 nStartPos = 0;
     sal_Int32 nEndPos = 0;
@@ -749,10 +749,10 @@ void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, BO
     }
 }
 
-ULONG CalcLineCount( SvStream& rStream )
+sal_uLong CalcLineCount( SvStream& rStream )
 {
-    ULONG nLFs = 0;
-    ULONG nCRs = 0;
+    sal_uLong nLFs = 0;
+    sal_uLong nCRs = 0;
     char c;
 
     rStream.Seek( 0 );
@@ -803,7 +803,7 @@ bool LibInfoKey::operator==( const LibInfoKey& rKey ) const
     return bRet;
 }
 
-LibInfoItem::LibInfoItem( const ScriptDocument& rDocument, const String& rLibName, const String& rCurrentName, USHORT nCurrentType )
+LibInfoItem::LibInfoItem( const ScriptDocument& rDocument, const String& rLibName, const String& rCurrentName, sal_uInt16 nCurrentType )
     :m_aDocument( rDocument )
     ,m_aLibName( rLibName )
     ,m_aCurrentName( rCurrentName )
@@ -889,7 +889,7 @@ LibInfoItem* LibInfos::GetInfo( const LibInfoKey& rKey )
     return pItem;
 }
 
-SbxItem::SbxItem(USHORT nWhich_, const ScriptDocument& rDocument, const String& aLibName, const String& aName, USHORT nType )
+SbxItem::SbxItem(sal_uInt16 nWhich_, const ScriptDocument& rDocument, const String& aLibName, const String& aName, sal_uInt16 nType )
     :SfxPoolItem( nWhich_ )
     ,m_aDocument(rDocument)
     ,m_aLibName(aLibName)
@@ -898,7 +898,7 @@ SbxItem::SbxItem(USHORT nWhich_, const ScriptDocument& rDocument, const String& 
 {
 }
 
-SbxItem::SbxItem(USHORT nWhich_, const ScriptDocument& rDocument, const String& aLibName, const String& aName, const String& aMethodName, USHORT nType )
+SbxItem::SbxItem(sal_uInt16 nWhich_, const ScriptDocument& rDocument, const String& aLibName, const String& aName, const String& aMethodName, sal_uInt16 nType )
     :SfxPoolItem( nWhich_ )
     ,m_aDocument(rDocument)
     ,m_aLibName(aLibName)
@@ -933,7 +933,7 @@ SfxPoolItem *SbxItem::Clone( SfxItemPool* ) const
     return new SbxItem(*this);
 }
 
-BOOL QueryDel( const String& rName, const ResId& rId, Window* pParent )
+sal_Bool QueryDel( const String& rName, const ResId& rId, Window* pParent )
 {
     String aQuery( rId );
     String aName( rName );
@@ -942,39 +942,39 @@ BOOL QueryDel( const String& rName, const ResId& rId, Window* pParent )
     aQuery.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "XX" ) ), aName );
     QueryBox aQueryBox( pParent, WB_YES_NO | WB_DEF_YES, aQuery );
     if ( aQueryBox.Execute() == RET_YES )
-        return TRUE;
-    return FALSE;
+        return sal_True;
+    return sal_False;
 }
 
-BOOL QueryDelMacro( const String& rName, Window* pParent )
+sal_Bool QueryDelMacro( const String& rName, Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMACRO ), pParent );
 }
 
-BOOL QueryReplaceMacro( const String& rName, Window* pParent )
+sal_Bool QueryReplaceMacro( const String& rName, Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYREPLACEMACRO ), pParent );
 }
 
-BOOL QueryDelDialog( const String& rName, Window* pParent )
+sal_Bool QueryDelDialog( const String& rName, Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELDIALOG ), pParent );
 }
 
-BOOL QueryDelLib( const String& rName, BOOL bRef, Window* pParent )
+sal_Bool QueryDelLib( const String& rName, sal_Bool bRef, Window* pParent )
 {
     return QueryDel( rName, IDEResId( bRef ? RID_STR_QUERYDELLIBREF : RID_STR_QUERYDELLIB ), pParent );
 }
 
-BOOL QueryDelModule( const String& rName, Window* pParent )
+sal_Bool QueryDelModule( const String& rName, Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMODULE ), pParent );
 }
 
-BOOL QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer, const String& rLibName, String& rPassword, BOOL bRepeat, BOOL bNewTitle )
+sal_Bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer, const String& rLibName, String& rPassword, sal_Bool bRepeat, sal_Bool bNewTitle )
 {
-    BOOL bOK = FALSE;
-    USHORT nRet = 0;
+    sal_Bool bOK = sal_False;
+    sal_uInt16 nRet = 0;
 
     do
     {

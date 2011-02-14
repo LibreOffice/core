@@ -203,10 +203,10 @@ xub_StrLen FunctionDescription::getSuppressedArgumentCount() const
     return sFormula;
 }
 // -----------------------------------------------------------------------------
-void FunctionDescription::fillVisibleArgumentMapping(::std::vector<USHORT>& _rArguments) const
+void FunctionDescription::fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const
 {
     const sal_Int32 nCount = m_aParameter.getLength();
-    for(USHORT i = 0;i < nCount; ++i)
+    for(sal_uInt16 i = 0;i < nCount; ++i)
     {
         _rArguments.push_back(i);
     }

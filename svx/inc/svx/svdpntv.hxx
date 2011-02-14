@@ -162,12 +162,12 @@ protected:
 
     SdrAnimationMode            eAnimationMode;
 
-    USHORT                      nHitTolPix;
-    USHORT                      nMinMovPix;
-    USHORT                      nHitTolLog;
-    USHORT                      nMinMovLog;
-    ULONG                       nMasterCacheMode;
-    ULONG                       nGraphicManagerDrawMode;
+    sal_uInt16                      nHitTolPix;
+    sal_uInt16                      nMinMovPix;
+    sal_uInt16                      nHitTolLog;
+    sal_uInt16                      nMinMovLog;
+    sal_uIntPtr                     nMasterCacheMode;
+    sal_uIntPtr                       nGraphicManagerDrawMode;
 
     // hold an incarnation of Drawinglayer configuration options
     SvtOptionsDrawinglayer      maDrawinglayerOpt;
@@ -188,9 +188,9 @@ protected:
     unsigned                    bSwapAsynchron : 1;
     unsigned                    bPrintPreview : 1;
 
-    // BOOL fuer die Verwaltung des anzuzeigenden Status
-    // Gruppe Betreten/Verlassen. Default ist TRUE, wird aber
-    // beispielsweise beim Chart auf FALSE gesetzt, da dort
+    // sal_Bool fuer die Verwaltung des anzuzeigenden Status
+    // Gruppe Betreten/Verlassen. Default ist sal_True, wird aber
+    // beispielsweise beim Chart auf sal_False gesetzt, da dort
     // die Ghosted-Effekte zur Darstellug unerwuenscht sind.
     unsigned                    bVisualizeEnteredGroup : 1;
     unsigned                    bAnimationPause : 1;
@@ -254,8 +254,8 @@ private:
     DECL_LINK(ImpComeBackHdl,Timer*);
 
 protected:
-    USHORT ImpGetMinMovLogic(short nMinMov, const OutputDevice* pOut) const;
-    USHORT ImpGetHitTolLogic(short nHitTol, const OutputDevice* pOut) const;
+    sal_uInt16 ImpGetMinMovLogic(short nMinMov, const OutputDevice* pOut) const;
+    sal_uInt16 ImpGetHitTolLogic(short nHitTol, const OutputDevice* pOut) const;
 
     // Wenn man den IdleStatus des Systems nicht abwarten will (auf const geschummelt):
     void FlushComeBackTimer() const;
@@ -263,12 +263,12 @@ protected:
     void ImpSetGlueVisible2(bool bOn) { if (bGlueVisible2!=(unsigned)bOn) { bGlueVisible2=bOn; if (!bGlueVisible && !bGlueVisible3 && !bGlueVisible4) GlueInvalidate(); } }
     void ImpSetGlueVisible3(bool bOn) { if (bGlueVisible3!=(unsigned)bOn) { bGlueVisible3=bOn; if (!bGlueVisible && !bGlueVisible2 && !bGlueVisible4) GlueInvalidate(); } }
     void ImpSetGlueVisible4(bool bOn) { if (bGlueVisible4!=(unsigned)bOn) { bGlueVisible4=bOn; if (!bGlueVisible && !bGlueVisible2 && !bGlueVisible3) GlueInvalidate(); } }
-    BOOL ImpIsGlueVisible2() const { return bGlueVisible2; }
-    BOOL ImpIsGlueVisible3() const { return bGlueVisible3; }
-    BOOL ImpIsGlueVisible4() const { return bGlueVisible4; }
+    sal_Bool ImpIsGlueVisible2() const { return bGlueVisible2; }
+    sal_Bool ImpIsGlueVisible3() const { return bGlueVisible3; }
+    sal_Bool ImpIsGlueVisible4() const { return bGlueVisible4; }
 
 public:
-    BOOL ImpIsGlueVisible() { return bGlueVisible || bGlueVisible2 || bGlueVisible3 || bGlueVisible4; }
+    sal_Bool ImpIsGlueVisible() { return bGlueVisible || bGlueVisible2 || bGlueVisible3 || bGlueVisible4; }
 protected:
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
@@ -296,7 +296,7 @@ public:
 //  virtual void Clear(); // PageViews loeschen, Markierungen weg, ...
     SdrModel* GetModel() const { return pMod; }
 
-    virtual BOOL IsAction() const;
+    virtual sal_Bool IsAction() const;
     virtual void MovAction(const Point& rPnt);
     virtual void EndAction();
     virtual void BckAction();
@@ -314,18 +314,18 @@ public:
     // jedem MapMode(Scaling)-wechsel gerufen werden, damit ich aus meinen
     // Pixelwerten logische Werte berechnen kann.
     void SetActualWin(const OutputDevice* pWin);
-    void SetMinMoveDistancePixel(USHORT nVal) { nMinMovPix=nVal; TheresNewMapMode(); }
-    USHORT GetMinMoveDistancePixel() const { return (USHORT)nMinMovPix; }
-    void SetHitTolerancePixel(USHORT nVal) { nHitTolPix=nVal; TheresNewMapMode(); }
-    USHORT GetHitTolerancePixel() const { return (USHORT)nHitTolPix; }
+    void SetMinMoveDistancePixel(sal_uInt16 nVal) { nMinMovPix=nVal; TheresNewMapMode(); }
+    sal_uInt16 GetMinMoveDistancePixel() const { return (sal_uInt16)nMinMovPix; }
+    void SetHitTolerancePixel(sal_uInt16 nVal) { nHitTolPix=nVal; TheresNewMapMode(); }
+    sal_uInt16 GetHitTolerancePixel() const { return (sal_uInt16)nHitTolPix; }
 
     // data read access on logic HitTolerance and MinMoveTolerance
-    USHORT getHitTolLog() const { return nHitTolLog; }
-    USHORT getMinMovLog() const { return nMinMovLog; }
+    sal_uInt16 getHitTolLog() const { return nHitTolLog; }
+    sal_uInt16 getMinMovLog() const { return nMinMovLog; }
 
     // Flag zur Visualisierung von Gruppen abfragen/testen
-    BOOL DoVisualizeEnteredGroup() const { return bVisualizeEnteredGroup; }
-    void SetVisualizeEnteredGroup(BOOL bNew) { bVisualizeEnteredGroup = bNew; }
+    sal_Bool DoVisualizeEnteredGroup() const { return bVisualizeEnteredGroup; }
+    void SetVisualizeEnteredGroup(sal_Bool bNew) { bVisualizeEnteredGroup = bNew; }
 
     // Am DragStatus laesst sich beispielsweise erfragen, welche
     // entfernung bereits gedraggd wurde, etc.
@@ -341,8 +341,8 @@ public:
     virtual void HideSdrPage();
 
     // Iterieren ueber alle angemeldeten PageViews
-//  USHORT GetPageViewCount() const { return USHORT(aPagV.Count()); }
-//  SdrPageView* GetPageViewByIndex(USHORT nPvNum) const { return ((SdrPageView*)aPagV.GetObject(nPvNum)); }
+//  sal_uInt16 GetPageViewCount() const { return sal_uInt16(aPagV.Count()); }
+//  SdrPageView* GetPageViewByIndex(sal_uInt16 nPvNum) const { return ((SdrPageView*)aPagV.GetObject(nPvNum)); }
     SdrPageView* GetSdrPageView() const { return mpPageView; }
 
     // Pageview einer bestimmten Seite ermitteln
@@ -360,17 +360,17 @@ public:
     virtual void AddWindowToPaintView(OutputDevice* pNewWin);
     virtual void DeleteWindowFromPaintView(OutputDevice* pOldWin);
 
-    void SetLayerVisible(const String& rName, BOOL bShow=TRUE);
+    void SetLayerVisible(const String& rName, sal_Bool bShow=sal_True);
     bool IsLayerVisible(const String& rName) const;
-    void SetAllLayersVisible(BOOL bShow=TRUE);
+    void SetAllLayersVisible(sal_Bool bShow=sal_True);
 
-    void SetLayerLocked(const String& rName, BOOL bLock=TRUE);
+    void SetLayerLocked(const String& rName, sal_Bool bLock=sal_True);
     bool IsLayerLocked(const String& rName) const;
-    void SetAllLayersLocked(BOOL bLock=TRUE);
+    void SetAllLayersLocked(sal_Bool bLock=sal_True);
 
-    void SetLayerPrintable(const String& rName, BOOL bPrn=TRUE);
+    void SetLayerPrintable(const String& rName, sal_Bool bPrn=sal_True);
     bool IsLayerPrintable(const String& rName) const;
-    void SetAllLayersPrintable(BOOL bPrn=TRUE);
+    void SetAllLayersPrintable(sal_Bool bPrn=sal_True);
 
     // PrePaint call forwarded from app windows
     void PrePaint();
@@ -412,14 +412,14 @@ protected:
     void ImpFormLayerDrawing(SdrPaintWindow& rPaintWindow) const;
 
 public:
-    BOOL IsPageVisible() const { return bPageVisible; }             // Seite (weisse Flaeche) malen oder nicht
-    BOOL IsPageBorderVisible() const { return bPageBorderVisible; } // Seite (weisse Flaeche) malen oder nicht
-    BOOL IsBordVisible() const { return bBordVisible; }             // Seitenrandlinie malen oder nicht
-    BOOL IsGridVisible() const { return bGridVisible; }             // Rastergitter malen oder nicht
-    BOOL IsGridFront() const { return bGridFront  ; }               // Rastergitter ueber die Objekte druebermalen oder dahinter
-    BOOL IsHlplVisible() const { return bHlplVisible; }             // Hilfslinien der Seiten malen oder nicht
-    BOOL IsHlplFront() const { return bHlplFront  ; }               // Hilfslinie ueber die Objekte druebermalen oder dahinter
-    BOOL IsGlueVisible() const { return bGlueVisible; }             // Konnektoren der objekte sichtbar oder nicht
+    sal_Bool IsPageVisible() const { return bPageVisible; }             // Seite (weisse Flaeche) malen oder nicht
+    sal_Bool IsPageBorderVisible() const { return bPageBorderVisible; } // Seite (weisse Flaeche) malen oder nicht
+    sal_Bool IsBordVisible() const { return bBordVisible; }             // Seitenrandlinie malen oder nicht
+    sal_Bool IsGridVisible() const { return bGridVisible; }             // Rastergitter malen oder nicht
+    sal_Bool IsGridFront() const { return bGridFront  ; }               // Rastergitter ueber die Objekte druebermalen oder dahinter
+    sal_Bool IsHlplVisible() const { return bHlplVisible; }             // Hilfslinien der Seiten malen oder nicht
+    sal_Bool IsHlplFront() const { return bHlplFront  ; }               // Hilfslinie ueber die Objekte druebermalen oder dahinter
+    sal_Bool IsGlueVisible() const { return bGlueVisible; }             // Konnektoren der objekte sichtbar oder nicht
     Color GetGridColor() const;
     void SetPageVisible(bool bOn = true) { bPageVisible=bOn; InvalidateAllWin(); }
     void SetPageBorderVisible(bool bOn = true) { bPageBorderVisible=bOn; InvalidateAllWin(); }
@@ -450,7 +450,7 @@ public:
     const Size& GetGridFine() const { return aGridFin; }
 
     void InvalidateAllWin();
-    void InvalidateAllWin(const Rectangle& rRect, BOOL bPlus1Pix=FALSE);
+    void InvalidateAllWin(const Rectangle& rRect, sal_Bool bPlus1Pix=sal_False);
 
     // Wenn die View kein Invalidate() an den Fenstern durchfuehren soll, muss
     // man diese beiden folgenden Methoden ueberladen und entsprechend anders
@@ -474,13 +474,13 @@ public:
 
     // DefaultAttribute an der View: Neu erzeugte Objekte bekommen diese
     // Attribute direkt nach dem Erzeugen erstmal zugewiesen.
-    void SetDefaultAttr(const SfxItemSet& rAttr, BOOL bReplaceAll);
+    void SetDefaultAttr(const SfxItemSet& rAttr, sal_Bool bReplaceAll);
     const SfxItemSet& GetDefaultAttr() const { return aDefaultAttr; }
-    void SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr);
+    void SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr);
     SfxStyleSheet* GetDefaultStyleSheet() const { return pDefaultStyleSheet; }
 
-    void SetNotPersistDefaultAttr(const SfxItemSet& rAttr, BOOL bReplaceAll);
-    void MergeNotPersistDefaultAttr(SfxItemSet& rAttr, BOOL bOnlyHardAttr) const;
+    void SetNotPersistDefaultAttr(const SfxItemSet& rAttr, sal_Bool bReplaceAll);
+    void MergeNotPersistDefaultAttr(SfxItemSet& rAttr, sal_Bool bOnlyHardAttr) const;
 
     // Aufziehen eines animierten Rechtecks fuer Applikationsspeziefische
     // Verwendung. Alle Positionsangaben in logischen View-Koordinaten.
@@ -494,32 +494,32 @@ public:
     sal_Bool IsEncirclement() const { return (0L != mpEncirclementOverlay); }
 
     // use this mode as mode to draw all internal GraphicManager objects with
-    ULONG GetGraphicManagerDrawMode() const { return nGraphicManagerDrawMode; }
-    void SetGraphicManagerDrawMode( ULONG nMode ) { nGraphicManagerDrawMode = nMode; }
+    sal_uIntPtr GetGraphicManagerDrawMode() const { return nGraphicManagerDrawMode; }
+    void SetGraphicManagerDrawMode( sal_uIntPtr nMode ) { nGraphicManagerDrawMode = nMode; }
 
     // SwapIn (z.B. von Grafiken) asynchron durchfuehren. Also nicht
     // beim Paint sofort nachladen, sondern dort das Nachladen anstossen.
     // Nach Abschluss des Nachladens wird das Objekt dann angezeigt.
     // Hat nur z.Zt. Wirkung, wenn SwapGraphics am Model eingeschaltet ist.
     // Default=FALSE. Flag ist nicht persistent.
-    BOOL IsSwapAsynchron() const { return bSwapAsynchron; }
-    void SetSwapAsynchron(BOOL bJa=TRUE) { bSwapAsynchron=bJa; }
-    virtual BOOL KeyInput(const KeyEvent& rKEvt, Window* pWin);
+    sal_Bool IsSwapAsynchron() const { return bSwapAsynchron; }
+    void SetSwapAsynchron(sal_Bool bJa=sal_True) { bSwapAsynchron=bJa; }
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt, Window* pWin);
 
-    virtual BOOL MouseButtonDown(const MouseEvent& /*rMEvt*/, Window* /*pWin*/) { return FALSE; }
-    virtual BOOL MouseButtonUp(const MouseEvent& /*rMEvt*/, Window* /*pWin*/) { return FALSE; }
-    virtual BOOL MouseMove(const MouseEvent& /*rMEvt*/, Window* /*pWin*/) { return FALSE; }
-    virtual BOOL Command(const CommandEvent& /*rCEvt*/, Window* /*pWin*/) { return FALSE; }
-    BOOL Cut(ULONG /*nFormat*/=SDR_ANYFORMAT) { return FALSE; }
-    BOOL Yank(ULONG /*nFormat*/=SDR_ANYFORMAT) { return FALSE; }
-    BOOL Paste(Window* /*pWin*/=NULL, ULONG /*nFormat*/=SDR_ANYFORMAT) { return FALSE; }
+    virtual sal_Bool MouseButtonDown(const MouseEvent& /*rMEvt*/, Window* /*pWin*/) { return sal_False; }
+    virtual sal_Bool MouseButtonUp(const MouseEvent& /*rMEvt*/, Window* /*pWin*/) { return sal_False; }
+    virtual sal_Bool MouseMove(const MouseEvent& /*rMEvt*/, Window* /*pWin*/) { return sal_False; }
+    virtual sal_Bool Command(const CommandEvent& /*rCEvt*/, Window* /*pWin*/) { return sal_False; }
+    sal_Bool Cut(sal_uIntPtr /*nFormat*/=SDR_ANYFORMAT) { return sal_False; }
+    sal_Bool Yank(sal_uIntPtr /*nFormat*/=SDR_ANYFORMAT) { return sal_False; }
+    sal_Bool Paste(Window* /*pWin*/=NULL, sal_uIntPtr /*nFormat*/=SDR_ANYFORMAT) { return sal_False; }
 
     /* new interface src537 */
-    BOOL GetAttributes(SfxItemSet& rTargetSet, BOOL bOnlyHardAttr=FALSE) const;
+    sal_Bool GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr=sal_False) const;
 
-    BOOL SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll);
-    SfxStyleSheet* GetStyleSheet() const; // SfxStyleSheet* GetStyleSheet(BOOL& rOk) const;
-    BOOL SetStyleSheet(SfxStyleSheet* pStyleSheet, BOOL bDontRemoveHardAttr);
+    sal_Bool SetAttributes(const SfxItemSet& rSet, sal_Bool bReplaceAll);
+    SfxStyleSheet* GetStyleSheet() const; // SfxStyleSheet* GetStyleSheet(sal_Bool& rOk) const;
+    sal_Bool SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr);
 
     virtual void MakeVisible(const Rectangle& rRect, Window& rWin);
 
@@ -529,8 +529,8 @@ public:
     // Animation aktivieren/deaktivieren fuer ::Paint
     // wird z.Zt. ausgewertet von SdrGrafObj, wenn in dem eine Animation steckt
     // Das Unterbinden der automatischen Animation wird z.B. fuer die Dia-Show benoetigt
-    BOOL IsAnimationEnabled() const { return ( SDR_ANIMATION_ANIMATE == eAnimationMode ); }
-    void SetAnimationEnabled( BOOL bEnable=TRUE );
+    sal_Bool IsAnimationEnabled() const { return ( SDR_ANIMATION_ANIMATE == eAnimationMode ); }
+    void SetAnimationEnabled( sal_Bool bEnable=sal_True );
 
     // set/unset pause state for animations
     bool IsAnimationPause() const { return bAnimationPause; }
@@ -543,10 +543,10 @@ public:
     void SetAnimationMode( const SdrAnimationMode eMode );
     SdrAnimationMode GetAnimationMode() const { return eAnimationMode; }
 
-    // bei bShow=FALSE wird der Browser destruiert
+    // bei bShow=sal_False wird der Browser destruiert
 #ifdef DBG_UTIL
-    void ShowItemBrowser(BOOL bShow=TRUE);
-    BOOL IsItemBrowserVisible() const { return pItemBrowser!=NULL && ((Window*)pItemBrowser)->IsVisible(); }
+    void ShowItemBrowser(sal_Bool bShow=sal_True);
+    sal_Bool IsItemBrowserVisible() const { return pItemBrowser!=NULL && ((Window*)pItemBrowser)->IsVisible(); }
     Window* GetItemBrowser() const { return (Window*)pItemBrowser; }
 #endif
 
@@ -555,7 +555,7 @@ public:
     void VisAreaChanged(const OutputDevice* pOut=NULL);
     void VisAreaChanged(const SdrPageWindow& rWindow);
 
-    BOOL IsPrintPreview() const { return bPrintPreview; }
+    sal_Bool IsPrintPreview() const { return bPrintPreview; }
     void SetPrintPreview(bool bOn = true) { bPrintPreview=bOn; }
 
     const svtools::ColorConfig& getColorConfig() const;

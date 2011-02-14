@@ -33,11 +33,11 @@
 #include <pamtyp.hxx>
 
 
-BOOL SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
-                        const SwPaM *pRegion, BOOL bInReadOnly  )
+sal_Bool SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
+                        const SwPaM *pRegion, sal_Bool bInReadOnly  )
 {
-    BOOL bFound = FALSE;
-    BOOL bSrchForward = fnMove == fnMoveForward;
+    sal_Bool bFound = sal_False;
+    sal_Bool bSrchForward = fnMove == fnMoveForward;
     SwPaM* pPam = MakeRegion( fnMove, pRegion );
 
     // Wenn am Anfang/Ende, aus dem Node moven
@@ -45,17 +45,17 @@ BOOL SwPaM::Find( const SwFmt& rFmt, SwMoveFn fnMove,
         ? pPam->GetPoint()->nContent.GetIndex() == pPam->GetCntntNode()->Len()
         : !pPam->GetPoint()->nContent.GetIndex() )
     {
-        if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, FALSE ))
+        if( !(*fnMove->fnNds)( &pPam->GetPoint()->nNode, sal_False ))
         {
             delete pPam;
-            return FALSE;
+            return sal_False;
         }
         SwCntntNode *pNd = pPam->GetPoint()->nNode.GetNode().GetCntntNode();
         xub_StrLen nTmpPos = bSrchForward ? 0 : pNd->Len();
         pPam->GetPoint()->nContent.Assign( pNd, nTmpPos );
     }
 
-    BOOL bFirst = TRUE;
+    sal_Bool bFirst = sal_True;
     SwCntntNode* pNode;
     while( !bFound &&
             0 != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly )))

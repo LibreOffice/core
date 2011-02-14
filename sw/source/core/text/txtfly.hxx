@@ -125,7 +125,7 @@ class SwTxtFly
 
     long nMinBottom;
     long nNextTop; // Hier wird die Oberkante des "naechsten" Rahmens gespeichert
-    ULONG nIndex;
+    sal_uLong nIndex;
     sal_Bool bOn : 1;
     sal_Bool bLeftSide : 1;
     sal_Bool bTopRule: 1;

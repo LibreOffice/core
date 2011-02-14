@@ -61,18 +61,18 @@ namespace connectivity
             friend  SvStream& operator << (SvStream &rStream, const ONDXPagePtr&);
             friend  SvStream& operator >> (SvStream &rStream, ONDXPagePtr&);
 
-            UINT32  nPagePos;       // Position in der Indexdatei
+            sal_uInt32  nPagePos;       // Position in der Indexdatei
 
         public:
-            ONDXPagePtr(UINT32 nPos = 0):nPagePos(nPos){}
+            ONDXPagePtr(sal_uInt32 nPos = 0):nPagePos(nPos){}
             ONDXPagePtr(const ONDXPagePtr& rRef);
             ONDXPagePtr(ONDXPage* pRefPage);
 
             ONDXPagePtr& operator=(const ONDXPagePtr& rRef);
             ONDXPagePtr& operator=(ONDXPage* pPageRef);
 
-            UINT32 GetPagePos() const {return nPagePos;}
-            BOOL HasPage() const {return nPagePos != 0;}
+            sal_uInt32 GetPagePos() const {return nPagePos;}
+            sal_Bool HasPage() const {return nPagePos != 0;}
             sal_Bool Is() const { return isValid(); }
             void Clear()
             {

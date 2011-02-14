@@ -102,21 +102,21 @@ class SvLBoxTab
     void*   pUserData;
 public:
             SvLBoxTab();
-            SvLBoxTab( long nPos, USHORT nFlags=SV_LBOXTAB_ADJUST_LEFT );
+            SvLBoxTab( long nPos, sal_uInt16 nFlags=SV_LBOXTAB_ADJUST_LEFT );
             SvLBoxTab( const SvLBoxTab& );
             ~SvLBoxTab();
 
-    USHORT  nFlags;
+    sal_uInt16  nFlags;
 
     void    SetUserData( void* pPtr ) { pUserData = pPtr; }
     void*   GetUserData() const { return pUserData; }
-    BOOL    IsDynamic() const { return (BOOL)((nFlags & SV_LBOXTAB_DYNAMIC)!=0); }
+    sal_Bool    IsDynamic() const { return (sal_Bool)((nFlags & SV_LBOXTAB_DYNAMIC)!=0); }
     void    SetPos( long nNewPos) { nPos = nNewPos; }
     long    GetPos() const { return nPos; }
     long    CalcOffset( long nItemLength, long nTabWidth );
     // long CalcOffset( const String&, const OutputDevice& );
-    BOOL    IsEditable() const { return (BOOL)((nFlags & SV_LBOXTAB_EDITABLE)!=0); }
-    BOOL    IsPushable() const { return (BOOL)((nFlags & SV_LBOXTAB_PUSHABLE)!=0); }
+    sal_Bool    IsEditable() const { return (sal_Bool)((nFlags & SV_LBOXTAB_EDITABLE)!=0); }
+    sal_Bool    IsPushable() const { return (sal_Bool)((nFlags & SV_LBOXTAB_PUSHABLE)!=0); }
 };
 
 // *********************************************************************
@@ -138,7 +138,7 @@ class SvViewDataEntry : public SvViewData
 {
 public:
     SvViewDataItem* pItemData;  // ein Array von SvViewDataItems
-    USHORT          nItmCnt;    // Anzahl Items fuer delete-operator
+    sal_uInt16          nItmCnt;    // Anzahl Items fuer delete-operator
 
                     SvViewDataEntry();
     virtual         ~SvViewDataEntry();
@@ -151,20 +151,20 @@ public:
 class SVT_DLLPUBLIC SvLBoxItem
 {
 public:
-                        SvLBoxItem( SvLBoxEntry*, USHORT nFlags );
+                        SvLBoxItem( SvLBoxEntry*, sal_uInt16 nFlags );
                         SvLBoxItem();
     virtual             ~SvLBoxItem();
-    virtual USHORT      IsA() = 0;
+    virtual sal_uInt16      IsA() = 0;
     const Size&         GetSize( SvLBox* pView, SvLBoxEntry* pEntry );
     const Size&         GetSize( SvLBoxEntry*, SvViewDataEntry* );
-    const Size&         GetSize( SvViewDataEntry* pData, USHORT nItemPos )
+    const Size&         GetSize( SvViewDataEntry* pData, sal_uInt16 nItemPos )
                         {
                             SvViewDataItem* pIData=pData->pItemData+nItemPos;
                             return pIData->aSize;
                         }
 
     virtual void        Paint( const Point& rPos, SvLBox& rOutDev,
-                            USHORT nViewDataEntryFlags,
+                            sal_uInt16 nViewDataEntryFlags,
                             SvLBoxEntry* pEntry ) = 0;
 
     virtual void        InitViewData( SvLBox* pView, SvLBoxEntry* pEntry,
@@ -194,7 +194,7 @@ class SVT_DLLPUBLIC SvLBoxEntry : public SvListEntry
 
     SvPtrarr    aItems;
     void*       pUserData;
-    USHORT      nEntryFlags;
+    sal_uInt16      nEntryFlags;
 //#if 0 // _SOLAR__PRIVATE
     SVT_DLLPRIVATE void         DeleteItems_Impl();
 //#endif
@@ -203,24 +203,24 @@ public:
                 SvLBoxEntry();
     virtual     ~SvLBoxEntry();
 
-    USHORT      ItemCount() const { return (USHORT)aItems.Count(); }
+    sal_uInt16      ItemCount() const { return (sal_uInt16)aItems.Count(); }
     // DARF NUR GERUFEN WERDEN, WENN DER EINTRAG NOCH NICHT IM MODEL
     // EINGEFUEGT IST, DA SONST FUER DAS ITEM KEINE VIEW-ABHAENGIGEN
     // DATEN ALLOZIERT WERDEN!
     void        AddItem( SvLBoxItem* pItem );
-    void        ReplaceItem( SvLBoxItem* pNewItem, USHORT nPos );
-    SvLBoxItem* GetItem( USHORT nPos ) const { return (SvLBoxItem*)aItems.GetObject(nPos ); }
-    SvLBoxItem* GetFirstItem( USHORT nId );
-    USHORT      GetPos( SvLBoxItem* pItem ) const { return aItems.GetPos( pItem ); }
+    void        ReplaceItem( SvLBoxItem* pNewItem, sal_uInt16 nPos );
+    SvLBoxItem* GetItem( sal_uInt16 nPos ) const { return (SvLBoxItem*)aItems.GetObject(nPos ); }
+    SvLBoxItem* GetFirstItem( sal_uInt16 nId );
+    sal_uInt16      GetPos( SvLBoxItem* pItem ) const { return aItems.GetPos( pItem ); }
     void*       GetUserData() const { return pUserData; }
     void        SetUserData( void* pPtr ) { pUserData = pPtr; }
     virtual void Clone( SvListEntry* pSource );
-    void        EnableChildsOnDemand( BOOL bEnable=TRUE );
-    BOOL        HasChildsOnDemand() const { return (BOOL)((nEntryFlags & SV_ENTRYFLAG_CHILDS_ON_DEMAND)!=0); }
-    BOOL        HasInUseEmphasis() const    { return (BOOL)((nEntryFlags & SV_ENTRYFLAG_IN_USE)!=0); }
+    void        EnableChildsOnDemand( sal_Bool bEnable=sal_True );
+    sal_Bool        HasChildsOnDemand() const { return (sal_Bool)((nEntryFlags & SV_ENTRYFLAG_CHILDS_ON_DEMAND)!=0); }
+    sal_Bool        HasInUseEmphasis() const    { return (sal_Bool)((nEntryFlags & SV_ENTRYFLAG_IN_USE)!=0); }
 
-    USHORT      GetFlags() const { return nEntryFlags; }
-    void        SetFlags( USHORT nFlags ) { nEntryFlags = nFlags; }
+    sal_uInt16      GetFlags() const { return nEntryFlags; }
+    void        SetFlags( sal_uInt16 nFlags ) { nEntryFlags = nFlags; }
 };
 
 // *********************************************************************
@@ -229,7 +229,7 @@ public:
 
 #define WB_FORCE_SELECTION          ((WinBits)0x8000)
 
-#define DragDropMode USHORT
+#define DragDropMode sal_uInt16
 #define SV_DRAGDROP_NONE            (DragDropMode)0x0000
 #define SV_DRAGDROP_CTRL_MOVE       (DragDropMode)0x0001
 #define SV_DRAGDROP_CTRL_COPY       (DragDropMode)0x0002
@@ -305,18 +305,18 @@ protected:
 
     SvLBox_Impl*    pLBoxImpl;
 
-    USHORT          nImpFlags;
+    sal_uInt16          nImpFlags;
     // Move/CopySelection: Position des aktuellen Eintrags in Selektionsliste
-    USHORT          nCurEntrySelPos;
+    sal_uInt16          nCurEntrySelPos;
 
     DragDropMode    nDragDropMode;
     SelectionMode   eSelMode;
     sal_Int8        nDragOptions;
 
-    BOOL            CheckDragAndDropMode( SvLBox* pSource, sal_Int8 );
-    void            ImplShowTargetEmphasis( SvLBoxEntry* pEntry, BOOL bShow);
-    void            EnableSelectionAsDropTarget( BOOL bEnable = TRUE,
-                                                 BOOL bWithChilds = TRUE );
+    sal_Bool            CheckDragAndDropMode( SvLBox* pSource, sal_Int8 );
+    void            ImplShowTargetEmphasis( SvLBoxEntry* pEntry, sal_Bool bShow);
+    void            EnableSelectionAsDropTarget( sal_Bool bEnable = sal_True,
+                                                 sal_Bool bWithChilds = sal_True );
     // standard impl gibt 0 zurueck; muss von abgeleiteten Klassen, die
     // D&D unterstuetzen, ueberladen werden
     using Window::GetDropTarget;
@@ -331,23 +331,23 @@ protected:
     // invalidate children on enable/disable
     virtual void StateChanged( StateChangedType );
 
-    virtual ULONG Insert( SvLBoxEntry* pEnt,SvLBoxEntry* pPar,ULONG nPos=LIST_APPEND);
-    virtual ULONG Insert( SvLBoxEntry* pEntry,ULONG nRootPos = LIST_APPEND );
+    virtual sal_uLong Insert( SvLBoxEntry* pEnt,SvLBoxEntry* pPar,sal_uLong nPos=LIST_APPEND);
+    virtual sal_uLong Insert( SvLBoxEntry* pEntry,sal_uLong nRootPos = LIST_APPEND );
     void            InsertTree( SvLBoxEntry* pTree, SvLBoxEntry* pTarget) {pModel->InsertTree( pTree, pTarget ); }
 
     // Inplace-Editing
     SvInplaceEdit2*  pEdCtrl;
-    void            EnableInplaceEditing( BOOL bEnable){if(bEnable)nImpFlags|=SVLBOX_EDT_ENABLED; else nImpFlags&=~SVLBOX_EDT_ENABLED;}
-    BOOL            IsInplaceEditingEnabled() const { return (BOOL)((nImpFlags&SVLBOX_EDT_ENABLED)!=0); }
+    void            EnableInplaceEditing( sal_Bool bEnable){if(bEnable)nImpFlags|=SVLBOX_EDT_ENABLED; else nImpFlags&=~SVLBOX_EDT_ENABLED;}
+    sal_Bool            IsInplaceEditingEnabled() const { return (sal_Bool)((nImpFlags&SVLBOX_EDT_ENABLED)!=0); }
     virtual void    EditingRequest( SvLBoxEntry* pEntry, SvLBoxItem* pItem,
                         const Point& rMousePos );
     void            EditText( const String&, const Rectangle&,const Selection&);
-    void            EditText( const String&, const Rectangle&,const Selection&, BOOL bMulti);
+    void            EditText( const String&, const Rectangle&,const Selection&, sal_Bool bMulti);
     void            EditTextMultiLine( const String&, const Rectangle&,const Selection&);
     void            CancelTextEditing();
-    BOOL            IsEditingActive() const { return (BOOL)((nImpFlags & SVLBOX_IN_EDT)!=0); }
-    BOOL            EditingCanceled() const;
-    void            EndEditing( BOOL bCancel = FALSE );
+    sal_Bool            IsEditingActive() const { return (sal_Bool)((nImpFlags & SVLBOX_IN_EDT)!=0); }
+    sal_Bool            EditingCanceled() const;
+    void            EndEditing( sal_Bool bCancel = sal_False );
     bool            IsEmptyTextAllowed() const;
     void            ForbidEmptyText();
     // Callback EditText
@@ -365,7 +365,7 @@ protected:
 
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual SvLBoxEntry* GetEntry( const Point& rPos, BOOL bHit=FALSE ) const;
+    virtual SvLBoxEntry* GetEntry( const Point& rPos, sal_Bool bHit=sal_False ) const;
     virtual void    ModelHasEntryInvalidated( SvListEntry* pEntry );
 
      // handler and methods for Drag - finished handler. This link can be set
@@ -403,12 +403,12 @@ public:
     void            SetModel( SvLBoxTreeList* );
     void            DisconnectFromModel();
 
-    virtual USHORT  IsA();
-    ULONG           GetEntryCount() const {return pModel->GetEntryCount();}
+    virtual sal_uInt16  IsA();
+    sal_uLong           GetEntryCount() const {return pModel->GetEntryCount();}
     SvLBoxEntry*    First() const { return (SvLBoxEntry*)(pModel->First()); }
-    SvLBoxEntry*    Next( SvLBoxEntry* pEntry, USHORT* pDepth=0 ) const { return (SvLBoxEntry*)(pModel->Next(pEntry,pDepth));}
-    SvLBoxEntry*    Prev( SvLBoxEntry* pEntry, USHORT* pDepth=0 ) const { return (SvLBoxEntry*)(pModel->Prev(pEntry,pDepth));}
-    SvLBoxEntry*    Last( USHORT* pDepth=0 ) const { return (SvLBoxEntry*)(pModel->Last(pDepth));}
+    SvLBoxEntry*    Next( SvLBoxEntry* pEntry, sal_uInt16* pDepth=0 ) const { return (SvLBoxEntry*)(pModel->Next(pEntry,pDepth));}
+    SvLBoxEntry*    Prev( SvLBoxEntry* pEntry, sal_uInt16* pDepth=0 ) const { return (SvLBoxEntry*)(pModel->Prev(pEntry,pDepth));}
+    SvLBoxEntry*    Last( sal_uInt16* pDepth=0 ) const { return (SvLBoxEntry*)(pModel->Last(pDepth));}
 
     SvLBoxEntry*    FirstChild(SvLBoxEntry* pParent ) const { return (SvLBoxEntry*)(pModel->FirstChild(pParent)); }
     SvLBoxEntry*    NextSibling(SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->NextSibling( pEntry )); }
@@ -421,9 +421,9 @@ public:
     SvLBoxEntry*    PrevSelected( SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(SvListView::PrevSelected(pEntry)); }
     SvLBoxEntry*    LastSelected() const { return (SvLBoxEntry*)(SvListView::LastSelected()); }
 
-    BOOL            CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget );
-    BOOL            MoveSelection( SvLBox* pSource, SvLBoxEntry* pTarget );
-    BOOL            MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry* pTarget, sal_Bool bAllowCopyFallback );
+    sal_Bool            CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget );
+    sal_Bool            MoveSelection( SvLBox* pSource, SvLBoxEntry* pTarget );
+    sal_Bool            MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry* pTarget, sal_Bool bAllowCopyFallback );
     void            RemoveSelection();
 
     DragDropMode    GetDragDropMode() const { return nDragDropMode; }
@@ -432,8 +432,8 @@ public:
     virtual void    SetSelectionMode( SelectionMode );
 
     // pParent==0 -> Root-Ebene
-    SvLBoxEntry*    GetEntry( SvLBoxEntry* pParent, ULONG nPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(pParent,nPos)); }
-    SvLBoxEntry*    GetEntry( ULONG nRootPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(nRootPos)); }
+    SvLBoxEntry*    GetEntry( SvLBoxEntry* pParent, sal_uLong nPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(pParent,nPos)); }
+    SvLBoxEntry*    GetEntry( sal_uLong nRootPos ) const { return (SvLBoxEntry*)(pModel->GetEntry(nRootPos)); }
 
     SvLBoxEntry*    GetEntryFromPath( const ::std::deque< sal_Int32 >& _rPath ) const;
     void            FillEntryPath( SvLBoxEntry* pEntry, ::std::deque< sal_Int32 >& _rPath ) const;
@@ -444,8 +444,8 @@ public:
     SvLBoxEntry*    GetRootLevelParent(SvLBoxEntry* pEntry ) const { return (SvLBoxEntry*)(pModel->GetRootLevelParent( pEntry ));}
 
     using Window::GetChildCount;
-    ULONG           GetChildCount( SvLBoxEntry* pParent ) const { return pModel->GetChildCount(pParent); }
-    ULONG           GetLevelChildCount( SvLBoxEntry* pParent ) const;
+    sal_uLong           GetChildCount( SvLBoxEntry* pParent ) const { return pModel->GetChildCount(pParent); }
+    sal_uLong           GetLevelChildCount( SvLBoxEntry* pParent ) const;
 
     SvViewDataEntry* GetViewDataEntry( SvListEntry* pEntry ) const { return (SvViewDataEntry*)SvListView::GetViewData(pEntry); }
     SvViewDataItem*  GetViewDataItem( SvListEntry*, SvLBoxItem* ) const;
@@ -488,21 +488,21 @@ public:
     */
     bool            HandleKeyInput( const KeyEvent& rKEvt );
 
-    virtual BOOL    Expand( SvLBoxEntry* pParent );
-    virtual BOOL    Collapse( SvLBoxEntry* pParent );
-    virtual BOOL    Select( SvLBoxEntry* pEntry, BOOL bSelect=TRUE );
-    virtual ULONG   SelectChilds( SvLBoxEntry* pParent, BOOL bSelect );
-    virtual void    SelectAll( BOOL bSelect, BOOL bPaint=TRUE );
+    virtual sal_Bool    Expand( SvLBoxEntry* pParent );
+    virtual sal_Bool    Collapse( SvLBoxEntry* pParent );
+    virtual sal_Bool    Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
+    virtual sal_uLong   SelectChilds( SvLBoxEntry* pParent, sal_Bool bSelect );
+    virtual void    SelectAll( sal_Bool bSelect, sal_Bool bPaint=sal_True );
 
     virtual void    SetCurEntry( SvLBoxEntry* _pEntry ) = 0;
     virtual SvLBoxEntry*
                     GetCurEntry() const = 0;
 
     // Model
-    void            SetInUseEmphasis( SvLBoxEntry* pEntry, BOOL bInUse=TRUE);
+    void            SetInUseEmphasis( SvLBoxEntry* pEntry, sal_Bool bInUse=sal_True);
     // View
-    void            SetCursorEmphasis( SvLBoxEntry* pEntry, BOOL bCursored=TRUE);
-    BOOL            HasCursorEmphasis( SvLBoxEntry* pEntry ) const;
+    void            SetCursorEmphasis( SvLBoxEntry* pEntry, sal_Bool bCursored=sal_True);
+    sal_Bool            HasCursorEmphasis( SvLBoxEntry* pEntry ) const;
 
     void            SetSelectHdl( const Link& rNewHdl ) {aSelectHdl=rNewHdl; }
     void            SetDeselectHdl( const Link& rNewHdl ) {aDeselectHdl=rNewHdl; }
@@ -518,8 +518,8 @@ public:
     virtual long    ExpandingHdl();
     virtual void    SelectHdl();
     virtual void    DeselectHdl();
-    virtual BOOL    DoubleClickHdl();
-    BOOL            IsTravelSelect() const { return (BOOL)((nImpFlags&SVLBOX_IS_TRAVELSELECT)!=0);}
+    virtual sal_Bool    DoubleClickHdl();
+    sal_Bool            IsTravelSelect() const { return (sal_Bool)((nImpFlags&SVLBOX_IS_TRAVELSELECT)!=0);}
     SvLBoxEntry*    GetHdlEntry() const { return pHdlEntry; }
     SvLBoxItem*     GetHdlItem() const;
 
@@ -536,7 +536,7 @@ public:
     virtual DragDropMode    NotifyStartDrag( TransferDataContainer& rData,
                                          SvLBoxEntry* );
     virtual void        DragFinished( sal_Int8 nDropAction );
-    virtual BOOL        NotifyAcceptDrop( SvLBoxEntry* );
+    virtual sal_Bool        NotifyAcceptDrop( SvLBoxEntry* );
 
     void            SetDragOptions( sal_Int8 nOptions ) { nDragOptions = nOptions; }
     sal_Int8        GetDragOptions() const { return nDragOptions; }
@@ -545,25 +545,25 @@ public:
     SvLBox*         GetTargetView() const;
 
     virtual void    NotifyRemoving( SvLBoxEntry* );
-    virtual void    ShowTargetEmphasis( SvLBoxEntry*, BOOL bShow );
+    virtual void    ShowTargetEmphasis( SvLBoxEntry*, sal_Bool bShow );
     virtual SvLBoxEntry* CloneEntry( SvLBoxEntry* pSource );
     virtual SvLBoxEntry* CreateEntry() const; // zum 'new'en von Entries
 
-    // Rueckgabe: TRUE==Ok, FALSE==Abbrechen
-    virtual BOOL    NotifyMoving(
+    // Rueckgabe: sal_True==Ok, sal_False==Abbrechen
+    virtual sal_Bool    NotifyMoving(
         SvLBoxEntry*  pTarget,       // D&D-Drop-Position in this->GetModel()
         SvLBoxEntry*  pEntry,        // Zu verschiebender Entry aus
                                      // GetSourceListBox()->GetModel()
         SvLBoxEntry*& rpNewParent,   // Neuer Target-Parent
-        ULONG&        rNewChildPos); // Position in Childlist des Target-Parents
+        sal_uLong&        rNewChildPos); // Position in Childlist des Target-Parents
 
-    // Rueckgabe: TRUE==Ok, FALSE==Abbrechen
-    virtual BOOL    NotifyCopying(
+    // Rueckgabe: sal_True==Ok, sal_False==Abbrechen
+    virtual sal_Bool    NotifyCopying(
         SvLBoxEntry*  pTarget,       // D&D-Drop-Position in this->GetModel()
         SvLBoxEntry*  pEntry,        // Zu kopierender Entry aus
                                      // GetSourceListBox()->GetModel()
         SvLBoxEntry*& rpNewParent,   // Neuer Target-Parent
-        ULONG&        rNewChildPos); // Position in Childlist des Target-Parents
+        sal_uLong&        rNewChildPos); // Position in Childlist des Target-Parents
 
     // ACCESSIBILITY ==========================================================
 
@@ -596,7 +596,7 @@ struct SvLBoxDDInfo
     SvLBoxEntry*    pDDStartEntry;
     // relative Position im Eintrag bei Drag-Beginn (IconView)
     long            nMouseRelX,nMouseRelY;
-    ULONG           nRes1,nRes2,nRes3,nRes4;
+    sal_uLong           nRes1,nRes2,nRes3,nRes4;
 };
 
 class SvInplaceEdit : public Edit
@@ -605,8 +605,8 @@ class SvInplaceEdit : public Edit
     Accelerator aAccReturn;
     Accelerator aAccEscape;
     Timer       aTimer;
-    BOOL        bCanceled;
-    BOOL        bAlreadyInCallBack;
+    sal_Bool        bCanceled;
+    sal_Bool        bAlreadyInCallBack;
 
 //#if 0 // _SOLAR__PRIVATE
     void        CallCallBackHdl_Impl();
@@ -623,9 +623,9 @@ public:
 
     virtual void    KeyInput( const KeyEvent& rKEvt );
     virtual void    LoseFocus();
-    BOOL            EditingCanceled() const { return bCanceled; }
+    sal_Bool            EditingCanceled() const { return bCanceled; }
     String          GetText() const { return Edit::GetText(); }
-    void            StopEditing( BOOL bCancel = FALSE );
+    void            StopEditing( sal_Bool bCancel = sal_False );
 };
 
 class SvInplaceEdit2
@@ -635,9 +635,9 @@ class SvInplaceEdit2
     Accelerator aAccEscape;
     Timer       aTimer;
     Edit*       pEdit;
-    BOOL        bCanceled;
-    BOOL        bAlreadyInCallBack;
-    BOOL        bMultiLine;
+    sal_Bool        bCanceled;
+    sal_Bool        bAlreadyInCallBack;
+    sal_Bool        bMultiLine;
 
 //#if 0 // _SOLAR__PRIVATE
     void        CallCallBackHdl_Impl();
@@ -649,14 +649,14 @@ class SvInplaceEdit2
 public:
                 SvInplaceEdit2( Window* pParent, const Point& rPos, const Size& rSize,
                    const String& rData, const Link& rNotifyEditEnd,
-                   const Selection&, BOOL bMultiLine = FALSE );
+                   const Selection&, sal_Bool bMultiLine = sal_False );
                ~SvInplaceEdit2();
-    BOOL        KeyInput( const KeyEvent& rKEvt );
+    sal_Bool        KeyInput( const KeyEvent& rKEvt );
     void        LoseFocus();
-    BOOL        EditingCanceled() const { return bCanceled; }
+    sal_Bool        EditingCanceled() const { return bCanceled; }
     String      GetText() const;
     String      GetSavedValue() const;
-    void        StopEditing( BOOL bCancel = FALSE );
+    void        StopEditing( sal_Bool bCancel = sal_False );
     void        Hide();
 };
 
@@ -667,7 +667,7 @@ inline SvViewDataItem* SvLBox::GetViewDataItem( SvListEntry* pEntry,
         (SvViewDataEntry*)SvListView::GetViewData(pEntry);
     DBG_ASSERT(pEntryData,"Entry not in View");
     DBG_ASSERT(pEntryData->pItemData,"No ItemData");
-    USHORT nItemPos = ((SvLBoxEntry*)pEntry)->GetPos( pItem );
+    sal_uInt16 nItemPos = ((SvLBoxEntry*)pEntry)->GetPos( pItem );
     return (pEntryData->pItemData+nItemPos);
 }
 

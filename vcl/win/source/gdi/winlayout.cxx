@@ -1211,7 +1211,7 @@ static bool InitUSP()
         DWORD nHandle;
         DWORD nBufSize = ::GetFileVersionInfoSizeW( const_cast<LPWSTR>(reinterpret_cast<LPCWSTR>(pModuleFileCStr)), &nHandle );
         char* pBuffer = (char*)alloca( nBufSize );
-        WIN_BOOL bRC = ::GetFileVersionInfoW( const_cast<LPWSTR>(reinterpret_cast<LPCWSTR>(pModuleFileCStr)), nHandle, nBufSize, pBuffer );
+        BOOL bRC = ::GetFileVersionInfoW( const_cast<LPWSTR>(reinterpret_cast<LPCWSTR>(pModuleFileCStr)), nHandle, nBufSize, pBuffer );
         VS_FIXEDFILEINFO* pFixedFileInfo = NULL;
         UINT nFixedFileSize = 0;
         if( bRC )

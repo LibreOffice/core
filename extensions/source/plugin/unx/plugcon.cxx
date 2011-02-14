@@ -32,22 +32,22 @@
 #include <cstdarg>
 #include <vector>
 
-UINT32 PluginConnector::GetStreamID( NPStream* pStream )
+sal_uInt32 PluginConnector::GetStreamID( NPStream* pStream )
 {
     size_t nLen = m_aNPWrapStreams.size();
     for( size_t i = 0; i < nLen; i++ )
         if( m_aNPWrapStreams[ i ] == pStream )
-            return static_cast<UINT32>(i);
+            return static_cast<sal_uInt32>(i);
     medDebug( 1, "Error: NPStream has no ID\n" );
     return UnknownStreamID;
 }
 
-UINT32 PluginConnector::GetNPPID( NPP instance )
+sal_uInt32 PluginConnector::GetNPPID( NPP instance )
 {
     size_t nLen = m_aInstances.size();
     for( size_t i=0; i <nLen; i++ )
         if( m_aInstances[ i ]->instance == instance )
-            return static_cast<UINT32>(i);
+            return static_cast<sal_uInt32>(i);
     medDebug( 1, "Error: NPP has no ID\n" );
 
     return UnknownNPPID;
@@ -65,37 +65,37 @@ ConnectorInstance* PluginConnector::getInstance( NPP instance )
     return NULL;
 }
 
-ConnectorInstance* PluginConnector::getInstanceById( UINT32 nInstanceID )
+ConnectorInstance* PluginConnector::getInstanceById( sal_uInt32 nInstanceID )
 {
-    return nInstanceID < static_cast<UINT32>(m_aInstances.size()) ? m_aInstances[ nInstanceID ] : NULL;
+    return nInstanceID < static_cast<sal_uInt32>(m_aInstances.size()) ? m_aInstances[ nInstanceID ] : NULL;
 }
 
 struct PtrStruct
 {
     char* pData;
-    ULONG nBytes;
+    sal_uLong nBytes;
 
-    PtrStruct( char* i_pData, ULONG i_nBytes )
+    PtrStruct( char* i_pData, sal_uLong i_nBytes )
     : pData( i_pData ), nBytes( i_nBytes ) {}
 };
 
-ULONG PluginConnector::FillBuffer( char*& rpBuffer,
+sal_uLong PluginConnector::FillBuffer( char*& rpBuffer,
                                    const char* pFunction,
-                                   ULONG nFunctionLen,
+                                   sal_uLong nFunctionLen,
                                    va_list ap )
 {
     std::vector< PtrStruct > aList;
     aList.reserve( 5 );
 
-    ULONG nDataSize = nFunctionLen + sizeof( ULONG );
+    sal_uLong nDataSize = nFunctionLen + sizeof( sal_uLong );
     char* pNext;
 
     do {
         pNext = va_arg( ap, char* );
         if( pNext )
         {
-            aList.push_back( PtrStruct( pNext, va_arg( ap, ULONG ) ) );
-            nDataSize += aList.back().nBytes + sizeof(ULONG);
+            aList.push_back( PtrStruct( pNext, va_arg( ap, sal_uLong ) ) );
+            nDataSize += aList.back().nBytes + sizeof(sal_uLong);
         }
     } while( pNext );
 
@@ -108,8 +108,8 @@ ULONG PluginConnector::FillBuffer( char*& rpBuffer,
 
     for( std::vector<PtrStruct>::const_iterator it = aList.begin(); it != aList.end(); ++it )
     {
-        memcpy( pRun, &it->nBytes, sizeof( ULONG ) );
-        pRun += sizeof( ULONG );
+        memcpy( pRun, &it->nBytes, sizeof( sal_uLong ) );
+        pRun += sizeof( sal_uLong );
         memcpy( pRun, it->pData, it->nBytes );
         pRun += it->nBytes;
     }
@@ -117,53 +117,53 @@ ULONG PluginConnector::FillBuffer( char*& rpBuffer,
 }
 
 MediatorMessage* PluginConnector::Transact( const char* pFunction,
-                                            ULONG nFunctionLen, ... )
+                                            sal_uLong nFunctionLen, ... )
 {
     va_list ap;
     char* pBuffer;
 
     va_start( ap, nFunctionLen );
-    ULONG nSize = FillBuffer( pBuffer, pFunction, nFunctionLen, ap );
+    sal_uLong nSize = FillBuffer( pBuffer, pFunction, nFunctionLen, ap );
     va_end( ap );
     return TransactMessage( nSize, pBuffer );
 }
 
-MediatorMessage* PluginConnector::Transact( UINT32 nFunction, ... )
+MediatorMessage* PluginConnector::Transact( sal_uInt32 nFunction, ... )
 {
     va_list ap;
     char* pBuffer;
 
     va_start( ap, nFunction );
-    ULONG nSize = FillBuffer( pBuffer, (char*)&nFunction, sizeof( nFunction ), ap );
+    sal_uLong nSize = FillBuffer( pBuffer, (char*)&nFunction, sizeof( nFunction ), ap );
     va_end( ap );
     return TransactMessage( nSize, pBuffer );
 }
 
-ULONG PluginConnector::Send( UINT32 nFunction, ... )
+sal_uLong PluginConnector::Send( sal_uInt32 nFunction, ... )
 {
     va_list ap;
     char* pBuffer;
 
     va_start( ap, nFunction );
-    ULONG nSize = FillBuffer( pBuffer, (char*)&nFunction, sizeof( nFunction ), ap );
+    sal_uLong nSize = FillBuffer( pBuffer, (char*)&nFunction, sizeof( nFunction ), ap );
     va_end( ap );
     return SendMessage( nSize, pBuffer );
 }
 
-void PluginConnector::Respond( ULONG nID,
+void PluginConnector::Respond( sal_uLong nID,
                                char* pFunction,
-                               ULONG nFunctionLen, ... )
+                               sal_uLong nFunctionLen, ... )
 {
     va_list ap;
     char* pBuffer;
 
     va_start( ap, nFunctionLen );
-    ULONG nSize = FillBuffer( pBuffer, pFunction, nFunctionLen, ap );
+    sal_uLong nSize = FillBuffer( pBuffer, pFunction, nFunctionLen, ap );
     va_end( ap );
     SendMessage( nSize, pBuffer, nID | ( 1 << 24 ) );
 }
 
-MediatorMessage* PluginConnector::WaitForAnswer( ULONG nMessageID )
+MediatorMessage* PluginConnector::WaitForAnswer( sal_uLong nMessageID )
 {
     if( ! m_bValid )
         return NULL;
@@ -176,7 +176,7 @@ MediatorMessage* PluginConnector::WaitForAnswer( ULONG nMessageID )
             for( size_t i = 0; i < m_aMessageQueue.size(); i++ )
             {
                 MediatorMessage* pMessage = m_aMessageQueue[ i ];
-                ULONG nID = pMessage->m_nID;
+                sal_uLong nID = pMessage->m_nID;
                 if(  ( nID & 0xff000000 ) &&
                      ( ( nID & 0x00ffffff ) == nMessageID ) )
                 {
@@ -193,9 +193,9 @@ MediatorMessage* PluginConnector::WaitForAnswer( ULONG nMessageID )
 }
 
 ConnectorInstance::ConnectorInstance( NPP inst, char* type,
-                                      int args, char* pargnbuf, ULONG nargnbytes,
-                                      char* pargvbuf, ULONG nargvbytes,
-                                      char* savedata, ULONG savebytes ) :
+                                      int args, char* pargnbuf, sal_uLong nargnbytes,
+                                      char* pargvbuf, sal_uLong nargvbytes,
+                                      char* savedata, sal_uLong savebytes ) :
         instance( inst ),
         pShell( NULL ),
         pWidget( NULL ),
@@ -219,18 +219,18 @@ ConnectorInstance::ConnectorInstance( NPP inst, char* type,
     for( i = 0; i < nArg; i++ )
     {
         argn[i] = pRun;
-        while( *pRun != 0 && (ULONG)(pRun - pArgnBuf) < nargnbytes )
+        while( *pRun != 0 && (sal_uLong)(pRun - pArgnBuf) < nargnbytes )
             pRun++;
-        if( (ULONG)(pRun - pArgnBuf) < nargnbytes )
+        if( (sal_uLong)(pRun - pArgnBuf) < nargnbytes )
             pRun++;
     }
     pRun = pArgvBuf;
     for( i = 0; i < nArg; i++ )
     {
         argv[i] = pRun;
-        while( *pRun != 0 && (ULONG)(pRun - pArgvBuf) < nargvbytes )
+        while( *pRun != 0 && (sal_uLong)(pRun - pArgvBuf) < nargvbytes )
             pRun++;
-        if( (ULONG)(pRun - pArgvBuf) < nargvbytes )
+        if( (sal_uLong)(pRun - pArgvBuf) < nargvbytes )
             pRun++;
     }
 }

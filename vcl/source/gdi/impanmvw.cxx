@@ -39,7 +39,7 @@
 
 ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
                             const Point& rPt, const Size& rSz,
-                            ULONG nExtraData,
+                            sal_uLong nExtraData,
                             OutputDevice* pFirstFrameOutDev ) :
         mpParent        ( pParent ),
         mpOut           ( pFirstFrameOutDev ? pFirstFrameOutDev : pOut ),
@@ -51,8 +51,8 @@ ImplAnimView::ImplAnimView( Animation* pParent, OutputDevice* pOut,
         mpBackground    ( new VirtualDevice ),
         mpRestore       ( new VirtualDevice ),
         meLastDisposal  ( DISPOSE_BACK ),
-        mbPause         ( FALSE ),
-        mbMarked        ( FALSE ),
+        mbPause         ( sal_False ),
+        mbMarked        ( sal_False ),
         mbHMirr         ( maSz.Width() < 0L ),
         mbVMirr         ( maSz.Height() < 0L )
 {
@@ -118,17 +118,17 @@ ImplAnimView::~ImplAnimView()
 
 // ------------------------------------------------------------------------
 
-BOOL ImplAnimView::ImplMatches( OutputDevice* pOut, long nExtraData ) const
+sal_Bool ImplAnimView::ImplMatches( OutputDevice* pOut, long nExtraData ) const
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if( nExtraData )
     {
         if( ( mnExtraData == nExtraData ) && ( !pOut || ( pOut == mpOut ) ) )
-            bRet = TRUE;
+            bRet = sal_True;
     }
     else if( !pOut || ( pOut == mpOut ) )
-        bRet = TRUE;
+        bRet = sal_True;
 
     return bRet;
 }
@@ -174,15 +174,15 @@ void ImplAnimView::ImplGetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, 
 
 // ------------------------------------------------------------------------
 
-void ImplAnimView::ImplDrawToPos( ULONG nPos )
+void ImplAnimView::ImplDrawToPos( sal_uLong nPos )
 {
     VirtualDevice   aVDev;
     Region*         pOldClip = !maClip.IsNull() ? new Region( mpOut->GetClipRegion() ) : NULL;
 
-    aVDev.SetOutputSizePixel( maSzPix, FALSE );
-    nPos = Min( nPos, (ULONG) mpParent->Count() - 1UL );
+    aVDev.SetOutputSizePixel( maSzPix, sal_False );
+    nPos = Min( nPos, (sal_uLong) mpParent->Count() - 1UL );
 
-    for( ULONG i = 0UL; i <= nPos; i++ )
+    for( sal_uLong i = 0UL; i <= nPos; i++ )
         ImplDraw( i, &aVDev );
 
     if( pOldClip )
@@ -199,20 +199,20 @@ void ImplAnimView::ImplDrawToPos( ULONG nPos )
 
 // ------------------------------------------------------------------------
 
-void ImplAnimView::ImplDraw( ULONG nPos )
+void ImplAnimView::ImplDraw( sal_uLong nPos )
 {
     ImplDraw( nPos, NULL );
 }
 
 // ------------------------------------------------------------------------
 
-void ImplAnimView::ImplDraw( ULONG nPos, VirtualDevice* pVDev )
+void ImplAnimView::ImplDraw( sal_uLong nPos, VirtualDevice* pVDev )
 {
     Rectangle aOutRect( mpOut->PixelToLogic( Point() ), mpOut->GetOutputSize() );
 
     // check, if output lies out of display
     if( aOutRect.Intersection( Rectangle( maDispPt, maDispSz ) ).IsEmpty() )
-        ImplSetMarked( TRUE );
+        ImplSetMarked( sal_True );
     else if( !mbPause )
     {
         VirtualDevice*          pDev;
@@ -220,8 +220,8 @@ void ImplAnimView::ImplDraw( ULONG nPos, VirtualDevice* pVDev )
         Point                   aBmpPosPix;
         Size                    aSizePix;
         Size                    aBmpSizePix;
-        const ULONG             nLastPos = mpParent->Count() - 1;
-        const AnimationBitmap&  rAnm = mpParent->Get( (USHORT) ( mnActPos = Min( nPos, nLastPos ) ) );
+        const sal_uLong             nLastPos = mpParent->Count() - 1;
+        const AnimationBitmap&  rAnm = mpParent->Get( (sal_uInt16) ( mnActPos = Min( nPos, nLastPos ) ) );
 
         ImplGetPosSize( rAnm, aPosPix, aSizePix );
 
@@ -253,7 +253,7 @@ void ImplAnimView::ImplDraw( ULONG nPos, VirtualDevice* pVDev )
         if( !pVDev )
         {
             pDev = new VirtualDevice;
-            pDev->SetOutputSizePixel( maSzPix, FALSE );
+            pDev->SetOutputSizePixel( maSzPix, sal_False );
             pDev->DrawOutDev( Point(), maSzPix, maDispPt, maDispSz, *mpOut );
         }
         else
@@ -284,10 +284,10 @@ void ImplAnimView::ImplDraw( ULONG nPos, VirtualDevice* pVDev )
         // ==> ggf. in eine Bitmap stecken, ansonsten SaveBitmap
         // aus Speichergruenden loeschen
         if( ( meLastDisposal == DISPOSE_BACK ) || ( meLastDisposal == DISPOSE_NOT ) )
-            mpRestore->SetOutputSizePixel( Size( 1, 1 ), FALSE );
+            mpRestore->SetOutputSizePixel( Size( 1, 1 ), sal_False );
         else
         {
-            mpRestore->SetOutputSizePixel( maRestSz, FALSE );
+            mpRestore->SetOutputSizePixel( maRestSz, sal_False );
             mpRestore->DrawOutDev( Point(), maRestSz, aPosPix, aSizePix, *pDev );
         }
 
@@ -320,7 +320,7 @@ void ImplAnimView::ImplDraw( ULONG nPos, VirtualDevice* pVDev )
 
 void ImplAnimView::ImplRepaint()
 {
-    const BOOL bOldPause = mbPause;
+    const sal_Bool bOldPause = mbPause;
 
     if( mpOut->GetOutDevType() == OUTDEV_WINDOW )
     {
@@ -333,7 +333,7 @@ void ImplAnimView::ImplRepaint()
     else
         mpBackground->DrawOutDev( Point(), maSzPix, maDispPt, maDispSz, *mpOut );
 
-    mbPause = FALSE;
+    mbPause = sal_False;
     ImplDrawToPos( mnActPos );
     mbPause = bOldPause;
 }

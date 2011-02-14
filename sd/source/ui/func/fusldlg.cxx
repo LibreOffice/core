@@ -91,7 +91,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 
     for( nPage = mpDoc->GetSdPageCount( PK_STANDARD ) - 1L; nPage >= 0L; nPage-- )
     {
-        pPage = mpDoc->GetSdPage( (USHORT) nPage, PK_STANDARD );
+        pPage = mpDoc->GetSdPage( (sal_uInt16) nPage, PK_STANDARD );
         String* pStr = new String( pPage->GetName() );
 
         if ( !pStr->Len() )
@@ -100,7 +100,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
             (*pStr).Append( UniString::CreateFromInt32( nPage + 1 ) );
         }
 
-        aPageNameList.Insert( pStr, (ULONG) 0 );
+        aPageNameList.Insert( pStr, (sal_uLong) 0 );
 
         // ist dies unsere (vorhandene) erste Seite?
         if ( rPresPage == *pStr )
@@ -110,7 +110,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     }
     List* pCustomShowList = mpDoc->GetCustomShowList(); // No Create
 
-    BOOL bStartWithActualPage = SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsStartWithActualPage();
+    sal_Bool bStartWithActualPage = SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsStartWithActualPage();
 /* #109180# change in behaviour, even when always start with current page is enabled, range settings are
             still used
     if( bStartWithActualPage )
@@ -148,7 +148,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
         rtl::OUString aPage;
         long    nValue32;
         sal_Bool bValue;
-        bool    bValuesChanged = FALSE;
+        bool    bValuesChanged = sal_False;
 
         pDlg->GetAttr( aDlgSet );
 
@@ -254,7 +254,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
 
         // wenn sich etwas geaendert hat, setzen wir das Modified-Flag,
         if ( bValuesChanged )
-            mpDoc->SetChanged( TRUE );
+            mpDoc->SetChanged( sal_True );
     }
     delete pDlg;
     // Strings aus Liste loeschen

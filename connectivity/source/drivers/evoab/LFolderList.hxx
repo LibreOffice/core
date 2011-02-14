@@ -63,7 +63,7 @@ namespace connectivity
 
         private:
             void fillColumns(const ::com::sun::star::lang::Locale& _aLocale);
-            BOOL CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo);
+            sal_Bool CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMemo);
 
             sal_Bool fetchRow(OValueRow _rRow,const OSQLColumns& _rCols);
             sal_Bool seekRow(IResultSetHelper::Movement eCursorPosition);

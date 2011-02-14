@@ -47,8 +47,8 @@ public:
 
     const SwFtnFrm* FindFootNote() const;
 
-    virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
-    virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
+    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
     virtual void    Format( const SwBorderAttrs *pAttrs = 0 );
     virtual void    PaintBorder( const SwRect &, const SwPageFrm *pPage,
                                  const SwBorderAttrs & ) const;
@@ -66,15 +66,15 @@ class SwFtnFrm: public SwLayoutFrm
     SwCntntFrm   *pRef;         //In diesem CntntFrm steht die Fussnotenref.
     SwTxtFtn     *pAttr;        //Fussnotenattribut (zum wiedererkennen)
 
-    BOOL bBackMoveLocked : 1;   //Absaetze in dieser Fussnote duerfen derzeit
+    sal_Bool bBackMoveLocked : 1;   //Absaetze in dieser Fussnote duerfen derzeit
                                 //nicht rueckwaerts fliessen.
     // --> OD 2005-05-18 #i49383# - control unlock of position of lower anchored objects.
     bool mbUnlockPosOfLowerObjs : 1;
     // <--
 #ifdef DBG_UTIL
 protected:
-    virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
-    virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
+    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
 #endif
 
 
@@ -84,7 +84,7 @@ public:
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 
-    BOOL operator<( const SwTxtFtn* pTxtFtn ) const;
+    sal_Bool operator<( const SwTxtFtn* pTxtFtn ) const;
 
 #ifndef DBG_UTIL
     const SwCntntFrm *GetRef() const    { return pRef; }
@@ -113,13 +113,13 @@ public:
 
     void InvalidateNxtFtnCnts( SwPageFrm* pPage );
 
-    void LockBackMove()     { bBackMoveLocked = TRUE; }
-    void UnlockBackMove()   { bBackMoveLocked = FALSE;}
-    BOOL IsBackMoveLocked() { return bBackMoveLocked; }
+    void LockBackMove()     { bBackMoveLocked = sal_True; }
+    void UnlockBackMove()   { bBackMoveLocked = sal_False;}
+    sal_Bool IsBackMoveLocked() { return bBackMoveLocked; }
 
     // Verhindert, dass der letzte Inhalt den SwFtnFrm mitloescht (Cut())
-    inline void ColLock()       { bColLocked = TRUE; }
-    inline void ColUnlock()     { bColLocked = FALSE; }
+    inline void ColLock()       { bColLocked = sal_True; }
+    inline void ColUnlock()     { bColLocked = sal_False; }
 
     // --> OD 2005-05-18 #i49383#
     inline void UnlockPosOfLowerObjs()

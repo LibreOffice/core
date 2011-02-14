@@ -206,15 +206,15 @@ SotStorageStreamRef ScfTools::OpenStorageStreamWrite( SotStorageRef xStrg, const
 
 // *** item handling *** ------------------------------------------------------
 
-bool ScfTools::CheckItem( const SfxItemSet& rItemSet, USHORT nWhichId, bool bDeep )
+bool ScfTools::CheckItem( const SfxItemSet& rItemSet, sal_uInt16 nWhichId, bool bDeep )
 {
     return rItemSet.GetItemState( nWhichId, bDeep ) == SFX_ITEM_SET;
 }
 
-bool ScfTools::CheckItems( const SfxItemSet& rItemSet, const USHORT* pnWhichIds, bool bDeep )
+bool ScfTools::CheckItems( const SfxItemSet& rItemSet, const sal_uInt16* pnWhichIds, bool bDeep )
 {
     DBG_ASSERT( pnWhichIds, "ScfTools::CheckItems - no which id list" );
-    for( const USHORT* pnWhichId = pnWhichIds; *pnWhichId != 0; ++pnWhichId )
+    for( const sal_uInt16* pnWhichId = pnWhichIds; *pnWhichId != 0; ++pnWhichId )
         if( CheckItem( rItemSet, *pnWhichId, bDeep ) )
             return true;
     return false;

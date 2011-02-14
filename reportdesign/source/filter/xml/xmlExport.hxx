@@ -181,7 +181,7 @@ private:
     virtual void                    SetBodyAttributes();
 protected:
 
-    virtual void                    _ExportStyles( BOOL bUsed );
+    virtual void                    _ExportStyles( sal_Bool bUsed );
     virtual void                    _ExportAutoStyles();
     virtual void                    _ExportContent();
     virtual void                    _ExportMasterStyles();

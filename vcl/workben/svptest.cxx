@@ -188,7 +188,7 @@ static Point project( const Point& rPoint )
 static Color approachColor( const Color& rFrom, const Color& rTo )
 {
     Color aColor;
-    UINT8 nDiff;
+    sal_uInt8 nDiff;
     // approach red
     if( rFrom.GetRed() < rTo.GetRed() )
     {

@@ -34,8 +34,8 @@
 #include "errobject.hxx"
 
 
-// Properties und Methoden legen beim Get (bWrite = FALSE) den Returnwert
-// im Element 0 des Argv ab; beim Put (bWrite = TRUE) wird der Wert aus
+// Properties und Methoden legen beim Get (bWrite = sal_False) den Returnwert
+// im Element 0 des Argv ab; beim Put (bWrite = sal_True) wird der Wert aus
 // Element 0 gespeichert.
 
 RTLFUNC(Erl)
@@ -59,9 +59,9 @@ RTLFUNC(Err)
     {
         if( bWrite )
         {
-            INT32 nVal = rPar.Get( 0 )->GetLong();
+            sal_Int32 nVal = rPar.Get( 0 )->GetLong();
             if( nVal <= 65535L )
-                StarBASIC::Error( StarBASIC::GetSfxFromVBError( (USHORT) nVal ) );
+                StarBASIC::Error( StarBASIC::GetSfxFromVBError( (sal_uInt16) nVal ) );
         }
         else
             rPar.Get( 0 )->PutLong( StarBASIC::GetVBErrorCode( StarBASIC::GetErrBasic() ) );
@@ -73,7 +73,7 @@ RTLFUNC(False)
     (void)pBasic;
     (void)bWrite;
 
-    rPar.Get(0)->PutBool( FALSE );
+    rPar.Get(0)->PutBool( sal_False );
 }
 
 RTLFUNC(Empty)
@@ -114,7 +114,7 @@ RTLFUNC(True)
     (void)pBasic;
     (void)bWrite;
 
-    rPar.Get( 0 )->PutBool( TRUE );
+    rPar.Get( 0 )->PutBool( sal_True );
 }
 
 RTLFUNC(ATTR_NORMAL)

@@ -30,33 +30,33 @@
 #include "swdllapi.h"
 #include <fmtclds.hxx>
 
-SW_DLLPUBLIC void FitToActualSize(SwFmtCol& rCol, USHORT nWidth);
+SW_DLLPUBLIC void FitToActualSize(SwFmtCol& rCol, sal_uInt16 nWidth);
 
 class SW_DLLPUBLIC SwColMgr
 {
 public:
         // lActWidth wird aus den Edits des Seitendialogs
         // direkt uebergeben
-    SwColMgr(const SfxItemSet &rSet, USHORT nActWidth = USHRT_MAX);
+    SwColMgr(const SfxItemSet &rSet, sal_uInt16 nActWidth = USHRT_MAX);
     ~SwColMgr();
 
 
-    inline USHORT       GetCount() const;
-    void                SetCount(USHORT nCount, USHORT nGutterWidth);
-    USHORT              GetGutterWidth(USHORT nPos = USHRT_MAX) const;
-    void                SetGutterWidth(USHORT nWidth, USHORT nPos = USHRT_MAX);
+    inline sal_uInt16       GetCount() const;
+    void                SetCount(sal_uInt16 nCount, sal_uInt16 nGutterWidth);
+    sal_uInt16              GetGutterWidth(sal_uInt16 nPos = USHRT_MAX) const;
+    void                SetGutterWidth(sal_uInt16 nWidth, sal_uInt16 nPos = USHRT_MAX);
 
-    USHORT              GetColWidth(USHORT nIdx) const;
-    void                SetColWidth(USHORT nIdx, USHORT nWidth);
+    sal_uInt16              GetColWidth(sal_uInt16 nIdx) const;
+    void                SetColWidth(sal_uInt16 nIdx, sal_uInt16 nWidth);
 
-    inline BOOL         IsAutoWidth() const;
-    void                SetAutoWidth(BOOL bOn = TRUE, USHORT lGutterWidth = 0);
+    inline sal_Bool         IsAutoWidth() const;
+    void                SetAutoWidth(sal_Bool bOn = sal_True, sal_uInt16 lGutterWidth = 0);
 
-    inline BOOL         HasLine() const;
+    inline sal_Bool         HasLine() const;
     inline void         SetNoLine();
 
-    inline void         SetLineWidthAndColor(ULONG nWidth, const Color& rCol);
-    inline ULONG        GetLineWidth() const;
+    inline void         SetLineWidthAndColor(sal_uLong nWidth, const Color& rCol);
+    inline sal_uLong        GetLineWidth() const;
     inline const Color& GetLineColor() const;
 
     inline SwColLineAdj GetAdjust() const;
@@ -70,28 +70,28 @@ public:
 
     const SwFmtCol&     GetColumns() const { return aFmtCol; }
 
-    void                SetActualWidth(USHORT nW);
-    USHORT              GetActualSize() const { return nWidth; }
+    void                SetActualWidth(sal_uInt16 nW);
+    sal_uInt16              GetActualSize() const { return nWidth; }
 
 
 private:
 
     SwFmtCol            aFmtCol;
-    USHORT              nWidth;
+    sal_uInt16              nWidth;
 };
 
 // INLINE METHODE --------------------------------------------------------
 
-inline  USHORT SwColMgr::GetCount() const
+inline  sal_uInt16 SwColMgr::GetCount() const
 {
     return aFmtCol.GetNumCols();
 }
-inline void         SwColMgr::SetLineWidthAndColor(ULONG nLWidth, const Color& rCol)
+inline void         SwColMgr::SetLineWidthAndColor(sal_uLong nLWidth, const Color& rCol)
 {
     aFmtCol.SetLineWidth(nLWidth);
     aFmtCol.SetLineColor(rCol);
 }
-inline ULONG        SwColMgr::GetLineWidth() const
+inline sal_uLong        SwColMgr::GetLineWidth() const
 {
     return aFmtCol.GetLineWidth();
 }
@@ -107,11 +107,11 @@ inline  void SwColMgr::SetAdjust(SwColLineAdj eAdj)
 {
     aFmtCol.SetLineAdj(eAdj);
 }
-inline BOOL SwColMgr::IsAutoWidth() const
+inline sal_Bool SwColMgr::IsAutoWidth() const
 {
     return aFmtCol.IsOrtho();
 }
-inline void SwColMgr::SetAutoWidth(BOOL bOn, USHORT nGutterWidth)
+inline void SwColMgr::SetAutoWidth(sal_Bool bOn, sal_uInt16 nGutterWidth)
 {
     aFmtCol.SetOrtho(bOn, nGutterWidth, nWidth);
 }
@@ -119,7 +119,7 @@ inline void SwColMgr::NoCols()
 {
     aFmtCol.GetColumns().DeleteAndDestroy(0, aFmtCol.GetColumns().Count());
 }
-inline BOOL SwColMgr::HasLine() const
+inline sal_Bool SwColMgr::HasLine() const
 {
     return GetAdjust() != COLADJ_NONE;
 }

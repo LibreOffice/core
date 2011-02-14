@@ -31,17 +31,17 @@
 
 class SwTbxAnchor : public SfxToolBoxControl
 {
-    USHORT nActAnchorId;
+    sal_uInt16 nActAnchorId;
 
 public:
 
-    virtual void StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual void Click();
     virtual SfxPopupWindow* CreatePopupWindow();
 
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SwTbxAnchor( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SwTbxAnchor( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SwTbxAnchor();
 };
 

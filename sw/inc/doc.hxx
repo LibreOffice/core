@@ -445,9 +445,9 @@ private:
     SdrLayerID  nInvisibleHell;
     SdrLayerID  nInvisibleControls;
 
-    bool mbGlossDoc              : 1;    //TRUE: ist ein Textbaustein Dokument
-    bool mbModified              : 1;    //TRUE: Dokument ist veraendert
-    bool mbDtor                  : 1;    //TRUE: ist im SwDoc DTOR
+    bool mbGlossDoc              : 1;    //sal_True: ist ein Textbaustein Dokument
+    bool mbModified              : 1;    //sal_True: Dokument ist veraendert
+    bool mbDtor                  : 1;    //sal_True: ist im SwDoc DTOR
                                          //      leider auch temporaer von
                                          //      SwSwgReader::InLayout(), wenn fehlerhafte
                                          //      Frames geloescht werden muessen
@@ -476,9 +476,9 @@ private:
     bool mbIsRedlineMove         : 1;    // True: die Redlines werden in/aus der Section verschoben
     bool mbInsOnlyTxtGlssry      : 1;    // True: insert 'only text' glossary into doc
     bool mbContains_MSVBasic     : 1;    // True: MS-VBasic exist is in our storage
-    bool mbPurgeOLE              : 1;    // TRUE: Purge OLE-Objects
-    bool mbKernAsianPunctuation  : 1;    // TRUE: kerning also for ASIAN punctuation
-    bool mbReadlineChecked       : 1;    // TRUE: if the query was already shown
+    bool mbPurgeOLE              : 1;    // sal_True: Purge OLE-Objects
+    bool mbKernAsianPunctuation  : 1;    // sal_True: kerning also for ASIAN punctuation
+    bool mbReadlineChecked       : 1;    // sal_True: if the query was already shown
     bool mbLinksUpdated          : 1;    // OD 2005-02-11 #i38810#
                                          // flag indicating, that the links have been updated.
     bool mbClipBoard             : 1;    // true: this document represents the clipboard
@@ -486,7 +486,7 @@ private:
                                          //       (clipboard docs only)
 
 #ifdef DBG_UTIL
-    bool mbXMLExport : 1;                // TRUE: during XML export
+    bool mbXMLExport : 1;                // sal_True: during XML export
 #endif
 
     // --> OD 2006-03-21 #b6375613#
@@ -505,59 +505,59 @@ private:
     // HISTORY OF THE COMPATIBILITY FLAGS:
     //
     // SO5:
-    // mbParaSpaceMax                        def = FALSE, TRUE since SO8
-    // mbParaSpaceMaxAtPages                 def = FALSE, TRUE since SO8
+    // mbParaSpaceMax                        def = sal_False, sal_True since SO8
+    // mbParaSpaceMaxAtPages                 def = sal_False, sal_True since SO8
     //
     // SO6:
-    // mbTabCompat                           def = FALSE, TRUE since SO8
+    // mbTabCompat                           def = sal_False, sal_True since SO8
     //
     // SO7:
-    // mbUseVirtualDevice                    def = TRUE
-    // mbAddFlyOffsets                       def = FALSE, hidden
+    // mbUseVirtualDevice                    def = sal_True
+    // mbAddFlyOffsets                       def = sal_False, hidden
     //
     // SO7pp1:
-    // bOldNumbering                        def = FALSE, hidden
+    // bOldNumbering                        def = sal_False, hidden
     //
     // SO8:
-    // mbAddExternalLeading                  def = TRUE
-    // mbUseHiResolutionVirtualDevice        def = TRUE, hidden
-    // mbOldLineSpacing                      def = FALSE
-    // mbAddParaSpacingToTableCells          def = TRUE
-    // mbUseFormerObjectPos                  def = FALSE
-    // mbUseFormerTextWrapping               def = FALSE
-    // mbConsiderWrapOnObjPos                def = FALSE
+    // mbAddExternalLeading                  def = sal_True
+    // mbUseHiResolutionVirtualDevice        def = sal_True, hidden
+    // mbOldLineSpacing                      def = sal_False
+    // mbAddParaSpacingToTableCells          def = sal_True
+    // mbUseFormerObjectPos                  def = sal_False
+    // mbUseFormerTextWrapping               def = sal_False
+    // mbConsiderWrapOnObjPos                def = sal_False
     //
     // SO8pp1:
-    // mbIgnoreFirstLineIndentInNumbering    def = FALSE, hidden
-    // mbDoNotJustifyLinesWithManualBreak    def = FALSE, hidden
-    // mbDoNotResetParaAttrsForNumFont       def = FALSE, hidden
+    // mbIgnoreFirstLineIndentInNumbering    def = sal_False, hidden
+    // mbDoNotJustifyLinesWithManualBreak    def = sal_False, hidden
+    // mbDoNotResetParaAttrsForNumFont       def = sal_False, hidden
     //
     // SO8pp3
-    // mbDoNotCaptureDrawObjsOnPage         def = FALSE, hidden
+    // mbDoNotCaptureDrawObjsOnPage         def = sal_False, hidden
     // - Relevant for drawing objects, which don't follow the text flow, but
     //   whose position is outside the page area:
-    //   FALSE: Such drawing objects are captured on the page area of its anchor.
-    //   TRUE: Such drawing objects can leave the page area, they aren't captured.
-    // mbTableRowKeep                            def = FALSE, hidden
-    // mbIgnoreTabsAndBlanksForLineCalculation   def = FALSE, hidden
-    // mbClipAsCharacterAnchoredWriterFlyFrame   def = FALSE, hidden
+    //   sal_False: Such drawing objects are captured on the page area of its anchor.
+    //   sal_True: Such drawing objects can leave the page area, they aren't captured.
+    // mbTableRowKeep                            def = sal_False, hidden
+    // mbIgnoreTabsAndBlanksForLineCalculation   def = sal_False, hidden
+    // mbClipAsCharacterAnchoredWriterFlyFrame   def = sal_False, hidden
     // - Introduced in order to re-activate clipping of as-character anchored
     //   Writer fly frames in method <SwFlyInCntFrm::MakeAll()> for documents,
     //   which are created with version prior SO8/OOo 2.0
     //
     // SO8pp4
-    // mbUnixForceZeroExtLeading                def = FALSE, hidden
+    // mbUnixForceZeroExtLeading                def = sal_False, hidden
     //
     // SO8pu8
-    // mbOldPrinterMetrics                      def = FALSE, hidden
+    // mbOldPrinterMetrics                      def = sal_False, hidden
     //
     // SO9
     // #i24363# tab stops relative to indent
-    // mbTabRelativeToIndent                    def = TRUE, hidden
+    // mbTabRelativeToIndent                    def = sal_True, hidden
     // #i89181# suppress tab stop at left indent for paragraphs in lists, whose
     // list level position and space mode equals LABEL_ALIGNMENT and whose list
     // label is followed by a tab character.
-    // mbTabAtLeftIndentForParagraphsInList     def = FALSE, hidden
+    // mbTabAtLeftIndentForParagraphsInList     def = sal_False, hidden
 
     bool mbParaSpaceMax                     : 1;
     bool mbParaSpaceMaxAtPages              : 1;
@@ -571,7 +571,7 @@ private:
     bool mbUseFormerObjectPos               : 1;    // OD  2004-03-12 #i11860#
     bool mbUseFormerTextWrapping            : 1;    // FME 2005-05-11 #108724#
     bool mbConsiderWrapOnObjPos             : 1;    // OD  2004-05-05 #i28701#
-                                                    // TRUE: object positioning algorithm has consider the wrapping style of                                                    //       the floating screen objects as given by its attribute 'WrapInfluenceOnObjPos'
+                                                    // sal_True: object positioning algorithm has consider the wrapping style of                                                    //       the floating screen objects as given by its attribute 'WrapInfluenceOnObjPos'
     bool mbMathBaselineAlignment            : 1;    // TL  2010-10-29 #i972#
 
     // non-ui-compatibility flags:
@@ -631,7 +631,7 @@ private:
     sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, sal_Bool bNewFrms );
 
     // --> OD 2005-01-13 #i40550#
-    typedef SwFmt* (SwDoc:: *FNCopyFmt)( const String&, SwFmt*, BOOL, BOOL );
+    typedef SwFmt* (SwDoc:: *FNCopyFmt)( const String&, SwFmt*, sal_Bool, sal_Bool );
     // <--
     SwFmt* CopyFmt( const SwFmt& rFmt, const SvPtrarr& rFmtArr,
                         FNCopyFmt fnCopyFmt, const SwFmt& rDfltFmt );
@@ -685,8 +685,8 @@ private:
     // Charts der angegebenen Tabelle updaten
     void _UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const;
 
-    BOOL _SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rRubyEntry,
-                                USHORT nMode );
+    sal_Bool _SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rRubyEntry,
+                                sal_uInt16 nMode );
 
     // unser eigener 'IdlTimer' ruft folgende Methode
     DECL_LINK( DoIdleJobs, Timer * );
@@ -694,9 +694,9 @@ private:
     DECL_LINK( DoUpdateAllCharts, Timer * );
     DECL_LINK( DoUpdateModifiedOLE, Timer * );
 
-     SwFmt *_MakeCharFmt(const String &, SwFmt *, BOOL, BOOL );
-     SwFmt *_MakeFrmFmt(const String &, SwFmt *, BOOL, BOOL );
-     SwFmt *_MakeTxtFmtColl(const String &, SwFmt *, BOOL, BOOL );
+     SwFmt *_MakeCharFmt(const String &, SwFmt *, sal_Bool, sal_Bool );
+     SwFmt *_MakeFrmFmt(const String &, SwFmt *, sal_Bool, sal_Bool );
+     SwFmt *_MakeTxtFmtColl(const String &, SwFmt *, sal_Bool, sal_Bool );
 
      void InitTOXTypes();
      void   Paste( const SwDoc& );
@@ -731,8 +731,8 @@ public:
     */
     virtual bool get(/*[in]*/ DocumentSettingId id) const;
     virtual void set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value);
-    virtual const com::sun::star::i18n::ForbiddenCharacters* getForbiddenCharacters(/*[in]*/ USHORT nLang, /*[in]*/ bool bLocaleData ) const;
-    virtual void setForbiddenCharacters(/*[in]*/ USHORT nLang, /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rForbiddenCharacters );
+    virtual const com::sun::star::i18n::ForbiddenCharacters* getForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ bool bLocaleData ) const;
+    virtual void setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang, /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rForbiddenCharacters );
     virtual vos::ORef<SvxForbiddenCharactersTable>& getForbiddenCharacterTable();
     virtual const vos::ORef<SvxForbiddenCharactersTable>& getForbiddenCharacterTable() const;
     virtual sal_uInt16 getLinkUpdateMode( /*[in]*/bool bGlobalSettings ) const;
@@ -802,7 +802,7 @@ public:
     virtual void SetVisibleLinks(bool bFlag);
     virtual sfx2::LinkManager& GetLinkManager();
     virtual const sfx2::LinkManager& GetLinkManager() const;
-    virtual void UpdateLinks(BOOL bUI);
+    virtual void UpdateLinks(sal_Bool bUI);
     virtual bool GetData(const String& rItem, const String& rMimeType, ::com::sun::star::uno::Any& rValue) const;
     virtual bool SetData(const String& rItem, const String& rMimeType, const ::com::sun::star::uno::Any& rValue);
     virtual ::sfx2::SvLinkSource* CreateLinkSource(const String& rItem);
@@ -819,7 +819,7 @@ public:
     virtual void RemoveFldType(sal_uInt16 nFld);
     virtual void UpdateFlds( SfxPoolItem* pNewHt, bool bCloseDB);
     virtual void InsDeletedFldType(SwFieldType &);
-    virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, USHORT nWhich);
+    virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich);
     virtual bool UpdateFld(SwTxtFld * rDstFmtFld, SwField & rSrcFld, SwMsgPoolItem * pMsgHnt, bool bUpdateTblFlds);
     virtual void UpdateRefFlds(SfxPoolItem* pHt);
     virtual void UpdateTblFlds(SfxPoolItem* pHt);
@@ -830,9 +830,9 @@ public:
     virtual void UnlockExpFlds();
     virtual bool IsExpFldsLocked() const;
     virtual SwDocUpdtFld& GetUpdtFlds() const;
-    virtual bool SetFieldsDirty(bool b, const SwNode* pChk, ULONG nLen);
+    virtual bool SetFieldsDirty(bool b, const SwNode* pChk, sal_uLong nLen);
     virtual void SetFixFields(bool bOnlyTimeDate, const DateTime* pNewDateTime);
-    virtual void FldsToCalc(SwCalc& rCalc, ULONG nLastNd, sal_uInt16 nLastCnt);
+    virtual void FldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt);
     virtual void FldsToCalc(SwCalc& rCalc, const _SetGetExpFld& rToThisFld);
     virtual void FldsToExpand(SwHash**& ppTbl, sal_uInt16& rTblSize, const _SetGetExpFld& rToThisFld);
     virtual bool IsNewFldLst() const;
@@ -1052,18 +1052,18 @@ public:
     //              im FlySet/FrmFmt mit gueltiger CntntPos gesetzt ist
     /* #109161# new parameter bCalledFromShell
 
-       TRUE: An existing adjust item at pAnchorPos is propagated to
+       sal_True: An existing adjust item at pAnchorPos is propagated to
        the content node of the new fly section. That propagation only
        takes place if there is no adjust item in the paragraph style
        for the new fly section.
 
-       FALSE: no propagation
+       sal_False: no propagation
     */
     SwFlyFrmFmt* MakeFlySection( RndStdIds eAnchorType,
                                  const SwPosition* pAnchorPos,
                                  const SfxItemSet* pSet = 0,
                                  SwFrmFmt *pParent = 0,
-                                 BOOL bCalledFromShell = FALSE );
+                                 sal_Bool bCalledFromShell = sal_False );
     SwFlyFrmFmt* MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                                 const SwSelBoxes* pSelBoxes = 0,
                                 SwFrmFmt *pParent = 0 );
@@ -1178,7 +1178,7 @@ public:
                      const SvUShortsSort* = 0,
                      const bool bSendDataChangedEvents = true );
     // <--
-    void RstTxtAttrs(const SwPaM &rRg, BOOL bInclRefToxMark = FALSE );
+    void RstTxtAttrs(const SwPaM &rRg, sal_Bool bInclRefToxMark = sal_False );
 
         // Setze das Attribut im angegebenen Format. Ist Undo aktiv, wird
         // das alte in die Undo-History aufgenommen
@@ -1187,7 +1187,7 @@ public:
 
     // --> OD 2008-02-12 #newlistlevelattrs#
     // method to reset a certain attribute at the given format
-    void ResetAttrAtFormat( const USHORT nWhichId,
+    void ResetAttrAtFormat( const sal_uInt16 nWhichId,
                             SwFmt& rChangedFormat );
     // <--
 
@@ -1226,18 +1226,18 @@ public:
     void RemoveAllFmtLanguageDependencies();
 
     SwFrmFmt  *MakeFrmFmt(const String &rFmtName, SwFrmFmt *pDerivedFrom,
-                          BOOL bBroadcast = FALSE, BOOL bAuto = TRUE);
-    void       DelFrmFmt( SwFrmFmt *pFmt, BOOL bBroadcast = FALSE );
+                          sal_Bool bBroadcast = sal_False, sal_Bool bAuto = sal_True);
+    void       DelFrmFmt( SwFrmFmt *pFmt, sal_Bool bBroadcast = sal_False );
     SwFrmFmt* FindFrmFmtByName( const String& rName ) const
         {   return (SwFrmFmt*)FindFmtByName( (SvPtrarr&)*pFrmFmtTbl, rName ); }
 
     // --> OD 2005-01-13 #i40550#
     SwCharFmt *MakeCharFmt(const String &rFmtName, SwCharFmt *pDerivedFrom,
-                           BOOL bBroadcast = FALSE,
-                           BOOL bAuto = TRUE );
+                           sal_Bool bBroadcast = sal_False,
+                           sal_Bool bAuto = sal_True );
     // <--
-    void       DelCharFmt(sal_uInt16 nFmt, BOOL bBroadcast = FALSE);
-    void       DelCharFmt(SwCharFmt* pFmt, BOOL bBroadcast = FALSE);
+    void       DelCharFmt(sal_uInt16 nFmt, sal_Bool bBroadcast = sal_False);
+    void       DelCharFmt(SwCharFmt* pFmt, sal_Bool bBroadcast = sal_False);
     SwCharFmt* FindCharFmtByName( const String& rName ) const
         {   return (SwCharFmt*)FindFmtByName( (SvPtrarr&)*pCharFmtTbl, rName ); }
 
@@ -1248,14 +1248,14 @@ public:
     // --> OD 2005-01-13 #i40550#
     SwTxtFmtColl *MakeTxtFmtColl( const String &rFmtName,
                                   SwTxtFmtColl *pDerivedFrom,
-                                  BOOL bBroadcast = FALSE,
-                                  BOOL bAuto = TRUE );
+                                  sal_Bool bBroadcast = sal_False,
+                                  sal_Bool bAuto = sal_True );
     // <--
     SwConditionTxtFmtColl* MakeCondTxtFmtColl( const String &rFmtName,
                                                SwTxtFmtColl *pDerivedFrom,
-                                               BOOL bBroadcast = FALSE);
-    void DelTxtFmtColl(sal_uInt16 nFmt, BOOL bBroadcast = FALSE);
-    void DelTxtFmtColl( SwTxtFmtColl* pColl, BOOL bBroadcast = FALSE );
+                                               sal_Bool bBroadcast = sal_False);
+    void DelTxtFmtColl(sal_uInt16 nFmt, sal_Bool bBroadcast = sal_False);
+    void DelTxtFmtColl( SwTxtFmtColl* pColl, sal_Bool bBroadcast = sal_False );
     // --> OD 2007-11-06 #i62675#
     // Add 4th optional parameter <bResetListAttrs>.
     // 'side effect' of <SetTxtFmtColl> with <bReset = true> is that the hard
@@ -1362,18 +1362,18 @@ public:
     SwPageDesc& _GetPageDesc( sal_uInt16 i ) const { return *aPageDescs[i]; }
     void ChgPageDesc( const String & rName, const SwPageDesc& );
     void ChgPageDesc( sal_uInt16 i, const SwPageDesc& );
-    BOOL FindPageDesc( const String & rName, sal_uInt16 * pFound );
+    sal_Bool FindPageDesc( const String & rName, sal_uInt16 * pFound );
     // -> #116530#
-    void DelPageDesc( const String & rName, BOOL bBroadcast = FALSE);
-    void DelPageDesc( sal_uInt16 i, BOOL bBroadcast = FALSE );
+    void DelPageDesc( const String & rName, sal_Bool bBroadcast = sal_False);
+    void DelPageDesc( sal_uInt16 i, sal_Bool bBroadcast = sal_False );
     // <- #116530#
     void PreDelPageDesc(SwPageDesc * pDel); // #i7983#
     // -> #116530#
     sal_uInt16 MakePageDesc( const String &rName, const SwPageDesc* pCpy = 0,
-                             BOOL bRegardLanguage = TRUE,
-                             BOOL bBroadcast = FALSE);
+                             sal_Bool bRegardLanguage = sal_True,
+                             sal_Bool bBroadcast = sal_False);
     void BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,
-                                 USHORT nOp);
+                                 sal_uInt16 nOp);
     // <- #116530#
 
 
@@ -1395,7 +1395,7 @@ public:
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet = 0,
                                             sal_Bool bExpand = sal_False );
-    const SwTOXBaseSection* InsertTableOf( ULONG nSttNd, ULONG nEndNd,
+    const SwTOXBaseSection* InsertTableOf( sal_uLong nSttNd, sal_uLong nEndNd,
                                             const SwTOXBase& rTOX,
                                             const SfxItemSet* pSet = 0                                          );
     const SwTOXBase* GetCurTOX( const SwPosition& rPos ) const;
@@ -1485,7 +1485,7 @@ public:
         // arbeitet mit alten und neuen Regeln, nur Differenzen aktualisieren
     // --> OD 2005-02-18 #i42921# - re-use unused 3rd parameter
     // --> OD 2008-02-08 #newlistlevelattrs#
-    // Add optional parameter <bResetIndentAttrs> - default value FALSE.
+    // Add optional parameter <bResetIndentAttrs> - default value sal_False.
     // If <bResetIndentAttrs> equals true, the indent attributes "before text"
     // and "first line indent" are additionally reset at the provided PaM, if
     // the list style makes use of the new list level attributes.
@@ -1534,7 +1534,7 @@ public:
     // add optional parameter <eDefaultNumberFormatPositionAndSpaceMode>
     sal_uInt16 MakeNumRule( const String &rName,
         const SwNumRule* pCpy = 0,
-        BOOL bBroadcast = FALSE,
+        sal_Bool bBroadcast = sal_False,
         const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode =
             SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
     // <--
@@ -1544,8 +1544,8 @@ public:
     // loeschen geht nur, wenn die ::com::sun::star::chaos::Rule niemand benutzt!
     // #106897#
     sal_Bool RenameNumRule(const String & aOldName, const String & aNewName,
-                           BOOL bBroadcast = FALSE);
-    sal_Bool DelNumRule( const String& rName, BOOL bBroadCast = FALSE );
+                           sal_Bool bBroadcast = sal_False);
+    sal_Bool DelNumRule( const String& rName, sal_Bool bBroadCast = sal_False );
     String GetUniqueNumRuleName( const String* pChkStr = 0, sal_Bool bAutoNum = sal_True ) const;
 
     void UpdateNumRule();   // alle invaliden Updaten
@@ -1567,12 +1567,12 @@ public:
        OD 2008-03-18 #refactorlists# - add output parameter <sListId>
 
        \param rPos         position to start search
-       \param bForward     - TRUE:  search forward
-                           - FALSE: search backward
-       \param bNum         - TRUE:  search for enumeration
-                           - FALSE: search for itemize
-       \param bOutline     - TRUE:  search for outline numbering rule
-                           - FALSE: search for non-outline numbering rule
+       \param bForward     - sal_True:  search forward
+                           - sal_False: search backward
+       \param bNum         - sal_True:  search for enumeration
+                           - sal_False: search for itemize
+       \param bOutline     - sal_True:  search for outline numbering rule
+                           - sal_False: search for non-outline numbering rule
        \param nNonEmptyAllowed   number of non-empty paragraphs allowed between
                                  rPos and found paragraph
 
@@ -1618,20 +1618,20 @@ public:
         //  Positionen der Spalten!! (nicht deren Breite!)
     /* #109161# new parameter bCalledFromShell:
 
-       TRUE: called from shell -> propagate existing adjust item at
+       sal_True: called from shell -> propagate existing adjust item at
        rPos to every new cell. A existing adjust item in the table
        heading or table contents paragraph style prevent that
        propagation.
 
-       FALSE: do not propagate
+       sal_False: do not propagate
     */
     const SwTable* InsertTable( const SwInsertTableOptions& rInsTblOpts,  // HEADLINE_NO_BORDER
                                 const SwPosition& rPos, sal_uInt16 nRows,
                                 sal_uInt16 nCols, short eAdjust,
                                 const SwTableAutoFmt* pTAFmt = 0,
                                 const SvUShorts* pColArr = 0,
-                                BOOL bCalledFromShell = FALSE,
-                                BOOL bNewModel = TRUE );
+                                sal_Bool bCalledFromShell = sal_False,
+                                sal_Bool bNewModel = sal_True );
 
     // steht der Index in einer Tabelle, dann returne den TableNode sonst 0
                  SwTableNode* IsIdxInTbl( const SwNodeIndex& rIdx );
@@ -1676,7 +1676,7 @@ public:
                     const SwCursor* pCrsr, const SwCellFrm* pBoxFrm = 0 );
     void GetTabRows( SwTabCols &rFill, const SwCursor* pCrsr,
                     const SwCellFrm* pBoxFrm = 0 ) const;
-    void SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor* pCrsr,
+    void SetTabRows( const SwTabCols &rNew, sal_Bool bCurColOnly, const SwCursor* pCrsr,
                      const SwCellFrm* pBoxFrm = 0 );
 
 
@@ -1684,14 +1684,14 @@ public:
     void SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rOld,
                                     const SwTableBox *pStart, sal_Bool bCurRowOnly);
 
-    void SetRowsToRepeat( SwTable &rTable, USHORT nSet );
+    void SetRowsToRepeat( SwTable &rTable, sal_uInt16 nSet );
 
         // AutoFormat fuer die Tabelle/TabellenSelection
     sal_Bool SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt& rNew );
         // Erfrage wie attributiert ist
     sal_Bool GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet );
         // setze das InsertDB als Tabelle Undo auf:
-    void AppendUndoForInsertFromDB( const SwPaM& rPam, BOOL bIsTable );
+    void AppendUndoForInsertFromDB( const SwPaM& rPam, sal_Bool bIsTable );
         // setze die Spalten/Zeilen/ZTellen Breite/Hoehe
     sal_Bool SetColRowWidthHeight( SwTableBox& rAktBox, sal_uInt16 eType,
                                 SwTwips nAbsDiff, SwTwips nRelDiff );
@@ -1744,7 +1744,7 @@ public:
     // returne dieses.
     SwFlyFrmFmt* InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
                     const String& rNumberingSeparator,
-                    const sal_Bool bBefore, const sal_uInt16 nId, const ULONG nIdx,
+                    const sal_Bool bBefore, const sal_uInt16 nId, const sal_uLong nIdx,
                     const String& rCharacterStyle,
                     const sal_Bool bCpyBrd = sal_True );
     SwFlyFrmFmt* InsertDrawLabel(
@@ -1856,7 +1856,7 @@ public:
     /// restore the invisible content if it's available on the undo stack
     bool RestoreInvisibleContent();
     // replace fields by text - mailmerge support
-    BOOL ConvertFieldsToText();
+    sal_Bool ConvertFieldsToText();
 
     // erzeuge Anhand der vorgebenen Collection Teildokumente
     // falls keine angegeben ist, nehme die Kapitelvorlage der 1. Ebene
@@ -1957,10 +1957,10 @@ public:
     void SetContainsMSVBasic( bool bFlag )  { mbContains_MSVBasic = bFlag; }
 
     // Interface for the list of Ruby - texts/attributes
-    USHORT FillRubyList( const SwPaM& rPam, SwRubyList& rList,
-                        USHORT nMode );
-    USHORT SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
-                        USHORT nMode );
+    sal_uInt16 FillRubyList( const SwPaM& rPam, SwRubyList& rList,
+                        sal_uInt16 nMode );
+    sal_uInt16 SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
+                        sal_uInt16 nMode );
 
     void ReadLayoutCache( SvStream& rStream );
     void WriteLayoutCache( SvStream& rStream );
@@ -1985,12 +1985,12 @@ public:
 
         @param sListId    list Id of the list whose level has to be marked/unmarked
         @param nListLevel level to mark
-        @param bValue     - TRUE  mark the level
-                          - FALSE unmark the level
+        @param bValue     - sal_True  mark the level
+                          - sal_False unmark the level
     */
     void MarkListLevel( const String& sListId,
                         const int nListLevel,
-                        const BOOL bValue );
+                        const sal_Bool bValue );
 
     /** Marks/Unmarks a list level of a certain list
 
@@ -1999,19 +1999,19 @@ public:
 
         @param rList      list whose level has to be marked/unmarked
         @param nListLevel level to mark
-        @param bValue     - TRUE  mark the level
-                          - FALSE unmark the level
+        @param bValue     - sal_True  mark the level
+                          - sal_False unmark the level
      */
     void MarkListLevel( SwList& rList,
                         const int nListLevel,
-                        const BOOL bValue );
+                        const sal_Bool bValue );
     // <- #i27615#
 
     // Change a format undoable.
     void ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet);
 
     void RenameFmt(SwFmt & rFmt, const String & sNewName,
-                   BOOL bBroadcast = FALSE);
+                   sal_Bool bBroadcast = sal_False);
 
     // Change a TOX undoable.
     void ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew);
@@ -2037,7 +2037,7 @@ public:
     String GetPaMDescr(const SwPaM & rPaM) const;
 
     // -> #i23726#
-    BOOL IsFirstOfNumRule(SwPosition & rPos);
+    sal_Bool IsFirstOfNumRule(SwPosition & rPos);
     // <- #i23726#
 
     // --> #i31958# access methods for XForms model(s)

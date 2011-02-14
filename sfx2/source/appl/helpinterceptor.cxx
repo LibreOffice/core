@@ -62,7 +62,7 @@ HelpInterceptor_Impl::HelpInterceptor_Impl() :
 
 HelpInterceptor_Impl::~HelpInterceptor_Impl()
 {
-    for ( USHORT i = 0; m_pHistory && i < m_pHistory->Count(); ++i )
+    for ( sal_uInt16 i = 0; m_pHistory && i < m_pHistory->Count(); ++i )
         delete m_pHistory->GetObject(i);
     delete m_pHistory;
 }
@@ -73,10 +73,10 @@ void HelpInterceptor_Impl::addURL( const String& rURL )
 {
   if ( !m_pHistory )
         m_pHistory = new HelpHistoryList_Impl;
-    ULONG nCount = m_pHistory->Count();
+    sal_uIntPtr nCount = m_pHistory->Count();
     if ( nCount && m_nCurPos < ( nCount - 1 ) )
     {
-        for ( ULONG i = nCount - 1; i > m_nCurPos; i-- )
+        for ( sal_uIntPtr i = nCount - 1; i > m_nCurPos; i-- )
             delete m_pHistory->Remove(i);
     }
     Reference<XFrame> xFrame(m_xIntercepted, UNO_QUERY);
@@ -126,7 +126,7 @@ void HelpInterceptor_Impl::SetStartURL( const String& rURL )
     {
         m_pHistory = new HelpHistoryList_Impl;
         Any aEmptyViewData;
-        m_pHistory->Insert( new HelpHistoryEntry_Impl( rURL, aEmptyViewData ), ((ULONG)0x0) );
+        m_pHistory->Insert( new HelpHistoryEntry_Impl( rURL, aEmptyViewData ), ((sal_uIntPtr)0x0) );
         m_nCurPos = m_pHistory->Count() - 1;
 
         m_pWindow->UpdateToolbox();
@@ -161,7 +161,7 @@ Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
 
     // INetURLObject aObj( aURL.Complete );
     // sal_Bool bHelpURL = ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP );
-    BOOL bHelpURL = aURL.Complete.toAsciiLowerCase().match(rtl::OUString::createFromAscii("vnd.sun.star.help"),0);
+    sal_Bool bHelpURL = aURL.Complete.toAsciiLowerCase().match(rtl::OUString::createFromAscii("vnd.sun.star.help"),0);
 
     if ( bHelpURL )
     {
@@ -269,7 +269,7 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
                 }
             }
 
-            ULONG nPos = ( bBack && m_nCurPos > 0 ) ? --m_nCurPos
+            sal_uIntPtr nPos = ( bBack && m_nCurPos > 0 ) ? --m_nCurPos
                                                     : ( !bBack && m_nCurPos < m_pHistory->Count() - 1 )
                                                     ? ++m_nCurPos
                                                     : ULONG_MAX;

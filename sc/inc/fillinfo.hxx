@@ -42,16 +42,16 @@ class ScPatternAttr;
 
 // ============================================================================
 
-const BYTE SC_ROTDIR_NONE       = 0;
-const BYTE SC_ROTDIR_STANDARD   = 1;
-const BYTE SC_ROTDIR_LEFT       = 2;
-const BYTE SC_ROTDIR_RIGHT      = 3;
-const BYTE SC_ROTDIR_CENTER     = 4;
+const sal_uInt8 SC_ROTDIR_NONE       = 0;
+const sal_uInt8 SC_ROTDIR_STANDARD   = 1;
+const sal_uInt8 SC_ROTDIR_LEFT       = 2;
+const sal_uInt8 SC_ROTDIR_RIGHT      = 3;
+const sal_uInt8 SC_ROTDIR_CENTER     = 4;
 
-const BYTE SC_CLIPMARK_NONE     = 0;
-const BYTE SC_CLIPMARK_LEFT     = 1;
-const BYTE SC_CLIPMARK_RIGHT    = 2;
-const BYTE SC_CLIPMARK_SIZE     = 64;
+const sal_uInt8 SC_CLIPMARK_NONE     = 0;
+const sal_uInt8 SC_CLIPMARK_LEFT     = 1;
+const sal_uInt8 SC_CLIPMARK_RIGHT    = 2;
+const sal_uInt8 SC_CLIPMARK_SIZE     = 64;
 
 enum ScShadowPart
 {
@@ -84,25 +84,25 @@ struct CellInfo
 
     ScShadowPart                eHShadowPart : 4;           // Schatten effektiv zum Zeichnen
     ScShadowPart                eVShadowPart : 4;
-    BYTE                        nClipMark;
-    USHORT                      nWidth;
-    BYTE                        nRotateDir;
+    sal_uInt8                        nClipMark;
+    sal_uInt16                      nWidth;
+    sal_uInt8                        nRotateDir;
 
-    BOOL                        bMarked : 1;
-    BOOL                        bEmptyCellText : 1;
+    sal_Bool                        bMarked : 1;
+    sal_Bool                        bEmptyCellText : 1;
 
-    BOOL                        bMerged : 1;
-    BOOL                        bHOverlapped : 1;
-    BOOL                        bVOverlapped : 1;
-    BOOL                        bAutoFilter : 1;
-    BOOL                        bPushButton : 1;
+    sal_Bool                        bMerged : 1;
+    sal_Bool                        bHOverlapped : 1;
+    sal_Bool                        bVOverlapped : 1;
+    sal_Bool                        bAutoFilter : 1;
+    sal_Bool                        bPushButton : 1;
     bool                        bPopupButton: 1;
     bool                        bFilterActive:1;
 
-    BOOL                        bPrinted : 1;               // bei Bedarf (Pagebreak-Modus)
+    sal_Bool                        bPrinted : 1;               // bei Bedarf (Pagebreak-Modus)
 
-    BOOL                        bHideGrid : 1;              // output-intern
-    BOOL                        bEditEngine : 1;            // output-intern
+    sal_Bool                        bHideGrid : 1;              // output-intern
+    sal_Bool                        bEditEngine : 1;            // output-intern
 };
 
 const SCCOL SC_ROTMAX_NONE = SCCOL_MAX;
@@ -113,15 +113,15 @@ struct RowInfo
 {
     CellInfo*           pCellInfo;
 
-    USHORT              nHeight;
+    sal_uInt16              nHeight;
     SCROW               nRowNo;
     SCCOL               nRotMaxCol;         // SC_ROTMAX_NONE, wenn nichts
 
-    BOOL                bEmptyBack;
-    BOOL                bEmptyText;
-    BOOL                bAutoFilter;
-    BOOL                bPushButton;
-    BOOL                bChanged;           // TRUE, wenn nicht getestet
+    sal_Bool                bEmptyBack;
+    sal_Bool                bEmptyText;
+    sal_Bool                bAutoFilter;
+    sal_Bool                bPushButton;
+    sal_Bool                bChanged;           // sal_True, wenn nicht getestet
 
     inline explicit     RowInfo() : pCellInfo( 0 ) {}
 
@@ -136,7 +136,7 @@ struct ScTableInfo
 {
     svx::frame::Array   maArray;
     RowInfo*            mpRowInfo;
-    USHORT              mnArrCount;
+    sal_uInt16              mnArrCount;
     bool                mbPageMode;
 
     explicit            ScTableInfo();

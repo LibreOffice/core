@@ -64,7 +64,7 @@ private:
     String      m_sURL;
 
 public:
-    OpenStatusListener_Impl() : m_bFinished( FALSE ), m_bSuccess( FALSE ) {}
+    OpenStatusListener_Impl() : m_bFinished( sal_False ), m_bSuccess( sal_False ) {}
 
     virtual void SAL_CALL   dispatchFinished( const ::com::sun::star::frame::DispatchResultEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
@@ -267,7 +267,7 @@ public:
 class BookmarksBox_Impl : public ListBox
 {
 private:
-    void                DoAction( USHORT nAction );
+    void                DoAction( sal_uInt16 nAction );
 
 public:
     BookmarksBox_Impl( Window* pParent, const ResId& rResId );
@@ -331,7 +331,7 @@ private:
 
     void                Initialize();
     void                SetActiveFactory();
-    HelpTabPage_Impl*   GetCurrentPage( USHORT& rCurId );
+    HelpTabPage_Impl*   GetCurrentPage( sal_uInt16& rCurId );
 
     inline ContentTabPage_Impl*     GetContentPage();
     inline IndexTabPage_Impl*       GetIndexPage();
@@ -566,7 +566,7 @@ public:
 
     void                SetFactory( const String& rFactory );
     void                SetHelpURL( const String& rURL );
-    void                DoAction( USHORT nActionId );
+    void                DoAction( sal_uInt16 nActionId );
     void                CloseWindow();
 
     void                UpdateToolbox();

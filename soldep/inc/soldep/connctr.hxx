@@ -42,13 +42,13 @@ static Rectangle aEmptyRect( Point( 0, 0), Point( 0, 0));
 class Connector
 {
     ObjectWin *mpStartWin, *mpEndWin;
-    ULONG mnStartId, mnEndId;
+    sal_uIntPtr mnStartId, mnEndId;
     Point mStart, mEnd, mCenter;
     DepWin* mpParent;
 
-    BOOL bVisible;
-    BOOL mbHideIndependend;
-    static BOOL msbHideMode;
+    sal_Bool bVisible;
+    sal_Bool mbHideIndependend;
+    static sal_Bool msbHideMode;
 
 
 public:
@@ -56,26 +56,26 @@ public:
     Connector( DepWin* pParent, WinBits nWinStyle );
     ~Connector();
 
-    void    Initialize( ObjectWin* pStartWin, ObjectWin* pEndWin, BOOL bVis = FALSE );
+    void    Initialize( ObjectWin* pStartWin, ObjectWin* pEndWin, sal_Bool bVis = sal_False );
     Point   GetMiddle();
     void    Paint( const Rectangle& rRect );
-    void    UpdatePosition( ObjectWin* pWin, BOOL bPaint = TRUE );
-    USHORT  Save( SvFileStream& rOutFile );
-    USHORT  Load( SvFileStream& rInFile );
-    ULONG   GetStartId(){ return mnStartId; };
-    ULONG   GetEndId(){ return mnEndId; };
+    void    UpdatePosition( ObjectWin* pWin, sal_Bool bPaint = sal_True );
+    sal_uInt16  Save( SvFileStream& rOutFile );
+    sal_uInt16  Load( SvFileStream& rInFile );
+    sal_uIntPtr GetStartId(){ return mnStartId; };
+    sal_uIntPtr GetEndId(){ return mnEndId; };
     ObjectWin*  GetStartWin(){ return mpStartWin; };
     ObjectWin*  GetEndWin(){ return mpEndWin; };
     ObjectWin*  GetOtherWin( ObjectWin* pWin );
-    ULONG   GetOtherId( ULONG nId );
-    ULONG   GetLen();
-    BOOL    IsStart( ObjectWin* pWin );
-    void    SetHideIndependend( BOOL bHide) { mbHideIndependend = bHide; };
+    sal_uIntPtr GetOtherId( sal_uIntPtr nId );
+    sal_uIntPtr GetLen();
+    sal_Bool    IsStart( ObjectWin* pWin );
+    void    SetHideIndependend( sal_Bool bHide) { mbHideIndependend = bHide; };
 
-    BOOL    IsVisible() { return bVisible; }
-    void    SetVisibility( BOOL visible ) { bVisible = visible; }
+    sal_Bool    IsVisible() { return bVisible; }
+    void    SetVisibility( sal_Bool visible ) { bVisible = visible; }
     void    UpdateVisibility();
-    void    SetHideMode(BOOL bHide) { msbHideMode = bHide; };
+    void    SetHideMode(sal_Bool bHide) { msbHideMode = bHide; };
     void    DrawOutput( OutputDevice* pDevice, const Point& rOffset  );
 };
 

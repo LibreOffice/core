@@ -49,20 +49,20 @@ void SdrDragStat::Reset()
 {
     pView=NULL;
     pPageView=NULL;
-    bShown=FALSE;
+    bShown=sal_False;
     nMinMov=1;
-    bMinMoved=FALSE;
-    bHorFixed=FALSE;
-    bVerFixed=FALSE;
-    bWantNoSnap=FALSE;
+    bMinMoved=sal_False;
+    bHorFixed=sal_False;
+    bVerFixed=sal_False;
+    bWantNoSnap=sal_False;
     pHdl=NULL;
-    bOrtho4=FALSE;
-    bOrtho8=FALSE;
+    bOrtho4=sal_False;
+    bOrtho8=sal_False;
     pDragMethod=NULL;
-    bEndDragChangesAttributes=FALSE;
-    bEndDragChangesGeoAndAttributes=FALSE;
-    bMouseIsUp=FALSE;
-    Clear(TRUE);
+    bEndDragChangesAttributes=sal_False;
+    bEndDragChangesGeoAndAttributes=sal_False;
+    bMouseIsUp=sal_False;
+    Clear(sal_True);
     aActionRect=Rectangle();
 }
 
@@ -114,7 +114,7 @@ FASTBOOL SdrDragStat::CheckMinMoved(const Point& rPnt)
         long dx=rPnt.X()-GetPrev().X(); if (dx<0) dx=-dx;
         long dy=rPnt.Y()-GetPrev().Y(); if (dy<0) dy=-dy;
         if (dx>=long(nMinMov) || dy>=long(nMinMov))
-            bMinMoved=TRUE;
+            bMinMoved=sal_True;
     }
     return bMinMoved;
 }

@@ -65,30 +65,30 @@ class StgStrm;
 class SvGlobalName;
 struct ClsId
 {
-    INT32   n1;
-    INT16   n2, n3;
-    UINT8   n4, n5, n6, n7, n8, n9, n10, n11;
+    sal_Int32   n1;
+    sal_Int16   n2, n3;
+    sal_uInt8   n4, n5, n6, n7, n8, n9, n10, n11;
 };
 
 class SOT_DLLPUBLIC StorageBase : public SvRefBase
 {
 protected:
-    ULONG           m_nError;                   // error code
+    sal_uLong           m_nError;                   // error code
     StreamMode      m_nMode;                    // open mode
-    BOOL            m_bAutoCommit;
+    sal_Bool            m_bAutoCommit;
                     StorageBase();
     virtual         ~StorageBase();
 public:
                     TYPEINFO();
     virtual const SvStream* GetSvStream() const = 0;
-    virtual BOOL    Validate( BOOL=FALSE ) const = 0;
-    virtual BOOL    ValidateMode( StreamMode ) const = 0;
+    virtual sal_Bool    Validate( sal_Bool=sal_False ) const = 0;
+    virtual sal_Bool    ValidateMode( StreamMode ) const = 0;
     void            ResetError() const;
-    void            SetError( ULONG ) const;
-    ULONG           GetError() const;
-    BOOL            Good() const          { return BOOL( m_nError == SVSTREAM_OK ); }
+    void            SetError( sal_uLong ) const;
+    sal_uLong           GetError() const;
+    sal_Bool            Good() const          { return sal_Bool( m_nError == SVSTREAM_OK ); }
     StreamMode      GetMode() const  { return m_nMode;  }
-    void            SetAutoCommit( BOOL bSet )
+    void            SetAutoCommit( sal_Bool bSet )
                     { m_bAutoCommit = bSet; }
 };
 
@@ -96,16 +96,16 @@ class BaseStorageStream : public StorageBase
 {
 public:
                     TYPEINFO();
-    virtual ULONG   Read( void * pData, ULONG nSize ) = 0;
-    virtual ULONG   Write( const void* pData, ULONG nSize ) = 0;
-    virtual ULONG   Seek( ULONG nPos ) = 0;
-    virtual ULONG   Tell() = 0;
+    virtual sal_uLong   Read( void * pData, sal_uLong nSize ) = 0;
+    virtual sal_uLong   Write( const void* pData, sal_uLong nSize ) = 0;
+    virtual sal_uLong   Seek( sal_uLong nPos ) = 0;
+    virtual sal_uLong   Tell() = 0;
     virtual void    Flush() = 0;
-    virtual BOOL    SetSize( ULONG nNewSize ) = 0;
-    virtual BOOL    CopyTo( BaseStorageStream * pDestStm ) = 0;
-    virtual BOOL    Commit() = 0;
-    virtual BOOL    Revert() = 0;
-    virtual BOOL    Equals( const BaseStorageStream& rStream ) const = 0;
+    virtual sal_Bool    SetSize( sal_uLong nNewSize ) = 0;
+    virtual sal_Bool    CopyTo( BaseStorageStream * pDestStm ) = 0;
+    virtual sal_Bool    Commit() = 0;
+    virtual sal_Bool    Revert() = 0;
+    virtual sal_Bool    Equals( const BaseStorageStream& rStream ) const = 0;
 };
 
 class SvStorageInfoList;
@@ -114,45 +114,45 @@ class BaseStorage : public StorageBase
 public:
                                 TYPEINFO();
     virtual const String&       GetName() const = 0;
-    virtual BOOL                IsRoot() const = 0;
+    virtual sal_Bool                IsRoot() const = 0;
     virtual void                SetClassId( const ClsId& ) = 0;
     virtual const ClsId&        GetClassId() const = 0;
     virtual void                SetDirty() = 0;
     virtual void                SetClass( const SvGlobalName & rClass,
-                                    ULONG nOriginalClipFormat,
+                                    sal_uLong nOriginalClipFormat,
                                     const String & rUserTypeName ) = 0;
     virtual void                SetConvertClass( const SvGlobalName & rConvertClass,
-                                           ULONG nOriginalClipFormat,
+                                           sal_uLong nOriginalClipFormat,
                                            const String & rUserTypeName ) = 0;
     virtual SvGlobalName        GetClassName() = 0;
-    virtual ULONG               GetFormat() = 0;
+    virtual sal_uLong               GetFormat() = 0;
     virtual String              GetUserName() = 0;
-    virtual BOOL                ShouldConvert() = 0;
+    virtual sal_Bool                ShouldConvert() = 0;
     virtual void                FillInfoList( SvStorageInfoList* ) const = 0;
-    virtual BOOL                CopyTo( BaseStorage* pDestStg ) const = 0;
-    virtual BOOL                Commit() = 0;
-    virtual BOOL                Revert() = 0;
+    virtual sal_Bool                CopyTo( BaseStorage* pDestStg ) const = 0;
+    virtual sal_Bool                Commit() = 0;
+    virtual sal_Bool                Revert() = 0;
     virtual BaseStorageStream*  OpenStream( const String & rEleName,
                                   StreamMode = STREAM_STD_READWRITE,
-                                  BOOL bDirect = TRUE, const ByteString* pKey=0 ) = 0;
+                                  sal_Bool bDirect = sal_True, const ByteString* pKey=0 ) = 0;
     virtual BaseStorage*        OpenStorage( const String & rEleName,
                                    StreamMode = STREAM_STD_READWRITE,
-                                   BOOL bDirect = FALSE ) = 0;
+                                   sal_Bool bDirect = sal_False ) = 0;
     virtual BaseStorage*        OpenUCBStorage( const String & rEleName,
                                    StreamMode = STREAM_STD_READWRITE,
-                                   BOOL bDirect = FALSE ) = 0;
+                                   sal_Bool bDirect = sal_False ) = 0;
     virtual BaseStorage*        OpenOLEStorage( const String & rEleName,
                                    StreamMode = STREAM_STD_READWRITE,
-                                   BOOL bDirect = FALSE ) = 0;
-    virtual BOOL                IsStream( const String& rEleName ) const = 0;
-    virtual BOOL                IsStorage( const String& rEleName ) const = 0;
-    virtual BOOL                IsContained( const String& rEleName ) const = 0;
-    virtual BOOL                Remove( const String & rEleName ) = 0;
-    virtual BOOL                Rename( const String & rEleName, const String & rNewName ) = 0;
-    virtual BOOL                CopyTo( const String & rEleName, BaseStorage * pDest, const String & rNewName ) = 0;
-    virtual BOOL                MoveTo( const String & rEleName, BaseStorage * pDest, const String & rNewName ) = 0;
-    virtual BOOL                ValidateFAT() = 0;
-    virtual BOOL                Equals( const BaseStorage& rStream ) const = 0;
+                                   sal_Bool bDirect = sal_False ) = 0;
+    virtual sal_Bool                IsStream( const String& rEleName ) const = 0;
+    virtual sal_Bool                IsStorage( const String& rEleName ) const = 0;
+    virtual sal_Bool                IsContained( const String& rEleName ) const = 0;
+    virtual sal_Bool                Remove( const String & rEleName ) = 0;
+    virtual sal_Bool                Rename( const String & rEleName, const String & rNewName ) = 0;
+    virtual sal_Bool                CopyTo( const String & rEleName, BaseStorage * pDest, const String & rNewName ) = 0;
+    virtual sal_Bool                MoveTo( const String & rEleName, BaseStorage * pDest, const String & rNewName ) = 0;
+    virtual sal_Bool                ValidateFAT() = 0;
+    virtual sal_Bool                Equals( const BaseStorage& rStream ) const = 0;
 };
 
 class OLEStorageBase
@@ -163,8 +163,8 @@ protected:
     StgDirEntry*    pEntry;                   // the dir entry
                     OLEStorageBase( StgIo*, StgDirEntry*, StreamMode& );
                     ~OLEStorageBase();
-    BOOL            Validate_Impl( BOOL=FALSE ) const;
-    BOOL            ValidateMode_Impl( StreamMode, StgDirEntry* p = NULL ) const ;
+    sal_Bool            Validate_Impl( sal_Bool=sal_False ) const;
+    sal_Bool            ValidateMode_Impl( StreamMode, StgDirEntry* p = NULL ) const ;
     const SvStream* GetSvStream_Impl() const;
 public:
 };
@@ -172,26 +172,26 @@ public:
 class StorageStream : public BaseStorageStream, public OLEStorageBase
 {
 //friend class Storage;
-    ULONG           nPos;                             // current position
+    sal_uLong           nPos;                             // current position
 protected:
                     ~StorageStream();
 public:
                     TYPEINFO();
                     StorageStream( StgIo*, StgDirEntry*, StreamMode );
-    virtual ULONG   Read( void * pData, ULONG nSize );
-    virtual ULONG   Write( const void* pData, ULONG nSize );
-    virtual ULONG   Seek( ULONG nPos );
-    virtual ULONG   Tell() { return nPos; }
+    virtual sal_uLong   Read( void * pData, sal_uLong nSize );
+    virtual sal_uLong   Write( const void* pData, sal_uLong nSize );
+    virtual sal_uLong   Seek( sal_uLong nPos );
+    virtual sal_uLong   Tell() { return nPos; }
     virtual void    Flush();
-    virtual BOOL    SetSize( ULONG nNewSize );
-    virtual BOOL    CopyTo( BaseStorageStream * pDestStm );
-    virtual BOOL    Commit();
-    virtual BOOL    Revert();
-    virtual BOOL    Validate( BOOL=FALSE ) const;
-    virtual BOOL    ValidateMode( StreamMode ) const;
-    BOOL            ValidateMode( StreamMode, StgDirEntry* p ) const;
+    virtual sal_Bool    SetSize( sal_uLong nNewSize );
+    virtual sal_Bool    CopyTo( BaseStorageStream * pDestStm );
+    virtual sal_Bool    Commit();
+    virtual sal_Bool    Revert();
+    virtual sal_Bool    Validate( sal_Bool=sal_False ) const;
+    virtual sal_Bool    ValidateMode( StreamMode ) const;
+    sal_Bool            ValidateMode( StreamMode, StgDirEntry* p ) const;
     const SvStream* GetSvStream() const;
-    virtual BOOL    Equals( const BaseStorageStream& rStream ) const;
+    virtual sal_Bool    Equals( const BaseStorageStream& rStream ) const;
 };
 
 class UCBStorageStream;
@@ -199,64 +199,64 @@ class UCBStorageStream;
 class SOT_DLLPUBLIC Storage : public BaseStorage, public OLEStorageBase
 {
     String                      aName;
-    BOOL                        bIsRoot;
-    void                        Init( BOOL bCreate );
+    sal_Bool                        bIsRoot;
+    void                        Init( sal_Bool bCreate );
                                 Storage( StgIo*, StgDirEntry*, StreamMode );
 protected:
                                 ~Storage();
 public:
                                 TYPEINFO();
-                                Storage( const String &, StreamMode = STREAM_STD_READWRITE, BOOL bDirect = TRUE );
-                                Storage( SvStream& rStrm, BOOL bDirect = TRUE );
-                                Storage( UCBStorageStream& rStrm, BOOL bDirect = TRUE );
+                                Storage( const String &, StreamMode = STREAM_STD_READWRITE, sal_Bool bDirect = sal_True );
+                                Storage( SvStream& rStrm, sal_Bool bDirect = sal_True );
+                                Storage( UCBStorageStream& rStrm, sal_Bool bDirect = sal_True );
 
-    static BOOL                 IsStorageFile( const String & rFileName );
-    static BOOL                 IsStorageFile( SvStream* );
+    static sal_Bool                 IsStorageFile( const String & rFileName );
+    static sal_Bool                 IsStorageFile( SvStream* );
 
     virtual const String&       GetName() const;
-    virtual BOOL                IsRoot() const { return bIsRoot; }
+    virtual sal_Bool                IsRoot() const { return bIsRoot; }
     virtual void                SetClassId( const ClsId& );
     virtual const ClsId&        GetClassId() const;
     virtual void                SetDirty();
     virtual void                SetClass( const SvGlobalName & rClass,
-                                    ULONG nOriginalClipFormat,
+                                    sal_uLong nOriginalClipFormat,
                                     const String & rUserTypeName );
     virtual void                SetConvertClass( const SvGlobalName & rConvertClass,
-                                           ULONG nOriginalClipFormat,
+                                           sal_uLong nOriginalClipFormat,
                                            const String & rUserTypeName );
     virtual SvGlobalName        GetClassName();
-    virtual ULONG               GetFormat();
+    virtual sal_uLong               GetFormat();
     virtual String              GetUserName();
-    virtual BOOL                ShouldConvert();
+    virtual sal_Bool                ShouldConvert();
     virtual void                FillInfoList( SvStorageInfoList* ) const;
-    virtual BOOL                CopyTo( BaseStorage* pDestStg ) const;
-    virtual BOOL                Commit();
-    virtual BOOL                Revert();
+    virtual sal_Bool                CopyTo( BaseStorage* pDestStg ) const;
+    virtual sal_Bool                Commit();
+    virtual sal_Bool                Revert();
     virtual BaseStorageStream*  OpenStream( const String & rEleName,
                                   StreamMode = STREAM_STD_READWRITE,
-                                  BOOL bDirect = TRUE, const ByteString* pKey=0 );
+                                  sal_Bool bDirect = sal_True, const ByteString* pKey=0 );
     virtual BaseStorage*        OpenStorage( const String & rEleName,
                                        StreamMode = STREAM_STD_READWRITE,
-                                       BOOL bDirect = FALSE );
+                                       sal_Bool bDirect = sal_False );
     virtual BaseStorage*        OpenUCBStorage( const String & rEleName,
                                    StreamMode = STREAM_STD_READWRITE,
-                                   BOOL bDirect = FALSE );
+                                   sal_Bool bDirect = sal_False );
     virtual BaseStorage*        OpenOLEStorage( const String & rEleName,
                                    StreamMode = STREAM_STD_READWRITE,
-                                   BOOL bDirect = FALSE );
-    virtual BOOL                IsStream( const String& rEleName ) const;
-    virtual BOOL                IsStorage( const String& rEleName ) const;
-    virtual BOOL                IsContained( const String& rEleName ) const;
-    virtual BOOL                Remove( const String & rEleName );
-    virtual BOOL                Rename( const String & rEleName, const String & rNewName );
-    virtual BOOL                CopyTo( const String & rEleName, BaseStorage * pDest, const String & rNewName );
-    virtual BOOL                MoveTo( const String & rEleName, BaseStorage * pDest, const String & rNewName );
-    virtual BOOL                ValidateFAT();
-    virtual BOOL                Validate( BOOL=FALSE ) const;
-    virtual BOOL                ValidateMode( StreamMode ) const;
-    BOOL                        ValidateMode( StreamMode, StgDirEntry* p ) const;
+                                   sal_Bool bDirect = sal_False );
+    virtual sal_Bool                IsStream( const String& rEleName ) const;
+    virtual sal_Bool                IsStorage( const String& rEleName ) const;
+    virtual sal_Bool                IsContained( const String& rEleName ) const;
+    virtual sal_Bool                Remove( const String & rEleName );
+    virtual sal_Bool                Rename( const String & rEleName, const String & rNewName );
+    virtual sal_Bool                CopyTo( const String & rEleName, BaseStorage * pDest, const String & rNewName );
+    virtual sal_Bool                MoveTo( const String & rEleName, BaseStorage * pDest, const String & rNewName );
+    virtual sal_Bool                ValidateFAT();
+    virtual sal_Bool                Validate( sal_Bool=sal_False ) const;
+    virtual sal_Bool                ValidateMode( StreamMode ) const;
+    sal_Bool                        ValidateMode( StreamMode, StgDirEntry* p ) const;
     virtual const SvStream*     GetSvStream() const;
-    virtual BOOL                Equals( const BaseStorage& rStream ) const;
+    virtual sal_Bool                Equals( const BaseStorage& rStream ) const;
 };
 
 class UCBStorageStream_Impl;
@@ -270,25 +270,25 @@ protected:
                                 ~UCBStorageStream();
 public:
                                 TYPEINFO();
-                                UCBStorageStream( const String& rName, StreamMode nMode, BOOL bDirect, const ByteString* pKey=0 );
-                                UCBStorageStream( const String& rName, StreamMode nMode, BOOL bDirect, const ByteString* pKey, BOOL bRepair, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XProgressHandler > xProgress );
+                                UCBStorageStream( const String& rName, StreamMode nMode, sal_Bool bDirect, const ByteString* pKey=0 );
+                                UCBStorageStream( const String& rName, StreamMode nMode, sal_Bool bDirect, const ByteString* pKey, sal_Bool bRepair, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XProgressHandler > xProgress );
                                 UCBStorageStream( UCBStorageStream_Impl* );
 
-    virtual ULONG               Read( void * pData, ULONG nSize );
-    virtual ULONG               Write( const void* pData, ULONG nSize );
-    virtual ULONG               Seek( ULONG nPos );
-    virtual ULONG               Tell();
+    virtual sal_uLong               Read( void * pData, sal_uLong nSize );
+    virtual sal_uLong               Write( const void* pData, sal_uLong nSize );
+    virtual sal_uLong               Seek( sal_uLong nPos );
+    virtual sal_uLong               Tell();
     virtual void                Flush();
-    virtual BOOL                SetSize( ULONG nNewSize );
-    virtual BOOL                CopyTo( BaseStorageStream * pDestStm );
-    virtual BOOL                Commit();
-    virtual BOOL                Revert();
-    virtual BOOL                Validate( BOOL=FALSE ) const;
-    virtual BOOL                ValidateMode( StreamMode ) const;
+    virtual sal_Bool                SetSize( sal_uLong nNewSize );
+    virtual sal_Bool                CopyTo( BaseStorageStream * pDestStm );
+    virtual sal_Bool                Commit();
+    virtual sal_Bool                Revert();
+    virtual sal_Bool                Validate( sal_Bool=sal_False ) const;
+    virtual sal_Bool                ValidateMode( StreamMode ) const;
     const SvStream*             GetSvStream() const;
-    virtual BOOL                Equals( const BaseStorageStream& rStream ) const;
-    BOOL                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
-    BOOL                        GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
+    virtual sal_Bool                Equals( const BaseStorageStream& rStream ) const;
+    sal_Bool                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
+    sal_Bool                        GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
 
     SvStream*                   GetModifySvStream();
 
@@ -309,76 +309,76 @@ class SOT_DLLPUBLIC UCBStorage : public BaseStorage
 protected:
                                 ~UCBStorage();
 public:
-    static BOOL                 IsStorageFile( SvStream* );
-    static BOOL                 IsStorageFile( const String& rName );
-    static BOOL                 IsDiskSpannedFile( SvStream* );
+    static sal_Bool                 IsStorageFile( SvStream* );
+    static sal_Bool                 IsStorageFile( const String& rName );
+    static sal_Bool                 IsDiskSpannedFile( SvStream* );
     static String               GetLinkedFile( SvStream& );
     static String               CreateLinkFile( const String& rName );
 
-                                UCBStorage( const ::ucbhelper::Content& rContent, const String& rName, StreamMode nMode, BOOL bDirect = TRUE, BOOL bIsRoot = TRUE );
+                                UCBStorage( const ::ucbhelper::Content& rContent, const String& rName, StreamMode nMode, sal_Bool bDirect = sal_True, sal_Bool bIsRoot = sal_True );
                                 UCBStorage( const String& rName,
                                             StreamMode nMode,
-                                            BOOL bDirect = TRUE,
-                                            BOOL bIsRoot = TRUE );
+                                            sal_Bool bDirect = sal_True,
+                                            sal_Bool bIsRoot = sal_True );
 
                                 UCBStorage( const String& rName,
                                             StreamMode nMode,
-                                            BOOL bDirect,
-                                            BOOL bIsRoot,
-                                            BOOL bIsRepair,
+                                            sal_Bool bDirect,
+                                            sal_Bool bIsRoot,
+                                            sal_Bool bIsRepair,
                                             ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XProgressHandler >
                                                 xProgressHandler );
 
                                 UCBStorage( UCBStorage_Impl* );
-                                UCBStorage( SvStream& rStrm, BOOL bDirect = TRUE );
+                                UCBStorage( SvStream& rStrm, sal_Bool bDirect = sal_True );
 
                                 TYPEINFO();
     virtual const String&       GetName() const;
-    virtual BOOL                IsRoot() const;
+    virtual sal_Bool                IsRoot() const;
     virtual void                SetClassId( const ClsId& );
     virtual const ClsId&        GetClassId() const;
     virtual void                SetDirty();
     virtual void                SetClass( const SvGlobalName & rClass,
-                                    ULONG nOriginalClipFormat,
+                                    sal_uLong nOriginalClipFormat,
                                     const String & rUserTypeName );
     virtual void                SetConvertClass( const SvGlobalName & rConvertClass,
-                                           ULONG nOriginalClipFormat,
+                                           sal_uLong nOriginalClipFormat,
                                            const String & rUserTypeName );
     virtual SvGlobalName        GetClassName();
-    virtual ULONG               GetFormat();
+    virtual sal_uLong               GetFormat();
     virtual String              GetUserName();
-    virtual BOOL                ShouldConvert();
+    virtual sal_Bool                ShouldConvert();
     virtual void                FillInfoList( SvStorageInfoList* ) const;
-    virtual BOOL                CopyTo( BaseStorage* pDestStg ) const;
-    virtual BOOL                Commit();
-    virtual BOOL                Revert();
+    virtual sal_Bool                CopyTo( BaseStorage* pDestStg ) const;
+    virtual sal_Bool                Commit();
+    virtual sal_Bool                Revert();
     virtual BaseStorageStream*  OpenStream( const String & rEleName,
                                   StreamMode = STREAM_STD_READWRITE,
-                                  BOOL bDirect = TRUE, const ByteString* pKey=0 );
+                                  sal_Bool bDirect = sal_True, const ByteString* pKey=0 );
     virtual BaseStorage*        OpenStorage( const String & rEleName,
                                        StreamMode = STREAM_STD_READWRITE,
-                                       BOOL bDirect = FALSE );
+                                       sal_Bool bDirect = sal_False );
     virtual BaseStorage*        OpenUCBStorage( const String & rEleName,
                                    StreamMode = STREAM_STD_READWRITE,
-                                   BOOL bDirect = FALSE );
+                                   sal_Bool bDirect = sal_False );
     virtual BaseStorage*        OpenOLEStorage( const String & rEleName,
                                    StreamMode = STREAM_STD_READWRITE,
-                                   BOOL bDirect = FALSE );
-    virtual BOOL                IsStream( const String& rEleName ) const;
-    virtual BOOL                IsStorage( const String& rEleName ) const;
-    virtual BOOL                IsContained( const String& rEleName ) const;
-    virtual BOOL                Remove( const String & rEleName );
-    virtual BOOL                Rename( const String & rEleName, const String & rNewName );
-    virtual BOOL                CopyTo( const String & rEleName, BaseStorage * pDest, const String & rNewName );
-    virtual BOOL                MoveTo( const String & rEleName, BaseStorage * pDest, const String & rNewName );
-    virtual BOOL                ValidateFAT();
-    virtual BOOL                Validate( BOOL=FALSE ) const;
-    virtual BOOL                ValidateMode( StreamMode ) const;
+                                   sal_Bool bDirect = sal_False );
+    virtual sal_Bool                IsStream( const String& rEleName ) const;
+    virtual sal_Bool                IsStorage( const String& rEleName ) const;
+    virtual sal_Bool                IsContained( const String& rEleName ) const;
+    virtual sal_Bool                Remove( const String & rEleName );
+    virtual sal_Bool                Rename( const String & rEleName, const String & rNewName );
+    virtual sal_Bool                CopyTo( const String & rEleName, BaseStorage * pDest, const String & rNewName );
+    virtual sal_Bool                MoveTo( const String & rEleName, BaseStorage * pDest, const String & rNewName );
+    virtual sal_Bool                ValidateFAT();
+    virtual sal_Bool                Validate( sal_Bool=sal_False ) const;
+    virtual sal_Bool                ValidateMode( StreamMode ) const;
     virtual const SvStream*     GetSvStream() const;
-    virtual BOOL                Equals( const BaseStorage& rStream ) const;
-    BOOL                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
-    BOOL                        GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
-    BOOL                        GetProperty( const String& rEleName, const String& rName, ::com::sun::star::uno::Any& rValue );
+    virtual sal_Bool                Equals( const BaseStorage& rStream ) const;
+    sal_Bool                        SetProperty( const String& rName, const ::com::sun::star::uno::Any& rValue );
+    sal_Bool                        GetProperty( const String& rName, ::com::sun::star::uno::Any& rValue );
+    sal_Bool                        GetProperty( const String& rEleName, const String& rName, ::com::sun::star::uno::Any& rValue );
 
     // HACK to avoid incompatible build, can be done since this feature is only for development
     // should be removed before release
@@ -386,10 +386,10 @@ public:
 
 //#if _SOLAR__PRIVATE
     UCBStorageElement_Impl*     FindElement_Impl( const String& rName ) const;
-    BOOL                        CopyStorageElement_Impl( UCBStorageElement_Impl& rElement,
+    sal_Bool                        CopyStorageElement_Impl( UCBStorageElement_Impl& rElement,
                                     BaseStorage* pDest, const String& rNew ) const;
     BaseStorage*                OpenStorage_Impl( const String & rEleName,
-                                       StreamMode, BOOL bDirect, BOOL bForceUCBStorage );
+                                       StreamMode, sal_Bool bDirect, sal_Bool bForceUCBStorage );
 //#endif
 
 };

@@ -69,7 +69,7 @@ PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const Re
     , maHorzDim( this, WB_HORZ | WB_CENTER  )
     , maVertDim( this, WB_VERT | WB_VCENTER )
 {
-    SetPaintTransparent( TRUE );
+    SetPaintTransparent( sal_True );
     SetBackground();
     if( useHCColorReplacement() )
         maPageVDev.SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
@@ -210,7 +210,7 @@ void PrintDialog::PrintPreviewWindow::Resize()
         fZoom /= 2.0;
     }
 
-    maPageVDev.SetOutputSizePixel( aScaledSize, FALSE );
+    maPageVDev.SetOutputSizePixel( aScaledSize, sal_False );
 
     // position dimension lines
     Point aRef( nTextHeight + (aNewSize.Width() - maPreviewSize.Width())/2,
@@ -266,7 +266,7 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
         maPageVDev.Erase();
         maPageVDev.Push();
         maPageVDev.SetMapMode( MAP_100TH_MM );
-        ULONG nOldDrawMode = maPageVDev.GetDrawMode();
+        sal_uLong nOldDrawMode = maPageVDev.GetDrawMode();
         if( mbGreyscale )
             maPageVDev.SetDrawMode( maPageVDev.GetDrawMode() |
                                     ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |
@@ -329,7 +329,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     maReplacementString = i_rReplacement;
     mbGreyscale = i_bGreyscale;
     maPageVDev.SetReferenceDevice( i_nDPIX, i_nDPIY );
-    maPageVDev.EnableOutput( TRUE );
+    maPageVDev.EnableOutput( sal_True );
 
     // use correct measurements
     const LocaleDataWrapper& rLocWrap( GetSettings().GetLocaleDataWrapper() );
@@ -454,13 +454,13 @@ PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
     FreeResource();
 
     maNupOrderWin.Show();
-    maPagesBtn.Check( TRUE );
-    maBrochureBtn.Show( FALSE );
+    maPagesBtn.Check( sal_True );
+    maBrochureBtn.Show( sal_False );
 
     // setup field units for metric fields
     const LocaleDataWrapper& rLocWrap( maPageMarginEdt.GetLocaleDataWrapper() );
     FieldUnit eUnit = FUNIT_MM;
-    USHORT nDigits = 0;
+    sal_uInt16 nDigits = 0;
     if( rLocWrap.getMeasurementSystemEnum() == MEASURE_US )
     {
         eUnit = FUNIT_INCH;
@@ -483,7 +483,7 @@ PrintDialog::NUpTabPage::~NUpTabPage()
 
 void PrintDialog::NUpTabPage::enableNupControls( bool bEnable )
 {
-    maNupPagesBox.Enable( TRUE );
+    maNupPagesBox.Enable( sal_True );
     maNupNumPagesTxt.Enable( bEnable );
     maNupColEdt.Enable( bEnable );
     maNupTimesTxt.Enable( bEnable );
@@ -712,8 +712,8 @@ void PrintDialog::JobTabPage::readFromSettings()
     if( aValue.equalsIgnoreAsciiCaseAscii( "alwaysoff" ) )
     {
         mnCollateUIMode = 1;
-        maCollateBox.Check( FALSE );
-        maCollateBox.Enable( FALSE );
+        maCollateBox.Check( sal_False );
+        maCollateBox.Enable( sal_False );
     }
     else
     {
@@ -827,8 +827,8 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     // set symbols on forward and backward button
     maBackwardBtn.SetSymbol( SYMBOL_PREV );
     maForwardBtn.SetSymbol( SYMBOL_NEXT );
-    maBackwardBtn.ImplSetSmallSymbol( TRUE );
-    maForwardBtn.ImplSetSmallSymbol( TRUE );
+    maBackwardBtn.ImplSetSmallSymbol( sal_True );
+    maForwardBtn.ImplSetSmallSymbol( sal_True );
 
     maPageStr = maNumPagesText.GetText();
 
@@ -1044,10 +1044,10 @@ void PrintDialog::readFromSettings()
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     rtl::OUString aValue = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPage" ) ) );
-    USHORT nCount = maTabCtrl.GetPageCount();
-    for( USHORT i = 0; i < nCount; i++ )
+    sal_uInt16 nCount = maTabCtrl.GetPageCount();
+    for( sal_uInt16 i = 0; i < nCount; i++ )
     {
-        USHORT nPageId = maTabCtrl.GetPageId( i );
+        sal_uInt16 nPageId = maTabCtrl.GetPageId( i );
         if( aValue.equals( maTabCtrl.GetPageText( nPageId ) ) )
         {
             maTabCtrl.SelectTabPage( nPageId );
@@ -1092,7 +1092,7 @@ int PrintDialog::getCopyCount()
 
 bool PrintDialog::isCollate()
 {
-    return maJobPage.maCopyCountField.GetValue() > 1 ? maJobPage.maCollateBox.IsChecked() : FALSE;
+    return maJobPage.maCopyCountField.GetValue() > 1 ? maJobPage.maCollateBox.IsChecked() : sal_False;
 }
 
 bool PrintDialog::isSingleJobs()
@@ -1128,7 +1128,7 @@ void PrintDialog::setupOptionalUI()
     boost::shared_ptr< vcl::RowOrColumn > pCurColumn;
 
     Window* pCurParent = 0, *pDynamicPageParent = 0;
-    USHORT nOptPageId = 9, nCurSubGroup = 0;
+    sal_uInt16 nOptPageId = 9, nCurSubGroup = 0;
     bool bOnStaticPage = false;
     bool bSubgroupOnStaticPage = false;
 
@@ -1473,7 +1473,7 @@ void PrintDialog::setupOptionalUI()
                     pBtn->Check( m == nSelectVal );
                     pBtn->SetToggleHdl( LINK( this, PrintDialog, UIOption_RadioHdl ) );
                     if( aChoicesDisabled.getLength() > m && aChoicesDisabled[m] == sal_True )
-                        pBtn->Enable( FALSE );
+                        pBtn->Enable( sal_False );
                     pBtn->Show();
                     maPropertyToWindowMap[ aPropertyName ].push_back( pBtn );
                     maControlToPropertyMap[pBtn] = aPropertyName;
@@ -1527,9 +1527,9 @@ void PrintDialog::setupOptionalUI()
                     PropertyValue* pVal = maPController->getValue( aPropertyName );
                     if( pVal && pVal->Value.hasValue() )
                         pVal->Value >>= nSelectVal;
-                    pList->SelectEntryPos( static_cast<USHORT>(nSelectVal) );
+                    pList->SelectEntryPos( static_cast<sal_uInt16>(nSelectVal) );
                     pList->SetSelectHdl( LINK( this, PrintDialog, UIOption_SelectHdl ) );
-                    pList->SetDropDownLineCount( static_cast<USHORT>(aChoices.getLength()) );
+                    pList->SetDropDownLineCount( static_cast<sal_uInt16>(aChoices.getLength()) );
                     pList->Show();
 
                     // set help id
@@ -1623,9 +1623,9 @@ void PrintDialog::setupOptionalUI()
         if( maNUpPage.mxPagesBtnLabel.get() )
         {
             maNUpPage.maPagesBoxTitleTxt.SetText( maNUpPage.maPagesBtn.GetText() );
-            maNUpPage.maPagesBoxTitleTxt.Show( TRUE );
+            maNUpPage.maPagesBoxTitleTxt.Show( sal_True );
             maNUpPage.mxPagesBtnLabel->setLabel( &maNUpPage.maPagesBoxTitleTxt );
-            maNUpPage.maPagesBtn.Show( FALSE );
+            maNUpPage.maPagesBtn.Show( sal_False );
         }
     }
 
@@ -1636,7 +1636,7 @@ void PrintDialog::setupOptionalUI()
     if( maJobPage.mxPrintRange->countElements() == 0 )
     {
         maJobPage.mxPrintRange->show( false, false );
-        maJobPage.maCopySpacer.Show( FALSE );
+        maJobPage.maCopySpacer.Show( sal_False );
     }
 
 #ifdef WNT
@@ -1708,7 +1708,7 @@ void PrintDialog::checkControlDependencies()
     if( maJobPage.maCopyCountField.GetValue() > 1 )
         maJobPage.maCollateBox.Enable( maJobPage.mnCollateUIMode == 0 );
     else
-        maJobPage.maCollateBox.Enable( FALSE );
+        maJobPage.maCollateBox.Enable( sal_False );
 
     Image aImg( maJobPage.maCollateBox.IsChecked() ? maJobPage.maCollateImg : maJobPage.maNoCollateImg );
     Image aHCImg( maJobPage.maCollateBox.IsChecked() ? maJobPage.maCollateHCImg : maJobPage.maNoCollateHCImg );
@@ -2295,7 +2295,7 @@ void PrintDialog::updateWindowFromProperty( const rtl::OUString& i_rProperty )
                 ListBox* pList = dynamic_cast< ListBox* >( rWindows.front() );
                 if( pList )
                 {
-                    pList->SelectEntryPos( static_cast< USHORT >(nVal) );
+                    pList->SelectEntryPos( static_cast< sal_uInt16 >(nVal) );
                 }
                 else if( nVal >= 0 && nVal < sal_Int32(rWindows.size() ) )
                 {
@@ -2561,9 +2561,9 @@ void PrintProgressDialog::Paint( const Rectangle& )
                         nOffset,
                         nWidth,
                         mnProgressHeight,
-                        static_cast<USHORT>(0),
-                        static_cast<USHORT>(10000*mnCur/mnMax),
-                        static_cast<USHORT>(10000/nMaxCount),
+                        static_cast<sal_uInt16>(0),
+                        static_cast<sal_uInt16>(10000*mnCur/mnMax),
+                        static_cast<sal_uInt16>(10000/nMaxCount),
                         maProgressRect
                         );
     Pop();

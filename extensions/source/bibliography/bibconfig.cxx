@@ -279,7 +279,7 @@ void    BibConfig::Commit()
     OUString sCommandType(C2U("CommandType"));
     for(sal_Int32 i = 0; i < pMappingsArr->Count(); i++)
     {
-        const Mapping* pMapping = pMappingsArr->GetObject((USHORT)i);
+        const Mapping* pMapping = pMappingsArr->GetObject((sal_uInt16)i);
         OUString sPrefix(C2U(cDataSourceHistory));
         sPrefix += C2U("/_");
         sPrefix += OUString::valueOf(i);

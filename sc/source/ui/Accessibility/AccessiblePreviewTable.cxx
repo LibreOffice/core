@@ -102,7 +102,7 @@ void ScAccessiblePreviewTable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint
     if (rHint.ISA( SfxSimpleHint ))
     {
         const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
-        ULONG nId = rRef.GetId();
+        sal_uLong nId = rRef.GetId();
         if ( nId == SFX_HINT_DATACHANGED )
         {
             //  column / row layout may change with any document change,

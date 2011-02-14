@@ -43,20 +43,20 @@ class SVX_DLLPUBLIC SvxClipBoardControl : public SfxToolBoxControl
 {
     SfxPoolItem*            pClipboardFmtItem;
     PopupMenu*              pPopup;
-    USHORT                  nItemId;
-    BOOL                    bDisabled;
+    sal_uInt16                  nItemId;
+    sal_Bool                    bDisabled;
 
     void                    DelPopup();
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxClipBoardControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxClipBoardControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxClipBoardControl();
 
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
-    virtual void                StateChanged( USHORT nSID,
+    virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState );
 };

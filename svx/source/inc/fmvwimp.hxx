@@ -252,7 +252,7 @@ private:
     void addWindow(const SdrPageWindow&);
     void removeWindow( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >& _rxCC );
     void Activate(sal_Bool bSync = sal_False);
-    void Deactivate(BOOL bDeactivateController = TRUE);
+    void Deactivate(sal_Bool bDeactivateController = sal_True);
 
     SdrObject*  implCreateFieldControl( const ::svx::ODataAccessDescriptor& _rColumnDescriptor );
     SdrObject*  implCreateXFormsControl( const ::svx::OXFormsDescriptor &_rDesc );
@@ -266,8 +266,8 @@ private:
         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& _rxNumberFormats,
         sal_uInt16 _nControlObjectID,
         const ::rtl::OUString& _rFieldPostfix,
-        UINT32 _nInventor,
-        UINT16 _nLabelObjectID,
+        sal_uInt32 _nInventor,
+        sal_uInt16 _nLabelObjectID,
         SdrPage* _pLabelPage,
         SdrPage* _pControlPage,
         SdrModel* _pModel,

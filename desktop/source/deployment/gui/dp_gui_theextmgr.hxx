@@ -86,7 +86,7 @@ public:
 
     void SetText( const ::rtl::OUString &rTitle );
     void Show();
-    void ToTop( USHORT nFlags );
+    void ToTop( sal_uInt16 nFlags );
     bool Close();
     bool isVisible();
 

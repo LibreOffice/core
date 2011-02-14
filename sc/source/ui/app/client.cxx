@@ -73,8 +73,8 @@ SdrOle2Obj* ScClient::GetDrawObj()
     SdrOle2Obj* pOle2Obj = NULL;
     String aName = GetViewShell()->GetObjectShell()->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
 
-    USHORT nPages = pModel->GetPageCount();
-    for (USHORT nPNr=0; nPNr<nPages && !pOle2Obj; nPNr++)
+    sal_uInt16 nPages = pModel->GetPageCount();
+    for (sal_uInt16 nPNr=0; nPNr<nPages && !pOle2Obj; nPNr++)
     {
         SdrPage* pPage = pModel->GetPage(nPNr);
         SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
@@ -114,7 +114,7 @@ void __EXPORT ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
             aLogicRect.SetPos( aOldRect.TopLeft() );
     }
 
-    USHORT nTab = pViewSh->GetViewData()->GetTabNo();
+    sal_uInt16 nTab = pViewSh->GetViewData()->GetTabNo();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)));
     if ( pPage && aLogicRect != aOldRect )
     {

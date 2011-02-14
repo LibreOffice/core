@@ -65,16 +65,16 @@
 
 void SdBulletMapper::PreMapNumBulletForDialog( SfxItemSet& rSet )
 {
-    if( SFX_ITEM_SET == rSet.GetItemState( EE_PARA_NUMBULLET, FALSE ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( EE_PARA_NUMBULLET, sal_False ) )
     {
         SvxNumRule* pRule = ((SvxNumBulletItem*)rSet.GetItem( EE_PARA_NUMBULLET ))->GetNumRule();
 
         if(pRule && pRule->GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING)
         {
             // 10er Bullet Item auf 9er Item mappen
-            SvxNumRule aNewRule( pRule->GetFeatureFlags(), 9, FALSE, SVX_RULETYPE_PRESENTATION_NUMBERING );
+            SvxNumRule aNewRule( pRule->GetFeatureFlags(), 9, sal_False, SVX_RULETYPE_PRESENTATION_NUMBERING );
 
-            for( USHORT i = 0; i < 9; i++ )
+            for( sal_uInt16 i = 0; i < 9; i++ )
                 aNewRule.SetLevel(i, pRule->GetLevel(i));
 
             rSet.Put( SvxNumBulletItem( aNewRule, EE_PARA_NUMBULLET ) );
@@ -84,7 +84,7 @@ void SdBulletMapper::PreMapNumBulletForDialog( SfxItemSet& rSet )
 
 void SdBulletMapper::PostMapNumBulletForDialog( SfxItemSet& rSet )
 {
-    if( SFX_ITEM_SET == rSet.GetItemState( EE_PARA_NUMBULLET, FALSE ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( EE_PARA_NUMBULLET, sal_False ) )
     {
         SvxNumRule* pRule = ((SvxNumBulletItem*)rSet.GetItem( EE_PARA_NUMBULLET ))->GetNumRule();
 
@@ -94,9 +94,9 @@ void SdBulletMapper::PostMapNumBulletForDialog( SfxItemSet& rSet )
             if(pRule->GetNumRuleType() == SVX_RULETYPE_PRESENTATION_NUMBERING)
             {
                 // 9er Bullet Item auf 10er Item mappen
-                SvxNumRule aNewRule( pRule->GetFeatureFlags(), 10, FALSE, SVX_RULETYPE_PRESENTATION_NUMBERING );
+                SvxNumRule aNewRule( pRule->GetFeatureFlags(), 10, sal_False, SVX_RULETYPE_PRESENTATION_NUMBERING );
 
-                for( USHORT i = 0; i < 9; i++ )
+                for( sal_uInt16 i = 0; i < 9; i++ )
                     aNewRule.SetLevel(i, pRule->GetLevel(i));
 
                 rSet.Put( SvxNumBulletItem( aNewRule, EE_PARA_NUMBULLET ) );
@@ -108,8 +108,8 @@ void SdBulletMapper::PostMapNumBulletForDialog( SfxItemSet& rSet )
 
 void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& rSet )
 {
-    const USHORT nCount = aNumRule.GetLevelCount();
-    for( USHORT nLevel = 0; nLevel < nCount; nLevel++ )
+    const sal_uInt16 nCount = aNumRule.GetLevelCount();
+    for( sal_uInt16 nLevel = 0; nLevel < nCount; nLevel++ )
     {
         const SvxNumberFormat& rSrcLevel = aNumRule.GetLevel(nLevel);
         SvxNumberFormat aNewLevel( rSrcLevel );
@@ -143,22 +143,22 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
 
             Font aMyFont;
             const SvxFontItem& rFItem =
-                (SvxFontItem&)rSet.Get(GetWhich( (USHORT)nFontID ));
+                (SvxFontItem&)rSet.Get(GetWhich( (sal_uInt16)nFontID ));
             aMyFont.SetFamily(rFItem.GetFamily());
             aMyFont.SetName(rFItem.GetFamilyName());
             aMyFont.SetCharSet(rFItem.GetCharSet());
             aMyFont.SetPitch(rFItem.GetPitch());
 
             const SvxFontHeightItem& rFHItem =
-                (SvxFontHeightItem&)rSet.Get(GetWhich( (USHORT)nFontHeightID ));
+                (SvxFontHeightItem&)rSet.Get(GetWhich( (sal_uInt16)nFontHeightID ));
             aMyFont.SetSize(Size(0, rFHItem.GetHeight()));
 
             const SvxWeightItem& rWItem =
-                (SvxWeightItem&)rSet.Get(GetWhich( (USHORT)nWeightID ));
+                (SvxWeightItem&)rSet.Get(GetWhich( (sal_uInt16)nWeightID ));
             aMyFont.SetWeight(rWItem.GetWeight());
 
             const SvxPostureItem& rPItem =
-                (SvxPostureItem&)rSet.Get(GetWhich( (USHORT)nPostureID ));
+                (SvxPostureItem&)rSet.Get(GetWhich( (sal_uInt16)nPostureID ));
             aMyFont.SetItalic(rPItem.GetPosture());
 
             const SvxUnderlineItem& rUItem = (SvxUnderlineItem&)rSet.Get(GetWhich(SID_ATTR_CHAR_UNDERLINE));

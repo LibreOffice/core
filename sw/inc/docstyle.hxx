@@ -74,7 +74,7 @@ class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
     SwDoc&              rDoc;
     SfxItemSet          aCoreSet;
 
-    BOOL                bPhysical;
+    sal_Bool                bPhysical;
 
 
     // leere Huelse zum richtigen StyleSheet (Core) machen
@@ -87,7 +87,7 @@ class SW_DLLPUBLIC SwDocStyleSheet : public SfxStyleSheetBase
         FillPhysical
     };
 
-    SW_DLLPRIVATE BOOL FillStyleSheet( FillStyleType eFType );
+    SW_DLLPRIVATE sal_Bool FillStyleSheet( FillStyleType eFType );
 
 protected:
     virtual ~SwDocStyleSheet();
@@ -97,20 +97,20 @@ public:
                      const String&          rName,
                      SwDocStyleSheetPool&   rPool,
                      SfxStyleFamily         eFam,
-                     USHORT                 nMask);
+                     sal_uInt16                 nMask);
 
     SwDocStyleSheet( const SwDocStyleSheet& );
 
     void                    Reset();
 
-    void                    SetMask(USHORT nMsk)            { nMask = nMsk;     }
+    void                    SetMask(sal_uInt16 nMsk)            { nMask = nMsk;     }
     void                    SetFamily(SfxStyleFamily eFam)  { nFamily = eFam;   }
 
-    BOOL                    IsPhysical() const              { return bPhysical; }
-    void                    SetPhysical(BOOL bPhys);
+    sal_Bool                    IsPhysical() const              { return bPhysical; }
+    void                    SetPhysical(sal_Bool bPhys);
 
     // --> OD 2008-02-11 #newlistlevelattrs#
-    // add optional parameter <bResetIndentAttrsAtParagraphStyle>, default value FALSE,
+    // add optional parameter <bResetIndentAttrsAtParagraphStyle>, default value sal_False,
     // which indicates that the indent attributes at a paragraph style should
     // be reset in case that a list style is applied to the paragraph style and
     // no indent attributes are applied.
@@ -127,8 +127,8 @@ public:
     virtual const String&   GetParent() const;
     virtual const String&   GetFollow() const;
 
-    virtual ULONG GetHelpId( String& rFile );
-    virtual void SetHelpId( const String& r, ULONG nId );
+    virtual sal_uLong GetHelpId( String& rFile );
+    virtual void SetHelpId( const String& r, sal_uLong nId );
 
     // Vorbelegen der member ohne physikalischen Zugriff
     // wird vom StyleSheetPool benutzt
@@ -138,13 +138,13 @@ public:
     void                    PresetParent(const String& rName){ aParent = rName; }
     void                    PresetFollow(const String& rName){ aFollow = rName; }
 
-    virtual BOOL            SetName( const String& rStr);
-    virtual BOOL            SetParent( const String& rStr);
-    virtual BOOL            SetFollow( const String& rStr);
+    virtual sal_Bool            SetName( const String& rStr);
+    virtual sal_Bool            SetParent( const String& rStr);
+    virtual sal_Bool            SetFollow( const String& rStr);
 
-    virtual BOOL            HasFollowSupport() const;
-    virtual BOOL            HasParentSupport() const;
-    virtual BOOL            HasClearParentSupport() const;
+    virtual sal_Bool            HasFollowSupport() const;
+    virtual sal_Bool            HasParentSupport() const;
+    virtual sal_Bool            HasClearParentSupport() const;
     virtual String          GetDescription();
     virtual String          GetDescription(SfxMapUnit eUnit);
 
@@ -155,7 +155,7 @@ public:
     const SwNumRule*        GetNumRule();
     void                    SetNumRule(const SwNumRule& rRule);
 
-    virtual BOOL            IsUsed() const;
+    virtual sal_Bool            IsUsed() const;
 };
 
 /*--------------------------------------------------------------------
@@ -167,21 +167,21 @@ class SwStyleSheetIterator : public SfxStyleSheetIterator, public SfxListener
     rtl::Reference< SwDocStyleSheet > mxIterSheet;
     rtl::Reference< SwDocStyleSheet > mxStyleSheet;
     SwPoolFmtList       aLst;
-    USHORT              nLastPos;
-    BOOL                bFirstCalled;
+    sal_uInt16              nLastPos;
+    sal_Bool                bFirstCalled;
 
     void                AppendStyleList(const SvStringsDtor& rLst,
-                                        BOOL    bUsed,
-                                        USHORT  nSection,
+                                        sal_Bool    bUsed,
+                                        sal_uInt16  nSection,
                                         char    cType);
 
 public:
     SwStyleSheetIterator( SwDocStyleSheetPool* pBase,
-                          SfxStyleFamily eFam, USHORT n=0xFFFF );
+                          SfxStyleFamily eFam, sal_uInt16 n=0xFFFF );
     virtual ~SwStyleSheetIterator();
 
-    virtual USHORT Count();
-    virtual SfxStyleSheetBase *operator[](USHORT nIdx);
+    virtual sal_uInt16 Count();
+    virtual SfxStyleSheetBase *operator[](sal_uInt16 nIdx);
     virtual SfxStyleSheetBase* First();
     virtual SfxStyleSheetBase* Next();
     virtual SfxStyleSheetBase* Find(const UniString& rStr);
@@ -197,34 +197,34 @@ class SwDocStyleSheetPool : public SfxStyleSheetBasePool
 {
     rtl::Reference< SwDocStyleSheet > mxStyleSheet;
     SwDoc&              rDoc;
-    BOOL                bOrganizer : 1;     // TRUE: fuer den Organizer
+    sal_Bool                bOrganizer : 1;     // sal_True: fuer den Organizer
 
 
-    virtual SfxStyleSheetBase* Create( const String&, SfxStyleFamily, USHORT nMask);
+    virtual SfxStyleSheetBase* Create( const String&, SfxStyleFamily, sal_uInt16 nMask);
     virtual SfxStyleSheetBase* Create( const SfxStyleSheetBase& );
 
     using SfxStyleSheetBasePool::Find;
 
 public:
-    SwDocStyleSheetPool( SwDoc&, BOOL bOrganizer = FALSE );
+    SwDocStyleSheetPool( SwDoc&, sal_Bool bOrganizer = sal_False );
 
     virtual void Replace( SfxStyleSheetBase& rSource,
                           SfxStyleSheetBase& rTarget );
-    virtual SfxStyleSheetBase& Make(const String&, SfxStyleFamily, USHORT nMask, USHORT nPos = 0xffff);
+    virtual SfxStyleSheetBase& Make(const String&, SfxStyleFamily, sal_uInt16 nMask, sal_uInt16 nPos = 0xffff);
 
     virtual SfxStyleSheetBase* Find( const String&, SfxStyleFamily eFam,
-                                    USHORT n=0xFFFF );
+                                    sal_uInt16 n=0xFFFF );
 
-    virtual BOOL SetParent( SfxStyleFamily eFam, const String &rStyle,
+    virtual sal_Bool SetParent( SfxStyleFamily eFam, const String &rStyle,
                             const String &rParent );
 
     virtual void Remove( SfxStyleSheetBase* pStyle);
 
-    void    SetOrganizerMode( BOOL bMode )  { bOrganizer = bMode; }
-    BOOL    IsOrganizerMode() const         { return bOrganizer; }
+    void    SetOrganizerMode( sal_Bool bMode )  { bOrganizer = bMode; }
+    sal_Bool    IsOrganizerMode() const         { return bOrganizer; }
 
     virtual SfxStyleSheetIterator* CreateIterator( SfxStyleFamily,
-                                                    USHORT nMask );
+                                                    sal_uInt16 nMask );
 
     SwDoc& GetDoc() const { return rDoc; }
 

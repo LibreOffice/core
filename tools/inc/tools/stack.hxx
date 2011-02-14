@@ -44,7 +44,7 @@ public:
             using Container::GetObject;
             using Container::GetPos;
 
-            Stack( USHORT _nInitSize = 16, USHORT _nReSize = 16 ) :
+            Stack( sal_uInt16 _nInitSize = 16, sal_uInt16 _nReSize = 16 ) :
                 Container( CONTAINER_MAXBLOCKSIZE, _nInitSize, _nReSize ) {}
             Stack( const Stack& rStack ) : Container( rStack ) {}
 
@@ -55,9 +55,9 @@ public:
     Stack&  operator =( const Stack& rStack )
                 { Container::operator =( rStack ); return *this; }
 
-    BOOL    operator ==( const Stack& rStack ) const
+    sal_Bool    operator ==( const Stack& rStack ) const
                 { return Container::operator ==( rStack ); }
-    BOOL    operator !=( const Stack& rStack ) const
+    sal_Bool    operator !=( const Stack& rStack ) const
                 { return Container::operator !=( rStack ); }
 };
 
@@ -72,8 +72,8 @@ public:                                                             \
                 using Stack::Clear;                                 \
                 using Stack::Count;                                 \
                                                                     \
-                ClassName( USHORT _nInitSize = 16,                  \
-                       USHORT _nReSize = 16 ) :                     \
+                ClassName( sal_uInt16 _nInitSize = 16,                  \
+                       sal_uInt16 _nReSize = 16 ) :                     \
                     Stack( _nInitSize, _nReSize ) {}                \
                 ClassName( const ClassName& rClassName ) :          \
                     Stack( rClassName ) {}                          \
@@ -82,12 +82,12 @@ public:                                                             \
     Type        Pop()          { return (Type)Stack::Pop(); }       \
     Type        Top() const    { return (Type)Stack::Top(); }       \
                                                                     \
-    Type        GetObject( ULONG nIndex ) const                     \
+    Type        GetObject( sal_uIntPtr nIndex ) const                     \
                     { return (Type)Stack::GetObject( nIndex ); }    \
-    ULONG       GetPos( const Type p ) const                        \
+    sal_uIntPtr       GetPos( const Type p ) const                        \
                     { return Stack::GetPos( (const void*)p ); }     \
-    ULONG       GetPos( const Type p, ULONG nStartIndex,            \
-                        BOOL bForward = TRUE ) const                \
+    sal_uIntPtr       GetPos( const Type p, sal_uIntPtr nStartIndex,            \
+                        sal_Bool bForward = sal_True ) const                \
                     { return Stack::GetPos( (const void*)p,         \
                                             nStartIndex,            \
                                             bForward ); }           \
@@ -96,9 +96,9 @@ public:                                                             \
                     { Stack::operator =( rClassName );              \
                       return *this; }                               \
                                                                     \
-    BOOL        operator ==( const ClassName& rStack ) const        \
+    sal_Bool        operator ==( const ClassName& rStack ) const        \
                     { return Stack::operator ==( rStack ); }        \
-    BOOL        operator !=( const ClassName& rStack ) const        \
+    sal_Bool        operator !=( const ClassName& rStack ) const        \
                     { return Stack::operator !=( rStack ); }        \
 };
 

@@ -81,7 +81,7 @@ private:
     SVX_DLLPRIVATE void ImpSetAttrToCircInfo(); // Werte vom Pool kopieren
     SVX_DLLPRIVATE void ImpSetCircInfoToAttr(); // Werte in den Pool kopieren
 
-    // Liefert TRUE, wenn das Painten ein XPolygon erfordert.
+    // Liefert sal_True, wenn das Painten ein XPolygon erfordert.
     SVX_DLLPRIVATE FASTBOOL PaintNeedsXPolyCirc() const; // PaintNeedsXPoly-> PaintNeedsXPolyCirc
     SVX_DLLPRIVATE virtual void RecalcXPoly();
 
@@ -103,7 +103,7 @@ public:
     virtual ~SdrCircObj();
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
 
     virtual void TakeObjNameSingul(String& rName) const;
@@ -137,7 +137,7 @@ public:
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
     virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
     virtual void NbcShear (const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
-    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 
 protected:
     virtual SdrObjGeoData* NewGeoData() const;

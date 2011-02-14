@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2009 by Sun Microsystems, Inc.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,12 +14,12 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.	If not, see
+# version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
@@ -43,14 +43,14 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -p $(firstword $(subst /, ,$(2))) \
         -i $(3) \
         -o $(1) \
-        -m $(4) \
+        -m $(SDF) \
         -l all)
 
 endef
 
 define gb_SrsPartMergeTarget__rules
 $$(call gb_SrsPartMergeTarget_get_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY) | $$(gb_SrsPartMergeTarget_TRANSEXTARGET) $$(gb_SrsPartMergeTarget_TRANSEXAUXDEPS)
-    $$(call gb_SrsPartMergeTarget__command,$$@,$$*,$$<,$$(SDF))
+    $$(if $$(SDF),$$(call gb_SrsPartMergeTarget__command,$$@,$$*,$$<),mkdir -p $$(dir $$@) && cp $$< $$@)
 
 endef
 
@@ -67,13 +67,13 @@ gb_SrsPartTarget_REPOS := $(gb_REPOS)
 define gb_SrsPartTarget__command
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
-    RESPONSEFILE=`$(gb_MKTEMP) $(gb_Helper_MISC)` && \
+    RESPONSEFILE=`$(gb_MKTEMP)` && \
     echo "-s \
-        $(4) \
+        $(INCLUDE) \
         -I$(dir $(3)) \
-        $(5) \
+        $(DEFS) \
         -fp=$(1) \
-        $(6)" > $${RESPONSEFILE} && \
+        $(if $<,$<,$(MERGEDFILE))" > $${RESPONSEFILE} && \
     $(gb_SrsPartTarget_RSCCOMMAND) -presponse @$${RESPONSEFILE} && \
     rm -rf $${RESPONSEFILE})
 
@@ -81,8 +81,8 @@ endef
 
 define gb_SrsPartTarget__rules
 $$(call gb_SrsPartTarget_get_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY) | $$(gb_SrsPartTarget_RSCTARGET)
-    $$(call gb_SrsPartTarget__command_dep,$$*,$$<,$$(INCLUDE),$$(DEFS))
-    $$(call gb_SrsPartTarget__command,$$@,$$*,$$<,$$(INCLUDE),$$(DEFS),$$(lastword $$< $$(MERGEDFILE)))
+    $$(call gb_SrsPartTarget__command_dep,$$*,$$<)
+    $$(call gb_SrsPartTarget__command,$$@,$$*,$$<)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $$(call gb_SrsPartTarget_get_dep_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY)
@@ -102,12 +102,12 @@ endif
 
 
 define gb_SrsPartTarget_SrsPartTarget
-ifeq ($(strip $(WITH_LANG)),)
+ifeq ($(strip $(gb_WITH_LANG)),)
 $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := 
 else
 $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := $(call gb_SrsPartMergeTarget_get_target,$(1))
 $(call gb_SrsPartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_get_target,$(1))
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(gb_SrsPartMergeTarget_SDFLOCATION)$(dir $(1))localize.sdf
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(realpath $(gb_SrsPartMergeTarget_SDFLOCATION)$(dir $(1))localize.sdf)
 endif
 
 endef
@@ -212,7 +212,7 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCT
     $(call gb_Helper_abbreviate_dirs_native,\
         mkdir -p $(dir $@) $(OUTDIR)/bin \
             $(dir $(call gb_ResTarget_get_imagelist_target,$*)) && \
-        RESPONSEFILE=`$(gb_MKTEMP) $(gb_Helper_MISC)` && \
+        RESPONSEFILE=`$(gb_MKTEMP)` && \
         echo "-r -p \
             -lg$(LANGUAGE) \
             -fs=$@ \
@@ -282,7 +282,7 @@ endef
 
 # AllLangResTarget
 
-gb_AllLangResTarget_LANGS := en-US $(WITH_LANG)
+gb_AllLangResTarget_LANGS := en-US $(filter-out en-US,$(gb_WITH_LANG))
 
 define gb_AllLangResTarget_set_langs
 gb_AllLangResTarget_LANGS := $(1)

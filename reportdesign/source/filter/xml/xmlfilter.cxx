@@ -508,7 +508,7 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         uno::Reference<XComponent> xCom(GetModel(),UNO_QUERY);
 
         SfxMediumRef pMedium = new SfxMedium(
-                sFileName, ( STREAM_READ | STREAM_NOCREATE ), FALSE, 0 );
+                sFileName, ( STREAM_READ | STREAM_NOCREATE ), sal_False, 0 );
 
         if( pMedium )
         {

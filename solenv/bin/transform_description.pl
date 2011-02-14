@@ -1,9 +1,9 @@
 #!/usr/bin/perl
 #*************************************************************************
-#*
+#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2009 by Sun Microsystems, Inc.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -24,7 +24,7 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#************************************************************************/
+#*************************************************************************
 
 parse_args();
 execute_args();

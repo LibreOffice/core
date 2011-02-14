@@ -69,9 +69,9 @@ namespace dbaui
     struct BooleanSettingDesc
     {
         CheckBox**  ppControl;          // the dialog's control which displays this setting
-        USHORT      nControlResId;      // the resource ID to load the control from
-        USHORT      nItemId;            // the ID of the item (in an SfxItemSet) which corresponds to this setting
-        bool        bInvertedDisplay;   // true if and only if the checkbox is checked when the item is FALSE, and vice versa
+        sal_uInt16      nControlResId;      // the resource ID to load the control from
+        sal_uInt16      nItemId;            // the ID of the item (in an SfxItemSet) which corresponds to this setting
+        bool        bInvertedDisplay;   // true if and only if the checkbox is checked when the item is sal_False, and vice versa
     };
 
     //========================================================================
@@ -113,17 +113,17 @@ namespace dbaui
                 ++setting
              )
         {
-            USHORT nItemId = setting->nItemId;
+            sal_uInt16 nItemId = setting->nItemId;
             if ( rFeatures.has( nItemId ) )
             {
-                USHORT nResourceId = setting->nControlResId;
+                sal_uInt16 nResourceId = setting->nControlResId;
                 (*setting->ppControl) = new CheckBox( this, ModuleRes( nResourceId ) );
                 (*setting->ppControl)->SetClickHdl( getControlModifiedLink() );
 
                 // check whether this must be a tristate check box
                 const SfxPoolItem& rItem = _rCoreAttrs.Get( nItemId );
                 if ( rItem.ISA( OptionalBoolItem ) )
-                    (*setting->ppControl)->EnableTriState( TRUE );
+                    (*setting->ppControl)->EnableTriState( sal_True );
             }
         }
 
@@ -318,7 +318,7 @@ namespace dbaui
             }
             else
             {
-                BOOL bValue = *aValue;
+                sal_Bool bValue = *aValue;
                 if ( setting->bInvertedDisplay )
                     bValue = !bValue;
                 (*setting->ppControl)->Check( bValue );
@@ -329,7 +329,7 @@ namespace dbaui
         if ( m_bHasBooleanComparisonMode )
         {
             SFX_ITEMSET_GET( _rSet, pBooleanComparison, SfxInt32Item, DSID_BOOLEANCOMPARISON, sal_True );
-            m_pBooleanComparisonMode->SelectEntryPos( static_cast< USHORT >( pBooleanComparison->GetValue() ) );
+            m_pBooleanComparisonMode->SelectEntryPos( static_cast< sal_uInt16 >( pBooleanComparison->GetValue() ) );
         }
 
         if ( m_bHasMaxRowScan )
@@ -522,7 +522,7 @@ namespace dbaui
     }
 
     //-------------------------------------------------------------------------
-    void AdvancedSettingsDialog::PageCreated(USHORT _nId, SfxTabPage& _rPage)
+    void AdvancedSettingsDialog::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
     {
         // register ourself as modified listener
         static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory(m_pImpl->getORB());

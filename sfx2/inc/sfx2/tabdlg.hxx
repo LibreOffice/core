@@ -57,7 +57,7 @@ class SfxBindings;
 #endif /* !ENABLE_LAYOUT_SFX_TABDIALOG*/
 
 typedef SfxTabPage* (*CreateTabPage)(Window *pParent, const SfxItemSet &rAttrSet);
-typedef USHORT*     (*GetTabPageRanges)(); // liefert internationale Which-Wert
+typedef sal_uInt16*     (*GetTabPageRanges)(); // liefert internationale Which-Wert
 struct TabPageImpl;
 class SfxUs_Impl;
 
@@ -79,10 +79,10 @@ class SFX2_DLLPUBLIC SfxTabDialogItem: public SfxSetItem
 {
 public:
     TYPEINFO();
-                            SfxTabDialogItem( USHORT nId, const SfxItemSet& rItemSet );
+                            SfxTabDialogItem( sal_uInt16 nId, const SfxItemSet& rItemSet );
                             SfxTabDialogItem(const SfxTabDialogItem& rAttr, SfxItemPool* pItemPool=NULL);
     virtual SfxPoolItem*    Clone(SfxItemPool* pToPool) const;
-    virtual SfxPoolItem*    Create(SvStream& rStream, USHORT nVersion) const;
+    virtual SfxPoolItem*    Create(SvStream& rStream, sal_uInt16 nVersion) const;
 };
 
 class SFX2_DLLPUBLIC SfxTabDialog : public TabDialog
@@ -104,11 +104,11 @@ friend class SfxTabDialogController;
     const SfxItemSet*   pSet;
     SfxItemSet*         pOutSet;
     TabDlg_Impl*        pImpl;
-    USHORT*             pRanges;
+    sal_uInt16*             pRanges;
     sal_uInt32          nResId;
-    USHORT              nAppPageId;
-    BOOL                bItemsReset;
-    BOOL                bFmt;
+    sal_uInt16              nAppPageId;
+    sal_Bool                bItemsReset;
+    sal_Bool                bFmt;
 
 //#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK( ActivatePageHdl, TabControl * );
@@ -118,81 +118,81 @@ friend class SfxTabDialogController;
     DECL_DLLPRIVATE_LINK( BaseFmtHdl, Button * );
     DECL_DLLPRIVATE_LINK( UserHdl, Button * );
     DECL_DLLPRIVATE_LINK( CancelHdl, Button * );
-    SAL_DLLPRIVATE void Init_Impl(BOOL, const String *);
+    SAL_DLLPRIVATE void Init_Impl(sal_Bool, const String *);
 //#endif
 
 protected:
     virtual short               Ok();
     // wird im Sfx gel"oscht!
-    virtual SfxItemSet*         CreateInputItemSet( USHORT nId );
+    virtual SfxItemSet*         CreateInputItemSet( sal_uInt16 nId );
     // wird *nicht* im Sfx gel"oscht!
     virtual const SfxItemSet*   GetRefreshedSet();
-    virtual void                PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
     virtual long                Notify( NotifyEvent& rNEvt );
 
     SfxItemSet*     pExampleSet;
     SfxItemSet*     GetInputSetImpl();
-    SfxTabPage*     GetTabPage( USHORT nPageId ) const;
+    SfxTabPage*     GetTabPage( sal_uInt16 nPageId ) const;
 
-    BOOL            IsInOK() const;
+    sal_Bool            IsInOK() const;
     /** prepare to leace the current page. Calls the DeactivatePage method of the current page, (if necessary),
         handles the item sets to copy.
-        @return TRUE if it is allowed to leave the current page, FALSE otherwise
+        @return sal_True if it is allowed to leave the current page, sal_False otherwise
     */
     bool PrepareLeaveCurrentPage();
 
 public:
-    SfxTabDialog( Window* pParent, const ResId &rResId, USHORT nSetId, SfxBindings& rBindings,
-                  BOOL bEditFmt = FALSE, const String *pUserButtonText = 0 );
+    SfxTabDialog( Window* pParent, const ResId &rResId, sal_uInt16 nSetId, SfxBindings& rBindings,
+                  sal_Bool bEditFmt = sal_False, const String *pUserButtonText = 0 );
     SfxTabDialog( Window* pParent, const ResId &rResId, const SfxItemSet * = 0,
-                  BOOL bEditFmt = FALSE, const String *pUserButtonText = 0 );
+                  sal_Bool bEditFmt = sal_False, const String *pUserButtonText = 0 );
     SfxTabDialog( SfxViewFrame *pViewFrame, Window* pParent, const ResId &rResId,
-                  const SfxItemSet * = 0, BOOL bEditFmt = FALSE,
+                  const SfxItemSet * = 0, sal_Bool bEditFmt = sal_False,
                   const String *pUserButtonText = 0 );
     ~SfxTabDialog();
 
-    void                AddTabPage( USHORT nId,
+    void                AddTabPage( sal_uInt16 nId,
                                     CreateTabPage pCreateFunc,      // != 0
                                     GetTabPageRanges pRangesFunc,   // darf 0 sein
-                                    BOOL bItemsOnDemand = FALSE);
-    void                AddTabPage( USHORT nId,
+                                    sal_Bool bItemsOnDemand = sal_False);
+    void                AddTabPage( sal_uInt16 nId,
                                     const String &rRiderText,
                                     CreateTabPage pCreateFunc,      // != 0
                                     GetTabPageRanges pRangesFunc,   // darf 0 sein
-                                    BOOL bItemsOnDemand = FALSE,
-                                    USHORT nPos = TAB_APPEND);
-    void                AddTabPage( USHORT nId,
+                                    sal_Bool bItemsOnDemand = sal_False,
+                                    sal_uInt16 nPos = TAB_APPEND);
+    void                AddTabPage( sal_uInt16 nId,
                                     const Bitmap &rRiderBitmap,
                                     CreateTabPage pCreateFunc,      // != 0
                                     GetTabPageRanges pRangesFunc,   // darf 0 sein
-                                    BOOL bItemsOnDemand = FALSE,
-                                    USHORT nPos = TAB_APPEND);
+                                    sal_Bool bItemsOnDemand = sal_False,
+                                    sal_uInt16 nPos = TAB_APPEND);
 
-    void                AddTabPage( USHORT nId,
-                                    BOOL bItemsOnDemand = FALSE);
-    void                AddTabPage( USHORT nId,
+    void                AddTabPage( sal_uInt16 nId,
+                                    sal_Bool bItemsOnDemand = sal_False);
+    void                AddTabPage( sal_uInt16 nId,
                                     const String &rRiderText,
-                                    BOOL bItemsOnDemand = FALSE,
-                                    USHORT nPos = TAB_APPEND);
-    void                AddTabPage( USHORT nId,
+                                    sal_Bool bItemsOnDemand = sal_False,
+                                    sal_uInt16 nPos = TAB_APPEND);
+    void                AddTabPage( sal_uInt16 nId,
                                     const Bitmap &rRiderBitmap,
-                                    BOOL bItemsOnDemand = FALSE,
-                                    USHORT nPos = TAB_APPEND);
+                                    sal_Bool bItemsOnDemand = sal_False,
+                                    sal_uInt16 nPos = TAB_APPEND);
 
-    void                RemoveTabPage( USHORT nId );
+    void                RemoveTabPage( sal_uInt16 nId );
 
-    void                SetCurPageId( USHORT nId ) { nAppPageId = nId; }
-    USHORT              GetCurPageId() const
+    void                SetCurPageId( sal_uInt16 nId ) { nAppPageId = nId; }
+    sal_uInt16              GetCurPageId() const
                             { return aTabCtrl.GetCurPageId(); }
-    void                ShowPage( USHORT nId );
+    void                ShowPage( sal_uInt16 nId );
 
                         // liefert ggf. per Map konvertierte lokale Slots
-    const USHORT*       GetInputRanges( const SfxItemPool& );
+    const sal_uInt16*       GetInputRanges( const SfxItemPool& );
     void                SetInputSet( const SfxItemSet* pInSet );
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
-    const SfxItemSet*   GetOutputItemSet( USHORT nId ) const;
+    const SfxItemSet*   GetOutputItemSet( sal_uInt16 nId ) const;
     int                 FillOutputItemSet();
-    BOOL IsFormat() const { return bFmt; }
+    sal_Bool IsFormat() const { return bFmt; }
 
     const OKButton&     GetOKButton() const { return aOKBtn; }
     OKButton&           GetOKButton() { return aOKBtn; }
@@ -212,7 +212,7 @@ public:
 
     short               Execute();
     void                StartExecuteModal( const Link& rEndDialogHdl );
-    void                Start( BOOL bShow = TRUE );
+    void                Start( sal_Bool bShow = sal_True );
 
 #if !ENABLE_LAYOUT_SFX_TABDIALOG
     const SfxItemSet*   GetExampleSet() const { return pExampleSet; }
@@ -221,14 +221,14 @@ public:
 #endif /* ENABLE_LAYOUT_SFX_TABDIALOG */
     SfxViewFrame*       GetViewFrame() const { return pFrame; }
 
-    void                EnableApplyButton(BOOL bEnable = TRUE);
-    BOOL                IsApplyButtonEnabled() const;
+    void                EnableApplyButton(sal_Bool bEnable = sal_True);
+    sal_Bool                IsApplyButtonEnabled() const;
     void                SetApplyHandler(const Link& _rHdl);
     Link                GetApplyHandler() const;
 
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void Start_Impl();
-    SAL_DLLPRIVATE BOOL OK_Impl() { return PrepareLeaveCurrentPage(); }
+    SAL_DLLPRIVATE sal_Bool OK_Impl() { return PrepareLeaveCurrentPage(); }
 //#endif
 };
 
@@ -252,7 +252,7 @@ friend class SfxTabDialog;
 private:
     const SfxItemSet*   pSet;
     String              aUserString;
-    BOOL                bHasExchangeSupport;
+    sal_Bool                bHasExchangeSupport;
     SfxTabDialog*       pTabDlg;
     TabPageImpl*        pImpl;
 
@@ -263,12 +263,12 @@ protected:
     SfxTabPage( Window *pParent, const ResId &, const SfxItemSet &rAttrSet );
     SfxTabPage( Window *pParent, WinBits nStyle, const SfxItemSet &rAttrSet );
 
-    USHORT              GetSlot( USHORT nWhich ) const
+    sal_uInt16              GetSlot( sal_uInt16 nWhich ) const
                             { return pSet->GetPool()->GetSlotId( nWhich ); }
-    USHORT              GetWhich( USHORT nSlot, sal_Bool bDeep = sal_True ) const
+    sal_uInt16              GetWhich( sal_uInt16 nSlot, sal_Bool bDeep = sal_True ) const
                             { return pSet->GetPool()->GetWhich( nSlot, bDeep ); }
-    const SfxPoolItem*  GetOldItem( const SfxItemSet& rSet, USHORT nSlot, sal_Bool bDeep = sal_True );
-    const SfxPoolItem*  GetExchangeItem( const SfxItemSet& rSet, USHORT nSlot );
+    const SfxPoolItem*  GetOldItem( const SfxItemSet& rSet, sal_uInt16 nSlot, sal_Bool bDeep = sal_True );
+    const SfxPoolItem*  GetExchangeItem( const SfxItemSet& rSet, sal_uInt16 nSlot );
     SfxTabDialog*       GetTabDialog() const { return pTabDlg; }
 
     void                AddItemConnection( sfx::ItemConnectionBase* pConnection );
@@ -278,12 +278,12 @@ public:
 
     const SfxItemSet&   GetItemSet() const { return *pSet; }
 
-    virtual BOOL        FillItemSet( SfxItemSet& );
+    virtual sal_Bool        FillItemSet( SfxItemSet& );
     virtual void        Reset( const SfxItemSet& );
 
-    BOOL                HasExchangeSupport() const
+    sal_Bool                HasExchangeSupport() const
                             { return bHasExchangeSupport; }
-    void                SetExchangeSupport( BOOL bNew = TRUE )
+    void                SetExchangeSupport( sal_Bool bNew = sal_True )
                             { bHasExchangeSupport = bNew; }
 
     enum sfxpg {
@@ -304,9 +304,9 @@ public:
                             { aUserString = rString; }
     String              GetUserData() { return aUserString; }
     virtual void        FillUserData();
-    virtual BOOL        IsReadOnly() const;
+    virtual sal_Bool        IsReadOnly() const;
     virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
-    static const SfxPoolItem* GetItem( const SfxItemSet& rSet, USHORT nSlot, sal_Bool bDeep = sal_True );
+    static const SfxPoolItem* GetItem( const SfxItemSet& rSet, sal_uInt16 nSlot, sal_Bool bDeep = sal_True );
 
     void SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetFrame();

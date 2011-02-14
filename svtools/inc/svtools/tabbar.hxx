@@ -86,10 +86,10 @@ DoubleClick     - Wird gerufen, wenn ein DoubleClick im TabBar ausgeloest
 ActivatePage    - Wird gerufen, wenn eine andere Seite aktiviert wird.
                   GetCurPageId() gibt die aktivierte Seite zurueck.
 DeactivatePage  - Wird gerufen, wenn eine Seite deaktiviert wird. Wenn
-                  eine andere Seite aktiviert werden darf, muss TRUE
+                  eine andere Seite aktiviert werden darf, muss sal_True
                   zurueckgegeben werden, wenn eine andere Seite von
                   der Aktivierung ausgeschlossen werden soll, muss
-                  FALSE zurueckgegeben werden. GetCurPageId() gibt die
+                  sal_False zurueckgegeben werden. GetCurPageId() gibt die
                   zu deaktivierende Seite zurueck.
 
 
@@ -104,7 +104,7 @@ werden. Dabei muss in den Handlern folgendes implementiert werden:
 Command         - Wenn in diesem Handler das Dragging gestartet werden
                   soll, muss StartDrag() gerufen werden. Diese Methode
                   selektiert dann den entsprechenden Eintrag oder gibt
-                  FALSE zurueck, wenn das Dragging nicht durchgefuhert
+                  sal_False zurueck, wenn das Dragging nicht durchgefuhert
                   werden kann.
 
 QueryDrop       - Dieser Handler wird von StarView immer dann gerufen, wenn
@@ -162,7 +162,7 @@ SwitchPage      - Diese Methode muss vom QueryDrop-Handler gerufen werden,
                   Das umschalten der Seite passiert zeitverzoegert (500 ms)
                   und wird automatisch von dieser Methode verwaltet.
                   In der Methode muss die Position vom Event uebergeben
-                  werden. Diese Methode gibt TRUE zurueck, wenn die Page
+                  werden. Diese Methode gibt sal_True zurueck, wenn die Page
                   umgeschaltet wurde.
 
 EndSwitchPage   - Diese Methode setzt die Daten fuer das umschalten der
@@ -223,7 +223,7 @@ EnableEditMode  - Damit kann eingestellt werden, das bei Alt+LeftClick
                   Im StartRenaming()-Handler kann dann das Umbenennen
                   noch abgelehnt werden.
 StartEditMode   - Mit dieser Methode wird der EditModus auf einem
-                  Tab gestartet. FALSE wird zurueckgegeben, wenn
+                  Tab gestartet. sal_False wird zurueckgegeben, wenn
                   der Editmodus schon aktiv ist, mit StartRenaming()
                   der Modus abgelehnt wurde oder kein Platz zum
                   Editieren vorhanden ist.
@@ -244,7 +244,7 @@ GetEditPageId   - Mit dieser Methode wird in den Renaming-Handlern
 StartRenaming() - Dieser Handler wird gerufen, wenn ueber StartEditMode()
                   der Editmodus gestartet wurde. Mit GetEditPageId()
                   kann abgefragt werden, welcher Tab umbenannt werden
-                  soll. FALSE sollte zurueckgegeben werden, wenn
+                  soll. sal_False sollte zurueckgegeben werden, wenn
                   der Editmodus nicht gestartet werden soll.
 AllowRenaming() - Dieser Handler wird gerufen, wenn der Editmodus
                   beendet wird (nicht bei Cancel). In diesem Handler
@@ -308,7 +308,7 @@ ueber einem bzw. ueber welchem Item durchgefuehrt wurde.
 // - TabBarPageBits -
 // ------------------
 
-typedef USHORT TabBarPageBits;
+typedef sal_uInt16 TabBarPageBits;
 
 // -------------------------
 // - Bits fuer TabBarPages -
@@ -320,8 +320,8 @@ typedef USHORT TabBarPageBits;
 // - TabBar-Types -
 // ----------------
 
-#define TABBAR_RENAMING_YES    ((long)TRUE)
-#define TABBAR_RENAMING_NO     ((long)FALSE)
+#define TABBAR_RENAMING_YES    ((long)sal_True)
+#define TABBAR_RENAMING_NO     ((long)sal_False)
 #define TABBAR_RENAMING_CANCEL ((long)2)
 
 // ----------
@@ -352,25 +352,25 @@ private:
     long            mnOffY;
     long            mnLastOffX;
     long            mnSplitSize;
-    ULONG           mnSwitchTime;
+    sal_uLong           mnSwitchTime;
     WinBits         mnWinStyle;
-    USHORT          mnCurPageId;
-    USHORT          mnFirstPos;
-    USHORT          mnDropPos;
-    USHORT          mnSwitchId;
-    USHORT          mnEditId;
-    BOOL            mbFormat;
-    BOOL            mbFirstFormat;
-    BOOL            mbSizeFormat;
-    BOOL            mbAutoMaxWidth;
-    BOOL            mbInSwitching;
-    BOOL            mbAutoEditMode;
-    BOOL            mbEditCanceled;
-    BOOL            mbDropPos;
-    BOOL            mbInSelect;
-    BOOL            mbSelColor;
-    BOOL            mbSelTextColor;
-    BOOL            mbMirrored;
+    sal_uInt16          mnCurPageId;
+    sal_uInt16          mnFirstPos;
+    sal_uInt16          mnDropPos;
+    sal_uInt16          mnSwitchId;
+    sal_uInt16          mnEditId;
+    sal_Bool            mbFormat;
+    sal_Bool            mbFirstFormat;
+    sal_Bool            mbSizeFormat;
+    sal_Bool            mbAutoMaxWidth;
+    sal_Bool            mbInSwitching;
+    sal_Bool            mbAutoEditMode;
+    sal_Bool            mbEditCanceled;
+    sal_Bool            mbDropPos;
+    sal_Bool            mbInSelect;
+    sal_Bool            mbSelColor;
+    sal_Bool            mbSelTextColor;
+    sal_Bool            mbMirrored;
     Link            maSelectHdl;
     Link            maDoubleClickHdl;
     Link            maSplitHdl;
@@ -382,13 +382,13 @@ private:
 
     using Window::ImplInit;
     SVT_DLLPRIVATE void            ImplInit( WinBits nWinStyle );
-    SVT_DLLPRIVATE void            ImplInitSettings( BOOL bFont, BOOL bBackground );
+    SVT_DLLPRIVATE void            ImplInitSettings( sal_Bool bFont, sal_Bool bBackground );
     SVT_DLLPRIVATE void            ImplGetColors( Color& rFaceColor, Color& rFaceTextColor,
                                    Color& rSelectColor, Color& rSelectTextColor );
-    SVT_DLLPRIVATE void            ImplShowPage( USHORT nPos );
-    SVT_DLLPRIVATE BOOL            ImplCalcWidth();
+    SVT_DLLPRIVATE void            ImplShowPage( sal_uInt16 nPos );
+    SVT_DLLPRIVATE sal_Bool            ImplCalcWidth();
     SVT_DLLPRIVATE void            ImplFormat();
-    SVT_DLLPRIVATE USHORT          ImplGetLastFirstPos();
+    SVT_DLLPRIVATE sal_uInt16          ImplGetLastFirstPos();
     SVT_DLLPRIVATE void            ImplInitControls();
     SVT_DLLPRIVATE void            ImplEnableControls();
     SVT_DLLPRIVATE void         ImplSelect();
@@ -422,102 +422,102 @@ public:
     virtual void    EndRenaming();
     virtual void    Mirror();
 
-    void            InsertPage( USHORT nPageId, const XubString& rText,
+    void            InsertPage( sal_uInt16 nPageId, const XubString& rText,
                                 TabBarPageBits nBits = 0,
-                                USHORT nPos = TabBar::APPEND );
-    void            RemovePage( USHORT nPageId );
-    void            MovePage( USHORT nPageId, USHORT nNewPos );
+                                sal_uInt16 nPos = TabBar::APPEND );
+    void            RemovePage( sal_uInt16 nPageId );
+    void            MovePage( sal_uInt16 nPageId, sal_uInt16 nNewPos );
 
-    Color           GetTabBgColor( USHORT nPageId ) const;
-    void            SetTabBgColor( USHORT nPageId, const Color& aTabBgColor );
-    BOOL            IsDefaultTabBgColor( USHORT nPageId );
+    Color           GetTabBgColor( sal_uInt16 nPageId ) const;
+    void            SetTabBgColor( sal_uInt16 nPageId, const Color& aTabBgColor );
+    sal_Bool        IsDefaultTabBgColor( sal_uInt16 nPageId );
 
     void            Clear();
 
-    void            EnablePage( USHORT nPageId, BOOL bEnable = TRUE );
-    BOOL            IsPageEnabled( USHORT nPageId ) const;
+    void            EnablePage( sal_uInt16 nPageId, sal_Bool bEnable = sal_True );
+    sal_Bool            IsPageEnabled( sal_uInt16 nPageId ) const;
 
-    void            SetPageBits( USHORT nPageId, TabBarPageBits nBits = 0 );
-    TabBarPageBits  GetPageBits( USHORT nPageId ) const;
+    void            SetPageBits( sal_uInt16 nPageId, TabBarPageBits nBits = 0 );
+    TabBarPageBits  GetPageBits( sal_uInt16 nPageId ) const;
 
-    USHORT          GetPageCount() const;
-    USHORT          GetPageId( USHORT nPos ) const;
-    USHORT          GetPagePos( USHORT nPageId ) const;
-    USHORT          GetPageId( const Point& rPos ) const;
-    Rectangle       GetPageRect( USHORT nPageId ) const;
+    sal_uInt16          GetPageCount() const;
+    sal_uInt16          GetPageId( sal_uInt16 nPos ) const;
+    sal_uInt16          GetPagePos( sal_uInt16 nPageId ) const;
+    sal_uInt16          GetPageId( const Point& rPos ) const;
+    Rectangle       GetPageRect( sal_uInt16 nPageId ) const;
     // returns the rectangle in which page tabs are drawn
     Rectangle       GetPageArea() const;
 
-    void            SetCurPageId( USHORT nPageId );
-    USHORT          GetCurPageId() const { return mnCurPageId; }
+    void            SetCurPageId( sal_uInt16 nPageId );
+    sal_uInt16          GetCurPageId() const { return mnCurPageId; }
 
-    void            SetFirstPageId( USHORT nPageId );
-    USHORT          GetFirstPageId() const { return GetPageId( mnFirstPos ); }
-    void            MakeVisible( USHORT nPageId );
+    void            SetFirstPageId( sal_uInt16 nPageId );
+    sal_uInt16          GetFirstPageId() const { return GetPageId( mnFirstPos ); }
+    void            MakeVisible( sal_uInt16 nPageId );
 
-    void            SelectPage( USHORT nPageId, BOOL bSelect = TRUE );
-    void            SelectPageRange( BOOL bSelect = FALSE,
-                                     USHORT nStartPos = 0,
-                                     USHORT nEndPos = TabBar::APPEND );
-    USHORT          GetSelectPage( USHORT nSelIndex = 0 ) const;
-    USHORT          GetSelectPageCount() const;
-    BOOL            IsPageSelected( USHORT nPageId ) const;
+    void            SelectPage( sal_uInt16 nPageId, sal_Bool bSelect = sal_True );
+    void            SelectPageRange( sal_Bool bSelect = sal_False,
+                                     sal_uInt16 nStartPos = 0,
+                                     sal_uInt16 nEndPos = TabBar::APPEND );
+    sal_uInt16          GetSelectPage( sal_uInt16 nSelIndex = 0 ) const;
+    sal_uInt16          GetSelectPageCount() const;
+    sal_Bool            IsPageSelected( sal_uInt16 nPageId ) const;
 
-    void            EnableAutoMaxPageWidth( BOOL bEnable = TRUE ) { mbAutoMaxWidth = bEnable; }
-    BOOL            IsAutoMaxPageWidthEnabled() const { return mbAutoMaxWidth; }
+    void            EnableAutoMaxPageWidth( sal_Bool bEnable = sal_True ) { mbAutoMaxWidth = bEnable; }
+    sal_Bool            IsAutoMaxPageWidthEnabled() const { return mbAutoMaxWidth; }
     void            SetMaxPageWidth( long nMaxWidth );
     long            GetMaxPageWidth() const { return mnMaxPageWidth; }
     void            ResetMaxPageWidth() { SetMaxPageWidth( 0 ); }
-    BOOL            IsMaxPageWidth() const { return mnMaxPageWidth != 0; }
+    sal_Bool            IsMaxPageWidth() const { return mnMaxPageWidth != 0; }
 
-    void            EnableEditMode( BOOL bEnable = TRUE ) { mbAutoEditMode = bEnable; }
-    BOOL            IsEditModeEnabled() const { return mbAutoEditMode; }
-    BOOL            StartEditMode( USHORT nPageId );
-    void            EndEditMode( BOOL bCancel = FALSE );
+    void            EnableEditMode( sal_Bool bEnable = sal_True ) { mbAutoEditMode = bEnable; }
+    sal_Bool            IsEditModeEnabled() const { return mbAutoEditMode; }
+    sal_Bool            StartEditMode( sal_uInt16 nPageId );
+    void            EndEditMode( sal_Bool bCancel = sal_False );
     void            SetEditText( const XubString& rText ) { maEditText = rText; }
     const XubString& GetEditText() const { return maEditText; }
-    BOOL            IsInEditMode() const { return (mpEdit != NULL); }
-    BOOL            IsEditModeCanceled() const { return mbEditCanceled; }
-    USHORT          GetEditPageId() const { return mnEditId; }
+    sal_Bool            IsInEditMode() const { return (mpEdit != NULL); }
+    sal_Bool            IsEditModeCanceled() const { return mbEditCanceled; }
+    sal_uInt16          GetEditPageId() const { return mnEditId; }
 
     /** Mirrors the entire control including position of buttons and splitter.
         Mirroring is done relative to the current direction of the GUI.
-        @param bMirrored  TRUE = the control will draw itself RTL in LTR GUI,
-            and vice versa; FALSE = the control behaves according to the
+        @param bMirrored  sal_True = the control will draw itself RTL in LTR GUI,
+            and vice versa; sal_False = the control behaves according to the
             current direction of the GUI. */
-    void            SetMirrored( BOOL bMirrored = TRUE );
-    /** Returns TRUE, if the control is set to mirrored mode (see SetMirrored()). */
-    BOOL            IsMirrored() const { return mbMirrored; }
+    void            SetMirrored( sal_Bool bMirrored = sal_True );
+    /** Returns sal_True, if the control is set to mirrored mode (see SetMirrored()). */
+    sal_Bool            IsMirrored() const { return mbMirrored; }
 
     /** Sets the control to LTR or RTL mode regardless of the GUI direction.
-        @param bRTL  FALSE = the control will draw from left to right;
-            TRUE = the control will draw from right to left. */
-    void            SetEffectiveRTL( BOOL bRTL );
-    /** Returns TRUE, if the control draws from right to left (see SetEffectiveRTL()). */
-    BOOL            IsEffectiveRTL() const;
+        @param bRTL  sal_False = the control will draw from left to right;
+            sal_True = the control will draw from right to left. */
+    void            SetEffectiveRTL( sal_Bool bRTL );
+    /** Returns sal_True, if the control draws from right to left (see SetEffectiveRTL()). */
+    sal_Bool            IsEffectiveRTL() const;
 
-    BOOL            StartDrag( const CommandEvent& rCEvt, Region& rRegion );
-    USHORT          ShowDropPos( const Point& rPos );
+    sal_Bool            StartDrag( const CommandEvent& rCEvt, Region& rRegion );
+    sal_uInt16          ShowDropPos( const Point& rPos );
     void            HideDropPos();
-    BOOL            SwitchPage( const Point& rPos );
+    sal_Bool            SwitchPage( const Point& rPos );
     void            EndSwitchPage();
-    BOOL            IsInSwitching() { return mbInSwitching; }
+    sal_Bool            IsInSwitching() { return mbInSwitching; }
 
     void            SetSelectColor();
     void            SetSelectColor( const Color& rColor );
     const Color&    GetSelectColor() const { return maSelColor; }
-    BOOL            IsSelectColor() const { return mbSelColor; }
+    sal_Bool            IsSelectColor() const { return mbSelColor; }
     void            SetSelectTextColor();
     void            SetSelectTextColor( const Color& rColor );
     const Color&    GetSelectTextColor() const { return maSelTextColor; }
-    BOOL            IsSelectTextColor() const { return mbSelTextColor; }
+    sal_Bool            IsSelectTextColor() const { return mbSelTextColor; }
 
-    void            SetPageText( USHORT nPageId, const XubString& rText );
-    XubString       GetPageText( USHORT nPageId ) const;
-    void            SetHelpText( USHORT nPageId, const XubString& rText );
-    XubString       GetHelpText( USHORT nPageId ) const;
-    void            SetHelpId( USHORT nPageId, const rtl::OString& nHelpId );
-    rtl::OString    GetHelpId( USHORT nPageId ) const;
+    void            SetPageText( sal_uInt16 nPageId, const XubString& rText );
+    XubString       GetPageText( sal_uInt16 nPageId ) const;
+    void            SetHelpText( sal_uInt16 nPageId, const XubString& rText );
+    XubString       GetHelpText( sal_uInt16 nPageId ) const;
+    void            SetHelpId( sal_uInt16 nPageId, const rtl::OString& nHelpId );
+    rtl::OString    GetHelpId( sal_uInt16 nPageId ) const;
 
     long            GetSplitSize() const { return mnSplitSize; }
     long            GetMinSize() const;

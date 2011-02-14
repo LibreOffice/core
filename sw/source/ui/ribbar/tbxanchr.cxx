@@ -61,7 +61,7 @@ SFX_IMPL_TOOLBOX_CONTROL(SwTbxAnchor, SfxUInt16Item);
  *  Beschreibung:
  ******************************************************************************/
 
-SwTbxAnchor::SwTbxAnchor( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SwTbxAnchor::SwTbxAnchor( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     nActAnchorId(0)
 {
@@ -80,7 +80,7 @@ SwTbxAnchor::SwTbxAnchor( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
  *  Beschreibung:
  ******************************************************************************/
 
-void  SwTbxAnchor::StateChanged( USHORT /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
+void  SwTbxAnchor::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
     GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SFX_ITEM_DISABLED) );
 
@@ -148,8 +148,8 @@ void  SwTbxAnchor::Click()
     aPopMenu.EnableItem( FN_TOOL_ANKER_FRAME, 0 != pWrtShell->IsFlyInFly() );
 
     Rectangle aRect(GetToolBox().GetItemRect(GetId()));
-    USHORT nHtmlMode = ::GetHtmlMode((SwDocShell*)SfxObjectShell::Current());
-    BOOL bHtmlModeNoAnchor = ( nHtmlMode & HTMLMODE_ON) && 0 == (nHtmlMode & HTMLMODE_SOME_ABS_POS);
+    sal_uInt16 nHtmlMode = ::GetHtmlMode((SwDocShell*)SfxObjectShell::Current());
+    sal_Bool bHtmlModeNoAnchor = ( nHtmlMode & HTMLMODE_ON) && 0 == (nHtmlMode & HTMLMODE_SOME_ABS_POS);
 
     if (bHtmlModeNoAnchor || pWrtShell->IsInHeaderFooter())
         aPopMenu.RemoveItem(aPopMenu.GetItemPos(FN_TOOL_ANKER_PAGE));
@@ -158,7 +158,7 @@ void  SwTbxAnchor::Click()
         aPopMenu.CheckItem(nActAnchorId);
 
 
-    USHORT nSlotId = aPopMenu.Execute(&GetToolBox(), aRect);
+    sal_uInt16 nSlotId = aPopMenu.Execute(&GetToolBox(), aRect);
     GetToolBox().EndSelection();
 
     if (nSlotId)

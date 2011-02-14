@@ -39,10 +39,10 @@
 #include "format.hxx"
 
 
-BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
+sal_Bool SmGetGlyphBoundRect(const OutputDevice &rDev,
                          const XubString &rText, Rectangle &rRect);
 
-BOOL SmIsMathAlpha(const XubString &rText);
+sal_Bool SmIsMathAlpha(const XubString &rText);
 
 
 inline long SmFromTo(long nFrom, long nTo, double fRelDist)
@@ -104,17 +104,17 @@ class SmRect
             nItalicRightSpace,
             nLoAttrFence,
             nHiAttrFence;
-    USHORT  nBorderWidth;
-    BOOL    bHasBaseline,
+    sal_uInt16  nBorderWidth;
+    sal_Bool    bHasBaseline,
             bHasAlignInfo;
 
 protected:
             void BuildRect (const OutputDevice &rDev, const SmFormat *pFormat,
-                            const XubString &rText, USHORT nBorderWidth);
+                            const XubString &rText, sal_uInt16 nBorderWidth);
             void Init(const OutputDevice &rDev, const SmFormat *pFormat,
-                      const XubString &rText, USHORT nBorderWidth);
+                      const XubString &rText, sal_uInt16 nBorderWidth);
 
-            void ClearBaseline()    { bHasBaseline = FALSE; };
+            void ClearBaseline()    { bHasBaseline = sal_False; };
     inline  void CopyMBL(const SmRect& rRect);
             void CopyAlignInfo(const SmRect& rRect);
 
@@ -128,12 +128,12 @@ public:
             SmRect(const SmRect &rRect);
 
 
-            USHORT  GetBorderWidth() const  { return nBorderWidth; }
+            sal_uInt16  GetBorderWidth() const  { return nBorderWidth; }
 
             void SetItalicSpaces(long nLeftSpace, long nRightSpace);
 
-            void SetWidth(ULONG nWidth)     { aSize.Width()  = nWidth; }
-            void SetHeight(ULONG nHeight)   { aSize.Height() = nHeight; }
+            void SetWidth(sal_uLong nWidth)     { aSize.Width()  = nWidth; }
+            void SetHeight(sal_uLong nHeight)   { aSize.Height() = nHeight; }
 
             void SetLeft(long nLeft);
             void SetRight(long nRight);
@@ -164,7 +164,7 @@ public:
             long GetItalicRight() const     { return GetRight() + GetItalicRightSpace(); }
             long GetItalicWidth() const     { return GetWidth() + GetItalicLeftSpace() + GetItalicRightSpace(); }
 
-            BOOL HasBaseline() const        { return bHasBaseline; }
+            sal_Bool HasBaseline() const        { return bHasBaseline; }
     inline  long GetBaseline() const;
             long GetBaselineOffset() const  { return GetBaseline() - GetTop(); }
 
@@ -187,12 +187,12 @@ public:
             void Move  (const Point &rPosition);
             void MoveTo(const Point &rPosition) { Move(rPosition - GetTopLeft()); }
 
-            BOOL IsEmpty() const
+            sal_Bool IsEmpty() const
             {
                 return GetWidth() == 0  ||  GetHeight() == 0;
             }
 
-            BOOL HasAlignInfo() const { return bHasAlignInfo; }
+            sal_Bool HasAlignInfo() const { return bHasAlignInfo; }
 
             const Point AlignTo(const SmRect &rRect, RectPos ePos,
                                 RectHorAlign eHor, RectVerAlign eVer) const;
@@ -201,11 +201,11 @@ public:
             SmRect & ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
                               long nNewAlignM);
             SmRect & ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
-                      BOOL bKeepVerAlignParams);
+                      sal_Bool bKeepVerAlignParams);
 
             long    OrientedDist(const Point &rPoint) const;
-            BOOL    IsInsideRect(const Point &rPoint) const;
-            BOOL    IsInsideItalicRect(const Point &rPoint) const;
+            sal_Bool    IsInsideRect(const Point &rPoint) const;
+            sal_Bool    IsInsideItalicRect(const Point &rPoint) const;
 
     inline  SmRect & operator = (const SmRect &rRect);
 

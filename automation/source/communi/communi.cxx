@@ -51,10 +51,10 @@
 #undef  SV_IMPL_PTRARR_SORT
 #define SV_IMPL_PTRARR_SORT( nm,AE )\
 _SV_IMPL_SORTAR_ALG( nm,AE )\
-    void nm::DeleteAndDestroy( USHORT nP, USHORT nL ) { \
+    void nm::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL ) { \
         if( nL ) {\
             DBG_ASSERT( nP < nA && nP + nL <= nA, "ERR_VAR_DEL" );\
-            for( USHORT n=nP; n < nP + nL; n++ ) \
+            for( sal_uInt16 n=nP; n < nP + nL; n++ ) \
                 DBG_ERROR("Das Element der Liste wurde nicht gelöscht"); \
             SvPtrarr::Remove( nP, nL ); \
         } \
@@ -72,8 +72,8 @@ CommunicationLinkViaSocket::CommunicationLinkViaSocket( CommunicationManager *pM
 : SimpleCommunicationLinkViaSocket( pMan, pSocket )
 , nConnectionClosedEventId( 0 )
 , nDataReceivedEventId( 0 )
-, bShutdownStarted( FALSE )
-, bDestroying( FALSE )
+, bShutdownStarted( sal_False )
+, bDestroying( sal_False )
 {
     SetPutDataReceivedHdl(LINK( this, CommunicationLinkViaSocket, PutDataReceivedHdl ));
     if ( !pMPostUserEvent )
@@ -87,7 +87,7 @@ CommunicationLinkViaSocket::CommunicationLinkViaSocket( CommunicationManager *pM
 
 CommunicationLinkViaSocket::~CommunicationLinkViaSocket()
 {
-    bDestroying = TRUE;
+    bDestroying = sal_True;
     StopCommunication();
     while ( nConnectionClosedEventId || nDataReceivedEventId )
         GetpApp()->Yield();
@@ -116,7 +116,7 @@ CommunicationLinkViaSocket::~CommunicationLinkViaSocket()
     }
 }
 
-BOOL CommunicationLinkViaSocket::ShutdownCommunication()
+sal_Bool CommunicationLinkViaSocket::ShutdownCommunication()
 {
     if ( isRunning() )
     {
@@ -144,10 +144,10 @@ BOOL CommunicationLinkViaSocket::ShutdownCommunication()
         join();
     }
 
-    return TRUE;
+    return sal_True;
 }
 
-BOOL CommunicationLinkViaSocket::StopCommunication()
+sal_Bool CommunicationLinkViaSocket::StopCommunication()
 {
     if ( !bShutdownStarted )
     {
@@ -156,7 +156,7 @@ BOOL CommunicationLinkViaSocket::StopCommunication()
     else
     {
         WaitForShutdown();
-        return TRUE;
+        return sal_True;
     }
 }
 
@@ -176,7 +176,7 @@ void CommunicationLinkViaSocket::WaitForShutdown()
         aShutdownTimer.SetTimeout( 30000 );     // Should be 30 Seconds
         aShutdownTimer.SetTimeoutHdl( LINK( this, CommunicationLinkViaSocket, ShutdownLink ) );
         aShutdownTimer.Start();
-        bShutdownStarted = TRUE;
+        bShutdownStarted = sal_True;
     }
     if ( bDestroying )
     {
@@ -190,14 +190,14 @@ void CommunicationLinkViaSocket::WaitForShutdown()
     }
 }
 
-BOOL CommunicationLinkViaSocket::IsCommunicationError()
+sal_Bool CommunicationLinkViaSocket::IsCommunicationError()
 {
     return !isRunning() || SimpleCommunicationLinkViaSocket::IsCommunicationError();
 }
 
 void CommunicationLinkViaSocket::run()
 {
-    BOOL bWasError = FALSE;
+    sal_Bool bWasError = sal_False;
     while ( schedule() && !bWasError && GetStreamSocket() )
     {
         if ( bWasError |= !DoReceiveDataStream() )
@@ -226,10 +226,10 @@ void CommunicationLinkViaSocket::run()
     }
 }
 
-BOOL CommunicationLinkViaSocket::DoTransferDataStream( SvStream *pDataStream, CMProtocol nProtocol )
+sal_Bool CommunicationLinkViaSocket::DoTransferDataStream( SvStream *pDataStream, CMProtocol nProtocol )
 {
     if ( !isRunning() )
-        return FALSE;
+        return sal_False;
 
     return SimpleCommunicationLinkViaSocket::DoTransferDataStream( pDataStream, nProtocol );
 }
@@ -263,9 +263,9 @@ IMPL_LINK( CommunicationLinkViaSocket, PutDataReceivedHdl, CommunicationLinkViaS
 
 
 
-MultiCommunicationManager::MultiCommunicationManager( BOOL bUseMultiChannel )
+MultiCommunicationManager::MultiCommunicationManager( sal_Bool bUseMultiChannel )
 : CommunicationManager( bUseMultiChannel )
-, bGracefullShutdown( TRUE )
+, bGracefullShutdown( sal_True )
 {
     ActiveLinks = new CommunicationLinkList;
     InactiveLinks = new CommunicationLinkList;
@@ -280,8 +280,8 @@ MultiCommunicationManager::~MultiCommunicationManager()
         Timer aTimeout;
         aTimeout.SetTimeout( 40000 );
         aTimeout.Start();
-        USHORT nLinkCount = 0;
-        USHORT nNewLinkCount = 0;
+        sal_uInt16 nLinkCount = 0;
+        sal_uInt16 nNewLinkCount = 0;
         while ( aTimeout.IsActive() )
         {
             GetpApp()->Yield();
@@ -298,7 +298,7 @@ MultiCommunicationManager::~MultiCommunicationManager()
 
     // Alles weghauen, was nicht rechtzeitig auf die Bäume gekommen ist
     // Was bei StopCommunication übrig geblieben ist, da es sich asynchron austragen wollte
-    USHORT i = ActiveLinks->Count();
+    sal_uInt16 i = ActiveLinks->Count();
     while ( i-- )
     {
         CommunicationLinkRef rTempLink = ActiveLinks->GetObject( i );
@@ -321,12 +321,12 @@ MultiCommunicationManager::~MultiCommunicationManager()
     delete InactiveLinks;
 }
 
-BOOL MultiCommunicationManager::StopCommunication()
+sal_Bool MultiCommunicationManager::StopCommunication()
 {
     // Alle Verbindungen abbrechen
     // ConnectionClosed entfernt die Links aus der Liste. Je nach Implementation syncron
     // oder asyncron. Daher Von oben nach unten Abräumen, so daß sich nichts verschiebt.
-    USHORT i = ActiveLinks->Count();
+    sal_uInt16 i = ActiveLinks->Count();
     int nFail = 0;
     while ( i )
     {
@@ -338,20 +338,20 @@ BOOL MultiCommunicationManager::StopCommunication()
     return nFail == 0;
 }
 
-BOOL MultiCommunicationManager::IsLinkValid( CommunicationLink* pCL )
+sal_Bool MultiCommunicationManager::IsLinkValid( CommunicationLink* pCL )
 {
     if ( ActiveLinks->Seek_Entry( pCL ) )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
-USHORT MultiCommunicationManager::GetCommunicationLinkCount()
+sal_uInt16 MultiCommunicationManager::GetCommunicationLinkCount()
 {
     return ActiveLinks->Count();
 }
 
-CommunicationLinkRef MultiCommunicationManager::GetCommunicationLink( USHORT nNr )
+CommunicationLinkRef MultiCommunicationManager::GetCommunicationLink( sal_uInt16 nNr )
 {
     return ActiveLinks->GetObject( nNr );
 }
@@ -371,7 +371,7 @@ void MultiCommunicationManager::CallConnectionClosed( CommunicationLink* pCL )
 
     CommunicationManager::CallConnectionClosed( pCL );
 
-    USHORT nPos;
+    sal_uInt16 nPos;
     if ( ActiveLinks->Seek_Entry( pCL, &nPos ) )
     {
         InactiveLinks->C40_PTR_INSERT(CommunicationLink, pCL);  // Ohne Reference
@@ -382,13 +382,13 @@ void MultiCommunicationManager::CallConnectionClosed( CommunicationLink* pCL )
     bIsCommunicationRunning = ActiveLinks->Count() > 0;
 //  delete pCL;
 #if OSL_DEBUG_LEVEL > 1
-        rHold->bFlag = TRUE;
+        rHold->bFlag = sal_True;
 #endif
 }
 
 void MultiCommunicationManager::DestroyingLink( CommunicationLink *pCL )
 {
-    USHORT nPos;
+    sal_uInt16 nPos;
     if ( InactiveLinks->Seek_Entry( pCL, &nPos ) )
         InactiveLinks->Remove( nPos );
     pCL->InvalidateManager();
@@ -396,7 +396,7 @@ void MultiCommunicationManager::DestroyingLink( CommunicationLink *pCL )
 
 
 
-CommunicationManagerClient::CommunicationManagerClient( BOOL bUseMultiChannel )
+CommunicationManagerClient::CommunicationManagerClient( sal_Bool bUseMultiChannel )
 : MultiCommunicationManager( bUseMultiChannel )
 {
     ByteString aApplication("Something inside ");
@@ -406,7 +406,7 @@ CommunicationManagerClient::CommunicationManagerClient( BOOL bUseMultiChannel )
 
 
 
-CommunicationManagerServerViaSocket::CommunicationManagerServerViaSocket( ULONG nPort, USHORT nMaxCon, BOOL bUseMultiChannel )
+CommunicationManagerServerViaSocket::CommunicationManagerServerViaSocket( sal_uLong nPort, sal_uInt16 nMaxCon, sal_Bool bUseMultiChannel )
 : CommunicationManagerServer( bUseMultiChannel )
 , nPortToListen( nPort )
 , nMaxConnections( nMaxCon )
@@ -419,15 +419,15 @@ CommunicationManagerServerViaSocket::~CommunicationManagerServerViaSocket()
     StopCommunication();
 }
 
-BOOL CommunicationManagerServerViaSocket::StartCommunication()
+sal_Bool CommunicationManagerServerViaSocket::StartCommunication()
 {
     if ( !pAcceptThread )
         pAcceptThread = new CommunicationManagerServerAcceptThread( this, nPortToListen, nMaxConnections );
-    return TRUE;
+    return sal_True;
 }
 
 
-BOOL CommunicationManagerServerViaSocket::StopCommunication()
+sal_Bool CommunicationManagerServerViaSocket::StopCommunication()
 {
     // Erst den Acceptor anhalten
     delete pAcceptThread;
@@ -444,7 +444,7 @@ void CommunicationManagerServerViaSocket::AddConnection( CommunicationLink *pNew
 }
 
 
-CommunicationManagerServerAcceptThread::CommunicationManagerServerAcceptThread( CommunicationManagerServerViaSocket* pServer, ULONG nPort, USHORT nMaxCon )
+CommunicationManagerServerAcceptThread::CommunicationManagerServerAcceptThread( CommunicationManagerServerViaSocket* pServer, sal_uLong nPort, sal_uInt16 nMaxCon )
 : pMyServer( pServer )
 , pAcceptorSocket( NULL )
 , nPortToListen( nPort )
@@ -575,14 +575,14 @@ IMPL_LINK( CommunicationManagerServerAcceptThread, AddConnection, void*, EMPTYAR
     }
 
 
-CommunicationManagerClientViaSocket::CommunicationManagerClientViaSocket( ByteString aHost, ULONG nPort, BOOL bUseMultiChannel )
+CommunicationManagerClientViaSocket::CommunicationManagerClientViaSocket( ByteString aHost, sal_uLong nPort, sal_Bool bUseMultiChannel )
 : CommunicationManagerClient( bUseMultiChannel )
 , aHostToTalk( aHost )
 , nPortToTalk( nPort )
 {
 }
 
-CommunicationManagerClientViaSocket::CommunicationManagerClientViaSocket( BOOL bUseMultiChannel )
+CommunicationManagerClientViaSocket::CommunicationManagerClientViaSocket( sal_Bool bUseMultiChannel )
 : CommunicationManagerClient( bUseMultiChannel )
 , aHostToTalk( "" )
 , nPortToTalk( 0 )

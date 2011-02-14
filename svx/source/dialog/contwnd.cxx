@@ -53,9 +53,9 @@
 ContourWindow::ContourWindow( Window* pParent, const ResId& rResId ) :
             GraphCtrl       ( pParent, rResId ),
             aWorkRect       ( 0, 0, 0, 0 ),
-            bPipetteMode    ( FALSE ),
-            bWorkplaceMode  ( FALSE ),
-            bClickValid     ( FALSE )
+            bPipetteMode    ( sal_False ),
+            bWorkplaceMode  ( sal_False ),
+            bClickValid     ( sal_False )
 {
     SetWinStyle( WB_SDRMODE );
 }
@@ -81,7 +81,7 @@ ContourWindow::~ContourWindow()
 void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
 {
     SdrPage*        pPage = (SdrPage*) pModel->GetPage( 0 );
-    const USHORT    nPolyCount = rPolyPoly.Count();
+    const sal_uInt16    nPolyCount = rPolyPoly.Count();
 
     // zuerst alle Zeichenobjekte loeschen
     aPolyPoly = rPolyPoly;
@@ -93,7 +93,7 @@ void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
 
     pPage->Clear();
 
-    for ( USHORT i = 0; i < nPolyCount; i++ )
+    for ( sal_uInt16 i = 0; i < nPolyCount; i++ )
     {
         basegfx::B2DPolyPolygon aPolyPolygon;
         aPolyPolygon.append(aPolyPoly[ i ].getB2DPolygon());
@@ -169,7 +169,7 @@ void ContourWindow::InitSdrModel()
     aSet.Put( XFillColorItem( String(), TRANSCOL ) );
     aSet.Put( XFillTransparenceItem( 50 ) );
     pView->SetAttributes( aSet );
-    pView->SetFrameDragSingles( TRUE );
+    pView->SetFrameDragSingles( sal_True );
 }
 
 
@@ -192,10 +192,10 @@ void ContourWindow::SdrObjCreated( const SdrObject&  )
 |*
 \************************************************************************/
 
-BOOL ContourWindow::IsContourChanged() const
+sal_Bool ContourWindow::IsContourChanged() const
 {
     SdrPage*    pPage = (SdrPage*) pModel->GetPage( 0 );
-    BOOL        bRet = FALSE;
+    sal_Bool        bRet = sal_False;
 
     if ( pPage && pPage->GetObjCount() )
         bRet = ( (SdrPathObj*) pPage->GetObj( 0 ) )->GetPathPoly().count() && pModel->IsChanged();
@@ -219,7 +219,7 @@ void ContourWindow::MouseButtonDown( const MouseEvent& rMEvt )
         SetPolyPolygon( PolyPolygon() );
         aWorkRect = Rectangle( aLogPt, aLogPt );
         Paint( Rectangle( Point(), GetGraphicSize() ) );
-        SetEditMode( TRUE );
+        SetEditMode( sal_True );
     }
 
     if ( !bPipetteMode )
@@ -235,7 +235,7 @@ void ContourWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 void ContourWindow::MouseMove( const MouseEvent& rMEvt )
 {
-    bClickValid = FALSE;
+    bClickValid = sal_False;
 
     if ( bPipetteMode )
     {

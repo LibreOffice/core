@@ -114,8 +114,8 @@ void PaneDockingWindow::SetValidSizeRange (const Range aValidSizeRange)
     SplitWindow* pSplitWindow = dynamic_cast<SplitWindow*>(GetParent());
     if (pSplitWindow != NULL)
     {
-        const USHORT nId (pSplitWindow->GetItemId(static_cast< ::Window*>(this)));
-        const USHORT nSetId (pSplitWindow->GetSet(nId));
+        const sal_uInt16 nId (pSplitWindow->GetItemId(static_cast< ::Window*>(this)));
+        const sal_uInt16 nSetId (pSplitWindow->GetSet(nId));
         // Because the PaneDockingWindow paints its own decoration, we have
         // to compensate the valid size range for that.
         const SvBorder aBorder (GetDecorationBorder());

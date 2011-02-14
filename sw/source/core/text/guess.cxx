@@ -78,13 +78,13 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
     ASSERT( nPorHeight, "+SwTxtGuess::Guess: no height" );
 
-    USHORT nMinSize;
-    USHORT nMaxSizeDiff;
+    sal_uInt16 nMinSize;
+    sal_uInt16 nMaxSizeDiff;
 
     const SwScriptInfo& rSI =
             ((SwParaPortion*)rInf.GetParaPortion())->GetScriptInfo();
 
-    USHORT nMaxComp = ( SW_CJK == rInf.GetFont()->GetActual() ) &&
+    sal_uInt16 nMaxComp = ( SW_CJK == rInf.GetFont()->GetActual() ) &&
                         rSI.CountCompChg() &&
                         ! rInf.IsMulti() &&
                         ! rPor.InFldGrp() &&
@@ -150,7 +150,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
             // save maximum width for later use
             if ( nMaxSizeDiff )
-                rInf.SetMaxWidthDiff( (ULONG)&rPor, nMaxSizeDiff );
+                rInf.SetMaxWidthDiff( (sal_uLong)&rPor, nMaxSizeDiff );
 
             return sal_True;
         }
@@ -201,7 +201,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
             // save maximum width for later use
             if ( nMaxSizeDiff )
-                rInf.SetMaxWidthDiff( (ULONG)&rPor, nMaxSizeDiff );
+                rInf.SetMaxWidthDiff( (sal_uLong)&rPor, nMaxSizeDiff );
 
             return sal_True;
         }
@@ -327,7 +327,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             // we have to check the script type of the last "real" character
             if ( nLangIndex < rInf.GetIdx() )
             {
-                USHORT nScript = pBreakIt->GetRealScriptOfText( rInf.GetTxt(),
+                sal_uInt16 nScript = pBreakIt->GetRealScriptOfText( rInf.GetTxt(),
                                                                 nLangIndex );
                 ASSERT( nScript, "Script is not between 1 and 4" );
 
@@ -394,10 +394,10 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             // e.g., Schiff-fahrt, referes to the word after hyphenation
             const String aHyphenatedWord = xHyphWord->getHyphenatedWord();
             // e.g., Schif-fahrt: 5, referes to our string
-            const USHORT nHyphenationPos = xHyphWord->getHyphenationPos();
+            const sal_uInt16 nHyphenationPos = xHyphWord->getHyphenationPos();
             (void)nHyphenationPos;
             // e.g., Schiff-fahrt: 6, referes to the word after hyphenation
-            const USHORT nHyphenPos = xHyphWord->getHyphenPos();
+            const sal_uInt16 nHyphenPos = xHyphWord->getHyphenPos();
             (void)nHyphenPos;
 #endif
 
@@ -504,7 +504,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         // save maximum width for later use
         if ( nMaxSizeDiff )
-            rInf.SetMaxWidthDiff( (ULONG)&rPor, nMaxSizeDiff );
+            rInf.SetMaxWidthDiff( (sal_uLong)&rPor, nMaxSizeDiff );
 
         nBreakWidth = nItalic + nMinSize;
     }

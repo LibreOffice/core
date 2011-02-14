@@ -98,11 +98,11 @@ private:
                                 FieldString& rText,
                                 bool bFocus );
 
-    /** @return  TRUE, if the field index is inside of the control area. */
+    /** @return  sal_True, if the field index is inside of the control area. */
     bool                    IsValidIndex( size_t nIndex ) const;
-    /** @return  TRUE, if the field with the given index exists. */
+    /** @return  sal_True, if the field with the given index exists. */
     bool                    IsExistingIndex( size_t nIndex ) const;
-    /** @return  TRUE, if the field with the given index exists and the text is
+    /** @return  sal_True, if the field with the given index exists and the text is
                     too long for the button control. */
     bool                    IsShortenedText( size_t nIndex ) const;
     /** @return  The new selection index after moving to the given direction. */
@@ -115,7 +115,7 @@ private:
     /** Sets selection to last field. */
     void                    SetSelectionEnd();
     /** Sets selection to new position relative to current. */
-    void                    MoveSelection( USHORT nKeyCode, SCsCOL nDX, SCsROW nDY );
+    void                    MoveSelection( sal_uInt16 nKeyCode, SCsCOL nDX, SCsROW nDY );
 
     /** Moves the selected field to nDestIndex. */
     void                    MoveField( size_t nDestIndex );
@@ -183,16 +183,16 @@ public:
     /** Inserts a field using the specified pixel position.
         @param rPos  The coordinates to insert the field.
         @param rnIndex  The new index of the field is returned here.
-        @return  TRUE, if the field has been created. */
+        @return  sal_True, if the field has been created. */
     bool                    AddField( const String& rText, const Point& rPos, size_t& rnIndex );
     /** Calculates the field index at a specific pixel position.
         @param rnIndex  The index of the field is returned here.
-        @return  TRUE, if the index value is valid. */
+        @return  sal_True, if the index value is valid. */
     bool                    GetFieldIndex( const Point& rPos, size_t& rnIndex ) const;
     /** Calculates a field index at a specific pixel position. Returns in every
         case the index of an existing field.
         @param rnIndex  The index of the field is returned here.
-        @return  TRUE, if the index value is valid. */
+        @return  sal_True, if the index value is valid. */
     void                    GetExistingIndex( const Point& rPos, size_t& rnIndex );
 
     /** Notifies this control that the offset of the first field has been changed.

@@ -262,17 +262,17 @@ protected:
 public:
 
     ScXMLDocContext_Impl( ScXMLImport& rImport,
-        USHORT nPrfx,
+        sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference<xml::sax::XAttributeList>& xAttrList );
     virtual ~ScXMLDocContext_Impl();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
         const rtl::OUString& rLocalName,
         const uno::Reference<xml::sax::XAttributeList>& xAttrList );
 };
 
-ScXMLDocContext_Impl::ScXMLDocContext_Impl( ScXMLImport& rImport, USHORT nPrfx,
+ScXMLDocContext_Impl::ScXMLDocContext_Impl( ScXMLImport& rImport, sal_uInt16 nPrfx,
                                            const OUString& rLName,
                                            const uno::Reference<xml::sax::XAttributeList>& /* xAttrList */ ) :
 SvXMLImportContext( rImport, nPrfx, rLName )
@@ -290,7 +290,7 @@ class ScXMLFlatDocContext_Impl
 {
 public:
     ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
-        USHORT i_nPrefix, const OUString & i_rLName,
+        sal_uInt16 i_nPrefix, const OUString & i_rLName,
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
         const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder);
@@ -298,12 +298,12 @@ public:
     virtual ~ScXMLFlatDocContext_Impl();
 
     virtual SvXMLImportContext *CreateChildContext(
-        USHORT i_nPrefix, const OUString& i_rLocalName,
+        sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList);
 };
 
 ScXMLFlatDocContext_Impl::ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
-                                                   USHORT i_nPrefix, const OUString & i_rLName,
+                                                   sal_uInt16 i_nPrefix, const OUString & i_rLName,
                                                    const uno::Reference<xml::sax::XAttributeList>& i_xAttrList,
                                                    const uno::Reference<document::XDocumentProperties>& i_xDocProps,
                                                    const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder) :
@@ -318,7 +318,7 @@ ScXMLFlatDocContext_Impl::~ScXMLFlatDocContext_Impl() { }
 
 
 SvXMLImportContext *ScXMLFlatDocContext_Impl::CreateChildContext(
-    USHORT i_nPrefix, const OUString& i_rLocalName,
+    sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
 {
     // behave like meta base class iff we encounter office:meta
@@ -369,7 +369,7 @@ SvXMLImportContext *ScXMLBodyContext_Impl::CreateChildContext(
     return GetScImport().CreateBodyContext( rLocalName, xAttrList );
 }
 
-SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPrefix,
                                                              const rtl::OUString& rLocalName,
                                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
@@ -1599,7 +1599,7 @@ const SvXMLTokenMap& ScXMLImport::GetConsolidationAttrTokenMap()
 }
 
 
-SvXMLImportContext *ScXMLImport::CreateContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLImport::CreateContext( sal_uInt16 nPrefix,
                                                const OUString& rLocalName,
                                                const uno::Reference<xml::sax::XAttributeList>& xAttrList )
 {
@@ -1864,7 +1864,7 @@ ScXMLImport::~ScXMLImport() throw()
 
 // ---------------------------------------------------------------------
 
-SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const USHORT nPrefix, const ::rtl::OUString& rLocalName,
+SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
                                                         const uno::Reference<xml::sax::XAttributeList>& xAttrList)
 {
     SvXMLImportContext *pContext = NULL;
@@ -2067,7 +2067,7 @@ void ScXMLImport::ExamineDefaultStyle()
                     aDecSep = aLocaleData.getNumDecimalSep();
                 }
 
-                BYTE nScript = pDoc->GetStringScriptType( aDecSep );
+                sal_uInt8 nScript = pDoc->GetStringScriptType( aDecSep );
                 if ( nScript == 0 || nScript == SCRIPTTYPE_LATIN )
                     bLatinDefaultStyle = sal_True;
             }
@@ -2848,7 +2848,7 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
             SCTAB nTabCount = pDoc->GetTableCount();
             for (SCTAB nTab=0; nTab<nTabCount; ++nTab)
                 if (!pSheetData->IsSheetBlocked( nTab ))
-                    pDoc->SetStreamValid( nTab, TRUE );
+                    pDoc->SetStreamValid( nTab, sal_True );
         }
 
         aTables.UpdateRowHeights();

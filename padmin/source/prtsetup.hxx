@@ -147,10 +147,10 @@ public:
 
     void update();
 
-    ULONG getLevel();
-    ULONG getPDFDevice();
-    ULONG getDepth() { return m_aDepthBox.GetSelectEntry().ToInt32(); }
-    ULONG getColorDevice()
+    sal_uLong getLevel();
+    sal_uLong getPDFDevice();
+    sal_uLong getDepth() { return m_aDepthBox.GetSelectEntry().ToInt32(); }
+    sal_uLong getColorDevice()
     {
         String aSpace( m_aSpaceBox.GetSelectEntry() );
         return aSpace == m_aSpaceColor ? 1 : ( aSpace == m_aSpaceGray ? -1 : 0 );

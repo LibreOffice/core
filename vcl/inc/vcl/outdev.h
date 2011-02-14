@@ -47,14 +47,14 @@ class GetDevSizeList;
 // -----------------------
 
 // flags for mnMatchType member
-#define IMPL_DEVFONT_SCALABLE       ((ULONG)0x00000001)
-#define IMPL_DEVFONT_SYMBOL         ((ULONG)0x00000002)
-#define IMPL_DEVFONT_NONESYMBOL     ((ULONG)0x00000004)
-#define IMPL_DEVFONT_LIGHT          ((ULONG)0x00000010)
-#define IMPL_DEVFONT_BOLD           ((ULONG)0x00000020)
-#define IMPL_DEVFONT_NORMAL         ((ULONG)0x00000040)
-#define IMPL_DEVFONT_NONEITALIC     ((ULONG)0x00000100)
-#define IMPL_DEVFONT_ITALIC         ((ULONG)0x00000200)
+#define IMPL_DEVFONT_SCALABLE       ((sal_uIntPtr)0x00000001)
+#define IMPL_DEVFONT_SYMBOL         ((sal_uIntPtr)0x00000002)
+#define IMPL_DEVFONT_NONESYMBOL     ((sal_uIntPtr)0x00000004)
+#define IMPL_DEVFONT_LIGHT          ((sal_uIntPtr)0x00000010)
+#define IMPL_DEVFONT_BOLD           ((sal_uIntPtr)0x00000020)
+#define IMPL_DEVFONT_NORMAL         ((sal_uIntPtr)0x00000040)
+#define IMPL_DEVFONT_NONEITALIC     ((sal_uIntPtr)0x00000100)
+#define IMPL_DEVFONT_ITALIC         ((sal_uIntPtr)0x00000200)
 
 // TODO: rename ImplDevFontListData to PhysicalFontFamily
 class ImplDevFontListData
@@ -85,8 +85,8 @@ friend class ImplDevFontList; // TODO: remove soon
     String              maName;             // Fontname (original font family name)
     String              maSearchName;       // normalized font family name
     String              maMapNames;         // fontname aliases
-    ULONG               mnTypeFaces;        // Typeface Flags
-    ULONG               mnMatchType;        // MATCH - Type
+    sal_uIntPtr               mnTypeFaces;        // Typeface Flags
+    sal_uIntPtr               mnMatchType;        // MATCH - Type
     String              maMatchFamilyName;  // MATCH - FamilyName
     FontWeight          meMatchWeight;      // MATCH - Weight
     FontWidth           meMatchWidth;       // MATCH - Width
@@ -161,9 +161,9 @@ struct ImplFontSubstEntry
     String                  maReplaceName;
     String                  maSearchName;
     String                  maSearchReplaceName;
-    USHORT                  mnFlags;
+    sal_uInt16                  mnFlags;
 
-    ImplFontSubstEntry(  const String& rFontName, const String& rSubstFontName, USHORT nSubstFlags );
+    ImplFontSubstEntry(  const String& rFontName, const String& rSubstFontName, sal_uInt16 nSubstFlags );
 };
 
 class ImplDirectFontSubstitution
@@ -173,14 +173,14 @@ private:
     typedef std::list<ImplFontSubstEntry> FontSubstList;
     FontSubstList maFontSubstList;
 public:
-    void    AddFontSubstitute( const String& rFontName, const String& rSubstName, USHORT nFlags );
+    void    AddFontSubstitute( const String& rFontName, const String& rSubstName, sal_uInt16 nFlags );
     void    RemoveFontSubstitute( int nIndex );
-    bool    GetFontSubstitute( int nIndex, String& rFontName, String& rSubstName, USHORT& rFlags ) const;
+    bool    GetFontSubstitute( int nIndex, String& rFontName, String& rSubstName, sal_uInt16& rFlags ) const;
     int     GetFontSubstituteCount() const { return maFontSubstList.size(); };
     bool    Empty() const { return maFontSubstList.empty(); }
     void    Clear() { maFontSubstList.clear(); }
 
-    bool    FindFontSubstitute( String& rSubstName, const String& rFontName, USHORT nFlags ) const;
+    bool    FindFontSubstitute( String& rSubstName, const String& rFontName, sal_uInt16 nFlags ) const;
 };
 
 // PreMatchFontSubstitution

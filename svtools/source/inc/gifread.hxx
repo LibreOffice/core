@@ -88,41 +88,41 @@ class GIFReader : public GraphicReader
     long                nLastPos;
     sal_uInt32          nLogWidth100;
     sal_uInt32          nLogHeight100;
-    USHORT              nTimer;
-    USHORT              nGlobalWidth;           // maximale Bildbreite aus Header
-    USHORT              nGlobalHeight;          // maximale Bildhoehe aus Header
-    USHORT              nImageWidth;            // maximale Bildbreite aus Header
-    USHORT              nImageHeight;           // maximale Bildhoehe aus Header
-    USHORT              nImagePosX;
-    USHORT              nImagePosY;
-    USHORT              nImageX;                // maximale Bildbreite aus Header
-    USHORT              nImageY;                // maximale Bildhoehe aus Header
-    USHORT              nLastImageY;
-    USHORT              nLastInterCount;
-    USHORT              nLoops;
+    sal_uInt16              nTimer;
+    sal_uInt16              nGlobalWidth;           // maximale Bildbreite aus Header
+    sal_uInt16              nGlobalHeight;          // maximale Bildhoehe aus Header
+    sal_uInt16              nImageWidth;            // maximale Bildbreite aus Header
+    sal_uInt16              nImageHeight;           // maximale Bildhoehe aus Header
+    sal_uInt16              nImagePosX;
+    sal_uInt16              nImagePosY;
+    sal_uInt16              nImageX;                // maximale Bildbreite aus Header
+    sal_uInt16              nImageY;                // maximale Bildhoehe aus Header
+    sal_uInt16              nLastImageY;
+    sal_uInt16              nLastInterCount;
+    sal_uInt16              nLoops;
     GIFAction           eActAction;
-    BOOL                bStatus;
-    BOOL                bGCTransparent;         // Ob das Bild Transparent ist, wenn ja:
-    BOOL                bInterlaced;
-    BOOL                bOverreadBlock;
-    BOOL                bImGraphicReady;
-    BOOL                bGlobalPalette;
-    BYTE                nBackgroundColor;       // Hintergrundfarbe
-    BYTE                nGCTransparentIndex;    // Pixel von diesem Index sind durchsichtig
-    BYTE                nGCDisposalMethod;      // 'Disposal Method' (siehe GIF-Doku)
-    BYTE                cTransIndex1;
-    BYTE                cNonTransIndex1;
+    sal_Bool                bStatus;
+    sal_Bool                bGCTransparent;         // Ob das Bild Transparent ist, wenn ja:
+    sal_Bool                bInterlaced;
+    sal_Bool                bOverreadBlock;
+    sal_Bool                bImGraphicReady;
+    sal_Bool                bGlobalPalette;
+    sal_uInt8               nBackgroundColor;       // Hintergrundfarbe
+    sal_uInt8               nGCTransparentIndex;    // Pixel von diesem Index sind durchsichtig
+    sal_uInt8               nGCDisposalMethod;      // 'Disposal Method' (siehe GIF-Doku)
+    sal_uInt8               cTransIndex1;
+    sal_uInt8               cNonTransIndex1;
 
-    void                ReadPaletteEntries( BitmapPalette* pPal, ULONG nCount );
+    void                ReadPaletteEntries( BitmapPalette* pPal, sal_uLong nCount );
     void                ClearImageExtensions();
-    BOOL                CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal, BOOL bWatchForBackgroundColor );
-    BOOL                ReadGlobalHeader();
-    BOOL                ReadExtension();
-    BOOL                ReadLocalHeader();
-    ULONG               ReadNextBlock();
-    void                FillImages( HPBYTE pBytes, ULONG nCount );
+    sal_Bool                CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPal, sal_Bool bWatchForBackgroundColor );
+    sal_Bool                ReadGlobalHeader();
+    sal_Bool                ReadExtension();
+    sal_Bool                ReadLocalHeader();
+    sal_uLong               ReadNextBlock();
+    void                FillImages( HPBYTE pBytes, sal_uLong nCount );
     void                CreateNewBitmaps();
-    BOOL                ProcessGIF();
+    sal_Bool                ProcessGIF();
 
 public:
 
@@ -139,6 +139,6 @@ public:
 // - ImportGIF -
 // -------------
 
- BOOL ImportGIF( SvStream& rStream, Graphic& rGraphic );
+ sal_Bool ImportGIF( SvStream& rStream, Graphic& rGraphic );
 
 #endif // _GIFREAD_HXX

@@ -65,7 +65,7 @@ namespace accessibility
     ::rtl::OUString AccessibleBrowseBoxTableCell::implGetText()
     {
         ensureIsAlive();
-        return mpBrowseBox->GetAccessibleCellText( getRowPos(), static_cast< USHORT >( getColumnPos() ) );
+        return mpBrowseBox->GetAccessibleCellText( getRowPos(), static_cast< sal_uInt16 >( getColumnPos() ) );
     }
 
     ::com::sun::star::lang::Locale AccessibleBrowseBoxTableCell::implGetLocale()

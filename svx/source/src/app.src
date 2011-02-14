@@ -29,6 +29,10 @@
 #include "app.hrc"
 
  //----------------------------------------------------------------------------
+String RID_APPTITLE
+{
+    Text = "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION" ;
+};
 
 #define MASKCOLOR       MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
 

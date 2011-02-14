@@ -112,37 +112,37 @@ public:
 
 class SW_DLLPUBLIC SwDateTimeField : public SwValueField
 {
-        USHORT              nSubType;
+        sal_uInt16              nSubType;
         long                nOffset;    // Offset in Minuten
 
         virtual String      Expand() const;
         virtual SwField*    Copy() const;
 
 public:
-        SwDateTimeField(SwDateTimeFieldType* pType, USHORT nSubType = DATEFLD,
-                    ULONG nFmt = 0, USHORT nLng = 0);
+        SwDateTimeField(SwDateTimeFieldType* pType, sal_uInt16 nSubType = DATEFLD,
+                    sal_uLong nFmt = 0, sal_uInt16 nLng = 0);
 
-        virtual USHORT          GetSubType() const;
-        virtual void            SetSubType(USHORT nSub);
+        virtual sal_uInt16          GetSubType() const;
+        virtual void            SetSubType(sal_uInt16 nSub);
 
         virtual double          GetValue() const;
 
         virtual void            SetPar2(const String& rStr);
         virtual String          GetPar2() const;
 
-        inline BOOL             IsDate() const
+        inline sal_Bool             IsDate() const
                                 { return (nSubType & DATEFLD) != 0; }
 
         inline void             SetOffset(long nMinutes)    { nOffset = nMinutes; }
         inline long             GetOffset() const           { return nOffset; }
 
-        Date                    GetDate(BOOL bUseOffset = FALSE) const;
-        Time                    GetTime(BOOL bUseOffset = FALSE) const;
+        Date                    GetDate(sal_Bool bUseOffset = sal_False) const;
+        Time                    GetTime(sal_Bool bUseOffset = sal_False) const;
         void                    SetDateTime(const DateTime& rDT);
         static double           GetDateTime(SwDoc* pDoc, const DateTime& rDT);
 
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nMId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nMId );
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nMId );
 };
 
 #endif // SW_FLDDAT_HXX

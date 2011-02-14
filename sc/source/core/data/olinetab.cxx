@@ -49,7 +49,7 @@ ScOutlineEntry::ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize, bool bNew
     nStart  ( nNewStart ),
     nSize   ( nNewSize ),
     bHidden ( bNewHidden ),
-    bVisible( TRUE )
+    bVisible( sal_True )
 {
 }
 
@@ -107,7 +107,7 @@ void ScOutlineEntry::SetVisible( bool bNewVisible )
 //------------------------------------------------------------------------
 
 ScOutlineCollection::ScOutlineCollection() :
-    ScSortedCollection( 4,4,FALSE )
+    ScSortedCollection( 4,4,sal_False )
 {
 }
 
@@ -124,13 +124,13 @@ short ScOutlineCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) con
                         ((ScOutlineEntry*)pKey2)->GetStart() );
 }
 
-USHORT ScOutlineCollection::FindStart( SCCOLROW nMinStart )
+sal_uInt16 ScOutlineCollection::FindStart( SCCOLROW nMinStart )
 {
     //!                 binaer suchen ?
 
-    USHORT nPos = 0;
-    USHORT nLocalCount = GetCount();
-    while ( (nPos<nLocalCount) ? (((ScOutlineEntry*)At(nPos))->GetStart() < nMinStart) : FALSE )
+    sal_uInt16 nPos = 0;
+    sal_uInt16 nLocalCount = GetCount();
+    while ( (nPos<nLocalCount) ? (((ScOutlineEntry*)At(nPos))->GetStart() < nMinStart) : sal_False )
         ++nPos;
 
     return nPos;
@@ -146,10 +146,10 @@ ScOutlineArray::ScOutlineArray() :
 ScOutlineArray::ScOutlineArray( const ScOutlineArray& rArray ) :
     nDepth( rArray.nDepth )
 {
-    for (USHORT nLevel=0; nLevel<nDepth; nLevel++)
+    for (sal_uInt16 nLevel=0; nLevel<nDepth; nLevel++)
     {
-        USHORT nCount = rArray.aCollections[nLevel].GetCount();
-        for (USHORT nEntry=0; nEntry<nCount; nEntry++)
+        sal_uInt16 nCount = rArray.aCollections[nLevel].GetCount();
+        for (sal_uInt16 nEntry=0; nEntry<nCount; nEntry++)
         {
             ScOutlineEntry* pEntry = (ScOutlineEntry*) rArray.aCollections[nLevel].At(nEntry);
             aCollections[nLevel].Insert( new ScOutlineEntry( *pEntry ) );
@@ -157,19 +157,19 @@ ScOutlineArray::ScOutlineArray( const ScOutlineArray& rArray ) :
     }
 }
 
-void ScOutlineArray::FindEntry( SCCOLROW nSearchPos, USHORT& rFindLevel, USHORT& rFindIndex,
-                                USHORT nMaxLevel )
+void ScOutlineArray::FindEntry( SCCOLROW nSearchPos, sal_uInt16& rFindLevel, sal_uInt16& rFindIndex,
+                                sal_uInt16 nMaxLevel )
 {
     rFindLevel = rFindIndex = 0;
 
     if (nMaxLevel > nDepth)
         nMaxLevel = nDepth;
 
-    for (USHORT nLevel=0; nLevel<nMaxLevel; nLevel++)               //! rueckwaerts suchen ?
+    for (sal_uInt16 nLevel=0; nLevel<nMaxLevel; nLevel++)               //! rueckwaerts suchen ?
     {
         ScOutlineCollection* pCollect = &aCollections[nLevel];
-        USHORT nCount = pCollect->GetCount();
-        for (USHORT i=0; i<nCount; i++)
+        sal_uInt16 nCount = pCollect->GetCount();
+        for (sal_uInt16 i=0; i<nCount; i++)
         {
             ScOutlineEntry* pEntry = (ScOutlineEntry*) pCollect->At(i);
             if ( pEntry->GetStart() <= nSearchPos && pEntry->GetEnd() >= nSearchPos )
@@ -181,28 +181,28 @@ void ScOutlineArray::FindEntry( SCCOLROW nSearchPos, USHORT& rFindLevel, USHORT&
     }
 }
 
-BOOL ScOutlineArray::Insert( SCCOLROW nStartCol, SCCOLROW nEndCol, BOOL& rSizeChanged,
-                                BOOL bHidden, BOOL bVisible )
+sal_Bool ScOutlineArray::Insert( SCCOLROW nStartCol, SCCOLROW nEndCol, sal_Bool& rSizeChanged,
+                                sal_Bool bHidden, sal_Bool bVisible )
 {
-    rSizeChanged = FALSE;
+    rSizeChanged = sal_False;
 
-    USHORT nStartLevel;
-    USHORT nStartIndex;
-    USHORT nEndLevel;
-    USHORT nEndIndex;
-    BOOL bFound = FALSE;
+    sal_uInt16 nStartLevel;
+    sal_uInt16 nStartIndex;
+    sal_uInt16 nEndLevel;
+    sal_uInt16 nEndIndex;
+    sal_Bool bFound = sal_False;
 
-    BOOL bCont;
-    USHORT nFindMax;
+    sal_Bool bCont;
+    sal_uInt16 nFindMax;
     FindEntry( nStartCol, nStartLevel, nStartIndex );       // nLevel = neuer Level (alter+1) !!!
     FindEntry( nEndCol, nEndLevel, nEndIndex );
     nFindMax = Max(nStartLevel,nEndLevel);
     do
     {
-        bCont = FALSE;
+        bCont = sal_False;
 
         if ( nStartLevel == nEndLevel && nStartIndex == nEndIndex && nStartLevel < SC_OL_MAXDEPTH )
-            bFound = TRUE;
+            bFound = sal_True;
 
         if (!bFound)
         {
@@ -217,25 +217,25 @@ BOOL ScOutlineArray::Insert( SCCOLROW nStartCol, SCCOLROW nEndCol, BOOL& rSizeCh
                     if ( ((ScOutlineEntry*)aCollections[nEndLevel-1].At(nEndIndex))->
                                 GetEnd() == nEndCol )
                         FindEntry( nEndCol, nEndLevel, nEndIndex, nFindMax );
-                bCont = TRUE;
+                bCont = sal_True;
             }
         }
     }
     while ( !bFound && bCont );
 
     if (!bFound)
-        return FALSE;
+        return sal_False;
 
-    USHORT nLevel = nStartLevel;
+    sal_uInt16 nLevel = nStartLevel;
 
     //  untere verschieben
 
-    BOOL bNeedSize = FALSE;
+    sal_Bool bNeedSize = sal_False;
     for ( short nMoveLevel = nDepth-1; nMoveLevel >= (short) nLevel; nMoveLevel-- )
     {
-        USHORT nCount = aCollections[nMoveLevel].GetCount();
-        BOOL bMoved = FALSE;
-        for ( USHORT i=0; i<nCount; i += bMoved ? 0 : 1 )
+        sal_uInt16 nCount = aCollections[nMoveLevel].GetCount();
+        sal_Bool bMoved = sal_False;
+        for ( sal_uInt16 i=0; i<nCount; i += bMoved ? 0 : 1 )
         {
             ScOutlineEntry* pEntry = (ScOutlineEntry*) aCollections[nMoveLevel].At(i);
             SCCOLROW nEntryStart = pEntry->GetStart();
@@ -243,40 +243,40 @@ BOOL ScOutlineArray::Insert( SCCOLROW nStartCol, SCCOLROW nEndCol, BOOL& rSizeCh
             {
                 if (nMoveLevel >= SC_OL_MAXDEPTH - 1)
                 {
-                    rSizeChanged = FALSE;               // kein Platz
-                    return FALSE;
+                    rSizeChanged = sal_False;               // kein Platz
+                    return sal_False;
                 }
                 aCollections[nMoveLevel+1].Insert( new ScOutlineEntry( *pEntry ) );
                 aCollections[nMoveLevel].AtFree( i );
                 nCount = aCollections[nMoveLevel].GetCount();
-                bMoved = TRUE;
+                bMoved = sal_True;
                 if (nMoveLevel == (short) nDepth - 1)
-                    bNeedSize = TRUE;
+                    bNeedSize = sal_True;
             }
             else
-                bMoved = FALSE;
+                bMoved = sal_False;
         }
     }
 
     if (bNeedSize)
     {
         ++nDepth;
-        rSizeChanged = TRUE;
+        rSizeChanged = sal_True;
     }
 
     if (nDepth <= nLevel)
     {
         nDepth = nLevel+1;
-        rSizeChanged = TRUE;
+        rSizeChanged = sal_True;
     }
 
 /*          nicht zusammenfassen!
 
     //  zusammenfassen
 
-    USHORT nCount = aCollections[nLevel].GetCount();
-    USHORT nIndex;
-    bFound = FALSE;
+    sal_uInt16 nCount = aCollections[nLevel].GetCount();
+    sal_uInt16 nIndex;
+    bFound = sal_False;
     for ( nIndex=0; nIndex<nCount && !bFound; nIndex++ )
     {
         if ( ((ScOutlineEntry*) aCollections[nLevel].At(nIndex))->GetEnd() + 1 == nStartCol )
@@ -284,18 +284,18 @@ BOOL ScOutlineArray::Insert( SCCOLROW nStartCol, SCCOLROW nEndCol, BOOL& rSizeCh
             nStartCol = ((ScOutlineEntry*) aCollections[nLevel].At(nIndex))->GetStart();
             aCollections[nLevel].AtFree(nIndex);
             nCount = aCollections[nLevel].GetCount();       // Daten geaendert
-            bFound = TRUE;
+            bFound = sal_True;
         }
     }
 
-    bFound = FALSE;
+    bFound = sal_False;
     for ( nIndex=0; nIndex<nCount && !bFound; nIndex++ )
     {
         if ( ((ScOutlineEntry*) aCollections[nLevel].At(nIndex))->GetStart() == nEndCol + 1 )
         {
             nEndCol = ((ScOutlineEntry*) aCollections[nLevel].At(nIndex))->GetEnd();
             aCollections[nLevel].AtFree(nIndex);
-            bFound = TRUE;
+            bFound = sal_True;
         }
     }
 */
@@ -303,19 +303,19 @@ BOOL ScOutlineArray::Insert( SCCOLROW nStartCol, SCCOLROW nEndCol, BOOL& rSizeCh
     pNewEntry->SetVisible( bVisible );
     aCollections[nLevel].Insert( pNewEntry );
 
-    return TRUE;
+    return sal_True;
 }
 
-BOOL ScOutlineArray::FindTouchedLevel( SCCOLROW nBlockStart, SCCOLROW nBlockEnd, USHORT& rFindLevel ) const
+sal_Bool ScOutlineArray::FindTouchedLevel( SCCOLROW nBlockStart, SCCOLROW nBlockEnd, sal_uInt16& rFindLevel ) const
 {
-    BOOL bFound = FALSE;
+    sal_Bool bFound = sal_False;
     rFindLevel = 0;
 
-    for (USHORT nLevel=0; nLevel<nDepth; nLevel++)
+    for (sal_uInt16 nLevel=0; nLevel<nDepth; nLevel++)
     {
         const ScOutlineCollection* pCollect = &aCollections[nLevel];
-        USHORT nCount = pCollect->GetCount();
-        for (USHORT i=0; i<nCount; i++)
+        sal_uInt16 nCount = pCollect->GetCount();
+        for (sal_uInt16 i=0; i<nCount; i++)
         {
             ScOutlineEntry* pEntry = (ScOutlineEntry*) pCollect->At(i);
             SCCOLROW nStart = pEntry->GetStart();
@@ -325,7 +325,7 @@ BOOL ScOutlineArray::FindTouchedLevel( SCCOLROW nBlockStart, SCCOLROW nBlockEnd,
                  ( nBlockEnd  >=nStart && nBlockEnd  <=nEnd ) )
             {
                 rFindLevel = nLevel;            // wirklicher Level
-                bFound = TRUE;
+                bFound = sal_True;
             }
         }
     }
@@ -333,16 +333,16 @@ BOOL ScOutlineArray::FindTouchedLevel( SCCOLROW nBlockStart, SCCOLROW nBlockEnd,
     return bFound;
 }
 
-void ScOutlineArray::RemoveSub( SCCOLROW nStartPos, SCCOLROW nEndPos, USHORT nLevel )
+void ScOutlineArray::RemoveSub( SCCOLROW nStartPos, SCCOLROW nEndPos, sal_uInt16 nLevel )
 {
     if ( nLevel >= nDepth )
         return;
     ScOutlineCollection* pCollect = &aCollections[nLevel];
-    USHORT nCount = pCollect->GetCount();
-    BOOL bFound = FALSE;
-    for ( USHORT i=0; i<nCount; i += ( bFound ? 0 : 1 ) )
+    sal_uInt16 nCount = pCollect->GetCount();
+    sal_Bool bFound = sal_False;
+    for ( sal_uInt16 i=0; i<nCount; i += ( bFound ? 0 : 1 ) )
     {
-        bFound = FALSE;
+        bFound = sal_False;
         ScOutlineEntry* pEntry = (ScOutlineEntry*) pCollect->At(i);
         SCCOLROW nStart = pEntry->GetStart();
         SCCOLROW nEnd   = pEntry->GetEnd();
@@ -352,12 +352,12 @@ void ScOutlineArray::RemoveSub( SCCOLROW nStartPos, SCCOLROW nEndPos, USHORT nLe
             RemoveSub( nStart, nEnd, nLevel+1 );
             pCollect->AtFree(i);
             nCount = pCollect->GetCount();
-            bFound = TRUE;
+            bFound = sal_True;
         }
     }
 }
 
-void ScOutlineArray::PromoteSub( SCCOLROW nStartPos, SCCOLROW nEndPos, USHORT nStartLevel )
+void ScOutlineArray::PromoteSub( SCCOLROW nStartPos, SCCOLROW nEndPos, sal_uInt16 nStartLevel )
 {
     if (nStartLevel==0)
     {
@@ -365,14 +365,14 @@ void ScOutlineArray::PromoteSub( SCCOLROW nStartPos, SCCOLROW nEndPos, USHORT nS
         return;
     }
 
-    for (USHORT nLevel = nStartLevel; nLevel < nDepth; nLevel++)
+    for (sal_uInt16 nLevel = nStartLevel; nLevel < nDepth; nLevel++)
     {
         ScOutlineCollection* pCollect = &aCollections[nLevel];
-        USHORT nCount = pCollect->GetCount();
-        BOOL bFound = FALSE;
-        for ( USHORT i=0; i<nCount; i += ( bFound ? 0 : 1 ) )
+        sal_uInt16 nCount = pCollect->GetCount();
+        sal_Bool bFound = sal_False;
+        for ( sal_uInt16 i=0; i<nCount; i += ( bFound ? 0 : 1 ) )
         {
-            bFound = FALSE;
+            bFound = sal_False;
             ScOutlineEntry* pEntry = (ScOutlineEntry*) pCollect->At(i);
             SCCOLROW nStart = pEntry->GetStart();
             SCCOLROW nEnd   = pEntry->GetEnd();
@@ -382,43 +382,43 @@ void ScOutlineArray::PromoteSub( SCCOLROW nStartPos, SCCOLROW nEndPos, USHORT nS
                 aCollections[nLevel-1].Insert( new ScOutlineEntry( *pEntry ) );
                 pCollect->AtFree(i);
                 nCount = pCollect->GetCount();
-                bFound = TRUE;
+                bFound = sal_True;
             }
         }
     }
 }
 
-BOOL ScOutlineArray::DecDepth()                         // nDepth auf leere Levels anpassen
+sal_Bool ScOutlineArray::DecDepth()                         // nDepth auf leere Levels anpassen
 {
-    BOOL bChanged = FALSE;
-    BOOL bCont;
+    sal_Bool bChanged = sal_False;
+    sal_Bool bCont;
     do
     {
-        bCont = FALSE;
+        bCont = sal_False;
         if (nDepth)
             if (aCollections[nDepth-1].GetCount() == 0)
             {
                 --nDepth;
-                bChanged = TRUE;
-                bCont = TRUE;
+                bChanged = sal_True;
+                bCont = sal_True;
             }
     }
     while (bCont);
     return bChanged;
 }
 
-BOOL ScOutlineArray::Remove( SCCOLROW nBlockStart, SCCOLROW nBlockEnd, BOOL& rSizeChanged )
+sal_Bool ScOutlineArray::Remove( SCCOLROW nBlockStart, SCCOLROW nBlockEnd, sal_Bool& rSizeChanged )
 {
-    USHORT nLevel;
+    sal_uInt16 nLevel;
     FindTouchedLevel( nBlockStart, nBlockEnd, nLevel );
 
     ScOutlineCollection* pCollect = &aCollections[nLevel];
-    USHORT nCount = pCollect->GetCount();
-    BOOL bFound = FALSE;
-    BOOL bAny = FALSE;
-    for ( USHORT i=0; i<nCount; i += ( bFound ? 0 : 1 ) )
+    sal_uInt16 nCount = pCollect->GetCount();
+    sal_Bool bFound = sal_False;
+    sal_Bool bAny = sal_False;
+    for ( sal_uInt16 i=0; i<nCount; i += ( bFound ? 0 : 1 ) )
     {
-        bFound = FALSE;
+        bFound = sal_False;
         ScOutlineEntry* pEntry = (ScOutlineEntry*) pCollect->At(i);
         SCCOLROW nStart = pEntry->GetStart();
         SCCOLROW nEnd   = pEntry->GetEnd();
@@ -430,34 +430,34 @@ BOOL ScOutlineArray::Remove( SCCOLROW nBlockStart, SCCOLROW nBlockEnd, BOOL& rSi
             PromoteSub( nStart, nEnd, nLevel+1 );
             nCount = pCollect->GetCount();
             i = pCollect->FindStart( nEnd+1 );
-            bFound = TRUE;
-            bAny = TRUE;
+            bFound = sal_True;
+            bAny = sal_True;
         }
     }
 
     if (bAny)                                   // Depth anpassen
         if (DecDepth())
-            rSizeChanged = TRUE;
+            rSizeChanged = sal_True;
 
     return bAny;
 }
 
-ScOutlineEntry* ScOutlineArray::GetEntry( USHORT nLevel, USHORT nIndex ) const
+ScOutlineEntry* ScOutlineArray::GetEntry( sal_uInt16 nLevel, sal_uInt16 nIndex ) const
 {
     return (ScOutlineEntry*)((nLevel < nDepth) ? aCollections[nLevel].At(nIndex) : NULL);
 }
 
-USHORT ScOutlineArray::GetCount( USHORT nLevel ) const
+sal_uInt16 ScOutlineArray::GetCount( sal_uInt16 nLevel ) const
 {
     return (nLevel < nDepth) ? aCollections[nLevel].GetCount() : 0;
 }
 
-ScOutlineEntry* ScOutlineArray::GetEntryByPos( USHORT nLevel, SCCOLROW nPos ) const
+ScOutlineEntry* ScOutlineArray::GetEntryByPos( sal_uInt16 nLevel, SCCOLROW nPos ) const
 {
-    USHORT          nCount  = GetCount( nLevel );
+    sal_uInt16          nCount  = GetCount( nLevel );
     ScOutlineEntry* pEntry;
 
-    for (USHORT nIndex = 0; nIndex < nCount; nIndex++)
+    for (sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++)
     {
         pEntry = GetEntry( nLevel, nIndex );
         if ((pEntry->GetStart() <= nPos) && (nPos <= pEntry->GetEnd()))
@@ -466,34 +466,34 @@ ScOutlineEntry* ScOutlineArray::GetEntryByPos( USHORT nLevel, SCCOLROW nPos ) co
     return NULL;
 }
 
-BOOL ScOutlineArray::GetEntryIndex( USHORT nLevel, SCCOLROW nPos, USHORT& rnIndex ) const
+sal_Bool ScOutlineArray::GetEntryIndex( sal_uInt16 nLevel, SCCOLROW nPos, sal_uInt16& rnIndex ) const
 {
     // found entry contains passed position
-    USHORT nCount  = GetCount( nLevel );
+    sal_uInt16 nCount  = GetCount( nLevel );
     for ( rnIndex = 0; rnIndex < nCount; ++rnIndex )
     {
         const ScOutlineEntry* pEntry = GetEntry( nLevel, rnIndex );
         if ( (pEntry->GetStart() <= nPos) && (nPos <= pEntry->GetEnd()) )
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL ScOutlineArray::GetEntryIndexInRange(
-        USHORT nLevel, SCCOLROW nBlockStart, SCCOLROW nBlockEnd, USHORT& rnIndex ) const
+sal_Bool ScOutlineArray::GetEntryIndexInRange(
+        sal_uInt16 nLevel, SCCOLROW nBlockStart, SCCOLROW nBlockEnd, sal_uInt16& rnIndex ) const
 {
     // found entry will be completely inside of passed range
-    USHORT nCount  = GetCount( nLevel );
+    sal_uInt16 nCount  = GetCount( nLevel );
     for ( rnIndex = 0; rnIndex < nCount; ++rnIndex )
     {
         const ScOutlineEntry* pEntry = GetEntry( nLevel, rnIndex );
         if ( (nBlockStart <= pEntry->GetStart()) && (pEntry->GetEnd() <= nBlockEnd) )
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-void ScOutlineArray::SetVisibleBelow( USHORT nLevel, USHORT nEntry, BOOL bValue, BOOL bSkipHidden )
+void ScOutlineArray::SetVisibleBelow( sal_uInt16 nLevel, sal_uInt16 nEntry, sal_Bool bValue, sal_Bool bSkipHidden )
 {
     ScOutlineEntry* pEntry = GetEntry( nLevel, nEntry );
     if( pEntry )
@@ -501,9 +501,9 @@ void ScOutlineArray::SetVisibleBelow( USHORT nLevel, USHORT nEntry, BOOL bValue,
         SCCOLROW nStart = pEntry->GetStart();
         SCCOLROW nEnd   = pEntry->GetEnd();
 
-        for (USHORT nSubLevel=nLevel+1; nSubLevel<nDepth; nSubLevel++)
+        for (sal_uInt16 nSubLevel=nLevel+1; nSubLevel<nDepth; nSubLevel++)
         {
-            USHORT i = 0;
+            sal_uInt16 i = 0;
             pEntry = (ScOutlineEntry*) aCollections[nSubLevel].At(i);
             while (pEntry)
             {
@@ -513,7 +513,7 @@ void ScOutlineArray::SetVisibleBelow( USHORT nLevel, USHORT nEntry, BOOL bValue,
 
                     if (bSkipHidden)
                         if (!pEntry->IsHidden())
-                            SetVisibleBelow( nSubLevel, i, bValue, TRUE );
+                            SetVisibleBelow( nSubLevel, i, bValue, sal_True );
                 }
 
                 ++i;
@@ -528,7 +528,7 @@ void ScOutlineArray::SetVisibleBelow( USHORT nLevel, USHORT nEntry, BOOL bValue,
 
 void ScOutlineArray::GetRange( SCCOLROW& rStart, SCCOLROW& rEnd ) const
 {
-    USHORT nCount = aCollections[0].GetCount();
+    sal_uInt16 nCount = aCollections[0].GetCount();
     if (nCount)
     {
         rStart = ((ScOutlineEntry*) aCollections[0].At(0))->GetStart();
@@ -538,12 +538,12 @@ void ScOutlineArray::GetRange( SCCOLROW& rStart, SCCOLROW& rEnd ) const
         rStart = rEnd = 0;
 }
 
-void ScOutlineArray::ExtendBlock( USHORT nLevel, SCCOLROW& rBlkStart, SCCOLROW& rBlkEnd )
+void ScOutlineArray::ExtendBlock( sal_uInt16 nLevel, SCCOLROW& rBlkStart, SCCOLROW& rBlkEnd )
 {
-    USHORT  nCount;
+    sal_uInt16  nCount;
     SCCOLROW    nStart;
     SCCOLROW    nEnd;
-    USHORT  i;
+    sal_uInt16  i;
     ScOutlineEntry* pEntry;
 
     nCount = GetCount(nLevel);
@@ -561,16 +561,16 @@ void ScOutlineArray::ExtendBlock( USHORT nLevel, SCCOLROW& rBlkStart, SCCOLROW& 
     }
 }
 
-BOOL ScOutlineArray::TestInsertSpace( SCSIZE nSize, SCCOLROW nMaxVal ) const
+sal_Bool ScOutlineArray::TestInsertSpace( SCSIZE nSize, SCCOLROW nMaxVal ) const
 {
-    USHORT nCount = aCollections[0].GetCount();
+    sal_uInt16 nCount = aCollections[0].GetCount();
     if (nCount)
     {
         SCCOLROW nEnd = ((ScOutlineEntry*) aCollections[0].At(nCount-1))->GetEnd();
         return ( sal::static_int_cast<SCCOLROW>(nEnd+nSize) <= nMaxVal );
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 void ScOutlineArray::InsertSpace( SCCOLROW nStartPos, SCSIZE nSize )
@@ -596,11 +596,11 @@ void ScOutlineArray::InsertSpace( SCCOLROW nStartPos, SCSIZE nSize )
     }
 }
 
-BOOL ScOutlineArray::DeleteSpace( SCCOLROW nStartPos, SCSIZE nSize )
+sal_Bool ScOutlineArray::DeleteSpace( SCCOLROW nStartPos, SCSIZE nSize )
 {
     SCCOLROW nEndPos = nStartPos + nSize - 1;
-    BOOL bNeedSave = FALSE;                         // Original fuer Undo benoetigt?
-    BOOL bChanged = FALSE;                          // fuer Test auf Level
+    sal_Bool bNeedSave = sal_False;                         // Original fuer Undo benoetigt?
+    sal_Bool bChanged = sal_False;                          // fuer Test auf Level
 
     ScSubOutlineIterator aIter( this );
     ScOutlineEntry* pEntry;
@@ -618,11 +618,11 @@ BOOL ScOutlineArray::DeleteSpace( SCCOLROW nStartPos, SCSIZE nSize )
                 pEntry->SetSize( nEntrySize-nSize );
             else
             {
-                bNeedSave = TRUE;
+                bNeedSave = sal_True;
                 if ( nEntryStart >= nStartPos && nEntryEnd <= nEndPos )             // innen
                 {
                     aIter.DeleteLast();
-                    bChanged = TRUE;
+                    bChanged = sal_True;
                 }
                 else if ( nEntryStart >= nStartPos )                                // rechts ueber
                     pEntry->SetPosSize( nStartPos, static_cast<SCSIZE>(nEntryEnd-nEndPos) );
@@ -673,7 +673,7 @@ bool ScOutlineArray::ManualAction( SCCOLROW nStartPos, SCCOLROW nEndPos, bool bS
 
 void ScOutlineArray::RemoveAll()
 {
-    for (USHORT nLevel=0; nLevel<nDepth; nLevel++)
+    for (sal_uInt16 nLevel=0; nLevel<nDepth; nLevel++)
         aCollections[nLevel].FreeAll();
 
     nDepth = 0;
@@ -691,7 +691,7 @@ ScOutlineTable::ScOutlineTable( const ScOutlineTable& rOutline ) :
 {
 }
 
-BOOL ScOutlineTable::TestInsertCol( SCSIZE nSize )
+sal_Bool ScOutlineTable::TestInsertCol( SCSIZE nSize )
 {
     return aColOutline.TestInsertSpace( nSize, MAXCOL );
 }
@@ -701,12 +701,12 @@ void ScOutlineTable::InsertCol( SCCOL nStartCol, SCSIZE nSize )
     aColOutline.InsertSpace( nStartCol, nSize );
 }
 
-BOOL ScOutlineTable::DeleteCol( SCCOL nStartCol, SCSIZE nSize )
+sal_Bool ScOutlineTable::DeleteCol( SCCOL nStartCol, SCSIZE nSize )
 {
     return aColOutline.DeleteSpace( nStartCol, nSize );
 }
 
-BOOL ScOutlineTable::TestInsertRow( SCSIZE nSize )
+sal_Bool ScOutlineTable::TestInsertRow( SCSIZE nSize )
 {
     return aRowOutline.TestInsertSpace( nSize, MAXROW );
 }
@@ -716,7 +716,7 @@ void ScOutlineTable::InsertRow( SCROW nStartRow, SCSIZE nSize )
     aRowOutline.InsertSpace( nStartRow, nSize );
 }
 
-BOOL ScOutlineTable::DeleteRow( SCROW nStartRow, SCSIZE nSize )
+sal_Bool ScOutlineTable::DeleteRow( SCROW nStartRow, SCSIZE nSize )
 {
     return aRowOutline.DeleteSpace( nStartRow, nSize );
 }
@@ -734,7 +734,7 @@ ScSubOutlineIterator::ScSubOutlineIterator( ScOutlineArray* pOutlineArray ) :
 }
 
 ScSubOutlineIterator::ScSubOutlineIterator( ScOutlineArray* pOutlineArray,
-                                            USHORT nLevel, USHORT nEntry ) :
+                                            sal_uInt16 nLevel, sal_uInt16 nEntry ) :
         pArray( pOutlineArray )
 {
     ScOutlineEntry* pEntry = (ScOutlineEntry*) pArray->aCollections[nLevel].At(nEntry);
@@ -748,7 +748,7 @@ ScSubOutlineIterator::ScSubOutlineIterator( ScOutlineArray* pOutlineArray,
 ScOutlineEntry* ScSubOutlineIterator::GetNext()
 {
     ScOutlineEntry* pEntry;
-    BOOL bFound = FALSE;
+    sal_Bool bFound = sal_False;
     do
     {
         if (nSubLevel >= nDepth)
@@ -763,7 +763,7 @@ ScOutlineEntry* ScSubOutlineIterator::GetNext()
         else
         {
             if ( pEntry->GetStart() >= nStart && pEntry->GetEnd() <= nEnd )
-                bFound = TRUE;
+                bFound = sal_True;
             ++nSubEntry;
         }
     }
@@ -771,12 +771,12 @@ ScOutlineEntry* ScSubOutlineIterator::GetNext()
     return pEntry;                  // nSubLevel gueltig, wenn pEntry != 0
 }
 
-USHORT ScSubOutlineIterator::LastLevel() const
+sal_uInt16 ScSubOutlineIterator::LastLevel() const
 {
     return nSubLevel;
 }
 
-USHORT ScSubOutlineIterator::LastEntry() const
+sal_uInt16 ScSubOutlineIterator::LastEntry() const
 {
     if (nSubEntry == 0)
     {

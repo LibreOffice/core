@@ -64,8 +64,8 @@ friend class FuncCollection;
     const ModuleData* pModuleData;
     String      aInternalName;
     String      aFuncName;
-    USHORT      nNumber;
-    USHORT      nParamCount;
+    sal_uInt16      nNumber;
+    sal_uInt16      nParamCount;
     ParamType   eAsyncType;
     ParamType   eParamType[MAXFUNCPARAM];
 private:
@@ -74,8 +74,8 @@ public:
     FuncData(const ModuleData*pModule,
              const String&    rIName,
              const String&    rFName,
-                   USHORT     nNo,
-                   USHORT     nCount,
+                   sal_uInt16     nNo,
+                   sal_uInt16     nCount,
              const ParamType* peType,
                    ParamType  eType);
     FuncData(const FuncData& rData);
@@ -84,17 +84,17 @@ public:
     const   String&     GetModuleName() const;
     const   String&     GetInternalName() const { return aInternalName; }
     const   String&     GetFuncName() const { return aFuncName; }
-            USHORT      GetParamCount() const { return nParamCount; }
-            ParamType   GetParamType(USHORT nIndex) const { return eParamType[nIndex]; }
+            sal_uInt16      GetParamCount() const { return nParamCount; }
+            ParamType   GetParamType(sal_uInt16 nIndex) const { return eParamType[nIndex]; }
             ParamType   GetReturnType() const { return eParamType[0]; }
             ParamType   GetAsyncType() const { return eAsyncType; }
-            BOOL        Call(void** ppParam);
-            BOOL        Unadvice(double nHandle);
+            sal_Bool        Call(void** ppParam);
+            sal_Bool        Unadvice(double nHandle);
 
                         // Name und Beschreibung des Parameters nParam.
                         // nParam==0 => Desc := Funktions-Beschreibung,
                         // Name := n/a
-            BOOL        GetParamDesc( String& aName, String& aDesc, USHORT nParam );
+            sal_Bool        GetParamDesc( String& aName, String& aDesc, sal_uInt16 nParam );
 };
 
 
@@ -102,17 +102,17 @@ public:
 class FuncCollection : public ScSortedCollection
 {
 public:
-    FuncCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE) : ScSortedCollection ( nLim, nDel, bDup ) {}
+    FuncCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = sal_False) : ScSortedCollection ( nLim, nDel, bDup ) {}
     FuncCollection(const FuncCollection& rFuncCollection) : ScSortedCollection ( rFuncCollection ) {}
 
     virtual ScDataObject*   Clone() const { return new FuncCollection(*this); }
-            FuncData*   operator[]( const USHORT nIndex) const {return (FuncData*)At(nIndex);}
+            FuncData*   operator[]( const sal_uInt16 nIndex) const {return (FuncData*)At(nIndex);}
     virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
-            BOOL        SearchFunc( const String& rName, USHORT& rIndex ) const;
+            sal_Bool        SearchFunc( const String& rName, sal_uInt16& rIndex ) const;
 };
 
 
-BOOL InitExternalFunc(const rtl::OUString& rModuleName);
+sal_Bool InitExternalFunc(const rtl::OUString& rModuleName);
 void ExitExternalFunc();
 
 #endif

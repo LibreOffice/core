@@ -45,7 +45,7 @@ class SwSplitTblDlg : public SvxStandardDialog
     RadioButton     aBorderCopyRB;
 
     SwWrtShell      &rShell;
-    USHORT          m_nSplit;
+    sal_uInt16          m_nSplit;
 
 protected:
     virtual void Apply();
@@ -53,7 +53,7 @@ protected:
 public:
     SwSplitTblDlg( Window *pParent, SwWrtShell &rSh );
 
-    USHORT GetSplitMode() const { return m_nSplit; }
+    sal_uInt16 GetSplitMode() const { return m_nSplit; }
 };
 
 #endif

@@ -40,7 +40,7 @@ protected:
 public:
     virtual ~AbstractDeviceData() {}
     virtual AbstractDeviceData *    Copy() const = 0;
-    virtual BOOL                    Equals( const AbstractDeviceData & ) const = 0;
+    virtual sal_Bool                    Equals( const AbstractDeviceData & ) const = 0;
 
     JobSetup * GetJobSetup() const { return pJobSetup; }
 };

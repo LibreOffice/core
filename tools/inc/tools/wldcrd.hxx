@@ -42,7 +42,7 @@ private:
     ByteString      aWildString;
     char            cSepSymbol;
 
-    USHORT          ImpMatch( const char *pWild, const char *pStr ) const;
+    sal_uInt16          ImpMatch( const char *pWild, const char *pStr ) const;
 
 public:
                     WildCard();
@@ -52,11 +52,11 @@ public:
     const String    GetWildCard() const     { return UniString( aWildString, osl_getThreadTextEncoding()); }
     const String    operator ()() const     { return UniString( aWildString, osl_getThreadTextEncoding()); }
 
-    BOOL            Matches( const String& rStr ) const;
+    sal_Bool            Matches( const String& rStr ) const;
 
-    BOOL            operator ==( const String& rString ) const
+    sal_Bool            operator ==( const String& rString ) const
                         { return Matches( rString ); }
-    BOOL            operator !=( const String& rString ) const
+    sal_Bool            operator !=( const String& rString ) const
                         { return !( Matches( rString ) ); }
 
     WildCard&       operator =( const String& rString );

@@ -1498,7 +1498,7 @@ static void GetKern(TrueTypeFont *ttf)
     if( !table )
         goto badtable;
 
-    if (GetUInt16(table, 0, 1) == 0) {                                /* Traditional Microsoft style table with USHORT version and nTables fields */
+    if (GetUInt16(table, 0, 1) == 0) {                                /* Traditional Microsoft style table with sal_uInt16 version and nTables fields */
         ttf->nkern = GetUInt16(table, 2, 1);
         ttf->kerntables = (const sal_uInt8**)calloc(ttf->nkern, sizeof(sal_uInt8 *));
         assert(ttf->kerntables != 0);

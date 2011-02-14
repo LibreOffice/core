@@ -65,7 +65,7 @@ SdrMediaObj::~SdrMediaObj()
 
 FASTBOOL SdrMediaObj::HasTextEdit() const
 {
-    return FALSE;
+    return sal_False;
 }
 
 // ------------------------------------------------------------------------------
@@ -103,9 +103,9 @@ void SdrMediaObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 
 // ------------------------------------------------------------------------------
 
-UINT16 SdrMediaObj::GetObjIdentifier() const
+sal_uInt16 SdrMediaObj::GetObjIdentifier() const
 {
-    return UINT16( OBJ_MEDIA );
+    return sal_uInt16( OBJ_MEDIA );
 }
 
 // ------------------------------------------------------------------------------

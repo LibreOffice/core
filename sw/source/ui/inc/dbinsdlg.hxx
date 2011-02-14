@@ -73,18 +73,18 @@ struct SwInsDBColumn
     sal_Int32 nDBNumFmt;
     sal_uInt32 nUsrNumFmt;
     LanguageType eUsrNumFmtLng;
-    USHORT nCol;
-    BOOL bHasFmt : 1;
-    BOOL bIsDBFmt : 1;
+    sal_uInt16 nCol;
+    sal_Bool bHasFmt : 1;
+    sal_Bool bIsDBFmt : 1;
 
-    SwInsDBColumn( const String& rStr, USHORT nColumn )
+    SwInsDBColumn( const String& rStr, sal_uInt16 nColumn )
         : sColumn( rStr ),
         nDBNumFmt( 0 ),
         nUsrNumFmt( 0 ),
         eUsrNumFmtLng( LANGUAGE_SYSTEM ),
         nCol( nColumn ),
-        bHasFmt(FALSE),
-        bIsDBFmt(TRUE)
+        bHasFmt(sal_False),
+        bIsDBFmt(sal_True)
     {}
 
     int operator==( const SwInsDBColumn& rCmp ) const
@@ -150,7 +150,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
 
     SfxItemSet*     pTblSet;
     SwTableRep*     pRep;
-    USHORT          nGBFmtLen;
+    sal_uInt16          nGBFmtLen;
 
     DECL_LINK( PageHdl, Button* );
     DECL_LINK( AutoFmtHdl, PushButton* );
@@ -161,7 +161,7 @@ class SwInsertDBColAutoPilot : public SfxModalDialog, public utl::ConfigItem
     DECL_LINK( DblClickHdl, ListBox* );
     DECL_LINK( HeaderHdl, Button* );
 
-    BOOL SplitTextToColArr( const String& rTxt, _DB_Columns& rColArr, BOOL bInsField );
+    sal_Bool SplitTextToColArr( const String& rTxt, _DB_Columns& rColArr, sal_Bool bInsField );
         using SfxModalDialog::Notify;
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     virtual void            Commit();

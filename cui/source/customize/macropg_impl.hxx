@@ -45,8 +45,8 @@ public:
     String*                         pStrEvent;
     String*                         pAssignedMacro;
     _HeaderTabListBox*              pEventLB;
-    BOOL                            bReadOnly;
-    BOOL                            bIDEDialogMode;
+    sal_Bool                            bReadOnly;
+    sal_Bool                            bIDEDialogMode;
 };
 
 class AssignComponentDialog : public ModalDialog

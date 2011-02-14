@@ -60,13 +60,13 @@
 #define FWK_SID_ADDONS (FWK_SID_SFX_START+1678)
 #define FWK_SID_ADDONHELP (FWK_SID_SFX_START+1684)
 
-const USHORT START_ITEMID_PICKLIST      = 4500;
-const USHORT END_ITEMID_PICKLIST        = 4599;
-const USHORT MAX_ITEMCOUNT_PICKLIST     =   99; // difference between START_... & END_... for picklist / must be changed too, if these values are changed!
-const USHORT START_ITEMID_WINDOWLIST    = 4600;
-const USHORT END_ITEMID_WINDOWLIST      = 4699;
-const USHORT ITEMID_ADDONLIST           = FWK_SID_ADDONS;
-const USHORT ITEMID_ADDONHELP           = FWK_SID_ADDONHELP;
+const sal_uInt16 START_ITEMID_PICKLIST      = 4500;
+const sal_uInt16 END_ITEMID_PICKLIST        = 4599;
+const sal_uInt16 MAX_ITEMCOUNT_PICKLIST     =   99; // difference between START_... & END_... for picklist / must be changed too, if these values are changed!
+const sal_uInt16 START_ITEMID_WINDOWLIST    = 4600;
+const sal_uInt16 END_ITEMID_WINDOWLIST      = 4699;
+const sal_uInt16 ITEMID_ADDONLIST           = FWK_SID_ADDONS;
+const sal_uInt16 ITEMID_ADDONHELP           = FWK_SID_ADDONHELP;
 
 namespace framework
 {
@@ -113,8 +113,8 @@ class FWE_DLLPUBLIC MenuConfiguration
                       ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream )
             throw ( ::com::sun::star::lang::WrappedTargetException );
 
-        static BOOL IsPickListItemId( USHORT nId );
-        static BOOL IsWindowListItemId( USHORT nId );
+        static sal_Bool IsPickListItemId( sal_uInt16 nId );
+        static sal_Bool IsWindowListItemId( sal_uInt16 nId );
 
     private:
         // #110897#-1 do not hold the uno reference by reference

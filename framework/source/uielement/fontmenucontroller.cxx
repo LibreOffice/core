@@ -117,7 +117,7 @@ void FontMenuController::fillPopupMenu( const Sequence< ::rtl::OUString >& rFont
     {
         vector<rtl::OUString> aVector;
         aVector.reserve(rFontNameSeq.getLength());
-        for ( USHORT i = 0; i < rFontNameSeq.getLength(); i++ )
+        for ( sal_uInt16 i = 0; i < rFontNameSeq.getLength(); i++ )
         {
             aVector.push_back(MnemonicGenerator::EraseAllMnemonicChars(pFontNameArray[i]));
         }
@@ -198,12 +198,12 @@ void SAL_CALL FontMenuController::activate( const css::awt::MenuEvent& ) throw (
     if ( m_xPopupMenu.is() )
     {
         // find new font name and set check mark!
-        USHORT        nChecked = 0;
-        USHORT        nItemCount = m_xPopupMenu->getItemCount();
+        sal_uInt16        nChecked = 0;
+        sal_uInt16        nItemCount = m_xPopupMenu->getItemCount();
         rtl::OUString aEmpty;
-        for( USHORT i = 0; i < nItemCount; i++ )
+        for( sal_uInt16 i = 0; i < nItemCount; i++ )
         {
-            USHORT nItemId = m_xPopupMenu->getItemId( i );
+            sal_uInt16 nItemId = m_xPopupMenu->getItemId( i );
 
             if ( m_xPopupMenu->isItemChecked( nItemId ) )
                 nChecked = nItemId;

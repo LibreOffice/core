@@ -265,7 +265,7 @@ namespace svxform
         return pMenu;
     }
 
-    void DataTreeListBox::ExcecuteContextMenuAction( USHORT _nSelectedPopupEntry )
+    void DataTreeListBox::ExcecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry )
     {
         m_pXFormsPage->DoMenuAction( _nSelectedPopupEntry );
     }
@@ -281,7 +281,7 @@ namespace svxform
 
     void DataTreeListBox::DeleteAndClear()
     {
-        ULONG i, nCount = GetEntryCount();
+        sal_uIntPtr i, nCount = GetEntryCount();
         for ( i = 0; i < nCount; ++i )
         {
             SvLBoxEntry* pEntry = GetEntry(i);
@@ -411,7 +411,7 @@ namespace svxform
                     {
                         ItemNode* pNode = new ItemNode( xChild );
                         SvLBoxEntry* pEntry = m_aItemList.InsertEntry(
-                            sName, aExpImg, aCollImg, _pParent, FALSE, LIST_APPEND, pNode );
+                            sName, aExpImg, aCollImg, _pParent, sal_False, LIST_APPEND, pNode );
                         if ( xChild->hasAttributes() )
                         {
                             Reference< css::xml::dom::XNamedNodeMap > xMap = xChild->getAttributes();
@@ -427,7 +427,7 @@ namespace svxform
                                         m_xUIHelper->getNodeDisplayName( xAttr, bShowDetails );
                                     m_aItemList.InsertEntry(
                                         sAttrName, aExpImg, aCollImg,
-                                        pEntry, FALSE, LIST_APPEND, pNode );
+                                        pEntry, sal_False, LIST_APPEND, pNode );
                                 }
                             }
                         }
@@ -443,7 +443,7 @@ namespace svxform
         }
     }
     //------------------------------------------------------------------------
-    bool XFormsPage::DoToolBoxAction( USHORT _nToolBoxID ) {
+    bool XFormsPage::DoToolBoxAction( sal_uInt16 _nToolBoxID ) {
 
         bool bHandled = false;
         bool bIsDocModified = false;
@@ -470,7 +470,7 @@ namespace svxform
                         xSubmissions->insert( makeAny( xNewSubmission ) );
                         Reference< XPropertySet > xNewPropSet( xNewSubmission, UNO_QUERY );
                         SvLBoxEntry* pEntry = AddEntry( xNewPropSet );
-                        m_aItemList.Select( pEntry, TRUE );
+                        m_aItemList.Select( pEntry, sal_True );
                         bIsDocModified = true;
                     }
                     catch ( Exception& )
@@ -486,7 +486,7 @@ namespace svxform
                 ItemNode* pNode = NULL;
                 Reference< css::xml::dom::XNode > xParentNode;
                 Reference< XPropertySet > xNewBinding;
-                USHORT nResId = 0;
+                sal_uInt16 nResId = 0;
                 bool bIsElement = true;
                 if ( DGTInstance == m_eGroup )
                 {
@@ -597,7 +597,7 @@ namespace svxform
                     {
                         SvLBoxEntry* pNewEntry = AddEntry( pNode, bIsElement );
                         m_aItemList.MakeVisible( pNewEntry );
-                        m_aItemList.Select( pNewEntry, TRUE );
+                        m_aItemList.Select( pNewEntry, sal_True );
                         bIsDocModified = true;
                     }
                     else
@@ -623,7 +623,7 @@ namespace svxform
                     if ( RET_OK == nReturn )
                     {
                         SvLBoxEntry* pNewEntry = AddEntry( xNewBinding );
-                        m_aItemList.Select( pNewEntry, TRUE );
+                        m_aItemList.Select( pNewEntry, sal_True );
                         bIsDocModified = true;
                     }
                     else
@@ -664,7 +664,7 @@ namespace svxform
 
                     AddDataItemDialog aDlg( this, pNode, m_xUIHelper );
                     DataItemType eType = DITElement;
-                    USHORT nResId = RID_STR_DATANAV_EDIT_ELEMENT;
+                    sal_uInt16 nResId = RID_STR_DATANAV_EDIT_ELEMENT;
                     if ( pNode && pNode->m_xNode.is() )
                     {
                         try
@@ -778,7 +778,7 @@ namespace svxform
         const ImageList& rImageList = GetSettings().GetStyleSettings().GetHighContrastMode()
             ? m_pNaviWin->GetItemHCImageList()
             : m_pNaviWin->GetItemImageList();
-        USHORT nImageID = ( _bIsElement ) ? IID_ELEMENT : IID_ATTRIBUTE;
+        sal_uInt16 nImageID = ( _bIsElement ) ? IID_ELEMENT : IID_ATTRIBUTE;
         Image aImage = rImageList.GetImage( nImageID );
         ::rtl::OUString sName;
         try
@@ -791,7 +791,7 @@ namespace svxform
             DBG_UNHANDLED_EXCEPTION();
         }
         return m_aItemList.InsertEntry(
-            sName, aImage, aImage, pParent, FALSE, LIST_APPEND, _pNewNode );
+            sName, aImage, aImage, pParent, sal_False, LIST_APPEND, _pNewNode );
     }
     //------------------------------------------------------------------------
     class lcl_ResourceString
@@ -999,7 +999,7 @@ namespace svxform
             {
                 // ID
                 _rEntry->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
-                pEntry = m_aItemList.InsertEntry( sTemp, aImage, aImage, NULL, FALSE, LIST_APPEND, pNode );
+                pEntry = m_aItemList.InsertEntry( sTemp, aImage, aImage, NULL, sal_False, LIST_APPEND, pNode );
                 // Action
                 _rEntry->getPropertyValue( PN_SUBMISSION_ACTION ) >>= sTemp;
                 String sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_ACTION );
@@ -1043,7 +1043,7 @@ namespace svxform
                 _rEntry->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
                 sName += String( sTemp );
                 pEntry = m_aItemList.InsertEntry(
-                    sName, aImage, aImage, NULL, FALSE, LIST_APPEND, pNode );
+                    sName, aImage, aImage, NULL, sal_False, LIST_APPEND, pNode );
             }
             catch ( Exception& )
             {
@@ -1080,7 +1080,7 @@ namespace svxform
                 _rEntry->getPropertyValue( PN_SUBMISSION_BIND ) >>= sTemp;
                 String sEntry = SVX_RESSTR( RID_STR_DATANAV_SUBM_BIND );
                 sEntry += String( sTemp );
-                ULONG nPos = 0;
+                sal_uIntPtr nPos = 0;
                 SvLBoxEntry* pChild = m_aItemList.GetEntry( pEntry, nPos++ );
                 m_aItemList.SetEntryText( pChild, sEntry );
                 _rEntry->getPropertyValue( PN_SUBMISSION_REF ) >>= sTemp;
@@ -1131,7 +1131,7 @@ namespace svxform
                     DBG_ASSERT( pNode->m_xNode.is(), "XFormsPage::RemoveEntry(): no XNode" );
                     css::xml::dom::NodeType eChildType = pNode->m_xNode->getNodeType();
                     bool bIsElement = ( eChildType == css::xml::dom::NodeType_ELEMENT_NODE );
-                    USHORT nResId = bIsElement ? RID_QRY_REMOVE_ELEMENT : RID_QRY_REMOVE_ATTRIBUTE;
+                    sal_uInt16 nResId = bIsElement ? RID_QRY_REMOVE_ELEMENT : RID_QRY_REMOVE_ATTRIBUTE;
                     String sVar = bIsElement ? ELEMENTNAME : ATTRIBUTENAME;
                     QueryBox aQBox( this, SVX_RES( nResId ) );
                     String sMessText = aQBox.GetMessText();
@@ -1163,7 +1163,7 @@ namespace svxform
             {
                 DBG_ASSERT( pNode->m_xPropSet.is(), "XFormsPage::RemoveEntry(): no propset" );
                 bool bSubmission = ( DGTSubmission == m_eGroup );
-                USHORT nResId = bSubmission ? RID_QRY_REMOVE_SUBMISSION : RID_QRY_REMOVE_BINDING;
+                sal_uInt16 nResId = bSubmission ? RID_QRY_REMOVE_SUBMISSION : RID_QRY_REMOVE_BINDING;
                 rtl::OUString sProperty = bSubmission ? PN_SUBMISSION_ID : PN_BINDING_ID;
                 String sSearch = bSubmission ? SUBMISSIONNAME : BINDINGNAME;
                 rtl::OUString sName;
@@ -1210,7 +1210,7 @@ namespace svxform
 
         if ( rNEvt.GetType() == EVENT_KEYINPUT )
         {
-            USHORT nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+            sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
 
             switch ( nCode )
             {
@@ -1234,7 +1234,7 @@ namespace svxform
         m_aItemList.SetPosSizePixel( Point( 2, 2 + aTbxSize.Height() ), aSize );
     }
     //------------------------------------------------------------------------
-    String XFormsPage::SetModel( const Reference< css::xforms::XModel >& _xModel, USHORT _nPagePos )
+    String XFormsPage::SetModel( const Reference< css::xforms::XModel >& _xModel, sal_uInt16 _nPagePos )
     {
         DBG_ASSERT( _xModel.is(), "XFormsPage::SetModel(): invalid model" );
 
@@ -1256,7 +1256,7 @@ namespace svxform
                     if ( xContainer.is() )
                         m_pNaviWin->AddContainerBroadcaster( xContainer );
 
-                    USHORT nIter = 0;
+                    sal_uInt16 nIter = 0;
                     Reference< XEnumerationAccess > xNumAccess( _xModel->getInstances(), UNO_QUERY );
                     if ( xNumAccess.is() )
                     {
@@ -1359,7 +1359,7 @@ namespace svxform
 
                                     ItemNode* pNode = new ItemNode( xPropSet );
                                     m_aItemList.InsertEntry(
-                                        sEntry, aImage1, aImage2, NULL, FALSE, LIST_APPEND, pNode );
+                                        sEntry, aImage1, aImage2, NULL, sal_False, LIST_APPEND, pNode );
                                 }
                             }
                         }
@@ -1436,7 +1436,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    bool XFormsPage::DoMenuAction( USHORT _nMenuID )
+    bool XFormsPage::DoMenuAction( sal_uInt16 _nMenuID )
     {
         return DoToolBoxAction( _nMenuID );
     }
@@ -1444,14 +1444,14 @@ namespace svxform
     //------------------------------------------------------------------------
     void XFormsPage::EnableMenuItems( Menu* _pMenu )
     {
-        BOOL bEnableAdd = FALSE;
-        BOOL bEnableEdit = FALSE;
-        BOOL bEnableRemove = FALSE;
+        sal_Bool bEnableAdd = sal_False;
+        sal_Bool bEnableEdit = sal_False;
+        sal_Bool bEnableRemove = sal_False;
 
         SvLBoxEntry* pEntry = m_aItemList.FirstSelected();
         if ( pEntry )
         {
-            bEnableAdd = TRUE;
+            bEnableAdd = sal_True;
             bool bSubmitChild = false;
             if ( DGTSubmission == m_eGroup && m_aItemList.GetParent( pEntry ) )
             {
@@ -1461,10 +1461,10 @@ namespace svxform
             ItemNode* pNode = static_cast< ItemNode* >( pEntry->GetUserData() );
             if ( pNode && ( pNode->m_xNode.is() || pNode->m_xPropSet.is() ) )
             {
-                bEnableEdit = TRUE;
+                bEnableEdit = sal_True;
                 bEnableRemove = ( bSubmitChild != true );
                 if ( DGTInstance == m_eGroup && !m_aItemList.GetParent( pEntry ) )
-                    bEnableRemove = FALSE;
+                    bEnableRemove = sal_False;
                 if ( pNode->m_xNode.is() )
                 {
                     try
@@ -1473,7 +1473,7 @@ namespace svxform
                         if ( eChildType != css::xml::dom::NodeType_ELEMENT_NODE
                             && eChildType != css::xml::dom::NodeType_DOCUMENT_NODE )
                         {
-                            bEnableAdd = FALSE;
+                            bEnableAdd = sal_False;
                         }
                     }
                     catch ( Exception& )
@@ -1484,7 +1484,7 @@ namespace svxform
             }
         }
         else if ( m_eGroup != DGTInstance )
-            bEnableAdd = TRUE;
+            bEnableAdd = sal_True;
 
         m_aToolBox.EnableItem( TBI_ITEM_ADD, bEnableAdd );
         m_aToolBox.EnableItem( TBI_ITEM_ADD_ELEMENT, bEnableAdd );
@@ -1502,8 +1502,8 @@ namespace svxform
         }
         if ( DGTInstance == m_eGroup )
         {
-            USHORT nResId1 = RID_STR_DATANAV_EDIT_ELEMENT;
-            USHORT nResId2 = RID_STR_DATANAV_REMOVE_ELEMENT;
+            sal_uInt16 nResId1 = RID_STR_DATANAV_EDIT_ELEMENT;
+            sal_uInt16 nResId2 = RID_STR_DATANAV_REMOVE_ELEMENT;
             if ( pEntry )
             {
                 ItemNode* pNode = static_cast< ItemNode* >( pEntry->GetUserData() );
@@ -1601,7 +1601,7 @@ namespace svxform
         pMenu->SetItemBits( MID_SHOW_DETAILS, MIB_CHECKABLE );
         pMenu->CheckItem( MID_SHOW_DETAILS, m_bShowDetails );
 
-        m_aTabCtrl.SetCurPageId( static_cast< USHORT >( nPageId ) );
+        m_aTabCtrl.SetCurPageId( static_cast< sal_uInt16 >( nPageId ) );
         ActivatePageHdl( &m_aTabCtrl );
 
         // get our frame
@@ -1645,7 +1645,7 @@ namespace svxform
     // -----------------------------------------------------------------------
     IMPL_LINK( DataNavigatorWindow, ModelSelectHdl, ListBox *, pBox )
     {
-        USHORT nPos = m_aModelsBox.GetSelectEntryPos();
+        sal_uInt16 nPos = m_aModelsBox.GetSelectEntryPos();
         // pBox == NULL, if you want to force a new fill.
         if ( nPos != m_nLastSelectedPos || !pBox )
         {
@@ -1662,7 +1662,7 @@ namespace svxform
     {
         bool bIsDocModified = false;
         Reference< css::xforms::XFormsUIHelper1 > xUIHelper;
-        USHORT nSelectedPos = m_aModelsBox.GetSelectEntryPos();
+        sal_uInt16 nSelectedPos = m_aModelsBox.GetSelectEntryPos();
         ::rtl::OUString sSelectedModel( m_aModelsBox.GetEntry( nSelectedPos ) );
         Reference< css::xforms::XModel > xModel;
         try
@@ -1718,7 +1718,7 @@ namespace svxform
                                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ExternalData" ) ),
                                         makeAny( sal_Bool( !bDocumentData ) ) );
 
-                                    USHORT nNewPos = m_aModelsBox.InsertEntry( sNewName );
+                                    sal_uInt16 nNewPos = m_aModelsBox.InsertEntry( sNewName );
                                     m_aModelsBox.SelectEntryPos( nNewPos );
                                     ModelSelectHdl( &m_aModelsBox );
                                     bIsDocModified = true;
@@ -1835,7 +1835,7 @@ namespace svxform
                     AddInstanceDialog aDlg( this, false );
                     if ( aDlg.Execute() == RET_OK )
                     {
-                        USHORT nInst = GetNewPageId();
+                        sal_uInt16 nInst = GetNewPageId();
                         ::rtl::OUString sName = aDlg.GetName();
                         ::rtl::OUString sURL = aDlg.GetURL();
                         bool bLinkOnce = aDlg.IsLinkInstance();
@@ -1861,7 +1861,7 @@ namespace svxform
                 }
                 case MID_INSTANCES_EDIT :
                 {
-                    USHORT nId = 0;
+                    sal_uInt16 nId = 0;
                     XFormsPage* pPage = GetCurrentPage( nId );
                     if ( pPage )
                     {
@@ -1897,7 +1897,7 @@ namespace svxform
                 }
                 case MID_INSTANCES_REMOVE :
                 {
-                    USHORT nId = 0;
+                    sal_uInt16 nId = 0;
                     XFormsPage* pPage = GetCurrentPage( nId );
                     if ( pPage )
                     {
@@ -1997,7 +1997,7 @@ namespace svxform
     // -----------------------------------------------------------------------
     IMPL_LINK( DataNavigatorWindow, ActivatePageHdl, TabControl *, EMPTYARG )
     {
-        USHORT nId = 0;
+        sal_uInt16 nId = 0;
         XFormsPage* pPage = GetCurrentPage( nId );
         if ( pPage )
         {
@@ -2015,7 +2015,7 @@ namespace svxform
         return 0;
     }
     // -----------------------------------------------------------------------
-    XFormsPage* DataNavigatorWindow::GetCurrentPage( USHORT& rCurId )
+    XFormsPage* DataNavigatorWindow::GetCurrentPage( sal_uInt16& rCurId )
     {
         rCurId = m_aTabCtrl.GetCurPageId();
         XFormsPage* pPage = NULL;
@@ -2048,7 +2048,7 @@ namespace svxform
 
         if ( rCurId > TID_INSTANCE )
         {
-            USHORT nPos = m_aTabCtrl.GetPagePos( rCurId );
+            sal_uInt16 nPos = m_aTabCtrl.GetPagePos( rCurId );
             if ( HasFirstInstancePage() && nPos > 0 )
                 nPos--;
             if ( m_aPageList.size() > nPos )
@@ -2129,8 +2129,8 @@ namespace svxform
             Reference< css::xforms::XModel > xFormsModel;
             if ( aAny >>= xFormsModel )
             {
-                USHORT nPagePos = TAB_PAGE_NOTFOUND;
-                USHORT nId = 0;
+                sal_uInt16 nPagePos = TAB_PAGE_NOTFOUND;
+                sal_uInt16 nId = 0;
                 XFormsPage* pPage = GetCurrentPage( nId );
                 DBG_ASSERT( pPage, "DataNavigatorWindow::SetPageModel(): no page" );
                 if ( nId >= TID_INSTANCE )
@@ -2243,7 +2243,7 @@ namespace svxform
             }
         }
 
-        USHORT nPageId = GetNewPageId();
+        sal_uInt16 nPageId = GetNewPageId();
         if ( sInstName.getLength() == 0 )
         {
             DBG_ERRORFILE( "DataNavigatorWindow::CreateInstancePage(): instance without name" );
@@ -2261,9 +2261,9 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    USHORT DataNavigatorWindow::GetNewPageId() const
+    sal_uInt16 DataNavigatorWindow::GetNewPageId() const
     {
-        USHORT i, nMax = 0, nCount = m_aTabCtrl.GetPageCount();
+        sal_uInt16 i, nMax = 0, nCount = m_aTabCtrl.GetPageCount();
         for ( i = 0; i < nCount; ++i )
         {
             if ( nMax < m_aTabCtrl.GetPageId(i) )
@@ -2599,7 +2599,7 @@ namespace svxform
                 sPropName = PN_READONLY_EXPR;
             else if ( &m_aCalculateCB == pBox )
                 sPropName = PN_CALCULATE_EXPR;
-            bool bIsChecked = ( pBox->IsChecked() != FALSE );
+            bool bIsChecked = ( pBox->IsChecked() != sal_False );
             m_xTempBinding->getPropertyValue( sPropName ) >>= sTemp;
             if ( bIsChecked && sTemp.getLength() == 0 )
                 sTemp = TRUE_VALUE;
@@ -2891,19 +2891,19 @@ namespace svxform
                 {
                     if ( ( m_xTempBinding->getPropertyValue( PN_REQUIRED_EXPR ) >>= sTemp )
                         && sTemp.getLength() > 0 )
-                        m_aRequiredCB.Check( TRUE );
+                        m_aRequiredCB.Check( sal_True );
                     if ( ( m_xTempBinding->getPropertyValue( PN_RELEVANT_EXPR ) >>= sTemp )
                         && sTemp.getLength() > 0 )
-                        m_aRelevantCB.Check( TRUE );
+                        m_aRelevantCB.Check( sal_True );
                     if ( ( m_xTempBinding->getPropertyValue( PN_CONSTRAINT_EXPR ) >>= sTemp )
                         && sTemp.getLength() > 0 )
-                        m_aConstraintCB.Check( TRUE );
+                        m_aConstraintCB.Check( sal_True );
                     if ( ( m_xTempBinding->getPropertyValue( PN_READONLY_EXPR ) >>= sTemp )
                         && sTemp.getLength() > 0 )
-                        m_aReadonlyCB.Check( TRUE );
+                        m_aReadonlyCB.Check( sal_True );
                     if ( ( m_xTempBinding->getPropertyValue( PN_CALCULATE_EXPR ) >>= sTemp )
                         && sTemp.getLength() > 0 )
-                        m_aCalculateCB.Check( TRUE );
+                        m_aCalculateCB.Check( sal_True );
                 }
                 catch ( Exception& )
                 {
@@ -2973,7 +2973,7 @@ namespace svxform
                         rtl::OUString sTemp;
                         if ( m_xTempBinding->getPropertyValue( PN_BINDING_TYPE ) >>= sTemp )
                         {
-                            USHORT nPos = m_aDataTypeLB.GetEntryPos( String( sTemp ) );
+                            sal_uInt16 nPos = m_aDataTypeLB.GetEntryPos( String( sTemp ) );
                             if ( LISTBOX_ENTRY_NOTFOUND == nPos )
                                 nPos = m_aDataTypeLB.InsertEntry( sTemp );
                             m_aDataTypeLB.SelectEntryPos( nPos );
@@ -3208,7 +3208,7 @@ namespace svxform
     //------------------------------------------------------------------------
     IMPL_LINK( NamespaceItemDialog, SelectHdl, SvxSimpleTable *,  EMPTYARG )
     {
-        BOOL bEnable = ( m_aNamespacesList.FirstSelected() != NULL );
+        sal_Bool bEnable = ( m_aNamespacesList.FirstSelected() != NULL );
         m_aEditNamespaceBtn.Enable( bEnable );
         m_aDeleteNamespaceBtn.Enable( bEnable );
 
@@ -3597,7 +3597,7 @@ namespace svxform
 
                 m_xSubmission->getPropertyValue( PN_SUBMISSION_METHOD ) >>= sTemp;
                 sTemp = lcl_MethodString::get().toUI( sTemp );
-                USHORT nPos = m_aMethodLB.GetEntryPos( String( sTemp ) );
+                sal_uInt16 nPos = m_aMethodLB.GetEntryPos( String( sTemp ) );
                 if ( LISTBOX_ENTRY_NOTFOUND == nPos )
                     nPos = m_aMethodLB.InsertEntry( sTemp );
                 m_aMethodLB.SelectEntryPos( nPos );

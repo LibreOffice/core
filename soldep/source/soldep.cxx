@@ -42,8 +42,8 @@
 #include <soldep/soldlg.hxx>
 #include "dtsodcmp.hrc"
 
-IMPLEMENT_HASHTABLE_OWNER( SolIdMapper, ByteString, ULONG* );
-//IMPLEMENT_HASHTABLE_OWNER( PrjIdMapper, ByteString, ULONG* );
+IMPLEMENT_HASHTABLE_OWNER( SolIdMapper, ByteString, sal_uIntPtr* );
+//IMPLEMENT_HASHTABLE_OWNER( PrjIdMapper, ByteString, sal_uIntPtr* );
 #define EVENT_RESIZE                0x00000001
 #define MIN(a,b) (a)<(b)?(a):(b)
 #define MAX(a,b) (a)>(b)?(a):(b)
@@ -60,9 +60,9 @@ IMPLEMENT_HASHTABLE_OWNER( SolIdMapper, ByteString, ULONG* );
 SolDep::SolDep( Window* pBaseWindow )
 /*****************************************************************************/
                 : Depper( pBaseWindow ),
-                mbBServer(FALSE),
+                mbBServer(sal_False),
                 mpTravellerList( NULL ),
-                mbIsHide( FALSE )
+                mbIsHide( sal_False )
 {
     mnSolWinCount = 0;
     mnSolLastId = 0;
@@ -100,7 +100,7 @@ void SolDep::Init()
     ByteString aUpdater( getenv("UPDATER") );
     if ( mpStandLst && (aUpdater == "YES") ) {
         if ( GetVersion() )
-            ReadSource( TRUE );
+            ReadSource( sal_True );
     } else
     {
         ReadSource();   // if stand.lst isn't available
@@ -112,7 +112,7 @@ void SolDep::Init( ByteString &rVersion, GenericInformationList *pVersionList )
 /*****************************************************************************/
 {
     // Interface for bs
-    mbBServer=TRUE;
+    mbBServer=sal_True;
     if ( pVersionList )
         mpStandLst = new GenericInformationList( *pVersionList );
     else {
@@ -122,7 +122,7 @@ void SolDep::Init( ByteString &rVersion, GenericInformationList *pVersionList )
     }
     if ( mpStandLst ) {
         msVersionMajor = ByteString( rVersion );
-        ReadSource(TRUE); //call from build server set UPDATER to TRUE
+        ReadSource(sal_True); //call from build server set UPDATER to TRUE
     }
 }
 
@@ -147,7 +147,7 @@ void SolDep::ProcessChildWindowEvent( const VclWindowEvent& _rVclWindowEvent )
 //Resize();
     if ( isAlive() )
         {
-            ULONG id = _rVclWindowEvent.GetId();
+            sal_uIntPtr id = _rVclWindowEvent.GetId();
             switch ( id )
             {
                 case VCLEVENT_USER_MOUSEBUTTON_DOWN:
@@ -170,8 +170,8 @@ void SolDep::ProcessChildWindowEvent( const VclWindowEvent& _rVclWindowEvent )
                                 pWin->LoseFocus();
                                 pWin->SetMarkMode( MARKMODE_SELECTED );
                                 pWin->UnsetMarkMode( MARKMODE_ACTIVATED );
-                                pWin->MarkNeeded( TRUE );
-                                pWin->MarkDepending( TRUE );
+                                pWin->MarkNeeded( sal_True );
+                                pWin->MarkDepending( sal_True );
                             }
 
                         }
@@ -229,7 +229,7 @@ void SolDep::ProcessChildWindowEvent( const VclWindowEvent& _rVclWindowEvent )
 IMPL_LINK( SolDep, ToolSelect, SoldepToolBox* , pBox)
 /*****************************************************************************/
 {
-    USHORT nItemId = pBox->GetCurItemId();
+    sal_uInt16 nItemId = pBox->GetCurItemId();
     switch ( nItemId )
     {
         case TID_SOLDEP_FIND:
@@ -240,7 +240,7 @@ IMPL_LINK( SolDep, ToolSelect, SoldepToolBox* , pBox)
             VirtualDevice   aVDev;
             aVDev.SetMapMode( MAP_100TH_MM );
             GDIMetaFile     aMtf;
-            aVDev.EnableOutput( FALSE );
+            aVDev.EnableOutput( sal_False );
             aMtf.Record( &aVDev );
 
             aVDev.SetLineColor( Color( COL_BLACK ) );
@@ -252,7 +252,7 @@ IMPL_LINK( SolDep, ToolSelect, SoldepToolBox* , pBox)
             long nYMax = 0;
             long nYMin = aSize.Height();
 
-            for ( USHORT i=0; i<mpObjectList->Count(); i++ )
+            for ( sal_uInt16 i=0; i<mpObjectList->Count(); i++ )
             {
                 Point aPoint = mpObjectList->GetObject(i)->GetPosPixel();
                 Size aSize = mpObjectList->GetObject(i)->GetSizePixel();
@@ -266,7 +266,7 @@ IMPL_LINK( SolDep, ToolSelect, SoldepToolBox* , pBox)
             aOffset = aVDev.PixelToLogic( aOffset );
 
             GetDepWin()->DrawOutput( &aVDev, aOffset );
-            for ( USHORT i=0; i<mpObjectList->Count(); i++ )
+            for ( sal_uInt16 i=0; i<mpObjectList->Count(); i++ )
                 if ( mpObjectList->GetObject(i)->IsVisible() )
                     mpObjectList->GetObject(i)->DrawOutput( &aVDev, aOffset );
 
@@ -283,7 +283,7 @@ IMPL_LINK( SolDep, ToolSelect, SoldepToolBox* , pBox)
         case TID_SOLDEP_HIDE_INDEPENDEND:
             {
                 ToggleHideDependency();
-                for ( USHORT i=0; i<mpObjectList->Count(); i++ )
+                for ( sal_uInt16 i=0; i<mpObjectList->Count(); i++ )
                     mpObjectList->GetObject(i)->SetViewMask(!mbIsHide);
 
                    maToolBox.CheckItem(TID_SOLDEP_HIDE_INDEPENDEND, IsHideMode());
@@ -298,7 +298,7 @@ IMPL_LINK( SolDep, ToolSelect, SoldepToolBox* , pBox)
                     delete mpSolIdMapper;
                     delete mpStarWriter;
                     mpObjectList->ClearAndDelete();
-                    ReadSource(TRUE);
+                    ReadSource(sal_True);
                 }
             }
             break;
@@ -325,16 +325,16 @@ void SolDep::ToggleHideDependency()
 };
 
 /*****************************************************************************/
-BOOL SolDep::GetVersion()
+sal_Bool SolDep::GetVersion()
 /*****************************************************************************/
 {
     SolSelectVersionDlg aVersionDlg( GetDepWin(), mpStandLst );
     if ( aVersionDlg.Execute() == RET_OK ) {
         msVersionMajor = aVersionDlg.GetVersionMajor();
         msVersionMinor = aVersionDlg.GetVersionMinor();
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 void SolDep::InitContextMenueMainWnd()
@@ -361,13 +361,13 @@ void SolDep::InitContextMenuePrjViewWnd(DepWin* pBaseWin )
 }
 
 /*****************************************************************************/
-ObjectWin *SolDep::RemoveObject( USHORT nId, BOOL bDelete )
+ObjectWin *SolDep::RemoveObject( sal_uInt16 nId, sal_Bool bDelete )
 /*****************************************************************************/
 {
     Prj* pPrj;
 
 //hshtable auf stand halten
-    ObjectWin* pWin = RemoveObjectFromList( mpObjectList, mnSolWinCount, nId, FALSE );
+    ObjectWin* pWin = RemoveObjectFromList( mpObjectList, mnSolWinCount, nId, sal_False );
     if ( pWin )
     {
         ByteString aBodyText( pWin->GetBodyText() );
@@ -379,7 +379,7 @@ ObjectWin *SolDep::RemoveObject( USHORT nId, BOOL bDelete )
             delete pPrj;
         }
         else
-            DBG_ASSERT( FALSE, "project not found - write" );
+            DBG_ASSERT( sal_False, "project not found - write" );
 
         mpSolIdMapper->Delete( aBodyText );
         if ( bDelete )
@@ -391,10 +391,10 @@ ObjectWin *SolDep::RemoveObject( USHORT nId, BOOL bDelete )
 }
 
 /*****************************************************************************/
-ULONG SolDep::AddObject( ByteString& rBodyText, BOOL bInteract )
+sal_uIntPtr SolDep::AddObject( ByteString& rBodyText, sal_Bool bInteract )
 /*****************************************************************************/
 {
-    ULONG nObjectId;
+    sal_uIntPtr nObjectId;
     if ( bInteract )
     {
         nObjectId = HandleNewPrjDialog( rBodyText );
@@ -403,7 +403,7 @@ ULONG SolDep::AddObject( ByteString& rBodyText, BOOL bInteract )
     {
 //hashtable auf stand halten
         MyHashObject* pHObject;
-        nObjectId = AddObjectToList( mpBaseWin, mpObjectList, mnSolLastId, mnSolWinCount, rBodyText, FALSE );
+        nObjectId = AddObjectToList( mpBaseWin, mpObjectList, mnSolLastId, mnSolWinCount, rBodyText, sal_False );
         pHObject = new MyHashObject( nObjectId, ObjIdToPtr(mpObjectList, nObjectId ));
         mpSolIdMapper->Insert( rBodyText, pHObject );
     }
@@ -411,10 +411,10 @@ ULONG SolDep::AddObject( ByteString& rBodyText, BOOL bInteract )
 }
 
 /*****************************************************************************/
-ULONG SolDep::AddPrjObject( ByteString& rBodyText, BOOL bInteract )
+sal_uIntPtr SolDep::AddPrjObject( ByteString& rBodyText, sal_Bool bInteract )
 /*****************************************************************************/
 {
-    ULONG nObjectId;
+    sal_uIntPtr nObjectId;
     if ( bInteract )
     {
         nObjectId = HandleNewDirectoryDialog( rBodyText );
@@ -431,7 +431,7 @@ ULONG SolDep::AddPrjObject( ByteString& rBodyText, BOOL bInteract )
 }
 
 /*****************************************************************************/
-USHORT SolDep::AddConnector( ObjectWin* pStartWin, ObjectWin* pEndWin )
+sal_uInt16 SolDep::AddConnector( ObjectWin* pStartWin, ObjectWin* pEndWin )
 /*****************************************************************************/
 {
 //  DBG_ASSERT( FALSE , "not yet" );
@@ -446,13 +446,13 @@ USHORT SolDep::AddConnector( ObjectWin* pStartWin, ObjectWin* pEndWin )
     }
     else
     {
-        DBG_ASSERT( FALSE , "non existing Project" );
+        DBG_ASSERT( sal_False , "non existing Project" );
         return 1;
     }
 }
 
 /*****************************************************************************/
-USHORT SolDep::RemoveConnector( ObjectWin* pStartWin, ObjectWin* pEndWin )
+sal_uInt16 SolDep::RemoveConnector( ObjectWin* pStartWin, ObjectWin* pEndWin )
 /*****************************************************************************/
 {
     SByteStringList* pPrjDeps = NULL;
@@ -460,12 +460,12 @@ USHORT SolDep::RemoveConnector( ObjectWin* pStartWin, ObjectWin* pEndWin )
     ByteString sStartName = pStartWin->GetBodyText();
 
     Prj* pPrj = mpStarWriter->GetPrj( sEndName );
-    pPrjDeps = pPrj->GetDependencies( FALSE );
+    pPrjDeps = pPrj->GetDependencies( sal_False );
     if ( pPrjDeps )
     {
         ByteString* pString;
-        ULONG nPrjDepsCount = pPrjDeps->Count();
-        for ( ULONG j = nPrjDepsCount; j > 0; j-- )
+        sal_uIntPtr nPrjDepsCount = pPrjDeps->Count();
+        for ( sal_uIntPtr j = nPrjDepsCount; j > 0; j-- )
         {
             pString = pPrjDeps->GetObject( j - 1 );
             if ( pString->GetToken( 0, '.') == sStartName )
@@ -496,7 +496,7 @@ void SolDep::RemoveAllObjects( ObjectList* pObjLst )
 }
 
 /*****************************************************************************/
-ULONG SolDep::GetStart(SolIdMapper* pIdMapper, ObjectList* pObjList)
+sal_uIntPtr SolDep::GetStart(SolIdMapper* pIdMapper, ObjectList* pObjList)
 /*****************************************************************************/
 {
 //  DBG_ASSERT( FALSE , "soldep" );
@@ -504,7 +504,7 @@ ULONG SolDep::GetStart(SolIdMapper* pIdMapper, ObjectList* pObjList)
 
     if ( !pHObject ) {
         ByteString sNullPrj = "null";//null_project
-        ULONG nObjectId = AddObject( sNullPrj, FALSE );
+        sal_uIntPtr nObjectId = AddObject( sNullPrj, sal_False );
         ObjIdToPtr( pObjList, nObjectId )->SetViewMask( 1 );
         return nObjectId;
     }
@@ -513,7 +513,7 @@ ULONG SolDep::GetStart(SolIdMapper* pIdMapper, ObjectList* pObjList)
 }
 
 /*****************************************************************************/
-ULONG SolDep::GetStartPrj(SolIdMapper* , ObjectList* )
+sal_uIntPtr SolDep::GetStartPrj(SolIdMapper* , ObjectList* )
 /*****************************************************************************/
 {
 //  DBG_ASSERT( FALSE , "prjdep" );
@@ -521,7 +521,7 @@ ULONG SolDep::GetStartPrj(SolIdMapper* , ObjectList* )
     if ( !pHObject )
     {
         ByteString bsNull("null");
-        ULONG nObjectId = AddPrjObject( bsNull, FALSE); //null_dir
+        sal_uIntPtr nObjectId = AddPrjObject( bsNull, sal_False); //null_dir
         return nObjectId;
     }
     else
@@ -529,7 +529,7 @@ ULONG SolDep::GetStartPrj(SolIdMapper* , ObjectList* )
 }
 
 /*****************************************************************************/
-USHORT SolDep::OpenSource()
+sal_uInt16 SolDep::OpenSource()
 /*****************************************************************************/
 {
     if ( mpStandLst ) {
@@ -540,13 +540,13 @@ USHORT SolDep::OpenSource()
 }
 
 /*****************************************************************************/
-USHORT SolDep::ReadSource(BOOL bUpdater)
+sal_uInt16 SolDep::ReadSource(sal_Bool bUpdater)
 /*****************************************************************************/
 {
-    mpBaseWin->EnablePaint( FALSE );
+    mpBaseWin->EnablePaint( sal_False );
     mpBaseWin->Hide();
-    ULONG nObjectId, nHashedId;
-    ULONG i;
+    sal_uIntPtr nObjectId, nHashedId;
+    sal_uIntPtr i;
     MyHashObject* pHObject;
     ByteString* pStr;
     ObjectWin *pStartWin, *pEndWin;
@@ -554,12 +554,12 @@ USHORT SolDep::ReadSource(BOOL bUpdater)
     mpSolIdMapper = new SolIdMapper( 63997 );
     if (mpStandLst && bUpdater)
     {
-        mpStarWriter = new StarWriter( mpStandLst, msVersionMajor, msVersionMinor, TRUE );
+        mpStarWriter = new StarWriter( mpStandLst, msVersionMajor, msVersionMinor, sal_True );
     } else
     {
         SolarFileList* pSolarFileList;
         pSolarFileList = GetPrjListFromDir();
-        mpStarWriter = new StarWriter( pSolarFileList, TRUE );
+        mpStarWriter = new StarWriter( pSolarFileList, sal_True );
     }
     ByteString sTitle( SOLDEPL_NAME );
     if ( mpStarWriter->GetMode() == STAR_MODE_SINGLE_PARSE ) {
@@ -573,22 +573,22 @@ USHORT SolDep::ReadSource(BOOL bUpdater)
     }
     SetTitle( String( sTitle, RTL_TEXTENCODING_UTF8) );
 
-    ULONG nCount = mpStarWriter->Count();
+    sal_uIntPtr nCount = mpStarWriter->Count();
     for ( i=0; i<nCount; i++ )
     {
         Prj *pPrj = mpStarWriter->GetObject(i);
         ByteString sPrjName = pPrj->GetProjectName();
-        nObjectId = AddObject( sPrjName, FALSE );
+        nObjectId = AddObject( sPrjName, sal_False );
         ObjIdToPtr( mpObjectList, nObjectId )->SetViewMask( 1 );
     }
     for ( i=0; i<nCount; i++ )
     {
         Prj *pPrj = mpStarWriter->GetObject(i);
-        SByteStringList *pLst = pPrj->GetDependencies( FALSE );
+        SByteStringList *pLst = pPrj->GetDependencies( sal_False );
         if ( pLst )
         {
-            ULONG nDepCount = pLst->Count();
-            for ( ULONG m=0; m<nDepCount; m++)
+            sal_uIntPtr nDepCount = pLst->Count();
+            for ( sal_uIntPtr m=0; m<nDepCount; m++)
             {
                 pStr = pLst->GetObject(m);
                 pHObject = mpSolIdMapper->Find( *pStr );
@@ -597,7 +597,7 @@ USHORT SolDep::ReadSource(BOOL bUpdater)
     // create new prj
                     Prj *pNewPrj = new Prj( *pStr );
                     ByteString sPrjName = pNewPrj->GetProjectName();
-                    nObjectId = AddObject( sPrjName, FALSE );
+                    nObjectId = AddObject( sPrjName, sal_False );
                     pHObject = mpSolIdMapper->Find( *pStr );
                     ObjIdToPtr( mpObjectList, nObjectId )->SetViewMask( 2 );
                 }*/
@@ -619,7 +619,7 @@ USHORT SolDep::ReadSource(BOOL bUpdater)
     if (!IsPrjView())
     {
         AutoArrange( mpSolIdMapper, mpObjectList, GetStart(mpSolIdMapper,mpObjectList), 0, GetStart(mpSolIdMapper,mpObjectList) );
-        GetDepWin()->EnablePaint( TRUE );
+        GetDepWin()->EnablePaint( sal_True );
     }
     return 0;
 }
@@ -634,11 +634,11 @@ SolarFileList* SolDep::GetPrjListFromDir()
     aCurrent.ToAbs();
     Dir aDir( aCurrent, FSYS_KIND_DIR );
 
-    USHORT nEntries = aDir.Count();
+    sal_uInt16 nEntries = aDir.Count();
     if( nEntries )
     {
         UniStringList aSortDirList;
-        for ( USHORT n = 0; n < nEntries; n++ )
+        for ( sal_uInt16 n = 0; n < nEntries; n++ )
         {
             DirEntry& rEntry = aDir[n];
             UniString aName( rEntry.GetName() );
@@ -665,11 +665,11 @@ SolarFileList* SolDep::GetPrjListFromDir()
 }
 
 /*****************************************************************************/
-USHORT SolDep::WriteSource()
+sal_uInt16 SolDep::WriteSource()
 /*****************************************************************************/
 {
 /* zur Sicherheit deaktiviert
-    USHORT nMode = mpStarWriter->GetMode();
+    sal_uInt16 nMode = mpStarWriter->GetMode();
     if ( nMode == STAR_MODE_SINGLE_PARSE ) {
         ByteString sFileName = mpStarWriter->GetName();
         if ( sFileName.Len()) {
@@ -696,32 +696,32 @@ USHORT SolDep::WriteSource()
     return 1;
 }
 
-USHORT SolDep::Load( const ByteString& rFileName )
+sal_uInt16 SolDep::Load( const ByteString& rFileName )
 {
 // moved from depper class
-    DBG_ASSERT( FALSE , "you are dead!" );
+    DBG_ASSERT( sal_False , "you are dead!" );
     SvFileStream aInFile( String( rFileName, RTL_TEXTENCODING_UTF8 ), STREAM_READ );
     depper_head dh;
-    ULONG i;
-    ULONG nLoadOffs = mnSolLastId;     //or Prj??
+    sal_uIntPtr i;
+    sal_uIntPtr nLoadOffs = mnSolLastId;     //or Prj??
     ObjectWin* pNewWin;
     aInFile.Read( &dh, sizeof( dh ));
 
-    ULONG nObjCount = dh.nObjectCount;
-    ULONG nCnctrCount = dh.nCnctrCount;
+    sal_uIntPtr nObjCount = dh.nObjectCount;
+    sal_uIntPtr nCnctrCount = dh.nCnctrCount;
 
     for ( i=0; i < nObjCount ; i++ )
     {
         ObjectWin* pWin = new ObjectWin( mpBaseWin, WB_BORDER );
         pWin->Load( aInFile );
-        pNewWin = ObjIdToPtr( mpObjectList, AddObjectToList( mpBaseWin, mpObjectList, mnSolLastId, mnSolWinCount, pWin->GetBodyText(), FALSE ));
+        pNewWin = ObjIdToPtr( mpObjectList, AddObjectToList( mpBaseWin, mpObjectList, mnSolLastId, mnSolWinCount, pWin->GetBodyText(), sal_False ));
         pNewWin->SetId( nLoadOffs + pWin->GetId());
         pNewWin->SetPosPixel( pWin->GetPosPixel());
         pNewWin->SetSizePixel( pWin->GetSizePixel());
     }
 
-    ULONG nStartId;
-    ULONG nEndId;
+    sal_uIntPtr nStartId;
+    sal_uIntPtr nEndId;
 //  ueber addconnector fuehren!
     for ( i=0; i < nCnctrCount ; i++ )
     {
@@ -742,13 +742,13 @@ USHORT SolDep::Load( const ByteString& rFileName )
 }
 
 /*****************************************************************************/
-BOOL SolDep::ViewContent( ByteString& rObjectName )
+sal_Bool SolDep::ViewContent( ByteString& rObjectName )
 /*****************************************************************************/
 {
     mpFocusWin = NULL;
-    SetPrjViewStatus(TRUE);
+    SetPrjViewStatus(sal_True);
 
-    for ( ULONG i = 0; i < mpObjectList->Count() && !mpFocusWin; i++ )
+    for ( sal_uIntPtr i = 0; i < mpObjectList->Count() && !mpFocusWin; i++ )
         if ( mpObjectList->GetObject( i )->HasFocus())
             mpFocusWin = mpObjectList->GetObject( i );
     //HideObjectsAndConnections( mpObjectList );
@@ -758,11 +758,11 @@ BOOL SolDep::ViewContent( ByteString& rObjectName )
 }
 
 /*****************************************************************************/
-BOOL SolDep::InitPrj( ByteString& rListName )
+sal_Bool SolDep::InitPrj( ByteString& rListName )
 /*****************************************************************************/
 {
-    ULONG nObjectId, nHashedId;
-    ULONG i, j;
+    sal_uIntPtr nObjectId, nHashedId;
+    sal_uIntPtr i, j;
     MyHashObject* pHObject;
     ByteString *pDepName;
     ByteString *pFlagName;
@@ -782,14 +782,14 @@ BOOL SolDep::InitPrj( ByteString& rListName )
     mnPrjWinCount = 0;
     mnPrjLastId = 0;
 
-    ULONG nCount = mpStarWriter->Count();
-    GetDepWin()->EnablePaint( FALSE );
+    sal_uIntPtr nCount = mpStarWriter->Count();
+    GetDepWin()->EnablePaint( sal_False );
     Point aPnt = GetGraphWin()->GetPosPixel();
     Size aSize = GetGraphWin()->GetSizePixel();
 
     GetGraphWin()->SetPosSizePixel( aPnt, aSize );         // Hier wird das Window gesetzt
 
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = sal_False;
 
     for ( i=0; i<nCount; i++ )
     {
@@ -799,10 +799,10 @@ BOOL SolDep::InitPrj( ByteString& rListName )
         ByteString sPrjName = pPrj->GetProjectName();
         if ( sPrjName == rListName )
         {
-            bReturn = TRUE;
+            bReturn = sal_True;
 
             mpPrj = mpStarWriter->GetObject(i);
-            ULONG nDirCount = mpPrj->Count();
+            sal_uIntPtr nDirCount = mpPrj->Count();
             for ( j=0; j<nDirCount; j++ )
             {
                 CommandData *pData = mpPrj->GetObject(j);
@@ -813,7 +813,7 @@ BOOL SolDep::InitPrj( ByteString& rListName )
                 if ( pData->GetLogFile() != "" )
                 {
                     ByteString sItem = pData->GetLogFile();
-                    nObjectId = AddPrjObject( sItem, FALSE);
+                    nObjectId = AddPrjObject( sItem, sal_False);
 // there may be faster ways......
                     ObjectWin *pWin = ObjIdToPtr( mpObjectPrjList, nObjectId );
                     pWin->SetViewMask( 0x0001 );
@@ -840,8 +840,8 @@ BOOL SolDep::InitPrj( ByteString& rListName )
 
                         nObjectId = pHObject->GetId();
 
-                        ULONG nDepCount = pDeps->Count();
-                        for ( ULONG k=0; k<nDepCount; k++ )
+                        sal_uIntPtr nDepCount = pDeps->Count();
+                        for ( sal_uIntPtr k=0; k<nDepCount; k++ )
                         {
                             pDepName = pDeps->GetObject(k);
                             pHObject = mpPrjIdMapper->Find( (*pDepName).GetToken( 0, '.'));
@@ -872,10 +872,10 @@ BOOL SolDep::InitPrj( ByteString& rListName )
         }
     }
     ByteString sNullDir = "null";
-    nObjectId = AddPrjObject( sNullDir, FALSE);
+    nObjectId = AddPrjObject( sNullDir, sal_False);
     ObjectWin *pWin = ObjIdToPtr( mpObjectPrjList, nObjectId );
     pWin->SetViewMask( 0x0001 );
-    mpGraphPrjWin->EnablePaint( TRUE );
+    mpGraphPrjWin->EnablePaint( sal_True );
     //debug
 //    int test_l = GetStartPrj(mpPrjIdMapper, mpObjectPrjList);
 //    ObjectWin *pTestWin = ObjIdToPtr( mpObjectPrjList, test_l );
@@ -888,7 +888,7 @@ BOOL SolDep::InitPrj( ByteString& rListName )
 }
 
 /*****************************************************************************/
-USHORT SolDep::CloseWindow()
+sal_uInt16 SolDep::CloseWindow()
 /*****************************************************************************/
 {
 
@@ -918,12 +918,12 @@ void SolDep::ShowHelp()
     SolHelpDlg aHelpDlg( mpBaseWin, DtSodResId( RID_SD_DIALOG_HELP ));
     aHelpDlg.maMLEHelp.SetText( aHelpText );
     aHelpDlg.maMLEHelp.SetReadOnly();
-    aHelpDlg.maMLEHelp.EnableFocusSelectionHide( TRUE );
+    aHelpDlg.maMLEHelp.EnableFocusSelectionHide( sal_True );
     aHelpDlg.Execute();
 }
 
 /*****************************************************************************/
-BOOL SolDep::FindProject()
+sal_Bool SolDep::FindProject()
 /*****************************************************************************/
 {
     SolFindProjectDlg aFindProjectDlg( GetDepWin(), GetObjectList() );
@@ -949,18 +949,18 @@ BOOL SolDep::FindProject()
         else
         {
             mpObjectList->ResetSelectedObject();
-            for ( USHORT i=0; i<mpObjectList->Count(); i++ )
+            for ( sal_uInt16 i=0; i<mpObjectList->Count(); i++ )
             {
                ObjectWin* pObjectWin = mpObjectList->GetObject( i );
                if ( !pObjectWin->IsTop() )
-                    pObjectWin->SetViewMask(FALSE);
+                    pObjectWin->SetViewMask(sal_False);
             }
         }
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SolDep::MarkObjects( ObjectWin* pObjectWin )
+sal_Bool SolDep::MarkObjects( ObjectWin* pObjectWin )
 {
     if (pObjectWin)
     {
@@ -978,7 +978,7 @@ BOOL SolDep::MarkObjects( ObjectWin* pObjectWin )
             fprintf(stdout,"null\n");
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 void SolDep::Resize()
@@ -987,11 +987,11 @@ void SolDep::Resize()
     Point aOutPos = Point( 0, 0 );
     Size aOutSize = mpProcessWin->GetOutputSizePixel();
         // calculate output size
-    ULONG nTaskHeight = maToolBox.CalcWindowSizePixel().Height();
-    ULONG nTaskWidth  = maToolBox.CalcWindowSizePixel().Width();
+    sal_uIntPtr nTaskHeight = maToolBox.CalcWindowSizePixel().Height();
+    sal_uIntPtr nTaskWidth  = maToolBox.CalcWindowSizePixel().Width();
     Size aSize( aOutSize.Width(), nTaskHeight );
 
-//  ULONG nMenuHeight = 0;
+//  sal_uIntPtr nMenuHeight = 0;
     Point aGraphWinPos = Point(0,0);
     Size  aGraphWinSize = Size(0,0);
 
@@ -1076,7 +1076,7 @@ void SolDep::Resize()
 */
     maToolBox.SetDockingRects( rout, rin );
 
-    BOOL bFloating = maToolBox.IsFloatingMode();
+    sal_Bool bFloating = maToolBox.IsFloatingMode();
 
     if ( bFloating )
     {
@@ -1090,7 +1090,7 @@ void SolDep::Resize()
     if (maToolBox.IsVisible()) maToolBox.Show();
 }
 
-USHORT SolDep::AddConnectorPrjView( ObjectWin* pStartWin, ObjectWin* pEndWin )
+sal_uInt16 SolDep::AddConnectorPrjView( ObjectWin* pStartWin, ObjectWin* pEndWin )
 {
 //  DBG_ASSERT( FALSE , "not yet" );
     ByteString sEndName = pEndWin->GetBodyText();
@@ -1112,7 +1112,7 @@ USHORT SolDep::AddConnectorPrjView( ObjectWin* pStartWin, ObjectWin* pEndWin )
     return AddConnectorToObjects( pStartWin, pEndWin );
 }
 
-USHORT SolDep::RemoveConnectorPrjView( ObjectWin* pStartWin, ObjectWin* pEndWin )
+sal_uInt16 SolDep::RemoveConnectorPrjView( ObjectWin* pStartWin, ObjectWin* pEndWin )
 {
     ByteString sEndName = pEndWin->GetBodyText();
     ByteString sStartName = pStartWin->GetBodyText();
@@ -1121,8 +1121,8 @@ USHORT SolDep::RemoveConnectorPrjView( ObjectWin* pStartWin, ObjectWin* pEndWin 
     if ( pDeps )
     {
         ByteString* pString;
-        ULONG nDepsCount = pDeps->Count();
-        for ( ULONG j = nDepsCount; j > 0; j-- )
+        sal_uIntPtr nDepsCount = pDeps->Count();
+        for ( sal_uIntPtr j = nDepsCount; j > 0; j-- )
         {
             pString = pDeps->GetObject( j - 1 );
             if ( pString->GetToken( 0, '.') == sStartName )
@@ -1132,7 +1132,7 @@ USHORT SolDep::RemoveConnectorPrjView( ObjectWin* pStartWin, ObjectWin* pEndWin 
     return RemoveConnectorFromObjects( pStartWin, pEndWin );
 }
 
-USHORT SolDep::AutoArrange( SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nTopId, ULONG nBottmId, ULONG aObjID )
+sal_uInt16 SolDep::AutoArrange( SolIdMapper* pIdMapper, ObjectList* pObjLst, sal_uIntPtr nTopId, sal_uIntPtr nBottmId, sal_uIntPtr aObjID )
 {
     AutoArrangeDlgStart();
     OptimizePos(pIdMapper, pObjLst, nTopId, nBottmId, aObjID );
@@ -1140,30 +1140,30 @@ USHORT SolDep::AutoArrange( SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG n
     return 0;
 }
 
-Point SolDep::CalcPos( USHORT nSet, USHORT nIndex )
+Point SolDep::CalcPos( sal_uInt16 nSet, sal_uInt16 nIndex )
 {
     int nRowIndex = nIndex / DEPPER_MAX_WIDTH;
-    ULONG nPosX = mnXOffset + nRowIndex % 3 * GetDefSize().Width() / 3 + ( nIndex - ( DEPPER_MAX_WIDTH * nRowIndex )) * (GetDefSize().Width() + OBJWIN_X_SPACING );
+    sal_uIntPtr nPosX = mnXOffset + nRowIndex % 3 * GetDefSize().Width() / 3 + ( nIndex - ( DEPPER_MAX_WIDTH * nRowIndex )) * (GetDefSize().Width() + OBJWIN_X_SPACING );
 
-    ULONG nPosY = ( nSet + mnLevelOffset + nRowIndex ) * ( GetDefSize().Height() + OBJWIN_Y_SPACING ) + OBJWIN_Y_SPACING;
+    sal_uIntPtr nPosY = ( nSet + mnLevelOffset + nRowIndex ) * ( GetDefSize().Height() + OBJWIN_Y_SPACING ) + OBJWIN_Y_SPACING;
     Point aPos( nPosX, nPosY );
     return aPos;
 }
 
-ULONG SolDep::CalcXOffset( ULONG nObjectsToFit )
+sal_uIntPtr SolDep::CalcXOffset( sal_uIntPtr nObjectsToFit )
 {
     long nDynXOffs;
     long nXMiddle;
-    ULONG nTrigger;
+    sal_uIntPtr nTrigger;
 
     nXMiddle = GetDepWin()->PixelToLogic( GetDepWin()->GetSizePixel()).Width() / 2;
     if ( nObjectsToFit > DEPPER_MAX_WIDTH )
         nObjectsToFit = DEPPER_MAX_WIDTH - 1 + DEPPER_MAX_WIDTH % 2;
     nTrigger = ( nObjectsToFit - 1 ) / 2;
     nDynXOffs = ( GetDefSize().Width() + OBJWIN_X_SPACING ) * nTrigger;
-    ULONG nXOffs = nXMiddle - nDynXOffs;
+    sal_uIntPtr nXOffs = nXMiddle - nDynXOffs;
 
-    if ( ULONG(nXMiddle - nDynXOffs) < mnMinDynXOffs )
+    if ( sal_uIntPtr(nXMiddle - nDynXOffs) < mnMinDynXOffs )
         mnMinDynXOffs = nXMiddle - nDynXOffs;
 
     return nXOffs;
@@ -1174,11 +1174,11 @@ double SolDep::CalcDistSum( ObjWinList* pObjList, DistType eDistType )
 {
     ObjectWin* pWin;
     Connector* pCon;
-    ULONG nObjCount = pObjList->Count();
+    sal_uIntPtr nObjCount = pObjList->Count();
     double dRetVal = 0;
     double dWinVal;
-    USHORT i, j;
-    BOOL bIsStart;
+    sal_uInt16 i, j;
+    sal_Bool bIsStart;
 
     for ( i = 0; i < nObjCount; i++ )
     {
@@ -1197,7 +1197,7 @@ double SolDep::CalcDistSum( ObjWinList* pObjList, DistType eDistType )
                         {
                             if ( bIsStart )
                             {
-                                pCon->UpdatePosition( pWin, FALSE );
+                                pCon->UpdatePosition( pWin, sal_False );
                                 dWinVal += pCon->GetLen() * pWin->mnHeadDist;
                             }
                         }
@@ -1205,14 +1205,14 @@ double SolDep::CalcDistSum( ObjWinList* pObjList, DistType eDistType )
                         {
                             if ( !bIsStart )
                             {
-                                pCon->UpdatePosition( pWin, FALSE );
+                                pCon->UpdatePosition( pWin, sal_False );
                                 dWinVal += pCon->GetLen() * pWin->mnRootDist;
                             }
 
                         }
                     else
                     {
-                        pCon->UpdatePosition( pWin, FALSE );
+                        pCon->UpdatePosition( pWin, sal_False );
                         if ( !bIsStart )
                             dWinVal += pCon->GetLen() * ( pWin->mnHeadDist + 1 );
                         else
@@ -1230,17 +1230,17 @@ double SolDep::CalcDistSum( ObjWinList* pObjList, DistType eDistType )
     return dRetVal;
 }
 
-USHORT SolDep::Impl_Traveller( ObjectWin* pWin, USHORT nDepth )
+sal_uInt16 SolDep::Impl_Traveller( ObjectWin* pWin, sal_uInt16 nDepth )
 {
-    USHORT i = 0;
+    sal_uInt16 i = 0;
     ObjectWin* pNewWin;
     Connector* pCon;
 
     nDepth++;
 
-    USHORT nMaxDepth = nDepth;
+    sal_uInt16 nMaxDepth = nDepth;
 
-    pWin->mbVisited = TRUE;
+    pWin->mbVisited = sal_True;
     pWin->mnRootDist = Max ( nDepth, pWin-> mnRootDist );
     if ( nDepth > DEPPER_MAX_DEPTH )
     {
@@ -1268,31 +1268,31 @@ USHORT SolDep::Impl_Traveller( ObjectWin* pWin, USHORT nDepth )
 }
 
 
-double SolDep::Impl_PermuteMin( ObjWinList& rObjList, Point* pPosArray, ObjWinList& rResultList, double dMinDist, ULONG nStart, ULONG nSize, DistType eDistType )
+double SolDep::Impl_PermuteMin( ObjWinList& rObjList, Point* pPosArray, ObjWinList& rResultList, double dMinDist, sal_uIntPtr nStart, sal_uIntPtr nSize, DistType eDistType )
 {
 
-    ULONG i, j, l;
-    ULONG nEnd = nStart + nSize;
+    sal_uIntPtr i, j, l;
+    sal_uIntPtr nEnd = nStart + nSize;
     ObjectWin* pSwapWin;
-    ULONG nLevelObjCount = rObjList.Count();
+    sal_uIntPtr nLevelObjCount = rObjList.Count();
 
 //dont use full recusion for more than 6 objects
     if ( nLevelObjCount > 6 )
     {
         srand(( unsigned ) time( NULL ));
 
-        ULONG nIdx1, nIdx2;
+        sal_uIntPtr nIdx1, nIdx2;
         for ( i = 0; i < 101; i++ )
         {
             UpdateSubProgrssBar(i);
             for ( j = 0; j < 100; j++ )
             {
-                nIdx1 = (ULONG) ( double( rand() ) / RAND_MAX * nLevelObjCount );
+                nIdx1 = (sal_uIntPtr) ( double( rand() ) / RAND_MAX * nLevelObjCount );
                 while ( rObjList.GetObject( nIdx1 ) == NULL )
-                    nIdx1 = (ULONG) ( double( rand() ) / RAND_MAX * nLevelObjCount );
-                nIdx2 = (ULONG) ( double( rand() ) / RAND_MAX * nLevelObjCount );
+                    nIdx1 = (sal_uIntPtr) ( double( rand() ) / RAND_MAX * nLevelObjCount );
+                nIdx2 = (sal_uIntPtr) ( double( rand() ) / RAND_MAX * nLevelObjCount );
                 while ( nIdx1 == nIdx2 || nIdx2 == nLevelObjCount )
-                    nIdx2 = (ULONG) ( double( rand() ) / RAND_MAX * nLevelObjCount );
+                    nIdx2 = (sal_uIntPtr) ( double( rand() ) / RAND_MAX * nLevelObjCount );
 
                 pSwapWin = rObjList.GetObject( nIdx1 );
                 if ( pSwapWin )
@@ -1374,15 +1374,15 @@ double SolDep::Impl_PermuteMin( ObjWinList& rObjList, Point* pPosArray, ObjWinLi
 }
 
 
-USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nTopId, ULONG nBottmId, ULONG aObjID )
+sal_uInt16 SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, sal_uIntPtr nTopId, sal_uIntPtr nBottmId, sal_uIntPtr aObjID )
 {
     ObjWinList aWorkList;
     ObjectWin* pWin;
     Connector* pCon;
-    USHORT nRootDist = (USHORT) -1;
-    USHORT i, j, k, l, nRetVal;
-    USHORT LevelUse[ DEPPER_MAX_DEPTH ];
-    USHORT LevelSecUse[ DEPPER_MAX_DEPTH ];
+    sal_uInt16 nRootDist = (sal_uInt16) -1;
+    sal_uInt16 i, j, k, l, nRetVal;
+    sal_uInt16 LevelUse[ DEPPER_MAX_DEPTH ];
+    sal_uInt16 LevelSecUse[ DEPPER_MAX_DEPTH ];
     ObjWinList* LevelList[ DEPPER_MAX_DEPTH ];
     ObjWinList* LevelSecList[ DEPPER_MAX_DEPTH ];
     Point aPosArray[ DEPPER_MAX_LEVEL_WIDTH * DEPPER_MAX_WIDTH ];
@@ -1397,22 +1397,22 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
         LevelSecList[ i ] = NULL;
     }
 
-    GetDepWin()->EnablePaint( FALSE );
+    GetDepWin()->EnablePaint( sal_False );
 
-    ULONG nObjCount = pObjLst->Count();
+    sal_uIntPtr nObjCount = pObjLst->Count();
     for ( i = 0; i < nObjCount; i++ )
     {
         pWin = pObjLst->GetObject( i );
         if ( pWin->IsVisible()) {
-            pWin->mbVisited = FALSE;
+            pWin->mbVisited = sal_False;
             pWin->mnHeadDist = 0;
             pWin->mnRootDist = 0;
 
             // find initial objects which need to be connected with
             // root object
             j = 0;
-            USHORT nStartCount = 0;
-            USHORT nEndCount = 0;
+            sal_uInt16 nStartCount = 0;
+            sal_uInt16 nEndCount = 0;
             while ( (pCon = pWin->GetConnector( j )) )
             {
                 if ( pCon->IsVisible()) {                   //null_project
@@ -1452,8 +1452,8 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
         return nRetVal;
     }
 
-    ULONG nUnvisited = 0;
-    ULONG nUnvisYOffs = 0;
+    sal_uIntPtr nUnvisited = 0;
+    sal_uIntPtr nUnvisYOffs = 0;
 
     // seperate mainstream, secondary and unconnected
     for ( i = 0; i < nObjCount; i++ )
@@ -1492,7 +1492,7 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
 
     mnLevelOffset = 0;
 
-    USHORT nScaleVal;
+    sal_uInt16 nScaleVal;
 
     if ( nRetVal == 0 )
         nScaleVal = 1;
@@ -1501,14 +1501,14 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
 
     i = 0;
 
-    USHORT nStep = 0;
+    sal_uInt16 nStep = 0;
 
     while ( LevelList[ i ] )
     {
         UpdateMainProgressBar(i, nScaleVal, nStep);
         DBG_ASSERT( LevelUse[ i ] == LevelList[ i ]->Count() , "level index im a..." );
         ObjectWin* pSwapWin;
-        ULONG nLevelObjCount = LevelList[ i ]->Count();
+        sal_uIntPtr nLevelObjCount = LevelList[ i ]->Count();
 
         if ( nLevelObjCount % 2 == 0 )
         {
@@ -1555,7 +1555,7 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
 
         if ( LevelSecList[ i ] != NULL )
         {
-            ULONG nLevelSecObjCount = LevelSecList[ i ]->Count();
+            sal_uIntPtr nLevelSecObjCount = LevelSecList[ i ]->Count();
             // expand list for better positioning
             while ( nLevelSecObjCount + LevelUse[ i ] < DEPPER_MAX_WIDTH - 1 )
             {
@@ -1579,19 +1579,19 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
             aWorkList.Clear();
 
             l = 0;
-            BOOL bUsedPos;
+            sal_Bool bUsedPos;
 
             // find free positions for secondary objects
             for ( j = 0; j < ( LevelUse[ i ] + nLevelSecObjCount ) ; j++ )
             {
                 Point aPos = CalcPos( i, j );
-                bUsedPos = FALSE;
+                bUsedPos = sal_False;
                 // is already occupied?
                 for ( k = 0; k < nLevelObjCount; k++ )
                 {
                     if ( LevelList[ i ]->GetObject( k ) )
                         if ( aPos == LevelList[ i ]->GetObject( k )->GetCalcPosPixel() )
-                            bUsedPos = TRUE;
+                            bUsedPos = sal_True;
                 }
                 // if its free, add to pool
                 if ( !bUsedPos )
@@ -1636,11 +1636,11 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
     do
     {
         i--;
-        UpdateMainProgressBar(i, nScaleVal, nStep, TRUE); // TRUE ~ counting down
+        UpdateMainProgressBar(i, nScaleVal, nStep, sal_True); // sal_True ~ counting down
         if ( LevelUse[ i ] + LevelSecUse[ i ] > DEPPER_MAX_WIDTH )
             mnLevelOffset-= ( LevelUse[ i ] + LevelSecUse[ i ] ) / DEPPER_MAX_WIDTH ;
         ObjectWin* pSwapWin;
-        ULONG nLevelObjCount = LevelList[ i ]->Count();
+        sal_uIntPtr nLevelObjCount = LevelList[ i ]->Count();
         mnXOffset = CalcXOffset( nLevelObjCount );
         aWorkList.Clear();
 
@@ -1669,23 +1669,23 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
 
         if ( LevelSecList[ i ] != NULL )
         {
-            ULONG nLevelSecObjCount = LevelSecList[ i ]->Count();
+            sal_uIntPtr nLevelSecObjCount = LevelSecList[ i ]->Count();
             mnXOffset = CalcXOffset( LevelUse[ i ] + nLevelSecObjCount );
             aWorkList.Clear();
 
             l = 0;
-            BOOL bUsedPos;
+            sal_Bool bUsedPos;
 
             for ( j = 0; j < ( LevelUse[ i ] + nLevelSecObjCount ) ; j++ )
             {
                 Point aPos = CalcPos( i, j );
-                bUsedPos = FALSE;
+                bUsedPos = sal_False;
 // could be faster
                 for ( k = 0; k < nLevelObjCount; k++ )
                 {
                     if ( LevelList[ i ]->GetObject( k ) )
                         if ( aPos == LevelList[ i ]->GetObject( k )->GetCalcPosPixel() )
-                            bUsedPos = TRUE;
+                            bUsedPos = sal_True;
                 }
                 if ( !bUsedPos )
                 {
@@ -1716,18 +1716,18 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
     } while ( i != 0 );
     SetMainProgressBar( 100 );
 
-    ULONG nNewXSize = ( DEPPER_MAX_WIDTH + 1 )  * ( OBJWIN_X_SPACING + GetDefSize().Width() );
+    sal_uIntPtr nNewXSize = ( DEPPER_MAX_WIDTH + 1 )  * ( OBJWIN_X_SPACING + GetDefSize().Width() );
 
-    //    ULONG aObjID = GetStart(pIdMapper, pObjLst) //hier muß man switchen GetStart/GetPrjStart oder so
+    //    sal_uIntPtr aObjID = GetStart(pIdMapper, pObjLst) //hier muß man switchen GetStart/GetPrjStart oder so
 
     ObjectWin* pObjWin = ObjIdToPtr( pObjLst, aObjID);
 
-    ULONG nNewYSize = pObjWin->GetCalcPosPixel().Y() + GetDefSize().Height() + 2 * OBJWIN_Y_SPACING;
+    sal_uIntPtr nNewYSize = pObjWin->GetCalcPosPixel().Y() + GetDefSize().Height() + 2 * OBJWIN_Y_SPACING;
     if (( nUnvisYOffs + GetDefSize().Height()) > nNewYSize )
         nNewYSize = nUnvisYOffs + GetDefSize().Height();
 
     MapMode aMapMode = GetDepWin()->GetMapMode();
-    Size aTmpSize( (ULONG) (double(nNewXSize) * double( aMapMode.GetScaleX())), (ULONG) (double( nNewYSize) * double( aMapMode.GetScaleY())));
+    Size aTmpSize( (sal_uIntPtr) (double(nNewXSize) * double( aMapMode.GetScaleX())), (sal_uIntPtr) (double( nNewYSize) * double( aMapMode.GetScaleY())));
 
     Size aNowSize( GetGraphWin()->GetSizePixel());
 
@@ -1745,7 +1745,7 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
 //  }
 
 // now remap all objects
-    ULONG nAllObjCount = pObjLst->Count();
+    sal_uIntPtr nAllObjCount = pObjLst->Count();
     Point aTmpPos;
     for ( j = 0; j < nAllObjCount; j++ )
     {
@@ -1765,7 +1765,7 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
         }
     }
     aWorkList.Clear();
-    GetDepWin()->EnablePaint( TRUE );
+    GetDepWin()->EnablePaint( sal_True );
     GetDepWin()->Invalidate();
 //LevelListen loeschen                  Hä? Welche Levellisten?
 
@@ -1797,7 +1797,7 @@ void SolDep::WriteToErrorFile()
     FILE* pErrFile = fopen( "depper.err", "w+" );
     if ( pErrFile )
     {
-        for ( USHORT i = 0; i < mpTravellerList->Count(); i++ )
+        for ( sal_uInt16 i = 0; i < mpTravellerList->Count(); i++ )
         {
             pWin = mpTravellerList->GetObject( i );
             fprintf( pErrFile, " %s -> \n", (pWin->GetBodyText()).GetBuffer());

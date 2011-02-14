@@ -41,7 +41,7 @@ class SVX_DLLPUBLIC TbxImageItem : public SfxUInt16Item
 {
 public:
                             TYPEINFO();
-                            TbxImageItem( USHORT nWhich = 0, UINT16 nImage = 0 );
+                            TbxImageItem( sal_uInt16 nWhich = 0, sal_uInt16 nImage = 0 );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
@@ -57,10 +57,10 @@ public:
 
                                 SFX_DECL_TOOLBOX_CONTROL();
 
-                                SvxGrafFilterToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+                                SvxGrafFilterToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
                                 ~SvxGrafFilterToolBoxControl();
 
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
 };
@@ -74,10 +74,10 @@ class SvxGrafToolBoxControl : public SfxToolBoxControl
 public:
 
                         SFX_DECL_TOOLBOX_CONTROL();
-                        SvxGrafToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+                        SvxGrafToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
                         ~SvxGrafToolBoxControl();
 
-    virtual void        StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual Window*     CreateItemWindow( Window *pParent );
 };
 
@@ -89,7 +89,7 @@ class SVX_DLLPUBLIC SvxGrafRedToolBoxControl : public SvxGrafToolBoxControl
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
-                        SvxGrafRedToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+                        SvxGrafRedToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 
 // ------------------------------
@@ -100,7 +100,7 @@ class SVX_DLLPUBLIC SvxGrafGreenToolBoxControl : public SvxGrafToolBoxControl
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
-                        SvxGrafGreenToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+                        SvxGrafGreenToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 
 // -----------------------------
@@ -111,7 +111,7 @@ class SVX_DLLPUBLIC SvxGrafBlueToolBoxControl : public SvxGrafToolBoxControl
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
-                        SvxGrafBlueToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+                        SvxGrafBlueToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 
 // ----------------------------------
@@ -122,7 +122,7 @@ class SVX_DLLPUBLIC SvxGrafLuminanceToolBoxControl : public SvxGrafToolBoxContro
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
-                        SvxGrafLuminanceToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+                        SvxGrafLuminanceToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 
 // ---------------------------------
@@ -133,7 +133,7 @@ class SVX_DLLPUBLIC SvxGrafContrastToolBoxControl : public SvxGrafToolBoxControl
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
-                        SvxGrafContrastToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+                        SvxGrafContrastToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 
 // ------------------------------
@@ -144,7 +144,7 @@ class SVX_DLLPUBLIC SvxGrafGammaToolBoxControl : public SvxGrafToolBoxControl
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
-                        SvxGrafGammaToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+                        SvxGrafGammaToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 
 // -------------------------------------
@@ -155,7 +155,7 @@ class SVX_DLLPUBLIC SvxGrafTransparenceToolBoxControl : public SvxGrafToolBoxCon
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
-                        SvxGrafTransparenceToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+                        SvxGrafTransparenceToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
 };
 
 // -----------------------------
@@ -166,10 +166,10 @@ class SVX_DLLPUBLIC SvxGrafModeToolBoxControl : public SfxToolBoxControl, public
 {
 public:
                         SFX_DECL_TOOLBOX_CONTROL();
-                        SvxGrafModeToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+                        SvxGrafModeToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
                         ~SvxGrafModeToolBoxControl();
 
-    virtual void        StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual Window*     CreateItemWindow( Window *pParent );
 };
 

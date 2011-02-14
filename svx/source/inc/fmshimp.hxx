@@ -123,11 +123,11 @@ class FmFormPage;
 struct SAL_DLLPRIVATE FmLoadAction
 {
     FmFormPage* pPage;
-    ULONG       nEventId;
+    sal_uLong       nEventId;
     sal_uInt16  nFlags;
 
     FmLoadAction( ) : pPage( NULL ), nEventId( 0 ), nFlags( 0 ) { }
-    FmLoadAction( FmFormPage* _pPage, sal_uInt16 _nFlags, ULONG _nEventId )
+    FmLoadAction( FmFormPage* _pPage, sal_uInt16 _nFlags, sal_uLong _nEventId )
         :pPage( _pPage ), nEventId( _nEventId ), nFlags( _nFlags )
     {
     }
@@ -200,8 +200,8 @@ class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
     SvLongs             m_arrRelativeGridColumn;
 
     ::osl::Mutex    m_aMutex;
-    ULONG           m_nInvalidationEvent;
-    ULONG           m_nActivationEvent;
+    sal_uLong           m_nInvalidationEvent;
+    sal_uLong           m_nActivationEvent;
     ::std::queue< FmLoadAction >
                     m_aLoadingPages;
 

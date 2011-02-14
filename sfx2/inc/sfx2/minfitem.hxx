@@ -43,7 +43,7 @@ class SFX2_DLLPUBLIC SfxMacroInfoItem: public SfxPoolItem
 
 public:
     TYPEINFO();
-    SfxMacroInfoItem( USHORT nWhich,
+    SfxMacroInfoItem( sal_uInt16 nWhich,
                     const BasicManager* pMgr,
                     const String &rLibName,
                     const String &rModuleName,

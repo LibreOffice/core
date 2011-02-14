@@ -106,7 +106,7 @@ public:
 
     inline const SfxPoolItem& GetAttr() const;
     inline       SfxPoolItem& GetAttr();
-    inline USHORT Which() const { return GetAttr().Which(); }
+    inline sal_uInt16 Which() const { return GetAttr().Which(); }
 
     virtual int         operator==( const SwTxtAttr& ) const;
 
@@ -129,7 +129,7 @@ protected:
     xub_StrLen m_nEnd;
 
 public:
-    SwTxtAttrEnd( SfxPoolItem& rAttr, USHORT nStart, USHORT nEnd );
+    SwTxtAttrEnd( SfxPoolItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
     using SwTxtAttr::GetEnd;
     virtual xub_StrLen* GetEnd();

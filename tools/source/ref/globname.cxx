@@ -52,7 +52,7 @@ ImpSvGlobalName::ImpSvGlobalName( int )
 /*************************************************************************
 |*    ImpSvGlobalName::operator ==()
 *************************************************************************/
-BOOL ImpSvGlobalName::operator == ( const ImpSvGlobalName & rObj ) const
+sal_Bool ImpSvGlobalName::operator == ( const ImpSvGlobalName & rObj ) const
 {
     return !memcmp( szData, rObj.szData, sizeof( szData ) );
 }
@@ -75,10 +75,10 @@ struct _GUID
 struct GUID
 #endif
 {
-    UINT32 Data1;
-    UINT16 Data2;
-    UINT16 Data3;
-    BYTE   Data4[8];
+    sal_uInt32 Data1;
+    sal_uInt16 Data2;
+    sal_uInt16 Data3;
+    sal_uInt8  Data4[8];
 };
 SvGlobalName::SvGlobalName( const CLSID & rId )
 {
@@ -87,16 +87,16 @@ SvGlobalName::SvGlobalName( const CLSID & rId )
     memcpy( pImp->szData, &rId, sizeof( pImp->szData ) );
 }
 
-SvGlobalName::SvGlobalName( UINT32 n1, USHORT n2, USHORT n3,
-                            BYTE b8, BYTE b9, BYTE b10, BYTE b11,
-                            BYTE b12, BYTE b13, BYTE b14, BYTE b15 )
+SvGlobalName::SvGlobalName( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
+                            sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
+                            sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 )
 {
     pImp = new ImpSvGlobalName();
     pImp->nRefCount++;
 
-    *(UINT32 *)pImp->szData       = n1;
-    *(USHORT *)&pImp->szData[ 4 ] = n2;
-    *(USHORT *)&pImp->szData[ 6 ] = n3;
+    *(sal_uInt32 *)pImp->szData       = n1;
+    *(sal_uInt16 *)&pImp->szData[ 4 ] = n2;
+    *(sal_uInt16 *)&pImp->szData[ 6 ] = n3;
     pImp->szData[ 8  ] = b8;
     pImp->szData[ 9  ] = b9;
     pImp->szData[ 10 ] = b10;
@@ -149,9 +149,9 @@ void SvGlobalName::NewImp()
 *************************************************************************/
 SvStream& operator << ( SvStream& rOStr, const SvGlobalName & rObj )
 {
-    rOStr << *(UINT32 *)rObj.pImp->szData;
-    rOStr << *(USHORT *)&rObj.pImp->szData[ 4 ];
-    rOStr << *(USHORT *)&rObj.pImp->szData[ 6 ];
+    rOStr << *(sal_uInt32 *)rObj.pImp->szData;
+    rOStr << *(sal_uInt16 *)&rObj.pImp->szData[ 4 ];
+    rOStr << *(sal_uInt16 *)&rObj.pImp->szData[ 6 ];
     rOStr.Write( (sal_Char *)&rObj.pImp->szData[ 8 ], 8 );
     return rOStr;
 }
@@ -159,9 +159,9 @@ SvStream& operator << ( SvStream& rOStr, const SvGlobalName & rObj )
 SvStream& operator >> ( SvStream& rStr, SvGlobalName & rObj )
 {
     rObj.NewImp(); // kopieren, falls noetig
-    rStr >> *(UINT32 *)rObj.pImp->szData;
-    rStr >> *(USHORT *)&rObj.pImp->szData[ 4 ];
-    rStr >> *(USHORT *)&rObj.pImp->szData[ 6 ];
+    rStr >> *(sal_uInt32 *)rObj.pImp->szData;
+    rStr >> *(sal_uInt16 *)&rObj.pImp->szData[ 4 ];
+    rStr >> *(sal_uInt16 *)&rObj.pImp->szData[ 6 ];
     rStr.Read( (sal_Char *)&rObj.pImp->szData[ 8 ], 8 );
     return rStr;
 }
@@ -170,41 +170,41 @@ SvStream& operator >> ( SvStream& rStr, SvGlobalName & rObj )
 /*************************************************************************
 |*    SvGlobalName::operator < ()
 *************************************************************************/
-BOOL SvGlobalName::operator < ( const SvGlobalName & rObj ) const
+sal_Bool SvGlobalName::operator < ( const SvGlobalName & rObj ) const
 {
     int n = memcmp( pImp->szData +6, rObj.pImp->szData +6,
                     sizeof( pImp->szData ) -6);
     if( n < 0 )
-        return TRUE;
+        return sal_True;
     else if( n > 0 )
-        return FALSE;
-    else if( *(USHORT *)&pImp->szData[ 4 ] < *(USHORT *)&rObj.pImp->szData[ 4 ] )
-        return TRUE;
-    else if( *(USHORT *)&pImp->szData[ 4 ] == *(USHORT *)&rObj.pImp->szData[ 4 ] )
-        return *(UINT32 *)pImp->szData  < *(UINT32 *)rObj.pImp->szData;
+        return sal_False;
+    else if( *(sal_uInt16 *)&pImp->szData[ 4 ] < *(sal_uInt16 *)&rObj.pImp->szData[ 4 ] )
+        return sal_True;
+    else if( *(sal_uInt16 *)&pImp->szData[ 4 ] == *(sal_uInt16 *)&rObj.pImp->szData[ 4 ] )
+        return *(sal_uInt32 *)pImp->szData  < *(sal_uInt32 *)rObj.pImp->szData;
     else
-        return FALSE;
+        return sal_False;
 
 }
 
 /*************************************************************************
 |*    SvGlobalName::operator +=()
 *************************************************************************/
-SvGlobalName & SvGlobalName::operator += ( UINT32 n )
+SvGlobalName & SvGlobalName::operator += ( sal_uInt32 n )
 {
     NewImp();
-    UINT32 nOld = (*(UINT32 *)pImp->szData);
-    (*(UINT32 *)pImp->szData) += n;
-    if( nOld > *(UINT32 *)pImp->szData )
+    sal_uInt32 nOld = (*(sal_uInt32 *)pImp->szData);
+    (*(sal_uInt32 *)pImp->szData) += n;
+    if( nOld > *(sal_uInt32 *)pImp->szData )
         // ueberlauf
-        (*(USHORT *)&pImp->szData[ 4 ])++;
+        (*(sal_uInt16 *)&pImp->szData[ 4 ])++;
     return *this;
 }
 
 /*************************************************************************
 |*    SvGlobalName::operator ==()
 *************************************************************************/
-BOOL SvGlobalName::operator == ( const SvGlobalName & rObj ) const
+sal_Bool SvGlobalName::operator == ( const SvGlobalName & rObj ) const
 {
     return *pImp == *rObj.pImp;
 }
@@ -218,7 +218,7 @@ void SvGlobalName::MakeFromMemory( void * pData )
 /*************************************************************************
 |*    SvGlobalName::MakeId()
 *************************************************************************/
-BOOL SvGlobalName::MakeId( const String & rIdStr )
+sal_Bool SvGlobalName::MakeId( const String & rIdStr )
 {
     ByteString  aStr( rIdStr, RTL_TEXTENCODING_ASCII_US );
     sal_Char * pStr = (sal_Char *)aStr.GetBuffer();
@@ -226,7 +226,7 @@ BOOL SvGlobalName::MakeId( const String & rIdStr )
       && '-' == pStr[ 8 ]  && '-' == pStr[ 13 ]
       && '-' == pStr[ 18 ] && '-' == pStr[ 23 ] )
     {
-        UINT32 nFirst = 0;
+        sal_uInt32 nFirst = 0;
         int i = 0;
         for( i = 0; i < 8; i++ )
         {
@@ -236,11 +236,11 @@ BOOL SvGlobalName::MakeId( const String & rIdStr )
                 else
                     nFirst = nFirst * 16 + (toupper( *pStr ) - 'A' + 10 );
             else
-                return FALSE;
+                return sal_False;
             pStr++;
         }
 
-        UINT16 nSec = 0;
+        sal_uInt16 nSec = 0;
         pStr++;
         for( i = 0; i < 4; i++ )
         {
@@ -248,13 +248,13 @@ BOOL SvGlobalName::MakeId( const String & rIdStr )
                 if( isdigit( *pStr ) )
                     nSec = nSec * 16 + (*pStr - '0');
                 else
-                    nSec = nSec * 16 + (UINT16)(toupper( *pStr ) - 'A' + 10 );
+                    nSec = nSec * 16 + (sal_uInt16)(toupper( *pStr ) - 'A' + 10 );
             else
-                return FALSE;
+                return sal_False;
             pStr++;
         }
 
-        UINT16 nThird = 0;
+        sal_uInt16 nThird = 0;
         pStr++;
         for( i = 0; i < 4; i++ )
         {
@@ -262,13 +262,13 @@ BOOL SvGlobalName::MakeId( const String & rIdStr )
                 if( isdigit( *pStr ) )
                     nThird = nThird * 16 + (*pStr - '0');
                 else
-                    nThird = nThird * 16 + (UINT16)(toupper( *pStr ) - 'A' + 10 );
+                    nThird = nThird * 16 + (sal_uInt16)(toupper( *pStr ) - 'A' + 10 );
             else
-                return FALSE;
+                return sal_False;
             pStr++;
         }
 
-        BYTE szRemain[ 8 ];
+        sal_Int8 szRemain[ 8 ];
         memset( szRemain, 0, sizeof( szRemain ) );
         pStr++;
         for( i = 0; i < 16; i++ )
@@ -277,22 +277,22 @@ BOOL SvGlobalName::MakeId( const String & rIdStr )
                 if( isdigit( *pStr ) )
                     szRemain[i/2] = szRemain[i/2] * 16 + (*pStr - '0');
                 else
-                    szRemain[i/2] = szRemain[i/2] * 16 + (BYTE)(toupper( *pStr ) - 'A' + 10 );
+                    szRemain[i/2] = szRemain[i/2] * 16 + (sal_Int8)(toupper( *pStr ) - 'A' + 10 );
             else
-                return FALSE;
+                return sal_False;
             pStr++;
             if( i == 3 )
                 pStr++;
         }
 
         NewImp();
-        *(UINT32 *)pImp->szData       = nFirst;
-        *(USHORT *)&pImp->szData[ 4 ] = nSec;
-        *(USHORT *)&pImp->szData[ 6 ] = nThird;
+        *(sal_uInt32 *)pImp->szData       = nFirst;
+        *(sal_uInt16 *)&pImp->szData[ 4 ] = nSec;
+        *(sal_uInt16 *)&pImp->szData[ 6 ] = nThird;
         memcpy( &pImp->szData[ 8 ], szRemain, 8 );
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -303,13 +303,13 @@ String SvGlobalName::GetctorName() const
     ByteString aRet;
 
     sal_Char buf[ 20 ];
-    sprintf( buf, "0x%8.8lX", (ULONG)*(UINT32 *)pImp->szData );
+    sprintf( buf, "0x%8.8lX", (sal_uIntPtr)*(sal_uInt32 *)pImp->szData );
     aRet += buf;
-    USHORT i;
+    sal_uInt16 i;
     for( i = 4; i < 8; i += 2 )
     {
         aRet += ',';
-        sprintf( buf, "0x%4.4X", *(USHORT *)&pImp->szData[ i ] );
+        sprintf( buf, "0x%4.4X", *(sal_uInt16 *)&pImp->szData[ i ] );
         aRet += buf;
     }
     for( i = 8; i < 16; i++ )
@@ -329,13 +329,13 @@ String SvGlobalName::GetHexName() const
     ByteString aRet;
 
     sal_Char buf[ 10 ];
-    sprintf( buf, "%8.8lX", (ULONG)*(UINT32 *)pImp->szData );
+    sprintf( buf, "%8.8lX", (sal_uIntPtr)*(sal_uInt32 *)pImp->szData );
     aRet += buf;
     aRet += '-';
-    USHORT i ;
+    sal_uInt16 i ;
     for( i = 4; i < 8; i += 2 )
     {
-        sprintf( buf, "%4.4X", *(USHORT *)&pImp->szData[ i ] );
+        sprintf( buf, "%4.4X", *(sal_uInt16 *)&pImp->szData[ i ] );
         aRet += buf;
         aRet += '-';
     }
@@ -368,7 +368,7 @@ SvGlobalNameList::SvGlobalNameList()
 *************************************************************************/
 SvGlobalNameList::~SvGlobalNameList()
 {
-    for( ULONG i = Count(); i > 0; i-- )
+    for( sal_uIntPtr i = Count(); i > 0; i-- )
     {
         ImpSvGlobalName * pImp = (ImpSvGlobalName *)aList.GetObject( i -1 );
         pImp->nRefCount--;
@@ -389,7 +389,7 @@ void SvGlobalNameList::Append( const SvGlobalName & rName )
 /*************************************************************************
 |*    SvGlobalNameList::GetObject()
 *************************************************************************/
-SvGlobalName SvGlobalNameList::GetObject( ULONG nPos )
+SvGlobalName SvGlobalNameList::GetObject( sal_uLong nPos )
 {
     return SvGlobalName( (ImpSvGlobalName *)aList.GetObject( nPos ) );
 }
@@ -397,14 +397,14 @@ SvGlobalName SvGlobalNameList::GetObject( ULONG nPos )
 /*************************************************************************
 |*    SvGlobalNameList::IsEntry()
 *************************************************************************/
-BOOL SvGlobalNameList::IsEntry( const SvGlobalName & rName )
+sal_Bool SvGlobalNameList::IsEntry( const SvGlobalName & rName )
 {
-    for( ULONG i = Count(); i > 0; i-- )
+    for( sal_uIntPtr i = Count(); i > 0; i-- )
     {
         if( *rName.pImp == *(ImpSvGlobalName *)aList.GetObject( i -1 ) )
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 com::sun::star::uno::Sequence < sal_Int8 > SvGlobalName::GetByteSequence() const
@@ -413,14 +413,14 @@ com::sun::star::uno::Sequence < sal_Int8 > SvGlobalName::GetByteSequence() const
     // maybe transported remotely
     com::sun::star::uno::Sequence< sal_Int8 > aResult( 16 );
 
-    aResult[0] = (sal_Int8) (*(UINT32 *)pImp->szData >> 24);
-    aResult[1] = (sal_Int8) ((*(UINT32 *)pImp->szData << 8 ) >> 24);
-    aResult[2] = (sal_Int8) ((*(UINT32 *)pImp->szData << 16 ) >> 24);
-    aResult[3] = (sal_Int8) ((*(UINT32 *)pImp->szData << 24 ) >> 24);
-    aResult[4] = (sal_Int8) (*(USHORT *)&pImp->szData[ 4 ] >> 8);
-    aResult[5] = (sal_Int8) ((*(USHORT *)&pImp->szData[ 4 ] << 8 ) >> 8);
-    aResult[6] = (sal_Int8) (*(USHORT *)&pImp->szData[ 6 ] >> 8);
-    aResult[7] = (sal_Int8) ((*(USHORT *)&pImp->szData[ 6 ] << 8 ) >> 8);
+    aResult[0] = (sal_Int8) (*(sal_uInt32 *)pImp->szData >> 24);
+    aResult[1] = (sal_Int8) ((*(sal_uInt32 *)pImp->szData << 8 ) >> 24);
+    aResult[2] = (sal_Int8) ((*(sal_uInt32 *)pImp->szData << 16 ) >> 24);
+    aResult[3] = (sal_Int8) ((*(sal_uInt32 *)pImp->szData << 24 ) >> 24);
+    aResult[4] = (sal_Int8) (*(sal_uInt16 *)&pImp->szData[ 4 ] >> 8);
+    aResult[5] = (sal_Int8) ((*(sal_uInt16 *)&pImp->szData[ 4 ] << 8 ) >> 8);
+    aResult[6] = (sal_Int8) (*(sal_uInt16 *)&pImp->szData[ 6 ] >> 8);
+    aResult[7] = (sal_Int8) ((*(sal_uInt16 *)&pImp->szData[ 6 ] << 8 ) >> 8);
     aResult[8] = pImp->szData[ 8 ];
     aResult[9] = pImp->szData[ 9 ];
     aResult[10] = pImp->szData[ 10 ];

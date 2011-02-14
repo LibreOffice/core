@@ -49,10 +49,10 @@ private:
     Dialog*         mpPrevExecuteDlg;
     DialogImpl*     mpDialogImpl;
     long            mnMousePositioned;
-    BOOL            mbInExecute;
-    BOOL            mbOldSaveBack;
-    BOOL            mbInClose;
-    BOOL            mbModalMode;
+    sal_Bool            mbInExecute;
+    sal_Bool            mbOldSaveBack;
+    sal_Bool            mbInClose;
+    sal_Bool            mbModalMode;
 
     SAL_DLLPRIVATE void    ImplInitDialogData();
     SAL_DLLPRIVATE void    ImplInitSettings();
@@ -70,12 +70,12 @@ protected:
     SAL_DLLPRIVATE void    ImplCenterDialog();
 
 public:
-    SAL_DLLPRIVATE BOOL    IsInClose() const { return mbInClose; }
+    SAL_DLLPRIVATE sal_Bool    IsInClose() const { return mbInClose; }
 //#endif
 
 protected:
                     Dialog( WindowType nType );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
 
 public:
                     Dialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );
@@ -86,20 +86,20 @@ public:
     virtual void    StateChanged( StateChangedType nStateChange );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 
     virtual short   Execute();
-    BOOL            IsInExecute() const { return mbInExecute; }
+    sal_Bool            IsInExecute() const { return mbInExecute; }
 
     ////////////////////////////////////////
     // Dialog::Execute replacement API
 public:
     // Link impl: DECL_LINK( MyEndDialogHdl, Dialog* ); <= param is dialog just ended
     virtual void    StartExecuteModal( const Link& rEndDialogHdl );
-    BOOL            IsStartedModal() const;
+    sal_Bool            IsStartedModal() const;
     long            GetResult() const;
 private:
-    BOOL            ImplStartExecuteModal();
+    sal_Bool            ImplStartExecuteModal();
     void            ImplEndExecuteModal();
 public:
 
@@ -112,9 +112,9 @@ public:
     void            GetDrawWindowBorder( sal_Int32& rLeftBorder, sal_Int32& rTopBorder,
                                          sal_Int32& rRightBorder, sal_Int32& rBottomBorder ) const;
 
-    void            SetModalInputMode( BOOL bModal );
-    void            SetModalInputMode( BOOL bModal, BOOL bSubModalDialogs );
-    BOOL            IsModalInputMode() const { return mbModalMode; }
+    void            SetModalInputMode( sal_Bool bModal );
+    void            SetModalInputMode( sal_Bool bModal, sal_Bool bSubModalDialogs );
+    sal_Bool            IsModalInputMode() const { return mbModalMode; }
 
     void            GrabFocusToFirstControl();
 };
@@ -148,7 +148,7 @@ public:
 
 private:
     using Window::Show;
-    void            Show( BOOL bVisible = TRUE );
+    void            Show( sal_Bool bVisible = sal_True );
     using Window::Hide;
     void            Hide();
 

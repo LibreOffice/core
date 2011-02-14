@@ -52,15 +52,15 @@ using namespace ::com::sun::star;
 
 #define INVAL_SEL       0xFFFF
 
-USHORT CertificateChooser::GetSelectedEntryPos( void ) const
+sal_uInt16 CertificateChooser::GetSelectedEntryPos( void ) const
 {
-    USHORT  nSel = INVAL_SEL;
+    sal_uInt16  nSel = INVAL_SEL;
 
     SvLBoxEntry* pSel = maCertLB.FirstSelected();
     if( pSel )
-        nSel = (USHORT) ( sal_uIntPtr ) pSel->GetUserData();
+        nSel = (sal_uInt16) ( sal_uIntPtr ) pSel->GetUserData();
 
-    return (USHORT) nSel;
+    return (sal_uInt16) nSel;
 }
 
 CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< uno::XComponentContext>& _rxCtx, uno::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment, const SignatureInformations& _rCertsToIgnore )
@@ -85,7 +85,7 @@ CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< uno::X
 
     mxCtx = _rxCtx;
     mxSecurityEnvironment = _rxSecurityEnvironment;
-    mbInitialized = FALSE;
+    mbInitialized = sal_False;
 
     // disable buttons
     CertificateHighlightHdl( NULL );
@@ -113,12 +113,12 @@ short CertificateChooser::Execute()
     Window* pMe = this;
     Window* pParent = GetParent();
     if ( pParent )
-        pParent->EnableInput( FALSE );
+        pParent->EnableInput( sal_False );
     pMe->Show();
     pMe->Update();
     ImplInitialize();
     if ( pParent )
-        pParent->EnableInput( TRUE );
+        pParent->EnableInput( sal_True );
     return ModalDialog::Execute();
 }
 
@@ -192,7 +192,7 @@ void CertificateChooser::ImplInitialize()
 
         // enable/disable buttons
         CertificateHighlightHdl( NULL );
-        mbInitialized = TRUE;
+        mbInitialized = sal_True;
     }
 }
 
@@ -200,7 +200,7 @@ void CertificateChooser::ImplInitialize()
 uno::Reference< dcss::security::XCertificate > CertificateChooser::GetSelectedCertificate()
 {
     uno::Reference< dcss::security::XCertificate > xCert;
-    USHORT  nSelected = GetSelectedEntryPos();
+    sal_uInt16  nSelected = GetSelectedEntryPos();
     if ( nSelected < maCerts.getLength() )
         xCert = maCerts[ nSelected ];
     return xCert;
@@ -231,7 +231,7 @@ void CertificateChooser::ImplShowCertificateDetails()
     uno::Reference< dcss::security::XCertificate > xCert = GetSelectedCertificate();
     if( xCert.is() )
     {
-        CertificateViewer aViewer( this, mxSecurityEnvironment, xCert, TRUE );
+        CertificateViewer aViewer( this, mxSecurityEnvironment, xCert, sal_True );
         aViewer.Execute();
     }
 }

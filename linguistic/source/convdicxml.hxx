@@ -89,7 +89,7 @@ class ConvDicXMLImport : public SvXMLImport
                                 //   but the language and conversion type will
                                 //   still be determined!
 
-    INT16           nLanguage;          // language of the dictionary
+    sal_Int16           nLanguage;          // language of the dictionary
     sal_Int16       nConversionType;    // conversion type the dictionary is used for
     sal_Bool        bSuccess;
 
@@ -120,11 +120,11 @@ public:
         const com::sun::star::uno::Reference < com::sun::star::xml::sax::XAttributeList > &rxAttrList );
 
     ConvDic *   GetDic()                    { return pDic; }
-    INT16       GetLanguage() const         { return nLanguage; }
+    sal_Int16       GetLanguage() const         { return nLanguage; }
     sal_Int16   GetConversionType() const   { return nConversionType; }
     sal_Bool    GetSuccess() const          { return bSuccess; }
 
-    void        SetLanguage( INT16 nLang )              { nLanguage = nLang; }
+    void        SetLanguage( sal_Int16 nLang )              { nLanguage = nLang; }
     void        SetConversionType( sal_Int16 nType )    { nConversionType = nType; }
 };
 

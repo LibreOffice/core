@@ -45,10 +45,10 @@ class SwUndoOverwrite: public SwUndo, private SwUndoSaveCntnt
 {
     String aDelStr, aInsStr;
     SwRedlineSaveDatas* pRedlSaveData;
-    ULONG nSttNode;
+    sal_uLong nSttNode;
     xub_StrLen nSttCntnt;
-    BOOL bInsChar : 1;  // no Overwrite, but Insert
-    BOOL bGroup : 1;    // TRUE: is already grouped; evaluated in CanGrouping()
+    sal_Bool bInsChar : 1;  // no Overwrite, but Insert
+    sal_Bool bGroup : 1;    // TRUE: is already grouped; evaluated in CanGrouping()
 
 public:
     SwUndoOverwrite( SwDoc*, SwPosition&, sal_Unicode cIns );
@@ -73,7 +73,7 @@ public:
      */
     virtual SwRewriter GetRewriter() const;
 
-    BOOL CanGrouping( SwDoc*, SwPosition&, sal_Unicode cIns );
+    sal_Bool CanGrouping( SwDoc*, SwPosition&, sal_Unicode cIns );
 };
 
 //--------------------------------------------------------------------
@@ -98,7 +98,7 @@ public:
 
     void AddChanges( SwTxtNode& rTNd, xub_StrLen nStart, xub_StrLen nLen,
                      ::com::sun::star::uno::Sequence <sal_Int32>& rOffsets );
-    BOOL HasData() const { return aChanges.size() > 0; }
+    sal_Bool HasData() const { return aChanges.size() > 0; }
 };
 
 #endif // SW_UNDO_OVERWRITE_HXX

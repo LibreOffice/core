@@ -782,11 +782,11 @@ const SwPropNameTab aPropNameTab = {
 /* 0740 UNO_NAME_EMBEDDED_OBJECT */ {MAP_CHAR_LEN("EmbeddedObject")},
 };
 
-const SwPropNameLen& SwGetPropName( USHORT nId )
+const SwPropNameLen& SwGetPropName( sal_uInt16 nId )
 {
     return GetPropName( nId );
 }
-const SwPropNameLen& GetPropName( USHORT nId )
+const SwPropNameLen& GetPropName( sal_uInt16 nId )
 {
     DBG_ASSERT( SW_PROPNAME_BEGIN <= nId && nId < SW_PROPNAME_END,
                 "GetPropName(): Wrong index" );

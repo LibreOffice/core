@@ -40,10 +40,10 @@
 //  @@@@  @@@@@  @@  @@   @@@@  @@@@@   @@@@  @@@@@  @@@@    @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-const UINT32 SdrInventor=UINT32('S')*0x00000001+
-                         UINT32('V')*0x00000100+
-                         UINT32('D')*0x00010000+
-                         UINT32('r')*0x01000000;
+const sal_uInt32 SdrInventor=sal_uInt32('S')*0x00000001+
+                         sal_uInt32('V')*0x00000100+
+                         sal_uInt32('D')*0x00010000+
+                         sal_uInt32('r')*0x01000000;
 
 // Kommandos fuer EndCreate()
 enum SdrCreateCmd {SDRCREATE_NEXTPOINT,     // Naechster Polygonpunkt, Kreissegment: Naechste Koordinate
@@ -90,10 +90,10 @@ enum SdrConvertType {SDRCONVERT_POLY,   // reines Polygon erzeugen
 // dann diesen Wert:
 #define SDRLAYER_NOTFOUND 0xFF
 // Man kann diesen Wert jodoch ohne Bedenken den Methoden des SdrLayerSet
-// zuwerfen, bekommt dann jedoch immer FALSE, bzw. tut die Methode nix.
+// zuwerfen, bekommt dann jedoch immer sal_False, bzw. tut die Methode nix.
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Typdeklaration fuer Layer-IDs
-typedef BYTE SdrLayerID;
+typedef sal_uInt8 SdrLayerID;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

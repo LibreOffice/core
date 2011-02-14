@@ -55,12 +55,12 @@
 // =======================================================================
 // SalInstance member to create and destroy a SalObject
 
-SalObject* X11SalInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow )
+SalObject* X11SalInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow )
 {
     return X11SalObject::CreateObject( pParent, pWindowData, bShow );
 }
 
-X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow )
+X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow )
 {
     int error_base, event_base;
     X11SalObject*       pObject  = new X11SalObject();
@@ -152,7 +152,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
                            pVisual,
                            CWEventMask|CWColormap, &aAttribs );
         XSync( pDisp, False );
-        BOOL bWasXError = pSalDisp->GetXLib()->HasXErrorOccured();
+        sal_Bool bWasXError = pSalDisp->GetXLib()->HasXErrorOccured();
         pSalDisp->GetXLib()->PopXErrorLevel();
         if( bWasXError )
         {
@@ -179,7 +179,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     pObjData->pAppContext   = NULL;
 
     XSync(pDisp, False);
-    BOOL bWasXError = pSalDisp->GetXLib()->HasXErrorOccured();
+    sal_Bool bWasXError = pSalDisp->GetXLib()->HasXErrorOccured();
     pSalDisp->GetXLib()->PopXErrorLevel();
     if( bWasXError )
     {
@@ -219,7 +219,7 @@ SalClipRegion::~SalClipRegion()
 
 
 void
-SalClipRegion::BeginSetClipRegion( ULONG nRects )
+SalClipRegion::BeginSetClipRegion( sal_uLong nRects )
 {
     if (ClipRectangleList)
         delete [] ClipRectangleList;
@@ -324,7 +324,7 @@ X11SalObject::ResetClipRegion()
 
 
 void
-X11SalObject::BeginSetClipRegion( ULONG nRectCount )
+X11SalObject::BeginSetClipRegion( sal_uLong nRectCount )
 {
     maClipRegion.BeginSetClipRegion ( nRectCount );
 }
@@ -375,7 +375,7 @@ X11SalObject::EndSetClipRegion()
 }
 
 
-USHORT
+sal_uInt16
 X11SalObject::GetClipRegionType()
 {
     return maClipRegion.GetClipRegionType();
@@ -399,7 +399,7 @@ X11SalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 
 
 void
-X11SalObject::Show( BOOL bVisible )
+X11SalObject::Show( sal_Bool bVisible )
 {
     if  ( ! maSystemChildData.aWindow )
         return;
@@ -420,7 +420,7 @@ X11SalObject::Show( BOOL bVisible )
 
 // -----------------------------------------------------------------------
 
-void X11SalObject::Enable( BOOL )
+void X11SalObject::Enable( sal_Bool )
 {
 }
 
@@ -454,9 +454,9 @@ const SystemChildData* X11SalObject::GetSystemData() const
     return &maSystemChildData;
 }
 
-static USHORT sal_GetCode( int state )
+static sal_uInt16 sal_GetCode( int state )
 {
-    USHORT nCode = 0;
+    sal_uInt16 nCode = 0;
 
     if( state & Button1Mask )
         nCode |= MOUSE_LEFT;
@@ -512,7 +512,7 @@ long X11SalObject::Dispatch( XEvent* pEvent )
                 aEvt.mnTime     = pEvent->xbutton.time;
                 aEvt.mnCode     = sal_GetCode( pEvent->xbutton.state );
                 aEvt.mnButton   = 0;
-                USHORT nEvent = 0;
+                sal_uInt16 nEvent = 0;
                 if( pEvent->type == ButtonPress ||
                     pEvent->type == ButtonRelease )
                 {
@@ -537,10 +537,10 @@ long X11SalObject::Dispatch( XEvent* pEvent )
                 switch( pEvent->type )
                 {
                     case UnmapNotify:
-                    pObject->mbVisible = FALSE;
+                    pObject->mbVisible = sal_False;
                     return 1;
                     case MapNotify:
-                    pObject->mbVisible = TRUE;
+                    pObject->mbVisible = sal_True;
                     return 1;
                     case ButtonPress:
                     pObject->CallCallback( SALOBJ_EVENT_TOTOP, NULL );

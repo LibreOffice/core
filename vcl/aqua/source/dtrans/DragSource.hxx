@@ -72,7 +72,7 @@ class AquaSalFrame;
 -(void)mouseDown: (NSEvent*)theEvent;
 -(void)mouseDragged: (NSEvent*)theEvent;
 
--(unsigned int)draggingSourceOperationMaskForLocal:(MacOSBOOL)isLocal;
+-(unsigned int)draggingSourceOperationMaskForLocal:(BOOL)isLocal;
 -(void)draggedImage:(NSImage*)anImage beganAt:(NSPoint)aPoint;
 -(void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation;
 -(void)draggedImage:(NSImage *)draggedImage movedTo:(NSPoint)screenPoint;

@@ -39,7 +39,7 @@
 #include "stgdir.hxx"
 #include "stgio.hxx"
 
-static BYTE cStgSignature[ 8 ] = { 0xD0,0xCF,0x11,0xE0,0xA1,0xB1,0x1A,0xE1 };
+static sal_uInt8 cStgSignature[ 8 ] = { 0xD0,0xCF,0x11,0xE0,0xA1,0xB1,0x1A,0xE1 };
 
 ////////////////////////////// struct ClsId  /////////////////////////////
 
@@ -62,17 +62,17 @@ SvStream& operator >>( SvStream& r, ClsId& rId )
 SvStream& operator <<( SvStream& r, const ClsId& rId )
 {
     return
-       r  << (INT32) rId.n1
-          << (INT16) rId.n2
-          << (INT16) rId.n3
-          << (UINT8) rId.n4
-          << (UINT8) rId.n5
-          << (UINT8) rId.n6
-          << (UINT8) rId.n7
-          << (UINT8) rId.n8
-          << (UINT8) rId.n9
-          << (UINT8) rId.n10
-          << (UINT8) rId.n11;
+       r  << (sal_Int32) rId.n1
+          << (sal_Int16) rId.n2
+          << (sal_Int16) rId.n3
+          << (sal_uInt8) rId.n4
+          << (sal_uInt8) rId.n5
+          << (sal_uInt8) rId.n6
+          << (sal_uInt8) rId.n7
+          << (sal_uInt8) rId.n8
+          << (sal_uInt8) rId.n9
+          << (sal_uInt8) rId.n10
+          << (sal_uInt8) rId.n11;
 }
 
 ///////////////////////////// class StgHeader ////////////////////////////
@@ -99,14 +99,14 @@ void StgHeader::Init()
         SetFATPage( i, STG_FREE );
 }
 
-BOOL StgHeader::Load( StgIo& rIo )
+sal_Bool StgHeader::Load( StgIo& rIo )
 {
     SvStream& r = *rIo.GetStrm();
     Load( r );
     return rIo.Good();
 }
 
-BOOL StgHeader::Load( SvStream& r )
+sal_Bool StgHeader::Load( SvStream& r )
 {
     r.Seek( 0L );
     r.Read( cSignature, 8 );
@@ -129,10 +129,10 @@ BOOL StgHeader::Load( SvStream& r )
     return r.GetErrorCode() == ERRCODE_NONE;
 }
 
-BOOL StgHeader::Store( StgIo& rIo )
+sal_Bool StgHeader::Store( StgIo& rIo )
 {
     if( !bDirty )
-        return TRUE;
+        return sal_True;
     SvStream& r = *rIo.GetStrm();
     r.Seek( 0L );
     r.Write( cSignature, 8 + 16 );
@@ -140,7 +140,7 @@ BOOL StgHeader::Store( StgIo& rIo )
       << nByteOrder                 // 1C Unicode byte order indicator
       << nPageSize                  // 1E 1 << nPageSize = block size
       << nDataPageSize              // 20 1 << this size == data block size
-      << (INT32) 0 << (INT32) 0 << (INT16) 0
+      << (sal_Int32) 0 << (sal_Int32) 0 << (sal_Int16) 0
       << nFATSize                   // 2C total number of FAT pages
       << nTOCstrm                   // 30 starting page for the TOC stream
       << nReserved                  // 34
@@ -152,7 +152,7 @@ BOOL StgHeader::Store( StgIo& rIo )
     for( short i = 0; i < 109; i++ )
         r << nMasterFAT[ i ];
     bDirty = !rIo.Good();
-    return BOOL( !bDirty );
+    return sal_Bool( !bDirty );
 }
 
 static bool lcl_wontoverflow(short shift)
@@ -161,15 +161,15 @@ static bool lcl_wontoverflow(short shift)
 }
 
 // Perform thorough checks also on unknown variables
-BOOL StgHeader::Check()
+sal_Bool StgHeader::Check()
 {
-    return BOOL( memcmp( cSignature, cStgSignature, 8 ) == 0
+    return sal_Bool( memcmp( cSignature, cStgSignature, 8 ) == 0
             && (short) ( nVersion >> 16 ) == 3 )
             && lcl_wontoverflow(nPageSize)
             && lcl_wontoverflow(nDataPageSize);
 }
 
-INT32 StgHeader::GetFATPage( short n ) const
+sal_Int32 StgHeader::GetFATPage( short n ) const
 {
     if( n >= 0 && n < 109 )
         return nMasterFAT[ n ];
@@ -177,50 +177,50 @@ INT32 StgHeader::GetFATPage( short n ) const
         return STG_EOF;
 }
 
-void StgHeader::SetFATPage( short n, INT32 nb )
+void StgHeader::SetFATPage( short n, sal_Int32 nb )
 {
     if( n >= 0 && n < 109 )
     {
         if( nMasterFAT[ n ] != nb )
-            bDirty = TRUE, nMasterFAT[ n ] = nb;
+            bDirty = sal_True, nMasterFAT[ n ] = nb;
     }
 }
 
 void StgHeader::SetClassId( const ClsId& r )
 {
     if( memcmp( &aClsId, &r, sizeof( ClsId ) ) )
-        bDirty = TRUE, memcpy( &aClsId, &r, sizeof( ClsId ) );
+        bDirty = sal_True, memcpy( &aClsId, &r, sizeof( ClsId ) );
 }
 
-void StgHeader::SetTOCStart( INT32 n )
+void StgHeader::SetTOCStart( sal_Int32 n )
 {
-    if( n != nTOCstrm ) bDirty = TRUE, nTOCstrm = n;
+    if( n != nTOCstrm ) bDirty = sal_True, nTOCstrm = n;
 }
 
-void StgHeader::SetDataFATStart( INT32 n )
+void StgHeader::SetDataFATStart( sal_Int32 n )
 {
-    if( n != nDataFAT ) bDirty = TRUE, nDataFAT = n;
+    if( n != nDataFAT ) bDirty = sal_True, nDataFAT = n;
 }
 
-void StgHeader::SetDataFATSize( INT32 n )
+void StgHeader::SetDataFATSize( sal_Int32 n )
 {
-    if( n != nDataFATSize ) bDirty = TRUE, nDataFATSize = n;
+    if( n != nDataFATSize ) bDirty = sal_True, nDataFATSize = n;
 }
 
-void StgHeader::SetFATSize( INT32 n )
+void StgHeader::SetFATSize( sal_Int32 n )
 {
-    if( n != nFATSize ) bDirty = TRUE, nFATSize = n;
+    if( n != nFATSize ) bDirty = sal_True, nFATSize = n;
 }
 
-void StgHeader::SetFATChain( INT32 n )
+void StgHeader::SetFATChain( sal_Int32 n )
 {
     if( n != nMasterChain )
-        bDirty = TRUE, nMasterChain = n;
+        bDirty = sal_True, nMasterChain = n;
 }
 
-void StgHeader::SetMasters( INT32 n )
+void StgHeader::SetMasters( sal_Int32 n )
 {
-    if( n != nMaster ) bDirty = TRUE, nMaster = n;
+    if( n != nMaster ) bDirty = sal_True, nMaster = n;
 }
 
 ///////////////////////////// class StgEntry /////////////////////////////
@@ -237,11 +237,11 @@ void ToUnicode_Impl( String& rName )
     rName.Erase( 32 );
     rName.Convert( ::GetSystemCharSet(), CHARSET_ANSI );
     // brute force is OK
-    BYTE* p = (BYTE*) rName.GetCharStr();
-    for( USHORT i = 0; i < rName.Len(); i++, p++ )
+    sal_uInt8* p = (sal_uInt8*) rName.GetCharStr();
+    for( sal_uInt16 i = 0; i < rName.Len(); i++, p++ )
     {
         // check each character and substitute blanks for illegal ones
-        BYTE cChar = *p;
+        sal_uInt8 cChar = *p;
         if( cChar == '!' || cChar == ':' || cChar == '\\' || cChar == '/' )
             *p = ' ';
     }
@@ -253,14 +253,14 @@ static void FromUnicode( String& rName )
     rName.Convert( CHARSET_ANSI, ::GetSystemCharSet() );
 }
 */
-BOOL StgEntry::Init()
+sal_Bool StgEntry::Init()
 {
     memset( this, 0, sizeof (StgEntry) - sizeof( String ) );
     SetLeaf( STG_LEFT,  STG_FREE );
     SetLeaf( STG_RIGHT, STG_FREE );
     SetLeaf( STG_CHILD, STG_FREE );
     SetLeaf( STG_DATA,  STG_EOF );
-    return TRUE;
+    return sal_True;
 }
 
 static String ToUpperUnicode( const String & rStr )
@@ -278,7 +278,7 @@ static String ToUpperUnicode( const String & rStr )
 }
 
 
-BOOL StgEntry::SetName( const String& rName )
+sal_Bool StgEntry::SetName( const String& rName )
 {
     // I don't know the locale, so en_US is hopefully fine
     aName = ToUpperUnicode( rName );
@@ -290,12 +290,12 @@ BOOL StgEntry::SetName( const String& rName )
     while( i < 32 )
         nName[ i++ ] = 0;
     nNameLen = ( aName.Len() + 1 ) << 1;
-    return TRUE;
+    return sal_True;
 }
 
-INT32 StgEntry::GetLeaf( StgEntryRef eRef ) const
+sal_Int32 StgEntry::GetLeaf( StgEntryRef eRef ) const
 {
-    INT32 n = -1;
+    sal_Int32 n = -1;
     switch( eRef )
     {
         case STG_LEFT:  n = nLeft;  break;
@@ -306,7 +306,7 @@ INT32 StgEntry::GetLeaf( StgEntryRef eRef ) const
     return n;
 }
 
-void StgEntry::SetLeaf( StgEntryRef eRef, INT32 nPage )
+void StgEntry::SetLeaf( StgEntryRef eRef, sal_Int32 nPage )
 {
     switch( eRef )
     {
@@ -317,12 +317,12 @@ void StgEntry::SetLeaf( StgEntryRef eRef, INT32 nPage )
     }
 }
 
-const INT32* StgEntry::GetTime( StgEntryTime eTime ) const
+const sal_Int32* StgEntry::GetTime( StgEntryTime eTime ) const
 {
     return( eTime == STG_MODIFIED ) ? nMtime : nAtime;
 }
 
-void StgEntry::SetTime( StgEntryTime eTime, INT32* pTime )
+void StgEntry::SetTime( StgEntryTime eTime, sal_Int32* pTime )
 {
     if( eTime == STG_MODIFIED )
         nMtime[ 0 ] = *pTime++, nMtime[ 1 ] = *pTime;
@@ -337,7 +337,7 @@ void StgEntry::SetClassId( const ClsId& r )
 
 void StgEntry::GetName( String& rName ) const
 {
-    UINT16 n = nNameLen;
+    sal_uInt16 n = nNameLen;
     if( n )
         n = ( n >> 1 ) - 1;
     rName = String( nName, n );
@@ -362,7 +362,7 @@ short StgEntry::Compare( const StgEntry& r ) const
 // These load/store operations are a bit more complicated,
 // since they have to copy their contents into a packed structure.
 
-BOOL StgEntry::Load( const void* pFrom )
+sal_Bool StgEntry::Load( const void* pFrom )
 {
     SvMemoryStream r( (sal_Char*) pFrom, 128, STREAM_READ );
     for( short i = 0; i < 32; i++ )
@@ -383,14 +383,14 @@ BOOL StgEntry::Load( const void* pFrom )
       >> nSize                      // 78 file size
       >> nUnknown;                  // 7C unknown
 
-    UINT16 n = nNameLen;
+    sal_uInt16 n = nNameLen;
     if( n )
         n = ( n >> 1 ) - 1;
     if( n > 31 || (nSize < 0 && cType != STG_STORAGE) )
     {
         // the size makes no sence for the substorage
         // TODO/LATER: actually the size should be an unsigned value, but in this case it would mean a stream of more than 2Gb
-        return FALSE;
+        return sal_False;
     }
 
     aName = String( nName, n );
@@ -398,7 +398,7 @@ BOOL StgEntry::Load( const void* pFrom )
     aName = ToUpperUnicode( aName );
     aName.Erase( 31 );
 
-    return TRUE;
+    return sal_True;
 }
 
 void StgEntry::Store( void* pTo )

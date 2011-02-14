@@ -1433,8 +1433,8 @@ void lcl_saveLastURLs(SvStringsDtor*&                                    rpURLLi
                       ::comphelper::SequenceAsVector< ::rtl::OUString >& lLastURLs )
 {
     lLastURLs.clear();
-    USHORT c = rpURLList->Count();
-    USHORT i = 0;
+    sal_uInt16 c = rpURLList->Count();
+    sal_uInt16 i = 0;
     for (i=0; i<c; ++i)
         lLastURLs.push_back(*(rpURLList->GetObject(i)));
 }
@@ -1522,15 +1522,15 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         // check password checkbox if the document had password before
         if( mbHasPassword )
         {
-            SFX_ITEMSET_ARG( rpSet, pPassItem, SfxBoolItem, SID_PASSWORDINTERACTION, FALSE );
+            SFX_ITEMSET_ARG( rpSet, pPassItem, SfxBoolItem, SID_PASSWORDINTERACTION, sal_False );
             mbPwdCheckBoxState = ( pPassItem != NULL && pPassItem->GetValue() );
 
             // in case the document has password to modify, the dialog should be shown
-            SFX_ITEMSET_ARG( rpSet, pPassToModifyItem, SfxUnoAnyItem, SID_MODIFYPASSWORDINFO, FALSE );
+            SFX_ITEMSET_ARG( rpSet, pPassToModifyItem, SfxUnoAnyItem, SID_MODIFYPASSWORDINFO, sal_False );
             mbPwdCheckBoxState |= ( pPassToModifyItem && pPassToModifyItem->GetValue().hasValue() );
         }
 
-        SFX_ITEMSET_ARG( rpSet, pSelectItem, SfxBoolItem, SID_SELECTION, FALSE );
+        SFX_ITEMSET_ARG( rpSet, pSelectItem, SfxBoolItem, SID_SELECTION, sal_False );
         if ( pSelectItem )
             mbSelection = pSelectItem->GetValue();
         else
@@ -1957,7 +1957,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
 
     // create the list of filters
     mpGraphicFilter = new GraphicFilter;
-    USHORT i, j, nCount = mpGraphicFilter->GetImportFormatCount();
+    sal_uInt16 i, j, nCount = mpGraphicFilter->GetImportFormatCount();
 
     // compute the extension string for all known import filters
     String aExtensions;
@@ -1966,7 +1966,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
     {
         j = 0;
         String sWildcard;
-        while( TRUE )
+        while( sal_True )
         {
             sWildcard = mpGraphicFilter->GetImportWildcard( i, j++ );
             if ( !sWildcard.Len() )
@@ -2006,7 +2006,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
         String aExt;
         j = 0;
         String sWildcard;
-        while( TRUE )
+        while( sal_True )
         {
             sWildcard = mpGraphicFilter->GetImportWildcard( i, j++ );
             if ( !sWildcard.Len() )

@@ -94,14 +94,14 @@ public:
     bool hasTerm( const rtl::OUString& rTerm ) const;
 
     void addEntry( const rtl::OUString& rTerm, const rtl::OUString& rMapping
-            , sal_Int16 nConversionPropertyType /*linguistic2::ConversionPropertyType*/, ULONG nPos = LIST_APPEND );
-    ULONG deleteEntries( const rtl::OUString& rTerm ); //return lowest position of deleted entries or LIST_APPEND if no entry was deleted
+            , sal_Int16 nConversionPropertyType /*linguistic2::ConversionPropertyType*/, sal_uIntPtr nPos = LIST_APPEND );
+    sal_uIntPtr deleteEntries( const rtl::OUString& rTerm ); //return lowest position of deleted entries or LIST_APPEND if no entry was deleted
     void deleteEntryOnPos( sal_Int32 nPos  );
     DictionaryEntry* getEntryOnPos( sal_Int32 nPos ) const;
     DictionaryEntry* getFirstSelectedEntry() const;
 
-    void sortByColumn( USHORT nSortColumnIndex, bool bSortAtoZ );
-    USHORT getSortColumn() const;
+    void sortByColumn( sal_uInt16 nSortColumnIndex, bool bSortAtoZ );
+    sal_uInt16 getSortColumn() const;
 
     virtual void Resize();
 
@@ -111,7 +111,7 @@ private:
 
     DECL_LINK( CompareHdl, SvSortData* );
     StringCompare ColumnCompare( SvLBoxEntry* pLeft, SvLBoxEntry* pRight );
-    SvLBoxItem* getItemAtColumn( SvLBoxEntry* pEntry, USHORT nColumn ) const;
+    SvLBoxItem* getItemAtColumn( SvLBoxEntry* pEntry, sal_uInt16 nColumn ) const;
 
 public:
     ::com::sun::star::uno::Reference<
@@ -123,7 +123,7 @@ private:
 
     std::vector< DictionaryEntry* > m_aToBeDeleted;
 
-    USHORT      m_nSortColumnIndex;
+    sal_uInt16      m_nSortColumnIndex;
 };
 
 class ChineseDictionaryDialog : public ModalDialog

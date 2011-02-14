@@ -73,16 +73,16 @@ protected:
     void                ShowSelection();
     void                HideSelection();
     void                ShowSelection( const TextSelection& rSel );
-    void                ImpShowHideSelection( BOOL bShow, const TextSelection* pRange = NULL );
+    void                ImpShowHideSelection( sal_Bool bShow, const TextSelection* pRange = NULL );
 
     TextSelection       ImpMoveCursor( const KeyEvent& rKeyEvent );
-    TextPaM             ImpDelete( BOOL bForward, BYTE nMode );
-    void                ImpSetSelection( const TextSelection& rNewSel, BOOL bUI );
-    BOOL                IsInSelection( const TextPaM& rPaM );
+    TextPaM             ImpDelete( sal_Bool bForward, sal_uInt8 nMode );
+    void                ImpSetSelection( const TextSelection& rNewSel, sal_Bool bUI );
+    sal_Bool                IsInSelection( const TextPaM& rPaM );
 
     void                ImpPaint( OutputDevice* pOut, const Point& rStartPos, Rectangle const* pPaintArea, TextSelection const* pPaintRange = 0, TextSelection const* pSelection = 0 );
-    void                ImpPaint( const Rectangle& rRect, BOOL bUseVirtDev );
-    void                ImpShowCursor( BOOL bGotoCursor, BOOL bForceVisCursor, BOOL bEndKey );
+    void                ImpPaint( const Rectangle& rRect, sal_Bool bUseVirtDev );
+    void                ImpShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sal_Bool bEndKey );
     void                ImpHighlight( const TextSelection& rSel );
     void                ImpSetSelection( const TextSelection& rSelection );
     Point               ImpGetOutputStartPos( const Point& rStartDocPos ) const;
@@ -91,7 +91,7 @@ protected:
     void                ImpShowDDCursor();
 
     bool                ImplTruncateNewText( rtl::OUString& rNewText ) const;
-    BOOL                ImplCheckTextLen( const String& rNewText );
+    sal_Bool                ImplCheckTextLen( const String& rNewText );
 
     VirtualDevice*      GetVirtualDevice();
 
@@ -117,27 +117,27 @@ public:
     void                Invalidate();
     void                Scroll( long nHorzScroll, long nVertScroll );
 
-    void                ShowCursor( BOOL bGotoCursor = TRUE, BOOL bForceVisCursor = TRUE );
+    void                ShowCursor( sal_Bool bGotoCursor = sal_True, sal_Bool bForceVisCursor = sal_True );
     void                HideCursor();
 
-    void                EnableCursor( BOOL bEnable );
-    BOOL                IsCursorEnabled() const;
+    void                EnableCursor( sal_Bool bEnable );
+    sal_Bool                IsCursorEnabled() const;
 
     const TextSelection&    GetSelection() const;
     TextSelection&      GetSelection();
     void                SetSelection( const TextSelection& rNewSel );
-    void                SetSelection( const TextSelection& rNewSel, BOOL bGotoCursor );
-    BOOL                HasSelection() const;
+    void                SetSelection( const TextSelection& rNewSel, sal_Bool bGotoCursor );
+    sal_Bool                HasSelection() const;
 
     String              GetSelected();
     String              GetSelected( LineEnd aSeparator );
     void                DeleteSelected();
 
-    void                InsertNewText( const rtl::OUString& rNew, BOOL bSelect = FALSE );
+    void                InsertNewText( const rtl::OUString& rNew, sal_Bool bSelect = sal_False );
     // deprecated: use InsertNewText instead
-    void                InsertText( const String& rNew, BOOL bSelect = FALSE );
+    void                InsertText( const String& rNew, sal_Bool bSelect = sal_False );
 
-    BOOL                KeyInput( const KeyEvent& rKeyEvent );
+    sal_Bool                KeyInput( const KeyEvent& rKeyEvent );
     void                Paint( const Rectangle& rRect );
     void                MouseButtonUp( const MouseEvent& rMouseEvent );
     void                MouseButtonDown( const MouseEvent& rMouseEvent );
@@ -154,8 +154,8 @@ public:
     void                Undo();
     void                Redo();
 
-    BOOL                Read( SvStream& rInput );
-    BOOL                Write( SvStream& rOutput );
+    sal_Bool                Read( SvStream& rInput );
+    sal_Bool                Write( SvStream& rOutput );
 
     void                SetStartDocPos( const Point& rPos );
     const Point&        GetStartDocPos() const;
@@ -163,26 +163,26 @@ public:
     Point               GetDocPos( const Point& rWindowPos ) const;
     Point               GetWindowPos( const Point& rDocPos ) const;
 
-    void                SetInsertMode( BOOL bInsert );
-    BOOL                IsInsertMode() const;
+    void                SetInsertMode( sal_Bool bInsert );
+    sal_Bool                IsInsertMode() const;
 
-    void                SetAutoIndentMode( BOOL bAutoIndent );
-    BOOL                IsAutoIndentMode() const;
+    void                SetAutoIndentMode( sal_Bool bAutoIndent );
+    sal_Bool                IsAutoIndentMode() const;
 
-    void                SetReadOnly( BOOL bReadOnly );
-    BOOL                IsReadOnly() const;
+    void                SetReadOnly( sal_Bool bReadOnly );
+    sal_Bool                IsReadOnly() const;
 
-    void                SetAutoScroll( BOOL bAutoScroll );
-    BOOL                IsAutoScroll() const;
+    void                SetAutoScroll( sal_Bool bAutoScroll );
+    sal_Bool                IsAutoScroll() const;
 
-    BOOL                SetCursorAtPoint( const Point& rPointPixel );
-    BOOL                IsSelectionAtPoint( const Point& rPointPixel );
+    sal_Bool                SetCursorAtPoint( const Point& rPointPixel );
+    sal_Bool                IsSelectionAtPoint( const Point& rPointPixel );
 
-    void                SetPaintSelection( BOOL bPaint);
-    BOOL                IsPaintSelection() const;
+    void                SetPaintSelection( sal_Bool bPaint);
+    sal_Bool                IsPaintSelection() const;
 
-    void                SetHighlightSelection( BOOL bSelectByHighlight );
-    BOOL                IsHighlightSelection() const;
+    void                SetHighlightSelection( sal_Bool bSelectByHighlight );
+    sal_Bool                IsHighlightSelection() const;
 
     void                EraseVirtualDevice();
 
@@ -192,8 +192,8 @@ public:
     TextPaM             PageDown( const TextPaM& rPaM );
     TextPaM             CursorUp( const TextPaM& rPaM );
     TextPaM             CursorDown( const TextPaM& rPaM );
-    TextPaM             CursorLeft( const TextPaM& rPaM, USHORT nCharacterIteratorMode );
-    TextPaM             CursorRight( const TextPaM& rPaM, USHORT nCharacterIteratorMode );
+    TextPaM             CursorLeft( const TextPaM& rPaM, sal_uInt16 nCharacterIteratorMode );
+    TextPaM             CursorRight( const TextPaM& rPaM, sal_uInt16 nCharacterIteratorMode );
     TextPaM             CursorWordLeft( const TextPaM& rPaM );
     TextPaM             CursorWordRight( const TextPaM& rPaM );
     TextPaM             CursorStartOfLine( const TextPaM& rPaM );
@@ -204,8 +204,8 @@ public:
     TextPaM             CursorEndOfDoc();
 
     // Old, remove!
-    TextPaM             CursorLeft( const TextPaM& rPaM, BOOL bWordMode = FALSE );
-    TextPaM             CursorRight( const TextPaM& rPaM, BOOL bWordMode = FALSE );
+    TextPaM             CursorLeft( const TextPaM& rPaM, sal_Bool bWordMode = sal_False );
+    TextPaM             CursorRight( const TextPaM& rPaM, sal_Bool bWordMode = sal_False );
 
     /**
         Drag and Drop, deleting and selection regards all text that has an attribute

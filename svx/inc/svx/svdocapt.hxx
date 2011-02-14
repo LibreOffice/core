@@ -92,15 +92,15 @@ public:
     virtual ~SdrCaptionObj();
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
     virtual void operator=(const SdrObject& rObj);
 
     // for calc: special shadow only for text box
-    void SetSpecialTextBoxShadow() { mbSpecialTextBoxShadow = TRUE; }
+    void SetSpecialTextBoxShadow() { mbSpecialTextBoxShadow = sal_True; }
     sal_Bool GetSpecialTextBoxShadow() const { return mbSpecialTextBoxShadow; }
 
     // for calc: fixed note tail position.
-    void SetFixedTail() { mbFixedTail = TRUE; }
+    void SetFixedTail() { mbFixedTail = sal_True; }
 
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
@@ -149,7 +149,7 @@ protected:
     virtual void RestGeoData(const SdrObjGeoData& rGeo);
 
 public:
-    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 
     const Point& GetTailPos() const;
     void SetTailPos(const Point& rPos);

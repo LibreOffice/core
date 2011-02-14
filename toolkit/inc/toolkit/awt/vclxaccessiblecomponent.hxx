@@ -74,8 +74,8 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> mxWindow;
     VCLXWindow*                         mpVCLXindow;
 
-    ULONG                           nDummy1;
-    ULONG                           nDummy2;
+    sal_uLong                           nDummy1;
+    sal_uLong                           nDummy2;
     void*                           pDummy1;
     VCLExternalSolarLock*           m_pSolarLock;
 

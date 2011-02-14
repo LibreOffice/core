@@ -53,7 +53,7 @@
 void ScViewFunc::DetectiveAddPred()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    BOOL bDone = pDocSh->GetDocFunc().
+    sal_Bool bDone = pDocSh->GetDocFunc().
                     DetectiveAddPred( GetViewData()->GetCurPos() );
     if (!bDone)
         Sound::Beep();
@@ -64,7 +64,7 @@ void ScViewFunc::DetectiveAddPred()
 void ScViewFunc::DetectiveDelPred()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    BOOL bDone = pDocSh->GetDocFunc().
+    sal_Bool bDone = pDocSh->GetDocFunc().
                     DetectiveDelPred( GetViewData()->GetCurPos() );
     if (!bDone)
         Sound::Beep();
@@ -75,7 +75,7 @@ void ScViewFunc::DetectiveDelPred()
 void ScViewFunc::DetectiveAddSucc()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    BOOL bDone = pDocSh->GetDocFunc().
+    sal_Bool bDone = pDocSh->GetDocFunc().
                     DetectiveAddSucc( GetViewData()->GetCurPos() );
     if (!bDone)
         Sound::Beep();
@@ -86,7 +86,7 @@ void ScViewFunc::DetectiveAddSucc()
 void ScViewFunc::DetectiveDelSucc()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    BOOL bDone = pDocSh->GetDocFunc().
+    sal_Bool bDone = pDocSh->GetDocFunc().
                     DetectiveDelSucc( GetViewData()->GetCurPos() );
     if (!bDone)
         Sound::Beep();
@@ -97,7 +97,7 @@ void ScViewFunc::DetectiveDelSucc()
 void ScViewFunc::DetectiveAddError()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    BOOL bDone = pDocSh->GetDocFunc().
+    sal_Bool bDone = pDocSh->GetDocFunc().
                     DetectiveAddError( GetViewData()->GetCurPos() );
     if (!bDone)
         Sound::Beep();
@@ -108,7 +108,7 @@ void ScViewFunc::DetectiveAddError()
 void ScViewFunc::DetectiveDelAll()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    BOOL bDone = pDocSh->GetDocFunc().
+    sal_Bool bDone = pDocSh->GetDocFunc().
                     DetectiveDelAll( GetViewData()->GetTabNo() );
     if (!bDone)
         Sound::Beep();
@@ -119,7 +119,7 @@ void ScViewFunc::DetectiveDelAll()
 void ScViewFunc::DetectiveMarkInvalid()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    BOOL bDone = pDocSh->GetDocFunc().
+    sal_Bool bDone = pDocSh->GetDocFunc().
                     DetectiveMarkInvalid( GetViewData()->GetTabNo() );
     if (!bDone)
         Sound::Beep();
@@ -130,7 +130,7 @@ void ScViewFunc::DetectiveMarkInvalid()
 void ScViewFunc::DetectiveRefresh()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    BOOL bDone = pDocSh->GetDocFunc().DetectiveRefresh();
+    sal_Bool bDone = pDocSh->GetDocFunc().DetectiveRefresh();
     if (!bDone)
         Sound::Beep();
 

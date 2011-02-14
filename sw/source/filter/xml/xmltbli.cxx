@@ -2111,7 +2111,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
         {
             // default num format?
             const SfxPoolItem* pItem = NULL;
-            if( pBoxFmt2->GetItemState( RES_BOXATR_FORMAT, FALSE, &pItem )
+            if( pBoxFmt2->GetItemState( RES_BOXATR_FORMAT, sal_False, &pItem )
                             == SFX_ITEM_SET )
             {
                 const SwTblBoxNumFormat* pNumFormat =
@@ -2166,7 +2166,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                 // Solution: the number format will be removed,
                 // the cell gets the default text format.
                 const SfxPoolItem* pItem = NULL;
-                if( pBoxFmt->GetItemState( RES_BOXATR_FORMAT, FALSE, &pItem )
+                if( pBoxFmt->GetItemState( RES_BOXATR_FORMAT, sal_False, &pItem )
                     == SFX_ITEM_SET )
                 {
                     const SwDoc* pDoc = pBoxFmt->GetDoc();
@@ -2842,10 +2842,10 @@ void SwXMLTableContext::MakeTable()
 
         // 3) create new DDE table, and
         SwDDETable* pDDETable = new SwDDETable( pTableNode->GetTable(),
-                                                pFldType, FALSE );
+                                                pFldType, sal_False );
 
         // 4) set new (DDE)table at node.
-        pTableNode->SetNewTable(pDDETable, FALSE);
+        pTableNode->SetNewTable(pDDETable, sal_False);
     }
 
     // ??? this is always false: root frame is only created in ViewShell::Init

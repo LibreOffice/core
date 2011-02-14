@@ -39,12 +39,12 @@ public:
     // Constructor movet alle Lines/Boxen aus der SwTable zu sich.
     // Die SwTable ist danach Leer und muss geloescht werden.
     SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
-                BOOL bUpdate = TRUE );
+                sal_Bool bUpdate = sal_True );
     ~SwDDETable();
 
     void Modify( SfxPoolItem*, SfxPoolItem* );
     void ChangeContent();
-    BOOL  NoDDETable();
+    sal_Bool  NoDDETable();
 
     SwDDEFieldType* GetDDEFldType();
     inline const SwDDEFieldType* GetDDEFldType() const;

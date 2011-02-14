@@ -1088,7 +1088,7 @@ const SvStringsDtor& SwStyleNameMapper::GetNumRuleProgNameArray()
 const String SwStyleNameMapper::GetSpecialExtraProgName( const String& rExtraUIName )
 {
     String aRes = rExtraUIName;
-    BOOL bChgName = FALSE;
+    sal_Bool bChgName = sal_False;
     const SvStringsDtor& rExtraArr = GetExtraUINameArray();
     static sal_uInt16 nIds[] =
     {
@@ -1103,7 +1103,7 @@ const String SwStyleNameMapper::GetSpecialExtraProgName( const String& rExtraUIN
     {
         if (aRes == *rExtraArr[ *pIds ])
         {
-            bChgName = TRUE;
+            bChgName = sal_True;
             break;
         }
     }
@@ -1115,7 +1115,7 @@ const String SwStyleNameMapper::GetSpecialExtraProgName( const String& rExtraUIN
 const String SwStyleNameMapper::GetSpecialExtraUIName( const String& rExtraProgName )
 {
     String aRes = rExtraProgName;
-    BOOL bChgName = FALSE;
+    sal_Bool bChgName = sal_False;
     const SvStringsDtor& rExtraArr = GetExtraProgNameArray();
     static sal_uInt16 nIds[] =
     {
@@ -1131,7 +1131,7 @@ const String SwStyleNameMapper::GetSpecialExtraUIName( const String& rExtraProgN
     {
         if (aRes == *rExtraArr[ *pIds ])
         {
-            bChgName = TRUE;
+            bChgName = sal_True;
             break;
         }
     }

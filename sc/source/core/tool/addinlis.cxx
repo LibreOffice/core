@@ -87,8 +87,8 @@ ScAddInListener* ScAddInListener::Get( uno::Reference<sheet::XVolatileResult> xV
 {
     sheet::XVolatileResult* pComp = xVR.get();
 
-    ULONG nCount = aAllListeners.Count();
-    for (ULONG nPos=0; nPos<nCount; nPos++)
+    sal_uLong nCount = aAllListeners.Count();
+    for (sal_uLong nPos=0; nPos<nCount; nPos++)
     {
         ScAddInListener* pLst = (ScAddInListener*)aAllListeners.GetObject(nPos);
         if ( pComp == (sheet::XVolatileResult*)pLst->xVolRes.get() )
@@ -101,14 +101,14 @@ ScAddInListener* ScAddInListener::Get( uno::Reference<sheet::XVolatileResult> xV
 // static
 void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
 {
-    ULONG nPos = aAllListeners.Count();
+    sal_uLong nPos = aAllListeners.Count();
     while (nPos)
     {
         //  loop backwards because elements are removed
         --nPos;
         ScAddInListener* pLst = (ScAddInListener*)aAllListeners.GetObject(nPos);
         ScAddInDocs* p = pLst->pDocs;
-        USHORT nFoundPos;
+        sal_uInt16 nFoundPos;
         if ( p->Seek_Entry( pDocumentP, &nFoundPos ) )
         {
             p->Remove( nFoundPos );
@@ -158,8 +158,8 @@ void SAL_CALL ScAddInListener::modified( const ::com::sun::star::sheet::ResultEv
     Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress(), NULL ) );
 
     const ScDocument** ppDoc = (const ScDocument**) pDocs->GetData();
-    USHORT nCount = pDocs->Count();
-    for ( USHORT j=0; j<nCount; j++, ppDoc++ )
+    sal_uInt16 nCount = pDocs->Count();
+    for ( sal_uInt16 j=0; j<nCount; j++, ppDoc++ )
     {
         ScDocument* pDoc = (ScDocument*)*ppDoc;
         pDoc->TrackFormulas();

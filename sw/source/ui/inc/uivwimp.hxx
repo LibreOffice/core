@@ -93,7 +93,7 @@ public:
 
     void ViewDestroyed() { pView = 0; }
 
-    void AddRemoveListener( BOOL bAdd );
+    void AddRemoveListener( sal_Bool bAdd );
 };
 
 

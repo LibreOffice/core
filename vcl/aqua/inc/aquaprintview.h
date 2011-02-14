@@ -51,7 +51,7 @@ struct PrintAccessoryViewState
     AquaSalInfoPrinter*         mpInfoPrinter;
 }
 -(id)initWithController: (vcl::PrinterController*)pController withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter;
--(MacOSBOOL)knowsPageRange: (NSRangePointer)range;
+-(BOOL)knowsPageRange: (NSRangePointer)range;
 -(NSRect)rectForPage: (int)page;
 -(NSPoint)locationOfPrintRect: (NSRect)aRect;
 -(void)drawRect: (NSRect)rect;

@@ -69,7 +69,7 @@ static SvXMLTokenMapEntry aChildren[] =
 
 SchemaContext::SchemaContext(
     SvXMLImport& rImport,
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XDataTypeRepository>& rRepository ) :
         TokenContext( rImport, nPrefix, rLocalName, aAttributes, aChildren ),

@@ -62,9 +62,9 @@ public:
                                 const String& rFileName );
                 ~SdInsertPagesObjsDlg();
 
-    List*       GetList( USHORT nType );
-    BOOL        IsLink();
-    BOOL        IsRemoveUnnessesaryMasterPages() const;
+    List*       GetList( sal_uInt16 nType );
+    sal_Bool        IsLink();
+    sal_Bool        IsRemoveUnnessesaryMasterPages() const;
 };
 
 

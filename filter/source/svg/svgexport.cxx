@@ -326,7 +326,7 @@ sal_Bool SVGFilter::implExportDocument( const Reference< XDrawPages >& rxMasterP
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns", B2UCONST( "http://www.w3.org/2000/svg" ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:xlink", B2UCONST( "http://www.w3.org/1999/xlink" ) );
 
-    mpSVGDoc = new SvXMLElementExport( *mpSVGExport, XML_NAMESPACE_NONE, "svg", TRUE, TRUE );
+    mpSVGDoc = new SvXMLElementExport( *mpSVGExport, XML_NAMESPACE_NONE, "svg", sal_True, sal_True );
 
     while( ( nCurPage <= nLastPage ) && ( -1 == nVisible ) )
     {
@@ -409,7 +409,7 @@ sal_Bool SVGFilter::implGenerateMetaData( const Reference< XDrawPages >& /* rxMa
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "numberOfSlides", OUString::valueOf( rxDrawPages->getCount() ) );
 
         {
-            SvXMLElementExport  aExp( *mpSVGExport, XML_NAMESPACE_NONE, "ooo:slidesInfo", TRUE, TRUE );
+            SvXMLElementExport  aExp( *mpSVGExport, XML_NAMESPACE_NONE, "ooo:slidesInfo", sal_True, sal_True );
             const OUString      aId( B2UCONST( "meta_slide" ) );
 
             for( sal_Int32 i = 0, nCount = rxDrawPages->getCount(); i < nCount; ++i )
@@ -442,7 +442,7 @@ sal_Bool SVGFilter::implGenerateMetaData( const Reference< XDrawPages >& /* rxMa
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "master-visibility", aMasterVisibility );
 
                 {
-                    SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "ooo:slideInfo", TRUE, TRUE );
+                    SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "ooo:slideInfo", sal_True, sal_True );
                 }
             }
         }
@@ -462,7 +462,7 @@ sal_Bool SVGFilter::implGenerateScript( const Reference< XDrawPages >& /* rxMast
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "type", B2UCONST( "text/ecmascript" ) );
 
     {
-        SvXMLElementExport                      aExp( *mpSVGExport, XML_NAMESPACE_NONE, "script", TRUE, TRUE );
+        SvXMLElementExport                      aExp( *mpSVGExport, XML_NAMESPACE_NONE, "script", sal_True, sal_True );
         Reference< XExtendedDocumentHandler >   xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
 
         if( xExtDocHandler.is() )
@@ -509,7 +509,7 @@ sal_Bool SVGFilter::implExportPages( const Reference< XDrawPages >& rxPages,
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", implGetValidIDFromInterface( xShapes ) );
 
                 {
-                    SvXMLElementExport  aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
+                    SvXMLElementExport  aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
                     const Point         aNullPt;
 
                     {
@@ -517,7 +517,7 @@ sal_Bool SVGFilter::implExportPages( const Reference< XDrawPages >& rxPages,
 
                         if( xExtDocHandler.is() )
                         {
-                            SvXMLElementExport  aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "desc", TRUE, TRUE );
+                            SvXMLElementExport  aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "desc", sal_True, sal_True );
                             OUString            aDesc;
 
                             if( bMaster )
@@ -638,10 +638,10 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
 
                 if( xShapes.is() )
                 {
-                    SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
+                    SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
 
                     {
-                        SvXMLElementExport                      aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "desc", TRUE, TRUE );
+                        SvXMLElementExport                      aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "desc", sal_True, sal_True );
                         Reference< XExtendedDocumentHandler >   xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
 
                         xExtDocHandler->unknown( B2UCONST( "Group" ) );
@@ -662,10 +662,10 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                 const Size  aSize( aBoundRect.Width, aBoundRect.Height );
 
                 {
-                    SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
+                    SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
 
                     {
-                        SvXMLElementExport                      aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "desc", TRUE, TRUE );
+                        SvXMLElementExport                      aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "desc", sal_True, sal_True );
                         Reference< XExtendedDocumentHandler >   xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
 
                         xExtDocHandler->unknown( implGetDescriptionFromShape( rxShape ) );
@@ -676,17 +676,17 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                         if( ( aShapeType.lastIndexOf( B2UCONST( "drawing.OLE2Shape" ) ) != -1 ) ||
                             ( aShapeType.lastIndexOf( B2UCONST( "drawing.GraphicObjectShape" ) ) != -1 ) )
                         {
-                            SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
+                            SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
                             mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf, SVGWRITER_WRITE_ALL);
                         }
                         else
                         {
                             // write geometries
-                            SvXMLElementExport aGeometryExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
+                            SvXMLElementExport aGeometryExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
                             mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf, SVGWRITER_WRITE_FILL );
 
                             // write text separately
-                            SvXMLElementExport aTextExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
+                            SvXMLElementExport aTextExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
                             mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf, SVGWRITER_WRITE_TEXT );
                         }
                     }

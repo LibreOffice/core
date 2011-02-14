@@ -46,7 +46,7 @@ class RemoteControl
 {
     friend class StatementFlow;
 
-    BOOL         m_bIdleInserted;
+    sal_Bool         m_bIdleInserted;
 #if OSL_DEBUG_LEVEL > 1
     EditWindow *m_pDbgWin;
 #endif
@@ -55,14 +55,14 @@ class RemoteControl
 public:
     RemoteControl();
     ~RemoteControl();
-    BOOL QueCommands( ULONG nServiceId, SvStream *pIn );
+    sal_Bool QueCommands( sal_uLong nServiceId, SvStream *pIn );
     SvStream* GetReturnStream();
 
     DECL_LINK( IdleHdl,   Application* );
     DECL_LINK( CommandHdl, Application* );
 
     DECL_LINK( QueCommandsEvent, CommunicationLink* );
-    ULONG nStoredServiceId;
+    sal_uLong nStoredServiceId;
     SvStream *pStoredStream;
 
     void ExecuteURL( String &aURL );

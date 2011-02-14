@@ -49,14 +49,14 @@ class EDITENG_DLLPUBLIC SvxFmtKeepItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    inline SvxFmtKeepItem( const BOOL bKeep /*= FALSE*/,
-                           const USHORT _nWhich  );
+    inline SvxFmtKeepItem( const sal_Bool bKeep /*= sal_False*/,
+                           const sal_uInt16 _nWhich  );
     inline SvxFmtKeepItem& operator=( const SvxFmtKeepItem& rSplit );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream&, USHORT ) const;
-    virtual SvStream&       Store( SvStream& , USHORT nItemVersion ) const;
+    virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 ) const;
+    virtual SvStream&       Store( SvStream& , sal_uInt16 nItemVersion ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -64,7 +64,7 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 };
 
-inline SvxFmtKeepItem::SvxFmtKeepItem( const BOOL bKeep, const USHORT _nWhich ) :
+inline SvxFmtKeepItem::SvxFmtKeepItem( const sal_Bool bKeep, const sal_uInt16 _nWhich ) :
     SfxBoolItem( _nWhich, bKeep )
 {}
 

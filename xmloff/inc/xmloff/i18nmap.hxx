@@ -46,7 +46,7 @@ class XMLOFF_DLLPUBLIC SvI18NMap
 {
     SvI18NMap_Impl      *pImpl;
 
-    SAL_DLLPRIVATE SvI18NMapEntry_Impl *_Find( USHORT nKind,
+    SAL_DLLPRIVATE SvI18NMapEntry_Impl *_Find( sal_uInt16 nKind,
                                 const ::rtl::OUString& rName ) const;
 
 public:
@@ -55,12 +55,12 @@ public:
     ~SvI18NMap();
 
     // Add a name mapping
-    void Add( USHORT nKind, const ::rtl::OUString& rName,
+    void Add( sal_uInt16 nKind, const ::rtl::OUString& rName,
               const ::rtl::OUString& rNewName );
 
     // Return a mapped name. If the name could not be found, return the
     // original name.
-    const ::rtl::OUString& Get( USHORT nKind,
+    const ::rtl::OUString& Get( sal_uInt16 nKind,
                                 const ::rtl::OUString& rName ) const;
 };
 

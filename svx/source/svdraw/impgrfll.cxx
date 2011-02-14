@@ -42,12 +42,12 @@ void ImpCalcBmpFillSizes( Size&            rStartOffset,
                           const Size&      rBmpSize,
                           const Size&      rBmpPerCent,
                           const Size&      rBmpOffPerCent,
-                          BOOL             bBmpLogSize,
-                          BOOL             bBmpTile,
-                          BOOL             bBmpStretch,
+                          sal_Bool             bBmpLogSize,
+                          sal_Bool             bBmpTile,
+                          sal_Bool             bBmpStretch,
                           RECT_POINT       eBmpRectPoint )
 {
-    BOOL    bOriginalSize = FALSE, bScaleSize = FALSE;
+    sal_Bool    bOriginalSize = sal_False, bScaleSize = sal_False;
 
     // Falls keine Groessen gegeben sind ( z.B. alte Dokumente )
     // berechnen wir uns die Groesse selber aus der Bitmap
@@ -57,16 +57,16 @@ void ImpCalcBmpFillSizes( Size&            rStartOffset,
     if( bBmpLogSize )
     {
         if( !rBmpSize.Width() && !rBmpSize.Height() )
-            bOriginalSize = TRUE;
+            bOriginalSize = sal_True;
         else if( !rBmpSize.Width() || !rBmpSize.Height() )
-            bScaleSize = TRUE;
+            bScaleSize = sal_True;
     }
     else
     {
         if( !rBmpPerCent.Width() && !rBmpPerCent.Height() )
-            bOriginalSize = TRUE;
+            bOriginalSize = sal_True;
         else if( !rBmpPerCent.Width() || !rBmpPerCent.Height() )
-            bScaleSize = TRUE;
+            bScaleSize = sal_True;
     }
 
     // entweder Originalgroesse oder angepasste Groesse

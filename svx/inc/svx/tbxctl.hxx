@@ -47,13 +47,13 @@ protected:
     using SfxToolBoxControl::Select;
 
 public:
-    SvxTbxCtlDraw( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxTbxCtlDraw() {}
 
     SFX_DECL_TOOLBOX_CONTROL();
 
-    virtual void                Select( BOOL bMod1 = FALSE );
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void                Select( sal_Bool bMod1 = sal_False );
+    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
     virtual SfxPopupWindowType  GetPopupWindowType() const;
 };

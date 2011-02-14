@@ -336,16 +336,16 @@ com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const rtl::
 }
 
 
-bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
+bool ImplInitAccessBridge(sal_Bool bAllowCancel, sal_Bool &rCancelled)
 {
-    rCancelled = FALSE;
+    rCancelled = sal_False;
 
     bool bErrorMessage = true;
 
     // Note:
-    // if bAllowCancel is TRUE we were called from application startup
+    // if bAllowCancel is sal_True we were called from application startup
     //  where we will disable any Java errorboxes and show our own accessibility dialog if Java throws an exception
-    // if bAllowCancel is FALSE we were called from Tools->Options
+    // if bAllowCancel is sal_False we were called from Tools->Options
     //  where we will see Java errorboxes, se we do not show our dialogs in addition to Java's
 
     try
@@ -422,7 +422,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = TRUE;
+                rCancelled = sal_True;
         }
 
         return false;
@@ -447,7 +447,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = TRUE;
+                rCancelled = sal_True;
         }
 
         return false;
@@ -472,7 +472,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = TRUE;
+                rCancelled = sal_True;
         }
 
         return false;
@@ -497,7 +497,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
             // Do not change the setting in case the user chooses to cancel
             if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                rCancelled = TRUE;
+                rCancelled = sal_True;
         }
 
         return false;
@@ -539,7 +539,7 @@ bool ImplInitAccessBridge(BOOL bAllowCancel, BOOL &rCancelled)
 
                     // Do not change the setting in case the user chooses to cancel
                     if( SALSYSTEM_SHOWNATIVEMSGBOX_BTN_CANCEL == ret )
-                        rCancelled = TRUE;
+                        rCancelled = sal_True;
                 }
                 else
                 {

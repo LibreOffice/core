@@ -54,17 +54,22 @@ my_components = \
     chartmodel \
     charttools \
     chartview \
-    comphelp4 \
+    component/comphelper/util/comphelp \
     component/framework/util/fwk \
     component/framework/util/fwl \
     component/framework/util/fwm \
+    component/vbahelper/util/msforms \
     component/sfx2/util/sfx \
+    component/sot/util/sot \
     component/svl/source/fsstor/fsstorage \
     component/svl/source/passwordcontainer/passwordcontainer \
     component/svl/util/svl \
     component/svtools/source/hatchwindow/hatchwindowfactory \
     component/svtools/source/productregistration/productregistration.uno \
     component/svtools/util/svt \
+    component/svx/util/svx \
+    component/svx/util/svxcore \
+    component/svx/util/textconversiondlgs \
     component/sw/util/msword \
     component/sw/util/sw \
     component/sw/util/swd \
@@ -109,7 +114,6 @@ my_components = \
     mcnttype \
     migrationoo2 \
     msfilter \
-    msforms \
     mysql \
     odbc \
     offacc \
@@ -142,17 +146,13 @@ my_components = \
     sm \
     smd \
     solver \
-    sot \
     spell \
     spl \
     srtrs1 \
     stringresource \
     svgfilter \
-    svx \
-    svxcore \
     syssh \
     t602filter \
-    textconversiondlgs \
     tvhlp1 \
     ucb1 \
     ucpchelp1 \

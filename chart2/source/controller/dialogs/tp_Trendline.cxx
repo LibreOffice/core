@@ -54,7 +54,7 @@ SfxTabPage* TrendlineTabPage::Create(
     return new TrendlineTabPage( pParent, rOutAttrs );
 }
 
-BOOL TrendlineTabPage::FillItemSet( SfxItemSet& rOutAttrs )
+sal_Bool TrendlineTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 {
     return m_aTrendlineResources.FillItemSet( rOutAttrs );
 }

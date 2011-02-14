@@ -52,7 +52,7 @@ void OutputImpl::OutputDataArea()
     mnCols.push_back( mnTabEndCol+1); //set last row bottom
     mnRows.push_back( mnTabEndRow+1); //set last col bottom
 
-    BOOL bAllRows = ( ( mnTabEndRow - mnDataStartRow + 2 ) == (SCROW) mnRows.size() );
+    sal_Bool bAllRows = ( ( mnTabEndRow - mnDataStartRow + 2 ) == (SCROW) mnRows.size() );
 
     std::sort( mnCols.begin(), mnCols.end(), lcl_compareColfuc );
     std::sort( mnRows.begin(), mnRows.end(), lcl_compareRowfuc );
@@ -88,7 +88,7 @@ void OutputImpl::OutputDataArea()
     OutputBlockFrame( mnDataStartCol, mnTabStartRow, mnTabEndCol, mnDataStartRow-1 );
 }
 
-OutputImpl::OutputImpl( ScDocument* pDoc, USHORT nTab,
+OutputImpl::OutputImpl( ScDocument* pDoc, sal_uInt16 nTab,
         SCCOL   nTabStartCol,
         SCROW   nTabStartRow,
         SCCOL   nMemberStartCol,
@@ -113,32 +113,32 @@ OutputImpl::OutputImpl( ScDocument* pDoc, USHORT nTab,
 
 }
 
-BOOL OutputImpl::AddRow( SCROW nRow )
+sal_Bool OutputImpl::AddRow( SCROW nRow )
 {
     if ( !mbNeedLineRows[ nRow - mnDataStartRow ] )
     {
         mbNeedLineRows[ nRow - mnDataStartRow ] = true;
         mnRows.push_back( nRow );
-        return TRUE;
+        return sal_True;
     }
     else
-        return FALSE;
+        return sal_False;
 }
 
-BOOL OutputImpl::AddCol( SCCOL nCol )
+sal_Bool OutputImpl::AddCol( SCCOL nCol )
 {
 
     if ( !mbNeedLineCols[ nCol - mnDataStartCol ] )
     {
         mbNeedLineCols[ nCol - mnDataStartCol ] = true;
         mnCols.push_back( nCol );
-        return TRUE;
+        return sal_True;
     }
     else
-        return FALSE;
+        return sal_False;
 }
 
-void OutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, BOOL bHori )
+void OutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, sal_Bool bHori )
 {
 
     SvxBorderLine aLine, aOutLine;
@@ -171,16 +171,16 @@ void OutputImpl::OutputBlockFrame ( SCCOL nStartCol, SCROW nStartRow, SCCOL nEnd
 
 
     SvxBoxInfoItem aBoxInfo( ATTR_BORDER_INNER );
-    aBoxInfo.SetValid(VALID_VERT,FALSE );
+    aBoxInfo.SetValid(VALID_VERT,sal_False );
     if ( bHori )
     {
-        aBoxInfo.SetValid(VALID_HORI,TRUE);
+        aBoxInfo.SetValid(VALID_HORI,sal_True);
         aBoxInfo.SetLine( &aLine, BOXINFO_LINE_HORI );
     }
     else
-        aBoxInfo.SetValid(VALID_HORI,FALSE );
+        aBoxInfo.SetValid(VALID_HORI,sal_False );
 
-    aBoxInfo.SetValid(VALID_DISTANCE,FALSE);
+    aBoxInfo.SetValid(VALID_DISTANCE,sal_False);
 
     mpDoc->ApplyFrameAreaTab( ScRange(  nStartCol, nStartRow, mnTab, nEndCol, nEndRow , mnTab ), &aBox, &aBoxInfo );
 

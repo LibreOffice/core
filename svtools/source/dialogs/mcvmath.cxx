@@ -99,11 +99,11 @@ FixCpx ImpMultBig2( const FixCpx& ra, const FixCpx& rb )
 |*
 **************************************************************************/
 
-USHORT ImpSqrt( ULONG nRadi )
+sal_uInt16 ImpSqrt( sal_uLong nRadi )
 {
-    register ULONG  inf = 1;
-    register ULONG  sup = nRadi;
-    register ULONG sqr;
+    register sal_uLong  inf = 1;
+    register sal_uLong  sup = nRadi;
+    register sal_uLong sqr;
 
     if ( !nRadi )
         return 0;
@@ -118,7 +118,7 @@ USHORT ImpSqrt( ULONG nRadi )
     sqr = (nRadi/sqr + sqr) >> 1;       // 2 Newton-Iterationen reichen fuer
     sqr = (nRadi/sqr + sqr) >> 1;       // +- 1 Digit
 
-    return sal::static_int_cast< USHORT >(sqr);
+    return sal::static_int_cast< sal_uInt16 >(sqr);
 }
 
 /**************************************************************************
@@ -133,7 +133,7 @@ USHORT ImpSqrt( ULONG nRadi )
 
 // e**(i*nPhi), Einheit nPhi: 2**16 == 360 Grad
 
-FixCpx ImpExPI( USHORT nPhi )
+FixCpx ImpExPI( sal_uInt16 nPhi )
 {
     short i;
     FixCpx aIter(1L);                   // e**(0*i)
@@ -165,10 +165,10 @@ FixCpx ImpExPI( USHORT nPhi )
 
 // use for x*x+y*y==1 only
 
-static USHORT ImpATanx2( const Fix& rX, const Fix& rY )
+static sal_uInt16 ImpATanx2( const Fix& rX, const Fix& rY )
 {
-    USHORT      phi0 = 0;           // result angel higher part
-    USHORT      phi = 0;            // dito lower part
+    sal_uInt16      phi0 = 0;           // result angel higher part
+    sal_uInt16      phi = 0;            // dito lower part
     long        x = rX.x;
     long        y = rY.x;
     long        z;
@@ -177,7 +177,7 @@ static USHORT ImpATanx2( const Fix& rX, const Fix& rY )
     FixCpx      aTry;
     FixCpx      aInc;
     FixCpx      aIter(1L);
-    BOOL        Small = FALSE;
+    sal_Bool        Small = sal_False;
 
     if ( (x==0) && (y==0) )
         return 0;
@@ -225,7 +225,7 @@ static USHORT ImpATanx2( const Fix& rX, const Fix& rY )
                 phi  += (1<<i);
 
                 if ( i > 11 )
-                    Small=TRUE;
+                    Small=sal_True;
             }
         }
     }
@@ -243,9 +243,9 @@ static USHORT ImpATanx2( const Fix& rX, const Fix& rY )
 |*
 **************************************************************************/
 
-USHORT ImpATan2( const short x, const short y )
+sal_uInt16 ImpATan2( const short x, const short y )
 {
-    Fix rRad = ImpSqrt(ULONG(long(x)*x+long(y)*y));
+    Fix rRad = ImpSqrt(sal_uLong(long(x)*x+long(y)*y));
 
     if ( !rRad.x )
         return 0;
@@ -267,9 +267,9 @@ USHORT ImpATan2( const short x, const short y )
 |*
 **************************************************************************/
 
-void ImpCartToPolar( const short x, const short y, Fix& rRad, USHORT& rPhi )
+void ImpCartToPolar( const short x, const short y, Fix& rRad, sal_uInt16& rPhi )
 {
-    rRad = Fix( ImpSqrt( ULONG( long(x)*x+long(y)*y ) ) );
+    rRad = Fix( ImpSqrt( sal_uLong( long(x)*x+long(y)*y ) ) );
 
     if ( !rRad.x )
         rPhi=0;
@@ -294,7 +294,7 @@ void ImpCartToPolar( const short x, const short y, Fix& rRad, USHORT& rPhi )
 |*
 **************************************************************************/
 
-void ImpPolarToCart( const Fix& rR, const USHORT Phi, short& rX, short& rY )
+void ImpPolarToCart( const Fix& rR, const sal_uInt16 Phi, short& rX, short& rY )
 {
     FixCpx fc = ImpExPI( Phi );  // calculate sin() & cos()
     fc.GetReal().MultBig( rR );

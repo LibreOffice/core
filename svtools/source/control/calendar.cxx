@@ -62,12 +62,12 @@
 
 #define WEEKNUMBER_HEIGHT               85
 
-#define CALENDAR_HITTEST_DAY            ((USHORT)0x0001)
-#define CALENDAR_HITTEST_WEEK           ((USHORT)0x0002)
-#define CALENDAR_HITTEST_MONTHTITLE     ((USHORT)0x0004)
-#define CALENDAR_HITTEST_PREV           ((USHORT)0x0008)
-#define CALENDAR_HITTEST_NEXT           ((USHORT)0x0010)
-#define CALENDAR_HITTEST_OUTSIDE        ((USHORT)0x1000)
+#define CALENDAR_HITTEST_DAY            ((sal_uInt16)0x0001)
+#define CALENDAR_HITTEST_WEEK           ((sal_uInt16)0x0002)
+#define CALENDAR_HITTEST_MONTHTITLE     ((sal_uInt16)0x0004)
+#define CALENDAR_HITTEST_PREV           ((sal_uInt16)0x0008)
+#define CALENDAR_HITTEST_NEXT           ((sal_uInt16)0x0010)
+#define CALENDAR_HITTEST_OUTSIDE        ((sal_uInt16)0x1000)
 
 #define MENU_YEAR_COUNT                 3
 
@@ -82,7 +82,7 @@ struct ImplDateInfo
     XubString   maText;
     Color*      mpTextColor;
     Color*      mpFrameColor;
-    USHORT      mnFlags;
+    sal_uInt16      mnFlags;
 
                 ImplDateInfo( const XubString& rText ) :
                     maText( rText )
@@ -94,7 +94,7 @@ DECLARE_TABLE( ImplDateTable, ImplDateInfo* )
 
 // =======================================================================
 
-static void ImplCalendarSelectDate( Table* pTable, const Date& rDate, BOOL bSelect )
+static void ImplCalendarSelectDate( Table* pTable, const Date& rDate, sal_Bool bSelect )
 {
     if ( bSelect )
         pTable->Insert( rDate.GetDate(), TABLE_DATE_SELECTED );
@@ -107,7 +107,7 @@ static void ImplCalendarSelectDate( Table* pTable, const Date& rDate, BOOL bSele
 static void ImplCalendarSelectDateRange( Table* pTable,
                                          const Date& rStartDate,
                                          const Date& rEndDate,
-                                         BOOL bSelect )
+                                         sal_Bool bSelect )
 {
     Date aStartDate = rStartDate;
     Date aEndDate = rEndDate;
@@ -208,24 +208,24 @@ void Calendar::ImplInit( WinBits nWinStyle )
     mnFirstYear             = 0;
     mnLastYear              = 0;
     mnRequestYear           = 0;
-    mbCalc                  = TRUE;
-    mbFormat                = TRUE;
-    mbDrag                  = FALSE;
-    mbSelection             = FALSE;
-    mbMultiSelection        = FALSE;
-    mbWeekSel               = FALSE;
-    mbUnSel                 = FALSE;
-    mbMenuDown              = FALSE;
-    mbSpinDown              = FALSE;
-    mbPrevIn                = FALSE;
-    mbNextIn                = FALSE;
-    mbDirect                = FALSE;
-    mbInSelChange           = FALSE;
-    mbTravelSelect          = FALSE;
-    mbScrollDateRange       = FALSE;
-    mbSelLeft               = FALSE;
-    mbAllSel                = FALSE;
-    mbDropPos               = FALSE;
+    mbCalc                  = sal_True;
+    mbFormat                = sal_True;
+    mbDrag                  = sal_False;
+    mbSelection             = sal_False;
+    mbMultiSelection        = sal_False;
+    mbWeekSel               = sal_False;
+    mbUnSel                 = sal_False;
+    mbMenuDown              = sal_False;
+    mbSpinDown              = sal_False;
+    mbPrevIn                = sal_False;
+    mbNextIn                = sal_False;
+    mbDirect                = sal_False;
+    mbInSelChange           = sal_False;
+    mbTravelSelect          = sal_False;
+    mbScrollDateRange       = sal_False;
+    mbSelLeft               = sal_False;
+    mbAllSel                = sal_False;
+    mbDropPos               = sal_False;
 
     ::rtl::OUString aGregorian( RTL_CONSTASCII_USTRINGPARAM( "gregorian"));
     maCalendarWrapper.loadCalendar( aGregorian,
@@ -252,14 +252,14 @@ void Calendar::ImplInit( WinBits nWinStyle )
     }
 
     SetFirstDate( maCurDate );
-    ImplCalendarSelectDate( mpSelectTable, maCurDate, TRUE );
+    ImplCalendarSelectDate( mpSelectTable, maCurDate, sal_True );
 
     // Sonstige Strings erzeugen
     maDayText = XubString( SvtResId( STR_SVT_CALENDAR_DAY ) );
     maWeekText = XubString( SvtResId( STR_SVT_CALENDAR_WEEK ) );
 
     // Tagestexte anlegen
-    for ( USHORT i = 0; i < 31; i++ )
+    for ( sal_uInt16 i = 0; i < 31; i++ )
         mpDayText[i] = new UniString( UniString::CreateFromInt32( i+1 ) );
 
     maDragScrollTimer.SetTimeoutHdl( STATIC_LINK( this, Calendar, ScrollHdl ) );
@@ -338,7 +338,7 @@ Calendar::~Calendar()
     if ( mpRestoreSelectTable )
         delete mpRestoreSelectTable;
 
-    for ( USHORT i = 0; i < 31; i++ )
+    for ( sal_uInt16 i = 0; i < 31; i++ )
         delete mpDayText[i];
 }
 
@@ -346,7 +346,7 @@ Calendar::~Calendar()
 
 void Calendar::SetMinimumNumberOfDaysInWeek( sal_Int16 nDays )
 {
-    ImplUpdate( TRUE );
+    ImplUpdate( sal_True );
     maCalendarWrapper.setMinimumNumberOfDaysForFirstWeek( nDays);
 }
 
@@ -354,7 +354,7 @@ void Calendar::SetMinimumNumberOfDaysInWeek( sal_Int16 nDays )
 
 void Calendar::SetWeekStart( sal_Int16 nDay )
 {
-    ImplUpdate( TRUE );
+    ImplUpdate( sal_True );
     switch (nDay)
     {
         case i18n::Weekdays::SUNDAY :
@@ -529,23 +529,23 @@ void Calendar::ImplFormat()
             nDay %= 7;
         }
 
-        mbCalc = FALSE;
+        mbCalc = sal_False;
     }
 
     // Anzahl Tage berechnen
 
     DayOfWeek eStartDay = ImplGetWeekStart();
 
-    USHORT nWeekDay;
+    sal_uInt16 nWeekDay;
     Date aTempDate = GetFirstMonth();
     maFirstDate = aTempDate;
-    nWeekDay = (USHORT)aTempDate.GetDayOfWeek();
-    nWeekDay = (nWeekDay+(7-(USHORT)eStartDay)) % 7;
-    maFirstDate -= (ULONG)nWeekDay;
+    nWeekDay = (sal_uInt16)aTempDate.GetDayOfWeek();
+    nWeekDay = (nWeekDay+(7-(sal_uInt16)eStartDay)) % 7;
+    maFirstDate -= (sal_uLong)nWeekDay;
     mnDayCount = nWeekDay;
-    USHORT nDaysInMonth;
-    USHORT nMonthCount = (USHORT)(mnMonthPerLine*mnLines);
-    for ( USHORT i = 0; i < nMonthCount; i++ )
+    sal_uInt16 nDaysInMonth;
+    sal_uInt16 nMonthCount = (sal_uInt16)(mnMonthPerLine*mnLines);
+    for ( sal_uInt16 i = 0; i < nMonthCount; i++ )
     {
         nDaysInMonth = aTempDate.GetDaysInMonth();
         mnDayCount += nDaysInMonth;
@@ -555,8 +555,8 @@ void Calendar::ImplFormat()
     aTempDate2--;
     nDaysInMonth = aTempDate2.GetDaysInMonth();
     aTempDate2 -= nDaysInMonth-1;
-    nWeekDay = (USHORT)aTempDate2.GetDayOfWeek();
-    nWeekDay = (nWeekDay+(7-(USHORT)eStartDay)) % 7;
+    nWeekDay = (sal_uInt16)aTempDate2.GetDayOfWeek();
+    nWeekDay = (nWeekDay+(7-(sal_uInt16)eStartDay)) % 7;
     mnDayCount += 42-nDaysInMonth-nWeekDay;
 
     // Farben festlegen
@@ -574,8 +574,8 @@ void Calendar::ImplFormat()
     }
 
     // DateInfo besorgen
-    USHORT nNewFirstYear = maFirstDate.GetYear();
-    USHORT nNewLastYear = GetLastDate().GetYear();
+    sal_uInt16 nNewFirstYear = maFirstDate.GetYear();
+    sal_uInt16 nNewLastYear = GetLastDate().GetYear();
     if ( mnFirstYear )
     {
         if ( nNewFirstYear < mnFirstYear )
@@ -600,12 +600,12 @@ void Calendar::ImplFormat()
     }
     mnRequestYear = 0;
 
-    mbFormat = FALSE;
+    mbFormat = sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-USHORT Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
+sal_uInt16 Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
 {
     if ( mbFormat )
         return 0;
@@ -619,7 +619,7 @@ USHORT Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
     long        nY;
     long        nOffX;
     long        nYMonth;
-    USHORT      nDay;
+    sal_uInt16      nDay;
     DayOfWeek   eStartDay = ImplGetWeekStart();
 
     rDate = GetFirstMonth();
@@ -636,7 +636,7 @@ USHORT Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
             if ( (rPos.X() < nX) && (rPos.Y() < nYMonth) )
                 return 0;
 
-            USHORT nDaysInMonth = rDate.GetDaysInMonth();
+            sal_uInt16 nDaysInMonth = rDate.GetDaysInMonth();
 
             // Entsprechender Monat gefunden
             if ( (rPos.X() > nX) && (rPos.Y() < nYMonth) &&
@@ -650,8 +650,8 @@ USHORT Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
                     long nDayY = nY+mnDaysOffY;
                     if ( rPos.Y() < nDayY )
                         return 0;
-                    USHORT nDayIndex = (USHORT)rDate.GetDayOfWeek();
-                    nDayIndex = (nDayIndex+(7-(USHORT)eStartDay)) % 7;
+                    sal_uInt16 nDayIndex = (sal_uInt16)rDate.GetDayOfWeek();
+                    nDayIndex = (nDayIndex+(7-(sal_uInt16)eStartDay)) % 7;
                     if ( (i == 0) && (j == 0) )
                     {
                         Date aTempDate = rDate;
@@ -692,9 +692,9 @@ USHORT Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
                     }
                     if ( (i == mnLines-1) && (j == mnMonthPerLine-1) )
                     {
-                        USHORT nWeekDay = (USHORT)rDate.GetDayOfWeek();
-                        nWeekDay = (nWeekDay+(7-(USHORT)eStartDay)) % 7;
-                        USHORT nDayCount = 42-nDaysInMonth-nWeekDay;
+                        sal_uInt16 nWeekDay = (sal_uInt16)rDate.GetDayOfWeek();
+                        nWeekDay = (nWeekDay+(7-(sal_uInt16)eStartDay)) % 7;
+                        sal_uInt16 nDayCount = 42-nDaysInMonth-nWeekDay;
                         Date aTempDate = rDate;
                         aTempDate += nDaysInMonth;
                         for ( nDay = 1; nDay <= nDayCount; nDay++ )
@@ -737,7 +737,7 @@ USHORT Calendar::ImplHitTest( const Point& rPos, Date& rDate ) const
 // -----------------------------------------------------------------------
 
 static void ImplDrawSpinArrow( OutputDevice* pDev, const Rectangle& rRect,
-                               BOOL bPrev )
+                               sal_Bool bPrev )
 {
     long    i;
     long    n;
@@ -782,7 +782,7 @@ static void ImplDrawSpinArrow( OutputDevice* pDev, const Rectangle& rRect,
 
 // -----------------------------------------------------------------------
 
-void Calendar::ImplDrawSpin( BOOL bDrawPrev, BOOL bDrawNext )
+void Calendar::ImplDrawSpin( sal_Bool bDrawPrev, sal_Bool bDrawNext )
 {
     if ( !bDrawPrev && !bDrawNext )
         return;
@@ -796,7 +796,7 @@ void Calendar::ImplDrawSpin( BOOL bDrawPrev, BOOL bDrawNext )
         aOutRect.Top()    += 3;
         aOutRect.Right()  -= 3;
         aOutRect.Bottom() -= 3;
-        ImplDrawSpinArrow( this, aOutRect, TRUE );
+        ImplDrawSpinArrow( this, aOutRect, sal_True );
     }
     if ( bDrawNext )
     {
@@ -805,33 +805,33 @@ void Calendar::ImplDrawSpin( BOOL bDrawPrev, BOOL bDrawNext )
         aOutRect.Top()    += 3;
         aOutRect.Right()  -= 3;
         aOutRect.Bottom() -= 3;
-        ImplDrawSpinArrow( this, aOutRect, FALSE );
+        ImplDrawSpinArrow( this, aOutRect, sal_False );
     }
 }
 
 // -----------------------------------------------------------------------
 
 void Calendar::ImplDrawDate( long nX, long nY,
-                             USHORT nDay, USHORT nMonth, USHORT nYear,
+                             sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear,
                              DayOfWeek eDayOfWeek,
-                             BOOL bBack, BOOL bOther, ULONG nToday )
+                             sal_Bool bBack, sal_Bool bOther, sal_uLong nToday )
 {
     ImplDateInfo*   pDateInfo;
     Color*          pTextColor = NULL;
     const String&   rDay = *(mpDayText[nDay-1]);
     Rectangle       aDateRect( nX, nY, nX+mnDayWidth-1, nY+mnDayHeight-1 );
 
-    BOOL bSel = FALSE;
-    BOOL bFocus = FALSE;
+    sal_Bool bSel = sal_False;
+    sal_Bool bFocus = sal_False;
     // Aktueller Tag
     if ( (nDay   == maCurDate.GetDay()) &&
          (nMonth == maCurDate.GetMonth()) &&
          (nYear  == maCurDate.GetYear()) )
-        bFocus = TRUE;
+        bFocus = sal_True;
     if ( mpSelectTable )
     {
         if ( mpSelectTable->IsKeyValid( Date( nDay, nMonth, nYear ).GetDate() ) )
-            bSel = TRUE;
+            bSel = sal_True;
     }
 
     // Dateinfo ermitteln
@@ -869,11 +869,11 @@ void Calendar::ImplDrawDate( long nX, long nY,
 
     // Font ermitteln
     Font aOldFont = GetFont();
-    BOOL bBoldFont = FALSE;
+    sal_Bool bBoldFont = sal_False;
     if ( (mnWinStyle & WB_BOLDTEXT) &&
          pDateInfo && (pDateInfo->mnFlags & DIB_BOLD) )
     {
-        bBoldFont = TRUE;
+        bBoldFont = sal_True;
         Font aFont = aOldFont;
         if ( aFont.GetWeight() < WEIGHT_BOLD )
             aFont.SetWeight( WEIGHT_BOLD );
@@ -965,7 +965,7 @@ void Calendar::ImplDrawDate( long nX, long nY,
 
 // -----------------------------------------------------------------------
 
-void Calendar::ImplDraw( BOOL bPaint )
+void Calendar::ImplDraw( sal_Bool bPaint )
 {
     ImplFormat();
 
@@ -979,10 +979,10 @@ void Calendar::ImplDraw( BOOL bPaint )
     long        nDeltaY;
     long        nDayX;
     long        nDayY;
-    ULONG       nToday = Date().GetDate();
-    USHORT      nDay;
-    USHORT      nMonth;
-    USHORT      nYear;
+    sal_uLong       nToday = Date().GetDate();
+    sal_uInt16      nDay;
+    sal_uInt16      nMonth;
+    sal_uInt16      nYear;
     Date        aDate = GetFirstMonth();
     DayOfWeek   eStartDay = ImplGetWeekStart();
 
@@ -1119,7 +1119,7 @@ void Calendar::ImplDraw( BOOL bPaint )
                 nDayX -= mnWeekWidth;
                 nDayY = nY+mnDaysOffY;
                 maCalendarWrapper.setGregorianDateTime( aDate);
-                for ( USHORT nWeekCount = 0; nWeekCount < 6; nWeekCount++ )
+                for ( sal_uInt16 nWeekCount = 0; nWeekCount < 6; nWeekCount++ )
                 {
                     sal_Int16 nWeek = maCalendarWrapper.getValue( i18n::CalendarFieldIndex::WEEK_OF_YEAR);
                     String  aWeekText( String::CreateFromInt32( nWeek));
@@ -1133,7 +1133,7 @@ void Calendar::ImplDraw( BOOL bPaint )
             }
 
             // Tage ausgeben
-            USHORT nDaysInMonth = aDate.GetDaysInMonth();
+            sal_uInt16 nDaysInMonth = aDate.GetDaysInMonth();
             nDayX = nX+mnDaysOffX;
             nDayY = nY+mnDaysOffY;
             if ( !bPaint )
@@ -1142,8 +1142,8 @@ void Calendar::ImplDraw( BOOL bPaint )
                                       nDayX+(7*mnDayWidth)-1, nDayY+(6*mnDayHeight)-1 );
                 Erase( aClearRect );
             }
-            USHORT nDayIndex = (USHORT)aDate.GetDayOfWeek();
-            nDayIndex = (nDayIndex+(7-(USHORT)eStartDay)) % 7;
+            sal_uInt16 nDayIndex = (sal_uInt16)aDate.GetDayOfWeek();
+            nDayIndex = (nDayIndex+(7-(sal_uInt16)eStartDay)) % 7;
             if ( (i == 0) && (j == 0) )
             {
                 Date aTempDate = aDate;
@@ -1153,15 +1153,15 @@ void Calendar::ImplDraw( BOOL bPaint )
                     nDeltaX = nDayX + (nDay*mnDayWidth);
                     ImplDrawDate( nDeltaX, nDayY, nDay+aTempDate.GetDay(),
                                   aTempDate.GetMonth(), aTempDate.GetYear(),
-                                  (DayOfWeek)((nDay+(USHORT)eStartDay)%7), FALSE, TRUE, nToday );
+                                  (DayOfWeek)((nDay+(sal_uInt16)eStartDay)%7), sal_False, sal_True, nToday );
                 }
             }
             for ( nDay = 1; nDay <= nDaysInMonth; nDay++ )
             {
                 nDeltaX = nDayX + (nDayIndex*mnDayWidth);
                 ImplDrawDate( nDeltaX, nDayY, nDay, nMonth, nYear,
-                              (DayOfWeek)((nDayIndex+(USHORT)eStartDay)%7),
-                              FALSE, FALSE, nToday );
+                              (DayOfWeek)((nDayIndex+(sal_uInt16)eStartDay)%7),
+                              sal_False, sal_False, nToday );
                 if ( nDayIndex == 6 )
                 {
                     nDayIndex = 0;
@@ -1172,9 +1172,9 @@ void Calendar::ImplDraw( BOOL bPaint )
             }
             if ( (i == mnLines-1) && (j == mnMonthPerLine-1) )
             {
-                USHORT nWeekDay = (USHORT)aDate.GetDayOfWeek();
-                nWeekDay = (nWeekDay+(7-(USHORT)eStartDay)) % 7;
-                USHORT nDayCount = 42-nDaysInMonth-nWeekDay;
+                sal_uInt16 nWeekDay = (sal_uInt16)aDate.GetDayOfWeek();
+                nWeekDay = (nWeekDay+(7-(sal_uInt16)eStartDay)) % 7;
+                sal_uInt16 nDayCount = 42-nDaysInMonth-nWeekDay;
                 Date aTempDate = aDate;
                 aTempDate += nDaysInMonth;
                 for ( nDay = 1; nDay <= nDayCount; nDay++ )
@@ -1182,8 +1182,8 @@ void Calendar::ImplDraw( BOOL bPaint )
                     nDeltaX = nDayX + (nDayIndex*mnDayWidth);
                     ImplDrawDate( nDeltaX, nDayY, nDay,
                                   aTempDate.GetMonth(), aTempDate.GetYear(),
-                                  (DayOfWeek)((nDayIndex+(USHORT)eStartDay)%7),
-                                  FALSE, TRUE, nToday );
+                                  (DayOfWeek)((nDayIndex+(sal_uInt16)eStartDay)%7),
+                                  sal_False, sal_True, nToday );
                     if ( nDayIndex == 6 )
                     {
                         nDayIndex = 0;
@@ -1215,10 +1215,10 @@ void Calendar::ImplUpdateDate( const Date& rDate )
         Rectangle aDateRect( GetDateRect( rDate ) );
         if ( !aDateRect.IsEmpty() )
         {
-            BOOL bOther = (rDate < GetFirstMonth()) || (rDate > GetLastMonth());
+            sal_Bool bOther = (rDate < GetFirstMonth()) || (rDate > GetLastMonth());
             ImplDrawDate( aDateRect.Left(), aDateRect.Top(),
                           rDate.GetDay(), rDate.GetMonth(), rDate.GetYear(),
-                          rDate.GetDayOfWeek(), TRUE, bOther );
+                          rDate.GetDayOfWeek(), sal_True, bOther );
         }
     }
 }
@@ -1229,7 +1229,7 @@ void Calendar::ImplUpdateSelection( Table* pOld )
 {
     Table*  pNew = mpSelectTable;
     void*   p;
-    ULONG   nKey;
+    sal_uLong   nKey;
 
     p = pOld->First();
     while ( p )
@@ -1260,8 +1260,8 @@ void Calendar::ImplUpdateSelection( Table* pOld )
 
 // -----------------------------------------------------------------------
 
-void Calendar::ImplMouseSelect( const Date& rDate, USHORT nHitTest,
-                                BOOL bMove, BOOL bExpand, BOOL bExtended )
+void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
+                                sal_Bool bMove, sal_Bool bExpand, sal_Bool bExtended )
 {
     Table*  pOldSel = new Table( *mpSelectTable );
     Date    aOldDate = maCurDate;
@@ -1297,35 +1297,35 @@ void Calendar::ImplMouseSelect( const Date& rDate, USHORT nHitTest,
                 {
                     if ( mbSelLeft )
                     {
-                        ImplCalendarSelectDateRange( mpSelectTable, Date( 1, 1, 0 ), aTempDate, FALSE );
-                        ImplCalendarSelectDateRange( mpSelectTable, maAnchorDate, Date( 31, 12, 9999 ), FALSE );
+                        ImplCalendarSelectDateRange( mpSelectTable, Date( 1, 1, 0 ), aTempDate, sal_False );
+                        ImplCalendarSelectDateRange( mpSelectTable, maAnchorDate, Date( 31, 12, 9999 ), sal_False );
                     }
                     else
                     {
-                        ImplCalendarSelectDateRange( mpSelectTable, Date( 1, 1, 0 ), maAnchorDate, FALSE );
-                        ImplCalendarSelectDateRange( mpSelectTable, aTempDate, Date( 31, 12, 9999 ), FALSE );
+                        ImplCalendarSelectDateRange( mpSelectTable, Date( 1, 1, 0 ), maAnchorDate, sal_False );
+                        ImplCalendarSelectDateRange( mpSelectTable, aTempDate, Date( 31, 12, 9999 ), sal_False );
                     }
                 }
-                ImplCalendarSelectDateRange( mpSelectTable, aTempDate, maAnchorDate, TRUE );
+                ImplCalendarSelectDateRange( mpSelectTable, aTempDate, maAnchorDate, sal_True );
             }
             else if ( bExtended && !(mnWinStyle & WB_RANGESELECT) )
             {
                 maAnchorDate = aTempDate;
                 if ( IsDateSelected( aTempDate ) )
                 {
-                    mbUnSel = TRUE;
-                    ImplCalendarSelectDate( mpSelectTable, aTempDate, FALSE );
+                    mbUnSel = sal_True;
+                    ImplCalendarSelectDate( mpSelectTable, aTempDate, sal_False );
                 }
                 else
                 {
-                    ImplCalendarSelectDate( mpSelectTable, aTempDate, TRUE );
+                    ImplCalendarSelectDate( mpSelectTable, aTempDate, sal_True );
                 }
             }
             else
             {
                 maAnchorDate = aTempDate;
                 ImplCalendarClearSelectDate( mpSelectTable );
-                ImplCalendarSelectDate( mpSelectTable, aTempDate, TRUE );
+                ImplCalendarSelectDate( mpSelectTable, aTempDate, sal_True );
             }
 
             mpRestoreSelectTable = new Table( *mpSelectTable );
@@ -1334,9 +1334,9 @@ void Calendar::ImplMouseSelect( const Date& rDate, USHORT nHitTest,
     else
     {
         if ( aTempDate < maCurDate )
-            mbSelLeft = TRUE;
+            mbSelLeft = sal_True;
         else
-            mbSelLeft = FALSE;
+            mbSelLeft = sal_False;
         if ( !(nHitTest & CALENDAR_HITTEST_DAY) )
             aTempDate = maOldCurDate;
         if ( !bMove )
@@ -1344,19 +1344,19 @@ void Calendar::ImplMouseSelect( const Date& rDate, USHORT nHitTest,
         if ( aTempDate != maCurDate )
         {
             maCurDate = aTempDate;
-            ImplCalendarSelectDate( mpSelectTable, aOldDate, FALSE );
-            ImplCalendarSelectDate( mpSelectTable, maCurDate, TRUE );
+            ImplCalendarSelectDate( mpSelectTable, aOldDate, sal_False );
+            ImplCalendarSelectDate( mpSelectTable, maCurDate, sal_True );
         }
     }
 
-    BOOL bNewSel = *pOldSel != *mpSelectTable;
+    sal_Bool bNewSel = *pOldSel != *mpSelectTable;
     if ( (maCurDate != aOldDate) || bNewSel )
     {
         if ( bNewSel )
         {
-            mbInSelChange = TRUE;
+            mbInSelChange = sal_True;
             SelectionChanging();
-            mbInSelChange = FALSE;
+            mbInSelChange = sal_False;
         }
         HideFocus();
         if ( bNewSel )
@@ -1372,7 +1372,7 @@ void Calendar::ImplMouseSelect( const Date& rDate, USHORT nHitTest,
 
 // -----------------------------------------------------------------------
 
-void Calendar::ImplUpdate( BOOL bCalcNew )
+void Calendar::ImplUpdate( sal_Bool bCalcNew )
 {
     if ( IsReallyVisible() && IsUpdateMode() )
     {
@@ -1382,8 +1382,8 @@ void Calendar::ImplUpdate( BOOL bCalcNew )
         {
             if ( mbDirect )
             {
-                mbFormat = TRUE;
-                ImplDraw( FALSE );
+                mbFormat = sal_True;
+                ImplDraw( sal_False );
                 return;
             }
             else
@@ -1392,8 +1392,8 @@ void Calendar::ImplUpdate( BOOL bCalcNew )
     }
 
     if ( bCalcNew )
-        mbCalc = TRUE;
-    mbFormat = TRUE;
+        mbCalc = sal_True;
+    mbFormat = sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -1408,7 +1408,7 @@ void Calendar::ImplInvertDropPos()
 
 // -----------------------------------------------------------------------
 
-void Calendar::ImplScroll( BOOL bPrev )
+void Calendar::ImplScroll( sal_Bool bPrev )
 {
     Date aNewFirstMonth = GetFirstMonth();
     if ( bPrev )
@@ -1418,9 +1418,9 @@ void Calendar::ImplScroll( BOOL bPrev )
     }
     else
         aNewFirstMonth += aNewFirstMonth.GetDaysInMonth();
-    mbDirect = TRUE;
+    mbDirect = sal_True;
     SetFirstDate( aNewFirstMonth );
-    mbDirect = FALSE;
+    mbDirect = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -1432,12 +1432,12 @@ void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
     Date        aOldFirstDate = GetFirstMonth();
     PopupMenu   aPopupMenu;
     PopupMenu*  pYearPopupMenus[MENU_YEAR_COUNT];
-    USHORT      nMonthOff;
-    USHORT      nCurItemId;
-    USHORT      nYear = rDate.GetYear()-1;
-    USHORT      i;
-    USHORT      j;
-    USHORT      nYearIdCount = 1000;
+    sal_uInt16      nMonthOff;
+    sal_uInt16      nCurItemId;
+    sal_uInt16      nYear = rDate.GetYear()-1;
+    sal_uInt16      i;
+    sal_uInt16      j;
+    sal_uInt16      nYearIdCount = 1000;
 
     nMonthOff = (rDate.GetYear()-aOldFirstDate.GetYear())*12;
     if ( aOldFirstDate.GetMonth() < rDate.GetMonth() )
@@ -1458,9 +1458,9 @@ void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
         nYearIdCount += 1000;
     }
 
-    mbMenuDown = TRUE;
+    mbMenuDown = sal_True;
     nCurItemId = aPopupMenu.Execute( this, rPos );
-    mbMenuDown = FALSE;
+    mbMenuDown = sal_False;
 
     // Menu zerstoeren
     aPopupMenu.SetPopupMenu( 2, NULL );
@@ -1472,10 +1472,10 @@ void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
 
     if ( nCurItemId )
     {
-        USHORT nTempMonthOff = nMonthOff % 12;
-        USHORT nTempYearOff = nMonthOff / 12;
-        USHORT nNewMonth = nCurItemId % 1000;
-        USHORT nNewYear = nYear+((nCurItemId-1000)/1000);
+        sal_uInt16 nTempMonthOff = nMonthOff % 12;
+        sal_uInt16 nTempYearOff = nMonthOff / 12;
+        sal_uInt16 nNewMonth = nCurItemId % 1000;
+        sal_uInt16 nNewYear = nYear+((nCurItemId-1000)/1000);
         if ( nTempMonthOff < nNewMonth )
             nNewMonth = nNewMonth - nTempMonthOff;
         else
@@ -1490,10 +1490,10 @@ void Calendar::ImplShowMenu( const Point& rPos, const Date& rDate )
 
 // -----------------------------------------------------------------------
 
-void Calendar::ImplTracking( const Point& rPos, BOOL bRepeat )
+void Calendar::ImplTracking( const Point& rPos, sal_Bool bRepeat )
 {
     Date    aTempDate = maCurDate;
-    USHORT  nHitTest = ImplHitTest( rPos, aTempDate );
+    sal_uInt16  nHitTest = ImplHitTest( rPos, aTempDate );
 
     if ( mbSpinDown )
     {
@@ -1502,29 +1502,29 @@ void Calendar::ImplTracking( const Point& rPos, BOOL bRepeat )
 
         if ( bRepeat && (mbPrevIn || mbNextIn) )
         {
-            mbScrollDateRange = TRUE;
+            mbScrollDateRange = sal_True;
             ImplScroll( mbPrevIn );
-            mbScrollDateRange = FALSE;
+            mbScrollDateRange = sal_False;
         }
     }
     else
-        ImplMouseSelect( aTempDate, nHitTest, TRUE, FALSE, FALSE );
+        ImplMouseSelect( aTempDate, nHitTest, sal_True, sal_False, sal_False );
 }
 
 // -----------------------------------------------------------------------
 
-void Calendar::ImplEndTracking( BOOL bCancel )
+void Calendar::ImplEndTracking( sal_Bool bCancel )
 {
-    BOOL bSelection = mbSelection;
-    BOOL bSpinDown = mbSpinDown;
+    sal_Bool bSelection = mbSelection;
+    sal_Bool bSpinDown = mbSpinDown;
 
-    mbDrag              = FALSE;
-    mbSelection         = FALSE;
-    mbMultiSelection    = FALSE;
-    mbUnSel             = FALSE;
-    mbSpinDown          = FALSE;
-    mbPrevIn            = FALSE;
-    mbNextIn            = FALSE;
+    mbDrag              = sal_False;
+    mbSelection         = sal_False;
+    mbMultiSelection    = sal_False;
+    mbUnSel             = sal_False;
+    mbSpinDown          = sal_False;
+    mbPrevIn            = sal_False;
+    mbNextIn            = sal_False;
 
     if ( bCancel )
     {
@@ -1553,15 +1553,15 @@ void Calendar::ImplEndTracking( BOOL bCancel )
         if ( !bCancel )
         {
             // Feststellen, ob wir sichtbaren Bereich scrollen sollen
-            ULONG nSelCount = mpSelectTable->Count();
+            sal_uLong nSelCount = mpSelectTable->Count();
             if ( nSelCount )
             {
                 Date aFirstSelDate( mpSelectTable->GetObjectKey( 0 ) );
                 Date aLastSelDate( mpSelectTable->GetObjectKey( nSelCount-1 ) );
                 if ( aLastSelDate < GetFirstMonth() )
-                    ImplScroll( TRUE );
+                    ImplScroll( sal_True );
                 else if ( GetLastMonth() < aFirstSelDate )
-                    ImplScroll( FALSE );
+                    ImplScroll( sal_False );
             }
         }
 
@@ -1583,13 +1583,13 @@ void Calendar::ImplEndTracking( BOOL bCancel )
 
 IMPL_STATIC_LINK( Calendar, ScrollHdl, Timer*, EMPTYARG )
 {
-    BOOL bPrevIn = (pThis->mnDragScrollHitTest & CALENDAR_HITTEST_PREV) != 0;
-    BOOL bNextIn = (pThis->mnDragScrollHitTest & CALENDAR_HITTEST_NEXT) != 0;
+    sal_Bool bPrevIn = (pThis->mnDragScrollHitTest & CALENDAR_HITTEST_PREV) != 0;
+    sal_Bool bNextIn = (pThis->mnDragScrollHitTest & CALENDAR_HITTEST_NEXT) != 0;
     if( bNextIn || bPrevIn )
     {
-        pThis->mbScrollDateRange = TRUE;
+        pThis->mbScrollDateRange = sal_True;
         pThis->ImplScroll( bPrevIn );
-        pThis->mbScrollDateRange = FALSE;
+        pThis->mbScrollDateRange = sal_False;
     }
     return 0;
 }
@@ -1601,7 +1601,7 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
     if ( rMEvt.IsLeft() && !mbMenuDown )
     {
         Date    aTempDate = maCurDate;
-        USHORT  nHitTest = ImplHitTest( rMEvt.GetPosPixel(), aTempDate );
+        sal_uInt16  nHitTest = ImplHitTest( rMEvt.GetPosPixel(), aTempDate );
         if ( nHitTest )
         {
             if ( nHitTest & CALENDAR_HITTEST_MONTHTITLE )
@@ -1614,10 +1614,10 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
                 mbNextIn = (nHitTest & CALENDAR_HITTEST_NEXT) != 0;
                 if ( mbPrevIn || mbNextIn )
                 {
-                    mbSpinDown = TRUE;
-                    mbScrollDateRange = TRUE;
+                    mbSpinDown = sal_True;
+                    mbScrollDateRange = sal_True;
                     ImplScroll( mbPrevIn );
-                    mbScrollDateRange = FALSE;
+                    mbScrollDateRange = sal_False;
                     // Hier muss BUTTONREPEAT stehen, also nicht wieder
                     // auf SCROLLREPEAT aendern, sondern mit TH abklaeren,
                     // warum es evtl. anders sein sollte (71775)
@@ -1636,16 +1636,16 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
 
                         if ( !mbSelection )
                         {
-                            mbDrag = TRUE;
+                            mbDrag = sal_True;
                             StartTracking();
                         }
 
                         mbMultiSelection = (mnWinStyle & (WB_MULTISELECT | WB_RANGESELECT)) != 0;
                         if ( (nHitTest & CALENDAR_HITTEST_DAY) && mbMultiSelection )
-                            mbWeekSel = TRUE;
+                            mbWeekSel = sal_True;
                         else
-                            mbWeekSel = FALSE;
-                        ImplMouseSelect( aTempDate, nHitTest, FALSE, rMEvt.IsShift(), rMEvt.IsMod1() );
+                            mbWeekSel = sal_False;
+                        ImplMouseSelect( aTempDate, nHitTest, sal_False, rMEvt.IsShift(), rMEvt.IsMod1() );
                     }
                 }
             }
@@ -1662,7 +1662,7 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
 void Calendar::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() && mbSelection )
-        ImplEndTracking( FALSE );
+        ImplEndTracking( sal_False );
     else
         Control::MouseButtonUp( rMEvt );
 }
@@ -1672,7 +1672,7 @@ void Calendar::MouseButtonUp( const MouseEvent& rMEvt )
 void Calendar::MouseMove( const MouseEvent& rMEvt )
 {
     if ( mbSelection && rMEvt.GetButtons() )
-        ImplTracking( rMEvt.GetPosPixel(), FALSE );
+        ImplTracking( rMEvt.GetPosPixel(), sal_False );
     else
         Control::MouseMove( rMEvt );
 }
@@ -1694,9 +1694,9 @@ void Calendar::Tracking( const TrackingEvent& rTEvt )
 void Calendar::KeyInput( const KeyEvent& rKEvt )
 {
     Date    aNewDate = maCurDate;
-    BOOL    bMultiSel = (mnWinStyle & (WB_RANGESELECT | WB_MULTISELECT)) != 0;
-    BOOL    bExpand = rKEvt.GetKeyCode().IsShift();
-    BOOL    bExtended = rKEvt.GetKeyCode().IsMod1();
+    sal_Bool    bMultiSel = (mnWinStyle & (WB_RANGESELECT | WB_MULTISELECT)) != 0;
+    sal_Bool    bExpand = rKEvt.GetKeyCode().IsShift();
+    sal_Bool    bExtended = rKEvt.GetKeyCode().IsMod1();
 
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
@@ -1741,13 +1741,13 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
             {
                 if ( !bExpand )
                 {
-                    BOOL bDateSel = IsDateSelected( maCurDate );
+                    sal_Bool bDateSel = IsDateSelected( maCurDate );
                     SelectDate( maCurDate, !bDateSel );
-                    mbSelLeft = FALSE;
+                    mbSelLeft = sal_False;
                     SelectionChanging();
-                    mbTravelSelect = TRUE;
+                    mbTravelSelect = sal_True;
                     Select();
-                    mbTravelSelect = FALSE;
+                    mbTravelSelect = sal_False;
                 }
             }
             else
@@ -1770,23 +1770,23 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
             {
                 if ( mbSelLeft )
                 {
-                    ImplCalendarSelectDateRange( mpSelectTable, Date( 1, 1, 0 ), aNewDate, FALSE );
-                    ImplCalendarSelectDateRange( mpSelectTable, maAnchorDate, Date( 31, 12, 9999 ), FALSE );
+                    ImplCalendarSelectDateRange( mpSelectTable, Date( 1, 1, 0 ), aNewDate, sal_False );
+                    ImplCalendarSelectDateRange( mpSelectTable, maAnchorDate, Date( 31, 12, 9999 ), sal_False );
                 }
                 else
                 {
-                    ImplCalendarSelectDateRange( mpSelectTable, Date( 1, 1, 0 ), maAnchorDate, FALSE );
-                    ImplCalendarSelectDateRange( mpSelectTable, aNewDate, Date( 31, 12, 9999 ), FALSE );
+                    ImplCalendarSelectDateRange( mpSelectTable, Date( 1, 1, 0 ), maAnchorDate, sal_False );
+                    ImplCalendarSelectDateRange( mpSelectTable, aNewDate, Date( 31, 12, 9999 ), sal_False );
                 }
             }
-            ImplCalendarSelectDateRange( mpSelectTable, aNewDate, maAnchorDate, TRUE );
-            mbDirect = TRUE;
+            ImplCalendarSelectDateRange( mpSelectTable, aNewDate, maAnchorDate, sal_True );
+            mbDirect = sal_True;
             SetCurDate( aNewDate );
-            mbDirect = FALSE;
+            mbDirect = sal_False;
             maAnchorDate = aOldAnchorDate;
-            mbInSelChange = TRUE;
+            mbInSelChange = sal_True;
             SelectionChanging();
-            mbInSelChange = FALSE;
+            mbInSelChange = sal_False;
             ImplUpdateSelection( pOldSel );
             delete pOldSel;
         }
@@ -1795,15 +1795,15 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
             if ( mnWinStyle & WB_RANGESELECT )
             {
                 SetNoSelection();
-                SelectDate( aNewDate, TRUE );
+                SelectDate( aNewDate, sal_True );
             }
-            mbDirect = TRUE;
+            mbDirect = sal_True;
             SetCurDate( aNewDate );
-            mbDirect = FALSE;
+            mbDirect = sal_False;
         }
-        mbTravelSelect = TRUE;
+        mbTravelSelect = sal_True;
         Select();
-        mbTravelSelect = FALSE;
+        mbTravelSelect = sal_False;
     }
 }
 
@@ -1811,7 +1811,7 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
 
 void Calendar::Paint( const Rectangle& )
 {
-    ImplDraw( TRUE );
+    ImplDraw( sal_True );
 }
 
 // -----------------------------------------------------------------------
@@ -1834,7 +1834,7 @@ void Calendar::LoseFocus()
 
 void Calendar::Resize()
 {
-    ImplUpdate( TRUE );
+    ImplUpdate( sal_True );
     Control::Resize();
 }
 
@@ -1880,8 +1880,8 @@ void Calendar::RequestHelp( const HelpEvent& rHEvt )
             if ( rHEvt.GetMode() & HELPMODE_QUICK )
             {
                 maCalendarWrapper.setGregorianDateTime( aDate);
-                USHORT      nWeek = (USHORT) maCalendarWrapper.getValue( i18n::CalendarFieldIndex::WEEK_OF_YEAR);
-                USHORT      nMonth = aDate.GetMonth();
+                sal_uInt16      nWeek = (sal_uInt16) maCalendarWrapper.getValue( i18n::CalendarFieldIndex::WEEK_OF_YEAR);
+                sal_uInt16      nMonth = aDate.GetMonth();
                 XubString   aStr( maDayText );
                 aStr.AppendAscii( ": " );
                 aStr.Append( XubString::CreateFromInt32( aDate.GetDayOfYear() ) );
@@ -1918,7 +1918,7 @@ void Calendar::Command( const CommandEvent& rCEvt )
         if ( !mbSelection && rCEvt.IsMouseEvent() )
         {
             Date    aTempDate = maCurDate;
-            USHORT  nHitTest = ImplHitTest( rCEvt.GetMousePosPixel(), aTempDate );
+            sal_uInt16  nHitTest = ImplHitTest( rCEvt.GetMousePosPixel(), aTempDate );
             if ( nHitTest & CALENDAR_HITTEST_MONTHTITLE )
             {
                 ImplShowMenu( rCEvt.GetMousePosPixel(), aTempDate );
@@ -1936,7 +1936,7 @@ void Calendar::Command( const CommandEvent& rCEvt )
             {
                 while ( nNotchDelta < 0 )
                 {
-                    ImplScroll( TRUE );
+                    ImplScroll( sal_True );
                     nNotchDelta++;
                 }
             }
@@ -1944,7 +1944,7 @@ void Calendar::Command( const CommandEvent& rCEvt )
             {
                 while ( nNotchDelta > 0 )
                 {
-                    ImplScroll( FALSE );
+                    ImplScroll( sal_False );
                     nNotchDelta--;
                 }
             }
@@ -2019,7 +2019,7 @@ void Calendar::Select()
 
 // -----------------------------------------------------------------------
 
-void Calendar::SelectDate( const Date& rDate, BOOL bSelect )
+void Calendar::SelectDate( const Date& rDate, sal_Bool bSelect )
 {
     if ( !rDate.IsValid() )
         return;
@@ -2043,7 +2043,7 @@ void Calendar::SelectDate( const Date& rDate, BOOL bSelect )
 // -----------------------------------------------------------------------
 
 void Calendar::SelectDateRange( const Date& rStartDate, const Date& rEndDate,
-                                BOOL bSelect )
+                                sal_Bool bSelect )
 {
     if ( !rStartDate.IsValid() || !rEndDate.IsValid() )
         return;
@@ -2086,21 +2086,21 @@ void Calendar::SetNoSelection()
 
 // -----------------------------------------------------------------------
 
-BOOL Calendar::IsDateSelected( const Date& rDate ) const
+sal_Bool Calendar::IsDateSelected( const Date& rDate ) const
 {
     return mpSelectTable->IsKeyValid( rDate.GetDate() );
 }
 
 // -----------------------------------------------------------------------
 
-ULONG Calendar::GetSelectDateCount() const
+sal_uLong Calendar::GetSelectDateCount() const
 {
     return mpSelectTable->Count();
 }
 
 // -----------------------------------------------------------------------
 
-Date Calendar::GetSelectDate( ULONG nIndex ) const
+Date Calendar::GetSelectDate( sal_uLong nIndex ) const
 {
     if ( nIndex < mpSelectTable->Count() )
         return Date( mpSelectTable->GetObjectKey( nIndex ) );
@@ -2120,18 +2120,18 @@ void Calendar::SetCurDate( const Date& rNewDate )
 
     if ( maCurDate != rNewDate )
     {
-        BOOL bUpdate    = IsVisible() && IsUpdateMode();
+        sal_Bool bUpdate    = IsVisible() && IsUpdateMode();
         Date aOldDate   = maCurDate;
         maCurDate       = rNewDate;
         maAnchorDate    = maCurDate;
 
         if ( !(mnWinStyle & (WB_RANGESELECT | WB_MULTISELECT)) )
         {
-            ImplCalendarSelectDate( mpSelectTable, aOldDate, FALSE );
-            ImplCalendarSelectDate( mpSelectTable, maCurDate, TRUE );
+            ImplCalendarSelectDate( mpSelectTable, aOldDate, sal_False );
+            ImplCalendarSelectDate( mpSelectTable, maCurDate, sal_True );
         }
         else if ( !HasFocus() )
-            bUpdate = FALSE;
+            bUpdate = sal_False;
 
         // Aktuelles Datum noch in den sichtbaren Bereich verschieben
         if ( mbFormat || (maCurDate < GetFirstMonth()) )
@@ -2176,7 +2176,7 @@ void Calendar::SetFirstDate( const Date& rNewFirstDate )
     if ( maFirstDate != rNewFirstDate )
     {
         maFirstDate = Date( 1, rNewFirstDate.GetMonth(), rNewFirstDate.GetYear() );
-        mbDropPos = FALSE;
+        mbDropPos = sal_False;
         ImplUpdate();
     }
 }
@@ -2201,8 +2201,8 @@ Date Calendar::GetFirstMonth() const
 Date Calendar::GetLastMonth() const
 {
     Date aDate = GetFirstMonth();
-    USHORT nMonthCount = GetMonthCount();
-    for ( USHORT i = 0; i < nMonthCount; i++ )
+    sal_uInt16 nMonthCount = GetMonthCount();
+    for ( sal_uInt16 i = 0; i < nMonthCount; i++ )
         aDate += aDate.GetDaysInMonth();
     aDate--;
     return aDate;
@@ -2210,39 +2210,39 @@ Date Calendar::GetLastMonth() const
 
 // -----------------------------------------------------------------------
 
-USHORT Calendar::GetMonthCount() const
+sal_uInt16 Calendar::GetMonthCount() const
 {
     if ( mbFormat )
         return 1;
     else
-        return (USHORT)(mnMonthPerLine*mnLines);
+        return (sal_uInt16)(mnMonthPerLine*mnLines);
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Calendar::GetDropDate( Date& rDate ) const
+sal_Bool Calendar::GetDropDate( Date& rDate ) const
 {
     if( mbDropPos )
     {
         rDate = maDropDate;
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL Calendar::GetDate( const Point& rPos, Date& rDate ) const
+sal_Bool Calendar::GetDate( const Point& rPos, Date& rDate ) const
 {
     Date    aDate = maCurDate;
-    USHORT  nHitTest = ImplHitTest( rPos, aDate );
+    sal_uInt16  nHitTest = ImplHitTest( rPos, aDate );
     if ( nHitTest & CALENDAR_HITTEST_DAY )
     {
         rDate = aDate;
-        return TRUE;
+        return sal_True;
     }
     else
-        return FALSE;
+        return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -2256,8 +2256,8 @@ Rectangle Calendar::GetDateRect( const Date& rDate ) const
 
     long    nX;
     long    nY;
-    ULONG   nDaysOff;
-    USHORT  nDayIndex;
+    sal_uLong   nDaysOff;
+    sal_uInt16  nDayIndex;
     Date    aDate = GetFirstMonth();
 
     if ( rDate < aDate )
@@ -2274,13 +2274,13 @@ Rectangle Calendar::GetDateRect( const Date& rDate ) const
         Date aLastDate = GetLastMonth();
         if ( rDate > aLastDate )
         {
-            USHORT nWeekDay = (USHORT)aLastDate.GetDayOfWeek();
-            nWeekDay = (nWeekDay+(7-(USHORT)ImplGetWeekStart())) % 7;
+            sal_uInt16 nWeekDay = (sal_uInt16)aLastDate.GetDayOfWeek();
+            nWeekDay = (nWeekDay+(7-(sal_uInt16)ImplGetWeekStart())) % 7;
             aLastDate -= nWeekDay;
             aRect = GetDateRect( aLastDate );
             nDaysOff = rDate-aLastDate;
             nDayIndex = 0;
-            for ( USHORT i = 0; i <= nDaysOff; i++ )
+            for ( sal_uInt16 i = 0; i <= nDaysOff; i++ )
             {
                 if ( aLastDate == rDate )
                 {
@@ -2307,7 +2307,7 @@ Rectangle Calendar::GetDateRect( const Date& rDate ) const
         nX = 0;
         for ( long j = 0; j < mnMonthPerLine; j++ )
         {
-            USHORT nDaysInMonth = aDate.GetDaysInMonth();
+            sal_uInt16 nDaysInMonth = aDate.GetDaysInMonth();
 
             // Monat gerufen
             if ( (aDate.GetMonth() == rDate.GetMonth()) &&
@@ -2315,9 +2315,9 @@ Rectangle Calendar::GetDateRect( const Date& rDate ) const
             {
                 long nDayX = nX+mnDaysOffX;
                 long nDayY = nY+mnDaysOffY;
-                nDayIndex = (USHORT)aDate.GetDayOfWeek();
-                nDayIndex = (nDayIndex+(7-(USHORT)ImplGetWeekStart())) % 7;
-                for ( USHORT nDay = 1; nDay <= nDaysInMonth; nDay++ )
+                nDayIndex = (sal_uInt16)aDate.GetDayOfWeek();
+                nDayIndex = (nDayIndex+(7-(sal_uInt16)ImplGetWeekStart())) % 7;
+                for ( sal_uInt16 nDay = 1; nDay <= nDaysInMonth; nDay++ )
                 {
                     if ( nDay == rDate.GetDay() )
                     {
@@ -2384,13 +2384,13 @@ void Calendar::SetSundayColor( const Color& rColor )
 
 void Calendar::AddDateInfo( const Date& rDate, const String& rText,
                             const Color* pTextColor, const Color* pFrameColor,
-                            USHORT nFlags )
+                            sal_uInt16 nFlags )
 {
     if ( !mpDateTable )
         mpDateTable = new ImplDateTable( 256, 256 );
 
-    BOOL            bChanged = FALSE;
-    ULONG           nKey = rDate.GetDate();
+    sal_Bool            bChanged = sal_False;
+    sal_uLong           nKey = rDate.GetDate();
     ImplDateInfo*   pDateInfo = mpDateTable->Get( nKey );
     if ( pDateInfo )
         pDateInfo->maText = rText;
@@ -2406,13 +2406,13 @@ void Calendar::AddDateInfo( const Date& rDate, const String& rText,
             if ( *(pDateInfo->mpTextColor) != *pTextColor )
             {
                 *(pDateInfo->mpTextColor) = *pTextColor;
-                bChanged = TRUE;
+                bChanged = sal_True;
             }
         }
         else
         {
             pDateInfo->mpTextColor = new Color( *pTextColor );
-            bChanged = TRUE;
+            bChanged = sal_True;
         }
     }
     else
@@ -2421,7 +2421,7 @@ void Calendar::AddDateInfo( const Date& rDate, const String& rText,
         {
             delete pDateInfo->mpTextColor;
             pDateInfo->mpTextColor = NULL;
-            bChanged = TRUE;
+            bChanged = sal_True;
         }
     }
     if ( pFrameColor )
@@ -2431,13 +2431,13 @@ void Calendar::AddDateInfo( const Date& rDate, const String& rText,
             if ( *(pDateInfo->mpFrameColor) != *pFrameColor )
             {
                 *(pDateInfo->mpFrameColor) = *pFrameColor;
-                bChanged = TRUE;
+                bChanged = sal_True;
             }
         }
         else
         {
             pDateInfo->mpFrameColor = new Color( *pFrameColor );
-            bChanged = TRUE;
+            bChanged = sal_True;
         }
     }
     else
@@ -2446,13 +2446,13 @@ void Calendar::AddDateInfo( const Date& rDate, const String& rText,
         {
             delete pDateInfo->mpFrameColor;
             pDateInfo->mpFrameColor = NULL;
-            bChanged = TRUE;
+            bChanged = sal_True;
         }
     }
     if ( pDateInfo->mnFlags != nFlags )
     {
         pDateInfo->mnFlags = nFlags;
-        bChanged = TRUE;
+        bChanged = sal_True;
     }
 
     if ( bChanged )
@@ -2483,7 +2483,7 @@ void Calendar::ClearDateInfo()
         ImplDateInfo* pDateInfo = mpDateTable->First();
         while ( pDateInfo )
         {
-            ULONG nKey = mpDateTable->GetCurKey();
+            sal_uLong nKey = mpDateTable->GetCurKey();
             mpDateTable->Remove( nKey );
             Date aDate( nKey );
             ImplUpdateDate( aDate );
@@ -2502,7 +2502,7 @@ XubString Calendar::GetDateInfoText( const Date& rDate )
     XubString aRet;
     if ( mpDateTable )
     {
-        ULONG           nKey = rDate.GetDate();
+        sal_uLong           nKey = rDate.GetDate();
         ImplDateInfo*   pDateInfo = mpDateTable->Get( nKey );
         if ( pDateInfo )
             aRet = pDateInfo->maText;
@@ -2512,7 +2512,7 @@ XubString Calendar::GetDateInfoText( const Date& rDate )
 
 // -----------------------------------------------------------------------
 
-BOOL Calendar::ShowDropPos( const Point& rPos, Date& rDate )
+sal_Bool Calendar::ShowDropPos( const Point& rPos, Date& rDate )
 {
     Date    aTempDate = maCurDate;
     mnDragScrollHitTest = ImplHitTest( rPos, aTempDate );
@@ -2534,12 +2534,12 @@ BOOL Calendar::ShowDropPos( const Point& rPos, Date& rDate )
                     if( mbDropPos )
                         ImplInvertDropPos();
                     maDropDate = aTempDate;
-                    mbDropPos = TRUE;
+                    mbDropPos = sal_True;
                     ImplInvertDropPos();
                 }
 
                 rDate = maDropDate;
-                return TRUE;
+                return sal_True;
             }
         }
     }
@@ -2547,7 +2547,7 @@ BOOL Calendar::ShowDropPos( const Point& rPos, Date& rDate )
         maDragScrollTimer.Stop();
 
     HideDropPos();
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -2557,7 +2557,7 @@ void Calendar::HideDropPos()
     if ( mbDropPos )
     {
         ImplInvertDropPos();
-        mbDropPos = FALSE;
+        mbDropPos = sal_False;
     }
 }
 
@@ -2570,7 +2570,7 @@ void Calendar::StartSelection()
     maOldCurDate = maCurDate;
     mpOldSelectTable = new Table( *mpSelectTable );
 
-    mbSelection = TRUE;
+    mbSelection = sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -2582,12 +2582,12 @@ void Calendar::EndSelection()
         if ( !mbSelection )
             ReleaseMouse();
 
-        mbDrag              = FALSE;
-        mbSelection         = FALSE;
-        mbMultiSelection    = FALSE;
-        mbSpinDown          = FALSE;
-        mbPrevIn            = FALSE;
-        mbNextIn            = FALSE;
+        mbDrag              = sal_False;
+        mbSelection         = sal_False;
+        mbMultiSelection    = sal_False;
+        mbSpinDown          = sal_False;
+        mbPrevIn            = sal_False;
+        mbNextIn            = sal_False;
     }
 }
 
@@ -2668,8 +2668,8 @@ public:
     void            SetCalendar( Calendar* pCalendar )
                         { mpCalendar = pCalendar; }
 
-    PushButton*     EnableTodayBtn( BOOL bEnable );
-    PushButton*     EnableNoneBtn( BOOL bEnable );
+    PushButton*     EnableTodayBtn( sal_Bool bEnable );
+    PushButton*     EnableNoneBtn( sal_Bool bEnable );
     void            ArrangeButtons();
 
     long            Notify( NotifyEvent& rNEvt );
@@ -2697,7 +2697,7 @@ ImplCFieldFloatWin::~ImplCFieldFloatWin()
 
 // -----------------------------------------------------------------------
 
-PushButton* ImplCFieldFloatWin::EnableTodayBtn( BOOL bEnable )
+PushButton* ImplCFieldFloatWin::EnableTodayBtn( sal_Bool bEnable )
 {
     if ( bEnable )
     {
@@ -2729,7 +2729,7 @@ PushButton* ImplCFieldFloatWin::EnableTodayBtn( BOOL bEnable )
 
 // -----------------------------------------------------------------------
 
-PushButton* ImplCFieldFloatWin::EnableNoneBtn( BOOL bEnable )
+PushButton* ImplCFieldFloatWin::EnableNoneBtn( sal_Bool bEnable )
 {
     if ( bEnable )
     {
@@ -2848,8 +2848,8 @@ CalendarField::CalendarField( Window* pParent, WinBits nWinStyle ) :
     mpFloatWin      = NULL;
     mpCalendar      = NULL;
     mnCalendarStyle = 0;
-    mbToday         = FALSE;
-    mbNone          = FALSE;
+    mbToday         = sal_False;
+    mbNone          = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -2861,8 +2861,8 @@ CalendarField::CalendarField( Window* pParent, const ResId& rResId ) :
     mpFloatWin      = NULL;
     mpCalendar      = NULL;
     mnCalendarStyle = 0;
-    mbToday         = FALSE;
-    mbNone          = FALSE;
+    mbToday         = sal_False;
+    mbNone          = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -2948,7 +2948,7 @@ void CalendarField::Select()
 
 // -----------------------------------------------------------------------
 
-BOOL CalendarField::ShowDropDown( BOOL bShow )
+sal_Bool CalendarField::ShowDropDown( sal_Bool bShow )
 {
     if ( bShow )
     {
@@ -2993,7 +2993,7 @@ BOOL CalendarField::ShowDropDown( BOOL bShow )
         mpCalendar->EndSelection();
         EndDropDown();
     }
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------

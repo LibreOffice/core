@@ -41,7 +41,7 @@ DBG_NAME(SdrOutliner)
 |* Ctor
 |*
 \************************************************************************/
-SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, USHORT nMode )
+SdrOutliner::SdrOutliner( SfxItemPool* pItemPool, sal_uInt16 nMode )
 :   Outliner( pItemPool, nMode ),
     //mpPaintInfoRec( NULL )
     mpVisualizedPage(0)
@@ -70,15 +70,15 @@ void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
 {
     if( pObj && pObj != mpTextObj.get() )
     {
-        SetUpdateMode(FALSE);
-        USHORT nOutlinerMode2 = OUTLINERMODE_OUTLINEOBJECT;
+        SetUpdateMode(sal_False);
+        sal_uInt16 nOutlinerMode2 = OUTLINERMODE_OUTLINEOBJECT;
         if ( !pObj->IsOutlText() )
             nOutlinerMode2 = OUTLINERMODE_TEXTOBJECT;
         Init( nOutlinerMode2 );
 
         SetGlobalCharStretching(100,100);
 
-        ULONG nStat = GetControlWord();
+        sal_uIntPtr nStat = GetControlWord();
         nStat &= ~( EE_CNTRL_STRETCHING | EE_CNTRL_AUTOPAGESIZE );
         SetControlWord(nStat);
 
@@ -108,14 +108,14 @@ void SdrOutliner::SetTextObjNoInit( const SdrTextObj* pObj )
 |*
 |*
 \************************************************************************/
-XubString SdrOutliner::CalcFieldValue(const SvxFieldItem& rField, USHORT nPara, USHORT nPos,
+XubString SdrOutliner::CalcFieldValue(const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
                                      Color*& rpTxtColor, Color*& rpFldColor)
 {
-    FASTBOOL bOk = FALSE;
+    FASTBOOL bOk = sal_False;
     XubString aRet;
 
     if(mpTextObj.is())
-        bOk = static_cast< SdrTextObj* >( mpTextObj.get())->CalcFieldValue(rField, nPara, nPos, FALSE, rpTxtColor, rpFldColor, aRet);
+        bOk = static_cast< SdrTextObj* >( mpTextObj.get())->CalcFieldValue(rField, nPara, nPos, sal_False, rpTxtColor, rpFldColor, aRet);
 
     if (!bOk)
         aRet = Outliner::CalcFieldValue(rField, nPara, nPos, rpTxtColor, rpFldColor);

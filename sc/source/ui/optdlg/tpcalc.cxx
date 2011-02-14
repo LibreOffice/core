@@ -55,7 +55,7 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-static USHORT pCalcOptRanges[] =
+static sal_uInt16 pCalcOptRanges[] =
 {
     SID_SCDOCOPTIONS,
     SID_SCDOCOPTIONS,
@@ -125,7 +125,7 @@ void ScTpCalcOptions::Init()
 
 //-----------------------------------------------------------------------
 
-USHORT* __EXPORT ScTpCalcOptions::GetRanges()
+sal_uInt16* __EXPORT ScTpCalcOptions::GetRanges()
 {
     return pCalcOptRanges;
 }
@@ -141,7 +141,7 @@ SfxTabPage* __EXPORT ScTpCalcOptions::Create( Window* pParent, const SfxItemSet&
 
 void __EXPORT ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
 {
-    USHORT  d,m,y;
+    sal_uInt16  d,m,y;
 
     *pLocalOptions  = *pOldOptions;
 
@@ -190,10 +190,10 @@ void __EXPORT ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
 
 //-----------------------------------------------------------------------
 
-BOOL __EXPORT ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
+sal_Bool __EXPORT ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     // alle weiteren Optionen werden in den Handlern aktualisiert
-    pLocalOptions->SetIterCount( (USHORT)aEdSteps.GetValue() );
+    pLocalOptions->SetIterCount( (sal_uInt16)aEdSteps.GetValue() );
     pLocalOptions->SetIgnoreCase( !aBtnCase.IsChecked() );
     pLocalOptions->SetCalcAsShown( aBtnCalc.IsChecked() );
     pLocalOptions->SetMatchWholeCell( aBtnMatch.IsChecked() );
@@ -209,10 +209,10 @@ BOOL __EXPORT ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
     if ( *pLocalOptions != *pOldOptions )
     {
         rCoreAttrs.Put( ScTpCalcItem( nWhichCalc, *pLocalOptions ) );
-        return TRUE;
+        return sal_True;
     }
     else
-        return FALSE;
+        return sal_False;
 }
 
 //------------------------------------------------------------------------
@@ -285,13 +285,13 @@ IMPL_LINK( ScTpCalcOptions, CheckClickHdl, CheckBox*, pBtn )
     {
         if ( pBtn->IsChecked() )
         {
-            pLocalOptions->SetIter( TRUE );
+            pLocalOptions->SetIter( sal_True );
             aFtSteps.Enable();  aEdSteps.Enable();
             aFtEps  .Enable();  aEdEps  .Enable();
         }
         else
         {
-            pLocalOptions->SetIter( FALSE );
+            pLocalOptions->SetIter( sal_False );
             aFtSteps.Disable(); aEdSteps.Disable();
             aFtEps  .Disable(); aEdEps  .Disable();
         }

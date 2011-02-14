@@ -208,8 +208,8 @@ class TitleBarUpdate : // interfaces
                     Is set only if return value is true.
 
             @return [sal_Bool]
-                    TRUE in casee module could be identified and all needed values could be read.
-                    FALSE otherwise.
+                    sal_True in casee module could be identified and all needed values could be read.
+                    sal_False otherwise.
          */
         ::sal_Bool implst_getModuleInfo(const css::uno::Reference< css::frame::XFrame >& xFrame,
                                               TModuleInfo&                               rInfo );

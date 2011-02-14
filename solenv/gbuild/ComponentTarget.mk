@@ -27,30 +27,21 @@
 
 gb_ComponentTarget_REPOS := $(gb_REPOS)
 
-ifeq ($(SYSTEM_LIBXSLT),YES)
-gb_ComponentTarget_XSLTPROCTARGET :=
-gb_ComponentTarget_XSLTPROCCOMMAND := xsltproc
-else
-gb_ComponentTarget_XSLTPROCTARGET := $(call gb_Executable_get_target,xsltproc)
-gb_ComponentTarget_XSLTPROCCOMMAND := $(gb_ComponentTarget_XSLTPROCPRECOMMAND) $(gb_ComponentTarget_XSLTPROCTARGET)
-endif
 gb_ComponentTarget_XSLTCOMMANDFILE := $(SOLARENV)/bin/createcomponent.xslt
 gb_ComponentTarget_get_source = $(1)/$(2).component
-
-# gb_ComponentTarget_PREFIXBASISNATIVE is set by the platform
 
 define gb_ComponentTarget__command
 $(call gb_Output_announce,$(3),$(true),CMP,1)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
-    $(gb_ComponentTarget_XSLTPROCCOMMAND) --nonet --stringparam uri \
-        '$(gb_ComponentTarget_PREFIXBASISNATIVE)$(LIBFILENAME)' -o $(1) \
+    $(gb_XSLTPROC) --nonet --stringparam uri \
+        '$(subst \d,$$,$(COMPONENTPREFIX))$(LIBFILENAME)' -o $(1) \
         $(gb_ComponentTarget_XSLTCOMMANDFILE) $(2))
 
 endef
 
 define gb_ComponentTarget__rules
-$$(call gb_ComponentTarget_get_target,%) : $$(call gb_ComponentTarget_get_source,$(1),%) | $(gb_ComponentTarget_XSLTPROCTARGET)
+$$(call gb_ComponentTarget_get_target,%) : $$(call gb_ComponentTarget_get_source,$(1),%) | $(gb_XSLTPROCTARGET)
     $$(call gb_ComponentTarget__command,$$@,$$<,$$*)
 
 $$(call gb_ComponentTarget_get_clean_target,%) :
@@ -68,7 +59,8 @@ $(call gb_ComponentTarget_get_external_target,%) :
     $(call gb_Deliver_deliver,$<,$@)
 
 define gb_ComponentTarget_ComponentTarget
-$(call gb_ComponentTarget_get_target,$(1)) : LIBFILENAME := $(or $(3),$(2))
+$(call gb_ComponentTarget_get_target,$(1)) : LIBFILENAME := $(3)
+$(call gb_ComponentTarget_get_target,$(1)) : COMPONENTPREFIX := $(2)
 $(call gb_ComponentTarget_get_outdir_target,$(1)) : $(call gb_ComponentTarget_get_target,$(1))
 $(call gb_Deliver_add_deliverable,$(call gb_ComponentTarget_get_outdir_target,$(1)),$(call gb_ComponentTarget_get_target,$(1)))
 

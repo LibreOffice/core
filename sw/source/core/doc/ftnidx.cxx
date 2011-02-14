@@ -42,24 +42,24 @@
 
 
 _SV_IMPL_SORTAR_ALG( _SwFtnIdxs, SwTxtFtnPtr )
-BOOL _SwFtnIdxs::Seek_Entry( const SwTxtFtnPtr rSrch, USHORT* pFndPos ) const
+sal_Bool _SwFtnIdxs::Seek_Entry( const SwTxtFtnPtr rSrch, sal_uInt16* pFndPos ) const
 {
-    ULONG nIdx = _SwTxtFtn_GetIndex( rSrch );
+    sal_uLong nIdx = _SwTxtFtn_GetIndex( rSrch );
     xub_StrLen nCntIdx = *rSrch->GetStart();
 
-    USHORT nO = Count(), nM, nU = 0;
+    sal_uInt16 nO = Count(), nM, nU = 0;
     if( nO > 0 )
     {
         nO--;
         while( nU <= nO )
         {
             nM = nU + ( nO - nU ) / 2;
-            ULONG nFndIdx = _SwTxtFtn_GetIndex( (*this)[ nM ] );
+            sal_uLong nFndIdx = _SwTxtFtn_GetIndex( (*this)[ nM ] );
             if( nFndIdx == nIdx && *(*this)[ nM ]->GetStart() == nCntIdx )
             {
                 if( pFndPos )
                     *pFndPos = nM;
-                return TRUE;
+                return sal_True;
             }
             else if( nFndIdx < nIdx ||
                 (nFndIdx == nIdx && *(*this)[ nM ]->GetStart() < nCntIdx ))
@@ -68,7 +68,7 @@ BOOL _SwFtnIdxs::Seek_Entry( const SwTxtFtnPtr rSrch, USHORT* pFndPos ) const
             {
                 if( pFndPos )
                     *pFndPos = nU;
-                return FALSE;
+                return sal_False;
             }
             else
                 nO = nM - 1;
@@ -76,7 +76,7 @@ BOOL _SwFtnIdxs::Seek_Entry( const SwTxtFtnPtr rSrch, USHORT* pFndPos ) const
     }
     if( pFndPos )
         *pFndPos = nU;
-    return FALSE;
+    return sal_False;
 }
 
 
@@ -101,11 +101,11 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
     {
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
         const SwNode* pCapStt = &pDoc->GetNodes().GetEndOfExtras();
-        ULONG nCapEnd = pDoc->GetNodes().GetEndOfContent().GetIndex();
+        sal_uLong nCapEnd = pDoc->GetNodes().GetEndOfContent().GetIndex();
         if( rOutlNds.Count() )
         {
             // suche den Start des Kapitels, in den rStt steht.
-            USHORT n;
+            sal_uInt16 n;
 
             for( n = 0; n < rOutlNds.Count(); ++n )
                 if( rOutlNds[ n ]->GetIndex() > rStt.GetIndex() )
@@ -123,7 +123,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
                 }
         }
 
-        USHORT nPos, nFtnNo = 1;
+        sal_uInt16 nPos, nFtnNo = 1;
         if( SeekEntry( *pCapStt, &nPos ) && nPos )
         {
             // gehe nach vorne bis der Index nicht mehr gleich ist
@@ -155,12 +155,12 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
 
     SwUpdFtnEndNtAtEnd aNumArr;
 
-    // BOOL, damit hier auch bei Chapter-Einstellung die Endnoten
+    // sal_Bool, damit hier auch bei Chapter-Einstellung die Endnoten
     // durchlaufen.
-    const BOOL bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
+    const sal_Bool bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
 
-    USHORT nPos, nFtnNo = 1, nEndNo = 1;
-    ULONG nUpdNdIdx = rStt.GetIndex();
+    sal_uInt16 nPos, nFtnNo = 1, nEndNo = 1;
+    sal_uLong nUpdNdIdx = rStt.GetIndex();
     for( nPos = 0; nPos < Count(); ++nPos )
     {
         pTxtFtn = (*this)[ nPos ];
@@ -187,7 +187,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
         const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
         if( !rFtn.GetNumStr().Len() )
         {
-            USHORT nSectNo = aNumArr.ChkNumber( *pTxtFtn );
+            sal_uInt16 nSectNo = aNumArr.ChkNumber( *pTxtFtn );
             if( !nSectNo && ( rFtn.IsEndNote() || !bEndNoteOnly ))
                 nSectNo = rFtn.IsEndNote()
                             ? rEndInfo.nFtnOffset + nEndNo++
@@ -226,14 +226,14 @@ void SwFtnIdxs::UpdateAllFtn()
     if( FTNNUM_CHAPTER == rFtnInfo.eNum )
     {
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
-        USHORT nNo = 1,         // Nummer fuer die Fussnoten
+        sal_uInt16 nNo = 1,         // Nummer fuer die Fussnoten
                nFtnIdx = 0;     // Index in das FtnIdx-Array
-        for( USHORT n = 0; n < rOutlNds.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rOutlNds.Count(); ++n )
         {
             //if( !rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
             if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )//<-end,zhaojianwei
             {
-                ULONG nCapStt = rOutlNds[ n ]->GetIndex();  // Start eines neuen Kapitels
+                sal_uLong nCapStt = rOutlNds[ n ]->GetIndex();  // Start eines neuen Kapitels
                 for( ; nFtnIdx < Count(); ++nFtnIdx )
                 {
                     pTxtFtn = (*this)[ nFtnIdx ];
@@ -266,17 +266,17 @@ void SwFtnIdxs::UpdateAllFtn()
 
     }
 
-    // BOOL, damit hier auch bei Chapter-Einstellung die Endnoten
+    // sal_Bool, damit hier auch bei Chapter-Einstellung die Endnoten
     // durchlaufen.
-    const BOOL bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
-    USHORT nFtnNo = 0, nEndNo = 0;
-    for( USHORT nPos = 0; nPos < Count(); ++nPos )
+    const sal_Bool bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
+    sal_uInt16 nFtnNo = 0, nEndNo = 0;
+    for( sal_uInt16 nPos = 0; nPos < Count(); ++nPos )
     {
         pTxtFtn = (*this)[ nPos ];
         const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
         if( !rFtn.GetNumStr().Len() )
         {
-            USHORT nSectNo = aNumArr.ChkNumber( *pTxtFtn );
+            sal_uInt16 nSectNo = aNumArr.ChkNumber( *pTxtFtn );
             if( !nSectNo && ( rFtn.IsEndNote() || !bEndNoteOnly ))
                 nSectNo = rFtn.IsEndNote()
                                 ? rEndInfo.nFtnOffset + (++nEndNo)
@@ -296,18 +296,18 @@ void SwFtnIdxs::UpdateAllFtn()
         pDoc->GetRootFrm()->UpdateFtnNums();
 }
 
-SwTxtFtn* SwFtnIdxs::SeekEntry( const SwNodeIndex& rPos, USHORT* pFndPos ) const
+SwTxtFtn* SwFtnIdxs::SeekEntry( const SwNodeIndex& rPos, sal_uInt16* pFndPos ) const
 {
-    ULONG nIdx = rPos.GetIndex();
+    sal_uLong nIdx = rPos.GetIndex();
 
-    USHORT nO = Count(), nM, nU = 0;
+    sal_uInt16 nO = Count(), nM, nU = 0;
     if( nO > 0 )
     {
         nO--;
         while( nU <= nO )
         {
             nM = nU + ( nO - nU ) / 2;
-            ULONG nNdIdx = _SwTxtFtn_GetIndex( (*this)[ nM ] );
+            sal_uLong nNdIdx = _SwTxtFtn_GetIndex( (*this)[ nM ] );
             if( nNdIdx == nIdx )
             {
                 if( pFndPos )
@@ -336,23 +336,23 @@ SwTxtFtn* SwFtnIdxs::SeekEntry( const SwNodeIndex& rPos, USHORT* pFndPos ) const
 const SwSectionNode* SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr(
                 const SwTxtFtn& rTxtFtn )
 {
-    USHORT nWh = static_cast<USHORT>( rTxtFtn.GetFtn().IsEndNote() ?
+    sal_uInt16 nWh = static_cast<sal_uInt16>( rTxtFtn.GetFtn().IsEndNote() ?
                         RES_END_AT_TXTEND : RES_FTN_AT_TXTEND );
-    USHORT nVal;
+    sal_uInt16 nVal;
     const SwSectionNode* pNd = rTxtFtn.GetTxtNode().FindSectionNode();
     while( pNd && FTNEND_ATTXTEND_OWNNUMSEQ != ( nVal =
             ((const SwFmtFtnAtTxtEnd&)pNd->GetSection().GetFmt()->
-            GetFmtAttr( nWh, TRUE )).GetValue() ) &&
+            GetFmtAttr( nWh, sal_True )).GetValue() ) &&
             FTNEND_ATTXTEND_OWNNUMANDFMT != nVal )
         pNd = pNd->StartOfSectionNode()->FindSectionNode();
 
     return pNd;
 }
 
-USHORT SwUpdFtnEndNtAtEnd::GetNumber( const SwTxtFtn& rTxtFtn,
+sal_uInt16 SwUpdFtnEndNtAtEnd::GetNumber( const SwTxtFtn& rTxtFtn,
                                     const SwSectionNode& rNd )
 {
-    USHORT nRet = 0, nWh;
+    sal_uInt16 nRet = 0, nWh;
     SvPtrarr* pArr;
     SvUShorts* pNum;
     if( rTxtFtn.GetFtn().IsEndNote() )
@@ -369,7 +369,7 @@ USHORT SwUpdFtnEndNtAtEnd::GetNumber( const SwTxtFtn& rTxtFtn,
     }
     void* pNd = (void*)&rNd;
 
-    for( USHORT n = pArr->Count(); n; )
+    for( sal_uInt16 n = pArr->Count(); n; )
         if( pArr->GetObject( --n ) == pNd )
         {
             nRet = ++pNum->GetObject( n );
@@ -387,7 +387,7 @@ USHORT SwUpdFtnEndNtAtEnd::GetNumber( const SwTxtFtn& rTxtFtn,
     return nRet;
 }
 
-USHORT SwUpdFtnEndNtAtEnd::ChkNumber( const SwTxtFtn& rTxtFtn )
+sal_uInt16 SwUpdFtnEndNtAtEnd::ChkNumber( const SwTxtFtn& rTxtFtn )
 {
     const SwSectionNode* pSectNd = FindSectNdWithEndAttr( rTxtFtn );
     return pSectNd ? GetNumber( rTxtFtn, *pSectNd ) : 0;

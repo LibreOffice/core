@@ -39,7 +39,7 @@ PRV_SV_IMPL_OWNER_LIST(SvStorageInfoList,SvStorageInfo)
 
 const SvStorageInfo * SvStorageInfoList::Get( const String & rEleName )
 {
-    for( ULONG i = 0; i < Count(); i++ )
+    for( sal_uLong i = 0; i < Count(); i++ )
     {
         const SvStorageInfo & rType = GetObject( i );
         if( rType.GetName() == rEleName )
@@ -50,10 +50,10 @@ const SvStorageInfo * SvStorageInfoList::Get( const String & rEleName )
 
 /************** class SvStorageInfo **************************************
 *************************************************************************/
-ULONG ReadClipboardFormat( SvStream & rStm )
+sal_uLong ReadClipboardFormat( SvStream & rStm )
 {
     sal_uInt32 nFormat = 0;
-    INT32 nLen = 0;
+    sal_Int32 nLen = 0;
     rStm >> nLen;
     if( rStm.IsEof() )
         rStm.SetError( SVSTREAM_GENERALERROR );
@@ -61,7 +61,7 @@ ULONG ReadClipboardFormat( SvStream & rStm )
     {
         // get a string name
         sal_Char * p = new sal_Char[ nLen ];
-        if( rStm.Read( p, nLen ) == (ULONG) nLen )
+        if( rStm.Read( p, nLen ) == (sal_uLong) nLen )
         {
             nFormat = SotExchange::RegisterFormatName( String::CreateFromAscii( p, short(nLen-1) ) );
         }
@@ -88,7 +88,7 @@ ULONG ReadClipboardFormat( SvStream & rStm )
     return nFormat;
 }
 
-void WriteClipboardFormat( SvStream & rStm, ULONG nFormat )
+void WriteClipboardFormat( SvStream & rStm, sal_uLong nFormat )
 {
     // determine the clipboard format string
     String aCbFmt;
@@ -97,15 +97,15 @@ void WriteClipboardFormat( SvStream & rStm, ULONG nFormat )
     if( aCbFmt.Len() )
     {
         ByteString aAsciiCbFmt( aCbFmt, RTL_TEXTENCODING_ASCII_US );
-        rStm << (INT32) (aAsciiCbFmt.Len() + 1);
+        rStm << (sal_Int32) (aAsciiCbFmt.Len() + 1);
         rStm << (const char *)aAsciiCbFmt.GetBuffer();
-        rStm << (UINT8) 0;
+        rStm << (sal_uInt8) 0;
     }
     else if( nFormat )
-        rStm << (INT32) -1         // for Windows
-             << (INT32) nFormat;
+        rStm << (sal_Int32) -1         // for Windows
+             << (sal_Int32) nFormat;
     else
-        rStm << (INT32) 0;         // no clipboard format
+        rStm << (sal_Int32) 0;         // no clipboard format
 }
 
 

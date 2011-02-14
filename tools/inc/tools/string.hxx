@@ -171,7 +171,7 @@ private:
     TOOLS_DLLPRIVATE void ImplUpdateStringFromUniString(
         sal_Unicode const *, sal_Size, rtl_TextEncoding, sal_uInt32);
     TOOLS_DLLPRIVATE void ImplStringConvert(
-        rtl_TextEncoding, rtl_TextEncoding, BOOL);
+        rtl_TextEncoding, rtl_TextEncoding, sal_Bool);
 
                         ByteString( const int* pDummy ); // not implemented: to prevent ByteString( NULL )
                         ByteString(int); // not implemented; to detect misuses
@@ -273,29 +273,29 @@ public:
 
     ByteString&         Convert( rtl_TextEncoding eSource,
                                  rtl_TextEncoding eTarget,
-                                 BOOL bReplace = TRUE );
+                                 sal_Bool bReplace = sal_True );
     static sal_Char     Convert( sal_Char c, rtl_TextEncoding eSource,
                                  rtl_TextEncoding eTarget,
-                                 BOOL bReplace = TRUE );
+                                 sal_Bool bReplace = sal_True );
     static sal_Unicode  ConvertToUnicode( sal_Char c,
                                           rtl_TextEncoding eTextEncoding );
     static sal_Char     ConvertFromUnicode( sal_Unicode c,
                                             rtl_TextEncoding eTextEncoding,
-                                            BOOL bReplace = TRUE );
+                                            sal_Bool bReplace = sal_True );
     static sal_Unicode  ConvertToUnicode( const sal_Char* pChar, sal_Size* pLen,
                                           rtl_TextEncoding eTextEncoding );
     static sal_Size     ConvertFromUnicode( sal_Unicode c, sal_Char* pBuf, sal_Size nBufLen,
                                             rtl_TextEncoding eTextEncoding,
-                                            BOOL bReplace = TRUE );
+                                            sal_Bool bReplace = sal_True );
     ByteString&         ConvertLineEnd( LineEnd eLineEnd );
     ByteString&         ConvertLineEnd()
                             { return ConvertLineEnd( GetSystemLineEnd() ); }
 
-    BOOL                IsLowerAscii() const;
-    BOOL                IsUpperAscii() const;
-    BOOL                IsAlphaAscii() const;
-    BOOL                IsNumericAscii() const;
-    BOOL                IsAlphaNumericAscii() const;
+    sal_Bool                IsLowerAscii() const;
+    sal_Bool                IsUpperAscii() const;
+    sal_Bool                IsAlphaAscii() const;
+    sal_Bool                IsNumericAscii() const;
+    sal_Bool                IsAlphaNumericAscii() const;
 
     ByteString&         ToLowerAscii();
     ByteString&         ToUpperAscii();
@@ -308,17 +308,17 @@ public:
                                                   xub_StrLen nLen = STRING_LEN ) const;
     StringCompare       CompareIgnoreCaseToAscii( const sal_Char* pCharStr,
                                                   xub_StrLen nLen = STRING_LEN ) const;
-    BOOL                Equals( const ByteString& rStr ) const;
-    BOOL                Equals( const sal_Char* pCharStr ) const;
-    BOOL                EqualsIgnoreCaseAscii( const ByteString& rStr ) const;
-    BOOL                EqualsIgnoreCaseAscii( const sal_Char* pCharStr ) const;
-    BOOL                Equals( const ByteString& rStr,
+    sal_Bool                Equals( const ByteString& rStr ) const;
+    sal_Bool                Equals( const sal_Char* pCharStr ) const;
+    sal_Bool                EqualsIgnoreCaseAscii( const ByteString& rStr ) const;
+    sal_Bool                EqualsIgnoreCaseAscii( const sal_Char* pCharStr ) const;
+    sal_Bool                Equals( const ByteString& rStr,
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;
-    BOOL                Equals( const sal_Char* pCharStr,
+    sal_Bool                Equals( const sal_Char* pCharStr,
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;
-    BOOL                EqualsIgnoreCaseAscii( const ByteString& rStr,
+    sal_Bool                EqualsIgnoreCaseAscii( const ByteString& rStr,
                                                xub_StrLen nIndex, xub_StrLen nLen ) const;
-    BOOL                EqualsIgnoreCaseAscii( const sal_Char* pCharStr,
+    sal_Bool                EqualsIgnoreCaseAscii( const sal_Char* pCharStr,
                                                xub_StrLen nIndex, xub_StrLen nLen ) const;
 
     xub_StrLen          Match( const ByteString& rStr ) const;
@@ -357,41 +357,41 @@ public:
     void                ReleaseBufferAccess( xub_StrLen nLen = STRING_LEN );
     sal_Char*           AllocBuffer( xub_StrLen nLen );
 
-    friend BOOL         operator == ( const ByteString& rStr1,  const ByteString& rStr2 )
+    friend sal_Bool         operator == ( const ByteString& rStr1,  const ByteString& rStr2 )
                             { return rStr1.Equals( rStr2 ); }
-    friend BOOL         operator == ( const ByteString& rStr,   const sal_Char* pCharStr )
+    friend sal_Bool         operator == ( const ByteString& rStr,   const sal_Char* pCharStr )
                             { return rStr.Equals( pCharStr ); }
-    friend BOOL         operator == ( const sal_Char* pCharStr, const ByteString& rStr )
+    friend sal_Bool         operator == ( const sal_Char* pCharStr, const ByteString& rStr )
                             { return rStr.Equals( pCharStr ); }
-    friend BOOL         operator != ( const ByteString& rStr1,  const ByteString& rStr2 )
+    friend sal_Bool         operator != ( const ByteString& rStr1,  const ByteString& rStr2 )
                             { return !(operator == ( rStr1, rStr2 )); }
-    friend BOOL         operator != ( const ByteString& rStr,   const sal_Char* pCharStr )
+    friend sal_Bool         operator != ( const ByteString& rStr,   const sal_Char* pCharStr )
                             { return !(operator == ( rStr, pCharStr )); }
-    friend BOOL         operator != ( const sal_Char* pCharStr, const ByteString& rStr )
+    friend sal_Bool         operator != ( const sal_Char* pCharStr, const ByteString& rStr )
                             { return !(operator == ( pCharStr, rStr )); }
-    friend BOOL         operator <  ( const ByteString& rStr1,  const ByteString& rStr2 )
+    friend sal_Bool         operator <  ( const ByteString& rStr1,  const ByteString& rStr2 )
                             { return (rStr1.CompareTo( rStr2 ) == COMPARE_LESS); }
-    friend BOOL         operator <  ( const ByteString& rStr,   const sal_Char* pCharStr )
+    friend sal_Bool         operator <  ( const ByteString& rStr,   const sal_Char* pCharStr )
                             { return (rStr.CompareTo( pCharStr ) == COMPARE_LESS); }
-    friend BOOL         operator <  ( const sal_Char* pCharStr, const ByteString& rStr )
+    friend sal_Bool         operator <  ( const sal_Char* pCharStr, const ByteString& rStr )
                             { return (rStr.CompareTo( pCharStr ) >= COMPARE_EQUAL); }
-    friend BOOL         operator >  ( const ByteString& rStr1,  const ByteString& rStr2 )
+    friend sal_Bool         operator >  ( const ByteString& rStr1,  const ByteString& rStr2 )
                             { return (rStr1.CompareTo( rStr2 ) == COMPARE_GREATER); }
-    friend BOOL         operator >  ( const ByteString& rStr,   const sal_Char* pCharStr )
+    friend sal_Bool         operator >  ( const ByteString& rStr,   const sal_Char* pCharStr )
                             { return (rStr.CompareTo( pCharStr ) == COMPARE_GREATER); }
-    friend BOOL         operator >  ( const sal_Char* pCharStr, const ByteString& rStr )
+    friend sal_Bool         operator >  ( const sal_Char* pCharStr, const ByteString& rStr )
                             { return (rStr.CompareTo( pCharStr ) <= COMPARE_EQUAL); }
-    friend BOOL         operator <= ( const ByteString& rStr1,  const ByteString& rStr2 )
+    friend sal_Bool         operator <= ( const ByteString& rStr1,  const ByteString& rStr2 )
                             { return !(operator > ( rStr1, rStr2 )); }
-    friend BOOL         operator <= ( const ByteString& rStr,   const sal_Char* pCharStr )
+    friend sal_Bool         operator <= ( const ByteString& rStr,   const sal_Char* pCharStr )
                             { return !(operator > ( rStr, pCharStr )); }
-    friend BOOL         operator <= ( const sal_Char* pCharStr,     const ByteString& rStr )
+    friend sal_Bool         operator <= ( const sal_Char* pCharStr,     const ByteString& rStr )
                             { return !(operator > ( pCharStr, rStr )); }
-    friend BOOL         operator >= ( const ByteString& rStr1,  const ByteString& rStr2 )
+    friend sal_Bool         operator >= ( const ByteString& rStr1,  const ByteString& rStr2 )
                             { return !(operator < ( rStr1, rStr2 )); }
-    friend BOOL         operator >= ( const ByteString& rStr,   const sal_Char* pCharStr )
+    friend sal_Bool         operator >= ( const ByteString& rStr,   const sal_Char* pCharStr )
                             { return !(operator < ( rStr, pCharStr )); }
-    friend BOOL         operator >= ( const sal_Char* pCharStr,     const ByteString& rStr )
+    friend sal_Bool         operator >= ( const sal_Char* pCharStr,     const ByteString& rStr )
                             { return !(operator < ( pCharStr, rStr )); }
 };
 
@@ -596,23 +596,23 @@ public:
                                                   xub_StrLen nLen = STRING_LEN ) const;
     StringCompare       CompareIgnoreCaseToAscii( const sal_Char* pAsciiStr,
                                                   xub_StrLen nLen = STRING_LEN ) const;
-    BOOL                Equals( const UniString& rStr ) const;
-    BOOL                Equals( const sal_Unicode* pCharStr ) const;
-    BOOL                EqualsAscii( const sal_Char* pAsciiStr ) const;
-    BOOL                EqualsIgnoreCaseAscii( const UniString& rStr ) const;
-    BOOL                EqualsIgnoreCaseAscii( const sal_Unicode* pCharStr ) const;
-    BOOL                EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr ) const;
-    BOOL                Equals( const UniString& rStr,
+    sal_Bool                Equals( const UniString& rStr ) const;
+    sal_Bool                Equals( const sal_Unicode* pCharStr ) const;
+    sal_Bool                EqualsAscii( const sal_Char* pAsciiStr ) const;
+    sal_Bool                EqualsIgnoreCaseAscii( const UniString& rStr ) const;
+    sal_Bool                EqualsIgnoreCaseAscii( const sal_Unicode* pCharStr ) const;
+    sal_Bool                EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr ) const;
+    sal_Bool                Equals( const UniString& rStr,
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;
-    BOOL                Equals( const sal_Unicode* pCharStr,
+    sal_Bool                Equals( const sal_Unicode* pCharStr,
                                 xub_StrLen nIndex, xub_StrLen nLen ) const;
-    BOOL                EqualsAscii( const sal_Char* pAsciiStr,
+    sal_Bool                EqualsAscii( const sal_Char* pAsciiStr,
                                      xub_StrLen nIndex, xub_StrLen nLen ) const;
-    BOOL                EqualsIgnoreCaseAscii( const UniString& rStr,
+    sal_Bool                EqualsIgnoreCaseAscii( const UniString& rStr,
                                                xub_StrLen nIndex, xub_StrLen nLen ) const;
-    BOOL                EqualsIgnoreCaseAscii( const sal_Unicode* pCharStr,
+    sal_Bool                EqualsIgnoreCaseAscii( const sal_Unicode* pCharStr,
                                                xub_StrLen nIndex, xub_StrLen nLen ) const;
-    BOOL                EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr,
+    sal_Bool                EqualsIgnoreCaseAscii( const sal_Char* pAsciiStr,
                                                xub_StrLen nIndex, xub_StrLen nLen ) const;
 
     xub_StrLen          Match( const UniString& rStr ) const;
@@ -656,17 +656,17 @@ public:
     void                ReleaseBufferAccess( xub_StrLen nLen = STRING_LEN );
     sal_Unicode*        AllocBuffer( xub_StrLen nLen );
 
-    friend BOOL         operator == ( const UniString& rStr1,   const UniString& rStr2 )
+    friend sal_Bool         operator == ( const UniString& rStr1,   const UniString& rStr2 )
                             { return rStr1.Equals( rStr2 ); }
-    friend BOOL         operator != ( const UniString& rStr1,   const UniString& rStr2 )
+    friend sal_Bool         operator != ( const UniString& rStr1,   const UniString& rStr2 )
                             { return !(operator == ( rStr1, rStr2 )); }
-    friend BOOL         operator <  ( const UniString& rStr1,   const UniString& rStr2 )
+    friend sal_Bool         operator <  ( const UniString& rStr1,   const UniString& rStr2 )
                             { return (rStr1.CompareTo( rStr2 ) == COMPARE_LESS); }
-    friend BOOL         operator >  ( const UniString& rStr1,   const UniString& rStr2 )
+    friend sal_Bool         operator >  ( const UniString& rStr1,   const UniString& rStr2 )
                             { return (rStr1.CompareTo( rStr2 ) == COMPARE_GREATER); }
-    friend BOOL         operator <= ( const UniString& rStr1,   const UniString& rStr2 )
+    friend sal_Bool         operator <= ( const UniString& rStr1,   const UniString& rStr2 )
                             { return !(operator > ( rStr1, rStr2 )); }
-    friend BOOL         operator >= ( const UniString& rStr1,   const UniString& rStr2 )
+    friend sal_Bool         operator >= ( const UniString& rStr1,   const UniString& rStr2 )
                             { return !(operator < ( rStr1, rStr2 )); }
 };
 

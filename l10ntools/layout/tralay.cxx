@@ -111,7 +111,7 @@ static ByteString ConvertSystemPath( const ByteString& rPath )
 
 ByteString TranslateLayout::GetCommandLineParam( int i )
 {
-    return ByteString( OUSTRING_CSTR( Application::GetCommandLineParam( sal::static_int_cast< USHORT >( i ) ) ) );
+    return ByteString( OUSTRING_CSTR( Application::GetCommandLineParam( sal::static_int_cast< sal_uInt16 >( i ) ) ) );
 }
 
 ByteString TranslateLayout::GetOptionArgument( int const i )
@@ -163,7 +163,7 @@ void TranslateLayout::ParseCommandLine()
 static XMLAttribute*
 findAttribute( XMLAttributeList* lst, String const& name )
 {
-    for ( ULONG i = 0; i < lst->Count(); i++ )
+    for ( sal_uLong i = 0; i < lst->Count(); i++ )
         if ( lst->GetObject( i )->Equals( name ) )
             return lst->GetObject( i );
     return 0;
@@ -243,7 +243,7 @@ static void insertMarker( XMLParentNode *p, ByteString const& file )
     if ( XMLChildNodeList* lst = p->GetChildList() )
         if ( lst->Count() )
         {
-            ULONG i = 1;
+            sal_uLong i = 1;
             // Skip newline, if possible.
             if ( lst->Count() > 1
                  && lst->GetObject( 2 )->GetNodeType() == XML_NODE_TYPE_DEFAULT )
@@ -260,7 +260,7 @@ void TranslateLayout::MergeLanguage( ByteString const& language )
     ByteString xmlFile = mFiles.front();
 
     MergeDataFile mergeData( mLocalize, xmlFile,
-                             FALSE, RTL_TEXTENCODING_MS_1252 );
+                             sal_False, RTL_TEXTENCODING_MS_1252 );
 
     DirEntry aFile( xmlFile );
     SimpleXMLParser aParser;

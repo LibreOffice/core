@@ -139,7 +139,7 @@ IMPL_LINK(SwGlossDecideDlg, SelectHdl, ListBox*, EMPTYARG)
 
 
 SwGlossaryList::SwGlossaryList() :
-    bFilled(FALSE)
+    bFilled(sal_False)
 {
     SvtPathOptions aPathOpt;
     sPath = aPathOpt.GetAutoTextPath();
@@ -163,7 +163,7 @@ SwGlossaryList::~SwGlossaryList()
 ********************************************************************/
 
 
-BOOL SwGlossaryList::GetShortName(const String& rLongName,
+sal_Bool SwGlossaryList::GetShortName(const String& rLongName,
                                 String& rShortName, String& rGroupName )
 {
     if(!bFilled)
@@ -171,13 +171,13 @@ BOOL SwGlossaryList::GetShortName(const String& rLongName,
 
     TripleStrings aTripleStrings;
 
-    USHORT nCount = aGroupArr.Count();
-    USHORT nFound = 0;
-    for(USHORT i = 0; i < nCount; i++ )
+    sal_uInt16 nCount = aGroupArr.Count();
+    sal_uInt16 nFound = 0;
+    for(sal_uInt16 i = 0; i < nCount; i++ )
     {
         AutoTextGroup* pGroup = aGroupArr.GetObject(i);
         if(!rGroupName.Len() || rGroupName == pGroup->sName)
-            for(USHORT j = 0; j < pGroup->nCount; j++)
+            for(sal_uInt16 j = 0; j < pGroup->nCount; j++)
             {
                 String sLong = pGroup->sLongNames.GetToken(j, STRING_DELIM);
                 if((rLongName == sLong))
@@ -191,14 +191,14 @@ BOOL SwGlossaryList::GetShortName(const String& rLongName,
             }
     }
 
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     nCount = aTripleStrings.Count();
     if(1 == nCount )
     {
         TripleString* pTriple = aTripleStrings[0];
         rShortName = pTriple->sShort;
         rGroupName = pTriple->sGroup;
-        bRet = TRUE;
+        bRet = sal_True;
     }
     else if(1 < nCount)
     {
@@ -209,7 +209,7 @@ BOOL SwGlossaryList::GetShortName(const String& rLongName,
         aDlg.SetText(sTitle);
 
         ListBox& rLB = aDlg.GetListBox();
-        for(USHORT i = 0; i < nCount; i++ )
+        for(sal_uInt16 i = 0; i < nCount; i++ )
             rLB.InsertEntry(aTripleStrings[i]->sGroup.GetToken(0, GLOS_DELIM));
 
         rLB.SelectEntryPos(0);
@@ -219,10 +219,10 @@ BOOL SwGlossaryList::GetShortName(const String& rLongName,
             TripleString* pTriple = aTripleStrings[rLB.GetSelectEntryPos()];
             rShortName = pTriple->sShort;
             rGroupName = pTriple->sGroup;
-            bRet = TRUE;
+            bRet = sal_True;
         }
         else
-            bRet = FALSE;
+            bRet = sal_False;
     }
     return bRet;
 }
@@ -232,7 +232,7 @@ BOOL SwGlossaryList::GetShortName(const String& rLongName,
 ********************************************************************/
 
 
-USHORT  SwGlossaryList::GetGroupCount()
+sal_uInt16  SwGlossaryList::GetGroupCount()
 {
     if(!bFilled)
         Update();
@@ -244,7 +244,7 @@ USHORT  SwGlossaryList::GetGroupCount()
 ********************************************************************/
 
 
-String SwGlossaryList::GetGroupName(USHORT nPos, BOOL bNoPath, String* pTitle)
+String SwGlossaryList::GetGroupName(sal_uInt16 nPos, sal_Bool bNoPath, String* pTitle)
 {
     DBG_ASSERT(aGroupArr.Count() > nPos, "Gruppe nicht vorhanden");
     String sRet(aEmptyStr);
@@ -266,7 +266,7 @@ String SwGlossaryList::GetGroupName(USHORT nPos, BOOL bNoPath, String* pTitle)
 ********************************************************************/
 
 
-USHORT  SwGlossaryList::GetBlockCount(USHORT nGroup)
+sal_uInt16  SwGlossaryList::GetBlockCount(sal_uInt16 nGroup)
 {
     DBG_ASSERT(aGroupArr.Count() > nGroup, "Gruppe nicht vorhanden");
     if(nGroup < aGroupArr.Count())
@@ -282,7 +282,7 @@ USHORT  SwGlossaryList::GetBlockCount(USHORT nGroup)
 ********************************************************************/
 
 
-String  SwGlossaryList::GetBlockName(USHORT nGroup, USHORT nBlock, String& rShortName)
+String  SwGlossaryList::GetBlockName(sal_uInt16 nGroup, sal_uInt16 nBlock, String& rShortName)
 {
     DBG_ASSERT(aGroupArr.Count() > nGroup, "Gruppe nicht vorhanden");
     if(nGroup < aGroupArr.Count())
@@ -309,7 +309,7 @@ void SwGlossaryList::Update()
     if(sTemp != sPath)
     {
         sPath = sTemp;
-        bFilled = FALSE;
+        bFilled = sal_False;
         ClearGroups();
     }
     SwGlossaries* pGlossaries = ::GetGlossaries();
@@ -317,11 +317,11 @@ void SwGlossaryList::Update()
     String sExt( SwGlossaries::GetExtension() );
     if(!bFilled)
     {
-        USHORT nGroupCount = pGlossaries->GetGroupCnt();
-        for(USHORT i = 0; i < nGroupCount; i++)
+        sal_uInt16 nGroupCount = pGlossaries->GetGroupCnt();
+        for(sal_uInt16 i = 0; i < nGroupCount; i++)
         {
             String sGrpName = pGlossaries->GetGroupName(i);
-            USHORT nPath = (USHORT)sGrpName.GetToken(1, GLOS_DELIM).ToInt32();
+            sal_uInt16 nPath = (sal_uInt16)sGrpName.GetToken(1, GLOS_DELIM).ToInt32();
             if(nPath < pPathArr->Count())
             {
                 AutoTextGroup* pGroup = new AutoTextGroup;
@@ -340,11 +340,11 @@ void SwGlossaryList::Update()
                 aGroupArr.Insert( pGroup, i );
             }
         }
-        bFilled = TRUE;
+        bFilled = sal_True;
     }
     else
     {
-        for(USHORT nPath = 0; nPath < pPathArr->Count(); nPath++)
+        for(sal_uInt16 nPath = 0; nPath < pPathArr->Count(); nPath++)
         {
             SvStringsDtor aFoundGroupNames;
             SvStrings aFiles( 16, 16 );
@@ -352,7 +352,7 @@ void SwGlossaryList::Update()
 
             SWUnoHelper::UCB_GetFileListOfFolder( *(*pPathArr)[nPath], aFiles,
                                                     &sExt, &aDateTimeArr );
-            for( USHORT nFiles = 0, nFEnd = aFiles.Count();
+            for( sal_uInt16 nFiles = 0, nFEnd = aFiles.Count();
                     nFiles < nFEnd; ++nFiles )
             {
                 String* pTitle = aFiles[ nFiles ];
@@ -385,20 +385,20 @@ void SwGlossaryList::Update()
                 delete pDT;
             }
 
-            USHORT nArrCount = aGroupArr.Count();
-            for( USHORT i = nArrCount; i; --i)
+            sal_uInt16 nArrCount = aGroupArr.Count();
+            for( sal_uInt16 i = nArrCount; i; --i)
             {
                 // evtl. geloeschte Gruppen entfernen
                 AutoTextGroup* pGroup = aGroupArr.GetObject(i - 1);
-                USHORT nGroupPath = (USHORT)pGroup->sName.GetToken( 1,
+                sal_uInt16 nGroupPath = (sal_uInt16)pGroup->sName.GetToken( 1,
                                                         GLOS_DELIM).ToInt32();
                 // nur die Gruppen werden geprueft, die fuer den
                 // aktuellen Teilpfad registriert sind
                 if(nGroupPath == nPath)
                 {
-                    BOOL bFound = FALSE;
+                    sal_Bool bFound = sal_False;
                     String sCompareGroup = pGroup->sName.GetToken(0, GLOS_DELIM);
-                    for( USHORT j = 0; j < aFoundGroupNames.Count() && !bFound; ++j)
+                    for( sal_uInt16 j = 0; j < aFoundGroupNames.Count() && !bFound; ++j)
                     {
                         bFound = sCompareGroup == *aFoundGroupNames[j];
                     }
@@ -432,7 +432,7 @@ void SwGlossaryList::Timeout()
 
 AutoTextGroup*  SwGlossaryList::FindGroup(const String& rGroupName)
 {
-    for(USHORT i = 0; i < aGroupArr.Count(); i++)
+    for(sal_uInt16 i = 0; i < aGroupArr.Count(); i++)
     {
         AutoTextGroup* pRet = aGroupArr.GetObject(i);
         if(pRet->sName == rGroupName)
@@ -454,7 +454,7 @@ void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
     if(pBlock)
         pGroup->sTitle = pBlock->GetName();
 
-    for(USHORT j = 0; j < pGroup->nCount; j++)
+    for(sal_uInt16 j = 0; j < pGroup->nCount; j++)
     {
         pGroup->sLongNames  += pBlock->GetLongName(j);
         pGroup->sLongNames  += STRING_DELIM;
@@ -469,19 +469,19 @@ void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
     passendem Anfang zurueckgeben
 ********************************************************************/
 
-BOOL SwGlossaryList::HasLongName(const String& rBegin, SvStringsISortDtor* pLongNames )
+sal_Bool SwGlossaryList::HasLongName(const String& rBegin, SvStringsISortDtor* pLongNames )
 {
     if(!bFilled)
         Update();
-    USHORT nFound = 0;
-    USHORT nCount = aGroupArr.Count();
-    USHORT nBeginLen = rBegin.Len();
+    sal_uInt16 nFound = 0;
+    sal_uInt16 nCount = aGroupArr.Count();
+    sal_uInt16 nBeginLen = rBegin.Len();
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
 
-    for(USHORT i = 0; i < nCount; i++ )
+    for(sal_uInt16 i = 0; i < nCount; i++ )
     {
         AutoTextGroup* pGroup = aGroupArr.GetObject(i);
-        for(USHORT j = 0; j < pGroup->nCount; j++)
+        for(sal_uInt16 j = 0; j < pGroup->nCount; j++)
         {
             String sBlock = pGroup->sLongNames.GetToken(j, STRING_DELIM);
             if( rSCmp.isEqual( sBlock.Copy(0, nBeginLen), rBegin ) &&
@@ -503,12 +503,12 @@ BOOL SwGlossaryList::HasLongName(const String& rBegin, SvStringsISortDtor* pLong
 ********************************************************************/
 void    SwGlossaryList::ClearGroups()
 {
-    USHORT nCount = aGroupArr.Count();
-    for( USHORT i = 0; i < nCount; ++i )
+    sal_uInt16 nCount = aGroupArr.Count();
+    for( sal_uInt16 i = 0; i < nCount; ++i )
         delete aGroupArr.GetObject( i );
 
     aGroupArr.Remove( 0, nCount );
-    bFilled = FALSE;
+    bFilled = sal_False;
 }
 
 

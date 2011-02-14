@@ -40,9 +40,9 @@
 
 class RtfExportFilter;
 class RtfSdrExport;
-typedef std::map<USHORT,Color> RtfColorTbl;
-typedef std::map<USHORT,rtl::OString> RtfStyleTbl;
-typedef std::map<String,USHORT> RtfRedlineTbl;
+typedef std::map<sal_uInt16,Color> RtfColorTbl;
+typedef std::map<sal_uInt16,rtl::OString> RtfStyleTbl;
+typedef std::map<String,sal_uInt16> RtfRedlineTbl;
 class SwNode;
 class SwEndNode;
 class SwTableNode;
@@ -85,7 +85,7 @@ public:
     virtual bool HackIsWW8OrHigher() const { return false; }
 
     /// Guess the script (asian/western).
-    virtual bool CollapseScriptsforWordOk( USHORT nScript, USHORT nWhich );
+    virtual bool CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich );
 
     virtual void AppendBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xub_StrLen nLen );
 
@@ -101,12 +101,12 @@ public:
     virtual void WriteRevTab();
 
     /// Output the actual headers and footers.
-    virtual void WriteHeadersFooters( BYTE nHeadFootFlags,
-            const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, BYTE nBreakCode );
+    virtual void WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
+            const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, sal_uInt8 nBreakCode );
 
     /// Write the field
     virtual void OutputField( const SwField* pFld, ww::eField eFldType,
-            const String& rFldCmd, BYTE nMode = nsFieldFlags::WRITEFIELD_ALL );
+            const String& rFldCmd, sal_uInt8 nMode = nsFieldFlags::WRITEFIELD_ALL );
 
     /// Write the data of the form field
     virtual void WriteFormData( const ::sw::mark::IFieldmark& rFieldmark );
@@ -120,7 +120,7 @@ public:
 
     virtual void DoFormText(const SwInputField * pFld);
 
-    virtual ULONG ReplaceCr( BYTE nChar );
+    virtual sal_uLong ReplaceCr( sal_uInt8 nChar );
 
 protected:
     /// Format-dependant part of the actual export.
@@ -143,7 +143,7 @@ protected:
     /// Output SwOLENode
     virtual void OutputOLENode( const SwOLENode& );
 
-    virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum );
+    virtual void AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum );
 
 public:
     /// Pass the pDocument, pCurrentPam and pOriginalPam to the base class.
@@ -164,26 +164,26 @@ public:
     /// This is used by OutputFlyFrame_Impl() to control the written syntax
     bool bRTFFlySyntax;
 
-    BOOL m_bOutStyleTab : 1;
+    sal_Bool m_bOutStyleTab : 1;
     SvStream& Strm();
-    SvStream& OutULong( ULONG nVal );
+    SvStream& OutULong( sal_uLong nVal );
     SvStream& OutLong( long nVal );
     void OutUnicode(const sal_Char *pToken, const String &rContent);
     void OutDateTime(const sal_Char* pStr, const util::DateTime& rDT );
     static rtl::OString OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEnc);
     static rtl::OString OutString(const String &rStr, rtl_TextEncoding eDestEnc);
-    static rtl::OString OutHex(ULONG nHex, BYTE nLen);
-    void OutPageDescription( const SwPageDesc& rPgDsc, BOOL bWriteReset, BOOL bCheckForFirstPage );
+    static rtl::OString OutHex(sal_uLong nHex, sal_uInt8 nLen);
+    void OutPageDescription( const SwPageDesc& rPgDsc, sal_Bool bWriteReset, sal_Bool bCheckForFirstPage );
 
-    USHORT GetColor( const Color& rColor ) const;
+    sal_uInt16 GetColor( const Color& rColor ) const;
     void InsColor( const Color& rCol );
     void InsColorLine( const SvxBoxItem& rBox );
     void OutColorTable();
-    USHORT GetRedline( const String& rAuthor );
-    const String* GetRedline( USHORT nId );
+    sal_uInt16 GetRedline( const String& rAuthor );
+    const String* GetRedline( sal_uInt16 nId );
 
-    void InsStyle( USHORT nId, const rtl::OString& rStyle );
-    rtl::OString* GetStyle( USHORT nId );
+    void InsStyle( sal_uInt16 nId, const rtl::OString& rStyle );
+    rtl::OString* GetStyle( sal_uInt16 nId );
 
 private:
     /// No copying.

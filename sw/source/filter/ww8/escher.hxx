@@ -111,7 +111,7 @@ protected:
     SvStream* pEscherStrm;
     long mnEmuMul, mnEmuDiv;
 
-    virtual INT32 WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
+    virtual sal_Int32 WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
         EscherPropertyContainer& rPropOpt);
     void WriteBrushAttr(const SvxBrushItem &rBrush,
         EscherPropertyContainer& rPropOpt);
@@ -120,19 +120,19 @@ protected:
         sal_uInt32 nShapeId, const com::sun::star::awt::Rectangle* pVisArea );
     void WriteGrfAttr(const SwNoTxtNode& rNd,EscherPropertyContainer& rPropOpt);
 
-    INT32 DrawModelToEmu(INT32 nVal) const
+    sal_Int32 DrawModelToEmu(sal_Int32 nVal) const
         { return BigMulDiv(nVal, mnEmuMul, mnEmuDiv); }
 
-    INT32 ToFract16(INT32 nVal, UINT32 nMax) const;
+    sal_Int32 ToFract16(sal_Int32 nVal, sal_uInt32 nMax) const;
 
-    virtual void SetPicId(const SdrObject &, UINT32, EscherPropertyContainer &);
+    virtual void SetPicId(const SdrObject &, sal_uInt32, EscherPropertyContainer &);
     SdrLayerID GetInvisibleHellId() const;
 
 public:
     SwBasicEscherEx(SvStream* pStrm, WW8Export& rWrt);
-    INT32 WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
-    INT32 WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
-    void WriteEmptyFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
+    sal_Int32 WriteGrfFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nShapeId);
+    sal_Int32 WriteOLEFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nShapeId);
+    void WriteEmptyFlyFrame(const SwFrmFmt& rFmt, sal_uInt32 nShapeId);
     virtual void WriteFrmExtraData(const SwFrmFmt&);
     virtual void WritePictures();
     virtual ~SwBasicEscherEx();
@@ -150,23 +150,23 @@ private:
     WinwordAnchoring aWinwordAnchoring;
     WW8_WrPlcTxtBoxes *pTxtBxs;
 
-    UINT32 GetFlyShapeId(const SwFrmFmt& rFmt,
+    sal_uInt32 GetFlyShapeId(const SwFrmFmt& rFmt,
         unsigned int nHdFtIndex, DrawObjPointerVector &rPVec);
     void MakeZOrderArrAndFollowIds(std::vector<DrawObj>& rSrcArr,
         DrawObjPointerVector& rDstArr);
 
-    INT32 WriteFlyFrm(const DrawObj &rObj, UINT32 &rShapeId,
+    sal_Int32 WriteFlyFrm(const DrawObj &rObj, sal_uInt32 &rShapeId,
         DrawObjPointerVector &rPVec);
-    INT32 WriteTxtFlyFrame(const DrawObj &rObj, UINT32 nShapeId,
-        UINT32 nTxtBox, DrawObjPointerVector &rPVec);
-    void WriteOCXControl(const SwFrmFmt& rFmt,UINT32 nShapeId);
-    virtual INT32 WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
+    sal_Int32 WriteTxtFlyFrame(const DrawObj &rObj, sal_uInt32 nShapeId,
+        sal_uInt32 nTxtBox, DrawObjPointerVector &rPVec);
+    void WriteOCXControl(const SwFrmFmt& rFmt,sal_uInt32 nShapeId);
+    virtual sal_Int32 WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
         EscherPropertyContainer& rPropOpt);
 
-    virtual UINT32 QueryTextID(
+    virtual sal_uInt32 QueryTextID(
         const com::sun::star::uno::Reference<
-        com::sun::star::drawing::XShape > &,UINT32);
-    virtual void SetPicId(const SdrObject &rSdrObj, UINT32 nShapeId,
+        com::sun::star::drawing::XShape > &,sal_uInt32);
+    virtual void SetPicId(const SdrObject &rSdrObj, sal_uInt32 nShapeId,
         EscherPropertyContainer &rPropOpt);
 public:
     SwEscherEx( SvStream* pStrm, WW8Export& rWW8Wrt );

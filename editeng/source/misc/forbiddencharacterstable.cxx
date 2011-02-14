@@ -35,7 +35,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-SvxForbiddenCharactersTable::SvxForbiddenCharactersTable( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF, USHORT nISize, USHORT nGrow )
+SvxForbiddenCharactersTable::SvxForbiddenCharactersTable( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF, sal_uInt16 nISize, sal_uInt16 nGrow )
  : SvxForbiddenCharactersTableImpl( nISize, nGrow )
 {
     mxMSF = xMSF;
@@ -44,13 +44,13 @@ SvxForbiddenCharactersTable::SvxForbiddenCharactersTable( ::com::sun::star::uno:
 
 SvxForbiddenCharactersTable::~SvxForbiddenCharactersTable()
 {
-    for ( ULONG n = Count(); n; )
+    for ( sal_uLong n = Count(); n; )
         delete GetObject( --n );
 }
 
 
 
-const com::sun::star::i18n::ForbiddenCharacters* SvxForbiddenCharactersTable::GetForbiddenCharacters( USHORT nLanguage, BOOL bGetDefault ) const
+const com::sun::star::i18n::ForbiddenCharacters* SvxForbiddenCharactersTable::GetForbiddenCharacters( sal_uInt16 nLanguage, sal_Bool bGetDefault ) const
 {
     ForbiddenCharactersInfo* pInf = Get( nLanguage );
     if ( !pInf && bGetDefault && mxMSF.is() )
@@ -60,7 +60,7 @@ const com::sun::star::i18n::ForbiddenCharacters* SvxForbiddenCharactersTable::Ge
          pInf = new ForbiddenCharactersInfo;
         pImpl->Insert( nLanguage, pInf );
 
-        pInf->bTemporary = TRUE;
+        pInf->bTemporary = sal_True;
         LocaleDataWrapper aWrapper( mxMSF, SvxCreateLocale( nLanguage ) );
         pInf->aForbiddenChars = aWrapper.getForbiddenCharacters();
     }
@@ -69,7 +69,7 @@ const com::sun::star::i18n::ForbiddenCharacters* SvxForbiddenCharactersTable::Ge
 
 
 
-void SvxForbiddenCharactersTable::SetForbiddenCharacters( USHORT nLanguage, const com::sun::star::i18n::ForbiddenCharacters& rForbiddenChars )
+void SvxForbiddenCharactersTable::SetForbiddenCharacters( sal_uInt16 nLanguage, const com::sun::star::i18n::ForbiddenCharacters& rForbiddenChars )
 {
     ForbiddenCharactersInfo* pInf = Get( nLanguage );
     if ( !pInf )
@@ -77,11 +77,11 @@ void SvxForbiddenCharactersTable::SetForbiddenCharacters( USHORT nLanguage, cons
         pInf = new ForbiddenCharactersInfo;
         Insert( nLanguage, pInf );
     }
-    pInf->bTemporary = FALSE;
+    pInf->bTemporary = sal_False;
     pInf->aForbiddenChars = rForbiddenChars;
 }
 
-void SvxForbiddenCharactersTable::ClearForbiddenCharacters( USHORT nLanguage )
+void SvxForbiddenCharactersTable::ClearForbiddenCharacters( sal_uInt16 nLanguage )
 {
     ForbiddenCharactersInfo* pInf = Get( nLanguage );
     if ( pInf )

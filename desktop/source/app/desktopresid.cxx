@@ -36,7 +36,7 @@
 namespace desktop
 {
 
-DesktopResId::DesktopResId( USHORT nId ) :
+DesktopResId::DesktopResId( sal_uInt16 nId ) :
     ResId( nId, *Desktop::GetDesktopResManager() )
 {
 }

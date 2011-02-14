@@ -132,7 +132,7 @@ using namespace ::vos;
 #include <sfx2/viewfrm.hxx>
 
 static SfxFilterList_Impl* pFilterArr = 0;
-static BOOL bFirstRead = TRUE;
+static sal_Bool bFirstRead = sal_True;
 
 static void CreateFilterArr()
 {
@@ -286,7 +286,7 @@ SfxFilterMatcher::SfxFilterMatcher( const String& rName )
 
     String aName = SfxObjectShell::GetServiceNameFromFactory( rName );
     DBG_ASSERT(aName.Len(), "Found boes type :-)");
-    for ( USHORT n=0; n<pImplArr->Count(); n++ )
+    for ( sal_uInt16 n=0; n<pImplArr->Count(); n++ )
     {
         // find the impl-Data of any comparable FilterMatcher that was created before
         SfxFilterMatcher_Impl* pImp = pImplArr->GetObject(n);
@@ -322,7 +322,7 @@ void SfxFilterMatcher_Impl::Update()
     {
         // this List was already used
         pList->Clear();
-        for ( USHORT n=0; n<pFilterArr->Count(); n++ )
+        for ( sal_uInt16 n=0; n<pFilterArr->Count(); n++ )
         {
             SfxFilter* pFilter = pFilterArr->GetObject(n);
             if ( pFilter->GetServiceName() == String(aName) )
@@ -545,7 +545,7 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
     const SfxFilter* pFilter = pOldFilter;
 
     sal_Bool bPreview = rMedium.IsPreview_Impl();
-    SFX_ITEMSET_ARG(rMedium.GetItemSet(), pReferer, SfxStringItem, SID_REFERER, FALSE);
+    SFX_ITEMSET_ARG(rMedium.GetItemSet(), pReferer, SfxStringItem, SID_REFERER, sal_False);
     if ( bPreview && rMedium.IsRemote() && ( !pReferer || pReferer->GetValue().CompareToAscii("private:searchfolder:",21 ) != COMPARE_EQUAL ) )
         return ERRCODE_ABORT;
 
@@ -775,7 +775,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4UIName( const String& rName, SfxFil
 const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const String& rName, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
     String aName( rName );
-    USHORT nIndex = aName.SearchAscii(": ");
+    sal_uInt16 nIndex = aName.SearchAscii(": ");
     if (  nIndex != STRING_NOTFOUND )
     {
         DBG_ERROR("Old filter name used!");
@@ -808,7 +808,7 @@ const SfxFilter* SfxFilterMatcher::GetFilter4FilterName( const String& rName, Sf
                 }
             }
 
-            SfxFilterContainer::ReadSingleFilter_Impl( rName, xTypeCFG, xFilterCFG, FALSE );
+            SfxFilterContainer::ReadSingleFilter_Impl( rName, xTypeCFG, xFilterCFG, sal_False );
         }
     }
 
@@ -911,7 +911,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
     const ::rtl::OUString& rName,
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xTypeCFG,
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xFilterCFG,
-    BOOL bUpdate
+    sal_Bool bUpdate
     )
 {
     ::rtl::OUString sFilterName( rName );
@@ -1052,16 +1052,16 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
         }
 
         SfxFilter* pFilter = bUpdate ? (SfxFilter*) SfxFilter::GetFilterByName( sFilterName ) : 0;
-        BOOL bNew = FALSE;
+        sal_Bool bNew = sal_False;
         if (!pFilter)
         {
-            bNew = TRUE;
+            bNew = sal_True;
             pFilter = new SfxFilter( sFilterName             ,
                                      sExtension              ,
                                      nFlags                  ,
                                      nClipboardId            ,
                                      sType                   ,
-                                     (USHORT)nDocumentIconId ,
+                                     (sal_uInt16)nDocumentIconId ,
                                      sMimeType               ,
                                      sUserData               ,
                                      sServiceName );
@@ -1073,7 +1073,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
             pFilter->nFormatType  = nFlags;
             pFilter->lFormat      = nClipboardId;
             pFilter->aTypeName    = sType;
-            pFilter->nDocIcon     = (USHORT)nDocumentIconId;
+            pFilter->nDocIcon     = (sal_uInt16)nDocumentIconId;
             pFilter->aMimeType    = sMimeType;
             pFilter->aUserData    = sUserData;
             pFilter->aServiceName = sServiceName;
@@ -1094,13 +1094,13 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
     }
 }
 
-void SfxFilterContainer::ReadFilters_Impl( BOOL bUpdate )
+void SfxFilterContainer::ReadFilters_Impl( sal_Bool bUpdate )
 {
     RTL_LOGFILE_CONTEXT( aMeasure, "sfx2 (as96863) ::SfxFilterContainer::ReadFilters" );
     if ( !pFilterArr )
         CreateFilterArr();
 
-    bFirstRead = FALSE;
+    bFirstRead = sal_False;
     SfxFilterList_Impl& rList = *pFilterArr;
 
     try
@@ -1130,10 +1130,10 @@ void SfxFilterContainer::ReadFilters_Impl( BOOL bUpdate )
                 // and change it back for all valid filters afterwards.
                 if( rList.Count() > 0 )
                 {
-                    bUpdate = TRUE;
-                    USHORT nCount = (USHORT)rList.Count();
+                    bUpdate = sal_True;
+                    sal_uInt16 nCount = (sal_uInt16)rList.Count();
                     SfxFilter* pFilter;
-                    for (USHORT f=0; f<nCount; ++f)
+                    for (sal_uInt16 f=0; f<nCount; ++f)
                     {
                         pFilter = NULL;
                         pFilter = rList.GetObject(f);
@@ -1155,9 +1155,9 @@ void SfxFilterContainer::ReadFilters_Impl( BOOL bUpdate )
                     // Otherwise you have to check more then 300 filter names manually .-)
                     // And conditional breakpoints on unicode values seams not to be supported .-(
                     #ifdef DEBUG
-                    bool bDBGStop = FALSE;
+                    bool bDBGStop = sal_False;
                     if (sFilterName.indexOf(::rtl::OUString::createFromAscii("DBG_"))>-1)
-                        bDBGStop = TRUE;
+                        bDBGStop = sal_True;
                     #endif
 
                     ReadSingleFilter_Impl( sFilterName, xTypeCFG, xFilterCFG, bUpdate );
@@ -1173,7 +1173,7 @@ void SfxFilterContainer::ReadFilters_Impl( BOOL bUpdate )
     if ( pImplArr && bUpdate )
     {
         // global filter arry was modified, factory specific ones might need an update too
-        for ( USHORT n=0; n<pImplArr->Count(); n++ )
+        for ( sal_uInt16 n=0; n<pImplArr->Count(); n++ )
             pImplArr->GetObject(n)->Update();
     }
 }

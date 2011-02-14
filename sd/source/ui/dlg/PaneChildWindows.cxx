@@ -62,11 +62,11 @@ SFX_IMPL_DOCKINGWINDOW( ToolPanelChildWindow, SID_TASKPANE)
 
 PaneChildWindow::PaneChildWindow (
     ::Window* pParentWindow,
-    USHORT nId,
+    sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo,
-    const USHORT nDockWinTitleResId,
-    const USHORT nTitleBarResId,
+    const sal_uInt16 nDockWinTitleResId,
+    const sal_uInt16 nTitleBarResId,
     SfxChildAlignment eAlignment)
     : SfxChildWindow (pParentWindow, nId)
 {
@@ -78,7 +78,7 @@ PaneChildWindow::PaneChildWindow (
         String( SdResId( nTitleBarResId ) ) );
     eChildAlignment = eAlignment;
     static_cast<SfxDockingWindow*>(pWindow)->Initialize(pInfo);
-    SetHideNotDelete(TRUE);
+    SetHideNotDelete(sal_True);
 
     ViewShellBase* pBase = ViewShellBase::GetViewShellBase(pBindings->GetDispatcher()->GetFrame());
     if (pBase != NULL)
@@ -110,7 +110,7 @@ PaneChildWindow::~PaneChildWindow (void)
 
 LeftPaneImpressChildWindow::LeftPaneImpressChildWindow (
     ::Window* pParentWindow,
-    USHORT nId,
+    sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo)
     : PaneChildWindow(
@@ -131,7 +131,7 @@ LeftPaneImpressChildWindow::LeftPaneImpressChildWindow (
 
 LeftPaneDrawChildWindow::LeftPaneDrawChildWindow (
     ::Window* pParentWindow,
-    USHORT nId,
+    sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo)
     : PaneChildWindow(
@@ -152,7 +152,7 @@ LeftPaneDrawChildWindow::LeftPaneDrawChildWindow (
 //= ToolPanelChildWindow
 //======================================================================================================================
 //----------------------------------------------------------------------------------------------------------------------
-ToolPanelChildWindow::ToolPanelChildWindow( ::Window* i_pParentWindow, USHORT i_nId, SfxBindings* i_pBindings,
+ToolPanelChildWindow::ToolPanelChildWindow( ::Window* i_pParentWindow, sal_uInt16 i_nId, SfxBindings* i_pBindings,
         SfxChildWinInfo* i_pChildWindowInfo )
     :PaneChildWindow( i_pParentWindow, i_nId, i_pBindings, i_pChildWindowInfo,
         FLT_TOOL_PANEL_DOCKING_WINDOW, STR_RIGHT_PANE_TITLE, SFX_ALIGN_RIGHT )

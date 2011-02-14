@@ -672,8 +672,8 @@ void SmXMLExport::_ExportContent()
         if (pDocShell)
         {
             SmParser &rParser = pDocShell->GetParser();
-            BOOL bVal = rParser.IsExportSymbolNames();
-            rParser.SetExportSymbolNames( TRUE );
+            sal_Bool bVal = rParser.IsExportSymbolNames();
+            rParser.SetExportSymbolNames( sal_True );
             SmNode *pTmpTree = rParser.Parse( aText );
             aText = rParser.GetText();
             delete pTmpTree;
@@ -793,7 +793,7 @@ void SmXMLExport::ExportUnaryHorizontal(const SmNode *pNode, int nLevel)
 void SmXMLExport::ExportExpression(const SmNode *pNode, int nLevel)
 {
     SvXMLElementExport *pRow=0;
-    ULONG  nSize = pNode->GetNumSubNodes();
+    sal_uLong  nSize = pNode->GetNumSubNodes();
 
     // #i115443: nodes of type expression always need to be grouped with mrow statement
     if (nSize > 1 || (pNode && pNode->GetType() == NEXPRESSION))
@@ -801,7 +801,7 @@ void SmXMLExport::ExportExpression(const SmNode *pNode, int nLevel)
 
     //if (nSize)
     //{
-        for (USHORT i = 0; i < nSize; i++)
+        for (sal_uInt16 i = 0; i < nSize; i++)
             if (const SmNode *pTemp = pNode->GetSubNode(i))
                 ExportNodes(pTemp, nLevel+1);
     //}
@@ -832,7 +832,7 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
 {
     SvXMLElementExport *pTable=0;
 
-    USHORT nSize = pNode->GetNumSubNodes();
+    sal_uInt16 nSize = pNode->GetNumSubNodes();
 
     //If the list ends in newline then the last entry has
     //no subnodes, the newline is superfulous so we just drop
@@ -846,7 +846,7 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
     if (nLevel || (nSize >1))
         pTable = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTABLE, sal_True, sal_True);
 
-    for (USHORT i = 0; i < nSize; i++)
+    for (sal_uInt16 i = 0; i < nSize; i++)
         if (const SmNode *pTemp = pNode->GetSubNode(i))
         {
             SvXMLElementExport *pRow=0;
@@ -1429,7 +1429,7 @@ void SmXMLExport::ExportVerticalBrace(const SmNode *pNode, int nLevel)
         // using accents will draw the over-/underbraces too close to the base
         // see http://www.w3.org/TR/MathML2/chapter3.html#id.3.4.5.2
         // also XML_ACCENT is illegal with XML_MUNDER. Thus no XML_ACCENT attribut here!
-//        AddAttribute(XML_NAMESPACE_MATH, XML_ACCENT, XML_TRUE);
+//        AddAttribute(XML_NAMESPACE_MATH, XML_ACCENT, XML_sal_True);
         SvXMLElementExport aOver2(*this, XML_NAMESPACE_MATH,which, sal_True, sal_True);
         ExportNodes(pNode->GetSubNode(0), nLevel);
         ExportNodes(pNode->GetSubNode(1), nLevel);
@@ -1441,11 +1441,11 @@ void SmXMLExport::ExportMatrix(const SmNode *pNode, int nLevel)
 {
     SvXMLElementExport aTable(*this, XML_NAMESPACE_MATH, XML_MTABLE, sal_True, sal_True);
     const SmMatrixNode *pMatrix = static_cast<const SmMatrixNode *>(pNode);
-    USHORT i=0;
-    for (ULONG y = 0; y < pMatrix->GetNumRows(); y++)
+    sal_uInt16 i=0;
+    for (sal_uLong y = 0; y < pMatrix->GetNumRows(); y++)
     {
         SvXMLElementExport aRow(*this, XML_NAMESPACE_MATH, XML_MTR, sal_True, sal_True);
-        for (ULONG x = 0; x < pMatrix->GetNumCols(); x++)
+        for (sal_uLong x = 0; x < pMatrix->GetNumCols(); x++)
             if (const SmNode *pTemp = pNode->GetSubNode(i++))
             {
                 SvXMLElementExport aCell(*this, XML_NAMESPACE_MATH, XML_MTD, sal_True, sal_True);
@@ -1562,8 +1562,8 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
 #if 0
         default:
             {
-            ULONG  nSize = pNode->GetNumSubNodes();
-            for (ULONG i = 0; i < nSize; i++)
+            sal_uLong  nSize = pNode->GetNumSubNodes();
+            for (sal_uLong i = 0; i < nSize; i++)
                 if (SmNode *pTemp = pNode->GetSubNode(i))
                     ExportNodes(pTemp, nLevel+1);
             }

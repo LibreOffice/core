@@ -103,8 +103,8 @@ class SvImpIconView
     long            nMaxBmpHeight;
     long            nMaxTextWidth;
     long            nMaxBoundHeight; // Hoehe des hoechsten BoundRects
-    ULONG           nFlags;
-    ULONG           nCurUserEvent;
+    sal_uLong           nFlags;
+    sal_uLong           nCurUserEvent;
     SvLBoxEntry*    pCurParent;
     SvLBoxEntry*    pCursor;
     SvLBoxEntry*    pNextCursor; // wird in MovingEntry gesetzt und ist
@@ -115,12 +115,12 @@ class SvImpIconView
     VirtualDevice*  pDDTempDev;
 
     SvIconViewTextMode eTextMode;
-    BOOL            bMustRecalcBoundingRects;
+    sal_Bool            bMustRecalcBoundingRects;
 
     void            CheckAllSizes();
     void            CheckSizes( SvLBoxEntry* pEntry,
                         const SvIcnVwDataEntry* pViewData = 0  );
-    void            ShowCursor( BOOL bShow );
+    void            ShowCursor( sal_Bool bShow );
 
     void            SetNextEntryPos(const Point& rPos);
     Point           FindNextEntryPos( const Size& rBoundSize );
@@ -137,7 +137,7 @@ class SvImpIconView
     void            AdjustScrollBars();
     void            PositionScrollBars( long nRealWidth, long nRealHeight );
     void            CalcDocPos( Point& aMousePos );
-    BOOL            GetResizeRect( Rectangle& );
+    sal_Bool            GetResizeRect( Rectangle& );
     void            PaintResizeRect( const Rectangle& );
     SvLBoxEntry*    GetNewCursor();
     void            ToggleSelection( SvLBoxEntry* );
@@ -160,8 +160,8 @@ class SvImpIconView
     SvIconViewTextMode GetEntryTextModeSmart( const SvLBoxEntry* pEntry,
                         const SvIcnVwDataEntry* pViewData ) const;
 
-    BOOL            CheckVerScrollBar();
-    BOOL            CheckHorScrollBar();
+    sal_Bool            CheckVerScrollBar();
+    sal_Bool            CheckHorScrollBar();
     void            CancelUserEvent();
 
 public:
@@ -169,7 +169,7 @@ public:
                     SvImpIconView( SvIconView* pView, SvLBoxTreeList*, WinBits nWinStyle );
                     ~SvImpIconView();
 
-    void            Clear( BOOL bInCtor = FALSE );
+    void            Clear( sal_Bool bInCtor = sal_False );
     void            SetStyle( const WinBits i_nWinStyle );
     void            SetModel( SvLBoxTreeList* pTree, SvLBoxEntry* pParent )
                         { pModel = pTree; SetCurParent(pParent); }
@@ -184,14 +184,14 @@ public:
     void            EntryExpanded( SvLBoxEntry* pEntry );
     void            EntryCollapsed( SvLBoxEntry* pEntry );
     void            CollapsingEntry( SvLBoxEntry* pEntry );
-    void            EntrySelected( SvLBoxEntry*, BOOL bSelect );
+    void            EntrySelected( SvLBoxEntry*, sal_Bool bSelect );
 
     void            Paint( const Rectangle& rRect );
     void            RepaintSelectionItems();
     void            MouseButtonDown( const MouseEvent& );
     void            MouseButtonUp( const MouseEvent& );
     void            MouseMove( const MouseEvent&);
-    BOOL            KeyInput( const KeyEvent& );
+    sal_Bool            KeyInput( const KeyEvent& );
     void            Resize();
     void            GetFocus();
     void            LoseFocus();
@@ -201,8 +201,8 @@ public:
     void            PaintEntry( SvLBoxEntry*, const Point&,
                         SvIcnVwDataEntry* pViewData = 0, OutputDevice* pOut = 0);
     void            SetEntryPosition( SvLBoxEntry* pEntry, const Point& rPos,
-                                      BOOL bAdjustRow = FALSE,
-                                      BOOL bCheckScrollBars = FALSE );
+                                      sal_Bool bAdjustRow = sal_False,
+                                      sal_Bool bCheckScrollBars = sal_False );
     void            InvalidateEntry( SvLBoxEntry* );
     void            ViewDataInitialized( SvLBoxEntry* pEntry );
     SvLBoxItem*     GetItem( SvLBoxEntry*, const Point& rAbsPos );
@@ -217,7 +217,7 @@ public:
     SvLBoxEntry*    GetCurEntry() const { return pCursor; }
     void            SetCursor( SvLBoxEntry* );
 
-    BOOL            IsEntryInView( SvLBoxEntry* );
+    sal_Bool            IsEntryInView( SvLBoxEntry* );
     SvLBoxEntry*    GetEntry( const Point& rDocPos );
     SvLBoxEntry*    GetNextEntry( const Point& rDocPos, SvLBoxEntry* pCurEntry );
     SvLBoxEntry*    GetPrevEntry( const Point& rDocPos, SvLBoxEntry* pCurEntry  );
@@ -237,7 +237,7 @@ public:
                         SvIcnVwDataEntry* pViewData=0 );
     Rectangle       CalcTextRect( SvLBoxEntry*, SvLBoxString* pItem = 0,
                                   const Point* pPos = 0,
-                                  BOOL bForInplaceEdit = FALSE,
+                                  sal_Bool bForInplaceEdit = sal_False,
                                   SvIcnVwDataEntry* pViewData = 0 );
 
     long            CalcBoundingWidth( SvLBoxEntry*, const SvIcnVwDataEntry* pViewData = 0) const;
@@ -254,22 +254,22 @@ public:
                         SvIcnVwDataEntry* pViewData=0);
     void            InvalidateBoundingRect( SvLBoxEntry* );
     void            InvalidateBoundingRect( Rectangle& rRect ) { rRect.Right() = LONG_MAX; }
-    BOOL            IsBoundingRectValid( const Rectangle& rRect ) const { return (BOOL)( rRect.Right() != LONG_MAX ); }
+    sal_Bool            IsBoundingRectValid( const Rectangle& rRect ) const { return (sal_Bool)( rRect.Right() != LONG_MAX ); }
 
-    void            PaintEmphasis( const Rectangle&, BOOL bSelected,
-                                   BOOL bCursored, OutputDevice* pOut = 0 );
+    void            PaintEmphasis( const Rectangle&, sal_Bool bSelected,
+                                   sal_Bool bCursored, OutputDevice* pOut = 0 );
     void            PaintItem( const Rectangle& rRect, SvLBoxItem* pItem,
-                        SvLBoxEntry* pEntry, USHORT nPaintFlags, OutputDevice* pOut = 0 );
-    // berechnet alle BoundingRects neu, wenn bMustRecalcBoundingRects == TRUE
+                        SvLBoxEntry* pEntry, sal_uInt16 nPaintFlags, OutputDevice* pOut = 0 );
+    // berechnet alle BoundingRects neu, wenn bMustRecalcBoundingRects == sal_True
     void            CheckBoundingRects() { if (bMustRecalcBoundingRects) RecalcAllBoundingRects(); }
     // berechnet alle invalidierten BoundingRects neu
     void            UpdateBoundingRects();
-    void            ShowTargetEmphasis( SvLBoxEntry* pEntry, BOOL bShow );
+    void            ShowTargetEmphasis( SvLBoxEntry* pEntry, sal_Bool bShow );
     SvLBoxEntry*    GetDropTarget( const Point& rPosPixel );
-    BOOL            NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-                        SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos );
-    BOOL            NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-                        SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos );
+    sal_Bool            NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+                        SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos );
+    sal_Bool            NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+                        SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos );
 
     void            WriteDragServerInfo( const Point&, SvLBoxDDInfo* );
     void            ReadDragServerInfo( const Point&, SvLBoxDDInfo* );
@@ -277,9 +277,9 @@ public:
 
     void            SetCurParent( SvLBoxEntry* pNewParent );
     SvLBoxEntry*    GetCurParent() const { return pCurParent; }
-    USHORT          GetSelectionCount() const;
+    sal_uInt16          GetSelectionCount() const;
     void            SetGrid( long nDX, long nDY );
-    void            Scroll( long nDeltaX, long nDeltaY, BOOL bScrollBar = FALSE );
+    void            Scroll( long nDeltaX, long nDeltaY, sal_Bool bScrollBar = sal_False );
     const Size&     GetItemSize( SvIconView* pView, SvLBoxEntry*, SvLBoxItem*,
                         const SvIcnVwDataEntry* pViewData = 0 ) const;
     void            PrepareCommandEvent( const Point& rPt );
@@ -290,18 +290,18 @@ public:
 
     SvLBoxEntry*    mpViewData;
 
-    BOOL            IsOver( SvPtrarr* pSelectedRectList, const Rectangle& rEntryBoundRect ) const;
-    void            SelectRect( const Rectangle&, BOOL bAdd = TRUE,
+    sal_Bool            IsOver( SvPtrarr* pSelectedRectList, const Rectangle& rEntryBoundRect ) const;
+    void            SelectRect( const Rectangle&, sal_Bool bAdd = sal_True,
                         SvPtrarr* pOtherRects = 0,
                         short nOffs = SELRECT_BORDER_OFFS );
     void            DrawSelectionRect( const Rectangle& );
     void            HideSelectionRect();
     void            CalcScrollOffsets( const Point& rRefPosPixel,
-                        long& rX, long& rY, BOOL bDragDrop = FALSE,
-                        USHORT nBorderWidth = 10 );
+                        long& rX, long& rY, sal_Bool bDragDrop = sal_False,
+                        sal_uInt16 nBorderWidth = 10 );
     void            EndTracking();
-    BOOL            IsTextHit( SvLBoxEntry* pEntry, const Point& rDocPos );
-    void            MakeVisible( const Rectangle& rDocPos,BOOL bInScrollBarEvent=FALSE);
+    sal_Bool            IsTextHit( SvLBoxEntry* pEntry, const Point& rDocPos );
+    void            MakeVisible( const Rectangle& rDocPos,sal_Bool bInScrollBarEvent=sal_False);
     void            AdjustAtGrid( SvLBoxEntry* pStart = 0 );
     void            SetTextMode( SvIconViewTextMode, SvLBoxEntry* pEntry = 0 );
     SvIconViewTextMode GetTextMode( const SvLBoxEntry* pEntry = 0,

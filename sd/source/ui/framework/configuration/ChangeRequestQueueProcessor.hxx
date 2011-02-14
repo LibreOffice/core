@@ -80,7 +80,7 @@ public:
     void AddRequest (const ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::framework::XConfigurationChangeRequest>& rxRequest);
 
-    /** Returns </TRUE> when the queue is empty.
+    /** Returns </sal_True> when the queue is empty.
     */
     bool IsEmpty (void) const;
 

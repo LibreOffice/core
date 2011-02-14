@@ -36,7 +36,7 @@
 #include <sfx2/viewfrm.hxx>
 
 
-USHORT ScIMapChildWindowId()
+sal_uInt16 ScIMapChildWindowId()
 {
     return SvxIMapDlgChildWindow::GetChildWindowId();
 }

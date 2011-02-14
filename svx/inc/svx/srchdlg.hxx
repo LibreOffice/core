@@ -64,7 +64,7 @@ struct SearchDlg_Impl;
 
 struct SearchAttrItem
 {
-    USHORT          nSlot;
+    sal_uInt16          nSlot;
     SfxPoolItem*    pItem;
 };
 
@@ -82,17 +82,17 @@ public:
     void            Put( const SfxItemSet& rSet );
     SfxItemSet&     Get( SfxItemSet& rSet );
     void            Clear();
-    USHORT          Count() const { return SrchAttrItemList::Count(); }
-    SearchAttrItem& operator[](USHORT nPos) const
+    sal_uInt16          Count() const { return SrchAttrItemList::Count(); }
+    SearchAttrItem& operator[](sal_uInt16 nPos) const
                         { return SrchAttrItemList::operator[]( nPos ); }
-    SearchAttrItem& GetObject( USHORT nPos ) const
+    SearchAttrItem& GetObject( sal_uInt16 nPos ) const
                         { return SrchAttrItemList::GetObject( nPos ); }
 
     // der Pointer auf das Item wird nicht kopiert!!! (also nicht l"oschen)
     void Insert( const SearchAttrItem& rItem )
         { SrchAttrItemList::Insert( rItem, SrchAttrItemList::Count() ); }
     // l"oscht die Pointer auf die Items
-    void Remove( USHORT nPos, USHORT nLen = 1 );
+    void Remove( sal_uInt16 nPos, sal_uInt16 nLen = 1 );
 };
 
 #ifndef SV_NODIALOG
@@ -107,7 +107,7 @@ class SVX_DLLPUBLIC SvxSearchDialogWrapper : public SfxChildWindow
 {
     SvxSearchDialog *dialog;
 public:
-    SvxSearchDialogWrapper( Window*pParent, USHORT nId,
+    SvxSearchDialogWrapper( Window*pParent, sal_uInt16 nId,
                             SfxBindings* pBindings, SfxChildWinInfo* pInfo );
 
     ~SvxSearchDialogWrapper ();
@@ -140,7 +140,7 @@ public:
     SvxSearchDialog( Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind );
     ~SvxSearchDialog();
 
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 
     // Window
     virtual void    Activate();
@@ -153,12 +153,12 @@ public:
     const SearchAttrItemList*   GetReplaceItemList() const
                                     { return pReplaceList; }
 
-    inline BOOL     HasSearchAttributes() const;
-    inline BOOL     HasReplaceAttributes() const;
+    inline sal_Bool     HasSearchAttributes() const;
+    inline sal_Bool     HasReplaceAttributes() const;
 
     PushButton&     GetReplaceBtn() { return aReplaceBtn; }
 
-    INT32           GetTransliterationFlags() const;
+    sal_Int32           GetTransliterationFlags() const;
 
 private:
     FixedText       aSearchText;
@@ -214,14 +214,14 @@ private:
     CheckBox        aAllSheetsCB;
 
     SfxBindings&    rBindings;
-    BOOL            bWriter;
-    BOOL            bSearch;
-    BOOL            bFormat;
-    USHORT          nOptions;
+    sal_Bool            bWriter;
+    sal_Bool            bSearch;
+    sal_Bool            bFormat;
+    sal_uInt16          nOptions;
     FASTBOOL        bSet;
     FASTBOOL        bReadOnly;
     FASTBOOL        bConstruct;
-    ULONG           nModifyFlag;
+    sal_uIntPtr         nModifyFlag;
     String          aStylesStr;
     String          aLayoutStr;
     LocalizedString aCalcStr;
@@ -240,7 +240,7 @@ private:
     SvxSearchController*    pSearchSetController;
     SvxSearchController*    pReplaceSetController;
 
-    mutable INT32           nTransliterationFlags;
+    mutable sal_Int32           nTransliterationFlags;
 
 #ifdef _SVX_SRCHDLG_CXX
     DECL_LINK( ModifyHdl_Impl, ComboBox* pEdit );
@@ -260,31 +260,31 @@ private:
     void            Init_Impl( int bHasItemSet );
     void            InitAttrList_Impl( const SfxItemSet* pSSet,
                                        const SfxItemSet* pRSet );
-    void            Remember_Impl( const String &rStr,BOOL bSearch );
+    void            Remember_Impl( const String &rStr,sal_Bool bSearch );
     void            PaintAttrText_Impl();
-    String&         BuildAttrText_Impl( String& rStr, BOOL bSrchFlag ) const;
+    String&         BuildAttrText_Impl( String& rStr, sal_Bool bSrchFlag ) const;
 
     void            TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool );
-    void            EnableControls_Impl( const USHORT nFlags );
+    void            EnableControls_Impl( const sal_uInt16 nFlags );
     void            EnableControl_Impl( Control* pCtrl );
     void            SetItem_Impl( const SvxSearchItem* pItem );
 
     void            SetModifyFlag_Impl( const Control* pCtrl );
     void            SaveToModule_Impl();
 
-    void            ApplyTransliterationFlags_Impl( INT32 nSettings );
+    void            ApplyTransliterationFlags_Impl( sal_Int32 nSettings );
 #endif
 };
 
 #include <sfx2/layout-post.hxx>
 
-inline BOOL SvxSearchDialog::HasSearchAttributes() const
+inline sal_Bool SvxSearchDialog::HasSearchAttributes() const
 {
     int bLen = aSearchAttrText.GetText().Len();
     return ( aSearchAttrText.IsEnabled() && bLen );
 }
 
-inline BOOL SvxSearchDialog::HasReplaceAttributes() const
+inline sal_Bool SvxSearchDialog::HasReplaceAttributes() const
 {
     int bLen = aReplaceAttrText.GetText().Len();
     return ( aReplaceAttrText.IsEnabled() && bLen );

@@ -57,9 +57,9 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 {
     const SvxPageItem* pPage = 0;
     SfxItemPool* pPool = rSet.GetPool();
-    USHORT nWhich = pPool->GetWhich( SID_ATTR_PAGE );
+    sal_uInt16 nWhich = pPool->GetWhich( SID_ATTR_PAGE );
 
-    if ( rSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
     {
         // Ausrichtung
         pPage = (const SvxPageItem*)&rSet.Get( nWhich );
@@ -70,14 +70,14 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     nWhich = pPool->GetWhich( SID_ATTR_PAGE_SIZE );
 
-    if ( rSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
     {
         // Orientation und Size aus dem PageItem
         const SvxSizeItem& rSize = (const SvxSizeItem&)rSet.Get( nWhich );
         SetSize( rSize.GetSize() );
     }
     nWhich = RES_LR_SPACE;
-    if ( rSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
     {
         // linken und rechten Rand einstellen
         const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rSet.Get( nWhich );
@@ -93,7 +93,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     nWhich = RES_UL_SPACE;
 
-    if ( rSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
     {
         // oberen und unteren Rand einstellen
         const SvxULSpaceItem& rULSpace = (const SvxULSpaceItem&)rSet.Get( nWhich );
@@ -111,7 +111,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     // Kopfzeilen-Attribute auswerten
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_HEADERSET),
-            FALSE, &pItem ) )
+            sal_False, &pItem ) )
     {
         const SfxItemSet& rHeaderSet = ((SvxSetItem*)pItem)->GetItemSet();
         const SfxBoolItem& rHeaderOn =
@@ -131,7 +131,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             SetHdDist( rUL.GetLower() );
             SetHdLeft( rLR.GetLeft() );
             SetHdRight( rLR.GetRight() );
-            SetHeader( TRUE );
+            SetHeader( sal_True );
             if ( rHeaderSet.GetItemState( RES_BACKGROUND ) == SFX_ITEM_SET )
             {
                 const SvxBrushItem& rItem =
@@ -146,11 +146,11 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             }
         }
         else
-            SetHeader( FALSE );
+            SetHeader( sal_False );
     }
 
     if( SFX_ITEM_SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_FOOTERSET),
-            FALSE, &pItem ) )
+            sal_False, &pItem ) )
     {
         const SfxItemSet& rFooterSet = ((SvxSetItem*)pItem)->GetItemSet();
         const SfxBoolItem& rFooterOn =
@@ -170,7 +170,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             SetFtDist( rUL.GetUpper() );
             SetFtLeft( rLR.GetLeft() );
             SetFtRight( rLR.GetRight() );
-            SetFooter( TRUE );
+            SetFooter( sal_True );
             if( rFooterSet.GetItemState( RES_BACKGROUND ) == SFX_ITEM_SET )
             {
                 const SvxBrushItem& rItem =
@@ -185,10 +185,10 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             }
         }
         else
-            SetFooter( FALSE );
+            SetFooter( sal_False );
     }
     if( SFX_ITEM_SET == rSet.GetItemState( RES_BACKGROUND,
-            FALSE, &pItem ) )
+            sal_False, &pItem ) )
     {
         SetColor( ( (const SvxBrushItem*)pItem )->GetColor() );
         const Graphic* pGrf = ( (const SvxBrushItem*)pItem )->GetGraphic();
@@ -210,11 +210,11 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
 
 void SwColExample::DrawPage( const Point& rOrg,
-                            const BOOL bSecond,
-                            const BOOL bEnabled )
+                            const sal_Bool bSecond,
+                            const sal_Bool bEnabled )
 {
     SwPageExample::DrawPage( rOrg, bSecond, bEnabled );
-    USHORT nColumnCount;
+    sal_uInt16 nColumnCount;
     if( pColMgr && 0 != (nColumnCount = pColMgr->GetCount()))
     {
         long nL = GetLeft();
@@ -247,18 +247,18 @@ void SwColExample::DrawPage( const Point& rOrg,
             SetFillColor( GetColor() );
 
         // #97495# make sure that the automatic column widht's are always equal
-        BOOL bAutoWidth = pColMgr->IsAutoWidth();
+        sal_Bool bAutoWidth = pColMgr->IsAutoWidth();
         sal_Int32 nAutoColWidth = 0;
         if(bAutoWidth)
         {
             sal_Int32 nColumnWidthSum = 0;
-            USHORT i;
+            sal_uInt16 i;
             for(i = 0; i < nColumnCount; ++i)
                 nColumnWidthSum += pColMgr->GetColWidth( i );
             nAutoColWidth = nColumnWidthSum / nColumnCount;
         }
 
-        USHORT i;
+        sal_uInt16 i;
         for( i = 0; i < nColumnCount; i++)
         {
             if(!bAutoWidth)
@@ -326,7 +326,7 @@ SwColumnOnlyExample::SwColumnOnlyExample( Window* pParent, const ResId& rResId) 
     SetBorderStyle( WINDOW_BORDER_MONO );
 
     m_aFrmSize  = SvxPaperInfo::GetPaperSize(PAPER_A4);// DIN A4
-    ::FitToActualSize(m_aCols, (USHORT)m_aFrmSize.Width());
+    ::FitToActualSize(m_aCols, (sal_uInt16)m_aFrmSize.Width());
 
     long nHeight = m_aFrmSize.Height();
     Fraction aScale( m_aWinSize.Height(), nHeight );
@@ -377,12 +377,12 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
     long nLength = aLogSize.Height() - 2 * aTL.Y();
     Point aUp( aTL );
     Point aDown( aTL.X(), nLength );
-    BOOL bLines = FALSE;
+    sal_Bool bLines = sal_False;
     if(m_aCols.GetLineAdj() != COLADJ_NONE)
     {
-        bLines = TRUE;
+        bLines = sal_True;
 
-        USHORT nPercent = m_aCols.GetLineHeight();
+        sal_uInt16 nPercent = m_aCols.GetLineHeight();
         if( nPercent != 100 )
         {
             nLength -= nLength * nPercent / 100;
@@ -400,14 +400,14 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
 
     }
     const SwColumns& rCols = m_aCols.GetColumns();
-    USHORT nColCount = rCols.Count();
+    sal_uInt16 nColCount = rCols.Count();
     if( nColCount )
     {
         DrawRect(aRect);
         SetFillColor( rFieldColor );
         Rectangle aFrmRect(aTL, m_aFrmSize);
         long nSum = aTL.X();
-        for(USHORT i = 0; i < nColCount; i++)
+        for(sal_uInt16 i = 0; i < nColCount; i++)
         {
             SwColumn* pCol = rCols[i];
             aFrmRect.Left()    = nSum + pCol->GetLeft();//nSum + pCol->GetLeft() + aTL.X();
@@ -418,7 +418,7 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
         if(bLines )
         {
             nSum = aTL.X();
-            for(USHORT i = 0; i < nColCount - 1; i++)
+            for(sal_uInt16 i = 0; i < nColCount - 1; i++)
             {
                 nSum += rCols[i]->GetWishWidth();
                 aUp.X() = nSum;
@@ -437,32 +437,32 @@ void SwColumnOnlyExample::Paint( const Rectangle& /*rRect*/ )
 void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
 {
     m_aCols = rCol;
-    USHORT nWishSum = m_aCols.GetWishWidth();
+    sal_uInt16 nWishSum = m_aCols.GetWishWidth();
     long nFrmWidth = m_aFrmSize.Width();
     SwColumns& rCols = m_aCols.GetColumns();
-    USHORT nColCount = rCols.Count();
+    sal_uInt16 nColCount = rCols.Count();
 
-    for(USHORT i = 0; i < nColCount; i++)
+    for(sal_uInt16 i = 0; i < nColCount; i++)
     {
         SwColumn* pCol = rCols[i];
         long nWish = pCol->GetWishWidth();
         nWish *= nFrmWidth;
         nWish /= nWishSum;
-        pCol->SetWishWidth((USHORT)nWish);
+        pCol->SetWishWidth((sal_uInt16)nWish);
         long nLeft = pCol->GetLeft();
         nLeft *= nFrmWidth;
         nLeft /= nWishSum;
-        pCol->SetLeft((USHORT)nLeft);
+        pCol->SetLeft((sal_uInt16)nLeft);
         long nRight = pCol->GetRight();
         nRight *= nFrmWidth;
         nRight /= nWishSum;
-        pCol->SetRight((USHORT)nRight);
+        pCol->SetRight((sal_uInt16)nRight);
     }
     // #97495# make sure that the automatic column width's are always equal
     if(nColCount && m_aCols.IsOrtho())
     {
         sal_Int32 nColumnWidthSum = 0;
-        USHORT i;
+        sal_uInt16 i;
         for(i = 0; i < nColCount; ++i)
         {
             SwColumn* pCol = rCols[i];
@@ -473,7 +473,7 @@ void  SwColumnOnlyExample::SetColumns(const SwFmtCol& rCol)
         for(i = 0; i < nColCount; ++i)
         {
             SwColumn* pCol = rCols[i];
-            pCol->SetWishWidth( static_cast< USHORT >(nColumnWidthSum + pCol->GetRight() + pCol->GetLeft()));
+            pCol->SetWishWidth( static_cast< sal_uInt16 >(nColumnWidthSum + pCol->GetRight() + pCol->GetLeft()));
         }
     }
 }
@@ -490,8 +490,8 @@ SwPageGridExample::~SwPageGridExample()
 #define MAX_ROWS    10
 #define MAX_LINES   15
 void SwPageGridExample::DrawPage( const Point& rOrg,
-                           const BOOL bSecond,
-                           const BOOL bEnabled )
+                           const sal_Bool bSecond,
+                           const sal_Bool bEnabled )
 {
     SwPageExample::DrawPage(rOrg, bSecond, bEnabled);
     if(pGridItem && pGridItem->GetGridType())
@@ -596,9 +596,9 @@ void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
 {
     DELETEZ(pGridItem);
     //get the grid information
-    if(SFX_ITEM_AVAILABLE <= rSet.GetItemState(RES_TEXTGRID, TRUE))
+    if(SFX_ITEM_AVAILABLE <= rSet.GetItemState(RES_TEXTGRID, sal_True))
         pGridItem = (SwTextGridItem*)((const SwTextGridItem&)rSet.Get(RES_TEXTGRID)).Clone();
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( RES_FRAMEDIR, TRUE ))
+    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( RES_FRAMEDIR, sal_True ))
     {
         const SvxFrameDirectionItem& rDirItem =
                     (const SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR);

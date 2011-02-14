@@ -50,7 +50,7 @@ public:
     virtual ~SalTimer();
 
     // AutoRepeat and Restart
-    virtual void            Start( ULONG nMS ) = 0;
+    virtual void            Start( sal_uLong nMS ) = 0;
     virtual void            Stop() = 0;
 
     // Callbacks (indepen in \sv\source\app\timer.cxx)

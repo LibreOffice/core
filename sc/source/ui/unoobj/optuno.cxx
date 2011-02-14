@@ -97,7 +97,7 @@ sal_Bool ScDocOptionsHelper::setPropertyValue( ScDocOptions& rOptions,
         {
             sal_Int32 nIntVal = 0;
             if ( aValue >>= nIntVal )
-                rOptions.SetIterCount( (USHORT)nIntVal );
+                rOptions.SetIterCount( (sal_uInt16)nIntVal );
         }
         break;
         case PROP_UNO_ITEREPSILON :
@@ -176,7 +176,7 @@ uno::Any ScDocOptionsHelper::getPropertyValue(
         break;
         case PROP_UNO_NULLDATE:
         {
-            USHORT nD, nM, nY;
+            sal_uInt16 nD, nM, nY;
             rOptions.GetDate( nD, nM, nY );
             util::Date aDate( nD, nM, nY );
             aRet <<= aDate;
@@ -216,7 +216,7 @@ void SAL_CALL ScDocOptionsObj::setPropertyValue(
 {
     ScUnoGuard aGuard;
 
-    BOOL bDone = ScDocOptionsHelper::setPropertyValue( aOptions, *GetPropertySet().getPropertyMap(), aPropertyName, aValue );
+    sal_Bool bDone = ScDocOptionsHelper::setPropertyValue( aOptions, *GetPropertySet().getPropertyMap(), aPropertyName, aValue );
 
     if (!bDone)
         ScModelObj::setPropertyValue( aPropertyName, aValue );

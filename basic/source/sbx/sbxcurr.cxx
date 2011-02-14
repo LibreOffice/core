@@ -257,7 +257,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); dVal = 0;
             }
-            *p->pByte = (BYTE) dVal; break;
+            *p->pByte = (sal_uInt8) dVal; break;
         case SbxBYREF | SbxINTEGER:
         case SbxBYREF | SbxBOOL:
             if( dVal > SbxMAXINT )
@@ -268,7 +268,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); dVal = SbxMININT;
             }
-            *p->pInteger = (INT16) dVal; break;
+            *p->pInteger = (sal_Int16) dVal; break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
             if( dVal > SbxMAXUINT )
@@ -279,7 +279,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); dVal = 0;
             }
-            *p->pUShort = (UINT16) dVal; break;
+            *p->pUShort = (sal_uInt16) dVal; break;
         case SbxBYREF | SbxLONG:
             if( dVal > SbxMAXLNG )
             {
@@ -289,7 +289,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); dVal = SbxMINLNG;
             }
-            *p->pLong = (INT32) dVal; break;
+            *p->pLong = (sal_Int32) dVal; break;
         case SbxBYREF | SbxULONG:
             if( dVal > SbxMAXULNG )
             {
@@ -299,7 +299,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); dVal = 0;
             }
-            *p->pULong = (UINT32) dVal; break;
+            *p->pULong = (sal_uInt32) dVal; break;
         case SbxBYREF | SbxSALINT64:
             *p->pnInt64 = ImpDoubleToSalInt64( dVal ); break;
         case SbxBYREF | SbxSALUINT64:

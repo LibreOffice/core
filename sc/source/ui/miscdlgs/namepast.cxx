@@ -42,7 +42,7 @@
 
 //==================================================================
 
-ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, BOOL bInsList )
+ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, sal_Bool bInsList )
     : ModalDialog( pParent, ScResId( RID_SCDLG_NAMES_PASTE ) ),
     aLabelText      ( this, ScResId( FT_LABEL ) ),
     aNameList       ( this, ScResId( LB_ENTRYLIST ) ),
@@ -59,10 +59,10 @@ ScNamePasteDlg::ScNamePasteDlg( Window * pParent, const ScRangeName* pList, BOOL
     aNameList.SetSelectHdl( LINK( this,ScNamePasteDlg,ListSelHdl) );
     aNameList.SetDoubleClickHdl( LINK( this,ScNamePasteDlg,ListDblClickHdl) );
 
-    USHORT  nCnt = pList->GetCount();
+    sal_uInt16  nCnt = pList->GetCount();
     String  aText;
 
-    for( USHORT i=0 ; i<nCnt ; i++ )
+    for( sal_uInt16 i=0 ; i<nCnt ; i++ )
     {
         ScRangeData* pData = (*pList)[ i ];
 

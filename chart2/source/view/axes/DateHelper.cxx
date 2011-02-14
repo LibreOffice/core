@@ -72,8 +72,8 @@ Date DateHelper::GetDateSomeMonthsAway( const Date& rD, long nMonthDistance )
         nNewYear--;
     if( nNewMonth <= 0 )
         nNewMonth += 12;
-    aRet.SetMonth( USHORT(nNewMonth) );
-    aRet.SetYear( USHORT(nNewYear) );
+    aRet.SetMonth( sal_uInt16(nNewMonth) );
+    aRet.SetYear( sal_uInt16(nNewYear) );
     while(!aRet.IsValid())
         aRet--;
     return aRet;
@@ -82,7 +82,7 @@ Date DateHelper::GetDateSomeMonthsAway( const Date& rD, long nMonthDistance )
 Date DateHelper::GetDateSomeYearsAway( const Date& rD, long nYearDistance )
 {
     Date aRet(rD);
-    aRet.SetYear( static_cast<USHORT>(rD.GetYear()+nYearDistance) );
+    aRet.SetYear( static_cast<sal_uInt16>(rD.GetYear()+nYearDistance) );
     while(!aRet.IsValid())
         aRet--;
     return aRet;

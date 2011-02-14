@@ -486,7 +486,7 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
     // --> FME 2008-09-16 #i91421#
     if ( !pMaster->GetIndPrev() )
     {
-        ULONG nLines = pMaster->GetThisLines();
+        sal_uLong nLines = pMaster->GetThisLines();
         if(nLines == 0 && pMaster->HasPara())
         {
             const SwParaPortion *pMasterPara = pMaster->GetPara();

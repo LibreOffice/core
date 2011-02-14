@@ -50,7 +50,7 @@ public:
     void                        ConnectElements( void );
                                     // should be called after all manipulations on elements are done
                                     // calcs real sizes depending on sizes of this
-    void                        Show( BOOL bVisible = TRUE, USHORT nFlags = 0 );    // same meaning as Windows::Show()
+    void                        Show( sal_Bool bVisible = sal_True, sal_uInt16 nFlags = 0 );    // same meaning as Windows::Show()
     void                        Enable( bool bEnable = true, bool bChild = true );  // same meaning as Windows::Enable()
 };
 

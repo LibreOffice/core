@@ -50,7 +50,7 @@ namespace svx
         ~TextControlCharAttribDialog();
 
     protected:
-        virtual void PageCreated( USHORT _nId, SfxTabPage& _rPage );
+        virtual void PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage );
     };
 
     //====================================================================

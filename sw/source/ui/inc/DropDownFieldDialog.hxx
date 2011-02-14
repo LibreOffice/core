@@ -62,7 +62,7 @@ class DropDownFieldDialog : public SvxStandardDialog
     virtual void    Apply();
 public:
     DropDownFieldDialog(   Window *pParent, SwWrtShell &rSh,
-                                SwField* pField, BOOL bNextButton = FALSE );
+                                SwField* pField, sal_Bool bNextButton = sal_False );
     ~DropDownFieldDialog();
 };
 } //namespace sw

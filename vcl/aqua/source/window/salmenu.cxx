@@ -207,7 +207,7 @@ static void initAppMenu()
 
 // =======================================================================
 
-SalMenu* AquaSalInstance::CreateMenu( BOOL bMenuBar, Menu* pVCLMenu )
+SalMenu* AquaSalInstance::CreateMenu( sal_Bool bMenuBar, Menu* pVCLMenu )
 {
     initAppMenu();
 
@@ -339,9 +339,9 @@ sal_Int32 removeUnusedItemsRunner(NSMenu * pMenu)
     return drawnItems;
 }
 
-bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, ULONG nFlags)
+bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags)
 {
-    // do not use native popup menu when AQUA_NATIVE_MENUS is set to FALSE
+    // do not use native popup menu when AQUA_NATIVE_MENUS is set to sal_False
     if( ! VisibleMenuBar() ) {
         return false;
     }
@@ -369,7 +369,7 @@ bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rR
 
     // do the same strange semantics as vcl popup windows to arrive at a frame geometry
     // in mirrored UI case; best done by actually executing the same code
-    USHORT nArrangeIndex;
+    sal_uInt16 nArrangeIndex;
     pWin->SetPosPixel( pWin->ImplCalcPos( pWin, rRect, nFlags, nArrangeIndex ) );
     displayPopupFrame.origin.x = pWin->ImplGetFrame()->maGeometry.nX - pParentAquaSalFrame->maGeometry.nX + offset;
     displayPopupFrame.origin.y = pWin->ImplGetFrame()->maGeometry.nY - pParentAquaSalFrame->maGeometry.nY + offset;
@@ -393,7 +393,7 @@ bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rR
     return true;
 }
 
-int AquaSalMenu::getItemIndexByPos( USHORT nPos ) const
+int AquaSalMenu::getItemIndexByPos( sal_uInt16 nPos ) const
 {
     int nIndex = 0;
     if( nPos == MENU_APPEND )
@@ -519,7 +519,7 @@ void AquaSalMenu::removeFallbackMenuItem( NSMenuItem* pOldItem )
     }
 }
 
-BOOL AquaSalMenu::VisibleMenuBar()
+sal_Bool AquaSalMenu::VisibleMenuBar()
 {
     // Enable/disable experimental native menus code?
     //
@@ -528,11 +528,11 @@ BOOL AquaSalMenu::VisibleMenuBar()
     static const char *pExperimental = getenv ("AQUA_NATIVE_MENUS");
 
     if ( ImplGetSVData()->mbIsTestTool || (pExperimental && !strcasecmp(pExperimental, "FALSE")) )
-        return FALSE;
+        return sal_False;
 
     // End of experimental code enable/disable part
 
-    return TRUE;
+    return sal_True;
 }
 
 void AquaSalMenu::SetFrame( const SalFrame *pFrame )
@@ -631,7 +631,7 @@ void AquaSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsi
     }
 }
 
-void AquaSalMenu::CheckItem( unsigned nPos, BOOL bCheck )
+void AquaSalMenu::CheckItem( unsigned nPos, sal_Bool bCheck )
 {
     if( nPos < maItems.size() )
     {
@@ -640,7 +640,7 @@ void AquaSalMenu::CheckItem( unsigned nPos, BOOL bCheck )
     }
 }
 
-void AquaSalMenu::EnableItem( unsigned nPos, BOOL bEnable )
+void AquaSalMenu::EnableItem( unsigned nPos, sal_Bool bEnable )
 {
     if( nPos < maItems.size() )
     {
@@ -701,10 +701,10 @@ void AquaSalMenu::SetItemText( unsigned i_nPos, SalMenuItem* i_pSalMenuItem, con
 
 void AquaSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName )
 {
-    USHORT nModifier;
+    sal_uInt16 nModifier;
     sal_Unicode nCommandKey = 0;
 
-    USHORT nKeyCode=rKeyCode.GetCode();
+    sal_uInt16 nKeyCode=rKeyCode.GetCode();
     if( nKeyCode )
     {
         if ((nKeyCode>=KEY_A) && (nKeyCode<=KEY_Z))           // letter A..Z
@@ -786,7 +786,7 @@ void AquaSalMenu::GetSystemMenuData( SystemMenuData* pData )
 {
 }
 
-AquaSalMenu::MenuBarButtonEntry* AquaSalMenu::findButtonItem( USHORT i_nItemId )
+AquaSalMenu::MenuBarButtonEntry* AquaSalMenu::findButtonItem( sal_uInt16 i_nItemId )
 {
     for( size_t i = 0; i < maButtons.size(); ++i )
     {
@@ -852,7 +852,7 @@ bool AquaSalMenu::AddMenuBarButton( const SalMenuButtonItem& i_rNewItem )
     return true;
 }
 
-void AquaSalMenu::RemoveMenuBarButton( USHORT i_nId )
+void AquaSalMenu::RemoveMenuBarButton( sal_uInt16 i_nId )
 {
     MenuBarButtonEntry* pEntry = findButtonItem( i_nId );
     if( pEntry )
@@ -866,7 +866,7 @@ void AquaSalMenu::RemoveMenuBarButton( USHORT i_nId )
         statusLayout();
 }
 
-Rectangle AquaSalMenu::GetMenuBarButtonRectPixel( USHORT i_nItemId, SalFrame* i_pReferenceFrame )
+Rectangle AquaSalMenu::GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame )
 {
     if( GetSalData()->mnSystemVersion < VER_LEOPARD )
         return Rectangle( Point( -1, -1 ), Size( 1, 1 ) );

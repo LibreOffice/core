@@ -55,9 +55,9 @@ public:
     virtual ~MorphDlg (void);
 
     void            SaveSettings() const;
-    USHORT          GetFadeSteps() const { return (USHORT) aMtfSteps.GetValue(); }
-    BOOL            IsAttributeFade() const { return aCbxAttributes.IsChecked(); }
-    BOOL            IsOrientationFade() const { return aCbxOrientation.IsChecked(); }
+    sal_uInt16          GetFadeSteps() const { return (sal_uInt16) aMtfSteps.GetValue(); }
+    sal_Bool            IsAttributeFade() const { return aCbxAttributes.IsChecked(); }
+    sal_Bool            IsOrientationFade() const { return aCbxOrientation.IsChecked(); }
 
 private:
     FixedLine       aGrpPreset;

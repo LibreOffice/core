@@ -38,7 +38,7 @@ class ViewShell;
 
 
 void LoadURL( const UniString& rName, ViewShell* pSh,
-              USHORT nFilter = URLLOAD_NOFILTER,
+              sal_uInt16 nFilter = URLLOAD_NOFILTER,
               const UniString *pTargetFrameName = 0 );
 
 

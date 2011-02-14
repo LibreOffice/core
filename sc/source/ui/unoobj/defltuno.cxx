@@ -302,7 +302,7 @@ beans::PropertyState SAL_CALL ScDocDefaultsObj::getPropertyState( const rtl::OUS
 
     beans::PropertyState eRet = beans::PropertyState_DEFAULT_VALUE;
 
-    USHORT nWID = pEntry->nWID;
+    sal_uInt16 nWID = pEntry->nWID;
     if ( nWID == ATTR_FONT || nWID == ATTR_CJK_FONT || nWID == ATTR_CTL_FONT || !nWID )
     {
         //  static default for font is system-dependent,

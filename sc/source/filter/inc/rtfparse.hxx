@@ -36,7 +36,7 @@ struct ScRTFCellDefault
 {
     SfxItemSet          aItemSet;
     SCCOL               nCol;
-    USHORT              nTwips;         // rechter Rand der Zelle
+    sal_uInt16              nTwips;         // rechter Rand der Zelle
     SCCOL               nColOverlap;    // MergeCell wenn >1, merged cells wenn 0
 
                         ScRTFCellDefault( SfxItemPool* pPool ) :
@@ -45,8 +45,8 @@ struct ScRTFCellDefault
 
 DECLARE_LIST( ScRTFDefaultList, ScRTFCellDefault* )
 // Remove: (const unsigned short &) not sufficiently different from (unsigned short)
-// deswegen ULONG, typedef bringt's auch nicht :-(
-SV_DECL_VARARR_SORT( ScRTFColTwips, ULONG, 16, 4)
+// deswegen sal_uLong, typedef bringt's auch nicht :-(
+SV_DECL_VARARR_SORT( ScRTFColTwips, sal_uLong, 16, 4)
 
 #else       // SC_RTFPARSE_CXX
 
@@ -67,22 +67,22 @@ private:
     ScRTFCellDefault*   pInsDefault;
     ScRTFCellDefault*   pActDefault;
     ScRTFCellDefault*   pDefMerge;
-    ULONG               nStartAdjust;
-    USHORT              nLastWidth;
-    BOOL                bNewDef;
+    sal_uLong               nStartAdjust;
+    sal_uInt16              nLastWidth;
+    sal_Bool                bNewDef;
 
     DECL_LINK( RTFImportHdl, ImportInfo* );
     inline void         NextRow();
     void                EntryEnd( ScEEParseEntry*, const ESelection& );
     void                ProcToken( ImportInfo* );
     void                ColAdjust();
-    BOOL                SeekTwips( USHORT nTwips, SCCOL* pCol );
+    sal_Bool                SeekTwips( sal_uInt16 nTwips, SCCOL* pCol );
     void                NewCellRow( ImportInfo* );
 
 public:
                         ScRTFParser( EditEngine* );
     virtual             ~ScRTFParser();
-    virtual ULONG       Read( SvStream&, const String& rBaseURL );
+    virtual sal_uLong       Read( SvStream&, const String& rBaseURL );
 };
 
 

@@ -55,7 +55,7 @@ protected:
    PIXBYTE* mpPixel;
 };
 
-template <ULONG PIXFMT>
+template <sal_uLong PIXFMT>
 class TrueColorPixelPtr : public BasePixelPtr
 {
 public:
@@ -311,7 +311,7 @@ public:
 // =======================================================================
 // converting truecolor formats
 
-template <ULONG SRCFMT, ULONG DSTFMT>
+template <sal_uLong SRCFMT, sal_uLong DSTFMT>
 inline void ImplConvertPixel( const TrueColorPixelPtr<DSTFMT>& rDst,
     const TrueColorPixelPtr<SRCFMT>& rSrc )
 {
@@ -335,7 +335,7 @@ inline void ImplConvertPixel<BMP_FORMAT_16BIT_TC_LSB_MASK, BMP_FORMAT_16BIT_TC_M
 
 // -----------------------------------------------------------------------
 
-template <ULONG SRCFMT, ULONG DSTFMT>
+template <sal_uLong SRCFMT, sal_uLong DSTFMT>
 inline void ImplConvertLine( const TrueColorPixelPtr<DSTFMT>& rDst,
     const TrueColorPixelPtr<SRCFMT>& rSrc, int nPixelCount )
 {
@@ -352,7 +352,7 @@ inline void ImplConvertLine( const TrueColorPixelPtr<DSTFMT>& rDst,
 // =======================================================================
 // alpha blending truecolor pixels
 
-template <unsigned ALPHABITS, ULONG SRCFMT, ULONG DSTFMT>
+template <unsigned ALPHABITS, sal_uLong SRCFMT, sal_uLong DSTFMT>
 inline void ImplBlendPixels( const TrueColorPixelPtr<DSTFMT>& rDst,
     const TrueColorPixelPtr<SRCFMT>& rSrc, unsigned nAlphaVal )
 {
@@ -384,7 +384,7 @@ inline void ImplBlendPixels( const TrueColorPixelPtr<DSTFMT>& rDst,
 
 // -----------------------------------------------------------------------
 
-template <unsigned ALPHABITS, ULONG MASKFMT, ULONG SRCFMT, ULONG DSTFMT>
+template <unsigned ALPHABITS, sal_uLong MASKFMT, sal_uLong SRCFMT, sal_uLong DSTFMT>
 inline void ImplBlendLines( const TrueColorPixelPtr<DSTFMT>& rDst,
     const TrueColorPixelPtr<SRCFMT>& rSrc, const TrueColorPixelPtr<MASKFMT>& rMsk,
     int nPixelCount )
@@ -403,7 +403,7 @@ inline void ImplBlendLines( const TrueColorPixelPtr<DSTFMT>& rDst,
 
 // -----------------------------------------------------------------------
 
-template <unsigned ALPHABITS, ULONG SRCFMT, ULONG DSTFMT>
+template <unsigned ALPHABITS, sal_uLong SRCFMT, sal_uLong DSTFMT>
 inline void ImplBlendLines( const TrueColorPixelPtr<DSTFMT>& rDst,
     const TrueColorPixelPtr<SRCFMT>& rSrc, unsigned nAlphaVal,
     int nPixelCount )
@@ -461,7 +461,7 @@ static bool ImplCopyImage( BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuf
 
 // -----------------------------------------------------------------------
 
-template <ULONG DSTFMT,ULONG SRCFMT>
+template <sal_uLong DSTFMT,sal_uLong SRCFMT>
 bool ImplConvertToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer )
 {
@@ -494,7 +494,7 @@ bool ImplConvertToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
 
 // -----------------------------------------------------------------------
 
-template <ULONG SRCFMT>
+template <sal_uLong SRCFMT>
 inline bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc )
 {
     TrueColorPixelPtr<SRCFMT> aSrcType; aSrcType.SetRawPtr( rSrc.mpBits );
@@ -595,8 +595,8 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
     if( rDst.mnHeight < rTR.mnDestY + rTR.mnDestHeight )
         return false;
 
-    const ULONG nSrcFormat = rSrc.mnFormat & ~BMP_FORMAT_TOP_DOWN;
-    const ULONG nDstFormat = rDst.mnFormat & ~BMP_FORMAT_TOP_DOWN;
+    const sal_uLong nSrcFormat = rSrc.mnFormat & ~BMP_FORMAT_TOP_DOWN;
+    const sal_uLong nDstFormat = rDst.mnFormat & ~BMP_FORMAT_TOP_DOWN;
 
     // TODO: also implement conversions for 16bit colormasks with non-565 format
     if( nSrcFormat & (BMP_FORMAT_16BIT_TC_LSB_MASK | BMP_FORMAT_16BIT_TC_MSB_MASK) )
@@ -676,7 +676,7 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
 
 // =======================================================================
 
-template <ULONG DSTFMT,ULONG SRCFMT> //,ULONG MSKFMT>
+template <sal_uLong DSTFMT,sal_uLong SRCFMT> //,sal_uLong MSKFMT>
 bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer,
     const BitmapBuffer& rMskBuffer )
@@ -753,7 +753,7 @@ inline bool ImplBlendToBitmap<BMP_FORMAT_32BIT_TC_BGRA,BMP_FORMAT_32BIT_TC_BGRA>
 
 // -----------------------------------------------------------------------
 
-template <ULONG SRCFMT>
+template <sal_uLong SRCFMT>
 bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, const BitmapBuffer& rMsk )
 {
     TrueColorPixelPtr<SRCFMT> aSrcType; aSrcType.SetRawPtr( rSrc.mpBits );
@@ -871,8 +871,8 @@ bool ImplFastBitmapBlending( BitmapWriteAccess& rDstWA,
     const BitmapBuffer& rSrc = *rSrcRA.ImplGetBitmapBuffer();
     const BitmapBuffer& rMsk = *rMskRA.ImplGetBitmapBuffer();
 
-    const ULONG nSrcFormat = rSrc.mnFormat & ~BMP_FORMAT_TOP_DOWN;
-    const ULONG nDstFormat = rDst.mnFormat & ~BMP_FORMAT_TOP_DOWN;
+    const sal_uLong nSrcFormat = rSrc.mnFormat & ~BMP_FORMAT_TOP_DOWN;
+    const sal_uLong nDstFormat = rDst.mnFormat & ~BMP_FORMAT_TOP_DOWN;
 
     // accelerated conversions for 16bit colormasks with non-565 format are not yet implemented
     if( nSrcFormat & (BMP_FORMAT_16BIT_TC_LSB_MASK | BMP_FORMAT_16BIT_TC_MSB_MASK) )
@@ -945,18 +945,18 @@ bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
     if( bDisableFastBitops )
         return false;
 
-    const ULONG nDstFormat = rDst.mnFormat & ~BMP_FORMAT_TOP_DOWN;
+    const sal_uLong nDstFormat = rDst.mnFormat & ~BMP_FORMAT_TOP_DOWN;
 
     // erasing a bitmap is often just a byte-wise memory fill
     bool bByteFill = true;
-    BYTE nFillByte;
+    sal_uInt8 nFillByte;
 
     switch( nDstFormat )
     {
         case BMP_FORMAT_1BIT_MSB_PAL:
         case BMP_FORMAT_1BIT_LSB_PAL:
             nFillByte = rColor.GetIndex();
-            nFillByte = static_cast<BYTE>( -(nFillByte & 1) ); // 0x00 or 0xFF
+            nFillByte = static_cast<sal_uInt8>( -(nFillByte & 1) ); // 0x00 or 0xFF
             break;
         case BMP_FORMAT_4BIT_MSN_PAL:
         case BMP_FORMAT_4BIT_LSN_PAL:

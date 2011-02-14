@@ -44,7 +44,7 @@ TYPEINIT1_FACTORY(SvxZoomSliderItem,SfxUInt16Item, new SvxZoomSliderItem);
 
 // -----------------------------------------------------------------------
 
-SvxZoomSliderItem::SvxZoomSliderItem( USHORT nCurrentZoom, USHORT nMinZoom, USHORT nMaxZoom, USHORT _nWhich )
+SvxZoomSliderItem::SvxZoomSliderItem( sal_uInt16 nCurrentZoom, sal_uInt16 nMinZoom, sal_uInt16 nMaxZoom, sal_uInt16 _nWhich )
 :   SfxUInt16Item( _nWhich, nCurrentZoom ), mnMinZoom( nMinZoom ), mnMaxZoom( nMaxZoom )
 {
 }
@@ -108,7 +108,7 @@ int SvxZoomSliderItem::operator==( const SfxPoolItem& rAttr ) const
              mnMinZoom == rItem.mnMinZoom && mnMaxZoom == rItem.mnMaxZoom );
 }
 
-sal_Bool SvxZoomSliderItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SvxZoomSliderItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -156,7 +156,7 @@ sal_Bool SvxZoomSliderItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMe
     return sal_True;
 }
 
-sal_Bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+sal_Bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -200,10 +200,10 @@ sal_Bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
 
                     if ( bAllConverted && nConvertedCount == ZOOMSLIDER_PARAMS )
                     {
-                        SetValue( (UINT16)nCurrentZoom );
+                        SetValue( (sal_uInt16)nCurrentZoom );
                         maValues = aValues;
-                        mnMinZoom = sal::static_int_cast< USHORT >( nMinZoom );
-                        mnMaxZoom = sal::static_int_cast< USHORT >( nMaxZoom );
+                        mnMinZoom = sal::static_int_cast< sal_uInt16 >( nMinZoom );
+                        mnMaxZoom = sal::static_int_cast< sal_uInt16 >( nMaxZoom );
 
                         return sal_True;
                     }
@@ -217,7 +217,7 @@ sal_Bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
                 sal_Int32 nVal = 0;
                 if ( rVal >>= nVal )
                 {
-                    SetValue( (UINT16)nVal );
+                    SetValue( (sal_uInt16)nVal );
                     return sal_True;
                 }
                 else
@@ -240,7 +240,7 @@ sal_Bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
                 sal_Int32 nVal = 0;
                 if( rVal >>= nVal )
                 {
-                    mnMinZoom = (UINT16)nVal;
+                    mnMinZoom = (sal_uInt16)nVal;
                     return sal_True;
                 }
                 else
@@ -251,7 +251,7 @@ sal_Bool SvxZoomSliderItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
                 sal_Int32 nVal = 0;
                 if( rVal >>= nVal )
                 {
-                    mnMaxZoom = (UINT16)nVal;
+                    mnMaxZoom = (sal_uInt16)nVal;
                     return sal_True;
                 }
                 else

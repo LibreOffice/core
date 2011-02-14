@@ -41,11 +41,11 @@ typedef long long3;                     // Zur Dokumentation: 3-byte-Longs
 class swcrypter {
 protected:
     sal_Char   cPasswd[ PASSWDLEN ];    // Passwort-Puffer
-    BOOL   bPasswd;                     // TRUE wenn mit Passwort
-    void   encode( sal_Char*, USHORT ); // Puffer codieren/decodieren
+    sal_Bool   bPasswd;                     // sal_True wenn mit Passwort
+    void   encode( sal_Char*, sal_uInt16 ); // Puffer codieren/decodieren
 public:
     swcrypter();
-    BOOL setpasswd( const String& );    // Passwort setzen
+    sal_Bool setpasswd( const String& );    // Passwort setzen
     void copypasswd( const sal_Char* ); // Passwort direkt setzen
     const sal_Char* getpasswd() { return cPasswd; }
 };
@@ -57,10 +57,10 @@ class swstreambase : public swcrypter {
 protected:
     SvStream* pStrm;                    // eigentlicher Stream
     sal_Char*  pBuf;                        // Zwischenpuffer
-    USHORT nBuflen;                     // Laenge des Zwischenpuffers
+    sal_uInt16 nBuflen;                     // Laenge des Zwischenpuffers
     short  nLong;                       // Long-Laenge (3 oder 4)
-    BOOL   bTempStrm;                   // TRUE: Stream loeschen
-    void   checkbuf( USHORT );          // Testen der Pufferlaenge
+    sal_Bool   bTempStrm;                   // sal_True: Stream loeschen
+    void   checkbuf( sal_uInt16 );          // Testen der Pufferlaenge
 
     swstreambase( SvStream& );
 
@@ -87,15 +87,15 @@ public:
     int operator!()                     { return ( pStrm->GetError() != SVSTREAM_OK ); }
     int eof()                           { return pStrm->IsEof(); }
 
-    BYTE get();
-    void get( void* p, USHORT n )       { pStrm->Read( (sal_Char*) p, n ); }
+    sal_uInt8 get();
+    void get( void* p, sal_uInt16 n )       { pStrm->Read( (sal_Char*) p, n ); }
 
     inline swstreambase& operator>>( sal_Char& );
-    inline swstreambase& operator>>( BYTE& );
+    inline swstreambase& operator>>( sal_uInt8& );
     inline swstreambase& operator>>( short& );
-    inline swstreambase& operator>>( USHORT& );
+    inline swstreambase& operator>>( sal_uInt16& );
            swstreambase& operator>>( long& );
-    inline swstreambase& operator>>( ULONG& );
+    inline swstreambase& operator>>( sal_uLong& );
 };
 
 inline swstreambase& swstreambase::operator>>( sal_Char& c )
@@ -103,7 +103,7 @@ inline swstreambase& swstreambase::operator>>( sal_Char& c )
     *pStrm >> c; return *this;
 }
 
-inline swstreambase& swstreambase::operator>>( BYTE& c )
+inline swstreambase& swstreambase::operator>>( sal_uInt8& c )
 {
     *pStrm >> c; return *this;
 }
@@ -113,26 +113,26 @@ inline swstreambase& swstreambase::operator>>( short& c )
     *pStrm >> c; return *this;
 }
 
-inline swstreambase& swstreambase::operator>>( USHORT& c )
+inline swstreambase& swstreambase::operator>>( sal_uInt16& c )
 {
     *pStrm >> c; return *this;
 }
 
-inline swstreambase& swstreambase::operator>>( ULONG& c )
+inline swstreambase& swstreambase::operator>>( sal_uLong& c )
 {
     return *this >> (long&) c;
 }
 
 class swistream : public swstreambase {
-    BYTE   cType;                       // Record-Typ
-    ULONG  nOffset;                     // Record-Offset-Portion
+    sal_uInt8   cType;                      // Record-Typ
+    sal_uLong  nOffset;                     // Record-Offset-Portion
 public:
     swistream( SvStream& );
 
-    BYTE peek();                        // 1 Byte testen
-    BYTE next();                        // Blockstart
-    BYTE cur() { return cType; }        // aktueller Block
-    BYTE skipnext();                    // Record ueberspringen
+    sal_uInt8 peek();                       // 1 Byte testen
+    sal_uInt8 next();                       // Blockstart
+    sal_uInt8 cur() { return cType; }       // aktueller Block
+    sal_uInt8 skipnext();                   // Record ueberspringen
     void undonext();                    // next() rueckgaengig machen
     long getskip()                      { return nOffset; }
     void skip( long = -1L );            // Block ueberspringen

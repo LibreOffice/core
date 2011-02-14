@@ -63,7 +63,7 @@ class FontNameMenu, class FontStyleMenu, class FontSizeMenu
 --------------------------------------------------------------------------
 
 FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2 = NULL,
-                    BOOL bAll = TRUE );
+                    sal_Bool bAll = sal_True );
 
 Konstruktor der Klasse FontList. Vom uebergebenen OutputDevice werden die
 entsprechenden Fonts abgefragt. Das OutputDevice muss solange existieren,
@@ -80,8 +80,8 @@ Device-Schriften (eine fuer Drucker und eine fuer den Bildschirm) vorhanden
 sind, wird die vom uebergebenen Device "pDevice" bevorzugt.
 
 Mit dem dritten Parameter kann man angeben, ob nur skalierbare Schriften
-abgefragt werden sollen oder alle. Wenn TRUE uebergeben wird, werden auch
-Bitmap-Schriften mit abgefragt. Bei FALSE werden Vector-Schriften und
+abgefragt werden sollen oder alle. Wenn sal_True uebergeben wird, werden auch
+Bitmap-Schriften mit abgefragt. Bei sal_False werden Vector-Schriften und
 scalierbare Schriften abgefragt.
 
 --------------------------------------------------------------------------
@@ -147,11 +147,11 @@ von der FontList, sollte deshalb das Array nicht mehr referenziert werden.
 // - FontList -
 // ------------
 
-#define FONTLIST_FONTINFO_NOTFOUND  ((USHORT)0xFFFF)
+#define FONTLIST_FONTINFO_NOTFOUND  ((sal_uInt16)0xFFFF)
 
-#define FONTLIST_FONTNAMETYPE_PRINTER           ((USHORT)0x0001)
-#define FONTLIST_FONTNAMETYPE_SCREEN            ((USHORT)0x0002)
-#define FONTLIST_FONTNAMETYPE_SCALABLE          ((USHORT)0x0004)
+#define FONTLIST_FONTNAMETYPE_PRINTER           ((sal_uInt16)0x0001)
+#define FONTLIST_FONTNAMETYPE_SCREEN            ((sal_uInt16)0x0002)
+#define FONTLIST_FONTNAMETYPE_SCALABLE          ((sal_uInt16)0x0004)
 
 class SVT_DLLPUBLIC FontList : private List
 {
@@ -175,16 +175,16 @@ private:
     OutputDevice*           mpDev2;
 
 #ifdef CTRLTOOL_CXX
-    SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFind( const XubString& rSearchName, ULONG* pIndex ) const;
+    SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFind( const XubString& rSearchName, sal_uLong* pIndex ) const;
     SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFindByName( const XubString& rStr ) const;
-    SVT_DLLPRIVATE void                 ImplInsertFonts( OutputDevice* pDev, BOOL bAll,
-                                             BOOL bInsertData );
+    SVT_DLLPRIVATE void                 ImplInsertFonts( OutputDevice* pDev, sal_Bool bAll,
+                                             sal_Bool bInsertData );
 #endif
 
 public:
                             FontList( OutputDevice* pDevice,
                                       OutputDevice* pDevice2 = NULL,
-                                      BOOL bAll = TRUE );
+                                      sal_Bool bAll = sal_True );
                             ~FontList();
 
     FontList*               Clone() const;
@@ -192,7 +192,7 @@ public:
     OutputDevice*           GetDevice() const { return mpDev; }
     OutputDevice*           GetDevice2() const { return mpDev2; }
     XubString               GetFontMapText( const FontInfo& rInfo ) const;
-    USHORT                  GetFontNameType( const XubString& rFontName ) const;
+    sal_uInt16                  GetFontNameType( const XubString& rFontName ) const;
 
     const XubString&        GetNormalStr() const { return maNormal; }
     const XubString&        GetItalicStr() const { return maNormalItalic; }
@@ -207,11 +207,11 @@ public:
                                  FontWeight eWeight,
                                  FontItalic eItalic ) const;
 
-    BOOL                    IsAvailable( const XubString& rName ) const;
-    USHORT                  GetFontNameCount() const
-                                { return (USHORT)List::Count(); }
-    const FontInfo&         GetFontName( USHORT nFont ) const;
-    USHORT                  GetFontNameType( USHORT nFont ) const;
+    sal_Bool                    IsAvailable( const XubString& rName ) const;
+    sal_uInt16                  GetFontNameCount() const
+                                { return (sal_uInt16)List::Count(); }
+    const FontInfo&         GetFontName( sal_uInt16 nFont ) const;
+    sal_uInt16                  GetFontNameType( sal_uInt16 nFont ) const;
     sal_Handle              GetFirstFontInfo( const XubString& rName ) const;
     sal_Handle              GetNextFontInfo( sal_Handle hFontInfo ) const;
     const FontInfo&         GetFontInfo( sal_Handle hFontInfo ) const;
@@ -233,19 +233,19 @@ class SVT_DLLPUBLIC FontSizeNames
 {
 private:
     struct ImplFSNameItem*  mpArray;
-    ULONG                   mnElem;
+    sal_uLong                   mnElem;
 
 public:
                             FontSizeNames( LanguageType eLanguage /* = LANGUAGE_DONTKNOW */ );
 
-    ULONG                   Count() const { return mnElem; }
-    BOOL                    IsEmpty() const { return !mnElem; }
+    sal_uLong                   Count() const { return mnElem; }
+    sal_Bool                    IsEmpty() const { return !mnElem; }
 
     long                    Name2Size( const String& ) const;
     String                  Size2Name( long ) const;
 
-    String                  GetIndexName( ULONG nIndex ) const;
-    long                    GetIndexSize( ULONG nIndex ) const;
+    String                  GetIndexName( sal_uLong nIndex ) const;
+    long                    GetIndexSize( sal_uLong nIndex ) const;
 };
 
 #endif  // _CTRLTOOL_HXX

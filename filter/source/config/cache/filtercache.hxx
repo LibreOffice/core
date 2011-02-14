@@ -382,7 +382,7 @@ class FilterCache : public BaseLock
                         cache items seems to be available after calling of "loadAll()"
                         on this cache and first search does not had any valid results.
 
-            @return     TRUE if the required fill state exists for this cache; FALSE
+            @return     sal_True if the required fill state exists for this cache; FALSE
                         otherwise.
          */
         virtual sal_Bool isFillState(EFillState eRequired) const
@@ -1031,7 +1031,7 @@ class FilterCache : public BaseLock
             @param  sModule
                     the long name of the module (e.g. "com.sun.star.text.TextDocument").
 
-            @return TRUE if the requested module is installed; FALSE otherwise.
+            @return sal_True if the requested module is installed; sal_False otherwise.
          */
         sal_Bool impl_isModuleInstalled(const ::rtl::OUString& sModule);
 

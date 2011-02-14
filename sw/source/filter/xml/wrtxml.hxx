@@ -52,15 +52,15 @@ class SwXMLWriter : public StgWriter
     using StgWriter::Write;
 
 protected:
-    virtual ULONG WriteStorage();
-    virtual ULONG WriteMedium( SfxMedium& aTargetMedium );
+    virtual sal_uLong WriteStorage();
+    virtual sal_uLong WriteMedium( SfxMedium& aTargetMedium );
 
 public:
 
     SwXMLWriter( const String& rBaseURL );
     virtual ~SwXMLWriter();
 
-    virtual ULONG Write( SwPaM&, SfxMedium&, const String* = 0 );
+    virtual sal_uLong Write( SwPaM&, SfxMedium&, const String* = 0 );
 
 private:
 

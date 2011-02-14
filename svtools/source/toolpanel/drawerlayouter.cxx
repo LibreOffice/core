@@ -147,10 +147,10 @@ namespace svt
 
         const PToolPanelDrawer pDrawer( m_aDrawers[ i_nChildIndex ] );
 
-        Reference< XAccessible > xItemAccessible = pDrawer->GetAccessible( FALSE );
+        Reference< XAccessible > xItemAccessible = pDrawer->GetAccessible( sal_False );
         if ( !xItemAccessible.is() )
         {
-            xItemAccessible = pDrawer->GetAccessible( TRUE );
+            xItemAccessible = pDrawer->GetAccessible( sal_True );
             ENSURE_OR_RETURN( xItemAccessible.is(), "illegal accessible provided by the drawer implementation!", NULL );
             OSL_VERIFY( ::comphelper::OAccessibleImplementationAccess::setAccessibleParent( xItemAccessible->getAccessibleContext(),
                 i_rParentAccessible ) );

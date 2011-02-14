@@ -85,6 +85,7 @@ SHL1STDLIBS=       \
     $(CPPUHELPERLIB)	\
     $(COMPHELPERLIB)	\
     $(UCBHELPERLIB)	\
+    $(VBAHELPERLIB)	\
     $(TKLIB)		\
     $(VOSLIB)		\
     $(SALLIB)		\
@@ -282,8 +283,6 @@ LIB8OBJFILES = \
         $(SLO)$/dpgroupdlg.obj	\
         $(SLO)$/editfield.obj
 
-.IF "$(ENABLE_VBA)"=="YES"
-
 TARGET_VBA=vbaobj
 SHL9TARGET=$(TARGET_VBA)$(DLLPOSTFIX).uno
 SHL9IMPLIB=	i$(TARGET_VBA)
@@ -291,11 +290,7 @@ SHL9IMPLIB=	i$(TARGET_VBA)
 SHL9VERSIONMAP=$(SOLARENV)/src/component.map
 SHL9DEF=$(MISC)$/$(SHL9TARGET).def
 DEF9NAME=$(SHL9TARGET)
-.IF "$(VBA_EXTENSION)"=="YES"
-SHL9RPATH=OXT
-.ELSE
 SHL9RPATH=OOO
-.ENDIF
 
 SHL9STDLIBS= \
         $(VBAHELPERLIB) \
@@ -327,21 +322,11 @@ SHL9LIBS=$(SLB)$/$(TARGET_VBA).lib
     LIBCOMPNAME=$(COMMONBIN)$/$(SHL9TARGET)$(DLLPOST)
 .ENDIF
 
-.ENDIF
- 
-
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk
 
-.IF "$(VBA_EXTENSION)"=="YES"
-    COMP=build_extn
-.ENDIF
-
 ALLTAR:	$(MISC)$/linkinc.ls  $(COMP)
-
-build_extn : $(SHL9TARGETN)
-    $(PERL) createExtPackage.pl $(COMMONBIN)$/vbaapi.oxt  $(SOLARBINDIR)$/oovbaapi.rdb $(LIBCOMPNAME)
 
 ALLTAR : $(MISC)/sc.component $(MISC)/scd.component $(MISC)/vbaobj.component
 

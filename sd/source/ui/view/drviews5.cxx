@@ -91,10 +91,10 @@ void DrawViewShell::ModelHasChanged()
 {
     Invalidate();
     // Damit der Navigator auch einen aktuellen Status bekommt
-    GetViewFrame()->GetBindings().Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
+    GetViewFrame()->GetBindings().Invalidate( SID_NAVIGATOR_STATE, sal_True, sal_False );
 
     //Update3DWindow();
-    SfxBoolItem aItem( SID_3D_STATE, TRUE );
+    SfxBoolItem aItem( SID_3D_STATE, sal_True );
     GetViewFrame()->GetDispatcher()->Execute(
         SID_3D_STATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
@@ -149,11 +149,11 @@ void DrawViewShell::ArrangeGUIElements (void)
 
     OSL_ASSERT (GetViewShell()!=NULL);
     Client* pIPClient = static_cast<Client*>(GetViewShell()->GetIPClient());
-    BOOL bClientActive = FALSE;
+    sal_Bool bClientActive = sal_False;
     if ( pIPClient && pIPClient->IsObjectInPlaceActive() )
-        bClientActive = TRUE;
+        bClientActive = sal_True;
 
-    BOOL bInPlaceActive = GetViewFrame()->GetFrame().IsInPlace();
+    sal_Bool bInPlaceActive = GetViewFrame()->GetFrame().IsInPlace();
 
     if ( mbZoomOnPage && !bInPlaceActive && !bClientActive )
     {
@@ -275,7 +275,7 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     // Definition:
     //  grosse Handles: 9
     //  kleine Handles: 7
-    USHORT nTmp = mpDrawView->GetMarkHdlSizePixel();
+    sal_uInt16 nTmp = mpDrawView->GetMarkHdlSizePixel();
     //DBG_ASSERT(nTmp != 7, "HandleSize != 7 oder 9");
     if( nTmp == 9 && !pView->IsBigHandles() )
         mpDrawView->SetMarkHdlSizePixel( 7 );
@@ -315,7 +315,7 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     if ( mpDrawView->GetActiveLayer() != pView->GetActiveLayer() )
         mpDrawView->SetActiveLayer( pView->GetActiveLayer() );
 
-    USHORT nSelectedPage = 0;
+    sal_uInt16 nSelectedPage = 0;
 
     if (mePageKind != PK_HANDOUT)
     {
@@ -323,7 +323,7 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     }
 
     EditMode eNewEditMode = pView->GetViewShEditMode(mePageKind);
-    BOOL bNewLayerMode = pView->IsLayerMode();
+    sal_Bool bNewLayerMode = pView->IsLayerMode();
     ChangeEditMode(eNewEditMode, bNewLayerMode);
     SwitchPage(nSelectedPage);
 
@@ -502,7 +502,7 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 void DrawViewShell::SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY)
 {
     ViewShell::SetZoomFactor(rZoomX, rZoomY);
-    mbZoomOnPage = FALSE;
+    mbZoomOnPage = sal_False;
     Point aOrigin = GetActiveWindow()->GetViewOrigin();
     GetActiveWindow()->SetWinViewPos(aOrigin);
 }
@@ -534,7 +534,7 @@ Size DrawViewShell::GetOptimalSizePixel() const
                 // 1:1 Darstellung
                 MapMode aMapMode(MAP_100TH_MM);
                 aSize = GetActiveWindow()->LogicToPixel( pPage->GetSize(), aMapMode );
-                const_cast< DrawViewShell* >(this)->mbZoomOnPage = TRUE;
+                const_cast< DrawViewShell* >(this)->mbZoomOnPage = sal_True;
             }
         }
     }
@@ -553,7 +553,7 @@ void DrawViewShell::HidePage()
 {
     FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
     if (pFormShell != NULL)
-        pFormShell->PrepareClose (FALSE);
+        pFormShell->PrepareClose (sal_False);
 }
 
 
@@ -707,8 +707,8 @@ void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
         if (nIndex>=0 && nIndex<pBar->GetPageCount())
         {
             // Tell the draw view and the tab control of the new active layer.
-            mpDrawView->SetActiveLayer (pBar->GetPageText (pBar->GetPageId ((USHORT)nIndex)));
-            pBar->SetCurPageId (pBar->GetPageId ((USHORT)nIndex));
+            mpDrawView->SetActiveLayer (pBar->GetPageText (pBar->GetPageId ((sal_uInt16)nIndex)));
+            pBar->SetCurPageId (pBar->GetPageId ((sal_uInt16)nIndex));
         }
     }
 }

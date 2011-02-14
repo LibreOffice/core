@@ -44,13 +44,13 @@ public:
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
     virtual SfxPopupWindow*     CreatePopupWindowCascading();
-    virtual void                StateChanged( USHORT nSID,
+    virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState );
 
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxTableToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxTableToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxTableToolBoxControl();
 };
 
@@ -66,10 +66,10 @@ public:
 
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxColumnsToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxColumnsToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxColumnsToolBoxControl();
 
-    virtual void                StateChanged( USHORT nSID,
+    virtual void                StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState );
 };

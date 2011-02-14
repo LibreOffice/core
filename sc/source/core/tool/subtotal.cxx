@@ -36,14 +36,14 @@
 
 // -----------------------------------------------------------------------
 
-BOOL SubTotal::SafePlus(double& fVal1, double fVal2)
+sal_Bool SubTotal::SafePlus(double& fVal1, double fVal2)
 {
-    BOOL bOk = TRUE;
+    sal_Bool bOk = sal_True;
     SAL_MATH_FPEXCEPTIONS_OFF();
     fVal1 += fVal2;
     if (!::rtl::math::isFinite(fVal1))
     {
-        bOk = FALSE;
+        bOk = sal_False;
         if (fVal2 > 0.0)
             fVal1 = DBL_MAX;
         else
@@ -53,28 +53,28 @@ BOOL SubTotal::SafePlus(double& fVal1, double fVal2)
 }
 
 
-BOOL SubTotal::SafeMult(double& fVal1, double fVal2)
+sal_Bool SubTotal::SafeMult(double& fVal1, double fVal2)
 {
-    BOOL bOk = TRUE;
+    sal_Bool bOk = sal_True;
     SAL_MATH_FPEXCEPTIONS_OFF();
     fVal1 *= fVal2;
     if (!::rtl::math::isFinite(fVal1))
     {
-        bOk = FALSE;
+        bOk = sal_False;
         fVal1 = DBL_MAX;
     }
     return bOk;
 }
 
 
-BOOL SubTotal::SafeDiv(double& fVal1, double fVal2)
+sal_Bool SubTotal::SafeDiv(double& fVal1, double fVal2)
 {
-    BOOL bOk = TRUE;
+    sal_Bool bOk = sal_True;
     SAL_MATH_FPEXCEPTIONS_OFF();
     fVal1 /= fVal2;
     if (!::rtl::math::isFinite(fVal1))
     {
-        bOk = FALSE;
+        bOk = sal_False;
         fVal1 = DBL_MAX;
     }
     return bOk;

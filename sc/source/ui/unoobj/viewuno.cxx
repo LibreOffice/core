@@ -137,7 +137,7 @@ SC_SIMPLE_SERVICE_INFO( ScViewPaneBase, "ScViewPaneObj", "com.sun.star.sheet.Spr
 
 //------------------------------------------------------------------------
 
-ScViewPaneBase::ScViewPaneBase(ScTabViewShell* pViewSh, USHORT nP) :
+ScViewPaneBase::ScViewPaneBase(ScTabViewShell* pViewSh, sal_uInt16 nP) :
     pViewShell( pViewSh ),
     nPane( nP )
 {
@@ -323,7 +323,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScViewPaneBase::getReferredCells()
 
 namespace
 {
-    bool lcl_prepareFormShellCall( ScTabViewShell* _pViewShell, USHORT _nPane, FmFormShell*& _rpFormShell, Window*& _rpWindow, SdrView*& _rpSdrView )
+    bool lcl_prepareFormShellCall( ScTabViewShell* _pViewShell, sal_uInt16 _nPane, FmFormShell*& _rpFormShell, Window*& _rpWindow, SdrView*& _rpSdrView )
     {
         if ( !_pViewShell )
             return false;
@@ -437,7 +437,7 @@ awt::Rectangle ScViewPaneBase::GetVisArea() const
 
 //------------------------------------------------------------------------
 
-ScViewPaneObj::ScViewPaneObj(ScTabViewShell* pViewSh, USHORT nP) :
+ScViewPaneObj::ScViewPaneObj(ScTabViewShell* pViewSh, sal_uInt16 nP) :
     ScViewPaneBase( pViewSh, nP )
 {
 }
@@ -593,7 +593,7 @@ void ScTabViewObj::SheetChanged( bool bSameTabButMoved )
         uno::Reference< uno::XInterface > xSource(xView, uno::UNO_QUERY);
         aEvent.Source = xSource;
         aEvent.ActiveSheet = new ScTableSheetObj(pDocSh, pViewData->GetTabNo());
-        for ( USHORT n=0; n<aActivationListeners.Count(); n++ )
+        for ( sal_uInt16 n=0; n<aActivationListeners.Count(); n++ )
         {
             try
             {
@@ -671,26 +671,26 @@ uno::Sequence<sal_Int8> SAL_CALL ScTabViewObj::getImplementationId()
 
 // XDocumentView
 
-BOOL lcl_TabInRanges( SCTAB nTab, const ScRangeList& rRanges )
+sal_Bool lcl_TabInRanges( SCTAB nTab, const ScRangeList& rRanges )
 {
-    ULONG nCount = rRanges.Count();
-    for (ULONG i=0; i<nCount; i++)
+    sal_uLong nCount = rRanges.Count();
+    for (sal_uLong i=0; i<nCount; i++)
     {
         const ScRange* pRange = rRanges.GetObject(i);
         if ( nTab >= pRange->aStart.Tab() && nTab <= pRange->aEnd.Tab() )
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 void lcl_ShowObject( ScTabViewShell& rViewSh, ScDrawView& rDrawView, SdrObject* pSelObj )
 {
-    BOOL bFound = FALSE;
+    sal_Bool bFound = sal_False;
     SCTAB nObjectTab = 0;
 
     SdrModel* pModel = rDrawView.GetModel();
-    USHORT nPageCount = pModel->GetPageCount();
-    for (USHORT i=0; i<nPageCount && !bFound; i++)
+    sal_uInt16 nPageCount = pModel->GetPageCount();
+    for (sal_uInt16 i=0; i<nPageCount && !bFound; i++)
     {
         SdrPage* pPage = pModel->GetPage(i);
         if (pPage)
@@ -701,7 +701,7 @@ void lcl_ShowObject( ScTabViewShell& rViewSh, ScDrawView& rDrawView, SdrObject* 
             {
                 if ( pObject == pSelObj )
                 {
-                    bFound = TRUE;
+                    bFound = sal_True;
                     nObjectTab = static_cast<SCTAB>(i);
                 }
                 pObject = aIter.Next();
@@ -723,11 +723,11 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
     ScTabViewShell* pViewSh = GetViewShell();
 
     if ( !pViewSh )
-        return FALSE;
+        return sal_False;
 
     //! Type of aSelection can be some specific interface instead of XInterface
 
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     uno::Reference<uno::XInterface> xInterface(aSelection, uno::UNO_QUERY);
     if ( !xInterface.is() )  //clear all selections
     {
@@ -739,7 +739,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
         }
         else //#102232#; if there is  no DrawView remove range selection
             pViewSh->Unmark();
-        bRet = TRUE;
+        bRet = sal_True;
     }
 
     if (bDrawSelModeSet) // remove DrawSelMode if set by API; if necessary it will be set again later
@@ -780,13 +780,13 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                 if (pDisp)
                     pDisp->Execute( pFunc->GetSlotID(), SFX_CALLMODE_SYNCHRON );
             }
-            pViewSh->SetDrawShell(FALSE);
-            pViewSh->SetDrawSelMode(FALSE); // nach dem Dispatcher-Execute
+            pViewSh->SetDrawShell(sal_False);
+            pViewSh->SetDrawSelMode(sal_False); // nach dem Dispatcher-Execute
 
             //  Ranges selektieren
 
             const ScRangeList& rRanges = pRangesImp->GetRangeList();
-            ULONG nRangeCount = rRanges.Count();
+            sal_uLong nRangeCount = rRanges.Count();
             // for empty range list, remove selection (cursor remains where it was)
             if ( nRangeCount == 0 )
                 pViewSh->Unmark();
@@ -801,7 +801,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                     pViewSh->SetTabNo( pFirst->aStart.Tab() );
                 pViewSh->DoneBlockMode();
                 pViewSh->InitOwnBlockMode();
-                pViewData->GetMarkData().MarkFromRangeList( rRanges, TRUE );
+                pViewData->GetMarkData().MarkFromRangeList( rRanges, sal_True );
                 pViewSh->MarkDataChanged();
                 pViewData->GetDocShell()->PostPaintGridAll();   // Markierung (alt&neu)
                 if ( pFirst )
@@ -813,7 +813,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
 
                 //! Methode an der View, um RangeList zu selektieren
             }
-            bRet = TRUE;
+            bRet = sal_True;
         }
     }
     else if ( pShapeImp || xShapeColl.is() )            // Drawing-Layer
@@ -834,7 +834,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                     if ( pPV && pObj->GetPage() == pPV->GetPage() )
                     {
                         pDrawView->MarkObj( pObj, pPV );
-                        bRet = TRUE;
+                        bRet = sal_True;
                     }
                 }
             }
@@ -883,14 +883,14 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                         }
                     }
                     if (bAllMarked)
-                        bRet = TRUE;
+                        bRet = sal_True;
                 }
                 else
-                    bRet = TRUE; // empty XShapes (all shapes are deselected)
+                    bRet = sal_True; // empty XShapes (all shapes are deselected)
             }
 
             if (bRet)
-                pViewSh->SetDrawShell(TRUE);
+                pViewSh->SetDrawShell(sal_True);
         }
     }
 
@@ -913,7 +913,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
         if (pDrawView)
         {
             const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
-            ULONG nMarkCount = rMarkList.GetMarkCount();
+            sal_uLong nMarkCount = rMarkList.GetMarkCount();
             if (nMarkCount)
             {
                 //  ShapeCollection erzeugen (wie in SdXImpressView::getSelection im Draw)
@@ -922,7 +922,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
                 SvxShapeCollection* pShapes = new SvxShapeCollection();
                 uno::Reference<uno::XInterface> xRet(static_cast<cppu::OWeakObject*>(pShapes));
 
-                for (ULONG i=0; i<nMarkCount; i++)
+                for (sal_uLong i=0; i<nMarkCount; i++)
                 {
                     SdrObject* pDrawObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
                     if (pDrawObj)
@@ -958,7 +958,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
             ScMarkData aFilteredMark( rMark );
             ScViewUtil::UnmarkFiltered( aFilteredMark, pDocSh->GetDocument());
             ScRangeList aRangeList;
-            aFilteredMark.FillRangeListWithMarks( &aRangeList, FALSE);
+            aFilteredMark.FillRangeListWithMarks( &aRangeList, sal_False);
             // Theoretically a selection may start and end on a filtered row.
             switch (aRangeList.Count())
             {
@@ -998,7 +998,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
             //  remember if the selection was from the cursor position without anything selected
             //  (used when rendering the selection)
 
-            pObj->SetCursorOnly( TRUE );
+            pObj->SetCursorOnly( sal_True );
         }
     }
 
@@ -1015,7 +1015,7 @@ rtl::OUString ScTabViewObj::getPrinterName(void) const
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
     {
-        SfxPrinter* pPrinter = pViewSh->GetPrinter(TRUE);
+        SfxPrinter* pPrinter = pViewSh->GetPrinter(sal_True);
         if (pPrinter)
             return pPrinter->GetName();
     }
@@ -1032,7 +1032,7 @@ void ScTabViewObj::setPrinterName(const rtl::OUString& PrinterName)
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
     {
-        SfxPrinter* pPrinter = pViewSh->GetPrinter(TRUE);
+        SfxPrinter* pPrinter = pViewSh->GetPrinter(sal_True);
         if (pPrinter)
         {
             String aString(PrinterName);
@@ -1080,7 +1080,7 @@ sal_Int32 SAL_CALL ScTabViewObj::getCount() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
-    USHORT nPanes = 0;
+    sal_uInt16 nPanes = 0;
     if (pViewSh)
     {
         nPanes = 1;
@@ -1098,7 +1098,7 @@ uno::Any SAL_CALL ScTabViewObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XViewPane> xPane(GetObjectByIndex_Impl((USHORT)nIndex));
+    uno::Reference<sheet::XViewPane> xPane(GetObjectByIndex_Impl((sal_uInt16)nIndex));
     if (xPane.is())
         return uno::makeAny(xPane);
     else
@@ -1120,7 +1120,7 @@ sal_Bool SAL_CALL ScTabViewObj::hasElements() throw(uno::RuntimeException)
 
 // XSpreadsheetView
 
-ScViewPaneObj* ScTabViewObj::GetObjectByIndex_Impl(USHORT nIndex) const
+ScViewPaneObj* ScTabViewObj::GetObjectByIndex_Impl(sal_uInt16 nIndex) const
 {
     static ScSplitPos ePosHV[4] =
         { SC_SPLIT_TOPLEFT, SC_SPLIT_BOTTOMLEFT, SC_SPLIT_TOPRIGHT, SC_SPLIT_BOTTOMRIGHT };
@@ -1129,22 +1129,22 @@ ScViewPaneObj* ScTabViewObj::GetObjectByIndex_Impl(USHORT nIndex) const
     if (pViewSh)
     {
         ScSplitPos eWhich = SC_SPLIT_BOTTOMLEFT;    // default Position
-        BOOL bError = FALSE;
+        sal_Bool bError = sal_False;
         ScViewData* pViewData = pViewSh->GetViewData();
-        BOOL bHor = ( pViewData->GetHSplitMode() != SC_SPLIT_NONE );
-        BOOL bVer = ( pViewData->GetVSplitMode() != SC_SPLIT_NONE );
+        sal_Bool bHor = ( pViewData->GetHSplitMode() != SC_SPLIT_NONE );
+        sal_Bool bVer = ( pViewData->GetVSplitMode() != SC_SPLIT_NONE );
         if ( bHor && bVer )
         {
             //  links oben, links unten, rechts oben, rechts unten - wie in Excel
             if ( nIndex < 4 )
                 eWhich = ePosHV[nIndex];
             else
-                bError = TRUE;
+                bError = sal_True;
         }
         else if ( bHor )
         {
             if ( nIndex > 1 )
-                bError = TRUE;
+                bError = sal_True;
             else if ( nIndex == 1 )
                 eWhich = SC_SPLIT_BOTTOMRIGHT;
             // sonst SC_SPLIT_BOTTOMLEFT
@@ -1152,16 +1152,16 @@ ScViewPaneObj* ScTabViewObj::GetObjectByIndex_Impl(USHORT nIndex) const
         else if ( bVer )
         {
             if ( nIndex > 1 )
-                bError = TRUE;
+                bError = sal_True;
             else if ( nIndex == 0 )
                 eWhich = SC_SPLIT_TOPLEFT;
             // sonst SC_SPLIT_BOTTOMLEFT
         }
         else if ( nIndex > 0 )
-            bError = TRUE;          // nicht geteilt: nur 0 gueltig
+            bError = sal_True;          // nicht geteilt: nur 0 gueltig
 
         if (!bError)
-            return new ScViewPaneObj( pViewSh, sal::static_int_cast<USHORT>(eWhich) );
+            return new ScViewPaneObj( pViewSh, sal::static_int_cast<sal_uInt16>(eWhich) );
     }
 
     return NULL;
@@ -1237,7 +1237,7 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
                 Window* pActiveWin = pData->GetActiveWin();
                 Point aPos = pActiveWin->PixelToLogic(rPoint);
 
-                USHORT nHitLog = (USHORT) pActiveWin->PixelToLogic(
+                sal_uInt16 nHitLog = (sal_uInt16) pActiveWin->PixelToLogic(
                                  Size(pDrawView->GetHitTolerancePixel(),0)).Width();
 
                 sal_uInt32 nCount(pDrawPage->GetObjCount());
@@ -1290,7 +1290,7 @@ sal_Bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
         aMouseEvent.PopupTrigger = e.PopupTrigger;
         aMouseEvent.Target = xTarget;
 
-        for ( USHORT n=0; n<aMouseClickHandlers.Count(); n++ )
+        for ( sal_uInt16 n=0; n<aMouseClickHandlers.Count(); n++ )
         {
             try
             {
@@ -1384,7 +1384,7 @@ sal_Bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
             aMouseEvent.PopupTrigger = e.PopupTrigger;
             aMouseEvent.Target = xTarget;
 
-            for ( USHORT n=0; n<aMouseClickHandlers.Count(); n++ )
+            for ( sal_uInt16 n=0; n<aMouseClickHandlers.Count(); n++ )
             {
                 try
                 {
@@ -1410,10 +1410,10 @@ void ScTabViewObj::StartMouseListening()
 
 void ScTabViewObj::EndMouseListening()
 {
-    USHORT nCount(aMouseClickHandlers.Count());
+    sal_uInt16 nCount(aMouseClickHandlers.Count());
     lang::EventObject aEvent;
     aEvent.Source = (cppu::OWeakObject*)this;
-    for ( USHORT n=0; n<nCount; n++ )
+    for ( sal_uInt16 n=0; n<nCount; n++ )
     {
         try
         {
@@ -1432,10 +1432,10 @@ void ScTabViewObj::StartActivationListening()
 
 void ScTabViewObj::EndActivationListening()
 {
-    USHORT nCount = aActivationListeners.Count();
+    sal_uInt16 nCount = aActivationListeners.Count();
     lang::EventObject aEvent;
     aEvent.Source = (cppu::OWeakObject*)this;
-    for ( USHORT n=0; n<nCount; n++ )
+    for ( sal_uInt16 n=0; n<nCount; n++ )
     {
         try
         {
@@ -1455,7 +1455,7 @@ void SAL_CALL ScTabViewObj::addEnhancedMouseClickHandler( const uno::Reference< 
 
     if (aListener.is())
     {
-        USHORT nCount = aMouseClickHandlers.Count();
+        sal_uInt16 nCount = aMouseClickHandlers.Count();
         uno::Reference<awt::XEnhancedMouseClickHandler> *pObj =
                 new uno::Reference<awt::XEnhancedMouseClickHandler>( aListener );
         aMouseClickHandlers.Insert( pObj, nCount );
@@ -1469,8 +1469,8 @@ void SAL_CALL ScTabViewObj::removeEnhancedMouseClickHandler( const uno::Referenc
                                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    USHORT nCount = aMouseClickHandlers.Count();
-    for ( USHORT n=nCount; n--; )
+    sal_uInt16 nCount = aMouseClickHandlers.Count();
+    for ( sal_uInt16 n=nCount; n--; )
     {
         uno::Reference<awt::XEnhancedMouseClickHandler> *pObj = aMouseClickHandlers[n];
         if ( *pObj == aListener )
@@ -1489,7 +1489,7 @@ void SAL_CALL ScTabViewObj::addActivationEventListener( const uno::Reference< sh
 
     if (aListener.is())
     {
-        USHORT nCount = aActivationListeners.Count();
+        sal_uInt16 nCount = aActivationListeners.Count();
         uno::Reference<sheet::XActivationEventListener> *pObj =
                 new uno::Reference<sheet::XActivationEventListener>( aListener );
         aActivationListeners.Insert( pObj, nCount );
@@ -1503,8 +1503,8 @@ void SAL_CALL ScTabViewObj::removeActivationEventListener( const uno::Reference<
                                     throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    USHORT nCount = aActivationListeners.Count();
-    for ( USHORT n=nCount; n--; )
+    sal_uInt16 nCount = aActivationListeners.Count();
+    for ( sal_uInt16 n=nCount; n--; )
     {
         uno::Reference<sheet::XActivationEventListener> *pObj = aActivationListeners[n];
         if ( *pObj == aListener )
@@ -1518,16 +1518,16 @@ void SAL_CALL ScTabViewObj::removeActivationEventListener( const uno::Reference<
 
 #if 0
 
-BOOL ScTabViewObj::getPagebreakMode(void) const
+sal_Bool ScTabViewObj::getPagebreakMode(void) const
 {
     ScUnoGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
         return pViewSh->GetViewData()->IsPagebreakMode();
-    return FALSE;
+    return sal_False;
 }
 
-void ScTabViewObj::setPagebreakMode(BOOL PagebreakMode)
+void ScTabViewObj::setPagebreakMode(sal_Bool PagebreakMode)
 {
     ScUnoGuard aGuard;
     ScTabViewShell* pViewSh = GetViewShell();
@@ -1537,18 +1537,18 @@ void ScTabViewObj::setPagebreakMode(BOOL PagebreakMode)
 
 #endif
 
-INT16 ScTabViewObj::GetZoom(void) const
+sal_Int16 ScTabViewObj::GetZoom(void) const
 {
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
     {
         const Fraction& rZoomY = pViewSh->GetViewData()->GetZoomY();    // Y wird angezeigt
-        return (INT16)(( rZoomY.GetNumerator() * 100 ) / rZoomY.GetDenominator());
+        return (sal_Int16)(( rZoomY.GetNumerator() * 100 ) / rZoomY.GetDenominator());
     }
     return 0;
 }
 
-void ScTabViewObj::SetZoom(INT16 nZoom)
+void ScTabViewObj::SetZoom(sal_Int16 nZoom)
 {
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
@@ -1565,7 +1565,7 @@ void ScTabViewObj::SetZoom(INT16 nZoom)
             }
         }
         Fraction aFract( nZoom, 100 );
-        pViewSh->SetZoom( aFract, aFract, TRUE );
+        pViewSh->SetZoom( aFract, aFract, sal_True );
         pViewSh->PaintGrid();
         pViewSh->PaintTop();
         pViewSh->PaintLeft();
@@ -1574,9 +1574,9 @@ void ScTabViewObj::SetZoom(INT16 nZoom)
     }
 }
 
-INT16 ScTabViewObj::GetZoomType(void) const
+sal_Int16 ScTabViewObj::GetZoomType(void) const
 {
-    INT16 aZoomType = view::DocumentZoomType::OPTIMAL;
+    sal_Int16 aZoomType = view::DocumentZoomType::OPTIMAL;
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
     {
@@ -1603,7 +1603,7 @@ INT16 ScTabViewObj::GetZoomType(void) const
     return aZoomType;
 }
 
-void ScTabViewObj::SetZoomType(INT16 aZoomType)
+void ScTabViewObj::SetZoomType(sal_Int16 aZoomType)
 {
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
@@ -1646,11 +1646,11 @@ void ScTabViewObj::SetZoomType(INT16 aZoomType)
             {
                 case SVX_ZOOM_WHOLEPAGE:
                 case SVX_ZOOM_PAGEWIDTH:
-                    pView->SetZoomType( eZoomType, TRUE );
+                    pView->SetZoomType( eZoomType, sal_True );
                     break;
 
                 default:
-                    pView->SetZoomType( SVX_ZOOM_PERCENT, TRUE );
+                    pView->SetZoomType( SVX_ZOOM_PERCENT, sal_True );
             }
             SetZoom( nZoom );
         }
@@ -1670,7 +1670,7 @@ sal_Bool SAL_CALL ScTabViewObj::getIsWindowSplit() throw(uno::RuntimeException)
                  pViewData->GetVSplitMode() == SC_SPLIT_NORMAL );
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 sal_Bool SAL_CALL ScTabViewObj::hasFrozenPanes() throw(uno::RuntimeException)
@@ -1686,7 +1686,7 @@ sal_Bool SAL_CALL ScTabViewObj::hasFrozenPanes() throw(uno::RuntimeException)
                  pViewData->GetVSplitMode() == SC_SPLIT_FIX );
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 sal_Int32 SAL_CALL ScTabViewObj::getSplitHorizontal() throw(uno::RuntimeException)
@@ -1732,7 +1732,7 @@ sal_Int32 SAL_CALL ScTabViewObj::getSplitColumn() throw(uno::RuntimeException)
 
             SCsCOL nCol;
             SCsROW nRow;
-            pViewData->GetPosFromPixel( nSplit, 0, ePos, nCol, nRow, FALSE );
+            pViewData->GetPosFromPixel( nSplit, 0, ePos, nCol, nRow, sal_False );
             if ( nCol > 0 )
                 return nCol;
         }
@@ -1754,7 +1754,7 @@ sal_Int32 SAL_CALL ScTabViewObj::getSplitRow() throw(uno::RuntimeException)
             ScSplitPos ePos = SC_SPLIT_TOPLEFT;     // es ist vertikal geteilt
             SCsCOL nCol;
             SCsROW nRow;
-            pViewData->GetPosFromPixel( 0, nSplit, ePos, nCol, nRow, FALSE );
+            pViewData->GetPosFromPixel( 0, nSplit, ePos, nCol, nRow, sal_False );
             if ( nRow > 0 )
                 return nRow;
         }
@@ -1769,8 +1769,8 @@ void SAL_CALL ScTabViewObj::splitAtPosition( sal_Int32 nPixelX, sal_Int32 nPixel
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
     {
-        pViewSh->SplitAtPixel( Point( nPixelX, nPixelY ), TRUE, TRUE );
-        pViewSh->FreezeSplitters( FALSE );
+        pViewSh->SplitAtPixel( Point( nPixelX, nPixelY ), sal_True, sal_True );
+        pViewSh->FreezeSplitters( sal_False );
         pViewSh->InvalidateSplit();
     }
 }
@@ -1792,11 +1792,11 @@ void SAL_CALL ScTabViewObj::freezeAtPosition( sal_Int32 nColumns, sal_Int32 nRow
             aWinStart = pWin->GetPosPixel();
 
         ScViewData* pViewData = pViewSh->GetViewData();
-        Point aSplit(pViewData->GetScrPos( (SCCOL)nColumns, (SCROW)nRows, SC_SPLIT_BOTTOMLEFT, TRUE ));
+        Point aSplit(pViewData->GetScrPos( (SCCOL)nColumns, (SCROW)nRows, SC_SPLIT_BOTTOMLEFT, sal_True ));
         aSplit += aWinStart;
 
-        pViewSh->SplitAtPixel( aSplit, TRUE, TRUE );
-        pViewSh->FreezeSplitters( TRUE );
+        pViewSh->SplitAtPixel( aSplit, sal_True, sal_True );
+        pViewSh->FreezeSplitters( sal_True );
         pViewSh->InvalidateSplit();
     }
 }
@@ -1816,8 +1816,8 @@ void SAL_CALL ScTabViewObj::removeSelectionChangeListener(
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    USHORT nCount = aSelectionListeners.Count();
-    for ( USHORT n=nCount; n--; )
+    sal_uInt16 nCount = aSelectionListeners.Count();
+    for ( sal_uInt16 n=nCount; n--; )
     {
         uno::Reference<view::XSelectionChangeListener> *pObj = aSelectionListeners[n];
         if ( *pObj == xListener )       //! wozu der Mumpitz mit queryInterface?
@@ -1832,7 +1832,7 @@ void ScTabViewObj::SelectionChanged()
 {
     lang::EventObject aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    for ( USHORT n=0; n<aSelectionListeners.Count(); n++ )
+    for ( sal_uInt16 n=0; n<aSelectionListeners.Count(); n++ )
         (*aSelectionListeners[n])->selectionChanged( aEvent );
 
     // handle sheet events
@@ -2079,8 +2079,8 @@ void SAL_CALL ScTabViewObj::removePropertyChangeListener( const ::rtl::OUString&
                                     uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    USHORT nCount = aPropertyChgListeners.Count();
-    for ( USHORT n=nCount; n--; )
+    sal_uInt16 nCount = aPropertyChgListeners.Count();
+    for ( sal_uInt16 n=nCount; n--; )
     {
         uno::Reference<beans::XPropertyChangeListener> *pObj = aPropertyChgListeners[n];
         if ( *pObj == xListener )       //! wozu der Mumpitz mit queryInterface?
@@ -2111,7 +2111,7 @@ void ScTabViewObj::VisAreaChanged()
 {
     beans::PropertyChangeEvent aEvent;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
-    for ( USHORT n=0; n<aPropertyChgListeners.Count(); n++ )
+    for ( sal_uInt16 n=0; n<aPropertyChgListeners.Count(); n++ )
         (*aPropertyChgListeners[n])->propertyChange( aEvent );
 }
 
@@ -2126,9 +2126,9 @@ void SAL_CALL ScTabViewObj::startRangeSelection(
     if (pViewSh)
     {
         String aInitVal, aTitle;
-        BOOL bCloseOnButtonUp = FALSE;
-        BOOL bSingleCell = FALSE;
-        BOOL bMultiSelection = FALSE;
+        sal_Bool bCloseOnButtonUp = sal_False;
+        sal_Bool bSingleCell = sal_False;
+        sal_Bool bMultiSelection = sal_False;
 
         rtl::OUString aStrVal;
         const beans::PropertyValue* pPropArray = aArguments.getConstArray();
@@ -2183,8 +2183,8 @@ void SAL_CALL ScTabViewObj::removeRangeSelectionListener(
                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    USHORT nCount = aRangeSelListeners.Count();
-    for ( USHORT n=nCount; n--; )
+    sal_uInt16 nCount = aRangeSelListeners.Count();
+    for ( sal_uInt16 n=nCount; n--; )
     {
         uno::Reference<sheet::XRangeSelectionListener> *pObj = aRangeSelListeners[n];
         if ( *pObj == xListener )
@@ -2210,8 +2210,8 @@ void SAL_CALL ScTabViewObj::removeRangeSelectionChangeListener(
                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    USHORT nCount = aRangeChgListeners.Count();
-    for ( USHORT n=nCount; n--; )
+    sal_uInt16 nCount = aRangeChgListeners.Count();
+    for ( sal_uInt16 n=nCount; n--; )
     {
         uno::Reference<sheet::XRangeSelectionChangeListener> *pObj = aRangeChgListeners[n];
         if ( *pObj == xListener )
@@ -2228,7 +2228,7 @@ void ScTabViewObj::RangeSelDone( const String& rText )
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     aEvent.RangeDescriptor = rtl::OUString( rText );
 
-    for ( USHORT n=0; n<aRangeSelListeners.Count(); n++ )
+    for ( sal_uInt16 n=0; n<aRangeSelListeners.Count(); n++ )
         (*aRangeSelListeners[n])->done( aEvent );
 }
 
@@ -2238,7 +2238,7 @@ void ScTabViewObj::RangeSelAborted( const String& rText )
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     aEvent.RangeDescriptor = rtl::OUString( rText );
 
-    for ( USHORT n=0; n<aRangeSelListeners.Count(); n++ )
+    for ( sal_uInt16 n=0; n<aRangeSelListeners.Count(); n++ )
         (*aRangeSelListeners[n])->aborted( aEvent );
 }
 
@@ -2248,7 +2248,7 @@ void ScTabViewObj::RangeSelChanged( const String& rText )
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     aEvent.RangeDescriptor = rtl::OUString( rText );
 
-    for ( USHORT n=0; n<aRangeChgListeners.Count(); n++ )
+    for ( sal_uInt16 n=0; n<aRangeChgListeners.Count(); n++ )
         (*aRangeChgListeners[n])->descriptorChanged( aEvent );
 }
 
@@ -2349,7 +2349,7 @@ void SAL_CALL ScTabViewObj::insertTransferable( const ::com::sun::star::uno::Ref
     ScUnoGuard aGuard;
     ScEditShell* pShell = PTR_CAST( ScEditShell, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
     if (pShell)
-        pShell->GetEditView()->InsertText( xTrans, ::rtl::OUString(), FALSE );
+        pShell->GetEditView()->InsertText( xTrans, ::rtl::OUString(), sal_False );
     else
     {
         ScDrawTextObjectBar* pTextShell = PTR_CAST( ScDrawTextObjectBar, GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) );
@@ -2360,7 +2360,7 @@ void SAL_CALL ScTabViewObj::insertTransferable( const ::com::sun::star::uno::Ref
             OutlinerView* pOutView = pView->GetTextEditOutlinerView();
             if ( pOutView )
             {
-                pOutView->GetEditView().InsertText( xTrans, ::rtl::OUString(), FALSE );
+                pOutView->GetEditView().InsertText( xTrans, ::rtl::OUString(), sal_False );
                 return;
             }
         }

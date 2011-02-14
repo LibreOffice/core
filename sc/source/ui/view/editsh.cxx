@@ -111,8 +111,8 @@ ScEditShell::ScEditShell(EditView* pView, ScViewData* pData) :
     pEditView       (pView),
     pViewData       (pData),
     pClipEvtLstnr   (NULL),
-    bPastePossible  (FALSE),
-    bIsInsertMode   (TRUE)
+    bPastePossible  (sal_False),
+    bIsInsertMode   (sal_True)
 {
     SetPool( pEditView->GetEditEngine()->GetEmptyItemSet().GetPool() );
     SetUndoManager( &pEditView->GetEditEngine()->GetUndoManager() );
@@ -123,7 +123,7 @@ ScEditShell::~ScEditShell()
 {
     if ( pClipEvtLstnr )
     {
-        pClipEvtLstnr->AddRemoveListener( pViewData->GetActiveWin(), FALSE );
+        pClipEvtLstnr->AddRemoveListener( pViewData->GetActiveWin(), sal_False );
 
         //  #122057# The listener may just now be waiting for the SolarMutex and call the link
         //  afterwards, in spite of RemoveListener. So the link has to be reset, too.
@@ -150,13 +150,13 @@ void lcl_RemoveAttribs( EditView& rEditView )
 {
     ScEditEngineDefaulter* pEngine = static_cast<ScEditEngineDefaulter*>(rEditView.GetEditEngine());
 
-    BOOL bOld = pEngine->GetUpdateMode();
-    pEngine->SetUpdateMode(FALSE);
+    sal_Bool bOld = pEngine->GetUpdateMode();
+    pEngine->SetUpdateMode(sal_False);
 
     String aName = ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
     pEngine->GetUndoManager().EnterListAction( aName, aName );
 
-    rEditView.RemoveAttribs(TRUE);
+    rEditView.RemoveAttribs(sal_True);
     pEngine->RepeatDefaults();      // #97226# paragraph attributes from cell formats must be preserved
 
     pEngine->GetUndoManager().LeaveListAction();
@@ -176,7 +176,7 @@ void lclInsertCharacter( EditView* pTableView, EditView* pTopView, sal_Unicode c
 void ScEditShell::Execute( SfxRequest& rReq )
 {
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
-    USHORT              nSlot       = rReq.GetSlot();
+    sal_uInt16              nSlot       = rReq.GetSlot();
     SfxBindings&        rBindings   = pViewData->GetBindings();
 
     ScInputHandler* pHdl = GetMyInputHdl();
@@ -198,7 +198,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
     EditEngine* pEngine = pTableView->GetEditEngine();
 
     pHdl->DataChanging();
-    BOOL bSetSelIsRef = FALSE;
+    sal_Bool bSetSelIsRef = sal_False;
 
     switch ( nSlot )
     {
@@ -262,10 +262,10 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
         case SID_CLIPBOARD_FORMAT_ITEMS:
             {
-                ULONG nFormat = 0;
+                sal_uLong nFormat = 0;
                 const SfxPoolItem* pItem;
                 if ( pReqArgs &&
-                     pReqArgs->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET &&
+                     pReqArgs->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET &&
                      pItem->ISA(SfxUInt32Item) )
                 {
                     nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
@@ -288,7 +288,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( pViewData->GetDialogParent() );
-                ULONG nFormat = 0;
+                sal_uLong nFormat = 0;
                 if ( pDlg )
                 {
                     pDlg->Insert( SOT_FORMAT_STRING, EMPTY_STRING );
@@ -326,7 +326,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
         case SID_SELECTALL:
             {
-                USHORT nPar = pEngine->GetParagraphCount();
+                sal_uInt16 nPar = pEngine->GetParagraphCount();
                 if (nPar)
                 {
                     xub_StrLen nLen = pEngine->GetTextLen(nPar-1);
@@ -339,8 +339,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
         case SID_CHARMAP:
             {
-                USHORT nScript = pTableView->GetSelectedScriptType();
-                USHORT nFontWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? EE_CHAR_FONTINFO_CJK :
+                sal_uInt16 nScript = pTableView->GetSelectedScriptType();
+                sal_uInt16 nFontWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? EE_CHAR_FONTINFO_CJK :
                                 ( ( nScript == SCRIPTTYPE_COMPLEX ) ? EE_CHAR_FONTINFO_CTL :
                                                                         EE_CHAR_FONTINFO );
                 const SvxFontItem& rItem = (const SvxFontItem&)
@@ -352,13 +352,13 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 const SfxItemSet *pArgs = rReq.GetArgs();
                 const SfxPoolItem* pItem = 0;
                 if( pArgs )
-                    pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), FALSE, &pItem);
+                    pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), sal_False, &pItem);
 
                 if ( pItem )
                 {
                     aString = ((const SfxStringItem*)pItem)->GetValue();
                     const SfxPoolItem* pFtItem = NULL;
-                    pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), FALSE, &pFtItem);
+                    pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), sal_False, &pFtItem);
                     const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
                     if ( pFontItem )
                     {
@@ -386,7 +386,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 if ( aString.Len() )
                 {
                     //  if string contains WEAK characters, set all fonts
-                    BYTE nSetScript;
+                    sal_uInt8 nSetScript;
                     ScDocument* pDoc = pViewData->GetDocument();
                     if ( pDoc->HasStringWeakCharacters( aString ) )
                         nSetScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
@@ -396,7 +396,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     SfxItemSet aSet( pTableView->GetEmptyItemSet() );
                     SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, GetPool() );
                     aSetItem.PutItemForScriptType( nSetScript, aNewItem );
-                    aSet.Put( aSetItem.GetItemSet(), FALSE );
+                    aSet.Put( aSetItem.GetItemSet(), sal_False );
 
                     //  SetAttribs an der View selektiert ein Wort, wenn nichts selektiert ist
                     pTableView->GetEditEngine()->QuickSetAttribs( aSet, pTableView->GetSelection() );
@@ -422,12 +422,12 @@ void ScEditShell::Execute( SfxRequest& rReq )
             {
                 ScDocument*     pDoc = pViewData->GetDocument();
                 //CHINA001 ScNamePasteDlg* pDlg = new ScNamePasteDlg( pViewData->GetDialogParent(),
-                //CHINA001                              pDoc->GetRangeName(), FALSE );
+                //CHINA001                              pDoc->GetRangeName(), sal_False );
                                                 // "Liste" disablen
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-                AbstractScNamePasteDlg* pDlg = pFact->CreateScNamePasteDlg( pViewData->GetDialogParent(), pDoc->GetRangeName(), RID_SCDLG_NAMES_PASTE, FALSE );
+                AbstractScNamePasteDlg* pDlg = pFact->CreateScNamePasteDlg( pViewData->GetDialogParent(), pDoc->GetRangeName(), RID_SCDLG_NAMES_PASTE, sal_False );
                 DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
@@ -489,7 +489,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
         case SID_TOGGLE_REL:
             {
-                BOOL bOk = FALSE;
+                sal_Bool bOk = sal_False;
                 if (pEngine->GetParagraphCount() == 1)
                 {
                     String aText = pEngine->GetText();
@@ -508,10 +508,10 @@ void ScEditShell::Execute( SfxRequest& rReq )
                             pTopView->GetEditEngine()->SetText( aNew );
                             pTopView->SetSelection( aNewSel );
                         }
-                        bOk = TRUE;
+                        bOk = sal_True;
 
                         //  Referenz wird selektiert -> beim Tippen nicht ueberschreiben
-                        bSetSelIsRef = TRUE;
+                        bSetSelIsRef = sal_True;
                     }
                 }
                 if (!bOk)
@@ -523,7 +523,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
             if( pReqArgs )
             {
                 const SfxPoolItem* pItem;
-                if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, TRUE, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, sal_True, &pItem ) == SFX_ITEM_SET )
                 {
                     const SvxHyperlinkItem* pHyper = (const SvxHyperlinkItem*) pItem;
                     const String& rName     = pHyper->GetName();
@@ -531,7 +531,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     const String& rTarget   = pHyper->GetTargetFrame();
                     SvxLinkInsertMode eMode = pHyper->GetInsertMode();
 
-                    BOOL bDone = FALSE;
+                    sal_Bool bDone = sal_False;
                     if ( eMode == HLINK_DEFAULT || eMode == HLINK_FIELD )
                     {
                         const SvxURLField* pURLField = GetURLField();
@@ -565,14 +565,14 @@ void ScEditShell::Execute( SfxRequest& rReq )
                                 pTopView->SetSelection( aSel );     // select inserted field
                             }
 
-                            bDone = TRUE;
+                            bDone = sal_True;
                         }
                     }
 
                     if (!bDone)
                     {
                         pViewData->GetViewShell()->
-                            InsertURL( rName, rURL, rTarget, (USHORT) eMode );
+                            InsertURL( rName, rURL, rTarget, (sal_uInt16) eMode );
 
                         //  InsertURL an der ViewShell schaltet bei "Button"
                         //  die EditShell ab, darum sofort return
@@ -617,13 +617,13 @@ void ScEditShell::Execute( SfxRequest& rReq )
 
     pHdl->DataChanged();
     if (bSetSelIsRef)
-        pHdl->SetSelIsRef(TRUE);
+        pHdl->SetSelIsRef(sal_True);
 }
 
 void lcl_DisableAll( SfxItemSet& rSet )    // disable all slots
 {
     SfxWhichIter aIter( rSet );
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
     while (nWhich)
     {
         rSet.DisableItem( nWhich );
@@ -646,7 +646,7 @@ void __EXPORT ScEditShell::GetState( SfxItemSet& rSet )
     EditView* pActiveView = pHdl ? pHdl->GetActiveView() : pEditView;
 
     SfxWhichIter aIter( rSet );
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
     while (nWhich)
     {
         switch (nWhich)
@@ -708,7 +708,7 @@ void __EXPORT ScEditShell::GetState( SfxItemSet& rSet )
                     rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
 
                     // disable thesaurus context menu entry if there is nothing to look up
-                    BOOL bCanDoThesaurus = ScModule::HasThesaurusLanguage( nLang );
+                    sal_Bool bCanDoThesaurus = ScModule::HasThesaurusLanguage( nLang );
                     if (!bIsLookUpWord || !bCanDoThesaurus)
                         rSet.DisableItem( SID_THES );
                 }
@@ -760,7 +760,7 @@ void __EXPORT ScEditShell::GetClipState( SfxItemSet& rSet )
         pClipEvtLstnr = new TransferableClipboardListener( LINK( this, ScEditShell, ClipboardChanged ) );
         pClipEvtLstnr->acquire();
         Window* pWin = pViewData->GetActiveWin();
-        pClipEvtLstnr->AddRemoveListener( pWin, TRUE );
+        pClipEvtLstnr->AddRemoveListener( pWin, sal_True );
 
         // get initial state
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
@@ -768,7 +768,7 @@ void __EXPORT ScEditShell::GetClipState( SfxItemSet& rSet )
     }
 
     SfxWhichIter aIter( rSet );
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
     while (nWhich)
     {
         switch (nWhich)
@@ -814,7 +814,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
     SfxItemSet          aSet( pEditView->GetEmptyItemSet() );
     SfxBindings&        rBindings   = pViewData->GetBindings();
     const SfxItemSet*   pArgs       = rReq.GetArgs();
-    USHORT              nSlot       = rReq.GetSlot();
+    sal_uInt16              nSlot       = rReq.GetSlot();
 
     switch ( nSlot )
     {
@@ -824,7 +824,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
                 if (pArgs)
                 {
                     // #i78017 establish the same behaviour as in Writer
-                    USHORT nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+                    sal_uInt16 nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
                     if (nSlot == SID_ATTR_CHAR_FONT)
                     {
                         nScript = pEditView->GetSelectedScriptType();
@@ -833,10 +833,10 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
                     SfxItemPool& rPool = GetPool();
                     SvxScriptSetItem aSetItem( nSlot, rPool );
-                    USHORT nWhich = rPool.GetWhich( nSlot );
+                    sal_uInt16 nWhich = rPool.GetWhich( nSlot );
                     aSetItem.PutItemForScriptType( nScript, pArgs->Get( nWhich ) );
 
-                    aSet.Put( aSetItem.GetItemSet(), FALSE );
+                    aSet.Put( aSetItem.GetItemSet(), sal_False );
                 }
             }
             break;
@@ -856,21 +856,21 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
         case SID_ATTR_CHAR_WEIGHT:
             {
                 // #i78017 establish the same behaviour as in Writer
-                USHORT nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+                sal_uInt16 nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
 
                 SfxItemPool& rPool = GetPool();
 
-                BOOL bOld = FALSE;
+                sal_Bool bOld = sal_False;
                 SvxScriptSetItem aOldSetItem( nSlot, rPool );
-                aOldSetItem.GetItemSet().Put( pEditView->GetAttribs(), FALSE );
+                aOldSetItem.GetItemSet().Put( pEditView->GetAttribs(), sal_False );
                 const SfxPoolItem* pCore = aOldSetItem.GetItemOfScript( nScript );
                 if ( pCore && ((const SvxWeightItem*)pCore)->GetWeight() > WEIGHT_NORMAL )
-                    bOld = TRUE;
+                    bOld = sal_True;
 
                 SvxScriptSetItem aSetItem( nSlot, rPool );
                 aSetItem.PutItemForScriptType( nScript,
                             SvxWeightItem( bOld ? WEIGHT_NORMAL : WEIGHT_BOLD, EE_CHAR_WEIGHT ) );
-                aSet.Put( aSetItem.GetItemSet(), FALSE );
+                aSet.Put( aSetItem.GetItemSet(), sal_False );
 
                 rBindings.Invalidate( nSlot );
             }
@@ -879,21 +879,21 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
         case SID_ATTR_CHAR_POSTURE:
             {
                 // #i78017 establish the same behaviour as in Writer
-                USHORT nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+                sal_uInt16 nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
 
                 SfxItemPool& rPool = GetPool();
 
-                BOOL bOld = FALSE;
+                sal_Bool bOld = sal_False;
                 SvxScriptSetItem aOldSetItem( nSlot, rPool );
-                aOldSetItem.GetItemSet().Put( pEditView->GetAttribs(), FALSE );
+                aOldSetItem.GetItemSet().Put( pEditView->GetAttribs(), sal_False );
                 const SfxPoolItem* pCore = aOldSetItem.GetItemOfScript( nScript );
                 if ( pCore && ((const SvxPostureItem*)pCore)->GetValue() != ITALIC_NONE )
-                    bOld = TRUE;
+                    bOld = sal_True;
 
                 SvxScriptSetItem aSetItem( nSlot, rPool );
                 aSetItem.PutItemForScriptType( nScript,
                             SvxPostureItem( bOld ? ITALIC_NONE : ITALIC_NORMAL, EE_CHAR_ITALIC ) );
-                aSet.Put( aSetItem.GetItemSet(), FALSE );
+                aSet.Put( aSetItem.GetItemSet(), sal_False );
 
                 rBindings.Invalidate( nSlot );
             }
@@ -944,7 +944,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_ATTR_CHAR_STRIKEOUT:
             {
-                BOOL bOld = ((const SvxCrossedOutItem&)pEditView->GetAttribs().
+                sal_Bool bOld = ((const SvxCrossedOutItem&)pEditView->GetAttribs().
                                 Get(EE_CHAR_STRIKEOUT)).GetValue() != STRIKEOUT_NONE;
                 aSet.Put( SvxCrossedOutItem( bOld ? STRIKEOUT_NONE : STRIKEOUT_SINGLE, EE_CHAR_STRIKEOUT ) );
                 rBindings.Invalidate( nSlot );
@@ -953,7 +953,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_ATTR_CHAR_SHADOWED:
             {
-                BOOL bOld = ((const SvxShadowedItem&)pEditView->GetAttribs().
+                sal_Bool bOld = ((const SvxShadowedItem&)pEditView->GetAttribs().
                                 Get(EE_CHAR_SHADOW)).GetValue();
                 aSet.Put( SvxShadowedItem( !bOld, EE_CHAR_SHADOW ) );
                 rBindings.Invalidate( nSlot );
@@ -962,7 +962,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
         case SID_ATTR_CHAR_CONTOUR:
             {
-                BOOL bOld = ((const SvxContourItem&)pEditView->GetAttribs().
+                sal_Bool bOld = ((const SvxContourItem&)pEditView->GetAttribs().
                                 Get(EE_CHAR_OUTLINE)).GetValue();
                 aSet.Put( SvxContourItem( !bOld, EE_CHAR_OUTLINE ) );
                 rBindings.Invalidate( nSlot );
@@ -996,8 +996,8 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
     //
 
     EditEngine* pEngine = pEditView->GetEditEngine();
-    BOOL bOld = pEngine->GetUpdateMode();
-    pEngine->SetUpdateMode(FALSE);
+    sal_Bool bOld = pEngine->GetUpdateMode();
+    pEngine->SetUpdateMode(sal_False);
 
     pEditView->SetAttribs( aSet );
 
@@ -1023,11 +1023,11 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
 
     //  choose font info according to selection script type
 
-    USHORT nScript = pEditView->GetSelectedScriptType();
+    sal_uInt16 nScript = pEditView->GetSelectedScriptType();
     if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
 
     // #i55929# input-language-dependent script type (depends on input language if nothing selected)
-    USHORT nInputScript = nScript;
+    sal_uInt16 nInputScript = nScript;
     if ( !pEditView->GetSelection().HasRange() )
     {
         LanguageType nInputLang = pViewData->GetActiveWin()->GetInputLanguage();
@@ -1047,7 +1047,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
 
     //  Unterstreichung
 
-    SfxItemState eState = aAttribs.GetItemState( EE_CHAR_UNDERLINE, TRUE );
+    SfxItemState eState = aAttribs.GetItemState( EE_CHAR_UNDERLINE, sal_True );
     if ( eState == SFX_ITEM_DONTCARE )
     {
         rSet.InvalidateItem( SID_ULINE_VAL_NONE );
@@ -1059,7 +1059,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
     {
         FontUnderline eUnderline = ((const SvxUnderlineItem&)
                     aAttribs.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
-        USHORT nId = SID_ULINE_VAL_NONE;
+        sal_uInt16 nId = SID_ULINE_VAL_NONE;
         switch (eUnderline)
         {
             case UNDERLINE_SINGLE:  nId = SID_ULINE_VAL_SINGLE; break;
@@ -1068,7 +1068,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
             default:
                 break;
         }
-        rSet.Put( SfxBoolItem( nId, TRUE ) );
+        rSet.Put( SfxBoolItem( nId, sal_True ) );
     }
 
     //! Testen, ob Klammer-Hervorhebung aktiv ist !!!!
@@ -1077,7 +1077,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
         rSet.ClearItem( EE_CHAR_WEIGHT );   // hervorgehobene Klammern hier nicht
 }
 
-String ScEditShell::GetSelectionText( BOOL bWholeWord )
+String ScEditShell::GetSelectionText( sal_Bool bWholeWord )
 {
     String aStrSelection;
 
@@ -1115,20 +1115,20 @@ void ScEditShell::ExecuteUndo(SfxRequest& rReq)
     pHdl->DataChanging();
 
     const SfxItemSet* pReqArgs = rReq.GetArgs();
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     switch ( nSlot )
     {
         case SID_UNDO:
         case SID_REDO:
             {
-                BOOL bIsUndo = ( nSlot == SID_UNDO );
+                sal_Bool bIsUndo = ( nSlot == SID_UNDO );
 
-                USHORT nCount = 1;
+                sal_uInt16 nCount = 1;
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && pReqArgs->GetItemState( nSlot, TRUE, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs && pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET )
                     nCount = ((const SfxUInt16Item*)pItem)->GetValue();
 
-                for (USHORT i=0; i<nCount; i++)
+                for (sal_uInt16 i=0; i<nCount; i++)
                 {
                     if ( bIsUndo )
                     {
@@ -1146,7 +1146,7 @@ void ScEditShell::ExecuteUndo(SfxRequest& rReq)
             }
             break;
     }
-    pViewData->GetBindings().InvalidateAll(FALSE);
+    pViewData->GetBindings().InvalidateAll(sal_False);
 
     pHdl->DataChanged();
 }
@@ -1159,7 +1159,7 @@ void ScEditShell::GetUndoState(SfxItemSet &rSet)
     if ( pViewFrm && GetUndoManager() )
     {
         SfxWhichIter aIter(rSet);
-        USHORT nWhich = aIter.FirstWhich();
+        sal_uInt16 nWhich = aIter.FirstWhich();
         while( nWhich )
         {
             pViewFrm->GetSlotState( nWhich, NULL, &rSet );

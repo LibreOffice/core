@@ -48,31 +48,31 @@
 
 // set of global variables
 ByteString sInputFile;
-BOOL bEnableExport;
-BOOL bMergeMode;
-BOOL bErrorLog;
-BOOL bUTF8;
-BOOL bULF; // ULF = Unicode Language File
+sal_Bool bEnableExport;
+sal_Bool bMergeMode;
+sal_Bool bErrorLog;
+sal_Bool bUTF8;
+sal_Bool bULF; // ULF = Unicode Language File
 ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sOutputFile;
 ByteString sMergeSrc;
 
 /*****************************************************************************/
-BOOL ParseCommandLine( int argc, char* argv[])
+sal_Bool ParseCommandLine( int argc, char* argv[])
 /*****************************************************************************/
 {
-    bEnableExport = FALSE;
-    bMergeMode = FALSE;
-    bErrorLog = TRUE;
-    bUTF8 = TRUE;
-    bULF = FALSE;
+    bEnableExport = sal_False;
+    bMergeMode = sal_False;
+    bErrorLog = sal_True;
+    bUTF8 = sal_True;
+    bULF = sal_False;
     sPrj = "";
     sPrjRoot = "";
     Export::sLanguages = "";
 
-    USHORT nState = STATE_NON;
-    BOOL bInput = FALSE;
+    sal_uInt16 nState = STATE_NON;
+    sal_Bool bInput = sal_False;
 
     // parse command line
     for( int i = 1; i < argc; i++ ) {
@@ -95,19 +95,19 @@ BOOL ParseCommandLine( int argc, char* argv[])
         }
         else if ( sSwitch == "-E" ) {
             nState = STATE_ERRORLOG;
-            bErrorLog = FALSE;
+            bErrorLog = sal_False;
         }
         else if ( sSwitch == "-UTF8" ) {
             nState = STATE_UTF8;
-            bUTF8 = TRUE;
+            bUTF8 = sal_True;
         }
 /*      else if ( sSwitch == "-NOUTF8" ) {
             nState = STATE_UTF8;
-            bUTF8 = FALSE;
+            bUTF8 = sal_False;
         }*/
 /*      else if ( sSwitch == "-ULF" ) {
             nState = STATE_ULF;
-            bULF = TRUE;
+            bULF = sal_True;
         }*/
         else if ( sSwitch == "-L" ) {
             nState = STATE_LANGUAGES;
@@ -115,12 +115,12 @@ BOOL ParseCommandLine( int argc, char* argv[])
         else {
             switch ( nState ) {
                 case STATE_NON: {
-                    return FALSE;   // no valid command line
+                    return sal_False;   // no valid command line
                 }
                 //break;
                 case STATE_INPUT: {
                     sInputFile = argv[ i ];
-                    bInput = TRUE; // source file found
+                    bInput = sal_True; // source file found
                 }
                 break;
                 case STATE_OUTPUT: {
@@ -138,7 +138,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
                 break;
                 case STATE_MERGESRC: {
                     sMergeSrc = argv[ i ];
-                    bMergeMode = TRUE; // activate merge mode, cause merge database found
+                    bMergeMode = sal_True; // activate merge mode, cause merge database found
                 }
                 break;
                 case STATE_LANGUAGES: {
@@ -151,13 +151,13 @@ BOOL ParseCommandLine( int argc, char* argv[])
 
     if ( bInput ) {
         // command line is valid
-        bULF = TRUE;
-        bEnableExport = TRUE;
-        return TRUE;
+        bULF = sal_True;
+        bEnableExport = sal_True;
+        return sal_True;
     }
 
     // command line is not valid
-    return FALSE;
+    return sal_False;
 }
 
 

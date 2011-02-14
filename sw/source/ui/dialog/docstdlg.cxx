@@ -110,9 +110,9 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
     SwFEShell* pFEShell = pDocShell->GetFEShell();
     if(!pFEShell)
     {
-        aUpdatePB.Show(FALSE);
-        aLineLbl.Show(FALSE);
-        aLineNo .Show(FALSE);
+        aUpdatePB.Show(sal_False);
+        aLineLbl.Show(sal_False);
+        aLineNo .Show(sal_False);
     }
 
 }
@@ -127,9 +127,9 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
  --------------------------------------------------------------------*/
 
 
-BOOL  SwDocStatPage::FillItemSet(SfxItemSet & /*rSet*/)
+sal_Bool  SwDocStatPage::FillItemSet(SfxItemSet & /*rSet*/)
 {
-    return FALSE;
+    return sal_False;
 }
 
 /*--------------------------------------------------------------------
@@ -172,7 +172,7 @@ void SwDocStatPage::Update()
 
     ASSERT( pSh, "Shell not found" );
 
-    SwWait aWait( *pSh->GetDoc()->GetDocShell(), TRUE );
+    SwWait aWait( *pSh->GetDoc()->GetDocShell(), sal_True );
     pSh->StartAction();
     aDocStat = pSh->GetDoc()->GetDocStat();
     pSh->GetDoc()->UpdateDocStat( aDocStat );
@@ -190,7 +190,7 @@ IMPL_LINK( SwDocStatPage, UpdateHdl, PushButton*, EMPTYARG)
     SwDocShell* pDocShell = (SwDocShell*) SfxObjectShell::Current();
     SwFEShell* pFEShell = pDocShell->GetFEShell();
     if(pFEShell)
-        aLineNo.SetText( String::CreateFromInt32( pFEShell->GetLineCount(FALSE)));
+        aLineNo.SetText( String::CreateFromInt32( pFEShell->GetLineCount(sal_False)));
     //pButton->Disable();
     return 0;
 }

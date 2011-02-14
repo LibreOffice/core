@@ -186,7 +186,7 @@ UUIInteractionHelper::handleRequest(
         HandleData aHD(rRequest);
         Link aLink(&aHD,handlerequest);
         pApp->PostUserEvent(aLink,this);
-        ULONG locks = Application::ReleaseSolarMutex();
+        sal_uLong locks = Application::ReleaseSolarMutex();
         aHD.wait();
         Application::AcquireSolarMutex(locks);
         return aHD.bHandled;
@@ -247,7 +247,7 @@ UUIInteractionHelper::getStringFromRequest(
         HandleData aHD(rRequest);
         Link aLink(&aHD,getstringfromrequest);
         pApp->PostUserEvent(aLink,this);
-        ULONG locks = Application::ReleaseSolarMutex();
+        sal_uLong locks = Application::ReleaseSolarMutex();
         aHD.wait();
         Application::AcquireSolarMutex(locks);
         return aHD.m_aResult;
@@ -1152,7 +1152,7 @@ UUIInteractionHelper::getInteractionHandler()
 
 namespace {
 
-USHORT
+sal_uInt16
 executeMessageBox(
     Window * pParent,
     rtl::OUString const & rTitle,
@@ -1164,7 +1164,7 @@ executeMessageBox(
 
     MessBox xBox( pParent, nButtonMask, rTitle, rMessage );
 
-    USHORT aResult = xBox.Execute();
+    sal_uInt16 aResult = xBox.Execute();
     switch( aResult )
     {
     case BUTTONID_OK:
@@ -1576,7 +1576,7 @@ ErrorResource::getString(ErrCode nErrorCode, rtl::OUString * pString)
     const SAL_THROW(())
 {
     OSL_ENSURE(pString, "specification violation");
-    ResId aResId(static_cast< USHORT >(nErrorCode & ERRCODE_RES_MASK),
+    ResId aResId(static_cast< sal_uInt16 >(nErrorCode & ERRCODE_RES_MASK),
                  *m_pResMgr);
     aResId.SetRT(RSC_STRING);
     if (!IsAvailableRes(aResId))

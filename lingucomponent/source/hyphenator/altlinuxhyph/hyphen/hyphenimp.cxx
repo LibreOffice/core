@@ -91,7 +91,7 @@ using namespace linguistic;
 Hyphenator::Hyphenator() :
     aEvtListeners   ( GetLinguMutex() )
 {
-    bDisposing = FALSE;
+    bDisposing = sal_False;
     pPropHelper = NULL;
     aDicts = NULL;
     numdict = 0;
@@ -261,17 +261,17 @@ sal_Bool SAL_CALL Hyphenator::hasLocale(const Locale& rLocale)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (!aSuppLocales.getLength())
         getLocales();
 
     const Locale *pLocale = aSuppLocales.getConstArray();
-    INT32 nLen = aSuppLocales.getLength();
-    for (INT32 i = 0;  i < nLen;  ++i)
+    sal_Int32 nLen = aSuppLocales.getLength();
+    for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
         if (rLocale == pLocale[i])
         {
-            bRes = TRUE;
+            bRes = sal_True;
             break;
         }
     }
@@ -422,12 +422,12 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const ::rtl::OUStri
         for (int c = n; c < wordlen; c++) hyphens[c] = '0';
         hyphens[wordlen] = '\0';
 
-        INT32 Leading =  GetPosInWordToCheck( aWord, nMaxLeading );
+        sal_Int32 Leading =  GetPosInWordToCheck( aWord, nMaxLeading );
 
-        for (INT32 i = 0; i < n; i++)
+        for (sal_Int32 i = 0; i < n; i++)
         {
             int leftrep = 0;
-            BOOL hit = (n >= minLen);
+            sal_Bool hit = (n >= minLen);
             if (!rep || !rep[i] || (i >= n))
             {
                 hit = hit && (hyphens[i]&1) && (i < Leading);
@@ -503,17 +503,17 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const ::rtl::OUStri
                 }
 
                 // handle shortening
-                INT16 nPos = (INT16) ((nHyphenationPosAltHyph < nHyphenationPos) ?
+                sal_Int16 nPos = (sal_Int16) ((nHyphenationPosAltHyph < nHyphenationPos) ?
                 nHyphenationPosAltHyph : nHyphenationPos);
                 // dicretionary hyphenation
                 xRes = new HyphenatedWord( aWord, LocaleToLanguage( aLocale ), nPos,
                     aWord.replaceAt(nHyphenationPosAlt + 1, cut[nHyphenationPos], repHyph),
-                    (INT16) nHyphenationPosAltHyph);
+                    (sal_Int16) nHyphenationPosAltHyph);
             }
             else
             {
                 xRes = new HyphenatedWord( aWord, LocaleToLanguage( aLocale ),
-                    (INT16)nHyphenationPos, aWord, (INT16) nHyphenationPos);
+                    (sal_Int16)nHyphenationPos, aWord, (sal_Int16) nHyphenationPos);
             }
         }
 
@@ -684,8 +684,8 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         hyphens[wordlen] = '\0';
         // fprintf(stderr,"... %s\n",hyphens); fflush(stderr);
 
-        INT16 nHyphCount = 0;
-        INT16 i;
+        sal_Int16 nHyphCount = 0;
+        sal_Int16 i;
 
         for ( i = 0; i < encWord.getLength(); i++)
         {
@@ -693,8 +693,8 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
                 nHyphCount++;
         }
 
-        Sequence< INT16 > aHyphPos(nHyphCount);
-        INT16 *pPos = aHyphPos.getArray();
+        Sequence< sal_Int16 > aHyphPos(nHyphCount);
+        sal_Int16 *pPos = aHyphPos.getArray();
         OUStringBuffer hyphenatedWordBuffer;
         OUString hyphenatedWord;
         nHyphCount = 0;
@@ -808,7 +808,7 @@ sal_Bool SAL_CALL Hyphenator::addLinguServiceEventListener(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (!bDisposing && rxLstnr.is())
     {
         bRes = GetPropHelper().addLinguServiceEventListener( rxLstnr );
@@ -823,7 +823,7 @@ sal_Bool SAL_CALL Hyphenator::removeLinguServiceEventListener(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (!bDisposing && rxLstnr.is())
     {
         DBG_ASSERT( xPropHelper.is(), "xPropHelper non existent" );
@@ -848,7 +848,7 @@ void SAL_CALL Hyphenator::initialize( const Sequence< Any >& rArguments )
 
     if (!pPropHelper)
     {
-        INT32 nLen = rArguments.getLength();
+        sal_Int32 nLen = rArguments.getLength();
         if (2 == nLen)
         {
             Reference< XPropertySet >   xPropSet;
@@ -878,7 +878,7 @@ void SAL_CALL Hyphenator::dispose()
 
     if (!bDisposing)
     {
-        bDisposing = TRUE;
+        bDisposing = sal_True;
         EventObject aEvtObj( (XHyphenator *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
     }
@@ -925,10 +925,10 @@ sal_Bool SAL_CALL Hyphenator::supportsService( const OUString& ServiceName )
 
     Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
-    for( INT32 i = 0; i < aSNL.getLength(); i++ )
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
-            return TRUE;
-    return FALSE;
+            return sal_True;
+    return sal_False;
 }
 
 

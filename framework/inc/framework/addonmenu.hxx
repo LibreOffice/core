@@ -93,7 +93,7 @@ class FWE_DLLPUBLIC AddonMenuManager
         static sal_Bool   HasAddonMenuElements();
         static sal_Bool   HasAddonHelpMenuElements();
 
-        static sal_Bool   IsAddonMenuId( USHORT nId ) { return (( nId >= ADDONMENU_ITEMID_START ) && ( nId < ADDONMENU_ITEMID_END )); }
+        static sal_Bool   IsAddonMenuId( sal_uInt16 nId ) { return (( nId >= ADDONMENU_ITEMID_START ) && ( nId < ADDONMENU_ITEMID_END )); }
 
         // Check if the context string matches the provided xModel context
         static sal_Bool   IsCorrectContext( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel, const rtl::OUString& aContext );
@@ -111,17 +111,17 @@ class FWE_DLLPUBLIC AddonMenuManager
         // Merge the addon popup menus into the given menu bar at the provided pos.
         static void       MergeAddonPopupMenus( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                                 const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rModel,
-                                                USHORT   nMergeAtPos,
+                                                sal_uInt16   nMergeAtPos,
                                                 MenuBar* pMergeMenuBar );
 
         // Returns the next position to insert a menu item/sub menu
-        static USHORT     GetNextPos( USHORT nPos );
+        static sal_uInt16     GetNextPos( sal_uInt16 nPos );
 
         // Build up the menu item and sub menu into the provided pCurrentMenu. The sub menus should be of type nSubMenuType.
         static void       BuildMenu( PopupMenu*  pCurrentMenu,
                                      MenuType    nSubMenuType,
-                                     USHORT      nInsPos,
-                                     USHORT&     nUniqueMenuId,
+                                     sal_uInt16      nInsPos,
+                                     sal_uInt16&     nUniqueMenuId,
                                      com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > aAddonMenuDefinition,
                                      const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                      const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rModel );

@@ -55,7 +55,7 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
     SvxFontWorkDialog*  pDlg        = NULL;
     ScDrawView*         pDrView     = pViewData->GetScDrawView();
     const SdrMarkList&  rMarkList   = pDrView->GetMarkedObjectList();
-    USHORT              nId = SvxFontWorkChildWindow::GetChildWindowId();
+    sal_uInt16              nId = SvxFontWorkChildWindow::GetChildWindowId();
 
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
     if ( pViewFrm->HasChildWindow(nId) )
@@ -68,7 +68,7 @@ void ScDrawShell::GetFormTextState(SfxItemSet& rSet)
         !((SdrTextObj*) pObj)->HasText() )
     {
         if ( pDlg )
-            pDlg->SetActive(FALSE);
+            pDlg->SetActive(sal_False);
 
         rSet.DisableItem(XATTR_FORMTXTSTYLE);
         rSet.DisableItem(XATTR_FORMTXTADJUST);

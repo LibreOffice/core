@@ -66,7 +66,7 @@ class SwLayouter
     SwEndnoter* pEndnoter;
     SwLooping* pLooping;
     void _CollectEndnotes( SwSectionFrm* pSect );
-    BOOL StartLooping( SwPageFrm* pPage );
+    sal_Bool StartLooping( SwPageFrm* pPage );
 
     // --> OD 2004-06-23 #i28701#
     SwMovedFwdFrmsByObjPos* mpMovedFwdFrms;
@@ -126,15 +126,15 @@ public:
     ~SwLayouter();
     void InsertEndnotes( SwSectionFrm* pSect );
     void CollectEndnote( SwFtnFrm* pFtn );
-    BOOL HasEndnotes() const;
+    sal_Bool HasEndnotes() const;
 
-    void LoopControl( SwPageFrm* pPage, BYTE nLoop );
+    void LoopControl( SwPageFrm* pPage, sal_uInt8 nLoop );
     void EndLoopControl();
     void LoopingLouieLight( const SwDoc& rDoc, const SwTxtFrm& rFrm );
 
     static void CollectEndnotes( SwDoc* pDoc, SwSectionFrm* pSect );
-    static BOOL Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn );
-    static BOOL StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage );
+    static sal_Bool Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn );
+    static sal_Bool StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage );
 
     // --> OD 2004-06-23 #i28701#
     static void ClearMovedFwdFrms( const SwDoc& _rDoc );

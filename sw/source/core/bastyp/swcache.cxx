@@ -60,8 +60,8 @@ void SwCache::Check()
     //Konsistenspruefung.
     ASSERT( !pLast->GetNext(), "Last but not last." );
     ASSERT( !pRealFirst->GetPrev(), "First but not first." );
-    USHORT nCnt = 0;
-    BOOL bFirstFound = FALSE;
+    sal_uInt16 nCnt = 0;
+    sal_Bool bFirstFound = sal_False;
     SwCacheObj *pObj = pRealFirst;
     SwCacheObj *pRekursive = pObj;
     while ( pObj )
@@ -74,7 +74,7 @@ void SwCache::Check()
 
         ++nCnt;
         if ( pObj == pFirst )
-            bFirstFound = TRUE;
+            bFirstFound = sal_True;
         if ( !pObj->GetNext() )
             ASSERT( pObj == pLast, "Last not Found." );
         pObj = pObj->GetNext();
@@ -103,12 +103,12 @@ void SwCache::Check()
 |*************************************************************************/
 
 
-SwCache::SwCache( const USHORT nInitSize, const USHORT nGrowSize
+SwCache::SwCache( const sal_uInt16 nInitSize, const sal_uInt16 nGrowSize
 #ifdef DBG_UTIL
     , const ByteString &rNm
 #endif
     ) :
-    SwCacheObjArr( (BYTE)nInitSize, (BYTE)nGrowSize ),
+    SwCacheObjArr( (sal_uInt8)nInitSize, (sal_uInt8)nGrowSize ),
     aFreePositions( 5, 5 ),
     pRealFirst( 0 ),
     pFirst( 0 ),
@@ -186,7 +186,7 @@ SwCache::~SwCache()
 |*************************************************************************/
 
 
-void SwCache::Flush( const BYTE )
+void SwCache::Flush( const sal_uInt8 )
 {
     INCREMENT( nFlushCnt );
     SwCacheObj *pObj = pRealFirst;
@@ -197,7 +197,7 @@ void SwCache::Flush( const BYTE )
 #ifdef DBG_UTIL
         if ( pObj->IsLocked() )
         {
-            ASSERT( TRUE, "Flushing locked objects." );
+            ASSERT( sal_True, "Flushing locked objects." );
             if ( !pRealFirst )
             {
                 pRealFirst = pFirst = pLast = pObj;
@@ -307,8 +307,8 @@ void SwCache::ToTop( SwCacheObj *pObj )
 |*************************************************************************/
 
 
-SwCacheObj *SwCache::Get( const void *pOwner, const USHORT nIndex,
-                          const BOOL bToTop )
+SwCacheObj *SwCache::Get( const void *pOwner, const sal_uInt16 nIndex,
+                          const sal_Bool bToTop )
 {
     SwCacheObj *pRet;
     if ( 0 != (pRet = nIndex < Count() ? operator[]( nIndex ) : 0) )
@@ -331,7 +331,7 @@ SwCacheObj *SwCache::Get( const void *pOwner, const USHORT nIndex,
 
 
 
-SwCacheObj *SwCache::Get( const void *pOwner, const BOOL bToTop )
+SwCacheObj *SwCache::Get( const void *pOwner, const sal_Bool bToTop )
 {
     SwCacheObj *pRet = pRealFirst;
     while ( pRet && !pRet->IsOwner( pOwner ) )
@@ -399,7 +399,7 @@ void SwCache::DeleteObj( SwCacheObj *pObj )
         //Unangenehmer Nebeneffekt ist, das die Positionen verschoben werden
         //muessen, und die Eigentuemer der Objekte diese wahrscheinlich nicht
         //wiederfinden werden.
-        for ( USHORT i = 0; i < Count(); ++i )
+        for ( sal_uInt16 i = 0; i < Count(); ++i )
         {
             SwCacheObj *pTmpObj = operator[](i);
             if ( !pTmpObj )
@@ -417,11 +417,11 @@ void SwCache::DeleteObj( SwCacheObj *pObj )
 /*
 
 
-void SwCache::Delete( const void *pOwner, const USHORT nIndex )
+void SwCache::Delete( const void *pOwner, const sal_uInt16 nIndex )
 {
     INCREMENT( nDelete );
     SwCacheObj *pObj;
-    if ( 0 != (pObj = Get( pOwner, nIndex, FALSE )) )
+    if ( 0 != (pObj = Get( pOwner, nIndex, sal_False )) )
         DeleteObj( pObj );
 }
 */
@@ -432,7 +432,7 @@ void SwCache::Delete( const void *pOwner )
 {
     INCREMENT( nDelete );
     SwCacheObj *pObj;
-    if ( 0 != (pObj = Get( pOwner, BOOL(FALSE) )) )
+    if ( 0 != (pObj = Get( pOwner, sal_Bool(sal_False) )) )
         DeleteObj( pObj );
 }
 
@@ -447,12 +447,12 @@ void SwCache::Delete( const void *pOwner )
 |*************************************************************************/
 
 
-BOOL SwCache::Insert( SwCacheObj *pNew )
+sal_Bool SwCache::Insert( SwCacheObj *pNew )
 {
     CHECK;
     ASSERT( !pNew->GetPrev() && !pNew->GetNext(), "New but not new." );
 
-    USHORT nPos;//Wird hinter den if's zum setzen am Obj benutzt.
+    sal_uInt16 nPos;//Wird hinter den if's zum setzen am Obj benutzt.
     if ( Count() < nCurMax )
     {
         //Es ist noch Platz frei, also einfach einfuegen.
@@ -464,7 +464,7 @@ BOOL SwCache::Insert( SwCacheObj *pNew )
     {
         //Es exitieren Platzhalter, also den letzten benutzen.
         INCREMENT( nInsertFree );
-        const USHORT nFreePos = aFreePositions.Count() - 1;
+        const sal_uInt16 nFreePos = aFreePositions.Count() - 1;
         nPos = aFreePositions[ nFreePos ];
         *(pData + nPos) = pNew;
         aFreePositions.Remove( nFreePos );
@@ -479,8 +479,8 @@ BOOL SwCache::Insert( SwCacheObj *pNew )
             pObj = pObj->GetPrev();
         if ( !pObj )
         {
-            ASSERT( FALSE, "Cache overflow." );
-            return FALSE;
+            ASSERT( sal_False, "Cache overflow." );
+            return sal_False;
         }
 
         nPos = pObj->GetCachePos();
@@ -521,7 +521,7 @@ BOOL SwCache::Insert( SwCacheObj *pNew )
     pFirst = pNew;
 
     CHECK;
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -534,14 +534,14 @@ BOOL SwCache::Insert( SwCacheObj *pNew )
 |*************************************************************************/
 
 
-void SwCache::SetLRUOfst( const USHORT nOfst )
+void SwCache::SetLRUOfst( const sal_uInt16 nOfst )
 {
     if ( !pRealFirst || ((Count() - aFreePositions.Count()) < nOfst) )
         return;
 
     CHECK;
     pFirst = pRealFirst;
-    for ( USHORT i = 0; i < Count() && i < nOfst; ++i )
+    for ( sal_uInt16 i = 0; i < Count() && i < nOfst; ++i )
     {
         if ( pFirst->GetNext() && pFirst->GetNext()->GetNext() )
             pFirst = pFirst->GetNext();
@@ -645,7 +645,7 @@ void SwCacheAccess::_Get()
 |*************************************************************************/
 
 
-BOOL SwCacheAccess::IsAvailable() const
+sal_Bool SwCacheAccess::IsAvailable() const
 {
     return pObj != 0;
 }

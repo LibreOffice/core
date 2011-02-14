@@ -119,7 +119,7 @@ class ImpXMLEXPPageMasterInfo
 
 public:
     ImpXMLEXPPageMasterInfo(const SdXMLExport& rExp, const Reference<XDrawPage>& xPage);
-    BOOL operator==(const ImpXMLEXPPageMasterInfo& rInfo) const;
+    sal_Bool operator==(const ImpXMLEXPPageMasterInfo& rInfo) const;
     void SetName(const OUString& rStr);
 
     const OUString& GetName() const { return msName; }
@@ -189,7 +189,7 @@ ImpXMLEXPPageMasterInfo::ImpXMLEXPPageMasterInfo(
     }
 }
 
-BOOL ImpXMLEXPPageMasterInfo::operator==(const ImpXMLEXPPageMasterInfo& rInfo) const
+sal_Bool ImpXMLEXPPageMasterInfo::operator==(const ImpXMLEXPPageMasterInfo& rInfo) const
 {
     return ((mnBorderBottom == rInfo.mnBorderBottom)
         && (mnBorderLeft == rInfo.mnBorderLeft)
@@ -224,7 +224,7 @@ class ImpXMLAutoLayoutInfo
 public:
     ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterInfo* pInf);
 
-    BOOL operator==(const ImpXMLAutoLayoutInfo& rInfo) const;
+    sal_Bool operator==(const ImpXMLAutoLayoutInfo& rInfo) const;
 
     sal_uInt16 GetLayoutType() const { return mnType; }
     sal_Int32 GetGapX() const { return mnGapX; }
@@ -236,19 +236,19 @@ public:
     const Rectangle& GetTitleRectangle() const { return maTitleRect; }
     const Rectangle& GetPresRectangle() const { return maPresRect; }
 
-    static BOOL IsCreateNecessary(sal_uInt16 nTyp);
+    static sal_Bool IsCreateNecessary(sal_uInt16 nTyp);
 };
 
-BOOL ImpXMLAutoLayoutInfo::IsCreateNecessary(sal_uInt16 nTyp)
+sal_Bool ImpXMLAutoLayoutInfo::IsCreateNecessary(sal_uInt16 nTyp)
 {
     if(nTyp == 5 /* AUTOLAYOUT_ORG */
         || nTyp == 20 /* AUTOLAYOUT_NONE */
         || nTyp >= IMP_AUTOLAYOUT_INFO_MAX)
-        return FALSE;
-    return TRUE;
+        return sal_False;
+    return sal_True;
 }
 
-BOOL ImpXMLAutoLayoutInfo::operator==(const ImpXMLAutoLayoutInfo& rInfo) const
+sal_Bool ImpXMLAutoLayoutInfo::operator==(const ImpXMLAutoLayoutInfo& rInfo) const
 {
     return ((mnType == rInfo.mnType
         && mpPageMasterInfo == rInfo.mpPageMasterInfo));
@@ -428,8 +428,8 @@ SdXMLExport::SdXMLExport(
     mpPropertySetMapper(0L),
     mpPresPagePropsMapper(0L),
     mbIsDraw(bIsDraw),
-    mbFamilyGraphicUsed(FALSE),
-    mbFamilyPresentationUsed(FALSE),
+    mbFamilyGraphicUsed(sal_False),
+    mbFamilyPresentationUsed(sal_False),
     msZIndex( GetXMLToken(XML_ZINDEX) ),
     msEmptyPres( RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ),
     msModel( RTL_CONSTASCII_USTRINGPARAM("Model") ),
@@ -824,7 +824,7 @@ void SdXMLExport::ImpWriteObjGraphicStyleInfos()
                 aStEx.exportDefaultStyle( xDefaults, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), aMapperRef );
 
                 // write graphic family styles
-                aStEx.exportStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_NAME, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), aMapperRef, FALSE, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
+                aStEx.exportStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_NAME, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), aMapperRef, sal_False, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
             }
         }
         catch( lang::ServiceNotRegisteredException& )
@@ -867,10 +867,10 @@ void SdXMLExport::ImpPrepAutoLayoutInfos()
     }
 }
 
-BOOL SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUString& rName)
+sal_Bool SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUString& rName)
 {
     rName = OUString();
-    BOOL bRetval(FALSE);
+    sal_Bool bRetval(sal_False);
 
     Reference <beans::XPropertySet> xPropSet(xPage, UNO_QUERY);
     if(xPropSet.is())
@@ -903,7 +903,7 @@ BOOL SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUStr
 
                 // create entry and look for existance
                 ImpXMLAutoLayoutInfo* pNew = new ImpXMLAutoLayoutInfo(nType, pInfo);
-                BOOL bDidExist(FALSE);
+                sal_Bool bDidExist(sal_False);
 
                 for(sal_uInt32 nCnt = 0L; !bDidExist && nCnt < mpAutoLayoutInfoList->Count(); nCnt++)
                 {
@@ -911,7 +911,7 @@ BOOL SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUStr
                     {
                         delete pNew;
                         pNew = mpAutoLayoutInfoList->GetObject(nCnt);
-                        bDidExist = TRUE;
+                        bDidExist = sal_True;
                     }
                 }
 
@@ -926,7 +926,7 @@ BOOL SdXMLExport::ImpPrepAutoLayoutInfo(const Reference<XDrawPage>& xPage, OUStr
                 }
 
                 rName = pNew->GetLayoutName();
-                bRetval = TRUE;
+                bRetval = sal_True;
             }
         }
     }
@@ -1859,7 +1859,7 @@ void SdXMLExport::ImpWritePresentationStyles()
                     aPrefix += OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
                     aStEx.exportStyleFamily(xNamed->getName(),
                         OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_PRESENTATION_NAME)),
-                        aMapperRef, FALSE,
+                        aMapperRef, sal_False,
                         XML_STYLE_FAMILY_SD_PRESENTATION_ID, &aPrefix);
                 }
             }
@@ -2272,7 +2272,7 @@ void SdXMLExport::exportPresentationSettings()
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::_ExportStyles(BOOL bUsed)
+void SdXMLExport::_ExportStyles(sal_Bool bUsed)
 {
     GetPropertySetMapper()->SetAutoStyles( sal_False );
 

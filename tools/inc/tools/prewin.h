@@ -29,15 +29,6 @@
 
 #if defined WNT
 
-#define BOOL         WIN_BOOL
-#define BYTE         WIN_BYTE
-#ifndef VCL_NEED_BASETSD
-#define INT64        WIN_INT64
-#define UINT64       WIN_UINT64
-#define INT32        WIN_INT32
-#define UINT32       WIN_UINT32
-#endif
-
 #define Rectangle    BLA_Rectangle
 #define Polygon      BLA_Polygon
 #define PolyPolygon  BLA_PolyPolygon

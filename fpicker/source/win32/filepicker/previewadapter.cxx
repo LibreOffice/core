@@ -308,7 +308,7 @@ void SAL_CALL CPreviewAdapterImpl::rearrangeLayout()
     // style bit of the FileOpen dialog must be set after that
     // message
     LONG lStyle = GetWindowLong(prvwnd,GWL_STYLE);
-    BOOL bIsVisible = (BOOL)(lStyle & WS_VISIBLE);
+    sal_Bool bIsVisible = (sal_Bool)(lStyle & WS_VISIBLE);
 
     int cx = 0;
 
@@ -318,7 +318,7 @@ void SAL_CALL CPreviewAdapterImpl::rearrangeLayout()
 
         // resize the filelistbox to the half of the
         // available space
-        BOOL bRet = SetWindowPos(flb_new,
+        bool bRet = SetWindowPos(flb_new,
             NULL, 0, 0, cx, height,
             SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
 

@@ -56,10 +56,10 @@ namespace svx
     class SVX_DLLPUBLIC ToolboxButtonColorUpdater
     {
     public:
-                    ToolboxButtonColorUpdater( USHORT   nSlotId,
-                                                USHORT   nTbxBtnId,
+                    ToolboxButtonColorUpdater( sal_uInt16   nSlotId,
+                                                sal_uInt16   nTbxBtnId,
                                                 ToolBox* ptrTbx,
-                                                USHORT   nMode = 0 );
+                                                sal_uInt16   nMode = 0 );
                     ~ToolboxButtonColorUpdater();
 
         void        Update( const Color& rColor );
@@ -68,14 +68,14 @@ namespace svx
         void        DrawChar(VirtualDevice&, const Color&);
 
     private:
-        USHORT      mnDrawMode;
-        USHORT      mnBtnId;
-        USHORT      mnSlotId;
+        sal_uInt16      mnDrawMode;
+        sal_uInt16      mnBtnId;
+        sal_uInt16      mnSlotId;
         ToolBox*    mpTbx;
         Color       maCurColor;
         Rectangle   maUpdRect;
         Size        maBmpSize;
-        BOOL        mbWasHiContrastMode;
+        sal_Bool        mbWasHiContrastMode;
     };
 
 //........................................................................

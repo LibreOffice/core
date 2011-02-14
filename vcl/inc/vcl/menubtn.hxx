@@ -39,7 +39,7 @@ class PopupMenu;
 // - MenuButton-Types -
 // --------------------
 
-#define MENUBUTTON_MENUMODE_TIMED       ((USHORT)0x0001)
+#define MENUBUTTON_MENUMODE_TIMED       ((sal_uInt16)0x0001)
 
 // --------------
 // - MenuButton -
@@ -52,8 +52,8 @@ private:
     Timer*          mpMenuTimer;
     PopupMenu*      mpOwnMenu;
     PopupMenu*      mpMenu;
-    USHORT          mnCurItemId;
-    USHORT          mnMenuMode;
+    sal_uInt16          mnCurItemId;
+    sal_uInt16          mnMenuMode;
     Link            maActivateHdl;
     Link            maSelectHdl;
 
@@ -81,13 +81,13 @@ public:
     virtual void    Activate();
     virtual void    Select();
 
-    void            SetMenuMode( USHORT nMode );
-    USHORT          GetMenuMode() const { return mnMenuMode; }
+    void            SetMenuMode( sal_uInt16 nMode );
+    sal_uInt16          GetMenuMode() const { return mnMenuMode; }
 
     void            SetPopupMenu( PopupMenu* pNewMenu );
     PopupMenu*      GetPopupMenu() const { return mpMenu; }
 
-    USHORT          GetCurItemId() const { return mnCurItemId; }
+    sal_uInt16          GetCurItemId() const { return mnCurItemId; }
 
     void            SetActivateHdl( const Link& rLink ) { maActivateHdl = rLink; }
     const Link&     GetActivateHdl() const              { return maActivateHdl; }

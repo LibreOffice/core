@@ -66,7 +66,7 @@ using namespace ::com::sun::star;
 const sal_Unicode cDialogExtraDataClose = '}';
 const char __FAR_DATA sDialogImpExtraData[] = "EncImpDlg:{";
 const char __FAR_DATA sDialogExpExtraData[] = "EncExpDlg:{";
-const USHORT nDialogExtraDataLen = 11;      // 12345678901
+const sal_uInt16 nDialogExtraDataLen = 11;      // 12345678901
 
 SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                                     SvStream* pStream )
@@ -86,7 +86,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
     aCancelPB( this, SW_RES( PB_CANCEL )),
     aHelpPB( this, SW_RES( PB_HELP )),
     sSystemCharSet( SW_RES( STR_SYS_CHARSET )),
-    bSaveLineStatus( TRUE )
+    bSaveLineStatus( sal_True )
 {
     FreeResource();
 
@@ -95,7 +95,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
         const String& rFindNm = String::CreateFromAscii(
                                     pStream ? sDialogImpExtraData
                                               : sDialogExpExtraData);
-        USHORT nEnd, nStt = GetExtraData().Search( rFindNm );
+        sal_uInt16 nEnd, nStt = GetExtraData().Search( rFindNm );
         if( STRING_NOTFOUND != nStt )
         {
             nStt += nDialogExtraDataLen;
@@ -113,8 +113,8 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
     if( pStream )
     {
         char aBuffer[ 4098 ];
-        ULONG nOldPos = pStream->Tell();
-        ULONG nBytesRead = pStream->Read( aBuffer, 4096 );
+        sal_uLong nOldPos = pStream->Tell();
+        sal_uLong nBytesRead = pStream->Read( aBuffer, 4096 );
         pStream->Seek( nOldPos );
 
         if( nBytesRead <= 4096 )
@@ -125,20 +125,20 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 aBuffer[ nBytesRead + 2 ] = '0';
         }
 
-        BOOL bCR = FALSE, bLF = FALSE, bNoNormalChar = FALSE,
-            bNullChar = FALSE;
-        for( USHORT nCnt = 0; nCnt < nBytesRead; ++nCnt )
+        sal_Bool bCR = sal_False, bLF = sal_False, bNoNormalChar = sal_False,
+            bNullChar = sal_False;
+        for( sal_uInt16 nCnt = 0; nCnt < nBytesRead; ++nCnt )
             switch( aBuffer[ nCnt ] )
             {
-                case 0x0:   bNullChar = TRUE; break;
-                case 0xA:   bLF = TRUE; break;
-                case 0xD:   bCR = TRUE; break;
+                case 0x0:   bNullChar = sal_True; break;
+                case 0xA:   bLF = sal_True; break;
+                case 0xD:   bCR = sal_True; break;
                 case 0xC:
                 case 0x1A:
                 case 0x9:   break;
                 default:
                     if( 0x20 > aBuffer[ nCnt ] )
-                        bNoNormalChar = TRUE;
+                        bNoNormalChar = sal_True;
             }
 
         if( !bNullChar )
@@ -168,9 +168,9 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
 
         SwDoc* pDoc = rDocSh.GetDoc();
 
-        USHORT nAppScriptType = GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
+        sal_uInt16 nAppScriptType = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
         {
-            BOOL bDelPrinter = FALSE;
+            sal_Bool bDelPrinter = sal_False;
             SfxPrinter* pPrt = pDoc ? pDoc->getPrinter(false) : 0;
             if( !pPrt )
             {
@@ -179,7 +179,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                             SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
                             0 );
                 pPrt = new SfxPrinter( pSet );
-                bDelPrinter = TRUE;
+                bDelPrinter = sal_True;
             }
 
 
@@ -203,7 +203,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
             {
                 if(pDoc)
                 {
-                    USHORT nFontRes = RES_CHRATR_FONT;
+                    sal_uInt16 nFontRes = RES_CHRATR_FONT;
                     if(SCRIPTTYPE_ASIAN == nAppScriptType)
                         nFontRes = RES_CHRATR_CJK_FONT;
                     else if(SCRIPTTYPE_COMPLEX == nAppScriptType)
@@ -214,7 +214,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 }
                 else
                 {
-                    USHORT nFontType = FONT_STANDARD;
+                    sal_uInt16 nFontType = FONT_STANDARD;
                     if(SCRIPTTYPE_ASIAN == nAppScriptType)
                         nFontType = FONT_STANDARD_CJK;
                     else if(SCRIPTTYPE_COMPLEX == nAppScriptType)
@@ -234,7 +234,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
             {
                 if(pDoc)
                 {
-                    USHORT nWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE, nAppScriptType);
+                    sal_uInt16 nWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE, nAppScriptType);
                     aOpt.SetLanguage( ((SvxLanguageItem&)pDoc->
                                 GetDefault( nWhich )).GetLanguage());
                 }
@@ -257,7 +257,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 }
             }
 
-            aLanguageLB.SetLanguageList( LANG_LIST_ALL, TRUE, FALSE );
+            aLanguageLB.SetLanguageList( LANG_LIST_ALL, sal_True, sal_False );
             aLanguageLB.SelectLanguage( aOpt.GetLanguage() );
         }
     }
@@ -315,18 +315,18 @@ SwAsciiFilterDlg::~SwAsciiFilterDlg()
 
 void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
 {
-    ULONG nCCode = aCharSetLB.GetSelectTextEncoding();
+    sal_uLong nCCode = aCharSetLB.GetSelectTextEncoding();
     String sFont;
-    ULONG nLng = 0;
+    sal_uLong nLng = 0;
     if( aFontLB.IsVisible() )
     {
         sFont = aFontLB.GetSelectEntry();
-        nLng = (ULONG)aLanguageLB.GetSelectLanguage();
+        nLng = (sal_uLong)aLanguageLB.GetSelectLanguage();
     }
 
     rOptions.SetFontName( sFont );
     rOptions.SetCharSet( rtl_TextEncoding( nCCode ) );
-    rOptions.SetLanguage( USHORT( nLng ) );
+    rOptions.SetLanguage( sal_uInt16( nLng ) );
     rOptions.SetParaFlags( GetCRLF() );
 
     // JP: Task #71802# save the user settings
@@ -337,7 +337,7 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
         const String& rFindNm = String::CreateFromAscii(
                                     aFontLB.IsVisible() ? sDialogImpExtraData
                                               : sDialogExpExtraData);
-        USHORT nEnd, nStt = GetExtraData().Search( rFindNm );
+        sal_uInt16 nEnd, nStt = GetExtraData().Search( rFindNm );
         if( STRING_NOTFOUND != nStt )
         {
             // called twice, so remove "old" settings
@@ -431,7 +431,7 @@ IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, SvxTextEncodingBox*, pBox )
         }
     }
 
-    bSaveLineStatus = FALSE;
+    bSaveLineStatus = sal_False;
     if( eEnd != (LineEnd)-1 )       // changed?
     {
         if( eOldEnd != eEnd )
@@ -444,7 +444,7 @@ IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, SvxTextEncodingBox*, pBox )
         aCR_RB.Check( aCR_RB.GetSavedValue() );
         aLF_RB.Check( aLF_RB.GetSavedValue() );
     }
-    bSaveLineStatus = TRUE;
+    bSaveLineStatus = sal_True;
 
     if( nOldLng != nLng && aFontLB.IsVisible() )
         aLanguageLB.SelectLanguage( nLng );

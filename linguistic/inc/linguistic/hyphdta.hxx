@@ -51,18 +51,18 @@ class HyphenatedWord :
 {
     ::rtl::OUString     aWord;
     ::rtl::OUString     aHyphenatedWord;
-    INT16               nHyphPos;
-    INT16               nHyphenationPos;
-    INT16               nLanguage;
-    BOOL                bIsAltSpelling;
+    sal_Int16               nHyphPos;
+    sal_Int16               nHyphenationPos;
+    sal_Int16               nLanguage;
+    sal_Bool                bIsAltSpelling;
 
     // disallow copy-constructor and assignment-operator for now
     HyphenatedWord(const HyphenatedWord &);
     HyphenatedWord & operator = (const HyphenatedWord &);
 
 public:
-    HyphenatedWord(const ::rtl::OUString &rWord, INT16 nLang, INT16 nHyphenationPos,
-                   const ::rtl::OUString &rHyphenatedWord, INT16 nHyphenPos );
+    HyphenatedWord(const ::rtl::OUString &rWord, sal_Int16 nLang, sal_Int16 nHyphenationPos,
+                   const ::rtl::OUString &rHyphenatedWord, sal_Int16 nHyphenPos );
     virtual ~HyphenatedWord();
 
     // XHyphenatedWord
@@ -87,10 +87,10 @@ public:
 
     ::rtl::OUString GetWord()           { return aWord; }
     ::rtl::OUString GetHyphenatedWord() { return aHyphenatedWord; }
-    INT16           GetLanguage()       { return nLanguage; }
+    sal_Int16           GetLanguage()       { return nLanguage; }
     void            SetWord( ::rtl::OUString &rTxt )            { aWord = rTxt; }
     void            SetHyphenatedWord( ::rtl::OUString &rTxt )  { aHyphenatedWord = rTxt; }
-    void            SetLanguage( INT16 nLang )                  { nLanguage = nLang; }
+    void            SetLanguage( sal_Int16 nLang )                  { nLanguage = nLang; }
 };
 
 
@@ -104,17 +104,17 @@ class PossibleHyphens :
 {
     ::rtl::OUString             aWord;
     ::rtl::OUString             aWordWithHyphens;
-    ::com::sun::star::uno::Sequence< INT16 >    aOrigHyphenPos;
-    INT16                       nLanguage;
+    ::com::sun::star::uno::Sequence< sal_Int16 >    aOrigHyphenPos;
+    sal_Int16                       nLanguage;
 
     // disallow copy-constructor and assignment-operator for now
     PossibleHyphens(const PossibleHyphens &);
     PossibleHyphens & operator = (const PossibleHyphens &);
 
 public:
-    PossibleHyphens(const ::rtl::OUString &rWord, INT16 nLang,
+    PossibleHyphens(const ::rtl::OUString &rWord, sal_Int16 nLang,
             const ::rtl::OUString &rHyphWord,
-            const ::com::sun::star::uno::Sequence< INT16 > &rPositions);
+            const ::com::sun::star::uno::Sequence< sal_Int16 > &rPositions);
     virtual ~PossibleHyphens();
 
     // XPossibleHyphens
@@ -132,9 +132,9 @@ public:
             throw(::com::sun::star::uno::RuntimeException);
 
     ::rtl::OUString GetWord()       { return aWord; }
-    INT16           GetLanguage()   { return nLanguage; }
+    sal_Int16           GetLanguage()   { return nLanguage; }
     void            SetWord( ::rtl::OUString &rTxt )    { aWord = rTxt; }
-    void            SetLanguage( INT16 nLang )          { nLanguage = nLang; }
+    void            SetLanguage( sal_Int16 nLang )          { nLanguage = nLang; }
 };
 
 

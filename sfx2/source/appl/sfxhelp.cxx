@@ -190,7 +190,7 @@ sal_Bool GetHelpAnchor_Impl( const String& _rURL, String& _rAnchor )
 
     // --> OD 2009-07-01 #159496#
     // do not release solar mutex due to crash regarding accessibility
-//    ULONG nSolarCount = Application::ReleaseSolarMutex();
+//    sal_uIntPtr nSolarCount = Application::ReleaseSolarMutex();
     // <--
     try
     {
@@ -901,17 +901,17 @@ XubString SfxHelp::GetHelpText( const String& aCommandURL, const Window* pWindow
     return sHelpText;
 }
 
-BOOL SfxHelp::SearchKeyword( const XubString& rKeyword )
+sal_Bool SfxHelp::SearchKeyword( const XubString& rKeyword )
 {
     return Start_Impl( String(), NULL, rKeyword );
 }
 
-BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
+sal_Bool SfxHelp::Start( const String& rURL, const Window* pWindow )
 {
     return Start_Impl( rURL, pWindow, String() );
 }
 
-BOOL SfxHelp::Start_Impl( const String& rURL, const Window* pWindow, const String& rKeyword )
+sal_Bool SfxHelp::Start_Impl( const String& rURL, const Window* pWindow, const String& rKeyword )
 {
     // check if help is available
     String aHelpRootURL( DEFINE_CONST_OUSTRING("vnd.sun.star.help://") );
@@ -922,7 +922,7 @@ BOOL SfxHelp::Start_Impl( const String& rURL, const Window* pWindow, const Strin
         // no factories -> no help -> error message and return
         NoHelpErrorBox aErrBox( const_cast< Window* >( pWindow ) );
         aErrBox.Execute();
-        return FALSE;
+        return sal_False;
     }
 
     /* rURL may be
@@ -992,7 +992,7 @@ BOOL SfxHelp::Start_Impl( const String& rURL, const Window* pWindow, const Strin
     else
         pHelpWindow = (SfxHelpWindow_Impl*)VCLUnoHelper::GetWindow(xHelp->getComponentWindow());
     if (!xHelp.is() || !xHelpContent.is() || !pHelpWindow)
-        return FALSE;
+        return sal_False;
 
 #ifdef DBG_UTIL
     ByteString aTmp("SfxHelp: HelpId = ");
@@ -1009,7 +1009,7 @@ BOOL SfxHelp::Start_Impl( const String& rURL, const Window* pWindow, const Strin
     if ( xTopWindow.is() )
         xTopWindow->toFront();
 
-    return TRUE;
+    return sal_True;
 }
 
 String SfxHelp::CreateHelpURL( const String& aCommandURL, const String& rModuleName )

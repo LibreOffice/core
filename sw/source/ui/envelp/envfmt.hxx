@@ -88,7 +88,7 @@ class SwEnvFmtPage : public SfxTabPage
 
     void SetMinMax();
 
-    SfxItemSet  *GetCollItemSet(SwTxtFmtColl* pColl, BOOL bSender);
+    SfxItemSet  *GetCollItemSet(SwTxtFmtColl* pColl, sal_Bool bSender);
 
     using Window::GetParent;
     SwEnvDlg    *GetParent() {return (SwEnvDlg*) SfxTabPage::GetParent()->GetParent();}
@@ -103,7 +103,7 @@ public:
     virtual void ActivatePage(const SfxItemSet& rSet);
     virtual int  DeactivatePage(SfxItemSet* pSet = 0);
             void FillItem(SwEnvItem& rItem);
-    virtual BOOL FillItemSet(SfxItemSet& rSet);
+    virtual sal_Bool FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
 };
 

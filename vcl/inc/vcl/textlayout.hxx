@@ -117,7 +117,7 @@ namespace vcl
         virtual ~ControlTextRenderer();
 
         Rectangle   DrawText( const Rectangle& _rRect,
-                              const XubString& _rText, USHORT _nStyle = 0,
+                              const XubString& _rText, sal_uInt16 _nStyle = 0,
                               MetricVector* _pVector = NULL, String* _pDisplayText = NULL );
 
     private:

@@ -95,7 +95,7 @@ void SwUndoFmtColl::DoSetFmtColl(SwDoc & rDoc, SwPaM & rPaM)
 {
     // es kann nur eine TextFmtColl auf einen Bereich angewendet werden,
     // also erfrage auch nur in dem Array
-    USHORT const nPos = rDoc.GetTxtFmtColls()->GetPos(
+    sal_uInt16 const nPos = rDoc.GetTxtFmtColls()->GetPos(
                                                      (SwTxtFmtColl*)pFmtColl );
     // does the format still exist?
     if( USHRT_MAX != nPos )

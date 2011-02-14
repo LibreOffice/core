@@ -219,7 +219,7 @@ void SdModifyFieldDlg::FillFormatList()
         aDateField.SetFormat( SVXDATEFORMAT_F );    // Dienstag, 13.Februar 1996
         aLbFormat.InsertEntry( aDateField.GetFormatted( *pNumberFormatter, eLangType ) );
 
-        aLbFormat.SelectEntryPos( (USHORT) ( pDateField->GetFormat() - 2 ) );
+        aLbFormat.SelectEntryPos( (sal_uInt16) ( pDateField->GetFormat() - 2 ) );
     }
     else if( pField->ISA( SvxExtTimeField ) )
     {
@@ -247,7 +247,7 @@ void SdModifyFieldDlg::FillFormatList()
         //SVXTIMEFORMAT_AM_HMS, // 01:49:38 PM
         //SVXTIMEFORMAT_AM_HMSH // 01:49:38.78 PM
 
-        aLbFormat.SelectEntryPos( (USHORT) ( pTimeField->GetFormat() - 2 ) );
+        aLbFormat.SelectEntryPos( (sal_uInt16) ( pTimeField->GetFormat() - 2 ) );
     }
     else if( pField->ISA( SvxExtFileField ) )
     {
@@ -259,20 +259,20 @@ void SdModifyFieldDlg::FillFormatList()
         aLbFormat.InsertEntry( String( SdResId( STR_FILEFORMAT_PATH ) ) );
         aLbFormat.InsertEntry( String( SdResId( STR_FILEFORMAT_NAME ) ) );
 
-        aLbFormat.SelectEntryPos( (USHORT) ( pFileField->GetFormat() ) );
+        aLbFormat.SelectEntryPos( (sal_uInt16) ( pFileField->GetFormat() ) );
     }
     else if( pField->ISA( SvxAuthorField ) )
     {
         const SvxAuthorField* pAuthorField = (const SvxAuthorField*) pField;
         SvxAuthorField aAuthorField( *pAuthorField );
 
-        for( USHORT i = 0; i < 4; i++ )
+        for( sal_uInt16 i = 0; i < 4; i++ )
         {
             aAuthorField.SetFormat( (SvxAuthorFormat) i );
             aLbFormat.InsertEntry( aAuthorField.GetFormatted() );
         }
 
-        aLbFormat.SelectEntryPos( (USHORT) ( pAuthorField->GetFormat() ) );
+        aLbFormat.SelectEntryPos( (sal_uInt16) ( pAuthorField->GetFormat() ) );
 
     }
 
@@ -327,7 +327,7 @@ void SdModifyFieldDlg::FillControls()
     aRbtVar.SaveValue();
 
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == maInputSet.GetItemState(EE_CHAR_LANGUAGE, TRUE, &pItem ) )
+    if( SFX_ITEM_SET == maInputSet.GetItemState(EE_CHAR_LANGUAGE, sal_True, &pItem ) )
         maLbLanguage.SelectLanguage( static_cast<const SvxLanguageItem*>(pItem)->GetLanguage() );
 
     maLbLanguage.SaveValue();

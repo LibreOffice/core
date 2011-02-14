@@ -56,7 +56,7 @@ TYPEINIT1(SfxDateTimeItem, SfxPoolItem);
 
 // -----------------------------------------------------------------------
 
-SfxDateTimeItem::SfxDateTimeItem( USHORT which ) :
+SfxDateTimeItem::SfxDateTimeItem( sal_uInt16 which ) :
     SfxPoolItem( which )
 {
     DBG_CTOR(SfxDateTimeItem, 0);
@@ -64,7 +64,7 @@ SfxDateTimeItem::SfxDateTimeItem( USHORT which ) :
 
 // -----------------------------------------------------------------------
 
-SfxDateTimeItem::SfxDateTimeItem( USHORT which, const DateTime& rDT ) :
+SfxDateTimeItem::SfxDateTimeItem( sal_uInt16 which, const DateTime& rDT ) :
     SfxPoolItem( which ),
     aDateTime( rDT )
 
@@ -109,7 +109,7 @@ int SfxDateTimeItem::Compare( const SfxPoolItem& rItem ) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SfxDateTimeItem::Create( SvStream& rStream, USHORT ) const
+SfxPoolItem* SfxDateTimeItem::Create( SvStream& rStream, sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxDateTimeItem, 0);
     sal_uInt32 nDate = 0;
@@ -122,7 +122,7 @@ SfxPoolItem* SfxDateTimeItem::Create( SvStream& rStream, USHORT ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SfxDateTimeItem::Store( SvStream& rStream, USHORT ) const
+SvStream& SfxDateTimeItem::Store( SvStream& rStream, sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxDateTimeItem, 0);
     rStream << aDateTime.GetDate();
@@ -174,8 +174,8 @@ SfxItemPresentation SfxDateTimeItem::GetPresentation
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxDateTimeItem::PutValue( const com::sun::star::uno::Any& rVal,
-                                   BYTE nMemberId )
+sal_Bool SfxDateTimeItem::PutValue( const com::sun::star::uno::Any& rVal,
+                                   sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     com::sun::star::util::DateTime aValue;
@@ -188,17 +188,17 @@ BOOL SfxDateTimeItem::PutValue( const com::sun::star::uno::Any& rVal,
                                       aValue.Minutes,
                                       aValue.Seconds,
                                       aValue.HundredthSeconds ) );
-        return TRUE;
+        return sal_True;
     }
 
     DBG_ERROR( "SfxDateTimeItem::PutValue - Wrong type!" );
-    return FALSE;
+    return sal_False;
 }
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxDateTimeItem::QueryValue( com::sun::star::uno::Any& rVal,
-                                   BYTE nMemberId ) const
+sal_Bool SfxDateTimeItem::QueryValue( com::sun::star::uno::Any& rVal,
+                                   sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     com::sun::star::util::DateTime aValue( aDateTime.Get100Sec(),
@@ -209,7 +209,7 @@ BOOL SfxDateTimeItem::QueryValue( com::sun::star::uno::Any& rVal,
                                            aDateTime.GetMonth(),
                                            aDateTime.GetYear() );
     rVal <<= aValue;
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -219,11 +219,11 @@ BOOL SfxDateTimeItem::QueryValue( com::sun::star::uno::Any& rVal,
 TYPEINIT1(SfxColumnDateTimeItem, SfxDateTimeItem);
 
 
-SfxColumnDateTimeItem::SfxColumnDateTimeItem( USHORT which ) :
+SfxColumnDateTimeItem::SfxColumnDateTimeItem( sal_uInt16 which ) :
     SfxDateTimeItem( which )
 {}
 
-SfxColumnDateTimeItem::SfxColumnDateTimeItem( USHORT which, const DateTime& rDT ) :
+SfxColumnDateTimeItem::SfxColumnDateTimeItem( sal_uInt16 which, const DateTime& rDT ) :
     SfxDateTimeItem( which, rDT )
 {}
 

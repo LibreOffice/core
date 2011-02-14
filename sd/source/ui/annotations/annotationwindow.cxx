@@ -114,11 +114,11 @@ extern OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAn
 extern SfxItemPool* GetAnnotationPool();
 extern com::sun::star::util::DateTime getCurrentDateTime();
 
-Color ColorFromAlphaColor(UINT8 aTransparency, Color &aFront, Color &aBack )
+Color ColorFromAlphaColor(sal_uInt8 aTransparency, Color &aFront, Color &aBack )
 {
-    return Color((UINT8)(aFront.GetRed()    * aTransparency/(double)255 + aBack.GetRed()    * (1-aTransparency/(double)255)),
-                 (UINT8)(aFront.GetGreen()  * aTransparency/(double)255 + aBack.GetGreen()  * (1-aTransparency/(double)255)),
-                 (UINT8)(aFront.GetBlue()   * aTransparency/(double)255 + aBack.GetBlue()   * (1-aTransparency/(double)255)));
+    return Color((sal_uInt8)(aFront.GetRed()    * aTransparency/(double)255 + aBack.GetRed()    * (1-aTransparency/(double)255)),
+                 (sal_uInt8)(aFront.GetGreen()  * aTransparency/(double)255 + aBack.GetGreen()  * (1-aTransparency/(double)255)),
+                 (sal_uInt8)(aFront.GetBlue()   * aTransparency/(double)255 + aBack.GetBlue()   * (1-aTransparency/(double)255)));
 }
 
 /************ AnnotationTextWindow **********************************/
@@ -160,7 +160,7 @@ void AnnotationTextWindow::Paint( const Rectangle& rRect)
 void AnnotationTextWindow::KeyInput( const KeyEvent& rKeyEvt )
 {
     const KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
-    USHORT nKey = rKeyCode.GetCode();
+    sal_uInt16 nKey = rKeyCode.GetCode();
 
     if ((rKeyCode.IsMod1() && rKeyCode.IsMod2()) && ((nKey == KEY_PAGEUP) || (nKey == KEY_PAGEDOWN)))
     {
@@ -211,7 +211,7 @@ void AnnotationTextWindow::MouseButtonDown( const MouseEvent& rMEvt )
     GrabFocus();
     if ( mpOutlinerView )
         mpOutlinerView->MouseButtonDown( rMEvt );
-    // todo mpOutlinerView->DocView()->GetViewFrame()->GetBindings().InvalidateAll(FALSE);
+    // todo mpOutlinerView->DocView()->GetViewFrame()->GetBindings().InvalidateAll(sal_False);
 }
 
 void AnnotationTextWindow::MouseButtonUp( const MouseEvent& rMEvt )
@@ -338,7 +338,7 @@ void AnnotationWindow::InitControls()
 
     mpOutliner = new ::Outliner(GetAnnotationPool(),OUTLINERMODE_TEXTOBJECT);
     Doc()->SetCalcFieldValueHdl( mpOutliner );
-    mpOutliner->SetUpdateMode( TRUE );
+    mpOutliner->SetUpdateMode( sal_True );
     Rescale();
 
     OutputDevice* pDev = Doc()->GetRefDevice();
@@ -368,7 +368,7 @@ void AnnotationWindow::InitControls()
     mpVScrollbar->EnableDrag();
 //  mpVScrollbar->AddEventListener( LINK( this, AnnotationWindow, WindowEventListener ) );
 
-    ULONG nCntrl = mpOutliner->GetControlWord();
+    sal_uLong nCntrl = mpOutliner->GetControlWord();
     nCntrl |= EE_CNTRL_PASTESPECIAL | EE_CNTRL_AUTOCORRECT  | EV_CNTRL_AUTOSCROLL | EE_CNTRL_NOCOLORS;
 /*
     if (pVOpt->IsFieldShadings())
@@ -381,14 +381,14 @@ void AnnotationWindow::InitControls()
         nCntrl &= ~EE_CNTRL_ONLINESPELLING;
 */
     mpOutliner->SetControlWord(nCntrl);
-//  mpOutliner->SetFlatMode( TRUE );
+//  mpOutliner->SetFlatMode( sal_True );
 
     Engine()->SetModifyHdl( Link() );
-    Engine()->EnableUndo( FALSE );
+    Engine()->EnableUndo( sal_False );
 
     Engine()->ClearModifyFlag();
     Engine()->GetUndoManager().Clear();
-    Engine()->EnableUndo( TRUE );
+    Engine()->EnableUndo( sal_True );
     Engine()->SetModifyHdl( LINK( this, AnnotationWindow, ModifyHdl ) );
 
     Invalidate();
@@ -509,7 +509,7 @@ void AnnotationWindow::SetLanguage(const SvxLanguageItem aNewItem)
     Engine()->SetModifyHdl( Link() );
     ESelection aOld = getView()->GetSelection();
 
-    ESelection aNewSelection( 0, 0, (USHORT)Engine()->GetParagraphCount()-1, USHRT_MAX );
+    ESelection aNewSelection( 0, 0, (sal_uInt16)Engine()->GetParagraphCount()-1, USHRT_MAX );
     getView()->SetSelection( aNewSelection );
     SfxItemSet aEditAttr(getView()->GetAttribs());
     aEditAttr.Put(aNewItem);
@@ -798,7 +798,7 @@ void AnnotationWindow::GetFocus()
         FloatingWindow::GetFocus();
 }
 
-void AnnotationWindow::ExecuteSlot( USHORT nSID )
+void AnnotationWindow::ExecuteSlot( sal_uInt16 nSID )
 {
     if( nSID == SID_COPY )
     {

@@ -87,7 +87,7 @@ namespace dbmm
     //--------------------------------------------------------------------
     inline void RangeProgressBar::SetValue( sal_uInt32 _nValue )
     {
-        ProgressBar::SetValue( (USHORT)( 100.0 * _nValue / m_nRange ) );
+        ProgressBar::SetValue( (sal_uInt16)( 100.0 * _nValue / m_nRange ) );
     }
 
     //--------------------------------------------------------------------

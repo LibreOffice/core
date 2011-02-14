@@ -101,9 +101,9 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
         pDrawView->SetWorkArea( pRoot->Frm().SVRect() );
 
     if ( GetShell()->IsPreView() )
-        pDrawView->SetAnimationEnabled( FALSE );
+        pDrawView->SetAnimationEnabled( sal_False );
 
-    pDrawView->SetUseIncompatiblePathCreateInterface( FALSE );
+    pDrawView->SetUseIncompatiblePathCreateInterface( sal_False );
     pDrawView->SetSolidMarkHdl(pNewOpt->IsSolidMarkHdl());
 
     // it's a JOE interface !
@@ -136,8 +136,8 @@ SwViewImp::SwViewImp( ViewShell *pParent ) :
     //bResetXorVisibility =
     //HMHbShowHdlPaint =
     bResetHdlHiddenPaint =
-    bSmoothUpdate = bStopSmooth = bStopPrt = FALSE;
-    bFirstPageInvalid = TRUE;
+    bSmoothUpdate = bStopSmooth = bStopPrt = sal_False;
+    bFirstPageInvalid = sal_True;
 }
 
 /******************************************************************************
@@ -191,16 +191,16 @@ void SwViewImp::DelRegion()
 |*
 ******************************************************************************/
 
-BOOL SwViewImp::AddPaintRect( const SwRect &rRect )
+sal_Bool SwViewImp::AddPaintRect( const SwRect &rRect )
 {
     if ( rRect.IsOver( pSh->VisArea() ) )
     {
         if ( !pRegion )
             pRegion = new SwRegionRects( pSh->VisArea() );
         (*pRegion) -= rRect;
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 
@@ -228,11 +228,11 @@ void SwViewImp::CheckWaitCrsr()
 |*
 ******************************************************************************/
 
-BOOL SwViewImp::IsCalcLayoutProgress() const
+sal_Bool SwViewImp::IsCalcLayoutProgress() const
 {
     if ( pLayAct )
         return pLayAct->IsCalcLayout();
-    return FALSE;
+    return sal_False;
 }
 
 /******************************************************************************
@@ -244,14 +244,14 @@ BOOL SwViewImp::IsCalcLayoutProgress() const
 |*
 ******************************************************************************/
 
-BOOL SwViewImp::IsUpdateExpFlds()
+sal_Bool SwViewImp::IsUpdateExpFlds()
 {
     if ( pLayAct && pLayAct->IsCalcLayout() )
     {
         pLayAct->SetUpdateExpFlds();
-        return TRUE;
+        return sal_True;
     }
-     return FALSE;
+     return sal_False;
 }
 
 
@@ -298,7 +298,7 @@ void SwViewImp::SetFirstVisPage()
         }
         pFirstVisPage = pPage ? pPage : (SwPageFrm*)pSh->GetLayout()->Lower();
     }
-    bFirstPageInvalid = FALSE;
+    bFirstPageInvalid = sal_False;
 }
 
 /******************************************************************************
@@ -613,7 +613,7 @@ void SwViewImp::FireAccessibleEvents()
 
 IMPL_LINK(SwViewImp, SetStopPrt, void *, EMPTYARG)
 {
-    bStopPrt = TRUE;
+    bStopPrt = sal_True;
 
     return 0;
 }

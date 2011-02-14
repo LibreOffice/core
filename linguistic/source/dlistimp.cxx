@@ -70,7 +70,7 @@ using namespace linguistic;
 
 ///////////////////////////////////////////////////////////////////////////
 
-static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg );
+static sal_Bool IsVers2OrNewer( const String& rFileURL, sal_uInt16& nLng, sal_Bool& bNeg );
 
 static void AddInternal( const uno::Reference< XDictionary > &rDic,
                          const rtl::OUString& rNew );
@@ -88,8 +88,8 @@ class DicEvtListenerHelper :
     uno::Sequence< DictionaryEvent >        aCollectDicEvt;
     uno::Reference< XDictionaryList >       xMyDicList;
 
-    INT16                               nCondensedEvt;
-    INT16                               nNumCollectEvtListeners,
+    sal_Int16                               nCondensedEvt;
+    sal_Int16                               nNumCollectEvtListeners,
                                          nNumVerboseListeners;
 
 public:
@@ -109,14 +109,14 @@ public:
     // non-UNO functions
     void    DisposeAndClear( const EventObject &rEvtObj );
 
-    BOOL    AddDicListEvtListener(
+    sal_Bool    AddDicListEvtListener(
                 const uno::Reference< XDictionaryListEventListener >& rxListener,
-                BOOL bReceiveVerbose );
-    BOOL    RemoveDicListEvtListener(
+                sal_Bool bReceiveVerbose );
+    sal_Bool    RemoveDicListEvtListener(
                 const uno::Reference< XDictionaryListEventListener >& rxListener );
-    INT16   BeginCollectEvents();
-    INT16   EndCollectEvents();
-    INT16   FlushEvents();
+    sal_Int16   BeginCollectEvents();
+    sal_Int16   EndCollectEvents();
+    sal_Int16   FlushEvents();
     void    ClearEvents()   { nCondensedEvt = 0; }
 };
 
@@ -183,7 +183,7 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
                 || xDicEntry.is(),
                 "lng : missing dictionary entry" );
 
-    /*BOOL bActiveDicsModified = FALSE;*/
+    /*sal_Bool bActiveDicsModified = sal_False;*/
     //
     // evaluate DictionaryEvents and update data for next DictionaryListEvent
     //
@@ -220,7 +220,7 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
     // update list of collected events if needs to be
     if (nNumVerboseListeners > 0)
     {
-        INT32 nColEvts = aCollectDicEvt.getLength();
+        sal_Int32 nColEvts = aCollectDicEvt.getLength();
         aCollectDicEvt.realloc( nColEvts + 1 );
         aCollectDicEvt.getArray()[ nColEvts ] = rDicEvent;
     }
@@ -230,32 +230,32 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
 }
 
 
-BOOL DicEvtListenerHelper::AddDicListEvtListener(
+sal_Bool DicEvtListenerHelper::AddDicListEvtListener(
             const uno::Reference< XDictionaryListEventListener >& xListener,
-            BOOL /*bReceiveVerbose*/ )
+            sal_Bool /*bReceiveVerbose*/ )
 {
     DBG_ASSERT( xListener.is(), "empty reference" );
-    INT32   nCount = aDicListEvtListeners.getLength();
+    sal_Int32   nCount = aDicListEvtListeners.getLength();
     return aDicListEvtListeners.addInterface( xListener ) != nCount;
 }
 
 
-BOOL DicEvtListenerHelper::RemoveDicListEvtListener(
+sal_Bool DicEvtListenerHelper::RemoveDicListEvtListener(
             const uno::Reference< XDictionaryListEventListener >& xListener )
 {
     DBG_ASSERT( xListener.is(), "empty reference" );
-    INT32   nCount = aDicListEvtListeners.getLength();
+    sal_Int32   nCount = aDicListEvtListeners.getLength();
     return aDicListEvtListeners.removeInterface( xListener ) != nCount;
 }
 
 
-INT16 DicEvtListenerHelper::BeginCollectEvents()
+sal_Int16 DicEvtListenerHelper::BeginCollectEvents()
 {
     return ++nNumCollectEvtListeners;
 }
 
 
-INT16 DicEvtListenerHelper::EndCollectEvents()
+sal_Int16 DicEvtListenerHelper::EndCollectEvents()
 {
     DBG_ASSERT(nNumCollectEvtListeners > 0, "lng: mismatched function call");
     if (nNumCollectEvtListeners > 0)
@@ -268,7 +268,7 @@ INT16 DicEvtListenerHelper::EndCollectEvents()
 }
 
 
-INT16 DicEvtListenerHelper::FlushEvents()
+sal_Int16 DicEvtListenerHelper::FlushEvents()
 {
     if (0 != nCondensedEvt)
     {
@@ -310,8 +310,8 @@ DicList::DicList() :
 {
     pDicEvtLstnrHelper  = new DicEvtListenerHelper( this );
     xDicEvtLstnrHelper  = pDicEvtLstnrHelper;
-    bDisposing = FALSE;
-    bInCreation = FALSE;
+    bDisposing = sal_False;
+    bInCreation = sal_False;
 
     pExitListener = new MyAppExitListener( *this );
     xExitListener = pExitListener;
@@ -327,22 +327,22 @@ DicList::~DicList()
 void DicList::SearchForDictionaries(
     DictionaryVec_t&rDicList,
     const String &rDicDirURL,
-    BOOL bIsWriteablePath )
+    sal_Bool bIsWriteablePath )
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
     const uno::Sequence< rtl::OUString > aDirCnt( utl::LocalFileHelper::
-                                        GetFolderContents( rDicDirURL, FALSE ) );
+                                        GetFolderContents( rDicDirURL, sal_False ) );
     const rtl::OUString *pDirCnt = aDirCnt.getConstArray();
-    INT32 nEntries = aDirCnt.getLength();
+    sal_Int32 nEntries = aDirCnt.getLength();
 
     String aDCN( String::CreateFromAscii( "dcn" ) );
     String aDCP( String::CreateFromAscii( "dcp" ) );
-    for (INT32 i = 0;  i < nEntries;  ++i)
+    for (sal_Int32 i = 0;  i < nEntries;  ++i)
     {
         String  aURL( pDirCnt[i] );
-        USHORT  nLang = LANGUAGE_NONE;
-        BOOL    bNeg  = FALSE;
+        sal_uInt16  nLang = LANGUAGE_NONE;
+        sal_Bool    bNeg  = sal_False;
 
         if(!::IsVers2OrNewer( aURL, nLang, bNeg ))
         {
@@ -352,9 +352,9 @@ void DicList::SearchForDictionaries(
             aExt.ToLowerAscii();
 
             if(aExt == aDCN)       // negativ
-                bNeg = TRUE;
+                bNeg = sal_True;
             else if(aExt == aDCP)  // positiv
-                bNeg = FALSE;
+                bNeg = sal_False;
             else
                 continue;          // andere Files
         }
@@ -362,7 +362,7 @@ void DicList::SearchForDictionaries(
         // Aufnehmen in die Liste der Dictionaries
         // Wenn existent nicht aufnehmen
         //
-        INT16 nSystemLanguage = MsLangId::getSystemLanguage();
+        sal_Int16 nSystemLanguage = MsLangId::getSystemLanguage();
         String aTmp1 = ToLower( aURL, nSystemLanguage );
         xub_StrLen nPos = aTmp1.SearchBackward( '/' );
         if (STRING_NOTFOUND != nPos)
@@ -396,11 +396,11 @@ void DicList::SearchForDictionaries(
 }
 
 
-INT32 DicList::GetDicPos(const uno::Reference< XDictionary > &xDic)
+sal_Int32 DicList::GetDicPos(const uno::Reference< XDictionary > &xDic)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    INT32 nPos = -1;
+    sal_Int32 nPos = -1;
     DictionaryVec_t& rDicList = GetOrCreateDicList();
     size_t n = rDicList.size();
     for (size_t i = 0;  i < n;  i++)
@@ -437,8 +437,8 @@ uno::Sequence< uno::Reference< XDictionary > > SAL_CALL
     uno::Sequence< uno::Reference< XDictionary > > aDics( rDicList.size() );
     uno::Reference< XDictionary > *pDic = aDics.getArray();
 
-    INT32 n = (USHORT) aDics.getLength();
-    for (INT32 i = 0;  i < n;  i++)
+    sal_Int32 n = (sal_uInt16) aDics.getLength();
+    for (sal_Int32 i = 0;  i < n;  i++)
         pDic[i] = rDicList[i];
 
     return aDics;
@@ -473,14 +473,14 @@ sal_Bool SAL_CALL DicList::addDictionary(
     osl::MutexGuard aGuard( GetLinguMutex() );
 
     if (bDisposing)
-        return FALSE;
+        return sal_False;
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (xDictionary.is())
     {
         DictionaryVec_t& rDicList = GetOrCreateDicList();
         rDicList.push_back( xDictionary );
-        bRes = TRUE;
+        bRes = sal_True;
 
         // add listener helper to the dictionaries listener lists
         xDictionary->addDictionaryEventListener( xDicEvtLstnrHelper );
@@ -495,10 +495,10 @@ sal_Bool SAL_CALL
     osl::MutexGuard aGuard( GetLinguMutex() );
 
     if (bDisposing)
-        return FALSE;
+        return sal_False;
 
-    BOOL  bRes = FALSE;
-    INT32 nPos = GetDicPos( xDictionary );
+    sal_Bool  bRes = sal_False;
+    sal_Int32 nPos = GetDicPos( xDictionary );
     if (nPos >= 0)
     {
         // remove dictionary list from the dictionaries listener lists
@@ -508,14 +508,14 @@ sal_Bool SAL_CALL
         if (xDic.is())
         {
             // deactivate dictionary if not already done
-            xDic->setActive( FALSE );
+            xDic->setActive( sal_False );
 
             xDic->removeDictionaryEventListener( xDicEvtLstnrHelper );
         }
 
         // remove element at nPos
         rDicList.erase( rDicList.begin() + nPos );
-        bRes = TRUE;
+        bRes = sal_True;
     }
     return bRes;
 }
@@ -528,11 +528,11 @@ sal_Bool SAL_CALL DicList::addDictionaryListEventListener(
     osl::MutexGuard aGuard( GetLinguMutex() );
 
     if (bDisposing)
-        return FALSE;
+        return sal_False;
 
     DBG_ASSERT(!bReceiveVerbose, "lng : not yet supported");
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (xListener.is()) //! don't add empty references
     {
         bRes = pDicEvtLstnrHelper->
@@ -548,9 +548,9 @@ sal_Bool SAL_CALL DicList::removeDictionaryListEventListener(
     osl::MutexGuard aGuard( GetLinguMutex() );
 
     if (bDisposing)
-        return FALSE;
+        return sal_False;
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if(xListener.is())
     {
         bRes = pDicEvtLstnrHelper->RemoveDicListEvtListener( xListener );
@@ -583,7 +583,7 @@ uno::Reference< XDictionary > SAL_CALL
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    INT16 nLanguage = LocaleToLanguage( rLocale );
+    sal_Int16 nLanguage = LocaleToLanguage( rLocale );
     bool bIsWriteablePath = rURL.match( GetDictionaryWriteablePath(), 0 );
     return new DictionaryNeo( rName, nLanguage, eDicType, rURL, bIsWriteablePath );
 }
@@ -608,7 +608,7 @@ void SAL_CALL
 
     if (!bDisposing)
     {
-        bDisposing = TRUE;
+        bDisposing = sal_True;
         EventObject aEvtObj( (XDictionaryList *) this );
 
         aEvtListeners.disposeAndClear( aEvtObj );
@@ -669,7 +669,7 @@ void SAL_CALL
 
 void DicList::_CreateDicList()
 {
-    bInCreation = TRUE;
+    bInCreation = sal_True;
 
     // look for dictionaries
     const rtl::OUString aWriteablePath( GetDictionaryWriteablePath() );
@@ -677,7 +677,7 @@ void DicList::_CreateDicList()
     const rtl::OUString *pPaths = aPaths.getConstArray();
     for (sal_Int32 i = 0;  i < aPaths.getLength();  ++i)
     {
-        const BOOL bIsWriteablePath = (pPaths[i] == aWriteablePath);
+        const sal_Bool bIsWriteablePath = (pPaths[i] == aWriteablePath);
         SearchForDictionaries( aDicList, pPaths[i], bIsWriteablePath );
     }
 
@@ -690,7 +690,7 @@ void DicList::_CreateDicList()
     if (xIgnAll.is())
     {
         AddUserData( xIgnAll );
-        xIgnAll->setActive( TRUE );
+        xIgnAll->setActive( sal_True );
         addDictionary( xIgnAll );
     }
 
@@ -704,14 +704,14 @@ void DicList::_CreateDicList()
     //
     const uno::Sequence< rtl::OUString > aActiveDics( aOpt.GetActiveDics() );
     const rtl::OUString *pActiveDic = aActiveDics.getConstArray();
-    INT32 nLen = aActiveDics.getLength();
-    for (INT32 i = 0;  i < nLen;  ++i)
+    sal_Int32 nLen = aActiveDics.getLength();
+    for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
         if (pActiveDic[i].getLength())
         {
             uno::Reference< XDictionary > xDic( getDictionaryByName( pActiveDic[i] ) );
             if (xDic.is())
-                xDic->setActive( TRUE );
+                xDic->setActive( sal_True );
         }
     }
 
@@ -721,7 +721,7 @@ void DicList::_CreateDicList()
 
     pDicEvtLstnrHelper->EndCollectEvents();
 
-    bInCreation = FALSE;
+    bInCreation = sal_False;
 }
 
 
@@ -772,10 +772,10 @@ sal_Bool SAL_CALL DicList::supportsService( const rtl::OUString& ServiceName )
 
     uno::Sequence< rtl::OUString > aSNL = getSupportedServiceNames();
     const rtl::OUString * pArray = aSNL.getConstArray();
-    for( INT32 i = 0; i < aSNL.getLength(); i++ )
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
-            return TRUE;
-    return FALSE;
+            return sal_True;
+    return sal_False;
 }
 
 
@@ -842,7 +842,7 @@ xub_StrLen lcl_GetToken( String &rToken,
         if (i >= rText.Len())   // delimeter not found
             rToken  = rText.Copy( nPos );
         else
-            rToken  = rText.Copy( nPos, sal::static_int_cast< xub_StrLen >((INT32) i - nPos) );
+            rToken  = rText.Copy( nPos, sal::static_int_cast< xub_StrLen >((sal_Int32) i - nPos) );
         nRes    = i + 1;    // continue after found delimeter
     }
 
@@ -870,7 +870,7 @@ static void AddInternal(
         {
             if( aToken.Len()  &&  !IsNumeric( aToken ) )
             {
-                rDic->add( aToken, FALSE, rtl::OUString() );
+                rDic->add( aToken, sal_False, rtl::OUString() );
             }
         }
     }
@@ -897,10 +897,10 @@ static void AddUserData( const uno::Reference< XDictionary > &rDic )
 #pragma optimize("g",off)
 #endif
 
-static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg )
+static sal_Bool IsVers2OrNewer( const String& rFileURL, sal_uInt16& nLng, sal_Bool& bNeg )
 {
     if (rFileURL.Len() == 0)
-        return FALSE;
+        return sal_False;
     String aDIC( GetDicExtension() );
     String aExt;
     xub_StrLen nPos = rFileURL.SearchBackward( '.' );
@@ -909,7 +909,7 @@ static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg )
     aExt.ToLowerAscii();
 
     if(aExt != aDIC)
-        return FALSE;
+        return sal_False;
 
     // get stream to be used
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
@@ -929,15 +929,15 @@ static BOOL IsVers2OrNewer( const String& rFileURL, USHORT& nLng, BOOL& bNeg )
     }
     DBG_ASSERT( xStream.is(), "failed to get stream for read" );
     if (!xStream.is())
-        return FALSE;
+        return sal_False;
 
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
 
     int nDicVersion = ReadDicVersion(pStream, nLng, bNeg);
     if (2 == nDicVersion || nDicVersion >= 5)
-        return TRUE;
+        return sal_True;
 
-    return FALSE;
+    return sal_False;
 }
 
 ///////////////////////////////////////////////////////////////////////////

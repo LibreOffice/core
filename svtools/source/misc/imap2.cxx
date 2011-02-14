@@ -212,9 +212,9 @@ void IMapCircleObject::WriteNCSA( SvStream& rOStm, const String& rBaseURL ) cons
 void IMapPolygonObject::WriteCERN( SvStream& rOStm, const String& rBaseURL  ) const
 {
     ByteString      aStr( "polygon " );
-    const USHORT    nCount = aPoly.GetSize();
+    const sal_uInt16    nCount = aPoly.GetSize();
 
-    for ( USHORT i = 0; i < nCount; i++ )
+    for ( sal_uInt16 i = 0; i < nCount; i++ )
         AppendCERNCoords( aPoly[ i ], aStr );
 
     AppendCERNURL( aStr, rBaseURL );
@@ -232,11 +232,11 @@ void IMapPolygonObject::WriteCERN( SvStream& rOStm, const String& rBaseURL  ) co
 void IMapPolygonObject::WriteNCSA( SvStream& rOStm, const String& rBaseURL  ) const
 {
     ByteString      aStr( "poly " );
-    const USHORT    nCount = Min( aPoly.GetSize(), (USHORT) 100 );
+    const sal_uInt16    nCount = Min( aPoly.GetSize(), (sal_uInt16) 100 );
 
     AppendNCSAURL( aStr, rBaseURL );
 
-    for ( USHORT i = 0; i < nCount; i++ )
+    for ( sal_uInt16 i = 0; i < nCount; i++ )
         AppendNCSACoords( aPoly[ i ], aStr );
 
     rOStm.WriteLine( aStr );
@@ -253,7 +253,7 @@ void IMapPolygonObject::WriteNCSA( SvStream& rOStm, const String& rBaseURL  ) co
 |*
 \******************************************************************************/
 
-void ImageMap::Write( SvStream& rOStm, ULONG nFormat, const String& rBaseURL ) const
+void ImageMap::Write( SvStream& rOStm, sal_uLong nFormat, const String& rBaseURL ) const
 {
     switch( nFormat )
     {
@@ -276,9 +276,9 @@ void ImageMap::Write( SvStream& rOStm, ULONG nFormat, const String& rBaseURL ) c
 void ImageMap::ImpWriteCERN( SvStream& rOStm, const String& rBaseURL ) const
 {
     IMapObject* pObj;
-    USHORT      nCount = (USHORT) maList.Count();
+    sal_uInt16      nCount = (sal_uInt16) maList.Count();
 
-    for ( USHORT i = 0; i < nCount; i++ )
+    for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
         pObj = GetIMapObject( i );
 
@@ -312,9 +312,9 @@ void ImageMap::ImpWriteCERN( SvStream& rOStm, const String& rBaseURL ) const
 void ImageMap::ImpWriteNCSA( SvStream& rOStm, const String& rBaseURL  ) const
 {
     IMapObject* pObj;
-    USHORT      nCount = (USHORT) maList.Count();
+    sal_uInt16      nCount = (sal_uInt16) maList.Count();
 
-    for ( USHORT i = 0; i < nCount; i++ )
+    for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
         pObj = GetIMapObject( i );
 
@@ -345,9 +345,9 @@ void ImageMap::ImpWriteNCSA( SvStream& rOStm, const String& rBaseURL  ) const
 |*
 \******************************************************************************/
 
-ULONG ImageMap::Read( SvStream& rIStm, ULONG nFormat, const String& rBaseURL  )
+sal_uLong ImageMap::Read( SvStream& rIStm, sal_uLong nFormat, const String& rBaseURL  )
 {
-    ULONG nRet = IMAP_ERR_FORMAT;
+    sal_uLong nRet = IMAP_ERR_FORMAT;
 
     if ( nFormat == IMAP_FORMAT_DETECT )
         nFormat = ImpDetectFormat( rIStm );
@@ -375,7 +375,7 @@ ULONG ImageMap::Read( SvStream& rIStm, ULONG nFormat, const String& rBaseURL  )
 |*
 \******************************************************************************/
 
-ULONG ImageMap::ImpReadCERN( SvStream& rIStm, const String& rBaseURL )
+sal_uLong ImageMap::ImpReadCERN( SvStream& rIStm, const String& rBaseURL )
 {
     ByteString aStr;
 
@@ -438,11 +438,11 @@ void ImageMap::ImpReadCERNLine( const ByteString& rLine, const String& rBaseURL 
         }
         else if ( ( aToken == "polygon" ) || ( aToken == "poly" ) )
         {
-            const USHORT    nCount = aStr.GetTokenCount( '(' ) - 1;
+            const sal_uInt16    nCount = aStr.GetTokenCount( '(' ) - 1;
             Polygon         aPoly( nCount );
             String          aURL;
 
-            for ( USHORT i = 0; i < nCount; i++ )
+            for ( sal_uInt16 i = 0; i < nCount; i++ )
                 aPoly[ i ] = ImpReadCERNCoords( &pStr );
 
             aURL = ImpReadCERNURL( &pStr, rBaseURL );
@@ -553,7 +553,7 @@ String ImageMap::ImpReadCERNURL( const char** ppStr, const String& rBaseURL )
 |*
 \******************************************************************************/
 
-ULONG ImageMap::ImpReadNCSA( SvStream& rIStm, const String& rBaseURL )
+sal_uLong ImageMap::ImpReadNCSA( SvStream& rIStm, const String& rBaseURL )
 {
     ByteString aStr;
 
@@ -618,11 +618,11 @@ void ImageMap::ImpReadNCSALine( const ByteString& rLine, const String& rBaseURL 
         }
         else if ( aToken == "poly" )
         {
-            const USHORT    nCount = aStr.GetTokenCount( ',' ) - 1;
+            const sal_uInt16    nCount = aStr.GetTokenCount( ',' ) - 1;
             const String    aURL( ImpReadNCSAURL( &pStr, rBaseURL ) );
             Polygon         aPoly( nCount );
 
-            for ( USHORT i = 0; i < nCount; i++ )
+            for ( sal_uInt16 i = 0; i < nCount; i++ )
                 aPoly[ i ] = ImpReadNCSACoords( &pStr );
 
             IMapPolygonObject* pObj = new IMapPolygonObject( aPoly, aURL, String(), String(), String(), String() );
@@ -708,10 +708,10 @@ Point ImageMap::ImpReadNCSACoords( const char** ppStr )
 |*
 \******************************************************************************/
 
-ULONG ImageMap::ImpDetectFormat( SvStream& rIStm )
+sal_uLong ImageMap::ImpDetectFormat( SvStream& rIStm )
 {
-    ULONG   nPos = rIStm.Tell();
-    ULONG   nRet = IMAP_FORMAT_BIN;
+    sal_uLong   nPos = rIStm.Tell();
+    sal_uLong   nRet = IMAP_FORMAT_BIN;
     char    cMagic[6];
 
     rIStm.Read( cMagic, sizeof( cMagic ) );

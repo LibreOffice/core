@@ -46,20 +46,20 @@ protected:
 
 public:
     TYPEINFO();
-    SvxClipboardFmtItem( USHORT nId = 0 );
+    SvxClipboardFmtItem( sal_uInt16 nId = 0 );
     SvxClipboardFmtItem( const SvxClipboardFmtItem& );
     virtual ~SvxClipboardFmtItem();
 
-    virtual BOOL QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const;
-    virtual sal_Bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
+    virtual sal_Bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const;
+    virtual sal_Bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
-    void AddClipbrdFormat( ULONG nId, USHORT nPos = USHRT_MAX );
-    void AddClipbrdFormat( ULONG nId, const String& rName,
-                            USHORT nPos = USHRT_MAX );
-    USHORT Count() const;
+    void AddClipbrdFormat( sal_uIntPtr nId, sal_uInt16 nPos = USHRT_MAX );
+    void AddClipbrdFormat( sal_uIntPtr nId, const String& rName,
+                            sal_uInt16 nPos = USHRT_MAX );
+    sal_uInt16 Count() const;
 
-    ULONG GetClipbrdFormatId( USHORT nPos ) const;
-    const String& GetClipbrdFormatName( USHORT nPos ) const;
+    sal_uIntPtr GetClipbrdFormatId( sal_uInt16 nPos ) const;
+    const String& GetClipbrdFormatName( sal_uInt16 nPos ) const;
 };
 
 

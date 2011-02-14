@@ -51,7 +51,7 @@ namespace sd {
 
 SpellDialogChildWindow::SpellDialogChildWindow (
     ::Window* _pParent,
-    USHORT nId,
+    sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo)
     : ::svx::SpellDialogChildWindow (_pParent, nId, pBindings, pInfo),
@@ -110,7 +110,7 @@ void SpellDialogChildWindow::InvalidateSpellDialog (void)
     // check.
     if (aResult.size() == 0)
     {
-        SfxBoolItem aItem (SID_SPELL_DIALOG, FALSE);
+        SfxBoolItem aItem (SID_SPELL_DIALOG, sal_False);
         GetBindings().GetDispatcher()->Execute(
             SID_SPELL_DIALOG,
             SFX_CALLMODE_ASYNCHRON,

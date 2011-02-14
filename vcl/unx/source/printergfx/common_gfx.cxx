@@ -527,9 +527,9 @@ PrinterGfx::DrawPolyPolygon (sal_uInt32 nPoly, const sal_uInt32* pSizes, const P
  */
 
 void
-PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const BYTE* pFlgAry)
+PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const sal_uInt8* pFlgAry)
 {
-    const sal_uInt32 nBezString = 1024;
+    const sal_uInt32 nBezString= 1024;
     sal_Char pString[nBezString];
 
     if ( nPoints > 1 && maLineColor.Is() && pPath )
@@ -578,7 +578,7 @@ PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const BY
 }
 
 void
-PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const BYTE* pFlgAry)
+PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const sal_uInt8* pFlgAry)
 {
     const sal_uInt32 nBezString = 1024;
     sal_Char pString[nBezString];
@@ -634,7 +634,7 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const BYT
 }
 
 void
-PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints, const Point* const * pPtAry, const BYTE* const* pFlgAry)
+PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints, const Point* const * pPtAry, const sal_uInt8* const* pFlgAry)
 {
     const sal_uInt32 nBezString = 1024;
     sal_Char pString[nBezString];

@@ -29,7 +29,7 @@
 #include "precompiled_svtools.hxx"
 #include "svtools/genericunodialog.hxx"
 #include <svtools/addresstemplate.hxx>
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>

@@ -300,7 +300,7 @@ static ::rtl::OUString RetrieveLabelFromCommand(
 }
 
 //=========================================================================
-SfxViewShell_Impl::SfxViewShell_Impl(USHORT const nFlags)
+SfxViewShell_Impl::SfxViewShell_Impl(sal_uInt16 const nFlags)
 : aInterceptorContainer( aMutex )
 ,   m_bControllerSet(false)
 ,   m_nPrinterLocks(0)
@@ -439,12 +439,12 @@ enum ETypeFamily
 
 void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 {
-        const USHORT nId = rReq.GetSlot();
+        const sal_uInt16 nId = rReq.GetSlot();
         switch( nId )
         {
                 case SID_STYLE_FAMILY :
                 {
-                        SFX_REQUEST_ARG(rReq, pItem, SfxUInt16Item, nId, FALSE);
+                        SFX_REQUEST_ARG(rReq, pItem, SfxUInt16Item, nId, sal_False);
                         if (pItem)
             {
                 pImp->m_nFamily = pItem->GetValue();
@@ -495,10 +495,10 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                             ToolBox* pTextToolbox = dynamic_cast< ToolBox* >( pWin );
                             if( pTextToolbox )
                             {
-                                USHORT nItemCount = pTextToolbox->GetItemCount();
-                                for( USHORT nItem = 0; nItem < nItemCount; ++nItem )
+                                sal_uInt16 nItemCount = pTextToolbox->GetItemCount();
+                                for( sal_uInt16 nItem = 0; nItem < nItemCount; ++nItem )
                                 {
-                                    USHORT nItemId = pTextToolbox->GetItemId( nItem );
+                                    sal_uInt16 nItemId = pTextToolbox->GetItemId( nItem );
                                     const XubString& rCommand = pTextToolbox->GetItemCommand( nItemId );
                                     if( rCommand.EqualsAscii( ".uno:StyleApply" ) )
                                     {
@@ -534,18 +534,18 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
                         if ( SvtInternalOptions().MailUIEnabled() )
             {
-                GetViewFrame()->SetChildWindow( SID_MAIL_CHILDWIN, TRUE );
+                GetViewFrame()->SetChildWindow( SID_MAIL_CHILDWIN, sal_True );
             }
             else
             {
                                 SfxMailModel  aModel;
                 rtl::OUString aDocType;
 
-                                SFX_REQUEST_ARG(rReq, pMailSubject, SfxStringItem, SID_MAIL_SUBJECT, FALSE );
+                                SFX_REQUEST_ARG(rReq, pMailSubject, SfxStringItem, SID_MAIL_SUBJECT, sal_False );
                                 if ( pMailSubject )
                                         aModel.SetSubject( pMailSubject->GetValue() );
 
-                                SFX_REQUEST_ARG(rReq, pMailRecipient, SfxStringItem, SID_MAIL_RECIPIENT, FALSE );
+                                SFX_REQUEST_ARG(rReq, pMailRecipient, SfxStringItem, SID_MAIL_RECIPIENT, sal_False );
                                 if ( pMailRecipient )
                                 {
                                         String aRecipient( pMailRecipient->GetValue() );
@@ -555,7 +555,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                                                 aRecipient = aRecipient.Erase( 0, aMailToStr.Len() );
                                         aModel.AddAddress( aRecipient, SfxMailModel::ROLE_TO );
                                 }
-                SFX_REQUEST_ARG(rReq, pMailDocType, SfxStringItem, SID_TYPE_NAME, FALSE );
+                SFX_REQUEST_ARG(rReq, pMailDocType, SfxStringItem, SID_TYPE_NAME, sal_False );
                 if ( pMailDocType )
                     aDocType = pMailDocType->GetValue();
 
@@ -610,7 +610,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             css::uno::Reference< css::frame::XModuleManager > xModuleManager( xSMGR->createInstance( aModuleManager ), css::uno::UNO_QUERY_THROW );
             if ( !xModuleManager.is() )
             {
-                rReq.Done(FALSE);
+                rReq.Done(sal_False);
                 return;
             }
 
@@ -668,7 +668,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 // No type and no location => error
                 if (( aFilterName.getLength() == 0 ) || ( aTypeName.getLength() == 0 ))
                 {
-                    rReq.Done(FALSE);
+                    rReq.Done(sal_False);
                     return;
                 }
 
@@ -709,7 +709,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 }
                 catch ( com::sun::star::io::IOException& )
                 {
-                    rReq.Done(FALSE);
+                    rReq.Done(sal_False);
                     return;
                 }
 
@@ -717,7 +717,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                     ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )),
                     css::uno::UNO_QUERY );
 
-                        BOOL bRet( TRUE );
+                        sal_Bool bRet( sal_True );
                 if ( xSystemShellExecute.is() )
                 {
                     try
@@ -730,7 +730,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                                             vos::OGuard aGuard( Application::GetSolarMutex() );
                         Window *pParent = SFX_APP()->GetTopWindow();
                                             ErrorBox( pParent, SfxResId( MSG_ERROR_NO_WEBBROWSER_FOUND )).Execute();
-                        bRet = FALSE;
+                        bRet = sal_False;
                     }
                 }
 
@@ -739,7 +739,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
             }
             else
             {
-                rReq.Done(FALSE);
+                rReq.Done(sal_False);
                 return;
             }
         }
@@ -747,7 +747,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
                 case SID_PLUGINS_ACTIVE:
                 {
-                        SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nId, FALSE);
+                        SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, nId, sal_False);
             bool const bActive = (pShowItem)
                 ? pShowItem->GetValue()
                 : !pImp->m_bPlugInsActive;
@@ -757,7 +757,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
                         // Jetzt schon DONE aufrufen, da die Argumente evtl. einen Pool
                         // benutzen, der demn"achst weg ist
-                        rReq.Done(TRUE);
+                        rReq.Done(sal_True);
 
                         // ausfuehren
             if (!pShowItem || (bActive != pImp->m_bPlugInsActive))
@@ -785,10 +785,10 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                             VisAreaChanged(aVisArea);
 
                                                         // the plugins might need change in their state
-                                                        SfxInPlaceClientList *pClients = pView->GetIPClientList_Impl(FALSE);
+                                                        SfxInPlaceClientList *pClients = pView->GetIPClientList_Impl(sal_False);
                                                         if ( pClients )
                                                         {
-                                                                for (USHORT n=0; n < pClients->Count(); n++)
+                                                                for (sal_uInt16 n=0; n < pClients->Count(); n++)
                                                                 {
                                                                         SfxInPlaceClient* pIPClient = pClients->GetObject(n);
                                                                         if ( pIPClient )
@@ -817,7 +817,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
         DBG_CHKTHIS(SfxViewShell, 0);
 
         SfxWhichIter aIter( rSet );
-        for ( USHORT nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
+        for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
         {
                 switch ( nSID )
                 {
@@ -838,7 +838,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                                 bEnabled = bEnabled  && !Application::GetSettings().GetMiscSettings().GetDisablePrinting();
                 if ( bEnabled )
                 {
-                    SfxPrinter *pPrinter = GetPrinter(FALSE);
+                    SfxPrinter *pPrinter = GetPrinter(sal_False);
 
                     if ( SID_PRINTDOCDIRECT == nSID )
                     {
@@ -879,7 +879,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                         case SID_MAIL_SENDDOC:
             case SID_MAIL_SENDDOCASFORMAT:
                         {
-                BOOL bEnable = !GetViewFrame()->HasChildWindow( SID_MAIL_CHILDWIN );
+                sal_Bool bEnable = !GetViewFrame()->HasChildWindow( SID_MAIL_CHILDWIN );
                                 if ( !bEnable )
                                         rSet.DisableItem( nSID );
                                 break;
@@ -903,7 +903,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                         // SelectionTextExt
                         case SID_SELECTION_TEXT_EXT:
                         {
-                                rSet.Put( SfxStringItem( SID_SELECTION_TEXT_EXT, GetSelectionText(TRUE) ) );
+                                rSet.Put( SfxStringItem( SID_SELECTION_TEXT_EXT, GetSelectionText(sal_True) ) );
                                 break;
                         }
 */
@@ -975,8 +975,8 @@ void SfxViewShell::UIActivating( SfxInPlaceClient* /*pClient*/ )
     if ( xParentFrame.is() )
         xParentFrame->setActiveFrame( xOwnFrame );
 
-    pFrame->GetBindings().HidePopups(TRUE);
-    pFrame->GetDispatcher()->Update_Impl( TRUE );
+    pFrame->GetBindings().HidePopups(sal_True);
+    pFrame->GetDispatcher()->Update_Impl( sal_True );
 }
 
 //--------------------------------------------------------------------
@@ -985,8 +985,8 @@ void SfxViewShell::UIDeactivated( SfxInPlaceClient* /*pClient*/ )
 {
     if ( !pFrame->GetFrame().IsClosing_Impl() ||
         SfxViewFrame::Current() != pFrame )
-            pFrame->GetDispatcher()->Update_Impl( TRUE );
-    pFrame->GetBindings().HidePopups(FALSE);
+            pFrame->GetDispatcher()->Update_Impl( sal_True );
+    pFrame->GetBindings().HidePopups(sal_False);
 
     // uno::Reference < frame::XFrame > xOwnFrame( pFrame->GetFrame().GetFrameInterface() );
     // uno::Reference < frame::XFramesSupplier > xParentFrame( xOwnFrame->getCreator(), uno::UNO_QUERY );
@@ -1002,13 +1002,13 @@ SfxInPlaceClient* SfxViewShell::FindIPClient
     Window*             pObjParentWin
 )   const
 {
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(FALSE);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(sal_False);
         if ( !pClients )
                 return 0;
 
         if( !pObjParentWin )
                 pObjParentWin = GetWindow();
-        for (USHORT n=0; n < pClients->Count(); n++)
+        for (sal_uInt16 n=0; n < pClients->Count(); n++)
         {
                 SfxInPlaceClient *pIPClient = (SfxInPlaceClient*) pClients->GetObject(n);
         if ( pIPClient->GetObject() == xObj && pIPClient->GetEditWin() == pObjParentWin )
@@ -1030,11 +1030,11 @@ SfxInPlaceClient* SfxViewShell::GetIPClient() const
 SfxInPlaceClient* SfxViewShell::GetUIActiveIPClient_Impl() const
 {
     // this method is needed as long as SFX still manages the border space for ChildWindows (see SfxFrame::Resize)
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(FALSE);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(sal_False);
         if ( !pClients )
                 return 0;
 
-        for (USHORT n=0; n < pClients->Count(); n++)
+        for (sal_uInt16 n=0; n < pClients->Count(); n++)
         {
         SfxInPlaceClient* pIPClient = pClients->GetObject(n);
         if ( pIPClient->IsUIActive() )
@@ -1046,11 +1046,11 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveIPClient_Impl() const
 
 SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
 {
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(FALSE);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(sal_False);
         if ( !pClients )
                 return 0;
 
-        for (USHORT n=0; n < pClients->Count(); n++)
+        for (sal_uInt16 n=0; n < pClients->Count(); n++)
         {
         SfxInPlaceClient* pIPClient = pClients->GetObject(n);
         if ( pIPClient->IsObjectUIActive() )
@@ -1062,7 +1062,7 @@ SfxInPlaceClient* SfxViewShell::GetUIActiveClient() const
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::Activate( BOOL bMDI )
+void SfxViewShell::Activate( sal_Bool bMDI )
 {
         DBG_CHKTHIS(SfxViewShell, 0);
         if ( bMDI )
@@ -1077,7 +1077,7 @@ void SfxViewShell::Activate( BOOL bMDI )
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::Deactivate(BOOL /*bMDI*/)
+void SfxViewShell::Deactivate(sal_Bool /*bMDI*/)
 {
         DBG_CHKTHIS(SfxViewShell, 0);
 }
@@ -1294,13 +1294,13 @@ void SfxViewShell::SetWindow
     DiscardClients_Impl();
 
     // View-Port austauschen
-    BOOL bHadFocus = pWindow ? pWindow->HasChildPathFocus( TRUE ) : FALSE;
+    sal_Bool bHadFocus = pWindow ? pWindow->HasChildPathFocus( sal_True ) : sal_False;
     pWindow = pViewPort;
 
     if( pWindow )
     {
         // Disable automatic GUI mirroring (right-to-left) for document windows
-        pWindow->EnableRTL( FALSE );
+        pWindow->EnableRTL( sal_False );
     }
 
     if ( bHadFocus && pWindow )
@@ -1323,7 +1323,7 @@ Size SfxViewShell::GetOptimalSizePixel() const
 SfxViewShell::SfxViewShell
 (
     SfxViewFrame*   pViewFrame,     /*  <SfxViewFrame>, in dem diese View dargestellt wird */
-    USHORT          nFlags          /*  siehe <SfxViewShell-Flags> */
+    sal_uInt16          nFlags          /*  siehe <SfxViewShell-Flags> */
 )
 
 :   SfxShell(this)
@@ -1384,10 +1384,10 @@ SfxViewShell::~SfxViewShell()
 
 //--------------------------------------------------------------------
 
-USHORT SfxViewShell::PrepareClose
+sal_uInt16 SfxViewShell::PrepareClose
 (
-    BOOL bUI,     // TRUE: Dialoge etc. erlaubt, FALSE: silent-mode
-    BOOL /*bForBrowsing*/
+    sal_Bool bUI,     // sal_True: Dialoge etc. erlaubt, sal_False: silent-mode
+    sal_Bool /*bForBrowsing*/
 )
 {
     SfxPrinter *pPrinter = GetPrinter();
@@ -1399,16 +1399,16 @@ USHORT SfxViewShell::PrepareClose
             aInfoBox.Execute();
         }
 
-        return FALSE;
+        return sal_False;
     }
 
     if( GetViewFrame()->IsInModalMode() )
-        return FALSE;
+        return sal_False;
 
     if( bUI && GetViewFrame()->GetDispatcher()->IsLocked() )
-        return FALSE;
+        return sal_False;
 
-    return TRUE;
+    return sal_True;
 }
 
 //--------------------------------------------------------------------
@@ -1426,9 +1426,9 @@ SfxViewShell* SfxViewShell::Get( const Reference< XController>& i_rController )
     if ( !i_rController.is() )
         return NULL;
 
-    for (   SfxViewShell* pViewShell = SfxViewShell::GetFirst( NULL, FALSE );
+    for (   SfxViewShell* pViewShell = SfxViewShell::GetFirst( NULL, sal_False );
             pViewShell;
-            pViewShell = SfxViewShell::GetNext( *pViewShell, NULL, FALSE )
+            pViewShell = SfxViewShell::GetNext( *pViewShell, NULL, sal_False )
         )
     {
         if ( pViewShell->GetController() == i_rController )
@@ -1457,7 +1457,7 @@ SdrView* SfxViewShell::GetDrawView() const
 
 String SfxViewShell::GetSelectionText
 (
-    BOOL /*bCompleteWords*/         /*      FALSE (default)
+    sal_Bool /*bCompleteWords*/         /*      sal_False (default)
                                                                 Nur der tats"achlich selektierte Text wird
                                                                 zur"uckgegeben.
 
@@ -1486,17 +1486,17 @@ String SfxViewShell::GetSelectionText
 
 //--------------------------------------------------------------------
 
-BOOL SfxViewShell::HasSelection( BOOL ) const
+sal_Bool SfxViewShell::HasSelection( sal_Bool ) const
 
 /*  [Beschreibung]
 
         Mit dieser virtuellen Methode kann z.B. ein Dialog abfragen, ob in der
-        aktuellen View etwas selektiert ist. Wenn der Parameter <BOOL> TRUE ist,
+        aktuellen View etwas selektiert ist. Wenn der Parameter <sal_Bool> sal_True ist,
         wird abgefragt, ob Text selektiert ist.
 */
 
 {
-    return FALSE;
+    return sal_False;
 }
 
 //--------------------------------------------------------------------
@@ -1549,10 +1549,10 @@ void SfxViewShell::RemoveSubShell( SfxShell* pShell )
     SfxDispatcher *pDisp = pFrame->GetDispatcher();
     if ( !pShell )
     {
-        USHORT nCount = pImp->aArr.Count();
+        sal_uInt16 nCount = pImp->aArr.Count();
         if ( pDisp->IsActive(*this) )
         {
-            for ( USHORT n=nCount; n>0; n-- )
+            for ( sal_uInt16 n=nCount; n>0; n-- )
                 pDisp->Pop( *pImp->aArr[n-1] );
             pDisp->Flush();
         }
@@ -1561,7 +1561,7 @@ void SfxViewShell::RemoveSubShell( SfxShell* pShell )
     }
     else
     {
-        USHORT nPos = pImp->aArr.GetPos( pShell );
+        sal_uInt16 nPos = pImp->aArr.GetPos( pShell );
         if ( nPos != 0xFFFF )
         {
             pImp->aArr.Remove( nPos );
@@ -1574,21 +1574,21 @@ void SfxViewShell::RemoveSubShell( SfxShell* pShell )
     }
 }
 
-SfxShell* SfxViewShell::GetSubShell( USHORT nNo )
+SfxShell* SfxViewShell::GetSubShell( sal_uInt16 nNo )
 {
-    USHORT nCount = pImp->aArr.Count();
+    sal_uInt16 nCount = pImp->aArr.Count();
     if ( nNo<nCount )
         return pImp->aArr[nCount-nNo-1];
     return NULL;
 }
 
-void SfxViewShell::PushSubShells_Impl( BOOL bPush )
+void SfxViewShell::PushSubShells_Impl( sal_Bool bPush )
 {
-    USHORT nCount = pImp->aArr.Count();
+    sal_uInt16 nCount = pImp->aArr.Count();
     SfxDispatcher *pDisp = pFrame->GetDispatcher();
     if ( bPush )
     {
-        for ( USHORT n=0; n<nCount; n++ )
+        for ( sal_uInt16 n=0; n<nCount; n++ )
             pDisp->Push( *pImp->aArr[n] );
     }
     else if ( nCount )
@@ -1603,13 +1603,13 @@ void SfxViewShell::PushSubShells_Impl( BOOL bPush )
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::WriteUserData( String&, BOOL )
+void SfxViewShell::WriteUserData( String&, sal_Bool )
 {
 }
 
 //--------------------------------------------------------------------
 
-void SfxViewShell::ReadUserData(const String&, BOOL )
+void SfxViewShell::ReadUserData(const String&, sal_Bool )
 {
 }
 
@@ -1628,13 +1628,13 @@ void SfxViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::c
 SfxViewShell* SfxViewShell::GetFirst
 (
     const TypeId* pType,
-    BOOL          bOnlyVisible
+    sal_Bool          bOnlyVisible
 )
 {
     // search for a SfxViewShell of the specified type
     SfxViewShellArr_Impl &rShells = SFX_APP()->GetViewShells_Impl();
     SfxViewFrameArr_Impl &rFrames = SFX_APP()->GetViewFrames_Impl();
-    for ( USHORT nPos = 0; nPos < rShells.Count(); ++nPos )
+    for ( sal_uInt16 nPos = 0; nPos < rShells.Count(); ++nPos )
     {
         SfxViewShell *pShell = rShells.GetObject(nPos);
         if ( pShell )
@@ -1666,12 +1666,12 @@ SfxViewShell* SfxViewShell::GetNext
 (
     const SfxViewShell& rPrev,
     const TypeId*       pType,
-    BOOL                bOnlyVisible
+    sal_Bool                bOnlyVisible
 )
 {
     SfxViewShellArr_Impl &rShells = SFX_APP()->GetViewShells_Impl();
     SfxViewFrameArr_Impl &rFrames = SFX_APP()->GetViewFrames_Impl();
-    USHORT nPos;
+    sal_uInt16 nPos;
     for ( nPos = 0; nPos < rShells.Count(); ++nPos )
         if ( rShells.GetObject(nPos) == &rPrev )
             break;
@@ -1743,7 +1743,7 @@ void SfxViewShell::Notify( SfxBroadcaster& rBC,
 
 //--------------------------------------------------------------------
 
-BOOL SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
+sal_Bool SfxViewShell::ExecKey_Impl(const KeyEvent& aKey)
 {
     if (!pImp->m_pAccExec.get())
     {
@@ -1769,7 +1769,7 @@ FASTBOOL SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
 
         [R"uckgabewert]
 
-        FASTBOOL                TRUE
+        FASTBOOL                sal_True
                                                         die Taste ist konfiguriert, der betreffende
                                                         Handler wurde gerufen
 
@@ -1785,7 +1785,7 @@ FASTBOOL SfxViewShell::KeyInput( const KeyEvent &rKeyEvent )
     return ExecKey_Impl(rKeyEvent);
 }
 
-FASTBOOL SfxViewShell::GlobalKeyInput_Impl( const KeyEvent &rKeyEvent )
+bool SfxViewShell::GlobalKeyInput_Impl( const KeyEvent &rKeyEvent )
 {
     return ExecKey_Impl(rKeyEvent);
 }
@@ -1828,11 +1828,11 @@ void SfxViewShell::GotFocus() const
 void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient *pIP )
 {
 
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(FALSE);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(sal_False);
     if ( !pClients )
         return;
 
-    for ( USHORT n=0; n < pClients->Count(); n++ )
+    for ( sal_uInt16 n=0; n < pClients->Count(); n++ )
     {
         SfxInPlaceClient* pIPClient = pClients->GetObject(n);
         if( pIPClient != pIP )
@@ -1844,11 +1844,11 @@ void SfxViewShell::ResetAllClients_Impl( SfxInPlaceClient *pIP )
 
 void SfxViewShell::DisconnectAllClients()
 {
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(FALSE);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(sal_False);
     if ( !pClients )
         return;
 
-    for ( USHORT n=0; n<pClients->Count(); )
+    for ( sal_uInt16 n=0; n<pClients->Count(); )
         // clients will remove themselves from the list
         delete pClients->GetObject(n);
 }
@@ -1871,11 +1871,11 @@ void SfxViewShell::AdjustVisArea(const Rectangle& rRect)
 
 void SfxViewShell::VisAreaChanged(const Rectangle& /*rVisArea*/)
 {
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(FALSE);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(sal_False);
     if ( !pClients )
         return;
 
-    for (USHORT n=0; n < pClients->Count(); n++)
+    for (sal_uInt16 n=0; n < pClients->Count(); n++)
     {
         SfxInPlaceClient* pIPClient = pClients->GetObject(n);
         if ( pIPClient->IsObjectInPlaceActive() )
@@ -1924,7 +1924,7 @@ void SfxViewShell::CheckIPClient_Impl( SfxInPlaceClient *pIPClient, const Rectan
 
 //--------------------------------------------------------------------
 
-BOOL SfxViewShell::PlugInsActive() const
+sal_Bool SfxViewShell::PlugInsActive() const
 {
     return pImp->m_bPlugInsActive;
 }
@@ -1940,11 +1940,11 @@ void SfxViewShell::DiscardClients_Impl()
 */
 
 {
-    SfxInPlaceClientList *pClients = GetIPClientList_Impl(FALSE);
+    SfxInPlaceClientList *pClients = GetIPClientList_Impl(sal_False);
     if ( !pClients )
         return;
 
-    for (USHORT n=0; n < pClients->Count(); )
+    for (sal_uInt16 n=0; n < pClients->Count(); )
         delete pClients->GetObject(n);
 }
 
@@ -2024,7 +2024,7 @@ void SfxViewShell::MarginChanged()
 
 //--------------------------------------------------------------------
 
-BOOL SfxViewShell::IsShowView_Impl() const
+sal_Bool SfxViewShell::IsShowView_Impl() const
 {
     return pImp->m_bIsShowView;
 }
@@ -2049,7 +2049,7 @@ void SfxViewShell::JumpToMark( const String& rMark )
 
 //------------------------------------------------------------------------
 
-SfxInPlaceClientList* SfxViewShell::GetIPClientList_Impl( BOOL bCreate ) const
+SfxInPlaceClientList* SfxViewShell::GetIPClientList_Impl( sal_Bool bCreate ) const
 {
     if ( !pIPClientList && bCreate )
         ( (SfxViewShell*) this )->pIPClientList = new SfxInPlaceClientList;
@@ -2096,10 +2096,10 @@ void SfxViewShell::RemoveContextMenuInterceptor_Impl( const REFERENCE< XCONTEXTM
 void Change( Menu* pMenu, SfxViewShell* pView )
 {
     SfxDispatcher *pDisp = pView->GetViewFrame()->GetDispatcher();
-    USHORT nCount = pMenu->GetItemCount();
-    for ( USHORT nPos=0; nPos<nCount; ++nPos )
+    sal_uInt16 nCount = pMenu->GetItemCount();
+    for ( sal_uInt16 nPos=0; nPos<nCount; ++nPos )
     {
-        USHORT nId = pMenu->GetItemId(nPos);
+        sal_uInt16 nId = pMenu->GetItemId(nPos);
         String aCmd = pMenu->GetItemCommand(nId);
         PopupMenu* pPopup = pMenu->GetPopupMenu(nId);
         if ( pPopup )
@@ -2110,7 +2110,7 @@ void Change( Menu* pMenu, SfxViewShell* pView )
         {
             if ( aCmd.CompareToAscii(".uno:", 5) == 0 )
             {
-                for (USHORT nIdx=0;;)
+                for (sal_uInt16 nIdx=0;;)
                 {
                     SfxShell *pShell=pDisp->GetShell(nIdx++);
                     if (pShell == NULL)
@@ -2131,10 +2131,10 @@ void Change( Menu* pMenu, SfxViewShell* pView )
 }
 
 
-BOOL SfxViewShell::TryContextMenuInterception( Menu& rIn, const ::rtl::OUString& rMenuIdentifier, Menu*& rpOut, ui::ContextMenuExecuteEvent aEvent )
+sal_Bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const ::rtl::OUString& rMenuIdentifier, Menu*& rpOut, ui::ContextMenuExecuteEvent aEvent )
 {
     rpOut = NULL;
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
 
     // create container from menu
         // #110897#
@@ -2157,14 +2157,14 @@ BOOL SfxViewShell::TryContextMenuInterception( Menu& rIn, const ::rtl::OUString&
             {
                 case ui::ContextMenuInterceptorAction_CANCELLED :
                     // interceptor does not want execution
-                    return FALSE;
+                    return sal_False;
                 case ui::ContextMenuInterceptorAction_EXECUTE_MODIFIED :
                     // interceptor wants his modified menu to be executed
-                    bModified = TRUE;
+                    bModified = sal_True;
                     break;
                 case ui::ContextMenuInterceptorAction_CONTINUE_MODIFIED :
                     // interceptor has modified menu, but allows for calling other interceptors
-                    bModified = TRUE;
+                    bModified = sal_True;
                     continue;
                 case ui::ContextMenuInterceptorAction_IGNORED :
                     // interceptor is indifferent
@@ -2191,7 +2191,7 @@ BOOL SfxViewShell::TryContextMenuInterception( Menu& rIn, const ::rtl::OUString&
         Change( rpOut, this );
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 void SfxViewShell::TakeOwnerShip_Impl()
@@ -2210,7 +2210,7 @@ void SfxViewShell::TakeFrameOwnerShip_Impl()
 
 void SfxViewShell::CheckOwnerShip_Impl()
 {
-    BOOL bSuccess = FALSE;
+    sal_Bool bSuccess = sal_False;
     if (pImp->m_bGotOwnership)
     {
         uno::Reference < util::XCloseable > xModel(
@@ -2221,7 +2221,7 @@ void SfxViewShell::CheckOwnerShip_Impl()
             {
                 // this call will destroy this object in case of success!
                 xModel->close( sal_True );
-                bSuccess = TRUE;
+                bSuccess = sal_True;
             }
             catch ( util::CloseVetoException& )
             {
@@ -2254,16 +2254,16 @@ long SfxViewShell::HandleNotifyEvent_Impl( NotifyEvent& rEvent )
     return 0;
 }
 
-BOOL SfxViewShell::HasKeyListeners_Impl()
+sal_Bool SfxViewShell::HasKeyListeners_Impl()
 {
     return (pImp->m_pController.is())
-        ? pImp->m_pController->HasKeyListeners_Impl() : FALSE;
+        ? pImp->m_pController->HasKeyListeners_Impl() : sal_False;
 }
 
-BOOL SfxViewShell::HasMouseClickListeners_Impl()
+sal_Bool SfxViewShell::HasMouseClickListeners_Impl()
 {
     return (pImp->m_pController.is())
-        ? pImp->m_pController->HasMouseClickListeners_Impl() : FALSE;
+        ? pImp->m_pController->HasMouseClickListeners_Impl() : sal_False;
 }
 
 void SfxViewShell::SetAdditionalPrintOptions( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& rOpts )
@@ -2272,7 +2272,7 @@ void SfxViewShell::SetAdditionalPrintOptions( const com::sun::star::uno::Sequenc
 //      GetObjectShell()->Broadcast( SfxPrintingHint( -3, NULL, NULL, rOpts ) );
 }
 
-BOOL SfxViewShell::Escape()
+sal_Bool SfxViewShell::Escape()
 {
     return GetViewFrame()->GetBindings().Execute( SID_TERMINATE_INPLACEACTIVATION );
 }
@@ -2299,7 +2299,7 @@ uno::Reference< datatransfer::clipboard::XClipboardNotifier > SfxViewShell::GetC
     return xClipboardNotifier;
 }
 
-void SfxViewShell::AddRemoveClipboardListener( const uno::Reference < datatransfer::clipboard::XClipboardListener >& rClp, BOOL bAdd )
+void SfxViewShell::AddRemoveClipboardListener( const uno::Reference < datatransfer::clipboard::XClipboardListener >& rClp, sal_Bool bAdd )
 {
     try
     {

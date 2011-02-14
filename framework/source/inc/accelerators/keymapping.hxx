@@ -148,10 +148,10 @@ class KeyMapping
 
             @param  rCode
                     contains the converted code, but is defined only
-                    if this method returns TRUE!
+                    if this method returns sal_True!
 
             @return [boolean]
-                    TRUE if convertion was successfully.
+                    sal_True if convertion was successfully.
           */
         sal_Bool impl_st_interpretIdentifierAsPureKeyCode(const ::rtl::OUString& sIdentifier,
                                                                 sal_uInt16&      rCode      );

@@ -112,14 +112,14 @@ class Browser: public BrowseBox
 friend class AppWindow;
 
     DataList        aRows;
-    BOOL            bInverse;
+    sal_Bool            bInverse;
     Edit*           pEdit;
 
 protected:
     virtual long    GetRowCount() const;
-    virtual BOOL    SeekRow( long nRow );
+    virtual sal_Bool    SeekRow( long nRow );
     virtual void    PaintField( OutputDevice& rDev, const Rectangle& rRect,
-                                USHORT nColumnId ) const;
+                                sal_uInt16 nColumnId ) const;
 
     virtual void    Select();
     virtual void    DoubleClick();
@@ -128,7 +128,7 @@ protected:
     virtual void    EndScroll();
     virtual void    Command( const CommandEvent &eEvt );
 
-    virtual BOOL    StartDragging( Pointer& rMovePtr,
+    virtual sal_Bool    StartDragging( Pointer& rMovePtr,
                                    Pointer& rCopyPtr );
     virtual void    EndDragging( const DropAction &rAction );
     virtual void    MouseButtonDown( const BrowserMouseEvent &rEvt );
@@ -137,7 +137,7 @@ public:
                     Browser( AppWindow* pParent, BrowserMode eMode );
                     ~Browser();
 
-    void            SetInverseSelection( BOOL bInverseSel )
+    void            SetInverseSelection( sal_Bool bInverseSel )
                     { bInverse = bInverseSel; }
 };
 
@@ -151,7 +151,7 @@ class AppWindow: public WorkWindow
     Browser         aBrowser;
     BrowserMode     eCurMode;
     FloatingWindow *pEventView;
-    ULONG           nNewRowNo;
+    sal_uLong           nNewRowNo;
 
 private:
     DECL_LINK( Modify, void * );
@@ -341,7 +341,7 @@ BrowserMode BrowseModeDialog::GetMode() const
 
 Browser::Browser( AppWindow* pParent, BrowserMode eMode ):
     BrowseBox( pParent, WinBits(WB_DRAG), eMode ),
-    bInverse(FALSE),
+    bInverse(sal_False),
     pEdit( 0 )
 {
     for ( long n = 0; n < 100; ++n )
@@ -369,11 +369,11 @@ Browser::~Browser()
 
 //------------------------------------------------------------------
 
-BOOL Browser::StartDragging( Pointer& rMovePtr, Pointer& rCopyPtr )
+sal_Bool Browser::StartDragging( Pointer& rMovePtr, Pointer& rCopyPtr )
 {
     rMovePtr = Pointer( POINTER_MOVEDATA );
     rCopyPtr = Pointer( POINTER_COPYDATA );
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------
@@ -469,9 +469,9 @@ void Browser::CursorMoved()
     aEvent += String( ":", RTL_TEXTENCODING_IBM_850 );
     aEvent += String( GetCurColumnId() );
     ( (AppWindow*) GetParent() )->Event( aEvent );
-    if ( IsFieldVisible( GetCurRow(), GetCurColumnId(), TRUE ) )
+    if ( IsFieldVisible( GetCurRow(), GetCurColumnId(), sal_True ) )
         ( (AppWindow*) GetParent() )->Event( String( "completely visible", RTL_TEXTENCODING_IBM_850 ) );
-    else if ( IsFieldVisible( 1, GetCurColumnId(), FALSE) )
+    else if ( IsFieldVisible( 1, GetCurColumnId(), sal_False) )
         ( (AppWindow*) GetParent() )->Event( String( "partly visible", RTL_TEXTENCODING_IBM_850 ) );
     else
         ( (AppWindow*) GetParent() )->Event( String( "not visible", RTL_TEXTENCODING_IBM_850 ) );
@@ -488,20 +488,20 @@ long Browser::GetRowCount() const
 
 //------------------------------------------------------------------
 
-BOOL Browser::SeekRow( long nRow )
+sal_Bool Browser::SeekRow( long nRow )
 {
     if ( nRow >= 0 && nRow < (long) aRows.Count() )
     {
         aRows.Seek(nRow);
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 //------------------------------------------------------------------
 
 void Browser::PaintField( OutputDevice& rDev, const Rectangle& rRect,
-                          USHORT nColumnId ) const
+                          sal_uInt16 nColumnId ) const
 {
     rDev.SetClipRegion( rRect );
     String aText( aRows.GetCurObject() );
@@ -583,7 +583,7 @@ IMPL_LINK_INLINE_START( AppWindow, Modify, void *, pCaller )
     aBrowser.GoToRow( pEdit->GetText().ToInt32() );
     aBrowser.GrabFocus();
 
-    return TRUE;
+    return sal_True;
 }
 IMPL_LINK_INLINE_END( AppWindow, Modify, void *, pCaller )
 
@@ -591,7 +591,7 @@ IMPL_LINK_INLINE_END( AppWindow, Modify, void *, pCaller )
 
 IMPL_LINK( AppWindow, MenuSelect, Menu *, pMenu )
 {
-    ULONG nPos;
+    sal_uLong nPos;
 
     switch ( pMenu->GetCurItemId() )
     {
@@ -726,7 +726,7 @@ IMPL_LINK( AppWindow, MenuSelect, Menu *, pMenu )
 
         case MID_INVERSE:
         {
-            BOOL bChecked = pMenu->IsItemChecked( MID_INVERSE );
+            sal_Bool bChecked = pMenu->IsItemChecked( MID_INVERSE );
             pMenu->CheckItem( MID_INVERSE, !bChecked );
             aBrowser.SetInverseSelection( !bChecked );
             break;
@@ -739,14 +739,14 @@ IMPL_LINK( AppWindow, MenuSelect, Menu *, pMenu )
         case MID_STARMONEY_1:
         {
             nPos = aBrowser.GetCurRow();
-            aBrowser.SelectRow( nPos + 1, TRUE );
+            aBrowser.SelectRow( nPos + 1, sal_True );
             aBrowser.aRows.Remove( nPos );
             aBrowser.RowRemoved( nPos );
             break;
         }
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------

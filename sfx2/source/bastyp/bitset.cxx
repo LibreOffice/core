@@ -39,7 +39,7 @@
 //====================================================================
 // add nOffset to each bit-value in the set
 
-BitSet BitSet::operator<<( USHORT nOffset ) const
+BitSet BitSet::operator<<( sal_uInt16 nOffset ) const
 {
     DBG_MEMTEST();
     // create a work-copy, return it if nothing to shift
@@ -48,17 +48,17 @@ BitSet BitSet::operator<<( USHORT nOffset ) const
         return aSet;
 
     // compute the shiftment in long-words and bits
-    USHORT nBlockDiff = nOffset / 32;
-    ULONG nBitValDiff = nOffset % 32;
+    sal_uInt16 nBlockDiff = nOffset / 32;
+    sal_uIntPtr nBitValDiff = nOffset % 32;
 
     // compute the new number of bits
-    for ( USHORT nBlock = 0; nBlock < nBlockDiff; ++nBlock )
+    for ( sal_uInt16 nBlock = 0; nBlock < nBlockDiff; ++nBlock )
         aSet.nCount = aSet.nCount - CountBits( *(aSet.pBitmap+nBlock) );
     aSet.nCount = aSet.nCount -
         CountBits( *(aSet.pBitmap+nBlockDiff) >> (32-nBitValDiff) );
 
     // shift complete long-words
-    USHORT nTarget, nSource;
+    sal_uInt16 nTarget, nSource;
     for ( nTarget = 0, nSource = nBlockDiff;
           (nSource+1) < aSet.nBlocks;
           ++nTarget, ++nSource )
@@ -76,7 +76,7 @@ BitSet BitSet::operator<<( USHORT nOffset ) const
     // shorten the block-array
     if ( nTarget < aSet.nBlocks )
     {
-        ULONG* pNewMap = new ULONG[nTarget];
+        sal_uIntPtr* pNewMap = new sal_uIntPtr[nTarget];
         memcpy( pNewMap, aSet.pBitmap, 4 * nTarget );
         delete [] aSet.pBitmap;
         aSet.pBitmap = pNewMap;
@@ -90,7 +90,7 @@ BitSet BitSet::operator<<( USHORT nOffset ) const
 
 // substracts nOffset from each bit-value in the set
 
-BitSet BitSet::operator>>( USHORT ) const
+BitSet BitSet::operator>>( sal_uInt16 ) const
 {
     DBG_MEMTEST();
     return BitSet();
@@ -108,7 +108,7 @@ void BitSet::CopyFrom( const BitSet& rSet )
     if ( rSet.nBlocks )
     {
         DBG_MEMTEST();
-        pBitmap = new ULONG[nBlocks];
+        pBitmap = new sal_uIntPtr[nBlocks];
         memcpy( pBitmap, rSet.pBitmap, 4 * nBlocks );
     }
     else
@@ -141,13 +141,13 @@ BitSet::BitSet( const BitSet& rOrig )
 
 // creates a bitset from an array
 
-BitSet::BitSet( USHORT* pArray, USHORT nSize ):
+BitSet::BitSet( sal_uInt16* pArray, sal_uInt16 nSize ):
     nCount(nSize)
 {
     DBG_MEMTEST();
     // find the highest bit to set
-    USHORT nMax = 0;
-    for ( USHORT n = 0; n < nCount; ++n )
+    sal_uInt16 nMax = 0;
+    for ( sal_uInt16 n = 0; n < nCount; ++n )
         if ( pArray[n] > nMax )
             nMax = pArray[n];
 
@@ -156,15 +156,15 @@ BitSet::BitSet( USHORT* pArray, USHORT nSize ):
     {
         // allocate memory for all blocks needed
         nBlocks = nMax / 32 + 1;
-        pBitmap = new ULONG[nBlocks];
+        pBitmap = new sal_uIntPtr[nBlocks];
         memset( pBitmap, 0, 4 * nBlocks );
 
         // set all the bits
-        for ( USHORT n = 0; n < nCount; ++n )
+        for ( sal_uInt16 n = 0; n < nCount; ++n )
         {
             // compute the block no. and bitvalue
-            USHORT nBlock = n / 32;
-            ULONG nBitVal = 1L << (n % 32);
+            sal_uInt16 nBlock = n / 32;
+            sal_uIntPtr nBitVal = 1L << (n % 32);
 
             // set a single bit
             if ( ( *(pBitmap+nBlock) & nBitVal ) == 0 )
@@ -220,16 +220,16 @@ BitSet& BitSet::operator=( const BitSet& rOrig )
 
 // assignment from a single bit
 
-BitSet& BitSet::operator=( USHORT nBit )
+BitSet& BitSet::operator=( sal_uInt16 nBit )
 {
     DBG_MEMTEST();
     delete [] pBitmap;
 
     nBlocks = nBit / 32;
-    ULONG nBitVal = 1L << (nBit % 32);
+    sal_uIntPtr nBitVal = 1L << (nBit % 32);
     nCount = 1;
 
-    pBitmap = new ULONG[nBlocks];
+    pBitmap = new sal_uIntPtr[nBlocks];
     memset( pBitmap + nBlocks, 0, 4 * nBlocks );
 
     *(pBitmap+nBlocks) = nBitVal;
@@ -241,11 +241,11 @@ BitSet& BitSet::operator=( USHORT nBit )
 
 // creates the asymetric difference with another bitset
 
-BitSet& BitSet::operator-=(USHORT nBit)
+BitSet& BitSet::operator-=(sal_uInt16 nBit)
 {
     DBG_MEMTEST();
-    USHORT nBlock = nBit / 32;
-    ULONG nBitVal = 1L << (nBit % 32);
+    sal_uInt16 nBlock = nBit / 32;
+    sal_uIntPtr nBitVal = 1L << (nBit % 32);
 
     if ( nBlock >= nBlocks )
       return *this;
@@ -266,12 +266,12 @@ BitSet& BitSet::operator-=(USHORT nBit)
 BitSet& BitSet::operator|=( const BitSet& rSet )
 {
     DBG_MEMTEST();
-    USHORT nMax = Min(nBlocks, rSet.nBlocks);
+    sal_uInt16 nMax = Min(nBlocks, rSet.nBlocks);
 
     // expand the bitmap
     if ( nBlocks < rSet.nBlocks )
     {
-        ULONG *pNewMap = new ULONG[rSet.nBlocks];
+        sal_uIntPtr *pNewMap = new sal_uIntPtr[rSet.nBlocks];
         memset( pNewMap + nBlocks, 0, 4 * (rSet.nBlocks - nBlocks) );
 
         if ( pBitmap )
@@ -284,10 +284,10 @@ BitSet& BitSet::operator|=( const BitSet& rSet )
     }
 
     // add the bits blocks by block
-    for ( USHORT nBlock = 0; nBlock < nMax; ++nBlock )
+    for ( sal_uInt16 nBlock = 0; nBlock < nMax; ++nBlock )
     {
         // compute numberof additional bits
-        ULONG nDiff = ~*(pBitmap+nBlock) & *(rSet.pBitmap+nBlock);
+        sal_uIntPtr nDiff = ~*(pBitmap+nBlock) & *(rSet.pBitmap+nBlock);
         nCount = nCount + CountBits(nDiff);
 
         *(pBitmap+nBlock) |= *(rSet.pBitmap+nBlock);
@@ -300,15 +300,15 @@ BitSet& BitSet::operator|=( const BitSet& rSet )
 
 // unites with a single bit
 
-BitSet& BitSet::operator|=( USHORT nBit )
+BitSet& BitSet::operator|=( sal_uInt16 nBit )
 {
     DBG_MEMTEST();
-    USHORT nBlock = nBit / 32;
-    ULONG nBitVal = 1L << (nBit % 32);
+    sal_uInt16 nBlock = nBit / 32;
+    sal_uIntPtr nBitVal = 1L << (nBit % 32);
 
     if ( nBlock >= nBlocks )
     {
-        ULONG *pNewMap = new ULONG[nBlock+1];
+        sal_uIntPtr *pNewMap = new sal_uIntPtr[nBlock+1];
         memset( pNewMap + nBlocks, 0, 4 * (nBlock - nBlocks + 1) );
 
         if ( pBitmap )
@@ -333,14 +333,14 @@ BitSet& BitSet::operator|=( USHORT nBit )
 
 // determines if the bit is set (may be the only one)
 
-BOOL BitSet::Contains( USHORT nBit ) const
+sal_Bool BitSet::Contains( sal_uInt16 nBit ) const
 {
     DBG_MEMTEST();
-    USHORT nBlock = nBit / 32;
-    ULONG nBitVal = 1L << (nBit % 32);
+    sal_uInt16 nBlock = nBit / 32;
+    sal_uIntPtr nBitVal = 1L << (nBit % 32);
 
     if ( nBlock >= nBlocks )
-        return FALSE;
+        return sal_False;
     return ( nBitVal & *(pBitmap+nBlock) ) == nBitVal;
 }
 
@@ -348,27 +348,27 @@ BOOL BitSet::Contains( USHORT nBit ) const
 
 // determines if the bitsets are equal
 
-BOOL BitSet::operator==( const BitSet& rSet ) const
+sal_Bool BitSet::operator==( const BitSet& rSet ) const
 {
     DBG_MEMTEST();
     if ( nBlocks != rSet.nBlocks )
-        return FALSE;
+        return sal_False;
 
-    USHORT nBlock = nBlocks;
+    sal_uInt16 nBlock = nBlocks;
     while ( nBlock-- > 0 )
         if ( *(pBitmap+nBlock) != *(rSet.pBitmap+nBlock) )
-            return FALSE;
+            return sal_False;
 
-    return TRUE;
+    return sal_True;
 }
 
 //--------------------------------------------------------------------
 
 // counts the number of 1-bits in the parameter
 
-USHORT BitSet::CountBits( ULONG nBits )
+sal_uInt16 BitSet::CountBits( sal_uIntPtr nBits )
 {
-    USHORT nCount = 0;
+    sal_uInt16 nCount = 0;
     int nBit = 32;
     while ( nBit-- && nBits )
     {   if ( ( (long)nBits ) < 0 )
@@ -380,15 +380,15 @@ USHORT BitSet::CountBits( ULONG nBits )
 
 //--------------------------------------------------------------------
 
-USHORT IndexBitSet::GetFreeIndex()
+sal_uInt16 IndexBitSet::GetFreeIndex()
 {
-  for(USHORT i=0;i<USHRT_MAX;i++)
+  for(sal_uInt16 i=0;i<USHRT_MAX;i++)
     if(!Contains(i))
       {
         *this|=i;
         return i;
       }
-  DBG_ASSERT(FALSE, "IndexBitSet enthaelt mehr als USHRT_MAX Eintraege");
+  DBG_ASSERT(sal_False, "IndexBitSet enthaelt mehr als USHRT_MAX Eintraege");
   return 0;
 }
 

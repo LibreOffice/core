@@ -50,7 +50,7 @@ void DbgDialogTest( Window* pWindow );
         ->DbgData::nWarningOut and ->DbgData::nTraceOut
     @see DBG_OUT_USER_CHANNEL_0
 */
-USHORT DbgRegisterNamedUserChannel( const XubString& _rChannelUIName, DbgPrintLine pProc );
+sal_uInt16 DbgRegisterNamedUserChannel( const XubString& _rChannelUIName, DbgPrintLine pProc );
 
 #define DBGGUI_INIT()           DbgGUIInit()
 #define DBGGUI_DEINIT()         DbgGUIDeInit()

@@ -41,30 +41,30 @@ class RscFlag : public RscConst {
     RSCINST         CreateBasic( RSCINST * pInst );
 public:
                     RscFlag( Atom nId, sal_uInt32 nTypId );
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, BOOL );
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool );
     RSCINST         CreateClient( RSCINST * pInst, const RSCINST & rDflt,
-                                  BOOL bOwnClass, Atom nConsId );
+                                  sal_Bool bOwnClass, Atom nConsId );
     sal_uInt32          Size();
 
     virtual void    SetToDefault( const RSCINST & rInst );
-    BOOL            IsDefault( const RSCINST & rInst );
-    BOOL            IsDefault( const RSCINST & rInst, Atom nConstId );
+    sal_Bool            IsDefault( const RSCINST & rInst );
+    sal_Bool            IsDefault( const RSCINST & rInst, Atom nConstId );
 
                     // Ist das Flag gesetzt
-    BOOL            IsSet( const RSCINST & rInst, Atom nConstId );
+    sal_Bool            IsSet( const RSCINST & rInst, Atom nConstId );
 
                     // Als Default setzen
-    BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
-    BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef,
+    sal_Bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
+    sal_Bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef,
                                     Atom nConstId );
 
     ERRTYPE         SetConst( const RSCINST & rInst, Atom nValueId,
-                              INT32 nValue );
+                              sal_Int32 nValue );
     ERRTYPE         SetNotConst( const RSCINST & rInst, Atom nConstId );
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, BOOL bExtra );
+                             RscTypCont * pTC, sal_uInt32, sal_Bool bExtra );
 };
 
 /******************* R s c C l i e n t ***********************************/
@@ -76,26 +76,26 @@ public:
                     RscClient( Atom nId, sal_uInt32 nTypId, RscFlag * pClass,
                                Atom nConstantId );
     virtual RSCCLASS_TYPE   GetClassType() const;
-    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, BOOL );
+    RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, sal_Bool );
     sal_uInt32          Size(){ return( pRefClass->Size() ); };
 
                     // Eine Zuweisung an eine Variable
-    BOOL            IsDefault( const RSCINST & rInst ){
+    sal_Bool            IsDefault( const RSCINST & rInst ){
                         return( pRefClass->IsDefault( rInst, nConstId ) );
                     };
                     // Als Default setzen
-    BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
+    sal_Bool            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
                         return pRefClass->IsValueDefault( rInst,
                                                     pDef, nConstId );
                     }
-    ERRTYPE         SetBool( const RSCINST & rInst, BOOL bValue ){
+    ERRTYPE         SetBool( const RSCINST & rInst, sal_Bool bValue ){
                         if( bValue )
                             return( pRefClass->SetConst( rInst, nConstId, bValue ) );
                         else
                             return( pRefClass->
                                     SetNotConst( rInst, nConstId ) );
                     };
-    ERRTYPE         GetBool( const RSCINST & rInst, BOOL * pB ){
+    ERRTYPE         GetBool( const RSCINST & rInst, sal_Bool * pB ){
                         *pB = pRefClass->IsSet( rInst, nConstId );
                         return( ERR_OK );
                     };

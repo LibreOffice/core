@@ -134,7 +134,7 @@ TYPEINIT1(SwFlyFreeFrm,SwFlyFrm);
 void SwFlyFreeFrm::NotifyBackground( SwPageFrm *pPageFrm,
                                      const SwRect& rRect, PrepareHint eHint )
 {
-    ::Notify_Background( GetVirtDrawObj(), pPageFrm, rRect, eHint, TRUE );
+    ::Notify_Background( GetVirtDrawObj(), pPageFrm, rRect, eHint, sal_True );
 }
 
 /*************************************************************************
@@ -174,7 +174,7 @@ void SwFlyFreeFrm::MakeAll()
 
     if ( IsClipped() )
     {
-        bValidSize = bHeightClipped = bWidthClipped = FALSE;
+        bValidSize = bHeightClipped = bWidthClipped = sal_False;
         // --> OD 2004-11-03 #114798# - no invalidation of position,
         // if anchored object is anchored inside a Writer fly frame,
         // its position is already locked, and it follows the text flow.
@@ -186,14 +186,14 @@ void SwFlyFreeFrm::MakeAll()
                 GetFrmFmt().GetFollowTextFlow().GetValue() ) )
         // <--
         {
-            bValidPos = FALSE;
+            bValidPos = sal_False;
         }
         // <--
     }
 
     // FME 2007-08-30 #i81146# new loop control
-    USHORT nLoopControlRuns = 0;
-    const USHORT nLoopControlMax = 10;
+    sal_uInt16 nLoopControlRuns = 0;
+    const sal_uInt16 nLoopControlMax = 10;
 
     while ( !bValidPos || !bValidSize || !bValidPrtArea || bFormatHeightOnly )
     {
@@ -208,7 +208,7 @@ void SwFlyFreeFrm::MakeAll()
             //Nur einstellen wenn das Flag gesetzt ist!!
             if ( !bValidSize )
             {
-                bValidPrtArea = FALSE;
+                bValidPrtArea = sal_False;
 /*
                 // This is also done in the Format function, so I think
                 // this code is not necessary anymore:
@@ -221,7 +221,7 @@ void SwFlyFreeFrm::MakeAll()
                 if( nDiff )
                 {
                     (aFrm.*fnRect->fnAddRight)( nDiff );
-                    bValidPos = FALSE;
+                    bValidPos = sal_False;
                 }
 */
             }
@@ -231,9 +231,9 @@ void SwFlyFreeFrm::MakeAll()
 
             if ( !bValidSize || bFormatHeightOnly )
             {
-                bValidSize = FALSE;
+                bValidSize = sal_False;
                 Format( &rAttrs );
-                bFormatHeightOnly = FALSE;
+                bFormatHeightOnly = sal_False;
             }
 
             if ( !bValidPos )
@@ -242,7 +242,7 @@ void SwFlyFreeFrm::MakeAll()
                 // OD 2004-03-23 #i26791# - use new method <MakeObjPos()>
                 // --> OD 2004-11-15 #i34753# - no positioning, if requested.
                 if ( IsNoMakePos() )
-                    bValidPos = TRUE;
+                    bValidPos = sal_True;
                 else
                     // OD 2004-03-23 #i26791# - use new method <MakeObjPos()>
                     MakeObjPos();
@@ -251,10 +251,10 @@ void SwFlyFreeFrm::MakeAll()
                 {
                     if( !bValidPos && GetAnchorFrm()->IsInSct() &&
                         !GetAnchorFrm()->FindSctFrm()->IsValid() )
-                        bValidPos = TRUE;
+                        bValidPos = sal_True;
                 }
                 else
-                    bValidSize = FALSE;
+                    bValidSize = sal_False;
             }
         }
 
@@ -341,8 +341,8 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
 
     const SwVirtFlyDrawObj *pObj = GetVirtDrawObj();
     SwRect aClip, aTmpStretch;
-    ::CalcClipRect( pObj, aClip, TRUE );
-    ::CalcClipRect( pObj, aTmpStretch, FALSE );
+    ::CalcClipRect( pObj, aClip, sal_True );
+    ::CalcClipRect( pObj, aTmpStretch, sal_False );
     aClip._Intersection( aTmpStretch );
 
     const long nBot = Frm().Top() + Frm().Height();
@@ -350,11 +350,11 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
     const long nClipBot = aClip.Top() + aClip.Height();
     const long nClipRig = aClip.Left() + aClip.Width();
 
-    const BOOL bBot = nBot > nClipBot;
-    const BOOL bRig = nRig > nClipRig;
+    const sal_Bool bBot = nBot > nClipBot;
+    const sal_Bool bRig = nRig > nClipRig;
     if ( bBot || bRig )
     {
-        BOOL bAgain = FALSE;
+        sal_Bool bAgain = sal_False;
         // --> OD 2004-11-12 #i37068# - no move, if it's requested
         if ( bBot && !IsNoMoveOnCheckClip() &&
              !GetDrawObjs() && !GetAnchorFrm()->IsInTab() )
@@ -370,8 +370,8 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 const long nOld = Frm().Top();
                 Frm().Pos().Y() = Max( aClip.Top(), nClipBot - Frm().Height() );
                 if ( Frm().Top() != nOld )
-                    bAgain = TRUE;
-                bHeightClipped = TRUE;
+                    bAgain = sal_True;
+                bHeightClipped = sal_True;
             }
         }
         if ( bRig )
@@ -386,12 +386,12 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 if( rH.GetHoriOrient() == text::HoriOrientation::LEFT )
                     Frm().Pos().X() = nOld;
                 else
-                    bAgain = TRUE;
+                    bAgain = sal_True;
             }
-            bWidthClipped = TRUE;
+            bWidthClipped = sal_True;
         }
         if ( bAgain )
-            bValidSize = FALSE;
+            bValidSize = sal_False;
         else
         {
             //Wenn wir hier ankommen ragt der Frm in unerlaubte Bereiche
@@ -412,7 +412,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 nDiff -= aFrmRect.Top(); //nDiff ist die verfuegbare Strecke.
                 nDiff = aFrmRect.Height() - nDiff;
                 aFrmRect.Height( aFrmRect.Height() - nDiff );
-                bHeightClipped = TRUE;
+                bHeightClipped = sal_True;
             }
             if ( bRig )
             {
@@ -420,7 +420,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 nDiff -= aFrmRect.Left();//nDiff ist die verfuegbare Strecke.
                 nDiff = aFrmRect.Width() - nDiff;
                 aFrmRect.Width( aFrmRect.Width() - nDiff );
-                bWidthClipped = TRUE;
+                bWidthClipped = sal_True;
             }
 
             // OD 06.08.2003 #i17297#, #111066#, #111070# - no proportional
@@ -454,14 +454,14 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 {
                     aFrmRect.Height( aFrmRect.Width() * aOldSize.Height() /
                                      aOldSize.Width() );
-                    bHeightClipped = TRUE;
+                    bHeightClipped = sal_True;
                 }
                 //Hoehe angepasst? - Breite dann proportional verkleinern
                 else if( aFrmRect.Height() != aOldSize.Height() )
                 {
                     aFrmRect.Width( aFrmRect.Height() * aOldSize.Width() /
                                     aOldSize.Height() );
-                    bWidthClipped = TRUE;
+                    bWidthClipped = sal_True;
                 }
 
                 // OD 07.08.2003 #i17297#, #111066#, #111070# - reactivate change
@@ -510,7 +510,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 ::CalcCntnt( this );
                 ColUnlock();
                 if ( !bValidSize && !bWidthClipped )
-                    bFormatHeightOnly = bValidSize = TRUE;
+                    bFormatHeightOnly = bValidSize = sal_True;
             }
             else
             {
@@ -551,7 +551,7 @@ bool SwFlyFreeFrm::IsFormatPossible() const
 SwFlyLayFrm::SwFlyLayFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     SwFlyFreeFrm( pFmt, pAnch )
 {
-    bLayout = TRUE;
+    bLayout = sal_True;
 }
 
 // --> OD 2004-06-29 #i28701#
@@ -568,11 +568,11 @@ TYPEINIT1(SwFlyLayFrm,SwFlyFreeFrm);
 
 void SwFlyLayFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {
-    USHORT nWhich = pNew ? pNew->Which() : 0;
+    sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
 
     SwFmtAnchor *pAnch = 0;
     if( RES_ATTRSET_CHG == nWhich && SFX_ITEM_SET ==
-        ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_ANCHOR, FALSE,
+        ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_ANCHOR, sal_False,
             (const SfxPoolItem**)&pAnch ))
         ;       // Beim GetItemState wird der AnkerPointer gesetzt !
 
@@ -599,10 +599,10 @@ void SwFlyLayFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 
         if ( FLY_AT_PAGE == pAnch->GetAnchorId() )
         {
-            USHORT nPgNum = pAnch->GetPageNum();
+            sal_uInt16 nPgNum = pAnch->GetPageNum();
             SwRootFrm *pRoot = FindRootFrm();
             SwPageFrm *pTmpPage = (SwPageFrm*)pRoot->Lower();
-            for ( USHORT i = 1; (i <= nPgNum) && pTmpPage; ++i,
+            for ( sal_uInt16 i = 1; (i <= nPgNum) && pTmpPage; ++i,
                                 pTmpPage = (SwPageFrm*)pTmpPage->GetNext() )
             {
                 if ( i == nPgNum )
@@ -622,7 +622,7 @@ void SwFlyLayFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         {
             SwNodeIndex aIdx( pAnch->GetCntntAnchor()->nNode );
             SwCntntFrm *pCntnt = GetFmt()->GetDoc()->GetNodes().GoNext( &aIdx )->
-                         GetCntntNode()->GetFrm( 0, 0, FALSE );
+                         GetCntntNode()->GetFrm( 0, 0, sal_False );
             if( pCntnt )
             {
                 SwFlyFrm *pTmp = pCntnt->FindFlyFrm();
@@ -673,7 +673,7 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
     const SwFlyFrm* pFly = pNew->GetAnchorFrm()->FindFlyFrm();
     if ( pFly && pObj->GetOrdNum() < pFly->GetVirtDrawObj()->GetOrdNum() )
     {
-        UINT32 nNewNum = pFly->GetVirtDrawObj()->GetOrdNumDirect();
+        sal_uInt32 nNewNum = pFly->GetVirtDrawObj()->GetOrdNumDirect();
         if ( pObj->GetPage() )
             pObj->GetPage()->SetObjectOrdNum( pObj->GetOrdNumDirect(), nNewNum);
         else
@@ -725,7 +725,7 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
     if ( pNew->GetDrawObjs() )
     {
         SwSortedObjs &rObjs = *pNew->GetDrawObjs();
-        for ( USHORT i = 0; i < rObjs.Count(); ++i )
+        for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
         {
             SwAnchoredObject* pTmpObj = rObjs[i];
             if ( pTmpObj->ISA(SwFlyFrm) )
@@ -764,7 +764,7 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
 
 void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
 {
-    const UINT32 nOrdNum = pToRemove->GetVirtDrawObj()->GetOrdNum();
+    const sal_uInt32 nOrdNum = pToRemove->GetVirtDrawObj()->GetOrdNum();
     FindRootFrm()->GetDrawPage()->RemoveObject( nOrdNum );
     pToRemove->GetVirtDrawObj()->ReferencedObj().SetOrdNum( nOrdNum );
 
@@ -944,7 +944,7 @@ void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
     if ( pFlyFrm &&
          _rNewObj.GetDrawObj()->GetOrdNum() < pFlyFrm->GetVirtDrawObj()->GetOrdNum() )
     {
-        UINT32 nNewNum = pFlyFrm->GetVirtDrawObj()->GetOrdNumDirect();
+        sal_uInt32 nNewNum = pFlyFrm->GetVirtDrawObj()->GetOrdNumDirect();
         if ( _rNewObj.GetDrawObj()->GetPage() )
             _rNewObj.DrawObj()->GetPage()->SetObjectOrdNum(
                             _rNewObj.GetDrawObj()->GetOrdNumDirect(), nNewNum);
@@ -1063,9 +1063,9 @@ void SwPageFrm::PlaceFly( SwFlyFrm* pFly, SwFlyFrmFmt* pFmt )
 // --> OD 2004-07-06 #i28701# - if document compatibility option 'Consider
 // wrapping style influence on object positioning' is ON, the clip area
 // corresponds to the one as the object doesn't follows the text flow.
-BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
+sal_Bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, sal_Bool bMove )
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
     if ( pSdrObj->ISA(SwVirtFlyDrawObj) )
     {
         const SwFlyFrm* pFly = ((const SwVirtFlyDrawObj*)pSdrObj)->GetFlyFrm();
@@ -1189,7 +1189,7 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                 SWRECTFN( pClip )
                 const SwLayoutFrm *pUp = pClip->GetUpper();
                 const SwFrm *pCell = pUp->IsCellFrm() ? pUp : 0;
-                USHORT nType = bMove ? FRM_ROOT   | FRM_FLY | FRM_HEADER |
+                sal_uInt16 nType = bMove ? FRM_ROOT   | FRM_FLY | FRM_HEADER |
                                        FRM_FOOTER | FRM_FTN
                                      : FRM_BODY   | FRM_FLY | FRM_HEADER |
                                        FRM_FOOTER | FRM_CELL| FRM_FTN;
@@ -1384,7 +1384,7 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             }
             else
             {
-                bRet = FALSE;
+                bRet = sal_False;
             }
         }
     }

@@ -50,19 +50,19 @@ TYPEINIT2(ScDdeLink,::sfx2::SvBaseLink,SfxBroadcaster);
 
 #define DDE_TXT_ENCODING    gsl_getSystemTextEncoding()
 
-BOOL ScDdeLink::bIsInUpdate = FALSE;
+sal_Bool ScDdeLink::bIsInUpdate = sal_False;
 
 //------------------------------------------------------------------------
 
 ScDdeLink::ScDdeLink( ScDocument* pD, const String& rA, const String& rT, const String& rI,
-                        BYTE nM ) :
+                        sal_uInt8 nM ) :
     ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ALWAYS,FORMAT_STRING),
     pDoc( pD ),
     aAppl( rA ),
     aTopic( rT ),
     aItem( rI ),
     nMode( nM ),
-    bNeedUpdate( FALSE ),
+    bNeedUpdate( sal_False ),
     pResult( NULL )
 {
 }
@@ -81,7 +81,7 @@ ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
     aTopic  ( rOther.aTopic ),
     aItem   ( rOther.aItem ),
     nMode   ( rOther.nMode ),
-    bNeedUpdate( FALSE ),
+    bNeedUpdate( sal_False ),
     pResult ( NULL )
 {
     if (rOther.pResult)
@@ -91,7 +91,7 @@ ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
 ScDdeLink::ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& rHdr ) :
     ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ALWAYS,FORMAT_STRING),
     pDoc( pD ),
-    bNeedUpdate( FALSE ),
+    bNeedUpdate( sal_False ),
     pResult( NULL )
 {
     rHdr.StartEntry();
@@ -101,7 +101,7 @@ ScDdeLink::ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& r
     rStream.ReadByteString( aTopic, eCharSet );
     rStream.ReadByteString( aItem, eCharSet );
 
-    BOOL bHasValue;
+    sal_Bool bHasValue;
     rStream >> bHasValue;
     if ( bHasValue )
         pResult = new ScMatrix( rStream );
@@ -123,7 +123,7 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
     rStream.WriteByteString( aTopic, eCharSet );
     rStream.WriteByteString( aItem, eCharSet );
 
-    BOOL bHasValue = ( pResult != NULL );
+    sal_Bool bHasValue = ( pResult != NULL );
     rStream << bHasValue;
     if (bHasValue)
         pResult->Store( rStream );
@@ -180,7 +180,7 @@ void __EXPORT ScDdeLink::DataChanged( const String& rMimeType,
         //  SC_DDE_DEFAULT - Zahlformat aus Zellvorlage "Standard"
         //  SC_DDE_ENGLISH - Standard-Zahlformat fuer English/US
         //  SC_DDE_TEXT    - ohne NumberFormatter direkt als String
-        ULONG nStdFormat = 0;
+        sal_uLong nStdFormat = 0;
         if ( nMode == SC_DDE_DEFAULT )
         {
             ScPatternAttr* pDefPattern = pDoc->GetDefPattern();     // enthaelt Standard-Vorlage
@@ -242,8 +242,8 @@ void ScDdeLink::ResetValue()
 
 void __EXPORT ScDdeLink::ListenersGone()
 {
-    BOOL bWas = bIsInUpdate;
-    bIsInUpdate = TRUE;             // Remove() kann Reschedule ausloesen??!?
+    sal_Bool bWas = bIsInUpdate;
+    bIsInUpdate = sal_True;             // Remove() kann Reschedule ausloesen??!?
 
     ScDocument* pStackDoc = pDoc;   // member pDoc can't be used after removing the link
 
@@ -263,16 +263,16 @@ void __EXPORT ScDdeLink::ListenersGone()
 void ScDdeLink::TryUpdate()
 {
     if (bIsInUpdate)
-        bNeedUpdate = TRUE;         // kann jetzt nicht ausgefuehrt werden
+        bNeedUpdate = sal_True;         // kann jetzt nicht ausgefuehrt werden
     else
     {
-        bIsInUpdate = TRUE;
+        bIsInUpdate = sal_True;
         //Application::Reschedule();    //! OS/2-Simulation
         pDoc->IncInDdeLinkUpdate();
         Update();
         pDoc->DecInDdeLinkUpdate();
-        bIsInUpdate = FALSE;
-        bNeedUpdate = FALSE;
+        bIsInUpdate = sal_False;
+        bNeedUpdate = sal_False;
     }
 }
 

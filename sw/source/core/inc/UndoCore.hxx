@@ -171,14 +171,14 @@ class SwUndoSetFlyFmt : public SwUndo, public SwClient
     SwFrmFmt* pOldFmt;                  // die alte Fly Vorlage
     SwFrmFmt* pNewFmt;                  // die neue Fly Vorlage
     SfxItemSet* pItemSet;               // die zurueck-/ gesetzten Attribute
-    ULONG nOldNode, nNewNode;
+    sal_uLong nOldNode, nNewNode;
     xub_StrLen nOldCntnt, nNewCntnt;
-    USHORT nOldAnchorTyp, nNewAnchorTyp;
-    BOOL bAnchorChgd;
+    sal_uInt16 nOldAnchorTyp, nNewAnchorTyp;
+    sal_Bool bAnchorChgd;
 
-    void PutAttr( USHORT nWhich, const SfxPoolItem* pItem );
+    void PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem );
     void Modify( SfxPoolItem*, SfxPoolItem* );
-    void GetAnchor( SwFmtAnchor& rAnhor, ULONG nNode, xub_StrLen nCntnt );
+    void GetAnchor( SwFmtAnchor& rAnhor, sal_uLong nNode, xub_StrLen nCntnt );
 
 public:
     SwUndoSetFlyFmt( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFrmFmt );

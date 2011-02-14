@@ -107,7 +107,7 @@ void Directory::readDirectory()
 
 void Directory::readDirectory ( const rtl::OUString& sFullpath )
 {
-    BOOL            fFinished;
+    sal_Bool            fFinished;
     HANDLE          hList;
     TCHAR           szDir[MAX_PATH+1];
     TCHAR           szSubDir[MAX_PATH+1];
@@ -128,7 +128,7 @@ void Directory::readDirectory ( const rtl::OUString& sFullpath )
     }
     else
     {
-        fFinished = FALSE;
+        fFinished = sal_False;
         while (!fFinished)
         {
 
@@ -157,7 +157,7 @@ void Directory::readDirectory ( const rtl::OUString& sFullpath )
             {
                 if (GetLastError() == ERROR_NO_MORE_FILES)
                 {
-                    fFinished = TRUE;
+                    fFinished = sal_True;
                 }
             }
         }

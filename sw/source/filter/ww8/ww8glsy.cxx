@@ -45,7 +45,7 @@
 #include "ww8par.hxx"
 
 
-WW8Glossary::WW8Glossary(SvStorageStreamRef &refStrm, BYTE nVersion,
+WW8Glossary::WW8Glossary(SvStorageStreamRef &refStrm, sal_uInt8 nVersion,
     SvStorage *pStg)
     : pGlossary(0), rStrm(refStrm), xStg(pStg), nStrings(0)
 {
@@ -69,7 +69,7 @@ WW8Glossary::WW8Glossary(SvStorageStreamRef &refStrm, BYTE nVersion,
 bool WW8Glossary::HasBareGraphicEnd(SwDoc *pDoc,SwNodeIndex &rIdx)
 {
     bool bRet=false;
-    for( USHORT nCnt = pDoc->GetSpzFrmFmts()->Count(); nCnt; )
+    for( sal_uInt16 nCnt = pDoc->GetSpzFrmFmts()->Count(); nCnt; )
     {
         SwFrmFmt* pFrmFmt = (*pDoc->GetSpzFrmFmts())[ --nCnt ];
         if ( RES_FLYFRMFMT != pFrmFmt->Which() &&
@@ -120,7 +120,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
     {
         SwTxtFmtColl* pColl = pD->GetTxtCollFromPool
             (RES_POOLCOLL_STANDARD, false);
-        USHORT nGlosEntry = 0;
+        sal_uInt16 nGlosEntry = 0;
         SwCntntNode* pCNd = 0;
         do {
             SwPaM aPam( aStart );
@@ -154,7 +154,7 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
             // sttbfglsystyle list that this entry belongs to. Unused at the
             // moment
             const ww::bytes &rData = rExtra[nGlosEntry];
-            USHORT n = SVBT16ToShort( &(rData[2]) );
+            sal_uInt16 n = SVBT16ToShort( &(rData[2]) );
             if(n != 0xFFFF)
             {
                 rBlocks.ClearDoc();
@@ -164,9 +164,9 @@ bool WW8Glossary::MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks,
 
                 // Need to check make sure the shortcut is not already being used
                 xub_StrLen nStart = 0;
-                USHORT nCurPos = rBlocks.GetIndex( sShortcut );
+                sal_uInt16 nCurPos = rBlocks.GetIndex( sShortcut );
                 xub_StrLen nLen = sShortcut.Len();
-                while( (USHORT)-1 != nCurPos )
+                while( (sal_uInt16)-1 != nCurPos )
                 {
                     sShortcut.Erase( nLen ) +=
                         String::CreateFromInt32( ++nStart );    // add an Number to it
@@ -217,7 +217,7 @@ bool WW8Glossary::Load( SwTextBlocks &rBlocks, bool bSaveRelFile )
 
         rStrm->Seek(0);
 
-        if ( 0 != (nStrings = static_cast< USHORT >(aStrings.size())))
+        if ( 0 != (nStrings = static_cast< sal_uInt16 >(aStrings.size())))
         {
             SfxObjectShellLock xDocSh(new SwDocShell(SFX_CREATE_MODE_INTERNAL));
             if (xDocSh->DoInitNew(0))
@@ -256,11 +256,11 @@ bool WW8GlossaryFib::IsGlossaryFib()
     return fGlsy;
 }
 
-UINT32 WW8GlossaryFib::FindGlossaryFibOffset(SvStream & /* rTableStrm */,
+sal_uInt32 WW8GlossaryFib::FindGlossaryFibOffset(SvStream & /* rTableStrm */,
                                              SvStream & /* rStrm */,
                                              const WW8Fib &rFib)
 {
-    UINT32 nGlossaryFibOffset = 0;
+    sal_uInt32 nGlossaryFibOffset = 0;
     if ( rFib.fDot ) // its a template
     {
         if ( rFib.pnNext  )

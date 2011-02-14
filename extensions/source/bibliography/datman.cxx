@@ -329,7 +329,7 @@ public:
     MappingDialog_Impl(Window* pParent, BibDataManager* pDatMan);
     ~MappingDialog_Impl();
 
-    void    SetModified() {bModified = TRUE;}
+    void    SetModified() {bModified = sal_True;}
 
 };
 /* -----------------11.11.99 16:42-------------------

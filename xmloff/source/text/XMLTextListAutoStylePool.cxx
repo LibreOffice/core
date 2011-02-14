@@ -186,7 +186,7 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
 XMLTextListAutoStylePool::~XMLTextListAutoStylePool()
 {
     // The XMLTextListAutoStylePoolEntry_Impl object in the pool need delete explicitly in dtor.
-    ULONG nCount = pPool->Count();
+    sal_uLong nCount = pPool->Count();
     while ( nCount-- )
         delete pPool->Remove(nCount);
     delete pPool;
@@ -211,7 +211,7 @@ sal_Bool XMLTextListAutoStylePool::HasName( const OUString& rName ) const
 
 sal_uInt32 XMLTextListAutoStylePool::Find( XMLTextListAutoStylePoolEntry_Impl* pEntry ) const
 {
-    ULONG nPos;
+    sal_uLong nPos;
     if( !pEntry->IsNamed() && mxNumRuleCompare.is() )
     {
         const sal_uInt32 nCount = pPool->Count();

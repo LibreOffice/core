@@ -527,7 +527,7 @@ public:
                             YieldFunc   handle );
     virtual void    Remove( int fd );
 
-    virtual void    StartTimer( ULONG nMS );
+    virtual void    StartTimer( sal_uLong nMS );
     virtual void    StopTimer();
     virtual void    Wakeup();
     virtual void    PostUserEvent();
@@ -727,7 +727,7 @@ gboolean GtkXLib::timeoutFn(gpointer data)
     return FALSE;
 }
 
-void GtkXLib::StartTimer( ULONG nMS )
+void GtkXLib::StartTimer( sal_uLong nMS )
 {
     m_nTimeoutMS = nMS; // for restarting
 

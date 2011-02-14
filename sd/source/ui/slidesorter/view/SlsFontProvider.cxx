@@ -111,7 +111,7 @@ FontProvider::SharedFontPointer FontProvider::GetFont (const OutputDevice& rDevi
     {
         // Initialize the font from the application style settings.
         maFont.reset(new Font (Application::GetSettings().GetStyleSettings().GetAppFont()));
-        maFont->SetTransparent(TRUE);
+        maFont->SetTransparent(sal_True);
         maFont->SetWeight(WEIGHT_NORMAL);
 
         // Transform the point size to pixel size.

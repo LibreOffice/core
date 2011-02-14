@@ -686,7 +686,7 @@ namespace editeng
 
                         // determine if it's Hangul
                         CharClass aCharClassificaton( m_xORB, m_aSourceLocale );
-                        sal_Int16 nScript = aCharClassificaton.getScript( m_sCurrentPortion, sal::static_int_cast< USHORT >(nNextAsianScript) );
+                        sal_Int16 nScript = aCharClassificaton.getScript( m_sCurrentPortion, sal::static_int_cast< sal_uInt16 >(nNextAsianScript) );
                         if  (   ( UnicodeScript_kHangulJamo == nScript )
                             ||  ( UnicodeScript_kHangulCompatibilityJamo == nScript )
                             ||  ( UnicodeScript_kHangulSyllable == nScript )

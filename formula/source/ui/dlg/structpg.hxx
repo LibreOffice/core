@@ -49,7 +49,7 @@ class   StructListBox : public SvTreeListBox
 {
 private:
 
-    BOOL            bActiveFlag;
+    sal_Bool            bActiveFlag;
 
 protected:
                     virtual void MouseButtonDown( const MouseEvent& rMEvt );
@@ -64,11 +64,11 @@ public:
                         const Image& rEntryImg,
                         const Image& rEntryImgHC,
                         SvLBoxEntry* pParent = NULL,
-                        ULONG nPos = LIST_APPEND,
+                        sal_uLong nPos = LIST_APPEND,
                         IFormulaToken* pToken = NULL );
 
-    void            SetActiveFlag(BOOL bFlag=TRUE);
-    BOOL            GetActiveFlag();
+    void            SetActiveFlag(sal_Bool bFlag=sal_True);
+    sal_Bool            GetActiveFlag();
     void            GetFocus();
     void            LoseFocus();
 };
@@ -105,7 +105,7 @@ public:
 
     void            ClearStruct();
     virtual SvLBoxEntry*    InsertEntry(const XubString& rText, SvLBoxEntry* pParent,
-                                USHORT nFlag,ULONG nPos=0,IFormulaToken* pScToken=NULL);
+                                sal_uInt16 nFlag,sal_uLong nPos=0,IFormulaToken* pScToken=NULL);
 
     virtual String          GetEntryText(SvLBoxEntry* pEntry) const;
     virtual SvLBoxEntry*    GetParent(SvLBoxEntry* pEntry) const;

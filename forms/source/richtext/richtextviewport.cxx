@@ -63,7 +63,7 @@ namespace frm
     {
         Control::GetFocus();
         m_pView->SetSelectionMode( EE_SELMODE_STD );
-        m_pView->ShowCursor( TRUE );
+        m_pView->ShowCursor( sal_True );
     }
 
     //--------------------------------------------------------------------

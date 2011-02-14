@@ -422,8 +422,8 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
             rtl::OUString aTmp;
             if ( ( rProp.Value >>= aTmp ) == sal_False )
                 throw ::com::sun::star::lang::IllegalArgumentException();
-            USHORT nCount = pPrinter->GetPaperBinCount();
-            for (USHORT nBin=0; nBin<nCount; nBin++)
+            sal_uInt16 nCount = pPrinter->GetPaperBinCount();
+            for (sal_uInt16 nBin=0; nBin<nCount; nBin++)
             {
                 ::rtl::OUString aName( pPrinter->GetPaperBinName(nBin) );
                 if ( aName == aTmp )

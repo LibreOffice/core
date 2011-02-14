@@ -796,11 +796,11 @@ void SfxDispatcher::DoActivate_Impl( sal_Bool bMDI, SfxViewFrame* /* pOld */ )
         SfxBindings *pBind = GetBindings();
         while ( pBind )
         {
-            pBind->HidePopupCtrls_Impl( FALSE );
+            pBind->HidePopupCtrls_Impl( sal_False );
             pBind = pBind->GetSubBindings_Impl();
         }
 
-        pImp->pFrame->GetFrame().GetWorkWindow_Impl()->HidePopups_Impl( FALSE, FALSE, 1 );
+        pImp->pFrame->GetFrame().GetWorkWindow_Impl()->HidePopups_Impl( sal_False, sal_False, 1 );
     }
 
     if ( pImp->aToDoStack.Count() )
@@ -882,7 +882,7 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
     for ( sal_uInt16 i = 0; i < pImp->aStack.Count(); ++i )
         pImp->aStack.Top(i)->DoDeactivate_Impl(pImp->pFrame, bMDI);
 
-    BOOL bHidePopups = bMDI && pImp->pFrame;
+    sal_Bool bHidePopups = bMDI && pImp->pFrame;
     if ( pNew && pImp->pFrame )
     {
         com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xOldFrame(
@@ -892,7 +892,7 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
             GetFrame()->GetFrame().GetFrameInterface(), com::sun::star::uno::UNO_QUERY );
 
         if ( xOldFrame == xMyFrame )
-            bHidePopups = FALSE;
+            bHidePopups = sal_False;
     }
 
     if ( bHidePopups )
@@ -901,11 +901,11 @@ void SfxDispatcher::DoDeactivate_Impl( sal_Bool bMDI, SfxViewFrame* pNew )
         SfxBindings *pBind = GetBindings();
         while ( pBind )
         {
-            pBind->HidePopupCtrls_Impl( TRUE );
+            pBind->HidePopupCtrls_Impl( sal_True );
             pBind = pBind->GetSubBindings_Impl();
         }
 
-        pImp->pFrame->GetFrame().GetWorkWindow_Impl()->HidePopups_Impl( TRUE, FALSE, 1 );
+        pImp->pFrame->GetFrame().GetWorkWindow_Impl()->HidePopups_Impl( sal_True, sal_False, 1 );
     }
 
     Flush();
@@ -1036,7 +1036,7 @@ void SfxDispatcher::_Execute
                 if ( &rShell == pDispat->pImp->aStack.Top(n) )
                 {
                     if ( eCallMode & SFX_CALLMODE_RECORD )
-                        rReq.AllowRecording( TRUE );
+                        rReq.AllowRecording( sal_True );
                     pDispat->pImp->xPoster->Post(new SfxRequest(rReq));
 //                    pDispat->pImp->xPoster->Post(new Executer(new SfxRequest(rReq), &rSlot, n ));
                     return;
@@ -1283,11 +1283,11 @@ const SfxPoolItem* SfxDispatcher::Execute( const SfxExecuteItem& rItem )
 
 //--------------------------------------------------------------------
 const SfxPoolItem*  SfxDispatcher::Execute(
-    USHORT nSlot,
+    sal_uInt16 nSlot,
     SfxCallMode nCall,
     SfxItemSet* pArgs,
     SfxItemSet* pInternalArgs,
-    USHORT nModi)
+    sal_uInt16 nModi)
 {
     if ( IsLocked(nSlot) )
         return 0;
@@ -1408,9 +1408,9 @@ const SfxPoolItem* SfxDispatcher::Execute
 //--------------------------------------------------------------------
 const SfxPoolItem*  SfxDispatcher::Execute
 (
-    USHORT nSlot,
+    sal_uInt16 nSlot,
     SfxCallMode eCall,
-    USHORT nModi,
+    sal_uInt16 nModi,
     const SfxItemSet &rArgs
 )
 {
@@ -1797,10 +1797,10 @@ void SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, sal_Bo
             // check for toolboxes that are exclusively for a viewer
             if ( pImp->pFrame)
             {
-                BOOL bViewerTbx = SFX_VISIBILITY_VIEWER == ( nPos & SFX_VISIBILITY_VIEWER );
+                sal_Bool bViewerTbx = SFX_VISIBILITY_VIEWER == ( nPos & SFX_VISIBILITY_VIEWER );
                 SfxObjectShell* pSh = pImp->pFrame->GetObjectShell();
                 SFX_ITEMSET_ARG( pSh->GetMedium()->GetItemSet(), pItem, SfxBoolItem, SID_VIEWONLY, sal_False );
-                BOOL bIsViewer = pItem && pItem->GetValue();
+                sal_Bool bIsViewer = pItem && pItem->GetValue();
                 if ( bIsViewer != bViewerTbx )
                     continue;
             }
@@ -1980,7 +1980,7 @@ void SfxDispatcher::FlushImpl()
         {
             // tats"aechlich poppen
             SfxShell* pPopped = 0;
-            FASTBOOL bFound = sal_False;
+            bool bFound = sal_False;
             do
             {
                 DBG_ASSERT( pImp->aStack.Count(), "popping from empty stack" );
@@ -2343,12 +2343,12 @@ sal_Bool SfxDispatcher::_FindServer
         if ( pSlot )
         {
             // Slot geh"ort zum Container?
-            FASTBOOL bIsContainerSlot = pSlot->IsMode(SFX_SLOT_CONTAINER);
-            FASTBOOL bIsInPlace = pImp->pFrame && pImp->pFrame->GetObjectShell()->IsInPlaceActive();
+            bool bIsContainerSlot = pSlot->IsMode(SFX_SLOT_CONTAINER);
+            bool bIsInPlace = pImp->pFrame && pImp->pFrame->GetObjectShell()->IsInPlaceActive();
 
             // Shell geh"ort zum Server?
             // AppDispatcher oder IPFrame-Dispatcher
-            FASTBOOL bIsServerShell = !pImp->pFrame || bIsInPlace;
+            bool bIsServerShell = !pImp->pFrame || bIsInPlace;
 
             // Nat"urlich sind ServerShell-Slots auch ausf"uhrbar, wenn sie auf
             // einem Container-Dispatcher ohne IPClient ausgef"uhrt werden sollen.
@@ -2360,7 +2360,7 @@ sal_Bool SfxDispatcher::_FindServer
 
             // Shell geh"ort zum Container?
             // AppDispatcher oder kein IPFrameDispatcher
-            FASTBOOL bIsContainerShell = !pImp->pFrame || !bIsInPlace;
+            bool bIsContainerShell = !pImp->pFrame || !bIsInPlace;
             // Shell und Slot passen zusammen
             if ( !( ( bIsContainerSlot && bIsContainerShell ) ||
                     ( !bIsContainerSlot && bIsServerShell ) ) )
@@ -2458,12 +2458,12 @@ sal_Bool SfxDispatcher::HasSlot_Impl( sal_uInt16 nSlot )
         if ( pSlot )
         {
             // Slot geh"ort zum Container?
-            FASTBOOL bIsContainerSlot = pSlot->IsMode(SFX_SLOT_CONTAINER);
-            FASTBOOL bIsInPlace = pImp->pFrame && pImp->pFrame->GetObjectShell()->IsInPlaceActive();
+            bool bIsContainerSlot = pSlot->IsMode(SFX_SLOT_CONTAINER);
+            bool bIsInPlace = pImp->pFrame && pImp->pFrame->GetObjectShell()->IsInPlaceActive();
 
             // Shell geh"ort zum Server?
             // AppDispatcher oder IPFrame-Dispatcher
-            FASTBOOL bIsServerShell = !pImp->pFrame || bIsInPlace;
+            bool bIsServerShell = !pImp->pFrame || bIsInPlace;
 
             // Nat"urlich sind ServerShell-Slots auch ausf"uhrbar, wenn sie auf
             // einem Container-Dispatcher ohne IPClient ausgef"uhrt werden sollen.
@@ -2475,7 +2475,7 @@ sal_Bool SfxDispatcher::HasSlot_Impl( sal_uInt16 nSlot )
 
             // Shell geh"ort zum Container?
             // AppDispatcher oder kein IPFrameDispatcher
-            FASTBOOL bIsContainerShell = !pImp->pFrame || !bIsInPlace;
+            bool bIsContainerShell = !pImp->pFrame || !bIsInPlace;
 
             // Shell und Slot passen zusammen
             if ( !( ( bIsContainerSlot && bIsContainerShell ) ||
@@ -2529,7 +2529,7 @@ sal_Bool SfxDispatcher::_FillState
     {
         DBG_ASSERT(bFlushed, "Dispatcher not flushed after retrieving slot servers!");
         if ( !bFlushed )
-            return FALSE;
+            return sal_False;
         // Flush();
 
         // Objekt ermitteln und Message an diesem Objekt aufrufen
@@ -2748,8 +2748,8 @@ void SfxDispatcher::Lock( sal_Bool bLock )
     pImp->bLocked = bLock;
     if ( !bLock )
     {
-        USHORT nCount = pImp->aReqArr.Count();
-        for ( USHORT i=0; i<nCount; i++ )
+        sal_uInt16 nCount = pImp->aReqArr.Count();
+        for ( sal_uInt16 i=0; i<nCount; i++ )
             pImp->xPoster->Post( pImp->aReqArr[i] );
         pImp->aReqArr.Remove( 0, nCount );
     }
@@ -2903,7 +2903,7 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSlot, const SfxPoolItem* &rp
     return SFX_ITEM_DISABLED;
 }
 
-SfxItemState SfxDispatcher::QueryState( USHORT nSID, ::com::sun::star::uno::Any& rAny )
+SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, ::com::sun::star::uno::Any& rAny )
 {
     SfxShell *pShell = 0;
     const SfxSlot *pSlot = 0;
@@ -2919,12 +2919,12 @@ SfxItemState SfxDispatcher::QueryState( USHORT nSID, ::com::sun::star::uno::Any&
             ::com::sun::star::uno::Any aState;
             if ( !pItem->ISA(SfxVoidItem) )
             {
-                USHORT nSubId( 0 );
+                sal_uInt16 nSubId( 0 );
                 SfxItemPool& rPool = pShell->GetPool();
-                USHORT nWhich = rPool.GetWhich( nSID );
+                sal_uInt16 nWhich = rPool.GetWhich( nSID );
                 if ( rPool.GetMetric( nWhich ) == SFX_MAPUNIT_TWIP )
                     nSubId |= CONVERT_TWIPS;
-                pItem->QueryValue( aState, (BYTE)nSubId );
+                pItem->QueryValue( aState, (sal_uInt8)nSubId );
             }
             rAny = aState;
 

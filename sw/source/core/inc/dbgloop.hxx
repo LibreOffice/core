@@ -39,8 +39,8 @@ class SvStream;
 
 class DbgLoopStack
 {
-    USHORT aCount[DBG_MAX_STACK];
-    USHORT nPtr;
+    sal_uInt16 aCount[DBG_MAX_STACK];
+    sal_uInt16 nPtr;
     const void *pDbg;
     void Reset();
 public:

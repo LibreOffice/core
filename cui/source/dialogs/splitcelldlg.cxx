@@ -59,7 +59,7 @@ SvxSplitTableDlg::SvxSplitTableDlg( Window *pParent, bool bIsTableVertical, long
     maVertBox.SetClickHdl( LINK( this, SvxSplitTableDlg, ClickHdl ));
 
     if( mnMaxVertical < 2 )
-        maVertBox.Enable(FALSE);
+        maVertBox.Enable(sal_False);
 
     //exchange the meaning of horizontal and vertical for vertical text
     if(bIsTableVertical)

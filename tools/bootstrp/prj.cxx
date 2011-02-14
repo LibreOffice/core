@@ -113,9 +113,9 @@ ByteString  SimpleConfig::GetNextLine()
     aTmpStr = aTmpStr.EraseTrailingChars();
     while ( aTmpStr.SearchAndReplace(ByteString(' '),ByteString('\t') ) != STRING_NOTFOUND ) ;
     int nLength = aTmpStr.Len();
-    BOOL bFound = FALSE;
+    sal_Bool bFound = sal_False;
     ByteString aEraseString;
-    for ( USHORT i = 0; i<= nLength; i++)
+    for ( sal_uInt16 i = 0; i<= nLength; i++)
     {
         if ( aTmpStr.GetChar( i ) == 0x20  && !bFound )
             aTmpStr.SetChar( i, 0x09 );
@@ -124,7 +124,7 @@ ByteString  SimpleConfig::GetNextLine()
 }
 
 /*****************************************************************************/
-ByteString SimpleConfig::GetCleanedNextLine( BOOL bReadComments )
+ByteString SimpleConfig::GetCleanedNextLine( sal_Bool bReadComments )
 /*****************************************************************************/
 {
 
@@ -142,11 +142,11 @@ ByteString SimpleConfig::GetCleanedNextLine( BOOL bReadComments )
 
     aTmpStr = aTmpStr.EraseLeadingChars();
     aTmpStr = aTmpStr.EraseTrailingChars();
-//  while ( aTmpStr.SearchAndReplace(String(' '),String('\t') ) != (USHORT)-1 );
+//  while ( aTmpStr.SearchAndReplace(String(' '),String('\t') ) != (sal_uInt16)-1 );
     int nLength = aTmpStr.Len();
     ByteString aEraseString;
-    BOOL bFirstTab = TRUE;
-    for ( USHORT i = 0; i<= nLength; i++)
+    sal_Bool bFirstTab = sal_True;
+    for ( sal_uInt16 i = 0; i<= nLength; i++)
     {
         if ( aTmpStr.GetChar( i ) == 0x20 )
             aTmpStr.SetChar( i, 0x09 );
@@ -154,17 +154,18 @@ ByteString SimpleConfig::GetCleanedNextLine( BOOL bReadComments )
         if ( aTmpStr.GetChar( i ) ==  0x09 )
         {
             if ( bFirstTab )
-                bFirstTab = FALSE;
+                bFirstTab = sal_False;
             else
             {
                 aTmpStr.SetChar( i, 0x20 );
             }
         }
         else
-            bFirstTab = TRUE;
+            bFirstTab = sal_True;
 
     }
     aTmpStr.EraseAllChars(' ');
     return aTmpStr;
 
 }
+

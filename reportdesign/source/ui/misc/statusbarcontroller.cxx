@@ -99,10 +99,10 @@ void SAL_CALL OStatusbarController::initialize( const Sequence< Any >& _rArgumen
     StatusBar* pStatusBar = static_cast<StatusBar*>(VCLUnoHelper::GetWindow(m_xParentWindow));
     if ( pStatusBar )
     {
-        const USHORT nCount = pStatusBar->GetItemCount();
-        for (USHORT nPos = 0; nPos < nCount; ++nPos)
+        const sal_uInt16 nCount = pStatusBar->GetItemCount();
+        for (sal_uInt16 nPos = 0; nPos < nCount; ++nPos)
         {
-            const USHORT nItemId = pStatusBar->GetItemId(nPos);
+            const sal_uInt16 nItemId = pStatusBar->GetItemId(nPos);
             if ( pStatusBar->GetItemCommand(nItemId) == String(m_aCommandURL) )
             {
                 m_nId = nItemId;

@@ -45,23 +45,23 @@ public:
 
     static FunctionReference Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
-    virtual BOOL MouseMove(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
-    virtual BOOL KeyInput(const KeyEvent& rKEvt);
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
 
     virtual void Activate();
     virtual void Deactivate();
 
     static void GetMenuState( DrawViewShell& rDrawViewShell, SfxItemSet &rSet );
-    static bool CanCopyThisType( UINT32 nObjectInventor, UINT16 nObjectIdentifier );
+    static bool CanCopyThisType( sal_uInt32 nObjectInventor, sal_uInt16 nObjectIdentifier );
 
 private:
     FuFormatPaintBrush ( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq);
 
     void DoExecute( SfxRequest& rReq );
 
-    bool HasContentForThisType( UINT32 nObjectInventor, UINT16 nObjectIdentifier ) const;
+    bool HasContentForThisType( sal_uInt32 nObjectInventor, sal_uInt16 nObjectIdentifier ) const;
     void Paste( bool, bool );
 
     void implcancel();

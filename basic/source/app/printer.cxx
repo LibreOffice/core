@@ -97,7 +97,7 @@ void BasicPrinter::Print( const String& rFile, const String& rText, BasicFrame *
     // Disable PRINT-Menu
     MenuBar* pBar = pFrame->GetMenuBar();
     Menu* pFileMenu = pBar->GetPopupMenu( RID_APPFILE );
-    pFileMenu->EnableItem( RID_FILEPRINT, FALSE );
+    pFileMenu->EnableItem( RID_FILEPRINT, sal_False );
 
     mpListener.reset( new vcl::OldStylePrintAdaptor( mpPrinter ) );
     mpListener->StartPage();
@@ -116,7 +116,7 @@ void BasicPrinter::Print( const String& rFile, const String& rText, BasicFrame *
 
     Printer::PrintJob( mpListener, mpPrinter->GetJobSetup() );
     nPage = 1;
-    pFileMenu->EnableItem( RID_FILEPRINT, TRUE );
+    pFileMenu->EnableItem( RID_FILEPRINT, sal_True );
 }
 
 

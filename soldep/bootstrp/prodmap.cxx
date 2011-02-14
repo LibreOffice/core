@@ -99,44 +99,44 @@ void ProductMapper::CreateProductList( GenericInformationList *pVerList )
         ByteString sDependsOnKey( DEPENDS_ON_KEY );
         ByteString sBasedOnKey( BASED_ON_KEY );
 
-        for ( ULONG i = 0; i < pVersionList->Count(); i++ ) {
+        for ( sal_uIntPtr i = 0; i < pVersionList->Count(); i++ ) {
             GenericInformation *pVersion = pVersionList->GetObject( i );
 
-            GenericInformation *pProducts = pVersion->GetSubInfo( sProductKey, TRUE );
+            GenericInformation *pProducts = pVersion->GetSubInfo( sProductKey, sal_True );
             if ( pProducts ) {
                 ByteString sProducts = pProducts->GetValue();
 
                 ByteString sDependsOn;
-                GenericInformation *pDependsOn = pVersion->GetSubInfo( sDependsOnKey, TRUE );
+                GenericInformation *pDependsOn = pVersion->GetSubInfo( sDependsOnKey, sal_True );
                 if ( pDependsOn )
                     sDependsOn = pDependsOn->GetValue();
 
                 ByteString sBasedOn;
-                GenericInformation *pBasedOn = pVersion->GetSubInfo( sBasedOnKey, TRUE );
+                GenericInformation *pBasedOn = pVersion->GetSubInfo( sBasedOnKey, sal_True );
                 if ( pBasedOn )
                     sBasedOn = pBasedOn->GetValue();
 
-                for ( USHORT x = 0; x < sProducts.GetTokenCount( ';' ); x++ ) {
+                for ( sal_uInt16 x = 0; x < sProducts.GetTokenCount( ';' ); x++ ) {
                     ByteString sProduct( sProducts.GetToken( x, ';' ));
                     if( sProduct.Len()) {
                         if ( !pProductList )
                             pProductList = new GenericInformationList();
 
-                        pProductList->InsertInfo( sProduct, *pVersion, TRUE, TRUE );
+                        pProductList->InsertInfo( sProduct, *pVersion, sal_True, sal_True );
 
-                        for ( USHORT y = 0; y < sDependsOn.GetTokenCount( ';' ); y++ ) {
+                        for ( sal_uInt16 y = 0; y < sDependsOn.GetTokenCount( ';' ); y++ ) {
                             ByteString sDependsOnKey_l = sProduct;
                             sDependsOnKey_l += "/DependsOn/";
                             sDependsOnKey_l += sDependsOn.GetToken( y, ';' );
 
-                            pProductList->InsertInfo( sDependsOnKey_l, "", TRUE, TRUE );
+                            pProductList->InsertInfo( sDependsOnKey_l, "", sal_True, sal_True );
                         }
-                        for ( USHORT z = 0; z < sBasedOn.GetTokenCount( ';' ); z++ ) {
+                        for ( sal_uInt16 z = 0; z < sBasedOn.GetTokenCount( ';' ); z++ ) {
                             ByteString sBasedOnKey_l = sProduct;
                             sBasedOnKey_l += "/BasedOn/";
                             sBasedOnKey_l += sBasedOn.GetToken( z, ';' );
 
-                            pProductList->InsertInfo( sBasedOnKey_l, "", TRUE, TRUE );
+                            pProductList->InsertInfo( sBasedOnKey_l, "", sal_True, sal_True );
                         }
                     }
                 }
@@ -146,7 +146,7 @@ void ProductMapper::CreateProductList( GenericInformationList *pVerList )
 }
 
 /*****************************************************************************/
-USHORT ProductMapper::GetProductInformation(
+sal_uInt16 ProductMapper::GetProductInformation(
     const ByteString &rProduct, GenericInformation *& pProductInfo )
 /*****************************************************************************/
 {
@@ -159,7 +159,7 @@ USHORT ProductMapper::GetProductInformation(
         return PRODUCT_MAPPER_NO_PRODUCT;
 
     ByteString sProductKey( rProduct );
-    pProductInfo = pProductList->GetInfo( sProductKey, TRUE );
+    pProductInfo = pProductList->GetInfo( sProductKey, sal_True );
 
     if ( !pProductInfo )
         return PRODUCT_MAPPER_NO_PRODUCT;
@@ -168,26 +168,26 @@ USHORT ProductMapper::GetProductInformation(
 }
 
 /*****************************************************************************/
-USHORT ProductMapper::PrintDependentTargets(
-    const ByteString &rProduct, USHORT nLevel )
+sal_uInt16 ProductMapper::PrintDependentTargets(
+    const ByteString &rProduct, sal_uInt16 nLevel )
 /*****************************************************************************/
 {
     GenericInformation *pProductInfo;
 
-    USHORT nReturn = GetProductInformation( rProduct, pProductInfo );
+    sal_uInt16 nReturn = GetProductInformation( rProduct, pProductInfo );
 
     if ( nReturn == PRODUCT_MAPPER_OK ) {
-        for ( USHORT i = 0; i < nLevel; i++ )
+        for ( sal_uInt16 i = 0; i < nLevel; i++ )
             fprintf( stdout, "    " );
         fprintf( stdout, "%s (%s)\n", pProductInfo->GetBuffer(),
             pProductInfo->GetValue().GetBuffer());
         aPrintedList.PutString( new ByteString( *pProductInfo ));
 
-        for ( ULONG j = 0; j < pProductList->Count(); j++ ) {
+        for ( sal_uIntPtr j = 0; j < pProductList->Count(); j++ ) {
             GenericInformation *pCandidate = pProductList->GetObject( j );
             ByteString sKey( "DEPENDSON/" );
             sKey += rProduct;
-            GenericInformation *pDependsOn = pCandidate->GetSubInfo( sKey, TRUE );
+            GenericInformation *pDependsOn = pCandidate->GetSubInfo( sKey, sal_True );
             if ( pDependsOn )
                 PrintDependentTargets( *pCandidate, nLevel + 1 );
         }
@@ -197,7 +197,7 @@ USHORT ProductMapper::PrintDependentTargets(
             if ( pBasedOn ) {
                 GenericInformationList *pBases = pBasedOn->GetSubList();
                 if ( pBases ) {
-                    for ( ULONG k = 0; k < pBases->Count(); k++ ) {
+                    for ( sal_uIntPtr k = 0; k < pBases->Count(); k++ ) {
                         aBaseList.PutString( new ByteString( *pBases->GetObject( k )));
                     }
                 }
@@ -209,24 +209,24 @@ USHORT ProductMapper::PrintDependentTargets(
 }
 
 /*****************************************************************************/
-USHORT ProductMapper::PrintAndDeleteBaseList()
+sal_uInt16 ProductMapper::PrintAndDeleteBaseList()
 /*****************************************************************************/
 {
     if ( aBaseList.Count()) {
         fprintf( stdout, "\nbased on\n" );
         while ( aBaseList.Count()) {
-            ByteString sProduct( *aBaseList.GetObject(( ULONG ) 0 ));
-            if ( aPrintedList.IsString( aBaseList.GetObject(( ULONG ) 0 )) == NOT_THERE ) {
-                aPrintedList.PutString( aBaseList.GetObject(( ULONG ) 0 ));
+            ByteString sProduct( *aBaseList.GetObject(( sal_uIntPtr ) 0 ));
+            if ( aPrintedList.IsString( aBaseList.GetObject(( sal_uIntPtr ) 0 )) == NOT_THERE ) {
+                aPrintedList.PutString( aBaseList.GetObject(( sal_uIntPtr ) 0 ));
                 PrintDependentTargets( sProduct );
             }
             else
-                delete aBaseList.GetObject(( ULONG ) 0 );
+                delete aBaseList.GetObject(( sal_uIntPtr ) 0 );
 
-            aBaseList.Remove(( ULONG ) 0 );
+            aBaseList.Remove(( sal_uIntPtr ) 0 );
         }
         while ( aPrintedList.Count())
-            delete aPrintedList.Remove(( ULONG ) 0 );
+            delete aPrintedList.Remove(( sal_uIntPtr ) 0 );
 
         fprintf( stdout, "\n" );
     }
@@ -234,16 +234,16 @@ USHORT ProductMapper::PrintAndDeleteBaseList()
 }
 
 /*****************************************************************************/
-USHORT ProductMapper::PrintDependencies( const ByteString &rProduct )
+sal_uInt16 ProductMapper::PrintDependencies( const ByteString &rProduct )
 /*****************************************************************************/
 {
-    USHORT nResult = PrintDependentTargets( rProduct );
+    sal_uInt16 nResult = PrintDependentTargets( rProduct );
     PrintAndDeleteBaseList();
     return nResult;
 }
 
 /*****************************************************************************/
-USHORT ProductMapper::PrintProductList()
+sal_uInt16 ProductMapper::PrintProductList()
 /*****************************************************************************/
 {
     if ( !pVersionList )
@@ -253,7 +253,7 @@ USHORT ProductMapper::PrintProductList()
         return PRODUCT_MAPPER_NO_PRODUCT;
 
     if ( pProductList->Count()) {
-        for ( ULONG i = 0; i < pProductList->Count(); i++ )
+        for ( sal_uIntPtr i = 0; i < pProductList->Count(); i++ )
             fprintf( stdout, "%s (%s)\n",
                 pProductList->GetObject( i )->GetBuffer(),
                 pProductList->GetObject( i )->GetValue().GetBuffer());
@@ -279,7 +279,7 @@ SByteStringList *ProductMapper::GetMinorList(
             aEntry += DirEntry( sWildcard );
 
             Dir aDir( aEntry, FSYS_KIND_DIR );
-            for ( USHORT i = 0; i < aDir.Count(); i++ ) {
+            for ( sal_uInt16 i = 0; i < aDir.Count(); i++ ) {
                 ByteString sInc( aDir[ i ].GetName(), RTL_TEXTENCODING_ASCII_US );
                 if ( sInc.GetTokenCount( '.' ) > 1 ) {
                     if ( !pList )
@@ -302,7 +302,7 @@ String ProductMapper::GetVersionRoot(
     if ( pVersion ) {
 #ifdef UNX
         sKey = "drives/o:/unixvolume";
-        GenericInformation *pUnixVolume = pVersion->GetSubInfo( sKey, TRUE );
+        GenericInformation *pUnixVolume = pVersion->GetSubInfo( sKey, sal_True );
         ByteString sPath;
         if ( pUnixVolume )
             sPath = pUnixVolume->GetValue();
@@ -311,7 +311,7 @@ String ProductMapper::GetVersionRoot(
         ByteString sPath( "o:\\" );
 #endif
         sKey = "settings/path";
-        GenericInformation *pPath = pVersion->GetSubInfo( sKey, TRUE );
+        GenericInformation *pPath = pVersion->GetSubInfo( sKey, sal_True );
         if ( pPath ) {
             sPath += pPath->GetValue().GetToken( 0, '\\' );
             sPath += "/";
@@ -331,7 +331,7 @@ String ProductMapper::GetVersionRoot(
 
 /*****************************************************************************/
 BaseProductList *ProductMapper::GetBases(
-    GenericInformation *pProductInfo, USHORT nLevel,
+    GenericInformation *pProductInfo, sal_uInt16 nLevel,
     BaseProductList *pBases )
 /*****************************************************************************/
 {
@@ -349,29 +349,29 @@ BaseProductList *ProductMapper::GetBases(
         if ( pBasedOn ) {
             GenericInformationList *pBasesInfo = pBasedOn->GetSubList();
             if ( pBasesInfo ) {
-                for ( ULONG k = 0; k < pBasesInfo->Count(); k++ ) {
+                for ( sal_uIntPtr k = 0; k < pBasesInfo->Count(); k++ ) {
                     GenericInformation *pBaseProduct;
                     if ( GetProductInformation( *pBasesInfo->GetObject( k ), pBaseProduct ) == PRODUCT_MAPPER_OK )
                         GetBases( pBaseProduct, ++ nLevel, pBases );
                 }
             }
         }
-        BOOL bFound = FALSE;
+        sal_Bool bFound = sal_False;
         ByteString sUpperCandidate( sCandidate );
         sUpperCandidate.ToUpperAscii();
-        for ( USHORT i = 0; i < pBases->Count() && !bFound; i++ ) {
+        for ( sal_uInt16 i = 0; i < pBases->Count() && !bFound; i++ ) {
             ByteString sTest( *pBases->GetObject( i ));
             if ( sTest.ToUpperAscii() == sUpperCandidate )
-                bFound = TRUE;
+                bFound = sal_True;
         }
         if ( !bFound )
-            pBases->Insert( new ByteString( sCandidate ), ( ULONG ) 0 );
+            pBases->Insert( new ByteString( sCandidate ), ( sal_uIntPtr ) 0 );
     }
     return pBases;
 }
 
 /*****************************************************************************/
-USHORT ProductMapper::PrintMinorList(
+sal_uInt16 ProductMapper::PrintMinorList(
     const ByteString rProduct, const ByteString rEnvironment )
 /*****************************************************************************/
 {
@@ -389,18 +389,18 @@ USHORT ProductMapper::PrintMinorList(
     BaseProductList *pBases = GetBases( pProductInfo );
     if ( pBases->Count()) {
         if ( pBases->Count() > 1 )
-            fprintf( stdout, "Product \"%s\" based on ", pBases->GetObject(( ULONG ) 0 )->GetBuffer());
+            fprintf( stdout, "Product \"%s\" based on ", pBases->GetObject(( sal_uIntPtr ) 0 )->GetBuffer());
         else
-            fprintf( stdout, "Product \"%s\" based on no other products", pBases->GetObject(( ULONG ) 0 )->GetBuffer());
+            fprintf( stdout, "Product \"%s\" based on no other products", pBases->GetObject(( sal_uIntPtr ) 0 )->GetBuffer());
 
-        for ( ULONG i = 1; i < pBases->Count(); i++ ) {
+        for ( sal_uIntPtr i = 1; i < pBases->Count(); i++ ) {
             fprintf( stdout, "\"%s\"", pBases->GetObject( i )->GetBuffer());
             if ( i < pBases->Count() - 1 )
                 fprintf( stdout, ", " );
         }
         fprintf( stdout, "\n\n" );
     }
-    USHORT nResult = PRODUCT_MAPPER_OK;
+    sal_uInt16 nResult = PRODUCT_MAPPER_OK;
 
     if ( rEnvironment.Len())
         nResult = PrintSingleMinorList( pProductInfo, pBases, rEnvironment );
@@ -408,12 +408,12 @@ USHORT ProductMapper::PrintMinorList(
         ByteString sEnvKey( pProductInfo->GetValue());
         sEnvKey += "/Environments";
 
-        GenericInformation *pEnvironmentInfo = pVersionList->GetInfo( sEnvKey, TRUE );
+        GenericInformation *pEnvironmentInfo = pVersionList->GetInfo( sEnvKey, sal_True );
         if ( pEnvironmentInfo ) {
             GenericInformationList *pEnvironmentList = pEnvironmentInfo->GetSubList();
             if ( pEnvironmentList ) {
-                for ( ULONG i = 0; i < pEnvironmentList->Count(); i++ ) {
-                    USHORT nTmp = PrintSingleMinorList( pProductInfo, pBases, *pEnvironmentList->GetObject( i ));
+                for ( sal_uIntPtr i = 0; i < pEnvironmentList->Count(); i++ ) {
+                    sal_uInt16 nTmp = PrintSingleMinorList( pProductInfo, pBases, *pEnvironmentList->GetObject( i ));
                     if ( nTmp != PRODUCT_MAPPER_OK )
                         nResult = nTmp;
                 }
@@ -421,7 +421,7 @@ USHORT ProductMapper::PrintMinorList(
         }
     }
 
-    for ( ULONG m = 0; m < pBases->Count(); m++ )
+    for ( sal_uIntPtr m = 0; m < pBases->Count(); m++ )
         delete pBases->GetObject( m );
     delete pBases;
 
@@ -429,7 +429,7 @@ USHORT ProductMapper::PrintMinorList(
 }
 
 /*****************************************************************************/
-USHORT ProductMapper::PrintSingleMinorList(
+sal_uInt16 ProductMapper::PrintSingleMinorList(
     GenericInformation *pProductInfo, BaseProductList *pBases,
     const ByteString rEnvironment )
 /*****************************************************************************/
@@ -445,12 +445,12 @@ USHORT ProductMapper::PrintSingleMinorList(
     pMinors->Insert( new ByteString( "" ), LIST_APPEND );
 
     SByteStringList aOutputList;
-    BOOL bUnknownMinor = FALSE;
-    for ( ULONG i = 0; i < pMinors->Count(); i++ ) {
+    sal_Bool bUnknownMinor = sal_False;
+    for ( sal_uIntPtr i = 0; i < pMinors->Count(); i++ ) {
         ByteString sOutput;
         ByteString sProductVersion;
 
-        for ( ULONG j = 0; j < pBases->Count(); j++ ) {
+        for ( sal_uIntPtr j = 0; j < pBases->Count(); j++ ) {
             ByteString sCurProduct( *pBases->GetObject( j ));
             ByteString sVersion( sCurProduct.GetToken( sCurProduct.GetTokenCount( '(' ) - 1, '(' ).GetToken( 0, ')' ));
             if ( !j )
@@ -462,7 +462,7 @@ USHORT ProductMapper::PrintSingleMinorList(
             ByteString sMinor( pMinorMk->GetLastMinor().GetBuffer());
             if ( !sMinor.Len()) {
                 sMinor = "!";
-                bUnknownMinor = TRUE;
+                bUnknownMinor = sal_True;
             }
             if ( j == 0 ) {
                 sOutput += pMinorMk->GetBuildNr();
@@ -487,7 +487,7 @@ USHORT ProductMapper::PrintSingleMinorList(
     if ( aOutputList.Count())
         fprintf( stdout, "Available builds on %s:\n", rEnvironment.GetBuffer());
 
-    for ( ULONG o = 0; o < aOutputList.Count(); o++ ) {
+    for ( sal_uIntPtr o = 0; o < aOutputList.Count(); o++ ) {
         ByteString sOutput( *aOutputList.GetObject( o ));
         sOutput = sOutput.Copy( sOutput.GetToken( 0, ' ' ).Len() + 1 );
 
@@ -505,7 +505,7 @@ USHORT ProductMapper::PrintSingleMinorList(
     else if ( aOutputList.Count())
         fprintf( stdout, "\n" );
 
-    for ( ULONG l = 0; l < pMinors->Count(); l++ )
+    for ( sal_uIntPtr l = 0; l < pMinors->Count(); l++ )
         delete pMinors->GetObject( l );
     delete pMinors;
 

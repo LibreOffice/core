@@ -63,11 +63,11 @@ SmSym::SmSym() :
     m_aName(C2S("unknown")),
     m_aSetName(C2S("unknown")),
     m_cChar('\0'),
-    m_bPredefined(FALSE),
-    m_bDocSymbol(FALSE)
+    m_bPredefined(sal_False),
+    m_bDocSymbol(sal_False)
 {
     m_aExportName = m_aName;
-    m_aFace.SetTransparent(TRUE);
+    m_aFace.SetTransparent(sal_True);
     m_aFace.SetAlign(ALIGN_BASELINE);
 }
 
@@ -79,12 +79,12 @@ SmSym::SmSym(const SmSym& rSymbol)
 
 
 SmSym::SmSym(const String& rName, const Font& rFont, sal_UCS4 cChar,
-             const String& rSet, BOOL bIsPredefined)
+             const String& rSet, sal_Bool bIsPredefined)
 {
     m_aName     = m_aExportName   = rName;
 
     m_aFace     = rFont;
-    m_aFace.SetTransparent(TRUE);
+    m_aFace.SetTransparent(sal_True);
     m_aFace.SetAlign(ALIGN_BASELINE);
 
     m_cChar   = cChar;
@@ -101,7 +101,7 @@ SmSym::SmSym(const String& rName, const Font& rFont, sal_UCS4 cChar,
 //        Character |= 0xF000;
     m_aSetName      = rSet;
     m_bPredefined   = bIsPredefined;
-    m_bDocSymbol    = FALSE;
+    m_bDocSymbol    = sal_False;
 }
 
 
@@ -313,7 +313,7 @@ void SmSymbolManager::Load()
         String aSymbolName( (sal_Unicode)'i' );
         aSymbolName += rSym.GetName();
         SmSym aSymbol( aSymbolName, aFont, rSym.GetCharacter(),
-                aSymbolSetName, TRUE /*bIsPredefined*/ );
+                aSymbolSetName, sal_True /*bIsPredefined*/ );
 
         AddOrReplaceSymbol( aSymbol );
     }
@@ -326,11 +326,11 @@ void SmSymbolManager::Save()
         SmMathConfig &rCfg = *SM_MOD()->GetConfig();
 
 #if 0
-        USHORT nSymbolCount     = GetSymbolCount();
-        USHORT nSaveSymbolCnt   = 0;
+        sal_uInt16 nSymbolCount     = GetSymbolCount();
+        sal_uInt16 nSaveSymbolCnt   = 0;
         const SmSym **pSymbols  = new const SmSym* [ nSymbolCount ];
         const SmSym **pSym      = pSymbols;
-        for (USHORT j = 0;  j < nSymbolCount;  ++j)
+        for (sal_uInt16 j = 0;  j < nSymbolCount;  ++j)
         {
             const SmSym &rSym = *pSymSet->GetSymbol( j );
             if (!rSym.IsDocSymbol())

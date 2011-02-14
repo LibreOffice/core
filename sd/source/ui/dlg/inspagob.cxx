@@ -117,7 +117,7 @@ void SdInsertPagesObjsDlg::Reset()
         aLbTree.SetCollapsedEntryBmp( pEntry, aImgTextH, BMP_COLOR_HIGHCONTRAST );
     }
 
-    aCbxMasters.Check( TRUE );
+    aCbxMasters.Check( sal_True );
 }
 
 /*************************************************************************
@@ -128,7 +128,7 @@ void SdInsertPagesObjsDlg::Reset()
 |*
 \************************************************************************/
 
-List* SdInsertPagesObjsDlg::GetList( USHORT nType )
+List* SdInsertPagesObjsDlg::GetList( sal_uInt16 nType )
 {
     // Bei Draw-Dokumenten muss bei der Selektion des Dokumentes NULL
     // zurueckgegeben werden
@@ -153,7 +153,7 @@ List* SdInsertPagesObjsDlg::GetList( USHORT nType )
 |*
 \************************************************************************/
 
-BOOL SdInsertPagesObjsDlg::IsLink()
+sal_Bool SdInsertPagesObjsDlg::IsLink()
 {
     return( aCbxLink.IsChecked() );
 }
@@ -164,7 +164,7 @@ BOOL SdInsertPagesObjsDlg::IsLink()
 |*
 \************************************************************************/
 
-BOOL SdInsertPagesObjsDlg::IsRemoveUnnessesaryMasterPages() const
+sal_Bool SdInsertPagesObjsDlg::IsRemoveUnnessesaryMasterPages() const
 {
     return( aCbxMasters.IsChecked() );
 }

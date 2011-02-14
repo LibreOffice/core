@@ -47,7 +47,7 @@ friend class SfxListener;
     SfxListenerArr_Impl     aListeners;
 
 private:
-    BOOL         AddListener( SfxListener& rListener );
+    sal_Bool         AddListener( SfxListener& rListener );
     void                    RemoveListener( SfxListener& rListener );
     const SfxBroadcaster&   operator=(const SfxBroadcaster &); // verboten
 
@@ -66,9 +66,9 @@ public:
     void                    BroadcastDelayed( const SfxHint& rHint );
     void                    BroadcastInIdle( const SfxHint& rHint );
 
-    BOOL                    HasListeners() const;
-    USHORT                  GetListenerCount() const { return aListeners.Count(); }
-    SfxListener*            GetListener( USHORT nNo ) const
+    sal_Bool                    HasListeners() const;
+    sal_uInt16                  GetListenerCount() const { return aListeners.Count(); }
+    SfxListener*            GetListener( sal_uInt16 nNo ) const
                             { return (SfxListener*) aListeners[nNo]; }
 };
 

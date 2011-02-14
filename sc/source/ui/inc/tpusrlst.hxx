@@ -46,8 +46,8 @@ class ScTpUserLists : public SfxTabPage
 public:
     static  SfxTabPage* Create          ( Window*               pParent,
                                           const SfxItemSet&     rAttrSet );
-    static  USHORT*     GetRanges       ();
-    virtual BOOL        FillItemSet     ( SfxItemSet& rCoreAttrs );
+    static  sal_uInt16*     GetRanges       ();
+    virtual sal_Bool        FillItemSet     ( SfxItemSet& rCoreAttrs );
     virtual void        Reset           ( const SfxItemSet& rCoreAttrs );
     using SfxTabPage::DeactivatePage;
     virtual int         DeactivatePage  ( SfxItemSet* pSet = NULL );
@@ -78,7 +78,7 @@ private:
     const String    aStrCopyFrom;
     const String    aStrCopyErr;
 
-    const USHORT    nWhichUserLists;
+    const sal_uInt16    nWhichUserLists;
     ScUserList*     pUserLists;
 
     ScDocument*     pDoc;
@@ -86,20 +86,20 @@ private:
     ScRangeUtil*    pRangeUtil;
     String          aStrSelectedArea;
 
-    BOOL            bModifyMode;
-    BOOL            bCancelMode;
-    BOOL            bCopyDone;
-    USHORT          nCancelPos;
+    sal_Bool            bModifyMode;
+    sal_Bool            bCancelMode;
+    sal_Bool            bCopyDone;
+    sal_uInt16          nCancelPos;
 
 #ifdef _TPUSRLST_CXX
 private:
     void    Init                ();
-    USHORT  UpdateUserListBox   ();
-    void    UpdateEntries       ( USHORT nList );
+    sal_uInt16  UpdateUserListBox   ();
+    void    UpdateEntries       ( sal_uInt16 nList );
     void    MakeListStr         ( String& rListStr );
     void    AddNewList          ( const String& rEntriesStr );
-    void    RemoveList          ( USHORT nList );
-    void    ModifyList          ( USHORT        nSelList,
+    void    RemoveList          ( sal_uInt16 nList );
+    void    ModifyList          ( sal_uInt16        nSelList,
                                   const String& rEntriesStr );
     void    CopyListFromArea    ( const ScRefAddress& rStartPos,
                                   const ScRefAddress& rEndPos );

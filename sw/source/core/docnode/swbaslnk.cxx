@@ -66,7 +66,7 @@
 
 using namespace com::sun::star;
 
-BOOL SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd );
+sal_Bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd );
 
 TYPEINIT1( SwBaseLink, ::sfx2::SvBaseLink );
 
@@ -108,11 +108,11 @@ void SwBaseLink::DataChanged( const String& rMimeType,
     SwDoc* pDoc = pCntntNode->GetDoc();
     if( pDoc->IsInDtor() || ChkNoDataFlag() || bIgnoreDataChanged )
     {
-        bIgnoreDataChanged = FALSE;
+        bIgnoreDataChanged = sal_False;
         return ;
     }
 
-    ULONG nFmt = SotExchange::GetFormatIdFromMimeType( rMimeType );
+    sal_uLong nFmt = SotExchange::GetFormatIdFromMimeType( rMimeType );
 
     if( pCntntNode->IsNoTxtNode() &&
         nFmt == sfx2::LinkManager::RegisterStatusInfoId() )
@@ -121,7 +121,7 @@ void SwBaseLink::DataChanged( const String& rMimeType,
         ::rtl::OUString sState;
         if( rValue.hasValue() && ( rValue >>= sState ))
         {
-            USHORT nEvent = 0;
+            sal_uInt16 nEvent = 0;
             switch( sState.toInt32() )
             {
             case sfx2::LinkManager::STATE_LOAD_OK:      nEvent = SVX_EVENT_IMAGE_LOAD;  break;
@@ -140,10 +140,10 @@ void SwBaseLink::DataChanged( const String& rMimeType,
         return;         // das wars!
     }
 
-    BOOL bUpdate = FALSE;
-    BOOL bGraphicArrived = FALSE;
-    BOOL bGraphicPieceArrived = FALSE;
-    BOOL bDontNotify = FALSE;
+    sal_Bool bUpdate = sal_False;
+    sal_Bool bGraphicArrived = sal_False;
+    sal_Bool bGraphicPieceArrived = sal_False;
+    sal_Bool bDontNotify = sal_False;
     Size aGrfSz, aFrmFmtSz;
 
     if( pCntntNode->IsGrfNode() )
@@ -183,12 +183,12 @@ void SwBaseLink::DataChanged( const String& rMimeType,
                 // gesetzt ist, dann muss "unten" der Teil von
                 // bGraphicArrived durchlaufen werden!
                 // (ansonten wird die Grafik in deft. Size gepaintet)
-                bGraphicArrived = TRUE;
-                bGraphicPieceArrived = FALSE;
+                bGraphicArrived = sal_True;
+                bGraphicPieceArrived = sal_False;
             }
 
             rGrfObj.SetGraphic( aGrf, rGrfObj.GetLink() );
-            bUpdate = TRUE;
+            bUpdate = sal_True;
 
             // Bug 33999: damit der Node den Transparent-Status
             //      richtig gesetzt hat, ohne auf die Grafik
@@ -207,7 +207,7 @@ void SwBaseLink::DataChanged( const String& rMimeType,
             ((SwGrfNode*)pCntntNode)->SetTwipSize( Size(0,0) );
     }
     else if( pCntntNode->IsOLENode() )
-        bUpdate = TRUE;
+        bUpdate = sal_True;
 
     ViewShell *pSh = 0;
     SwEditShell* pESh = pDoc->GetEditShell( &pSh );
@@ -219,19 +219,19 @@ void SwBaseLink::DataChanged( const String& rMimeType,
         {
             SwMsgPoolItem aMsgHint( RES_GRAPHIC_PIECE_ARRIVED );
             pCntntNode->Modify( &aMsgHint, &aMsgHint );
-            bUpdate = FALSE;
+            bUpdate = sal_False;
         }
     }
 
-    static BOOL bInNotifyLinks = FALSE;
+    static sal_Bool bInNotifyLinks = sal_False;
     if( bUpdate && !bDontNotify && (!bSwapIn || bGraphicArrived) &&
         !bInNotifyLinks)
     {
-        BOOL bLockView = FALSE;
+        sal_Bool bLockView = sal_False;
         if( pSh )
         {
             bLockView = pSh->IsViewLocked();
-            pSh->LockView( TRUE );
+            pSh->LockView( sal_True );
         }
 
         if( pESh )
@@ -239,16 +239,16 @@ void SwBaseLink::DataChanged( const String& rMimeType,
         else if( pSh )
             pSh->StartAction();
 
-        SwMsgPoolItem aMsgHint( static_cast<USHORT>(
+        SwMsgPoolItem aMsgHint( static_cast<sal_uInt16>(
             bGraphicArrived ? RES_GRAPHIC_ARRIVED : RES_UPDATE_ATTR ) );
 
         if ( bGraphicArrived )
         {
             //Alle benachrichtigen, die am gleichen Link horchen.
-            bInNotifyLinks = TRUE;
+            bInNotifyLinks = sal_True;
 
             const ::sfx2::SvBaseLinks& rLnks = pDoc->GetLinkManager().GetLinks();
-            for( USHORT n = rLnks.Count(); n; )
+            for( sal_uInt16 n = rLnks.Count(); n; )
             {
                 ::sfx2::SvBaseLink* pLnk = &(*rLnks[ --n ]);
                 if( pLnk && OBJECT_CLIENT_GRF == pLnk->GetObjType() &&
@@ -261,9 +261,9 @@ void SwBaseLink::DataChanged( const String& rMimeType,
                         ( !bSwapIn ||
                             GRAPHIC_DEFAULT == pGrfNd->GetGrfObj().GetType()))
                     {
-                        pBLink->bIgnoreDataChanged = FALSE;
+                        pBLink->bIgnoreDataChanged = sal_False;
                         pBLink->DataChanged( rMimeType, rValue );
-                        pBLink->bIgnoreDataChanged = TRUE;
+                        pBLink->bIgnoreDataChanged = sal_True;
 
                         pGrfNd->SetGrafikArrived( ((SwGrfNode*)pCntntNode)->
                                                     IsGrafikArrived() );
@@ -279,7 +279,7 @@ void SwBaseLink::DataChanged( const String& rMimeType,
                 }
             }
 
-            bInNotifyLinks = FALSE;
+            bInNotifyLinks = sal_False;
         }
         else
         {
@@ -289,8 +289,8 @@ void SwBaseLink::DataChanged( const String& rMimeType,
 
         if( pESh )
         {
-            const BOOL bEndActionByVirDev = pESh->IsEndActionByVirDev();
-            pESh->SetEndActionByVirDev( TRUE );
+            const sal_Bool bEndActionByVirDev = pESh->IsEndActionByVirDev();
+            pESh->SetEndActionByVirDev( sal_True );
             pESh->EndAllAction();
             pESh->SetEndActionByVirDev( bEndActionByVirDev );
         }
@@ -298,13 +298,13 @@ void SwBaseLink::DataChanged( const String& rMimeType,
             pSh->EndAction();
 
         if( pSh && !bLockView )
-            pSh->LockView( FALSE );
+            pSh->LockView( sal_False );
     }
 }
 
-BOOL SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
+sal_Bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     ViewShell *pSh;
     CurrShell *pCurr = 0;
     if ( pGrfNd->GetDoc()->GetEditShell( &pSh ) )
@@ -342,7 +342,7 @@ BOOL SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
                 SwFmtFrmSize aAttr( rOldAttr  );
                 aAttr.SetSize( aCalcSz );
                 pFmt->SetFmtAttr( aAttr );
-                bRet = TRUE;
+                bRet = sal_True;
             }
 
             if( !aSz.Width() )
@@ -357,16 +357,16 @@ BOOL SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
                     0 != (pANd = & pAPos->nNode.GetNode()) &&
                     0 != (pTblNd = pANd->FindTableNode()) )
                 {
-                    const BOOL bLastGrf = !pTblNd->GetTable().DecGrfsThatResize();
+                    const sal_Bool bLastGrf = !pTblNd->GetTable().DecGrfsThatResize();
                     SwHTMLTableLayout *pLayout =
                         pTblNd->GetTable().GetHTMLTableLayout();
                     if( pLayout )
                     {
-                        const USHORT nBrowseWidth =
+                        const sal_uInt16 nBrowseWidth =
                                     pLayout->GetBrowseWidthByTable( *pDoc );
                         if ( nBrowseWidth )
                         {
-                            pLayout->Resize( nBrowseWidth, TRUE, TRUE,
+                            pLayout->Resize( nBrowseWidth, sal_True, sal_True,
                                              bLastGrf ? HTMLTABLE_RESIZE_NOW
                                                       : 500 );
                         }
@@ -386,11 +386,11 @@ BOOL SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
 }
 
 
-BOOL SwBaseLink::SwapIn( BOOL bWaitForData, BOOL bNativFormat )
+sal_Bool SwBaseLink::SwapIn( sal_Bool bWaitForData, sal_Bool bNativFormat )
 {
-    bSwapIn = TRUE;
+    bSwapIn = sal_True;
 
-    BOOL bRes;
+    sal_Bool bRes;
 
     if( !GetObj() && ( bNativFormat || ( !IsSynchron() && bWaitForData ) ))
     {
@@ -439,27 +439,27 @@ BOOL SwBaseLink::SwapIn( BOOL bWaitForData, BOOL bNativFormat )
         if( bWaitForData && !GetObj() )
         {
             ASSERT( !this, "das SvxFileObject wurde in einem GetData geloescht!" );
-            bRes = FALSE;
+            bRes = sal_False;
         }
         else if( 0 != ( bRes = aValue.hasValue() ) )
         {
             //JP 14.04.99: Bug 64820 - das Flag muss beim SwapIn natuerlich
             //              zurueckgesetzt werden. Die Daten sollen ja neu
             //              uebernommen werden
-            bIgnoreDataChanged = FALSE;
+            bIgnoreDataChanged = sal_False;
             DataChanged( aMimeType, aValue );
         }
     }
     else if( !IsSynchron() && bWaitForData )
     {
-        SetSynchron( TRUE );
+        SetSynchron( sal_True );
         bRes = Update();
-        SetSynchron( FALSE );
+        SetSynchron( sal_False );
     }
     else
         bRes = Update();
 
-    bSwapIn = FALSE;
+    bSwapIn = sal_False;
 
     // --> OD 2005-04-11 #i46300# - deactivate fix for issues i9861 and i33293
 //    if ( pTBIS && pTBIS->isTouched() )
@@ -511,7 +511,7 @@ const SwNode* SwBaseLink::GetAnchor() const
     return 0;
 }
 
-BOOL SwBaseLink::IsRecursion( const SwBaseLink* pChkLnk ) const
+sal_Bool SwBaseLink::IsRecursion( const SwBaseLink* pChkLnk ) const
 {
     SwServerObjectRef aRef( (SwServerObject*)GetObj() );
     if( aRef.Is() )
@@ -521,14 +521,14 @@ BOOL SwBaseLink::IsRecursion( const SwBaseLink* pChkLnk ) const
         // handelt es sich um eine Rekursion.
         return aRef->IsLinkInServer( pChkLnk );
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SwBaseLink::IsInRange( ULONG, ULONG, xub_StrLen, xub_StrLen ) const
+sal_Bool SwBaseLink::IsInRange( sal_uLong, sal_uLong, xub_StrLen, xub_StrLen ) const
 {
     // Grafik oder OLE-Links nicht,
     // Felder oder Sections haben eigene Ableitung!
-    return FALSE;
+    return sal_False;
 }
 
 SwBaseLink::~SwBaseLink()

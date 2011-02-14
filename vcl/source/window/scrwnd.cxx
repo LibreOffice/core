@@ -77,12 +77,12 @@ ImplWheelWindow::ImplWheelWindow( Window* pParent ) :
     DBG_ASSERT( pParent, "ImplWheelWindow::ImplWheelWindow(): Parent not set!" );
 
     const Size      aSize( pParent->GetOutputSizePixel() );
-    const USHORT    nFlags = ImplGetSVData()->maWinData.mnAutoScrollFlags;
-    const BOOL      bHorz = ( nFlags & AUTOSCROLL_HORZ ) != 0;
-    const BOOL      bVert = ( nFlags & AUTOSCROLL_VERT ) != 0;
+    const sal_uInt16    nFlags = ImplGetSVData()->maWinData.mnAutoScrollFlags;
+    const sal_Bool      bHorz = ( nFlags & AUTOSCROLL_HORZ ) != 0;
+    const sal_Bool      bVert = ( nFlags & AUTOSCROLL_VERT ) != 0;
 
     // calculate maximum speed distance
-    mnMaxWidth = (ULONG) ( 0.4 * hypot( (double) aSize.Width(), aSize.Height() ) );
+    mnMaxWidth = (sal_uLong) ( 0.4 * hypot( (double) aSize.Width(), aSize.Height() ) );
 
     // create wheel window
     SetTitleType( FLOATWIN_TITLE_NONE );
@@ -124,7 +124,7 @@ void ImplWheelWindow::ImplStop()
 {
     ReleaseMouse();
     mpTimer->Stop();
-    Show(FALSE);
+    Show(sal_False);
 }
 
 // ------------------------------------------------------------------------
@@ -156,7 +156,7 @@ void ImplWheelWindow::ImplCreateImageList()
 
 // ------------------------------------------------------------------------
 
-void ImplWheelWindow::ImplSetWheelMode( ULONG nWheelMode )
+void ImplWheelWindow::ImplSetWheelMode( sal_uLong nWheelMode )
 {
     if( nWheelMode != mnWheelMode )
     {
@@ -181,7 +181,7 @@ void ImplWheelWindow::ImplSetWheelMode( ULONG nWheelMode )
 
 void ImplWheelWindow::ImplDrawWheel()
 {
-    USHORT nId;
+    sal_uInt16 nId;
 
     switch( mnWheelMode )
     {
@@ -209,13 +209,13 @@ void ImplWheelWindow::ImplRecalcScrollValues()
     }
     else
     {
-        ULONG nCurTime;
+        sal_uLong nCurTime;
 
         // calc current time
         if( mnMaxWidth )
         {
             const double fExp = ( (double) mnActDist / mnMaxWidth ) * log10( (double) MAX_TIME / MIN_TIME );
-            nCurTime = (ULONG) ( MAX_TIME / pow( 10., fExp ) );
+            nCurTime = (sal_uLong) ( MAX_TIME / pow( 10., fExp ) );
         }
         else
             nCurTime = MAX_TIME;
@@ -259,9 +259,9 @@ void ImplWheelWindow::ImplRecalcScrollValues()
 PointerStyle ImplWheelWindow::ImplGetMousePointer( long nDistX, long nDistY )
 {
     PointerStyle    eStyle;
-    const USHORT    nFlags = ImplGetSVData()->maWinData.mnAutoScrollFlags;
-    const BOOL      bHorz = ( nFlags & AUTOSCROLL_HORZ ) != 0;
-    const BOOL      bVert = ( nFlags & AUTOSCROLL_VERT ) != 0;
+    const sal_uInt16    nFlags = ImplGetSVData()->maWinData.mnAutoScrollFlags;
+    const sal_Bool      bHorz = ( nFlags & AUTOSCROLL_HORZ ) != 0;
+    const sal_Bool      bVert = ( nFlags & AUTOSCROLL_VERT ) != 0;
 
     if( bHorz || bVert )
     {
@@ -339,13 +339,13 @@ void ImplWheelWindow::MouseMove( const MouseEvent& rMEvt )
     const long  nDistX = aMousePos.X() - maCenter.X();
     const long  nDistY = aMousePos.Y() - maCenter.Y();
 
-    mnActDist = (ULONG) hypot( (double) nDistX, nDistY );
+    mnActDist = (sal_uLong) hypot( (double) nDistX, nDistY );
 
     const PointerStyle  eActStyle = ImplGetMousePointer( nDistX, nDistY );
-    const USHORT        nFlags = ImplGetSVData()->maWinData.mnAutoScrollFlags;
-    const BOOL          bHorz = ( nFlags & AUTOSCROLL_HORZ ) != 0;
-    const BOOL          bVert = ( nFlags & AUTOSCROLL_VERT ) != 0;
-    const BOOL          bOuter = mnActDist > WHEEL_RADIUS;
+    const sal_uInt16        nFlags = ImplGetSVData()->maWinData.mnAutoScrollFlags;
+    const sal_Bool          bHorz = ( nFlags & AUTOSCROLL_HORZ ) != 0;
+    const sal_Bool          bVert = ( nFlags & AUTOSCROLL_VERT ) != 0;
+    const sal_Bool          bOuter = mnActDist > WHEEL_RADIUS;
 
     if( bOuter && ( maLastMousePos != aMousePos ) )
     {
@@ -397,12 +397,12 @@ IMPL_LINK( ImplWheelWindow, ImplScrollHdl, Timer*, EMPTYARG )
         const Point         aMousePos( pWindow->OutputToScreenPixel( pWindow->GetPointerPosPixel() ) );
         Point               aCmdMousePos( pWindow->ImplFrameToOutput( aMousePos ) );
         CommandScrollData   aScrollData( mnActDeltaX, mnActDeltaY );
-        CommandEvent        aCEvt( aCmdMousePos, COMMAND_AUTOSCROLL, TRUE, &aScrollData );
+        CommandEvent        aCEvt( aCmdMousePos, COMMAND_AUTOSCROLL, sal_True, &aScrollData );
         NotifyEvent         aNCmdEvt( EVENT_COMMAND, pWindow, &aCEvt );
 
         if ( !ImplCallPreNotify( aNCmdEvt ) )
         {
-            const ULONG nTime = Time::GetSystemTicks();
+            const sal_uLong nTime = Time::GetSystemTicks();
             ImplDelData aDel( this );
             pWindow->Command( aCEvt );
             if( aDel.IsDead() )

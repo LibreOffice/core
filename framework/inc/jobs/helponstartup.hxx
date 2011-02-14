@@ -178,8 +178,8 @@ class HelpOnStartup : private ThreadHelpBase
                     the help url for checking.
 
             @return [bool]
-                    TRUE if the given URL is any default one ...
-                    FALSE otherwise.
+                    sal_True if the given URL is any default one ...
+                    sal_False otherwise.
          */
         ::sal_Bool its_isHelpUrlADefaultOne(const ::rtl::OUString& sHelpURL);
 

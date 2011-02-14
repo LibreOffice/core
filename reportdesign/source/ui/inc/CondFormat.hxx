@@ -60,7 +60,7 @@ namespace rptui
     public:
         virtual void            addCondition( size_t _nAddAfterIndex ) = 0;
         virtual void            deleteCondition( size_t _nCondIndex ) = 0;
-        virtual void            applyCommand( size_t _nCondIndex, USHORT _nCommandId, const ::Color _aColor ) = 0;
+        virtual void            applyCommand( size_t _nCondIndex, sal_uInt16 _nCommandId, const ::Color _aColor ) = 0;
         virtual void            moveConditionUp( size_t _nCondIndex ) = 0;
         virtual void            moveConditionDown( size_t _nCondIndex ) = 0;
         virtual ::rtl::OUString getDataField() const = 0;
@@ -109,7 +109,7 @@ namespace rptui
         // IConditionalFormatAction overridables
         virtual void addCondition( size_t _nAddAfterIndex );
         virtual void deleteCondition( size_t _nCondIndex );
-        virtual void applyCommand( size_t _nCondIndex, USHORT _nCommandId, const ::Color _aColor );
+        virtual void applyCommand( size_t _nCondIndex, sal_uInt16 _nCommandId, const ::Color _aColor );
         virtual void moveConditionUp( size_t _nCondIndex );
         virtual void moveConditionDown( size_t _nCondIndex );
         virtual ::rtl::OUString getDataField() const;

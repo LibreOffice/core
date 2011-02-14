@@ -35,7 +35,7 @@
 ::rtl::OUString ActionDescriptionProvider::createDescription( ActionType eActionType
                         , const ::rtl::OUString& rObjectName )
 {
-    USHORT nResID=0;
+    sal_uInt16 nResID=0;
     switch( eActionType )
     {
     case INSERT:

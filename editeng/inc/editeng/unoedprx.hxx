@@ -41,20 +41,20 @@ public:
     SvxAccessibleTextAdapter();
     virtual ~SvxAccessibleTextAdapter();
 
-    virtual USHORT          GetParagraphCount() const;
-    virtual USHORT          GetTextLen( USHORT nParagraph ) const;
+    virtual sal_uInt16          GetParagraphCount() const;
+    virtual sal_uInt16          GetTextLen( sal_uInt16 nParagraph ) const;
     virtual String          GetText( const ESelection& rSel ) const;
-    virtual SfxItemSet      GetAttribs( const ESelection& rSel, BOOL bOnlyHardAttrib = 0 ) const;
-    virtual SfxItemSet      GetParaAttribs( USHORT nPara ) const;
-    virtual void            SetParaAttribs( USHORT nPara, const SfxItemSet& rSet );
+    virtual SfxItemSet      GetAttribs( const ESelection& rSel, sal_Bool bOnlyHardAttrib = 0 ) const;
+    virtual SfxItemSet      GetParaAttribs( sal_uInt16 nPara ) const;
+    virtual void            SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet );
     virtual void            RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich );
-    virtual void            GetPortions( USHORT nPara, SvUShorts& rList ) const;
+    virtual void            GetPortions( sal_uInt16 nPara, SvUShorts& rList ) const;
 
-    virtual sal_Int32       CalcLogicalIndex( USHORT nPara, USHORT nEEIndex );
-    virtual USHORT          CalcEditEngineIndex( USHORT nPara, sal_Int32 nLogicalIndex );
+    virtual sal_Int32       CalcLogicalIndex( sal_uInt16 nPara, sal_uInt16 nEEIndex );
+    virtual sal_uInt16          CalcEditEngineIndex( sal_uInt16 nPara, sal_Int32 nLogicalIndex );
 
-     virtual USHORT         GetItemState( const ESelection& rSel, USHORT nWhich ) const;
-    virtual USHORT          GetItemState( USHORT nPara, USHORT nWhich ) const;
+     virtual sal_uInt16         GetItemState( const ESelection& rSel, sal_uInt16 nWhich ) const;
+    virtual sal_uInt16          GetItemState( sal_uInt16 nPara, sal_uInt16 nWhich ) const;
 
     virtual void            QuickInsertText( const String& rText, const ESelection& rSel );
     virtual void            QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );
@@ -63,46 +63,46 @@ public:
 
     virtual SfxItemPool*    GetPool() const;
 
-    virtual XubString       CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor );
-    virtual void            FieldClicked( const SvxFieldItem& rField, USHORT nPara, xub_StrLen nPos );
+    virtual XubString       CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos, Color*& rpTxtColor, Color*& rpFldColor );
+    virtual void            FieldClicked( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos );
 
-    virtual BOOL            IsValid() const;
+    virtual sal_Bool            IsValid() const;
 
-    virtual LanguageType    GetLanguage( USHORT, USHORT ) const;
-    virtual USHORT          GetFieldCount( USHORT nPara ) const;
-    virtual EFieldInfo      GetFieldInfo( USHORT nPara, USHORT nField ) const;
-    virtual EBulletInfo     GetBulletInfo( USHORT nPara ) const;
-    virtual Rectangle       GetCharBounds( USHORT nPara, USHORT nIndex ) const;
-    virtual Rectangle       GetParaBounds( USHORT nPara ) const;
+    virtual LanguageType    GetLanguage( sal_uInt16, sal_uInt16 ) const;
+    virtual sal_uInt16          GetFieldCount( sal_uInt16 nPara ) const;
+    virtual EFieldInfo      GetFieldInfo( sal_uInt16 nPara, sal_uInt16 nField ) const;
+    virtual EBulletInfo     GetBulletInfo( sal_uInt16 nPara ) const;
+    virtual Rectangle       GetCharBounds( sal_uInt16 nPara, sal_uInt16 nIndex ) const;
+    virtual Rectangle       GetParaBounds( sal_uInt16 nPara ) const;
     virtual MapMode         GetMapMode() const;
     virtual OutputDevice*   GetRefDevice() const;
-    virtual sal_Bool        GetIndexAtPoint( const Point&, USHORT& nPara, USHORT& nIndex ) const;
-    virtual sal_Bool        GetWordIndices( USHORT nPara, USHORT nIndex, USHORT& nStart, USHORT& nEnd ) const;
-    virtual sal_Bool        GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const;
-    virtual USHORT          GetLineCount( USHORT nPara ) const;
-    virtual USHORT          GetLineLen( USHORT nPara, USHORT nLine ) const;
-    virtual void            GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nParagraph, USHORT nLine ) const;
-    virtual USHORT          GetLineNumberAtIndex( USHORT nPara, USHORT nIndex ) const;
+    virtual sal_Bool        GetIndexAtPoint( const Point&, sal_uInt16& nPara, sal_uInt16& nIndex ) const;
+    virtual sal_Bool        GetWordIndices( sal_uInt16 nPara, sal_uInt16 nIndex, sal_uInt16& nStart, sal_uInt16& nEnd ) const;
+    virtual sal_Bool        GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, sal_uInt16 nPara, sal_uInt16 nIndex ) const;
+    virtual sal_uInt16          GetLineCount( sal_uInt16 nPara ) const;
+    virtual sal_uInt16          GetLineLen( sal_uInt16 nPara, sal_uInt16 nLine ) const;
+    virtual void            GetLineBoundaries( /*out*/sal_uInt16 &rStart, /*out*/sal_uInt16 &rEnd, sal_uInt16 nParagraph, sal_uInt16 nLine ) const;
+    virtual sal_uInt16          GetLineNumberAtIndex( sal_uInt16 nPara, sal_uInt16 nIndex ) const;
 
     virtual sal_Bool        Delete( const ESelection& );
     virtual sal_Bool        InsertText( const String&, const ESelection& );
-    virtual sal_Bool        QuickFormatDoc( BOOL bFull=FALSE );
-    virtual sal_Int16       GetDepth( USHORT nPara ) const;
-    virtual sal_Bool        SetDepth( USHORT nPara, sal_Int16 nNewDepth );
+    virtual sal_Bool        QuickFormatDoc( sal_Bool bFull=sal_False );
+    virtual sal_Int16       GetDepth( sal_uInt16 nPara ) const;
+    virtual sal_Bool        SetDepth( sal_uInt16 nPara, sal_Int16 nNewDepth );
 
     virtual const SfxItemSet*   GetEmptyItemSetPtr();
 
     // implementation functions for XParagraphAppend and XTextPortionAppend
     // (not needed for accessibility, only for new import API)
     virtual void        AppendParagraph();
-    virtual xub_StrLen  AppendTextPortion( USHORT nPara, const String &rText, const SfxItemSet &rSet );
+    virtual xub_StrLen  AppendTextPortion( sal_uInt16 nPara, const String &rText, const SfxItemSet &rSet );
 
     //XTextCopy
     virtual void        CopyText(const SvxTextForwarder& rSource);
 
     void                    SetForwarder( SvxTextForwarder& );
-    sal_Bool                HaveImageBullet( USHORT nPara ) const;
-    sal_Bool                HaveTextBullet( USHORT nPara ) const;
+    sal_Bool                HaveImageBullet( sal_uInt16 nPara ) const;
+    sal_Bool                HaveTextBullet( sal_uInt16 nPara ) const;
 
     /** Query whether all text in given selection is editable
 
@@ -124,7 +124,7 @@ public:
     virtual             ~SvxAccessibleTextEditViewAdapter();
 
     // SvxViewForwarder interface
-    virtual BOOL        IsValid() const;
+    virtual sal_Bool        IsValid() const;
     virtual Rectangle   GetVisArea() const;
     virtual Point       LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const;
     virtual Point       PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const;

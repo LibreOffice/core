@@ -72,7 +72,7 @@ private:
     FontHeightToolBoxControl*                  m_pCtrl;
     String                                     m_aCurText;
     Size                                       m_aLogicalSize;
-    BOOL                                       m_bRelease;
+    sal_Bool                                       m_bRelease;
     uno::Reference< frame::XDispatchProvider > m_xDispatchProvider;
     uno::Reference< frame::XFrame >            m_xFrame;
     uno::Reference< awt::XWindow >             m_xOldFocusWindow;
@@ -94,7 +94,7 @@ SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
 
     m_pCtrl             ( &_rCtrl ),
     m_aLogicalSize      ( 30,100 ),
-    m_bRelease          ( TRUE ),
+    m_bRelease          ( sal_True ),
     m_xDispatchProvider ( _rDispatchProvider ),
     m_xFrame            ( _xFrame )
 {
@@ -109,7 +109,7 @@ void SvxFontSizeBox_Impl::ReleaseFocus_Impl()
 {
     if ( !m_bRelease )
     {
-        m_bRelease = TRUE;
+        m_bRelease = sal_True;
         return;
     }
 
@@ -197,7 +197,7 @@ long SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
-        USHORT nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
+        sal_uInt16 nCode = rNEvt.GetKeyEvent()->GetKeyCode().GetCode();
 
         switch ( nCode )
         {
@@ -205,7 +205,7 @@ long SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
             case KEY_TAB:
             {
                 if ( KEY_TAB == nCode )
-                    m_bRelease = FALSE;
+                    m_bRelease = sal_False;
                 else
                     nHandled = 1;
                 Select();

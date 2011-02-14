@@ -75,7 +75,7 @@ class SFTreeListBox : public SvTreeListBox
 {
    friend class SvxScriptOrgDialog;
 private:
-    USHORT          nMode;
+    sal_uInt16          nMode;
     Image m_hdImage;
     Image m_hdImage_hc;
     Image m_libImage;
@@ -109,12 +109,12 @@ public:
 
 
 
-    SvLBoxEntry * insertEntry(String const & rText, USHORT nBitmap,
+    SvLBoxEntry * insertEntry(String const & rText, sal_uInt16 nBitmap,
                               SvLBoxEntry * pParent,
                               bool bChildrenOnDemand,
                               std::auto_ptr< SFEntry > aUserData,
                               ::rtl::OUString factoryURL );
-    SvLBoxEntry * insertEntry(String const & rText, USHORT nBitmap,
+    SvLBoxEntry * insertEntry(String const & rText, sal_uInt16 nBitmap,
                               SvLBoxEntry * pParent,
                               bool bChildrenOnDemand,
                               std::auto_ptr< SFEntry > aUserData );
@@ -131,7 +131,7 @@ private:
     CancelButton    aCancelButton;
 
 public:
-    InputDialog( Window * pParent, USHORT nMode );
+    InputDialog( Window * pParent, sal_uInt16 nMode );
                 ~InputDialog();
 
     String      GetObjectName() const { return aEdit.GetText(); }
@@ -141,21 +141,21 @@ public:
 class SFEntry
 {
 private:
-    BYTE            nType;
+    sal_uInt8           nType;
     bool            loaded;
         ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > nodes;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > model;
     SFEntry(){}
 public:
-                    SFEntry( BYTE nT )              { nType = nT; loaded=false; }
-                    SFEntry( BYTE nT,
+                    SFEntry( sal_uInt8 nT )             { nType = nT; loaded=false; }
+                    SFEntry( sal_uInt8 nT,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& entryNodes ,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& entryModel) { nType = nT; nodes = entryNodes; loaded=false; model = entryModel; }
                     SFEntry( const SFEntry& r ) { nType = r.nType; nodes = r.nodes; loaded = r.loaded; }
     virtual         ~SFEntry() {}
     ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > GetNode() { return nodes ;}
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModel() { return model ;};
-    BYTE            GetType() const                     { return nType; }
+    sal_uInt8           GetType() const                     { return nType; }
     bool            isLoaded() const                    { return loaded; }
     void            setLoaded()                         { loaded=true; }
 };
@@ -191,7 +191,7 @@ protected:
     DECL_LINK( MacroDoubleClickHdl, SvTreeListBox * );
     DECL_LINK( ScriptSelectHdl, SvTreeListBox * );
     DECL_LINK( ButtonHdl, Button * );
-    BOOL                getBoolProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProps, ::rtl::OUString& propName );
+    sal_Bool                getBoolProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProps, ::rtl::OUString& propName );
     void                CheckButtons(  ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node );
 
     void        createEntry( SvLBoxEntry* pEntry );

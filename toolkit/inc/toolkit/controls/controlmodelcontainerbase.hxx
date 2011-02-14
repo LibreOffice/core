@@ -95,6 +95,7 @@ protected:
     ::rtl::OUString                         m_sTooltip;
     sal_Int16                               m_nTabPageId;
 
+    void    Clone_Impl(ControlModelContainerBase& _rClone) const;
 
 protected:
     ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;

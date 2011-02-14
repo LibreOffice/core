@@ -59,7 +59,7 @@ SO2_IMPL_INVARIANT(SotObject)
 |*
 |*  Beschreibung:
 *************************************************************************/
-void SotObject::TestMemberObjRef( BOOL /*bFree*/ )
+void SotObject::TestMemberObjRef( sal_Bool /*bFree*/ )
 {
 }
 
@@ -69,7 +69,7 @@ void SotObject::TestMemberObjRef( BOOL /*bFree*/ )
 |*  Beschreibung:
 *************************************************************************/
 #ifdef TEST_INVARIANT
-void SotObject::TestMemberInvariant( BOOL /*bPrint*/ )
+void SotObject::TestMemberInvariant( sal_Bool /*bPrint*/ )
 {
 }
 #endif
@@ -82,9 +82,9 @@ void SotObject::TestMemberInvariant( BOOL /*bPrint*/ )
 SotObject::SotObject()
     : nStrongLockCount( 0 )
     , nOwnerLockCount( 0 )
-    , bOwner      ( TRUE )
-    , bSVObject   ( FALSE )
-    , bInClose    ( FALSE )
+    , bOwner      ( sal_True )
+    , bSVObject   ( sal_False )
+    , bInClose    ( sal_False )
 {
     SotFactory::IncSvObjectCount( this );
 }
@@ -127,10 +127,10 @@ void* SotObject::CastAndAddRef( const SotFactory * pFact )
 }
 
 //=========================================================================
-USHORT SotObject::Lock( BOOL bLock )
+sal_uInt16 SotObject::Lock( sal_Bool bLock )
 {
     SotObjectRef xHoldAlive( this );
-    USHORT nRet;
+    sal_uInt16 nRet;
     if( bLock )
     {
         AddRef();
@@ -151,7 +151,7 @@ USHORT SotObject::Lock( BOOL bLock )
 //=========================================================================
 void SotObject::OwnerLock
 (
-    BOOL bLock      /* TRUE, lock. FALSE, unlock. */
+    sal_Bool bLock      /* sal_True, lock. sal_False, unlock. */
 )
 /*  [Beschreibung]
 
@@ -187,23 +187,23 @@ void SotObject::RemoveOwnerLock()
 }
 
 //=========================================================================
-BOOL SotObject::DoClose()
+sal_Bool SotObject::DoClose()
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     if( !bInClose )
     {
         SotObjectRef xHoldAlive( this );
-        bInClose = TRUE;
+        bInClose = sal_True;
         bRet = Close();
-        bInClose = FALSE;
+        bInClose = sal_False;
     }
     return bRet;
 }
 
 //=========================================================================
-BOOL SotObject::Close()
+sal_Bool SotObject::Close()
 {
-    return TRUE;
+    return sal_True;
 }
 
 

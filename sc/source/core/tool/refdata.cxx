@@ -66,19 +66,19 @@ void ScSingleRefData::CalcAbsIfRel( const ScAddress& rPos )
     {
         nCol = nRelCol + rPos.Col();
         if ( !VALIDCOL( nCol ) )
-            Flags.bColDeleted = TRUE;
+            Flags.bColDeleted = sal_True;
     }
     if ( Flags.bRowRel )
     {
         nRow = nRelRow + rPos.Row();
         if ( !VALIDROW( nRow ) )
-            Flags.bRowDeleted = TRUE;
+            Flags.bRowDeleted = sal_True;
     }
     if ( Flags.bTabRel )
     {
         nTab = nRelTab + rPos.Tab();
         if ( !VALIDTAB( nTab ) )
-            Flags.bTabDeleted = TRUE;
+            Flags.bTabDeleted = sal_True;
     }
 }
 
@@ -87,62 +87,62 @@ void ScSingleRefData::CalcAbsIfRel( const ScAddress& rPos )
 //UNUSED2008-05      switch ( rBools.bRelCol )
 //UNUSED2008-05      {
 //UNUSED2008-05          case SR_DELETED :
-//UNUSED2008-05              Flags.bColRel = TRUE;           // der war verlorengegangen
-//UNUSED2008-05              Flags.bColDeleted = TRUE;
+//UNUSED2008-05              Flags.bColRel = sal_True;           // der war verlorengegangen
+//UNUSED2008-05              Flags.bColDeleted = sal_True;
 //UNUSED2008-05              break;
 //UNUSED2008-05          case SR_ABSOLUTE :
-//UNUSED2008-05              Flags.bColRel = FALSE;
-//UNUSED2008-05              Flags.bColDeleted = FALSE;
+//UNUSED2008-05              Flags.bColRel = sal_False;
+//UNUSED2008-05              Flags.bColDeleted = sal_False;
 //UNUSED2008-05              break;
 //UNUSED2008-05          case SR_RELABS :
 //UNUSED2008-05          case SR_RELATIVE :
 //UNUSED2008-05          default:
-//UNUSED2008-05              Flags.bColRel = TRUE;
-//UNUSED2008-05              Flags.bColDeleted = FALSE;
+//UNUSED2008-05              Flags.bColRel = sal_True;
+//UNUSED2008-05              Flags.bColDeleted = sal_False;
 //UNUSED2008-05      }
 //UNUSED2008-05      switch ( rBools.bRelRow )
 //UNUSED2008-05      {
 //UNUSED2008-05          case SR_DELETED :
-//UNUSED2008-05              Flags.bRowRel = TRUE;           // der war verlorengegangen
-//UNUSED2008-05              Flags.bRowDeleted = TRUE;
+//UNUSED2008-05              Flags.bRowRel = sal_True;           // der war verlorengegangen
+//UNUSED2008-05              Flags.bRowDeleted = sal_True;
 //UNUSED2008-05              break;
 //UNUSED2008-05          case SR_ABSOLUTE :
-//UNUSED2008-05              Flags.bRowRel = FALSE;
-//UNUSED2008-05              Flags.bRowDeleted = FALSE;
+//UNUSED2008-05              Flags.bRowRel = sal_False;
+//UNUSED2008-05              Flags.bRowDeleted = sal_False;
 //UNUSED2008-05              break;
 //UNUSED2008-05          case SR_RELABS :
 //UNUSED2008-05          case SR_RELATIVE :
 //UNUSED2008-05          default:
-//UNUSED2008-05              Flags.bRowRel = TRUE;
-//UNUSED2008-05              Flags.bRowDeleted = FALSE;
+//UNUSED2008-05              Flags.bRowRel = sal_True;
+//UNUSED2008-05              Flags.bRowDeleted = sal_False;
 //UNUSED2008-05      }
 //UNUSED2008-05      switch ( rBools.bRelTab )
 //UNUSED2008-05      {
 //UNUSED2008-05          case SR_DELETED :
-//UNUSED2008-05              Flags.bTabRel = TRUE;           // der war verlorengegangen
-//UNUSED2008-05              Flags.bTabDeleted = TRUE;
+//UNUSED2008-05              Flags.bTabRel = sal_True;           // der war verlorengegangen
+//UNUSED2008-05              Flags.bTabDeleted = sal_True;
 //UNUSED2008-05              break;
 //UNUSED2008-05          case SR_ABSOLUTE :
-//UNUSED2008-05              Flags.bTabRel = FALSE;
-//UNUSED2008-05              Flags.bTabDeleted = FALSE;
+//UNUSED2008-05              Flags.bTabRel = sal_False;
+//UNUSED2008-05              Flags.bTabDeleted = sal_False;
 //UNUSED2008-05              break;
 //UNUSED2008-05          case SR_RELABS :
 //UNUSED2008-05          case SR_RELATIVE :
 //UNUSED2008-05          default:
-//UNUSED2008-05              Flags.bTabRel = TRUE;
-//UNUSED2008-05              Flags.bTabDeleted = FALSE;
+//UNUSED2008-05              Flags.bTabRel = sal_True;
+//UNUSED2008-05              Flags.bTabDeleted = sal_False;
 //UNUSED2008-05      }
-//UNUSED2008-05      Flags.bFlag3D = (rBools.bOldFlag3D & SRF_3D ? TRUE : FALSE);
-//UNUSED2008-05      Flags.bRelName = (rBools.bOldFlag3D & SRF_RELNAME ? TRUE : FALSE);
+//UNUSED2008-05      Flags.bFlag3D = (rBools.bOldFlag3D & SRF_3D ? sal_True : sal_False);
+//UNUSED2008-05      Flags.bRelName = (rBools.bOldFlag3D & SRF_RELNAME ? sal_True : sal_False);
 //UNUSED2008-05      if ( !Flags.bFlag3D )
-//UNUSED2008-05          Flags.bTabRel = TRUE;   // ist bei einigen aelteren Dokumenten nicht gesetzt
+//UNUSED2008-05          Flags.bTabRel = sal_True;   // ist bei einigen aelteren Dokumenten nicht gesetzt
 //UNUSED2008-05  }
 //UNUSED2008-05
 //UNUSED2008-05
 //UNUSED2008-05  /*
 //UNUSED2008-05   bis Release 3.1 sah Store so aus
 //UNUSED2008-05
-//UNUSED2008-05      BYTE n = ( ( r.bOldFlag3D & 0x03 ) << 6 )   // RelName, 3D
+//UNUSED2008-05      sal_uInt8 n = ( ( r.bOldFlag3D & 0x03 ) << 6 )   // RelName, 3D
 //UNUSED2008-05              | ( ( r.bRelTab & 0x03 ) << 4 )     // Relative, RelAbs
 //UNUSED2008-05              | ( ( r.bRelRow & 0x03 ) << 2 )
 //UNUSED2008-05              |   ( r.bRelCol & 0x03 );
@@ -160,9 +160,9 @@ void ScSingleRefData::CalcAbsIfRel( const ScAddress& rPos )
 //UNUSED2008-05   Aber immer noch nCol > MAXCOL und gut sollte sein..
 //UNUSED2008-05   */
 //UNUSED2008-05
-//UNUSED2008-05  BYTE ScSingleRefData::CreateStoreByteFromFlags() const
+//UNUSED2008-05  sal_uInt8 ScSingleRefData::CreateStoreByteFromFlags() const
 //UNUSED2008-05  {
-//UNUSED2008-05      return (BYTE)(
+//UNUSED2008-05      return (sal_uInt8)(
 //UNUSED2008-05            ( (Flags.bRelName     & 0x01) << 7 )
 //UNUSED2008-05          | ( (Flags.bFlag3D      & 0x01) << 6 )
 //UNUSED2008-05          | ( (Flags.bTabDeleted  & 0x01) << 5 )
@@ -175,7 +175,7 @@ void ScSingleRefData::CalcAbsIfRel( const ScAddress& rPos )
 //UNUSED2008-05  }
 //UNUSED2008-05
 //UNUSED2008-05
-//UNUSED2008-05  void ScSingleRefData::CreateFlagsFromLoadByte( BYTE n )
+//UNUSED2008-05  void ScSingleRefData::CreateFlagsFromLoadByte( sal_uInt8 n )
 //UNUSED2008-05  {
 //UNUSED2008-05      Flags.bColRel       = (n & 0x01 );
 //UNUSED2008-05      Flags.bColDeleted   = ( (n >> 1) & 0x01 );
@@ -188,7 +188,7 @@ void ScSingleRefData::CalcAbsIfRel( const ScAddress& rPos )
 //UNUSED2008-05  }
 
 
-BOOL ScSingleRefData::operator==( const ScSingleRefData& r ) const
+sal_Bool ScSingleRefData::operator==( const ScSingleRefData& r ) const
 {
     return bFlags == r.bFlags &&
         (Flags.bColRel ? nRelCol == r.nRelCol : nCol == r.nCol) &&
@@ -206,8 +206,8 @@ static void lcl_putInOrder( ScSingleRefData & rRef1, ScSingleRefData & rRef2 )
     SCCOL nCol1, nCol2;
     SCROW nRow1, nRow2;
     SCTAB nTab1, nTab2;
-    BOOL bTmp;
-    BYTE nRelState1, nRelState2;
+    sal_Bool bTmp;
+    sal_uInt8 nRelState1, nRelState2;
     if ( rRef1.Flags.bRelName )
         nRelState1 =
             ((rRef1.Flags.bTabRel & 0x01) << 2)
@@ -288,8 +288,8 @@ static void lcl_putInOrder( ScSingleRefData & rRef1, ScSingleRefData & rRef2 )
         rRef1.Flags.bTabDeleted = rRef2.Flags.bTabDeleted;
         rRef2.Flags.bTabDeleted = bTmp;
     }
-    rRef1.Flags.bRelName = ( nRelState1 ? TRUE : FALSE );
-    rRef2.Flags.bRelName = ( nRelState2 ? TRUE : FALSE );
+    rRef1.Flags.bRelName = ( nRelState1 ? sal_True : sal_False );
+    rRef2.Flags.bRelName = ( nRelState2 ? sal_True : sal_False );
 }
 
 

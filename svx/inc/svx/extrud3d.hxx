@@ -89,7 +89,7 @@ public:
     sal_Bool GetCloseBack() const
         { return ((const Svx3DCloseBackItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_CLOSE_BACK)).GetValue(); }
 
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
 
     virtual void operator=(const SdrObject&);
 
@@ -102,7 +102,7 @@ public:
     const basegfx::B2DPolyPolygon &GetExtrudePolygon() { return maExtrudePolygon; }
 
     // Aufbrechen
-    virtual BOOL IsBreakObjPossible();
+    virtual sal_Bool IsBreakObjPossible();
     virtual SdrAttrObj* GetBreakObj();
 };
 

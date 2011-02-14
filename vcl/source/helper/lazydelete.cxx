@@ -68,7 +68,7 @@ void LazyDelete::flush()
 // specialized is_less function for Window
 template<> bool LazyDeletor<Window>::is_less( Window* left, Window* right )
 {
-    return (left != right && right->IsChild( left, TRUE )) ? true : false;
+    return (left != right && right->IsChild( left, sal_True )) ? true : false;
 }
 
 // specialized is_less function for Menu

@@ -71,7 +71,7 @@ namespace dbmm
         virtual sal_Bool        onFinish();
 
         // Dialog overridables
-        virtual BOOL    Close();
+        virtual sal_Bool    Close();
         virtual short   Execute();
 
     private:

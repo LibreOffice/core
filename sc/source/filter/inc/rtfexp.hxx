@@ -33,7 +33,7 @@
 
 class ScRTFExport : public ScExportBase
 {
-    ULONG*              pCellX;     // kumulierte Zellbreiten einer Tabelle
+    sal_uLong*              pCellX;     // kumulierte Zellbreiten einer Tabelle
 
     void                WriteTab( SCTAB nTab );
     void                WriteRow( SCTAB nTab, SCROW nRow );
@@ -44,7 +44,7 @@ public:
                         ScRTFExport( SvStream&, ScDocument*, const ScRange& );
     virtual             ~ScRTFExport();
 
-    ULONG               Write();
+    sal_uLong               Write();
 };
 
 

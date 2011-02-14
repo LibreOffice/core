@@ -163,7 +163,7 @@ const Reference< XAccessibleContext >& ToolbarMenuEntry::GetAccessible( bool bCr
     {
         if( mpControl )
         {
-            mxAccContext = Reference< XAccessibleContext >( mpControl->GetAccessible( TRUE ), UNO_QUERY );
+            mxAccContext = Reference< XAccessibleContext >( mpControl->GetAccessible( sal_True ), UNO_QUERY );
         }
         else
         {
@@ -843,7 +843,7 @@ void ToolbarMenu::appendSeparator()
 ValueSet* ToolbarMenu::createEmptyValueSetControl()
 {
     ValueSet* pSet = new ValueSet( this, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
-    pSet->EnableFullItemMode( FALSE );
+    pSet->EnableFullItemMode( sal_False );
     pSet->SetColor( GetControlBackground() );
     pSet->SetHighlightHdl( LINK( this, ToolbarMenu, HighlightHdl ) );
     return pSet;
@@ -927,7 +927,7 @@ void ToolbarMenu::implHighlightEntry( int nHighlightEntry, bool bHighlight )
                 if( bHighlight && IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM ) )
                 {
                     bDrawItemRect = false;
-                    if( FALSE == DrawNativeControl( CTRL_MENU_POPUP, PART_MENU_ITEM,
+                    if( sal_False == DrawNativeControl( CTRL_MENU_POPUP, PART_MENU_ITEM,
                                                     aItemRect,
                                                     CTRL_STATE_SELECTED | ( pEntry->mbEnabled? CTRL_STATE_ENABLED: 0 ),
                                                     ImplControlValue(),
@@ -1017,7 +1017,7 @@ void ToolbarMenu::implHighlightEntry( const MouseEvent& rMEvt, bool bMBDown )
     Size aOutSz = GetOutputSizePixel();
     if ( ( nMouseY >= 0 ) && ( nMouseY < aOutSz.Height() ) )
     {
-        bool bHighlighted = FALSE;
+        bool bHighlighted = sal_False;
 
         const int nEntryCount = mpImpl->maEntryVector.size();
         int nEntry;
@@ -1092,11 +1092,11 @@ static bool implCheckSubControlCursorMove( Control* pControl, bool bUp, int& nLa
     ValueSet* pValueSet = dynamic_cast< ValueSet* >( pControl );
     if( pValueSet )
     {
-        USHORT nItemPos = pValueSet->GetItemPos( pValueSet->GetSelectItemId() );
+        sal_uInt16 nItemPos = pValueSet->GetItemPos( pValueSet->GetSelectItemId() );
         if( nItemPos != VALUESET_ITEM_NOTFOUND )
         {
-            const USHORT nColCount = pValueSet->GetColCount();
-            const USHORT nLine = nItemPos / nColCount;
+            const sal_uInt16 nColCount = pValueSet->GetColCount();
+            const sal_uInt16 nLine = nItemPos / nColCount;
 
             nLastColumn = nItemPos - (nLine * nColCount);
 
@@ -1106,7 +1106,7 @@ static bool implCheckSubControlCursorMove( Control* pControl, bool bUp, int& nLa
             }
             else
             {
-                const USHORT nLineCount = (pValueSet->GetItemCount() + nColCount - 1) / nColCount;
+                const sal_uInt16 nLineCount = (pValueSet->GetItemCount() + nColCount - 1) / nColCount;
                 return (nLine+1) < nLineCount;
             }
         }
@@ -1195,19 +1195,19 @@ ToolbarMenuEntry* ToolbarMenu::implCursorUpDown( bool bUp, bool bHomeEnd )
 
 // --------------------------------------------------------------------
 
-void ToolbarMenu_Impl::implHighlightControl( USHORT nCode, Control* pControl )
+void ToolbarMenu_Impl::implHighlightControl( sal_uInt16 nCode, Control* pControl )
 {
     ValueSet* pValueSet = dynamic_cast< ValueSet* >( pControl );
     if( pValueSet )
     {
-        const USHORT nItemCount = pValueSet->GetItemCount();
-        USHORT nItemPos = VALUESET_ITEM_NOTFOUND;
+        const sal_uInt16 nItemCount = pValueSet->GetItemCount();
+        sal_uInt16 nItemPos = VALUESET_ITEM_NOTFOUND;
         switch( nCode )
         {
         case KEY_UP:
         {
-            const USHORT nColCount = pValueSet->GetColCount();
-            const USHORT nLastLine = nItemCount / nColCount;
+            const sal_uInt16 nColCount = pValueSet->GetColCount();
+            const sal_uInt16 nLastLine = nItemCount / nColCount;
             nItemPos = std::min( ((nLastLine-1) * nColCount) + mnLastColumn, nItemCount-1 );
             break;
         }
@@ -1231,7 +1231,7 @@ void ToolbarMenu_Impl::implHighlightControl( USHORT nCode, Control* pControl )
 void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
 {
     Control* pForwardControl = 0;
-    USHORT nCode = rKEvent.GetKeyCode().GetCode();
+    sal_uInt16 nCode = rKEvent.GetKeyCode().GetCode();
     switch ( nCode )
     {
         case KEY_UP:
@@ -1308,7 +1308,7 @@ void ToolbarMenu::KeyInput( const KeyEvent& rKEvent )
 // --------------------------------------------------------------------
 static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRect, bool i_bHighlight )
 {
-    BOOL bNativeOk = FALSE;
+    sal_Bool bNativeOk = sal_False;
     if( i_pWindow->IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
     {
         ImplControlValue    aControlValue;
@@ -1325,7 +1325,7 @@ static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRec
     {
         const StyleSettings& rSettings = i_pWindow->GetSettings().GetStyleSettings();
         Color aColor( i_bHighlight ? rSettings.GetMenuHighlightTextColor() : rSettings.GetHighlightColor() );
-        i_pWindow->DrawSelectionBackground( i_rRect, 0, i_bHighlight, TRUE, FALSE, 2, NULL, &aColor );
+        i_pWindow->DrawSelectionBackground( i_rRect, 0, i_bHighlight, sal_True, sal_False, 2, NULL, &aColor );
     }
 }
 
@@ -1375,7 +1375,7 @@ static long ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lo
 
 void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
 {
-    USHORT nBorder = 0; long nStartY = 0; // from Menu implementations, needed when we support native menu background & scrollable menu
+    sal_uInt16 nBorder = 0; long nStartY = 0; // from Menu implementations, needed when we support native menu background & scrollable menu
 
     long nFontHeight = GetTextHeight();
 //    long nExtra = nFontHeight/4;
@@ -1425,9 +1425,9 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
             {
                 long nTextOffsetY = ((pEntry->maSize.Height()-nFontHeight)/2);
 
-                USHORT  nTextStyle   = 0;
-                USHORT  nSymbolStyle = 0;
-                USHORT  nImageStyle  = 0;
+                sal_uInt16  nTextStyle   = 0;
+                sal_uInt16  nSymbolStyle = 0;
+                sal_uInt16  nImageStyle  = 0;
 
                 if( !pEntry->mbEnabled )
                 {
@@ -1538,7 +1538,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                     aTmpPos.X() = aPos.X() + (bTitle ? 4 : mpImpl->mnTextPos);
                     aTmpPos.Y() = aPos.Y();
                     aTmpPos.Y() += nTextOffsetY;
-                    USHORT nStyle = nTextStyle|TEXT_DRAW_MNEMONIC;
+                    sal_uInt16 nStyle = nTextStyle|TEXT_DRAW_MNEMONIC;
 
                     DrawCtrlText( aTmpPos, pEntry->maText, 0, pEntry->maText.Len(), nStyle, NULL, NULL ); // pVector, pDisplayText );
                 }

@@ -260,7 +260,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL KDE4FilePicker::getFiles()
         files.append(dir);
     }
 
-    for (USHORT i = 0; i < rawFiles.size(); ++i)
+    for (sal_uInt16 i = 0; i < rawFiles.size(); ++i)
     {
         // if the raw file is not the base directory (see above kde bug)
         // we add the file to list of avail files
@@ -339,8 +339,8 @@ void SAL_CALL KDE4FilePicker::appendFilterGroup( const rtl::OUString& , const un
     if (!_filter.isNull())
         _filter.append(QString("\n"));
 
-    const USHORT length = filters.getLength();
-    for (USHORT i = 0; i < length; ++i)
+    const sal_uInt16 length = filters.getLength();
+    for (sal_uInt16 i = 0; i < length; ++i)
     {
         beans::StringPair aPair = filters[i];
 

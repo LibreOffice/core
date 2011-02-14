@@ -41,15 +41,15 @@
 
 //==================================================================
 
-BOOL   ScDeleteContentsDlg::bPreviousAllCheck = FALSE;
-USHORT ScDeleteContentsDlg::nPreviousChecks   = (IDF_DATETIME | IDF_STRING  |
+sal_Bool   ScDeleteContentsDlg::bPreviousAllCheck = sal_False;
+sal_uInt16 ScDeleteContentsDlg::nPreviousChecks   = (IDF_DATETIME | IDF_STRING  |
                                                  IDF_NOTE     | IDF_FORMULA |
                                                  IDF_VALUE);
 
 //-----------------------------------------------------------------------
 
 ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
-                                          USHORT  nCheckDefaults ) :
+                                          sal_uInt16  nCheckDefaults ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DELCONT ) ),
     //
     aFlFrame        ( this, ScResId( FL_FRAME ) ),
@@ -64,12 +64,12 @@ ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
     aBtnOk          ( this, ScResId( BTN_OK ) ),
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
     aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-    bObjectsDisabled( FALSE )
+    bObjectsDisabled( sal_False )
 {
     if ( nCheckDefaults != 0 )
     {
         ScDeleteContentsDlg::nPreviousChecks = nCheckDefaults;
-        ScDeleteContentsDlg::bPreviousAllCheck = FALSE;
+        ScDeleteContentsDlg::bPreviousAllCheck = sal_False;
     }
 
     aBtnDelAll.Check     ( ScDeleteContentsDlg::bPreviousAllCheck );
@@ -98,7 +98,7 @@ ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
 
 //------------------------------------------------------------------------
 
-USHORT ScDeleteContentsDlg::GetDelContentsCmdBits() const
+sal_uInt16 ScDeleteContentsDlg::GetDelContentsCmdBits() const
 {
     ScDeleteContentsDlg::nPreviousChecks = 0;
 
@@ -126,7 +126,7 @@ USHORT ScDeleteContentsDlg::GetDelContentsCmdBits() const
 
 //------------------------------------------------------------------------
 
-void ScDeleteContentsDlg::DisableChecks( BOOL bDelAllChecked )
+void ScDeleteContentsDlg::DisableChecks( sal_Bool bDelAllChecked )
 {
     if ( bDelAllChecked )
     {
@@ -157,8 +157,8 @@ void ScDeleteContentsDlg::DisableChecks( BOOL bDelAllChecked )
 
 void ScDeleteContentsDlg::DisableObjects()
 {
-    bObjectsDisabled = TRUE;
-    aBtnDelObjects.Check(FALSE);
+    bObjectsDisabled = sal_True;
+    aBtnDelObjects.Check(sal_False);
     aBtnDelObjects.Disable();
 }
 

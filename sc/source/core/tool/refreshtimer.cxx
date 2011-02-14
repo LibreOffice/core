@@ -39,7 +39,7 @@ ScRefreshTimerProtector::ScRefreshTimerProtector( ScRefreshTimerControl * const 
 {
     if ( ppControl && *ppControl )
     {
-        (*ppControl)->SetAllowRefresh( FALSE );
+        (*ppControl)->SetAllowRefresh( sal_False );
         // wait for any running refresh in another thread to finnish
         ::vos::OGuard aGuard( (*ppControl)->GetMutex() );
     }
@@ -54,9 +54,9 @@ ScRefreshTimer::~ScRefreshTimer()
 }
 
 
-void ScRefreshTimer::SetRefreshDelay( ULONG nSeconds )
+void ScRefreshTimer::SetRefreshDelay( sal_uLong nSeconds )
 {
-    BOOL bActive = IsActive();
+    sal_Bool bActive = IsActive();
     if ( bActive && !nSeconds )
         Stop();
     SetTimeout( nSeconds * 1000 );

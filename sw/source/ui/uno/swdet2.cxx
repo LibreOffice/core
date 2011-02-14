@@ -57,16 +57,16 @@ bool IsDocShellRegistered()
 
 //-------------------------------------------------------------------------
 
-ULONG SwFilterDetect::DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter )
+sal_uLong SwFilterDetect::DetectFilter( SfxMedium& rMedium, const SfxFilter** ppFilter )
 {
-    ULONG nRet = ERRCODE_NONE;
+    sal_uLong nRet = ERRCODE_NONE;
     if( *ppFilter )
     {
         // verify the given filter
         String aPrefFlt = (*ppFilter)->GetUserData();
 
         // detection for TextFilter needs an additional checking
-        BOOL bDetected = SwIoSystem::IsFileFilter( rMedium, aPrefFlt );
+        sal_Bool bDetected = SwIoSystem::IsFileFilter( rMedium, aPrefFlt );
         return bDetected ? nRet : ERRCODE_ABORT;
     }
 

@@ -55,8 +55,8 @@ Process::Process()
 : pArgumentList( NULL )
 , pEnvList( NULL )
 , pProcess( NULL )
-, bWasGPF( FALSE )
-, bHasBeenStarted( FALSE )
+, bWasGPF( sal_False )
+, bHasBeenStarted( sal_False )
 {
 }
 
@@ -68,19 +68,19 @@ Process::~Process()
 }
 
 
-BOOL Process::ImplIsRunning()
+sal_Bool Process::ImplIsRunning()
 {
     if ( pProcess && bHasBeenStarted )
     {
         vos::OProcess::TProcessInfo aProcessInfo;
         pProcess->getInfo( vos::OProcess::TData_ExitCode, &aProcessInfo );
         if ( !(aProcessInfo.Fields & vos::OProcess::TData_ExitCode) )
-            return TRUE;
+            return sal_True;
         else
-            return FALSE;
+            return sal_False;
     }
     else
-        return FALSE;
+        return sal_False;
 }
 
 long Process::ImplGetExitCode()
@@ -149,19 +149,19 @@ void Process::SetImage( const String &aAppPath, const String &aAppParams, const 
         ::rtl::OUString aNormalizedAppPath;
         osl::FileBase::getFileURLFromSystemPath( ::rtl::OUString(aAppPath), aNormalizedAppPath );
         pProcess = new vos::OProcess( aNormalizedAppPath );
-        bHasBeenStarted = FALSE;
+        bHasBeenStarted = sal_False;
 
         delete [] pParamList;
         delete [] pEnvArray;
     }
 }
 
-BOOL Process::Start()
+sal_Bool Process::Start()
 { // Start program
-    BOOL bSuccess=FALSE;
+    sal_Bool bSuccess=sal_False;
     if ( pProcess && !ImplIsRunning() )
     {
-        bWasGPF = FALSE;
+        bWasGPF = sal_False;
 #ifdef WNT
 //      sal_uInt32 nErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_NOALIGNMENTFAULTEXCEPT | SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
         sal_uInt32 nErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_NOALIGNMENTFAULTEXCEPT | SEM_NOGPFAULTERRORBOX);
@@ -189,7 +189,7 @@ BOOL Process::Start()
         }
         catch( ... )
         {
-            bWasGPF = TRUE;
+            bWasGPF = sal_True;
             // TODO: Output debug message !!
         }
         nErrorMode = SetErrorMode(nErrorMode);
@@ -201,17 +201,17 @@ BOOL Process::Start()
     return bSuccess;
 }
 
-ULONG Process::GetExitCode()
+sal_uIntPtr Process::GetExitCode()
 { // ExitCode of program after execution
     return ImplGetExitCode();
 }
 
-BOOL Process::IsRunning()
+sal_Bool Process::IsRunning()
 {
     return ImplIsRunning();
 }
 
-BOOL Process::WasGPF()
+sal_Bool Process::WasGPF()
 { // Did the process fail?
 #ifdef WNT
     return ImplGetExitCode() == 3221225477;
@@ -220,10 +220,10 @@ BOOL Process::WasGPF()
 #endif
 }
 
-BOOL Process::Terminate()
+sal_Bool Process::Terminate()
 {
     if ( ImplIsRunning() )
         return pProcess->terminate() == vos::OProcess::E_None;
-    return TRUE;
+    return sal_True;
 }
 

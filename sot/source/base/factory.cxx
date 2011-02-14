@@ -96,10 +96,10 @@ void SotFactory::DeInit()
                 aStr += " Count: ";
                 aStr += p->GetRefCount();
                 DBG_TRACE( "\tReferences:" );
-                p->TestObjRef( FALSE );
+                p->TestObjRef( sal_False );
 #ifdef TEST_INVARIANT
                 DBG_TRACE( "\tInvariant:" );
-                p->TestInvariant( TRUE );
+                p->TestInvariant( sal_True );
 #endif
                 p = pObjList->Next();
             }
@@ -129,7 +129,7 @@ void SotFactory::DeInit()
     if( pSotData->pDataFlavorList )
     {
 
-        for( ULONG i = 0, nMax = pSotData->pDataFlavorList->Count(); i < nMax; i++ )
+        for( sal_uLong i = 0, nMax = pSotData->pDataFlavorList->Count(); i < nMax; i++ )
             delete (::com::sun::star::datatransfer::DataFlavor*) pSotData->pDataFlavorList->GetObject( i );
         delete pSotData->pDataFlavorList;
         pSotData->pDataFlavorList = NULL;
@@ -194,7 +194,7 @@ SotFactory::~SotFactory()
 |*
 |*    Beschreibung      Zugriffsmethoden auf SotData_Impl-Daten
 *************************************************************************/
-UINT32 SotFactory::GetSvObjectCount()
+sal_uInt32 SotFactory::GetSvObjectCount()
 {
     return SOTDATA()->nSvObjCount;
 }
@@ -295,10 +295,10 @@ void SotFactory::TestInvariant()
     SotData_Impl * pSotData = SOTDATA();
     if( pSotData->pObjectList )
     {
-        ULONG nCount = pSotData->pObjectList->Count();
-        for( ULONG i = 0; i < nCount ; i++ )
+        sal_uLong nCount = pSotData->pObjectList->Count();
+        for( sal_uLong i = 0; i < nCount ; i++ )
         {
-            pSotData->pObjectList->GetObject( i )->TestInvariant( FALSE );
+            pSotData->pObjectList->GetObject( i )->TestInvariant( sal_False );
         }
     }
 #endif
@@ -349,17 +349,17 @@ void * SotFactory::CastAndAddRef
 |*
 |*    Beschreibung
 *************************************************************************/
-BOOL SotFactory::Is( const SotFactory * pSuperCl ) const
+sal_Bool SotFactory::Is( const SotFactory * pSuperCl ) const
 {
     if( this == pSuperCl )
-        return TRUE;
+        return sal_True;
 
-    for( USHORT i = 0; i < nSuperCount; i++ )
+    for( sal_uInt16 i = 0; i < nSuperCount; i++ )
     {
         if( pSuperClasses[ i ]->Is( pSuperCl ) )
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 

@@ -203,12 +203,12 @@ IMPL_LINK( OScrollWindowHelper, ScrollHdl, ScrollBar*, /*pScroll*/ )
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::addSection(const uno::Reference< report::XSection >& _xSection
                                    ,const ::rtl::OUString& _sColorEntry
-                                   ,USHORT _nPosition)
+                                   ,sal_uInt16 _nPosition)
 {
     m_aReportWindow.addSection(_xSection,_sColorEntry,_nPosition);
 }
 //------------------------------------------------------------------------------
-void OScrollWindowHelper::removeSection(USHORT _nPosition)
+void OScrollWindowHelper::removeSection(sal_uInt16 _nPosition)
 {
     m_aReportWindow.removeSection(_nPosition);
 }
@@ -218,12 +218,12 @@ void OScrollWindowHelper::toggleGrid(sal_Bool _bVisible)
     m_aReportWindow.toggleGrid(_bVisible);
 }
 //------------------------------------------------------------------------------
-USHORT OScrollWindowHelper::getSectionCount() const
+sal_uInt16 OScrollWindowHelper::getSectionCount() const
 {
     return m_aReportWindow.getSectionCount();
 }
 //------------------------------------------------------------------------------
-void OScrollWindowHelper::SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType )
+void OScrollWindowHelper::SetInsertObj( sal_uInt16 eObj,const ::rtl::OUString& _sShapeType )
 {
     m_aReportWindow.SetInsertObj(eObj,_sShapeType);
 }
@@ -238,7 +238,7 @@ void OScrollWindowHelper::SetMode( DlgEdMode _eNewMode )
     m_aReportWindow.SetMode(_eNewMode);
 }
 //------------------------------------------------------------------------------
-BOOL OScrollWindowHelper::HasSelection() const
+sal_Bool OScrollWindowHelper::HasSelection() const
 {
     return m_aReportWindow.HasSelection();
 }
@@ -258,7 +258,7 @@ void OScrollWindowHelper::Paste()
     m_aReportWindow.Paste();
 }
 //----------------------------------------------------------------------------
-BOOL OScrollWindowHelper::IsPasteAllowed() const
+sal_Bool OScrollWindowHelper::IsPasteAllowed() const
 {
     return m_aReportWindow.IsPasteAllowed();
 }
@@ -380,12 +380,12 @@ void OScrollWindowHelper::_propertyChanged(const beans::PropertyChangeEvent& /*_
     m_aReportWindow.notifySizeChanged();
 }
 // -----------------------------------------------------------------------------
-void OScrollWindowHelper::setGridSnap(BOOL bOn)
+void OScrollWindowHelper::setGridSnap(sal_Bool bOn)
 {
     m_aReportWindow.setGridSnap(bOn);
 }
 // -----------------------------------------------------------------------------
-void OScrollWindowHelper::setDragStripes(BOOL bOn)
+void OScrollWindowHelper::setDragStripes(sal_Bool bOn)
 {
     m_aReportWindow.setDragStripes(bOn);
 }

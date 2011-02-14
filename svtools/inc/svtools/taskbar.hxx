@@ -150,11 +150,11 @@ public:
 
     virtual void        RequestHelp( const HelpEvent& rHEvt );
 
-    void                InsertButton( USHORT nItemId,
+    void                InsertButton( sal_uInt16 nItemId,
                                       const Image& rImage, const String& rText,
-                                      USHORT nPos = TOOLBOX_APPEND )
+                                      sal_uInt16 nPos = TOOLBOX_APPEND )
                             { InsertItem( nItemId, rImage, rText, TIB_LEFT | TIB_AUTOSIZE, nPos ); }
-    void                RemoveButton( USHORT nItemId )
+    void                RemoveButton( sal_uInt16 nItemId )
                             { RemoveItem( nItemId ); }
 };
 
@@ -162,7 +162,7 @@ public:
 // - TaskToolBox-Types -
 // ---------------------
 
-#define TASKTOOLBOX_TASK_NOTFOUND       ((USHORT)0xFFFF)
+#define TASKTOOLBOX_TASK_NOTFOUND       ((sal_uInt16)0xFFFF)
 
 // ---------------
 // - TaskToolBox -
@@ -176,18 +176,18 @@ private:
     ImplTaskItemList*   mpItemList;
     TaskBar*            mpNotifyTaskBar;
     Point               maContextMenuPos;
-    ULONG               mnOldItemCount;
+    sal_uLong               mnOldItemCount;
     long                mnMaxTextWidth;
     long                mnDummy1;
-    USHORT              mnUpdatePos;
-    USHORT              mnUpdateNewPos;
-    USHORT              mnActiveItemId;
-    USHORT              mnNewActivePos;
-    USHORT              mnTaskItem;
-    USHORT              mnSmallItem;
-    USHORT              mnDummy2;
-    BOOL                mbMinActivate;
-    BOOL                mbDummy1;
+    sal_uInt16              mnUpdatePos;
+    sal_uInt16              mnUpdateNewPos;
+    sal_uInt16              mnActiveItemId;
+    sal_uInt16              mnNewActivePos;
+    sal_uInt16              mnTaskItem;
+    sal_uInt16              mnSmallItem;
+    sal_uInt16              mnDummy2;
+    sal_Bool                mbMinActivate;
+    sal_Bool                mbDummy1;
     Link                maActivateTaskHdl;
     Link                maContextMenuHdl;
 
@@ -203,9 +203,9 @@ public:
                         TaskToolBox( Window* pParent, WinBits nWinStyle = 0 );
                         ~TaskToolBox();
 
-    void                ActivateTaskItem( USHORT nItemId,
-                                          BOOL bMinActivate = FALSE );
-    USHORT              GetTaskItem( const Point& rPos ) const;
+    void                ActivateTaskItem( sal_uInt16 nItemId,
+                                          sal_Bool bMinActivate = sal_False );
+    sal_uInt16              GetTaskItem( const Point& rPos ) const;
 
     virtual void        ActivateTask();
     virtual void        ContextMenu();
@@ -219,12 +219,12 @@ public:
 
     void                StartUpdateTask();
     void                UpdateTask( const Image& rImage, const String& rText,
-                                    BOOL bActive = FALSE );
+                                    sal_Bool bActive = sal_False );
     void                EndUpdateTask();
 
     const Point&        GetContextMenuPos() const { return maContextMenuPos; }
-    USHORT              GetTaskItem() const { return mnTaskItem; }
-    BOOL                IsMinActivate() const { return mbMinActivate; }
+    sal_uInt16              GetTaskItem() const { return mnTaskItem; }
+    sal_Bool                IsMinActivate() const { return mbMinActivate; }
 
     void                SetActivateTaskHdl( const Link& rLink ) { maActivateTaskHdl = rLink; }
     const Link&         GetActivateTaskHdl() const { return maActivateTaskHdl; }
@@ -232,9 +232,9 @@ public:
     const Link&         GetContextMenuHdl() const { return maContextMenuHdl; }
 };
 
-inline USHORT TaskToolBox::GetTaskItem( const Point& rPos ) const
+inline sal_uInt16 TaskToolBox::GetTaskItem( const Point& rPos ) const
 {
-    USHORT nId = GetItemId( rPos );
+    sal_uInt16 nId = GetItemId( rPos );
     if ( nId )
         return nId-1;
     else
@@ -248,18 +248,18 @@ inline USHORT TaskToolBox::GetTaskItem( const Point& rPos ) const
 class ITaskStatusNotify
 {
 public:
-    virtual BOOL        MouseButtonDown( USHORT nItemd, const MouseEvent& rMEvt );
-    virtual BOOL        MouseButtonUp( USHORT nItemd, const MouseEvent& rMEvt );
-    virtual BOOL        MouseMove( USHORT nItemd, const MouseEvent& rMEvt );
-    virtual BOOL        Command( USHORT nItemd, const CommandEvent& rCEvt );
-    virtual BOOL        UpdateHelp( USHORT nItemd );
+    virtual sal_Bool        MouseButtonDown( sal_uInt16 nItemd, const MouseEvent& rMEvt );
+    virtual sal_Bool        MouseButtonUp( sal_uInt16 nItemd, const MouseEvent& rMEvt );
+    virtual sal_Bool        MouseMove( sal_uInt16 nItemd, const MouseEvent& rMEvt );
+    virtual sal_Bool        Command( sal_uInt16 nItemd, const CommandEvent& rCEvt );
+    virtual sal_Bool        UpdateHelp( sal_uInt16 nItemd );
 };
 
 // -----------------------
 // - TaskStatusFieldItem -
 // -----------------------
 
-#define TASKSTATUSFIELDITEM_FLASH           ((USHORT)0x0001)
+#define TASKSTATUSFIELDITEM_FLASH           ((sal_uInt16)0x0001)
 
 class TaskStatusFieldItem
 {
@@ -269,7 +269,7 @@ private:
     XubString           maQuickHelpText;
     XubString           maHelpText;
     rtl::OString        maHelpId;
-    USHORT              mnFlags;
+    sal_uInt16          mnFlags;
 
 public:
                         TaskStatusFieldItem();
@@ -278,7 +278,7 @@ public:
                                              const Image& rImage,
                                              const XubString& rQuickHelpText,
                                              const XubString& rHelpText,
-                                             USHORT nFlags );
+                                             sal_uInt16 nFlags );
                         ~TaskStatusFieldItem();
 
     void                SetNotifyObject( ITaskStatusNotify* pNotify ) { mpNotify = pNotify; }
@@ -291,8 +291,8 @@ public:
     const XubString&    GetHelpText() const { return maHelpText; }
     void                SetHelpId( const rtl::OString& rHelpId ) { maHelpId = rHelpId; }
     const rtl::OString& GetHelpId() const { return maHelpId; }
-    void                SetFlags( USHORT nFlags ) { mnFlags = nFlags; }
-    USHORT              GetFlags() const { return mnFlags; }
+    void                SetFlags( sal_uInt16 nFlags ) { mnFlags = nFlags; }
+    sal_uInt16          GetFlags() const { return mnFlags; }
 
     const TaskStatusFieldItem& operator=( const TaskStatusFieldItem& rItem );
 };
@@ -301,10 +301,10 @@ public:
 // - TaskStatusBar -
 // -----------------
 
-#define TASKSTATUSBAR_STATUSFIELDID         ((USHORT)61000)
+#define TASKSTATUSBAR_STATUSFIELDID         ((sal_uInt16)61000)
 
-#define TASKSTATUSBAR_CLOCKID               ((USHORT)61000)
-#define TASKSTATUSFIELD_CLOCK               ((USHORT)0x0001)
+#define TASKSTATUSBAR_CLOCKID               ((sal_uInt16)61000)
+#define TASKSTATUSFIELD_CLOCK               ((sal_uInt16)0x0001)
 
 class SVT_DLLPUBLIC TaskStatusBar : public StatusBar
 {
@@ -320,19 +320,19 @@ private:
     long                mnClockWidth;
     long                mnItemWidth;
     long                mnFieldWidth;
-    USHORT              mnFieldFlags;
-    USHORT              mnDummy1;
-    BOOL                mbFlashItems;
-    BOOL                mbOutInterval;
-    BOOL                mbDummy1;
-    BOOL                mbDummy2;
+    sal_uInt16              mnFieldFlags;
+    sal_uInt16              mnDummy1;
+    sal_Bool                mbFlashItems;
+    sal_Bool                mbOutInterval;
+    sal_Bool                mbDummy1;
+    sal_Bool                mbDummy2;
 
 #ifdef _TASKBAR_CXX
-    SVT_DLLPRIVATE ImplTaskSBFldItem*  ImplGetFieldItem( USHORT nItemId ) const;
-    SVT_DLLPRIVATE ImplTaskSBFldItem*  ImplGetFieldItem( const Point& rPos, BOOL& rFieldRect ) const;
-    SVT_DLLPRIVATE BOOL                ImplUpdateClock();
-    SVT_DLLPRIVATE BOOL                ImplUpdateFlashItems();
-    SVT_DLLPRIVATE void                ImplUpdateField( BOOL bItems );
+    SVT_DLLPRIVATE ImplTaskSBFldItem*  ImplGetFieldItem( sal_uInt16 nItemId ) const;
+    SVT_DLLPRIVATE ImplTaskSBFldItem*  ImplGetFieldItem( const Point& rPos, sal_Bool& rFieldRect ) const;
+    SVT_DLLPRIVATE sal_Bool                ImplUpdateClock();
+    SVT_DLLPRIVATE sal_Bool                ImplUpdateFlashItems();
+    SVT_DLLPRIVATE void                ImplUpdateField( sal_Bool bItems );
                         DECL_DLLPRIVATE_LINK( ImplTimerHdl, Timer* );
 #endif
 
@@ -348,20 +348,20 @@ public:
     virtual void        UserDraw( const UserDrawEvent& rUDEvt );
 
     void                InsertStatusField( long nOffset = STATUSBAR_OFFSET,
-                                           USHORT nPos = STATUSBAR_APPEND,
-                                           USHORT nFlags = TASKSTATUSFIELD_CLOCK );
+                                           sal_uInt16 nPos = STATUSBAR_APPEND,
+                                           sal_uInt16 nFlags = TASKSTATUSFIELD_CLOCK );
     void                RemoveStatusField()
                             { maTimer.Stop(); RemoveItem( TASKSTATUSBAR_STATUSFIELDID ); }
-    void                SetFieldFlags( USHORT nFlags );
-    USHORT              GetFieldFlags() const { return mnFieldFlags; }
+    void                SetFieldFlags( sal_uInt16 nFlags );
+    sal_uInt16              GetFieldFlags() const { return mnFieldFlags; }
     void                SetNotifyObject( ITaskStatusNotify* pNotify ) { mpNotify = pNotify; }
     ITaskStatusNotify*  GetNotifyObject() const { return mpNotify; }
 
-    void                AddStatusFieldItem( USHORT nItemId, const TaskStatusFieldItem& rItem,
-                                            USHORT nPos = 0xFFFF );
-    void                ModifyStatusFieldItem( USHORT nItemId, const TaskStatusFieldItem& rItem );
-    void                RemoveStatusFieldItem( USHORT nItemId );
-    BOOL                GetStatusFieldItem( USHORT nItemId, TaskStatusFieldItem& rItem ) const;
+    void                AddStatusFieldItem( sal_uInt16 nItemId, const TaskStatusFieldItem& rItem,
+                                            sal_uInt16 nPos = 0xFFFF );
+    void                ModifyStatusFieldItem( sal_uInt16 nItemId, const TaskStatusFieldItem& rItem );
+    void                RemoveStatusFieldItem( sal_uInt16 nItemId );
+    sal_Bool                GetStatusFieldItem( sal_uInt16 nItemId, TaskStatusFieldItem& rItem ) const;
 };
 
 // -----------
@@ -388,15 +388,15 @@ private:
     long                    mnDummy3;
     long                    mnDummy4;
     WinBits                 mnWinBits;
-    USHORT                  mnLines;
-    BOOL                    mbStatusText;
-    BOOL                    mbShowItems;
-    BOOL                    mbAutoHide;
-    BOOL                    mbAlignDummy1;
-    BOOL                    mbDummy1;
-    BOOL                    mbDummy2;
-    BOOL                    mbDummy3;
-    BOOL                    mbDummy4;
+    sal_uInt16                  mnLines;
+    sal_Bool                    mbStatusText;
+    sal_Bool                    mbShowItems;
+    sal_Bool                    mbAutoHide;
+    sal_Bool                    mbAlignDummy1;
+    sal_Bool                    mbDummy1;
+    sal_Bool                    mbDummy2;
+    sal_Bool                    mbDummy3;
+    sal_Bool                    mbDummy4;
     Link                    maTaskResizeHdl;
 
 #ifdef _TASKBAR_CXX
@@ -424,10 +424,10 @@ public:
 
     void                    Format();
 
-    void                    SetLines( USHORT nLines );
-    USHORT                  GetLines() const { return mnLines; }
-    void                    EnableAutoHide( BOOL bAutoHide = TRUE );
-    BOOL                    IsAutoHideEnabled() const { return mbAutoHide; }
+    void                    SetLines( sal_uInt16 nLines );
+    sal_uInt16                  GetLines() const { return mnLines; }
+    void                    EnableAutoHide( sal_Bool bAutoHide = sal_True );
+    sal_Bool                    IsAutoHideEnabled() const { return mbAutoHide; }
 
     void                    ShowStatusText( const String& rText );
     void                    HideStatusText();
@@ -466,7 +466,7 @@ class SVT_DLLPUBLIC WindowArrange
 private:
     List*                   mpWinList;
     void*                   mpDummy;
-    ULONG                   mnDummy;
+    sal_uLong                   mnDummy;
 
 #ifdef _TASKBAR_CXX
     SVT_DLLPRIVATE void                    ImplTile( const Rectangle& rRect );
@@ -479,12 +479,12 @@ public:
                             WindowArrange();
                             ~WindowArrange();
 
-    void                    AddWindow( Window* pWindow, ULONG nPos = LIST_APPEND )
+    void                    AddWindow( Window* pWindow, sal_uLong nPos = LIST_APPEND )
                                 { mpWinList->Insert( (void*)pWindow, nPos ); }
     void                    RemoveAllWindows()
                                 { mpWinList->Clear(); }
 
-    void                    Arrange( USHORT nType, const Rectangle& rRect );
+    void                    Arrange( sal_uInt16 nType, const Rectangle& rRect );
 };
 
 #endif  // _TASKBAR_HXX

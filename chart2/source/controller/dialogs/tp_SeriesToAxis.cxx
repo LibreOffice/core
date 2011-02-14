@@ -96,7 +96,7 @@ SfxTabPage* SchOptionTabPage::Create(Window* pWindow,const SfxItemSet& rOutAttrs
     return new SchOptionTabPage(pWindow, rOutAttrs);
 }
 
-BOOL SchOptionTabPage::FillItemSet(SfxItemSet& rOutAttrs)
+sal_Bool SchOptionTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
     if(aRbtAxis2.IsChecked())
         rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS,CHART_AXIS_SECONDARY_Y));
@@ -127,113 +127,113 @@ BOOL SchOptionTabPage::FillItemSet(SfxItemSet& rOutAttrs)
     if (m_aCBIncludeHiddenCells.IsVisible())
         rOutAttrs.Put(SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, m_aCBIncludeHiddenCells.IsChecked()));
 
-    return TRUE;
+    return sal_True;
 }
 
 void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
 {
     const SfxPoolItem *pPoolItem = NULL;
 
-    aRbtAxis1.Check(TRUE);
-    aRbtAxis2.Check(FALSE);
-    if (rInAttrs.GetItemState(SCHATTR_AXIS,TRUE, &pPoolItem) == SFX_ITEM_SET)
+    aRbtAxis1.Check(sal_True);
+    aRbtAxis2.Check(sal_False);
+    if (rInAttrs.GetItemState(SCHATTR_AXIS,sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         long nVal=((const SfxInt32Item*)pPoolItem)->GetValue();
         if(nVal==CHART_AXIS_SECONDARY_Y)
         {
-            aRbtAxis2.Check(TRUE);
-            aRbtAxis1.Check(FALSE);
+            aRbtAxis2.Check(sal_True);
+            aRbtAxis1.Check(sal_False);
         }
     }
 
     long nTmp;
-    if (rInAttrs.GetItemState(SCHATTR_BAR_GAPWIDTH, TRUE, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_BAR_GAPWIDTH, sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
         aMTGap.SetValue(nTmp);
     }
 
-    if (rInAttrs.GetItemState(SCHATTR_BAR_OVERLAP, TRUE, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_BAR_OVERLAP, sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
         aMTOverlap.SetValue(nTmp);
     }
 
-    if (rInAttrs.GetItemState(SCHATTR_BAR_CONNECT, TRUE, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_BAR_CONNECT, sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
-        BOOL bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
+        sal_Bool bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         aCBConnect.Check(bCheck);
     }
 
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_FOR_ALL_SERIES, TRUE, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_FOR_ALL_SERIES, sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         m_nAllSeriesAxisIndex = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
         aCBAxisSideBySide.Disable();
     }
-    if (rInAttrs.GetItemState(SCHATTR_GROUP_BARS_PER_AXIS, TRUE, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_GROUP_BARS_PER_AXIS, sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         // model property is "group bars per axis", UI feature is the other way
         // round: "show bars side by side"
-        BOOL bCheck = ! static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
+        sal_Bool bCheck = ! static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         aCBAxisSideBySide.Check( bCheck );
     }
     else
     {
-        aCBAxisSideBySide.Show(FALSE);
+        aCBAxisSideBySide.Show(sal_False);
     }
 
 
     //missing value treatment
     {
         ::com::sun::star::uno::Sequence < sal_Int32 > aMissingValueTreatments;
-        if( rInAttrs.GetItemState(SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS, TRUE, &pPoolItem) == SFX_ITEM_SET )
+        if( rInAttrs.GetItemState(SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS, sal_True, &pPoolItem) == SFX_ITEM_SET )
             aMissingValueTreatments =((const SfxIntegerListItem*)pPoolItem)->GetConstSequence();
 
-        if ( aMissingValueTreatments.getLength()>1 && rInAttrs.GetItemState(SCHATTR_MISSING_VALUE_TREATMENT,TRUE, &pPoolItem) == SFX_ITEM_SET)
+        if ( aMissingValueTreatments.getLength()>1 && rInAttrs.GetItemState(SCHATTR_MISSING_VALUE_TREATMENT,sal_True, &pPoolItem) == SFX_ITEM_SET)
         {
-            m_aRB_DontPaint.Enable(FALSE);
-            m_aRB_AssumeZero.Enable(FALSE);
-            m_aRB_ContinueLine.Enable(FALSE);
+            m_aRB_DontPaint.Enable(sal_False);
+            m_aRB_AssumeZero.Enable(sal_False);
+            m_aRB_ContinueLine.Enable(sal_False);
 
             for( sal_Int32 nN =0; nN<aMissingValueTreatments.getLength(); nN++ )
             {
                 sal_Int32 nVal = aMissingValueTreatments[nN];
                 if(nVal==::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
-                    m_aRB_DontPaint.Enable(TRUE);
+                    m_aRB_DontPaint.Enable(sal_True);
                 else if(nVal==::com::sun::star::chart::MissingValueTreatment::USE_ZERO)
-                    m_aRB_AssumeZero.Enable(TRUE);
+                    m_aRB_AssumeZero.Enable(sal_True);
                 else if(nVal==::com::sun::star::chart::MissingValueTreatment::CONTINUE)
-                    m_aRB_ContinueLine.Enable(TRUE);
+                    m_aRB_ContinueLine.Enable(sal_True);
             }
 
             long nVal=((const SfxInt32Item*)pPoolItem)->GetValue();
             if(nVal==::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
-                m_aRB_DontPaint.Check(TRUE);
+                m_aRB_DontPaint.Check(sal_True);
             else if(nVal==::com::sun::star::chart::MissingValueTreatment::USE_ZERO)
-                m_aRB_AssumeZero.Check(TRUE);
+                m_aRB_AssumeZero.Check(sal_True);
             else if(nVal==::com::sun::star::chart::MissingValueTreatment::CONTINUE)
-                m_aRB_ContinueLine.Check(TRUE);
+                m_aRB_ContinueLine.Check(sal_True);
         }
         else
         {
-            m_aFT_MissingValues.Show(FALSE);
-            m_aRB_DontPaint.Show(FALSE);
-            m_aRB_AssumeZero.Show(FALSE);
-            m_aRB_ContinueLine.Show(FALSE);
+            m_aFT_MissingValues.Show(sal_False);
+            m_aRB_DontPaint.Show(sal_False);
+            m_aRB_AssumeZero.Show(sal_False);
+            m_aRB_ContinueLine.Show(sal_False);
         }
     }
 
     // Include hidden cells
-    if (rInAttrs.GetItemState(SCHATTR_INCLUDE_HIDDEN_CELLS, TRUE, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_INCLUDE_HIDDEN_CELLS, sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         bool bVal = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
         m_aCBIncludeHiddenCells.Check(bVal);
     }
     else
     {
-        m_aCBIncludeHiddenCells.Show(FALSE);
+        m_aCBIncludeHiddenCells.Show(sal_False);
         if(!m_aFT_MissingValues.IsVisible())
-            m_aFL_PlotOptions.Show(FALSE);
+            m_aFL_PlotOptions.Show(sal_False);
     }
 
     AdaptControlPositionsAndVisibility();
@@ -275,7 +275,7 @@ void SchOptionTabPage::AdaptControlPositionsAndVisibility()
 
     if( !aMTGap.IsVisible() && !aMTOverlap.IsVisible() )
     {
-        aGrpBar.Show(FALSE);
+        aGrpBar.Show(sal_False);
         Point aPos;
         if( !aRbtAxis1.IsVisible() && !aRbtAxis2.IsVisible() )
             aPos = aGrpAxis.GetPosPixel();

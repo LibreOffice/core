@@ -39,28 +39,28 @@
 class SVX_DLLPUBLIC SvxZoomSliderItem: public SfxUInt16Item
 {
     com::sun::star::uno::Sequence < sal_Int32 > maValues;
-    USHORT mnMinZoom;
-    USHORT mnMaxZoom;
+    sal_uInt16 mnMinZoom;
+    sal_uInt16 mnMaxZoom;
 
 public:
     TYPEINFO();
 
-    SvxZoomSliderItem( USHORT nCurrentZoom = 100, USHORT nMinZoom = 20, USHORT nMaxZoom = 600, USHORT nWhich = SID_ATTR_ZOOMSLIDER );
+    SvxZoomSliderItem( sal_uInt16 nCurrentZoom = 100, sal_uInt16 nMinZoom = 20, sal_uInt16 nMaxZoom = 600, sal_uInt16 nWhich = SID_ATTR_ZOOMSLIDER );
     SvxZoomSliderItem( const SvxZoomSliderItem& );
     ~SvxZoomSliderItem();
 
     void AddSnappingPoint( sal_Int32 nNew );
     const com::sun::star::uno::Sequence < sal_Int32 >& GetSnappingPoints() const;
-    USHORT GetMinZoom() const {return mnMinZoom;}
-    USHORT GetMaxZoom() const {return mnMaxZoom;}
+    sal_uInt16 GetMinZoom() const {return mnMinZoom;}
+    sal_uInt16 GetMaxZoom() const {return mnMaxZoom;}
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rStrm, USHORT nVersion ) const;                       // leer
-    virtual SvStream&       Store( SvStream& rStrm , USHORT nItemVersion ) const;                   // leer
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const; // leer
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );   // leer
+    virtual SfxPoolItem*    Create( SvStream& rStrm, sal_uInt16 nVersion ) const;                       // leer
+    virtual SvStream&       Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const;                   // leer
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const; // leer
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );   // leer
 };
 
 //------------------------------------------------------------------------

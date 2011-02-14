@@ -69,22 +69,22 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
     SwWrtShell &rSh = GetShell();
     GetView().GetEditWin().FlushInBuffer();
     const SfxItemSet *pArgs = rReq.GetArgs();
-    BOOL bSelect = FALSE;
-    USHORT nCount = 1;
+    sal_Bool bSelect = sal_False;
+    sal_uInt16 nCount = 1;
     if(pArgs)
     {
         const SfxPoolItem *pItem;
-        if(SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_MOVE_COUNT, TRUE, &pItem))
+        if(SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_MOVE_COUNT, sal_True, &pItem))
             nCount = ((const SfxInt16Item *)pItem)->GetValue();
-        if(SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_MOVE_SELECTION, TRUE, &pItem))
+        if(SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_MOVE_SELECTION, sal_True, &pItem))
             bSelect = ((const SfxBoolItem *)pItem)->GetValue();
     }
     switch(rReq.GetSlot())
     {
-        case FN_CHAR_LEFT_SEL:  rReq.SetSlot( FN_CHAR_LEFT );  bSelect = TRUE; break;
-        case FN_CHAR_RIGHT_SEL: rReq.SetSlot( FN_CHAR_RIGHT ); bSelect = TRUE; break;
-        case FN_LINE_UP_SEL:    rReq.SetSlot( FN_LINE_UP );    bSelect = TRUE; break;
-        case FN_LINE_DOWN_SEL:  rReq.SetSlot( FN_LINE_DOWN );  bSelect = TRUE; break;
+        case FN_CHAR_LEFT_SEL:  rReq.SetSlot( FN_CHAR_LEFT );  bSelect = sal_True; break;
+        case FN_CHAR_RIGHT_SEL: rReq.SetSlot( FN_CHAR_RIGHT ); bSelect = sal_True; break;
+        case FN_LINE_UP_SEL:    rReq.SetSlot( FN_LINE_UP );    bSelect = sal_True; break;
+        case FN_LINE_DOWN_SEL:  rReq.SetSlot( FN_LINE_DOWN );  bSelect = sal_True; break;
     }
 
     uno::Reference< frame::XDispatchRecorder > xRecorder =
@@ -94,19 +94,19 @@ void SwTextShell::ExecBasicMove(SfxRequest &rReq)
         rReq.AppendItem( SfxInt16Item(FN_PARAM_MOVE_COUNT, nCount) );
         rReq.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, bSelect) );
     }
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     rReq.Done();
     // Get EditWin before calling the move functions (shell change may occur!)
     SwEditWin& rTmpEditWin = GetView().GetEditWin();
-    for( USHORT i = 0; i < nCount; i++ )
+    for( sal_uInt16 i = 0; i < nCount; i++ )
     {
         switch(nSlot)
         {
-        case FN_CHAR_LEFT:  rSh.Left( CRSR_SKIP_CELLS,  bSelect, 1, FALSE, TRUE ); break;
-        case FN_CHAR_RIGHT: rSh.Right( CRSR_SKIP_CELLS, bSelect, 1, FALSE, TRUE ); break;
+        case FN_CHAR_LEFT:  rSh.Left( CRSR_SKIP_CELLS,  bSelect, 1, sal_False, sal_True ); break;
+        case FN_CHAR_RIGHT: rSh.Right( CRSR_SKIP_CELLS, bSelect, 1, sal_False, sal_True ); break;
         case FN_LINE_UP:    rSh.Up   ( bSelect, 1 ); break;
         case FN_LINE_DOWN:  rSh.Down ( bSelect, 1 ); break;
-        default:            ASSERT(FALSE, falscher Dispatcher); return;
+        default:            ASSERT(sal_False, falscher Dispatcher); return;
         }
     }
 
@@ -120,16 +120,16 @@ void SwTextShell::ExecMove(SfxRequest &rReq)
     SwEditWin& rTmpEditWin = GetView().GetEditWin();
     rTmpEditWin.FlushInBuffer();
 
-    USHORT nSlot = rReq.GetSlot();
-    BOOL bRet = FALSE;
+    sal_uInt16 nSlot = rReq.GetSlot();
+    sal_Bool bRet = sal_False;
     switch ( nSlot )
     {
         case FN_START_OF_LINE_SEL:
-        case FN_START_OF_LINE:      bRet = rSh.LeftMargin ( FN_START_OF_LINE_SEL == nSlot, FALSE );
+        case FN_START_OF_LINE:      bRet = rSh.LeftMargin ( FN_START_OF_LINE_SEL == nSlot, sal_False );
         break;
 
         case FN_END_OF_LINE_SEL:
-        case FN_END_OF_LINE:        bRet = rSh.RightMargin( FN_END_OF_LINE_SEL == nSlot, FALSE );
+        case FN_END_OF_LINE:        bRet = rSh.RightMargin( FN_END_OF_LINE_SEL == nSlot, sal_False );
         break;
 
         case FN_START_OF_DOCUMENT_SEL:
@@ -143,7 +143,7 @@ void SwTextShell::ExecMove(SfxRequest &rReq)
         case FN_SELECT_WORD:            bRet = rSh.SelNearestWrd(); break;
 
         case SID_SELECTALL:             bRet = 0 != rSh.SelAll();   break;
-        default:                    ASSERT(FALSE, falscher Dispatcher); return;
+        default:                    ASSERT(sal_False, falscher Dispatcher); return;
     }
 
     if ( bRet )
@@ -160,7 +160,7 @@ void SwTextShell::ExecMovePage(SfxRequest &rReq)
     SwWrtShell &rSh = GetShell();
     GetView().GetEditWin().FlushInBuffer();
 
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     switch( nSlot )
     {
         case FN_START_OF_NEXT_PAGE_SEL :
@@ -180,7 +180,7 @@ void SwTextShell::ExecMovePage(SfxRequest &rReq)
 
         case FN_END_OF_PAGE_SEL:
         case FN_END_OF_PAGE:        rSh.EndPg   ( FN_END_OF_PAGE_SEL == nSlot ); break;
-        default:                    ASSERT(FALSE, falscher Dispatcher); return;
+        default:                    ASSERT(sal_False, falscher Dispatcher); return;
     }
     rReq.Done();
 }
@@ -191,13 +191,13 @@ void SwTextShell::ExecMoveCol(SfxRequest &rReq)
     SwWrtShell &rSh = GetShell();
     switch ( rReq.GetSlot() )
     {
-        case FN_START_OF_COLUMN:      rSh.StartOfColumn    ( FALSE ); break;
-        case FN_END_OF_COLUMN:        rSh.EndOfColumn      ( FALSE ); break;
-        case FN_START_OF_NEXT_COLUMN: rSh.StartOfNextColumn( FALSE ) ; break;
-        case FN_END_OF_NEXT_COLUMN:   rSh.EndOfNextColumn  ( FALSE ); break;
-        case FN_START_OF_PREV_COLUMN: rSh.StartOfPrevColumn( FALSE ); break;
-        case FN_END_OF_PREV_COLUMN:   rSh.EndOfPrevColumn  ( FALSE ); break;
-        default:                      ASSERT(FALSE, falscher Dispatcher); return;
+        case FN_START_OF_COLUMN:      rSh.StartOfColumn    ( sal_False ); break;
+        case FN_END_OF_COLUMN:        rSh.EndOfColumn      ( sal_False ); break;
+        case FN_START_OF_NEXT_COLUMN: rSh.StartOfNextColumn( sal_False ) ; break;
+        case FN_END_OF_NEXT_COLUMN:   rSh.EndOfNextColumn  ( sal_False ); break;
+        case FN_START_OF_PREV_COLUMN: rSh.StartOfPrevColumn( sal_False ); break;
+        case FN_END_OF_PREV_COLUMN:   rSh.EndOfPrevColumn  ( sal_False ); break;
+        default:                      ASSERT(sal_False, falscher Dispatcher); return;
     }
     rReq.Done();
 }
@@ -207,8 +207,8 @@ void SwTextShell::ExecMoveLingu(SfxRequest &rReq)
     SwWrtShell &rSh = GetShell();
     GetView().GetEditWin().FlushInBuffer();
 
-    USHORT nSlot = rReq.GetSlot();
-    BOOL bRet = FALSE;
+    sal_uInt16 nSlot = rReq.GetSlot();
+    sal_Bool bRet = sal_False;
     switch ( nSlot )
     {
         case FN_NEXT_WORD_SEL:
@@ -235,12 +235,12 @@ void SwTextShell::ExecMoveLingu(SfxRequest &rReq)
         case FN_PREV_SENT:      bRet = rSh.BwdSentence( FN_PREV_SENT_SEL == nSlot );
         break;
 
-        case FN_NEXT_PARA:      bRet = rSh.FwdPara    ( FALSE );
+        case FN_NEXT_PARA:      bRet = rSh.FwdPara    ( sal_False );
         break;
 
-        case FN_PREV_PARA:      bRet = rSh.BwdPara    ( FALSE );
+        case FN_PREV_PARA:      bRet = rSh.BwdPara    ( sal_False );
         break;
-        default:                ASSERT(FALSE, falscher Dispatcher); return;
+        default:                ASSERT(sal_False, falscher Dispatcher); return;
     }
     rReq.Done();
 }
@@ -248,8 +248,8 @@ void SwTextShell::ExecMoveLingu(SfxRequest &rReq)
 void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
-    USHORT nSlot = rReq.GetSlot();
-    BOOL bSetRetVal = TRUE, bRet = TRUE;
+    sal_uInt16 nSlot = rReq.GetSlot();
+    sal_Bool bSetRetVal = sal_True, bRet = sal_True;
     switch ( nSlot )
     {
         case SID_FM_TOGGLECONTROLFOCUS:
@@ -270,7 +270,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
                 if ( !pFilter.get() )
                     break;
 
-                const SdrObject* pNearestControl = rSh.GetBestObject( TRUE, GOTOOBJ_DRAW_CONTROL, FALSE, pFilter.get() );
+                const SdrObject* pNearestControl = rSh.GetBestObject( sal_True, GOTOOBJ_DRAW_CONTROL, sal_False, pFilter.get() );
                 if ( !pNearestControl )
                     break;
 
@@ -283,7 +283,7 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
             }
             break;
         case FN_CNTNT_TO_NEXT_FRAME:
-            bRet = rSh.GotoObj(TRUE, GOTOOBJ_GOTO_ANY);
+            bRet = rSh.GotoObj(sal_True, GOTOOBJ_GOTO_ANY);
             if(bRet)
             {
                 rSh.HideCrsr();
@@ -300,27 +300,27 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
             break;
         case FN_TO_HEADER:
             rSh.MoveCrsr();
-            if ( FRMTYPE_HEADER & rSh.GetFrmType(0,FALSE) )
+            if ( FRMTYPE_HEADER & rSh.GetFrmType(0,sal_False) )
                 rSh.SttPg();
             else
                 rSh.GotoHeaderTxt();
-            bSetRetVal = FALSE;
+            bSetRetVal = sal_False;
             break;
         case FN_TO_FOOTER:
             rSh.MoveCrsr();
-            if ( FRMTYPE_FOOTER & rSh.GetFrmType(0,FALSE) )
+            if ( FRMTYPE_FOOTER & rSh.GetFrmType(0,sal_False) )
                 rSh.EndPg();
             else
                 rSh.GotoFooterTxt();
-            bSetRetVal = FALSE;
+            bSetRetVal = sal_False;
             break;
         case FN_FOOTNOTE_TO_ANCHOR:
             rSh.MoveCrsr();
-            if ( FRMTYPE_FOOTNOTE & rSh.GetFrmType(0,FALSE) )
+            if ( FRMTYPE_FOOTNOTE & rSh.GetFrmType(0,sal_False) )
                 rSh.GotoFtnAnchor();
             else
                 rSh.GotoFtnTxt();
-            bSetRetVal = FALSE;
+            bSetRetVal = sal_False;
             break;
         case FN_TO_FOOTNOTE_AREA :
             rSh.GotoFtnTxt();
@@ -339,26 +339,26 @@ void SwTextShell::ExecMoveMisc(SfxRequest &rReq)
         break;
 
         case FN_NEXT_TOXMARK:
-            bRet = rSh.GotoNxtPrvTOXMark( TRUE );
+            bRet = rSh.GotoNxtPrvTOXMark( sal_True );
             break;
         case FN_PREV_TOXMARK:
-            bRet = rSh.GotoNxtPrvTOXMark( FALSE );
+            bRet = rSh.GotoNxtPrvTOXMark( sal_False );
             break;
         case FN_NEXT_TBLFML:
-            bRet = rSh.GotoNxtPrvTblFormula( TRUE, FALSE );
+            bRet = rSh.GotoNxtPrvTblFormula( sal_True, sal_False );
             break;
         case FN_PREV_TBLFML:
-            bRet = rSh.GotoNxtPrvTblFormula( FALSE, FALSE );
+            bRet = rSh.GotoNxtPrvTblFormula( sal_False, sal_False );
             break;
         case FN_NEXT_TBLFML_ERR:
-            bRet = rSh.GotoNxtPrvTblFormula( TRUE, TRUE );
+            bRet = rSh.GotoNxtPrvTblFormula( sal_True, sal_True );
             break;
         case FN_PREV_TBLFML_ERR:
-            bRet = rSh.GotoNxtPrvTblFormula( FALSE, TRUE );
+            bRet = rSh.GotoNxtPrvTblFormula( sal_False, sal_True );
             break;
 
         default:
-            ASSERT(FALSE, falscher Dispatcher);
+            ASSERT(sal_False, falscher Dispatcher);
             return;
     }
 

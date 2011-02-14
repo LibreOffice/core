@@ -99,7 +99,7 @@ class SwXMLTableContext : public XMLTextTableContext
     sal_Bool            bRelWidth : 1;
     sal_Bool            bHasSubTables : 1;
 
-    USHORT              nHeaderRows;
+    sal_uInt16              nHeaderRows;
     sal_uInt32          nCurRow;
     sal_uInt32          nCurCol;
     sal_Int32           nWidth;

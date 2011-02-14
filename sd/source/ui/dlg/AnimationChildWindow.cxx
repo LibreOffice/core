@@ -49,7 +49,7 @@ SFX_IMPL_DOCKINGWINDOW(AnimationChildWindow, SID_ANIMATION_OBJECTS)
 
 AnimationChildWindow::AnimationChildWindow(
     ::Window* _pParent,
-    USHORT nId,
+    sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo )
     : SfxChildWindow( _pParent, nId )
@@ -75,7 +75,7 @@ AnimationChildWindow::AnimationChildWindow(
 
     pAnimWin->aFltWinSize = pWindow->GetSizePixel();
     */
-    SetHideNotDelete( TRUE );
+    SetHideNotDelete( sal_True );
 }
 
 } // end of namespace sd

@@ -36,7 +36,7 @@
     class Class : public SfxChildWindow                                         \
     {                                                                           \
     public:                                                                     \
-        Class( Window*, USHORT, SfxBindings*, SfxChildWinInfo* );               \
+        Class( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );               \
         SFX_DECL_CHILDWINDOW(Class);                                            \
     };
 
@@ -68,7 +68,7 @@ class ScAcceptChgDlgWrapper: public SfxChildWindow
 {
     public:
         ScAcceptChgDlgWrapper(  Window*,
-                                USHORT,
+                                sal_uInt16,
                                 SfxBindings*,
                                 SfxChildWinInfo* );
 
@@ -81,20 +81,20 @@ class ScSimpleRefDlgWrapper: public SfxChildWindow
 {
     public:
         ScSimpleRefDlgWrapper(  Window*,
-                                USHORT,
+                                sal_uInt16,
                                 SfxBindings*,
                                 SfxChildWinInfo* );
 
         SFX_DECL_CHILDWINDOW(Class);
 
-        static void     SetDefaultPosSize(Point aPos, Size aSize, BOOL bSet=TRUE);
+        static void     SetDefaultPosSize(Point aPos, Size aSize, sal_Bool bSet=sal_True);
         virtual String  GetRefString();
         virtual void    SetRefString(const String& rStr);
         void            SetCloseHdl( const Link& rLink );
         void            SetUnoLinks( const Link& rDone, const Link& rAbort,
                                         const Link& rChange );
-        void            SetFlags( BOOL bCloseOnButtonUp, BOOL bSingleCell, BOOL bMultiSelection );
-        static void     SetAutoReOpen(BOOL bFlag);
+        void            SetFlags( sal_Bool bCloseOnButtonUp, sal_Bool bSingleCell, sal_Bool bMultiSelection );
+        static void     SetAutoReOpen(sal_Bool bFlag);
 
         void            StartRefInput();
 };
@@ -106,13 +106,13 @@ class SC_DLLPUBLIC ScValidityRefChildWin : public SfxChildWindow
     bool    m_bFreeWindowLock:1;
     Window * m_pSavedWndParent;
 public:
-    ScValidityRefChildWin( Window*, USHORT, SfxBindings*, SfxChildWinInfo* );
+    ScValidityRefChildWin( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
     SFX_DECL_CHILDWINDOW(ScValidityRefChildWin);
     ~ScValidityRefChildWin();
     bool    LockVisible( bool bLock ){ bool bVis = m_bVisibleLock; m_bVisibleLock = bLock; return bVis; }
     bool    LockFreeWindow( bool bLock ){ bool bFreeWindow = m_bFreeWindowLock; m_bFreeWindowLock = bLock; return bFreeWindow; }
     void                Hide(){ if( !m_bVisibleLock) SfxChildWindow::Hide(); }
-    void                Show( USHORT nFlags ){ if( !m_bVisibleLock ) SfxChildWindow::Show( nFlags ); }
+    void                Show( sal_uInt16 nFlags ){ if( !m_bVisibleLock ) SfxChildWindow::Show( nFlags ); }
 };
 //-->Added by PengYunQuan for Validity Cell Range Picker
 

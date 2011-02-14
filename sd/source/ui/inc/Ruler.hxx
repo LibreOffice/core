@@ -53,14 +53,14 @@ public:
         DrawViewShell& rViewSh,
         ::Window* pParent,
         ::sd::Window* pWin,
-        USHORT nRulerFlags,
+        sal_uInt16 nRulerFlags,
         SfxBindings& rBindings,
         WinBits nWinStyle);
     virtual ~Ruler (void);
 
     void SetNullOffset(const Point& rOffset);
 
-    BOOL IsHorizontal() const { return bHorz; }
+    sal_Bool IsHorizontal() const { return bHorz; }
 
     using ::Ruler::SetNullOffset;
 protected:
@@ -68,7 +68,7 @@ protected:
     ::sd::Window* pSdWin;
     DrawViewShell* pDrViewShell;
     RulerCtrlItem* pCtrlItem;
-    BOOL bHorz;
+    sal_Bool bHorz;
 
     virtual void    MouseButtonDown(const MouseEvent& rMEvt);
     virtual void    MouseButtonUp(const MouseEvent& rMEvt);

@@ -60,7 +60,7 @@ SwFieldType* SwScriptFieldType::Copy() const
 
 SwScriptField::SwScriptField( SwScriptFieldType* pInitType,
                                 const String& rType, const String& rCode,
-                                BOOL bURL )
+                                sal_Bool bURL )
     : SwField( pInitType ), sType( rType ), sCode( rCode ), bCodeURL( bURL )
 {
 }
@@ -111,7 +111,7 @@ String SwScriptField::GetPar2() const
 /*-----------------05.03.98 15:00-------------------
 
 --------------------------------------------------*/
-BOOL SwScriptField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+sal_Bool SwScriptField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -127,12 +127,12 @@ BOOL SwScriptField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return sal_True;
 }
 /*-----------------05.03.98 15:00-------------------
 
 --------------------------------------------------*/
-BOOL SwScriptField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+sal_Bool SwScriptField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -148,6 +148,6 @@ BOOL SwScriptField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return sal_True;
 }
 

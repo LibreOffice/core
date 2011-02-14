@@ -773,7 +773,7 @@ ScVbaWindow::setView( const uno::Any& _view) throw (uno::RuntimeException)
 {
     sal_Int32 nWindowView = excel::XlWindowView::xlNormalView;
     _view >>= nWindowView;
-    USHORT nSlot = FID_NORMALVIEWMODE;
+    sal_uInt16 nSlot = FID_NORMALVIEWMODE;
     switch ( nWindowView )
     {
         case excel::XlWindowView::xlNormalView:

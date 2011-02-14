@@ -56,17 +56,17 @@ class SwLabDlg : public SfxTabDialog
     String          sBusinessCardDlg;
     String          sFormat;
     String          sMedium;
-    BOOL            m_bLabel;
+    sal_Bool            m_bLabel;
     void          _ReplaceGroup( const String &rMake );
 
-    virtual void PageCreated( USHORT nId, SfxTabPage &rPage );
+    virtual void PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
 public:
 
      SwLabDlg( Window* pParent, const SfxItemSet& rSet,
-                 SwNewDBMgr* pNewDBMgr, BOOL bLabel);
+                 SwNewDBMgr* pNewDBMgr, sal_Bool bLabel);
     ~SwLabDlg();
 
-    SwLabRec*   GetRecord(const String &rRecName, BOOL bCont);
+    SwLabRec*   GetRecord(const String &rRecName, sal_Bool bCont);
     void        GetLabItem(SwLabItem &rItem);
 
           SwLabRecs &Recs()           { return *pRecs;   }

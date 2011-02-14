@@ -69,7 +69,7 @@ private:
             void                ImplNewCharClass() const;
             void                ImplNewLocaleData() const;
             void                ImplNewCalendar() const;
-            void                ImplNewCollator( BOOL bCaseSensitive ) const;
+            void                ImplNewCollator( sal_Bool bCaseSensitive ) const;
 
 
 public:
@@ -108,14 +108,14 @@ public:
     const CollatorWrapper*      getCollator() const
                                     {
                                         if ( !pCollator )
-                                            ImplNewCollator( FALSE );
+                                            ImplNewCollator( sal_False );
                                         return pCollator;
                                     }
     /// case sensitive collator
     const CollatorWrapper*      getCaseCollator() const
                                     {
                                         if ( !pCaseCollator )
-                                            ImplNewCollator( TRUE );
+                                            ImplNewCollator( sal_True );
                                         return pCaseCollator;
                                     }
 };

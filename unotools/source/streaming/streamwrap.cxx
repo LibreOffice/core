@@ -181,7 +181,7 @@ void OInputStreamWrapper::checkError() const
 //------------------------------------------------------------------------------
 OSeekableInputStreamWrapper::OSeekableInputStreamWrapper(SvStream& _rStream)
 {
-    SetStream( &_rStream, FALSE );
+    SetStream( &_rStream, sal_False );
 }
 
 //------------------------------------------------------------------------------
@@ -328,7 +328,7 @@ sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getLength(  ) throw (IOExceptio
 //------------------------------------------------------------------------------
 OStreamWrapper::OStreamWrapper(SvStream& _rStream)
 {
-    SetStream( &_rStream, FALSE );
+    SetStream( &_rStream, sal_False );
 }
 
 //------------------------------------------------------------------------------

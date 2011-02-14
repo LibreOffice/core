@@ -31,7 +31,7 @@
 /*
     Todo:
         - Anker loeschen in SelectionEngine bei manuellem Selektieren
-        - SelectAll( FALSE ), nur die deselektierten Entries repainten
+        - SelectAll( sal_False ), nur die deselektierten Entries repainten
 */
 
 #include <string.h>
@@ -77,14 +77,14 @@ SvInplaceEdit::SvInplaceEdit
     Edit( pParent, WB_LEFT ),
 
     aCallBackHdl        ( rNotifyEditEnd ),
-    bCanceled           ( FALSE ),
-    bAlreadyInCallBack  ( FALSE )
+    bCanceled           ( sal_False ),
+    bAlreadyInCallBack  ( sal_False )
 
 {
     DBG_CTOR(SvInplaceEdit,0);
 
     Font aFont( pParent->GetFont() );
-    aFont.SetTransparent( FALSE );
+    aFont.SetTransparent( sal_False );
     Color aColor( pParent->GetBackground().GetColor() );
     aFont.SetFillColor(aColor );
     SetFont( aFont );
@@ -120,7 +120,7 @@ SvInplaceEdit::~SvInplaceEdit()
 IMPL_LINK_INLINE_START( SvInplaceEdit, ReturnHdl_Impl, Accelerator *, EMPTYARG )
 {
     DBG_CHKTHIS(SvInplaceEdit,0);
-    bCanceled = FALSE;
+    bCanceled = sal_False;
     CallCallBackHdl_Impl();
     return 1;
 }
@@ -129,7 +129,7 @@ IMPL_LINK_INLINE_END( SvInplaceEdit, ReturnHdl_Impl, Accelerator *, EMPTYARG )
 IMPL_LINK_INLINE_START( SvInplaceEdit, EscapeHdl_Impl, Accelerator *, EMPTYARG )
 {
     DBG_CHKTHIS(SvInplaceEdit,0);
-    bCanceled = TRUE;
+    bCanceled = sal_True;
     CallCallBackHdl_Impl();
     return 1;
 }
@@ -138,16 +138,16 @@ IMPL_LINK_INLINE_END( SvInplaceEdit, EscapeHdl_Impl, Accelerator *, EMPTYARG )
 void SvInplaceEdit::KeyInput( const KeyEvent& rKEvt )
 {
     DBG_CHKTHIS(SvInplaceEdit,0);
-    USHORT nCode = rKEvt.GetKeyCode().GetCode();
+    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
     switch ( nCode )
     {
         case KEY_ESCAPE:
-            bCanceled = TRUE;
+            bCanceled = sal_True;
             CallCallBackHdl_Impl();
             break;
 
         case KEY_RETURN:
-            bCanceled = FALSE;
+            bCanceled = sal_False;
             CallCallBackHdl_Impl();
             break;
 
@@ -156,7 +156,7 @@ void SvInplaceEdit::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-void SvInplaceEdit::StopEditing( BOOL bCancel )
+void SvInplaceEdit::StopEditing( sal_Bool bCancel )
 {
     DBG_CHKTHIS(SvInplaceEdit,0);
     if ( !bAlreadyInCallBack )
@@ -171,7 +171,7 @@ void SvInplaceEdit::LoseFocus()
     DBG_CHKTHIS(SvInplaceEdit,0);
     if ( !bAlreadyInCallBack )
     {
-        bCanceled = FALSE;
+        bCanceled = sal_False;
         aTimer.SetTimeout(10);
         aTimer.SetTimeoutHdl(LINK(this,SvInplaceEdit,Timeout_Impl));
         aTimer.Start();
@@ -192,12 +192,12 @@ void SvInplaceEdit::CallCallBackHdl_Impl()
     aTimer.Stop();
     if ( !bAlreadyInCallBack )
     {
-        bAlreadyInCallBack = TRUE;
+        bAlreadyInCallBack = sal_True;
         GetpApp()->RemoveAccel( &aAccReturn );
         GetpApp()->RemoveAccel( &aAccEscape );
         Hide();
         aCallBackHdl.Call( this );
-        // bAlreadyInCallBack = FALSE;
+        // bAlreadyInCallBack = sal_False;
     }
 }
 
@@ -268,12 +268,12 @@ SvInplaceEdit2::SvInplaceEdit2
     const String& rData,
     const Link& rNotifyEditEnd,
     const Selection& rSelection,
-    BOOL bMulti
+    sal_Bool bMulti
 ) :
 
      aCallBackHdl       ( rNotifyEditEnd ),
-    bCanceled           ( FALSE ),
-    bAlreadyInCallBack  ( FALSE ),
+    bCanceled           ( sal_False ),
+    bAlreadyInCallBack  ( sal_False ),
     bMultiLine          ( bMulti )
 
 {
@@ -285,7 +285,7 @@ SvInplaceEdit2::SvInplaceEdit2
         pEdit = new MyEdit_Impl( pParent, this );
 
     Font aFont( pParent->GetFont() );
-    aFont.SetTransparent( FALSE );
+    aFont.SetTransparent( sal_False );
     Color aColor( pParent->GetBackground().GetColor() );
     aFont.SetFillColor(aColor );
     pEdit->SetFont( aFont );
@@ -333,7 +333,7 @@ void SvInplaceEdit2::Hide()
 IMPL_LINK_INLINE_START( SvInplaceEdit2, ReturnHdl_Impl, Accelerator *, EMPTYARG )
 {
     DBG_CHKTHIS(SvInplaceEdit2,0);
-    bCanceled = FALSE;
+    bCanceled = sal_False;
     CallCallBackHdl_Impl();
     return 1;
 }
@@ -342,35 +342,35 @@ IMPL_LINK_INLINE_END( SvInplaceEdit2, ReturnHdl_Impl, Accelerator *, EMPTYARG )
 IMPL_LINK_INLINE_START( SvInplaceEdit2, EscapeHdl_Impl, Accelerator *, EMPTYARG )
 {
     DBG_CHKTHIS(SvInplaceEdit2,0);
-    bCanceled = TRUE;
+    bCanceled = sal_True;
     CallCallBackHdl_Impl();
     return 1;
 }
 IMPL_LINK_INLINE_END( SvInplaceEdit2, EscapeHdl_Impl, Accelerator *, EMPTYARG )
 
 
-BOOL SvInplaceEdit2::KeyInput( const KeyEvent& rKEvt )
+sal_Bool SvInplaceEdit2::KeyInput( const KeyEvent& rKEvt )
 {
     DBG_CHKTHIS(SvInplaceEdit2,0);
     KeyCode aCode = rKEvt.GetKeyCode();
-    USHORT nCode = aCode.GetCode();
+    sal_uInt16 nCode = aCode.GetCode();
 
     switch ( nCode )
     {
         case KEY_ESCAPE:
-            bCanceled = TRUE;
+            bCanceled = sal_True;
             CallCallBackHdl_Impl();
-            return TRUE;
+            return sal_True;
 
         case KEY_RETURN:
-            bCanceled = FALSE;
+            bCanceled = sal_False;
             CallCallBackHdl_Impl();
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-void SvInplaceEdit2::StopEditing( BOOL bCancel )
+void SvInplaceEdit2::StopEditing( sal_Bool bCancel )
 {
     DBG_CHKTHIS(SvInplaceEdit2,0);
     if ( !bAlreadyInCallBack )
@@ -387,7 +387,7 @@ void SvInplaceEdit2::LoseFocus()
     && ((!Application::GetFocusWindow()) || !pEdit->IsChild( Application::GetFocusWindow()) )
     )
     {
-        bCanceled = FALSE;
+        bCanceled = sal_False;
         aTimer.SetTimeout(10);
         aTimer.SetTimeoutHdl(LINK(this,SvInplaceEdit2,Timeout_Impl));
         aTimer.Start();
@@ -408,7 +408,7 @@ void SvInplaceEdit2::CallCallBackHdl_Impl()
     aTimer.Stop();
     if ( !bAlreadyInCallBack )
     {
-        bAlreadyInCallBack = TRUE;
+        bAlreadyInCallBack = sal_True;
         GetpApp()->RemoveAccel( &aAccReturn );
         GetpApp()->RemoveAccel( &aAccEscape );
         pEdit->Hide();
@@ -435,7 +435,7 @@ SvLBoxTab::SvLBoxTab()
     nFlags = 0;
 }
 
-SvLBoxTab::SvLBoxTab( long nPosition, USHORT nTabFlags )
+SvLBoxTab::SvLBoxTab( long nPosition, sal_uInt16 nTabFlags )
 {
     DBG_CTOR(SvLBoxTab,0);
     nPos = nPosition;
@@ -494,7 +494,7 @@ long SvLBoxTab::CalcOffset( const String& rStr, const OutputDevice& rOutDev )
     long nWidth;
     if ( nFlags & SV_LBOXTAB_ADJUST_NUMERIC )
     {
-        USHORT nPos = rStr.Search( '.' );
+        sal_uInt16 nPos = rStr.Search( '.' );
         if ( nPos == STRING_NOTFOUND )
             nPos = rStr.Search( ',' );
         if ( nPos == STRING_NOTFOUND )
@@ -518,7 +518,7 @@ long SvLBoxTab::CalcOffset( const String& rStr, const OutputDevice& rOutDev )
 
 DBG_NAME(SvLBoxItem);
 
-SvLBoxItem::SvLBoxItem( SvLBoxEntry*, USHORT )
+SvLBoxItem::SvLBoxItem( SvLBoxEntry*, sal_uInt16 )
 {
     DBG_CTOR(SvLBoxItem,0);
 }
@@ -543,7 +543,7 @@ const Size& SvLBoxItem::GetSize( SvLBox* pView,SvLBoxEntry* pEntry )
 const Size& SvLBoxItem::GetSize( SvLBoxEntry* pEntry, SvViewDataEntry* pViewData)
 {
     DBG_CHKTHIS(SvLBoxItem,0);
-    USHORT nItemPos = pEntry->GetPos( this );
+    sal_uInt16 nItemPos = pEntry->GetPos( this );
     SvViewDataItem* pItemData = pViewData->pItemData+nItemPos;
     return pItemData->aSize;
 }
@@ -584,7 +584,7 @@ SvLBoxEntry::~SvLBoxEntry()
 void SvLBoxEntry::DeleteItems_Impl()
 {
     DBG_CHKTHIS(SvLBoxEntry,0);
-    USHORT nCount = aItems.Count();
+    sal_uInt16 nCount = aItems.Count();
     while( nCount )
     {
         nCount--;
@@ -607,8 +607,8 @@ void SvLBoxEntry::Clone( SvListEntry* pSource )
     SvListEntry::Clone( pSource );
     SvLBoxItem* pNewItem;
     DeleteItems_Impl();
-    USHORT nCount = ((SvLBoxEntry*)pSource)->ItemCount();
-    USHORT nCurPos = 0;
+    sal_uInt16 nCount = ((SvLBoxEntry*)pSource)->ItemCount();
+    sal_uInt16 nCurPos = 0;
     while( nCurPos < nCount )
     {
         SvLBoxItem* pItem = ((SvLBoxEntry*)pSource)->GetItem( nCurPos );
@@ -621,7 +621,7 @@ void SvLBoxEntry::Clone( SvListEntry* pSource )
     nEntryFlags = ((SvLBoxEntry*)pSource)->nEntryFlags;
 }
 
-void SvLBoxEntry::EnableChildsOnDemand( BOOL bEnable )
+void SvLBoxEntry::EnableChildsOnDemand( sal_Bool bEnable )
 {
     DBG_CHKTHIS(SvLBoxEntry,0);
     if ( bEnable )
@@ -630,7 +630,7 @@ void SvLBoxEntry::EnableChildsOnDemand( BOOL bEnable )
         nEntryFlags &= (~SV_ENTRYFLAG_CHILDS_ON_DEMAND);
 }
 
-void SvLBoxEntry::ReplaceItem( SvLBoxItem* pNewItem, USHORT nPos )
+void SvLBoxEntry::ReplaceItem( SvLBoxItem* pNewItem, sal_uInt16 nPos )
 {
     DBG_CHKTHIS(SvLBoxEntry,0);
     DBG_ASSERT(pNewItem,"ReplaceItem:No Item");
@@ -643,10 +643,10 @@ void SvLBoxEntry::ReplaceItem( SvLBoxItem* pNewItem, USHORT nPos )
     }
 }
 
-SvLBoxItem* SvLBoxEntry::GetFirstItem( USHORT nId )
+SvLBoxItem* SvLBoxEntry::GetFirstItem( sal_uInt16 nId )
 {
-    USHORT nCount = aItems.Count();
-    USHORT nCur = 0;
+    sal_uInt16 nCount = aItems.Count();
+    sal_uInt16 nCur = 0;
     SvLBoxItem* pItem;
     while( nCur < nCount )
     {
@@ -801,7 +801,7 @@ bool SvLBox::IsEntryMnemonicsEnabled() const
     return pLBoxImpl->m_bEntryMnemonicsEnabled;
 }
 
-USHORT SvLBox::IsA()
+sal_uInt16 SvLBox::IsA()
 {
     DBG_CHKTHIS(SvLBox,0);
     return SVLISTBOX_ID_LBOX;
@@ -814,17 +814,17 @@ IMPL_LINK_INLINE_START( SvLBox, CloneHdl_Impl, SvListEntry*, pEntry )
 }
 IMPL_LINK_INLINE_END( SvLBox, CloneHdl_Impl, SvListEntry*, pEntry )
 
-ULONG SvLBox::Insert( SvLBoxEntry* pEntry, SvLBoxEntry* pParent, ULONG nPos )
+sal_uLong SvLBox::Insert( SvLBoxEntry* pEntry, SvLBoxEntry* pParent, sal_uLong nPos )
 {
     DBG_CHKTHIS(SvLBox,0);
-    ULONG nInsPos = pModel->Insert( pEntry, pParent, nPos );
+    sal_uLong nInsPos = pModel->Insert( pEntry, pParent, nPos );
     return nInsPos;
 }
 
-ULONG SvLBox::Insert( SvLBoxEntry* pEntry,ULONG nRootPos )
+sal_uLong SvLBox::Insert( SvLBoxEntry* pEntry,sal_uLong nRootPos )
 {
     DBG_CHKTHIS(SvLBox,0);
-    ULONG nInsPos = pModel->Insert( pEntry, nRootPos );
+    sal_uLong nInsPos = pModel->Insert( pEntry, nRootPos );
     return nInsPos;
 }
 
@@ -852,48 +852,48 @@ void SvLBox::DeselectHdl()
     aDeselectHdl.Call( this );
 }
 
-BOOL SvLBox::DoubleClickHdl()
+sal_Bool SvLBox::DoubleClickHdl()
 {
     DBG_CHKTHIS(SvLBox,0);
     aDoubleClickHdl.Call( this );
-    return TRUE;
+    return sal_True;
 }
 
 
-BOOL SvLBox::CheckDragAndDropMode( SvLBox* pSource, sal_Int8 nAction )
+sal_Bool SvLBox::CheckDragAndDropMode( SvLBox* pSource, sal_Int8 nAction )
 {
     DBG_CHKTHIS(SvLBox,0);
     if ( pSource == this )
     {
         if ( !(nDragDropMode & (SV_DRAGDROP_CTRL_MOVE | SV_DRAGDROP_CTRL_COPY) ) )
-            return FALSE; // D&D innerhalb der Liste gesperrt
+            return sal_False; // D&D innerhalb der Liste gesperrt
         if( DND_ACTION_MOVE == nAction )
         {
             if ( !(nDragDropMode & SV_DRAGDROP_CTRL_MOVE) )
-                 return FALSE; // kein lokales Move
+                 return sal_False; // kein lokales Move
         }
         else
         {
             if ( !(nDragDropMode & SV_DRAGDROP_CTRL_COPY))
-                return FALSE; // kein lokales Copy
+                return sal_False; // kein lokales Copy
         }
     }
     else
     {
         if ( !(nDragDropMode & SV_DRAGDROP_APP_DROP ) )
-            return FALSE; // kein Drop
+            return sal_False; // kein Drop
         if ( DND_ACTION_MOVE == nAction )
         {
             if ( !(nDragDropMode & SV_DRAGDROP_APP_MOVE) )
-                return FALSE; // kein globales Move
+                return sal_False; // kein globales Move
         }
         else
         {
             if ( !(nDragDropMode & SV_DRAGDROP_APP_COPY))
-                return FALSE; // kein globales Copy
+                return sal_False; // kein globales Copy
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -919,19 +919,19 @@ void SvLBox::NotifyRemoving( SvLBoxEntry* )
         - Entry wird an das Ende der Target-Childlist gehaengt
 */
 #ifdef DBG_UTIL
-BOOL SvLBox::NotifyMoving(
+sal_Bool SvLBox::NotifyMoving(
     SvLBoxEntry*  pTarget,       // D&D-Drop-Position in this->GetModel()
     SvLBoxEntry*  pEntry,        // Zu verschiebender Entry aus
                                  // GetSourceListBox()->GetModel()
     SvLBoxEntry*& rpNewParent,   // Neuer Target-Parent
-    ULONG&        rNewChildPos)  // Position in Childlist des Target-Parents
+    sal_uLong&        rNewChildPos)  // Position in Childlist des Target-Parents
 #else
-BOOL SvLBox::NotifyMoving(
+sal_Bool SvLBox::NotifyMoving(
     SvLBoxEntry*  pTarget,       // D&D-Drop-Position in this->GetModel()
     SvLBoxEntry*,                // Zu verschiebender Entry aus
                                  // GetSourceListBox()->GetModel()
     SvLBoxEntry*& rpNewParent,   // Neuer Target-Parent
-    ULONG&        rNewChildPos)  // Position in Childlist des Target-Parents
+    sal_uLong&        rNewChildPos)  // Position in Childlist des Target-Parents
 #endif
 {
     DBG_CHKTHIS(SvLBox,0);
@@ -940,7 +940,7 @@ BOOL SvLBox::NotifyMoving(
     {
         rpNewParent = 0;
         rNewChildPos = 0;
-        return TRUE;
+        return sal_True;
     }
     if ( !pTarget->HasChilds() && !pTarget->HasChildsOnDemand() )
     {
@@ -959,15 +959,15 @@ BOOL SvLBox::NotifyMoving(
         else
             rNewChildPos = LIST_APPEND;
     }
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SvLBox::NotifyCopying(
+sal_Bool SvLBox::NotifyCopying(
     SvLBoxEntry*  pTarget,       // D&D-Drop-Position in this->GetModel()
     SvLBoxEntry*  pEntry,        // Zu kopierender Entry aus
                                  // GetSourceListBox()->GetModel()
     SvLBoxEntry*& rpNewParent,   // Neuer Target-Parent
-    ULONG&        rNewChildPos)  // Position in Childlist des Target-Parents
+    sal_uLong&        rNewChildPos)  // Position in Childlist des Target-Parents
 {
     DBG_CHKTHIS(SvLBox,0);
     return NotifyMoving(pTarget,pEntry,rpNewParent,rNewChildPos);
@@ -977,7 +977,7 @@ BOOL SvLBox::NotifyCopying(
     {
         rpNewParent = 0;
         rNewChildPos = 0;
-        return TRUE;
+        return sal_True;
     }
     if ( !pTarget->HasChilds() && !pTarget->HasChildsOnDemand() )
     {
@@ -994,7 +994,7 @@ BOOL SvLBox::NotifyCopying(
         else
             rNewChildPos = LIST_APPEND;
     }
-    return TRUE;
+    return sal_True;
     */
 }
 
@@ -1008,13 +1008,13 @@ SvLBoxEntry* SvLBox::CloneEntry( SvLBoxEntry* pSource )
 
 
 // Rueckgabe: Alle Entries wurden kopiert
-BOOL SvLBox::CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget )
+sal_Bool SvLBox::CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget )
 {
     DBG_CHKTHIS(SvLBox,0);
     nCurEntrySelPos = 0; // Selektionszaehler fuer NotifyMoving/Copying
-    BOOL bSuccess = TRUE;
+    sal_Bool bSuccess = sal_True;
     SvTreeEntryList aList;
-    BOOL bClone = (BOOL)( (ULONG)(pSource->GetModel()) != (ULONG)GetModel() );
+    sal_Bool bClone = (sal_Bool)( (sal_uLong)(pSource->GetModel()) != (sal_uLong)GetModel() );
     Link aCloneLink( pModel->GetCloneLink() );
     pModel->SetCloneLink( LINK(this, SvLBox, CloneHdl_Impl ));
 
@@ -1025,7 +1025,7 @@ BOOL SvLBox::CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget )
     while ( pSourceEntry )
     {
         // Childs werden automatisch mitkopiert
-        pSource->SelectChilds( pSourceEntry, FALSE );
+        pSource->SelectChilds( pSourceEntry, sal_False );
         aList.Insert( pSourceEntry, LIST_APPEND );
         pSourceEntry = pSource->NextSelected( pSourceEntry );
     }
@@ -1034,13 +1034,13 @@ BOOL SvLBox::CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget )
     while ( pSourceEntry )
     {
         SvLBoxEntry* pNewParent = 0;
-        ULONG nInsertionPos = LIST_APPEND;
-        BOOL bOk=NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
+        sal_uLong nInsertionPos = LIST_APPEND;
+        sal_Bool bOk=NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         if ( bOk )
         {
             if ( bClone )
             {
-                ULONG nCloneCount = 0;
+                sal_uLong nCloneCount = 0;
                 pSourceEntry = (SvLBoxEntry*)
                     pModel->Clone( (SvListEntry*)pSourceEntry, nCloneCount );
                 pModel->InsertTree( (SvListEntry*)pSourceEntry,
@@ -1048,15 +1048,15 @@ BOOL SvLBox::CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget )
             }
             else
             {
-                ULONG nListPos = pModel->Copy( (SvListEntry*)pSourceEntry,
+                sal_uLong nListPos = pModel->Copy( (SvListEntry*)pSourceEntry,
                     (SvListEntry*)pNewParent, nInsertionPos );
                 pSourceEntry = GetEntry( pNewParent, nListPos );
             }
         }
         else
-            bSuccess = FALSE;
+            bSuccess = sal_False;
 
-        if( bOk == (BOOL)2 )  // !!!HACK  verschobenen Entry sichtbar machen?
+        if( bOk == (sal_Bool)2 )  // !!!HACK  verschobenen Entry sichtbar machen?
             MakeVisible( pSourceEntry );
 
         pSourceEntry = (SvLBoxEntry*)aList.Next();
@@ -1066,18 +1066,18 @@ BOOL SvLBox::CopySelection( SvLBox* pSource, SvLBoxEntry* pTarget )
 }
 
 // Rueckgabe: Alle Entries wurden verschoben
-BOOL SvLBox::MoveSelection( SvLBox* pSource, SvLBoxEntry* pTarget )
+sal_Bool SvLBox::MoveSelection( SvLBox* pSource, SvLBoxEntry* pTarget )
 {
     return MoveSelectionCopyFallbackPossible( pSource, pTarget, sal_False );
 }
 
-BOOL SvLBox::MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry* pTarget, sal_Bool bAllowCopyFallback )
+sal_Bool SvLBox::MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry* pTarget, sal_Bool bAllowCopyFallback )
 {
     DBG_CHKTHIS(SvLBox,0);
     nCurEntrySelPos = 0; // Selektionszaehler fuer NotifyMoving/Copying
-    BOOL bSuccess = TRUE;
+    sal_Bool bSuccess = sal_True;
     SvTreeEntryList aList;
-    BOOL bClone = (BOOL)( (ULONG)(pSource->GetModel()) != (ULONG)GetModel() );
+    sal_Bool bClone = (sal_Bool)( (sal_uLong)(pSource->GetModel()) != (sal_uLong)GetModel() );
     Link aCloneLink( pModel->GetCloneLink() );
     if ( bClone )
         pModel->SetCloneLink( LINK(this, SvLBox, CloneHdl_Impl ));
@@ -1086,7 +1086,7 @@ BOOL SvLBox::MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry* pT
     while ( pSourceEntry )
     {
         // Childs werden automatisch mitbewegt
-        pSource->SelectChilds( pSourceEntry, FALSE );
+        pSource->SelectChilds( pSourceEntry, sal_False );
         aList.Insert( pSourceEntry, LIST_APPEND );
         pSourceEntry = pSource->NextSelected( pSourceEntry );
     }
@@ -1095,7 +1095,7 @@ BOOL SvLBox::MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry* pT
     while ( pSourceEntry )
     {
         SvLBoxEntry* pNewParent = 0;
-        ULONG nInsertionPos = LIST_APPEND;
+        sal_uLong nInsertionPos = LIST_APPEND;
         sal_Bool bOk = NotifyMoving(pTarget,pSourceEntry,pNewParent,nInsertionPos);
         sal_Bool bCopyOk = bOk;
         if ( !bOk && bAllowCopyFallback )
@@ -1108,7 +1108,7 @@ BOOL SvLBox::MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry* pT
         {
             if ( bClone )
             {
-                ULONG nCloneCount = 0;
+                sal_uLong nCloneCount = 0;
                 pSourceEntry = (SvLBoxEntry*)
                     pModel->Clone( (SvListEntry*)pSourceEntry, nCloneCount );
                 pModel->InsertTree( (SvListEntry*)pSourceEntry,
@@ -1125,9 +1125,9 @@ BOOL SvLBox::MoveSelectionCopyFallbackPossible( SvLBox* pSource, SvLBoxEntry* pT
             }
         }
         else
-            bSuccess = FALSE;
+            bSuccess = sal_False;
 
-        if( bOk == (BOOL)2 )  // !!!HACK  verschobenen Entry sichtbar machen?
+        if( bOk == (sal_Bool)2 )  // !!!HACK  verschobenen Entry sichtbar machen?
             MakeVisible( pSourceEntry );
 
         pSourceEntry = (SvLBoxEntry*)aList.Next();
@@ -1148,7 +1148,7 @@ void SvLBox::RemoveSelection()
         aList.Insert( pEntry );
         if ( pEntry->HasChilds() )
             // Remove loescht Childs automatisch
-            SelectChilds( pEntry, FALSE );
+            SelectChilds( pEntry, sal_False );
         pEntry = NextSelected( pEntry );
     }
     pEntry = (SvLBoxEntry*)aList.First();
@@ -1181,8 +1181,8 @@ void SvLBox::RecalcViewData()
     SvLBoxEntry* pEntry = First();
     while( pEntry )
     {
-        USHORT nCount = pEntry->ItemCount();
-        USHORT nCurPos = 0;
+        sal_uInt16 nCount = pEntry->ItemCount();
+        sal_uInt16 nCurPos = 0;
         while ( nCurPos < nCount )
         {
             SvLBoxItem* pItem = pEntry->GetItem( nCurPos );
@@ -1206,7 +1206,7 @@ void SvLBox::StateChanged( StateChangedType eType )
     Control::StateChanged( eType );
 }
 
-void SvLBox::ImplShowTargetEmphasis( SvLBoxEntry* pEntry, BOOL bShow)
+void SvLBox::ImplShowTargetEmphasis( SvLBoxEntry* pEntry, sal_Bool bShow)
 {
     DBG_CHKTHIS(SvLBox,0);
     if ( bShow && (nImpFlags & SVLBOX_TARGEMPH_VIS) )
@@ -1220,31 +1220,31 @@ void SvLBox::ImplShowTargetEmphasis( SvLBoxEntry* pEntry, BOOL bShow)
         nImpFlags &= ~SVLBOX_TARGEMPH_VIS;
 }
 
-void SvLBox::ShowTargetEmphasis( SvLBoxEntry*, BOOL /* bShow */ )
+void SvLBox::ShowTargetEmphasis( SvLBoxEntry*, sal_Bool /* bShow */ )
 {
     DBG_CHKTHIS(SvLBox,0);
 }
 
 
-BOOL SvLBox::Expand( SvLBoxEntry* )
+sal_Bool SvLBox::Expand( SvLBoxEntry* )
 {
     DBG_CHKTHIS(SvLBox,0);
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SvLBox::Collapse( SvLBoxEntry* )
+sal_Bool SvLBox::Collapse( SvLBoxEntry* )
 {
     DBG_CHKTHIS(SvLBox,0);
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SvLBox::Select( SvLBoxEntry*, BOOL  )
+sal_Bool SvLBox::Select( SvLBoxEntry*, sal_Bool  )
 {
     DBG_CHKTHIS(SvLBox,0);
-    return FALSE;
+    return sal_False;
 }
 
-ULONG SvLBox::SelectChilds( SvLBoxEntry* , BOOL  )
+sal_uLong SvLBox::SelectChilds( SvLBoxEntry* , sal_Bool  )
 {
     DBG_CHKTHIS(SvLBox,0);
     return 0;
@@ -1256,7 +1256,7 @@ void SvLBox::OnCurrentEntryChanged()
         pLBoxImpl->m_aQuickSelectionEngine.Reset();
 }
 
-void SvLBox::SelectAll( BOOL /* bSelect */ , BOOL /* bPaint */ )
+void SvLBox::SelectAll( sal_Bool /* bSelect */ , sal_Bool /* bPaint */ )
 {
     DBG_CHKTHIS(SvLBox,0);
 }
@@ -1285,9 +1285,9 @@ void SvLBox::FillEntryPath( SvLBoxEntry* pEntry, ::std::deque< sal_Int32 >& _rPa
     if ( pEntry )
     {
         SvLBoxEntry* pParentEntry = GetParent( pEntry );
-        while ( TRUE )
+        while ( sal_True )
         {
-            ULONG i, nCount = GetLevelChildCount( pParentEntry );
+            sal_uLong i, nCount = GetLevelChildCount( pParentEntry );
             for ( i = 0; i < nCount; ++i )
             {
                 SvLBoxEntry* pTemp = GetEntry( pParentEntry, i );
@@ -1317,11 +1317,11 @@ String SvLBox::GetEntryText( SvLBoxEntry* ) const
     return String();
 }
 
-ULONG SvLBox::GetLevelChildCount( SvLBoxEntry* _pParent ) const
+sal_uLong SvLBox::GetLevelChildCount( SvLBoxEntry* _pParent ) const
 {
     DBG_CHKTHIS(SvLBox,0);
 
-    ULONG nCount = 0;
+    sal_uLong nCount = 0;
     SvLBoxEntry* pEntry = FirstChild( _pParent );
     while ( pEntry )
     {
@@ -1360,8 +1360,8 @@ void SvLBox::InitViewData( SvViewData* pData, SvListEntry* pEntry )
     pEntryData->pItemData = new SvViewDataItem[ pInhEntry->ItemCount() ];
     SvViewDataItem* pItemData = pEntryData->pItemData;
     pEntryData->nItmCnt = pInhEntry->ItemCount(); // Anzahl Items fuer delete
-    USHORT nCount = pInhEntry->ItemCount();
-    USHORT nCurPos = 0;
+    sal_uInt16 nCount = pInhEntry->ItemCount();
+    sal_uInt16 nCurPos = 0;
     while( nCurPos < nCount )
     {
         SvLBoxItem* pItem = pInhEntry->GetItem( nCurPos );
@@ -1373,10 +1373,10 @@ void SvLBox::InitViewData( SvViewData* pData, SvListEntry* pEntry )
 
 
 
-void SvLBox::EnableSelectionAsDropTarget( BOOL bEnable, BOOL bWithChilds )
+void SvLBox::EnableSelectionAsDropTarget( sal_Bool bEnable, sal_Bool bWithChilds )
 {
     DBG_CHKTHIS(SvLBox,0);
-    USHORT nRefDepth;
+    sal_uInt16 nRefDepth;
     SvLBoxEntry* pTemp;
 
     SvLBoxEntry* pSelEntry = FirstSelected();
@@ -1427,11 +1427,11 @@ SvLBoxEntry* SvLBox::GetDropTarget( const Point& )
 void SvLBox::EditText( const String& rStr, const Rectangle& rRect,
     const Selection& rSel )
 {
-    EditText( rStr, rRect, rSel, FALSE );
+    EditText( rStr, rRect, rSel, sal_False );
 }
 
 void SvLBox::EditText( const String& rStr, const Rectangle& rRect,
-    const Selection& rSel, BOOL bMulti )
+    const Selection& rSel, sal_Bool bMulti )
 {
     DBG_CHKTHIS(SvLBox,0);
     if( pEdCtrl )
@@ -1473,11 +1473,11 @@ void SvLBox::CancelTextEditing()
 {
     DBG_CHKTHIS(SvLBox,0);
     if ( pEdCtrl )
-        pEdCtrl->StopEditing( TRUE );
+        pEdCtrl->StopEditing( sal_True );
     nImpFlags &= (~SVLBOX_IN_EDT);
 }
 
-void SvLBox::EndEditing( BOOL bCancel )
+void SvLBox::EndEditing( sal_Bool bCancel )
 {
     DBG_CHKTHIS(SvLBox,0);
     if( pEdCtrl )
@@ -1591,7 +1591,7 @@ void SvLBox::SelectSearchEntry( const void* _pEntry )
     if ( !pEntry )
         return;
 
-    SelectAll( FALSE );
+    SelectAll( sal_False );
     SetCurEntry( pEntry );
     Select( pEntry );
 }
@@ -1642,7 +1642,7 @@ bool SvLBox::HandleKeyInput( const KeyEvent& _rKEvt )
     return false;
 }
 
-SvLBoxEntry* SvLBox::GetEntry( const Point&, BOOL ) const
+SvLBoxEntry* SvLBox::GetEntry( const Point&, sal_Bool ) const
 {
     DBG_CHKTHIS(SvLBox,0);
     return 0;
@@ -1651,15 +1651,15 @@ SvLBoxEntry* SvLBox::GetEntry( const Point&, BOOL ) const
 void SvLBox::ModelHasEntryInvalidated( SvListEntry* pEntry )
 {
     DBG_CHKTHIS(SvLBox,0);
-    USHORT nCount = ((SvLBoxEntry*)pEntry)->ItemCount();
-    for( USHORT nIdx = 0; nIdx < nCount; nIdx++ )
+    sal_uInt16 nCount = ((SvLBoxEntry*)pEntry)->ItemCount();
+    for( sal_uInt16 nIdx = 0; nIdx < nCount; nIdx++ )
     {
         SvLBoxItem* pItem = ((SvLBoxEntry*)pEntry)->GetItem( nIdx );
         pItem->InitViewData( this, (SvLBoxEntry*)pEntry, 0 );
     }
 }
 
-void SvLBox::SetInUseEmphasis( SvLBoxEntry* pEntry, BOOL bInUse )
+void SvLBox::SetInUseEmphasis( SvLBoxEntry* pEntry, sal_Bool bInUse )
 {
     DBG_CHKTHIS(SvLBox,0);
     DBG_ASSERT(pEntry,"SetInUseEmphasis:No Entry");
@@ -1681,7 +1681,7 @@ void SvLBox::SetInUseEmphasis( SvLBoxEntry* pEntry, BOOL bInUse )
     }
 }
 
-void SvLBox::SetCursorEmphasis( SvLBoxEntry* pEntry, BOOL bCursored )
+void SvLBox::SetCursorEmphasis( SvLBoxEntry* pEntry, sal_Bool bCursored )
 {
     DBG_CHKTHIS(SvLBox,0);
     DBG_ASSERT(pEntry,"SetInUseEmphasis:No Entry");
@@ -1696,7 +1696,7 @@ void SvLBox::SetCursorEmphasis( SvLBoxEntry* pEntry, BOOL bCursored )
     }
 }
 
-BOOL SvLBox::HasCursorEmphasis( SvLBoxEntry* pEntry ) const
+sal_Bool SvLBox::HasCursorEmphasis( SvLBoxEntry* pEntry ) const
 {
     DBG_CHKTHIS(SvLBox,0);
     DBG_ASSERT(pEntry,"SetInUseEmphasis:No Entry");
@@ -1715,11 +1715,11 @@ void SvLBox::ReadDragServerInfo(const Point&, SvLBoxDDInfo* )
     DBG_CHKTHIS(SvLBox,0);
 }
 
-BOOL SvLBox::EditingCanceled() const
+sal_Bool SvLBox::EditingCanceled() const
 {
     if( pEdCtrl && pEdCtrl->EditingCanceled() )
-        return TRUE;
-    return FALSE;
+        return sal_True;
+    return sal_False;
 }
 
 
@@ -1731,7 +1731,7 @@ sal_Int8 SvLBox::AcceptDrop( const AcceptDropEvent& rEvt )
 
     if( rEvt.mbLeaving || !CheckDragAndDropMode( pDDSource, rEvt.mnAction ) )
     {
-        ImplShowTargetEmphasis( pTargetEntry, FALSE );
+        ImplShowTargetEmphasis( pTargetEntry, sal_False );
     }
     else if( !nDragDropMode )
     {
@@ -1758,12 +1758,12 @@ sal_Int8 SvLBox::AcceptDrop( const AcceptDropEvent& rEvt )
 
         // **** Emphasis zeichnen ****
         if( DND_ACTION_NONE == nRet )
-               ImplShowTargetEmphasis( pTargetEntry, FALSE );
+               ImplShowTargetEmphasis( pTargetEntry, sal_False );
         else if( pEntry != pTargetEntry || !(nImpFlags & SVLBOX_TARGEMPH_VIS) )
         {
-            ImplShowTargetEmphasis( pTargetEntry, FALSE );
+            ImplShowTargetEmphasis( pTargetEntry, sal_False );
             pTargetEntry = pEntry;
-            ImplShowTargetEmphasis( pTargetEntry, TRUE );
+            ImplShowTargetEmphasis( pTargetEntry, sal_True );
         }
     }
     return nRet;
@@ -1775,9 +1775,9 @@ sal_Int8 SvLBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvLBox* pSourceView 
     sal_Int8 nRet = DND_ACTION_NONE;
 
     DBG_ASSERT( pSourceView, "SvLBox::ExecuteDrop(): no source view" );
-    pSourceView->EnableSelectionAsDropTarget( TRUE, TRUE );
+    pSourceView->EnableSelectionAsDropTarget( sal_True, sal_True );
 
-    ImplShowTargetEmphasis( pTargetEntry, FALSE );
+    ImplShowTargetEmphasis( pTargetEntry, sal_False );
     pDDTarget = this;
 
     SvLBoxDDInfo aDDInfo;
@@ -1873,8 +1873,8 @@ void SvLBox::StartDrag( sal_Int8, const Point& rPosPixel )
     pDDSource = this;
     pDDTarget = 0;
 
-    BOOL bOldUpdateMode = Control::IsUpdateMode();
-    Control::SetUpdateMode( TRUE );
+    sal_Bool bOldUpdateMode = Control::IsUpdateMode();
+    Control::SetUpdateMode( sal_True );
     Update();
     Control::SetUpdateMode( bOldUpdateMode );
 
@@ -1882,8 +1882,8 @@ void SvLBox::StartDrag( sal_Int8, const Point& rPosPixel )
     // Wichtig: Wenn im DropHandler die Selektion der
     // SourceListBox veraendert wird, muessen vorher die Eintraege
     // als DropTargets wieder freigeschaltet werden:
-    // (GetSourceListBox()->EnableSelectionAsDropTarget( TRUE, TRUE );)
-    EnableSelectionAsDropTarget( FALSE, TRUE /* with Childs */ );
+    // (GetSourceListBox()->EnableSelectionAsDropTarget( sal_True, sal_True );)
+    EnableSelectionAsDropTarget( sal_False, sal_True /* with Childs */ );
 
     pContainer->StartDrag( this, nDragOptions, GetDragFinishedHdl() );
 }
@@ -1894,18 +1894,18 @@ nAction
 #endif
 )
 {
-    EnableSelectionAsDropTarget( TRUE, TRUE );
+    EnableSelectionAsDropTarget( sal_True, sal_True );
 
 #ifndef UNX
     if( (nAction == DND_ACTION_MOVE) && ( (pDDTarget &&
-        ((ULONG)(pDDTarget->GetModel())!=(ULONG)(this->GetModel()))) ||
+        ((sal_uLong)(pDDTarget->GetModel())!=(sal_uLong)(this->GetModel()))) ||
         !pDDTarget ))
     {
         RemoveSelection();
     }
 #endif
 
-    ImplShowTargetEmphasis( pTargetEntry, FALSE );
+    ImplShowTargetEmphasis( pTargetEntry, sal_False );
     pDDSource = 0;
     pDDTarget = 0;
     pTargetEntry = 0;
@@ -1918,10 +1918,10 @@ DragDropMode SvLBox::NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* )
     return (DragDropMode)0xffff;
 }
 
-BOOL SvLBox::NotifyAcceptDrop( SvLBoxEntry* )
+sal_Bool SvLBox::NotifyAcceptDrop( SvLBoxEntry* )
 {
     DBG_CHKTHIS(SvLBox,0);
-    return TRUE;
+    return sal_True;
 }
 
 // handler and methods for Drag - finished handler.
@@ -1938,20 +1938,20 @@ namespace
 
 void SvLBox::AddBoxToDDList_Impl( const SvLBox& rB )
 {
-    ULONG nVal = (ULONG)&rB;
+    sal_uLong nVal = (sal_uLong)&rB;
     SortLBoxes::get().Insert( nVal );
 }
 
 void SvLBox::RemoveBoxFromDDList_Impl( const SvLBox& rB )
 {
-    ULONG nVal = (ULONG)&rB;
+    sal_uLong nVal = (sal_uLong)&rB;
     SortLBoxes::get().Remove( nVal );
 }
 
 IMPL_STATIC_LINK( SvLBox, DragFinishHdl_Impl, sal_Int8*, pAction )
 {
-    ULONG nVal = (ULONG)pThis;
-    USHORT nFnd;
+    sal_uLong nVal = (sal_uLong)pThis;
+    sal_uInt16 nFnd;
     SvULongsSort &rSortLBoxes = SortLBoxes::get();
     if( rSortLBoxes.Seek_Entry( nVal, &nFnd ) )
     {

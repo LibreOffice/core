@@ -90,7 +90,7 @@ class Hyphenator :
     Reference< XPropertyChangeListener >    xPropHelper;
     Reference< XMultiServiceFactory >       rSMgr;
     linguistic::PropertyHelper_Hyphen *     pPropHelper;
-    BOOL                                    bDisposing;
+    sal_Bool                                    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     Hyphenator(const Hyphenator &);

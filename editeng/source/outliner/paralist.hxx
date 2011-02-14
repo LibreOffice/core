@@ -39,27 +39,27 @@ private:
     Link            aVisibleStateChangedHdl;
 
 public:
-    void            Clear( BOOL bDestroyParagraphs );
+    void            Clear( sal_Bool bDestroyParagraphs );
 
-    ULONG           GetParagraphCount() const           { return List::Count(); }
-    Paragraph*      GetParagraph( ULONG nPos ) const    { return (Paragraph*)List::GetObject( nPos ); }
+    sal_uLong           GetParagraphCount() const           { return List::Count(); }
+    Paragraph*      GetParagraph( sal_uLong nPos ) const    { return (Paragraph*)List::GetObject( nPos ); }
 
-    ULONG           GetAbsPos( Paragraph* pParent ) const { return List::GetPos( pParent ); }
-    ULONG           GetVisPos( Paragraph* pParagraph );
+    sal_uLong           GetAbsPos( Paragraph* pParent ) const { return List::GetPos( pParent ); }
+    sal_uLong           GetVisPos( Paragraph* pParagraph );
 
-    void            Insert( Paragraph* pPara, ULONG nAbsPos = LIST_APPEND ) { List::Insert( pPara, nAbsPos ); }
-    void            Remove( ULONG nPara ) { List::Remove( nPara ); }
-    void            MoveParagraphs( ULONG nStart, ULONG nDest, ULONG nCount );
+    void            Insert( Paragraph* pPara, sal_uLong nAbsPos = LIST_APPEND ) { List::Insert( pPara, nAbsPos ); }
+    void            Remove( sal_uLong nPara ) { List::Remove( nPara ); }
+    void            MoveParagraphs( sal_uLong nStart, sal_uLong nDest, sal_uLong nCount );
 
     Paragraph*      NextVisible( Paragraph* ) const;
     Paragraph*      PrevVisible( Paragraph* ) const;
     Paragraph*      LastVisible() const;
 
-    Paragraph*      GetParent( Paragraph* pParagraph /*, USHORT& rRelPos */ ) const;
-    BOOL            HasChilds( Paragraph* pParagraph ) const;
-    BOOL            HasHiddenChilds( Paragraph* pParagraph ) const;
-    BOOL            HasVisibleChilds( Paragraph* pParagraph ) const;
-    ULONG           GetChildCount( Paragraph* pParagraph ) const;
+    Paragraph*      GetParent( Paragraph* pParagraph /*, sal_uInt16& rRelPos */ ) const;
+    sal_Bool            HasChilds( Paragraph* pParagraph ) const;
+    sal_Bool            HasHiddenChilds( Paragraph* pParagraph ) const;
+    sal_Bool            HasVisibleChilds( Paragraph* pParagraph ) const;
+    sal_uLong           GetChildCount( Paragraph* pParagraph ) const;
 
     void            Expand( Paragraph* pParent );
     void            Collapse( Paragraph* pParent );

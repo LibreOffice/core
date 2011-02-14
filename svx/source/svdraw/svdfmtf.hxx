@@ -57,11 +57,11 @@ public:
     {}
 
     void Clear() { aList.Clear(); }
-    ULONG GetObjCount() const { return aList.Count(); }
-    SdrObject* GetObj(ULONG nNum) const { return (SdrObject*)aList.GetObject(nNum); }
-    SdrObject* operator[](ULONG nNum) const { return (SdrObject*)aList.GetObject(nNum); }
-    void InsertObject(SdrObject* pObj, ULONG nPos=CONTAINER_APPEND) { aList.Insert(pObj,nPos); }
-    void RemoveObject(ULONG nPos) { aList.Remove(nPos); }
+    sal_uLong GetObjCount() const { return aList.Count(); }
+    SdrObject* GetObj(sal_uLong nNum) const { return (SdrObject*)aList.GetObject(nNum); }
+    SdrObject* operator[](sal_uLong nNum) const { return (SdrObject*)aList.GetObject(nNum); }
+    void InsertObject(SdrObject* pObj, sal_uLong nPos=CONTAINER_APPEND) { aList.Insert(pObj,nPos); }
+    void RemoveObject(sal_uLong nPos) { aList.Remove(nPos); }
 };
 
 //************************************************************
@@ -74,7 +74,7 @@ protected:
     SdrObjRefList               aTmpList;
     VirtualDevice               aVD;
     Rectangle                   aScaleRect;
-    ULONG                       nMapScalingOfs; // ab hier nocht nicht mit MapScaling bearbeitet
+    sal_uLong                       nMapScalingOfs; // ab hier nocht nicht mit MapScaling bearbeitet
     SfxItemSet*                 pLineAttr;
     SfxItemSet*                 pFillAttr;
     SfxItemSet*                 pTextAttr;
@@ -130,19 +130,19 @@ protected:
     void DoAction(MetaFillColorAction       & rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaTextColorAction       & rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaTextFillColorAction   & rAct) { rAct.Execute(&aVD); }
-    void DoAction(MetaFontAction            & rAct) { rAct.Execute(&aVD); bFntDirty=TRUE; }
-    void DoAction(MetaTextAlignAction       & rAct) { rAct.Execute(&aVD); bFntDirty=TRUE; }
+    void DoAction(MetaFontAction            & rAct) { rAct.Execute(&aVD); bFntDirty=sal_True; }
+    void DoAction(MetaTextAlignAction       & rAct) { rAct.Execute(&aVD); bFntDirty=sal_True; }
     void DoAction(MetaClipRegionAction      & rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaRasterOpAction        & rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaPushAction            & rAct) { rAct.Execute(&aVD); }
-    void DoAction(MetaPopAction             & rAct) { rAct.Execute(&aVD); bFntDirty=TRUE; }
+    void DoAction(MetaPopAction             & rAct) { rAct.Execute(&aVD); bFntDirty=sal_True; }
     void DoAction(MetaMoveClipRegionAction  & rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaISectRectClipRegionAction& rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaISectRegionClipRegionAction& rAct) { rAct.Execute(&aVD); }
     void DoAction(MetaCommentAction& rAct, GDIMetaFile* pMtf);
 
     void ImportText( const Point& rPos, const XubString& rStr, const MetaAction& rAct );
-    void SetAttributes(SdrObject* pObj, FASTBOOL bForceTextAttr=FALSE);
+    void SetAttributes(SdrObject* pObj, FASTBOOL bForceTextAttr=sal_False);
     void InsertObj( SdrObject* pObj, sal_Bool bScale = sal_True );
     void MapScaling();
 
@@ -153,7 +153,7 @@ protected:
 public:
     ImpSdrGDIMetaFileImport(SdrModel& rModel);
     ~ImpSdrGDIMetaFileImport();
-    ULONG DoImport(const GDIMetaFile& rMtf, SdrObjList& rDestList, ULONG nInsPos=CONTAINER_APPEND, SvdProgressInfo *pProgrInfo = NULL);
+    sal_uLong DoImport(const GDIMetaFile& rMtf, SdrObjList& rDestList, sal_uLong nInsPos=CONTAINER_APPEND, SvdProgressInfo *pProgrInfo = NULL);
     void SetLayer(SdrLayerID nLay) { nLayer=nLay; }
     SdrLayerID GetLayer() const { return nLayer; }
     void SetScaleRect(const Rectangle& rRect) { aScaleRect=rRect; }

@@ -47,23 +47,23 @@ class SVX_DLLPUBLIC SvxNumberInfoItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxNumberInfoItem( const USHORT nId  );
+    SvxNumberInfoItem( const sal_uInt16 nId  );
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
-                       const USHORT nId  );
+                       const sal_uInt16 nId  );
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const String& rVal,
-                       const USHORT nId  );
+                       const sal_uInt16 nId  );
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const double& rVal,
-                       const USHORT nId  );
+                       const sal_uInt16 nId  );
     // if both double and String are supplied, String is used for text formats
     SvxNumberInfoItem( SvNumberFormatter* pNumFormatter, const double& rVal,
-                       const String& rValueStr, const USHORT nId );
+                       const String& rValueStr, const sal_uInt16 nId );
     SvxNumberInfoItem( const SvxNumberInfoItem& );
     ~SvxNumberInfoItem();
 
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create( SvStream& rStream, USHORT nVer ) const;
-    virtual SvStream&        Store( SvStream& , USHORT nItemVersion ) const;
+    virtual SfxPoolItem*     Create( SvStream& rStream, sal_uInt16 nVer ) const;
+    virtual SvStream&        Store( SvStream& , sal_uInt16 nItemVersion ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

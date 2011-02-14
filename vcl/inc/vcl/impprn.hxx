@@ -73,7 +73,7 @@ private:
     GDIMetaFile                     maCurPageMetaFile;
     long                            mnMaxBmpDPIX;
     long                            mnMaxBmpDPIY;
-    ULONG                           mnRestoreDrawMode;
+    sal_uLong                           mnRestoreDrawMode;
     int                             mnCurCopyCount;
 
                 DECL_LINK( ImplPrintHdl, Timer* );
@@ -96,7 +96,7 @@ public:
     void        StartQueuePrint();
     void        EndQueuePrint();
     void        AbortQueuePrint();
-    void        AddQueuePage( GDIMetaFile* pPage, USHORT nPage, BOOL bNewJobSetup );
+    void        AddQueuePage( GDIMetaFile* pPage, sal_uInt16 nPage, sal_Bool bNewJobSetup );
 
     bool        IsUserCopy() const { return mbUserCopy; }
     void        SetUserCopy( bool bSet ) { mbUserCopy = bSet; }
@@ -109,7 +109,7 @@ public:
     used by pull implementation to get the number of physical pages
     (that is how often PrintNextPage should be called)
     */
-    ULONG       GetPrintPageCount() const;
+    sal_uLong       GetPrintPageCount() const;
 
     /**
     used by pull implementation to get ranges of physical pages that
@@ -129,7 +129,7 @@ public:
 
     returns an false in push model (error condition)
     */
-    bool GetPaperRanges( std::vector< ULONG >& o_rRanges, bool i_bIncludeOrientationChanges ) const;
+    bool GetPaperRanges( std::vector< sal_uLong >& o_rRanges, bool i_bIncludeOrientationChanges ) const;
 
     /**
     get the jobsetup for a page

@@ -43,42 +43,42 @@ class SvxGridTabPage;
 class SVX_DLLPUBLIC SvxOptionsGrid
 {
 protected:
-    UINT32  nFldDrawX;
-    UINT32  nFldDivisionX;
-    UINT32  nFldDrawY;
-    UINT32  nFldDivisionY;
-    UINT32  nFldSnapX;
-    UINT32  nFldSnapY;
-    BOOL    bUseGridsnap:1;
-    BOOL    bSynchronize:1;
-    BOOL    bGridVisible:1;
-    BOOL    bEqualGrid:  1;
+    sal_uInt32  nFldDrawX;
+    sal_uInt32  nFldDivisionX;
+    sal_uInt32  nFldDrawY;
+    sal_uInt32  nFldDivisionY;
+    sal_uInt32  nFldSnapX;
+    sal_uInt32  nFldSnapY;
+    sal_Bool    bUseGridsnap:1;
+    sal_Bool    bSynchronize:1;
+    sal_Bool    bGridVisible:1;
+    sal_Bool    bEqualGrid:  1;
 
 public:
     SvxOptionsGrid();
     ~SvxOptionsGrid();
 
-    void    SetFldDrawX(    UINT32 nSet){nFldDrawX      = nSet;}
-    void    SetFldDivisionX(UINT32 nSet){nFldDivisionX  = nSet;}
-    void    SetFldDrawY   ( UINT32 nSet){nFldDrawY      = nSet;}
-    void    SetFldDivisionY(UINT32 nSet){nFldDivisionY  = nSet;}
-    void    SetFldSnapX(    UINT32 nSet){nFldSnapX      = nSet;}
-    void    SetFldSnapY   ( UINT32 nSet){nFldSnapY      = nSet;}
-    void    SetUseGridSnap( BOOL bSet ) {bUseGridsnap   = bSet;}
-    void    SetSynchronize( BOOL bSet ) {bSynchronize   = bSet;}
-    void    SetGridVisible( BOOL bSet ) {bGridVisible   = bSet;}
-    void    SetEqualGrid( BOOL bSet )   {bEqualGrid     = bSet;}
+    void    SetFldDrawX(    sal_uInt32 nSet){nFldDrawX      = nSet;}
+    void    SetFldDivisionX(sal_uInt32 nSet){nFldDivisionX  = nSet;}
+    void    SetFldDrawY   ( sal_uInt32 nSet){nFldDrawY      = nSet;}
+    void    SetFldDivisionY(sal_uInt32 nSet){nFldDivisionY  = nSet;}
+    void    SetFldSnapX(    sal_uInt32 nSet){nFldSnapX      = nSet;}
+    void    SetFldSnapY   ( sal_uInt32 nSet){nFldSnapY      = nSet;}
+    void    SetUseGridSnap( sal_Bool bSet ) {bUseGridsnap   = bSet;}
+    void    SetSynchronize( sal_Bool bSet ) {bSynchronize   = bSet;}
+    void    SetGridVisible( sal_Bool bSet ) {bGridVisible   = bSet;}
+    void    SetEqualGrid( sal_Bool bSet )   {bEqualGrid     = bSet;}
 
-    UINT32  GetFldDrawX(    ) const {  return nFldDrawX;    }
-    UINT32  GetFldDivisionX() const {  return nFldDivisionX;}
-    UINT32  GetFldDrawY   ( ) const {  return nFldDrawY;    }
-    UINT32  GetFldDivisionY() const {  return nFldDivisionY;}
-    UINT32  GetFldSnapX(    ) const {  return nFldSnapX;    }
-    UINT32  GetFldSnapY   ( ) const {  return nFldSnapY;    }
-    BOOL    GetUseGridSnap( ) const {  return bUseGridsnap; }
-    BOOL    GetSynchronize( ) const {  return bSynchronize; }
-    BOOL    GetGridVisible( ) const {  return bGridVisible; }
-    BOOL    GetEqualGrid()    const {  return bEqualGrid;   }
+    sal_uInt32  GetFldDrawX(    ) const {  return nFldDrawX;    }
+    sal_uInt32  GetFldDivisionX() const {  return nFldDivisionX;}
+    sal_uInt32  GetFldDrawY   ( ) const {  return nFldDrawY;    }
+    sal_uInt32  GetFldDivisionY() const {  return nFldDivisionY;}
+    sal_uInt32  GetFldSnapX(    ) const {  return nFldSnapX;    }
+    sal_uInt32  GetFldSnapY   ( ) const {  return nFldSnapY;    }
+    sal_Bool    GetUseGridSnap( ) const {  return bUseGridsnap; }
+    sal_Bool    GetSynchronize( ) const {  return bSynchronize; }
+    sal_Bool    GetGridVisible( ) const {  return bGridVisible; }
+    sal_Bool    GetEqualGrid()    const {  return bEqualGrid;   }
 };
 
 // class SvxGridItem -----------------------------------------------------
@@ -89,7 +89,7 @@ class SVX_DLLPUBLIC SvxGridItem : public SvxOptionsGrid, public SfxPoolItem
     friend class SvxGridTabPage;
 
 public:
-    SvxGridItem( USHORT _nWhich) : SfxPoolItem(_nWhich){};
+    SvxGridItem( sal_uInt16 _nWhich) : SfxPoolItem(_nWhich){};
     SvxGridItem( const SvxGridItem& pTestItem );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
@@ -114,7 +114,7 @@ public:
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     virtual void        ActivatePage( const SfxItemSet& rSet );
@@ -163,8 +163,8 @@ protected:
     MetricField     aMtrFldBezAngle;
 
 private:
-    BOOL                bAttrModified;
-//  BOOL                bEqualGrid; // Neu
+    sal_Bool                bAttrModified;
+//  sal_Bool                bEqualGrid; // Neu
 
 #ifdef _SVX_OPTGRID_CXX
     DECL_LINK( ClickRotateHdl_Impl, void * );

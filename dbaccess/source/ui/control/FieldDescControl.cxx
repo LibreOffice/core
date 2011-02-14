@@ -816,7 +816,7 @@ void OFieldDescControl::ArrangeAggregates()
     {
         Control*    pctrlInputControl;  // das eigentliche Control zur Eingabe
         Control*    pctrlTextControl;   // das Label dazu
-        USHORT      nPosSizeArgument;   // das zweite Argument fuer SetPosSize
+        sal_uInt16      nPosSizeArgument;   // das zweite Argument fuer SetPosSize
     };
     AGGREGATE_DESCRIPTION adAggregates[] = {
         { m_pColumnName, m_pColumnNameText, 1},
@@ -1081,7 +1081,7 @@ void OFieldDescControl::InitializeControl(Control* _pControl,const ::rtl::OStrin
     _pControl->EnableClipSiblings();
 }
 // -----------------------------------------------------------------------------
-FixedText* OFieldDescControl::CreateText(USHORT _nTextRes)
+FixedText* OFieldDescControl::CreateText(sal_uInt16 _nTextRes)
 {
     FixedText* pFixedText = new FixedText( this );
     pFixedText->SetText( ModuleRes(_nTextRes) );
@@ -1089,13 +1089,13 @@ FixedText* OFieldDescControl::CreateText(USHORT _nTextRes)
     return pFixedText;
 }
 // -----------------------------------------------------------------------------
-OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(USHORT _nHelpStr,short _nProperty,const rtl::OString& _sHelpId)
+OPropNumericEditCtrl* OFieldDescControl::CreateNumericControl(sal_uInt16 _nHelpStr,short _nProperty,const rtl::OString& _sHelpId)
 {
     OPropNumericEditCtrl* pControl = new OPropNumericEditCtrl( this, _nHelpStr, _nProperty, WB_BORDER );
     pControl->SetDecimalDigits(0);
     pControl->SetMin(0);
     pControl->SetMax(0x7FFFFFFF);   // soll draussen geaendert werden, wenn noetig
-    pControl->SetStrictFormat(TRUE);
+    pControl->SetStrictFormat(sal_True);
 
     InitializeControl(pControl,_sHelpId,false);
 
@@ -1537,7 +1537,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
 
     if(m_pType)
     {
-        USHORT nPos = pFieldType.get() ? m_pType->GetEntryPos(String(pFieldDescr->getTypeInfo()->aUIName)) : LISTBOX_ENTRY_NOTFOUND;
+        sal_uInt16 nPos = pFieldType.get() ? m_pType->GetEntryPos(String(pFieldDescr->getTypeInfo()->aUIName)) : LISTBOX_ENTRY_NOTFOUND;
         if(nPos == LISTBOX_ENTRY_NOTFOUND)
         {
             const OTypeInfoMap* pMap = getTypeInfo();

@@ -797,11 +797,11 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
     SwDoc* pDoc = m_pView->GetDocShell()->GetDoc();
     SwRubyList aList;
 
-    USHORT nCount = pDoc->FillRubyList( *rSh.GetCrsr(), aList, 0 );
+    sal_uInt16 nCount = pDoc->FillRubyList( *rSh.GetCrsr(), aList, 0 );
     Sequence< Sequence< PropertyValue > > aRet(nCount);
     Sequence< PropertyValue >* pRet = aRet.getArray();
     String aString;
-    for(USHORT n = 0; n < nCount; n++)
+    for(sal_uInt16 n = 0; n < nCount; n++)
     {
         const SwRubyListEntryPtr pEntry = aList[n];
 
@@ -895,7 +895,7 @@ void SAL_CALL SwXTextView::setRubyList(
                 pEntry->GetRubyAttr().SetPosition(bValue ? 0 : 1);
             }
         }
-        aList.Insert(pEntry, (USHORT)nPos);
+        aList.Insert(pEntry, (sal_uInt16)nPos);
     }
     SwDoc* pDoc = m_pView->GetDocShell()->GetDoc();
     pDoc->SetRubyList( *rSh.GetCrsr(), aList, 0 );
@@ -1058,7 +1058,7 @@ uno::Any SAL_CALL SwXTextView::getPropertyValue(
                 if (nWID == WID_PAGE_COUNT)
                     nCount = m_pView->GetDocShell()->GetDoc()->GetPageCount();
                 else // WID_LINE_COUNT
-                    nCount = m_pView->GetWrtShell().GetLineCount( FALSE /*of whole document*/ );
+                    nCount = m_pView->GetWrtShell().GetLineCount( sal_False /*of whole document*/ );
                 aRet <<= nCount;
             }
             break;
@@ -1070,7 +1070,7 @@ uno::Any SAL_CALL SwXTextView::getPropertyValue(
                 const SwViewOption *pOpt = m_pView->GetWrtShell().GetViewOptions();
                 if (!pOpt)
                     throw RuntimeException();
-                UINT32 nFlag = VIEWOPT_1_ONLINESPELL;
+                sal_uInt32 nFlag = VIEWOPT_1_ONLINESPELL;
                 sal_Bool bVal = 0 != (pOpt->GetCoreOptions() & nFlag);
                 aRet <<= bVal;
             }
@@ -1129,7 +1129,7 @@ OUString SwXTextView::getImplementationName(void) throw( RuntimeException )
 /* -----------------------------06.04.00 11:07--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwXTextView::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXTextView::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return rServiceName.equalsAscii("com.sun.star.text.TextDocumentView") ||
             rServiceName.equalsAscii("com.sun.star.view.OfficeDocumentView");
@@ -1537,7 +1537,7 @@ sal_Bool SwXTextViewCursor::jumpToFirstPage(void) throw( uno::RuntimeException )
             rSh.LeaveSelFrmMode();
         }
         rSh.EnterStdMode();
-        bRet = rSh.SttEndDoc(TRUE);
+        bRet = rSh.SttEndDoc(sal_True);
     }
     else
         throw uno::RuntimeException();
@@ -1559,7 +1559,7 @@ sal_Bool SwXTextViewCursor::jumpToLastPage(void) throw( uno::RuntimeException )
             rSh.LeaveSelFrmMode();
         }
         rSh.EnterStdMode();
-        bRet = rSh.SttEndDoc(FALSE);
+        bRet = rSh.SttEndDoc(sal_False);
         rSh.SttPg();
     }
     else
@@ -1574,7 +1574,7 @@ sal_Bool SwXTextViewCursor::jumpToPage(sal_Int16 nPage) throw( uno::RuntimeExcep
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Bool bRet = sal_False;
     if(m_pView)
-        bRet = m_pView->GetWrtShell().GotoPage(nPage, TRUE);
+        bRet = m_pView->GetWrtShell().GotoPage(nPage, sal_True);
     else
         throw uno::RuntimeException();
     return bRet;
@@ -1642,7 +1642,7 @@ sal_Int16 SwXTextViewCursor::getPage(void) throw( uno::RuntimeException )
     {
         SwWrtShell& rSh = m_pView->GetWrtShell();
         SwPaM* pShellCrsr = rSh.GetCrsr();
-        nRet = (short)pShellCrsr->GetPageNum( TRUE, 0 );
+        nRet = (short)pShellCrsr->GetPageNum( sal_True, 0 );
     }
     else
         throw uno::RuntimeException();
@@ -2078,7 +2078,7 @@ OUString SwXTextViewCursor::getImplementationName(void) throw( RuntimeException 
 /* -----------------------------06.04.00 11:07--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwXTextViewCursor::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXTextViewCursor::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return !rServiceName.compareToAscii("com.sun.star.text.TextViewCursor") ||
             !rServiceName.compareToAscii("com.sun.star.style.CharacterProperties") ||
@@ -2171,8 +2171,8 @@ uno::Reference< datatransfer::XTransferable > SAL_CALL SwXTextView::getTransfera
     else
     {
         SwTransferable* pTransfer = new SwTransferable( rSh );
-        const BOOL bLockedView = rSh.IsViewLocked();
-        rSh.LockView( TRUE );    //lock visible section
+        const sal_Bool bLockedView = rSh.IsViewLocked();
+        rSh.LockView( sal_True );    //lock visible section
         pTransfer->PrepareForCopy();
         rSh.LockView( bLockedView );
         return uno::Reference< datatransfer::XTransferable >( pTransfer );
@@ -2190,7 +2190,7 @@ void SAL_CALL SwXTextView::insertTransferable( const uno::Reference< datatransfe
     {
         SdrView *pSdrView = rSh.GetDrawView();
         OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
-        pOLV->GetEditView().InsertText( xTrans, GetView()->GetDocShell()->GetMedium()->GetBaseURL(), FALSE );
+        pOLV->GetEditView().InsertText( xTrans, GetView()->GetDocShell()->GetMedium()->GetBaseURL(), sal_False );
     }
     else
     {

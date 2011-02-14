@@ -55,13 +55,13 @@ struct ScSheetSourceDesc
     ScRange         aSourceRange;
     ScQueryParam    aQueryParam;
 
-    BOOL operator== ( const ScSheetSourceDesc& rOther ) const
+    sal_Bool operator== ( const ScSheetSourceDesc& rOther ) const
         { return aSourceRange == rOther.aSourceRange &&
                  aQueryParam  == rOther.aQueryParam; }
 // Wang Xu Ming - DataPilot migration
 // Buffer&&Performance
     ScDPTableDataCache* CreateCache( ScDocument* pDoc, long nID = -1) const;
-    ULONG CheckValidate( ScDocument* pDoc  ) const;
+    sal_uLong CheckValidate( ScDocument* pDoc  ) const;
     ScDPTableDataCache* GetCache( ScDocument* pDoc, long nID ) const;
     ScDPTableDataCache*  GetExistDPObjectCache ( ScDocument* pDoc  ) const;
     long    GetCacheId( ScDocument* pDoc, long nID ) const;
@@ -73,9 +73,9 @@ class SC_DLLPUBLIC ScSheetDPData : public ScDPTableData
 {
 private:
     ScQueryParam    aQuery;
-    BOOL*                pSpecial;
-    BOOL            bIgnoreEmptyRows;
-    BOOL            bRepeatIfEmpty;
+    sal_Bool*                pSpecial;
+    sal_Bool            bIgnoreEmptyRows;
+    sal_Bool            bRepeatIfEmpty;
 
        ScDPCacheTable  aCacheTable;
 
@@ -87,11 +87,11 @@ public:
     // End Comments
     virtual long                    GetColumnCount();
     virtual String                  getDimensionName(long nColumn);
-    virtual BOOL                    getIsDataLayoutDimension(long nColumn);
-    virtual BOOL                    IsDateDimension(long nDim);
-    virtual ULONG                   GetNumberFormat(long nDim);
+    virtual sal_Bool                    getIsDataLayoutDimension(long nColumn);
+    virtual sal_Bool                    IsDateDimension(long nDim);
+    virtual sal_uLong                   GetNumberFormat(long nDim);
     virtual void                    DisposeData();
-    virtual void                    SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty );
+    virtual void                    SetEmptyFlags( sal_Bool bIgnoreEmptyRows, sal_Bool bRepeatIfEmpty );
 
     virtual bool                    IsRepeatIfEmpty();
 

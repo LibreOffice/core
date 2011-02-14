@@ -66,11 +66,11 @@ private:
     long                    nWidth;
     long                    nHeight;
     SvLBoxButtonData_Impl*  pImpl;
-    BOOL                    bDataOk;
+    sal_Bool                    bDataOk;
     SvButtonState           eState;
 
     SVT_DLLPRIVATE void                     SetWidthAndHeight();
-    SVT_DLLPRIVATE void                 InitData( BOOL bImagesFromDefault,
+    SVT_DLLPRIVATE void                 InitData( sal_Bool bImagesFromDefault,
                                       bool _bRadioBtn, const Control* pControlForSettings = NULL );
 public:
                             // include creating default images (CheckBox or RadioButton)
@@ -80,17 +80,17 @@ public:
                             SvLBoxButtonData();
                             ~SvLBoxButtonData();
 
-    USHORT                  GetIndex( USHORT nItemState );
+    sal_uInt16                  GetIndex( sal_uInt16 nItemState );
     inline long             Width();
     inline long             Height();
     void                    SetLink( const Link& rLink) { aLink=rLink; }
     const Link&             GetLink() const { return aLink; }
-     BOOL                   IsRadio();
+     sal_Bool                   IsRadio();
     // weil Buttons nicht von LinkHdl abgeleitet sind
     void                    CallLink();
 
-    void                    StoreButtonState( SvLBoxEntry* pEntry, USHORT nItemFlags );
-    SvButtonState           ConvertToButtonState( USHORT nItemFlags ) const;
+    void                    StoreButtonState( SvLBoxEntry* pEntry, sal_uInt16 nItemFlags );
+    SvButtonState           ConvertToButtonState( sal_uInt16 nItemFlags ) const;
 
     inline SvButtonState    GetActButtonState() const;
     SvLBoxEntry*            GetActEntry() const;
@@ -100,7 +100,7 @@ public:
     void                    SetDefaultImages( const Control* pControlForSettings = NULL );
                                 // set images acording to the color scheeme of the Control
                                 // pControlForSettings == NULL: settings are taken from Application
-    BOOL                    HasDefaultImages( void ) const;
+    sal_Bool                    HasDefaultImages( void ) const;
 };
 
 inline long SvLBoxButtonData::Width()
@@ -128,14 +128,14 @@ class SVT_DLLPUBLIC SvLBoxString : public SvLBoxItem
 {
     XubString aStr;
 public:
-                    SvLBoxString( SvLBoxEntry*,USHORT nFlags,const XubString& rStr);
+                    SvLBoxString( SvLBoxEntry*,sal_uInt16 nFlags,const XubString& rStr);
                     SvLBoxString();
     virtual         ~SvLBoxString();
-    virtual USHORT  IsA();
+    virtual sal_uInt16  IsA();
     void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
     XubString       GetText() const { return aStr; }
     void            SetText( SvLBoxEntry*, const XubString& rStr );
-    void            Paint( const Point&, SvLBox& rDev, USHORT nFlags,SvLBoxEntry* );
+    void            Paint( const Point&, SvLBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
     SvLBoxItem*     Create() const;
     void            Clone( SvLBoxItem* pSource );
 };
@@ -144,13 +144,13 @@ class SvLBoxBmp : public SvLBoxItem
 {
     Image aBmp;
 public:
-                    SvLBoxBmp( SvLBoxEntry*, USHORT nFlags, Image );
+                    SvLBoxBmp( SvLBoxEntry*, sal_uInt16 nFlags, Image );
                     SvLBoxBmp();
     virtual         ~SvLBoxBmp();
-    virtual USHORT  IsA();
+    virtual sal_uInt16  IsA();
     void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
     void            SetBitmap( SvLBoxEntry*, Image );
-    void            Paint( const Point&, SvLBox& rView, USHORT nFlags,SvLBoxEntry* );
+    void            Paint( const Point&, SvLBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
     SvLBoxItem*     Create() const;
     void            Clone( SvLBoxItem* pSource );
 };
@@ -173,9 +173,9 @@ class SVT_DLLPUBLIC SvLBoxButton : public SvLBoxItem
 {
     SvLBoxButtonData*   pData;
     SvLBoxButtonKind eKind;
-    USHORT nItemFlags;
-    USHORT nImgArrOffs;
-    USHORT nBaseOffs;
+    sal_uInt16 nItemFlags;
+    sal_uInt16 nImgArrOffs;
+    sal_uInt16 nBaseOffs;
 
     void ImplAdjustBoxSize( Size& io_rCtrlSize, ControlType i_eType, Window* pParent );
 public:
@@ -185,31 +185,31 @@ public:
                     // (see SV_BMP_STATICIMAGE; nFlags are effectively ignored
                     // for that kind).
                     SvLBoxButton( SvLBoxEntry* pEntry,
-                                  SvLBoxButtonKind eTheKind, USHORT nFlags,
+                                  SvLBoxButtonKind eTheKind, sal_uInt16 nFlags,
                                   SvLBoxButtonData* pBData );
                     SvLBoxButton();
     virtual         ~SvLBoxButton();
     void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
-    virtual USHORT  IsA();
-    void            Check( SvLBox* pView, SvLBoxEntry*, BOOL bCheck );
-    virtual BOOL    ClickHdl(SvLBox* pView, SvLBoxEntry* );
-    void            Paint( const Point&, SvLBox& rView, USHORT nFlags,SvLBoxEntry* );
+    virtual sal_uInt16  IsA();
+    void            Check( SvLBox* pView, SvLBoxEntry*, sal_Bool bCheck );
+    virtual sal_Bool    ClickHdl(SvLBox* pView, SvLBoxEntry* );
+    void            Paint( const Point&, SvLBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
     SvLBoxItem*     Create() const;
     void            Clone( SvLBoxItem* pSource );
-    USHORT          GetButtonFlags() const { return nItemFlags; }
-    BOOL            IsStateChecked() const { return (BOOL)(nItemFlags & SV_ITEMSTATE_CHECKED)!=0; }
-    BOOL            IsStateUnchecked() const { return (BOOL)(nItemFlags & SV_ITEMSTATE_UNCHECKED)!=0; }
-    BOOL            IsStateTristate() const { return (BOOL)(nItemFlags & SV_ITEMSTATE_TRISTATE)!=0; }
-    BOOL            IsStateHilighted() const { return (BOOL)(nItemFlags & SV_ITEMSTATE_HILIGHTED)!=0; }
+    sal_uInt16          GetButtonFlags() const { return nItemFlags; }
+    sal_Bool            IsStateChecked() const { return (sal_Bool)(nItemFlags & SV_ITEMSTATE_CHECKED)!=0; }
+    sal_Bool            IsStateUnchecked() const { return (sal_Bool)(nItemFlags & SV_ITEMSTATE_UNCHECKED)!=0; }
+    sal_Bool            IsStateTristate() const { return (sal_Bool)(nItemFlags & SV_ITEMSTATE_TRISTATE)!=0; }
+    sal_Bool            IsStateHilighted() const { return (sal_Bool)(nItemFlags & SV_ITEMSTATE_HILIGHTED)!=0; }
     void            SetStateChecked();
     void            SetStateUnchecked();
     void            SetStateTristate();
-    void            SetStateHilighted( BOOL bHilight );
+    void            SetStateHilighted( sal_Bool bHilight );
 
     SvLBoxButtonKind GetKind() const { return eKind; }
 
-    void            SetBaseOffs( USHORT nOffs ) { nBaseOffs = nOffs; }
-    USHORT          GetBaseOffs() const { return nBaseOffs; }
+    void            SetBaseOffs( sal_uInt16 nOffs ) { nBaseOffs = nOffs; }
+    sal_uInt16          GetBaseOffs() const { return nBaseOffs; }
 
     // Check whether this button can be modified via UI, sounding a beep if it
     // cannot be modified:
@@ -231,7 +231,7 @@ inline void SvLBoxButton::SetStateTristate()
     nItemFlags &= SV_STATE_MASK;
     nItemFlags |= SV_ITEMSTATE_TRISTATE;
 }
-inline void SvLBoxButton::SetStateHilighted( BOOL bHilight )
+inline void SvLBoxButton::SetStateHilighted( sal_Bool bHilight )
 {
     if ( bHilight )
         nItemFlags |= SV_ITEMSTATE_HILIGHTED;
@@ -245,18 +245,18 @@ class SVT_DLLPUBLIC SvLBoxContextBmp : public SvLBoxItem
 {
     SvLBoxContextBmp_Impl*  m_pImpl;
 public:
-                    SvLBoxContextBmp( SvLBoxEntry*,USHORT nFlags,Image,Image,
-                                    USHORT nEntryFlagsBmp1);
+                    SvLBoxContextBmp( SvLBoxEntry*,sal_uInt16 nFlags,Image,Image,
+                                    sal_uInt16 nEntryFlagsBmp1);
                     SvLBoxContextBmp();
     virtual         ~SvLBoxContextBmp();
-    virtual USHORT  IsA();
+    virtual sal_uInt16  IsA();
     void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
-    void            Paint( const Point&, SvLBox& rView, USHORT nFlags,SvLBoxEntry* );
+    void            Paint( const Point&, SvLBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
     SvLBoxItem*     Create() const;
     void            Clone( SvLBoxItem* pSource );
 
 
-    BOOL            SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2, BmpColorMode _eMode = BMP_COLOR_NORMAL );
+    sal_Bool            SetModeImages( const Image& _rBitmap1, const Image& _rBitmap2, BmpColorMode _eMode = BMP_COLOR_NORMAL );
     void            GetModeImages(       Image& _rBitmap1,       Image& _rBitmap2, BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
 
     inline void         SetBitmap1( const Image& _rImage, BmpColorMode _eMode = BMP_COLOR_NORMAL );

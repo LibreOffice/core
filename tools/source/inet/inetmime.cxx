@@ -4552,7 +4552,7 @@ void INetContentTypeParameterList::Clear()
 const INetContentTypeParameter *
 INetContentTypeParameterList::find(const ByteString & rAttribute) const
 {
-    for (ULONG i = 0; i < Count(); ++i)
+    for (sal_uIntPtr i = 0; i < Count(); ++i)
     {
         const INetContentTypeParameter * pParameter = GetObject(i);
         if (pParameter->m_sAttribute.EqualsIgnoreCaseAscii(rAttribute))

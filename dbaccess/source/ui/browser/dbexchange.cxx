@@ -179,7 +179,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     sal_Bool ODataClipboard::GetData( const DataFlavor& rFlavor )
     {
-        const ULONG nFormat = SotExchange::GetFormat(rFlavor);
+        const sal_uLong nFormat = SotExchange::GetFormat(rFlavor);
         switch (nFormat)
         {
             case SOT_FORMAT_RTF:

@@ -124,15 +124,15 @@ IMPL_LINK( SearchWindow, ClickHdl, Button *, pButton )
 /*      InfoBox( this, String( "T: " ) + sText +
                        String( "\nS: " ) + sSrch ).Execute();
 */
-        BOOL bRet = FALSE;
-        USHORT nStt = 0, nEnd = sText.Len();
+        sal_Bool bRet = sal_False;
+        sal_uInt16 nStt = 0, nEnd = sText.Len();
 
         {
             aParam.SetSrchStr( sSrch );
             SearchText aSrchText( aParam, GetpApp()->GetAppInternational() );
             bRet = aSrchText.SearchFrwrd( sText, &nStt, &nEnd );
 
-//          BOOL SearchBkwrd( const String &rStr, USHORT* pStart, USHORT* pEnde );
+//          sal_Bool SearchBkwrd( const String &rStr, sal_uInt16* pStart, sal_uInt16* pEnde );
         }
 
         String sFound( "gefunden" );

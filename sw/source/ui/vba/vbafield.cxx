@@ -239,10 +239,10 @@ xub_StrLen _ReadFieldParams::FindNextStringPiece(const xub_StrLen nStart)
 
 
 // read parameters "1-3" or 1-3 with both values between 1 and nMax
-bool _ReadFieldParams::GetTokenSttFromTo(USHORT* pFrom, USHORT* pTo, USHORT nMax)
+bool _ReadFieldParams::GetTokenSttFromTo(sal_uInt16* pFrom, sal_uInt16* pTo, sal_uInt16 nMax)
 {
-    USHORT nStart = 0;
-    USHORT nEnd   = 0;
+    sal_uInt16 nStart = 0;
+    sal_uInt16 nEnd   = 0;
     xub_StrLen n = GoToTokenParam();
     if( STRING_NOTFOUND != n )
     {
@@ -253,8 +253,8 @@ bool _ReadFieldParams::GetTokenSttFromTo(USHORT* pFrom, USHORT* pTo, USHORT nMax
         String sStart( sParams.GetToken(0, '-', nIndex) );
         if( STRING_NOTFOUND != nIndex )
         {
-            nStart = static_cast<USHORT>(sStart.ToInt32());
-            nEnd   = static_cast<USHORT>(sParams.Copy(nIndex).ToInt32());
+            nStart = static_cast<sal_uInt16>(sStart.ToInt32());
+            nEnd   = static_cast<sal_uInt16>(sParams.Copy(nIndex).ToInt32());
         }
     }
     if( pFrom ) *pFrom = nStart;

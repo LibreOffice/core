@@ -51,13 +51,13 @@ class SFX2_DLLPUBLIC SfxSlotPool
     SfxSlotPool*                _pParentPool;
     ResMgr*                     _pResMgr;
     SfxInterfaceArr_Impl*       _pInterfaces;
-    USHORT                      _nCurGroup;
-    USHORT                      _nCurInterface;
-    USHORT                      _nCurMsg;
+    sal_uInt16                      _nCurGroup;
+    sal_uInt16                      _nCurInterface;
+    sal_uInt16                      _nCurMsg;
     SfxSlotArr_Impl*            _pUnoSlots;
 
 private:
-    const SfxSlot* SeekSlot( USHORT nObject );
+    const SfxSlot* SeekSlot( sal_uInt16 nObject );
 
 public:
                         SfxSlotPool( SfxSlotPool* pParent=0, ResMgr* pMgr=0);
@@ -70,14 +70,14 @@ public:
 
     static SfxSlotPool& GetSlotPool( SfxViewFrame *pFrame=NULL );
 
-    USHORT              GetGroupCount();
-    String              SeekGroup( USHORT nNo );
+    sal_uInt16              GetGroupCount();
+    String              SeekGroup( sal_uInt16 nNo );
     const SfxSlot*      FirstSlot();
     const SfxSlot*      NextSlot();
-    const SfxSlot*      GetSlot( USHORT nId );
-    const SfxSlot*      GetUnoSlot( USHORT nId );
+    const SfxSlot*      GetSlot( sal_uInt16 nId );
+    const SfxSlot*      GetUnoSlot( sal_uInt16 nId );
     const SfxSlot*      GetUnoSlot( const String& rUnoName );
-    TypeId              GetSlotType( USHORT nSlotId ) const;
+    TypeId              GetSlotType( sal_uInt16 nSlotId ) const;
 };
 
 //--------------------------------------------------------------------

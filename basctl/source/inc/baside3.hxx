@@ -75,7 +75,7 @@ protected:
     virtual void        DoInit();
     virtual void        DoScroll( ScrollBar* pCurScrollBar );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
-    void                InitSettings(BOOL bFont,BOOL bForeground,BOOL bBackground);
+    void                InitSettings(sal_Bool bFont,sal_Bool bForeground,sal_Bool bBackground);
 
 public:
                         TYPEINFO();
@@ -91,20 +91,20 @@ public:
     DlgEdModel*         GetModel() const;
     DlgEdPage*          GetPage() const;
     DlgEdView*          GetView() const;
-    BOOL                RenameDialog( const String& rNewName );
+    sal_Bool                RenameDialog( const String& rNewName );
     void                DisableBrowser();
     void                UpdateBrowser();
-    BOOL                SaveDialog();
-    BOOL                ImportDialog();
+    sal_Bool                SaveDialog();
+    sal_Bool                ImportDialog();
 
     virtual String      GetTitle();
     virtual BasicEntryDescriptor CreateEntryDescriptor();
-    virtual void        SetReadOnly( BOOL bReadOnly );
-    virtual BOOL        IsReadOnly();
+    virtual void        SetReadOnly( sal_Bool bReadOnly );
+    virtual sal_Bool        IsReadOnly();
 
     virtual void        StoreData();
-    virtual BOOL        IsModified();
-    virtual BOOL        IsPasteAllowed();
+    virtual sal_Bool        IsModified();
+    virtual sal_Bool        IsPasteAllowed();
 
     virtual ::svl::IUndoManager*
                         GetUndoManager();

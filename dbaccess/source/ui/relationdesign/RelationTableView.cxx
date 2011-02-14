@@ -188,7 +188,7 @@ void ORelationTableView::ReSync()
         GetTabWinMap()->begin()->second->GrabFocus();
 }
 //------------------------------------------------------------------------------
-BOOL ORelationTableView::IsAddAllowed()
+sal_Bool ORelationTableView::IsAddAllowed()
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
 
@@ -291,9 +291,9 @@ void ORelationTableView::AddNewRelation()
     DBG_CHKTHIS(ORelationTableView,NULL);
 
     TTableConnectionData::value_type pNewConnData( new ORelationTableConnectionData() );
-    ORelationDialog aRelDlg(this, pNewConnData, TRUE);
+    ORelationDialog aRelDlg(this, pNewConnData, sal_True);
 
-    BOOL bSuccess = (aRelDlg.Execute() == RET_OK);
+    sal_Bool bSuccess = (aRelDlg.Execute() == RET_OK);
     if (bSuccess)
     {
         // already updated by the dialog
@@ -324,7 +324,7 @@ bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool /*_
 }
 
 //------------------------------------------------------------------------------
-void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, BOOL /*bNewTable*/)
+void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, sal_Bool /*bNewTable*/)
 {
     DBG_CHKTHIS(ORelationTableView,NULL);
     OSL_ENSURE(_rComposedName.getLength(),"There must be a table name supplied!");
@@ -342,7 +342,7 @@ void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const 
     //////////////////////////////////////////////////////////////////
     // Neue Datenstruktur in DocShell eintragen
     TTableWindowData::value_type pNewTabWinData(createTableWindowData( _rComposedName, rWinName,rWinName ));
-    pNewTabWinData->ShowAll(FALSE);
+    pNewTabWinData->ShowAll(sal_False);
 
     //////////////////////////////////////////////////////////////////
     // Neues Fenster in Fensterliste eintragen
@@ -397,7 +397,7 @@ void ORelationTableView::lookForUiActivities()
         aDlg.AddButton( ModuleRes(STR_QUERY_REL_EDIT), BUTTONID_OK, BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
         aDlg.AddButton( ModuleRes(STR_QUERY_REL_CREATE), BUTTONID_YES, 0);
         aDlg.AddButton(BUTTON_CANCEL,BUTTONID_CANCEL,0);
-        UINT16 nRet = aDlg.Execute();
+        sal_uInt16 nRet = aDlg.Execute();
         if( nRet == RET_CANCEL)
         {
             m_pCurrentlyTabConnData.reset();

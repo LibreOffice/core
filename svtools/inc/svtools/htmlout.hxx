@@ -45,7 +45,7 @@ struct HTMLOutEvent
 {
     const sal_Char *pBasicName;
     const sal_Char *pJavaName;
-    USHORT nEvent;
+    sal_uInt16 nEvent;
 };
 
 struct SVT_DLLPUBLIC HTMLOutContext
@@ -71,7 +71,7 @@ struct HTMLOutFuncs
                         String *pNonConvertableChars = 0);
 
     SVT_DLLPUBLIC static SvStream& Out_AsciiTag( SvStream&, const sal_Char* pStr,
-                                   BOOL bOn = TRUE,
+                                   sal_Bool bOn = sal_True,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252);
     SVT_DLLPUBLIC static SvStream& Out_Char( SvStream&, sal_Unicode cChar,
                         HTMLOutContext& rContext,
@@ -79,13 +79,13 @@ struct HTMLOutFuncs
     SVT_DLLPUBLIC static SvStream& Out_String( SvStream&, const String&,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                         String *pNonConvertableChars = 0 );
-    SVT_DLLPUBLIC static SvStream& Out_Hex( SvStream&, ULONG nHex, BYTE nLen,
+    SVT_DLLPUBLIC static SvStream& Out_Hex( SvStream&, sal_uLong nHex, sal_uInt8 nLen,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252 );
     SVT_DLLPUBLIC static SvStream& Out_Color( SvStream&, const Color&,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252 );
     SVT_DLLPUBLIC static SvStream& Out_ImageMap( SvStream&, const String&, const ImageMap&, const String&,
                                    const HTMLOutEvent *pEventTable,
-                                   BOOL bOutStarBasic,
+                                   sal_Bool bOutStarBasic,
                                    const sal_Char *pDelim = 0,
                                    const sal_Char *pIndentArea = 0,
                                    const sal_Char *pIndentMap = 0,
@@ -107,18 +107,18 @@ struct HTMLOutFuncs
     // der 3. Parameter ist ein Array von HTMLOutEvents, das mit einem
     // nur aus 0 bestehen Eintrag terminiert ist.
     SVT_DLLPUBLIC static SvStream& Out_Events( SvStream&, const SvxMacroTableDtor&,
-                                 const HTMLOutEvent*, BOOL bOutStarBasic,
+                                 const HTMLOutEvent*, sal_Bool bOutStarBasic,
                         rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                         String *pNonConvertableChars = 0 );
 
     // <TD SDVAL="..." SDNUM="...">
     SVT_DLLPUBLIC static ByteString&    CreateTableDataOptionsValNum( ByteString& aStrTD,
-                BOOL bValue, double fVal, ULONG nFormat,
+                sal_Bool bValue, double fVal, sal_uLong nFormat,
                 SvNumberFormatter& rFormatter,
                 rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
                 String *pNonConvertableChars = 0 );
 
-    SVT_DLLPUBLIC static BOOL PrivateURLToInternalImg( String& rURL );
+    SVT_DLLPUBLIC static sal_Bool PrivateURLToInternalImg( String& rURL );
 };
 
 #endif

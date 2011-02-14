@@ -64,7 +64,7 @@ using namespace xmloff::token;
 //------------------------------------------------------------------
 
 ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) :
@@ -121,7 +121,7 @@ ScXMLTableRowContext::~ScXMLTableRowContext()
 {
 }
 
-SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -238,7 +238,7 @@ void ScXMLTableRowContext::EndElement()
 }
 
 ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -281,7 +281,7 @@ ScXMLTableRowsContext::~ScXMLTableRowsContext()
 {
 }
 
-SvXMLImportContext *ScXMLTableRowsContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLTableRowsContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )

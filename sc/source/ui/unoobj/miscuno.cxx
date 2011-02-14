@@ -162,7 +162,7 @@ sal_Bool ScUnoHelpFunctions::GetBoolFromAny( const uno::Any& aAny )
 {
     if ( aAny.getValueTypeClass() == uno::TypeClass_BOOLEAN )
         return *(sal_Bool*)aAny.getValue();
-    return FALSE;
+    return sal_False;
 }
 
 //  static
@@ -301,7 +301,7 @@ sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const ::rtl::OUString& Se
 //UNUSED2008-05
 //UNUSED2008-05  sal_Bool SAL_CALL ScEmptyEnumerationAccess::hasElements() throw(uno::RuntimeException)
 //UNUSED2008-05  {
-//UNUSED2008-05      return FALSE;
+//UNUSED2008-05      return sal_False;
 //UNUSED2008-05  }
 
 //------------------------------------------------------------------------
@@ -319,7 +319,7 @@ sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const ::rtl::OUString& Se
 //UNUSED2008-05  sal_Bool SAL_CALL ScEmptyEnumeration::hasMoreElements() throw(uno::RuntimeException)
 //UNUSED2008-05  {
 //UNUSED2008-05      ScUnoGuard aGuard;
-//UNUSED2008-05      return FALSE;
+//UNUSED2008-05      return sal_False;
 //UNUSED2008-05  }
 //UNUSED2008-05
 //UNUSED2008-05  uno::Any SAL_CALL ScEmptyEnumeration::nextElement() throw(container::NoSuchElementException,

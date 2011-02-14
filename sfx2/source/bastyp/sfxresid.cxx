@@ -39,7 +39,7 @@
 
 static ResMgr* pMgr=NULL;
 
-SfxResId::SfxResId( USHORT nId ) :
+SfxResId::SfxResId( sal_uInt16 nId ) :
 
     ResId( nId, *GetResMgr() )
 {
@@ -51,7 +51,7 @@ SfxResId::SfxResId( USHORT nId ) :
 //
 //============================================================================
 
-SfxSimpleResId::SfxSimpleResId(USHORT nID):
+SfxSimpleResId::SfxSimpleResId(sal_uInt16 nID):
     m_sText( SFX_APP()->GetSimpleResManager()->ReadString(nID) )
 {}
 

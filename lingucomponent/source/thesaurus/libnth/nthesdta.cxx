@@ -54,10 +54,10 @@ namespace linguistic
 
 Meaning::Meaning(
 #if 0
-            const OUString &rTerm, INT16 nLang,
+            const OUString &rTerm, sal_Int16 nLang,
             const PropertyHelper_Thes &rHelper ) :
 #else
-            const OUString &rTerm, INT16 nLang) :
+            const OUString &rTerm, sal_Int16 nLang) :
 #endif
 
     aSyn        ( Sequence< OUString >(1) ),

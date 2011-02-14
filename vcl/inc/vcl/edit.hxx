@@ -76,11 +76,11 @@ private:
     XubString           maRedoText;
     long                mnXOffset;
     Selection           maSelection;
-    USHORT              mnAlign;
+    sal_uInt16              mnAlign;
     xub_StrLen          mnMaxTextLen;
     AutocompleteAction  meAutocompleteAction;
     xub_Unicode         mcEchoChar;
-    BOOL                mbModified:1,
+    sal_Bool                mbModified:1,
                         mbInternModified:1,
                         mbReadOnly:1,
                         mbInsertMode:1,
@@ -100,19 +100,19 @@ private:
     SAL_DLLPRIVATE XubString   ImplGetText() const;
     SAL_DLLPRIVATE void        ImplRepaint( xub_StrLen nStart = 0, xub_StrLen nEnd = STRING_LEN, bool bLayout = false );
     SAL_DLLPRIVATE void        ImplInvalidateOrRepaint( xub_StrLen nStart = 0, xub_StrLen nEnd = STRING_LEN );
-    SAL_DLLPRIVATE void        ImplDelete( const Selection& rSelection, BYTE nDirection, BYTE nMode );
+    SAL_DLLPRIVATE void        ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uInt8 nMode );
     SAL_DLLPRIVATE void        ImplSetText( const XubString& rStr, const Selection* pNewSelection = 0 );
     SAL_DLLPRIVATE void        ImplInsertText( const XubString& rStr, const Selection* pNewSelection = 0, sal_Bool bIsUserInput = sal_False );
     SAL_DLLPRIVATE String      ImplGetValidString( const String& rString ) const;
     SAL_DLLPRIVATE void        ImplClearBackground( long nXStart, long nXEnd );
-    SAL_DLLPRIVATE void        ImplShowCursor( BOOL bOnlyIfVisible = TRUE );
+    SAL_DLLPRIVATE void        ImplShowCursor( sal_Bool bOnlyIfVisible = sal_True );
     SAL_DLLPRIVATE void        ImplAlign();
     SAL_DLLPRIVATE void        ImplAlignAndPaint();
     SAL_DLLPRIVATE xub_StrLen  ImplGetCharPos( const Point& rWindowPos ) const;
-    SAL_DLLPRIVATE void        ImplSetCursorPos( xub_StrLen nChar, BOOL bSelect );
+    SAL_DLLPRIVATE void        ImplSetCursorPos( xub_StrLen nChar, sal_Bool bSelect );
     SAL_DLLPRIVATE void        ImplShowDDCursor();
     SAL_DLLPRIVATE void        ImplHideDDCursor();
-    SAL_DLLPRIVATE BOOL        ImplHandleKeyEvent( const KeyEvent& rKEvt );
+    SAL_DLLPRIVATE sal_Bool        ImplHandleKeyEvent( const KeyEvent& rKEvt );
     SAL_DLLPRIVATE void        ImplCopyToSelectionClipboard();
     SAL_DLLPRIVATE void        ImplCopy( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard );
     SAL_DLLPRIVATE void        ImplPaste( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard );
@@ -126,9 +126,9 @@ protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void        ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits     ImplInitStyle( WinBits nStyle );
-    SAL_DLLPRIVATE void        ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+    SAL_DLLPRIVATE void        ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     SAL_DLLPRIVATE void        ImplLoadRes( const ResId& rResId );
-    SAL_DLLPRIVATE void        ImplSetSelection( const Selection& rSelection, BOOL bPaint = TRUE );
+    SAL_DLLPRIVATE void        ImplSetSelection( const Selection& rSelection, sal_Bool bPaint = sal_True );
     SAL_DLLPRIVATE int         ImplGetNativeControlType();
     static SAL_DLLPRIVATE void ImplInvalidateOutermostBorder( Window* pWin );
 
@@ -164,7 +164,7 @@ public:
     virtual void        KeyInput( const KeyEvent& rKEvt );
     virtual void        Paint( const Rectangle& rRect );
     virtual void        Resize();
-    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void        GetFocus();
     virtual void        LoseFocus();
     virtual void        Tracking( const TrackingEvent& rTEvt );
@@ -176,24 +176,24 @@ public:
     virtual void        Modify();
     virtual void        UpdateData();
 
-    static BOOL         IsCharInput( const KeyEvent& rKEvt );
+    static sal_Bool         IsCharInput( const KeyEvent& rKEvt );
 
     virtual void        SetModifyFlag();
     virtual void        ClearModifyFlag();
-    virtual BOOL        IsModified() const { return mpSubEdit ? mpSubEdit->mbModified : mbModified; }
+    virtual sal_Bool        IsModified() const { return mpSubEdit ? mpSubEdit->mbModified : mbModified; }
 
-    virtual void        EnableUpdateData( ULONG nTimeout = EDIT_UPDATEDATA_TIMEOUT );
+    virtual void        EnableUpdateData( sal_uLong nTimeout = EDIT_UPDATEDATA_TIMEOUT );
     virtual void        DisableUpdateData() { delete mpUpdateDataTimer; mpUpdateDataTimer = NULL; }
-    virtual ULONG       IsUpdateDataEnabled() const;
+    virtual sal_uLong       IsUpdateDataEnabled() const;
 
     void                SetEchoChar( xub_Unicode c );
     xub_Unicode         GetEchoChar() const { return mcEchoChar; }
 
-    virtual void        SetReadOnly( BOOL bReadOnly = TRUE );
-    virtual BOOL        IsReadOnly() const { return mbReadOnly; }
+    virtual void        SetReadOnly( sal_Bool bReadOnly = sal_True );
+    virtual sal_Bool        IsReadOnly() const { return mbReadOnly; }
 
-    void                SetInsertMode( BOOL bInsert );
-    BOOL                IsInsertMode() const;
+    void                SetInsertMode( sal_Bool bInsert );
+    sal_Bool                IsInsertMode() const;
 
     virtual void        SetMaxTextLen( xub_StrLen nMaxLen = EDIT_NOLIMIT );
     virtual xub_StrLen  GetMaxTextLen() const { return mnMaxTextLen; }
@@ -231,7 +231,7 @@ public:
 
     virtual Size        CalcMinimumSize() const;
     virtual Size        GetOptimalSize(WindowSizeType eType) const;
-    virtual Size        CalcSize( USHORT nChars ) const;
+    virtual Size        CalcSize( sal_uInt16 nChars ) const;
     virtual xub_StrLen  GetMaxVisChars() const;
 
     xub_StrLen          GetCharPos( const Point& rWindowPos ) const;
@@ -253,12 +253,12 @@ public:
     static Size GetMinimumEditSize();
 };
 
-inline ULONG Edit::IsUpdateDataEnabled() const
+inline sal_uLong Edit::IsUpdateDataEnabled() const
 {
     if ( mpUpdateDataTimer )
         return mpUpdateDataTimer->GetTimeout();
     else
-        return FALSE;
+        return sal_False;
 }
 
 #endif  // _SV_EDIT_HXX

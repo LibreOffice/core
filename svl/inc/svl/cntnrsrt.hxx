@@ -63,17 +63,17 @@
 public:                                                                     \
     using Container::Count;                                                 \
                                                                             \
-    ClassName( USHORT  InitSize, USHORT  ReSize ) :                         \
+    ClassName( sal_uInt16  InitSize, sal_uInt16  ReSize ) :                         \
         Container( CONTAINER_MAXBLOCKSIZE, InitSize, ReSize )   {}          \
                                                                             \
-    BOOL Insert( Type* pObj );                                              \
+    sal_Bool Insert( Type* pObj );                                              \
                                                                                \
-    Type *Remove( ULONG nPos )                                              \
+    Type *Remove( sal_uLong nPos )                                              \
         { return (Type *)Container::Remove( nPos ); }                       \
                                                                             \
     Type *Remove( Type* pObj );                                             \
                                                                                \
-    void DeleteAndDestroy( ULONG nPos )                                     \
+    void DeleteAndDestroy( sal_uLong nPos )                                     \
     {                                                                       \
         Type *pObj = Remove( nPos );                                        \
         if( pObj )                                                          \
@@ -83,15 +83,15 @@ public:                                                                     \
     void DeleteAndDestroy()                                                 \
         { while( Count() ) DeleteAndDestroy( 0 ); }                         \
                                                                             \
-    Type* GetObject( ULONG nPos ) const                                     \
+    Type* GetObject( sal_uLong nPos ) const                                     \
         { return (Type *)Container::GetObject( nPos ); }                    \
                                                                             \
-    Type* operator[]( ULONG nPos ) const                                    \
+    Type* operator[]( sal_uLong nPos ) const                                    \
         { return GetObject(nPos); }                                         \
                                                                             \
-    BOOL Seek_Entry( const Type *pObj, ULONG* pPos ) const;                 \
+    sal_Bool Seek_Entry( const Type *pObj, sal_uLong* pPos ) const;                 \
                                                                             \
-    ULONG GetPos( const Type* pObj ) const;                                 \
+    sal_uLong GetPos( const Type* pObj ) const;                                 \
 
 
 #define DECLARE_CONTAINER_SORT( ClassName, Type )                           \
@@ -111,10 +111,10 @@ class ClassName : private Container                                         \
 
 
 #define IMPL_CONTAINER_SORT( ClassName, Type, SortFunc )                    \
-BOOL ClassName::Insert( Type *pObj )                                        \
+sal_Bool ClassName::Insert( Type *pObj )                                        \
 {                                                                           \
-    ULONG nPos;                                                             \
-    BOOL bExist = Seek_Entry( pObj, &nPos );                                \
+    sal_uLong nPos;                                                             \
+    sal_Bool bExist = Seek_Entry( pObj, &nPos );                                \
     if( !bExist )                                                           \
         Container::Insert( pObj, nPos );                                    \
     return !bExist;                                                         \
@@ -122,25 +122,25 @@ BOOL ClassName::Insert( Type *pObj )                                        \
                                                                             \
 Type *ClassName::Remove( Type* pObj )                                       \
 {                                                                           \
-    ULONG nPos;                                                             \
+    sal_uLong nPos;                                                             \
     if( Seek_Entry( pObj, &nPos ) )                                         \
         return Remove( nPos );                                              \
     else                                                                    \
         return 0;                                                           \
 }                                                                           \
                                                                             \
-ULONG ClassName::GetPos( const Type* pObj ) const                           \
+sal_uLong ClassName::GetPos( const Type* pObj ) const                           \
 {                                                                           \
-    ULONG nPos;                                                             \
+    sal_uLong nPos;                                                             \
     if( Seek_Entry( pObj, &nPos ) )                                         \
         return nPos;                                                        \
     else                                                                    \
         return CONTAINER_ENTRY_NOTFOUND;                                    \
 }                                                                           \
                                                                             \
-BOOL ClassName::Seek_Entry( const Type* pObj, ULONG* pPos ) const           \
+sal_Bool ClassName::Seek_Entry( const Type* pObj, sal_uLong* pPos ) const           \
 {                                                                           \
-    register ULONG nO  = Count(),                                           \
+    register sal_uLong nO  = Count(),                                           \
             nM,                                                             \
             nU = 0;                                                         \
     if( nO > 0 )                                                            \
@@ -154,21 +154,21 @@ BOOL ClassName::Seek_Entry( const Type* pObj, ULONG* pPos ) const           \
             if( 0 == nCmp )                                                 \
             {                                                               \
                 if( pPos ) *pPos = nM;                                      \
-                return TRUE;                                                \
+                return sal_True;                                                \
             }                                                               \
             else if( nCmp < 0 )                                             \
                 nU = nM + 1;                                                \
             else if( nM == 0 )                                              \
             {                                                               \
                 if( pPos ) *pPos = nU;                                      \
-                return FALSE;                                               \
+                return sal_False;                                               \
             }                                                               \
             else                                                            \
                 nO = nM - 1;                                                \
         }                                                                   \
     }                                                                       \
     if( pPos ) *pPos = nU;                                                  \
-    return FALSE;                                                           \
+    return sal_False;                                                           \
 }                                                                           \
 
 #endif

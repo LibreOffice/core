@@ -88,13 +88,13 @@ class HyphenatorDispatcher :
             buildHyphWord( const rtl::OUString rOrigWord,
                 const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XDictionaryEntry> &xEntry,
-                INT16 nLang, INT16 nMaxLeading );
+                sal_Int16 nLang, sal_Int16 nMaxLeading );
 
     com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XPossibleHyphens >
             buildPossHyphens( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::linguistic2::XDictionaryEntry > &xEntry,
-                    INT16 nLanguage );
+                    sal_Int16 nLanguage );
 
 public:
     HyphenatorDispatcher( LngSvcMgr &rLngSvcMgr );

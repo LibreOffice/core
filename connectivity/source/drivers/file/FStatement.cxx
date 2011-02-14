@@ -743,7 +743,7 @@ void OStatement_Base::ParseAssignValues(const ::std::vector< String>& aColumnNam
     else if (SQL_ISTOKEN(pRow_Value_Constructor_Elem,NULL))
     {
         // NULL setzen
-        SetAssignValue(aColumnName, String(), TRUE);
+        SetAssignValue(aColumnName, String(), sal_True);
     }
     else if (SQL_ISRULE(pRow_Value_Constructor_Elem,parameter))
         parseParamterElem(aColumnName,pRow_Value_Constructor_Elem);
@@ -756,8 +756,8 @@ void OStatement_Base::ParseAssignValues(const ::std::vector< String>& aColumnNam
 //------------------------------------------------------------------
 void OStatement_Base::SetAssignValue(const String& aColumnName,
                                    const String& aValue,
-                                   BOOL bSetNull,
-                                   UINT32 nParameter)
+                                   sal_Bool bSetNull,
+                                   sal_uInt32 nParameter)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "OStatement_Base::SetAssignValue" );
     Reference<XPropertySet> xCol;

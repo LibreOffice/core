@@ -96,9 +96,9 @@ static String impl_getSvtResString( sal_uInt32 nId )
     return aRet;
 }
 
-BOOL InsertObjectDialog_Impl::IsCreateNew() const
+sal_Bool InsertObjectDialog_Impl::IsCreateNew() const
 {
-    return FALSE;
+    return sal_False;
 }
 
 uno::Reference< io::XInputStream > InsertObjectDialog_Impl::GetIconIfIconified( ::rtl::OUString* /*pGraphicMediaType*/ )
@@ -224,7 +224,7 @@ SvInsertOleDlg::SvInsertOleDlg
     Link aLink( LINK( this, SvInsertOleDlg, RadioHdl ) );
     aRbNewObject.SetClickHdl( aLink );
     aRbObjectFromfile.SetClickHdl( aLink );
-    aRbNewObject.Check( TRUE );
+    aRbNewObject.Check( sal_True );
     RadioHdl( NULL );
 }
 
@@ -241,10 +241,10 @@ short SvInsertOleDlg::Execute()
 
     // fill listbox and select default
     ListBox& rBox = GetObjectTypes();
-    rBox.SetUpdateMode( FALSE );
-    for ( ULONG i = 0; i < m_pServers->Count(); i++ )
+    rBox.SetUpdateMode( sal_False );
+    for ( sal_uLong i = 0; i < m_pServers->Count(); i++ )
         rBox.InsertEntry( (*m_pServers)[i].GetHumanName() );
-    rBox.SetUpdateMode( TRUE );
+    rBox.SetUpdateMode( sal_True );
     SelectDefault();
     ::rtl::OUString aName;
 
@@ -252,8 +252,8 @@ short SvInsertOleDlg::Execute()
     if ( m_xStorage.is() && ( nRet = Dialog::Execute() ) == RET_OK )
     {
         String aFileName;
-        BOOL bLink = FALSE;
-        BOOL bCreateNew = IsCreateNew();
+        sal_Bool bLink = sal_False;
+        sal_Bool bCreateNew = IsCreateNew();
         if ( bCreateNew )
         {
             // create and insert new embedded object
@@ -472,7 +472,7 @@ SvInsertPlugInDialog::~SvInsertPlugInDialog()
 
 static void Plugin_ImplFillCommandSequence( const String& aCommands, uno::Sequence< beans::PropertyValue >& aCommandSequence )
 {
-    USHORT nEaten;
+    sal_uInt16 nEaten;
     SvCommandList aLst;
     aLst.AppendCommands( aCommands, &nEaten );
 
@@ -642,7 +642,7 @@ short SvInsertAppletDialog::Execute()
     m_aClass.Erase();
     m_aCommands.Erase();
 
-    BOOL bOK = FALSE;
+    sal_Bool bOK = sal_False;
     uno::Reference < beans::XPropertySet > xSet;
     if ( m_xObj.is() )
     {
@@ -669,7 +669,7 @@ short SvInsertAppletDialog::Execute()
 
             String aText( CUI_RES( STR_EDIT_APPLET ) );
             SetText( aText );
-            bOK = TRUE;
+            bOK = sal_True;
         }
         catch ( uno::Exception& )
         {
@@ -698,7 +698,7 @@ short SvInsertAppletDialog::Execute()
         {
             try
             {
-                BOOL bIPActive = m_xObj->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE;
+                sal_Bool bIPActive = m_xObj->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE;
                 if ( bIPActive )
                     m_xObj->changeState( embed::EmbedStates::RUNNING );
 
@@ -825,7 +825,7 @@ SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( Window *pParent, con
 short SfxInsertFloatingFrameDialog::Execute()
 {
     short nRet = RET_OK;
-    BOOL bOK = FALSE;
+    sal_Bool bOK = sal_False;
     uno::Reference < beans::XPropertySet > xSet;
     if ( m_xObj.is() )
     {
@@ -848,10 +848,10 @@ short SfxInsertFloatingFrameDialog::Execute()
 
             if ( nSize == SIZE_NOT_SET )
             {
-                aCBMarginWidthDefault.Check( TRUE );
+                aCBMarginWidthDefault.Check( sal_True );
                 aNMMarginWidth.SetText( String::CreateFromInt32( DEFAULT_MARGIN_WIDTH )  );
-                aFTMarginWidth.Enable( FALSE );
-                aNMMarginWidth.Enable( FALSE );
+                aFTMarginWidth.Enable( sal_False );
+                aNMMarginWidth.Enable( sal_False );
             }
             else
                 aNMMarginWidth.SetText( String::CreateFromInt32( nSize ) );
@@ -861,17 +861,17 @@ short SfxInsertFloatingFrameDialog::Execute()
 
             if ( nSize == SIZE_NOT_SET )
             {
-                aCBMarginHeightDefault.Check( TRUE );
+                aCBMarginHeightDefault.Check( sal_True );
                 aNMMarginHeight.SetText( String::CreateFromInt32( DEFAULT_MARGIN_HEIGHT )  );
-                aFTMarginHeight.Enable( FALSE );
-                aNMMarginHeight.Enable( FALSE );
+                aFTMarginHeight.Enable( sal_False );
+                aNMMarginHeight.Enable( sal_False );
             }
             else
                 aNMMarginHeight.SetText( String::CreateFromInt32( nSize ) );
 
-            BOOL bScrollOn = FALSE;
-            BOOL bScrollOff = FALSE;
-            BOOL bScrollAuto = FALSE;
+            sal_Bool bScrollOn = sal_False;
+            sal_Bool bScrollOff = sal_False;
+            sal_Bool bScrollAuto = sal_False;
 
             sal_Bool bSet = sal_False;
             aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll") );
@@ -884,7 +884,7 @@ short SfxInsertFloatingFrameDialog::Execute()
                 bScrollOff = !bSet;
             }
             else
-                bScrollAuto = TRUE;
+                bScrollAuto = sal_True;
 
             aRBScrollingOn.Check( bScrollOn );
             aRBScrollingOff.Check( bScrollOff );
@@ -901,8 +901,8 @@ short SfxInsertFloatingFrameDialog::Execute()
                 aRBFrameBorderOff.Check( !bSet );
             }
 
-            SetUpdateMode( TRUE );
-            bOK = TRUE;
+            SetUpdateMode( sal_True );
+            bOK = sal_True;
         }
         catch ( uno::Exception& )
         {
@@ -942,7 +942,7 @@ short SfxInsertFloatingFrameDialog::Execute()
         {
             try
             {
-                BOOL bIPActive = m_xObj->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE;
+                sal_Bool bIPActive = m_xObj->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE;
                 if ( bIPActive )
                     m_xObj->changeState( embed::EmbedStates::RUNNING );
 

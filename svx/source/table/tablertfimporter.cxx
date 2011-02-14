@@ -62,7 +62,7 @@ struct RTFCellDefault
 {
     SfxItemSet          maItemSet;
     sal_Int32           mnCol;
-    USHORT              mnTwips;         // right border of the cell
+    sal_uInt16              mnTwips;         // right border of the cell
     sal_Int32           mnColSpan;   // MergeCell if >1, merged cells if 0
 
     RTFCellDefault( SfxItemPool* pPool ) : maItemSet( *pPool ), mnCol(0), mnTwips(0 ), mnColSpan(1) {}
@@ -119,7 +119,7 @@ private:
     sal_Int32       mnLastWidth;
     bool            mbNewDef;
 
-    USHORT          mnStartPara;
+    sal_uInt16          mnStartPara;
 
     sal_Int32       mnColCnt;
     sal_Int32       mnRowCnt;
@@ -151,7 +151,7 @@ SdrTableRTFParser::SdrTableRTFParser( SdrTableObj& rTableObj )
 , mpDefMerge( 0 )
 , mxTable( rTableObj.getTable() )
 {
-    mpOutliner->SetUpdateMode(TRUE);
+    mpOutliner->SetUpdateMode(sal_True);
     mpOutliner->SetStyleSheet( 0, mrTableObj.GetStyleSheet() );
     mpInsDefault = new RTFCellDefault( &mrItemPool );
 }
@@ -282,16 +282,16 @@ void SdrTableRTFParser::FillTable()
                 if( xCell.is() && xCellInfo.get() )
                 {
                     const SfxPoolItem *pPoolItem = 0;
-                    if( xCellInfo->maItemSet.GetItemState(SDRATTR_TABLE_BORDER,FALSE,&pPoolItem)==SFX_ITEM_SET)
+                    if( xCellInfo->maItemSet.GetItemState(SDRATTR_TABLE_BORDER,sal_False,&pPoolItem)==SFX_ITEM_SET)
                         xCell->SetMergedItem( *pPoolItem );
 
                     String sDebug = mpOutliner->GetText( mpOutliner->GetParagraph( xCellInfo->mnStartPara ), xCellInfo->mnParaCount );
 
-                    OutlinerParaObject* pTextObject = mpOutliner->CreateParaObject( (USHORT)xCellInfo->mnStartPara, (USHORT)xCellInfo->mnParaCount );
+                    OutlinerParaObject* pTextObject = mpOutliner->CreateParaObject( (sal_uInt16)xCellInfo->mnStartPara, (sal_uInt16)xCellInfo->mnParaCount );
                     if( pTextObject )
                     {
                         SdrOutliner& rOutliner=mrTableObj.ImpGetDrawOutliner();
-                        rOutliner.SetUpdateMode(TRUE);
+                        rOutliner.SetUpdateMode(sal_True);
                         rOutliner.SetText( *pTextObject );
                         mrTableObj.NbcSetOutlinerParaObjectForText( rOutliner.CreateParaObject(), xCell.get() );
                         delete pTextObject;
@@ -316,7 +316,7 @@ void SdrTableRTFParser::NewCellRow()
 {
     if( mbNewDef )
     {
-        mbNewDef = FALSE;
+        mbNewDef = sal_False;
 
         maRows.push_back( RTFColumnVectorPtr( new RTFColumnVector() ) );
     }
@@ -373,7 +373,7 @@ void SdrTableRTFParser::ProcToken( ImportInfo* pInfo )
         break;
         case RTF_CELLX:         // closes cell default
         {
-            mbNewDef = TRUE;
+            mbNewDef = sal_True;
             mpInsDefault->mnCol = mnColCnt;
             maDefaultList.push_back( boost::shared_ptr< RTFCellDefault >( mpInsDefault ) );
 
@@ -427,10 +427,10 @@ void SdrTableRTFParser::ProcToken( ImportInfo* pInfo )
             switch ( pInfo->nToken & ~(0xff | RTF_TABLEDEF) )
             {
                 case RTF_SHADINGDEF:
-//                  ((SvxRTFParser*)pInfo->pParser)->ReadBackgroundAttr(pInfo->nToken, mpInsDefault->maItemSet, TRUE );
+//                  ((SvxRTFParser*)pInfo->pParser)->ReadBackgroundAttr(pInfo->nToken, mpInsDefault->maItemSet, sal_True );
                 break;
                 case RTF_BRDRDEF:
-                    ((SvxRTFParser*)pInfo->pParser)->ReadBorderAttr(pInfo->nToken, mpInsDefault->maItemSet, TRUE );
+                    ((SvxRTFParser*)pInfo->pParser)->ReadBorderAttr(pInfo->nToken, mpInsDefault->maItemSet, sal_True );
                 break;
             }
         }

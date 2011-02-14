@@ -177,7 +177,7 @@ namespace rptui
     public:
         TYPEINFO();
         OCommentUndoAction( SdrModel& rMod
-                            ,USHORT nCommentID);
+                            ,sal_uInt16 nCommentID);
         virtual ~OCommentUndoAction();
 
         virtual UniString   GetComment() const { return m_strComment; }
@@ -207,7 +207,7 @@ namespace rptui
                             ,Action _eAction
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > _xContainer
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xElem
-                            ,USHORT _nCommentId);
+                            ,sal_uInt16 _nCommentId);
         virtual ~OUndoContainerAction();
 
         virtual void Undo();
@@ -233,7 +233,7 @@ namespace rptui
                                 ,OReportHelper> _pMemberFunction
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >& _xReport
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xElem
-                            ,USHORT _nCommentId);
+                            ,sal_uInt16 _nCommentId);
 
     protected:
         virtual void    implReInsert( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );
@@ -255,7 +255,7 @@ namespace rptui
                                             ,OGroupHelper> _pMemberFunction
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XGroup >& _xGroup
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& xElem
-                            ,USHORT _nCommentId);
+                            ,sal_uInt16 _nCommentId);
 
     protected:
         virtual void    implReInsert( ) SAL_THROW( ( ::com::sun::star::uno::Exception ) );

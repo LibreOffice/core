@@ -195,7 +195,7 @@ class LoadEnv : private ThreadHelpBase
 
         /** @short  it indicates, that the member m_xTargetFrame was new created for this
                     load request and must be closed in case loading (not handling!)
-                    operation failed. The default value is FALSE!
+                    operation failed. The default value is sal_False!
          */
         sal_Bool m_bCloseFrameOnError;
 
@@ -203,7 +203,7 @@ class LoadEnv : private ThreadHelpBase
                     in combination with the m_sTarget value "_self") was suspended.
                     Normaly it will be replaced by the new loaded document. But in case
                     loading (not handling!) failed, it must be reactivated.
-                    The default value is FALSE!
+                    The default value is sal_False!
          */
         sal_Bool m_bReactivateControllerOnError;
 
@@ -369,8 +369,8 @@ class LoadEnv : private ThreadHelpBase
                     specify a timeout in [ms].
                     A value 0 let it wait forever!
 
-            @return TRUE if the started load process could be finished in time;
-                    FALSE if the specified time was over.
+            @return sal_True if the started load process could be finished in time;
+                    sal_False if the specified time was over.
 
             @throw  ... currently not used :-)
 
@@ -653,10 +653,10 @@ class LoadEnv : private ThreadHelpBase
                     points to the container window of a frame.
 
             @param  bForceToFront
-                    if it's set to FALSE ... showing of the window is done more intelligent.
+                    if it's set to sal_False ... showing of the window is done more intelligent.
                     setVisible() is called only if the window was not shown before.
                     This mode is needed by b) and c)
-                    If it's set to TRUE ... both actions has to be done: setVisible(), toFront()!
+                    If it's set to sal_True ... both actions has to be done: setVisible(), toFront()!
                     This mode is needed by a)
          */
         void impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
@@ -672,8 +672,8 @@ class LoadEnv : private ThreadHelpBase
                     the frame, which should be checked.
 
             @return [sal_Bool]
-                    TRUE if this frame is already used for loading,
-                    FALSE otherwise.
+                    sal_True if this frame is already used for loading,
+                    sal_False otherwise.
          */
         sal_Bool impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::frame::XFrame >& xFrame) const;
 

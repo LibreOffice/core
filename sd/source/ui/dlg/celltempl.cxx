@@ -56,7 +56,7 @@
 \************************************************************************/
 
 SdPresCellTemplateDlg::SdPresCellTemplateDlg( SdrModel* pModel, Window* pParent, SfxStyleSheetBase& rStyleBase )
-: SfxStyleDialog( pParent, SdResId(TAB_CELL_TEMPLATE), rStyleBase, FALSE )
+: SfxStyleDialog( pParent, SdResId(TAB_CELL_TEMPLATE), rStyleBase, sal_False )
 , mpColorTab( pModel->GetColorTable() )
 , mpGradientList( pModel->GetGradientList() )
 , mpHatchingList( pModel->GetHatchList() )
@@ -78,7 +78,7 @@ SdPresCellTemplateDlg::~SdPresCellTemplateDlg()
 
 // -----------------------------------------------------------------------
 
-void SdPresCellTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
+void SdPresCellTemplateDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     switch( nId )
     {

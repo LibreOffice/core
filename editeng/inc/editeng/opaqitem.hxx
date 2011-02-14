@@ -51,13 +51,13 @@ class EDITENG_DLLPUBLIC SvxOpaqueItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    SvxOpaqueItem( const USHORT nId , const BOOL bOpa = TRUE );
+    SvxOpaqueItem( const sal_uInt16 nId , const sal_Bool bOpa = sal_True );
     inline SvxOpaqueItem &operator=( const SvxOpaqueItem &rCpy );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
-    virtual SvStream&       Store(SvStream &, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -65,7 +65,7 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 };
 
-inline SvxOpaqueItem::SvxOpaqueItem( const USHORT nId, const BOOL bOpa )
+inline SvxOpaqueItem::SvxOpaqueItem( const sal_uInt16 nId, const sal_Bool bOpa )
     : SfxBoolItem( nId, bOpa )
 {}
 

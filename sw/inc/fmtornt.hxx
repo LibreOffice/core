@@ -39,7 +39,7 @@
 
 class IntlWrapper;
 
-#define IVER_VERTORIENT_REL ((USHORT)0x0001)
+#define IVER_VERTORIENT_REL ((sal_uInt16)0x0001)
 
 class SW_DLLPUBLIC SwFmtVertOrient: public SfxPoolItem
 {
@@ -60,8 +60,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     sal_Int16 GetVertOrient() const { return eOrient; }
     sal_Int16 GetRelationOrient() const { return eRelation; }
@@ -75,19 +75,19 @@ public:
 //SwFmtHoriOrient, wie und woran orientiert --
 //  sich der FlyFrm in der Hoizontalen ----------
 
-#define IVER_HORIORIENT_TOGGLE ((USHORT)0x0001)
-#define IVER_HORIORIENT_REL ((USHORT)0x0002)
+#define IVER_HORIORIENT_TOGGLE ((sal_uInt16)0x0001)
+#define IVER_HORIORIENT_REL ((sal_uInt16)0x0002)
 
 class SW_DLLPUBLIC SwFmtHoriOrient: public SfxPoolItem
 {
     SwTwips         nXPos;  //Enthaelt _immer_ die aktuelle RelPos.
     sal_Int16       eOrient;
     sal_Int16       eRelation;
-    BOOL            bPosToggle : 1; // auf geraden Seiten Position spiegeln
+    sal_Bool            bPosToggle : 1; // auf geraden Seiten Position spiegeln
 public:
     TYPEINFO();
     SwFmtHoriOrient( SwTwips nX = 0, sal_Int16 eHori = com::sun::star::text::HoriOrientation::NONE,
-        sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA, BOOL bPos = FALSE );
+        sal_Int16 eRel = com::sun::star::text::RelOrientation::PRINT_AREA, sal_Bool bPos = sal_False );
     inline SwFmtHoriOrient &operator=( const SwFmtHoriOrient &rCpy );
 
     // "pure virtual Methoden" vom SfxPoolItem
@@ -98,8 +98,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     sal_Int16 GetHoriOrient() const { return eOrient; }
     sal_Int16 GetRelationOrient() const { return eRelation; }
@@ -109,8 +109,8 @@ public:
     SwTwips GetPos() const { return nXPos; }
     void    SetPos( SwTwips nNew ) { nXPos = nNew; }
 
-    BOOL IsPosToggle() const { return bPosToggle; }
-    void SetPosToggle( BOOL bNew ) { bPosToggle = bNew; }
+    sal_Bool IsPosToggle() const { return bPosToggle; }
+    void SetPosToggle( sal_Bool bNew ) { bPosToggle = bNew; }
 };
 
 inline SwFmtVertOrient &SwFmtVertOrient::operator=( const SwFmtVertOrient &rCpy )
@@ -129,14 +129,14 @@ inline SwFmtHoriOrient &SwFmtHoriOrient::operator=( const SwFmtHoriOrient &rCpy 
     return *this;
 }
 
-inline const SwFmtVertOrient &SwAttrSet::GetVertOrient(BOOL bInP) const
+inline const SwFmtVertOrient &SwAttrSet::GetVertOrient(sal_Bool bInP) const
     { return (const SwFmtVertOrient&)Get( RES_VERT_ORIENT,bInP); }
-inline const SwFmtHoriOrient &SwAttrSet::GetHoriOrient(BOOL bInP) const
+inline const SwFmtHoriOrient &SwAttrSet::GetHoriOrient(sal_Bool bInP) const
     { return (const SwFmtHoriOrient&)Get( RES_HORI_ORIENT,bInP); }
 
-inline const SwFmtVertOrient &SwFmt::GetVertOrient(BOOL bInP) const
+inline const SwFmtVertOrient &SwFmt::GetVertOrient(sal_Bool bInP) const
     { return aSet.GetVertOrient(bInP); }
-inline const SwFmtHoriOrient &SwFmt::GetHoriOrient(BOOL bInP) const
+inline const SwFmtHoriOrient &SwFmt::GetHoriOrient(sal_Bool bInP) const
     { return aSet.GetHoriOrient(bInP); }
 
 #endif

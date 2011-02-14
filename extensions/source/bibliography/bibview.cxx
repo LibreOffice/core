@@ -222,9 +222,9 @@ namespace bib
             m_pGeneralPage->GrabFocus();
     }
 
-    BOOL BibView::HandleShortCutKey( const KeyEvent& rKeyEvent )
+    sal_Bool BibView::HandleShortCutKey( const KeyEvent& rKeyEvent )
     {
-        return m_pGeneralPage? m_pGeneralPage->HandleShortCutKey( rKeyEvent ) : FALSE;
+        return m_pGeneralPage? m_pGeneralPage->HandleShortCutKey( rKeyEvent ) : sal_False;
     }
 
 //.........................................................................

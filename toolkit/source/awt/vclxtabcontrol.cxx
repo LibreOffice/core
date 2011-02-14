@@ -134,7 +134,7 @@ TabControl *VCLXTabControl::getTabControl() const throw (uno::RuntimeException)
 sal_Int32 SAL_CALL VCLXTabControl::insertTab() throw (uno::RuntimeException)
 {
     TabControl *pTabControl = getTabControl();
-    USHORT id = sal::static_int_cast< USHORT >( mTabId++ );
+    sal_uInt16 id = sal::static_int_cast< sal_uInt16 >( mTabId++ );
     rtl::OUString title (RTL_CONSTASCII_USTRINGPARAM( "" ) );
     pTabControl->InsertPage( id, title.getStr(), TAB_APPEND );
     pTabControl->SetTabPage( id, new TabPage( pTabControl ) );
@@ -144,17 +144,17 @@ sal_Int32 SAL_CALL VCLXTabControl::insertTab() throw (uno::RuntimeException)
 void SAL_CALL VCLXTabControl::removeTab( sal_Int32 ID ) throw (uno::RuntimeException, IndexOutOfBoundsException)
 {
     TabControl *pTabControl = getTabControl();
-    if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( ID ) ) == NULL )
+    if ( pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >( ID ) ) == NULL )
         throw IndexOutOfBoundsException();
-    pTabControl->RemovePage( sal::static_int_cast< USHORT >( ID ) );
+    pTabControl->RemovePage( sal::static_int_cast< sal_uInt16 >( ID ) );
 }
 
 void SAL_CALL VCLXTabControl::activateTab( sal_Int32 ID ) throw (uno::RuntimeException, IndexOutOfBoundsException)
 {
     TabControl *pTabControl = getTabControl();
-    if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( ID ) ) == NULL )
+    if ( pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >( ID ) ) == NULL )
         throw IndexOutOfBoundsException();
-    pTabControl->SelectTabPage( sal::static_int_cast< USHORT >( ID ) );
+    pTabControl->SelectTabPage( sal::static_int_cast< sal_uInt16 >( ID ) );
 }
 
 sal_Int32 SAL_CALL VCLXTabControl::getActiveTabID() throw (uno::RuntimeException)
@@ -192,7 +192,7 @@ void SAL_CALL VCLXTabControl::removeTabListener( const uno::Reference< awt::XTab
 void SAL_CALL VCLXTabControl::setTabProps( sal_Int32 ID, const uno::Sequence< NamedValue >& Properties ) throw (uno::RuntimeException, IndexOutOfBoundsException)
 {
     TabControl *pTabControl = getTabControl();
-    if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( ID ) ) == NULL )
+    if ( pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >( ID ) ) == NULL )
         throw IndexOutOfBoundsException();
 
     for ( int i = 0; i < Properties.getLength(); i++ )
@@ -203,7 +203,7 @@ void SAL_CALL VCLXTabControl::setTabProps( sal_Int32 ID, const uno::Sequence< Na
         if ( name  == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ) )
         {
             rtl::OUString title = value.get<rtl::OUString>();
-            pTabControl->SetPageText( sal::static_int_cast< USHORT >( ID ), title.getStr() );
+            pTabControl->SetPageText( sal::static_int_cast< sal_uInt16 >( ID ), title.getStr() );
         }
     }
 }
@@ -212,7 +212,7 @@ uno::Sequence< NamedValue > SAL_CALL VCLXTabControl::getTabProps( sal_Int32 ID )
     throw (IndexOutOfBoundsException, uno::RuntimeException)
 {
     TabControl *pTabControl = getTabControl();
-    if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( ID ) ) == NULL )
+    if ( pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >( ID ) ) == NULL )
         throw IndexOutOfBoundsException();
 
 #define ADD_PROP( seq, i, name, val ) {                                \
@@ -223,8 +223,8 @@ uno::Sequence< NamedValue > SAL_CALL VCLXTabControl::getTabProps( sal_Int32 ID )
     }
 
     uno::Sequence< NamedValue > props( 2 );
-    ADD_PROP( props, 0, "Title", rtl::OUString( pTabControl->GetPageText( sal::static_int_cast< USHORT >( ID ) ) ) );
-    ADD_PROP( props, 1, "Position", pTabControl->GetPagePos( sal::static_int_cast< USHORT >( ID ) ) );
+    ADD_PROP( props, 0, "Title", rtl::OUString( pTabControl->GetPageText( sal::static_int_cast< sal_uInt16 >( ID ) ) ) );
+    ADD_PROP( props, 1, "Position", pTabControl->GetPagePos( sal::static_int_cast< sal_uInt16 >( ID ) ) );
 #undef ADD_PROP
     return props;
 }
@@ -235,7 +235,7 @@ void SAL_CALL VCLXTabControl::draw( sal_Int32 nX, sal_Int32 nY ) throw(uno::Runt
     ::vos::OGuard aGuard( GetMutex() );
 
     TabControl *pTabControl = getTabControl();
-    TabPage *pTabPage = pTabControl->GetTabPage( sal::static_int_cast< USHORT >(  getActiveTabID() ) );
+    TabPage *pTabPage = pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >(  getActiveTabID() ) );
     if ( pTabPage )
     {
         ::Point aPos( nX, nY );
@@ -409,8 +409,8 @@ void SAL_CALL VCLXTabControl::allocateArea (awt::Rectangle const &area)
 
             if ( active )
             {
-                ::Rectangle label_rect = pTabControl->GetTabBounds( sal::static_int_cast< USHORT >( i+1 ) );
-                ::Rectangle page_rect = pTabControl->GetTabPageBounds( sal::static_int_cast< USHORT >( i+1 ) );
+                ::Rectangle label_rect = pTabControl->GetTabBounds( sal::static_int_cast< sal_uInt16 >( i+1 ) );
+                ::Rectangle page_rect = pTabControl->GetTabPageBounds( sal::static_int_cast< sal_uInt16 >( i+1 ) );
 
                 awt::Rectangle childRect;
                 childRect.X = page_rect.Left();
@@ -443,7 +443,7 @@ awt::Size SAL_CALL VCLXTabControl::getMinimumSize()
         if ( child->mxChild.is() )
         {
             // set the title prop here...
-            pTabControl->SetPageText( sal::static_int_cast< USHORT >( i+1 ), child->maTitle.getStr() );
+            pTabControl->SetPageText( sal::static_int_cast< sal_uInt16 >( i+1 ), child->maTitle.getStr() );
 
             awt::Size childSize( child->mxChild->getMinimumSize() );
             childrenSize.Width = SAL_MAX( childSize.Width, childrenSize.Width );
@@ -483,7 +483,7 @@ void VCLXTabControl::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent 
         case VCLEVENT_TABPAGE_REMOVEDALL:
         case VCLEVENT_TABPAGE_PAGETEXTCHANGED:
         {
-            ULONG page = (ULONG) _rVclWindowEvent.GetData();
+            sal_uLong page = (sal_uLong) _rVclWindowEvent.GetData();
             for ( std::list< uno::Reference
                       < awt::XTabListener > >::iterator it
                       = mxTabListeners.begin(); it != mxTabListeners.end(); it++)
@@ -509,7 +509,7 @@ void VCLXTabControl::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent 
                     case VCLEVENT_TABPAGE_REMOVEDALL:
                         for ( int i = 1; i < mTabId; i++)
                         {
-                            if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( i ) ) )
+                            if ( pTabControl->GetTabPage( sal::static_int_cast< sal_uInt16 >( i ) ) )
                                 listener->removed( i );
                         }
                         break;

@@ -24,13 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-//============================================================================
-// Lokale  Resourcen
-//
-// (C) 1996 - 2000 Star Division GmbH, Hamburg, Germany
-// $Author: rt $ $Date: 2008-07-30 09:24:39 $ $Revision: 1.8 $
-// $Logfile:   T:/sfx2/source/inc/sfxlocal.hrv  $ $Workfile:   SFXLOCAL.HRC  $
-//----------------------------------------------------------------------------
+
+// local resources
+
 #ifndef _SFXLOCAL_HRC
 #define _SFXLOCAL_HRC
 

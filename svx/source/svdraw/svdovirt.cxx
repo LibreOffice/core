@@ -60,7 +60,7 @@ TYPEINIT1(SdrVirtObj,SdrObject);
 SdrVirtObj::SdrVirtObj(SdrObject& rNewObj):
     rRefObj(rNewObj)
 {
-    bVirtObj=TRUE; // Ja, ich bin ein virtuelles Objekt
+    bVirtObj=sal_True; // Ja, ich bin ein virtuelles Objekt
     rRefObj.AddReference(*this);
     bClosedObj=rRefObj.IsClosedObj();
 }
@@ -69,7 +69,7 @@ SdrVirtObj::SdrVirtObj(SdrObject& rNewObj, const Point& rAnchorPos):
     rRefObj(rNewObj)
 {
     aAnchor=rAnchorPos;
-    bVirtObj=TRUE; // Ja, ich bin ein virtuelles Objekt
+    bVirtObj=sal_True; // Ja, ich bin ein virtuelles Objekt
     rRefObj.AddReference(*this);
     bClosedObj=rRefObj.IsClosedObj();
 }
@@ -119,12 +119,12 @@ void SdrVirtObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rRefObj.TakeObjInfo(rInfo);
 }
 
-UINT32 SdrVirtObj::GetObjInventor() const
+sal_uInt32 SdrVirtObj::GetObjInventor() const
 {
     return rRefObj.GetObjInventor();
 }
 
-UINT16 SdrVirtObj::GetObjIdentifier() const
+sal_uInt16 SdrVirtObj::GetObjIdentifier() const
 {
     return rRefObj.GetObjIdentifier();
 }
@@ -197,7 +197,7 @@ void SdrVirtObj::TakeObjNamePlural(XubString& rName) const
 void operator +=(PolyPolygon& rPoly, const Point& rOfs)
 {
     if (rOfs.X()!=0 || rOfs.Y()!=0) {
-        USHORT i,j;
+        sal_uInt16 i,j;
         for (j=0; j<rPoly.Count(); j++) {
             Polygon aP1(rPoly.GetObject(j));
             for (i=0; i<aP1.GetSize(); i++) {

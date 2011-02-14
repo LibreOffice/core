@@ -310,7 +310,7 @@ IMPL_LINK(ScrollBarManager, VerticalScrollBarHandler, ScrollBar*, pScrollBar)
         mrSlideSorter.GetContentWindow()->SetVisibleXY(-1, nRelativePosition);
         mrSlideSorter.GetController().GetVisibleAreaManager().DeactivateCurrentSlideTracking();
     }
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -329,7 +329,7 @@ IMPL_LINK(ScrollBarManager, HorizontalScrollBarHandler, ScrollBar*, pScrollBar)
         mrSlideSorter.GetContentWindow()->SetVisibleXY(nRelativePosition, -1);
         mrSlideSorter.GetController().GetVisibleAreaManager().DeactivateCurrentSlideTracking();
     }
-    return TRUE;
+    return sal_True;
 }
 
 

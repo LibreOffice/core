@@ -87,9 +87,9 @@ EditRTFParser::EditRTFParser( SvStream& rIn, EditSelection aSel, SfxItemPool& rA
     SetInsPos( EditPosition( pImpEditEngine, &aCurSel ) );
 
     // Umwandeln der Twips-Werte...
-    SetCalcValue( TRUE );
+    SetCalcValue( sal_True );
     SetChkStyleAttr( pImpEE->GetStatus().DoImportRTFStyleSheets() );
-    SetNewDoc( FALSE );     // damit die Pool-Defaults nicht
+    SetNewDoc( sal_False );     // damit die Pool-Defaults nicht
                             // ueberschrieben werden...
     aEditMapMode = MapMode( pImpEE->GetRefDevice()->GetMapMode().GetMapUnit() );
 }
@@ -133,7 +133,7 @@ SvParserState __EXPORT EditRTFParser::CallParser()
     if ( nLastAction == ACTION_INSERTPARABRK )
     {
         ContentNode* pCurNode = aCurSel.Max().GetNode();
-        USHORT nPara = pImpEditEngine->GetEditDoc().GetPos( pCurNode );
+        sal_uInt16 nPara = pImpEditEngine->GetEditDoc().GetPos( pCurNode );
         ContentNode* pPrevNode = pImpEditEngine->GetEditDoc().SaveGetObject( nPara-1 );
         DBG_ASSERT( pPrevNode, "Ungueltiges RTF-Dokument ?!" );
         EditSelection aSel;
@@ -143,17 +143,17 @@ SvParserState __EXPORT EditRTFParser::CallParser()
     }
     EditPaM aEnd2PaM( aCurSel.Max() );
     //AddRTFDefaultValues( aStart2PaM, aEnd2PaM );
-    BOOL bOnlyOnePara = ( aEnd2PaM.GetNode() == aStart2PaM.GetNode() );
+    sal_Bool bOnlyOnePara = ( aEnd2PaM.GetNode() == aStart2PaM.GetNode() );
     // Den Brocken wieder einfuegen...
     // Problem: Absatzattribute duerfen ggf. nicht uebernommen werden
     // => Zeichenattribute machen.
 
-    BOOL bSpecialBackward = aStart1PaM.GetNode()->Len() ? FALSE : TRUE;
+    sal_Bool bSpecialBackward = aStart1PaM.GetNode()->Len() ? sal_False : sal_True;
     if ( bOnlyOnePara || aStart1PaM.GetNode()->Len() )
         pImpEditEngine->ParaAttribsToCharAttribs( aStart2PaM.GetNode() );
     aCurSel.Min() = pImpEditEngine->ImpConnectParagraphs(
         aStart1PaM.GetNode(), aStart2PaM.GetNode(), bSpecialBackward );
-    bSpecialBackward = aEnd1PaM.GetNode()->Len() ? TRUE : FALSE;
+    bSpecialBackward = aEnd1PaM.GetNode()->Len() ? sal_True : sal_False;
     // wenn bOnlyOnePara, dann ist der Node beim Connect verschwunden.
     if ( !bOnlyOnePara && aEnd1PaM.GetNode()->Len() )
         pImpEditEngine->ParaAttribsToCharAttribs( aEnd2PaM.GetNode() );
@@ -176,9 +176,9 @@ void EditRTFParser::AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& r
     SvxFontItem aFontItem( aDefFont.GetFamily(), aDefFont.GetName(),
                     aDefFont.GetStyleName(), aDefFont.GetPitch(), aDefFont.GetCharSet(), EE_CHAR_FONTINFO );
 
-    USHORT nStartPara = pImpEditEngine->GetEditDoc().GetPos( rStart.GetNode() );
-    USHORT nEndPara = pImpEditEngine->GetEditDoc().GetPos( rEnd.GetNode() );
-    for ( USHORT nPara = nStartPara; nPara <= nEndPara; nPara++ )
+    sal_uInt16 nStartPara = pImpEditEngine->GetEditDoc().GetPos( rStart.GetNode() );
+    sal_uInt16 nEndPara = pImpEditEngine->GetEditDoc().GetPos( rEnd.GetNode() );
+    for ( sal_uInt16 nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
         ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( nPara );
         DBG_ASSERT( pNode, "AddRTFDefaultValues - Kein Absatz ?!" );
@@ -195,12 +195,12 @@ void __EXPORT EditRTFParser::NextToken( int nToken )
     {
         case RTF_DEFF:
         {
-            nDefFont = USHORT(nTokenValue);
+            nDefFont = sal_uInt16(nTokenValue);
         }
         break;
         case RTF_DEFTAB:
         {
-            nDefTab = USHORT(nTokenValue);
+            nDefTab = sal_uInt16(nTokenValue);
         }
         break;
         case RTF_CELL:
@@ -287,7 +287,7 @@ void __EXPORT EditRTFParser::MovePos( int bForward )
 }
 
 void __EXPORT EditRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos,
-                                    USHORT& rCntPos )
+                                    sal_uInt16& rCntPos )
 {
     //    Gewollt ist: von der aktuellen Einfuegeposition den vorherigen
     //              Absatz bestimmen und von dem das Ende setzen.
@@ -295,7 +295,7 @@ void __EXPORT EditRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos,
     //              angewendet.
 
     ContentNode* pN = aCurSel.Max().GetNode();
-    USHORT nCurPara = pImpEditEngine->GetEditDoc().GetPos( pN );
+    sal_uInt16 nCurPara = pImpEditEngine->GetEditDoc().GetPos( pN );
     DBG_ASSERT( nCurPara != 0, "Absatz gleich 0: SetEnfPrevPara" );
     if ( nCurPara )
         nCurPara--;
@@ -305,7 +305,7 @@ void __EXPORT EditRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos,
     rCntPos = pPrevNode->Len();
 }
 
-int __EXPORT EditRTFParser::IsEndPara( SvxNodeIdx* pNd, USHORT nCnt ) const
+int __EXPORT EditRTFParser::IsEndPara( SvxNodeIdx* pNd, sal_uInt16 nCnt ) const
 {
     return ( nCnt == ( ((EditNodeIdx*)pNd)->GetNode()->Len()) );
 }
@@ -326,12 +326,12 @@ void __EXPORT EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     const MapUnit eSrcUnit  = aRTFMapMode.GetMapUnit();
     if (eDestUnit != eSrcUnit)
     {
-        USHORT aFntHeightIems[3] = { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL };
+        sal_uInt16 aFntHeightIems[3] = { EE_CHAR_FONTHEIGHT, EE_CHAR_FONTHEIGHT_CJK, EE_CHAR_FONTHEIGHT_CTL };
         for (int i = 0; i < 2; ++i)
         {
-            if (SFX_ITEM_SET == rSet.GetAttrSet().GetItemState( aFntHeightIems[i], FALSE, &pItem ))
+            if (SFX_ITEM_SET == rSet.GetAttrSet().GetItemState( aFntHeightIems[i], sal_False, &pItem ))
             {
-                UINT32 nHeight  = ((SvxFontHeightItem*)pItem)->GetHeight();
+                sal_uInt32 nHeight  = ((SvxFontHeightItem*)pItem)->GetHeight();
                 long nNewHeight;
                 nNewHeight = pImpEditEngine->GetRefDevice()->LogicToLogic( (long)nHeight, eSrcUnit, eDestUnit );
 
@@ -341,7 +341,7 @@ void __EXPORT EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
         }
     }
 
-    if( SFX_ITEM_SET == rSet.GetAttrSet().GetItemState( EE_CHAR_ESCAPEMENT, FALSE, &pItem ))
+    if( SFX_ITEM_SET == rSet.GetAttrSet().GetItemState( EE_CHAR_ESCAPEMENT, sal_False, &pItem ))
     {
         // die richtige
         long nEsc = ((SvxEscapementItem*)pItem)->GetEsc();
@@ -368,8 +368,8 @@ void __EXPORT EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 
     ContentNode* pSN = aStartPaM.GetNode();
     ContentNode* pEN = aEndPaM.GetNode();
-    USHORT nStartNode = pImpEditEngine->GetEditDoc().GetPos( pSN );
-    USHORT nEndNode = pImpEditEngine->GetEditDoc().GetPos( pEN );
+    sal_uInt16 nStartNode = pImpEditEngine->GetEditDoc().GetPos( pSN );
+    sal_uInt16 nEndNode = pImpEditEngine->GetEditDoc().GetPos( pEN );
     sal_Int16 nOutlLevel = 0xff;
 
     if ( rSet.StyleNo() && pImpEditEngine->GetStyleSheetPool() && pImpEditEngine->GetStatus().DoImportRTFStyleSheets() )
@@ -388,7 +388,7 @@ void __EXPORT EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 
     // Achtung: Selektion kann ueber mehrere Absaetze gehen.
     // Alle vollstaendigen Absaetze sind Absatzattribute...
-    for ( USHORT z = nStartNode+1; z < nEndNode; z++ )
+    for ( sal_uInt16 z = nStartNode+1; z < nEndNode; z++ )
     {
         DBG_ASSERT( pImpEditEngine->GetEditDoc().SaveGetObject( z ), "Node existiert noch nicht(RTF)" );
         pImpEditEngine->SetParaAttribs( z, rSet.GetAttrSet() );
@@ -426,7 +426,7 @@ void __EXPORT EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     // OutlLevel...
     if ( nOutlLevel != 0xff )
     {
-        for ( USHORT n = nStartNode; n <= nEndNode; n++ )
+        for ( sal_uInt16 n = nStartNode; n <= nEndNode; n++ )
         {
             ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( n );
             pNode->GetContentAttribs().GetItems().Put( SfxInt16Item( EE_PARA_OUTLLEVEL, nOutlLevel ) );
@@ -510,8 +510,8 @@ void EditRTFParser::ReadField()
 {
     // Aus SwRTFParser::ReadField()
     int _nOpenBrakets = 1;      // die erste wurde schon vorher erkannt
-    BOOL bFldInst = FALSE;
-    BOOL bFldRslt = FALSE;
+    sal_Bool bFldInst = sal_False;
+    sal_Bool bFldRslt = sal_False;
     String aFldInst;
     String aFldRslt;
 
@@ -524,8 +524,8 @@ void EditRTFParser::ReadField()
                 _nOpenBrakets--;
                 if ( _nOpenBrakets == 1 )
                 {
-                    bFldInst = FALSE;
-                    bFldRslt = FALSE;
+                    bFldInst = sal_False;
+                    bFldRslt = sal_False;
                 }
             }
             break;
@@ -536,10 +536,10 @@ void EditRTFParser::ReadField()
             case RTF_FIELD:     SkipGroup();
                                 break;
 
-            case RTF_FLDINST:   bFldInst = TRUE;
+            case RTF_FLDINST:   bFldInst = sal_True;
                                 break;
 
-            case RTF_FLDRSLT:   bFldRslt = TRUE;
+            case RTF_FLDRSLT:   bFldRslt = sal_True;
                                 break;
 
             case RTF_TEXTTOKEN:
@@ -601,7 +601,7 @@ void EditRTFParser::SkipGroup()
     SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
 }
 
-ULONG __EXPORT EditNodeIdx::GetIdx() const
+sal_uLong __EXPORT EditNodeIdx::GetIdx() const
 {
     return pImpEditEngine->GetEditDoc().GetPos( pNode );
 }
@@ -621,13 +621,13 @@ SvxNodeIdx* __EXPORT EditPosition::MakeNodeIdx() const
     return new EditNodeIdx( pImpEditEngine, pCurSel->Max().GetNode() );
 }
 
-ULONG __EXPORT EditPosition::GetNodeIdx() const
+sal_uLong __EXPORT EditPosition::GetNodeIdx() const
 {
     ContentNode* pN = pCurSel->Max().GetNode();
     return pImpEditEngine->GetEditDoc().GetPos( pN );
 }
 
-USHORT __EXPORT EditPosition::GetCntIdx() const
+sal_uInt16 __EXPORT EditPosition::GetCntIdx() const
 {
     return pCurSel->Max().GetIndex();
 }

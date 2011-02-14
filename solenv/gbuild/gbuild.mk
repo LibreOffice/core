@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2009 by Sun Microsystems, Inc.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,12 +14,12 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.	If not, see
+# version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
@@ -62,6 +62,11 @@ endef
 
 COMMA :=,
 
+# optional extensions that should never be essential
+ifneq ($(wildcard $(GBUILDDIR)/extensions/pre_*.mk),)
+include $(wildcard $(GBUILDDIR)/extensions/pre_*.mk)
+endif
+
 include $(GBUILDDIR)/Output.mk
 
 # BuildDirs uses the Output functions already
@@ -95,7 +100,7 @@ gb_ENABLE_PCH := $(false)
 endif
 
 # for clean, setuplocal and removelocal goals we switch off dependencies
-ifneq ($(filter clean setuplocal removelocal,$(MAKECMDGOALS)),)
+ifneq ($(filter clean setuplocal removelocal showdeliverables,$(MAKECMDGOALS)),)
 gb_FULLDEPS := $(false)
 else
 gb_FULLDEPS := $(true)
@@ -129,6 +134,8 @@ endif
 endif
 endif
 endif
+
+include $(GBUILDDIR)/Tempfile.mk
 
 include $(foreach repo,$(gb_REPOS),$(repo)/RepositoryFixes.mk)
 
@@ -172,6 +179,22 @@ gb_GLOBALDEFS += \
 
 endif
 
+ifneq ($(strip $(ENABLE_GTK)),)
+gb_GLOBALDEFS += -DENABLE_GTK
+endif
+
+ifneq ($(strip $(ENABLE_KDE)),)
+gb_GLOBALDEFS += -DENABLE_KDE
+endif
+
+ifneq ($(strip $(ENABLE_KDE4)),)
+gb_GLOBALDEFS += -DENABLE_KDE4
+endif
+
+ifeq ($(strip $(ENABLE_GRAPHITE)),TRUE)
+gb_GLOBALDEFS += -DENABLE_GRAPHITE
+endif
+
 gb_GLOBALDEFS := $(sort $(gb_GLOBALDEFS))
 
 include $(GBUILDDIR)/Deliver.mk
@@ -204,13 +227,28 @@ include $(foreach class, \
     Executable \
     SdiTarget \
     Package \
+    CustomTarget \
     PrecompiledHeaders \
+    CppunitTest \
+    JavaClassSet \
+    JunitTest \
     Module \
 ,$(GBUILDDIR)/$(class).mk)
 
 # optional extensions that should never be essential
-ifneq ($(wildcard $(GBUILDDIR)/extensions/*.mk),)
-include $(wildcard $(GBUILDDIR)/extensions/*.mk)
+ifneq ($(wildcard $(GBUILDDIR)/extensions/post_*.mk),)
+include $(wildcard $(GBUILDDIR)/extensions/post_*.mk)
 endif
+
+ifeq ($(SYSTEM_LIBXSLT),YES)
+gb_XSLTPROCTARGET :=
+gb_XSLTPROC := xsltproc
+else
+gb_XSLTPROCTARGET := $(call gb_Executable_get_target,xsltproc)
+gb_XSLTPROC := $(gb_XSLTPROCPRECOMMAND) $(gb_XSLTPROCTARGET)
+endif
+
+export gb_AWK
+export gb_XSLTPROC
 
 # vim: set noet sw=4 ts=4:

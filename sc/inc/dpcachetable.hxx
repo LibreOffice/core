@@ -168,7 +168,7 @@ public:
     ScDPTableDataCache* GetCache() const;
     /** Fill the internal table from the cell range provided.  This function
     assumes that the first row is the column header. */
-    void fillTable( const ScQueryParam& rQuery, BOOL* pSpecial,
+    void fillTable( const ScQueryParam& rQuery, sal_Bool* pSpecial,
         bool bIgnoreEmptyRows, bool bRepeatIfEmpty );
     /** Fill the internal table from database connection object.  This function
         assumes that the first row is the column header. */

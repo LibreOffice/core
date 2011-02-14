@@ -46,8 +46,8 @@
 
 // =======================================================================
 
-#define WORKWIN_WINDOWSTATE_FULLSCREEN          ((ULONG)0x00010000)
-#define WORKWIN_WINDOWSTATE_ALL                 ((ULONG)0x00FF0000)
+#define WORKWIN_WINDOWSTATE_FULLSCREEN          ((sal_uLong)0x00010000)
+#define WORKWIN_WINDOWSTATE_ALL                 ((sal_uLong)0x00FF0000)
 
 // =======================================================================
 
@@ -56,17 +56,17 @@ void WorkWindow::ImplInitWorkWindowData()
     mnIcon                  = 0; // Should be removed in the next top level update - now in SystemWindow
 
     mnPresentationFlags     = 0;
-    mbPresentationMode      = FALSE;
-    mbPresentationVisible   = FALSE;
-    mbPresentationFull      = FALSE;
-    mbFullScreenMode        = FALSE;
+    mbPresentationMode      = sal_False;
+    mbPresentationVisible   = sal_False;
+    mbPresentationFull      = sal_False;
+    mbFullScreenMode        = sal_False;
 }
 
 // -----------------------------------------------------------------------
 
 void WorkWindow::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
-    USHORT nFrameStyle = BORDERWINDOW_STYLE_FRAME;
+    sal_uInt16 nFrameStyle = BORDERWINDOW_STYLE_FRAME;
     if ( nStyle & WB_APP )
         nFrameStyle |= BORDERWINDOW_STYLE_APP;
 
@@ -139,7 +139,7 @@ WorkWindow::WorkWindow( Window* pParent, const ::com::sun::star::uno::Any& aSyst
     SystemWindow( WINDOW_WORKWINDOW )
 {
     ImplInitWorkWindowData();
-    mbSysChild = TRUE;
+    mbSysChild = sal_True;
     ImplInit( pParent, nStyle, aSystemWorkWindowToken );
 }
 
@@ -149,7 +149,7 @@ WorkWindow::WorkWindow( SystemParentData* pParent ) :
     SystemWindow( WINDOW_WORKWINDOW )
 {
     ImplInitWorkWindowData();
-    mbSysChild = TRUE;
+    mbSysChild = sal_True;
     ImplInit( NULL, 0, pParent );
 }
 
@@ -178,7 +178,7 @@ WorkWindow::~WorkWindow()
 
 // -----------------------------------------------------------------------
 
-void WorkWindow::ShowFullScreenMode( BOOL bFullScreenMode, sal_Int32 nDisplay )
+void WorkWindow::ShowFullScreenMode( sal_Bool bFullScreenMode, sal_Int32 nDisplay )
 {
     if ( !mbFullScreenMode == !bFullScreenMode )
         return;
@@ -192,34 +192,34 @@ void WorkWindow::ShowFullScreenMode( BOOL bFullScreenMode, sal_Int32 nDisplay )
     mbFullScreenMode = bFullScreenMode != 0;
     if ( !mbSysChild )
     {
-        mpWindowImpl->mpFrameWindow->mpWindowImpl->mbWaitSystemResize = TRUE;
+        mpWindowImpl->mpFrameWindow->mpWindowImpl->mbWaitSystemResize = sal_True;
         ImplGetFrame()->ShowFullScreen( bFullScreenMode, nDisplay );
     }
 }
 
 // -----------------------------------------------------------------------
 
-void WorkWindow::StartPresentationMode( BOOL bPresentation, USHORT nFlags, sal_Int32 nDisplay )
+void WorkWindow::StartPresentationMode( sal_Bool bPresentation, sal_uInt16 nFlags, sal_Int32 nDisplay )
 {
     if ( !bPresentation == !mbPresentationMode )
         return;
 
     if ( bPresentation )
     {
-        mbPresentationMode      = TRUE;
+        mbPresentationMode      = sal_True;
         mbPresentationVisible   = IsVisible();
         mbPresentationFull      = mbFullScreenMode;
         mnPresentationFlags     = nFlags;
 
         if ( !(mnPresentationFlags & PRESENTATION_NOFULLSCREEN) )
-            ShowFullScreenMode( TRUE, nDisplay );
+            ShowFullScreenMode( sal_True, nDisplay );
         if ( !mbSysChild )
         {
             if ( mnPresentationFlags & PRESENTATION_HIDEALLAPPS )
-                mpWindowImpl->mpFrame->SetAlwaysOnTop( TRUE );
+                mpWindowImpl->mpFrame->SetAlwaysOnTop( sal_True );
             if ( !(mnPresentationFlags & PRESENTATION_NOAUTOSHOW) )
                 ToTop();
-            mpWindowImpl->mpFrame->StartPresentation( TRUE );
+            mpWindowImpl->mpFrame->StartPresentation( sal_True );
         }
 
         if ( !(mnPresentationFlags & PRESENTATION_NOAUTOSHOW) )
@@ -230,22 +230,22 @@ void WorkWindow::StartPresentationMode( BOOL bPresentation, USHORT nFlags, sal_I
         Show( mbPresentationVisible );
         if ( !mbSysChild )
         {
-            mpWindowImpl->mpFrame->StartPresentation( FALSE );
+            mpWindowImpl->mpFrame->StartPresentation( sal_False );
             if ( mnPresentationFlags & PRESENTATION_HIDEALLAPPS )
-                mpWindowImpl->mpFrame->SetAlwaysOnTop( FALSE );
+                mpWindowImpl->mpFrame->SetAlwaysOnTop( sal_False );
         }
         ShowFullScreenMode( mbPresentationFull, nDisplay );
 
-        mbPresentationMode      = FALSE;
-        mbPresentationVisible   = FALSE;
-        mbPresentationFull      = FALSE;
+        mbPresentationMode      = sal_False;
+        mbPresentationVisible   = sal_False;
+        mbPresentationFull      = sal_False;
         mnPresentationFlags     = 0;
     }
 }
 
 // -----------------------------------------------------------------------
 
-BOOL WorkWindow::IsMinimized() const
+sal_Bool WorkWindow::IsMinimized() const
 {
     //return mpWindowImpl->mpFrameData->mbMinimized;
     SalFrameState aState;
@@ -255,15 +255,15 @@ BOOL WorkWindow::IsMinimized() const
 
 // -----------------------------------------------------------------------
 
-BOOL WorkWindow::SetPluginParent( SystemParentData* pParent )
+sal_Bool WorkWindow::SetPluginParent( SystemParentData* pParent )
 {
     DBG_ASSERT( ! mbPresentationMode && ! mbFullScreenMode, "SetPluginParent in fullscreen or presentation mode !" );
 
     bool bWasDnd = Window::ImplStopDnd();
 
-    BOOL bShown = IsVisible();
-    Show( FALSE );
-    BOOL bRet = mpWindowImpl->mpFrame->SetPluginParent( pParent );
+    sal_Bool bShown = IsVisible();
+    Show( sal_False );
+    sal_Bool bRet = mpWindowImpl->mpFrame->SetPluginParent( pParent );
     Show( bShown );
 
     if( bWasDnd )
@@ -272,7 +272,7 @@ BOOL WorkWindow::SetPluginParent( SystemParentData* pParent )
     return bRet;
 }
 
-void WorkWindow::ImplSetFrameState( ULONG aFrameState )
+void WorkWindow::ImplSetFrameState( sal_uLong aFrameState )
 {
     SalFrameState   aState;
     aState.mnMask   = SAL_FRAMESTATE_MASK_STATE;
@@ -291,9 +291,9 @@ void WorkWindow::Restore()
     ImplSetFrameState( SAL_FRAMESTATE_NORMAL );
 }
 
-BOOL WorkWindow::Close()
+sal_Bool WorkWindow::Close()
 {
-    BOOL bCanClose = SystemWindow::Close();
+    sal_Bool bCanClose = SystemWindow::Close();
 
     // Ist es das Applikationsfenster, dann beende die Applikation
     if ( bCanClose && ( ImplGetSVData()->maWinData.mpAppWin == this ) )
@@ -302,14 +302,14 @@ BOOL WorkWindow::Close()
     return bCanClose;
 }
 
-void WorkWindow::Maximize( BOOL bMaximize )
+void WorkWindow::Maximize( sal_Bool bMaximize )
 {
     ImplSetFrameState( bMaximize ? SAL_FRAMESTATE_MAXIMIZED : SAL_FRAMESTATE_NORMAL );
 }
 
-BOOL WorkWindow::IsMaximized() const
+sal_Bool WorkWindow::IsMaximized() const
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     SalFrameState aState;
     if( mpWindowImpl->mpFrame->GetWindowState( &aState ) )
@@ -317,7 +317,7 @@ BOOL WorkWindow::IsMaximized() const
         if( aState.mnState & (SAL_FRAMESTATE_MAXIMIZED          |
                               SAL_FRAMESTATE_MAXIMIZED_HORZ     |
                               SAL_FRAMESTATE_MAXIMIZED_VERT ) )
-            bRet = TRUE;
+            bRet = sal_True;
     }
     return bRet;
 }

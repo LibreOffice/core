@@ -117,14 +117,14 @@ class AbstractFldInputDlg : public VclAbstractDialog  //add for SwFldInputDlg
 public:
     //from class SalFrame
     virtual void            SetWindowState( const ByteString& rStr ) = 0;
-    virtual ByteString      GetWindowState( ULONG nMask = WINDOWSTATE_MASK_ALL ) const = 0;
+    virtual ByteString      GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const = 0;
 };
 
 class AbstractInsFootNoteDlg : public VclAbstractDialog  //add for SwInsFootNoteDlg
 {
 public:
     virtual String          GetFontName() = 0;
-    virtual BOOL            IsEndNote() = 0;
+    virtual sal_Bool            IsEndNote() = 0;
     virtual String          GetStr() = 0;
     //from class Window
     virtual void    SetHelpId( const rtl::OString& sHelpId ) = 0;
@@ -135,14 +135,14 @@ class AbstractInsertGrfRulerDlg : public VclAbstractDialog  //add for SwInsertGr
 {
 public:
     virtual String          GetGraphicName() = 0;
-    virtual BOOL            IsSimpleLine() = 0;
-    virtual BOOL            HasImages() const  = 0;
+    virtual sal_Bool            IsSimpleLine() = 0;
+    virtual sal_Bool            HasImages() const  = 0;
 };
 
 class AbstractInsTableDlg : public VclAbstractDialog  //add for SwInsTableDlg
 {
 public:
-    virtual void            GetValues( String& rName, USHORT& rRow, USHORT& rCol,
+    virtual void            GetValues( String& rName, sal_uInt16& rRow, sal_uInt16& rCol,
                                 SwInsertTableOptions& rInsTblFlags, String& rTableAutoFmtName,
                                 SwTableAutoFmt *& prTAFmt ) = 0;
 };
@@ -152,15 +152,15 @@ class AbstractJavaEditDialog : public VclAbstractDialog  //add for SwJavaEditDia
 public:
     virtual String              GetText() = 0;
     virtual String              GetType() = 0;
-    virtual BOOL                IsUrl() = 0;
-    virtual BOOL                IsNew() = 0;
-    virtual BOOL                IsUpdate() = 0;
+    virtual sal_Bool                IsUrl() = 0;
+    virtual sal_Bool                IsNew() = 0;
+    virtual sal_Bool                IsUpdate() = 0;
 };
 
 class AbstractMailMergeDlg : public VclAbstractDialog  //add for SwMailMergeDlg
 {
 public:
-    virtual USHORT  GetMergeType() = 0;
+    virtual sal_uInt16  GetMergeType() = 0;
     virtual const ::rtl::OUString& GetSaveFilter() const = 0;
     virtual const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetSelection() const = 0;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const = 0;
@@ -168,12 +168,12 @@ public:
 class AbstractMailMergeCreateFromDlg : public VclAbstractDialog  //add for SwMailMergeCreateFromDlg
 {
 public:
-    virtual BOOL    IsThisDocument() const = 0;
+    virtual sal_Bool    IsThisDocument() const = 0;
 };
 class AbstractMailMergeFieldConnectionsDlg : public VclAbstractDialog  //add for SwMailMergeFieldConnectionsDlg
 {
 public:
-    virtual BOOL    IsUseExistingConnections() const = 0;
+    virtual sal_Bool    IsUseExistingConnections() const = 0;
 };
 
 class AbstractMultiTOXTabDialog : public VclAbstractDialog  //add for SwMultiTOXTabDialog
@@ -206,8 +206,8 @@ public:
 class AbstractSwInsertAbstractDlg : public VclAbstractDialog    // add for SwInsertAbstractDlg
 {
 public:
-    virtual BYTE    GetLevel() const = 0;
-    virtual BYTE    GetPara() const = 0;
+    virtual sal_uInt8   GetLevel() const = 0;
+    virtual sal_uInt8   GetPara() const = 0;
 };
 
 class AbstractSwAsciiFilterDlg : public VclAbstractDialog // add for SwAsciiFilterDlg
@@ -221,8 +221,8 @@ class AbstractSwBreakDlg : public VclAbstractDialog // add for SwBreakDlg
 {
 public:
     virtual String  GetTemplateName() = 0;
-    virtual USHORT  GetKind() = 0;
-    virtual USHORT  GetPageNumber() = 0;
+    virtual sal_uInt16  GetKind() = 0;
+    virtual sal_uInt16  GetPageNumber() = 0;
 
 };
 
@@ -253,7 +253,7 @@ public:
 class AbstractDropDownFieldDialog : public VclAbstractDialog //add for DropDownFieldDialog
 {
 public:
-     virtual ByteString      GetWindowState( ULONG nMask = WINDOWSTATE_MASK_ALL ) const = 0; //this method inherit from SystemWindow
+     virtual ByteString      GetWindowState( sal_uLong nMask = WINDOWSTATE_MASK_ALL ) const = 0; //this method inherit from SystemWindow
      virtual void            SetWindowState( const ByteString& rStr ) =0;//this method inherit from SystemWindow
 };
 
@@ -268,15 +268,15 @@ class AbstarctSwSelGlossaryDlg : public VclAbstractDialog //add for SwSelGlossar
 {
 public:
     virtual void InsertGlos(const String &rRegion, const String &rGlosName) = 0;    // inline
-    virtual USHORT GetSelectedIdx() const = 0;  // inline
-    virtual void SelectEntryPos(USHORT nIdx) = 0;   // inline
+    virtual sal_uInt16 GetSelectedIdx() const = 0;  // inline
+    virtual void SelectEntryPos(sal_uInt16 nIdx) = 0;   // inline
 };
 
 class AbstractSwSplitTableDlg :public VclAbstractDialog //add for SwSplitTableDlg
 {
 public:
-    virtual BOOL                IsHorizontal() const = 0;
-    virtual BOOL                IsProportional() const = 0;
+    virtual sal_Bool                IsHorizontal() const = 0;
+    virtual sal_Bool                IsProportional() const = 0;
     virtual long                GetCount() const = 0;
 };
 
@@ -289,11 +289,11 @@ public:
 class AbstractSwFldDlg : public SfxAbstractTabDialog //add for SwFldDlg
 {
 public:
-    virtual void                Start( BOOL bShow = TRUE ) = 0;  //this method from sfxtabdialog
+    virtual void                Start( sal_Bool bShow = sal_True ) = 0;  //this method from sfxtabdialog
     virtual void                Initialize(SfxChildWinInfo *pInfo) = 0;
     virtual void                ReInitDlg() = 0;
     virtual void                ActivateDatabasePage() = 0;
-    virtual void                ShowPage( USHORT nId ) = 0;// this method from SfxTabDialog
+    virtual void                ShowPage( sal_uInt16 nId ) = 0;// this method from SfxTabDialog
     virtual Window *            GetWindow() = 0; //this method is added for return a Window type pointer
 };
 
@@ -309,7 +309,7 @@ public:
 class AbstractSwModalRedlineAcceptDlg : public VclAbstractDialog //add for SwModalRedlineAcceptDlg
 {
 public:
-    virtual void            AcceptAll( BOOL bAccept ) = 0;
+    virtual void            AcceptAll( sal_Bool bAccept ) = 0;
 };
 
 class AbstractMarkFloatDlg : public VclAbstractDialog     //add for SwIndexMarkFloatDlg & SwAuthMarkFloatDlg
@@ -333,7 +333,7 @@ class AbstractMailMergeWizard : public VclAbstractDialog2
 public:
     virtual void                SetReloadDocument(const String& rURL) = 0;
     virtual const String&       GetReloadDocument() const = 0;
-    virtual BOOL                ShowPage( USHORT nLevel ) = 0;
+    virtual sal_Bool                ShowPage( sal_uInt16 nLevel ) = 0;
     virtual sal_uInt16          GetRestartPage() const = 0;
 };
 
@@ -358,7 +358,7 @@ public:
     virtual AbstractSwBreakDlg * CreateSwBreakDlg( Window *pParent, SwWrtShell &rSh,int nResId ) = 0; // add for SwBreakDlg
     virtual VclAbstractDialog   * CreateSwChangeDBDlg( SwView& rVw, int nResId ) = 0; //add for SwChangeDBDlg
     virtual SfxAbstractTabDialog *  CreateSwCharDlg( Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet, int nResId, // add for SwCharDlg
-                                                const String* pFmtStr = 0, BOOL bIsDrwTxtDlg = FALSE) = 0;
+                                                const String* pFmtStr = 0, sal_Bool bIsDrwTxtDlg = sal_False) = 0;
     virtual AbstractSwConvertTableDlg* CreateSwConvertTableDlg ( SwView& rView , int nResId, bool bToTable) = 0; //add for SwConvertTableDlg
     virtual VclAbstractDialog * CreateSwCaptionDialog ( Window *pParent, SwView &rV,int nResId) = 0; //add for SwCaptionDialog
 
@@ -369,23 +369,23 @@ public:
     virtual SfxAbstractTabDialog * CreateSwFootNoteOptionDlg( Window *pParent, SwWrtShell &rSh,int nResId) = 0;//add for  SwFootNoteOptionDlg
 
     virtual AbstractDropDownFieldDialog * CreateDropDownFieldDialog ( Window *pParent, SwWrtShell &rSh, //add for DropDownFieldDialog
-                                SwField* pField,int nResId, BOOL bNextButton = FALSE ) = 0;
-    virtual SfxAbstractTabDialog* CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, BOOL bInsert,int nResId ) = 0; //add for SwEnvDlg
+                                SwField* pField,int nResId, sal_Bool bNextButton = sal_False ) = 0;
+    virtual SfxAbstractTabDialog* CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, sal_Bool bInsert,int nResId ) = 0; //add for SwEnvDlg
 
 
     virtual AbstarctSwLabDlg* CreateSwLabDlg ( Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
-                                                     SwNewDBMgr* pNewDBMgr, BOOL bLabel,int nResId  ) = 0;
+                                                     SwNewDBMgr* pNewDBMgr, sal_Bool bLabel,int nResId  ) = 0;
 
     virtual SwLabDlgMethod GetSwLabDlgStaticMethod () =0;//add for SwLabDlg
 
     virtual SfxAbstractTabDialog* CreateSwParaDlg ( Window *pParent, //add for SwParaDlg
                                                     SwView& rVw,
                                                     const SfxItemSet& rCoreSet,
-                                                    BYTE nDialogMode,
+                                                    sal_uInt8 nDialogMode,
                                                     int nResId,
                                                     const String *pCollName = 0,
-                                                    BOOL bDraw = FALSE,
-                                                    UINT16 nDefPage = 0) = 0;
+                                                    sal_Bool bDraw = sal_False,
+                                                    sal_uInt16 nDefPage = 0) = 0;
 
     virtual AbstarctSwSelGlossaryDlg * CreateSwSelGlossaryDlg ( Window * pParent, const String &rShortName, int nResId ) = 0; //add for SwSelGlossaryDlg
 
@@ -394,10 +394,10 @@ public:
 
     virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( Window* pParent, SwWrtShell* pShell, //add for SwAutoFormatDlg
                                                             int nResId,
-                                                            BOOL bSetAutoFmt = TRUE,
+                                                            sal_Bool bSetAutoFmt = sal_True,
                                                             const SwTableAutoFmt* pSelFmt = 0 ) = 0;
-    virtual SfxAbstractDialog * CreateSwBorderDlg ( Window* pParent, SfxItemSet& rSet, USHORT nType, int nResId ) = 0;//add for SwBorderDlg
-    virtual SfxAbstractDialog * CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, BOOL bDrawMode, int nResId ) = 0; //add for SwWrapDlg
+    virtual SfxAbstractDialog * CreateSwBorderDlg ( Window* pParent, SfxItemSet& rSet, sal_uInt16 nType, int nResId ) = 0;//add for SwBorderDlg
+    virtual SfxAbstractDialog * CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, sal_Bool bDrawMode, int nResId ) = 0; //add for SwWrapDlg
 
     virtual VclAbstractDialog * CreateSwTableWidthDlg ( Window *pParent, SwTableFUNC &rFnc , int nResId ) = 0; //add for SwTableWidthDlg
     virtual SfxAbstractTabDialog* CreateSwTableTabDlg( Window* pParent, SfxItemPool& Pool,
@@ -410,33 +410,33 @@ public:
                                                                 STAR_REFERENCE( container::XNameAccess ) & xNameAccess, int nResId ) = 0;
     virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg ( Window *pParent, int nResId ) = 0; //add for SwModalRedlineAcceptDlg
 
-    virtual VclAbstractDialog*          CreateSwVclDialog( int nResId, Window* pParent, BOOL& rWithPrev ) = 0; //add for SwMergeTblDlg
+    virtual VclAbstractDialog*          CreateSwVclDialog( int nResId, Window* pParent, sal_Bool& rWithPrev ) = 0; //add for SwMergeTblDlg
     virtual SfxAbstractTabDialog*       CreateFrmTabDialog( int nResId,
                                                 SfxViewFrame *pFrame, Window *pParent,
                                                 const SfxItemSet& rCoreSet,
-                                                BOOL            bNewFrm  = TRUE,
-                                                USHORT          nResType = DLG_FRM_STD,
-                                                BOOL            bFmt     = FALSE,
-                                                UINT16          nDefPage = 0,
+                                                sal_Bool            bNewFrm  = sal_True,
+                                                sal_uInt16          nResType = DLG_FRM_STD,
+                                                sal_Bool            bFmt     = sal_False,
+                                                sal_uInt16          nDefPage = 0,
                                                 const String*   pFmtStr  = 0) = 0;  //add for SwFrmDlg
     virtual SfxAbstractTabDialog*       CreateTemplateDialog( int nResId,
                                                 Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
-                                                USHORT              nRegion,
-                                                BOOL                bColumn = FALSE,
+                                                sal_uInt16              nRegion,
+                                                sal_Bool                bColumn = sal_False,
                                                 SwWrtShell*         pActShell = 0,
-                                                BOOL                bNew = FALSE ) = 0; //add for SwTemplateDlg
+                                                sal_Bool                bNew = sal_False ) = 0; //add for SwTemplateDlg
     virtual AbstractGlossaryDlg*        CreateGlossaryDlg( int nResId,
                                                 SfxViewFrame* pViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) = 0; //add for SwGlossaryDlg
     virtual AbstractFldInputDlg*        CreateFldInputDlg( int nResId,
                                                 Window *pParent, SwWrtShell &rSh,
-                                                SwField* pField, BOOL bNextButton = FALSE ) = 0; //add for SwFldInputDlg
+                                                SwField* pField, sal_Bool bNextButton = sal_False ) = 0; //add for SwFldInputDlg
     virtual AbstractInsFootNoteDlg*     CreateInsFootNoteDlg( int nResId,
-                                                Window * pParent, SwWrtShell &rSh, BOOL bEd = FALSE) = 0; //add for SwInsFootNoteDlg
+                                                Window * pParent, SwWrtShell &rSh, sal_Bool bEd = sal_False) = 0; //add for SwInsFootNoteDlg
     virtual VclAbstractDialog *         CreateVclSwViewDialog( int nResId,
-                                                SwView& rView, BOOL bCol = FALSE ) = 0; //add for SwInsRowColDlg, SwLineNumberingDlg
+                                                SwView& rView, sal_Bool bCol = sal_False ) = 0; //add for SwInsRowColDlg, SwLineNumberingDlg
     virtual AbstractInsertGrfRulerDlg*      CreateInsertGrfRulerDlg( int nResId,
                                                 Window * pParent ) = 0; //add for SwInsertGrfRulerDlg
     virtual AbstractInsTableDlg*        CreateInsTableDlg( int nResId,
@@ -463,8 +463,8 @@ public:
     virtual AbstractMultiTOXTabDialog*      CreateMultiTOXTabDialog( int nResId,
                                                 Window* pParent, const SfxItemSet& rSet,
                                                 SwWrtShell &rShell,
-                                                SwTOXBase* pCurTOX, USHORT nToxType = USHRT_MAX,
-                                                BOOL bGlobal = FALSE) = 0; //add for SwMultiTOXTabDialog
+                                                SwTOXBase* pCurTOX, sal_uInt16 nToxType = USHRT_MAX,
+                                                sal_Bool bGlobal = sal_False) = 0; //add for SwMultiTOXTabDialog
     virtual AbstractEditRegionDlg*      CreateEditRegionDlg( int nResId,
                                                 Window* pParent, SwWrtShell& rWrtSh ) = 0; //add for SwEditRegionDlg
     virtual AbstractInsertSectionTabDialog*     CreateInsertSectionTabDialog( int nResId,
@@ -487,12 +487,12 @@ public:
     virtual AbstractMailMergeWizard*    CreateMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rConfigItem) = 0;
 
     //add for static func in SwGlossaryDlg
-    virtual GlossaryGetCurrGroup        GetGlossaryCurrGroupFunc( USHORT nId ) = 0;
-    virtual GlossarySetActGroup         SetGlossaryActGroupFunc( USHORT nId ) = 0;
+    virtual GlossaryGetCurrGroup        GetGlossaryCurrGroupFunc( sal_uInt16 nId ) = 0;
+    virtual GlossarySetActGroup         SetGlossaryActGroupFunc( sal_uInt16 nId ) = 0;
 
     // for tabpage
-    virtual CreateTabPage               GetTabPageCreatorFunc( USHORT nId ) = 0;
-    virtual GetTabPageRanges            GetTabPageRangesFunc( USHORT nId ) = 0;
+    virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;
+    virtual GetTabPageRanges            GetTabPageRangesFunc( sal_uInt16 nId ) = 0;
 };
 
 #endif

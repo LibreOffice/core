@@ -266,7 +266,7 @@ DigitalSignaturesDialog::~DigitalSignaturesDialog()
 {
 }
 
-BOOL DigitalSignaturesDialog::Init( const rtl::OUString& rTokenName )
+sal_Bool DigitalSignaturesDialog::Init( const rtl::OUString& rTokenName )
 {
     bool bInit = maSignatureHelper.Init( rTokenName );
 
@@ -543,7 +543,7 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
     {
         try
         {
-            USHORT nSelected = (USHORT) (sal_uIntPtr) maSignaturesLB.FirstSelected()->GetUserData();
+            sal_uInt16 nSelected = (sal_uInt16) (sal_uIntPtr) maSignaturesLB.FirstSelected()->GetUserData();
             maCurrentSignatureInformations.erase( maCurrentSignatureInformations.begin()+nSelected );
 
             // Export all other signatures...
@@ -752,7 +752,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
 {
     if( maSignaturesLB.FirstSelected() )
     {
-        USHORT nSelected = (USHORT) (sal_uIntPtr) maSignaturesLB.FirstSelected()->GetUserData();
+        sal_uInt16 nSelected = (sal_uInt16) (sal_uIntPtr) maSignaturesLB.FirstSelected()->GetUserData();
         const SignatureInformation& rInfo = maCurrentSignatureInformations[ nSelected ];
         css::uno::Reference<css::xml::crypto::XSecurityEnvironment > xSecEnv =
             maSignatureHelper.GetSecurityEnvironment();
@@ -769,7 +769,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
         DBG_ASSERT( xCert.is(), "Error getting cCertificate!" );
         if ( xCert.is() )
         {
-            CertificateViewer aViewer( this, maSignatureHelper.GetSecurityEnvironment(), xCert, FALSE );
+            CertificateViewer aViewer( this, maSignatureHelper.GetSecurityEnvironment(), xCert, sal_False );
             aViewer.Execute();
         }
     }

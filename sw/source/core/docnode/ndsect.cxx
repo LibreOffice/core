@@ -91,8 +91,8 @@ bool lcl_IsInSameTblBox( SwNodes& _rNds,
         do
         {
             if ( _bPrev
-                 ? !_rNds.GoPrevSection( &aChkIdx, FALSE, FALSE )
-                 : !_rNds.GoNextSection( &aChkIdx, FALSE, FALSE ) )
+                 ? !_rNds.GoPrevSection( &aChkIdx, sal_False, sal_False )
+                 : !_rNds.GoNextSection( &aChkIdx, sal_False, sal_False ) )
             {
                 ASSERT( false, "<lcl_IsInSameTblBox(..)> - no previous/next!" );
                 return false;
@@ -122,8 +122,8 @@ bool lcl_IsInSameTblBox( SwNodes& _rNds,
 
     // dann suche den StartNode der Box
     const SwTableSortBoxes& rSortBoxes = pTblNd->GetTable().GetTabSortBoxes();
-    ULONG nIdx = _rNd.GetIndex();
-    for( USHORT n = 0; n < rSortBoxes.Count(); ++n )
+    sal_uLong nIdx = _rNd.GetIndex();
+    for( sal_uInt16 n = 0; n < rSortBoxes.Count(); ++n )
     {
         const SwStartNode* pNd = rSortBoxes[ n ]->GetSttNd();
         if ( pNd->GetIndex() < nIdx && nIdx < pNd->EndOfSectionIndex() )
@@ -141,14 +141,14 @@ void lcl_CheckEmptyLayFrm( SwNodes& rNds, SwSectionData& rSectionData,
                         const SwNode& rStt, const SwNode& rEnd )
 {
     SwNodeIndex aIdx( rStt );
-    if( !rNds.GoPrevSection( &aIdx, TRUE, FALSE ) ||
-        !CheckNodesRange( rStt, aIdx, TRUE ) ||
+    if( !rNds.GoPrevSection( &aIdx, sal_True, sal_False ) ||
+        !CheckNodesRange( rStt, aIdx, sal_True ) ||
         // OD 04.11.2003 #i21457#
         !lcl_IsInSameTblBox( rNds, rStt, true ))
     {
         aIdx = rEnd;
-        if( !rNds.GoNextSection( &aIdx, TRUE, FALSE ) ||
-            !CheckNodesRange( rEnd, aIdx, TRUE ) ||
+        if( !rNds.GoNextSection( &aIdx, sal_True, sal_False ) ||
+            !CheckNodesRange( rEnd, aIdx, sal_True ) ||
             // OD 04.11.2003 #i21457#
             !lcl_IsInSameTblBox( rNds, rEnd, false ))
         {
@@ -163,7 +163,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                        SfxItemSet const*const pAttr, bool const bUpdate)
 {
     const SwNode* pPrvNd = 0;
-    USHORT nRegionRet = 0;
+    sal_uInt16 nRegionRet = 0;
     if( rRange.HasMark() &&
         0 == ( nRegionRet = IsInsRegionAvailable( rRange, &pPrvNd ) ))
     {
@@ -235,7 +235,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                         pSttPos->nNode.GetNode().GetTxtNode();
                     if (pTNd)
                     {
-                        pUndoInsSect->SaveSplitNode( pTNd, TRUE );
+                        pUndoInsSect->SaveSplitNode( pTNd, sal_True );
                     }
                 }
 
@@ -246,7 +246,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                     if (pTNd &&
                         (pTNd->GetTxt().Len() != pEndPos->nContent.GetIndex()))
                     {
-                        pUndoInsSect->SaveSplitNode( pTNd, FALSE );
+                        pUndoInsSect->SaveSplitNode( pTNd, sal_False );
                     }
                 }
             }
@@ -315,7 +315,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
         {
             if( pUndoInsSect && pCNd->IsTxtNode() )
             {
-                pUndoInsSect->SaveSplitNode( (SwTxtNode*)pCNd, TRUE );
+                pUndoInsSect->SaveSplitNode( (SwTxtNode*)pCNd, sal_True );
             }
             SplitNode( *pPos, false );
             pNewSectNode = GetNodes().InsertTextSection(
@@ -355,10 +355,10 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
         rNewSect.SetCondHidden( aCalc.Calculate( rNewSect.GetCondition() ).GetBool() );
     }
 
-    BOOL bUpdateFtn = FALSE;
+    sal_Bool bUpdateFtn = sal_False;
     if( GetFtnIdxs().Count() && pAttr )
     {
-        USHORT nVal = ((SwFmtFtnAtTxtEnd&)pAttr->Get(
+        sal_uInt16 nVal = ((SwFmtFtnAtTxtEnd&)pAttr->Get(
                                             RES_FTN_AT_TXTEND )).GetValue();
            if( ( FTNEND_ATTXTEND_OWNNUMSEQ == nVal ||
               FTNEND_ATTXTEND_OWNNUMANDFMT == nVal ) ||
@@ -366,7 +366,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
                             pAttr->Get( RES_END_AT_TXTEND )).GetValue() ) ||
               FTNEND_ATTXTEND_OWNNUMANDFMT == nVal ))
         {
-            bUpdateFtn = TRUE;
+            bUpdateFtn = sal_True;
         }
     }
 
@@ -391,10 +391,10 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
     return &pNewSectNode->GetSection();
 }
 
-USHORT SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
+sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
                                 const SwNode** ppSttNd ) const
 {
-    USHORT nRet = 1;
+    sal_uInt16 nRet = 1;
     if( rRange.HasMark() )
     {
         // teste ob es sich um eine gueltige Selektion handelt
@@ -416,7 +416,7 @@ USHORT SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
                 pCNd->Len() )
             {
                 SwNodeIndex aIdx( pStt->nNode, -1 );
-                ULONG nCmp = pEnd->nNode.GetIndex();
+                sal_uLong nCmp = pEnd->nNode.GetIndex();
                 const SwStartNode* pPrvNd;
                 const SwEndNode* pNxtNd;
                 while( 0 != ( pPrvNd = (pNd = &aIdx.GetNode())->GetSectionNode() ) &&
@@ -523,20 +523,20 @@ SwSectionFmt* SwDoc::MakeSectionFmt( SwSectionFmt *pDerivedFrom )
     return pNew;
 }
 
-void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
+void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, sal_Bool bDelNodes )
 {
-    USHORT nPos = pSectionFmtTbl->GetPos( pFmt );
+    sal_uInt16 nPos = pSectionFmtTbl->GetPos( pFmt );
 
     GetIDocumentUndoRedo().StartUndo(UNDO_DELSECTION, NULL);
 
     if( USHRT_MAX != nPos )
     {
-        const SwNodeIndex* pIdx = pFmt->GetCntnt( FALSE ).GetCntntIdx();
+        const SwNodeIndex* pIdx = pFmt->GetCntnt( sal_False ).GetCntntIdx();
         const SfxPoolItem* pFtnEndAtTxtEnd;
         if( SFX_ITEM_SET != pFmt->GetItemState(
-                            RES_FTN_AT_TXTEND, TRUE, &pFtnEndAtTxtEnd ) ||
+                            RES_FTN_AT_TXTEND, sal_True, &pFtnEndAtTxtEnd ) ||
             SFX_ITEM_SET != pFmt->GetItemState(
-                            RES_END_AT_TXTEND, TRUE, &pFtnEndAtTxtEnd ))
+                            RES_END_AT_TXTEND, sal_True, &pFtnEndAtTxtEnd ))
             pFtnEndAtTxtEnd = 0;
 
         const SwSectionNode* pSectNd;
@@ -585,7 +585,7 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
         //          zu loeschen!
         pSectionFmtTbl->Remove( nPos );
 //FEATURE::CONDCOLL
-        ULONG nCnt = 0, nSttNd = 0;
+        sal_uLong nCnt = 0, nSttNd = 0;
         if( pIdx && &GetNodes() == &pIdx->GetNodes() &&
             0 != (pSectNd = pIdx->GetNode().GetSectionNode() ))
         {
@@ -628,16 +628,16 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     if (pSection->DataEquals(rNewData))
     {
         // die Attribute ueberpruefen
-        BOOL bOnlyAttrChg = FALSE;
+        sal_Bool bOnlyAttrChg = sal_False;
         if( pAttr && pAttr->Count() )
         {
             SfxItemIter aIter( *pAttr );
-            USHORT nWhich = aIter.GetCurItem()->Which();
-            while( TRUE )
+            sal_uInt16 nWhich = aIter.GetCurItem()->Which();
+            while( sal_True )
             {
                 if( pFmt->GetFmtAttr( nWhich ) != *aIter.GetCurItem() )
                 {
-                    bOnlyAttrChg = TRUE;
+                    bOnlyAttrChg = sal_True;
                     break;
                 }
 
@@ -708,9 +708,9 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
         sSectName.Erase();
 
     /// OD 04.10.2002 #102894# - NOTE
-    /// In SwSection::operator=(..) class member bCondHiddenFlag is always set to TRUE.
+    /// In SwSection::operator=(..) class member bCondHiddenFlag is always set to sal_True.
     /// IMHO this have to be changed, but I can't estimate the consequences:
-    /// Either it is set to TRUE using corresponding method <SwSection.SetCondHidden(..)>,
+    /// Either it is set to sal_True using corresponding method <SwSection.SetCondHidden(..)>,
     /// or it is set to the value of SwSection which is assigned to it.
     /// Discussion with AMA results that the adjustment to the assignment operator
     /// could be very risky -> see notes in bug #102894#.
@@ -735,9 +735,9 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
         /// OD 04.10.2002 #102894#
         /// Because on using SwSection::operator=() to set up <pSection>
         /// with <rNewData> and the above given note, the hidden condition flag
-        /// has to be set to FALSE, if hidden condition flag of <pFmt->GetSection()>
-        /// (SwSection before the changes) is FALSE (already saved in <bOldCondHidden>)
-        /// and new calculated condition is TRUE.
+        /// has to be set to sal_False, if hidden condition flag of <pFmt->GetSection()>
+        /// (SwSection before the changes) is sal_False (already saved in <bOldCondHidden>)
+        /// and new calculated condition is sal_True.
         /// This is necessary, because otherwise the <SetCondHidden> would have
         /// no effect.
         bool bCalculatedCondHidden =
@@ -770,12 +770,12 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
  * --------------------------------------------------*/
 
 // und dann waren da noch die Fussnoten:
-void lcl_DeleteFtn( SwSectionNode *pNd, ULONG nStt, ULONG nEnd )
+void lcl_DeleteFtn( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd )
 {
     SwFtnIdxs& rFtnArr = pNd->GetDoc()->GetFtnIdxs();
     if( rFtnArr.Count() )
     {
-        USHORT nPos;
+        sal_uInt16 nPos;
         rFtnArr.SeekEntry( SwNodeIndex( *pNd ), &nPos );
         SwTxtFtn* pSrch;
 
@@ -863,7 +863,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
         // aInsPos is at the moment the Position where my EndNode will be inserted
         const SwStartNode* pStartNode = aInsPos.GetNode().StartOfSectionNode();
         // This StartNode should be in front of me, but if not, I wanna survive
-        ULONG nMyIndex = pSectNd->GetIndex();
+        sal_uLong nMyIndex = pSectNd->GetIndex();
         if( pStartNode->GetIndex() > nMyIndex ) // Suspicious!
         {
             const SwNode* pTemp;
@@ -920,7 +920,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
 
     // Hier bietet sich als Optimierung an, vorhandene Frames nicht zu
     // zerstoeren und wieder neu anzulegen, sondern nur umzuhaengen.
-    BOOL bInsFrm = bCreateFrms && !pSectNd->GetSection().IsHidden() &&
+    sal_Bool bInsFrm = bCreateFrms && !pSectNd->GetSection().IsHidden() &&
                    GetDoc()->GetRootFrm();
     SwNode2Layout *pNode2Layout = NULL;
     if( bInsFrm )
@@ -932,10 +932,10 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
     }
 
     // jetzt noch bei allen im Bereich den richtigen StartNode setzen
-    ULONG nEnde = pSectNd->EndOfSectionIndex();
-    ULONG nStart = pSectNd->GetIndex()+1;
-    ULONG nSkipIdx = ULONG_MAX;
-    for( ULONG n = nStart; n < nEnde; ++n )
+    sal_uLong nEnde = pSectNd->EndOfSectionIndex();
+    sal_uLong nStart = pSectNd->GetIndex()+1;
+    sal_uLong nSkipIdx = ULONG_MAX;
+    for( sal_uLong n = nStart; n < nEnde; ++n )
     {
         SwNode* pNd = (*this)[n];
 
@@ -975,7 +975,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
     {
         if( pNode2Layout )
         {
-            ULONG nIdx = pSectNd->GetIndex();
+            sal_uLong nIdx = pSectNd->GetIndex();
             pNode2Layout->RestoreUpperFrms( pSectNd->GetNodes(), nIdx, nIdx + 1 );
             delete pNode2Layout;
         }
@@ -1074,7 +1074,7 @@ SwSectionNode::~SwSectionNode()
             if ( pLast->IsA( TYPE(SwFrm) ) )
             {
                 SwSectionFrm *pSectFrm = (SwSectionFrm*)pLast;
-                SwSectionFrm::MoveCntntAndDelete( pSectFrm, TRUE );
+                SwSectionFrm::MoveCntntAndDelete( pSectFrm, sal_True );
                 pLast = aIter.GoStart();
             }
             else
@@ -1112,11 +1112,11 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
         if( GetSection().IsHidden() || IsCntntHidden() )
         {
             SwNodeIndex aIdx( *EndOfSectionNode() );
-            SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, TRUE, FALSE );
+            SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, sal_True, sal_False );
             if( !pCNd )
             {
                 aIdx = *this;
-                if( 0 == ( pCNd = rNds.GoPrevSection( &aIdx, TRUE, FALSE )) )
+                if( 0 == ( pCNd = rNds.GoPrevSection( &aIdx, sal_True, sal_False )) )
                     return ;
             }
             pCNd = aIdx.GetNode().GetCntntNode();
@@ -1239,11 +1239,11 @@ void SwSectionNode::MakeFrms( SwNodeIndex* pIdxBehind, SwNodeIndex* pEndIdx )
 
 void SwSectionNode::DelFrms()
 {
-    ULONG nStt = GetIndex()+1, nEnd = EndOfSectionIndex();
+    sal_uLong nStt = GetIndex()+1, nEnd = EndOfSectionIndex();
     if( nStt >= nEnd )
     {
         // unser Flag muessen wir noch aktualisieren
-        // pSection->bHiddenFlag = TRUE;
+        // pSection->bHiddenFlag = sal_True;
         return ;
     }
 
@@ -1259,14 +1259,14 @@ void SwSectionNode::DelFrms()
     //              Fly/TblBox-Frame keinen Lower !!!
     {
         SwNodeIndex aIdx( *this );
-        if( !rNds.GoPrevSection( &aIdx, TRUE, FALSE ) ||
-            !CheckNodesRange( *this, aIdx, TRUE ) ||
+        if( !rNds.GoPrevSection( &aIdx, sal_True, sal_False ) ||
+            !CheckNodesRange( *this, aIdx, sal_True ) ||
             // OD 04.11.2003 #i21457#
             !lcl_IsInSameTblBox( rNds, *this, true ))
         {
             aIdx = *EndOfSectionNode();
-            if( !rNds.GoNextSection( &aIdx, TRUE, FALSE ) ||
-                !CheckNodesRange( *EndOfSectionNode(), aIdx, TRUE ) ||
+            if( !rNds.GoNextSection( &aIdx, sal_True, sal_False ) ||
+                !CheckNodesRange( *EndOfSectionNode(), aIdx, sal_True ) ||
                 // OD 04.11.2003 #i21457#
                 !lcl_IsInSameTblBox( rNds, *EndOfSectionNode(), false ))
             {
@@ -1321,16 +1321,16 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     pNewSect->SetCondition( GetSection().GetCondition() );
     pNewSect->SetLinkFileName( GetSection().GetLinkFileName() );
     if( !pNewSect->IsHiddenFlag() && GetSection().IsHidden() )
-        pNewSect->SetHidden( TRUE );
+        pNewSect->SetHidden( sal_True );
     if( !pNewSect->IsProtectFlag() && GetSection().IsProtect() )
-        pNewSect->SetProtect( TRUE );
+        pNewSect->SetProtect( sal_True );
     // --> FME 2004-06-22 #114856# edit in readonly sections
     if( !pNewSect->IsEditInReadonlyFlag() && GetSection().IsEditInReadonly() )
-        pNewSect->SetEditInReadonly( TRUE );
+        pNewSect->SetEditInReadonly( sal_True );
     // <--
 
     SwNodeRange aRg( *this, +1, *EndOfSectionNode() );  // (wo stehe in denn nun ??)
-    rNds._Copy( aRg, aInsPos, FALSE );
+    rNds._Copy( aRg, aInsPos, sal_False );
 
     // loesche alle Frames vom kopierten Bereich, diese werden beim
     // erzeugen des SectionFrames angelegt !
@@ -1355,12 +1355,12 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
     return pSectNd;
 }
 
-BOOL SwSectionNode::IsCntntHidden() const
+sal_Bool SwSectionNode::IsCntntHidden() const
 {
     ASSERT( !m_pSection->IsHidden(),
             "That's simple: Hidden Section => Hidden Content" );
     SwNodeIndex aTmp( *this, 1 );
-    ULONG nEnd = EndOfSectionIndex();
+    sal_uLong nEnd = EndOfSectionIndex();
     while( aTmp < nEnd )
     {
         if( aTmp.GetNode().IsSectionNode() )
@@ -1373,12 +1373,12 @@ BOOL SwSectionNode::IsCntntHidden() const
         else
         {
             if( aTmp.GetNode().IsCntntNode() || aTmp.GetNode().IsTableNode() )
-                return FALSE; // Nicht versteckter Inhalt wurde gefunden
+                return sal_False; // Nicht versteckter Inhalt wurde gefunden
             ASSERT( aTmp.GetNode().IsEndNode(), "EndNode expected" );
         }
         aTmp++;
     }
-    return TRUE; // Alles versteckt
+    return sal_True; // Alles versteckt
 }
 
 
@@ -1406,8 +1406,8 @@ void SwSectionNode::NodesArrChgd()
                                       : pDoc->GetDfltFrmFmt() );
 
         // jetzt noch bei allen im Bereich den richtigen StartNode setzen
-        ULONG nStart = GetIndex()+1, nEnde = EndOfSectionIndex();
-        for( ULONG n = nStart; n < nEnde; ++n )
+        sal_uLong nStart = GetIndex()+1, nEnde = EndOfSectionIndex();
+        for( sal_uLong n = nStart; n < nEnde; ++n )
             // die Verschachtelung der Formate herstellen!
             if( 0 != ( pSectNd = rNds[ n ]->GetSectionNode() ) )
             {
@@ -1453,22 +1453,22 @@ String SwDoc::GetUniqueSectionName( const String* pChkStr ) const
     String aName( aId );
     xub_StrLen nNmLen = aName.Len();
 
-    USHORT nNum = 0;
-    USHORT nTmp, nFlagSize = ( pSectionFmtTbl->Count() / 8 ) +2;
-    BYTE* pSetFlags = new BYTE[ nFlagSize ];
+    sal_uInt16 nNum = 0;
+    sal_uInt16 nTmp, nFlagSize = ( pSectionFmtTbl->Count() / 8 ) +2;
+    sal_uInt8* pSetFlags = new sal_uInt8[ nFlagSize ];
     memset( pSetFlags, 0, nFlagSize );
 
     const SwSectionNode* pSectNd;
-    USHORT n;
+    sal_uInt16 n;
 
     for( n = 0; n < pSectionFmtTbl->Count(); ++n )
-        if( 0 != ( pSectNd = (*pSectionFmtTbl)[ n ]->GetSectionNode( FALSE ) ))
+        if( 0 != ( pSectNd = (*pSectionFmtTbl)[ n ]->GetSectionNode( sal_False ) ))
         {
             const String& rNm = pSectNd->GetSection().GetSectionName();
             if( rNm.Match( aName ) == nNmLen )
             {
                 // Nummer bestimmen und das Flag setzen
-                nNum = static_cast<USHORT>(rNm.Copy( nNmLen ).ToInt32());
+                nNum = static_cast<sal_uInt16>(rNm.Copy( nNmLen ).ToInt32());
                 if( nNum-- && nNum < pSectionFmtTbl->Count() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }

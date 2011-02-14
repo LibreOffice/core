@@ -91,7 +91,7 @@ namespace framework
         virtual String      GetComment() const;
         virtual void        Undo();
         virtual void        Redo();
-        virtual BOOL        CanRepeat(SfxRepeatTarget&) const;
+        virtual sal_Bool    CanRepeat(SfxRepeatTarget&) const;
 
     private:
         const Reference< XUndoAction >  m_xUndoAction;
@@ -148,9 +148,9 @@ namespace framework
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    BOOL UndoActionWrapper::CanRepeat(SfxRepeatTarget&) const
+    sal_Bool UndoActionWrapper::CanRepeat(SfxRepeatTarget&) const
     {
-        return FALSE;
+        return sal_False;
     }
 
     //==================================================================================================================

@@ -49,7 +49,7 @@ using namespace vcl;
 
 void Control::ImplInitControlData()
 {
-    mbHasFocus      = FALSE;
+    mbHasFocus      = sal_False;
     mpControlData   = new ImplControlData;
 }
 
@@ -305,10 +305,10 @@ long Control::Notify( NotifyEvent& rNEvt )
     {
         if ( !mbHasFocus )
         {
-            mbHasFocus = TRUE;
+            mbHasFocus = sal_True;
             if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_GETFOCUS, maGetFocusHdl, this ) )
                 // been destroyed within the handler
-                return TRUE;
+                return sal_True;
         }
     }
     else
@@ -318,10 +318,10 @@ long Control::Notify( NotifyEvent& rNEvt )
             Window* pFocusWin = Application::GetFocusWindow();
             if ( !pFocusWin || !ImplIsWindowOrChild( pFocusWin ) )
             {
-                mbHasFocus = FALSE;
+                mbHasFocus = sal_False;
                 if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_LOSEFOCUS, maLoseFocusHdl, this ) )
                     // been destroyed within the handler
-                    return TRUE;
+                    return sal_True;
             }
         }
     }
@@ -374,7 +374,7 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
 
 // -----------------------------------------------------------------
 
-BOOL Control::ImplCallEventListenersAndHandler(  ULONG nEvent, const Link& rHandler, void* pCaller )
+sal_Bool Control::ImplCallEventListenersAndHandler(  sal_uLong nEvent, const Link& rHandler, void* pCaller )
 {
     ImplDelData aCheckDelete;
     ImplAddDel( &aCheckDelete );
@@ -387,10 +387,10 @@ BOOL Control::ImplCallEventListenersAndHandler(  ULONG nEvent, const Link& rHand
         if ( !aCheckDelete.IsDelete() )
         {
             ImplRemoveDel( &aCheckDelete );
-            return FALSE;
+            return sal_False;
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------
@@ -449,8 +449,8 @@ void Control::DataChanged( const DataChangedEvent& rDCEvt)
     {
         AllSettings     aSettings = GetSettings();
         StyleSettings   aStyleSettings = aSettings.GetStyleSettings();
-        ULONG           nOldOptions = rDCEvt.GetOldSettings()->GetStyleSettings().GetOptions();
-        ULONG           nNewOptions = aStyleSettings.GetOptions();
+        sal_uLong           nOldOptions = rDCEvt.GetOldSettings()->GetStyleSettings().GetOptions();
+        sal_uLong           nNewOptions = aStyleSettings.GetOptions();
 
         if ( !(nNewOptions & STYLE_OPTION_MONO) && ( nOldOptions & STYLE_OPTION_MONO ) )
         {
@@ -519,7 +519,7 @@ const Color& Control::GetCanonicalTextColor( const StyleSettings& _rStyle ) cons
 }
 
 // -----------------------------------------------------------------
-void Control::ImplInitSettings( const BOOL _bFont, const BOOL _bForeground )
+void Control::ImplInitSettings( const sal_Bool _bFont, const sal_Bool _bForeground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -546,7 +546,7 @@ void Control::ImplInitSettings( const BOOL _bFont, const BOOL _bForeground )
 // -----------------------------------------------------------------
 
 void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect, const XubString& _rStr,
-    USHORT _nStyle, MetricVector* _pVector, String* _pDisplayText ) const
+    sal_uInt16 _nStyle, MetricVector* _pVector, String* _pDisplayText ) const
 {
 #ifdef FS_DEBUG
     if ( !_pVector )

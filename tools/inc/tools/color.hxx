@@ -41,24 +41,24 @@ class ResId;
 // - ColorCount-Types -
 // --------------------
 
-#define COLCOUNT_MONOCHROM          ((ULONG)2)
-#define COLCOUNT_16                 ((ULONG)16)
-#define COLCOUNT_256                ((ULONG)256)
-#define COLCOUNT_HICOLOR1           (((ULONG)0x00007FFF)+1)
-#define COLCOUNT_HICOLOR2           (((ULONG)0x0000FFFF)+1)
-#define COLCOUNT_TRUECOLOR          (((ULONG)0x00FFFFFF)+1)
+#define COLCOUNT_MONOCHROM          ((sal_uIntPtr)2)
+#define COLCOUNT_16                 ((sal_uIntPtr)16)
+#define COLCOUNT_256                ((sal_uIntPtr)256)
+#define COLCOUNT_HICOLOR1           (((sal_uIntPtr)0x00007FFF)+1)
+#define COLCOUNT_HICOLOR2           (((sal_uIntPtr)0x0000FFFF)+1)
+#define COLCOUNT_TRUECOLOR          (((sal_uIntPtr)0x00FFFFFF)+1)
 
 // ---------------
 // - Color-Types -
 // ---------------
 
-typedef UINT32 ColorData;
-#define RGB_COLORDATA( r,g,b )      ((ColorData)(((UINT32)((UINT8)(b))))|(((UINT32)((UINT8)(g)))<<8)|(((UINT32)((UINT8)(r)))<<16))
-#define TRGB_COLORDATA( t,r,g,b )   ((ColorData)(((UINT32)((UINT8)(b))))|(((UINT32)((UINT8)(g)))<<8)|(((UINT32)((UINT8)(r)))<<16)|(((UINT32)((UINT8)(t)))<<24))
-#define COLORDATA_RED( n )          ((UINT8)((n)>>16))
-#define COLORDATA_GREEN( n )        ((UINT8)(((UINT16)(n)) >> 8))
-#define COLORDATA_BLUE( n )         ((UINT8)(n))
-#define COLORDATA_TRANSPARENCY( n ) ((UINT8)((n)>>24))
+typedef sal_uInt32 ColorData;
+#define RGB_COLORDATA( r,g,b )      ((ColorData)(((sal_uInt32)((sal_uInt8)(b))))|(((sal_uInt32)((sal_uInt8)(g)))<<8)|(((sal_uInt32)((sal_uInt8)(r)))<<16))
+#define TRGB_COLORDATA( t,r,g,b )   ((ColorData)(((sal_uInt32)((sal_uInt8)(b))))|(((sal_uInt32)((sal_uInt8)(g)))<<8)|(((sal_uInt32)((sal_uInt8)(r)))<<16)|(((sal_uInt32)((sal_uInt8)(t)))<<24))
+#define COLORDATA_RED( n )          ((sal_uInt8)((n)>>16))
+#define COLORDATA_GREEN( n )        ((sal_uInt8)(((sal_uInt16)(n)) >> 8))
+#define COLORDATA_BLUE( n )         ((sal_uInt8)(n))
+#define COLORDATA_TRANSPARENCY( n ) ((sal_uInt8)((n)>>24))
 #define COLORDATA_RGB( n )          ((ColorData)((n) & 0x00FFFFFF))
 
 #define COL_BLACK                   RGB_COLORDATA( 0x00, 0x00, 0x00 )
@@ -108,7 +108,7 @@ typedef UINT32 ColorData;
 #define COL_AUTHOR9_LIGHT           RGB_COLORDATA(255, 231, 199)
 
 #define COLOR_CHANNEL_MERGE( _def_cDst, _def_cSrc, _def_cSrcTrans ) \
-    ((BYTE)((((long)(_def_cDst)-(_def_cSrc))*(_def_cSrcTrans)+(((_def_cSrc)<<8L)|(_def_cDst)))>>8L))
+    ((sal_uInt8)((((long)(_def_cDst)-(_def_cSrc))*(_def_cSrcTrans)+(((_def_cSrc)<<8L)|(_def_cDst)))>>8L))
 
 // ---------
 // - Color -
@@ -122,9 +122,9 @@ protected:
 public:
                         Color() { mnColor = COL_BLACK; }
                         Color( ColorData nColor ) { mnColor = nColor; }
-                        Color( UINT8 nRed, UINT8 nGreen, UINT8 nBlue )
+                        Color( sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue )
                             { mnColor = RGB_COLORDATA( nRed, nGreen, nBlue ); }
-                        Color( UINT8 nTransparency, UINT8 nRed, UINT8 nGreen, UINT8 nBlue )
+                        Color( sal_uInt8 nTransparency, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue )
                             { mnColor = TRGB_COLORDATA( nTransparency, nRed, nGreen, nBlue ); }
                         Color( const ResId& rResId );
                          // This ctor is defined in svtools, not tools!
@@ -133,58 +133,58 @@ public:
                         explicit Color(const ::basegfx::BColor& rBColor)
                         {
                             mnColor = RGB_COLORDATA(
-                                UINT8((rBColor.getRed() * 255.0) + 0.5),
-                                UINT8((rBColor.getGreen() * 255.0) + 0.5),
-                                UINT8((rBColor.getBlue() * 255.0) + 0.5));
+                                sal_uInt8((rBColor.getRed() * 255.0) + 0.5),
+                                sal_uInt8((rBColor.getGreen() * 255.0) + 0.5),
+                                sal_uInt8((rBColor.getBlue() * 255.0) + 0.5));
                         }
 
-    void                SetRed( UINT8 nRed );
-    UINT8               GetRed() const { return COLORDATA_RED( mnColor ); }
-    void                SetGreen( UINT8 nGreen );
-    UINT8               GetGreen() const { return COLORDATA_GREEN( mnColor ); }
-    void                SetBlue( UINT8 nBlue );
-    UINT8               GetBlue() const { return COLORDATA_BLUE( mnColor ); }
-    void                SetTransparency( UINT8 nTransparency );
-    UINT8               GetTransparency() const { return COLORDATA_TRANSPARENCY( mnColor ); }
+    void                SetRed( sal_uInt8 nRed );
+    sal_uInt8               GetRed() const { return COLORDATA_RED( mnColor ); }
+    void                SetGreen( sal_uInt8 nGreen );
+    sal_uInt8               GetGreen() const { return COLORDATA_GREEN( mnColor ); }
+    void                SetBlue( sal_uInt8 nBlue );
+    sal_uInt8               GetBlue() const { return COLORDATA_BLUE( mnColor ); }
+    void                SetTransparency( sal_uInt8 nTransparency );
+    sal_uInt8               GetTransparency() const { return COLORDATA_TRANSPARENCY( mnColor ); }
 
     void                SetColor( ColorData nColor ) { mnColor = nColor; }
     ColorData           GetColor() const { return mnColor; }
     ColorData           GetRGBColor() const { return COLORDATA_RGB( mnColor ); }
 
-    UINT8               GetColorError( const Color& rCompareColor ) const;
+    sal_uInt8               GetColorError( const Color& rCompareColor ) const;
 
-    UINT8               GetLuminance() const;
-    void                IncreaseLuminance( UINT8 cLumInc );
-    void                DecreaseLuminance( UINT8 cLumDec );
+    sal_uInt8               GetLuminance() const;
+    void                IncreaseLuminance( sal_uInt8 cLumInc );
+    void                DecreaseLuminance( sal_uInt8 cLumDec );
 
-    void                IncreaseContrast( UINT8 cContInc );
-    void                DecreaseContrast( UINT8 cContDec );
+    void                IncreaseContrast( sal_uInt8 cContInc );
+    void                DecreaseContrast( sal_uInt8 cContDec );
 
     void                Invert();
 
-    void                Merge( const Color& rMergeColor, BYTE cTransparency );
+    void                Merge( const Color& rMergeColor, sal_uInt8 cTransparency );
 
-    BOOL                IsRGBEqual( const Color& rColor ) const;
+    sal_Bool                IsRGBEqual( const Color& rColor ) const;
 
     // comparison with luminance thresholds
-    BOOL                IsDark()    const;
-    BOOL                IsBright()  const;
+    sal_Bool                IsDark()    const;
+    sal_Bool                IsBright()  const;
 
     // color space conversion tools
     // the range for h/s/b is:
     // Hue: 0-360 degree
     // Saturation: 0-100 %
     // Brightness: 0-100 %
-    static ColorData    HSBtoRGB( USHORT nHue, USHORT nSat, USHORT nBri );
-    void                RGBtoHSB( USHORT& nHue, USHORT& nSat, USHORT& nBri ) const;
+    static ColorData    HSBtoRGB( sal_uInt16 nHue, sal_uInt16 nSat, sal_uInt16 nBri );
+    void                RGBtoHSB( sal_uInt16& nHue, sal_uInt16& nSat, sal_uInt16& nBri ) const;
 
-    BOOL                operator==( const Color& rColor ) const
+    sal_Bool                operator==( const Color& rColor ) const
                             { return (mnColor == rColor.mnColor); }
-    BOOL                operator!=( const Color& rColor ) const
+    sal_Bool                operator!=( const Color& rColor ) const
                             { return !(Color::operator==( rColor )); }
 
-    SvStream&           Read( SvStream& rIStm, BOOL bNewFormat = TRUE );
-    SvStream&           Write( SvStream& rOStm, BOOL bNewFormat = TRUE );
+    SvStream&           Read( SvStream& rIStm, sal_Bool bNewFormat = sal_True );
+    SvStream&           Write( SvStream& rOStm, sal_Bool bNewFormat = sal_True );
 
     TOOLS_DLLPUBLIC friend SvStream&    operator>>( SvStream& rIStream, Color& rColor );
     TOOLS_DLLPUBLIC friend SvStream&    operator<<( SvStream& rOStream, const Color& rColor );
@@ -193,43 +193,43 @@ public:
     ::basegfx::BColor getBColor() const { return ::basegfx::BColor(GetRed() / 255.0, GetGreen() / 255.0, GetBlue() / 255.0); }
 };
 
-inline void Color::SetRed( UINT8 nRed )
+inline void Color::SetRed( sal_uInt8 nRed )
 {
     mnColor &= 0xFF00FFFF;
-    mnColor |= ((UINT32)nRed)<<16;
+    mnColor |= ((sal_uInt32)nRed)<<16;
 }
 
-inline void Color::SetGreen( UINT8 nGreen )
+inline void Color::SetGreen( sal_uInt8 nGreen )
 {
     mnColor &= 0xFFFF00FF;
-    mnColor |= ((UINT16)nGreen)<<8;
+    mnColor |= ((sal_uInt16)nGreen)<<8;
 }
 
-inline void Color::SetBlue( UINT8 nBlue )
+inline void Color::SetBlue( sal_uInt8 nBlue )
 {
     mnColor &= 0xFFFFFF00;
     mnColor |= nBlue;
 }
 
-inline void Color::SetTransparency( UINT8 nTransparency )
+inline void Color::SetTransparency( sal_uInt8 nTransparency )
 {
     mnColor &= 0x00FFFFFF;
-    mnColor |= ((UINT32)nTransparency)<<24;
+    mnColor |= ((sal_uInt32)nTransparency)<<24;
 }
 
-inline BOOL Color::IsRGBEqual( const Color& rColor ) const
+inline sal_Bool Color::IsRGBEqual( const Color& rColor ) const
 {
     return (COLORDATA_RGB( mnColor ) == COLORDATA_RGB( rColor.mnColor ));
 }
 
-inline UINT8 Color::GetLuminance() const
+inline sal_uInt8 Color::GetLuminance() const
 {
-    return( (UINT8) ( ( COLORDATA_BLUE( mnColor ) * 28UL +
+    return( (sal_uInt8) ( ( COLORDATA_BLUE( mnColor ) * 28UL +
                         COLORDATA_GREEN( mnColor ) * 151UL +
                         COLORDATA_RED( mnColor ) * 77UL ) >> 8UL ) );
 }
 
-inline void Color::Merge( const Color& rMergeColor, BYTE cTransparency )
+inline void Color::Merge( const Color& rMergeColor, sal_uInt8 cTransparency )
 {
     SetRed( COLOR_CHANNEL_MERGE( COLORDATA_RED( mnColor ), COLORDATA_RED( rMergeColor.mnColor ), cTransparency ) );
     SetGreen( COLOR_CHANNEL_MERGE( COLORDATA_GREEN( mnColor ), COLORDATA_GREEN( rMergeColor.mnColor ), cTransparency ) );

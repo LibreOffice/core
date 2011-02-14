@@ -43,11 +43,11 @@ DECLARE_LIST( LngLineList, ByteString * )
 class LngParser
 {
 private:
-    USHORT nError;
+    sal_uInt16 nError;
     LngLineList *pLines;
     ByteString sSource;
-    BOOL bDBIsUTF8;
-    BOOL bULF;
+    sal_Bool bDBIsUTF8;
+    sal_Bool bULF;
     bool bQuiet;
     std::vector<ByteString> aLanguages;
 
@@ -58,9 +58,9 @@ private:
                     const ByteString &rPrj ,
                     const ByteString &rRoot , const ByteString &sActFileName , const ByteString &sID );
 public:
-    LngParser( const ByteString &rLngFile, BOOL bUTF8, BOOL bULFFormat );
+    LngParser( const ByteString &rLngFile, sal_Bool bUTF8, sal_Bool bULFFormat );
     ~LngParser();
 
-    BOOL CreateSDF( const ByteString &rSDFFile, const ByteString &rPrj, const ByteString &rRoot );
-    BOOL Merge( const ByteString &rSDFFile, const ByteString &rDestinationFile , const ByteString &rPrj );
+    sal_Bool CreateSDF( const ByteString &rSDFFile, const ByteString &rPrj, const ByteString &rRoot );
+    sal_Bool Merge( const ByteString &rSDFFile, const ByteString &rDestinationFile , const ByteString &rPrj );
 };

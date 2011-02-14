@@ -256,11 +256,11 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    USHORT TitledDockingWindow::impl_addDropDownToolBoxItem( const String& i_rItemText, const rtl::OString& i_nHelpId, const Link& i_rCallback )
+    sal_uInt16 TitledDockingWindow::impl_addDropDownToolBoxItem( const String& i_rItemText, const rtl::OString& i_nHelpId, const Link& i_rCallback )
     {
         // Add the menu before the closer button.
-        const USHORT nItemCount( m_aToolbox.GetItemCount() );
-        const USHORT nItemId( nItemCount + 1 );
+        const sal_uInt16 nItemCount( m_aToolbox.GetItemCount() );
+        const sal_uInt16 nItemId( nItemCount + 1 );
         m_aToolbox.InsertItem( nItemId, i_rItemText, TIB_DROPDOWNONLY, nItemCount > 0 ? nItemCount - 1 : TOOLBOX_APPEND );
         m_aToolbox.SetHelpId( nItemId, i_nHelpId );
         m_aToolbox.SetClickHdl( i_rCallback );
@@ -277,14 +277,14 @@ namespace sfx2
     //------------------------------------------------------------------------------------------------------------------
     IMPL_LINK( TitledDockingWindow, OnToolboxItemSelected, ToolBox*, pToolBox )
     {
-        const USHORT nId = pToolBox->GetCurItemId();
+        const sal_uInt16 nId = pToolBox->GetCurItemId();
 
         if ( nId == 1 )
         {
             // the closer
             EndTracking();
             const sal_uInt16 nChildWindowId( GetChildWindow_Impl()->GetType() );
-            const SfxBoolItem aVisibility( nChildWindowId, FALSE );
+            const SfxBoolItem aVisibility( nChildWindowId, sal_False );
             GetBindings().GetDispatcher()->Execute(
                 nChildWindowId,
                 SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
@@ -309,7 +309,7 @@ namespace sfx2
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TitledDockingWindow::EndDocking( const Rectangle& i_rRect, BOOL i_bFloatMode )
+    void TitledDockingWindow::EndDocking( const Rectangle& i_rRect, sal_Bool i_bFloatMode )
     {
         SfxDockingWindow::EndDocking( i_rRect, i_bFloatMode );
 

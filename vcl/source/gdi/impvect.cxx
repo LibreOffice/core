@@ -111,23 +111,23 @@ static ChainMove aImplMoveOuter[ 8 ] =  {
 struct ImplColorSet
 {
     BitmapColor maColor;
-    USHORT      mnIndex;
-    BOOL        mbSet;
+    sal_uInt16      mnIndex;
+    sal_Bool        mbSet;
 
-    BOOL        operator<( const ImplColorSet& rSet ) const;
-    BOOL        operator>( const ImplColorSet& rSet ) const;
+    sal_Bool        operator<( const ImplColorSet& rSet ) const;
+    sal_Bool        operator>( const ImplColorSet& rSet ) const;
 };
 
 // ----------------------------------------------------------------------------
 
-inline BOOL ImplColorSet::operator<( const ImplColorSet& rSet ) const
+inline sal_Bool ImplColorSet::operator<( const ImplColorSet& rSet ) const
 {
     return( mbSet && ( !rSet.mbSet || ( maColor.GetLuminance() > rSet.maColor.GetLuminance() ) ) );
 }
 
 // ----------------------------------------------------------------------------
 
-inline BOOL ImplColorSet::operator>( const ImplColorSet& rSet ) const
+inline sal_Bool ImplColorSet::operator>( const ImplColorSet& rSet ) const
 {
     return( !mbSet || ( rSet.mbSet && maColor.GetLuminance() < rSet.maColor.GetLuminance() ) );
 }
@@ -142,8 +142,8 @@ extern "C" int __LOADONCALLAPI ImplColorSetCmpFnc( const void* p1, const void* p
 
     if( pSet1->mbSet && pSet2->mbSet )
     {
-        const BYTE cLum1 = pSet1->maColor.GetLuminance();
-        const BYTE cLum2 = pSet2->maColor.GetLuminance();
+        const sal_uInt8 cLum1 = pSet1->maColor.GetLuminance();
+        const sal_uInt8 cLum2 = pSet2->maColor.GetLuminance();
         nRet = ( ( cLum1 > cLum2 ) ? -1 : ( ( cLum1 == cLum2 ) ? 0 : 1 ) );
     }
     else if( pSet1->mbSet )
@@ -163,21 +163,21 @@ extern "C" int __LOADONCALLAPI ImplColorSetCmpFnc( const void* p1, const void* p
 class ImplPointArray
 {
     Point*              mpArray;
-    ULONG               mnSize;
-    ULONG               mnRealSize;
+    sal_uLong               mnSize;
+    sal_uLong               mnRealSize;
 
 public:
 
                         ImplPointArray();
                         ~ImplPointArray();
 
-    void                ImplSetSize( ULONG nSize );
+    void                ImplSetSize( sal_uLong nSize );
 
-    ULONG               ImplGetRealSize() const { return mnRealSize; }
-    void                ImplSetRealSize( ULONG nRealSize ) { mnRealSize = nRealSize; }
+    sal_uLong               ImplGetRealSize() const { return mnRealSize; }
+    void                ImplSetRealSize( sal_uLong nRealSize ) { mnRealSize = nRealSize; }
 
-    inline Point&       operator[]( ULONG nPos );
-    inline const Point& operator[]( ULONG nPos ) const;
+    inline Point&       operator[]( sal_uLong nPos );
+    inline const Point& operator[]( sal_uLong nPos ) const;
 
     void                ImplCreatePoly( Polygon& rPoly ) const;
 };
@@ -202,9 +202,9 @@ ImplPointArray::~ImplPointArray()
 
 // -----------------------------------------------------------------------------
 
-void ImplPointArray::ImplSetSize( ULONG nSize )
+void ImplPointArray::ImplSetSize( sal_uLong nSize )
 {
-    const ULONG nTotal = nSize * sizeof( Point );
+    const sal_uLong nTotal = nSize * sizeof( Point );
 
     mnSize = nSize;
     mnRealSize = 0UL;
@@ -218,7 +218,7 @@ void ImplPointArray::ImplSetSize( ULONG nSize )
 
 // -----------------------------------------------------------------------------
 
-inline Point& ImplPointArray::operator[]( ULONG nPos )
+inline Point& ImplPointArray::operator[]( sal_uLong nPos )
 {
     DBG_ASSERT( nPos < mnSize, "ImplPointArray::operator[]: nPos out of range!" );
     return mpArray[ nPos ];
@@ -226,7 +226,7 @@ inline Point& ImplPointArray::operator[]( ULONG nPos )
 
 // -----------------------------------------------------------------------------
 
-inline const Point& ImplPointArray::operator[]( ULONG nPos ) const
+inline const Point& ImplPointArray::operator[]( sal_uLong nPos ) const
 {
     DBG_ASSERT( nPos < mnSize, "ImplPointArray::operator[]: nPos out of range!" );
     return mpArray[ nPos ];
@@ -236,7 +236,7 @@ inline const Point& ImplPointArray::operator[]( ULONG nPos ) const
 
 void ImplPointArray::ImplCreatePoly( Polygon& rPoly ) const
 {
-    rPoly = Polygon( sal::static_int_cast<USHORT>(mnRealSize), mpArray );
+    rPoly = Polygon( sal::static_int_cast<sal_uInt16>(mnRealSize), mpArray );
 }
 
 // ---------------
@@ -262,12 +262,12 @@ public:
     inline long     Width() const { return mnWidth; }
     inline long     Height() const { return mnHeight; }
 
-    inline void     Set( long nY, long nX, BYTE cVal );
-    inline BYTE     Get( long nY, long nX ) const;
+    inline void     Set( long nY, long nX, sal_uInt8 cVal );
+    inline sal_uInt8        Get( long nY, long nX ) const;
 
-    inline BOOL     IsFree( long nY, long nX ) const;
-    inline BOOL     IsCont( long nY, long nX ) const;
-    inline BOOL     IsDone( long nY, long nX ) const;
+    inline sal_Bool     IsFree( long nY, long nX ) const;
+    inline sal_Bool     IsCont( long nY, long nX ) const;
+    inline sal_Bool     IsDone( long nY, long nX ) const;
 
 };
 
@@ -299,36 +299,36 @@ ImplVectMap::~ImplVectMap()
 
 // -----------------------------------------------------------------------------
 
-inline void ImplVectMap::Set( long nY, long nX, BYTE cVal )
+inline void ImplVectMap::Set( long nY, long nX, sal_uInt8 cVal )
 {
-    const BYTE cShift = sal::static_int_cast<BYTE>(6 - ( ( nX & 3 ) << 1 ));
+    const sal_uInt8 cShift = sal::static_int_cast<sal_uInt8>(6 - ( ( nX & 3 ) << 1 ));
     ( ( mpScan[ nY ][ nX >> 2 ] ) &= ~( 3 << cShift ) ) |= ( cVal << cShift );
 }
 
 // -----------------------------------------------------------------------------
 
-inline BYTE ImplVectMap::Get( long nY, long nX ) const
+inline sal_uInt8    ImplVectMap::Get( long nY, long nX ) const
 {
-    return sal::static_int_cast<BYTE>( ( ( mpScan[ nY ][ nX >> 2 ] ) >> ( 6 - ( ( nX & 3 ) << 1 ) ) ) & 3 );
+    return sal::static_int_cast<sal_uInt8>( ( ( mpScan[ nY ][ nX >> 2 ] ) >> ( 6 - ( ( nX & 3 ) << 1 ) ) ) & 3 );
 }
 
 // -----------------------------------------------------------------------------
 
-inline BOOL ImplVectMap::IsFree( long nY, long nX ) const
+inline sal_Bool ImplVectMap::IsFree( long nY, long nX ) const
 {
     return( VECT_FREE_INDEX == Get( nY, nX ) );
 }
 
 // -----------------------------------------------------------------------------
 
-inline BOOL ImplVectMap::IsCont( long nY, long nX ) const
+inline sal_Bool ImplVectMap::IsCont( long nY, long nX ) const
 {
     return( VECT_CONT_INDEX == Get( nY, nX ) );
 }
 
 // -----------------------------------------------------------------------------
 
-inline BOOL ImplVectMap::IsDone( long nY, long nX ) const
+inline sal_Bool ImplVectMap::IsDone( long nY, long nX ) const
 {
     return( VECT_DONE_INDEX == Get( nY, nX ) );
 }
@@ -343,10 +343,10 @@ private:
 
     Polygon         maPoly;
     Point           maStartPt;
-    ULONG           mnArraySize;
-    ULONG           mnCount;
+    sal_uLong           mnArraySize;
+    sal_uLong           mnCount;
     long            mnResize;
-    BYTE*           mpCodes;
+    sal_uInt8*          mpCodes;
 
     void            ImplGetSpace();
 
@@ -357,25 +357,25 @@ private:
 
 public:
 
-                    ImplChain( ULONG nInitCount = 1024UL, long nResize = -1L );
+                    ImplChain( sal_uLong nInitCount = 1024UL, long nResize = -1L );
                     ~ImplChain();
 
     void            ImplBeginAdd( const Point& rStartPt );
-    inline void     ImplAdd( BYTE nCode );
-    void            ImplEndAdd( ULONG nTypeFlag );
+    inline void     ImplAdd( sal_uInt8 nCode );
+    void            ImplEndAdd( sal_uLong nTypeFlag );
 
     const Polygon&  ImplGetPoly() { return maPoly; }
 };
 
 // -----------------------------------------------------------------------------
 
-ImplChain::ImplChain( ULONG nInitCount, long nResize ) :
+ImplChain::ImplChain( sal_uLong nInitCount, long nResize ) :
     mnArraySize ( nInitCount ),
     mnCount     ( 0UL ),
     mnResize    ( nResize )
 {
     DBG_ASSERT( nInitCount && nResize, "ImplChain::ImplChain(): invalid parameters!" );
-    mpCodes = new BYTE[ mnArraySize ];
+    mpCodes = new sal_uInt8[ mnArraySize ];
 }
 
 // -----------------------------------------------------------------------------
@@ -389,11 +389,11 @@ ImplChain::~ImplChain()
 
 void ImplChain::ImplGetSpace()
 {
-    const ULONG nOldArraySize = mnArraySize;
-    BYTE*       pNewCodes;
+    const sal_uLong nOldArraySize = mnArraySize;
+    sal_uInt8*      pNewCodes;
 
-    mnArraySize = ( mnResize < 0L ) ? ( mnArraySize << 1UL ) : ( mnArraySize + (ULONG) mnResize );
-    pNewCodes = new BYTE[ mnArraySize ];
+    mnArraySize = ( mnResize < 0L ) ? ( mnArraySize << 1UL ) : ( mnArraySize + (sal_uLong) mnResize );
+    pNewCodes = new sal_uInt8[ mnArraySize ];
     memcpy( pNewCodes, mpCodes, nOldArraySize );
     delete[] mpCodes;
     mpCodes = pNewCodes;
@@ -410,7 +410,7 @@ void ImplChain::ImplBeginAdd( const Point& rStartPt )
 
 // -----------------------------------------------------------------------------
 
-inline void ImplChain::ImplAdd( BYTE nCode )
+inline void ImplChain::ImplAdd( sal_uInt8 nCode )
 {
     if( mnCount == mnArraySize )
         ImplGetSpace();
@@ -420,7 +420,7 @@ inline void ImplChain::ImplAdd( BYTE nCode )
 
 // -----------------------------------------------------------------------------
 
-void ImplChain::ImplEndAdd( ULONG nFlag )
+void ImplChain::ImplEndAdd( sal_uLong nFlag )
 {
     if( mnCount )
     {
@@ -435,15 +435,15 @@ void ImplChain::ImplEndAdd( ULONG nFlag )
             nFirstY = nLastY = maStartPt.Y();
             aArr.ImplSetSize( mnCount << 1 );
 
-            USHORT i, nPolyPos;
+            sal_uInt16 i, nPolyPos;
             for( i = 0, nPolyPos = 0; i < ( mnCount - 1 ); i++ )
             {
-                const BYTE              cMove = mpCodes[ i ];
-                const BYTE              cNextMove = mpCodes[ i + 1 ];
+                const sal_uInt8             cMove = mpCodes[ i ];
+                const sal_uInt8             cNextMove = mpCodes[ i + 1 ];
                 const ChainMove&        rMove = aImplMove[ cMove ];
                 const ChainMove&        rMoveInner = aImplMoveInner[ cMove ];
 //              Point&                  rPt = aArr[ nPolyPos ];
-                BOOL                    bDone = TRUE;
+                sal_Bool                    bDone = sal_True;
 
                 nLastX += rMove.nDX;
                 nLastY += rMove.nDY;
@@ -501,7 +501,7 @@ void ImplChain::ImplEndAdd( ULONG nFlag )
                         aArr[ nPolyPos++ ].Y() = nLastY - 1;
                     }
                     else
-                        bDone = FALSE;
+                        bDone = sal_False;
                 }
                 else if( cMove == 7 && cNextMove == 0 )
                 {
@@ -520,7 +520,7 @@ void ImplChain::ImplEndAdd( ULONG nFlag )
                     aArr[ nPolyPos++ ].Y() = nLastY;
                 }
                 else
-                    bDone = FALSE;
+                    bDone = sal_False;
 
                 if( !bDone )
                 {
@@ -542,15 +542,15 @@ void ImplChain::ImplEndAdd( ULONG nFlag )
             nFirstY = nLastY = maStartPt.Y();
             aArr.ImplSetSize( mnCount << 1 );
 
-            USHORT i, nPolyPos;
+            sal_uInt16 i, nPolyPos;
             for( i = 0, nPolyPos = 0; i < ( mnCount - 1 ); i++ )
             {
-                const BYTE              cMove = mpCodes[ i ];
-                const BYTE              cNextMove = mpCodes[ i + 1 ];
+                const sal_uInt8             cMove = mpCodes[ i ];
+                const sal_uInt8             cNextMove = mpCodes[ i + 1 ];
                 const ChainMove&        rMove = aImplMove[ cMove ];
                 const ChainMove&        rMoveOuter = aImplMoveOuter[ cMove ];
 //              Point&                  rPt = aArr[ nPolyPos ];
-                BOOL                    bDone = TRUE;
+                sal_Bool                    bDone = sal_True;
 
                 nLastX += rMove.nDX;
                 nLastY += rMove.nDY;
@@ -608,7 +608,7 @@ void ImplChain::ImplEndAdd( ULONG nFlag )
                         aArr[ nPolyPos++ ].Y() = nLastY - 1;
                     }
                     else
-                        bDone = FALSE;
+                        bDone = sal_False;
                 }
                 else if( cMove == 7 && cNextMove == 3 )
                 {
@@ -627,7 +627,7 @@ void ImplChain::ImplEndAdd( ULONG nFlag )
                     aArr[ nPolyPos++ ].Y() = nLastY + 1;
                 }
                 else
-                    bDone = FALSE;
+                    bDone = sal_False;
 
                 if( !bDone )
                 {
@@ -647,7 +647,7 @@ void ImplChain::ImplEndAdd( ULONG nFlag )
             aArr.ImplSetSize( mnCount + 1 );
             aArr[ 0 ] = Point( nLastX, nLastY );
 
-            for( ULONG i = 0; i < mnCount; )
+            for( sal_uLong i = 0; i < mnCount; )
             {
                 const ChainMove& rMove = aImplMove[ mpCodes[ i ] ];
                 aArr[ ++i ] = Point( nLastX += rMove.nDX, nLastY += rMove.nDY );
@@ -670,9 +670,9 @@ void ImplChain::ImplPostProcess( const ImplPointArray& rArr )
     ImplPointArray  aNewArr2;
     Point*          pLast;
     Point*          pLeast;
-    ULONG           nNewPos;
-    ULONG           nCount = rArr.ImplGetRealSize();
-    ULONG           n;
+    sal_uLong           nNewPos;
+    sal_uLong           nCount = rArr.ImplGetRealSize();
+    sal_uLong           n;
 
     // pass 1
     aNewArr1.ImplSetSize( nCount );
@@ -739,10 +739,10 @@ ImplVectorizer::~ImplVectorizer()
 
 // -----------------------------------------------------------------------------
 
-BOOL ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
-                                    BYTE cReduce, ULONG nFlags, const Link* pProgress )
+sal_Bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
+                                    sal_uInt8 cReduce, sal_uLong nFlags, const Link* pProgress )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     VECT_PROGRESS( pProgress, 0 );
 
@@ -756,9 +756,9 @@ BOOL ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
         double              fPercentStep_2 = 0.0;
         const long          nWidth = pRAcc->Width();
         const long          nHeight = pRAcc->Height();
-        const USHORT        nColorCount = pRAcc->GetPaletteEntryCount();
-        USHORT              n;
-        ImplColorSet*       pColorSet = (ImplColorSet*) new BYTE[ 256 * sizeof( ImplColorSet ) ];
+        const sal_uInt16        nColorCount = pRAcc->GetPaletteEntryCount();
+        sal_uInt16              n;
+        ImplColorSet*       pColorSet = (ImplColorSet*) new sal_uInt8[ 256 * sizeof( ImplColorSet ) ];
 
         memset( pColorSet, 0, 256 * sizeof( ImplColorSet ) );
         rMtf.Clear();
@@ -785,11 +785,11 @@ BOOL ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
 
         VECT_PROGRESS( pProgress, FRound( fPercent += 10.0 ) );
 
-        for( USHORT i = 0; i < n; i++ )
+        for( sal_uInt16 i = 0; i < n; i++ )
         {
             const BitmapColor   aBmpCol( pRAcc->GetPaletteColor( pColorSet[ i ].mnIndex ) );
             const Color         aFindColor( aBmpCol.GetRed(), aBmpCol.GetGreen(), aBmpCol.GetBlue() );
-//          const BYTE          cLum = aFindColor.GetLuminance();
+//          const sal_uInt8         cLum = aFindColor.GetLuminance();
             ImplVectMap*        pMap = ImplExpand( pRAcc, aFindColor );
 
             VECT_PROGRESS( pProgress, FRound( fPercent += fPercentStep_2 ) );
@@ -809,8 +809,8 @@ BOOL ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
 
                     if( aPolyPoly.Count() )
                     {
-                        rMtf.AddAction( new MetaLineColorAction( aFindColor, TRUE ) );
-                        rMtf.AddAction( new MetaFillColorAction( aFindColor, TRUE ) );
+                        rMtf.AddAction( new MetaLineColorAction( aFindColor, sal_True ) );
+                        rMtf.AddAction( new MetaFillColorAction( aFindColor, sal_True ) );
                         rMtf.AddAction( new MetaPolyPolygonAction( aPolyPoly ) );
                     }
                 }
@@ -819,7 +819,7 @@ BOOL ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
             VECT_PROGRESS( pProgress, FRound( fPercent += fPercentStep_2 ) );
         }
 
-        delete[] (BYTE*) pColorSet;
+        delete[] (sal_uInt8*) pColorSet;
 
         if( rMtf.GetActionCount() )
         {
@@ -831,7 +831,7 @@ BOOL ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
             rMtf.SetPrefSize( Size( nWidth + 2, nHeight + 2 ) );
             rMtf.Move( 1, 1 );
             rMtf.Scale( aLogSize1.Width(), aLogSize1.Height() );
-            bRet = TRUE;
+            bRet = sal_True;
         }
     }
 
@@ -844,14 +844,14 @@ BOOL ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
 
 // -----------------------------------------------------------------------------
 
-BOOL ImplVectorizer::ImplVectorize( const Bitmap& rMonoBmp,
+sal_Bool ImplVectorizer::ImplVectorize( const Bitmap& rMonoBmp,
                                     PolyPolygon& rPolyPoly,
-                                    ULONG nFlags, const Link* pProgress )
+                                    sal_uLong nFlags, const Link* pProgress )
 {
     Bitmap*             pBmp = new Bitmap( rMonoBmp );
     BitmapReadAccess*   pRAcc;
     ImplVectMap*        pMap;
-    BOOL                bRet = FALSE;
+    sal_Bool                bRet = sal_False;
 
     VECT_PROGRESS( pProgress, 10 );
 
@@ -925,13 +925,13 @@ BOOL ImplVectorizer::ImplVectorize( const Bitmap& rMonoBmp,
         // put outmost polygon to the front
         if( nFirstPoly > 0 )
         {
-            const Polygon aFirst( rPolyPoly.GetObject( static_cast< USHORT >( nFirstPoly ) ) );
+            const Polygon aFirst( rPolyPoly.GetObject( static_cast< sal_uInt16 >( nFirstPoly ) ) );
 
-            rPolyPoly.Remove( static_cast< USHORT >( nFirstPoly ) );
+            rPolyPoly.Remove( static_cast< sal_uInt16 >( nFirstPoly ) );
             rPolyPoly.Insert( aFirst, 0 );
         }
 
-        bRet = TRUE;
+        bRet = sal_True;
     }
 
     VECT_PROGRESS( pProgress, 100 );
@@ -947,14 +947,14 @@ void ImplVectorizer::ImplLimitPolyPoly( PolyPolygon& rPolyPoly )
     {
         PolyPolygon aNewPolyPoly;
         long        nReduce = 0;
-        USHORT      nNewCount;
+        sal_uInt16      nNewCount;
 
         do
         {
             aNewPolyPoly.Clear();
             nReduce++;
 
-            for( USHORT i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )
+            for( sal_uInt16 i = 0, nCount = rPolyPoly.Count(); i < nCount; i++ )
             {
                 const Rectangle aBound( rPolyPoly[ i ].GetBoundRect() );
 
@@ -1068,14 +1068,14 @@ ImplVectMap* ImplVectorizer::ImplExpand( BitmapReadAccess* pRAcc, const Color& r
 
 // -----------------------------------------------------------------------------
 
-void ImplVectorizer::ImplCalculate( ImplVectMap* pMap, PolyPolygon& rPolyPoly, BYTE cReduce, ULONG nFlags )
+void ImplVectorizer::ImplCalculate( ImplVectMap* pMap, PolyPolygon& rPolyPoly, sal_uInt8 cReduce, sal_uLong nFlags )
 {
     const long nWidth = pMap->Width(), nHeight= pMap->Height();
 
     for( long nY = 0L; nY < nHeight; nY++ )
     {
         long    nX = 0L;
-        BOOL    bInner = TRUE;
+        sal_Bool    bInner = sal_True;
 
         while( nX < nWidth )
         {
@@ -1137,15 +1137,15 @@ void ImplVectorizer::ImplCalculate( ImplVectMap* pMap, PolyPolygon& rPolyPoly, B
 
 // -----------------------------------------------------------------------------
 
-BOOL ImplVectorizer::ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain )
+sal_Bool ImplVectorizer::ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, ImplChain& rChain )
 {
     long                nActX = rStartPt.X();
     long                nActY = rStartPt.Y();
     long                nTryX;
     long                nTryY;
-    ULONG               nFound;
-    ULONG               nLastDir = 0UL;
-    ULONG               nDir;
+    sal_uLong               nFound;
+    sal_uLong               nLastDir = 0UL;
+    sal_uLong               nDir;
 
     do
     {
@@ -1157,7 +1157,7 @@ BOOL ImplVectorizer::ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, Im
 
         if( pMap->IsCont( nTryY, nTryX ) )
         {
-            rChain.ImplAdd( (BYTE) nLastDir );
+            rChain.ImplAdd( (sal_uInt8) nLastDir );
             pMap->Set( nActY = nTryY, nActX = nTryX, VECT_DONE_INDEX );
             nFound = 1UL;
         }
@@ -1174,7 +1174,7 @@ BOOL ImplVectorizer::ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, Im
 
                     if( pMap->IsCont( nTryY, nTryX ) )
                     {
-                        rChain.ImplAdd( (BYTE) nDir );
+                        rChain.ImplAdd( (sal_uInt8) nDir );
                         pMap->Set( nActY = nTryY, nActX = nTryX, VECT_DONE_INDEX );
                         nFound = 1UL;
                         nLastDir = nDir;
@@ -1186,19 +1186,19 @@ BOOL ImplVectorizer::ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, Im
     }
     while( nFound );
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------------
 
-BOOL ImplVectorizer::ImplIsUp( ImplVectMap* pMap, long nY, long nX ) const
+sal_Bool ImplVectorizer::ImplIsUp( ImplVectMap* pMap, long nY, long nX ) const
 {
     if( pMap->IsDone( nY - 1L, nX ) )
-        return TRUE;
+        return sal_True;
     else if( pMap->IsDone( nY + 1L, nX ) )
-        return FALSE;
+        return sal_False;
     else if( pMap->IsDone( nY - 1L, nX - 1L ) || pMap->IsDone( nY - 1L, nX + 1L ) )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }

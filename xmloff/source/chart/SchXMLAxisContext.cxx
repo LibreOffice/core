@@ -305,13 +305,13 @@ void SchXMLAxisContext::StartElement( const Reference< xml::sax::XAttributeList 
         OUString sAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {
             case XML_TOK_AXIS_DIMENSION:
                 {
-                    USHORT nEnumVal;
+                    sal_uInt16 nEnumVal;
                     if( rImport.GetMM100UnitConverter().convertEnum( nEnumVal, aValue, aXMLAxisDimensionMap ))
                         m_aCurrentAxis.eDimension = ( SchXMLAxisDimension )nEnumVal;
                 }
@@ -321,7 +321,7 @@ void SchXMLAxisContext::StartElement( const Reference< xml::sax::XAttributeList 
                 break;
             case XML_TOK_AXIS_TYPE:
             case XML_TOK_AXIS_TYPE_EXT:
-                USHORT nEnumVal;
+                sal_uInt16 nEnumVal;
                 if( rImport.GetMM100UnitConverter().convertEnum( nEnumVal, aValue, aXMLAxisTypeMap ))
                 {
                     m_nAxisType = nEnumVal;
@@ -653,7 +653,7 @@ struct theAxisChildTokenMap : public rtl::Static< AxisChildTokenMap, theAxisChil
 }
 
 SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
-    USHORT p_nPrefix,
+    sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -695,7 +695,7 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
             {
                 OUString sAttrName = xAttrList->getNameByIndex( i );
                 OUString aLocalName;
-                USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+                sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
                 if( nPrefix == XML_NAMESPACE_CHART )
                 {
@@ -906,7 +906,7 @@ void SchXMLCategoriesContext::StartElement( const Reference< xml::sax::XAttribut
     {
         OUString sAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_TABLE &&
             IsXMLToken( aLocalName, XML_CELL_RANGE_ADDRESS ) )
@@ -997,7 +997,7 @@ void DateScaleContext::StartElement( const Reference< xml::sax::XAttributeList >
         OUString sAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
         OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {

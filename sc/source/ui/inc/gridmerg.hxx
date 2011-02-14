@@ -43,8 +43,8 @@ private:
     long            nVarStart;
     long            nVarDiff;
     long            nCount;
-    BOOL            bVertical;
-    BOOL            bOptimize;
+    sal_Bool            bVertical;
+    sal_Bool            bOptimize;
 
     void        AddLine( long nStart, long nEnd, long nPos );
 

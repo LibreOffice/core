@@ -145,35 +145,6 @@ void SfxApplication::PreInit( )
 {
 }
 
-//---------------------------------------------------------------------------
-bool SfxApplication::InitLabelResMgr( const char* _pLabelPrefix, bool _bException )
-{
-    bool bRet = false;
-    // Label-DLL mit diversen Resourcen fuer OEM-Ver. etc. (Intro, Titel, About)
-    DBG_ASSERT( _pLabelPrefix, "Wrong initialisation!" );
-    if ( _pLabelPrefix )
-    {
-        // versuchen, die Label-DLL zu erzeugen
-        pAppData_Impl->pLabelResMgr = CreateResManager( _pLabelPrefix );
-
-        // keine separate Label-DLL vorhanden?
-        if ( !pAppData_Impl->pLabelResMgr )
-        {
-            if ( _bException )
-            {
-                // maybe corrupted installation
-                throw (::com::sun::star::uno::RuntimeException(
-                    ::rtl::OUString::createFromAscii("iso resource could not be loaded by SfxApplication"),
-                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >()));
-            }
-        }
-        else
-            bRet = true;
-    }
-
-    return bRet;
-}
-
 void SfxApplication::Main( )
 {
 }

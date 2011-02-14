@@ -45,8 +45,8 @@ class SVL_DLLPUBLIC SfxRectangleItem: public SfxPoolItem
 public:
                              TYPEINFO();
                              SfxRectangleItem();
-                             SfxRectangleItem( USHORT nWhich, const Rectangle& rVal );
-                             SfxRectangleItem( USHORT nWhich, SvStream & );
+                             SfxRectangleItem( sal_uInt16 nWhich, const Rectangle& rVal );
+                             SfxRectangleItem( sal_uInt16 nWhich, SvStream & );
                              SfxRectangleItem( const SfxRectangleItem& );
                              ~SfxRectangleItem() {
                                  DBG_DTOR(SfxRectangleItem, 0); }
@@ -59,18 +59,18 @@ public:
 
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT nItemVersion) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion) const;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16 nItemVersion) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const;
 
     const Rectangle&         GetValue() const { return aVal; }
             void             SetValue( const Rectangle& rNewVal ) {
                                  DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
                                  aVal = rNewVal;
                              }
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal,
-                                          BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal,
-                                          BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal,
+                                          sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal,
+                                          sal_uInt8 nMemberId = 0 );
 };
 
 #endif

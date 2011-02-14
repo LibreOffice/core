@@ -60,9 +60,9 @@ using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------------
 
-static sal_Int64 ImplPower10( USHORT n )
+static sal_Int64 ImplPower10( sal_uInt16 n )
 {
-    USHORT i;
+    sal_uInt16 i;
     sal_Int64   nValue = 1;
 
     for ( i=0; i < n; i++ )
@@ -73,16 +73,16 @@ static sal_Int64 ImplPower10( USHORT n )
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
-                                        BOOL bStrictFormat, BOOL bThousandSep,
+static sal_Bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
+                                        sal_Bool bStrictFormat, sal_Bool bThousandSep,
                                         const LocaleDataWrapper& rLocaleDataWrappper )
 {
     if ( !bStrictFormat )
-        return FALSE;
+        return sal_False;
     else
     {
         xub_Unicode cChar = rKEvt.GetCharCode();
-        USHORT      nGroup = rKEvt.GetKeyCode().GetGroup();
+        sal_uInt16      nGroup = rKEvt.GetKeyCode().GetGroup();
 
         if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
              (nGroup == KEYGROUP_MISC) ||
@@ -90,28 +90,28 @@ static BOOL ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
              (cChar == rLocaleDataWrappper.getNumDecimalSep() ) ||
              (bThousandSep && (cChar == rLocaleDataWrappper.getNumThousandSep())) ||
              (cChar == '-') )
-            return FALSE;
+            return sal_False;
         else
-            return TRUE;
+            return sal_True;
     }
 }
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplNumericGetValue( const XubString& rStr, double& rValue,
-                                 USHORT nDecDigits, const LocaleDataWrapper& rLocaleDataWrappper,
-                                 BOOL bCurrency = FALSE )
+static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
+                                 sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrappper,
+                                 sal_Bool bCurrency = sal_False )
 {
     XubString   aStr = rStr;
     XubString   aStr1;
     XubString   aStr2;
-    BOOL        bNegative = FALSE;
+    sal_Bool        bNegative = sal_False;
     xub_StrLen  nDecPos;
     xub_StrLen  i;
 
     // Reaktion auf leeren String
     if ( !rStr.Len() )
-        return FALSE;
+        return sal_False;
 
     // Fuehrende und nachfolgende Leerzeichen entfernen
     aStr.EraseLeadingAndTrailingChars( ' ' );
@@ -130,7 +130,7 @@ static BOOL ImplNumericGetValue( const XubString& rStr, double& rValue,
     if ( bCurrency )
     {
         if ( (aStr.GetChar( 0 ) == '(') && (aStr.GetChar( aStr.Len()-1 ) == ')') )
-            bNegative = TRUE;
+            bNegative = sal_True;
         if ( !bNegative )
         {
             for ( i=0; i < aStr.Len(); i++ )
@@ -139,14 +139,14 @@ static BOOL ImplNumericGetValue( const XubString& rStr, double& rValue,
                     break;
                 else if ( aStr.GetChar( i ) == '-' )
                 {
-                    bNegative = TRUE;
+                    bNegative = sal_True;
                     break;
                 }
             }
         }
         if ( !bNegative && bCurrency && aStr.Len() )
         {
-            USHORT nFormat = rLocaleDataWrappper.getCurrNegativeFormat();
+            sal_uInt16 nFormat = rLocaleDataWrappper.getCurrNegativeFormat();
             if ( (nFormat == 3) || (nFormat == 6)  ||
                  (nFormat == 7) || (nFormat == 10) )
             {
@@ -156,7 +156,7 @@ static BOOL ImplNumericGetValue( const XubString& rStr, double& rValue,
                         break;
                     else if ( aStr.GetChar( i ) == '-' )
                     {
-                        bNegative = TRUE;
+                        bNegative = sal_True;
                         break;
                     }
                 }
@@ -166,7 +166,7 @@ static BOOL ImplNumericGetValue( const XubString& rStr, double& rValue,
     else
     {
         if ( aStr1.GetChar( 0 ) == '-' )
-            bNegative = TRUE;
+            bNegative = sal_True;
     }
 
     // Alle unerwuenschten Zeichen rauswerfen
@@ -186,7 +186,7 @@ static BOOL ImplNumericGetValue( const XubString& rStr, double& rValue,
     }
 
     if ( !aStr1.Len() && !aStr2.Len() )
-        return FALSE;
+        return sal_False;
 
     if ( !aStr1.Len() )
         aStr1.Insert( '0' );
@@ -194,11 +194,11 @@ static BOOL ImplNumericGetValue( const XubString& rStr, double& rValue,
         aStr1.Insert( '-', 0 );
 
     // Nachkommateil zurechtstutzen und dabei runden
-    BOOL bRound = FALSE;
+    sal_Bool bRound = sal_False;
     if ( aStr2.Len() > nDecDigits )
     {
         if ( aStr2.GetChar( nDecDigits ) >= '5' )
-            bRound = TRUE;
+            bRound = sal_True;
         aStr2.Erase( nDecDigits );
     }
     if ( aStr2.Len() < nDecDigits )
@@ -219,7 +219,7 @@ static BOOL ImplNumericGetValue( const XubString& rStr, double& rValue,
 
     rValue = nValue;
 
-    return TRUE;
+    return sal_True;
 }
 
 static void ImplUpdateSeparatorString( String& io_rText,
@@ -267,8 +267,8 @@ static void ImplUpdateSeparators( const String& rOldDecSep, const String& rNewDe
 
     if( bChangeDec || bChangeTh )
     {
-        BOOL bUpdateMode = pEdit->IsUpdateMode();
-        pEdit->SetUpdateMode( FALSE );
+        sal_Bool bUpdateMode = pEdit->IsUpdateMode();
+        pEdit->SetUpdateMode( sal_False );
         String aText = pEdit->GetText();
         ImplUpdateSeparatorString( aText, rOldDecSep, rNewDecSep, rOldThSep, rNewThSep );
         pEdit->SetText( aText );
@@ -277,8 +277,8 @@ static void ImplUpdateSeparators( const String& rOldDecSep, const String& rNewDe
         if( pCombo )
         {
             // update box entries
-            USHORT nEntryCount = pCombo->GetEntryCount();
-            for ( USHORT i=0; i < nEntryCount; i++ )
+            sal_uInt16 nEntryCount = pCombo->GetEntryCount();
+            for ( sal_uInt16 i=0; i < nEntryCount; i++ )
             {
                 aText = pCombo->GetEntry( i );
                 void* pEntryData = pCombo->GetEntryData( i );
@@ -299,11 +299,11 @@ FormatterBase::FormatterBase( Edit* pField )
 {
     mpField                     = pField;
     mpLocaleDataWrapper         = NULL;
-    mbReformat                  = FALSE;
-    mbStrictFormat              = FALSE;
-    mbEmptyFieldValue           = FALSE;
-    mbEmptyFieldValueEnabled    = FALSE;
-    mbDefaultLocale             = TRUE;
+    mbReformat                  = sal_False;
+    mbStrictFormat              = sal_False;
+    mbEmptyFieldValue           = sal_False;
+    mbEmptyFieldValueEnabled    = sal_False;
+    mbDefaultLocale             = sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -344,7 +344,7 @@ void FormatterBase::ReformatAll()
 
 // -----------------------------------------------------------------------
 
-void FormatterBase::SetStrictFormat( BOOL bStrict )
+void FormatterBase::SetStrictFormat( sal_Bool bStrict )
 {
     if ( bStrict != mbStrictFormat )
     {
@@ -359,7 +359,7 @@ void FormatterBase::SetStrictFormat( BOOL bStrict )
 void FormatterBase::SetLocale( const lang::Locale& rLocale )
 {
     ImplGetLocaleDataWrapper().setLocale( rLocale );
-    mbDefaultLocale = FALSE;
+    mbDefaultLocale = sal_False;
     ReformatAll();
 }
 
@@ -390,7 +390,7 @@ const AllSettings& FormatterBase::GetFieldSettings() const
 
 // -----------------------------------------------------------------------
 
-void FormatterBase::SetFieldText( const XubString& rText, BOOL bKeepSelection )
+void FormatterBase::SetFieldText( const XubString& rText, sal_Bool bKeepSelection )
 {
     if ( mpField )
     {
@@ -417,7 +417,7 @@ void FormatterBase::ImplSetText( const XubString& rText, Selection* pNewSelectio
             mpField->SetText( rText, aSel );
         }
 
-        MarkToBeReformatted( FALSE );
+        MarkToBeReformatted( sal_False );
     }
 }
 
@@ -427,23 +427,23 @@ void FormatterBase::SetEmptyFieldValue()
 {
     if ( mpField )
         mpField->SetText( ImplGetSVEmptyStr() );
-    mbEmptyFieldValue = TRUE;
+    mbEmptyFieldValue = sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL FormatterBase::IsEmptyFieldValue() const
+sal_Bool FormatterBase::IsEmptyFieldValue() const
 {
     return (!mpField || !mpField->GetText().Len());
 }
 
 // -----------------------------------------------------------------------
 
-BOOL NumericFormatter::ImplNumericReformat( const XubString& rStr, double& rValue,
+sal_Bool NumericFormatter::ImplNumericReformat( const XubString& rStr, double& rValue,
                                             XubString& rOutStr )
 {
     if ( !ImplNumericGetValue( rStr, rValue, GetDecimalDigits(), ImplGetLocaleDataWrapper() ) )
-        return TRUE;
+        return sal_True;
     else
     {
         double nTempVal = rValue;
@@ -459,14 +459,14 @@ BOOL NumericFormatter::ImplNumericReformat( const XubString& rStr, double& rValu
             if ( !GetErrorHdl().Call( this ) )
             {
                 mnCorrectedValue = 0;
-                return FALSE;
+                return sal_False;
             }
             else
                 mnCorrectedValue = 0;
         }
 
         rOutStr = CreateFieldText( (sal_Int64)nTempVal );
-        return TRUE;
+        return sal_True;
     }
 }
 
@@ -481,8 +481,8 @@ void NumericFormatter::ImplInit()
     mnCorrectedValue    = 0;
     mnDecimalDigits     = 2;
     mnType              = FORMAT_NUMERIC;
-    mbThousandSep       = TRUE;
-    mbShowTrailingZeros = TRUE;
+    mbThousandSep       = sal_True;
+    mbShowTrailingZeros = sal_True;
 
     // for fields
     mnSpinSize          = 1;
@@ -507,7 +507,7 @@ void NumericFormatter::ImplLoadRes( const ResId& rResId )
 
     if( pMgr )
     {
-        ULONG nMask = pMgr->ReadLong();
+        sal_uLong nMask = pMgr->ReadLong();
 
         if ( NUMERICFORMATTER_MIN & nMask )
             mnMin = pMgr->ReadLong();
@@ -516,7 +516,7 @@ void NumericFormatter::ImplLoadRes( const ResId& rResId )
             mnMax = pMgr->ReadLong();
 
         if ( NUMERICFORMATTER_STRICTFORMAT & nMask )
-            SetStrictFormat( (BOOL)pMgr->ReadShort() );
+            SetStrictFormat( (sal_Bool)pMgr->ReadShort() );
 
         if ( NUMERICFORMATTER_DECIMALDIGITS & nMask )
             SetDecimalDigits( pMgr->ReadShort() );
@@ -532,7 +532,7 @@ void NumericFormatter::ImplLoadRes( const ResId& rResId )
         }
 
         if ( NUMERICFORMATTER_NOTHOUSANDSEP & nMask )
-            SetUseThousandSep( !(BOOL)pMgr->ReadShort() );
+            SetUseThousandSep( !(sal_Bool)pMgr->ReadShort() );
     }
 }
 
@@ -562,7 +562,7 @@ void NumericFormatter::SetMax( sal_Int64 nNewMax )
 
 // -----------------------------------------------------------------------
 
-void NumericFormatter::SetUseThousandSep( BOOL b )
+void NumericFormatter::SetUseThousandSep( sal_Bool b )
 {
     mbThousandSep = b;
     ReformatAll();
@@ -570,7 +570,7 @@ void NumericFormatter::SetUseThousandSep( BOOL b )
 
 // -----------------------------------------------------------------------
 
-void NumericFormatter::SetDecimalDigits( USHORT nDigits )
+void NumericFormatter::SetDecimalDigits( sal_uInt16 nDigits )
 {
     mnDecimalDigits = nDigits;
     ReformatAll();
@@ -578,7 +578,7 @@ void NumericFormatter::SetDecimalDigits( USHORT nDigits )
 
 // -----------------------------------------------------------------------
 
-void NumericFormatter::SetShowTrailingZeros( BOOL bShowTrailingZeros )
+void NumericFormatter::SetShowTrailingZeros( sal_Bool bShowTrailingZeros )
 {
     if ( mbShowTrailingZeros != bShowTrailingZeros )
     {
@@ -589,7 +589,7 @@ void NumericFormatter::SetShowTrailingZeros( BOOL bShowTrailingZeros )
 
 // -----------------------------------------------------------------------
 
-USHORT NumericFormatter::GetDecimalDigits() const
+sal_uInt16 NumericFormatter::GetDecimalDigits() const
 {
     return mnDecimalDigits;
 }
@@ -600,7 +600,7 @@ void NumericFormatter::SetValue( sal_Int64 nNewValue )
 {
     SetUserValue( nNewValue );
     mnFieldValue = mnLastValue;
-    SetEmptyFieldValueData( FALSE );
+    SetEmptyFieldValueData( sal_False );
 }
 
 // -----------------------------------------------------------------------
@@ -656,14 +656,14 @@ sal_Int64 NumericFormatter::GetValue() const
 
 // -----------------------------------------------------------------------
 
-BOOL NumericFormatter::IsValueModified() const
+sal_Bool NumericFormatter::IsValueModified() const
 {
     if ( ImplGetEmptyFieldValue() )
         return !IsEmptyFieldValue();
     else if ( GetValue() != mnFieldValue )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -714,7 +714,7 @@ void NumericFormatter::Reformat()
     XubString aStr;
     // caution: precision loss in double cast
     double nTemp = (double)mnLastValue;
-    BOOL bOK = ImplNumericReformat( GetField()->GetText(), nTemp, aStr );
+    sal_Bool bOK = ImplNumericReformat( GetField()->GetText(), nTemp, aStr );
     mnLastValue = (sal_Int64)nTemp;
     if ( !bOK )
         return;
@@ -834,7 +834,7 @@ void NumericField::ImplLoadRes( const ResId& rResId )
     SpinField::ImplLoadRes( rResId );
     NumericFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
 
-    ULONG      nMask = ReadLongRes();
+    sal_uLong      nMask = ReadLongRes();
 
     if ( NUMERICFIELD_FIRST & nMask )
         mnFirst = ReadLongRes();
@@ -870,7 +870,7 @@ long NumericField::PreNotify( NotifyEvent& rNEvt )
 long NumericField::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
-        MarkToBeReformatted( FALSE );
+        MarkToBeReformatted( sal_False );
     else if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
         if ( MustBeReformatted() && (GetText().Len() || !IsEmptyFieldValueEnabled()) )
@@ -903,7 +903,7 @@ void NumericField::DataChanged( const DataChangedEvent& rDCEvt )
 
 void NumericField::Modify()
 {
-    MarkToBeReformatted( TRUE );
+    MarkToBeReformatted( sal_True );
     SpinField::Modify();
 }
 
@@ -989,7 +989,7 @@ long NumericBox::PreNotify( NotifyEvent& rNEvt )
 long NumericBox::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
-        MarkToBeReformatted( FALSE );
+        MarkToBeReformatted( sal_False );
     else if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
         if ( MustBeReformatted() && (GetText().Len() || !IsEmptyFieldValueEnabled()) )
@@ -1022,7 +1022,7 @@ void NumericBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 void NumericBox::Modify()
 {
-    MarkToBeReformatted( TRUE );
+    MarkToBeReformatted( sal_True );
     ComboBox::Modify();
 }
 
@@ -1032,21 +1032,21 @@ void NumericBox::ReformatAll()
 {
     double nValue;
     XubString aStr;
-    SetUpdateMode( FALSE );
-    USHORT nEntryCount = GetEntryCount();
-    for ( USHORT i=0; i < nEntryCount; i++ )
+    SetUpdateMode( sal_False );
+    sal_uInt16 nEntryCount = GetEntryCount();
+    for ( sal_uInt16 i=0; i < nEntryCount; i++ )
     {
         ImplNumericReformat( GetEntry( i ), nValue, aStr );
         RemoveEntry( i );
         InsertEntry( aStr, i );
     }
     NumericFormatter::Reformat();
-    SetUpdateMode( TRUE );
+    SetUpdateMode( sal_True );
 }
 
 // -----------------------------------------------------------------------
 
-void NumericBox::InsertValue( sal_Int64 nValue, USHORT nPos )
+void NumericBox::InsertValue( sal_Int64 nValue, sal_uInt16 nPos )
 {
     ComboBox::InsertEntry( CreateFieldText( nValue ), nPos );
 }
@@ -1060,7 +1060,7 @@ void NumericBox::RemoveValue( sal_Int64 nValue )
 
 // -----------------------------------------------------------------------
 
-sal_Int64 NumericBox::GetValue( USHORT nPos ) const
+sal_Int64 NumericBox::GetValue( sal_uInt16 nPos ) const
 {
     double nValue = 0;
     ImplNumericGetValue( ComboBox::GetEntry( nPos ), nValue, GetDecimalDigits(), ImplGetLocaleDataWrapper() );
@@ -1069,19 +1069,19 @@ sal_Int64 NumericBox::GetValue( USHORT nPos ) const
 
 // -----------------------------------------------------------------------
 
-USHORT NumericBox::GetValuePos( sal_Int64 nValue ) const
+sal_uInt16 NumericBox::GetValuePos( sal_Int64 nValue ) const
 {
     return ComboBox::GetEntryPos( CreateFieldText( nValue ) );
 }
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplMetricProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
-                                       BOOL, BOOL bUseThousandSep, const LocaleDataWrapper& rWrapper )
+static sal_Bool ImplMetricProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
+                                       sal_Bool, sal_Bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
 {
     // Es gibt hier kein sinnvolles StrictFormat, also alle
     // Zeichen erlauben
-    return ImplNumericProcessKeyInput( pEdit, rKEvt, FALSE, bUseThousandSep, rWrapper );
+    return ImplNumericProcessKeyInput( pEdit, rKEvt, sal_False, bUseThousandSep, rWrapper );
 }
 
 // -----------------------------------------------------------------------
@@ -1107,7 +1107,7 @@ static XubString ImplMetricGetUnitText( const XubString& rStr )
 /*
     // MT: #90545# Preparation for translated strings...
     String aMetricText;
-    for ( USHORT n = rStr.Len(); n; )
+    for ( sal_uInt16 n = rStr.Len(); n; )
     {
         sal_Unicode c = rStr.GetChar( --n );
         sal_Int32 nType = xCharClass->getStringType( rStr, n, 1, rLocale );
@@ -1245,7 +1245,7 @@ static double nonValueDoubleToValueDouble( double nValue )
     return rtl::math::isFinite( nValue ) ? nValue : 0.0;
 }
 
-sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, USHORT nDecDigits,
+sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
                                      FieldUnit eInUnit, FieldUnit eOutUnit )
 {
     // caution: precision loss in double cast
@@ -1259,7 +1259,7 @@ sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, US
 
 // -----------------------------------------------------------------------
 
-sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, USHORT nDigits,
+sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_uInt16 nDigits,
                                      MapUnit eInUnit, FieldUnit eOutUnit )
 {
     return static_cast<sal_Int64>(
@@ -1271,7 +1271,7 @@ sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, USHORT nDigits,
 
 // -----------------------------------------------------------------------
 
-sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, USHORT nDigits,
+sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_uInt16 nDigits,
                                      FieldUnit eInUnit, MapUnit eOutUnit )
 {
     return static_cast<sal_Int64>(
@@ -1283,7 +1283,7 @@ sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, USHORT nDigits,
 
 // -----------------------------------------------------------------------
 
-double MetricField::ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, USHORT nDecDigits,
+double MetricField::ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, sal_uInt16 nDecDigits,
                                         FieldUnit eInUnit, FieldUnit eOutUnit )
 {
     if ( eInUnit != eOutUnit )
@@ -1295,7 +1295,7 @@ double MetricField::ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, US
             if ( (mnBaseValue <= 0) || (nValue <= 0) )
                 return nValue;
             nDiv = 100;
-            for ( USHORT i=0; i < nDecDigits; i++ )
+            for ( sal_uInt16 i=0; i < nDecDigits; i++ )
                 nDiv *= 10;
 
             nMult = mnBaseValue;
@@ -1334,7 +1334,7 @@ double MetricField::ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, US
 
 // -----------------------------------------------------------------------
 
-double MetricField::ConvertDoubleValue( double nValue, USHORT nDigits,
+double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
                                         MapUnit eInUnit, FieldUnit eOutUnit )
 {
     if ( eOutUnit == FUNIT_PERCENT ||
@@ -1391,7 +1391,7 @@ double MetricField::ConvertDoubleValue( double nValue, USHORT nDigits,
 
 // -----------------------------------------------------------------------
 
-double MetricField::ConvertDoubleValue( double nValue, USHORT nDigits,
+double MetricField::ConvertDoubleValue( double nValue, sal_uInt16 nDigits,
                                         FieldUnit eInUnit, MapUnit eOutUnit )
 {
     if ( eInUnit == FUNIT_PERCENT ||
@@ -1448,12 +1448,12 @@ double MetricField::ConvertDoubleValue( double nValue, USHORT nDigits,
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplMetricGetValue( const XubString& rStr, double& rValue, sal_Int64 nBaseValue,
-                                USHORT nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper, FieldUnit eUnit )
+static sal_Bool ImplMetricGetValue( const XubString& rStr, double& rValue, sal_Int64 nBaseValue,
+                                sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper, FieldUnit eUnit )
 {
     // Zahlenwert holen
     if ( !ImplNumericGetValue( rStr, rValue, nDecDigits, rLocaleDataWrapper ) )
-        return FALSE;
+        return sal_False;
 
     // Einheit rausfinden
     FieldUnit eEntryUnit = ImplMetricGetUnit( rStr );
@@ -1461,15 +1461,15 @@ static BOOL ImplMetricGetValue( const XubString& rStr, double& rValue, sal_Int64
     // Einheiten umrechnen
     rValue = MetricField::ConvertDoubleValue( rValue, nBaseValue, nDecDigits, eEntryUnit, eUnit );
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL MetricFormatter::ImplMetricReformat( const XubString& rStr, double& rValue, XubString& rOutStr )
+sal_Bool MetricFormatter::ImplMetricReformat( const XubString& rStr, double& rValue, XubString& rOutStr )
 {
     if ( !ImplMetricGetValue( rStr, rValue, mnBaseValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), meUnit ) )
-        return TRUE;
+        return sal_True;
     else
     {
         double nTempVal = rValue;
@@ -1485,14 +1485,14 @@ BOOL MetricFormatter::ImplMetricReformat( const XubString& rStr, double& rValue,
             if ( !GetErrorHdl().Call( this ) )
             {
                 mnCorrectedValue = 0;
-                return FALSE;
+                return sal_False;
             }
             else
                 mnCorrectedValue = 0;
         }
 
         rOutStr = CreateFieldText( (sal_Int64)nTempVal );
-        return TRUE;
+        return sal_True;
     }
 }
 
@@ -1521,7 +1521,7 @@ void MetricFormatter::ImplLoadRes( const ResId& rResId )
     ResMgr*     pMgr = rResId.GetResMgr();
     if( pMgr )
     {
-        ULONG       nMask = pMgr->ReadLong();
+        sal_uLong       nMask = pMgr->ReadLong();
 
         if ( METRICFORMATTER_UNIT & nMask )
             meUnit = (FieldUnit)pMgr->ReadLong();
@@ -1695,7 +1695,7 @@ void MetricFormatter::Reformat()
     XubString aStr;
     // caution: precision loss in double cast
     double nTemp = (double)mnLastValue;
-    BOOL bOK = ImplMetricReformat( aText, nTemp, aStr );
+    sal_Bool bOK = ImplMetricReformat( aText, nTemp, aStr );
     mnLastValue = (sal_Int64)nTemp;
 
     if ( !bOK )
@@ -1752,7 +1752,7 @@ void MetricField::ImplLoadRes( const ResId& rResId )
     SpinField::ImplLoadRes( rResId );
     MetricFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
 
-    ULONG      nMask = ReadLongRes();
+    sal_uLong      nMask = ReadLongRes();
 
     if ( METRICFIELD_FIRST & nMask )
         mnFirst = ReadLongRes();
@@ -1828,7 +1828,7 @@ long MetricField::PreNotify( NotifyEvent& rNEvt )
 long MetricField::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
-        MarkToBeReformatted( FALSE );
+        MarkToBeReformatted( sal_False );
     else if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
         if ( MustBeReformatted() && (GetText().Len() || !IsEmptyFieldValueEnabled()) )
@@ -1861,7 +1861,7 @@ void MetricField::DataChanged( const DataChangedEvent& rDCEvt )
 
 void MetricField::Modify()
 {
-    MarkToBeReformatted( TRUE );
+    MarkToBeReformatted( sal_True );
     SpinField::Modify();
 }
 
@@ -1954,7 +1954,7 @@ long MetricBox::PreNotify( NotifyEvent& rNEvt )
 long MetricBox::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
-        MarkToBeReformatted( FALSE );
+        MarkToBeReformatted( sal_False );
     else if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
         if ( MustBeReformatted() && (GetText().Len() || !IsEmptyFieldValueEnabled()) )
@@ -1987,7 +1987,7 @@ void MetricBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 void MetricBox::Modify()
 {
-    MarkToBeReformatted( TRUE );
+    MarkToBeReformatted( sal_True );
     ComboBox::Modify();
 }
 
@@ -1997,16 +1997,16 @@ void MetricBox::ReformatAll()
 {
     double nValue;
     XubString aStr;
-    SetUpdateMode( FALSE );
-    USHORT nEntryCount = GetEntryCount();
-    for ( USHORT i=0; i < nEntryCount; i++ )
+    SetUpdateMode( sal_False );
+    sal_uInt16 nEntryCount = GetEntryCount();
+    for ( sal_uInt16 i=0; i < nEntryCount; i++ )
     {
         ImplMetricReformat( GetEntry( i ), nValue, aStr );
         RemoveEntry( i );
         InsertEntry( aStr, i );
     }
     MetricFormatter::Reformat();
-    SetUpdateMode( TRUE );
+    SetUpdateMode( sal_True );
 }
 
 // -----------------------------------------------------------------------
@@ -2018,7 +2018,7 @@ void MetricBox::CustomConvert()
 
 // -----------------------------------------------------------------------
 
-void MetricBox::InsertValue( sal_Int64 nValue, FieldUnit eInUnit, USHORT nPos )
+void MetricBox::InsertValue( sal_Int64 nValue, FieldUnit eInUnit, sal_uInt16 nPos )
 {
     // Umrechnen auf eingestellte Einheiten
     nValue = MetricField::ConvertValue( nValue, mnBaseValue, GetDecimalDigits(),
@@ -2038,7 +2038,7 @@ void MetricBox::RemoveValue( sal_Int64 nValue, FieldUnit eInUnit )
 
 // -----------------------------------------------------------------------
 
-sal_Int64 MetricBox::GetValue( USHORT nPos, FieldUnit eOutUnit ) const
+sal_Int64 MetricBox::GetValue( sal_uInt16 nPos, FieldUnit eOutUnit ) const
 {
     double nValue = 0;
     ImplMetricGetValue( ComboBox::GetEntry( nPos ), nValue, mnBaseValue,
@@ -2053,7 +2053,7 @@ sal_Int64 MetricBox::GetValue( USHORT nPos, FieldUnit eOutUnit ) const
 
 // -----------------------------------------------------------------------
 
-USHORT MetricBox::GetValuePos( sal_Int64 nValue, FieldUnit eInUnit ) const
+sal_uInt16 MetricBox::GetValuePos( sal_Int64 nValue, FieldUnit eInUnit ) const
 {
     // Umrechnen auf eingestellte Einheiten
     nValue = MetricField::ConvertValue( nValue, mnBaseValue, GetDecimalDigits(),
@@ -2079,31 +2079,31 @@ sal_Int64 MetricBox::GetValue() const
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
-                                         BOOL, BOOL bUseThousandSep, const LocaleDataWrapper& rWrapper )
+static sal_Bool ImplCurrencyProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
+                                         sal_Bool, sal_Bool bUseThousandSep, const LocaleDataWrapper& rWrapper )
 {
     // Es gibt hier kein sinnvolles StrictFormat, also alle
     // Zeichen erlauben
-    return ImplNumericProcessKeyInput( pEdit, rKEvt, FALSE, bUseThousandSep, rWrapper );
+    return ImplNumericProcessKeyInput( pEdit, rKEvt, sal_False, bUseThousandSep, rWrapper );
 }
 
 // -----------------------------------------------------------------------
 
-inline BOOL ImplCurrencyGetValue( const XubString& rStr, double& rValue,
-                                  USHORT nDecDigits, const LocaleDataWrapper& rWrapper )
+inline sal_Bool ImplCurrencyGetValue( const XubString& rStr, double& rValue,
+                                  sal_uInt16 nDecDigits, const LocaleDataWrapper& rWrapper )
 {
     // Zahlenwert holen
-    return ImplNumericGetValue( rStr, rValue, nDecDigits, rWrapper, TRUE );
+    return ImplNumericGetValue( rStr, rValue, nDecDigits, rWrapper, sal_True );
 }
 
 // -----------------------------------------------------------------------
 
-BOOL CurrencyFormatter::ImplCurrencyReformat( const XubString& rStr,
+sal_Bool CurrencyFormatter::ImplCurrencyReformat( const XubString& rStr,
                                               XubString& rOutStr )
 {
     double nValue;
-    if ( !ImplNumericGetValue( rStr, nValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), TRUE ) )
-        return TRUE;
+    if ( !ImplNumericGetValue( rStr, nValue, GetDecimalDigits(), ImplGetLocaleDataWrapper(), sal_True ) )
+        return sal_True;
     else
     {
         double nTempVal = nValue;
@@ -2119,14 +2119,14 @@ BOOL CurrencyFormatter::ImplCurrencyReformat( const XubString& rStr,
             if ( !GetErrorHdl().Call( this ) )
             {
                 mnCorrectedValue = 0;
-                return FALSE;
+                return sal_False;
             }
             else
                 mnCorrectedValue = 0;
         }
 
         rOutStr = CreateFieldText( (long)nTempVal );
-        return TRUE;
+        return sal_True;
     }
 }
 
@@ -2171,7 +2171,7 @@ void CurrencyFormatter::SetValue( sal_Int64 nNewValue )
 {
     SetUserValue( nNewValue );
     mnFieldValue = mnLastValue;
-    SetEmptyFieldValueData( FALSE );
+    SetEmptyFieldValueData( sal_False );
 }
 
 // -----------------------------------------------------------------------
@@ -2210,7 +2210,7 @@ void CurrencyFormatter::Reformat()
         return;
 
     XubString aStr;
-    BOOL bOK = ImplCurrencyReformat( GetField()->GetText(), aStr );
+    sal_Bool bOK = ImplCurrencyReformat( GetField()->GetText(), aStr );
     if ( !bOK )
         return;
 
@@ -2257,7 +2257,7 @@ void CurrencyField::ImplLoadRes( const ResId& rResId )
     SpinField::ImplLoadRes( rResId );
     CurrencyFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
 
-    ULONG      nMask = ReadLongRes();
+    sal_uLong      nMask = ReadLongRes();
 
     if ( CURRENCYFIELD_FIRST & nMask )
         mnFirst = ReadLongRes();
@@ -2295,7 +2295,7 @@ long CurrencyField::PreNotify( NotifyEvent& rNEvt )
 long CurrencyField::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
-        MarkToBeReformatted( FALSE );
+        MarkToBeReformatted( sal_False );
     else if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
         if ( MustBeReformatted() && (GetText().Len() || !IsEmptyFieldValueEnabled()) )
@@ -2328,7 +2328,7 @@ void CurrencyField::DataChanged( const DataChangedEvent& rDCEvt )
 
 void CurrencyField::Modify()
 {
-    MarkToBeReformatted( TRUE );
+    MarkToBeReformatted( sal_True );
     SpinField::Modify();
 }
 
@@ -2414,7 +2414,7 @@ long CurrencyBox::PreNotify( NotifyEvent& rNEvt )
 long CurrencyBox::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
-        MarkToBeReformatted( FALSE );
+        MarkToBeReformatted( sal_False );
     else if ( rNEvt.GetType() == EVENT_LOSEFOCUS )
     {
         if ( MustBeReformatted() && (GetText().Len() || !IsEmptyFieldValueEnabled()) )
@@ -2447,7 +2447,7 @@ void CurrencyBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 void CurrencyBox::Modify()
 {
-    MarkToBeReformatted( TRUE );
+    MarkToBeReformatted( sal_True );
     ComboBox::Modify();
 }
 
@@ -2456,21 +2456,21 @@ void CurrencyBox::Modify()
 void CurrencyBox::ReformatAll()
 {
     XubString aStr;
-    SetUpdateMode( FALSE );
-    USHORT nEntryCount = GetEntryCount();
-    for ( USHORT i=0; i < nEntryCount; i++ )
+    SetUpdateMode( sal_False );
+    sal_uInt16 nEntryCount = GetEntryCount();
+    for ( sal_uInt16 i=0; i < nEntryCount; i++ )
     {
         ImplCurrencyReformat( GetEntry( i ), aStr );
         RemoveEntry( i );
         InsertEntry( aStr, i );
     }
     CurrencyFormatter::Reformat();
-    SetUpdateMode( TRUE );
+    SetUpdateMode( sal_True );
 }
 
 // -----------------------------------------------------------------------
 
-void CurrencyBox::InsertValue( sal_Int64 nValue, USHORT nPos )
+void CurrencyBox::InsertValue( sal_Int64 nValue, sal_uInt16 nPos )
 {
     ComboBox::InsertEntry( CreateFieldText( nValue ), nPos );
 }
@@ -2484,7 +2484,7 @@ void CurrencyBox::RemoveValue( sal_Int64 nValue )
 
 // -----------------------------------------------------------------------
 
-sal_Int64 CurrencyBox::GetValue( USHORT nPos ) const
+sal_Int64 CurrencyBox::GetValue( sal_uInt16 nPos ) const
 {
     double nValue = 0;
     ImplCurrencyGetValue( ComboBox::GetEntry( nPos ), nValue, GetDecimalDigits(), ImplGetLocaleDataWrapper() );
@@ -2493,7 +2493,7 @@ sal_Int64 CurrencyBox::GetValue( USHORT nPos ) const
 
 // -----------------------------------------------------------------------
 
-USHORT CurrencyBox::GetValuePos( sal_Int64 nValue ) const
+sal_uInt16 CurrencyBox::GetValuePos( sal_Int64 nValue ) const
 {
     return ComboBox::GetEntryPos( CreateFieldText( nValue ) );
 }

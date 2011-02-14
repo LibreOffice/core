@@ -44,7 +44,7 @@ using namespace xmloff::token;
 
 ScXMLLabelRangesContext::ScXMLLabelRangesContext(
         ScXMLImport& rImport,
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& /* xAttrList */ ):
     SvXMLImportContext( rImport, nPrefix, rLName )
@@ -58,7 +58,7 @@ ScXMLLabelRangesContext::~ScXMLLabelRangesContext()
 }
 
 SvXMLImportContext* ScXMLLabelRangesContext::CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -86,7 +86,7 @@ void ScXMLLabelRangesContext::EndElement()
 
 ScXMLLabelRangeContext::ScXMLLabelRangeContext(
         ScXMLImport& rImport,
-        USHORT nPrfx,
+        sal_uInt16 nPrfx,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -100,7 +100,7 @@ ScXMLLabelRangeContext::ScXMLLabelRangeContext(
         const rtl::OUString& sAttrName  (xAttrList->getNameByIndex( nIndex ));
         const rtl::OUString& sValue     (xAttrList->getValueByIndex( nIndex ));
         OUString    aLocalName;
-        USHORT      nPrefix     (GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName ));
+        sal_uInt16      nPrefix     (GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName ));
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
@@ -122,7 +122,7 @@ ScXMLLabelRangeContext::~ScXMLLabelRangeContext()
 }
 
 SvXMLImportContext* ScXMLLabelRangeContext::CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& /* xAttrList */ )
 {

@@ -128,7 +128,7 @@ public:
         { return ((const Svx3DFocalLengthItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue(); }
 
     // Two sided lighting:
-    BOOL GetTwoSidedLighting() const
+    sal_Bool GetTwoSidedLighting() const
         { return ((const Svx3DTwoSidedLightingItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue(); }
 
     // Lightcolor:
@@ -154,21 +154,21 @@ public:
         { return ((const Svx3DAmbientcolorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_AMBIENTCOLOR)).GetValue(); }
 
     // Light on/off:
-    BOOL GetLightOnOff1() const
+    sal_Bool GetLightOnOff1() const
         { return ((const Svx3DLightOnOff1Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue(); }
-    BOOL GetLightOnOff2() const
+    sal_Bool GetLightOnOff2() const
         { return ((const Svx3DLightOnOff2Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue(); }
-    BOOL GetLightOnOff3() const
+    sal_Bool GetLightOnOff3() const
         { return ((const Svx3DLightOnOff3Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue(); }
-    BOOL GetLightOnOff4() const
+    sal_Bool GetLightOnOff4() const
         { return ((const Svx3DLightOnOff4Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue(); }
-    BOOL GetLightOnOff5() const
+    sal_Bool GetLightOnOff5() const
         { return ((const Svx3DLightOnOff5Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue(); }
-    BOOL GetLightOnOff6() const
+    sal_Bool GetLightOnOff6() const
         { return ((const Svx3DLightOnOff6Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue(); }
-    BOOL GetLightOnOff7() const
+    sal_Bool GetLightOnOff7() const
         { return ((const Svx3DLightOnOff7Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue(); }
-    BOOL GetLightOnOff8() const
+    sal_Bool GetLightOnOff8() const
         { return ((const Svx3DLightOnOff8Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue(); }
 
     // Light direction:
@@ -198,9 +198,9 @@ public:
         { return ((const Svx3DShadeModeItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_SHADE_MODE)).GetValue(); }
 
     // set flag to draw only selected
-    void SetDrawOnlySelected(BOOL bNew) { bDrawOnlySelected = bNew; }
+    void SetDrawOnlySelected(sal_Bool bNew) { bDrawOnlySelected = bNew; }
     bool GetDrawOnlySelected() const { return bDrawOnlySelected; }
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
 
     virtual void    NbcSetSnapRect(const Rectangle& rRect);
     virtual void    NbcMove(const Size& rSize);
@@ -233,7 +233,7 @@ public:
     B3dCamera& GetCameraSet() { return aCameraSet; }
 
     // Aufbrechen
-    virtual BOOL IsBreakObjPossible();
+    virtual sal_Bool IsBreakObjPossible();
 
     basegfx::B3DVector GetShadowPlaneDirection() const;
     void SetShadowPlaneDirection(const basegfx::B3DVector& rVec);
@@ -243,7 +243,7 @@ public:
 
     // create moves
     virtual FASTBOOL BegCreate(SdrDragStat& rStat);
-    virtual FASTBOOL MovCreate(SdrDragStat& rStat); // TRUE=Xor muss repainted werden
+    virtual FASTBOOL MovCreate(SdrDragStat& rStat); // sal_True=Xor muss repainted werden
     virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
     virtual FASTBOOL BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);

@@ -161,8 +161,8 @@ public:
     const SwViewOption* GetViewOption(sal_Bool bWeb);
     void                ApplyUsrPref(const SwViewOption &, SwView*,
                                      sal_uInt16 nDest = VIEWOPT_DEST_VIEW );
-    void ApplyUserMetric( FieldUnit eMetric, BOOL bWeb );
-    void ApplyRulerMetric( FieldUnit eMetric, BOOL bHorizontal, BOOL bWeb );
+    void ApplyUserMetric( FieldUnit eMetric, sal_Bool bWeb );
+    void ApplyRulerMetric( FieldUnit eMetric, sal_Bool bHorizontal, sal_Bool bWeb );
     void ApplyFldUpdateFlags(SwFldUpdateFlags eFldFlags);
     void ApplyLinkMode(sal_Int32 nNewLinkMode);
 
@@ -191,7 +191,7 @@ public:
     sal_Bool IsEmbeddedLoadSave() const         { return bEmbeddedLoadSave; }
     void SetEmbeddedLoadSave( sal_Bool bFlag )  { bEmbeddedLoadSave = bFlag; }
 
-    void ShowDBObj( SwView& rView, const SwDBData& rData, BOOL bOnlyIfAvailable = FALSE);
+    void ShowDBObj( SwView& rView, const SwDBData& rData, sal_Bool bOnlyIfAvailable = sal_False);
 
     // Tabellenmodi
     sal_Bool            IsInsTblFormatNum(sal_Bool bHTML) const;

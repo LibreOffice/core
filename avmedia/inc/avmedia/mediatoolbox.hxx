@@ -48,10 +48,10 @@ public:
 
                                 SFX_DECL_TOOLBOX_CONTROL();
 
-                                MediaToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbX );
+                                MediaToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbX );
                                 ~MediaToolBoxControl();
 
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual Window*             CreateItemWindow( Window* pParent );
 
 private:

@@ -158,12 +158,12 @@ void ScShareDocumentDlg::UpdateView()
                         ::rtl::OUString aDateStr = aDateTimeStr.getToken( 0, ' ', nIndex );
                         ::rtl::OUString aTimeStr = aDateTimeStr.getToken( 0, ' ', nIndex );
                         nIndex = 0;
-                        USHORT nDay = sal::static_int_cast< USHORT >( aDateStr.getToken( 0, '.', nIndex ).toInt32() );
-                        USHORT nMonth = sal::static_int_cast< USHORT >( aDateStr.getToken( 0, '.', nIndex ).toInt32() );
-                        USHORT nYear = sal::static_int_cast< USHORT >( aDateStr.getToken( 0, '.', nIndex ).toInt32() );
+                        sal_uInt16 nDay = sal::static_int_cast< sal_uInt16 >( aDateStr.getToken( 0, '.', nIndex ).toInt32() );
+                        sal_uInt16 nMonth = sal::static_int_cast< sal_uInt16 >( aDateStr.getToken( 0, '.', nIndex ).toInt32() );
+                        sal_uInt16 nYear = sal::static_int_cast< sal_uInt16 >( aDateStr.getToken( 0, '.', nIndex ).toInt32() );
                         nIndex = 0;
-                        USHORT nHours = sal::static_int_cast< USHORT >( aTimeStr.getToken( 0, ':', nIndex ).toInt32() );
-                        USHORT nMinutes = sal::static_int_cast< USHORT >( aTimeStr.getToken( 0, ':', nIndex ).toInt32() );
+                        sal_uInt16 nHours = sal::static_int_cast< sal_uInt16 >( aTimeStr.getToken( 0, ':', nIndex ).toInt32() );
+                        sal_uInt16 nMinutes = sal::static_int_cast< sal_uInt16 >( aTimeStr.getToken( 0, ':', nIndex ).toInt32() );
                         Date aDate( nDay, nMonth, nYear );
                         Time aTime( nHours, nMinutes );
                         DateTime aDateTime( aDate, aTime );
@@ -172,7 +172,7 @@ void ScShareDocumentDlg::UpdateView()
                         aString += '\t';
                         aString += ScGlobal::pLocaleData->getDate( aDateTime );
                         aString += ' ';
-                        aString += ScGlobal::pLocaleData->getTime( aDateTime, FALSE );
+                        aString += ScGlobal::pLocaleData->getTime( aDateTime, sal_False );
 
                         maLbUsers.InsertEntry( aString, NULL );
                     }
@@ -228,7 +228,7 @@ void ScShareDocumentDlg::UpdateView()
 
         aString += ScGlobal::pLocaleData->getDate( aDateTime );
         aString += ' ';
-        aString += ScGlobal::pLocaleData->getTime( aDateTime, FALSE );
+        aString += ScGlobal::pLocaleData->getTime( aDateTime, sal_False );
 
         maLbUsers.InsertEntry( aString, NULL );
     }

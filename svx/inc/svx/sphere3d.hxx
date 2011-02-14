@@ -67,8 +67,8 @@ public:
     sal_uInt32 GetVerticalSegments() const
         { return ((const Svx3DVerticalSegmentsItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_VERT_SEGS)).GetValue(); }
 
-    virtual UINT16 GetObjIdentifier() const;
-    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 
     virtual void operator=(const SdrObject&);
 

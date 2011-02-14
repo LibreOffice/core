@@ -82,7 +82,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 {
     ScDPTableDataCache* pCache = NULL;
     ScDPCollection* pDPCollection= pDoc->GetDPCollection();
-    USHORT nCount = pDPCollection->GetCount();
+    sal_uInt16 nCount = pDPCollection->GetCount();
 
     for ( short i=nCount-1; i>=0 ; i--)
     {
@@ -250,18 +250,18 @@ String ScDatabaseDPData::getDimensionName(long nColumn)
     return aCacheTable.getFieldName((SCCOL)nColumn);
 }
 
-BOOL ScDatabaseDPData::getIsDataLayoutDimension(long nColumn)
+sal_Bool ScDatabaseDPData::getIsDataLayoutDimension(long nColumn)
 {
     return ( nColumn == GetCacheTable().getColSize());
 }
 
-BOOL ScDatabaseDPData::IsDateDimension(long /* nDim */)
+sal_Bool ScDatabaseDPData::IsDateDimension(long /* nDim */)
 {
     //! later...
-    return FALSE;
+    return sal_False;
 }
 
-void ScDatabaseDPData::SetEmptyFlags( BOOL /* bIgnoreEmptyRows */, BOOL /* bRepeatIfEmpty */ )
+void ScDatabaseDPData::SetEmptyFlags( sal_Bool /* bIgnoreEmptyRows */, sal_Bool /* bRepeatIfEmpty */ )
 {
     //  not used for database data
     //! disable flags

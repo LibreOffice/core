@@ -62,7 +62,7 @@ namespace
     enum RedlineFunc    { RF_ON, RF_PROTECT };
 
 /*
-    bool QueryIsEnabled( USHORT _nSlot )
+    bool QueryIsEnabled( sal_uInt16 _nSlot )
     {
         bool bRes = false;
         SfxViewShell* pViewSh = SfxViewShell::Current();
@@ -77,7 +77,7 @@ namespace
     }
 */
 
-    bool QueryState( USHORT _nSlot, bool& _rValue )
+    bool QueryState( sal_uInt16 _nSlot, bool& _rValue )
     {
         bool bRet = false;
         SfxViewShell* pViewSh = SfxViewShell::Current();
@@ -99,7 +99,7 @@ namespace
         bool bRet = false;
         if (_eMode != RL_NONE)
         {
-            USHORT nSlot = _eMode == RL_WRITER ? FN_REDLINE_PROTECT : SID_CHG_PROTECT;
+            sal_uInt16 nSlot = _eMode == RL_WRITER ? FN_REDLINE_PROTECT : SID_CHG_PROTECT;
             bRet = QueryState( nSlot, _rValue );
         }
         return bRet;
@@ -111,7 +111,7 @@ namespace
         bool bRet = false;
         if (_eMode != RL_NONE)
         {
-            USHORT nSlot = _eMode == RL_WRITER ? FN_REDLINE_ON : FID_CHG_RECORD;
+            sal_uInt16 nSlot = _eMode == RL_WRITER ? FN_REDLINE_ON : FID_CHG_RECORD;
             bRet = QueryState( nSlot, _rValue );
         }
         return bRet;
@@ -204,7 +204,7 @@ struct SfxSecurityPage_Impl
     SfxSecurityPage_Impl( SfxSecurityPage &rDlg, const SfxItemSet &rItemSet );
     ~SfxSecurityPage_Impl();
 
-    BOOL    FillItemSet_Impl( SfxItemSet & );
+    sal_Bool    FillItemSet_Impl( SfxItemSet & );
     void    Reset_Impl( const SfxItemSet & );
 };
 
@@ -283,7 +283,7 @@ SfxSecurityPage_Impl::~SfxSecurityPage_Impl()
 }
 
 
-BOOL SfxSecurityPage_Impl::FillItemSet_Impl( SfxItemSet & )
+sal_Bool SfxSecurityPage_Impl::FillItemSet_Impl( SfxItemSet & )
 {
     bool bModified = false;
 
@@ -355,7 +355,7 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
             SfxDispatcher* pDisp = pViewSh->GetDispatcher();
             if (SFX_ITEM_AVAILABLE <= pDisp->QueryState( SID_HTML_MODE, pItem ))
             {
-                USHORT nMode = static_cast< const SfxUInt16Item* >( pItem )->GetValue();
+                sal_uInt16 nMode = static_cast< const SfxUInt16Item* >( pItem )->GetValue();
                 bIsHTMLDoc = ( ( nMode & HTMLMODE_ON ) != 0 );
             }
         }
@@ -402,9 +402,9 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
             // A Calc document that is shared will have 'm_eRedlingMode == RL_NONE'
             // In shared documents change recording and protection must be disabled,
             // similar to documents that do not support change recording at all.
-            m_aRecordChangesCB.Check( FALSE );
+            m_aRecordChangesCB.Check( sal_False );
             m_aRecordChangesCB.Disable();
-            m_aChangeProtectionPB.Check( FALSE );
+            m_aChangeProtectionPB.Check( sal_False );
             m_aChangeProtectionPB.Disable();
         }
     }
@@ -530,7 +530,7 @@ SfxSecurityPage::~SfxSecurityPage()
 }
 
 
-BOOL SfxSecurityPage::FillItemSet( SfxItemSet & rItemSet )
+sal_Bool SfxSecurityPage::FillItemSet( SfxItemSet & rItemSet )
 {
     bool bModified = false;
     DBG_ASSERT( m_pImpl.get(), "implementation pointer is 0. Still in c-tor?" );

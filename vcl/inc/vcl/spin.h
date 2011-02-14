@@ -43,9 +43,9 @@ class OutputDevice;
 void ImplDrawSpinButton( OutputDevice* pOutDev,
                          const Rectangle& rUpperRect,
                          const Rectangle& rLowerRect,
-                         BOOL bUpperIn, BOOL bLowerIn,
-                         BOOL bUpperEnabled = TRUE,
-                         BOOL bLowerEnabled = TRUE,
-                         BOOL bHorz = FALSE, BOOL bMirrorHorz = FALSE );
+                         sal_Bool bUpperIn, sal_Bool bLowerIn,
+                         sal_Bool bUpperEnabled = sal_True,
+                         sal_Bool bLowerEnabled = sal_True,
+                         sal_Bool bHorz = sal_False, sal_Bool bMirrorHorz = sal_False );
 
 #endif  // _SV_SPIN_H

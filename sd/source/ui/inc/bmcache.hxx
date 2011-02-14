@@ -36,12 +36,12 @@ class GraphicObject;
 
 class BitmapCache
 {
-    ULONG                   nMaxSize;
-    ULONG                   nCurSize;
+    sal_uLong                   nMaxSize;
+    sal_uLong                   nCurSize;
     List                    aEntries;
 
 public:
-                            BitmapCache(ULONG nMaxSizeKB)
+                            BitmapCache(sal_uLong nMaxSizeKB)
                               : nMaxSize(nMaxSizeKB), nCurSize(0) {}
     virtual                 ~BitmapCache();
 

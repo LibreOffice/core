@@ -84,12 +84,12 @@ protected:
     void*     aReservePtr4;
 
     FASTBOOL  bShown;    // Xor sichrbar?
-    USHORT    nMinMov;   // Soviel muss erstmal minimal bewegt werden
+    sal_uInt16    nMinMov;   // Soviel muss erstmal minimal bewegt werden
     FASTBOOL  bMinMoved; // MinMove durchbrochen?
 
     FASTBOOL  bHorFixed; // nur Vertikal draggen
     FASTBOOL  bVerFixed; // nur Horizontal draggen
-    FASTBOOL  bWantNoSnap; // TRUE=Fuer die Entscheidung ob fuer pObj->MovCreate() NoSnapPos verwendet
+    FASTBOOL  bWantNoSnap; // sal_True=Fuer die Entscheidung ob fuer pObj->MovCreate() NoSnapPos verwendet
                           // werden soll. Entsprechend wird auch NoSnapPos in den Buffer geschrieben.
     FASTBOOL  bOrtho4;
     FASTBOOL  bOrtho8;
@@ -98,19 +98,19 @@ protected:
 
 protected:
     void Clear(FASTBOOL bLeaveOne);
-    Point& Pnt(ULONG nNum)                           { return *((Point*)aPnts.GetObject(nNum)); }
+    Point& Pnt(sal_uIntPtr nNum)                           { return *((Point*)aPnts.GetObject(nNum)); }
 //public:
     SdrDragStatUserData*    pUser;     // Userdata
 public:
     SdrDragStat(): aPnts(1024,16,16)                 { pUser=NULL; Reset(); }
-    ~SdrDragStat()                                   { Clear(FALSE); }
+    ~SdrDragStat()                                   { Clear(sal_False); }
     void         Reset();
     SdrView*     GetView() const                     { return pView; }
     void         SetView(SdrView* pV)                { pView=pV; }
     SdrPageView* GetPageView() const                 { return pPageView; }
     void         SetPageView(SdrPageView* pPV)       { pPageView=pPV; }
-    const Point& GetPoint(ULONG nNum) const          { return *((Point*)aPnts.GetObject(nNum)); }
-    ULONG        GetPointAnz() const                 { return aPnts.Count(); }
+    const Point& GetPoint(sal_uIntPtr nNum) const          { return *((Point*)aPnts.GetObject(nNum)); }
+    sal_uIntPtr        GetPointAnz() const                 { return aPnts.Count(); }
     const Point& GetStart() const                    { return GetPoint(0); }
     Point&       Start()                             { return Pnt(0); }
     const Point& GetPrev() const                     { return GetPoint(GetPointAnz()-(GetPointAnz()>=2 ? 2:1)); }
@@ -133,10 +133,10 @@ public:
     void         SetShown(FASTBOOL bOn)              { bShown=bOn; }
 
     FASTBOOL     IsMinMoved() const                  { return bMinMoved; }
-    void         SetMinMoved()                       { bMinMoved=TRUE; }
-    void         ResetMinMoved()                     { bMinMoved=FALSE; }
-    void         SetMinMove(USHORT nDist)            { nMinMov=nDist; if (nMinMov<1) nMinMov=1; }
-    USHORT       GetMinMove() const                  { return nMinMov; }
+    void         SetMinMoved()                       { bMinMoved=sal_True; }
+    void         ResetMinMoved()                     { bMinMoved=sal_False; }
+    void         SetMinMove(sal_uInt16 nDist)            { nMinMov=nDist; if (nMinMov<1) nMinMov=1; }
+    sal_uInt16       GetMinMove() const                  { return nMinMov; }
 
     FASTBOOL     IsHorFixed() const                  { return bHorFixed; }
     void         SetHorFixed(FASTBOOL bOn)           { bHorFixed=bOn; }
@@ -146,16 +146,16 @@ public:
     // Hier kann das Obj sagen: "Ich will keinen Koordinatenfang!"
     // z.B. fuer den Winkel des Kreisbogen...
     FASTBOOL     IsNoSnap() const                     { return bWantNoSnap; }
-    void         SetNoSnap(FASTBOOL bOn=TRUE)         { bWantNoSnap=bOn; }
+    void         SetNoSnap(FASTBOOL bOn=sal_True)         { bWantNoSnap=bOn; }
 
     // Und hier kann das Obj sagen welches Ortho (wenn ueberhaupt eins)
     // sinnvoll auf ihm angewendet werden kann.
     // Ortho4 bedeutet Ortho in 4 Richtungen (fuer Rect und Cirt)
     FASTBOOL     IsOrtho4Possible() const             { return bOrtho4; }
-    void         SetOrtho4Possible(FASTBOOL bOn=TRUE) { bOrtho4=bOn; }
+    void         SetOrtho4Possible(FASTBOOL bOn=sal_True) { bOrtho4=bOn; }
     // Ortho8 bedeutet Ortho in 8 Richtungen (fuer Linien)
     FASTBOOL     IsOrtho8Possible() const             { return bOrtho8; }
-    void         SetOrtho8Possible(FASTBOOL bOn=TRUE) { bOrtho8=bOn; }
+    void         SetOrtho8Possible(FASTBOOL bOn=sal_True) { bOrtho8=bOn; }
 
     // Wird vom gedraggten Objekt gesetzt
     FASTBOOL     IsEndDragChangesAttributes() const   { return bEndDragChangesAttributes; }
@@ -170,7 +170,7 @@ public:
     Point KorregPos(const Point& rNow, const Point& rPrev) const;
     void  Reset(const Point& rPnt);
     void  NextMove(const Point& rPnt);
-    void  NextPoint(FASTBOOL bSaveReal=FALSE);
+    void  NextPoint(FASTBOOL bSaveReal=sal_False);
     void  PrevPoint();
     FASTBOOL CheckMinMoved(const Point& rPnt);
     long  GetDX() const                     { return GetNow().X()-GetPrev().X(); }

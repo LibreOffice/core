@@ -74,8 +74,8 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
 
     // Textrumpf generieren
     // OD 18.03.2003 #106329# - add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc>
-    void GenerateText( USHORT nArrayIdx,
-                       USHORT nCount,
+    void GenerateText( sal_uInt16 nArrayIdx,
+                       sal_uInt16 nCount,
                        SvStringsDtor&,
                        const sal_uInt32   _nTOXSectNdIdx,
                        const SwPageDesc*  _pDefaultPageDesc );
@@ -89,11 +89,11 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
 
     // Bereich fuer Stichwort einfuegen suchen
     Range GetKeyRange( const String& rStr, const String& rStrReading,
-                       const SwTOXSortTabBase& rNew, USHORT nLevel,
+                       const SwTOXSortTabBase& rNew, sal_uInt16 nLevel,
                        const Range& rRange );
 
     // returne die TextCollection ueber den Namen / aus Format-Pool
-    SwTxtFmtColl* GetTxtFmtColl( USHORT nLevel );
+    SwTxtFmtColl* GetTxtFmtColl( sal_uInt16 nLevel );
 
 public:
     SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFmt & rFmt);
@@ -107,7 +107,7 @@ public:
     void UpdatePageNum();               // Seitennummern einfuegen
     TYPEINFO();                         // fuers rtti
 
-    BOOL SetPosAtStartEnd( SwPosition& rPos, BOOL bAtStart = TRUE ) const;
+    sal_Bool SetPosAtStartEnd( SwPosition& rPos, sal_Bool bAtStart = sal_True ) const;
 };
 /* -----------------02.09.99 07:52-------------------
 

@@ -50,16 +50,16 @@ class SVT_DLLPUBLIC SvxBoxEntry
     friend class SvxComboBox;
 
 public:
-    SvxBoxEntry( const String& aName, USHORT nId=0 );
+    SvxBoxEntry( const String& aName, sal_uInt16 nId=0 );
     SvxBoxEntry( const SvxBoxEntry& rOrg );
     SvxBoxEntry();
 
     String              aName;
-    USHORT              nId;
+    sal_uInt16              nId;
 
 private:
-    BOOL                bModified;
-    BOOL                bNew;
+    sal_Bool                bModified;
+    sal_Bool                bNew;
 };
 
 // class SvxListBox ------------------------------------------------------
@@ -79,30 +79,30 @@ public:
 
     void                InsertNewEntry( const SvxBoxEntry& rEntry );
     void                InsertEntry( const SvxBoxEntry& rEntry,
-                                     USHORT nId = LISTBOX_ENTRY_NOTFOUND );
+                                     sal_uInt16 nId = LISTBOX_ENTRY_NOTFOUND );
 
-    void                RemoveEntry( USHORT nPos );
+    void                RemoveEntry( sal_uInt16 nPos );
     void                RemoveEntry( const SvxBoxEntry& rEntry );
 
     void                Clear();
 
-    USHORT              GetEntryPos( const SvxBoxEntry& rEntry ) const;
-    const SvxBoxEntry&  GetSvxBoxEntry( USHORT nIdx ) const;
+    sal_uInt16              GetEntryPos( const SvxBoxEntry& rEntry ) const;
+    const SvxBoxEntry&  GetSvxBoxEntry( sal_uInt16 nIdx ) const;
 
-    inline BOOL         IsEntrySelected( const SvxBoxEntry& rEntry ) const;
-    const SvxBoxEntry&  GetSelectSvxBoxEntry( USHORT nIdx = 0 ) const;
+    inline sal_Bool         IsEntrySelected( const SvxBoxEntry& rEntry ) const;
+    const SvxBoxEntry&  GetSelectSvxBoxEntry( sal_uInt16 nIdx = 0 ) const;
     inline void         SelectEntry( const SvxBoxEntry& rEntry,
-                                     BOOL bSelect = TRUE );
+                                     sal_Bool bSelect = sal_True );
 
-    void                ModifyEntry( USHORT nPos, const String& aName );
-    USHORT              GetModifiedCount() const;
-    const SvxBoxEntry&  GetModifiedEntry( USHORT nPos ) const;
+    void                ModifyEntry( sal_uInt16 nPos, const String& aName );
+    sal_uInt16              GetModifiedCount() const;
+    const SvxBoxEntry&  GetModifiedEntry( sal_uInt16 nPos ) const;
 
-    USHORT              GetRemovedCount() const;
-    const SvxBoxEntry&  GetRemovedEntry( USHORT nPos ) const;
+    sal_uInt16              GetRemovedCount() const;
+    const SvxBoxEntry&  GetRemovedEntry( sal_uInt16 nPos ) const;
 
-    USHORT              GetNewCount() const;
-    const SvxBoxEntry&  GetNewEntry( USHORT nPos ) const;
+    sal_uInt16              GetNewCount() const;
+    const SvxBoxEntry&  GetNewEntry( sal_uInt16 nPos ) const;
 
 private:
     SvxEntryLst         aEntryLst;
@@ -115,10 +115,10 @@ private:
 
 // inlines ---------------------------------------------------------------
 
-inline BOOL SvxListBox::IsEntrySelected( const SvxBoxEntry& aEntry ) const
+inline sal_Bool SvxListBox::IsEntrySelected( const SvxBoxEntry& aEntry ) const
     { return ListBox::IsEntrySelected( aEntry.aName ); }
 
-inline void SvxListBox::SelectEntry( const SvxBoxEntry& aEntry, BOOL bSelect )
+inline void SvxListBox::SelectEntry( const SvxBoxEntry& aEntry, sal_Bool bSelect )
     { ListBox::SelectEntry( aEntry.aName, bSelect ); }
 
 // enum SvxComboBoxStyle -------------------------------------------------
@@ -143,33 +143,33 @@ class SVT_DLLPUBLIC SvxComboBox : public ComboBox
 
 public:
     SvxComboBox( Window* pParent,
-                 WinBits nBits = WB_BORDER, USHORT nStyleBits = SVX_CBS_ALL );
-    SvxComboBox( Window* pParent, const ResId& rId, USHORT nStyleBits = SVX_CBS_ALL );
+                 WinBits nBits = WB_BORDER, sal_uInt16 nStyleBits = SVX_CBS_ALL );
+    SvxComboBox( Window* pParent, const ResId& rId, sal_uInt16 nStyleBits = SVX_CBS_ALL );
     ~SvxComboBox();
 
     void                InsertNewEntry( const SvxBoxEntry& );
     void                InsertEntry( const SvxBoxEntry& );
 
-    void                RemoveEntry( USHORT nPos );
+    void                RemoveEntry( sal_uInt16 nPos );
     void                RemoveEntry( const SvxBoxEntry& rEntry );
 
     void                Clear();
 
-    USHORT              GetEntryPos( const SvxBoxEntry& rEntry ) const;
-    const SvxBoxEntry&  GetEntry( USHORT nIdx ) const;
+    sal_uInt16              GetEntryPos( const SvxBoxEntry& rEntry ) const;
+    const SvxBoxEntry&  GetEntry( sal_uInt16 nIdx ) const;
 
-    void                ModifyEntry( USHORT nPos, const String& aName );
-    USHORT              GetModifiedCount() const;
-    const SvxBoxEntry&  GetModifiedEntry( USHORT nPos ) const;
+    void                ModifyEntry( sal_uInt16 nPos, const String& aName );
+    sal_uInt16              GetModifiedCount() const;
+    const SvxBoxEntry&  GetModifiedEntry( sal_uInt16 nPos ) const;
 
-    USHORT              GetRemovedCount() const;
-    const SvxBoxEntry&  GetRemovedEntry( USHORT nPos ) const;
+    sal_uInt16              GetRemovedCount() const;
+    const SvxBoxEntry&  GetRemovedEntry( sal_uInt16 nPos ) const;
 
-    USHORT              GetNewCount() const;
-    const SvxBoxEntry&  GetNewEntry( USHORT nPos ) const;
+    sal_uInt16              GetNewCount() const;
+    const SvxBoxEntry&  GetNewEntry( sal_uInt16 nPos ) const;
 
-    USHORT              GetStyle() const             { return nStyle; }
-    void                SetStyle( const USHORT nSt ) { nStyle = nSt; }
+    sal_uInt16              GetStyle() const             { return nStyle; }
+    void                SetStyle( const sal_uInt16 nSt ) { nStyle = nSt; }
 
     String              GetText() const;
 
@@ -177,7 +177,7 @@ private:
     SvxEntryLst         aEntryLst;
     SvxEntryLst         aDelEntryLst;
     SvxBoxEntry         aDefault;
-    USHORT              nStyle;
+    sal_uInt16              nStyle;
 
     virtual void        KeyInput( const KeyEvent& rKEvt );
 

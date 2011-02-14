@@ -72,7 +72,7 @@ using ::boost::shared_ptr;
 
 #define D_TIMEFACTOR              86400.0
 
-const USHORT SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calculations
+const sal_uInt16 SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calculations
 
 // part values for the extra "<" and ">" entries (same for all parts)
 const sal_Int32 SC_DP_DATE_FIRST = -1;
@@ -81,10 +81,10 @@ const sal_Int32 SC_DP_DATE_LAST = 10000;
 // ============================================================================
 namespace
 {
-    BOOL lcl_Search( SCCOL nSourceDim, ScDPTableDataCache* pCache , const std::vector< SCROW >& vIdx, SCROW nNew , SCROW& rIndex)
+    sal_Bool lcl_Search( SCCOL nSourceDim, ScDPTableDataCache* pCache , const std::vector< SCROW >& vIdx, SCROW nNew , SCROW& rIndex)
     {
         rIndex = vIdx.size();
-        BOOL bFound = FALSE;
+        sal_Bool bFound = sal_False;
         SCROW nLo = 0;
         SCROW nHi = vIdx.size() - 1;
         SCROW nIndex;
@@ -104,7 +104,7 @@ namespace
                 nHi = nIndex - 1;
                 if (nCompare == 0)
                 {
-                    bFound = TRUE;
+                    bFound = sal_True;
                     nLo = nIndex;
                 }
             }
@@ -145,7 +145,7 @@ namespace
     template<bool bUpdateData>
     void lcl_InsertValue ( SCCOL nSourceDim, ScDPTableDataCache* pCache ,  std::vector< SCROW >& vIdx, const String&  rString, const double& fValue )
     {
-        lcl_InsertValue<bUpdateData>( nSourceDim, pCache, vIdx, ScDPItemData( rString, fValue, TRUE ) );
+        lcl_InsertValue<bUpdateData>( nSourceDim, pCache, vIdx, ScDPItemData( rString, fValue, sal_True ) );
     }
 
     template<bool bUpdateData>
@@ -156,7 +156,7 @@ namespace
 
     void lcl_AppendDateStr( rtl::OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter )
     {
-        ULONG nFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATE, ScGlobal::eLnge );
+        sal_uLong nFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATE, ScGlobal::eLnge );
         String aString;
         pFormatter->GetInputLineString( fValue, nFormat, aString );
         rBuffer.append( aString );
@@ -447,7 +447,7 @@ String lcl_GetDateGroupName( sal_Int32 nDatePart, sal_Int32 nValue, SvNumberForm
                 Date aNullDate = *(pFormatter->GetNullDate());
                 long nDays = aDate - aNullDate;
 
-                ULONG nFormat = pFormatter->GetFormatIndex( NF_DATE_SYS_DDMMM, ScGlobal::eLnge );
+                sal_uLong nFormat = pFormatter->GetFormatIndex( NF_DATE_SYS_DDMMM, ScGlobal::eLnge );
                 Color* pColor;
                 pFormatter->GetOutputString( nDays, nFormat, aRet, &pColor );
             }
@@ -539,7 +539,7 @@ sal_Int32 lcl_GetDatePartValue( double fValue, sal_Int32 nDatePart, SvNumberForm
     return nResult;
 }
 
-BOOL lcl_DateContained( sal_Int32 nGroupPart, const ScDPItemData& rGroupData,
+sal_Bool lcl_DateContained( sal_Int32 nGroupPart, const ScDPItemData& rGroupData,
                         sal_Int32 nBasePart, const ScDPItemData& rBaseData )
 {
     if ( !rGroupData.IsValue() || !rBaseData.IsValue() )
@@ -569,7 +569,7 @@ BOOL lcl_DateContained( sal_Int32 nGroupPart, const ScDPItemData& rGroupData,
         return ( nGroupValue == nBaseValue );
     }
 
-    BOOL bContained = TRUE;
+    sal_Bool bContained = sal_True;
     switch ( nBasePart )        // inner part
     {
         case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:
@@ -1145,13 +1145,13 @@ String ScDPGroupTableData::getDimensionName(long nColumn)
     return pSourceData->getDimensionName( nColumn );
 }
 
-BOOL ScDPGroupTableData::getIsDataLayoutDimension(long nColumn)
+sal_Bool ScDPGroupTableData::getIsDataLayoutDimension(long nColumn)
 {
     // position of data layout dimension is moved from source data
     return ( nColumn == sal::static_int_cast<long>( nSourceCount + aGroups.size() ) );    // data layout dimension?
 }
 
-BOOL ScDPGroupTableData::IsDateDimension(long nDim)
+sal_Bool ScDPGroupTableData::IsDateDimension(long nDim)
 {
     if ( nDim >= nSourceCount )
     {
@@ -1164,7 +1164,7 @@ BOOL ScDPGroupTableData::IsDateDimension(long nDim)
     return pSourceData->IsDateDimension( nDim );
 }
 
-ULONG ScDPGroupTableData::GetNumberFormat(long nDim)
+sal_uLong ScDPGroupTableData::GetNumberFormat(long nDim)
 {
     if ( nDim >= nSourceCount )
     {
@@ -1188,7 +1188,7 @@ void ScDPGroupTableData::DisposeData()
     pSourceData->DisposeData();
 }
 
-void ScDPGroupTableData::SetEmptyFlags( BOOL bIgnoreEmptyRows, BOOL bRepeatIfEmpty )
+void ScDPGroupTableData::SetEmptyFlags( sal_Bool bIgnoreEmptyRows, sal_Bool bRepeatIfEmpty )
 {
     pSourceData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
 }
@@ -1392,7 +1392,7 @@ void ScDPGroupTableData::FillGroupValues( /*ScDPItemData* pItemData*/ SCROW* pIt
                     double fGroupValue;
                     String aGroupName = lcl_GetNumGroupForValue( pData->GetValue(),
                              aNumInfo, bHasNonInteger, cDecSeparator, fGroupValue, pDoc );
-                    ScDPItemData  aItemData ( aGroupName, fGroupValue, TRUE ) ;
+                    ScDPItemData  aItemData ( aGroupName, fGroupValue, sal_True ) ;
                     pItemDataIndex[nDim] = pCache->GetAdditionalItemID( aItemData  );
                 }
                 // else (textual) keep original value
@@ -1418,16 +1418,16 @@ void ScDPGroupTableData::FillGroupValues( /*ScDPItemData* pItemData*/ SCROW* pIt
     }
 }
 
-BOOL ScDPGroupTableData::IsBaseForGroup(long nDim) const
+sal_Bool ScDPGroupTableData::IsBaseForGroup(long nDim) const
 {
     for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); aIter++ )
     {
         const ScDPGroupDimension& rDim = *aIter;
         if ( rDim.GetSourceDim() == nDim )
-            return TRUE;
+            return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 long ScDPGroupTableData::GetGroupBase(long nGroupDim) const
@@ -1442,7 +1442,7 @@ long ScDPGroupTableData::GetGroupBase(long nGroupDim) const
     return -1;      // none
 }
 
-BOOL ScDPGroupTableData::IsNumOrDateGroup(long nDimension) const
+sal_Bool ScDPGroupTableData::IsNumOrDateGroup(long nDimension) const
 {
     // Virtual method from ScDPTableData, used in result data to force text labels.
 
@@ -1459,10 +1459,10 @@ BOOL ScDPGroupTableData::IsNumOrDateGroup(long nDimension) const
             return ( rDim.GetDateHelper() != NULL );
     }
 
-    return FALSE;
+    return sal_False;
 }
 
-BOOL ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
+sal_Bool ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
                                     const ScDPItemData& rBaseData, long nBaseIndex ) const
 {
     for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); aIter++ )
@@ -1486,7 +1486,7 @@ BOOL ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGroupI
                 if ( !pBaseDateHelper )
                 {
                     DBG_ERROR( "mix of date and non-date groups" );
-                    return TRUE;
+                    return sal_True;
                 }
 
                 sal_Int32 nGroupPart = pGroupDateHelper->GetDatePart();
@@ -1506,10 +1506,10 @@ BOOL ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGroupI
     }
 
     DBG_ERROR("IsInGroup: no group dimension found");
-    return TRUE;
+    return sal_True;
 }
 
-BOOL ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
+sal_Bool ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
                                          const ScDPItemData& rSecondData, long nSecondIndex ) const
 {
     const ScDPGroupDimension* pFirstDim = NULL;
@@ -1532,7 +1532,7 @@ BOOL ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, long 
             if ( !pFirstDateHelper || !pSecondDateHelper )
             {
                 DBG_ERROR( "mix of date and non-date groups" );
-                return TRUE;
+                return sal_True;
             }
 
             sal_Int32 nFirstPart = pFirstDateHelper->GetDatePart();
@@ -1544,7 +1544,7 @@ BOOL ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, long 
         const ScDPGroupItem* pSecondItem = pSecondDim->GetGroupForName( rSecondData );
         if ( pFirstItem && pSecondItem )
         {
-            // two existing groups -> TRUE if they have a common element
+            // two existing groups -> sal_True if they have a common element
             return pFirstItem->HasCommonElement( *pSecondItem );
         }
         else if ( pFirstItem )
@@ -1559,13 +1559,13 @@ BOOL ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, long 
         }
         else
         {
-            // no groups -> TRUE if equal
+            // no groups -> sal_True if equal
             return rFirstData.IsCaseInsEqual( rSecondData );
         }
     }
 
     DBG_ERROR("HasCommonElement: no group dimension found");
-    return TRUE;
+    return sal_True;
 }
 
 long ScDPGroupTableData::GetSourceDim( long nDim )

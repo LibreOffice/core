@@ -1500,8 +1500,8 @@ Reference< XCloneable > SAL_CALL ODatabaseForm::createClone(  ) throw (RuntimeEx
 //------------------------------------------------------------------------------
 void ODatabaseForm::fire( sal_Int32* pnHandles, const Any* pNewValues, const Any* pOldValues, sal_Int32 nCount, sal_Bool bVetoable )
 {
-    // same as in getFastPropertyValue(INT32) : if we're resetting currently don't fire any changes of the
-    // IsModified property from FALSE to TRUE, as this is only temporary 'til the reset is done
+    // same as in getFastPropertyValue(sal_Int32) : if we're resetting currently don't fire any changes of the
+    // IsModified property from sal_False to sal_True, as this is only temporary 'til the reset is done
     if (m_nResetsPending > 0)
     {
         // look for the PROPERTY_ID_ISMODIFIED

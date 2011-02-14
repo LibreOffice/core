@@ -32,7 +32,7 @@
 #define MESSAGEFILE_EXT     "smd"   // Extension der Single-Mail/News-Files
 #define MESSAGETEMPFILE_EXT "sd~"   // Extension f"ur Mail/News-TempFiles
 
-#define SfxFilterFlags ULONG
+#define SfxFilterFlags sal_uLong
 #define PRODUCT_VERSION     "5.0"
 
 #endif

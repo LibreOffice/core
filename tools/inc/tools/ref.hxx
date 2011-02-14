@@ -41,7 +41,7 @@
     inline               ~ClassName##Ref();                             \
     inline ClassName##Ref & operator = ( const ClassName##Ref & rObj ); \
     inline ClassName##Ref & operator = ( ClassName * pObj );            \
-    inline BOOL            Is() const { return pObj != NULL; }          \
+    inline sal_Bool            Is() const { return pObj != NULL; }          \
     inline ClassName *     operator &  () const { return pObj; }        \
     inline ClassName *     operator -> () const { return pObj; }        \
     inline ClassName &     operator *  () const { return *pObj; }       \
@@ -106,8 +106,8 @@ PRV_SV_IMPL_REF_COUNTERS( ClassName, Ref, AddRef(), AddNextRef(),\
                           ReleaseReference(), EMPTYARG, pObj )
 
 #define SV_IMPL_LOCK( ClassName )                                   \
-PRV_SV_IMPL_REF_COUNTERS( ClassName, Lock, OwnerLock( TRUE ),       \
-                          OwnerLock( TRUE ), OwnerLock( FALSE ),    \
+PRV_SV_IMPL_REF_COUNTERS( ClassName, Lock, OwnerLock( sal_True ),       \
+                          OwnerLock( sal_True ), OwnerLock( sal_False ),    \
                           EMPTYARG, pObj )
 
 #define SV_DECL_IMPL_REF(ClassName)             \
@@ -126,7 +126,7 @@ class vis CN##MemberList : public CN##List\
 {\
 public:\
 inline CN##MemberList();\
-inline CN##MemberList(USHORT nInitSz, USHORT nResize );\
+inline CN##MemberList(sal_uInt16 nInitSz, sal_uInt16 nResize );\
 inline CN##MemberList( const CN##MemberList & rRef );\
 inline ~CN##MemberList();\
 inline CN##MemberList & operator =\
@@ -134,17 +134,17 @@ inline CN##MemberList & operator =\
 inline void Clear();\
 inline void Insert( EN p )\
 { CN##List::Insert( p ); p->AddRef();}\
-inline void Insert( EN p, ULONG nIndex )\
+inline void Insert( EN p, sal_uIntPtr nIndex )\
 { CN##List::Insert( p, nIndex ); p->AddRef();}\
 inline void Insert( EN p, EN pOld )\
 { CN##List::Insert( p, pOld ); p->AddRef();}\
 inline void Append( EN p )\
 { Insert( p, LIST_APPEND );}\
 inline EN   Remove();\
-inline EN   Remove( ULONG nIndex );\
+inline EN   Remove( sal_uIntPtr nIndex );\
 inline EN   Remove( EN p );\
 inline EN   Replace( EN p );\
-inline EN   Replace( EN p, ULONG nIndex );\
+inline EN   Replace( EN p, sal_uIntPtr nIndex );\
 inline EN   Replace( EN pNew, EN pOld );\
 inline void Append( const CN##MemberList & );\
 };
@@ -157,12 +157,12 @@ PRV_SV_DECL_REF_LIST(CN,EN,vis)
 /************************** S v R e f L i s t ****************************/
 #define SV_IMPL_REF_LIST( CN, EN ) \
 inline CN##MemberList::CN##MemberList(){}\
-inline CN##MemberList::CN##MemberList(USHORT nInitSz, USHORT nResize )\
+inline CN##MemberList::CN##MemberList(sal_uInt16 nInitSz, sal_uInt16 nResize )\
     : CN##List( nInitSz, nResize ){}\
 inline CN##MemberList::CN##MemberList( const CN##MemberList & rRef ) \
       : CN##List( rRef ) \
 {\
-    ULONG nOldCount = Count(); \
+    sal_uIntPtr nOldCount = Count(); \
     EN pEntry = First(); \
     while( pEntry ) \
     { pEntry->AddRef(); pEntry = Next(); } \
@@ -173,7 +173,7 @@ inline CN##MemberList & CN##MemberList::operator = \
                     ( const CN##MemberList & rRef ) \
 {\
     CN##MemberList & rList = (CN##MemberList &)rRef; \
-    ULONG nOldCount = rList.Count(); \
+    sal_uIntPtr nOldCount = rList.Count(); \
     /* Count der Objekte erhoehen */ \
     EN pEntry = rList.First(); \
     while( pEntry ) \
@@ -195,7 +195,7 @@ inline EN CN##MemberList::Remove() \
     EN p = CN##List::Remove(); \
     if( p ) p->ReleaseReference(); return p; \
 }\
-inline EN CN##MemberList::Remove( ULONG nIndex ) \
+inline EN CN##MemberList::Remove( sal_uIntPtr nIndex ) \
 {\
     EN p = CN##List::Remove( nIndex ); \
     if( p ) p->ReleaseReference(); return p; \
@@ -210,7 +210,7 @@ inline EN CN##MemberList::Replace( EN p ) \
     p->AddRef(); p = CN##List::Replace( p ); \
     if( p ) p->ReleaseReference(); return p; \
 }\
-inline EN CN##MemberList::Replace( EN p, ULONG nIndex ) \
+inline EN CN##MemberList::Replace( EN p, sal_uIntPtr nIndex ) \
 {\
     p->AddRef(); p = CN##List::Replace( p, nIndex ); \
     if( p ) p->ReleaseReference(); return p; \
@@ -222,7 +222,7 @@ inline EN CN##MemberList::Replace( EN pNew, EN pOld ) \
 }\
 inline void CN##MemberList::Append( const CN##MemberList & rList )\
 {\
-    for( ULONG i = 0; i < rList.Count(); i++ )\
+    for( sal_uIntPtr i = 0; i < rList.Count(); i++ )\
         Append( rList.GetObject( i ) );\
 }
 
@@ -234,23 +234,23 @@ inline void CN##MemberList::Append( const CN##MemberList & rList )\
 /************************** S v M e m b e r L i s t **********************/
 #define PRV_SV_DECL_MEMBER_LIST(Class,EntryName)        \
        Class##MemberList() {}                           \
-inline Class##MemberList(USHORT nInitSz,USHORT nResize);\
+inline Class##MemberList(sal_uInt16 nInitSz,sal_uInt16 nResize);\
 inline void Insert( EntryName p );                      \
-inline void Insert( EntryName p, ULONG nIndex );        \
+inline void Insert( EntryName p, sal_uIntPtr nIndex );        \
 inline void Insert( EntryName p, EntryName pOld );      \
 inline void Append( EntryName p );                      \
 inline EntryName   Remove();                            \
-inline EntryName   Remove( ULONG nIndex );              \
+inline EntryName   Remove( sal_uIntPtr nIndex );              \
 inline EntryName   Remove( EntryName p );               \
 inline EntryName   Replace( EntryName p );              \
-inline EntryName   Replace( EntryName p, ULONG nIndex );\
+inline EntryName   Replace( EntryName p, sal_uIntPtr nIndex );\
 inline EntryName   Replace( EntryName pNew, EntryName pOld );\
 inline EntryName   GetCurObject() const;\
-inline EntryName   GetObject( ULONG nIndex ) const;\
-inline ULONG       GetPos( const EntryName ) const;\
-inline ULONG       GetPos( const EntryName, ULONG nStartIndex,\
-                           BOOL bForward = TRUE ) const;\
-inline EntryName Seek( ULONG nIndex );\
+inline EntryName   GetObject( sal_uIntPtr nIndex ) const;\
+inline sal_uIntPtr       GetPos( const EntryName ) const;\
+inline sal_uIntPtr       GetPos( const EntryName, sal_uIntPtr nStartIndex,\
+                           sal_Bool bForward = sal_True ) const;\
+inline EntryName Seek( sal_uIntPtr nIndex );\
 inline EntryName Seek( EntryName p );\
 inline EntryName First();\
 inline EntryName Last();\
@@ -260,11 +260,11 @@ inline void      Append( const Class##MemberList & rList );
 
 #define PRV_SV_IMPL_MEMBER_LIST(ClassName,EntryName,BaseList)\
 inline ClassName##MemberList::ClassName##MemberList\
-                    (USHORT nInitSz,USHORT nResize)\
+                    (sal_uInt16 nInitSz,sal_uInt16 nResize)\
             : BaseList( nInitSz, nResize ){}\
 inline void ClassName##MemberList::Insert( EntryName p )\
             {BaseList::Insert(p);}\
-inline void ClassName##MemberList::Insert( EntryName p, ULONG nIdx )\
+inline void ClassName##MemberList::Insert( EntryName p, sal_uIntPtr nIdx )\
             {BaseList::Insert(p,nIdx);}\
 inline void ClassName##MemberList::Insert( EntryName p, EntryName pOld )\
             {BaseList::Insert(p,pOld);}\
@@ -272,21 +272,21 @@ inline void ClassName##MemberList::Append( EntryName p )\
             {BaseList::Append(p);}\
 inline EntryName ClassName##MemberList::Remove()\
             {return (EntryName)BaseList::Remove();}\
-inline EntryName ClassName##MemberList::Remove( ULONG nIdx )\
+inline EntryName ClassName##MemberList::Remove( sal_uIntPtr nIdx )\
             {return (EntryName)BaseList::Remove(nIdx);}\
 inline EntryName ClassName##MemberList::Remove( EntryName p )\
             {return (EntryName)BaseList::Remove(p);}\
 inline EntryName ClassName##MemberList::Replace( EntryName p )\
             {return (EntryName)BaseList::Replace(p);}\
-inline EntryName ClassName##MemberList::Replace( EntryName p, ULONG nIdx )\
+inline EntryName ClassName##MemberList::Replace( EntryName p, sal_uIntPtr nIdx )\
             {return (EntryName)BaseList::Replace(p,nIdx);}\
 inline EntryName ClassName##MemberList::Replace( EntryName p, EntryName pOld )\
             {return (EntryName)BaseList::Replace(p,pOld);}\
 inline EntryName   ClassName##MemberList::GetCurObject() const\
             {return (EntryName)BaseList::GetCurObject();}\
-inline EntryName   ClassName##MemberList::GetObject( ULONG nIdx ) const\
+inline EntryName   ClassName##MemberList::GetObject( sal_uIntPtr nIdx ) const\
             {return (EntryName)BaseList::GetObject( nIdx );}\
-inline EntryName ClassName##MemberList::Seek( ULONG nIdx )\
+inline EntryName ClassName##MemberList::Seek( sal_uIntPtr nIdx )\
             {return (EntryName)BaseList::Seek( nIdx );}\
 inline EntryName ClassName##MemberList::Seek( EntryName p )\
             {return (EntryName)BaseList::Seek( p );}\
@@ -300,10 +300,10 @@ inline EntryName ClassName##MemberList::Prev()\
             {return (EntryName)BaseList::Prev();}\
 inline void      ClassName##MemberList::Append( const ClassName##MemberList & rList )\
             {BaseList::Append(rList);}\
-inline ULONG     ClassName##MemberList::GetPos( const EntryName p) const\
+inline sal_uIntPtr   ClassName##MemberList::GetPos( const EntryName p) const\
             {return BaseList::GetPos( p );}\
-inline ULONG     ClassName##MemberList::GetPos\
-                    ( const EntryName p, ULONG nStart, BOOL bForward ) const\
+inline sal_uIntPtr   ClassName##MemberList::GetPos\
+                    ( const EntryName p, sal_uIntPtr nStart, sal_Bool bForward ) const\
             {return BaseList::GetPos( p, nStart, bForward );}
 
 #define SV_DECL_MEMBER_LIST(ClassName,EntryName)\
@@ -324,7 +324,7 @@ SV_IMPL_MEMBER_LIST(ClassName,EntryName)
 #define SV_NO_DELETE_REFCOUNT  0x80000000
 class TOOLS_DLLPUBLIC SvRefBase
 {
-    UINT32 nRefCount;
+    sal_uIntPtr nRefCount;
 #if defined (GCC) && (defined (C281) || defined (C290) || defined (C291))
 public:
 #else
@@ -343,9 +343,9 @@ public:
                         if( nRefCount < SV_NO_DELETE_REFCOUNT )
                             nRefCount += SV_NO_DELETE_REFCOUNT;
                     }
-    UINT32          AddMulRef( UINT32 n ) { return nRefCount += n; }
-    UINT32          AddNextRef() { return ++nRefCount; }
-    UINT32          AddRef()
+    sal_uIntPtr          AddMulRef( sal_uIntPtr n ) { return nRefCount += n; }
+    sal_uIntPtr          AddNextRef() { return ++nRefCount; }
+    sal_uIntPtr          AddRef()
                     {
                         if( nRefCount >= SV_NO_DELETE_REFCOUNT )
                             nRefCount -= SV_NO_DELETE_REFCOUNT;
@@ -356,14 +356,14 @@ public:
                         if( !--nRefCount )
                             QueryDelete();
                     }
-    UINT32          ReleaseRef()
+    sal_uIntPtr          ReleaseRef()
                     {
-                        UINT32 n = --nRefCount;
+                        sal_uIntPtr n = --nRefCount;
                         if( !n )
                             QueryDelete();
                         return n;
                     }
-    UINT32          GetRefCount() const { return nRefCount; }
+    sal_uIntPtr          GetRefCount() const { return nRefCount; }
 };
 
 //#if 0 // _SOLAR__PRIVATE
@@ -436,7 +436,7 @@ public:                                                             \
     inline void          Clear() { _xHdl.Clear(); }                 \
     inline ClassName##Weak& operator = ( ClassName * pObj ) {       \
         _xHdl = pObj ? pObj->GetHdl() : 0; return *this; }          \
-    inline BOOL            Is() const {                             \
+    inline sal_Bool            Is() const {                             \
         return _xHdl.Is() && _xHdl->GetObj(); }                     \
     inline ClassName *     operator &  () const {                   \
         return (ClassName*) ( _xHdl.Is() ? _xHdl->GetObj() : 0 ); } \

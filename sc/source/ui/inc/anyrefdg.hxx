@@ -72,7 +72,7 @@ class ScFormulaReferenceHelper
     SfxBindings*        m_pBindings;
     ::std::auto_ptr<Accelerator>
                         pAccel;                 // fuer Enter/Escape
-    BOOL*               pHiddenMarks;           // Merkfeld fuer versteckte Controls
+    sal_Bool*               pHiddenMarks;           // Merkfeld fuer versteckte Controls
     SCTAB               nRefTab;                // used for ShowReference
 
     String              sOldDialogText;         // Originaltitel des Dialogfensters
@@ -81,9 +81,9 @@ class ScFormulaReferenceHelper
     Size                aOldEditSize;           // Originalgroesse des Eingabefeldes
     Point               aOldButtonPos;          // Originalpositiuon des Buttons
 
-    BOOL                bEnableColorRef;
-    BOOL                bHighLightRef;
-    BOOL                bAccInserted;
+    sal_Bool                bEnableColorRef;
+    sal_Bool                bHighLightRef;
+    sal_Bool                bAccInserted;
 
     DECL_LINK( AccelSelectHdl, Accelerator* );
 
@@ -98,24 +98,24 @@ public:
 
     void                ShowReference( const XubString& rStr );
     void                ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
-    void                HideReference( BOOL bDoneRefMode = TRUE );
+    void                HideReference( sal_Bool bDoneRefMode = sal_True );
     void                RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
-    void                RefInputDone( BOOL bForced = FALSE );
+    void                RefInputDone( sal_Bool bForced = sal_False );
     void                ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
 
     inline void         SetWindow(Window* _pWindow) { m_pWindow = _pWindow; }
-    BOOL                DoClose( USHORT nId );
-    void                SetDispatcherLock( BOOL bLock );
-    void                EnableSpreadsheets( BOOL bFlag = TRUE, BOOL bChilds = TRUE );
+    sal_Bool                DoClose( sal_uInt16 nId );
+    void                SetDispatcherLock( sal_Bool bLock );
+    void                EnableSpreadsheets( sal_Bool bFlag = sal_True, sal_Bool bChilds = sal_True );
     void                ViewShellChanged( ScTabViewShell* pScViewShell );
 
-    static              void enableInput(BOOL _bInput);
+    static              void enableInput(sal_Bool _bInput);
 //<!--Added by PengYunQuan for Validity Cell Range Picker
 protected:
     Window      *       GetWindow(){ return m_pWindow; }
 public:
     bool                CanInputStart( const ScRefEdit *pEdit ){ return !!pEdit; }
-    bool                CanInputDone( BOOL bForced ){   return pRefEdit && (bForced || !pRefBtn);   }
+    bool                CanInputDone( sal_Bool bForced ){   return pRefEdit && (bForced || !pRefBtn);   }
 //<!--Added by PengYunQuan for Validity Cell Range Picker
 };
 //============================================================================
@@ -148,15 +148,15 @@ private:
 
 
 protected:
-    virtual BOOL        DoClose( USHORT nId );
+    virtual sal_Bool        DoClose( sal_uInt16 nId );
 
-    void                SetDispatcherLock( BOOL bLock );
+    void                SetDispatcherLock( sal_Bool bLock );
 
     //Overwrite TWindow will implemented by ScRefHdlrImplBase
     //virtual long        PreNotify( NotifyEvent& rNEvt );
 
     virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
-    virtual void        RefInputDone( BOOL bForced = FALSE );
+    virtual void        RefInputDone( sal_Bool bForced = sal_False );
     void                ShowSimpleReference( const XubString& rStr );
     void                ShowFormulaReference( const XubString& rStr );
 
@@ -164,18 +164,18 @@ protected:
 
 public:
                         ScRefHandler( Window &rWindow, SfxBindings* pB/*, SfxChildWindow* pCW,
-                                     Window* pParent, USHORT nResId*/, bool bBindRef );
+                                     Window* pParent, sal_uInt16 nResId*/, bool bBindRef );
     virtual             ~ScRefHandler();
 
     virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) = 0;
     virtual void        AddRefEntry();
 
-    virtual BOOL        IsRefInputMode() const;
-    virtual BOOL        IsTableLocked() const;
-    virtual BOOL        IsDocAllowed( SfxObjectShell* pDocSh ) const;
+    virtual sal_Bool        IsRefInputMode() const;
+    virtual sal_Bool        IsTableLocked() const;
+    virtual sal_Bool        IsDocAllowed( SfxObjectShell* pDocSh ) const;
 
     virtual void        ShowReference( const XubString& rStr );
-    virtual void        HideReference( BOOL bDoneRefMode = TRUE );
+    virtual void        HideReference( sal_Bool bDoneRefMode = sal_True );
 
     virtual void        ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
     virtual void        ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
@@ -185,7 +185,7 @@ public:
     //SfxBindings&        GetBindings();
 
     virtual void        SetActive() = 0;
-//  virtual BOOL        Close();
+//  virtual sal_Bool        Close();
     //Overwrite TWindow will implemented by ScRefHdlrImplBase
     //virtual void        StateChanged( StateChangedType nStateChange );
 
@@ -194,7 +194,7 @@ public:
     bool                EnterRefMode();
     bool                LeaveRefMode();
     inline  bool        CanInputStart( const ScRefEdit *pEdit );
-    inline  bool        CanInputDone( BOOL bForced );
+    inline  bool        CanInputDone( sal_Bool bForced );
 //-->Added by PengYunQuan for Validity Cell Range Picker
 };
 
@@ -225,12 +225,12 @@ private:
 template<class TWindow, bool bBindRef>
 template<class TBindings, class TChildWindow, class TParentWindow, class TResId>
 ScRefHdlrImplBase<TWindow, bBindRef>::ScRefHdlrImplBase( TBindings* pB, TChildWindow* pCW,
-                 TParentWindow* pParent, TResId nResId):TWindow(pB, pCW, pParent, ScResId(static_cast<USHORT>( nResId ) ) ), ScRefHandler( *static_cast<TWindow*>(this), pB, bBindRef ){}
+                 TParentWindow* pParent, TResId nResId):TWindow(pB, pCW, pParent, ScResId(static_cast<sal_uInt16>( nResId ) ) ), ScRefHandler( *static_cast<TWindow*>(this), pB, bBindRef ){}
 
 template<class TWindow, bool bBindRef >
 template<class TParentWindow, class TResId, class TArg>
 ScRefHdlrImplBase<TWindow,bBindRef>::ScRefHdlrImplBase( TParentWindow* pParent, TResId nResIdP, const TArg &rArg, SfxBindings *pB /*= NULL*/ )
-:TWindow( pParent, ScResId(static_cast<USHORT>( nResIdP )), rArg ), ScRefHandler( *static_cast<TWindow*>(this), pB, bBindRef ){}
+:TWindow( pParent, ScResId(static_cast<sal_uInt16>( nResIdP )), rArg ), ScRefHandler( *static_cast<TWindow*>(this), pB, bBindRef ){}
 
 template<class TWindow, bool bBindRef >
 ScRefHdlrImplBase<TWindow,bBindRef>::~ScRefHdlrImplBase(){}
@@ -244,12 +244,12 @@ struct ScRefHdlrImpl: ScRefHdlrImplBase<TBase, bBindRef >
     template<class T1, class T2, class T3, class T4>
     ScRefHdlrImpl( const T1 & rt1, const T2 & rt2, const T3 & rt3, const T4 & rt4 ):ScRefHdlrImplBase<TBase, bBindRef >(rt1, rt2, rt3, rt4 )
     {
-        SC_MOD()->RegisterRefWindow( static_cast<USHORT>( static_cast<TDerived*>(this)->SLOTID ), this );
+        SC_MOD()->RegisterRefWindow( static_cast<sal_uInt16>( static_cast<TDerived*>(this)->SLOTID ), this );
     }
 
     ~ScRefHdlrImpl()
     {
-        SC_MOD()->UnregisterRefWindow( static_cast<USHORT>( static_cast<TDerived*>(this)->SLOTID ), this );
+        SC_MOD()->UnregisterRefWindow( static_cast<sal_uInt16>( static_cast<TDerived*>(this)->SLOTID ), this );
     }
 };
 //============================================================================
@@ -265,7 +265,7 @@ inline bool ScRefHandler::CanInputStart( const ScRefEdit *pEdit )
     return m_aHelper.CanInputStart( pEdit );
 }
 
-inline  bool ScRefHandler::CanInputDone( BOOL bForced )
+inline  bool ScRefHandler::CanInputDone( sal_Bool bForced )
 {
     return m_aHelper.CanInputDone( bForced );
 }

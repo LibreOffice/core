@@ -115,10 +115,10 @@ namespace dbaui
                                     ~OSelectionBrowseBox();
 
         void                        initialize();
-        OTableFieldDescRef          InsertField( const OJoinExchangeData& jxdSource, USHORT _nColumnPostion = BROWSER_INVALIDID, sal_Bool bVis=sal_True, sal_Bool bActivate=sal_True );
-        OTableFieldDescRef          InsertField( const OTableFieldDescRef& rInfo, USHORT _nColumnPostion = BROWSER_INVALIDID, sal_Bool bVis=sal_True, sal_Bool bActivate=sal_True );
-        void                        InsertColumn( OTableFieldDescRef pEntry, USHORT& _nColumnPostion );
-        void                        RemoveColumn( USHORT _nColumnId );
+        OTableFieldDescRef          InsertField( const OJoinExchangeData& jxdSource, sal_uInt16 _nColumnPostion = BROWSER_INVALIDID, sal_Bool bVis=sal_True, sal_Bool bActivate=sal_True );
+        OTableFieldDescRef          InsertField( const OTableFieldDescRef& rInfo, sal_uInt16 _nColumnPostion = BROWSER_INVALIDID, sal_Bool bVis=sal_True, sal_Bool bActivate=sal_True );
+        void                        InsertColumn( OTableFieldDescRef pEntry, sal_uInt16& _nColumnPostion );
+        void                        RemoveColumn( sal_uInt16 _nColumnId );
         void                        DeleteFields( const String& rAliasName );
 
         bool                        HasFieldByAliasName(const ::rtl::OUString& rFieldName, OTableFieldDescRef& rInfo) const;
@@ -141,8 +141,8 @@ namespace dbaui
         void                        SetColWidth(sal_uInt16 nColId, long lNewWidth);
                                     // beachtet im Gegensatz zum SetColumnWidth der Basisklasse auch eine eventuell aktive Zelle in dieser Spalte
 
-        String                      GetCellContents(sal_Int32 nCellIndex, USHORT nColId);
-        void                        SetCellContents(sal_Int32 nCellIndex, USHORT nColId, const String& strNewText);
+        String                      GetCellContents(sal_Int32 nCellIndex, sal_uInt16 nColId);
+        void                        SetCellContents(sal_Int32 nCellIndex, sal_uInt16 nColId, const String& strNewText);
                                         // Zelleninhalt (als String formatiert) setzen/liefern
         sal_Int32                   GetNoneVisibleRows() const;
         void                        SetNoneVisbleRow(long nRows);
@@ -163,8 +163,8 @@ namespace dbaui
 
         virtual void                GetFocus();
         virtual void                DeactivateCell(sal_Bool bUpdate = sal_True);
-        virtual void                ColumnMoved( USHORT nColId ) { ColumnMoved(nColId,TRUE); }
-        void                        ColumnMoved( USHORT nColId,BOOL _bCreateUndo);
+        virtual void                ColumnMoved( sal_uInt16 nColId ) { ColumnMoved(nColId,sal_True); }
+        void                        ColumnMoved( sal_uInt16 nColId,sal_Bool _bCreateUndo);
 
         void                        Fill();
         void                        PreFill();
@@ -184,7 +184,7 @@ namespace dbaui
             @return
                 the text out of the cell
         */
-        virtual String              GetCellText(long _nRow, USHORT _nColId) const;
+        virtual String              GetCellText(long _nRow, sal_uInt16 _nColId) const;
 
         /** returns the description of the row.
             @param  _nRow
@@ -245,10 +245,10 @@ namespace dbaui
         void                        startTimer();
 
     private:
-        OTableFieldDescRef          FindFirstFreeCol(USHORT& _rColumnPosition);
+        OTableFieldDescRef          FindFirstFreeCol(sal_uInt16& _rColumnPosition);
             // rCol enthaelt die Nummer (in pOTableFieldDescList) der ersten Spalte, die von sich sagt, dass sie leer ist
             // wenn es keine solche gibt, ist rCol undefiniert und der Rueckgabewert NULL
-        void                        CheckFreeColumns(USHORT& _rColumnPosition);
+        void                        CheckFreeColumns(sal_uInt16& _rColumnPosition);
             // testet, ob es noch freie Spalten gibt, wenn nicht, wird ein neuer Packen angefuegt
             // rCol enthaelt die Nummer der ersten freien Spalte (in pOTableFieldDescList)
 
@@ -320,7 +320,7 @@ namespace dbaui
             @param  _bListAction
                 Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
         */
-        void            notifyTableFieldChanged(const String& _sOldAlias,const String& _sAlias,sal_Bool& _bListAction,USHORT _nColumnId);
+        void            notifyTableFieldChanged(const String& _sOldAlias,const String& _sAlias,sal_Bool& _bListAction,sal_uInt16 _nColumnId);
 
         /** append an undo action for the function field
             @param  _sOldFunctionName
@@ -330,7 +330,7 @@ namespace dbaui
             @param  _bListAction
                 Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
         */
-        void            notifyFunctionFieldChanged(const String& _sOldFunctionName,const String& _sFunctionName,sal_Bool& _bListAction,USHORT _nColumnId);
+        void            notifyFunctionFieldChanged(const String& _sOldFunctionName,const String& _sFunctionName,sal_Bool& _bListAction,sal_uInt16 _nColumnId);
 
         /** clears the function fields of the submitted entry if it doesn't match the SQL standard and append an undo action.
             E.q. AGGREGATE functions are only valid when the field name isn't an asterix
@@ -341,7 +341,7 @@ namespace dbaui
             @param  _bListAction
                 When <TRUE/> an list action will be created.
         */
-        void            clearEntryFunctionField(const String& _sFieldName,OTableFieldDescRef& _pEntry,sal_Bool& _bListAction,USHORT _nColumnId);
+        void            clearEntryFunctionField(const String& _sFieldName,OTableFieldDescRef& _pEntry,sal_Bool& _bListAction,sal_uInt16 _nColumnId);
 
         /** remove or insert the necessary function types
             @param  _pEntry

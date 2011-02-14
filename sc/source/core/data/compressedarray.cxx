@@ -888,19 +888,19 @@ void ScCoupledCompressedArrayIterator<A,D,S>::Resync( A nPos )
 
 // === Force instantiation of specializations ================================
 
-template class ScCompressedArray< SCROW, USHORT>;           // heights, base class
-template class ScSummableCompressedArray< SCROW, USHORT>;   // heights
-template class ScCompressedArray< SCROW, BYTE>;             // flags, base class
-template class ScBitMaskCompressedArray< SCROW, BYTE>;      // flags
+template class ScCompressedArray< SCROW, sal_uInt16>;           // heights, base class
+template class ScSummableCompressedArray< SCROW, sal_uInt16>;   // heights
+template class ScCompressedArray< SCROW, sal_uInt8>;             // flags, base class
+template class ScBitMaskCompressedArray< SCROW, sal_uInt8>;      // flags
 template unsigned long ScBitMaskCompressedArray< SCROW,
-    BYTE>::SumCoupledArrayForCondition( SCROW, SCROW, const BYTE&, const BYTE&,
-            const ScSummableCompressedArray< SCROW, USHORT>&) const;
+    sal_uInt8>::SumCoupledArrayForCondition( SCROW, SCROW, const sal_uInt8&, const sal_uInt8&,
+            const ScSummableCompressedArray< SCROW, sal_uInt16>&) const;
 template unsigned long ScBitMaskCompressedArray< SCROW,
-    BYTE>::SumScaledCoupledArrayForCondition( SCROW, SCROW, const BYTE&,
-            const BYTE&, const ScSummableCompressedArray< SCROW, USHORT>&,
+    sal_uInt8>::SumScaledCoupledArrayForCondition( SCROW, SCROW, const sal_uInt8&,
+            const sal_uInt8&, const ScSummableCompressedArray< SCROW, sal_uInt16>&,
             double) const;
-template void ScCompressedArrayIterator< SCROW, USHORT>::Follow(
-        const ScCompressedArrayIterator< SCROW, BYTE>&);
-template class ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT>;
+template void ScCompressedArrayIterator< SCROW, sal_uInt16>::Follow(
+        const ScCompressedArrayIterator< SCROW, sal_uInt8>&);
+template class ScCoupledCompressedArrayIterator< SCROW, sal_uInt8, sal_uInt16>;
 
 // === EOF ===================================================================

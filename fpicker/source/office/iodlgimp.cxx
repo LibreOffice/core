@@ -120,7 +120,7 @@ namespace
 
     struct SvtSimpleResId : public ResId
     {
-        SvtSimpleResId (USHORT nId) : ResId (nId, *ResMgrHolder::getOrCreate()) {}
+        SvtSimpleResId (sal_uInt16 nId) : ResId (nId, *ResMgrHolder::getOrCreate()) {}
     };
 }
 
@@ -315,7 +315,7 @@ void SvtTravelButton_Impl::FillURLMenu( PopupMenu* _pMenu )
 
     sal_Bool bIsHighContrast = GetDialogParent()->GetView()->GetSettings().GetStyleSettings().GetHighContrastMode();
 
-    USHORT nItemId = 1;
+    sal_uInt16 nItemId = 1;
     String sDisplayName;
 
     ::std::vector< String >::const_iterator aLoop;
@@ -471,7 +471,7 @@ void SvtExpFileDlg_Impl::InsertFilterListEntry( const SvtFileDialogFilter_Impl* 
         sName = _pFilterDesc->GetName();
 
     // insert an set user data
-    USHORT nPos = _pLbFilter->InsertEntry( sName );
+    sal_uInt16 nPos = _pLbFilter->InsertEntry( sName );
     _pLbFilter->SetEntryData( nPos, const_cast< void* >( static_cast< const void* >( _pFilterDesc ) ) );
 }
 
@@ -483,7 +483,7 @@ void SvtExpFileDlg_Impl::InitFilterList( )
     ClearFilterList( );
 
     // reinit it
-    USHORT nPos = _pFilter->Count();
+    sal_uInt16 nPos = _pFilter->Count();
 
     // search for the first entry which is no group separator
     while ( nPos-- && _pFilter->GetObject( nPos ) && _pFilter->GetObject( nPos )->isGroupSeparator() )

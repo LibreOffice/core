@@ -44,7 +44,7 @@
     namespace validation { class NumberValidator; }
 #endif
 
-typedef USHORT FORMAT_CHANGE_TYPE;
+typedef sal_uInt16 FORMAT_CHANGE_TYPE;
 #define FCT_KEYONLY         0x00        // only a new key was set
 #define FCT_FORMATTER       0x01        // a new formatter weas set, usually implies a change of the key, too
 #define FCT_PRECISION       0x02        // a new precision was set
@@ -60,7 +60,7 @@ private:
     class StaticFormatter
     {
         static SvNumberFormatter*   s_cFormatter;
-        static ULONG                s_nReferences;
+        static sal_uLong                s_nReferences;
     public:
         StaticFormatter();
         ~StaticFormatter();
@@ -77,19 +77,19 @@ protected:
 
     double              m_dMinValue;
     double              m_dMaxValue;
-    BOOL                m_bHasMin : 1;
-    BOOL                m_bHasMax : 1;
+    sal_Bool                m_bHasMin : 1;
+    sal_Bool                m_bHasMax : 1;
 
-    BOOL                m_bStrictFormat : 1;
+    sal_Bool                m_bStrictFormat : 1;
 
-    BOOL                m_bValueDirty : 1;
-    BOOL                m_bEnableEmptyField : 1;
-    BOOL                m_bAutoColor : 1;
-    BOOL                m_bEnableNaN : 1;
+    sal_Bool                m_bValueDirty : 1;
+    sal_Bool                m_bEnableEmptyField : 1;
+    sal_Bool                m_bAutoColor : 1;
+    sal_Bool                m_bEnableNaN : 1;
     double              m_dCurrentValue;
     double              m_dDefaultValue;
 
-    ULONG               m_nFormatKey;
+    sal_uLong               m_nFormatKey;
     SvNumberFormatter*  m_pFormatter;
     StaticFormatter     m_aStaticFormatter;
 
@@ -100,7 +100,7 @@ protected:
     // es macht einen Unterschied, ob man bei eingestellter Textformatierung beim LostFocus den aktuellen String durch
     // den Formatter jagt und das Ergebnis anzeigt oder erst aus dem String ein double macht, das formatiert und dann
     // ausgibt
-    BOOL                m_bTreatAsNumber;
+    sal_Bool                m_bTreatAsNumber;
     // und mit den folgenden Members koennen wir das Ganze hier auch zur formatierten Text-Ausgabe benutzen ...
     String              m_sCurrentTextValue;
     String              m_sDefaultText;
@@ -112,18 +112,18 @@ protected:
     bool                m_bUseInputStringForFormatting;
 
 public:
-    FormattedField(Window* pParent, WinBits nStyle = 0, SvNumberFormatter* pInitialFormatter = NULL, INT32 nFormatKey = 0);
-    FormattedField(Window* pParent, const ResId& rResId, SvNumberFormatter* pInitialFormatter = NULL, INT32 nFormatKey = 0);
+    FormattedField(Window* pParent, WinBits nStyle = 0, SvNumberFormatter* pInitialFormatter = NULL, sal_Int32 nFormatKey = 0);
+    FormattedField(Window* pParent, const ResId& rResId, SvNumberFormatter* pInitialFormatter = NULL, sal_Int32 nFormatKey = 0);
     virtual ~FormattedField();
 
     // Min-/Max-Verwaltung
-    BOOL    HasMinValue() const         { return m_bHasMin; }
-    void    ClearMinValue()             { m_bHasMin = FALSE; }
+    sal_Bool    HasMinValue() const         { return m_bHasMin; }
+    void    ClearMinValue()             { m_bHasMin = sal_False; }
     void    SetMinValue(double dMin);
     double  GetMinValue() const         { return m_dMinValue; }
 
-    BOOL    HasMaxValue() const         { return m_bHasMax; }
-    void    ClearMaxValue()             { m_bHasMax = FALSE; }
+    sal_Bool    HasMaxValue() const         { return m_bHasMax; }
+    void    ClearMaxValue()             { m_bHasMax = sal_False; }
     void    SetMaxValue(double dMax);
     double  GetMaxValue() const         { return m_dMaxValue; }
 
@@ -137,30 +137,30 @@ public:
     void    SetTextValue(const XubString& rText);
         // der String wird in ein double umgewandelt (durch den Formatter) und anschliessen in SetValue gesteckt
 
-    BOOL    IsEmptyFieldEnabled() const         { return m_bEnableEmptyField; }
-    void    EnableEmptyField(BOOL bEnable);
+    sal_Bool    IsEmptyFieldEnabled() const         { return m_bEnableEmptyField; }
+    void    EnableEmptyField(sal_Bool bEnable);
         // wenn nicht enabled, wird beim Verlassen des Feldes der Text auf den letzten gueltigen zurueckgesetzt
 
-    void    SetDefaultValue(double dDefault)    { m_dDefaultValue = dDefault; m_bValueDirty = TRUE; }
+    void    SetDefaultValue(double dDefault)    { m_dDefaultValue = dDefault; m_bValueDirty = sal_True; }
         // wenn der aktuelle String ungueltig ist, liefert GetValue() diesen Default-Wert
     double  GetDefaultValue() const             { return m_dDefaultValue; }
 
     // Einstellungen fuer das Format
-    ULONG   GetFormatKey() const                { return m_nFormatKey; }
-    void    SetFormatKey(ULONG nFormatKey);
+    sal_uLong   GetFormatKey() const                { return m_nFormatKey; }
+    void    SetFormatKey(sal_uLong nFormatKey);
 
     SvNumberFormatter*  GetFormatter() const    { return m_pFormatter; }
-    void    SetFormatter(SvNumberFormatter* pFormatter, BOOL bResetFormat = TRUE);
-        // wenn bResetFormat FALSE ist, wird versucht, das alte eingestellte Format mit 'hinueberzuretten' (teuer, wenn es sich nicht
+    void    SetFormatter(SvNumberFormatter* pFormatter, sal_Bool bResetFormat = sal_True);
+        // wenn bResetFormat sal_False ist, wird versucht, das alte eingestellte Format mit 'hinueberzuretten' (teuer, wenn es sich nicht
         // um eines der Standard-Formate handelt, die in allen Formattern gleich sind)
-        // wenn TRUE, wird als neuer FormatKey 0 gesetzt
+        // wenn sal_True, wird als neuer FormatKey 0 gesetzt
 
-    BOOL    GetThousandsSep() const;
-    void    SetThousandsSep(BOOL _bUseSeparator);
+    sal_Bool    GetThousandsSep() const;
+    void    SetThousandsSep(sal_Bool _bUseSeparator);
         // the is no check if the current format is numeric, so be cautious when calling these functions
 
-    USHORT  GetDecimalDigits() const;
-    void    SetDecimalDigits(USHORT _nPrecision);
+    sal_uInt16  GetDecimalDigits() const;
+    void    SetDecimalDigits(sal_uInt16 _nPrecision);
         // the is no check if the current format is numeric, so be cautious when calling these functions
 
     SvNumberFormatter*  StandardFormatter() { return m_aStaticFormatter; }
@@ -169,11 +169,11 @@ public:
         // also ist etwas Vorsicht angebracht ...
 
     void        GetFormat(XubString& rFormatString, LanguageType& eLang) const;
-    BOOL        SetFormat(const XubString& rFormatString, LanguageType eLang);
-        // FALSE, wenn der FormatString nicht gesetzt werden konnte (also wahrscheinlich ungueltig ist)
+    sal_Bool        SetFormat(const XubString& rFormatString, LanguageType eLang);
+        // sal_False, wenn der FormatString nicht gesetzt werden konnte (also wahrscheinlich ungueltig ist)
 
-    BOOL    IsStrictFormat() const              { return m_bStrictFormat; }
-    void    SetStrictFormat(BOOL bEnable)       { m_bStrictFormat = bEnable; }
+    sal_Bool    IsStrictFormat() const              { return m_bStrictFormat; }
+    void    SetStrictFormat(sal_Bool bEnable)       { m_bStrictFormat = bEnable; }
         // Formatueberpruefung waehrend der Eingabe ?
 
     // Spin-Handling
@@ -193,15 +193,15 @@ public:
     void    SetSpinLast(double dLast)   { m_dSpinLast = dLast; }
     double  GetSpinLast() const         { return m_dSpinLast; }
 
-    BOOL    TreatingAsNumber() const    { return m_bTreatAsNumber; }
-    void    TreatAsNumber(BOOL bDoSo) { m_bTreatAsNumber = bDoSo; }
+    sal_Bool    TreatingAsNumber() const    { return m_bTreatAsNumber; }
+    void    TreatAsNumber(sal_Bool bDoSo) { m_bTreatAsNumber = bDoSo; }
 
 public:
     virtual void SetText( const XubString& rStr );
     virtual void SetText( const XubString& rStr, const Selection& rNewSelection );
     void    SetValidateText(const XubString& rText, const String* pErrorText = NULL);
 
-    // die folgenden Methoden sind interesant, wenn m_bTreatAsNumber auf FALSE sitzt
+    // die folgenden Methoden sind interesant, wenn m_bTreatAsNumber auf sal_False sitzt
     /** nehmen wir mal an, irgendjemand will das ganze schoene double-Handling gar nicht haben, sondern
         einfach den Text formatiert ausgeben ...
         (der Text wird einfach nur durch den Formatter gejagt und dann gesetzt)
@@ -222,12 +222,12 @@ public:
     */
     void    Commit();
 
-    // enable automatic coloring. if set to TRUE, and the format the field is working with for any current value
+    // enable automatic coloring. if set to sal_True, and the format the field is working with for any current value
     // says that it has to be painted in a special color (e.g. a format where negative numbers should be printed
     // red), the text is painted with that color automatically.
     // The color used is the same as returned by GetLastOutputColor()
-    void    SetAutoColor(BOOL _bAutomatic);
-    BOOL    GetAutoColor() const { return m_bAutoColor; }
+    void    SetAutoColor(sal_Bool _bAutomatic);
+    sal_Bool    GetAutoColor() const { return m_bAutoColor; }
 
     /** enables handling of not-a-number value.
 
@@ -243,8 +243,8 @@ public:
         control, and then tabs out of it, the text "foo" will persist, and GetValue will
         return NaN in subsequent calls.
     */
-    void    EnableNotANumber( BOOL _bEnable );
-    BOOL    IsNotANumberEnabled( ) const { return m_bEnableNaN; }
+    void    EnableNotANumber( sal_Bool _bEnable );
+    sal_Bool    IsNotANumberEnabled( ) const { return m_bEnableNaN; }
 
     /** When being set to true, the strings in the field are formatted using the
         InputLine format.  That's also what you get in Calc when you edit a cell
@@ -258,16 +258,16 @@ protected:
     virtual void Modify();
 
     // CheckText ueberschreiben fuer Ueberpruefung zur Eingabezeit
-    virtual BOOL CheckText(const XubString&) const { return TRUE; }
+    virtual sal_Bool CheckText(const XubString&) const { return sal_True; }
 
     // any aspect of the current format has changed
     virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat);
 
     void ImplSetTextImpl(const XubString& rNew, Selection* pNewSel);
-    void ImplSetValue(double dValue, BOOL bForce);
-    BOOL ImplGetValue(double& dNewVal);
+    void ImplSetValue(double dValue, sal_Bool bForce);
+    sal_Bool ImplGetValue(double& dNewVal);
 
-    void ImplSetFormatKey(ULONG nFormatKey);
+    void ImplSetFormatKey(sal_uLong nFormatKey);
         // SetFormatKey without FormatChanged notification
 
     virtual SvNumberFormatter*  CreateFormatter() { SetFormatter(StandardFormatter()); return m_pFormatter; }
@@ -313,7 +313,7 @@ public:
     virtual ~DoubleNumericField();
 
 protected:
-    virtual BOOL CheckText(const XubString& sText) const;
+    virtual sal_Bool CheckText(const XubString& sText) const;
 
     virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat);
     void ResetConformanceTester();
@@ -327,8 +327,8 @@ protected:
 class DoubleCurrencyField : public FormattedField
 {
     XubString   m_sCurrencySymbol;
-    BOOL        m_bPrependCurrSym;
-    BOOL        m_bChangingFormat;
+    sal_Bool        m_bPrependCurrSym;
+    sal_Bool        m_bChangingFormat;
 
 public:
     DoubleCurrencyField(Window* pParent, WinBits nStyle = 0);
@@ -337,8 +337,8 @@ public:
     XubString   getCurrencySymbol() const { return m_sCurrencySymbol; }
     void        setCurrencySymbol(const XubString& _sSymbol);
 
-    BOOL        getPrependCurrSym() const { return m_bPrependCurrSym; }
-    void        setPrependCurrSym(BOOL _bPrepend);
+    sal_Bool        getPrependCurrSym() const { return m_bPrependCurrSym; }
+    void        setPrependCurrSym(sal_Bool _bPrepend);
 
 protected:
     virtual void FormatChanged(FORMAT_CHANGE_TYPE nWhat);

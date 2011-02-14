@@ -30,7 +30,7 @@
 
 #include <tools/solar.h>
 
-BOOL MemNew( void );
+sal_Bool MemNew( void );
 void MemDelete( void );
 
 #endif

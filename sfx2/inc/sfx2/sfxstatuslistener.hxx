@@ -44,7 +44,7 @@
 class SfxStatusListenerInterface
 {
     public:
-        virtual void StateChanged( USHORT nSlotId, SfxItemState eState, const SfxPoolItem* pState ) = 0;
+        virtual void StateChanged( sal_uInt16 nSlotId, SfxItemState eState, const SfxPoolItem* pState ) = 0;
 };
 
 class SFX2_DLLPUBLIC SfxStatusListener :
@@ -56,17 +56,17 @@ class SFX2_DLLPUBLIC SfxStatusListener :
     public:
         SFX_DECL_XINTERFACE_XTYPEPROVIDER
 
-        SfxStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider, USHORT nSlotId, const rtl::OUString& aCommand );
+        SfxStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const rtl::OUString& aCommand );
         virtual ~SfxStatusListener();
 
         // old methods from SfxControllerItem
-        USHORT  GetId() const { return m_nSlotID; }
+        sal_uInt16  GetId() const { return m_nSlotID; }
         void    Bind();
-        void    Bind( USHORT nSlotID, const rtl::OUString& rNewCommand );
+        void    Bind( sal_uInt16 nSlotID, const rtl::OUString& rNewCommand );
         void    UnBind();
         void    ReBind();
 
-        virtual void StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+        virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
 
         // XComponent
         virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
@@ -84,7 +84,7 @@ class SFX2_DLLPUBLIC SfxStatusListener :
         SfxStatusListener();
         SfxStatusListener& operator=( const SfxStatusListener& );
 
-        USHORT                                                                          m_nSlotID;
+        sal_uInt16                                                                          m_nSlotID;
         ::com::sun::star::util::URL                                                     m_aCommand;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >  m_xDispatchProvider;
         ::com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >            m_xDispatch;

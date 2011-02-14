@@ -176,7 +176,7 @@ class SvtMenuOptions_Impl : public ConfigItem
                     {
                         m_bDontHideDisabledEntries = bState;
                         SetModified();
-                        for ( USHORT n=0; n<aList.Count(); n++ )
+                        for ( sal_uInt16 n=0; n<aList.Count(); n++ )
                             aList.GetObject(n)->Call( this );
                         Commit();
                     }
@@ -185,7 +185,7 @@ class SvtMenuOptions_Impl : public ConfigItem
                     {
                         m_bFollowMouse = bState;
                         SetModified();
-                        for ( USHORT n=0; n<aList.Count(); n++ )
+                        for ( sal_uInt16 n=0; n<aList.Count(); n++ )
                             aList.GetObject(n)->Call( this );
                         Commit();
                     }
@@ -194,7 +194,7 @@ class SvtMenuOptions_Impl : public ConfigItem
                     {
                         m_nMenuIcons = bState;
                         SetModified();
-                        for ( USHORT n=0; n<aList.Count(); n++ )
+                        for ( sal_uInt16 n=0; n<aList.Count(); n++ )
                             aList.GetObject(n)->Call( this );
                         Commit();
                     }
@@ -299,7 +299,7 @@ SvtMenuOptions_Impl::~SvtMenuOptions_Impl()
         Commit();
     }
 
-    for ( USHORT n=0; n<aList.Count(); )
+    for ( sal_uInt16 n=0; n<aList.Count(); )
         delete aList.Remove(n);
 }
 
@@ -358,7 +358,7 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
     if ( bMenuSettingsChanged )
         m_nMenuIcons = bSystemMenuIcons ? 2 : bMenuIcons;
 
-    for ( USHORT n=0; n<aList.Count(); n++ )
+    for ( sal_uInt16 n=0; n<aList.Count(); n++ )
         aList.GetObject(n)->Call( this );
 }
 
@@ -427,7 +427,7 @@ void SvtMenuOptions_Impl::AddListenerLink( const Link& rLink )
 
 void SvtMenuOptions_Impl::RemoveListenerLink( const Link& rLink )
 {
-    for ( USHORT n=0; n<aList.Count(); n++ )
+    for ( sal_uInt16 n=0; n<aList.Count(); n++ )
     {
         if ( (*aList.GetObject(n) ) == rLink )
         {

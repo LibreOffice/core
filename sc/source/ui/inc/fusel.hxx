@@ -52,11 +52,11 @@ public:
 
     virtual ~FuSelection();
                                        // Mouse- & Key-Events
-    virtual BOOL KeyInput(const KeyEvent& rKEvt);
-    virtual BOOL MouseMove(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
-    virtual BYTE Command(const CommandEvent& rCEvt);
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
+    virtual sal_uInt8 Command(const CommandEvent& rCEvt);
 
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
@@ -66,10 +66,10 @@ public:
 protected:
 //  Outliner*       pOutliner;
 //  OutlinerView*   pOutlinerView;
-    BOOL            bVCAction;
+    sal_Bool            bVCAction;
 
 private:
-    BOOL TestDetective( SdrPageView* pPV, const Point& rPos );  // -> fusel2
+    sal_Bool TestDetective( SdrPageView* pPV, const Point& rPos );  // -> fusel2
 
     bool                IsNoteCaptionMarked() const;
     bool                IsNoteCaptionClicked( const Point& rPos ) const;

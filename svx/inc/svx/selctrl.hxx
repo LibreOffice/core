@@ -37,19 +37,19 @@
 class SVX_DLLPUBLIC SvxSelectionModeControl : public SfxStatusBarControl
 {
 public:
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
     virtual void    Click();
     virtual void    Paint( const UserDrawEvent& rEvt );
 
     SFX_DECL_STATUSBAR_CONTROL();
 
-    SvxSelectionModeControl( USHORT nSlotId, USHORT nId, StatusBar& rStb );
+    SvxSelectionModeControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
 
-    static  ULONG   GetDefItemWidth(const StatusBar& rStb);
+    static  sal_uIntPtr GetDefItemWidth(const StatusBar& rStb);
 
 private:
-    USHORT  nState;
+    sal_uInt16  nState;
 
 #ifdef _SVX_SELCTRL_CXX
     SVX_DLLPRIVATE void DrawItemText_Impl();

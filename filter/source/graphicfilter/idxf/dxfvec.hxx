@@ -99,8 +99,8 @@ public:
     DXFVector Unit() const;
 
     // Aequivalenz oder nicht:
-    BOOL operator == (const DXFVector & rV) const;
-    BOOL operator != (const DXFVector & rV) const;
+    sal_Bool operator == (const DXFVector & rV) const;
+    sal_Bool operator != (const DXFVector & rV) const;
 };
 
 //------------------------------------------------------------------------------
@@ -148,20 +148,20 @@ public:
     void TransDir(const DXFVector & rSrc, DXFVector & rTgt) const;
         // Transformation eines relativen Vektors (also kein Verschiebung)
 
-    BOOL TransCircleToEllipse(double fRadius, double & rEx, double & rEy) const;
+    sal_Bool TransCircleToEllipse(double fRadius, double & rEx, double & rEy) const;
         // Versucht, einen Kreis (in der XY-Ebene) zu transformieren, so dass eine
         // ausgerichtete Ellipse entsteht. Wenn das nicht geht, weil Ellipse
-        // in belibieger Lage entstehen wuerde, wird FALSE geliefert.
+        // in belibieger Lage entstehen wuerde, wird sal_False geliefert.
         // (Der Mittelpunkt wird hiermit nicht transformiert, nehme Transform(..))
 
-    ULONG TransLineWidth(double fW) const;
+    sal_uLong TransLineWidth(double fW) const;
         // Transformiert die Liniendicke (so gut es geht)
 
     double CalcRotAngle() const;
         // Ermittelt den Rotationswinkel um die Z-Achse (in Grad)
 
-    BOOL Mirror() const;
-        // Liefert TRUE, wenn die Matrix ein Linkssystem bildet
+    sal_Bool Mirror() const;
+        // Liefert sal_True, wenn die Matrix ein Linkssystem bildet
 
     LineInfo Transform(const DXFLineInfo& aDXFLineInfo) const;
         // Transform to LineInfo
@@ -245,17 +245,17 @@ inline DXFVector DXFVector::operator * (double fs) const
 }
 
 
-inline BOOL DXFVector::operator == (const DXFVector & rV) const
+inline sal_Bool DXFVector::operator == (const DXFVector & rV) const
 {
-    if (fx==rV.fx && fy==rV.fy && fz==rV.fz) return TRUE;
-    else return FALSE;
+    if (fx==rV.fx && fy==rV.fy && fz==rV.fz) return sal_True;
+    else return sal_False;
 }
 
 
-inline BOOL DXFVector::operator != (const DXFVector & rV) const
+inline sal_Bool DXFVector::operator != (const DXFVector & rV) const
 {
-    if (fx!=rV.fx || fy!=rV.fy || fz!=rV.fz) return TRUE;
-    else return FALSE;
+    if (fx!=rV.fx || fy!=rV.fy || fz!=rV.fz) return sal_True;
+    else return sal_False;
 }
 
 #endif

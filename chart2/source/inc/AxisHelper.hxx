@@ -189,7 +189,7 @@ public:
             , sal_Int32& rOutCooSysIndex, sal_Int32& rOutDimensionIndex, sal_Int32& rOutAxisIndex );
 
     /** @param bOnlyVisible if </TRUE>, only axes with property "Show" set to
-               </TRUE> are returned
+               </sal_True> are returned
      */
     static ::com::sun::star::uno::Sequence<
                 ::com::sun::star::uno::Reference<
@@ -199,7 +199,7 @@ public:
             , bool bOnlyVisible = false );
 
     /** @param bOnlyVisible if </TRUE>, only axes with property "Show" set to
-               </TRUE> are returned
+               </sal_True> are returned
      */
     SAL_DLLPRIVATE static std::vector<
                 ::com::sun::star::uno::Reference<

@@ -282,7 +282,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                         *pAny <<= (sal_Int16)(pTxtNd->GetActualListLevel());
                     else if(rEntry.nWID == FN_UNO_IS_NUMBER)
                     {
-                        BOOL bIsNumber = pTxtNd->IsCountedInList();
+                        sal_Bool bIsNumber = pTxtNd->IsCountedInList();
                         pAny->setValue(&bIsNumber, ::getBooleanCppuType());
                     }
                     // --> OD 2008-07-14 #i91601#
@@ -294,7 +294,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     // <--
                     else /*if(rEntry.nWID == UNO_NAME_PARA_IS_NUMBERING_RESTART)*/
                     {
-                        BOOL bIsRestart = pTxtNd->IsListRestart();
+                        sal_Bool bIsRestart = pTxtNd->IsListRestart();
                         pAny->setValue(&bIsRestart, ::getBooleanCppuType());
                     }
                 }
@@ -532,26 +532,26 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         {
 
             SwTxtNode* pTxtNode;
-            if((pTxtNode = (SwTxtNode*)rPam.GetNode( TRUE )) == rPam.GetNode(FALSE) &&
+            if((pTxtNode = (SwTxtNode*)rPam.GetNode( sal_True )) == rPam.GetNode(sal_False) &&
                     pTxtNode->GetpSwpHints())
             {
-                USHORT nPaMStart = rPam.GetPoint()->nContent.GetIndex();
-                USHORT nPaMEnd = rPam.GetMark() ? rPam.GetMark()->nContent.GetIndex() : nPaMStart;
+                sal_uInt16 nPaMStart = rPam.GetPoint()->nContent.GetIndex();
+                sal_uInt16 nPaMEnd = rPam.GetMark() ? rPam.GetMark()->nContent.GetIndex() : nPaMStart;
                 if(nPaMStart > nPaMEnd)
                 {
-                    USHORT nTmp = nPaMStart;
+                    sal_uInt16 nTmp = nPaMStart;
                     nPaMStart = nPaMEnd;
                     nPaMEnd = nTmp;
                 }
                 Sequence< ::rtl::OUString> aCharStyles;
                 SwpHints* pHints = pTxtNode->GetpSwpHints();
-                for(USHORT nAttr = 0; nAttr < pHints->GetStartCount(); nAttr++ )
+                for(sal_uInt16 nAttr = 0; nAttr < pHints->GetStartCount(); nAttr++ )
                 {
                     SwTxtAttr* pAttr = pHints->GetStart( nAttr );
                     if(pAttr->Which() != RES_TXTATR_CHARFMT)
                         continue;
-                    USHORT nAttrStart = *pAttr->GetStart();
-                    USHORT nAttrEnd = *pAttr->GetEnd();
+                    sal_uInt16 nAttrStart = *pAttr->GetStart();
+                    sal_uInt16 nAttrEnd = *pAttr->GetEnd();
                     //check if the attribute touches the selection
                     if( ( nAttrEnd > nPaMStart && nAttrStart < nPaMEnd ) ||
                         ( !nAttrStart && !nAttrEnd && !nPaMStart && !nPaMEnd ) )
@@ -1076,7 +1076,7 @@ void makeRedline( SwPaM& rPaM,
     comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );
     uno::Any aAuthorValue;
     aAuthorValue = aPropMap.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii("RedlineAuthor"), aAuthorValue);
-    USHORT nAuthor = 0;
+    sal_uInt16 nAuthor = 0;
     ::rtl::OUString sAuthor;
     if( aAuthorValue >>= sAuthor )
         nAuthor = pRedlineAccess->InsertRedlineAuthor(sAuthor);
@@ -1123,7 +1123,7 @@ SwAnyMapHelper::~SwAnyMapHelper()
 /*-- 19.02.2009 09:27:26---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwAnyMapHelper::SetValue( USHORT nWhichId, USHORT nMemberId, const uno::Any& rAny )
+void SwAnyMapHelper::SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& rAny )
 {
     sal_uInt32 nKey = (nWhichId << 16) + nMemberId;
     AnyMapHelper_t::iterator aIt = find( nKey );
@@ -1137,7 +1137,7 @@ void SwAnyMapHelper::SetValue( USHORT nWhichId, USHORT nMemberId, const uno::Any
 /*-- 19.02.2009 09:27:26---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-bool    SwAnyMapHelper::FillValue( USHORT nWhichId, USHORT nMemberId, const uno::Any*& pAny )
+bool    SwAnyMapHelper::FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any*& pAny )
 {
     bool bRet = false;
     sal_uInt32 nKey = (nWhichId << 16) + nMemberId;

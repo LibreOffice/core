@@ -65,14 +65,14 @@ class SW_DLLPUBLIC SwClient
     friend class SwClientIter;
 
     SwClient *pLeft, *pRight;           // fuer die AVL-Sortierung
-    BOOL bModifyLocked : 1;             // wird in SwModify::Modify benutzt,
+    sal_Bool bModifyLocked : 1;             // wird in SwModify::Modify benutzt,
                                         // eigentlich ein Member des SwModify
                                         // aber aus Platzgruenden hier.
-    BOOL bInModify  : 1;                // ist in einem Modify. (Debug!!!)
-    BOOL bInDocDTOR : 1;                // Doc wird zerstoert, nicht "abmelden"
-    BOOL bInCache   : 1;                // Ist im BorderAttrCache des Layout,
+    sal_Bool bInModify  : 1;                // ist in einem Modify. (Debug!!!)
+    sal_Bool bInDocDTOR : 1;                // Doc wird zerstoert, nicht "abmelden"
+    sal_Bool bInCache   : 1;                // Ist im BorderAttrCache des Layout,
                                         // Traegt sich dann im Modify aus!
-    BOOL bInSwFntCache : 1;             // Ist im SwFont-Cache der Formatierung
+    sal_Bool bInSwFntCache : 1;             // Ist im SwFont-Cache der Formatierung
 
 protected:
     SwModify *pRegisteredIn;
@@ -92,17 +92,17 @@ public:
     //werden.
     TYPEINFO();
 
-    void LockModify()                   { bModifyLocked = TRUE;  }
-    void UnlockModify()                 { bModifyLocked = FALSE; }
-    void SetInCache( BOOL bNew )        { bInCache = bNew;       }
-    void SetInSwFntCache( BOOL bNew )   { bInSwFntCache = bNew;  }
-    BOOL IsModifyLocked() const         { return bModifyLocked;  }
-    BOOL IsInDocDTOR()    const         { return bInDocDTOR;     }
-    BOOL IsInCache()      const         { return bInCache;       }
-    BOOL IsInSwFntCache()  const        { return bInSwFntCache;  }
+    void LockModify()                   { bModifyLocked = sal_True;  }
+    void UnlockModify()                 { bModifyLocked = sal_False; }
+    void SetInCache( sal_Bool bNew )        { bInCache = bNew;       }
+    void SetInSwFntCache( sal_Bool bNew )   { bInSwFntCache = bNew;  }
+    sal_Bool IsModifyLocked() const         { return bModifyLocked;  }
+    sal_Bool IsInDocDTOR()    const         { return bInDocDTOR;     }
+    sal_Bool IsInCache()      const         { return bInCache;       }
+    sal_Bool IsInSwFntCache()  const        { return bInSwFntCache;  }
 
         // erfrage vom Client Informationen
-    virtual BOOL GetInfo( SfxPoolItem& ) const;
+    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
 
 private:
     SwClient( const SwClient& );
@@ -111,7 +111,7 @@ private:
 
 inline SwClient::SwClient() :
     pLeft(0), pRight(0), pRegisteredIn(0)
-{ bModifyLocked = bInModify = bInDocDTOR = bInCache = bInSwFntCache = FALSE; }
+{ bModifyLocked = bInModify = bInDocDTOR = bInCache = bInSwFntCache = sal_False; }
 
 
 // ----------
@@ -144,13 +144,13 @@ public:
     const SwClient* GetDepends() const  { return pRoot; }
 
         // erfrage vom Client Informationen
-    virtual BOOL GetInfo( SfxPoolItem& ) const;
+    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
 
-    void SetInDocDTOR() { bInDocDTOR = TRUE; }
+    void SetInDocDTOR() { bInDocDTOR = sal_True; }
 
-    void CheckCaching( const USHORT nWhich );
+    void CheckCaching( const sal_uInt16 nWhich );
 
-    BOOL IsLastDepend() const
+    sal_Bool IsLastDepend() const
         { return pRoot && !pRoot->pLeft && !pRoot->pRight; }
 
 private:
@@ -185,7 +185,7 @@ public:
     virtual void Modify( SfxPoolItem *pOldValue, SfxPoolItem *pNewValue );
 
         // erfrage vom Client Informationen
-    virtual BOOL GetInfo( SfxPoolItem & ) const;
+    virtual sal_Bool GetInfo( SfxPoolItem & ) const;
 
 private:
     // forbidden and not implemented (see @ SwClient).

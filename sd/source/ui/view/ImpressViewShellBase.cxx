@@ -53,7 +53,7 @@ SfxViewShell* __EXPORT ImpressViewShellBase::CreateInstance (
     pBase->LateInit(::rtl::OUString());
     return pBase;
 }
-void ImpressViewShellBase::RegisterFactory( USHORT nPrio )
+void ImpressViewShellBase::RegisterFactory( sal_uInt16 nPrio )
 {
     pFactory = new SfxViewFactory(
         &CreateInstance,&InitFactory,nPrio,"Default");
@@ -92,7 +92,7 @@ ImpressViewShellBase::~ImpressViewShellBase (void)
 
 void ImpressViewShellBase::Execute (SfxRequest& rRequest)
 {
-    USHORT nSlotId = rRequest.GetSlot();
+    sal_uInt16 nSlotId = rRequest.GetSlot();
 
     switch (nSlotId)
     {

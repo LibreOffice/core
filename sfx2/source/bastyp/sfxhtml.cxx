@@ -73,7 +73,7 @@ static HTMLOptionEnum __READONLY_DATA aAreaShapeOptEnums[] =
     { 0,                    0                   }
 };
 
-SfxHTMLParser::SfxHTMLParser( SvStream& rStream, BOOL bIsNewDoc,
+SfxHTMLParser::SfxHTMLParser( SvStream& rStream, sal_Bool bIsNewDoc,
                               SfxMedium *pMed ) :
     HTMLParser( rStream, bIsNewDoc ),
     pMedium( pMed ), pDLMedium( 0 ),
@@ -89,7 +89,7 @@ SfxHTMLParser::SfxHTMLParser( SvStream& rStream, BOOL bIsNewDoc,
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
 
     // If the file starts with a BOM, switch to UCS2.
-    SetSwitchToUCS2( TRUE );
+    SetSwitchToUCS2( sal_True );
 }
 
 __EXPORT SfxHTMLParser::~SfxHTMLParser()
@@ -98,7 +98,7 @@ __EXPORT SfxHTMLParser::~SfxHTMLParser()
     delete pDLMedium;
 }
 
-BOOL SfxHTMLParser::ParseMapOptions(ImageMap * pImageMap,
+sal_Bool SfxHTMLParser::ParseMapOptions(ImageMap * pImageMap,
                                     const HTMLOptions * pOptions)
 {
     DBG_ASSERT( pImageMap, "ParseMapOptions: keine Image-Map" );
@@ -106,7 +106,7 @@ BOOL SfxHTMLParser::ParseMapOptions(ImageMap * pImageMap,
 
     String aName;
 
-    for( USHORT i=pOptions->Count(); i; )
+    for( sal_uInt16 i=pOptions->Count(); i; )
     {
         const HTMLOption *pOption = (*pOptions)[--i];
         switch( pOption->GetToken() )
@@ -123,23 +123,23 @@ BOOL SfxHTMLParser::ParseMapOptions(ImageMap * pImageMap,
     return aName.Len() > 0;
 }
 
-BOOL SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,
+sal_Bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const String& rBaseURL,
                                      const HTMLOptions * pOptions,
-                                     USHORT nEventMouseOver,
-                                     USHORT nEventMouseOut )
+                                     sal_uInt16 nEventMouseOver,
+                                     sal_uInt16 nEventMouseOut )
 {
     DBG_ASSERT( pImageMap, "ParseAreaOptions: keine Image-Map" );
     DBG_ASSERT( pOptions, "ParseAreaOptions: keine Optionen" );
 
-    USHORT nShape = IMAP_OBJ_RECTANGLE;
+    sal_uInt16 nShape = IMAP_OBJ_RECTANGLE;
     SvULongs aCoords;
     String aName, aHRef, aAlt, aTarget, sEmpty;
-    BOOL bNoHRef = FALSE;
+    sal_Bool bNoHRef = sal_False;
     SvxMacroTableDtor aMacroTbl;
 
-    for( USHORT i=pOptions->Count(); i; )
+    for( sal_uInt16 i=pOptions->Count(); i; )
     {
-        USHORT nEvent = 0;
+        sal_uInt16 nEvent = 0;
         ScriptType eScrpType = STARBASIC;
         const HTMLOption *pOption = (*pOptions)[--i];
         switch( pOption->GetToken() )
@@ -151,13 +151,13 @@ BOOL SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const String& rBaseUR
             pOption->GetEnum( nShape, aAreaShapeOptEnums );
             break;
         case HTML_O_COORDS:
-            pOption->GetNumbers( aCoords, TRUE );
+            pOption->GetNumbers( aCoords, sal_True );
             break;
         case HTML_O_HREF:
             aHRef = INetURLObject::GetAbsURL( rBaseURL, pOption->GetString() );
             break;
         case HTML_O_NOHREF:
-            bNoHRef = TRUE;
+            bNoHRef = sal_True;
             break;
         case HTML_O_ALT:
             aAlt = pOption->GetString();
@@ -195,7 +195,7 @@ IMAPOBJ_SETEVENT:
     if( bNoHRef )
         aHRef.Erase();
 
-    BOOL bNewArea = TRUE;
+    sal_Bool bNewArea = sal_True;
     switch( nShape )
     {
     case IMAP_OBJ_RECTANGLE:
@@ -224,9 +224,9 @@ IMAPOBJ_SETEVENT:
     case IMAP_OBJ_POLYGON:
         if( aCoords.Count() >=6 )
         {
-            USHORT nCount = aCoords.Count() / 2;
+            sal_uInt16 nCount = aCoords.Count() / 2;
             Polygon aPoly( nCount );
-            for( USHORT i=0; i<nCount; i++ )
+            for( sal_uInt16 i=0; i<nCount; i++ )
                 aPoly[i] = Point( aCoords[2*i], aCoords[2*i+1] );
             IMapPolygonObject aMapPObj( aPoly, aHRef, aAlt, String(), aTarget, aName,
                                         !bNoHRef );
@@ -236,7 +236,7 @@ IMAPOBJ_SETEVENT:
         }
         break;
     default:
-        bNewArea = FALSE;
+        bNewArea = sal_False;
     }
 
     return bNewArea;
@@ -250,7 +250,7 @@ void SfxHTMLParser::StartFileDownload( const String& rURL, int nToken,
     if( pDLMedium )
         return;
 
-    pDLMedium = new SfxMedium( rURL, SFX_STREAM_READONLY, FALSE );
+    pDLMedium = new SfxMedium( rURL, SFX_STREAM_READONLY, sal_False );
     if( pSh )
     {
         // Medium registrieren, damit abgebrochen werden kann
@@ -264,13 +264,13 @@ void SfxHTMLParser::StartFileDownload( const String& rURL, int nToken,
     }
 
     // Download anstossen (Achtung: Kann auch synchron sein).
-    if ( TRUE /*pMedium->GetDoneLink() == Link()*/ )
+    if ( sal_True /*pMedium->GetDoneLink() == Link()*/ )
         pDLMedium->DownLoad();
     else
     {
-        // Downloading-Flag auf TRUE setzen. Es werden dann auch
+        // Downloading-Flag auf sal_True setzen. Es werden dann auch
         // Data-Available-Links, wenn wir in den Pending-Staus gelangen.
-        SetDownloadingFile( TRUE );
+        SetDownloadingFile( sal_True );
         pDLMedium->DownLoad( STATIC_LINK( this, SfxHTMLParser, FileDownloadDone ) );
 
         // Wenn das Dowsnloading-Flag noch gesetzt ist erfolgt der Download
@@ -287,17 +287,17 @@ void SfxHTMLParser::StartFileDownload( const String& rURL, int nToken,
     }
 }
 
-BOOL SfxHTMLParser::GetFileDownloadMIME( String& rMIME )
+sal_Bool SfxHTMLParser::GetFileDownloadMIME( String& rMIME )
 {
     return pDLMedium && pDLMedium->GetErrorCode()==0 &&
            pDLMedium->GetMIMEAndRedirect(rMIME)==0;
 }
 
-BOOL SfxHTMLParser::FinishFileDownload( String& rStr )
+sal_Bool SfxHTMLParser::FinishFileDownload( String& rStr )
 {
     String aStr;
 
-    BOOL bOK = pDLMedium && pDLMedium->GetErrorCode()==0;
+    sal_Bool bOK = pDLMedium && pDLMedium->GetErrorCode()==0;
     if( bOK )
     {
         SvStream* pStream = pDLMedium->GetInStream();
@@ -342,7 +342,7 @@ IMPL_STATIC_LINK( SfxHTMLParser, FileDownloadDone, void*, EMPTYARG )
 {
     // Der Download ist jetzt abgeschlossen. Ausserdem muss/darf der
     // Data-Available-Link wieder durchgelassen werden.
-    pThis->SetDownloadingFile( FALSE );
+    pThis->SetDownloadingFile( sal_False );
 
     // ... und einmal aufrufen, damit weitergelesen wird.
     pThis->CallAsyncCallLink();
@@ -357,7 +357,7 @@ void SfxHTMLParser::GetScriptType_Impl( SvKeyValueIterator *pHTTPHeader )
     if( pHTTPHeader )
     {
         SvKeyValue aKV;
-        for( BOOL bCont = pHTTPHeader->GetFirst( aKV ); bCont;
+        for( sal_Bool bCont = pHTTPHeader->GetFirst( aKV ); bCont;
              bCont = pHTTPHeader->GetNext( aKV ) )
         {
             if( aKV.GetKey().EqualsIgnoreCaseAscii(

@@ -57,12 +57,12 @@ class ScCellShell: public ScFormatShell
 {
 private:
     CellShell_Impl* pImpl;
-    BOOL            bPastePossible;
+    sal_Bool            bPastePossible;
 
     void        GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats );
     void        ExecuteExternalSource(
                     const String& _rFile, const String& _rFilter, const String& _rOptions,
-                    const String& _rSource, ULONG _nRefresh, SfxRequest& _rRequest );
+                    const String& _rSource, sal_uLong _nRefresh, SfxRequest& _rRequest );
 
     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
     DECL_LINK( DialogClosed, AbstractScLinkedAreaDlg* );

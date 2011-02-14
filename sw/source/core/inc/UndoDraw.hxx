@@ -64,18 +64,18 @@ public:
 class SwUndoDrawGroup : public SwUndo
 {
     SwUndoGroupObjImpl* pObjArr;
-    USHORT nSize;
-    BOOL bDelFmt;
+    sal_uInt16 nSize;
+    sal_Bool bDelFmt;
 
 public:
-    SwUndoDrawGroup( USHORT nCnt );
+    SwUndoDrawGroup( sal_uInt16 nCnt );
 
     virtual ~SwUndoDrawGroup();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
 
-    void AddObj( USHORT nPos, SwDrawFrmFmt*, SdrObject* );
+    void AddObj( sal_uInt16 nPos, SwDrawFrmFmt*, SdrObject* );
     void SetGroupFmt( SwDrawFrmFmt* );
 };
 
@@ -94,8 +94,8 @@ public:
 class SwUndoDrawUnGroup : public SwUndo
 {
     SwUndoGroupObjImpl* pObjArr;
-    USHORT nSize;
-    BOOL bDelFmt;
+    sal_uInt16 nSize;
+    sal_Bool bDelFmt;
 
 public:
     SwUndoDrawUnGroup( SdrObjGroup* );
@@ -105,7 +105,7 @@ public:
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
 
-    void AddObj( USHORT nPos, SwDrawFrmFmt* );
+    void AddObj( sal_uInt16 nPos, SwDrawFrmFmt* );
 };
 
 // --> OD 2006-11-01 #130889#
@@ -132,18 +132,18 @@ class SwUndoDrawDelete : public SwUndo
 {
     SwUndoGroupObjImpl* pObjArr;
     SdrMarkList* pMarkLst;  // MarkList for all selected SdrObjects
-    USHORT nSize;
-    BOOL bDelFmt;
+    sal_uInt16 nSize;
+    sal_Bool bDelFmt;
 
 public:
-    SwUndoDrawDelete( USHORT nCnt );
+    SwUndoDrawDelete( sal_uInt16 nCnt );
 
     virtual ~SwUndoDrawDelete();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
 
-    void AddObj( USHORT nPos, SwDrawFrmFmt*, const SdrMark& );
+    void AddObj( sal_uInt16 nPos, SwDrawFrmFmt*, const SdrMark& );
 };
 
 #endif // SW_UNDO_DRAW_HXX

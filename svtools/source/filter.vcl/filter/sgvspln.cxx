@@ -140,10 +140,6 @@ short basis()             /* BASIS maschinenunabhaengig bestimmen     */
 #define NEGMAX   -POSMIN                   /* groesste negative Zahl  */
 #define NEGMIN   -POSMAX                   /* kleinste negative Zahl  */
 
-#define TRUE      1
-#define FALSE     0
-
-
 /* Definition von Funktionsmakros:
    */
 
@@ -170,7 +166,7 @@ short basis()             /* BASIS maschinenunabhaengig bestimmen     */
 
 /*----------------------   MODUL TRIDIAGONAL  ------------------------*/
 
-USHORT TriDiagGS(BOOL rep, USHORT n, double* lower,
+sal_uInt16 TriDiagGS(sal_Bool rep, sal_uInt16 n, double* lower,
                  double* diag, double* upper, double* b)
                                               /************************/
                                               /* GAUSS-Verfahren fuer */
@@ -207,7 +203,7 @@ USHORT TriDiagGS(BOOL rep, USHORT n, double* lower,
 /*                                                                    */
 /*   Eingabeparameter:                                                */
 /*   ================                                                 */
-/*      n        Dimension der Matrix ( > 1 )  USHORT n               */
+/*      n        Dimension der Matrix ( > 1 )  sal_uInt16 n               */
 /*                                                                    */
 /*      lower    untere Nebendiagonale         double lower[n]        */
 /*      diag     Hauptdiagonale                double diag[n]         */
@@ -217,7 +213,7 @@ USHORT TriDiagGS(BOOL rep, USHORT n, double* lower,
 /*               Dreieckzerlegung der Ausgangsmatrix.                 */
 /*                                                                    */
 /*      b        rechte Seite des Systems      double b[n]            */
-/*      rep      = 0  erstmaliger Aufruf       BOOL rep               */
+/*      rep      = 0  erstmaliger Aufruf       sal_Bool rep               */
 /*               !=0  wiederholter Aufruf                             */
 /*                    fuer gleiche Matrix,                            */
 /*                    aber verschiedenes b.                           */
@@ -251,7 +247,7 @@ USHORT TriDiagGS(BOOL rep, USHORT n, double* lower,
 
 /*.cp 5 */
 {
- USHORT i;
+ sal_uInt16 i;
  short  j;
 
 // double fabs(double);
@@ -302,7 +298,7 @@ USHORT TriDiagGS(BOOL rep, USHORT n, double* lower,
 /*----------------  MODUL ZYKLISCH TRIDIAGONAL  ----------------------*/
 
 
-USHORT ZyklTriDiagGS(BOOL rep, USHORT n, double* lower, double* diag,
+sal_uInt16 ZyklTriDiagGS(sal_Bool rep, sal_uInt16 n, double* lower, double* diag,
                      double* upper, double* lowrow, double* ricol, double* b)
                                         /******************************/
                                         /* Systeme mit zyklisch tri-  */
@@ -343,12 +339,12 @@ USHORT ZyklTriDiagGS(BOOL rep, USHORT n, double* lower, double* diag,
 /*                                                                    */
 /*   Eingabeparameter:                                                */
 /*   ================                                                 */
-/*      n        Dimension der Matrix ( > 2 )  USHORT n               */
+/*      n        Dimension der Matrix ( > 2 )  sal_uInt16 n               */
 /*      lower    untere Nebendiagonale         double lower[n]        */
 /*      diag     Hauptdiagonale                double diag[n]         */
 /*      upper    obere Nebendiagonale          double upper[n]        */
 /*      b        rechte Seite des Systems      double b[n]            */
-/*      rep      = 0  erstmaliger Aufruf       BOOL rep               */
+/*      rep      = 0  erstmaliger Aufruf       sal_Bool rep               */
 /*               !=0  wiederholter Aufruf                             */
 /*                    fuer gleiche Matrix,                            */
 /*                    aber verschiedenes b.                           */
@@ -385,7 +381,7 @@ USHORT ZyklTriDiagGS(BOOL rep, USHORT n, double* lower, double* diag,
 /*.cp 5 */
 {
  double temp;  // fabs(double);
- USHORT i;
+ sal_uInt16 i;
  short  j;
 
  if ( n < 3 ) return(1);
@@ -458,15 +454,15 @@ USHORT ZyklTriDiagGS(BOOL rep, USHORT n, double* lower, double* diag,
 |*
 *************************************************************************/
 
-USHORT NaturalSpline(USHORT n, double* x, double* y,
+sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
                      double Marg0, double MargN,
-                     BYTE MargCond,
+                     sal_uInt8 MargCond,
                      double* b, double* c, double* d)
 {
-    USHORT  i;
+    sal_uInt16  i;
     double* a;
     double* h;
-    USHORT  error;
+    sal_uInt16  error;
 
     if (n<2) return 1;
     if ( (MargCond & ~3) ) return 2;
@@ -516,7 +512,7 @@ USHORT NaturalSpline(USHORT n, double* x, double* y,
     if (n==2) {
         c[1]=a[0]/d[0];
     } else {
-        error=TriDiagGS(FALSE,n-1,b,d,c,a);
+        error=TriDiagGS(sal_False,n-1,b,d,c,a);
         if (error!=0) { delete[] a; delete[] h; return error+2; }
         for (i=0;i<n-1;i++) c[i+1]=a[i];
     }
@@ -567,11 +563,11 @@ USHORT NaturalSpline(USHORT n, double* x, double* y,
 *************************************************************************/
 
 
-USHORT PeriodicSpline(USHORT n, double* x, double* y,
+sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
                       double* b, double* c, double* d)
 {                     // Arrays muessen von [0..n] dimensioniert sein!
-    USHORT  Error;
-    USHORT  i,im1,nm1; //integer
+    sal_uInt16  Error;
+    sal_uInt16  i,im1,nm1; //integer
     double  hr,hl;
     double* a;
     double* lowrow;
@@ -608,7 +604,7 @@ USHORT PeriodicSpline(USHORT n, double* x, double* y,
         lowrow[0]=hr;
         ricol[0]=hr;
         a[nm1]=3.0*((y[1]-y[0])/hr-(y[n]-y[nm1])/hl);
-        Error=ZyklTriDiagGS(FALSE,n,b,d,c,lowrow,ricol,a);
+        Error=ZyklTriDiagGS(sal_False,n,b,d,c,lowrow,ricol,a);
         if ( Error != 0 )
         {
             delete[] a;
@@ -645,22 +641,22 @@ USHORT PeriodicSpline(USHORT n, double* x, double* y,
 |*
 *************************************************************************/
 
-USHORT ParaSpline(USHORT n, double* x, double* y, BYTE MargCond,
+sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
                   double Marg01, double Marg02,
                   double MargN1, double MargN2,
-                  BOOL CondT, double* T,
+                  sal_Bool CondT, double* T,
                   double* bx, double* cx, double* dx,
                   double* by, double* cy, double* dy)
 {
-    USHORT Error,Marg;
-    USHORT i;
+    sal_uInt16 Error,Marg;
+    sal_uInt16 i;
     double deltX,deltY,delt,
            alphX = 0,alphY = 0,
            betX = 0,betY = 0;
 
     if (n<2) return 1;
     if ((MargCond & ~3) && (MargCond != 4)) return 2; // ungueltige Randbedingung
-    if (CondT==FALSE) {
+    if (CondT==sal_False) {
         T[0]=0.0;
         for (i=0;i<n;i++) {
             deltX=x[i+1]-x[i]; deltY=y[i+1]-y[i];
@@ -724,7 +720,7 @@ USHORT ParaSpline(USHORT n, double* x, double* y, BYTE MargCond,
 |*                      Polygons werden als Stuetzstellen angenommen.
 |*                      n liefert die Anzahl der Teilpolynome.
 |*                      Ist die Berechnung fehlerfrei verlaufen, so
-|*                      liefert die Funktion TRUE. Nur in diesem Fall
+|*                      liefert die Funktion sal_True. Nur in diesem Fall
 |*                      ist Speicher fuer die Koeffizientenarrays
 |*                      allokiert, der dann spaeter vom Aufrufer mittels
 |*                      delete freizugeben ist.
@@ -733,14 +729,14 @@ USHORT ParaSpline(USHORT n, double* x, double* y, BYTE MargCond,
 |*
 *************************************************************************/
 
-BOOL CalcSpline(Polygon& rPoly, BOOL Periodic, USHORT& n,
+sal_Bool CalcSpline(Polygon& rPoly, sal_Bool Periodic, sal_uInt16& n,
                 double*& ax, double*& ay, double*& bx, double*& by,
                 double*& cx, double*& cy, double*& dx, double*& dy, double*& T)
 {
-    BYTE   Marg;
+    sal_uInt8   Marg;
     double Marg01,Marg02;
     double MargN1,MargN2;
-    USHORT i;
+    sal_uInt16 i;
     Point  P0(-32768,-32768);
     Point  Pt;
 
@@ -782,12 +778,12 @@ BOOL CalcSpline(Polygon& rPoly, BOOL Periodic, USHORT& n,
     MargN2=0.0;
     if (n>0) n--; // n Korregieren (Anzahl der Teilpolynome)
 
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     if ( ( Marg == 3 && n >= 3 ) || ( Marg == 2 && n >= 2 ) )
     {
-        bRet = ParaSpline(n,ax,ay,Marg,Marg01,Marg01,MargN1,MargN2,FALSE,T,bx,cx,dx,by,cy,dy) == 0;
+        bRet = ParaSpline(n,ax,ay,Marg,Marg01,Marg01,MargN1,MargN2,sal_False,T,bx,cx,dx,by,cy,dy) == 0;
     }
-    if ( bRet == FALSE )
+    if ( bRet == sal_False )
     {
         delete[] ax;
         delete[] ay;
@@ -811,7 +807,7 @@ BOOL CalcSpline(Polygon& rPoly, BOOL Periodic, USHORT& n,
 |*    Beschreibung      Konvertiert einen parametrichen kubischen
 |*                      Polynomspline Spline (natuerlich oder periodisch)
 |*                      in ein angenaehertes Polygon.
-|*                      Die Funktion liefert FALSE, wenn ein Fehler bei
+|*                      Die Funktion liefert sal_False, wenn ein Fehler bei
 |*                      der Koeffizientenberechnung aufgetreten ist oder
 |*                      das Polygon zu gross wird (>PolyMax=16380). Im 1.
 |*                      Fall hat das Polygon 0, im 2. Fall PolyMax Punkte.
@@ -821,7 +817,7 @@ BOOL CalcSpline(Polygon& rPoly, BOOL Periodic, USHORT& n,
 |*    Letzte Aenderung  JOE 23.06.93
 |*
 *************************************************************************/
-BOOL Spline2Poly(Polygon& rSpln, BOOL Periodic, Polygon& rPoly)
+sal_Bool Spline2Poly(Polygon& rSpln, sal_Bool Periodic, Polygon& rPoly)
 {
     short  MinKoord=-32000; // zur Vermeidung
     short  MaxKoord=32000;  // von Ueberlaeufen
@@ -839,11 +835,11 @@ BOOL Spline2Poly(Polygon& rSpln, BOOL Periodic, Polygon& rPoly)
     double  Step;        // Schrittweite fuer t
     double  dt1,dt2,dt3; // Delta t, y, ^3
     double  t;
-    BOOL    bEnde;       // Teilpolynom zu Ende?
-    USHORT  n;           // Anzahl der zu zeichnenden Teilpolynome
-    USHORT  i;           // aktuelles Teilpolynom
-    BOOL    bOk;         // noch alles ok?
-    USHORT  PolyMax=16380;// Maximale Anzahl von Polygonpunkten
+    sal_Bool    bEnde;       // Teilpolynom zu Ende?
+    sal_uInt16  n;           // Anzahl der zu zeichnenden Teilpolynome
+    sal_uInt16  i;           // aktuelles Teilpolynom
+    sal_Bool    bOk;         // noch alles ok?
+    sal_uInt16  PolyMax=16380;// Maximale Anzahl von Polygonpunkten
     long    x,y;
 
     bOk=CalcSpline(rSpln,Periodic,n,ax,ay,bx,by,cx,cy,dx,dy,tv);
@@ -855,7 +851,7 @@ BOOL Spline2Poly(Polygon& rSpln, BOOL Periodic, Polygon& rPoly)
         i=0;
         while (i<n) {       // n Teilpolynome malen
             t=tv[i]+Step;
-            bEnde=FALSE;
+            bEnde=sal_False;
             while (!bEnde) {  // ein Teilpolynom interpolieren
                 bEnde=t>=tv[i+1];
                 if (bEnde) t=tv[i+1];
@@ -868,7 +864,7 @@ BOOL Spline2Poly(Polygon& rSpln, BOOL Periodic, Polygon& rPoly)
                     rPoly.SetSize(rPoly.GetSize()+1);
                     rPoly.SetPoint(Point(short(x),short(y)),rPoly.GetSize()-1);
                 } else {
-                    bOk=FALSE; // Fehler: Polygon wird zu gross
+                    bOk=sal_False; // Fehler: Polygon wird zu gross
                 }
                 t=t+Step;
             } // Ende von Teilpolynom
@@ -886,5 +882,5 @@ BOOL Spline2Poly(Polygon& rSpln, BOOL Periodic, Polygon& rPoly)
         return bOk;
     } // Ende von if (bOk)
     rPoly.SetSize(0);
-    return FALSE;
+    return sal_False;
 }

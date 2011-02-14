@@ -74,7 +74,7 @@
 #include <com/sun/star/task/XJobExecutor.hpp>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>

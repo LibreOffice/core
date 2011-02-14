@@ -54,7 +54,7 @@
 +(void)addParameterizedAttributeNamesTo:(NSMutableArray *)attributeNames;
 +(NSArray *)specialAttributeNames;
 +(NSArray *)specialParameterizedAttributeNames;
-+(MacOSBOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper;
++(BOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper;
 +(void)setVisibleCharacterRangeAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value;
 +(void)setSelectedTextRangeAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value;
 +(void)setSelectedTextAttributeForElement:(AquaA11yWrapper *)wrapper to:(id)value;

@@ -95,11 +95,11 @@ class InternalResMgr
     friend class ResMgrContainer;
 
     ImpContent *                    pContent;
-    UINT32                          nOffCorrection;
-    BYTE *                          pStringBlock;
+    sal_uInt32                          nOffCorrection;
+    sal_uInt8 *                         pStringBlock;
     SvStream *                      pStm;
-    BOOL                            bEqual2Content;
-    UINT32                          nEntries;
+    sal_Bool                            bEqual2Content;
+    sal_uInt32                          nEntries;
     OUString                        aFileName;
     OUString                        aPrefix;
     OUString                        aResName;
@@ -112,9 +112,9 @@ class InternalResMgr
                                             const OUString& aResName,
                                             const com::sun::star::lang::Locale& rLocale );
                             ~InternalResMgr();
-    BOOL                    Create();
+    sal_Bool                    Create();
 
-    BOOL                    IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const;
+    sal_Bool                    IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const;
     void *                  LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
                                            void **pResHandle );
 public:
@@ -549,7 +549,7 @@ InternalResMgr::InternalResMgr( const OUString& rFileURL,
     : pContent( NULL )
     , pStringBlock( NULL )
     , pStm( NULL )
-    , bEqual2Content( TRUE )
+    , bEqual2Content( sal_True )
     , nEntries( 0 )
     , aFileName( rFileURL )
     , aPrefix( rPrefix )
@@ -600,15 +600,15 @@ InternalResMgr::~InternalResMgr()
 // -----------------------------------------------------------------------
 
 
-BOOL InternalResMgr::Create()
+sal_Bool InternalResMgr::Create()
 {
     ResMgrContainer::get();
-    BOOL bDone = FALSE;
+    sal_Bool bDone = sal_False;
 
     pStm = new SvFileStream( aFileName, (STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE) );
     if( pStm->GetError() == 0 )
     {
-        INT32   lContLen = 0;
+        sal_Int32   lContLen = 0;
 
         pStm->Seek( STREAM_SEEK_TO_END );
         /*
@@ -622,15 +622,15 @@ BOOL InternalResMgr::Create()
         lContLen = ResMgr::GetLong( &lContLen );
         pStm->SeekRel( -lContLen );
         // allocate stored ImpContent data (12 bytes per unit)
-        BYTE* pContentBuf = (BYTE*)rtl_allocateMemory( lContLen );
+        sal_uInt8* pContentBuf = (sal_uInt8*)rtl_allocateMemory( lContLen );
         pStm->Read( pContentBuf, lContLen );
         // allocate ImpContent space (sizeof(ImpContent) per unit, not necessarily 12)
         pContent = (ImpContent *)rtl_allocateMemory( sizeof(ImpContent)*lContLen/12 );
         // Auf die Anzahl der ImpContent k�rzen
-        nEntries = (UINT32)lContLen / 12;
-        bEqual2Content = TRUE;  // Die Daten der Resourcen liegen
+        nEntries = (sal_uInt32)lContLen / 12;
+        bEqual2Content = sal_True;  // Die Daten der Resourcen liegen
                                 // genauso wie das Inhaltsverzeichnis
-        BOOL bSorted = TRUE;
+        sal_Bool bSorted = sal_True;
         if( nEntries )
         {
 #ifdef DBG_UTIL
@@ -652,10 +652,10 @@ BOOL InternalResMgr::Create()
                 pContent[j].nTypeAndId = ResMgr::GetUInt64( pContentBuf + (12*j) );
                 pContent[j].nOffset = ResMgr::GetLong( pContentBuf + (12*j+8) );
                 if( pContent[i].nTypeAndId >= pContent[j].nTypeAndId )
-                    bSorted = FALSE;
+                    bSorted = sal_False;
                 if( (pContent[i].nTypeAndId & 0xFFFFFFFF00000000LL) == (pContent[j].nTypeAndId & 0xFFFFFFFF00000000LL)
                     && pContent[i].nOffset >= pContent[j].nOffset )
-                    bEqual2Content = FALSE;
+                    bEqual2Content = sal_False;
             }
         }
         rtl_freeMemory( pContentBuf );
@@ -667,7 +667,7 @@ BOOL InternalResMgr::Create()
             ::std::sort(pContent,pContent+nEntries,ImpContentLessCompare());
             //  qsort( pContent, nEntries, sizeof( ImpContent ), Compare );
 
-        bDone = TRUE;
+        bDone = sal_True;
     }
 
     return bDone;
@@ -675,7 +675,7 @@ BOOL InternalResMgr::Create()
 
 // -----------------------------------------------------------------------
 
-BOOL InternalResMgr::IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const
+sal_Bool InternalResMgr::IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const
 {
     // Anfang der Strings suchen
     sal_uInt64 nValue = ((sal_uInt64(nRT) << 32) | nId);
@@ -717,18 +717,18 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
                 while( pLast < pEnd && (pLast->nTypeAndId >> 32) == RSC_STRING )
                     ++pLast;
                 nOffCorrection = pFirst->nOffset;
-                UINT32 nSize;
+                sal_uInt32 nSize;
                 --pLast;
                 pStm->Seek( pLast->nOffset );
                 RSHEADER_TYPE aHdr;
                 pStm->Read( &aHdr, sizeof( aHdr ) );
                 nSize = pLast->nOffset + aHdr.GetGlobOff() - nOffCorrection;
-                pStringBlock = (BYTE*)rtl_allocateMemory( nSize );
+                pStringBlock = (sal_uInt8*)rtl_allocateMemory( nSize );
                 pStm->Seek( pFirst->nOffset );
                 pStm->Read( pStringBlock, nSize );
             }
             *pResHandle = pStringBlock;
-            return (BYTE*)pStringBlock + pFind->nOffset - nOffCorrection;
+            return (sal_uInt8*)pStringBlock + pFind->nOffset - nOffCorrection;
         } // if( nRT == RSC_STRING && bEqual2Content )
         else
         {
@@ -738,7 +738,7 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
             pStm->Read( &aHeader, sizeof( RSHEADER_TYPE ) );
             void * pRes = rtl_allocateMemory( aHeader.GetGlobOff() );
             memcpy( pRes, &aHeader, sizeof( RSHEADER_TYPE ) );
-            pStm->Read( (BYTE*)pRes + sizeof( RSHEADER_TYPE ),
+            pStm->Read( (sal_uInt8*)pRes + sizeof( RSHEADER_TYPE ),
                         aHeader.GetGlobOff() - sizeof( RSHEADER_TYPE ) );
             return pRes;
         }
@@ -764,12 +764,12 @@ void InternalResMgr::FreeGlobalRes( void * pResHandle, void * pResource )
 UniString GetTypeRes_Impl( const ResId& rTypeId )
 {
     // Funktion verlassen, falls Resourcefehler in dieser Funktion
-    static int bInUse = FALSE;
+    static int bInUse = sal_False;
     UniString aTypStr( UniString::CreateFromInt32( rTypeId.GetId() ) );
 
     if ( !bInUse )
     {
-        bInUse = TRUE;
+        bInUse = sal_True;
 
         ResId aResId( sal_uInt32(RSCVERSION_ID), *rTypeId.GetResMgr() );
         aResId.SetRT( RSC_VERSIONCONTROL );
@@ -784,7 +784,7 @@ UniString GetTypeRes_Impl( const ResId& rTypeId )
                 rTypeId.GetResMgr()->Increment( sizeof( RSHEADER_TYPE ) );
             }
         }
-        bInUse = FALSE;
+        bInUse = sal_False;
     }
 
     return aTypStr;
@@ -896,14 +896,14 @@ static RSHEADER_TYPE* LocalResource( const ImpRCStack* pStack,
     if ( pStack->pResource && pStack->pClassRes )
     {
         pTmp = (RSHEADER_TYPE*)
-               ((BYTE*)pStack->pResource + pStack->pResource->GetLocalOff());
+               ((sal_uInt8*)pStack->pResource + pStack->pResource->GetLocalOff());
         pEnd = (RSHEADER_TYPE*)
-               ((BYTE*)pStack->pResource + pStack->pResource->GetGlobOff());
+               ((sal_uInt8*)pStack->pResource + pStack->pResource->GetGlobOff());
         while ( pTmp != pEnd )
         {
             if ( pTmp->GetRT() == nRTType && pTmp->GetId() == nId )
                 return pTmp;
-            pTmp = (RSHEADER_TYPE*)((BYTE*)pTmp + pTmp->GetGlobOff());
+            pTmp = (RSHEADER_TYPE*)((sal_uInt8*)pTmp + pTmp->GetGlobOff());
         }
     }
 
@@ -1070,11 +1070,11 @@ void ResMgr::TestStack( const Resource* )
 #endif
 
 // -----------------------------------------------------------------------
-BOOL ResMgr::IsAvailable( const ResId& rId, const Resource* pResObj ) const
+sal_Bool ResMgr::IsAvailable( const ResId& rId, const Resource* pResObj ) const
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
-    BOOL            bAvailable = FALSE;
+    sal_Bool            bAvailable = sal_False;
     RSHEADER_TYPE*  pClassRes = rId.GetpResource();
     RESOURCE_TYPE   nRT = rId.GetRT2();
     sal_uInt32      nId = rId.GetId();
@@ -1097,7 +1097,7 @@ BOOL ResMgr::IsAvailable( const ResId& rId, const Resource* pResObj ) const
         if ( pClassRes )
         {
             if ( pClassRes->GetRT() == nRT )
-                bAvailable = TRUE;
+                bAvailable = sal_True;
         }
     }
 
@@ -1122,7 +1122,7 @@ void* ResMgr::GetClass()
 
 // -----------------------------------------------------------------------
 
-BOOL ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
+sal_Bool ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
@@ -1167,7 +1167,7 @@ BOOL ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
             pTop->Flags |= RC_NOTFOUND;
             pTop->pClassRes = getEmptyBuffer();
             pTop->pResource = (RSHEADER_TYPE*)pTop->pClassRes;
-            return FALSE;
+            return sal_False;
         }
     }
     else
@@ -1213,12 +1213,12 @@ BOOL ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
                 pTop->Flags |= RC_NOTFOUND;
                 pTop->pClassRes = getEmptyBuffer();
                 pTop->pResource = (RSHEADER_TYPE*)pTop->pClassRes;
-                return FALSE;
+                return sal_False;
             }
         }
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -1267,7 +1267,7 @@ void ResMgr::PopContext( const Resource* pResObj )
 #ifdef DBG_UTIL
         if ( DbgIsResource() && !(pTop->Flags & RC_NOTFOUND) )
         {
-            void* pRes = (BYTE*)pTop->pResource +
+            void* pRes = (sal_uInt8*)pTop->pResource +
                          pTop->pResource->GetLocalOff();
 
             if ( pTop->pClassRes != pRes )
@@ -1319,7 +1319,7 @@ RSHEADER_TYPE* ResMgr::CreateBlock( const ResId& rId )
 
 // ------------------------------------------------------------------
 
-INT16 ResMgr::GetShort( void * pShort )
+sal_Int16 ResMgr::GetShort( void * pShort )
 {
     return ((*((sal_uInt8*)pShort + 0) << 8) |
             (*((sal_uInt8*)pShort + 1) << 0)   );
@@ -1327,7 +1327,7 @@ INT16 ResMgr::GetShort( void * pShort )
 
 // ------------------------------------------------------------------
 
-INT32 ResMgr::GetLong( void * pLong )
+sal_Int32 ResMgr::GetLong( void * pLong )
 {
     return ((*((sal_uInt8*)pLong + 0) << 24) |
             (*((sal_uInt8*)pLong + 1) << 16) |
@@ -1350,7 +1350,7 @@ sal_uInt64 ResMgr::GetUInt64( void* pDatum )
 }
 
 // -----------------------------------------------------------------------
-sal_uInt32 ResMgr::GetStringWithoutHook( UniString& rStr, const BYTE* pStr )
+sal_uInt32 ResMgr::GetStringWithoutHook( UniString& rStr, const sal_uInt8* pStr )
 {
     sal_uInt32 nLen=0;
     sal_uInt32 nRet = GetStringSize( pStr, nLen );
@@ -1362,7 +1362,7 @@ sal_uInt32 ResMgr::GetStringWithoutHook( UniString& rStr, const BYTE* pStr )
     return nRet;
 }
 
-sal_uInt32 ResMgr::GetString( UniString& rStr, const BYTE* pStr )
+sal_uInt32 ResMgr::GetString( UniString& rStr, const sal_uInt8* pStr )
 {
     UniString aString;
     sal_uInt32 nRet =  GetStringWithoutHook( aString, pStr );
@@ -1372,7 +1372,7 @@ sal_uInt32 ResMgr::GetString( UniString& rStr, const BYTE* pStr )
     return nRet;
 }
 
-sal_uInt32 ResMgr::GetByteString( rtl::OString& rStr, const BYTE* pStr )
+sal_uInt32 ResMgr::GetByteString( rtl::OString& rStr, const sal_uInt8* pStr )
 {
     sal_uInt32 nLen=0;
     sal_uInt32 nRet = GetStringSize( pStr, nLen );
@@ -1382,7 +1382,7 @@ sal_uInt32 ResMgr::GetByteString( rtl::OString& rStr, const BYTE* pStr )
 
 // ------------------------------------------------------------------
 
-sal_uInt32 ResMgr::GetStringSize( const BYTE* pStr, sal_uInt32& nLen )
+sal_uInt32 ResMgr::GetStringSize( const sal_uInt8* pStr, sal_uInt32& nLen )
 {
     nLen = static_cast< sal_uInt32 >( strlen( (const char*)pStr ) );
     return GetStringSize( nLen );
@@ -1398,9 +1398,9 @@ sal_uInt32 ResMgr::GetRemainSize()
         return pFallbackResMgr->GetRemainSize();
 
     const ImpRCStack& rTop = aStack[nCurStack];
-    return  (sal_uInt32)((long)(BYTE *)rTop.pResource +
+    return  (sal_uInt32)((long)(sal_uInt8 *)rTop.pResource +
                      rTop.pResource->GetLocalOff() -
-                     (long)(BYTE *)rTop.pClassRes);
+                     (long)(sal_uInt8 *)rTop.pClassRes);
 }
 
 // -----------------------------------------------------------------------
@@ -1416,7 +1416,7 @@ void* ResMgr::Increment( sal_uInt32 nSize )
     if( (rStack.Flags & RC_NOTFOUND) )
         return rStack.pClassRes;
 
-    BYTE* pClassRes = (BYTE*)rStack.pClassRes + nSize;
+    sal_uInt8* pClassRes = (sal_uInt8*)rStack.pClassRes + nSize;
 
     rStack.pClassRes = pClassRes;
 
@@ -1507,7 +1507,7 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
 //
 //---------------------------------------------------------------------------
 
-const char* ResMgr::GetLang( LanguageType& nType, USHORT nPrio )
+const char* ResMgr::GetLang( LanguageType& nType, sal_uInt16 nPrio )
 {
     if ( nType == LANGUAGE_SYSTEM || nType == LANGUAGE_DONTKNOW )
         nType = MsLangId::getSystemUILanguage();
@@ -1718,29 +1718,29 @@ ResMgr* ResMgr::SearchCreateResMgr(
 
 // -----------------------------------------------------------------------
 
-INT16 ResMgr::ReadShort()
+sal_Int16 ResMgr::ReadShort()
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
     if( pFallbackResMgr )
         return pFallbackResMgr->ReadShort();
 
-    INT16 n = GetShort( GetClass() );
-    Increment( sizeof( INT16 ) );
+    sal_Int16 n = GetShort( GetClass() );
+    Increment( sizeof( sal_Int16 ) );
     return n;
 }
 
 // -----------------------------------------------------------------------
 
-INT32 ResMgr::ReadLong()
+sal_Int32 ResMgr::ReadLong()
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
     if( pFallbackResMgr )
         return pFallbackResMgr->ReadLong();
 
-    INT32 n = GetLong( GetClass() );
-    Increment( sizeof( INT32 ) );
+    sal_Int32 n = GetLong( GetClass() );
+    Increment( sizeof( sal_Int32 ) );
     return n;
 }
 
@@ -1763,7 +1763,7 @@ UniString ResMgr::ReadStringWithoutHook()
         #endif
     }
     else
-        Increment( GetStringWithoutHook( aRet, (const BYTE*)GetClass() ) );
+        Increment( GetStringWithoutHook( aRet, (const sal_uInt8*)GetClass() ) );
 
     return aRet;
 }
@@ -1793,7 +1793,7 @@ rtl::OString ResMgr::ReadByteString()
         #endif
     }
     else
-        Increment( GetByteString( aRet, (const BYTE*)GetClass() ) );
+        Increment( GetByteString( aRet, (const sal_uInt8*)GetClass() ) );
 
     return aRet;
 }
@@ -2021,8 +2021,8 @@ UniString SimpleResMgr::ReadString( sal_uInt32 nId )
             return sReturn;
     }
 
-    // ULONG nLen = pResHeader->GetLocalOff() - sizeof(RSHEADER_TYPE);
-    ResMgr::GetString( sReturn, (const BYTE*)(pResHeader+1) );
+    // sal_uIntPtr nLen = pResHeader->GetLocalOff() - sizeof(RSHEADER_TYPE);
+    ResMgr::GetString( sReturn, (const sal_uInt8*)(pResHeader+1) );
 
     // not neccessary with te current implementation which holds the string table permanently, but to be sure ....
     // note: pFallback cannot be NULL here and is either the fallback or m_pResImpl
@@ -2098,7 +2098,7 @@ sal_uInt32 SimpleResMgr::ReadBlob( sal_uInt32 nId, void** pBuffer )
     // FreeBlob doesn't know that so it would probably crash ....
 
     sal_uInt32 nRemaining = pResHeader->GetLocalOff() - sizeof(RSHEADER_TYPE);
-    *pBuffer = (void*)(((BYTE*)pResHeader) + sizeof(RSHEADER_TYPE));
+    *pBuffer = (void*)(((sal_uInt8*)pResHeader) + sizeof(RSHEADER_TYPE));
 
     // free an eventual fallback InternalResMgr
     if( m_pResImpl != pFallback )
@@ -2115,6 +2115,6 @@ sal_uInt32 SimpleResMgr::ReadBlob( sal_uInt32 nId, void** pBuffer )
 
 void SimpleResMgr::FreeBlob( void* pBuffer )
 {
-    void* pCompleteBuffer = (void*)(((BYTE*)pBuffer) - sizeof(RSHEADER_TYPE));
+    void* pCompleteBuffer = (void*)(((sal_uInt8*)pBuffer) - sizeof(RSHEADER_TYPE));
     rtl_freeMemory(pCompleteBuffer);
 }

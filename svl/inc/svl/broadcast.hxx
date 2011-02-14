@@ -59,7 +59,7 @@ public:
 
     void                    Broadcast( const SfxHint &rHint );
 
-    BOOL                    HasListeners() const { return 0 != pRoot; }
+    sal_Bool                    HasListeners() const { return 0 != pRoot; }
 };
 
 

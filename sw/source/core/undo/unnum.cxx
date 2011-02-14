@@ -100,7 +100,7 @@ void SwUndoInsNum::UndoImpl(::sw::UndoRedoContext & rContext)
         SwTxtNode* pNd;
         if( ULONG_MAX != nSttSet &&
             0 != ( pNd = rDoc.GetNodes()[ nSttSet ]->GetTxtNode() ))
-                pNd->SetListRestart( TRUE );
+                pNd->SetListRestart( sal_True );
         else
             pNd = 0;
 
@@ -203,7 +203,7 @@ void SwUndoInsNum::SaveOldNumRule( const SwNumRule& rOld )
 
 SwUndoDelNum::SwUndoDelNum( const SwPaM& rPam )
     : SwUndo( UNDO_DELNUM ), SwUndRng( rPam ),
-    aNodeIdx( BYTE( nEndNode - nSttNode > 255 ? 255 : nEndNode - nSttNode ))
+    aNodeIdx( sal_uInt8( nEndNode - nSttNode > 255 ? 255 : nEndNode - nSttNode ))
 {
     pHistory = new SwHistory;
 }
@@ -220,7 +220,7 @@ void SwUndoDelNum::UndoImpl(::sw::UndoRedoContext & rContext)
     pHistory->TmpRollback( &rDoc, 0 );
     pHistory->SetTmpEnd( pHistory->Count() );
 
-    for( USHORT n = 0; n < aNodeIdx.Count(); ++n )
+    for( sal_uInt16 n = 0; n < aNodeIdx.Count(); ++n )
     {
         SwTxtNode* pNd = rDoc.GetNodes()[ aNodeIdx[ n ] ]->GetTxtNode();
         ASSERT( pNd, "Where is TextNode gone?" );
@@ -244,14 +244,14 @@ void SwUndoDelNum::RepeatImpl(::sw::RepeatContext & rContext)
     rContext.GetDoc().DelNumRules(rContext.GetRepeatPaM());
 }
 
-void SwUndoDelNum::AddNode( const SwTxtNode& rNd, BOOL )
+void SwUndoDelNum::AddNode( const SwTxtNode& rNd, sal_Bool )
 {
     if( rNd.GetNumRule() )
     {
-        USHORT nIns = aNodeIdx.Count();
+        sal_uInt16 nIns = aNodeIdx.Count();
         aNodeIdx.Insert( rNd.GetIndex(), nIns );
 
-        aLevels.insert( aLevels.begin() + nIns, static_cast<BYTE>(rNd.GetActualListLevel()) );
+        aLevels.insert( aLevels.begin() + nIns, static_cast<sal_uInt8>(rNd.GetActualListLevel()) );
     }
 }
 
@@ -259,7 +259,7 @@ void SwUndoDelNum::AddNode( const SwTxtNode& rNd, BOOL )
 /*  */
 
 
-SwUndoMoveNum::SwUndoMoveNum( const SwPaM& rPam, long nOff, BOOL bIsOutlMv )
+SwUndoMoveNum::SwUndoMoveNum( const SwPaM& rPam, long nOff, sal_Bool bIsOutlMv )
     : SwUndo( bIsOutlMv ? UNDO_OUTLINE_UD : UNDO_MOVENUM ),
     SwUndRng( rPam ),
     nNewStt( 0 ), nOffset( nOff )
@@ -270,7 +270,7 @@ SwUndoMoveNum::SwUndoMoveNum( const SwPaM& rPam, long nOff, BOOL bIsOutlMv )
 
 void SwUndoMoveNum::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    ULONG nTmpStt = nSttNode, nTmpEnd = nEndNode;
+    sal_uLong nTmpStt = nSttNode, nTmpEnd = nEndNode;
 
     if( nEndNode || USHRT_MAX != nEndCntnt )        // Bereich ?
     {
@@ -283,7 +283,7 @@ void SwUndoMoveNum::UndoImpl(::sw::UndoRedoContext & rContext)
 
 //JP 22.06.95: wird wollen die Bookmarks/Verzeichnisse behalten, oder?
 //  SetPaM( rUndoIter );
-//  RemoveIdxFromRange( *rUndoIter.pAktPam, TRUE );
+//  RemoveIdxFromRange( *rUndoIter.pAktPam, sal_True );
 
     SwPaM & rPam( AddUndoRedoPaM(rContext) );
     rContext.GetDoc().MoveParagraph( rPam, -nOffset,
@@ -296,7 +296,7 @@ void SwUndoMoveNum::RedoImpl(::sw::UndoRedoContext & rContext)
 {
 //JP 22.06.95: wird wollen die Bookmarks/Verzeichnisse behalten, oder?
 //  SetPaM( rUndoIter );
-//  RemoveIdxFromRange( *rUndoIter.pAktPam, TRUE );
+//  RemoveIdxFromRange( *rUndoIter.pAktPam, sal_True );
 
     SwPaM & rPam( AddUndoRedoPaM(rContext) );
     rContext.GetDoc().MoveParagraph(rPam, nOffset, UNDO_OUTLINE_UD == GetId());
@@ -312,7 +312,7 @@ void SwUndoMoveNum::RepeatImpl(::sw::RepeatContext & rContext)
     }
     else
     {
-        rDoc.MoveParagraph(rContext.GetRepeatPaM(), nOffset, FALSE);
+        rDoc.MoveParagraph(rContext.GetRepeatPaM(), nOffset, sal_False);
     }
 }
 
@@ -347,8 +347,8 @@ void SwUndoNumUpDown::RepeatImpl(::sw::RepeatContext & rContext)
 /*  */
 
 // #115901#
-SwUndoNumOrNoNum::SwUndoNumOrNoNum( const SwNodeIndex& rIdx, BOOL bOldNum,
-                                    BOOL bNewNum)
+SwUndoNumOrNoNum::SwUndoNumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bOldNum,
+                                    sal_Bool bNewNum)
     : SwUndo( UNDO_NUMORNONUM ), nIdx( rIdx.GetIndex() ), mbNewNum(bNewNum),
       mbOldNum(bOldNum)
 {
@@ -384,27 +384,27 @@ void SwUndoNumOrNoNum::RepeatImpl(::sw::RepeatContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
     if (mbOldNum && ! mbNewNum)
     {
-        rDoc.NumOrNoNum(rContext.GetRepeatPaM().GetPoint()->nNode, FALSE);
+        rDoc.NumOrNoNum(rContext.GetRepeatPaM().GetPoint()->nNode, sal_False);
     }
     else if ( ! mbOldNum && mbNewNum )
     {
-        rDoc.NumOrNoNum(rContext.GetRepeatPaM().GetPoint()->nNode, TRUE);
+        rDoc.NumOrNoNum(rContext.GetRepeatPaM().GetPoint()->nNode, sal_True);
     }
 }
 
 /*  */
 
-SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, BOOL bFlg )
+SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, sal_Bool bFlg )
     : SwUndo( UNDO_SETNUMRULESTART ),
     nIdx( rPos.nNode.GetIndex() ), nOldStt( USHRT_MAX ),
-    nNewStt( USHRT_MAX ), bSetSttValue( FALSE ), bFlag( bFlg )
+    nNewStt( USHRT_MAX ), bSetSttValue( sal_False ), bFlag( bFlg )
 {
 }
 
-SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, USHORT nStt )
+SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, sal_uInt16 nStt )
     : SwUndo( UNDO_SETNUMRULESTART ),
     nIdx( rPos.nNode.GetIndex() ),
-    nOldStt( USHRT_MAX ), nNewStt( nStt ), bSetSttValue( TRUE )
+    nOldStt( USHRT_MAX ), nNewStt( nStt ), bSetSttValue( sal_True )
 {
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if ( pTxtNd )
@@ -412,7 +412,7 @@ SwUndoNumRuleStart::SwUndoNumRuleStart( const SwPosition& rPos, USHORT nStt )
         // --> OD 2008-02-28 #refactorlists#
         if ( pTxtNd->HasAttrListRestartValue() )
         {
-            nOldStt = static_cast<USHORT>(pTxtNd->GetAttrListRestartValue());
+            nOldStt = static_cast<sal_uInt16>(pTxtNd->GetAttrListRestartValue());
         }
         else
         {

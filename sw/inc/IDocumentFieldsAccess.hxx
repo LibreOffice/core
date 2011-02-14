@@ -91,10 +91,10 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
        @param rVal             the value
        @param nMId
 
-       @retval TRUE            putting of value was successful
-       @retval FALSE           else
+       @retval sal_True            putting of value was successful
+       @retval sal_False           else
     */
-    virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, USHORT nWhich) = 0;
+    virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich) = 0;
 
     // rufe das Update der Expression Felder auf; alle Ausdruecke werden
     // neu berechnet.
@@ -107,8 +107,8 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
         @param pMsgHnt
         @param bUpdateTblFlds TRUE: update table fields, too.
 
-        @retval TRUE             update was successful
-        @retval FALSE            else
+        @retval sal_True             update was successful
+        @retval sal_False            else
     */
     virtual bool UpdateFld(SwTxtFld * rDstFmtFld, SwField & rSrcFld, SwMsgPoolItem * pMsgHnt, bool bUpdateTblFlds) = 0;
 
@@ -151,7 +151,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
         SwNode (see parameter pChk) is (?) part of the private
         data structure of SwDoc and should not be exposed
     */
-    virtual bool SetFieldsDirty(bool b, const SwNode* pChk, ULONG nLen) = 0;
+    virtual bool SetFieldsDirty(bool b, const SwNode* pChk, sal_uLong nLen) = 0;
 
     /**
     */
@@ -162,7 +162,7 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
     // eine erzeugte Liste aller Felder mit uebergegeben werden.
     // (ist die Adresse != 0, und der Pointer == 0 wird eine neue
     // Liste returnt.)
-    virtual void FldsToCalc(SwCalc& rCalc, ULONG nLastNd, sal_uInt16 nLastCnt) = 0;
+    virtual void FldsToCalc(SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt) = 0;
 
     /**
     */

@@ -47,7 +47,7 @@ private:
             ~ScDocStatPage();
 
 protected:
-    virtual BOOL    FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool    FillItemSet( SfxItemSet& rSet );
     virtual void    Reset      ( const SfxItemSet& rSet );
 
 private:

@@ -310,17 +310,19 @@ Reference< XPropertySetInfo > ControlModelContainerBase::getPropertySetInfo(  ) 
     static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
-
+void ControlModelContainerBase::Clone_Impl(ControlModelContainerBase& _rClone) const
+{
+    // clone all children
+    ::std::for_each(
+        maModels.begin(), maModels.end(),
+        CloneControlModel( _rClone.maModels )
+    );
+}
 UnoControlModel* ControlModelContainerBase::Clone() const
 {
     // clone the container itself
     ControlModelContainerBase* pClone = new ControlModelContainerBase( *this );
-
-    // clone all children
-    ::std::for_each(
-        maModels.begin(), maModels.end(),
-        CloneControlModel( pClone->maModels )
-    );
+    Clone_Impl(*pClone);
 
     return pClone;
 }

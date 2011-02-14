@@ -51,9 +51,9 @@ public:
             ScHighlightRanges();
             ~ScHighlightRanges();
 
-    ULONG   Count() const                       { return aEntries.Count(); }
+    sal_uLong   Count() const                       { return aEntries.Count(); }
     void    Insert( ScHighlightEntry* pNew )    { aEntries.Insert(pNew, LIST_APPEND); }
-    ScHighlightEntry* GetObject( ULONG nIndex ) const
+    ScHighlightEntry* GetObject( sal_uLong nIndex ) const
                         { return (ScHighlightEntry*)aEntries.GetObject(nIndex); }
 };
 

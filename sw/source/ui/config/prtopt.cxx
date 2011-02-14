@@ -158,7 +158,7 @@ void    SwPrintOptions::Commit()
     Any* pValues = aValues.getArray();
 
     const Type& rType = ::getBooleanCppuType();
-    BOOL bVal;
+    sal_Bool bVal;
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)

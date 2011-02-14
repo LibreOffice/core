@@ -118,15 +118,15 @@ SW_DLLPUBLIC const char * dbg_out(const ::rtl::OUString & aStr)
 
 struct CompareUShort
 {
-    bool operator()(USHORT a, USHORT b) const
+    bool operator()(sal_uInt16 a, sal_uInt16 b) const
     {
         return a < b;
     }
 };
 
-map<USHORT,String,CompareUShort> & GetItemWhichMap()
+map<sal_uInt16,String,CompareUShort> & GetItemWhichMap()
 {
-    static map<USHORT,String,CompareUShort> aItemWhichMap;
+    static map<sal_uInt16,String,CompareUShort> aItemWhichMap;
     static bool bInitialized = false;
 
     if (! bInitialized)
@@ -342,7 +342,7 @@ const String lcl_dbg_out(const SwpHints & rHints)
 {
     String aStr("[ SwpHints\n", RTL_TEXTENCODING_ASCII_US);
 
-    for (USHORT i = 0; i < rHints.Count(); i++)
+    for (sal_uInt16 i = 0; i < rHints.Count(); i++)
     {
         aStr += String("  ", RTL_TEXTENCODING_ASCII_US);
         aStr += lcl_dbg_out(*rHints[i]);
@@ -473,7 +473,7 @@ const String lcl_AnchoredFrames(const SwNode & rNode)
         if (pFrmFmts)
         {
             bool bFirst = true;
-            for (USHORT nI = 0; nI < pFrmFmts->Count(); nI++)
+            for (sal_uInt16 nI = 0; nI < pFrmFmts->Count(); nI++)
             {
                 const SwFmtAnchor & rAnchor = (*pFrmFmts)[nI]->GetAnchor();
                 const SwPosition * pPos = rAnchor.GetCntntAnchor();
@@ -602,7 +602,7 @@ String lcl_dbg_out(const SwNode & rNode)
             const SfxPoolItem * pItem = NULL;
 
             if (pAttrSet && SFX_ITEM_SET ==
-                pAttrSet->GetItemState(RES_PARATR_NUMRULE, FALSE, &pItem))
+                pAttrSet->GetItemState(RES_PARATR_NUMRULE, sal_False, &pItem))
             {
                 aTmpStr += String("(", RTL_TEXTENCODING_ASCII_US);
                 aTmpStr +=
@@ -615,7 +615,7 @@ String lcl_dbg_out(const SwNode & rNode)
             aTmpStr += String("</rule>", RTL_TEXTENCODING_ASCII_US);
 
             if (pTxtNode->GetActualListLevel() > 0)
-                pNumFmt = pNumRule->GetNumFmt( static_cast< USHORT >(pTxtNode->GetActualListLevel()) );
+                pNumFmt = pNumRule->GetNumFmt( static_cast< sal_uInt16 >(pTxtNode->GetActualListLevel()) );
 
             if (pNumFmt)
             {
@@ -722,7 +722,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwTxtNode * pNode)
         return NULL;
 }
 
-BOOL lcl_dbg_add_node(const SwNodePtr & pNode, void * pArgs)
+sal_Bool lcl_dbg_add_node(const SwNodePtr & pNode, void * pArgs)
 {
     if (pNode)
     {
@@ -731,10 +731,10 @@ BOOL lcl_dbg_add_node(const SwNodePtr & pNode, void * pArgs)
     }
 
     //MBA: this code didn't compile, needed to add a return value
-    return TRUE;
+    return sal_True;
 }
 
-void lcl_dbg_nodes_inner(String & aStr, SwNodes & rNodes, ULONG & nIndex)
+void lcl_dbg_nodes_inner(String & aStr, SwNodes & rNodes, sal_uLong & nIndex)
 {
     SwNode * pNode = rNodes[nIndex];
     SwStartNode * pStartNode = dynamic_cast<SwStartNode *> (pNode);
@@ -743,8 +743,8 @@ void lcl_dbg_nodes_inner(String & aStr, SwNodes & rNodes, ULONG & nIndex)
     if (pStartNode != NULL)
         pEndNode = pStartNode->EndOfSectionNode();
 
-    ULONG nCount = rNodes.Count();
-    ULONG nStartIndex = nIndex;
+    sal_uLong nCount = rNodes.Count();
+    sal_uLong nStartIndex = nIndex;
 
     bool bDone = false;
 
@@ -787,8 +787,8 @@ String lcl_dbg_out(SwNodes & rNodes)
 {
     String aStr("<nodes-array>", RTL_TEXTENCODING_ASCII_US);
 
-    ULONG nIndex = 0;
-    ULONG nCount = rNodes.Count();
+    sal_uLong nIndex = 0;
+    sal_uLong nCount = rNodes.Count();
 
     while (nIndex < nCount)
     {
@@ -828,7 +828,7 @@ String lcl_dbg_out(SwOutlineNodes & rNodes)
 {
     String aStr("[\n", RTL_TEXTENCODING_ASCII_US);
 
-    for (USHORT i = 0; i < rNodes.Count(); i++)
+    for (sal_uInt16 i = 0; i < rNodes.Count(); i++)
     {
         aStr += lcl_dbg_out(*rNodes[i]);
         aStr += String("\n", RTL_TEXTENCODING_ASCII_US);
@@ -875,7 +875,7 @@ String lcl_dbg_out(const SwNumRule & rRule)
     aResult += rRule.GetName();
     aResult += String(" [", RTL_TEXTENCODING_ASCII_US);
 
-    for (BYTE n = 0; n < MAXLEVEL; n++)
+    for (sal_uInt8 n = 0; n < MAXLEVEL; n++)
     {
         if (n > 0)
             aResult += String(", ", RTL_TEXTENCODING_ASCII_US);
@@ -925,7 +925,7 @@ String lcl_dbg_out(const SwNumRuleTbl & rTbl)
 {
     String aResult("[", RTL_TEXTENCODING_ASCII_US);
 
-    for (USHORT n = 0; n < rTbl.Count(); n++)
+    for (sal_uInt16 n = 0; n < rTbl.Count(); n++)
     {
         if (n > 0)
             aResult += String(", ", RTL_TEXTENCODING_ASCII_US);

@@ -78,13 +78,13 @@ public:
     void    StateFormatPaintbrush(SfxItemSet& rSet);
 
     void    ExecuteMacroAssign( SdrObject* pObj, Window* pWin );
-    void    ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage = 0xffff );
-    void    ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage = 0xffff );
-    void    ExecuteTextAttrDlg( SfxRequest& rReq, USHORT nTabPage = 0xffff );
+    void    ExecuteLineDlg( SfxRequest& rReq, sal_uInt16 nTabPage = 0xffff );
+    void    ExecuteAreaDlg( SfxRequest& rReq, sal_uInt16 nTabPage = 0xffff );
+    void    ExecuteTextAttrDlg( SfxRequest& rReq, sal_uInt16 nTabPage = 0xffff );
 
     ScDrawView* GetDrawView();
 
-    BOOL    AreAllObjectsOnLayer(USHORT nLayerNo,const SdrMarkList& rMark);
+    sal_Bool    AreAllObjectsOnLayer(sal_uInt16 nLayerNo,const SdrMarkList& rMark);
 };
 
 

@@ -47,24 +47,24 @@ struct SvProgressArg;
 class SFX2_DLLPUBLIC SfxProgress
 {
     SfxProgress_Impl*       pImp;
-    ULONG                   nVal;
-    BOOL                    bSuspended;
+    sal_uIntPtr                 nVal;
+    sal_Bool                    bSuspended;
 
 public:
                             SfxProgress( SfxObjectShell* pObjSh,
                                          const String& rText,
-                                         ULONG nRange, BOOL bAllDocs = FALSE,
-                                         BOOL bWait = TRUE );
+                                         sal_uIntPtr nRange, sal_Bool bAllDocs = sal_False,
+                                         sal_Bool bWait = sal_True );
     virtual                 ~SfxProgress();
 
     virtual void            SetText( const String& rText );
-    BOOL                    SetStateText( ULONG nVal, const String &rVal, ULONG nNewRange = 0 );
-    virtual BOOL            SetState( ULONG nVal, ULONG nNewRange = 0 );
-    ULONG                   GetState() const { return nVal; }
+    sal_Bool                    SetStateText( sal_uIntPtr nVal, const String &rVal, sal_uIntPtr nNewRange = 0 );
+    virtual sal_Bool            SetState( sal_uIntPtr nVal, sal_uIntPtr nNewRange = 0 );
+    sal_uIntPtr                 GetState() const { return nVal; }
 
     void                    Resume();
     void                    Suspend();
-    BOOL                    IsSuspended() const { return bSuspended; }
+    sal_Bool                    IsSuspended() const { return bSuspended; }
 
     void                    Lock();
     void                    UnLock();
@@ -72,8 +72,8 @@ public:
 
     void                    Stop();
 
-    void                    SetWaitMode( BOOL bWait );
-    BOOL                    GetWaitMode() const;
+    void                    SetWaitMode( sal_Bool bWait );
+    sal_Bool                    GetWaitMode() const;
 
     static SfxProgress*     GetActiveProgress( SfxObjectShell *pDocSh = 0 );
     static void             EnterLock();

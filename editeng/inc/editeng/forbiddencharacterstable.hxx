@@ -47,7 +47,7 @@ namespace lang {
 struct ForbiddenCharactersInfo
 {
     com::sun::star::i18n::ForbiddenCharacters aForbiddenChars;
-    BOOL bTemporary;
+    sal_Bool bTemporary;
 };
 
 DECLARE_TABLE( SvxForbiddenCharactersTableImpl, ForbiddenCharactersInfo* )
@@ -58,12 +58,12 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
 
 public:
-            SvxForbiddenCharactersTable( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF, USHORT nISize = 4, USHORT nGrow = 4 );
+            SvxForbiddenCharactersTable( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF, sal_uInt16 nISize = 4, sal_uInt16 nGrow = 4 );
             ~SvxForbiddenCharactersTable();
 
-    const com::sun::star::i18n::ForbiddenCharacters* GetForbiddenCharacters( USHORT nLanuage, BOOL bGetDefault ) const;
-    void    SetForbiddenCharacters(  USHORT nLanuage , const com::sun::star::i18n::ForbiddenCharacters& );
-    void    ClearForbiddenCharacters( USHORT nLanuage );
+    const com::sun::star::i18n::ForbiddenCharacters* GetForbiddenCharacters( sal_uInt16 nLanuage, sal_Bool bGetDefault ) const;
+    void    SetForbiddenCharacters(  sal_uInt16 nLanuage , const com::sun::star::i18n::ForbiddenCharacters& );
+    void    ClearForbiddenCharacters( sal_uInt16 nLanuage );
 };
 
 #endif // _FORBIDDENCHARACTERSTABLE_HXX

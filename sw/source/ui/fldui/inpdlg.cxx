@@ -51,7 +51,7 @@
  --------------------------------------------------------------------*/
 
 SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
-                              SwField* pField, BOOL bNextButton ) :
+                              SwField* pField, sal_Bool bNextButton ) :
 
     SvxStandardDialog(pParent,  SW_RES(DLG_FLD_INPUT)),
 
@@ -94,7 +94,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
         //
         pInpFld = (SwInputField*)pField;
         aLabelED.SetText( pInpFld->GetPar2() );
-        USHORT nSubType = pInpFld->GetSubType();
+        sal_uInt16 nSubType = pInpFld->GetSubType();
 
         switch(nSubType & 0xff)
         {
@@ -128,7 +128,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
 
     // JP 31.3.00: Inputfields in readonly regions must be allowed to
     //              input any content. - 74639
-    BOOL bEnable = !rSh.IsCrsrReadonly();
+    sal_Bool bEnable = !rSh.IsCrsrReadonly();
                     /*!rSh.IsReadOnlyAvailable() || !rSh.HasReadonlySel()*/;
     aOKBT.Enable( bEnable );
     aEditED.SetReadOnly( !bEnable );
@@ -159,7 +159,7 @@ void SwFldInputDlg::Apply()
     aTmp.EraseAllChars( '\r' );
 
     rSh.StartAllAction();
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
     if(pInpFld)
     {
         if(pUsrType)
@@ -168,21 +168,21 @@ void SwFldInputDlg::Apply()
             {
                 pUsrType->SetContent(aTmp);
                 pUsrType->UpdateFlds();
-                bModified = TRUE;
+                bModified = sal_True;
             }
         }
         else if( aTmp != pInpFld->GetPar1() )
         {
             pInpFld->SetPar1(aTmp);
             rSh.SwEditShell::UpdateFlds(*pInpFld);
-            bModified = TRUE;
+            bModified = sal_True;
         }
     }
     else if( aTmp != pSetFld->GetPar2() )
     {
         pSetFld->SetPar2(aTmp);
         rSh.SwEditShell::UpdateFlds(*pSetFld);
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     if( bModified )

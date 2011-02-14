@@ -54,8 +54,8 @@ public:
     SwSelGlossaryDlg(Window * pParent, const String &rShortName);
     ~SwSelGlossaryDlg();
     void InsertGlos(const String &rRegion, const String &rGlosName);    // inline
-    USHORT GetSelectedIdx() const;  // inline
-    void SelectEntryPos(USHORT nIdx);   // inline
+    sal_uInt16 GetSelectedIdx() const;  // inline
+    void SelectEntryPos(sal_uInt16 nIdx);   // inline
 };
 
 inline void SwSelGlossaryDlg::InsertGlos(const String &rRegion,
@@ -66,9 +66,9 @@ inline void SwSelGlossaryDlg::InsertGlos(const String &rRegion,
     aTmp += rGlosName;
     aGlosBox.InsertEntry( aTmp );
 }
-inline USHORT SwSelGlossaryDlg::GetSelectedIdx() const
+inline sal_uInt16 SwSelGlossaryDlg::GetSelectedIdx() const
 {   return aGlosBox.GetSelectEntryPos(); }
-inline void SwSelGlossaryDlg::SelectEntryPos(USHORT nIdx)
+inline void SwSelGlossaryDlg::SelectEntryPos(sal_uInt16 nIdx)
 {   aGlosBox.SelectEntryPos(nIdx); }
 
 #endif

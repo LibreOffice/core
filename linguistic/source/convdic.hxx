@@ -52,7 +52,7 @@ class SvStream;
 
 ///////////////////////////////////////////////////////////////////////////
 
-BOOL    IsConvDic( const String &rFileURL, INT16 &nLang, sal_Int16 &nConvType );
+sal_Bool    IsConvDic( const String &rFileURL, sal_Int16 &nLang, sal_Int16 &nConvType );
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -104,15 +104,15 @@ protected:
 
     String          aMainURL;   // URL to file
     rtl::OUString   aName;
-    INT16           nLanguage;
+    sal_Int16           nLanguage;
     sal_Int16       nConversionType;
     sal_Int16       nMaxLeftCharCount;
     sal_Int16       nMaxRightCharCount;
-    BOOL            bMaxCharCountIsValid;
-    BOOL            bNeedEntries;
-    BOOL            bIsModified;
-    BOOL            bIsActive;
-    BOOL            bIsReadonly;
+    sal_Bool            bMaxCharCountIsValid;
+    sal_Bool            bNeedEntries;
+    sal_Bool            bIsModified;
+    sal_Bool            bIsActive;
+    sal_Bool            bIsReadonly;
 
     // disallow copy-constructor and assignment-operator for now
     ConvDic(const ConvDic &);
@@ -124,9 +124,9 @@ protected:
 
 public:
     ConvDic( const String &rName,
-             INT16 nLanguage,
+             sal_Int16 nLanguage,
              sal_Int16 nConversionType,
-             BOOL bBiDirectional,
+             sal_Bool bBiDirectional,
              const String &rMainURL);
     virtual ~ConvDic();
 
@@ -163,7 +163,7 @@ public:
     static com::sun::star::uno::Sequence< ::rtl::OUString >
         getSupportedServiceNames_Static() throw();
 
-    BOOL    HasEntry( const rtl::OUString &rLeftText, const rtl::OUString &rRightText );
+    sal_Bool    HasEntry( const rtl::OUString &rLeftText, const rtl::OUString &rRightText );
     void    AddEntry( const rtl::OUString &rLeftText, const rtl::OUString &rRightText );
     void    RemoveEntry( const rtl::OUString &rLeftText, const rtl::OUString &rRightText );
 };

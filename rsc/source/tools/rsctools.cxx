@@ -144,7 +144,7 @@ ByteString GetTmpFileName()
 /*                                                                  */
 /*  Description :   appends text files                              */
 /********************************************************************/
-BOOL Append( FILE * fDest, ByteString aTmpFile )
+sal_Bool Append( FILE * fDest, ByteString aTmpFile )
 {
 #define MAX_BUF 4096
     char    szBuf[ MAX_BUF ];
@@ -155,7 +155,7 @@ BOOL Append( FILE * fDest, ByteString aTmpFile )
     if( !fDest || !fSource ){
         if( fSource )
             fclose( fSource );
-        return FALSE;
+        return sal_False;
     }
     else{
         do{ // append
@@ -165,14 +165,14 @@ BOOL Append( FILE * fDest, ByteString aTmpFile )
 
         fclose( fSource );
     };
-    return TRUE;
+    return sal_True;
 }
 
-BOOL Append( ByteString aOutputSrs, ByteString aTmpFile )
+sal_Bool Append( ByteString aOutputSrs, ByteString aTmpFile )
 {
     FILE * fDest   = fopen( aOutputSrs.GetBuffer(), "ab" );
 
-    BOOL bRet = Append( fDest, aTmpFile );
+    sal_Bool bRet = Append( fDest, aTmpFile );
 
     if( fDest )
         fclose( fDest );
@@ -390,10 +390,10 @@ RscWriteRc::RscWriteRc( RSCBYTEORDER_TYPE nOrder )
     short               nSwapTest = 1;
     RSCBYTEORDER_TYPE   nMachineOrder;
 
-    bSwap = FALSE;
+    bSwap = sal_False;
     if( nOrder != RSC_SYSTEMENDIAN )
     {
-        if( (BYTE)*(BYTE *)&nSwapTest )
+        if( (sal_uInt8)*(sal_uInt8 *)&nSwapTest )
             nMachineOrder = RSC_LITTLEENDIAN;
         else
             nMachineOrder = RSC_BIGENDIAN;

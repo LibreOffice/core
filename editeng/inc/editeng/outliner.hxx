@@ -136,12 +136,12 @@ private:
 
     Paragraph& operator=(const Paragraph& rPara );
 
-    USHORT              nFlags;
+    sal_uInt16              nFlags;
     XubString           aBulText;
     Size                aBulSize;
-    BOOL                bVisible;
+    sal_Bool                bVisible;
 
-    BOOL                IsVisible() const { return bVisible; }
+    sal_Bool                IsVisible() const { return bVisible; }
     void                SetText( const XubString& rText ) { aBulText = rText; aBulSize.Width() = -1; }
     void                Invalidate() { aBulSize.Width() = -1; }
     void                SetDepth( sal_Int16 nNewDepth ) { nDepth = nNewDepth; aBulSize.Width() = -1; }
@@ -160,27 +160,27 @@ private:
     sal_Bool            IsParaIsNumberingRestart() const { return mbParaIsNumberingRestart; }
     void                SetParaIsNumberingRestart( sal_Bool bParaIsNumberingRestart );
 
-    void                SetFlag( USHORT nFlag ) { nFlags |= nFlag; }
-    void                RemoveFlag( USHORT nFlag ) { nFlags &= ~nFlag; }
-    bool                HasFlag( USHORT nFlag ) const { return (nFlags & nFlag) != 0; }
+    void                SetFlag( sal_uInt16 nFlag ) { nFlags |= nFlag; }
+    void                RemoveFlag( sal_uInt16 nFlag ) { nFlags &= ~nFlag; }
+    bool                HasFlag( sal_uInt16 nFlag ) const { return (nFlags & nFlag) != 0; }
 };
 
 struct ParaRange
 {
-    USHORT  nStartPara;
-    USHORT  nEndPara;
+    sal_uInt16  nStartPara;
+    sal_uInt16  nEndPara;
 
-            ParaRange( USHORT nS, USHORT nE ) { nStartPara = nS, nEndPara = nE; }
+            ParaRange( sal_uInt16 nS, sal_uInt16 nE ) { nStartPara = nS, nEndPara = nE; }
 
     void    Adjust();
-    USHORT  Len() const { return 1 + ( ( nEndPara > nStartPara ) ? (nEndPara-nStartPara) : (nStartPara-nEndPara) ); }
+    sal_uInt16  Len() const { return 1 + ( ( nEndPara > nStartPara ) ? (nEndPara-nStartPara) : (nStartPara-nEndPara) ); }
 };
 
 inline void ParaRange::Adjust()
 {
     if ( nStartPara > nEndPara )
     {
-        USHORT nTmp = nStartPara;
+        sal_uInt16 nTmp = nStartPara;
         nStartPara = nEndPara;
         nEndPara = nTmp;
     }
@@ -198,18 +198,18 @@ private:
     EditView*   pEditView;
 
     // Drag & Drop
-    BOOL        bBeginDragAtMove_OLDMEMBER;
-    BOOL        bInDragMode;
+    sal_Bool        bBeginDragAtMove_OLDMEMBER;
+    sal_Bool        bInDragMode;
     Point       aDDStartPosRef;
     Point       aDDStartPosPix;
-    ULONG       nDDStartPara;
-    ULONG       nDDStartParaVisChildCount;
-    ULONG       nDDCurPara;
-    USHORT      nDDStartDepth;
-    USHORT      nDDCurDepth;
-    USHORT      nDDMaxDepth;
-    BOOL        bDDChangingDepth;
-    BOOL        bDDCursorVisible;
+    sal_uLong       nDDStartPara;
+    sal_uLong       nDDStartParaVisChildCount;
+    sal_uLong       nDDCurPara;
+    sal_uInt16      nDDStartDepth;
+    sal_uInt16      nDDCurDepth;
+    sal_uInt16      nDDMaxDepth;
+    sal_Bool        bDDChangingDepth;
+    sal_Bool        bDDCursorVisible;
     long*       pHorTabArrDoc;
     long        nDDScrollLRBorderWidthWin;  // Left Right
     long        nDDScrollTBBorderWidthWin;  // Top Bottom
@@ -217,7 +217,7 @@ private:
     long        nDDScrollTDOffs;
 
     void*       pDummy;
-    ULONG       nDummy;
+    sal_uLong       nDummy;
 
     enum MouseTarget {
         MouseText = 0,
@@ -230,11 +230,11 @@ private:
 
 #ifdef _OUTLINER_CXX
 
-    EDITENG_DLLPRIVATE void         ImplExpandOrCollaps( USHORT nStartPara, USHORT nEndPara, BOOL bExpand );
+    EDITENG_DLLPRIVATE void         ImplExpandOrCollaps( sal_uInt16 nStartPara, sal_uInt16 nEndPara, sal_Bool bExpand );
 
-    EDITENG_DLLPRIVATE ULONG       ImpCheckMousePos( const Point& rPosPixel, MouseTarget& reTarget);
+    EDITENG_DLLPRIVATE sal_uLong       ImpCheckMousePos( const Point& rPosPixel, MouseTarget& reTarget);
     EDITENG_DLLPRIVATE void        ImpToggleExpand( Paragraph* pParentPara );
-    EDITENG_DLLPRIVATE ParaRange    ImpGetSelectedParagraphs( BOOL bIncludeHiddenChilds );
+    EDITENG_DLLPRIVATE ParaRange    ImpGetSelectedParagraphs( sal_Bool bIncludeHiddenChilds );
     EDITENG_DLLPRIVATE void        ImpHideDDCursor();
     EDITENG_DLLPRIVATE void        ImpShowDDCursor();
     EDITENG_DLLPRIVATE void        ImpPaintDDCursor();
@@ -245,13 +245,13 @@ private:
     EDITENG_DLLPRIVATE void        ImpScrollUp();
     EDITENG_DLLPRIVATE void        ImpScrollDown();
 
-    EDITENG_DLLPRIVATE ULONG       ImpGetInsertionPara( const Point& rPosPixel );
+    EDITENG_DLLPRIVATE sal_uLong       ImpGetInsertionPara( const Point& rPosPixel );
     EDITENG_DLLPRIVATE Point       ImpGetDocPos( const Point& rPosPixel );
     EDITENG_DLLPRIVATE Pointer     ImpGetMousePointer( MouseTarget eTarget );
-    EDITENG_DLLPRIVATE USHORT      ImpInitPaste( ULONG& rStart );
-    EDITENG_DLLPRIVATE void        ImpPasted( ULONG nStart, ULONG nPrevParaCount, USHORT nSize);
-    EDITENG_DLLPRIVATE USHORT      ImpCalcSelectedPages( BOOL bIncludeFirstSelected );
-    EDITENG_DLLPRIVATE BOOL        ImpIsIndentingPages();
+    EDITENG_DLLPRIVATE sal_uInt16      ImpInitPaste( sal_uLong& rStart );
+    EDITENG_DLLPRIVATE void        ImpPasted( sal_uLong nStart, sal_uLong nPrevParaCount, sal_uInt16 nSize);
+    EDITENG_DLLPRIVATE sal_uInt16      ImpCalcSelectedPages( sal_Bool bIncludeFirstSelected );
+    EDITENG_DLLPRIVATE sal_Bool        ImpIsIndentingPages();
 
 #endif
 
@@ -264,12 +264,12 @@ public:
     void        Scroll( long nHorzScroll, long nVertScroll );
 
     void        Paint( const Rectangle& rRect );
-    BOOL        PostKeyEvent( const KeyEvent& rKEvt );
-    BOOL        MouseButtonDown( const MouseEvent& );
-    BOOL        MouseButtonUp( const MouseEvent& );
-    BOOL        MouseMove( const MouseEvent& );
+    sal_Bool        PostKeyEvent( const KeyEvent& rKEvt );
+    sal_Bool        MouseButtonDown( const MouseEvent& );
+    sal_Bool        MouseButtonUp( const MouseEvent& );
+    sal_Bool        MouseMove( const MouseEvent& );
 
-    void        ShowCursor( BOOL bGotoCursor = TRUE );
+    void        ShowCursor( sal_Bool bGotoCursor = sal_True );
     void        HideCursor();
 
     void        SetOutliner( Outliner* pOutliner );
@@ -278,8 +278,8 @@ public:
     void        SetWindow( Window* pWindow );
     Window*     GetWindow() const;
 
-    void        SetReadOnly( BOOL bReadOnly );
-    BOOL        IsReadOnly() const;
+    void        SetReadOnly( sal_Bool bReadOnly );
+    sal_Bool        IsReadOnly() const;
 
     void        SetOutputArea( const Rectangle& rRect );
     Rectangle   GetOutputArea() const;
@@ -290,26 +290,26 @@ public:
 
     // gibt Anzahl selektierter Absaetze zurueck
     // MT 07/00: Who needs this?
-    ULONG       Select( Paragraph* pParagraph,
-                    BOOL bSelect=TRUE,
-                    BOOL bWChilds=TRUE);
+    sal_uLong       Select( Paragraph* pParagraph,
+                    sal_Bool bSelect=sal_True,
+                    sal_Bool bWChilds=sal_True);
 
     String      GetSelected() const;
-    void        SelectRange( ULONG nFirst, USHORT nCount );
+    void        SelectRange( sal_uLong nFirst, sal_uInt16 nCount );
     void        SetAttribs( const SfxItemSet& );
     void        Indent( short nDiff );
     void        AdjustDepth( short nDX );   // Spaeter gegeb Indent ersetzen!
 
-    BOOL        AdjustHeight( long nDY );
+    sal_Bool        AdjustHeight( long nDY );
     void        AdjustDepth( Paragraph* pPara, short nDX,
-                    BOOL bWithChilds = FALSE );
+                    sal_Bool bWithChilds = sal_False );
     void        AdjustHeight( Paragraph* pPara, long nDY,
-                    BOOL bWithChilds=FALSE );
+                    sal_Bool bWithChilds=sal_False );
 
-    ULONG       Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, BOOL bSelect = FALSE, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
-    ULONG       Write( SvStream& rOutput, EETextFormat eFormat );
+    sal_uLong       Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, sal_Bool bSelect = sal_False, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
+    sal_uLong       Write( SvStream& rOutput, EETextFormat eFormat );
 
-    void        InsertText( const String& rNew, BOOL bSelect = FALSE );
+    void        InsertText( const String& rNew, sal_Bool bSelect = sal_False );
     void        InsertText( const OutlinerParaObject& rParaObj );
     void        Expand();
     void        Collapse();
@@ -327,7 +327,7 @@ public:
     void        Copy();
     void        Paste();
     void        PasteSpecial();
-    void        EnablePaste( BOOL bEnable );
+    void        EnablePaste( sal_Bool bEnable );
 
     void        Undo();
     void        Redo();
@@ -335,41 +335,41 @@ public:
     void            SetStyleSheet( SfxStyleSheet* );
     SfxStyleSheet*  GetStyleSheet() const;
 
-    void        SetControlWord( ULONG nWord );
-    ULONG       GetControlWord() const;
+    void        SetControlWord( sal_uLong nWord );
+    sal_uLong       GetControlWord() const;
 
     void            SetAnchorMode( EVAnchorMode eMode );
     EVAnchorMode    GetAnchorMode() const;
 
     Pointer     GetPointer( const Point& rPosPixel );
     void        Command( const CommandEvent& rCEvt );
-    void        RemoveCharAttribs( ULONG nPara, USHORT nWhich = 0 );
+    void        RemoveCharAttribs( sal_uLong nPara, sal_uInt16 nWhich = 0 );
 
     void        CompleteAutoCorrect();
 
-    EESpellState    StartSpeller( BOOL bMultipleDoc = FALSE );
+    EESpellState    StartSpeller( sal_Bool bMultipleDoc = sal_False );
     EESpellState    StartThesaurus();
-    USHORT          StartSearchAndReplace( const SvxSearchItem& rSearchItem );
+    sal_uInt16          StartSearchAndReplace( const SvxSearchItem& rSearchItem );
 
     // for text conversion
-    void            StartTextConversion( LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont, INT32 nOptions, BOOL bIsInteractive, BOOL bMultipleDoc );
+    void            StartTextConversion( LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont, sal_Int32 nOptions, sal_Bool bIsInteractive, sal_Bool bMultipleDoc );
 
     void            TransliterateText( sal_Int32 nTransliterationMode );
 
     ESelection  GetSelection();
 
-    USHORT      GetSelectedScriptType() const;
+    sal_uInt16      GetSelectedScriptType() const;
 
     void        SetVisArea( const Rectangle& rRec );
     void        SetSelection( const ESelection& );
 
-    void        RemoveAttribs( BOOL bRemoveParaAttribs = FALSE, USHORT nWhich = 0, BOOL bKeepLanguages = FALSE );
-    void        RemoveAttribsKeepLanguages( BOOL bRemoveParaAttribs );
-    BOOL        HasSelection() const;
+    void        RemoveAttribs( sal_Bool bRemoveParaAttribs = sal_False, sal_uInt16 nWhich = 0, sal_Bool bKeepLanguages = sal_False );
+    void        RemoveAttribsKeepLanguages( sal_Bool bRemoveParaAttribs );
+    sal_Bool        HasSelection() const;
 
     void                InsertField( const SvxFieldItem& rFld );
     const SvxFieldItem* GetFieldUnderMousePointer() const;
-    const SvxFieldItem* GetFieldUnderMousePointer( USHORT& nPara, xub_StrLen& nPos ) const;
+    const SvxFieldItem* GetFieldUnderMousePointer( sal_uInt16& nPara, xub_StrLen& nPos ) const;
     const SvxFieldItem* GetFieldAtSelection() const;
 
     /** enables numbering for the selected paragraphs if the numbering of the first paragraph is off
@@ -382,13 +382,13 @@ public:
     */
     void        EnableBullets();
 
-    BOOL        IsCursorAtWrongSpelledWord( BOOL bMarkIfWrong = FALSE );
-    BOOL        IsWrongSpelledWordAtPos( const Point& rPosPixel, BOOL bMarkIfWrong = FALSE );
+    sal_Bool        IsCursorAtWrongSpelledWord( sal_Bool bMarkIfWrong = sal_False );
+    sal_Bool        IsWrongSpelledWordAtPos( const Point& rPosPixel, sal_Bool bMarkIfWrong = sal_False );
     void        SpellIgnoreWord();
     void        ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack = 0 );
 
-    void        SetInvalidateMore( USHORT nPixel );
-    USHORT      GetInvalidateMore() const;
+    void        SetInvalidateMore( sal_uInt16 nPixel );
+    sal_uInt16      GetInvalidateMore() const;
 
     String      GetSurroundingText() const;
      Selection  GetSurroundingTextSelection() const;
@@ -425,14 +425,14 @@ public:
     const Color maTextLineColor;
 
     // #101498# BiDi level needs to be transported, too.
-    BYTE                mnBiDiLevel;
+    sal_uInt8               mnBiDiLevel;
 
     // bitfield
     unsigned            mbEndOfLine : 1;
     unsigned            mbEndOfParagraph : 1;
     unsigned            mbEndOfBullet : 1;
 
-    BYTE GetBiDiLevel() const { return mnBiDiLevel; }
+    sal_uInt8 GetBiDiLevel() const { return mnBiDiLevel; }
     sal_Bool IsRTL() const;
 
     DrawPortionInfo(
@@ -449,7 +449,7 @@ public:
         const ::com::sun::star::lang::Locale* pLocale,
         const Color& rOverlineColor,
         const Color& rTextLineColor,
-        BYTE nBiDiLevel,
+        sal_uInt8 nBiDiLevel,
         bool bEndOfLine,
         bool bEndOfParagraph,
         bool bEndOfBullet)
@@ -492,14 +492,14 @@ public:
 
 struct EDITENG_DLLPUBLIC PaintFirstLineInfo
 {
-    USHORT mnPara;
+    sal_uInt16 mnPara;
     const Point& mrStartPos;
     long mnBaseLineY;
     const Point& mrOrigin;
     short mnOrientation;
     OutputDevice* mpOutDev;
 
-    PaintFirstLineInfo( USHORT nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev )
+    PaintFirstLineInfo( sal_uInt16 nPara, const Point& rStartPos, long nBaseLineY, const Point& rOrigin, short nOrientation, OutputDevice* pOutDev )
         : mnPara( nPara ), mrStartPos( rStartPos ), mnBaseLineY( nBaseLineY ), mrOrigin( rOrigin ), mnOrientation( nOrientation ), mpOutDev( pOutDev )
     {}
 };
@@ -517,9 +517,9 @@ private:
 
     String              aRepresentation;
 
-    USHORT              nPara;
+    sal_uInt16              nPara;
     xub_StrLen          nPos;
-    BOOL                bSimpleClick;
+    sal_Bool                bSimpleClick;
 
                         EditFieldInfo();
                         EditFieldInfo( const EditFieldInfo& );
@@ -527,12 +527,12 @@ private:
     SdrPage*            mpSdrPage;
 
 public:
-                    EditFieldInfo( Outliner* pOutl, const SvxFieldItem& rFItem, USHORT nPa, xub_StrLen nPo )
+                    EditFieldInfo( Outliner* pOutl, const SvxFieldItem& rFItem, sal_uInt16 nPa, xub_StrLen nPo )
                         : rFldItem( rFItem )
                     {
                         pOutliner = pOutl;
                         nPara = nPa; nPos = nPo;
-                        pTxtColor = 0; pFldColor = 0; bSimpleClick = FALSE;
+                        pTxtColor = 0; pFldColor = 0; bSimpleClick = sal_False;
                         mpSdrPage = 0;
                     }
                     ~EditFieldInfo()
@@ -555,11 +555,11 @@ public:
     void            ClearFldColor()
                         { delete pFldColor; pFldColor = 0; }
 
-    USHORT          GetPara() const { return nPara; }
+    sal_uInt16          GetPara() const { return nPara; }
     xub_StrLen          GetPos() const { return nPos; }
 
-    BOOL            IsSimpleClick() const { return bSimpleClick; }
-    void            SetSimpleClick( BOOL bSimple ) { bSimpleClick = bSimple; }
+    sal_Bool            IsSimpleClick() const { return bSimpleClick; }
+    void            SetSimpleClick( sal_Bool bSimple ) { bSimpleClick = bSimple; }
 
     const String&       GetRepresentation() const                { return aRepresentation; }
     String&             GetRepresentation()                      { return aRepresentation; }
@@ -571,15 +571,15 @@ public:
 
 struct EBulletInfo
 {
-    BOOL        bVisible;
-    USHORT      nType;          // see SvxNumberType
+    sal_Bool        bVisible;
+    sal_uInt16      nType;          // see SvxNumberType
     String      aText;
     SvxFont     aFont;
     Graphic     aGraphic;
-    USHORT      nParagraph;
+    sal_uInt16      nParagraph;
     Rectangle   aBounds;
 
-    EBulletInfo() : bVisible( FALSE ), nType( 0 ), nParagraph( EE_PARA_NOT_FOUND ) {}
+    EBulletInfo() : bVisible( sal_False ), nType( 0 ), nParagraph( EE_PARA_NOT_FOUND ) {}
 };
 
 #define OUTLINERMODE_DONTKNOW       0x0000
@@ -609,7 +609,7 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     ViewList            aViewList;
 
     Paragraph*          pHdlParagraph;
-    ULONG               mnFirstSelPage;
+    sal_uLong               mnFirstSelPage;
     Link                aDrawPortionHdl;
     Link                aDrawBulletHdl;
     Link                aExpandHdl;
@@ -628,20 +628,20 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     Link                maEndPasteOrDropHdl;
 
     sal_Int16           nDepthChangedHdlPrevDepth;
-    USHORT              mnDepthChangeHdlPrevFlags;
+    sal_uInt16              mnDepthChangeHdlPrevFlags;
     sal_Int16           nMaxDepth;
     const sal_Int16     nMinDepth;
-    USHORT              nFirstPage;
+    sal_uInt16              nFirstPage;
 
-    USHORT              nOutlinerMode;
+    sal_uInt16              nOutlinerMode;
 
-    BOOL                bIsExpanding; // Nur in Expand/Collaps-Hdl gueltig, mal umstellen
-    BOOL                bFirstParaIsEmpty;
-    BOOL                bBlockInsCallback;
-    BOOL                bStrippingPortions;
-    BOOL                bPasting;
+    sal_Bool                bIsExpanding; // Nur in Expand/Collaps-Hdl gueltig, mal umstellen
+    sal_Bool                bFirstParaIsEmpty;
+    sal_Bool                bBlockInsCallback;
+    sal_Bool                bStrippingPortions;
+    sal_Bool                bPasting;
 
-    ULONG               nDummy;
+    sal_uLong               nDummy;
 
 #ifdef _OUTLINER_CXX
 
@@ -651,96 +651,96 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
     DECL_LINK(              BeginPasteOrDropHdl, PasteOrDropInfos* );
     DECL_LINK(              EndPasteOrDropHdl, PasteOrDropInfos* );
     DECL_LINK(              EditEngineNotifyHdl, EENotify* );
-    void                    ImplCheckParagraphs( USHORT nStart, USHORT nEnd );
-    BOOL                    ImplHasBullet( USHORT nPara ) const;
-    Size                    ImplGetBulletSize( USHORT nPara );
-    sal_uInt16              ImplGetNumbering( USHORT nPara, const SvxNumberFormat* pParaFmt );
-    void                    ImplCalcBulletText( USHORT nPara, BOOL bRecalcLevel, BOOL bRecalcChilds );
-    String                  ImplGetBulletText( USHORT nPara );
-    void                    ImplCheckNumBulletItem( USHORT nPara );
-    void                    ImplInitDepth( USHORT nPara, sal_Int16 nDepth, BOOL bCreateUndo, BOOL bUndoAction = FALSE );
-    void                    ImplSetLevelDependendStyleSheet( USHORT nPara, SfxStyleSheet* pLevelStyle = NULL );
+    void                    ImplCheckParagraphs( sal_uInt16 nStart, sal_uInt16 nEnd );
+    sal_Bool                    ImplHasBullet( sal_uInt16 nPara ) const;
+    Size                    ImplGetBulletSize( sal_uInt16 nPara );
+    sal_uInt16              ImplGetNumbering( sal_uInt16 nPara, const SvxNumberFormat* pParaFmt );
+    void                    ImplCalcBulletText( sal_uInt16 nPara, sal_Bool bRecalcLevel, sal_Bool bRecalcChilds );
+    String                  ImplGetBulletText( sal_uInt16 nPara );
+    void                    ImplCheckNumBulletItem( sal_uInt16 nPara );
+    void                    ImplInitDepth( sal_uInt16 nPara, sal_Int16 nDepth, sal_Bool bCreateUndo, sal_Bool bUndoAction = sal_False );
+    void                    ImplSetLevelDependendStyleSheet( sal_uInt16 nPara, SfxStyleSheet* pLevelStyle = NULL );
 
-    void                    ImplBlockInsertionCallbacks( BOOL b );
+    void                    ImplBlockInsertionCallbacks( sal_Bool b );
 
-    void                ImplCheckStyleSheet( USHORT nPara, BOOL bReplaceExistingStyle );
-    void                ImpRecalcBulletIndent( ULONG nPara );
+    void                ImplCheckStyleSheet( sal_uInt16 nPara, sal_Bool bReplaceExistingStyle );
+    void                ImpRecalcBulletIndent( sal_uLong nPara );
 
-    const SvxBulletItem& ImpGetBullet( ULONG nPara, USHORT& );
-    void        ImpFilterIndents( ULONG nFirstPara, ULONG nLastPara );
+    const SvxBulletItem& ImpGetBullet( sal_uLong nPara, sal_uInt16& );
+    void        ImpFilterIndents( sal_uLong nFirstPara, sal_uLong nLastPara );
     bool        ImpConvertEdtToOut( sal_uInt32 nPara, EditView* pView = 0 );
 
-    void        ImpTextPasted( ULONG nStartPara, USHORT nCount );
-    long        ImpCalcMaxBulletWidth( USHORT nPara, const SvxBulletItem& rBullet );
-    Font        ImpCalcBulletFont( USHORT nPara ) const;
-    Rectangle   ImpCalcBulletArea( USHORT nPara, BOOL bAdjust, BOOL bReturnPaperPos );
-    long        ImpGetTextIndent( ULONG nPara );
-    BOOL        ImpCanIndentSelectedPages( OutlinerView* pCurView );
-    BOOL        ImpCanDeleteSelectedPages( OutlinerView* pCurView );
-    BOOL        ImpCanDeleteSelectedPages( OutlinerView* pCurView, USHORT nFirstPage, USHORT nPages );
+    void        ImpTextPasted( sal_uLong nStartPara, sal_uInt16 nCount );
+    long        ImpCalcMaxBulletWidth( sal_uInt16 nPara, const SvxBulletItem& rBullet );
+    Font        ImpCalcBulletFont( sal_uInt16 nPara ) const;
+    Rectangle   ImpCalcBulletArea( sal_uInt16 nPara, sal_Bool bAdjust, sal_Bool bReturnPaperPos );
+    long        ImpGetTextIndent( sal_uLong nPara );
+    sal_Bool        ImpCanIndentSelectedPages( OutlinerView* pCurView );
+    sal_Bool        ImpCanDeleteSelectedPages( OutlinerView* pCurView );
+    sal_Bool        ImpCanDeleteSelectedPages( OutlinerView* pCurView, sal_uInt16 nFirstPage, sal_uInt16 nPages );
 
-    USHORT      ImplGetOutlinerMode() const { return nOutlinerMode & OUTLINERMODE_USERMASK; }
+    sal_uInt16      ImplGetOutlinerMode() const { return nOutlinerMode & OUTLINERMODE_USERMASK; }
     void        ImplCheckDepth( sal_Int16& rnDepth ) const;
 #endif
 
 protected:
-    void            ParagraphInserted( USHORT nParagraph );
-    void            ParagraphDeleted( USHORT nParagraph );
-    void            ParaAttribsChanged( USHORT nParagraph );
+    void            ParagraphInserted( sal_uInt16 nParagraph );
+    void            ParagraphDeleted( sal_uInt16 nParagraph );
+    void            ParaAttribsChanged( sal_uInt16 nParagraph );
 
     virtual void    StyleSheetChanged( SfxStyleSheet* pStyle );
 
-    void        InvalidateBullet( Paragraph* pPara, ULONG nPara );
-    void        PaintBullet( USHORT nPara, const Point& rStartPos,
+    void        InvalidateBullet( Paragraph* pPara, sal_uLong nPara );
+    void        PaintBullet( sal_uInt16 nPara, const Point& rStartPos,
                     const Point& rOrigin, short nOrientation,
                     OutputDevice* pOutDev );
 
     // used by OutlinerEditEng. Allows Outliner objects to provide
     // bullet access to the EditEngine.
-    virtual const SvxNumberFormat*  GetNumberFormat( USHORT nPara ) const;
+    virtual const SvxNumberFormat*  GetNumberFormat( sal_uInt16 nPara ) const;
 
 public:
 
-                    Outliner( SfxItemPool* pPool, USHORT nOutlinerMode );
+                    Outliner( SfxItemPool* pPool, sal_uInt16 nOutlinerMode );
     virtual         ~Outliner();
 
-    void            Init( USHORT nOutlinerMode );
-    USHORT          GetMode() const { return nOutlinerMode; }
+    void            Init( sal_uInt16 nOutlinerMode );
+    sal_uInt16          GetMode() const { return nOutlinerMode; }
 
-    void            SetVertical( BOOL bVertical );
-    BOOL            IsVertical() const;
+    void            SetVertical( sal_Bool bVertical );
+    sal_Bool            IsVertical() const;
 
-    void            SetFixedCellHeight( BOOL bUseFixedCellHeight );
-    BOOL            IsFixedCellHeight() const;
+    void            SetFixedCellHeight( sal_Bool bUseFixedCellHeight );
+    sal_Bool            IsFixedCellHeight() const;
 
     void                        SetDefaultHorizontalTextDirection( EEHorizontalTextDirection eHTextDir );
     EEHorizontalTextDirection   GetDefaultHorizontalTextDirection() const;
 
-    USHORT          GetScriptType( const ESelection& rSelection ) const;
-    LanguageType    GetLanguage( USHORT nPara, USHORT nPos ) const;
+    sal_uInt16          GetScriptType( const ESelection& rSelection ) const;
+    LanguageType    GetLanguage( sal_uInt16 nPara, sal_uInt16 nPos ) const;
 
-    void            SetAsianCompressionMode( USHORT nCompressionMode );
-    USHORT          GetAsianCompressionMode() const;
+    void            SetAsianCompressionMode( sal_uInt16 nCompressionMode );
+    sal_uInt16          GetAsianCompressionMode() const;
 
-    void            SetKernAsianPunctuation( BOOL bEnabled );
-    BOOL            IsKernAsianPunctuation() const;
+    void            SetKernAsianPunctuation( sal_Bool bEnabled );
+    sal_Bool            IsKernAsianPunctuation() const;
 
-    void            SetAddExtLeading( BOOL b );
-    BOOL            IsAddExtLeading() const;
+    void            SetAddExtLeading( sal_Bool b );
+    sal_Bool            IsAddExtLeading() const;
 
-    ULONG           InsertView( OutlinerView* pView, ULONG nIndex=LIST_APPEND);
+    sal_uLong           InsertView( OutlinerView* pView, sal_uLong nIndex=LIST_APPEND);
     OutlinerView*   RemoveView( OutlinerView* pView );
-    OutlinerView*   RemoveView( ULONG nIndex );
-    OutlinerView*   GetView( ULONG nIndex ) const;
-    ULONG           GetViewCount() const;
+    OutlinerView*   RemoveView( sal_uLong nIndex );
+    OutlinerView*   GetView( sal_uLong nIndex ) const;
+    sal_uLong           GetViewCount() const;
 
-    Paragraph*      Insert( const String& rText, ULONG nAbsPos = LIST_APPEND, sal_Int16 nDepth = 0 );
+    Paragraph*      Insert( const String& rText, sal_uLong nAbsPos = LIST_APPEND, sal_Int16 nDepth = 0 );
     void            SetText( const OutlinerParaObject& );
     void            AddText( const OutlinerParaObject& );
     void            SetText( const String& rText, Paragraph* pParagraph );
-    String          GetText( Paragraph* pPara, ULONG nParaCount=1 ) const;
+    String          GetText( Paragraph* pPara, sal_uLong nParaCount=1 ) const;
 
-    OutlinerParaObject* CreateParaObject( USHORT nStartPara = 0, USHORT nParaCount = 0xFFFF ) const;
+    OutlinerParaObject* CreateParaObject( sal_uInt16 nStartPara = 0, sal_uInt16 nParaCount = 0xFFFF ) const;
 
     const SfxItemSet& GetEmptyItemSet() const;
 
@@ -752,46 +752,46 @@ public:
 
     sal_Int16       GetMinDepth() const { return -1; }
 
-    void            SetMaxDepth( sal_Int16 nDepth, BOOL bCheckParas = FALSE );
+    void            SetMaxDepth( sal_Int16 nDepth, sal_Bool bCheckParas = sal_False );
     sal_Int16          GetMaxDepth() const { return nMaxDepth; }
 
-    void            SetUpdateMode( BOOL bUpdate );
-    BOOL            GetUpdateMode() const;
+    void            SetUpdateMode( sal_Bool bUpdate );
+    sal_Bool            GetUpdateMode() const;
 
     void            Clear();
 
     void            RemoveAttribs( const ESelection& rSelection, sal_Bool bRemoveParaAttribs, sal_uInt16 nWhich );
 
-    ULONG           GetParagraphCount() const;
-    Paragraph*      GetParagraph( ULONG nAbsPos ) const;
+    sal_uLong           GetParagraphCount() const;
+    Paragraph*      GetParagraph( sal_uLong nAbsPos ) const;
 
-    BOOL            HasParent( Paragraph* pParagraph ) const;
-    BOOL            HasChilds( Paragraph* pParagraph ) const;
-    ULONG           GetChildCount( Paragraph* pParent ) const;
-    BOOL            IsExpanded( Paragraph* pPara ) const;
-//  Paragraph*      GetParagraph( Paragraph* pParent, ULONG nRelPos ) const;
+    sal_Bool            HasParent( Paragraph* pParagraph ) const;
+    sal_Bool            HasChilds( Paragraph* pParagraph ) const;
+    sal_uLong           GetChildCount( Paragraph* pParent ) const;
+    sal_Bool            IsExpanded( Paragraph* pPara ) const;
+//  Paragraph*      GetParagraph( Paragraph* pParent, sal_uLong nRelPos ) const;
     Paragraph*      GetParent( Paragraph* pParagraph ) const;
-//  ULONG           GetRelPos( Paragraph* pParent, Paragraph* pPara ) const;
-    ULONG           GetAbsPos( Paragraph* pPara );
+//  sal_uLong           GetRelPos( Paragraph* pParent, Paragraph* pPara ) const;
+    sal_uLong           GetAbsPos( Paragraph* pPara );
 
-    sal_Int16       GetDepth( ULONG nPara ) const;
+    sal_Int16       GetDepth( sal_uLong nPara ) const;
     void            SetDepth( Paragraph* pParagraph, sal_Int16 nNewDepth );
 
-    void            SetVisible( Paragraph* pPara, BOOL bVisible );
-    BOOL            IsVisible( Paragraph* pPara ) const { return pPara->IsVisible(); }
+    void            SetVisible( Paragraph* pPara, sal_Bool bVisible );
+    sal_Bool            IsVisible( Paragraph* pPara ) const { return pPara->IsVisible(); }
 
-    void            EnableUndo( BOOL bEnable );
-    BOOL            IsUndoEnabled() const;
-    void            UndoActionStart( USHORT nId );
-    void            UndoActionEnd( USHORT nId );
+    void            EnableUndo( sal_Bool bEnable );
+    sal_Bool            IsUndoEnabled() const;
+    void            UndoActionStart( sal_uInt16 nId );
+    void            UndoActionEnd( sal_uInt16 nId );
     void            InsertUndo( EditUndo* pUndo );
-    BOOL            IsInUndo();
+    sal_Bool            IsInUndo();
 
     void            ClearModifyFlag();
-    BOOL            IsModified() const;
+    sal_Bool            IsModified() const;
 
     Paragraph*      GetHdlParagraph() const { return pHdlParagraph; }
-    BOOL            IsExpanding() const { return bIsExpanding; }
+    sal_Bool            IsExpanding() const { return bIsExpanding; }
 
     virtual void    ExpandHdl();
     void            SetExpandHdl( const Link& rLink ) { aExpandHdl = rLink; }
@@ -809,7 +809,7 @@ public:
     void            SetDepthChangedHdl(const Link& rLink){aDepthChangedHdl=rLink;}
     Link            GetDepthChangedHdl() const { return aDepthChangedHdl; }
     sal_Int16       GetPrevDepth() const { return nDepthChangedHdlPrevDepth; }
-    USHORT          GetPrevFlags() const { return mnDepthChangeHdlPrevFlags; }
+    sal_uInt16          GetPrevFlags() const { return mnDepthChangeHdlPrevFlags; }
 
     virtual long    RemovingPagesHdl( OutlinerView* );
     void            SetRemovingPagesHdl(const Link& rLink){aRemovingPagesHdl=rLink;}
@@ -818,9 +818,9 @@ public:
     void            SetIndentingPagesHdl(const Link& rLink){aIndentingPagesHdl=rLink;}
     Link            GetIndentingPagesHdl() const { return aIndentingPagesHdl; }
     // nur gueltig in den beiden oberen Handlern
-    USHORT          GetSelPageCount() const { return nDepthChangedHdlPrevDepth; }
+    sal_uInt16          GetSelPageCount() const { return nDepthChangedHdlPrevDepth; }
     // nur gueltig in den beiden oberen Handlern
-    ULONG           GetFirstSelPage() const { return mnFirstSelPage; }
+    sal_uLong           GetFirstSelPage() const { return mnFirstSelPage; }
 
     void            SetCalcFieldValueHdl(const Link& rLink ) { aCalcFieldValueHdl= rLink; }
     Link            GetCalcFieldValueHdl() const { return aCalcFieldValueHdl; }
@@ -853,8 +853,8 @@ public:
     const Size&     GetPaperSize() const;
     void            SetPaperSize( const Size& rSize );
 
-    void            SetFirstPageNumber( USHORT n )  { nFirstPage = n; }
-    USHORT          GetFirstPageNumber() const      { return nFirstPage; }
+    void            SetFirstPageNumber( sal_uInt16 n )  { nFirstPage = n; }
+    sal_uInt16          GetFirstPageNumber() const      { return nFirstPage; }
 
     void                SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon );
     void                SetPolygon( const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon);
@@ -867,30 +867,30 @@ public:
     const Size&     GetMaxAutoPaperSize() const;
     void            SetMaxAutoPaperSize( const Size& rSz );
 
-    void            SetDefTab( USHORT nTab );
-    USHORT          GetDefTab() const;
+    void            SetDefTab( sal_uInt16 nTab );
+    sal_uInt16          GetDefTab() const;
 
-    BOOL            IsFlatMode() const;
-    void            SetFlatMode( BOOL bFlat );
+    sal_Bool            IsFlatMode() const;
+    void            SetFlatMode( sal_Bool bFlat );
 
-    void            EnableAutoColor( BOOL b );
-    BOOL            IsAutoColorEnabled() const;
+    void            EnableAutoColor( sal_Bool b );
+    sal_Bool            IsAutoColorEnabled() const;
 
-    void            ForceAutoColor( BOOL b );
-    BOOL            IsForceAutoColor() const;
+    void            ForceAutoColor( sal_Bool b );
+    sal_Bool            IsForceAutoColor() const;
 
-    EBulletInfo     GetBulletInfo( USHORT nPara );
+    EBulletInfo     GetBulletInfo( sal_uInt16 nPara );
 
     void        SetWordDelimiters( const String& rDelimiters );
     String      GetWordDelimiters() const;
-    String      GetWord( USHORT nPara, xub_StrLen nIndex );
+    String      GetWord( sal_uInt16 nPara, xub_StrLen nIndex );
 
     void            StripPortions();
 
     // #101498#
     virtual void DrawingText(
-        const Point& rStartPos, const String& rText, USHORT nTextStart, USHORT nTextLen,
-        const sal_Int32* pDXArray, const SvxFont& rFont, USHORT nPara, xub_StrLen nIndex, BYTE nRightToLeft,
+        const Point& rStartPos, const String& rText, sal_uInt16 nTextStart, sal_uInt16 nTextLen,
+        const sal_Int32* pDXArray, const SvxFont& rFont, sal_uInt16 nPara, xub_StrLen nIndex, sal_uInt8 nRightToLeft,
         const EEngineData::WrongSpellVector* pWrongSpellVector,
         const SvxFieldData* pFieldData,
         bool bEndOfLine,
@@ -907,17 +907,17 @@ public:
     void                SetStyleSheetPool( SfxStyleSheetPool* pSPool );
     SfxStyleSheetPool*  GetStyleSheetPool();
 
-    BOOL            IsInSelectionMode() const;
+    sal_Bool            IsInSelectionMode() const;
 
-    void            SetStyleSheet( ULONG nPara, SfxStyleSheet* pStyle );
-    SfxStyleSheet*  GetStyleSheet( ULONG nPara );
+    void            SetStyleSheet( sal_uLong nPara, SfxStyleSheet* pStyle );
+    SfxStyleSheet*  GetStyleSheet( sal_uLong nPara );
 
-    void            SetParaAttribs( USHORT nPara, const SfxItemSet& );
-    SfxItemSet      GetParaAttribs( USHORT nPara );
+    void            SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& );
+    SfxItemSet      GetParaAttribs( sal_uInt16 nPara );
 
-    void            Remove( Paragraph* pPara, ULONG nParaCount );
-    BOOL            Expand( Paragraph* );
-    BOOL            Collapse( Paragraph* );
+    void            Remove( Paragraph* pPara, sal_uLong nParaCount );
+    sal_Bool            Expand( Paragraph* );
+    sal_Bool            Collapse( Paragraph* );
 
     void            SetParaFlag( Paragraph* pPara,  sal_uInt16 nFlag );
     void            RemoveParaFlag( Paragraph* pPara, sal_uInt16 nFlag );
@@ -928,20 +928,20 @@ public:
     Link            GetWidthArrReqHdl() const{ return aWidthArrReqHdl; }
     void            SetWidthArrReqHdl(const Link& rLink){aWidthArrReqHdl=rLink; }
 
-    void            SetControlWord( ULONG nWord );
-    ULONG           GetControlWord() const;
+    void            SetControlWord( sal_uLong nWord );
+    sal_uLong           GetControlWord() const;
 
     Link            GetBeginMovingHdl() const { return aBeginMovingHdl; }
     void            SetBeginMovingHdl(const Link& rLink) {aBeginMovingHdl=rLink;}
     Link            GetEndMovingHdl() const {return aEndMovingHdl;}
     void            SetEndMovingHdl( const Link& rLink){aEndMovingHdl=rLink;}
 
-    ULONG           GetLineCount( ULONG nParagraph ) const;
-    USHORT          GetLineLen( ULONG nParagraph, USHORT nLine ) const;
-    ULONG           GetLineHeight( ULONG nParagraph, ULONG nLine = 0 );
+    sal_uLong           GetLineCount( sal_uLong nParagraph ) const;
+    sal_uInt16          GetLineLen( sal_uLong nParagraph, sal_uInt16 nLine ) const;
+    sal_uLong           GetLineHeight( sal_uLong nParagraph, sal_uLong nLine = 0 );
 
     // nFormat muss ein Wert aus dem enum EETextFormat sein (wg.CLOOKS)
-    ULONG           Read( SvStream& rInput, const String& rBaseURL, USHORT, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
+    sal_uLong           Read( SvStream& rInput, const String& rBaseURL, sal_uInt16, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
 
     ::svl::IUndoManager&
                     GetUndoManager();
@@ -953,15 +953,15 @@ public:
     // nur fuer EditEngine-Modus
     void            QuickInsertText( const String& rText, const ESelection& rSel );
     void            QuickDelete( const ESelection& rSel );
-    void            QuickRemoveCharAttribs( USHORT nPara, USHORT nWhich = 0 );
-    void            QuickFormatDoc( BOOL bFull = FALSE );
+    void            QuickRemoveCharAttribs( sal_uInt16 nPara, sal_uInt16 nWhich = 0 );
+    void            QuickFormatDoc( sal_Bool bFull = sal_False );
 
-    BOOL            UpdateFields();
-    void            RemoveFields( BOOL bKeepFieldText, TypeId aType = NULL );
+    sal_Bool            UpdateFields();
+    void            RemoveFields( sal_Bool bKeepFieldText, TypeId aType = NULL );
 
-    virtual void    FieldClicked( const SvxFieldItem& rField, USHORT nPara, xub_StrLen nPos );
-    virtual void    FieldSelected( const SvxFieldItem& rField, USHORT nPara, xub_StrLen nPos );
-    virtual String  CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, xub_StrLen nPos, Color*& rTxtColor, Color*& rFldColor );
+    virtual void    FieldClicked( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos );
+    virtual void    FieldSelected( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos );
+    virtual String  CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, xub_StrLen nPos, Color*& rTxtColor, Color*& rFldColor );
 
     void            SetSpeller( ::com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XSpellChecker1 > &xSpeller );
@@ -981,16 +981,16 @@ public:
     void            SetDefaultLanguage( LanguageType eLang );
     LanguageType    GetDefaultLanguage() const;
 
-    BOOL            HasOnlineSpellErrors() const;
+    sal_Bool            HasOnlineSpellErrors() const;
     void            CompleteOnlineSpelling();
 
     EESpellState    HasSpellErrors();
-    BOOL            HasText( const SvxSearchItem& rSearchItem );
-    virtual BOOL    SpellNextDocument();
+    sal_Bool            HasText( const SvxSearchItem& rSearchItem );
+    virtual sal_Bool    SpellNextDocument();
 
     // for text conversion
     sal_Bool        HasConvertibleTextPortion( LanguageType nLang );
-    virtual BOOL    ConvertNextDocument();
+    virtual sal_Bool    ConvertNextDocument();
 
     void            SetEditTextObjectPool( SfxItemPool* pPool );
     SfxItemPool*    GetEditTextObjectPool() const;
@@ -998,30 +998,30 @@ public:
     void            SetRefDevice( OutputDevice* pRefDev );
     OutputDevice*   GetRefDevice() const;
 
-    USHORT          GetFirstLineOffset( ULONG nParagraph );
+    sal_uInt16          GetFirstLineOffset( sal_uLong nParagraph );
 
-    ULONG           GetTextHeight() const;
-    ULONG           GetTextHeight( ULONG nParagraph ) const;
-    Point           GetDocPosTopLeft( ULONG nParagraph );
+    sal_uLong           GetTextHeight() const;
+    sal_uLong           GetTextHeight( sal_uLong nParagraph ) const;
+    Point           GetDocPosTopLeft( sal_uLong nParagraph );
     Point           GetDocPos( const Point& rPaperPos ) const;
-    BOOL            IsTextPos( const Point& rPaperPos, USHORT nBorder = 0 );
-    BOOL            IsTextPos( const Point& rPaperPos, USHORT nBorder, BOOL* pbBuuletPos );
+    sal_Bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder = 0 );
+    sal_Bool            IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder, sal_Bool* pbBuuletPos );
 
-    void            SetGlobalCharStretching( USHORT nX = 100, USHORT nY = 100 );
-    void            GetGlobalCharStretching( USHORT& rX, USHORT& rY );
-    void            DoStretchChars( USHORT nX, USHORT nY );
+    void            SetGlobalCharStretching( sal_uInt16 nX = 100, sal_uInt16 nY = 100 );
+    void            GetGlobalCharStretching( sal_uInt16& rX, sal_uInt16& rY );
+    void            DoStretchChars( sal_uInt16 nX, sal_uInt16 nY );
     void            EraseVirtualDevice();
 
-    void            SetBigTextObjectStart( USHORT nStartAtPortionCount );
-    USHORT          GetBigTextObjectStart() const;
-    BOOL            ShouldCreateBigTextObject() const;
+    void            SetBigTextObjectStart( sal_uInt16 nStartAtPortionCount );
+    sal_uInt16          GetBigTextObjectStart() const;
+    sal_Bool            ShouldCreateBigTextObject() const;
 
     const EditEngine& GetEditEngine() const { return *((EditEngine*)pEditEngine); }
 
     // this is needed for StarOffice Api
-    void SetLevelDependendStyleSheet( USHORT nPara );
+    void SetLevelDependendStyleSheet( sal_uInt16 nPara );
 
-    USHORT  GetOutlinerMode() const { return nOutlinerMode & OUTLINERMODE_USERMASK; }
+    sal_uInt16  GetOutlinerMode() const { return nOutlinerMode & OUTLINERMODE_USERMASK; }
 
     void            StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc);
     //spell and return a sentence

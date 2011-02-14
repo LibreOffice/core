@@ -40,7 +40,7 @@ class ScDrawLayer;
 class ScDrawPage: public FmFormPage
 {
 public:
-    ScDrawPage(ScDrawLayer& rNewModel, StarBASIC* pBasic, BOOL bMasterPage=FALSE);
+    ScDrawPage(ScDrawLayer& rNewModel, StarBASIC* pBasic, sal_Bool bMasterPage=sal_False);
     ~ScDrawPage();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();

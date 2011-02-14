@@ -130,9 +130,9 @@ AccessibleDialogWindow::AccessibleDialogWindow( DialogWindow* pDialogWindow )
         SdrPage* pSdrPage = m_pDialogWindow->GetPage();
         if ( pSdrPage )
         {
-            ULONG nCount = pSdrPage->GetObjCount();
+            sal_uLong nCount = pSdrPage->GetObjCount();
 
-            for ( ULONG i = 0; i < nCount; ++i )
+            for ( sal_uLong i = 0; i < nCount; ++i )
             {
                 SdrObject* pObj = pSdrPage->GetObj( i );
                 DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, pObj );
@@ -357,7 +357,7 @@ void AccessibleDialogWindow::UpdateChildren()
         SdrPage* pSdrPage = m_pDialogWindow->GetPage();
         if ( pSdrPage )
         {
-            for ( ULONG i = 0, nCount = pSdrPage->GetObjCount(); i < nCount; ++i )
+            for ( sal_uLong i = 0, nCount = pSdrPage->GetObjCount(); i < nCount; ++i )
             {
                 SdrObject* pObj = pSdrPage->GetObj( i );
                 DlgEdObj* pDlgEdObj = PTR_CAST( DlgEdObj, pObj );
@@ -751,7 +751,7 @@ sal_Int32 AccessibleDialogWindow::getAccessibleIndexInParent(  ) throw (RuntimeE
         Window* pParent = m_pDialogWindow->GetAccessibleParentWindow();
         if ( pParent )
         {
-            for ( USHORT i = 0, nCount = pParent->GetAccessibleChildWindowCount(); i < nCount; ++i )
+            for ( sal_uInt16 i = 0, nCount = pParent->GetAccessibleChildWindowCount(); i < nCount; ++i )
             {
                 Window* pChild = pParent->GetAccessibleChildWindow( i );
                 if ( pChild == static_cast< Window* >( m_pDialogWindow ) )
@@ -1114,7 +1114,7 @@ void AccessibleDialogWindow::deselectAccessibleChild( sal_Int32 nChildIndex ) th
             {
                 SdrPageView* pPgView = pSdrView->GetSdrPageView();
                 if ( pPgView )
-                    pSdrView->MarkObj( pDlgEdObj, pPgView, TRUE );
+                    pSdrView->MarkObj( pDlgEdObj, pPgView, sal_True );
             }
         }
     }

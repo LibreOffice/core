@@ -226,7 +226,7 @@ throw (::com::sun::star::uno::RuntimeException)
             if ( rStr == m_aCurLang )
             {
                 //make a sign for the current language
-                xPopupMenu->checkItem( nItemId, TRUE );
+                xPopupMenu->checkItem( nItemId, sal_True );
             }
             aLangMap[ nItemId ] = rStr;
             ++nItemId;

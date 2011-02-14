@@ -67,7 +67,7 @@ SvxFormatCellsDialog::~SvxFormatCellsDialog()
 {
 }
 
-void SvxFormatCellsDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
+void SvxFormatCellsDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     switch( nId )
     {

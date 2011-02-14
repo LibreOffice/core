@@ -64,7 +64,7 @@ GfxLink::GfxLink( const GfxLink& rGfxLink ) :
 
 // ------------------------------------------------------------------------
 
-GfxLink::GfxLink( BYTE* pBuf, sal_uInt32 nSize, GfxLinkType nType, BOOL bOwns ) :
+GfxLink::GfxLink( sal_uInt8* pBuf, sal_uInt32 nSize, GfxLinkType nType, sal_Bool bOwns ) :
     mpImpData( new ImpGfxLink )
 {
     DBG_ASSERT( (pBuf != NULL && nSize) || (!bOwns && nSize == 0),
@@ -166,7 +166,7 @@ GfxLinkType GfxLink::GetType() const
 
 // ------------------------------------------------------------------------
 
-BOOL GfxLink::IsNative() const
+sal_Bool GfxLink::IsNative() const
 {
     return( meType >= GFX_LINK_FIRST_NATIVE_ID && meType <= GFX_LINK_LAST_NATIVE_ID );
 }
@@ -180,7 +180,7 @@ sal_uInt32 GfxLink::GetDataSize() const
 
 // ------------------------------------------------------------------------
 
-const BYTE* GfxLink::GetData() const
+const sal_uInt8* GfxLink::GetData() const
 {
     if( IsSwappedOut() )
         ( (GfxLink*) this )->SwapIn();
@@ -234,20 +234,20 @@ bool GfxLink::IsPrefMapModeValid()
 
 // ------------------------------------------------------------------------
 
-BOOL GfxLink::LoadNative( Graphic& rGraphic )
+sal_Bool GfxLink::LoadNative( Graphic& rGraphic )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if( IsNative() && mnBufSize )
     {
-        const BYTE* pData = GetData();
+        const sal_uInt8* pData = GetData();
 
         if( pData )
         {
             SvMemoryStream  aMemStm;
-            ULONG           nCvtType;
+            sal_uLong           nCvtType;
 
-            aMemStm.SetBuffer( (char*) pData, mnBufSize, FALSE, mnBufSize );
+            aMemStm.SetBuffer( (char*) pData, mnBufSize, sal_False, mnBufSize );
 
             switch( meType )
             {
@@ -263,7 +263,7 @@ BOOL GfxLink::LoadNative( Graphic& rGraphic )
             }
 
             if( nCvtType && ( GraphicConverter::Import( aMemStm, rGraphic, nCvtType ) == ERRCODE_NONE ) )
-                bRet = TRUE;
+                bRet = sal_True;
         }
     }
 
@@ -310,7 +310,7 @@ void GfxLink::SwapIn()
 
 // ------------------------------------------------------------------------
 
-BOOL GfxLink::ExportNative( SvStream& rOStream ) const
+sal_Bool GfxLink::ExportNative( SvStream& rOStream ) const
 {
     if( GetDataSize() )
     {
@@ -330,7 +330,7 @@ SvStream& operator<<( SvStream& rOStream, const GfxLink& rGfxLink )
     VersionCompat* pCompat = new VersionCompat( rOStream, STREAM_WRITE, 2 );
 
     // Version 1
-    rOStream << (UINT16) rGfxLink.GetType() << rGfxLink.GetDataSize() << rGfxLink.GetUserId();
+    rOStream << (sal_uInt16) rGfxLink.GetType() << rGfxLink.GetDataSize() << rGfxLink.GetUserId();
 
     // Version 2
     rOStream << rGfxLink.GetPrefSize() << rGfxLink.GetPrefMapMode();
@@ -356,8 +356,8 @@ SvStream& operator>>( SvStream& rIStream, GfxLink& rGfxLink)
     MapMode         aMapMode;
     sal_uInt32      nSize;
     sal_uInt32      nUserId;
-    UINT16          nType;
-    BYTE*           pBuf;
+    sal_uInt16          nType;
+    sal_uInt8*          pBuf;
     bool            bMapAndSizeValid( false );
     VersionCompat*  pCompat = new VersionCompat( rIStream, STREAM_READ );
 
@@ -372,10 +372,10 @@ SvStream& operator>>( SvStream& rIStream, GfxLink& rGfxLink)
 
     delete pCompat;
 
-    pBuf = new BYTE[ nSize ];
+    pBuf = new sal_uInt8[ nSize ];
     rIStream.Read( pBuf, nSize );
 
-    rGfxLink = GfxLink( pBuf, nSize, (GfxLinkType) nType, TRUE );
+    rGfxLink = GfxLink( pBuf, nSize, (GfxLinkType) nType, sal_True );
     rGfxLink.SetUserId( nUserId );
 
     if( bMapAndSizeValid )
@@ -391,7 +391,7 @@ SvStream& operator>>( SvStream& rIStream, GfxLink& rGfxLink)
 // - ImpSwap -
 // -----------
 
-ImpSwap::ImpSwap( BYTE* pData, ULONG nDataSize ) :
+ImpSwap::ImpSwap( sal_uInt8* pData, sal_uLong nDataSize ) :
             mnDataSize( nDataSize ),
             mnRefCount( 1UL )
 {
@@ -429,16 +429,16 @@ ImpSwap::~ImpSwap()
 
 // ------------------------------------------------------------------------
 
-BYTE* ImpSwap::GetData() const
+sal_uInt8* ImpSwap::GetData() const
 {
-    BYTE* pData;
+    sal_uInt8* pData;
 
     if( IsSwapped() )
     {
         SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( maURL, STREAM_READWRITE );
         if( pIStm )
         {
-            pData = new BYTE[ mnDataSize ];
+            pData = new sal_uInt8[ mnDataSize ];
             pIStm->Read( pData, mnDataSize );
             sal_Bool bError = ( ERRCODE_NONE != pIStm->GetError() );
             delete pIStm;
@@ -459,7 +459,7 @@ BYTE* ImpSwap::GetData() const
 
 void ImpSwap::WriteTo( SvStream& rOStm ) const
 {
-    BYTE* pData = GetData();
+    sal_uInt8* pData = GetData();
 
     if( pData )
     {

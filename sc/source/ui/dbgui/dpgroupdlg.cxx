@@ -242,21 +242,21 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
 {
     maLbUnits.SetHelpId( HID_SC_DPDATEGROUP_LB );
     ResStringArray aArr( ScResId( STR_UNITS ) );
-    for( USHORT nIdx = 0, nCount = sal::static_int_cast<USHORT>(aArr.Count()); nIdx < nCount; ++nIdx )
+    for( sal_uInt16 nIdx = 0, nCount = sal::static_int_cast<sal_uInt16>(aArr.Count()); nIdx < nCount; ++nIdx )
         maLbUnits.InsertEntry( aArr.GetString( nIdx ) );
 
     FreeResource();
 
-    maEdStart.SetShowDateCentury( TRUE );
-    maEdEnd.SetShowDateCentury( TRUE );
+    maEdStart.SetShowDateCentury( sal_True );
+    maEdEnd.SetShowDateCentury( sal_True );
 
     maStartHelper.SetValue( rInfo.AutoStart, rInfo.Start );
     maEndHelper.SetValue( rInfo.AutoEnd, rInfo.End );
 
     if( nDatePart == 0 )
         nDatePart = com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS;
-    for( ULONG nIdx = 0, nCount = maLbUnits.GetEntryCount(); nIdx < nCount; ++nIdx )
-        maLbUnits.CheckEntryPos( static_cast< USHORT >( nIdx ), (nDatePart & spnDateParts[ nIdx ]) != 0 );
+    for( sal_uLong nIdx = 0, nCount = maLbUnits.GetEntryCount(); nIdx < nCount; ++nIdx )
+        maLbUnits.CheckEntryPos( static_cast< sal_uInt16 >( nIdx ), (nDatePart & spnDateParts[ nIdx ]) != 0 );
 
     if( rInfo.DateValues )
     {
@@ -320,8 +320,8 @@ sal_Int32 ScDPDateGroupDlg::GetDatePart() const
 
     // return listbox contents for "units" mode
     sal_Int32 nDatePart = 0;
-    for( ULONG nIdx = 0, nCount = maLbUnits.GetEntryCount(); nIdx < nCount; ++nIdx )
-        if( maLbUnits.IsChecked( static_cast< USHORT >( nIdx ) ) )
+    for( sal_uLong nIdx = 0, nCount = maLbUnits.GetEntryCount(); nIdx < nCount; ++nIdx )
+        if( maLbUnits.IsChecked( static_cast< sal_uInt16 >( nIdx ) ) )
             nDatePart |= spnDateParts[ nIdx ];
     return nDatePart;
 }

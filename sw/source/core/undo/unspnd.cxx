@@ -51,10 +51,10 @@
 
 
 SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
-                                    BOOL bChkTable )
+                                    sal_Bool bChkTable )
     : SwUndo( UNDO_SPLITNODE ), pHistory( 0 ), pRedlData( 0 ), nNode( rPos.nNode.GetIndex() ),
         nCntnt( rPos.nContent.GetIndex() ),
-        bTblFlag( FALSE ), bChkTblStt( bChkTable )
+        bTblFlag( sal_False ), bChkTblStt( bChkTable )
 {
     SwTxtNode *const pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     OSL_ENSURE(pTxtNd, "SwUndoSplitNode: TextNode expected!");
@@ -102,11 +102,11 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
             if( pNdSet )
             {
                 const SfxPoolItem *pItem;
-                if( SFX_ITEM_SET == pNdSet->GetItemState( RES_PAGEDESC, FALSE,
+                if( SFX_ITEM_SET == pNdSet->GetItemState( RES_PAGEDESC, sal_False,
                     &pItem ) )
                     pTableFmt->SetFmtAttr( *pItem );
 
-                if( SFX_ITEM_SET == pNdSet->GetItemState( RES_BREAK, FALSE,
+                if( SFX_ITEM_SET == pNdSet->GetItemState( RES_BREAK, sal_False,
                      &pItem ) )
                     pTableFmt->SetFmtAttr( *pItem );
             }
@@ -145,7 +145,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
                 rPam.SetMark();
                 rPam.GetPoint()->nContent = pTNd->GetTxt().Len();
 
-                pDoc->RstTxtAttrs( rPam, TRUE );
+                pDoc->RstTxtAttrs( rPam, sal_True );
                 pHistory->TmpRollback( pDoc, 0, false );
             }
         }

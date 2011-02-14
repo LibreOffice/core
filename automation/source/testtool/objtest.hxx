@@ -120,24 +120,24 @@ public:
     ControlItem( const char *Name, rtl::OString aUIdP );
     ControlItem( const String &Name, rtl::OString aUIdP );
 //  ControlItem( const String &Name, const String &URL, const URLType aType );
-//    ControlItem( const String &Name, const String &URL, const ULONG nUId );
-//    ControlItem( const char *Name, const String &URL, const ULONG nUId );
+//    ControlItem( const String &Name, const String &URL, const sal_uLong nUId );
+//    ControlItem( const char *Name, const String &URL, const sal_uLong nUId );
     ControlItem( ControlData *pDataP );
     virtual ~ControlItem() {
 DBG_DTOR(ControlItem,0);
         delete pData;
     }
-    virtual BOOL operator < (const ControlItem &rPar)=0;
-    virtual BOOL operator == (const ControlItem &rPar)=0;
+    virtual sal_Bool operator < (const ControlItem &rPar)=0;
+    virtual sal_Bool operator == (const ControlItem &rPar)=0;
 //  void Write( SvStream &aStream );
 };
 
 SV_DECL_PTRARR_SORT_DEL(CNames, ControlItem*, 50, 10)
 
 #define MK_SON_ACCESS( ClassName )\
-    BOOL SonInsert( const ClassName *pNewEntry ) { const ControlItem *pItem = pNewEntry; return pSons->Insert( pItem ); }\
-    BOOL SonSeek_Entry( const ClassName *pSearchEntry, USHORT *nRes = NULL) { return pSons->Seek_Entry( pSearchEntry, nRes ); }\
-    ClassName* SonGetObject( USHORT nNr ) { return (ClassName*)pSons->GetObject( nNr ); }
+    sal_Bool SonInsert( const ClassName *pNewEntry ) { const ControlItem *pItem = pNewEntry; return pSons->Insert( pItem ); }\
+    sal_Bool SonSeek_Entry( const ClassName *pSearchEntry, sal_uInt16 *nRes = NULL) { return pSons->Seek_Entry( pSearchEntry, nRes ); }\
+    ClassName* SonGetObject( sal_uInt16 nNr ) { return (ClassName*)pSons->GetObject( nNr ); }
 
 class ControlSon
 {
@@ -149,7 +149,7 @@ public:
     ~ControlSon();
 //  void Write( SvStream &aStream );
 
-    USHORT Son_Count() { return pSons->Count(); }
+    sal_uInt16 Son_Count() { return pSons->Count(); }
     void Sons( CNames *pNewSons ) { pSons = pNewSons; }
     CNames*& GetSons() { return pSons; }
 };
@@ -161,8 +161,8 @@ public:
         : ControlItem( Name, aUIdP ) {}
     ControlItemSon(const String &Name, rtl::OString aUIdP );
 //  ControlItemSon(const String &Name, const String &URL, const URLType aType );
-//    ControlItemSon(const String &Name, const String &URL, const ULONG nUId );
-//    ControlItemSon(const char *Name, const String &URL, const ULONG nUId );
+//    ControlItemSon(const String &Name, const String &URL, const sal_uLong nUId );
+//    ControlItemSon(const char *Name, const String &URL, const sal_uLong nUId );
 //  void Write( SvStream &aStream );
 };
 
@@ -173,10 +173,10 @@ public:
         : ControlItemSon( Name, aUIdP ) {DBG_CTOR(ControlDef,0);}
     ControlDef(const String &Name, rtl::OString aUIdP );
 //  ControlDef(const String &Name, const String &URL, const URLType aType );
-    ControlDef(const String &aOldName, const String &aNewName, ControlDef *pOriginal, BOOL bWithSons = FALSE );
+    ControlDef(const String &aOldName, const String &aNewName, ControlDef *pOriginal, sal_Bool bWithSons = sal_False );
     ~ControlDef() {DBG_DTOR(ControlDef,0);}
-    virtual BOOL operator < (const ControlItem &rPar);
-    virtual BOOL operator == (const ControlItem &rPar);
+    virtual sal_Bool operator < (const ControlItem &rPar);
+    virtual sal_Bool operator == (const ControlItem &rPar);
     void Write( SvStream &aStream );
     MK_SON_ACCESS( ControlDef )
 };
@@ -186,8 +186,8 @@ class ControlItemUId : public ControlItem
 public:
     ControlItemUId(String Name, rtl::OString aUIdP)
         : ControlItem( Name, aUIdP){}
-    virtual BOOL operator < (const ControlItem &rPar);
-    virtual BOOL operator == (const ControlItem &rPar);
+    virtual sal_Bool operator < (const ControlItem &rPar);
+    virtual sal_Bool operator == (const ControlItem &rPar);
 };
 
 class ControlItemUIdSon : public ControlItemUId, public ControlSon
@@ -200,17 +200,17 @@ public:
 class ReverseName : public ControlItemUId
 {
 public:
-    ULONG LastSequence;
+    sal_uLong LastSequence;
 
-    ReverseName(String Name, rtl::OString aUIdP, ULONG nSeq) : ControlItemUId( Name, aUIdP), LastSequence(nSeq) {}
+    ReverseName(String Name, rtl::OString aUIdP, sal_uLong nSeq) : ControlItemUId( Name, aUIdP), LastSequence(nSeq) {}
 };
 
 class CRevNames: public CNames
 {
 public:
-    void Insert( String aName, rtl::OString aUId, ULONG nSeq );
+    void Insert( String aName, rtl::OString aUId, sal_uLong nSeq );
     String GetName( rtl::OString aUId );
-    void Invalidate ( ULONG nSeq );
+    void Invalidate ( sal_uLong nSeq );
 };
 
 
@@ -218,7 +218,7 @@ class SbxTransportMethod: public SbxMethod
 {
 public:
     SbxTransportMethod( SbxDataType );
-    ULONG nValue;
+    sal_uLong nValue;
     String aUnoSlot;
 };
 SV_DECL_IMPL_REF(SbxTransportMethod);
@@ -263,42 +263,42 @@ public:
 
 
 // Profiling Datenfelder
-    ULONG LocalStarttime;
-    USHORT nNumBorders;
-    ULONG naValBorders[4];
-    ULONG naNumEntries[5];
-    ULONG naRemoteTime[5];
-    ULONG naLocalTime[5];
+    sal_uLong LocalStarttime;
+    sal_uInt16 nNumBorders;
+    sal_uLong naValBorders[4];
+    sal_uLong naNumEntries[5];
+    sal_uLong naRemoteTime[5];
+    sal_uLong naLocalTime[5];
 
-    ULONG nMinRemoteCommandDelay;
-    ULONG nMaxRemoteCommandDelay;
-    BOOL bDoRemoteCommandDelay;
+    sal_uLong nMinRemoteCommandDelay;
+    sal_uLong nMaxRemoteCommandDelay;
+    sal_Bool bDoRemoteCommandDelay;
 
-    BOOL bLnaguageExtensionLoaded;      // Wurde über 'use' was geladen? Für syntax highlighting
+    sal_Bool bLnaguageExtensionLoaded;      // Wurde über 'use' was geladen? Für syntax highlighting
     SfxBroadcaster *pTTSfxBroadcaster;
 
-    ULONG nErrorCount;
-    ULONG nWarningCount;
-    ULONG nQAErrorCount;
-    ULONG nIncludeFileWarningCount;
+    sal_uLong nErrorCount;
+    sal_uLong nWarningCount;
+    sal_uLong nQAErrorCount;
+    sal_uLong nIncludeFileWarningCount;
 
     SbxDimArrayRef xErrorList;
     SbxDimArrayRef xWarningList;
     SbxDimArrayRef xQAErrorList;
     SbxDimArrayRef xIncludeFileWarningList;
 
-    BOOL bIsStart;                      // set tu TRUE while command Start is initiating the communication
+    sal_Bool bIsStart;                      // set tu sal_True while command Start is initiating the communication
 
     MyBasic* pMyBasic;
 
     String aTestCaseName;       // holds name of current TestCase
     String aTestCaseFileName;   // holds FileName of current TestCase
-    USHORT nTestCaseLineNr;     // holds Line of current TestCase
+    sal_uInt16 nTestCaseLineNr;     // holds Line of current TestCase
 
-    BOOL bEnableQaErrors;       // include QA errors in report
-    BOOL bDebugFindNoErrors;    // suppress generating errors when find of variables is called for variable viewing purposes
+    sal_Bool bEnableQaErrors;       // include QA errors in report
+    sal_Bool bDebugFindNoErrors;    // suppress generating errors when find of variables is called for variable viewing purposes
 
-    BOOL bStopOnSyntaxError;    // catch syntax errors in testcases or not
+    sal_Bool bStopOnSyntaxError;    // catch syntax errors in testcases or not
 
     Environment *pChildEnv;     // Environment Variables for child Process
 
@@ -309,7 +309,7 @@ public:
 class TTFormat
 {
 public:
-    static String ms2s( ULONG nMilliSeconds );
+    static String ms2s( sal_uLong nMilliSeconds );
 };
 
 

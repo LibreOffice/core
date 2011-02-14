@@ -66,7 +66,7 @@ void SchXMLParagraphContext::StartElement( const uno::Reference< xml::sax::XAttr
         {
             rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
             rtl::OUString aLocalName;
-            USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
             if (IsXMLToken(aLocalName, XML_ID))
             {
@@ -93,7 +93,7 @@ void SchXMLParagraphContext::EndElement()
 }
 
 SvXMLImportContext* SchXMLParagraphContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {

@@ -59,7 +59,7 @@ private:
     Size                aBitmapSize;
     Color               aTransparentColor;
     TransparentType     eTransparent;
-    BOOL                bAlpha;
+    sal_Bool                bAlpha;
 
 public:
 
@@ -83,13 +83,13 @@ public:
                         ~BitmapEx();
 
     BitmapEx&           operator=( const BitmapEx& rBitmapEx );
-    BOOL                operator==( const BitmapEx& rBitmapEx ) const;
-    BOOL                operator!=( const BitmapEx& rBitmapEx ) const { return !(*this==rBitmapEx); }
-    BOOL                operator!() const { return !aBitmap; }
+    sal_Bool                operator==( const BitmapEx& rBitmapEx ) const;
+    sal_Bool                operator!=( const BitmapEx& rBitmapEx ) const { return !(*this==rBitmapEx); }
+    sal_Bool                operator!() const { return !aBitmap; }
 
-    BOOL                IsEqual( const BitmapEx& rBmpEx ) const;
+    sal_Bool                IsEqual( const BitmapEx& rBmpEx ) const;
 
-    BOOL                IsEmpty() const;
+    sal_Bool                IsEmpty() const;
     void                SetEmpty();
     void                Clear();
 
@@ -101,7 +101,7 @@ public:
                               const Point& rDestPt, const Size& rDestSize,
                               const Point& rSrcPtPixel, const Size& rSrcSizePixel ) const;
 
-    BOOL                IsTransparent() const;
+    sal_Bool                IsTransparent() const;
     TransparentType     GetTransparentType() const { return eTransparent; }
 
     Bitmap              GetBitmap( const Color* pTransReplaceColor = NULL ) const;
@@ -109,7 +109,7 @@ public:
 
     BitmapEx            GetColorTransformedBitmapEx( BmpColorMode eColorMode ) const;
 
-    BOOL                IsAlpha() const;
+    sal_Bool                IsAlpha() const;
     AlphaMask           GetAlpha() const;
 
     const Size&         GetSizePixel() const { return aBitmapSize; }
@@ -124,9 +124,9 @@ public:
     const Color&        GetTransparentColor() const { return aTransparentColor; }
     void                SetTransparentColor( const Color& rColor ) { aTransparentColor = rColor; }
 
-    USHORT              GetBitCount() const { return aBitmap.GetBitCount(); }
-    ULONG               GetSizeBytes() const;
-    ULONG               GetChecksum() const;
+    sal_uInt16              GetBitCount() const { return aBitmap.GetBitCount(); }
+    sal_uLong               GetSizeBytes() const;
+    sal_uLong               GetChecksum() const;
 
 public:
 
@@ -135,9 +135,9 @@ public:
         @param eConversion
         The format this bitmap should be converted to.
 
-        @return TRUE, if the conversion was completed successfully.
+        @return sal_True, if the conversion was completed successfully.
      */
-    BOOL                Convert( BmpConversion eConversion );
+    sal_Bool                Convert( BmpConversion eConversion );
 
     /** Reduce number of colors for the bitmap
 
@@ -147,9 +147,9 @@ public:
         @param eReduce
         Algorithm to use for color reduction
 
-        @return TRUE, if the color reduction operation was completed successfully.
+        @return sal_True, if the color reduction operation was completed successfully.
      */
-    BOOL                ReduceColors( USHORT nNewColorCount,
+    sal_Bool                ReduceColors( sal_uInt16 nNewColorCount,
                                       BmpReduce eReduce = BMP_REDUCE_SIMPLE );
 
     /** Apply a dither algorithm to the bitmap
@@ -161,7 +161,7 @@ public:
         @param nDitherFlags
         The algorithm to be used for dithering
      */
-    BOOL                Dither( ULONG nDitherFlags = BMP_DITHER_MATRIX );
+    sal_Bool                Dither( sal_uLong nDitherFlags = BMP_DITHER_MATRIX );
 
     /** Crop the bitmap
 
@@ -173,11 +173,11 @@ public:
         dimension, i.e. negative left,top rectangle coordinates or
         exceeding width or height is ignored.
 
-        @return TRUE, if cropping was performed successfully. If
+        @return sal_True, if cropping was performed successfully. If
         nothing had to be cropped, because e.g. the crop rectangle
-        included the bitmap, FALSE is returned, too!
+        included the bitmap, sal_False is returned, too!
      */
-    BOOL                Crop( const Rectangle& rRectPixel );
+    sal_Bool                Crop( const Rectangle& rRectPixel );
 
     /** Expand the bitmap by pixel padding
 
@@ -190,13 +190,13 @@ public:
         @param pInitColor
         Color to use for padded pixel
 
-        @return TRUE, if padding was performed successfully. FALSE is
+        @return sal_True, if padding was performed successfully. sal_False is
         not only returned when the operation failed, but also if
         nothing had to be done, e.g. because nDX and nDY were zero.
      */
-    BOOL                Expand( ULONG nDX, ULONG nDY,
+    sal_Bool                Expand( sal_uLong nDX, sal_uLong nDY,
                                 const Color* pInitColor = NULL,
-                                BOOL bExpandTransparent = FALSE );
+                                sal_Bool bExpandTransparent = sal_False );
 
     /** Copy a rectangular area from another bitmap
 
@@ -215,12 +215,12 @@ public:
         equal to the object this method is called on, copying takes
         place within the same bitmap.
 
-        @return TRUE, if the operation completed successfully. FALSE
+        @return sal_True, if the operation completed successfully. sal_False
         is not only returned when the operation failed, but also if
         nothing had to be done, e.g. because one of the rectangles are
         empty.
      */
-    BOOL                CopyPixel( const Rectangle& rRectDst,
+    sal_Bool                CopyPixel( const Rectangle& rRectDst,
                                    const Rectangle& rRectSrc,
                                    const BitmapEx* pBmpExSrc = NULL );
 
@@ -230,24 +230,24 @@ public:
         Color value to use for filling. Set the transparency part of
         the color to fill the mask.
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                Erase( const Color& rFillColor );
+    sal_Bool                Erase( const Color& rFillColor );
 
     /** Perform the Invert operation on every pixel
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                Invert();
+    sal_Bool                Invert();
 
     /** Mirror the bitmap
 
         @param nMirrorFlags
         About which axis (horizontal, vertical, or both) to mirror
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                Mirror( ULONG nMirrorFlags );
+    sal_Bool                Mirror( sal_uLong nMirrorFlags );
 
     /** Scale the bitmap
 
@@ -257,9 +257,9 @@ public:
         @param nScaleFlag
         The algorithm to be used for scaling
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                Scale( const Size& rNewSize, ULONG nScaleFlag = BMP_SCALE_FAST );
+    sal_Bool                Scale( const Size& rNewSize, sal_uLong nScaleFlag = BMP_SCALE_FAST );
 
     /** Scale the bitmap
 
@@ -269,9 +269,9 @@ public:
         @param rScaleY
         The scale factor in y direction.
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                Scale( const double& rScaleX, const double& rScaleY, ULONG nScaleFlag = BMP_SCALE_FAST );
+    sal_Bool                Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag = BMP_SCALE_FAST );
 
     /** Rotate bitmap by the specified angle
 
@@ -284,9 +284,9 @@ public:
         in. The empty spaces around that rotated original bitmap are
         then filled with this color.
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                Rotate( long nAngle10, const Color& rFillColor );
+    sal_Bool                Rotate( long nAngle10, const Color& rFillColor );
 
     /** Replace all pixel having the search color with the specified color
 
@@ -301,9 +301,9 @@ public:
         rSearchColor and the individual pixel values, such that the
         corresponding pixel is still regarded a match.
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                Replace( const Color& rSearchColor, const Color& rReplaceColor, ULONG nTol = 0 );
+    sal_Bool                Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol = 0 );
 
     /** Replace all pixel having one the search colors with the corresponding replace color
 
@@ -321,10 +321,10 @@ public:
         pSearchColor colors and the individual pixel values, such that
         the corresponding pixel is still regarded a match.
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                Replace( const Color* pSearchColors, const Color* pReplaceColors,
-                                 ULONG nColorCount, const ULONG* pTols = NULL );
+    sal_Bool                Replace( const Color* pSearchColors, const Color* pReplaceColors,
+                                 sal_uLong nColorCount, const sal_uLong* pTols = NULL );
 
     /** Change various global color characteristics
 
@@ -349,17 +349,17 @@ public:
         (0.0,10.0]. Values outside this range are regarded as 1.0.
 
         @param bInvert
-        If TRUE, invert the channel values with the logical 'not' operator
+        If sal_True, invert the channel values with the logical 'not' operator
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                Adjust( short nLuminancePercent = 0,
+    sal_Bool                Adjust( short nLuminancePercent = 0,
                                 short nContrastPercent = 0,
                                 short nChannelRPercent = 0,
                                 short nChannelGPercent = 0,
                                 short nChannelBPercent = 0,
                                 double fGamma = 1.0,
-                                BOOL bInvert = FALSE );
+                                sal_Bool bInvert = sal_False );
 
     /** Apply specified filter to the bitmap
 
@@ -372,9 +372,9 @@ public:
         @param pProgress
         A callback for showing the progress of the vectorization
 
-        @return TRUE, if the operation was completed successfully.
+        @return sal_True, if the operation was completed successfully.
      */
-    BOOL                Filter( BmpFilter eFilter,
+    sal_Bool                Filter( BmpFilter eFilter,
                                 const BmpFilterParam* pFilterParam = NULL,
                                 const Link* pProgress = NULL );
 

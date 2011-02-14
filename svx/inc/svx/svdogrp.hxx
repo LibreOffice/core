@@ -64,7 +64,7 @@ public:
     virtual ~SdrObjGroup();
 
     virtual void SetBoundRectDirty();
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual SdrLayerID GetLayer() const;
     virtual void NbcSetLayer(SdrLayerID nLayer);
@@ -93,7 +93,7 @@ public:
     virtual FASTBOOL BegCreate(SdrDragStat& rStat);
 
     virtual long GetRotateAngle() const;
-    virtual long GetShearAngle(FASTBOOL bVertical=FALSE) const;
+    virtual long GetShearAngle(FASTBOOL bVertical=sal_False) const;
 
     virtual void Move(const Size& rSiz);
     virtual void Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
@@ -118,7 +118,7 @@ public:
     virtual void NbcReformatText();
     virtual void ReformatText();
 
-    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 };
 
 #endif //_SVDOGRP_HXX

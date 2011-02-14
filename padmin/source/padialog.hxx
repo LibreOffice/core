@@ -92,7 +92,7 @@ namespace padmin {
         DECL_LINK( SelectHdl, ListBox* );
         DECL_LINK( DelPressedHdl, ListBox* );
 
-        PADialog( Window*,  BOOL );
+        PADialog( Window*,  sal_Bool );
         void Init();
 
         void UpdateDefPrt();
@@ -112,7 +112,7 @@ namespace padmin {
     public:
         ~PADialog();
 
-        static PADialog* Create( Window*,  BOOL );
+        static PADialog* Create( Window*,  sal_Bool );
     };
 
 } // namespace

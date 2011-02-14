@@ -596,7 +596,7 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::A
     {
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
             throw beans::PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
-        sal_Bool bVal = FALSE;
+        sal_Bool bVal = sal_False;
         if(aValue.getValueType() == ::getBooleanCppuType())
             bVal = *(sal_Bool*)aValue.getValue();
         switch(pEntry->nWID)
@@ -770,7 +770,7 @@ OUString SwXTextSearch::getImplementationName(void) throw( uno::RuntimeException
 /* -----------------------------19.04.00 14:43--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwXTextSearch::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
+sal_Bool SwXTextSearch::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
 {
     return C2U("com.sun.star.util.SearchDescriptor") == rServiceName ||
             C2U("com.sun.star.util.ReplaceDescriptor") == rServiceName;

@@ -39,12 +39,12 @@ class ScGroupDlg : public ModalDialog
 {
 public:
             ScGroupDlg( Window* pParent,
-                        USHORT  nResId,
-                        BOOL    bUnGroup = FALSE,
-                        BOOL    bRows    = TRUE  );
+                        sal_uInt16  nResId,
+                        sal_Bool    bUnGroup = sal_False,
+                        sal_Bool    bRows    = sal_True  );
             ~ScGroupDlg();
 
-    BOOL GetColsChecked() const;
+    sal_Bool GetColsChecked() const;
 
 private:
     FixedLine       aFlFrame;

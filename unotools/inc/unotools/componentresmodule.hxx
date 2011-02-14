@@ -80,7 +80,7 @@ namespace utl
     class UNOTOOLS_DLLPUBLIC ModuleRes : public ::ResId
     {
     public:
-        ModuleRes( USHORT _nId, OComponentResourceModule& _rModule ) : ResId( _nId, *_rModule.getResManager() ) { }
+        ModuleRes( sal_uInt16 _nId, OComponentResourceModule& _rModule ) : ResId( _nId, *_rModule.getResManager() ) { }
     };
 
     //====================================================================
@@ -119,7 +119,7 @@ namespace utl
         typedef ::utl::ModuleRes    BaseClass; \
     \
     public: \
-        ResClass( USHORT _nId ) : BaseClass( _nId, ModuleClass::getInstance() ) \
+        ResClass( sal_uInt16 _nId ) : BaseClass( _nId, ModuleClass::getInstance() ) \
         { \
         } \
     }; \

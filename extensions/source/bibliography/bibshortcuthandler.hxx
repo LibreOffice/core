@@ -46,7 +46,7 @@ protected:
 
 public:
     virtual                 ~BibShortCutHandler();
-    virtual BOOL            HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
+    virtual sal_Bool            HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
 
     inline Window*          GetWindow( void );
 };

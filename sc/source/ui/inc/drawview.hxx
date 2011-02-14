@@ -48,7 +48,7 @@ class ScDrawView: public FmFormView
     Fraction                aScaleY;
     SdrDropMarkerOverlay*   pDropMarker;
     SdrObject*              pDropMarkObj;
-    BOOL                    bInConstruct;
+    sal_Bool                    bInConstruct;
     //HMHBOOL                   bDisableHdl;
 
     void            Construct();
@@ -81,12 +81,12 @@ public:
 
     //HMHBOOL           IsDisableHdl() const    { return bDisableHdl; }
 
-    void            SetMarkedToLayer( BYTE nLayerNo );
+    void            SetMarkedToLayer( sal_uInt8 nLayerNo );
 
     void            InvalidateAttribs();
     void            InvalidateDrawTextAttrs();
 
-    BOOL            BeginDrag( Window* pWindow, const Point& rStartPos );
+    sal_Bool            BeginDrag( Window* pWindow, const Point& rStartPos );
     void            DoCut();
     void            DoCopy();
 
@@ -105,17 +105,17 @@ public:
 
     void            UpdateIMap( SdrObject* pObj );
 
-    USHORT          GetPopupMenuId();
+    sal_uInt16          GetPopupMenuId();
     void            UpdateUserViewOptions();
 
     void            SetMarkedOriginalSize();
 
-    BOOL            SelectObject( const String& rName );
+    sal_Bool            SelectObject( const String& rName );
 //UNUSED2008-05  String         GetSelectedChartName() const;
     bool            HasMarkedControl() const;
     bool            HasMarkedInternal() const;
 
-    FASTBOOL        InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, ULONG nOptions=0);
+    FASTBOOL        InsertObjectSafe(SdrObject* pObj, SdrPageView& rPV, sal_uLong nOptions=0);
 
     /** Returns the selected object, if it is the caption object of a cell note.
         @param ppCaptData  (out-param) If not null, returns the pointer to the caption object data. */
@@ -140,7 +140,7 @@ public:
     inline void     UnlockInternalLayer() { LockInternalLayer( false ); }
 
     SdrEndTextEditKind  ScEndTextEdit();    // ruft SetDrawTextUndo(0)
-//UNUSED2009-05 void                    CaptionTextDirection(USHORT nSlot);
+//UNUSED2009-05 void                    CaptionTextDirection(sal_uInt16 nSlot);
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CopyToTransferable();
 };
 

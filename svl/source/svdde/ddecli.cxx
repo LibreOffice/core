@@ -86,7 +86,7 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
     if( self )
     {
         DdeTransaction* t;
-        BOOL bFound = FALSE;
+        sal_Bool bFound = sal_False;
         for( t = self->aTransactions.First(); t; t = self->aTransactions.Next() )
         {
             switch( nCode )
@@ -95,9 +95,9 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
                     if( (DWORD)t->nId == nInfo1 )
                     {
                         nCode = t->nType & (XCLASS_MASK | XTYP_MASK);
-                        t->bBusy = FALSE;
+                        t->bBusy = sal_False;
                         t->Done( 0 != hData );
-                        bFound = TRUE;
+                        bFound = sal_True;
                     }
                     break;
 
@@ -108,11 +108,11 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
                                     : DdeGetLastError( pInst->hDdeInstCli );
                     t = 0;
                     nRet = 0;
-                    bFound = TRUE;
+                    bFound = sal_True;
                     break;
 
                 case XTYP_ADVDATA:
-                    bFound = BOOL( *t->pName == hText2 );
+                    bFound = sal_Bool( *t->pName == hText2 );
                     break;
             }
             if( bFound )
@@ -222,7 +222,7 @@ DdeConnection::~DdeConnection()
 
 // --- DdeConnection::IsConnected() --------------------------------
 
-BOOL DdeConnection::IsConnected()
+sal_Bool DdeConnection::IsConnected()
 {
     CONVINFO c;
 #ifdef OS2
@@ -231,13 +231,13 @@ BOOL DdeConnection::IsConnected()
     c.cb = sizeof( c );
 #endif
     if ( DdeQueryConvInfo( pImp->hConv, QID_SYNC, &c ) )
-        return TRUE;
+        return sal_True;
     else
     {
         DdeInstData* pInst = ImpGetInstData();
         pImp->hConv = DdeReconnect( pImp->hConv );
         pImp->nStatus = pImp->hConv ? DMLERR_NO_ERROR : DdeGetLastError( pInst->hDdeInstCli );
-        return BOOL( pImp->nStatus == DMLERR_NO_ERROR );
+        return sal_Bool( pImp->nStatus == DMLERR_NO_ERROR );
     }
 }
 
@@ -280,7 +280,7 @@ DdeTransaction::DdeTransaction( DdeConnection& d, const String& rItemName,
     nTime = n;
     nId   = 0;
     nType = 0;
-    bBusy = FALSE;
+    bBusy = sal_False;
 
     rDde.aTransactions.Insert( this );
 }
@@ -306,7 +306,7 @@ void DdeTransaction::Execute()
     HSZ     hItem = *pName;
     void*   pData = (void*)(const void *)aDdeData;
     DWORD   nData = (DWORD)(long)aDdeData;
-    ULONG   nIntFmt = aDdeData.pImp->nFmt;
+    sal_uLong   nIntFmt = aDdeData.pImp->nFmt;
     UINT    nExtFmt  = DdeData::GetExternalFormat( nIntFmt );
     DdeInstData* pInst = ImpGetInstData();
 
@@ -342,7 +342,7 @@ void DdeTransaction::Execute()
         if ( nId && rDde.pImp->hConv )
             DdeAbandonTransaction( pInst->hDdeInstCli, rDde.pImp->hConv, nId);
         nId = 0;
-        bBusy = TRUE;
+        bBusy = sal_True;
         HDDEDATA hRet = DdeClientTransaction( (unsigned char*)pData, nData,
                                             rDde.pImp->hConv, hItem, nExtFmt,
                                             (UINT)nType, TIMEOUT_ASYNC,
@@ -373,7 +373,7 @@ void __EXPORT DdeTransaction::Data( const DdeData* p )
 
 // --- DdeTransaction::Done() --------------------------------------
 
-void __EXPORT DdeTransaction::Done( BOOL bDataValid )
+void __EXPORT DdeTransaction::Done( sal_Bool bDataValid )
 {
     aDone.Call( (void*)bDataValid );
 }
@@ -389,7 +389,7 @@ DdeLink::DdeLink( DdeConnection& d, const String& aItemName, long n ) :
 
 DdeLink::~DdeLink()
 {
-    nType = (USHORT)XTYP_ADVSTOP;
+    nType = (sal_uInt16)XTYP_ADVSTOP;
     nTime = 0;
 }
 
@@ -427,7 +427,7 @@ DdeHotLink::DdeHotLink( DdeConnection& d, const String& i, long n ) :
 // --- DdePoke::DdePoke() ------------------------------------------
 
 DdePoke::DdePoke( DdeConnection& d, const String& i, const char* p,
-                  long l, ULONG f, long n ) :
+                  long l, sal_uLong f, long n ) :
             DdeTransaction( d, i, n )
 {
     aDdeData = DdeData( p, l, f );

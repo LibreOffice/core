@@ -46,8 +46,8 @@
 SFX_IMPL_STATUSBAR_CONTROL( SwZoomControl, SvxZoomItem );
 
 
-SwZoomControl::SwZoomControl( USHORT _nSlotId,
-                              USHORT _nId,
+SwZoomControl::SwZoomControl( sal_uInt16 _nSlotId,
+                              sal_uInt16 _nId,
                               StatusBar& rStb ) :
     SvxZoomStatusBarControl( _nSlotId, _nId, rStb )
 {
@@ -61,7 +61,7 @@ SwZoomControl::~SwZoomControl()
 
 // -----------------------------------------------------------------------
 
-void SwZoomControl::StateChanged( USHORT nSID, SfxItemState eState,
+void SwZoomControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
 {
     if(SFX_ITEM_AVAILABLE == eState && pState->ISA( SfxStringItem ))

@@ -66,7 +66,7 @@ class SwRevisionConfig : public utl::ConfigItem
                                     //Revision/TextDisplay/Delete/Color
     AuthorCharAttr  aFormatAttr;    //Revision/TextDisplay/ChangeAttribute/Attribute
                                     //Revision/TextDisplay/ChangeAttribute/Color
-    USHORT          nMarkAlign;     //Revision/LinesChanged/Mark
+    sal_uInt16          nMarkAlign;     //Revision/LinesChanged/Mark
     Color           aMarkColor;     //Revision/LinesChanged/Color
 
     const com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
@@ -117,10 +117,10 @@ class SwTableConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
 
-    USHORT      nTblHMove;          //int Table/Shift/Row
-    USHORT      nTblVMove;          //int Table/Shift/Column
-    USHORT      nTblHInsert;        //int Table/Insert/Row
-    USHORT      nTblVInsert;        //int Table/Insert/Column
+    sal_uInt16      nTblHMove;          //int Table/Shift/Row
+    sal_uInt16      nTblVMove;          //int Table/Shift/Column
+    sal_uInt16      nTblHInsert;        //int Table/Insert/Row
+    sal_uInt16      nTblVInsert;        //int Table/Insert/Column
     TblChgMode  eTblChgMode;        //int Table/Change/Effect
 
     sal_Bool    bInsTblFormatNum;       // Table/Input/NumberRecognition        // Automatische Zahlenerkennung
@@ -145,13 +145,13 @@ class SwMiscConfig : public utl::ConfigItem
     friend class SwModuleOptions;
 
     String      sWordDelimiter;             // Statistics/WordNumber/Delimiter
-    BOOL        bDefaultFontsInCurrDocOnly; // DefaultFont/Document
-    BOOL        bShowIndexPreview ;         // Index/ShowPreview
-    BOOL        bGrfToGalleryAsLnk;         // Misc/GraphicToGalleryAsLink
-    BOOL        bNumAlignSize;              // Numbering/Graphic/KeepRatio
-    BOOL        bSinglePrintJob;            // FormLetter/PrintOutput/SinglePrintJobs
-    BOOL        bIsNameFromColumn;          // FormLetter/FileOutput/FileName/Generation
-    BOOL        bAskForMailMergeInPrint;    // Ask if documents containing fields should be 'mailmerged'
+    sal_Bool        bDefaultFontsInCurrDocOnly; // DefaultFont/Document
+    sal_Bool        bShowIndexPreview ;         // Index/ShowPreview
+    sal_Bool        bGrfToGalleryAsLnk;         // Misc/GraphicToGalleryAsLink
+    sal_Bool        bNumAlignSize;              // Numbering/Graphic/KeepRatio
+    sal_Bool        bSinglePrintJob;            // FormLetter/PrintOutput/SinglePrintJobs
+    sal_Bool        bIsNameFromColumn;          // FormLetter/FileOutput/FileName/Generation
+    sal_Bool        bAskForMailMergeInPrint;    // Ask if documents containing fields should be 'mailmerged'
     sal_Int16   nMailingFormats;            // FormLetter/MailingOutput/Formats
     String      sNameFromColumn;            // FormLetter/FileOutput/FileName/FromDatabaseField (string!)
     String      sMailingPath;               // FormLetter/FileOutput/Path
@@ -183,7 +183,7 @@ class SW_DLLPUBLIC SwModuleOptions
     SwMiscConfig                    aMiscConfig;
 
     //fiscus: don't show tips of text fields - it's not part of the configuration!
-    BOOL        bHideFieldTips : 1;
+    sal_Bool        bHideFieldTips : 1;
 
 public:
     SwModuleOptions();
@@ -192,20 +192,20 @@ public:
     void        SetTblMode( TblChgMode  eSet ) { aTableConfig.eTblChgMode = eSet;
                                                 aTableConfig.SetModified();}
 
-    USHORT      GetTblHMove() const { return aTableConfig.nTblHMove;}
-    void        SetTblHMove( USHORT nSet ) {    aTableConfig.nTblHMove = nSet;
+    sal_uInt16      GetTblHMove() const { return aTableConfig.nTblHMove;}
+    void        SetTblHMove( sal_uInt16 nSet ) {    aTableConfig.nTblHMove = nSet;
                                                 aTableConfig.SetModified();}
 
-    USHORT      GetTblVMove() const { return aTableConfig.nTblVMove;}
-    void        SetTblVMove( USHORT nSet ) {    aTableConfig.nTblVMove = nSet;
+    sal_uInt16      GetTblVMove() const { return aTableConfig.nTblVMove;}
+    void        SetTblVMove( sal_uInt16 nSet ) {    aTableConfig.nTblVMove = nSet;
                                                 aTableConfig.SetModified();}
 
-    USHORT      GetTblHInsert() const {return aTableConfig.nTblHInsert;}
-    void        SetTblHInsert( USHORT nSet ) {  aTableConfig.nTblHInsert = nSet;
+    sal_uInt16      GetTblHInsert() const {return aTableConfig.nTblHInsert;}
+    void        SetTblHInsert( sal_uInt16 nSet ) {  aTableConfig.nTblHInsert = nSet;
                                                 aTableConfig.SetModified();}
 
-    USHORT      GetTblVInsert() const {return aTableConfig.nTblVInsert;}
-    void        SetTblVInsert( USHORT nSet ) {  aTableConfig.nTblVInsert = nSet;
+    sal_uInt16      GetTblVInsert() const {return aTableConfig.nTblVInsert;}
+    void        SetTblVInsert( sal_uInt16 nSet ) {  aTableConfig.nTblVInsert = nSet;
                                                 aTableConfig.SetModified();}
 
     const AuthorCharAttr    &GetInsertAuthorAttr() const { return aRevisionConfig.aInsertAttr; }
@@ -220,17 +220,17 @@ public:
     void        SetFormatAuthorAttr( AuthorCharAttr &rAttr ) {  aRevisionConfig.aFormatAttr = rAttr;
                                                                 aRevisionConfig.SetModified();}
 
-    USHORT          GetMarkAlignMode()  const               { return aRevisionConfig.nMarkAlign; }
-    void            SetMarkAlignMode(USHORT nMode)          { aRevisionConfig.nMarkAlign = nMode;
+    sal_uInt16          GetMarkAlignMode()  const               { return aRevisionConfig.nMarkAlign; }
+    void            SetMarkAlignMode(sal_uInt16 nMode)          { aRevisionConfig.nMarkAlign = nMode;
                                                               aRevisionConfig.SetModified();}
 
     const Color&    GetMarkAlignColor() const               { return aRevisionConfig.aMarkColor; }
     void            SetMarkAlignColor(const Color &rColor)  { aRevisionConfig.aMarkColor = rColor;
                                                               aRevisionConfig.SetModified();}
 
-    BOOL        IsInsWithCaption(BOOL bHTML) const
-                        { return bHTML ? FALSE : aInsertConfig.bInsWithCaption; }
-    void        SetInsWithCaption( BOOL bHTML, BOOL b )
+    sal_Bool        IsInsWithCaption(sal_Bool bHTML) const
+                        { return bHTML ? sal_False : aInsertConfig.bInsWithCaption; }
+    void        SetInsWithCaption( sal_Bool bHTML, sal_Bool b )
                     {   if(!bHTML)
                             aInsertConfig.bInsWithCaption = b;
                         aInsertConfig.SetModified();}
@@ -245,60 +245,60 @@ public:
                     }
                 }
 
-    BOOL        IsInsTblFormatNum(BOOL bHTML) const
+    sal_Bool        IsInsTblFormatNum(sal_Bool bHTML) const
                     { return bHTML ? aWebTableConfig.bInsTblFormatNum : aTableConfig.bInsTblFormatNum; }
-    void        SetInsTblFormatNum( BOOL bHTML, BOOL b )
+    void        SetInsTblFormatNum( sal_Bool bHTML, sal_Bool b )
                     { bHTML ? (aWebTableConfig.bInsTblFormatNum = b) : (aTableConfig.bInsTblFormatNum = b);
                       bHTML ? aWebTableConfig.SetModified() : aTableConfig.SetModified();}
 
-    BOOL        IsInsTblChangeNumFormat(BOOL bHTML) const
+    sal_Bool        IsInsTblChangeNumFormat(sal_Bool bHTML) const
                     { return bHTML ? aWebTableConfig.bInsTblChangeNumFormat : aTableConfig.bInsTblChangeNumFormat; }
-    void        SetInsTblChangeNumFormat( BOOL bHTML, BOOL b )
+    void        SetInsTblChangeNumFormat( sal_Bool bHTML, sal_Bool b )
                     { bHTML ? (aWebTableConfig.bInsTblChangeNumFormat = b) : (aTableConfig.bInsTblChangeNumFormat = b);
                       bHTML ? aWebTableConfig.SetModified() : aTableConfig.SetModified();}
 
 
-    BOOL        IsInsTblAlignNum(BOOL bHTML) const
+    sal_Bool        IsInsTblAlignNum(sal_Bool bHTML) const
                     { return bHTML ? aWebTableConfig.bInsTblAlignNum : aTableConfig.bInsTblAlignNum; }
-    void        SetInsTblAlignNum( BOOL bHTML, BOOL b )
+    void        SetInsTblAlignNum( sal_Bool bHTML, sal_Bool b )
                     { bHTML ? (aWebTableConfig.bInsTblAlignNum = b) : (aTableConfig.bInsTblAlignNum = b);
                         bHTML ? aWebTableConfig.SetModified() : aTableConfig.SetModified();;}
 
-    SwInsertTableOptions GetInsTblFlags(BOOL bHTML) const
+    SwInsertTableOptions GetInsTblFlags(sal_Bool bHTML) const
                     { return bHTML ? aWebInsertConfig.aInsTblOpts : aInsertConfig.aInsTblOpts;}
-    void        SetInsTblFlags( BOOL bHTML, const SwInsertTableOptions& rOpts ) {
+    void        SetInsTblFlags( sal_Bool bHTML, const SwInsertTableOptions& rOpts ) {
                     bHTML ? (aWebInsertConfig.aInsTblOpts = rOpts) : (aInsertConfig.aInsTblOpts = rOpts);
                     bHTML ? aWebInsertConfig.SetModified() : aInsertConfig.SetModified();}
 
-    const InsCaptionOpt* GetCapOption(BOOL bHTML, const SwCapObjType eType, const SvGlobalName *pOleId);
-    BOOL        SetCapOption(BOOL bHTML, const InsCaptionOpt* pOpt);
+    const InsCaptionOpt* GetCapOption(sal_Bool bHTML, const SwCapObjType eType, const SvGlobalName *pOleId);
+    sal_Bool        SetCapOption(sal_Bool bHTML, const InsCaptionOpt* pOpt);
 
 
-    BOOL        IsGrfToGalleryAsLnk() const     { return aMiscConfig.bGrfToGalleryAsLnk; }
-    void        SetGrfToGalleryAsLnk( BOOL b )  { aMiscConfig.bGrfToGalleryAsLnk = b;
+    sal_Bool        IsGrfToGalleryAsLnk() const     { return aMiscConfig.bGrfToGalleryAsLnk; }
+    void        SetGrfToGalleryAsLnk( sal_Bool b )  { aMiscConfig.bGrfToGalleryAsLnk = b;
                                                   aMiscConfig.SetModified();}
 
     sal_Int16   GetMailingFormats() const       { return aMiscConfig.nMailingFormats;}
     void        SetMailingFormats( sal_Int16 nSet ) { aMiscConfig.nMailingFormats = nSet;
                                                   aMiscConfig.SetModified();}
 
-    BOOL        IsSinglePrintJob() const        { return aMiscConfig.bSinglePrintJob; }
-    void        SetSinglePrintJob( BOOL b )     { aMiscConfig.bSinglePrintJob = b;
+    sal_Bool        IsSinglePrintJob() const        { return aMiscConfig.bSinglePrintJob; }
+    void        SetSinglePrintJob( sal_Bool b )     { aMiscConfig.bSinglePrintJob = b;
                                                   aMiscConfig.SetModified();}
 
-    BOOL        IsNumAlignSize() const          { return aMiscConfig.bNumAlignSize; }
-    void        SetNumAlignSize( BOOL b )       { aMiscConfig.bNumAlignSize = b;
+    sal_Bool        IsNumAlignSize() const          { return aMiscConfig.bNumAlignSize; }
+    void        SetNumAlignSize( sal_Bool b )       { aMiscConfig.bNumAlignSize = b;
                                                   aMiscConfig.SetModified();}
 
-    BOOL        IsNameFromColumn() const        { return aMiscConfig.bIsNameFromColumn; }
-    void        SetIsNameFromColumn( BOOL bSet )
+    sal_Bool        IsNameFromColumn() const        { return aMiscConfig.bIsNameFromColumn; }
+    void        SetIsNameFromColumn( sal_Bool bSet )
                         {
                             aMiscConfig.SetModified();
                             aMiscConfig.bIsNameFromColumn = bSet;
                         }
 
-    BOOL        IsAskForMailMerge() const       { return aMiscConfig.bAskForMailMergeInPrint;}
-    void        SetAskForMailMerge(BOOL bSet)
+    sal_Bool        IsAskForMailMerge() const       { return aMiscConfig.bAskForMailMergeInPrint;}
+    void        SetAskForMailMerge(sal_Bool bSet)
                     {
                         aMiscConfig.SetModified();
                         aMiscConfig.bAskForMailMergeInPrint = bSet;
@@ -322,22 +322,22 @@ public:
                                                           aMiscConfig.SetModified();}
 
     //convert word delimiter from or to user interface
-    static String ConvertWordDelimiter(const String& rDelim, BOOL bFromUI);
+    static String ConvertWordDelimiter(const String& rDelim, sal_Bool bFromUI);
 
-    BOOL        IsShowIndexPreview() const {return  aMiscConfig.bShowIndexPreview;}
-    void        SetShowIndexPreview(BOOL bSet)
+    sal_Bool        IsShowIndexPreview() const {return  aMiscConfig.bShowIndexPreview;}
+    void        SetShowIndexPreview(sal_Bool bSet)
                     {aMiscConfig.bShowIndexPreview = bSet;
                     aMiscConfig.SetModified();}
 
-    BOOL        IsDefaultFontInCurrDocOnly() const { return aMiscConfig.bDefaultFontsInCurrDocOnly;}
-    void        SetDefaultFontInCurrDocOnly(BOOL bSet)
+    sal_Bool        IsDefaultFontInCurrDocOnly() const { return aMiscConfig.bDefaultFontsInCurrDocOnly;}
+    void        SetDefaultFontInCurrDocOnly(sal_Bool bSet)
                     {
                         aMiscConfig.bDefaultFontsInCurrDocOnly = bSet;
                         aMiscConfig.SetModified();
                     }
 
-    BOOL        IsHideFieldTips() const {return bHideFieldTips;}
-    void        SetHideFieldTips(BOOL bSet) {bHideFieldTips = bSet;}
+    sal_Bool        IsHideFieldTips() const {return bHideFieldTips;}
+    void        SetHideFieldTips(sal_Bool bSet) {bHideFieldTips = bSet;}
 };
 #endif
 

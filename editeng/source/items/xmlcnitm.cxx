@@ -42,7 +42,7 @@ using namespace ::com::sun::star::xml;
 
 TYPEINIT1(SvXMLAttrContainerItem, SfxPoolItem);
 
-SvXMLAttrContainerItem::SvXMLAttrContainerItem( USHORT _nWhich ) :
+SvXMLAttrContainerItem::SvXMLAttrContainerItem( sal_uInt16 _nWhich ) :
     SfxPoolItem( _nWhich )
 {
     pImpl = new SvXMLAttrContainerData;
@@ -84,21 +84,21 @@ SfxItemPresentation SvXMLAttrContainerItem::GetPresentation(
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-USHORT SvXMLAttrContainerItem::GetVersion( USHORT /*nFileFormatVersion*/ ) const
+sal_uInt16 SvXMLAttrContainerItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/ ) const
 {
     // This item should never be stored
     return USHRT_MAX;
 }
 
-BOOL  SvXMLAttrContainerItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+sal_Bool  SvXMLAttrContainerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     Reference<XNameContainer> xContainer =
         new SvUnoAttributeContainer( new SvXMLAttrContainerData( *pImpl ) );
 
     rVal.setValue( &xContainer, ::getCppuType((Reference<XNameContainer>*)0) );
-    return TRUE;
+    return sal_True;
 }
-BOOL SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+sal_Bool SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     Reference<XInterface> xRef;
     SvUnoAttributeContainer* pContainer = NULL;
@@ -108,7 +108,7 @@ BOOL SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
         xRef = *(Reference<XInterface>*)rVal.getValue();
         Reference<XUnoTunnel> xTunnel(xRef, UNO_QUERY);
         if( xTunnel.is() )
-            pContainer = (SvUnoAttributeContainer*)(ULONG)xTunnel->getSomething(SvUnoAttributeContainer::getUnoTunnelId());
+            pContainer = (SvUnoAttributeContainer*)(sal_uLong)xTunnel->getSomething(SvUnoAttributeContainer::getUnoTunnelId());
     }
 
     if( pContainer )
@@ -124,14 +124,14 @@ BOOL SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
         {
             Reference<XNameContainer> xContainer( xRef, UNO_QUERY );
             if( !xContainer.is() )
-                return FALSE;
+                return sal_False;
 
             const Sequence< ::rtl::OUString > aNameSequence( xContainer->getElementNames() );
             const ::rtl::OUString* pNames = aNameSequence.getConstArray();
-            const INT32 nCount = aNameSequence.getLength();
+            const sal_Int32 nCount = aNameSequence.getLength();
             Any aAny;
             AttributeData* pData;
-            INT32 nAttr;
+            sal_Int32 nAttr;
 
             for( nAttr = 0; nAttr < nCount; nAttr++ )
             {
@@ -139,7 +139,7 @@ BOOL SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
 
                 aAny = xContainer->getByName( aName );
                 if( aAny.getValue() == NULL || aAny.getValueType() != ::getCppuType((AttributeData*)0) )
-                    return FALSE;
+                    return sal_False;
 
                 pData = (AttributeData*)aAny.getValue();
                 sal_Int32 pos = aName.indexOf( sal_Unicode(':') );
@@ -174,74 +174,74 @@ BOOL SvXMLAttrContainerItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
             else
             {
                 delete pNewImpl;
-                return FALSE;
+                return sal_False;
             }
         }
         catch(...)
         {
             delete pNewImpl;
-            return FALSE;
+            return sal_False;
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 
-BOOL SvXMLAttrContainerItem::AddAttr( const ::rtl::OUString& rLName,
+sal_Bool SvXMLAttrContainerItem::AddAttr( const ::rtl::OUString& rLName,
                                         const ::rtl::OUString& rValue )
 {
     return pImpl->AddAttr( rLName, rValue );
 }
 
-BOOL SvXMLAttrContainerItem::AddAttr( const ::rtl::OUString& rPrefix,
+sal_Bool SvXMLAttrContainerItem::AddAttr( const ::rtl::OUString& rPrefix,
           const ::rtl::OUString& rNamespace, const ::rtl::OUString& rLName,
           const ::rtl::OUString& rValue )
 {
     return pImpl->AddAttr( rPrefix, rNamespace, rLName, rValue );
 }
 
-USHORT SvXMLAttrContainerItem::GetAttrCount() const
+sal_uInt16 SvXMLAttrContainerItem::GetAttrCount() const
 {
-    return (USHORT)pImpl->GetAttrCount();
+    return (sal_uInt16)pImpl->GetAttrCount();
 }
 
-::rtl::OUString SvXMLAttrContainerItem::GetAttrNamespace( USHORT i ) const
+::rtl::OUString SvXMLAttrContainerItem::GetAttrNamespace( sal_uInt16 i ) const
 {
     return pImpl->GetAttrNamespace( i );
 }
 
-::rtl::OUString SvXMLAttrContainerItem::GetAttrPrefix( USHORT i ) const
+::rtl::OUString SvXMLAttrContainerItem::GetAttrPrefix( sal_uInt16 i ) const
 {
     return pImpl->GetAttrPrefix( i );
 }
 
-const ::rtl::OUString& SvXMLAttrContainerItem::GetAttrLName( USHORT i ) const
+const ::rtl::OUString& SvXMLAttrContainerItem::GetAttrLName( sal_uInt16 i ) const
 {
     return pImpl->GetAttrLName( i );
 }
 
-const ::rtl::OUString& SvXMLAttrContainerItem::GetAttrValue( USHORT i ) const
+const ::rtl::OUString& SvXMLAttrContainerItem::GetAttrValue( sal_uInt16 i ) const
 {
     return pImpl->GetAttrValue( i );
 }
 
 
-USHORT SvXMLAttrContainerItem::GetFirstNamespaceIndex() const
+sal_uInt16 SvXMLAttrContainerItem::GetFirstNamespaceIndex() const
 {
     return pImpl->GetFirstNamespaceIndex();
 }
 
-USHORT SvXMLAttrContainerItem::GetNextNamespaceIndex( USHORT nIdx ) const
+sal_uInt16 SvXMLAttrContainerItem::GetNextNamespaceIndex( sal_uInt16 nIdx ) const
 {
     return pImpl->GetNextNamespaceIndex( nIdx );
 }
 
-const ::rtl::OUString& SvXMLAttrContainerItem::GetNamespace( USHORT i ) const
+const ::rtl::OUString& SvXMLAttrContainerItem::GetNamespace( sal_uInt16 i ) const
 {
     return pImpl->GetNamespace( i );
 }
 
-const ::rtl::OUString& SvXMLAttrContainerItem::GetPrefix( USHORT i ) const
+const ::rtl::OUString& SvXMLAttrContainerItem::GetPrefix( sal_uInt16 i ) const
 {
     return pImpl->GetPrefix( i );
 }

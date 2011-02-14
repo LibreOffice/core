@@ -514,7 +514,7 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
     if (mpViewShellBase != NULL)
     {
         // Create the corresponding shell and determine the id of the child window.
-        USHORT nChildWindowId = 0;
+        sal_uInt16 nChildWindowId = 0;
         ::std::auto_ptr<SfxShell> pShell;
         switch (rDescriptor.mePaneId)
         {

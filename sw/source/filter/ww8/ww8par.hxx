@@ -147,12 +147,12 @@ SV_DECL_PTRARR_SORT_DEL(WW8OleMaps, WW8OleMap_Ptr,16,16)
 
 class WW8Reader : public StgReader
 {
-    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+    virtual sal_uLong Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 public:
     virtual int GetReaderType();
 
-    virtual BOOL HasGlossaries() const;
-    virtual BOOL ReadGlossaries( SwTextBlocks&, BOOL bSaveRelFiles ) const;
+    virtual sal_Bool HasGlossaries() const;
+    virtual sal_Bool ReadGlossaries( SwTextBlocks&, sal_Bool bSaveRelFiles ) const;
 };
 
 struct WW8OleMap
@@ -186,7 +186,7 @@ public:
     enum ListLevel {nMinLevel=1, nMaxLevel=9};
     //the rParaSprms returns back the original word paragraph indent
     //sprms which were attached to the original numbering format
-    SwNumRule* GetNumRuleForActivation(USHORT nLFOPosition, const BYTE nLevel,
+    SwNumRule* GetNumRuleForActivation(sal_uInt16 nLFOPosition, const sal_uInt8 nLevel,
         std::vector<sal_uInt8> &rParaSprms, SwTxtNode *pNode=0);
     SwNumRule* CreateNextRule(bool bSimple);
     ~WW8ListManager();
@@ -198,12 +198,12 @@ private:
     SvStream&        rSt;
     std::vector<WW8LSTInfo* > maLSTInfos;
     WW8LFOInfos* pLFOInfos;// D. aus PLF LFO, sortiert genau wie im WW8 Stream
-    USHORT       nUniqueList; // current number for creating unique list names
-    BYTE* GrpprlHasSprm(USHORT nId, BYTE& rSprms, BYTE nLen);
+    sal_uInt16       nUniqueList; // current number for creating unique list names
+    sal_uInt8* GrpprlHasSprm(sal_uInt16 nId, sal_uInt8& rSprms, sal_uInt8 nLen);
     WW8LSTInfo* GetLSTByListId(    sal_uInt32  nIdLst     ) const;
     //the rParaSprms returns back the original word paragraph indent
     //sprms which are attached to this numbering level
-    bool ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet, USHORT nLevelStyle,
+    bool ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet, sal_uInt16 nLevelStyle,
         bool bSetStartNo, std::deque<bool> &rNotReallyThere, sal_uInt16 nLevel,
         std::vector<sal_uInt8> &rParaSprms);
 
@@ -212,7 +212,7 @@ private:
     // Zeichen Style Pointer
     typedef SwCharFmt* WW8aCFmt[nMaxLevel];
 
-    void AdjustLVL(BYTE nLevel, SwNumRule& rNumRule, WW8aISet& rListItemSet,
+    void AdjustLVL(sal_uInt8 nLevel, SwNumRule& rNumRule, WW8aISet& rListItemSet,
         WW8aCFmt& aCharFmt, bool& bNewCharFmtCreated,
         String aPrefix = aEmptyStr);
 
@@ -229,8 +229,8 @@ class SwWW8FltControlStack : public SwFltControlStack
 {
 private:
     SwWW8ImplReader& rReader;
-    USHORT nToggleAttrFlags;
-    USHORT nToggleBiDiAttrFlags;
+    sal_uInt16 nToggleAttrFlags;
+    sal_uInt16 nToggleBiDiAttrFlags;
     //No copying
     SwWW8FltControlStack(const SwWW8FltControlStack&);
     SwWW8FltControlStack& operator=(const SwWW8FltControlStack&);
@@ -241,16 +241,16 @@ protected:
         SwFltStackEntry* pEntry);
 
 public:
-    SwWW8FltControlStack(SwDoc* pDo, ULONG nFieldFl, SwWW8ImplReader& rReader_ )
+    SwWW8FltControlStack(SwDoc* pDo, sal_uLong nFieldFl, SwWW8ImplReader& rReader_ )
         : SwFltControlStack( pDo, nFieldFl ), rReader( rReader_ ),
         nToggleAttrFlags(0), nToggleBiDiAttrFlags(0)
     {}
 
     void NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr);
 
-    virtual void SetAttr(const SwPosition& rPos, USHORT nAttrId=0, BOOL bTstEnde=TRUE, long nHand=LONG_MAX, BOOL consumedByField=FALSE);
+    virtual void SetAttr(const SwPosition& rPos, sal_uInt16 nAttrId=0, sal_Bool bTstEnde=sal_True, long nHand=LONG_MAX, sal_Bool consumedByField=sal_False);
 
-    void SetToggleAttr(BYTE nId, bool bOn)
+    void SetToggleAttr(sal_uInt8 nId, bool bOn)
     {
         if( bOn )
             nToggleAttrFlags |= (1 << nId);
@@ -258,9 +258,9 @@ public:
             nToggleAttrFlags &= ~(1 << nId);
     }
 
-    USHORT GetToggleAttrFlags() const { return nToggleAttrFlags; }
+    sal_uInt16 GetToggleAttrFlags() const { return nToggleAttrFlags; }
 
-    void SetToggleBiDiAttr(BYTE nId, bool bOn)
+    void SetToggleBiDiAttr(sal_uInt8 nId, bool bOn)
     {
         if( bOn )
             nToggleBiDiAttrFlags |= (1 << nId);
@@ -268,12 +268,12 @@ public:
             nToggleBiDiAttrFlags &= ~(1 << nId);
     }
 
-    USHORT GetToggleBiDiAttrFlags() const { return nToggleBiDiAttrFlags; }
-    void SetToggleAttrFlags(USHORT nFlags) { nToggleAttrFlags = nFlags; }
-    void SetToggleBiDiAttrFlags(USHORT nFlags) {nToggleBiDiAttrFlags = nFlags;}
+    sal_uInt16 GetToggleBiDiAttrFlags() const { return nToggleBiDiAttrFlags; }
+    void SetToggleAttrFlags(sal_uInt16 nFlags) { nToggleAttrFlags = nFlags; }
+    void SetToggleBiDiAttrFlags(sal_uInt16 nFlags) {nToggleBiDiAttrFlags = nFlags;}
 
-    const SfxPoolItem* GetFmtAttr(const SwPosition& rPos, USHORT nWhich);
-    const SfxPoolItem* GetStackAttr(const SwPosition& rPos, USHORT nWhich);
+    const SfxPoolItem* GetFmtAttr(const SwPosition& rPos, sal_uInt16 nWhich);
+    const SfxPoolItem* GetStackAttr(const SwPosition& rPos, sal_uInt16 nWhich);
 };
 
 //The only thing this is for is RES_FLTR_ANCHOR, anything else is an error.
@@ -282,7 +282,7 @@ public:
 class SwWW8FltAnchorStack : public SwFltControlStack
 {
 public:
-    SwWW8FltAnchorStack(SwDoc* pDo, ULONG nFieldFl)
+    SwWW8FltAnchorStack(SwDoc* pDo, sal_uLong nFieldFl)
         : SwFltControlStack( pDo, nFieldFl ) {}
     void AddAnchor(const SwPosition& rPos,SwFrmFmt *pFmt);
     void Flush();
@@ -311,10 +311,10 @@ private:
 class SwWW8FltRefStack : public SwFltEndStack
 {
 public:
-    SwWW8FltRefStack(SwDoc* pDo, ULONG nFieldFl)
+    SwWW8FltRefStack(SwDoc* pDo, sal_uLong nFieldFl)
         : SwFltEndStack( pDo, nFieldFl )
     {}
-    bool IsFtnEdnBkmField(const SwFmtFld& rFmtFld, USHORT& rBkmNo);
+    bool IsFtnEdnBkmField(const SwFmtFld& rFmtFld, sal_uInt16& rBkmNo);
 
     struct ltstr
     {
@@ -403,7 +403,7 @@ private:
     const SwNumRule* mpPrevNumRule;
     WW8TabDesc* mpTableDesc;
     int mnInTable;
-    USHORT mnAktColl;
+    sal_uInt16 mnAktColl;
     sal_Unicode mcSymbol;
     bool mbIgnoreText;
     bool mbSymbol;
@@ -459,19 +459,19 @@ public:
         fUnused(0), nSize(0), hpsCheckBox(20), nChecked(0)
     {
     }
-    UINT8 fUnknown:2;
-    UINT8 fDropdownIndex:6;
-    UINT8 fToolTip:1;
-    UINT8 fNoMark:1;
-    UINT8 fUseSize:1;
-    UINT8 fNumbersOnly:1;
-    UINT8 fDateOnly:1;
-    UINT8 fUnused:3;
-    UINT16 nSize;
+    sal_uInt8 fUnknown:2;
+    sal_uInt8 fDropdownIndex:6;
+    sal_uInt8 fToolTip:1;
+    sal_uInt8 fNoMark:1;
+    sal_uInt8 fUseSize:1;
+    sal_uInt8 fNumbersOnly:1;
+    sal_uInt8 fDateOnly:1;
+    sal_uInt8 fUnused:3;
+    sal_uInt16 nSize;
 
-    UINT16 hpsCheckBox;
-    UINT16 nChecked;
-    UINT16 nDefaultChecked;
+    sal_uInt16 hpsCheckBox;
+    sal_uInt16 nChecked;
+    sal_uInt16 nDefaultChecked;
 
     String sTitle;
     String sDefault;
@@ -554,7 +554,7 @@ public:
         com::sun::star::form::XFormComponent >& rFComp,
         const ::com::sun::star::awt::Size& rSize,
         com::sun::star::uno::Reference <
-        com::sun::star::drawing::XShape > *pShape,BOOL bFloatingCtrl);
+        com::sun::star::drawing::XShape > *pShape,sal_Bool bFloatingCtrl);
     bool ExportControl(WW8Export &rWrt, const SdrObject *pObj);
 };
 
@@ -565,9 +565,9 @@ private:
     SvStream *pFallbackStream;
     List *pOldEscherBlipCache;
 
-    virtual BOOL GetOLEStorageName( long nOLEId, String& rStorageName,
+    virtual sal_Bool GetOLEStorageName( long nOLEId, String& rStorageName,
         SvStorageRef& rSrcStorage, com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rDestStorage ) const;
-    virtual BOOL ShapeHasText( ULONG nShapeId, ULONG nFilePos ) const;
+    virtual sal_Bool ShapeHasText( sal_uLong nShapeId, sal_uLong nFilePos ) const;
     // --> OD 2004-12-14 #i32596# - new parameter <_nCalledByGroup>, which
     // indicates, if the OLE object is imported inside a group object
     virtual SdrObject* ImportOLE( long nOLEId,
@@ -582,9 +582,9 @@ private:
     SwMSDffManager(const SwMSDffManager&);
     SwMSDffManager& operator=(const SwMSDffManager&);
 public:
-    static UINT32 GetFilterFlags();
-    static INT32 GetEscherLineMatch(MSO_LineStyle eStyle, MSO_SPT eShapeType,
-        INT32 &rThick);
+    static sal_uInt32 GetFilterFlags();
+    static sal_Int32 GetEscherLineMatch(MSO_LineStyle eStyle, MSO_SPT eShapeType,
+        sal_Int32 &rThick);
     SwMSDffManager( SwWW8ImplReader& rRdr );
     void DisableFallbackStream();
     void EnableFallbackStream();
@@ -610,7 +610,7 @@ public:
     sal_uInt32 nPgLeft;
     sal_uInt32 nPgRight;
 
-    BYTE mnBorders;
+    sal_uInt8 mnBorders;
     bool mbHasFootnote;
     void SetDirection();
     void SetLinkId(short sLinkId) { mLinkId = sLinkId; }
@@ -698,7 +698,7 @@ public:
     bool CurrentSectionIsVertical() const;
     bool CurrentSectionIsProtected() const;
     void PrependedInlineNode(const SwPosition &rPos, const SwNode &rNode);
-    USHORT CurrentSectionColCount() const;
+    sal_uInt16 CurrentSectionColCount() const;
     bool WillHavePageDescHere(SwNodeIndex aIdx) const;
     void CreateSep(const long nTxtPos, bool bMustHaveBreak);
     void InsertSegments();
@@ -758,8 +758,8 @@ struct ApoTestResults
 {
     bool mbStartApo;
     bool mbStopApo;
-    const BYTE* mpSprm37;
-    const BYTE* mpSprm29;
+    const sal_uInt8* mpSprm37;
+    const sal_uInt8* mpSprm29;
     WW8FlyPara* mpStyleApo;
     ApoTestResults() :
         mbStartApo(false), mbStopApo(false), mpSprm37(0), mpSprm29(0),
@@ -772,8 +772,8 @@ struct ANLDRuleMap
 {
     SwNumRule* mpOutlineNumRule;    // WinWord 6 numbering, varient 1
     SwNumRule* mpNumberingNumRule;  // WinWord 6 numbering, varient 2
-    SwNumRule* GetNumRule(BYTE nNumType);
-    void SetNumRule(SwNumRule*, BYTE nNumType);
+    SwNumRule* GetNumRule(sal_uInt8 nNumType);
+    void SetNumRule(SwNumRule*, sal_uInt8 nNumType);
     ANLDRuleMap() : mpOutlineNumRule(0), mpNumberingNumRule(0) {}
 };
 
@@ -991,29 +991,29 @@ private:
     String sBaseURL;
 
                                 // Ini-Flags:
-    ULONG nIniFlags;            // Flags aus der writer.ini
-    ULONG nIniFlags1;           // dito ( zusaetzliche Flags )
-    ULONG nFieldFlags;          // dito fuer Feldern
-    ULONG nFieldTagAlways[3];   // dito fuers Taggen von Feldern
-    ULONG nFieldTagBad[3];      // dito fuers Taggen von nicht importierbaren F.
+    sal_uLong nIniFlags;            // Flags aus der writer.ini
+    sal_uLong nIniFlags1;           // dito ( zusaetzliche Flags )
+    sal_uLong nFieldFlags;          // dito fuer Feldern
+    sal_uLong nFieldTagAlways[3];   // dito fuers Taggen von Feldern
+    sal_uLong nFieldTagBad[3];      // dito fuers Taggen von nicht importierbaren F.
     bool m_bRegardHindiDigits;  // import digits in CTL scripts as Hindi numbers
 
     WW8_CP nDrawCpO;            // Anfang der Txbx-SubDocs
 
-    ULONG nPicLocFc;            // Picture Location in File (FC)
-    ULONG nObjLocFc;            // Object Location in File (FC)
+    sal_uLong nPicLocFc;            // Picture Location in File (FC)
+    sal_uLong nObjLocFc;            // Object Location in File (FC)
 
-    INT32 nIniFlyDx;            // X-Verschiebung von Flys
-    INT32 nIniFlyDy;            // Y-Verschiebung von Flys
+    sal_Int32 nIniFlyDx;            // X-Verschiebung von Flys
+    sal_Int32 nIniFlyDy;            // Y-Verschiebung von Flys
 
     rtl_TextEncoding eTextCharSet;    // Default charset for Text
     rtl_TextEncoding eStructCharSet;  // rtl_TextEncoding for structures
     rtl_TextEncoding eHardCharSet;    // Hard rtl_TextEncoding-Attribute
-    USHORT nProgress;           // %-Angabe fuer Progressbar
-    USHORT nColls;              // Groesse des Arrays
-    USHORT nAktColl;            // gemaess WW-Zaehlung
-    USHORT nFldNum;             // laufende Nummer dafuer
-    USHORT nLFOPosition;
+    sal_uInt16 nProgress;           // %-Angabe fuer Progressbar
+    sal_uInt16 nColls;              // Groesse des Arrays
+    sal_uInt16 nAktColl;            // gemaess WW-Zaehlung
+    sal_uInt16 nFldNum;             // laufende Nummer dafuer
+    sal_uInt16 nLFOPosition;
 
     short nCharFmt;             // gemaess WW-Zaehlung, <0 fuer keine
 
@@ -1023,16 +1023,16 @@ private:
     sal_Unicode cSymbol;        // aktuell einzulesendes Symbolzeichen
 
 
-    BYTE nWantedVersion;        // urspruenglich vom Writer
+    sal_uInt8 nWantedVersion;        // urspruenglich vom Writer
                                 // angeforderte WW-Doc-Version
 
 
-    BYTE nSwNumLevel;           // LevelNummer fuer Outline / Nummerierung
-    BYTE nWwNumType;            // Gliederung / Nummerg / Aufzaehlg
-    BYTE nListLevel;
+    sal_uInt8 nSwNumLevel;           // LevelNummer fuer Outline / Nummerierung
+    sal_uInt8 nWwNumType;            // Gliederung / Nummerg / Aufzaehlg
+    sal_uInt8 nListLevel;
 
-    BYTE nPgChpDelim;           // ChapterDelim from PageNum
-    BYTE nPgChpLevel;           // ChapterLevel of Heading from PageNum
+    sal_uInt8 nPgChpDelim;           // ChapterDelim from PageNum
+    sal_uInt8 nPgChpLevel;           // ChapterLevel of Heading from PageNum
 
     bool mbNewDoc;          // Neues Dokument ?
     bool bReadNoTbl;        // Keine Tabellen
@@ -1097,10 +1097,10 @@ private:
 
 //---------------------------------------------
 
-    const SprmReadInfo& GetSprmReadInfo(USHORT nId) const;
+    const SprmReadInfo& GetSprmReadInfo(sal_uInt16 nId) const;
 
     bool StyleExists(int nColl) const { return (nColl < nColls); }
-    SwWW8StyInf *GetStyle(USHORT nColl) const;
+    SwWW8StyInf *GetStyle(sal_uInt16 nColl) const;
     void AppendTxtNode(SwPosition& rPos);
 
     void Read_HdFt(bool bIsTitle, int nSect, const SwPageDesc *pPrev,
@@ -1111,12 +1111,12 @@ private:
 
     bool isValid_HdFt_CP(WW8_CP nHeaderCP) const;
 
-    bool HasOwnHeaderFooter(BYTE nWhichItems, BYTE grpfIhdt, int nSect);
+    bool HasOwnHeaderFooter(sal_uInt8 nWhichItems, sal_uInt8 grpfIhdt, int nSect);
 
     void HandleLineNumbering(const wwSection &rSection);
 
     void CopyPageDescHdFt( const SwPageDesc* pOrgPageDesc,
-                           SwPageDesc* pNewPageDesc, BYTE nCode );
+                           SwPageDesc* pNewPageDesc, sal_uInt8 nCode );
 
     void DeleteStk(SwFltControlStack* prStck);
     void DeleteCtrlStk()    { DeleteStk( pCtrlStck  ); pCtrlStck   = 0; }
@@ -1133,7 +1133,7 @@ private:
     bool ReadChar(long nPosCp, long nCpOfs);
     bool ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs);
     bool ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd, long nCpOfs);
-    bool LangUsesHindiNumbers(USHORT nLang);
+    bool LangUsesHindiNumbers(sal_uInt16 nLang);
     sal_Unicode TranslateToHindiNumbers(sal_Unicode);
 
     void SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection);
@@ -1145,15 +1145,15 @@ private:
     void CloseAttrEnds();
     bool ReadText(long nStartCp, long nTextLen, ManTypes nType);
 
-    void ReadRevMarkAuthorStrTabl( SvStream& rStrm, INT32 nTblPos,
-        INT32 nTblSiz, SwDoc& rDoc );
+    void ReadRevMarkAuthorStrTabl( SvStream& rStrm, sal_Int32 nTblPos,
+        sal_Int32 nTblSiz, SwDoc& rDoc );
 
     void Read_HdFtFtnText( const SwNodeIndex* pSttIdx, long nStartCp,
                            long nLen, ManTypes nType );
 
     void ImportTox( int nFldId, String aStr );
 
-    void EndSprm( USHORT nId );
+    void EndSprm( sal_uInt16 nId );
     // --> OD 2010-05-06 #i103711#
     // --> OD 2010-05-11 #i105414#
     void NewAttr( const SfxPoolItem& rAttr,
@@ -1161,14 +1161,14 @@ private:
                   const bool bLeftIndentSet = false );
     // <--
 
-    bool GetFontParams(USHORT, FontFamily&, String&, FontPitch&,
+    bool GetFontParams(sal_uInt16, FontFamily&, String&, FontPitch&,
         rtl_TextEncoding&);
-    bool SetNewFontAttr(USHORT nFCode, bool bSetEnums, USHORT nWhich);
-    USHORT CorrectResIdForCharset(CharSet nCharSet, USHORT nWhich);
+    bool SetNewFontAttr(sal_uInt16 nFCode, bool bSetEnums, sal_uInt16 nWhich);
+    sal_uInt16 CorrectResIdForCharset(CharSet nCharSet, sal_uInt16 nWhich);
     void ResetCharSetVars();
     void ResetCJKCharSetVars();
 
-    const SfxPoolItem* GetFmtAttr( USHORT nWhich );
+    const SfxPoolItem* GetFmtAttr( sal_uInt16 nWhich );
     bool JoinNode(SwPaM &rPam, bool bStealAttr = false);
 
     bool IsBorder(const WW8_BRC* pbrc, bool bChkBtwn = false) const;
@@ -1182,10 +1182,10 @@ private:
     // #i20672# we can't properly support between lines so best to ignore
     // them for now
     bool SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc, short *pSizeArray=0,
-        BYTE nSetBorders=0xFF, bool bChkBtwn = false) const;
+        sal_uInt8 nSetBorders=0xFF, bool bChkBtwn = false) const;
 #endif
     bool SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc, short *pSizeArray=0,
-        BYTE nSetBorders=0xFF) const;
+        sal_uInt8 nSetBorders=0xFF) const;
     void GetBorderDistance(const WW8_BRC* pbrc, Rectangle& rInnerDist) const;
     sal_uInt16 GetParagraphAutoSpace(bool fDontUseHTMLAutoSpacing);
     bool SetShadow(SvxShadowItem& rShadow, const short *pSizeArray,
@@ -1195,8 +1195,8 @@ private:
         short *SizeArray=0) const;
     void SetPageBorder(SwFrmFmt &rFmt, const wwSection &rSection) const;
 
-    INT32 MatchSdrBoxIntoFlyBoxItem( const Color& rLineColor,
-        MSO_LineStyle eLineStyle, MSO_SPT eShapeType, INT32 &rLineWidth,
+    sal_Int32 MatchSdrBoxIntoFlyBoxItem( const Color& rLineColor,
+        MSO_LineStyle eLineStyle, MSO_SPT eShapeType, sal_Int32 &rLineWidth,
         SvxBoxItem& rBox );
     void MatchSdrItemsIntoFlySet( SdrObject*    pSdrObj, SfxItemSet &aFlySet,
         MSO_LineStyle eLineStyle, MSO_SPT eShapeType, Rectangle &rInnerDist );
@@ -1222,10 +1222,10 @@ private:
 
     void EndSpecial();
     bool ProcessSpecial(bool &rbReSync, WW8_CP nStartCp);
-    USHORT TabRowSprm(int nLevel) const;
+    sal_uInt16 TabRowSprm(int nLevel) const;
 
     bool ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
-       const WW8_PIC& rPic, SvStream* pSt, ULONG nFilePos, bool* pDelIt);
+       const WW8_PIC& rPic, SvStream* pSt, sal_uLong nFilePos, bool* pDelIt);
 
     void ReplaceObj(const SdrObject &rReplaceTextObj,
         SdrObject &rSubObj);
@@ -1239,7 +1239,7 @@ private:
         const SfxItemSet& rGrfSet);
 
     SwFrmFmt *AddAutoAnchor(SwFrmFmt *pFmt);
-    SwFrmFmt* ImportGraf1(WW8_PIC& rPic, SvStream* pSt, ULONG nFilePos);
+    SwFrmFmt* ImportGraf1(WW8_PIC& rPic, SvStream* pSt, sal_uLong nFilePos);
     SwFrmFmt* ImportGraf(SdrTextObj* pTextObj = 0, SwFrmFmt* pFlyFmt = 0);
 
     SdrObject* ImportOleBase( Graphic& rGraph, const Graphic* pGrf=0,
@@ -1258,9 +1258,9 @@ private:
     //This converts MS Asian Typography information into OOo's
     void ImportDopTypography(const WW8DopTypography &rTypo);
 
-    ULONG LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss);
-    ULONG SetSubStreams(SvStorageStreamRef &rTableStream, SvStorageStreamRef &rDataStream);
-    ULONG CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos);
+    sal_uLong LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss);
+    sal_uLong SetSubStreams(SvStorageStreamRef &rTableStream, SvStorageStreamRef &rDataStream);
+    sal_uLong CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos);
 
     void ReadDocVars();
 
@@ -1283,16 +1283,16 @@ private:
 // verwaltet werden: rglst, hpllfo und hsttbListNames
 // die Strukturen hierfuer sind: LSTF, LVLF, LFO LFOLVL
 
-    void SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV, const BYTE* pTxt,
+    void SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV, const sal_uInt8* pTxt,
         bool bOutline);
-    void SetAnld(SwNumRule* pNumR, WW8_ANLD* pAD, BYTE nSwLevel, bool bOutLine);
-    void SetNumOlst( SwNumRule* pNumR, WW8_OLST* pO, BYTE nSwLevel );
+    void SetAnld(SwNumRule* pNumR, WW8_ANLD* pAD, sal_uInt8 nSwLevel, bool bOutLine);
+    void SetNumOlst( SwNumRule* pNumR, WW8_OLST* pO, sal_uInt8 nSwLevel );
     SwNumRule* GetStyRule();
 
-    void StartAnl(const BYTE* pSprm13);
-    void NextAnlLine(const BYTE* pSprm13);
+    void StartAnl(const sal_uInt8* pSprm13);
+    void NextAnlLine(const sal_uInt8* pSprm13);
     void StopAllAnl(bool bGoBack = true);
-    void StopAnlToRestart(BYTE nType, bool bGoBack = true);
+    void StopAnlToRestart(sal_uInt8 nType, bool bGoBack = true);
 
 // GrafikLayer
 
@@ -1309,20 +1309,20 @@ private:
     SdrObject *ReadPolyLine(WW8_DPHEAD* pHd, const WW8_DO* pDo,
         SfxAllItemSet &rSet);
     ESelection GetESelection( long nCpStart, long nCpEnd );
-    void InsertTxbxStyAttrs( SfxItemSet& rS, USHORT nColl );
+    void InsertTxbxStyAttrs( SfxItemSet& rS, sal_uInt16 nColl );
     void InsertAttrsAsDrawingAttrs(long nStartCp, long nEndCp, ManTypes eType, bool bONLYnPicLocFc=false);
 
-    bool GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp, USHORT nTxBxS,
-        USHORT nSequence);
+    bool GetTxbxTextSttEndCp(WW8_CP& rStartCp, WW8_CP& rEndCp, sal_uInt16 nTxBxS,
+        sal_uInt16 nSequence);
     bool GetRangeAsDrawingString(String& rString, long StartCp, long nEndCp, ManTypes eType);
     OutlinerParaObject* ImportAsOutliner(String &rString, WW8_CP nStartCp, WW8_CP nEndCp, ManTypes eType);
     SwFrmFmt* InsertTxbxText(SdrTextObj* pTextObj, Size* pObjSiz,
-        USHORT nTxBxS, USHORT nSequence, long nPosCp, SwFrmFmt* pFlyFmt,
+        sal_uInt16 nTxBxS, sal_uInt16 nSequence, long nPosCp, SwFrmFmt* pFlyFmt,
         bool bMakeSdrGrafObj, bool& rbEraseTextObj,
         bool* pbTestTxbxContainsText = 0, long* pnStartCp = 0,
         long* pnEndCp = 0, bool* pbContainsGraphics = 0,
         SvxMSDffImportRec* pRecord = 0);
-    bool TxbxChainContainsRealText( USHORT nTxBxS,
+    bool TxbxChainContainsRealText( sal_uInt16 nTxBxS,
                                     long&  rStartCp,
                                     long&  rEndCp );
     SdrObject *ReadTxtBox(WW8_DPHEAD* pHd, const WW8_DO* pDo,
@@ -1358,39 +1358,39 @@ private:
     void UpdateFields();
     void ConvertFFileName( String& rName, const String& rRaw );
     long Read_F_Tag( WW8FieldDesc* pF );
-    void InsertTagField( const USHORT nId, const String& rTagText );
+    void InsertTagField( const sal_uInt16 nId, const String& rTagText );
     long ImportExtSprm(WW8PLCFManResult* pRes);
-    void EndExtSprm(USHORT nSprmId);
+    void EndExtSprm(sal_uInt16 nSprmId);
     void ReadDocInfo();
 
 // Ver8-Listen
 
-    void RegisterNumFmtOnTxtNode(USHORT nActLFO, BYTE nActLevel,
+    void RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO, sal_uInt8 nActLevel,
         bool bSetAttr = true);
-    void RegisterNumFmtOnStyle(USHORT nStyle);
+    void RegisterNumFmtOnStyle(sal_uInt16 nStyle);
     void SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
         sal_uInt8 nActLevel);
-    void RegisterNumFmt(USHORT nActLFO, BYTE nActLevel);
+    void RegisterNumFmt(sal_uInt16 nActLFO, sal_uInt8 nActLevel);
 
 // spaeter zu ersetzen durch Aufruf in entsprechend erweiterten SvxMSDffManager
 
     const String* GetAnnotationAuthor(sal_uInt16 nIdx);
 
     // Schnittstellen fuer die Toggle-Attribute
-    void SetToggleAttr(BYTE nAttrId, bool bOn);
-    void SetToggleBiDiAttr(BYTE nAttrId, bool bOn);
-    void _ChkToggleAttr( USHORT nOldStyle81Mask, USHORT nNewStyle81Mask );
+    void SetToggleAttr(sal_uInt8 nAttrId, bool bOn);
+    void SetToggleBiDiAttr(sal_uInt8 nAttrId, bool bOn);
+    void _ChkToggleAttr( sal_uInt16 nOldStyle81Mask, sal_uInt16 nNewStyle81Mask );
 
-    void ChkToggleAttr( USHORT nOldStyle81Mask, USHORT nNewStyle81Mask )
+    void ChkToggleAttr( sal_uInt16 nOldStyle81Mask, sal_uInt16 nNewStyle81Mask )
     {
         if( nOldStyle81Mask != nNewStyle81Mask &&
             pCtrlStck->GetToggleAttrFlags() )
             _ChkToggleAttr( nOldStyle81Mask, nNewStyle81Mask );
     }
 
-    void _ChkToggleBiDiAttr( USHORT nOldStyle81Mask, USHORT nNewStyle81Mask );
+    void _ChkToggleBiDiAttr( sal_uInt16 nOldStyle81Mask, sal_uInt16 nNewStyle81Mask );
 
-    void ChkToggleBiDiAttr( USHORT nOldStyle81Mask, USHORT nNewStyle81Mask )
+    void ChkToggleBiDiAttr( sal_uInt16 nOldStyle81Mask, sal_uInt16 nNewStyle81Mask )
     {
         if( nOldStyle81Mask != nNewStyle81Mask &&
             pCtrlStck->GetToggleBiDiAttrFlags() )
@@ -1415,17 +1415,17 @@ private:
 
     // --> OD 2008-04-10 #i84783#
     // determine object attribute "Layout in Table Cell"
-    bool IsObjectLayoutInTableCell( const UINT32 nLayoutInTableCell ) const;
+    bool IsObjectLayoutInTableCell( const sal_uInt32 nLayoutInTableCell ) const;
     // <--
 
     //No copying
     SwWW8ImplReader(const SwWW8ImplReader &);
     SwWW8ImplReader& operator=(const SwWW8ImplReader&);
 public:     // eigentlich private, geht aber leider nur public
-    USHORT GetToggleAttrFlags() const;
-    USHORT GetToggleBiDiAttrFlags() const;
-    void SetToggleAttrFlags(USHORT nFlags);
-    void SetToggleBiDiAttrFlags(USHORT nFlags);
+    sal_uInt16 GetToggleAttrFlags() const;
+    sal_uInt16 GetToggleBiDiAttrFlags() const;
+    void SetToggleAttrFlags(sal_uInt16 nFlags);
+    void SetToggleBiDiAttrFlags(sal_uInt16 nFlags);
 
 
     long Read_Ftn(WW8PLCFManResult* pRes);
@@ -1437,100 +1437,100 @@ public:     // eigentlich private, geht aber leider nur public
 
     // Attribute
 
-    void Read_Special(USHORT, const BYTE*, short nLen);
-    void Read_Obj(USHORT, const BYTE*, short nLen);
-    void Read_PicLoc(USHORT, const BYTE* pData, short nLen );
-    void Read_BoldUsw(USHORT nId, const BYTE*, short nLen);
-    void Read_Bidi(USHORT nId, const BYTE*, short nLen);
-    void Read_BoldBiDiUsw(USHORT nId, const BYTE*, short nLen);
-    void Read_SubSuper(         USHORT, const BYTE*, short nLen );
+    void Read_Special(sal_uInt16, const sal_uInt8*, short nLen);
+    void Read_Obj(sal_uInt16, const sal_uInt8*, short nLen);
+    void Read_PicLoc(sal_uInt16, const sal_uInt8* pData, short nLen );
+    void Read_BoldUsw(sal_uInt16 nId, const sal_uInt8*, short nLen);
+    void Read_Bidi(sal_uInt16 nId, const sal_uInt8*, short nLen);
+    void Read_BoldBiDiUsw(sal_uInt16 nId, const sal_uInt8*, short nLen);
+    void Read_SubSuper(         sal_uInt16, const sal_uInt8*, short nLen );
     bool ConvertSubToGraphicPlacement();
     SwFrmFmt *ContainsSingleInlineGraphic(const SwPaM &rRegion);
-    void Read_SubSuperProp(     USHORT, const BYTE*, short nLen );
-    void Read_Underline(        USHORT, const BYTE*, short nLen );
-    void Read_TxtColor(         USHORT, const BYTE*, short nLen );
-    void Read_FontCode(         USHORT, const BYTE*, short nLen );
-    void Read_FontSize(         USHORT, const BYTE*, short nLen );
-    void Read_CharSet(USHORT , const BYTE* pData, short nLen);
-    void Read_Language(         USHORT, const BYTE*, short nLen );
-    void Read_CColl(            USHORT, const BYTE*, short nLen );
-    void Read_Kern(             USHORT, const BYTE* pData, short nLen );
-    void Read_FontKern(         USHORT, const BYTE* pData, short nLen );
-    void Read_Emphasis(         USHORT, const BYTE* pData, short nLen );
-    void Read_ScaleWidth(       USHORT, const BYTE* pData, short nLen );
-    void Read_Relief(           USHORT, const BYTE* pData, short nLen);
-    void Read_TxtAnim(      USHORT, const BYTE* pData, short nLen);
+    void Read_SubSuperProp(     sal_uInt16, const sal_uInt8*, short nLen );
+    void Read_Underline(        sal_uInt16, const sal_uInt8*, short nLen );
+    void Read_TxtColor(         sal_uInt16, const sal_uInt8*, short nLen );
+    void Read_FontCode(         sal_uInt16, const sal_uInt8*, short nLen );
+    void Read_FontSize(         sal_uInt16, const sal_uInt8*, short nLen );
+    void Read_CharSet(sal_uInt16 , const sal_uInt8* pData, short nLen);
+    void Read_Language(         sal_uInt16, const sal_uInt8*, short nLen );
+    void Read_CColl(            sal_uInt16, const sal_uInt8*, short nLen );
+    void Read_Kern(             sal_uInt16, const sal_uInt8* pData, short nLen );
+    void Read_FontKern(         sal_uInt16, const sal_uInt8* pData, short nLen );
+    void Read_Emphasis(         sal_uInt16, const sal_uInt8* pData, short nLen );
+    void Read_ScaleWidth(       sal_uInt16, const sal_uInt8* pData, short nLen );
+    void Read_Relief(           sal_uInt16, const sal_uInt8* pData, short nLen);
+    void Read_TxtAnim(      sal_uInt16, const sal_uInt8* pData, short nLen);
 
-    void Read_NoLineNumb(       USHORT nId, const BYTE* pData, short nLen );
+    void Read_NoLineNumb(       sal_uInt16 nId, const sal_uInt8* pData, short nLen );
 
-    void Read_LR(               USHORT nId, const BYTE*, short nLen );
-    void Read_UL(               USHORT nId, const BYTE*, short nLen );
-    void Read_ParaAutoBefore(USHORT , const BYTE *pData, short nLen);
-    void Read_ParaAutoAfter(USHORT , const BYTE *pData, short nLen);
-    void Read_DontAddEqual(USHORT , const BYTE *pData, short nLen);
-    void Read_LineSpace(        USHORT, const BYTE*, short nLen );
-    void Read_Justify(USHORT, const BYTE*, short nLen);
-    void Read_IdctHint(USHORT, const BYTE*, short nLen);
+    void Read_LR(               sal_uInt16 nId, const sal_uInt8*, short nLen );
+    void Read_UL(               sal_uInt16 nId, const sal_uInt8*, short nLen );
+    void Read_ParaAutoBefore(sal_uInt16 , const sal_uInt8 *pData, short nLen);
+    void Read_ParaAutoAfter(sal_uInt16 , const sal_uInt8 *pData, short nLen);
+    void Read_DontAddEqual(sal_uInt16 , const sal_uInt8 *pData, short nLen);
+    void Read_LineSpace(        sal_uInt16, const sal_uInt8*, short nLen );
+    void Read_Justify(sal_uInt16, const sal_uInt8*, short nLen);
+    void Read_IdctHint(sal_uInt16, const sal_uInt8*, short nLen);
     bool IsRightToLeft();
-    void Read_RTLJustify(USHORT, const BYTE*, short nLen);
-    void Read_Hyphenation(      USHORT, const BYTE* pData, short nLen );
-    void Read_WidowControl(     USHORT, const BYTE* pData, short nLen );
-    void Read_AlignFont(        USHORT, const BYTE* pData, short nLen );
-    void Read_UsePgsuSettings(  USHORT, const BYTE* pData, short nLen );
-    void Read_KeepLines(        USHORT, const BYTE* pData, short nLen );
-    void Read_KeepParas(        USHORT, const BYTE* pData, short nLen );
-    void Read_BreakBefore(      USHORT, const BYTE* pData, short nLen );
-    void Read_Apo(USHORT nId, const BYTE* pData, short nLen);
-    void Read_ApoPPC(USHORT, const BYTE* pData, short);
+    void Read_RTLJustify(sal_uInt16, const sal_uInt8*, short nLen);
+    void Read_Hyphenation(      sal_uInt16, const sal_uInt8* pData, short nLen );
+    void Read_WidowControl(     sal_uInt16, const sal_uInt8* pData, short nLen );
+    void Read_AlignFont(        sal_uInt16, const sal_uInt8* pData, short nLen );
+    void Read_UsePgsuSettings(  sal_uInt16, const sal_uInt8* pData, short nLen );
+    void Read_KeepLines(        sal_uInt16, const sal_uInt8* pData, short nLen );
+    void Read_KeepParas(        sal_uInt16, const sal_uInt8* pData, short nLen );
+    void Read_BreakBefore(      sal_uInt16, const sal_uInt8* pData, short nLen );
+    void Read_Apo(sal_uInt16 nId, const sal_uInt8* pData, short nLen);
+    void Read_ApoPPC(sal_uInt16, const sal_uInt8* pData, short);
 
-    void Read_BoolItem(         USHORT nId, const BYTE*, short nLen );
+    void Read_BoolItem(         sal_uInt16 nId, const sal_uInt8*, short nLen );
 
-    void Read_Border(           USHORT nId, const BYTE* pData, short nLen );
-    void Read_Tab(              USHORT nId, const BYTE* pData, short nLen );
-    void Read_Symbol(USHORT, const BYTE* pData, short nLen);
-    void Read_FldVanish(        USHORT nId, const BYTE* pData, short nLen );
+    void Read_Border(           sal_uInt16 nId, const sal_uInt8* pData, short nLen );
+    void Read_Tab(              sal_uInt16 nId, const sal_uInt8* pData, short nLen );
+    void Read_Symbol(sal_uInt16, const sal_uInt8* pData, short nLen);
+    void Read_FldVanish(        sal_uInt16 nId, const sal_uInt8* pData, short nLen );
 
     // Revision Marks ( == Redlining )
 
     // insert or delete content (change char attributes resp.)
-    void Read_CRevisionMark(RedlineType_t eType, const BYTE* pData, short nLen);
+    void Read_CRevisionMark(RedlineType_t eType, const sal_uInt8* pData, short nLen);
     // insert new content
-    void Read_CFRMark(USHORT , const BYTE* pData, short nLen);
+    void Read_CFRMark(sal_uInt16 , const sal_uInt8* pData, short nLen);
     // delete old content
-    void Read_CFRMarkDel(USHORT , const BYTE* pData, short nLen);
+    void Read_CFRMarkDel(sal_uInt16 , const sal_uInt8* pData, short nLen);
     // change properties of content (e.g. char formating)
-    void Read_CPropRMark(USHORT , const BYTE* pData, short nLen); // complex!
+    void Read_CPropRMark(sal_uInt16 , const sal_uInt8* pData, short nLen); // complex!
 
 
-    void Read_TabRowEnd(        USHORT, const BYTE* pData, short nLen );
-    void Read_TabCellEnd(        USHORT, const BYTE* pData, short nLen );
+    void Read_TabRowEnd(        sal_uInt16, const sal_uInt8* pData, short nLen );
+    void Read_TabCellEnd(        sal_uInt16, const sal_uInt8* pData, short nLen );
     static bool ParseTabPos(WW8_TablePos *aTabPos, WW8PLCFx_Cp_FKP* pPap);
-    void Read_Shade(            USHORT, const BYTE* pData, short nLen );
-    void Read_ANLevelNo(        USHORT, const BYTE* pData, short nLen );
-    void Read_ANLevelDesc(      USHORT, const BYTE* pData, short nLen );
+    void Read_Shade(            sal_uInt16, const sal_uInt8* pData, short nLen );
+    void Read_ANLevelNo(        sal_uInt16, const sal_uInt8* pData, short nLen );
+    void Read_ANLevelDesc(      sal_uInt16, const sal_uInt8* pData, short nLen );
 
     // Gliederungsebene Ver8
-    void Read_POutLvl(USHORT, const BYTE* pData, short nLen);
+    void Read_POutLvl(sal_uInt16, const sal_uInt8* pData, short nLen);
 
-    void Read_OLST(             USHORT, const BYTE* pData, short nLen );
+    void Read_OLST(             sal_uInt16, const sal_uInt8* pData, short nLen );
 
-    void Read_CharShadow(       USHORT, const BYTE* pData, short nLen );
-    void Read_CharHighlight(    USHORT, const BYTE* pData, short nLen );
+    void Read_CharShadow(       sal_uInt16, const sal_uInt8* pData, short nLen );
+    void Read_CharHighlight(    sal_uInt16, const sal_uInt8* pData, short nLen );
                                         // Ver8-Listen
 
-    void Read_ListLevel(        USHORT nId, const sal_uInt8* pData, short nLen);
-    void Read_LFOPosition(      USHORT nId, const sal_uInt8* pData, short nLen);
+    void Read_ListLevel(        sal_uInt16 nId, const sal_uInt8* pData, short nLen);
+    void Read_LFOPosition(      sal_uInt16 nId, const sal_uInt8* pData, short nLen);
     bool SetTxtFmtCollAndListLevel(const SwPaM& rRg, SwWW8StyInf& rStyleInfo);
 
-    void Read_StyleCode(USHORT, const BYTE* pData, short nLen);
-    void Read_Majority(USHORT, const BYTE* , short );
-    void Read_DoubleLine_Rotate( USHORT, const BYTE* pDATA, short nLen);
+    void Read_StyleCode(sal_uInt16, const sal_uInt8* pData, short nLen);
+    void Read_Majority(sal_uInt16, const sal_uInt8* , short );
+    void Read_DoubleLine_Rotate( sal_uInt16, const sal_uInt8* pDATA, short nLen);
 
-    void Read_TxtForeColor(USHORT, const BYTE* pData, short nLen);
-    void Read_TxtBackColor(USHORT, const BYTE* pData, short nLen);
-    void Read_ParaBackColor(USHORT, const BYTE* pData, short nLen);
-    void Read_ParaBiDi(USHORT, const BYTE* pData, short nLen);
-    static sal_uInt32 ExtractColour(const BYTE* &rpData, bool bVer67);
+    void Read_TxtForeColor(sal_uInt16, const sal_uInt8* pData, short nLen);
+    void Read_TxtBackColor(sal_uInt16, const sal_uInt8* pData, short nLen);
+    void Read_ParaBackColor(sal_uInt16, const sal_uInt8* pData, short nLen);
+    void Read_ParaBiDi(sal_uInt16, const sal_uInt8* pData, short nLen);
+    static sal_uInt32 ExtractColour(const sal_uInt8* &rpData, bool bVer67);
 
     long MapBookmarkVariables(const WW8FieldDesc* pF,String &rOrigName,
         const String &rData);
@@ -1543,9 +1543,9 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_DocInfo( WW8FieldDesc* pF, String& rStr );
     eF_ResT Read_F_Author( WW8FieldDesc*, String& );
     eF_ResT Read_F_TemplName( WW8FieldDesc*, String& );
-    short GetTimeDatePara(String& rStr, sal_uInt32& rFormat, USHORT &rLang,
+    short GetTimeDatePara(String& rStr, sal_uInt32& rFormat, sal_uInt16 &rLang,
         int nWhichDefault, bool bHijri = false);
-    bool ForceFieldLanguage(SwField &rFld, USHORT nLang);
+    bool ForceFieldLanguage(SwField &rFld, sal_uInt16 nLang);
     eF_ResT Read_F_DateTime( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_FileName( WW8FieldDesc*, String& rStr);
     eF_ResT Read_F_Anz( WW8FieldDesc* pF, String& );
@@ -1584,30 +1584,30 @@ public:     // eigentlich private, geht aber leider nur public
 
     void DeleteFormImpl();
 
-    short ImportSprm( const BYTE* pPos, USHORT nId = 0 );
+    short ImportSprm( const sal_uInt8* pPos, sal_uInt16 nId = 0 );
 
     bool SearchRowEnd(WW8PLCFx_Cp_FKP* pPap,WW8_CP &rStartCp, int nLevel) const;
 
     const WW8Fib& GetFib() const    { return *pWwFib; }
     SwDoc& GetDoc() const           { return rDoc; }
-    USHORT GetNAktColl()  const     { return nAktColl; }
-    void SetNAktColl( USHORT nColl ) { nAktColl = nColl;    }
+    sal_uInt16 GetNAktColl()  const     { return nAktColl; }
+    void SetNAktColl( sal_uInt16 nColl ) { nAktColl = nColl;    }
     void SetAktItemSet( SfxItemSet* pItemSet ) { pAktItemSet = pItemSet; }
-    USHORT StyleUsingLFO( USHORT nLFOIndex ) const ;
+    sal_uInt16 StyleUsingLFO( sal_uInt16 nLFOIndex ) const ;
     const SwFmt* GetStyleWithOrgWWName( String& rName ) const ;
 
     static bool GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc);
     static void PicRead( SvStream *pDataStream, WW8_PIC *pPic, bool bVer67);
     static bool ImportOleWMF( SvStorageRef xSrc1, GDIMetaFile &rWMF,
         long &rX, long &rY);
-    static ColorData GetCol(BYTE nIco);
+    static ColorData GetCol(sal_uInt8 nIco);
 
-    SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage, SvStream* pSt,
+    SwWW8ImplReader( sal_uInt8 nVersionPara, SvStorage* pStorage, SvStream* pSt,
         SwDoc& rD, const String& rBaseURL, bool bNewDoc );
 
     const String& GetBaseURL() const { return sBaseURL; }
     // Laden eines kompletten DocFiles
-    ULONG LoadDoc( SwPaM&,WW8Glossary *pGloss=0);
+    sal_uLong LoadDoc( SwPaM&,WW8Glossary *pGloss=0);
     CharSet GetCurrentCharSet();
     CharSet GetCurrentCJKCharSet();
 

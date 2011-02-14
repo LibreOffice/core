@@ -97,7 +97,7 @@ String DictionaryList::getPropertyTypeName( sal_Int16 nConversionPropertyType ) 
     if(!m_pPropertyTypeNameListBox || !m_pPropertyTypeNameListBox->GetEntryCount())
         return String();
 
-    USHORT nPos = static_cast<USHORT>( nConversionPropertyType )-1;
+    sal_uInt16 nPos = static_cast<sal_uInt16>( nConversionPropertyType )-1;
     if(nPos<m_pPropertyTypeNameListBox->GetEntryCount())
         return m_pPropertyTypeNameListBox->GetEntry(nPos);
     return m_pPropertyTypeNameListBox->GetEntry(0);
@@ -260,7 +260,7 @@ bool DictionaryList::hasTerm( const rtl::OUString& rTerm ) const
 }
 
 void DictionaryList::addEntry( const rtl::OUString& rTerm, const rtl::OUString& rMapping
-                              , sal_Int16 nConversionPropertyType, ULONG nPos )
+                              , sal_Int16 nConversionPropertyType, sal_uIntPtr nPos )
 {
     if( hasTerm( rTerm ) )
         return;
@@ -286,9 +286,9 @@ void DictionaryList::deleteEntryOnPos( sal_Int32 nPos  )
     }
 }
 
-ULONG DictionaryList::deleteEntries( const rtl::OUString& rTerm )
+sal_uIntPtr DictionaryList::deleteEntries( const rtl::OUString& rTerm )
 {
-    ULONG nPos = LIST_APPEND;
+    sal_uIntPtr nPos = LIST_APPEND;
     for( sal_Int32 nN=GetRowCount(); nN--; )
     {
         DictionaryEntry* pCurEntry = getEntryOnPos( nN );
@@ -355,7 +355,7 @@ void DictionaryList::Resize()
     m_pHeaderBar->SetSizePixel( aBarSize );
 }
 
-void DictionaryList::sortByColumn( USHORT nSortColumnIndex, bool bSortAtoZ )
+void DictionaryList::sortByColumn( sal_uInt16 nSortColumnIndex, bool bSortAtoZ )
 {
     m_nSortColumnIndex=nSortColumnIndex;
     if( nSortColumnIndex<3 )
@@ -372,7 +372,7 @@ void DictionaryList::sortByColumn( USHORT nSortColumnIndex, bool bSortAtoZ )
         GetModel()->SetSortMode(SortNone);
 }
 
-USHORT DictionaryList::getSortColumn() const
+sal_uInt16 DictionaryList::getSortColumn() const
 {
     return m_nSortColumnIndex;
 }
@@ -393,8 +393,8 @@ StringCompare DictionaryList::ColumnCompare( SvLBoxEntry* pLeft, SvLBoxEntry* pR
 
     if(pLeftItem != NULL && pRightItem != NULL)
     {
-        USHORT nLeftKind=pLeftItem->IsA();
-        USHORT nRightKind=pRightItem->IsA();
+        sal_uInt16 nLeftKind=pLeftItem->IsA();
+        sal_uInt16 nRightKind=pRightItem->IsA();
 
         if(nRightKind == SV_ITEM_ID_LBOXSTRING &&
             nLeftKind == SV_ITEM_ID_LBOXSTRING )
@@ -412,12 +412,12 @@ StringCompare DictionaryList::ColumnCompare( SvLBoxEntry* pLeft, SvLBoxEntry* pR
     return eCompare;
 }
 
-SvLBoxItem* DictionaryList::getItemAtColumn( SvLBoxEntry* pEntry, USHORT nColumn ) const
+SvLBoxItem* DictionaryList::getItemAtColumn( SvLBoxEntry* pEntry, sal_uInt16 nColumn ) const
 {
     SvLBoxItem* pItem = NULL;
     if( pEntry )
     {
-        USHORT nCount = pEntry->ItemCount();
+        sal_uInt16 nCount = pEntry->ItemCount();
         nColumn++;
         if( nTreeFlags & TREEFLAG_CHKBTN )
             nColumn++;
@@ -791,12 +791,12 @@ IMPL_LINK( ChineseDictionaryDialog, ModifyHdl, void*, EMPTYARG )
         {
             if( m_aCB_Reverse.IsChecked() )
             {
-                ULONG nPos = rReverse.deleteEntries( pE->m_aMapping );
+                sal_uIntPtr nPos = rReverse.deleteEntries( pE->m_aMapping );
                 nPos = rReverse.deleteEntries( aMapping );
                 rReverse.addEntry( aMapping, aTerm, nConversionPropertyType, nPos );
             }
 
-            ULONG nPos = rActive.deleteEntries( aTerm );
+            sal_uIntPtr nPos = rActive.deleteEntries( aTerm );
             rActive.addEntry( aTerm, aMapping, nConversionPropertyType, nPos );
         }
     }
@@ -869,7 +869,7 @@ IMPL_LINK( ChineseDictionaryDialog, HeaderBarClick, void*, EMPTYARG )
 {
     if(m_pHeaderBar)
     {
-        USHORT nId = m_pHeaderBar->GetCurItemId();
+        sal_uInt16 nId = m_pHeaderBar->GetCurItemId();
         HeaderBarItemBits nBits = m_pHeaderBar->GetItemBits(nId);
         if( nBits & HIB_CLICKABLE )
         {

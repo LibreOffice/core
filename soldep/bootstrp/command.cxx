@@ -85,7 +85,7 @@
 #endif
 
 /*****************************************************************************/
-CommandLine::CommandLine(BOOL bWrite)
+CommandLine::CommandLine(sal_Bool bWrite)
 /*****************************************************************************/
                 : bTmpWrite(bWrite)
 {
@@ -110,7 +110,7 @@ CommandLine::CommandLine(BOOL bWrite)
 }
 
 /*****************************************************************************/
-CommandLine::CommandLine(const char *CommandString, BOOL bWrite)
+CommandLine::CommandLine(const char *CommandString, sal_Bool bWrite)
 /*****************************************************************************/
                 : bTmpWrite(bWrite)
 {
@@ -136,7 +136,7 @@ CommandLine::CommandLine(const char *CommandString, BOOL bWrite)
 }
 
 /*****************************************************************************/
-CommandLine::CommandLine(const CommandLine& CCommandLine, BOOL bWrite)
+CommandLine::CommandLine(const CommandLine& CCommandLine, sal_Bool bWrite)
 /*****************************************************************************/
                 : bTmpWrite(bWrite)
 {
@@ -398,9 +398,9 @@ void CCommand::ImplInit()
     char *pChar;
     int nVoid = sizeof( size_t * );
     nArgc = aCommandLine.GetTokenCount(' ');
-    ULONG nLen = aCommandLine.Len();
+    sal_uIntPtr nLen = aCommandLine.Len();
 
-    ppArgv = (char **) new char[ (ULONG)(nLen + nVoid * (nArgc +2) + nArgc ) ];
+    ppArgv = (char **) new char[ (sal_uIntPtr)(nLen + nVoid * (nArgc +2) + nArgc ) ];
     pChar = (char *) ppArgv + ( (1+nArgc) * nVoid );
     pPtr = (size_t *) ppArgv;
     for ( xub_StrLen i=0; i<nArgc; i++ )
@@ -414,7 +414,7 @@ void CCommand::ImplInit()
 #ifdef UNX
         if ( i == 1 )
         {
-            USHORT nWo = aCommandLine.Search("csh -c ");
+            sal_uInt16 nWo = aCommandLine.Search("csh -c ");
             if (nWo != STRING_NOTFOUND)
                 aCommandLine.Erase(0, nWo + 7);
             else
@@ -445,19 +445,19 @@ CCommand::operator int()
 
     if (( pid = fork()) < 0 )
     {
-        DBG_ASSERT( FALSE, "fork error" );
+        DBG_ASSERT( sal_False, "fork error" );
     }
     else if ( pid == 0 )
     {
         if ( execv( ppArgv[0], (char * const *) ppArgv ) < 0 )
         {
-            DBG_ASSERT( FALSE, "execv failed" );
+            DBG_ASSERT( sal_False, "execv failed" );
         }
     }
     //fprintf( stderr, "parent: %s %s\n", ppArgv[0] , ppArgv[1] );
     if ( (nRet = waitpid( pid, NULL, 0 ) < 0) )
     {
-        DBG_ASSERT( FALSE, "wait error" );
+        DBG_ASSERT( sal_False, "wait error" );
     }
 #endif
 
@@ -510,7 +510,7 @@ ByteString CCommand::Search(ByteString aEnv, ByteString sItem)
     ByteString sEnvironment = GetEnv( sEnv.GetBuffer());
     xub_StrLen nCount = sEnvironment.GetTokenCount( cPathSeperator );
 
-    BOOL bFound = FALSE;
+    sal_Bool bFound = sal_False;
 
     for ( xub_StrLen i=0; i<nCount && !bFound; i++ )
     {
@@ -527,7 +527,7 @@ ByteString CCommand::Search(ByteString aEnv, ByteString sItem)
         aDirEntry.ToAbs();
         if ( aDirEntry.Exists()) {
             sReturn = aEntry;
-            bFound = TRUE;
+            bFound = sal_True;
         }
     }
     if ( !bFound )
@@ -550,7 +550,7 @@ ByteString CCommand::Search(ByteString aEnv, ByteString sItem)
             aDirEntry.ToAbs();
             if ( aDirEntry.Exists()) {
                 sReturn = aEntry;
-                bFound = TRUE;
+                bFound = sal_True;
             }
         }
     }
@@ -589,7 +589,7 @@ CCommandd::operator int()
     LPTSTR lpCommandLine = (char *) GetCommandLine_().GetBuffer();
     LPSECURITY_ATTRIBUTES lpProcessAttributes = NULL;
     LPSECURITY_ATTRIBUTES lpThreadAttributes = NULL;
-    BOOL bInheritHandles = TRUE;
+    sal_Bool bInheritHandles = sal_True;
 
     // wie wuenschen wir denn gestartet zu werden ??
     DWORD dwCreationFlags;

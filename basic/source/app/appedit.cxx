@@ -83,8 +83,8 @@ AppEdit::~AppEdit()
 void AppEdit::LoadIniFile()
 {
     TextView *pTextView = ((TextEdit*)pDataEdit)->aEdit.pTextView;
-    BOOL bWasModified = pTextView->GetTextEngine()->IsModified();
-    pTextView->GetTextEngine()->SetModified( FALSE );
+    sal_Bool bWasModified = pTextView->GetTextEngine()->IsModified();
+    pTextView->GetTextEngine()->SetModified( sal_False );
 
     FontList aFontList( pFrame );   // Just some Window is needed
     Config aConf(Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ));
@@ -93,8 +93,8 @@ void AppEdit::LoadIniFile()
     String aFontStyle = String( aConf.ReadKey( "ScriptFontStyle", "normal" ), RTL_TEXTENCODING_UTF8 );
     String aFontSize = String( aConf.ReadKey( "ScriptFontSize", "12" ), RTL_TEXTENCODING_UTF8 );
     Font aFont = aFontList.Get( aFontName, aFontStyle );
-//    ULONG nFontSize = aFontSize.GetValue( FUNIT_POINT );
-    ULONG nFontSize = aFontSize.ToInt32();
+//    sal_uIntPtr nFontSize = aFontSize.GetValue( FUNIT_POINT );
+    sal_uIntPtr nFontSize = aFontSize.ToInt32();
 //    aFont.SetSize( Size( nFontSize, nFontSize ) );
     aFont.SetHeight( nFontSize );
 
@@ -103,7 +103,7 @@ void AppEdit::LoadIniFile()
         Font aFont2( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguage(), 0, pFrame ));
     }
 #endif
-    aFont.SetTransparent( FALSE );
+    aFont.SetTransparent( sal_False );
 //    aFont.SetAlign( ALIGN_BOTTOM );
 //    aFont.SetHeight( aFont.GetHeight()+2 );
     pDataEdit->SetFont( aFont );
@@ -184,7 +184,7 @@ void AppEdit::SetScrollBarRanges()
 
 
 
-USHORT AppEdit::GetLineNr()
+sal_uInt16 AppEdit::GetLineNr()
 {
   return pDataEdit->GetLineNr();
 }
@@ -208,7 +208,7 @@ long AppEdit::InitMenu( Menu* pMenu )
         pMenu->EnableItem( RID_EDITREDO,    RedoCount > 0 );
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 long AppEdit::DeInitMenu( Menu* pMenu )
@@ -218,7 +218,7 @@ long AppEdit::DeInitMenu( Menu* pMenu )
     pMenu->EnableItem( RID_EDITUNDO );
     pMenu->EnableItem( RID_EDITREDO );
 
-    return TRUE;
+    return sal_True;
 }
 
 void AppEdit::Resize()
@@ -233,7 +233,7 @@ void AppEdit::Resize()
     if ( pHScroll )
     {
         rHSize = pHScroll->GetSizePixel();
-        ULONG nHieght = rHSize.Height();
+        sal_uIntPtr nHieght = rHSize.Height();
         rNewSize.Height() -= nHieght;
         rHStart.Y() = rNewSize.Height();
     }
@@ -241,7 +241,7 @@ void AppEdit::Resize()
     if ( pVScroll )
     {
         rVSize = pVScroll->GetSizePixel();
-        ULONG nWidth = rVSize.Width();
+        sal_uIntPtr nWidth = rVSize.Width();
         rNewSize.Width() -= nWidth;
         rVStart.X() = rNewSize.Width();
     }
@@ -293,7 +293,7 @@ void AppEdit::PostSaveAs()
 {
 }
 
-void AppEdit::Highlight( USHORT nLine, USHORT nCol1, USHORT nCol2 )
+void AppEdit::Highlight( sal_uInt16 nLine, sal_uInt16 nCol1, sal_uInt16 nCol2 )
 {
     ((TextEdit*)pDataEdit)->Highlight( nLine, nCol1, nCol2 );
     ToTop();

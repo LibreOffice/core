@@ -75,12 +75,12 @@ FuConstCustomShape::~FuConstCustomShape()
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool __EXPORT FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
+    sal_Bool bReturn = FuConstruct::MouseButtonDown(rMEvt);
     if ( rMEvt.IsLeft() && !pView->IsAction() )
     {
         Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
@@ -102,7 +102,7 @@ BOOL __EXPORT FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
                 pObj->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
         }
 
-        bReturn = TRUE;
+        bReturn = sal_True;
     }
     return bReturn;
 }
@@ -113,7 +113,7 @@ BOOL __EXPORT FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstCustomShape::MouseMove(const MouseEvent& rMEvt)
+sal_Bool __EXPORT FuConstCustomShape::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -124,18 +124,18 @@ BOOL __EXPORT FuConstCustomShape::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool __EXPORT FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = sal_False;
 
     if ( pView->IsCreateObj() && rMEvt.IsLeft() )
     {
         Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         pView->EndCreateObj(SDRCREATE_FORCEEND);
-        bReturn = TRUE;
+        bReturn = sal_True;
     }
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
 }
@@ -144,14 +144,14 @@ BOOL __EXPORT FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 |* Tastaturereignisse bearbeiten
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert TRUE, andernfalls
+|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
 |* FALSE.
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstCustomShape::KeyInput(const KeyEvent& rKEvt)
+sal_Bool __EXPORT FuConstCustomShape::KeyInput(const KeyEvent& rKEvt)
 {
-    BOOL bReturn = FuConstruct::KeyInput(rKEvt);
+    sal_Bool bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);
 }
 

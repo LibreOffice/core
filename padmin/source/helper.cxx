@@ -219,13 +219,13 @@ QueryString::QueryString( Window* pParent, String& rQuery, String& rRet, const :
         m_aComboBox.InsertEntry( m_rReturnValue );
         for( ::std::list<String>::const_iterator it = rChoices.begin(); it != rChoices.end(); ++it )
             m_aComboBox.InsertEntry( *it );
-        m_aEdit.Show( FALSE );
+        m_aEdit.Show( sal_False );
         m_bUseEdit = false;
     }
     else
     {
         m_aEdit.SetText( m_rReturnValue );
-        m_aComboBox.Show( FALSE );
+        m_aComboBox.Show( sal_False );
         m_bUseEdit = true;
     }
     SetText( Application::GetDisplayName() );
@@ -251,13 +251,13 @@ IMPL_LINK( QueryString, ClickBtnHdl, Button*, pButton )
  *  AreYouSure
  */
 
-BOOL padmin::AreYouSure( Window* pParent, int nRid )
+sal_Bool padmin::AreYouSure( Window* pParent, int nRid )
 {
     if( nRid == -1 )
         nRid = RID_YOU_SURE;
     QueryBox aQueryBox( pParent, WB_YES_NO | WB_DEF_NO,
                         String( PaResId( nRid ) ) );
-    return aQueryBox.Execute() == RET_NO ? FALSE : TRUE;
+    return aQueryBox.Execute() == RET_NO ? sal_False : sal_True;
 }
 
 /*

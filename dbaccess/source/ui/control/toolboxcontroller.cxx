@@ -106,7 +106,7 @@ namespace dbaui
 
     namespace
     {
-        void lcl_copy(Menu* _pMenu,USHORT _nMenuId,USHORT _nMenuPos,ToolBox* _pToolBox,USHORT _nToolId,const ::rtl::OUString& _sCommand)
+        void lcl_copy(Menu* _pMenu,sal_uInt16 _nMenuId,sal_uInt16 _nMenuPos,ToolBox* _pToolBox,sal_uInt16 _nToolId,const ::rtl::OUString& _sCommand)
         {
             if ( _pMenu->GetItemType(_nMenuPos) != MENUITEM_STRING )
                 _pToolBox->SetItemImage(_nToolId, _pMenu->GetItemImage(_nMenuId));
@@ -179,10 +179,10 @@ namespace dbaui
         ToolBox*    pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));
         if ( pToolBox )
         {
-            USHORT nCount = pToolBox->GetItemCount();
-            for (USHORT nPos = 0; nPos < nCount; ++nPos)
+            sal_uInt16 nCount = pToolBox->GetItemCount();
+            for (sal_uInt16 nPos = 0; nPos < nCount; ++nPos)
             {
-                USHORT nItemId = pToolBox->GetItemId(nPos);
+                sal_uInt16 nItemId = pToolBox->GetItemId(nPos);
                 if ( pToolBox->GetItemCommand(nItemId) == String(m_aCommandURL) )
                 {
                     m_nToolBoxId = nItemId;
@@ -206,10 +206,10 @@ namespace dbaui
             if ( m_aCommandURL == aFind->first && !Event.IsEnabled )
             {
                 ::std::auto_ptr<PopupMenu> pMenu = getMenu();
-                USHORT nCount = pMenu->GetItemCount();
-                for (USHORT i = 0; i < nCount; ++i)
+                sal_uInt16 nCount = pMenu->GetItemCount();
+                for (sal_uInt16 i = 0; i < nCount; ++i)
                 {
-                    USHORT nItemId = pMenu->GetItemId(i);
+                    sal_uInt16 nItemId = pMenu->GetItemId(i);
                     aFind = m_aStates.find(pMenu->GetItemCommand(nItemId));
                     if ( aFind != m_aStates.end() && aFind->second )
                     {
@@ -245,13 +245,13 @@ namespace dbaui
                     nImageType |= ImageType::COLOR_HIGHCONTRAST;
 
                 Sequence< ::rtl::OUString> aSeq(1);
-                USHORT nCount = pMenu->GetItemCount();
-                for (USHORT nPos = 0; nPos < nCount; ++nPos)
+                sal_uInt16 nCount = pMenu->GetItemCount();
+                for (sal_uInt16 nPos = 0; nPos < nCount; ++nPos)
                 {
                     if ( pMenu->GetItemType( nPos ) == MENUITEM_SEPARATOR )
                         continue;
 
-                    USHORT nItemId = pMenu->GetItemId(nPos);
+                    sal_uInt16 nItemId = pMenu->GetItemId(nPos);
                     aSeq[0] = pMenu->GetItemCommand(nItemId);
                     Sequence< Reference<XGraphic> > aImages = xImageMgr->getImages(nImageType,aSeq);
 
@@ -285,7 +285,7 @@ namespace dbaui
         ToolBox* pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));
         ::std::auto_ptr<PopupMenu> pMenu = getMenu();
 
-        USHORT nSelected = pMenu->Execute(pToolBox, pToolBox->GetItemRect( m_nToolBoxId ),POPUPMENU_EXECUTE_DOWN);
+        sal_uInt16 nSelected = pMenu->Execute(pToolBox, pToolBox->GetItemRect( m_nToolBoxId ),POPUPMENU_EXECUTE_DOWN);
         // "cleanup" the toolbox state
         Point aPoint = pToolBox->GetItemRect( m_nToolBoxId ).TopLeft();
         MouseEvent aLeave( aPoint, 0, MOUSE_LEAVEWINDOW | MOUSE_SYNTHETIC );

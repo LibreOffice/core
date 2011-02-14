@@ -42,11 +42,11 @@
 //==================================================================
 
 ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
-                                    USHORT          nResId,
+                                    sal_uInt16          nResId,
                                     long            nCurrent,
                                     long            nDefault,
                                     FieldUnit       eFUnit,
-                                    USHORT          nDecimals,
+                                    sal_uInt16          nDecimals,
                                     long            nMaximum,
                                     long            nMinimum,
                                     long            nFirst,
@@ -98,14 +98,14 @@ long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
     mit Nachkommastellen:
 
     double  nVal    = aEdValue.GetValue( eUnit );
-    USHORT  nDecs   = aEdValue.GetDecimalDigits();
+    sal_uInt16  nDecs   = aEdValue.GetDecimalDigits();
     double  nFactor = 0.0;
 
-    // static long ImpPower10( USHORT nDecs )
+    // static long ImpPower10( sal_uInt16 nDecs )
     {
         nFactor = 1.0;
 
-        for ( USHORT i=0; i < nDecs; i++ )
+        for ( sal_uInt16 i=0; i < nDecs; i++ )
             nFactor *= 10.0;
     }
 

@@ -61,7 +61,7 @@ void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, SfxChildWinFacto
         pAppData_Impl->pFactArr = new SfxChildWinFactArr_Impl;
 
 //#ifdef DBG_UTIL
-    for (USHORT nFactory=0; nFactory<pAppData_Impl->pFactArr->Count(); ++nFactory)
+    for (sal_uInt16 nFactory=0; nFactory<pAppData_Impl->pFactArr->Count(); ++nFactory)
     {
         if (pFact->nId ==  (*pAppData_Impl->pFactArr)[nFactory]->nId)
         {
@@ -76,7 +76,7 @@ void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, SfxChildWinFacto
         SfxChildWinFactory, pFact, pAppData_Impl->pFactArr->Count() );
 }
 
-void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, USHORT nId,
+void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt16 nId,
         SfxChildWinContextFactory *pFact)
 {
     SfxChildWinFactArr_Impl *pFactories;
@@ -87,8 +87,8 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, USHORT nI
         pFactories = pMod->GetChildWinFactories_Impl();
         if ( pFactories )
         {
-            USHORT nCount = pFactories->Count();
-            for (USHORT nFactory=0; nFactory<nCount; ++nFactory)
+            sal_uInt16 nCount = pFactories->Count();
+            for (sal_uInt16 nFactory=0; nFactory<nCount; ++nFactory)
             {
                 SfxChildWinFactory *pFac = (*pFactories)[nFactory];
                 if ( nId == pFac->nId )
@@ -108,8 +108,8 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, USHORT nI
         DBG_ASSERT( pAppData_Impl->pFactArr, "Keine Factories!" );
 
         pFactories = pAppData_Impl->pFactArr;
-        USHORT nCount = pFactories->Count();
-        for (USHORT nFactory=0; nFactory<nCount; ++nFactory)
+        sal_uInt16 nCount = pFactories->Count();
+        for (sal_uInt16 nFactory=0; nFactory<nCount; ++nFactory)
         {
             SfxChildWinFactory *pFac = (*pFactories)[nFactory];
             if ( nId == pFac->nId )

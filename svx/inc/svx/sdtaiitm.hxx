@@ -32,13 +32,13 @@
 
 class SdrTextAniStartInsideItem: public SdrYesNoItem {
 public:
-    SdrTextAniStartInsideItem(BOOL bOn=FALSE): SdrYesNoItem(SDRATTR_TEXT_ANISTARTINSIDE,bOn) {}
+    SdrTextAniStartInsideItem(sal_Bool bOn=sal_False): SdrYesNoItem(SDRATTR_TEXT_ANISTARTINSIDE,bOn) {}
     SdrTextAniStartInsideItem(SvStream& rIn) : SdrYesNoItem(SDRATTR_TEXT_ANISTARTINSIDE,rIn) {}
 };
 
 class SdrTextAniStopInsideItem: public SdrYesNoItem {
 public:
-    SdrTextAniStopInsideItem(BOOL bOn=FALSE): SdrYesNoItem(SDRATTR_TEXT_ANISTOPINSIDE,bOn) {}
+    SdrTextAniStopInsideItem(sal_Bool bOn=sal_False): SdrYesNoItem(SDRATTR_TEXT_ANISTOPINSIDE,bOn) {}
     SdrTextAniStopInsideItem(SvStream& rIn) : SdrYesNoItem(SDRATTR_TEXT_ANISTOPINSIDE,rIn) {}
 };
 

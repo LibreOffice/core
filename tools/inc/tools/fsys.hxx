@@ -146,7 +146,7 @@ typedef int FSysAction;
 #define RFS_LOWER       "-rfs-"
 #define RFS_UPPER       "-RFS-"
 
-typedef ULONG FSysError;
+typedef sal_uIntPtr FSysError;
 
 // FSysExact
 enum FSysExact
@@ -176,9 +176,9 @@ class TOOLS_DLLPUBLIC FileStat
     friend struct   DirReader_Impl;
     friend void     ImpInitFileStat( FileStat&, dirent* );
 
-    ULONG           nError;
+    sal_uIntPtr         nError;
     DirEntryKind    nKindFlags;
-    ULONG           nSize;
+    sal_uIntPtr         nSize;
     String          aCreator;
     String          aType;
     Date            aDateCreated;
@@ -199,16 +199,16 @@ public:
                     FileStat();
                     FileStat( const DirEntry& rDirEntry,
                               FSysAccess nAccess = FSYS_ACCESS_FLOPPY );
-    BOOL            Update( const DirEntry& rDirEntry,
-                              BOOL bForceAccess = TRUE );
+    sal_Bool            Update( const DirEntry& rDirEntry,
+                              sal_Bool bForceAccess = sal_True );
 
-    ULONG           GetError() const { return ERRCODE_TOERROR(nError); }
-    ULONG           GetErrorCode() const { return nError; }
+    sal_uIntPtr         GetError() const { return ERRCODE_TOERROR(nError); }
+    sal_uIntPtr         GetErrorCode() const { return nError; }
 
-    ULONG           GetSize() const { return nSize; }
+    sal_uIntPtr         GetSize() const { return nSize; }
 
     DirEntryKind    GetKind() const { return nKindFlags; }
-    BOOL            IsKind( DirEntryKind nKind ) const;
+    sal_Bool            IsKind( DirEntryKind nKind ) const;
 
     String          GetType() const { return aType; }
     String          GetCreator() const { return aCreator; }
@@ -219,12 +219,12 @@ public:
     Time            TimeModified() const { return aTimeModified; }
     Date            DateAccessed() const { return aDateAccessed; }
     Time            TimeAccessed() const { return aTimeAccessed; }
-    BOOL            IsYounger( const FileStat& rIsOlder ) const;
+    sal_Bool            IsYounger( const FileStat& rIsOlder ) const;
 
 #define TF_FSYS_READONLY_FLAG
-    static ULONG    SetReadOnlyFlag( const DirEntry &rEntry, BOOL bRO = TRUE );
-    static BOOL     GetReadOnlyFlag( const DirEntry &rEntry );
-    static BOOL     HasReadOnlyFlag();
+    static sal_uIntPtr  SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO = sal_True );
+    static sal_Bool     GetReadOnlyFlag( const DirEntry &rEntry );
+    static sal_Bool     HasReadOnlyFlag();
 
     static ErrCode  QueryDiskSpace( const String &rPath,
                                     BigInt &rFreeBytes, BigInt &rTotalBytes );
@@ -251,7 +251,7 @@ friend class FileCopier;
 #endif
     ByteString          aName;
     DirEntry*           pParent;
-    ULONG               nError;
+    sal_uIntPtr             nError;
     DirEntryFlag        eFlag;
 
 private:
@@ -271,17 +271,17 @@ private:
                                          FSysPathStyle eStyle );
     TOOLS_DLLPRIVATE FSysError          ImpParseUnixName( const ByteString& rPfad,
                                           FSysPathStyle eStyle );
-    TOOLS_DLLPRIVATE USHORT             ImpTryUrl( DirEntryStack& rStack, const String& rPfad, FSysPathStyle eStyle );
+    TOOLS_DLLPRIVATE sal_uInt16             ImpTryUrl( DirEntryStack& rStack, const String& rPfad, FSysPathStyle eStyle );
     TOOLS_DLLPRIVATE const DirEntry*    ImpGetTopPtr() const;
     TOOLS_DLLPRIVATE DirEntry*          ImpGetTopPtr();
     TOOLS_DLLPRIVATE DirEntry*          ImpGetPreTopPtr();
-    TOOLS_DLLPRIVATE BOOL               ImpToRel( String aStart );
+    TOOLS_DLLPRIVATE sal_Bool               ImpToRel( String aStart );
 
 protected:
     void                ImpTrim( FSysPathStyle eStyle );
     const ByteString&   ImpTheName() const;
     DirEntryFlag        ImpTheFlag() const { return eFlag; };
-    DirEntry*           ImpChangeParent( DirEntry* pNewParent, BOOL bNormalize = TRUE );
+    DirEntry*           ImpChangeParent( DirEntry* pNewParent, sal_Bool bNormalize = sal_True );
     DirEntry*           ImpGetParent() { return pParent; }
 #ifdef FEAT_FSYS_DOUBLESPEED
     FileStat*           ImpGetStat() const { return pStat; }
@@ -291,7 +291,7 @@ protected:
 //#endif
 
 protected:
-    void                SetError( ULONG nErr ) { nError = nErr; }
+    void                SetError( sal_uIntPtr nErr ) { nError = nErr; }
     DirEntry*           GetParent() { return pParent; }
 public:
                         DirEntry( DirEntryFlag aDirFlag = FSYS_FLAG_CURRENT );
@@ -302,11 +302,11 @@ public:
                                    FSysPathStyle eParser = FSYS_STYLE_HOST );
                         ~DirEntry();
 
-    BOOL                IsLongNameOnFAT() const;
-    BOOL                IsCaseSensitive (FSysPathStyle eFormatter = FSYS_STYLE_HOST) const;
+    sal_Bool                IsLongNameOnFAT() const;
+    sal_Bool                IsCaseSensitive (FSysPathStyle eFormatter = FSYS_STYLE_HOST) const;
 
-    ULONG               GetError() const { return nError; }
-    BOOL                IsValid() const;
+    sal_uIntPtr             GetError() const { return nError; }
+    sal_Bool                IsValid() const;
     DirEntryFlag        GetFlag() const { return eFlag; };
 
     void                SetExtension( const String& rExt, char cSep = '.' );
@@ -322,31 +322,31 @@ public:
     DirEntry            GetDevice() const;
     String              GetVolume() const;
     String              GetFull( FSysPathStyle eFormatter = FSYS_STYLE_HOST,
-                                 BOOL bWithDelimiter = FALSE,
-                                 USHORT nMaxChars = STRING_MAXLEN ) const;
+                                 sal_Bool bWithDelimiter = sal_False,
+                                 sal_uInt16 nMaxChars = STRING_MAXLEN ) const;
 
     DirEntry            TempName( DirEntryKind = FSYS_KIND_NONE ) const;
     static const DirEntry& SetTempNameBase( const String &rBaseName );
-    BOOL                MakeShortName( const String& rLongName,
+    sal_Bool                MakeShortName( const String& rLongName,
                                        DirEntryKind eCreateKind = FSYS_KIND_NONE,
-                                       BOOL bUseTilde = TRUE,
+                                       sal_Bool bUseTilde = sal_True,
                                        FSysPathStyle eStyle = FSYS_STYLE_DETECT );
 
     bool                IsAbs() const;
-    BOOL                ToAbs();
-    BOOL                Find( const String& rPfad, char cDelim = 0 );
-    BOOL                ToRel();
-    BOOL                ToRel( const DirEntry& rRefDir );
-    USHORT              CutRelParents();
+    sal_Bool                ToAbs();
+    sal_Bool                Find( const String& rPfad, char cDelim = 0 );
+    sal_Bool                ToRel();
+    sal_Bool                ToRel( const DirEntry& rRefDir );
+    sal_uInt16              CutRelParents();
 
-    BOOL                SetCWD( BOOL bSloppy = FALSE ) const;
-    BOOL                MakeDir( BOOL bSloppy = FALSE ) const;
-    BOOL                Exists( FSysAccess nAccess = FSYS_ACCESS_FLOPPY ) const;
-    BOOL                First();
+    sal_Bool                SetCWD( sal_Bool bSloppy = sal_False ) const;
+    sal_Bool                MakeDir( sal_Bool bSloppy = sal_False ) const;
+    sal_Bool                Exists( FSysAccess nAccess = FSYS_ACCESS_FLOPPY ) const;
+    sal_Bool                First();
 
-    USHORT              Level() const;
-    const DirEntry&     operator []( USHORT nParentLevel ) const;
-    BOOL                Contains( const DirEntry &rSubEntry ) const;
+    sal_uInt16              Level() const;
+    const DirEntry&     operator []( sal_uInt16 nParentLevel ) const;
+    sal_Bool                Contains( const DirEntry &rSubEntry ) const;
 
     FSysError           CopyTo( const DirEntry& rDestDir,
                                 FSysAction nActions = FSYS_ACTION_STANDARD ) const;
@@ -356,8 +356,8 @@ public:
     DirEntry&           operator =( const DirEntry& rOrigDir );
     DirEntry            operator +( const DirEntry& rSubDir ) const;
     DirEntry&           operator +=( const DirEntry& rSubDir );
-    BOOL                operator ==( const DirEntry& rAnotherDir ) const;
-    BOOL                operator !=( const DirEntry& rAnotherDir ) const
+    sal_Bool                operator ==( const DirEntry& rAnotherDir ) const;
+    sal_Bool                operator !=( const DirEntry& rAnotherDir ) const
                             { return !(DirEntry::operator==( rAnotherDir )); }
 
     StringCompare       NameCompare( const DirEntry &rWith ) const;
@@ -372,11 +372,11 @@ public:
 
     static String       GetAccessDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
     static String       GetSearchDelimiter( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
-    static USHORT       GetMaxNameLen( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
+    static sal_uInt16       GetMaxNameLen( FSysPathStyle eFormatter = FSYS_STYLE_HOST );
     static FSysPathStyle GetPathStyle( const String &rDevice );
     static String       ConvertNameToSystem( const String & rName );
     static String       ConvertSystemToName( const String & rName );
-    static BOOL         IsRFSAvailable();
+    static sal_Bool         IsRFSAvailable();
 };
 
 // --------------
@@ -387,10 +387,10 @@ class TOOLS_DLLPUBLIC FileCopier
 {
     DirEntry            aSource;
     DirEntry            aTarget;
-    ULONG               nBytesTotal;
-    ULONG               nBytesCopied;
+    sal_uIntPtr             nBytesTotal;
+    sal_uIntPtr             nBytesCopied;
     Link                aProgressLink;
-    USHORT              nBlockSize;
+    sal_uInt16              nBlockSize;
     FileCopier_Impl*    pImp;
 
 private:
@@ -398,7 +398,7 @@ private:
         const DirEntry &rSource, const DirEntry &rTarget );
 
 protected:
-    virtual BOOL        Progress();
+    virtual sal_Bool        Progress();
     virtual ErrCode     Error( ErrCode eErr,
                                const DirEntry *pSource, const DirEntry *pTarget );
 
@@ -411,11 +411,11 @@ public:
 
     FileCopier&         operator = ( const FileCopier &rCopier );
 
-    void                SetBlockSize( USHORT nBytes ) { nBlockSize = nBytes; }
-    USHORT              GetBlockSize() const { return nBlockSize; }
+    void                SetBlockSize( sal_uInt16 nBytes ) { nBlockSize = nBytes; }
+    sal_uInt16              GetBlockSize() const { return nBlockSize; }
 
-    ULONG               GetBytesTotal() const { return nBytesTotal; }
-    ULONG               GetBytesCopied() const { return nBytesCopied; }
+    sal_uIntPtr             GetBytesTotal() const { return nBytesTotal; }
+    sal_uIntPtr             GetBytesCopied() const { return nBytesCopied; }
 
     void                SetSource( const DirEntry &rSource ) { aSource = rSource; }
     void                SetTarget( const DirEntry &rTarget ) { aTarget = rTarget; }
@@ -464,10 +464,10 @@ private:
 
 #ifndef _TOOLS_HXX
 protected:
-    BOOL            ImpInsertPointReached( const DirEntry& rIsSmaller,
+    sal_Bool            ImpInsertPointReached( const DirEntry& rIsSmaller,
                                            const FileStat& rNewStat,
-                                           ULONG nCurPos,
-                                           ULONG nSortIndex ) const;
+                                           sal_uIntPtr nCurPos,
+                                           sal_uIntPtr nSortIndex ) const;
     void            ImpSortedInsert( const DirEntry *pNewEntry,
                                      const FileStat *pNewStat );
 #endif
@@ -486,12 +486,12 @@ public:
     FSysError       SetSort( FSysSort nSort, ... );
 
     void            Reset();
-    USHORT          Scan( USHORT nCount = 5 );
-    USHORT          Count( BOOL bUpdated = TRUE ) const;
-    BOOL            Update();
+    sal_uInt16          Scan( sal_uInt16 nCount = 5 );
+    sal_uInt16          Count( sal_Bool bUpdated = sal_True ) const;
+    sal_Bool            Update();
 
     Dir&            operator +=( const Dir& rDir );
-    DirEntry&       operator []( USHORT nIndex ) const;
+    DirEntry&       operator []( sal_uInt16 nIndex ) const;
 };
 
 // we don't need this stuff for bootstraping
@@ -509,7 +509,7 @@ public:
 class FSysRedirector
 {
     static FSysRedirector*  _pRedirector;
-    static BOOL             _bEnabled;
+    static sal_Bool             _bEnabled;
 
 public:
     /** This method must called with the one and only instance of the
@@ -541,9 +541,9 @@ public:
                 redirected (modified) path too, which can be of both formats
                 too.
 
-        @return BOOL<BR>
-                TRUE, if the path is redirected
-                FALSE, if the path is not redirected (unchanged)
+        @return sal_Bool<BR>
+                sal_True, if the path is redirected
+                sal_False, if the path is not redirected (unchanged)
      */
     static void             DoRedirect( String &rPath );
 };
@@ -552,7 +552,7 @@ public:
 
 //========================================================================
 
-void FSysEnableSysErrorBox( BOOL bEnable );
+void FSysEnableSysErrorBox( sal_Bool bEnable );
 
 //========================================================================
 

@@ -36,17 +36,17 @@ Bitmap* pWinCopy;
 
 DepWin::DepWin( Window* pParent, WinBits nWinStyle ) :
     Window( pParent, nWinStyle ),
-    mbStartNewCon( FALSE ),
+    mbStartNewCon( sal_False ),
     maNewConStart( 0, 0 ),
     maNewConEnd( 0, 0 )
 //    mpSelectedProject( NULL ) unbekannt
 //  mpCapturer( NULL )
 {
     if ( !pParent->IsChildNotify() )
-        pParent->EnableChildNotify( TRUE );
+        pParent->EnableChildNotify( sal_True );
 //  if ( !pParent->IsAllResizeEnabled())
-//      pParent->EnableAllResize( TRUE );
-    SetUpdateMode( TRUE );
+//      pParent->EnableAllResize( sal_True );
+    SetUpdateMode( sal_True );
     SetPosSizePixel( Point(0,0), Size( 2000, 2000 )); //Size of the scrollable Window
     mpPopup = new PopupMenu();
 }
@@ -77,7 +77,7 @@ void DepWin::NewConnector( ObjectWin* pWin )
     if ( !mbStartNewCon )
     {
         mpNewConWin = pWin;
-        mbStartNewCon = TRUE;
+        mbStartNewCon = sal_True;
         maNewConStart = pWin->GetFixPoint(Point(0,0));
     }
     else
@@ -93,15 +93,15 @@ void DepWin::NewConnector( ObjectWin* pWin )
 //          mpDepperDontuseme->AddConnector( mpNewConWin, pWin );
         }
         mpNewConWin = 0L;
-        mbStartNewCon = FALSE;
+        mbStartNewCon = sal_False;
     }
 
 }
 
 void DepWin::Paint( const Rectangle& rRect )
 {
-    ULONG i = 0;
-    ULONG nListCount = ConList.Count();
+    sal_uIntPtr i = 0;
+    sal_uIntPtr nListCount = ConList.Count();
 
     for ( i=0 ; i < nListCount ; i++ )
     {
@@ -115,8 +115,8 @@ void DepWin::Paint( const Rectangle& rRect )
 
 void DepWin::DrawOutput( OutputDevice* pDevice, const Point& rOffset  )
 {
-    ULONG i = 0;
-    ULONG nListCount = ConList.Count();
+    sal_uIntPtr i = 0;
+    sal_uIntPtr nListCount = ConList.Count();
 
     for ( i=0 ; i < nListCount ; i++ )
     {

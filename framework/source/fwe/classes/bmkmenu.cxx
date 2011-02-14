@@ -86,30 +86,30 @@ void GetMenuEntry(
 class BmkMenu_Impl
 {
     private:
-        static USHORT        m_nMID;
+        static sal_uInt16        m_nMID;
 
     public:
         BmkMenu*             m_pRoot;
-        BOOL                 m_bInitialized;
+        sal_Bool                 m_bInitialized;
 
         BmkMenu_Impl( BmkMenu* pRoot );
         BmkMenu_Impl();
         ~BmkMenu_Impl();
 
-        static USHORT       GetMID();
+        static sal_uInt16       GetMID();
 };
 
-USHORT BmkMenu_Impl::m_nMID = BMKMENU_ITEMID_START;
+sal_uInt16 BmkMenu_Impl::m_nMID = BMKMENU_ITEMID_START;
 
 BmkMenu_Impl::BmkMenu_Impl( BmkMenu* pRoot ) :
     m_pRoot(pRoot),
-    m_bInitialized(FALSE)
+    m_bInitialized(sal_False)
 {
 }
 
 BmkMenu_Impl::BmkMenu_Impl() :
     m_pRoot(0),
-    m_bInitialized(FALSE)
+    m_bInitialized(sal_False)
 {
 }
 
@@ -117,7 +117,7 @@ BmkMenu_Impl::~BmkMenu_Impl()
 {
 }
 
-USHORT BmkMenu_Impl::GetMID()
+sal_uInt16 BmkMenu_Impl::GetMID()
 {
     m_nMID++;
     if( !m_nMID )
@@ -155,7 +155,7 @@ void BmkMenu::Initialize()
     if( _pImp->m_bInitialized )
         return;
 
-    _pImp->m_bInitialized = TRUE;
+    _pImp->m_bInitialized = sal_True;
 
     Sequence< Sequence< PropertyValue > > aDynamicMenuEntries;
 
@@ -165,16 +165,16 @@ void BmkMenu::Initialize()
         aDynamicMenuEntries = SvtDynamicMenuOptions().GetMenu( E_WIZARDMENU );
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    BOOL bShowMenuImages = rSettings.GetUseImagesInMenus();
+    sal_Bool bShowMenuImages = rSettings.GetUseImagesInMenus();
 
     ::rtl::OUString aTitle;
     ::rtl::OUString aURL;
     ::rtl::OUString aTargetFrame;
     ::rtl::OUString aImageId;
 
-    BOOL bIsHiContrastMode = rSettings.GetHighContrastMode();
+    sal_Bool bIsHiContrastMode = rSettings.GetHighContrastMode();
 
-    UINT32 i, nCount = aDynamicMenuEntries.getLength();
+    sal_uInt32 i, nCount = aDynamicMenuEntries.getLength();
     for ( i = 0; i < nCount; ++i )
     {
         GetMenuEntry( aDynamicMenuEntries[i], aTitle, aURL, aTargetFrame, aImageId );
@@ -187,13 +187,13 @@ void BmkMenu::Initialize()
         else
         {
             sal_Bool    bImageSet = sal_False;
-            USHORT      nId = CreateMenuId();
+            sal_uInt16      nId = CreateMenuId();
 
             if ( bShowMenuImages )
             {
                 if ( aImageId.getLength() > 0 )
                 {
-                    Image aImage = GetImageFromURL( m_xFrame, aImageId, FALSE, bIsHiContrastMode );
+                    Image aImage = GetImageFromURL( m_xFrame, aImageId, sal_False, bIsHiContrastMode );
                     if ( !!aImage )
                     {
                         bImageSet = sal_True;
@@ -203,7 +203,7 @@ void BmkMenu::Initialize()
 
                 if ( !bImageSet )
                 {
-                    Image aImage = GetImageFromURL( m_xFrame, aURL, FALSE, bIsHiContrastMode );
+                    Image aImage = GetImageFromURL( m_xFrame, aURL, sal_False, bIsHiContrastMode );
                     if ( !aImage )
                         InsertItem( nId, aTitle );
                     else
@@ -216,14 +216,14 @@ void BmkMenu::Initialize()
             // Store values from configuration to the New and Wizard menu entries to enable
             // sfx2 based code to support high contrast mode correctly!
             MenuConfiguration::Attributes* pUserAttributes = new MenuConfiguration::Attributes( aTargetFrame, aImageId );
-            SetUserValue( nId, (ULONG)pUserAttributes );
+            SetUserValue( nId, (sal_uIntPtr)pUserAttributes );
 
             SetItemCommand( nId, aURL );
         }
     }
 }
 
-USHORT BmkMenu::CreateMenuId()
+sal_uInt16 BmkMenu::CreateMenuId()
 {
     return BmkMenu_Impl::GetMID();
 }

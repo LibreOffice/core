@@ -54,7 +54,7 @@ public:
     /** Returns mapping from visible arguments to real arguments, e.g. if of 4
         parameters the second one is suppressed {0,2,3}. For VAR_ARGS
         parameters only one element is added to the end of the sequence. */
-    virtual void fillVisibleArgumentMapping(::std::vector<USHORT>& _rArguments) const ;
+    virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const ;
     virtual void initArgumentInfo()  const;
     virtual ::rtl::OUString getSignature() const ;
     virtual rtl::OString getHelpId() const ;
@@ -90,16 +90,16 @@ public:
         variable arguments the number of fixed non-suppressed arguments plus
         VAR_ARGS, same as for nArgCount (variable arguments can't be
         suppressed). */
-    USHORT  GetSuppressedArgCount() const;
+    sal_uInt16  GetSuppressedArgCount() const;
 
     String          *pFuncName;              // Function name
     String          *pFuncDesc;              // Description of function
     String         **ppDefArgNames;          // Parameter name(s)
     String         **ppDefArgDescs;          // Description(s) of parameter(s)
     ParameterFlags  *pDefArgFlags;           // Flags for each parameter
-    USHORT           nFIndex;                // Unique function index
-    USHORT           nCategory;              // Function category
-    USHORT           nArgCount;              // All parameter count, suppressed and unsuppressed
+    sal_uInt16           nFIndex;                // Unique function index
+    sal_uInt16           nCategory;              // Function category
+    sal_uInt16           nArgCount;              // All parameter count, suppressed and unsuppressed
     rtl::OString     sHelpId;                // HelpID of function
     bool             bIncomplete         :1; // Incomplete argument info (set for add-in info from configuration)
     bool             bHasSuppressedArgs  :1; // Whether there is any suppressed parameter.
@@ -113,7 +113,7 @@ public:
     ScFunctionList();
     ~ScFunctionList();
 
-    ULONG           GetCount() const
+    sal_uLong           GetCount() const
                     { return aFunctionList.Count(); }
 
     const ScFuncDesc*   First()
@@ -122,7 +122,7 @@ public:
     const ScFuncDesc*   Next()
                         { return (const ScFuncDesc*) aFunctionList.Next(); }
 
-    const ScFuncDesc*   GetFunction( ULONG nIndex ) const
+    const ScFuncDesc*   GetFunction( sal_uLong nIndex ) const
                     { return (const ScFuncDesc*) aFunctionList.GetObject( nIndex ); }
 
     xub_StrLen      GetMaxFuncNameLen() const
@@ -160,8 +160,8 @@ public:
     static String       GetCategoryName(sal_uInt32 _nCategoryNumber );
 
     const ScFuncDesc*   Get( const String& rFName ) const;
-    const ScFuncDesc*   Get( USHORT nFIndex ) const;
-    const ScFuncDesc*   First( USHORT nCategory = 0 ) const;
+    const ScFuncDesc*   Get( sal_uInt16 nFIndex ) const;
+    const ScFuncDesc*   First( sal_uInt16 nCategory = 0 ) const;
     const ScFuncDesc*   Next() const;
 
     // formula::IFunctionManager

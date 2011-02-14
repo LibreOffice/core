@@ -98,9 +98,9 @@ namespace dbaui
         sal_uInt32          m_nControlFlags;
 
     public:
-        virtual BOOL        FillItemSet (SfxItemSet& _rCoreAttrs);
+        virtual sal_Bool        FillItemSet (SfxItemSet& _rCoreAttrs);
 
-        OCommonBehaviourTabPage(Window* pParent, USHORT nResId, const SfxItemSet& _rCoreAttrs, sal_uInt32 nControlFlags,bool _bFreeResource = true);
+        OCommonBehaviourTabPage(Window* pParent, sal_uInt16 nResId, const SfxItemSet& _rCoreAttrs, sal_uInt32 nControlFlags,bool _bFreeResource = true);
     protected:
 
             // nControlFlags ist eine Kombination der CBTP_xxx-Konstanten
@@ -122,7 +122,7 @@ namespace dbaui
     class ODbaseDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
         ODbaseDetailsPage(Window* pParent, const SfxItemSet& _rCoreAttrs);
     private:
@@ -165,7 +165,7 @@ namespace dbaui
     class OOdbcDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
         OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
@@ -184,7 +184,7 @@ namespace dbaui
     class OUserDriverDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
         OUserDriverDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
@@ -215,15 +215,15 @@ namespace dbaui
     {
     public:
         OGeneralSpecialJDBCDetailsPage(   Window* pParent
-                                        , USHORT _nResId
+                                        , sal_uInt16 _nResId
                                         , const SfxItemSet& _rCoreAttrs
-                                        , USHORT _nPortId
+                                        , sal_uInt16 _nPortId
                                         );
 
     protected:
 
 
-        virtual BOOL FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual sal_Bool FillItemSet( SfxItemSet& _rCoreAttrs );
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
@@ -244,7 +244,7 @@ namespace dbaui
         PushButton          m_aTestJavaDriver;
 
         String              m_sDefaultJdbcDriverName;
-        USHORT              m_nPortId;
+        sal_uInt16              m_nPortId;
         bool                m_bUseClass;
     };
 
@@ -267,7 +267,7 @@ namespace dbaui
         CheckBox            m_aPasswordRequired;
 
     protected:
-        virtual BOOL FillItemSet( SfxItemSet& _rCoreAttrs );
+        virtual sal_Bool FillItemSet( SfxItemSet& _rCoreAttrs );
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList);
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList);
@@ -279,7 +279,7 @@ namespace dbaui
     class OAdabasDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual BOOL        FillItemSet (SfxItemSet& _rCoreAttrs);
+        virtual sal_Bool        FillItemSet (SfxItemSet& _rCoreAttrs);
 
         OAdabasDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
@@ -306,7 +306,7 @@ namespace dbaui
         CheckBox            m_CB_SHUTDB;
         PushButton          m_PB_STAT;
         String              m_sUser;
-        BOOL                bAttrsChanged;
+        sal_Bool                bAttrsChanged;
 
         DECL_LINK( AttributesChangedHdl,    void * );
         DECL_LINK( UserSettingsHdl,         void * );
@@ -320,7 +320,7 @@ namespace dbaui
     class OLDAPDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
         OLDAPDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
     protected:
@@ -360,7 +360,7 @@ namespace dbaui
     class OTextDetailsPage : public OCommonBehaviourTabPage
     {
     public:
-        virtual BOOL        FillItemSet ( SfxItemSet& _rCoreAttrs );
+        virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );
 
         OTextDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs );
         OTextConnectionHelper*  m_pTextConnectionHelper;

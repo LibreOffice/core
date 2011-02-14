@@ -61,17 +61,17 @@ typedef void (CALLTYPE* ExFuncPtr14)(void*, void*, void*, void*, void*, void*, v
 typedef void (CALLTYPE* ExFuncPtr15)(void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*);
 typedef void (CALLTYPE* ExFuncPtr16)(void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*, void*);
 
-typedef void (CALLTYPE* GetFuncCountPtr)(USHORT& nCount);
+typedef void (CALLTYPE* GetFuncCountPtr)(sal_uInt16& nCount);
 typedef void (CALLTYPE* GetFuncDataPtr)
-    (USHORT& nNo, sal_Char* pFuncName, USHORT& nParamCount, ParamType* peType, sal_Char* pInternalName);
+    (sal_uInt16& nNo, sal_Char* pFuncName, sal_uInt16& nParamCount, ParamType* peType, sal_Char* pInternalName);
 
-typedef void (CALLTYPE* SetLanguagePtr)( USHORT& nLanguage );
+typedef void (CALLTYPE* SetLanguagePtr)( sal_uInt16& nLanguage );
 typedef void (CALLTYPE* GetParamDesc)
-    (USHORT& nNo, USHORT& nParam, sal_Char* pName, sal_Char* pDesc );
+    (sal_uInt16& nNo, sal_uInt16& nParam, sal_Char* pName, sal_Char* pDesc );
 
-typedef void (CALLTYPE* IsAsync) ( USHORT&      nNo,
+typedef void (CALLTYPE* IsAsync) ( sal_uInt16&      nNo,
                                    ParamType*   peType );
-typedef void (CALLTYPE* Advice)  ( USHORT&      nNo,
+typedef void (CALLTYPE* Advice)  ( sal_uInt16&      nNo,
                                    AdvData&     pfCallback );
 typedef void (CALLTYPE* Unadvice)( double&      nHandle );
 
@@ -110,7 +110,7 @@ FuncData::FuncData(const String& rIName) :
     nParamCount     (0),
     eAsyncType      (NONE)
 {
-    for (USHORT i = 0; i < MAXFUNCPARAM; i++)
+    for (sal_uInt16 i = 0; i < MAXFUNCPARAM; i++)
         eParamType[i] = PTR_DOUBLE;
 }
 
@@ -119,8 +119,8 @@ FuncData::FuncData(const String& rIName) :
 FuncData::FuncData(const ModuleData*pModule,
                    const String&    rIName,
                    const String&    rFName,
-                         USHORT nNo,
-                    USHORT  nCount,
+                         sal_uInt16 nNo,
+                    sal_uInt16  nCount,
                    const ParamType* peType,
                     ParamType  eType) :
     pModuleData     (pModule),
@@ -130,7 +130,7 @@ FuncData::FuncData(const ModuleData*pModule,
     nParamCount     (nCount),
     eAsyncType      (eType)
 {
-    for (USHORT i = 0; i < MAXFUNCPARAM; i++)
+    for (sal_uInt16 i = 0; i < MAXFUNCPARAM; i++)
         eParamType[i] = peType[i];
 }
 
@@ -145,7 +145,7 @@ FuncData::FuncData(const FuncData& rData) :
     nParamCount     (rData.nParamCount),
     eAsyncType      (rData.eAsyncType)
 {
-    for (USHORT i = 0; i < MAXFUNCPARAM; i++)
+    for (sal_uInt16 i = 0; i < MAXFUNCPARAM; i++)
         eParamType[i] = rData.eParamType[i];
 }
 
@@ -159,7 +159,7 @@ short FuncCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 
 //------------------------------------------------------------------------
 
-BOOL FuncCollection::SearchFunc( const String& rName, USHORT& rIndex ) const
+sal_Bool FuncCollection::SearchFunc( const String& rName, sal_uInt16& rIndex ) const
 {
     FuncData aDataObj(rName);
     return Search( &aDataObj, rIndex );
@@ -186,13 +186,13 @@ public:
 class ModuleCollection : public ScSortedCollection
 {
 public:
-    ModuleCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE) : ScSortedCollection ( nLim, nDel, bDup ) {}
+    ModuleCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = sal_False) : ScSortedCollection ( nLim, nDel, bDup ) {}
     ModuleCollection(const ModuleCollection& rModuleCollection) : ScSortedCollection ( rModuleCollection ) {}
 
     virtual ScDataObject*       Clone() const { return new ModuleCollection(*this); }
-            ModuleData*     operator[]( const USHORT nIndex) const {return (ModuleData*)At(nIndex);}
+            ModuleData*     operator[]( const sal_uInt16 nIndex) const {return (ModuleData*)At(nIndex);}
     virtual short           Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
-            BOOL            SearchModule( const String& rName,
+            sal_Bool            SearchModule( const String& rName,
                                           const ModuleData*& rpModule ) const;
 };
 
@@ -208,12 +208,12 @@ short ModuleCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 
 //------------------------------------------------------------------------
 
-BOOL ModuleCollection::SearchModule( const String& rName,
+sal_Bool ModuleCollection::SearchModule( const String& rName,
                                      const ModuleData*& rpModule ) const
 {
-    USHORT nIndex;
+    sal_uInt16 nIndex;
     ModuleData aSearchModule(rName, 0);
-    BOOL bFound = Search( &aSearchModule, nIndex );
+    sal_Bool bFound = Search( &aSearchModule, nIndex );
     if (bFound)
         rpModule = (ModuleData*)At(nIndex);
     else
@@ -223,19 +223,19 @@ BOOL ModuleCollection::SearchModule( const String& rName,
 
 //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-BOOL InitExternalFunc(const rtl::OUString& rModuleName)
+sal_Bool InitExternalFunc(const rtl::OUString& rModuleName)
 {
     String aModuleName( rModuleName );
 
     // Module schon geladen?
     const ModuleData* pTemp;
     if (aModuleCollection.SearchModule(aModuleName, pTemp))
-        return FALSE;
+        return sal_False;
 
     rtl::OUString aNP;
     aNP = rModuleName;
 
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     osl::Module* pLib = new osl::Module( aNP );
     if (pLib->is())
     {
@@ -249,7 +249,7 @@ BOOL InitExternalFunc(const rtl::OUString& rModuleName)
             if ( fpSetLanguage )
             {
                 LanguageType eLanguage = Application::GetSettings().GetUILanguage();
-                USHORT nLanguage = (USHORT) eLanguage;
+                sal_uInt16 nLanguage = (sal_uInt16) eLanguage;
                 (*((SetLanguagePtr)fpSetLanguage))( nLanguage );
             }
 
@@ -261,20 +261,20 @@ BOOL InitExternalFunc(const rtl::OUString& rModuleName)
             AdvData pfCallBack = &ScAddInAsyncCallBack;
             FuncData* pFuncData;
             FuncCollection* pFuncCol = ScGlobal::GetFuncCollection();
-            USHORT nCount;
+            sal_uInt16 nCount;
             (*((GetFuncCountPtr)fpGetCount))(nCount);
-            for (USHORT i=0; i < nCount; i++)
+            for (sal_uInt16 i=0; i < nCount; i++)
             {
                 sal_Char cFuncName[256];
                 sal_Char cInternalName[256];
-                USHORT nParamCount;
+                sal_uInt16 nParamCount;
                 ParamType eParamType[MAXFUNCPARAM];
                 ParamType eAsyncType = NONE;
                 // #62113# alles initialisieren, falls das AddIn sich schlecht verhaelt
                 cFuncName[0] = 0;
                 cInternalName[0] = 0;
                 nParamCount = 0;
-                for ( USHORT j=0; j<MAXFUNCPARAM; j++ )
+                for ( sal_uInt16 j=0; j<MAXFUNCPARAM; j++ )
                 {
                     eParamType[j] = NONE;
                 }
@@ -297,7 +297,7 @@ BOOL InitExternalFunc(const rtl::OUString& rModuleName)
                                           eAsyncType );
                 pFuncCol->Insert(pFuncData);
             }
-            bRet = TRUE;
+            bRet = sal_True;
         }
         else
             delete pLib;
@@ -311,8 +311,8 @@ BOOL InitExternalFunc(const rtl::OUString& rModuleName)
 
 void ExitExternalFunc()
 {
-    USHORT nCount = aModuleCollection.GetCount();
-    for (USHORT i=0; i<nCount; i++)
+    sal_uInt16 nCount = aModuleCollection.GetCount();
+    for (sal_uInt16 i=0; i<nCount; i++)
     {
         ModuleData* pData = aModuleCollection[i];
         pData->FreeInstance();
@@ -321,9 +321,9 @@ void ExitExternalFunc()
 
 //------------------------------------------------------------------------
 
-BOOL FuncData::Call(void** ppParam)
+sal_Bool FuncData::Call(void** ppParam)
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     osl::Module* pLib = pModuleData->GetInstance();
     FARPROC fProc = (FARPROC)pLib->getFunctionSymbol(aFuncName);
     if (fProc != NULL)
@@ -332,81 +332,81 @@ BOOL FuncData::Call(void** ppParam)
         {
             case 1 :
                 (*((ExFuncPtr1)fProc))(ppParam[0]);
-                bRet = TRUE;
+                bRet = sal_True;
                 break;
             case 2 :
                 (*((ExFuncPtr2)fProc))(ppParam[0], ppParam[1]);
-                bRet = TRUE;
+                bRet = sal_True;
                 break;
             case 3 :
                 (*((ExFuncPtr3)fProc))(ppParam[0], ppParam[1], ppParam[2]);
-                bRet = TRUE;
+                bRet = sal_True;
                 break;
             case 4 :
                 (*((ExFuncPtr4)fProc))(ppParam[0], ppParam[1], ppParam[2], ppParam[3]);
-                bRet = TRUE;
+                bRet = sal_True;
                 break;
             case 5 :
                 (*((ExFuncPtr5)fProc))(ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4]);
-                bRet = TRUE;
+                bRet = sal_True;
                 break;
             case 6 :
                 (*((ExFuncPtr6)fProc))(ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5]);
-                bRet = TRUE;
+                bRet = sal_True;
                 break;
             case 7 :
                 (*((ExFuncPtr7)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6]);
-                bRet = TRUE;
+                bRet = sal_True;
                 break;
             case 8 :
                 (*((ExFuncPtr8)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7]);
-                bRet = TRUE;
+                bRet = sal_True;
                 break;
             case 9 :
                 (*((ExFuncPtr9)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8]);
-                bRet = TRUE;
+                bRet = sal_True;
                 break;
             case 10 :
                 (*((ExFuncPtr10)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9]);
-                bRet = TRUE;
+                bRet = sal_True;
                 break;
             case 11 :
                 (*((ExFuncPtr11)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10]);
-                bRet = TRUE;
+                bRet = sal_True;
                 break;
             case 12:
                 (*((ExFuncPtr12)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11]);
-                bRet = TRUE;
+                bRet = sal_True;
                 break;
             case 13:
                 (*((ExFuncPtr13)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11],
                                         ppParam[12]);
-                bRet = TRUE;
+                bRet = sal_True;
                 break;
             case 14 :
                 (*((ExFuncPtr14)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11],
                                         ppParam[12], ppParam[13]);
-                bRet = TRUE;
+                bRet = sal_True;
                 break;
             case 15 :
                 (*((ExFuncPtr15)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11],
                                         ppParam[12], ppParam[13], ppParam[14]);
-                bRet = TRUE;
+                bRet = sal_True;
                 break;
             case 16 :
                 (*((ExFuncPtr16)fProc))( ppParam[0], ppParam[1], ppParam[2], ppParam[3], ppParam[4], ppParam[5],
                                         ppParam[6], ppParam[7], ppParam[8], ppParam[9], ppParam[10], ppParam[11],
                                         ppParam[12], ppParam[13], ppParam[14], ppParam[15]);
-                bRet = TRUE;
+                bRet = sal_True;
                 break;
             default : break;
         }
@@ -416,15 +416,15 @@ BOOL FuncData::Call(void** ppParam)
 
 //------------------------------------------------------------------------
 
-BOOL FuncData::Unadvice( double nHandle )
+sal_Bool FuncData::Unadvice( double nHandle )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     osl::Module* pLib = pModuleData->GetInstance();
     FARPROC fProc = (FARPROC)pLib->getFunctionSymbol(LIBFUNCNAME(UNADVICE));
     if (fProc != NULL)
     {
         ((::Unadvice)fProc)(nHandle);
-        bRet = TRUE;
+        bRet = sal_True;
     }
     return bRet;
 }
@@ -439,9 +439,9 @@ const String& FuncData::GetModuleName() const
 
 //------------------------------------------------------------------------
 
-BOOL FuncData::GetParamDesc( String& aName, String& aDesc, USHORT nParam )
+sal_Bool FuncData::GetParamDesc( String& aName, String& aDesc, sal_uInt16 nParam )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     if ( nParam <= nParamCount )
     {
         osl::Module* pLib = pModuleData->GetInstance();
@@ -451,11 +451,11 @@ BOOL FuncData::GetParamDesc( String& aName, String& aDesc, USHORT nParam )
             sal_Char pcName[256];
             sal_Char pcDesc[256];
             *pcName = *pcDesc = 0;
-            USHORT nFuncNo = nNumber;   // nicht per Reference versauen lassen..
+            sal_uInt16 nFuncNo = nNumber;   // nicht per Reference versauen lassen..
             ((::GetParamDesc)fProc)( nFuncNo, nParam, pcName, pcDesc );
             aName = String( pcName, osl_getThreadTextEncoding() );
             aDesc = String( pcDesc, osl_getThreadTextEncoding() );
-            bRet = TRUE;
+            bRet = sal_True;
         }
     }
     if ( !bRet )

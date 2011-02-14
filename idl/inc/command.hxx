@@ -62,8 +62,8 @@ public:
     String      aCSVFile;
     String      aExportFile;
     String      aDocuFile;
-    UINT32      nVerbosity;
-    UINT32      nFlags;
+    sal_uInt32      nVerbosity;
+    sal_uInt32      nFlags;
 
                 SvCommand( int argc, char ** argv );
                 ~SvCommand();
@@ -71,7 +71,7 @@ public:
 
 void Init();
 class SvIdlWorkingBase;
-BOOL ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand );
+sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand );
 void DeInit();
 
 #endif // _COMMAND_HXX

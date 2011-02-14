@@ -296,7 +296,7 @@ class ControllerProperties
             std::map< int, rtl::OUString >::const_iterator name_it = maTagToPropertyName.find( nTag );
             if( name_it != maTagToPropertyName.end() && ! name_it->second.equalsAscii( "PrintContent" ) )
             {
-                MacOSBOOL bEnabled = mpController->isUIOptionEnabled( name_it->second ) ? YES : NO;
+                BOOL bEnabled = mpController->isUIOptionEnabled( name_it->second ) ? YES : NO;
                 if( pCtrl )
                 {
                     [pCtrl setEnabled: bEnabled];

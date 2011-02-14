@@ -85,8 +85,8 @@ SdSnapLineDlg::SdSnapLineDlg(
 
     aBtnDelete.SetClickHdl(LINK(this, SdSnapLineDlg, ClickHdl));
 
-    SetFieldUnit( aMtrFldX, eUIUnit, TRUE );
-    SetFieldUnit( aMtrFldY, eUIUnit, TRUE );
+    SetFieldUnit( aMtrFldX, eUIUnit, sal_True );
+    SetFieldUnit( aMtrFldY, eUIUnit, sal_True );
 
     // WorkArea holen
     Rectangle aWorkArea = pView->GetWorkArea();
@@ -149,9 +149,9 @@ SdSnapLineDlg::SdSnapLineDlg(
 
 IMPL_LINK( SdSnapLineDlg, ClickHdl, Button *, pBtn )
 {
-    if ( pBtn == &aRbPoint )        SetInputFields(TRUE, TRUE);
-    else if ( pBtn == &aRbHorz )    SetInputFields(FALSE, TRUE);
-    else if ( pBtn == &aRbVert )    SetInputFields(TRUE, FALSE);
+    if ( pBtn == &aRbPoint )        SetInputFields(sal_True, sal_True);
+    else if ( pBtn == &aRbHorz )    SetInputFields(sal_False, sal_True);
+    else if ( pBtn == &aRbVert )    SetInputFields(sal_True, sal_False);
     else if ( pBtn == &aBtnDelete ) EndDialog(RET_SNAP_DELETE);
 
     return 0;
@@ -174,7 +174,7 @@ void SdSnapLineDlg::GetAttr(SfxItemSet& rOutAttrs)
     nXValue = Fraction( GetCoreValue( aMtrFldX, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
     nYValue = Fraction( GetCoreValue( aMtrFldY, SFX_MAPUNIT_100TH_MM) ) * aUIScale;
 
-    rOutAttrs.Put(SfxAllEnumItem(ATTR_SNAPLINE_KIND, (USHORT)eKind));
+    rOutAttrs.Put(SfxAllEnumItem(ATTR_SNAPLINE_KIND, (sal_uInt16)eKind));
     rOutAttrs.Put(SfxUInt32Item(ATTR_SNAPLINE_X, nXValue));
     rOutAttrs.Put(SfxUInt32Item(ATTR_SNAPLINE_Y, nYValue));
 }
@@ -199,7 +199,7 @@ void SdSnapLineDlg::HideRadioGroup()
 |*
 \************************************************************************/
 
-void SdSnapLineDlg::SetInputFields(BOOL bEnableX, BOOL bEnableY)
+void SdSnapLineDlg::SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY)
 {
     if ( bEnableX )
     {

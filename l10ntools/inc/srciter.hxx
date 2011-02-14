@@ -49,7 +49,7 @@ public:
     SourceTreeIterator( const ByteString &rRootDirectory, const ByteString &rVersion , bool bLocal_in = false);
     virtual ~SourceTreeIterator();
 
-    BOOL StartExecute();
+    sal_Bool StartExecute();
     void EndExecute();
 
     virtual void OnExecuteDirectory( const rtl::OUString &rDirectory );

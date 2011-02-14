@@ -75,7 +75,7 @@ VBA_Impl::VBA_Impl(SvStorage &rIn, bool bCmmntd)
 VBA_Impl::~VBA_Impl()
 {
     delete [] pOffsets;
-    for (ULONG i=0;i<aVBAStrings.GetSize();++i)
+    for (sal_uLong i=0;i<aVBAStrings.GetSize();++i)
         delete aVBAStrings.Get(i);
 }
 
@@ -528,7 +528,7 @@ const StringArray &VBA_Impl::Decompress(sal_uInt16 nIndex, int *pOverflow)
                 sTempStringa = String( RTL_CONSTASCII_USTRINGPARAM( "\x0D\x0A" ) );
             String sTempStringb(sTempStringa);
             sTempStringb+=sComment;
-            for(ULONG i=0;i<aVBAStrings.GetSize();i++)
+            for(sal_uLong i=0;i<aVBAStrings.GetSize();i++)
             {
                 aVBAStrings.Get(i)->SearchAndReplaceAll(
                     sTempStringa,sTempStringb);

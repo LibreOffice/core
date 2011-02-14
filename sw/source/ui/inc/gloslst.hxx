@@ -39,7 +39,7 @@ class SvStringsISortDtor;
 
 struct AutoTextGroup
 {
-    USHORT      nCount;
+    sal_uInt16      nCount;
     String      sName;
     String      sTitle;
     String      sLongNames;   // durch 0x0A getrennte Langnamen
@@ -55,7 +55,7 @@ class SwGlossaryList : public AutoTimer
 {
     AutoTextGroups  aGroupArr;
     String          sPath;
-    BOOL            bFilled;
+    sal_Bool            bFilled;
 
     AutoTextGroup*  FindGroup(const String& rGroupName);
     void            FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGloss);
@@ -64,14 +64,14 @@ public:
         SwGlossaryList();
         ~SwGlossaryList();
 
-    BOOL            HasLongName(const String& rBegin, SvStringsISortDtor* pLongNames );
-    BOOL            GetShortName(const String& rLongName,
+    sal_Bool            HasLongName(const String& rBegin, SvStringsISortDtor* pLongNames );
+    sal_Bool            GetShortName(const String& rLongName,
                                         String& rShortName, String& rGroupName );
 
-    USHORT          GetGroupCount();
-    String          GetGroupName(USHORT nPos, BOOL bNoPath = TRUE, String* pTitle = 0);
-    USHORT          GetBlockCount(USHORT nGroup);
-    String          GetBlockName(USHORT nGroup, USHORT nBlock, String& rShortName);
+    sal_uInt16          GetGroupCount();
+    String          GetGroupName(sal_uInt16 nPos, sal_Bool bNoPath = sal_True, String* pTitle = 0);
+    sal_uInt16          GetBlockCount(sal_uInt16 nGroup);
+    String          GetBlockName(sal_uInt16 nGroup, sal_uInt16 nBlock, String& rShortName);
 
     void            Update();
 

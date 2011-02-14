@@ -203,9 +203,9 @@ sal_Bool SAL_CALL ActionTriggerPropertySet::convertFastPropertyValue(
 throw( IllegalArgumentException )
 {
     //  Check, if value of property will changed in method "setFastPropertyValue_NoBroadcast()".
-    //  Return TRUE, if changed - else return FALSE.
+    //  Return sal_True, if changed - else return sal_False.
     //  Attention: Method "impl_tryToChangeProperty()" can throw the IllegalArgumentException !!!
-    //  Initialize return value with FALSE !!!
+    //  Initialize return value with sal_False !!!
     //  (Handle can be invalid)
     sal_Bool bReturn = sal_False;
 

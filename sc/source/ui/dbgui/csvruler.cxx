@@ -127,7 +127,7 @@ ScCsvRuler::~ScCsvRuler()
 // common ruler handling ------------------------------------------------------
 
 void ScCsvRuler::SetPosSizePixel(
-        long nX, long nY, long nWidth, long nHeight, USHORT nFlags )
+        long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
 {
     if( nFlags & WINDOW_POSSIZE_HEIGHT )
         nHeight = GetTextHeight() + mnSplitSize + 2;

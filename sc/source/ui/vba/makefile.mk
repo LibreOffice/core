@@ -37,10 +37,6 @@ VISIBILITY_HIDDEN=TRUE
 .INCLUDE :  settings.mk
 DLLPRE =
 
-.IF "$(ENABLE_VBA)"!="YES"
-dummy:
-        @echo "not building vba..."
-.ENDIF
 .IF "$(L10N_framework)"==""
 INCPRE=$(INCCOM)$/$(TARGET)
 

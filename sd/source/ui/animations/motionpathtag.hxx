@@ -64,11 +64,11 @@ public:
     virtual bool KeyInput( const KeyEvent& rKEvt );
 
     // callbacks from sdr view
-    virtual ULONG GetMarkablePointCount() const;
-    virtual ULONG GetMarkedPointCount() const;
-    virtual BOOL MarkPoint(SdrHdl& rHdl, BOOL bUnmark=FALSE);
+    virtual sal_uLong GetMarkablePointCount() const;
+    virtual sal_uLong GetMarkedPointCount() const;
+    virtual sal_Bool MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark=sal_False);
     virtual void CheckPossibilities();
-    virtual BOOL MarkPoints(const Rectangle* pRect, BOOL bUnmark);
+    virtual sal_Bool MarkPoints(const Rectangle* pRect, sal_Bool bUnmark);
 
     const CustomAnimationEffectPtr& getEffect() const { return mpEffect; }
 
@@ -76,20 +76,20 @@ public:
 
     // IPolyPolygonEditorController
     virtual void DeleteMarkedPoints();
-    virtual BOOL IsDeleteMarkedPointsPossible() const;
+    virtual sal_Bool IsDeleteMarkedPointsPossible() const;
 
     virtual void RipUpAtMarkedPoints();
     virtual bool IsRipUpAtMarkedPointsPossible() const;
 
-    virtual BOOL IsSetMarkedSegmentsKindPossible() const;
+    virtual sal_Bool IsSetMarkedSegmentsKindPossible() const;
     virtual SdrPathSegmentKind GetMarkedSegmentsKind() const;
     virtual void SetMarkedSegmentsKind(SdrPathSegmentKind eKind);
 
-    virtual BOOL IsSetMarkedPointsSmoothPossible() const;
+    virtual sal_Bool IsSetMarkedPointsSmoothPossible() const;
     virtual SdrPathSmoothKind GetMarkedPointsSmooth() const;
     virtual void SetMarkedPointsSmooth(SdrPathSmoothKind eKind);
 
-    virtual void CloseMarkedObjects(BOOL bToggle, BOOL bOpen );
+    virtual void CloseMarkedObjects(sal_Bool bToggle, sal_Bool bOpen );
     virtual bool IsOpenCloseMarkedObjectsPossible() const;
     virtual SdrObjClosedKind GetMarkedObjectsClosedState() const;
 

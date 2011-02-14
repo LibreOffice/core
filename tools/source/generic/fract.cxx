@@ -634,10 +634,10 @@ void Fraction::ReduceInaccurate( unsigned nSignificantBits )
 |*
 *************************************************************************/
 
-BOOL operator == ( const Fraction& rVal1, const Fraction& rVal2 )
+sal_Bool operator == ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.IsValid() || !rVal2.IsValid() )
-        return FALSE;
+        return sal_False;
 
     return rVal1.nNumerator == rVal2.nNumerator
            && rVal1.nDenominator == rVal2.nDenominator;
@@ -660,10 +660,10 @@ BOOL operator == ( const Fraction& rVal1, const Fraction& rVal2 )
 // und (c*b) zu vergleichen. Das Ergebnis dieses Vergleichs wird
 // zurueckgegeben.
 
-BOOL operator < ( const Fraction& rVal1, const Fraction& rVal2 )
+sal_Bool operator < ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.IsValid() || !rVal2.IsValid() )
-        return FALSE;
+        return sal_False;
 
     BigInt nN( rVal1.nNumerator );
     nN *= BigInt( rVal2.nDenominator );
@@ -690,10 +690,10 @@ BOOL operator < ( const Fraction& rVal1, const Fraction& rVal2 )
 // und (c*b) zu vergleichen. Das Ergebnis dieses Vergleichs wird
 // zurueckgegeben.
 
-BOOL operator > ( const Fraction& rVal1, const Fraction& rVal2 )
+sal_Bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.IsValid() || !rVal2.IsValid() )
-        return FALSE;
+        return sal_False;
 
     BigInt nN( rVal1.nNumerator );
     nN *= BigInt( rVal2.nDenominator );

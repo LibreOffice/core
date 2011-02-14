@@ -290,7 +290,7 @@ uno::Sequence<sal_uInt8> SFX2_DLLPUBLIC convertMetaFile(GDIMetaFile* i_pThumb)
         SvMemoryStream aStream;
 // magic value 160 taken from GraphicHelper::getThumbnailFormatFromGDI_Impl()
         if( i_pThumb->CreateThumbnail( 160, aBitmap ) ) {
-            aBitmap.GetBitmap().Write( aStream, FALSE, FALSE );
+            aBitmap.GetBitmap().Write( aStream, sal_False, sal_False );
 //            uno::Sequence<sal_uInt8> aSeq(aStream.GetSize()); // WRONG
             aStream.Seek(STREAM_SEEK_TO_END);
             uno::Sequence<sal_uInt8> aSeq(aStream.Tell());

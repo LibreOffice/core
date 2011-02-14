@@ -87,7 +87,6 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include "about.hxx"
 #include "frmload.hxx"
 #include "referers.hxx"
 #include <sfx2/app.hxx>
@@ -155,7 +154,7 @@ long QuitAgain_Impl( void* pObj, void* pArg )
 void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 {
     DBG_MEMTEST();
-    FASTBOOL bDone = FALSE;
+    bool bDone = sal_False;
     switch ( rReq.GetSlot() )
     {
         case SID_SETOPTIONS:
@@ -186,7 +185,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                         continue;
 
                     if ( pObjSh->PrepareClose(2) )
-                        pObjSh->SetModified( FALSE );
+                        pObjSh->SetModified( sal_False );
                     else
                         return;
                 }
@@ -212,16 +211,16 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             }
 
             // block reentrant calls
-            pAppData_Impl->bInQuit = TRUE;
+            pAppData_Impl->bInQuit = sal_True;
             Reference < XDesktop > xDesktop ( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
 
             rReq.ForgetAllArgs();
 
-            // if terminate() failed, pAppData_Impl->bInQuit will now be FALSE, allowing further calls of SID_QUITAPP
-            BOOL bTerminated = xDesktop->terminate();
+            // if terminate() failed, pAppData_Impl->bInQuit will now be sal_False, allowing further calls of SID_QUITAPP
+            sal_Bool bTerminated = xDesktop->terminate();
             if (!bTerminated)
                 // if terminate() was successful, SfxApplication is now dead!
-                pAppData_Impl->bInQuit = FALSE;
+                pAppData_Impl->bInQuit = sal_False;
 
             // Returnwert setzten, ggf. terminieren
             rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bTerminated ) );
@@ -254,7 +253,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                 Reference< XFrame > xFrame;
                 const SfxItemSet* pIntSet = rReq.GetInternalArgs_Impl();
-                SFX_ITEMSET_ARG( pIntSet, pFrameItem, SfxUnoFrameItem, SID_FILLFRAME, FALSE );
+                SFX_ITEMSET_ARG( pIntSet, pFrameItem, SfxUnoFrameItem, SID_FILLFRAME, sal_False );
                 if ( pFrameItem )
                     xFrame = pFrameItem->GetFrame();
 
@@ -267,7 +266,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     const short nRet = pDlg->Execute();
 
                     if ( nRet )
-                        bDone = TRUE;
+                        bDone = sal_True;
 
                     delete pDlg;
                 }
@@ -304,16 +303,16 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             }
             while( sal_True );
 
-            BOOL bOk = ( n == 0);
+            sal_Bool bOk = ( n == 0);
             rReq.SetReturnValue( SfxBoolItem( 0, bOk ) );
-            bDone = TRUE;
+            bDone = sal_True;
             break;
         }
 
         case SID_SAVEDOCS:
         {
-            BOOL bOK = TRUE;
-            BOOL bTmpDone = TRUE;
+            sal_Bool bOK = sal_True;
+            sal_Bool bTmpDone = sal_True;
             for ( SfxObjectShell *pObjSh = SfxObjectShell::GetFirst();
                   pObjSh;
                   pObjSh = SfxObjectShell::GetNext( *pObjSh ) )
@@ -325,7 +324,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     SfxBoolItem *pItem = PTR_CAST( SfxBoolItem, aReq.GetReturnValue() );
                     bTmpDone = aReq.IsDone();
                     if ( !pItem || !pItem->GetValue() )
-                        bOK = FALSE;
+                        bOK = sal_False;
                 }
             }
 
@@ -353,7 +352,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 }
                 else
                     pHelp->Start( String::CreateFromAscii(".uno:HelpIndex"), NULL ); // show start page
-                bDone = TRUE;
+                bDone = sal_True;
             }
             break;
         }
@@ -362,7 +361,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_HELPTIPS:
         {
             // Parameter aus werten
-            SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPTIPS, FALSE);
+            SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPTIPS, sal_False);
             bool bOn = pOnItem
                             ? ((SfxBoolItem*)pOnItem)->GetValue()
                             : !Help::IsQuickHelpEnabled();
@@ -374,7 +373,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 Help::DisableQuickHelp();
             SvtHelpOptions().SetHelpTips( bOn );
             Invalidate(SID_HELPTIPS);
-            bDone = TRUE;
+            bDone = sal_True;
 
             // ggf. recorden
             if ( !rReq.IsAPI() )
@@ -390,7 +389,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_HELPBALLOONS:
         {
             // Parameter auswerten
-            SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPBALLOONS, FALSE);
+            SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPBALLOONS, sal_False);
             bool bOn = pOnItem
                             ? ((SfxBoolItem*)pOnItem)->GetValue()
                             : !Help::IsBalloonHelpEnabled();
@@ -402,7 +401,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 Help::DisableBalloonHelp();
             SvtHelpOptions().SetExtendedHelp( bOn );
             Invalidate(SID_HELPBALLOONS);
-            bDone = TRUE;
+            bDone = sal_True;
 
             // ggf. recorden
             if ( !rReq.IsAPI() )
@@ -414,99 +413,27 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_HELP_PI:
         {
             SvtHelpOptions aHelpOpt;
-            SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELP_PI, FALSE);
+            SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELP_PI, sal_False);
             sal_Bool bOn = pOnItem
                             ? ((SfxBoolItem*)pOnItem)->GetValue()
                             : !aHelpOpt.IsHelpAgentAutoStartMode();
             aHelpOpt.SetHelpAgentAutoStartMode( bOn );
             Invalidate(SID_HELP_PI);
-            bDone = TRUE;
+            bDone = sal_True;
             break;
         }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_ABOUT:
         {
-            const String sCWSSchema( String::CreateFromAscii( "[CWS:" ) );
-            rtl::OUString sDefault;
-            String sBuildId( utl::Bootstrap::getBuildIdData( sDefault ) );
-            OSL_ENSURE( sBuildId.Len() > 0, "No BUILDID in bootstrap file" );
-            if ( sBuildId.Len() > 0 && sBuildId.Search( sCWSSchema ) == STRING_NOTFOUND )
+             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+            if ( pFact )
             {
-                // no cws part in brand buildid -> try basis buildid
-                rtl::OUString sBasisBuildId( DEFINE_CONST_OUSTRING(
-                    "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}" ) );
-                rtl::Bootstrap::expandMacros( sBasisBuildId );
-                sal_Int32 nIndex = sBasisBuildId.indexOf( sCWSSchema );
-                if ( nIndex != -1 )
-                    sBuildId += String( sBasisBuildId.copy( nIndex ) );
+                VclAbstractDialog* pDlg = pFact->CreateVclDialog( 0, RID_DEFAULTABOUT );
+                pDlg->Execute();
+                delete pDlg;
+                bDone = sal_True;
             }
-
-            String sProductSource( utl::Bootstrap::getProductSource( sDefault ) );
-            OSL_ENSURE( sProductSource.Len() > 0, "No ProductSource in bootstrap file" );
-
-            // the product source is something like "DEV300", where the
-            // build id is something like "300m12(Build:12345)". For better readability,
-            // strip the duplicate UPD ("300").
-            if ( sProductSource.Len() )
-            {
-                bool bMatchingUPD =
-                        ( sProductSource.Len() >= 3 )
-                    &&  ( sBuildId.Len() >= 3 )
-                    &&  ( sProductSource.Copy( sProductSource.Len() - 3 ) == sBuildId.Copy( 0, 3 ) );
-                OSL_ENSURE( bMatchingUPD, "BUILDID and ProductSource do not match in their UPD" );
-                if ( bMatchingUPD )
-                    sProductSource = sProductSource.Copy( 0, sProductSource.Len() - 3 );
-
-                // prepend the product source
-                sBuildId.Insert( sProductSource, 0 );
-            }
-
-            // --> PB 2008-10-30 #i94693#
-            /* if the build ids of the basis or ure layer are different from the build id
-             * of the brand layer then show them */
-            rtl::OUString aBasisProductBuildId( DEFINE_CONST_OUSTRING(
-                "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":ProductBuildid}" ) );
-            rtl::Bootstrap::expandMacros( aBasisProductBuildId );
-            rtl::OUString aUREProductBuildId( DEFINE_CONST_OUSTRING(
-                "${$URE_BIN_DIR/" SAL_CONFIGFILE("version") ":ProductBuildid}" ) );
-            rtl::Bootstrap::expandMacros( aUREProductBuildId );
-            if ( sBuildId.Search( String( aBasisProductBuildId ) ) == STRING_NOTFOUND
-                || sBuildId.Search( String( aUREProductBuildId ) ) == STRING_NOTFOUND )
-            {
-                String sTemp( '-' );
-                sTemp += String( aBasisProductBuildId );
-                sTemp += '-';
-                sTemp += String( aUREProductBuildId );
-                sBuildId.Insert( sTemp, sBuildId.Search( ')' ) );
-            }
-            // <--
-
-            // the build id format is "milestone(build)[cwsname]". For readability, it would
-            // be nice to have some more spaces in there.
-            xub_StrLen nPos = 0;
-            if ( ( nPos = sBuildId.Search( sal_Unicode( '(' ) ) ) != STRING_NOTFOUND )
-                sBuildId.Insert( sal_Unicode( ' ' ), nPos );
-            if ( ( nPos = sBuildId.Search( sal_Unicode( '[' ) ) ) != STRING_NOTFOUND )
-                sBuildId.Insert( sal_Unicode( ' ' ), nPos );
-
-            // search for the resource of the about box
-            ResId aDialogResId( RID_DEFAULTABOUT, *pAppData_Impl->pLabelResMgr );
-            ResMgr* pResMgr = pAppData_Impl->pLabelResMgr;
-            if( ! pResMgr->IsAvailable( aDialogResId.SetRT( RSC_MODALDIALOG ) ) )
-                pResMgr = GetOffResManager_Impl();
-
-            aDialogResId.SetResMgr( pResMgr );
-            if ( !pResMgr->IsAvailable( aDialogResId ) )
-            {
-                DBG_ERRORFILE( "No RID_DEFAULTABOUT in label-resource-dll" );
-            }
-
-            // then show the about box
-            AboutDialog* pDlg = new AboutDialog( 0, aDialogResId, sBuildId );
-            pDlg->Execute();
-            delete pDlg;
-            bDone = TRUE;
             break;
         }
 
@@ -517,7 +444,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 new SfxTemplateOrganizeDlg(NULL);
             pDlg->Execute();
             delete pDlg;
-            bDone = TRUE;
+            bDone = sal_True;
             break;
         }
 
@@ -525,7 +452,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         {
             svt::AddressBookSourceDialog aDialog(GetTopWindow(), ::comphelper::getProcessServiceFactory());
             aDialog.Execute();
-            bDone = TRUE;
+            bDone = sal_True;
             break;
         }
 
@@ -553,7 +480,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                                 TYPE(SfxBoolItem)));
                 bool bShow = pItem == 0
                     ? !pAppData_Impl->m_xImeStatusWindow->isShowing()
-                    : ( pItem->GetValue() == TRUE );
+                    : ( pItem->GetValue() == sal_True );
                 pAppData_Impl->m_xImeStatusWindow->show(bShow);
                 if (pItem == 0)
                     rReq.AppendItem(SfxBoolItem(SID_SHOW_IME_STATUS_WINDOW,
@@ -600,7 +527,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                     // Parameter auswerten
                     rtl::OUString aToolbarName( aBuf.makeStringAndClear() );
-                    BOOL bShow( !xLayoutManager->isElementVisible( aToolbarName ));
+                    sal_Bool bShow( !xLayoutManager->isElementVisible( aToolbarName ));
 
                     if ( bShow )
                     {
@@ -631,11 +558,11 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
     DBG_MEMTEST();
 
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    const USHORT *pRanges = rSet.GetRanges();
+    const sal_uInt16 *pRanges = rSet.GetRanges();
     DBG_ASSERT(pRanges && *pRanges, "Set ohne Bereich");
     while ( *pRanges )
     {
-        for(USHORT nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
+        for(sal_uInt16 nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
         {
             switch(nWhich)
             {
@@ -691,14 +618,14 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
                 case SID_SAVEDOCS:
                 {
-                    BOOL bModified = FALSE;
+                    sal_Bool bModified = sal_False;
                     for ( SfxObjectShell *pObjSh = SfxObjectShell::GetFirst();
                           pObjSh;
                           pObjSh = SfxObjectShell::GetNext( *pObjSh ) )
                     {
                         if ( pObjSh->IsModified() )
                         {
-                            bModified = TRUE;
+                            bModified = sal_True;
                             break;
                         }
                     }
@@ -733,15 +660,15 @@ static const ::rtl::OUString& getProductRegistrationServiceName( )
     return s_sServiceName;
 }
 
-typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(XModel*, BOOL, rtl_uString*);
-typedef void (SAL_CALL *basicide_macro_organizer)( INT16 );
+typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(XModel*, sal_Bool, rtl_uString*);
+typedef void (SAL_CALL *basicide_macro_organizer)( sal_Int16 );
 
 #define DOSTRING( x )                       #x
 #define STRING( x )                         DOSTRING( x )
 
 extern "C" { static void SAL_CALL thisModule() {} }
 
-::rtl::OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc = ::rtl::OUString() )
+::rtl::OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, sal_Bool bChooseOnly, const ::rtl::OUString& rMacroDesc = ::rtl::OUString() )
 {
     // get basctl dllname
     static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "basctl" ) ) );
@@ -761,7 +688,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
     return aScriptURL;
 }
 
-void MacroOrganizer( INT16 nTabId )
+void MacroOrganizer( sal_Int16 nTabId )
 {
     // get basctl dllname
     static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "basctl" ) ) );
@@ -919,7 +846,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 SfxViewFrame* pView = SfxViewFrame::GetFirst();
                 while ( pView )
                 {
-                    pView->GetBindings().InvalidateAll(FALSE);
+                    pView->GetBindings().InvalidateAll(sal_False);
                     pView = SfxViewFrame::GetNext( *pView );
                 }
             }
@@ -1002,7 +929,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             {
                 SfxObjectShell* pBasicIDE = SfxObjectShell::CreateObject( lcl_getBasicIDEServiceName() );
                 pBasicIDE->DoInitNew( 0 );
-                pBasicIDE->SetModified( FALSE );
+                pBasicIDE->SetModified( sal_False );
                 try
                 {
                     // load the Basic IDE via direct access to the SFX frame loader. A generic loadComponentFromURL
@@ -1059,15 +986,15 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
             const SfxPoolItem* pItem;
-            BOOL bChooseOnly = FALSE;
+            sal_Bool bChooseOnly = sal_False;
             Reference< XModel > xLimitToModel;
             if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_RECORDMACRO, sal_False, &pItem) )
             {
-                BOOL bRecord = ((SfxBoolItem*)pItem)->GetValue();
+                sal_Bool bRecord = ((SfxBoolItem*)pItem)->GetValue();
                 if ( bRecord )
                 {
                     // !Hack
-                    bChooseOnly = FALSE;
+                    bChooseOnly = sal_False;
                     SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
                     OSL_ENSURE( pCurrentShell, "macro recording outside an SFX document?" );
                     if ( pCurrentShell )
@@ -1085,7 +1012,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             OSL_TRACE("handling SID_MACROORGANIZER");
             const SfxItemSet* pArgs = rReq.GetArgs();
             const SfxPoolItem* pItem;
-            INT16 nTabId = 0;
+            sal_Int16 nTabId = 0;
             if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_MACROORGANIZER, sal_False, &pItem) )
             {
                 nTabId = ((SfxUInt16Item*)pItem)->GetValue();
@@ -1103,7 +1030,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
             Reference< XFrame > xFrame;
             const SfxItemSet* pIntSet = rReq.GetInternalArgs_Impl();
-            SFX_ITEMSET_ARG( pIntSet, pFrameItem, SfxUnoFrameItem, SID_FILLFRAME, FALSE );
+            SFX_ITEMSET_ARG( pIntSet, pFrameItem, SfxUnoFrameItem, SID_FILLFRAME, sal_False );
             if ( pFrameItem )
                 xFrame = pFrameItem->GetFrame();
 
@@ -1117,7 +1044,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             do  // artificial loop for flow control
             {
                 AbstractScriptSelectorDialog* pDlg = pFact->CreateScriptSelectorDialog(
-                    lcl_getDialogParent( xFrame, GetTopWindow() ), FALSE, xFrame );
+                    lcl_getDialogParent( xFrame, GetTopWindow() ), sal_False, xFrame );
                 OSL_ENSURE( pDlg, "SfxApplication::OfaExec_Impl( SID_RUNMACRO ): no dialog!" );
                 if ( !pDlg )
                     break;
@@ -1185,7 +1112,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             if ( pStringItem )
             {
                 String aPLZ = pStringItem->GetValue();
-                bRet = TRUE /*!!!SfxIniManager::CheckPLZ( aPLZ )*/;
+                bRet = sal_True /*!!!SfxIniManager::CheckPLZ( aPLZ )*/;
             }
             else
                 SbxBase::SetError( SbxERR_WRONG_ARGS );
@@ -1202,7 +1129,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 const SfxPoolItem* pItem=NULL;
                 const SfxItemSet* pSet = rReq.GetArgs();
                 SfxItemPool* pSetPool = pSet ? pSet->GetPool() : NULL;
-                if ( pSet && pSet->GetItemState( pSetPool->GetWhich( SID_AUTO_CORRECT_DLG ), FALSE, &pItem ) == SFX_ITEM_SET )
+                if ( pSet && pSet->GetItemState( pSetPool->GetWhich( SID_AUTO_CORRECT_DLG ), sal_False, &pItem ) == SFX_ITEM_SET )
                     aSet.Put( *pItem );
 
                   SfxAbstractTabDialog* pDlg = pFact->CreateTabDialog( RID_OFA_AUTOCORR_DLG, NULL, &aSet, NULL );
@@ -1291,7 +1218,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 if (xDialog.is())
                     xDialog->execute();
                 else
-                    ShowServiceNotAvailableError(NULL, sDialogServiceName, TRUE);
+                    ShowServiceNotAvailableError(NULL, sDialogServiceName, sal_True);
             }
             catch(::com::sun::star::uno::Exception&)
             {
@@ -1312,11 +1239,11 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
 void SfxApplication::OfaState_Impl(SfxItemSet &rSet)
 {
-    const USHORT *pRanges = rSet.GetRanges();
+    const sal_uInt16 *pRanges = rSet.GetRanges();
     DBG_ASSERT(pRanges && *pRanges, "Set ohne Bereich");
     while ( *pRanges )
     {
-        for(USHORT nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
+        for(sal_uInt16 nWhich = *pRanges++; nWhich <= *pRanges; ++nWhich)
         {
             switch(nWhich)
             {

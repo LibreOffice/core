@@ -794,7 +794,7 @@ void ExportDialog::createSizeControls( vcl::RowOrColumn& rLayout )
         nUnit = UNIT_PIXEL;
     if ( nUnit < 0 )
         nUnit = UNIT_CM;
-    maLbSizeX.SelectEntryPos( static_cast< USHORT >( nUnit ) );
+    maLbSizeX.SelectEntryPos( static_cast< sal_uInt16 >( nUnit ) );
 
     if ( mbIsPixelFormat )      // TODO: (metafileresolutionsupport) should be supported for vector formats also... this makes
     {                           // sense eg for bitmap fillings in metafiles, to preserve high dpi output
@@ -807,7 +807,7 @@ void ExportDialog::createSizeControls( vcl::RowOrColumn& rLayout )
         sal_Int32 nResolutionUnit = mpOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "PixelExportResolutionUnit" ) ), 1 );
         if ( ( nResolutionUnit < 0 ) || ( nResolutionUnit > 2 ) )
             nResolutionUnit = 1;
-        maLbResolution.SelectEntryPos( static_cast< USHORT >( nResolutionUnit ) );
+        maLbResolution.SelectEntryPos( static_cast< sal_uInt16 >( nResolutionUnit ) );
     }
 
     boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( &rLayout, 2 ) );

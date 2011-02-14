@@ -113,8 +113,8 @@ static __FAR_DATA SvXMLTokenMapEntry aMetaStatAttrTokenMap[] =
 struct statistic {
     SvXMLTokenMapAttrs token;
     const char* name;
-    USHORT SwDocStat::* target16;
-    ULONG  SwDocStat::* target32; /* or 64, on LP64 platforms */
+    sal_uInt16 SwDocStat::* target16;
+    sal_uLong  SwDocStat::* target32; /* or 64, on LP64 platforms */
 };
 
 static const struct statistic s_stats [] = {

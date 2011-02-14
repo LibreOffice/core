@@ -71,7 +71,7 @@
 |*************************************************************************/
 //SwSaveHdl::SwSaveHdl( SwViewImp *pI ) :
 //  pImp( pI ),
-//  bXorVis( FALSE )
+//  bXorVis( sal_False )
 //{
     //if ( pImp->HasDrawView() )
     //{
@@ -147,8 +147,8 @@ void SwViewImp::LockPaint()
     }
     else
     {
-        //HMHbShowHdlPaint = FALSE;
-        bResetHdlHiddenPaint = FALSE;
+        //HMHbShowHdlPaint = sal_False;
+        bResetHdlHiddenPaint = sal_False;
     }
 }
 
@@ -188,7 +188,7 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
     {
         //change the draw mode in high contrast mode
         OutputDevice* pOutDev = GetShell()->GetOut();
-        ULONG nOldDrawMode = pOutDev->GetDrawMode();
+        sal_uLong nOldDrawMode = pOutDev->GetDrawMode();
         if( GetShell()->GetWin() &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
             (!GetShell()->IsPreView()||SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews()))
@@ -259,23 +259,23 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
 |*************************************************************************/
 #define WIEDUWILLST 400
 
-BOOL SwViewImp::IsDragPossible( const Point &rPoint )
+sal_Bool SwViewImp::IsDragPossible( const Point &rPoint )
 {
     if ( !HasDrawView() )
-        return FALSE;
+        return sal_False;
 
     const SdrMarkList &rMrkList = GetDrawView()->GetMarkedObjectList();
 
     if( !rMrkList.GetMarkCount() )
-        return FALSE;
+        return sal_False;
 
     SdrObject *pO = rMrkList.GetMark(rMrkList.GetMarkCount()-1)->GetMarkedSdrObj();
 
     SwRect aRect;
-    if( ::CalcClipRect( pO, aRect, FALSE ) )
+    if( ::CalcClipRect( pO, aRect, sal_False ) )
     {
         SwRect aTmp;
-        ::CalcClipRect( pO, aTmp, TRUE );
+        ::CalcClipRect( pO, aTmp, sal_True );
         aRect.Union( aTmp );
     }
     else
@@ -308,11 +308,11 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
     //Begrenzung des Arbeitsbereiches.
     const Rectangle aRect( Point( DOCUMENTBORDER, DOCUMENTBORDER ), rNewSz );
     const Rectangle &rOldWork = GetDrawView()->GetWorkArea();
-    BOOL bCheckDrawObjs = FALSE;
+    sal_Bool bCheckDrawObjs = sal_False;
     if ( aRect != rOldWork )
     {
         if ( rOldWork.Bottom() > aRect.Bottom() || rOldWork.Right() > aRect.Right())
-            bCheckDrawObjs = TRUE;
+            bCheckDrawObjs = sal_True;
         GetDrawView()->SetWorkArea( aRect );
     }
     if ( !bCheckDrawObjs )
@@ -320,8 +320,8 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
 
     ASSERT( pSh->getIDocumentDrawModelAccess()->GetDrawModel(), "NotifySizeChg without DrawModel" );
     SdrPage* pPage = pSh->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 );
-    const ULONG nObjs = pPage->GetObjCount();
-    for( ULONG nObj = 0; nObj < nObjs; ++nObj )
+    const sal_uLong nObjs = pPage->GetObjCount();
+    for( sal_uLong nObj = 0; nObj < nObjs; ++nObj )
     {
         SdrObject *pObj = pPage->GetObj( nObj );
         if( !pObj->ISA(SwVirtFlyDrawObj) )

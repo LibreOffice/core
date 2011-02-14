@@ -1030,7 +1030,7 @@ void FmXFormShell::InvalidateSlot( sal_Int16 nId, sal_Bool bWithId )
     if (m_nLockSlotInvalidation)
     {
         m_arrInvalidSlots.Insert(nId, m_arrInvalidSlots.Count());
-        BYTE nFlags = ( bWithId ? 0x01 : 0 );
+        sal_uInt8 nFlags = ( bWithId ? 0x01 : 0 );
         m_arrInvalidSlots_Flags.push_back(nFlags);
     }
     else
@@ -1070,7 +1070,7 @@ IMPL_LINK(FmXFormShell, OnInvalidateSlots, void*, EMPTYARG)
 
     DBG_ASSERT(m_arrInvalidSlots.Count() == m_arrInvalidSlots_Flags.size(),
         "FmXFormShell::OnInvalidateSlots : inconsistent slot arrays !");
-    BYTE nFlags;
+    sal_uInt8 nFlags;
     for (sal_Int16 i=0; i<m_arrInvalidSlots.Count(); ++i)
     {
         nFlags = m_arrInvalidSlots_Flags[i];
@@ -1111,7 +1111,7 @@ void FmXFormShell::ForceUpdateSelection(sal_Bool bAllowInvalidation)
 PopupMenu* FmXFormShell::GetConversionMenu()
 {
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    BOOL bIsHiContrastMode  = rSettings.GetHighContrastMode();
+    sal_Bool bIsHiContrastMode  = rSettings.GetHighContrastMode();
 
     PopupMenu* pNewMenu = new PopupMenu(SVX_RES( RID_FMSHELL_CONVERSIONMENU ));
 
@@ -4226,10 +4226,10 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
             // We can't simply re-insert the item because we have a clear order for all the our items.
             // So first we have to determine the position of the item to insert.
             PopupMenu* pSource = FmXFormShell::GetConversionMenu();
-            USHORT nSourcePos = pSource->GetItemPos(nSID);
+            sal_uInt16 nSourcePos = pSource->GetItemPos(nSID);
             DBG_ASSERT(nSourcePos != MENU_ITEM_NOTFOUND, "ControlConversionMenuController::StateChanged : FmXFormShell supplied an invalid menu !");
-            USHORT nPrevInSource = nSourcePos;
-            USHORT nPrevInConversion = MENU_ITEM_NOTFOUND;
+            sal_uInt16 nPrevInSource = nSourcePos;
+            sal_uInt16 nPrevInConversion = MENU_ITEM_NOTFOUND;
             while (nPrevInSource>0)
             {
                 sal_Int16 nPrevId = pSource->GetItemId(--nPrevInSource);
@@ -4241,7 +4241,7 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
             }
             if (MENU_ITEM_NOTFOUND == nPrevInConversion)
                 // none of the items which precede the nSID-slot in the source menu are present in our conversion menu
-                nPrevInConversion = sal::static_int_cast< USHORT >(-1); // put the item at the first position
+                nPrevInConversion = sal::static_int_cast< sal_uInt16 >(-1); // put the item at the first position
             m_pConversionMenu->InsertItem(nSID, pSource->GetItemText(nSID), pSource->GetItemBits(nSID), ++nPrevInConversion);
             m_pConversionMenu->SetItemImage(nSID, pSource->GetItemImage(nSID));
             m_pConversionMenu->SetHelpId(nSID, pSource->GetHelpId(nSID));

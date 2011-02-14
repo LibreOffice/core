@@ -57,7 +57,7 @@ SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
     SfxItemSet* pAttr = 0;
     if( rSect.GetFmt() )
     {
-        USHORT nCnt = 1;
+        sal_uInt16 nCnt = 1;
         if( rSect.IsProtect() )
             ++nCnt;
 
@@ -236,7 +236,7 @@ void SwUndoInsSection::RepeatImpl(::sw::RepeatContext & rContext)
     }
 }
 
-void SwUndoInsSection::Join( SwDoc& rDoc, ULONG nNode )
+void SwUndoInsSection::Join( SwDoc& rDoc, sal_uLong nNode )
 {
     SwNodeIndex aIdx( rDoc.GetNodes(), nNode );
     SwTxtNode* pTxtNd = aIdx.GetNode().GetTxtNode();
@@ -290,8 +290,8 @@ private:
     ::std::auto_ptr<SwTOXBase> const m_pTOXBase; /// set iff section is TOX
     ::std::auto_ptr<SfxItemSet> const m_pAttrSet;
     ::boost::shared_ptr< ::sfx2::MetadatableUndo > const m_pMetadataUndo;
-    ULONG const m_nStartNode;
-    ULONG const m_nEndNode;
+    sal_uLong const m_nStartNode;
+    sal_uLong const m_nEndNode;
 
 public:
     SwUndoDelSection(
@@ -401,7 +401,7 @@ class SwUndoUpdateSection
 private:
     ::std::auto_ptr<SwSectionData> m_pSectionData;
     ::std::auto_ptr<SfxItemSet> m_pAttrSet;
-    ULONG const m_nStartNode;
+    sal_uLong const m_nStartNode;
     bool const m_bOnlyAttrChanged;
 
 public:
@@ -452,7 +452,7 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
         // das Content- und Protect-Item muss bestehen bleiben
         const SfxPoolItem* pItem;
         m_pAttrSet->Put( pFmt->GetFmtAttr( RES_CNTNT ));
-        if( SFX_ITEM_SET == pFmt->GetItemState( RES_PROTECT, TRUE, &pItem ))
+        if( SFX_ITEM_SET == pFmt->GetItemState( RES_PROTECT, sal_True, &pItem ))
         {
             m_pAttrSet->Put( *pItem );
         }

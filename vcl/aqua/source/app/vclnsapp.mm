@@ -287,7 +287,7 @@
     return AquaSalInstance::GetDynamicDockMenu();
 }
 
--(MacOSBOOL)application: (NSApplication*)app openFile: (NSString*)pFile
+-(BOOL)application: (NSApplication*)app openFile: (NSString*)pFile
 {
     const rtl::OUString aFile( GetOUString( pFile ) );
     if( ! AquaSalInstance::isOnCommandLine( aFile ) )
@@ -328,7 +328,7 @@
     }
 }
 
--(MacOSBOOL)application: (NSApplication*)app printFile: (NSString*)pFile
+-(BOOL)application: (NSApplication*)app printFile: (NSString*)pFile
 {
     const rtl::OUString aFile( GetOUString( pFile ) );
 	const ApplicationEvent* pAppEvent = new ApplicationEvent( String(), ApplicationAddress(),
@@ -336,7 +336,7 @@
 	AquaSalInstance::aAppEventList.push_back( pAppEvent );
     return YES;
 }
--(NSApplicationPrintReply)application: (NSApplication *) app printFiles:(NSArray *)files withSettings: (NSDictionary *)printSettings showPrintPanels:(MacOSBOOL)bShowPrintPanels
+-(NSApplicationPrintReply)application: (NSApplication *) app printFiles:(NSArray *)files withSettings: (NSDictionary *)printSettings showPrintPanels:(BOOL)bShowPrintPanels
 {
     // currently ignores print settings an bShowPrintPanels
     rtl::OUStringBuffer aFileList( 256 );
@@ -468,7 +468,7 @@
     }
 }
 
-- (MacOSBOOL)applicationShouldHandleReopen: (NSApplication*)pApp hasVisibleWindows: (MacOSBOOL) bWinVisible
+- (BOOL)applicationShouldHandleReopen: (NSApplication*)pApp hasVisibleWindows: (BOOL) bWinVisible
 {
     NSObject* pHdl = GetSalData()->mpDockIconClickHandler;
     if( pHdl && [pHdl respondsToSelector: @selector(dockIconClicked:)] )

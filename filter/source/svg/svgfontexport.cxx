@@ -71,7 +71,7 @@ void SVGFontExport::implCollectGlyphs()
             {
                 ::rtl::OUString     aText;
                 MetaAction*         pAction = rMtf.GetAction( i );
-                const USHORT        nType = pAction->GetType();
+                const sal_uInt16        nType = pAction->GetType();
 
                 switch( nType )
                 {
@@ -134,7 +134,7 @@ void SVGFontExport::implEmbedFont( const ::rtl::OUString& rFontName, const ::std
     const ::rtl::OUString                       aEmbeddedFontStr( B2UCONST( "EmbeddedFont_" ) );
 
     {
-        SvXMLElementExport  aExp( mrExport, XML_NAMESPACE_NONE, "defs", TRUE, TRUE );
+        SvXMLElementExport  aExp( mrExport, XML_NAMESPACE_NONE, "defs", sal_True, sal_True );
         ::rtl::OUString     aCurIdStr( aEmbeddedFontStr );
         ::rtl::OUString     aUnitsPerEM( SVGActionWriter::GetValueString( nFontEM ) );
         VirtualDevice       aVDev;
@@ -148,7 +148,7 @@ void SVGFontExport::implEmbedFont( const ::rtl::OUString& rFontName, const ::std
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", aUnitsPerEM );
 
         {
-            SvXMLElementExport  aExp2( mrExport, XML_NAMESPACE_NONE, "font", TRUE, TRUE );
+            SvXMLElementExport  aExp2( mrExport, XML_NAMESPACE_NONE, "font", sal_True, sal_True );
             Point               aPos;
             Size                aSize( nFontEM, nFontEM );
             PolyPolygon         aMissingGlyphPolyPoly( Rectangle( aPos, aSize ) );
@@ -162,19 +162,19 @@ void SVGFontExport::implEmbedFont( const ::rtl::OUString& rFontName, const ::std
             mrExport.AddAttribute( XML_NAMESPACE_NONE, "descent", SVGActionWriter::GetValueString( aVDev.GetFontMetric().GetDescent() ) );
 
             {
-                SvXMLElementExport aExp3( mrExport, XML_NAMESPACE_NONE, "font-face", TRUE, TRUE );
+                SvXMLElementExport aExp3( mrExport, XML_NAMESPACE_NONE, "font-face", sal_True, sal_True );
             }
 
             mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", SVGActionWriter::GetValueString( aSize.Width() ) );
 
             {
-                SvXMLElementExport aExp3( mrExport, XML_NAMESPACE_NONE, "missing-glyph", TRUE, TRUE );
+                SvXMLElementExport aExp3( mrExport, XML_NAMESPACE_NONE, "missing-glyph", sal_True, sal_True );
 
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "style", B2UCONST( "fill:none;stroke:black;stroke-width:33" ) );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "d", SVGActionWriter::GetPathString( aMissingGlyphPolyPoly, sal_False ) );
 
                 {
-                    SvXMLElementExport aExp4( mrExport, XML_NAMESPACE_NONE, "path", TRUE, TRUE );
+                    SvXMLElementExport aExp4( mrExport, XML_NAMESPACE_NONE, "path", sal_True, sal_True );
                 }
             }
 
@@ -213,7 +213,7 @@ void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& r
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", SVGActionWriter::GetValueString( aBoundRect.GetWidth() ) );
 
         {
-            SvXMLElementExport    aExp( mrExport, XML_NAMESPACE_NONE, "glyph", TRUE, TRUE );
+            SvXMLElementExport    aExp( mrExport, XML_NAMESPACE_NONE, "glyph", sal_True, sal_True );
             const ::rtl::OUString aPathString( SVGActionWriter::GetPathString( aPolyPoly, sal_False ) );
 
             if( aPathString.getLength() )
@@ -221,7 +221,7 @@ void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& r
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "d", aPathString );
 
                 {
-                    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, B2UCONST( "path" ), TRUE, TRUE );
+                    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, B2UCONST( "path" ), sal_True, sal_True );
                 }
             }
         }

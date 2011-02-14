@@ -80,22 +80,22 @@ public:
     INLINE xub_StrLen operator+=( const SwIndex& );
     INLINE xub_StrLen operator-=( const SwIndex& );
 
-    INLINE BOOL operator<( const SwIndex& ) const;
-    INLINE BOOL operator<=( const SwIndex& ) const;
-    INLINE BOOL operator>( const SwIndex& ) const;
-    INLINE BOOL operator>=( const SwIndex& ) const;
-    BOOL operator==( const SwIndex& rSwIndex ) const
+    INLINE sal_Bool operator<( const SwIndex& ) const;
+    INLINE sal_Bool operator<=( const SwIndex& ) const;
+    INLINE sal_Bool operator>( const SwIndex& ) const;
+    INLINE sal_Bool operator>=( const SwIndex& ) const;
+    sal_Bool operator==( const SwIndex& rSwIndex ) const
     { return (nIndex == rSwIndex.nIndex) &&  (pArray == rSwIndex.pArray); }
 
-    BOOL operator!=( const SwIndex& rSwIndex ) const
+    sal_Bool operator!=( const SwIndex& rSwIndex ) const
     { return (nIndex != rSwIndex.nIndex) ||  (pArray != rSwIndex.pArray); }
 
-    BOOL operator<( xub_StrLen nWert ) const    { return nIndex <  nWert; }
-    BOOL operator<=( xub_StrLen nWert ) const   { return nIndex <= nWert; }
-    BOOL operator>( xub_StrLen nWert ) const    { return nIndex >  nWert; }
-    BOOL operator>=( xub_StrLen nWert ) const   { return nIndex >= nWert; }
-    BOOL operator==( xub_StrLen nWert ) const   { return nIndex == nWert; }
-    BOOL operator!=( xub_StrLen nWert ) const   { return nIndex != nWert; }
+    sal_Bool operator<( xub_StrLen nWert ) const    { return nIndex <  nWert; }
+    sal_Bool operator<=( xub_StrLen nWert ) const   { return nIndex <= nWert; }
+    sal_Bool operator>( xub_StrLen nWert ) const    { return nIndex >  nWert; }
+    sal_Bool operator>=( xub_StrLen nWert ) const   { return nIndex >= nWert; }
+    sal_Bool operator==( xub_StrLen nWert ) const   { return nIndex == nWert; }
+    sal_Bool operator!=( xub_StrLen nWert ) const   { return nIndex != nWert; }
 
     INLINE SwIndex& operator=( xub_StrLen );
     SwIndex& operator=( const SwIndex & );
@@ -134,7 +134,7 @@ protected:
 
     void ChkArr();
 
-    BOOL HasAnyIndex() const { return 0 != pFirst; }
+    sal_Bool HasAnyIndex() const { return 0 != pFirst; }
 
 public:
     SwIndexReg();
@@ -189,19 +189,19 @@ inline xub_StrLen SwIndex::operator-=( const SwIndex& rIndex )
     return ChgValue( *this, nIndex - rIndex.nIndex ).nIndex;
 }
 
-inline BOOL SwIndex::operator<( const SwIndex& rIndex ) const
+inline sal_Bool SwIndex::operator<( const SwIndex& rIndex ) const
 {
     return nIndex < rIndex.nIndex;
 }
-inline BOOL SwIndex::operator<=( const SwIndex& rIndex ) const
+inline sal_Bool SwIndex::operator<=( const SwIndex& rIndex ) const
 {
     return nIndex <= rIndex.nIndex;
 }
-inline BOOL SwIndex::operator>( const SwIndex& rIndex ) const
+inline sal_Bool SwIndex::operator>( const SwIndex& rIndex ) const
 {
     return nIndex > rIndex.nIndex;
 }
-inline BOOL SwIndex::operator>=( const SwIndex& rIndex ) const
+inline sal_Bool SwIndex::operator>=( const SwIndex& rIndex ) const
 {
     return nIndex >= rIndex.nIndex;
 }

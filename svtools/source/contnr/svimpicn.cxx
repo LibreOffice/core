@@ -100,30 +100,30 @@
 #undef TEXT_DRAW_WORDBREAK
 #endif
 
-// #define TEXT_DRAW_DISABLE           ((USHORT)0x0001)
-// #define TEXT_DRAW_3DLOOK            ((USHORT)0x0002)
-// #define TEXT_DRAW_MNEMONIC          ((USHORT)0x0004)
-#define TEXT_DRAW_LEFT              ((USHORT)0x0010)
-#define TEXT_DRAW_CENTER            ((USHORT)0x0020)
-#define TEXT_DRAW_RIGHT             ((USHORT)0x0040)
-#define TEXT_DRAW_TOP               ((USHORT)0x0080)
-#define TEXT_DRAW_VCENTER           ((USHORT)0x0100)
-#define TEXT_DRAW_BOTTOM            ((USHORT)0x0200)
-#define TEXT_DRAW_ENDELLIPSIS       ((USHORT)0x0400)
-#define TEXT_DRAW_PATHELLIPSIS      ((USHORT)0x0800)
-#define TEXT_DRAW_CLIP              ((USHORT)0x1000)
-#define TEXT_DRAW_MULTILINE         ((USHORT)0x2000)
-#define TEXT_DRAW_WORDBREAK         ((USHORT)0x4000)
+// #define TEXT_DRAW_DISABLE           ((sal_uInt16)0x0001)
+// #define TEXT_DRAW_3DLOOK            ((sal_uInt16)0x0002)
+// #define TEXT_DRAW_MNEMONIC          ((sal_uInt16)0x0004)
+#define TEXT_DRAW_LEFT              ((sal_uInt16)0x0010)
+#define TEXT_DRAW_CENTER            ((sal_uInt16)0x0020)
+#define TEXT_DRAW_RIGHT             ((sal_uInt16)0x0040)
+#define TEXT_DRAW_TOP               ((sal_uInt16)0x0080)
+#define TEXT_DRAW_VCENTER           ((sal_uInt16)0x0100)
+#define TEXT_DRAW_BOTTOM            ((sal_uInt16)0x0200)
+#define TEXT_DRAW_ENDELLIPSIS       ((sal_uInt16)0x0400)
+#define TEXT_DRAW_PATHELLIPSIS      ((sal_uInt16)0x0800)
+#define TEXT_DRAW_CLIP              ((sal_uInt16)0x1000)
+#define TEXT_DRAW_MULTILINE         ((sal_uInt16)0x2000)
+#define TEXT_DRAW_WORDBREAK         ((sal_uInt16)0x4000)
 
 XubString GetEllipsisString( OutputDevice* pDev,
                             const XubString& rStr, long nMaxWidth,
-                            USHORT nStyle = TEXT_DRAW_ENDELLIPSIS )
+                            sal_uInt16 nStyle = TEXT_DRAW_ENDELLIPSIS )
 {
     XubString aStr = rStr;
 
     if ( nStyle & TEXT_DRAW_ENDELLIPSIS )
     {
-        USHORT nIndex = pDev->GetTextBreak( rStr, nMaxWidth );
+        sal_uInt16 nIndex = pDev->GetTextBreak( rStr, nMaxWidth );
         if ( nIndex != STRING_LEN )
         {
             aStr.Erase( nIndex );
@@ -151,11 +151,11 @@ class TextLineInfo
 {
 private:
     long        mnWidth;
-    USHORT      mnIndex;
-    USHORT      mnLen;
+    sal_uInt16      mnIndex;
+    sal_uInt16      mnLen;
 
 public:
-                TextLineInfo( long nWidth, USHORT nIndex, USHORT nLen )
+                TextLineInfo( long nWidth, sal_uInt16 nIndex, sal_uInt16 nLen )
                 {
                     mnWidth = nWidth;
                     mnIndex = nIndex;
@@ -163,8 +163,8 @@ public:
                 }
 
     long        GetWidth() const { return mnWidth; }
-    USHORT      GetIndex() const { return mnIndex; }
-    USHORT      GetLen() const { return mnLen; }
+    sal_uInt16      GetIndex() const { return mnIndex; }
+    sal_uInt16      GetLen() const { return mnLen; }
 };
 
 #define MULTITEXTLINEINFO_RESIZE    16
@@ -174,8 +174,8 @@ class MultiTextLineInfo
 {
 private:
     PTextLineInfo*      mpLines;
-    USHORT              mnLines;
-    USHORT              mnSize;
+    sal_uInt16              mnLines;
+    sal_uInt16              mnSize;
 
 public:
                         MultiTextLineInfo();
@@ -184,9 +184,9 @@ public:
     void                AddLine( TextLineInfo* pLine );
     void                Clear();
 
-    TextLineInfo*       GetLine( USHORT nLine ) const
+    TextLineInfo*       GetLine( sal_uInt16 nLine ) const
                             { return mpLines[nLine]; }
-    USHORT              Count() const { return mnLines; }
+    sal_uInt16              Count() const { return mnLines; }
 
 private:
                         MultiTextLineInfo( const MultiTextLineInfo& );
@@ -202,7 +202,7 @@ MultiTextLineInfo::MultiTextLineInfo()
 
 MultiTextLineInfo::~MultiTextLineInfo()
 {
-    for ( USHORT i = 0; i < mnLines; i++ )
+    for ( sal_uInt16 i = 0; i < mnLines; i++ )
         delete mpLines[i];
     delete [] mpLines;
 }
@@ -223,7 +223,7 @@ void MultiTextLineInfo::AddLine( TextLineInfo* pLine )
 
 void MultiTextLineInfo::Clear()
 {
-    for ( USHORT i = 0; i < mnLines; i++ )
+    for ( sal_uInt16 i = 0; i < mnLines; i++ )
         delete mpLines[i];
     mnLines = 0;
 }
@@ -232,7 +232,7 @@ void MultiTextLineInfo::Clear()
 
 long GetTextLines( OutputDevice* pDev, MultiTextLineInfo& rLineInfo,
                    long nWidth, const XubString& rStr,
-                   USHORT nStyle = TEXT_DRAW_WORDBREAK )
+                   sal_uInt16 nStyle = TEXT_DRAW_WORDBREAK )
 {
     rLineInfo.Clear();
     if ( !rStr.Len() )
@@ -240,20 +240,20 @@ long GetTextLines( OutputDevice* pDev, MultiTextLineInfo& rLineInfo,
     if ( nWidth <= 0 )
         nWidth = 1;
 
-    USHORT          nStartPos       = 0;                // Start-Position der Zeile
-    USHORT          nLastLineLen    = 0;                // Zeilenlaenge bis zum vorherigen Wort
-    USHORT          nLastWordPos    = 0;                // Position des letzten Wortanfangs
-    USHORT          i               = 0;
-    USHORT          nPos;                               // StartPositon der Zeile (nur Temp)
-    USHORT          nLen;                               // Laenge der Zeile (nur Temp)
-    USHORT          nStrLen         = rStr.Len();
+    sal_uInt16          nStartPos       = 0;                // Start-Position der Zeile
+    sal_uInt16          nLastLineLen    = 0;                // Zeilenlaenge bis zum vorherigen Wort
+    sal_uInt16          nLastWordPos    = 0;                // Position des letzten Wortanfangs
+    sal_uInt16          i               = 0;
+    sal_uInt16          nPos;                               // StartPositon der Zeile (nur Temp)
+    sal_uInt16          nLen;                               // Laenge der Zeile (nur Temp)
+    sal_uInt16          nStrLen         = rStr.Len();
     long            nMaxLineWidth   = 0;                // Maximale Zeilenlaenge
     long            nLineWidth;                         // Aktuelle Zeilenlaenge
     long            nLastLineWidth  = 0;                // Zeilenlaenge der letzten Zeile
     xub_Unicode          c;
     xub_Unicode          c2;
     const xub_Unicode*   pStr       = rStr.GetBuffer();
-    BOOL            bHardBreak      = FALSE;
+    sal_Bool            bHardBreak      = sal_False;
 
     do
     {
@@ -261,9 +261,9 @@ long GetTextLines( OutputDevice* pDev, MultiTextLineInfo& rLineInfo,
 
         // Auf Zeilenende ermitteln
         if ( (c == _CR) || (c == _LF) )
-            bHardBreak = TRUE;
+            bHardBreak = sal_True;
         else
-            bHardBreak = FALSE;
+            bHardBreak = sal_False;
 
         // Testen, ob ein Wortende erreicht ist
         if ( bHardBreak || (i == nStrLen) ||
@@ -378,9 +378,9 @@ long GetTextLines( OutputDevice* pDev, MultiTextLineInfo& rLineInfo,
 
 // -----------------------------------------------------------------------
 
-USHORT GetTextLines( OutputDevice* pDev, const Rectangle& rRect,
+sal_uInt16 GetTextLines( OutputDevice* pDev, const Rectangle& rRect,
                      const XubString& rStr,
-                     USHORT nStyle = TEXT_DRAW_WORDBREAK,
+                     sal_uInt16 nStyle = TEXT_DRAW_WORDBREAK,
                      long* pMaxWidth = NULL )
 {
     MultiTextLineInfo aMultiLineInfo;
@@ -395,10 +395,10 @@ USHORT GetTextLines( OutputDevice* pDev, const Rectangle& rRect,
 
 Rectangle GetTextRect( OutputDevice* pDev, const Rectangle& rRect,
                        const XubString& rStr,
-                       USHORT nStyle = TEXT_DRAW_WORDBREAK )
+                       sal_uInt16 nStyle = TEXT_DRAW_WORDBREAK )
 {
     Rectangle           aRect = rRect;
-    USHORT              nLines;
+    sal_uInt16              nLines;
     long                nWidth = rRect.GetWidth();
     long                nMaxWidth;
     long                nTextHeight;
@@ -407,13 +407,13 @@ Rectangle GetTextRect( OutputDevice* pDev, const Rectangle& rRect,
     {
         MultiTextLineInfo   aMultiLineInfo;
         TextLineInfo*       pLineInfo;
-        USHORT              nFormatLines;
+        sal_uInt16              nFormatLines;
 
         nMaxWidth = 0;
         GetTextLines( pDev, aMultiLineInfo, nWidth, rStr, nStyle );
         nFormatLines = aMultiLineInfo.Count();
         nTextHeight = pDev->GetTextHeight();
-        nLines = (USHORT)(aRect.GetHeight()/nTextHeight);
+        nLines = (sal_uInt16)(aRect.GetHeight()/nTextHeight);
         if ( nFormatLines <= nLines )
             nLines = nFormatLines;
         else
@@ -423,7 +423,7 @@ Rectangle GetTextRect( OutputDevice* pDev, const Rectangle& rRect,
             else
                 nMaxWidth = nWidth;
         }
-        for ( USHORT i = 0; i < nLines; i++ )
+        for ( sal_uInt16 i = 0; i < nLines; i++ )
         {
             pLineInfo = aMultiLineInfo.GetLine( i );
             if ( pLineInfo->GetWidth() > nMaxWidth )
@@ -465,7 +465,7 @@ Rectangle GetTextRect( OutputDevice* pDev, const Rectangle& rRect,
 // -----------------------------------------------------------------------
 
 void DrawText( OutputDevice* pDev, const Rectangle& rRect,
-               const XubString& rStr, USHORT nStyle = 0 )
+               const XubString& rStr, sal_uInt16 nStyle = 0 )
 {
     if ( !rStr.Len() || rRect.IsEmpty() )
         return;
@@ -487,10 +487,10 @@ void DrawText( OutputDevice* pDev, const Rectangle& rRect,
         TextLineInfo*       pLineInfo;
         long                nTextHeight     = pDev->GetTextHeight();
         long                nMaxTextWidth;
-        USHORT              i;
-        USHORT              nLines          = (USHORT)(nHeight/nTextHeight);
-        USHORT              nFormatLines;
-        BOOL                bIsClipRegion = FALSE;
+        sal_uInt16              i;
+        sal_uInt16              nLines          = (sal_uInt16)(nHeight/nTextHeight);
+        sal_uInt16              nFormatLines;
+        sal_Bool                bIsClipRegion = sal_False;
         nMaxTextWidth = GetTextLines( pDev, aMultiLineInfo, nWidth, rStr, nStyle );
 
         nFormatLines = aMultiLineInfo.Count();
@@ -611,7 +611,7 @@ void DrawText( OutputDevice* pDev, const Rectangle& rRect,
 
         if ( nStyle & TEXT_DRAW_CLIP )
         {
-            BOOL bIsClipRegion = pDev->IsClipRegion();
+            sal_Bool bIsClipRegion = pDev->IsClipRegion();
             if ( bIsClipRegion )
             {
                 Region aOldRegion = pDev->GetClipRegion();
@@ -649,7 +649,7 @@ class ImpIcnCursor
     SvImpIconView*  pView;
     SvPtrarr*       pColumns;
     SvPtrarr*       pRows;
-    BOOL*           pGridMap;
+    sal_Bool*           pGridMap;
     long            nGridDX, nGridDY;
     long            nGridCols, nGridRows;
     long            nCols;
@@ -661,39 +661,39 @@ class ImpIcnCursor
     void            ImplCreate();
     void            Create() {  if( !pColumns ) ImplCreate(); }
 
-    USHORT          GetSortListPos( SvPtrarr* pList, long nValue, int bVertical);
-    SvLBoxEntry*    SearchCol(USHORT nCol,USHORT nTop,USHORT nBottom,USHORT nPref,
-                        BOOL bDown, BOOL bSimple );
-    SvLBoxEntry*    SearchRow(USHORT nRow,USHORT nRight,USHORT nLeft,USHORT nPref,
-                        BOOL bRight, BOOL bSimple );
+    sal_uInt16          GetSortListPos( SvPtrarr* pList, long nValue, int bVertical);
+    SvLBoxEntry*    SearchCol(sal_uInt16 nCol,sal_uInt16 nTop,sal_uInt16 nBottom,sal_uInt16 nPref,
+                        sal_Bool bDown, sal_Bool bSimple );
+    SvLBoxEntry*    SearchRow(sal_uInt16 nRow,sal_uInt16 nRight,sal_uInt16 nLeft,sal_uInt16 nPref,
+                        sal_Bool bRight, sal_Bool bSimple );
 
     void            ExpandGrid();
     void            CreateGridMap();
-    // Rueckgabe FALSE: Eintrag liegt nicht in der GridMap. rGridx,y werden
+    // Rueckgabe sal_False: Eintrag liegt nicht in der GridMap. rGridx,y werden
     // dann an nGridCols, nGridRows geclippt
-    BOOL            GetGrid( const Point& rDocPos, USHORT& rGridX, USHORT& rGridY ) const;
-    void            SetGridUsed( USHORT nDX, USHORT nDY, BOOL bUsed )
+    sal_Bool            GetGrid( const Point& rDocPos, sal_uInt16& rGridX, sal_uInt16& rGridY ) const;
+    void            SetGridUsed( sal_uInt16 nDX, sal_uInt16 nDY, sal_Bool bUsed )
                     {
                         pGridMap[ (nDY * nGridCols) + nDX ] = bUsed;
                     }
-    BOOL            IsGridUsed( USHORT nDX, USHORT nDY )
+    sal_Bool            IsGridUsed( sal_uInt16 nDX, sal_uInt16 nDY )
                     {
                         return pGridMap[ (nDY * nGridCols) + nDX ];
                     }
 public:
                     ImpIcnCursor( SvImpIconView* pOwner );
                     ~ImpIcnCursor();
-    void            Clear( BOOL bGridToo = TRUE );
+    void            Clear( sal_Bool bGridToo = sal_True );
 
     // fuer Cursortravelling usw.
-    SvLBoxEntry*    GoLeftRight( SvLBoxEntry*, BOOL bRight );
-    SvLBoxEntry*    GoUpDown( SvLBoxEntry*, BOOL bDown );
+    SvLBoxEntry*    GoLeftRight( SvLBoxEntry*, sal_Bool bRight );
+    SvLBoxEntry*    GoUpDown( SvLBoxEntry*, sal_Bool bDown );
 
-    // Rueckgaebe: FALSE == Das leere Rect steht hinter dem letzten
+    // Rueckgaebe: sal_False == Das leere Rect steht hinter dem letzten
     // Eintrag; d.h. beim naechsten Einfuegen ergibt sich das naechste
     // leere Rechteck durch Addition. Hinweis: Das Rechteck kann dann
     // ausserhalb des View-Space liegen
-    BOOL            FindEmptyGridRect( Rectangle& rRect );
+    sal_Bool            FindEmptyGridRect( Rectangle& rRect );
 
     // Erzeugt fuer jede Zeile (Hoehe=nGridDY) eine nach BoundRect.Left()
     // sortierte Liste der Eintraege, die in ihr stehen. Eine Liste kann
@@ -701,7 +701,7 @@ public:
     // muessen mit DestroyGridAdjustData geloescht werden
     void            CreateGridAjustData( SvPtrarr& pLists, SvLBoxEntry* pRow=0);
     static void     DestroyGridAdjustData( SvPtrarr& rLists );
-    void            SetGridUsed( const Rectangle&, BOOL bUsed = TRUE );
+    void            SetGridUsed( const Rectangle&, sal_Bool bUsed = sal_True );
 };
 
 
@@ -740,7 +740,7 @@ SvImpIconView::SvImpIconView( SvIconView* pCurView, SvLBoxTreeList* pTree,
     aEditTimer.SetTimeout( 800 );
     aEditTimer.SetTimeoutHdl(LINK(this,SvImpIconView,EditTimeoutHdl));
 
-    Clear( TRUE );
+    Clear( sal_True );
 }
 
 SvImpIconView::~SvImpIconView()
@@ -755,14 +755,14 @@ SvImpIconView::~SvImpIconView()
     ClearSelectedRectList();
 }
 
-void SvImpIconView::Clear( BOOL bInCtor )
+void SvImpIconView::Clear( sal_Bool bInCtor )
 {
     StopEditTimer();
     CancelUserEvent();
     nMaxBmpWidth = 0;
     nMaxBmpHeight = 0;
     nMaxTextWidth = 0;
-    bMustRecalcBoundingRects = FALSE;
+    bMustRecalcBoundingRects = sal_False;
     nMaxBoundHeight = 0;
 
     //XXX
@@ -797,17 +797,17 @@ void SvImpIconView::SetStyle( const WinBits i_nWinStyle )
 
 IMPL_LINK( SvImpIconView, ScrollUpDownHdl, ScrollBar *, pScrollBar )
 {
-    pView->EndEditing( TRUE );
+    pView->EndEditing( sal_True );
     // Pfeil hoch: delta=-1; Pfeil runter: delta=+1
-    Scroll( 0, pScrollBar->GetDelta(), TRUE );
+    Scroll( 0, pScrollBar->GetDelta(), sal_True );
     return 0;
 }
 
 IMPL_LINK( SvImpIconView, ScrollLeftRightHdl, ScrollBar *, pScrollBar )
 {
-    pView->EndEditing( TRUE );
+    pView->EndEditing( sal_True );
     // Pfeil links: delta=-1; Pfeil rechts: delta=+1
-    Scroll( pScrollBar->GetDelta(), 0, TRUE );
+    Scroll( pScrollBar->GetDelta(), 0, sal_True );
     return 0;
 }
 
@@ -847,7 +847,7 @@ void SvImpIconView::CheckSizes( SvLBoxEntry* pEntry,
         {
             nMaxTextWidth = aSize.Width();
             if( !(nFlags & F_GRIDMODE ) )
-                bMustRecalcBoundingRects = TRUE;
+                bMustRecalcBoundingRects = sal_True;
         }
     }
     SvLBoxContextBmp* pBmpItem = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
@@ -859,14 +859,14 @@ void SvImpIconView::CheckSizes( SvLBoxEntry* pEntry,
             nMaxBmpWidth = aSize.Width();
             nMaxBmpWidth += (2*LROFFS_ICON);
             if( !(nFlags & F_GRIDMODE ) )
-                bMustRecalcBoundingRects = TRUE;
+                bMustRecalcBoundingRects = sal_True;
         }
         if( aSize.Height() > nMaxBmpHeight )
         {
             nMaxBmpHeight = aSize.Height();
             nMaxBmpHeight += (2*TBOFFS_ICON);;
             if( !(nFlags & F_GRIDMODE ) )
-                bMustRecalcBoundingRects = TRUE;
+                bMustRecalcBoundingRects = sal_True;
         }
     }
 }
@@ -879,9 +879,9 @@ void SvImpIconView::EntryInserted( SvLBoxEntry* pEntry )
         DBG_ASSERT(pZOrderList->GetPos(pEntry)==0xffff,"EntryInserted:ZOrder?");
         pZOrderList->Insert( pEntry, pZOrderList->Count() );
         if( nFlags & F_GRIDMODE )
-            pImpCursor->Clear( FALSE );
+            pImpCursor->Clear( sal_False );
         else
-            pImpCursor->Clear( TRUE );
+            pImpCursor->Clear( sal_True );
         SvIcnVwDataEntry* pViewData = ICNVIEWDATA(pEntry);
         CheckSizes( pEntry, pViewData );
         if( pView->IsUpdateMode() )
@@ -911,11 +911,11 @@ void SvImpIconView::RemovingEntry( SvLBoxEntry* pEntry )
         if( pEntry == pCursor )
         {
             SvLBoxEntry* pNewCursor = GetNewCursor();
-            ShowCursor( FALSE );
+            ShowCursor( sal_False );
             pCursor = 0; // damit er nicht deselektiert wird
             SetCursor( pNewCursor );
         }
-        USHORT nPos = pZOrderList->GetPos( (void*)pEntry );
+        sal_uInt16 nPos = pZOrderList->GetPos( (void*)pEntry );
         pZOrderList->Remove( nPos, 1 );
         pImpCursor->Clear();
     }
@@ -958,7 +958,7 @@ void SvImpIconView::MovingEntry( SvLBoxEntry* pEntry )
 
 void SvImpIconView::EntryMoved( SvLBoxEntry* pEntry )
 {
-    ShowCursor( FALSE );
+    ShowCursor( sal_False );
     SvIcnVwDataEntry* pViewData = ICNVIEWDATA(pEntry);
     if( pModel->GetParent(pEntry)==pCurParent )
     {
@@ -986,9 +986,9 @@ void SvImpIconView::EntryMoved( SvLBoxEntry* pEntry )
             SetCursor( pNextCursor );
         }
         pImpCursor->Clear();
-        USHORT nPos = pZOrderList->GetPos( (void*)pEntry );
+        sal_uInt16 nPos = pZOrderList->GetPos( (void*)pEntry );
         pZOrderList->Remove( nPos, 1 );
-        pView->Select( pEntry, FALSE );
+        pView->Select( pEntry, sal_False );
         // wenn er nochmal in dieser View auftaucht, muss sein
         // Bounding-Rect neu berechnet werden
         InvalidateBoundingRect( pViewData->aRect );
@@ -1013,7 +1013,7 @@ void SvImpIconView::CollapsingEntry( SvLBoxEntry* )
 {
 }
 
-void SvImpIconView::EntrySelected( SvLBoxEntry* pEntry, BOOL bSelect )
+void SvImpIconView::EntrySelected( SvLBoxEntry* pEntry, sal_Bool bSelect )
 {
     if( pModel->GetParent(pEntry) != pCurParent  )
         return;
@@ -1033,13 +1033,13 @@ void SvImpIconView::EntrySelected( SvLBoxEntry* pEntry, BOOL bSelect )
     if( pView->IsUpdateMode() )
     {
         if( pEntry == pCursor )
-            ShowCursor( FALSE );
+            ShowCursor( sal_False );
         if( nFlags & F_RUBBERING )
             PaintEntry( pEntry );
         else
             pView->Invalidate( GetBoundingRect( pEntry ) );
         if( pEntry == pCursor )
-            ShowCursor( TRUE );
+            ShowCursor( sal_True );
     }
 }
 
@@ -1131,7 +1131,7 @@ void SvImpIconView::ResetVirtSize()
     StopEditTimer();
     aVirtOutputSize.Width() = 0;
     aVirtOutputSize.Height() = 0;
-    BOOL bLockedEntryFound = FALSE;
+    sal_Bool bLockedEntryFound = sal_False;
     nFlags &= (~F_GRID_INSERT);
     SvLBoxEntry* pCur = pModel->FirstChild( pCurParent );
     while( pCur )
@@ -1144,7 +1144,7 @@ void SvImpIconView::ResetVirtSize()
                 FindBoundingRect( pCur, pViewData );
             else
                 AdjustVirtSize( pViewData->aRect );
-            bLockedEntryFound = TRUE;
+            bLockedEntryFound = sal_True;
         }
         else
             InvalidateBoundingRect( pViewData->aRect );
@@ -1198,16 +1198,16 @@ void SvImpIconView::Arrange()
 void SvImpIconView::ImpArrange()
 {
     StopEditTimer();
-    ShowCursor( FALSE );
+    ShowCursor( sal_False );
     ResetVirtSize();
-    bMustRecalcBoundingRects = FALSE;
+    bMustRecalcBoundingRects = sal_False;
     MapMode aMapMode( pView->GetMapMode());
     aMapMode.SetOrigin( Point() );
     pView->SetMapMode( aMapMode );
     CheckAllSizes();
     RecalcAllBoundingRectsSmart();
     pView->Invalidate();
-    ShowCursor( TRUE );
+    ShowCursor( sal_True );
 }
 
 void SvImpIconView::Paint( const Rectangle& rRect )
@@ -1249,14 +1249,14 @@ void SvImpIconView::Paint( const Rectangle& rRect )
     if( !pCursor )
         pCursor = pModel->FirstChild( pCurParent );
 
-    USHORT nCount = pZOrderList->Count();
+    sal_uInt16 nCount = pZOrderList->Count();
     if( !nCount )
         return;
 
     SvPtrarr* pNewZOrderList = new SvPtrarr;
     SvPtrarr* pPaintedEntries = new SvPtrarr;
 
-    USHORT nPos = 0;
+    sal_uInt16 nPos = 0;
     while( nCount )
     {
         SvLBoxEntry* pEntry = (SvLBoxEntry*)(pZOrderList->GetObject(nPos ));
@@ -1279,7 +1279,7 @@ void SvImpIconView::Paint( const Rectangle& rRect )
     nCount = pPaintedEntries->Count();
     if( nCount )
     {
-        for( USHORT nCur = 0; nCur < nCount; nCur++ )
+        for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
             pZOrderList->Insert( pPaintedEntries->GetObject( nCur ),pZOrderList->Count());
     }
     delete pPaintedEntries;
@@ -1289,7 +1289,7 @@ void SvImpIconView::Paint( const Rectangle& rRect )
         PaintResizeRect( aRect );
 }
 
-BOOL SvImpIconView::GetResizeRect( Rectangle& rRect )
+sal_Bool SvImpIconView::GetResizeRect( Rectangle& rRect )
 {
     if( aHorSBar.IsVisible() && aVerSBar.IsVisible() )
     {
@@ -1300,9 +1300,9 @@ BOOL SvImpIconView::GetResizeRect( Rectangle& rRect )
         aOrigin.Y() += aOutputSize.Height();
         rRect.SetPos( aOrigin );
         rRect.SetSize( Size( nVerSBarWidth, nHorSBarHeight));
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 void SvImpIconView::PaintResizeRect( const Rectangle& rRect )
@@ -1362,7 +1362,7 @@ void SvImpIconView::MouseButtonDown( const MouseEvent& rMEvt)
         {
             if( !rMEvt.IsMod1() )  // Ctrl
             {
-                pView->SelectAll( FALSE );
+                pView->SelectAll( sal_False );
                 ClearSelectedRectList();
             }
             else
@@ -1374,8 +1374,8 @@ void SvImpIconView::MouseButtonDown( const MouseEvent& rMEvt)
         return;
     }
 
-    BOOL bSelected = pView->IsSelected( pEntry );
-    BOOL bEditingEnabled = pView->IsInplaceEditingEnabled();
+    sal_Bool bSelected = pView->IsSelected( pEntry );
+    sal_Bool bEditingEnabled = pView->IsInplaceEditingEnabled();
 
     if( rMEvt.GetClicks() == 2 )
     {
@@ -1399,7 +1399,7 @@ void SvImpIconView::MouseButtonDown( const MouseEvent& rMEvt)
         {
             DeselectAllBut( pEntry );
             SetCursor( pEntry );
-            pView->Select( pEntry, TRUE );
+            pView->Select( pEntry, sal_True );
             if( bEditingEnabled && bSelected && !rMEvt.GetModifier() &&
                 rMEvt.IsLeft() && IsTextHit( pEntry, aDocPos ) )
             {
@@ -1414,7 +1414,7 @@ void SvImpIconView::MouseButtonDown( const MouseEvent& rMEvt)
                 {
                     DeselectAllBut( pEntry );
                     SetCursor( pEntry );
-                    pView->Select( pEntry, TRUE );
+                    pView->Select( pEntry, sal_True );
                 }
                 else
                 {
@@ -1449,7 +1449,7 @@ void SvImpIconView::MouseButtonUp( const MouseEvent& rMEvt )
         nFlags &= ~(F_RUBBERING | F_ADD_MODE);
     }
 
-    SvLBoxEntry* pEntry = pView->GetEntry( rMEvt.GetPosPixel(), TRUE );
+    SvLBoxEntry* pEntry = pView->GetEntry( rMEvt.GetPosPixel(), sal_True );
     if( pEntry )
     {
         if( nFlags & F_DOWN_CTRL )
@@ -1462,7 +1462,7 @@ void SvImpIconView::MouseButtonUp( const MouseEvent& rMEvt )
         {
             DeselectAllBut( pEntry );
             SetCursor( pEntry );
-            pView->Select( pEntry, TRUE );
+            pView->Select( pEntry, sal_True );
         }
     }
 
@@ -1498,12 +1498,12 @@ void SvImpIconView::MouseMove( const MouseEvent& rMEvt )
 
         long nScrollDX, nScrollDY;
 
-        CalcScrollOffsets(rMEvt.GetPosPixel(),nScrollDX,nScrollDY,FALSE );
-        BOOL bSelRectHidden = FALSE;
+        CalcScrollOffsets(rMEvt.GetPosPixel(),nScrollDX,nScrollDY,sal_False );
+        sal_Bool bSelRectHidden = sal_False;
         if( nScrollDX || nScrollDY )
         {
             HideSelectionRect();
-            bSelRectHidden = TRUE;
+            bSelRectHidden = sal_True;
             pView->Scroll( nScrollDX, nScrollDY );
         }
         Point aDocPos( rMEvt.GetPosPixel() );
@@ -1512,8 +1512,8 @@ void SvImpIconView::MouseMove( const MouseEvent& rMEvt )
         if( aRect != aCurSelectionRect )
         {
             HideSelectionRect();
-            bSelRectHidden = TRUE;
-            BOOL bAdd = (nFlags & F_ADD_MODE) ? TRUE : FALSE;
+            bSelRectHidden = sal_True;
+            sal_Bool bAdd = (nFlags & F_ADD_MODE) ? sal_True : sal_False;
             SelectRect( aRect, bAdd, &aSelectedRectList );
         }
         if( bSelRectHidden )
@@ -1521,32 +1521,32 @@ void SvImpIconView::MouseMove( const MouseEvent& rMEvt )
     }
 }
 
-BOOL SvImpIconView::KeyInput( const KeyEvent& rKEvt )
+sal_Bool SvImpIconView::KeyInput( const KeyEvent& rKEvt )
 {
     StopEditTimer();
-    BOOL bKeyUsed = TRUE;
-    BOOL bMod1 = rKEvt.GetKeyCode().IsMod1();
-    BOOL bInAddMode = (BOOL)((nFlags & F_ADD_MODE) != 0);
+    sal_Bool bKeyUsed = sal_True;
+    sal_Bool bMod1 = rKEvt.GetKeyCode().IsMod1();
+    sal_Bool bInAddMode = (sal_Bool)((nFlags & F_ADD_MODE) != 0);
     int bDeselAll = (pView->GetSelectionMode() != SINGLE_SELECTION) &&
                     !bInAddMode;
     SvLBoxEntry* pNewCursor;
-    USHORT nCode = rKEvt.GetKeyCode().GetCode();
+    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
     switch( nCode )
     {
         case KEY_UP:
             if( pCursor )
             {
                 MakeVisible( pCursor );
-                pNewCursor = pImpCursor->GoUpDown(pCursor,FALSE);
+                pNewCursor = pImpCursor->GoUpDown(pCursor,sal_False);
                 if( pNewCursor )
                 {
                     if( bDeselAll )
-                        pView->SelectAll( FALSE );
-                    ShowCursor( FALSE );
+                        pView->SelectAll( sal_False );
+                    ShowCursor( sal_False );
                     MakeVisible( pNewCursor );
                     SetCursor( pNewCursor );
                     if( !bInAddMode )
-                        pView->Select( pCursor, TRUE );
+                        pView->Select( pCursor, sal_True );
                 }
                 else
                 {
@@ -1564,17 +1564,17 @@ BOOL SvImpIconView::KeyInput( const KeyEvent& rKEvt )
         case KEY_DOWN:
             if( pCursor )
             {
-                pNewCursor=pImpCursor->GoUpDown( pCursor,TRUE );
+                pNewCursor=pImpCursor->GoUpDown( pCursor,sal_True );
                 if( pNewCursor )
                 {
                     MakeVisible( pCursor );
                     if( bDeselAll )
-                        pView->SelectAll( FALSE );
-                    ShowCursor( FALSE );
+                        pView->SelectAll( sal_False );
+                    ShowCursor( sal_False );
                     MakeVisible( pNewCursor );
                     SetCursor( pNewCursor );
                     if( !bInAddMode )
-                        pView->Select( pCursor, TRUE );
+                        pView->Select( pCursor, sal_True );
                 }
             }
             break;
@@ -1582,17 +1582,17 @@ BOOL SvImpIconView::KeyInput( const KeyEvent& rKEvt )
         case KEY_RIGHT:
             if( pCursor )
             {
-                pNewCursor=pImpCursor->GoLeftRight(pCursor,TRUE );
+                pNewCursor=pImpCursor->GoLeftRight(pCursor,sal_True );
                 if( pNewCursor )
                 {
                     MakeVisible( pCursor );
                     if( bDeselAll )
-                        pView->SelectAll( FALSE );
-                    ShowCursor( FALSE );
+                        pView->SelectAll( sal_False );
+                    ShowCursor( sal_False );
                     MakeVisible( pNewCursor );
                     SetCursor( pNewCursor );
                     if( !bInAddMode )
-                        pView->Select( pCursor, TRUE );
+                        pView->Select( pCursor, sal_True );
                 }
             }
             break;
@@ -1601,16 +1601,16 @@ BOOL SvImpIconView::KeyInput( const KeyEvent& rKEvt )
             if( pCursor )
             {
                 MakeVisible( pCursor );
-                pNewCursor = pImpCursor->GoLeftRight(pCursor,FALSE );
+                pNewCursor = pImpCursor->GoLeftRight(pCursor,sal_False );
                 if( pNewCursor )
                 {
                     if( bDeselAll )
-                        pView->SelectAll( FALSE );
-                    ShowCursor( FALSE );
+                        pView->SelectAll( sal_False );
+                    ShowCursor( sal_False );
                     MakeVisible( pNewCursor );
                     SetCursor( pNewCursor );
                     if( !bInAddMode )
-                        pView->Select( pCursor, TRUE );
+                        pView->Select( pCursor, sal_True );
                 }
                 else
                 {
@@ -1629,7 +1629,7 @@ BOOL SvImpIconView::KeyInput( const KeyEvent& rKEvt )
             if( nFlags & F_RUBBERING )
             {
                 HideSelectionRect();
-                pView->SelectAll( FALSE );
+                pView->SelectAll( sal_False );
                 nFlags &= ~F_RUBBERING;
             }
             break;
@@ -1670,13 +1670,13 @@ BOOL SvImpIconView::KeyInput( const KeyEvent& rKEvt )
         case KEY_ADD:
         case KEY_DIVIDE :
             if( bMod1 )
-                pView->SelectAll( TRUE );
+                pView->SelectAll( sal_True );
             break;
 
         case KEY_SUBTRACT:
         case KEY_COMMA :
             if( bMod1 )
-                pView->SelectAll( FALSE );
+                pView->SelectAll( sal_False );
             break;
 
         case KEY_RETURN:
@@ -1688,7 +1688,7 @@ BOOL SvImpIconView::KeyInput( const KeyEvent& rKEvt )
             break;
 
         default:
-            bKeyUsed = FALSE;
+            bKeyUsed = sal_False;
 
     }
     return bKeyUsed;
@@ -1756,7 +1756,7 @@ void SvImpIconView::AdjustScrollBars()
     bool bVerSBar = (pView->GetStyle() & WB_VSCROLL) ? true : false;
     bool bHorSBar = (pView->GetStyle() & WB_HSCROLL) ? true : false;
 
-    USHORT nResult = 0;
+    sal_uInt16 nResult = 0;
     if( nVirtHeight )
     {
         // activate ver scrollbar ?
@@ -1896,23 +1896,23 @@ void __EXPORT SvImpIconView::Resize()
 #endif
 }
 
-BOOL SvImpIconView::CheckHorScrollBar()
+sal_Bool SvImpIconView::CheckHorScrollBar()
 {
     if( !pZOrderList || !aHorSBar.IsVisible() )
-        return FALSE;
+        return sal_False;
     const MapMode& rMapMode = pView->GetMapMode();
     Point aOrigin( rMapMode.GetOrigin() );
     if(!(pView->GetStyle() & WB_HSCROLL) && !aOrigin.X() )
     {
         long nWidth = aOutputSize.Width();
-        USHORT nCount = pZOrderList->Count();
+        sal_uInt16 nCount = pZOrderList->Count();
         long nMostRight = 0;
-        for( USHORT nCur = 0; nCur < nCount; nCur++ )
+        for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
         {
             SvLBoxEntry* pEntry = (SvLBoxEntry*)pZOrderList->operator[](nCur);
             long nRight = GetBoundingRect(pEntry).Right();
             if( nRight > nWidth )
-                return FALSE;
+                return sal_False;
             if( nRight > nMostRight )
                 nMostRight = nRight;
         }
@@ -1929,28 +1929,28 @@ BOOL SvImpIconView::CheckHorScrollBar()
             aSize.Height() += nHorSBarHeight;
             aVerSBar.SetSizePixel( aSize );
         }
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SvImpIconView::CheckVerScrollBar()
+sal_Bool SvImpIconView::CheckVerScrollBar()
 {
     if( !pZOrderList || !aVerSBar.IsVisible() )
-        return FALSE;
+        return sal_False;
     const MapMode& rMapMode = pView->GetMapMode();
     Point aOrigin( rMapMode.GetOrigin() );
     if(!(pView->GetStyle() & WB_VSCROLL) && !aOrigin.Y() )
     {
         long nDeepest = 0;
         long nHeight = aOutputSize.Height();
-        USHORT nCount = pZOrderList->Count();
-        for( USHORT nCur = 0; nCur < nCount; nCur++ )
+        sal_uInt16 nCount = pZOrderList->Count();
+        for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
         {
             SvLBoxEntry* pEntry = (SvLBoxEntry*)pZOrderList->operator[](nCur);
             long nBottom = GetBoundingRect(pEntry).Bottom();
             if( nBottom > nHeight )
-                return FALSE;
+                return sal_False;
             if( nBottom > nDeepest )
                 nDeepest = nBottom;
         }
@@ -1967,9 +1967,9 @@ BOOL SvImpIconView::CheckVerScrollBar()
             aSize.Width() += nVerSBarWidth;
             aHorSBar.SetSizePixel( aSize );
         }
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 
@@ -1986,8 +1986,8 @@ void __EXPORT SvImpIconView::GetFocus()
 {
     if( pCursor )
     {
-        pView->SetEntryFocus( pCursor, TRUE );
-        ShowCursor( TRUE );
+        pView->SetEntryFocus( pCursor, sal_True );
+        ShowCursor( sal_True );
     }
 }
 
@@ -1995,8 +1995,8 @@ void __EXPORT SvImpIconView::LoseFocus()
 {
     StopEditTimer();
     if( pCursor )
-        pView->SetEntryFocus( pCursor,FALSE );
-    ShowCursor( FALSE );
+        pView->SetEntryFocus( pCursor,sal_False );
+    ShowCursor( sal_False );
 }
 
 void SvImpIconView::UpdateAll()
@@ -2012,8 +2012,8 @@ void SvImpIconView::PaintEntry( SvLBoxEntry* pEntry, SvIcnVwDataEntry* pViewData
     PaintEntry( pEntry, aPos, pViewData );
 }
 
-void SvImpIconView::PaintEmphasis( const Rectangle& rRect, BOOL bSelected,
-                                   BOOL bCursored, OutputDevice* pOut )
+void SvImpIconView::PaintEmphasis( const Rectangle& rRect, sal_Bool bSelected,
+                                   sal_Bool bCursored, OutputDevice* pOut )
 {
     // HACK fuer D&D
     if( nFlags & F_NO_EMPHASIS )
@@ -2051,7 +2051,7 @@ void SvImpIconView::PaintEmphasis( const Rectangle& rRect, BOOL bSelected,
 }
 
 void SvImpIconView::PaintItem( const Rectangle& rRect,
-    SvLBoxItem* pItem, SvLBoxEntry* pEntry, USHORT nPaintFlags,
+    SvLBoxItem* pItem, SvLBoxEntry* pEntry, sal_uInt16 nPaintFlags,
     OutputDevice* pOut )
 {
     if( nViewMode == VIEWMODE_ICON && pItem->IsA() == SV_ITEM_ID_LBOXSTRING )
@@ -2089,8 +2089,8 @@ void SvImpIconView::PaintEntry( SvLBoxEntry* pEntry, const Point& rPos,
 
     SvLBoxString* pStringItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
 
-    BOOL bSelected  = pViewData->IsSelected();
-    BOOL bCursored  = pViewData->IsCursored();
+    sal_Bool bSelected  = pViewData->IsSelected();
+    sal_Bool bCursored  = pViewData->IsCursored();
 
     Font aTempFont( pOut->GetFont() );
     // waehrend D&D nicht die Fontfarbe wechseln, da sonst auch die
@@ -2102,7 +2102,7 @@ void SvImpIconView::PaintEntry( SvLBoxEntry* pEntry, const Point& rPos,
         aNewFont.SetColor( rStyleSettings.GetHighlightTextColor() );
         pOut->SetFont( aNewFont );
     }
-    Rectangle aTextRect( CalcTextRect(pEntry,pStringItem,&rPos,FALSE,pViewData));
+    Rectangle aTextRect( CalcTextRect(pEntry,pStringItem,&rPos,sal_False,pViewData));
     Rectangle aBmpRect( CalcBmpRect(pEntry, &rPos, pViewData ) );
 
     switch( nViewMode )
@@ -2112,7 +2112,7 @@ void SvImpIconView::PaintEntry( SvLBoxEntry* pEntry, const Point& rPos,
             PaintEmphasis( aBmpRect, bSelected, bCursored, pOut );
             PaintItem( aBmpRect, pBmpItem, pEntry,
                 PAINTFLAG_HOR_CENTERED | PAINTFLAG_VER_CENTERED, pOut );
-            PaintEmphasis( aTextRect, bSelected, FALSE, pOut );
+            PaintEmphasis( aTextRect, bSelected, sal_False, pOut );
             PaintItem( aTextRect, pStringItem, pEntry, PAINTFLAG_HOR_CENTERED, pOut );
             break;
 
@@ -2120,7 +2120,7 @@ void SvImpIconView::PaintEntry( SvLBoxEntry* pEntry, const Point& rPos,
             pBmpItem = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
             PaintEmphasis( aBmpRect, bSelected, bCursored, pOut );
             PaintItem( aBmpRect, pBmpItem, pEntry, PAINTFLAG_VER_CENTERED, pOut );
-            PaintEmphasis( aTextRect, bSelected, FALSE, pOut );
+            PaintEmphasis( aTextRect, bSelected, sal_False, pOut );
             PaintItem( aTextRect, pStringItem, pEntry,PAINTFLAG_VER_CENTERED, pOut );
             break;
 
@@ -2133,11 +2133,11 @@ void SvImpIconView::PaintEntry( SvLBoxEntry* pEntry, const Point& rPos,
 }
 
 void SvImpIconView::SetEntryPosition( SvLBoxEntry* pEntry, const Point& rPos,
-    BOOL bAdjustAtGrid, BOOL bCheckScrollBars )
+    sal_Bool bAdjustAtGrid, sal_Bool bCheckScrollBars )
 {
     if( pModel->GetParent(pEntry) == pCurParent )
     {
-        ShowCursor( FALSE );
+        ShowCursor( sal_False );
         SvIcnVwDataEntry* pViewData = ICNVIEWDATA(pEntry);
         Rectangle aBoundRect( GetBoundingRect( pEntry, pViewData ));
         pView->Invalidate( aBoundRect );
@@ -2163,7 +2163,7 @@ void SvImpIconView::SetEntryPosition( SvLBoxEntry* pEntry, const Point& rPos,
             CheckScrollBars();
 
         PaintEntry( pEntry, pViewData );
-        ShowCursor( TRUE );
+        ShowCursor( sal_True );
     }
 }
 
@@ -2174,7 +2174,7 @@ void SvImpIconView::ViewDataInitialized( SvLBoxEntry*)
 void SvImpIconView::ModelHasEntryInvalidated( SvListEntry* pEntry )
 {
     if( pEntry == pCursor )
-        ShowCursor( FALSE );
+        ShowCursor( sal_False );
     SvIcnVwDataEntry* pViewData = ICNVIEWDATA(pEntry);
     pView->Invalidate( pViewData->aRect );
 
@@ -2187,7 +2187,7 @@ void SvImpIconView::ModelHasEntryInvalidated( SvListEntry* pEntry )
     ViewDataInitialized( (SvLBoxEntry*)pEntry );
     pView->Invalidate( pViewData->aRect );
     if( pEntry == pCursor )
-        ShowCursor( TRUE );
+        ShowCursor( sal_True );
 }
 
 
@@ -2209,9 +2209,9 @@ void SvImpIconView::SetSelectionMode( SelectionMode )
 {
 }
 
-BOOL SvImpIconView::IsEntryInView( SvLBoxEntry* )
+sal_Bool SvImpIconView::IsEntryInView( SvLBoxEntry* )
 {
-    return FALSE;
+    return sal_False;
 }
 
 SvLBoxEntry* SvImpIconView::GetDropTarget( const Point& rPos )
@@ -2229,7 +2229,7 @@ SvLBoxEntry* SvImpIconView::GetEntry( const Point& rDocPos )
     CheckBoundingRects();
     SvLBoxEntry* pTarget = 0;
     // Z-Order-Liste vom Ende her absuchen
-    USHORT nCount = pZOrderList->Count();
+    sal_uInt16 nCount = pZOrderList->Count();
     while( nCount )
     {
         nCount--;
@@ -2248,11 +2248,11 @@ SvLBoxEntry* SvImpIconView::GetNextEntry( const Point& rDocPos, SvLBoxEntry* pCu
 {
     CheckBoundingRects();
     SvLBoxEntry* pTarget = 0;
-    USHORT nStartPos = pZOrderList->GetPos( (void*)pCurEntry );
+    sal_uInt16 nStartPos = pZOrderList->GetPos( (void*)pCurEntry );
     if( nStartPos != USHRT_MAX )
     {
-        USHORT nCount = pZOrderList->Count();
-        for( USHORT nCur = nStartPos+1; nCur < nCount; nCur++ )
+        sal_uInt16 nCount = pZOrderList->Count();
+        for( sal_uInt16 nCur = nStartPos+1; nCur < nCount; nCur++ )
         {
             SvLBoxEntry* pEntry = (SvLBoxEntry*)(pZOrderList->GetObject(nCur));
             SvIcnVwDataEntry* pViewData = ICNVIEWDATA(pEntry);
@@ -2270,7 +2270,7 @@ SvLBoxEntry* SvImpIconView::GetPrevEntry( const Point& rDocPos, SvLBoxEntry* pCu
 {
     CheckBoundingRects();
     SvLBoxEntry* pTarget = 0;
-    USHORT nStartPos = pZOrderList->GetPos( (void*)pCurEntry );
+    sal_uInt16 nStartPos = pZOrderList->GetPos( (void*)pCurEntry );
     if( nStartPos != USHRT_MAX && nStartPos != 0 )
     {
         nStartPos--;
@@ -2350,7 +2350,7 @@ Rectangle SvImpIconView::CalcBmpRect( SvLBoxEntry* pEntry, const Point* pPos,
 }
 
 Rectangle SvImpIconView::CalcTextRect( SvLBoxEntry* pEntry,
-    SvLBoxString* pItem, const Point* pPos, BOOL bForInplaceEdit,
+    SvLBoxString* pItem, const Point* pPos, sal_Bool bForInplaceEdit,
     SvIcnVwDataEntry* pViewData )
 {
     long nBmpHeight, nBmpWidth;
@@ -2503,7 +2503,7 @@ void SvImpIconView::RecalcAllBoundingRects()
         pZOrderList->Insert( pEntry, pZOrderList->Count() );
         pEntry = pModel->NextSibling( pEntry );
     }
-    bMustRecalcBoundingRects = FALSE;
+    bMustRecalcBoundingRects = sal_False;
     AdjustScrollBars();
 }
 
@@ -2582,26 +2582,26 @@ void SvImpIconView::SetCursor( SvLBoxEntry* pEntry )
     if( pEntry == pCursor )
         return;
 
-    ShowCursor( FALSE );
+    ShowCursor( sal_False );
     if( pCursor )
     {
-        pView->SetEntryFocus( pCursor, FALSE );
+        pView->SetEntryFocus( pCursor, sal_False );
         if( pView->GetSelectionMode() == SINGLE_SELECTION )
-            pView->Select( pCursor, FALSE );
+            pView->Select( pCursor, sal_False );
     }
     pCursor = pEntry;
     ToTop( pCursor );
     if( pCursor )
     {
-        pView->SetEntryFocus(pCursor, TRUE );
+        pView->SetEntryFocus(pCursor, sal_True );
         if( pView->GetSelectionMode() == SINGLE_SELECTION )
-            pView->Select( pCursor, TRUE );
-        ShowCursor( TRUE );
+            pView->Select( pCursor, sal_True );
+        ShowCursor( sal_True );
     }
 }
 
 
-void SvImpIconView::ShowCursor( BOOL bShow )
+void SvImpIconView::ShowCursor( sal_Bool bShow )
 {
     if( !pCursor || !bShow || !pView->HasFocus() )
     {
@@ -2640,7 +2640,7 @@ void SvImpIconView::ShowDDIcon( SvLBoxEntry* pRefEntry, const Point& rPosPix )
         DELETEZ(pDDDev);
         DELETEZ(pDDBufDev);
     }
-    BOOL bSelected = pView->SvListView::Select( pRefEntry, FALSE );
+    sal_Bool bSelected = pView->SvListView::Select( pRefEntry, sal_False );
     if( !pDDDev )
     {
         if( pDDBufDev )
@@ -2678,7 +2678,7 @@ void SvImpIconView::ShowDDIcon( SvLBoxEntry* pRefEntry, const Point& rPosPix )
     PaintEntry( pRefEntry, aPos );
     nFlags &= ~F_NO_EMPHASIS;
     if( bSelected )
-        pView->SvListView::Select( pRefEntry, TRUE );
+        pView->SvListView::Select( pRefEntry, sal_True );
 }
 
 void SvImpIconView::HideShowDDIcon( SvLBoxEntry* pRefEntry, const Point& rPosPix )
@@ -2769,12 +2769,12 @@ void SvImpIconView::HideShowDDIcon( SvLBoxEntry* pRefEntry, const Point& rPosPix
         pDDDev->GetOutputSizePixel(),
         *pDDTempDev );
 
-    BOOL bSelected = pView->SvListView::Select( pRefEntry, FALSE );
+    sal_Bool bSelected = pView->SvListView::Select( pRefEntry, sal_False );
     if( bSelected )
-        pView->SvListView::Select( pRefEntry, TRUE );
+        pView->SvListView::Select( pRefEntry, sal_True );
 }
 
-void SvImpIconView::ShowTargetEmphasis( SvLBoxEntry* pEntry, BOOL )
+void SvImpIconView::ShowTargetEmphasis( SvLBoxEntry* pEntry, sal_Bool )
 {
     CheckBoundingRects();
     Rectangle aRect;
@@ -2794,8 +2794,8 @@ void SvImpIconView::ShowTargetEmphasis( SvLBoxEntry* pEntry, BOOL )
     ImpDrawXORRect( aRect );
 }
 
-BOOL SvImpIconView::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-    SvLBoxEntry*& rpNewPar, ULONG& rNewChildPos )
+sal_Bool SvImpIconView::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+    SvLBoxEntry*& rpNewPar, sal_uLong& rNewChildPos )
 {
     if( pTarget == pCurParent && pModel->GetParent(pEntry) == pCurParent )
     {
@@ -2805,14 +2805,14 @@ BOOL SvImpIconView::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
         Size aSize( pViewData->aRect.GetSize() );
         Point aNewPos = FindNextEntryPos( aSize );
         AdjustVirtSize( Rectangle( aNewPos, aSize ) );
-        SetEntryPosition( pEntry, aNewPos, FALSE, TRUE );
-        return FALSE;
+        SetEntryPosition( pEntry, aNewPos, sal_False, sal_True );
+        return sal_False;
     }
     return pView->SvLBox::NotifyMoving(pTarget,pEntry,rpNewPar,rNewChildPos);
 }
 
-BOOL SvImpIconView::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-    SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos )
+sal_Bool SvImpIconView::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+    SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos )
 {
     return pView->SvLBox::NotifyCopying(pTarget,pEntry,rpNewParent,rNewChildPos);
 }
@@ -2849,9 +2849,9 @@ void SvImpIconView::PrepareCommandEvent( const Point& rPt )
     aMouseMoveTimer.Stop();
     StopEditTimer();
     nFlags |= F_CMD_ARRIVED;
-    SvLBoxEntry* pEntry = pView->GetEntry( rPt, TRUE );
+    SvLBoxEntry* pEntry = pView->GetEntry( rPt, sal_True );
     if( (nFlags & F_DOWN_CTRL) && pEntry && !pView->IsSelected(pEntry) )
-        pView->Select( pEntry, TRUE );
+        pView->Select( pEntry, sal_True );
     nFlags &= ~(F_DOWN_CTRL | F_DOWN_DESELECT);
 }
 
@@ -2860,12 +2860,12 @@ void SvImpIconView::SttDrag( const Point& rPos )
     PrepareCommandEvent( rPos );
 
     nFlags |= F_DRAG_SOURCE;
-    ShowCursor( FALSE );
+    ShowCursor( sal_False );
 }
 
 void SvImpIconView::EndDrag()
 {
-    ShowCursor( TRUE );
+    ShowCursor( sal_True );
     nFlags &= (~F_DRAG_SOURCE);
 }
 
@@ -2874,7 +2874,7 @@ void SvImpIconView::ToTop( SvLBoxEntry* pEntry )
     DBG_ASSERT(pZOrderList->GetPos(pEntry)!=0xffff,"ToTop:ZOrder?");
     if( pZOrderList->GetObject( pZOrderList->Count() -1 ) != pEntry )
     {
-        USHORT nPos = pZOrderList->GetPos( (void*)pEntry );
+        sal_uInt16 nPos = pZOrderList->GetPos( (void*)pEntry );
         pZOrderList->Remove( nPos, 1 );
         pZOrderList->Insert( pEntry, pZOrderList->Count() );
     }
@@ -2901,9 +2901,9 @@ void SvImpIconView::ClipAtVirtOutRect( Rectangle& rRect ) const
 
 // rRect: Bereich des Dokumentes (in Dokumentkoordinaten), der
 // sichtbar gemacht werden soll.
-// bScrBar == TRUE: Das Rect wurde aufgrund eines ScrollBar-Events berechnet
+// bScrBar == sal_True: Das Rect wurde aufgrund eines ScrollBar-Events berechnet
 
-void SvImpIconView::MakeVisible( const Rectangle& rRect, BOOL bScrBar )
+void SvImpIconView::MakeVisible( const Rectangle& rRect, sal_Bool bScrBar )
 {
     Rectangle aRect( rRect );
     ClipAtVirtOutRect( aRect );
@@ -2957,7 +2957,7 @@ void SvImpIconView::MakeVisible( const Rectangle& rRect, BOOL bScrBar )
     pView->SetMapMode( aMapMode );
 
     // in umgekehrte Richtung scrollen!
-    pView->Control::Scroll( -nDx, -nDy, aOutputArea, TRUE );
+    pView->Control::Scroll( -nDx, -nDy, aOutputArea, sal_True );
     if( aHorSBar.IsVisible() || aVerSBar.IsVisible() )
     {
         if( !bScrBar )
@@ -2981,15 +2981,15 @@ SvLBoxEntry* SvImpIconView::GetNewCursor()
     SvLBoxEntry* pNewCursor;
     if( pCursor )
     {
-        pNewCursor = pImpCursor->GoLeftRight( pCursor, FALSE );
+        pNewCursor = pImpCursor->GoLeftRight( pCursor, sal_False );
         if( !pNewCursor )
         {
-            pNewCursor = pImpCursor->GoLeftRight( pCursor, TRUE );
+            pNewCursor = pImpCursor->GoLeftRight( pCursor, sal_True );
             if( !pNewCursor )
             {
-                pNewCursor = pImpCursor->GoUpDown( pCursor, FALSE );
+                pNewCursor = pImpCursor->GoUpDown( pCursor, sal_False );
                 if( !pNewCursor )
-                    pNewCursor = pImpCursor->GoUpDown( pCursor, TRUE );
+                    pNewCursor = pImpCursor->GoUpDown( pCursor, sal_True );
             }
         }
     }
@@ -3000,9 +3000,9 @@ SvLBoxEntry* SvImpIconView::GetNewCursor()
 }
 
 
-USHORT SvImpIconView:: GetSelectionCount() const
+sal_uInt16 SvImpIconView:: GetSelectionCount() const
 {
-    USHORT nSelected = 0;
+    sal_uInt16 nSelected = 0;
     SvLBoxEntry* pEntry = pModel->FirstChild( pCurParent);
     while( pEntry )
     {
@@ -3016,11 +3016,11 @@ USHORT SvImpIconView:: GetSelectionCount() const
 
 void SvImpIconView::ToggleSelection( SvLBoxEntry* pEntry )
 {
-    BOOL bSel;
+    sal_Bool bSel;
     if( pView->IsSelected( pEntry ) )
-        bSel = FALSE;
+        bSel = sal_False;
     else
-        bSel = TRUE;
+        bSel = sal_True;
     pView->Select( pEntry, bSel );
 }
 
@@ -3031,7 +3031,7 @@ void SvImpIconView::DeselectAllBut( SvLBoxEntry* pThisEntryNot )
     while( pEntry )
     {
         if( pEntry != pThisEntryNot && pView->IsSelected( pEntry ))
-            pView->Select( pEntry, FALSE );
+            pView->Select( pEntry, sal_False );
         pEntry = pModel->NextSibling( pEntry );
     }
 }
@@ -3061,14 +3061,14 @@ ImpIcnCursor::~ImpIcnCursor()
     delete pGridMap;
 }
 
-USHORT ImpIcnCursor::GetSortListPos( SvPtrarr* pList, long nValue,
+sal_uInt16 ImpIcnCursor::GetSortListPos( SvPtrarr* pList, long nValue,
     int bVertical )
 {
-    USHORT nCount = (USHORT)pList->Count();
+    sal_uInt16 nCount = (sal_uInt16)pList->Count();
     if( !nCount )
         return 0;
 
-    USHORT nCurPos = 0;
+    sal_uInt16 nCurPos = 0;
     long nPrevValue = LONG_MIN;
     while( nCount )
     {
@@ -3080,7 +3080,7 @@ USHORT ImpIcnCursor::GetSortListPos( SvPtrarr* pList, long nValue,
         else
             nCurValue = rRect.Left();
         if( nValue >= nPrevValue && nValue <= nCurValue )
-            return (USHORT)nCurPos;
+            return (sal_uInt16)nCurPos;
         nPrevValue = nCurValue;
         nCount--;
         nCurPos++;
@@ -3116,10 +3116,10 @@ void ImpIcnCursor::ImplCreate()
         if( nX >= nCols )
             nX = sal::static_int_cast< short >(nCols - 1);
 
-        USHORT nIns = GetSortListPos( &pColumns[nX], rRect.Top(), TRUE );
+        sal_uInt16 nIns = GetSortListPos( &pColumns[nX], rRect.Top(), sal_True );
         pColumns[ nX ].Insert( pEntry, nIns );
 
-        nIns = GetSortListPos( &pRows[nY], rRect.Left(), FALSE );
+        nIns = GetSortListPos( &pRows[nY], rRect.Left(), sal_False );
         pRows[ nY ].Insert( pEntry, nIns );
 
         pViewData->nX = nX;
@@ -3163,7 +3163,7 @@ void ImpIcnCursor::CreateGridMap()
     //XXX
     //nGridRows += 50; // in fuenfziger-Schritten
 
-    pGridMap = new BOOL[ nGridRows*nGridCols];
+    pGridMap = new sal_Bool[ nGridRows*nGridCols];
     memset( (void*)pGridMap, 0, nGridRows*nGridCols );
 
     SvLBoxTreeList* pModel = pView->pModel;
@@ -3182,49 +3182,49 @@ void ImpIcnCursor::CreateGridMap()
     }
 }
 
-BOOL ImpIcnCursor::GetGrid( const Point& rDocPos, USHORT& rGridX, USHORT& rGridY ) const
+sal_Bool ImpIcnCursor::GetGrid( const Point& rDocPos, sal_uInt16& rGridX, sal_uInt16& rGridY ) const
 {
     Point aPos( rDocPos );
     aPos.X() -= LROFFS_WINBORDER;
     aPos.Y() -= TBOFFS_WINBORDER;
-    rGridX = (USHORT)(aPos.X() / nGridDX);
-    rGridY = (USHORT)(aPos.Y() / nGridDY);
-    BOOL bInGrid = TRUE;
+    rGridX = (sal_uInt16)(aPos.X() / nGridDX);
+    rGridY = (sal_uInt16)(aPos.Y() / nGridDY);
+    sal_Bool bInGrid = sal_True;
     if( rGridX >= nGridCols )
     {
-        rGridX = sal::static_int_cast< USHORT >(nGridCols - 1);
-        bInGrid = FALSE;
+        rGridX = sal::static_int_cast< sal_uInt16 >(nGridCols - 1);
+        bInGrid = sal_False;
     }
     if( rGridY >= nGridRows )
     {
-        rGridY = sal::static_int_cast< USHORT >(nGridRows - 1);
+        rGridY = sal::static_int_cast< sal_uInt16 >(nGridRows - 1);
         if( !bInGrid )
-            return FALSE; // beide Koordinaten nicht im Grid
+            return sal_False; // beide Koordinaten nicht im Grid
     }
-    return TRUE;
+    return sal_True;
 }
 
-void ImpIcnCursor::SetGridUsed( const Rectangle& rRect, BOOL bUsed  )
+void ImpIcnCursor::SetGridUsed( const Rectangle& rRect, sal_Bool bUsed  )
 {
     CreateGridMap();
-    USHORT nTLX, nTLY, nBRX, nBRY;
+    sal_uInt16 nTLX, nTLY, nBRX, nBRY;
 
-    BOOL bTLInGrid = GetGrid( rRect.TopLeft(), nTLX, nTLY );
-    BOOL bBRInGrid = GetGrid( rRect.BottomRight(), nBRX, nBRY );
+    sal_Bool bTLInGrid = GetGrid( rRect.TopLeft(), nTLX, nTLY );
+    sal_Bool bBRInGrid = GetGrid( rRect.BottomRight(), nBRX, nBRY );
 
     if( !bTLInGrid && !bBRInGrid )
         return;
 
-    for( USHORT nCurY = nTLY; nCurY <= nBRY; nCurY++ )
+    for( sal_uInt16 nCurY = nTLY; nCurY <= nBRY; nCurY++ )
     {
-        for( USHORT nCurX = nTLX; nCurX <= nBRX; nCurX++ )
+        for( sal_uInt16 nCurX = nTLX; nCurX <= nBRX; nCurX++ )
         {
             SetGridUsed( nCurX, nCurY, bUsed );
         }
     }
 }
 
-void ImpIcnCursor::Clear( BOOL bGridToo )
+void ImpIcnCursor::Clear( sal_Bool bGridToo )
 {
     if( pColumns )
     {
@@ -3244,12 +3244,12 @@ void ImpIcnCursor::Clear( BOOL bGridToo )
     }
 }
 
-SvLBoxEntry* ImpIcnCursor::SearchCol(USHORT nCol,USHORT nTop,USHORT nBottom,
-    USHORT, BOOL bDown, BOOL bSimple  )
+SvLBoxEntry* ImpIcnCursor::SearchCol(sal_uInt16 nCol,sal_uInt16 nTop,sal_uInt16 nBottom,
+    sal_uInt16, sal_Bool bDown, sal_Bool bSimple  )
 {
     DBG_ASSERT(pCurEntry,"SearchCol: No reference entry");
     SvPtrarr* pList = &(pColumns[ nCol ]);
-    USHORT nCount = pList->Count();
+    sal_uInt16 nCount = pList->Count();
     if( !nCount )
         return 0;
 
@@ -3257,7 +3257,7 @@ SvLBoxEntry* ImpIcnCursor::SearchCol(USHORT nCol,USHORT nTop,USHORT nBottom,
 
     if( bSimple )
     {
-        USHORT nListPos = pList->GetPos( pCurEntry );
+        sal_uInt16 nListPos = pList->GetPos( pCurEntry );
         DBG_ASSERT(nListPos!=0xffff,"Entry not in Col-List");
         if( bDown )
         {
@@ -3290,19 +3290,19 @@ SvLBoxEntry* ImpIcnCursor::SearchCol(USHORT nCol,USHORT nTop,USHORT nBottom,
 
     if( nTop > nBottom )
     {
-        USHORT nTemp = nTop;
+        sal_uInt16 nTemp = nTop;
         nTop = nBottom;
         nBottom = nTemp;
     }
     long nMinDistance = LONG_MAX;
     SvLBoxEntry* pResult = 0;
-    for( USHORT nCur = 0; nCur < nCount; nCur++ )
+    for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
     {
         SvLBoxEntry* pEntry = (SvLBoxEntry*)(pList->GetObject( nCur ));
         if( pEntry != pCurEntry )
         {
             SvIcnVwDataEntry* pViewData = ICNVIEWDATA2(pEntry);
-            USHORT nY = pViewData->nY;
+            sal_uInt16 nY = pViewData->nY;
             if( nY >= nTop && nY <= nBottom )
             {
                 const Rectangle& rRect = pView->GetBoundingRect( pEntry );
@@ -3320,12 +3320,12 @@ SvLBoxEntry* ImpIcnCursor::SearchCol(USHORT nCol,USHORT nTop,USHORT nBottom,
     return pResult;
 }
 
-SvLBoxEntry* ImpIcnCursor::SearchRow(USHORT nRow,USHORT nLeft,USHORT nRight,
-    USHORT, BOOL bRight, BOOL bSimple )
+SvLBoxEntry* ImpIcnCursor::SearchRow(sal_uInt16 nRow,sal_uInt16 nLeft,sal_uInt16 nRight,
+    sal_uInt16, sal_Bool bRight, sal_Bool bSimple )
 {
     DBG_ASSERT(pCurEntry,"SearchRow: No reference entry");
     SvPtrarr* pList = &(pRows[ nRow ]);
-    USHORT nCount = pList->Count();
+    sal_uInt16 nCount = pList->Count();
     if( !nCount )
         return 0;
 
@@ -3333,7 +3333,7 @@ SvLBoxEntry* ImpIcnCursor::SearchRow(USHORT nRow,USHORT nLeft,USHORT nRight,
 
     if( bSimple )
     {
-        USHORT nListPos = pList->GetPos( pCurEntry );
+        sal_uInt16 nListPos = pList->GetPos( pCurEntry );
         DBG_ASSERT(nListPos!=0xffff,"Entry not in Row-List");
         if( bRight )
         {
@@ -3366,19 +3366,19 @@ SvLBoxEntry* ImpIcnCursor::SearchRow(USHORT nRow,USHORT nLeft,USHORT nRight,
     }
     if( nRight < nLeft )
     {
-        USHORT nTemp = nRight;
+        sal_uInt16 nTemp = nRight;
         nRight = nLeft;
         nLeft = nTemp;
     }
     long nMinDistance = LONG_MAX;
     SvLBoxEntry* pResult = 0;
-    for( USHORT nCur = 0; nCur < nCount; nCur++ )
+    for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
     {
         SvLBoxEntry* pEntry = (SvLBoxEntry*)(pList->GetObject( nCur ));
         if( pEntry != pCurEntry )
         {
             SvIcnVwDataEntry* pViewData = ICNVIEWDATA2(pEntry);
-            USHORT nX = pViewData->nX;
+            sal_uInt16 nX = pViewData->nX;
             if( nX >= nLeft && nX <= nRight )
             {
                 const Rectangle& rRect = pView->GetBoundingRect( pEntry );
@@ -3400,7 +3400,7 @@ SvLBoxEntry* ImpIcnCursor::SearchRow(USHORT nRow,USHORT nLeft,USHORT nRight,
 
 /*
     Sucht ab dem uebergebenen Eintrag den naechsten rechts- bzw.
-    linksstehenden. Suchverfahren am Beispiel bRight = TRUE:
+    linksstehenden. Suchverfahren am Beispiel bRight = sal_True:
 
                   c
                 b c
@@ -3415,22 +3415,22 @@ SvLBoxEntry* ImpIcnCursor::SearchRow(USHORT nRow,USHORT nLeft,USHORT nRight,
     a,b,c : 2., 3., 4. Suchrechteck
 */
 
-SvLBoxEntry* ImpIcnCursor::GoLeftRight( SvLBoxEntry* pIcnEntry, BOOL bRight )
+SvLBoxEntry* ImpIcnCursor::GoLeftRight( SvLBoxEntry* pIcnEntry, sal_Bool bRight )
 {
     SvLBoxEntry* pResult;
     pCurEntry = pIcnEntry;
     Create();
     SvIcnVwDataEntry* pViewData = ICNVIEWDATA2(pIcnEntry);
-    USHORT nY = pViewData->nY;
-    USHORT nX = pViewData->nX;
+    sal_uInt16 nY = pViewData->nY;
+    sal_uInt16 nX = pViewData->nX;
     DBG_ASSERT(nY< nRows,"GoLeftRight:Bad column");
     DBG_ASSERT(nX< nCols,"GoLeftRight:Bad row");
     // Nachbar auf gleicher Zeile ?
     if( bRight )
         pResult = SearchRow(
-            nY, nX, sal::static_int_cast< USHORT >(nCols-1), nX, TRUE, TRUE );
+            nY, nX, sal::static_int_cast< sal_uInt16 >(nCols-1), nX, sal_True, sal_True );
     else
-        pResult = SearchRow( nY, nX ,0, nX, FALSE, TRUE );
+        pResult = SearchRow( nY, nX ,0, nX, sal_False, sal_True );
     if( pResult )
         return pResult;
 
@@ -3448,11 +3448,11 @@ SvLBoxEntry* ImpIcnCursor::GoLeftRight( SvLBoxEntry* pIcnEntry, BOOL bRight )
         nLastCol = -1;   // 0-1
     }
 
-    USHORT nRowMin = nY;
-    USHORT nRowMax = nY;
+    sal_uInt16 nRowMin = nY;
+    sal_uInt16 nRowMax = nY;
     do
     {
-        SvLBoxEntry* pEntry = SearchCol((USHORT)nCurCol,nRowMin,nRowMax,nY,TRUE, FALSE);
+        SvLBoxEntry* pEntry = SearchCol((sal_uInt16)nCurCol,nRowMin,nRowMax,nY,sal_True, sal_False);
         if( pEntry )
             return pEntry;
         if( nRowMin )
@@ -3464,23 +3464,23 @@ SvLBoxEntry* ImpIcnCursor::GoLeftRight( SvLBoxEntry* pIcnEntry, BOOL bRight )
     return 0;
 }
 
-SvLBoxEntry* ImpIcnCursor::GoUpDown( SvLBoxEntry* pIcnEntry, BOOL bDown)
+SvLBoxEntry* ImpIcnCursor::GoUpDown( SvLBoxEntry* pIcnEntry, sal_Bool bDown)
 {
     SvLBoxEntry* pResult;
     pCurEntry = pIcnEntry;
     Create();
     SvIcnVwDataEntry* pViewData = ICNVIEWDATA2(pIcnEntry);
-    USHORT nY = pViewData->nY;
-    USHORT nX = pViewData->nX;
+    sal_uInt16 nY = pViewData->nY;
+    sal_uInt16 nX = pViewData->nX;
     DBG_ASSERT(nY<nRows,"GoUpDown:Bad column");
     DBG_ASSERT(nX<nCols,"GoUpDown:Bad row");
 
     // Nachbar in gleicher Spalte ?
     if( bDown )
         pResult = SearchCol(
-            nX, nY, sal::static_int_cast< USHORT >(nRows-1), nY, TRUE, TRUE );
+            nX, nY, sal::static_int_cast< sal_uInt16 >(nRows-1), nY, sal_True, sal_True );
     else
-        pResult = SearchCol( nX, nY ,0, nY, FALSE, TRUE );
+        pResult = SearchCol( nX, nY ,0, nY, sal_False, sal_True );
     if( pResult )
         return pResult;
 
@@ -3498,11 +3498,11 @@ SvLBoxEntry* ImpIcnCursor::GoUpDown( SvLBoxEntry* pIcnEntry, BOOL bDown)
         nLastRow = -1;   // 0-1
     }
 
-    USHORT nColMin = nX;
-    USHORT nColMax = nX;
+    sal_uInt16 nColMin = nX;
+    sal_uInt16 nColMax = nX;
     do
     {
-        SvLBoxEntry* pEntry = SearchRow((USHORT)nCurRow,nColMin,nColMax,nX,TRUE, FALSE);
+        SvLBoxEntry* pEntry = SearchRow((sal_uInt16)nCurRow,nColMin,nColMax,nX,sal_True, sal_False);
         if( pEntry )
             return pEntry;
         if( nColMin )
@@ -3564,29 +3564,29 @@ void ImpIcnCursor::ExpandGrid()
     }
 }
 
-BOOL ImpIcnCursor::FindEmptyGridRect( Rectangle& rRect )
+sal_Bool ImpIcnCursor::FindEmptyGridRect( Rectangle& rRect )
 {
     CreateGridMap();
-    USHORT nCount = (USHORT)(nGridCols * nGridRows);
+    sal_uInt16 nCount = (sal_uInt16)(nGridCols * nGridRows);
     if( !nCount )
-        return FALSE;
-    for( USHORT nCur = 0; nCur < nCount; nCur++ )
+        return sal_False;
+    for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
     {
         if( !pGridMap[ nCur ] )
         {
-            USHORT nCol = (USHORT)(nCur % nGridCols);
-            USHORT nRow = (USHORT)(nCur / nGridCols);
+            sal_uInt16 nCol = (sal_uInt16)(nCur % nGridCols);
+            sal_uInt16 nRow = (sal_uInt16)(nCur / nGridCols);
             rRect.Top() = nRow * nGridDY + TBOFFS_WINBORDER;
             rRect.Bottom() = rRect.Top() + nGridDY;
             rRect.Left() = nCol * nGridDX+ LROFFS_WINBORDER;
             rRect.Right() = rRect.Left() + nGridDX;
-            SetGridUsed( nCol, nRow, TRUE );
+            SetGridUsed( nCol, nRow, sal_True );
 
             //XXX
             //if( nRow + 5 > nGridRows )
             //  ExpandGrid();
             DBG_ASSERT(pGridMap[nCur],"SetGridUsed failed");
-            return TRUE;
+            return sal_True;
         }
     }
     // Gridmap ist voll: Um eine Zeile erweitern
@@ -3594,22 +3594,22 @@ BOOL ImpIcnCursor::FindEmptyGridRect( Rectangle& rRect )
     rRect.Bottom() = rRect.Top() + nGridDY;
     rRect.Left() = LROFFS_WINBORDER;
     rRect.Right() = rRect.Left() + nGridDX;
-    return FALSE;
+    return sal_False;
     //XXX
     //ExpandGrid();
-    //return TRUE;
+    //return sal_True;
 }
 
 void ImpIcnCursor::CreateGridAjustData( SvPtrarr& rLists, SvLBoxEntry* pRefEntry)
 {
     if( !pRefEntry )
     {
-        USHORT nAdjustRows = (USHORT)(pView->aVirtOutputSize.Height() / pView->nGridDY);
+        sal_uInt16 nAdjustRows = (sal_uInt16)(pView->aVirtOutputSize.Height() / pView->nGridDY);
         nAdjustRows++; // wg. Abrundung!
 
         if( !nAdjustRows )
             return;
-        for( USHORT nCurList = 0; nCurList < nAdjustRows; nCurList++ )
+        for( sal_uInt16 nCurList = 0; nCurList < nAdjustRows; nCurList++ )
         {
             SvPtrarr* pRow = new SvPtrarr;
             rLists.Insert( (void*)pRow, nCurList );
@@ -3619,7 +3619,7 @@ void ImpIcnCursor::CreateGridAjustData( SvPtrarr& rLists, SvLBoxEntry* pRefEntry
         {
             const Rectangle& rRect = pView->GetBoundingRect( pEntry );
             short nY = (short)( ((rRect.Top()+rRect.Bottom())/2) / pView->nGridDY );
-            USHORT nIns = GetSortListPos((SvPtrarr*)rLists[nY],rRect.Left(),FALSE);
+            sal_uInt16 nIns = GetSortListPos((SvPtrarr*)rLists[nY],rRect.Left(),sal_False);
             ((SvPtrarr*)rLists[ nY ])->Insert( pEntry, nIns );
             pEntry = pView->pModel->NextSibling( pEntry );
         }
@@ -3643,7 +3643,7 @@ void ImpIcnCursor::CreateGridAjustData( SvPtrarr& rLists, SvLBoxEntry* pRefEntry
             short nY = (short)( ((rRect.Top()+rRect.Bottom())/2) / pView->nGridDY );
             if( nY == nRefRow )
             {
-                USHORT nIns = GetSortListPos( pRow, rRect.Left(), FALSE );
+                sal_uInt16 nIns = GetSortListPos( pRow, rRect.Left(), sal_False );
                 pRow->Insert( pEntry, nIns );
             }
             pEntry = pView->pModel->NextSibling( pEntry );
@@ -3654,8 +3654,8 @@ void ImpIcnCursor::CreateGridAjustData( SvPtrarr& rLists, SvLBoxEntry* pRefEntry
 //static
 void ImpIcnCursor::DestroyGridAdjustData( SvPtrarr& rLists )
 {
-    USHORT nCount = rLists.Count();
-    for( USHORT nCur = 0; nCur < nCount; nCur++ )
+    sal_uInt16 nCount = rLists.Count();
+    for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
     {
         SvPtrarr* pArr = (SvPtrarr*)rLists[ nCur ];
         delete pArr;
@@ -3712,7 +3712,7 @@ void SvImpIconView::Center( SvLBoxEntry* pEntry,
 // Die Deltas entsprechen Offsets, um die die View auf dem Doc verschoben wird
 // links, hoch: Offsets < 0
 // rechts, runter: Offsets > 0
-void SvImpIconView::Scroll( long nDeltaX, long nDeltaY, BOOL bScrollBar )
+void SvImpIconView::Scroll( long nDeltaX, long nDeltaY, sal_Bool bScrollBar )
 {
     const MapMode& rMapMode = pView->GetMapMode();
     Point aOrigin( rMapMode.GetOrigin() );
@@ -3750,7 +3750,7 @@ Rectangle SvImpIconView::CalcFocusRect( SvLBoxEntry* pEntry )
 }
 
 
-void SvImpIconView::SelectRect( const Rectangle& rRect, BOOL bAdd,
+void SvImpIconView::SelectRect( const Rectangle& rRect, sal_Bool bAdd,
     SvPtrarr* pOtherRects, short nBorderOffs )
 {
     if( !pZOrderList || !pZOrderList->Count() )
@@ -3758,7 +3758,7 @@ void SvImpIconView::SelectRect( const Rectangle& rRect, BOOL bAdd,
 
     CheckBoundingRects();
     pView->Update();
-    USHORT nCount = pZOrderList->Count();
+    sal_uInt16 nCount = pZOrderList->Count();
 
     Rectangle aRect( rRect );
     aRect.Justify();
@@ -3769,9 +3769,9 @@ void SvImpIconView::SelectRect( const Rectangle& rRect, BOOL bAdd,
         aRect.Top() -= nBorderOffs;
         aRect.Bottom() += nBorderOffs;
     }
-    BOOL bCalcOverlap = (bAdd && pOtherRects && pOtherRects->Count()) ? TRUE : FALSE;
+    sal_Bool bCalcOverlap = (bAdd && pOtherRects && pOtherRects->Count()) ? sal_True : sal_False;
 
-    for( USHORT nPos = 0; nPos < nCount; nPos++ )
+    for( sal_uInt16 nPos = 0; nPos < nCount; nPos++ )
     {
         SvLBoxEntry* pEntry = (SvLBoxEntry*)(pZOrderList->GetObject(nPos ));
 
@@ -3780,28 +3780,28 @@ void SvImpIconView::SelectRect( const Rectangle& rRect, BOOL bAdd,
         if( !IsBoundingRectValid( pViewData->aRect ))
             FindBoundingRect( pEntry, pViewData );
         const Rectangle& rBoundRect = pViewData->aRect;
-        BOOL bSelected = pViewData->IsSelected();
+        sal_Bool bSelected = pViewData->IsSelected();
 
-        BOOL bOverlaps;
+        sal_Bool bOverlaps;
         if( bCalcOverlap )
             bOverlaps = IsOver( pOtherRects, rBoundRect );
         else
-            bOverlaps = FALSE;
-        BOOL bOver = aRect.IsOver( rBoundRect );
+            bOverlaps = sal_False;
+        sal_Bool bOver = aRect.IsOver( rBoundRect );
 
         if( bOver && !bOverlaps )
         {
             // Ist im neuen Selektionsrechteck und in keinem alten
             // => selektieren
             if( !bSelected )
-                pView->Select( pEntry, TRUE );
+                pView->Select( pEntry, sal_True );
         }
         else if( !bAdd )
         {
             // ist ausserhalb des Selektionsrechtecks
             // => Selektion entfernen
             if( bSelected )
-                pView->Select( pEntry, FALSE );
+                pView->Select( pEntry, sal_False );
         }
         else if( bAdd && bOverlaps )
         {
@@ -3821,34 +3821,34 @@ void SvImpIconView::SelectRect( const Rectangle& rRect, BOOL bAdd,
             {
                 // Schnittmenge zwischen alten Rects & aktuellem Rect desel.
                 if( bSelected )
-                    pView->Select( pEntry, FALSE );
+                    pView->Select( pEntry, sal_False );
             }
             else
             {
                 // Eintrag eines alten Rects selektieren
                 if( !bSelected )
-                    pView->Select( pEntry, TRUE );
+                    pView->Select( pEntry, sal_True );
             }
         }
         else if( !bOver && bSelected )
         {
             // Der Eintrag liegt voellig ausserhalb und wird deshalb desel.
-            pView->Select( pEntry, FALSE );
+            pView->Select( pEntry, sal_False );
         }
     }
     pView->Update();
 }
 
-BOOL SvImpIconView::IsOver( SvPtrarr* pRectList, const Rectangle& rBoundRect ) const
+sal_Bool SvImpIconView::IsOver( SvPtrarr* pRectList, const Rectangle& rBoundRect ) const
 {
-    USHORT nCount = pRectList->Count();
-    for( USHORT nCur = 0; nCur < nCount; nCur++ )
+    sal_uInt16 nCount = pRectList->Count();
+    for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
     {
         Rectangle* pRect = (Rectangle*)pRectList->GetObject( nCur );
         if( rBoundRect.IsOver( *pRect ))
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 void SvImpIconView::AddSelectedRect( const Rectangle& rRect, short nBorderOffs )
@@ -3867,8 +3867,8 @@ void SvImpIconView::AddSelectedRect( const Rectangle& rRect, short nBorderOffs )
 
 void SvImpIconView::ClearSelectedRectList()
 {
-    USHORT nCount = aSelectedRectList.Count();
-    for( USHORT nCur = 0; nCur < nCount; nCur++ )
+    sal_uInt16 nCount = aSelectedRectList.Count();
+    for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
     {
         Rectangle* pRect = (Rectangle*)aSelectedRectList.GetObject( nCur );
         delete pRect;
@@ -3906,7 +3906,7 @@ void SvImpIconView::ImpDrawXORRect( const Rectangle& rRect )
 }
 
 void SvImpIconView::CalcScrollOffsets( const Point& rPosPixel,
-    long& rX, long& rY, BOOL bInDragDrop, USHORT nBorderWidth)
+    long& rX, long& rY, sal_Bool bInDragDrop, sal_uInt16 nBorderWidth)
 {
     // Scrolling der View, falls sich der Mauszeiger im Grenzbereich des
     // Fensters befindet
@@ -3914,8 +3914,8 @@ void SvImpIconView::CalcScrollOffsets( const Point& rPosPixel,
     long nPixelToScrollY = 0;
     Size aWndSize = aOutputSize;
 
-    nBorderWidth = (USHORT)(Min( (long)(aWndSize.Height()-1), (long)nBorderWidth ));
-    nBorderWidth = (USHORT)(Min( (long)(aWndSize.Width()-1), (long)nBorderWidth ));
+    nBorderWidth = (sal_uInt16)(Min( (long)(aWndSize.Height()-1), (long)nBorderWidth ));
+    nBorderWidth = (sal_uInt16)(Min( (long)(aWndSize.Width()-1), (long)nBorderWidth ));
 
     if ( rPosPixel.X() < nBorderWidth )
     {
@@ -3967,16 +3967,16 @@ void SvImpIconView::EndTracking()
     }
 }
 
-BOOL SvImpIconView::IsTextHit( SvLBoxEntry* pEntry, const Point& rDocPos )
+sal_Bool SvImpIconView::IsTextHit( SvLBoxEntry* pEntry, const Point& rDocPos )
 {
     SvLBoxString* pItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
     if( pItem )
     {
         Rectangle aRect( CalcTextRect( pEntry, pItem ));
         if( aRect.IsInside( rDocPos ) )
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 IMPL_LINK(SvImpIconView, EditTimeoutHdl, Timer*, EMPTYARG )
@@ -4001,8 +4001,8 @@ void SvImpIconView::AdjustAtGrid( SvLBoxEntry* pStart )
 {
     SvPtrarr aLists;
     pImpCursor->CreateGridAjustData( aLists, pStart );
-    USHORT nCount = aLists.Count();
-    for( USHORT nCur = 0; nCur < nCount; nCur++ )
+    sal_uInt16 nCount = aLists.Count();
+    for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
     {
         AdjustAtGrid( *(SvPtrarr*)aLists[ nCur ], pStart );
     }
@@ -4016,18 +4016,18 @@ void SvImpIconView::AdjustAtGrid( const SvPtrarr& rRow, SvLBoxEntry* pStart )
     if( !rRow.Count() )
         return;
 
-    BOOL bGo;
+    sal_Bool bGo;
     if( !pStart )
-        bGo = TRUE;
+        bGo = sal_True;
     else
-        bGo = FALSE;
+        bGo = sal_False;
 
     long nCurRight = 0;
-    for( USHORT nCur = 0; nCur < rRow.Count(); nCur++ )
+    for( sal_uInt16 nCur = 0; nCur < rRow.Count(); nCur++ )
     {
         SvLBoxEntry* pCur = (SvLBoxEntry*)rRow[ nCur ];
         if( !bGo && pCur == pStart )
-            bGo = TRUE;
+            bGo = sal_True;
 
         SvIcnVwDataEntry* pViewData = ICNVIEWDATA(pCur);
         // Massgebend (fuer das menschliche Auge) ist die Bitmap, da sonst

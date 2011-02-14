@@ -169,7 +169,7 @@ void CurrentSlideManager::SwitchCurrentSlide (
             // The slide sorter is the main view.
             FrameView* pFrameView = pViewShell->GetFrameView();
             if (pFrameView != NULL)
-                pFrameView->SetSelectedPage(sal::static_int_cast<USHORT>(mnCurrentSlideIndex));
+                pFrameView->SetSelectedPage(sal::static_int_cast<sal_uInt16>(mnCurrentSlideIndex));
             mrSlideSorter.GetController().GetPageSelector().SetCoreSelection();
         }
 
@@ -212,7 +212,7 @@ void CurrentSlideManager::SetCurrentSlideAtViewShellBase (const SharedPageDescri
             pBase->GetMainViewShell().get());
         if (pDrawViewShell != NULL)
         {
-            USHORT nPageNumber = (rpDescriptor->GetPage()->GetPageNum()-1)/2;
+            sal_uInt16 nPageNumber = (rpDescriptor->GetPage()->GetPageNum()-1)/2;
             pDrawViewShell->SwitchPage(nPageNumber);
             pDrawViewShell->GetPageTabControl()->SetCurPageId(nPageNumber+1);
         }
@@ -233,7 +233,7 @@ void CurrentSlideManager::SetCurrentSlideAtTabControl (const SharedPageDescripto
             ::boost::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
         if (pDrawViewShell)
         {
-            USHORT nPageNumber = (rpDescriptor->GetPage()->GetPageNum()-1)/2;
+            sal_uInt16 nPageNumber = (rpDescriptor->GetPage()->GetPageNum()-1)/2;
             pDrawViewShell->GetPageTabControl()->SetCurPageId(nPageNumber+1);
         }
     }

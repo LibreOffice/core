@@ -34,11 +34,11 @@
 // - SalColor -
 // ------------
 
-typedef UINT32 SalColor;
-#define MAKE_SALCOLOR( r, g, b )    ((SalColor)(((UINT32)((UINT8)(b))))|(((UINT32)((UINT8)(g)))<<8)|(((UINT32)((UINT8)(r)))<<16))
-#define SALCOLOR_RED( n )           ((UINT8)((n)>>16))
-#define SALCOLOR_GREEN( n )         ((UINT8)(((UINT16)(n)) >> 8))
-#define SALCOLOR_BLUE( n )          ((UINT8)(n))
+typedef sal_uInt32 SalColor;
+#define MAKE_SALCOLOR( r, g, b )    ((SalColor)(((sal_uInt32)((sal_uInt8)(b))))|(((sal_uInt32)((sal_uInt8)(g)))<<8)|(((sal_uInt32)((sal_uInt8)(r)))<<16))
+#define SALCOLOR_RED( n )           ((sal_uInt8)((n)>>16))
+#define SALCOLOR_GREEN( n )         ((sal_uInt8)(((sal_uInt16)(n)) >> 8))
+#define SALCOLOR_BLUE( n )          ((sal_uInt8)(n))
 #define SALCOLOR_NONE           (~(SalColor)0)
 // ------------
 // - SalPoint -
@@ -73,7 +73,7 @@ struct SalTwoRect
 // - SalROPColor -
 // ---------------
 
-typedef USHORT SalROPColor;
+typedef sal_uInt16 SalROPColor;
 #define SAL_ROP_0                   ((SalROPColor)0)
 #define SAL_ROP_1                   ((SalROPColor)1)
 #define SAL_ROP_INVERT              ((SalROPColor)2)
@@ -82,7 +82,7 @@ typedef USHORT SalROPColor;
 // - SalInvert -
 // -------------
 
-typedef USHORT SalInvert;
+typedef sal_uInt16 SalInvert;
 #define SAL_INVERT_HIGHLIGHT        ((SalInvert)0x0001)
 #define SAL_INVERT_50               ((SalInvert)0x0002)
 #define SAL_INVERT_TRACKFRAME       ((SalInvert)0x0004)

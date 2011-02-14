@@ -40,15 +40,15 @@ class SVX_DLLPUBLIC SvxTbxCtlCustomShapes : public SfxToolBoxControl
 {
 public:
     using SfxToolBoxControl::Select;
-    virtual void                Select( BOOL bMod1 = FALSE );
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void                Select( sal_Bool bMod1 = sal_False );
+    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
 
             SFX_DECL_TOOLBOX_CONTROL();
 
-            SvxTbxCtlCustomShapes( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+            SvxTbxCtlCustomShapes( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
             ~SvxTbxCtlCustomShapes() {}
 
     //interface XSubToolbarController:

@@ -36,7 +36,7 @@
 class SwCalendarWrapper : public CalendarWrapper
 {
     String sUniqueId;
-    USHORT nLang;
+    sal_uInt16 nLang;
 
 public:
     SwCalendarWrapper( const ::com::sun::star::uno::Reference<
@@ -44,7 +44,7 @@ public:
         : CalendarWrapper( xMSF ), nLang( LANGUAGE_SYSTEM )
     {}
 
-    void LoadDefaultCalendar( USHORT nLang );
+    void LoadDefaultCalendar( sal_uInt16 nLang );
 };
 
 

@@ -69,7 +69,7 @@ extern int bDocSzUpdated;
  --------------------------------------------------------------------*/
 
 
-void SwView::Activate(BOOL bMDIActivate)
+void SwView::Activate(sal_Bool bMDIActivate)
 {
     // aktuelle View anmelden an der DocShell
     // die View bleibt solange an der DocShell
@@ -91,23 +91,23 @@ void SwView::Activate(BOOL bMDIActivate)
         pWrtShell->MakeSelVisible();
         bMakeSelectionVisible = sal_False;
     }
-    pHRuler->SetActive( TRUE );
-    pVRuler->SetActive( TRUE );
+    pHRuler->SetActive( sal_True );
+    pVRuler->SetActive( sal_True );
 
     if ( bMDIActivate )
     {
-        pWrtShell->ShGetFcs(FALSE);     // Selektionen sichtbar
+        pWrtShell->ShGetFcs(sal_False);     // Selektionen sichtbar
 
         if( sSwViewData.Len() )
         {
-            ReadUserData( sSwViewData, FALSE );
+            ReadUserData( sSwViewData, sal_False );
             sSwViewData.Erase();
         }
 
         AttrChangedNotify(pWrtShell);
 
         // Flddlg ggf neu initialisieren (z.B. fuer TYP_SETVAR)
-        USHORT nId = SwFldDlgWrapper::GetChildWindowId();
+        sal_uInt16 nId = SwFldDlgWrapper::GetChildWindowId();
         SfxViewFrame* pVFrame = GetViewFrame();
         SwFldDlgWrapper *pWrp = (SwFldDlgWrapper*)pVFrame->GetChildWindow(nId);
         if (pWrp)
@@ -144,9 +144,9 @@ void SwView::Activate(BOOL bMDIActivate)
  --------------------------------------------------------------------*/
 
 
-void SwView::Deactivate(BOOL bMDIActivate)
+void SwView::Deactivate(sal_Bool bMDIActivate)
 {
-    extern BOOL bFlushCharBuffer ;
+    extern sal_Bool bFlushCharBuffer ;
         // Befinden sich noch Zeichen im Input Buffer?
     if( bFlushCharBuffer )
         GetEditWin().FlushInBuffer();
@@ -155,8 +155,8 @@ void SwView::Deactivate(BOOL bMDIActivate)
     {
         pWrtShell->ShLooseFcs();    // Selektionen unsichtbar
 
-        pHRuler->SetActive( FALSE );
-        pVRuler->SetActive( FALSE );
+        pHRuler->SetActive( sal_False );
+        pVRuler->SetActive( sal_False );
     }
     SfxViewShell::Deactivate(bMDIActivate);
 }

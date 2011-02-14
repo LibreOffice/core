@@ -24,15 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-//=========================================================================
-//
+
 // UCB Explorer ( resource identifiers )
-//
-// (C) 2000 StarOffice Entwicklungs GmbH, Hamburg, Germany
-//
-// $Author: rt $ $Date: 2008-04-10 16:19:47 $Revision$
-//
-//=========================================================================
 
 #ifndef _UCBEXPLORER_HRC
 #define _UCBEXPLORER_HRC

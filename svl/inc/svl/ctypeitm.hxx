@@ -42,17 +42,17 @@ public:
     TYPEINFO();
 
     CntContentTypeItem();
-    CntContentTypeItem( USHORT nWhich, const XubString& rType );
-    CntContentTypeItem( USHORT nWhich, const INetContentType eType );
+    CntContentTypeItem( sal_uInt16 nWhich, const XubString& rType );
+    CntContentTypeItem( sal_uInt16 nWhich, const INetContentType eType );
     CntContentTypeItem( const CntContentTypeItem& rOrig );
 
     virtual SfxPoolItem* Create( SvStream& rStream,
-                                 USHORT nItemVersion ) const;
-    virtual SvStream & Store(SvStream & rStream, USHORT) const;
+                                 sal_uInt16 nItemVersion ) const;
+    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
 
     virtual int          operator==( const SfxPoolItem& rOrig ) const;
 
-    virtual USHORT GetVersion(USHORT) const;
+    virtual sal_uInt16 GetVersion(sal_uInt16) const;
 
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = NULL ) const;
 
@@ -68,10 +68,10 @@ public:
                                                  XubString &rText,
                                                  const IntlWrapper* pIntlWrapper = 0 ) const;
 
-    virtual BOOL QueryValue( com::sun::star::uno::Any& rVal,
-                             BYTE nMemberId = 0 ) const;
-    virtual BOOL PutValue  ( const com::sun::star::uno::Any& rVal,
-                             BYTE nMemberId = 0);
+    virtual sal_Bool QueryValue( com::sun::star::uno::Any& rVal,
+                             sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool PutValue  ( const com::sun::star::uno::Any& rVal,
+                             sal_uInt8 nMemberId = 0);
 
     INetContentType GetEnumValue() const;
 

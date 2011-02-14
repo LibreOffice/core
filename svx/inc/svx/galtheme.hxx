@@ -56,7 +56,7 @@ struct GalleryObject
     INetURLObject   aURL;
     sal_uInt32      nOffset;
     SgaObjKind      eObjKind;
-    BOOL            bDummy;
+    sal_Bool            bDummy;
 };
 
 DECLARE_LIST( GalleryObjectList, GalleryObject* )
@@ -73,7 +73,7 @@ class ListBox;
 struct GalDragParams
 {
     Region      aDragRegion;
-    ULONG       nDragObjPos;
+    sal_uIntPtr     nDragObjPos;
     String      aThemeName;
     String      aFileName;
     SgaObjKind  eObjKind;
@@ -106,24 +106,24 @@ private:
     SotStorageRef               aSvDrawStorageRef;
     Gallery*                    pParent;
     GalleryThemeEntry*          pThm;
-    ULONG                       mnThemeLockCount;
-    ULONG                       mnBroadcasterLockCount;
-    ULONG                       nDragPos;
-    BOOL                        bDragging;
-    BOOL                        bAbortActualize;
+    sal_uIntPtr                       mnThemeLockCount;
+    sal_uIntPtr                     mnBroadcasterLockCount;
+    sal_uIntPtr                     nDragPos;
+    sal_Bool                        bDragging;
+    sal_Bool                        bAbortActualize;
 
     void                        ImplCreateSvDrawStorage();
     SVX_DLLPUBLIC SgaObject*                    ImplReadSgaObject( GalleryObject* pEntry );
-    BOOL                        ImplWriteSgaObject( const SgaObject& rObj, ULONG nPos, GalleryObject* pExistentEntry );
+    sal_Bool                        ImplWriteSgaObject( const SgaObject& rObj, sal_uIntPtr nPos, GalleryObject* pExistentEntry );
     void                        ImplRead();
     void                        ImplWrite();
-    const GalleryObject*        ImplGetGalleryObject( ULONG nPos ) const { return aObjectList.GetObject( nPos ); }
+    const GalleryObject*        ImplGetGalleryObject( sal_uIntPtr nPos ) const { return aObjectList.GetObject( nPos ); }
     SVX_DLLPUBLIC const GalleryObject*      ImplGetGalleryObject( const INetURLObject& rURL );
-    ULONG                       ImplGetGalleryObjectPos( const GalleryObject* pObj ) const { return aObjectList.GetPos( pObj ); }
+    sal_uIntPtr                     ImplGetGalleryObjectPos( const GalleryObject* pObj ) const { return aObjectList.GetPos( pObj ); }
     INetURLObject               ImplGetURL( const GalleryObject* pObject ) const;
-    INetURLObject               ImplCreateUniqueURL( SgaObjKind eObjKind, ULONG nFormat = CVT_UNKNOWN );
-    void                        ImplSetModified( BOOL bModified );
-    void                        ImplBroadcast( ULONG nUpdatePos );
+    INetURLObject               ImplCreateUniqueURL( SgaObjKind eObjKind, sal_uIntPtr nFormat = CVT_UNKNOWN );
+    void                        ImplSetModified( sal_Bool bModified );
+    void                        ImplBroadcast( sal_uIntPtr nUpdatePos );
 
                                 GalleryTheme();
                                 GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry );
@@ -131,16 +131,16 @@ private:
 
 public:
 
-    static GalleryThemeEntry*   CreateThemeEntry( const INetURLObject& rURL, BOOL bReadOnly );
+    static GalleryThemeEntry*   CreateThemeEntry( const INetURLObject& rURL, sal_Bool bReadOnly );
 
-    ULONG                   GetObjectCount() const { return aObjectList.Count(); }
+    sal_uIntPtr                 GetObjectCount() const { return aObjectList.Count(); }
 
-    SVX_DLLPUBLIC SgaObject*                    AcquireObject( ULONG nPos );
+    SVX_DLLPUBLIC SgaObject*                    AcquireObject( sal_uIntPtr nPos );
     SVX_DLLPUBLIC void                      ReleaseObject( SgaObject* pObj );
 
-    SVX_DLLPUBLIC BOOL                      InsertObject( const SgaObject& rObj, ULONG nPos = LIST_APPEND );
-    SVX_DLLPUBLIC BOOL                      RemoveObject( ULONG nPos );
-    BOOL                        ChangeObjectPos( ULONG nOldPos, ULONG nNewPos );
+    SVX_DLLPUBLIC sal_Bool                      InsertObject( const SgaObject& rObj, sal_uIntPtr nPos = LIST_APPEND );
+    SVX_DLLPUBLIC sal_Bool                      RemoveObject( sal_uIntPtr nPos );
+    sal_Bool                        ChangeObjectPos( sal_uIntPtr nOldPos, sal_uIntPtr nNewPos );
 
     SVX_DLLPUBLIC const String& GetName() const;
     const String&               GetRealName() const;
@@ -154,69 +154,69 @@ public:
     SVX_DLLPUBLIC const INetURLObject&      GetSdgURL() const;
     const INetURLObject&        GetSdvURL() const;
 
-    SVX_DLLPUBLIC UINT32        GetId() const;
-    void                        SetId( UINT32 nNewId, BOOL bResetThemeName );
+    SVX_DLLPUBLIC sal_uInt32        GetId() const;
+    void                        SetId( sal_uInt32 nNewId, sal_Bool bResetThemeName );
 
-    void                        SetDragging( BOOL bSet ) { bDragging = bSet; }
-    BOOL                        IsDragging() const { return bDragging; }
+    void                        SetDragging( sal_Bool bSet ) { bDragging = bSet; }
+    sal_Bool                        IsDragging() const { return bDragging; }
 
     void                        LockTheme() { ++mnThemeLockCount; }
-    BOOL                        UnlockTheme();
+    sal_Bool                        UnlockTheme();
 
     void                        LockBroadcaster() { mnBroadcasterLockCount++; }
-    SVX_DLLPUBLIC void          UnlockBroadcaster( ULONG nUpdatePos = 0 );
-    BOOL                        IsBroadcasterLocked() const { return mnBroadcasterLockCount > 0; }
+    SVX_DLLPUBLIC void          UnlockBroadcaster( sal_uIntPtr nUpdatePos = 0 );
+    sal_Bool                        IsBroadcasterLocked() const { return mnBroadcasterLockCount > 0; }
 
-    void                        SetDragPos( ULONG nPos ) { nDragPos = nPos; }
-    ULONG                       GetDragPos() const { return nDragPos; }
+    void                        SetDragPos( sal_uIntPtr nPos ) { nDragPos = nPos; }
+    sal_uIntPtr                     GetDragPos() const { return nDragPos; }
 
-    BOOL                        IsThemeNameFromResource() const;
+    sal_Bool                        IsThemeNameFromResource() const;
 
-    SVX_DLLPUBLIC BOOL          IsImported() const;
-    SVX_DLLPUBLIC BOOL          IsReadOnly() const;
-    SVX_DLLPUBLIC BOOL          IsDefault() const;
-    BOOL                        IsModified() const;
+    SVX_DLLPUBLIC sal_Bool          IsImported() const;
+    SVX_DLLPUBLIC sal_Bool          IsReadOnly() const;
+    SVX_DLLPUBLIC sal_Bool          IsDefault() const;
+    sal_Bool                        IsModified() const;
 
     SVX_DLLPUBLIC void                      Actualize( const Link& rActualizeLink, GalleryProgress* pProgress = NULL );
-    void                        AbortActualize() { bAbortActualize = TRUE; }
+    void                        AbortActualize() { bAbortActualize = sal_True; }
 
     Gallery*                    GetParent() const { return pParent; }
     SotStorageRef               GetSvDrawStorage() const { return aSvDrawStorageRef; }
 
 public:
 
-    SgaObjKind                  GetObjectKind( ULONG nPos ) const
+    SgaObjKind                  GetObjectKind( sal_uIntPtr nPos ) const
                                 {
                                     DBG_ASSERT( nPos < GetObjectCount(), "Position out of range" );
                                     return ImplGetGalleryObject( nPos )->eObjKind;
                                 }
 
 
-    const INetURLObject&        GetObjectURL( ULONG nPos ) const
+    const INetURLObject&        GetObjectURL( sal_uIntPtr nPos ) const
                                 {
                                     DBG_ASSERT( nPos < GetObjectCount(), "Position out of range" );
                                     return ImplGetGalleryObject( nPos )->aURL;
                                 }
 
-    BOOL                        GetThumb( ULONG nPos, Bitmap& rBmp, BOOL bProgress = FALSE );
+    sal_Bool                        GetThumb( sal_uIntPtr nPos, Bitmap& rBmp, sal_Bool bProgress = sal_False );
 
-    SVX_DLLPUBLIC BOOL                      GetGraphic( ULONG nPos, Graphic& rGraphic, BOOL bProgress = FALSE );
-    SVX_DLLPUBLIC BOOL                      InsertGraphic( const Graphic& rGraphic, ULONG nInsertPos = LIST_APPEND );
+    SVX_DLLPUBLIC sal_Bool                      GetGraphic( sal_uIntPtr nPos, Graphic& rGraphic, sal_Bool bProgress = sal_False );
+    SVX_DLLPUBLIC sal_Bool                      InsertGraphic( const Graphic& rGraphic, sal_uIntPtr nInsertPos = LIST_APPEND );
 
-    SVX_DLLPUBLIC BOOL                      GetModel( ULONG nPos, SdrModel& rModel, BOOL bProgress = FALSE );
-    SVX_DLLPUBLIC BOOL                      InsertModel( const FmFormModel& rModel, ULONG nInsertPos = LIST_APPEND );
+    SVX_DLLPUBLIC sal_Bool                      GetModel( sal_uIntPtr nPos, SdrModel& rModel, sal_Bool bProgress = sal_False );
+    SVX_DLLPUBLIC sal_Bool                      InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPos = LIST_APPEND );
 
-    BOOL                        GetModelStream( ULONG nPos, SotStorageStreamRef& rModelStreamRef, BOOL bProgress = FALSE );
-    BOOL                        InsertModelStream( const SotStorageStreamRef& rModelStream, ULONG nInsertPos = LIST_APPEND );
+    sal_Bool                        GetModelStream( sal_uIntPtr nPos, SotStorageStreamRef& rModelStreamRef, sal_Bool bProgress = sal_False );
+    sal_Bool                        InsertModelStream( const SotStorageStreamRef& rModelStream, sal_uIntPtr nInsertPos = LIST_APPEND );
 
-    BOOL                        GetURL( ULONG nPos, INetURLObject& rURL, BOOL bProgress = FALSE );
-    SVX_DLLPUBLIC BOOL                      InsertURL( const INetURLObject& rURL, ULONG nInsertPos = LIST_APPEND );
-    BOOL                        InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, ULONG nInsertPos = LIST_APPEND );
+    sal_Bool                        GetURL( sal_uIntPtr nPos, INetURLObject& rURL, sal_Bool bProgress = sal_False );
+    SVX_DLLPUBLIC sal_Bool                      InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos = LIST_APPEND );
+    sal_Bool                        InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, sal_uIntPtr nInsertPos = LIST_APPEND );
 
-    BOOL                        InsertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable, ULONG nInsertPos );
+    sal_Bool                        InsertTransferable( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxTransferable, sal_uIntPtr nInsertPos );
 
-    void                        CopyToClipboard( Window* pWindow, ULONG nPos );
-    void                        StartDrag( Window* pWindow, ULONG nPos );
+    void                        CopyToClipboard( Window* pWindow, sal_uIntPtr nPos );
+    void                        StartDrag( Window* pWindow, sal_uIntPtr nPos );
 
 public:
 

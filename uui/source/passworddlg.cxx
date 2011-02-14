@@ -71,8 +71,8 @@ PasswordDialog::PasswordDialog(
 {
     if( nDialogMode == task::PasswordRequestMode_PASSWORD_REENTER )
     {
-        const USHORT nOpenToModifyErrStrId = bOpenToModify ? STR_ERROR_PASSWORD_TO_MODIFY_WRONG : STR_ERROR_PASSWORD_TO_OPEN_WRONG;
-        const USHORT nErrStrId = bIsSimplePasswordRequest ? STR_ERROR_SIMPLE_PASSWORD_WRONG : nOpenToModifyErrStrId;
+        const sal_uInt16 nOpenToModifyErrStrId = bOpenToModify ? STR_ERROR_PASSWORD_TO_MODIFY_WRONG : STR_ERROR_PASSWORD_TO_OPEN_WRONG;
+        const sal_uInt16 nErrStrId = bIsSimplePasswordRequest ? STR_ERROR_SIMPLE_PASSWORD_WRONG : nOpenToModifyErrStrId;
         String aErrorMsg( ResId( nErrStrId, *pResourceMgr ));
         ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
         aErrorBox.Execute();
@@ -82,8 +82,8 @@ PasswordDialog::PasswordDialog(
     String aTitle( ResId( STR_TITLE_ENTER_PASSWORD, *pResourceMgr ) );
     aFTConfirmPassword.Hide();
     aEDConfirmPassword.Hide();
-    aFTConfirmPassword.Enable( FALSE );
-    aEDConfirmPassword.Enable( FALSE );
+    aFTConfirmPassword.Enable( sal_False );
+    aEDConfirmPassword.Enable( sal_False );
 
     // settings for create password
     if (nDialogMode == task::PasswordRequestMode_PASSWORD_CREATE)
@@ -94,8 +94,8 @@ PasswordDialog::PasswordDialog(
 
         aFTConfirmPassword.Show();
         aEDConfirmPassword.Show();
-        aFTConfirmPassword.Enable( TRUE );
-        aEDConfirmPassword.Enable( TRUE );
+        aFTConfirmPassword.Enable( sal_True );
+        aEDConfirmPassword.Enable( sal_True );
     }
     else
     {
@@ -115,7 +115,7 @@ PasswordDialog::PasswordDialog(
 
     SetText( aTitle );
 
-    USHORT nStrId = bOpenToModify ? STR_ENTER_PASSWORD_TO_MODIFY : STR_ENTER_PASSWORD_TO_OPEN;
+    sal_uInt16 nStrId = bOpenToModify ? STR_ENTER_PASSWORD_TO_MODIFY : STR_ENTER_PASSWORD_TO_OPEN;
     aFTPassword.SetText( String( ResId( nStrId, *pResourceMgr ) ) );
     aFTPassword.SetText( aFTPassword.GetText() + aDocURL );
     if (bIsSimplePasswordRequest)

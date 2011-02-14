@@ -57,9 +57,9 @@ struct SwRedlineDataParent
     SvLBoxEntry*                pTLBParent; // zugehoeriger TreeListBox-Eintrag
     String                      sComment;   // Redline-Kommentar
 
-    inline BOOL operator==( const SwRedlineDataParent& rObj ) const
+    inline sal_Bool operator==( const SwRedlineDataParent& rObj ) const
                         { return (pData && pData->GetSeqNo() == rObj.pData->GetSeqNo()); }
-    inline BOOL operator< ( const SwRedlineDataParent& rObj ) const
+    inline sal_Bool operator< ( const SwRedlineDataParent& rObj ) const
                         { return (pData && pData->GetSeqNo() <  rObj.pData->GetSeqNo()); }
 };
 
@@ -99,9 +99,9 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     SvxRedlinTable*         pTable; // PB 2006/02/02 #i48648 now SvHeaderTabListBox
     Link                    aOldSelectHdl;
     Link                    aOldDeselectHdl;
-    BOOL                    bOnlyFormatedRedlines;
-    BOOL                    bHasReadonlySel;
-    BOOL                    bRedlnAutoFmt;
+    sal_Bool                    bOnlyFormatedRedlines;
+    sal_Bool                    bHasReadonlySel;
+    sal_Bool                    bRedlnAutoFmt;
 
     // prevent update dialog data during longer operations (cf #102657#)
     bool                    bInhibitActivate;
@@ -116,27 +116,27 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg
     SW_DLLPRIVATE DECL_LINK( GotoHdl,           void* );
     SW_DLLPRIVATE DECL_LINK( CommandHdl,        void* );
 
-    SW_DLLPRIVATE USHORT            CalcDiff(USHORT nStart, BOOL bChild);
-    SW_DLLPRIVATE void          InsertChilds(SwRedlineDataParent *pParent, const SwRedline& rRedln, const USHORT nAutoFmt);
-    SW_DLLPRIVATE void          InsertParents(USHORT nStart, USHORT nEnd = USHRT_MAX);
-    SW_DLLPRIVATE void          RemoveParents(USHORT nStart, USHORT nEnd);
+    SW_DLLPRIVATE sal_uInt16            CalcDiff(sal_uInt16 nStart, sal_Bool bChild);
+    SW_DLLPRIVATE void          InsertChilds(SwRedlineDataParent *pParent, const SwRedline& rRedln, const sal_uInt16 nAutoFmt);
+    SW_DLLPRIVATE void          InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd = USHRT_MAX);
+    SW_DLLPRIVATE void          RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd);
     SW_DLLPRIVATE void          InitAuthors();
 
-    SW_DLLPRIVATE String            GetRedlineText(const SwRedline& rRedln, DateTime &rDateTime, USHORT nStack = 0);
-    SW_DLLPRIVATE const String& GetActionText(const SwRedline& rRedln, USHORT nStack = 0);
-    SW_DLLPRIVATE USHORT            GetRedlinePos( const SvLBoxEntry& rEntry) const;
+    SW_DLLPRIVATE String            GetRedlineText(const SwRedline& rRedln, DateTime &rDateTime, sal_uInt16 nStack = 0);
+    SW_DLLPRIVATE const String& GetActionText(const SwRedline& rRedln, sal_uInt16 nStack = 0);
+    SW_DLLPRIVATE sal_uInt16            GetRedlinePos( const SvLBoxEntry& rEntry) const;
 
 public:
-    SwRedlineAcceptDlg(Dialog *pParent, BOOL bAutoFmt = FALSE);
+    SwRedlineAcceptDlg(Dialog *pParent, sal_Bool bAutoFmt = sal_False);
     virtual ~SwRedlineAcceptDlg();
 
     DECL_LINK( FilterChangedHdl, void *pDummy = 0 );
 
     inline SvxAcceptChgCtr* GetChgCtrl()        { return &aTabPagesCTRL; }
-    inline BOOL     HasRedlineAutoFmt() const   { return bRedlnAutoFmt; }
+    inline sal_Bool     HasRedlineAutoFmt() const   { return bRedlnAutoFmt; }
 
-    void            Init(USHORT nStart = 0);
-    void            CallAcceptReject( BOOL bSelect, BOOL bAccept );
+    void            Init(sal_uInt16 nStart = 0);
+    void            CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept );
 
     void            Initialize(const String &rExtraData);
     void            FillInfo(String &rExtraData) const;
@@ -174,13 +174,13 @@ class SwRedlineAcceptChild : public SwChildWinWrapper
 {
 public:
     SwRedlineAcceptChild(   Window* ,
-                            USHORT nId,
+                            sal_uInt16 nId,
                             SfxBindings*,
                             SfxChildWinInfo*  );
 
     SFX_DECL_CHILDWINDOW( SwRedlineAcceptChild );
 
-    virtual BOOL    ReInitDlg(SwDocShell *pDocSh);
+    virtual sal_Bool    ReInitDlg(SwDocShell *pDocSh);
 };
 
 

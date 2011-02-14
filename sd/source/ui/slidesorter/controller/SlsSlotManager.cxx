@@ -164,7 +164,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             if (rRequest.GetArgs() != NULL)
             {
                 SFX_REQUEST_ARG(rRequest, pPagesPerRow, SfxUInt16Item,
-                    SID_PAGES_PER_ROW, FALSE);
+                    SID_PAGES_PER_ROW, sal_False);
                 if (pPagesPerRow != NULL)
                 {
                     sal_Int32 nColumnCount = pPagesPerRow->GetValue();
@@ -400,7 +400,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
                 SlideSorterController::ModelChangeLock aModelLock (mrSlideSorter.GetController());
                 PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
                 SelectionObserver::Context aContext (mrSlideSorter);
-                pViewShell->ImpSidUndo (FALSE, rRequest);
+                pViewShell->ImpSidUndo (sal_False, rRequest);
             }
             break;
         }
@@ -415,7 +415,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
                 SlideSorterController::ModelChangeLock aModelLock (mrSlideSorter.GetController());
                 PageSelector::UpdateLock aUpdateLock (mrSlideSorter);
                 SelectionObserver::Context aContext (mrSlideSorter);
-                pViewShell->ImpSidRedo (FALSE, rRequest);
+                pViewShell->ImpSidRedo (sal_False, rRequest);
             }
             break;
         }
@@ -431,7 +431,7 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
 void SlotManager::ExecCtrl (SfxRequest& rRequest)
 {
     ViewShell* pViewShell = mrSlideSorter.GetViewShell();
-    USHORT nSlot = rRequest.GetSlot();
+    sal_uInt16 nSlot = rRequest.GetSlot();
     switch (nSlot)
     {
         case SID_RELOAD:
@@ -497,10 +497,10 @@ void SlotManager::GetAttrState (SfxItemSet& rSet)
 {
     // Iteratate over all items.
     SfxWhichIter aIter (rSet);
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
     while (nWhich)
     {
-        USHORT nSlotId (nWhich);
+        sal_uInt16 nSlotId (nWhich);
         if (SfxItemPool::IsWhich(nWhich) && mrSlideSorter.GetViewShell()!=NULL)
             nSlotId = mrSlideSorter.GetViewShell()->GetPool().GetSlotId(nWhich);
         switch (nSlotId)
@@ -509,7 +509,7 @@ void SlotManager::GetAttrState (SfxItemSet& rSet)
                 rSet.Put (
                     SfxUInt16Item (
                         nSlotId,
-                        (USHORT)mrSlideSorter.GetView().GetLayouter().GetColumnCount()
+                        (sal_uInt16)mrSlideSorter.GetView().GetLayouter().GetColumnCount()
                         )
                     );
             break;
@@ -526,15 +526,15 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
 
     if (pShell!=NULL && pShell->GetCurrentFunction().is())
     {
-        USHORT nSId = pShell->GetCurrentFunction()->GetSlotID();
+        sal_uInt16 nSId = pShell->GetCurrentFunction()->GetSlotID();
 
-        rSet.Put( SfxBoolItem( nSId, TRUE ) );
+        rSet.Put( SfxBoolItem( nSId, sal_True ) );
     }
-    rSet.Put( SfxBoolItem( SID_DRAWINGMODE, FALSE ) );
-    rSet.Put( SfxBoolItem( SID_DIAMODE, TRUE ) );
-    rSet.Put( SfxBoolItem( SID_OUTLINEMODE, FALSE ) );
-    rSet.Put( SfxBoolItem( SID_NOTESMODE, FALSE ) );
-    rSet.Put( SfxBoolItem( SID_HANDOUTMODE, FALSE ) );
+    rSet.Put( SfxBoolItem( SID_DRAWINGMODE, sal_False ) );
+    rSet.Put( SfxBoolItem( SID_DIAMODE, sal_True ) );
+    rSet.Put( SfxBoolItem( SID_OUTLINEMODE, sal_False ) );
+    rSet.Put( SfxBoolItem( SID_NOTESMODE, sal_False ) );
+    rSet.Put( SfxBoolItem( SID_HANDOUTMODE, sal_False ) );
 
     // Vorlagenkatalog darf nicht aufgerufen werden
     rSet.DisableItem(SID_STYLE_CATALOG);
@@ -616,7 +616,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PRESENTATION ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_REHEARSE_TIMINGS ) )
     {
-        BOOL bDisable = TRUE;
+        sal_Bool bDisable = sal_True;
         model::PageEnumeration aAllPages (
             model::PageEnumerationProvider::CreateAllPagesEnumeration(mrSlideSorter.GetModel()));
         while (aAllPages.HasMoreElements())
@@ -624,7 +624,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
             SdPage* pPage = aAllPages.GetNextElement()->GetPage();
 
             if( !pPage->IsExcluded() )
-                bDisable = FALSE;
+                bDisable = sal_False;
         }
         if( bDisable || pDocShell->IsPreview())
         {
@@ -830,8 +830,8 @@ void SlotManager::GetStatusBarState (SfxItemSet& rSet)
     */
     SdPage* pPage      = NULL;
     SdPage* pFirstPage = NULL;
-    USHORT  nFirstPage;
-    USHORT  nSelectedPages = (USHORT)mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount();
+    sal_uInt16  nFirstPage;
+    sal_uInt16  nSelectedPages = (sal_uInt16)mrSlideSorter.GetController().GetPageSelector().GetSelectedPageCount();
     String aPageStr;
     String aLayoutStr;
 
@@ -959,9 +959,9 @@ IMPL_LINK(SlotManager, RenameSlideHdl, AbstractSvxNameDialog*, pDialog)
             && mrSlideSorter.GetViewShell()->GetDocSh()->IsNewPageNameValid( aNewName ) ));
 }
 
-bool SlotManager::RenameSlideFromDrawViewShell( USHORT nPageId, const String & rName  )
+bool SlotManager::RenameSlideFromDrawViewShell( sal_uInt16 nPageId, const String & rName  )
 {
-    BOOL   bOutDummy;
+    sal_Bool   bOutDummy;
     SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
     if( pDocument->GetPageByName( rName, bOutDummy ) != SDRPAGE_NOTFOUND )
         return false;
@@ -983,8 +983,8 @@ bool SlotManager::RenameSlideFromDrawViewShell( USHORT nPageId, const String & r
             // Undo
             SdPage* pUndoPage = pPageToRename;
             SdrLayerAdmin &  rLayerAdmin = pDocument->GetLayerAdmin();
-            BYTE nBackground = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRND )), FALSE );
-            BYTE nBgObj = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRNDOBJ )), FALSE );
+            sal_uInt8 nBackground = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRND )), sal_False );
+            sal_uInt8 nBgObj = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRNDOBJ )), sal_False );
             SetOfByte aVisibleLayers = pPageToRename->TRG_GetMasterPageVisibleLayers();
 
             // (#67720#)
@@ -1018,7 +1018,7 @@ bool SlotManager::RenameSlideFromDrawViewShell( USHORT nPageId, const String & r
         }
     }
 
-    bool bSuccess = pPageToRename!=NULL && ( FALSE != rName.Equals( pPageToRename->GetName()));
+    bool bSuccess = pPageToRename!=NULL && ( sal_False != rName.Equals( pPageToRename->GetName()));
 
     if( bSuccess )
     {
@@ -1026,10 +1026,10 @@ bool SlotManager::RenameSlideFromDrawViewShell( USHORT nPageId, const String & r
         //        aTabControl.SetPageText( nPageId, rName );
 
         // set document to modified state
-        pDocument->SetChanged( TRUE );
+        pDocument->SetChanged( sal_True );
 
         // inform navigator about change
-        SfxBoolItem aItem( SID_NAVIGATOR_INIT, TRUE );
+        SfxBoolItem aItem( SID_NAVIGATOR_INIT, sal_True );
         if (mrSlideSorter.GetViewShell() != NULL)
             mrSlideSorter.GetViewShell()->GetDispatcher()->Execute(
                 SID_NAVIGATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
@@ -1092,8 +1092,8 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
 
                 // Create shapes for the default layout.
                 pNewPage = pDocument->GetMasterSdPage(
-                    (USHORT)(nInsertionIndex+1), PK_STANDARD);
-                pNewPage->CreateTitleAndLayout (TRUE,TRUE);
+                    (sal_uInt16)(nInsertionIndex+1), PK_STANDARD);
+                pNewPage->CreateTitleAndLayout (sal_True,sal_True);
             }
         }
     }
@@ -1300,7 +1300,7 @@ namespace {
 SlideExclusionState GetSlideExclusionState (model::PageEnumeration& rPageSet)
 {
     SlideExclusionState eState (UNDEFINED);
-    BOOL bState;
+    sal_Bool bState;
 
     // Get toggle state of the selected pages.
     while (rPageSet.HasMoreElements() && eState!=MIXED)

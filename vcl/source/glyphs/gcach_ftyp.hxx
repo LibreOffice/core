@@ -77,7 +77,7 @@ public:
                                 const ExtraKernInfo* );
                           ~FtFontInfo();
 
-    const unsigned char*  GetTable( const char*, ULONG* pLength=0 ) const;
+    const unsigned char*  GetTable( const char*, sal_uLong* pLength=0 ) const;
 
     FT_FaceRec_*          GetFaceFT();
     void                  ReleaseFaceFT( FT_FaceRec_* );
@@ -197,9 +197,9 @@ public:
     virtual bool                GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const;
     virtual bool                GetGlyphOutline( int nGlyphIndex, ::basegfx::B2DPolyPolygon& ) const;
     virtual int                 GetGlyphKernValue( int nLeftGlyph, int nRightGlyph ) const;
-    virtual ULONG               GetKernPairs( ImplKernPairData** ) const;
+    virtual sal_uLong               GetKernPairs( ImplKernPairData** ) const;
 
-    const unsigned char*        GetTable( const char* pName, ULONG* pLength )
+    const unsigned char*        GetTable( const char* pName, sal_uLong* pLength )
                                 { return mpFontInfo->GetTable( pName, pLength ); }
     int                         GetEmUnits() const;
     const FT_Size_Metrics&      GetMetricsFT() const { return maSizeFT->metrics; }

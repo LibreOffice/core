@@ -49,20 +49,20 @@ class EditEngine;
 class EDITENG_DLLPUBLIC SvxEditSourceHint : public TextHint
 {
 private:
-    ULONG   mnStart;
-    ULONG   mnEnd;
+    sal_uLong   mnStart;
+    sal_uLong   mnEnd;
 
 public:
             TYPEINFO();
-            SvxEditSourceHint( ULONG nId );
-            SvxEditSourceHint( ULONG nId, ULONG nValue, ULONG nStart=0, ULONG nEnd=0 );
+            SvxEditSourceHint( sal_uLong nId );
+            SvxEditSourceHint( sal_uLong nId, sal_uLong nValue, sal_uLong nStart=0, sal_uLong nEnd=0 );
 
-    ULONG   GetValue() const;
-    ULONG   GetStartValue() const;
-    ULONG   GetEndValue() const;
-    void    SetValue( ULONG n );
-    void    SetStartValue( ULONG n );
-    void    SetEndValue( ULONG n );
+    sal_uLong   GetValue() const;
+    sal_uLong   GetStartValue() const;
+    sal_uLong   GetEndValue() const;
+    void    SetValue( sal_uLong n );
+    void    SetStartValue( sal_uLong n );
+    void    SetEndValue( sal_uLong n );
 };
 
 /** Helper class for common functionality in edit sources
@@ -101,7 +101,7 @@ public:
 
         @return sal_True, if the range has been successfully determined
      */
-    static sal_Bool GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, const EditEngine& rEE, USHORT nPara, USHORT nIndex );
+    static sal_Bool GetAttributeRun( sal_uInt16& nStartIndex, sal_uInt16& nEndIndex, const EditEngine& rEE, sal_uInt16 nPara, sal_uInt16 nIndex );
 
     /** Convert point from edit engine to user coordinate space
 

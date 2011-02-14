@@ -60,10 +60,10 @@ public:
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
 
-    virtual BOOL    IsRefInputMode() const { return TRUE; }
+    virtual sal_Bool    IsRefInputMode() const { return sal_True; }
     virtual void    SetActive();
 
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 
 protected:
     virtual void    Deactivate();
@@ -107,17 +107,17 @@ private:
     ScDocument*         pDoc;
     ScRangeUtil*        pRangeUtil;
     ScAreaData*         pAreaData;
-    USHORT              nAreaDataCount;
-    USHORT              nWhichCons;
+    sal_uInt16              nAreaDataCount;
+    sal_uInt16              nWhichCons;
 
     formula::RefEdit*           pRefInputEdit;
-    BOOL                bDlgLostFocus;
+    sal_Bool                bDlgLostFocus;
 
 #ifdef _CONSDLG_CXX
 private:
     void Init               ();
     void FillAreaLists      ();
-    BOOL VerifyEdit         ( formula::RefEdit* pEd );
+    sal_Bool VerifyEdit         ( formula::RefEdit* pEd );
 
     DECL_LINK( OkHdl,        void* );
     DECL_LINK( ClickHdl,     PushButton* );
@@ -125,8 +125,8 @@ private:
     DECL_LINK( ModifyHdl,    formula::RefEdit* );
     DECL_LINK( SelectHdl,    ListBox* );
 
-    ScSubTotalFunc  LbPosToFunc( USHORT nPos );
-    USHORT          FuncToLbPos( ScSubTotalFunc eFunc );
+    ScSubTotalFunc  LbPosToFunc( sal_uInt16 nPos );
+    sal_uInt16          FuncToLbPos( ScSubTotalFunc eFunc );
 #endif // _CONSDLG_CXX
 };
 

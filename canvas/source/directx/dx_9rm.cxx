@@ -696,11 +696,11 @@ namespace dxcanvas
             mpWindow->SetParentClipMode(0x0002);
 
             // the system child window must not clear its background
-            mpWindow->EnableEraseBackground( FALSE );
+            mpWindow->EnableEraseBackground( sal_False );
 
             mpWindow->SetControlForeground();
             mpWindow->SetControlBackground();
-            mpWindow->EnablePaint(FALSE);
+            mpWindow->EnablePaint(sal_False);
 
             const SystemEnvData *pData = mpWindow->GetSystemData();
             const HWND hwnd(reinterpret_cast<HWND>(pData->hWnd));

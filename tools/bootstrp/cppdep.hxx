@@ -41,7 +41,7 @@ protected:
     ByteStringList      *pFileList;
     ByteStringList      *pSources;
 
-    BOOL            Search( ByteString aFileName );
+    sal_Bool            Search( ByteString aFileName );
     ByteString      Exists( ByteString aFileName );
 
     ByteString      IsIncludeStatement( ByteString aLine );
@@ -52,7 +52,7 @@ public:
     virtual void    Execute();
 
     ByteStringList*     GetDepList(){return pFileList;}
-    BOOL            AddSearchPath( const char* aPath );
-    BOOL            AddSource( const char * aSource );
+    sal_Bool            AddSearchPath( const char* aPath );
+    sal_Bool            AddSource( const char * aSource );
 };
 

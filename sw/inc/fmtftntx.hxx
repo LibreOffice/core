@@ -48,11 +48,11 @@ class SW_DLLPUBLIC SwFmtFtnEndAtTxtEnd : public SfxEnumItem
     String      sPrefix;
     String      sSuffix;
     SvxNumberType aFmt;
-    USHORT      nOffset;
+    sal_uInt16      nOffset;
 
 protected:
-    SwFmtFtnEndAtTxtEnd( USHORT nWhichL, SwFtnEndPosEnum ePos )
-        : SfxEnumItem( nWhichL, sal::static_int_cast< USHORT >(ePos) ), nOffset( 0 )
+    SwFmtFtnEndAtTxtEnd( sal_uInt16 nWhichL, SwFtnEndPosEnum ePos )
+        : SfxEnumItem( nWhichL, sal::static_int_cast< sal_uInt16 >(ePos) ), nOffset( 0 )
     {}
     SwFmtFtnEndAtTxtEnd( const SwFmtFtnEndAtTxtEnd& rAttr )
         : SfxEnumItem( rAttr ), sPrefix( rAttr.sPrefix ),
@@ -61,12 +61,12 @@ protected:
     {}
 
 public:
-    virtual USHORT          GetValueCount() const;
+    virtual sal_uInt16          GetValueCount() const;
 
     virtual int             operator==( const SfxPoolItem& ) const;
 
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
 // will be used at time??
 //  void                    FillVariable( SbxVariable &rVar,
@@ -81,7 +81,7 @@ public:
                                     String &rText,
                                     const IntlWrapper* pIntl = 0 ) const;
 
-    inline BOOL IsAtEnd() const { return FTNEND_ATPGORDOCEND != GetValue(); }
+    inline sal_Bool IsAtEnd() const { return FTNEND_ATPGORDOCEND != GetValue(); }
 
     SwFmtFtnEndAtTxtEnd & operator=( const SwFmtFtnEndAtTxtEnd & rAttr );
 
@@ -90,8 +90,8 @@ public:
 
     const SvxNumberType& GetSwNumType() const   { return aFmt; }
 
-    USHORT GetOffset() const                { return nOffset; }
-    void SetOffset( USHORT nOff )           { nOffset = nOff; }
+    sal_uInt16 GetOffset() const                { return nOffset; }
+    void SetOffset( sal_uInt16 nOff )           { nOffset = nOff; }
 
     const String& GetPrefix() const         { return sPrefix; }
     void SetPrefix(const String& rSet)      { sPrefix = rSet; }
@@ -122,15 +122,15 @@ public:
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
 };
 
-inline const SwFmtFtnAtTxtEnd &SwAttrSet::GetFtnAtTxtEnd(BOOL bInP) const
+inline const SwFmtFtnAtTxtEnd &SwAttrSet::GetFtnAtTxtEnd(sal_Bool bInP) const
     { return (const SwFmtFtnAtTxtEnd&)Get( RES_FTN_AT_TXTEND, bInP); }
-inline const SwFmtEndAtTxtEnd &SwAttrSet::GetEndAtTxtEnd(BOOL bInP) const
+inline const SwFmtEndAtTxtEnd &SwAttrSet::GetEndAtTxtEnd(sal_Bool bInP) const
     { return (const SwFmtEndAtTxtEnd&)Get( RES_END_AT_TXTEND, bInP); }
 
 
-inline const SwFmtFtnAtTxtEnd &SwFmt::GetFtnAtTxtEnd(BOOL bInP) const
+inline const SwFmtFtnAtTxtEnd &SwFmt::GetFtnAtTxtEnd(sal_Bool bInP) const
     { return aSet.GetFtnAtTxtEnd(bInP); }
-inline const SwFmtEndAtTxtEnd &SwFmt::GetEndAtTxtEnd(BOOL bInP) const
+inline const SwFmtEndAtTxtEnd &SwFmt::GetEndAtTxtEnd(sal_Bool bInP) const
     { return aSet.GetEndAtTxtEnd(bInP); }
 
 #endif

@@ -189,7 +189,7 @@ public:
     void                    SetDoubleClickHdl( const Link& rHdl );
     void                    SetOpenDoneHdl( const Link& rHdl );
 
-    ULONG                   GetSelectionCount() const;
+    sal_uLong                   GetSelectionCount() const;
     SvLBoxEntry*            FirstSelected() const;
     SvLBoxEntry*            NextSelected( SvLBoxEntry* pEntry ) const;
     void                    EnableAutoResize();
@@ -199,7 +199,7 @@ public:
     void                    EnableDelete( sal_Bool bEnable );
     void                    EnableNameReplacing( sal_Bool bEnable = sal_True );
                                 // translate folder names or display doc-title instead of file name
-                                // EnableContextMenu( TRUE )/EnableDelete(TRUE) disable name replacing!
+                                // EnableContextMenu( sal_True )/EnableDelete(sal_True) disable name replacing!
 
                             // save and load column size and sort order
     String                  GetConfigString() const;

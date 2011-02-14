@@ -33,11 +33,6 @@ PRJ=..$/..
 
 PRJNAME=scripting
 TARGET=vbaevents
-.IF "$(ENABLE_VBA)"!="YES"
-dummy:
-        @echo "not building vbaevents..."
-.ENDIF
-
 VISIBILITY_HIDDEN=TRUE
 NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE

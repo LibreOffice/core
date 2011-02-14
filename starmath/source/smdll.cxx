@@ -57,7 +57,7 @@
 
 
 
-BOOL SmDLL::bInitialized = FALSE;
+sal_Bool SmDLL::bInitialized = sal_False;
 
 /*************************************************************************
 |*
@@ -69,7 +69,7 @@ void SmDLL::Init()
     if ( bInitialized )
         return;
 
-    bInitialized = TRUE;
+    bInitialized = sal_True;
 
     SfxObjectFactory& rFactory = SmDocShell::Factory();
 
@@ -93,10 +93,10 @@ void SmDLL::Init()
     SvxUndoRedoControl::RegisterControl( SID_REDO, pp );
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pp );
 
-    SmToolBoxWrapper::RegisterChildWindow(TRUE);
-    SmCmdBoxWrapper::RegisterChildWindow(TRUE);
+    SmToolBoxWrapper::RegisterChildWindow(sal_True);
+    SmCmdBoxWrapper::RegisterChildWindow(sal_True);
 
-    ::sfx2::TaskPaneWrapper::RegisterChildWindow( FALSE, pp );
+    ::sfx2::TaskPaneWrapper::RegisterChildWindow( sal_False, pp );
 }
 
 /*************************************************************************

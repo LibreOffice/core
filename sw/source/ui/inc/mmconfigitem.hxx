@@ -68,8 +68,8 @@ class SW_DLLPUBLIC SwMailMergeConfigItem
     ::rtl::OUString                                             m_rAddressBlockFrame;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> m_aSelection;
 
-    USHORT                                                      m_nStartPrint;
-    USHORT                                                      m_nEndPrint;
+    sal_uInt16                                                      m_nStartPrint;
+    sal_uInt16                                                      m_nEndPrint;
 
     ::rtl::OUString                                             m_sSelectedPrinter;
 
@@ -256,10 +256,10 @@ public:
     SwDocMergeInfo&     GetDocumentMergeInfo(sal_uInt32 nDocument);
     sal_uInt32          GetMergedDocumentCount() const;
 
-    void                SetPrintRange( USHORT nStartDocument, USHORT nEndDocument)
+    void                SetPrintRange( sal_uInt16 nStartDocument, sal_uInt16 nEndDocument)
                             {m_nStartPrint = nStartDocument; m_nEndPrint = nEndDocument;}
-    USHORT              GetPrintRangeStart() const  {return m_nStartPrint;}
-    USHORT              GetPrintRangeEnd() const {return m_nEndPrint;}
+    sal_uInt16              GetPrintRangeStart() const  {return m_nStartPrint;}
+    sal_uInt16              GetPrintRangeEnd() const {return m_nEndPrint;}
 
     const ::rtl::OUString&  GetSelectedPrinter() const {return m_sSelectedPrinter;}
     void                    SetSelectedPrinter(const ::rtl::OUString& rSet )

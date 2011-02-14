@@ -44,14 +44,14 @@ SV_DECL_PTRARR_SORT( CommunicationLinkList, CommunicationLink*, 1, 10 )
 class MultiCommunicationManager : public CommunicationManager
 {
 public:
-    MultiCommunicationManager( BOOL bUseMultiChannel = FALSE );
+    MultiCommunicationManager( sal_Bool bUseMultiChannel = sal_False );
     virtual ~MultiCommunicationManager();
-    virtual BOOL StopCommunication();       // Hält alle CommunicationLinks an
-    virtual BOOL IsLinkValid( CommunicationLink* pCL );
-    virtual USHORT GetCommunicationLinkCount();
-    virtual CommunicationLinkRef GetCommunicationLink( USHORT nNr );
+    virtual sal_Bool StopCommunication();       // Hält alle CommunicationLinks an
+    virtual sal_Bool IsLinkValid( CommunicationLink* pCL );
+    virtual sal_uInt16 GetCommunicationLinkCount();
+    virtual CommunicationLinkRef GetCommunicationLink( sal_uInt16 nNr );
 
-    void DoQuickShutdown( BOOL bQuickShutdown = TRUE) { bGracefullShutdown = !bQuickShutdown; }
+    void DoQuickShutdown( sal_Bool bQuickShutdown = sal_True) { bGracefullShutdown = !bQuickShutdown; }
 
 protected:
     virtual void CallConnectionOpened( CommunicationLink* pCL );
@@ -61,19 +61,19 @@ protected:
                                                 /// allerdings schon ein StopCommunication gekriegt haben, bzw ein ConnectionTerminated
     virtual void DestroyingLink( CommunicationLink *pCL );  // Link trägt sich im Destruktor aus
 
-    BOOL bGracefullShutdown;
+    sal_Bool bGracefullShutdown;
 };
 
 class CommunicationManagerServer : public MultiCommunicationManager
 {
 public:
-    CommunicationManagerServer( BOOL bUseMultiChannel = FALSE ):MultiCommunicationManager( bUseMultiChannel ){;}
+    CommunicationManagerServer( sal_Bool bUseMultiChannel = sal_False ):MultiCommunicationManager( bUseMultiChannel ){;}
 };
 
 class CommunicationManagerClient : public MultiCommunicationManager, public ICommunicationManagerClient
 {
 public:
-    CommunicationManagerClient( BOOL bUseMultiChannel = FALSE );
+    CommunicationManagerClient( sal_Bool bUseMultiChannel = sal_False );
 };
 
 class CommunicationLinkViaSocket : public SimpleCommunicationLinkViaSocket, public vos::OThread
@@ -82,14 +82,14 @@ public:
     CommunicationLinkViaSocket( CommunicationManager *pMan, vos::OStreamSocket *pSocket );
     virtual ~CommunicationLinkViaSocket();
 
-    virtual BOOL IsCommunicationError();
-    virtual BOOL DoTransferDataStream( SvStream *pDataStream, CMProtocol nProtocol = CM_PROTOCOL_OLDSTYLE );
+    virtual sal_Bool IsCommunicationError();
+    virtual sal_Bool DoTransferDataStream( SvStream *pDataStream, CMProtocol nProtocol = CM_PROTOCOL_OLDSTYLE );
 
     // Diese sind Virtuelle Links!!!!
     virtual long ConnectionClosed( void* = NULL );
     virtual long DataReceived( void* = NULL );
 
-    virtual BOOL StopCommunication();
+    virtual sal_Bool StopCommunication();
 
     void SetPutDataReceivedHdl( Link lPutDataReceived ){ mlPutDataReceived = lPutDataReceived; }
     Link GetDataReceivedLink () {Link aLink = LINK( this, CommunicationLinkViaSocket, DataReceived ); return aLink;}
@@ -98,17 +98,17 @@ public:
 protected:
     virtual void SAL_CALL run();
 
-    virtual BOOL ShutdownCommunication();
-    ULONG nConnectionClosedEventId;
-    ULONG nDataReceivedEventId;
+    virtual sal_Bool ShutdownCommunication();
+    sal_uLong nConnectionClosedEventId;
+    sal_uLong nDataReceivedEventId;
     vos::OMutex aMConnectionClosed; // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
     vos::OMutex aMDataReceived;     // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
     virtual void WaitForShutdown();
 
     DECL_LINK( ShutdownLink, void* );
        Timer aShutdownTimer;
-    BOOL bShutdownStarted;
-    BOOL bDestroying;
+    sal_Bool bShutdownStarted;
+    sal_Bool bDestroying;
     Link mlPutDataReceived;
 };
 
@@ -118,15 +118,15 @@ class CommunicationManagerServerViaSocket : public CommunicationManagerServer
 public:
     using CommunicationManager::StartCommunication;
 
-    CommunicationManagerServerViaSocket( ULONG nPort, USHORT nMaxCon, BOOL bUseMultiChannel = FALSE );
+    CommunicationManagerServerViaSocket( sal_uLong nPort, sal_uInt16 nMaxCon, sal_Bool bUseMultiChannel = sal_False );
     virtual ~CommunicationManagerServerViaSocket();
 
-    virtual BOOL StartCommunication();
-    virtual BOOL StopCommunication();
+    virtual sal_Bool StartCommunication();
+    virtual sal_Bool StopCommunication();
 
 protected:
-    ULONG nPortToListen;
-    USHORT nMaxConnections;
+    sal_uLong nPortToListen;
+    sal_uInt16 nMaxConnections;
 
 private:
     CommunicationManagerServerAcceptThread *pAcceptThread;
@@ -136,7 +136,7 @@ private:
 class CommunicationManagerServerAcceptThread: public vos::OThread
 {
 public:
-    CommunicationManagerServerAcceptThread( CommunicationManagerServerViaSocket* pServer, ULONG nPort, USHORT nMaxCon = CM_UNLIMITED_CONNECTIONS );
+    CommunicationManagerServerAcceptThread( CommunicationManagerServerViaSocket* pServer, sal_uLong nPort, sal_uInt16 nMaxCon = CM_UNLIMITED_CONNECTIONS );
     virtual ~CommunicationManagerServerAcceptThread();
     CommunicationLinkRef GetNewConnection(){ CommunicationLinkRef xTemp = xmNewConnection; xmNewConnection.Clear(); return xTemp; }
 
@@ -146,9 +146,9 @@ protected:
 private:
     CommunicationManagerServerViaSocket* pMyServer;
     vos::OAcceptorSocket *pAcceptorSocket;
-    ULONG nPortToListen;
-    USHORT nMaxConnections;
-    ULONG nAddConnectionEventId;
+    sal_uLong nPortToListen;
+    sal_uInt16 nMaxConnections;
+    sal_uLong nAddConnectionEventId;
     vos::OMutex aMAddConnection;    // Notwendig, da Event verarbeitet werden kann bevor Variable gesetzt ist
     void CallInfoMsg( InfoString aMsg ){ pMyServer->CallInfoMsg( aMsg ); }
     CM_InfoType GetInfoType(){ return pMyServer->GetInfoType(); }
@@ -163,16 +163,16 @@ class CommunicationManagerClientViaSocket : public CommunicationManagerClient, C
 public:
     using CommunicationManager::StartCommunication;
 
-    CommunicationManagerClientViaSocket( ByteString aHost, ULONG nPort, BOOL bUseMultiChannel = FALSE );
-    CommunicationManagerClientViaSocket( BOOL bUseMultiChannel = FALSE );
+    CommunicationManagerClientViaSocket( ByteString aHost, sal_uLong nPort, sal_Bool bUseMultiChannel = sal_False );
+    CommunicationManagerClientViaSocket( sal_Bool bUseMultiChannel = sal_False );
     virtual ~CommunicationManagerClientViaSocket();
 
-    virtual BOOL StartCommunication(){ return StartCommunication( aHostToTalk, nPortToTalk );}
-    virtual BOOL StartCommunication( ByteString aHost, ULONG nPort ){ return DoStartCommunication( this, (ICommunicationManagerClient*) this, aHost, nPort  );}
+    virtual sal_Bool StartCommunication(){ return StartCommunication( aHostToTalk, nPortToTalk );}
+    virtual sal_Bool StartCommunication( ByteString aHost, sal_uLong nPort ){ return DoStartCommunication( this, (ICommunicationManagerClient*) this, aHost, nPort  );}
 
 private:
     ByteString aHostToTalk;
-    ULONG nPortToTalk;
+    sal_uLong nPortToTalk;
 protected:
     virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, vos::OConnectorSocket *pCS ){ return new CommunicationLinkViaSocket( pCM, pCS ); }
 };

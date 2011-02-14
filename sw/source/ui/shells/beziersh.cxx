@@ -89,12 +89,12 @@ void SwBezierShell::Execute(SfxRequest &rReq)
     SwWrtShell *pSh = &GetShell();
     SdrView*    pSdrView = pSh->GetDrawView();
     const SfxItemSet *pArgs = rReq.GetArgs();
-    USHORT      nSlotId = rReq.GetSlot();
-    BOOL        bChanged = pSdrView->GetModel()->IsChanged();
-    pSdrView->GetModel()->SetChanged(FALSE);
+    sal_uInt16      nSlotId = rReq.GetSlot();
+    sal_Bool        bChanged = pSdrView->GetModel()->IsChanged();
+    pSdrView->GetModel()->SetChanged(sal_False);
     const SfxPoolItem* pItem;
     if(pArgs)
-        pArgs->GetItemState(nSlotId, FALSE, &pItem);
+        pArgs->GetItemState(nSlotId, sal_False, &pItem);
 
     switch (nSlotId)
     {
@@ -103,7 +103,7 @@ void SwBezierShell::Execute(SfxRequest &rReq)
             if (pSh->IsObjSelected())
             {
                 if (pSdrView->HasMarkedPoints())
-                    pSh->GetView().GetViewFrame()->GetDispatcher()->Execute(SID_BEZIER_DELETE, FALSE);
+                    pSh->GetView().GetViewFrame()->GetDispatcher()->Execute(SID_BEZIER_DELETE, sal_False);
                 else
                 {
                     pSh->DelSelectedObj();
@@ -140,7 +140,7 @@ void SwBezierShell::Execute(SfxRequest &rReq)
         case SID_BEZIER_INSERT:
             {
                 GetView().GetEditWin().SetBezierMode(nSlotId);
-                static USHORT __READONLY_DATA aInva[] =
+                static sal_uInt16 __READONLY_DATA aInva[] =
                                 {
                                     SID_BEZIER_INSERT,
                                     SID_BEZIER_MOVE,
@@ -200,7 +200,7 @@ void SwBezierShell::Execute(SfxRequest &rReq)
                         {
                             pSdrView->SetMarkedPointsSmooth(eKind);
 
-                            static USHORT __READONLY_DATA aInva[] =
+                            static sal_uInt16 __READONLY_DATA aInva[] =
                                             {
                                                 SID_BEZIER_SMOOTH,
                                                 SID_BEZIER_EDGE,
@@ -236,7 +236,7 @@ void SwBezierShell::Execute(SfxRequest &rReq)
     if (pSdrView->GetModel()->IsChanged())
         GetShell().SetModified();
     else if (bChanged)
-        pSdrView->GetModel()->SetChanged(TRUE);
+        pSdrView->GetModel()->SetChanged(sal_True);
 }
 
 /*--------------------------------------------------------------------
@@ -249,7 +249,7 @@ void SwBezierShell::GetState(SfxItemSet &rSet)
     SdrView* pSdrView = GetShell().GetDrawView();
 
     SfxWhichIter aIter( rSet );
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
 
     while( nWhich )
     {
@@ -258,7 +258,7 @@ void SwBezierShell::GetState(SfxItemSet &rSet)
             case SID_BEZIER_MOVE:
             case SID_BEZIER_INSERT:
             {
-                USHORT nEditMode = GetView().GetEditWin().GetBezierMode();
+                sal_uInt16 nEditMode = GetView().GetEditWin().GetBezierMode();
 
                 rSet.Put(SfxBoolItem(nWhich, nEditMode == nWhich));
             }
@@ -289,8 +289,8 @@ void SwBezierShell::GetState(SfxItemSet &rSet)
                     switch (eSegm)
                     {
                         case SDRPATHSEGMENT_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CONVERT); break;
-                        case SDRPATHSEGMENT_LINE    : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,FALSE)); break; // Button reingedrueckt = Kurve
-                        case SDRPATHSEGMENT_CURVE   : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,TRUE));  break;
+                        case SDRPATHSEGMENT_LINE    : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,sal_False)); break; // Button reingedrueckt = Kurve
+                        case SDRPATHSEGMENT_CURVE   : rSet.Put(SfxBoolItem(SID_BEZIER_CONVERT,sal_True));  break;
                         default:; //prevent warning
                     }
                 }
@@ -304,7 +304,7 @@ void SwBezierShell::GetState(SfxItemSet &rSet)
                 else
                 {
                     SdrPathSmoothKind eSmooth = pSdrView->GetMarkedPointsSmooth();
-                    BOOL bEnable = FALSE;
+                    sal_Bool bEnable = sal_False;
                     switch (eSmooth)
                     {
                         case SDRPATHSMOOTH_DONTCARE  :
@@ -334,8 +334,8 @@ void SwBezierShell::GetState(SfxItemSet &rSet)
                     switch (eClose)
                     {
                         case SDROBJCLOSED_DONTCARE: rSet.InvalidateItem(SID_BEZIER_CLOSE); break;
-                        case SDROBJCLOSED_OPEN    : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,FALSE)); break;
-                        case SDROBJCLOSED_CLOSED  : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,TRUE)); break;
+                        case SDROBJCLOSED_OPEN    : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,sal_False)); break;
+                        case SDROBJCLOSED_CLOSED  : rSet.Put(SfxBoolItem(SID_BEZIER_CLOSE,sal_True)); break;
                         default:; //prevent warning
                     }
                 }

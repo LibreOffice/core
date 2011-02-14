@@ -44,7 +44,7 @@ class SW_DLLPUBLIC SwFmtURL: public SfxPoolItem
     String    sName;            // Name des Anchors
     ImageMap *pMap;             //ClientSide Images
 
-    BOOL      bIsServerMap;     //mit der URL eine ServerSideImageMap
+    sal_Bool      bIsServerMap;     //mit der URL eine ServerSideImageMap
 
     SwFmtURL& operator=( const SwFmtURL& );
 
@@ -64,16 +64,16 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     void SetTargetFrameName( const String& rStr ) { sTargetFrameName = rStr; }
-    void SetURL( const String &rURL, BOOL bServerMap );
+    void SetURL( const String &rURL, sal_Bool bServerMap );
     void SetMap( const ImageMap *pM );  //Pointer wird kopiert!
 
     const String   &GetTargetFrameName()const { return sTargetFrameName; }
     const String   &GetURL()            const { return sURL; }
-          BOOL      IsServerMap()       const { return bIsServerMap; }
+          sal_Bool      IsServerMap()       const { return bIsServerMap; }
     const ImageMap *GetMap()            const { return pMap; }
           ImageMap *GetMap()                  { return pMap; }
 
@@ -82,10 +82,10 @@ public:
 };
 
 
-inline const SwFmtURL &SwAttrSet::GetURL(BOOL bInP) const
+inline const SwFmtURL &SwAttrSet::GetURL(sal_Bool bInP) const
     { return (const SwFmtURL&)Get( RES_URL,bInP); }
 
-inline const SwFmtURL &SwFmt::GetURL(BOOL bInP) const
+inline const SwFmtURL &SwFmt::GetURL(sal_Bool bInP) const
     { return aSet.GetURL(bInP); }
 
 #endif

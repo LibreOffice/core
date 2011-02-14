@@ -46,7 +46,7 @@ TYPEINIT1( SdXMLGroupShapeContext, SvXMLImportContext );
 
 SdXMLGroupShapeContext::SdXMLGroupShapeContext(
     SvXMLImport& rImport,
-    USHORT nPrfx, const OUString& rLocalName,
+    sal_uInt16 nPrfx, const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
@@ -62,7 +62,7 @@ SdXMLGroupShapeContext::~SdXMLGroupShapeContext()
 
 //////////////////////////////////////////////////////////////////////////////
 
-SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext* SdXMLGroupShapeContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {

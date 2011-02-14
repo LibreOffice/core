@@ -49,32 +49,32 @@ ExtMultiLineEdit::~ExtMultiLineEdit()
 {
 }
 
-void ExtMultiLineEdit::InsertText( const String& rNew, BOOL )
+void ExtMultiLineEdit::InsertText( const String& rNew, sal_Bool )
 {
-    GetTextView()->InsertText( rNew, FALSE );
+    GetTextView()->InsertText( rNew, sal_False );
 }
 
-void ExtMultiLineEdit::SetAutoScroll( BOOL bAutoScroll )
+void ExtMultiLineEdit::SetAutoScroll( sal_Bool bAutoScroll )
 {
     GetTextView()->SetAutoScroll( bAutoScroll );
 }
 
-void ExtMultiLineEdit::EnableCursor( BOOL bEnable )
+void ExtMultiLineEdit::EnableCursor( sal_Bool bEnable )
 {
     GetTextView()->EnableCursor( bEnable );
 }
 
-void ExtMultiLineEdit::SetAttrib( const TextAttrib& rAttr, ULONG nPara, USHORT nStart, USHORT nEnd )
+void ExtMultiLineEdit::SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd )
 {
     GetTextEngine()->SetAttrib( rAttr, nPara, nStart, nEnd );
 }
 
-void ExtMultiLineEdit::SetLeftMargin( USHORT nLeftMargin )
+void ExtMultiLineEdit::SetLeftMargin( sal_uInt16 nLeftMargin )
 {
     GetTextEngine()->SetLeftMargin( nLeftMargin );
 }
 
-ULONG ExtMultiLineEdit::GetParagraphCount() const
+sal_uLong ExtMultiLineEdit::GetParagraphCount() const
 {
     return GetTextEngine()->GetParagraphCount();
 }

@@ -35,18 +35,18 @@
 
 // -----------------------------------------------------------------------------
 
-BOOL ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem )
+sal_Bool ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, FilterConfigItem* pConfigItem )
 {
-    UINT32 nMetaType;
-    UINT32 nOrgPos = rStreamWMF.Tell();
-    UINT16 nOrigNumberFormat = rStreamWMF.GetNumberFormatInt();
+    sal_uInt32 nMetaType;
+    sal_uInt32 nOrgPos = rStreamWMF.Tell();
+    sal_uInt16 nOrigNumberFormat = rStreamWMF.GetNumberFormatInt();
     rStreamWMF.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     rStreamWMF.Seek( 0x28 );
     rStreamWMF >> nMetaType;
     rStreamWMF.Seek( nOrgPos );
     if ( nMetaType == 0x464d4520 )
     {
-        if ( EnhWMFReader( rStreamWMF, rGDIMetaFile, pConfigItem ).ReadEnhWMF() == FALSE )
+        if ( EnhWMFReader( rStreamWMF, rGDIMetaFile, pConfigItem ).ReadEnhWMF() == sal_False )
             rStreamWMF.SetError( SVSTREAM_FILEFORMAT_ERROR );
     }
     else
@@ -59,18 +59,18 @@ BOOL ConvertWMFToGDIMetaFile( SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile,
 
 // -----------------------------------------------------------------------------
 
-BOOL ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem* pFilterConfigItem )
+sal_Bool ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem* pFilterConfigItem )
 {
-    UINT32 nMetaType;
-    UINT32 nOrgPos = rStream.Tell();
-    UINT16 nOrigNumberFormat = rStream.GetNumberFormatInt();
+    sal_uInt32 nMetaType;
+    sal_uInt32 nOrgPos = rStream.Tell();
+    sal_uInt16 nOrigNumberFormat = rStream.GetNumberFormatInt();
     rStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     rStream.Seek( 0x28 );
     rStream >> nMetaType;
     rStream.Seek( nOrgPos );
     if ( nMetaType == 0x464d4520 )
     {
-        if ( EnhWMFReader( rStream, rMTF, NULL ).ReadEnhWMF() == FALSE )
+        if ( EnhWMFReader( rStream, rMTF, NULL ).ReadEnhWMF() == sal_False )
             rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
     }
     else
@@ -83,8 +83,8 @@ BOOL ReadWindowMetafile( SvStream& rStream, GDIMetaFile& rMTF, FilterConfigItem*
 
 // -----------------------------------------------------------------------------
 
-BOOL ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
-                              FilterConfigItem* pConfigItem, BOOL bPlaceable)
+sal_Bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
+                              FilterConfigItem* pConfigItem, sal_Bool bPlaceable)
 {
     WMFWriter aWMFWriter;
     return aWMFWriter.WriteWMF( rMTF, rTargetStream, pConfigItem, bPlaceable );
@@ -92,7 +92,7 @@ BOOL ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream
 
 // -----------------------------------------------------------------------------
 
-BOOL ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
+sal_Bool ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
                               FilterConfigItem* pConfigItem )
 {
     EMFWriter aEMFWriter;
@@ -101,14 +101,14 @@ BOOL ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetStream
 
 // -----------------------------------------------------------------------------
 
-BOOL WriteWindowMetafile( SvStream& rStream, const GDIMetaFile& rMTF )
+sal_Bool WriteWindowMetafile( SvStream& rStream, const GDIMetaFile& rMTF )
 {
     return WMFWriter().WriteWMF( rMTF, rStream, NULL );
 }
 
 // -----------------------------------------------------------------------------
 
-BOOL WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF )
+sal_Bool WriteWindowMetafileBits( SvStream& rStream, const GDIMetaFile& rMTF )
 {
-    return WMFWriter().WriteWMF( rMTF, rStream, NULL, FALSE );
+    return WMFWriter().WriteWMF( rMTF, rStream, NULL, sal_False );
 }

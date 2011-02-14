@@ -106,7 +106,7 @@ private:
     ScOutputType eType;         // Bildschirm/Drucker ...
     double nPPTX;               // Pixel per Twips
     double nPPTY;
-//  USHORT nZoom;               // Zoom-Faktor (Prozent) - fuer GetFont
+//  sal_uInt16 nZoom;               // Zoom-Faktor (Prozent) - fuer GetFont
     Fraction aZoomX;
     Fraction aZoomY;
 
@@ -117,61 +117,61 @@ private:
     // #114135#
     FmFormView* pDrawView;      // SdrView to paint to
 
-    BOOL bEditMode;             // InPlace editierte Zelle - nicht ausgeben
+    sal_Bool bEditMode;             // InPlace editierte Zelle - nicht ausgeben
     SCCOL nEditCol;
     SCROW nEditRow;
 
-    BOOL bMetaFile;             // Ausgabe auf Metafile (nicht in Pixeln!)
-    BOOL bSingleGrid;           // beim Gitter bChanged auswerten
+    sal_Bool bMetaFile;             // Ausgabe auf Metafile (nicht in Pixeln!)
+    sal_Bool bSingleGrid;           // beim Gitter bChanged auswerten
 
-    BOOL bPagebreakMode;        // Seitenumbruch-Vorschau
-    BOOL bSolidBackground;      // weiss statt transparent
+    sal_Bool bPagebreakMode;        // Seitenumbruch-Vorschau
+    sal_Bool bSolidBackground;      // weiss statt transparent
 
-    BOOL bUseStyleColor;
-    BOOL bForceAutoColor;
+    sal_Bool bUseStyleColor;
+    sal_Bool bForceAutoColor;
 
-    BOOL bSyntaxMode;           // Syntax-Highlighting
+    sal_Bool bSyntaxMode;           // Syntax-Highlighting
     Color* pValueColor;
     Color* pTextColor;
     Color* pFormulaColor;
 
     Color   aGridColor;
 
-    BOOL    bShowNullValues;
-    BOOL    bShowFormulas;
-    BOOL    bShowSpellErrors;   // Spell-Errors in EditObjekten anzeigen
-    BOOL    bMarkClipped;
+    sal_Bool    bShowNullValues;
+    sal_Bool    bShowFormulas;
+    sal_Bool    bShowSpellErrors;   // Spell-Errors in EditObjekten anzeigen
+    sal_Bool    bMarkClipped;
 
-    BOOL    bSnapPixel;
+    sal_Bool    bSnapPixel;
 
-    BOOL    bAnyRotated;        // intern
-    BOOL    bAnyClipped;        // intern
-    BOOL    bTabProtected;
-    BYTE    nTabTextDirection;  // EEHorizontalTextDirection values
-    BOOL    bLayoutRTL;
+    sal_Bool    bAnyRotated;        // intern
+    sal_Bool    bAnyClipped;        // intern
+    sal_Bool    bTabProtected;
+    sal_uInt8   nTabTextDirection;  // EEHorizontalTextDirection values
+    sal_Bool    bLayoutRTL;
 
     // #i74769# use SdrPaintWindow direct, remember it during BeginDrawLayers/EndDrawLayers
     SdrPaintWindow*     mpTargetPaintWindow;
 
                             // private methods
 
-    BOOL            GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
-                                    SCCOL& rOverX, SCROW& rOverY, BOOL bVisRowChanged );
-    BOOL            IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW nY );
+    sal_Bool            GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
+                                    SCCOL& rOverX, SCROW& rOverY, sal_Bool bVisRowChanged );
+    sal_Bool            IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW nY );
     void            GetVisibleCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell*& rpCell );
 
-    BOOL            IsAvailable( SCCOL nX, SCROW nY );
+    sal_Bool            IsAvailable( SCCOL nX, SCROW nY );
 
     void            GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY,
                                    SCCOL nCellX, SCROW nCellY, long nNeeded,
                                    const ScPatternAttr& rPattern,
-                                   USHORT nHorJustify, bool bCellIsValue,
+                                   sal_uInt16 nHorJustify, bool bCellIsValue,
                                    bool bBreak, bool bOverwrite,
                                    OutputAreaParam& rParam );
 
     void            ShrinkEditEngine( EditEngine& rEngine, const Rectangle& rAlignRect,
                                     long nLeftM, long nTopM, long nRightM, long nBottomM,
-                                    BOOL bWidth, USHORT nOrient, long nAttrRotate, BOOL bPixelToLogic,
+                                    sal_Bool bWidth, sal_uInt16 nOrient, long nAttrRotate, sal_Bool bPixelToLogic,
                                     long& rEngineWidth, long& rEngineHeight, long& rNeededPixel,
                                     bool& rLeftClip, bool& rRightClip );
 
@@ -203,36 +203,36 @@ public:
     // #114135#
     void    SetDrawView( FmFormView* pNew )     { pDrawView = pNew; }
 
-    void    SetSolidBackground( BOOL bSet )     { bSolidBackground = bSet; }
-    void    SetUseStyleColor( BOOL bSet )       { bUseStyleColor = bSet; }
+    void    SetSolidBackground( sal_Bool bSet )     { bSolidBackground = bSet; }
+    void    SetUseStyleColor( sal_Bool bSet )       { bUseStyleColor = bSet; }
 
     void    SetEditCell( SCCOL nCol, SCROW nRow );
-    void    SetSyntaxMode( BOOL bNewMode );
-    void    SetMetaFileMode( BOOL bNewMode );
-    void    SetSingleGrid( BOOL bNewMode );
+    void    SetSyntaxMode( sal_Bool bNewMode );
+    void    SetMetaFileMode( sal_Bool bNewMode );
+    void    SetSingleGrid( sal_Bool bNewMode );
     void    SetGridColor( const Color& rColor );
-    void    SetMarkClipped( BOOL bSet );
-    void    SetShowNullValues ( BOOL bSet = TRUE );
-    void    SetShowFormulas   ( BOOL bSet = TRUE );
-    void    SetShowSpellErrors( BOOL bSet = TRUE );
+    void    SetMarkClipped( sal_Bool bSet );
+    void    SetShowNullValues ( sal_Bool bSet = sal_True );
+    void    SetShowFormulas   ( sal_Bool bSet = sal_True );
+    void    SetShowSpellErrors( sal_Bool bSet = sal_True );
     void    SetMirrorWidth( long nNew );
     long    GetScrW() const     { return nScrW; }
     long    GetScrH() const     { return nScrH; }
 
-    void    SetSnapPixel( BOOL bSet = TRUE );
+    void    SetSnapPixel( sal_Bool bSet = sal_True );
 
-    void    DrawGrid( BOOL bGrid, BOOL bPage );
-    void    DrawStrings( BOOL bPixelToLogic = FALSE );
+    void    DrawGrid( sal_Bool bGrid, sal_Bool bPage );
+    void    DrawStrings( sal_Bool bPixelToLogic = sal_False );
     void    DrawBackground();
     void    DrawShadow();
-    void    DrawExtraShadow(BOOL bLeft, BOOL bTop, BOOL bRight, BOOL bBottom);
+    void    DrawExtraShadow(sal_Bool bLeft, sal_Bool bTop, sal_Bool bRight, sal_Bool bBottom);
     void    DrawFrame();
 
                     // with logic MapMode set!
-    void    DrawEdit(BOOL bPixelToLogic);
+    void    DrawEdit(sal_Bool bPixelToLogic);
 
     void    FindRotated();
-    void    DrawRotated(BOOL bPixelToLogic);        // logisch
+    void    DrawRotated(sal_Bool bPixelToLogic);        // logisch
 
     void    DrawClear();
 
@@ -245,7 +245,7 @@ public:
     void    DrawingSingle(const sal_uInt16 nLayer);
     void    DrawSelectiveObjects(const sal_uInt16 nLayer);
 
-    BOOL    SetChangedClip();       // FALSE = nix
+    sal_Bool    SetChangedClip();       // sal_False = nix
     PolyPolygon GetChangedArea();
 
     void    FindChanged();
@@ -255,10 +255,10 @@ public:
 #endif
     void    DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
                          SCCOL nRefEndX, SCROW nRefEndY,
-                         const Color& rColor, BOOL bHandle );
+                         const Color& rColor, sal_Bool bHandle );
     void    DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
                             SCCOL nRefEndX, SCROW nRefEndY,
-                            const Color& rColor, USHORT nType );
+                            const Color& rColor, sal_uInt16 nType );
     void    DrawChangeTrack();
     void    DrawClipMarks();
 

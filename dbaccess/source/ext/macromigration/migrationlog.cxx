@@ -397,7 +397,7 @@ namespace dbmm
         }
 
         //----------------------------------------------------------------
-        void lcl_describeErrors( ::rtl::OUStringBuffer& _rBuffer, const ErrorLog& _rErrors, const USHORT _nHeadingResId )
+        void lcl_describeErrors( ::rtl::OUStringBuffer& _rBuffer, const ErrorLog& _rErrors, const sal_uInt16 _nHeadingResId )
         {
             _rBuffer.appendAscii( "=== " );
             _rBuffer.append     ( String( MacroMigrationResId( _nHeadingResId ) ) );

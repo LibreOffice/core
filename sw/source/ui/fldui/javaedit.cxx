@@ -91,8 +91,8 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
     aNextBtn        ( this, SW_RES( BTN_NEXT ) ),
     aHelpBtn        ( this, SW_RES( BTN_POST_HELP ) ),
 
-    bNew(TRUE),
-    bIsUrl(FALSE),
+    bNew(sal_True),
+    bIsUrl(sal_False),
 
     pSh(pWrtSh),
     pFileDlg(NULL),
@@ -210,8 +210,8 @@ void SwJavaEditDialog::Apply()
 
 void SwJavaEditDialog::CheckTravel()
 {
-    BOOL bTravel = FALSE;
-    BOOL bNext(FALSE), bPrev(FALSE);
+    sal_Bool bTravel = sal_False;
+    sal_Bool bNext(sal_False), bPrev(sal_False);
 
     if(!bNew)
     {
@@ -299,7 +299,7 @@ void SwJavaEditDialog::SetFld()
         aType = String::CreateFromAscii("JavaScript");
 }
 
-BOOL SwJavaEditDialog::IsUpdate()
+sal_Bool SwJavaEditDialog::IsUpdate()
 {
     return pFld && ( bIsUrl != pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
 }
@@ -310,7 +310,7 @@ BOOL SwJavaEditDialog::IsUpdate()
 
 IMPL_LINK( SwJavaEditDialog, RadioButtonHdl, RadioButton *, EMPTYARG )
 {
-    BOOL bEnable = aUrlRB.IsChecked();
+    sal_Bool bEnable = aUrlRB.IsChecked();
     aUrlPB.Enable(bEnable);
     aUrlED.Enable(bEnable);
     aEditED.Enable(!bEnable);
@@ -323,7 +323,7 @@ IMPL_LINK( SwJavaEditDialog, RadioButtonHdl, RadioButton *, EMPTYARG )
         aEditED.SetReadOnly( !bEnable);
         aTypeED.SetReadOnly( !bEnable);
         if( aUrlPB.IsEnabled() && !bEnable )
-            aUrlPB.Enable( FALSE );
+            aUrlPB.Enable( sal_False );
     }
     return 0;
 }

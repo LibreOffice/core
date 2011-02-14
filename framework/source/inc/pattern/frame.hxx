@@ -92,7 +92,7 @@ inline css::uno::Reference< css::frame::XModel > extractFrameModel(const css::un
             the right owner in case closing failed.
 
     @return [bool]
-            TRUE if closing failed.
+            sal_True if closing failed.
  */
 inline sal_Bool closeIt(const css::uno::Reference< css::uno::XInterface >& xResource         ,
                        sal_Bool                                     bDelegateOwnerShip)

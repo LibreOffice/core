@@ -41,13 +41,13 @@
 |*
 *************************************************************************/
 
-BOOL DateTime::IsBetween( const DateTime& rFrom,
+sal_Bool DateTime::IsBetween( const DateTime& rFrom,
                           const DateTime& rTo ) const
 {
     if ( (*this >= rFrom) && (*this <= rTo) )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
 /*************************************************************************
@@ -60,13 +60,13 @@ BOOL DateTime::IsBetween( const DateTime& rFrom,
 |*
 *************************************************************************/
 
-BOOL DateTime::operator >( const DateTime& rDateTime ) const
+sal_Bool DateTime::operator >( const DateTime& rDateTime ) const
 {
     if ( (Date::operator>( rDateTime )) ||
          (Date::operator==( rDateTime ) && Time::operator>( rDateTime )) )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
 /*************************************************************************
@@ -79,13 +79,13 @@ BOOL DateTime::operator >( const DateTime& rDateTime ) const
 |*
 *************************************************************************/
 
-BOOL DateTime::operator <( const DateTime& rDateTime ) const
+sal_Bool DateTime::operator <( const DateTime& rDateTime ) const
 {
     if ( (Date::operator<( rDateTime )) ||
          (Date::operator==( rDateTime ) && Time::operator<( rDateTime )) )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
 /*************************************************************************
@@ -98,13 +98,13 @@ BOOL DateTime::operator <( const DateTime& rDateTime ) const
 |*
 *************************************************************************/
 
-BOOL DateTime::operator >=( const DateTime& rDateTime ) const
+sal_Bool DateTime::operator >=( const DateTime& rDateTime ) const
 {
     if ( (Date::operator>( rDateTime )) ||
          (Date::operator==( rDateTime ) && Time::operator>=( rDateTime )) )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
 /*************************************************************************
@@ -117,13 +117,13 @@ BOOL DateTime::operator >=( const DateTime& rDateTime ) const
 |*
 *************************************************************************/
 
-BOOL DateTime::operator <=( const DateTime& rDateTime ) const
+sal_Bool DateTime::operator <=( const DateTime& rDateTime ) const
 {
     if ( (Date::operator<( rDateTime )) ||
          (Date::operator==( rDateTime ) && Time::operator<=( rDateTime )) )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
 /*************************************************************************
@@ -161,14 +161,14 @@ long DateTime::GetSecFromDateTime( const Date& rDate ) const
 |*
 *************************************************************************/
 
-void DateTime::MakeDateTimeFromSec( const Date& rDate, ULONG nSec )
+void DateTime::MakeDateTimeFromSec( const Date& rDate, sal_uIntPtr nSec )
 {
     long nDays = nSec / (24UL*60*60);
     ((Date*)this)->operator=( rDate );
     nSec -= nDays * (24UL*60*60);
-    USHORT nMin = (USHORT)(nSec / 60);
+    sal_uInt16 nMin = (sal_uInt16)(nSec / 60);
     nSec -= nMin * 60;
-    ((Time*)this)->operator=( Time( 0, nMin, (USHORT)nSec ) );
+    ((Time*)this)->operator=( Time( 0, nMin, (sal_uInt16)nSec ) );
     operator+=( nDays );
 }
 
@@ -186,7 +186,7 @@ DateTime& DateTime::operator +=( const Time& rTime )
 {
     Time aTime = *this;
     aTime += rTime;
-    USHORT nHours = aTime.GetHour();
+    sal_uInt16 nHours = aTime.GetHour();
     if ( aTime.GetTime() > 0 )
     {
         while ( nHours >= 24 )
@@ -225,7 +225,7 @@ DateTime& DateTime::operator -=( const Time& rTime )
 {
     Time aTime = *this;
     aTime -= rTime;
-    USHORT nHours = aTime.GetHour();
+    sal_uInt16 nHours = aTime.GetHour();
     if ( aTime.GetTime() > 0 )
     {
         while ( nHours >= 24 )
@@ -421,22 +421,22 @@ DateTime DateTime::CreateFromWin32FileDateTime( const sal_uInt32 & rLower, const
           ( nDays / ( 400 * 365 ) ) ) / 365;
     nDays -= nYears * 365 + nYears / 4 - nYears / 100 + nYears / 400;
 
-    USHORT nMonths = 0;
+    sal_uInt16 nMonths = 0;
     for( sal_Int64 nDaysCount = nDays; nDaysCount >= 0; )
     {
         nDays = nDaysCount;
         nMonths ++;
         nDaysCount -= Date(
-            1, nMonths, sal::static_int_cast< USHORT >(1601 + nYears) ).
+            1, nMonths, sal::static_int_cast< sal_uInt16 >(1601 + nYears) ).
             GetDaysInMonth();
     }
 
     Date _aDate(
-        (USHORT)( nDays + 1 ), nMonths,
-        sal::static_int_cast< USHORT >(nYears + 1601) );
-    Time _aTime( ULONG( ( aTime / ( a100nPerSecond * 60 * 60 ) ) % sal_Int64( 24 ) ),
-            ULONG( ( aTime / ( a100nPerSecond * 60 ) ) % sal_Int64( 60 ) ),
-            ULONG( ( aTime / ( a100nPerSecond ) ) % sal_Int64( 60 ) ) );
+        (sal_uInt16)( nDays + 1 ), nMonths,
+        sal::static_int_cast< sal_uInt16 >(nYears + 1601) );
+    Time _aTime( sal_uIntPtr( ( aTime / ( a100nPerSecond * 60 * 60 ) ) % sal_Int64( 24 ) ),
+            sal_uIntPtr( ( aTime / ( a100nPerSecond * 60 ) ) % sal_Int64( 60 ) ),
+            sal_uIntPtr( ( aTime / ( a100nPerSecond ) ) % sal_Int64( 60 ) ) );
 
     return DateTime( _aDate, _aTime );
 }

@@ -45,7 +45,7 @@ DBG_NAME(SfxControllerItem);
 //--------------------------------------------------------------------
 #ifdef DBG_UTIL
 
-void SfxControllerItem::CheckConfigure_Impl( ULONG nType )
+void SfxControllerItem::CheckConfigure_Impl( sal_uIntPtr nType )
 {
     // echter Slot? (also kein Separator etc.)
     if ( !nId )
@@ -77,9 +77,9 @@ SfxControllerItem* SfxControllerItem::GetItemLink()
 
 //--------------------------------------------------------------------
 
-// returns TRUE if this binding is really bound to a function
+// returns sal_True if this binding is really bound to a function
 
-BOOL SfxControllerItem::IsBound() const
+sal_Bool SfxControllerItem::IsBound() const
 {
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxControllerItem, 0);
@@ -90,13 +90,13 @@ BOOL SfxControllerItem::IsBound() const
 
 // returns the associated function-id or 0 if none
 
-// USHORT SfxControllerItem::GetId() const;
+// sal_uInt16 SfxControllerItem::GetId() const;
 
 //====================================================================
 
 // registeres with the id at the bindings
 
-void SfxControllerItem::Bind( USHORT nNewId, SfxBindings *pBindinx )
+void SfxControllerItem::Bind( sal_uInt16 nNewId, SfxBindings *pBindinx )
 {
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxControllerItem, 0);
@@ -115,7 +115,7 @@ void SfxControllerItem::Bind( USHORT nNewId, SfxBindings *pBindinx )
     pBindings->Register(*this);
 }
 
-void SfxControllerItem::BindInternal_Impl( USHORT nNewId, SfxBindings *pBindinx )
+void SfxControllerItem::BindInternal_Impl( sal_uInt16 nNewId, SfxBindings *pBindinx )
 {
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxControllerItem, 0);
@@ -261,7 +261,7 @@ SfxControllerItem* SfxControllerItem::ChangeItemLink( SfxControllerItem* pNewLin
 
 // changes the id of unbound functions (e.g. for sub-menu-ids)
 
-void SfxControllerItem::SetId( USHORT nItemId )
+void SfxControllerItem::SetId( sal_uInt16 nItemId )
 {
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxControllerItem, 0);
@@ -286,7 +286,7 @@ SfxControllerItem::SfxControllerItem():
 
 // creates a representation of the function nId and registeres it
 
-SfxControllerItem::SfxControllerItem( USHORT nID, SfxBindings &rBindings ):
+SfxControllerItem::SfxControllerItem( sal_uInt16 nID, SfxBindings &rBindings ):
     nId(nID),
     pNext(this),
     pBindings(&rBindings)
@@ -312,7 +312,7 @@ SfxControllerItem::~SfxControllerItem()
 
 void SfxControllerItem::StateChanged
 (
-    USHORT              ,   // <SID> des ausl"osenden Slot
+    sal_uInt16              ,   // <SID> des ausl"osenden Slot
     SfxItemState        ,   // <SfxItemState> von 'pState'
     const SfxPoolItem*      // Slot-Status, ggf. 0 oder IsInvalidItem()
 )
@@ -352,7 +352,7 @@ void SfxControllerItem::DeleteFloatingWindow()
 
 void SfxStatusForwarder::StateChanged
 (
-    USHORT              nSID,       // <SID> des ausl"osenden Slot
+    sal_uInt16              nSID,       // <SID> des ausl"osenden Slot
     SfxItemState        eState,     // <SfxItemState> von 'pState'
     const SfxPoolItem*  pState      // Slot-Status, ggf. 0 oder IsInvalidItem()
 )
@@ -364,7 +364,7 @@ void SfxStatusForwarder::StateChanged
 //--------------------------------------------------------------------
 
 SfxStatusForwarder::SfxStatusForwarder(
-            USHORT              nSlotId,
+            sal_uInt16              nSlotId,
             SfxControllerItem&  rMaster ):
     SfxControllerItem( nSlotId, rMaster.GetBindings() ),
     pMaster( &rMaster )
@@ -448,7 +448,7 @@ SfxMapUnit SfxControllerItem::GetCoreMetric() const
         {
             SfxShell *pSh = pDispat->GetShell( pServer->GetShellLevel() );
             SfxItemPool &rPool = pSh->GetPool();
-            USHORT nWhich = rPool.GetWhich( nId );
+            sal_uInt16 nWhich = rPool.GetWhich( nId );
             return rPool.GetMetric( nWhich );
         }
     }

@@ -612,7 +612,7 @@ static ImplFontAttrWidthSearchData const aImplWidthAttrSearchList[] =
 struct ImplFontAttrTypeSearchData
 {
     const char*             mpStr;
-    ULONG                   mnType;
+    sal_uLong                   mnType;
 };
 
 static ImplFontAttrTypeSearchData const aImplTypeAttrSearchList[] =
@@ -776,23 +776,23 @@ static bool ImplKillTrailingWithExceptions( String& rName, const char* const* pp
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplFindAndErase( String& rName, const char* pStr )
+static sal_Bool ImplFindAndErase( String& rName, const char* pStr )
 {
     xub_StrLen nPos = rName.SearchAscii( pStr );
     if ( nPos == STRING_NOTFOUND )
-        return FALSE;
+        return sal_False;
 
     const char* pTempStr = pStr;
     while ( *pTempStr )
         pTempStr++;
     rName.Erase( nPos, (xub_StrLen)(pTempStr-pStr) );
-    return TRUE;
+    return sal_True;
 }
 
 // =======================================================================
 
 void FontSubstConfiguration::getMapName( const String& rOrgName, String& rShortName,
-    String& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, ULONG& rType )
+    String& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, sal_uLong& rType )
 {
     rShortName = rOrgName;
 

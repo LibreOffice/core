@@ -57,13 +57,13 @@ class VCL_DLLPUBLIC KeyEvent
 {
 private:
     KeyCode         maKeyCode;
-    USHORT          mnRepeat;
+    sal_uInt16          mnRepeat;
     xub_Unicode     mnCharCode;
 
 public:
                     KeyEvent();
                     KeyEvent( xub_Unicode nChar, const KeyCode& rKeyCode,
-                              USHORT nRepeat = 0 );
+                              sal_uInt16 nRepeat = 0 );
 
                     /** inits this vcl KeyEvent with all settings from the given awt event **/
                     KeyEvent( const ::com::sun::star::awt::KeyEvent& rEvent );
@@ -73,7 +73,7 @@ public:
 
     xub_Unicode     GetCharCode() const     { return mnCharCode; }
     const KeyCode&  GetKeyCode() const      { return maKeyCode;  }
-    USHORT          GetRepeat() const       { return mnRepeat;   }
+    sal_uInt16          GetRepeat() const       { return mnRepeat;   }
 
     KeyEvent        LogicalTextDirectionality (TextDirectionality eMode) const;
                     KeyEvent (const KeyEvent& rKeyEvent);
@@ -87,7 +87,7 @@ inline KeyEvent::KeyEvent()
 }
 
 inline KeyEvent::KeyEvent( xub_Unicode nChar, const KeyCode& rKeyCode,
-                           USHORT nRepeat ) :
+                           sal_uInt16 nRepeat ) :
             maKeyCode( rKeyCode )
 
 {
@@ -100,24 +100,24 @@ inline KeyEvent::KeyEvent( xub_Unicode nChar, const KeyCode& rKeyCode,
 // --------------------
 
 // Maus-Move-Modi
-#define MOUSE_SIMPLEMOVE        ((USHORT)0x0001)
-#define MOUSE_DRAGMOVE          ((USHORT)0x0002)
-#define MOUSE_DRAGCOPY          ((USHORT)0x0004)
-#define MOUSE_ENTERWINDOW       ((USHORT)0x0010)
-#define MOUSE_LEAVEWINDOW       ((USHORT)0x0020)
-#define MOUSE_SYNTHETIC         ((USHORT)0x0040)
-#define MOUSE_MODIFIERCHANGED   ((USHORT)0x0080)
+#define MOUSE_SIMPLEMOVE        ((sal_uInt16)0x0001)
+#define MOUSE_DRAGMOVE          ((sal_uInt16)0x0002)
+#define MOUSE_DRAGCOPY          ((sal_uInt16)0x0004)
+#define MOUSE_ENTERWINDOW       ((sal_uInt16)0x0010)
+#define MOUSE_LEAVEWINDOW       ((sal_uInt16)0x0020)
+#define MOUSE_SYNTHETIC         ((sal_uInt16)0x0040)
+#define MOUSE_MODIFIERCHANGED   ((sal_uInt16)0x0080)
 
 // Maus-Button-Down/Up-Modi
-#define MOUSE_SIMPLECLICK       ((USHORT)0x0001)
-#define MOUSE_SELECT            ((USHORT)0x0002)
-#define MOUSE_MULTISELECT       ((USHORT)0x0004)
-#define MOUSE_RANGESELECT       ((USHORT)0x0008)
+#define MOUSE_SIMPLECLICK       ((sal_uInt16)0x0001)
+#define MOUSE_SELECT            ((sal_uInt16)0x0002)
+#define MOUSE_MULTISELECT       ((sal_uInt16)0x0004)
+#define MOUSE_RANGESELECT       ((sal_uInt16)0x0008)
 
 // Maus-Buttons
-#define MOUSE_LEFT              ((USHORT)0x0001)
-#define MOUSE_MIDDLE            ((USHORT)0x0002)
-#define MOUSE_RIGHT             ((USHORT)0x0004)
+#define MOUSE_LEFT              ((sal_uInt16)0x0001)
+#define MOUSE_MIDDLE            ((sal_uInt16)0x0002)
+#define MOUSE_RIGHT             ((sal_uInt16)0x0004)
 
 // --------------
 // - MouseEvent -
@@ -127,53 +127,53 @@ class VCL_DLLPUBLIC MouseEvent
 {
 private:
     Point           maPos;
-    USHORT          mnMode;
-    USHORT          mnClicks;
-    USHORT          mnCode;
+    sal_uInt16          mnMode;
+    sal_uInt16          mnClicks;
+    sal_uInt16          mnCode;
 
 public:
                     MouseEvent();
-                    MouseEvent( const Point& rPos, USHORT nClicks = 1,
-                                USHORT nMode = 0, USHORT nButtons = 0,
-                                USHORT nModifier = 0 );
+                    MouseEvent( const Point& rPos, sal_uInt16 nClicks = 1,
+                                sal_uInt16 nMode = 0, sal_uInt16 nButtons = 0,
+                                sal_uInt16 nModifier = 0 );
 
     const Point&    GetPosPixel() const     { return maPos; }
-    USHORT          GetMode() const         { return mnMode; }
+    sal_uInt16          GetMode() const         { return mnMode; }
                     /** inits this vcl KeyEvent with all settings from the given awt event **/
                     MouseEvent( const ::com::sun::star::awt::MouseEvent& rEvent );
 
     /** fills out the given awt KeyEvent with all settings from this vcl event **/
     void InitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent ) const;
 
-    USHORT          GetClicks() const       { return mnClicks; }
+    sal_uInt16          GetClicks() const       { return mnClicks; }
 
-    BOOL            IsEnterWindow() const
+    sal_Bool            IsEnterWindow() const
                         { return ((mnMode & MOUSE_ENTERWINDOW) != 0); }
-    BOOL            IsLeaveWindow() const
+    sal_Bool            IsLeaveWindow() const
                         { return ((mnMode & MOUSE_LEAVEWINDOW) != 0); }
-    BOOL            IsSynthetic() const
+    sal_Bool            IsSynthetic() const
                         { return ((mnMode & MOUSE_SYNTHETIC) != 0); }
-    BOOL            IsModifierChanged() const
+    sal_Bool            IsModifierChanged() const
                         { return ((mnMode & MOUSE_MODIFIERCHANGED) != 0); }
 
-    USHORT          GetButtons() const
+    sal_uInt16          GetButtons() const
                         { return (mnCode & (MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT)); }
-    BOOL            IsLeft() const
+    sal_Bool            IsLeft() const
                         { return ((mnCode & MOUSE_LEFT) != 0); }
-    BOOL            IsMiddle() const
+    sal_Bool            IsMiddle() const
                         { return ((mnCode & MOUSE_MIDDLE) != 0); }
-    BOOL            IsRight() const
+    sal_Bool            IsRight() const
                         { return ((mnCode & MOUSE_RIGHT) != 0); }
 
-    USHORT          GetModifier() const
+    sal_uInt16          GetModifier() const
                         { return (mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)); }
-    BOOL            IsShift() const
+    sal_Bool            IsShift() const
                         { return ((mnCode & KEY_SHIFT) != 0); }
-    BOOL            IsMod1() const
+    sal_Bool            IsMod1() const
                         { return ((mnCode & KEY_MOD1) != 0); }
-    BOOL            IsMod2() const
+    sal_Bool            IsMod2() const
                         { return ((mnCode & KEY_MOD2) != 0); }
-    BOOL            IsMod3() const
+    sal_Bool            IsMod3() const
                         { return ((mnCode & KEY_MOD3) != 0); }
 };
 
@@ -184,9 +184,9 @@ inline MouseEvent::MouseEvent()
     mnCode      = 0;
 }
 
-inline MouseEvent::MouseEvent( const Point& rPos, USHORT nClicks,
-                               USHORT nMode,
-                               USHORT nButtons, USHORT nModifier ) :
+inline MouseEvent::MouseEvent( const Point& rPos, sal_uInt16 nClicks,
+                               sal_uInt16 nMode,
+                               sal_uInt16 nButtons, sal_uInt16 nModifier ) :
             maPos( rPos )
 {
     mnClicks    = nClicks;
@@ -198,46 +198,46 @@ inline MouseEvent::MouseEvent( const Point& rPos, USHORT nClicks,
 // - HelpEvent -
 // -------------
 
-#define HELPMODE_CONTEXT        ((USHORT)0x0001)
-#define HELPMODE_EXTENDED       ((USHORT)0x0002)
-#define HELPMODE_BALLOON        ((USHORT)0x0004)
-#define HELPMODE_QUICK          ((USHORT)0x0008)
+#define HELPMODE_CONTEXT        ((sal_uInt16)0x0001)
+#define HELPMODE_EXTENDED       ((sal_uInt16)0x0002)
+#define HELPMODE_BALLOON        ((sal_uInt16)0x0004)
+#define HELPMODE_QUICK          ((sal_uInt16)0x0008)
 
 class VCL_DLLPUBLIC HelpEvent
 {
 private:
     Point           maPos;
-    USHORT          mnMode;
-    BOOL            mbKeyboardActivated;
+    sal_uInt16          mnMode;
+    sal_Bool            mbKeyboardActivated;
 
 public:
                     HelpEvent();
-                    HelpEvent( USHORT nHelpMode );
-                    HelpEvent( const Point& rMousePos, USHORT nHelpMode );
+                    HelpEvent( sal_uInt16 nHelpMode );
+                    HelpEvent( const Point& rMousePos, sal_uInt16 nHelpMode );
 
     const Point&    GetMousePosPixel() const;
-    USHORT          GetMode() const { return mnMode; }
-    BOOL            KeyboardActivated() const { return mbKeyboardActivated; }
-    void            SetKeyboardActivated( BOOL bKeyboard ) { mbKeyboardActivated = bKeyboard; }
+    sal_uInt16          GetMode() const { return mnMode; }
+    sal_Bool            KeyboardActivated() const { return mbKeyboardActivated; }
+    void            SetKeyboardActivated( sal_Bool bKeyboard ) { mbKeyboardActivated = bKeyboard; }
 };
 
 inline HelpEvent::HelpEvent()
 {
     mnMode  = HELPMODE_CONTEXT;
-    mbKeyboardActivated = TRUE;
+    mbKeyboardActivated = sal_True;
 }
 
-inline HelpEvent::HelpEvent( const Point& rMousePos, USHORT nHelpMode ) :
+inline HelpEvent::HelpEvent( const Point& rMousePos, sal_uInt16 nHelpMode ) :
             maPos( rMousePos )
 {
     mnMode  = nHelpMode;
-    mbKeyboardActivated = FALSE;
+    mbKeyboardActivated = sal_False;
 }
 
-inline HelpEvent::HelpEvent( USHORT nHelpMode )
+inline HelpEvent::HelpEvent( sal_uInt16 nHelpMode )
 {
     mnMode  = nHelpMode;
-    mbKeyboardActivated = TRUE;
+    mbKeyboardActivated = sal_True;
 }
 
 // -----------------
@@ -249,19 +249,19 @@ class VCL_DLLPUBLIC UserDrawEvent
 private:
     OutputDevice*       mpOutDev;
     Rectangle           maOutRect;
-    USHORT              mnItemId;
-    USHORT              mnStyle;
+    sal_uInt16              mnItemId;
+    sal_uInt16              mnStyle;
 
 public:
                         UserDrawEvent();
                         UserDrawEvent( OutputDevice* pOut,
                                        const Rectangle& rOutRect,
-                                       USHORT nId, USHORT nStyle = 0 );
+                                       sal_uInt16 nId, sal_uInt16 nStyle = 0 );
 
     OutputDevice*       GetDevice() const { return mpOutDev; }
     const Rectangle&    GetRect() const { return maOutRect; }
-    USHORT              GetItemId() const { return mnItemId; }
-    USHORT              GetStyle() const { return mnStyle; }
+    sal_uInt16              GetItemId() const { return mnItemId; }
+    sal_uInt16              GetStyle() const { return mnStyle; }
 };
 
 inline UserDrawEvent::UserDrawEvent()
@@ -273,7 +273,7 @@ inline UserDrawEvent::UserDrawEvent()
 
 inline UserDrawEvent::UserDrawEvent( OutputDevice* pOut,
                                      const Rectangle& rOutRect,
-                                     USHORT nId, USHORT nStyle ) :
+                                     sal_uInt16 nId, sal_uInt16 nStyle ) :
             maOutRect( rOutRect )
 {
     mpOutDev    = pOut;
@@ -285,13 +285,13 @@ inline UserDrawEvent::UserDrawEvent( OutputDevice* pOut,
 // - Tracking-Types -
 // ------------------
 
-#define ENDTRACK_CANCEL         ((USHORT)0x0001)
-#define ENDTRACK_KEY            ((USHORT)0x0002)
-#define ENDTRACK_FOCUS          ((USHORT)0x0004)
-#define ENDTRACK_END            ((USHORT)0x1000)
-#define ENDTRACK_DONTCALLHDL    ((USHORT)0x8000)
+#define ENDTRACK_CANCEL         ((sal_uInt16)0x0001)
+#define ENDTRACK_KEY            ((sal_uInt16)0x0002)
+#define ENDTRACK_FOCUS          ((sal_uInt16)0x0004)
+#define ENDTRACK_END            ((sal_uInt16)0x1000)
+#define ENDTRACK_DONTCALLHDL    ((sal_uInt16)0x8000)
 
-#define TRACKING_REPEAT         ((USHORT)0x0100)
+#define TRACKING_REPEAT         ((sal_uInt16)0x0100)
 
 // -----------------
 // - TrackingEvent -
@@ -301,23 +301,23 @@ class VCL_DLLPUBLIC TrackingEvent
 {
 private:
     MouseEvent          maMEvt;
-    USHORT              mnFlags;
+    sal_uInt16              mnFlags;
 
 public:
                         TrackingEvent();
                         TrackingEvent( const MouseEvent& rMEvt,
-                                       USHORT nTrackFlags = 0 );
+                                       sal_uInt16 nTrackFlags = 0 );
 
     const MouseEvent&   GetMouseEvent() const { return maMEvt; }
 
-    BOOL                IsTrackingRepeat() const
+    sal_Bool                IsTrackingRepeat() const
                             { return ((mnFlags & TRACKING_REPEAT) != 0); }
 
-    BOOL                IsTrackingEnded() const
+    sal_Bool                IsTrackingEnded() const
                             { return ((mnFlags & ENDTRACK_END) != 0); }
-    BOOL                IsTrackingCanceled() const
+    sal_Bool                IsTrackingCanceled() const
                             { return ((mnFlags & ENDTRACK_CANCEL) != 0); }
-    USHORT              GetTrackingFlags() const { return mnFlags; }
+    sal_uInt16              GetTrackingFlags() const { return mnFlags; }
 };
 
 inline TrackingEvent::TrackingEvent()
@@ -326,7 +326,7 @@ inline TrackingEvent::TrackingEvent()
 }
 
 inline TrackingEvent::TrackingEvent( const MouseEvent& rMEvt,
-                                     USHORT nTrackFlags ) :
+                                     sal_uInt16 nTrackFlags ) :
             maMEvt( rMEvt )
 {
     mnFlags = nTrackFlags;
@@ -356,17 +356,17 @@ class VCL_DLLPUBLIC NotifyEvent
 private:
     Window*                 mpWindow;
     void*                   mpData;
-    USHORT                  mnType;
+    sal_uInt16                  mnType;
     long                    mnRetValue;
 
 public:
                             NotifyEvent();
-                            NotifyEvent( USHORT nType,
+                            NotifyEvent( sal_uInt16 nType,
                                          Window* pWindow,
                                          const void* pEvent = NULL,
                                          long nRet = 0 );
 
-    USHORT                  GetType() const { return mnType; }
+    sal_uInt16                  GetType() const { return mnType; }
     Window*                 GetWindow() const { return mpWindow; }
     void*                   GetData() const { return mpData; }
 
@@ -386,7 +386,7 @@ inline NotifyEvent::NotifyEvent()
     mnRetValue  = 0;
 }
 
-inline NotifyEvent::NotifyEvent( USHORT nType, Window* pWindow,
+inline NotifyEvent::NotifyEvent( sal_uInt16 nType, Window* pWindow,
                                  const void* pEvent, long nRet )
 {
     mpWindow    = pWindow;
@@ -423,30 +423,30 @@ inline const CommandEvent* NotifyEvent::GetCommandEvent() const
 // - DataChangedEvent -
 // --------------------
 
-#define DATACHANGED_SETTINGS            ((USHORT)1)
-#define DATACHANGED_DISPLAY             ((USHORT)2)
-#define DATACHANGED_DATETIME            ((USHORT)3)
-#define DATACHANGED_FONTS               ((USHORT)4)
-#define DATACHANGED_PRINTER             ((USHORT)5)
-#define DATACHANGED_FONTSUBSTITUTION    ((USHORT)6)
-#define DATACHANGED_USER                ((USHORT)10000)
+#define DATACHANGED_SETTINGS            ((sal_uInt16)1)
+#define DATACHANGED_DISPLAY             ((sal_uInt16)2)
+#define DATACHANGED_DATETIME            ((sal_uInt16)3)
+#define DATACHANGED_FONTS               ((sal_uInt16)4)
+#define DATACHANGED_PRINTER             ((sal_uInt16)5)
+#define DATACHANGED_FONTSUBSTITUTION    ((sal_uInt16)6)
+#define DATACHANGED_USER                ((sal_uInt16)10000)
 
 class VCL_DLLPUBLIC DataChangedEvent
 {
 private:
     void*                   mpData;
-    ULONG                   mnFlags;
-    USHORT                  mnType;
+    sal_uLong                   mnFlags;
+    sal_uInt16                  mnType;
 
 public:
                             DataChangedEvent();
-                            DataChangedEvent( USHORT nType,
+                            DataChangedEvent( sal_uInt16 nType,
                                               const void* pData = NULL,
-                                              ULONG nFlags = 0 );
+                                              sal_uLong nFlags = 0 );
 
-    USHORT                  GetType() const { return mnType; }
+    sal_uInt16                  GetType() const { return mnType; }
     void*                   GetData() const { return mpData; }
-    ULONG                   GetFlags() const { return mnFlags; }
+    sal_uLong                   GetFlags() const { return mnFlags; }
 
     const AllSettings*      GetOldSettings() const;
 };
@@ -458,9 +458,9 @@ inline DataChangedEvent::DataChangedEvent()
     mnType  = 0;
 }
 
-inline DataChangedEvent::DataChangedEvent( USHORT nType,
+inline DataChangedEvent::DataChangedEvent( sal_uInt16 nType,
                                            const void* pData,
-                                           ULONG nChangeFlags )
+                                           sal_uLong nChangeFlags )
 {
     mpData  = (void*)pData;
     mnFlags = nChangeFlags;

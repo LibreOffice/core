@@ -66,7 +66,7 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::sheet::DataPilotFieldFilter;
 
 
-static BOOL lcl_HasQueryEntry( const ScQueryParam& rParam )
+static sal_Bool lcl_HasQueryEntry( const ScQueryParam& rParam )
 {
     return rParam.GetEntryCount() > 0 &&
             rParam.GetEntry(0).bDoQuery;
@@ -183,7 +183,7 @@ sal_Int32 ScDPCacheTable::getColSize() const
     return GetCache()->GetColumnCount();
 }
 
-void ScDPCacheTable::fillTable(  const ScQueryParam& rQuery, BOOL* pSpecial,
+void ScDPCacheTable::fillTable(  const ScQueryParam& rQuery, sal_Bool* pSpecial,
                                bool bIgnoreEmptyRows, bool bRepeatIfEmpty )
 {
     if ( mpCache == NULL )

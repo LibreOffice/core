@@ -446,7 +446,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
     // hat ein "gueltige" Nummer ?
     if( pTxtNd->IsNumbered() && pTxtNd->IsCountedInList())
     {
-        const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<USHORT>(pTxtNd->GetActualListLevel()) );
+        const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<sal_uInt16>(pTxtNd->GetActualListLevel()) );
         const sal_Bool bLeft = SVX_ADJUST_LEFT == rNumFmt.GetNumAdjust();
         const sal_Bool bCenter = SVX_ADJUST_CENTER == rNumFmt.GetNumAdjust();
         // --> OD 2008-01-23 #newlistlevelattrs#
@@ -519,7 +519,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
 
                 if ( pFmtFnt )
                 {
-                    const BYTE nAct = pNumFnt->GetActual();
+                    const sal_uInt8 nAct = pNumFnt->GetActual();
                     pNumFnt->SetFamily( pFmtFnt->GetFamily(), nAct );
                     pNumFnt->SetName( pFmtFnt->GetName(), nAct );
                     pNumFnt->SetStyleName( pFmtFnt->GetStyleName(), nAct );

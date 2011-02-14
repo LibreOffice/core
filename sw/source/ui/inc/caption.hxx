@@ -42,29 +42,29 @@
 class SW_DLLPUBLIC InsCaptionOpt
 {
 private:
-    BOOL            bUseCaption;
+    sal_Bool            bUseCaption;
     SwCapObjType    eObjType;
     SvGlobalName    aOleId;
     String          sCategory;
-    USHORT          nNumType;
+    sal_uInt16          nNumType;
     ::rtl::OUString sNumberSeparator;
     String          sCaption;
-    USHORT          nPos;
-    USHORT          nLevel;
+    sal_uInt16          nPos;
+    sal_uInt16          nLevel;
 //  sal_Unicode     cSeparator;
     String          sSeparator;
     String          sCharacterStyle;
 
-    BOOL         bIgnoreSeqOpts;    // wird nicht gespeichert
-    BOOL         bCopyAttributes;   //          -""-
+    sal_Bool         bIgnoreSeqOpts;    // wird nicht gespeichert
+    sal_Bool         bCopyAttributes;   //          -""-
 
 public:
     InsCaptionOpt(const SwCapObjType eType = FRAME_CAP, const SvGlobalName* pOleId = 0);
     InsCaptionOpt(const InsCaptionOpt&);
     ~InsCaptionOpt();
 
-    inline BOOL&            UseCaption()                    { return bUseCaption; }
-    inline BOOL             UseCaption() const              { return bUseCaption; }
+    inline sal_Bool&            UseCaption()                    { return bUseCaption; }
+    inline sal_Bool             UseCaption() const              { return bUseCaption; }
 
     inline SwCapObjType     GetObjType() const              { return eObjType; }
     inline void             SetObjType(const SwCapObjType eType) { eObjType = eType; }
@@ -75,8 +75,8 @@ public:
     inline const String&    GetCategory() const             { return sCategory; }
     inline void             SetCategory(const String& rCat) { sCategory = rCat; }
 
-    inline USHORT           GetNumType() const              { return nNumType; }
-    inline void             SetNumType(const USHORT nNT)    { nNumType = nNT; }
+    inline sal_uInt16           GetNumType() const              { return nNumType; }
+    inline void             SetNumType(const sal_uInt16 nNT)    { nNumType = nNT; }
 
     const ::rtl::OUString&  GetNumSeparator() const { return sNumberSeparator; }
     void                    SetNumSeparator(const ::rtl::OUString& rSet) {sNumberSeparator = rSet;}
@@ -84,11 +84,11 @@ public:
     inline const String&    GetCaption() const              { return sCaption; }
     inline void             SetCaption(const String& rCap)  { sCaption = rCap; }
 
-    inline USHORT           GetPos() const                  { return nPos; }
-    inline void             SetPos(const USHORT nP)         { nPos = nP; }
+    inline sal_uInt16           GetPos() const                  { return nPos; }
+    inline void             SetPos(const sal_uInt16 nP)         { nPos = nP; }
 
-    inline USHORT           GetLevel() const                { return nLevel; }
-    inline void             SetLevel(const USHORT nLvl)     { nLevel = nLvl; }
+    inline sal_uInt16           GetLevel() const                { return nLevel; }
+    inline void             SetLevel(const sal_uInt16 nLvl)     { nLevel = nLvl; }
 
 //  inline sal_Unicode      GetSeparator() const                { return cSeparator; }
 //  inline void             SetSeparator(const sal_Unicode cSep){ cSeparator = cSep; }
@@ -99,15 +99,15 @@ public:
     void                    SetCharacterStyle(const String& rStyle)
                                     { sCharacterStyle = rStyle; }
 
-    inline BOOL&            IgnoreSeqOpts()                 { return bIgnoreSeqOpts; }
-    inline BOOL             IgnoreSeqOpts() const           { return bIgnoreSeqOpts; }
+    inline sal_Bool&            IgnoreSeqOpts()                 { return bIgnoreSeqOpts; }
+    inline sal_Bool             IgnoreSeqOpts() const           { return bIgnoreSeqOpts; }
 
-    inline BOOL&            CopyAttributes()                { return bCopyAttributes; }
-    inline BOOL             CopyAttributes() const          { return bCopyAttributes; }
+    inline sal_Bool&            CopyAttributes()                { return bCopyAttributes; }
+    inline sal_Bool             CopyAttributes() const          { return bCopyAttributes; }
 
-    BOOL                    operator==( const InsCaptionOpt& rOpt ) const;
+    sal_Bool                    operator==( const InsCaptionOpt& rOpt ) const;
     InsCaptionOpt&          operator= ( const InsCaptionOpt& rOpt );
-    inline BOOL             operator< ( const InsCaptionOpt & rObj ) const
+    inline sal_Bool             operator< ( const InsCaptionOpt & rObj ) const
                                                 { return aOleId < rObj.aOleId; }
 //  friend SvStream&        operator>>( SvStream& rIStream, InsCaptionOpt& rCapOpt );
 //  friend SvStream&        operator<<( SvStream& rOStream, const InsCaptionOpt& rCapOpt );

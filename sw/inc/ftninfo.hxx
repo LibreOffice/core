@@ -50,7 +50,7 @@ protected:
     bool        m_bEndNote;
 public:
     SvxNumberType aFmt;
-    USHORT    nFtnOffset;
+    sal_uInt16    nFtnOffset;
 
     void        ChgPageDesc( SwPageDesc *pDesc );
     SwPageDesc *GetPageDesc( SwDoc &rDoc ) const;
@@ -70,7 +70,7 @@ public:
     virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
 
     SwEndNoteInfo & operator=(const SwEndNoteInfo&);
-    BOOL operator==( const SwEndNoteInfo &rInf ) const;
+    sal_Bool operator==( const SwEndNoteInfo &rInf ) const;
 
     SwEndNoteInfo( SwTxtFmtColl *pTxtColl = 0);
     SwEndNoteInfo(const SwEndNoteInfo&);
@@ -107,7 +107,7 @@ public:
 
     SwFtnInfo& operator=(const SwFtnInfo&);
 
-    BOOL operator==( const SwFtnInfo &rInf ) const;
+    sal_Bool operator==( const SwFtnInfo &rInf ) const;
 
     SwFtnInfo(SwTxtFmtColl* pTxtColl = 0);
     SwFtnInfo(const SwFtnInfo&);

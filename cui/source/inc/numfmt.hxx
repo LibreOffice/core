@@ -61,7 +61,7 @@ private:
     String          aPrevStr;
     Color           aPrevCol;
 
-    void            InitSettings( BOOL bForeground, BOOL bBackground );
+    void            InitSettings( sal_Bool bForeground, sal_Bool bBackground );
 
 protected:
     virtual void    Paint( const Rectangle& rRect );
@@ -91,9 +91,9 @@ public:
 #define SfxTabPage ::SfxTabPage
     static SfxTabPage*      Create( Window* pParent,
                                     const SfxItemSet& rAttrSet );
-    static USHORT*          GetRanges();
+    static sal_uInt16*          GetRanges();
 
-    virtual BOOL            FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool            FillItemSet( SfxItemSet& rSet );
     virtual void            Reset( const SfxItemSet& rSet );
     virtual int             DeactivatePage  ( SfxItemSet* pSet = NULL );
 
@@ -102,7 +102,7 @@ public:
                                 { SetInfoItem( rItem ); }
 
     void                    SetOkHdl( const Link& rOkHandler );
-    void                    HideLanguage(BOOL nFlag=TRUE);
+    void                    HideLanguage(sal_Bool nFlag=sal_True);
     virtual long            PreNotify( NotifyEvent& rNEvt );
     virtual void            PageCreated (SfxAllItemSet aSet); //add CHINA001
 private:
@@ -139,11 +139,11 @@ private:
 
     SvxNumberInfoItem*      pNumItem;
     SvxNumberFormatShell*   pNumFmtShell;
-    ULONG                   nInitFormat;
+    sal_uLong                   nInitFormat;
     Link                    fnOkHdl;
 
-    BOOL                    bNumItemFlag; //Fuer Handling mit DocShell
-    BOOL                    bOneAreaFlag;
+    sal_Bool                    bNumItemFlag; //Fuer Handling mit DocShell
+    sal_Bool                    bOneAreaFlag;
     short                   nFixedCategory;
 
     long                    nCatHeight;
@@ -160,16 +160,16 @@ private:
     void    Init_Impl();
     void    FillCurrencyBox();
     void    FillFormatListBox_Impl( SvxDelStrgs& rEntries );
-    void    UpdateOptions_Impl( BOOL bCheckCatChange );
-    void    UpdateFormatListBox_Impl( USHORT bCat, BOOL bUpdateEdit );
+    void    UpdateOptions_Impl( sal_Bool bCheckCatChange );
+    void    UpdateFormatListBox_Impl( sal_uInt16 bCat, sal_Bool bUpdateEdit );
     void    DeleteEntryList_Impl( SvxDelStrgs& rEntries );
     void    Obstructing();
     void    EnableBySourceFormat_Impl();
-    void    SetCategory( USHORT nPos );
+    void    SetCategory( sal_uInt16 nPos );
     String  GetExpColorString( Color*& rpPreviewColor, const String& aFormatStr, short nTmpCatPos );
     void    MakePreviewText( const String& rFormat );
-    void    ChangePreviewText( USHORT nPos );
-    void    AddAutomaticLanguage_Impl(LanguageType eAutoLang, BOOL bSelect);
+    void    ChangePreviewText( sal_uInt16 nPos );
+    void    AddAutomaticLanguage_Impl(LanguageType eAutoLang, sal_Bool bSelect);
     // Handler
     DECL_LINK( LostFocusHdl_Impl, Edit* pEd );
     DECL_LINK( DoubleClickHdl_Impl, SvxFontListBox* pLb );

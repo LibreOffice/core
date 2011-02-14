@@ -83,7 +83,7 @@ public:
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
 
@@ -131,13 +131,13 @@ private:
     CheckBox        maSelectionCB;
     MetricField     maSelectionMF;
 
-    UINT16          nSizeLB_InitialSelection;
-    UINT16          nStyleLB_InitialSelection;
-    BOOL            bSfxSymbolsAuto;
+    sal_uInt16          nSizeLB_InitialSelection;
+    sal_uInt16          nStyleLB_InitialSelection;
+    sal_Bool            bSfxSymbolsAuto;
 
     // item ID for the given icon theme
     // might be zero when the theme is not installed and the item is removed
-    ULONG           aIconStyleItemId[STYLE_SYMBOLS_THEMES_MAX];
+    sal_uLong           aIconStyleItemId[STYLE_SYMBOLS_THEMES_MAX];
     SvtTabAppearanceCfg*    pAppearanceCfg;
     CanvasSettings*         pCanvasSettings;
     SvtOptionsDrawinglayer* mpDrawinglayerOpt;
@@ -154,7 +154,7 @@ public:
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
 /* -----------------------------23.11.00 13:04--------------------------------
@@ -209,7 +209,7 @@ public:
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
 #endif // #ifndef _OFA_OPTGDLG_HXX

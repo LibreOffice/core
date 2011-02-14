@@ -124,7 +124,7 @@ void ScPreviewShell::Construct( Window* pParent )
     pVerScroll = new ScrollBar(pParent, WB_VSCROLL);
 
     // SSA: --- RTL --- no mirroring for horizontal scrollbars
-    pHorScroll->EnableRTL( FALSE );
+    pHorScroll->EnableRTL( sal_False );
 
     pHorScroll->SetEndScrollHdl( LINK( this, ScPreviewShell, ScrollHandler ) );
     pVerScroll->SetEndScrollHdl( LINK( this, ScPreviewShell, ScrollHandler ) );
@@ -133,8 +133,8 @@ void ScPreviewShell::Construct( Window* pParent )
 
     SetPool( &SC_MOD()->GetPool() );
     SetWindow( pPreview );
-    StartListening(*pDocShell,TRUE);
-    StartListening(*SFX_APP(),TRUE);        // #i62045# #i62046# application is needed for Calc's own hints
+    StartListening(*pDocShell,sal_True);
+    StartListening(*SFX_APP(),sal_True);        // #i62045# #i62046# application is needed for Calc's own hints
     SfxBroadcaster* pDrawBC = pDocShell->GetDocument()->GetDrawBroadcaster();
     if (pDrawBC)
         StartListening(*pDrawBC);
@@ -261,9 +261,9 @@ void __EXPORT ScPreviewShell::AdjustPosSizePixel( const Point &rPos, const Size 
                               Size( nBarW, nBarH ) );
 
     if ( SVX_ZOOM_WHOLEPAGE == eZoom )
-        pPreview->SetZoom( pPreview->GetOptimalZoom(FALSE) );
+        pPreview->SetZoom( pPreview->GetOptimalZoom(sal_False) );
     else if ( SVX_ZOOM_PAGEWIDTH == eZoom )
-        pPreview->SetZoom( pPreview->GetOptimalZoom(TRUE) );
+        pPreview->SetZoom( pPreview->GetOptimalZoom(sal_True) );
 
     UpdateScrollBars();
 }
@@ -373,7 +373,7 @@ IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
     long nTotalPages    = pPreview->GetTotalPages();
     long nPageNo        = 0;
     long nPerPageLength = 0;
-    BOOL bIsDivide      = TRUE;
+    sal_Bool bIsDivide      = sal_True;
 
     if( nTotalPages )
         nPerPageLength = nMaxRange / nTotalPages;
@@ -383,12 +383,12 @@ IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
         nPageNo = nPos / nPerPageLength;
         if( nPos % nPerPageLength )
         {
-            bIsDivide = FALSE;
+            bIsDivide = sal_False;
             nPageNo ++;
         }
     }
 
-    BOOL bHoriz = ( pScroll == pHorScroll );
+    sal_Bool bHoriz = ( pScroll == pHorScroll );
 
     if( bHoriz )
         pPreview->SetXOffset( nPos );
@@ -402,7 +402,7 @@ IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
             Point  aPos      = pScroll->GetParent()->OutputToNormalizedScreenPixel( pScroll->GetPosPixel() );
             String aHelpStr;
             Rectangle aRect;
-            USHORT   nAlign;
+            sal_uInt16   nAlign;
 
             if( nDelta < 0 )
             {
@@ -420,7 +420,7 @@ IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
             }
             else if( nDelta > 0 )
             {
-                BOOL bAllTested = pPreview->AllTested();
+                sal_Bool bAllTested = pPreview->AllTested();
                 if ( nTotalPages && ( nPageNo < nTotalPages || !bAllTested ) )
                     pPreview->SetPageNo( nPageNo );
 
@@ -444,9 +444,9 @@ IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
     return 0;
 }
 
-BOOL ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
+sal_Bool ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
 {
-    BOOL bDone = FALSE;
+    sal_Bool bDone = sal_False;
     const CommandWheelData* pData = rCEvt.GetWheelData();
     if ( pData && pData->GetMode() == COMMAND_WHEEL_ZOOM )
     {
@@ -460,10 +460,10 @@ BOOL ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
         if ( nNew != nOld )
         {
             eZoom = SVX_ZOOM_PERCENT;
-            pPreview->SetZoom( (USHORT)nNew );
+            pPreview->SetZoom( (sal_uInt16)nNew );
         }
 
-        bDone = TRUE;
+        bDone = sal_True;
     }
     else
     {
@@ -473,12 +473,12 @@ BOOL ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
     return bDone;
 }
 
-SfxPrinter* __EXPORT ScPreviewShell::GetPrinter( BOOL bCreate )
+SfxPrinter* __EXPORT ScPreviewShell::GetPrinter( sal_Bool bCreate )
 {
     return pDocShell->GetPrinter(bCreate);
 }
 
-USHORT __EXPORT ScPreviewShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags, bool )
+sal_uInt16 __EXPORT ScPreviewShell::SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags, bool )
 {
     return pDocShell->SetPrinter( pNewPrinter, nDiffFlags );
 }
@@ -496,7 +496,7 @@ SfxTabPage* ScPreviewShell::CreatePrintOptionsPage( Window *pParent, const SfxIt
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScPreviewShell::Activate(BOOL bMDI)
+void __EXPORT ScPreviewShell::Activate(sal_Bool bMDI)
 {
     SfxViewShell::Activate(bMDI);
 
@@ -511,7 +511,7 @@ void __EXPORT ScPreviewShell::Activate(BOOL bMDI)
     }
 }
 
-void __EXPORT ScPreviewShell::Deactivate(BOOL bMDI)
+void __EXPORT ScPreviewShell::Deactivate(sal_Bool bMDI)
 {
     SfxViewShell::Deactivate(bMDI);
 
@@ -524,7 +524,7 @@ void __EXPORT ScPreviewShell::Deactivate(BOOL bMDI)
 
 void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
 {
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
     switch ( nSlot )
@@ -550,7 +550,7 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
         case SID_NEXT_TABLE: // Accelerator
         case SID_PREVIEW_NEXT:
             {
-                BOOL bAllTested = pPreview->AllTested();
+                sal_Bool bAllTested = pPreview->AllTested();
                 long nPage = pPreview->GetPageNo();
                 long nTotal = pPreview->GetTotalPages();
                 if (nTotal && (nPage+1 < nTotal || !bAllTested))
@@ -581,8 +581,8 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
         case SID_ATTR_ZOOM:
         case FID_SCALE:
             {
-                USHORT      nZoom       = 100;
-                BOOL        bCancel     = FALSE;
+                sal_uInt16      nZoom       = 100;
+                sal_Bool        bCancel     = sal_False;
 
                 eZoom = SVX_ZOOM_PERCENT;
 
@@ -631,10 +631,10 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
                     {
                         case SVX_ZOOM_OPTIMAL:
                         case SVX_ZOOM_WHOLEPAGE:
-                            nZoom = pPreview->GetOptimalZoom(FALSE);
+                            nZoom = pPreview->GetOptimalZoom(sal_False);
                             break;
                         case SVX_ZOOM_PAGEWIDTH:
-                            nZoom = pPreview->GetOptimalZoom(TRUE);
+                            nZoom = pPreview->GetOptimalZoom(sal_True);
                             break;
                         default:
                         {
@@ -649,7 +649,7 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
             break;
         case SID_PREVIEW_ZOOMIN:
             {
-                USHORT nNew = pPreview->GetZoom() + 20 ;
+                sal_uInt16 nNew = pPreview->GetZoom() + 20 ;
                 nNew -= nNew % 20;
                 pPreview->SetZoom( nNew );
                 eZoom = SVX_ZOOM_PERCENT;
@@ -658,7 +658,7 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
             break;
         case SID_PREVIEW_ZOOMOUT:
             {
-                USHORT nNew = pPreview->GetZoom() - 1;
+                sal_uInt16 nNew = pPreview->GetZoom() - 1;
                 nNew -= nNew % 20;
                 pPreview->SetZoom( nNew );
                 eZoom = SVX_ZOOM_PERCENT;
@@ -667,7 +667,7 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
             break;
         case SID_PREVIEW_MARGIN:
             {
-                BOOL bMargin = pPreview->GetPageMargins();
+                sal_Bool bMargin = pPreview->GetPageMargins();
                 pPreview->SetPageMargins( !bMargin );
                 pPreview->Invalidate();
                 rReq.Done();
@@ -677,9 +677,9 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
             {
                 const SfxPoolItem* pItem;
                 eZoom = SVX_ZOOM_PERCENT;
-                if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_ZOOMSLIDER, TRUE, &pItem ) )
+                if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_ZOOMSLIDER, sal_True, &pItem ) )
                 {
-                    const USHORT nCurrentZoom = ((const SvxZoomSliderItem*)pItem)->GetValue();
+                    const sal_uInt16 nCurrentZoom = ((const SvxZoomSliderItem*)pItem)->GetValue();
                     if( nCurrentZoom )
                     {
                         pPreview->SetZoom( nCurrentZoom );
@@ -697,9 +697,9 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
                 SfxStyleSheetBase* pStyleSheet  = pStylePool->Find( aOldName, SFX_STYLE_FAMILY_PAGE );
                 DBG_ASSERT( pStyleSheet, "PageStyle not found! :-/" );
 
-                if ( pReqArgs && pStyleSheet && SFX_ITEM_SET == pReqArgs->GetItemState( SID_PREVIEW_SCALINGFACTOR, TRUE, &pItem ) )
+                if ( pReqArgs && pStyleSheet && SFX_ITEM_SET == pReqArgs->GetItemState( SID_PREVIEW_SCALINGFACTOR, sal_True, &pItem ) )
                 {
-                    const USHORT nCurrentZoom   = ((const SvxZoomSliderItem *)pItem)->GetValue();
+                    const sal_uInt16 nCurrentZoom   = ((const SvxZoomSliderItem *)pItem)->GetValue();
                     SfxItemSet& rSet            = pStyleSheet->GetItemSet();
                     rSet.Put( SfxUInt16Item( ATTR_PAGE_SCALE, nCurrentZoom ) );
                     ScPrintFunc aPrintFunc( pDocShell, pDocShell->GetPrinter(), nTab );
@@ -739,16 +739,16 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
 
 void __EXPORT ScPreviewShell::GetState( SfxItemSet& rSet )
 {
-    pPreview->SetInGetState(TRUE);
+    pPreview->SetInGetState(sal_True);
 
     SCTAB nTab      = pPreview->GetTab();
     long nPage      = pPreview->GetPageNo();
     long nTotal     = pPreview->GetTotalPages();
-    USHORT nZoom    = pPreview->GetZoom();
-    BOOL bAllTested = pPreview->AllTested();
+    sal_uInt16 nZoom    = pPreview->GetZoom();
+    sal_Bool bAllTested = pPreview->AllTested();
 
     SfxWhichIter aIter(rSet);
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
     while ( nWhich )
     {
         switch (nWhich)
@@ -809,7 +809,7 @@ void __EXPORT ScPreviewShell::GetState( SfxItemSet& rSet )
                         if ( pStyleSheet )
                         {
                             SfxItemSet& rStyleSet   = pStyleSheet->GetItemSet();
-                            USHORT nCurrentZoom     = ((const SfxUInt16Item&)rStyleSet.Get(ATTR_PAGE_SCALE)).GetValue();
+                            sal_uInt16 nCurrentZoom     = ((const SfxUInt16Item&)rStyleSet.Get(ATTR_PAGE_SCALE)).GetValue();
                             if( nCurrentZoom )
                             {
                                 SvxZoomSliderItem aZoomSliderItem( nCurrentZoom, MINZOOM_SLIDER, MAXZOOM_SLIDER, SID_PREVIEW_SCALINGFACTOR );
@@ -826,7 +826,7 @@ void __EXPORT ScPreviewShell::GetState( SfxItemSet& rSet )
                 rSet.Put( SfxStringItem( nWhich, pPreview->GetPosString() ) );
                 break;
             case SID_PRINTPREVIEW:
-                rSet.Put( SfxBoolItem( nWhich, TRUE ) );
+                rSet.Put( SfxBoolItem( nWhich, sal_True ) );
                 break;
             case SID_FORMATPAGE:
             case SID_PREVIEW_MARGIN:
@@ -838,7 +838,7 @@ void __EXPORT ScPreviewShell::GetState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 
-    pPreview->SetInGetState(FALSE);
+    pPreview->SetInGetState(sal_False);
 }
 
 void ScPreviewShell::FillFieldData( ScHeaderFieldData& rData )
@@ -856,7 +856,7 @@ void ScPreviewShell::FillFieldData( ScHeaderFieldData& rData )
         rData.aShortDocName = rData.aLongDocName = rData.aTitle;
     rData.nPageNo       = pPreview->GetPageNo() + 1;
 
-    BOOL bAllTested = pPreview->AllTested();
+    sal_Bool bAllTested = pPreview->AllTested();
     if (bAllTested)
         rData.nTotalPages = pPreview->GetTotalPages();
     else
@@ -865,7 +865,7 @@ void ScPreviewShell::FillFieldData( ScHeaderFieldData& rData )
     //  eNumType kennt der Dialog selber
 }
 
-void __EXPORT ScPreviewShell::WriteUserData(String& rData, BOOL /* bBrowse */)
+void __EXPORT ScPreviewShell::WriteUserData(String& rData, sal_Bool /* bBrowse */)
 {
     //  nZoom
     //  nPageNo
@@ -875,13 +875,13 @@ void __EXPORT ScPreviewShell::WriteUserData(String& rData, BOOL /* bBrowse */)
     rData += String::CreateFromInt32(pPreview->GetPageNo());
 }
 
-void __EXPORT ScPreviewShell::ReadUserData(const String& rData, BOOL /* bBrowse */)
+void __EXPORT ScPreviewShell::ReadUserData(const String& rData, sal_Bool /* bBrowse */)
 {
     xub_StrLen nCount = rData.GetTokenCount();
     if (nCount)
     {
         xub_StrLen nIndex = 0;
-        pPreview->SetZoom((USHORT)rData.GetToken( 0, SC_USERDATA_SEP, nIndex ).ToInt32());
+        pPreview->SetZoom((sal_uInt16)rData.GetToken( 0, SC_USERDATA_SEP, nIndex ).ToInt32());
         pPreview->SetPageNo(rData.GetToken( 0, SC_USERDATA_SEP, nIndex ).ToInt32());
         eZoom = SVX_ZOOM_PERCENT;
     }
@@ -932,7 +932,7 @@ void __EXPORT ScPreviewShell::ReadUserDataSequence(const uno::Sequence < beans::
     }
 }
 
-void ScPreviewShell::DoScroll( USHORT nMode )
+void ScPreviewShell::DoScroll( sal_uInt16 nMode )
 {
     Point   aCurPos, aPrevPos;
 
@@ -1127,7 +1127,7 @@ void ScPreviewShell::BroadcastAccessibility( const SfxHint &rHint )
         pAccessibilityBroadcaster->Broadcast( rHint );
 }
 
-BOOL ScPreviewShell::HasAccessibilityObjects()
+sal_Bool ScPreviewShell::HasAccessibilityObjects()
 {
     return pAccessibilityBroadcaster && pAccessibilityBroadcaster->HasListeners();
 }

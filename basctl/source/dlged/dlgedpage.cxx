@@ -68,7 +68,7 @@ SdrPage* DlgEdPage::Clone() const
 
 //----------------------------------------------------------------------------
 
-SdrObject* DlgEdPage::SetObjectOrdNum(ULONG nOldObjNum, ULONG nNewObjNum)
+SdrObject* DlgEdPage::SetObjectOrdNum(sal_uLong nOldObjNum, sal_uLong nNewObjNum)
 {
     SdrObject* pObj = SdrPage::SetObjectOrdNum( nOldObjNum, nNewObjNum );
 

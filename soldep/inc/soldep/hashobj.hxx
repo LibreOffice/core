@@ -35,10 +35,10 @@ class ObjectWin;
 class MyHashObject
 {
     ObjectWin* mpWin;
-    ULONG mnId;
+    sal_uIntPtr mnId;
 public:
-    MyHashObject( ULONG nId, ObjectWin* pWin );
-    ULONG GetId() { return mnId; };
+    MyHashObject( sal_uIntPtr nId, ObjectWin* pWin );
+    sal_uIntPtr GetId() { return mnId; };
 };
 
 #endif

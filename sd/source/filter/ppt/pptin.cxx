@@ -155,7 +155,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
             SfxItemSet& rSet = pSheet->GetItemSet();
 
             // if autokerning is set in style, override it, ppt has no autokerning
-            if( rSet.GetItemState( EE_CHAR_PAIRKERNING, FALSE ) == SFX_ITEM_SET )
+            if( rSet.GetItemState( EE_CHAR_PAIRKERNING, sal_False ) == SFX_ITEM_SET )
                 rSet.ClearItem( EE_CHAR_PAIRKERNING );
         }
     }
@@ -177,7 +177,7 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SvStorage& rStorage
 :   SdrPowerPointImport     ( rParam, rMedium.GetBaseURL() )
 ,   mrMed                   ( rMedium )
 ,   mrStorage               ( rStorage_ )
-,   mbDocumentFound         ( FALSE )
+,   mbDocumentFound         ( sal_False )
 ,   mnFilterOptions         ( 0 )
 {
     mpDoc = pDocument;
@@ -185,22 +185,22 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SvStorage& rStorage
     {
         mbDocumentFound = SeekToDocument( &maDocHd );                           // maDocHd = the latest DocumentHeader
         while ( SeekToRec( rStCtrl, PPT_PST_Document, nStreamLen, &maDocHd ) )
-            mbDocumentFound = TRUE;
+            mbDocumentFound = sal_True;
 
-        UINT32 nDggContainerOfs = 0;
+        sal_uInt32 nDggContainerOfs = 0;
 
         if ( mbDocumentFound )
         {
-            ULONG nPosMerk = rStCtrl.Tell();
+            sal_uLong nPosMerk = rStCtrl.Tell();
 
             pStData = rStorage_.OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ), STREAM_STD_READ );
 
             rStCtrl.Seek( maDocHd.GetRecBegFilePos() + 8 );
-            ULONG nDocLen = maDocHd.GetRecEndFilePos();
+            sal_uLong nDocLen = maDocHd.GetRecEndFilePos();
             DffRecordHeader aPPDGHd;
             if ( SeekToRec( rStCtrl, PPT_PST_PPDrawingGroup, nDocLen, &aPPDGHd ) )
             {
-                ULONG nPPDGLen = aPPDGHd.GetRecEndFilePos();
+                sal_uLong nPPDGLen = aPPDGHd.GetRecEndFilePos();
                 if ( SeekToRec( rStCtrl, DFF_msofbtDggContainer, nPPDGLen, NULL ) )
                     nDggContainerOfs = rStCtrl.Tell();
             }
@@ -252,7 +252,7 @@ ImplSdPPTImport::~ImplSdPPTImport()
 sal_Bool ImplSdPPTImport::Import()
 {
     if ( !bOk )
-        return FALSE;
+        return sal_False;
 
     pSdrModel->setLock( sal_True );
     pSdrModel->EnableUndo(false);
@@ -264,8 +264,8 @@ sal_Bool ImplSdPPTImport::Import()
     ((EditEngine&)rOutl.GetEditEngine()).SetControlWord( nControlWord );
 
     SdrLayerAdmin& rAdmin = mpDoc->GetLayerAdmin();
-    mnBackgroundLayerID = rAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRND )), FALSE );
-    mnBackgroundObjectsLayerID = rAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRNDOBJ )), FALSE );
+    mnBackgroundLayerID = rAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRND )), sal_False );
+    mnBackgroundObjectsLayerID = rAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRNDOBJ )), sal_False );
 
     ::sd::DrawDocShell* pDocShell = mpDoc->GetDocSh();
     if ( pDocShell )
@@ -277,11 +277,11 @@ sal_Bool ImplSdPPTImport::Import()
     {
         PropItem aPropItem;
 
-        UINT32 nType, nPropSize, nPropCount;
+        sal_uInt32 nType, nPropSize, nPropCount;
 
         pDInfoSec2->Read();
 
-        BYTE aPropSetGUID[ 16 ] =
+        sal_uInt8 aPropSetGUID[ 16 ] =
         {
             0x02, 0xd5, 0xcd, 0xd5, 0x9c, 0x2e, 0x1b, 0x10, 0x93, 0x97, 0x08, 0x00, 0x2b, 0x2c, 0xf9, 0xae
         };
@@ -294,14 +294,14 @@ sal_Bool ImplSdPPTImport::Import()
                 if ( ( nType == VT_I4 ) || ( nType == VT_UI4 ) )
                 {
                     // examine PID_HEADINGPAIR to get the correct entry for PID_DOCPARTS
-                    UINT32 nSlideCount, nVecCount;
+                    sal_uInt32 nSlideCount, nVecCount;
                     aPropItem >> nSlideCount;
                     if ( nSlideCount && pSection->GetProperty( PID_HEADINGPAIR, aPropItem ) )
                     {
-                        UINT32  nSlideTitleIndex = 0, nSlideTitleCount = 0;
-                        UINT32  nFontIndex, nFontCount = 0;
-                        UINT32  nDesignTemplateIndex, nDesignTemplateCount = 0;
-                        UINT32  i, nTemp, nEntryCount = 0;
+                        sal_uInt32  nSlideTitleIndex = 0, nSlideTitleCount = 0;
+                        sal_uInt32  nFontIndex, nFontCount = 0;
+                        sal_uInt32  nDesignTemplateIndex, nDesignTemplateCount = 0;
+                        sal_uInt32  i, nTemp, nEntryCount = 0;
 
                         String aUString;
 
@@ -314,7 +314,7 @@ sal_Bool ImplSdPPTImport::Import()
 
                             for ( i = 0; i < nVecCount; i++ )
                             {
-                                if ( !aPropItem.Read( aUString, VT_EMPTY, FALSE ) )
+                                if ( !aPropItem.Read( aUString, VT_EMPTY, sal_False ) )
                                     break;
                                 aPropItem >> nType;
                                 if ( ( nType != VT_I4 ) && ( nType != VT_UI4 ) )
@@ -353,7 +353,7 @@ sal_Bool ImplSdPPTImport::Import()
                                 }
                                 for ( i = 0; i < nSlideTitleCount; i++ )
                                 {
-                                    if ( !aPropItem.Read( aUString, nType, FALSE ) )
+                                    if ( !aPropItem.Read( aUString, nType, sal_False ) )
                                         break;
                                     String* pString = new String( aUString );
                                     if ( pString->EqualsAscii( "No Slide Title" ))
@@ -378,7 +378,7 @@ sal_Bool ImplSdPPTImport::Import()
                 }
             }
 
-            BYTE aUserPropSetGUID[ 16 ] =
+            sal_uInt8 aUserPropSetGUID[ 16 ] =
             {
                 0x05, 0xd5, 0xcd, 0xd5, 0x9c, 0x2e, 0x1b, 0x10, 0x93, 0x97, 0x08, 0x00, 0x2b, 0x2c, 0xf9, 0xae
             };
@@ -388,7 +388,7 @@ sal_Bool ImplSdPPTImport::Import()
                 Dictionary aDict;
                 if ( pSection->GetDictionary( aDict ) )
                 {
-                    UINT32 nPropId = aDict.GetProperty( rtl::OUString::createFromAscii("_PID_HLINKS" ));
+                    sal_uInt32 nPropId = aDict.GetProperty( rtl::OUString::createFromAscii("_PID_HLINKS" ));
                     if ( nPropId )
                     {
                         if ( pSection->GetProperty( nPropId, aPropItem ) )
@@ -402,7 +402,7 @@ sal_Bool ImplSdPPTImport::Import()
 
                                 if ( ! ( nPropCount % 6 ) )
                                 {
-                                    UINT32 i;
+                                    sal_uInt32 i;
 
                                     nPropCount /= 6;    // 6 propertys a hyperlink
 
@@ -509,7 +509,7 @@ sal_Bool ImplSdPPTImport::Import()
                                                 {
                                                     pHyperlink->aConvSubString = String( SdResId( STR_PAGE ) );
                                                     pHyperlink->aConvSubString.Append( sal_Unicode( ' ' ) );
-                                                    pHyperlink->aConvSubString.Append( mpDoc->CreatePageNumValue( (USHORT)nPageNumber + 1 ) );
+                                                    pHyperlink->aConvSubString.Append( mpDoc->CreatePageNumValue( (sal_uInt16)nPageNumber + 1 ) );
                                                 }
                                             }
                                         }
@@ -534,7 +534,7 @@ sal_Bool ImplSdPPTImport::Import()
         DffRecordHeader aHyperHd;
         if ( SeekToRec( rStCtrl, PPT_PST_ExObjList, maDocHd.GetRecEndFilePos(), &aHyperHd ) )
         {
-            UINT32 nExObjHyperListLen = aHyperHd.GetRecEndFilePos();
+            sal_uInt32 nExObjHyperListLen = aHyperHd.GetRecEndFilePos();
             for ( void* pPtr = aHyperList.First(); pPtr; pPtr = aHyperList.Next() )
             {
                 DffRecordHeader aHyperE;
@@ -568,24 +568,24 @@ sal_Bool ImplSdPPTImport::Import()
     SfxProgress* pStbMgr = new SfxProgress( pDocShell, String( SdResId( STR_POWERPOINT_IMPORT ) ),
             pMasterPages->Count() + pSlidePages->Count() + pNotePages->Count() );
 
-    UINT32 nImportedPages = 0;
+    sal_uInt32 nImportedPages = 0;
     {
-        UINT16          nMasterAnz = GetPageCount( PPT_MASTERPAGE );
+        sal_uInt16          nMasterAnz = GetPageCount( PPT_MASTERPAGE );
 
-        for ( USHORT nMasterNum = 0; nMasterNum < nMasterAnz; nMasterNum++ )
+        for ( sal_uInt16 nMasterNum = 0; nMasterNum < nMasterAnz; nMasterNum++ )
         {
             SetPageNum( nMasterNum, PPT_MASTERPAGE );
-            SdPage* pPage = (SdPage*)MakeBlancPage( TRUE );
+            SdPage* pPage = (SdPage*)MakeBlancPage( sal_True );
             if ( pPage )
             {
-                BOOL bNotesMaster = (*GetPageList( eAktPageKind ) )[ nAktPageNum ]->bNotesMaster;
-                BOOL bStarDrawFiller = (*GetPageList( eAktPageKind ) )[ nAktPageNum ]->bStarDrawFiller;
+                sal_Bool bNotesMaster = (*GetPageList( eAktPageKind ) )[ nAktPageNum ]->bNotesMaster;
+                sal_Bool bStarDrawFiller = (*GetPageList( eAktPageKind ) )[ nAktPageNum ]->bStarDrawFiller;
 
                 PageKind ePgKind = ( bNotesMaster ) ? PK_NOTES : PK_STANDARD;
                 pPage->SetPageKind( ePgKind );
                 pSdrModel->InsertMasterPage( (SdrPage*)pPage );
                 if ( bNotesMaster && bStarDrawFiller )
-                    ((SdPage*)pPage)->SetAutoLayout( AUTOLAYOUT_NOTES, TRUE );
+                    ((SdPage*)pPage)->SetAutoLayout( AUTOLAYOUT_NOTES, sal_True );
                 if ( nMasterNum )
                 {
                     boost::optional< sal_Int16 > oStartNumbering;
@@ -645,9 +645,9 @@ sal_Bool ImplSdPPTImport::Import()
                     /////////////////////
                     if ( pPage->GetPageKind() == PK_STANDARD )
                     {
-                        UINT32 nTitleInstance = TSS_TYPE_PAGETITLE;
-                        UINT32 nOutlinerInstance = TSS_TYPE_BODY;
-//                      BOOL bSwapStyleSheet = pSlideLayout->eLayout == PPT_LAYOUT_TITLEMASTERSLIDE;
+                        sal_uInt32 nTitleInstance = TSS_TYPE_PAGETITLE;
+                        sal_uInt32 nOutlinerInstance = TSS_TYPE_BODY;
+//                      sal_Bool bSwapStyleSheet = pSlideLayout->eLayout == PPT_LAYOUT_TITLEMASTERSLIDE;
 //                      if ( bSwapStyleSheet )
 //                      {
 //                          nTitleInstance = TSS_TYPE_TITLE;
@@ -669,7 +669,7 @@ sal_Bool ImplSdPPTImport::Import()
                         ////////////////////////
                         // outlinerstylesheet //
                         ////////////////////////
-                        UINT16 nLevel;
+                        sal_uInt16 nLevel;
                         PPTParagraphObj* pParagraphs[ 9 ];
                         PPTParagraphObj* pPreviousPara = NULL;
 
@@ -750,7 +750,7 @@ sal_Bool ImplSdPPTImport::Import()
                     ((SdPage*)pNotesClone)->SetLayoutName( aLayoutName );
                 }
             }
-            else if ( ( pPersist->bStarDrawFiller == FALSE ) )
+            else if ( ( pPersist->bStarDrawFiller == sal_False ) )
             {
                 PptSlidePersistEntry* pE = pPersist;
                 while( ( pE->aSlideAtom.nFlags & 4 ) && pE->aSlideAtom.nMasterId )
@@ -761,7 +761,7 @@ sal_Bool ImplSdPPTImport::Import()
                     else
                         pE = (*pList)[ nNextMaster ];
                 }
-                SdrObject* pObj = ImportPageBackgroundObject( *pMPage, pE->nBackgroundOffset, TRUE );   // import background
+                SdrObject* pObj = ImportPageBackgroundObject( *pMPage, pE->nBackgroundOffset, sal_True );   // import background
                 if ( pObj )
                     pMPage->NbcInsertObject( pObj );
 
@@ -897,24 +897,24 @@ sal_Bool ImplSdPPTImport::Import()
     // importing slide pages          //
     ////////////////////////////////////
     {
-        UINT32          nFPosMerk = rStCtrl.Tell();
+        sal_uInt32          nFPosMerk = rStCtrl.Tell();
         PptPageKind     ePageKind = eAktPageKind;
-        UINT16          nPageNum = nAktPageNum;
+        sal_uInt16          nPageNum = nAktPageNum;
 
-        SdPage* pHandoutPage = (SdPage*)MakeBlancPage( FALSE );
+        SdPage* pHandoutPage = (SdPage*)MakeBlancPage( sal_False );
         pHandoutPage->SetPageKind( PK_HANDOUT );
         pSdrModel->InsertPage( pHandoutPage );
 
-        USHORT nPageAnz = GetPageCount( PPT_SLIDEPAGE );
+        sal_uInt16 nPageAnz = GetPageCount( PPT_SLIDEPAGE );
         if ( nPageAnz )
         {
-            for ( USHORT nPage = 0; nPage < nPageAnz; nPage++ )
+            for ( sal_uInt16 nPage = 0; nPage < nPageAnz; nPage++ )
             {
                 sal_Bool bNewAnimationsUsed = sal_False;
 
                 mePresChange = PRESCHANGE_SEMIAUTO;
                 SetPageNum( nPage, PPT_SLIDEPAGE );
-                SdPage* pPage = (SdPage*)MakeBlancPage( FALSE );
+                SdPage* pPage = (SdPage*)MakeBlancPage( sal_False );
                 PptSlidePersistEntry* pMasterPersist = NULL;
                 if ( HasMasterPage( nPage, PPT_SLIDEPAGE ) )     // try to get the LayoutName from the masterpage
                 {
@@ -993,7 +993,7 @@ sal_Bool ImplSdPPTImport::Import()
 
                 // creating the corresponding note page
                 eAktPageKind = PPT_NOTEPAGE;
-                SdPage* pNotesPage = (SdPage*)MakeBlancPage( FALSE );
+                SdPage* pNotesPage = (SdPage*)MakeBlancPage( sal_False );
                 sal_uInt16 nNotesMasterNum = GetMasterPageIndex( nPage, PPT_SLIDEPAGE ) + 1;
                 sal_uInt32 nNotesPageId = GetNotesPageId( nPage );
                 if ( nNotesPageId )
@@ -1017,13 +1017,13 @@ sal_Bool ImplSdPPTImport::Import()
                     pSdrModel->InsertPage( pNotesPage );        // SJ: #i29625# because of form controls, the
                     ImportPage( pNotesPage, pMasterPersist2 );  // page must be inserted before importing
                     SetHeaderFooterPageSettings( pNotesPage, pMasterPersist2 );
-                    pNotesPage->SetAutoLayout( AUTOLAYOUT_NOTES, FALSE );
+                    pNotesPage->SetAutoLayout( AUTOLAYOUT_NOTES, sal_False );
                 }
                 else
                 {
                     pNotesPage->SetPageKind( PK_NOTES );
                     pNotesPage->TRG_SetMasterPage(*pSdrModel->GetMasterPage(nNotesMasterNum));
-                    pNotesPage->SetAutoLayout( AUTOLAYOUT_NOTES, TRUE );
+                    pNotesPage->SetAutoLayout( AUTOLAYOUT_NOTES, sal_True );
                     pSdrModel->InsertPage( pNotesPage );
                     SdrObject* pPageObj = pNotesPage->GetPresObj( PRESOBJ_PAGE, 1 );
                     if ( pPageObj )
@@ -1039,7 +1039,7 @@ sal_Bool ImplSdPPTImport::Import()
         {
             // Das kann bei Dokumentvorlagen vorkommen
             eAktPageKind = PPT_SLIDEPAGE;
-            SdrPage* pPage = MakeBlancPage( FALSE );
+            SdrPage* pPage = MakeBlancPage( sal_False );
             pSdrModel->InsertPage( pPage );
 
             // #i37397#, trying to set the title master for the first page
@@ -1064,10 +1064,10 @@ sal_Bool ImplSdPPTImport::Import()
                 ((SdPage*)pPage)->TRG_SetMasterPage( *((SdPage*)pFoundMaster) );
                 ((SdPage*)pPage)->SetLayoutName( ((SdPage*)pFoundMaster)->GetLayoutName() );
             }
-            ((SdPage*)pPage)->SetAutoLayout( AUTOLAYOUT_TITLE, TRUE, TRUE );
+            ((SdPage*)pPage)->SetAutoLayout( AUTOLAYOUT_TITLE, sal_True, sal_True );
 
             eAktPageKind = PPT_NOTEPAGE;
-            SdrPage* pNPage = MakeBlancPage( FALSE );
+            SdrPage* pNPage = MakeBlancPage( sal_False );
             pSdrModel->InsertPage( pNPage );
         }
         SetPageNum( nPageNum, ePageKind );
@@ -1095,7 +1095,7 @@ sal_Bool ImplSdPPTImport::Import()
                     case PPT_LAYOUT_TITLEANDBODYSLIDE :
                     {
                         eAutoLayout = AUTOLAYOUT_ENUM;
-                        USHORT nID1 = pSlideLayout->aPlaceholderId[ 1 ];
+                        sal_uInt16 nID1 = pSlideLayout->aPlaceholderId[ 1 ];
                         switch ( nID1 )
                         {
                             case PPT_PLACEHOLDER_BODY :
@@ -1123,8 +1123,8 @@ sal_Bool ImplSdPPTImport::Import()
                     case PPT_LAYOUT_2COLUMNSANDTITLE :
                     {
                         eAutoLayout = AUTOLAYOUT_2TEXT;
-                        USHORT nID1 = pSlideLayout->aPlaceholderId[ 1 ];
-                        USHORT nID2 = pSlideLayout->aPlaceholderId[ 2 ];
+                        sal_uInt16 nID1 = pSlideLayout->aPlaceholderId[ 1 ];
+                        sal_uInt16 nID2 = pSlideLayout->aPlaceholderId[ 2 ];
                         if ( nID1 == PPT_PLACEHOLDER_BODY && nID2 == PPT_PLACEHOLDER_GRAPH )
                             eAutoLayout = AUTOLAYOUT_TEXTCHART;
                         else if ( nID1 == PPT_PLACEHOLDER_GRAPH && nID2 == PPT_PLACEHOLDER_BODY )
@@ -1149,8 +1149,8 @@ sal_Bool ImplSdPPTImport::Import()
                     case PPT_LAYOUT_2ROWSANDTITLE :
                     {
                         eAutoLayout = AUTOLAYOUT_2TEXT;
-                        USHORT nID1 = pSlideLayout->aPlaceholderId[ 1 ];
-                        USHORT nID2 = pSlideLayout->aPlaceholderId[ 2 ];
+                        sal_uInt16 nID1 = pSlideLayout->aPlaceholderId[ 1 ];
+                        sal_uInt16 nID2 = pSlideLayout->aPlaceholderId[ 2 ];
                         if ( nID1 == PPT_PLACEHOLDER_BODY && nID2 == PPT_PLACEHOLDER_OBJECT )
                             eAutoLayout = AUTOLAYOUT_TEXTOVEROBJ;
                         else if ( nID1 == PPT_PLACEHOLDER_OBJECT && nID2 == PPT_PLACEHOLDER_BODY )
@@ -1197,17 +1197,17 @@ sal_Bool ImplSdPPTImport::Import()
                     break;
                 }
                 if ( eAutoLayout != AUTOLAYOUT_NONE )
-                    pPage->SetAutoLayout( eAutoLayout, FALSE );
+                    pPage->SetAutoLayout( eAutoLayout, sal_False );
             }
         }
         //////////////////////////////////////////////////////////////
         // Handzettel-MasterPage: Autolayout setzen                 //
         //////////////////////////////////////////////////////////////
         SdPage* pHandoutMPage = mpDoc->GetMasterSdPage( 0, PK_HANDOUT );
-        pHandoutMPage->SetAutoLayout( AUTOLAYOUT_HANDOUT6, TRUE, TRUE );
+        pHandoutMPage->SetAutoLayout( AUTOLAYOUT_HANDOUT6, sal_True, sal_True );
     }
 
-    UINT32 nSlideCount = GetPageCount();
+    sal_uInt32 nSlideCount = GetPageCount();
     for ( i = 0; ( i < nSlideCount) && ( i < maSlideNameList.Count() ); i++ )
     {
         SdPage* pPage = mpDoc->GetSdPage( i, PK_STANDARD );
@@ -1301,22 +1301,22 @@ sal_Bool ImplSdPPTImport::Import()
                         if ( SeekToRec( rStCtrl, PPT_PST_NamedShowSlides, aCuHeader.GetRecEndFilePos(), &aContent ) )
                         {
                             PptSlidePersistList* pPageList = GetPageList( PPT_SLIDEPAGE );
-                            UINT32 nSCount = aContent.nRecLen >> 2;
+                            sal_uInt32 nSCount = aContent.nRecLen >> 2;
                             if ( pPageList && nSCount )
                             {
-                                List* pList = mpDoc->GetCustomShowList( TRUE );
+                                List* pList = mpDoc->GetCustomShowList( sal_True );
                                 if ( pList )
                                 {
                                     SdCustomShow* pSdCustomShow = new SdCustomShow( mpDoc );
                                     if ( pSdCustomShow )
                                     {
                                         pSdCustomShow->SetName( aCuShow );
-                                        UINT32 nFound = 0;
-                                        for ( UINT32 nS = 0; nS < nSCount; nS++ )
+                                        sal_uInt32 nFound = 0;
+                                        for ( sal_uInt32 nS = 0; nS < nSCount; nS++ )
                                         {
-                                            UINT32 nPageNumber;
+                                            sal_uInt32 nPageNumber;
                                             rStCtrl >> nPageNumber;
-                                            USHORT nPage = pPageList->FindPage( nPageNumber );
+                                            sal_uInt16 nPage = pPageList->FindPage( nPageNumber );
                                             if ( nPage != PPTSLIDEPERSIST_ENTRY_NOTFOUND )
                                             {
                                                 SdPage* pPage = mpDoc->GetSdPage( nPage, PK_STANDARD );
@@ -1357,7 +1357,7 @@ sal_Bool ImplSdPPTImport::Import()
                     >> nEndSlide;
 
             sal_Unicode nChar;
-            for ( UINT32 i2 = 0; i2 < 32; i2++ )
+            for ( sal_uInt32 i2 = 0; i2 < 32; i2++ )
             {
                 rStCtrl >> nChar;
                 if ( nChar )
@@ -1374,7 +1374,7 @@ sal_Bool ImplSdPPTImport::Import()
         if ( aCustomShow.Len() )
         {
             void* pPtr;
-            List* pList = mpDoc->GetCustomShowList( FALSE );
+            List* pList = mpDoc->GetCustomShowList( sal_False );
             if ( pList )
             {
                 for ( pPtr = pList->First(); pPtr; pPtr = pList->Next() )
@@ -1434,7 +1434,7 @@ void ImplSdPPTImport::SetHeaderFooterPageSettings( SdPage* pPage, const PptSlide
             bool bVisible = pHFE->IsToDisplay( i );
             if ( ( eAktPageKind == PPT_SLIDEPAGE )
                 && ( rSlidePersist.aSlideAtom.aLayout.eLayout == PPT_LAYOUT_TITLESLIDE )
-                    && ( aDocAtom.bTitlePlaceholdersOmitted == TRUE ) )
+                    && ( aDocAtom.bTitlePlaceholdersOmitted == sal_True ) )
             {
                 bVisible = sal_False;
             }
@@ -1519,7 +1519,7 @@ bool Ppt97AnimationStlSortHelper::operator()( const std::pair< SdrObject*, Ppt97
 
 void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimationsUsed )
 {
-    ULONG nFilePosMerk = rStCtrl.Tell();
+    sal_uLong nFilePosMerk = rStCtrl.Tell();
 
     // PageKind an der Seite setzen (bisher nur PK_STANDARD oder PK_NOTES)
     if ( pPage->GetPageKind() == PK_STANDARD )
@@ -1535,7 +1535,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                 if(pPage->TRG_HasMasterPage())
                 {
                     SetOfByte aVisibleLayers = pPage->TRG_GetMasterPageVisibleLayers();
-                    aVisibleLayers.Set(mnBackgroundObjectsLayerID, FALSE);
+                    aVisibleLayers.Set(mnBackgroundObjectsLayerID, sal_False);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                 }
             }
@@ -1543,11 +1543,11 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
         DffRecordHeader aPageRecHd;
         if ( pPage && SeekToAktPage( &aPageRecHd ) )
         {
-            ULONG nPageRecEnd = aPageRecHd.GetRecEndFilePos();
+            sal_uLong nPageRecEnd = aPageRecHd.GetRecEndFilePos();
 
-            BOOL bTryTwice = ( eAktPageKind == PPT_SLIDEPAGE );
-            BOOL bSSSlideInfoAtom = FALSE;
-            while ( TRUE )
+            sal_Bool bTryTwice = ( eAktPageKind == PPT_SLIDEPAGE );
+            sal_Bool bSSSlideInfoAtom = sal_False;
+            while ( sal_True )
             {
                 while ( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < nPageRecEnd ) )
                 {
@@ -1557,7 +1557,7 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                     {
                         case PPT_PST_SSSlideInfoAtom:
                         {
-                            bSSSlideInfoAtom = TRUE;
+                            bSSSlideInfoAtom = sal_True;
                             if ( eAktPageKind == PPT_MASTERPAGE )
                             {
                                 if ( pActualSlidePersist )
@@ -1810,10 +1810,10 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
 //                                  pPage->SetPresChange( mePresChange );
 
                                 if ( nBuildFlags & 4 )
-                                    pPage->SetExcluded( TRUE );                 // Dia nicht anzeigen
+                                    pPage->SetExcluded( sal_True );                 // Dia nicht anzeigen
                                 if ( nBuildFlags & 16 )
                                 {   // Dia mit Soundeffekt
-                                    pPage->SetSound( TRUE );
+                                    pPage->SetSound( sal_True );
                                     String aSoundFile( ReadSound( nSoundRef ) );
                                     pPage->SetSoundFile( aSoundFile );
                                 }
@@ -1827,19 +1827,19 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                     }
                     aHd.SeekToEndOfRecord( rStCtrl );
                 }
-                if ( bTryTwice && ( bSSSlideInfoAtom == FALSE ) )
+                if ( bTryTwice && ( bSSSlideInfoAtom == sal_False ) )
                 {
-                    bTryTwice = FALSE;
+                    bTryTwice = sal_False;
                     if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
                     {
-                        USHORT nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
+                        sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
                         PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
                         if ( pPageList && ( nMasterNum < pPageList->Count() ) )
                         {
                             PptSlidePersistEntry* pE = (*pPageList)[ nMasterNum ];
                             if ( pE )
                             {
-                                UINT32 nOfs = pE->aPersistAtom.nReserved;
+                                sal_uInt32 nOfs = pE->aPersistAtom.nReserved;
                                 if ( nOfs )
                                 {
                                     rStCtrl.Seek( nOfs );
@@ -1898,31 +1898,31 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
 //
 ///////////////////////////////////////////////////////////////////////////
 
-String ImplSdPPTImport::ReadSound(UINT32 nSoundRef) const
+String ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
 {
     String aRetval;
-    UINT32 nPosMerk = rStCtrl.Tell();
+    sal_uInt32 nPosMerk = rStCtrl.Tell();
     DffRecordHeader aDocHd;
     if ( SeekToDocument( &aDocHd ) )
     {
-        UINT32 nSoundLen = aDocHd.GetRecEndFilePos();
+        sal_uInt32 nSoundLen = aDocHd.GetRecEndFilePos();
         DffRecordHeader aSoundBlockRecHd;
         if( SeekToRec( rStCtrl, PPT_PST_SoundCollection, nSoundLen, &aSoundBlockRecHd ) )
         {
-            UINT32 nDataLen = aSoundBlockRecHd.GetRecEndFilePos();
+            sal_uInt32 nDataLen = aSoundBlockRecHd.GetRecEndFilePos();
             DffRecordHeader aSoundRecHd;
-            BOOL bRefStrValid = FALSE;
-            BOOL bDone = FALSE;
+            sal_Bool bRefStrValid = sal_False;
+            sal_Bool bDone = sal_False;
 
             while( !bDone && SeekToRec( rStCtrl, PPT_PST_Sound, nDataLen, &aSoundRecHd ) )
             {
-                UINT32 nStrLen = aSoundRecHd.GetRecEndFilePos();
+                sal_uInt32 nStrLen = aSoundRecHd.GetRecEndFilePos();
                 String aRefStr;
-                UINT32 nPosMerk2 = rStCtrl.Tell();
+                sal_uInt32 nPosMerk2 = rStCtrl.Tell();
                 if ( SeekToRec( rStCtrl, PPT_PST_CString, nStrLen, NULL, 2 ) )
                 {
                     if ( ReadString( aRefStr ) )
-                        bRefStrValid = TRUE;
+                        bRefStrValid = sal_True;
                 }
                 if ( bRefStrValid )
                 {
@@ -1932,7 +1932,7 @@ String ImplSdPPTImport::ReadSound(UINT32 nSoundRef) const
                         if ( SeekToRec( rStCtrl, PPT_PST_CString, nStrLen, NULL, 0 ) )
                         {
                             ReadString( aRetval );
-                            bDone = TRUE;
+                            bDone = sal_True;
                         }
                     }
                 }
@@ -1941,13 +1941,13 @@ String ImplSdPPTImport::ReadSound(UINT32 nSoundRef) const
                     // ueberpruefen, ob diese Sound-Datei schon
                     // existiert. Wenn nicht, exportiere diese
                     // in unser lokales Sound-Verzeichnis.
-                    BOOL    bSoundExists = FALSE;
+                    sal_Bool    bSoundExists = sal_False;
                     List*   pSoundList = new List();
 
                     GalleryExplorer::FillObjList( GALLERY_THEME_SOUNDS, *pSoundList );
                     GalleryExplorer::FillObjList( GALLERY_THEME_USERSOUNDS, *pSoundList );
 
-                    for( ULONG n = 0; ( n < pSoundList->Count() ) && !bSoundExists; n++ )
+                    for( sal_uLong n = 0; ( n < pSoundList->Count() ) && !bSoundExists; n++ )
                     {
                         INetURLObject   aURL( *(String*)pSoundList->GetObject( n ) );
                         String          aSoundName( aURL.GetName() );
@@ -1955,7 +1955,7 @@ String ImplSdPPTImport::ReadSound(UINT32 nSoundRef) const
                         if( aSoundName == aRetval )
                         {
                             aRetval = *(String*)pSoundList->GetObject( n );
-                            bSoundExists = TRUE;
+                            bSoundExists = sal_True;
                         }
                     }
 
@@ -1974,8 +1974,8 @@ String ImplSdPPTImport::ReadSound(UINT32 nSoundRef) const
                             INetURLObject   aGalleryUserSound( aGalleryDir.GetToken( aGalleryDir.GetTokenCount( ';' ) - 1 ) );
 
                             aGalleryUserSound.Append( aRetval );
-                            UINT32 nSoundDataLen = aSoundDataRecHd.nRecLen;
-                            UINT8* pBuf = new UINT8[ nSoundDataLen ];
+                            sal_uInt32 nSoundDataLen = aSoundDataRecHd.nRecLen;
+                            sal_uInt8* pBuf = new sal_uInt8[ nSoundDataLen ];
 
                             rStCtrl.Read( pBuf, nSoundDataLen );
                             SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aGalleryUserSound.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_TRUNC );
@@ -2247,7 +2247,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         {
             pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
             if ( pSheet )
-                ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, TRUE );
+                ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, sal_True );
             DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for titleobject (SJ)" );
         }
         break;
@@ -2255,7 +2255,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         {
             pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TEXT );
             if ( pSheet )
-                ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, TRUE );
+                ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, sal_True );
             DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for subtitleobject (SJ)" );
         }
         break;
@@ -2263,7 +2263,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
         case TSS_TYPE_HALFBODY :
         case TSS_TYPE_QUARTERBODY :
         {
-            for ( UINT16 nLevel = 9; nLevel; nLevel-- )
+            for ( sal_uInt16 nLevel = 9; nLevel; nLevel-- )
             {
                 String aName( pPage->GetLayoutName() );
                 aName.Append( (sal_Unicode)( ' ' ) );
@@ -2275,7 +2275,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             }
             DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for outlinerobject (SJ)" );
             if ( pSheet )
-                ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, TRUE );
+                ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, sal_True );
             ppStyleSheetAry = &pStyleSheetAry[ 0 ];
         }
         break;
@@ -2286,7 +2286,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             {
                 pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
                 if ( pSheet )
-                    ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, TRUE );
+                    ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, sal_True );
                 DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for titleobject (SJ)" );
             }
             else
@@ -2294,7 +2294,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                 pSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_NOTES );
                 DBG_ASSERT( pSheet, "ImplSdPPTImport::ApplyTextObj -> could not get stylesheet for notesobj (SJ)" );
                 if ( pSheet )
-                    ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, TRUE );
+                    ((SdrAttrObj*)pText)->SdrAttrObj::NbcSetStyleSheet( pSheet, sal_True );
             }
         }
         break;
@@ -2329,8 +2329,8 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             {
                 if ( !bIsHeaderFooter )
                 {
-                    pText->SetNotVisibleAsMaster( TRUE );
-                    pText->SetEmptyPresObj( TRUE );
+                    pText->SetNotVisibleAsMaster( sal_True );
+                    pText->SetEmptyPresObj( sal_True );
                 }
                 pText->SetUserCall( pPage );
                 pPage->InsertPresObj( pText, ePresKind );
@@ -2353,13 +2353,13 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                         rItemSet.Put( (SdrTextVertAdjustItem&)pText->GetMergedItem( SDRATTR_TEXT_VERTADJUST ) );
                         rItemSet.Put( (SdrTextHorzAdjustItem&)pText->GetMergedItem( SDRATTR_TEXT_HORZADJUST ) );
                     }
-                    pText->NbcSetStyleSheet( pSheet2, FALSE );
+                    pText->NbcSetStyleSheet( pSheet2, sal_False );
                 }
 
                 SfxItemSet aTempAttr( mpDoc->GetPool() );
                 SdrTextMinFrameHeightItem aMinHeight( pText->GetLogicRect().GetSize().Height() );
                 aTempAttr.Put( aMinHeight );
-                SdrTextAutoGrowHeightItem aAutoGrowHeight( FALSE );
+                SdrTextAutoGrowHeightItem aAutoGrowHeight( sal_False );
                 aTempAttr.Put( aAutoGrowHeight );
                 pText->SetMergedItemSet(aTempAttr);
             }
@@ -2373,8 +2373,8 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
             const PptSlideLayoutAtom* pSlideLayout = GetSlideLayoutAtom();
             if ( pSlideLayout || ( eAktPageKind == PPT_NOTEPAGE ) )
             {
-                INT16 nPlaceholderId = pPlaceHolder->nPlaceholderId;
-                UINT16 i = 0;
+                sal_Int16 nPlaceholderId = pPlaceHolder->nPlaceholderId;
+                sal_uInt16 i = 0;
                 if ( eAktPageKind == PPT_SLIDEPAGE )
                 {
                     for ( ; i < 8; i++ )
@@ -2445,14 +2445,14 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                         }
                         else
                         {
-                            SdrObject* pPresObj = pPage->CreatePresObj( ePresObjKind, bVertical, pText->GetLogicRect(), TRUE );
+                            SdrObject* pPresObj = pPage->CreatePresObj( ePresObjKind, bVertical, pText->GetLogicRect(), sal_True );
                             pPresObj->SetUserCall( pPage );
 
                             SfxItemSet aSet( pSdrModel->GetItemPool() );
                             ApplyAttributes( rStCtrl, aSet );
                             pPresObj->SetMergedItemSet(aSet);
 
-                            if ( ( eAktPageKind != PPT_NOTEPAGE ) && ( pSlideLayout->aPlacementId[ i ] != (ULONG)-1 ) )
+                            if ( ( eAktPageKind != PPT_NOTEPAGE ) && ( pSlideLayout->aPlacementId[ i ] != (sal_uLong)-1 ) )
                             {
                                 SdrObject* pTitleObj = ((SdPage&)pPage->TRG_GetMasterPage()).GetPresObj( PRESOBJ_TITLE );
                                 SdrObject* pOutlineObj = ((SdPage&)pPage->TRG_GetMasterPage()).GetPresObj( PRESOBJ_OUTLINE );
@@ -2598,21 +2598,21 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 pProcessData->pPage->InsertPresObj( pObj, PRESOBJ_PAGE );
         }
 
-        BOOL bInhabitanceChecked = FALSE;
-        BOOL bAnimationInfoFound = FALSE;
+        sal_Bool bInhabitanceChecked = sal_False;
+        sal_Bool bAnimationInfoFound = sal_False;
         DffRecordHeader aMasterShapeHd;
 
         if ( maShapeRecords.SeekToContent( rSt, DFF_msofbtClientData, SEEK_FROM_CURRENT_AND_RESTART ) )
         {
             DffRecordHeader& rHdClientData = *maShapeRecords.Current();
-            while( TRUE )
+            while( sal_True )
             {
-                UINT32 nClientDataLen = rHdClientData.GetRecEndFilePos();
+                sal_uInt32 nClientDataLen = rHdClientData.GetRecEndFilePos();
                 DffRecordHeader aHd;
                 do
                 {
                     rSt >> aHd;
-                    UINT32 nHdRecEnd = aHd.GetRecEndFilePos();
+                    sal_uInt32 nHdRecEnd = aHd.GetRecEndFilePos();
                     switch ( aHd.nRecType )
                     {
                         case PPT_PST_AnimationInfo :
@@ -2656,14 +2656,14 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
                                     maAnimations[pObj] = pAnimation;
 
-                                    bAnimationInfoFound = TRUE;
+                                    bAnimationInfoFound = sal_True;
                                 }
                             }
                         }
                         break;
                         case PPT_PST_InteractiveInfo:
                         {
-                            UINT32 nFilePosMerk2 = rSt.Tell();
+                            sal_uInt32 nFilePosMerk2 = rSt.Tell();
                             String aMacroName;
 
                             if(SeekToRec( rSt, PPT_PST_CString, nHdRecEnd, NULL, 0 ) )
@@ -2725,7 +2725,7 @@ SdrObject* ImplSdPPTImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
 
                 if ( bInhabitanceChecked || bAnimationInfoFound )
                     break;
-                bInhabitanceChecked = TRUE;
+                bInhabitanceChecked = sal_True;
                 if ( ! ( IsProperty( DFF_Prop_hspMaster ) && SeekToShape( rSt, pData, GetPropertyValue( DFF_Prop_hspMaster ) ) ) )
                     break;
                 rSt >> aMasterShapeHd;

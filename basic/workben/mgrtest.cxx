@@ -85,7 +85,7 @@ private:
     BasicManager*   pBasMgr;
 
     void            CheckError();
-    USHORT          nLibX;
+    sal_uInt16          nLibX;
     DECL_LINK( BasicErrorHdl, StarBASIC * );
 
 
@@ -125,7 +125,7 @@ TestWindow::TestWindow() :
     aFont.SetSize( Size( 0, 6 ) );
     aFont.SetPitch( PITCH_VARIABLE );
     aFont.SetFamily( FAMILY_SWISS );
-    aFont.SetTransparent( TRUE );
+    aFont.SetTransparent( sal_True );
     aFont.SetAlign( ALIGN_TOP );
     aToolBox.SetFont( aFont );
     SetFont( aFont );
@@ -197,7 +197,7 @@ void TestWindow::ShowInfo()
     if ( pBasMgr )
     {
         Point aPos( 10, aToolBox.GetSizePixel().Height()+5 );
-        for ( USHORT nLib = 0; nLib < pBasMgr->GetLibCount(); nLib++ )
+        for ( sal_uInt16 nLib = 0; nLib < pBasMgr->GetLibCount(); nLib++ )
         {
             String aOutStr( nLib );
             aOutStr +=": ";
@@ -212,7 +212,7 @@ void TestWindow::ShowInfo()
             aOutStr += ">, Storage='";
             aOutStr += pBasMgr->GetLibStorageName( nLib );
             aOutStr += "', bLoaded=";
-            aOutStr += (USHORT)pBasMgr->IsLibLoaded( nLib );
+            aOutStr += (sal_uInt16)pBasMgr->IsLibLoaded( nLib );
             DrawText( aPos, aOutStr );
             aPos.Y() += nH;
         }
@@ -223,22 +223,22 @@ void TestWindow::UpdateToolBox()
 {
     // View of some buttons as checked or disabled if
     // wished by tests
-    aToolBox.EnableItem( TB_ORG, (BOOL)(ULONG)pBasMgr );
+    aToolBox.EnableItem( TB_ORG, (sal_Bool)(sal_uIntPtr)pBasMgr );
 
-    aToolBox.EnableItem( TB_CREATELIB1, (BOOL)(ULONG)pBasMgr );
-    aToolBox.EnableItem( TB_CREATELIB2, (BOOL)(ULONG)pBasMgr );
-    aToolBox.EnableItem( TB_CREATELIB3, (BOOL)(ULONG)pBasMgr );
+    aToolBox.EnableItem( TB_CREATELIB1, (sal_Bool)(sal_uIntPtr)pBasMgr );
+    aToolBox.EnableItem( TB_CREATELIB2, (sal_Bool)(sal_uIntPtr)pBasMgr );
+    aToolBox.EnableItem( TB_CREATELIB3, (sal_Bool)(sal_uIntPtr)pBasMgr );
 
-    aToolBox.EnableItem( TB_LOADLIB1, (BOOL)(ULONG)pBasMgr );
-    aToolBox.EnableItem( TB_LOADLIB2, (BOOL)(ULONG)pBasMgr );
-    aToolBox.EnableItem( TB_LOADLIB3, (BOOL)(ULONG)pBasMgr );
+    aToolBox.EnableItem( TB_LOADLIB1, (sal_Bool)(sal_uIntPtr)pBasMgr );
+    aToolBox.EnableItem( TB_LOADLIB2, (sal_Bool)(sal_uIntPtr)pBasMgr );
+    aToolBox.EnableItem( TB_LOADLIB3, (sal_Bool)(sal_uIntPtr)pBasMgr );
 
-    aToolBox.EnableItem( TB_STORELIBX, (BOOL)(ULONG)pBasMgr );
-    aToolBox.EnableItem( TB_EXECX, (BOOL)(ULONG)pBasMgr );
-    aToolBox.EnableItem( TB_UNLOADX, (BOOL)(ULONG)pBasMgr );
-    aToolBox.EnableItem( TB_LOADX, (BOOL)(ULONG)pBasMgr );
-    aToolBox.EnableItem( TB_REMOVEX, (BOOL)(ULONG)pBasMgr );
-    aToolBox.EnableItem( TB_REMOVEDELX, (BOOL)(ULONG)pBasMgr );
+    aToolBox.EnableItem( TB_STORELIBX, (sal_Bool)(sal_uIntPtr)pBasMgr );
+    aToolBox.EnableItem( TB_EXECX, (sal_Bool)(sal_uIntPtr)pBasMgr );
+    aToolBox.EnableItem( TB_UNLOADX, (sal_Bool)(sal_uIntPtr)pBasMgr );
+    aToolBox.EnableItem( TB_LOADX, (sal_Bool)(sal_uIntPtr)pBasMgr );
+    aToolBox.EnableItem( TB_REMOVEX, (sal_Bool)(sal_uIntPtr)pBasMgr );
+    aToolBox.EnableItem( TB_REMOVEDELX, (sal_Bool)(sal_uIntPtr)pBasMgr );
 
     aToolBox.CheckItem( TB_LIB0, nLibX == 0 );
     aToolBox.CheckItem( TB_LIB1, nLibX == 1 );
@@ -248,8 +248,8 @@ void TestWindow::UpdateToolBox()
 
 IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
 {
-    USHORT nId = aToolBox.GetCurItemId();
-    BOOL bChecked = aToolBox.IsItemChecked( nId );
+    sal_uInt16 nId = aToolBox.GetCurItemId();
+    sal_Bool bChecked = aToolBox.IsItemChecked( nId );
     switch ( nId )
     {
         case TB_NEW:
@@ -289,7 +289,7 @@ IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
         {
             if ( pBasMgr )
             {
-                USHORT nLib = pBasMgr->GetLibId( pBasMgr->CreateLib( pLib1Str ) );
+                sal_uInt16 nLib = pBasMgr->GetLibId( pBasMgr->CreateLib( pLib1Str ) );
                 if ( nLib != LIB_NOTFOUND )
                 {
                     pBasMgr->SetLibStorageName( nLib, "d:\\mystore.svs" );
@@ -309,7 +309,7 @@ IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
         {
             if ( pBasMgr )
             {
-                USHORT nLib = pBasMgr->GetLibId( pBasMgr->CreateLib( pLib2Str ) );
+                sal_uInt16 nLib = pBasMgr->GetLibId( pBasMgr->CreateLib( pLib2Str ) );
                 if ( nLib != LIB_NOTFOUND )
                 {
                     pBasMgr->SetLibStorageName( nLib, "d:\\mystore.svs" );
@@ -328,7 +328,7 @@ IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
             if ( pBasMgr )
             {
                 // liegt in einem anderen Storage !!!
-                USHORT nLib = pBasMgr->GetLibId( pBasMgr->CreateLib( pLib3Str ) );
+                sal_uInt16 nLib = pBasMgr->GetLibId( pBasMgr->CreateLib( pLib3Str ) );
                 if ( nLib != LIB_NOTFOUND )
                 {
                     pBasMgr->SetLibStorageName( nLib, "d:\\mystore2.svs" );
@@ -347,7 +347,7 @@ IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
             if ( pBasMgr )
             {
                 SvStorageRef xStorage = new SvStorage( "d:\\mystore.svs" );
-                if ( !pBasMgr->AddLib( *xStorage, pLib1Str, FALSE ) )
+                if ( !pBasMgr->AddLib( *xStorage, pLib1Str, sal_False ) )
                     Sound::Beep();
             }
         }
@@ -357,7 +357,7 @@ IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
             if ( pBasMgr )
             {
                 SvStorageRef xStorage = new SvStorage( "d:\\mystore.svs" );
-                if ( !pBasMgr->AddLib( *xStorage, pLib2Str, FALSE ) )
+                if ( !pBasMgr->AddLib( *xStorage, pLib2Str, sal_False ) )
                     Sound::Beep();
             }
         }
@@ -368,7 +368,7 @@ IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
             {
                 // liegt in einem anderen Storage !!!
                 SvStorageRef xStorage = new SvStorage( "d:\\mystore2.svs" );
-                if ( !pBasMgr->AddLib( *xStorage, pLib3Str, FALSE ) )
+                if ( !pBasMgr->AddLib( *xStorage, pLib3Str, sal_False ) )
                     Sound::Beep();
             }
         }
@@ -394,13 +394,13 @@ IMPL_LINK( TestWindow, TBSelect, ToolBox *, p )
         case TB_REMOVEX:
         {
             if ( pBasMgr )
-                pBasMgr->RemoveLib( nLibX, FALSE );
+                pBasMgr->RemoveLib( nLibX, sal_False );
         }
         break;
         case TB_REMOVEDELX:
         {
             if ( pBasMgr )
-                pBasMgr->RemoveLib( nLibX, TRUE );
+                pBasMgr->RemoveLib( nLibX, sal_True );
         }
         break;
         case TB_EXECX:
@@ -527,7 +527,7 @@ void __EXPORT TestWindow::Resize()
 void __EXPORT TestWindow::KeyInput( const KeyEvent& rKEvt )
 {
     char nCharCode = rKEvt.GetCharCode();
-    USHORT nCode = rKEvt.GetKeyCode().GetCode();
+    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
 
     // Nur bei Alt-Return
     if ( ( nCode == KEY_RETURN ) && rKEvt.GetKeyCode().IsMod2() )

@@ -72,11 +72,11 @@ private:
 
     void            FillMenu();
     DECL_LINK( MenuSelect, PopupMenu * );
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
 
 public:
-    SvxSmartTagsControl( USHORT nId, Menu&, SfxBindings& );
+    SvxSmartTagsControl( sal_uInt16 nId, Menu&, SfxBindings& );
     ~SvxSmartTagsControl();
 
     virtual PopupMenu*  GetPopup() const;

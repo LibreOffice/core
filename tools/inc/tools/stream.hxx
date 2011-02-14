@@ -142,16 +142,16 @@ protected:
 public:
     TYPEINFO();
 
-    SvLockBytes(): m_pStream(0), m_bOwner(FALSE), m_bSync(FALSE) {}
+    SvLockBytes(): m_pStream(0), m_bOwner(sal_False), m_bSync(sal_False) {}
 
-    SvLockBytes(SvStream * pTheStream, sal_Bool bTheOwner = FALSE):
-        m_pStream(pTheStream), m_bOwner(bTheOwner), m_bSync(FALSE) {}
+    SvLockBytes(SvStream * pTheStream, sal_Bool bTheOwner = sal_False):
+        m_pStream(pTheStream), m_bOwner(bTheOwner), m_bSync(sal_False) {}
 
     virtual ~SvLockBytes() { close(); }
 
     virtual const SvStream * GetStream() const { return m_pStream; }
 
-    virtual void SetSynchronMode(sal_Bool bTheSync = TRUE) { m_bSync = bTheSync; }
+    virtual void SetSynchronMode(sal_Bool bTheSync = sal_True) { m_bSync = bTheSync; }
 
     virtual sal_Bool IsSynchronMode() const { return m_bSync; }
 
@@ -183,7 +183,7 @@ class TOOLS_DLLPUBLIC SvOpenLockBytes: public SvLockBytes
 public:
     TYPEINFO();
 
-    SvOpenLockBytes(): SvLockBytes(0, FALSE) {}
+    SvOpenLockBytes(): SvLockBytes(0, sal_False) {}
 
     SvOpenLockBytes(SvStream * pStream, sal_Bool bOwner):
         SvLockBytes(pStream, bOwner) {}
@@ -213,7 +213,7 @@ public:
     TYPEINFO();
 
     SvAsyncLockBytes(SvStream * pStream, sal_Bool bOwner):
-        SvOpenLockBytes(pStream, bOwner), m_nSize(0), m_bTerminated(FALSE) {}
+        SvOpenLockBytes(pStream, bOwner), m_nSize(0), m_bTerminated(sal_False) {}
 
     virtual ErrCode ReadAt(sal_Size nPos, void * pBuffer, sal_Size nCount,
                            sal_Size * pRead) const;
@@ -228,7 +228,7 @@ public:
 
     virtual sal_Size Seek(sal_Size nPos);
 
-    virtual void Terminate() { m_bTerminated = TRUE; }
+    virtual void Terminate() { m_bTerminated = sal_True; }
 };
 
 SV_DECL_IMPL_REF(SvAsyncLockBytes);
@@ -257,8 +257,8 @@ private:
     unsigned int    eIOMode:2;      // STREAM_IO_*
 
     // Error-Codes, Konvertierung, Komprimierung, ...
-    int             bIsDirty:1;     // TRUE: Stream != Pufferinhalt
-    int             bIsConsistent:1;// FALSE: Buffer enthaelt Daten, die NICHT
+    int             bIsDirty:1;     // sal_True: Stream != Pufferinhalt
+    int             bIsConsistent:1;// sal_False: Buffer enthaelt Daten, die NICHT
                                     // per PutData in den abgeleiteten Stream
                                     // geschrieben werden duerfen (siehe PutBack)
     int             bSwap:1;
@@ -648,7 +648,7 @@ inline SvStream& SvStream::ReadNumber( int& rInt )
 /*
 inline SvStream& SvStream::ReadNumber( unsigned int& rUInt )
 {
-    ULONG nTmp;
+    sal_uIntPtr nTmp;
     ReadNumber( nTmp );
     rUInt = (unsigned int)nTmp;
     return *this;
@@ -684,7 +684,7 @@ inline SvStream& SvStream::WriteNumber( int nInt )
 /*
 inline SvStream& SvStream::WriteNumber( unsigned int nUInt )
 {
-    WriteNumber( (ULONG)nUInt );
+    WriteNumber( (sal_uIntPtr)nUInt );
     return *this;
 }
 */
@@ -824,7 +824,7 @@ public:
 
     void*           SwitchBuffer( sal_Size nInitSize=512, sal_Size nResize=64 );
     void*           SetBuffer( void* pBuf, sal_Size nSize,
-                               sal_Bool bOwnsData=TRUE, sal_Size nEOF=0 );
+                               sal_Bool bOwnsData=sal_True, sal_Size nEOF=0 );
 
     void            ObjectOwnsMemory( sal_Bool bOwn ) { bOwnsData = bOwn; }
     sal_Bool            IsObjectMemoryOwner() { return bOwnsData; }

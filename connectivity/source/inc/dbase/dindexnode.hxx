@@ -50,14 +50,14 @@ namespace connectivity
         class ONDXKey : public ONDXKey_BASE
         {
             friend class ONDXNode;
-            UINT32          nRecord;                /* Satzzeiger               */
+            sal_uInt32          nRecord;                /* Satzzeiger               */
             ORowSetValue    xValue;                 /* Schluesselwert           */
 
         public:
-            ONDXKey(UINT32 nRec=0);
-            ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, UINT32 nRec);
-            ONDXKey(const rtl::OUString& aStr, UINT32 nRec = 0);
-            ONDXKey(double aVal, UINT32 nRec = 0);
+            ONDXKey(sal_uInt32 nRec=0);
+            ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, sal_uInt32 nRec);
+            ONDXKey(const rtl::OUString& aStr, sal_uInt32 nRec = 0);
+            ONDXKey(double aVal, sal_uInt32 nRec = 0);
 
             inline ONDXKey(const ONDXKey& rKey);
 
@@ -66,21 +66,21 @@ namespace connectivity
 
             virtual const ORowSetValue& getValue() const;
 
-            UINT32 GetRecord() const        { return nRecord;   }
-            void setRecord(UINT32 _nRec)    { nRecord = _nRec;  }
+            sal_uInt32 GetRecord() const        { return nRecord;   }
+            void setRecord(sal_uInt32 _nRec)    { nRecord = _nRec;  }
             void   ResetRecord()            { nRecord = 0;      }
 
-            BOOL operator == (const ONDXKey& rKey) const;
-            BOOL operator != (const ONDXKey& rKey) const;
-            BOOL operator <  (const ONDXKey& rKey) const;
-            BOOL operator <= (const ONDXKey& rKey) const;
-            BOOL operator >  (const ONDXKey& rKey) const;
-            BOOL operator >= (const ONDXKey& rKey) const;
+            sal_Bool operator == (const ONDXKey& rKey) const;
+            sal_Bool operator != (const ONDXKey& rKey) const;
+            sal_Bool operator <  (const ONDXKey& rKey) const;
+            sal_Bool operator <= (const ONDXKey& rKey) const;
+            sal_Bool operator >  (const ONDXKey& rKey) const;
+            sal_Bool operator >= (const ONDXKey& rKey) const;
 
-            BOOL Load (SvFileStream& rStream, BOOL bText);
-            BOOL Write(SvFileStream& rStream, BOOL bText);
+            sal_Bool Load (SvFileStream& rStream, sal_Bool bText);
+            sal_Bool Write(SvFileStream& rStream, sal_Bool bText);
 
-            static BOOL IsText(sal_Int32 eType);
+            static sal_Bool IsText(sal_Int32 eType);
 
         private:
             StringCompare Compare(const ONDXKey& rKey) const;
@@ -100,18 +100,18 @@ namespace connectivity
             friend  SvStream& operator << (SvStream &rStream, const ONDXPagePtr&);
             friend  SvStream& operator >> (SvStream &rStream, ONDXPagePtr&);
 
-            UINT32  nPagePos;       // Position in der Indexdatei
+            sal_uInt32  nPagePos;       // Position in der Indexdatei
 
         public:
-            ONDXPagePtr(UINT32 nPos = 0):nPagePos(nPos){}
+            ONDXPagePtr(sal_uInt32 nPos = 0):nPagePos(nPos){}
             ONDXPagePtr(const ONDXPagePtr& rRef);
             ONDXPagePtr(ONDXPage* pRefPage);
 
             ONDXPagePtr& operator=(const ONDXPagePtr& rRef);
             ONDXPagePtr& operator=(ONDXPage* pPageRef);
 
-            UINT32 GetPagePos() const {return nPagePos;}
-            BOOL HasPage() const {return nPagePos != 0;}
+            sal_uInt32 GetPagePos() const {return nPagePos;}
+            sal_Bool HasPage() const {return nPagePos != 0;}
             //  sal_Bool Is() const { return isValid(); }
         };
         //==================================================================
@@ -124,9 +124,9 @@ namespace connectivity
             friend  SvStream& operator << (SvStream &rStream, const ONDXPage&);
             friend  SvStream& operator >> (SvStream &rStream, ONDXPage&);
 
-            UINT32      nPagePos;               // Position in der Indexdatei
-            BOOL        bModified : 1;
-            USHORT      nCount;
+            sal_uInt32      nPagePos;               // Position in der Indexdatei
+            sal_Bool        bModified : 1;
+            sal_uInt16      nCount;
 
             ONDXPagePtr aParent,            // VaterSeite
                         aChild;             // Zeiger auf rechte ChildPage
@@ -135,33 +135,33 @@ namespace connectivity
 
         public:
             // Knoten Operationen
-            USHORT  Count() const {return nCount;}
+            sal_uInt16  Count() const {return nCount;}
 
-            BOOL    Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft = 0);
-            BOOL    Insert(USHORT nIndex, ONDXNode& rNode);
-            BOOL    Append(ONDXNode& rNode);
-            BOOL    Delete(USHORT);
-            void    Remove(USHORT);
-            void    Release(BOOL bSave = TRUE);
-            void    ReleaseFull(BOOL bSave = TRUE);
+            sal_Bool    Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft = 0);
+            sal_Bool    Insert(sal_uInt16 nIndex, ONDXNode& rNode);
+            sal_Bool    Append(ONDXNode& rNode);
+            sal_Bool    Delete(sal_uInt16);
+            void    Remove(sal_uInt16);
+            void    Release(sal_Bool bSave = sal_True);
+            void    ReleaseFull(sal_Bool bSave = sal_True);
 
             // Aufteilen und Zerlegen
             ONDXNode Split(ONDXPage& rPage);
-            void Merge(USHORT nParentNodePos, ONDXPagePtr xPage);
+            void Merge(sal_uInt16 nParentNodePos, ONDXPagePtr xPage);
 
             // Zugriffsoperationen
-            ONDXNode& operator[] (USHORT nPos);
-            const ONDXNode& operator[] (USHORT nPos) const;
+            ONDXNode& operator[] (sal_uInt16 nPos);
+            const ONDXNode& operator[] (sal_uInt16 nPos) const;
 
-            BOOL IsRoot() const;
-            BOOL IsLeaf() const;
-            BOOL IsModified() const;
-            BOOL HasParent();
-            BOOL HasChild() const;
+            sal_Bool IsRoot() const;
+            sal_Bool IsLeaf() const;
+            sal_Bool IsModified() const;
+            sal_Bool HasParent();
+            sal_Bool HasChild() const;
 
-            BOOL IsFull() const;
+            sal_Bool IsFull() const;
 
-            UINT32 GetPagePos() const {return nPagePos;}
+            sal_uInt32 GetPagePos() const {return nPagePos;}
             ONDXPagePtr& GetChild(ODbaseIndex* pIndex = 0);
 
             // Parent braucht nicht nachgeladen zu werden
@@ -173,8 +173,8 @@ namespace connectivity
             void SetChild(ONDXPagePtr aCh);
             void SetParent(ONDXPagePtr aPa);
 
-            USHORT Search(const ONDXKey& rSearch);
-            USHORT Search(const ONDXPage* pPage);
+            sal_uInt16 Search(const ONDXKey& rSearch);
+            sal_uInt16 Search(const ONDXPage* pPage);
             void   SearchAndReplace(const ONDXKey& rSearch, ONDXKey& rReplace);
 
         protected:
@@ -183,11 +183,11 @@ namespace connectivity
 
             virtual void QueryDelete();
 
-            void SetModified(BOOL bMod) {bModified = bMod;}
-            void SetPagePos(UINT32 nPage) {nPagePos = nPage;}
+            void SetModified(sal_Bool bMod) {bModified = bMod;}
+            void SetPagePos(sal_uInt32 nPage) {nPagePos = nPage;}
 
-            BOOL Find(const ONDXKey&);  // rek. Abstieg
-            USHORT FindPos(const ONDXKey& rKey) const;
+            sal_Bool Find(const ONDXKey&);  // rek. Abstieg
+            sal_uInt16 FindPos(const ONDXKey& rKey) const;
 
 #if OSL_DEBUG_LEVEL > 1
             void PrintPage();
@@ -199,11 +199,11 @@ namespace connectivity
         SvStream& operator << (SvStream &rStream, const ONDXPagePtr&);
         SvStream& operator >> (SvStream &rStream, ONDXPagePtr&);
 
-        inline BOOL ONDXPage::IsRoot() const {return !aParent.Is();}
-        inline BOOL ONDXPage::IsLeaf() const {return !aChild.HasPage();}
-        inline BOOL ONDXPage::IsModified() const {return bModified;}
-        inline BOOL ONDXPage::HasParent() {return aParent.Is();}
-        inline BOOL ONDXPage::HasChild() const {return aChild.HasPage();}
+        inline sal_Bool ONDXPage::IsRoot() const {return !aParent.Is();}
+        inline sal_Bool ONDXPage::IsLeaf() const {return !aChild.HasPage();}
+        inline sal_Bool ONDXPage::IsModified() const {return bModified;}
+        inline sal_Bool ONDXPage::HasParent() {return aParent.Is();}
+        inline sal_Bool ONDXPage::HasChild() const {return aChild.HasPage();}
         inline ONDXPagePtr ONDXPage::GetParent() {return aParent;}
 
         inline void ONDXPage::SetParent(ONDXPagePtr aPa = ONDXPagePtr())
@@ -239,7 +239,7 @@ namespace connectivity
                        :aChild(aPagePtr),aKey(rKey) {}
 
             // verweist der Knoten auf eine Seite
-            BOOL            HasChild() const {return aChild.HasPage();}
+            sal_Bool            HasChild() const {return aChild.HasPage();}
             // Ist ein Index angegeben, kann gegebenfalls die Seite nachgeladen werden
             ONDXPagePtr&    GetChild(ODbaseIndex* pIndex = NULL, ONDXPage* = NULL);
 
@@ -256,14 +256,14 @@ namespace connectivity
         //==================================================================
         // inline implementation
         //==================================================================
-//      inline ONDXKey::ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, UINT32 nRec)
+//      inline ONDXKey::ONDXKey(const ORowSetValue& rVal, sal_Int32 eType, sal_uInt32 nRec)
 //          : ONDXKey_BASE(eType)
 //          , nRecord(nRec),xValue(rVal)
 //      {
 //      }
 
 
-//      inline ONDXKey::ONDXKey(const rtl::OUString& aStr, UINT32 nRec)
+//      inline ONDXKey::ONDXKey(const rtl::OUString& aStr, sal_uInt32 nRec)
 //                  : ONDXKey_BASE(::com::sun::star::sdbc::DataType::VARCHAR)
 //                   ,nRecord(nRec)
 //      {
@@ -271,14 +271,14 @@ namespace connectivity
 //              xValue = aStr;
 //      }
 
-//      inline ONDXKey::ONDXKey(double aVal, UINT32 nRec)
+//      inline ONDXKey::ONDXKey(double aVal, sal_uInt32 nRec)
 //                   : ONDXKey_BASE(::com::sun::star::sdbc::DataType::DOUBLE)
 //                   ,nRecord(nRec)
 //                   ,xValue(aVal)
 //      {
 //      }
 
-//      inline ONDXKey::ONDXKey(UINT32 nRec)
+//      inline ONDXKey::ONDXKey(sal_uInt32 nRec)
 //                   :nRecord(nRec)
 //      {
 //      }
@@ -301,29 +301,29 @@ namespace connectivity
             return *this;
         }
 
-        inline BOOL ONDXKey::operator == (const ONDXKey& rKey) const
+        inline sal_Bool ONDXKey::operator == (const ONDXKey& rKey) const
         {
             if(&rKey == this)
                 return sal_True;
             return Compare(rKey) == COMPARE_EQUAL;
         }
-        inline BOOL ONDXKey::operator != (const ONDXKey& rKey) const
+        inline sal_Bool ONDXKey::operator != (const ONDXKey& rKey) const
         {
             return !operator== (rKey);
         }
-        inline BOOL ONDXKey::operator <  (const ONDXKey& rKey) const
+        inline sal_Bool ONDXKey::operator <  (const ONDXKey& rKey) const
         {
             return Compare(rKey) == COMPARE_LESS;
         }
-        inline BOOL ONDXKey::operator >  (const ONDXKey& rKey) const
+        inline sal_Bool ONDXKey::operator >  (const ONDXKey& rKey) const
         {
             return Compare(rKey) == COMPARE_GREATER;
         }
-        inline BOOL ONDXKey::operator <= (const ONDXKey& rKey) const
+        inline sal_Bool ONDXKey::operator <= (const ONDXKey& rKey) const
         {
             return !operator > (rKey);
         }
-        inline BOOL ONDXKey::operator >= (const ONDXKey& rKey) const
+        inline sal_Bool ONDXKey::operator >= (const ONDXKey& rKey) const
         {
             return !operator< (rKey);
         }

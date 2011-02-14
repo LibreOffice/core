@@ -104,7 +104,7 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     short   m_nOldVRel;
 
     double  m_fWidthHeightRatio; //width-to-height ratio to support the KeepRatio button
-    USHORT  m_nHtmlMode;
+    sal_uInt16  m_nHtmlMode;
     bool    m_bHtmlMode;
     bool    m_bAtHoriPosModified;
     bool    m_bAtVertPosModified;
@@ -123,15 +123,15 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( ProtectHdl, TriStateBox *);
 
-    void            InitPos(short nAnchorType, USHORT nH, USHORT nHRel,
-                            USHORT nV,  USHORT nVRel,
+    void            InitPos(short nAnchorType, sal_uInt16 nH, sal_uInt16 nHRel,
+                            sal_uInt16 nV,  sal_uInt16 nVRel,
                             long   nX,  long   nY);
-    USHORT          GetMapPos(FrmMap *pMap, ListBox &rAlignLB);
-    short           GetAlignment(FrmMap *pMap, USHORT nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
+    sal_uInt16          GetMapPos(FrmMap *pMap, ListBox &rAlignLB);
+    short           GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
     short           GetRelation(FrmMap *pMap, ListBox &rRelationLB);
     short           GetAnchorType(bool* pbHasChanged = 0);
-    ULONG           FillRelLB(FrmMap *pMap, USHORT nLBSelPos, USHORT nAlign, USHORT nRel, ListBox &rLB, FixedText &rFT);
-    USHORT          FillPosLB(FrmMap *pMap, USHORT nAlign, const USHORT _nRel, ListBox &rLB);
+    sal_uLong           FillRelLB(FrmMap *pMap, sal_uInt16 nLBSelPos, sal_uInt16 nAlign, sal_uInt16 nRel, ListBox &rLB, FixedText &rFT);
+    sal_uInt16          FillPosLB(FrmMap *pMap, sal_uInt16 nAlign, const sal_uInt16 _nRel, ListBox &rLB);
 
     void            UpdateExample();
 
@@ -140,14 +140,14 @@ public:
     ~SvxSwPosSizeTabPage();
 
     static SfxTabPage* Create( Window*, const SfxItemSet& );
-    static USHORT*     GetRanges();
+    static sal_uInt16*     GetRanges();
 
-    virtual BOOL FillItemSet( SfxItemSet& );
+    virtual sal_Bool FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
     virtual int  DeactivatePage( SfxItemSet* pSet );
 
-    void    EnableAnchorTypes(USHORT nAnchorEnable);
+    void    EnableAnchorTypes(sal_uInt16 nAnchorEnable);
 
     void SetValidateFramePosLink( const Link& rLink )
             {m_aValidateLink = rLink;}

@@ -58,7 +58,7 @@ FmInputRecordNoDialog::FmInputRecordNoDialog(Window * pParent)
 {
     m_aRecordNo.SetMin(1);
     m_aRecordNo.SetMax(0x7FFFFFFF);
-    m_aRecordNo.SetStrictFormat(TRUE);
+    m_aRecordNo.SetStrictFormat(sal_True);
     m_aRecordNo.SetDecimalDigits(0);
 
     FreeResource();

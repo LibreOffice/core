@@ -81,7 +81,7 @@ public:
 
     ~UpdateInstallDialog();
 
-    BOOL Close();
+    sal_Bool Close();
     virtual short Execute();
 
 private:

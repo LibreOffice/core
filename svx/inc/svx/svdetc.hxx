@@ -41,11 +41,11 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // ExchangeFormat-Id der DrawingEngine holen. Daten koennen dann per
-//   static BOOL CopyData(pData,nLen,nFormat);
+//   static sal_Bool CopyData(pData,nLen,nFormat);
 // bereitgestellt werden, wobei pData/nLen einen SvMemoryStream beschreiben in
 // dem ein SdrModel gestreamt wird an dem fuer die Zeitdauer des Streamens das
-// Flag SdrModel::SetStreamingSdrModel(TRUE) gesetzt wird.
-// ULONG SdrGetExchangeFormat(); -- JP 18.01.99 - dafuer gibt es ein define
+// Flag SdrModel::SetStreamingSdrModel(sal_True) gesetzt wird.
+// sal_uIntPtr SdrGetExchangeFormat(); -- JP 18.01.99 - dafuer gibt es ein define
 
 class SdrOutliner;
 class SdrModel;
@@ -62,7 +62,7 @@ namespace com { namespace sun { namespace star { namespace lang {
 // Ist pMod<>NULL, dann wird der MapMode des uebergebenen
 // Models verwendet. Die resultierende Default-Fonthoehe bleibt
 // jedoch dieselbe (die logische Fonthoehe wird umgerechnet).
-SVX_DLLPUBLIC SdrOutliner* SdrMakeOutliner( USHORT nOutlinerMode, SdrModel* pMod );
+SVX_DLLPUBLIC SdrOutliner* SdrMakeOutliner( sal_uInt16 nOutlinerMode, SdrModel* pMod );
 
 // Globale Defaulteinstellungen fuer die DrawingEngine.
 // Diese Einstellungen sollte man direkt beim Applikationsstart
@@ -73,7 +73,7 @@ friend class SdrAttrObj;
     String     aFontName;
     FontFamily eFontFamily;
     Color      aFontColor;
-    ULONG      nFontHeight;
+    sal_uIntPtr      nFontHeight;
     MapUnit    eMapUnit;
     Fraction   aMapFraction;
 
@@ -96,8 +96,8 @@ public:
     // 847/100mm entspricht also ca. 24 Point. Verwendet man stattdessen
     // beispielsweise Twips (SetMapUnit(MAP_TWIP)) (20 Twip = 1 Point) muss
     // man als Fonthoehe 480 angeben um 24 Point als default zu erhalten.
-    static void       SetFontHeight(ULONG nHeight)         { GetDefaults().nFontHeight=nHeight; }
-    static ULONG      GetFontHeight()                      { return GetDefaults().nFontHeight; }
+    static void       SetFontHeight(sal_uIntPtr nHeight)         { GetDefaults().nFontHeight=nHeight; }
+    static sal_uIntPtr      GetFontHeight()                      { return GetDefaults().nFontHeight; }
     // Der MapMode wird fuer den globalen Outliner benoetigt.
     // Gleichzeitig bekommt auch jedes neu instanziierte SdrModel
     // diesen MapMode default zugewiesen.
@@ -119,26 +119,26 @@ public:
     // Ist pMod<>NULL, dann wird der MapMode des uebergebenen
     // Models verwendet. Die resultierende Default-Fonthoehe bleibt
     // jedoch dieselbe (die logische Fonthoehe wird umgerechnet).
-    friend SVX_DLLPUBLIC SdrOutliner* SdrMakeOutliner( USHORT nOutlinerMode, SdrModel* pMod );
+    friend SVX_DLLPUBLIC SdrOutliner* SdrMakeOutliner( sal_uInt16 nOutlinerMode, SdrModel* pMod );
 };
 
 class SfxItemSet;
 // Liefert eine Ersatzdarstellung fuer einen XFillStyle
-// Bei XFILL_NONE gibt's FALSE und rCol bleibt unveraendert.
+// Bei XFILL_NONE gibt's sal_False und rCol bleibt unveraendert.
 SVX_DLLPUBLIC FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol);
 
 // Ein Container fuer USHORTs (im Prinzip ein dynamisches Array)
 class UShortCont {
     Container aArr;
 public:
-    UShortCont(USHORT nBlock, USHORT nInit, USHORT nResize): aArr(nBlock,nInit,nResize) {}
+    UShortCont(sal_uInt16 nBlock, sal_uInt16 nInit, sal_uInt16 nResize): aArr(nBlock,nInit,nResize) {}
     void   Clear()                                           { aArr.Clear(); }
-    void   Insert(USHORT nElem, ULONG nPos=CONTAINER_APPEND) { aArr.Insert((void*)ULONG(nElem),nPos); }
-    void   Remove(ULONG nPos)                                { aArr.Remove(nPos); }
-    void   Replace(USHORT nElem, ULONG nPos)                 { aArr.Replace((void*)ULONG(nElem),nPos); }
-    USHORT GetObject(ULONG nPos)                       const { return USHORT(ULONG(aArr.GetObject(nPos))); }
-    ULONG  GetPos(USHORT nElem)                        const { return aArr.GetPos((void*)(ULONG)nElem); }
-    ULONG  GetCount()                                  const { return aArr.Count(); }
+    void   Insert(sal_uInt16 nElem, sal_uIntPtr nPos=CONTAINER_APPEND) { aArr.Insert((void*)sal_uIntPtr(nElem),nPos); }
+    void   Remove(sal_uIntPtr nPos)                                { aArr.Remove(nPos); }
+    void   Replace(sal_uInt16 nElem, sal_uIntPtr nPos)                 { aArr.Replace((void*)sal_uIntPtr(nElem),nPos); }
+    sal_uInt16 GetObject(sal_uIntPtr nPos)                       const { return sal_uInt16(sal_uIntPtr(aArr.GetObject(nPos))); }
+    sal_uIntPtr  GetPos(sal_uInt16 nElem)                        const { return aArr.GetPos((void*)(sal_uIntPtr)nElem); }
+    sal_uIntPtr  GetCount()                                  const { return aArr.Count(); }
     void   Sort();
 };
 
@@ -151,7 +151,7 @@ private:
 //#endif // __PRIVATE
 public:
     ContainerSorter(Container& rNewCont): rCont(rNewCont) {}
-    void DoSort(ULONG a=0, ULONG b=0xFFFFFFFF) const;
+    void DoSort(sal_uIntPtr a=0, sal_uIntPtr b=0xFFFFFFFF) const;
 #ifdef This_Is_Just_For_A_Comment
     Compare() muss returnieren:
       -1 falls *pElem1<*pElem2
@@ -184,25 +184,25 @@ class ImpSdrHdcMerk
     ImpColorMerk* pFarbMerk;
     ImpClipMerk*  pClipMerk;
     Color*        pLineColorMerk;
-    USHORT        nMode;
+    sal_uInt16        nMode;
 public:
-    ImpSdrHdcMerk(const OutputDevice& rOut, USHORT nNewMode=SDRHDC_SAVEALL, FASTBOOL bAutoMerk=TRUE);
+    ImpSdrHdcMerk(const OutputDevice& rOut, sal_uInt16 nNewMode=SDRHDC_SAVEALL, FASTBOOL bAutoMerk=sal_True);
     ~ImpSdrHdcMerk();
     void Save(const OutputDevice& rOut);
     FASTBOOL IsSaved() const                 { return pFarbMerk!=NULL || pClipMerk!=NULL || pLineColorMerk!=NULL; }
-    void Restore(OutputDevice& rOut, USHORT nMask=SDRHDC_SAVEALL) const;
+    void Restore(OutputDevice& rOut, sal_uInt16 nMask=SDRHDC_SAVEALL) const;
 };
 //#endif // __PRIVATE
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Ein ItemSet auf Outliner- bzw. EditEngine-Items durchsuchen
-// Liefert TRUE, wenn der Set solchen Items enthaelt.
-BOOL SearchOutlinerItems(const SfxItemSet& rSet, BOOL bInklDefaults, BOOL* pbOnlyEE=NULL);
+// Liefert sal_True, wenn der Set solchen Items enthaelt.
+sal_Bool SearchOutlinerItems(const SfxItemSet& rSet, sal_Bool bInklDefaults, sal_Bool* pbOnlyEE=NULL);
 
 // zurueck erhaelt man einen neuen WhichTable den
 // man dann irgendwann mit delete platthauen muss.
-USHORT* RemoveWhichRange(const USHORT* pOldWhichTable, USHORT nRangeBeg, USHORT nRangeEnd);
+sal_uInt16* RemoveWhichRange(const sal_uInt16* pOldWhichTable, sal_uInt16 nRangeBeg, sal_uInt16 nRangeEnd);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -217,46 +217,46 @@ class Link;
 class SVX_DLLPUBLIC SvdProgressInfo
 {
 private:
-    ULONG nSumActionCount;  // Summe aller Actions
-    ULONG nSumCurAction;    // Summe aller bearbeiteten Actions
+    sal_uIntPtr nSumActionCount;    // Summe aller Actions
+    sal_uIntPtr nSumCurAction;  // Summe aller bearbeiteten Actions
 
-    ULONG nActionCount;     // Anzahl der Actions im akt. Obj.
-    ULONG nCurAction;       // Anzahl bearbeiteter Act. im akt. Obj.
+    sal_uIntPtr nActionCount;       // Anzahl der Actions im akt. Obj.
+    sal_uIntPtr nCurAction;     // Anzahl bearbeiteter Act. im akt. Obj.
 
-    ULONG nInsertCount;     // Anzahl einzufuegender Act. im akt. Obj.
-    ULONG nCurInsert;       // Anzahl bereits eingefuegter Actions
+    sal_uIntPtr nInsertCount;       // Anzahl einzufuegender Act. im akt. Obj.
+    sal_uIntPtr nCurInsert;     // Anzahl bereits eingefuegter Actions
 
-    ULONG nObjCount;        // Anzahl der selektierten Objekte
-    ULONG nCurObj;          // Aktuelles Objekt
+    sal_uIntPtr nObjCount;      // Anzahl der selektierten Objekte
+    sal_uIntPtr nCurObj;            // Aktuelles Objekt
 
     Link *pLink;
 
 public:
     SvdProgressInfo( Link *_pLink );
 
-    void Init( ULONG _nSumActionCount, ULONG _nObjCount );
+    void Init( sal_uIntPtr _nSumActionCount, sal_uIntPtr _nObjCount );
 
-    BOOL SetNextObject();
+    sal_Bool SetNextObject();
 
-    void SetActionCount( ULONG _nActionCount );
-    void SetInsertCount( ULONG _nInsertCount );
+    void SetActionCount( sal_uIntPtr _nActionCount );
+    void SetInsertCount( sal_uIntPtr _nInsertCount );
 
-    BOOL ReportActions( ULONG nAnzActions );
-    BOOL ReportInserts( ULONG nAnzInserts );
+    sal_Bool ReportActions( sal_uIntPtr nAnzActions );
+    sal_Bool ReportInserts( sal_uIntPtr nAnzInserts );
 
-    ULONG GetSumActionCount() const { return nSumActionCount; };
-    ULONG GetSumCurAction() const { return nSumCurAction; };
-    ULONG GetObjCount() const { return nObjCount; };
-    ULONG GetCurObj() const { return nCurObj; };
+    sal_uIntPtr GetSumActionCount() const { return nSumActionCount; };
+    sal_uIntPtr GetSumCurAction() const { return nSumCurAction; };
+    sal_uIntPtr GetObjCount() const { return nObjCount; };
+    sal_uIntPtr GetCurObj() const { return nCurObj; };
 
-    ULONG GetActionCount() const { return nActionCount; };
-    ULONG GetCurAction() const { return nCurAction; };
+    sal_uIntPtr GetActionCount() const { return nActionCount; };
+    sal_uIntPtr GetCurAction() const { return nCurAction; };
 
-    ULONG GetInsertCount() const { return nInsertCount; };
-    ULONG GetCurInsert() const { return nCurInsert; };
+    sal_uIntPtr GetInsertCount() const { return nInsertCount; };
+    sal_uIntPtr GetCurInsert() const { return nCurInsert; };
 
     void ReportError();
-    BOOL ReportRescales( ULONG nAnzRescales );
+    sal_Bool ReportRescales( sal_uIntPtr nAnzRescales );
 };
 
 
@@ -287,18 +287,18 @@ class AutoTimer;
 
 class OLEObjCache : public Container
 {
-    ULONG               nSize;
+    sal_uIntPtr             nSize;
     AutoTimer*          pTimer;
 
     void UnloadOnDemand();
-    BOOL UnloadObj( SdrOle2Obj* pObj );
+    sal_Bool UnloadObj( SdrOle2Obj* pObj );
     DECL_LINK( UnloadCheckHdl, AutoTimer* );
 
 public:
     OLEObjCache();
     SVX_DLLPUBLIC ~OLEObjCache();
 
-    void SetSize(ULONG nNewSize);
+    void SetSize(sal_uIntPtr nNewSize);
     void InsertObj(SdrOle2Obj* pObj);
     void RemoveObj(SdrOle2Obj* pObj);
 };
@@ -315,7 +315,7 @@ public:
     SdrOutliner*        pOutliner;
     SdrEngineDefaults*  pDefaults;
     ResMgr*             pResMgr;
-    ULONG               nExchangeFormat;
+    sal_uIntPtr                 nExchangeFormat;
     OLEObjCache         aOLEObjCache;
 
 

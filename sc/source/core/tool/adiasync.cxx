@@ -55,7 +55,7 @@ SV_IMPL_PTRARR_SORT( ScAddInDocs, ScAddInDocPtr );
 extern "C" {
 void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData )
 {
-    ScAddInAsync::CallBack( ULONG( nHandle ), pData );
+    ScAddInAsync::CallBack( sal_uLong( nHandle ), pData );
 }
 }
 
@@ -69,11 +69,11 @@ ScAddInAsync::ScAddInAsync() :
 
 
 
-ScAddInAsync::ScAddInAsync( ULONG nHandleP, USHORT nIndex, ScDocument* pDoc ) :
+ScAddInAsync::ScAddInAsync( sal_uLong nHandleP, sal_uInt16 nIndex, ScDocument* pDoc ) :
     SvtBroadcaster(),
     pStr( NULL ),
     nHandle( nHandleP ),
-    bValid( FALSE )
+    bValid( sal_False )
 {
     pDocs = new ScAddInDocs( 1, 1 );
     pDocs->Insert( pDoc );
@@ -99,9 +99,9 @@ ScAddInAsync::~ScAddInAsync()
 
 
 
-ScAddInAsync* ScAddInAsync::Get( ULONG nHandleP )
+ScAddInAsync* ScAddInAsync::Get( sal_uLong nHandleP )
 {
-    USHORT nPos;
+    sal_uInt16 nPos;
     ScAddInAsync* pRet = 0;
     aSeekObj.nHandle = nHandleP;
     if ( theAddInAsyncTbl.Seek_Entry( &aSeekObj, &nPos ) )
@@ -112,7 +112,7 @@ ScAddInAsync* ScAddInAsync::Get( ULONG nHandleP )
 
 
 
-void ScAddInAsync::CallBack( ULONG nHandleP, void* pData )
+void ScAddInAsync::CallBack( sal_uLong nHandleP, void* pData )
 {
     ScAddInAsync* p;
     if ( (p = Get( nHandleP )) == NULL )
@@ -140,12 +140,12 @@ void ScAddInAsync::CallBack( ULONG nHandleP, void* pData )
             DBG_ERROR( "unbekannter AsyncType" );
             return;
     }
-    p->bValid = TRUE;
+    p->bValid = sal_True;
     p->Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress(), NULL ) );
 
     const ScDocument** ppDoc = (const ScDocument**) p->pDocs->GetData();
-    USHORT nCount = p->pDocs->Count();
-    for ( USHORT j=0; j<nCount; j++, ppDoc++ )
+    sal_uInt16 nCount = p->pDocs->Count();
+    for ( sal_uInt16 j=0; j<nCount; j++, ppDoc++ )
     {
         ScDocument* pDoc = (ScDocument*)*ppDoc;
         pDoc->TrackFormulas();
@@ -158,7 +158,7 @@ void ScAddInAsync::CallBack( ULONG nHandleP, void* pData )
 
 void ScAddInAsync::RemoveDocument( ScDocument* pDocumentP )
 {
-    USHORT nPos = theAddInAsyncTbl.Count();
+    sal_uInt16 nPos = theAddInAsyncTbl.Count();
     if ( nPos )
     {
         const ScAddInAsync** ppAsync =
@@ -166,7 +166,7 @@ void ScAddInAsync::RemoveDocument( ScDocument* pDocumentP )
         for ( ; nPos-- >0; ppAsync-- )
         {   // rueckwaerts wg. Pointer-Aufrueckerei im Array
             ScAddInDocs* p = ((ScAddInAsync*)*ppAsync)->pDocs;
-            USHORT nFoundPos;
+            sal_uInt16 nFoundPos;
             if ( p->Seek_Entry( pDocumentP, &nFoundPos ) )
             {
                 p->Remove( nFoundPos );

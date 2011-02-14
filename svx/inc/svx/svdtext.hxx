@@ -54,7 +54,7 @@ public:
     virtual ~SdrText();
 
     virtual void SetModel(SdrModel* pNewModel);
-    virtual void ForceOutlinerParaObject( USHORT nOutlMode );
+    virtual void ForceOutlinerParaObject( sal_uInt16 nOutlMode );
 
     virtual void SetOutlinerParaObject( OutlinerParaObject* pTextObject );
     virtual OutlinerParaObject* GetOutlinerParaObject() const;

@@ -95,10 +95,10 @@ void FuLineEnd::DoExecute( SfxRequest& )
             if( aInfoRec.bCanConvToPath &&
                 pObj->GetObjInventor() == SdrInventor &&
                 pObj->GetObjIdentifier() != OBJ_GRUP )
-                // bCanConvToPath ist bei Gruppenobjekten TRUE,
+                // bCanConvToPath ist bei Gruppenobjekten sal_True,
                 // stuerzt aber bei ConvertToPathObj() ab !
             {
-                pNewObj = pConvPolyObj = pObj->ConvertToPolyObj( TRUE, FALSE );
+                pNewObj = pConvPolyObj = pObj->ConvertToPolyObj( sal_True, sal_False );
 
                 if( !pNewObj || !pNewObj->ISA( SdrPathObj ) )
                     return; // Abbruch, zusaetzliche Sicherheit, die bei
@@ -121,18 +121,18 @@ void FuLineEnd::DoExecute( SfxRequest& )
 
         long nCount = pLineEndList->Count();
         long j = 1;
-        BOOL bDifferent = FALSE;
+        sal_Bool bDifferent = sal_False;
 
         while( !bDifferent )
         {
             aName = aNewName;
             aName.Append( sal_Unicode(' ') );
             aName.Append( UniString::CreateFromInt32( j++ ) );
-            bDifferent = TRUE;
+            bDifferent = sal_True;
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
                 if( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                    bDifferent = FALSE;
+                    bDifferent = sal_False;
             }
         }
 
@@ -146,12 +146,12 @@ void FuLineEnd::DoExecute( SfxRequest& )
             if( pDlg->Execute() == RET_OK )
             {
                 pDlg->GetName( aName );
-                bDifferent = TRUE;
+                bDifferent = sal_True;
 
                 for( long i = 0; i < nCount && bDifferent; i++ )
                 {
                     if( aName == pLineEndList->GetLineEnd( i )->GetName() )
-                        bDifferent = FALSE;
+                        bDifferent = sal_False;
                 }
 
                 if( bDifferent )

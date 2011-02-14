@@ -44,8 +44,8 @@ namespace connectivity
             return 0;
 
         xub_StrLen nTokCount = 1;
-        BOOL bStart = TRUE;     // Stehen wir auf dem ersten Zeichen im Token?
-        BOOL bInString = FALSE; // Befinden wir uns INNERHALB eines (cStrDel delimited) String?
+        sal_Bool bStart = sal_True;     // Stehen wir auf dem ersten Zeichen im Token?
+        sal_Bool bInString = sal_False; // Befinden wir uns INNERHALB eines (cStrDel delimited) String?
 
         // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
         for( xub_StrLen i = 0; i < nLen; ++i )
@@ -53,11 +53,11 @@ namespace connectivity
             const sal_Unicode cChar = m_sString.GetChar(i);
             if (bStart)
             {
-                bStart = FALSE;
+                bStart = sal_False;
                 // Erstes Zeichen ein String-Delimiter?
                 if ( cChar == cStrDel )
                 {
-                    bInString = TRUE;   // dann sind wir jetzt INNERHALB des Strings!
+                    bInString = sal_True;   // dann sind wir jetzt INNERHALB des Strings!
                     continue;           // dieses Zeichen ueberlesen!
                 }
             }
@@ -75,7 +75,7 @@ namespace connectivity
                     else
                     {
                         // String-Ende
-                        bInString = FALSE;
+                        bInString = sal_False;
                     }
                 }
             } // if (bInString)
@@ -85,7 +85,7 @@ namespace connectivity
                 if ( cChar == cTok )
                 {
                     ++nTokCount;
-                    bStart = TRUE;
+                    bStart = sal_True;
                 }
             }
         }
@@ -102,7 +102,7 @@ namespace connectivity
         const xub_StrLen nLen = m_sString.Len();
         if ( nLen )
         {
-            BOOL bInString = (nStartPos < nLen) && (m_sString.GetChar(nStartPos) == cStrDel);   // Befinden wir uns INNERHALB eines (cStrDel delimited) String?
+            sal_Bool bInString = (nStartPos < nLen) && (m_sString.GetChar(nStartPos) == cStrDel);   // Befinden wir uns INNERHALB eines (cStrDel delimited) String?
 
             // Erstes Zeichen ein String-Delimiter?
             if (bInString )
@@ -131,7 +131,7 @@ namespace connectivity
                         else
                         {
                             // String-Ende
-                            bInString = FALSE;
+                            bInString = sal_False;
                             *pData = 0;
                         }
                     }

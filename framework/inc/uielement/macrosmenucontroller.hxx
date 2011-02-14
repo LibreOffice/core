@@ -81,7 +81,7 @@ namespace framework
             virtual void impl_select(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aURL);
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
             String RetrieveLabelFromCommand( const String& aCmdURL );
-            void addScriptItems( PopupMenu* pPopupMenu, USHORT startItemId );
+            void addScriptItems( PopupMenu* pPopupMenu, sal_uInt16 startItemId );
     };
 }
 

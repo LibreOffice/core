@@ -186,7 +186,7 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_WINDOW_STARTDOCKING            1217    // pData = DockingData
 #define VCLEVENT_WINDOW_DOCKING                 1218
 #define VCLEVENT_WINDOW_ENDDOCKING              1219    // pData = EndDockingData
-#define VCLEVENT_WINDOW_PREPARETOGGLEFLOATING   1220    // pData = BOOL
+#define VCLEVENT_WINDOW_PREPARETOGGLEFLOATING   1220    // pData = sal_Bool
 #define VCLEVENT_WINDOW_TOGGLEFLOATING          1221
 #define VCLEVENT_WINDOW_ENDPOPUPMODE            1222    // pData = EndPopupModeData
 
@@ -197,13 +197,13 @@ namespace com { namespace sun { namespace star {
 class VCL_DLLPUBLIC VclSimpleEvent
 {
 private:
-    ULONG nId;
+    sal_uLong nId;
 
 public:
-    VclSimpleEvent( ULONG n ) { nId = n; }
+    VclSimpleEvent( sal_uLong n ) { nId = n; }
     TYPEINFO();
 
-    ULONG GetId() const { return nId; }
+    sal_uLong GetId() const { return nId; }
 };
 
 class VCL_DLLPUBLIC VclWindowEvent : public VclSimpleEvent
@@ -213,7 +213,7 @@ private:
     void*   pData;
 
 public:
-    VclWindowEvent( Window* pWin, ULONG n, void* pDat = NULL ) : VclSimpleEvent(n) { pWindow = pWin; pData = pDat; }
+    VclWindowEvent( Window* pWin, sal_uLong n, void* pDat = NULL ) : VclSimpleEvent(n) { pWindow = pWin; pData = pDat; }
     TYPEINFO();
 
     Window* GetWindow() const { return pWindow; }
@@ -227,7 +227,7 @@ private:
     MouseEvent aEvent;
 
 public:
-    VclMouseEvent( Window* pWin, ULONG n, const MouseEvent& rEvent ) : VclWindowEvent( pWin, n ), aEvent(rEvent) { ; }
+    VclMouseEvent( Window* pWin, sal_uLong n, const MouseEvent& rEvent ) : VclWindowEvent( pWin, n ), aEvent(rEvent) { ; }
     TYPEINFO();
 
     const MouseEvent& GetEvent() const { return aEvent; }
@@ -238,20 +238,20 @@ class VCL_DLLPUBLIC VclMenuEvent : public VclSimpleEvent
 {
 private:
     Menu* pMenu;
-    USHORT mnPos;
+    sal_uInt16 mnPos;
 
 public:
-    VclMenuEvent( Menu* pM, ULONG n, USHORT nPos ) : VclSimpleEvent(n) { pMenu = pM; mnPos = nPos; }
+    VclMenuEvent( Menu* pM, sal_uLong n, sal_uInt16 nPos ) : VclSimpleEvent(n) { pMenu = pM; mnPos = nPos; }
     TYPEINFO();
 
     Menu* GetMenu() const { return pMenu; }
-    USHORT GetItemPos() const { return mnPos; }
+    sal_uInt16 GetItemPos() const { return mnPos; }
 };
 
 class VCL_DLLPUBLIC VclAccessibleEvent: public VclSimpleEvent
 {
 public:
-    VclAccessibleEvent( ULONG n, const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible );
+    VclAccessibleEvent( sal_uLong n, const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible );
     virtual ~VclAccessibleEvent();
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetAccessible() const;
 
@@ -265,9 +265,9 @@ public:
     void Call( VclSimpleEvent* pEvent ) const;
 
     // stops notifying when any handler has processed the event
-    // and returns TRUE in that case
-    // a handler must return TRUE to signal that it has processed the event
-    BOOL Process( VclSimpleEvent* pEvent ) const;
+    // and returns sal_True in that case
+    // a handler must return sal_True to signal that it has processed the event
+    sal_Bool Process( VclSimpleEvent* pEvent ) const;
 };
 
 class VCL_DLLPUBLIC VclEventListeners2 : public vcl::DeletionNotifier

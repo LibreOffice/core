@@ -47,7 +47,7 @@ TYPEINIT1(SvxSmartTagItem, SfxPoolItem);
 
 // class SvxFontItem -----------------------------------------------------
 
-SvxSmartTagItem::SvxSmartTagItem( const USHORT nId,
+SvxSmartTagItem::SvxSmartTagItem( const sal_uInt16 nId,
                                   const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::smarttags::XSmartTagAction > > >& rActionComponentsSequence,
                                   const com::sun::star::uno::Sequence < com::sun::star::uno::Sequence< sal_Int32 > >& rActionIndicesSequence,
                                   const com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > >& rStringKeyMaps,
@@ -72,12 +72,12 @@ SvxSmartTagItem::SvxSmartTagItem( const USHORT nId,
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxSmartTagItem::QueryValue( uno::Any& /* rVal */, BYTE /* nMemberId */ ) const
+sal_Bool SvxSmartTagItem::QueryValue( uno::Any& /* rVal */, sal_uInt8 /* nMemberId */ ) const
 {
     return sal_False;
 }
 // -----------------------------------------------------------------------
-sal_Bool SvxSmartTagItem::PutValue( const uno::Any& /*rVal*/, BYTE /* nMemberId */)
+sal_Bool SvxSmartTagItem::PutValue( const uno::Any& /*rVal*/, sal_uInt8 /* nMemberId */)
 {
     return sal_False;
 }
@@ -110,14 +110,14 @@ SfxPoolItem* SvxSmartTagItem::Clone( SfxItemPool * ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxSmartTagItem::Store( SvStream& rStream, USHORT /*nItemVersion*/ ) const
+SvStream& SvxSmartTagItem::Store( SvStream& rStream, sal_uInt16 /*nItemVersion*/ ) const
 {
     return rStream;
 }
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxSmartTagItem::Create(SvStream& , USHORT) const
+SfxPoolItem* SvxSmartTagItem::Create(SvStream& , sal_uInt16) const
 {
     return 0;
 }

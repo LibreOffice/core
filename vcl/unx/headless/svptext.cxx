@@ -1,4 +1,4 @@
-/*************************************************************************
+#/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -204,7 +204,7 @@ void PspKernInfo::Initialize() const
 
 // ===========================================================================
 
-USHORT SvpSalGraphics::SetFont( ImplFontSelectData* pIFSD, int nFallbackLevel )
+sal_uInt16 SvpSalGraphics::SetFont( ImplFontSelectData* pIFSD, int nFallbackLevel )
 {
     // release all no longer needed font resources
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
@@ -254,15 +254,15 @@ void SvpSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
 
 // ---------------------------------------------------------------------------
 
-ULONG SvpSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
+sal_uLong SvpSalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs )
 {
-    ULONG nGotPairs = 0;
+    sal_uLong nGotPairs = 0;
 
     if( m_pServerFont[0] != NULL )
     {
         ImplKernPairData* pTmpKernPairs = NULL;
         nGotPairs = m_pServerFont[0]->GetKernPairs( &pTmpKernPairs );
-        for( ULONG i = 0; i < nPairs && i < nGotPairs; ++i )
+        for( sal_uLong i = 0; i < nPairs && i < nGotPairs; ++i )
             pKernPairs[ i ] = pTmpKernPairs[ i ];
         delete[] pTmpKernPairs;
     }
@@ -339,7 +339,7 @@ bool SvpSalGraphics::AddTempDevFont( ImplDevFontList*,
 
 // ---------------------------------------------------------------------------
 
-BOOL SvpSalGraphics::CreateFontSubset(
+sal_Bool SvpSalGraphics::CreateFontSubset(
     const rtl::OUString& rToFile,
     const ImplFontData* pFont,
     sal_Int32* pGlyphIDs,
@@ -422,39 +422,39 @@ void SvpSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
 
 // ---------------------------------------------------------------------------
 
-BOOL SvpSalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
+sal_Bool SvpSalGraphics::GetGlyphBoundRect( long nGlyphIndex, Rectangle& rRect )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
-        return FALSE;
+        return sal_False;
 
     ServerFont* pSF = m_pServerFont[ nLevel ];
     if( !pSF )
-        return FALSE;
+        return sal_False;
 
     nGlyphIndex &= ~GF_FONTMASK;
     const GlyphMetric& rGM = pSF->GetGlyphMetric( nGlyphIndex );
     rRect = Rectangle( rGM.GetOffset(), rGM.GetSize() );
-    return TRUE;
+    return sal_True;
 }
 
 // ---------------------------------------------------------------------------
 
-BOOL SvpSalGraphics::GetGlyphOutline( long nGlyphIndex, B2DPolyPolygon& rPolyPoly )
+sal_Bool SvpSalGraphics::GetGlyphOutline( long nGlyphIndex, B2DPolyPolygon& rPolyPoly )
 {
     int nLevel = nGlyphIndex >> GF_FONTSHIFT;
     if( nLevel >= MAX_FALLBACK )
-        return FALSE;
+        return sal_False;
 
     const ServerFont* pSF = m_pServerFont[ nLevel ];
     if( !pSF )
-        return FALSE;
+        return sal_False;
 
     nGlyphIndex &= ~GF_FONTMASK;
     if( pSF->GetGlyphOutline( nGlyphIndex, rPolyPoly ) )
-        return TRUE;
+        return sal_True;
 
-    return FALSE;
+    return sal_False;
 }
 
 // ---------------------------------------------------------------------------

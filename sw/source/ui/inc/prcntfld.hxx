@@ -41,12 +41,12 @@ class SW_DLLPUBLIC PercentField : public MetricField
     sal_Int64   nOldBaseValue;
     sal_Int64   nLastPercent;
     sal_Int64   nLastValue;
-    USHORT      nOldDigits;
+    sal_uInt16      nOldDigits;
     FieldUnit   eOldUnit;
     sal_Bool    bLockAutoCalculation; //prevent recalcution of percent values when the
                                         //reference value is changed
 
-    SW_DLLPRIVATE sal_Int64      ImpPower10(USHORT n);
+    SW_DLLPRIVATE sal_Int64      ImpPower10(sal_uInt16 n);
 
     using MetricField::SetValue;
     using MetricField::GetValue;
@@ -70,7 +70,7 @@ public:
 
     sal_Int64        GetValue(FieldUnit eOutUnit = FUNIT_NONE);
 
-    BOOL        IsValueModified();
+    sal_Bool        IsValueModified();
 
     //using NumericFormatter::SetMax;
     void        SetMax(sal_Int64 nNewMax, FieldUnit eInUnit = FUNIT_NONE);
@@ -87,9 +87,9 @@ public:
 
     sal_Int64   Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit eOutUnit);
 
-    void        ShowPercent(BOOL bPercent);
+    void        ShowPercent(sal_Bool bPercent);
 
-    USHORT      GetOldDigits() const {return nOldDigits;}
+    sal_uInt16      GetOldDigits() const {return nOldDigits;}
 
     void        LockAutoCalculation(sal_Bool bLock) {bLockAutoCalculation = bLock;}
     sal_Bool    IsAutoCalculationLocked()const {return bLockAutoCalculation;}

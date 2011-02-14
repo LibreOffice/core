@@ -118,32 +118,32 @@ ScDPSaveMember::~ScDPSaveMember()
 {
 }
 
-BOOL ScDPSaveMember::operator== ( const ScDPSaveMember& r ) const
+sal_Bool ScDPSaveMember::operator== ( const ScDPSaveMember& r ) const
 {
     if ( aName            != r.aName            ||
          nVisibleMode     != r.nVisibleMode     ||
          nShowDetailsMode != r.nShowDetailsMode )
-        return FALSE;
+        return sal_False;
 
-    return TRUE;
+    return sal_True;
 }
 
-BOOL ScDPSaveMember::HasIsVisible() const
+sal_Bool ScDPSaveMember::HasIsVisible() const
 {
     return nVisibleMode != SC_DPSAVEMODE_DONTKNOW;
 }
 
-void ScDPSaveMember::SetIsVisible(BOOL bSet)
+void ScDPSaveMember::SetIsVisible(sal_Bool bSet)
 {
     nVisibleMode = bSet;
 }
 
-BOOL ScDPSaveMember::HasShowDetails() const
+sal_Bool ScDPSaveMember::HasShowDetails() const
 {
     return nShowDetailsMode != SC_DPSAVEMODE_DONTKNOW;
 }
 
-void ScDPSaveMember::SetShowDetails(BOOL bSet)
+void ScDPSaveMember::SetShowDetails(sal_Bool bSet)
 {
     nShowDetailsMode = bSet;
 }
@@ -181,11 +181,11 @@ void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMemb
 
         if ( nVisibleMode != SC_DPSAVEMODE_DONTKNOW )
             lcl_SetBoolProperty( xMembProp,
-                    rtl::OUString::createFromAscii(DP_PROP_ISVISIBLE), (BOOL)nVisibleMode );
+                    rtl::OUString::createFromAscii(DP_PROP_ISVISIBLE), (sal_Bool)nVisibleMode );
 
         if ( nShowDetailsMode != SC_DPSAVEMODE_DONTKNOW )
             lcl_SetBoolProperty( xMembProp,
-                    rtl::OUString::createFromAscii(DP_PROP_SHOWDETAILS), (BOOL)nShowDetailsMode );
+                    rtl::OUString::createFromAscii(DP_PROP_SHOWDETAILS), (sal_Bool)nShowDetailsMode );
 
         if (mpLayoutName.get())
             ScUnoHelpFunctions::SetOptionalPropertyValue(xMembProp, SC_UNO_LAYOUTNAME, *mpLayoutName);
@@ -197,18 +197,18 @@ void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMemb
 
 // -----------------------------------------------------------------------
 
-ScDPSaveDimension::ScDPSaveDimension(const String& rName, BOOL bDataLayout) :
+ScDPSaveDimension::ScDPSaveDimension(const String& rName, sal_Bool bDataLayout) :
     aName( rName ),
     pSelectedPage( NULL ),
     mpLayoutName(NULL),
     mpSubtotalName(NULL),
     bIsDataLayout( bDataLayout ),
-    bDupFlag( FALSE ),
+    bDupFlag( sal_False ),
     nOrientation( sheet::DataPilotFieldOrientation_HIDDEN ),
     nFunction( sheet::GeneralFunction_AUTO ),
     nUsedHierarchy( -1 ),
     nShowEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
-    bSubTotalDefault( TRUE ),
+    bSubTotalDefault( sal_True ),
     nSubTotalCount( 0 ),
     pSubTotalFuncs( NULL ),
     pReferenceValue( NULL ),
@@ -234,7 +234,7 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
 {
     if ( nSubTotalCount && r.pSubTotalFuncs )
     {
-        pSubTotalFuncs = new USHORT[nSubTotalCount];
+        pSubTotalFuncs = new sal_uInt16[nSubTotalCount];
         for (long nSub=0; nSub<nSubTotalCount; nSub++)
             pSubTotalFuncs[nSub] = r.pSubTotalFuncs[nSub];
     }
@@ -284,7 +284,7 @@ ScDPSaveDimension::~ScDPSaveDimension()
     delete [] pSubTotalFuncs;
 }
 
-BOOL ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
+sal_Bool ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
 {
     if ( aName            != r.aName            ||
          bIsDataLayout    != r.bIsDataLayout    ||
@@ -295,71 +295,71 @@ BOOL ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
          nShowEmptyMode   != r.nShowEmptyMode   ||
          bSubTotalDefault != r.bSubTotalDefault ||
          nSubTotalCount   != r.nSubTotalCount )
-        return FALSE;
+        return sal_False;
 
     if ( nSubTotalCount && ( !pSubTotalFuncs || !r.pSubTotalFuncs ) )   // should not happen
-        return FALSE;
+        return sal_False;
 
     long i;
     for (i=0; i<nSubTotalCount; i++)
         if ( pSubTotalFuncs[i] != r.pSubTotalFuncs[i] )
-            return FALSE;
+            return sal_False;
 
     if (maMemberHash.size() != r.maMemberHash.size() )
-        return FALSE;
+        return sal_False;
 
     MemberList::const_iterator a=maMemberList.begin();
     MemberList::const_iterator b=r.maMemberList.begin();
     for (; a != maMemberList.end() ; ++a, ++b)
         if (!(**a == **b))
-            return FALSE;
+            return sal_False;
 
     if ( this->HasCurrentPage() && r.HasCurrentPage() )
     {
         if ( this->GetCurrentPage() != r.GetCurrentPage() )
         {
-            return FALSE;
+            return sal_False;
         }
     }
     else if ( this->HasCurrentPage() || r.HasCurrentPage() )
     {
-        return FALSE;
+        return sal_False;
     }
     if( pReferenceValue && r.pReferenceValue )
     {
         if ( !(*pReferenceValue == *r.pReferenceValue) )
         {
-            return FALSE;
+            return sal_False;
         }
     }
     else if ( pReferenceValue || r.pReferenceValue )
     {
-        return FALSE;
+        return sal_False;
     }
     if( this->pSortInfo && r.pSortInfo )
     {
         if ( !(*this->pSortInfo == *r.pSortInfo) )
         {
-            return FALSE;
+            return sal_False;
         }
     }
     else if ( this->pSortInfo || r.pSortInfo )
     {
-        return FALSE;
+        return sal_False;
     }
     if( this->pAutoShowInfo && r.pAutoShowInfo )
     {
         if ( !(*this->pAutoShowInfo == *r.pAutoShowInfo) )
         {
-            return FALSE;
+            return sal_False;
         }
     }
     else if ( this->pAutoShowInfo || r.pAutoShowInfo )
     {
-        return FALSE;
+        return sal_False;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 void ScDPSaveDimension::AddMember(ScDPSaveMember* pMember)
@@ -388,26 +388,26 @@ void ScDPSaveDimension::SetName( const String& rNew )
     aName = rNew;
 }
 
-void ScDPSaveDimension::SetOrientation(USHORT nNew)
+void ScDPSaveDimension::SetOrientation(sal_uInt16 nNew)
 {
     nOrientation = nNew;
 }
 
-void ScDPSaveDimension::SetSubTotals(long nCount, const USHORT* pFuncs)
+void ScDPSaveDimension::SetSubTotals(long nCount, const sal_uInt16* pFuncs)
 {
     if (pSubTotalFuncs)
         delete [] pSubTotalFuncs;
     nSubTotalCount = nCount;
     if ( nCount && pFuncs )
     {
-        pSubTotalFuncs = new USHORT[nCount];
+        pSubTotalFuncs = new sal_uInt16[nCount];
         for (long i=0; i<nCount; i++)
             pSubTotalFuncs[i] = pFuncs[i];
     }
     else
         pSubTotalFuncs = NULL;
 
-    bSubTotalDefault = FALSE;
+    bSubTotalDefault = sal_False;
 }
 
 bool ScDPSaveDimension::HasShowEmpty() const
@@ -415,12 +415,12 @@ bool ScDPSaveDimension::HasShowEmpty() const
     return nShowEmptyMode != SC_DPSAVEMODE_DONTKNOW;
 }
 
-void ScDPSaveDimension::SetShowEmpty(BOOL bSet)
+void ScDPSaveDimension::SetShowEmpty(sal_Bool bSet)
 {
     nShowEmptyMode = bSet;
 }
 
-void ScDPSaveDimension::SetFunction(USHORT nNew)
+void ScDPSaveDimension::SetFunction(sal_uInt16 nNew)
 {
     nFunction = nNew;
 }
@@ -516,7 +516,7 @@ void ScDPSaveDimension::SetCurrentPage( const String* pPage )
         pSelectedPage = NULL;
 }
 
-BOOL ScDPSaveDimension::HasCurrentPage() const
+sal_Bool ScDPSaveDimension::HasCurrentPage() const
 {
     return ( pSelectedPage != NULL );
 }
@@ -580,7 +580,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
 
         if ( nUsedHierarchy >= 0 )
         {
-            aAny <<= (INT32)nUsedHierarchy;
+            aAny <<= (sal_Int32)nUsedHierarchy;
             xDimProp->setPropertyValue( rtl::OUString::createFromAscii(DP_PROP_USEDHIERARCHY), aAny );
         }
 
@@ -664,7 +664,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                 }
                 if ( nShowEmptyMode != SC_DPSAVEMODE_DONTKNOW )
                     lcl_SetBoolProperty( xLevProp,
-                        rtl::OUString::createFromAscii(DP_PROP_SHOWEMPTY), (BOOL)nShowEmptyMode );
+                        rtl::OUString::createFromAscii(DP_PROP_SHOWEMPTY), (sal_Bool)nShowEmptyMode );
 
                 if ( pSortInfo )
                     ScUnoHelpFunctions::SetOptionalPropertyValue(xLevProp, SC_UNO_SORTING, *pSortInfo);
@@ -751,8 +751,8 @@ ScDPSaveData::ScDPSaveData() :
     nRowGrandMode( SC_DPSAVEMODE_DONTKNOW ),
     nIgnoreEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
     nRepeatEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
-    bFilterButton( TRUE ),
-    bDrillDown( TRUE ),
+    bFilterButton( sal_True ),
+    bDrillDown( sal_True ),
     // Wang Xu Ming -- 2009-8-17
     // DataPilot Migration - Cache&&Performance
     mnCacheId( -1),
@@ -805,7 +805,7 @@ ScDPSaveData& ScDPSaveData::operator= ( const ScDPSaveData& r )
     return *this;
 }
 
-BOOL ScDPSaveData::operator== ( const ScDPSaveData& r ) const
+sal_Bool ScDPSaveData::operator== ( const ScDPSaveData& r ) const
 {
     if ( nColumnGrandMode != r.nColumnGrandMode ||
          nRowGrandMode    != r.nRowGrandMode    ||
@@ -815,20 +815,20 @@ BOOL ScDPSaveData::operator== ( const ScDPSaveData& r ) const
          mnCacheId        != r.mnCacheId ||/// Wang Xu Ming -- 2009-6-18 DataPilot Migration
          bDrillDown       != r.bDrillDown ||
          mbDimensionMembersBuilt != r.mbDimensionMembersBuilt)
-        return FALSE;
+        return sal_False;
 
     if ( pDimensionData || r.pDimensionData )
         if ( !pDimensionData || !r.pDimensionData || !( *pDimensionData == *r.pDimensionData ) )
-            return FALSE;
+            return sal_False;
 
-    ULONG nCount = aDimList.Count();
+    sal_uLong nCount = aDimList.Count();
     if ( nCount != r.aDimList.Count() )
-        return FALSE;
+        return sal_False;
 
-    for (ULONG i=0; i<nCount; i++)
+    for (sal_uLong i=0; i<nCount; i++)
         if ( !( *(ScDPSaveDimension*)aDimList.GetObject(i) ==
                 *(ScDPSaveDimension*)r.aDimList.GetObject(i) ) )
-            return FALSE;
+            return sal_False;
 
     if (mpGrandTotalName.get())
     {
@@ -840,7 +840,7 @@ BOOL ScDPSaveData::operator== ( const ScDPSaveData& r ) const
     else if (r.mpGrandTotalName.get())
         return false;
 
-    return TRUE;
+    return sal_True;
 }
 
 ScDPSaveData::~ScDPSaveData()
@@ -872,7 +872,7 @@ ScDPSaveDimension* ScDPSaveData::GetDimensionByName(const String& rName)
         if ( pDim->GetName() == rName && !pDim->IsDataLayout() )
             return pDim;
     }
-    ScDPSaveDimension* pNew = new ScDPSaveDimension( rName, FALSE );
+    ScDPSaveDimension* pNew = new ScDPSaveDimension( rName, sal_False );
     aDimList.Insert( pNew, LIST_APPEND );
     return pNew;
 }
@@ -898,7 +898,7 @@ ScDPSaveDimension* ScDPSaveData::GetNewDimensionByName(const String& rName)
         if ( pDim->GetName() == rName && !pDim->IsDataLayout() )
             return DuplicateDimension(rName);
     }
-    ScDPSaveDimension* pNew = new ScDPSaveDimension( rName, FALSE );
+    ScDPSaveDimension* pNew = new ScDPSaveDimension( rName, sal_False );
     aDimList.Insert( pNew, LIST_APPEND );
     return pNew;
 }
@@ -909,7 +909,7 @@ ScDPSaveDimension* ScDPSaveData::GetDataLayoutDimension()
     if (pDim)
         return pDim;
 
-    ScDPSaveDimension* pNew = new ScDPSaveDimension( String(), TRUE );
+    ScDPSaveDimension* pNew = new ScDPSaveDimension( String(), sal_True );
     aDimList.Insert( pNew, LIST_APPEND );
     return pNew;
 }
@@ -933,7 +933,7 @@ ScDPSaveDimension* ScDPSaveData::DuplicateDimension(const String& rName)
 
     ScDPSaveDimension* pOld = GetDimensionByName( rName );
     ScDPSaveDimension* pNew = new ScDPSaveDimension( *pOld );
-    pNew->SetDupFlag( TRUE );
+    pNew->SetDupFlag( sal_True );
     aDimList.Insert( pNew, LIST_APPEND );
     return pNew;
 }
@@ -956,12 +956,12 @@ void ScDPSaveData::RemoveDimensionByName(const String& rName)
 ScDPSaveDimension& ScDPSaveData::DuplicateDimension( const ScDPSaveDimension& rDim )
 {
     ScDPSaveDimension* pNew = new ScDPSaveDimension( rDim );
-    pNew->SetDupFlag( TRUE );
+    pNew->SetDupFlag( sal_True );
     aDimList.Insert( pNew, LIST_APPEND );
     return *pNew;
 }
 
-ScDPSaveDimension* ScDPSaveData::GetInnermostDimension(USHORT nOrientation)
+ScDPSaveDimension* ScDPSaveData::GetInnermostDimension(sal_uInt16 nOrientation)
 {
     //  return the innermost dimension for the given orientation,
     //  excluding data layout dimension
@@ -1008,12 +1008,12 @@ void ScDPSaveData::SetPosition( ScDPSaveDimension* pDim, long nNew )
 {
     //  position (nNew) is counted within dimensions of the same orientation
 
-    USHORT nOrient = pDim->GetOrientation();
+    sal_uInt16 nOrient = pDim->GetOrientation();
 
     aDimList.Remove( pDim );
-    ULONG nCount = aDimList.Count();        // after remove
+    sal_uLong nCount = aDimList.Count();        // after remove
 
-    ULONG nInsPos = 0;
+    sal_uLong nInsPos = 0;
     while ( nNew > 0 && nInsPos < nCount )
     {
         if ( ((ScDPSaveDimension*)aDimList.GetObject(nInsPos))->GetOrientation() == nOrient )
@@ -1024,32 +1024,32 @@ void ScDPSaveData::SetPosition( ScDPSaveDimension* pDim, long nNew )
     aDimList.Insert( pDim, nInsPos );
 }
 
-void ScDPSaveData::SetColumnGrand(BOOL bSet)
+void ScDPSaveData::SetColumnGrand(sal_Bool bSet)
 {
     nColumnGrandMode = bSet;
 }
 
-void ScDPSaveData::SetRowGrand(BOOL bSet)
+void ScDPSaveData::SetRowGrand(sal_Bool bSet)
 {
     nRowGrandMode = bSet;
 }
 
-void ScDPSaveData::SetIgnoreEmptyRows(BOOL bSet)
+void ScDPSaveData::SetIgnoreEmptyRows(sal_Bool bSet)
 {
     nIgnoreEmptyMode = bSet;
 }
 
-void ScDPSaveData::SetRepeatIfEmpty(BOOL bSet)
+void ScDPSaveData::SetRepeatIfEmpty(sal_Bool bSet)
 {
     nRepeatEmptyMode = bSet;
 }
 
-void ScDPSaveData::SetFilterButton(BOOL bSet)
+void ScDPSaveData::SetFilterButton(sal_Bool bSet)
 {
     bFilterButton = bSet;
 }
 
-void ScDPSaveData::SetDrillDown(BOOL bSet)
+void ScDPSaveData::SetDrillDown(sal_Bool bSet)
 {
     bDrillDown = bSet;
 }
@@ -1092,10 +1092,10 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
         {
             if ( nIgnoreEmptyMode != SC_DPSAVEMODE_DONTKNOW )
                 lcl_SetBoolProperty( xSourceProp,
-                    rtl::OUString::createFromAscii(DP_PROP_IGNOREEMPTY), (BOOL)nIgnoreEmptyMode );
+                    rtl::OUString::createFromAscii(DP_PROP_IGNOREEMPTY), (sal_Bool)nIgnoreEmptyMode );
             if ( nRepeatEmptyMode != SC_DPSAVEMODE_DONTKNOW )
                 lcl_SetBoolProperty( xSourceProp,
-                    rtl::OUString::createFromAscii(DP_PROP_REPEATIFEMPTY), (BOOL)nRepeatEmptyMode );
+                    rtl::OUString::createFromAscii(DP_PROP_REPEATIFEMPTY), (sal_Bool)nRepeatEmptyMode );
         }
         catch(uno::Exception&)
         {
@@ -1125,14 +1125,14 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
 
             DBG_TRACESTR(pDim->GetName());
 
-            BOOL bData = pDim->IsDataLayout();
+            sal_Bool bData = pDim->IsDataLayout();
 
             //! getByName for ScDPSource, including DataLayoutDimension !!!!!!!!
 
             uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
             uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
             long nIntCount = xIntDims->getCount();
-            BOOL bFound = FALSE;
+            sal_Bool bFound = sal_False;
             for (long nIntDim=0; nIntDim<nIntCount && !bFound; nIntDim++)
             {
                 uno::Reference<uno::XInterface> xIntDim = ScUnoHelpFunctions::AnyToInterface( xIntDims->getByIndex(nIntDim) );
@@ -1150,7 +1150,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                 {
                     uno::Reference<container::XNamed> xDimName( xIntDim, uno::UNO_QUERY );
                     if ( xDimName.is() && xDimName->getName() == aName )
-                        bFound = TRUE;
+                        bFound = sal_True;
                 }
 
                 if ( bFound )
@@ -1187,10 +1187,10 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
         {
             if ( nColumnGrandMode != SC_DPSAVEMODE_DONTKNOW )
                 lcl_SetBoolProperty( xSourceProp,
-                    rtl::OUString::createFromAscii(DP_PROP_COLUMNGRAND), (BOOL)nColumnGrandMode );
+                    rtl::OUString::createFromAscii(DP_PROP_COLUMNGRAND), (sal_Bool)nColumnGrandMode );
             if ( nRowGrandMode != SC_DPSAVEMODE_DONTKNOW )
                 lcl_SetBoolProperty( xSourceProp,
-                    rtl::OUString::createFromAscii(DP_PROP_ROWGRAND), (BOOL)nRowGrandMode );
+                    rtl::OUString::createFromAscii(DP_PROP_ROWGRAND), (sal_Bool)nRowGrandMode );
         }
     }
     catch(uno::Exception&)
@@ -1199,16 +1199,16 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
     }
 }
 
-BOOL ScDPSaveData::IsEmpty() const
+sal_Bool ScDPSaveData::IsEmpty() const
 {
     long nCount = aDimList.Count();
     for (long i=0; i<nCount; i++)
     {
         ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
         if ( pDim->GetOrientation() != sheet::DataPilotFieldOrientation_HIDDEN && !pDim->IsDataLayout() )
-            return FALSE;
+            return sal_False;
     }
-    return TRUE;    // no entries that are not hidden
+    return sal_True;    // no entries that are not hidden
 }
 
 ScDPDimensionSaveData* ScDPSaveData::GetDimensionData()
@@ -1301,13 +1301,13 @@ void ScDPSaveData::Refresh( const uno::Reference<sheet::XDimensionsSupplier>& xS
             uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
             uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
             long nIntCount = xIntDims->getCount();
-            BOOL bFound = FALSE;
+            sal_Bool bFound = sal_False;
             for (long nIntDim=0; nIntDim<nIntCount && !bFound; nIntDim++)
             {
                 uno::Reference<uno::XInterface> xIntDim = ScUnoHelpFunctions::AnyToInterface( xIntDims->getByIndex(nIntDim) );
                 uno::Reference<container::XNamed> xDimName( xIntDim, uno::UNO_QUERY );
                 if ( xDimName.is() && xDimName->getName() == aName )
-                    bFound = TRUE;
+                    bFound = sal_True;
             }
             if ( !bFound )
             {

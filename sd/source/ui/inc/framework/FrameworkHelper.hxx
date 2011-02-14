@@ -239,7 +239,7 @@ public:
     /** Process a slot call that requests a view shell change.
     */
     void HandleModeChangeSlot (
-        ULONG nSlotId,
+        sal_uLong nSlotId,
         SfxRequest& rRequest);
 
     /** Run the given callback when the specified event is notified by the

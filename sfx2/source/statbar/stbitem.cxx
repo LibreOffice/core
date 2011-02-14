@@ -66,9 +66,9 @@ using namespace ::com::sun::star;
 
 //--------------------------------------------------------------------
 
-USHORT SfxStatusBarControl::convertAwtToVCLMouseButtons( sal_Int16 nAwtMouseButtons )
+sal_uInt16 SfxStatusBarControl::convertAwtToVCLMouseButtons( sal_Int16 nAwtMouseButtons )
 {
-    USHORT nVCLMouseButtons( 0 );
+    sal_uInt16 nVCLMouseButtons( 0 );
 
     if ( nAwtMouseButtons & awt::MouseButton::LEFT )
         nVCLMouseButtons |= MOUSE_LEFT;
@@ -130,7 +130,7 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
     const SfxSlot* pSlot = pSlotPool->GetUnoSlot( aTargetURL.Path );
     if ( pSlot )
     {
-        USHORT nSlotId = pSlot->GetSlotId();
+        sal_uInt16 nSlotId = pSlot->GetSlotId();
         if ( nSlotId > 0 )
         {
             rtl::OString aCmd(".uno:");
@@ -147,12 +147,12 @@ svt::StatusbarController* SAL_CALL SfxStatusBarControllerFactory(
 
 SfxStatusBarControl::SfxStatusBarControl
 (
-    USHORT      nSlotID,            /* Slot-Id, mit der diese Instanz
+    sal_uInt16      nSlotID,            /* Slot-Id, mit der diese Instanz
                                        verbunden wird. Wurde bei der
                                        Registrierung eine Slot-Id != 0
                                        angegeben, ist dies immer die dort
                                        angegebene. */
-    USHORT      nCtrlID,            /* ID of this controller in the status bar */
+    sal_uInt16      nCtrlID,            /* ID of this controller in the status bar */
 
     StatusBar&  rBar                /* Referenz auf die StatusBar, f"ur die
                                        dieses Control erzeugt wurde. */
@@ -251,7 +251,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
         }
     }
 
-    USHORT nSlotID = 0;
+    sal_uInt16 nSlotID = 0;
     SfxSlotPool& rPool = SfxSlotPool::GetSlotPool( pViewFrame );
     const SfxSlot* pSlot = rPool.GetUnoSlot( rEvent.FeatureURL.Path );
     if ( pSlot )
@@ -337,7 +337,7 @@ throw ( uno::RuntimeException )
     ::Point aPos( rMouseEvent.X, rMouseEvent.Y );
 
     ::MouseEvent aMouseEvent( aPos,
-                              (USHORT)rMouseEvent.ClickCount,
+                              (sal_uInt16)rMouseEvent.ClickCount,
                               0,
                               convertAwtToVCLMouseButtons( rMouseEvent.Buttons ),
                               0 );
@@ -355,7 +355,7 @@ throw (uno::RuntimeException)
     ::Point aPos( rMouseEvent.X, rMouseEvent.Y );
 
     ::MouseEvent aMouseEvent( aPos,
-                              (USHORT)rMouseEvent.ClickCount,
+                              (sal_uInt16)rMouseEvent.ClickCount,
                               0,
                               convertAwtToVCLMouseButtons( rMouseEvent.Buttons ),
                               0 );
@@ -372,7 +372,7 @@ throw ( uno::RuntimeException )
     ::Point aPos( rMouseEvent.X, rMouseEvent.Y );
 
     ::MouseEvent aMouseEvent( aPos,
-                              (USHORT)rMouseEvent.ClickCount,
+                              (sal_uInt16)rMouseEvent.ClickCount,
                               0,
                               convertAwtToVCLMouseButtons( rMouseEvent.Buttons ),
                               0 );
@@ -390,7 +390,7 @@ throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     ::Point aPos( rPos.X, rPos.Y );
-    CommandEvent aCmdEvent( aPos, (USHORT)nCommand, TRUE, NULL );
+    CommandEvent aCmdEvent( aPos, (sal_uInt16)nCommand, sal_True, NULL );
 
     Command( aCmdEvent );
 }
@@ -410,7 +410,7 @@ throw ( ::uno::RuntimeException )
     if ( pOutDev )
     {
         ::Rectangle aRect = VCLRectangle( rOutputRectangle );
-        UserDrawEvent aUserDrawEvent( pOutDev, aRect, (USHORT)nItemId, (USHORT)nStyle );
+        UserDrawEvent aUserDrawEvent( pOutDev, aRect, (sal_uInt16)nItemId, (sal_uInt16)nStyle );
         Paint( aUserDrawEvent );
     }
 }
@@ -439,7 +439,7 @@ throw ( uno::RuntimeException )
 
 void SfxStatusBarControl::StateChanged
 (
-    USHORT              nSID,
+    sal_uInt16              nSID,
     SfxItemState        eState,
     const SfxPoolItem*  pState  /* Zeiger auf ein SfxPoolItem, welches nur
                                    innerhalb dieses Methodenaufrufs g"ultig
@@ -474,7 +474,7 @@ void SfxStatusBarControl::StateChanged
 
 //--------------------------------------------------------------------
 
-BOOL SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
+sal_Bool SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
 
 /*  [Beschreibung]
 
@@ -488,7 +488,7 @@ BOOL SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
 
     [Rueckgabewert]
 
-    BOOL                TRUE
+    sal_Bool                TRUE
                         das Event wurde bearbeitet und soll nicht an
                         die StatusBar weitergeleitet werden
 
@@ -498,12 +498,12 @@ BOOL SfxStatusBarControl::MouseButtonDown( const MouseEvent & )
 */
 
 {
-    return FALSE;
+    return sal_False;
 }
 
 //--------------------------------------------------------------------
 
-BOOL SfxStatusBarControl::MouseMove( const MouseEvent & )
+sal_Bool SfxStatusBarControl::MouseMove( const MouseEvent & )
 
 /*  [Beschreibung]
 
@@ -517,7 +517,7 @@ BOOL SfxStatusBarControl::MouseMove( const MouseEvent & )
 
     [Rueckgabewert]
 
-    BOOL                TRUE
+    sal_Bool                TRUE
                         das Event wurde bearbeitet und soll nicht an
                         die StatusBar weitergeleitet werden
 
@@ -527,12 +527,12 @@ BOOL SfxStatusBarControl::MouseMove( const MouseEvent & )
 */
 
 {
-    return FALSE;
+    return sal_False;
 }
 
 //--------------------------------------------------------------------
 
-BOOL SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
+sal_Bool SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
 
 /*  [Beschreibung]
 
@@ -546,7 +546,7 @@ BOOL SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
 
     [Rueckgabewert]
 
-    BOOL                TRUE
+    sal_Bool                TRUE
                         das Event wurde bearbeitet und soll nicht an
                         die StatusBar weitergeleitet werden
 
@@ -556,7 +556,7 @@ BOOL SfxStatusBarControl::MouseButtonUp( const MouseEvent & )
 */
 
 {
-    return FALSE;
+    return sal_False;
 }
 
 //--------------------------------------------------------------------
@@ -641,8 +641,8 @@ void SfxStatusBarControl::ReleaseMouse()
 
 SfxStatusBarControl* SfxStatusBarControl::CreateControl
 (
-    USHORT     nSlotID,
-    USHORT     nStbId,
+    sal_uInt16     nSlotID,
+    sal_uInt16     nStbId,
     StatusBar* pBar,
     SfxModule* pMod
 )
@@ -665,7 +665,7 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
             if ( pFactories )
             {
                 SfxStbCtrlFactArr_Impl &rFactories = *pFactories;
-                for ( USHORT nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
+                for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
                 if ( rFactories[nFactory]->nTypeId == aSlotType &&
                      ( ( rFactories[nFactory]->nSlotId == 0 ) ||
                      ( rFactories[nFactory]->nSlotId == nSlotID) ) )
@@ -674,7 +674,7 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
         }
 
         SfxStbCtrlFactArr_Impl &rFactories = pApp->GetStbCtrlFactories_Impl();
-        for ( USHORT nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
+        for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
         if ( rFactories[nFactory]->nTypeId == aSlotType &&
              ( ( rFactories[nFactory]->nSlotId == 0 ) ||
              ( rFactories[nFactory]->nSlotId == nSlotID) ) )

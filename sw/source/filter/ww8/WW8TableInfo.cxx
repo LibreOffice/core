@@ -664,7 +664,7 @@ void WW8TableInfo::processSwTable(const SwTable * pTable)
     {
         const SwTableLines & rLines = pTable->GetTabLines();
 
-        for (USHORT n = 0; n < rLines.Count(); n++)
+        for (sal_uInt16 n = 0; n < rLines.Count(); n++)
         {
             const SwTableLine * pLine = rLines[n];
 
@@ -700,7 +700,7 @@ WW8TableInfo::processTableLine(const SwTable * pTable,
 
     WW8TableNodeInfo::Pointer_t pTextNodeInfo;
 
-    for (USHORT n = 0; n < rBoxes.Count(); n++)
+    for (sal_uInt16 n = 0; n < rBoxes.Count(); n++)
     {
         const SwTableBox * pBox = rBoxes[n];
 
@@ -737,7 +737,7 @@ WW8TableInfo::processTableBoxLines(const SwTableBox * pBox,
             const SwTableLine * pLine = rLines[n];
             const SwTableBoxes & rBoxes = pLine->GetTabBoxes();
 
-            for (USHORT nBox = 0; nBox < rBoxes.Count(); nBox++)
+            for (sal_uInt16 nBox = 0; nBox < rBoxes.Count(); nBox++)
                 pNodeInfo = processTableBoxLines(rBoxes[nBox], pTable, pBoxToSet, nRow, nCell, nDepth);
         }
     }

@@ -226,7 +226,7 @@ DBG_NAME(OConnectionHelper)
         m_aConnectionURL.Show();
         m_aConnectionURL.ShowPrefix( ::dbaccess::DST_JDBC == m_pCollection->determineType(m_eType) );
 
-        BOOL bEnableBrowseButton = m_pCollection->supportsBrowsing( m_eType );
+        sal_Bool bEnableBrowseButton = m_pCollection->supportsBrowsing( m_eType );
         m_aPB_Connection.Show( bEnableBrowseButton );
 
         SFX_ITEMSET_GET(_rSet, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);

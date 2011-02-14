@@ -417,7 +417,7 @@ namespace canvas { namespace
                                 // out notion of alpha is
                                 // different from the rest
                                 // of the world's
-                                *pCurrOutput++ = 255 - (BYTE)*pAScan++;
+                                *pCurrOutput++ = 255 - (sal_uInt8)*pAScan++;
                             }
                         }
                         break;
@@ -437,7 +437,7 @@ namespace canvas { namespace
                                 // out notion of alpha is
                                 // different from the rest
                                 // of the world's
-                                *pCurrOutput++ = 255 - (BYTE)*pAScan++;
+                                *pCurrOutput++ = 255 - (sal_uInt8)*pAScan++;
                             }
                         }
                         break;
@@ -469,7 +469,7 @@ namespace canvas { namespace
                                 // out notion of alpha is
                                 // different from the rest
                                 // of the world's
-                                *pCurrOutput++ = 255 - (BYTE)*pAScan++;
+                                *pCurrOutput++ = 255 - (sal_uInt8)*pAScan++;
                             }
                         }
                         break;
@@ -661,8 +661,8 @@ namespace canvas { namespace
         else
         {
             // *no* alpha mask
-            ULONG nFormat = pReadAccess->GetScanlineFormat();
-            BYTE *pBuffer = reinterpret_cast<BYTE *>(rBmpData.mpBitmapData);
+            sal_uIntPtr nFormat = pReadAccess->GetScanlineFormat();
+            sal_uInt8 *pBuffer = reinterpret_cast<sal_uInt8 *>(rBmpData.mpBitmapData);
 
             switch(nFormat)
             {
@@ -672,14 +672,14 @@ namespace canvas { namespace
                         sal_Int32 height = pReadAccess->Height();
                         for(sal_Int32 y=0; y<height; ++y)
                         {
-                            BYTE *pScanline=pReadAccess->GetScanline(y);
+                            sal_uInt8 *pScanline=pReadAccess->GetScanline(y);
                             sal_Int32 width = pReadAccess->Width();
                             for(sal_Int32 x=0; x<width; ++x)
                             {
                                 // BGR -> RGB
-                                BYTE b(*pScanline++);
-                                BYTE g(*pScanline++);
-                                BYTE r(*pScanline++);
+                                sal_uInt8 b(*pScanline++);
+                                sal_uInt8 g(*pScanline++);
+                                sal_uInt8 r(*pScanline++);
                                 *pBuffer++ = r;
                                 *pBuffer++ = g;
                                 *pBuffer++ = b;
@@ -694,14 +694,14 @@ namespace canvas { namespace
                         sal_Int32 height = pReadAccess->Height();
                         for(sal_Int32 y=0; y<height; ++y)
                         {
-                            BYTE *pScanline=pReadAccess->GetScanline(y);
+                            sal_uInt8 *pScanline=pReadAccess->GetScanline(y);
                             sal_Int32 width = pReadAccess->Width();
                             for(sal_Int32 x=0; x<width; ++x)
                             {
                                 // RGB -> RGB
-                                BYTE r(*pScanline++);
-                                BYTE g(*pScanline++);
-                                BYTE b(*pScanline++);
+                                sal_uInt8 r(*pScanline++);
+                                sal_uInt8 g(*pScanline++);
+                                sal_uInt8 b(*pScanline++);
                                 *pBuffer++ = r;
                                 *pBuffer++ = g;
                                 *pBuffer++ = b;
@@ -720,7 +720,7 @@ namespace canvas { namespace
                         sal_Int32 height = pReadAccess->Height();
                         for(sal_Int32 y=0; y<height; ++y)
                         {
-                            BYTE *pScanline=pReadAccess->GetScanline(y);
+                            sal_uInt8 *pScanline=pReadAccess->GetScanline(y);
                             sal_Int32 width = pReadAccess->Width();
                             for(sal_Int32 x=0; x<width; ++x)
                             {
@@ -1263,11 +1263,11 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygonImpl(
                         sal_uInt8 *pDst=pDstBuffer;
                         for(sal_Int32 x=0; x<dwWidth; ++x)
                         {
-                            BYTE r(*pSrc++);
-                            BYTE g(*pSrc++);
-                            BYTE b(*pSrc++);
-                            BYTE Alpha(*pSrc++);
-                            BYTE OneMinusAlpha(0xFF-Alpha);
+                            sal_uInt8 r(*pSrc++);
+                            sal_uInt8 g(*pSrc++);
+                            sal_uInt8 b(*pSrc++);
+                            sal_uInt8 Alpha(*pSrc++);
+                            sal_uInt8 OneMinusAlpha(0xFF-Alpha);
                             *pDst=(((r*Alpha)+((*pDst)*OneMinusAlpha))/0xFF);
                             ++pDst;
                             *pDst=(((g*Alpha)+((*pDst)*OneMinusAlpha))/0xFF);
@@ -1287,9 +1287,9 @@ ImageCachedPrimitiveSharedPtr Image::fillTexturedPolyPolygonImpl(
                         sal_uInt8 *pDst=pDstBuffer;
                         for(sal_Int32 x=0; x<dwWidth; ++x)
                         {
-                            BYTE r(*pSrc++);
-                            BYTE g(*pSrc++);
-                            BYTE b(*pSrc++);
+                            sal_uInt8 r(*pSrc++);
+                            sal_uInt8 g(*pSrc++);
+                            sal_uInt8 b(*pSrc++);
                             *pDst++=r;
                             *pDst++=g;
                             *pDst++=b;

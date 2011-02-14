@@ -34,7 +34,7 @@
 
 TYPEINIT1( TTProperties, ApplicationProperty )
 
-BOOL TTProperties::RequestProperty( USHORT nRequest )
+sal_Bool TTProperties::RequestProperty( sal_uInt16 nRequest )
 {
     if ( (( nRequest & TT_PR_ONCE ) == 0) || (nDonePRs & (nRequest & 0x0ff)) == 0 )
     {
@@ -43,17 +43,17 @@ BOOL TTProperties::RequestProperty( USHORT nRequest )
         GetpApp()->Property( *this );
         return nActualPR == 0;
     }
-    return TRUE;
+    return sal_True;
 }
 
 
-BOOL TTProperties::GetSlots()
+sal_Bool TTProperties::GetSlots()
 {
     RequestProperty( TT_PR_SLOTS );
     return HasSlots();
 }
 
-USHORT TTProperties::ExecuteFunction( USHORT nSID, SfxPoolItem** ppArgs, USHORT nMode )
+sal_uInt16 TTProperties::ExecuteFunction( sal_uInt16 nSID, SfxPoolItem** ppArgs, sal_uInt16 nMode )
 {
     mnSID = nSID;
     mppArgs = ppArgs;
@@ -63,16 +63,16 @@ USHORT TTProperties::ExecuteFunction( USHORT nSID, SfxPoolItem** ppArgs, USHORT 
     return nActualPR;
 }
 
-BOOL TTProperties::Img( Bitmap *pBmp )
+sal_Bool TTProperties::Img( Bitmap *pBmp )
 {
-    BOOL bRet;
+    sal_Bool bRet;
     mpBmp = pBmp;
     bRet = RequestProperty( TT_PR_IMG );
     mpBmp = NULL;
     return bRet;
 }
 
-SvtResId TTProperties::GetSvtResId( USHORT nId )
+SvtResId TTProperties::GetSvtResId( sal_uInt16 nId )
 {
     return SvtResId( nId );
 }

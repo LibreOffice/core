@@ -44,13 +44,13 @@ private:
     ByteString          maGroupName;
     ImplConfigData*     mpData;
     ImplGroupData*      mpActGroup;
-    ULONG               mnDataUpdateId;
-    USHORT              mnLockCount;
-    BOOL                mbPersistence;
-    BOOL                mbDummy1;
+    sal_uIntPtr             mnDataUpdateId;
+    sal_uInt16              mnLockCount;
+    sal_Bool                mbPersistence;
+    sal_Bool                mbDummy1;
 
 #ifdef _CONFIG_CXX
-    TOOLS_DLLPRIVATE BOOL               ImplUpdateConfig() const;
+    TOOLS_DLLPRIVATE sal_Bool               ImplUpdateConfig() const;
     TOOLS_DLLPRIVATE ImplGroupData*     ImplGetGroup() const;
 #endif
 
@@ -66,9 +66,9 @@ public:
     void                SetGroup( const ByteString& rGroup );
     const ByteString&   GetGroup() const { return maGroupName; }
     void                DeleteGroup( const ByteString& rGroup );
-    ByteString          GetGroupName( USHORT nGroup ) const;
-    USHORT              GetGroupCount() const;
-    BOOL                HasGroup( const ByteString& rGroup ) const;
+    ByteString          GetGroupName( sal_uInt16 nGroup ) const;
+    sal_uInt16              GetGroupCount() const;
+    sal_Bool                HasGroup( const ByteString& rGroup ) const;
 
     ByteString          ReadKey( const ByteString& rKey ) const;
     UniString           ReadKey( const ByteString& rKey, rtl_TextEncoding eEncoding ) const;
@@ -76,19 +76,19 @@ public:
     void                WriteKey( const ByteString& rKey, const ByteString& rValue );
     void                WriteKey( const ByteString& rKey, const UniString& rValue, rtl_TextEncoding eEncoding );
     void                DeleteKey( const ByteString& rKey );
-    ByteString          GetKeyName( USHORT nKey ) const;
-    ByteString          ReadKey( USHORT nKey ) const;
-    USHORT              GetKeyCount() const;
+    ByteString          GetKeyName( sal_uInt16 nKey ) const;
+    ByteString          ReadKey( sal_uInt16 nKey ) const;
+    sal_uInt16              GetKeyCount() const;
 
     void                EnterLock();
     void                LeaveLock();
-    BOOL                IsLocked() const { return (mnLockCount != 0); }
-    BOOL                Update();
+    sal_Bool                IsLocked() const { return (mnLockCount != 0); }
+    sal_Bool                Update();
     void                Flush();
 
-    void                EnablePersistence( BOOL bPersistence = TRUE )
+    void                EnablePersistence( sal_Bool bPersistence = sal_True )
                             { mbPersistence = bPersistence; }
-    BOOL                IsPersistenceEnabled() const { return mbPersistence; }
+    sal_Bool                IsPersistenceEnabled() const { return mbPersistence; }
 
     void                SetLineEnd( LineEnd eLineEnd );
     LineEnd             GetLineEnd() const;

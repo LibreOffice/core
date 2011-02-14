@@ -72,7 +72,7 @@ SwPageDesc::SwPageDesc( const String& rName, SwFrmFmt *pFmt, SwDoc *pDc ) :
     nRegHeight( 0 ),
     nRegAscent( 0 ),
     eUse( (UseOnPage)(nsUseOnPage::PD_ALL | nsUseOnPage::PD_HEADERSHARE | nsUseOnPage::PD_FOOTERSHARE) ),
-    bLandscape( FALSE ),
+    bLandscape( sal_False ),
     aFtnInfo()
 {
 }
@@ -174,16 +174,16 @@ void SwPageDesc::ResetAllAttr( sal_Bool bLeft )
 
 
     // erfrage vom Modify Informationen
-BOOL SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
+sal_Bool SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
 {
 //    if( RES_AUTOFMT_DOCNODE == rInfo.Which() )
 //    {
         // dann weiter zum Format
         if( !aMaster.GetInfo( rInfo ) )
-            return FALSE;       // gefunden
+            return sal_False;       // gefunden
         return aLeft.GetInfo( rInfo );
 //    }
-//    return TRUE;        // weiter suchen
+//    return sal_True;        // weiter suchen
 }
 
 /*************************************************************************
@@ -290,7 +290,7 @@ void SwPageDesc::RegisterChange()
 
 void SwPageDesc::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {
-    const USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     SwModify::Modify( pOld, pNew );
 
     if ( (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich)
@@ -303,7 +303,7 @@ void SwPageDesc::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 static const SwFrm* lcl_GetFrmOfNode( const SwNode& rNd )
 {
     SwModify* pMod;
-    USHORT nFrmType = FRM_CNTNT;
+    sal_uInt16 nFrmType = FRM_CNTNT;
 
     if( rNd.IsCntntNode() )
     {
@@ -318,7 +318,7 @@ static const SwFrm* lcl_GetFrmOfNode( const SwNode& rNd )
         pMod = 0;
 
     Point aNullPt;
-    return pMod ? ::GetFrmOfModify( *pMod, nFrmType, &aNullPt, 0, FALSE )
+    return pMod ? ::GetFrmOfModify( *pMod, nFrmType, &aNullPt, 0, sal_False )
                 : 0;
 }
 
@@ -332,7 +332,7 @@ const SwPageDesc* SwPageDesc::GetPageDescOfNode(const SwNode& rNd)
 }
 
 const SwFrmFmt* SwPageDesc::GetPageFmtOfNode( const SwNode& rNd,
-                                              BOOL bCheckForThisPgDc ) const
+                                              sal_Bool bCheckForThisPgDc ) const
 {
     // welches PageDescFormat ist fuer diesen Node gueltig?
     const SwFrmFmt* pRet;
@@ -358,9 +358,9 @@ const SwFrmFmt* SwPageDesc::GetPageFmtOfNode( const SwNode& rNd,
     return pRet;
 }
 
-BOOL SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
+sal_Bool SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     if( GetFollow() && this != GetFollow() )
     {
         const SwFrm* pChkFrm = lcl_GetFrmOfNode( rNd );
@@ -369,7 +369,7 @@ BOOL SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
             ( !pChkFrm->GetNext() || GetFollow() ==
                         ((SwPageFrm*)pChkFrm->GetNext())->GetPageDesc() ))
             // die Seite gefunden, auf die der Follow verweist
-            bRet = TRUE;
+            bRet = sal_True;
     }
     return bRet;
 }
@@ -445,7 +445,7 @@ SwPageFtnInfo &SwPageFtnInfo::operator=( const SwPageFtnInfo& rCpy )
 
 
 
-BOOL SwPageFtnInfo::operator==( const SwPageFtnInfo& rCmp ) const
+sal_Bool SwPageFtnInfo::operator==( const SwPageFtnInfo& rCmp ) const
 {
     return ( nMaxHeight == rCmp.GetHeight() &&
              nLineWidth == rCmp.nLineWidth &&

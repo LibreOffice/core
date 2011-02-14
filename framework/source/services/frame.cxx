@@ -280,7 +280,7 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
         ,   PropertySetHelper           ( xFactory,
                                           &m_aLock,
                                           &m_aTransactionManager,
-                                          sal_False) // FALSE => dont release shared mutex on calling us!
+                                          sal_False) // sal_False => dont release shared mutex on calling us!
         ,   ::cppu::OWeakObject         (                                                   )
         //  init member
         ,   m_xFactory                  ( xFactory                                          )

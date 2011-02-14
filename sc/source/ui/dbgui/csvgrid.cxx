@@ -76,7 +76,7 @@ struct Func_Select
 ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
     ScCsvControl( rParent ),
     mrColorConfig( SC_MOD()->GetColorConfig() ),
-    mpEditEngine( new ScEditEngineDefaulter( EditEngine::CreatePool(), TRUE ) ),
+    mpEditEngine( new ScEditEngineDefaulter( EditEngine::CreatePool(), sal_True ) ),
     maHeaderFont( GetFont() ),
     maColStates( 1 ),
     maTypeNames( 1 ),
@@ -235,7 +235,7 @@ void ScCsvGrid::InitFonts()
     aDefSet.Put( aComplexItem );
 
     // set Asian/Complex font size to height of character in Latin font
-    ULONG nFontHt = static_cast< ULONG >( maMonoFont.GetSize().Height() );
+    sal_uLong nFontHt = static_cast< sal_uLong >( maMonoFont.GetSize().Height() );
     aDefSet.Put( SvxFontHeightItem( nFontHt, 100, EE_CHAR_FONTHEIGHT_CJK ) );
     aDefSet.Put( SvxFontHeightItem( nFontHt, 100, EE_CHAR_FONTHEIGHT_CTL ) );
 
@@ -886,8 +886,8 @@ void ScCsvGrid::KeyInput( const KeyEvent& rKEvt )
 {
     const KeyCode& rKCode = rKEvt.GetKeyCode();
     sal_uInt16 nCode = rKCode.GetCode();
-    bool bShift = rKCode.IsShift() == TRUE;
-    bool bMod1 = rKCode.IsMod1() == TRUE;
+    bool bShift = rKCode.IsShift() == sal_True;
+    bool bMod1 = rKCode.IsMod1() == sal_True;
 
     if( !rKCode.IsMod2() )
     {

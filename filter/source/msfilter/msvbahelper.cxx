@@ -185,7 +185,7 @@ bool hasMacro( SfxObjectShell* pShell, const String& sLibrary, String& sMod, con
             StarBASIC* pBasic = pBasicMgr->GetLib( sLibrary );
             if ( !pBasic )
             {
-                USHORT nId = pBasicMgr->GetLibId( sLibrary );
+                sal_uInt16 nId = pBasicMgr->GetLibId( sLibrary );
                 pBasicMgr->LoadLib( nId );
                 pBasic = pBasicMgr->GetLib( sLibrary );
             }

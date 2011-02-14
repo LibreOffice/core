@@ -89,9 +89,9 @@ public:
 
     // typedefs -------------------------------
 
-    typedef USHORT          tWhichIdType;
+    typedef sal_uInt16          tWhichIdType;
     typedef ::rtl::OUString tPropertyNameType;
-    typedef BYTE            tMemberIdType;
+    typedef sal_uInt8            tMemberIdType;
 
     typedef ::std::pair< tPropertyNameType, tMemberIdType > tPropertyNameWithMemberId;
 
@@ -133,7 +133,7 @@ protected:
 
     /** implement this method to provide an array of which-ranges of the form:
 
-        const USHORT aMyPairs[] =
+        const sal_uInt16 aMyPairs[] =
         {
             from_1, to_1,
             from_2, to_2,
@@ -142,7 +142,7 @@ protected:
             0
         };
     */
-    virtual const USHORT * GetWhichPairs() const = 0;
+    virtual const sal_uInt16 * GetWhichPairs() const = 0;
 
     /** implement this method to return a Property object for a given which id.
 
@@ -161,7 +161,7 @@ protected:
 
         The default implementation does nothing except showing an assertion
      */
-    virtual void FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
         throw( ::com::sun::star::uno::Exception );
 
     /** for items that can not be mapped directly to a property.
@@ -173,7 +173,7 @@ protected:
 
         @return true if the item changed a property, false otherwise.
      */
-    virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet )
+    virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
         throw( ::com::sun::star::uno::Exception );
 
     // ________

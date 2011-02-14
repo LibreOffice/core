@@ -57,7 +57,7 @@
                                      (MNEMONIC_RANGE_4_END-MNEMONIC_RANGE_4_START+1))
 
 #define MNEMONIC_CHAR               ((sal_Unicode)'~')
-#define MNEMONIC_INDEX_NOTFOUND     ((USHORT)0xFFFF)
+#define MNEMONIC_INDEX_NOTFOUND     ((sal_uInt16)0xFFFF)
 
 // -------------------------
 // - MnemonicGenerator -
@@ -67,18 +67,18 @@ class VCL_DLLPUBLIC MnemonicGenerator
 {
 private:
     // 0 == Mnemonic; >0 == count of characters
-    BYTE                maMnemonics[MAX_MNEMONICS];
+    sal_uInt8               maMnemonics[MAX_MNEMONICS];
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification > mxCharClass;
 
 protected:
-    SAL_DLLPRIVATE USHORT       ImplGetMnemonicIndex( sal_Unicode c );
+    SAL_DLLPRIVATE sal_uInt16       ImplGetMnemonicIndex( sal_Unicode c );
     SAL_DLLPRIVATE sal_Unicode  ImplFindMnemonic( const XubString& rKey );
 
 public:
                         MnemonicGenerator();
 
     void                RegisterMnemonic( const XubString& rKey );
-    BOOL                CreateMnemonic( XubString& rKey );
+    sal_Bool                CreateMnemonic( XubString& rKey );
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification > GetCharClass();
 
     // returns a string where all '~'-characters and CJK mnemonics of the form (~A) are completely removed

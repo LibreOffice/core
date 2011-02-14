@@ -107,14 +107,14 @@ void AquaSalObject::ResetClipRegion()
 
 // -----------------------------------------------------------------------
 
-USHORT AquaSalObject::GetClipRegionType()
+sal_uInt16 AquaSalObject::GetClipRegionType()
 {
     return SAL_OBJECT_CLIP_INCLUDERECTS;
 }
 
 // -----------------------------------------------------------------------
 
-void AquaSalObject::BeginSetClipRegion( ULONG nRectCount )
+void AquaSalObject::BeginSetClipRegion( sal_uLong nRectCount )
 {
     mbClip = false;
 }
@@ -200,7 +200,7 @@ void AquaSalObject::setClippedPosSize()
 
 // -----------------------------------------------------------------------
 
-void AquaSalObject::Show( BOOL bVisible )
+void AquaSalObject::Show( sal_Bool bVisible )
 {
     if( mpClipView )
         [mpClipView setHidden: (bVisible ? NO : YES)];
@@ -208,7 +208,7 @@ void AquaSalObject::Show( BOOL bVisible )
 
 // -----------------------------------------------------------------------
 
-void AquaSalObject::Enable( BOOL bEnable )
+void AquaSalObject::Enable( sal_Bool bEnable )
 {
 }
 

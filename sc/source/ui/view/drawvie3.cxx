@@ -48,7 +48,7 @@
 
 void ScIMapDlgSet( const Graphic& rGraphic, const ImageMap* pImageMap,
                     const TargetList* pTargetList, void* pEditingObj );     // imapwrap
-USHORT ScIMapChildWindowId();
+sal_uInt16 ScIMapChildWindowId();
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -60,8 +60,8 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
     nTab( pData->GetTabNo() ),
     pDropMarker( NULL ),
     pDropMarkObj( NULL ),
-    bInConstruct( TRUE )
-    //HMHbDisableHdl( FALSE )
+    bInConstruct( sal_True )
+    //HMHbDisableHdl( sal_False )
 {
     // #i73602# Use default from the configuration
     SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_Calc());
@@ -80,8 +80,8 @@ void ScDrawView::SetAnchor( ScAnchorType eType )
     if( AreObjectsMarked() )
     {
         const SdrMarkList* pMark = &GetMarkedObjectList();
-        ULONG nCount = pMark->GetMarkCount();
-        for( ULONG i=0; i<nCount; i++ )
+        sal_uLong nCount = pMark->GetMarkCount();
+        for( sal_uLong i=0; i<nCount; i++ )
         {
             pObj = pMark->GetMark(i)->GetMarkedSdrObj();
             ScDrawLayer::SetAnchor( pObj, eType );
@@ -94,21 +94,21 @@ void ScDrawView::SetAnchor( ScAnchorType eType )
 
 ScAnchorType ScDrawView::GetAnchor() const
 {
-    BOOL bPage = FALSE;
-    BOOL bCell = FALSE;
+    sal_Bool bPage = sal_False;
+    sal_Bool bCell = sal_False;
     const SdrObject* pObj = NULL;
     if( AreObjectsMarked() )
     {
         const SdrMarkList* pMark = &GetMarkedObjectList();
-        ULONG nCount = pMark->GetMarkCount();
+        sal_uLong nCount = pMark->GetMarkCount();
         Point p0;
-        for( ULONG i=0; i<nCount; i++ )
+        for( sal_uLong i=0; i<nCount; i++ )
         {
             pObj = pMark->GetMark(i)->GetMarkedSdrObj();
             if( ScDrawLayer::GetAnchor( pObj ) == SCA_CELL )
-                bCell =TRUE;
+                bCell =sal_True;
             else
-                bPage = TRUE;
+                bPage = sal_True;
         }
     }
     if( bPage && !bCell )

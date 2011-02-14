@@ -110,37 +110,37 @@ DlgEdFunc::~DlgEdFunc()
 
 //----------------------------------------------------------------------------
 
-BOOL DlgEdFunc::MouseButtonDown( const MouseEvent& )
+sal_Bool DlgEdFunc::MouseButtonDown( const MouseEvent& )
 {
-    return TRUE;
+    return sal_True;
 }
 
 //----------------------------------------------------------------------------
 
-BOOL DlgEdFunc::MouseButtonUp( const MouseEvent& )
+sal_Bool DlgEdFunc::MouseButtonUp( const MouseEvent& )
 {
     aScrollTimer.Stop();
-    return TRUE;
+    return sal_True;
 }
 
 //----------------------------------------------------------------------------
 
-BOOL DlgEdFunc::MouseMove( const MouseEvent& )
+sal_Bool DlgEdFunc::MouseMove( const MouseEvent& )
 {
-    return TRUE;
+    return sal_True;
 }
 
 //----------------------------------------------------------------------------
 
-BOOL DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
+sal_Bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = sal_False;
 
     SdrView* pView = pParent->GetView();
     Window* pWindow = pParent->GetWindow();
 
     KeyCode aCode = rKEvt.GetKeyCode();
-    USHORT nCode = aCode.GetCode();
+    sal_uInt16 nCode = aCode.GetCode();
 
     switch ( nCode )
     {
@@ -149,7 +149,7 @@ BOOL DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
             if ( pView->IsAction() )
             {
                 pView->BrkAction();
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
             else if ( pView->AreObjectsMarked() )
             {
@@ -160,7 +160,7 @@ BOOL DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                 else
                     pView->UnmarkAll();
 
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
         }
         break;
@@ -179,7 +179,7 @@ BOOL DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                 if ( pView->AreObjectsMarked() )
                     pView->MakeVisible( pView->GetAllMarkedRect(), *pWindow );
 
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
             else if ( aCode.IsMod1() )
             {
@@ -196,7 +196,7 @@ BOOL DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                     pView->MakeVisible( aVisRect, *pWindow );
                 }
 
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
         }
         break;
@@ -303,13 +303,13 @@ BOOL DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                         if ( pView->IsDragObj() )
                         {
                             FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
-                            BOOL bWasSnapEnabled = pView->IsSnapEnabled();
+                            sal_Bool bWasSnapEnabled = pView->IsSnapEnabled();
 
                             // switch snapping off
                             if ( !bWasNoSnap )
-                                ((SdrDragStat&)rDragStat).SetNoSnap( TRUE );
+                                ((SdrDragStat&)rDragStat).SetNoSnap( sal_True );
                             if ( bWasSnapEnabled )
-                                pView->SetSnapEnabled( FALSE );
+                                pView->SetSnapEnabled( sal_False );
 
                             pView->MovAction( aEndPoint );
                             pView->EndDragObj();
@@ -345,7 +345,7 @@ BOOL DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                 }
             }
 
-            bReturn = TRUE;
+            bReturn = sal_True;
         }
         break;
         default:
@@ -365,30 +365,30 @@ BOOL DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 DlgEdFuncInsert::DlgEdFuncInsert( DlgEditor* pParent_ ) :
     DlgEdFunc( pParent_ )
 {
-    pParent_->GetView()->SetCreateMode( TRUE );
+    pParent_->GetView()->SetCreateMode( sal_True );
 }
 
 //----------------------------------------------------------------------------
 
 DlgEdFuncInsert::~DlgEdFuncInsert()
 {
-    pParent->GetView()->SetEditMode( TRUE );
+    pParent->GetView()->SetEditMode( sal_True );
 }
 
 //----------------------------------------------------------------------------
 
-BOOL DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
+sal_Bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if( !rMEvt.IsLeft() )
-        return TRUE;
+        return sal_True;
 
     SdrView* pView  = pParent->GetView();
     Window*  pWindow= pParent->GetWindow();
     pView->SetActualWin( pWindow );
 
     Point aPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
-    USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(3,0)).Width() );
-    USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(3,0)).Width() );
+    sal_uInt16 nHitLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
+    sal_uInt16 nDrgLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
 
     pWindow->CaptureMouse();
 
@@ -413,12 +413,12 @@ BOOL DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
             pParent->ShowProperties();
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 //----------------------------------------------------------------------------
 
-BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
+sal_Bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
 {
     DlgEdFunc::MouseButtonUp( rMEvt );
 
@@ -435,34 +435,34 @@ BOOL DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
 
         if ( !pView->AreObjectsMarked() )
         {
-            USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(3,0)).Width() );
+            sal_uInt16 nHitLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
             Point aPos( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
             pView->MarkObj(aPos, nHitLog);
         }
 
         if( pView->AreObjectsMarked() )
-            return TRUE;
+            return sal_True;
         else
-            return FALSE;
+            return sal_False;
     }
     else
     {
         if ( pView->IsDragObj() )
              pView->EndDragObj( rMEvt.IsMod1() );
-        return TRUE;
+        return sal_True;
     }
 }
 
 //----------------------------------------------------------------------------
 
-BOOL DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
+sal_Bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
 {
     SdrView* pView  = pParent->GetView();
     Window*  pWindow= pParent->GetWindow();
     pView->SetActualWin( pWindow );
 
     Point   aPos( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-    USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(3,0)).Width() );
+    sal_uInt16 nHitLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
 
     if ( pView->IsAction() )
     {
@@ -472,14 +472,14 @@ BOOL DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
 
     pWindow->SetPointer( pView->GetPreferedPointer( aPos, pWindow, nHitLog ) );
 
-    return TRUE;
+    return sal_True;
 }
 
 //----------------------------------------------------------------------------
 
 DlgEdFuncSelect::DlgEdFuncSelect( DlgEditor* pParent_ ) :
     DlgEdFunc( pParent_ ),
-    bMarkAction(FALSE)
+    bMarkAction(sal_False)
 {
 }
 
@@ -491,15 +491,15 @@ DlgEdFuncSelect::~DlgEdFuncSelect()
 
 //----------------------------------------------------------------------------
 
-BOOL DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
+sal_Bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
 {
     // get view from parent
     SdrView* pView   = pParent->GetView();
     Window*  pWindow = pParent->GetWindow();
     pView->SetActualWin( pWindow );
 
-    USHORT nDrgLog = USHORT ( pWindow->PixelToLogic(Size(3,0)).Width() );
-    USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(3,0)).Width() );
+    sal_uInt16 nDrgLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
+    sal_uInt16 nHitLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
     Point  aMDPos = pWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
     if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 1 )
@@ -539,7 +539,7 @@ BOOL DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 // select object
                 pView->BegMarkObj(aMDPos);
-                bMarkAction = TRUE;
+                bMarkAction = sal_True;
             }
         }
     }
@@ -550,12 +550,12 @@ BOOL DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
             pParent->ShowProperties();
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 //----------------------------------------------------------------------------
 
-BOOL DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
+sal_Bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
 {
     DlgEdFunc::MouseButtonUp( rMEvt );
 
@@ -565,7 +565,7 @@ BOOL DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
     pView->SetActualWin( pWindow );
 
     Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-    USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(3,0)).Width() );
+    sal_uInt16 nHitLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
 
     if ( rMEvt.IsLeft() )
     {
@@ -584,7 +584,7 @@ BOOL DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
         }
     }
 
-//  USHORT nClicks = rMEvt.GetClicks();
+//  sal_uInt16 nClicks = rMEvt.GetClicks();
 //  if (nClicks == 2)
 //  {
 //      if ( pView->AreObjectsMarked() )
@@ -601,24 +601,24 @@ BOOL DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
 //      }
 //  }
 
-    bMarkAction = FALSE;
+    bMarkAction = sal_False;
 
     pWindow->SetPointer( pView->GetPreferedPointer( aPnt, pWindow, nHitLog ) );
     pWindow->ReleaseMouse();
 
-    return TRUE;
+    return sal_True;
 }
 
 //----------------------------------------------------------------------------
 
-BOOL DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
+sal_Bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 {
     SdrView* pView  = pParent->GetView();
     Window*  pWindow= pParent->GetWindow();
     pView->SetActualWin( pWindow );
 
     Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-    USHORT nHitLog = USHORT ( pWindow->PixelToLogic(Size(3,0)).Width() );
+    sal_uInt16 nHitLog = sal_uInt16 ( pWindow->PixelToLogic(Size(3,0)).Width() );
 
     if ( pView->IsAction() )
     {
@@ -631,7 +631,7 @@ BOOL DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 
     pWindow->SetPointer( pView->GetPreferedPointer( aPnt, pWindow, nHitLog ) );
 
-    return TRUE;
+    return sal_True;
 }
 
 //----------------------------------------------------------------------------

@@ -46,29 +46,29 @@ namespace rtl
     Dieses Item beschreibt ein Schattenattribut (Farbe, Breite, Lage).
 */
 
-#define SHADOW_TOP      ((USHORT)0)
-#define SHADOW_BOTTOM   ((USHORT)1)
-#define SHADOW_LEFT     ((USHORT)2)
-#define SHADOW_RIGHT    ((USHORT)3)
+#define SHADOW_TOP      ((sal_uInt16)0)
+#define SHADOW_BOTTOM   ((sal_uInt16)1)
+#define SHADOW_LEFT     ((sal_uInt16)2)
+#define SHADOW_RIGHT    ((sal_uInt16)3)
 
 class EDITENG_DLLPUBLIC SvxShadowItem : public SfxEnumItemInterface
 {
     Color               aShadowColor;
-    USHORT              nWidth;
+    sal_uInt16              nWidth;
     SvxShadowLocation   eLocation;
 public:
     TYPEINFO();
 
-    SvxShadowItem( const USHORT nId ,
-                 const Color *pColor = 0, const USHORT nWidth = 100 /*5pt*/,
+    SvxShadowItem( const sal_uInt16 nId ,
+                 const Color *pColor = 0, const sal_uInt16 nWidth = 100 /*5pt*/,
                  const SvxShadowLocation eLoc = SVX_SHADOW_NONE );
 
     inline SvxShadowItem& operator=( const SvxShadowItem& rFmtShadow );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -76,27 +76,27 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion ) const;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion ) const;
     virtual int              ScaleMetrics( long nMult, long nDiv );
     virtual int              HasMetrics() const;
 
     const Color& GetColor() const { return aShadowColor;}
     void SetColor( const Color &rNew ) { aShadowColor = rNew; }
 
-    USHORT GetWidth() const { return nWidth; }
+    sal_uInt16 GetWidth() const { return nWidth; }
     SvxShadowLocation GetLocation() const { return eLocation; }
 
-    void SetWidth( USHORT nNew ) { nWidth = nNew; }
+    void SetWidth( sal_uInt16 nNew ) { nWidth = nNew; }
     void SetLocation( SvxShadowLocation eNew ) { eLocation = eNew; }
 
         //Breite des Schattens auf der jeweiligen Seite berechnen.
-    USHORT CalcShadowSpace( USHORT nShadow ) const;
+    sal_uInt16 CalcShadowSpace( sal_uInt16 nShadow ) const;
 
-    virtual USHORT          GetValueCount() const;
-    virtual String          GetValueTextByPos( USHORT nPos ) const;
-    virtual USHORT          GetEnumValue() const;
-    virtual void            SetEnumValue( USHORT nNewVal );
+    virtual sal_uInt16          GetValueCount() const;
+    virtual String          GetValueTextByPos( sal_uInt16 nPos ) const;
+    virtual sal_uInt16          GetEnumValue() const;
+    virtual void            SetEnumValue( sal_uInt16 nNewVal );
 };
 
 inline SvxShadowItem &SvxShadowItem::operator=( const SvxShadowItem& rFmtShadow )

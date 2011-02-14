@@ -67,7 +67,7 @@ class FWE_DLLPUBLIC BmkMenu : public AddonMenu
 
     protected:
         BmkMenu::BmkMenuType m_nType;
-        USHORT          CreateMenuId();
+        sal_uInt16          CreateMenuId();
 
     private:
                         BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,

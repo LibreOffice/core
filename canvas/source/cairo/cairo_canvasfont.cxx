@@ -78,7 +78,7 @@ namespace cairocanvas
     {
         maFont->SetAlign( ALIGN_BASELINE );
         maFont->SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==com::sun::star::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
-        maFont->SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? TRUE : FALSE );
+        maFont->SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? sal_True : sal_False );
 
         // TODO(F2): improve panose->vclenum conversion
         maFont->SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
@@ -94,7 +94,7 @@ namespace cairocanvas
             if( pOutDev )
             {
                 const bool bOldMapState( pOutDev->IsMapModeEnabled() );
-                pOutDev->EnableMapMode(FALSE);
+                pOutDev->EnableMapMode(sal_False);
 
                 const Size aSize = pOutDev->GetFontMetric( *maFont ).GetSize();
 

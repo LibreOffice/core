@@ -78,13 +78,13 @@ struct SfxViewFrame_Impl
 
 class SfxFrameViewWindow_Impl : public Window
 {
-    BOOL            bActive;
+    sal_Bool            bActive;
     SfxViewFrame*   pFrame;
 
 public:
                         SfxFrameViewWindow_Impl( SfxViewFrame* p, Window& rParent, WinBits nBits=0 ) :
                             Window( &rParent, nBits | WB_BORDER | WB_CLIPCHILDREN ),
-                            bActive( FALSE ),
+                            bActive( sal_False ),
                             pFrame( p )
                         {
                             p->GetFrame().GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );

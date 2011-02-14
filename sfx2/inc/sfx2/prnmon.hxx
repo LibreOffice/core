@@ -57,19 +57,19 @@ private:
 //#endif
 public:
                             SfxPrintProgress( SfxViewShell* pViewSh,
-                                              FASTBOOL bShow = TRUE );
+                                              FASTBOOL bShow = sal_True );
     virtual                 ~SfxPrintProgress();
 
     virtual void            SetText( const String &rText );
-            BOOL            SetStateText( ULONG nVal, const String &rVal, ULONG nNewRange = 0 );
-    virtual BOOL            SetState( ULONG nVal, ULONG nNewRange = 0 );
+            sal_Bool            SetStateText( sal_uIntPtr nVal, const String &rVal, sal_uIntPtr nNewRange = 0 );
+    virtual sal_Bool            SetState( sal_uIntPtr nVal, sal_uIntPtr nNewRange = 0 );
 
     void                    RestoreOnEndPrint( SfxPrinter *pOldPrinter );
     void                    RestoreOnEndPrint( SfxPrinter *pOldPrinter,
-                                               BOOL bOldEnablePrintFile );
+                                               sal_Bool bOldEnablePrintFile );
     void                    DeleteOnEndPrint();
     void                    SetCancelHdl( const Link& aCancelHdl );
-    BOOL                    IsAborted() const;
+    sal_Bool                    IsAborted() const;
 };
 */
 // ------------------------------------------------------------------------
@@ -92,7 +92,7 @@ public:
                                                    const SfxItemSet *rOptions );
     virtual                 ~SfxPrintOptionsDialog();
 
-    BOOL                    Construct();
+    sal_Bool                    Construct();
     virtual short           Execute();
     virtual long            Notify( NotifyEvent& rNEvt );
 

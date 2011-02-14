@@ -75,13 +75,13 @@ class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
     GraphicObject*  pGraphicObject;
     String          aPrevText;
     String          aFollowText;
-    USHORT          nStart;
-    USHORT          nStyle;
+    sal_uInt16          nStart;
+    sal_uInt16          nStyle;
     long            nWidth;
-    USHORT          nScale;
+    sal_uInt16          nScale;
     sal_Unicode     cSymbol;
-    BYTE            nJustify;
-    USHORT          nValidMask; // Nur temporaer fuer GetAttribs/SetAttribs, wegen des grossen Bullets
+    sal_uInt8            nJustify;
+    sal_uInt16          nValidMask; // Nur temporaer fuer GetAttribs/SetAttribs, wegen des grossen Bullets
 
 #ifdef _SVX_BULITEM_CXX
     void    SetDefaultFont_Impl();
@@ -91,30 +91,30 @@ class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxBulletItem( USHORT nWhich = 0 );
-    SvxBulletItem( BYTE nStyle, const Font& rFont, USHORT nStart = 0, USHORT nWhich = 0 );
-    SvxBulletItem( const Font& rFont, sal_Unicode cSymbol, USHORT nWhich=0 );
-    SvxBulletItem( const Bitmap&, USHORT nWhich = 0 );
-    SvxBulletItem( const GraphicObject&, USHORT nWhich = 0 );
-    SvxBulletItem( SvStream& rStrm, USHORT nWhich = 0 );
+    SvxBulletItem( sal_uInt16 nWhich = 0 );
+    SvxBulletItem( sal_uInt8 nStyle, const Font& rFont, sal_uInt16 nStart = 0, sal_uInt16 nWhich = 0 );
+    SvxBulletItem( const Font& rFont, sal_Unicode cSymbol, sal_uInt16 nWhich=0 );
+    SvxBulletItem( const Bitmap&, sal_uInt16 nWhich = 0 );
+    SvxBulletItem( const GraphicObject&, sal_uInt16 nWhich = 0 );
+    SvxBulletItem( SvStream& rStrm, sal_uInt16 nWhich = 0 );
     SvxBulletItem( const SvxBulletItem& );
     ~SvxBulletItem();
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream&, USHORT nVersion ) const;
-    virtual SvStream&       Store( SvStream & , USHORT nItemVersion ) const;
+    virtual SfxPoolItem*    Create( SvStream&, sal_uInt16 nVersion ) const;
+    virtual SvStream&       Store( SvStream & , sal_uInt16 nItemVersion ) const;
 
     String              GetFullText() const;
     sal_Unicode         GetSymbol() const { return cSymbol; }
     String              GetPrevText() const { return aPrevText; }
     String              GetFollowText() const { return aFollowText; }
 
-    USHORT              GetStart() const { return nStart; }
+    sal_uInt16              GetStart() const { return nStart; }
     long                GetWidth() const { return nWidth; }
-    USHORT              GetStyle() const { return nStyle; }
-    BYTE                GetJustification() const { return nJustify; }
+    sal_uInt16              GetStyle() const { return nStyle; }
+    sal_uInt8                GetJustification() const { return nJustify; }
     Font                GetFont() const { return aFont; }
-    USHORT              GetScale() const { return nScale; }
+    sal_uInt16              GetScale() const { return nScale; }
 
     Bitmap              GetBitmap() const;
     void                SetBitmap( const Bitmap& rBmp );
@@ -126,14 +126,14 @@ public:
     void                SetPrevText( const String& rStr) { aPrevText = rStr;}
     void                SetFollowText(const String& rStr) { aFollowText=rStr;}
 
-    void                SetStart( USHORT nNew ) { nStart = nNew; }
+    void                SetStart( sal_uInt16 nNew ) { nStart = nNew; }
     void                SetWidth( long nNew ) { nWidth = nNew; }
-    void                SetStyle( USHORT nNew ) { nStyle = nNew; }
-    void                SetJustification( BYTE nNew ) { nJustify = nNew; }
+    void                SetStyle( sal_uInt16 nNew ) { nStyle = nNew; }
+    void                SetJustification( sal_uInt8 nNew ) { nJustify = nNew; }
     void                SetFont( const Font& rNew) { aFont = rNew; }
-    void                SetScale( USHORT nNew ) { nScale = nNew; }
+    void                SetScale( sal_uInt16 nNew ) { nScale = nNew; }
 
-    virtual USHORT      GetVersion(USHORT nFileVersion) const;
+    virtual sal_uInt16      GetVersion(sal_uInt16 nFileVersion) const;
     virtual int         operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -141,12 +141,12 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     static void         StoreFont( SvStream&, const Font& );
-    static Font         CreateFont( SvStream&, USHORT nVer );
+    static Font         CreateFont( SvStream&, sal_uInt16 nVer );
 
-    USHORT&             GetValidMask()                  { return nValidMask;    }
-    USHORT              GetValidMask() const            { return nValidMask;    }
-    USHORT              IsValid( USHORT nFlag ) const   { return nValidMask & nFlag; }
-    void                SetValid( USHORT nFlag, BOOL bValid )
+    sal_uInt16&             GetValidMask()                  { return nValidMask;    }
+    sal_uInt16              GetValidMask() const            { return nValidMask;    }
+    sal_uInt16              IsValid( sal_uInt16 nFlag ) const   { return nValidMask & nFlag; }
+    void                SetValid( sal_uInt16 nFlag, sal_Bool bValid )
                         {
                             if ( bValid )
                                 nValidMask |= nFlag;

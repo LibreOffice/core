@@ -76,9 +76,9 @@ TaskBar::TaskBar( Window* pParent, WinBits nWinStyle ) :
     mnOldStatusWidth    = 0;
     mnLines             = 1;
     mnWinBits           = nWinStyle;
-    mbStatusText        = FALSE;
-    mbShowItems         = FALSE;
-    mbAutoHide          = FALSE;
+    mbStatusText        = sal_False;
+    mbShowItems         = sal_False;
+    mbAutoHide          = sal_False;
 
     ImplInitSettings();
 }
@@ -309,13 +309,13 @@ void TaskBar::Resize()
 
     if ( pTempButtonBar )
     {
-        USHORT  i = 0;
-        BOOL    bVisibleItems = FALSE;
+        sal_uInt16  i = 0;
+        sal_Bool    bVisibleItems = sal_False;
         while ( i < pTempButtonBar->GetItemCount() )
         {
             if ( pTempButtonBar->IsItemVisible( pTempButtonBar->GetItemId( i ) ) )
             {
-                bVisibleItems = TRUE;
+                bVisibleItems = sal_True;
                 break;
             }
             i++;
@@ -464,14 +464,14 @@ void TaskBar::Format()
 
 // -----------------------------------------------------------------------
 
-void TaskBar::SetLines( USHORT nLines )
+void TaskBar::SetLines( sal_uInt16 nLines )
 {
     mnLines = nLines;
 }
 
 // -----------------------------------------------------------------------
 
-void TaskBar::EnableAutoHide( BOOL bAutoHide )
+void TaskBar::EnableAutoHide( sal_Bool bAutoHide )
 {
     mbAutoHide = bAutoHide;
 
@@ -493,14 +493,14 @@ void TaskBar::ShowStatusText( const String& rText )
     {
         if ( !mbStatusText )
         {
-            mbStatusText = TRUE;
+            mbStatusText = sal_True;
             if ( mpStatusBar->AreItemsVisible() )
             {
-                mbShowItems = TRUE;
+                mbShowItems = sal_True;
                 mpStatusBar->HideItems();
             }
             else
-                mbShowItems = TRUE;
+                mbShowItems = sal_True;
             maOldText = mpStatusBar->GetText();
             Resize();
             mpStatusBar->SetText( rText );
@@ -518,7 +518,7 @@ void TaskBar::HideStatusText()
 {
     if ( mbStatusText && mpStatusBar )
     {
-        mbStatusText = FALSE;
+        mbStatusText = sal_False;
         mpStatusBar->SetText( maOldText );
         Resize();
         if ( mbShowItems )

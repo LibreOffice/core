@@ -63,8 +63,8 @@ public:
     SwInsertAbstractDlg( Window* pParent );
     ~SwInsertAbstractDlg();
 
-    BYTE    GetLevel() const;
-    BYTE    GetPara() const;
+    sal_uInt8   GetLevel() const;
+    sal_uInt8   GetPara() const;
 };
 
 #endif

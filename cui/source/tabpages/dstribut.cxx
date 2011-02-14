@@ -37,7 +37,7 @@
 #include <dialmgr.hxx>
 #include <tools/shl.hxx>
 
-static USHORT pRanges[] =
+static sal_uInt16 pRanges[] =
 {
     SDRATTR_MEASURE_FIRST,
     SDRATTR_MEASURE_LAST,
@@ -148,7 +148,7 @@ SfxTabPage* SvxDistributePage::Create(Window* pWindow, const SfxItemSet& rAttrs,
 |*
 \************************************************************************/
 
-UINT16* SvxDistributePage::GetRanges()
+sal_uInt16* SvxDistributePage::GetRanges()
 {
     return(pRanges);
 }
@@ -171,34 +171,34 @@ void SvxDistributePage::PointChanged(Window* /*pWindow*/, RECT_POINT /*eRP*/)
 
 void __EXPORT SvxDistributePage::Reset(const SfxItemSet& )
 {
-    maBtnHorNone.SetState(FALSE);
-    maBtnHorLeft.SetState(FALSE);
-    maBtnHorCenter.SetState(FALSE);
-    maBtnHorDistance.SetState(FALSE);
-    maBtnHorRight.SetState(FALSE);
+    maBtnHorNone.SetState(sal_False);
+    maBtnHorLeft.SetState(sal_False);
+    maBtnHorCenter.SetState(sal_False);
+    maBtnHorDistance.SetState(sal_False);
+    maBtnHorRight.SetState(sal_False);
 
     switch(meDistributeHor)
     {
-        case SvxDistributeHorizontalNone : maBtnHorNone.SetState(TRUE); break;
-        case SvxDistributeHorizontalLeft : maBtnHorLeft.SetState(TRUE); break;
-        case SvxDistributeHorizontalCenter : maBtnHorCenter.SetState(TRUE); break;
-        case SvxDistributeHorizontalDistance : maBtnHorDistance.SetState(TRUE); break;
-        case SvxDistributeHorizontalRight : maBtnHorRight.SetState(TRUE); break;
+        case SvxDistributeHorizontalNone : maBtnHorNone.SetState(sal_True); break;
+        case SvxDistributeHorizontalLeft : maBtnHorLeft.SetState(sal_True); break;
+        case SvxDistributeHorizontalCenter : maBtnHorCenter.SetState(sal_True); break;
+        case SvxDistributeHorizontalDistance : maBtnHorDistance.SetState(sal_True); break;
+        case SvxDistributeHorizontalRight : maBtnHorRight.SetState(sal_True); break;
     }
 
-    maBtnVerNone.SetState(FALSE);
-    maBtnVerTop.SetState(FALSE);
-    maBtnVerCenter.SetState(FALSE);
-    maBtnVerDistance.SetState(FALSE);
-    maBtnVerBottom.SetState(FALSE);
+    maBtnVerNone.SetState(sal_False);
+    maBtnVerTop.SetState(sal_False);
+    maBtnVerCenter.SetState(sal_False);
+    maBtnVerDistance.SetState(sal_False);
+    maBtnVerBottom.SetState(sal_False);
 
     switch(meDistributeVer)
     {
-        case SvxDistributeVerticalNone : maBtnVerNone.SetState(TRUE); break;
-        case SvxDistributeVerticalTop : maBtnVerTop.SetState(TRUE); break;
-        case SvxDistributeVerticalCenter : maBtnVerCenter.SetState(TRUE); break;
-        case SvxDistributeVerticalDistance : maBtnVerDistance.SetState(TRUE); break;
-        case SvxDistributeVerticalBottom : maBtnVerBottom.SetState(TRUE); break;
+        case SvxDistributeVerticalNone : maBtnVerNone.SetState(sal_True); break;
+        case SvxDistributeVerticalTop : maBtnVerTop.SetState(sal_True); break;
+        case SvxDistributeVerticalCenter : maBtnVerCenter.SetState(sal_True); break;
+        case SvxDistributeVerticalDistance : maBtnVerDistance.SetState(sal_True); break;
+        case SvxDistributeVerticalBottom : maBtnVerBottom.SetState(sal_True); break;
     }
 }
 
@@ -208,7 +208,7 @@ void __EXPORT SvxDistributePage::Reset(const SfxItemSet& )
 |*
 \************************************************************************/
 
-BOOL SvxDistributePage::FillItemSet( SfxItemSet& )
+sal_Bool SvxDistributePage::FillItemSet( SfxItemSet& )
 {
     SvxDistributeHorizontal eDistributeHor(SvxDistributeHorizontalNone);
     SvxDistributeVertical eDistributeVer(SvxDistributeVerticalNone);
@@ -235,10 +235,10 @@ BOOL SvxDistributePage::FillItemSet( SfxItemSet& )
     {
         meDistributeHor = eDistributeHor;
         meDistributeVer = eDistributeVer;
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 

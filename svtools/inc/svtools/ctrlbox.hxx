@@ -181,60 +181,60 @@ public:
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
     using ListBox::InsertEntry;
-    virtual USHORT  InsertEntry( const XubString& rStr,
-                                 USHORT nPos = LISTBOX_APPEND );
-    virtual USHORT  InsertEntry( const Color& rColor, const XubString& rStr,
-                                 USHORT nPos = LISTBOX_APPEND );
+    virtual sal_uInt16  InsertEntry( const XubString& rStr,
+                                 sal_uInt16 nPos = LISTBOX_APPEND );
+    virtual sal_uInt16  InsertEntry( const Color& rColor, const XubString& rStr,
+                                 sal_uInt16 nPos = LISTBOX_APPEND );
     void            InsertAutomaticEntry();
     using ListBox::RemoveEntry;
-    virtual void    RemoveEntry( USHORT nPos );
+    virtual void    RemoveEntry( sal_uInt16 nPos );
     virtual void    Clear();
     void            CopyEntries( const ColorListBox& rBox );
 
     using ListBox::GetEntryPos;
-    virtual USHORT  GetEntryPos( const Color& rColor ) const;
-    virtual Color   GetEntryColor( USHORT nPos ) const;
+    virtual sal_uInt16  GetEntryPos( const Color& rColor ) const;
+    virtual Color   GetEntryColor( sal_uInt16 nPos ) const;
     Size            GetImageSize() const { return aImageSize; }
 
-    void            SelectEntry( const XubString& rStr, BOOL bSelect = TRUE )
+    void            SelectEntry( const XubString& rStr, sal_Bool bSelect = sal_True )
                         { ListBox::SelectEntry( rStr, bSelect ); }
-    void            SelectEntry( const Color& rColor, BOOL bSelect = TRUE );
-    XubString       GetSelectEntry( USHORT nSelIndex = 0 ) const
+    void            SelectEntry( const Color& rColor, sal_Bool bSelect = sal_True );
+    XubString       GetSelectEntry( sal_uInt16 nSelIndex = 0 ) const
                         { return ListBox::GetSelectEntry( nSelIndex ); }
-    Color           GetSelectEntryColor( USHORT nSelIndex = 0 ) const;
-    BOOL            IsEntrySelected( const XubString& rStr ) const
+    Color           GetSelectEntryColor( sal_uInt16 nSelIndex = 0 ) const;
+    sal_Bool            IsEntrySelected( const XubString& rStr ) const
                         { return ListBox::IsEntrySelected( rStr ); }
 
-    BOOL            IsEntrySelected( const Color& rColor ) const;
+    sal_Bool            IsEntrySelected( const Color& rColor ) const;
 
 private:
     // declared as private because some compilers would generate the default functions
                     ColorListBox( const ColorListBox& );
     ColorListBox&   operator =( const ColorListBox& );
 
-    void            SetEntryData( USHORT nPos, void* pNewData );
-    void*           GetEntryData( USHORT nPos ) const;
+    void            SetEntryData( sal_uInt16 nPos, void* pNewData );
+    void*           GetEntryData( sal_uInt16 nPos ) const;
 };
 
-inline void ColorListBox::SelectEntry( const Color& rColor, BOOL bSelect )
+inline void ColorListBox::SelectEntry( const Color& rColor, sal_Bool bSelect )
 {
-    USHORT nPos = GetEntryPos( rColor );
+    sal_uInt16 nPos = GetEntryPos( rColor );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         ListBox::SelectEntryPos( nPos, bSelect );
 }
 
-inline BOOL ColorListBox::IsEntrySelected( const Color& rColor ) const
+inline sal_Bool ColorListBox::IsEntrySelected( const Color& rColor ) const
 {
-    USHORT nPos = GetEntryPos( rColor );
+    sal_uInt16 nPos = GetEntryPos( rColor );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         return IsEntryPosSelected( nPos );
     else
-        return FALSE;
+        return sal_False;
 }
 
-inline Color ColorListBox::GetSelectEntryColor( USHORT nSelIndex ) const
+inline Color ColorListBox::GetSelectEntryColor( sal_uInt16 nSelIndex ) const
 {
-    USHORT nPos = GetSelectEntryPos( nSelIndex );
+    sal_uInt16 nPos = GetSelectEntryPos( nSelIndex );
     Color aColor;
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         aColor = GetEntryColor( nPos );
@@ -259,7 +259,7 @@ class SVT_DLLPUBLIC LineListBox : public ListBox
     using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit();
     void            UpdateLineColors( void );
-    BOOL            UpdatePaintLineColor( void );       // returns TRUE if maPaintCol has changed
+    sal_Bool            UpdatePaintLineColor( void );       // returns sal_True if maPaintCol has changed
     inline const Color& GetPaintColor( void ) const;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
@@ -269,25 +269,25 @@ public:
     virtual         ~LineListBox();
 
     using ListBox::InsertEntry;
-    virtual USHORT  InsertEntry( const XubString& rStr, USHORT nPos = LISTBOX_APPEND );
-    virtual USHORT  InsertEntry( long nLine1, long nLine2 = 0, long nDistance = 0, USHORT nPos = LISTBOX_APPEND );
+    virtual sal_uInt16  InsertEntry( const XubString& rStr, sal_uInt16 nPos = LISTBOX_APPEND );
+    virtual sal_uInt16  InsertEntry( long nLine1, long nLine2 = 0, long nDistance = 0, sal_uInt16 nPos = LISTBOX_APPEND );
     using ListBox::RemoveEntry;
-    virtual void    RemoveEntry( USHORT nPos );
+    virtual void    RemoveEntry( sal_uInt16 nPos );
     virtual void    Clear();
 
     using ListBox::GetEntryPos;
-    USHORT          GetEntryPos( long nLine1, long nLine2 = 0, long nDistance = 0 ) const;
-    long            GetEntryLine1( USHORT nPos ) const;
-    long            GetEntryLine2( USHORT nPos ) const;
-    long            GetEntryDistance( USHORT nPos ) const;
+    sal_uInt16          GetEntryPos( long nLine1, long nLine2 = 0, long nDistance = 0 ) const;
+    long            GetEntryLine1( sal_uInt16 nPos ) const;
+    long            GetEntryLine2( sal_uInt16 nPos ) const;
+    long            GetEntryDistance( sal_uInt16 nPos ) const;
 
-    inline void     SelectEntry( const XubString& rStr, BOOL bSelect = TRUE ) { ListBox::SelectEntry( rStr, bSelect ); }
-    void            SelectEntry( long nLine1, long nLine2 = 0, long nDistance = 0, BOOL bSelect = TRUE );
-    long            GetSelectEntryLine1( USHORT nSelIndex = 0 ) const;
-    long            GetSelectEntryLine2( USHORT nSelIndex = 0 ) const;
-    long            GetSelectEntryDistance( USHORT nSelIndex = 0 ) const;
-    inline BOOL     IsEntrySelected( const XubString& rStr ) const { return ListBox::IsEntrySelected( rStr ); }
-    BOOL            IsEntrySelected( long nLine1, long nLine2 = 0, long nDistance = 0 ) const;
+    inline void     SelectEntry( const XubString& rStr, sal_Bool bSelect = sal_True ) { ListBox::SelectEntry( rStr, bSelect ); }
+    void            SelectEntry( long nLine1, long nLine2 = 0, long nDistance = 0, sal_Bool bSelect = sal_True );
+    long            GetSelectEntryLine1( sal_uInt16 nSelIndex = 0 ) const;
+    long            GetSelectEntryLine2( sal_uInt16 nSelIndex = 0 ) const;
+    long            GetSelectEntryDistance( sal_uInt16 nSelIndex = 0 ) const;
+    inline sal_Bool     IsEntrySelected( const XubString& rStr ) const { return ListBox::IsEntrySelected( rStr ); }
+    sal_Bool            IsEntrySelected( long nLine1, long nLine2 = 0, long nDistance = 0 ) const;
 
     inline void     SetUnit( FieldUnit eNewUnit ) { eUnit = eNewUnit; }
     inline FieldUnit    GetUnit() const { return eUnit; }
@@ -301,51 +301,51 @@ private:
     // declared as private because some compilers would generate the default methods
                     LineListBox( const LineListBox& );
     LineListBox&    operator =( const LineListBox& );
-    void            SetEntryData( USHORT nPos, void* pNewData );
-    void*           GetEntryData( USHORT nPos ) const;
+    void            SetEntryData( sal_uInt16 nPos, void* pNewData );
+    void*           GetEntryData( sal_uInt16 nPos ) const;
 };
 
-inline void LineListBox::SelectEntry( long nLine1, long nLine2, long nDistance, BOOL bSelect )
+inline void LineListBox::SelectEntry( long nLine1, long nLine2, long nDistance, sal_Bool bSelect )
 {
-    USHORT nPos = GetEntryPos( nLine1, nLine2, nDistance );
+    sal_uInt16 nPos = GetEntryPos( nLine1, nLine2, nDistance );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         ListBox::SelectEntryPos( nPos, bSelect );
 }
 
-inline long LineListBox::GetSelectEntryLine1( USHORT nSelIndex ) const
+inline long LineListBox::GetSelectEntryLine1( sal_uInt16 nSelIndex ) const
 {
-    USHORT nPos = GetSelectEntryPos( nSelIndex );
+    sal_uInt16 nPos = GetSelectEntryPos( nSelIndex );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         return GetEntryLine1( nPos );
     else
         return 0;
 }
 
-inline long LineListBox::GetSelectEntryLine2( USHORT nSelIndex ) const
+inline long LineListBox::GetSelectEntryLine2( sal_uInt16 nSelIndex ) const
 {
-    USHORT nPos = GetSelectEntryPos( nSelIndex );
+    sal_uInt16 nPos = GetSelectEntryPos( nSelIndex );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         return GetEntryLine2( nPos );
     else
         return 0;
 }
 
-inline long LineListBox::GetSelectEntryDistance( USHORT nSelIndex ) const
+inline long LineListBox::GetSelectEntryDistance( sal_uInt16 nSelIndex ) const
 {
-    USHORT nPos = GetSelectEntryPos( nSelIndex );
+    sal_uInt16 nPos = GetSelectEntryPos( nSelIndex );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         return GetEntryDistance( nPos );
     else
         return 0;
 }
 
-inline BOOL LineListBox::IsEntrySelected( long nLine1, long nLine2, long nDistance ) const
+inline sal_Bool LineListBox::IsEntrySelected( long nLine1, long nLine2, long nDistance ) const
 {
-    USHORT nPos = GetEntryPos( nLine1, nLine2, nDistance );
+    sal_uInt16 nPos = GetEntryPos( nLine1, nLine2, nDistance );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
         return IsEntryPosSelected( nPos );
     else
-        return FALSE;
+        return sal_False;
 }
 
 inline void LineListBox::SetColor( const Color& rColor )
@@ -372,8 +372,8 @@ private:
     Image           maImagePrinterFont;
     Image           maImageBitmapFont;
     Image           maImageScalableFont;
-    BOOL            mbWYSIWYG;
-    BOOL            mbSymbols;
+    sal_Bool            mbWYSIWYG;
+    sal_Bool            mbSymbols;
 
 #ifdef _CTRLBOX_CXX
     SVT_DLLPRIVATE void         ImplCalcUserItemSize();
@@ -393,11 +393,11 @@ public:
 
     void            Fill( const FontList* pList );
 
-    void            EnableWYSIWYG( BOOL bEnable = TRUE );
-    BOOL            IsWYSIWYGEnabled() const { return mbWYSIWYG; }
+    void            EnableWYSIWYG( sal_Bool bEnable = sal_True );
+    sal_Bool            IsWYSIWYGEnabled() const { return mbWYSIWYG; }
 
-    void            EnableSymbols( BOOL bEnable = TRUE );
-    BOOL            IsSymbolsEnabled() const { return mbSymbols; }
+    void            EnableSymbols( sal_Bool bEnable = sal_True );
+    sal_Bool            IsSymbolsEnabled() const { return mbSymbols; }
 
 private:
     // declared as private because some compilers would generate the default functions
@@ -447,13 +447,13 @@ class SVT_DLLPUBLIC FontSizeBox : public MetricBox
 {
     FontInfo        aFontInfo;
     const FontList* pFontList;
-    USHORT          nRelMin;
-    USHORT          nRelMax;
-    USHORT          nRelStep;
+    sal_uInt16          nRelMin;
+    sal_uInt16          nRelMax;
+    sal_uInt16          nRelStep;
     short           nPtRelMin;
     short           nPtRelMax;
     short           nPtRelStep;
-    BOOL            bRelativeMode:1,
+    sal_Bool            bRelativeMode:1,
                     bRelative:1,
                     bPtRelative:1,
                     bStdSize:1;
@@ -476,22 +476,22 @@ public:
 
     void            Fill( const FontInfo* pInfo, const FontList* pList );
 
-    void            EnableRelativeMode( USHORT nMin = 50, USHORT nMax = 150,
-                                        USHORT nStep = 5 );
+    void            EnableRelativeMode( sal_uInt16 nMin = 50, sal_uInt16 nMax = 150,
+                                        sal_uInt16 nStep = 5 );
     void            EnablePtRelativeMode( short nMin = -200, short nMax = 200,
                                           short nStep = 10 );
-    BOOL            IsRelativeMode() const { return bRelativeMode; }
-    void            SetRelative( BOOL bRelative = FALSE );
-    BOOL            IsRelative() const { return bRelative; }
-    void            SetPtRelative( BOOL bPtRel = TRUE )
-                        { bPtRelative = bPtRel; SetRelative( TRUE ); }
-    BOOL            IsPtRelative() const { return bPtRelative; }
+    sal_Bool            IsRelativeMode() const { return bRelativeMode; }
+    void            SetRelative( sal_Bool bRelative = sal_False );
+    sal_Bool            IsRelative() const { return bRelative; }
+    void            SetPtRelative( sal_Bool bPtRel = sal_True )
+                        { bPtRelative = bPtRel; SetRelative( sal_True ); }
+    sal_Bool            IsPtRelative() const { return bPtRelative; }
 
     virtual void    SetValue( sal_Int64 nNewValue, FieldUnit eInUnit );
     virtual void    SetValue( sal_Int64 nNewValue  );
     virtual sal_Int64   GetValue( FieldUnit eOutUnit ) const;
     virtual sal_Int64   GetValue() const;
-    sal_Int64           GetValue( USHORT nPos, FieldUnit eOutUnit ) const;
+    sal_Int64           GetValue( sal_uInt16 nPos, FieldUnit eOutUnit ) const;
     void            SetUserValue( sal_Int64 nNewValue, FieldUnit eInUnit );
     void            SetUserValue( sal_Int64 nNewValue ) { SetUserValue( nNewValue, FUNIT_NONE ); }
 

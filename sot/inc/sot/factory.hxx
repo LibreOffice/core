@@ -47,13 +47,13 @@ typedef void * (*CreateInstanceType)( SotObject ** );
 //==================class SotFactory=======================================
 class SOT_DLLPUBLIC SotFactory : public SvGlobalName
 {
-    USHORT              nSuperCount;    // Anzahl der Superklassen
+    sal_uInt16              nSuperCount;    // Anzahl der Superklassen
     const SotFactory ** pSuperClasses;  // Superklassen
     CreateInstanceType  pCreateFunc;
 
     String              aClassName;
 
-    static  BOOL        ExistTest( const SvGlobalName & );
+    static  sal_Bool        ExistTest( const SvGlobalName & );
 protected:
     virtual             ~SotFactory();
 public:
@@ -61,7 +61,7 @@ public:
     static  void        DeInit();
     static  void        IncSvObjectCount( SotObject * = NULL );
     static  void        DecSvObjectCount( SotObject * = NULL );
-    static  UINT32      GetSvObjectCount();
+    static  sal_uInt32      GetSvObjectCount();
     static  void        TestInvariant();
 
     static  const SotFactory *      Find( const SvGlobalName & );
@@ -74,8 +74,8 @@ public:
     virtual void *      CreateInstance( SotObject ** ppObj = NULL ) const;
     void *              CastAndAddRef( SotObject * ) const;
 
-    BOOL                Is( const SotFactory * pSuperClass ) const;
-    const SotFactory *  GetSuper( USHORT nPos ) const
+    sal_Bool                Is( const SotFactory * pSuperClass ) const;
+    const SotFactory *  GetSuper( sal_uInt16 nPos ) const
                         {
                             return nPos < nSuperCount ?
                                          pSuperClasses[ nPos ]

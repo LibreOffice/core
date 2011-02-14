@@ -61,12 +61,12 @@ private:
     ::rtl::OUString m_aLanguage;
 
 public:
-    XMLScriptChildContext( SvXMLImport& rImport, USHORT nPrfx, const ::rtl::OUString& rLName,
+    XMLScriptChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& rxModel,
         const ::rtl::OUString& rLanguage );
     virtual ~XMLScriptChildContext();
 
-    virtual SvXMLImportContext* CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
+    virtual SvXMLImportContext* CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     virtual void EndElement();
@@ -74,7 +74,7 @@ public:
 
 // -----------------------------------------------------------------------------
 
-XMLScriptChildContext::XMLScriptChildContext( SvXMLImport& rImport, USHORT nPrfx, const ::rtl::OUString& rLName,
+XMLScriptChildContext::XMLScriptChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const ::rtl::OUString& rLName,
         const Reference< frame::XModel >& rxModel, const ::rtl::OUString& rLanguage )
     :SvXMLImportContext( rImport, nPrfx, rLName )
     ,m_xModel( rxModel )
@@ -92,7 +92,7 @@ XMLScriptChildContext::~XMLScriptChildContext()
 // -----------------------------------------------------------------------------
 
 SvXMLImportContext* XMLScriptChildContext::CreateChildContext(
-    USHORT nPrefix, const ::rtl::OUString& rLocalName,
+    sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName,
     const Reference< xml::sax::XAttributeList >& xAttrList )
 {
     SvXMLImportContext* pContext = NULL;

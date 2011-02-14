@@ -52,7 +52,7 @@ public:
     virtual             ~AlignmentTabPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
     virtual void        Reset( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet );

@@ -166,15 +166,15 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Flag um nach dem Laden des Pools Aufzuraeumen (d.h. die RefCounts
-// neu zu bestimmen und unbenutztes wegzuwerfen). FALSE == aktiv
-#define LOADREFCOUNTS (FALSE)
+// neu zu bestimmen und unbenutztes wegzuwerfen). sal_False == aktiv
+#define LOADREFCOUNTS (sal_False)
 
 struct SdrDocumentStreamInfo
 {
     FASTBOOL        mbDeleteAfterUse;
     String          maUserData;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > mxStorageRef;
-    BOOL            mbDummy1 : 1;
+    sal_Bool            mbDummy1 : 1;
 };
 
 struct SdrModelImpl;
@@ -205,27 +205,27 @@ protected:
                     m_pEmbeddedHelper; // helper for embedded objects to get rid of the SfxObjectShell
     SdrOutliner*    pDrawOutliner;  // ein Outliner zur Textausgabe
     SdrOutliner*    pHitTestOutliner;// ein Outliner fuer den HitTest
-    ULONG           nDefTextHgt;    // Default Texthoehe in logischen Einheiten
+    sal_uIntPtr           nDefTextHgt;    // Default Texthoehe in logischen Einheiten
     OutputDevice*   pRefOutDev;     // ReferenzDevice fuer die EditEngine
-    ULONG           nProgressAkt;   // fuer den
-    ULONG           nProgressMax;   // ProgressBar-
-    ULONG           nProgressOfs;   // -Handler
+    sal_uIntPtr           nProgressAkt;   // fuer den
+    sal_uIntPtr           nProgressMax;   // ProgressBar-
+    sal_uIntPtr           nProgressOfs;   // -Handler
     rtl::Reference< SfxStyleSheetBasePool > mxStyleSheetPool;
     SfxStyleSheet*  pDefaultStyleSheet;
     sfx2::LinkManager* pLinkManager;   // LinkManager
     Container*      pUndoStack;
     Container*      pRedoStack;
     SdrUndoGroup*   pAktUndoGroup;  // Fuer mehrstufige
-    USHORT          nUndoLevel;     // Undo-Klammerung
+    sal_uInt16          nUndoLevel;     // Undo-Klammerung
     bool            mbUndoEnabled;  // If false no undo is recorded or we are during the execution of an undo action
-    USHORT          nProgressPercent; // fuer den ProgressBar-Handler
-    USHORT          nLoadVersion;   // Versionsnummer der geladenen Datei
+    sal_uInt16          nProgressPercent; // fuer den ProgressBar-Handler
+    sal_uInt16          nLoadVersion;   // Versionsnummer der geladenen Datei
     FASTBOOL        bExtColorTable; // Keinen eigenen ColorTable
     sal_Bool        mbChanged;
     FASTBOOL        bInfoChanged;
     FASTBOOL        bPagNumsDirty;
     FASTBOOL        bMPgNumsDirty;
-    FASTBOOL        bPageNotValid;  // TRUE=Doc ist nur ObjektTraeger. Page ist nicht gueltig.
+    FASTBOOL        bPageNotValid;  // sal_True=Doc ist nur ObjektTraeger. Page ist nicht gueltig.
     FASTBOOL        bSavePortable;  // Metafiles portabel speichern
     FASTBOOL        bNoBitmapCaching;   // Bitmaps fuer Screenoutput cachen
     FASTBOOL        bReadOnly;
@@ -234,12 +234,12 @@ protected:
     FASTBOOL        bSwapGraphics;
     FASTBOOL        bPasteResize; // Objekte werden gerade resized wegen Paste mit anderem MapMode
     FASTBOOL        bSaveOLEPreview;      // save preview metafile of OLE objects
-    UINT16          nStreamCompressMode;  // Komprimiert schreiben?
-    UINT16          nStreamNumberFormat;
-    UINT16          nDefaultTabulator;
-    UINT32          nMaxUndoCount;
+    sal_uInt16          nStreamCompressMode;  // Komprimiert schreiben?
+    sal_uInt16          nStreamNumberFormat;
+    sal_uInt16          nDefaultTabulator;
+    sal_uInt32          nMaxUndoCount;
     FASTBOOL        bSaveNative;
-    BOOL            bStarDrawPreviewMode;
+    sal_Bool            bStarDrawPreviewMode;
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -266,19 +266,19 @@ public:
     bool IsAllowShapePropertyChangeListener() const;
     void SetAllowShapePropertyChangeListener( bool bAllow );
 
-    UINT16          nStarDrawPreviewMasterPageNum;
+    sal_uInt16          nStarDrawPreviewMasterPageNum;
     // Reserven fuer kompatible Erweiterungen
 //-/    SfxItemPool*    pUndoItemPool;
     SotStorage*     pModelStorage;
     SvxForbiddenCharactersTable* mpForbiddenCharactersTable;
-    ULONG           nSwapGraphicsMode;
+    sal_uIntPtr         nSwapGraphicsMode;
 
     SdrOutlinerCache* mpOutlinerCache;
     SdrModelImpl*   mpImpl;
-    UINT16          mnCharCompressType;
-    UINT16          mnHandoutPageCount;
-    UINT16          nReserveUInt6;
-    UINT16          nReserveUInt7;
+    sal_uInt16          mnCharCompressType;
+    sal_uInt16          mnHandoutPageCount;
+    sal_uInt16          nReserveUInt6;
+    sal_uInt16          nReserveUInt7;
     FASTBOOL        mbModelLocked;
     FASTBOOL        mbKernAsianPunctuation;
     FASTBOOL        mbAddExtLeading;
@@ -299,8 +299,8 @@ public:
 public:
     const SvNumberFormatter& GetNumberFormatter() const;
 
-    UINT16 getHandoutPageCount() const { return mnHandoutPageCount; }
-    void setHandoutPageCount( UINT16 nHandoutPageCount ) { mnHandoutPageCount = nHandoutPageCount; }
+    sal_uInt16 getHandoutPageCount() const { return mnHandoutPageCount; }
+    void setHandoutPageCount( sal_uInt16 nHandoutPageCount ) { mnHandoutPageCount = nHandoutPageCount; }
 
 protected:
 
@@ -314,7 +314,7 @@ private:
 //#if 0 // _SOLAR__PRIVATE
     SVX_DLLPRIVATE void ImpPostUndoAction(SdrUndoAction* pUndo);
     SVX_DLLPRIVATE void ImpSetUIUnit();
-    SVX_DLLPRIVATE void ImpSetOutlinerDefaults( SdrOutliner* pOutliner, BOOL bInit = FALSE );
+    SVX_DLLPRIVATE void ImpSetOutlinerDefaults( SdrOutliner* pOutliner, sal_Bool bInit = sal_False );
     SVX_DLLPRIVATE void ImpReformatAllTextObjects();
     SVX_DLLPRIVATE void ImpReformatAllEdgeObjects();    // #103122#
     SVX_DLLPRIVATE void ImpCreateTables();
@@ -353,7 +353,7 @@ public:
     // Hier kann man erfragen, ob das Model gerade eingrstreamt wird
     FASTBOOL IsLoading() const                  { return sal_False /*BFS01 bLoading */; }
     // Muss z.B. ueberladen werden, um das Swappen/LoadOnDemand von Grafiken
-    // zu ermoeglichen. Wird rbDeleteAfterUse auf TRUE gesetzt, so wird
+    // zu ermoeglichen. Wird rbDeleteAfterUse auf sal_True gesetzt, so wird
     // die SvStream-Instanz vom Aufrufer nach Gebrauch destruiert.
     // Wenn diese Methode NULL liefert, wird zum Swappen eine temporaere
     // Datei angelegt.
@@ -385,7 +385,7 @@ public:
     const SdrTextObj*    GetFormattingTextObj() const;
     // Die TextDefaults (Font,Hoehe,Farbe) in ein Set putten
     void                 SetTextDefaults() const;
-    static void          SetTextDefaults( SfxItemPool* pItemPool, ULONG nDefTextHgt );
+    static void          SetTextDefaults( SfxItemPool* pItemPool, sal_uIntPtr nDefTextHgt );
 
     // ReferenzDevice fuer die EditEngine
     void                 SetRefDevice(OutputDevice* pDev);
@@ -393,11 +393,11 @@ public:
     // Wenn ein neuer MapMode am RefDevice gesetzt wird o.ae.
     void                 RefDeviceChanged(); // noch nicht implementiert
     // Default-Schrifthoehe in logischen Einheiten
-    void                 SetDefaultFontHeight(ULONG nVal);
-    ULONG                GetDefaultFontHeight() const           { return nDefTextHgt; }
+    void                 SetDefaultFontHeight(sal_uIntPtr nVal);
+    sal_uIntPtr                GetDefaultFontHeight() const           { return nDefTextHgt; }
     // Default-Tabulatorweite fuer die EditEngine
-    void                 SetDefaultTabulator(USHORT nVal);
-    USHORT               GetDefaultTabulator() const            { return nDefaultTabulator; }
+    void                 SetDefaultTabulator(sal_uInt16 nVal);
+    sal_uInt16               GetDefaultTabulator() const            { return nDefaultTabulator; }
 
     // Der DefaultStyleSheet wird jedem Zeichenobjekt verbraten das in diesem
     // Model eingefuegt wird und kein StyleSheet gesetzt hat.
@@ -452,20 +452,20 @@ public:
     FASTBOOL         IsUIOnlyKomma() const                      { return bUIOnlyKomma; }
 
     static void      TakeUnitStr(FieldUnit eUnit, String& rStr);
-    void             TakeMetricStr(long nVal, String& rStr, FASTBOOL bNoUnitChars=FALSE, sal_Int32 nNumDigits = -1) const;
-    void             TakeWinkStr(long nWink, String& rStr, FASTBOOL bNoDegChar=FALSE) const;
-    void             TakePercentStr(const Fraction& rVal, String& rStr, FASTBOOL bNoPercentChar=FALSE) const;
+    void             TakeMetricStr(long nVal, String& rStr, FASTBOOL bNoUnitChars=sal_False, sal_Int32 nNumDigits = -1) const;
+    void             TakeWinkStr(long nWink, String& rStr, FASTBOOL bNoDegChar=sal_False) const;
+    void             TakePercentStr(const Fraction& rVal, String& rStr, FASTBOOL bNoPercentChar=sal_False) const;
 
     // RecalcPageNums wird idR. nur von der Page gerufen.
     FASTBOOL         IsPagNumsDirty() const                     { return bPagNumsDirty; };
     FASTBOOL         IsMPgNumsDirty() const                     { return bMPgNumsDirty; };
     void             RecalcPageNums(FASTBOOL bMaster);
     // Nach dem Insert gehoert die Page dem SdrModel.
-    virtual void     InsertPage(SdrPage* pPage, USHORT nPos=0xFFFF);
-    virtual void     DeletePage(USHORT nPgNum);
+    virtual void     InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
+    virtual void     DeletePage(sal_uInt16 nPgNum);
     // Remove bedeutet Eigentumsuebereignung an den Aufrufer (Gegenteil von Insert)
-    virtual SdrPage* RemovePage(USHORT nPgNum);
-    virtual void     MovePage(USHORT nPgNum, USHORT nNewPos);
+    virtual SdrPage* RemovePage(sal_uInt16 nPgNum);
+    virtual void     MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos);
     const SdrPage* GetPage(sal_uInt16 nPgNum) const;
     SdrPage* GetPage(sal_uInt16 nPgNum);
     sal_uInt16 GetPageCount() const;
@@ -473,11 +473,11 @@ public:
     virtual void PageListChanged();
 
     // Masterpages
-    virtual void     InsertMasterPage(SdrPage* pPage, USHORT nPos=0xFFFF);
-    virtual void     DeleteMasterPage(USHORT nPgNum);
+    virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
+    virtual void     DeleteMasterPage(sal_uInt16 nPgNum);
     // Remove bedeutet Eigentumsuebereignung an den Aufrufer (Gegenteil von Insert)
-    virtual SdrPage* RemoveMasterPage(USHORT nPgNum);
-    virtual void     MoveMasterPage(USHORT nPgNum, USHORT nNewPos);
+    virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum);
+    virtual void     MoveMasterPage(sal_uInt16 nPgNum, sal_uInt16 nNewPos);
     const SdrPage* GetMasterPage(sal_uInt16 nPgNum) const;
     SdrPage* GetMasterPage(sal_uInt16 nPgNum);
     sal_uInt16 GetMasterPageCount() const;
@@ -494,29 +494,29 @@ public:
     // auf einer Page verankert sind, die Page aber nicht gueltig ist. Diese
     // Kennzeichnung wird fuers Clipboard/Drag&Drop benoetigt.
     FASTBOOL        IsPageNotValid() const                     { return bPageNotValid; }
-    void            SetPageNotValid(FASTBOOL bJa=TRUE)         { bPageNotValid=bJa; }
+    void            SetPageNotValid(FASTBOOL bJa=sal_True)         { bPageNotValid=bJa; }
 
-    // Schaltet man dieses Flag auf TRUE, so werden Grafikobjekte
+    // Schaltet man dieses Flag auf sal_True, so werden Grafikobjekte
     // portabel gespeichert. Es findet dann beim Speichern ggf.
     // eine implizite Wandlung von Metafiles statt.
     // Default=FALSE. Flag ist nicht persistent.
     FASTBOOL        IsSavePortable() const                     { return bSavePortable; }
-    void            SetSavePortable(FASTBOOL bJa=TRUE)         { bSavePortable=bJa; }
+    void            SetSavePortable(FASTBOOL bJa=sal_True)         { bSavePortable=bJa; }
 
-    // Schaltet man dieses Flag auf TRUE, so werden
+    // Schaltet man dieses Flag auf sal_True, so werden
     // Pixelobjekte (stark) komprimiert gespeichert.
     // Default=FALSE. Flag ist nicht persistent.
     FASTBOOL        IsSaveCompressed() const                   { return bSaveCompressed; }
-    void            SetSaveCompressed(FASTBOOL bJa=TRUE)       { bSaveCompressed=bJa; }
+    void            SetSaveCompressed(FASTBOOL bJa=sal_True)       { bSaveCompressed=bJa; }
 
-    // Schaltet man dieses Flag auf TRUE, so werden
+    // Schaltet man dieses Flag auf sal_True, so werden
     // Grafikobjekte mit gesetztem Native-Link
     // native gespeichert.
     // Default=FALSE. Flag ist nicht persistent.
     FASTBOOL        IsSaveNative() const                       { return bSaveNative; }
-    void            SetSaveNative(FASTBOOL bJa=TRUE)           { bSaveNative=bJa; }
+    void            SetSaveNative(FASTBOOL bJa=sal_True)           { bSaveNative=bJa; }
 
-    // Schaltet man dieses Flag auf TRUE, so werden die Grafiken
+    // Schaltet man dieses Flag auf sal_True, so werden die Grafiken
     // von Grafikobjekten:
     // - beim Laden eines Dokuments nicht sofort mitgeladen,
     //   sondern erst wenn sie gebraucht (z.B. angezeigt) werden.
@@ -526,9 +526,9 @@ public:
     // GetDocumentStream() ueberladen werden.
     // Default=FALSE. Flag ist nicht persistent.
     FASTBOOL        IsSwapGraphics() const { return bSwapGraphics; }
-    void            SetSwapGraphics(FASTBOOL bJa=TRUE);
-    void            SetSwapGraphicsMode(ULONG nMode) { nSwapGraphicsMode = nMode; }
-    ULONG           GetSwapGraphicsMode() const { return nSwapGraphicsMode; }
+    void            SetSwapGraphics(FASTBOOL bJa=sal_True);
+    void            SetSwapGraphicsMode(sal_uIntPtr nMode) { nSwapGraphicsMode = nMode; }
+    sal_uIntPtr         GetSwapGraphicsMode() const { return nSwapGraphicsMode; }
 
     FASTBOOL        IsSaveOLEPreview() const          { return bSaveOLEPreview; }
     void            SetSaveOLEPreview( FASTBOOL bSet) { bSaveOLEPreview = bSet; }
@@ -541,9 +541,9 @@ public:
     // (Speicher sparen).
     // Default=Cache eingeschaltet. Flag ist nicht persistent.
     FASTBOOL        IsBitmapCaching() const                     { return !bNoBitmapCaching; }
-    void            SetBitmapCaching(FASTBOOL bJa=TRUE)         { bNoBitmapCaching=!bJa; }
+    void            SetBitmapCaching(FASTBOOL bJa=sal_True)         { bNoBitmapCaching=!bJa; }
 
-    // Defaultmaessig (FALSE) kann man Textrahmen ohne Fuellung durch
+    // Defaultmaessig (sal_False) kann man Textrahmen ohne Fuellung durch
     // Mausklick selektieren. Nach Aktivierung dieses Flags trifft man sie
     // nur noch in dem Bereich, wo sich auch tatsaechlich Text befindet.
     FASTBOOL        IsPickThroughTransparentTextFrames() const  { return bTransparentTextFrames; }
@@ -553,7 +553,7 @@ public:
     // Wird nur von den Possibility-Methoden der View ausgewerdet.
     // Direkte Manipulationen am Model, ... berueksichtigen dieses Flag nicht.
     // Sollte ueberladen werden und entsprechend des ReadOnly-Status des Files
-    // TRUE oder FALSE liefern (Methode wird oeffters gerufen, also ein Flag
+    // sal_True oder sal_False liefern (Methode wird oeffters gerufen, also ein Flag
     // verwenden!).
     virtual FASTBOOL IsReadOnly() const;
     virtual void     SetReadOnly(FASTBOOL bYes);
@@ -563,26 +563,26 @@ public:
     // rSourceModel ist anschliessend u.U. weitgehend leer.
     // nFirstPageNum,nLastPageNum: Die aus rSourceModel zu uebernehmenden Seiten
     // nDestPos..................: Einfuegeposition
-    // bMergeMasterPages.........: TRUE =benoetigte MasterPages werden aus
+    // bMergeMasterPages.........: sal_True =benoetigte MasterPages werden aus
     //                                   rSourceModel ebenfalls uebernommen
-    //                             FALSE=Die MasterPageDescriptoren der Seiten
+    //                             sal_False=Die MasterPageDescriptoren der Seiten
     //                                   aus rSourceModel werden auf die
     //                                   vorhandenen MasterPages gemappt.
     // bUndo.....................: Fuer das Merging wird eine UndoAction generiert.
     //                             Undo ist nur fuer das ZielModel, nicht fuer
     //                             rSourceModel.
-    // bTreadSourceAsConst.......: TRUE=Das SourceModel wird nicht veraendert,.
+    // bTreadSourceAsConst.......: sal_True=Das SourceModel wird nicht veraendert,.
     //                             d.h die Seiten werden kopiert.
     virtual void Merge(SdrModel& rSourceModel,
-               USHORT nFirstPageNum=0, USHORT nLastPageNum=0xFFFF,
-               USHORT nDestPos=0xFFFF,
-               FASTBOOL bMergeMasterPages=FALSE, FASTBOOL bAllMasterPages=FALSE,
-               FASTBOOL bUndo=TRUE, FASTBOOL bTreadSourceAsConst=FALSE);
+               sal_uInt16 nFirstPageNum=0, sal_uInt16 nLastPageNum=0xFFFF,
+               sal_uInt16 nDestPos=0xFFFF,
+               FASTBOOL bMergeMasterPages=sal_False, FASTBOOL bAllMasterPages=sal_False,
+               FASTBOOL bUndo=sal_True, FASTBOOL bTreadSourceAsConst=sal_False);
 
-    // Ist wie Merge(SourceModel=DestModel,nFirst,nLast,nDest,FALSE,FALSE,bUndo,!bMoveNoCopy);
-    void CopyPages(USHORT nFirstPageNum, USHORT nLastPageNum,
-                   USHORT nDestPos,
-                   FASTBOOL bUndo=TRUE, FASTBOOL bMoveNoCopy=FALSE);
+    // Ist wie Merge(SourceModel=DestModel,nFirst,nLast,nDest,sal_False,sal_False,bUndo,!bMoveNoCopy);
+    void CopyPages(sal_uInt16 nFirstPageNum, sal_uInt16 nLastPageNum,
+                   sal_uInt16 nDestPos,
+                   FASTBOOL bUndo=sal_True, FASTBOOL bMoveNoCopy=sal_False);
 
     // Mit BegUndo() / EndUndo() ist es moeglich beliebig viele UndoActions
     // beliebig tief zu klammern. Als Kommentar der
@@ -598,7 +598,7 @@ public:
     void BegUndo(SdrUndoGroup* pUndoGrp); // Undo-Klammerung auf
     void EndUndo();                       // Undo-Klammerung zu
     void AddUndo(SdrUndoAction* pUndo);
-    USHORT GetUndoBracketLevel() const                       { return nUndoLevel; }
+    sal_uInt16 GetUndoBracketLevel() const                       { return nUndoLevel; }
     const SdrUndoGroup* GetAktUndoGroup() const              { return pAktUndoGroup; }
     // nur nach dem 1. BegUndo oder vor dem letzten EndUndo:
     void SetUndoComment(const String& rComment);
@@ -607,15 +607,15 @@ public:
     // Das Undo-Managment findet nur statt, wenn kein NotifyUndoAction-Handler
     // gesetzt ist.
     // Default ist 16. Minimaler MaxUndoActionCount ist 1!
-    void  SetMaxUndoActionCount(ULONG nAnz);
-    ULONG GetMaxUndoActionCount() const { return nMaxUndoCount; }
+    void  SetMaxUndoActionCount(sal_uIntPtr nAnz);
+    sal_uIntPtr GetMaxUndoActionCount() const { return nMaxUndoCount; }
     void  ClearUndoBuffer();
     // UndoAction(0) ist die aktuelle (also die zuletzt eingegangene)
-    ULONG GetUndoActionCount() const                      { return pUndoStack!=NULL ? pUndoStack->Count() : 0; }
-    const SfxUndoAction* GetUndoAction(ULONG nNum) const  { return (SfxUndoAction*)(pUndoStack!=NULL ? pUndoStack->GetObject(nNum) : NULL); }
+    sal_uIntPtr GetUndoActionCount() const                      { return pUndoStack!=NULL ? pUndoStack->Count() : 0; }
+    const SfxUndoAction* GetUndoAction(sal_uIntPtr nNum) const  { return (SfxUndoAction*)(pUndoStack!=NULL ? pUndoStack->GetObject(nNum) : NULL); }
     // RedoAction(0) ist die aktuelle (also die des letzten Undo)
-    ULONG GetRedoActionCount() const                      { return pRedoStack!=NULL ? pRedoStack->Count() : 0; }
-    const SfxUndoAction* GetRedoAction(ULONG nNum) const  { return (SfxUndoAction*)(pRedoStack!=NULL ? pRedoStack->GetObject(nNum) : NULL); }
+    sal_uIntPtr GetRedoActionCount() const                      { return pRedoStack!=NULL ? pRedoStack->Count() : 0; }
+    const SfxUndoAction* GetRedoAction(sal_uIntPtr nNum) const  { return (SfxUndoAction*)(pRedoStack!=NULL ? pRedoStack->GetObject(nNum) : NULL); }
 
     FASTBOOL Undo();
     FASTBOOL Redo();
@@ -646,7 +646,7 @@ public:
     // Hier kann man einen Handler setzen der beim Streamen mehrfach gerufen
     // wird und ungefaehre Auskunft ueber den Fortschreitungszustand der
     // Funktion gibt. Der Handler muss folgendes Aussehen haben:
-    //   void __EXPORT class::IOProgressHdl(const USHORT& nPercent);
+    //   void __EXPORT class::IOProgressHdl(const sal_uInt16& nPercent);
     // Der erste Aufruf des Handlers erfolgt grundsaetzlich mit 0, der letzte
     // mit 100. Dazwischen erfolgen maximal 99 Aufrufe mit Werten 1...99.
     // Man kann also durchaus bei 0 den Progressbar Initiallisieren und bei
@@ -679,13 +679,13 @@ public:
     // durch. Geprueft wird insbesondere die Verkettung von Verschachtelten
     // Gruppenobjekten, aber auch Stati wie bInserted sowie Model* und Page*
     // der Objects, SubLists und Pages. Bei korrekter Struktur liefert die
-    // Methode TRUE, andernfalls FALSE.
+    // Methode sal_True, andernfalls FALSE.
     // Dieser Check steht nur zur Verfuegung, wenn die Engine mit DBG_UTIL
     // uebersetzt wurde. Andernfalls liefert die Methode immer TRUE. (ni)
     FASTBOOL CheckConsistence() const;
 
-    void    SetStarDrawPreviewMode(BOOL bPreview);
-    BOOL    IsStarDrawPreviewMode() { return bStarDrawPreviewMode; }
+    void    SetStarDrawPreviewMode(sal_Bool bPreview);
+    sal_Bool    IsStarDrawPreviewMode() { return bStarDrawPreviewMode; }
 
     SotStorage* GetModelStorage() const { return pModelStorage; }
     void        SetModelStorage( SotStorage* pStor ) { pModelStorage = pStor; }
@@ -695,14 +695,14 @@ public:
 
     // these functions are used by the api to disable repaints during a
     // set of api calls.
-    BOOL isLocked() const { return (BOOL)mbModelLocked; }
-    void setLock( BOOL bLock );
+    sal_Bool isLocked() const { return (sal_Bool)mbModelLocked; }
+    void setLock( sal_Bool bLock );
 
     void            SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
     vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable() const;
 
-    void SetCharCompressType( UINT16 nType );
-    UINT16 GetCharCompressType() const { return mnCharCompressType; }
+    void SetCharCompressType( sal_uInt16 nType );
+    sal_uInt16 GetCharCompressType() const { return mnCharCompressType; }
 
     void SetKernAsianPunctuation( sal_Bool bEnabled );
     sal_Bool IsKernAsianPunctuation() const { return (sal_Bool)mbKernAsianPunctuation; }
@@ -712,9 +712,9 @@ public:
 
     void ReformatAllTextObjects();
 
-    FASTBOOL HasTransparentObjects( BOOL bCheckForAlphaChannel = FALSE ) const;
+    FASTBOOL HasTransparentObjects( sal_Bool bCheckForAlphaChannel = sal_False ) const;
 
-    SdrOutliner* createOutliner( USHORT nOutlinerMode );
+    SdrOutliner* createOutliner( sal_uInt16 nOutlinerMode );
     void disposeOutliner( SdrOutliner* pOutliner );
 
     sal_Bool IsWriter() const { return !bMyPool; }

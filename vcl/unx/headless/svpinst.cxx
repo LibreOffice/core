@@ -122,7 +122,7 @@ SvpSalInstance::~SvpSalInstance()
     osl_destroyMutex( m_aEventGuard );
 }
 
-void SvpSalInstance::PostEvent( const SalFrame* pFrame, void* pData, USHORT nEvent )
+void SvpSalInstance::PostEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent )
 {
     if( osl_acquireMutex( m_aEventGuard ) )
     {
@@ -132,7 +132,7 @@ void SvpSalInstance::PostEvent( const SalFrame* pFrame, void* pData, USHORT nEve
     Wakeup();
 }
 
-void SvpSalInstance::CancelEvent( const SalFrame* pFrame, void* pData, USHORT nEvent )
+void SvpSalInstance::CancelEvent( const SalFrame* pFrame, void* pData, sal_uInt16 nEvent )
 {
     if( osl_acquireMutex( m_aEventGuard ) )
     {
@@ -192,7 +192,7 @@ inline int operator >= ( const timeval &t1, const timeval &t2 )
         return t1.tv_usec >= t2.tv_usec;
     return t1.tv_sec > t2.tv_sec;
 }
-inline timeval &operator += ( timeval &t1, ULONG t2 )
+inline timeval &operator += ( timeval &t1, sal_uLong t2 )
 {
     t1.tv_sec  += t2 / 1000;
     t1.tv_usec += t2 ? (t2 % 1000) * 1000 : 500;
@@ -235,12 +235,12 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
     return bRet;
 }
 
-SalFrame* SvpSalInstance::CreateChildFrame( SystemParentData* pParent, ULONG nStyle )
+SalFrame* SvpSalInstance::CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle )
 {
     return new SvpSalFrame( this, NULL, nStyle, pParent );
 }
 
-SalFrame* SvpSalInstance::CreateFrame( SalFrame* pParent, ULONG nStyle )
+SalFrame* SvpSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nStyle )
 {
     return new SvpSalFrame( this, pParent, nStyle );
 }
@@ -250,7 +250,7 @@ void SvpSalInstance::DestroyFrame( SalFrame* pFrame )
     delete pFrame;
 }
 
-SalObject* SvpSalInstance::CreateObject( SalFrame*, SystemWindowData*, BOOL )
+SalObject* SvpSalInstance::CreateObject( SalFrame*, SystemWindowData*, sal_Bool )
 {
     return new SvpSalObject();
 }
@@ -262,7 +262,7 @@ void SvpSalInstance::DestroyObject( SalObject* pObject )
 
 SalVirtualDevice* SvpSalInstance::CreateVirtualDevice( SalGraphics*,
                                                        long nDX, long nDY,
-                                                       USHORT nBitCount, const SystemGraphicsData* )
+                                                       sal_uInt16 nBitCount, const SystemGraphicsData* )
 {
     SvpSalVirtualDevice* pNew = new SvpSalVirtualDevice( nBitCount );
     pNew->SetSize( nDX, nDY );
@@ -299,13 +299,13 @@ vos::IMutex* SvpSalInstance::GetYieldMutex()
     return &m_aYieldMutex;
 }
 
-ULONG SvpSalInstance::ReleaseYieldMutex()
+sal_uLong SvpSalInstance::ReleaseYieldMutex()
 {
     if ( m_aYieldMutex.GetThreadId() ==
          vos::OThread::getCurrentIdentifier() )
     {
-        ULONG nCount = m_aYieldMutex.GetAcquireCount();
-        ULONG n = nCount;
+        sal_uLong nCount = m_aYieldMutex.GetAcquireCount();
+        sal_uLong n = nCount;
         while ( n )
         {
             m_aYieldMutex.release();
@@ -318,7 +318,7 @@ ULONG SvpSalInstance::ReleaseYieldMutex()
         return 0;
 }
 
-void SvpSalInstance::AcquireYieldMutex( ULONG nCount )
+void SvpSalInstance::AcquireYieldMutex( sal_uLong nCount )
 {
     while ( nCount )
     {
@@ -346,7 +346,7 @@ void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
     // release yield mutex
     std::list< SalUserEvent > aEvents;
-    ULONG nAcquireCount = ReleaseYieldMutex();
+    sal_uLong nAcquireCount = ReleaseYieldMutex();
     if( osl_acquireMutex( m_aEventGuard ) )
     {
         if( ! m_aUserEvents.empty() )
@@ -425,7 +425,7 @@ void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
 }
 
-bool SvpSalInstance::AnyInput( USHORT nType )
+bool SvpSalInstance::AnyInput( sal_uInt16 nType )
 {
     if( (nType & INPUT_TIMER) != 0 )
         return CheckTimeout( false );
@@ -497,7 +497,7 @@ void SvpSalInstance::StopTimer()
     m_nTimeoutMS        = 0;
 }
 
-void SvpSalInstance::StartTimer( ULONG nMS )
+void SvpSalInstance::StartTimer( sal_uLong nMS )
 {
     timeval Timeout (m_aTimeout); // previous timeout.
     gettimeofday (&m_aTimeout, 0);
@@ -525,7 +525,7 @@ void SvpSalTimer::Stop()
     m_pInstance->StopTimer();
 }
 
-void SvpSalTimer::Start( ULONG nMS )
+void SvpSalTimer::Start( sal_uLong nMS )
 {
     m_pInstance->StartTimer( nMS );
 }

@@ -716,11 +716,11 @@ void ViewIteratorImpl::SetPage (sal_Int32 nPageIndex)
         {
             if (maPosition.meEditMode == EM_PAGE)
                 mpPage = mpDocument->GetSdPage (
-                    (USHORT)nPageIndex,
+                    (sal_uInt16)nPageIndex,
                     maPosition.mePageKind);
             else
                 mpPage = mpDocument->GetMasterSdPage (
-                    (USHORT)nPageIndex,
+                    (sal_uInt16)nPageIndex,
                     maPosition.mePageKind);
         }
         else

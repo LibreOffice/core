@@ -47,16 +47,16 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
     SwPosition *pPos;                   // Inhalt fuers Redo
     String *pTxt, *pUndoTxt;
     SwRedlineData* pRedlData;
-    ULONG nNode;
+    sal_uLong nNode;
     xub_StrLen nCntnt, nLen;
-    BOOL bIsWordDelim : 1;
-    BOOL bIsAppend : 1;
+    sal_Bool bIsWordDelim : 1;
+    sal_Bool bIsAppend : 1;
 
     const IDocumentContentOperations::InsertFlags m_nInsertFlags;
 
     friend class SwDoc;     // eigentlich nur SwDoc::Insert( String )
-    BOOL CanGrouping( sal_Unicode cIns );
-    BOOL CanGrouping( const SwPosition& rPos );
+    sal_Bool CanGrouping( sal_Unicode cIns );
+    sal_Bool CanGrouping( const SwPosition& rPos );
 
     SwDoc * pDoc;
 
@@ -66,7 +66,7 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
 public:
     SwUndoInsert( const SwNodeIndex& rNode, xub_StrLen nCntnt, xub_StrLen nLen,
                   const IDocumentContentOperations::InsertFlags nInsertFlags,
-                  BOOL bWDelim = TRUE );
+                  sal_Bool bWDelim = sal_True );
     SwUndoInsert( const SwNodeIndex& rNode );
     virtual ~SwUndoInsert();
 
@@ -96,7 +96,7 @@ public:
 //--------------------------------------------------------------------
 
 SwRewriter SW_DLLPRIVATE
-MakeUndoReplaceRewriter(ULONG const ocurrences,
+MakeUndoReplaceRewriter(sal_uLong const ocurrences,
     ::rtl::OUString const& sOld, ::rtl::OUString const& sNew);
 
 class SwUndoReplace
@@ -147,8 +147,8 @@ class SwUndoReRead : public SwUndo
 {
     Graphic *pGrf;
     String *pNm, *pFltr;
-    ULONG nPos;
-    USHORT nMirr;
+    sal_uLong nPos;
+    sal_uInt16 nMirr;
 
     void SaveGraphicData( const SwGrfNode& );
     void SetAndSave( ::sw::UndoRedoContext & );
@@ -175,7 +175,7 @@ class SwUndoInsertLabel : public SwUndo
         struct {
             // fuer Tabelle/TextRahmen
             SwUndoDelete* pUndoInsNd;
-            ULONG nNode;
+            sal_uLong nNode;
         } NODE;
     };
 
@@ -186,12 +186,12 @@ class SwUndoInsertLabel : public SwUndo
     String sNumberSeparator;
     String sCharacterStyle;
     // OD 2004-04-15 #i26791# - re-store of drawing object position no longer needed
-    USHORT nFldId;
+    sal_uInt16 nFldId;
     SwLabelType eType;
-    BYTE nLayerId;              // fuer Zeichen-Objekte
-    BOOL bBefore        :1;
-    BOOL bUndoKeep      :1;
-    BOOL bCpyBrd        :1;
+    sal_uInt8 nLayerId;              // fuer Zeichen-Objekte
+    sal_Bool bBefore        :1;
+    sal_Bool bUndoKeep      :1;
+    sal_Bool bCpyBrd        :1;
 
 public:
     SwUndoInsertLabel( const SwLabelType eTyp, const String &rText,
@@ -199,9 +199,9 @@ public:
                         const String& rSeparator,
     // <--
                         const String& rNumberSeparator, //#i61007# order of captions
-                        const BOOL bBefore, const USHORT nId,
+                        const sal_Bool bBefore, const sal_uInt16 nId,
                         const String& rCharacterStyle,
-                        const BOOL bCpyBrd );
+                        const sal_Bool bCpyBrd );
     virtual ~SwUndoInsertLabel();
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );
@@ -223,12 +223,12 @@ public:
      */
     virtual SwRewriter GetRewriter() const;
 
-    void SetNodePos( ULONG nNd )
+    void SetNodePos( sal_uLong nNd )
         { if( LTYPE_OBJECT != eType ) NODE.nNode = nNd; }
 
-    void SetUndoKeep()  { bUndoKeep = TRUE; }
+    void SetUndoKeep()  { bUndoKeep = sal_True; }
     void SetFlys( SwFrmFmt& rOldFly, SfxItemSet& rChgSet, SwFrmFmt& rNewFly );
-    void SetDrawObj( BYTE nLayerId );
+    void SetDrawObj( sal_uInt8 nLayerId );
 };
 
 #endif // SW_UNDO_INSERT_HXX

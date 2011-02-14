@@ -58,7 +58,7 @@ namespace sfx2 { class SvLinkSource;  class LinkManager; }
     /** FME 2005-02-25 #i42634# Moved common code of SwReader::Read() and
         SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
     */
-    virtual void UpdateLinks(BOOL bUI) = 0;
+    virtual void UpdateLinks(sal_Bool bUI) = 0;
 
     /** SS fuers Linken von Dokumentteilen
     */

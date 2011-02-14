@@ -261,7 +261,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
         rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {
@@ -465,7 +465,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
 }
 
 SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -698,7 +698,7 @@ void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttr
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_CHART )
         {
@@ -843,7 +843,7 @@ void SchXMLCoordinateRegionContext::StartElement( const uno::Reference< xml::sax
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
         rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
         m_rPositioning.readPositioningAttribute( nPrefix, aLocalName, aValue );
     }
 }
@@ -879,7 +879,7 @@ void SchXMLWallFloorContext::StartElement( const uno::Reference< xml::sax::XAttr
         {
             rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
             rtl::OUString aLocalName;
-            USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
             if( nPrefix == XML_NAMESPACE_CHART &&
                 IsXMLToken( aLocalName, XML_STYLE_NAME ) )
@@ -942,7 +942,7 @@ void SchXMLStockContext::StartElement( const uno::Reference< xml::sax::XAttribut
         {
             rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
             rtl::OUString aLocalName;
-            USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
             if( nPrefix == XML_NAMESPACE_CHART &&
                 IsXMLToken( aLocalName, XML_STYLE_NAME ) )
@@ -1019,7 +1019,7 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_CHART )
         {
@@ -1052,7 +1052,7 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
 }
 
 SvXMLImportContext* SchXMLStatisticsObjectContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -1112,7 +1112,7 @@ void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttri
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
         rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {

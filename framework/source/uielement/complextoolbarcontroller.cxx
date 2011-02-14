@@ -82,7 +82,7 @@ ComplexToolbarController::ComplexToolbarController(
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
-    USHORT                                   nID,
+    sal_uInt16                                   nID,
     const ::rtl::OUString&                          aCommand ) :
     svt::ToolboxController( rServiceManager, rFrame, aCommand )
     ,   m_pToolbar( pToolbar )
@@ -185,7 +185,7 @@ throw ( RuntimeException )
     {
         m_pToolbar->EnableItem( m_nID, Event.IsEnabled );
 
-        USHORT nItemBits = m_pToolbar->GetItemBits( m_nID );
+        sal_uInt16 nItemBits = m_pToolbar->GetItemBits( m_nID );
         nItemBits &= ~TIB_CHECKABLE;
         TriState eTri = STATE_NOCHECK;
 
@@ -199,7 +199,7 @@ throw ( RuntimeException )
         {
             // Boolean, treat it as checked/unchecked
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, TRUE );
+                m_pToolbar->ShowItem( m_nID, sal_True );
             m_pToolbar->CheckItem( m_nID, bValue );
             if ( bValue )
                 eTri = STATE_CHECK;
@@ -212,14 +212,14 @@ throw ( RuntimeException )
             m_pToolbar->SetQuickHelpText( m_nID, aText );
 
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, TRUE );
+                m_pToolbar->ShowItem( m_nID, sal_True );
         }
         else if ( Event.State >>= aItemState )
         {
             eTri = STATE_DONTKNOW;
             nItemBits |= TIB_CHECKABLE;
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, TRUE );
+                m_pToolbar->ShowItem( m_nID, sal_True );
         }
         else if ( Event.State >>= aItemVisibility )
         {
@@ -230,11 +230,11 @@ throw ( RuntimeException )
         {
             executeControlCommand( aControlCommand );
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, TRUE );
+                m_pToolbar->ShowItem( m_nID, sal_True );
         }
 
         else if ( m_bMadeInvisible )
-            m_pToolbar->ShowItem( m_nID, TRUE );
+            m_pToolbar->ShowItem( m_nID, sal_True );
 
         m_pToolbar->SetItemState( m_nID, eTri );
         m_pToolbar->SetItemBits( m_nID, nItemBits );

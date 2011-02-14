@@ -33,14 +33,14 @@
 #define CM_05 1         // 0.5 centimeter   or 1/4 inch
 #define CM_01 2         // 0.1 centimeter   or 1/20 inch
 
-inline USHORT GetMetricVal( int n )
+inline sal_uInt16 GetMetricVal( int n )
 {
 #ifdef USE_MEASUREMENT
-    USHORT nVal = MEASURE_METRIC == SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
+    sal_uInt16 nVal = MEASURE_METRIC == SvtSysLocale().GetLocaleData().getMeasurementSystemEnum()
                     ? 567       // 1 cm
                     : 770;      // 1/2 Inch
 #else
-    USHORT nVal = 567;      // 1 cm
+    sal_uInt16 nVal = 567;      // 1 cm
 #endif
 
     if( CM_01 == n )

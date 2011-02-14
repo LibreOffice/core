@@ -42,7 +42,7 @@ class IntlWrapper;
 |*    class     SwFmtDrop
 *************************************************************************/
 
-#define DROP_WHOLEWORD ((USHORT)0x0001)
+#define DROP_WHOLEWORD ((sal_uInt16)0x0001)
 
 //Wenn ein SwFmtDrop Client ist, so ist dies das CharFmt welches den Font fuer
 //die DropCaps beschreibt. Ist es kein Client, so wird von der Formatierung
@@ -53,11 +53,11 @@ class SW_DLLPUBLIC SwFmtDrop: public SfxPoolItem, public SwClient
 {
     SwModify* pDefinedIn;   // Modify-Object, in dem der DropCaps steht
                             // kann nur TxtFmtCollection/TxtNode sein
-    USHORT nDistance;   // Abstand zum Textbeginn
-    USHORT nReadFmt;    // fuer den Sw3-Reader: CharFormat-Id (Pool laden!)
-    BYTE   nLines;       // Anzahl der Zeilen
-    BYTE   nChars;       // Anzahl der Zeichen
-    BOOL   bWholeWord;   // Erstes Wort als Initialen
+    sal_uInt16 nDistance;   // Abstand zum Textbeginn
+    sal_uInt16 nReadFmt;    // fuer den Sw3-Reader: CharFormat-Id (Pool laden!)
+    sal_uInt8   nLines;      // Anzahl der Zeilen
+    sal_uInt8   nChars;      // Anzahl der Zeichen
+    sal_Bool   bWholeWord;   // Erstes Wort als Initialen
 public:
     TYPEINFO(); //Bereits in der Basisklasse SwClient
 
@@ -79,27 +79,27 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0) const;
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    inline BYTE GetLines() const { return nLines; }
-    inline BYTE &GetLines() { return nLines; }
+    inline sal_uInt8 GetLines() const { return nLines; }
+    inline sal_uInt8 &GetLines() { return nLines; }
 
-    inline BYTE GetChars() const { return nChars; }
-    inline BYTE &GetChars() { return nChars; }
+    inline sal_uInt8 GetChars() const { return nChars; }
+    inline sal_uInt8 &GetChars() { return nChars; }
 
-    inline BOOL GetWholeWord() const { return bWholeWord; }
-    inline BYTE &GetWholeWord() { return bWholeWord; }
+    inline sal_Bool GetWholeWord() const { return bWholeWord; }
+    inline sal_uInt8 &GetWholeWord() { return bWholeWord; }
 
-    inline USHORT GetDistance() const { return nDistance; }
-    inline USHORT &GetDistance() { return nDistance; }
+    inline sal_uInt16 GetDistance() const { return nDistance; }
+    inline sal_uInt16 &GetDistance() { return nDistance; }
 
     inline const SwCharFmt *GetCharFmt() const { return (SwCharFmt*)pRegisteredIn; }
     inline SwCharFmt *GetCharFmt()       { return (SwCharFmt*)pRegisteredIn; }
     void SetCharFmt( SwCharFmt *pNew );
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
         // erfrage vom Client Informationen
-    virtual BOOL GetInfo( SfxPoolItem& ) const;
+    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
 
     // erfrage und setze den Modify-Pointer
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
@@ -112,7 +112,7 @@ class SwRegisterItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    inline SwRegisterItem( const BOOL bRegister = FALSE );
+    inline SwRegisterItem( const sal_Bool bRegister = sal_False );
 
     // @@@ public copy assignment, but no copy ctor?
     inline SwRegisterItem& operator=( const SwRegisterItem& rRegister );
@@ -126,7 +126,7 @@ public:
                                     const IntlWrapper*    pIntl = 0 ) const;
 };
 
-inline SwRegisterItem::SwRegisterItem( const BOOL bRegister ) :
+inline SwRegisterItem::SwRegisterItem( const sal_Bool bRegister ) :
     SfxBoolItem( RES_PARATR_REGISTER, bRegister )
 {}
 
@@ -165,8 +165,8 @@ public:
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 };
 
 class SwParaConnectBorderItem : public SfxBoolItem
@@ -174,7 +174,7 @@ class SwParaConnectBorderItem : public SfxBoolItem
 public:
     TYPEINFO();
 
-    inline SwParaConnectBorderItem( const BOOL bConnect = TRUE );
+    inline SwParaConnectBorderItem( const sal_Bool bConnect = sal_True );
 
     // @@@ public copy assignment, but no copy ctor?
     inline SwParaConnectBorderItem& operator=( const SwParaConnectBorderItem& rConnect );
@@ -188,7 +188,7 @@ public:
                                     const IntlWrapper*    pIntl = 0 ) const;
 };
 
-inline SwParaConnectBorderItem::SwParaConnectBorderItem( const BOOL bConnect ) :
+inline SwParaConnectBorderItem::SwParaConnectBorderItem( const sal_Bool bConnect ) :
     SfxBoolItem( RES_PARATR_CONNECT_BORDER, bConnect )
 {}
 
@@ -205,74 +205,74 @@ inline SwParaConnectBorderItem& SwParaConnectBorderItem::operator=(
  *  Implementierung der Paragraph-Attribut Methoden vom SwAttrSet
  ******************************************************************************/
 
-inline const SvxLineSpacingItem &SwAttrSet::GetLineSpacing(BOOL bInP) const
+inline const SvxLineSpacingItem &SwAttrSet::GetLineSpacing(sal_Bool bInP) const
     {   return (const SvxLineSpacingItem&)Get( RES_PARATR_LINESPACING,bInP); }
-inline const SvxAdjustItem &SwAttrSet::GetAdjust(BOOL bInP) const
+inline const SvxAdjustItem &SwAttrSet::GetAdjust(sal_Bool bInP) const
     {   return (const SvxAdjustItem&)Get( RES_PARATR_ADJUST,bInP); }
-inline const SvxFmtSplitItem &SwAttrSet::GetSplit(BOOL bInP) const
+inline const SvxFmtSplitItem &SwAttrSet::GetSplit(sal_Bool bInP) const
     {   return (const SvxFmtSplitItem&)Get( RES_PARATR_SPLIT,bInP); }
-inline const SwRegisterItem &SwAttrSet::GetRegister(BOOL bInP) const
+inline const SwRegisterItem &SwAttrSet::GetRegister(sal_Bool bInP) const
     {   return (const SwRegisterItem&)Get( RES_PARATR_REGISTER,bInP); }
-inline const SvxWidowsItem &SwAttrSet::GetWidows(BOOL bInP) const
+inline const SvxWidowsItem &SwAttrSet::GetWidows(sal_Bool bInP) const
     {   return (const SvxWidowsItem&)Get( RES_PARATR_WIDOWS,bInP); }
-inline const SvxOrphansItem &SwAttrSet::GetOrphans(BOOL bInP) const
+inline const SvxOrphansItem &SwAttrSet::GetOrphans(sal_Bool bInP) const
     {   return (const SvxOrphansItem&)Get( RES_PARATR_ORPHANS,bInP); }
-inline const SvxTabStopItem &SwAttrSet::GetTabStops(BOOL bInP) const
+inline const SvxTabStopItem &SwAttrSet::GetTabStops(sal_Bool bInP) const
     {   return (const SvxTabStopItem&)Get( RES_PARATR_TABSTOP,bInP); }
-inline const SvxHyphenZoneItem &SwAttrSet::GetHyphenZone(BOOL bInP) const
+inline const SvxHyphenZoneItem &SwAttrSet::GetHyphenZone(sal_Bool bInP) const
     {   return (const SvxHyphenZoneItem&)Get(RES_PARATR_HYPHENZONE,bInP); }
-inline const SwFmtDrop &SwAttrSet::GetDrop(BOOL bInP) const
+inline const SwFmtDrop &SwAttrSet::GetDrop(sal_Bool bInP) const
     {   return (const SwFmtDrop&)Get(RES_PARATR_DROP,bInP); }
-inline const SwNumRuleItem &SwAttrSet::GetNumRule(BOOL bInP) const
+inline const SwNumRuleItem &SwAttrSet::GetNumRule(sal_Bool bInP) const
     {   return (const SwNumRuleItem&)Get(RES_PARATR_NUMRULE,bInP); }
-inline const SvxScriptSpaceItem& SwAttrSet::GetScriptSpace(BOOL bInP) const
+inline const SvxScriptSpaceItem& SwAttrSet::GetScriptSpace(sal_Bool bInP) const
     {   return (const SvxScriptSpaceItem&)Get(RES_PARATR_SCRIPTSPACE,bInP); }
-inline const SvxHangingPunctuationItem &SwAttrSet::GetHangingPunctuation(BOOL bInP) const
+inline const SvxHangingPunctuationItem &SwAttrSet::GetHangingPunctuation(sal_Bool bInP) const
     {   return (const SvxHangingPunctuationItem&)Get(RES_PARATR_HANGINGPUNCTUATION,bInP); }
-inline const SvxForbiddenRuleItem &SwAttrSet::GetForbiddenRule(BOOL bInP) const
+inline const SvxForbiddenRuleItem &SwAttrSet::GetForbiddenRule(sal_Bool bInP) const
     {   return (const SvxForbiddenRuleItem&)Get(RES_PARATR_FORBIDDEN_RULES, bInP); }
-inline const SvxParaVertAlignItem &SwAttrSet::GetParaVertAlign(BOOL bInP) const
+inline const SvxParaVertAlignItem &SwAttrSet::GetParaVertAlign(sal_Bool bInP) const
     {   return (const SvxParaVertAlignItem&)Get( RES_PARATR_VERTALIGN, bInP ); }
-inline const SvxParaGridItem &SwAttrSet::GetParaGrid(BOOL bInP) const
+inline const SvxParaGridItem &SwAttrSet::GetParaGrid(sal_Bool bInP) const
     {   return (const SvxParaGridItem&)Get( RES_PARATR_SNAPTOGRID, bInP ); }
-inline const SwParaConnectBorderItem &SwAttrSet::GetParaConnectBorder(BOOL bInP) const
+inline const SwParaConnectBorderItem &SwAttrSet::GetParaConnectBorder(sal_Bool bInP) const
     {   return (const SwParaConnectBorderItem&)Get( RES_PARATR_CONNECT_BORDER, bInP ); }
 
 /******************************************************************************
  *  Implementierung der Paragraph-Attribut Methoden vom SwFmt
  ******************************************************************************/
 
-inline const SvxLineSpacingItem &SwFmt::GetLineSpacing(BOOL bInP) const
+inline const SvxLineSpacingItem &SwFmt::GetLineSpacing(sal_Bool bInP) const
     {   return aSet.GetLineSpacing(bInP); }
-inline const SvxAdjustItem &SwFmt::GetAdjust(BOOL bInP) const
+inline const SvxAdjustItem &SwFmt::GetAdjust(sal_Bool bInP) const
     {   return aSet.GetAdjust(bInP); }
-inline const SvxFmtSplitItem &SwFmt::GetSplit(BOOL bInP) const
+inline const SvxFmtSplitItem &SwFmt::GetSplit(sal_Bool bInP) const
     {   return aSet.GetSplit(bInP); }
-inline const SwRegisterItem &SwFmt::GetRegister(BOOL bInP) const
+inline const SwRegisterItem &SwFmt::GetRegister(sal_Bool bInP) const
     {   return aSet.GetRegister(bInP); }
-inline const SvxWidowsItem &SwFmt::GetWidows(BOOL bInP) const
+inline const SvxWidowsItem &SwFmt::GetWidows(sal_Bool bInP) const
     {   return aSet.GetWidows(bInP); }
-inline const SvxOrphansItem &SwFmt::GetOrphans(BOOL bInP) const
+inline const SvxOrphansItem &SwFmt::GetOrphans(sal_Bool bInP) const
     {   return aSet.GetOrphans(bInP); }
-inline const SvxTabStopItem &SwFmt::GetTabStops(BOOL bInP) const
+inline const SvxTabStopItem &SwFmt::GetTabStops(sal_Bool bInP) const
     {   return aSet.GetTabStops(bInP); }
-inline const SvxHyphenZoneItem &SwFmt::GetHyphenZone(BOOL bInP) const
+inline const SvxHyphenZoneItem &SwFmt::GetHyphenZone(sal_Bool bInP) const
     {   return aSet.GetHyphenZone(bInP); }
-inline const SwFmtDrop &SwFmt::GetDrop(BOOL bInP) const
+inline const SwFmtDrop &SwFmt::GetDrop(sal_Bool bInP) const
     {   return aSet.GetDrop(bInP); }
-inline const SwNumRuleItem &SwFmt::GetNumRule(BOOL bInP) const
+inline const SwNumRuleItem &SwFmt::GetNumRule(sal_Bool bInP) const
     {   return aSet.GetNumRule(bInP); }
-inline const SvxScriptSpaceItem& SwFmt::GetScriptSpace(BOOL bInP) const
+inline const SvxScriptSpaceItem& SwFmt::GetScriptSpace(sal_Bool bInP) const
     {   return aSet.GetScriptSpace(bInP) ; }
-inline const SvxHangingPunctuationItem &SwFmt::GetHangingPunctuation(BOOL bInP) const
+inline const SvxHangingPunctuationItem &SwFmt::GetHangingPunctuation(sal_Bool bInP) const
     {   return aSet.GetHangingPunctuation(bInP) ; }
-inline const SvxForbiddenRuleItem &SwFmt::GetForbiddenRule(BOOL bInP) const
+inline const SvxForbiddenRuleItem &SwFmt::GetForbiddenRule(sal_Bool bInP) const
     {   return (const SvxForbiddenRuleItem&)aSet.Get(RES_PARATR_FORBIDDEN_RULES, bInP); }
-inline const SvxParaVertAlignItem &SwFmt::GetParaVertAlign(BOOL bInP) const
+inline const SvxParaVertAlignItem &SwFmt::GetParaVertAlign(sal_Bool bInP) const
     {   return (const SvxParaVertAlignItem&)aSet.Get( RES_PARATR_VERTALIGN, bInP ); }
-inline const SvxParaGridItem &SwFmt::GetParaGrid(BOOL bInP) const
+inline const SvxParaGridItem &SwFmt::GetParaGrid(sal_Bool bInP) const
     {   return (const SvxParaGridItem&)aSet.Get( RES_PARATR_SNAPTOGRID, bInP ); }
-inline const SwParaConnectBorderItem &SwFmt::GetParaConnectBorder(BOOL bInP) const
+inline const SwParaConnectBorderItem &SwFmt::GetParaConnectBorder(sal_Bool bInP) const
     {   return (const SwParaConnectBorderItem&)aSet.Get( RES_PARATR_CONNECT_BORDER, bInP ); }
 
 #endif

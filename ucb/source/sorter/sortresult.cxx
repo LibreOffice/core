@@ -490,7 +490,7 @@ sal_Int32 SAL_CALL SortedResultSet::getRow()
  @param row
     is the number of rows to move. Could be negative.
  @returns
-    <sal_True/> if the cursor is on a row; <sal_False/> otherwise
+    <TRUE/> if the cursor is on a row; <FALSE/> otherwise
  @throws SQLException
     if a database access error occurs or if row is 0, or the result set
     type is FORWARD_ONLY.
@@ -552,7 +552,7 @@ sal_Bool SAL_CALL SortedResultSet::absolute( sal_Int32 row )
  @param rows
     is the number of rows to move. Could be negative.
  @returns
-    <sal_True/> if the cursor is on a valid row; <sal_False/> if it is off
+    <TRUE/> if the cursor is on a valid row; <FALSE/> if it is off
     the result set.
  @throws SQLException
     if a database access error occurs or if there is no
@@ -597,7 +597,7 @@ sal_Bool SAL_CALL SortedResultSet::relative( sal_Int32 rows )
  <p>Note: <code>previous()</code> is not the same as
  <code>relative(-1)</code> because it makes sense to call
  <code>previous()</code> when there is no current row.
- @returns <sal_True/> if the cursor is on a valid row; <sal_False/> if it is off
+ @returns <TRUE/> if the cursor is on a valid row; <FALSE/> if it is off
     the result set.
  @throws SQLException
     if a database access error occurs or the result set type

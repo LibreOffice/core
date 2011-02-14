@@ -472,17 +472,17 @@ IMPL_LINK( SwLabPage, MakeHdl, ListBox *, EMPTYARG )
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         const String aType ( GetParent()->Recs()[i]->aType );
-        BOOL bInsert = FALSE;
+        sal_Bool bInsert = sal_False;
         if ( GetParent()->Recs()[i]->aType == sCustom )
         {
-            bInsert = TRUE;
+            bInsert = sal_True;
             aTypeBox.InsertEntry(aType );
         }
         else if ( GetParent()->Recs()[i]->bCont == bCont )
         {
             if ( aHiddenSortTypeBox.GetEntryPos(aType) == LISTBOX_ENTRY_NOTFOUND )
             {
-                bInsert = TRUE;
+                bInsert = sal_True;
                 aHiddenSortTypeBox.InsertEntry( aType );
             }
         }
@@ -524,7 +524,7 @@ IMPL_LINK_INLINE_END( SwLabPage, TypeHdl, ListBox *, EMPTYARG )
 void SwLabPage::DisplayFormat()
 {
     MetricField aField(this, WinBits(0));
-    FieldUnit aMetric = ::GetDfltMetric(FALSE);
+    FieldUnit aMetric = ::GetDfltMetric(sal_False);
     SetMetric(aField, aMetric);
     aField.SetDecimalDigits(2);
     aField.SetMin         (0);

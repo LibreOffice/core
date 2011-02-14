@@ -117,7 +117,7 @@ public:
     SbUserFormModuleInstance( SbUserFormModule* pParentModule, const String& rName,
         const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat );
 
-    virtual BOOL IsClass( const String& ) const;
+    virtual sal_Bool IsClass( const String& ) const;
     virtual SbxVariable* Find( const XubString& rName, SbxClassType t );
 };
 

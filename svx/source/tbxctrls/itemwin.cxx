@@ -74,7 +74,7 @@ SvxLineBox::SvxLineBox( Window* pParent, const Reference< XFrame >& rFrame, WinB
     meBmpMode   ( GetSettings().GetStyleSettings().GetHighContrastMode() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL ),
     nCurPos     ( 0 ),
     aLogicalSize(40,140),
-    bRelease    ( TRUE ),
+    bRelease    ( sal_True ),
     mpSh        ( NULL ),
     mxFrame     ( rFrame )
 {
@@ -114,7 +114,7 @@ void SvxLineBox::Select()
     if ( !IsTravelSelect() )
     {
         XLineStyle eXLS;
-        USHORT nPos = GetSelectEntryPos();
+        sal_uInt16 nPos = GetSelectEntryPos();
 //      SfxDispatcher* pDisp = rBindings.GetDispatcher();
         //DBG_ASSERT( pDisp, "invalid Dispatcher" );
 
@@ -177,7 +177,7 @@ void SvxLineBox::Select()
 
 long SvxLineBox::PreNotify( NotifyEvent& rNEvt )
 {
-    USHORT nType = rNEvt.GetType();
+    sal_uInt16 nType = rNEvt.GetType();
 
     switch(nType)
     {
@@ -193,7 +193,7 @@ long SvxLineBox::PreNotify( NotifyEvent& rNEvt )
             const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
             if( pKEvt->GetKeyCode().GetCode() == KEY_TAB)
             {
-                bRelease = FALSE;
+                bRelease = sal_False;
                 Select();
             }
         }
@@ -235,7 +235,7 @@ void SvxLineBox::ReleaseFocus_Impl()
 {
     if(!bRelease)
     {
-        bRelease = TRUE;
+        bRelease = sal_True;
         return;
     }
 
@@ -302,7 +302,7 @@ SvxColorBox::SvxColorBox(
     ColorLB( pParent, nBits ),
     nCurPos     ( 0 ),
     aLogicalSize(45,80),
-    bRelease    ( TRUE ),
+    bRelease    ( sal_True ),
     maCommand   ( rCommand ),
     mxFrame     ( rFrame )
 {
@@ -383,7 +383,7 @@ void SvxColorBox::Select()
 
 long SvxColorBox::PreNotify( NotifyEvent& rNEvt )
 {
-    USHORT nType = rNEvt.GetType();
+    sal_uInt16 nType = rNEvt.GetType();
 
     switch(nType)
     {
@@ -400,7 +400,7 @@ long SvxColorBox::PreNotify( NotifyEvent& rNEvt )
 
             if( pKEvt->GetKeyCode().GetCode() == KEY_TAB)
             {
-                bRelease = FALSE;
+                bRelease = sal_False;
                 Select();
             }
         }
@@ -456,7 +456,7 @@ void SvxColorBox::ReleaseFocus_Impl()
 {
     if(!bRelease)
     {
-        bRelease = TRUE;
+        bRelease = sal_True;
         return;
     }
 
@@ -492,7 +492,7 @@ SvxMetricField::SvxMetricField(
     SetFirst( 0 );
 
     eDlgUnit = SfxModule::GetCurrentFieldUnit();
-    SetFieldUnit( *this, eDlgUnit, FALSE );
+    SetFieldUnit( *this, eDlgUnit, sal_False );
     Show();
 }
 
@@ -580,7 +580,7 @@ void SvxMetricField::RefreshDlgUnit()
     if ( eDlgUnit != eTmpUnit )
     {
         eDlgUnit = eTmpUnit;
-        SetFieldUnit( *this, eDlgUnit, FALSE );
+        SetFieldUnit( *this, eDlgUnit, sal_False );
     }
 }
 
@@ -588,7 +588,7 @@ void SvxMetricField::RefreshDlgUnit()
 
 long SvxMetricField::PreNotify( NotifyEvent& rNEvt )
 {
-    USHORT nType = rNEvt.GetType();
+    sal_uInt16 nType = rNEvt.GetType();
 
     if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
         aCurTxt = GetText();
@@ -612,18 +612,18 @@ long SvxMetricField::Notify( NotifyEvent& rNEvt )
             pSh->KeyInput( *pKEvt );
         else
         {
-            FASTBOOL bHandled = FALSE;
+            bool bHandled = sal_False;
 
             switch ( rKey.GetCode() )
             {
                 case KEY_RETURN:
                     Reformat();
-                    bHandled = TRUE;
+                    bHandled = sal_True;
                     break;
 
                 case KEY_ESCAPE:
                     SetText( aCurTxt );
-                    bHandled = TRUE;
+                    bHandled = sal_True;
                     break;
             }
 
@@ -658,8 +658,8 @@ void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
 SvxFillTypeBox::SvxFillTypeBox( Window* pParent, WinBits nBits ) :
     FillTypeLB( pParent, nBits | WB_TABSTOP ),
     nCurPos ( 0 ),
-    bSelect ( FALSE ),
-    bRelease(TRUE)
+    bSelect ( sal_False ),
+    bRelease(sal_True)
 {
     SetSizePixel( LogicToPixel( Size(40, 40 ),MAP_APPFONT ));
     Fill();
@@ -677,18 +677,18 @@ SvxFillTypeBox::~SvxFillTypeBox()
 
 long SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
 {
-    USHORT nType = rNEvt.GetType();
+    sal_uInt16 nType = rNEvt.GetType();
 
     if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
         nCurPos = GetSelectEntryPos();
     else if ( EVENT_LOSEFOCUS == nType
         && Application::GetFocusWindow()
-        && !IsWindowOrChild( Application::GetFocusWindow(), TRUE ) )
+        && !IsWindowOrChild( Application::GetFocusWindow(), sal_True ) )
     {
         if ( !bSelect )
             SelectEntryPos( nCurPos );
         else
-            bSelect = FALSE;
+            bSelect = sal_False;
     }
 
     return FillTypeLB::PreNotify( rNEvt );
@@ -710,9 +710,9 @@ long SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
                 ( (Link&)GetSelectHdl() ).Call( this );
             break;
             case KEY_TAB:
-                bRelease = FALSE;
+                bRelease = sal_False;
                 ( (Link&)GetSelectHdl() ).Call( this );
-                bRelease = TRUE;
+                bRelease = sal_True;
                 break;
 
             case KEY_ESCAPE:
@@ -747,7 +747,7 @@ SvxFillAttrBox::SvxFillAttrBox( Window* pParent, WinBits nBits ) :
     FillAttrLB( pParent, nBits | WB_TABSTOP ),
 
     nCurPos( 0 ),
-    bRelease( TRUE )
+    bRelease( sal_True )
 
 {
     SetPosPixel( Point( 90, 0 ) );
@@ -765,7 +765,7 @@ SvxFillAttrBox::~SvxFillAttrBox()
 
 long SvxFillAttrBox::PreNotify( NotifyEvent& rNEvt )
 {
-    USHORT nType = rNEvt.GetType();
+    sal_uInt16 nType = rNEvt.GetType();
 
     if ( EVENT_MOUSEBUTTONDOWN == nType || EVENT_GETFOCUS == nType )
         nCurPos = GetSelectEntryPos();
@@ -790,9 +790,9 @@ long SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
                 nHandled = 1;
             break;
             case KEY_TAB:
-                bRelease = FALSE;
+                bRelease = sal_False;
                 GetSelectHdl().Call( this );
-                bRelease = TRUE;
+                bRelease = sal_True;
             break;
             case KEY_ESCAPE:
                 SelectEntryPos( nCurPos );

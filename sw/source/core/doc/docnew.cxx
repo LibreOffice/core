@@ -203,7 +203,7 @@ void StartGrammarChecking( SwDoc &rDoc )
 
 
 
-BOOL lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
+sal_Bool lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
 {
     SwFmtCntnt &rFmtCntnt = (SwFmtCntnt&)rpFmt->GetCntnt();
     if ( rFmtCntnt.GetCntntIdx() )
@@ -211,7 +211,7 @@ BOOL lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
     SwFmtAnchor &rFmtAnchor = (SwFmtAnchor&)rpFmt->GetAnchor();
     if ( rFmtAnchor.GetCntntAnchor() )
         rFmtAnchor.SetAnchor( 0 );
-    return TRUE;
+    return sal_True;
 }
 
 /*
@@ -527,7 +527,7 @@ SwDoc::~SwDoc()
 
     delete pPgPViewPrtData;
 
-    mbDtor = TRUE;
+    mbDtor = sal_True;
 
     DELETEZ( pLayout );
 
@@ -543,7 +543,7 @@ SwDoc::~SwDoc()
 
     // die BaseLinks freigeben.
     {
-        for( USHORT n = pLinkMgr->GetServers().Count(); n; )
+        for( sal_uInt16 n = pLinkMgr->GetServers().Count(); n; )
             pLinkMgr->GetServers()[ --n ]->Closed();
 
         if( pLinkMgr->GetLinks().Count() )
@@ -552,11 +552,11 @@ SwDoc::~SwDoc()
 
     // die KapitelNummern / Nummern muessen vor den Vorlage geloescht werden
     // ansonsten wird noch staendig geupdatet !!!
-    m_pNodes->pOutlineNds->Remove(USHORT(0), m_pNodes->pOutlineNds->Count());
+    m_pNodes->pOutlineNds->Remove(sal_uInt16(0), m_pNodes->pOutlineNds->Count());
     SwNodes & rUndoNodes( GetUndoManager().GetUndoNodes() );
-    rUndoNodes.pOutlineNds->Remove(USHORT(0), rUndoNodes.pOutlineNds->Count());
+    rUndoNodes.pOutlineNds->Remove(sal_uInt16(0), rUndoNodes.pOutlineNds->Count());
 
-    pFtnIdxs->Remove( USHORT(0), pFtnIdxs->Count() );
+    pFtnIdxs->Remove( sal_uInt16(0), pFtnIdxs->Count() );
 
     // indices could be registered in attributes
     m_pUndoManager->DelAllUndoObj();
@@ -578,7 +578,7 @@ SwDoc::~SwDoc()
 //JP: alt - loeschen ohne Flag ist teuer; Modify wird verschickt!
 //  aTOXTypes.DeleteAndDestroy( 0, aTOXTypes.Count() );
     {
-        for( USHORT n = pTOXTypes->Count(); n; )
+        for( sal_uInt16 n = pTOXTypes->Count(); n; )
         {
             (*pTOXTypes)[ --n ]->SetInDocDTOR();
             delete (*pTOXTypes)[ n ];
@@ -815,7 +815,7 @@ void SwDoc::ClearDoc()
     }
 
     // stehen noch FlyFrames rum, loesche auch diese
-    USHORT n;
+    sal_uInt16 n;
     while ( 0 != (n = GetSpzFrmFmts()->Count()) )
         DelLayoutFmt((*pSpzFrmFmtTbl)[n-1]);
     ASSERT( !pDrawModel || !pDrawModel->GetPage(0)->GetObjCount(),
@@ -971,11 +971,11 @@ IGrammarContact* getGrammarContact( const SwTxtNode& rTxtNode )
 
 // --> FME 2005-02-25 #i42634# Moved common code of SwReader::Read() and
 // SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
-void SwDoc::UpdateLinks( BOOL bUI )
+void SwDoc::UpdateLinks( sal_Bool bUI )
 {
     SfxObjectCreateMode eMode;
-    USHORT nLinkMode = getLinkUpdateMode( true );
-    USHORT nUpdateDocMode = GetDocShell()->GetUpdateDocMode();
+    sal_uInt16 nLinkMode = getLinkUpdateMode( true );
+    sal_uInt16 nUpdateDocMode = GetDocShell()->GetUpdateDocMode();
     if( GetDocShell() &&
             (nLinkMode != NEVER ||  document::UpdateDocMode::FULL_UPDATE == nUpdateDocMode) &&
         GetLinkManager().GetLinks().Count() &&
@@ -986,13 +986,13 @@ void SwDoc::UpdateLinks( BOOL bUI )
         !GetDocShell()->IsPreview() )
     {
         ViewShell* pVSh = 0;
-        BOOL bAskUpdate = nLinkMode == MANUAL;
-        BOOL bUpdate = TRUE;
+        sal_Bool bAskUpdate = nLinkMode == MANUAL;
+        sal_Bool bUpdate = sal_True;
         switch(nUpdateDocMode)
         {
-            case document::UpdateDocMode::NO_UPDATE:   bUpdate = FALSE;break;
-            case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = FALSE; break;
-            case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = TRUE; break;
+            case document::UpdateDocMode::NO_UPDATE:   bUpdate = sal_False;break;
+            case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = sal_False; break;
+            case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = sal_True; break;
         }
         if( bUpdate && (bUI || !bAskUpdate) )
         {
@@ -1004,10 +1004,10 @@ void SwDoc::UpdateLinks( BOOL bUI )
                 ViewShell aVSh( *this, 0, 0 );
 
                 SET_CURR_SHELL( &aVSh );
-                GetLinkManager().UpdateAllLinks( bAskUpdate , TRUE, FALSE, pDlgParent );
+                GetLinkManager().UpdateAllLinks( bAskUpdate , sal_True, sal_False, pDlgParent );
             }
             else
-                GetLinkManager().UpdateAllLinks( bAskUpdate, TRUE, FALSE, pDlgParent );
+                GetLinkManager().UpdateAllLinks( bAskUpdate, sal_True, sal_False, pDlgParent );
         }
     }
 
@@ -1120,7 +1120,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 {
     SwDoc* pRet = new SwDoc;
     //copy settings
-    USHORT __FAR_DATA aRangeOfDefaults[] = {
+    sal_uInt16 __FAR_DATA aRangeOfDefaults[] = {
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
         RES_PARATR_BEGIN, RES_PARATR_END-1,
@@ -1133,8 +1133,8 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 
     SfxItemSet aNewDefaults( pRet->GetAttrPool(), aRangeOfDefaults );
 
-    USHORT nWhich;
-    USHORT nRange = 0;
+    sal_uInt16 nWhich;
+    sal_uInt16 nRange = 0;
     while( aRangeOfDefaults[nRange] != 0)
     {
         for( nWhich = aRangeOfDefaults[nRange]; nWhich < aRangeOfDefaults[nRange + 1]; ++nWhich )
@@ -1199,11 +1199,11 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     return pRetShell;
 }
 /*-- 08.05.2009 10:52:40---------------------------------------------------
-    copy document content - code from SwFEShell::Paste( SwDoc* , BOOL  )
+    copy document content - code from SwFEShell::Paste( SwDoc* , sal_Bool  )
   -----------------------------------------------------------------------*/
 void SwDoc::Paste( const SwDoc& rSource )
 {
-//  this has to be empty const USHORT nStartPageNumber = GetPhyPageNum();
+//  this has to be empty const sal_uInt16 nStartPageNumber = GetPhyPageNum();
     // until the end of the NodesArray
     SwNodeIndex aSourceIdx( rSource.GetNodes().GetEndOfExtras(), 2 );
     SwPaM aCpyPam( aSourceIdx ); //DocStart
@@ -1249,9 +1249,9 @@ void SwDoc::Paste( const SwDoc& rSource )
         //additionally copy page bound frames
         if( /*bIncludingPageFrames && */rSource.GetSpzFrmFmts()->Count() )
         {
-            for ( USHORT i = 0; i < rSource.GetSpzFrmFmts()->Count(); ++i )
+            for ( sal_uInt16 i = 0; i < rSource.GetSpzFrmFmts()->Count(); ++i )
             {
-                BOOL bInsWithFmt = TRUE;
+                sal_Bool bInsWithFmt = sal_True;
                 const SwFrmFmt& rCpyFmt = *(*rSource.GetSpzFrmFmts())[i];
                 if( bInsWithFmt  )
                 {

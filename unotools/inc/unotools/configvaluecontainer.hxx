@@ -187,7 +187,7 @@ namespace utl
             <p>The current values in memory (your exchange locations registered using the registerXXX methods) is
             forwarded to their respective configuration nodes.</p>
 
-            <p>Note that calling <method>write</method>(<TRUE/) is the same as calling <method>commit</method>(<TRUE/>).</p>
+            <p>Note that calling <method>write</method>(<sal_True/) is the same as calling <method>commit</method>(<TRUE/>).</p>
 
             @precond
                 The access must have been created for update access
@@ -203,7 +203,7 @@ namespace utl
 
         /** commits any changes done
 
-            <p>Note that calling <method>write</method>(<TRUE/) is the same as calling <method>commit</method>(<TRUE/>).</p>
+            <p>Note that calling <method>write</method>(<sal_True/) is the same as calling <method>commit</method>(<TRUE/>).</p>
 
             @precond
                 The access must have been created for update access

@@ -166,13 +166,13 @@ namespace connectivity
             void construct();
             sal_Bool evaluate();
 
-            BOOL ExecuteRow(IResultSetHelper::Movement eFirstCursorPosition,
-                                INT32 nOffset = 1,
-                                BOOL bEvaluate = TRUE,
-                                BOOL bRetrieveData = TRUE);
+            sal_Bool ExecuteRow(IResultSetHelper::Movement eFirstCursorPosition,
+                                sal_Int32 nOffset = 1,
+                                sal_Bool bEvaluate = sal_True,
+                                sal_Bool bRetrieveData = sal_True);
 
             OKeyValue* GetOrderbyKeyValue(OValueRefRow& _rRow);
-            BOOL IsSorted() const { return !m_aOrderbyColumnNumber.empty() && m_aOrderbyColumnNumber[0] != SQL_COLUMN_NOTFOUND;}
+            sal_Bool IsSorted() const { return !m_aOrderbyColumnNumber.empty() && m_aOrderbyColumnNumber[0] != SQL_COLUMN_NOTFOUND;}
 
             // return true when the select statement is "select count(*) from table"
             inline sal_Bool isCount() const { return m_bIsCount; }
@@ -187,7 +187,7 @@ namespace connectivity
 
             using OResultSet_BASE::rBHelper;
 
-            BOOL Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset, BOOL bRetrieveData);
+            sal_Bool Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Bool bRetrieveData);
             virtual sal_Bool fillIndexValues(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier> &_xIndex);
 
             // OPropertyArrayUsageHelper
@@ -300,7 +300,7 @@ namespace connectivity
 
             // special methods
             inline sal_Int32 mapColumn(sal_Int32    column);
-            virtual BOOL OpenImpl();
+            virtual sal_Bool OpenImpl();
             virtual void doTableSpecials(const OSQLTable& _xTable);
 
             inline sal_Int32 getRowCountResult() const { return m_nRowCountResult; }

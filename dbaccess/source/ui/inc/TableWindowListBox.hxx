@@ -65,12 +65,12 @@ namespace dbaui
         Point                       m_aMousePos;
 
         OTableWindow*               m_pTabWin;
-        ULONG                       m_nDropEvent;
-        ULONG                       m_nUiEvent;
+        sal_uLong                       m_nDropEvent;
+        sal_uLong                       m_nUiEvent;
         OJoinDropData               m_aDropInfo;
 
-        BOOL                        m_bReallyScrolled : 1;
-        BOOL                        m_bDragSource : 1;
+        sal_Bool                        m_bReallyScrolled : 1;
+        sal_Bool                        m_bDragSource : 1;
 
     protected:
         virtual void LoseFocus();

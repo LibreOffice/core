@@ -561,7 +561,7 @@ uno::Reference< drawing::XLayer > SAL_CALL SdLayerManager::insertNewByIndex( sal
         SdrLayerAdmin& rLA=mpModel->mpDoc->GetLayerAdmin();
         const sal_Int32 nMax=rLA.GetLayerCount();
         if (nIndex>nMax) nIndex=nMax;
-        xLayer = GetLayer (rLA.NewLayer(aLayerName,(USHORT)nIndex));
+        xLayer = GetLayer (rLA.NewLayer(aLayerName,(sal_uInt16)nIndex));
         mpModel->SetModified();
     }
     return xLayer;
@@ -684,7 +684,7 @@ uno::Any SAL_CALL SdLayerManager::getByName( const OUString& aName )
         throw lang::DisposedException();
 
     SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
-    SdrLayer* pLayer = rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), FALSE );
+    SdrLayer* pLayer = rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), sal_False );
     if( pLayer == NULL )
         throw container::NoSuchElementException();
 
@@ -726,7 +726,7 @@ sal_Bool SAL_CALL SdLayerManager::hasByName( const OUString& aName ) throw(uno::
 
     SdrLayerAdmin& rLayerAdmin = mpModel->mpDoc->GetLayerAdmin();
 
-    return NULL != rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), FALSE );
+    return NULL != rLayerAdmin.GetLayer( SdLayer::convertToInternalName( aName ), sal_False );
 }
 
 // XElementAccess

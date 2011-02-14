@@ -72,7 +72,7 @@ BmpCreator::~BmpCreator()
 
 // -----------------------------------------------------------------------------
 
-void BmpCreator::Message( const String&, BYTE )
+void BmpCreator::Message( const String&, sal_uInt8 )
 {
 }
 
@@ -329,7 +329,7 @@ void BmpCreator::Create( const String& rSRSName,
 {
     DirEntry                    aFileName( ImplGetSystemFileName( rSRSName ) ), aOutDir( ImplGetSystemFileName( rOutName ) );
     ::std::vector< DirEntry >   aInDirs;
-    BOOL                        bDone = FALSE;
+    sal_Bool                        bDone = sal_False;
 
     aFileName.ToAbs();
     aOutDir.ToAbs();
@@ -361,7 +361,7 @@ void BmpCreator::Create( const String& rSRSName,
     {
         String      aText;
         ByteString  aByteText;
-        BOOL        bLangDep = FALSE;
+        sal_Bool        bLangDep = sal_False;
 
         do
         {
@@ -389,7 +389,7 @@ void BmpCreator::Create( const String& rSRSName,
                     aByteText.Search( '[' ) != STRING_NOTFOUND &&
                     aByteText.Search( ']' ) != STRING_NOTFOUND )
                 {
-                    bLangDep = TRUE;
+                    bLangDep = sal_True;
                 }
 
                 if (!pSRS->ReadLine(aByteText))
@@ -401,13 +401,13 @@ void BmpCreator::Create( const String& rSRSName,
             // if image list is not language dependent, don't do anything for languages except german
             if( aText.Len() )
             {
-                bDone = TRUE;
+                bDone = sal_True;
                 ImplCreate( aInDirs, aOutDir, aName, rLang );
             }
 /*          else if( ( rLang.mnLangNum != 49 ) && !bLangDep )
             {
                 Message( String( RTL_CONSTASCII_USTRINGPARAM( "INFO: ImageList is not language dependent! Nothing to do for this language." ) ) );
-                bDone = TRUE;
+                bDone = sal_True;
             }*/
         }
         while ( aText.Len() );

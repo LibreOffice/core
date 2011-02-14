@@ -49,11 +49,11 @@ const int FIND_NO_RING      = 2;
 
 struct SwFindParas
 {
-    virtual int Find( SwPaM*, SwMoveFn, const SwPaM*, BOOL ) = 0;
+    virtual int Find( SwPaM*, SwMoveFn, const SwPaM*, sal_Bool ) = 0;
     virtual int IsReplaceMode() const = 0;
 };
 
-typedef USHORT SwCursorSelOverFlags;
+typedef sal_uInt16 SwCursorSelOverFlags;
 namespace nsSwCursorSelOverFlags
 {
     const SwCursorSelOverFlags SELOVER_NONE                = 0x00;
@@ -69,10 +69,10 @@ class SwCursor : public SwPaM
 
     _SwCursor_SavePos* pSavePos;
     long mnRowSpanOffset;        // required for travelling in tabs with rowspans
-    BYTE nCursorBidiLevel;       // bidi level of the cursor
+    sal_uInt8 nCursorBidiLevel;       // bidi level of the cursor
     bool mbColumnSelection;      // true: cursor is aprt of a column selection
 
-    ULONG FindAll( SwFindParas& , SwDocPositions, SwDocPositions, FindRanges, BOOL& bCancel );
+    sal_uLong FindAll( SwFindParas& , SwDocPositions, SwDocPositions, FindRanges, sal_Bool& bCancel );
 
     using SwPaM::Find;
 
@@ -84,7 +84,7 @@ protected:
     const _SwCursor_SavePos* GetSavePos() const { return pSavePos; }
 
     virtual const SwCntntFrm* DoSetBidiLevelLeftRight(
-        BOOL & io_rbLeft, BOOL bVisualAllowed, BOOL bInsertCrsr);
+        sal_Bool & io_rbLeft, sal_Bool bVisualAllowed, sal_Bool bInsertCrsr);
     virtual void DoSetBidiLevelUpDown();
     virtual bool IsSelOvrCheck(int eFlags);
 
@@ -112,45 +112,45 @@ public:
                                         SwPaM* ) const;
 
 
-    ULONG Find( const com::sun::star::util::SearchOptions& rSearchOpt,
-                BOOL bSearchInNotes,
+    sal_uLong Find( const com::sun::star::util::SearchOptions& rSearchOpt,
+                sal_Bool bSearchInNotes,
                 SwDocPositions nStart, SwDocPositions nEnde,
-                BOOL& bCancel,
+                sal_Bool& bCancel,
                 FindRanges = FND_IN_BODY,
-                int bReplace = FALSE );
-    ULONG Find( const SwTxtFmtColl& rFmtColl,
+                int bReplace = sal_False );
+    sal_uLong Find( const SwTxtFmtColl& rFmtColl,
                 SwDocPositions nStart, SwDocPositions nEnde,
-                BOOL& bCancel,
+                sal_Bool& bCancel,
                 FindRanges = FND_IN_BODY,
                 const SwTxtFmtColl* pReplFmt = 0 );
-    ULONG Find( const SfxItemSet& rSet, BOOL bNoCollections,
+    sal_uLong Find( const SfxItemSet& rSet, sal_Bool bNoCollections,
                 SwDocPositions nStart, SwDocPositions nEnde,
-                BOOL& bCancel,
+                sal_Bool& bCancel,
                 FindRanges = FND_IN_BODY,
                 const com::sun::star::util::SearchOptions* pSearchOpt = 0,
                 const SfxItemSet* rReplSet = 0 );
 
     // UI versions
-    BOOL IsStartWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
-    BOOL IsEndWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
-    BOOL IsInWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
-    BOOL IsStartEndSentence( bool bEnd ) const;
-    BOOL GoStartWord();
-    BOOL GoEndWord();
-    BOOL GoNextWord();
-    BOOL GoPrevWord();
-    BOOL SelectWord( const Point* pPt = 0 );
+    sal_Bool IsStartWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
+    sal_Bool IsEndWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
+    sal_Bool IsInWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
+    sal_Bool IsStartEndSentence( bool bEnd ) const;
+    sal_Bool GoStartWord();
+    sal_Bool GoEndWord();
+    sal_Bool GoNextWord();
+    sal_Bool GoPrevWord();
+    sal_Bool SelectWord( const Point* pPt = 0 );
 
     // API versions of above functions (will be used with a different
     // WordType for the break iterator)
-    BOOL IsStartWordWT( sal_Int16 nWordType ) const;
-    BOOL IsEndWordWT( sal_Int16 nWordType ) const;
-    BOOL IsInWordWT( sal_Int16 nWordType ) const;
-    BOOL GoStartWordWT( sal_Int16 nWordType );
-    BOOL GoEndWordWT( sal_Int16 nWordType );
-    BOOL GoNextWordWT( sal_Int16 nWordType );
-    BOOL GoPrevWordWT( sal_Int16 nWordType );
-    BOOL SelectWordWT( sal_Int16 nWordType, const Point* pPt = 0 );
+    sal_Bool IsStartWordWT( sal_Int16 nWordType ) const;
+    sal_Bool IsEndWordWT( sal_Int16 nWordType ) const;
+    sal_Bool IsInWordWT( sal_Int16 nWordType ) const;
+    sal_Bool GoStartWordWT( sal_Int16 nWordType );
+    sal_Bool GoEndWordWT( sal_Int16 nWordType );
+    sal_Bool GoNextWordWT( sal_Int16 nWordType );
+    sal_Bool GoPrevWordWT( sal_Int16 nWordType );
+    sal_Bool SelectWordWT( sal_Int16 nWordType, const Point* pPt = 0 );
 
     enum SentenceMoveType
     {
@@ -159,66 +159,66 @@ public:
         START_SENT,
         END_SENT
     };
-    BOOL GoSentence(SentenceMoveType eMoveType);
-    BOOL GoNextSentence(){return GoSentence(NEXT_SENT);}
-    BOOL GoEndSentence(){return GoSentence(END_SENT);}
-    BOOL GoPrevSentence(){return GoSentence(PREV_SENT);}
-    BOOL GoStartSentence(){return GoSentence(START_SENT);}
-    BOOL ExpandToSentenceBorders();
+    sal_Bool GoSentence(SentenceMoveType eMoveType);
+    sal_Bool GoNextSentence(){return GoSentence(NEXT_SENT);}
+    sal_Bool GoEndSentence(){return GoSentence(END_SENT);}
+    sal_Bool GoPrevSentence(){return GoSentence(PREV_SENT);}
+    sal_Bool GoStartSentence(){return GoSentence(START_SENT);}
+    sal_Bool ExpandToSentenceBorders();
 
-    virtual BOOL LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
-        BOOL bAllowVisual, BOOL bSkipHidden, BOOL bInsertCrsr );
-    BOOL UpDown( BOOL bUp, USHORT nCnt, Point* pPt, long nUpDownX );
-    BOOL LeftRightMargin( BOOL bLeftMargin, BOOL bAPI = FALSE );
-    BOOL IsAtLeftRightMargin( BOOL bLeftMargin, BOOL bAPI = FALSE ) const;
-    BOOL SttEndDoc( BOOL bSttDoc );
-    BOOL GoPrevNextCell( BOOL bNext, USHORT nCnt );
+    virtual sal_Bool LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
+        sal_Bool bAllowVisual, sal_Bool bSkipHidden, sal_Bool bInsertCrsr );
+    sal_Bool UpDown( sal_Bool bUp, sal_uInt16 nCnt, Point* pPt, long nUpDownX );
+    sal_Bool LeftRightMargin( sal_Bool bLeftMargin, sal_Bool bAPI = sal_False );
+    sal_Bool IsAtLeftRightMargin( sal_Bool bLeftMargin, sal_Bool bAPI = sal_False ) const;
+    sal_Bool SttEndDoc( sal_Bool bSttDoc );
+    sal_Bool GoPrevNextCell( sal_Bool bNext, sal_uInt16 nCnt );
 
-    BOOL Left( USHORT nCnt, USHORT nMode, BOOL bAllowVisual, BOOL bSkipHidden )
-                                    { return LeftRight( TRUE, nCnt, nMode, bAllowVisual, bSkipHidden, FALSE ); }
-    BOOL Right( USHORT nCnt, USHORT nMode, BOOL bAllowVisual, BOOL bSkipHidden )
-                                    { return LeftRight( FALSE, nCnt, nMode, bAllowVisual, bSkipHidden, FALSE ); }
-    BOOL GoNextCell( USHORT nCnt = 1 )  { return GoPrevNextCell( TRUE, nCnt ); }
-    BOOL GoPrevCell( USHORT nCnt = 1 )  { return GoPrevNextCell( FALSE, nCnt ); }
-    virtual BOOL GotoTable( const String& rName );
-    BOOL GotoTblBox( const String& rName );
-    BOOL GotoRegion( const String& rName );
-    BOOL GotoFtnAnchor();
-    BOOL GotoFtnTxt();
-    BOOL GotoNextFtnAnchor();
-    BOOL GotoPrevFtnAnchor();
-    BOOL GotoNextFtnCntnt();
-    BOOL GotoPrevFtnCntnt();
+    sal_Bool Left( sal_uInt16 nCnt, sal_uInt16 nMode, sal_Bool bAllowVisual, sal_Bool bSkipHidden )
+                                    { return LeftRight( sal_True, nCnt, nMode, bAllowVisual, bSkipHidden, sal_False ); }
+    sal_Bool Right( sal_uInt16 nCnt, sal_uInt16 nMode, sal_Bool bAllowVisual, sal_Bool bSkipHidden )
+                                    { return LeftRight( sal_False, nCnt, nMode, bAllowVisual, bSkipHidden, sal_False ); }
+    sal_Bool GoNextCell( sal_uInt16 nCnt = 1 )  { return GoPrevNextCell( sal_True, nCnt ); }
+    sal_Bool GoPrevCell( sal_uInt16 nCnt = 1 )  { return GoPrevNextCell( sal_False, nCnt ); }
+    virtual sal_Bool GotoTable( const String& rName );
+    sal_Bool GotoTblBox( const String& rName );
+    sal_Bool GotoRegion( const String& rName );
+    sal_Bool GotoFtnAnchor();
+    sal_Bool GotoFtnTxt();
+    sal_Bool GotoNextFtnAnchor();
+    sal_Bool GotoPrevFtnAnchor();
+    sal_Bool GotoNextFtnCntnt();
+    sal_Bool GotoPrevFtnCntnt();
 
-    BOOL MovePara( SwWhichPara, SwPosPara );
-    BOOL MoveSection( SwWhichSection, SwPosSection );
-    BOOL MoveTable( SwWhichTable, SwPosTable );
-    BOOL MoveRegion( SwWhichRegion, SwPosRegion );
+    sal_Bool MovePara( SwWhichPara, SwPosPara );
+    sal_Bool MoveSection( SwWhichSection, SwPosSection );
+    sal_Bool MoveTable( SwWhichTable, SwPosTable );
+    sal_Bool MoveRegion( SwWhichRegion, SwPosRegion );
 
 
     // gibt es eine Selection vom Content in die Tabelle
     // Return Wert gibt an, ob der Crsr auf der alten Position verbleibt
-    virtual BOOL IsSelOvr( int eFlags =
+    virtual sal_Bool IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                   nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
-    virtual BOOL IsInProtectTable( BOOL bMove = FALSE,
-                                        BOOL bChgCrsr = TRUE );
-    BOOL IsNoCntnt() const;
+    virtual sal_Bool IsInProtectTable( sal_Bool bMove = sal_False,
+                                        sal_Bool bChgCrsr = sal_True );
+    sal_Bool IsNoCntnt() const;
 
     void RestoreSavePos();      // Point auf die SavePos setzen
 
-    // TRUE: an die Position kann der Cursor gesetzt werden
-    virtual BOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
+    // sal_True: an die Position kann der Cursor gesetzt werden
+    virtual sal_Bool IsAtValidPos( sal_Bool bPoint = sal_True ) const;
 
     // darf der Cursor in ReadOnlyBereiche?
     virtual bool IsReadOnlyAvailable() const;
 
-    virtual BOOL IsSkipOverProtectSections() const;
-    virtual BOOL IsSkipOverHiddenSections() const;
+    virtual sal_Bool IsSkipOverProtectSections() const;
+    virtual sal_Bool IsSkipOverHiddenSections() const;
 
-    BYTE GetCrsrBidiLevel() const { return nCursorBidiLevel; }
-    void SetCrsrBidiLevel( BYTE nNewLevel ) { nCursorBidiLevel = nNewLevel; }
+    sal_uInt8 GetCrsrBidiLevel() const { return nCursorBidiLevel; }
+    void SetCrsrBidiLevel( sal_uInt8 nNewLevel ) { nCursorBidiLevel = nNewLevel; }
 
     bool IsColumnSelection() const { return mbColumnSelection; }
     void SetColumnSelection( bool bNew ) { mbColumnSelection = bNew; }
@@ -240,7 +240,7 @@ public:
 
 struct _SwCursor_SavePos
 {
-    ULONG nNode;
+    sal_uLong nNode;
     xub_StrLen nCntnt;
     _SwCursor_SavePos* pNext;
 
@@ -260,11 +260,11 @@ class SwTableCursor : public virtual SwCursor
 {
 
 protected:
-    ULONG nTblPtNd, nTblMkNd;
+    sal_uLong nTblPtNd, nTblMkNd;
     xub_StrLen nTblPtCnt, nTblMkCnt;
     SwSelBoxes aSelBoxes;
-    BOOL bChg : 1;
-    BOOL bParked : 1;       // Tabellen-Cursor wurde geparkt
+    sal_Bool bChg : 1;
+    sal_Bool bParked : 1;       // Tabellen-Cursor wurde geparkt
 
     virtual bool IsSelOvrCheck(int eFlags);
 
@@ -273,25 +273,25 @@ public:
     SwTableCursor( SwTableCursor& );
     virtual ~SwTableCursor();
 
-    virtual BOOL LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
-        BOOL bAllowVisual, BOOL bSkipHidden, BOOL bInsertCrsr );
-    virtual BOOL GotoTable( const String& rName );
+    virtual sal_Bool LeftRight( sal_Bool bLeft, sal_uInt16 nCnt, sal_uInt16 nMode,
+        sal_Bool bAllowVisual, sal_Bool bSkipHidden, sal_Bool bInsertCrsr );
+    virtual sal_Bool GotoTable( const String& rName );
 
     void InsertBox( const SwTableBox& rTblBox );
-    void DeleteBox( USHORT nPos ) { aSelBoxes.Remove( nPos ); bChg = TRUE; }
-    USHORT GetBoxesCount() const { return aSelBoxes.Count(); }
+    void DeleteBox( sal_uInt16 nPos ) { aSelBoxes.Remove( nPos ); bChg = sal_True; }
+    sal_uInt16 GetBoxesCount() const { return aSelBoxes.Count(); }
     const SwSelBoxes& GetBoxes() const { return aSelBoxes; }
 
         // Baut fuer alle Boxen die Cursor auf
     SwCursor* MakeBoxSels( SwCursor* pAktCrsr );
         // sind irgendwelche Boxen mit einem Schutz versehen?
-    BOOL HasReadOnlyBoxSel() const;
+    sal_Bool HasReadOnlyBoxSel() const;
 
         // wurde der TabelleCursor veraendert ? Wenn ja speicher gleich
         // die neuen Werte.
-    BOOL IsCrsrMovedUpdt();
+    sal_Bool IsCrsrMovedUpdt();
         // wurde der TabelleCursor veraendert ?
-    BOOL IsCrsrMoved() const
+    sal_Bool IsCrsrMoved() const
     {
         return  nTblMkNd != GetMark()->nNode.GetIndex() ||
                 nTblPtNd != GetPoint()->nNode.GetIndex() ||
@@ -299,7 +299,7 @@ public:
                 nTblPtCnt != GetPoint()->nContent.GetIndex();
     }
 
-    BOOL IsChgd() const { return bChg; }
+    sal_Bool IsChgd() const { return bChg; }
 
     // Parke den Tabellen-Cursor auf dem StartNode der Boxen.
     void ParkCrsr();

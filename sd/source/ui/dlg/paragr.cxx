@@ -56,9 +56,9 @@ public:
     ~SdParagraphNumTabPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
 private:
@@ -92,9 +92,9 @@ SfxTabPage* SdParagraphNumTabPage::Create(Window *pParent, const SfxItemSet & rA
     return new SdParagraphNumTabPage( pParent, rAttrSet );
 }
 
-USHORT* SdParagraphNumTabPage::GetRanges()
+sal_uInt16* SdParagraphNumTabPage::GetRanges()
 {
-    static USHORT __FAR_DATA aRange[] =
+    static sal_uInt16 __FAR_DATA aRange[] =
     {
         ATTR_PARANUMBERING_START, ATTR_PARANUMBERING_END,
         0
@@ -103,15 +103,15 @@ USHORT* SdParagraphNumTabPage::GetRanges()
     return aRange;
 }
 
-BOOL SdParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
+sal_Bool SdParagraphNumTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if(maNewStartCB.GetState() != maNewStartCB.GetSavedValue() ||
         maNewStartNumberCB.GetState() != maNewStartNumberCB.GetSavedValue()||
         maNewStartNF.GetText() != maNewStartNF.GetSavedValue())
     {
         mbModified = true;
-        BOOL bNewStartChecked = STATE_CHECK == maNewStartCB.GetState();
-        BOOL bNumberNewStartChecked = STATE_CHECK == maNewStartNumberCB.GetState();
+        sal_Bool bNewStartChecked = STATE_CHECK == maNewStartCB.GetState();
+        sal_Bool bNumberNewStartChecked = STATE_CHECK == maNewStartNumberCB.GetState();
         rSet.Put(SfxBoolItem(ATTR_NUMBER_NEWSTART, bNewStartChecked));
 
         const sal_Int16 nStartAt = (sal_Int16)maNewStartNF.GetValue();
@@ -128,7 +128,7 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     {
         const SfxBoolItem& rStart = (const SfxBoolItem&)rSet.Get(ATTR_NUMBER_NEWSTART);
         maNewStartCB.SetState( rStart.GetValue() ? STATE_CHECK : STATE_NOCHECK );
-        maNewStartCB.EnableTriState(FALSE);
+        maNewStartCB.EnableTriState(sal_False);
     }
     else
     {
@@ -146,7 +146,7 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet& rSet )
             nNewStart = 1;
 
         maNewStartNF.SetValue(nNewStart);
-        maNewStartNumberCB.EnableTriState(FALSE);
+        maNewStartNumberCB.EnableTriState(sal_False);
     }
     else
     {
@@ -155,12 +155,12 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     ImplNewStartHdl(&maNewStartCB);
     maNewStartNF.SaveValue();
     maNewStartNumberCB.SaveValue();
-    mbModified = FALSE;
+    mbModified = sal_False;
 }
 
 IMPL_LINK( SdParagraphNumTabPage, ImplNewStartHdl, CheckBox*, EMPTYARG )
 {
-    BOOL bEnable = maNewStartCB.IsChecked();
+    sal_Bool bEnable = maNewStartCB.IsChecked();
     maNewStartNumberCB.Enable(bEnable);
     maNewStartNF.Enable(bEnable && maNewStartNumberCB.IsChecked());
     return 0;
@@ -182,7 +182,7 @@ SdParagraphDlg::SdParagraphDlg( Window* pParent, const SfxItemSet* pAttr )
 
     AddTabPage( RID_SVXPAGE_ALIGN_PARAGRAPH );
 
-    static const BOOL bShowParaNumbering = ( getenv( "SD_SHOW_NUMBERING_PAGE" ) != NULL );
+    static const sal_Bool bShowParaNumbering = ( getenv( "SD_SHOW_NUMBERING_PAGE" ) != NULL );
     if( bShowParaNumbering )
         AddTabPage( RID_TABPAGE_PARA_NUMBERING, SdParagraphNumTabPage::Create, SdParagraphNumTabPage::GetRanges );
     else

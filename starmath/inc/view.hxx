@@ -58,13 +58,13 @@ class SmGraphicWindow : public ScrollableWindow
     SmGraphicAccessible *                                       pAccessible;
 
     SmViewShell    *pViewShell;
-    USHORT          nZoom;
+    sal_uInt16          nZoom;
     short           nModifyCount;
-    BOOL            bIsCursorVisible;
+    sal_Bool            bIsCursorVisible;
 
 protected:
     void        SetFormulaDrawPos(const Point &rPos) { aFormulaDrawPos = rPos; }
-    void        SetIsCursorVisible(BOOL bVis) { bIsCursorVisible = bVis; }
+    void        SetIsCursorVisible(sal_Bool bVis) { bIsCursorVisible = bVis; }
     using   Window::SetCursor;
     void        SetCursor(const SmNode *pNode);
     void        SetCursor(const Rectangle &rRect);
@@ -88,9 +88,9 @@ public:
     SmViewShell *   GetView()   { return pViewShell; }
 
     using   Window::SetZoom;
-    void   SetZoom(USHORT Factor);
+    void   SetZoom(sal_uInt16 Factor);
     using   Window::GetZoom;
-    USHORT GetZoom() const { return nZoom; }
+    sal_uInt16 GetZoom() const { return nZoom; }
 
     const Point &   GetFormulaDrawPos() const { return aFormulaDrawPos; }
 
@@ -98,9 +98,9 @@ public:
     using   ScrollableWindow::SetTotalSize;
     void SetTotalSize();
 
-    BOOL IsCursorVisible() const { return bIsCursorVisible; }
-    void ShowCursor(BOOL bShow);
-    const SmNode * SetCursorPos(USHORT nRow, USHORT nCol);
+    sal_Bool IsCursorVisible() const { return bIsCursorVisible; }
+    void ShowCursor(sal_Bool bShow);
+    const SmNode * SetCursorPos(sal_uInt16 nRow, sal_uInt16 nCol);
 
     void ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg );
 
@@ -118,8 +118,8 @@ class SmGraphicController: public SfxControllerItem
 protected:
     SmGraphicWindow &rGraphic;
 public:
-    SmGraphicController(SmGraphicWindow &, USHORT, SfxBindings & );
-    virtual void StateChanged(USHORT             nSID,
+    SmGraphicController(SmGraphicWindow &, sal_uInt16, SfxBindings & );
+    virtual void StateChanged(sal_uInt16             nSID,
                               SfxItemState       eState,
                               const SfxPoolItem* pState);
 };
@@ -132,12 +132,12 @@ protected:
     SmEditWindow &rEdit;
 
 public:
-    SmEditController(SmEditWindow &, USHORT, SfxBindings  & );
+    SmEditController(SmEditWindow &, sal_uInt16, SfxBindings  & );
 #if OSL_DEBUG_LEVEL > 1
     virtual ~SmEditController();
 #endif
 
-    virtual void StateChanged(USHORT             nSID,
+    virtual void StateChanged(sal_uInt16             nSID,
                               SfxItemState       eState,
                               const SfxPoolItem* pState);
 };
@@ -148,7 +148,7 @@ class SmCmdBoxWindow : public SfxDockingWindow
 {
     SmEditWindow        aEdit;
     SmEditController    aController;
-    BOOL                bExiting;
+    sal_Bool                bExiting;
 
     Timer               aInitialFocusTimer;
 
@@ -189,7 +189,7 @@ class SmCmdBoxWrapper : public SfxChildWindow
 
 protected:
     SmCmdBoxWrapper(Window          *pParentWindow,
-                    USHORT           nId,
+                    sal_uInt16           nId,
                     SfxBindings     *pBindings,
                     SfxChildWinInfo *pInfo);
 
@@ -224,7 +224,7 @@ class SmViewShell: public SfxViewShell
             ::com::sun::star::lang:: XEventListener > xClipEvtLstnr;
     SmClipboardChangeListener*  pClipEvtLstnr;
     SmViewShell_Impl*   pImpl;
-    BOOL                bPasteState;
+    sal_Bool                bPasteState;
 
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -242,20 +242,20 @@ protected:
     void DrawText(OutputDevice& rDevice,
                   const Point&  rPosition,
                   const String& rText,
-                  USHORT        MaxWidth);
+                  sal_uInt16        MaxWidth);
 
-    virtual USHORT Print(SfxProgress &rProgress, BOOL bIsAPI);
-    virtual SfxPrinter *GetPrinter(BOOL bCreate = FALSE);
-    virtual USHORT SetPrinter(SfxPrinter *pNewPrinter,
-                              USHORT     nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false);
+    virtual sal_uInt16 Print(SfxProgress &rProgress, sal_Bool bIsAPI);
+    virtual SfxPrinter *GetPrinter(sal_Bool bCreate = sal_False);
+    virtual sal_uInt16 SetPrinter(SfxPrinter *pNewPrinter,
+                              sal_uInt16     nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false);
 
-    BOOL        Insert( SfxMedium& rMedium );
-    BOOL        InsertFrom(SfxMedium &rMedium);
+    sal_Bool        Insert( SfxMedium& rMedium );
+    sal_Bool        InsertFrom(SfxMedium &rMedium);
 
     virtual SfxTabPage *CreatePrintOptionsPage(Window           *pParent,
                                                const SfxItemSet &rOptions);
-    virtual void Deactivate(BOOL IsMDIActivate);
-    virtual void Activate(BOOL IsMDIActivate);
+    virtual void Deactivate(sal_Bool IsMDIActivate);
+    virtual void Activate(sal_Bool IsMDIActivate);
     virtual Size GetOptimalSizePixel() const;
     virtual void AdjustPosSizePixel(const Point &rPos, const Size &rSize);
     virtual void InnerResizePixel(const Point &rOfs, const Size  &rSize);

@@ -57,9 +57,9 @@ using namespace ::com::sun::star::io;
 
 DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName )
 {
-    bCreatingWindow = TRUE;
+    bCreatingWindow = sal_True;
 
-    ULONG nKey = 0;
+    sal_uLong nKey = 0;
     DialogWindow* pWin = 0;
     String aLibName( rLibName );
     String aDlgName( rDlgName );
@@ -73,7 +73,7 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
         aDlgName = rDocument.createObjectName( E_DIALOGS, aLibName );
 
     // Vielleicht gibt es ein suspendiertes?
-    pWin = FindDlgWin( rDocument, aLibName, aDlgName, FALSE, TRUE );
+    pWin = FindDlgWin( rDocument, aLibName, aDlgName, sal_False, sal_True );
 
     if ( !pWin )
     {
@@ -125,17 +125,17 @@ DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, cons
     if( pWin )
     {
         pWin->GrabScrollBars( &aHScrollBar, &aVScrollBar );
-        pTabBar->InsertPage( (USHORT)nKey, aDlgName );
+        pTabBar->InsertPage( (sal_uInt16)nKey, aDlgName );
         pTabBar->Sort();
         if ( !pCurWin )
-            SetCurWindow( pWin, FALSE, FALSE );
+            SetCurWindow( pWin, sal_False, sal_False );
     }
 
-    bCreatingWindow = FALSE;
+    bCreatingWindow = sal_False;
     return pWin;
 }
 
-DialogWindow* BasicIDEShell::FindDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName, BOOL bCreateIfNotExist, BOOL bFindSuspended )
+DialogWindow* BasicIDEShell::FindDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended )
 {
     DialogWindow* pDlgWin = 0;
     IDEBaseWindow* pWin = aIDEWindowTable.First();

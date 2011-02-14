@@ -38,29 +38,29 @@ class StgPage;
 class StgDirEntry;
 
 // The FAT class performs FAT operations on an underlying storage stream.
-// This stream is either the physical FAT stream (bPhys == TRUE ) or a normal
+// This stream is either the physical FAT stream (bPhys == sal_True ) or a normal
 // storage stream, which then holds the FAT for small data allocations.
 
 class StgFAT
 {                                       // FAT allocator
     StgStrm& rStrm;                     // underlying stream
-    INT32 nMaxPage;                     // highest page allocated so far
+    sal_Int32 nMaxPage;                     // highest page allocated so far
     short nPageSize;                    // physical page size
     short nEntries;                     // FAT entries per page
     short nOffset;                      // current offset within page
-    INT32 nLimit;                       // search limit recommendation
-    BOOL  bPhys;                        // TRUE: physical FAT
-    StgPage* GetPhysPage( INT32 nPage );
-    BOOL  MakeChain( INT32 nStart, INT32 nPages );
-    BOOL  InitNew( INT32 nPage1 );
+    sal_Int32 nLimit;                       // search limit recommendation
+    sal_Bool  bPhys;                        // sal_True: physical FAT
+    StgPage* GetPhysPage( sal_Int32 nPage );
+    sal_Bool  MakeChain( sal_Int32 nStart, sal_Int32 nPages );
+    sal_Bool  InitNew( sal_Int32 nPage1 );
 public:
-    StgFAT( StgStrm& rStrm, BOOL bMark );
-    INT32 FindBlock( INT32& nPages );
-    INT32 GetNextPage( INT32 nPg );
-    INT32 AllocPages( INT32 nStart, INT32 nPages );
-    BOOL  FreePages( INT32 nStart, BOOL bAll );
-    INT32 GetMaxPage() { return nMaxPage; }
-    void  SetLimit( INT32 n ) { nLimit = n; }
+    StgFAT( StgStrm& rStrm, sal_Bool bMark );
+    sal_Int32 FindBlock( sal_Int32& nPages );
+    sal_Int32 GetNextPage( sal_Int32 nPg );
+    sal_Int32 AllocPages( sal_Int32 nStart, sal_Int32 nPages );
+    sal_Bool  FreePages( sal_Int32 nStart, sal_Bool bAll );
+    sal_Int32 GetMaxPage() { return nMaxPage; }
+    void  SetLimit( sal_Int32 n ) { nLimit = n; }
 };
 
 // The base stream class provides basic functionality for seeking
@@ -72,31 +72,31 @@ protected:
     StgIo& rIo;                         // I/O system
     StgFAT* pFat;                       // FAT stream for allocations
     StgDirEntry* pEntry;                // dir entry (for ownership)
-    INT32 nStart;                       // 1st data page
-    INT32 nSize;                        // stream size in bytes
-    INT32 nPos;                         // current byte position
-    INT32 nPage;                        // current logical page
+    sal_Int32 nStart;                       // 1st data page
+    sal_Int32 nSize;                        // stream size in bytes
+    sal_Int32 nPos;                         // current byte position
+    sal_Int32 nPage;                        // current logical page
     short nOffset;                      // offset into current page
     short nPageSize;                    // logical page size
-    BOOL  Copy( INT32 nFrom, INT32 nBytes );
+    sal_Bool  Copy( sal_Int32 nFrom, sal_Int32 nBytes );
     StgStrm( StgIo& );
 public:
     virtual ~StgStrm();
     StgIo&  GetIo()     { return rIo;    }
-    INT32   GetPos()    { return nPos;   }
-    INT32   GetStart()  { return nStart; }
-    INT32   GetSize()   { return nSize;  }
-    INT32   GetPage()   { return nPage;  }
+    sal_Int32   GetPos()    { return nPos;   }
+    sal_Int32   GetStart()  { return nStart; }
+    sal_Int32   GetSize()   { return nSize;  }
+    sal_Int32   GetPage()   { return nPage;  }
     short   GetPageSize() { return nPageSize; }
-    INT32   GetPages();
+    sal_Int32   GetPages();
     short   GetOffset() { return nOffset;}
     void    SetEntry( StgDirEntry& );
-    virtual BOOL SetSize( INT32 );
-    virtual BOOL Pos2Page( INT32 nBytePos );
-    virtual INT32 Read( void*, INT32 )        { return 0; }
-    virtual INT32 Write( const void*, INT32 ) { return 0; }
-    virtual StgPage* GetPhysPage( INT32 nBytePos, BOOL bForce = FALSE );
-    virtual BOOL IsSmallStrm() { return FALSE; }
+    virtual sal_Bool SetSize( sal_Int32 );
+    virtual sal_Bool Pos2Page( sal_Int32 nBytePos );
+    virtual sal_Int32 Read( void*, sal_Int32 )        { return 0; }
+    virtual sal_Int32 Write( const void*, sal_Int32 ) { return 0; }
+    virtual StgPage* GetPhysPage( sal_Int32 nBytePos, sal_Bool bForce = sal_False );
+    virtual sal_Bool IsSmallStrm() { return sal_False; }
 };
 
 // The FAT stream class provides physical access to the master FAT.
@@ -104,15 +104,15 @@ public:
 // FAT allocator.
 
 class StgFATStrm : public StgStrm {     // the master FAT stream
-    virtual BOOL Pos2Page( INT32 nBytePos );
-    BOOL  SetPage( short, INT32 );
+    virtual sal_Bool Pos2Page( sal_Int32 nBytePos );
+    sal_Bool  SetPage( short, sal_Int32 );
 public:
     StgFATStrm( StgIo& );
     virtual ~StgFATStrm() {}
     using StgStrm::GetPage;
-    INT32 GetPage( short, BOOL, USHORT *pnMasterAlloc = 0);
-    virtual BOOL SetSize( INT32 );
-    virtual StgPage* GetPhysPage( INT32 nBytePos, BOOL bForce = FALSE );
+    sal_Int32 GetPage( short, sal_Bool, sal_uInt16 *pnMasterAlloc = 0);
+    virtual sal_Bool SetSize( sal_Int32 );
+    virtual StgPage* GetPhysPage( sal_Int32 nBytePos, sal_Bool bForce = sal_False );
 };
 
 // The stream has a size increment which normally is 1, but which can be
@@ -121,15 +121,15 @@ public:
 class StgDataStrm : public StgStrm      // a physical data stream
 {
     short nIncr;                        // size adjust increment
-    void Init( INT32 nBgn, INT32 nLen );
+    void Init( sal_Int32 nBgn, sal_Int32 nLen );
 public:
-    StgDataStrm( StgIo&, INT32 nBgn, INT32 nLen=-1 );
+    StgDataStrm( StgIo&, sal_Int32 nBgn, sal_Int32 nLen=-1 );
     StgDataStrm( StgIo&, StgDirEntry* );
-    void* GetPtr( INT32 nPos, BOOL bForce, BOOL bDirty );
+    void* GetPtr( sal_Int32 nPos, sal_Bool bForce, sal_Bool bDirty );
     void SetIncrement( short n ) { nIncr = n ; }
-    virtual BOOL SetSize( INT32 );
-    virtual INT32 Read( void*, INT32 );
-    virtual INT32 Write( const void*, INT32 );
+    virtual sal_Bool SetSize( sal_Int32 );
+    virtual sal_Int32 Read( void*, sal_Int32 );
+    virtual sal_Int32 Write( const void*, sal_Int32 );
 };
 
 // The small stream class provides access to streams with a size < 4096 bytes.
@@ -140,13 +140,13 @@ public:
 class StgSmallStrm : public StgStrm     // a logical data stream
 {
     StgStrm* pData;                     // the data stream
-    void Init( INT32 nBgn, INT32 nLen );
+    void Init( sal_Int32 nBgn, sal_Int32 nLen );
 public:
-    StgSmallStrm( StgIo&, INT32 nBgn, INT32 nLen );
+    StgSmallStrm( StgIo&, sal_Int32 nBgn, sal_Int32 nLen );
     StgSmallStrm( StgIo&, StgDirEntry* );
-    virtual INT32 Read( void*, INT32 );
-    virtual INT32 Write( const void*, INT32 );
-    virtual BOOL IsSmallStrm() { return TRUE; }
+    virtual sal_Int32 Read( void*, sal_Int32 );
+    virtual sal_Int32 Write( const void*, sal_Int32 );
+    virtual sal_Bool IsSmallStrm() { return sal_True; }
 };
 
 class StgTmpStrm : public SvMemoryStream
@@ -154,17 +154,17 @@ class StgTmpStrm : public SvMemoryStream
     String aName;
     SvFileStream* pStrm;
     using SvMemoryStream::GetData;
-    virtual ULONG GetData( void* pData, ULONG nSize );
-    virtual ULONG PutData( const void* pData, ULONG nSize );
-    virtual ULONG SeekPos( ULONG nPos );
+    virtual sal_uLong GetData( void* pData, sal_uLong nSize );
+    virtual sal_uLong PutData( const void* pData, sal_uLong nSize );
+    virtual sal_uLong SeekPos( sal_uLong nPos );
     virtual void FlushData();
 
 public:
-    StgTmpStrm( ULONG=16 );
+    StgTmpStrm( sal_uLong=16 );
    ~StgTmpStrm();
-    BOOL Copy( StgTmpStrm& );
-    void SetSize( ULONG );
-    ULONG GetSize() const;
+    sal_Bool Copy( StgTmpStrm& );
+    void SetSize( sal_uLong );
+    sal_uLong GetSize() const;
 };
 
 #endif

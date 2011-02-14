@@ -185,7 +185,7 @@ lang::Locale SAL_CALL SwXFlatParagraph::getLanguageOfText(::sal_Int32 nPos, ::sa
     if (!mpTxtNode)
         return SvxCreateLocale( LANGUAGE_NONE );
 
-    const lang::Locale aLocale( SW_BREAKITER()->GetLocale( mpTxtNode->GetLang( static_cast<USHORT>(nPos), static_cast<USHORT>(nLen) ) ) );
+    const lang::Locale aLocale( SW_BREAKITER()->GetLocale( mpTxtNode->GetLang( static_cast<sal_uInt16>(nPos), static_cast<sal_uInt16>(nLen) ) ) );
     return aLocale;
 }
 
@@ -198,7 +198,7 @@ lang::Locale SAL_CALL SwXFlatParagraph::getPrimaryLanguageOfText(::sal_Int32 nPo
     if (!mpTxtNode)
         return SvxCreateLocale( LANGUAGE_NONE );
 
-    const lang::Locale aLocale( SW_BREAKITER()->GetLocale( mpTxtNode->GetLang( static_cast<USHORT>(nPos), static_cast<USHORT>(nLen) ) ) );
+    const lang::Locale aLocale( SW_BREAKITER()->GetLocale( mpTxtNode->GetLang( static_cast<sal_uInt16>(nPos), static_cast<sal_uInt16>(nLen) ) ) );
     return aLocale;
 }
 
@@ -212,7 +212,7 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
 
     SwTxtNode* pOldTxtNode = mpTxtNode;
 
-    SwPaM aPaM( *mpTxtNode, static_cast<USHORT>(nPos), *mpTxtNode, static_cast<USHORT>(nPos + nLen) );
+    SwPaM aPaM( *mpTxtNode, static_cast<sal_uInt16>(nPos), *mpTxtNode, static_cast<sal_uInt16>(nPos + nLen) );
 
     UnoActionContext aAction( mpTxtNode->GetDoc() );
 
@@ -222,7 +222,7 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
     uno::Reference< beans::XPropertySet > xPropSet( xRange, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
-        for ( USHORT i = 0; i < aAttributes.getLength(); ++i )
+        for ( sal_uInt16 i = 0; i < aAttributes.getLength(); ++i )
             xPropSet->setPropertyValue( aAttributes[i].Name, aAttributes[i].Value );
     }
 
@@ -242,7 +242,7 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
     if ( !mpTxtNode )
         return;
 
-    SwPaM aPaM( *mpTxtNode, static_cast<USHORT>(nPos), *mpTxtNode, static_cast<USHORT>(nPos + nLen) );
+    SwPaM aPaM( *mpTxtNode, static_cast<sal_uInt16>(nPos), *mpTxtNode, static_cast<sal_uInt16>(nPos + nLen) );
 
     UnoActionContext aAction( mpTxtNode->GetDoc() );
 
@@ -252,7 +252,7 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
     uno::Reference< beans::XPropertySet > xPropSet( xRange, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
-        for ( USHORT i = 0; i < aAttributes.getLength(); ++i )
+        for ( sal_uInt16 i = 0; i < aAttributes.getLength(); ++i )
             xPropSet->setPropertyValue( aAttributes[i].Name, aAttributes[i].Value );
     }
 
@@ -395,7 +395,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
     else    // non-automatic checking
     {
         const SwNodes& rNodes = mpDoc->GetNodes();
-        const ULONG nMaxNodes = rNodes.Count();
+        const sal_uLong nMaxNodes = rNodes.Count();
 
         while ( mnCurrentNode < mnEndNode && mnCurrentNode < nMaxNodes )
         {
@@ -460,7 +460,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
     SwTxtNode* pNextTxtNode = 0;
     const SwNodes& rNodes = pCurrentNode->GetDoc()->GetNodes();
 
-    for( ULONG nCurrentNode = pCurrentNode->GetIndex() + 1; nCurrentNode < rNodes.Count(); ++nCurrentNode )
+    for( sal_uLong nCurrentNode = pCurrentNode->GetIndex() + 1; nCurrentNode < rNodes.Count(); ++nCurrentNode )
     {
         SwNode* pNd = rNodes[ nCurrentNode ];
         pNextTxtNode = dynamic_cast<SwTxtNode*>(pNd);
@@ -507,7 +507,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(c
     SwTxtNode* pPrevTxtNode = 0;
     const SwNodes& rNodes = pCurrentNode->GetDoc()->GetNodes();
 
-    for( ULONG nCurrentNode = pCurrentNode->GetIndex() - 1; nCurrentNode > 0; --nCurrentNode )
+    for( sal_uLong nCurrentNode = pCurrentNode->GetIndex() - 1; nCurrentNode > 0; --nCurrentNode )
     {
         SwNode* pNd = rNodes[ nCurrentNode ];
         pPrevTxtNode = dynamic_cast<SwTxtNode*>(pNd);

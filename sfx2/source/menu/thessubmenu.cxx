@@ -66,7 +66,7 @@ SFX_IMPL_MENU_CONTROL(SfxThesSubMenuControl, SfxStringItem);
     Ctor; setzt Select-Handler am Menu und traegt Menu
     in seinen Parent ein.
  */
-SfxThesSubMenuControl::SfxThesSubMenuControl( USHORT nSlotId, Menu &rMenu, SfxBindings &rBindings )
+SfxThesSubMenuControl::SfxThesSubMenuControl( sal_uInt16 nSlotId, Menu &rMenu, SfxBindings &rBindings )
     : SfxMenuControl( nSlotId, rBindings ),
     pMenu(new PopupMenu),
     rParent(rMenu)
@@ -74,7 +74,7 @@ SfxThesSubMenuControl::SfxThesSubMenuControl( USHORT nSlotId, Menu &rMenu, SfxBi
     rMenu.SetPopupMenu(nSlotId, pMenu);
     pMenu->SetSelectHdl(LINK(this, SfxThesSubMenuControl, MenuSelect));
     pMenu->Clear();
-    rParent.EnableItem( GetId(), FALSE );
+    rParent.EnableItem( GetId(), sal_False );
 }
 
 
@@ -90,7 +90,7 @@ SfxThesSubMenuControl::~SfxThesSubMenuControl()
     Menueeintrag im Parentmenu disabled, andernfalls wird er enabled.
  */
 void SfxThesSubMenuControl::StateChanged(
-    USHORT /*nSID*/,
+    sal_uInt16 /*nSID*/,
     SfxItemState eState,
     const SfxPoolItem* /*pState*/ )
 {
@@ -104,7 +104,7 @@ void SfxThesSubMenuControl::StateChanged(
  */
 IMPL_LINK_INLINE_START( SfxThesSubMenuControl, MenuSelect, Menu *, pSelMenu )
 {
-    const USHORT nSlotId = pSelMenu->GetCurItemId();
+    const sal_uInt16 nSlotId = pSelMenu->GetCurItemId();
     if( nSlotId )
         GetBindings().Execute(nSlotId);
     return 1;

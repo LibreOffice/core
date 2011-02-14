@@ -40,9 +40,9 @@ class SvpSalGraphics;
 class SvpSalFrame : public SalFrame, public SvpElement
 {
     SvpSalInstance*                     m_pInstance;
-    SvpSalFrame*                        m_pParent;       // pointer to parent frame
+    SvpSalFrame*                    m_pParent;       // pointer to parent frame
     std::list< SvpSalFrame* >           m_aChildren;     // List of child frames
-    ULONG                               m_nStyle;
+    sal_uLong                         m_nStyle;
     bool                                m_bVisible;
     long                                m_nMinWidth;
     long                                m_nMinHeight;
@@ -58,7 +58,7 @@ class SvpSalFrame : public SalFrame, public SvpElement
 public:
     SvpSalFrame( SvpSalInstance* pInstance,
                  SalFrame* pParent,
-                 ULONG nSalFrameStyle,
+                 sal_uLong nSalFrameStyle,
                  SystemParentData* pSystemParent = NULL );
     virtual ~SvpSalFrame();
 
@@ -73,39 +73,39 @@ public:
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
 
-    virtual BOOL                PostEvent( void* pData );
+    virtual sal_Bool                PostEvent( void* pData );
 
     virtual void                SetTitle( const XubString& rTitle );
-    virtual void                SetIcon( USHORT nIcon );
+    virtual void                SetIcon( sal_uInt16 nIcon );
     virtual void                SetMenu( SalMenu* pMenu );
     virtual void                                DrawMenuBar();
 
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle );
-    virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE );
-    virtual void                Enable( BOOL bEnable );
+    virtual void                Show( sal_Bool bVisible, sal_Bool bNoActivate = sal_False );
+    virtual void                Enable( sal_Bool bEnable );
     virtual void                SetMinClientSize( long nWidth, long nHeight );
     virtual void                SetMaxClientSize( long nWidth, long nHeight );
-    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags );
+    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags );
     virtual void                GetClientSize( long& rWidth, long& rHeight );
     virtual void                GetWorkArea( Rectangle& rRect );
     virtual SalFrame*           GetParent() const;
     virtual void                SetWindowState( const SalFrameState* pState );
-    virtual BOOL                GetWindowState( SalFrameState* pState );
-    virtual void                ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay );
-    virtual void                StartPresentation( BOOL bStart );
-    virtual void                SetAlwaysOnTop( BOOL bOnTop );
-    virtual void                ToTop( USHORT nFlags );
+    virtual sal_Bool                GetWindowState( SalFrameState* pState );
+    virtual void                ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay );
+    virtual void                StartPresentation( sal_Bool bStart );
+    virtual void                SetAlwaysOnTop( sal_Bool bOnTop );
+    virtual void                ToTop( sal_uInt16 nFlags );
     virtual void                SetPointer( PointerStyle ePointerStyle );
-    virtual void                CaptureMouse( BOOL bMouse );
+    virtual void                CaptureMouse( sal_Bool bMouse );
     virtual void                SetPointerPos( long nX, long nY );
     using SalFrame::Flush;
     virtual void                Flush();
     virtual void                Sync();
     virtual void                SetInputContext( SalInputContext* pContext );
-    virtual void                EndExtTextInput( USHORT nFlags );
-    virtual String              GetKeyName( USHORT nKeyCode );
-    virtual String              GetSymbolKeyName( const XubString& rFontName, USHORT nKeyCode );
-    virtual BOOL                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
+    virtual void                EndExtTextInput( sal_uInt16 nFlags );
+    virtual String              GetKeyName( sal_uInt16 nKeyCode );
+    virtual String              GetSymbolKeyName( const XubString& rFontName, sal_uInt16 nKeyCode );
+    virtual sal_Bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
     virtual LanguageType        GetInputLanguage();
     virtual SalBitmap*          SnapShot();
     virtual void                UpdateSettings( AllSettings& rSettings );
@@ -116,7 +116,7 @@ public:
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
     virtual void                SetBackgroundBitmap( SalBitmap* pBitmap );
     virtual void                ResetClipRegion();
-    virtual void                BeginSetClipRegion( ULONG nRects );
+    virtual void                BeginSetClipRegion( sal_uLong nRects );
     virtual void                UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual void                EndSetClipRegion();
 

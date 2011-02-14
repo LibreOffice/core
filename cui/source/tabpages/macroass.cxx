@@ -72,9 +72,9 @@ public:
     FixedText*                      pMacroFT;
     String*                         pMacroStr;
 
-    BOOL                            bReadOnly;
+    sal_Bool                            bReadOnly;
     Timer                           maFillGroupTimer;
-    BOOL                            bGotEvents;
+    sal_Bool                            bGotEvents;
 };
 
 _SfxMacroTabPage_Impl::_SfxMacroTabPage_Impl( void ) :
@@ -88,8 +88,8 @@ _SfxMacroTabPage_Impl::_SfxMacroTabPage_Impl( void ) :
     pMacroLB( NULL ),
     pMacroFT( NULL ),
     pMacroStr( NULL ),
-    bReadOnly( FALSE ),
-    bGotEvents( FALSE )
+    bReadOnly( sal_False ),
+    bGotEvents( sal_False )
 {
 }
 
@@ -108,7 +108,7 @@ _SfxMacroTabPage_Impl::~_SfxMacroTabPage_Impl()
 }
 
 
-static USHORT __FAR_DATA aPageRg[] = {
+static sal_uInt16 __FAR_DATA aPageRg[] = {
     SID_ATTR_MACROITEM, SID_ATTR_MACROITEM,
     0
 };
@@ -136,7 +136,7 @@ String ConvertToUIName_Impl( SvxMacro *pMacro )
     String aEntry;
     if ( ! pMacro->GetLanguage().EqualsAscii("JavaScript") )
     {
-        USHORT nCount = aName.GetTokenCount('.');
+        sal_uInt16 nCount = aName.GetTokenCount('.');
         aEntry = aName.GetToken( nCount-1, '.' );
         if ( nCount > 2 )
         {
@@ -159,7 +159,7 @@ void _SfxMacroTabPage::EnableButtons()
     if ( pE )
     {
         // Gebundenes Macro holen
-        const SvxMacro* pM = aTbl.Get( (USHORT)(ULONG) pE->GetUserData() );
+        const SvxMacro* pM = aTbl.Get( (sal_uInt16)(sal_uLong) pE->GetUserData() );
         mpImpl->pDeletePB->Enable( 0 != pM && !mpImpl->bReadOnly );
 
         String sEventMacro;
@@ -169,7 +169,7 @@ void _SfxMacroTabPage::EnableButtons()
         mpImpl->pAssignPB->Enable( !mpImpl->bReadOnly && !sScriptURI.EqualsIgnoreCaseAscii( sEventMacro ) );
     }
     else
-        mpImpl->pAssignPB->Enable( FALSE );
+        mpImpl->pAssignPB->Enable( sal_False );
 }
 
 _SfxMacroTabPage::_SfxMacroTabPage( Window* pParent, const ResId& rResId, const SfxItemSet& rAttrSet )
@@ -184,7 +184,7 @@ _SfxMacroTabPage::~_SfxMacroTabPage()
     DELETEZ( mpImpl );
 }
 
-void _SfxMacroTabPage::AddEvent( const String & rEventName, USHORT nEventId )
+void _SfxMacroTabPage::AddEvent( const String & rEventName, sal_uInt16 nEventId )
 {
     String sTmp( rEventName );
     sTmp += '\t';
@@ -213,29 +213,29 @@ void _SfxMacroTabPage::ScriptChanged()
     EnableButtons();
 }
 
-BOOL _SfxMacroTabPage::FillItemSet( SfxItemSet& rSet )
+sal_Bool _SfxMacroTabPage::FillItemSet( SfxItemSet& rSet )
 {
     SvxMacroItem aItem( GetWhich( aPageRg[0] ) );
     ((SvxMacroTableDtor&)aItem.GetMacroTable()) = aTbl;
 
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET != GetItemSet().GetItemState( aItem.Which(), TRUE, &pItem )
+    if( SFX_ITEM_SET != GetItemSet().GetItemState( aItem.Which(), sal_True, &pItem )
         || aItem != *(SvxMacroItem*)pItem )
     {
         rSet.Put( aItem );
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 void _SfxMacroTabPage::PageCreated (SfxAllItemSet aSet)
 {
     const SfxPoolItem* pEventsItem;
-    if( !mpImpl->bGotEvents && SFX_ITEM_SET == aSet.GetItemState( SID_EVENTCONFIG, TRUE, &pEventsItem ) )
+    if( !mpImpl->bGotEvents && SFX_ITEM_SET == aSet.GetItemState( SID_EVENTCONFIG, sal_True, &pEventsItem ) )
     {
-        mpImpl->bGotEvents = TRUE;
+        mpImpl->bGotEvents = sal_True;
         const SfxEventNamesList& rList = ((SfxEventNamesItem*)pEventsItem)->GetEvents();
-        for ( USHORT nNo = 0; nNo < rList.Count(); ++nNo )
+        for ( sal_uInt16 nNo = 0; nNo < rList.Count(); ++nNo )
         {
             const SfxEventName *pOwn = rList.GetObject(nNo);
             AddEvent( pOwn->maUIName, pOwn->mnId );
@@ -246,15 +246,15 @@ void _SfxMacroTabPage::PageCreated (SfxAllItemSet aSet)
 void _SfxMacroTabPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rSet.GetItemState( GetWhich( aPageRg[0] ), TRUE, &pItem ))
+    if( SFX_ITEM_SET == rSet.GetItemState( GetWhich( aPageRg[0] ), sal_True, &pItem ))
         aTbl = ((SvxMacroItem*)pItem)->GetMacroTable();
 
     const SfxPoolItem* pEventsItem;
-    if( !mpImpl->bGotEvents && SFX_ITEM_SET == rSet.GetItemState( SID_EVENTCONFIG, TRUE, &pEventsItem ) )
+    if( !mpImpl->bGotEvents && SFX_ITEM_SET == rSet.GetItemState( SID_EVENTCONFIG, sal_True, &pEventsItem ) )
     {
-        mpImpl->bGotEvents = TRUE;
+        mpImpl->bGotEvents = sal_True;
         const SfxEventNamesList& rList = ((SfxEventNamesItem*)pEventsItem)->GetEvents();
-        for ( USHORT nNo = 0; nNo < rList.Count(); ++nNo )
+        for ( sal_uInt16 nNo = 0; nNo < rList.Count(); ++nNo )
         {
             const SfxEventName *pOwn = rList.GetObject(nNo);
             AddEvent( pOwn->maUIName, pOwn->mnId );
@@ -269,7 +269,7 @@ void _SfxMacroTabPage::Reset( const SfxItemSet& rSet )
         rListBox.SetCurEntry( pE );
 }
 
-BOOL _SfxMacroTabPage::IsReadOnly() const
+sal_Bool _SfxMacroTabPage::IsReadOnly() const
 {
     return mpImpl->bReadOnly;
 }
@@ -279,7 +279,7 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
     _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
     SvHeaderTabListBox&     rListBox = pImpl->pEventLB->GetListBox();
     SvLBoxEntry*            pE = rListBox.FirstSelected();
-    ULONG                   nPos;
+    sal_uLong                   nPos;
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
         ( nPos = rListBox.GetModel()->GetAbsPos( pE ) ) )
     {
@@ -320,7 +320,7 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
     _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
     SvHeaderTabListBox& rListBox = pImpl->pEventLB->GetListBox();
     SvLBoxEntry* pE = rListBox.FirstSelected();
-    ULONG nPos;
+    sal_uLong nPos;
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
         ( nPos = rListBox.GetModel()->GetAbsPos( pE ) ) )
     {
@@ -328,10 +328,10 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
         return 0;
     }
 
-    const BOOL bAssEnabled = pBtn != pImpl->pDeletePB && pImpl->pAssignPB->IsEnabled();
+    const sal_Bool bAssEnabled = pBtn != pImpl->pDeletePB && pImpl->pAssignPB->IsEnabled();
 
     // aus der Tabelle entfernen
-    USHORT nEvent = (USHORT)(ULONG)pE->GetUserData();
+    sal_uInt16 nEvent = (sal_uInt16)(sal_uLong)pE->GetUserData();
     SvxMacro *pRemoveMacro = pThis->aTbl.Remove( nEvent );
     delete pRemoveMacro;
 
@@ -352,12 +352,12 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton*, pBtn )
         }
     }
 
-    pImpl->pEventLB->SetUpdateMode( FALSE );
+    pImpl->pEventLB->SetUpdateMode( sal_False );
     pE->ReplaceItem( new SvLBoxString( pE, 0, sScriptURI ), LB_MACROS_ITEMPOS );
     rListBox.GetModel()->InvalidateEntry( pE );
     rListBox.Select( pE );
     rListBox.MakeVisible( pE );
-    rListBox.SetUpdateMode( TRUE );
+    rListBox.SetUpdateMode( sal_True );
 
     pThis->EnableButtons();
     return 0;
@@ -371,12 +371,12 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, TimeOut_Impl, Timer*, EMPTYARG )
     if ( pTabDlg )
     {
         pTabDlg->EnterWait();
-        pTabDlg->EnableInput( FALSE );
+        pTabDlg->EnableInput( sal_False );
     }
     pThis->FillMacroList();
     if ( pTabDlg )
     {
-        pTabDlg->EnableInput( TRUE );
+        pTabDlg->EnableInput( sal_True );
         pTabDlg->LeaveWait();
     }
     return 0;
@@ -408,9 +408,9 @@ void _SfxMacroTabPage::InitAndSetHandler()
     mpImpl->pEventLB->Show();
     mpImpl->pEventLB->ConnectElements();
 
-    mpImpl->pEventLB->Enable( TRUE );
-    mpImpl->pGroupLB->Enable( TRUE );
-    mpImpl->pMacroLB->Enable( TRUE );
+    mpImpl->pEventLB->Enable( sal_True );
+    mpImpl->pGroupLB->Enable( sal_True );
+    mpImpl->pMacroLB->Enable( sal_True );
 
     mpImpl->pGroupLB->SetFunctionListBox( mpImpl->pMacroLB );
 
@@ -432,10 +432,10 @@ void _SfxMacroTabPage::FillEvents()
 {
     SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
 
-    ULONG               nEntryCnt = rListBox.GetEntryCount();
+    sal_uLong       nEntryCnt = rListBox.GetEntryCount();
 
     // Events aus der Tabelle holen und die EventListBox entsprechen fuellen
-    for( ULONG n = 0 ; n < nEntryCnt ; ++n )
+    for( sal_uLong n = 0 ; n < nEntryCnt ; ++n )
     {
         SvLBoxEntry*    pE = rListBox.GetEntry( n );
         if( pE )
@@ -445,7 +445,7 @@ void _SfxMacroTabPage::FillEvents()
 
             String          sOld( pLItem->GetText() );
             String          sNew;
-            USHORT          nEventId = ( USHORT ) ( ULONG ) pE->GetUserData();
+            sal_uInt16          nEventId = ( sal_uInt16 ) ( sal_uLong ) pE->GetUserData();
             if( aTbl.IsKeyValid( nEventId ) )
                 sNew = ConvertToUIName_Impl( aTbl.Get( nEventId ) );
 

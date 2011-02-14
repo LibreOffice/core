@@ -141,7 +141,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
     RscPtrPtr       aCmdLine;       // Kommandozeile
     ByteString      aString;
     sal_uInt32      i;
-    BOOL            bOutputSrsIsSet = FALSE;
+    sal_Bool        bOutputSrsIsSet = sal_False;
 
     Init(); // Defaults setzen
 
@@ -253,7 +253,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             else if( !rsc_strnicmp( (*ppStr) + 1, "fp=", 3 ) )
             { // anderer Name fuer .srs-file
                 aOutputSrs = (*ppStr) + 4;
-                bOutputSrsIsSet = TRUE;
+                bOutputSrsIsSet = sal_True;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fl=", 3 ) )
             { // Name fuer listing-file
@@ -348,9 +348,9 @@ RscCmdLine::~RscCmdLine()
 {
     ByteString  *pString;
 
-    while( NULL != (pString = aInputList.Remove( (ULONG)0 )) )
+    while( NULL != (pString = aInputList.Remove( (sal_uLong)0 )) )
         delete pString;
-    while( NULL != (pString = aSymbolList.Remove( (ULONG)0 )) )
+    while( NULL != (pString = aSymbolList.Remove( (sal_uLong)0 )) )
         delete pString;
 }
 
@@ -576,7 +576,7 @@ void RscCompiler::EndCompile()
                     if( !pFN->IsIncFile() )
                     {
                         pTC->WriteSrc( foutput, NOFILE_INDEX,
-                                       RTL_TEXTENCODING_UNICODE, FALSE );
+                                       RTL_TEXTENCODING_UNICODE, sal_False );
                         break; // ?T 281091MM nur eine Src-Datei
                     }
                 };
@@ -656,7 +656,7 @@ void RscCompiler::EndCompile()
 |*    Letzte Aenderung  MM 21.06.91
 |*
 *************************************************************************/
-ERRTYPE RscCompiler :: IncludeParser( ULONG lFileKey )
+ERRTYPE RscCompiler :: IncludeParser( sal_uLong lFileKey )
 {
     FILE            * finput;
     RscFile         * pFName;
@@ -681,7 +681,7 @@ ERRTYPE RscCompiler :: IncludeParser( ULONG lFileKey )
             RscDepend       * pDep;
             RscFileInst       aFileInst( pTC, lFileKey, lFileKey, finput );
 
-            pFName->bScanned = TRUE;
+            pFName->bScanned = sal_True;
             ::IncludeParser( &aFileInst );
             fclose( finput );
 
@@ -724,7 +724,7 @@ ERRTYPE RscCompiler :: IncludeParser( ULONG lFileKey )
 |*    Letzte Aenderung  MM 26.06.91
 |*
 *************************************************************************/
-ERRTYPE RscCompiler :: ParseOneFile( ULONG lFileKey,
+ERRTYPE RscCompiler :: ParseOneFile( sal_uLong lFileKey,
                                      const RscCmdLine::OutputFile* pOutputFile,
                                      const WriteRcContext* pContext )
 {
@@ -740,7 +740,7 @@ ERRTYPE RscCompiler :: ParseOneFile( ULONG lFileKey,
         RscDepend  * pDep;
 
         //Include-Dateien vorher lesen
-        pFName->bLoaded = TRUE; //Endlos Rekursion vermeiden
+        pFName->bLoaded = sal_True; //Endlos Rekursion vermeiden
         pDep = pFName->First();
         while( pDep && aError.IsOk() )
         {
@@ -750,7 +750,7 @@ ERRTYPE RscCompiler :: ParseOneFile( ULONG lFileKey,
         }
 
         if( aError.IsError() )
-            pFName->bLoaded = FALSE; //bei Fehler nicht geladenen
+            pFName->bLoaded = sal_False; //bei Fehler nicht geladenen
         else
         {
             String      aTmpName( ::GetTmpFileName(), RTL_TEXTENCODING_ASCII_US );
@@ -855,7 +855,7 @@ ERRTYPE RscCompiler::Link()
                 {
                     pTC->Delete( pTC->aFileTab.GetIndex( pFName ) );
                     pTC->aFileTab.Seek( pFName );
-                    pFName->bLoaded = FALSE;
+                    pFName->bLoaded = sal_False;
                 }
             }
 
@@ -1115,7 +1115,7 @@ ByteString RscCompiler::GetTmpFileName()
 
 /********************************************************************/
 /*                                                                  */
-/*  Function    :   BOOL openinput()                                */
+/*  Function    :   sal_Bool openinput()                            */
 /*                                                                  */
 /*  Description :   Check to see if the input file exists and can   */
 /*  be opened for reading.                                          */

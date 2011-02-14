@@ -41,7 +41,7 @@ class BigPtrEntry
 {
     friend class BigPtrArray;
     BigPtrArray* pBigPtrArray_;
-    ULONG pos_;
+    sal_uLong pos_;
 
 protected:
     BigPtrEntry() : pBigPtrArray_(0), pos_(0)
@@ -50,7 +50,7 @@ protected:
     virtual ~BigPtrEntry()
     {}
 
-    ULONG GetPos() const
+    sal_uLong GetPos() const
     {
         return pos_;
     }
@@ -62,7 +62,7 @@ protected:
 };
 
 typedef BigPtrEntry* ElementPtr;
-typedef BOOL (*FnForEach)(const ElementPtr&, void* pArgs);
+typedef sal_Bool (*FnForEach)(const ElementPtr&, void* pArgs);
 
 /** A container abstraction
 */
@@ -79,7 +79,7 @@ public:
     /** Return the number of entries inserted
         into the array
     */
-    ULONG Count() const;
+    sal_uLong Count() const;
 
     /** Insert an Element into the array at a certain
         position
@@ -93,7 +93,7 @@ public:
         @pre (pos >= 0 && pos <= BigPtrArray.Count())
         @post (((oldCount + 1) == BigPtrArray.Count()) && BigPtrArray[pos] == rElem)
     */
-    void Insert(const ElementPtr& rElem, ULONG pos);
+    void Insert(const ElementPtr& rElem, sal_uLong pos);
 
     /** Remove a specified number of elements starting at a certain position.
 
@@ -106,7 +106,7 @@ public:
         @pre (pos < BigPtrArray.Count() && n <= BigPtrArray.Count())
         @post ((oldCount - n) == BigPtrArray.Count())
     */
-    void Remove(ULONG pos, ULONG n = 1);
+    void Remove(sal_uLong pos, sal_uLong n = 1);
 
     /** Move an entry from a certain position to another on.
 
@@ -116,7 +116,7 @@ public:
         @param to
         [in]
     */
-    void Move(ULONG fromPos, ULONG toPos);
+    void Move(sal_uLong fromPos, sal_uLong toPos);
 
     /** Replace an entry at a certain position
 
@@ -129,7 +129,7 @@ public:
         @pre pos < BigPtrArray.Count()
         @post (oldCount == BigPtrArray.Count() && BigPtrArray[pos] == rElem)
     */
-    void Replace(ULONG pos, const ElementPtr& rElem);
+    void Replace(sal_uLong pos, const ElementPtr& rElem);
 
     /** Get the entry at a certain index
 
@@ -138,7 +138,7 @@ public:
 
         @pre pos < BigPtrArray.Count()
     */
-    ElementPtr operator[](ULONG pos) const;
+    ElementPtr operator[](sal_uLong pos) const;
 
     /**
     */
@@ -146,7 +146,7 @@ public:
 
     /**
     */
-    void ForEach(ULONG fromPos, ULONG toPos, FnForEach fn, void* pArgs = NULL);
+    void ForEach(sal_uLong fromPos, sal_uLong toPos, FnForEach fn, void* pArgs = NULL);
 
 private:
 

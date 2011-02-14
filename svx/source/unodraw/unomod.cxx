@@ -192,11 +192,11 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
 
     if( ServiceSpecifier.compareTo( aDrawingPrefix, aDrawingPrefix.getLength() ) == 0 )
     {
-        UINT32 nType = aSdrShapeIdentifierMap.getId( ServiceSpecifier );
+        sal_uInt32 nType = aSdrShapeIdentifierMap.getId( ServiceSpecifier );
         if( nType != UHASHMAP_NOTFOUND )
         {
-            UINT16 nT = (UINT16)(nType & ~E3D_INVENTOR_FLAG);
-            UINT32 nI = (nType & E3D_INVENTOR_FLAG)?E3dInventor:SdrInventor;
+            sal_uInt16 nT = (sal_uInt16)(nType & ~E3D_INVENTOR_FLAG);
+            sal_uInt32 nI = (nType & E3D_INVENTOR_FLAG)?E3dInventor:SdrInventor;
 
             return uno::Reference< uno::XInterface >( (drawing::XShape*) SvxDrawPage::CreateShapeByTypeAndInventor( nT, nI ) );
         }
@@ -225,7 +225,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawMSFactory::getAvailableServiceNames
 {
     UHashMapEntry* pMap = pSdrShapeIdentifierMap;
 
-    UINT32 nCount = 0;
+    sal_uInt32 nCount = 0;
     while (pMap->aIdentifier.getLength())
     {
         pMap++;
@@ -236,7 +236,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoDrawMSFactory::getAvailableServiceNames
     OUString* pStrings = aSeq.getArray();
 
     pMap = pSdrShapeIdentifierMap;
-    UINT32 nIdx = 0;
+    sal_uInt32 nIdx = 0;
     while(pMap->aIdentifier.getLength())
     {
         pStrings[nIdx] = pMap->aIdentifier;

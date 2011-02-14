@@ -78,7 +78,7 @@ void PluginDisposer::onShot()
     {
         if( m_pPlugin->isDisposable() )
         {
-            ULONG nEvent;
+            sal_uLong nEvent;
             Application::PostUserEvent( nEvent, LINK( m_pPlugin, XPlugin_Impl, secondLevelDispose ), (void*)m_pPlugin );
         }
     }
@@ -1026,7 +1026,7 @@ void PluginInputStream::load()
     aUrl.SetSmartProtocol( INET_PROT_FILE );
     aUrl.SetSmartURL(
         String( getStream()->url,
-                ::sal::static_int_cast< USHORT, size_t >( strlen( getStream()->url ) ),
+                ::sal::static_int_cast< sal_uInt16, size_t >( strlen( getStream()->url ) ),
                 RTL_TEXTENCODING_MS_1252
             ) );
     try
@@ -1071,8 +1071,8 @@ void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw()
     if( m_nMode == -1 || !m_pPlugin->getPluginComm() )
         return;
 
-    UINT32 nPos = m_aFileStream.Tell();
-    UINT32 nBytes = 0;
+    sal_uInt32 nPos = m_aFileStream.Tell();
+    sal_uInt32 nBytes = 0;
     while( m_nMode != NP_ASFILEONLY &&
            m_nWritePos < nPos &&
            (nBytes = m_pPlugin->getPluginComm()-> NPP_WriteReady(

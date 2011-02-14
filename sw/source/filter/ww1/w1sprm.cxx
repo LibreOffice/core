@@ -65,22 +65,22 @@ using namespace ::com::sun::star;
 void Ww1Sprm::Stop( Ww1Shell& rOut, Ww1Manager& rMan)
 {
     if(IsUsed())
-//      for(USHORT i=0;i<Count();i++)
+//      for(sal_uInt16 i=0;i<Count();i++)
         for(short i=Count()-1;i>=0;i--){    // rueckwaerts
-            BYTE nId;
-            USHORT nSize;
-            BYTE* pSprm;
+            sal_uInt8 nId;
+            sal_uInt16 nSize;
+            sal_uInt8* pSprm;
             Fill(i, nId, nSize, pSprm);
             GetTab(nId).Stop(rOut, nId, pSprm, nSize, rMan);
         }
 }
 
 void Ww1Sprm::Start(
-    Ww1Shell& rOut, Ww1Manager& rMan, USHORT i)
+    Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 i)
 {
-    BYTE nId;
-    USHORT nSize;
-    BYTE* pSprm;
+    sal_uInt8 nId;
+    sal_uInt16 nSize;
+    sal_uInt8* pSprm;
     Fill(i, nId, nSize, pSprm);
     GetTab(nId).Start(rOut, nId, pSprm, nSize, rMan);
 }
@@ -89,20 +89,20 @@ void Ww1Sprm::Start(
     Ww1Shell& rOut, Ww1Manager& rMan)
 {
     if(IsUsed())
-        for(USHORT i=0;i<Count();i++)
+        for(sal_uInt16 i=0;i<Count();i++)
             Start(rOut, rMan, i);
 }
 
 //////////////////////////////////////////////////////////// SingleSprm
 void Ww1SingleSprm::Start(
-    Ww1Shell&, BYTE /*nId*/, BYTE*, USHORT, Ww1Manager&)
+    Ww1Shell&, sal_uInt8 /*nId*/, sal_uInt8*, sal_uInt16, Ww1Manager&)
 {
 }
 
 void Ww1SingleSprm::Stop(
-    Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&)
+    Ww1Shell&, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&)
 {
-//  ASSERT(FALSE, "Unknown Sprm");
+//  ASSERT(sal_False, "Unknown Sprm");
 }
 
 ////////////////////////////////////////////////////////////////// STOP
@@ -113,11 +113,11 @@ void Ww1SingleSprm::Stop(
 //
 #define STOP1(Class, Code) \
     void Class::Stop( \
-     Ww1Shell& rOut, BYTE, BYTE*, USHORT, Ww1Manager&) { \
+     Ww1Shell& rOut, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) { \
         rOut.EndItem(Code); }
 #define STOP2(Class, Code1, Code2) \
     void Class::Stop( \
-     Ww1Shell& rOut, BYTE, BYTE*, USHORT, Ww1Manager&) { \
+     Ww1Shell& rOut, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager&) { \
         rOut.EndItem(Code1).EndItem(Code2); }
 
 /////////////////////////////////////////////////////// SingleSprmXxxxx
@@ -129,7 +129,7 @@ void Ww1SingleSprm::Stop(
 // virtualen methoden bei beginn und ende der formatierung gerufen.
 //
 void Ww1SingleSprmPDxaLeft::Start(
-    Ww1Shell& rOut, BYTE, BYTE* pSprm, USHORT, Ww1Manager&)
+    Ww1Shell& rOut, sal_uInt8, sal_uInt8* pSprm, sal_uInt16, Ww1Manager&)
 {
     SvxLRSpaceItem aLR((SvxLRSpaceItem&)rOut.GetAttr(RES_LR_SPACE));
     short nPara = SVBT16ToShort(pSprm);
@@ -142,7 +142,7 @@ void Ww1SingleSprmPDxaLeft::Start(
 }
 
 void Ww1SingleSprmPDxaRight::Start(
-    Ww1Shell& rOut, BYTE, BYTE* pSprm, USHORT, Ww1Manager&)
+    Ww1Shell& rOut, sal_uInt8, sal_uInt8* pSprm, sal_uInt16, Ww1Manager&)
 {
     SvxLRSpaceItem aLR((SvxLRSpaceItem&)rOut.GetAttr(RES_LR_SPACE));
     short nPara = SVBT16ToShort(pSprm);
@@ -153,7 +153,7 @@ void Ww1SingleSprmPDxaRight::Start(
 }
 
 void Ww1SingleSprmPDxaLeft1::Start(
-    Ww1Shell& rOut, BYTE, BYTE* pSprm, USHORT, Ww1Manager&)
+    Ww1Shell& rOut, sal_uInt8, sal_uInt8* pSprm, sal_uInt16, Ww1Manager&)
 {
     SvxLRSpaceItem aLR((SvxLRSpaceItem&)rOut.GetAttr(RES_LR_SPACE));
     short nPara = SVBT16ToShort(pSprm);
@@ -166,14 +166,14 @@ void Ww1SingleSprmPDxaLeft1::Start(
 STOP1(Ww1SingleSprmPDxa, RES_LR_SPACE)
 
 void Ww1SingleSprmPJc::Start(
-    Ww1Shell& rOut, BYTE, BYTE* pSprm, USHORT, Ww1Manager&)
+    Ww1Shell& rOut, sal_uInt8, sal_uInt8* pSprm, sal_uInt16, Ww1Manager&)
 {
     static SvxAdjust __READONLY_DATA aAdj[] = {
         SVX_ADJUST_LEFT,
         SVX_ADJUST_CENTER,
         SVX_ADJUST_RIGHT,
         SVX_ADJUST_BLOCK };
-    BYTE nPara = SVBT8ToByte(pSprm);
+    sal_uInt8 nPara = SVBT8ToByte(pSprm);
     nPara %=(sizeof(aAdj)/sizeof(*aAdj));
     rOut << SvxAdjustItem(aAdj[nPara], RES_PARATR_ADJUST);
 }
@@ -181,7 +181,7 @@ void Ww1SingleSprmPJc::Start(
 STOP1(Ww1SingleSprmPJc, RES_PARATR_ADJUST)
 
 void Ww1SingleSprmPFKeep::Start(
-    Ww1Shell& rOut, BYTE, BYTE* pSprm, USHORT, Ww1Manager&)
+    Ww1Shell& rOut, sal_uInt8, sal_uInt8* pSprm, sal_uInt16, Ww1Manager&)
 {
     rOut << SvxFmtSplitItem((SVBT8ToByte(pSprm) & 1) == 0, RES_PARATR_SPLIT);
 }
@@ -189,7 +189,7 @@ void Ww1SingleSprmPFKeep::Start(
 STOP1(Ww1SingleSprmPFKeep, RES_PARATR_SPLIT)
 
 void Ww1SingleSprmPFKeepFollow::Start(
-    Ww1Shell& rOut, BYTE, BYTE* pSprm, USHORT, Ww1Manager&)
+    Ww1Shell& rOut, sal_uInt8, sal_uInt8* pSprm, sal_uInt16, Ww1Manager&)
 {
     rOut << SvxFmtKeepItem((SVBT8ToByte(pSprm) & 1) != 0, RES_KEEP);
 }
@@ -197,7 +197,7 @@ void Ww1SingleSprmPFKeepFollow::Start(
 STOP1(Ww1SingleSprmPFKeepFollow, RES_KEEP)
 
 void Ww1SingleSprmPPageBreakBefore::Start(
-    Ww1Shell& rOut, BYTE, BYTE* pSprm, USHORT, Ww1Manager&)
+    Ww1Shell& rOut, sal_uInt8, sal_uInt8* pSprm, sal_uInt16, Ww1Manager&)
 {
     rOut << SvxFmtBreakItem(SVBT8ToByte(pSprm) & 1?
      SVX_BREAK_PAGE_BEFORE:SVX_BREAK_NONE, RES_BREAK );
@@ -207,12 +207,12 @@ STOP1(Ww1SingleSprmPPageBreakBefore, RES_BREAK)
 
 SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc)
 {
-    USHORT nCode;
+    sal_uInt16 nCode;
     if(pBrc->dxpLine2WidthGet() == 0)
     {
         switch(pBrc->dxpLine1WidthGet())
         {
-        default: ASSERT(FALSE, "unknown linewidth");
+        default: ASSERT(sal_False, "unknown linewidth");
         case 0: return 0;                           // keine Linie
         case 1: nCode = DEF_LINE_WIDTH_0; break;
         case 2: nCode = DEF_LINE_WIDTH_1; break;
@@ -227,20 +227,20 @@ SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc
     {
         switch(pBrc->dxpLine1WidthGet())
         {
-        default: ASSERT(FALSE, "unknown linewidth");
+        default: ASSERT(sal_False, "unknown linewidth");
         case 1: nCode = DEF_DOUBLE_LINE0_IN; break;
         }
         pLine->SetOutWidth(nCode);
         switch(pBrc->dxpLine2WidthGet())
         {
-        default: ASSERT(FALSE, "unknown linewidth");
+        default: ASSERT(sal_False, "unknown linewidth");
         case 1: nCode = DEF_DOUBLE_LINE0_OUT; break;
         }
         pLine->SetInWidth(nCode);
     }
     switch(pBrc->dxpLine1WidthGet())
     {
-    default: ASSERT(FALSE, "unknown space");
+    default: ASSERT(sal_False, "unknown space");
     case 0: nCode = DEF_DOUBLE_LINE0_DIST; break;
     case 1: nCode = DEF_DOUBLE_LINE1_DIST; break;
     case 2: nCode = DEF_DOUBLE_LINE2_DIST; break;
@@ -251,9 +251,9 @@ SvxBorderLine* Ww1SingleSprmPBrc::SetBorder(SvxBorderLine* pLine, W1_BRC10* pBrc
 }
 
 void Ww1SingleSprmPBrc::Start(
-    Ww1Shell& rOut, BYTE,
+    Ww1Shell& rOut, sal_uInt8,
     W1_BRC10* pBrc,
-    USHORT
+    sal_uInt16
 #ifdef DBG_UTIL
     nSize
 #endif
@@ -285,11 +285,11 @@ void Ww1SingleSprmPBrc::Start(
 
 STOP2(Ww1SingleSprmPBrc, RES_BOX, RES_SHADOW)
 
-static USHORT __READONLY_DATA nBrcTrans[BRC_ANZ] =
+static sal_uInt16 __READONLY_DATA nBrcTrans[BRC_ANZ] =
      { BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT };
 
 void Ww1SingleSprmPBrc10::Start(
-    Ww1Shell& rOut, BYTE nId, BYTE* pSprm, USHORT nSize, Ww1Manager& rMan)
+    Ww1Shell& rOut, sal_uInt8 nId, sal_uInt8* pSprm, sal_uInt16 nSize, Ww1Manager& rMan)
 {
 
     W1_BRC10* pBrc =(W1_BRC10*)pSprm;
@@ -306,7 +306,7 @@ void Ww1SingleSprmPBrc10::Start(
 STOP1(Ww1SingleSprmParaSpace, RES_UL_SPACE)
 
 void Ww1SingleSprmPDyaBefore::Start(
-    Ww1Shell& rOut, BYTE /*nId*/, BYTE* pSprm, USHORT /*nSize*/, Ww1Manager& /*rMan*/)
+    Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& /*rMan*/)
 {
     short nPara = SVBT16ToShort(pSprm);
     if(nPara < 0)
@@ -317,7 +317,7 @@ void Ww1SingleSprmPDyaBefore::Start(
 }
 
 void Ww1SingleSprmPDyaAfter::Start(
-    Ww1Shell& rOut, BYTE /*nId*/, BYTE* pSprm, USHORT /*nSize*/, Ww1Manager& /*rMan*/)
+    Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& /*rMan*/)
 {
     short nPara = SVBT16ToShort(pSprm);
     if(nPara < 0)
@@ -330,30 +330,30 @@ void Ww1SingleSprmPDyaAfter::Start(
 STOP1(Ww1SingleSprmPDyaLine, RES_PARATR_LINESPACING)
 
 void Ww1SingleSprmPDyaLine::Start(
-    Ww1Shell& rOut, BYTE /*nId*/, BYTE* pSprm, USHORT /*nSize*/, Ww1Manager& /*rMan*/)
+    Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& /*rMan*/)
 {
     short nSpace = SVBT16ToShort(pSprm);
     if(nSpace < 0)
         nSpace = -nSpace;
     SvxLineSpacingItem aLSpc( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING );
-    if(TRUE)
+    if(sal_True)
     {// MultilineSpace(proportional)
         long n = nSpace * 100 / 240;    // W1: 240 = 100%, SW: 100 = 100%
         if(n>200)
             n = 200; // SW_UI-Maximum
         aLSpc.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
-        aLSpc.SetPropLineSpace((BYTE)n);
+        aLSpc.SetPropLineSpace((sal_uInt8)n);
     }
     else
     {// Fixed / Minimum
-        aLSpc.SetLineHeight((USHORT)nSpace);
+        aLSpc.SetLineHeight((sal_uInt16)nSpace);
         aLSpc.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
     }
     rOut << aLSpc;
 }
 
 void Ww1SingleSprmPChgTabsPapx::Start(
-    Ww1Shell& rOut, BYTE /*nId*/, BYTE* pSprm, USHORT /*nSize*/, Ww1Manager& /*rMan*/)
+    Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& /*rMan*/)
 {
 #if OSL_DEBUG_LEVEL > 1
 //  rOut << 'T';
@@ -363,10 +363,10 @@ void Ww1SingleSprmPChgTabsPapx::Start(
 //                                 : nLeftParaMgn;      // Absatz L-Space
 
     short i;
-    BYTE nDel = pSprm[1];
-    BYTE* pDel = pSprm + 2;                     // Del - Array
-    BYTE nIns = pSprm[nDel*2+2];
-    BYTE* pIns = pSprm + 2*nDel + 3;            // Ins - Array
+    sal_uInt8 nDel = pSprm[1];
+    sal_uInt8* pDel = pSprm + 2;                        // Del - Array
+    sal_uInt8 nIns = pSprm[nDel*2+2];
+    sal_uInt8* pIns = pSprm + 2*nDel + 3;           // Ins - Array
     W1_TBD* pTyp = (W1_TBD*)(pSprm + 2*nDel + 2*nIns + 3);// Typ - Array
 
     SvxTabStopItem aAttr( (SvxTabStopItem&)rOut.GetNodeOrStyAttr( RES_PARATR_TABSTOP ));
@@ -374,7 +374,7 @@ void Ww1SingleSprmPChgTabsPapx::Start(
     SvxTabStop aTabStop;
 
     for( i=0; i<nDel; i++ ){
-        USHORT nPos = aAttr.GetPos( SVBT16ToShort( pDel + i*2 ) - nLeftPMgn );
+        sal_uInt16 nPos = aAttr.GetPos( SVBT16ToShort( pDel + i*2 ) - nLeftPMgn );
         if( nPos != SVX_TAB_NOTFOUND )
             aAttr.Remove( nPos, 1 );
     }
@@ -400,7 +400,7 @@ void Ww1SingleSprmPChgTabsPapx::Start(
         case 4: aTabStop.GetFill() = '_'; break;
         }
 
-        USHORT nPos2 = aAttr.GetPos( nPos );
+        sal_uInt16 nPos2 = aAttr.GetPos( nPos );
         if( nPos2 != SVX_TAB_NOTFOUND )
             aAttr.Remove( nPos2, 1 );       // sonst weigert sich das Insert()
 
@@ -412,13 +412,13 @@ void Ww1SingleSprmPChgTabsPapx::Start(
 STOP1(Ww1SingleSprmPChgTabsPapx, RES_PARATR_TABSTOP)
 
 void Ww1SingleSprmSGprfIhdt::Start(
-    Ww1Shell& /*rOut*/, BYTE /*nId*/, BYTE* pSprm, USHORT /*nSize*/, Ww1Manager& rMan)
+    Ww1Shell& /*rOut*/, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& rMan)
 {
     rMan.GetSep().SetGrpfIhdt(SVBT8ToByte(pSprm));
 }
 
 void Ww1SingleSprmSColumns::Start(
-    Ww1Shell& rOut, BYTE /*nId*/, BYTE* pSprm, USHORT /*nSize*/, Ww1Manager& /*rMan*/)
+    Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& /*rMan*/)
 {
     short nColSpace = 708; // default 1,25 cm
     short nNettoWidth = -1; //~ mdt: dxaLeft/Right missing...
@@ -432,22 +432,22 @@ void Ww1SingleSprmSColumns::Start(
 }
 
 void Ww1SingleSprmPTtp::Start(
-    Ww1Shell& /*rOut*/, BYTE, BYTE*, USHORT, Ww1Manager& rMan)
+    Ww1Shell& /*rOut*/, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager& rMan)
 {
-    rMan.SetInTtp( TRUE );      // Besonderheit: wird bei InTable::Stop und
+    rMan.SetInTtp( sal_True );      // Besonderheit: wird bei InTable::Stop und
                                 // nicht bei InTtp::Stop zurueckgesetzt,
                                 // da Auswertung in InTable
 }
 
 void Ww1SingleSprmPTtp::Stop(
-    Ww1Shell& rOut, BYTE, BYTE*, USHORT, Ww1Manager& rMan)
+    Ww1Shell& rOut, sal_uInt8, sal_uInt8*, sal_uInt16, Ww1Manager& rMan)
 {
     if (rOut.IsInTable() && rMan.HasInTable())
         rOut.NextTableRow();
 }
 
 void Ww1SingleSprmPFInTable::Start(
-    Ww1Shell& /*rOut*/, BYTE, BYTE*, USHORT,
+    Ww1Shell& /*rOut*/, sal_uInt8, sal_uInt8*, sal_uInt16,
     Ww1Manager& /*rMan*/)
 {
 }
@@ -458,26 +458,26 @@ void Ww1SingleSprmPFInTable::Stop(
     rOut
 #endif
     ,
-    BYTE, BYTE*, USHORT,
+    sal_uInt8, sal_uInt8*, sal_uInt16,
     Ww1Manager& rMan)
 {
     ASSERT(rOut.IsInTable(), "");
-    rMan.SetInTtp( FALSE );
+    rMan.SetInTtp( sal_False );
 }
 
 void Ww1SingleSprmTDxaGapHalf::Start(
-    Ww1Shell& rOut, BYTE /*nId*/, BYTE* pSprm, USHORT /*nSize*/, Ww1Manager& /*rMan*/)
+    Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& /*rMan*/)
 {
     short nSpace = SVBT16ToShort(pSprm);
     rOut.SetCellSpace(nSpace);
 }
 
 void Ww1SingleSprmTDefTable10::Start(
-    Ww1Shell& rOut, BYTE /*nId*/, BYTE* pSprm, USHORT nSize, Ww1Manager& /*rMan*/)
+    Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 nSize, Ww1Manager& /*rMan*/)
 {
-    USHORT i;
-    BYTE *p = pSprm + 2;    // LaengenWord ueberlesen
-    BYTE nCount = *p;
+    sal_uInt16 i;
+    sal_uInt8 *p = pSprm + 2;   // LaengenWord ueberlesen
+    sal_uInt8 nCount = *p;
     p++;
     nSize -= 3;
 // Es fehlt noch:
@@ -494,7 +494,7 @@ void Ww1SingleSprmTDefTable10::Start(
                                         // noch gesetzt werden ?
     {
         short nWholeWidth = SVBT16ToShort( p + 2 * nCount ) - nPos;
-        rOut.SetTableWidth( (USHORT)nWholeWidth );  // Tabellenbreite setzen
+        rOut.SetTableWidth( (sal_uInt16)nWholeWidth );  // Tabellenbreite setzen
 
 // Pos der Tabelle setzen
         long nMidTab = nPos + nWholeWidth / 2;      // TabellenMitte
@@ -515,17 +515,17 @@ void Ww1SingleSprmTDefTable10::Start(
         rOut.SetTableOrient( eOri );
     }
 
-    BYTE* pEndPos = p+2;
-    BYTE* pTc0 = ( nSize >= nCount * 10 ) ? pEndPos + 2 * nCount : 0;
-    USHORT nCellsDeleted = 0;       // fuer gemergte Zellen
+    sal_uInt8* pEndPos = p+2;
+    sal_uInt8* pTc0 = ( nSize >= nCount * 10 ) ? pEndPos + 2 * nCount : 0;
+    sal_uInt16 nCellsDeleted = 0;       // fuer gemergte Zellen
 
     for( i = 0; i < nCount; i++ ){
 // Info sammeln
         W1_TC* pTc = (W1_TC*)pTc0;
-        BOOL bMerged = (pTc) ? pTc->fMergedGet() : FALSE;
+        sal_Bool bMerged = (pTc) ? pTc->fMergedGet() : sal_False;
 
 // Zellenbreiten setzen
-        USHORT nPos1 = SVBT16ToShort( pEndPos );
+        sal_uInt16 nPos1 = SVBT16ToShort( pEndPos );
         if( !bMerged )
             rOut.SetCellWidth( nPos1 - nPos, i - nCellsDeleted );
                                         // Zellenbreite setzen
@@ -536,14 +536,14 @@ void Ww1SingleSprmTDefTable10::Start(
 
         if( pTc0 ){                     // gibts TCs ueberhaupt ?
             W1_TC* pTc2 = (W1_TC*)pTc0;
-            BOOL bMerged2 = pTc2->fMergedGet();
+            sal_Bool bMerged2 = pTc2->fMergedGet();
 //          ASSERT( !bMerged2, "Gemergte Tabellenzellen noch nicht vollstaendig implementiert" );
             if( !bMerged2 ){
 // und nun die Umrandungen
                 SvxBoxItem aBox( (SvxBoxItem&)rOut.GetCellAttr( RES_BOX ));
                 SvxBorderLine aLine;
                 W1_BRC10* pBrc = pTc2->rgbrcGet();
-                for( USHORT j=0; j<4; j++ ){
+                for( sal_uInt16 j=0; j<4; j++ ){
                     aBox.SetLine(Ww1SingleSprmPBrc::SetBorder(&aLine, pBrc),
                                  nBrcTrans[j]);
                     pBrc++;
@@ -561,7 +561,7 @@ void Ww1SingleSprmTDefTable10::Start(
 
 
 void Ww1SingleSprmTDyaRowHeight::Start(
-    Ww1Shell& rOut, BYTE /*nId*/, BYTE* pSprm, USHORT /*nSize*/, Ww1Manager& /*rMan*/)
+    Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& /*rMan*/)
 {
     short nSpace = SVBT16ToShort(pSprm);
     rOut.SetCellHeight(nSpace);
@@ -570,9 +570,9 @@ void Ww1SingleSprmTDyaRowHeight::Start(
 // Fastsave-Attribute brauche ich als Dymmys nicht
 
 void Ww1SingleSprmPpc::Start(
-    Ww1Shell& rOut, BYTE /*nId*/, BYTE* pSprm, USHORT /*nSize*/, Ww1Manager& rMan)
+    Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& rMan)
 {
-    BYTE nPpc = SVBT8ToByte(pSprm);
+    sal_uInt8 nPpc = SVBT8ToByte(pSprm);
 
     if (rOut.IsInTable())                       // Flys in Tabellen kann PMW
         return;                                 // nicht
@@ -613,7 +613,7 @@ void Ww1SingleSprmPpc::Start(
 }
 
 void Ww1SingleSprmPDxaAbs::Start(
-    Ww1Shell& rOut, BYTE /*nId*/, BYTE* pSprm, USHORT /*nSize*/, Ww1Manager& rMan)
+    Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& rMan)
 {
     short nXPos = SVBT16ToShort(pSprm);
 
@@ -638,7 +638,7 @@ void Ww1SingleSprmPDxaAbs::Start(
 }
 
 void Ww1SingleSprmPDyaAbs::Start(
-    Ww1Shell& rOut, BYTE /*nId*/, BYTE* pSprm, USHORT /*nSize*/, Ww1Manager& /*rMan*/)
+    Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& /*rMan*/)
 {
     short nYPos = SVBT16ToShort(pSprm);
     sal_Int16 eVRel = text::RelOrientation::FRAME;
@@ -654,14 +654,14 @@ void Ww1SingleSprmPDyaAbs::Start(
 }
 
 void Ww1SingleSprmPDxaWidth::Start(
-    Ww1Shell& rOut, BYTE /*nId*/, BYTE* pSprm, USHORT /*nSize*/, Ww1Manager& /*rMan*/)
+    Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& /*rMan*/)
 {
     short nDxaWidth = SVBT16ToShort(pSprm);
     rOut.SetFlyFrmAttr( SwFmtFrmSize( ATT_VAR_SIZE, nDxaWidth, MINFLY ) );
 }
 
 void Ww1SingleSprmPFromText::Start(
-    Ww1Shell& rOut, BYTE /*nId*/, BYTE* pSprm, USHORT /*nSize*/, Ww1Manager& /*rMan*/)
+    Ww1Shell& rOut, sal_uInt8 /*nId*/, sal_uInt8* pSprm, sal_uInt16 /*nSize*/, Ww1Manager& /*rMan*/)
 {
     if( rOut.IsInFly() ){   // Kommt auch ausserhalb eines Flys vor, hat
                             // dann aber offensichtlich nichts zu bedeuten.

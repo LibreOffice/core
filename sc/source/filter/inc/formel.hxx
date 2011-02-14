@@ -84,7 +84,7 @@ public:
     inline void             Append( const ScComplexRefData& rCRD );
 
     using                   List::Count;
-    inline BOOL             HasRanges( void ) const;
+    inline sal_Bool             HasRanges( void ) const;
 
     inline const ScRange*   First( void );
     inline const ScRange*   Next( void );
@@ -103,7 +103,7 @@ inline void _ScRangeList::Append( ScRange* p )
 }
 
 
-inline BOOL _ScRangeList::HasRanges( void ) const
+inline sal_Bool _ScRangeList::HasRanges( void ) const
 {
     return Count() > 0;
 }
@@ -143,27 +143,27 @@ class _ScRangeListTabs
 {
 private:
 protected:
-    BOOL                        bHasRanges;
+    sal_Bool                        bHasRanges;
     _ScRangeList**              ppTabLists;
     _ScRangeList*               pAct;
-    UINT16                      nAct;
+    sal_uInt16                      nAct;
 public:
                                 _ScRangeListTabs( void );
     virtual                     ~_ScRangeListTabs();
 
-    void                        Append( ScSingleRefData aSRD, const BOOL bLimit = TRUE );
-    void                        Append( ScComplexRefData aCRD, const BOOL bLimit = TRUE );
+    void                        Append( ScSingleRefData aSRD, const sal_Bool bLimit = sal_True );
+    void                        Append( ScComplexRefData aCRD, const sal_Bool bLimit = sal_True );
 
-    inline BOOL                 HasRanges( void ) const;
+    inline sal_Bool                 HasRanges( void ) const;
 
-    const ScRange*              First( const UINT16 nTab = 0 );
+    const ScRange*              First( const sal_uInt16 nTab = 0 );
     const ScRange*              Next( void );
 //      const ScRange*              NextContinue( void );
     inline const _ScRangeList*  GetActList( void ) const;
 };
 
 
-inline BOOL _ScRangeListTabs::HasRanges( void ) const
+inline sal_Bool _ScRangeListTabs::HasRanges( void ) const
 {
     return bHasRanges;
 }
@@ -185,9 +185,9 @@ protected:
     ScAddress           aEingPos;
     ConvErr             eStatus;
     sal_Char*           pBuffer;        // Universal-Puffer
-    UINT16              nBufferSize;    // ...und seine Groesse
+    sal_uInt16              nBufferSize;    // ...und seine Groesse
 
-                        ConverterBase( UINT16 nNewBuffer );
+                        ConverterBase( sal_uInt16 nNewBuffer );
     virtual             ~ConverterBase();
 
     void                Reset();
@@ -204,7 +204,7 @@ public:
 class ExcelConverterBase : public ConverterBase
 {
 protected:
-                        ExcelConverterBase( UINT16 nNewBuffer );
+                        ExcelConverterBase( sal_uInt16 nNewBuffer );
     virtual             ~ExcelConverterBase();
 
 public:
@@ -223,25 +223,25 @@ class LotusConverterBase : public ConverterBase
 {
 protected:
     SvStream&           aIn;
-    INT32               nBytesLeft;
+    sal_Int32               nBytesLeft;
 
     inline void         Ignore( const long nSeekRel );
     inline void         Read( sal_Char& nByte );
-    inline void         Read( BYTE& nByte );
-    inline void         Read( UINT16& nUINT16 );
-    inline void         Read( INT16& nINT16 );
+    inline void         Read( sal_uInt8& nByte );
+    inline void         Read( sal_uInt16& nUINT16 );
+    inline void         Read( sal_Int16& nINT16 );
     inline void         Read( double& fDouble );
-        inline void                     Read( UINT32& nUINT32 );
+        inline void                     Read( sal_uInt32& nUINT32 );
 
-                        LotusConverterBase( SvStream& rStr, UINT16 nNewBuffer );
+                        LotusConverterBase( SvStream& rStr, sal_uInt16 nNewBuffer );
     virtual             ~LotusConverterBase();
 
 public:
-//UNUSED2008-05  void                Reset( INT32 nLen );
-//UNUSED2008-05  void                Reset( INT32 nLen, const ScAddress& rEingPos );
+//UNUSED2008-05  void                Reset( sal_Int32 nLen );
+//UNUSED2008-05  void                Reset( sal_Int32 nLen, const ScAddress& rEingPos );
     void                Reset( const ScAddress& rEingPos );
 
-    virtual ConvErr     Convert( const ScTokenArray*& rpErg, INT32& nRest,
+    virtual ConvErr     Convert( const ScTokenArray*& rpErg, sal_Int32& nRest,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
 
 protected:
@@ -261,19 +261,19 @@ inline void LotusConverterBase::Read( sal_Char& nByte )
     nBytesLeft--;
 }
 
-inline void LotusConverterBase::Read( BYTE& nByte )
+inline void LotusConverterBase::Read( sal_uInt8& nByte )
 {
     aIn >> nByte;
     nBytesLeft--;
 }
 
-inline void LotusConverterBase::Read( UINT16& nUINT16 )
+inline void LotusConverterBase::Read( sal_uInt16& nUINT16 )
 {
     aIn >> nUINT16;
     nBytesLeft -= 2;
 }
 
-inline void LotusConverterBase::Read( INT16& nINT16 )
+inline void LotusConverterBase::Read( sal_Int16& nINT16 )
 {
     aIn >> nINT16;
     nBytesLeft -= 2;
@@ -285,7 +285,7 @@ inline void LotusConverterBase::Read( double& fDouble )
     nBytesLeft -= 8;
 }
 
-inline void LotusConverterBase::Read( UINT32& nUINT32 )
+inline void LotusConverterBase::Read( sal_uInt32& nUINT32 )
 {
     aIn >> nUINT32;
     nBytesLeft -= 4;

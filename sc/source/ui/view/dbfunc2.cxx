@@ -53,9 +53,9 @@
 class ScDrawLayer;
 class ScChartCollection;
 
-void ScDBFunc::UpdateCharts( BOOL bAllCharts )
+void ScDBFunc::UpdateCharts( sal_Bool bAllCharts )
 {
-    USHORT nFound = 0;
+    sal_uInt16 nFound = 0;
     ScViewData* pViewData = GetViewData();
     ScDocument* pDoc = pViewData->GetDocument();
 

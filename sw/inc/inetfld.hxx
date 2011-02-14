@@ -74,7 +74,7 @@ class SwINetField : public SwField
 
 public:
     // Direkte Eingabe alten Wert loeschen
-    SwINetField( SwINetFieldType* pTyp, USHORT nFmt,
+    SwINetField( SwINetFieldType* pTyp, sal_uInt16 nFmt,
                   const String& rURL, const String& rText );
     virtual ~SwINetField();
 
@@ -101,8 +101,8 @@ public:
     const SvxMacroTableDtor* GetMacroTbl() const    { return pMacroTbl; }
 
     // setze / erfrage ein Makro
-    void SetMacro( USHORT nEvent, const SvxMacro& rMacro );
-    const SvxMacro* GetMacro( USHORT nEvent ) const;
+    void SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro );
+    const SvxMacro* GetMacro( sal_uInt16 nEvent ) const;
 };
 
 

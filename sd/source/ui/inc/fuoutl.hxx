@@ -54,7 +54,7 @@ class FuOutline
 public:
     TYPEINFO();
 
-    virtual BOOL Command(const CommandEvent& rCEvt);
+    virtual sal_Bool Command(const CommandEvent& rCEvt);
 
     virtual void ScrollStart();
     virtual void ScrollEnd();

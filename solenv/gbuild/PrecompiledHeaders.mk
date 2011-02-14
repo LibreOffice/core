@@ -60,6 +60,7 @@ $(call gb_PrecompiledHeader_get_clean_target,%) :
     $(call gb_Output_announce,$*,$(false),PCH,1)
     -$(call gb_Helper_abbreviate_dirs,\
         rm -f $(call gb_PrecompiledHeader_get_target,$*) \
+            $(call gb_PrecompiledHeader_get_target,$*).obj \
             $(call gb_PrecompiledHeader_get_target,$*).pdb \
             $(call gb_PrecompiledHeader_get_dep_target,$*))
 
@@ -68,6 +69,7 @@ $(call gb_NoexPrecompiledHeader_get_clean_target,%) :
     $(call gb_Output_announce,$*,$(false),PCH,1)
     -$(call gb_Helper_abbreviate_dirs,\
         rm -f $(call gb_NoexPrecompiledHeader_get_target,$*) \
+            $(call gb_NoexPrecompiledHeader_get_target,$*).obj \
             $(call gb_NoexPrecompiledHeader_get_target,$*).pdb \
             $(call gb_NoexPrecompiledHeader_get_dep_target,$*))
 endif

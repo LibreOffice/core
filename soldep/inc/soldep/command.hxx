@@ -74,12 +74,12 @@ private:
     char            *CommandBuffer;
     char            *ComShell;
     char            **ppArgv;
-    BOOL            bTmpWrite;
+    sal_Bool            bTmpWrite;
 
 public:
-                    CommandLine(BOOL bTmpWrite = FALSE);
-                    CommandLine(const char *, BOOL bTmpWrite = FALSE);
-                    CommandLine(const CommandLine&, BOOL bTmpWrite = FALSE);
+                    CommandLine(sal_Bool bTmpWrite = sal_False);
+                    CommandLine(const char *, sal_Bool bTmpWrite = sal_False);
+                    CommandLine(const CommandLine&, sal_Bool bTmpWrite = sal_False);
     virtual         ~CommandLine();
 
     int             nArgc;
@@ -102,12 +102,12 @@ private:
     ByteString          aCommand;
     char                *pArgv;
     char                **ppArgv;
-    ULONG               nArgc;
+    sal_uIntPtr             nArgc;
     int                 nError;
 
 protected:
     void            ImplInit();
-    void            Initpp( ULONG nCount, ByteString &rStr );
+    void            Initpp( sal_uIntPtr nCount, ByteString &rStr );
 
 public:
                     /** Creates the process specified without spawning it
@@ -146,7 +146,7 @@ public:
 #define COMMAND_EXECUTE_WAIT    0x0000010
 #define COMMAND_EXECUTE_REMOTE  0x1000000
 
-typedef ULONG CommandBits;
+typedef sal_uIntPtr CommandBits;
 
 /** Allowes to spawn programms hidden, waiting etc.
     @see CCommand

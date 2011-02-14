@@ -362,7 +362,7 @@ void ScChildrenShapes::SetDrawBroadcaster()
         SfxBroadcaster* pDrawBC = mpViewShell->GetViewData()->GetDocument()->GetDrawBroadcaster();
         if (pDrawBC)
         {
-            StartListening(*pDrawBC, TRUE);
+            StartListening(*pDrawBC, sal_True);
 
             maShapeTreeInfo.SetModelBroadcaster( new ScDrawModelBroadcaster(mpViewShell->GetViewData()->GetDocument()->GetDrawLayer()) );
             maShapeTreeInfo.SetSdrView(mpViewShell->GetViewData()->GetScDrawView());
@@ -1246,7 +1246,7 @@ ScAccessibleDocument::ScAccessibleDocument(
         if( pWin )
         {
             pWin->AddChildEventListener( LINK( this, ScAccessibleDocument, WindowChildEventListener ));
-            USHORT nCount =   pWin->GetChildCount();
+            sal_uInt16 nCount =   pWin->GetChildCount();
             for( sal_uInt16 i=0; i < nCount; ++i )
             {
                 Window *pChildWin = pWin->GetChild( i );

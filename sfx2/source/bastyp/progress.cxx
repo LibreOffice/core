@@ -81,14 +81,14 @@ struct SfxProgress_Impl
 {
     Reference < XStatusIndicator > xStatusInd;
     String                  aText, aStateText;
-    ULONG                   nMax;
+    sal_uIntPtr                 nMax;
     clock_t                 nCreate;
     clock_t                 nNextReschedule;
-    BOOL                    bLocked, bAllDocs;
-    BOOL                    bWaitMode;
-    BOOL                    bAllowRescheduling;
-    BOOL                    bRunning;
-    BOOL                    bIsStatusText;
+    sal_Bool                    bLocked, bAllDocs;
+    sal_Bool                    bWaitMode;
+    sal_Bool                    bAllowRescheduling;
+    sal_Bool                    bRunning;
+    sal_Bool                    bIsStatusText;
 
     SfxProgress*            pActiveProgress;
     SfxObjectShellRef       xObjSh;
@@ -96,7 +96,7 @@ struct SfxProgress_Impl
     SfxViewFrame*           pView;
 
                             SfxProgress_Impl( const String& );
-    void                    Enable_Impl( BOOL );
+    void                    Enable_Impl( sal_Bool );
 
 };
 
@@ -114,11 +114,11 @@ struct SfxProgress_Impl
 #define aTypeLibInfo aProgressTypeLibImpl
 
 //========================================================================
-extern ULONG Get10ThSec();
+extern sal_uIntPtr Get10ThSec();
 
 // -----------------------------------------------------------------------
 
-void SfxProgress_Impl::Enable_Impl( BOOL bEnable )
+void SfxProgress_Impl::Enable_Impl( sal_Bool bEnable )
 {
     SfxObjectShell* pDoc = bAllDocs ? NULL : (SfxObjectShell*) xObjSh;
     SfxViewFrame *pFrame= SfxViewFrame::GetFirst(pDoc);
@@ -157,11 +157,11 @@ SfxProgress::SfxProgress
     const String&   rText,  /* Text, der in der Statuszeile vor den Statusmonitor
                                erscheint */
 
-    ULONG           nRange, /* Maximalwert des Bereiches */
+    sal_uIntPtr         nRange, /* Maximalwert des Bereiches */
 
-    BOOL            bAll    /* alle Dokumente oder nur das Dokument des ViewFrames
-                               disablen (FALSE) */
-    ,BOOL           bWait   /* initial den Wait-Pointer aktivieren (TRUE) */
+    sal_Bool            bAll    /* alle Dokumente oder nur das Dokument des ViewFrames
+                               disablen (sal_False) */
+    ,sal_Bool           bWait   /* initial den Wait-Pointer aktivieren (sal_True) */
 )
 
 /*  [Beschreibung]
@@ -176,17 +176,17 @@ SfxProgress::SfxProgress
 
 :   pImp( new SfxProgress_Impl( rText ) ),
     nVal(0),
-    bSuspended(TRUE)
+    bSuspended(sal_True)
 {
-    pImp->bRunning = TRUE;
+    pImp->bRunning = sal_True;
     pImp->bAllowRescheduling = Application::IsInExecute();;
 
     pImp->xObjSh = pObjSh;
     pImp->aText = rText;
     pImp->nMax = nRange;
-    pImp->bLocked = FALSE;
+    pImp->bLocked = sal_False;
     pImp->bWaitMode = bWait;
-    pImp->bIsStatusText = FALSE;
+    pImp->bIsStatusText = sal_False;
     pImp->nCreate = Get10ThSec();
     pImp->nNextReschedule = pImp->nCreate;
     DBG( DbgOutf( "SfxProgress: created for '%s' at %luds",
@@ -219,7 +219,7 @@ SfxProgress::~SfxProgress()
     if ( pImp->xStatusInd.is() )
         pImp->xStatusInd->end();
 
-    if( pImp->bIsStatusText == TRUE )
+    if( pImp->bIsStatusText == sal_True )
         GetpApp()->HideStatusText( );
     delete pImp;
 }
@@ -243,7 +243,7 @@ void SfxProgress::Stop()
 
     if ( !pImp->bRunning )
         return;
-    pImp->bRunning = FALSE;
+    pImp->bRunning = sal_False;
     DBG( DbgOutf( "SfxProgress: destroyed at %luds", Get10ThSec() ) );
 
     Suspend();
@@ -252,7 +252,7 @@ void SfxProgress::Stop()
     else
         SFX_APP()->SetProgress_Impl(0);
     if ( pImp->bLocked )
-        pImp->Enable_Impl(TRUE);
+        pImp->Enable_Impl(sal_True);
 }
 
 // -----------------------------------------------------------------------
@@ -299,7 +299,7 @@ IMPL_STATIC_LINK( SfxProgress, SetStateHdl, PlugInLoadStatus*, pStatus )
     {
         GetpApp()->ShowStatusText( aString );
         if( pThis )
-            pThis->pImp->bIsStatusText = TRUE;
+            pThis->pImp->bIsStatusText = sal_True;
     }
     return 0;
 }
@@ -308,7 +308,7 @@ IMPL_STATIC_LINK( SfxProgress, SetStateHdl, PlugInLoadStatus*, pStatus )
 // -----------------------------------------------------------------------
 
 // muss in AppDaten
-static ULONG nLastTime = 0;
+static sal_uIntPtr nLastTime = 0;
 
 long TimeOut_Impl( void*, void* pArgV )
 {
@@ -325,11 +325,11 @@ long TimeOut_Impl( void*, void* pArgV )
 
 // -----------------------------------------------------------------------
 
-BOOL SfxProgress::SetStateText
+sal_Bool SfxProgress::SetStateText
 (
-    ULONG           nNewVal,    /* neuer Wert f"ur die Fortschritts-Anzeige */
+    sal_uLong           nNewVal,    /* neuer Wert f"ur die Fortschritts-Anzeige */
     const String&   rNewVal,    /* Status als Text */
-    ULONG           nNewRange   /* neuer Maximalwert, 0 f"ur Beibehaltung des alten */
+    sal_uLong           nNewRange   /* neuer Maximalwert, 0 f"ur Beibehaltung des alten */
 )
 
 {
@@ -339,11 +339,11 @@ BOOL SfxProgress::SetStateText
 
 // -----------------------------------------------------------------------
 
-BOOL SfxProgress::SetState
+sal_Bool SfxProgress::SetState
 (
-    ULONG   nNewVal,    /* neuer Wert f"ur die Fortschritts-Anzeige */
+    sal_uLong   nNewVal,    /* neuer Wert f"ur die Fortschritts-Anzeige */
 
-    ULONG   nNewRange   /* neuer Maximalwert, 0 f"ur Beibehaltung des alten */
+    sal_uLong   nNewRange   /* neuer Maximalwert, 0 f"ur Beibehaltung des alten */
 )
 /*  [Beschreibung]
 
@@ -353,7 +353,7 @@ BOOL SfxProgress::SetState
 
     [R"uckgabewert]
 
-    BOOL                TRUE
+    sal_Bool                TRUE
                         Fortfahren mit der Aktion
 
                         FALSE
@@ -363,12 +363,12 @@ BOOL SfxProgress::SetState
 {
     // wurde via Stop-Button angehalten?
 //  if ( pImp->IsCancelled() )
-//      return FALSE;
+//      return sal_False;
 
-    if( pImp->pActiveProgress ) return TRUE;
+    if( pImp->pActiveProgress ) return sal_True;
 
     // neuen Wert "ubernehmen
-    BOOL bOver=FALSE;
+    sal_Bool bOver=sal_False;
     nVal = nNewVal;
 
     // neuer Range?
@@ -377,7 +377,7 @@ BOOL SfxProgress::SetState
         DBG( DbgOutf( "SfxProgress: range changed from %lu to %lu",
                       pImp->nMax, nNewRange ) );
         pImp->nMax = nNewRange;
-        bOver = TRUE;
+        bOver = sal_True;
     }
 
     if ( !pImp->xStatusInd.is() )
@@ -397,7 +397,7 @@ BOOL SfxProgress::SetState
             {
                 // don't show status indicator for hidden documents (only valid while loading)
                 SfxMedium* pMedium = pObjSh->GetMedium();
-                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, FALSE );
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHiddenItem, SfxBoolItem, SID_HIDDEN, sal_False );
                 if ( !pHiddenItem || !pHiddenItem->GetValue() )
                 {
                     // not in a view, perhaps it's just loading
@@ -409,7 +409,7 @@ BOOL SfxProgress::SetState
                     //}
                     //else
                     {
-                        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pIndicatorItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL, FALSE );
+                        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pIndicatorItem, SfxUnoAnyItem, SID_PROGRESS_STATUSBAR_CONTROL, sal_False );
                         Reference< XStatusIndicator > xInd;
                         if ( pIndicatorItem && (pIndicatorItem->GetValue()>>=xInd) )
                             pImp->xStatusInd = xInd;
@@ -436,7 +436,7 @@ BOOL SfxProgress::SetState
         pImp->xStatusInd->setValue( nNewVal );
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -480,7 +480,7 @@ void SfxProgress::Resume()
                 pFrame->GetBindings().ENTERREGISTRATIONS();
         }
 
-        bSuspended = FALSE;
+        bSuspended = sal_False;
     }
 }
 
@@ -501,7 +501,7 @@ void SfxProgress::Suspend()
     if ( !bSuspended )
     {
         DBG( DbgOutf( "SfxProgress: suspended" ) );
-        bSuspended = TRUE;
+        bSuspended = sal_True;
 
         if ( pImp->xStatusInd.is() )
         {
@@ -543,7 +543,7 @@ void SfxProgress::Lock()
                  ( eMode == SFX_CREATE_MODE_PREVIEW ) )
             {
                 DBG( DbgOutf( "SfxProgress: not locked because EMBEDDED/PREVIEW found" ) );
-                pImp->bAllowRescheduling = FALSE;
+                pImp->bAllowRescheduling = sal_False;
             }
         }
     }
@@ -554,14 +554,14 @@ void SfxProgress::Lock()
              ( eMode == SFX_CREATE_MODE_PREVIEW ) )
         {
             DBG( DbgOutf( "SfxProgress: not locked because ObjectShell is EMBEDDED/PREVIEW" ) );
-            pImp->bAllowRescheduling = FALSE;
+            pImp->bAllowRescheduling = sal_False;
         }
     }
 
-    pImp->Enable_Impl( FALSE );
+    pImp->Enable_Impl( sal_False );
 
     DBG( DbgOutf( "SfxProgress: locked" ) );
-    pImp->bLocked = TRUE;
+    pImp->bLocked = sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -573,8 +573,8 @@ void SfxProgress::UnLock()
         return;
 
     DBG( DbgOutf( "SfxProgress: unlocked" ) );
-    pImp->bLocked = FALSE;
-    pImp->Enable_Impl(TRUE);
+    pImp->bLocked = sal_False;
+    pImp->Enable_Impl(sal_True);
 }
 
 // -----------------------------------------------------------------------
@@ -608,7 +608,7 @@ void SfxProgress::Reschedule()
 
 void SfxProgress::SetWaitMode
 (
-    BOOL    bWait       /*  TRUE
+    sal_Bool    bWait       /*  TRUE
                             Wartecursor wird verwendet
 
                             FALSE
@@ -654,7 +654,7 @@ void SfxProgress::SetWaitMode
 
 // -----------------------------------------------------------------------
 
-BOOL SfxProgress::GetWaitMode() const
+sal_Bool SfxProgress::GetWaitMode() const
 
 /*  [Beschreibung]
 
@@ -748,6 +748,6 @@ FASTBOOL SfxProgress::StatusBarManagerGone_Impl
 */
 
 {
-    return TRUE;
+    return sal_True;
 }
 

@@ -53,18 +53,18 @@ class ButtonFrame
     Rectangle   aRect;
     Rectangle   aInnerRect;
     String      aText;
-    BOOL        bPressed;
-    BOOL        bCurs;
-    BOOL        bAbbr;
-    BOOL        m_bDrawDisabled;
+    sal_Bool        bPressed;
+    sal_Bool        bCurs;
+    sal_Bool        bAbbr;
+    sal_Bool        m_bDrawDisabled;
 
 public:
                ButtonFrame( const Point& rPt, const Size& rSz,
                             const String &rText,
-                            BOOL bPress = FALSE,
-                            BOOL bCursor = FALSE,
-                            BOOL bAbbreviate = TRUE,
-                            BOOL _bDrawDisabled = FALSE)
+                            sal_Bool bPress = sal_False,
+                            sal_Bool bCursor = sal_False,
+                            sal_Bool bAbbreviate = sal_True,
+                            sal_Bool _bDrawDisabled = sal_False)
                 :aRect( rPt, rSz )
                 ,aInnerRect( Point( aRect.Left()+1, aRect.Top()+1 ),
                             Size( aRect.GetWidth()-2, aRect.GetHeight()-2 ) )
@@ -83,34 +83,34 @@ public:
 
 class BrowserColumn
 {
-    USHORT              _nId;
-    ULONG               _nOriginalWidth;
-    ULONG               _nWidth;
+    sal_uInt16              _nId;
+    sal_uLong               _nOriginalWidth;
+    sal_uLong               _nWidth;
     Image               _aImage;
     String              _aTitle;
-    BOOL                _bFrozen;
+    sal_Bool                _bFrozen;
     HeaderBarItemBits   _nFlags;
 
 public:
-                        BrowserColumn( USHORT nItemId, const Image &rImage,
-                                        const String& rTitle, ULONG nWidthPixel, const Fraction& rCurrentZoom,
+                        BrowserColumn( sal_uInt16 nItemId, const Image &rImage,
+                                        const String& rTitle, sal_uLong nWidthPixel, const Fraction& rCurrentZoom,
                                         HeaderBarItemBits nFlags );
     virtual            ~BrowserColumn();
 
-    USHORT              GetId() const { return _nId; }
+    sal_uInt16              GetId() const { return _nId; }
 
-    ULONG               Width() { return _nWidth; }
+    sal_uLong               Width() { return _nWidth; }
     Image&              GetImage() { return _aImage; }
     String&             Title() { return _aTitle; }
     HeaderBarItemBits&  Flags() { return _nFlags; }
 
-    BOOL                IsFrozen() const { return _bFrozen; }
-    void                Freeze( BOOL bFreeze = TRUE ) { _bFrozen = bFreeze; }
+    sal_Bool                IsFrozen() const { return _bFrozen; }
+    void                Freeze( sal_Bool bFreeze = sal_True ) { _bFrozen = bFreeze; }
 
     virtual void        Draw( BrowseBox& rBox, OutputDevice& rDev,
-                              const Point& rPos, BOOL bCurs  );
+                              const Point& rPos, sal_Bool bCurs  );
 
-    void                SetWidth(ULONG nNewWidthPixel, const Fraction& rCurrentZoom);
+    void                SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZoom);
     void                ZoomChanged(const Fraction& rNewZoom);
 };
 
@@ -125,7 +125,7 @@ public:
     BrowserHeader*  pHeaderBar;     // only for BROWSER_HEADERBAR_NEW
     Window*         pEventWin;      // Window of forwarded events
     ScrollBarBox*   pCornerWin;     // Window in the corner btw the ScrollBars
-    BOOL*           pDtorNotify;
+    sal_Bool*           pDtorNotify;
     AutoTimer       aMouseTimer;    // recalls MouseMove on dragging out
     MouseEvent      aRepeatEvt;     // a MouseEvent to repeat
     Point           aLastMousePos;  // verhindert pseudo-MouseMoves
@@ -133,8 +133,8 @@ public:
     String          aRealRowCount;  // zur Anzeige im VScrollBar
 
     RectangleList   aInvalidRegion; // invalidated Rectangles during !UpdateMode
-    FASTBOOL        bInPaint;       // TRUE while in Paint
-    FASTBOOL        bInCommand;     // TRUE while in Command
+    FASTBOOL        bInPaint;       // sal_True while in Paint
+    FASTBOOL        bInCommand;     // sal_True while in Command
     FASTBOOL        bNoScrollBack;  // nur vorwaerts scrollen
     FASTBOOL        bNoHScroll;     // kein horizontaler Scrollbar
     FASTBOOL        bNoVScroll;     // no vertical scrollbar
@@ -148,7 +148,7 @@ public:
     FASTBOOL        bHadRecursion;          // Rekursion war aufgetreten
     FASTBOOL        bOwnDataChangedHdl;     // dont change colors in DataChanged
     FASTBOOL        bCallingDropCallback;   // we're in a callback to AcceptDrop or ExecuteDrop curently
-    USHORT          nUpdateLock;    // lock count, dont call Control::Update()!
+    sal_uInt16          nUpdateLock;    // lock count, dont call Control::Update()!
     short           nCursorHidden;  // new conuter for DoHide/ShowCursor
 
     long            m_nDragRowDividerLimit;
@@ -184,20 +184,20 @@ public:
                          { return (BrowseBox*) Window::GetParent(); }
     const String&   GetRealRowCount() const { return aRealRowCount; }
 
-    void            SetUpdateMode( BOOL bMode );
+    void            SetUpdateMode( sal_Bool bMode );
     FASTBOOL        GetUpdateMode() const { return bUpdateMode; }
     void            EnterUpdateLock() { ++nUpdateLock; }
     void            LeaveUpdateLock();
     void            Update();
     void            DoOutstandingInvalidations();
-    void            Invalidate( USHORT nFlags = 0 );
-    void            Invalidate( const Rectangle& rRect, USHORT nFlags = 0 );
-    void            Invalidate( const Region& rRegion, USHORT nFlags = 0 )
+    void            Invalidate( sal_uInt16 nFlags = 0 );
+    void            Invalidate( const Rectangle& rRect, sal_uInt16 nFlags = 0 );
+    void            Invalidate( const Region& rRegion, sal_uInt16 nFlags = 0 )
                     { Control::Invalidate( rRegion, nFlags ); }
 
 protected:
     void            StartRowDividerDrag( const Point& _rStartPos );
-    BOOL            ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent );
+    sal_Bool            ImplRowDividerHitTest( const BrowserMouseEvent& _rEvent );
 };
 
 //-------------------------------------------------------------------
@@ -213,8 +213,8 @@ inline void BrowserDataWin::Repaint()
 
 class BrowserScrollBar: public ScrollBar
 {
-    ULONG           _nTip;
-    ULONG           _nLastPos;
+    sal_uLong           _nTip;
+    sal_uLong           _nLastPos;
     BrowserDataWin* _pDataWin;
 
 public:
@@ -234,7 +234,7 @@ public:
 //===================================================================
 
 void InitSettings_Impl( Window *pWin,
-         BOOL bFont = TRUE, BOOL bForeground = TRUE, BOOL bBackground = TRUE );
+         sal_Bool bFont = sal_True, sal_Bool bForeground = sal_True, sal_Bool bBackground = sal_True );
 
 //===================================================================
 

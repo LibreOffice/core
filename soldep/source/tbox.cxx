@@ -34,16 +34,16 @@
 
 
 
-SoldepToolBox::SoldepToolBox( Window* pParent, const ResId& aId, BOOL bDAble ) :
+SoldepToolBox::SoldepToolBox( Window* pParent, const ResId& aId, sal_Bool bDAble ) :
                 ToolBox( pParent, aId ),
                 bDockable( bDAble ),
-                bCloseMode( FALSE ),
-                bBoxIsVisible( TRUE ),
-                bPinable( TRUE ),
+                bCloseMode( sal_False ),
+                bBoxIsVisible( sal_True ),
+                bPinable( sal_True ),
                 aPinedBitmap( DtSodResId( TID_SMALL_PIN_PINED )),     // BMP_SMALL_PIN_PINED
                 aUnpinedBitmap( DtSodResId( TID_SMALL_PIN_UNPINED ))   // BMP_SMALL_PIN_UNPINED
 {
-    bPinable = TRUE;
+    bPinable = sal_True;
 
     SetAlign( WINDOWALIGN_TOP );
     HideItem(TID_SOLDEP_BACK);    //Inital hide this item, activated in project view.
@@ -53,7 +53,7 @@ SoldepToolBox::SoldepToolBox( Window* pParent, const ResId& aId, BOOL bDAble ) :
     //SetMouseDownHdl(LINK(this,SoldepToolBox,MouseDownHdl));
     //SetFloatingLines( nFloatingLines );
     //SetFloatingMode( bFloatingMode );
-    BOOL bFloatingMode = FALSE;
+    sal_Bool bFloatingMode = sal_False;
     if ( bFloatingMode )
     {
         //Point aPos( sToolBoxInfo.GetToken( 4, ',' ).ToInt64(), sToolBoxInfo.GetToken( 5, ',' ).ToInt64());
@@ -64,11 +64,11 @@ SoldepToolBox::SoldepToolBox( Window* pParent, const ResId& aId, BOOL bDAble ) :
                                             // (ein Separator an 1er Pos wird
                                             // nicht gezeichnet,
                                             // schafft aber Platz.)
-    bBoxIsVisible = FALSE;
+    bBoxIsVisible = sal_False;
 //  if ( sToolBoxInfo.GetToken( 3, ',' ) == "Visible" ) {
-        for ( USHORT i = 0; i < GetItemCount() && !bBoxIsVisible; i++ )
+        for ( sal_uInt16 i = 0; i < GetItemCount() && !bBoxIsVisible; i++ )
         {
-//          USHORT nItemId = GetItemId( i );
+//          sal_uInt16 nItemId = GetItemId( i );
 
             switch ( GetItemType( i ))
             {
@@ -77,7 +77,7 @@ SoldepToolBox::SoldepToolBox( Window* pParent, const ResId& aId, BOOL bDAble ) :
                 case TOOLBOXITEM_SEPARATOR :
                     break;
                 default:
-                    bBoxIsVisible = TRUE;
+                    bBoxIsVisible = sal_True;
                     break;
             }
         }
@@ -115,12 +115,12 @@ void SoldepToolBox::Paint( const Rectangle& rRect )
 
     if ( bDockable )
     {
-        USHORT nItemId = GetItemId( 0 );
+        sal_uInt16 nItemId = GetItemId( 0 );
 
         // ... zeichnen wir den wunderbaren Abreiád”del ber das erste Item (Seperator)
 
         if ( !IsFloatingMode() && ( mnCurLine == 1 )) {
-            BOOL bIsCloseable = (( mnWinStyle & WB_CLOSEABLE ) != 0 );
+            sal_Bool bIsCloseable = (( mnWinStyle & WB_CLOSEABLE ) != 0 );
 
             ShowItem( nItemId );
             Rectangle aRect = GetItemRect( nItemId );
@@ -236,7 +236,7 @@ void SoldepToolBox::MouseButtonDown(const MouseEvent& rEvent)
                 Invalidate();
             }
             else {
-                bCloseMode = TRUE;
+                bCloseMode = sal_True;
 
                 // ... und zeichnen ggf. den Button gedrckt.
 
@@ -274,7 +274,7 @@ void SoldepToolBox::MouseButtonUp(const MouseEvent& rEvent)
 
     if ( bCloseMode )
     {
-        bCloseMode = FALSE;
+        bCloseMode = sal_False;
 
         // ... so zeichen wir diesen wieder normal ...
 
@@ -338,7 +338,7 @@ void SoldepToolBox::MouseMove(const MouseEvent& rEvent)
                 DrawLine( Point( aRect.Left(), aRect.Bottom()), Point( aRect.Right(), aRect.Bottom()));
             DrawLine( Point( aRect.Right(), aRect.Bottom()), Point( aRect.Right(), aRect.Top()));
 
-            bCloseMode = FALSE;
+            bCloseMode = sal_False;
         }
         else
         {
@@ -360,7 +360,7 @@ void SoldepToolBox::ToggleFloatingMode()
 }
 
 /*****************************************************************************/
-void SoldepToolBox::EndDocking( const Rectangle& rRect, BOOL bFloatMode )
+void SoldepToolBox::EndDocking( const Rectangle& rRect, sal_Bool bFloatMode )
 /*****************************************************************************/
 {
     ToolBox::EndDocking( rRect, bFloatMode );
@@ -373,12 +373,12 @@ void SoldepToolBox::EndDocking( const Rectangle& rRect, BOOL bFloatMode )
 };
 
 /*****************************************************************************/
-BOOL SoldepToolBox::Close()
+sal_Bool SoldepToolBox::Close()
 /*****************************************************************************/
 {
-    if (!ToolBox::Close()) return FALSE;
+    if (!ToolBox::Close()) return sal_False;
 
-    return TRUE;
+    return sal_True;
 }
 
 /*****************************************************************************/
@@ -396,7 +396,7 @@ void SoldepToolBox::Move()
 void SoldepToolBox::CloseDockingMode()
 {
     Hide();
-    bBoxIsVisible = FALSE;
+    bBoxIsVisible = sal_False;
     CallEventListeners( VCLEVENT_USER_TBOX_RESIZE_APP, this);
 }
 
@@ -430,10 +430,10 @@ void SoldepToolBox::Command( const CommandEvent& rCEvt)
 
             switch( GetAlign())
             {
-                case WINDOWALIGN_TOP : aPopupMenu.EnableItem( 1, FALSE ); break;
-                case WINDOWALIGN_BOTTOM : aPopupMenu.EnableItem( 2, FALSE ); break;
-                case WINDOWALIGN_LEFT : aPopupMenu.EnableItem( 3, FALSE ); break;
-                case WINDOWALIGN_RIGHT : aPopupMenu.EnableItem( 4, FALSE ); break;
+                case WINDOWALIGN_TOP : aPopupMenu.EnableItem( 1, sal_False ); break;
+                case WINDOWALIGN_BOTTOM : aPopupMenu.EnableItem( 2, sal_False ); break;
+                case WINDOWALIGN_LEFT : aPopupMenu.EnableItem( 3, sal_False ); break;
+                case WINDOWALIGN_RIGHT : aPopupMenu.EnableItem( 4, sal_False ); break;
             }
 
             if (( mnWinStyle & WB_CLOSEABLE ) != 0 )
@@ -478,15 +478,15 @@ PopupMenu *SoldepToolBox::GetContextMenu()
 
 void SoldepToolBox::InitContextMenu()
 {
-    USHORT nStart = 0;
+    sal_uInt16 nStart = 0;
     if ( bDockable )
         nStart = 1;
 
     aMenu.Clear();
 
-    for ( USHORT i = nStart; i < GetItemCount(); i++ )
+    for ( sal_uInt16 i = nStart; i < GetItemCount(); i++ )
     {
-        USHORT nItemId = GetItemId( i );
+        sal_uInt16 nItemId = GetItemId( i );
 
         switch ( GetItemType( i ))
         {
@@ -498,8 +498,8 @@ void SoldepToolBox::InitContextMenu()
                 break;
             default:
                 aMenu.InsertItem( nItemId, GetItemText( nItemId ), GetItemImage( nItemId ));
-                if (IsItemChecked( nItemId )) aMenu.CheckItem( nItemId, TRUE );
-                if (!IsItemEnabled( nItemId )) aMenu.EnableItem( nItemId, FALSE );
+                if (IsItemChecked( nItemId )) aMenu.CheckItem( nItemId, sal_True );
+                if (!IsItemEnabled( nItemId )) aMenu.EnableItem( nItemId, sal_False );
                 if (!IsItemVisible( nItemId )) aMenu.HideItem(nItemId);
                 break;
         }
@@ -554,7 +554,7 @@ void SoldepToolBox::StartDocking()
     CallEventListeners( VCLEVENT_USER_TBOX_RESIZE_APP, this);
 };
 
-BOOL SoldepToolBox::GetPin()
+sal_Bool SoldepToolBox::GetPin()
 
 {
     return bPin;
@@ -565,7 +565,7 @@ void SoldepToolBox::TogglePin()
      bPin = !bPin;
 }
 
-void SoldepToolBox::SetPin( BOOL bP )
+void SoldepToolBox::SetPin( sal_Bool bP )
 {
     bPin = bP;
 }
@@ -579,13 +579,13 @@ void SoldepToolBox::SetPin( BOOL bP )
 IMPL_LINK ( SoldepToolBox, MenuSelectHdl, Menu*, pMenu )
 {
     // Wenn die CurItemId <= 6 ist, dann wurde das Abreiád”del-Context-Men ausgefhrt ...
-    ULONG itemid;
+    sal_uIntPtr itemid;
     itemid = pMenu->GetCurItemId();
 
     if ( pMenu == &aMenu )
     {
         // ... Andernfalls wurde das Default-Context-Men ausgefhrt ...
-        USHORT nTmpId = mnCurItemId;
+        sal_uInt16 nTmpId = mnCurItemId;
         mnCurItemId = pMenu->GetCurItemId();
 
         // ... und der gesetzte Handler (in soldep.cxx) wird gerufen.

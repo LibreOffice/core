@@ -192,7 +192,7 @@ public:
 
     void                        SetPageVisible( sal_uInt16 nPage, sal_Bool bVisible );
     void                        Reset();
-    void                        FocusHasChanged( USHORT nOldFocusPage, USHORT nNewFocusPage );
+    void                        FocusHasChanged( sal_uInt16 nOldFocusPage, sal_uInt16 nNewFocusPage );
 
 
 private:

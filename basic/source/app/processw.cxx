@@ -48,10 +48,10 @@
 //    none
 // 2) Methods:
 //    SetImage( Filename )
-//    BOOL Start
-//    USHORT GetExitCode
-//    BOOL IsRunning
-//    BOOL WasGPF
+//    sal_Bool Start
+//    sal_uInt16 GetExitCode
+//    sal_Bool IsRunning
+//    sal_Bool WasGPF
 
 
 // This implementation is a sample for a table driven version that
@@ -67,7 +67,7 @@
 #define _BWRITE     0x0200  // can be used as Lvaluen
 #define _LVALUE     _BWRITE
 #define _READWRITE  0x0300  // can read and written
-#define _OPT        0x0400  // TRUE: optional parameter
+#define _OPT        0x0400  // sal_True: optional parameter
 #define _METHOD     0x1000  // Mask-Bit for a method
 #define _PROPERTY   0x2000  // Mask-Bit for a property
 #define _COLL       0x4000  // Mask-Bit for a collection
@@ -128,12 +128,12 @@ SbxVariable* ProcessWrapper::Find( const String& rName, SbxClassType t )
         // otherwise search
         Methods* p = pMethods;
         short nIndex = 0;
-        BOOL bFound = FALSE;
+        sal_Bool bFound = sal_False;
         while( p->nArgs != -1 )
         {
             if( rName.EqualsIgnoreCaseAscii( p->pName ) )
             {
-                bFound = TRUE; break;
+                bFound = sal_True; break;
             }
             nIndex += ( p->nArgs & _ARGSMASK ) + 1;
             p = pMethods + nIndex;
@@ -168,22 +168,22 @@ void ProcessWrapper::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCT,
     {
         SbxVariable* pVar = pHint->GetVar();
         SbxArray* pNotifyPar = pVar->GetParameters();
-        USHORT nIndex = (USHORT) pVar->GetUserData();
+        sal_uInt16 nIndex = (sal_uInt16) pVar->GetUserData();
         // No index: put through
         if( nIndex )
         {
-            ULONG t = pHint->GetId();
+            sal_uIntPtr t = pHint->GetId();
             if( t == SBX_HINT_INFOWANTED )
                 pVar->SetInfo( GetInfo( (short) pVar->GetUserData() ) );
             else
             {
-                BOOL bWrite = FALSE;
+                sal_Bool bWrite = sal_False;
                 if( t == SBX_HINT_DATACHANGED )
-                    bWrite = TRUE;
+                    bWrite = sal_True;
                 if( t == SBX_HINT_DATAWANTED || bWrite )
                 {
                     // Parameter-Test for methods:
-                    USHORT nPar = pMethods[ --nIndex ].nArgs & 0x00FF;
+                    sal_uInt16 nPar = pMethods[ --nIndex ].nArgs & 0x00FF;
                     // Element 0 is the return value
                     if( ( !pNotifyPar && nPar )
                      || ( pNotifyPar && pNotifyPar->Count() < nPar+1 ) )
@@ -212,7 +212,7 @@ SbxInfo* ProcessWrapper::GetInfo( short nIdx )
     {
         p++;
         String aMethodName( p->pName, RTL_TEXTENCODING_ASCII_US );
-        USHORT nInfoFlags = ( p->nArgs >> 8 ) & 0x03;
+        sal_uInt16 nInfoFlags = ( p->nArgs >> 8 ) & 0x03;
         if( p->nArgs & _OPT )
             nInfoFlags |= SBX_OPTIONAL;
         pResultInfo->AddParam( aMethodName, p->eType, nInfoFlags );
@@ -226,10 +226,10 @@ SbxInfo* ProcessWrapper::GetInfo( short nIdx )
 
 ////////////////////////////////////////////////////////////////////////////
 
-// Properties and methods save the return value in argv[0] (Get, bPut = FALSE)
-// and store the value from argv[0] (Put, bPut = TRUE)
+// Properties and methods save the return value in argv[0] (Get, bPut = sal_False)
+// and store the value from argv[0] (Put, bPut = sal_True)
 
-void ProcessWrapper::PSetImage( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
+void ProcessWrapper::PSetImage( SbxVariable* pVar, SbxArray* pMethodePar, sal_Bool bWriteIt )
 { // Imagefile of the executable
     (void) pVar; /* avoid warning about unused parameter */
     (void) bWriteIt; /* avoid warning about unused parameter */
@@ -239,28 +239,28 @@ void ProcessWrapper::PSetImage( SbxVariable* pVar, SbxArray* pMethodePar, BOOL b
         pProcess->SetImage(pMethodePar->Get( 1 )->GetString(), String() );
 }
 
-void ProcessWrapper::PStart( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
+void ProcessWrapper::PStart( SbxVariable* pVar, SbxArray* pMethodePar, sal_Bool bWriteIt )
 { // Program is started
     (void) pMethodePar; /* avoid warning about unused parameter */
     (void) bWriteIt; /* avoid warning about unused parameter */
     pVar->PutBool( pProcess->Start() );
 }
 
-void ProcessWrapper::PGetExitCode( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
+void ProcessWrapper::PGetExitCode( SbxVariable* pVar, SbxArray* pMethodePar, sal_Bool bWriteIt )
 { // ExitCode of the program after it was finished
     (void) pMethodePar; /* avoid warning about unused parameter */
     (void) bWriteIt; /* avoid warning about unused parameter */
     pVar->PutULong( pProcess->GetExitCode() );
 }
 
-void ProcessWrapper::PIsRunning( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
+void ProcessWrapper::PIsRunning( SbxVariable* pVar, SbxArray* pMethodePar, sal_Bool bWriteIt )
 { // Program is still running
     (void) pMethodePar; /* avoid warning about unused parameter */
     (void) bWriteIt; /* avoid warning about unused parameter */
     pVar->PutBool( pProcess->IsRunning() );
 }
 
-void ProcessWrapper::PWasGPF( SbxVariable* pVar, SbxArray* pMethodePar, BOOL bWriteIt )
+void ProcessWrapper::PWasGPF( SbxVariable* pVar, SbxArray* pMethodePar, sal_Bool bWriteIt )
 { // Program faulted with GPF etc.
     (void) pMethodePar; /* avoid warning about unused parameter */
     (void) bWriteIt; /* avoid warning about unused parameter */

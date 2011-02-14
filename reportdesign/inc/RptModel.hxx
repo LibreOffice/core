@@ -72,7 +72,7 @@ public:
     virtual void        SetChanged(sal_Bool bFlg = sal_True);
     virtual SdrPage*    AllocPage(FASTBOOL bMasterPage);
     virtual Window*     GetCurDocViewWin();
-    virtual SdrPage*    RemovePage(USHORT nPgNum);
+    virtual SdrPage*    RemovePage(sal_uInt16 nPgNum);
     /** returns the numbering type that is used to format page fields in drawing shapes */
     virtual SvxNumType  GetPageNumType() const;
 

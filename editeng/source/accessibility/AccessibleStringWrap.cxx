@@ -67,7 +67,7 @@ sal_Bool AccessibleStringWrap::GetCharacterBounds( sal_Int32 nIndex, Rectangle& 
     else
     {
         sal_Int32 aXArray[2];
-        mrDev.GetCaretPositions( maText, aXArray, static_cast< USHORT >(nIndex), 1 );
+        mrDev.GetCaretPositions( maText, aXArray, static_cast< sal_uInt16 >(nIndex), 1 );
         rRect.Left() = 0;
         rRect.Top() = 0;
         rRect.SetSize( Size(mrDev.GetTextHeight(), labs(aXArray[0] - aXArray[1])) );
