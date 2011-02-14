@@ -131,6 +131,44 @@ COMPHELPER_DLLPUBLIC ::rtl::OUString convertCommaSeparated(
 COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::rtl::OUString >
     convertCommaSeparated( ::rtl::OUString const & i_rString );
 
+/**
+  Compares two strings using natural order.
+
+  For non digit characters, the comparison use the same algorithm as
+  rtl_str_compare. When a number is encountered during the comparison,
+  natural order is used. Thus, Heading 10 will be considered as greater
+  than Heading 2. Numerical comparison is done using decimal representation.
+
+  Beware that "MyString 001" and "MyString 1" will be considered as equal
+  since leading 0 are meaningless.
+
+  @param    str         the object to be compared.
+  @return   0 - if both strings are equal
+            < 0 - if this string is less than the string argument
+            > 0 - if this string is greater than the string argument
+*/
+COMPHELPER_DLLPUBLIC sal_Int32 compareNatural( const ::rtl::OUString &rLHS, const ::rtl::OUString &rRHS )
+    SAL_THROW(());
+
+/**
+  Compares two strings using natural order.
+
+  For non digit characters, the comparison use the same algorithm as
+  rtl_str_compare. When a number is encountered during the comparison,
+  natural order is used. Thus, Heading 10 will be considered as greater
+  than Heading 2. Numerical comparison is done using decimal representation.
+
+  Beware that "MyString 001" and "MyString 1" will be considered as equal
+  since leading 0 are meaningless.
+
+  @param    str         the object to be compared.
+  @return   0 - if both strings are equal
+            < 0 - if this string is less than the string argument
+            > 0 - if this string is greater than the string argument
+ */
+COMPHELPER_DLLPUBLIC sal_Int32 compareNatural( const ::rtl::OString &rLHS, const ::rtl::OString &rRHS )
+    SAL_THROW(());
+
 } }
 
 #endif
