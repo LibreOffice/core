@@ -30,8 +30,6 @@
 
 // =======================================================================
 
-#define IS_DIGIT(CHAR) (((CHAR) >= 48) && ((CHAR <= 57)))
-
 static sal_Int32 ImplStringCompare( const STRCODE* pStr1, const STRCODE* pStr2 )
 {
     sal_Int32 nRet;
@@ -59,55 +57,6 @@ static sal_Int32 ImplStringCompare( const STRCODE* pStr1, const STRCODE* pStr2,
         ++pStr2,
         --nCount;
     }
-
-    return nRet;
-}
-
-static sal_Int32 ImplStringCompareToNumeric( const STRCODE* pStr1, const STRCODE* pStr2 )
-{
-    sal_Int32 nRet = 0;
-    do
-    {
-        while ( ((nRet = ((sal_Int32)((STRCODEU)*pStr1))-
-                         ((sal_Int32)((STRCODEU)*pStr2))) == 0) &&
-                *pStr2 )
-        {
-            pStr1++;
-            pStr2++;
-        }
-
-        if(*pStr1 && *pStr2)
-        {
-            STRCODE   c1 = ( *pStr1 );
-            STRCODE   c2 = ( *pStr2 );
-            sal_Int64   number1 = 0;
-            sal_Int64   number2 = 0;
-            if(IS_DIGIT(c1) && IS_DIGIT(c2))
-            {
-              do
-              {
-                number1 = number1 * 10 + (c1 - '0');
-                pStr1++;
-                c1 = ( *pStr1 );
-              }
-              while(c1 && IS_DIGIT(c1));
-
-              do
-              {
-                number2 = number2 * 10 + (c2 - '0');
-                pStr2++;
-                c2 = ( *pStr2 );
-              }
-              while(c2 && IS_DIGIT(c2));
-
-              if(number1 != number2)
-              {
-                nRet = number1 - number2;
-              }
-            }
-        }
-    }
-    while(nRet == 0 && *pStr1 && *pStr2);
 
     return nRet;
 }
@@ -1328,24 +1277,6 @@ StringCompare STRING::CompareTo( const STRCODE* pCharStr, xub_StrLen nLen ) cons
         return COMPARE_GREATER;
 }
 
-StringCompare STRING::CompareToNumeric( const STRING& rStr) const
-{
-    // ensure arguments' types
-    DBG_CHKTHIS( STRING, DBGCHECKSTRING );
-    DBG_CHKOBJ( &rStr, STRING, DBGCHECKSTRING );
-
-    if ( mpData == rStr.mpData )
-        return COMPARE_EQUAL;
-
-    sal_Int32 nCompare = ImplStringCompareToNumeric( mpData->maStr, rStr.mpData->maStr );
-
-    if( nCompare == 0)
-        return COMPARE_EQUAL;
-    else if(nCompare < 0 )
-        return COMPARE_LESS;
-    else
-        return COMPARE_GREATER;
-}
 // -----------------------------------------------------------------------
 
 StringCompare STRING::CompareIgnoreCaseToAscii( const STRING& rStr,
