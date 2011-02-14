@@ -41,7 +41,6 @@
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/extract.hxx>
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
 #include <tools/diagnose_ex.h>
@@ -59,6 +58,7 @@
 #include <unotools/configmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/extract.hxx>
 #include <vcl/svapp.hxx>
 #include <uno/data.h>
 
@@ -1149,7 +1149,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
             }
             else
             {
-                BOOL bConverted = FALSE;
+                sal_Bool bConverted = sal_False;
                 // 13.03.2001 - 84923 - frank.schoenheit@germany.sun.com
 
                 switch (pDestType->getTypeClass())

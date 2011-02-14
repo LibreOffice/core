@@ -41,21 +41,21 @@ struct SvAggregate
         SotFactory * pFact;
         SotObject * pObj;
     };
-    BOOL    bFactory;
-    BOOL    bMainObj; // TRUE, das Objekt, welches das casting steuert
+    sal_Bool    bFactory;
+    sal_Bool    bMainObj; // sal_True, das Objekt, welches das casting steuert
 
     SvAggregate()
         : pFact( NULL )
-        , bFactory( FALSE )
-        , bMainObj( FALSE ) {}
-    SvAggregate( SotObject * pObjP, BOOL bMainP )
+        , bFactory( sal_False )
+        , bMainObj( sal_False ) {}
+    SvAggregate( SotObject * pObjP, sal_Bool bMainP )
         : pObj( pObjP )
-        , bFactory( FALSE )
+        , bFactory( sal_False )
         , bMainObj( bMainP ) {}
     SvAggregate( SotFactory * pFactP )
         : pFact( pFactP )
-        , bFactory( TRUE )
-        , bMainObj( FALSE ) {}
+        , bFactory( sal_True )
+        , bMainObj( sal_False ) {}
 };
 
 /************** class SvAggregateMemberList *****************************/

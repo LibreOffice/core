@@ -140,7 +140,7 @@ public:
     void        Paint( const Rectangle& rRect );
     void        Resize();
 
-    BOOL        Close();
+    sal_Bool        Close();
 
     void parseList( const rtl::OString& rList );
     rtl::OString processCommand( const rtl::OString& rCommand );
@@ -189,9 +189,9 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     m_aQuitButton.Show();
 }
 
-BOOL MyWin::Close()
+sal_Bool MyWin::Close()
 {
-    BOOL bRet = WorkWindow::Close();
+    sal_Bool bRet = WorkWindow::Close();
     if( bRet )
         Application::Quit();
     return bRet;
@@ -272,7 +272,7 @@ IMPL_LINK( MyWin, QuitHdl, Button*, )
 IMPL_LINK( MyWin, SelectHdl, ListBox*, )
 {
     String aEntry = m_aSvpBitmaps.GetSelectEntry();
-    USHORT nPos = aEntry.SearchAscii( ": " );
+    sal_uInt16 nPos = aEntry.SearchAscii( ": " );
     if( nPos != STRING_NOTFOUND )
     {
         OStringBuffer aCommand( 64 );

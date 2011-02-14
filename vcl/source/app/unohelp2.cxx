@@ -84,7 +84,7 @@ namespace vcl { namespace unohelper {
     {
         uno::Any aAny;
 
-        ULONG nT = SotExchange::GetFormat( rFlavor );
+        sal_uLong nT = SotExchange::GetFormat( rFlavor );
         if ( nT == SOT_FORMAT_STRING )
         {
             aAny <<= (::rtl::OUString)GetString();
@@ -105,7 +105,7 @@ namespace vcl { namespace unohelper {
 
     sal_Bool TextDataObject::isDataFlavorSupported( const datatransfer::DataFlavor& rFlavor ) throw(uno::RuntimeException)
     {
-        ULONG nT = SotExchange::GetFormat( rFlavor );
+        sal_uLong nT = SotExchange::GetFormat( rFlavor );
         return ( nT == SOT_FORMAT_STRING );
     }
 

@@ -50,7 +50,7 @@ SfxLockBytesItem::SfxLockBytesItem()
 
 // -----------------------------------------------------------------------
 
-SfxLockBytesItem::SfxLockBytesItem( USHORT nW, SvLockBytes *pLockBytes )
+SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvLockBytes *pLockBytes )
 :   SfxPoolItem( nW ),
     _xVal( pLockBytes )
 {
@@ -58,11 +58,11 @@ SfxLockBytesItem::SfxLockBytesItem( USHORT nW, SvLockBytes *pLockBytes )
 
 // -----------------------------------------------------------------------
 
-SfxLockBytesItem::SfxLockBytesItem( USHORT nW, SvStream &rStream )
+SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvStream &rStream )
 :   SfxPoolItem( nW )
 {
     rStream.Seek( 0L );
-    _xVal = new SvLockBytes( new SvCacheStream(), TRUE );
+    _xVal = new SvLockBytes( new SvCacheStream(), sal_True );
 
     SvStream aLockBytesStream( _xVal );
     rStream >> aLockBytesStream;
@@ -100,16 +100,16 @@ SfxPoolItem* SfxLockBytesItem::Clone(SfxItemPool *) const
 
 #define MAX_BUF 32000
 
-SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, USHORT ) const
+SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, sal_uInt16 ) const
 {
     sal_uInt32 nSize = 0;
-    ULONG nActRead = 0;
+    sal_uLong nActRead = 0;
     sal_Char cTmpBuf[MAX_BUF];
     SvMemoryStream aNewStream;
     rStream >> nSize;
 
     do {
-        ULONG nToRead;
+        sal_uLong nToRead;
         if( (nSize - nActRead) > MAX_BUF )
             nToRead = MAX_BUF;
         else
@@ -123,7 +123,7 @@ SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, USHORT ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SfxLockBytesItem::Store(SvStream &rStream, USHORT ) const
+SvStream& SfxLockBytesItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
     SvStream aLockBytesStream( _xVal );
     sal_uInt32 nSize = aLockBytesStream.Seek( STREAM_SEEK_TO_END );
@@ -137,7 +137,7 @@ SvStream& SfxLockBytesItem::Store(SvStream &rStream, USHORT ) const
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
+sal_Bool SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     com::sun::star::uno::Sequence< sal_Int8 > aSeq;
     if ( rVal >>= aSeq )
@@ -148,21 +148,21 @@ BOOL SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
             pStream->Write( (void*)aSeq.getConstArray(), aSeq.getLength() );
             pStream->Seek(0);
 
-            _xVal = new SvLockBytes( pStream, TRUE );
+            _xVal = new SvLockBytes( pStream, sal_True );
         }
         else
             _xVal = NULL;
 
-        return TRUE;
+        return sal_True;
     }
 
     DBG_ERROR( "SfxLockBytesItem::PutValue - Wrong type!" );
-    return FALSE;
+    return sal_False;
 }
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal,BYTE ) const
+sal_Bool SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal,sal_uInt8 ) const
 {
     if ( _xVal.Is() )
     {
@@ -172,9 +172,9 @@ BOOL SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal,BYTE ) const
         if ( _xVal->Stat( &aStat, SVSTATFLAG_DEFAULT ) == ERRCODE_NONE )
             nLen = aStat.nSize;
         else
-            return FALSE;
+            return sal_False;
 
-        ULONG nRead = 0;
+        sal_uLong nRead = 0;
         com::sun::star::uno::Sequence< sal_Int8 > aSeq( nLen );
 
         _xVal->ReadAt( 0, aSeq.getArray(), nLen, &nRead );
@@ -186,6 +186,6 @@ BOOL SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal,BYTE ) const
         rVal <<= aSeq;
     }
 
-    return TRUE;
+    return sal_True;
 }
 

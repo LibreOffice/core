@@ -116,7 +116,7 @@ private:
     // They only support XTextComponent, so keep the text
     // here, maybe there is no Peer when calling setText()...
     ::rtl::OUString     maText;
-    USHORT              mnMaxTextLen;
+    sal_uInt16              mnMaxTextLen;
 
     sal_Bool            mbSetTextInPeer;
     sal_Bool            mbSetMaxTextLenInPeer;
@@ -1019,7 +1019,7 @@ class UnoSpinFieldControl : public UnoEditControl,
 {
 private:
     SpinListenerMultiplexer     maSpinListeners;
-    BOOL                        mbRepeat;
+    sal_Bool                        mbRepeat;
 
 public:
                                 UnoSpinFieldControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );

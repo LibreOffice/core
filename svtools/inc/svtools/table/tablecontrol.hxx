@@ -113,7 +113,7 @@ namespace svt { namespace table
         /** activates the cell at the given position
 
             @return
-                <TRUE/> if the move was successful, <FALSE/> otherwise. Usual
+                <sal_True/> if the move was successful, <FALSE/> otherwise. Usual
                 failure conditions include some other instance vetoing the move,
                 or impossibility to execute the move at all (for instance because
                 of invalid coordinates).
@@ -123,7 +123,7 @@ namespace svt { namespace table
         /** moves the active cell to the given column, by keeping the active row
 
             @return
-                <TRUE/> if the move was successful, <FALSE/> otherwise. Usual
+                <sal_True/> if the move was successful, <FALSE/> otherwise. Usual
                 failure conditions include some other instance vetoing the move,
                 or impossibility to execute the move at all (for instance because
                 of invalid coordinates).
@@ -136,7 +136,7 @@ namespace svt { namespace table
         /** moves the active cell to the given row, by keeping the active column
 
             @return
-                <TRUE/> if the move was successful, <FALSE/> otherwise. Usual
+                <sal_True/> if the move was successful, <FALSE/> otherwise. Usual
                 failure conditions include some other instance vetoing the move,
                 or impossibility to execute the move at all (for instance because
                 of invalid coordinates).
@@ -177,7 +177,7 @@ namespace svt { namespace table
         // IAccessibleTable
         virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) const;
         virtual void GrabFocus();
-        virtual XACC GetAccessible( BOOL bCreate = TRUE );
+        virtual XACC GetAccessible( sal_Bool bCreate = sal_True );
         virtual Window* GetAccessibleParentWindow() const;
         virtual Window* GetWindowInstance();
         virtual sal_Int32 GetAccessibleControlCount() const;
@@ -186,8 +186,8 @@ namespace svt { namespace table
         virtual long GetColumnCount() const;
         virtual sal_Bool HasRowHeader() const;
         virtual sal_Bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint );
-        virtual Rectangle calcHeaderRect( sal_Bool _bIsColumnBar, BOOL _bOnScreen = TRUE );
-        virtual Rectangle calcTableRect( BOOL _bOnScreen = TRUE );
+        virtual Rectangle calcHeaderRect( sal_Bool _bIsColumnBar, sal_Bool _bOnScreen = sal_True );
+        virtual Rectangle calcTableRect( sal_Bool _bOnScreen = sal_True );
         virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex);
         virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint);
         virtual void FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const;

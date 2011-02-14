@@ -149,12 +149,12 @@ namespace svt { namespace table
         bool bHandled = false;
 
         const KeyCode& rKeyCode = rKEvt.GetKeyCode();
-        USHORT nKeyCode = rKeyCode.GetCode();
+        sal_uInt16 nKeyCode = rKeyCode.GetCode();
 
         struct _ActionMapEntry
         {
-            USHORT              nKeyCode;
-            USHORT              nKeyModifier;
+            sal_uInt16              nKeyCode;
+            sal_uInt16              nKeyModifier;
             TableControlAction  eAction;
         }
         static aKnownActions[] = {

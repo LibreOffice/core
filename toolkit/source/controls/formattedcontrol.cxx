@@ -459,7 +459,7 @@ namespace toolkit
         aValues[0] = xPeer->getProperty( aNames[0] );
         aValues[1] = xPeer->getProperty( aNames[1] );
 
-        ImplSetPropertyValues( aNames, aValues, FALSE );
+        ImplSetPropertyValues( aNames, aValues, sal_False );
 
         if ( GetTextListeners().getLength() )
             GetTextListeners().textChanged( e );

@@ -155,9 +155,9 @@ namespace svt { namespace table
             return aTextArea;
         }
 
-        static ULONG lcl_getAlignmentTextDrawFlags( GridTableRenderer_Impl const & i_impl, ColPos const i_columnPos )
+        static sal_uLong lcl_getAlignmentTextDrawFlags( GridTableRenderer_Impl const & i_impl, ColPos const i_columnPos )
         {
-            ULONG nVertFlag = TEXT_DRAW_TOP;
+            sal_uLong nVertFlag = TEXT_DRAW_TOP;
             VerticalAlignment const eVertAlign = i_impl.rModel.getVerticalAlign();
             switch ( eVertAlign )
             {
@@ -167,7 +167,7 @@ namespace svt { namespace table
                 break;
             }
 
-            ULONG nHorzFlag = TEXT_DRAW_LEFT;
+            sal_uLong nHorzFlag = TEXT_DRAW_LEFT;
             HorizontalAlignment const eHorzAlign = i_impl.rModel.getColumnModel( i_columnPos )->getHorizontalAlign();
             switch ( eHorzAlign )
             {
@@ -273,7 +273,7 @@ namespace svt { namespace table
         _rDevice.SetTextColor( textColor );
 
         Rectangle const aTextRect( lcl_getTextRenderingArea( lcl_getContentArea( *m_pImpl, _rArea ) ) );
-        ULONG const nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, _nCol ) | TEXT_DRAW_CLIP;
+        sal_uLong const nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, _nCol ) | TEXT_DRAW_CLIP;
         _rDevice.DrawText( aTextRect, sHeaderText, nDrawTextFlags );
 
         ::boost::optional< ::Color > const aLineColor( m_pImpl->rModel.getLineColor() );
@@ -408,7 +408,7 @@ namespace svt { namespace table
             _rDevice.SetTextColor( textColor );
 
             Rectangle const aTextRect( lcl_getTextRenderingArea( lcl_getContentArea( *m_pImpl, _rArea ) ) );
-            ULONG const nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, 0 ) | TEXT_DRAW_CLIP;
+            sal_uLong const nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, 0 ) | TEXT_DRAW_CLIP;
                 // TODO: is using the horizontal alignment of the 0'th column a good idea here? This is pretty ... arbitray ..
             _rDevice.DrawText( aTextRect, rowTitle, nDrawTextFlags );
         }
@@ -491,9 +491,35 @@ namespace svt { namespace table
                 break;
             }
 
+<<<<<<< local
         }
         else
             imageSize.Width() = i_context.aContentArea.GetWidth();
+=======
+        Rectangle aRect( _rArea );
+        ++aRect.Left(); --aRect.Right();
+        aRect.Top(); aRect.Bottom();
+        if(_bSelected)
+            _rDevice.SetTextColor(_rStyle.GetHighlightTextColor());
+        else if(m_pImpl->rModel.getTextColor() != 0x000000)
+            _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
+        else
+            _rDevice.SetTextColor(_rStyle.GetFieldTextColor());
+        sal_uLong nHorFlag = TEXT_DRAW_LEFT;
+        sal_uLong nVerFlag = TEXT_DRAW_TOP;
+        if(m_pImpl->rModel.getVerticalAlign() == 1)
+            nVerFlag = TEXT_DRAW_VCENTER;
+        else if(m_pImpl->rModel.getVerticalAlign() == 2)
+            nVerFlag = TEXT_DRAW_BOTTOM;
+        if(m_pImpl->rModel.getColumnModel(_nColumn)->getHorizontalAlign() == 1)
+            nHorFlag = TEXT_DRAW_CENTER;
+        else if(m_pImpl->rModel.getColumnModel(_nColumn)->getHorizontalAlign() == 2)
+            nHorFlag = TEXT_DRAW_RIGHT;
+        Rectangle textRect(_rArea);
+        textRect.Left()+=4; textRect.Right()-=4;
+        textRect.Bottom()-=2;
+        _rDevice.DrawText( textRect, _rText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
+>>>>>>> other
 
         if ( i_context.aContentArea.GetHeight() > imageSize.Height() )
         {
@@ -553,7 +579,7 @@ namespace svt { namespace table
         }
 
         Rectangle const textRect( lcl_getTextRenderingArea( i_context.aContentArea ) );
-        ULONG const nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, i_context.nColumn ) | TEXT_DRAW_CLIP;
+        sal_uLong const nDrawTextFlags = lcl_getAlignmentTextDrawFlags( *m_pImpl, i_context.nColumn ) | TEXT_DRAW_CLIP;
         i_context.rDevice.DrawText( textRect, i_text, nDrawTextFlags );
     }
 

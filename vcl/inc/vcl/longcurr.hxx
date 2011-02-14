@@ -43,7 +43,7 @@ class LocaleDataWrapper;
 class VCL_DLLPUBLIC LongCurrencyFormatter : public FormatterBase
 {
 private:
-    SAL_DLLPRIVATE friend BOOL ImplLongCurrencyReformat( const XubString&, BigInt, BigInt, USHORT, const LocaleDataWrapper&, XubString&, LongCurrencyFormatter& );
+    SAL_DLLPRIVATE friend sal_Bool ImplLongCurrencyReformat( const XubString&, BigInt, BigInt, sal_uInt16, const LocaleDataWrapper&, XubString&, LongCurrencyFormatter& );
     SAL_DLLPRIVATE void        ImpInit();
 
 protected:
@@ -53,9 +53,9 @@ protected:
     BigInt                  mnMax;
     BigInt                  mnCorrectedValue;
     String                  maCurrencySymbol;
-    USHORT                  mnType;
-    USHORT                  mnDecimalDigits;
-    BOOL                    mbThousandSep;
+    sal_uInt16                  mnType;
+    sal_uInt16                  mnDecimalDigits;
+    sal_Bool                    mbThousandSep;
 
                             LongCurrencyFormatter();
     SAL_DLLPRIVATE void     ImplLoadRes( const ResId& rResId );
@@ -66,8 +66,8 @@ public:
     virtual void            Reformat();
     virtual void            ReformatAll();
 
-    void                    SetUseThousandSep( BOOL b );
-    BOOL                    IsUseThousandSep() const { return mbThousandSep; }
+    void                    SetUseThousandSep( sal_Bool b );
+    sal_Bool                    IsUseThousandSep() const { return mbThousandSep; }
 
     void                    SetCurrencySymbol( const String& rStr );
     String                  GetCurrencySymbol() const;
@@ -77,15 +77,15 @@ public:
     void                    SetMax( BigInt nNewMax );
     BigInt                  GetMax() const { return mnMax; }
 
-    void                    SetDecimalDigits( USHORT nDigits );
-    USHORT                  GetDecimalDigits() const;
+    void                    SetDecimalDigits( sal_uInt16 nDigits );
+    sal_uInt16                  GetDecimalDigits() const;
     void                    SetValue( BigInt nNewValue );
     void                    SetUserValue( BigInt nNewValue );
     BigInt                  GetValue() const;
-    BOOL                    IsValueModified() const;
+    sal_Bool                    IsValueModified() const;
 
     void                    SetEmptyValue();
-    BOOL                    IsEmptyValue() const { return !GetField()->GetText().Len(); }
+    sal_Bool                    IsEmptyValue() const { return !GetField()->GetText().Len(); }
 
     BigInt                  GetCorrectedValue() const { return mnCorrectedValue; }
 
@@ -151,12 +151,12 @@ public:
     void            ReformatAll();
 
     void            InsertValue( BigInt nValue,
-                                 USHORT nPos = COMBOBOX_APPEND );
+                                 sal_uInt16 nPos = COMBOBOX_APPEND );
     void            RemoveValue( BigInt nValue );
     BigInt          GetValue() const
                         { return LongCurrencyFormatter::GetValue(); }
-    BigInt          GetValue( USHORT nPos ) const;
-    USHORT          GetValuePos( BigInt nValue ) const;
+    BigInt          GetValue( sal_uInt16 nPos ) const;
+    sal_uInt16          GetValuePos( BigInt nValue ) const;
 };
 
 #endif // _LONGCURR_HXX

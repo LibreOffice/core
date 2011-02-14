@@ -72,18 +72,18 @@ key [value]
 #define IP_NO_ERROR         0x0000
 #define IP_UNEXPECTED_EOF   0x0001
 
-#define REPLACE_VARIABLES   TRUE
+#define REPLACE_VARIABLES   sal_True
 
 class TOOLS_DLLPUBLIC InformationParser
 {
 private:
-    BOOL bRecover;
+    sal_Bool bRecover;
     ByteString sOldLine;
 
     ByteString sCurrentComment;
 
-    BOOL bReplaceVariables; // meaning %UPD and %VERSION
-    USHORT nLevel;
+    sal_Bool bReplaceVariables; // meaning %UPD and %VERSION
+    sal_uInt16 nLevel;
     ByteString sUPD;
     ByteString sVersion;
 
@@ -91,10 +91,10 @@ private:
     SvStream *pActStream;
     UniString sStreamName;
 
-    USHORT nErrorCode;
-    ULONG nErrorLine;
+    sal_uInt16 nErrorCode;
+    sal_uIntPtr nErrorLine;
     ByteString sErrorText;
-    ULONG nActLine;
+    sal_uIntPtr nActLine;
 
     // methods
     TOOLS_DLLPRIVATE ByteString &ReadLine();
@@ -102,15 +102,15 @@ private:
     inline void Recover();
 
 protected:
-  BOOL Save( SvStream &rOutStream,
-         const GenericInformationList *pSaveList, USHORT nLevel, BOOL bStripped );
+  sal_Bool Save( SvStream &rOutStream,
+         const GenericInformationList *pSaveList, sal_uInt16 nLevel, sal_Bool bStripped );
     GenericInformationList *Execute( SvStream &rSourceStream,
                                 GenericInformationList *pExistingList );
     virtual void PrintStatus( ByteString &rStatus )
         { if ( aStatusLink.IsSet()) aStatusLink.Call( &rStatus ); }
 
 public:
-    InformationParser( BOOL bReplace = FALSE );
+    InformationParser( sal_Bool bReplace = sal_False );
     virtual ~InformationParser();
 
     // the following methods return NULL if any errors are detected
@@ -129,15 +129,15 @@ public:
                                 GenericInformationList *pExistingList = NULL );
 
   // save the InfrormationList to rSourceFile
-  // returns FALSE on error
-  BOOL Save( SvFileStream &rSourceStream,
+  // returns sal_False on error
+  sal_Bool Save( SvFileStream &rSourceStream,
          const GenericInformationList *pSaveList );
-  BOOL Save( SvMemoryStream &rSourceStream,
+  sal_Bool Save( SvMemoryStream &rSourceStream,
          const GenericInformationList *pSaveList );
-  BOOL Save( const UniString &rSourceFile,
+  sal_Bool Save( const UniString &rSourceFile,
          const GenericInformationList *pSaveList );
 
-    USHORT GetErrorCode();
+    sal_uInt16 GetErrorCode();
     ByteString &GetErrorText();
 
     void SetStatusHdl( const Link &rHdl ) { aStatusLink = rHdl; }

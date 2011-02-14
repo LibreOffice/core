@@ -279,7 +279,7 @@ namespace svt { namespace table
     Reference<XAccessible> TableControl::CreateAccessibleControl( sal_Int32 _nIndex )
     {
         (void)_nIndex;
-        DBG_ASSERT( FALSE, "TableControl::CreateAccessibleControl: to be overwritten!" );
+        DBG_ASSERT( sal_False, "TableControl::CreateAccessibleControl: to be overwritten!" );
         return NULL;
     }
 
@@ -452,7 +452,7 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XAccessible > TableControl::GetAccessible( BOOL bCreate )
+    Reference< XAccessible > TableControl::GetAccessible( sal_Bool bCreate )
     {
         return Control::GetAccessible( bCreate );
     }
@@ -555,14 +555,14 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Rectangle TableControl::calcHeaderRect(sal_Bool _bIsColumnBar,BOOL _bOnScreen)
+    Rectangle TableControl::calcHeaderRect(sal_Bool _bIsColumnBar,sal_Bool _bOnScreen)
     {
         (void)_bOnScreen;
         return m_pImpl->calcHeaderRect( _bIsColumnBar ? false : true );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Rectangle TableControl::calcTableRect(BOOL _bOnScreen)
+    Rectangle TableControl::calcTableRect(sal_Bool _bOnScreen)
     {
         (void)_bOnScreen;
         return m_pImpl->calcTableRect();

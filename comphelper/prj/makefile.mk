@@ -25,30 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
-PRJNAME=comphelper
-TARGET=streaming
-
-ENABLE_EXCEPTIONS=TRUE
-
-# --- Settings ----------------------------------
+PRJ=..
+TARGET=prj
 
 .INCLUDE : settings.mk
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
 
-# --- Files -------------------------------------
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-SLOFILES=	$(SLO)$/basicio.obj \
-            $(SLO)$/oslfile2streamwrap.obj	\
-            $(SLO)$/seqstream.obj	\
-            $(SLO)$/seqinputstreamserv.obj	\
-            $(SLO)$/seqoutputstreamserv.obj  \
-            $(SLO)$/streamsection.obj \
-            $(SLO)$/seekableinput.obj \
-            $(SLO)$/otransactedfilestream.obj \
-            $(SLO)$/memorystream.obj
-
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
-
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog
