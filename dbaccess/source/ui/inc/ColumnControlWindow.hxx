@@ -70,7 +70,7 @@ namespace dbaui
         virtual TOTypeInfoSP        getTypeInfo(sal_Int32 _nPos);
         virtual sal_Bool            isAutoIncrementValueEnabled() const;
         virtual ::rtl::OUString     getAutoIncrementValue() const;
-        virtual void                CellModified(long nRow, USHORT nColId );
+        virtual void                CellModified(long nRow, sal_uInt16 nColId );
 
     public:
         OColumnControlWindow(Window* pParent

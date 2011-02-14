@@ -71,7 +71,7 @@ namespace rptui
     // sal_Int32 FixedTextColor::getTextColor()
     // {
     //     const StyleSettings& aStyleSettings = Application::GetSettings().GetStyleSettings();
-    //     BOOL bHighContrast = aStyleSettings.GetHighContrastMode();
+    //     sal_Bool bHighContrast = aStyleSettings.GetHighContrastMode();
     //
     //     Color aGetFaceColor = aStyleSettings.GetFaceColor();
     //     Color aGetCheckedColor = aStyleSettings.GetCheckedColor();
@@ -246,7 +246,7 @@ namespace rptui
             if ( xSection.is() )
             {
                 OReportPage *pPage = pModel->getPage(xSection);
-                ULONG nIndex = pPage->getIndexOf(_xFixedText.get());
+                sal_uLong nIndex = pPage->getIndexOf(_xFixedText.get());
                 if (nIndex < pPage->GetObjCount() )
                 {
                     SdrObject *pObject = pPage->GetObj(nIndex);

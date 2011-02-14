@@ -52,7 +52,7 @@ namespace dbaui
     private:
         String          m_sHelpText;
         MultiLineEdit*  m_pTextWin;
-        USHORT          m_nDummy;
+        sal_uInt16          m_nDummy;
 
     protected:
         virtual void Resize();

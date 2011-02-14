@@ -148,8 +148,8 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
                     double nUsedPages = xRow->getInt(1) / 256;
                     double nFreePages = xRow->getInt(2) / 256;
 
-                    m_ET_SIZE.SetText(::rtl::OUString::valueOf((INT32)nUsedPages));
-                    m_ET_FREESIZE.SetText(::rtl::OUString::valueOf((INT32)nFreePages));
+                    m_ET_SIZE.SetText(::rtl::OUString::valueOf((sal_Int32)nUsedPages));
+                    m_ET_FREESIZE.SetText(::rtl::OUString::valueOf((sal_Int32)nFreePages));
                     m_ET_MEMORYUSING.SetValue(static_cast<sal_Int32>(((nUsedPages-nFreePages)/nUsedPages)*100));
                 }
                 else

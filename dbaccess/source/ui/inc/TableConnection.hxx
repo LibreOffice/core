@@ -66,7 +66,7 @@ namespace dbaui
                                         m_pData;
         OJoinTableView*                 m_pParent;
 
-        BOOL                            m_bSelected;
+        sal_Bool                            m_bSelected;
 
         void Init();
         /** clearLineData loops through the vector and deletes all lines
@@ -90,8 +90,8 @@ namespace dbaui
 
         void        Select();
         void        Deselect();
-        BOOL        IsSelected() const { return m_bSelected; }
-        BOOL        CheckHit( const Point& rMousePos ) const;
+        sal_Bool        IsSelected() const { return m_bSelected; }
+        sal_Bool        CheckHit( const Point& rMousePos ) const;
         bool        InvalidateConnection();
         void        UpdateLineList();
 

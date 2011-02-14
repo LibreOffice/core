@@ -762,8 +762,8 @@ void OApplicationController::onLoadedMenu(const Reference< ::com::sun::star::fra
             MenuBar* pMenu = pSystemWindow ? pSystemWindow->GetMenuBar() : NULL;
             if ( pMenu )
             {
-                USHORT nMenuItems = pMenu->GetItemCount();
-                for ( USHORT i = 0; i < nMenuItems; ++i )
+                sal_uInt16 nMenuItems = pMenu->GetItemCount();
+                for ( sal_uInt16 i = 0; i < nMenuItems; ++i )
                     aMnemonicGenerator.RegisterMnemonic( pMenu->GetItemText( pMenu->GetItemId( i ) ) );
             }
             // - the icons should use automatic ones

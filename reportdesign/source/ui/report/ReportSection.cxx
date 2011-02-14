@@ -96,7 +96,7 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
 ,m_pReportListener(NULL)
 ,m_xSection(_xSection)
 ,m_eMode(RPTUI_SELECT)
-,m_bDialogModelChanged(FALSE)
+,m_bDialogModelChanged(sal_False)
 ,m_bInDrag(sal_False)
 {
     DBG_CTOR( rpt_OReportSection,NULL);
@@ -211,7 +211,7 @@ void OReportSection::fill()
     // without the following call, no grid is painted
     m_pView->ShowSdrPage( m_pPage );
 
-    m_pView->SetMoveSnapOnlyTopLeft( TRUE );
+    m_pView->SetMoveSnapOnlyTopLeft( sal_True );
     ODesignView* pDesignView = m_pParent->getViewsWindow()->getView()->getReportView();
 
     // #i93595# Adapted grid to a more coarse grid and subdivisions for better visualisation. This
@@ -227,8 +227,8 @@ void OReportSection::fill()
     m_pView->SetSnapGridWidth(aX, aY);
 
     m_pView->SetGridSnap( pDesignView->isGridSnap() );
-    m_pView->SetGridFront( FALSE );
-    m_pView->SetDragStripes( TRUE );
+    m_pView->SetGridFront( sal_False );
+    m_pView->SetDragStripes( sal_True );
     m_pView->SetPageVisible();
     sal_Int32 nColor = m_xSection->getBackColor();
     if ( nColor == (sal_Int32)COL_TRANSPARENT )
@@ -243,7 +243,7 @@ void OReportSection::fill()
 // LLA: TODO
 //  m_pPage->SetUppBorder(-10000);
 
-    m_pView->SetDesignMode( TRUE );
+    m_pView->SetDesignMode( sal_True );
 
     m_pView->StartListening( *m_pModel  );
     /*Resize();*/
@@ -372,14 +372,14 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
 
     // insert control models of marked objects into clipboard dialog model
     const SdrMarkList& rMarkedList = m_pView->GetMarkedObjectList();
-    const ULONG nMark = rMarkedList.GetMarkCount();
+    const sal_uLong nMark = rMarkedList.GetMarkCount();
 
     ::std::vector< uno::Reference<report::XReportComponent> > aCopies;
     aCopies.reserve(nMark);
 
     SdrUndoFactory& rUndo = m_pView->GetModel()->GetSdrUndoFactory();
 
-    for( ULONG i = nMark; i > 0; )
+    for( sal_uLong i = nMark; i > 0; )
     {
         --i;
         SdrObject* pSdrObject = rMarkedList.GetMark(i)->GetMarkedSdrObj();
@@ -402,7 +402,7 @@ void OReportSection::Copy(uno::Sequence< beans::NamedValue >& _rAllreadyCopiedOb
                 OSL_ENSURE(0,"Can't copy report elements!");
             }
         }
-    } // for( ULONG i = 0; i < nMark; i++ )
+    } // for( sal_uLong i = 0; i < nMark; i++ )
 
     if ( !aCopies.empty() )
     {
@@ -436,7 +436,7 @@ void OReportSection::MouseMove( const MouseEvent& rMEvt )
 
 }
 //----------------------------------------------------------------------------
-void OReportSection::SetGridVisible(BOOL _bVisible)
+void OReportSection::SetGridVisible(sal_Bool _bVisible)
 {
     m_pView->SetGridVisible( _bVisible );
 }
@@ -460,14 +460,14 @@ void OReportSection::SelectAll(const sal_uInt16 _nObjectType)
         }
     }
 }
-void lcl_insertMenuItemImages(PopupMenu& rContextMenu,OReportController& rController,const uno::Reference< report::XReportDefinition>& _xReportDefinition,uno::Reference<frame::XFrame>& _rFrame,BOOL _bHiContrast)
+void lcl_insertMenuItemImages(PopupMenu& rContextMenu,OReportController& rController,const uno::Reference< report::XReportDefinition>& _xReportDefinition,uno::Reference<frame::XFrame>& _rFrame,sal_Bool _bHiContrast)
 {
-    const USHORT nCount = rContextMenu.GetItemCount();
-    for (USHORT i = 0; i < nCount; ++i)
+    const sal_uInt16 nCount = rContextMenu.GetItemCount();
+    for (sal_uInt16 i = 0; i < nCount; ++i)
     {
         if ( MENUITEM_SEPARATOR != rContextMenu.GetItemType(i))
         {
-            const USHORT nId = rContextMenu.GetItemId(i);
+            const sal_uInt16 nId = rContextMenu.GetItemId(i);
             PopupMenu* pPopupMenu = rContextMenu.GetPopupMenu( nId );
             if ( pPopupMenu )
             {
@@ -476,7 +476,7 @@ void lcl_insertMenuItemImages(PopupMenu& rContextMenu,OReportController& rContro
             else
             {
                 const ::rtl::OUString sCommand = rContextMenu.GetItemCommand(nId);
-                rContextMenu.SetItemImage(nId,framework::GetImageFromURL(_rFrame,sCommand,FALSE,_bHiContrast));
+                rContextMenu.SetItemImage(nId,framework::GetImageFromURL(_rFrame,sCommand,sal_False,_bHiContrast));
                 if ( nId == SID_PAGEHEADERFOOTER )
                 {
                     String sText = String(ModuleRes((_xReportDefinition.is() && _xReportDefinition->getPageHeaderOn()) ? RID_STR_PAGEHEADERFOOTER_DELETE : RID_STR_PAGEHEADERFOOTER_INSERT));
@@ -491,7 +491,7 @@ void lcl_insertMenuItemImages(PopupMenu& rContextMenu,OReportController& rContro
             rContextMenu.CheckItem(nId,rController.isCommandChecked(nId));
             rContextMenu.EnableItem(nId,rController.isCommandEnabled(nId));
         }
-    } // for (USHORT i = 0; i < nCount; ++i)
+    } // for (sal_uInt16 i = 0; i < nCount; ++i)
 }
 //----------------------------------------------------------------------------
 void OReportSection::Command( const CommandEvent& _rCEvt )
@@ -502,7 +502,7 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
         case COMMAND_CONTEXTMENU:
         {
             const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-            BOOL bHiContrast = rSettings.GetHighContrastMode();
+            sal_Bool bHiContrast = rSettings.GetHighContrastMode();
             OReportController& rController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
             uno::Reference<frame::XFrame> xFrame = rController.getFrame();
             PopupMenu aContextMenu( ModuleRes( RID_MENU_REPORT ) );
@@ -512,7 +512,7 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
 
             Point aPos = _rCEvt.GetMousePosPixel();
             m_pView->EndAction();
-            const USHORT nId = aContextMenu.Execute(this, aPos);
+            const sal_uInt16 nId = aContextMenu.Execute(this, aPos);
             if ( nId )
             {
                 uno::Sequence< beans::PropertyValue> aArgs;
@@ -753,7 +753,7 @@ sal_Int8 OReportSection::AcceptDrop( const AcceptDropEvent& _rEvt )
          )
     {
         if (!m_pParent) return DND_ACTION_NONE;
-        USHORT nCurrentPosition = 0;
+        sal_uInt16 nCurrentPosition = 0;
         nCurrentPosition = m_pParent->getViewsWindow()->getPosition(m_pParent);
         if (_rEvt.mnAction == DND_ACTION_COPY )
         {

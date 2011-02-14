@@ -114,10 +114,10 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     ,m_nRows(1)
     ,m_nRowCount(0)
     ,m_nDefToken( gsl_getSystemTextEncoding() )
-    ,m_bError(FALSE)
-    ,m_bInTbl(FALSE)
-    ,m_bHead(TRUE)
-    ,m_bDontAskAgain(FALSE)
+    ,m_bError(sal_False)
+    ,m_bInTbl(sal_False)
+    ,m_bHead(sal_True)
+    ,m_bDontAskAgain(sal_False)
     ,m_bIsAutoIncrement(_bAutoIncrementEnabled)
     ,m_bFoundTable(sal_False)
     ,m_bCheckOnly(sal_False)
@@ -173,7 +173,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
     ,m_nDefToken( gsl_getSystemTextEncoding() )
     ,m_bError(sal_False)
     ,m_bInTbl(sal_False)
-    ,m_bHead(TRUE)
+    ,m_bHead(sal_True)
     ,m_bDontAskAgain(sal_False)
     ,m_bIsAutoIncrement(sal_False)
     ,m_bFoundTable(sal_False)
@@ -787,9 +787,9 @@ void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException
         OSQLWarningBox aBox( NULL, aMsg, WB_YES_NO | WB_DEF_NO );
 
         if (aBox.Execute() == RET_YES)
-            m_bDontAskAgain = TRUE;
+            m_bDontAskAgain = sal_True;
         else
-            m_bError = TRUE;
+            m_bError = sal_True;
     } // if(!m_bDontAskAgain)
 }
 // -----------------------------------------------------------------------------

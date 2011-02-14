@@ -55,7 +55,7 @@
 
 using namespace dbaui;
 DBG_NAME(OQueryDesignFieldUndoAct)
-OQueryDesignFieldUndoAct::OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, USHORT nCommentID)
+OQueryDesignFieldUndoAct::OQueryDesignFieldUndoAct(OSelectionBrowseBox* pSelBrwBox, sal_uInt16 nCommentID)
     : OCommentUndoAction(nCommentID)
     , pOwner(pSelBrwBox)
     , m_nColumnPostion(BROWSER_INVALIDID)
@@ -72,7 +72,7 @@ OQueryDesignFieldUndoAct::~OQueryDesignFieldUndoAct()
 
 DBG_NAME(OQueryTabWinUndoAct )
 // ------------------------------------------------------------------------------------------------
-OQueryTabWinUndoAct::OQueryTabWinUndoAct(OQueryTableView* pOwner, USHORT nCommentID)
+OQueryTabWinUndoAct::OQueryTabWinUndoAct(OQueryTableView* pOwner, sal_uInt16 nCommentID)
     :OQueryDesignUndoAction(pOwner, nCommentID)
     ,m_pTabWin(NULL)
 {
@@ -110,7 +110,7 @@ void OTabFieldCellModifiedUndoAct::Undo()
     OSL_ENSURE(m_nColumnPostion < pOwner->GetColumnCount(),"Position outside the column count!");
     if ( m_nColumnPostion != BROWSER_INVALIDID )
     {
-        USHORT nColumnId = pOwner->GetColumnId(m_nColumnPostion);
+        sal_uInt16 nColumnId = pOwner->GetColumnId(m_nColumnPostion);
         String strNext = pOwner->GetCellContents(m_nCellIndex, nColumnId);
         pOwner->SetCellContents(m_nCellIndex, nColumnId, m_strNextCellContents);
         m_strNextCellContents = strNext;
@@ -125,7 +125,7 @@ void OTabFieldSizedUndoAct::Undo()
     OSL_ENSURE(m_nColumnPostion != BROWSER_INVALIDID,"Column position was not set add the undo action!");
     if ( m_nColumnPostion != BROWSER_INVALIDID )
     {
-        USHORT nColumnId = pOwner->GetColumnId(m_nColumnPostion);
+        sal_uInt16 nColumnId = pOwner->GetColumnId(m_nColumnPostion);
         long nNextWidth = pOwner->GetColumnWidth(nColumnId);
         pOwner->SetColWidth(nColumnId, m_nNextWidth);
         m_nNextWidth = nNextWidth;
@@ -140,9 +140,9 @@ void OTabFieldMovedUndoAct::Undo()
     if ( m_nColumnPostion != BROWSER_INVALIDID )
     {
         sal_uInt16 nId = pDescr->GetColumnId();
-        USHORT nOldPos = pOwner->GetColumnPos(nId);
+        sal_uInt16 nOldPos = pOwner->GetColumnPos(nId);
         pOwner->SetColumnPos(nId,m_nColumnPostion);
-        pOwner->ColumnMoved(nId,FALSE);
+        pOwner->ColumnMoved(nId,sal_False);
         m_nColumnPostion = nOldPos;
     }
     pOwner->LeaveUndoMode();

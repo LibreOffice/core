@@ -76,7 +76,7 @@ namespace dbaui
 
             @return true if successful
         */
-        virtual BOOL Update();
+        virtual sal_Bool Update();
 
         ::rtl::OUString GetAliasName(EConnectionSide nWhich) const;
 

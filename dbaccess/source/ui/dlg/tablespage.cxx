@@ -647,7 +647,7 @@ DBG_NAME(OTableSubscriptionPage)
     }
 
     //------------------------------------------------------------------------
-    BOOL OTableSubscriptionPage::FillItemSet( SfxItemSet& _rCoreAttrs )
+    sal_Bool OTableSubscriptionPage::FillItemSet( SfxItemSet& _rCoreAttrs )
     {
         sal_Bool bValid, bReadonly;
         getFlags(_rCoreAttrs, bValid, bReadonly);

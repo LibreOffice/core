@@ -615,8 +615,8 @@ void SbaTableQueryBrowser::initializePreviewMode()
 {
     if ( getBrowserView() && getBrowserView()->getVclControl() )
     {
-        getBrowserView()->getVclControl()->AlwaysEnableInput( FALSE );
-        getBrowserView()->getVclControl()->EnableInput( FALSE );
+        getBrowserView()->getVclControl()->AlwaysEnableInput( sal_False );
+        getBrowserView()->getVclControl()->EnableInput( sal_False );
         getBrowserView()->getVclControl()->ForceHideScrollbars( sal_True );
     }
     Reference< XPropertySet >  xDataSourceSet(getRowSet(), UNO_QUERY);
@@ -2143,7 +2143,7 @@ void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDb
 
         m_pTreeView->getListBox().InsertEntry(
             _rQueryName, _rQueryImage, _rQueryImage, pDatasourceEntry,
-            TRUE /*ChildsOnDemand*/, LIST_APPEND, pQueriesData );
+            sal_True /*ChildsOnDemand*/, LIST_APPEND, pQueriesData );
     }
 
     // the child for the tables container
@@ -2153,7 +2153,7 @@ void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDb
 
         m_pTreeView->getListBox().InsertEntry(
             _rTableName, _rTableImage, _rTableImage, pDatasourceEntry,
-            TRUE /*ChildsOnDemand*/, LIST_APPEND, pTablesData );
+            sal_True /*ChildsOnDemand*/, LIST_APPEND, pTablesData );
     }
 
 }
