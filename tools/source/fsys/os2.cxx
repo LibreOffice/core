@@ -47,10 +47,6 @@
 
 int Sys2SolarError_Impl( int nSysErr );
 
-DECLARE_LIST( DirEntryList, DirEntry* );
-DECLARE_LIST( FSysSortList, FSysSort* );
-DECLARE_LIST( FileStatList, FileStat* );
-
 static char sCaseMap[256];
 static BOOL bCaseMap = FALSE;
 static BOOL bDriveMap = FALSE;

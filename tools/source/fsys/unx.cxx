@@ -66,10 +66,6 @@ struct mnttab
 #include "comdep.hxx"
 #include <rtl/instance.hxx>
 
-DECLARE_LIST( DirEntryList, DirEntry* )
-DECLARE_LIST( FSysSortList, FSysSort* )
-DECLARE_LIST( FileStatList, FileStat* )
-
 #if defined SOLARIS || defined SINIX
 #define MOUNTSPECIAL mnt_special
 #define MOUNTPOINT   mnt_mountp
