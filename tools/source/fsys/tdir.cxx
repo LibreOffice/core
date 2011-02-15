@@ -40,10 +40,8 @@
 #include "comdep.hxx"
 #include <tools/fsys.hxx>
 
-
 DBG_NAME( Dir )
 
-DECLARE_LIST( DirEntryList, DirEntry* )
 DECLARE_LIST( FSysSortList, FSysSort* )
 DECLARE_LIST( FileStatList, FileStat* )
 
@@ -59,19 +57,19 @@ DECLARE_LIST( FileStatList, FileStat* )
 
 BOOL Dir::ImpInsertPointReached( const DirEntry& rNewEntry,
                                  const FileStat& rNewStat,
-                                 ULONG nCurPos, ULONG nSortIndex ) const
+                                 size_t nCurPos, size_t nSortIndex ) const
 {
 #define VALUE( nKindFlags ) \
     ( ( FSYS_KIND_FILE | FSYS_KIND_DIR | FSYS_KIND_DEV | \
         FSYS_KIND_CHAR | FSYS_KIND_BLOCK ) & nKindFlags )
 
     // einfache Dinge erfordern einfache Loesungen
-    if ( !pLst->Count() )
+    if ( pLst->empty() )
         return TRUE;
 
     FSysSort  nSort      = *( pSortLst->GetObject( nSortIndex ) );
     FileStat *pOldStat   = NULL;
-    DirEntry *pCurLstObj = pLst->GetObject( nCurPos );
+    DirEntry *pCurLstObj = (*pLst)[ nCurPos ];
     if ( pStatLst )
         pOldStat = pStatLst->GetObject( nCurPos );
 
@@ -214,25 +212,26 @@ void Dir::ImpSortedInsert( const DirEntry *pNewEntry, const FileStat *pNewStat )
 {
     //Sonderfall, keine Sortierung gewuenscht.
     if ( !pSortLst ) {
-        pLst->Insert( (DirEntry*)pNewEntry, APPEND );
+        pLst->push_back( (DirEntry*)pNewEntry );
         return;
     }
 
-    pLst->First();
-    do {
-        if ( ImpInsertPointReached( *pNewEntry, *pNewStat, pLst->GetCurPos(),
-                                    (ULONG)0  ) )
+    for ( size_t i = 0, n = pLst->size(); i < n; ++i )
+    {
+        if ( ImpInsertPointReached( *pNewEntry, *pNewStat, i, 0  ) )
         {
             if ( pStatLst )
-                pStatLst->Insert( (FileStat*)pNewStat, pLst->GetCurPos() );
-            pLst->Insert( (DirEntry*)pNewEntry );
+                pStatLst->Insert( (FileStat*)pNewStat, i );
+            DirEntryList::iterator it = pLst->begin();
+            ::std::advance( it, i );
+            pLst->insert( it, (DirEntry*)pNewEntry );
             return;
         }
-    } while( pLst->Next() );
+    }
 
     if ( pStatLst )
         pStatLst->Insert( (FileStat*)pNewStat, APPEND );
-    pLst->Insert( (DirEntry*)pNewEntry, APPEND );
+    pLst->push_back( (DirEntry*)pNewEntry );
 }
 
 /*************************************************************************
@@ -295,14 +294,10 @@ void Dir::Reset()
     // alle DirEntries aus der Liste entfernen und deren Speicher freigeben
     if ( pLst )
     {
-        DirEntry* pEntry = pLst->First();
-        while (pEntry)
-        {
-            DirEntry* pNext = pLst->Next();
-            delete pEntry;
-            pEntry = pNext;
+        for ( size_t i = 0, n = pLst->size(); i < n; ++i ) {
+            delete (*pLst)[ i ];
         }
-        pLst->Clear();
+        pLst->clear();
     }
     else
         pLst = new DirEntryList();
@@ -368,7 +363,7 @@ USHORT Dir::Scan( USHORT nCount )
     if ( pReader )
     {
         // frischer Reader?
-        if ( !pLst->Count() )
+        if ( pLst->empty() )
         {
             // dann ggf. Laufwerke scannen
             pReader->bInUse = TRUE;
@@ -456,15 +451,10 @@ Dir::~Dir()
     // alle DirEntries aus der Liste entfernen und deren Speicher freigeben
     if ( pLst )
     {
-        DirEntry* pEntry = pLst->First();
-        while (pEntry)
-        {
-            DirEntry* pNext = pLst->Next();
-            delete pEntry;
-            pEntry = pNext;
+        for ( size_t i = 0, n = pLst->size(); i < n; ++i ) {
+            delete (*pLst)[ i ];
         }
-        pLst->Clear();
-
+        pLst->clear();
         delete pLst;
     }
 
@@ -607,17 +597,16 @@ FSysError Dir::ImpSetSort( std::va_list pArgs, int nFirstSort )
             pOldStatLst = pStatLst;
             pStatLst = new FileStatList(); //neue StatListe (zu Sortieren)
         }
-        pOldLst->First();
-        do
+
+        for ( size_t i = 0, n = pOldLst->size(); i < n; ++i )
         {
             //Sortiertes Einfuegen der Elemente aus den gemerkten Listen
             //in die 'richtigen' Listen
             if ( pOldStatLst )
-                ImpSortedInsert( pOldLst->GetCurObject(),
-                                 pOldStatLst->GetObject( pOldLst->GetCurPos() ) );
+                ImpSortedInsert( (*pOldLst)[ i ], pOldStatLst->GetObject( i ) );
             else
-                ImpSortedInsert( pOldLst->GetCurObject(), NULL );
-        } while( pOldLst->Next() );
+                ImpSortedInsert( (*pOldLst)[ i ], NULL );
+        }
 
         delete pOldLst;
         if ( pOldStatLst )
@@ -645,11 +634,11 @@ FSysError Dir::SetSort( FSysSort nSort, ... )
 |*
 *************************************************************************/
 
-DirEntry& Dir::operator[] ( USHORT nIndex ) const
+DirEntry& Dir::operator[] ( size_t nIndex ) const
 {
     DBG_ASSERT( nIndex < Count(), "Dir::operator[] : nIndex > Count()" );
 
-    DirEntry *pEntry = pLst->GetObject( nIndex );
+    DirEntry *pEntry = (*pLst)[ nIndex ];
     return *pEntry;
 }
 
@@ -703,13 +692,13 @@ Dir& Dir::operator+=( const Dir& rDir )
 *************************************************************************/
 
 
-USHORT Dir::Count( BOOL bUpdated ) const
+size_t Dir::Count( BOOL bUpdated ) const
 {
     // ggf. erst den Rest lesen
     if ( bUpdated && pReader )
         ((Dir*)this)->Scan( USHRT_MAX );
 
-    return pLst == NULL ? 0 : (USHORT) pLst->Count();
+    return pLst == NULL ? 0 : pLst->size();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,6 +37,7 @@
 #include "tools/toolsdllapi.h"
 
 #include <cstdarg>
+#include <vector>
 
 #define FEAT_FSYS_DOUBLESPEED
 
@@ -45,12 +46,13 @@
 // --------------
 
 class DirEntry;
-class DirEntryList;
 class FSysSortList;
 class FileStatList;
 struct FileCopier_Impl;
 class SvFileStream;
 class BigInt;
+
+typedef ::std::vector< DirEntry* > DirEntryList;
 
 #define FSYS_BUFSIZE                1024
 #define FSYS_SHORTNAME_DELIMITER    '@'
@@ -472,8 +474,8 @@ private:
 protected:
     BOOL            ImpInsertPointReached( const DirEntry& rIsSmaller,
                                            const FileStat& rNewStat,
-                                           ULONG nCurPos,
-                                           ULONG nSortIndex ) const;
+                                           size_t nCurPos,
+                                           size_t nSortIndex ) const;
     void            ImpSortedInsert( const DirEntry *pNewEntry,
                                      const FileStat *pNewStat );
 #endif
@@ -493,11 +495,11 @@ public:
 
     void            Reset();
     USHORT          Scan( USHORT nCount = 5 );
-    USHORT          Count( BOOL bUpdated = TRUE ) const;
+    size_t          Count( BOOL bUpdated = TRUE ) const;
     BOOL            Update();
 
     Dir&            operator +=( const Dir& rDir );
-    DirEntry&       operator []( USHORT nIndex ) const;
+    DirEntry&       operator []( size_t nIndex ) const;
 };
 
 // we don't need this stuff for bootstraping
