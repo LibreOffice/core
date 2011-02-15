@@ -44,7 +44,6 @@ void FontStyle::write(DocumentHandlerInterface *pHandler) const
     TagOpenElement styleOpen("style:font-face");
     styleOpen.addAttribute("style:name", getName());
     styleOpen.addAttribute("svg:font-family", msFontFamily);
-//    styleOpen.addAttribute("style:font-pitch", msFontPitch);
     styleOpen.write(pHandler);
     TagCloseElement styleClose("style:font-face");
     styleClose.write(pHandler);

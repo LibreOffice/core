@@ -41,7 +41,6 @@ import org.openoffice.xmerge.ConvertData;
 import org.openoffice.xmerge.ConvertException;
 import org.openoffice.xmerge.DocumentDeserializer;
 import org.openoffice.xmerge.converter.dom.DOMDocument;
-//import org.openoffice.xmerge.converter.xml.sxw.SxwDocument;
 import org.openoffice.xmerge.converter.xml.xslt.GenericOfficeDocument;
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.registry.ConverterInfo;
@@ -50,19 +49,12 @@ import org.openoffice.xmerge.util.registry.ConverterInfo;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.dom.DOMSource;
-//import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.Source;
-
-
-//
-//import org.apache.xalan.serialize.Serializer;
-//import org.apache.xalan.serialize.SerializerFactory;
-//import org.apache.xalan.templates.OutputProperties;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -150,14 +142,12 @@ public final class DocumentDeserializerImpl
 
  public Source resolve(String href,String base)
     throws TransformerException{
-        //System.out.println("\nhref "+href+"\nbase "+base);
         if (href !=null){
         if(href.equals("javax.xml.transform.dom.DOMSource")|| href.equals(""))
             return null;
         try{
             ConverterInfo ci = pluginFactory.getConverterInfo();
             String newhRef ="jar:"+ci.getJarName()+"!/"+href;
-            //System.out.println("\n Looking For "+ newhRef);
             StreamSource sheetFile= new StreamSource(newhRef);
             return sheetFile;
         }
@@ -215,13 +205,6 @@ public final class DocumentDeserializerImpl
           tFactory.setURIResolver(this);
           Transformer transformer = tFactory.newTransformer(xslDomSource);
           transformer.transform(xmlDomSource,new StreamResult(baos));
-          /*
-          // Serialize for output to standard out
-          Serializer serializer = SerializerFactory.getSerializer
-                                   (OutputProperties.getDefaultMethodProperties("xml"));
-          serializer.setOutputStream(System.out);
-          serializer.asDOMSerializer().serialize(xmlDomResult.getNode());
-          */
 
           log("\n** Transform Complete ***");
 

@@ -35,8 +35,6 @@ import org.openoffice.xmerge.DocumentDeserializer;
 import org.openoffice.xmerge.DocumentDeserializerFactory;
 import org.openoffice.xmerge.PluginFactory;
 import org.openoffice.xmerge.converter.dom.DOMDocument;
-//import org.openoffice.xmerge.converter.xml.sxw.SxwDocument;
-//import org.openoffice.xmerge.converter.xml.OfficeDocument;
 import org.openoffice.xmerge.converter.xml.xslt.GenericOfficeDocument;
 import org.openoffice.xmerge.util.registry.ConverterInfo;
 import org.openoffice.xmerge.DocumentMerger;

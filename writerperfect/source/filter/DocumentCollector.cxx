@@ -1018,7 +1018,6 @@ void DocumentCollector::openTableCell(const WPXPropertyList &propList)
         if (propList["table:number-rows-spanned"])
                 pTableCellOpenElement->addAttribute("table:number-rows-spanned",
                                                     propList["table:number-rows-spanned"]->getStr().cstr());
-        // pTableCellOpenElement->addAttribute("table:value-type", "string");
         mpCurrentContentElements->push_back(pTableCellOpenElement);
 
         mWriterDocumentStates.top().mbTableCellOpened = true;

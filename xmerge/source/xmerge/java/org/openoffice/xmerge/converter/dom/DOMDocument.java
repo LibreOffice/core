@@ -202,7 +202,6 @@ public class DOMDocument
             builder = factory.newDocumentBuilder();
         } catch (ParserConfigurationException ex) {
         System.out.println("Error:"+ ex);
-            //throw new OfficeDocumentException(ex);
         }
     try {
 
@@ -211,7 +210,6 @@ public class DOMDocument
 
         } catch (SAXException ex) {
         System.out.println("Error:"+ ex);
-            //throw new OfficeDocumentException(ex);
         }
     }
 

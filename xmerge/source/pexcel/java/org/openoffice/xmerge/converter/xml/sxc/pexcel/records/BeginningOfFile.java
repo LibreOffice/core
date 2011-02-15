@@ -57,7 +57,6 @@ public class BeginningOfFile implements BIFFRecord {
             setSubStreamWBGlobal();
         else
             setSubStreamWorkSheet();
-        // this.subStream = EndianConverter.writeShort(dt);
     }
 
     public BeginningOfFile(InputStream is) throws IOException {
@@ -73,12 +72,10 @@ public class BeginningOfFile implements BIFFRecord {
     }
 
     private void setSubStreamWBGlobal() {
-        // subStream = new byte[] {0x05};
         subStream = EndianConverter.writeShort((short) 0x05);
     }
 
     private void setSubStreamWorkSheet() {
-        // subStream = new byte[] {0x10};
         subStream = EndianConverter.writeShort((short) 0x10);
     }
 

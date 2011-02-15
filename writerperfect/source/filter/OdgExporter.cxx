@@ -196,7 +196,6 @@ void OdgExporter::endGraphics()
     tmpStyleStyleOpenElement.write(mpHandler);
 
     TagOpenElement tmpStyleDrawingPagePropertiesOpenElement("style:drawing-page-properties");
-    // tmpStyleDrawingPagePropertiesOpenElement.addAttribute("draw:background-size", "border");
     tmpStyleDrawingPagePropertiesOpenElement.addAttribute("draw:fill", "none");
     tmpStyleDrawingPagePropertiesOpenElement.write(mpHandler);
 

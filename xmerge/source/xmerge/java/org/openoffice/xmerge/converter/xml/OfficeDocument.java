@@ -531,13 +531,9 @@ public abstract class OfficeDocument
     }
     else{
         try{
-        //System.out.println("\nParsing Input stream, validating?: "+builder.isValidating());
-        //contentDoc=  builder.parse((InputStream)is);
-
                Reader r = secondHack(is);
                InputSource ins = new InputSource(r);
             org.w3c.dom.Document newDoc = builder.parse(ins);
-            //org.w3c.dom.Document newDoc = builder.parse((InputStream)is);
             Element rootElement=newDoc.getDocumentElement();
 
             NodeList nodeList;
@@ -829,13 +825,11 @@ public abstract class OfficeDocument
         }
 
         byte contentBytes[] = docToBytes(newDoc);
-        //System.out.println(new String(contentBytes));
         os.write(contentBytes);
             }
             catch(Exception exc){
         System.out.println("\nException in OfficeDocument.write():" +exc);
             }
-        //byte contentBytes[] = docToBytes(contentDoc);
     }
     }
 
