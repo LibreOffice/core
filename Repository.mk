@@ -38,6 +38,10 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     sspretty \
 ))
 
+$(eval $(call gb_Helper_register_executables,OOO, \
+    spadmin.bin \
+))
+
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     avmedia \
     basegfx \
@@ -59,6 +63,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     sb \
     sfx \
     sot \
+    spa \
     svl \
     svt \
     svx \
@@ -124,6 +129,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     jpeglib \
     ooopathutils \
     salcpprt \
+    vclmain \
     zlib \
     vclmain \
 ))
