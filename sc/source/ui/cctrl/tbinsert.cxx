@@ -62,7 +62,7 @@ SFX_IMPL_TOOLBOX_CONTROL( ScTbxInsertCtrl, SfxUInt16Item);
 //
 //------------------------------------------------------------------
 
-ScTbxInsertCtrl::ScTbxInsertCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx  ) :
+ScTbxInsertCtrl::ScTbxInsertCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx  ) :
         SfxToolBoxControl( nSlotId, nId, rTbx ),
         nLastSlotId(0)
 {
@@ -73,7 +73,7 @@ __EXPORT ScTbxInsertCtrl::~ScTbxInsertCtrl()
 {
 }
 
-void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT /* nSID */, SfxItemState eState,
+void __EXPORT ScTbxInsertCtrl::StateChanged( sal_uInt16 /* nSID */, SfxItemState eState,
                                               const SfxPoolItem* pState )
 {
     GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SFX_ITEM_DISABLED) );
@@ -85,7 +85,7 @@ void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT /* nSID */, SfxItemState eSt
         if(pItem)
         {
             nLastSlotId = pItem->GetValue();
-            USHORT nImageId = nLastSlotId ? nLastSlotId : GetSlotId();
+            sal_uInt16 nImageId = nLastSlotId ? nLastSlotId : GetSlotId();
             rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
             aSlotURL += rtl::OUString::valueOf( sal_Int32( nImageId ));
             Image aImage = GetImage( m_xFrame,
@@ -99,8 +99,8 @@ void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT /* nSID */, SfxItemState eSt
 
 SfxPopupWindow* __EXPORT ScTbxInsertCtrl::CreatePopupWindow()
 {
-//    USHORT nWinResId, nTbxResId;
-    USHORT nSlotId = GetSlotId();
+//    sal_uInt16 nWinResId, nTbxResId;
+    sal_uInt16 nSlotId = GetSlotId();
     if (nSlotId == SID_TBXCTL_INSERT)
     {
         rtl::OUString aInsertBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertbar" ));
@@ -126,7 +126,7 @@ SfxPopupWindow* __EXPORT ScTbxInsertCtrl::CreatePopupWindow()
     WindowAlign eNewAlign = ( GetToolBox().IsHorizontal() ) ? WINDOWALIGN_LEFT : WINDOWALIGN_TOP;
     ScTbxInsertPopup *pWin = new ScTbxInsertPopup( nSlotId, eNewAlign,
                                     ScResId(nWinResId), ScResId(nTbxResId), GetBindings() );
-    pWin->StartPopupMode(&GetToolBox(), TRUE);
+    pWin->StartPopupMode(&GetToolBox(), sal_True);
     pWin->StartSelection();
     pWin->Show();
     return pWin;
@@ -139,7 +139,7 @@ SfxPopupWindowType __EXPORT ScTbxInsertCtrl::GetPopupWindowType() const
     return nLastSlotId ? SFX_POPUPWINDOW_ONTIMEOUT : SFX_POPUPWINDOW_ONCLICK;
 }
 
-void __EXPORT ScTbxInsertCtrl::Select( BOOL /* bMod1 */ )
+void __EXPORT ScTbxInsertCtrl::Select( sal_Bool /* bMod1 */ )
 {
     SfxViewShell*   pCurSh( SfxViewShell::Current() );
     SfxDispatcher*  pDispatch( 0 );
@@ -161,7 +161,7 @@ void __EXPORT ScTbxInsertCtrl::Select( BOOL /* bMod1 */ )
 //
 //------------------------------------------------------------------
 
-ScTbxInsertPopup::ScTbxInsertPopup( USHORT nId, WindowAlign eNewAlign,
+ScTbxInsertPopup::ScTbxInsertPopup( sal_uInt16 nId, WindowAlign eNewAlign,
                         const ResId& rRIdWin, const ResId& rRIdTbx,
                         SfxBindings& rBindings ) :
                 SfxPopupWindow  ( nId, rRIdWin, rBindings),
@@ -204,7 +204,7 @@ IMPL_LINK(ScTbxInsertPopup, TbxSelectHdl, ToolBox*, pBox)
 {
     EndPopupMode();
 
-    USHORT nLastSlotId = pBox->GetCurItemId();
+    sal_uInt16 nLastSlotId = pBox->GetCurItemId();
     SfxUInt16Item aItem( GetId(), nLastSlotId );
     SfxDispatcher* pDisp = GetBindings().GetDispatcher();
     pDisp->Execute( GetId(), SFX_CALLMODE_SYNCHRON, &aItem, 0L );
@@ -214,7 +214,7 @@ IMPL_LINK(ScTbxInsertPopup, TbxSelectHdl, ToolBox*, pBox)
 
 IMPL_LINK(ScTbxInsertPopup, TbxClickHdl, ToolBox*, pBox)
 {
-    USHORT nLastSlotId = pBox->GetCurItemId();
+    sal_uInt16 nLastSlotId = pBox->GetCurItemId();
     SfxUInt16Item aItem( GetId(), nLastSlotId );
     GetBindings().GetDispatcher()->Execute( GetId(), SFX_CALLMODE_SYNCHRON, &aItem, 0L );
     if(aTbxClickHdl.IsSet())

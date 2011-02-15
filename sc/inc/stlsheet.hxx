@@ -59,17 +59,17 @@ public:
 
                         ScStyleSheet( const ScStyleSheet& rStyle );
 
-    virtual BOOL        SetParent        ( const String& rParentName );
+    virtual sal_Bool        SetParent        ( const String& rParentName );
     virtual SfxItemSet& GetItemSet       ();
-    virtual BOOL        IsUsed           () const;
-    virtual BOOL        HasFollowSupport () const;
-    virtual BOOL        HasParentSupport () const;
+    virtual sal_Bool        IsUsed           () const;
+    virtual sal_Bool        HasFollowSupport () const;
+    virtual sal_Bool        HasParentSupport () const;
 
     virtual const String& GetName() const;
     virtual const String& GetParent() const;
     virtual const String& GetFollow() const;
 
-    virtual BOOL SetName( const String& );
+    virtual sal_Bool SetName( const String& );
 
             void                SetUsage( ScStyleSheet::Usage eUse ) const
                                     { eUsage = eUse; }
@@ -82,7 +82,7 @@ protected:
                 ScStyleSheet( const String&     rName,
                               ScStyleSheetPool& rPool,
                               SfxStyleFamily    eFamily,
-                              USHORT            nMask );
+                              sal_uInt16            nMask );
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };

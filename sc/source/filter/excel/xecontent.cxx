@@ -55,7 +55,7 @@
 #include "xestyle.hxx"
 #include "xename.hxx"
 
-#include <oox/core/tokens.hxx>
+using namespace ::oox;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
@@ -362,14 +362,14 @@ void XclExpMergedcells::Save( XclExpStream& rStrm )
 
 void XclExpMergedcells::SaveXml( XclExpXmlStream& rStrm )
 {
-    ULONG nCount = maMergedRanges.Count();
+    sal_uLong nCount = maMergedRanges.Count();
     if( !nCount )
         return;
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_mergeCells,
             XML_count,  OString::valueOf( (sal_Int32) nCount ).getStr(),
             FSEND );
-    for( ULONG i = 0; i < nCount; ++i )
+    for( sal_uLong i = 0; i < nCount; ++i )
     {
         if( const ScRange* pRange = maMergedRanges.GetObject( i ) )
         {
@@ -821,7 +821,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
     GetAddressConverter().ConvertRangeList( maXclRanges, aScRanges, true );
     if( !maXclRanges.empty() )
     {
-        for( USHORT nIndex = 0, nCount = rCondFormat.Count(); nIndex < nCount; ++nIndex )
+        for( sal_uInt16 nIndex = 0, nCount = rCondFormat.Count(); nIndex < nCount; ++nIndex )
             if( const ScCondFormatEntry* pEntry = rCondFormat.GetEntry( nIndex ) )
                 maCFList.AppendNewRecord( new XclExpCF( GetRoot(), *pEntry ) );
         aScRanges.Format( msSeqRef, SCA_VALID, NULL, formula::FormulaGrammar::CONV_XL_A1 );
@@ -964,7 +964,7 @@ const char* lcl_GetOperatorType( sal_uInt32 nFlags )
 
 // ----------------------------------------------------------------------------
 
-XclExpDV::XclExpDV( const XclExpRoot& rRoot, ULONG nScHandle ) :
+XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
     XclExpRecord( EXC_ID_DV ),
     XclExpRoot( rRoot ),
     mnFlags( 0 ),
@@ -974,7 +974,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, ULONG nScHandle ) :
     {
         // prompt box - empty string represented by single NUL character
         String aTitle, aText;
-        bool bShowPrompt = (pValData->GetInput( aTitle, aText ) == TRUE);
+        bool bShowPrompt = (pValData->GetInput( aTitle, aText ) == sal_True);
         if( aTitle.Len() )
             maPromptTitle.Assign( aTitle );
         else
@@ -986,7 +986,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, ULONG nScHandle ) :
 
         // error box - empty string represented by single NUL character
         ScValidErrorStyle eScErrorStyle;
-        bool bShowError = (pValData->GetErrMsg( aTitle, aText, eScErrorStyle ) == TRUE);
+        bool bShowError = (pValData->GetErrMsg( aTitle, aText, eScErrorStyle ) == sal_True);
         if( aTitle.Len() )
             maErrorTitle.Assign( aTitle );
         else
@@ -1189,7 +1189,7 @@ XclExpDval::~XclExpDval()
 {
 }
 
-void XclExpDval::InsertCellRange( const ScRange& rRange, ULONG nScHandle )
+void XclExpDval::InsertCellRange( const ScRange& rRange, sal_uLong nScHandle )
 {
     if( GetBiff() == EXC_BIFF8 )
     {
@@ -1234,7 +1234,7 @@ void XclExpDval::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_dataValidations );
 }
 
-XclExpDV& XclExpDval::SearchOrCreateDv( ULONG nScHandle )
+XclExpDV& XclExpDval::SearchOrCreateDv( sal_uLong nScHandle )
 {
     // test last found record
     if( mxLastFoundDV.get() && (mxLastFoundDV->GetScHandle() == nScHandle) )
@@ -1247,7 +1247,7 @@ XclExpDV& XclExpDval::SearchOrCreateDv( ULONG nScHandle )
         size_t nFirstPos = 0;
         size_t nLastPos = maDVList.GetSize() - 1;
         bool bLoop = true;
-        ULONG nCurrScHandle = ::std::numeric_limits< ULONG >::max();
+        sal_uLong nCurrScHandle = ::std::numeric_limits< sal_uLong >::max();
         while( (nFirstPos <= nLastPos) && bLoop )
         {
             nCurrPos = (nFirstPos + nLastPos) / 2;

@@ -34,6 +34,8 @@
 
 #include <sfx2/objsh.hxx>
 #include "global.hxx"
+#include "charthelper.hxx"
+#include "rangelst.hxx"
 
 
 class SdrModel;
@@ -58,16 +60,18 @@ private:
                                     // extracted from model in ctor:
     Size                            aSrcSize;
     INetBookmark*                   pBookmark;
-    BOOL                            bGraphic;
-    BOOL                            bGrIsBit;
-    BOOL                            bOleObj;
+    sal_Bool                            bGraphic;
+    sal_Bool                            bGrIsBit;
+    sal_Bool                            bOleObj;
                                     // source information for drag&drop:
                                     // (view is needed to handle drawing obejcts)
     SdrView*                        pDragSourceView;
-    USHORT                          nDragSourceFlags;
-    BOOL                            bDragWasInternal;
+    sal_uInt16                          nDragSourceFlags;
+    sal_Bool                            bDragWasInternal;
 
     sal_uInt32                      nSourceDocID;
+
+    ScRangeListVector               m_aProtectedChartRangesVector;
 
 
     void                InitDocShell();
@@ -91,11 +95,11 @@ public:
     void                SetDrawPersist( const SfxObjectShellRef& rRef );
     void                SetDragSource( ScDrawView* pView );
     void                SetDragSourceObj( SdrObject* pObj, SCTAB nTab );
-    void                SetDragSourceFlags( USHORT nFlags );
+    void                SetDragSourceFlags( sal_uInt16 nFlags );
     void                SetDragWasInternal();
 
     SdrView*            GetDragSourceView()             { return pDragSourceView; }
-    USHORT              GetDragSourceFlags() const      { return nDragSourceFlags; }
+    sal_uInt16              GetDragSourceFlags() const      { return nDragSourceFlags; }
 
     void                SetSourceDocID( sal_uInt32 nVal )
                             { nSourceDocID = nVal; }
@@ -104,6 +108,8 @@ public:
     static ScDrawTransferObj* GetOwnClipboard( Window* pUIWin );
     virtual sal_Int64 SAL_CALL getSomething( const com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( com::sun::star::uno::RuntimeException );
     static const com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
+
+    const ScRangeListVector& GetProtectedChartRangesVector() const { return m_aProtectedChartRangesVector; }
 };
 
 #endif

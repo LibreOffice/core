@@ -56,9 +56,10 @@
 #include "ChartTypeHelper.hxx"
 #include "ObjectNameProvider.hxx"
 #include "DiagramHelper.hxx"
-#include "chartview/NumberFormatterWrapper.hxx"
+#include "NumberFormatterWrapper.hxx"
 #include "AxisIndexDefines.hxx"
 #include "AxisHelper.hxx"
+#include "ExplicitCategoriesProvider.hxx"
 
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
@@ -116,6 +117,7 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const rtl::OUS
         , m_bIsCrossingAxisIsCategoryAxis(false)
         , m_aCategories()
         , m_xChartDocument( 0 )
+        , m_bComplexCategoriesAxis( false )
 {
     rtl::OUString aParticleID = ObjectIdentifier::getParticleID( m_aObjectCID );
     m_bAffectsMultipleObjects = aParticleID.equals(C2U("ALLELEMENTS"));
@@ -179,7 +181,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                 ScaleData aData( xAxis->getScaleData() );
                 if( chart2::AxisType::SERIES == aData.AxisType )
                     m_bHasScaleProperties = false;
-                if( chart2::AxisType::REALNUMBER == aData.AxisType || chart2::AxisType::PERCENT == aData.AxisType )
+                if( chart2::AxisType::SERIES != aData.AxisType )
                     m_bHasNumberProperties = true;
 
                 sal_Int32 nCooSysIndex=0;
@@ -205,6 +207,13 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                     m_bIsCrossingAxisIsCategoryAxis = ( chart2::AxisType::CATEGORY == aScale.AxisType  );
                     if( m_bIsCrossingAxisIsCategoryAxis )
                         m_aCategories = DiagramHelper::getExplicitSimpleCategories( Reference< chart2::XChartDocument >( xChartModel, uno::UNO_QUERY) );
+                }
+
+                m_bComplexCategoriesAxis = false;
+                if ( nDimensionIndex == 0 && aData.AxisType == chart2::AxisType::CATEGORY )
+                {
+                    ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, xChartModel );
+                    m_bComplexCategoriesAxis = aExplicitCategoriesProvider.hasComplexCategories();
                 }
             }
         }
@@ -322,9 +331,13 @@ uno::Reference< chart2::XChartDocument > ObjectPropertiesDialogParameter::getDoc
 {
     return m_xChartDocument;
 }
+bool ObjectPropertiesDialogParameter::IsComplexCategoriesAxis() const
+{
+    return m_bComplexCategoriesAxis;
+}
 
-//const USHORT nNoArrowDlg          = 1100;
-const USHORT nNoArrowNoShadowDlg    = 1101;
+//const sal_uInt16 nNoArrowDlg          = 1100;
+const sal_uInt16 nNoArrowNoShadowDlg    = 1101;
 
 //-------------------------------------------------------------------
 //-------------------------------------------------------------------
@@ -505,7 +518,7 @@ SchAttribTabDlg::~SchAttribTabDlg()
     delete m_pAutoSymbolGraphic;
 }
 
-void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
+void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 {
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
     switch (nId)
@@ -566,6 +579,7 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
         {
             bool bShowStaggeringControls = m_pParameter->CanAxisLabelsBeStaggered();
             ((SchAxisLabelTabPage&)rPage).ShowStaggeringControls( bShowStaggeringControls );
+            ( dynamic_cast< SchAxisLabelTabPage& >( rPage ) ).SetComplexCategories( m_pParameter->IsComplexCategoriesAxis() );
             break;
         }
 
@@ -609,7 +623,7 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
             break;
 
         case RID_SVXPAGE_NUMBERFORMAT:
-               aSet.Put (SvxNumberInfoItem( m_pNumberFormatter, (const USHORT)SID_ATTR_NUMBERFORMAT_INFO));
+               aSet.Put (SvxNumberInfoItem( m_pNumberFormatter, (const sal_uInt16)SID_ATTR_NUMBERFORMAT_INFO));
             rPage.PageCreated(aSet);
             break;
 

@@ -84,8 +84,7 @@
 
 #include <math.h>
 
-#include <oox/core/tokens.hxx>
-
+using namespace ::oox;
 using ::rtl::OString;
 
 static String lcl_GetVbaTabName( SCTAB n )
@@ -197,8 +196,8 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     SCTAB   nC;
     String  aTmpString;
     SCTAB  nScTabCount     = rTabInfo.GetScTabCount();
-    UINT16  nExcTabCount    = rTabInfo.GetXclTabCount();
-    UINT16  nCodenames      = static_cast< UINT16 >( GetExtDocOptions().GetCodeNameCount() );
+    sal_uInt16  nExcTabCount    = rTabInfo.GetXclTabCount();
+    sal_uInt16  nCodenames      = static_cast< sal_uInt16 >( GetExtDocOptions().GetCodeNameCount() );
 
     SfxObjectShell* pShell = GetDocShell();
     sal_uInt16 nWriteProtHash = pShell ? pShell->GetModifyPasswordHash() : 0;
@@ -791,7 +790,7 @@ void ExcDocument::WriteXml( SvStream& rStrm )
     {
         InitializeSave();
 
-        XclExpXmlStream aStrm( ::comphelper::getProcessServiceFactory(), rStrm, GetRoot() );
+        XclExpXmlStream aStrm( ::comphelper::getProcessComponentContext(), rStrm, GetRoot() );
 
         sax_fastparser::FSHelperPtr& rWorkbook = aStrm.GetCurrentStream();
         rWorkbook->startElement( XML_workbook,

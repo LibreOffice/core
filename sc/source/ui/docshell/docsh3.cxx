@@ -115,8 +115,8 @@ void ScDocShell::PostDataChanged()
 }
 
 void ScDocShell::PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
-                            SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, USHORT nPart,
-                            USHORT nExtFlags )
+                            SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, sal_uInt16 nPart,
+                            sal_uInt16 nExtFlags )
 {
     if (!ValidCol(nStartCol)) nStartCol = MAXCOL;
     if (!ValidRow(nStartRow)) nStartRow = MAXROW;
@@ -127,7 +127,7 @@ void ScDocShell::PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
     {
         // #i54081# PAINT_EXTRAS still has to be brodcast because it changes the
         // current sheet if it's invalid. All other flags added to pPaintLockData.
-        USHORT nLockPart = nPart & ~PAINT_EXTRAS;
+        sal_uInt16 nLockPart = nPart & ~PAINT_EXTRAS;
         if ( nLockPart )
         {
             //! nExtFlags ???
@@ -177,7 +177,7 @@ void ScDocShell::PostPaint( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
         aDocument.ResetChanged( ScRange(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab) );
 }
 
-void ScDocShell::PostPaint( const ScRange& rRange, USHORT nPart, USHORT nExtFlags )
+void ScDocShell::PostPaint( const ScRange& rRange, sal_uInt16 nPart, sal_uInt16 nExtFlags )
 {
     PostPaint( rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
                rRange.aEnd.Col(),   rRange.aEnd.Row(),   rRange.aEnd.Tab(),
@@ -204,7 +204,7 @@ void ScDocShell::PostPaintExtras()
     PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_EXTRAS );
 }
 
-void ScDocShell::UpdatePaintExt( USHORT& rExtFlags, const ScRange& rRange )
+void ScDocShell::UpdatePaintExt( sal_uInt16& rExtFlags, const ScRange& rRange )
 {
     if ( ( rExtFlags & SC_PF_LINES ) == 0 && aDocument.HasAttrib( rRange, HASATTR_PAINTEXT ) )
     {
@@ -228,7 +228,7 @@ void ScDocShell::UpdatePaintExt( USHORT& rExtFlags, const ScRange& rRange )
     }
 }
 
-void ScDocShell::UpdatePaintExt( USHORT& rExtFlags, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
+void ScDocShell::UpdatePaintExt( sal_uInt16& rExtFlags, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
                                                    SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab )
 {
     UpdatePaintExt( rExtFlags, ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab ) );
@@ -236,14 +236,14 @@ void ScDocShell::UpdatePaintExt( USHORT& rExtFlags, SCCOL nStartCol, SCROW nStar
 
 //------------------------------------------------------------------
 
-void ScDocShell::LockPaint_Impl(BOOL bDoc)
+void ScDocShell::LockPaint_Impl(sal_Bool bDoc)
 {
     if ( !pPaintLockData )
         pPaintLockData = new ScPaintLockData(0);    //! Modus...
     pPaintLockData->IncLevel(bDoc);
 }
 
-void ScDocShell::UnlockPaint_Impl(BOOL bDoc)
+void ScDocShell::UnlockPaint_Impl(sal_Bool bDoc)
 {
     if ( pPaintLockData )
     {
@@ -259,9 +259,9 @@ void ScDocShell::UnlockPaint_Impl(BOOL bDoc)
             ScRangeListRef xRangeList = pPaint->GetRangeList();
             if (xRangeList)
             {
-                USHORT nParts = pPaint->GetParts();
-                ULONG nCount = xRangeList->Count();
-                for ( ULONG i=0; i<nCount; i++ )
+                sal_uInt16 nParts = pPaint->GetParts();
+                sal_uLong nCount = xRangeList->Count();
+                for ( sal_uLong i=0; i<nCount; i++ )
                 {
                     //! nExtFlags ???
                     ScRange aRange = *xRangeList->GetObject(i);
@@ -283,63 +283,63 @@ void ScDocShell::UnlockPaint_Impl(BOOL bDoc)
     }
 }
 
-void ScDocShell::LockDocument_Impl(USHORT nNew)
+void ScDocShell::LockDocument_Impl(sal_uInt16 nNew)
 {
     if (!nDocumentLock)
     {
         ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
         if (pDrawLayer)
-            pDrawLayer->setLock(TRUE);
+            pDrawLayer->setLock(sal_True);
     }
     nDocumentLock = nNew;
 }
 
-void ScDocShell::UnlockDocument_Impl(USHORT nNew)
+void ScDocShell::UnlockDocument_Impl(sal_uInt16 nNew)
 {
     nDocumentLock = nNew;
     if (!nDocumentLock)
     {
         ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
         if (pDrawLayer)
-            pDrawLayer->setLock(FALSE);
+            pDrawLayer->setLock(sal_False);
     }
 }
 
-USHORT ScDocShell::GetLockCount() const
+sal_uInt16 ScDocShell::GetLockCount() const
 {
     return nDocumentLock;
 }
 
-void ScDocShell::SetLockCount(USHORT nNew)
+void ScDocShell::SetLockCount(sal_uInt16 nNew)
 {
     if (nNew)                   // setzen
     {
         if ( !pPaintLockData )
             pPaintLockData = new ScPaintLockData(0);    //! Modus...
-        pPaintLockData->SetLevel(nNew-1, TRUE);
+        pPaintLockData->SetLevel(nNew-1, sal_True);
         LockDocument_Impl(nNew);
     }
     else if (pPaintLockData)    // loeschen
     {
-        pPaintLockData->SetLevel(0, TRUE);  // bei Unlock sofort ausfuehren
-        UnlockPaint_Impl(TRUE);                 // jetzt
+        pPaintLockData->SetLevel(0, sal_True);  // bei Unlock sofort ausfuehren
+        UnlockPaint_Impl(sal_True);                 // jetzt
         UnlockDocument_Impl(0);
     }
 }
 
 void ScDocShell::LockPaint()
 {
-    LockPaint_Impl(FALSE);
+    LockPaint_Impl(sal_False);
 }
 
 void ScDocShell::UnlockPaint()
 {
-    UnlockPaint_Impl(FALSE);
+    UnlockPaint_Impl(sal_False);
 }
 
 void ScDocShell::LockDocument()
 {
-    LockPaint_Impl(TRUE);
+    LockPaint_Impl(sal_True);
     LockDocument_Impl(nDocumentLock + 1);
 }
 
@@ -347,7 +347,7 @@ void ScDocShell::UnlockDocument()
 {
     if (nDocumentLock)
     {
-        UnlockPaint_Impl(TRUE);
+        UnlockPaint_Impl(sal_True);
         UnlockDocument_Impl(nDocumentLock - 1);
     }
     else
@@ -358,7 +358,7 @@ void ScDocShell::UnlockDocument()
 
 //------------------------------------------------------------------
 
-void ScDocShell::SetInplace( BOOL bInplace )
+void ScDocShell::SetInplace( sal_Bool bInplace )
 {
     if (bIsInplace != bInplace)
     {
@@ -375,7 +375,7 @@ void ScDocShell::CalcOutputFactor()
         return;
     }
 
-    BOOL bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
+    sal_Bool bTextWysiwyg = SC_MOD()->GetInputOptions().GetTextWysiwyg();
     if (bTextWysiwyg)
     {
         nPrtToScreenFactor = 1.0;
@@ -428,8 +428,8 @@ void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and L
 {
     //  Einstellungen aus dem SpellCheckCfg kommen in Doc- und ViewOptions
 
-    USHORT nDefLang, nCjkLang, nCtlLang;
-    BOOL bAutoSpell;
+    sal_uInt16 nDefLang, nCjkLang, nCtlLang;
+    sal_Bool bAutoSpell;
     ScModule::GetSpellSettings( nDefLang, nCjkLang, nCtlLang, bAutoSpell );
     ScModule* pScMod = SC_MOD();
 
@@ -438,7 +438,7 @@ void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and L
     aDocOpt.SetAutoSpell( bAutoSpell );
 
     // zweistellige Jahreszahleneingabe aus Extras->Optionen->Allgemein->Sonstiges
-    aDocOpt.SetYear2000( sal::static_int_cast<USHORT>( ::utl::MiscCfg().GetYear2000() ) );
+    aDocOpt.SetYear2000( sal::static_int_cast<sal_uInt16>( ::utl::MiscCfg().GetYear2000() ) );
 
     if (bForLoading)
     {
@@ -463,7 +463,7 @@ Printer* ScDocShell::GetDocumentPrinter()       // fuer OLE
     return aDocument.GetPrinter();
 }
 
-SfxPrinter* ScDocShell::GetPrinter(BOOL bCreateIfNotExist)
+SfxPrinter* ScDocShell::GetPrinter(sal_Bool bCreateIfNotExist)
 {
     return aDocument.GetPrinter(bCreateIfNotExist);
 }
@@ -472,7 +472,7 @@ void ScDocShell::UpdateFontList()
 {
     delete pImpl->pFontList;
     // pImpl->pFontList = new FontList( GetPrinter(), Application::GetDefaultDevice() );
-    pImpl->pFontList = new FontList( GetRefDevice(), NULL, FALSE ); // FALSE or TRUE???
+    pImpl->pFontList = new FontList( GetRefDevice(), NULL, sal_False ); // sal_False or sal_True???
     SvxFontListItem aFontListItem( pImpl->pFontList, SID_ATTR_CHAR_FONTLIST );
     PutItem( aFontListItem );
 
@@ -484,9 +484,9 @@ OutputDevice* ScDocShell::GetRefDevice()
     return aDocument.GetRefDevice();
 }
 
-USHORT ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, USHORT nDiffFlags )
+sal_uInt16 ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlags )
 {
-    SfxPrinter *pOld = aDocument.GetPrinter( FALSE );
+    SfxPrinter *pOld = aDocument.GetPrinter( sal_False );
     if ( pOld && pOld->IsPrinting() )
         return SFX_PRINTERROR_BUSY;
 
@@ -557,8 +557,8 @@ USHORT ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, USHORT nDiffFlags )
             if (nDiffFlags & SFX_PRINTER_CHG_ORIENTATION)
             {
                 const SvxPageItem& rOldItem = (const SvxPageItem&)rSet.Get(ATTR_PAGE);
-                BOOL bWasLand = rOldItem.IsLandscape();
-                BOOL bNewLand = ( pNewPrinter->GetOrientation() == ORIENTATION_LANDSCAPE );
+                sal_Bool bWasLand = rOldItem.IsLandscape();
+                sal_Bool bNewLand = ( pNewPrinter->GetOrientation() == ORIENTATION_LANDSCAPE );
                 if (bNewLand != bWasLand)
                 {
                     SvxPageItem aNewItem( rOldItem );
@@ -665,13 +665,13 @@ void ScDocShell::SetChangeComment( ScChangeAction* pAction, const String& rComme
         ScChangeTrack* pTrack = GetDocument()->GetChangeTrack();
         if (pTrack)
         {
-            ULONG nNumber = pAction->GetActionNumber();
+            sal_uLong nNumber = pAction->GetActionNumber();
             pTrack->NotifyModified( SC_CTM_CHANGE, nNumber, nNumber );
         }
     }
 }
 
-void ScDocShell::ExecuteChangeCommentDialog( ScChangeAction* pAction, Window* pParent,BOOL bPrevNext)
+void ScDocShell::ExecuteChangeCommentDialog( ScChangeAction* pAction, Window* pParent,sal_Bool bPrevNext)
 {
     if (!pAction) return;           // ohne Aktion ist nichts..
 
@@ -681,7 +681,7 @@ void ScDocShell::ExecuteChangeCommentDialog( ScChangeAction* pAction, Window* pP
     DateTime aDT = pAction->GetDateTime();
     String aDate = ScGlobal::pLocaleData->getDate( aDT );
     aDate += ' ';
-    aDate += ScGlobal::pLocaleData->getTime( aDT, FALSE, FALSE );
+    aDate += ScGlobal::pLocaleData->getTime( aDT, sal_False, sal_False );
 
     SfxItemSet aSet( GetPool(),
                       SID_ATTR_POSTIT_AUTHOR, SID_ATTR_POSTIT_AUTHOR,
@@ -733,7 +733,7 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
             if (pOtherMed)
                 aOtherFile = pOtherMed->GetName();
         }
-        BOOL bSameDoc = ( aThisFile == aOtherFile && aThisFile.Len() );
+        sal_Bool bSameDoc = ( aThisFile == aOtherFile && aThisFile.Len() );
         if ( !bSameDoc )
         {
             //  create change actions from comparing with the name of the user
@@ -769,7 +769,7 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
 //
 //---------------------------------------------------------------------
 
-inline BOOL lcl_Equal( const ScChangeAction* pA, const ScChangeAction* pB, BOOL bIgnore100Sec )
+inline sal_Bool lcl_Equal( const ScChangeAction* pA, const ScChangeAction* pB, sal_Bool bIgnore100Sec )
 {
     return pA && pB &&
         pA->GetActionNumber() == pB->GetActionNumber() &&
@@ -781,14 +781,14 @@ inline BOOL lcl_Equal( const ScChangeAction* pA, const ScChangeAction* pB, BOOL 
     //  State nicht vergleichen, falls eine alte Aenderung akzeptiert wurde
 }
 
-bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScDocument* pSearchDoc, const ScChangeAction* pFirstSearchAction, const ScChangeAction* pLastSearchAction, BOOL bIgnore100Sec )
+bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScDocument* pSearchDoc, const ScChangeAction* pFirstSearchAction, const ScChangeAction* pLastSearchAction, sal_Bool bIgnore100Sec )
 {
     if ( !pDoc || !pAction || !pSearchDoc || !pFirstSearchAction || !pLastSearchAction )
     {
         return false;
     }
 
-    ULONG nLastSearchAction = pLastSearchAction->GetActionNumber();
+    sal_uLong nLastSearchAction = pLastSearchAction->GetActionNumber();
     const ScChangeAction* pA = pFirstSearchAction;
     while ( pA && pA->GetActionNumber() <= nLastSearchAction )
     {
@@ -800,9 +800,9 @@ bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScDocument
              pAction->GetBigRange() == pA->GetBigRange() )
         {
             String aActionDesc;
-            pAction->GetDescription( aActionDesc, pDoc, TRUE );
+            pAction->GetDescription( aActionDesc, pDoc, sal_True );
             String aADesc;
-            pA->GetDescription( aADesc, pSearchDoc, TRUE );
+            pA->GetDescription( aADesc, pSearchDoc, sal_True );
             if ( aActionDesc.Equals( aADesc ) )
             {
                 DBG_ERROR( "lcl_FindAction(): found equal action!" );
@@ -815,9 +815,9 @@ bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScDocument
     return false;
 }
 
-void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheckDuplicates, ULONG nOffset, ScChangeActionMergeMap* pMergeMap, bool bInverseMap )
+void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheckDuplicates, sal_uLong nOffset, ScChangeActionMergeMap* pMergeMap, bool bInverseMap )
 {
-    ScTabViewShell* pViewSh = GetBestViewShell( FALSE );    //! Funktionen an die DocShell
+    ScTabViewShell* pViewSh = GetBestViewShell( sal_False );    //! Funktionen an die DocShell
     if (!pViewSh)
         return;
 
@@ -835,17 +835,17 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
         {
             // #51138# visuelles RedLining einschalten
             ScChangeViewSettings aChangeViewSet;
-            aChangeViewSet.SetShowChanges(TRUE);
+            aChangeViewSet.SetShowChanges(sal_True);
             aDocument.SetChangeViewSettings(aChangeViewSet);
         }
     }
 
     // #97286# include 100th seconds in compare?
-    BOOL bIgnore100Sec = !pSourceTrack->IsTime100thSeconds() ||
+    sal_Bool bIgnore100Sec = !pSourceTrack->IsTime100thSeconds() ||
             !pThisTrack->IsTime100thSeconds();
 
     //  gemeinsame Ausgangsposition suchen
-    ULONG nFirstNewNumber = 0;
+    sal_uLong nFirstNewNumber = 0;
     const ScChangeAction* pSourceAction = pSourceTrack->GetFirst();
     const ScChangeAction* pThisAction = pThisTrack->GetFirst();
     // skip identical actions
@@ -868,7 +868,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
     const ScChangeAction* pLastSearchAction = pThisTrack->GetLast();
 
     //  MergeChangeData aus den folgenden Aktionen erzeugen
-    ULONG nNewActionCount = 0;
+    sal_uLong nNewActionCount = 0;
     const ScChangeAction* pCount = pSourceAction;
     while ( pCount )
     {
@@ -884,7 +884,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                     String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("...")),
                     nNewActionCount );
 
-    ULONG nLastMergeAction = pSourceTrack->GetLast()->GetActionNumber();
+    sal_uLong nLastMergeAction = pSourceTrack->GetLast()->GetActionNumber();
     // UpdateReference-Undo, gueltige Referenzen fuer den letzten gemeinsamen Zustand
     pSourceTrack->MergePrepare( (ScChangeAction*) pFirstMergeAction, bShared );
 
@@ -910,7 +910,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                     const ScChangeActionDel* pDel = (const ScChangeActionDel*) pThisAction;
                     if ( pDel->IsTopDelete() && !pDel->IsTabDeleteCol() )
                     {   // deleted Table enthaelt deleted Cols, die nicht
-                        ULONG nStart, nEnd;
+                        sal_uLong nStart, nEnd;
                         pSourceTrack->AppendDeleteRange(
                             pDel->GetOverAllRange().MakeRange(), NULL, nStart, nEnd );
                     }
@@ -935,9 +935,9 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
     LockPaint();    // #i73877# no repainting after each action
 
     //  MergeChangeData in das aktuelle Dokument uebernehmen
-    BOOL bHasRejected = FALSE;
+    sal_Bool bHasRejected = sal_False;
     String aOldUser = pThisTrack->GetUser();
-    pThisTrack->SetUseFixDateTime( TRUE );
+    pThisTrack->SetUseFixDateTime( sal_True );
     ScMarkData& rMarkData = pViewSh->GetViewData()->GetMarkData();
     ScMarkData aOldMarkData( rMarkData );
     pSourceAction = pFirstMergeAction;
@@ -986,10 +986,10 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 
                 pThisTrack->SetUser( pSourceAction->GetUser() );
                 pThisTrack->SetFixDateTimeUTC( pSourceAction->GetDateTimeUTC() );
-                ULONG nOldActionMax = pThisTrack->GetActionMax();
+                sal_uLong nOldActionMax = pThisTrack->GetActionMax();
 
                 bool bExecute = true;
-                ULONG nReject = pSourceAction->GetRejectAction();
+                sal_uLong nReject = pSourceAction->GetRejectAction();
                 if ( nReject )
                 {
                     if ( bShared )
@@ -1002,7 +1002,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                         if ( pOldAction && pOldAction->IsVirgin() )
                         {
                             pThisTrack->Reject( pOldAction );
-                            bHasRejected = TRUE;
+                            bHasRejected = sal_True;
                             bExecute = false;
                         }
                     }
@@ -1017,7 +1017,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             //! oder Reject-Aenderung normal ausfuehren
 
                             pThisTrack->Reject(pOldAction);
-                            bHasRejected = TRUE;                // fuer Paint
+                            bHasRejected = sal_True;                // fuer Paint
                         }
                         bExecute = false;
                     }
@@ -1039,7 +1039,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             ScAddress aPos = aSourceRange.aStart;
                             String aValue;
                             ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
-                            BYTE eMatrix = MM_NONE;
+                            sal_uInt8 eMatrix = MM_NONE;
                             const ScBaseCell* pCell = ((const ScChangeActionContent*)pSourceAction)->GetNewCell();
                             if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
                                 eMatrix = ((const ScFormulaCell*)pCell)->GetMatrixFlag();
@@ -1058,7 +1058,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                                     aValue.Erase( 0, 1 );
                                     aValue.Erase( aValue.Len()-1, 1 );
                                     GetDocFunc().EnterMatrix( aSourceRange,
-                                        NULL, NULL, aValue, FALSE, FALSE,
+                                        NULL, NULL, aValue, sal_False, sal_False,
                                         EMPTY_STRING, formula::FormulaGrammar::GRAM_DEFAULT );
                                 }
                                 break;
@@ -1077,17 +1077,17 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                         {
                             String aName;
                             aDocument.CreateValidTabName( aName );
-                            GetDocFunc().InsertTable( aSourceRange.aStart.Tab(), aName, TRUE, FALSE );
+                            GetDocFunc().InsertTable( aSourceRange.aStart.Tab(), aName, sal_True, sal_False );
                         }
                         break;
                         case SC_CAT_INSERT_ROWS:
-                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSROWS, TRUE, FALSE );
+                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSROWS, sal_True, sal_False );
                         break;
                         case SC_CAT_INSERT_COLS:
-                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSCOLS, TRUE, FALSE );
+                            GetDocFunc().InsertCells( aSourceRange, NULL, INS_INSCOLS, sal_True, sal_False );
                         break;
                         case SC_CAT_DELETE_TABS :
-                            GetDocFunc().DeleteTable( aSourceRange.aStart.Tab(), TRUE, FALSE );
+                            GetDocFunc().DeleteTable( aSourceRange.aStart.Tab(), sal_True, sal_False );
                         break;
                         case SC_CAT_DELETE_ROWS:
                         {
@@ -1095,7 +1095,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             if ( pDel->IsTopDelete() )
                             {
                                 aSourceRange = pDel->GetOverAllRange().MakeRange();
-                                GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELROWS, TRUE, FALSE );
+                                GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELROWS, sal_True, sal_False );
 
                                 // #i101099# [Collaboration] Changes are not correctly shown
                                 if ( bShared )
@@ -1115,7 +1115,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             if ( pDel->IsTopDelete() && !pDel->IsTabDeleteCol() )
                             {   // deleted Table enthaelt deleted Cols, die nicht
                                 aSourceRange = pDel->GetOverAllRange().MakeRange();
-                                GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELCOLS, TRUE, FALSE );
+                                GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELCOLS, sal_True, sal_False );
                             }
                         }
                         break;
@@ -1124,7 +1124,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             const ScChangeActionMove* pMove = (const ScChangeActionMove*) pSourceAction;
                             ScRange aFromRange( pMove->GetFromRange().MakeRange() );
                             GetDocFunc().MoveBlock( aFromRange,
-                                aSourceRange.aStart, TRUE, TRUE, FALSE, FALSE );
+                                aSourceRange.aStart, sal_True, sal_True, sal_False, sal_False );
                         }
                         break;
                         default:
@@ -1164,10 +1164,10 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                     ScChangeAction* pAct = pThisTrack->GetLast();
                     if ( pAct && pAct->GetActionNumber() > nOldActionMax )
                     {
-                        ULONG nActionMax = pAct->GetActionNumber();
-                        ULONG nActionCount = nActionMax - nOldActionMax;
-                        ULONG nAction = nActionMax - nActionCount + 1;
-                        ULONG nSourceAction = pSourceAction->GetActionNumber() - nActionCount + 1;
+                        sal_uLong nActionMax = pAct->GetActionNumber();
+                        sal_uLong nActionCount = nActionMax - nOldActionMax;
+                        sal_uLong nAction = nActionMax - nActionCount + 1;
+                        sal_uLong nSourceAction = pSourceAction->GetActionNumber() - nActionCount + 1;
                         while ( nAction <= nActionMax )
                         {
                             if ( bInverseMap )
@@ -1189,7 +1189,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
 
     rMarkData = aOldMarkData;
     pThisTrack->SetUser(aOldUser);
-    pThisTrack->SetUseFixDateTime( FALSE );
+    pThisTrack->SetUseFixDateTime( sal_False );
 
     pSourceTrack->Clear();      //! der ist jetzt verhunzt
 
@@ -1230,11 +1230,11 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
 
     // reset show changes
     ScChangeViewSettings aChangeViewSet;
-    aChangeViewSet.SetShowChanges( FALSE );
+    aChangeViewSet.SetShowChanges( sal_False );
     aDocument.SetChangeViewSettings( aChangeViewSet );
 
     // find first merge action in this document
-    BOOL bIgnore100Sec = !pThisTrack->IsTime100thSeconds() || !pSharedTrack->IsTime100thSeconds();
+    sal_Bool bIgnore100Sec = !pThisTrack->IsTime100thSeconds() || !pSharedTrack->IsTime100thSeconds();
     ScChangeAction* pThisAction = pThisTrack->GetFirst();
     ScChangeAction* pSharedAction = pSharedTrack->GetFirst();
     while ( lcl_Equal( pThisAction, pSharedAction, bIgnore100Sec ) )
@@ -1248,8 +1248,8 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
         if ( pThisAction )
         {
             // merge own changes into shared document
-            ULONG nActStartShared = pSharedAction->GetActionNumber();
-            ULONG nActEndShared = pSharedTrack->GetActionMax();
+            sal_uLong nActStartShared = pSharedAction->GetActionNumber();
+            sal_uLong nActEndShared = pSharedTrack->GetActionMax();
             ScDocument* pTmpDoc = new ScDocument;
             for ( sal_Int32 nIndex = 0; nIndex < aDocument.GetTableCount(); ++nIndex )
             {
@@ -1261,8 +1261,8 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             ScChangeActionMergeMap aOwnInverseMergeMap;
             pSharedDocShell->MergeDocument( *pTmpDoc, true, true, 0, &aOwnInverseMergeMap, true );
             delete pTmpDoc;
-            ULONG nActStartOwn = nActEndShared + 1;
-            ULONG nActEndOwn = pSharedTrack->GetActionMax();
+            sal_uLong nActStartOwn = nActEndShared + 1;
+            sal_uLong nActEndOwn = pSharedTrack->GetActionMax();
 
             // find conflicts
             ScConflictsList aConflictsList;
@@ -1305,7 +1305,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             pThisTrack->Clone( pTmpDoc );
 
             // undo own changes since last save in own document
-            ULONG nStartShared = pThisAction->GetActionNumber();
+            sal_uLong nStartShared = pThisAction->GetActionNumber();
             ScChangeAction* pAction = pThisTrack->GetLast();
             while ( pAction && pAction->GetActionNumber() >= nStartShared )
             {
@@ -1319,7 +1319,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             // merge shared changes into own document
             ScChangeActionMergeMap aSharedMergeMap;
             MergeDocument( rSharedDoc, true, true, 0, &aSharedMergeMap );
-            ULONG nEndShared = pThisTrack->GetActionMax();
+            sal_uLong nEndShared = pThisTrack->GetActionMax();
 
             // resolve conflicts for shared non-content actions
             if ( !aConflictsList.empty() )
@@ -1337,18 +1337,18 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
             nEndShared = pThisTrack->GetActionMax();
 
             // only show changes from shared document
-            aChangeViewSet.SetShowChanges( TRUE );
-            aChangeViewSet.SetShowAccepted( TRUE );
+            aChangeViewSet.SetShowChanges( sal_True );
+            aChangeViewSet.SetShowAccepted( sal_True );
             aChangeViewSet.SetHasActionRange( true );
             aChangeViewSet.SetTheActionRange( nStartShared, nEndShared );
             aDocument.SetChangeViewSettings( aChangeViewSet );
 
             // merge own changes back into own document
-            ULONG nStartOwn = nEndShared + 1;
+            sal_uLong nStartOwn = nEndShared + 1;
             ScChangeActionMergeMap aOwnMergeMap;
             MergeDocument( *pTmpDoc, true, true, nEndShared - nStartShared + 1, &aOwnMergeMap );
             delete pTmpDoc;
-            ULONG nEndOwn = pThisTrack->GetActionMax();
+            sal_uLong nEndOwn = pThisTrack->GetActionMax();
 
             // resolve conflicts for shared content actions and own actions
             if ( !aConflictsList.empty() )
@@ -1376,13 +1376,13 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
         else
         {
             // merge shared changes into own document
-            ULONG nStartShared = pThisTrack->GetActionMax() + 1;
+            sal_uLong nStartShared = pThisTrack->GetActionMax() + 1;
             MergeDocument( rSharedDoc, true, true );
-            ULONG nEndShared = pThisTrack->GetActionMax();
+            sal_uLong nEndShared = pThisTrack->GetActionMax();
 
             // only show changes from shared document
-            aChangeViewSet.SetShowChanges( TRUE );
-            aChangeViewSet.SetShowAccepted( TRUE );
+            aChangeViewSet.SetShowChanges( sal_True );
+            aChangeViewSet.SetShowAccepted( sal_True );
             aChangeViewSet.SetHasActionRange( true );
             aChangeViewSet.SetTheActionRange( nStartShared, nEndShared );
             aDocument.SetChangeViewSettings( aChangeViewSet );

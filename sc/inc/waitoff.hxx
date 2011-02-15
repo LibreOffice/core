@@ -36,7 +36,7 @@ class ScWaitCursorOff
 {
 private:
     Window*             pWin;
-    ULONG               nWaiters;
+    sal_uLong               nWaiters;
 public:
                         ScWaitCursorOff( Window* pWin );
                         ~ScWaitCursorOff();

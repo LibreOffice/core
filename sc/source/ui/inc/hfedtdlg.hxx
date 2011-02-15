@@ -45,11 +45,11 @@ public:
                          Window*            pParent,
                          const SfxItemSet&  rCoreSet,
                          const String&      rPageStyle,
-                         USHORT             nResId = RID_SCDLG_HFEDIT );
+                         sal_uInt16             nResId = RID_SCDLG_HFEDIT );
 
             ~ScHFEditDlg();
 
-    virtual void PageCreated( USHORT nId, SfxTabPage& rPage );
+    virtual void PageCreated( sal_uInt16 nId, SfxTabPage& rPage );
 };
 
 

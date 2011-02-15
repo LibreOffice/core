@@ -48,7 +48,7 @@ class FuDraw : public FuPoor
            SdrModel* pDoc, SfxRequest& rReq);
     virtual ~FuDraw();
 
-    virtual BOOL KeyInput(const KeyEvent& rKEvt);
+    virtual sal_Bool KeyInput(const KeyEvent& rKEvt);
 
     virtual void ScrollStart();
     virtual void ScrollEnd();
@@ -58,14 +58,14 @@ class FuDraw : public FuPoor
 
     virtual void ForcePointer(const MouseEvent* pMEvt);
 
-    virtual BOOL MouseMove(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseMove(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
+    virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
 
     // #97016# II
     virtual void SelectionHasChanged();
 
-    BOOL IsSizingOrMovingNote( const MouseEvent& rMEvt ) const;
+    sal_Bool IsSizingOrMovingNote( const MouseEvent& rMEvt ) const;
 
  private:
     void    DoModifiers(const MouseEvent& rMEvt);

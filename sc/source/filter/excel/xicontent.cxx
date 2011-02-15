@@ -639,7 +639,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
 
     if( !mxScCondFmt.get() )
     {
-        ULONG nKey = 0;
+        sal_uLong nKey = 0;
         mxScCondFmt.reset( new ScConditionalFormat( nKey, GetDocPtr() ) );
     }
 
@@ -654,7 +654,7 @@ void XclImpCondFormat::Apply()
     {
         ScDocument& rDoc = GetDoc();
 
-        ULONG nKey = rDoc.AddCondFormat( *mxScCondFmt );
+        sal_uLong nKey = rDoc.AddCondFormat( *mxScCondFmt );
         ScPatternAttr aPattern( rDoc.GetPool() );
         aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nKey ) );
 
@@ -851,7 +851,7 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
                     aValidData.ResetError();
 
                 // set the handle ID
-                ULONG nHandle = rDoc.AddValidationEntry( aValidData );
+                sal_uLong nHandle = rDoc.AddValidationEntry( aValidData );
                 ScPatternAttr aPattern( rDoc.GetPool() );
                 aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nHandle ) );
 
@@ -917,14 +917,13 @@ void XclImpWebQuery::ReadWqtables( XclImpStream& rStrm )
         String aTables( rStrm.ReadUniString() );
 
         const sal_Unicode cSep = ';';
-        aTables.SearchAndReplaceAll( ',', cSep );
         String aQuotedPairs( RTL_CONSTASCII_USTRINGPARAM( "\"\"" ) );
-        xub_StrLen nTokenCnt = aTables.GetQuotedTokenCount( aQuotedPairs, cSep );
+        xub_StrLen nTokenCnt = aTables.GetQuotedTokenCount( aQuotedPairs, ',' );
         maTables.Erase();
         xub_StrLen nStringIx = 0;
         for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
         {
-            String aToken( aTables.GetQuotedToken( 0, aQuotedPairs, cSep, nStringIx ) );
+            String aToken( aTables.GetQuotedToken( 0, aQuotedPairs, ',', nStringIx ) );
             sal_Int32 nTabNum = CharClass::isAsciiNumeric( aToken ) ? aToken.ToInt32() : 0;
             if( nTabNum > 0 )
                 ScGlobal::AddToken( maTables, ScfTools::GetNameFromHTMLIndex( static_cast< sal_uInt32 >( nTabNum ) ), cSep );

@@ -756,18 +756,18 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
                             switch( eOrient )
                             {
                                 case table::CellOrientation_STANDARD:
-                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, sal_False ) );
                                 break;
                                 case table::CellOrientation_TOPBOTTOM:
-                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, sal_False ) );
                                     pData->PutItem( nFieldIndex, SfxInt32Item( ATTR_ROTATE_VALUE, 27000 ) );
                                 break;
                                 case table::CellOrientation_BOTTOMTOP:
-                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, sal_False ) );
                                     pData->PutItem( nFieldIndex, SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
                                 break;
                                 case table::CellOrientation_STACKED:
-                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, TRUE ) );
+                                    pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, sal_True ) );
                                 break;
                                 default:
                                 {
@@ -840,7 +840,7 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const rtl::OUString& a
                     {
                         const SfxInt32Item* pRotItem = (const SfxInt32Item*)pData->GetItem( nFieldIndex, ATTR_ROTATE_VALUE );
                         sal_Int32 nRot = pRotItem ? pRotItem->GetValue() : 0;
-                        BOOL bStacked = ((const SfxBoolItem*)pItem)->GetValue();
+                        sal_Bool bStacked = ((const SfxBoolItem*)pItem)->GetValue();
                         SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( aVal );
                     }
                     break;

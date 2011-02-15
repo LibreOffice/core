@@ -58,7 +58,7 @@ class ScXMLTableContext : public SvXMLImportContext
 
 public:
 
-    ScXMLTableContext( ScXMLImport& rImport, USHORT nPrfx,
+    ScXMLTableContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -67,7 +67,7 @@ public:
 
     virtual ~ScXMLTableContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

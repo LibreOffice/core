@@ -377,14 +377,14 @@ void SAL_CALL ScVbaControlObjectBase::setOnAction( const OUString& rMacroName ) 
     // if a macro name has been passed, try to attach it to the event
     if( rMacroName.getLength() > 0 )
     {
-        VBAMacroResolvedInfo aResolvedMacro = resolveVBAMacro( getSfxObjShell( mxModel ), rMacroName );
-        if( !aResolvedMacro.IsResolved() )
+        MacroResolvedInfo aResolvedMacro = resolveVBAMacro( getSfxObjShell( mxModel ), rMacroName );
+        if( !aResolvedMacro.mbFound )
             throw uno::RuntimeException();
         script::ScriptEventDescriptor aDescriptor;
         aDescriptor.ListenerType = maListenerType;
         aDescriptor.EventMethod = maEventMethod;
         aDescriptor.ScriptType = CREATE_OUSTRING( "Script" );
-        aDescriptor.ScriptCode = makeMacroURL( aResolvedMacro.ResolvedMacro() );
+        aDescriptor.ScriptCode = makeMacroURL( aResolvedMacro.msResolvedMacro );
         xEventMgr->registerScriptEvent( nIndex, aDescriptor );
     }
 }

@@ -94,7 +94,7 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
         aArgs[ 0 ] <<= getProcessServiceFactory();
         aArgs[ 1 ] <<= aArgSeq;
         uno::Reference< document::XImporter > xImporter( ScfApiHelper::CreateInstanceWithArgs(
-            CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelBiffFilter" ), aArgs ), uno::UNO_QUERY_THROW );
+            CREATE_OUSTRING( "com.sun.star.comp.oox.xls.ExcelBiffFilter" ), aArgs ), uno::UNO_QUERY_THROW );
         xImporter->setTargetDocument( xComponent );
 
         MediaDescriptor aMediaDesc;
@@ -144,7 +144,7 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
     SotStorageStreamRef xStrgStrm;
     if( SotStorage::IsStorageFile( pMedStrm ) )
     {
-        xRootStrg = new SotStorage( pMedStrm, FALSE );
+        xRootStrg = new SotStorage( pMedStrm, sal_False );
         if( xRootStrg->GetError() )
             xRootStrg = 0;
     }
@@ -217,10 +217,10 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
 
 
 static FltError lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
-        SvStream* pMedStrm, BOOL bBiff8, CharSet eNach )
+        SvStream* pMedStrm, sal_Bool bBiff8, CharSet eNach )
 {
     // try to open an OLE storage
-    SotStorageRef xRootStrg = new SotStorage( pMedStrm, FALSE );
+    SotStorageRef xRootStrg = new SotStorage( pMedStrm, sal_False );
     if( xRootStrg->GetError() ) return eERR_OPEN;
 
     // create BIFF dependent strings

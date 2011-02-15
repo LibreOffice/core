@@ -30,7 +30,7 @@
 #include "xerecord.hxx"
 #include "xeroot.hxx"
 
-#include <oox/core/tokens.hxx>
+using namespace ::oox;
 
 // Base classes to export Excel records =======================================
 

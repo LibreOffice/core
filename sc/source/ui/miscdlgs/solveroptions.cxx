@@ -76,7 +76,7 @@ class ScSolverOptionsString : public SvLBoxString
     sal_Int32   mnIntValue;
 
 public:
-    ScSolverOptionsString( SvLBoxEntry* pEntry, USHORT nFlags, const String& rStr ) :
+    ScSolverOptionsString( SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& rStr ) :
         SvLBoxString( pEntry, nFlags, rStr ),
         mbIsDouble( false ),
         mfDoubleValue( 0.0 ),
@@ -89,10 +89,10 @@ public:
     void      SetDoubleValue( double fNew ) { mbIsDouble = true; mfDoubleValue = fNew; }
     void      SetIntValue( sal_Int32 nNew ) { mbIsDouble = false; mnIntValue = nNew; }
 
-    virtual void Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags, SvLBoxEntry* pEntry );
+    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
 };
 
-void ScSolverOptionsString::Paint( const Point& rPos, SvLBox& rDev, USHORT, SvLBoxEntry* /* pEntry */ )
+void ScSolverOptionsString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, SvLBoxEntry* /* pEntry */ )
 {
     //! move position? (SvxLinguTabPage: aPos.X() += 20)
     String aNormalStr( GetText() );
@@ -174,7 +174,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( Window* pParent,
         maProperties.realloc(0);        // don't use options from different engine
     }
     if ( nSelect >= 0 )                 // select in list box
-        maLbEngine.SelectEntryPos( static_cast<USHORT>(nSelect) );
+        maLbEngine.SelectEntryPos( static_cast<sal_uInt16>(nSelect) );
 
     if ( !maProperties.getLength() )
         ReadFromComponent();            // fill maProperties from component (using maEngine)
@@ -207,8 +207,8 @@ const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties(
             SvLBoxEntry* pEntry = pModel->GetEntry(nEntryPos);
 
             bool bHasData = false;
-            USHORT nItemCount = pEntry->ItemCount();
-            for (USHORT nItemPos=0; nItemPos<nItemCount && !bHasData; ++nItemPos)
+            sal_uInt16 nItemCount = pEntry->ItemCount();
+            for (sal_uInt16 nItemPos=0; nItemPos<nItemCount && !bHasData; ++nItemPos)
             {
                 SvLBoxItem* pItem = pEntry->GetItem( nItemPos );
                 ScSolverOptionsString* pStringItem = dynamic_cast<ScSolverOptionsString*>(pItem);
@@ -264,7 +264,7 @@ void ScSolverOptionsDialog::FillListBox()
 
     // fill the list box
 
-    maLbSettings.SetUpdateMode(FALSE);
+    maLbSettings.SetUpdateMode(sal_False);
     maLbSettings.Clear();
 
     String sEmpty;
@@ -317,7 +317,7 @@ void ScSolverOptionsDialog::FillListBox()
         pModel->Insert( pEntry );
     }
 
-    maLbSettings.SetUpdateMode(TRUE);
+    maLbSettings.SetUpdateMode(sal_True);
 }
 
 void ScSolverOptionsDialog::ReadFromComponent()
@@ -330,8 +330,8 @@ void ScSolverOptionsDialog::EditOption()
     SvLBoxEntry* pEntry = maLbSettings.GetCurEntry();
     if (pEntry)
     {
-        USHORT nItemCount = pEntry->ItemCount();
-        for (USHORT nPos=0; nPos<nItemCount; ++nPos)
+        sal_uInt16 nItemCount = pEntry->ItemCount();
+        for (sal_uInt16 nPos=0; nPos<nItemCount; ++nPos)
         {
             SvLBoxItem* pItem = pEntry->GetItem( nPos );
             ScSolverOptionsString* pStringItem = dynamic_cast<ScSolverOptionsString*>(pItem);
@@ -380,7 +380,7 @@ IMPL_LINK( ScSolverOptionsDialog, SettingsDoubleClickHdl, SvTreeListBox*, EMPTYA
 
 IMPL_LINK( ScSolverOptionsDialog, EngineSelectHdl, ListBox*, EMPTYARG )
 {
-    USHORT nSelectPos = maLbEngine.GetSelectEntryPos();
+    sal_uInt16 nSelectPos = maLbEngine.GetSelectEntryPos();
     if ( nSelectPos < maImplNames.getLength() )
     {
         String aNewEngine( maImplNames[nSelectPos] );
@@ -396,14 +396,14 @@ IMPL_LINK( ScSolverOptionsDialog, EngineSelectHdl, ListBox*, EMPTYARG )
 
 IMPL_LINK( ScSolverOptionsDialog, SettingsSelHdl, SvxCheckListBox*, EMPTYARG )
 {
-    BOOL bCheckbox = FALSE;
+    sal_Bool bCheckbox = sal_False;
 
     SvLBoxEntry* pEntry = maLbSettings.GetCurEntry();
     if (pEntry)
     {
         SvLBoxItem* pItem = pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON);
         if ( pItem && pItem->IsA() == SV_ITEM_ID_LBOXBUTTON )
-            bCheckbox = TRUE;
+            bCheckbox = sal_True;
     }
 
     maBtnEdit.Enable( !bCheckbox );

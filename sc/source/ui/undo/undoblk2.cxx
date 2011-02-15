@@ -67,7 +67,7 @@ ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
                 SCCOLROW nNewStart, SCTAB nNewStartTab, SCCOLROW nNewEnd, SCTAB nNewEndTab,
                 ScDocument* pNewUndoDoc, SCCOLROW nNewCnt, SCCOLROW* pNewRanges,
                 ScOutlineTable* pNewUndoTab,
-                ScSizeMode eNewMode, USHORT nNewSizeTwips, BOOL bNewWidth ) :
+                ScSizeMode eNewMode, sal_uInt16 nNewSizeTwips, sal_Bool bNewWidth ) :
     ScSimpleUndo( pNewDocShell ),
     aMarkData( rMark ),
     nStart( nNewStart ),
@@ -113,18 +113,13 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
     BeginUndo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
     SCCOLROW nPaintStart = nStart > 0 ? nStart-1 : static_cast<SCCOLROW>(0);
 
     if (eMode==SC_SIZE_OPTIMAL)
     {
-        if (pViewShell)
-        {
-            pViewShell->SetMarkData( aMarkData );
-
+        if ( SetViewMarkData( aMarkData ) )
             nPaintStart = 0;        // paint all, because of changed selection
-        }
     }
 
     //! outlines from all tables?
@@ -140,14 +135,14 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
             {
                 pUndoDoc->CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
                         static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE,
-                        FALSE, pDoc );
+                        sal_False, pDoc );
                 pDoc->UpdatePageBreaks( nTab );
                 pDocShell->PostPaint( static_cast<SCCOL>(nPaintStart), 0, nTab,
                         MAXCOL, MAXROW, nTab, PAINT_GRID | PAINT_TOP );
             }
             else        // Height
             {
-                pUndoDoc->CopyToDocument( 0, nStart, nTab, MAXCOL, nEnd, nTab, IDF_NONE, FALSE, pDoc );
+                pUndoDoc->CopyToDocument( 0, nStart, nTab, MAXCOL, nEnd, nTab, IDF_NONE, sal_False, pDoc );
                 pDoc->UpdatePageBreaks( nTab );
                 pDocShell->PostPaint( 0, nPaintStart, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID | PAINT_LEFT );
             }
@@ -155,6 +150,7 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
 
     DoSdrUndoAction( pDrawUndo, pDoc );
 
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
         pViewShell->UpdateScrollBars();
@@ -171,19 +167,14 @@ void __EXPORT ScUndoWidthOrHeight::Redo()
 {
     BeginRedo();
 
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-
-    BOOL bPaintAll = FALSE;
+    sal_Bool bPaintAll = sal_False;
     if (eMode==SC_SIZE_OPTIMAL)
     {
-        if (pViewShell)
-        {
-            pViewShell->SetMarkData( aMarkData );
-
-            bPaintAll = TRUE;       // paint all, because of changed selection
-        }
+        if ( SetViewMarkData( aMarkData ) )
+            bPaintAll = sal_True;       // paint all, because of changed selection
     }
 
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
         SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
@@ -192,7 +183,8 @@ void __EXPORT ScUndoWidthOrHeight::Redo()
     }
 
     // SetWidthOrHeight aendert aktuelle Tabelle !
-    pViewShell->SetWidthOrHeight( bWidth, nRangeCnt, pRanges, eMode, nNewSize, FALSE, TRUE, &aMarkData );
+    if ( pViewShell )
+        pViewShell->SetWidthOrHeight( bWidth, nRangeCnt, pRanges, eMode, nNewSize, sal_False, sal_True, &aMarkData );
 
     // paint grid if selection was changed directly at the MarkData
     if (bPaintAll)
@@ -204,10 +196,10 @@ void __EXPORT ScUndoWidthOrHeight::Redo()
 void __EXPORT ScUndoWidthOrHeight::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
-        ((ScTabViewTarget&)rTarget).GetViewShell()->SetMarkedWidthOrHeight( bWidth, eMode, nNewSize, TRUE );
+        ((ScTabViewTarget&)rTarget).GetViewShell()->SetMarkedWidthOrHeight( bWidth, eMode, nNewSize, sal_True );
 }
 
-BOOL __EXPORT ScUndoWidthOrHeight::CanRepeat(SfxRepeatTarget& rTarget) const
+sal_Bool __EXPORT ScUndoWidthOrHeight::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }

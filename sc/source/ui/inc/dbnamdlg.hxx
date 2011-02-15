@@ -58,9 +58,9 @@ public:
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
 
-    virtual BOOL    IsRefInputMode() const;
+    virtual sal_Bool    IsRefInputMode() const;
     virtual void    SetActive();
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 
 private:
     FixedLine           aFlName;
@@ -85,7 +85,7 @@ private:
     PushButton      aBtnRemove;
     MoreButton      aBtnMore;
 
-    BOOL            bSaved;
+    sal_Bool            bSaved;
 
 
     const String    aStrAdd;    // "Hinzufuegen"
@@ -98,7 +98,7 @@ private:
 
     ScViewData*     pViewData;
     ScDocument*     pDoc;
-    BOOL            bRefInputMode;
+    sal_Bool            bRefInputMode;
     ScAddress::Details aAddrDetails;
 
     ScDBCollection  aLocalDbCol;

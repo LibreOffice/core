@@ -41,8 +41,9 @@
 // for filter manager
 #include "excrecds.hxx"
 
-#include <oox/core/tokens.hxx>
 #include <formula/grammar.hxx>
+
+using namespace ::oox;
 
 using ::rtl::OString;
 
@@ -135,9 +136,9 @@ public:
     void                Initialize();
 
     /** Inserts the Calc name with the passed index and returns the Excel NAME index. */
-    sal_uInt16          InsertName( USHORT nScNameIdx );
+    sal_uInt16          InsertName( sal_uInt16 nScNameIdx );
     /** Inserts the Calc database range with the passed index and returns the Excel NAME index. */
-    sal_uInt16          InsertDBRange( USHORT nScDBRangeIdx );
+    sal_uInt16          InsertDBRange( sal_uInt16 nScDBRangeIdx );
 
     /** Inserts a new built-in defined name. */
     sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab );
@@ -164,11 +165,11 @@ public:
 private:
     typedef XclExpRecordList< XclExpName >      XclExpNameList;
     typedef XclExpNameList::RecordRefType       XclExpNameRef;
-    typedef ::std::map< USHORT, sal_uInt16 >    XclExpIndexMap;
+    typedef ::std::map< sal_uInt16, sal_uInt16 >    XclExpIndexMap;
 
 private:
     /** Finds the index of a NAME record from the passed Calc index in the specified map. */
-    sal_uInt16          FindNameIdx( const XclExpIndexMap& rMap, USHORT nScIdx ) const;
+    sal_uInt16          FindNameIdx( const XclExpIndexMap& rMap, sal_uInt16 nScIdx ) const;
     /** Returns the index of an existing built-in NAME record with the passed definition, otherwise 0. */
     sal_uInt16          FindBuiltInNameIdx( const String& rName,
                             const XclTokenArray& rTokArr, bool bDBRange ) const;
@@ -377,7 +378,7 @@ void XclExpNameManagerImpl::Initialize()
     CreateDatabaseNames();
 }
 
-sal_uInt16 XclExpNameManagerImpl::InsertName( USHORT nScNameIdx )
+sal_uInt16 XclExpNameManagerImpl::InsertName( sal_uInt16 nScNameIdx )
 {
     sal_uInt16 nNameIdx = FindNameIdx( maNameMap, nScNameIdx );
     if( nNameIdx == 0 )
@@ -386,7 +387,7 @@ sal_uInt16 XclExpNameManagerImpl::InsertName( USHORT nScNameIdx )
     return nNameIdx;
 }
 
-sal_uInt16 XclExpNameManagerImpl::InsertDBRange( USHORT nScDBRangeIdx )
+sal_uInt16 XclExpNameManagerImpl::InsertDBRange( sal_uInt16 nScDBRangeIdx )
 {
     sal_uInt16 nNameIdx = FindNameIdx( maDBRangeMap, nScDBRangeIdx );
     if( nNameIdx == 0 )
@@ -481,7 +482,7 @@ void XclExpNameManagerImpl::SaveXml( XclExpXmlStream& rStrm )
 
 // private --------------------------------------------------------------------
 
-sal_uInt16 XclExpNameManagerImpl::FindNameIdx( const XclExpIndexMap& rMap, USHORT nScIdx ) const
+sal_uInt16 XclExpNameManagerImpl::FindNameIdx( const XclExpIndexMap& rMap, sal_uInt16 nScIdx ) const
 {
     XclExpIndexMap::const_iterator aIt = rMap.find( nScIdx );
     return (aIt == rMap.end()) ? 0 : aIt->second;
@@ -627,7 +628,7 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
             if( rDoc.HasPrintRange() )
             {
                 ScRangeList aRangeList;
-                for( USHORT nIdx = 0, nCount = rDoc.GetPrintRangeCount( nScTab ); nIdx < nCount; ++nIdx )
+                for( sal_uInt16 nIdx = 0, nCount = rDoc.GetPrintRangeCount( nScTab ); nIdx < nCount; ++nIdx )
                 {
                     ScRange aRange( *rDoc.GetPrintRange( nScTab, nIdx ) );
                     // Calc document does not care about sheet index in print ranges
@@ -671,7 +672,7 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
 void XclExpNameManagerImpl::CreateUserNames()
 {
     const ScRangeName& rNamedRanges = GetNamedRanges();
-    for( USHORT nNameIdx = 0, nNameCount = rNamedRanges.GetCount(); nNameIdx < nNameCount; ++nNameIdx )
+    for( sal_uInt16 nNameIdx = 0, nNameCount = rNamedRanges.GetCount(); nNameIdx < nNameCount; ++nNameIdx )
     {
         const ScRangeData* pRangeData = rNamedRanges[ nNameIdx ];
         DBG_ASSERT( rNamedRanges[ nNameIdx ], "XclExpNameManagerImpl::CreateUserNames - missing defined name" );
@@ -684,7 +685,7 @@ void XclExpNameManagerImpl::CreateUserNames()
 void XclExpNameManagerImpl::CreateDatabaseNames()
 {
     const ScDBCollection& rDBRanges = GetDatabaseRanges();
-    for( USHORT nDBIdx = 0, nDBCount = rDBRanges.GetCount(); nDBIdx < nDBCount; ++nDBIdx )
+    for( sal_uInt16 nDBIdx = 0, nDBCount = rDBRanges.GetCount(); nDBIdx < nDBCount; ++nDBIdx )
     {
         const ScDBData* pDBData = rDBRanges[ nDBIdx ];
         DBG_ASSERT( pDBData, "XclExpNameManagerImpl::CreateDatabaseNames - missing database range" );
@@ -711,12 +712,12 @@ void XclExpNameManager::Initialize()
     mxImpl->Initialize();
 }
 
-sal_uInt16 XclExpNameManager::InsertName( USHORT nScNameIdx )
+sal_uInt16 XclExpNameManager::InsertName( sal_uInt16 nScNameIdx )
 {
     return mxImpl->InsertName( nScNameIdx );
 }
 
-sal_uInt16 XclExpNameManager::InsertDBRange( USHORT nScDBRangeIdx )
+sal_uInt16 XclExpNameManager::InsertDBRange( sal_uInt16 nScDBRangeIdx )
 {
     return mxImpl->InsertDBRange( nScDBRangeIdx );
 }

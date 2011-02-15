@@ -66,7 +66,7 @@ using ::boost::scoped_ptr;
 using namespace com::sun::star;
 
 #define IS_AVAILABLE(WhichId,ppItem) \
-    (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
+    (pReqArgs->GetItemState((WhichId), sal_True, ppItem ) == SFX_ITEM_SET)
 
 //------------------------------------------------------------------
 
@@ -77,7 +77,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
     SCTAB       nCurrentTab = pViewData->GetTabNo();
     SCTAB       nTabCount   = pDoc->GetTableCount();
-    USHORT      nSlot       = rReq.GetSlot();
+    sal_uInt16      nSlot       = rReq.GetSlot();
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
     HideListBox();                  // Autofilter-DropDown-Listbox
@@ -89,7 +89,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 String aName;
                 pDoc->GetName( nCurrentTab, aName );
 
-                BOOL bVisible=TRUE;
+                sal_Bool bVisible=sal_True;
                 if( pReqArgs != NULL )
                 {
                     const SfxPoolItem* pItem;
@@ -101,7 +101,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     ScMarkData& rMark = pViewData->GetMarkData();
                     SCTAB nTabSelCount = rMark.GetSelectCount();
-                    USHORT nVis = 0;
+                    sal_uInt16 nVis = 0;
                     for ( SCTAB i=0; i < nTabCount && nVis<2; i++ )
                         if (pDoc->IsVisible(i))
                             ++nVis;
@@ -123,7 +123,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             {
                 ScMarkData& rMark = pViewData->GetMarkData();
                 SCTAB nTabSelCount = rMark.GetSelectCount();
-                USHORT nVis = 0;
+                sal_uInt16 nVis = 0;
                 for ( SCTAB i=0; i < nTabCount && nVis<2; i++ )
                     if (pDoc->IsVisible(i))
                         ++nVis;
@@ -180,21 +180,21 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
 
                     String aTabName;
-                    BOOL bFirst = TRUE;
+                    sal_Bool bFirst = sal_True;
                     for ( SCTAB i=0; i != nTabCount; i++ )
                     {
                         if (!pDoc->IsVisible(i))
                         {
                             pDoc->GetName( i, aTabName );
                             pDlg->Insert( aTabName, bFirst );
-                            bFirst = FALSE;
+                            bFirst = sal_False;
                         }
                     }
 
                     if ( pDlg->Execute() == RET_OK )
                     {
-                        USHORT nCount = pDlg->GetSelectEntryCount();
-                        for (USHORT nPos=0; nPos<nCount; nPos++)
+                        sal_uInt16 nCount = pDlg->GetSelectEntryCount();
+                        for (sal_uInt16 nPos=0; nPos<nCount; nPos++)
                         {
                             aName = pDlg->GetSelectEntry(nPos);
                             ShowTable( aName );
@@ -219,7 +219,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                 if ( pReqArgs != NULL )             // von Basic
                 {
-                    BOOL bOk = FALSE;
+                    sal_Bool bOk = sal_False;
                     const SfxPoolItem*  pTabItem;
                     const SfxPoolItem*  pNameItem;
                     String              aName;
@@ -257,14 +257,14 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         {
                             SCTAB nTabs[MAXTABCOUNT];
                             SCTAB nCount = 0;
-                            USHORT n = 0;
+                            sal_uInt16 n = 0;
                             const String* pStr = pDlg->GetFirstTable( &n );
                             while ( pStr )
                             {
                                 nTabs[nCount++] = static_cast<SCTAB>(n);
                                 pStr = pDlg->GetNextTable( &n );
                             }
-                            BOOL bLink = pDlg->GetTablesAsLink();
+                            sal_Bool bLink = pDlg->GetTablesAsLink();
                             if (nCount != 0)
                             {
                                 if(pDlg->IsTableBefore())
@@ -389,7 +389,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                 if( pReqArgs != NULL )
                 {
-                    BOOL        bDone   = FALSE;
+                    sal_Bool        bDone   = sal_False;
                     const SfxPoolItem* pItem;
                     String      aName;
 
@@ -416,8 +416,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 else
                 {
-                    USHORT      nRet    = RET_OK;
-                    BOOL        bDone   = FALSE;
+                    sal_uInt16      nRet    = RET_OK;
+                    sal_Bool        bDone   = sal_False;
                     String      aErrMsg ( ScGlobal::GetRscString( STR_INVALIDTABNAME ) );
                     String      aName;
                     String      aDlgTitle;
@@ -498,10 +498,10 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 if ( pDoc->GetChangeTrack() != NULL )
                     break;      // bei aktiviertem ChangeTracking kein TabMove
 
-                BOOL   bDoIt = FALSE;
-                USHORT nDoc = 0;
+                sal_Bool   bDoIt = sal_False;
+                sal_uInt16 nDoc = 0;
                 SCTAB nTab = pViewData->GetTabNo();
-                BOOL   bCpy = FALSE;
+                sal_Bool   bCpy = sal_False;
                 String aDocName;
 
                 if( pReqArgs != NULL )
@@ -525,7 +525,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     {
                         SfxObjectShell* pSh     = SfxObjectShell::GetFirst();
                         ScDocShell*     pScSh   = NULL;
-                        USHORT          i=0;
+                        sal_uInt16          i=0;
 
                         while ( pSh )
                         {
@@ -552,7 +552,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     else // Kein Dokumentname -> neues Dokument
                     {
                         nDoc = SC_DOC_NEW;
-                        bDoIt = TRUE;
+                        bDoIt = sal_True;
                     }
 
                     if ( bDoIt && nTab >= nTableCount )     // ggf. anhaengen
@@ -575,14 +575,14 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     if(nTableCount==nTabSelCount)
                     {
                         pDlg->SetCopyTable();
-                        pDlg->EnableCopyTable(FALSE);
+                        pDlg->EnableCopyTable(sal_False);
                     }
                     if ( pDlg->Execute() == RET_OK )
                     {
                         nDoc = pDlg->GetSelectedDocument();
                         nTab = pDlg->GetSelectedTable();
                         bCpy = pDlg->GetCopyTable();
-                        bDoIt = TRUE;
+                        bDoIt = sal_True;
 
                         String aFoundDocName;
                         if ( nDoc != SC_DOC_NEW )
@@ -594,7 +594,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 if ( !pSh->GetDocument()->IsDocEditable() )
                                 {
                                     ErrorMessage(STR_READONLYERR);
-                                    bDoIt = FALSE;
+                                    bDoIt = sal_False;
                                 }
                             }
                         }
@@ -620,7 +620,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             {
                 //  Parameter war ueberfluessig, weil die Methode an der Table haengt
 
-                BOOL bDoIt = rReq.IsAPI();
+                sal_Bool bDoIt = rReq.IsAPI();
                 if( !bDoIt )
                 {
                     //  wenn's nicht von Basic kommt, nochmal nachfragen:
@@ -641,7 +641,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     SCTAB nNewTab   = nCurrentTab;
                     SCTAB nFirstTab=0;
-                    BOOL   bTabFlag=FALSE;
+                    sal_Bool   bTabFlag=sal_False;
                     ScMarkData& rMark = pViewData->GetMarkData();
                     SvShorts TheTabs;
                     for(SCTAB i=0;i<nTabCount;i++)
@@ -649,7 +649,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         if(rMark.GetTableSelect(i) &&!pDoc->IsTabProtected(i))
                         {
                             TheTabs.push_back(i);
-                            bTabFlag=TRUE;
+                            bTabFlag=sal_True;
                             if(nNewTab==i) nNewTab++;
                         }
                         if(!bTabFlag) nFirstTab=i;
@@ -668,25 +668,25 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             {
                 ScDocShell* pDocSh = pViewData->GetDocShell();
                 ScDocFunc aFunc(*pDocSh);
-                BOOL bSet = !pDoc->IsLayoutRTL( nCurrentTab );
+                sal_Bool bSet = !pDoc->IsLayoutRTL( nCurrentTab );
 
                 const ScMarkData& rMark = pViewData->GetMarkData();
                 if ( rMark.GetSelectCount() != 0 )
                 {
                     //  handle several sheets
 
-                    SfxUndoManager* pUndoManager = pDocSh->GetUndoManager();
+                    ::svl::IUndoManager* pUndoManager = pDocSh->GetUndoManager();
                     String aUndo = ScGlobal::GetRscString( STR_UNDO_TAB_RTL );
                     pUndoManager->EnterListAction( aUndo, aUndo );
 
                     for (SCTAB nTab=0; nTab<nTabCount; nTab++)
                         if ( rMark.GetTableSelect(nTab) )
-                            aFunc.SetLayoutRTL( nTab, bSet, FALSE );
+                            aFunc.SetLayoutRTL( nTab, bSet, sal_False );
 
                     pUndoManager->LeaveListAction();
                 }
                 else
-                    aFunc.SetLayoutRTL( nCurrentTab, bSet, FALSE );
+                    aFunc.SetLayoutRTL( nCurrentTab, bSet, sal_False );
             }
             break;
 
@@ -706,7 +706,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                 if( pReqArgs != NULL )
                 {
-                    BOOL                bDone = FALSE;
+                    sal_Bool                bDone = sal_False;
                     const SfxPoolItem*  pItem;
                     Color               aColor;
                     if( IS_AVAILABLE( FN_PARAM_1, &pItem ) )
@@ -741,8 +741,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 else
                 {
-                    USHORT      nRet    = RET_OK; /// temp
-                    BOOL        bDone   = FALSE; /// temp
+                    sal_uInt16      nRet    = RET_OK; /// temp
+                    sal_Bool        bDone   = sal_False; /// temp
                     Color       aTabBgColor;
                     Color       aNewTabBgColor;
 
@@ -839,7 +839,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
     SCTAB nTabSelCount = rMark.GetSelectCount();
 
     SfxWhichIter    aIter(rSet);
-    USHORT          nWhich = aIter.FirstWhich();
+    sal_uInt16          nWhich = aIter.FirstWhich();
 
     while ( nWhich )
     {
@@ -852,7 +852,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
 
             case FID_TABLE_HIDE:
                 {
-                    USHORT nVis = 0;
+                    sal_uInt16 nVis = 0;
                     for ( SCTAB i=0; i < nTabCount && nVis<2; i++ )
                         if (pDoc->IsVisible(i))
                             ++nVis;
@@ -864,10 +864,10 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
 
             case FID_TABLE_SHOW:
                 {
-                    BOOL bHasHidden = FALSE;
+                    sal_Bool bHasHidden = sal_False;
                     for ( SCTAB i=0; i < nTabCount && !bHasHidden; i++ )
                         if (!pDoc->IsVisible(i))
-                            bHasHidden = TRUE;
+                            bHasHidden = sal_True;
                     if ( !bHasHidden || pDoc->IsDocProtected() || nTabSelCount > 1 )
                         rSet.DisableItem( nWhich );
                 }
@@ -879,7 +879,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
                         rSet.DisableItem( nWhich );
                     else
                     {
-                        USHORT nVis = 0;
+                        sal_uInt16 nVis = 0;
                         for ( SCTAB i=0; i < nTabCount && nVis<2; i++ )
                             if (pDoc->IsVisible(i))
                                 ++nVis;

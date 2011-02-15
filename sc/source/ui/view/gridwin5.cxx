@@ -85,22 +85,22 @@ ScHideTextCursor::~ScHideTextCursor()
     {
         //  restore text cursor
         if ( pViewData->HasEditView(eWhich) && pWin->HasFocus() )
-            pViewData->GetEditView(eWhich)->ShowCursor( FALSE, TRUE );
+            pViewData->GetEditView(eWhich)->ShowCursor( sal_False, sal_True );
     }
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, BOOL bKeyboard )
+sal_Bool ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, sal_Bool bKeyboard )
 {
-    BOOL bDone = FALSE;
+    sal_Bool bDone = sal_False;
 
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB       nTab = pViewData->GetTabNo();
     ScAddress   aCellPos( nPosX, nPosY, nTab );
 
     String aTrackText;
-    BOOL bLeftEdge = FALSE;
+    sal_Bool bLeftEdge = sal_False;
 
     //  Change-Tracking
 
@@ -174,7 +174,7 @@ BOOL ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, BOOL bKeyboard )
 
             //  bei geloeschten Spalten: Pfeil auf die linke Seite der Zelle
             if ( pFound->GetType() == SC_CAT_DELETE_COLS )
-                bLeftEdge = TRUE;
+                bLeftEdge = sal_True;
 
             DateTime aDT = pFound->GetDateTime();
             aTrackText  = pFound->GetUser();
@@ -201,23 +201,23 @@ BOOL ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, BOOL bKeyboard )
     const ScPostIt* pNote = pDoc->GetNote( aCellPos );
     if ( (aTrackText.Len() > 0) || (pNote && !pNote->IsCaptionShown()) )
     {
-        BOOL bNew = TRUE;
-        BOOL bFast = FALSE;
+        sal_Bool bNew = sal_True;
+        sal_Bool bFast = sal_False;
         if ( pNoteMarker )          // schon eine Notiz angezeigt
         {
             if ( pNoteMarker->GetDocPos() == aCellPos ) // dieselbe
-                bNew = FALSE;                           // dann stehenlassen
+                bNew = sal_False;                           // dann stehenlassen
             else
-                bFast = TRUE;                           // sonst sofort
+                bFast = sal_True;                           // sonst sofort
 
             //  marker which was shown for ctrl-F1 isn't removed by mouse events
             if ( pNoteMarker->IsByKeyboard() && !bKeyboard )
-                bNew = FALSE;
+                bNew = sal_False;
         }
         if ( bNew )
         {
             if ( bKeyboard )
-                bFast = TRUE;           // keyboard also shows the marker immediately
+                bFast = sal_True;           // keyboard also shows the marker immediately
 
             delete pNoteMarker;
 
@@ -232,7 +232,7 @@ BOOL ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, BOOL bKeyboard )
 
             /*  If caption is shown from right or bottom windows, adjust
                 mapmode to include size of top-left window. */
-            MapMode aMapMode = GetDrawMapMode( TRUE );
+            MapMode aMapMode = GetDrawMapMode( sal_True );
             Size aLeftSize = pLeft->PixelToLogic( pLeft->GetOutputSizePixel(), aMapMode );
             Point aOrigin = aMapMode.GetOrigin();
             if( (this == pRight) || (this == pDiagonal) )
@@ -246,7 +246,7 @@ BOOL ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, BOOL bKeyboard )
                                             aMapMode, bLeftEdge, bFast, bKeyboard );
         }
 
-        bDone = TRUE;       // something is shown (old or new)
+        bDone = sal_True;       // something is shown (old or new)
     }
 
     return bDone;
@@ -256,11 +256,11 @@ BOOL ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, BOOL bKeyboard )
 
 void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 {
-    BOOL bDone = FALSE;
-    BOOL bHelpEnabled = ( rHEvt.GetMode() & ( HELPMODE_BALLOON | HELPMODE_QUICK ) ) != 0;
+    sal_Bool bDone = sal_False;
+    sal_Bool bHelpEnabled = ( rHEvt.GetMode() & ( HELPMODE_BALLOON | HELPMODE_QUICK ) ) != 0;
     SdrView* pDrView = pViewData->GetScDrawView();
 
-    BOOL bDrawTextEdit = FALSE;
+    sal_Bool bDrawTextEdit = sal_False;
     if (pDrView)
         bDrawTextEdit = pDrView->IsTextEdit();
 
@@ -273,10 +273,10 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         SCsROW nPosY;
         pViewData->GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
 
-        if ( ShowNoteMarker( nPosX, nPosY, FALSE ) )
+        if ( ShowNoteMarker( nPosX, nPosY, sal_False ) )
         {
             Window::RequestHelp( rHEvt );   // alte Tip/Balloon ausschalten
-            bDone = TRUE;
+            bDone = sal_True;
         }
     }
 
@@ -374,8 +374,8 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 
                 ScHideTextCursor aHideCursor( pViewData, eWhich );      // MapMode is changed in GetEditArea
 
-                // bForceToTop = FALSE, use the cell's real position
-                aPixRect = pViewData->GetEditArea( eWhich, nPosX, nPosY, this, pPattern, FALSE );
+                // bForceToTop = sal_False, use the cell's real position
+                aPixRect = pViewData->GetEditArea( eWhich, nPosX, nPosY, this, pPattern, sal_False );
             }
         }
 
@@ -389,7 +389,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
             else if ( rHEvt.GetMode() & HELPMODE_QUICK )
                 Help::ShowQuickHelp(this,aScreenRect, aHelpText);
 
-            bDone = TRUE;
+            bDone = sal_True;
         }
     }
 
@@ -407,13 +407,13 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
 
     if ( nMouseStatus == SC_GM_TABDOWN && pViewData->GetRefType() == SC_REFTYPE_FILL &&
             Help::IsQuickHelpEnabled() )
-        bDone = TRUE;
+        bDone = sal_True;
 
     if (!bDone)
         Window::RequestHelp( rHEvt );
 }
 
-BOOL ScGridWindow::IsMyModel(SdrEditView* pSdrView)
+sal_Bool ScGridWindow::IsMyModel(SdrEditView* pSdrView)
 {
     return pSdrView &&
             pSdrView->GetModel() == pViewData->GetDocument()->GetDrawLayer();
