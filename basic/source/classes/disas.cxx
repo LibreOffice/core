@@ -608,6 +608,11 @@ void SbiDisas::TypeOp( String& rText )
     }
     if( nOp1 < 13 )
     {
+        static char pTypes[][13] = {
+            "Empty","Null","Integer","Long","Single","Double",
+            "Currency","Date","String","Object","Error","Boolean",
+            "Variant" };
+
         rText.AppendAscii( pTypes[ nOp1 ] );
     }
     else
