@@ -808,13 +808,16 @@ void ODataOutputStream::writeUTF(const OUString& Value)
             writeByte(sal_Int8(0xE0 | ((c >> 12) & 0x0F)));
             writeByte(sal_Int8(0x80 | ((c >>  6) & 0x3F)));
             writeByte(sal_Int8(0x80 | ((c >>  0) & 0x3F)));
+            //written += 2;
         }
         else
         {
             writeByte(sal_Int8(0xC0 | ((c >>  6) & 0x1F)));
             writeByte(sal_Int8(0x80 | ((c >>  0) & 0x3F)));
+            //written += 1;
         }
     }
+    //written += strlen + 2;
 }
 
 // XActiveDataSource
