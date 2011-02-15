@@ -118,7 +118,7 @@ public:
     */
     virtual void ArrangeGUIElements (void);
 
-    virtual void Activate (BOOL IsMDIActivate);
+    virtual void Activate (sal_Bool IsMDIActivate);
 
     //===== Drag and Drop =====================================================
 
@@ -131,14 +131,14 @@ public:
         const AcceptDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow = NULL,
-        USHORT nPage = SDRPAGE_NOTFOUND,
-        USHORT nLayer = SDRPAGE_NOTFOUND );
+        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
+        sal_uInt16 nLayer = SDRPAGE_NOTFOUND );
     virtual sal_Int8 ExecuteDrop (
         const ExecuteDropEvent& rEvt,
         DropTargetHelper& rTargetHelper,
         ::sd::Window* pTargetWindow = NULL,
-        USHORT nPage = SDRPAGE_NOTFOUND,
-        USHORT nLayer = SDRPAGE_NOTFOUND);
+        sal_uInt16 nPage = SDRPAGE_NOTFOUND,
+        sal_uInt16 nLayer = SDRPAGE_NOTFOUND);
 
     typedef ::std::vector<SdPage*> PageSelection;
 
@@ -192,7 +192,7 @@ protected:
     /** This method is overloaded to handle a missing tool bar correctly.
         This is the case when the slide sorter is not the main view shell.
     */
-    virtual SfxUndoManager* ImpGetUndoManager (void) const;
+    virtual ::svl::IUndoManager* ImpGetUndoManager (void) const;
 
 private:
     ::boost::shared_ptr<SlideSorter> mpSlideSorter;

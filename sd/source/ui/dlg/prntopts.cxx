@@ -112,7 +112,7 @@ SdPrintOptions::~SdPrintOptions()
 
 // -----------------------------------------------------------------------
 
-BOOL SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
+sal_Bool SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
 {
     if( aCbxDraw.GetSavedValue() != aCbxDraw.IsChecked() ||
         aCbxNotes.GetSavedValue() != aCbxNotes.IsChecked() ||
@@ -149,7 +149,7 @@ BOOL SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
         aOptions.GetOptionsPrint().SetBackPage( aCbxBack.IsChecked() );
         aOptions.GetOptionsPrint().SetPaperbin( aCbxPaperbin.IsChecked() );
 
-        UINT16 nQuality = 0; // Standard, also Color
+        sal_uInt16 nQuality = 0; // Standard, also Color
         if( aRbtGrayscale.IsChecked() )
             nQuality = 1;
         if( aRbtBlackWhite.IsChecked() )
@@ -158,9 +158,9 @@ BOOL SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
 
         rAttrs.Put( aOptions );
 
-        return( TRUE );
+        return( sal_True );
     }
-    return( FALSE );
+    return( sal_False );
 }
 
 // -----------------------------------------------------------------------
@@ -168,7 +168,7 @@ BOOL SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
 void SdPrintOptions::Reset( const SfxItemSet& rAttrs )
 {
     const SdOptionsPrintItem* pPrintOpts = NULL;
-    if( SFX_ITEM_SET == rAttrs.GetItemState( ATTR_OPTIONS_PRINT, FALSE,
+    if( SFX_ITEM_SET == rAttrs.GetItemState( ATTR_OPTIONS_PRINT, sal_False,
                             (const SfxPoolItem**) &pPrintOpts ) )
     {
         aCbxDraw.Check(              pPrintOpts->GetOptionsPrint().IsDraw() );
@@ -193,7 +193,7 @@ void SdPrintOptions::Reset( const SfxItemSet& rAttrs )
             aRbtDefault.Check();
         }
 
-        UINT16 nQuality = pPrintOpts->GetOptionsPrint().GetOutputQuality();
+        sal_uInt16 nQuality = pPrintOpts->GetOptionsPrint().GetOutputQuality();
         if( nQuality == 0 )
             aRbtColor.Check();
         else if( nQuality == 1 )
@@ -303,7 +303,7 @@ void SdPrintOptions::PageCreated (SfxAllItemSet
     SFX_ITEMSET_ARG (&aSet,pFlagItem,SfxUInt32Item,SID_SDMODE_FLAG,sal_False);
     if (pFlagItem)
     {
-        UINT32 nFlags=pFlagItem->GetValue();
+        sal_uInt32 nFlags=pFlagItem->GetValue();
         if ( ( nFlags & SD_DRAW_MODE ) == SD_DRAW_MODE )
             SetDrawMode();
     }

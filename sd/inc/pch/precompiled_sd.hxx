@@ -530,7 +530,6 @@
 #include "unotools/pathoptions.hxx"
 #include "svl/poolitem.hxx"
 #include "svtools/prgsbar.hxx"
-#include "svtools/printdlg.hxx"
 #include "svl/ptitem.hxx"
 #include "svl/rectitem.hxx"
 #include "unotools/saveopt.hxx"
@@ -901,7 +900,7 @@
 #include "vcl/virdev.hxx"
 #include "vcl/waitobj.hxx"
 #include "vcl/window.hxx"
-#include "vcl/wintypes.hxx"
+#include "tools/wintypes.hxx"
 #include "vcl/wrkwin.hxx"
 
 #include "vos/diagnose.hxx"

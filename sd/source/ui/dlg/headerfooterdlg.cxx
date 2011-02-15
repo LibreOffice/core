@@ -192,7 +192,7 @@ public:
     ~HeaderFooterTabPage();
 
     static  SfxTabPage* Create( ::Window*, const SfxItemSet& );
-    static  USHORT*    GetRanges();
+    static  sal_uInt16*    GetRanges();
 
     void    init( const HeaderFooterSettings& rSettings, bool bNotOnTitle, bool bHasApply );
     void    getData( HeaderFooterSettings& rSettings, bool& rNotOnTitle );
@@ -293,7 +293,7 @@ HeaderFooterDialog::~HeaderFooterDialog()
 
 IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 {
-    const USHORT nId = pTabCtrl->GetCurPageId();
+    const sal_uInt16 nId = pTabCtrl->GetCurPageId();
     TabPage* pTabPage = pTabCtrl->GetTabPage( nId );
     pTabPage->Show();
 
@@ -304,14 +304,14 @@ IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 IMPL_LINK( HeaderFooterDialog, DeactivatePageHdl, TabControl *, EMPTYARG )
 {
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
 short HeaderFooterDialog::Execute()
 {
-    USHORT nRet = TabDialog::Execute();
+    sal_uInt16 nRet = TabDialog::Execute();
     if( nRet )
         mpViewShell->GetDocSh()->SetModified();
     return nRet;
@@ -366,7 +366,7 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
             int nPage;
             for( nPage = 0; nPage < nPageCount; nPage++ )
             {
-                SdPage* pPage = mpDoc->GetSdPage( (USHORT)nPage, PK_STANDARD );
+                SdPage* pPage = mpDoc->GetSdPage( (sal_uInt16)nPage, PK_STANDARD );
                 change( pUndoGroup, pPage, aNewSettings );
             }
         }
@@ -407,7 +407,7 @@ void HeaderFooterDialog::apply( bool bToAll, bool bForceSlides )
         int nPage;
         for( nPage = 0; nPage < nPageCount; nPage++ )
         {
-            SdPage* pPage = mpDoc->GetSdPage( (USHORT)nPage, PK_NOTES );
+            SdPage* pPage = mpDoc->GetSdPage( (sal_uInt16)nPage, PK_NOTES );
 
             change( pUndoGroup, pPage, aNewSettings );
         }
@@ -589,7 +589,7 @@ void HeaderFooterTabPage::FillFormatList( int eFormat )
     for( nFormat = 0; nFormat < nDateTimeFormatsCount; nFormat++ )
     {
         String aStr( SvxDateTimeField::GetFormatted( aDate, aTime, nDateTimeFormats[nFormat], *(SD_MOD()->GetNumberFormatter()), eLanguage ) );
-        USHORT nEntry = maCBDateTimeFormat.InsertEntry( aStr );
+        sal_uInt16 nEntry = maCBDateTimeFormat.InsertEntry( aStr );
         maCBDateTimeFormat.SetEntryData( nEntry, (void*)nDateTimeFormats[nFormat] );
         if( nDateTimeFormats[nFormat] == eFormat )
         {
@@ -621,7 +621,7 @@ void HeaderFooterTabPage::init( const HeaderFooterSettings& rSettings, bool bNot
 
     maCBDateTimeLanguage.SelectLanguage( meOldLanguage );
 
-    USHORT nPos;
+    sal_uInt16 nPos;
     for( nPos = 0; nPos < maCBDateTimeFormat.GetEntryCount(); nPos++ )
     {
         int nFormat = (int)(sal_IntPtr)maCBDateTimeFormat.GetEntryData( nPos );
@@ -724,8 +724,8 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
         // if set, set it on all notes master pages
         if( bSet )
         {
-            USHORT nPageCount = mpDoc->GetMasterSdPageCount( PK_NOTES );
-            USHORT nPage;
+            sal_uInt16 nPageCount = mpDoc->GetMasterSdPageCount( PK_NOTES );
+            sal_uInt16 nPage;
             for( nPage = 0; nPage < nPageCount; nPage++ )
             {
                 GetOrSetDateTimeLanguage( rLanguage, bSet, mpDoc->GetMasterSdPage( nPage, PK_NOTES ) );
@@ -739,8 +739,8 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
     {
         // get the language from the first master page
         // or set it to all master pages
-        USHORT nPageCount = bSet ? mpDoc->GetMasterSdPageCount( PK_NOTES ) : 1;
-        USHORT nPage;
+        sal_uInt16 nPageCount = bSet ? mpDoc->GetMasterSdPageCount( PK_NOTES ) : 1;
+        sal_uInt16 nPage;
         for( nPage = 0; nPage < nPageCount; nPage++ )
         {
             GetOrSetDateTimeLanguage( rLanguage, bSet, mpDoc->GetMasterSdPage( nPage, PK_STANDARD ) );
@@ -759,7 +759,7 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
         {
             Outliner* pOutl = mpDoc->GetInternalOutliner();
             pOutl->Init( OUTLINERMODE_TEXTOBJECT );
-            USHORT nOutlMode = pOutl->GetMode();
+            sal_uInt16 nOutlMode = pOutl->GetMode();
 
             EditEngine* pEdit = const_cast< EditEngine* >(&pOutl->GetEditEngine());
 
@@ -770,12 +770,12 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
             EFieldInfo aFieldInfo;
             aFieldInfo.pFieldItem = NULL;
 
-            USHORT nParaCount = pEdit->GetParagraphCount();
-            USHORT nPara;
+            sal_uInt16 nParaCount = pEdit->GetParagraphCount();
+            sal_uInt16 nPara;
             for( nPara = 0; (nPara < nParaCount) && (aFieldInfo.pFieldItem == NULL); nPara++ )
             {
-                USHORT nFieldCount = pEdit->GetFieldCount( nPara );
-                USHORT nField;
+                sal_uInt16 nFieldCount = pEdit->GetFieldCount( nPara );
+                sal_uInt16 nField;
                 for( nField = 0; (nField < nFieldCount) && (aFieldInfo.pFieldItem == NULL); nField++ )
                 {
                     aFieldInfo = pEdit->GetFieldInfo( nPara, nField );

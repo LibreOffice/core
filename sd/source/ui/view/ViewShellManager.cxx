@@ -915,7 +915,7 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
 
     // Remember the undo manager from the top-most shell on the stack.
     SfxShell* pTopMostShell = mrBase.GetSubShell(0);
-    SfxUndoManager* pUndoManager = (pTopMostShell!=NULL)
+    ::svl::IUndoManager* pUndoManager = (pTopMostShell!=NULL)
         ? pTopMostShell->GetUndoManager()
         : NULL;
 
@@ -930,7 +930,7 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
 
     // 3. Get SFX shell stack.
     ShellStack aSfxShellStack;
-    USHORT nIndex (0);
+    sal_uInt16 nIndex (0);
     while (mrBase.GetSubShell(nIndex)!=NULL)
         ++nIndex;
     aSfxShellStack.reserve(nIndex);
@@ -1015,7 +1015,7 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
 
     // Remember the undo manager from the top-most shell on the stack.
     SfxShell* pTopMostShell = mrBase.GetSubShell(0);
-    SfxUndoManager* pUndoManager = (pTopMostShell!=NULL)
+    ::svl::IUndoManager* pUndoManager = (pTopMostShell!=NULL)
         ? pTopMostShell->GetUndoManager()
         : NULL;
 
@@ -1026,7 +1026,7 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
 
     // 0.Make sure that the given shell is on the stack.  This is a
     // preparation for the following assertion.
-    for (USHORT nIndex=0; true; nIndex++)
+    for (sal_uInt16 nIndex=0; true; nIndex++)
     {
         SfxShell* pShellOnStack = mrBase.GetSubShell(nIndex);
         if (pShellOnStack == NULL)
@@ -1044,7 +1044,7 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
     {
         // 1. Deactivate our shells on the stack before they are removed so
         // that during the Deactivation() calls the stack is still intact.
-        for (USHORT nIndex=0; true; nIndex++)
+        for (sal_uInt16 nIndex=0; true; nIndex++)
         {
             SfxShell* pShellOnStack = mrBase.GetSubShell(nIndex);
             Deactivate(pShellOnStack);
@@ -1187,7 +1187,7 @@ IMPL_LINK(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent*,
                 break;
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -1340,7 +1340,7 @@ void ViewShellManager::Implementation::DumpShellStack (const ShellStack& rStack)
 void ViewShellManager::Implementation::DumpSfxShellStack (void)
 {
     ShellStack aSfxShellStack;
-    USHORT nIndex (0);
+    sal_uInt16 nIndex (0);
     while (mrBase.GetSubShell(nIndex)!=NULL)
         ++nIndex;
     aSfxShellStack.reserve(nIndex);
@@ -1373,7 +1373,7 @@ void ViewShellManager::Implementation::Deactivate (SfxShell* pShell)
     }
 
     // Now we can deactivate the shell.
-    pShell->Deactivate(TRUE);
+    pShell->Deactivate(sal_True);
 }
 
 

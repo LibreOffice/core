@@ -415,8 +415,8 @@ ShapeSharedPtr ShapeImporter::createShape(
         aGraphAttrs.SetChannelG( nGreen );
         aGraphAttrs.SetChannelB( nBlue );
         aGraphAttrs.SetGamma( nGamma );
-        aGraphAttrs.SetTransparency( static_cast<BYTE>(nTransparency) );
-        aGraphAttrs.SetRotation( static_cast<USHORT>(nRotation*10) );
+        aGraphAttrs.SetTransparency( static_cast<sal_uInt8>(nTransparency) );
+        aGraphAttrs.SetRotation( static_cast<sal_uInt16>(nRotation*10) );
 
         text::GraphicCrop aGraphCrop;
         if( getPropertyValue( aGraphCrop, xPropSet, OUSTR("GraphicCrop") ))
@@ -653,20 +653,13 @@ ShapeImporter::ShapeImporter( uno::Reference<drawing::XDrawPage> const&         
                               sal_Int32                                          nOrdNumStart,
                               bool                                               bConvertingMasterPage ) :
     mxPage( xActualPage ),
-#ifdef ENABLE_PRESENTER_EXTRA_UI
     mxPagesSupplier( xPagesSupplier ),
-#else
-    mxPagesSupplier( NULL ),
-#endif
     mrContext( rContext ),
     maPolygons(),
     maShapesStack(),
     mnAscendingPrio( nOrdNumStart ),
     mbConvertingMasterPage( bConvertingMasterPage )
 {
-#ifndef ENABLE_PRESENTER_EXTRA_UI
-    (void)xPagesSupplier;
-#endif
     uno::Reference<drawing::XShapes> const xShapes(
         xPage, uno::UNO_QUERY_THROW );
     maShapesStack.push( XShapesEntry(xShapes) );
