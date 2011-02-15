@@ -40,7 +40,7 @@
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
-#include <com/sun/star/sheet/XSheetCondition.hpp>
+#include <com/sun/star/sheet/XSheetCondition2.hpp>
 #include <com/sun/star/sheet/XCellAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
@@ -84,7 +84,6 @@ using ::com::sun::star::drawing::XDrawPage;
 using ::com::sun::star::drawing::XDrawPageSupplier;
 using ::com::sun::star::lang::Locale;
 using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::sheet::ConditionOperator;
 using ::com::sun::star::sheet::ValidationType;
 using ::com::sun::star::sheet::ValidationAlertStyle;
 using ::com::sun::star::sheet::XCellAddressable;
@@ -95,7 +94,7 @@ using ::com::sun::star::sheet::XMultiFormulaTokens;
 using ::com::sun::star::sheet::XMultipleOperation;
 using ::com::sun::star::sheet::XSheetCellRangeContainer;
 using ::com::sun::star::sheet::XSheetCellRanges;
-using ::com::sun::star::sheet::XSheetCondition;
+using ::com::sun::star::sheet::XSheetCondition2;
 using ::com::sun::star::sheet::XSheetOutline;
 using ::com::sun::star::sheet::XSpreadsheet;
 using ::com::sun::star::table::BorderLine;
@@ -1483,8 +1482,8 @@ void WorksheetData::finalizeValidationRanges() const
             try
             {
                 // condition operator
-                Reference< XSheetCondition > xSheetCond( xValidation, UNO_QUERY_THROW );
-                xSheetCond->setOperator( CondFormatBuffer::convertToApiOperator( aIt->mnOperator ) );
+                Reference< XSheetCondition2 > xSheetCond( xValidation, UNO_QUERY_THROW );
+                xSheetCond->setConditionOperator( CondFormatBuffer::convertToApiOperator( aIt->mnOperator ) );
 
                 // condition formulas
                 Reference< XMultiFormulaTokens > xTokens( xValidation, UNO_QUERY_THROW );

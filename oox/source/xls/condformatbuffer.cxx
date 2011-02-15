@@ -34,7 +34,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/sheet/ConditionOperator.hpp>
+#include <com/sun/star/sheet/ConditionOperator2.hpp>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
@@ -64,7 +64,6 @@ using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::container::XNameContainer;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
-using ::com::sun::star::sheet::ConditionOperator;
 using ::com::sun::star::table::XCellRange;
 using ::com::sun::star::sheet::XSheetCellRanges;
 using ::com::sun::star::sheet::XSheetConditionalEntries;
@@ -445,7 +444,7 @@ void CondFormatRule::importCfRule( BiffInputStream& rStrm, sal_Int32 nPriority )
 
 void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >& rxEntries )
 {
-    ConditionOperator eOperator = ::com::sun::star::sheet::ConditionOperator_NONE;
+    sal_Int32 eOperator = ::com::sun::star::sheet::ConditionOperator2::NONE;
 
     /*  Replacement formula for unsupported rule types (text comparison rules,
         time period rules, cell type rules). The replacement formulas below may
@@ -471,8 +470,12 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
         case XML_cellIs:
             eOperator = CondFormatBuffer::convertToApiOperator( maModel.mnOperator );
         break;
+        case XML_duplicateValues:
+            eOperator = CondFormatBuffer::convertToApiOperator( XML_duplicateValues );
+            aReplaceFormula = CREATE_OUSTRING( " " );
+        break;
         case XML_expression:
-            eOperator = ::com::sun::star::sheet::ConditionOperator_FORMULA;
+            eOperator = ::com::sun::star::sheet::ConditionOperator2::FORMULA;
         break;
         case XML_containsText:
             OSL_ENSURE( maModel.mnOperator == XML_containsText, "CondFormatRule::finalizeImport - unexpected operator" );
@@ -603,10 +606,11 @@ void CondFormatRule::finalizeImport( const Reference< XSheetConditionalEntries >
         // set the replacement formula
         maModel.maFormulas.clear();
         appendFormula( aReplaceFormula );
-        eOperator = ::com::sun::star::sheet::ConditionOperator_FORMULA;
+        if( eOperator != ::com::sun::star::sheet::ConditionOperator2::DUPLICATE )
+            eOperator = ::com::sun::star::sheet::ConditionOperator2::FORMULA;
     }
 
-    if( rxEntries.is() && (eOperator != ::com::sun::star::sheet::ConditionOperator_NONE) && !maModel.maFormulas.empty() )
+    if( rxEntries.is() && (eOperator != ::com::sun::star::sheet::ConditionOperator2::NONE) && !maModel.maFormulas.empty() )
     {
         ::std::vector< PropertyValue > aProps;
         // create condition properties
@@ -755,21 +759,22 @@ void CondFormatBuffer::finalizeImport()
     maCondFormats.forEachMem( &CondFormat::finalizeImport );
 }
 
-ConditionOperator CondFormatBuffer::convertToApiOperator( sal_Int32 nToken )
+sal_Int32 CondFormatBuffer::convertToApiOperator( sal_Int32 nToken )
 {
     using namespace ::com::sun::star::sheet;
     switch( nToken )
     {
-        case XML_between:               return ConditionOperator_BETWEEN;
-        case XML_equal:                 return ConditionOperator_EQUAL;
-        case XML_greaterThan:           return ConditionOperator_GREATER;
-        case XML_greaterThanOrEqual:    return ConditionOperator_GREATER_EQUAL;
-        case XML_lessThan:              return ConditionOperator_LESS;
-        case XML_lessThanOrEqual:       return ConditionOperator_LESS_EQUAL;
-        case XML_notBetween:            return ConditionOperator_NOT_BETWEEN;
-        case XML_notEqual:              return ConditionOperator_NOT_EQUAL;
+        case XML_between:               return ConditionOperator2::BETWEEN;
+        case XML_equal:                 return ConditionOperator2::EQUAL;
+        case XML_greaterThan:           return ConditionOperator2::GREATER;
+        case XML_greaterThanOrEqual:    return ConditionOperator2::GREATER_EQUAL;
+        case XML_lessThan:              return ConditionOperator2::LESS;
+        case XML_lessThanOrEqual:       return ConditionOperator2::LESS_EQUAL;
+        case XML_notBetween:            return ConditionOperator2::NOT_BETWEEN;
+        case XML_notEqual:              return ConditionOperator2::NOT_EQUAL;
+        case XML_duplicateValues:       return ConditionOperator2::DUPLICATE;
     }
-    return ConditionOperator_NONE;
+    return ConditionOperator2::NONE;
 }
 
 // private --------------------------------------------------------------------
