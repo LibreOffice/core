@@ -61,6 +61,7 @@ public:
     ValueType getValue(SCCOLROW nPos);
     ExtValueType getSumValue(SCCOLROW nPos1, SCCOLROW nPos2);
     bool getRangeData(SCCOLROW nPos, RangeData& rData);
+    bool getRangeDataLeaf(SCCOLROW nPos, RangeData& rData);
     void removeSegment(SCCOLROW nPos1, SCCOLROW nPos2);
     void insertSegment(SCCOLROW nPos, SCCOLROW nSize, bool bSkipStartBoundary);
 
@@ -172,28 +173,38 @@ ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getSumValue(SCCOLROW nPos1, SCCOL
 template<typename _ValueType, typename _ExtValueType>
 bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getRangeData(SCCOLROW nPos, RangeData& rData)
 {
+    if (!mbTreeSearchEnabled)
+        return getRangeDataLeaf(nPos, rData);
+
     ValueType nValue;
     SCCOLROW nPos1, nPos2;
 
-    if (mbTreeSearchEnabled)
-    {
-        if (!maSegments.is_tree_valid())
-            maSegments.build_tree();
+    if (!maSegments.is_tree_valid())
+        maSegments.build_tree();
 
-        if (!maSegments.search_tree(nPos, nValue, &nPos1, &nPos2))
-            return false;
-    }
-    else
-    {
-        // Conduct leaf-node only search.  Faster when searching between range insertion.
-        ::std::pair<typename fst_type::const_iterator, bool> ret =
-            maSegments.search(maItr, nPos, nValue, &nPos1, &nPos2);
+    if (!maSegments.search_tree(nPos, nValue, &nPos1, &nPos2))
+        return false;
 
-        if (!ret.second)
-            return false;
+    rData.mnPos1 = nPos1;
+    rData.mnPos2 = nPos2-1; // end point is not inclusive.
+    rData.mnValue = nValue;
+    return true;
+}
 
-        maItr = ret.first;
-    }
+template<typename _ValueType, typename _ExtValueType>
+bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getRangeDataLeaf(SCCOLROW nPos, RangeData& rData)
+{
+    ValueType nValue;
+    SCCOLROW nPos1, nPos2;
+
+    // Conduct leaf-node only search.  Faster when searching between range insertion.
+    ::std::pair<typename fst_type::const_iterator, bool> ret =
+        maSegments.search(maItr, nPos, nValue, &nPos1, &nPos2);
+
+    if (!ret.second)
+        return false;
+
+    maItr = ret.first;
 
     rData.mnPos1 = nPos1;
     rData.mnPos2 = nPos2-1; // end point is not inclusive.

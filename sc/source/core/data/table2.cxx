@@ -61,8 +61,6 @@
 #include "globstr.hrc"
 #include "segmenttree.hxx"
 
-#include <math.h>
-
 // STATIC DATA -----------------------------------------------------------
 
 
@@ -722,108 +720,100 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             const ScMarkData* pMarkData,
                             BOOL bAsLink, BOOL bColRowFlags)
 {
-    if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
-    {
-        if (nFlags)
-            for (SCCOL i = nCol1; i <= nCol2; i++)
-                aCol[i].CopyToColumn(nRow1, nRow2, nFlags, bMarked,
+    if (!ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2))
+        return;
+
+    if (nFlags)
+        for (SCCOL i = nCol1; i <= nCol2; i++)
+            aCol[i].CopyToColumn(nRow1, nRow2, nFlags, bMarked,
                                 pDestTab->aCol[i], pMarkData, bAsLink);
 
-        if (bColRowFlags)       // Spaltenbreiten/Zeilenhoehen/Flags
+    if (!bColRowFlags)      // Spaltenbreiten/Zeilenhoehen/Flags
+        return;
+
+    //  Charts muessen beim Ein-/Ausblenden angepasst werden
+    ScChartListenerCollection* pCharts = pDestTab->pDocument->GetChartListenerCollection();
+
+    bool bFlagChange = false;
+
+    BOOL bWidth  = (nRow1==0 && nRow2==MAXROW && pColWidth && pDestTab->pColWidth);
+    BOOL bHeight = (nCol1==0 && nCol2==MAXCOL && mpRowHeights && pDestTab->mpRowHeights);
+
+    if (bWidth || bHeight)
+    {
+        pDestTab->IncRecalcLevel();
+
+        if (bWidth)
         {
-            //  Charts muessen beim Ein-/Ausblenden angepasst werden
-            ScChartListenerCollection* pCharts = pDestTab->pDocument->GetChartListenerCollection();
-
-            bool bFlagChange = false;
-
-            BOOL bWidth  = (nRow1==0 && nRow2==MAXROW && pColWidth && pDestTab->pColWidth);
-            BOOL bHeight = (nCol1==0 && nCol2==MAXCOL && mpRowHeights && pDestTab->mpRowHeights);
-
-            if (bWidth||bHeight)
+            for (SCCOL i = nCol1; i <= nCol2; ++i)
             {
-                pDestTab->IncRecalcLevel();
+                bool bThisHidden = ColHidden(i);
+                bool bHiddenChange = (pDestTab->ColHidden(i) != bThisHidden);
+                bool bChange = bHiddenChange || (pDestTab->pColWidth[i] != pColWidth[i]);
+                pDestTab->pColWidth[i] = pColWidth[i];
+                pDestTab->pColFlags[i] = pColFlags[i];
+                pDestTab->SetColHidden(i, i, bThisHidden);
+                //! Aenderungen zusammenfassen?
+                if (bHiddenChange && pCharts)
+                    pCharts->SetRangeDirty(ScRange( i, 0, nTab, i, MAXROW, nTab ));
 
-                if (bWidth)
-                {
-                    for (SCCOL i=nCol1; i<=nCol2; i++)
-                    {
-                        bool bThisHidden = ColHidden(i);
-                        bool bHiddenChange = (pDestTab->ColHidden(i) != bThisHidden);
-                        bool bChange = bHiddenChange || (pDestTab->pColWidth[i] != pColWidth[i]);
-                        pDestTab->pColWidth[i] = pColWidth[i];
-                        pDestTab->pColFlags[i] = pColFlags[i];
-                        pDestTab->SetColHidden(i, i, bThisHidden);
-                        //! Aenderungen zusammenfassen?
-                        if (bHiddenChange && pCharts)
-                            pCharts->SetRangeDirty(ScRange( i, 0, nTab, i, MAXROW, nTab ));
+                if (bChange)
+                    bFlagChange = true;
+            }
+            pDestTab->SetColManualBreaks( maColManualBreaks);
+        }
 
-                        if (bChange)
-                            bFlagChange = true;
-                    }
-                    pDestTab->SetColManualBreaks( maColManualBreaks);
-                }
+        if (bHeight)
+        {
+            bool bChange = pDestTab->GetRowHeight(nRow1, nRow2) != GetRowHeight(nRow1, nRow2);
 
-                if (bHeight)
-                {
-                    bool bChange = pDestTab->GetRowHeight(nRow1, nRow2) != GetRowHeight(nRow1, nRow2);
+            if (bChange)
+                bFlagChange = true;
 
-                    if (bChange)
-                        bFlagChange = true;
+            pDestTab->CopyRowHeight(*this, nRow1, nRow2, 0);
+            pDestTab->pRowFlags->CopyFrom(*pRowFlags, nRow1, nRow2);
 
-                    pDestTab->CopyRowHeight(*this, nRow1, nRow2, 0);
-                    pDestTab->pRowFlags->CopyFrom(*pRowFlags, nRow1, nRow2);
+            // Hidden flags.
+            for (SCROW i = nRow1; i <= nRow2; ++i)
+            {
+                SCROW nLastRow;
+                bool bHidden = RowHidden(i, NULL, &nLastRow);
+                if (nLastRow >= nRow2)
+                    // the last row shouldn't exceed the upper bound the caller specified.
+                    nLastRow = nRow2;
 
-                    // Hidden flags.
-                    for (SCROW i = nRow1; i <= nRow2; ++i)
-                    {
-                        SCROW nThisLastRow, nDestLastRow;
-                        bool bThisHidden = RowHidden(i, NULL, &nThisLastRow);
-                        bool bDestHidden = pDestTab->RowHidden(i, NULL, &nDestLastRow);
+                bool bHiddenChanged = pDestTab->SetRowHidden(i, nLastRow, bHidden);
+                if (bHiddenChanged && pCharts)
+                    // Hidden flags differ.
+                    pCharts->SetRangeDirty(ScRange(0, i, nTab, MAXCOL, nLastRow, nTab));
 
-                        // If the segment sizes differ, we take the shorter segment of the two.
-                        SCROW nLastRow = ::std::min(nThisLastRow, nDestLastRow);
-                        if (nLastRow >= nRow2)
-                            // the last row shouldn't exceed the upper bound the caller specified.
-                            nLastRow = nRow2;
+                if (bHiddenChanged)
+                    bFlagChange = true;
 
-                        pDestTab->SetRowHidden(i, nLastRow, bThisHidden);
-
-                        bool bThisHiddenChange = (bThisHidden != bDestHidden);
-                        if (bThisHiddenChange && pCharts)
-                        {
-                            // Hidden flags differ.
-                            pCharts->SetRangeDirty(ScRange(0, i, nTab, MAXCOL, nLastRow, nTab));
-                        }
-
-                        if (bThisHiddenChange)
-                            bFlagChange = true;
-
-                        // Jump to the last row of the identical flag segment.
-                        i = nLastRow;
-                    }
-
-                    // Filtered flags.
-                    for (SCROW i = nRow1; i <= nRow2; ++i)
-                    {
-                        SCROW nLastRow;
-                        bool bFiltered = RowFiltered(i, NULL, &nLastRow);
-                        if (nLastRow >= nRow2)
-                            // the last row shouldn't exceed the upper bound the caller specified.
-                            nLastRow = nRow2;
-                        pDestTab->SetRowFiltered(i, nLastRow, bFiltered);
-                        i = nLastRow;
-                    }
-                    pDestTab->SetRowManualBreaks( maRowManualBreaks);
-                }
-                pDestTab->DecRecalcLevel();
+                // Jump to the last row of the identical flag segment.
+                i = nLastRow;
             }
 
-            if (bFlagChange)
-                pDestTab->InvalidatePageBreaks();
-
-            pDestTab->SetOutlineTable( pOutlineTable );     // auch nur wenn bColRowFlags
+            // Filtered flags.
+            for (SCROW i = nRow1; i <= nRow2; ++i)
+            {
+                SCROW nLastRow;
+                bool bFiltered = RowFiltered(i, NULL, &nLastRow);
+                if (nLastRow >= nRow2)
+                    // the last row shouldn't exceed the upper bound the caller specified.
+                    nLastRow = nRow2;
+                pDestTab->SetRowFiltered(i, nLastRow, bFiltered);
+                i = nLastRow;
+            }
+            pDestTab->SetRowManualBreaks( maRowManualBreaks);
         }
+        pDestTab->DecRecalcLevel();
     }
+
+    if (bFlagChange)
+        pDestTab->InvalidatePageBreaks();
+
+    pDestTab->SetOutlineTable( pOutlineTable );     // auch nur wenn bColRowFlags
 }
 
 
