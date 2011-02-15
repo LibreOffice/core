@@ -245,7 +245,7 @@ void SAL_CALL AccessibleGridControlTable::selectAccessibleChild( sal_Int32 nChil
     ensureIsValidIndex( nChildIndex );
     sal_Int32 nColumns = m_aTable.GetColumnCount();
     sal_Int32 nRow = (nChildIndex / nColumns);
-    m_aTable.SelectRow( nRow, TRUE );
+    m_aTable.SelectRow( nRow, sal_True );
 }
 sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleChildSelected( sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
