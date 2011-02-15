@@ -429,7 +429,15 @@ sub hg_clone_cws_or_milestone
     my $pull_from_remote = 0;
     my $cws_remote_source;
     if ( !$clone_milestone_only ) {
-        $cws_remote_source = "$hg_remote_source/cws/" . $cws->child();
+        if ($rep_type eq "ooo" || $rep_type eq "so")
+        {
+            $cws_remote_source = "$hg_remote_source/cws/" . $cws->child();
+        }
+        # e.g. cws_l10n
+        else
+        {
+             $cws_remote_source = "$hg_remote_source/cws_".$rep_type."/" . $cws->child();
+        }
 
         # The outgoing repository might not yet be available. Which is not
         # an error. Since pulling from the cws outgoing URL results in an ugly
@@ -1717,14 +1725,15 @@ sub do_fetch
                 print_error("Can't create directory '$work_master': $!.", 8);
             }
 
-            my %unique = map { $_ => 1 } split(/,/,$additional_repositories_opt);
+            my %unique = map { $_ => 1 } split(/","/,$additional_repositories_opt);
             my @unique_repo_list = keys %unique;
 
             if (defined($additional_repositories_opt))
             {
                 foreach my $repo(@unique_repo_list)
                 {
-                    hg_clone_cws_or_milestone($repo, $cws, "$work_master/".$repo, $clone_milestone_only), if $repo ne "ooo" || $repo ne "sun";
+                    # do not double clone ooo and sun
+                    hg_clone_cws_or_milestone($repo, $cws, "$work_master/".$repo, $clone_milestone_only), if $repo ne "ooo" && $repo ne "sun";
                 }
 
             }

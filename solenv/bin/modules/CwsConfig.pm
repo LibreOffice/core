@@ -365,6 +365,7 @@ sub get_hg_source
     my $repository  = shift;
     my $location    = shift;
 
+    #Special prefix handling, see cwsrc
     if ($repository eq "OOO")
     {
         if ($location eq "LOCAL")
