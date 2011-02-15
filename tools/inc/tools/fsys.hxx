@@ -46,7 +46,6 @@
 // --------------
 
 class DirEntry;
-class FSysSortList;
 class FileStatList;
 struct FileCopier_Impl;
 class SvFileStream;
@@ -96,6 +95,7 @@ typedef int FSysSort;
 #define FSYS_SORT_KIND              ((FSysSort) 256)
 #define FSYS_SORT_CREATOR           ((FSysSort) 512)
 #define FSYS_SORT_END               ((FSysSort)1024)
+typedef ::std::vector< FSysSort > FSysSortList;
 
 // DirEntryFlag
 enum DirEntryFlag
