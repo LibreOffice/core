@@ -35,7 +35,8 @@
 .IF "$(GUI)"=="WNT"
 CFLAGS+= -GR
 .ENDIF
-.IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || $(COM) == "GCC"
+.IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || \
+    "$(OS)"=="DRAGONFLY" || $(COM) == "GCC"
 CFLAGSCXX+= -frtti
 .ENDIF
 

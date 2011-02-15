@@ -66,7 +66,8 @@ LIBOUT=$(SOLARLIBDIR)
 
 MY_AUTODOC=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(SOLARBINDIR)/autodoc
 
-.IF "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || "$(OS)"=="MACOSX" || "$(OS)"=="AIX"
+.IF "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || "$(OS)"=="MACOSX" || \
+    "$(OS)"=="AIX" || "$(OS)"=="DRAGONFLY"
 MY_COPY=$(GNUCOPY)
 MY_COPY_RECURSIVE=$(GNUCOPY) -r
 .ELSE
@@ -132,6 +133,9 @@ DESTPLATFROM=netbsd
 .ELIF "$(OS)"=="FREEBSD"
 # FREEBSD
 DESTPLATFROM=freebsd
+
+.ELIF "$(OS)"=="DRAGONFLY"
+DESTPLATFROM=dragonfly
 
 .ELIF "$(OS)"=="MACOSX"
 # MACOSX
