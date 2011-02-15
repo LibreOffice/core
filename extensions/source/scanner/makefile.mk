@@ -77,7 +77,7 @@ SHL1STDLIBS=\
     $(SVTOOLLIB)
 
 .IF "$(GUI)"=="UNX" && "$(OS)"!="FREEBSD" && \
-	"$(OS)"!="NETBSD" && "$(OS)"!="OPENBSD"
+    "$(OS)"!="NETBSD" && "$(OS)"!="OPENBSD" && "$(OS)"!="DRAGONFLY"
 SHL1STDLIBS+=$(SVTOOLLIB) -ldl
 .ENDIF
 

@@ -77,7 +77,7 @@ APP1STDLIBS+=-lXm -lXt $(X11LINK_DYNAMIC) -ldl
 .IF "$(DISABLE_XAW)" != "TRUE"
 APP1STDLIBS+=-lXaw 
 .ENDIF
-.IF "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || "$(OS)"=="OPENBSD"
+.IF "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || "$(OS)"=="OPENBSD" || "$(OS)"=="DRAGONFLY"
 APP1STDLIBS+= -lXt -lXext -lX11
 .ELIF "$(OS)"=="AIX"
 APP1STDLIBS+= -lXpm -lXmu -lXt $(X11LINK_DYNAMIC) -ldl

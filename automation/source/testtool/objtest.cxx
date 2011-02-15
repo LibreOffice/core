@@ -459,6 +459,10 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     abGP.Append( "25" );  // OpenBSD/i386
 #elif defined OPENBSD && defined X86_64
     abGP.Append( "26" );  // OpenBSD/amd64
+#elif defined DRAGONFLY && defined X86
+    abGP.Append( "27" );  // DragonFly/i386
+#elif defined DRAGONFLY && defined X86_64
+    abGP.Append( "28" );  // DragonFly/x86-64
 #else
 #error ("unknown platform. please request an ID for your platform on qa/dev")
 #endif
