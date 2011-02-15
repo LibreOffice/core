@@ -841,42 +841,43 @@ sal_Bool AstExpression::operator==(AstExpression *pExpr)
 
 sal_Bool AstExpression::compare(AstExpression *pExpr)
 {
+    bool bRet = sal_False;
     if (m_combOperator != pExpr->getCombOperator())
-        return sal_False;
+        return bRet;
     evaluate(EK_const);
     pExpr->evaluate(EK_const);
     if (m_exprValue == NULL || pExpr->getExprValue() == NULL)
-        return sal_False;
+        return bRet;
     if (m_exprValue->et != pExpr->getExprValue()->et)
-        return sal_False;
+        return bRet;
     switch (m_exprValue->et)
     {
         case ET_short:
-            return (m_exprValue->u.sval == pExpr->getExprValue()->u.sval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.sval == pExpr->getExprValue()->u.sval) ? sal_True : sal_False;
         case ET_ushort:
-            return (m_exprValue->u.usval == pExpr->getExprValue()->u.usval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.usval == pExpr->getExprValue()->u.usval) ? sal_True : sal_False;
         case ET_long:
-            return (m_exprValue->u.lval == pExpr->getExprValue()->u.lval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.lval == pExpr->getExprValue()->u.lval) ? sal_True : sal_False;
         case ET_ulong:
-            return (m_exprValue->u.ulval == pExpr->getExprValue()->u.ulval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.ulval == pExpr->getExprValue()->u.ulval) ? sal_True : sal_False;
         case ET_hyper:
-            return (m_exprValue->u.hval == pExpr->getExprValue()->u.hval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.hval == pExpr->getExprValue()->u.hval) ? sal_True : sal_False;
         case ET_uhyper:
-            return (m_exprValue->u.uhval == pExpr->getExprValue()->u.uhval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.uhval == pExpr->getExprValue()->u.uhval) ? sal_True : sal_False;
         case ET_float:
-            return (m_exprValue->u.fval == pExpr->getExprValue()->u.fval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.fval == pExpr->getExprValue()->u.fval) ? sal_True : sal_False;
         case ET_double:
-            return (m_exprValue->u.dval == pExpr->getExprValue()->u.dval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.dval == pExpr->getExprValue()->u.dval) ? sal_True : sal_False;
         case ET_byte:
-            return (m_exprValue->u.byval == pExpr->getExprValue()->u.byval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.byval == pExpr->getExprValue()->u.byval) ? sal_True : sal_False;
         case ET_boolean:
-            return (m_exprValue->u.lval == pExpr->getExprValue()->u.lval) ? sal_True : sal_False;
+            bRet = (m_exprValue->u.lval == pExpr->getExprValue()->u.lval) ? sal_True : sal_False;
         default:
             OSL_ASSERT(false);
-            return sal_False;
+            bRet = sal_False;
     }
 
-    return sal_False;
+    return bRet;
 }
 
 void AstExpression::fillDefinitionDetails()
