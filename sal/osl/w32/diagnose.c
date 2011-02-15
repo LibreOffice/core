@@ -180,7 +180,7 @@ sal_Int32 SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszMessage)
 
     // display the assert
     nDisposition = MessageBox(hWndParent, pszMessage, "Exception!", nFlags);
-
+    (void)nType; //unused, but part of public API/ABI
     return nDisposition;
 }
 
