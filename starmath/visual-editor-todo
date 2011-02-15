@@ -36,10 +36,9 @@ Complex
 
 Complex and non-essential
 -------------------------
-1. Global clipboard integration
-2. Support undo/redo with UndoManager integration
-3. Consider improving GUI for "Formula Elements"-dialog, most buttons work with visual editor
-4. Consider allowing users to enter commands in visual editor, by prefixing the command...
-5. Optimize things, for instance SmCursor::AnnotateSelection() is called way too many places...
-6. Improve handling of MoveUp and MoveDown in SmCursor::Move, SmCaretPos2LineVisitor might need improvement.
-7. Synchronized command text caret and visual editor caret.
+* Global clipboard integration
+* Consider improving GUI for "Formula Elements"-dialog, most buttons work with visual editor
+* Consider allowing users to enter commands in visual editor, by prefixing the command...
+* Optimize things, for instance SmCursor::AnnotateSelection() is called way too many places...
+* Improve handling of MoveUp and MoveDown in SmCursor::Move, SmCaretPos2LineVisitor might need improvement.
+* Synchronized command text caret and visual editor caret.

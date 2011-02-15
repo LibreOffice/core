@@ -1174,6 +1174,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                     (pTmpUndoMgr->*fnDo)( 0 );
             }
             Repaint();
+            UpdateText();
             SfxViewFrame* pFrm = SfxViewFrame::GetFirst( this );
             while( pFrm )
             {
