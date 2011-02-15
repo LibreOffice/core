@@ -893,7 +893,8 @@ void SalDisplay::Init()
         sscanf( pProperties, "%li", &nProperties_ );
     else
     {
-#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD || defined NETBSD || defined OPENBSD
+#if defined DBG_UTIL || defined SUN || defined LINUX || defined FREEBSD || \
+    defined NETBSD || defined OPENBSD || defined DRAGONFLY
         nProperties_ |= PROPERTY_FEATURE_Maximize;
 #endif
         // Server Bugs & Properties
@@ -919,7 +920,8 @@ void SalDisplay::Init()
         if( GetServerVendor() == vendor_xfree )
         {
             nProperties_ |= PROPERTY_BUG_XCopyArea_GXxor;
-#if defined LINUX || defined FREEBSD || defined NETBSD || defined OPENBSD
+#if defined LINUX || defined FREEBSD || defined NETBSD || defined OPENBSD || \
+    defined DRAGONFLY
             // otherwm and olwm are a kind of default, which are not detected
             // carefully. if we are running linux (i.e. not netbsd) on an xfree
             // display, fvwm is most probable the wm to choose, confusing with mwm

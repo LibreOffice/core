@@ -45,8 +45,8 @@
 extern "C" int mntctl( int cmd, size_t size, char* buf );
 #elif defined(NETBSD)
 #include <sys/mount.h>
-#elif defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD)
-#elif defined DECUNIX
+#elif defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD) || \
+      defined(DECUNIX) || defined(DRAGONFLY)
 struct mnttab
 {
   char *mnt_dir;
@@ -92,7 +92,7 @@ struct mymnttab
 
 
 #if defined(NETBSD) || defined(FREEBSD) || defined(MACOSX) || \
-    defined(OPENBSD)
+    defined(OPENBSD) || defined(DRAGONFLY)
 BOOL GetMountEntry(dev_t /* dev */, struct mymnttab * /* mytab */ )
 {
     DBG_WARNING( "Sorry, not implemented: GetMountEntry" );
@@ -218,7 +218,7 @@ BOOL DirEntry::IsCaseSensitive( FSysPathStyle eFormatter ) const
 
     if (eFormatter==FSYS_STYLE_HOST)
     {
-#ifdef NETBSD
+#if defined(NETBSD) || defined(DRAGONFLY)
         return TRUE;
 #else
         struct stat buf;

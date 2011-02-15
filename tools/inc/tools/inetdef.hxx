@@ -63,6 +63,10 @@
 #define TOOLS_INETDEF_OS "OpenBSD/i386"
 #elif defined OPENBSD && defined X86_64
 #define TOOLS_INETDEF_OS "OpenBSD/amd64"
+#elif defined DRAGONFLY && defined X86
+#define TOOLS_INETDEF_OS "DragonFly/i386"
+#elif defined DRAGONFLY && defined X86_64
+#define TOOLS_INETDEF_OS "DragonFly/amd64"
 #elif defined SINIX
 #define TOOLS_INETDEF_OS "SINIX"
 #else // AIX, HPUX, SOLARIS, ...

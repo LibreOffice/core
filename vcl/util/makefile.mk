@@ -328,7 +328,7 @@ SHL2STDLIBS+=`pkg-config --libs xrender`
 
 SHL2STDLIBS += -lXext -lSM -lICE -lX11
 .IF "$(OS)"!="MACOSX" && "$(OS)"!="FREEBSD" && "$(OS)"!="NETBSD" && \
-	&& "$(OS)"!="OPENBSD"
+    && "$(OS)"!="OPENBSD" "$(OS)"!="DRAGONFLY"
 # needed by salprnpsp.cxx
 SHL2STDLIBS+= -ldl
 .ENDIF

@@ -48,7 +48,9 @@
 extern "C" {
 #endif
 
-#if defined(LINUX) || defined(FREEBSD) || defined(MACOSX) || defined(NETBSD) || defined(OPENBSD) // should really check for xfree86 or for X11R6.1 and higher
+// FIXME: should really check for xfree86 or for X11R6.1 and higher
+#if defined(LINUX) || defined(FREEBSD) || defined(MACOSX) || defined(NETBSD) || \
+    defined(OPENBSD) || defined(DRAGONFLY)
 #define __XKeyboardExtension__ 1
 #else
 #define __XKeyboardExtension__ 0

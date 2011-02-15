@@ -339,6 +339,8 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
   #define __DLLEXTENSION "mxi.dylib"
 #elif defined OPENBSD
   #define __DLLEXTENSION "ob.so"
+#elif defined DRAGONFLY
+  #define __DLLEXTENSION "df.so"
 #else
   #error unknown plattform
 #endif
