@@ -80,12 +80,12 @@ class PropertyChgHelper :
     int     nEvtFlags;  // flags for event types allowed to be launched
 
     // default values
-    BOOL    bIsIgnoreControlCharacters;
-    BOOL    bIsUseDictionaryList;
+    sal_Bool    bIsIgnoreControlCharacters;
+    sal_Bool    bIsUseDictionaryList;
 
     // return values, will be set to default value or current temporary value
-    BOOL    bResIsIgnoreControlCharacters;
-    BOOL    bResIsUseDictionaryList;
+    sal_Bool    bResIsIgnoreControlCharacters;
+    sal_Bool    bResIsUseDictionaryList;
 
 
     // disallow use of copy-constructor and assignment-operator
@@ -102,9 +102,9 @@ protected:
         ::com::sun::star::beans::XPropertySet > &
             GetPropSet()    { return xPropSet; }
 
-    void    AddPropNames( const char *pNewNames[], INT32 nCount );
+    void    AddPropNames( const char *pNewNames[], sal_Int32 nCount );
 
-    virtual BOOL    propertyChange_Impl(
+    virtual sal_Bool    propertyChange_Impl(
                             const ::com::sun::star::beans::PropertyChangeEvent& rEvt );
 
 public:
@@ -155,8 +155,8 @@ public:
         ::com::sun::star::uno::XInterface > &
             GetEvtObj() const       { return xMyEvtObj; }
 
-    BOOL    IsIgnoreControlCharacters() const   { return bResIsIgnoreControlCharacters; }
-    BOOL    IsUseDictionaryList() const         { return bResIsUseDictionaryList; }
+    sal_Bool    IsIgnoreControlCharacters() const   { return bResIsIgnoreControlCharacters; }
+    sal_Bool    IsUseDictionaryList() const         { return bResIsUseDictionaryList; }
 };
 
 
@@ -189,15 +189,15 @@ class PropertyHelper_Spell :
     public PropertyChgHelper
 {
     // default values
-    BOOL    bIsSpellUpperCase;
-    BOOL    bIsSpellWithDigits;
-    BOOL    bIsSpellCapitalization;
+    sal_Bool    bIsSpellUpperCase;
+    sal_Bool    bIsSpellWithDigits;
+    sal_Bool    bIsSpellCapitalization;
 
     // return values, will be set to default value or current temporary value
-    INT16   nResMaxNumberOfSuggestions; // special value that is not part of the property set and thus needs to be handled differently
-    BOOL    bResIsSpellUpperCase;
-    BOOL    bResIsSpellWithDigits;
-    BOOL    bResIsSpellCapitalization;
+    sal_Int16   nResMaxNumberOfSuggestions; // special value that is not part of the property set and thus needs to be handled differently
+    sal_Bool    bResIsSpellUpperCase;
+    sal_Bool    bResIsSpellWithDigits;
+    sal_Bool    bResIsSpellCapitalization;
 
 
     // disallow use of copy-constructor and assignment-operator
@@ -208,7 +208,7 @@ protected:
     // PropertyChgHelper
     virtual void    SetDefaultValues();
     virtual void    GetCurrentValues();
-    virtual BOOL    propertyChange_Impl(
+    virtual sal_Bool    propertyChange_Impl(
                             const ::com::sun::star::beans::PropertyChangeEvent& rEvt );
 
 public:
@@ -226,12 +226,12 @@ public:
         propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt )
             throw(::com::sun::star::uno::RuntimeException);
 
-    virtual INT16   GetDefaultNumberOfSuggestions() const;
+    virtual sal_Int16   GetDefaultNumberOfSuggestions() const;
 
-    INT16   GetMaxNumberOfSuggestions() const   { return nResMaxNumberOfSuggestions; }
-    BOOL    IsSpellUpperCase() const            { return bResIsSpellUpperCase; }
-    BOOL    IsSpellWithDigits() const           { return bResIsSpellWithDigits; }
-    BOOL    IsSpellCapitalization() const       { return bResIsSpellCapitalization; }
+    sal_Int16   GetMaxNumberOfSuggestions() const   { return nResMaxNumberOfSuggestions; }
+    sal_Bool    IsSpellUpperCase() const            { return bResIsSpellUpperCase; }
+    sal_Bool    IsSpellWithDigits() const           { return bResIsSpellWithDigits; }
+    sal_Bool    IsSpellCapitalization() const       { return bResIsSpellCapitalization; }
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -240,12 +240,12 @@ class PropertyHelper_Hyphen :
     public PropertyChgHelper
 {
     // default values
-    INT16   nHyphMinLeading,
+    sal_Int16   nHyphMinLeading,
             nHyphMinTrailing,
             nHyphMinWordLength;
 
     // return values, will be set to default value or current temporary value
-    INT16   nResHyphMinLeading,
+    sal_Int16   nResHyphMinLeading,
             nResHyphMinTrailing,
             nResHyphMinWordLength;
 
@@ -257,7 +257,7 @@ protected:
     // PropertyChgHelper
     virtual void    SetDefaultValues();
     virtual void    GetCurrentValues();
-    virtual BOOL    propertyChange_Impl(
+    virtual sal_Bool    propertyChange_Impl(
                             const ::com::sun::star::beans::PropertyChangeEvent& rEvt );
 
 public:
@@ -275,9 +275,9 @@ public:
         propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& rEvt )
             throw(::com::sun::star::uno::RuntimeException);
 
-    INT16   GetMinLeading() const               { return nResHyphMinLeading; }
-    INT16   GetMinTrailing() const              { return nResHyphMinTrailing; }
-    INT16   GetMinWordLength() const            { return nResHyphMinWordLength; }
+    sal_Int16   GetMinLeading() const               { return nResHyphMinLeading; }
+    sal_Int16   GetMinTrailing() const              { return nResHyphMinTrailing; }
+    sal_Int16   GetMinWordLength() const            { return nResHyphMinWordLength; }
 };
 
 ///////////////////////////////////////////////////////////////////////////

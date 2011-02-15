@@ -275,7 +275,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
         rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {
@@ -1017,7 +1017,7 @@ void SchXMLChartContext::MergeSeriesForStockChart()
 }
 
 SvXMLImportContext* SchXMLChartContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -1196,7 +1196,7 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
         rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if( nPrefix == XML_NAMESPACE_SVG )
         {
@@ -1241,7 +1241,7 @@ void SchXMLTitleContext::StartElement( const uno::Reference< xml::sax::XAttribut
 }
 
 SvXMLImportContext* SchXMLTitleContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& )
 {

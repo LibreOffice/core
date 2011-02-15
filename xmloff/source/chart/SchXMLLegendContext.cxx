@@ -151,7 +151,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
         rtl::OUString aValue = xAttrList->getValueByIndex( i );
-        USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {

@@ -64,8 +64,8 @@ using namespace ::com::sun::star::beans;
 
 // Please look at sfx2/inc/sfxsids.hrc the values are defined there. Due to build dependencies
 // we cannot include the header file.
-const USHORT SID_HELPMENU            = (SID_SFX_START + 410);
-const USHORT SID_ONLINE_REGISTRATION = (SID_SFX_START + 1537);
+const sal_uInt16 SID_HELPMENU            = (SID_SFX_START + 410);
+const sal_uInt16 SID_ONLINE_REGISTRATION = (SID_SFX_START + 1537);
 
 namespace framework
 {
@@ -77,12 +77,12 @@ AddonMenu::AddonMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::
 
 AddonMenu::~AddonMenu()
 {
-    for ( USHORT i = 0; i < GetItemCount(); i++ )
+    for ( sal_uInt16 i = 0; i < GetItemCount(); i++ )
     {
         if ( GetItemType( i ) != MENUITEM_SEPARATOR )
         {
             // delete user attributes created with new!
-            USHORT nId = GetItemId( i );
+            sal_uInt16 nId = GetItemId( i );
             MenuConfiguration::Attributes* pUserAttributes = (MenuConfiguration::Attributes*)GetUserValue( nId );
             delete pUserAttributes;
             delete GetPopupMenu( nId );
@@ -154,7 +154,7 @@ AddonMenu* AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& rFrame 
 {
     AddonsOptions aOptions;
     AddonMenu*  pAddonMenu      = NULL;
-    USHORT      nUniqueMenuId   = ADDONMENU_ITEMID_START;
+    sal_uInt16      nUniqueMenuId   = ADDONMENU_ITEMID_START;
 
     const Sequence< Sequence< PropertyValue > >& rAddonMenuEntries = aOptions.GetAddonsMenu();
     if ( rAddonMenuEntries.getLength() > 0 )
@@ -175,19 +175,19 @@ AddonMenu* AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& rFrame 
 }
 
 // Returns the next insert position from nPos.
-USHORT AddonMenuManager::GetNextPos( USHORT nPos )
+sal_uInt16 AddonMenuManager::GetNextPos( sal_uInt16 nPos )
 {
     return ( nPos == MENU_APPEND ) ? MENU_APPEND : ( nPos+1 );
 }
 
 
-static USHORT FindMenuId( Menu* pMenu, const String aCommand )
+static sal_uInt16 FindMenuId( Menu* pMenu, const String aCommand )
 {
-    USHORT nPos = 0;
+    sal_uInt16 nPos = 0;
     String aCmd;
     for ( nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
     {
-        USHORT nId = pMenu->GetItemId( nPos );
+        sal_uInt16 nId = pMenu->GetItemId( nPos );
         aCmd = pMenu->GetItemCommand( nId );
         if ( aCmd == aCommand )
             return nId;
@@ -205,7 +205,7 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, Me
         PopupMenu* pHelpMenu = pMergeMenuBar->GetPopupMenu( SID_HELPMENU );
         if ( !pHelpMenu )
         {
-            USHORT nId = FindMenuId( pMergeMenuBar, String::CreateFromAscii( ".uno:HelpMenu" ));
+            sal_uInt16 nId = FindMenuId( pMergeMenuBar, String::CreateFromAscii( ".uno:HelpMenu" ));
             if ( nId != USHRT_MAX )
                 pHelpMenu = pMergeMenuBar->GetPopupMenu( nId );
         }
@@ -217,17 +217,17 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, Me
 
             // Add-Ons help menu items should be inserted after the "registration" menu item
             bool   bAddAfter        = true;
-            USHORT nItemCount       = pHelpMenu->GetItemCount();
-            USHORT nRegPos          = pHelpMenu->GetItemPos( SID_ONLINE_REGISTRATION );
-            USHORT nInsPos          = nRegPos;
-            USHORT nInsSepAfterPos  = MENU_APPEND;
-            USHORT nUniqueMenuId    = ADDONMENU_ITEMID_START;
+            sal_uInt16 nItemCount       = pHelpMenu->GetItemCount();
+            sal_uInt16 nRegPos          = pHelpMenu->GetItemPos( SID_ONLINE_REGISTRATION );
+            sal_uInt16 nInsPos          = nRegPos;
+            sal_uInt16 nInsSepAfterPos  = MENU_APPEND;
+            sal_uInt16 nUniqueMenuId    = ADDONMENU_ITEMID_START;
             AddonsOptions aOptions;
 
             if ( nRegPos == USHRT_MAX )
             {
                 // try to detect the online registration dialog menu item with the command URL
-                USHORT nId = FindMenuId( pHelpMenu, String::CreateFromAscii( REFERENCECOMMAND_AFTER ));
+                sal_uInt16 nId = FindMenuId( pHelpMenu, String::CreateFromAscii( REFERENCECOMMAND_AFTER ));
                 nRegPos    = pHelpMenu->GetItemPos( nId );
                 nInsPos    = nRegPos;
             }
@@ -236,7 +236,7 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, Me
             {
                 // second try:
                 // try to detect the about menu item with the command URL
-                USHORT nId = FindMenuId( pHelpMenu, String::CreateFromAscii( REFERENCECOMMAND_BEFORE ));
+                sal_uInt16 nId = FindMenuId( pHelpMenu, String::CreateFromAscii( REFERENCECOMMAND_BEFORE ));
                 nRegPos    = pHelpMenu->GetItemPos( nId );
                 nInsPos    = nRegPos;
                 bAddAfter  = false;
@@ -272,13 +272,13 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, Me
 // Merge the addon popup menus into the given menu bar at the provided pos.
 void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
                                              const Reference< XModel >& rModel,
-                                             USHORT               nMergeAtPos,
+                                             sal_uInt16               nMergeAtPos,
                                              MenuBar*             pMergeMenuBar )
 {
     if ( pMergeMenuBar )
     {
         AddonsOptions   aAddonsOptions;
-        USHORT          nInsertPos = nMergeAtPos;
+        sal_uInt16          nInsertPos = nMergeAtPos;
 
         ::rtl::OUString                              aTitle;
         ::rtl::OUString                              aURL;
@@ -286,7 +286,7 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
         ::rtl::OUString                              aImageId;
         ::rtl::OUString                              aContext;
         Sequence< Sequence< PropertyValue > > aAddonSubMenu;
-        USHORT                                nUniqueMenuId = ADDONMENU_ITEMID_START;
+        sal_uInt16                                nUniqueMenuId = ADDONMENU_ITEMID_START;
 
         const Sequence< Sequence< PropertyValue > >&    rAddonMenuEntries = aAddonsOptions.GetAddonsMenuBarPart();
         for ( sal_Int32 i = 0; i < rAddonMenuEntries.getLength(); i++ )
@@ -303,7 +303,7 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
                  aAddonSubMenu.getLength() > 0 &&
                  AddonMenuManager::IsCorrectContext( rModel, aContext ))
             {
-                USHORT          nId             = nUniqueMenuId++;
+                sal_uInt16          nId             = nUniqueMenuId++;
                 AddonPopupMenu* pAddonPopupMenu = (AddonPopupMenu *)AddonMenuManager::CreatePopupMenuType( ADDON_POPUPMENU, rFrame );
 
                 AddonMenuManager::BuildMenu( pAddonPopupMenu, ADDON_MENU, MENU_APPEND, nUniqueMenuId, aAddonSubMenu, rFrame, rModel );
@@ -327,17 +327,17 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
 // Insert the menu and sub menu entries into pCurrentMenu with the aAddonMenuDefinition provided
 void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrentMenu,
                                   MenuType                              nSubMenuType,
-                                  USHORT                                nInsPos,
-                                  USHORT&                               nUniqueMenuId,
+                                  sal_uInt16                                nInsPos,
+                                  sal_uInt16&                               nUniqueMenuId,
                                   Sequence< Sequence< PropertyValue > > aAddonMenuDefinition,
                                   const Reference< XFrame >&            rFrame,
                                   const Reference< XModel >&            rModel )
 {
     Sequence< Sequence< PropertyValue > >   aAddonSubMenu;
-    BOOL                                    bInsertSeparator    = FALSE;
-    UINT32                                  i                   = 0;
-    UINT32                                  nElements           = 0;
-    UINT32                                  nCount              = aAddonMenuDefinition.getLength();
+    sal_Bool                                    bInsertSeparator    = sal_False;
+    sal_uInt32                                  i                   = 0;
+    sal_uInt32                                  nElements           = 0;
+    sal_uInt32                                  nCount              = aAddonMenuDefinition.getLength();
     AddonsOptions                           aAddonsOptions;
 
     ::rtl::OUString aTitle;
@@ -354,7 +354,7 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
             continue;
 
         if ( aURL == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:separator" )))
-            bInsertSeparator = TRUE;
+            bInsertSeparator = sal_True;
         else
         {
             PopupMenu* pSubMenu = NULL;
@@ -377,12 +377,12 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
                 // Insert a separator only when we insert a new element afterwards and we
                 // have already one before us
                 nElements = 0;
-                bInsertSeparator = FALSE;
+                bInsertSeparator = sal_False;
                 pCurrentMenu->InsertSeparator( nInsPos );
                 nInsPos = AddonMenuManager::GetNextPos( nInsPos );
             }
 
-            USHORT nId = nUniqueMenuId++;
+            sal_uInt16 nId = nUniqueMenuId++;
             pCurrentMenu->InsertItem( nId, aTitle, 0, nInsPos );
             nInsPos = AddonMenuManager::GetNextPos( nInsPos );
 
@@ -390,7 +390,7 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
 
             // Store values from configuration to the New and Wizard menu entries to enable
             // sfx2 based code to support high contrast mode correctly!
-            pCurrentMenu->SetUserValue( nId, ULONG( new MenuConfiguration::Attributes( aTarget, aImageId )) );
+            pCurrentMenu->SetUserValue( nId, sal_uIntPtr( new MenuConfiguration::Attributes( aTarget, aImageId )) );
             pCurrentMenu->SetItemCommand( nId, aURL );
 
             if ( pSubMenu )

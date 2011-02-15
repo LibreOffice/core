@@ -898,7 +898,7 @@ void DbCellControl::Init( Window& rParent, const Reference< XRowSet >& _rxCursor
             {
                 sal_Int16 nWheelBehavior = MouseWheelBehavior::SCROLL_FOCUS_ONLY;
                 OSL_VERIFY( xModel->getPropertyValue( FM_PROP_MOUSE_WHEEL_BEHAVIOR ) >>= nWheelBehavior );
-                USHORT nVclSetting = MOUSE_WHEEL_FOCUS_ONLY;
+                sal_uInt16 nVclSetting = MOUSE_WHEEL_FOCUS_ONLY;
                 switch ( nWheelBehavior )
                 {
                 case MouseWheelBehavior::SCROLL_DISABLED:   nVclSetting = MOUSE_WHEEL_DISABLE; break;
@@ -913,7 +913,7 @@ void DbCellControl::Init( Window& rParent, const Reference< XRowSet >& _rxCursor
                 MouseSettings aMouseSettings = aSettings.GetMouseSettings();
                 aMouseSettings.SetWheelBehavior( nVclSetting );
                 aSettings.SetMouseSettings( aMouseSettings );
-                m_pWindow->SetSettings( aSettings, TRUE );
+                m_pWindow->SetSettings( aSettings, sal_True );
             }
         }
         catch( const Exception& )
@@ -986,7 +986,7 @@ void DbCellControl::PaintCell( OutputDevice& _rDev, const Rectangle& _rRect )
         m_pPainter->SetTextFillColor( _rDev.GetTextColor() );
 
         Font aFont( _rDev.GetFont() );
-        aFont.SetTransparent( TRUE );
+        aFont.SetTransparent( sal_True );
         m_pPainter->SetFont( aFont );
 
         m_pPainter->SetPosSizePixel( _rRect.TopLeft(), _rRect.GetSize() );
@@ -2274,13 +2274,13 @@ void DbDateField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
         static_cast< DateField* >( m_pWindow )->SetMin( nMin );
         static_cast< DateField* >( m_pWindow )->SetMax( nMax );
         static_cast< DateField* >( m_pWindow )->SetStrictFormat( bStrict );
-        static_cast< DateField* >( m_pWindow )->EnableEmptyFieldValue( TRUE );
+        static_cast< DateField* >( m_pWindow )->EnableEmptyFieldValue( sal_True );
 
         static_cast< DateField* >( m_pPainter )->SetExtDateFormat( (ExtDateFieldFormat)nFormat );
         static_cast< DateField* >( m_pPainter )->SetMin( nMin );
         static_cast< DateField* >( m_pPainter )->SetMax( nMax );
         static_cast< DateField* >( m_pPainter )->SetStrictFormat( bStrict );
-        static_cast< DateField* >( m_pPainter )->EnableEmptyFieldValue( TRUE );
+        static_cast< DateField* >( m_pPainter )->EnableEmptyFieldValue( sal_True );
     }
 }
 
@@ -2384,13 +2384,13 @@ void DbTimeField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
         static_cast< TimeField* >( m_pWindow )->SetMin( nMin );
         static_cast< TimeField* >( m_pWindow )->SetMax( nMax );
         static_cast< TimeField* >( m_pWindow )->SetStrictFormat( bStrict );
-        static_cast< TimeField* >( m_pWindow )->EnableEmptyFieldValue( TRUE );
+        static_cast< TimeField* >( m_pWindow )->EnableEmptyFieldValue( sal_True );
 
         static_cast< TimeField* >( m_pPainter )->SetExtFormat( (ExtTimeFieldFormat)nFormat );
         static_cast< TimeField* >( m_pPainter )->SetMin( nMin );
         static_cast< TimeField* >( m_pPainter )->SetMax( nMax );
         static_cast< TimeField* >( m_pPainter )->SetStrictFormat( bStrict );
-        static_cast< TimeField* >( m_pPainter )->EnableEmptyFieldValue( TRUE );
+        static_cast< TimeField* >( m_pPainter )->EnableEmptyFieldValue( sal_True );
     }
 }
 
@@ -3499,7 +3499,7 @@ void FmXGridCell::onFocusLost( const awt::FocusEvent& _rEvent )
 }
 
 //------------------------------------------------------------------------------
-void FmXGridCell::onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData )
+void FmXGridCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _rWindow, const void* _pEventData )
 {
     switch ( _nEventId )
     {
@@ -3908,7 +3908,7 @@ void FmXEditCell::onFocusLost( const awt::FocusEvent& _rEvent )
 }
 
 //------------------------------------------------------------------------------
-void FmXEditCell::onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData )
+void FmXEditCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _rWindow, const void* _pEventData )
 {
     switch ( _nEventId )
     {
@@ -4066,7 +4066,7 @@ Window* FmXCheckBoxCell::getEventWindow() const
 }
 
 //------------------------------------------------------------------
-void FmXCheckBoxCell::onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData )
+void FmXCheckBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _rWindow, const void* _pEventData )
 {
     switch ( _nEventId )
     {
@@ -4403,7 +4403,7 @@ void SAL_CALL FmXListBoxCell::makeVisible(sal_Int16 nEntry) throw( RuntimeExcept
 }
 
 //------------------------------------------------------------------
-void FmXListBoxCell::onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData )
+void FmXListBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _rWindow, const void* _pEventData )
 {
     if  (   ( &_rWindow == m_pBox )
         &&  ( _nEventId == VCLEVENT_LISTBOX_SELECT )
@@ -4617,7 +4617,7 @@ void SAL_CALL FmXComboBoxCell::setDropDownLineCount(sal_Int16 nLines) throw( Run
 }
 
 //------------------------------------------------------------------------------
-void FmXComboBoxCell::onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData )
+void FmXComboBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _rWindow, const void* _pEventData )
 {
 
     switch ( _nEventId )

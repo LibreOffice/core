@@ -457,7 +457,7 @@ uno::Any SvxUnoXDashTable::getAny( const XPropertyEntry* pEntry ) const throw()
 
     drawing::LineDash aLineDash;
 
-    aLineDash.Style = (::com::sun::star::drawing::DashStyle)((UINT16)rXD.GetDashStyle());
+    aLineDash.Style = (::com::sun::star::drawing::DashStyle)((sal_uInt16)rXD.GetDashStyle());
     aLineDash.Dots = rXD.GetDots();
     aLineDash.DotLen = rXD.GetDotLen();
     aLineDash.Dashes = rXD.GetDashes();
@@ -477,7 +477,7 @@ XPropertyEntry* SvxUnoXDashTable::getEntry( const OUString& rName, const uno::An
 
     XDash aXDash;
 
-    aXDash.SetDashStyle((XDashStyle)((UINT16)(aLineDash.Style)));
+    aXDash.SetDashStyle((XDashStyle)((sal_uInt16)(aLineDash.Style)));
     aXDash.SetDots(aLineDash.Dots);
     aXDash.SetDotLen(aLineDash.DotLen);
     aXDash.SetDashes(aLineDash.Dashes);
@@ -616,8 +616,8 @@ uno::Any SvxUnoXGradientTable::getAny( const XPropertyEntry* pEntry ) const thro
     awt::Gradient aGradient;
 
     aGradient.Style = (awt::GradientStyle) aXGradient.GetGradientStyle();
-    aGradient.StartColor = (INT32)aXGradient.GetStartColor().GetColor();
-    aGradient.EndColor = (INT32)aXGradient.GetEndColor().GetColor();
+    aGradient.StartColor = (sal_Int32)aXGradient.GetStartColor().GetColor();
+    aGradient.EndColor = (sal_Int32)aXGradient.GetEndColor().GetColor();
     aGradient.Angle = (short)aXGradient.GetAngle();
     aGradient.Border = aXGradient.GetBorder();
     aGradient.XOffset = aXGradient.GetXOffset();

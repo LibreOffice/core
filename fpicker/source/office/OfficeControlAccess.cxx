@@ -537,7 +537,7 @@ namespace svt
             {
                 sal_Int32 nPos = 0;
                 if ( _rValue >>= nPos )
-                    _pListbox->RemoveEntry( (USHORT) nPos );
+                    _pListbox->RemoveEntry( (sal_uInt16) nPos );
             }
             break;
 
@@ -675,7 +675,7 @@ namespace svt
                 sal_Int32 nPos = 0;
                 if ( _rValue >>= nPos )
                 {
-                    static_cast< ListBox* >( _pControl )->SelectEntryPos( (USHORT) nPos );
+                    static_cast< ListBox* >( _pControl )->SelectEntryPos( (sal_uInt16) nPos );
                 }
                 else if ( !_bIgnoreIllegalArgument )
                 {
@@ -737,7 +737,7 @@ namespace svt
 
                 Sequence< ::rtl::OUString > aItems( static_cast< ListBox* >( _pControl )->GetEntryCount() );
                 ::rtl::OUString* pItems = aItems.getArray();
-                for ( USHORT i=0; i<static_cast< ListBox* >( _pControl )->GetEntryCount(); ++i )
+                for ( sal_uInt16 i=0; i<static_cast< ListBox* >( _pControl )->GetEntryCount(); ++i )
                     *pItems++ = static_cast< ListBox* >( _pControl )->GetEntry( i );
 
                 aReturn <<= aItems;
@@ -749,7 +749,7 @@ namespace svt
                 DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
-                USHORT nSelected = static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
+                sal_uInt16 nSelected = static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
                 ::rtl::OUString sSelected;
                 if ( LISTBOX_ENTRY_NOTFOUND != nSelected )
                     sSelected = static_cast< ListBox* >( _pControl )->GetSelectEntry();
@@ -762,7 +762,7 @@ namespace svt
                 DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
-                USHORT nSelected = static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
+                sal_uInt16 nSelected = static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
                 if ( LISTBOX_ENTRY_NOTFOUND != nSelected )
                     aReturn <<= (sal_Int32)static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
                 else
