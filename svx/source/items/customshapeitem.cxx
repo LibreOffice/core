@@ -71,9 +71,6 @@ SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( const uno::Sequence< bea
     sal_Int32 i, j;
     aPropSeq = rVal;
 
-    // hashing property values
-//  beans::PropertyValue* pPropValues = aPropSeq.getArray();
-//  const rtl::OUString* pPtr = NULL;
     for ( i = 0; i < aPropSeq.getLength(); i++ )
     {
         beans::PropertyValue& rPropVal = aPropSeq[ i ];
@@ -309,7 +306,6 @@ SfxItemPresentation SdrCustomShapeGeometryItem::GetPresentation(
     if ( ePresentation == SFX_ITEM_PRESENTATION_COMPLETE )
     {
         XubString aStr;
-//      SdrItemPool::TakeItemName( Which(), aStr );
         aStr += sal_Unicode( ' ' );
         rText.Insert( aStr, 0 );
     }
@@ -332,17 +328,7 @@ SvStream& SdrCustomShapeGeometryItem::Store( SvStream& rOut, sal_uInt16 nItemVer
 
 SfxPoolItem* SdrCustomShapeGeometryItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
-    SdrCustomShapeGeometryItem* pItem = new SdrCustomShapeGeometryItem( GetGeometry() );
-//  SdrCustomShapeGeometryItem* pItem = new SdrCustomShapeGeometryItem( *this );
-
-/*
-    for ( i = 0; i < GetCount(); i++ )
-    {
-        const SdrCustomShapeAdjustmentValue& rVal = GetValue( i );
-        pItem->SetValue( i, rVal );
-    }
-*/
-    return pItem;
+    return new SdrCustomShapeGeometryItem( GetGeometry() );
 }
 
 sal_uInt16 SdrCustomShapeGeometryItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/ ) const
@@ -365,12 +351,7 @@ const uno::Sequence< beans::PropertyValue >& SdrCustomShapeGeometryItem::GetGeom
 {
     return aPropSeq;
 }
-/*
-const uno::Any* GetValueByName( const rtl::OUString& rProperty ) const
-{
 
-}
-*/
 SdrCustomShapeReplacementURLItem::SdrCustomShapeReplacementURLItem()
 :   SfxStringItem( SDRATTR_CUSTOMSHAPE_REPLACEMENT_URL, String() )
 {}
