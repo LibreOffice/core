@@ -98,9 +98,9 @@ XclImpOutlineBuffer::XclImpOutlineBuffer( SCSIZE nNewSize )
     DBG_ASSERT( nNewSize > 0, "-OutlineBuffer::Ctor: nNewSize == 0!" );
 
     nSize = nNewSize + 1;
-    pLevel = new BYTE[ nSize ];
-    pOuted = new BOOL[ nSize ];
-    pHidden = new BOOL[ nSize ];
+    pLevel = new sal_uInt8[ nSize ];
+    pOuted = new sal_Bool[ nSize ];
+    pHidden = new sal_Bool[ nSize ];
     pOutlineArray = NULL;
 
     Reset();
@@ -115,7 +115,7 @@ XclImpOutlineBuffer::~XclImpOutlineBuffer()
 }
 
 
-void XclImpOutlineBuffer::SetLevel( SCSIZE nIndex, BYTE nVal, BOOL bOuted, BOOL bHidden )
+void XclImpOutlineBuffer::SetLevel( SCSIZE nIndex, sal_uInt8 nVal, sal_Bool bOuted, sal_Bool bHidden )
 {
     if( nIndex < nSize )
     {
@@ -143,28 +143,28 @@ void XclImpOutlineBuffer::MakeScOutline( void )
     if( !pOutlineArray || !HasOutline() )
         return;
 
-    const UINT16    nNumLev         = 8;
-    BOOL            bPreOutedLevel  = FALSE;
-    BYTE            nCurrLevel      = 0;
-    BOOL            bMakeHidden[ nNumLev ];
-    BOOL            bMakeVisible[ nNumLev + 1 ];
+    const sal_uInt16    nNumLev         = 8;
+    sal_Bool            bPreOutedLevel  = sal_False;
+    sal_uInt8           nCurrLevel      = 0;
+    sal_Bool            bMakeHidden[ nNumLev ];
+    sal_Bool            bMakeVisible[ nNumLev + 1 ];
 
     sal_uInt16 nLevel;
     for( nLevel = 0; nLevel < nNumLev; ++nLevel )
-        bMakeHidden[ nLevel ] = FALSE;
+        bMakeHidden[ nLevel ] = sal_False;
     for( nLevel = 0; nLevel <= nNumLev; ++nLevel )
-        bMakeVisible[ nLevel ] = TRUE;
+        bMakeVisible[ nLevel ] = sal_True;
     if( nLast < (nSize - 1) )
         nLast++;
 
     // search for hidden attributes at end of level, move them to begin
     if( bButtonNormal )
     {
-        for( BYTE nWorkLevel = 1; nWorkLevel <= nMaxLevel; nWorkLevel++ )
+        for( sal_uInt8 nWorkLevel = 1; nWorkLevel <= nMaxLevel; nWorkLevel++ )
         {
-            UINT16  nStartPos       = 0;
-            BYTE    nCurrLevel2 = 0;
-            BYTE    nPrevLevel  = 0;
+            sal_uInt16  nStartPos       = 0;
+            sal_uInt8    nCurrLevel2 = 0;
+            sal_uInt8   nPrevLevel  = 0;
 
             for( SCSIZE nC = 0 ; nC <= nLast ; nC++ )
             {
@@ -177,10 +177,10 @@ void XclImpOutlineBuffer::MakeScOutline( void )
                     if( pOuted[ nC ] && pHidden[ nStartPos ] )
                     {
                         if( nStartPos )
-                            pOuted[ nStartPos - 1 ] = TRUE;
+                            pOuted[ nStartPos - 1 ] = sal_True;
                         else
-                            bPreOutedLevel = TRUE;
-                        pOuted[ nC ] = FALSE;
+                            bPreOutedLevel = sal_True;
+                        pOuted[ nC ] = sal_False;
                     }
                 }
             }
@@ -190,16 +190,16 @@ void XclImpOutlineBuffer::MakeScOutline( void )
         bPreOutedLevel = pHidden[ 0 ];
 
     // generate SC outlines
-    UINT16  nPrevC;
-    UINT16  nStart[ nNumLev ];
-    BOOL    bDummy;
-    BOOL    bPrevOuted  = bPreOutedLevel;
-    BOOL    bCurrHidden = FALSE;
-    BOOL    bPrevHidden = FALSE;
+    sal_uInt16  nPrevC;
+    sal_uInt16  nStart[ nNumLev ];
+    sal_Bool    bDummy;
+    sal_Bool    bPrevOuted  = bPreOutedLevel;
+    sal_Bool    bCurrHidden = sal_False;
+    sal_Bool    bPrevHidden = sal_False;
 
     for( SCSIZE nC = 0; nC <= nLast; nC++ )
     {
-        BYTE nWorkLevel = pLevel[ nC ];
+        sal_uInt8 nWorkLevel = pLevel[ nC ];
 
         nPrevC      = static_cast< sal_uInt16 >( nC ? nC - 1 : 0 );
         bPrevHidden = bCurrHidden;
@@ -217,9 +217,9 @@ void XclImpOutlineBuffer::MakeScOutline( void )
         // close levels
         while( nWorkLevel < nCurrLevel )
         {
-            BOOL bLastLevel     = (nWorkLevel == (nCurrLevel - 1));
-            BOOL bRealHidden    = (bMakeHidden[ nCurrLevel ] && bPrevHidden );
-            BOOL bRealVisible   = (bMakeVisible[ nCurrLevel ] ||
+            sal_Bool bLastLevel     = (nWorkLevel == (nCurrLevel - 1));
+            sal_Bool bRealHidden    = (bMakeHidden[ nCurrLevel ] && bPrevHidden );
+            sal_Bool bRealVisible   = (bMakeVisible[ nCurrLevel ] ||
                                     (!bCurrHidden && bLastLevel));
 
             pOutlineArray->Insert( nStart[ nCurrLevel ], nPrevC , bDummy,
@@ -232,8 +232,8 @@ void XclImpOutlineBuffer::MakeScOutline( void )
 }
 
 
-void XclImpOutlineBuffer::SetLevelRange( SCSIZE nF, SCSIZE nL, BYTE nVal,
-                                    BOOL bOuted, BOOL bHidden )
+void XclImpOutlineBuffer::SetLevelRange( SCSIZE nF, SCSIZE nL, sal_uInt8 nVal,
+                                    sal_Bool bOuted, sal_Bool bHidden )
 {
     DBG_ASSERT( nF <= nL, "+OutlineBuffer::SetLevelRange(): Last < First!" );
 
@@ -242,10 +242,10 @@ void XclImpOutlineBuffer::SetLevelRange( SCSIZE nF, SCSIZE nL, BYTE nVal,
         if( nL > nLast )
             nLast = nL;
 
-        BYTE*   pLevelCount;
-        BYTE*   pLast;
-        BOOL*   pOutedCount;
-        BOOL*   pHiddenCount;
+        sal_uInt8*  pLevelCount;
+        sal_uInt8*  pLast;
+        sal_Bool*   pOutedCount;
+        sal_Bool*   pHiddenCount;
 
         pLevelCount = &pLevel[ nF ];
         pLast = &pLevel[ nL ];
@@ -270,7 +270,7 @@ void XclImpOutlineBuffer::Reset( void )
     for( SCSIZE nC = 0 ; nC < nSize ; nC++  )
     {
         pLevel[ nC ] = 0;
-        pOuted[ nC ] = pHidden[ nC ] = FALSE;
+        pOuted[ nC ] = pHidden[ nC ] = sal_False;
     }
     nLast = 0;
     nMaxLevel = 0;
@@ -280,7 +280,7 @@ void XclImpOutlineBuffer::Reset( void )
 //___________________________________________________________________
 
 
-ExcScenarioCell::ExcScenarioCell( const UINT16 nC, const UINT16 nR ) : nCol( nC ), nRow( nR )
+ExcScenarioCell::ExcScenarioCell( const sal_uInt16 nC, const sal_uInt16 nR ) : nCol( nC ), nRow( nR )
 {
 }
 
@@ -300,8 +300,8 @@ void ExcScenarioCell::SetValue( const String& r )
 
 ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( rR.pIR->GetCurrScTab() )
 {
-    UINT16          nCref;
-    UINT8           nName, nComment;
+    sal_uInt16          nCref;
+    sal_uInt8           nName, nComment;
 
     rIn >> nCref;
     rIn >> nProtected;
@@ -324,8 +324,8 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( rR.pIR
     else
         pComment = new String;
 
-    UINT16          n = nCref;
-    UINT16          nC, nR;
+    sal_uInt16          n = nCref;
+    sal_uInt16          nC, nR;
     while( n )
     {
         rIn >> nR >> nC;
@@ -365,24 +365,24 @@ ExcScenario::~ExcScenario()
 }
 
 
-void ExcScenario::Apply( const XclImpRoot& rRoot, const BOOL bLast )
+void ExcScenario::Apply( const XclImpRoot& rRoot, const sal_Bool bLast )
 {
     ScDocument&         r = rRoot.GetDoc();
     ExcScenarioCell*    p = EXCSCFIRST();
     String              aSzenName( *pName );
-    UINT16              nNewTab = nTab + 1;
+    sal_uInt16              nNewTab = nTab + 1;
 
     if( !r.InsertTab( nNewTab, aSzenName ) )
         return;
 
-    r.SetScenario( nNewTab, TRUE );
+    r.SetScenario( nNewTab, sal_True );
     // #112621# do not show scenario frames
     r.SetScenarioData( nNewTab, *pComment, COL_LIGHTGRAY, /*SC_SCENARIO_SHOWFRAME|*/SC_SCENARIO_COPYALL|(nProtected ? SC_SCENARIO_PROTECT : 0) );
 
     while( p )
     {
-        UINT16          nCol = p->nCol;
-        UINT16          nRow = p->nRow;
+        sal_uInt16          nCol = p->nCol;
+        sal_uInt16          nRow = p->nRow;
         String          aVal = p->GetValue();
 
         r.ApplyFlagsTab( nCol, nRow, nCol, nRow, nNewTab, SC_MF_SCENARIO );
@@ -393,7 +393,7 @@ void ExcScenario::Apply( const XclImpRoot& rRoot, const BOOL bLast )
     }
 
     if( bLast )
-        r.SetActiveScenario( nNewTab, TRUE );
+        r.SetActiveScenario( nNewTab, sal_True );
 
     // #111896# modify what the Active tab is set to if the new
     // scenario tab occurs before the active tab.
@@ -421,12 +421,12 @@ ExcScenarioList::~ExcScenarioList()
 void ExcScenarioList::Apply( const XclImpRoot& rRoot )
 {
     ExcScenario*    p = _Last();
-    UINT16          n = ( UINT16 ) Count();
+    sal_uInt16          n = ( sal_uInt16 ) Count();
 
     while( p )
     {
         n--;
-        p->Apply( rRoot, ( BOOL ) ( n == nLastScenario ) );
+        p->Apply( rRoot, ( sal_Bool ) ( n == nLastScenario ) );
         p = _Prev();
     }
 }

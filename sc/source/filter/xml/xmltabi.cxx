@@ -144,7 +144,7 @@ ScXMLExternalTabData::ScXMLExternalTabData() :
 //------------------------------------------------------------------
 
 ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -171,7 +171,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
         {
             const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
             rtl::OUString aLocalName;
-            USHORT nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
+            sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                                 sAttrName, &aLocalName ));
             const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
@@ -232,7 +232,7 @@ ScXMLTableContext::~ScXMLTableContext()
 {
 }
 
-SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -372,24 +372,24 @@ void ScXMLTableContext::EndElement()
             sal_Int32 i;
             for (i = 0; i < nDepth; ++i)
             {
-                sal_Int32 nCount(pColArray->GetCount(static_cast<USHORT>(i)));
+                sal_Int32 nCount(pColArray->GetCount(static_cast<sal_uInt16>(i)));
                 for (sal_Int32 j = 0; j < nCount; ++j)
                 {
-                    ScOutlineEntry* pEntry(pColArray->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j)));
+                    ScOutlineEntry* pEntry(pColArray->GetEntry(static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(j)));
                     if (pEntry->IsHidden())
-                        pColArray->SetVisibleBelow(static_cast<USHORT>(i), static_cast<USHORT>(j), sal_False);
+                        pColArray->SetVisibleBelow(static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(j), sal_False);
                 }
             }
             ScOutlineArray* pRowArray(pOutlineTable->GetRowArray());
             nDepth = pRowArray->GetDepth();
             for (i = 0; i < nDepth; ++i)
             {
-                sal_Int32 nCount(pRowArray->GetCount(static_cast<USHORT>(i)));
+                sal_Int32 nCount(pRowArray->GetCount(static_cast<sal_uInt16>(i)));
                 for (sal_Int32 j = 0; j < nCount; ++j)
                 {
-                    ScOutlineEntry* pEntry(pRowArray->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j)));
+                    ScOutlineEntry* pEntry(pRowArray->GetEntry(static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(j)));
                     if (pEntry->IsHidden())
-                        pRowArray->SetVisibleBelow(static_cast<USHORT>(i), static_cast<USHORT>(j), sal_False);
+                        pRowArray->SetVisibleBelow(static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(j), sal_False);
                 }
             }
         }

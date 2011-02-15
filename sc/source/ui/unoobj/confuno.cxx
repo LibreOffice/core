@@ -244,7 +244,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             {
                 // Int16 contains CharacterCompressionType values
                 sal_Int16 nUno = ScUnoHelpFunctions::GetInt16FromAny( aValue );
-                pDoc->SetAsianCompression( (BYTE) nUno );
+                pDoc->SetAsianCompression( (sal_uInt8) nUno );
                 bUpdateHeights = sal_True;
             }
             else if ( aPropertyName.compareToAscii( SC_UNO_ASIANKERN ) == 0 )
@@ -379,7 +379,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             {
                 // #i75610# don't create the printer, return empty string if no printer created yet
                 // (as in SwXDocumentSettings)
-                SfxPrinter* pPrinter = pDoc->GetPrinter( FALSE );
+                SfxPrinter* pPrinter = pDoc->GetPrinter( sal_False );
                 if (pPrinter)
                     aRet <<= rtl::OUString ( pPrinter->GetName());
                 else
@@ -389,7 +389,7 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             {
                 // #i75610# don't create the printer, return empty sequence if no printer created yet
                 // (as in SwXDocumentSettings)
-                SfxPrinter* pPrinter = pDoc->GetPrinter( FALSE );
+                SfxPrinter* pPrinter = pDoc->GetPrinter( sal_False );
                 if (pPrinter)
                 {
                     SvMemoryStream aStream;

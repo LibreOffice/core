@@ -129,16 +129,16 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
         value. */
     aItemSet.Put( XLineStartItem( String::EmptyString(), ::basegfx::B2DPolyPolygon( aTriangle ) ) );
     aItemSet.Put( XLineStartWidthItem( 200 ) );
-    aItemSet.Put( XLineStartCenterItem( FALSE ) );
+    aItemSet.Put( XLineStartCenterItem( sal_False ) );
     aItemSet.Put( XFillStyleItem( XFILL_SOLID ) );
     aItemSet.Put( XFillColorItem( String::EmptyString(), ScDetectiveFunc::GetCommentColor() ) );
     aItemSet.Put( SdrCaptionEscDirItem( SDRCAPT_ESCBESTFIT ) );
 
     // shadow
-    /*  SdrShadowItem has FALSE, instead the shadow is set for the
+    /*  SdrShadowItem has sal_False, instead the shadow is set for the
         rectangle only with SetSpecialTextBoxShadow() when the object is
         created (item must be set to adjust objects from older files). */
-    aItemSet.Put( SdrShadowItem( FALSE ) );
+    aItemSet.Put( SdrShadowItem( sal_False ) );
     aItemSet.Put( SdrShadowXDistItem( 100 ) );
     aItemSet.Put( SdrShadowYDistItem( 100 ) );
 
@@ -147,8 +147,8 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
     aItemSet.Put( SdrTextRightDistItem( 100 ) );
     aItemSet.Put( SdrTextUpperDistItem( 100 ) );
     aItemSet.Put( SdrTextLowerDistItem( 100 ) );
-    aItemSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
-    aItemSet.Put( SdrTextAutoGrowHeightItem( TRUE ) );
+    aItemSet.Put( SdrTextAutoGrowWidthItem( sal_False ) );
+    aItemSet.Put( SdrTextAutoGrowHeightItem( sal_True ) );
     // #78943# use the default cell style to be able to modify the caption font
     const ScPatternAttr& rDefPattern = static_cast< const ScPatternAttr& >( rDoc.GetPool()->GetDefaultItem( ATTR_PATTERN ) );
     rDefPattern.FillEditItemSet( &aItemSet );
@@ -161,7 +161,7 @@ void ScCaptionUtil::SetCaptionItems( SdrCaptionObj& rCaption, const SfxItemSet& 
     // copy all items
     rCaption.SetMergedItemSet( rItemSet );
     // reset shadow items
-    rCaption.SetMergedItem( SdrShadowItem( FALSE ) );
+    rCaption.SetMergedItem( SdrShadowItem( sal_False ) );
     rCaption.SetMergedItem( SdrShadowXDistItem( 100 ) );
     rCaption.SetMergedItem( SdrShadowYDistItem( 100 ) );
     rCaption.SetSpecialTextBoxShadow();
@@ -566,7 +566,7 @@ OUString ScPostIt::GetText() const
     if( const EditTextObject* pEditObj = GetEditTextObject() )
     {
         OUStringBuffer aBuffer;
-        for( USHORT nPara = 0, nParaCount = pEditObj->GetParagraphCount(); nPara < nParaCount; ++nPara )
+        for( sal_uInt16 nPara = 0, nParaCount = pEditObj->GetParagraphCount(); nPara < nParaCount; ++nPara )
         {
             if( nPara > 0 )
                 aBuffer.append( sal_Unicode( '\n' ) );
@@ -836,10 +836,10 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
         ScCaptionUtil::SetDefaultItems( *pCaption, rDoc );
         // adjust caption size to text size
         long nMaxWidth = ::std::min< long >( aVisRect.GetWidth() * 2 / 3, SC_NOTECAPTION_MAXWIDTH_TEMP );
-        pCaption->SetMergedItem( SdrTextAutoGrowWidthItem( TRUE ) );
+        pCaption->SetMergedItem( SdrTextAutoGrowWidthItem( sal_True ) );
         pCaption->SetMergedItem( SdrTextMinFrameWidthItem( SC_NOTECAPTION_WIDTH ) );
         pCaption->SetMergedItem( SdrTextMaxFrameWidthItem( nMaxWidth ) );
-        pCaption->SetMergedItem( SdrTextAutoGrowHeightItem( TRUE ) );
+        pCaption->SetMergedItem( SdrTextAutoGrowHeightItem( sal_True ) );
         pCaption->AdjustTextFrameWidthAndHeight();
     }
 

@@ -98,13 +98,13 @@ OUString ScDPLabelData::getDisplayName() const
 
 // ============================================================================
 
-ScDPFuncData::ScDPFuncData( short nCol, USHORT nFuncMask ) :
+ScDPFuncData::ScDPFuncData( short nCol, sal_uInt16 nFuncMask ) :
     mnCol( nCol ),
     mnFuncMask( nFuncMask )
 {
 }
 
-ScDPFuncData::ScDPFuncData( short nCol, USHORT nFuncMask, const DataPilotFieldReference& rFieldRef ) :
+ScDPFuncData::ScDPFuncData( short nCol, sal_uInt16 nFuncMask, const DataPilotFieldReference& rFieldRef ) :
     mnCol( nCol ),
     mnFuncMask( nFuncMask ),
     maFieldRef( rFieldRef )

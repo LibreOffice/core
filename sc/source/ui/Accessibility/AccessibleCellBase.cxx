@@ -278,7 +278,7 @@ sal_Bool SAL_CALL
         {
             ScDocShell* pDocShell = (ScDocShell*) mpDoc->GetDocumentShell();
             ScDocFunc aFunc(*pDocShell);
-            bResult = aFunc.PutCell( maCellAddress, new ScValueCell(fValue), TRUE );
+            bResult = aFunc.PutCell( maCellAddress, new ScValueCell(fValue), sal_True );
         }
     }
     return bResult;

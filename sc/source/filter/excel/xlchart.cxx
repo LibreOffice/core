@@ -329,6 +329,24 @@ XclChLabelRange::XclChLabelRange() :
 
 // ----------------------------------------------------------------------------
 
+XclChDateRange::XclChDateRange() :
+    mnMinDate( 0 ),
+    mnMaxDate( 0 ),
+    mnMajorStep( 0 ),
+    mnMajorUnit( EXC_CHDATERANGE_DAYS ),
+    mnMinorStep( 0 ),
+    mnMinorUnit( EXC_CHDATERANGE_DAYS ),
+    mnBaseUnit( EXC_CHDATERANGE_DAYS ),
+    mnCross( 0 ),
+    mnFlags( EXC_CHDATERANGE_AUTOMIN | EXC_CHDATERANGE_AUTOMAX |
+        EXC_CHDATERANGE_AUTOMAJOR | EXC_CHDATERANGE_AUTOMINOR |
+        EXC_CHDATERANGE_AUTOBASE | EXC_CHDATERANGE_AUTOCROSS |
+        EXC_CHDATERANGE_AUTODATE )
+{
+}
+
+// ----------------------------------------------------------------------------
+
 XclChValueRange::XclChValueRange() :
     mfMin( 0.0 ),
     mfMax( 0.0 ),
@@ -336,7 +354,8 @@ XclChValueRange::XclChValueRange() :
     mfMinorStep( 0.0 ),
     mfCross( 0.0 ),
     mnFlags( EXC_CHVALUERANGE_AUTOMIN | EXC_CHVALUERANGE_AUTOMAX |
-        EXC_CHVALUERANGE_AUTOMAJOR | EXC_CHVALUERANGE_AUTOMINOR | EXC_CHVALUERANGE_AUTOCROSS | EXC_CHVALUERANGE_BIT8 )
+        EXC_CHVALUERANGE_AUTOMAJOR | EXC_CHVALUERANGE_AUTOMINOR |
+        EXC_CHVALUERANGE_AUTOCROSS | EXC_CHVALUERANGE_BIT8 )
 {
 }
 
@@ -1055,17 +1074,17 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
 {
     if( rEscherFmt.mxItemSet.is() )
     {
-        if( const XFillStyleItem* pStyleItem = static_cast< const XFillStyleItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLSTYLE, FALSE ) ) )
+        if( const XFillStyleItem* pStyleItem = static_cast< const XFillStyleItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLSTYLE, sal_False ) ) )
         {
             switch( pStyleItem->GetValue() )
             {
                 case XFILL_SOLID:
                     // #i84812# Excel 2007 writes Escher properties for solid fill
-                    if( const XFillColorItem* pColorItem = static_cast< const XFillColorItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLCOLOR, FALSE ) ) )
+                    if( const XFillColorItem* pColorItem = static_cast< const XFillColorItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLCOLOR, sal_False ) ) )
                     {
                         namespace cssd = ::com::sun::star::drawing;
                         // get solid transparence too
-                        const XFillTransparenceItem* pTranspItem = static_cast< const XFillTransparenceItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLTRANSPARENCE, FALSE ) );
+                        const XFillTransparenceItem* pTranspItem = static_cast< const XFillTransparenceItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLTRANSPARENCE, sal_False ) );
                         sal_uInt16 nTransp = pTranspItem ? pTranspItem->GetValue() : 0;
                         ScfPropSetHelper& rAreaHlp = GetAreaHelper( ePropMode );
                         rAreaHlp.InitializeWrite();
@@ -1074,7 +1093,7 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
                     }
                 break;
                 case XFILL_GRADIENT:
-                    if( const XFillGradientItem* pGradItem = static_cast< const XFillGradientItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLGRADIENT, FALSE ) ) )
+                    if( const XFillGradientItem* pGradItem = static_cast< const XFillGradientItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLGRADIENT, sal_False ) ) )
                     {
                         Any aGradientAny;
                         if( pGradItem->QueryValue( aGradientAny, MID_FILLGRADIENT ) )
@@ -1092,7 +1111,7 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
                     }
                 break;
                 case XFILL_BITMAP:
-                    if( const XFillBitmapItem* pBmpItem = static_cast< const XFillBitmapItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLBITMAP, FALSE ) ) )
+                    if( const XFillBitmapItem* pBmpItem = static_cast< const XFillBitmapItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLBITMAP, sal_False ) ) )
                     {
                         Any aBitmapAny;
                         if( pBmpItem->QueryValue( aBitmapAny, MID_GRAFURL ) )

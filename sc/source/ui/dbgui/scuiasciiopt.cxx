@@ -323,7 +323,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     {
         Seek( 0 );
         mpDatStream->StartReadingUnicodeText( RTL_TEXTENCODING_DONTKNOW );
-        ULONG nUniPos = mpDatStream->Tell();
+        sal_uLong nUniPos = mpDatStream->Tell();
         switch (nUniPos)
         {
             case 2:
@@ -334,7 +334,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
                 break;
             case 0:
                 {
-                    UINT16 n;
+                    sal_uInt16 n;
                     *mpDatStream >> n;
                     // Assume that normal ASCII/ANSI/ISO/etc. text doesn't start with
                     // control characters except CR,LF,TAB
@@ -380,7 +380,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
 
     // *** text encoding ListBox ***
     // all encodings allowed, including Unicode, but subsets are excluded
-    aLbCharSet.FillFromTextEncodingTable( TRUE );
+    aLbCharSet.FillFromTextEncodingTable( sal_True );
     // Insert one "SYSTEM" entry for compatibility in AsciiOptions and system
     // independent document linkage.
     aLbCharSet.InsertTextEncoding( RTL_TEXTENCODING_DONTKNOW, aCharSetUser );
@@ -388,7 +388,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
             gsl_getSystemTextEncoding() : ePreselectUnicode );
 
     if( nCharSet >= 0 && ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW )
-        aLbCharSet.SelectEntryPos( static_cast<USHORT>(nCharSet) );
+        aLbCharSet.SelectEntryPos( static_cast<sal_uInt16>(nCharSet) );
 
     SetSelectedCharSet();
     aLbCharSet.SetSelectHdl( LINK( this, ScImportAsciiDlg, CharSetHdl ) );
@@ -432,7 +432,7 @@ ScImportAsciiDlg::~ScImportAsciiDlg()
 
 // ----------------------------------------------------------------------------
 
-bool ScImportAsciiDlg::GetLine( ULONG nLine, String &rText )
+bool ScImportAsciiDlg::GetLine( sal_uLong nLine, String &rText )
 {
     if (nLine >= ASCIIDLG_MAXROWS || !mpDatStream)
         return false;
@@ -441,7 +441,7 @@ bool ScImportAsciiDlg::GetLine( ULONG nLine, String &rText )
     bool bFixed = aRbFixed.IsChecked();
 
     if (!mpRowPosArray)
-        mpRowPosArray = new ULONG[ASCIIDLG_MAXROWS + 2];
+        mpRowPosArray = new sal_uLong[ASCIIDLG_MAXROWS + 2];
 
     if (!mnRowPosCount) // complete re-fresh
     {
@@ -578,7 +578,7 @@ String ScImportAsciiDlg::GetSeparators() const
 
 void ScImportAsciiDlg::SetupSeparatorCtrls()
 {
-    BOOL bEnable = aRbSeparated.IsChecked();
+    sal_Bool bEnable = aRbSeparated.IsChecked();
     aCkbTab.Enable( bEnable );
     aCkbSemicolon.Enable( bEnable );
     aCkbComma.Enable( bEnable );
@@ -698,7 +698,7 @@ IMPL_LINK( ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox*, EMPTYARG )
         maPreviewLine[i].Erase();
 
     maTableBox.Execute( CSVCMD_SETLINECOUNT, mnRowPosCount);
-    bool bMergeSep = (aCkbAsOnce.IsChecked() == TRUE);
+    bool bMergeSep = (aCkbAsOnce.IsChecked() == sal_True);
     maTableBox.SetUniStrings( maPreviewLine, maFieldSeparators, mcTextSep, bMergeSep);
 
     return 0;

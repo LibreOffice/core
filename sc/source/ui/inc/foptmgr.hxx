@@ -79,7 +79,7 @@ public:
                                 const String&       refStrUndefined );
             ~ScFilterOptionsMgr();
 
-    BOOL    VerifyPosStr ( const String& rPosStr ) const;
+    sal_Bool    VerifyPosStr ( const String& rPosStr ) const;
 
 private:
     Dialog*         pDlg;

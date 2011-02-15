@@ -38,6 +38,8 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/XNumberFormats.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <utility>
 #include <vector>
@@ -108,7 +110,7 @@ public:
         );
 
     /** @param bOnlyAtFirstChartType
-            If </TRUE>, the stacking mode is only set at the series found inside
+            If </sal_True>, the stacking mode is only set at the series found inside
             the first chart type.  This is the standard for all current
             templates (the only template that has more than one chart-type and
             allows stacking is bar/line combi, and for this the stacking only
@@ -240,6 +242,21 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XCoordinateSystem > & xCooSys );
 
+    static void switchToDateCategories(
+        const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XChartDocument > & xChartDoc );
+
+    static void switchToTextCategories(
+        const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XChartDocument > & xChartDoc );
+
+    static bool isSupportingDateAxis( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram );
+    static bool isDateNumberFormat( sal_Int32 nNumberFormat, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& xNumberFormats );
+    static sal_Int32 getDateNumberFormat( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+
+    static sal_Int32 getPercentNumberFormat( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartType >
         getChartTypeByIndex( const ::com::sun::star::uno::Reference<
@@ -270,7 +287,7 @@ public:
         * @param bForward
         *  Direction of the move to be checked.
         *
-        * @returns </TRUE> if the series can be moved.
+        * @returns </sal_True> if the series can be moved.
         *
         */
     static bool isSeriesMoveable(
@@ -292,7 +309,7 @@ public:
         * @param bForward
         *  Direction in which the series should be moved.
         *
-        * @returns </TRUE> if the series was moved successfully.
+        * @returns </sal_True> if the series was moved successfully.
         *
         */
     static bool moveSeries(

@@ -79,7 +79,8 @@ SHL1STDLIBS=	$(CHARTTOOLS) 		\
                 $(SVLLIB)			\
                 $(SVTOOLLIB)		\
                 $(SALLIB)			\
-                $(UCBHELPERLIB)
+                $(UCBHELPERLIB)     \
+                $(FWELIB)           \
 
 #--------exports
 

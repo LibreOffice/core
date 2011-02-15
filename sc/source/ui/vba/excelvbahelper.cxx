@@ -167,7 +167,7 @@ implnCut( const uno::Reference< frame::XModel>& xModel )
     ScTabViewShell* pViewShell =  getBestViewShell( xModel );
     if ( pViewShell )
     {
-        pViewShell->CutToClip( NULL, TRUE );
+        pViewShell->CutToClip( NULL, sal_True );
 
         // mark the copied transfer object so it is used in ScVbaRange::Insert
         ScTransferObj* pClipObj = ScTransferObj::GetOwnClipboard( NULL );
@@ -176,7 +176,7 @@ implnCut( const uno::Reference< frame::XModel>& xModel )
     }
 }
 
-void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, USHORT nFlags,USHORT nFunction,sal_Bool bSkipEmpty, sal_Bool bTranspose)
+void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, sal_uInt16 nFlags,sal_uInt16 nFunction,sal_Bool bSkipEmpty, sal_Bool bTranspose)
 {
     PasteCellsWarningReseter resetWarningBox;
     sal_Bool bAsLink(sal_False), bOtherDoc(sal_False);
@@ -202,7 +202,7 @@ void implnPasteSpecial( const uno::Reference< frame::XModel>& xModel, USHORT nFl
                 }
                 pTabViewShell->PasteFromClip( nFlags, pDoc,
                     nFunction, bSkipEmpty, bTranspose, bAsLink,
-                    eMoveMode, IDF_NONE, TRUE );
+                    eMoveMode, IDF_NONE, sal_True );
                 pTabViewShell->CellContentChanged();
             }
         }
