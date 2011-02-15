@@ -229,8 +229,10 @@ namespace drawinglayer
                         mpOutputDevice->SetAntialiasing(nOldAntiAliase | ANTIALIASING_PIXELSNAPHAIRLINE);
                     }
 
+                    const primitive2d::MetafilePrimitive2D& rMetafilePrimitive( static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate) );
+
                     static bool bTestMetaFilePrimitiveDecomposition(true);
-                    if(bTestMetaFilePrimitiveDecomposition)
+                    if( bTestMetaFilePrimitiveDecomposition && !rMetafilePrimitive.getMetaFile().GetUseCanvas() )
                     {
                         // use new Metafile decomposition
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
@@ -238,7 +240,7 @@ namespace drawinglayer
                     else
                     {
                         // direct draw of MetaFile
-                        RenderMetafilePrimitive2D(static_cast< const primitive2d::MetafilePrimitive2D& >(rCandidate));
+                        RenderMetafilePrimitive2D( rMetafilePrimitive );
                     }
 
                     if(bForceLineSnap)
