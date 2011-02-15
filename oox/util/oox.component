@@ -28,31 +28,40 @@
 
 <component loader="com.sun.star.loader.SharedLibrary"
     xmlns="http://openoffice.org/2010/uno-components">
-  <implementation name="com.sun.star.comp.Impress.oox.PowerPointImport">
-    <service name="com.sun.star.comp.ooxpptx"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.oox.BiffDetector">
-    <service name="com.sun.star.frame.ExtendedTypeDetection"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.oox.ExcelBiffFilter">
-    <service name="com.sun.star.comp.oox.ExcelBiffFilter"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.oox.ExcelFilter">
-    <service name="com.sun.star.comp.oox.ExcelFilter"/>
-  </implementation>
-  <implementation name="com.sun.star.comp.oox.FastTokenHandlerService">
+  <implementation name="com.sun.star.comp.oox.core.FastTokenHandler">
     <service name="com.sun.star.xml.sax.FastTokenHandler"/>
   </implementation>
   <implementation name="com.sun.star.comp.oox.FormatDetector">
     <service name="com.sun.star.frame.ExtendedTypeDetection"/>
   </implementation>
-  <implementation name="com.sun.star.comp.oox.OOXMLFormulaParser">
-    <service name="com.sun.star.sheet.FilterFormulaParser"/>
+  <implementation name="com.sun.star.comp.oox.docprop.DocumentPropertiesImporter">
+    <service name="com.sun.star.document.OOXMLDocumentPropertiesImporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.oox.WordVbaProjectFilter">
+    <service name="com.sun.star.document.ImportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.oox.ppt.PowerPointImport">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExportFilter"/>
   </implementation>
   <implementation name="com.sun.star.comp.oox.ShapeContextHandler">
     <service name="com.sun.star.xml.sax.FastShapeContextHandler"/>
   </implementation>
-  <implementation name="com.sun.star.comp.oox.docprop.OOXMLDocumentPropertiesImporter">
-    <service name="com.sun.star.document.OOXMLDocumentPropertiesImporter"/>
+  <implementation name="com.sun.star.comp.oox.xls.BiffDetector">
+    <service name="com.sun.star.frame.ExtendedTypeDetection"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.oox.xls.ExcelFilter">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.oox.xls.ExcelBiffFilter">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.oox.xls.ExcelVbaProjectFilter">
+    <service name="com.sun.star.document.ImportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.oox.xls.FormulaParser">
+    <service name="com.sun.star.sheet.FilterFormulaParser"/>
   </implementation>
 </component>

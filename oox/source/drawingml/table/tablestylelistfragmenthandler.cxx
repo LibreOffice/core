@@ -62,10 +62,10 @@ Reference< XFastContextHandler > TableStyleListFragmentHandler::createFastChildC
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
-        case NMSP_DRAWINGML|XML_tblStyleLst:    // CT_TableStyleList
+        case A_TOKEN( tblStyleLst ):    // CT_TableStyleList
             mrTableStyleList.getDefaultStyleId() = xAttribs->getOptionalValue( XML_def );
             break;
-        case NMSP_DRAWINGML|XML_tblStyle:       // CT_TableStyle
+        case A_TOKEN( tblStyle ):       // CT_TableStyle
             std::vector< TableStyle >& rTableStyles = mrTableStyleList.getTableStyles();
             rTableStyles.resize( rTableStyles.size() + 1 );
             xRet = new TableStyleContext( *this, xAttribs, rTableStyles.back() );

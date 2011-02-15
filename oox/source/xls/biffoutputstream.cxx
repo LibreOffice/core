@@ -205,4 +205,3 @@ sal_uInt16 BiffOutputStream::prepareRawBlock( sal_Int32 nTotalSize )
 
 } // namespace xls
 } // namespace oox
-

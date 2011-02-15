@@ -26,7 +26,6 @@
  ************************************************************************/
 
 #include "oox/drawingml/theme.hxx"
-#include "tokens.hxx"
 
 using ::rtl::OUString;
 

@@ -69,7 +69,7 @@ struct BinAddress
     inline void         set( sal_Int32 nCol, sal_Int32 nRow ) { mnCol = nCol; mnRow = nRow; }
     inline void         set( const ::com::sun::star::table::CellAddress& rAddr ) { mnCol = rAddr.Column; mnRow = rAddr.Row; }
 
-    void                read( RecordInputStream& rStrm );
+    void                read( SequenceInputStream& rStrm );
     void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
     void                write( BiffOutputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false ) const;
 };
@@ -86,7 +86,7 @@ inline bool operator<( const BinAddress& rL, const BinAddress& rR )
     return (rL.mnCol < rR.mnCol) || ((rL.mnCol == rR.mnCol) && (rL.mnRow < rR.mnRow));
 }
 
-inline RecordInputStream& operator>>( RecordInputStream& rStrm, BinAddress& orPos )
+inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinAddress& orPos )
 {
     orPos.read( rStrm );
     return rStrm;
@@ -134,7 +134,7 @@ struct BinRange
     inline sal_Int32    getRowCount() const { return maLast.mnRow - maFirst.mnRow + 1; }
     bool                contains( const BinAddress& rAddr ) const;
 
-    void                read( RecordInputStream& rStrm );
+    void                read( SequenceInputStream& rStrm );
     void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
     void                write( BiffOutputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false ) const;
 };
@@ -151,7 +151,7 @@ inline bool operator<( const BinRange& rL, const BinRange& rR )
     return (rL.maFirst < rR.maFirst) || ((rL.maFirst == rR.maFirst) && (rL.maLast < rR.maLast));
 }
 
-inline RecordInputStream& operator>>( RecordInputStream& rStrm, BinRange& orRange )
+inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinRange& orRange )
 {
     orRange.read( rStrm );
     return rStrm;
@@ -179,7 +179,7 @@ public:
 
     BinRange            getEnclosingRange() const;
 
-    void                read( RecordInputStream& rStrm );
+    void                read( SequenceInputStream& rStrm );
     void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
     void                write( BiffOutputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false ) const;
     void                writeSubList( BiffOutputStream& rStrm,
@@ -188,7 +188,7 @@ public:
 
 // ----------------------------------------------------------------------------
 
-inline RecordInputStream& operator>>( RecordInputStream& rStrm, BinRangeList& orRanges )
+inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinRangeList& orRanges )
 {
     orRanges.read( rStrm );
     return rStrm;
@@ -221,7 +221,7 @@ enum BiffTargetType
 // ============================================================================
 // ============================================================================
 
-/** Converter for cell addresses and cell ranges for OOX and BIFF filters.
+/** Converter for cell addresses and cell ranges for OOXML and BIFF filters.
  */
 class AddressConverter : public WorkbookHelper
 {
@@ -689,4 +689,3 @@ private:
 } // namespace oox
 
 #endif
-

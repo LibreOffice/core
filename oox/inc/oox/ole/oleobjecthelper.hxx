@@ -32,8 +32,8 @@
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Size; }
-    namespace lang { class XMultiServiceFactory; }
     namespace document { class XEmbeddedObjectResolver; }
+    namespace lang { class XMultiServiceFactory; }
 } } }
 
 namespace oox { class PropertyMap; }
@@ -83,4 +83,3 @@ private:
 } // namespace oox
 
 #endif
-

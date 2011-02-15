@@ -87,4 +87,3 @@ public:
 } // namespace oox
 
 #endif
-

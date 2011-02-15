@@ -322,4 +322,3 @@ inline void ByteOrderConverter::swap8( sal_uInt8* pnData )
 } // namespace oox
 
 #endif
-

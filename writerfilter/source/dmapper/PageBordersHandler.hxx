@@ -5,7 +5,7 @@
 #include "PropertyMap.hxx"
 
 #include <WriterFilterDllApi.hxx>
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 
 #include <com/sun/star/table/BorderLine.hpp>
@@ -27,7 +27,7 @@ public:
     ~_PgBorder( );
 };
 
-class WRITERFILTER_DLLPRIVATE PageBordersHandler : public Properties
+class WRITERFILTER_DLLPRIVATE PageBordersHandler : public LoggedProperties
 {
 private:
 
@@ -36,13 +36,13 @@ private:
     sal_Int32 m_nOffset;
     vector<_PgBorder> m_aBorders;
 
+    // Properties
+    virtual void lcl_attribute( Id eName, Value& rVal );
+    virtual void lcl_sprm( Sprm& rSprm );
+
 public:
     PageBordersHandler( );
     ~PageBordersHandler( );
-
-    // Properties
-    virtual void attribute( Id eName, Value& rVal );
-    virtual void sprm( Sprm& rSprm );
 
     inline sal_Int32 GetDisplayOffset( )
     {

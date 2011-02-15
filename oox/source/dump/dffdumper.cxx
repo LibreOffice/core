@@ -29,10 +29,12 @@
 
 #if OOX_INCLUDE_DUMPER
 
-using ::rtl::OUString;
-
 namespace oox {
 namespace dump {
+
+// ============================================================================
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -320,4 +322,3 @@ sal_uInt16 DffStreamObject::dumpDffOptPropHeader()
 } // namespace oox
 
 #endif
-

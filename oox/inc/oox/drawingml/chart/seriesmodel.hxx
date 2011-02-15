@@ -241,4 +241,3 @@ struct SeriesModel
 } // namespace oox
 
 #endif
-

@@ -100,4 +100,3 @@ struct TypeGroupModel
 } // namespace oox
 
 #endif
-

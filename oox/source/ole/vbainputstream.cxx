@@ -31,6 +31,8 @@
 namespace oox {
 namespace ole {
 
+// ============================================================================
+
 namespace {
 
 const sal_uInt8 VBASTREAM_SIGNATURE         = 1;

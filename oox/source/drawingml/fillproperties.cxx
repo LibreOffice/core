@@ -36,13 +36,12 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
-#include "properties.hxx"
-#include "tokens.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/modelobjecthelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
+#include "oox/token/tokens.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;

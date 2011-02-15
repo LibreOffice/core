@@ -154,4 +154,3 @@ SeriesModel::~SeriesModel()
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
-
