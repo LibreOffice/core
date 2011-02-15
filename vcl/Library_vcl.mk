@@ -287,6 +287,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/control/spinbtn \
     vcl/source/control/spinfld \
     vcl/source/control/tabctrl \
+    vcl/source/control/throbber \
     vcl/source/fontsubset/cff \
     vcl/source/fontsubset/fontsubset \
     vcl/source/fontsubset/gsub \
