@@ -35,7 +35,7 @@
 // ----------------
 
 // By changes you must also change: rsc/vclrsc.hxx
-typedef USHORT SymbolType;
+typedef sal_uInt16 SymbolType;
 #define SYMBOL_DONTKNOW         ((SymbolType)0)
 #define SYMBOL_IMAGE            ((SymbolType)1)
 #define SYMBOL_ARROW_UP         ((SymbolType)2)

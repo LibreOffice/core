@@ -192,7 +192,7 @@ namespace svt { namespace table
     //// Window
     virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) const;
     virtual void GrabFocus();
-    virtual XACC GetAccessible( BOOL bCreate = TRUE );
+    virtual XACC GetAccessible( sal_Bool bCreate = sal_True );
     virtual Window* GetAccessibleParentWindow() const;
     virtual Window* GetWindowInstance();
     virtual sal_Int32 GetAccessibleControlCount() const;
@@ -203,8 +203,8 @@ namespace svt { namespace table
     virtual sal_Int32 GetSelectedRowCount() const;
     virtual bool IsRowSelected( long _nRow ) const;
     virtual sal_Bool ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint );
-    virtual Rectangle calcHeaderRect( sal_Bool _bIsColumnBar, BOOL _bOnScreen = TRUE );
-    virtual Rectangle calcTableRect( BOOL _bOnScreen = TRUE );
+    virtual Rectangle calcHeaderRect( sal_Bool _bIsColumnBar, sal_Bool _bOnScreen = sal_True );
+    virtual Rectangle calcTableRect( sal_Bool _bOnScreen = sal_True );
     virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex);
     virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint);
     virtual void FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const;

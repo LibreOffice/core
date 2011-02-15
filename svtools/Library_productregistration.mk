@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2009 by Sun Microsystems, Inc.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,12 +14,12 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.	If not, see
+# version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
@@ -50,6 +50,7 @@ $(eval $(call gb_Library_add_linked_libs,productregistration,\
     tl \
     utl \
     vcl \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,productregistration,\
@@ -57,36 +58,4 @@ $(eval $(call gb_Library_add_exception_objects,productregistration,\
     svtools/source/productregistration/registrationdlg \
 ))
 
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,productregistration,\
-    dl \
-    m \
-    pthread \
-))
-endif
-
-ifeq ($(OS),WNT)
-ifneq ($(USE_MINGW),)
-$(eval $(call gb_Library_add_linked_libs,productregistration,\
-    mingwthrd \
-    $(gb_MINGW_LIBSTDCPP) \
-    mingw32 \
-    $(gb_MINGW_LIBGCC) \
-    uwinapi \
-    moldname \
-    mingwex \
-    kernel32 \
-    msvcrt \
-    user32 \
-))
-else
-$(eval $(call gb_Library_add_linked_libs,productregistration,\
-    kernel32 \
-    msvcrt \
-    oldnames \
-    user32 \
-    uwinapi \
-))
-endif
-endif
 # vim: set noet sw=4 ts=4:

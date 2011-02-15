@@ -44,26 +44,26 @@ public:
         class Visibility Name: public SfxHint \
         { \
             Type* pObj; \
-            BOOL  bIsOwner; \
+            sal_Bool  bIsOwner; \
         \
         public: \
             TYPEINFO(); \
-            Name( Type* Object, BOOL bOwnedByHint = FALSE ); \
+            Name( Type* Object, sal_Bool bOwnedByHint = sal_False ); \
             ~Name(); \
         \
             Type* GetObject() const { return pObj; } \
-            BOOL  IsOwner() const { return bIsOwner; } \
+            sal_Bool  IsOwner() const { return bIsOwner; } \
         }
 
 #define IMPL_PTRHINT_AUTODELETE(Name, Type) \
         TYPEINIT1(Name, SfxHint);   \
-        Name::Name( Type* pObject, BOOL bOwnedByHint ) \
+        Name::Name( Type* pObject, sal_Bool bOwnedByHint ) \
             { pObj = pObject; bIsOwner = bOwnedByHint; } \
         Name::~Name() { if ( bIsOwner ) delete pObj; }
 
 #define IMPL_PTRHINT(Name, Type) \
         TYPEINIT1(Name, SfxHint);   \
-        Name::Name( Type* pObject, BOOL bOwnedByHint ) \
+        Name::Name( Type* pObject, sal_Bool bOwnedByHint ) \
             { pObj = pObject; bIsOwner = bOwnedByHint; } \
         Name::~Name() {}
 

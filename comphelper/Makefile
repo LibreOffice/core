@@ -25,41 +25,14 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
-PRJINC=..$/..$/inc
-PRJNAME=comphelper
-TARGET=property
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-ENABLE_EXCEPTIONS=TRUE
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-# --- Settings ----------------------------------
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-.INCLUDE : settings.mk
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
-
-# --- Files -------------------------------------
-
-SLOFILES= 	\
-            $(SLO)$/MasterPropertySetInfo.obj \
-            $(SLO)$/MasterPropertySet.obj \
-            $(SLO)$/ChainablePropertySetInfo.obj \
-            $(SLO)$/ChainablePropertySet.obj \
-            $(SLO)$/TypeGeneration.obj \
-            $(SLO)$/genericpropertyset.obj\
-            $(SLO)$/propertysethelper.obj \
-            $(SLO)$/propertysetinfo.obj \
-            $(SLO)$/composedprops.obj \
-            $(SLO)$/propagg.obj \
-            $(SLO)$/property.obj \
-            $(SLO)$/propmultiplex.obj \
-            $(SLO)$/propstate.obj \
-            $(SLO)$/propertystatecontainer.obj \
-            $(SLO)$/propertycontainer.obj \
-            $(SLO)$/propertycontainerhelper.obj \
-            $(SLO)$/propertybag.obj \
-            $(SLO)$/opropertybag.obj
-
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
-
+# vim: set noet sw=4 ts=4:

@@ -52,6 +52,7 @@ public:
                         UnoControlDialogModel( const UnoControlDialogModel& rModel );
                         ~UnoControlDialogModel();
 
+    UnoControlModel*    Clone() const;
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 

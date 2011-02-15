@@ -81,7 +81,7 @@ class WordTransTree
     E_Result            TransformNextToken();
 
     // INQUIRY
-    BOOL                TextEndReached() const;
+    sal_Bool                TextEndReached() const;
     const char *        Output() const;
 
         // These 3 functions are valid between two calls of
@@ -132,7 +132,7 @@ class WordTransTree
 
 
 
-inline BOOL
+inline sal_Bool
 WordTransTree::TextEndReached() const
     { return pInputPosition == pInputEnd; }
 inline const char *

@@ -408,7 +408,7 @@ void SalXLib::Init()
     sal_uInt32 nParams = aCommandLine.getCommandArgCount();
     rtl::OUString aParam;
     rtl::OString aDisplay;
-    for (USHORT i=0; i<nParams; i++)
+    for (sal_uInt16 i=0; i<nParams; i++)
     {
         aCommandLine.getCommandArg(i, aParam);
         if (aParam.equalsAscii("-display"))

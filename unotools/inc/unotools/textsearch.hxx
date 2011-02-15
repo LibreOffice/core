@@ -81,9 +81,9 @@ private:
 public:
     SearchParam( const String &rText,
                     SearchType eSrchType = SearchParam::SRCH_NORMAL,
-                    BOOL bCaseSens = TRUE,
-                    BOOL bWrdOnly = FALSE,
-                    BOOL bSrchInSel = FALSE );
+                    sal_Bool bCaseSens = sal_True,
+                    sal_Bool bWrdOnly = sal_False,
+                    sal_Bool bSrchInSel = sal_False );
     SearchParam( const SearchParam& );
 
     const String&   GetSrchStr() const          { return sSrchStr; }
@@ -159,14 +159,14 @@ public:
         pStart  - start position for the search
         pEnde   - end position for the search
 
-        RETURN values   ==  TRUE: something is found
+        RETURN values   ==  sal_True: something is found
                         - pStart start pos of the found text,
                         - pStart end pos of the found text,
                         - pSrchResult - the search result with all found
                              positions. Is only filled with more positions
                              if the regular expression handles groups.
 
-                        == FALSE: nothing found, pStart,pEnde unchanged.
+                        == sal_False: nothing found, pStart,pEnde unchanged.
 
         Definitions: start pos always inclusive, end pos always exclusive!
                      The position must always in the right direction!

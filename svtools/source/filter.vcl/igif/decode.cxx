@@ -36,19 +36,19 @@ struct GIFLZWTableEntry
 {
     GIFLZWTableEntry*   pPrev;
     GIFLZWTableEntry*   pFirst;
-    BYTE                nData;
+    sal_uInt8               nData;
 };
 
 // ------------------------------------------------------------------------
 
-GIFLZWDecompressor::GIFLZWDecompressor( BYTE cDataSize ) :
+GIFLZWDecompressor::GIFLZWDecompressor( sal_uInt8 cDataSize ) :
             nInputBitsBuf       ( 0 ),
             nOutBufDataLen      ( 0 ),
             nInputBitsBufSize   ( 0 ),
-            bEOIFound           ( FALSE ),
+            bEOIFound           ( sal_False ),
             nDataSize           ( cDataSize )
 {
-    pOutBuf = new BYTE[ 4096 ];
+    pOutBuf = new sal_uInt8[ 4096 ];
 
     nClearCode = 1 << nDataSize;
     nEOICode = nClearCode + 1;
@@ -59,11 +59,11 @@ GIFLZWDecompressor::GIFLZWDecompressor( BYTE cDataSize ) :
 
     pTable = new GIFLZWTableEntry[ 4098 ];
 
-    for( USHORT i = 0; i < nTableSize; i++ )
+    for( sal_uInt16 i = 0; i < nTableSize; i++ )
     {
         pTable[i].pPrev = NULL;
         pTable[i].pFirst = pTable + i;
-        pTable[i].nData = (BYTE) i;
+        pTable[i].nData = (sal_uInt8) i;
     }
 }
 
@@ -77,11 +77,11 @@ GIFLZWDecompressor::~GIFLZWDecompressor()
 
 // ------------------------------------------------------------------------
 
-HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, BYTE cBufSize,
-                                            ULONG& rCount, BOOL& rEOI )
+HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize,
+                                            sal_uLong& rCount, sal_Bool& rEOI )
 {
-    ULONG   nTargetSize = 4096;
-    ULONG   nCount = 0;
+    sal_uLong   nTargetSize = 4096;
+    sal_uLong   nCount = 0;
     HPBYTE  pTarget = (HPBYTE) rtl_allocateMemory( nTargetSize );
     HPBYTE  pTmpTarget = pTarget;
 
@@ -95,8 +95,8 @@ HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, BYTE cBufSize,
 
         if( nCount > nTargetSize )
         {
-            ULONG   nNewSize = nTargetSize << 1;
-            ULONG   nOffset = pTmpTarget - pTarget;
+            sal_uLong   nNewSize = nTargetSize << 1;
+            sal_uLong   nOffset = pTmpTarget - pTarget;
             HPBYTE  pTmp = (HPBYTE) rtl_allocateMemory( nNewSize );
 
             memcpy( pTmp, pTarget, nTargetSize );
@@ -123,7 +123,7 @@ HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, BYTE cBufSize,
 
 // ------------------------------------------------------------------------
 
-void GIFLZWDecompressor::AddToTable( USHORT nPrevCode, USHORT nCodeFirstData )
+void GIFLZWDecompressor::AddToTable( sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData )
 {
     GIFLZWTableEntry* pE;
 
@@ -135,37 +135,37 @@ void GIFLZWDecompressor::AddToTable( USHORT nPrevCode, USHORT nCodeFirstData )
         pE->nData = pTable[ nCodeFirstData ].pFirst->nData;
         nTableSize++;
 
-        if ( ( nTableSize == (USHORT) (1 << nCodeSize) ) && ( nTableSize < 4096 ) )
+        if ( ( nTableSize == (sal_uInt16) (1 << nCodeSize) ) && ( nTableSize < 4096 ) )
             nCodeSize++;
     }
 }
 
 // ------------------------------------------------------------------------
 
-BOOL GIFLZWDecompressor::ProcessOneCode()
+sal_Bool GIFLZWDecompressor::ProcessOneCode()
 {
     GIFLZWTableEntry*   pE;
-    USHORT              nCode;
-    BOOL                bRet = FALSE;
-    BOOL                bEndOfBlock = FALSE;
+    sal_uInt16              nCode;
+    sal_Bool                bRet = sal_False;
+    sal_Bool                bEndOfBlock = sal_False;
 
     while( nInputBitsBufSize < nCodeSize )
     {
         if( nBlockBufPos >= nBlockBufSize )
         {
-            bEndOfBlock = TRUE;
+            bEndOfBlock = sal_True;
             break;
         }
 
-        nInputBitsBuf |= ( (ULONG) pBlockBuf[ nBlockBufPos++ ] ) << nInputBitsBufSize;
+        nInputBitsBuf |= ( (sal_uLong) pBlockBuf[ nBlockBufPos++ ] ) << nInputBitsBufSize;
         nInputBitsBufSize += 8;
     }
 
     if ( !bEndOfBlock )
     {
         // Einen Code aus dem Eingabe-Buffer holen:
-        nCode = sal::static_int_cast< USHORT >(
-            ( (USHORT) nInputBitsBuf ) & ( ~( 0xffff << nCodeSize ) ));
+        nCode = sal::static_int_cast< sal_uInt16 >(
+            ( (sal_uInt16) nInputBitsBuf ) & ( ~( 0xffff << nCodeSize ) ));
         nInputBitsBuf >>= nCodeSize;
         nInputBitsBufSize = nInputBitsBufSize - nCodeSize;
 
@@ -191,9 +191,9 @@ BOOL GIFLZWDecompressor::ProcessOneCode()
                 nOutBufDataLen = 0;
             }
             else
-                bEOIFound = TRUE;
+                bEOIFound = sal_True;
 
-            return TRUE;
+            return sal_True;
         }
 
         nOldCode = nCode;
@@ -208,7 +208,7 @@ BOOL GIFLZWDecompressor::ProcessOneCode()
         }
         while( pE );
 
-        bRet = TRUE;
+        bRet = sal_True;
     }
 
     return bRet;

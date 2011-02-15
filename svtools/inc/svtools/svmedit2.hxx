@@ -40,14 +40,14 @@ public:
                     ~ExtMultiLineEdit();
 
                     // methods of TextView
-    void            InsertText( const String& rNew, BOOL bSelect = FALSE );
-    void            SetAutoScroll( BOOL bAutoScroll );
-    void            EnableCursor( BOOL bEnable );
+    void            InsertText( const String& rNew, sal_Bool bSelect = sal_False );
+    void            SetAutoScroll( sal_Bool bAutoScroll );
+    void            EnableCursor( sal_Bool bEnable );
 
                     // methods of TextEngine
-    void            SetAttrib( const TextAttrib& rAttr, ULONG nPara, USHORT nStart, USHORT nEnd );
-    void            SetLeftMargin( USHORT nLeftMargin );
-    ULONG           GetParagraphCount() const;
+    void            SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd );
+    void            SetLeftMargin( sal_uInt16 nLeftMargin );
+    sal_uLong           GetParagraphCount() const;
 };
 
 #endif

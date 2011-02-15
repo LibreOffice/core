@@ -51,13 +51,13 @@ public:
     ::sal_Int16     GetScaleMode() const { return mnScaleMode; }
 
     virtual void    Resize();
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void    Paint( const Rectangle& rRect );
     virtual void    GetFocus();
     virtual void    LoseFocus();
 
 protected:
-    void    ImplDraw( OutputDevice& rDev, ULONG nDrawFlags, const Point& rPos, const Size& rSize ) const;
+    void    ImplDraw( OutputDevice& rDev, sal_uLong nDrawFlags, const Point& rPos, const Size& rSize ) const;
 private:
     using FixedImage::ImplDraw;
 };

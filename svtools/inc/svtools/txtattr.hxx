@@ -48,17 +48,17 @@ class Font;
 class SVT_DLLPUBLIC TextAttrib
 {
 private:
-    USHORT                  mnWhich;
+    sal_uInt16                  mnWhich;
 
 protected:
-                            TextAttrib( USHORT nWhich ) { mnWhich = nWhich; }
+                            TextAttrib( sal_uInt16 nWhich ) { mnWhich = nWhich; }
                             TextAttrib( const TextAttrib& rAttr ) { mnWhich = rAttr.mnWhich; }
 
 public:
 
     virtual                 ~TextAttrib();
 
-    USHORT                  Which() const   { return mnWhich; }
+    sal_uInt16                  Which() const   { return mnWhich; }
 
     virtual void            SetFont( Font& rFont ) const = 0;
     virtual TextAttrib*     Clone() const = 0;
@@ -150,84 +150,84 @@ class TextCharAttrib
 {
 private:
     TextAttrib*     mpAttr;
-    USHORT          mnStart;
-    USHORT          mnEnd;
+    sal_uInt16          mnStart;
+    sal_uInt16          mnEnd;
 
 protected:
 
 public:
 
-                    TextCharAttrib( const TextAttrib& rAttr, USHORT nStart, USHORT nEnd );
+                    TextCharAttrib( const TextAttrib& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
                     TextCharAttrib( const TextCharAttrib& rTextCharAttrib );
                     ~TextCharAttrib();
 
     const TextAttrib&   GetAttr() const         { return *mpAttr; }
 
-    USHORT          Which() const               { return mpAttr->Which(); }
+    sal_uInt16          Which() const               { return mpAttr->Which(); }
 
-    USHORT          GetStart() const            { return mnStart; }
-    USHORT&         GetStart()                  { return mnStart; }
+    sal_uInt16          GetStart() const            { return mnStart; }
+    sal_uInt16&         GetStart()                  { return mnStart; }
 
-    USHORT          GetEnd() const              { return mnEnd; }
-    USHORT&         GetEnd()                    { return mnEnd; }
+    sal_uInt16          GetEnd() const              { return mnEnd; }
+    sal_uInt16&         GetEnd()                    { return mnEnd; }
 
-    inline USHORT   GetLen() const;
+    inline sal_uInt16   GetLen() const;
 
-    inline void     MoveForward( USHORT nDiff );
-    inline void     MoveBackward( USHORT nDiff );
+    inline void     MoveForward( sal_uInt16 nDiff );
+    inline void     MoveBackward( sal_uInt16 nDiff );
 
-    inline void     Expand( USHORT nDiff );
-    inline void     Collaps( USHORT nDiff );
+    inline void     Expand( sal_uInt16 nDiff );
+    inline void     Collaps( sal_uInt16 nDiff );
 
-    inline BOOL     IsIn( USHORT nIndex );
-    inline BOOL     IsInside( USHORT nIndex );
-    inline BOOL     IsEmpty();
+    inline sal_Bool     IsIn( sal_uInt16 nIndex );
+    inline sal_Bool     IsInside( sal_uInt16 nIndex );
+    inline sal_Bool     IsEmpty();
 
 };
 
-inline USHORT TextCharAttrib::GetLen() const
+inline sal_uInt16 TextCharAttrib::GetLen() const
 {
     DBG_ASSERT( mnEnd >= mnStart, "TextCharAttrib: nEnd < nStart!" );
     return mnEnd-mnStart;
 }
 
-inline void TextCharAttrib::MoveForward( USHORT nDiff )
+inline void TextCharAttrib::MoveForward( sal_uInt16 nDiff )
 {
     DBG_ASSERT( ((long)mnEnd + nDiff) <= 0xFFFF, "TextCharAttrib: MoveForward?!" );
     mnStart = mnStart + nDiff;
     mnEnd = mnEnd + nDiff;
 }
 
-inline void TextCharAttrib::MoveBackward( USHORT nDiff )
+inline void TextCharAttrib::MoveBackward( sal_uInt16 nDiff )
 {
     DBG_ASSERT( ((long)mnStart - nDiff) >= 0, "TextCharAttrib: MoveBackward?!" );
     mnStart = mnStart - nDiff;
     mnEnd = mnEnd - nDiff;
 }
 
-inline void TextCharAttrib::Expand( USHORT nDiff )
+inline void TextCharAttrib::Expand( sal_uInt16 nDiff )
 {
     DBG_ASSERT( ( ((long)mnEnd + nDiff) <= (long)0xFFFF ), "TextCharAttrib: Expand?!" );
     mnEnd = mnEnd + nDiff;
 }
 
-inline void TextCharAttrib::Collaps( USHORT nDiff )
+inline void TextCharAttrib::Collaps( sal_uInt16 nDiff )
 {
     DBG_ASSERT( (long)mnEnd - nDiff >= (long)mnStart, "TextCharAttrib: Collaps?!" );
     mnEnd = mnEnd - nDiff;
 }
 
-inline BOOL TextCharAttrib::IsIn( USHORT nIndex )
+inline sal_Bool TextCharAttrib::IsIn( sal_uInt16 nIndex )
 {
     return ( ( mnStart <= nIndex ) && ( mnEnd >= nIndex ) );
 }
 
-inline BOOL TextCharAttrib::IsInside( USHORT nIndex )
+inline sal_Bool TextCharAttrib::IsInside( sal_uInt16 nIndex )
 {
     return ( ( mnStart < nIndex ) && ( mnEnd > nIndex ) );
 }
 
-inline BOOL TextCharAttrib::IsEmpty()
+inline sal_Bool TextCharAttrib::IsEmpty()
 {
     return mnStart == mnEnd;
 }

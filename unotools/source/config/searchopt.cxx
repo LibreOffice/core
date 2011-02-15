@@ -50,19 +50,19 @@ using namespace com::sun::star::i18n;
 
 class SvtSearchOptions_Impl : public ConfigItem
 {
-    INT32   nFlags;
-    BOOL    bModified;
+    sal_Int32   nFlags;
+    sal_Bool    bModified;
 
     // disallow copy-constructor and assignment-operator for now
     SvtSearchOptions_Impl( const SvtSearchOptions_Impl & );
     SvtSearchOptions_Impl & operator = ( const SvtSearchOptions_Impl & );
 
 protected:
-    BOOL            IsModified() const { return bModified; }
+    sal_Bool            IsModified() const { return bModified; }
     using ConfigItem::SetModified;
-    void            SetModified( BOOL bVal );
-    BOOL            Load();
-    BOOL            Save();
+    void            SetModified( sal_Bool bVal );
+    sal_Bool            Load();
+    sal_Bool            Save();
 
     Sequence< OUString >    GetPropertyNames() const;
 
@@ -74,8 +74,8 @@ public:
     virtual void    Commit();
     virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 
-    BOOL            GetFlag( USHORT nOffset ) const;
-    void            SetFlag( USHORT nOffset, BOOL bVal );
+    sal_Bool            GetFlag( sal_uInt16 nOffset ) const;
+    void            SetFlag( sal_uInt16 nOffset, sal_Bool bVal );
 };
 
 
@@ -86,7 +86,7 @@ SvtSearchOptions_Impl::SvtSearchOptions_Impl() :
     RTL_LOGFILE_CONTEXT(aLog, "unotools SvtSearchOptions_Impl::SvtSearchOptions_Impl()");
     nFlags = 0x0003FFFF;    // set all options values to 'true'
     Load();
-    SetModified( FALSE );
+    SetModified( sal_False );
 }
 
 
@@ -107,28 +107,28 @@ void SvtSearchOptions_Impl::Notify( const Sequence< rtl::OUString >&  )
 }
 
 
-BOOL SvtSearchOptions_Impl::GetFlag( USHORT nOffset ) const
+sal_Bool SvtSearchOptions_Impl::GetFlag( sal_uInt16 nOffset ) const
 {
     DBG_ASSERT( nOffset <= MAX_FLAGS_OFFSET, "offset out of range");
-    return ((nFlags >> nOffset) & 0x01) ? TRUE : FALSE;
+    return ((nFlags >> nOffset) & 0x01) ? sal_True : sal_False;
 }
 
 
-void SvtSearchOptions_Impl::SetFlag( USHORT nOffset, BOOL bVal )
+void SvtSearchOptions_Impl::SetFlag( sal_uInt16 nOffset, sal_Bool bVal )
 {
     DBG_ASSERT( nOffset <= MAX_FLAGS_OFFSET, "offset out of range");
-    INT32 nOldFlags = nFlags;
-    INT32 nMask = ((INT32) 1)  << nOffset;
+    sal_Int32 nOldFlags = nFlags;
+    sal_Int32 nMask = ((sal_Int32) 1)  << nOffset;
     if (bVal)
         nFlags |= nMask;
     else
         nFlags &= ~nMask;
     if (nFlags != nOldFlags)
-        SetModified( TRUE );
+        SetModified( sal_True );
 }
 
 
-void SvtSearchOptions_Impl::SetModified( BOOL bVal )
+void SvtSearchOptions_Impl::SetModified( sal_Bool bVal )
 {
     bModified = bVal;
     if (bModified)
@@ -174,19 +174,19 @@ Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames() const
     const int nCount = sizeof( aPropNames ) / sizeof( aPropNames[0] );
     Sequence< OUString > aNames( nCount );
     OUString* pNames = aNames.getArray();
-    for (INT32 i = 0;  i < nCount;  ++i)
+    for (sal_Int32 i = 0;  i < nCount;  ++i)
         pNames[i] = OUString::createFromAscii( aPropNames[i] );
 
     return aNames;
 }
 
 
-BOOL SvtSearchOptions_Impl::Load()
+sal_Bool SvtSearchOptions_Impl::Load()
 {
-    BOOL bSucc = FALSE;
+    sal_Bool bSucc = sal_False;
 
     Sequence< OUString > aNames = GetPropertyNames();
-    INT32 nProps = aNames.getLength();
+    sal_Int32 nProps = aNames.getLength();
 
     const Sequence< Any > aValues = GetProperties( aNames );
     DBG_ASSERT( aValues.getLength() == aNames.getLength(),
@@ -195,16 +195,16 @@ BOOL SvtSearchOptions_Impl::Load()
 
     if (nProps  &&  aValues.getLength() == nProps)
     {
-        bSucc = TRUE;
+        bSucc = sal_True;
 
         const Any* pValues = aValues.getConstArray();
-        for (USHORT i = 0;  i < nProps;  ++i)
+        for (sal_uInt16 i = 0;  i < nProps;  ++i)
         {
             const Any &rVal = pValues[i];
             DBG_ASSERT( rVal.hasValue(), "property value missing" );
             if (rVal.hasValue())
             {
-                BOOL bVal = BOOL();
+                sal_Bool bVal = sal_Bool();
                 if (rVal >>= bVal)
                 {
                     if (i <= MAX_FLAGS_OFFSET)
@@ -219,13 +219,13 @@ BOOL SvtSearchOptions_Impl::Load()
                 else
                 {
                     DBG_ERROR( "unexpected type" );
-                    bSucc = FALSE;
+                    bSucc = sal_False;
                 }
             }
             else
             {
                 DBG_ERROR( "value missing" );
-                bSucc = FALSE;
+                bSucc = sal_False;
             }
         }
     }
@@ -235,12 +235,12 @@ BOOL SvtSearchOptions_Impl::Load()
 }
 
 
-BOOL SvtSearchOptions_Impl::Save()
+sal_Bool SvtSearchOptions_Impl::Save()
 {
-    BOOL bSucc = FALSE;
+    sal_Bool bSucc = sal_False;
 
     const Sequence< OUString > aNames = GetPropertyNames();
-    INT32 nProps = aNames.getLength();
+    sal_Int32 nProps = aNames.getLength();
 
     Sequence< Any > aValues( nProps );
     Any *pValue = aValues.getArray();
@@ -249,13 +249,13 @@ BOOL SvtSearchOptions_Impl::Save()
             "unexpected size of index" );
     if (nProps  &&  nProps == MAX_FLAGS_OFFSET + 1)
     {
-        for (USHORT i = 0;  i < nProps;  ++i)
-            pValue[i] <<= (BOOL) GetFlag(i);
+        for (sal_uInt16 i = 0;  i < nProps;  ++i)
+            pValue[i] <<= (sal_Bool) GetFlag(i);
         bSucc |= PutProperties( aNames, aValues );
     }
 
     if (bSucc)
-        SetModified( FALSE );
+        SetModified( sal_False );
 
     return bSucc;
 }
@@ -275,9 +275,9 @@ SvtSearchOptions::~SvtSearchOptions()
 }
 
 
-INT32 SvtSearchOptions::GetTransliterationFlags() const
+sal_Int32 SvtSearchOptions::GetTransliterationFlags() const
 {
-    INT32 nRes = 0;
+    sal_Int32 nRes = 0;
 
     if (!IsMatchCase()) // 'IsMatchCase' means act case sensitive
         nRes |= TransliterationModules_IGNORE_CASE;
@@ -322,312 +322,312 @@ INT32 SvtSearchOptions::GetTransliterationFlags() const
 }
 
 
-BOOL SvtSearchOptions::IsWholeWordsOnly() const
+sal_Bool SvtSearchOptions::IsWholeWordsOnly() const
 {
     return pImpl->GetFlag( 0 );
 }
 
 
-void SvtSearchOptions::SetWholeWordsOnly( BOOL bVal )
+void SvtSearchOptions::SetWholeWordsOnly( sal_Bool bVal )
 {
     pImpl->SetFlag( 0, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsBackwards() const
+sal_Bool SvtSearchOptions::IsBackwards() const
 {
     return pImpl->GetFlag( 1 );
 }
 
 
-void SvtSearchOptions::SetBackwards( BOOL bVal )
+void SvtSearchOptions::SetBackwards( sal_Bool bVal )
 {
     pImpl->SetFlag( 1, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsUseRegularExpression() const
+sal_Bool SvtSearchOptions::IsUseRegularExpression() const
 {
     return pImpl->GetFlag( 2 );
 }
 
 
-void SvtSearchOptions::SetUseRegularExpression( BOOL bVal )
+void SvtSearchOptions::SetUseRegularExpression( sal_Bool bVal )
 {
     pImpl->SetFlag( 2, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsSearchForStyles() const
+sal_Bool SvtSearchOptions::IsSearchForStyles() const
 {
     return pImpl->GetFlag( 3 );
 }
 
 
-void SvtSearchOptions::SetSearchForStyles( BOOL bVal )
+void SvtSearchOptions::SetSearchForStyles( sal_Bool bVal )
 {
     pImpl->SetFlag( 3, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsSimilaritySearch() const
+sal_Bool SvtSearchOptions::IsSimilaritySearch() const
 {
     return pImpl->GetFlag( 4 );
 }
 
 
-void SvtSearchOptions::SetSimilaritySearch( BOOL bVal )
+void SvtSearchOptions::SetSimilaritySearch( sal_Bool bVal )
 {
     pImpl->SetFlag( 4, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsUseAsianOptions() const
+sal_Bool SvtSearchOptions::IsUseAsianOptions() const
 {
     return pImpl->GetFlag( 5 );
 }
 
 
-void SvtSearchOptions::SetUseAsianOptions( BOOL bVal )
+void SvtSearchOptions::SetUseAsianOptions( sal_Bool bVal )
 {
     pImpl->SetFlag( 5, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchCase() const
+sal_Bool SvtSearchOptions::IsMatchCase() const
 {
     return pImpl->GetFlag( 6 );
 }
 
 
-void SvtSearchOptions::SetMatchCase( BOOL bVal )
+void SvtSearchOptions::SetMatchCase( sal_Bool bVal )
 {
     pImpl->SetFlag( 6, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchFullHalfWidthForms() const
+sal_Bool SvtSearchOptions::IsMatchFullHalfWidthForms() const
 {
     return pImpl->GetFlag( 7 );
 }
 
 
-void SvtSearchOptions::SetMatchFullHalfWidthForms( BOOL bVal )
+void SvtSearchOptions::SetMatchFullHalfWidthForms( sal_Bool bVal )
 {
     pImpl->SetFlag( 7, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchHiraganaKatakana() const
+sal_Bool SvtSearchOptions::IsMatchHiraganaKatakana() const
 {
     return pImpl->GetFlag( 8 );
 }
 
 
-void SvtSearchOptions::SetMatchHiraganaKatakana( BOOL bVal )
+void SvtSearchOptions::SetMatchHiraganaKatakana( sal_Bool bVal )
 {
     pImpl->SetFlag( 8, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchContractions() const
+sal_Bool SvtSearchOptions::IsMatchContractions() const
 {
     return pImpl->GetFlag( 9 );
 }
 
 
-void SvtSearchOptions::SetMatchContractions( BOOL bVal )
+void SvtSearchOptions::SetMatchContractions( sal_Bool bVal )
 {
     pImpl->SetFlag( 9, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchMinusDashChoon() const
+sal_Bool SvtSearchOptions::IsMatchMinusDashChoon() const
 {
     return pImpl->GetFlag( 10 );
 }
 
 
-void SvtSearchOptions::SetMatchMinusDashChoon( BOOL bVal )
+void SvtSearchOptions::SetMatchMinusDashChoon( sal_Bool bVal )
 {
     pImpl->SetFlag( 10, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchRepeatCharMarks() const
+sal_Bool SvtSearchOptions::IsMatchRepeatCharMarks() const
 {
     return pImpl->GetFlag( 11 );
 }
 
 
-void SvtSearchOptions::SetMatchRepeatCharMarks( BOOL bVal )
+void SvtSearchOptions::SetMatchRepeatCharMarks( sal_Bool bVal )
 {
     pImpl->SetFlag( 11, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchVariantFormKanji() const
+sal_Bool SvtSearchOptions::IsMatchVariantFormKanji() const
 {
     return pImpl->GetFlag( 12 );
 }
 
 
-void SvtSearchOptions::SetMatchVariantFormKanji( BOOL bVal )
+void SvtSearchOptions::SetMatchVariantFormKanji( sal_Bool bVal )
 {
     pImpl->SetFlag( 12, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchOldKanaForms() const
+sal_Bool SvtSearchOptions::IsMatchOldKanaForms() const
 {
     return pImpl->GetFlag( 13 );
 }
 
 
-void SvtSearchOptions::SetMatchOldKanaForms( BOOL bVal )
+void SvtSearchOptions::SetMatchOldKanaForms( sal_Bool bVal )
 {
     pImpl->SetFlag( 13, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchDiziDuzu() const
+sal_Bool SvtSearchOptions::IsMatchDiziDuzu() const
 {
     return pImpl->GetFlag( 14 );
 }
 
 
-void SvtSearchOptions::SetMatchDiziDuzu( BOOL bVal )
+void SvtSearchOptions::SetMatchDiziDuzu( sal_Bool bVal )
 {
     pImpl->SetFlag( 14, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchBavaHafa() const
+sal_Bool SvtSearchOptions::IsMatchBavaHafa() const
 {
     return pImpl->GetFlag( 15 );
 }
 
 
-void SvtSearchOptions::SetMatchBavaHafa( BOOL bVal )
+void SvtSearchOptions::SetMatchBavaHafa( sal_Bool bVal )
 {
     pImpl->SetFlag( 15, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchTsithichiDhizi() const
+sal_Bool SvtSearchOptions::IsMatchTsithichiDhizi() const
 {
     return pImpl->GetFlag( 16 );
 }
 
 
-void SvtSearchOptions::SetMatchTsithichiDhizi( BOOL bVal )
+void SvtSearchOptions::SetMatchTsithichiDhizi( sal_Bool bVal )
 {
     pImpl->SetFlag( 16, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchHyuiyuByuvyu() const
+sal_Bool SvtSearchOptions::IsMatchHyuiyuByuvyu() const
 {
     return pImpl->GetFlag( 17 );
 }
 
 
-void SvtSearchOptions::SetMatchHyuiyuByuvyu( BOOL bVal )
+void SvtSearchOptions::SetMatchHyuiyuByuvyu( sal_Bool bVal )
 {
     pImpl->SetFlag( 17, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchSesheZeje() const
+sal_Bool SvtSearchOptions::IsMatchSesheZeje() const
 {
     return pImpl->GetFlag( 18 );
 }
 
 
-void SvtSearchOptions::SetMatchSesheZeje( BOOL bVal )
+void SvtSearchOptions::SetMatchSesheZeje( sal_Bool bVal )
 {
     pImpl->SetFlag( 18, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchIaiya() const
+sal_Bool SvtSearchOptions::IsMatchIaiya() const
 {
     return pImpl->GetFlag( 19 );
 }
 
 
-void SvtSearchOptions::SetMatchIaiya( BOOL bVal )
+void SvtSearchOptions::SetMatchIaiya( sal_Bool bVal )
 {
     pImpl->SetFlag( 19, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsMatchKiku() const
+sal_Bool SvtSearchOptions::IsMatchKiku() const
 {
     return pImpl->GetFlag( 20 );
 }
 
 
-void SvtSearchOptions::SetMatchKiku( BOOL bVal )
+void SvtSearchOptions::SetMatchKiku( sal_Bool bVal )
 {
     pImpl->SetFlag( 20, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsIgnorePunctuation() const
+sal_Bool SvtSearchOptions::IsIgnorePunctuation() const
 {
     return pImpl->GetFlag( 21 );
 }
 
 
-void SvtSearchOptions::SetIgnorePunctuation( BOOL bVal )
+void SvtSearchOptions::SetIgnorePunctuation( sal_Bool bVal )
 {
     pImpl->SetFlag( 21, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsIgnoreWhitespace() const
+sal_Bool SvtSearchOptions::IsIgnoreWhitespace() const
 {
     return pImpl->GetFlag( 22 );
 }
 
 
-void SvtSearchOptions::SetIgnoreWhitespace( BOOL bVal )
+void SvtSearchOptions::SetIgnoreWhitespace( sal_Bool bVal )
 {
     pImpl->SetFlag( 22, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsIgnoreProlongedSoundMark() const
+sal_Bool SvtSearchOptions::IsIgnoreProlongedSoundMark() const
 {
     return pImpl->GetFlag( 23 );
 }
 
 
-void SvtSearchOptions::SetIgnoreProlongedSoundMark( BOOL bVal )
+void SvtSearchOptions::SetIgnoreProlongedSoundMark( sal_Bool bVal )
 {
     pImpl->SetFlag( 23, bVal );
 }
 
 
-BOOL SvtSearchOptions::IsIgnoreMiddleDot() const
+sal_Bool SvtSearchOptions::IsIgnoreMiddleDot() const
 {
     return pImpl->GetFlag( 24 );
 }
 
 
-void SvtSearchOptions::SetIgnoreMiddleDot( BOOL bVal )
+void SvtSearchOptions::SetIgnoreMiddleDot( sal_Bool bVal )
 {
     pImpl->SetFlag( 24, bVal );
 }
 
-BOOL SvtSearchOptions::IsNotes() const
+sal_Bool SvtSearchOptions::IsNotes() const
 {
         return pImpl->GetFlag( 25 );
 }
 
 
-void SvtSearchOptions::SetNotes( BOOL bVal )
+void SvtSearchOptions::SetNotes( sal_Bool bVal )
 {
         pImpl->SetFlag( 25, bVal );
 }

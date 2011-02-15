@@ -57,26 +57,26 @@ public:
 
 class SVL_DLLPUBLIC SfxUndoAction
 {
-    BOOL bLinked;
+    sal_Bool bLinked;
 public:
                             TYPEINFO();
                             SfxUndoAction();
     virtual                 ~SfxUndoAction();
 
-    virtual BOOL            IsLinked();
-    virtual void            SetLinked( BOOL bIsLinked = TRUE );
+    virtual sal_Bool            IsLinked();
+    virtual void            SetLinked( sal_Bool bIsLinked = sal_True );
     virtual void            Undo();
     virtual void            UndoWithContext( SfxUndoContext& i_context );
     virtual void            Redo();
     virtual void            RedoWithContext( SfxUndoContext& i_context );
     virtual void            Repeat(SfxRepeatTarget&);
-    virtual BOOL            CanRepeat(SfxRepeatTarget&) const;
+    virtual sal_Bool            CanRepeat(SfxRepeatTarget&) const;
 
-    virtual BOOL            Merge( SfxUndoAction *pNextAction );
+    virtual sal_Bool            Merge( SfxUndoAction *pNextAction );
 
     virtual UniString       GetComment() const;
     virtual UniString       GetRepeatComment(SfxRepeatTarget&) const;
-    virtual USHORT          GetId() const;
+    virtual sal_uInt16  GetId() const;
 
 private:
     SfxUndoAction&          operator=( const SfxUndoAction& );    // n.i.!!
@@ -171,25 +171,25 @@ class SVL_DLLPUBLIC SfxListUndoAction : public SfxUndoAction, public SfxUndoArra
                             TYPEINFO();
 
                             SfxListUndoAction( const UniString &rComment,
-                                const UniString rRepeatComment, USHORT Id, SfxUndoArray *pFather);
+                                const UniString rRepeatComment, sal_uInt16 Id, SfxUndoArray *pFather);
     virtual void            Undo();
     virtual void            UndoWithContext( SfxUndoContext& i_context );
     virtual void            Redo();
     virtual void            RedoWithContext( SfxUndoContext& i_context );
     virtual void            Repeat(SfxRepeatTarget&);
-    virtual BOOL            CanRepeat(SfxRepeatTarget&) const;
+    virtual sal_Bool            CanRepeat(SfxRepeatTarget&) const;
 
-    virtual BOOL            Merge( SfxUndoAction *pNextAction );
+    virtual sal_Bool            Merge( SfxUndoAction *pNextAction );
 
     virtual UniString       GetComment() const;
     virtual UniString       GetRepeatComment(SfxRepeatTarget&) const;
-    virtual USHORT          GetId() const;
+    virtual sal_uInt16  GetId() const;
 
     void SetComment( const UniString& rComment );
 
     private:
 
-    USHORT                  nId;
+    sal_uInt16          nId;
     UniString               aComment;
     UniString               aRepeatComment;
 
@@ -233,18 +233,18 @@ namespace svl
         virtual void            SetMaxUndoActionCount( size_t nMaxUndoActionCount ) = 0;
         virtual size_t          GetMaxUndoActionCount() const = 0;
 
-        virtual void            AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg=FALSE ) = 0;
+        virtual void            AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg=sal_False ) = 0;
 
         virtual size_t          GetUndoActionCount( bool const i_currentLevel = CurrentLevel ) const = 0;
-        virtual USHORT          GetUndoActionId() const = 0;
+        virtual sal_uInt16      GetUndoActionId() const = 0;
         virtual UniString       GetUndoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const = 0;
         virtual SfxUndoAction*  GetUndoAction( size_t nNo=0 ) const = 0;
 
         virtual size_t          GetRedoActionCount( bool const i_currentLevel = CurrentLevel ) const = 0;
         virtual UniString       GetRedoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const = 0;
 
-        virtual BOOL            Undo() = 0;
-        virtual BOOL            Redo() = 0;
+        virtual sal_Bool        Undo() = 0;
+        virtual sal_Bool        Redo() = 0;
 
         /** clears both the Redo and the Undo stack.
 
@@ -273,10 +273,10 @@ namespace svl
 
         virtual size_t          GetRepeatActionCount() const = 0;
         virtual UniString       GetRepeatActionComment( SfxRepeatTarget &rTarget) const = 0;
-        virtual BOOL            Repeat( SfxRepeatTarget &rTarget ) = 0;
-        virtual BOOL            CanRepeat( SfxRepeatTarget &rTarget ) const = 0;
+        virtual sal_Bool        Repeat( SfxRepeatTarget &rTarget ) = 0;
+        virtual sal_Bool        CanRepeat( SfxRepeatTarget &rTarget ) const = 0;
 
-        virtual void            EnterListAction(const UniString &rComment, const UniString& rRepeatComment, USHORT nId=0) = 0;
+        virtual void            EnterListAction(const UniString &rComment, const UniString& rRepeatComment, sal_uInt16 nId=0) = 0;
 
         /** leaves the list action entered with EnterListAction
             @return the number of the sub actions in the list which has just been left. Note that in case no such
@@ -348,24 +348,24 @@ public:
     // IUndoManager overridables
     virtual void            SetMaxUndoActionCount( size_t nMaxUndoActionCount );
     virtual size_t          GetMaxUndoActionCount() const;
-    virtual void            AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg=FALSE );
+    virtual void            AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg=sal_False );
     virtual size_t          GetUndoActionCount( bool const i_currentLevel = CurrentLevel ) const;
-    virtual USHORT          GetUndoActionId() const;
+    virtual sal_uInt16      GetUndoActionId() const;
     virtual UniString       GetUndoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const;
     virtual SfxUndoAction*  GetUndoAction( size_t nNo=0 ) const;
     virtual size_t          GetRedoActionCount( bool const i_currentLevel = CurrentLevel ) const;
     virtual UniString       GetRedoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const;
-    virtual BOOL            Undo();
-    virtual BOOL            Redo();
+    virtual sal_Bool        Undo();
+    virtual sal_Bool        Redo();
     virtual void            Clear();
     virtual void            ClearRedo();
     virtual void            Reset();
     virtual bool            IsDoing() const;
     virtual size_t          GetRepeatActionCount() const;
     virtual UniString       GetRepeatActionComment( SfxRepeatTarget &rTarget) const;
-    virtual BOOL            Repeat( SfxRepeatTarget &rTarget );
-    virtual BOOL            CanRepeat( SfxRepeatTarget &rTarget ) const;
-    virtual void            EnterListAction(const UniString &rComment, const UniString& rRepeatComment, USHORT nId=0);
+    virtual sal_Bool        Repeat( SfxRepeatTarget &rTarget );
+    virtual sal_Bool        CanRepeat( SfxRepeatTarget &rTarget ) const;
+    virtual void            EnterListAction(const UniString &rComment, const UniString& rRepeatComment, sal_uInt16 nId=0);
     virtual size_t          LeaveListAction();
     virtual size_t          LeaveAndMergeListAction();
     virtual bool            IsInListAction() const;
@@ -381,7 +381,6 @@ public:
     UndoStackMark   MarkTopUndoAction();
 
     /** removes a mark given by its ID.
-
         After the call, the mark ID is invalid.
     */
     void            RemoveMark( UndoStackMark const i_mark );
@@ -395,8 +394,8 @@ public:
     void            RemoveOldestUndoActions( size_t const i_count );
 
 protected:
-    BOOL    UndoWithContext( SfxUndoContext& i_context );
-    BOOL    RedoWithContext( SfxUndoContext& i_context );
+    sal_Bool UndoWithContext( SfxUndoContext& i_context );
+    sal_Bool RedoWithContext( SfxUndoContext& i_context );
 
     void    ImplClearRedo_NoLock( bool const i_currentLevel );
 
@@ -422,8 +421,8 @@ private:
     bool    ImplIsInListAction_Lock() const;
     void    ImplEnableUndo_Lock( bool const i_enable );
 
-    BOOL    ImplUndo( SfxUndoContext* i_contextOrNull );
-    BOOL    ImplRedo( SfxUndoContext* i_contextOrNull );
+    sal_Bool ImplUndo( SfxUndoContext* i_contextOrNull );
+    sal_Bool ImplRedo( SfxUndoContext* i_contextOrNull );
 
     friend class ::svl::undo::impl::LockGuard;
 };
@@ -454,13 +453,13 @@ public:
 
     virtual void            Undo();
     virtual void            Redo();
-    virtual BOOL            CanRepeat(SfxRepeatTarget& r) const;
+    virtual sal_Bool            CanRepeat(SfxRepeatTarget& r) const;
 
     virtual void            Repeat(SfxRepeatTarget&r);
 
     virtual UniString       GetComment() const;
     virtual UniString       GetRepeatComment(SfxRepeatTarget&r) const;
-    virtual USHORT          GetId() const;
+    virtual sal_uInt16  GetId() const;
 
     SfxUndoAction*          GetAction() const { return pAction; }
 
