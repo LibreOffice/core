@@ -224,7 +224,7 @@ namespace
     class OTablePreviewWindow : public Window
     {
         DECL_LINK(OnDisableInput, void*);
-        void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt);
     public:
@@ -247,7 +247,7 @@ namespace
     // -----------------------------------------------------------------------------
     IMPL_LINK(OTablePreviewWindow, OnDisableInput, void*, EMPTYARG)
     {
-        EnableInput(FALSE);
+        EnableInput(sal_False);
         return 0L;
     }
     // -----------------------------------------------------------------------------
@@ -310,7 +310,7 @@ OAppDetailPageHelper::OAppDetailPageHelper(Window* _pParent,OAppBorderWindow& _r
     m_aTBPreview.SetHelpId(HID_APP_VIEW_PREVIEW_CB);
     m_aTBPreview.SetDropdownClickHdl( LINK( this, OAppDetailPageHelper, OnDropdownClickHdl ) );
     m_aTBPreview.EnableMenuStrings();
-    m_aTBPreview.Enable(TRUE);
+    m_aTBPreview.Enable(sal_True);
 
     m_aBorder.SetUniqueId(UID_APP_VIEW_PREVIEW_1);
 
@@ -374,7 +374,7 @@ void OAppDetailPageHelper::selectAll()
     int nPos = getVisibleControlIndex();
     if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
-        m_pLists[nPos]->SelectAll(TRUE);
+        m_pLists[nPos]->SelectAll(sal_True);
     }
 }
 // -----------------------------------------------------------------------------
@@ -538,7 +538,7 @@ void OAppDetailPageHelper::selectElements(const Sequence< ::rtl::OUString>& _aNa
     if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
         DBTreeListBox& rTree = *m_pLists[nPos];
-        rTree.SelectAll(FALSE);
+        rTree.SelectAll(sal_False);
         const ::rtl::OUString* pIter = _aNames.getConstArray();
         const ::rtl::OUString* pEnd  = pIter + _aNames.getLength();
         for(;pIter != pEnd;++pIter)
@@ -689,7 +689,7 @@ SvLBoxEntry* OAppDetailPageHelper::getEntry( const Point& _aPosPixel) const
     SvLBoxEntry* pReturn = NULL;
     int nPos = getVisibleControlIndex();
     if ( nPos < E_ELEMENT_TYPE_COUNT )
-        pReturn = m_pLists[nPos]->GetEntry( _aPosPixel,TRUE );
+        pReturn = m_pLists[nPos]->GetEntry( _aPosPixel,sal_True );
     return pReturn;
 }
 // -----------------------------------------------------------------------------
@@ -722,14 +722,14 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
         SvLBoxEntry* pEntry = m_pLists[E_TABLE]->First();
         if ( pEntry )
             m_pLists[E_TABLE]->Expand(pEntry);
-        m_pLists[E_TABLE]->SelectAll(FALSE);
+        m_pLists[E_TABLE]->SelectAll(sal_False);
     }
 
     setDetailPage(m_pLists[E_TABLE]);
 }
 
 // -----------------------------------------------------------------------------
-void OAppDetailPageHelper::getElementIcons( ElementType _eType, USHORT& _rImageId, USHORT& _rHighContrastImageId )
+void OAppDetailPageHelper::getElementIcons( ElementType _eType, sal_uInt16& _rImageId, sal_uInt16& _rHighContrastImageId )
 {
     ImageProvider aImageProvider;
     _rImageId = _rHighContrastImageId = 0;
@@ -753,7 +753,7 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
 {
     OSL_ENSURE(E_TABLE != _eType,"E_TABLE isn't allowed.");
 
-    USHORT nImageId = 0, nImageIdH = 0;
+    sal_uInt16 nImageId = 0, nImageIdH = 0;
     rtl::OString sHelpId;
     ImageProvider aImageProvider;
     Image aFolderImage, aFolderImageHC;
@@ -790,7 +790,7 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
         {
             fillNames( _xContainer, _eType, nImageId, nImageIdH, NULL );
 
-            m_pLists[_eType]->SelectAll(FALSE);
+            m_pLists[_eType]->SelectAll(sal_False);
         }
         setDetailPage(m_pLists[_eType]);
     }
@@ -804,7 +804,7 @@ void OAppDetailPageHelper::setDetailPage(Window* _pWindow)
         pCurrent->Hide();
 
     showPreview(NULL);
-    BOOL bHasFocus = FALSE;
+    sal_Bool bHasFocus = sal_False;
     m_aFL.Show();
     {
         bHasFocus = pCurrent->HasChildPathFocus();
@@ -812,7 +812,7 @@ void OAppDetailPageHelper::setDetailPage(Window* _pWindow)
     }
     m_aTBPreview.Show();
     m_aBorder.Show();
-    switchPreview(m_ePreviewMode,TRUE);
+    switchPreview(m_ePreviewMode,sal_True);
 
     if ( bHasFocus )
         _pWindow->GrabFocus();
@@ -836,7 +836,7 @@ namespace
 
 // -----------------------------------------------------------------------------
 void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContainer, const ElementType _eType,
-                                      const USHORT _nImageId, const USHORT _nHighContrastImageId, SvLBoxEntry* _pParent )
+                                      const sal_uInt16 _nImageId, const sal_uInt16 _nHighContrastImageId, SvLBoxEntry* _pParent )
 {
     OSL_ENSURE(_xContainer.is(),"Data source is NULL! -> GPF");
     OSL_ENSURE( ( _eType >= E_TABLE ) && ( _eType < E_ELEMENT_TYPE_COUNT ), "OAppDetailPageHelper::fillNames: invalid type!" );
@@ -859,7 +859,7 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
             Reference<XNameAccess> xSubElements(_xContainer->getByName(*pIter),UNO_QUERY);
             if ( xSubElements.is() )
             {
-                pEntry = pList->InsertEntry( *pIter, _pParent, FALSE, LIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
+                pEntry = pList->InsertEntry( *pIter, _pParent, sal_False, LIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
                 getBorderWin().getView()->getAppController().containerFound( Reference< XContainer >( xSubElements, UNO_QUERY ) );
                 fillNames( xSubElements, _eType, _nImageId, _nHighContrastImageId, pEntry );
             }
@@ -991,13 +991,13 @@ SvLBoxEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const ::rtl::
             }
         }
 
-        USHORT nImageId = 0, nImageIdH = 0;
+        sal_uInt16 nImageId = 0, nImageIdH = 0;
         getElementIcons( _eType, nImageId, nImageIdH );
         Reference<XNameAccess> xContainer(_rObject,UNO_QUERY);
         if ( xContainer.is() )
         {
             const sal_Int32 nFolderIndicator = lcl_getFolderIndicatorForType( _eType );
-            pRet = pTreeView->InsertEntry( _rName, pEntry, FALSE, LIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
+            pRet = pTreeView->InsertEntry( _rName, pEntry, sal_False, LIST_APPEND, reinterpret_cast< void* >( nFolderIndicator ) );
             fillNames( xContainer, _eType, nImageId, nImageIdH, pRet );
         }
         else
@@ -1133,7 +1133,7 @@ sal_Bool OAppDetailPageHelper::isPreviewEnabled()
     return m_ePreviewMode != E_PREVIEWNONE;
 }
 // -----------------------------------------------------------------------------
-void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,BOOL _bForce)
+void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,sal_Bool _bForce)
 {
     if ( m_ePreviewMode != _eMode || _bForce )
     {
@@ -1364,7 +1364,7 @@ void OAppDetailPageHelper::KeyInput( const KeyEvent& rKEvt )
     OSL_PRECOND( pCurrentView, "OAppDetailPageHelper::KeyInput: how this?" );
 
     KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction(); (void)eFunc;
-    USHORT      nCode = rKEvt.GetKeyCode().GetCode();
+    sal_uInt16      nCode = rKEvt.GetKeyCode().GetCode();
 
     if ( ( KEY_RETURN == nCode ) && pCurrentView )
     {
@@ -1436,11 +1436,11 @@ OPreviewWindow::OPreviewWindow(Window* _pParent)
     ImplInitSettings( sal_True, sal_True, sal_True );
 }
 // -----------------------------------------------------------------------------
-BOOL OPreviewWindow::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const
+sal_Bool OPreviewWindow::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const
 {
     const Size aWinSize( GetOutputSizePixel() );
     Size       aNewSize( LogicToPixel( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode() ) );
-    BOOL       bRet = FALSE;
+    sal_Bool       bRet = sal_False;
 
     if( aNewSize.Width() && aNewSize.Height() )
     {
@@ -1463,7 +1463,7 @@ BOOL OPreviewWindow::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangl
                              ( aWinSize.Height() - aNewSize.Height() ) >> 1 );
 
         rResultRect = Rectangle( aNewPos, aNewSize );
-        bRet = TRUE;
+        bRet = sal_True;
     }
 
     return bRet;

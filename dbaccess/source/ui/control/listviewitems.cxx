@@ -56,7 +56,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------
-    USHORT OBoldListboxString::IsA()
+    sal_uInt16 OBoldListboxString::IsA()
     {
         return SV_ITEM_ID_BOLDLBSTRING;
     }

@@ -109,7 +109,7 @@ OSectionWindow::OSectionWindow( OViewsWindow* _pParent,const uno::Reference< rep
     }
 
     _propertyChanged(aEvent);
-    SetPaintTransparent(TRUE);
+    SetPaintTransparent(sal_True);
 }
 // -----------------------------------------------------------------------------
 OSectionWindow::~OSectionWindow()
@@ -135,11 +135,11 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
         const uno::Reference< report::XSection> xCurrentSection = m_aReportSection.getSection();
         if ( _rEvent.PropertyName.equals(PROPERTY_HEIGHT) )
         {
-            m_pParent->getView()->SetUpdateMode(FALSE);
+            m_pParent->getView()->SetUpdateMode(sal_False);
             Resize();
             m_pParent->getView()->notifySizeChanged();
             m_pParent->resize(*this);
-            m_pParent->getView()->SetUpdateMode(TRUE);
+            m_pParent->getView()->SetUpdateMode(sal_True);
             m_aStartMarker.Invalidate(INVALIDATE_NOERASE);
             m_aEndMarker.Invalidate(INVALIDATE_NOERASE);
             m_aReportSection.Invalidate(/*INVALIDATE_NOERASE*/);
@@ -175,7 +175,7 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
     }
 }
 // -----------------------------------------------------------------------------
-bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReportDefinition>& _xReport,USHORT _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OReportHelper> _pGetSection,::std::mem_fun_t<sal_Bool,OReportHelper> _pIsSectionOn)
+bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReportDefinition>& _xReport,sal_uInt16 _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OReportHelper> _pGetSection,::std::mem_fun_t<sal_Bool,OReportHelper> _pIsSectionOn)
 {
     OReportHelper aReportHelper(_xReport);
     const bool bRet = _pIsSectionOn(&aReportHelper) && _pGetSection(&aReportHelper) == m_aReportSection.getSection();
@@ -188,7 +188,7 @@ bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReport
     return bRet;
 }
 // -----------------------------------------------------------------------------
-bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>& _xGroup,USHORT _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> _pGetSection,::std::mem_fun_t<sal_Bool,OGroupHelper> _pIsSectionOn)
+bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>& _xGroup,sal_uInt16 _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> _pGetSection,::std::mem_fun_t<sal_Bool,OGroupHelper> _pIsSectionOn)
 {
     OGroupHelper aGroupHelper(_xGroup);
     const bool bRet = _pIsSectionOn(&aGroupHelper) && _pGetSection(&aGroupHelper) == m_aReportSection.getSection() ;

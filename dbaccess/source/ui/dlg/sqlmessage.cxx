@@ -121,14 +121,14 @@ namespace
     class ImageProvider : public IImageProvider
     {
     private:
-        USHORT  m_defaultImageID;
-        USHORT  m_highContrastImageID;
+        sal_uInt16  m_defaultImageID;
+        sal_uInt16  m_highContrastImageID;
 
         mutable Image   m_defaultImage;
         mutable Image   m_highContrastImage;
 
     public:
-        ImageProvider( USHORT _defaultImageID, USHORT _highContrastImageID )
+        ImageProvider( sal_uInt16 _defaultImageID, sal_uInt16 _highContrastImageID )
             :m_defaultImageID( _defaultImageID )
             ,m_highContrastImageID( _highContrastImageID )
         {
@@ -155,7 +155,7 @@ namespace
     private:
         String  m_label;
     public:
-        LabelProvider( USHORT _labelResourceID )
+        LabelProvider( sal_uInt16 _labelResourceID )
             :m_label( ModuleRes( _labelResourceID ) )
         {
         }
@@ -185,8 +185,8 @@ namespace
         ::boost::shared_ptr< IImageProvider >   getImageProvider( SQLExceptionInfo::TYPE _eType ) const
         {
             ::boost::shared_ptr< IImageProvider >* ppProvider( &m_pErrorImage );
-            USHORT nNormalImageID( BMP_EXCEPTION_ERROR );
-            USHORT nHCImageID( BMP_EXCEPTION_ERROR_SCH );
+            sal_uInt16 nNormalImageID( BMP_EXCEPTION_ERROR );
+            sal_uInt16 nHCImageID( BMP_EXCEPTION_ERROR_SCH );
 
             switch ( _eType )
             {
@@ -214,7 +214,7 @@ namespace
         ::boost::shared_ptr< ILabelProvider >   getLabelProvider( SQLExceptionInfo::TYPE _eType, bool _bSubLabel ) const
         {
             ::boost::shared_ptr< ILabelProvider >* ppProvider( &m_pErrorLabel );
-            USHORT nLabelID( STR_EXCEPTION_ERROR );
+            sal_uInt16 nLabelID( STR_EXCEPTION_ERROR );
 
             switch ( _eType )
             {
@@ -516,7 +516,7 @@ namespace
 
     void lcl_addButton( ButtonDialog& _rDialog, StandardButtonType _eType, bool _bDefault )
     {
-        USHORT nButtonID = 0;
+        sal_uInt16 nButtonID = 0;
         switch ( _eType )
         {
         case BUTTON_YES:    nButtonID = BUTTONID_YES; break;
