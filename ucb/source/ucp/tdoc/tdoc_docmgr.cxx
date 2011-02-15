@@ -84,7 +84,11 @@ OfficeDocumentsManager::OfficeDocumentsManager(
 // virtual
 OfficeDocumentsManager::~OfficeDocumentsManager()
 {
-    OSL_ENSURE( m_aDocs.empty(), "document list not empty!" );
+    //OSL_ENSURE( m_aDocs.empty(), "document list not empty!" );
+    // no need to assert this: Normal shutdown of OOo could already trigger it, since the order in which
+    // objects are actually released/destroyed upon shutdown is not defined. And when we arrive *here*,
+    // OOo *is* shutting down currently, since we're held by the TDOC provider, which is disposed
+    // upon shutdown.
 }
 
 //=========================================================================
