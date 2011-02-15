@@ -1989,16 +1989,16 @@ template<typename Item>
 bool
 lcl_setLine(const uno::Any& rAny, Item& rItem, USHORT nLine, const bool bConvert)
 {
-    bool bSet(false);
+    bool bDone = false;
     table::BorderLine2 aBorderLine;
     if (lcl_extractBorderLine(rAny, aBorderLine))
     {
         SvxBorderLine aLine;
-        bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
-        if (bSet)
-            rItem.SetLine(&aLine, nLine);
+        bool bSet = SvxBoxItem::LineToSvxLine(aBorderLine, aLine, bConvert);
+        rItem.SetLine( bSet ? &aLine : NULL, nLine);
+        bDone = true;
     }
-    return bSet;
+    return bDone;
 }
 
 }
