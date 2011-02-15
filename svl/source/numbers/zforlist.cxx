@@ -3462,14 +3462,17 @@ void SvNumberFormatter::GetCompatibilityCurrency( String& rSymbol, String& rAbbr
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency2 >
         xCurrencies( xLocaleData->getAllCurrencies() );
+
+    const ::com::sun::star::i18n::Currency2 *pCurrencies = xCurrencies.getConstArray();
     sal_Int32 nCurrencies = xCurrencies.getLength();
+
     sal_Int32 j;
     for ( j=0; j < nCurrencies; ++j )
     {
-        if ( xCurrencies[j].UsedInCompatibleFormatCodes )
+        if ( pCurrencies[j].UsedInCompatibleFormatCodes )
         {
-            rSymbol = xCurrencies[j].Symbol;
-            rAbbrev = xCurrencies[j].BankSymbol;
+            rSymbol = pCurrencies[j].Symbol;
+            rAbbrev = pCurrencies[j].BankSymbol;
             break;
         }
     }
