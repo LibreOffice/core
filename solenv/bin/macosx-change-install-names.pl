@@ -59,6 +59,18 @@ sub action($$$)
   'Usage: app|shl|extshl UREBIN|URELIB|OOO|SDK|BRAND|OXT|BOXT|NONE <filepath>*';
 $type = shift @ARGV;
 $loc = shift @ARGV;
+if ($type eq "SharedLibrary")
+{
+    $type = "shl";
+}
+if ($type eq "Executable")
+{
+    $type = "app"
+}
+if ($type eq "Library")
+{
+    $type = "shl"
+}
 if ($type eq "extshl")
 {
     $type = "shl";

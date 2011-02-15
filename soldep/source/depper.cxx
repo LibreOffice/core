@@ -52,7 +52,7 @@ ByteString sDelimiterLine("#====================================================
 
 Depper::Depper( Window* pBaseWindow ):
     Window( pBaseWindow ),
-    mbIsPrjView(FALSE),
+    mbIsPrjView(sal_False),
     maDefPos( 50, 50 ),
     maDefSize( 60, 25 ),
     mnViewMask( 1 ),
@@ -105,7 +105,7 @@ Depper::~Depper()
     delete mpGraphWin;
 }
 
-BOOL Depper::TogglePrjViewStatus()
+sal_Bool Depper::TogglePrjViewStatus()
 {
     GetDepWin()->Hide();            //Hide old content window
     GetGraphWin()->Hide();
@@ -118,7 +118,7 @@ BOOL Depper::TogglePrjViewStatus()
 
 void Depper::HideObjectsAndConnections( ObjectList* pObjLst )
 {
-    for ( ULONG i = 0; i < pObjLst->Count(); i ++ ) {
+    for ( sal_uIntPtr i = 0; i < pObjLst->Count(); i ++ ) {
         ObjectWin *pWin = pObjLst->GetObject( i );
         pWin->Hide();
     }
@@ -130,7 +130,7 @@ void Depper::HideObjectsAndConnections( ObjectList* pObjLst )
 
 void Depper::ShowObjectsAndConnections( ObjectList* pObjLst )
 {
-    for ( ULONG i = 0; i < pObjLst->Count(); i ++ ) {
+    for ( sal_uIntPtr i = 0; i < pObjLst->Count(); i ++ ) {
         ObjectWin *pWin = pObjLst->GetObject( i );
         pWin->Show();
     }
@@ -143,23 +143,23 @@ void Depper::ShowObjectsAndConnections( ObjectList* pObjLst )
 
 void Depper::RemoveAllObjects( ObjectList* pObjLst )
 {
-    ULONG i;
+    sal_uIntPtr i;
 
     for ( i = pObjLst->Count(); i > 0; i-- )
         delete pObjLst->GetObject( i - 1 );
     pObjLst->Clear();
 }
 
-USHORT Depper::Save( const ByteString& rFileName )
+sal_uInt16 Depper::Save( const ByteString& rFileName )
 {
-    DBG_ASSERT( FALSE , "you are dead!" );
+    DBG_ASSERT( sal_False , "you are dead!" );
     SvFileStream aOutFile( String( rFileName, RTL_TEXTENCODING_UTF8 ), STREAM_WRITE );
     depper_head dh;
-    USHORT i;
-    ULONG nObjCount = mpObjectList->Count();
+    sal_uInt16 i;
+    sal_uIntPtr nObjCount = mpObjectList->Count();
 
     ConnectorList* pConList = GetDepWin()->GetConnectorList();
-    ULONG nCnctrCount = pConList->Count();
+    sal_uIntPtr nCnctrCount = pConList->Count();
 
     dh.nID = DEPPER_ID;
     dh.nObjectCount = nObjCount;
@@ -181,30 +181,30 @@ USHORT Depper::Save( const ByteString& rFileName )
 }
 
 
-USHORT  Depper::WriteSource()
+sal_uInt16  Depper::WriteSource()
 {
-    DBG_ASSERT( FALSE , "overload it!" );
+    DBG_ASSERT( sal_False , "overload it!" );
     return 0;
 };
 
-USHORT  Depper::ReadSource( BOOL bUpdater )
+sal_uInt16  Depper::ReadSource( sal_Bool bUpdater )
 {
-    DBG_ASSERT( FALSE , "overload it!" );
+    DBG_ASSERT( sal_False , "overload it!" );
     return 0;
 };
 
-USHORT  Depper::OpenSource()
+sal_uInt16  Depper::OpenSource()
 {
-    DBG_ASSERT( FALSE , "overload it!" );
+    DBG_ASSERT( sal_False , "overload it!" );
     return 0;
 };
 
-ObjectWin* Depper::ObjIdToPtr( ObjectList* pObjLst, ULONG nId )
+ObjectWin* Depper::ObjIdToPtr( ObjectList* pObjLst, sal_uIntPtr nId )
 {
-    ULONG nObjCount = pObjLst->Count();
-    ULONG i = 0;
+    sal_uIntPtr nObjCount = pObjLst->Count();
+    sal_uIntPtr i = 0;
     ObjectWin* pWin;
-    ULONG nWinId = 0;
+    sal_uIntPtr nWinId = 0;
 
     do
     {
@@ -219,7 +219,7 @@ ObjectWin* Depper::ObjIdToPtr( ObjectList* pObjLst, ULONG nId )
         return NULL;
 }
 
-void Depper::SetMainProgressBar( USHORT i)
+void Depper::SetMainProgressBar( sal_uInt16 i)
 {
     if ( pMainBar ) {
         pMainBar->SetValue( 100 );
@@ -227,9 +227,9 @@ void Depper::SetMainProgressBar( USHORT i)
     }
 }
 
-void Depper::UpdateMainProgressBar(USHORT i, USHORT nScaleVal, USHORT &nStep, BOOL bCountingDown )
+void Depper::UpdateMainProgressBar(sal_uInt16 i, sal_uInt16 nScaleVal, sal_uInt16 &nStep, sal_Bool bCountingDown )
 {
-    ULONG val = 0;
+    sal_uIntPtr val = 0;
     if ( pMainBar ) {
  //       val = i * 50 / nScaleVal + 1;
         val = bCountingDown ? 50 + ( nScaleVal - i ) * 50 / nScaleVal : i * 50 / nScaleVal;
@@ -242,7 +242,7 @@ void Depper::UpdateMainProgressBar(USHORT i, USHORT nScaleVal, USHORT &nStep, BO
     }
 }
 
-void Depper::UpdateSubProgrssBar(ULONG i)
+void Depper::UpdateSubProgrssBar(sal_uIntPtr i)
 {
     if ( pSubBar )
     {
@@ -253,7 +253,7 @@ void Depper::UpdateSubProgrssBar(ULONG i)
 }
 
 
-USHORT Depper::AutoArrangeDlgStart()
+sal_uInt16 Depper::AutoArrangeDlgStart()
 {
     pSubBar = maArrangeDlg.GetSubBar();
     pMainBar = maArrangeDlg.GetMainBar();
@@ -261,15 +261,15 @@ USHORT Depper::AutoArrangeDlgStart()
     pMainText = maArrangeDlg.GetMainText();
     pMainText->SetText( String::CreateFromAscii( "Overall status" ));
     maArrangeDlg.Show();
-    GetDepWin()->Enable( FALSE );
+    GetDepWin()->Enable( sal_False );
     GetDepWin()->Hide();
     return 0;
 }
 
-USHORT Depper::AutoArrangeDlgStop()
+sal_uInt16 Depper::AutoArrangeDlgStop()
 {
     maArrangeDlg.Hide();
-    GetDepWin()->Enable( TRUE );
+    GetDepWin()->Enable( sal_True );
     GetDepWin()->Show();
     pSubBar = NULL;
     pMainBar = NULL;
@@ -280,9 +280,9 @@ USHORT Depper::AutoArrangeDlgStop()
 
 
 
-USHORT Depper::Zoom( MapMode& rMapMode )
+sal_uInt16 Depper::Zoom( MapMode& rMapMode )
 {
-    ULONG i;
+    sal_uIntPtr i;
     ObjectWin* pWin;
     Point aPos;
     Size aSize;
@@ -306,7 +306,7 @@ USHORT Depper::Zoom( MapMode& rMapMode )
     return 0;
 }
 
-ULONG Depper::AddObjectToList( DepWin* pParentWin, ObjectList* pObjLst, ULONG &LastID, ULONG &WinCount, ByteString& rBodyText, BOOL bInteract )
+sal_uIntPtr Depper::AddObjectToList( DepWin* pParentWin, ObjectList* pObjLst, sal_uIntPtr &LastID, sal_uIntPtr &WinCount, ByteString& rBodyText, sal_Bool bInteract )
 {
     Point aPos;
     Size aSize = GetDefSize();
@@ -316,7 +316,7 @@ ULONG Depper::AddObjectToList( DepWin* pParentWin, ObjectList* pObjLst, ULONG &L
     return AddObjectToList( pParentWin, pObjLst, LastID, WinCount, rBodyText, aPos, aSize );
 }
 
-ULONG Depper::AddObjectToList( DepWin* pParentWin, ObjectList* pObjLst, ULONG &LastID, ULONG &WinCount, ByteString& rBodyText, Point& rPos, Size& rSize )
+sal_uIntPtr Depper::AddObjectToList( DepWin* pParentWin, ObjectList* pObjLst, sal_uIntPtr &LastID, sal_uIntPtr &WinCount, ByteString& rBodyText, Point& rPos, Size& rSize )
 {
     ObjectWin* pWin = new ObjectWin( pParentWin, WB_BORDER );
     //pWin->mpDepperDontuseme = this;
@@ -350,14 +350,14 @@ ULONG Depper::AddObjectToList( DepWin* pParentWin, ObjectList* pObjLst, ULONG &L
 {
     GetDepWin()->DrawOutput( pDevice );
     ObjectList* pObjList = GetObjectList();
-    for ( USHORT i = pObjList->Count(); i > 0; i-- )
+    for ( sal_uInt16 i = pObjList->Count(); i > 0; i-- )
     {
         ObjectWin* pWin = pObjList->GetObject( i - 1 );
         pWin->DrawOutput( pDevice );
     }
 }*/
 
-ObjectWin* Depper::RemoveObjectFromList( ObjectList* pObjLst, ULONG &WinCount, USHORT nId, BOOL bDelete )
+ObjectWin* Depper::RemoveObjectFromList( ObjectList* pObjLst, sal_uIntPtr &WinCount, sal_uInt16 nId, sal_Bool bDelete )
 {
     ObjectWin* pWin = ObjIdToPtr( pObjLst, nId );
 
@@ -372,7 +372,7 @@ ObjectWin* Depper::RemoveObjectFromList( ObjectList* pObjLst, ULONG &WinCount, U
     else
         return NULL;
 }
-USHORT Depper::AddConnectorToObjects( ObjectList* pObjLst, ULONG nStartId, ULONG nEndId )
+sal_uInt16 Depper::AddConnectorToObjects( ObjectList* pObjLst, sal_uIntPtr nStartId, sal_uIntPtr nEndId )
 {
     ObjectWin* pStartWin = ObjIdToPtr( pObjLst, nStartId );
 
@@ -387,7 +387,7 @@ USHORT Depper::AddConnectorToObjects( ObjectList* pObjLst, ULONG nStartId, ULONG
     return AddConnectorToObjects( pStartWin, pEndWin );
 }
 
-USHORT Depper::RemoveConnectorFromObjects( ObjectList* pObjLst, ULONG nStartId, ULONG nEndId )
+sal_uInt16 Depper::RemoveConnectorFromObjects( ObjectList* pObjLst, sal_uIntPtr nStartId, sal_uIntPtr nEndId )
 {
 //  DBG_ASSERT( FALSE , "noch nicht" );
     ObjectWin* pStartWin = ObjIdToPtr( pObjLst, nStartId );
@@ -403,7 +403,7 @@ USHORT Depper::RemoveConnectorFromObjects( ObjectList* pObjLst, ULONG nStartId, 
     return RemoveConnectorFromObjects( pStartWin, pEndWin );
 }
 
-USHORT Depper::AddConnectorToObjects( ObjectWin* pStartWin, ObjectWin* pEndWin )
+sal_uInt16 Depper::AddConnectorToObjects( ObjectWin* pStartWin, ObjectWin* pEndWin )
 {
     if ( pStartWin->ConnectionExistsInAnyDirection( pEndWin ))
         return 0;
@@ -411,13 +411,13 @@ USHORT Depper::AddConnectorToObjects( ObjectWin* pStartWin, ObjectWin* pEndWin )
     Connector* pCon = new Connector( GetDepWin(), WB_NOBORDER );
 //  pCon->Initialize( pStartWin, pEndWin );
     if (pStartWin->IsNullObject()) //null_project
-        pCon->Initialize( pStartWin, pEndWin, FALSE );
+        pCon->Initialize( pStartWin, pEndWin, sal_False );
     else
-        pCon->Initialize( pStartWin, pEndWin, TRUE );
+        pCon->Initialize( pStartWin, pEndWin, sal_True );
     return 0;
 }
 
-USHORT Depper::RemoveConnectorFromObjects( ObjectWin* pStartWin, ObjectWin* pEndWin )
+sal_uInt16 Depper::RemoveConnectorFromObjects( ObjectWin* pStartWin, ObjectWin* pEndWin )
 {
     Connector* pCon = pStartWin->GetConnector( pStartWin->GetId(), pEndWin->GetId() );
 
@@ -430,7 +430,7 @@ USHORT Depper::RemoveConnectorFromObjects( ObjectWin* pStartWin, ObjectWin* pEnd
     }
 }
 
-ULONG Depper::HandleNewPrjDialog( ByteString &rBodyText )
+sal_uIntPtr Depper::HandleNewPrjDialog( ByteString &rBodyText )
 {
         SolNewProjectDlg aNewProjectDlg( GetDepWin(), DtSodResId( RID_SD_DIALOG_NEWPROJECT ));
         if ( aNewProjectDlg.Execute() )
@@ -438,7 +438,7 @@ ULONG Depper::HandleNewPrjDialog( ByteString &rBodyText )
             rBodyText = ByteString( aNewProjectDlg.maEName.GetText(), RTL_TEXTENCODING_UTF8);
 //hashtable auf stand halten
             MyHashObject* pHObject;
-            ULONG nObjectId = AddObjectToList( mpBaseWin, mpObjectList, mnSolLastId, mnSolWinCount, rBodyText, FALSE );
+            sal_uIntPtr nObjectId = AddObjectToList( mpBaseWin, mpObjectList, mnSolLastId, mnSolWinCount, rBodyText, sal_False );
             pHObject = new MyHashObject( nObjectId, ObjIdToPtr( mpObjectList, nObjectId ));
             mpSolIdMapper->Insert( rBodyText, pHObject );
 
@@ -451,9 +451,9 @@ ULONG Depper::HandleNewPrjDialog( ByteString &rBodyText )
 
             if ( sDeps != "" )
             {
-                USHORT i;
+                sal_uInt16 i;
                 ByteString sDepName;
-                USHORT nToken = sDeps.GetTokenCount(' ');
+                sal_uInt16 nToken = sDeps.GetTokenCount(' ');
                 for ( i = 0 ; i < nToken ; i++)
                 {
                     sDepName =  sDeps.GetToken( i, ' ' );
@@ -468,11 +468,11 @@ ULONG Depper::HandleNewPrjDialog( ByteString &rBodyText )
 
             if ( sDeps != "" )
             {
-                USHORT i;
+                sal_uInt16 i;
                 ByteString sDepName;
-                ULONG nObjectId_l, nHashedId;
+                sal_uIntPtr nObjectId_l, nHashedId;
                 MyHashObject* pHObject_l;
-                USHORT nToken = sDeps.GetTokenCount(' ');
+                sal_uInt16 nToken = sDeps.GetTokenCount(' ');
                 for ( i = 0 ; i < nToken ; i++)
                 {
                     sDepName =  sDeps.GetToken( i, ' ' );
@@ -501,7 +501,7 @@ ULONG Depper::HandleNewPrjDialog( ByteString &rBodyText )
         return 0;
 }
 
-ULONG Depper::HandleNewDirectoryDialog(ByteString &rBodyText)
+sal_uIntPtr Depper::HandleNewDirectoryDialog(ByteString &rBodyText)
 {
         SolNewDirectoryDlg aNewDirectoryDlg( GetDepWin(), DtSodResId( RID_SD_DIALOG_NEWDIRECTORY ));
 //todo: set defaults
@@ -510,7 +510,7 @@ ULONG Depper::HandleNewDirectoryDialog(ByteString &rBodyText)
             rBodyText = ByteString( aNewDirectoryDlg.maEFlag.GetText(), RTL_TEXTENCODING_UTF8 );
 //hashtable auf stand halten
             MyHashObject* pHObject;
-            ULONG nObjectId = AddObjectToList( GetDepWin(), mpObjectPrjList, mnSolLastId, mnSolWinCount, rBodyText );
+            sal_uIntPtr nObjectId = AddObjectToList( GetDepWin(), mpObjectPrjList, mnSolLastId, mnSolWinCount, rBodyText );
             pHObject = new MyHashObject( nObjectId, ObjIdToPtr( mpObjectPrjList, nObjectId ));
             mpPrjIdMapper->Insert( rBodyText, pHObject ); // mpPrjIdMapper
 
@@ -542,12 +542,12 @@ ULONG Depper::HandleNewDirectoryDialog(ByteString &rBodyText)
 
             if ( aNewDirectoryDlg.maEDeps.GetText() != String( "", RTL_TEXTENCODING_UTF8 ))
             {
-                USHORT i;
+                sal_uInt16 i;
                 ByteString sDeps = ByteString( aNewDirectoryDlg.maEDeps.GetText(), RTL_TEXTENCODING_UTF8 );
                 ByteString sDepName;
-                ULONG nObjectId_l, nHashedId;
+                sal_uIntPtr nObjectId_l, nHashedId;
                 MyHashObject* pHObject_l;
-                USHORT nToken = sDeps.GetTokenCount(' ');
+                sal_uInt16 nToken = sDeps.GetTokenCount(' ');
                 for ( i = 0 ; i < nToken ; i++)
                 {
                     sDepName =  sDeps.GetToken( i, ' ' );
@@ -589,14 +589,14 @@ ULONG Depper::HandleNewDirectoryDialog(ByteString &rBodyText)
 // Context-Menue
 IMPL_LINK( Depper, PopupSelected, PopupMenu*, mpPopup )
 {
-    USHORT nItemId = mpPopup->GetCurItemId();
+    sal_uInt16 nItemId = mpPopup->GetCurItemId();
 
     switch( nItemId )
     {
         case DEPPOPUP_NEW :
                 {
                     ByteString sNewItem = ByteString("new");
-                     //AddObject( mpObjectList, sNewItem , TRUE );
+                     //AddObject( mpObjectList, sNewItem , sal_True );
                  }
                 break;
         case DEPPOPUP_AUTOARRANGE :
@@ -612,7 +612,7 @@ IMPL_LINK( Depper, PopupSelected, PopupMenu*, mpPopup )
                 WriteSource();
                 break;
         case DEPPOPUP_READ_SOURCE :
-                ReadSource(TRUE);
+                ReadSource(sal_True);
                 break;
         case DEPPOPUP_OPEN_SOURCE :
                 OpenSource();
@@ -680,7 +680,7 @@ IMPL_LINK( Depper, PopupSelected, PopupMenu*, mpPopup )
             maToolBox.Show();
             break;
         default :
-            DBG_ASSERT( FALSE, "default" );
+            DBG_ASSERT( sal_False, "default" );
                 break;
     }
     return 0;
