@@ -124,7 +124,7 @@ ScDataPilotDatabaseDlg::~ScDataPilotDatabaseDlg()
 
 void ScDataPilotDatabaseDlg::GetValues( ScImportSourceDesc& rDesc )
 {
-    USHORT nSelect = aLbType.GetSelectEntryPos();
+    sal_uInt16 nSelect = aLbType.GetSelectEntryPos();
 
     rDesc.aDBName = aLbDatabase.GetSelectEntry();
     rDesc.aObject = aCbObject.GetText();
@@ -155,7 +155,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
     if (!aDatabaseName.Len())
         return;
 
-    USHORT nSelect = aLbType.GetSelectEntryPos();
+    sal_uInt16 nSelect = aLbType.GetSelectEntryPos();
     if ( nSelect > DP_TYPELIST_QUERY )
         return;                                 // only tables and queries
 

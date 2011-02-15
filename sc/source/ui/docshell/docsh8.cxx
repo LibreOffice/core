@@ -104,7 +104,7 @@ using namespace com::sun::star;
 
 namespace
 {
-    ULONG lcl_getDBaseConnection(uno::Reference<sdbc::XDriverManager>& _rDrvMgr,uno::Reference<sdbc::XConnection>& _rConnection,String& _rTabName,const String& rFullFileName,rtl_TextEncoding eCharSet)
+    sal_uLong lcl_getDBaseConnection(uno::Reference<sdbc::XDriverManager>& _rDrvMgr,uno::Reference<sdbc::XConnection>& _rConnection,String& _rTabName,const String& rFullFileName,rtl_TextEncoding eCharSet)
     {
         INetURLObject aURL;
         aURL.SetSmartProtocol( INET_PROT_FILE );
@@ -161,7 +161,7 @@ namespace
 // MoveFile/KillFile/IsDocument: similar to SfxContentHelper
 
 // static
-BOOL ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject& rDestObj )
+sal_Bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject& rDestObj )
 {
     sal_Bool bMoveData = sal_True;
     sal_Bool bRet = sal_True, bKillSource = sal_False;
@@ -206,7 +206,7 @@ BOOL ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject&
 
 
 // static
-BOOL ScDocShell::KillFile( const INetURLObject& rURL )
+sal_Bool ScDocShell::KillFile( const INetURLObject& rURL )
 {
     sal_Bool bRet = sal_True;
     try
@@ -226,7 +226,7 @@ BOOL ScDocShell::KillFile( const INetURLObject& rURL )
 }
 
 // static
-BOOL ScDocShell::IsDocument( const INetURLObject& rURL )
+sal_Bool ScDocShell::IsDocument( const INetURLObject& rURL )
 {
     sal_Bool bRet = sal_False;
     try
@@ -246,10 +246,10 @@ BOOL ScDocShell::IsDocument( const INetURLObject& rURL )
 
 // -----------------------------------------------------------------------
 
-ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
-                                BOOL bSimpleColWidth[MAXCOLCOUNT] )
+sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
+                                sal_Bool bSimpleColWidth[MAXCOLCOUNT] )
 {
-    ULONG nErr = eERR_OK;
+    sal_uLong nErr = eERR_OK;
     long i;
 
     try
@@ -257,7 +257,7 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
         String aTabName;
         uno::Reference<sdbc::XDriverManager> xDrvMan;
         uno::Reference<sdbc::XConnection> xConnection;
-        ULONG nRet = lcl_getDBaseConnection(xDrvMan,xConnection,aTabName,rFullFileName,eCharSet);
+        sal_uLong nRet = lcl_getDBaseConnection(xDrvMan,xConnection,aTabName,rFullFileName,eCharSet);
         if ( !xConnection.is() || !xDrvMan.is() )
             return nRet;
         ::utl::DisposableComponent aConnectionHelper(xConnection);
@@ -364,7 +364,7 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
         }
 
         SCROW nRow = 1;     // 0 is column titles
-        BOOL bEnd = FALSE;
+        sal_Bool bEnd = sal_False;
         while ( !bEnd && xRowSet->next() )
         {
             if ( nRow <= MAXROW )
@@ -373,7 +373,7 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
                 for (i=0; i<nColCount; i++)
                 {
                     ScDatabaseDocUtil::PutData( &aDocument, nCol, nRow, 0,
-                                                xRow, i+1, pTypeArr[i], FALSE,
+                                                xRow, i+1, pTypeArr[i], sal_False,
                                                 &bSimpleColWidth[nCol] );
                     ++nCol;
                 }
@@ -381,7 +381,7 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
             }
             else        // past the end of the spreadsheet
             {
-                bEnd = TRUE;                            // don't continue
+                bEnd = sal_True;                            // don't continue
                 nErr = SCWARN_IMPORT_RANGE_OVERFLOW;    // warning message
             }
 
@@ -415,15 +415,15 @@ inline sal_Bool IsAsciiAlpha( sal_Unicode c )
 }
 
 void lcl_GetColumnTypes( ScDocShell& rDocShell,
-                            const ScRange& rDataRange, BOOL bHasFieldNames,
+                            const ScRange& rDataRange, sal_Bool bHasFieldNames,
                             rtl::OUString* pColNames, sal_Int32* pColTypes,
                             sal_Int32* pColLengths, sal_Int32* pColScales,
-                            BOOL& bHasMemo, CharSet eCharSet )
+                            sal_Bool& bHasMemo, CharSet eCharSet )
 {
     //  updating of column titles didn't work in 5.2 and isn't always wanted
     //  (saving normally shouldn't modify the document)
     //! read flag from configuration
-    BOOL bUpdateTitles = FALSE;
+    sal_Bool bUpdateTitles = sal_False;
 
     ScDocument* pDoc = rDocShell.GetDocument();
     SvNumberFormatter* pNumFmt = pDoc->GetFormatTable();
@@ -440,8 +440,8 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
     SCROW nFirstDataRow = ( bHasFieldNames ? nFirstRow + 1 : nFirstRow );
     for ( SCCOL nCol = nFirstCol; nCol <= nLastCol; nCol++ )
     {
-        BOOL bTypeDefined = FALSE;
-        BOOL bPrecDefined = FALSE;
+        sal_Bool bTypeDefined = sal_False;
+        sal_Bool bPrecDefined = sal_False;
         sal_Int32 nFieldLen = 0;
         sal_Int32 nPrecision = 0;
         sal_Int32 nDbType = sdbc::DataType::SQLNULL;
@@ -463,30 +463,30 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
                     case 'L' :
                         nDbType = sdbc::DataType::BIT;
                         nFieldLen = 1;
-                        bTypeDefined = TRUE;
-                        bPrecDefined = TRUE;
+                        bTypeDefined = sal_True;
+                        bPrecDefined = sal_True;
                         break;
                     case 'D' :
                         nDbType = sdbc::DataType::DATE;
                         nFieldLen = 8;
-                        bTypeDefined = TRUE;
-                        bPrecDefined = TRUE;
+                        bTypeDefined = sal_True;
+                        bPrecDefined = sal_True;
                         break;
                     case 'M' :
                         nDbType = sdbc::DataType::LONGVARCHAR;
                         nFieldLen = 10;
-                        bTypeDefined = TRUE;
-                        bPrecDefined = TRUE;
-                        bHasMemo = TRUE;
+                        bTypeDefined = sal_True;
+                        bPrecDefined = sal_True;
+                        bHasMemo = sal_True;
                         break;
                     case 'C' :
                         nDbType = sdbc::DataType::VARCHAR;
-                        bTypeDefined = TRUE;
-                        bPrecDefined = TRUE;
+                        bTypeDefined = sal_True;
+                        bPrecDefined = sal_True;
                         break;
                     case 'N' :
                         nDbType = sdbc::DataType::DECIMAL;
-                        bTypeDefined = TRUE;
+                        bTypeDefined = sal_True;
                         break;
                 }
                 if ( bTypeDefined && !nFieldLen && nToken > 2 )
@@ -498,7 +498,7 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
                         if ( CharClass::isAsciiNumeric(aTmp) )
                         {
                             nPrecision = aTmp.ToInt32();
-                            bPrecDefined = TRUE;
+                            bPrecDefined = sal_True;
                         }
                     }
                 }
@@ -528,7 +528,7 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
             StrData* pStrData = new StrData( aFieldName );
             if ( !aFieldNamesCollection.Insert( pStrData ) )
             {   // doppelter Feldname, numerisch erweitern
-                USHORT nSub = 1;
+                sal_uInt16 nSub = 1;
                 String aFixPart( aFieldName );
                 do
                 {
@@ -584,8 +584,8 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
                 }
             }
         }
-        BOOL bSdbLenAdjusted = FALSE;
-        BOOL bSdbLenBad = FALSE;
+        sal_Bool bSdbLenAdjusted = sal_False;
+        sal_Bool bSdbLenBad = sal_False;
         // Feldlaenge
         if ( nDbType == sdbc::DataType::VARCHAR && !nFieldLen )
         {   // maximale Feldbreite bestimmen
@@ -627,9 +627,9 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
              //! CAVEAT! There is no way to define a numeric field with a length
              //! of 1 and no decimals!
             if ( nFieldLen == 1 && nPrecision == 0 )
-                bSdbLenBad = TRUE;
+                bSdbLenBad = sal_True;
             nFieldLen = SvDbaseConverter::ConvertPrecisionToOdbc( nFieldLen, nPrecision );
-            bSdbLenAdjusted = TRUE;
+            bSdbLenAdjusted = sal_True;
         }
         if ( nFieldLen > 254 )
         {
@@ -637,7 +637,7 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
             {   // zu lang fuer normales Textfeld => Memofeld
                 nDbType = sdbc::DataType::LONGVARCHAR;
                 nFieldLen = 10;
-                bHasMemo = TRUE;
+                bHasMemo = sal_True;
             }
             else
                 nFieldLen = 254;                    // dumm gelaufen..
@@ -709,13 +709,13 @@ inline void lcl_getLongVarCharString( String& rString, ScBaseCell* pCell,
 }
 
 
-ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BOOL& bHasMemo )
+sal_uLong ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, sal_Bool& bHasMemo )
 {
     // remove the file so the dBase driver doesn't find an invalid file
     INetURLObject aDeleteObj( rFullFileName, INET_PROT_FILE );
     KillFile( aDeleteObj );
 
-    ULONG nErr = eERR_OK;
+    sal_uLong nErr = eERR_OK;
     uno::Any aAny;
 
     SCCOL nFirstCol, nLastCol;
@@ -731,11 +731,11 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
                                                     nLastRow - nFirstRow );
     SvNumberFormatter* pNumFmt = aDocument.GetFormatTable();
 
-    BOOL bHasFieldNames = TRUE;
+    sal_Bool bHasFieldNames = sal_True;
     for ( SCCOL nDocCol = nFirstCol; nDocCol <= nLastCol && bHasFieldNames; nDocCol++ )
     {   // nur Strings in erster Zeile => sind Feldnamen
         if ( !aDocument.HasStringData( nDocCol, nFirstRow, nTab ) )
-            bHasFieldNames = FALSE;
+            bHasFieldNames = sal_False;
     }
 
     long nColCount = nLastCol - nFirstCol + 1;
@@ -759,7 +759,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
     {
         uno::Reference<sdbc::XDriverManager> xDrvMan;
         uno::Reference<sdbc::XConnection> xConnection;
-        ULONG nRet = lcl_getDBaseConnection(xDrvMan,xConnection,aTabName,rFullFileName,eCharSet);
+        sal_uLong nRet = lcl_getDBaseConnection(xDrvMan,xConnection,aTabName,rFullFileName,eCharSet);
         if ( !xConnection.is() || !xDrvMan.is() )
             return nRet;
         ::utl::DisposableComponent aConnectionHelper(xConnection);
@@ -928,7 +928,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
                         {
                             aDocument.GetValue( nDocCol, nDocRow, nTab, fVal );
                             // #39274# zwischen 0 Wert und 0 kein Wert unterscheiden
-                            BOOL bIsNull = (fVal == 0.0);
+                            sal_Bool bIsNull = (fVal == 0.0);
                             if ( bIsNull )
                                 bIsNull = !aDocument.HasValueData( nDocCol, nDocRow, nTab );
                             if ( bIsNull )

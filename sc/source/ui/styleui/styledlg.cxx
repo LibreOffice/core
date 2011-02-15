@@ -65,12 +65,12 @@
 
 ScStyleDlg::ScStyleDlg( Window*             pParent,
                         SfxStyleSheetBase&  rStyleBase,
-                        USHORT              nRscId )
+                        sal_uInt16              nRscId )
 
     :   SfxStyleDialog  ( pParent,
                           ScResId( nRscId ),
                           rStyleBase,
-                          FALSE ),
+                          sal_False ),
         nDlgRsc         ( nRscId )
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create(); //CHINA001
@@ -145,7 +145,7 @@ __EXPORT ScStyleDlg::~ScStyleDlg()
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScStyleDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
+void __EXPORT ScStyleDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 {
     if ( nDlgRsc == RID_SCDLG_STYLES_PAR )
     {
@@ -194,7 +194,7 @@ void __EXPORT ScStyleDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
         {
             case TP_PAGE_STD:
                 //CHINA001 ((SvxPageDescPage&)rTabPage).SetMode( SVX_PAGE_MODE_CENTER );
-                aSet.Put (SfxAllEnumItem((const USHORT)SID_ENUM_PAGE_MODE, SVX_PAGE_MODE_CENTER)); //CHINA001
+                aSet.Put (SfxAllEnumItem((const sal_uInt16)SID_ENUM_PAGE_MODE, SVX_PAGE_MODE_CENTER)); //CHINA001
                 rTabPage.PageCreated(aSet); //CHINA001
                 break;
 

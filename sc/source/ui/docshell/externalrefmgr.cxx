@@ -1339,7 +1339,7 @@ static FormulaToken* lcl_convertToToken(ScBaseCell* pCell)
         case CELLTYPE_FORMULA:
         {
             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
-            USHORT nError = pFCell->GetErrCode();
+            sal_uInt16 nError = pFCell->GetErrCode();
             if (nError)
                 return new FormulaErrorToken( nError);
             else if (pFCell->IsValue())
@@ -1392,7 +1392,8 @@ static ScTokenArray* lcl_convertToTokenArray(ScDocument* pSrcDoc, ScRange& rRang
         // Only loop within the data area.
         SCCOL nDataCol1 = nCol1, nDataCol2 = nCol2;
         SCROW nDataRow1 = nRow1, nDataRow2 = nRow2;
-        if (!pSrcDoc->ShrinkToDataArea(nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2))
+        bool bShrunk;
+        if (!pSrcDoc->ShrinkToUsedDataArea( bShrunk, nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2, false))
             // no data within specified range.
             continue;
 
@@ -1442,7 +1443,7 @@ static ScTokenArray* lcl_convertToTokenArray(ScDocument* pSrcDoc, ScRange& rRang
                         case CELLTYPE_FORMULA:
                         {
                             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
-                            USHORT nError = pFCell->GetErrCode();
+                            sal_uInt16 nError = pFCell->GetErrCode();
                             if (nError)
                                 xMat->PutDouble( CreateDoubleError( nError), nC, nR);
                             else if (pFCell->IsValue())
@@ -1708,8 +1709,8 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
 
     SCCOL nDataCol1 = 0, nDataCol2 = MAXCOL;
     SCROW nDataRow1 = 0, nDataRow2 = MAXROW;
-    pSrcDoc->ShrinkToDataArea(nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2);
-    if (rCell.Col() < nDataCol1 || nDataCol2 < rCell.Col() || rCell.Row() < nDataRow1 || nDataRow2 < rCell.Row())
+    bool bData = pSrcDoc->ShrinkToDataArea(nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2);
+    if (!bData || rCell.Col() < nDataCol1 || nDataCol2 < rCell.Col() || rCell.Row() < nDataRow1 || nDataRow2 < rCell.Row())
     {
         // requested cell is outside the data area.  Don't even bother caching
         // this data, but add it to the cached range to prevent accessing the
@@ -1846,7 +1847,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokens(sal_u
 
     ScRangeName* pExtNames = pSrcDoc->GetRangeName();
     String aUpperName = ScGlobal::pCharClass->upper(rName);
-    USHORT n;
+    sal_uInt16 n;
     bool bRes = pExtNames->SearchNameUpper(aUpperName, n);
     if (!bRes)
         return ScExternalRefCache::TokenArrayRef();
@@ -2045,7 +2046,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, Stri
         pSet->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, aOptions));
 
     // make medium hidden to prevent assertion from progress bar
-    pSet->Put( SfxBoolItem( SID_HIDDEN, TRUE ) );
+    pSet->Put( SfxBoolItem( SID_HIDDEN, sal_True ) );
 
     auto_ptr<SfxMedium> pMedium(new SfxMedium(aFile, STREAM_STD_READ, false, pFilter, pSet));
     if (pMedium->GetError() != ERRCODE_NONE)

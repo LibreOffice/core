@@ -44,19 +44,19 @@ class SC_DLLPUBLIC ScImportOptions
 public:
         ScImportOptions()
             : nFieldSepCode(0), nTextSepCode(0),
-            eCharSet(RTL_TEXTENCODING_DONTKNOW), bFixedWidth(FALSE),
-            bSaveAsShown(FALSE), bQuoteAllText(sal_False)
+            eCharSet(RTL_TEXTENCODING_DONTKNOW), bFixedWidth(sal_False),
+            bSaveAsShown(sal_False), bQuoteAllText(sal_False)
         {}
         ScImportOptions( const String& rStr );
 
         ScImportOptions( sal_Unicode nFieldSep, sal_Unicode nTextSep, const String& rStr )
             : nFieldSepCode(nFieldSep), nTextSepCode(nTextSep), aStrFont(rStr),
-            bFixedWidth(FALSE), bSaveAsShown(FALSE), bQuoteAllText(sal_False)
+            bFixedWidth(sal_False), bSaveAsShown(sal_False), bQuoteAllText(sal_False)
         { eCharSet = ScGlobal::GetCharsetValue(aStrFont); }
 
         ScImportOptions( sal_Unicode nFieldSep, sal_Unicode nTextSep, rtl_TextEncoding nEnc )
             : nFieldSepCode(nFieldSep), nTextSepCode(nTextSep),
-            bFixedWidth(FALSE), bSaveAsShown(FALSE), bQuoteAllText(sal_False)
+            bFixedWidth(sal_False), bSaveAsShown(sal_False), bQuoteAllText(sal_False)
         { SetTextEncoding( nEnc ); }
 
         ScImportOptions( const ScImportOptions& rCpy )
@@ -81,7 +81,7 @@ public:
                             return *this;
                         }
 
-    BOOL             operator==( const ScImportOptions& rCmp )
+    sal_Bool             operator==( const ScImportOptions& rCmp )
                         {
                             return
                                    nFieldSepCode    == rCmp.nFieldSepCode
@@ -100,8 +100,8 @@ public:
     sal_Unicode nTextSepCode;
     String      aStrFont;
     CharSet     eCharSet;
-    BOOL        bFixedWidth;
-    BOOL        bSaveAsShown;
+    sal_Bool    bFixedWidth;
+    sal_Bool    bSaveAsShown;
     sal_Bool    bQuoteAllText;
 };
 

@@ -99,7 +99,7 @@ using namespace xmloff::token;
 //------------------------------------------------------------------
 
 ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
-                                      USHORT nPrfx,
+                                      sal_uInt16 nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
@@ -313,7 +313,7 @@ void ScXMLTableRowCellContext::SetCursorOnTextImport(const rtl::OUString& rOUTem
     }
 }
 
-SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
@@ -947,7 +947,7 @@ void ScXMLTableRowCellContext::EndElement()
                                             // #i56027# This is about setting simple text, not edit cells,
                                             // so ProgressBarIncrement must be called with bEditCell = FALSE.
                                             // Formatted text that is put into the cell by the child context
-                                            // is handled below (bIsEmpty is TRUE then).
+                                            // is handled below (bIsEmpty is sal_True then).
                                             if (bDoIncrement || bHasTextImport)
                                                 rXMLImport.ProgressBarIncrement(sal_False);
                                         }
@@ -1022,7 +1022,7 @@ void ScXMLTableRowCellContext::EndElement()
                     else
                     {
                         // #i56027# If the child context put formatted text into the cell,
-                        // bIsEmpty is TRUE and ProgressBarIncrement has to be called
+                        // bIsEmpty is sal_True and ProgressBarIncrement has to be called
                         // with bEditCell = TRUE.
                         if (bHasTextImport)
                             rXMLImport.ProgressBarIncrement(sal_True);

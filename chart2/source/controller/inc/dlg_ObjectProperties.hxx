@@ -115,8 +115,8 @@ class SchAttribTabDlg : public SfxTabDialog
 private:
     ObjectType               eObjectType;
     bool                     bAffectsMultipleObjects;//is true if more than one object of the given type will be changed (e.g. all axes or all titles)
-    USHORT                   nDlgType;
-    USHORT                   nPageType;
+    sal_uInt16                   nDlgType;
+    sal_uInt16                   nPageType;
 
     const ObjectPropertiesDialogParameter * const        m_pParameter;
     const ViewElementListProvider* const                 m_pViewElementListProvider;
@@ -128,7 +128,7 @@ private:
     double          m_fAxisMinorStepWidthForErrorBarDecimals;
     bool            m_bOKPressed;
 
-    virtual void PageCreated(USHORT nId, SfxTabPage& rPage);
+    virtual void PageCreated(sal_uInt16 nId, SfxTabPage& rPage);
 
     Link m_aOriginalOKClickHdl;
     DECL_LINK( OKPressed, void * );

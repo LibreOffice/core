@@ -50,15 +50,15 @@ static const sal_Char __FAR_DATA pStrMrg[] = "MRG";
 // ============================================================================
 
 ScAsciiOptions::ScAsciiOptions() :
-    bFixedLen       ( FALSE ),
+    bFixedLen       ( sal_False ),
     aFieldSeps      ( ';' ),
-    bMergeFieldSeps ( FALSE ),
+    bMergeFieldSeps ( sal_False ),
     bQuotedFieldAsText(false),
     bDetectSpecialNumber(false),
     cTextSep        ( cDefaultTextSep ),
     eCharSet        ( gsl_getSystemTextEncoding() ),
     eLang           ( LANGUAGE_SYSTEM ),
-    bCharSetSystem  ( FALSE ),
+    bCharSetSystem  ( sal_False ),
     nStartRow       ( 1 ),
     nInfoCount      ( 0 ),
     pColStart       ( NULL ),
@@ -83,8 +83,8 @@ ScAsciiOptions::ScAsciiOptions(const ScAsciiOptions& rOpt) :
     if (nInfoCount)
     {
         pColStart = new xub_StrLen[nInfoCount];
-        pColFormat = new BYTE[nInfoCount];
-        for (USHORT i=0; i<nInfoCount; i++)
+        pColFormat = new sal_uInt8[nInfoCount];
+        for (sal_uInt16 i=0; i<nInfoCount; i++)
         {
             pColStart[i] = rOpt.pColStart[i];
             pColFormat[i] = rOpt.pColFormat[i];
@@ -105,7 +105,7 @@ ScAsciiOptions::~ScAsciiOptions()
 }
 
 
-void ScAsciiOptions::SetColInfo( USHORT nCount, const xub_StrLen* pStart, const BYTE* pFormat )
+void ScAsciiOptions::SetColInfo( sal_uInt16 nCount, const xub_StrLen* pStart, const sal_uInt8* pFormat )
 {
     delete[] pColStart;
     delete[] pColFormat;
@@ -115,8 +115,8 @@ void ScAsciiOptions::SetColInfo( USHORT nCount, const xub_StrLen* pStart, const 
     if (nInfoCount)
     {
         pColStart = new xub_StrLen[nInfoCount];
-        pColFormat = new BYTE[nInfoCount];
-        for (USHORT i=0; i<nInfoCount; i++)
+        pColFormat = new sal_uInt8[nInfoCount];
+        for (sal_uInt16 i=0; i<nInfoCount; i++)
         {
             pColStart[i] = pStart[i];
             pColFormat[i] = pFormat[i];
@@ -168,7 +168,7 @@ ScAsciiOptions& ScAsciiOptions::operator=( const ScAsciiOptions& rCpy )
 }
 
 
-BOOL ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
+sal_Bool ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
 {
     if ( bFixedLen       == rCmp.bFixedLen &&
          aFieldSeps      == rCmp.aFieldSeps &&
@@ -182,14 +182,14 @@ BOOL ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
     {
         DBG_ASSERT( !nInfoCount || (pColStart && pColFormat && rCmp.pColStart && rCmp.pColFormat),
                      "0-Zeiger in ScAsciiOptions" );
-        for (USHORT i=0; i<nInfoCount; i++)
+        for (sal_uInt16 i=0; i<nInfoCount; i++)
             if ( pColStart[i] != rCmp.pColStart[i] ||
                  pColFormat[i] != rCmp.pColFormat[i] )
-                return FALSE;
+                return sal_False;
 
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 //
@@ -211,18 +211,18 @@ void ScAsciiOptions::ReadFromString( const String& rString )
 
     if ( nCount >= 1 )
     {
-        bFixedLen = bMergeFieldSeps = FALSE;
+        bFixedLen = bMergeFieldSeps = sal_False;
         aFieldSeps.Erase();
 
         aToken = rString.GetToken(0,',');
         if ( aToken.EqualsAscii(pStrFix) )
-            bFixedLen = TRUE;
+            bFixedLen = sal_True;
         nSub = aToken.GetTokenCount('/');
         for ( i=0; i<nSub; i++ )
         {
             String aCode = aToken.GetToken( i, '/' );
             if ( aCode.EqualsAscii(pStrMrg) )
-                bMergeFieldSeps = TRUE;
+                bMergeFieldSeps = sal_True;
             else
             {
                 sal_Int32 nVal = aCode.ToInt32();
@@ -278,11 +278,11 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         if (nInfoCount)
         {
             pColStart = new xub_StrLen[nInfoCount];
-            pColFormat = new BYTE[nInfoCount];
-            for (USHORT nInfo=0; nInfo<nInfoCount; nInfo++)
+            pColFormat = new sal_uInt8[nInfoCount];
+            for (sal_uInt16 nInfo=0; nInfo<nInfoCount; nInfo++)
             {
                 pColStart[nInfo]  = (xub_StrLen) aToken.GetToken( 2*nInfo, '/' ).ToInt32();
-                pColFormat[nInfo] = (BYTE) aToken.GetToken( 2*nInfo+1, '/' ).ToInt32();
+                pColFormat[nInfo] = (sal_uInt8) aToken.GetToken( 2*nInfo+1, '/' ).ToInt32();
             }
         }
         else
@@ -378,7 +378,7 @@ String ScAsciiOptions::WriteToString() const
         //
 
     DBG_ASSERT( !nInfoCount || (pColStart && pColFormat), "0-Zeiger in ScAsciiOptions" );
-    for (USHORT nInfo=0; nInfo<nInfoCount; nInfo++)
+    for (sal_uInt16 nInfo=0; nInfo<nInfoCount; nInfo++)
     {
         if (nInfo)
             aOutStr += '/';
@@ -419,36 +419,36 @@ void ScAsciiOptions::InterpretColumnList( const String& rString )
     //  Kommas durch Semikolon ersetzen
 
     String aSemiStr = rString;
-    USHORT nPos = 0;
+    sal_uInt16 nPos = 0;
     do
         nPos = aSemiStr.SearchAndReplace( ',', ';', nPos );
     while ( nPos != STRING_NOTFOUND );
 
     //  Eintraege sortieren
 
-    USHORT nCount = aSemiStr.GetTokenCount();
-    USHORT* pTemp = new USHORT[nCount+1];
+    sal_uInt16 nCount = aSemiStr.GetTokenCount();
+    sal_uInt16* pTemp = new sal_uInt16[nCount+1];
     pTemp[0] = 1;                                   // erste Spalte faengt immer bei 1 an
-    USHORT nFound = 1;
-    USHORT i,j;
+    sal_uInt16 nFound = 1;
+    sal_uInt16 i,j;
     for (i=0; i<nCount; i++)
     {
-        USHORT nVal = (USHORT) aSemiStr.GetToken(i);
+        sal_uInt16 nVal = (sal_uInt16) aSemiStr.GetToken(i);
         if (nVal)
         {
-            BOOL bThere = FALSE;
+            sal_Bool bThere = sal_False;
             nPos = 0;
             for (j=0; j<nFound; j++)
             {
                 if ( pTemp[j] == nVal )
-                    bThere = TRUE;
+                    bThere = sal_True;
                 else if ( pTemp[j] < nVal )
                     nPos = j+1;
             }
             if ( !bThere )
             {
                 if ( nPos < nFound )
-                    memmove( &pTemp[nPos+1], &pTemp[nPos], (nFound-nPos)*sizeof(USHORT) );
+                    memmove( &pTemp[nPos+1], &pTemp[nPos], (nFound-nPos)*sizeof(sal_uInt16) );
                 pTemp[nPos] = nVal;
                 ++nFound;
             }
@@ -462,8 +462,8 @@ void ScAsciiOptions::InterpretColumnList( const String& rString )
     nInfoCount = nFound;
     if (nInfoCount)
     {
-        pColStart = new USHORT[nInfoCount];
-        pColFormat = new BYTE[nInfoCount];
+        pColStart = new sal_uInt16[nInfoCount];
+        pColFormat = new sal_uInt8[nInfoCount];
         for (i=0; i<nInfoCount; i++)
         {
             pColStart[i] = pTemp[i] - 1;
@@ -476,7 +476,7 @@ void ScAsciiOptions::InterpretColumnList( const String& rString )
         pColFormat = NULL;
     }
 
-    bFixedLen = TRUE;           // sonst macht's keinen Sinn
+    bFixedLen = sal_True;           // sonst macht's keinen Sinn
 
     //  aufraeumen
 

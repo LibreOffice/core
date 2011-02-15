@@ -43,7 +43,7 @@ using namespace com::sun::star;
 
 //-------------------------------------------------------------------------
 
-ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg( Window* pParent, BOOL bEnableExternal ) :
+ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg( Window* pParent, sal_Bool bEnableExternal ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DAPITYPE ) ),
     //
     aFlFrame        ( this, ScResId( FL_FRAME ) ),
@@ -66,12 +66,12 @@ ScDataPilotSourceTypeDlg::~ScDataPilotSourceTypeDlg()
 {
 }
 
-BOOL ScDataPilotSourceTypeDlg::IsDatabase() const
+sal_Bool ScDataPilotSourceTypeDlg::IsDatabase() const
 {
     return aBtnDatabase.IsChecked();
 }
 
-BOOL ScDataPilotSourceTypeDlg::IsExternal() const
+sal_Bool ScDataPilotSourceTypeDlg::IsExternal() const
 {
     return aBtnExternal.IsChecked();
 }

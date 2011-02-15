@@ -59,19 +59,19 @@ public:
     virtual             ~ScExportBase();
 
                         // Hidden Cols/Rows an den Raendern trimmen,
-                        // return: TRUE wenn Bereich vorhanden
+                        // return: sal_True wenn Bereich vorhanden
                         // Start/End/Col/Row muessen gueltige Ausgangswerte sein
-    BOOL                TrimDataArea( SCTAB nTab, SCCOL& nStartCol,
+    sal_Bool                TrimDataArea( SCTAB nTab, SCCOL& nStartCol,
                             SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const;
 
                         // Ausgabebereich einer Tabelle ermitteln,
                         // Hidden Cols/Rows an den Raendern beruecksichtigt,
-                        // return: TRUE wenn Bereich vorhanden
-    BOOL                GetDataArea( SCTAB nTab, SCCOL& nStartCol,
+                        // return: sal_True wenn Bereich vorhanden
+    sal_Bool                GetDataArea( SCTAB nTab, SCCOL& nStartCol,
                             SCROW& nStartRow, SCCOL& nEndCol, SCROW& nEndRow ) const;
 
                         // Tabelle nicht vorhanden oder leer
-    BOOL                IsEmptyTable( SCTAB nTab ) const;
+    sal_Bool                IsEmptyTable( SCTAB nTab ) const;
 
     ScFieldEditEngine&  GetEditEngine() const;
 

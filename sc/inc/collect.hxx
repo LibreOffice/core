@@ -57,29 +57,29 @@ public:
 class SC_DLLPUBLIC ScCollection : public ScDataObject
 {
 protected:
-    USHORT          nCount;
-    USHORT          nLimit;
-    USHORT          nDelta;
+    sal_uInt16          nCount;
+    sal_uInt16          nLimit;
+    sal_uInt16          nDelta;
     ScDataObject**  pItems;
 public:
-    ScCollection(USHORT nLim = 4, USHORT nDel = 4);
+    ScCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4);
     ScCollection(const ScCollection& rCollection);
     virtual             ~ScCollection();
 
     virtual ScDataObject*   Clone() const;
 
-    void        AtFree(USHORT nIndex);
+    void        AtFree(sal_uInt16 nIndex);
     void        Free(ScDataObject* pScDataObject);
     void        FreeAll();
 
-    BOOL        AtInsert(USHORT nIndex, ScDataObject* pScDataObject);
-    virtual BOOL        Insert(ScDataObject* pScDataObject);
+    sal_Bool        AtInsert(sal_uInt16 nIndex, ScDataObject* pScDataObject);
+    virtual sal_Bool        Insert(ScDataObject* pScDataObject);
 
-    ScDataObject*   At(USHORT nIndex) const;
-    virtual USHORT      IndexOf(ScDataObject* pScDataObject) const;
-    USHORT GetCount() const;
+    ScDataObject*   At(sal_uInt16 nIndex) const;
+    virtual sal_uInt16      IndexOf(ScDataObject* pScDataObject) const;
+    sal_uInt16 GetCount() const;
 
-            ScDataObject* operator[]( const USHORT nIndex) const {return At(nIndex);}
+            ScDataObject* operator[]( const sal_uInt16 nIndex) const {return At(nIndex);}
             ScCollection&   operator=( const ScCollection& rCol );
 };
 
@@ -87,25 +87,25 @@ public:
 class SC_DLLPUBLIC  ScSortedCollection : public ScCollection
 {
 private:
-    BOOL    bDuplicates;
+    sal_Bool    bDuplicates;
 protected:
                         // fuer ScStrCollection Load/Store
-            void        SetDups( BOOL bVal ) { bDuplicates = bVal; }
-            BOOL        IsDups() const { return bDuplicates; }
+            void        SetDups( sal_Bool bVal ) { bDuplicates = bVal; }
+            sal_Bool        IsDups() const { return bDuplicates; }
 public:
-    ScSortedCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE);
+    ScSortedCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = sal_False);
     ScSortedCollection(const ScSortedCollection& rScSortedCollection) :
                             ScCollection(rScSortedCollection),
                             bDuplicates(rScSortedCollection.bDuplicates) {}
 
-    virtual USHORT      IndexOf(ScDataObject* pScDataObject) const;
+    virtual sal_uInt16      IndexOf(ScDataObject* pScDataObject) const;
     virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const = 0;
-    virtual BOOL        IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const;
-    BOOL        Search(ScDataObject* pScDataObject, USHORT& rIndex) const;
-    virtual BOOL        Insert(ScDataObject* pScDataObject);
-    virtual BOOL        InsertPos(ScDataObject* pScDataObject, USHORT& nIndex);
+    virtual sal_Bool        IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const;
+    sal_Bool        Search(ScDataObject* pScDataObject, sal_uInt16& rIndex) const;
+    virtual sal_Bool        Insert(ScDataObject* pScDataObject);
+    virtual sal_Bool        InsertPos(ScDataObject* pScDataObject, sal_uInt16& nIndex);
 
-    BOOL        operator==(const ScSortedCollection& rCmp) const;
+    sal_Bool        operator==(const ScSortedCollection& rCmp) const;
 };
 
 
@@ -132,13 +132,13 @@ class SvStream;
 class SC_DLLPUBLIC ScStrCollection : public ScSortedCollection
 {
 public:
-    ScStrCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE) :
+    ScStrCollection(sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = sal_False) :
                         ScSortedCollection  ( nLim, nDel, bDup ) {}
     ScStrCollection(const ScStrCollection& rScStrCollection) :
                         ScSortedCollection  ( rScStrCollection ) {}
 
     virtual ScDataObject*   Clone() const;
-            StrData*    operator[]( const USHORT nIndex) const {return (StrData*)At(nIndex);}
+            StrData*    operator[]( const sal_uInt16 nIndex) const {return (StrData*)At(nIndex);}
     virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
 };
 
@@ -150,13 +150,13 @@ class TypedStrData : public ScDataObject
 {
 public:
             TypedStrData( const String& rStr, double nVal = 0.0,
-                          USHORT nType = SC_STRTYPE_STANDARD )
+                          sal_uInt16 nType = SC_STRTYPE_STANDARD )
                 : aStrValue(rStr),
                   nValue(nVal),
                   nStrType(nType) {}
 
 //UNUSED2008-05  TypedStrData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
-//UNUSED2008-05                  BOOL bAllStrings );
+//UNUSED2008-05                  sal_Bool bAllStrings );
 
             TypedStrData( const TypedStrData& rCpy )
                 : ScDataObject(),
@@ -166,7 +166,7 @@ public:
 
     virtual ScDataObject*   Clone() const;
 
-    BOOL                IsStrData() const { return nStrType != 0; }
+    sal_Bool                IsStrData() const { return nStrType != 0; }
     const String&       GetString() const { return aStrValue; }
     double              GetValue () const { return nValue; }
 
@@ -175,16 +175,16 @@ private:
 
     String  aStrValue;
     double  nValue;
-    USHORT  nStrType;           // 0 = Value
+    sal_uInt16  nStrType;           // 0 = Value
 };
 
 class SC_DLLPUBLIC TypedScStrCollection : public ScSortedCollection
 {
 private:
-    BOOL    bCaseSensitive;
+    sal_Bool    bCaseSensitive;
 
 public:
-    TypedScStrCollection( USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE );
+    TypedScStrCollection( sal_uInt16 nLim = 4, sal_uInt16 nDel = 4, sal_Bool bDup = sal_False );
 
     TypedScStrCollection( const TypedScStrCollection& rCpy )
         : ScSortedCollection( rCpy ) { bCaseSensitive = rCpy.bCaseSensitive; }
@@ -193,12 +193,12 @@ public:
     virtual ScDataObject*       Clone() const;
     virtual short           Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) const;
 
-    TypedStrData*   operator[]( const USHORT nIndex) const;
+    TypedStrData*   operator[]( const sal_uInt16 nIndex) const;
 
-    void    SetCaseSensitive( BOOL bSet );
+    void    SetCaseSensitive( sal_Bool bSet );
 
-    BOOL    FindText( const String& rStart, String& rResult, USHORT& rPos, BOOL bBack ) const;
-    BOOL    GetExactMatch( String& rString ) const;
+    sal_Bool    FindText( const String& rStart, String& rResult, sal_uInt16& rPos, sal_Bool bBack ) const;
+    sal_Bool    GetExactMatch( String& rString ) const;
 };
 
 #endif

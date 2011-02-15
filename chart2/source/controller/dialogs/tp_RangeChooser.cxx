@@ -48,7 +48,7 @@ namespace
 void lcl_ShowChooserButton(
     ::chart::RangeSelectionButton & rChooserButton,
     Edit & rEditField,
-    BOOL bShow )
+    sal_Bool bShow )
 {
     if( rChooserButton.IsVisible() != bShow )
     {
@@ -65,8 +65,8 @@ void lcl_enableRangeChoosing( bool bEnable, Dialog * pDialog )
 {
     if( pDialog )
     {
-        pDialog->Show( bEnable ? FALSE : TRUE );
-        pDialog->SetModalInputMode( bEnable ? FALSE : TRUE );
+        pDialog->Show( bEnable ? sal_False : sal_True );
+        pDialog->SetModalInputMode( bEnable ? sal_False : sal_True );
     }
 }
 void lcl_shiftControlY( Control & rControl, long nYOffset )
@@ -341,7 +341,7 @@ bool RangeChooserTabPage::isValid()
         m_aCB_FirstRowAsLabel.Enable( bIsValid );
         m_aCB_FirstColumnAsLabel.Enable( bIsValid );
 }
-    BOOL bShowIB = m_rDialogModel.getRangeSelectionHelper()->hasRangeSelection();
+    sal_Bool bShowIB = m_rDialogModel.getRangeSelectionHelper()->hasRangeSelection();
     lcl_ShowChooserButton( m_aIB_Range, m_aED_Range, bShowIB );
 
     return bIsValid;
@@ -366,7 +366,7 @@ IMPL_LINK( RangeChooserTabPage, ChooseRangeHdl, void *, EMPTYARG )
 {
     rtl::OUString aRange = m_aED_Range.GetText();
     // using assignment for broken gcc 3.3
-    rtl::OUString aTitle = ::rtl::OUString( String( SchResId( STR_PAGE_DATA_RANGE ) ));
+    rtl::OUString aTitle = String( SchResId( STR_PAGE_DATA_RANGE ) );
 
     lcl_enableRangeChoosing( true, m_pParentDialog );
     m_rDialogModel.getRangeSelectionHelper()->chooseRange( aRange, aTitle, *this );

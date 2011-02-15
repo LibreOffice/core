@@ -48,7 +48,7 @@ ScImportOptions::ScImportOptions( const String& rStr )
     // because the import options string is passed here when a CSV file is loaded and saved again.
     // The old format is still supported because it might be used in macros.
 
-    bFixedWidth = FALSE;
+    bFixedWidth = sal_False;
     nFieldSepCode = 0;
     nTextSepCode = 0;
     eCharSet = RTL_TEXTENCODING_DONTKNOW;
@@ -60,7 +60,7 @@ ScImportOptions::ScImportOptions( const String& rStr )
         // first 3 tokens: common
         String aToken( rStr.GetToken( 0, ',' ) );
         if( aToken.EqualsIgnoreCaseAscii( pStrFix ) )
-            bFixedWidth = TRUE;
+            bFixedWidth = sal_True;
         else
             nFieldSepCode = (sal_Unicode) aToken.ToInt32();
         nTextSepCode  = (sal_Unicode) rStr.GetToken(1,',').ToInt32();

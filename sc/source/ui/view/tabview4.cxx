@@ -46,7 +46,7 @@
 #include "cell.hxx"
 #include "dociter.hxx"
 
-extern USHORT nScFillModeMouseModifier;             // global.cxx
+extern sal_uInt16 nScFillModeMouseModifier;             // global.cxx
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -67,7 +67,7 @@ void ScTabView::HideTip()
 
 void ScTabView::ShowRefTip()
 {
-    BOOL bDone = FALSE;
+    sal_Bool bDone = sal_False;
     if ( aViewData.GetRefType() == SC_REFTYPE_REF && Help::IsQuickHelpEnabled() )
     {
         SCCOL nStartX = aViewData.GetRefStartX();
@@ -76,8 +76,8 @@ void ScTabView::ShowRefTip()
         SCROW nEndY   = aViewData.GetRefEndY();
         if ( nEndX != nStartX || nEndY != nStartY )     // nicht fuer einzelne Zelle
         {
-            BOOL bLeft = ( nEndX < nStartX );
-            BOOL bTop  = ( nEndY < nStartY );
+            sal_Bool bLeft = ( nEndX < nStartX );
+            sal_Bool bTop  = ( nEndY < nStartY );
             PutInOrder( nStartX, nEndX );
             PutInOrder( nStartY, nEndY );
             SCCOL nCols = nEndX+1-nStartX;
@@ -98,7 +98,7 @@ void ScTabView::ShowRefTip()
 
                 Point aPos( bLeft ? aStart.X() : ( aEnd.X() + 3 ),
                             bTop ? aStart.Y() : ( aEnd.Y() + 3 ) );
-                USHORT nFlags = ( bLeft ? QUICKHELP_RIGHT : QUICKHELP_LEFT ) |
+                sal_uInt16 nFlags = ( bLeft ? QUICKHELP_RIGHT : QUICKHELP_LEFT ) |
                                 ( bTop ? QUICKHELP_BOTTOM : QUICKHELP_TOP );
 
                 // nicht ueber die editierte Formel
@@ -116,7 +116,7 @@ void ScTabView::ShowRefTip()
 
                 HideTip();
                 nTipVisible = Help::ShowTip( pWin, aRect, aHelp, nFlags );
-                bDone = TRUE;
+                bDone = sal_True;
             }
         }
     }
@@ -129,7 +129,7 @@ void ScTabView::StopRefMode()
 {
     if (aViewData.IsRefMode())
     {
-        aViewData.SetRefMode( FALSE, SC_REFTYPE_NONE );
+        aViewData.SetRefMode( sal_False, SC_REFTYPE_NONE );
 
         HideTip();
         UpdateShrinkOverlay();
@@ -149,7 +149,7 @@ void ScTabView::StopRefMode()
         }
 
         pSelEngine->Reset();
-        pSelEngine->SetAddMode( FALSE );        //! sollte das nicht bei Reset passieren?
+        pSelEngine->SetAddMode( sal_False );        //! sollte das nicht bei Reset passieren?
 
         ScSplitPos eOld = pSelEngine->GetWhich();
         ScSplitPos eNew = aViewData.GetActivePart();
@@ -171,14 +171,14 @@ void ScTabView::StopRefMode()
     AlignToCursor( aViewData.GetCurX(), aViewData.GetCurY(), SC_FOLLOW_NONE );
 }
 
-void ScTabView::DoneRefMode( BOOL bContinue )
+void ScTabView::DoneRefMode( sal_Bool bContinue )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     if ( aViewData.GetRefType() == SC_REFTYPE_REF && bContinue )
         SC_MOD()->AddRefEntry();
 
-    BOOL bWasRef = aViewData.IsRefMode();
-    aViewData.SetRefMode( FALSE, SC_REFTYPE_NONE );
+    sal_Bool bWasRef = aViewData.IsRefMode();
+    aViewData.SetRefMode( sal_False, SC_REFTYPE_NONE );
 
     HideTip();
     UpdateShrinkOverlay();
@@ -253,7 +253,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
             PutInOrder(nStartY,nEndY);
             pDoc->SetEmbedded( ScRange(nStartX,nStartY,nTab, nEndX,nEndY,nTab) );
             ScDocShell* pDocSh = aViewData.GetDocShell();
-            pDocSh->UpdateOle( &aViewData, TRUE );
+            pDocSh->UpdateOle( &aViewData, sal_True );
             pDocSh->SetDocumentModified();
         }
 
@@ -300,18 +300,18 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
         if ( pWin )
             aPos = pWin->OutputToScreenPixel( aPos );
         Rectangle aRect( aPos, aPos );
-        USHORT nAlign = QUICKHELP_LEFT|QUICKHELP_TOP;
+        sal_uInt16 nAlign = QUICKHELP_LEFT|QUICKHELP_TOP;
         Help::ShowQuickHelp(pWin, aRect, aHelpStr, nAlign);
     }
 }
 
-void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eType, BOOL bPaint )
+void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eType, sal_Bool bPaint )
 {
     ScDocument* pDoc = aViewData.GetDocument();
     ScMarkData& rMark = aViewData.GetMarkData();
     if (!aViewData.IsRefMode())
     {
-        aViewData.SetRefMode( TRUE, eType );
+        aViewData.SetRefMode( sal_True, eType );
         aViewData.SetRefStart( nCurX, nCurY, nCurZ );
         aViewData.SetRefEnd( nCurX, nCurY, nCurZ );
 
@@ -336,13 +336,13 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
 //UNUSED2008-05  void ScTabView::EndSelection()
 //UNUSED2008-05  {
 //UNUSED2008-05      ScModule* pScMod = SC_MOD();
-//UNUSED2008-05      BOOL bRefMode = pScMod->IsFormulaMode();
+//UNUSED2008-05      sal_Bool bRefMode = pScMod->IsFormulaMode();
 //UNUSED2008-05      if ( bRefMode )
 //UNUSED2008-05          pScMod->EndReference();
 //UNUSED2008-05  }
 
 // static
-void ScTabView::SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, BOOL bLayoutRTL )
+void ScTabView::SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible, long nPos, sal_Bool bLayoutRTL )
 {
     if ( nVisible == 0 )
         nVisible = 1;       // #i59893# don't use visible size 0
@@ -366,7 +366,7 @@ void ScTabView::SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible,
 }
 
 // static
-long ScTabView::GetScrollBarPos( ScrollBar& rScroll, BOOL bLayoutRTL )
+long ScTabView::GetScrollBarPos( ScrollBar& rScroll, sal_Bool bLayoutRTL )
 {
     if ( bLayoutRTL )
         return -rScroll.GetThumbPos() - rScroll.GetVisibleSize();
@@ -407,11 +407,11 @@ long lcl_GetScrollRange( SCCOLROW nDocEnd, SCCOLROW nPos, SCCOLROW nVis, SCCOLRO
 void ScTabView::UpdateScrollBars()
 {
     long        nDiff;
-    BOOL        bTop =   ( aViewData.GetVSplitMode() != SC_SPLIT_NONE );
-    BOOL        bRight = ( aViewData.GetHSplitMode() != SC_SPLIT_NONE );
+    sal_Bool        bTop =   ( aViewData.GetVSplitMode() != SC_SPLIT_NONE );
+    sal_Bool        bRight = ( aViewData.GetHSplitMode() != SC_SPLIT_NONE );
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB       nTab = aViewData.GetTabNo();
-    BOOL        bMirror = pDoc->IsLayoutRTL( nTab ) != Application::GetSettings().GetLayoutRTL();
+    sal_Bool        bMirror = pDoc->IsLayoutRTL( nTab ) != Application::GetSettings().GetLayoutRTL();
     SCCOL       nUsedX;
     SCROW       nUsedY;
     pDoc->GetTableArea( nTab, nUsedX, nUsedY );     //! cachen !!!!!!!!!!!!!!!
@@ -434,7 +434,7 @@ void ScTabView::UpdateScrollBars()
 
     nVisYB = aViewData.VisibleCellsY( SC_SPLIT_BOTTOM );
     long nMaxYB = lcl_GetScrollRange( nUsedY, aViewData.GetPosY(SC_SPLIT_BOTTOM), nVisYB, MAXROW, nStartY );
-    SetScrollBar( aVScrollBottom, nMaxYB, nVisYB, aViewData.GetPosY( SC_SPLIT_BOTTOM ) - nStartY, FALSE );
+    SetScrollBar( aVScrollBottom, nMaxYB, nVisYB, aViewData.GetPosY( SC_SPLIT_BOTTOM ) - nStartY, sal_False );
 
     if (bRight)
     {
@@ -447,7 +447,7 @@ void ScTabView::UpdateScrollBars()
     {
         nVisYT = aViewData.VisibleCellsY( SC_SPLIT_TOP );
         long nMaxYT = lcl_GetScrollRange( nUsedY, aViewData.GetPosY(SC_SPLIT_TOP), nVisYT, MAXROW, 0 );
-        SetScrollBar( aVScrollTop, nMaxYT, nVisYT, aViewData.GetPosY( SC_SPLIT_TOP ), FALSE );
+        SetScrollBar( aVScrollTop, nMaxYT, nVisYT, aViewData.GetPosY( SC_SPLIT_TOP ), sal_False );
     }
 
     //      Bereich testen
@@ -493,7 +493,7 @@ void ScTabView::UpdateScrollBars()
 
 void ScTabView::InvertHorizontal( ScVSplitPos eWhich, long nDragPos )
 {
-    for (USHORT i=0; i<4; i++)
+    for (sal_uInt16 i=0; i<4; i++)
         if (WhichV((ScSplitPos)i)==eWhich)
         {
             ScGridWindow* pWin = pGridWin[i];
@@ -508,7 +508,7 @@ void ScTabView::InvertHorizontal( ScVSplitPos eWhich, long nDragPos )
 
 void ScTabView::InvertVertical( ScHSplitPos eWhich, long nDragPos )
 {
-    for (USHORT i=0; i<4; i++)
+    for (sal_uInt16 i=0; i<4; i++)
         if (WhichH((ScSplitPos)i)==eWhich)
         {
             ScGridWindow* pWin = pGridWin[i];
@@ -533,7 +533,7 @@ void ScTabView::InterpretVisible()
         return;
 
     SCTAB nTab = aViewData.GetTabNo();
-    for (USHORT i=0; i<4; i++)
+    for (sal_uInt16 i=0; i<4; i++)
     {
         //  rely on gridwin pointers to find used panes
         //  no IsVisible test in case the whole view is not yet shown

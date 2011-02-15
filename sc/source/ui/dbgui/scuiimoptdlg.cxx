@@ -50,7 +50,7 @@ public:
                 nIter     ( 0 )
             {}
 
-    USHORT  GetCode( const String& rDelimiter ) const;
+    sal_uInt16  GetCode( const String& rDelimiter ) const;
     String  GetDelimiter( sal_Unicode nCode ) const;
 
     String  FirstDel()  { nIter = 0; return theDelTab.GetToken( nIter, cSep ); }
@@ -65,7 +65,7 @@ private:
 
 //------------------------------------------------------------------------
 
-USHORT ScDelimiterTable::GetCode( const String& rDel ) const
+sal_uInt16 ScDelimiterTable::GetCode( const String& rDel ) const
 {
     sal_Unicode nCode = 0;
     xub_StrLen i = 0;
@@ -117,12 +117,12 @@ String ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
 
 ScImportOptionsDlg::ScImportOptionsDlg(
         Window*                 pParent,
-        BOOL                    bAscii,
+        sal_Bool                    bAscii,
         const ScImportOptions*  pOptions,
         const String*           pStrTitle,
-        BOOL                    bMultiByte,
-        BOOL                    bOnlyDbtoolsEncodings,
-        BOOL                    bImport )
+        sal_Bool                    bMultiByte,
+        sal_Bool                    bOnlyDbtoolsEncodings,
+        sal_Bool                    bImport )
 
     :   ModalDialog ( pParent, ScResId( RID_SCDLG_IMPORTOPT ) ),
         aFlFieldOpt ( this, ScResId( FL_FIELDOPT ) ),
@@ -212,9 +212,9 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         SetSizePixel( aWinSize );
         aCbFixed.Show();
         aCbFixed.SetClickHdl( LINK( this, ScImportOptionsDlg, FixedWidthHdl ) );
-        aCbFixed.Check( FALSE );
+        aCbFixed.Check( sal_False );
         aCbShown.Show();
-        aCbShown.Check( TRUE );
+        aCbShown.Check( sal_True );
         aCbQuoteAll.Show();
         aCbQuoteAll.Check( sal_False );
     }
@@ -269,11 +269,11 @@ void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
 
 //------------------------------------------------------------------------
 
-USHORT ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
+sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
 {
     ScDelimiterTable* pTab;
     String  aStr( rEd.GetText() );
-    USHORT  nCode;
+    sal_uInt16  nCode;
 
     if ( &rEd == &aEdTextSep )
         pTab = pTextSepTab;
@@ -289,7 +289,7 @@ USHORT ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
         nCode = pTab->GetCode( aStr );
 
         if ( nCode == 0 )
-            nCode = (USHORT)aStr.GetChar(0);
+            nCode = (sal_uInt16)aStr.GetChar(0);
     }
 
     return nCode;
@@ -301,7 +301,7 @@ IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, CheckBox*, pCheckBox )
 {
     if( pCheckBox == &aCbFixed )
     {
-        BOOL bEnable = !aCbFixed.IsChecked();
+        sal_Bool bEnable = !aCbFixed.IsChecked();
         aFtFieldSep.Enable( bEnable );
         aEdFieldSep.Enable( bEnable );
         aFtTextSep.Enable( bEnable );

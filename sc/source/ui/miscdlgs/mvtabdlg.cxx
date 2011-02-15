@@ -70,7 +70,7 @@ ScMoveTableDlg::ScMoveTableDlg( Window* pParent )
         //
         nDocument   ( 0 ),
         nTable      ( 0 ),
-        bCopyTable  ( FALSE )
+        bCopyTable  ( sal_False )
 {
 #if ENABLE_LAYOUT
 #undef ScResId
@@ -88,17 +88,17 @@ __EXPORT ScMoveTableDlg::~ScMoveTableDlg()
 
 //------------------------------------------------------------------------
 
-USHORT ScMoveTableDlg::GetSelectedDocument () const { return nDocument;  }
+sal_uInt16 ScMoveTableDlg::GetSelectedDocument () const { return nDocument;  }
 
 SCTAB ScMoveTableDlg::GetSelectedTable    () const { return nTable;     }
 
-BOOL   ScMoveTableDlg::GetCopyTable        () const { return bCopyTable; }
+sal_Bool   ScMoveTableDlg::GetCopyTable        () const { return bCopyTable; }
 
-void ScMoveTableDlg::SetCopyTable(BOOL bFlag)
+void ScMoveTableDlg::SetCopyTable(sal_Bool bFlag)
 {
     aBtnCopy.Check(bFlag);
 }
-void ScMoveTableDlg::EnableCopyTable(BOOL bFlag)
+void ScMoveTableDlg::EnableCopyTable(sal_Bool bFlag)
 {
     if(bFlag)
         aBtnCopy.Enable();
@@ -113,7 +113,7 @@ void __EXPORT ScMoveTableDlg::Init()
 {
     aBtnOk.SetClickHdl   ( LINK( this, ScMoveTableDlg, OkHdl ) );
     aLbDoc.SetSelectHdl  ( LINK( this, ScMoveTableDlg, SelHdl ) );
-    aBtnCopy.Check( FALSE );
+    aBtnCopy.Check( sal_False );
     InitDocListBox();
     SelHdl( &aLbDoc );
 }
@@ -124,11 +124,11 @@ void ScMoveTableDlg::InitDocListBox()
 {
     SfxObjectShell* pSh     = SfxObjectShell::GetFirst();
     ScDocShell*     pScSh   = NULL;
-    USHORT          nSelPos = 0;
-    USHORT          i       = 0;
+    sal_uInt16          nSelPos = 0;
+    sal_uInt16          i       = 0;
 
     aLbDoc.Clear();
-    aLbDoc.SetUpdateMode( FALSE );
+    aLbDoc.SetUpdateMode( sal_False );
 
     while ( pSh )
     {
@@ -147,7 +147,7 @@ void ScMoveTableDlg::InitDocListBox()
         pSh = SfxObjectShell::GetNext( *pSh );
     }
 
-    aLbDoc.SetUpdateMode( TRUE );
+    aLbDoc.SetUpdateMode( sal_True );
     aLbDoc.InsertEntry( String( ScResId( STR_NEWDOC ) ) );
     aLbDoc.SelectEntryPos( nSelPos );
 }
@@ -158,10 +158,10 @@ void ScMoveTableDlg::InitDocListBox()
 
 IMPL_LINK( ScMoveTableDlg, OkHdl, void *, EMPTYARG )
 {
-    USHORT  nDocSel     = aLbDoc.GetSelectEntryPos();
-    USHORT  nDocLast    = aLbDoc.GetEntryCount()-1;
-    USHORT  nTabSel     = aLbTable.GetSelectEntryPos();
-    USHORT  nTabLast    = aLbTable.GetEntryCount()-1;
+    sal_uInt16  nDocSel     = aLbDoc.GetSelectEntryPos();
+    sal_uInt16  nDocLast    = aLbDoc.GetEntryCount()-1;
+    sal_uInt16  nTabSel     = aLbTable.GetSelectEntryPos();
+    sal_uInt16  nTabLast    = aLbTable.GetEntryCount()-1;
 
     nDocument   = (nDocSel != nDocLast) ? nDocSel : SC_DOC_NEW;
     nTable      = (nTabSel != nTabLast) ? static_cast<SCTAB>(nTabSel) : SC_TAB_APPEND;
@@ -183,7 +183,7 @@ IMPL_LINK( ScMoveTableDlg, SelHdl, ListBox *, pLb )
         String      aName;
 
         aLbTable.Clear();
-        aLbTable.SetUpdateMode( FALSE );
+        aLbTable.SetUpdateMode( sal_False );
         if ( pDoc )
         {
             nLast = pDoc->GetTableCount()-1;
@@ -194,7 +194,7 @@ IMPL_LINK( ScMoveTableDlg, SelHdl, ListBox *, pLb )
             }
         }
         aLbTable.InsertEntry( ScGlobal::GetRscString(STR_MOVE_TO_END) );
-        aLbTable.SetUpdateMode( TRUE );
+        aLbTable.SetUpdateMode( sal_True );
         aLbTable.SelectEntryPos( 0 );
     }
 

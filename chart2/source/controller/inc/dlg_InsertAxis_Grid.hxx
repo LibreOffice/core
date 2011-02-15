@@ -75,7 +75,7 @@ protected:
     HelpButton          aPbHelp;
 
 public:
-    SchAxisDlg( Window* pParent, const InsertAxisOrGridDialogData& rInput, BOOL bAxisDlg=true );
+    SchAxisDlg( Window* pParent, const InsertAxisOrGridDialogData& rInput, sal_Bool bAxisDlg=true );
     virtual ~SchAxisDlg();
 
     void getResult( InsertAxisOrGridDialogData& rOutput );

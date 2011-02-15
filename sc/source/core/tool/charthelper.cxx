@@ -52,16 +52,16 @@ namespace
 {
 
 
-USHORT lcl_DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, BOOL bAllCharts )
+sal_uInt16 lcl_DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, sal_Bool bAllCharts )
 {
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
         return 0;
 
-    USHORT nFound = 0;
+    sal_uInt16 nFound = 0;
 
-    USHORT nPageCount = pModel->GetPageCount();
-    for (USHORT nPageNo=0; nPageNo<nPageCount; nPageNo++)
+    sal_uInt16 nPageCount = pModel->GetPageCount();
+    for (sal_uInt16 nPageNo=0; nPageNo<nPageCount; nPageNo++)
     {
         SdrPage* pPage = pModel->GetPage(nPageNo);
         DBG_ASSERT(pPage,"Page ?");
@@ -73,12 +73,12 @@ USHORT lcl_DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, BOOL bAllCha
             if ( pObject->GetObjIdentifier() == OBJ_OLE2 && pDoc->IsChart( pObject ) )
             {
                 String aName = ((SdrOle2Obj*)pObject)->GetPersistName();
-                BOOL bHit = TRUE;
+                sal_Bool bHit = sal_True;
                 if ( !bAllCharts )
                 {
                     ScRangeList aRanges;
-                    BOOL bColHeaders = FALSE;
-                    BOOL bRowHeaders = FALSE;
+                    sal_Bool bColHeaders = sal_False;
+                    sal_Bool bRowHeaders = sal_False;
                     pDoc->GetOldChartParameters( aName, aRanges, bColHeaders, bRowHeaders );
                     bHit = aRanges.In( rPos );
                 }
@@ -94,31 +94,31 @@ USHORT lcl_DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc, BOOL bAllCha
     return nFound;
 }
 
-BOOL lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSourceTab, SCTAB nDestTab, SCTAB nTabCount )
+sal_Bool lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSourceTab, SCTAB nDestTab, SCTAB nTabCount )
 {
     //! if multiple sheets are copied, update references into the other copied sheets?
 
-    BOOL bChanged = FALSE;
+    sal_Bool bChanged = sal_False;
 
-    ULONG nCount = rRanges.Count();
-    for (ULONG i=0; i<nCount; i++)
+    sal_uLong nCount = rRanges.Count();
+    for (sal_uLong i=0; i<nCount; i++)
     {
         ScRange* pRange = rRanges.GetObject(i);
         if ( pRange->aStart.Tab() == nSourceTab && pRange->aEnd.Tab() == nSourceTab )
         {
             pRange->aStart.SetTab( nDestTab );
             pRange->aEnd.SetTab( nDestTab );
-            bChanged = TRUE;
+            bChanged = sal_True;
         }
         if ( pRange->aStart.Tab() >= nTabCount )
         {
             pRange->aStart.SetTab( nTabCount > 0 ? ( nTabCount - 1 ) : 0 );
-            bChanged = TRUE;
+            bChanged = sal_True;
         }
         if ( pRange->aEnd.Tab() >= nTabCount )
         {
             pRange->aEnd.SetTab( nTabCount > 0 ? ( nTabCount - 1 ) : 0 );
-            bChanged = TRUE;
+            bChanged = sal_True;
         }
     }
 
@@ -130,15 +130,15 @@ BOOL lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSourceTab, SCTAB nDestTab, S
 // === ScChartHelper ======================================
 
 //static
-USHORT ScChartHelper::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc )
+sal_uInt16 ScChartHelper::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc )
 {
-    return lcl_DoUpdateCharts( rPos, pDoc, FALSE );
+    return lcl_DoUpdateCharts( rPos, pDoc, sal_False );
 }
 
 //static
-USHORT ScChartHelper::DoUpdateAllCharts( ScDocument* pDoc )
+sal_uInt16 ScChartHelper::DoUpdateAllCharts( ScDocument* pDoc )
 {
-    return lcl_DoUpdateCharts( ScAddress(), pDoc, TRUE );
+    return lcl_DoUpdateCharts( ScAddress(), pDoc, sal_True );
 }
 
 //static
@@ -318,7 +318,7 @@ void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector,
                     ::rtl::OUString aChartName = pSdrOle2Obj->GetPersistName();
                     ScRange aEmptyRange;
                     ScChartListener aSearcher( aChartName, pDocument, aEmptyRange );
-                    USHORT nIndex = 0;
+                    sal_uInt16 nIndex = 0;
                     ScChartListenerCollection* pCollection = pDocument->GetChartListenerCollection();
                     if ( pCollection && pCollection->Search( &aSearcher, nIndex ) )
                     {
@@ -408,7 +408,7 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
                                 {
                                     ScRange aEmptyRange;
                                     ScChartListener aSearcher( aChartName, pDoc, aEmptyRange );
-                                    USHORT nIndex = 0;
+                                    sal_uInt16 nIndex = 0;
                                     ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
                                     if ( pCollection && !pCollection->Search( &aSearcher, nIndex ) )
                                     {

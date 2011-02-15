@@ -44,7 +44,7 @@ private:
     String      aOptions;
     String      aSourceArea;
     ScRange     aDestArea;
-    ULONG       nRefresh;
+    sal_uLong       nRefresh;
 
 public:
                 ScAreaLinkSaver( const ScAreaLink& rSource );
@@ -53,8 +53,8 @@ public:
 
     virtual ScDataObject*   Clone() const;
 
-    BOOL        IsEqual( const ScAreaLink& rCompare ) const;
-    BOOL        IsEqualSource( const ScAreaLink& rCompare ) const;
+    sal_Bool        IsEqual( const ScAreaLink& rCompare ) const;
+    sal_Bool        IsEqualSource( const ScAreaLink& rCompare ) const;
 
     void        WriteToLink( ScAreaLink& rLink ) const;
     void        InsertNewLink( ScDocument* pDoc ) const;
@@ -70,9 +70,9 @@ public:
 
     virtual ScDataObject*   Clone() const;
 
-    ScAreaLinkSaver*    operator[](USHORT nIndex) const {return (ScAreaLinkSaver*)At(nIndex);}
+    ScAreaLinkSaver*    operator[](sal_uInt16 nIndex) const {return (ScAreaLinkSaver*)At(nIndex);}
 
-    BOOL        IsEqual( const ScDocument* pDoc ) const;
+    sal_Bool        IsEqual( const ScDocument* pDoc ) const;
     void        Restore( ScDocument* pDoc ) const;
 
     // returns NULL if empty

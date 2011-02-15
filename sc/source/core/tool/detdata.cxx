@@ -46,17 +46,17 @@ SV_IMPL_PTRARR( ScDetOpArr_Impl, ScDetOpDataPtr );
 
 ScDetOpList::ScDetOpList(const ScDetOpList& rList) :
     ScDetOpArr_Impl(),
-    bHasAddError( FALSE )
+    bHasAddError( sal_False )
 {
-    USHORT nCount = rList.Count();
+    sal_uInt16 nCount = rList.Count();
 
-    for (USHORT i=0; i<nCount; i++)
+    for (sal_uInt16 i=0; i<nCount; i++)
         Append( new ScDetOpData(*rList[i]) );
 }
 
 void ScDetOpList::DeleteOnTab( SCTAB nTab )
 {
-    USHORT nPos = 0;
+    sal_uInt16 nPos = 0;
     while ( nPos < Count() )
     {
         // look for operations on the deleted sheet
@@ -71,8 +71,8 @@ void ScDetOpList::DeleteOnTab( SCTAB nTab )
 void ScDetOpList::UpdateReference( ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    USHORT nCount = Count();
-    for (USHORT i=0; i<nCount; i++)
+    sal_uInt16 nCount = Count();
+    for (sal_uInt16 i=0; i<nCount; i++)
     {
         ScAddress aPos = (*this)[i]->GetPos();
         SCCOL nCol1 = aPos.Col();
@@ -95,21 +95,21 @@ void ScDetOpList::UpdateReference( ScDocument* pDoc, UpdateRefMode eUpdateRefMod
 void ScDetOpList::Append( ScDetOpData* pDetOpData )
 {
     if ( pDetOpData->GetOperation() == SCDETOP_ADDERROR )
-        bHasAddError = TRUE;
+        bHasAddError = sal_True;
 
     Insert( pDetOpData, Count() );
 }
 
 
-BOOL ScDetOpList::operator==( const ScDetOpList& r ) const
+sal_Bool ScDetOpList::operator==( const ScDetOpList& r ) const
 {
     // fuer Ref-Undo
 
-    USHORT nCount = Count();
-    BOOL bEqual = ( nCount == r.Count() );
-    for (USHORT i=0; i<nCount && bEqual; i++)       // Reihenfolge muss auch gleich sein
+    sal_uInt16 nCount = Count();
+    sal_Bool bEqual = ( nCount == r.Count() );
+    for (sal_uInt16 i=0; i<nCount && bEqual; i++)       // Reihenfolge muss auch gleich sein
         if ( !(*(*this)[i] == *r[i]) )              // Eintraege unterschiedlich ?
-            bEqual = FALSE;
+            bEqual = sal_False;
 
     return bEqual;
 }

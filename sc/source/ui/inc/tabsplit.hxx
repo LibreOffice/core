@@ -37,7 +37,7 @@ class ScTabSplitter : public Splitter
 {
 private:
     ScViewData*     pViewData;
-    BOOL            bFixed;
+    sal_Bool            bFixed;
 
 protected:
     virtual void    MouseMove( const MouseEvent& rMEvt );
@@ -51,7 +51,7 @@ public:
                                     ScViewData* pData );
                     ~ScTabSplitter();
 
-    void            SetFixed(BOOL bSet);
+    void            SetFixed(sal_Bool bSet);
 };
 
 

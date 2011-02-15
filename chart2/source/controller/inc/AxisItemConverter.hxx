@@ -27,8 +27,7 @@
 #ifndef CHART_AXISITEMCONVERTER_HXX
 #define CHART_AXISITEMCONVERTER_HXX
 
-#include <com/sun/star/chart2/ExplicitScaleData.hpp>
-#include <com/sun/star/chart2/ExplicitIncrementData.hpp>
+#include <chartview/ExplicitScaleValues.hxx>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -55,8 +54,8 @@ public:
         SdrModel& rDrawModel,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > & xChartDoc,
-        ::com::sun::star::chart2::ExplicitScaleData * pScale = NULL,
-        ::com::sun::star::chart2::ExplicitIncrementData * pIncrement = NULL,
+        ExplicitScaleData * pScale = NULL,
+        ExplicitIncrementData * pIncrement = NULL,
         ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
             ::std::auto_ptr< ::com::sun::star::awt::Size >() );
     virtual ~AxisItemConverter();
@@ -65,12 +64,12 @@ public:
     virtual bool ApplyItemSet( const SfxItemSet & rItemSet );
 
 protected:
-    virtual const USHORT * GetWhichPairs() const;
+    virtual const sal_uInt16 * GetWhichPairs() const;
     virtual bool GetItemProperty( tWhichIdType nWhichId, tPropertyNameWithMemberId & rOutProperty ) const;
 
-    virtual void FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
         throw( ::com::sun::star::uno::Exception );
-    virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet )
+    virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
         throw( ::com::sun::star::uno::Exception );
 
 private:
@@ -81,8 +80,8 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XChartDocument >      m_xChartDoc;
 
-    ::com::sun::star::chart2::ExplicitScaleData *       m_pExplicitScale;
-    ::com::sun::star::chart2::ExplicitIncrementData *   m_pExplicitIncrement;
+    ExplicitScaleData*      m_pExplicitScale;
+    ExplicitIncrementData*  m_pExplicitIncrement;
 };
 
 } //  namespace wrapper

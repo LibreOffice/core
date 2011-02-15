@@ -105,7 +105,7 @@ ScTempDocSource::ScTempDocSource( ScTempDocCache& rDocCache ) :
         pTempDoc = CreateDocument();
     else
     {
-        rCache.SetInUse( TRUE );
+        rCache.SetInUse( sal_True );
         if ( !rCache.GetDocument() )
             rCache.SetDocument( CreateDocument() );
     }
@@ -116,7 +116,7 @@ ScTempDocSource::~ScTempDocSource()
     if ( pTempDoc )
         delete pTempDoc;
     else
-        rCache.SetInUse( FALSE );
+        rCache.SetInUse( sal_False );
 }
 
 ScDocument* ScTempDocSource::GetDocument()
@@ -131,7 +131,7 @@ ScDocument* ScTempDocSource::GetDocument()
 
 ScTempDocCache::ScTempDocCache() :
     pDoc( NULL ),
-    bInUse( FALSE )
+    bInUse( sal_False )
 {
 }
 
@@ -160,7 +160,7 @@ void ScTempDocCache::Clear()
 //! merge this with ScAreaLink::Refresh
 //! copy directly without a clipboard document?
 
-BOOL lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
+sal_Bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
                     ScDocument* pDestDoc, const ScAddress& rDestPos )
 {
     SCTAB nSrcTab = rSrcRange.aStart.Tab();
@@ -200,7 +200,7 @@ BOOL lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
             if ( (nFormat % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
             {
                 ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
-                USHORT nErrCode = pFCell->GetErrCode();
+                sal_uInt16 nErrCode = pFCell->GetErrCode();
                 if ( nErrCode == 0 && pFCell->IsValue() )
                 {
                     sal_uInt32 nNewFormat = pFCell->GetStandardFormat( *pClipDoc->GetFormatTable(), nFormat );
@@ -216,10 +216,10 @@ BOOL lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
     ScMarkData aDestMark;
     aDestMark.SelectOneTable( nDestTab );
     aDestMark.SetMarkArea( aNewRange );
-    pDestDoc->CopyFromClip( aNewRange, aDestMark, IDF_ALL & ~IDF_FORMULA, NULL, pClipDoc, FALSE );
+    pDestDoc->CopyFromClip( aNewRange, aDestMark, IDF_ALL & ~IDF_FORMULA, NULL, pClipDoc, sal_False );
 
     delete pClipDoc;
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------------
@@ -329,7 +329,7 @@ void SAL_CALL ScFunctionAccess::setPropertyValue(
 
         // options aren't initialized from configuration - always get the same default behaviour
 
-        BOOL bDone = ScDocOptionsHelper::setPropertyValue( *pOptions, aPropertyMap, aPropertyName, aValue );
+        sal_Bool bDone = ScDocOptionsHelper::setPropertyValue( *pOptions, aPropertyMap, aPropertyName, aValue );
         if (!bDone)
             throw beans::UnknownPropertyException();
     }
@@ -356,7 +356,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFunctionAccess )
 
 // XFunctionAccess
 
-BOOL lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName,const ScCompiler& rCompiler )
+sal_Bool lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName,const ScCompiler& rCompiler )
 {
     // function names are always case-insensitive
     String aUpper( ScGlobal::pCharClass->upper( rName ) );
@@ -368,28 +368,28 @@ BOOL lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName,cons
     if ( eOp != ocNone )
     {
         rArray.AddOpCode( eOp );
-        return TRUE;
+        return sal_True;
     }
 
     // 2. old add in functions
 
-    USHORT nIndex;
+    sal_uInt16 nIndex;
     if ( ScGlobal::GetFuncCollection()->SearchFunc( aUpper, nIndex ) )
     {
         rArray.AddExternal( aUpper.GetBuffer() );
-        return TRUE;
+        return sal_True;
     }
 
     // 3. new (uno) add in functions
 
-    String aIntName(ScGlobal::GetAddInCollection()->FindFunction( aUpper, FALSE ));
+    String aIntName(ScGlobal::GetAddInCollection()->FindFunction( aUpper, sal_False ));
     if (aIntName.Len())
     {
         rArray.AddExternal( aIntName.GetBuffer() );     // international name
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;       // no valid function name
+    return sal_False;       // no valid function name
 }
 
 void lcl_AddRef( ScTokenArray& rArray, long nStartRow, long nColCount, long nRowCount )
@@ -521,7 +521,7 @@ class ArrayOfArrayProc
 {
 public:
 static void processSequences( ScDocument* pDoc, const uno::Any& rArg, ScTokenArray& rTokenArr,
-                                long& rDocRow, BOOL& rArgErr, BOOL& rOverflow )
+                                long& rDocRow, sal_Bool& rArgErr, sal_Bool& rOverflow )
 {
     SequencesContainer< T > aContainer( rArg, rTokenArr, rDocRow, pDoc );
     aContainer.process();
@@ -579,8 +579,8 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
     //  add arguments to token array
     //
 
-    BOOL bArgErr = FALSE;
-    BOOL bOverflow = FALSE;
+    sal_Bool bArgErr = sal_False;
+    sal_Bool bOverflow = sal_False;
     long nDocRow = 0;
     long nArgCount = aArguments.getLength();
     const uno::Any* pArgArr = aArguments.getConstArray();
@@ -656,12 +656,12 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
                     long nRowCount = aSrcRange.aEnd.Row() - aSrcRange.aStart.Row() + 1;
 
                     if ( nStartRow + nRowCount > MAXROWCOUNT )
-                        bOverflow = TRUE;
+                        bOverflow = sal_True;
                     else
                     {
                         // copy data
                         if ( !lcl_CopyData( pSrcDoc, aSrcRange, pDoc, ScAddress( 0, (SCROW)nDocRow, 0 ) ) )
-                            bOverflow = TRUE;
+                            bOverflow = sal_True;
                     }
 
                     nDocRow += nRowCount;
@@ -669,13 +669,13 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
                         lcl_AddRef( aTokenArr, nStartRow, nColCount, nRowCount );
                 }
                 else
-                    bArgErr = TRUE;
+                    bArgErr = sal_True;
             }
             else
-                bArgErr = TRUE;
+                bArgErr = sal_True;
         }
         else
-            bArgErr = TRUE;                 // invalid type
+            bArgErr = sal_True;                 // invalid type
     }
     aTokenArr.AddOpCode(ocClose);
     aTokenArr.AddOpCode(ocStop);
@@ -691,14 +691,14 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         // GRAM_PODF_A1 doesn't really matter for the token array but fits with
         // other API compatibility grammars.
         ScFormulaCell* pFormula = new ScFormulaCell( pDoc, aFormulaPos,
-                &aTokenArr, formula::FormulaGrammar::GRAM_PODF_A1, (BYTE)(mbArray ? MM_FORMULA : MM_NONE) );
+                &aTokenArr, formula::FormulaGrammar::GRAM_PODF_A1, (sal_uInt8)(mbArray ? MM_FORMULA : MM_NONE) );
         pDoc->PutCell( aFormulaPos, pFormula );     //! necessary?
 
         //  call GetMatrix before GetErrCode because GetMatrix always recalculates
         //  if there is no matrix result
 
         const ScMatrix* pMat = mbArray ? pFormula->GetMatrix() : 0;
-        USHORT nErrCode = pFormula->GetErrCode();
+        sal_uInt16 nErrCode = pFormula->GetErrCode();
         if ( nErrCode == 0 )
         {
             if ( pMat )
@@ -726,7 +726,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         else
         {
             //  any other error: IllegalArgumentException
-            bArgErr = TRUE;
+            bArgErr = sal_True;
         }
 
         pDoc->DeleteAreaTab( 0, 0, MAXCOL, MAXROW, 0, IDF_ALL );
