@@ -64,7 +64,7 @@ public:
                              String         aStartStr,
                              double         fStep,
                              double         fMax,
-                             USHORT         nPossDir );
+                             sal_uInt16         nPossDir );
             ~ScFillSeriesDlg();
 
     FillDir     GetFillDir() const          { return theFillDir; }
@@ -76,7 +76,7 @@ public:
 
     String      GetStartStr() const         { return aEdStartVal.GetText(); }
 
-    void        SetEdStartValEnabled(BOOL bFlag=FALSE);
+    void        SetEdStartValEnabled(sal_Bool bFlag=sal_False);
 
 private:
     FixedText       aFtStartVal;
@@ -107,7 +107,7 @@ private:
     RadioButton     aBtnDayOfWeek;
     RadioButton     aBtnMonth;
     RadioButton     aBtnYear;
-    BOOL            bStartValFlag;
+    sal_Bool        bStartValFlag;
 
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
@@ -127,10 +127,10 @@ private:
 
 #ifdef _FILLDLG_CXX
 private:
-    void Init( USHORT nPossDir );
-    BOOL CheckStartVal();
-    BOOL CheckIncrementVal();
-    BOOL CheckEndVal();
+    void Init( sal_uInt16 nPossDir );
+    sal_Bool CheckStartVal();
+    sal_Bool CheckIncrementVal();
+    sal_Bool CheckEndVal();
 
     DECL_LINK( OKHdl, void * );
     DECL_LINK( DisableHdl, Button * );

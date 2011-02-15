@@ -24,12 +24,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _CHART2_VIEW_NUMBERFORMATTERWRAPPER_HXX
-#define _CHART2_VIEW_NUMBERFORMATTERWRAPPER_HXX
+#ifndef _CHART2_TOOLS_NUMBERFORMATTERWRAPPER_HXX
+#define _CHART2_TOOLS_NUMBERFORMATTERWRAPPER_HXX
 
+#include "charttoolsdllapi.hxx"
 #include <svl/zforlist.hxx>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include "chartviewdllapi.hxx"
 
 //.............................................................................
 namespace chart
@@ -41,7 +41,7 @@ namespace chart
 */
 class FixedNumberFormatter;
 
-class OOO_DLLPUBLIC_CHARTVIEW NumberFormatterWrapper
+class OOO_DLLPUBLIC_CHARTTOOLS NumberFormatterWrapper
 {
 public:
     NumberFormatterWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xSupplier );
@@ -52,6 +52,7 @@ public:
                 getNumberFormatsSupplier() { return m_xNumberFormatsSupplier; };
 
     rtl::OUString getFormattedString( sal_Int32 nNumberFormatKey, double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const;
+    Date    getNullDate() const;
 
 private: //private member
     ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
@@ -62,7 +63,7 @@ private: //private member
 };
 
 
-class FixedNumberFormatter
+class OOO_DLLPUBLIC_CHARTTOOLS FixedNumberFormatter
 {
 public:
     FixedNumberFormatter( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xSupplier
@@ -73,7 +74,7 @@ public:
 
 private:
     NumberFormatterWrapper      m_aNumberFormatterWrapper;
-    ULONG                       m_nNumberFormatKey;
+    sal_uLong                       m_nNumberFormatKey;
 };
 
 //.............................................................................

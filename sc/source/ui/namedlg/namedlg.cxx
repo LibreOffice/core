@@ -66,24 +66,24 @@
 struct SaveData
 {
     SaveData()
-        : bCriteria(FALSE),bPrintArea(FALSE),
-          bColHeader(FALSE),bRowHeader(FALSE),
-          bDirty(FALSE) {}
+        : bCriteria(sal_False),bPrintArea(sal_False),
+          bColHeader(sal_False),bRowHeader(sal_False),
+          bDirty(sal_False) {}
 
     void Clear()
         {
             aStrSymbol.Erase();
             bCriteria  = bPrintArea =
-            bColHeader = bRowHeader = FALSE;
-            bDirty = TRUE;
+            bColHeader = bRowHeader = sal_False;
+            bDirty = sal_True;
         }
 
     String  aStrSymbol;
-    BOOL    bCriteria:1;
-    BOOL    bPrintArea:1;
-    BOOL    bColHeader:1;
-    BOOL    bRowHeader:1;
-    BOOL    bDirty:1;
+    sal_Bool    bCriteria:1;
+    sal_Bool    bPrintArea:1;
+    sal_Bool    bColHeader:1;
+    sal_Bool    bRowHeader:1;
+    sal_Bool    bDirty:1;
 };
 
 static SaveData* pSaveObj = NULL;
@@ -94,7 +94,7 @@ static SaveData* pSaveObj = NULL;
     pSaveObj->bPrintArea = aBtnPrintArea.IsChecked();   \
     pSaveObj->bColHeader = aBtnColHeader.IsChecked();   \
     pSaveObj->bRowHeader = aBtnRowHeader.IsChecked();   \
-    pSaveObj->bDirty     = TRUE;
+    pSaveObj->bDirty     = sal_True;
 
 #define RESTORE_DATA() \
     if ( pSaveObj->bDirty )                             \
@@ -104,7 +104,7 @@ static SaveData* pSaveObj = NULL;
         aBtnPrintArea.Check( pSaveObj->bPrintArea );    \
         aBtnColHeader.Check( pSaveObj->bColHeader );    \
         aBtnRowHeader.Check( pSaveObj->bRowHeader );    \
-        pSaveObj->bDirty = FALSE;                       \
+        pSaveObj->bDirty = sal_False;                       \
     }
 
 #define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute();
@@ -141,7 +141,7 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
         aBtnMore        ( this, ScResId( BTN_MORE ) ),
         //
-        bSaved          (FALSE),
+        bSaved          (sal_False),
         aStrAdd         ( ScResId( STR_ADD ) ),
         aStrModify      ( ScResId( STR_MODIFY ) ),
         errMsgInvalidSym( ScResId( STR_INVALIDSYMBOL ) ),
@@ -215,20 +215,20 @@ void __EXPORT ScNameDlg::Init()
     UpdateChecks();
     EdModifyHdl( 0 );
 
-    bSaved=TRUE;
+    bSaved=sal_True;
     SAVE_DATA()
 
     //@BugID 54702
-    //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
+    //SFX_APPWINDOW->Disable(sal_False);        //! allgemeine Methode im ScAnyRefDlg
 }
 
 //----------------------------------------------------------------------------
-BOOL ScNameDlg::IsRefInputMode() const
+sal_Bool ScNameDlg::IsRefInputMode() const
 {
     return aEdAssign.IsEnabled();
 }
 
-void ScNameDlg::RefInputDone( BOOL bForced)
+void ScNameDlg::RefInputDone( sal_Bool bForced)
 {
     ScAnyRefDlg::RefInputDone(bForced);
     EdModifyHdl(&aEdAssign);
@@ -253,7 +253,7 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 
 //----------------------------------------------------------------------------
-BOOL __EXPORT ScNameDlg::Close()
+sal_Bool __EXPORT ScNameDlg::Close()
 {
     return DoClose( ScNameDlgWrapper::GetChildWindowId() );
 }
@@ -272,7 +272,7 @@ void ScNameDlg::SetActive()
 
 void __EXPORT ScNameDlg::UpdateChecks()
 {
-    USHORT       nCurPos=0;
+    sal_uInt16       nCurPos=0;
 
     if(aLocalRangeName.SearchName( aEdName.GetText(), nCurPos))
     {
@@ -317,11 +317,11 @@ void __EXPORT ScNameDlg::UpdateChecks()
 
 void __EXPORT ScNameDlg::UpdateNames()
 {
-    USHORT  nRangeCount = aLocalRangeName.GetCount();
+    sal_uInt16  nRangeCount = aLocalRangeName.GetCount();
 
-    aEdName.SetUpdateMode( FALSE );
+    aEdName.SetUpdateMode( sal_False );
     //-----------------------------------------------------------
-    USHORT  nNamePos = aEdName.GetTopEntry();
+    sal_uInt16  nNamePos = aEdName.GetTopEntry();
     aEdName.Clear();
 
     aEdAssign.SetText( EMPTY_STRING );
@@ -331,7 +331,7 @@ void __EXPORT ScNameDlg::UpdateNames()
         ScRangeData*    pRangeData = NULL;
         String          aString;
 
-        for ( USHORT i=0; i<nRangeCount; i++ )
+        for ( sal_uInt16 i=0; i<nRangeCount; i++ )
         {
             pRangeData = (ScRangeData*)(aLocalRangeName.At( i ));
             if ( pRangeData )
@@ -352,7 +352,7 @@ void __EXPORT ScNameDlg::UpdateNames()
         aBtnRemove.Disable();
     }
     //-----------------------------------------------------------
-    aEdName.SetUpdateMode( TRUE );
+    aEdName.SetUpdateMode( sal_True );
     aEdName.SetTopEntry(nNamePos);
     aEdName.Invalidate();
 }
@@ -360,7 +360,7 @@ void __EXPORT ScNameDlg::UpdateNames()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScNameDlg::CalcCurTableAssign( String& aAssign, USHORT nCurPos )
+void __EXPORT ScNameDlg::CalcCurTableAssign( String& aAssign, sal_uInt16 nCurPos )
 {
     ScRangeData* pRangeData = (ScRangeData*)(aLocalRangeName.At( nCurPos ));
 
@@ -390,7 +390,7 @@ IMPL_LINK( ScNameDlg, OkBtnHdl, void *, EMPTYARG )
     {
         ScDocShell* pDocSh = pViewData->GetDocShell();
         ScDocFunc aFunc(*pDocSh);
-        aFunc.ModifyRangeNames( aLocalRangeName, FALSE );
+        aFunc.ModifyRangeNames( aLocalRangeName, sal_False );
         Close();
     }
     return 0;
@@ -411,9 +411,9 @@ IMPL_LINK_INLINE_END( ScNameDlg, CancelBtnHdl, void *, EMPTYARG )
 
 IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
 {
-    BOOL    bAdded    = FALSE;
+    sal_Bool    bAdded    = sal_False;
     String  aNewEntry = aEdName.GetText();
-    USHORT  nNamePos = aEdName.GetTopEntry();
+    sal_uInt16  nNamePos = aEdName.GetTopEntry();
     aNewEntry.EraseLeadingChars( ' ' );
     aNewEntry.EraseTrailingChars( ' ' );
 
@@ -425,7 +425,7 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
             {
                 ScRangeData*    pNewEntry   = NULL;
                 RangeType       nType       = RT_NAME;
-                USHORT          nFoundAt    = 0;
+                sal_uInt16          nFoundAt    = 0;
                 String          theSymbol   = aEdAssign.GetText();
                 String          aStrPos;
                 String          aStrArea;
@@ -464,7 +464,7 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
                         delete pNewEntry;
 
                     UpdateNames();
-                    bSaved=FALSE;
+                    bSaved=sal_False;
                     RESTORE_DATA()
                     aEdName.SetText(EMPTY_STRING);
                     aEdName.GrabFocus();
@@ -474,9 +474,9 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
                     aBtnRemove.Disable();
 
                     //@BugID 54702 raus mit dem Sch.
-                    //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
+                    //SFX_APPWINDOW->Disable(sal_False);        //! allgemeine Methode im ScAnyRefDlg
 
-                    bAdded = TRUE;
+                    bAdded = sal_True;
                 }
                 else // theSymbol ungueltig
                 {
@@ -504,7 +504,7 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
 
 IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
 {
-    USHORT       nRemoveAt = 0;
+    sal_uInt16       nRemoveAt = 0;
     const String aStrEntry = aEdName.GetText();
 
     if ( aLocalRangeName.SearchName( aStrEntry, nRemoveAt ) )
@@ -521,7 +521,7 @@ IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
             aLocalRangeName.AtFree( nRemoveAt );
             UpdateNames();
             UpdateChecks();
-            bSaved=FALSE;
+            bSaved=sal_False;
             RESTORE_DATA()
             theCurSel = Selection( 0, SELECTION_MAX );
             aBtnAdd.SetText( aStrAdd );
@@ -537,7 +537,7 @@ IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
 
 IMPL_LINK( ScNameDlg, NameSelectHdl, void *, EMPTYARG )
 {
-    USHORT nAtPos;
+    sal_uInt16 nAtPos;
 
     if ( aLocalRangeName.SearchName( aEdName.GetText(), nAtPos ) )
     {
@@ -564,7 +564,7 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
 {
     String  theName     = aEdName.GetText();
     String  theSymbol   = aEdAssign.GetText();
-    BOOL    bNameFound  = (COMBOBOX_ENTRY_NOTFOUND
+    sal_Bool    bNameFound  = (COMBOBOX_ENTRY_NOTFOUND
                            != aEdName.GetEntryPos( theName ));
 
     if ( pEd == &aEdName )
@@ -579,7 +579,7 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
             aEdAssign.Disable();
             aRbAssign.Disable();
             //@BugID 54702 raus mit dem Sch.
-            //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
+            //SFX_APPWINDOW->Disable(sal_False);        //! allgemeine Methode im ScAnyRefDlg
         }
         else
         {
@@ -592,7 +592,7 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
 
                 if(!bSaved)
                 {
-                    bSaved=TRUE;
+                    bSaved=sal_True;
                     SAVE_DATA()
                 }
                 NameSelectHdl( 0 );
@@ -603,7 +603,7 @@ IMPL_LINK( ScNameDlg, EdModifyHdl, Edit *, pEd )
                     aBtnAdd.SetText( aStrAdd );
                 aBtnRemove.Disable();
 
-                bSaved=FALSE;
+                bSaved=sal_False;
                 RESTORE_DATA()
             }
             theSymbol = aEdAssign.GetText();

@@ -60,7 +60,7 @@
 class ScFunctionChildWindow : public SfxChildWindow
 {
  public:
-    ScFunctionChildWindow( Window*, USHORT, SfxBindings*,
+    ScFunctionChildWindow( Window*, sal_uInt16, SfxBindings*,
                             SfxChildWinInfo* );
 
     SFX_DECL_CHILDWINDOW(ScFunctionChildWindow);
@@ -87,17 +87,17 @@ private:
     SfxChildAlignment   eSfxOldAlignment;
     ImageButton         aInsertButton;
     FixedText           aFiFuncDesc;
-    USHORT              nLeftSlot;
-    USHORT              nRightSlot;
-    ULONG               nMinWidth;
-    ULONG               nMinHeight;
+    sal_uInt16              nLeftSlot;
+    sal_uInt16              nRightSlot;
+    sal_uLong               nMinWidth;
+    sal_uLong               nMinHeight;
     Size                aOldSize;
-    BOOL                bSizeFlag;
-    BOOL                bInit;
+    sal_Bool                bSizeFlag;
+    sal_Bool                bInit;
     short               nDockMode;
     Point               aSplitterInitPos;
     const ScFuncDesc*   pFuncDesc;
-    USHORT              nArgs;
+    sal_uInt16              nArgs;
     String**            pArgArr;
 
 
@@ -105,7 +105,7 @@ private:
 
     void            UpdateFunctionList();
     void            UpdateLRUList();
-    void            DoEnter(BOOL bOk); //@@ ???
+    void            DoEnter(sal_Bool bOk); //@@ ???
     void            SetDescription();
     void            SetLeftRightSize();
     void            SetTopBottonSize();
@@ -122,7 +122,7 @@ private:
 
 protected:
 
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
     virtual void    Resize();
     virtual void    Resizing( Size& rSize );
     virtual void    SetSize();
@@ -144,7 +144,7 @@ public:
     using SfxDockingWindow::Notify;
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    void            SetSlotIDs( USHORT nLeft, USHORT nRight )
+    void            SetSlotIDs( sal_uInt16 nLeft, sal_uInt16 nRight )
                         { nLeftSlot = nLeft; nRightSlot = nRight; }
 
     void            InitLRUList();

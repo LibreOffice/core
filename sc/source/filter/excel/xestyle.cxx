@@ -55,7 +55,7 @@
 #include "globstr.hrc"
 #include "xestring.hxx"
 
-#include <oox/core/tokens.hxx>
+using namespace ::oox;
 
 using ::rtl::OString;
 using ::rtl::OUString;
@@ -821,7 +821,7 @@ void XclExpPalette::WriteBody( XclExpStream& rStrm )
 
 namespace {
 
-typedef ::std::pair< USHORT, sal_Int16 > WhichAndScript;
+typedef ::std::pair< sal_uInt16, sal_Int16 > WhichAndScript;
 
 sal_Int16 lclCheckFontItems( const SfxItemSet& rItemSet,
         const WhichAndScript& rWAS1, const WhichAndScript& rWAS2, const WhichAndScript& rWAS3 )
@@ -885,7 +885,7 @@ sal_Int16 lclCheckFontItems( const SfxItemSet& rItemSet,
         nScript = GetFirstUsedScript( rRoot, rItemSet );
 
     // convert to core script type constants
-    BYTE nScScript = SCRIPTTYPE_LATIN;
+    sal_uInt8 nScScript = SCRIPTTYPE_LATIN;
     switch( nScript )
     {
         case ApiScriptType::LATIN:      nScScript = SCRIPTTYPE_LATIN;   break;
@@ -902,14 +902,14 @@ sal_Int16 lclCheckFontItems( const SfxItemSet& rItemSet,
 
 /*static*/ bool XclExpFontHelper::CheckItems( const XclExpRoot& rRoot, const SfxItemSet& rItemSet, sal_Int16 nScript, bool bDeep )
 {
-    static const USHORT pnCommonIds[] = {
+    static const sal_uInt16 pnCommonIds[] = {
         ATTR_FONT_UNDERLINE, ATTR_FONT_CROSSEDOUT, ATTR_FONT_CONTOUR,
         ATTR_FONT_SHADOWED, ATTR_FONT_COLOR, ATTR_FONT_LANGUAGE, 0 };
-    static const USHORT pnLatinIds[] = {
+    static const sal_uInt16 pnLatinIds[] = {
         ATTR_FONT, ATTR_FONT_HEIGHT, ATTR_FONT_WEIGHT, ATTR_FONT_POSTURE, 0 };
-    static const USHORT pnAsianIds[] = {
+    static const sal_uInt16 pnAsianIds[] = {
         ATTR_CJK_FONT, ATTR_CJK_FONT_HEIGHT, ATTR_CJK_FONT_WEIGHT, ATTR_CJK_FONT_POSTURE, 0 };
-    static const USHORT pnComplexIds[] = {
+    static const sal_uInt16 pnComplexIds[] = {
         ATTR_CTL_FONT, ATTR_CTL_FONT_HEIGHT, ATTR_CTL_FONT_WEIGHT, ATTR_CTL_FONT_POSTURE, 0 };
 
     bool bUsed = ScfTools::CheckItems( rItemSet, pnCommonIds, bDeep );
@@ -1197,8 +1197,8 @@ size_t XclExpFontBuffer::Find( const XclFontData& rFontData )
 /** Predicate for search algorithm. */
 struct XclExpNumFmtPred
 {
-    ULONG               mnScNumFmt;
-    inline explicit     XclExpNumFmtPred( ULONG nScNumFmt ) : mnScNumFmt( nScNumFmt ) {}
+    sal_uLong               mnScNumFmt;
+    inline explicit     XclExpNumFmtPred( sal_uLong nScNumFmt ) : mnScNumFmt( nScNumFmt ) {}
     inline bool         operator()( const XclExpNumFmt& rFormat ) const
                             { return rFormat.mnScNumFmt == mnScNumFmt; }
 };
@@ -1236,7 +1236,7 @@ XclExpNumFmtBuffer::~XclExpNumFmtBuffer()
     delete[] mpKeywordTable;
 }
 
-sal_uInt16 XclExpNumFmtBuffer::Insert( ULONG nScNumFmt )
+sal_uInt16 XclExpNumFmtBuffer::Insert( sal_uLong nScNumFmt )
 {
     XclExpNumFmtVec::const_iterator aIt =
         ::std::find_if( maFormatMap.begin(), maFormatMap.end(), XclExpNumFmtPred( nScNumFmt ) );
@@ -1393,7 +1393,7 @@ bool XclExpCellAlign::FillFromItemSet(
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_INDENT, bStyle );
 
             // shrink to fit
-            mbShrink = GETITEMVALUE( rItemSet, SfxBoolItem, ATTR_SHRINKTOFIT, BOOL );
+            mbShrink = GETITEMVALUE( rItemSet, SfxBoolItem, ATTR_SHRINKTOFIT, sal_Bool );
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_SHRINKTOFIT, bStyle );
 
             // CTL text direction
@@ -1409,7 +1409,7 @@ bool XclExpCellAlign::FillFromItemSet(
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_VER_JUSTIFY, bStyle );
 
             // stacked/rotation
-            bool bStacked = GETITEMVALUE( rItemSet, SfxBoolItem, ATTR_STACKED, BOOL );
+            bool bStacked = GETITEMVALUE( rItemSet, SfxBoolItem, ATTR_STACKED, sal_Bool );
             bUsed |= ScfTools::CheckItem( rItemSet, ATTR_STACKED, bStyle );
             if( bStacked )
             {
@@ -1900,7 +1900,7 @@ void XclExpXFId::ConvertXFIndex( const XclExpRoot& rRoot )
 
 XclExpXF::XclExpXF(
         const XclExpRoot& rRoot, const ScPatternAttr& rPattern, sal_Int16 nScript,
-        ULONG nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak ) :
+        sal_uLong nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak ) :
     XclXFBase( true ),
     XclExpRoot( rRoot )
 {
@@ -1928,7 +1928,7 @@ XclExpXF::XclExpXF( const XclExpRoot& rRoot, bool bCellXF ) :
 }
 
 bool XclExpXF::Equals( const ScPatternAttr& rPattern,
-        ULONG nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak ) const
+        sal_uLong nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak ) const
 {
     return IsCellXF() && (mpItemSet == &rPattern.GetItemSet()) &&
         (!bForceLineBreak || maAlignment.mbLineBreak) &&
@@ -1965,7 +1965,7 @@ void XclExpXF::InitDefault()
 }
 
 void XclExpXF::Init( const SfxItemSet& rItemSet, sal_Int16 nScript,
-        ULONG nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak, bool bDefStyle )
+        sal_uLong nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak, bool bDefStyle )
 {
     InitDefault();
     mpItemSet = &rItemSet;
@@ -1987,7 +1987,7 @@ void XclExpXF::Init( const SfxItemSet& rItemSet, sal_Int16 nScript,
 
     // number format
     mnScNumFmt = (nForceScNumFmt == NUMBERFORMAT_ENTRY_NOT_FOUND) ?
-        GETITEMVALUE( rItemSet, SfxUInt32Item, ATTR_VALUE_FORMAT, ULONG ) : nForceScNumFmt;
+        GETITEMVALUE( rItemSet, SfxUInt32Item, ATTR_VALUE_FORMAT, sal_uLong ) : nForceScNumFmt;
     mnXclNumFmt = GetNumFmtBuffer().Insert( mnScNumFmt );
     mbFmtUsed = ScfTools::CheckItem( rItemSet, ATTR_VALUE_FORMAT, IsStyleXF() );
 
@@ -2349,7 +2349,7 @@ sal_uInt32 XclExpXFBuffer::InsertWithFont( const ScPatternAttr* pPattern, sal_In
     return InsertCellXF( pPattern, nScript, NUMBERFORMAT_ENTRY_NOT_FOUND, nForceXclFont, bForceLineBreak );
 }
 
-sal_uInt32 XclExpXFBuffer::InsertWithNumFmt( const ScPatternAttr* pPattern, sal_Int16 nScript, ULONG nForceScNumFmt, bool bForceLineBreak )
+sal_uInt32 XclExpXFBuffer::InsertWithNumFmt( const ScPatternAttr* pPattern, sal_Int16 nScript, sal_uLong nForceScNumFmt, bool bForceLineBreak )
 {
     return InsertCellXF( pPattern, nScript, nForceScNumFmt, EXC_FONT_NOTFOUND, bForceLineBreak );
 }
@@ -2608,7 +2608,7 @@ void XclExpXFBuffer::SaveXFXml( XclExpXmlStream& rStrm, XclExpXF& rXF )
 }
 
 sal_uInt32 XclExpXFBuffer::FindXF( const ScPatternAttr& rPattern,
-        ULONG nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak ) const
+        sal_uLong nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak ) const
 {
     for( size_t nPos = 0, nSize = maXFList.GetSize(); nPos < nSize; ++nPos )
         if( maXFList.GetRecord( nPos )->Equals( rPattern, nForceScNumFmt, nForceXclFont, bForceLineBreak ) )
@@ -2633,7 +2633,7 @@ sal_uInt32 XclExpXFBuffer::FindBuiltInXF( sal_uInt8 nStyleId, sal_uInt8 nLevel )
 }
 
 sal_uInt32 XclExpXFBuffer::InsertCellXF( const ScPatternAttr* pPattern, sal_Int16 nScript,
-        ULONG nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak )
+        sal_uLong nForceScNumFmt, sal_uInt16 nForceXclFont, bool bForceLineBreak )
 {
     const ScPatternAttr* pDefPattern = GetDoc().GetDefPattern();
     if( !pPattern )

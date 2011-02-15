@@ -45,16 +45,16 @@ public:
     SfxUndoAction*          GetDrawUndo()       { return pDrawUndo; }
     void                    ForgetDrawUndo();
 
-    virtual BOOL            IsLinked();
-    virtual void            SetLinked( BOOL bIsLinked );
+    virtual sal_Bool            IsLinked();
+    virtual void            SetLinked( sal_Bool bIsLinked );
     virtual void            Undo();
     virtual void            Redo();
     virtual void            Repeat(SfxRepeatTarget& rTarget);
-    virtual BOOL            CanRepeat(SfxRepeatTarget& rTarget) const;
-    virtual BOOL            Merge( SfxUndoAction *pNextAction );
+    virtual sal_Bool            CanRepeat(SfxRepeatTarget& rTarget) const;
+    virtual sal_Bool            Merge( SfxUndoAction *pNextAction );
     virtual String          GetComment() const;
     virtual String          GetRepeatComment(SfxRepeatTarget&) const;
-    virtual USHORT          GetId() const;
+    virtual sal_uInt16          GetId() const;
 };
 
 

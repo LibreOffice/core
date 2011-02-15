@@ -99,13 +99,13 @@ public:
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
 
-    virtual BOOL    IsRefInputMode() const;
+    virtual sal_Bool    IsRefInputMode() const;
     virtual void    SetActive();
 
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
     void            SliderMoved();
-    USHORT          GetSliderPos();
-    void            RefreshEditRow( USHORT nOffset );
+    sal_uInt16          GetSliderPos();
+    void            RefreshEditRow( sal_uInt16 nOffset );
 
 private:
     FixedLine       aFlCriteria;
@@ -153,7 +153,7 @@ private:
 
     ScFilterOptionsMgr* pOptionsMgr;
 
-    const USHORT        nWhichQuery;
+    const sal_uInt16        nWhichQuery;
     const ScQueryParam  theQueryData;
     ScQueryItem*        pOutItem;
     ScViewData*         pViewData;
@@ -165,12 +165,12 @@ private:
     ListBox*            aCondLbArr[4];
     ListBox*            aConnLbArr[4];
     bool                mbHasDates[MAXQUERY];
-    BOOL                bRefreshExceptQuery[MAXQUERY];
-    USHORT              nFieldCount;
-    BOOL                bRefInputMode;
+    sal_Bool                bRefreshExceptQuery[MAXQUERY];
+    sal_uInt16              nFieldCount;
+    sal_Bool                bRefInputMode;
 
     TypedScStrCollection*   pEntryLists[MAXCOLCOUNT];
-    USHORT              nHeaderPos[MAXCOLCOUNT];
+    sal_uInt16              nHeaderPos[MAXCOLCOUNT];
 
     // Hack: RefInput-Kontrolle
     Timer*  pTimer;
@@ -180,10 +180,10 @@ private:
     void            Init            ( const SfxItemSet& rArgSet );
     void            FillFieldLists  ();
     void            FillAreaList    ();
-    void            UpdateValueList ( USHORT nList );
-    void            UpdateHdrInValueList( USHORT nList );
-    void            ClearValueList  ( USHORT nList );
-    USHORT          GetFieldSelPos  ( SCCOL nField );
+    void            UpdateValueList ( sal_uInt16 nList );
+    void            UpdateHdrInValueList( sal_uInt16 nList );
+    void            ClearValueList  ( sal_uInt16 nList );
+    sal_uInt16          GetFieldSelPos  ( SCCOL nField );
     ScQueryItem*    GetOutputItem   ();
 
     // Handler:
@@ -210,10 +210,10 @@ public:
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
 
-    virtual BOOL    IsRefInputMode() const;
+    virtual sal_Bool    IsRefInputMode() const;
     virtual void    SetActive();
 
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 
 private:
     FixedText   aFtFilterArea;
@@ -232,14 +232,14 @@ private:
 
     ScFilterOptionsMgr* pOptionsMgr;
 
-    const USHORT        nWhichQuery;
+    const sal_uInt16        nWhichQuery;
     const ScQueryParam  theQueryData;
     ScQueryItem*        pOutItem;
     ScViewData*         pViewData;
     ScDocument*         pDoc;
 
     formula::RefEdit*           pRefInputEdit;
-    BOOL                bRefInputMode;
+    sal_Bool                bRefInputMode;
 
     // Hack: RefInput-Kontrolle
     Timer*  pTimer;

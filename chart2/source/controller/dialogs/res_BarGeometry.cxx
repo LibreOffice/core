@@ -94,15 +94,15 @@ void BarGeometryResources::Enable( bool bEnable )
     m_aLB_Geometry.Enable( bEnable );
 }
 
-USHORT BarGeometryResources::GetSelectEntryCount() const
+sal_uInt16 BarGeometryResources::GetSelectEntryCount() const
 {
     return m_aLB_Geometry.GetSelectEntryCount();
 }
-USHORT BarGeometryResources::GetSelectEntryPos() const
+sal_uInt16 BarGeometryResources::GetSelectEntryPos() const
 {
     return m_aLB_Geometry.GetSelectEntryPos();
 }
-void BarGeometryResources::SelectEntryPos( USHORT nPos )
+void BarGeometryResources::SelectEntryPos( sal_uInt16 nPos )
 {
     if( nPos < m_aLB_Geometry.GetEntryCount() )
         m_aLB_Geometry.SelectEntryPos( nPos );

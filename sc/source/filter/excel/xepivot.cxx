@@ -51,7 +51,7 @@
 #include "xestring.hxx"
 #include "xelink.hxx"
 
-#include <oox/core/tokens.hxx>
+using namespace ::oox;
 
 using ::com::sun::star::sheet::DataPilotFieldOrientation;
 using ::com::sun::star::sheet::DataPilotFieldOrientation_HIDDEN;
@@ -922,7 +922,7 @@ String lclGetDataFieldCaption( const String& rFieldName, GeneralFunction eFunc )
 {
     String aCaption;
 
-    USHORT nResIdx = 0;
+    sal_uInt16 nResIdx = 0;
     using namespace ::com::sun::star::sheet;
     switch( eFunc )
     {
@@ -1281,7 +1281,7 @@ XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& r
                 maFieldList.AppendNewRecord( new XclExpPTField( *this, nFieldIdx ) );
 
             const List& rDimList = pSaveData->GetDimensions();
-            ULONG nDimIdx, nDimCount = rDimList.Count();
+            sal_uLong nDimIdx, nDimCount = rDimList.Count();
 
             /*  2)  First process all data dimensions, they are needed for extended
                     settings of row/column/page fields (sorting/auto show). */
@@ -1714,7 +1714,7 @@ XclExpPivotTableManager::XclExpPivotTableManager( const XclExpRoot& rRoot ) :
 void XclExpPivotTableManager::CreatePivotTables()
 {
     if( ScDPCollection* pDPColl = GetDoc().GetDPCollection() )
-        for( USHORT nDPObj = 0, nCount = pDPColl->GetCount(); nDPObj < nCount; ++nDPObj )
+        for( sal_uInt16 nDPObj = 0, nCount = pDPColl->GetCount(); nDPObj < nCount; ++nDPObj )
             if( ScDPObject* pDPObj = (*pDPColl)[ nDPObj ] )
                 if( const XclExpPivotCache* pPCache = CreatePivotCache( *pDPObj ) )
                     maPTableList.AppendNewRecord( new XclExpPivotTable( GetRoot(), *pDPObj, *pPCache ) );

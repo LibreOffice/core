@@ -548,12 +548,12 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
     if ( nUnoType & sheet::NamedRangeFlag::COLUMN_HEADER )      nNewType |= RT_COLHEADER;
     if ( nUnoType & sheet::NamedRangeFlag::ROW_HEADER )         nNewType |= RT_ROWHEADER;
 
-    BOOL bDone = FALSE;
+    sal_Bool bDone = sal_False;
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
         ScRangeName* pNames = pDoc->GetRangeName();
-        USHORT nIndex = 0;
+        sal_uInt16 nIndex = 0;
         if (pNames && !pNames->SearchName(aNameStr, nIndex))
         {
             ScRangeName* pNewRanges = new ScRangeName( *pNames );
@@ -564,7 +564,7 @@ void SAL_CALL ScNamedRangesObj::addNewByName( const rtl::OUString& aName,
             {
                 ScDocFunc aFunc(*pDocShell);
                 aFunc.SetNewRangeNames( pNewRanges, sal_True );
-                bDone = TRUE;
+                bDone = sal_True;
             }
             else
             {
@@ -609,7 +609,7 @@ void SAL_CALL ScNamedRangesObj::removeByName( const rtl::OUString& aName )
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    BOOL bDone = FALSE;
+    sal_Bool bDone = sal_False;
     if (pDocShell)
     {
         ScRangeName* pNames = pDocShell->GetDocument()->GetRangeName();
@@ -624,7 +624,7 @@ void SAL_CALL ScNamedRangesObj::removeByName( const rtl::OUString& aName )
                     pNewRanges->AtFree(nPos);
                     ScDocFunc aFunc(*pDocShell);
                     aFunc.SetNewRangeNames( pNewRanges, sal_True );
-                    bDone = TRUE;
+                    bDone = sal_True;
                 }
         }
     }
@@ -761,13 +761,13 @@ sal_Bool SAL_CALL ScNamedRangesObj::hasByName( const rtl::OUString& aName )
 /** called from the XActionLockable interface methods on initial locking */
 void ScNamedRangesObj::lock()
 {
-    pDocShell->GetDocument()->CompileNameFormula( TRUE ); // CreateFormulaString
+    pDocShell->GetDocument()->CompileNameFormula( sal_True ); // CreateFormulaString
 }
 
 /** called from the XActionLockable interface methods on final unlock */
 void ScNamedRangesObj::unlock()
 {
-    pDocShell->GetDocument()->CompileNameFormula( FALSE ); // CompileFormulaString
+    pDocShell->GetDocument()->CompileNameFormula( sal_False ); // CompileFormulaString
 }
 
 // document::XActionLockable
@@ -1041,7 +1041,7 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    BOOL bDone = FALSE;
+    sal_Bool bDone = sal_False;
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
@@ -1065,7 +1065,7 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
                 pDoc->CompileColRowNameFormula();
                 pDocShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB, PAINT_GRID );
                 pDocShell->SetDocumentModified();
-                bDone = TRUE;
+                bDone = sal_True;
 
                 //! Undo ?!?! (hier und aus Dialog)
             }

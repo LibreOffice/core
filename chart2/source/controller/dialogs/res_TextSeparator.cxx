@@ -127,7 +127,7 @@ Size TextSeparatorResources::GetCurrentListBoxSize() const
 
 void TextSeparatorResources::SetValue( const rtl::OUString& rSeparator )
 {
-    ::std::map< ::rtl::OUString, USHORT >::iterator aIter( m_aEntryMap.find(rSeparator) );
+    ::std::map< ::rtl::OUString, sal_uInt16 >::iterator aIter( m_aEntryMap.find(rSeparator) );
     if( aIter == m_aEntryMap.end() )
         m_aLB_Separator.SelectEntryPos( m_nDefaultPos );
     else
@@ -141,8 +141,8 @@ void TextSeparatorResources::SetDefault()
 
 rtl::OUString TextSeparatorResources::GetValue() const
 {
-    USHORT nPos = m_aLB_Separator.GetSelectEntryPos();
-    ::std::map< ::rtl::OUString, USHORT >::const_iterator aIter( m_aEntryMap.begin() );
+    sal_uInt16 nPos = m_aLB_Separator.GetSelectEntryPos();
+    ::std::map< ::rtl::OUString, sal_uInt16 >::const_iterator aIter( m_aEntryMap.begin() );
     while( aIter != m_aEntryMap.end() )
     {
         if(aIter->second==nPos )

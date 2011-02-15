@@ -47,7 +47,7 @@ private:
     sal_Int32               nRefSheet;
     sal_Bool                bIsRange;
 
-    sal_Bool                ParseUIString( const String& rUIString );
+    sal_Bool                ParseUIString( const String& rUIString, ::formula::FormulaGrammar::AddressConvention eConv = ::formula::FormulaGrammar::CONV_OOO );
 
 public:
 

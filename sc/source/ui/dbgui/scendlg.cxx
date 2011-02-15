@@ -51,7 +51,7 @@
 
 //========================================================================
 
-ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL bEdit, BOOL bSheetProtected)
+ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, sal_Bool bEdit, sal_Bool bSheetProtected)
 
     :   ModalDialog     ( pParent, ScResId( RID_SCDLG_NEWSCENARIO ) ),
         aFlName         ( this, ScResId( FL_NAME )),
@@ -85,14 +85,14 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL b
             XColorTable* pColorTable = ((SvxColorTableItem*)pItem)->GetColorTable();
             if (pColorTable)
             {
-                aLbColor.SetUpdateMode( FALSE );
+                aLbColor.SetUpdateMode( sal_False );
                 long nCount = pColorTable->Count();
                 for ( long n=0; n<nCount; n++ )
                 {
                     XColorEntry* pEntry = pColorTable->GetColor(n);
                     aLbColor.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
                 }
-                aLbColor.SetUpdateMode( TRUE );
+                aLbColor.SetUpdateMode( sal_True );
             }
         }
     }
@@ -122,27 +122,27 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL b
     FreeResource();
 
     aLbColor.SelectEntry( Color( COL_LIGHTGRAY ) );
-    aCbShowFrame.Check(TRUE);
-    //aCbPrintFrame.Check(TRUE);
-    aCbTwoWay.Check(TRUE);
-    //aCbAttrib.Check(FALSE);
-    //aCbValue.Check(FALSE);
-    aCbCopyAll.Check(FALSE);
-    aCbProtect.Check(TRUE);
+    aCbShowFrame.Check(sal_True);
+    //aCbPrintFrame.Check(sal_True);
+    aCbTwoWay.Check(sal_True);
+    //aCbAttrib.Check(sal_False);
+    //aCbValue.Check(sal_False);
+    aCbCopyAll.Check(sal_False);
+    aCbProtect.Check(sal_True);
 
     if (bIsEdit)
-        aCbCopyAll.Enable(FALSE);
+        aCbCopyAll.Enable(sal_False);
     // If the Sheet is protected then we disable the Scenario Protect input
     // and default it to true above. Note we are in 'Add' mode here as: if
     // Sheet && scenario protection are true, then we cannot edit this dialog.
     if (bSheetProtected)
-        aCbProtect.Enable(FALSE);
+        aCbProtect.Enable(sal_False);
 
     //! die drei funktionieren noch nicht...
     /*
-    aCbPrintFrame.Enable(FALSE);
-    aCbAttrib.Enable(FALSE);
-    aCbValue.Enable(FALSE);
+    aCbPrintFrame.Enable(sal_False);
+    aCbAttrib.Enable(sal_False);
+    aCbValue.Enable(sal_False);
     */
 
     aEdComment.SetAccessibleRelationMemberOf(&aFlComment);
@@ -158,7 +158,7 @@ __EXPORT ScNewScenarioDlg::~ScNewScenarioDlg()
 //------------------------------------------------------------------------
 
 void ScNewScenarioDlg::GetScenarioData( String& rName, String& rComment,
-                                        Color& rColor, USHORT& rFlags ) const
+                                        Color& rColor, sal_uInt16& rFlags ) const
 {
     rComment = aEdComment.GetText();
     rName    = aEdName.GetText();
@@ -167,7 +167,7 @@ void ScNewScenarioDlg::GetScenarioData( String& rName, String& rComment,
         rName = aDefScenarioName;
 
     rColor = aLbColor.GetSelectEntryColor();
-    USHORT nBits = 0;
+    sal_uInt16 nBits = 0;
     if (aCbShowFrame.IsChecked())
         nBits |= SC_SCENARIO_SHOWFRAME;
     /*
@@ -190,7 +190,7 @@ void ScNewScenarioDlg::GetScenarioData( String& rName, String& rComment,
 }
 
 void ScNewScenarioDlg::SetScenarioData( const String& rName, const String& rComment,
-                                        const Color& rColor, USHORT nFlags )
+                                        const Color& rColor, sal_uInt16 nFlags )
 {
     aEdComment.SetText(rComment);
     aEdName.SetText(rName);

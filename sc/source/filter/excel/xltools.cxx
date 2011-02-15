@@ -215,7 +215,7 @@ sal_uInt8 XclTools::GetXclOrientFromRot( sal_uInt16 nXclRot )
     return EXC_ORIENT_NONE;
 }
 
-sal_uInt8 XclTools::GetXclErrorCode( USHORT nScError )
+sal_uInt8 XclTools::GetXclErrorCode( sal_uInt16 nScError )
 {
     using namespace ScErrorCodes;
     switch( nScError )
@@ -240,7 +240,7 @@ sal_uInt8 XclTools::GetXclErrorCode( USHORT nScError )
     return EXC_ERR_NA;
 }
 
-USHORT XclTools::GetScErrorCode( sal_uInt8 nXclError )
+sal_uInt16 XclTools::GetScErrorCode( sal_uInt8 nXclError )
 {
     using namespace ScErrorCodes;
     switch( nXclError )
@@ -328,13 +328,13 @@ sal_Int32 XclTools::GetHmmFromTwips( sal_Int32 nTwips )
     return GetHmmFromInch( GetInchFromTwips( nTwips ) );
 }
 
-USHORT XclTools::GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth )
+sal_uInt16 XclTools::GetScColumnWidth( sal_uInt16 nXclWidth, long nScCharWidth )
 {
     double fScWidth = static_cast< double >( nXclWidth ) / 256.0 * nScCharWidth + 0.5;
-    return limit_cast< USHORT >( fScWidth );
+    return limit_cast< sal_uInt16 >( fScWidth );
 }
 
-sal_uInt16 XclTools::GetXclColumnWidth( USHORT nScWidth, long nScCharWidth )
+sal_uInt16 XclTools::GetXclColumnWidth( sal_uInt16 nScWidth, long nScCharWidth )
 {
     double fXclWidth = static_cast< double >( nScWidth ) * 256.0 / nScCharWidth + 0.5;
     return limit_cast< sal_uInt16 >( fXclWidth );
@@ -695,9 +695,9 @@ const OUString XclTools::maSbMacroSuffix( RTL_CONSTASCII_USTRINGPARAM( "?languag
 OUString XclTools::GetSbMacroUrl( const String& rMacroName, SfxObjectShell* pDocShell )
 {
     OSL_ENSURE( rMacroName.Len() > 0, "XclTools::GetSbMacroUrl - macro name is empty" );
-    ::ooo::vba::VBAMacroResolvedInfo aMacroInfo = ::ooo::vba::resolveVBAMacro( pDocShell, rMacroName, false );
-    if( aMacroInfo.IsResolved() )
-        return ::ooo::vba::makeMacroURL( aMacroInfo.ResolvedMacro() );
+    ::ooo::vba::MacroResolvedInfo aMacroInfo = ::ooo::vba::resolveVBAMacro( pDocShell, rMacroName, false );
+    if( aMacroInfo.mbFound )
+        return ::ooo::vba::makeMacroURL( aMacroInfo.msResolvedMacro );
     return OUString();
 }
 

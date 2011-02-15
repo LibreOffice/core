@@ -77,7 +77,7 @@ public:
     virtual void                SetPosSizePixel(
                                     long nX, long nY,
                                     long nWidth, long nHeight,
-                                    USHORT nFlags = WINDOW_POSSIZE_ALL );
+                                    sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
 
     /** Apply current layout data to the ruler. */
     void                        ApplyLayout( const ScCsvLayoutData& rOldData );
@@ -89,7 +89,7 @@ private:
     SC_DLLPRIVATE void                        InitSizeData();
 
     /** Moves cursor to a new position.
-        @param bScroll  TRUE = The method may scroll the ruler. */
+        @param bScroll  sal_True = The method may scroll the ruler. */
     SC_DLLPRIVATE void                        MoveCursor( sal_Int32 nPos, bool bScroll = true );
     /** Moves cursor to the given direction. */
     SC_DLLPRIVATE void                        MoveCursorRel( ScMoveMode eDir );
@@ -150,7 +150,7 @@ private:
     /** Moves tracking to a new position. */
     SC_DLLPRIVATE void                        MoveMouseTracking( sal_Int32 nPos );
     /** Applies tracking action for the current tracking position.
-        @param bApply  TRUE = apply action, FALSE = cancel action. */
+        @param bApply  sal_True = apply action, sal_False = cancel action. */
     SC_DLLPRIVATE void                        EndMouseTracking( bool bApply );
 
     // painting ---------------------------------------------------------------

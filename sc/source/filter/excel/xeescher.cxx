@@ -64,7 +64,7 @@
 #include "xename.hxx"
 #include "xestyle.hxx"
 
-#include <oox/core/tokens.hxx>
+using namespace ::oox;
 
 using ::rtl::OString;
 using ::rtl::OUString;
@@ -390,10 +390,10 @@ XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Referenc
     ScfPropertySet aCtrlProp( XclControlHelper::GetControlModel( xShape ) );
 
     // OBJ record flags
-    SetLocked( TRUE );
+    SetLocked( sal_True );
     SetPrintable( aCtrlProp.GetBoolProperty( CREATE_OUSTRING( "Printable" ) ) );
-    SetAutoFill( FALSE );
-    SetAutoLine( FALSE );
+    SetAutoFill( sal_False );
+    SetAutoLine( sal_False );
 
     // fill DFF property set
     mrEscherEx.OpenContainer( ESCHER_SpContainer );
@@ -534,10 +534,10 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rObjMgr, Referenc
         return;
 
     // OBJ record flags
-    SetLocked( TRUE );
+    SetLocked( sal_True );
     SetPrintable( aCtrlProp.GetBoolProperty( CREATE_OUSTRING( "Printable" ) ) );
-    SetAutoFill( FALSE );
-    SetAutoLine( FALSE );
+    SetAutoFill( sal_False );
+    SetAutoLine( sal_False );
 
     // fill DFF property set
     mrEscherEx.OpenContainer( ESCHER_SpContainer );

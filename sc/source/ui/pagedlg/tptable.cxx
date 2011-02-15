@@ -70,38 +70,38 @@ sal_Int64 EmptyNumericField::GetValue() const
 
 // STATIC DATA -----------------------------------------------------------
 
-static USHORT pPageTableRanges[] =
+static sal_uInt16 pPageTableRanges[] =
 {
     ATTR_PAGE_NOTES, ATTR_PAGE_FIRSTPAGENO,
     0
 };
 
-BOOL lcl_PutVObjModeItem( USHORT            nWhich,
+sal_Bool lcl_PutVObjModeItem( sal_uInt16            nWhich,
                           SfxItemSet&       rCoreSet,
                           const SfxItemSet& rOldSet,
                           const CheckBox&   rBtn );
 
-BOOL lcl_PutScaleItem( USHORT               nWhich,
+sal_Bool lcl_PutScaleItem( sal_uInt16               nWhich,
                        SfxItemSet&          rCoreSet,
                        const SfxItemSet&    rOldSet,
                        const ListBox&       rListBox,
-                       USHORT               nLBEntry,
+                       sal_uInt16               nLBEntry,
                        const SpinField&     rEd,
-                       UINT16               nValue );
+                       sal_uInt16               nValue );
 
-BOOL lcl_PutScaleItem2( USHORT               nWhich,
+sal_Bool lcl_PutScaleItem2( sal_uInt16               nWhich,
                        SfxItemSet&          rCoreSet,
                        const SfxItemSet&    rOldSet,
                        const ListBox&       rListBox,
-                       USHORT               nLBEntry,
+                       sal_uInt16               nLBEntry,
                        const NumericField&  rEd1,
                        const NumericField&  rEd2 );
 
-BOOL lcl_PutBoolItem( USHORT            nWhich,
+sal_Bool lcl_PutBoolItem( sal_uInt16            nWhich,
                       SfxItemSet&       rCoreSet,
                       const SfxItemSet& rOldSet,
-                      BOOL              bIsChecked,
-                      BOOL              bSavedValue );
+                      sal_Bool              bIsChecked,
+                      sal_Bool              bSavedValue );
 
 //------------------------------------------------------------------------
 
@@ -109,9 +109,9 @@ BOOL lcl_PutBoolItem( USHORT            nWhich,
 #define PAGEDIR_HDL         LINK(this,ScTablePage,PageDirHdl)
 #define SCALE_HDL           LINK(this,ScTablePage,ScaleHdl)
 
-#define WAS_DEFAULT(w,s)    (SFX_ITEM_DEFAULT==(s).GetItemState((w),TRUE))
+#define WAS_DEFAULT(w,s)    (SFX_ITEM_DEFAULT==(s).GetItemState((w),sal_True))
 #define GET_BOOL(sid,set)   ((const SfxBoolItem&)((set).Get(GetWhich((sid))))).GetValue()
-#define GET_USHORT(sid,set) (USHORT)((const SfxUInt16Item&)((set).Get(GetWhich((sid))))).GetValue()
+#define GET_USHORT(sid,set) (sal_uInt16)((const SfxUInt16Item&)((set).Get(GetWhich((sid))))).GetValue()
 #define GET_SHOW(sid,set)   ( ScVObjMode( ((const ScViewObjectModeItem&)((set).Get(GetWhich((sid))))).GetValue() ) \
                               == VOBJ_MODE_SHOW )
 
@@ -186,7 +186,7 @@ ScTablePage::~ScTablePage()
 
 //------------------------------------------------------------------------
 
-USHORT* ScTablePage::GetRanges()
+sal_uInt16* ScTablePage::GetRanges()
 {
     return pPageTableRanges;
 }
@@ -202,11 +202,11 @@ SfxTabPage* ScTablePage::Create( Window* pParent, const SfxItemSet& rCoreSet )
 
 void ScTablePage::Reset( const SfxItemSet& rCoreSet )
 {
-    BOOL    bTopDown = GET_BOOL( SID_SCATTR_PAGE_TOPDOWN, rCoreSet );
-    USHORT  nWhich   = 0;
+    sal_Bool    bTopDown = GET_BOOL( SID_SCATTR_PAGE_TOPDOWN, rCoreSet );
+    sal_uInt16  nWhich   = 0;
 
     //-----------
-    // BOOL-Flags
+    // sal_Bool-Flags
     //-----------
     aBtnNotes       .Check( GET_BOOL(SID_SCATTR_PAGE_NOTES,rCoreSet) );
     aBtnGrid        .Check( GET_BOOL(SID_SCATTR_PAGE_GRID,rCoreSet) );
@@ -219,7 +219,7 @@ void ScTablePage::Reset( const SfxItemSet& rCoreSet )
     //------------------
     // Erste Druckseite:
     //------------------
-    USHORT nPage = GET_USHORT(SID_SCATTR_PAGE_FIRSTPAGENO,rCoreSet);
+    sal_uInt16 nPage = GET_USHORT(SID_SCATTR_PAGE_FIRSTPAGENO,rCoreSet);
     aBtnPageNo.Check( nPage != 0 );
     aEdPageNo.SetValue( (nPage != 0) ? nPage : 1 );
     PageNoHdl( NULL );
@@ -236,20 +236,20 @@ void ScTablePage::Reset( const SfxItemSet& rCoreSet )
     //------------
 
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALE);
-    if ( rCoreSet.GetItemState( nWhich, TRUE ) >= SFX_ITEM_AVAILABLE )
+    if ( rCoreSet.GetItemState( nWhich, sal_True ) >= SFX_ITEM_AVAILABLE )
     {
-        USHORT nScale = ((const SfxUInt16Item&)rCoreSet.Get(nWhich)).GetValue();
+        sal_uInt16 nScale = ((const SfxUInt16Item&)rCoreSet.Get(nWhich)).GetValue();
         if( nScale > 0 )
             aLbScaleMode.SelectEntryPos( SC_TPTABLE_SCALE_PERCENT );
         aEdScaleAll.SetValue( (nScale > 0) ? nScale : 100 );
     }
 
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALETO);
-    if ( rCoreSet.GetItemState( nWhich, TRUE ) >= SFX_ITEM_AVAILABLE )
+    if ( rCoreSet.GetItemState( nWhich, sal_True ) >= SFX_ITEM_AVAILABLE )
     {
         const ScPageScaleToItem& rItem = static_cast< const ScPageScaleToItem& >( rCoreSet.Get( nWhich ) );
-        USHORT nWidth = rItem.GetWidth();
-        USHORT nHeight = rItem.GetHeight();
+        sal_uInt16 nWidth = rItem.GetWidth();
+        sal_uInt16 nHeight = rItem.GetHeight();
 
         /*  width==0 and height==0 is invalid state, used as "not selected".
             Dialog shows width=height=1 then. */
@@ -261,9 +261,9 @@ void ScTablePage::Reset( const SfxItemSet& rCoreSet )
     }
 
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALETOPAGES);
-    if ( rCoreSet.GetItemState( nWhich, TRUE ) >= SFX_ITEM_AVAILABLE )
+    if ( rCoreSet.GetItemState( nWhich, sal_True ) >= SFX_ITEM_AVAILABLE )
     {
-        USHORT nPages = ((const SfxUInt16Item&)rCoreSet.Get(nWhich)).GetValue();
+        sal_uInt16 nPages = ((const SfxUInt16Item&)rCoreSet.Get(nWhich)).GetValue();
         if( nPages > 0 )
             aLbScaleMode.SelectEntryPos( SC_TPTABLE_SCALE_TO_PAGES );
         aEdScalePageNum.SetValue( (nPages > 0) ? nPages : 1 );
@@ -302,14 +302,14 @@ void ScTablePage::Reset( const SfxItemSet& rCoreSet )
 
 // -----------------------------------------------------------------------
 
-BOOL ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
+sal_Bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
 {
     const SfxItemSet&   rOldSet      = GetItemSet();
-    USHORT              nWhichPageNo = GetWhich(SID_SCATTR_PAGE_FIRSTPAGENO);
-    BOOL                bDataChanged = FALSE;
+    sal_uInt16              nWhichPageNo = GetWhich(SID_SCATTR_PAGE_FIRSTPAGENO);
+    sal_Bool                bDataChanged = sal_False;
 
     //-----------
-    // BOOL-Flags
+    // sal_Bool-Flags
     //-----------
 
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_NOTES),
@@ -345,7 +345,7 @@ BOOL ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
     //------------------
     // Erste Druckseite:
     //------------------
-    BOOL bUseValue = aBtnPageNo.IsChecked();
+    sal_Bool bUseValue = aBtnPageNo.IsChecked();
 
     if (   WAS_DEFAULT(nWhichPageNo,rOldSet)
         && (    (!bUseValue && bUseValue == aBtnPageNo.GetSavedValue())
@@ -356,12 +356,12 @@ BOOL ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
     }
     else
     {
-        UINT16 nPage = (UINT16)( aBtnPageNo.IsChecked()
+        sal_uInt16 nPage = (sal_uInt16)( aBtnPageNo.IsChecked()
                                     ? aEdPageNo.GetValue()
                                     : 0 );
 
         rCoreSet.Put( SfxUInt16Item( nWhichPageNo, nPage ) );
-        bDataChanged = TRUE;
+        bDataChanged = sal_True;
     }
 
     //-------------------
@@ -390,7 +390,7 @@ BOOL ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
     bDataChanged |= lcl_PutScaleItem( GetWhich(SID_SCATTR_PAGE_SCALE),
                                       rCoreSet, rOldSet,
                                       aLbScaleMode, SC_TPTABLE_SCALE_PERCENT,
-                                      aEdScaleAll, (UINT16)aEdScaleAll.GetValue() );
+                                      aEdScaleAll, (sal_uInt16)aEdScaleAll.GetValue() );
 
     bDataChanged |= lcl_PutScaleItem2( GetWhich(SID_SCATTR_PAGE_SCALETO),
                                       rCoreSet, rOldSet,
@@ -400,7 +400,7 @@ BOOL ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
     bDataChanged |= lcl_PutScaleItem( GetWhich(SID_SCATTR_PAGE_SCALETOPAGES),
                                       rCoreSet, rOldSet,
                                       aLbScaleMode, SC_TPTABLE_SCALE_TO_PAGES,
-                                      aEdScalePageNum, (UINT16)aEdScalePageNum.GetValue() );
+                                      aEdScalePageNum, (sal_uInt16)aEdScalePageNum.GetValue() );
 
     return bDataChanged;
 }
@@ -478,13 +478,13 @@ IMPL_LINK( ScTablePage, ScaleHdl, ListBox*, EMPTYARG )
 // Hilfsfunktionen fuer FillItemSet:
 //========================================================================
 
-BOOL lcl_PutBoolItem( USHORT            nWhich,
+sal_Bool lcl_PutBoolItem( sal_uInt16            nWhich,
                      SfxItemSet&        rCoreSet,
                      const SfxItemSet&  rOldSet,
-                     BOOL               bIsChecked,
-                     BOOL               bSavedValue )
+                     sal_Bool               bIsChecked,
+                     sal_Bool               bSavedValue )
 {
-    BOOL bDataChanged = (   bSavedValue == bIsChecked
+    sal_Bool bDataChanged = (   bSavedValue == bIsChecked
                          && WAS_DEFAULT(nWhich,rOldSet) );
 
     if ( bDataChanged )
@@ -497,13 +497,13 @@ BOOL lcl_PutBoolItem( USHORT            nWhich,
 
 //------------------------------------------------------------------------
 
-BOOL lcl_PutVObjModeItem( USHORT            nWhich,
+sal_Bool lcl_PutVObjModeItem( sal_uInt16            nWhich,
                          SfxItemSet&        rCoreSet,
                          const SfxItemSet&  rOldSet,
                          const CheckBox&    rBtn )
 {
-    BOOL bIsChecked   = rBtn.IsChecked();
-    BOOL bDataChanged = (   rBtn.GetSavedValue() == bIsChecked
+    sal_Bool bIsChecked   = rBtn.IsChecked();
+    sal_Bool bDataChanged = (   rBtn.GetSavedValue() == bIsChecked
                          && WAS_DEFAULT(nWhich,rOldSet) );
 
     if ( bDataChanged )
@@ -518,16 +518,16 @@ BOOL lcl_PutVObjModeItem( USHORT            nWhich,
 
 //------------------------------------------------------------------------
 
-BOOL lcl_PutScaleItem( USHORT               nWhich,
+sal_Bool lcl_PutScaleItem( sal_uInt16               nWhich,
                       SfxItemSet&           rCoreSet,
                       const SfxItemSet&     rOldSet,
                       const ListBox&        rListBox,
-                      USHORT                nLBEntry,
+                      sal_uInt16                nLBEntry,
                       const SpinField&      rEd,
-                      UINT16                nValue )
+                      sal_uInt16                nValue )
 {
-    BOOL bIsSel = (rListBox.GetSelectEntryPos() == nLBEntry);
-    BOOL bDataChanged = (rListBox.GetSavedValue() != nLBEntry) ||
+    sal_Bool bIsSel = (rListBox.GetSelectEntryPos() == nLBEntry);
+    sal_Bool bDataChanged = (rListBox.GetSavedValue() != nLBEntry) ||
                         (rEd.GetSavedValue() != rEd.GetText()) ||
                         !WAS_DEFAULT( nWhich, rOldSet );
 
@@ -540,18 +540,18 @@ BOOL lcl_PutScaleItem( USHORT               nWhich,
 }
 
 
-BOOL lcl_PutScaleItem2( USHORT               nWhich,
+sal_Bool lcl_PutScaleItem2( sal_uInt16               nWhich,
                       SfxItemSet&           rCoreSet,
                       const SfxItemSet&     rOldSet,
                       const ListBox&        rListBox,
-                      USHORT                nLBEntry,
+                      sal_uInt16                nLBEntry,
                       const NumericField&   rEd1,
                       const NumericField&   rEd2 )
 {
-    UINT16 nValue1 = (UINT16)rEd1.GetValue();
-    UINT16 nValue2 = (UINT16)rEd2.GetValue();
-    BOOL bIsSel = (rListBox.GetSelectEntryPos() == nLBEntry);
-    BOOL bDataChanged = (rListBox.GetSavedValue() != nLBEntry) ||
+    sal_uInt16 nValue1 = (sal_uInt16)rEd1.GetValue();
+    sal_uInt16 nValue2 = (sal_uInt16)rEd2.GetValue();
+    sal_Bool bIsSel = (rListBox.GetSelectEntryPos() == nLBEntry);
+    sal_Bool bDataChanged = (rListBox.GetSavedValue() != nLBEntry) ||
                         (rEd1.GetSavedValue() != rEd1.GetText()) ||
                         (rEd2.GetSavedValue() != rEd2.GetText()) ||
                         !WAS_DEFAULT( nWhich, rOldSet );

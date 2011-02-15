@@ -55,11 +55,11 @@ public:
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
     virtual void    AddRefEntry();
 
-    virtual BOOL    IsTableLocked() const;
+    virtual sal_Bool    IsTableLocked() const;
 
     virtual void    SetActive();
     virtual void    Deactivate();
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 
 private:
     FixedLine       aFlPrintArea;
@@ -81,7 +81,7 @@ private:
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
 
-    BOOL            bDlgLostFocus;
+    sal_Bool            bDlgLostFocus;
     formula::RefEdit*       pRefInputEdit;
     ScDocument*     pDoc;
     ScViewData*     pViewData;
@@ -90,9 +90,9 @@ private:
 #ifdef _AREASDLG_CXX
 private:
     void Impl_Reset();
-    BOOL Impl_CheckRefStrings();
+    sal_Bool Impl_CheckRefStrings();
     void Impl_FillLists();
-    BOOL Impl_GetItem( Edit* pEd, SfxStringItem& rItem );
+    sal_Bool Impl_GetItem( Edit* pEd, SfxStringItem& rItem );
 
     // Handler:
     DECL_LINK( Impl_SelectHdl,      ListBox*    );

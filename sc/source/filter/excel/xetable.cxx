@@ -43,7 +43,7 @@
 #include "xecontent.hxx"
 #include "xeescher.hxx"
 
-#include <oox/core/tokens.hxx>
+using namespace ::oox;
 
 using ::rtl::OString;
 using ::rtl::OUString;
@@ -813,12 +813,12 @@ XclExpFormulaCell::XclExpFormulaCell(
         XclExpNumFmtBuffer& rNumFmtBfr = rRoot.GetNumFmtBuffer();
 
         // current cell number format
-        ULONG nScNumFmt = pPattern ?
-            GETITEMVALUE( pPattern->GetItemSet(), SfxUInt32Item, ATTR_VALUE_FORMAT, ULONG ) :
+        sal_uLong nScNumFmt = pPattern ?
+            GETITEMVALUE( pPattern->GetItemSet(), SfxUInt32Item, ATTR_VALUE_FORMAT, sal_uLong ) :
             rNumFmtBfr.GetStandardFormat();
 
         // alternative number format passed to XF buffer
-        ULONG nAltScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND;
+        sal_uLong nAltScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND;
         /*  #73420# Xcl doesn't know Boolean number formats, we write
             "TRUE";"FALSE" (language dependent). Don't do it for automatic
             formula formats, because Excel gets them right. */
@@ -917,7 +917,7 @@ void XclExpFormulaCell::Save( XclExpStream& rStrm )
         mxStringRec->Save( rStrm );
 }
 
-static const char* lcl_GetErrorString( USHORT nScErrCode )
+static const char* lcl_GetErrorString( sal_uInt16 nScErrCode )
 {
     sal_uInt8 nXclErrCode = XclTools::GetXclErrorCode( nScErrCode );
     switch( nXclErrCode )
@@ -940,7 +940,7 @@ static void lcl_GetFormulaInfo( ScFormulaCell& rCell, const char** pType, OUStri
         case NUMBERFORMAT_NUMBER:
         {
             // either value or error code
-            USHORT nScErrCode = rCell.GetErrCode();
+            sal_uInt16 nScErrCode = rCell.GetErrCode();
             if( nScErrCode )
             {
                 *pType = "e";
@@ -1036,7 +1036,7 @@ void XclExpFormulaCell::WriteContents( XclExpStream& rStrm )
         case NUMBERFORMAT_NUMBER:
         {
             // either value or error code
-            USHORT nScErrCode = mrScFmlaCell.GetErrCode();
+            sal_uInt16 nScErrCode = mrScFmlaCell.GetErrCode();
             if( nScErrCode )
                 rStrm << EXC_FORMULA_RES_ERROR << sal_uInt8( 0 )
                       << XclTools::GetXclErrorCode( nScErrCode )
@@ -1402,7 +1402,7 @@ XclExpOutlineBuffer::XclExpOutlineBuffer( const XclExpRoot& rRoot, bool bRows ) 
         mpScOLArray = bRows ? pOutlineTable->GetRowArray() : pOutlineTable->GetColArray();
 
     if( mpScOLArray )
-        for( USHORT nLevel = 0; nLevel < SC_OL_MAXDEPTH; ++nLevel )
+        for( sal_uInt16 nLevel = 0; nLevel < SC_OL_MAXDEPTH; ++nLevel )
             if( ScOutlineEntry* pEntry = mpScOLArray->GetEntryByPos( nLevel, 0 ) )
                 maLevelInfos[ nLevel ].mnScEndPos = pEntry->GetEnd();
 }
@@ -1412,7 +1412,7 @@ void XclExpOutlineBuffer::UpdateColRow( SCCOLROW nScPos )
     if( mpScOLArray )
     {
         // find open level index for passed position
-        USHORT nNewOpenScLevel = 0; // new open level (0-based Calc index)
+        sal_uInt16 nNewOpenScLevel = 0; // new open level (0-based Calc index)
         sal_uInt8 nNewLevel = 0;    // new open level (1-based Excel index)
 
         if( mpScOLArray->FindTouchedLevel( nScPos, nScPos, nNewOpenScLevel ) )
@@ -1423,7 +1423,7 @@ void XclExpOutlineBuffer::UpdateColRow( SCCOLROW nScPos )
         if( nNewLevel >= mnCurrLevel )
         {
             // new level(s) opened, or no level closed - update all level infos
-            for( USHORT nScLevel = 0; nScLevel <= nNewOpenScLevel; ++nScLevel )
+            for( sal_uInt16 nScLevel = 0; nScLevel <= nNewOpenScLevel; ++nScLevel )
             {
                 /*  In each level: check if a new group is started (there may be
                     neighbored groups without gap - therefore check ALL levels). */
@@ -1441,8 +1441,8 @@ void XclExpOutlineBuffer::UpdateColRow( SCCOLROW nScPos )
         {
             // level(s) closed - check if any of the closed levels are collapsed
             // Calc uses 0-based level indexes
-            USHORT nOldOpenScLevel = mnCurrLevel - 1;
-            for( USHORT nScLevel = nNewOpenScLevel + 1; !mbCurrCollapse && (nScLevel <= nOldOpenScLevel); ++nScLevel )
+            sal_uInt16 nOldOpenScLevel = mnCurrLevel - 1;
+            for( sal_uInt16 nScLevel = nNewOpenScLevel + 1; !mbCurrCollapse && (nScLevel <= nOldOpenScLevel); ++nScLevel )
                 mbCurrCollapse = maLevelInfos[ nScLevel ].mbHidden;
         }
 
@@ -1597,7 +1597,7 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
         rDoc.GetMostUsedPattern( nScCol, 0, nLastScRow, nScTab ), GetDefApiScript() );
 
     // column width
-    USHORT nScWidth = rDoc.GetColWidth( nScCol, nScTab );
+    sal_uInt16 nScWidth = rDoc.GetColWidth( nScCol, nScTab );
     mnWidth = XclTools::GetXclColumnWidth( nScWidth, GetCharWidth() );
 
     // column flags
@@ -1824,8 +1824,8 @@ XclExpRow::XclExpRow( const XclExpRoot& rRoot, sal_uInt16 nXclRow,
 
     // *** Row flags *** ------------------------------------------------------
 
-    BYTE nRowFlags = GetDoc().GetRowFlags( nScRow, nScTab );
-    bool bUserHeight = ::get_flag< BYTE >( nRowFlags, CR_MANUALSIZE );
+    sal_uInt8 nRowFlags = GetDoc().GetRowFlags( nScRow, nScTab );
+    bool bUserHeight = ::get_flag< sal_uInt8 >( nRowFlags, CR_MANUALSIZE );
     bool bHidden = GetDoc().RowHidden(nScRow, nScTab);
     ::set_flag( mnFlags, EXC_ROW_UNSYNCED, bUserHeight );
     ::set_flag( mnFlags, EXC_ROW_HIDDEN, bHidden );
@@ -2410,7 +2410,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                 // try to create a Boolean cell
                 if( pPattern && ((fValue == 0.0) || (fValue == 1.0)) )
                 {
-                    ULONG nScNumFmt = GETITEMVALUE( pPattern->GetItemSet(), SfxUInt32Item, ATTR_VALUE_FORMAT, ULONG );
+                    sal_uLong nScNumFmt = GETITEMVALUE( pPattern->GetItemSet(), SfxUInt32Item, ATTR_VALUE_FORMAT, sal_uLong );
                     if( rFormatter.GetType( nScNumFmt ) == NUMBERFORMAT_LOGICAL )
                         xCell.reset( new XclExpBooleanCell(
                             GetRoot(), aXclPos, pPattern, nMergeBaseXFId, fValue != 0.0 ) );
@@ -2510,7 +2510,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             // data validation
             if( ScfTools::CheckItem( rItemSet, ATTR_VALIDDATA, false ) )
             {
-                ULONG nScHandle = GETITEMVALUE( rItemSet, SfxUInt32Item, ATTR_VALIDDATA, ULONG );
+                sal_uLong nScHandle = GETITEMVALUE( rItemSet, SfxUInt32Item, ATTR_VALIDDATA, sal_uLong );
                 ScRange aScRange( aScPos );
                 aScRange.aEnd.SetCol( nLastScCol );
                 mxDval->InsertCellRange( aScRange, nScHandle );

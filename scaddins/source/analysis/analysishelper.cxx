@@ -1995,7 +1995,7 @@ void Complex::Sqrt( void )
 }
 
 
-inline BOOL SinOverflow( double f )
+inline sal_Bool SinOverflow( double f )
 {
     return fabs( f ) >= 134217728;
 }

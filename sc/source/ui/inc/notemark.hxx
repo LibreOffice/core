@@ -51,27 +51,27 @@ private:
     Rectangle   aVisRect;
     Timer       aTimer;
     MapMode     aMapMode;
-    BOOL        bLeft;
-    BOOL        bByKeyboard;
+    sal_Bool        bLeft;
+    sal_Bool        bByKeyboard;
 
     Rectangle       aRect;
     SdrModel*       pModel;
     SdrObject*      pObject;
-    BOOL            bVisible;
+    sal_Bool            bVisible;
 
     DECL_LINK( TimeHdl, Timer* );
 
 public:
                 ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Window* pDiagonal,
                                 ScDocument* pD, ScAddress aPos, const String& rUser,
-                                const MapMode& rMap, BOOL bLeftEdge, BOOL bForce, BOOL bKeyboard );
+                                const MapMode& rMap, sal_Bool bLeftEdge, sal_Bool bForce, sal_Bool bKeyboard );
                 ~ScNoteMarker();
 
     void        Draw();
     void        InvalidateWin();
 
     ScAddress   GetDocPos() const       { return aDocPos; }
-    BOOL        IsByKeyboard() const    { return bByKeyboard; }
+    sal_Bool        IsByKeyboard() const    { return bByKeyboard; }
 };
 
 

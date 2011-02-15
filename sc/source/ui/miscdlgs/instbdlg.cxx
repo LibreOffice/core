@@ -226,7 +226,7 @@ void ScInsertTableDlg::SetFromTo_Impl()
 
 void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
 {
-    aLbTables.SetUpdateMode( FALSE );
+    aLbTables.SetUpdateMode( sal_False );
     aLbTables.Clear();
 
     if ( pSrcDoc )
@@ -241,7 +241,7 @@ void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
         }
     }
 
-    aLbTables.SetUpdateMode( TRUE );
+    aLbTables.SetUpdateMode( sal_True );
 
     if(aLbTables.GetEntryCount()==1)
         aLbTables.SelectEntryPos(0);
@@ -249,7 +249,7 @@ void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
 
 //------------------------------------------------------------------------
 
-const String* ScInsertTableDlg::GetFirstTable( USHORT* pN )
+const String* ScInsertTableDlg::GetFirstTable( sal_uInt16* pN )
 {
     const String* pStr = NULL;
 
@@ -272,7 +272,7 @@ const String* ScInsertTableDlg::GetFirstTable( USHORT* pN )
 
 //------------------------------------------------------------------------
 
-const String* ScInsertTableDlg::GetNextTable( USHORT* pN )
+const String* ScInsertTableDlg::GetNextTable( sal_uInt16* pN )
 {
     const String* pStr = NULL;
 
@@ -393,7 +393,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
             if ( pDocShTables )
                 pDocShTables->DoClose();        // delete passiert beim Zuweisen auf die Ref
 
-            pMed->UseInteractionHandler( TRUE );    // to enable the filter options dialog
+            pMed->UseInteractionHandler( sal_True );    // to enable the filter options dialog
 
             pDocShTables = new ScDocShell;
             aDocShTablesRef = pDocShTables;
@@ -403,7 +403,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
             pDocShTables->DoLoad( pMed );
             SetPointer( aOldPtr );
 
-            ULONG nErr = pDocShTables->GetErrorCode();
+            sal_uLong nErr = pDocShTables->GetErrorCode();
             if ( nErr )
                 ErrorHandler::HandleError( nErr );              // auch Warnings
 

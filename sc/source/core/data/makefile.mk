@@ -140,6 +140,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/documen3.obj \
     $(SLO)$/documen5.obj \
     $(SLO)$/documen6.obj \
+    $(SLO)$/documen8.obj \
     $(SLO)$/documen9.obj \
     $(SLO)$/dpcachetable.obj \
     $(SLO)$/dptablecache.obj \

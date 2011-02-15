@@ -57,7 +57,7 @@ class ScPreviewShell: public SfxViewShell
     Window*         pCorner;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aSourceData;  // ViewData
-    BYTE            nSourceDesignMode;      // form design mode from TabView
+    sal_uInt8           nSourceDesignMode;      // form design mode from TabView
     SvxZoomType     eZoom;
     long            nMaxVertPos;
 
@@ -66,11 +66,11 @@ class ScPreviewShell: public SfxViewShell
 private:
     void            Construct( Window* pParent );
     DECL_LINK(ScrollHandler, ScrollBar* );
-    void            DoScroll( USHORT nMode );
+    void            DoScroll( sal_uInt16 nMode );
 
 protected:
-    virtual void    Activate(BOOL bMDI);
-    virtual void    Deactivate(BOOL bMDI);
+    virtual void    Activate(sal_Bool bMDI);
+    virtual void    Deactivate(sal_Bool bMDI);
 
     virtual void    AdjustPosSizePixel( const Point &rPos, const Size &rSize );
 
@@ -81,8 +81,8 @@ protected:
 
     virtual String  GetDescription() const;
 
-    virtual void    WriteUserData(String &, BOOL bBrowse = FALSE);
-    virtual void    ReadUserData(const String &, BOOL bBrowse = FALSE);
+    virtual void    WriteUserData(String &, sal_Bool bBrowse = sal_False);
+    virtual void    ReadUserData(const String &, sal_Bool bBrowse = sal_False);
 
     virtual void    WriteUserDataSequence (::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
     virtual void    ReadUserDataSequence (const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse = sal_False );
@@ -101,7 +101,7 @@ public:
     void            InitStartTable(SCTAB nTab);
 
     void            UpdateScrollBars();
-    BOOL            ScrollCommand( const CommandEvent& rCEvt );
+    sal_Bool            ScrollCommand( const CommandEvent& rCEvt );
 
     void            Execute( SfxRequest& rReq );
     void            GetState( SfxItemSet& rSet );
@@ -110,22 +110,18 @@ public:
 
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >
                     GetSourceData() const       { return aSourceData; }
-    BYTE            GetSourceDesignMode() const { return nSourceDesignMode; }
+    sal_uInt8           GetSourceDesignMode() const { return nSourceDesignMode; }
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    virtual SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
-    virtual USHORT          SetPrinter( SfxPrinter* pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
-    virtual PrintDialog*    CreatePrintDialog( Window* pParent );
+    virtual SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );
+    virtual sal_uInt16          SetPrinter( SfxPrinter* pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
     virtual SfxTabPage*     CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
-    virtual void            PreparePrint( PrintDialog* pPrintDialog = NULL );
-    virtual ErrCode         DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog, BOOL bSilent, BOOL bIsAPI );
-    virtual USHORT          Print( SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pPrintDialog = NULL );
 
     void    AddAccessibilityObject( SfxListener& rObject );
     void    RemoveAccessibilityObject( SfxListener& rObject );
     void    BroadcastAccessibility( const SfxHint &rHint );
-    BOOL    HasAccessibilityObjects();
+    sal_Bool    HasAccessibilityObjects();
 
     const ScPreviewLocationData& GetLocationData();
     ScDocument*     GetDocument();

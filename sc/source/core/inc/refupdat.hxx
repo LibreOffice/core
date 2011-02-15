@@ -63,7 +63,7 @@ public:
 
     static ScRefUpdateRes Update( UpdateRefMode eUpdateRefMode,
                                 const ScBigRange& rWhere,
-                                INT32 nDx, INT32 nDy, INT32 nDz,
+                                sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz,
                                 ScBigRange& rWhat );
 
     /// Before calling, the absolute references must be up-to-date!
@@ -76,7 +76,7 @@ public:
     /// Before calling, the absolute references must be up-to-date!
     static ScRefUpdateRes Move( ScDocument* pDoc, const ScAddress& rPos,
                                 SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                ScComplexRefData& rRef, BOOL bWrap, BOOL bAbsolute );
+                                ScComplexRefData& rRef, sal_Bool bWrap, sal_Bool bAbsolute );
 
     static void MoveRelWrap( ScDocument* pDoc, const ScAddress& rPos,
                              SCCOL nMaxCol, SCROW nMaxRow, ScComplexRefData& rRef );

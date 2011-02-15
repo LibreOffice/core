@@ -553,11 +553,6 @@ String STR_REPLCELLSWARN
     Text [ en-US ] = "You are pasting data into cells that already contain data.\nDo you really want to overwrite the existing data?";
 };
 
-String STR_PRINT_NOTHING
-{
-    Text [ en-US ] = "There is nothing to print. The selected print range or sheet is empty.";
-};
-
 String SCSTR_ALLFILTER
 {
     Text [ en-US ] = "All";
@@ -766,22 +761,13 @@ StringArray SCSTR_PRINT_OPTIONS
     {
         < "Pages"; >;
         < "~Include output of empty pages"; >;
-        < "If checked empty pages that have no cell contents or draw objects are not printed."; >;
-        < "Sheets"; >;
-        < "Print ~only selected sheets"; >;
-        < "If checked only contents from selected sheets are printed, even if you specify a wider range in the Format - Print Ranges dialog. Content from sheets that are not selected will not be printed."; >;
         < "Print content"; >;
         < "~All sheets"; >;
-        < "The printout will be created from all sheets in the document."; >;
         < "~Selected sheets"; >;
-        < "The printout will be created only from the currently selected sheets."; >;
         < "Selected cells"; >;
-        < "The printout will be created only from the currently selected cells."; >;
         < "Thereof print"; >;
         < "All ~pages"; >;
-        < "Print all pages of the printable content."; >;
         < "Pa~ges"; >;
-        < "Print only some pages of the printable content."; >;
         < "%PRODUCTNAME %s"; >;
     };
 };

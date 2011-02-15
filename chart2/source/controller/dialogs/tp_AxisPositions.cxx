@@ -233,10 +233,10 @@ SfxTabPage* AxisPositionsTabPage::Create(Window* pWindow,const SfxItemSet& rOutA
     return new AxisPositionsTabPage(pWindow, rOutAttrs);
 }
 
-BOOL AxisPositionsTabPage::FillItemSet(SfxItemSet& rOutAttrs)
+sal_Bool AxisPositionsTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
     // axis line
-    USHORT nPos = m_aLB_CrossesAt.GetSelectEntryPos();
+    sal_uInt16 nPos = m_aLB_CrossesAt.GetSelectEntryPos();
     rOutAttrs.Put( SfxInt32Item( SCHATTR_AXIS_POSITION, nPos+1 ));
     if( 2==nPos )
     {
@@ -247,7 +247,7 @@ BOOL AxisPositionsTabPage::FillItemSet(SfxItemSet& rOutAttrs)
     }
 
     // labels
-    USHORT nLabelPos = m_aLB_PlaceLabels.GetSelectEntryPos();
+    sal_uInt16 nLabelPos = m_aLB_PlaceLabels.GetSelectEntryPos();
     if( nLabelPos != LISTBOX_ENTRY_NOTFOUND )
         rOutAttrs.Put( SfxInt32Item( SCHATTR_AXIS_LABEL_POSITION, nLabelPos ));
 
@@ -267,11 +267,11 @@ BOOL AxisPositionsTabPage::FillItemSet(SfxItemSet& rOutAttrs)
     rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_TICKS,nTicks));
     rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_HELPTICKS,nMinorTicks));
 
-    USHORT nMarkPos = m_aLB_PlaceTicks.GetSelectEntryPos();
+    sal_uInt16 nMarkPos = m_aLB_PlaceTicks.GetSelectEntryPos();
     if( nMarkPos != LISTBOX_ENTRY_NOTFOUND )
         rOutAttrs.Put( SfxInt32Item( SCHATTR_AXIS_MARK_POSITION, nMarkPos ));
 
-    return TRUE;
+    return sal_True;
 }
 
 void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
@@ -285,7 +285,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
         for( sal_Int32 nN=0; nN<m_aCategories.getLength() && nN<nMaxCount; nN++ )
             m_aED_CrossesAtCategory.InsertEntry( m_aCategories[nN] );
 
-        USHORT nCount = m_aED_CrossesAtCategory.GetEntryCount();
+        sal_uInt16 nCount = m_aED_CrossesAtCategory.GetEntryCount();
         if( nCount>30 )
             nCount=30;
         m_aED_CrossesAtCategory.SetDropDownLineCount( nCount );
@@ -303,10 +303,10 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
     const SfxPoolItem *pPoolItem = NULL;
 
     //axis line
-    if(rInAttrs.GetItemState(SCHATTR_AXIS_POSITION,TRUE, &pPoolItem)== SFX_ITEM_SET)
+    if(rInAttrs.GetItemState(SCHATTR_AXIS_POSITION,sal_True, &pPoolItem)== SFX_ITEM_SET)
     {
         bool bZero = false;
-        USHORT nPos = (USHORT)static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
+        sal_uInt16 nPos = (sal_uInt16)static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
         if(nPos==0)
         {
             //switch to value
@@ -320,13 +320,13 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
             m_aLB_CrossesAt.SelectEntryPos( nPos );
         CrossesAtSelectHdl( (void*)0 );
 
-        if( rInAttrs.GetItemState(SCHATTR_AXIS_POSITION_VALUE,TRUE, &pPoolItem)== SFX_ITEM_SET || bZero )
+        if( rInAttrs.GetItemState(SCHATTR_AXIS_POSITION_VALUE,sal_True, &pPoolItem)== SFX_ITEM_SET || bZero )
         {
             double fCrossover = 0.0;
             if( !bZero )
                 fCrossover = (((const SvxDoubleItem*)pPoolItem)->GetValue());
             if( m_bCrossingAxisIsCategoryAxis )
-                m_aED_CrossesAtCategory.SelectEntryPos( static_cast<USHORT>(::rtl::math::round(fCrossover-1.0)) );
+                m_aED_CrossesAtCategory.SelectEntryPos( static_cast<sal_uInt16>(::rtl::math::round(fCrossover-1.0)) );
             else
                 m_aED_CrossesAt.SetValue(fCrossover);
         }
@@ -339,13 +339,13 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
     else
     {
         m_aLB_CrossesAt.SetNoSelection();
-        m_aED_CrossesAt.Enable( FALSE );
+        m_aED_CrossesAt.Enable( sal_False );
     }
 
     // Labels
-    if( rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_POSITION, FALSE, &pPoolItem ) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_POSITION, sal_False, &pPoolItem ) == SFX_ITEM_SET )
     {
-        USHORT nPos = (USHORT)static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
+        sal_uInt16 nPos = (sal_uInt16)static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
         if( nPos < m_aLB_PlaceLabels.GetEntryCount() )
             m_aLB_PlaceLabels.SelectEntryPos( nPos );
     }
@@ -355,20 +355,20 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
 
     // Tick marks
     long nTicks=0,nMinorTicks=0;
-    if(rInAttrs.GetItemState(SCHATTR_AXIS_TICKS,TRUE, &pPoolItem)== SFX_ITEM_SET)
+    if(rInAttrs.GetItemState(SCHATTR_AXIS_TICKS,sal_True, &pPoolItem)== SFX_ITEM_SET)
         nTicks=((const SfxInt32Item*)pPoolItem)->GetValue();
-    if(rInAttrs.GetItemState(SCHATTR_AXIS_HELPTICKS,TRUE, &pPoolItem)== SFX_ITEM_SET)
+    if(rInAttrs.GetItemState(SCHATTR_AXIS_HELPTICKS,sal_True, &pPoolItem)== SFX_ITEM_SET)
         nMinorTicks=((const SfxInt32Item*)pPoolItem)->GetValue();
 
-    m_aCB_TicksInner.Check(BOOL(nTicks&CHAXIS_MARK_INNER));
-    m_aCB_TicksOuter.Check(BOOL(nTicks&CHAXIS_MARK_OUTER));
-    m_aCB_MinorInner.Check(BOOL(nMinorTicks&CHAXIS_MARK_INNER));
-    m_aCB_MinorOuter.Check(BOOL(nMinorTicks&CHAXIS_MARK_OUTER));
+    m_aCB_TicksInner.Check(sal_Bool(nTicks&CHAXIS_MARK_INNER));
+    m_aCB_TicksOuter.Check(sal_Bool(nTicks&CHAXIS_MARK_OUTER));
+    m_aCB_MinorInner.Check(sal_Bool(nMinorTicks&CHAXIS_MARK_INNER));
+    m_aCB_MinorOuter.Check(sal_Bool(nMinorTicks&CHAXIS_MARK_OUTER));
 
     // Tick position
-    if( rInAttrs.GetItemState( SCHATTR_AXIS_MARK_POSITION, FALSE, &pPoolItem ) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState( SCHATTR_AXIS_MARK_POSITION, sal_False, &pPoolItem ) == SFX_ITEM_SET )
     {
-        USHORT nPos = (USHORT)static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
+        sal_uInt16 nPos = (sal_uInt16)static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
         if( nPos < m_aLB_PlaceTicks.GetEntryCount() )
             m_aLB_PlaceTicks.SelectEntryPos( nPos );
     }
@@ -443,9 +443,9 @@ void AxisPositionsTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
     m_aED_CrossesAt.UseInputStringForFormatting();
 
     const SfxPoolItem *pPoolItem = NULL;
-    if( GetItemSet().GetItemState( SCHATTR_AXIS_CROSSING_MAIN_AXIS_NUMBERFORMAT, TRUE, &pPoolItem ) == SFX_ITEM_SET )
+    if( GetItemSet().GetItemState( SCHATTR_AXIS_CROSSING_MAIN_AXIS_NUMBERFORMAT, sal_True, &pPoolItem ) == SFX_ITEM_SET )
     {
-        ULONG nFmt = (ULONG)((const SfxInt32Item*)pPoolItem)->GetValue();
+        sal_uLong nFmt = (sal_uLong)((const SfxInt32Item*)pPoolItem)->GetValue();
         m_aED_CrossesAt.SetFormatKey( nFmt );
     }
 }
@@ -467,7 +467,7 @@ void AxisPositionsTabPage::SupportAxisPositioning( bool bSupportAxisPositioning 
 
 IMPL_LINK ( AxisPositionsTabPage, CrossesAtSelectHdl, void *, EMPTYARG )
 {
-    USHORT nPos = m_aLB_CrossesAt.GetSelectEntryPos();
+    sal_uInt16 nPos = m_aLB_CrossesAt.GetSelectEntryPos();
     m_aED_CrossesAt.Show( (2==nPos) && !m_bCrossingAxisIsCategoryAxis );
     m_aED_CrossesAtCategory.Show( (2==nPos) && m_bCrossingAxisIsCategoryAxis );
 
@@ -482,12 +482,12 @@ IMPL_LINK ( AxisPositionsTabPage, CrossesAtSelectHdl, void *, EMPTYARG )
 
 IMPL_LINK ( AxisPositionsTabPage, PlaceLabelsSelectHdl, void *, EMPTYARG )
 {
-    USHORT nLabelPos = m_aLB_PlaceLabels.GetSelectEntryPos();
+    sal_uInt16 nLabelPos = m_aLB_PlaceLabels.GetSelectEntryPos();
 
     bool bEnableTickmarkPlacement = (nLabelPos>1);
     if( bEnableTickmarkPlacement )
     {
-        USHORT nAxisPos = m_aLB_CrossesAt.GetSelectEntryPos();
+        sal_uInt16 nAxisPos = m_aLB_CrossesAt.GetSelectEntryPos();
         if( nLabelPos-2 == nAxisPos )
             bEnableTickmarkPlacement=false;
     }

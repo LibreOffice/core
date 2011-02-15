@@ -64,11 +64,11 @@ void lcl_InvalidateOutliner( SfxBindings* pBindings )
 //! PaintWidthHeight zur DocShell verschieben?
 
 void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
-                                    BOOL bColumns, SCCOLROW nStart, SCCOLROW nEnd )
+                                    sal_Bool bColumns, SCCOLROW nStart, SCCOLROW nEnd )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
 
-    USHORT nParts = PAINT_GRID;
+    sal_uInt16 nParts = PAINT_GRID;
     SCCOL nStartCol = 0;
     SCROW nStartRow = 0;
     SCCOL nEndCol = MAXCOL;         // fuer Test auf Merge
@@ -96,9 +96,9 @@ void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
 
 //------------------------------------------------------------------------
 
-BOOL ScOutlineDocFunc::MakeOutline( const ScRange& rRange, BOOL bColumns, BOOL bRecord, BOOL bApi )
+sal_Bool ScOutlineDocFunc::MakeOutline( const ScRange& rRange, sal_Bool bColumns, sal_Bool bRecord, sal_Bool bApi )
 {
-    BOOL bSuccess = FALSE;
+    sal_Bool bSuccess = sal_False;
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
     SCCOL nEndCol = rRange.aEnd.Col();
@@ -106,19 +106,19 @@ BOOL ScOutlineDocFunc::MakeOutline( const ScRange& rRange, BOOL bColumns, BOOL b
     SCTAB nTab = rRange.aStart.Tab();
 
     ScDocument* pDoc = rDocShell.GetDocument();
-    ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab, TRUE );
+    ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab, sal_True );
     ScOutlineTable* pUndoTab = NULL;
 
     if (bRecord && !pDoc->IsUndoEnabled())
-        bRecord = FALSE;
+        bRecord = sal_False;
 
     if (bRecord)
         pUndoTab = new ScOutlineTable( *pTable );
 
     ScOutlineArray* pArray = bColumns ? pTable->GetColArray() : pTable->GetRowArray();
 
-    BOOL bRes;
-    BOOL bSize = FALSE;
+    sal_Bool bRes;
+    sal_Bool bSize = sal_False;
     if ( bColumns )
         bRes = pArray->Insert( nStartCol, nEndCol, bSize );
     else
@@ -131,13 +131,13 @@ BOOL ScOutlineDocFunc::MakeOutline( const ScRange& rRange, BOOL bColumns, BOOL b
             rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoMakeOutline( &rDocShell,
                                         nStartCol,nStartRow,nTab,nEndCol,nEndRow,nTab,
-                                        pUndoTab, bColumns, TRUE ) );
+                                        pUndoTab, bColumns, sal_True ) );
         }
 
         if (pDoc->IsStreamValid(nTab))
-            pDoc->SetStreamValid(nTab, FALSE);
+            pDoc->SetStreamValid(nTab, sal_False);
 
-        USHORT nParts = 0;              // Datenbereich nicht geaendert
+        sal_uInt16 nParts = 0;              // Datenbereich nicht geaendert
         if ( bColumns )
             nParts |= PAINT_TOP;
         else
@@ -148,7 +148,7 @@ BOOL ScOutlineDocFunc::MakeOutline( const ScRange& rRange, BOOL bColumns, BOOL b
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, nParts );
         rDocShell.SetDocumentModified();
         lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
-        bSuccess = TRUE;
+        bSuccess = sal_True;
     }
     else
     {
@@ -160,9 +160,9 @@ BOOL ScOutlineDocFunc::MakeOutline( const ScRange& rRange, BOOL bColumns, BOOL b
     return bSuccess;
 }
 
-BOOL ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, BOOL bColumns, BOOL bRecord, BOOL bApi )
+sal_Bool ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, sal_Bool bColumns, sal_Bool bRecord, sal_Bool bApi )
 {
-    BOOL bDone = FALSE;
+    sal_Bool bDone = sal_False;
 
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -173,7 +173,7 @@ BOOL ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, BOOL bColumns, BOOL
     ScDocument* pDoc = rDocShell.GetDocument();
 
     if (bRecord && !pDoc->IsUndoEnabled())
-        bRecord = FALSE;
+        bRecord = sal_False;
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
     if (pTable)
     {
@@ -183,8 +183,8 @@ BOOL ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, BOOL bColumns, BOOL
 
         ScOutlineArray* pArray = bColumns ? pTable->GetColArray() : pTable->GetRowArray();
 
-        BOOL bRes;
-        BOOL bSize = FALSE;
+        sal_Bool bRes;
+        sal_Bool bSize = sal_False;
         if ( bColumns )
             bRes = pArray->Remove( nStartCol, nEndCol, bSize );
         else
@@ -197,13 +197,13 @@ BOOL ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, BOOL bColumns, BOOL
                 rDocShell.GetUndoManager()->AddUndoAction(
                     new ScUndoMakeOutline( &rDocShell,
                                             nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab,
-                                            pUndoTab, bColumns, FALSE ) );
+                                            pUndoTab, bColumns, sal_False ) );
             }
 
             if (pDoc->IsStreamValid(nTab))
-                pDoc->SetStreamValid(nTab, FALSE);
+                pDoc->SetStreamValid(nTab, sal_False);
 
-            USHORT nParts = 0;              // Datenbereich nicht geaendert
+            sal_uInt16 nParts = 0;              // Datenbereich nicht geaendert
             if ( bColumns )
                 nParts |= PAINT_TOP;
             else
@@ -213,7 +213,7 @@ BOOL ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, BOOL bColumns, BOOL
 
             rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, nParts );
             rDocShell.SetDocumentModified();
-            bDone = TRUE;
+            bDone = sal_True;
             lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
             // es wird nicht wieder eingeblendet -> kein UpdatePageBreaks
@@ -228,13 +228,13 @@ BOOL ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, BOOL bColumns, BOOL
     return bDone;
 }
 
-BOOL ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, BOOL bRecord, BOOL bApi )
+sal_Bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, sal_Bool bRecord, sal_Bool bApi )
 {
-    BOOL bSuccess = FALSE;
+    sal_Bool bSuccess = sal_False;
     ScDocument* pDoc = rDocShell.GetDocument();
 
     if (bRecord && !pDoc->IsUndoEnabled())
-        bRecord = FALSE;
+        bRecord = sal_False;
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
     if (pTable)
     {
@@ -249,9 +249,9 @@ BOOL ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, BOOL bRecord, BOOL bApi )
             SCROW nEndRow = nRow2;
 
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, TRUE );
-            pDoc->CopyToDocument( nStartCol, 0, nTab, nEndCol, MAXROW, nTab, IDF_NONE, FALSE, pUndoDoc );
-            pDoc->CopyToDocument( 0, nStartRow, nTab, MAXCOL, nEndRow, nTab, IDF_NONE, FALSE, pUndoDoc );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_True, sal_True );
+            pDoc->CopyToDocument( nStartCol, 0, nTab, nEndCol, MAXROW, nTab, IDF_NONE, sal_False, pUndoDoc );
+            pDoc->CopyToDocument( 0, nStartRow, nTab, MAXCOL, nEndRow, nTab, IDF_NONE, sal_False, pUndoDoc );
 
             ScOutlineTable* pUndoTab = new ScOutlineTable( *pTable );
 
@@ -262,20 +262,20 @@ BOOL ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, BOOL bRecord, BOOL bApi )
                                                 pUndoDoc, pUndoTab ) );
         }
 
-        SelectLevel( nTab, TRUE,  pTable->GetColArray()->GetDepth(), FALSE, FALSE, bApi );
-        SelectLevel( nTab, FALSE, pTable->GetRowArray()->GetDepth(), FALSE, FALSE, bApi );
+        SelectLevel( nTab, sal_True,  pTable->GetColArray()->GetDepth(), sal_False, sal_False, bApi );
+        SelectLevel( nTab, sal_False, pTable->GetRowArray()->GetDepth(), sal_False, sal_False, bApi );
         pDoc->SetOutlineTable( nTab, NULL );
 
         pDoc->UpdatePageBreaks( nTab );
 
         if (pDoc->IsStreamValid(nTab))
-            pDoc->SetStreamValid(nTab, FALSE);
+            pDoc->SetStreamValid(nTab, sal_False);
 
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab,
                                     PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
         rDocShell.SetDocumentModified();
         lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
-        bSuccess = TRUE;
+        bSuccess = sal_True;
     }
     else if (!bApi)
         Sound::Beep();
@@ -285,7 +285,7 @@ BOOL ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, BOOL bRecord, BOOL bApi )
 
 //------------------------------------------------------------------------
 
-BOOL ScOutlineDocFunc::AutoOutline( const ScRange& rRange, BOOL bRecord, BOOL bApi )
+sal_Bool ScOutlineDocFunc::AutoOutline( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi )
 {
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -296,7 +296,7 @@ BOOL ScOutlineDocFunc::AutoOutline( const ScRange& rRange, BOOL bRecord, BOOL bA
     ScDocument* pDoc = rDocShell.GetDocument();
 
     if (bRecord && !pDoc->IsUndoEnabled())
-        bRecord = FALSE;
+        bRecord = sal_False;
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
 
     ScDocument* pUndoDoc = NULL;
@@ -317,14 +317,14 @@ BOOL ScOutlineDocFunc::AutoOutline( const ScRange& rRange, BOOL bRecord, BOOL bA
             SCROW nOutEndRow = nRow2;
 
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, TRUE );
-            pDoc->CopyToDocument( nOutStartCol, 0, nTab, nOutEndCol, MAXROW, nTab, IDF_NONE, FALSE, pUndoDoc );
-            pDoc->CopyToDocument( 0, nOutStartRow, nTab, MAXCOL, nOutEndRow, nTab, IDF_NONE, FALSE, pUndoDoc );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_True, sal_True );
+            pDoc->CopyToDocument( nOutStartCol, 0, nTab, nOutEndCol, MAXROW, nTab, IDF_NONE, sal_False, pUndoDoc );
+            pDoc->CopyToDocument( 0, nOutStartRow, nTab, MAXCOL, nOutEndRow, nTab, IDF_NONE, sal_False, pUndoDoc );
         }
 
         // einblenden
-        SelectLevel( nTab, TRUE,  pTable->GetColArray()->GetDepth(), FALSE, FALSE, bApi );
-        SelectLevel( nTab, FALSE, pTable->GetRowArray()->GetDepth(), FALSE, FALSE, bApi );
+        SelectLevel( nTab, sal_True,  pTable->GetColArray()->GetDepth(), sal_False, sal_False, bApi );
+        SelectLevel( nTab, sal_False, pTable->GetRowArray()->GetDepth(), sal_False, sal_False, bApi );
         pDoc->SetOutlineTable( nTab, NULL );
     }
 
@@ -340,30 +340,30 @@ BOOL ScOutlineDocFunc::AutoOutline( const ScRange& rRange, BOOL bRecord, BOOL bA
     }
 
     if (pDoc->IsStreamValid(nTab))
-        pDoc->SetStreamValid(nTab, FALSE);
+        pDoc->SetStreamValid(nTab, sal_False);
 
     rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
     rDocShell.SetDocumentModified();
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------------
 
-BOOL ScOutlineDocFunc::SelectLevel( SCTAB nTab, BOOL bColumns, USHORT nLevel,
-                                    BOOL bRecord, BOOL bPaint, BOOL /* bApi */ )
+sal_Bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, sal_Bool bColumns, sal_uInt16 nLevel,
+                                    sal_Bool bRecord, sal_Bool bPaint, sal_Bool /* bApi */ )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
 
     if (bRecord && !pDoc->IsUndoEnabled())
-        bRecord = FALSE;
+        bRecord = sal_False;
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );             // ist schon da
     if (!pTable)
-        return FALSE;
+        return sal_False;
     ScOutlineArray* pArray = bColumns ? pTable->GetColArray() : pTable->GetRowArray();
     if (!pArray)
-        return FALSE;
+        return sal_False;
 
     SCCOLROW nStart, nEnd;
     pArray->GetRange( nStart, nEnd );
@@ -374,15 +374,15 @@ BOOL ScOutlineDocFunc::SelectLevel( SCTAB nTab, BOOL bColumns, USHORT nLevel,
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         if (bColumns)
         {
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, FALSE );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_True, sal_False );
             pDoc->CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
-                    static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE, FALSE,
+                    static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE, sal_False,
                     pUndoDoc );
         }
         else
         {
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, FALSE, TRUE );
-            pDoc->CopyToDocument( 0, nStart, nTab, MAXCOL, nEnd, nTab, IDF_NONE, FALSE, pUndoDoc );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_False, sal_True );
+            pDoc->CopyToDocument( 0, nStart, nTab, MAXCOL, nEnd, nTab, IDF_NONE, sal_False, pUndoDoc );
         }
 
         rDocShell.GetUndoManager()->AddUndoAction(
@@ -396,21 +396,21 @@ BOOL ScOutlineDocFunc::SelectLevel( SCTAB nTab, BOOL bColumns, USHORT nLevel,
     ScOutlineEntry* pEntry;
     while ((pEntry=aIter.GetNext()) != NULL)
     {
-        USHORT nThisLevel = aIter.LastLevel();
-        BOOL bShow = (nThisLevel < nLevel);
+        sal_uInt16 nThisLevel = aIter.LastLevel();
+        sal_Bool bShow = (nThisLevel < nLevel);
         if (bShow)                                          // einblenden
         {
-            pEntry->SetHidden( FALSE );
-            pEntry->SetVisible( TRUE );
+            pEntry->SetHidden( sal_False );
+            pEntry->SetVisible( sal_True );
         }
         else if ( nThisLevel == nLevel )                    // ausblenden
         {
-            pEntry->SetHidden( TRUE );
-            pEntry->SetVisible( TRUE );
+            pEntry->SetHidden( sal_True );
+            pEntry->SetVisible( sal_True );
         }
         else                                                // verdeckt
         {
-            pEntry->SetVisible( FALSE );
+            pEntry->SetVisible( sal_False );
         }
 
         SCCOLROW nThisStart = pEntry->GetStart();
@@ -433,14 +433,14 @@ BOOL ScOutlineDocFunc::SelectLevel( SCTAB nTab, BOOL bColumns, USHORT nLevel,
     rDocShell.SetDocumentModified();
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
-    return TRUE;
+    return sal_True;
 }
 
 //------------------------------------------------------------------------
 
-BOOL ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, BOOL bApi )
+sal_Bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi )
 {
-    BOOL bDone = FALSE;
+    sal_Bool bDone = sal_False;
 
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -451,7 +451,7 @@ BOOL ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
     ScDocument* pDoc = rDocShell.GetDocument();
 
     if (bRecord && !pDoc->IsUndoEnabled())
-        bRecord = FALSE;
+        bRecord = sal_False;
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
 
     if (pTable)
@@ -468,14 +468,14 @@ BOOL ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
         {
             ScOutlineTable* pUndoTab = new ScOutlineTable( *pTable );
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, TRUE );
-            pDoc->CopyToDocument( nStartCol, 0, nTab, nEndCol, MAXROW, nTab, IDF_NONE, FALSE, pUndoDoc );
-            pDoc->CopyToDocument( 0, nStartRow, nTab, MAXCOL, nEndRow, nTab, IDF_NONE, FALSE, pUndoDoc );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_True, sal_True );
+            pDoc->CopyToDocument( nStartCol, 0, nTab, nEndCol, MAXROW, nTab, IDF_NONE, sal_False, pUndoDoc );
+            pDoc->CopyToDocument( 0, nStartRow, nTab, MAXCOL, nEndRow, nTab, IDF_NONE, sal_False, pUndoDoc );
 
             rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoOutlineBlock( &rDocShell,
                                         nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
-                                        pUndoDoc, pUndoTab, TRUE ) );
+                                        pUndoDoc, pUndoTab, sal_True ) );
         }
 
         //  Spalten
@@ -490,14 +490,14 @@ BOOL ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
             nEnd   = pEntry->GetEnd();
             if ( nStart>=nStartCol && nEnd<=nEndCol )
             {
-                pEntry->SetHidden( FALSE );
-                pEntry->SetVisible( TRUE );
+                pEntry->SetHidden( sal_False );
+                pEntry->SetVisible( sal_True );
                 if (nStart<nMin) nMin=nStart;
                 if (nEnd>nMax) nMax=nEnd;
             }
         }
         for ( i=nMin; i<=nMax; i++ )
-            pDoc->ShowCol( static_cast<SCCOL>(i), nTab, TRUE );
+            pDoc->ShowCol( static_cast<SCCOL>(i), nTab, sal_True );
 
         //  Zeilen
 
@@ -511,22 +511,22 @@ BOOL ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
             nEnd   = pEntry->GetEnd();
             if ( nStart>=nStartRow && nEnd<=nEndRow )
             {
-                pEntry->SetHidden( FALSE );
-                pEntry->SetVisible( TRUE );
+                pEntry->SetHidden( sal_False );
+                pEntry->SetVisible( sal_True );
                 if (nStart<nMin) nMin=nStart;
                 if (nEnd>nMax) nMax=nEnd;
             }
         }
         for ( i=nMin; i<=nMax; i++ )
             if ( !pDoc->RowFiltered( i,nTab ) )             // weggefilterte nicht einblenden
-                pDoc->ShowRow( i, nTab, TRUE );
+                pDoc->ShowRow( i, nTab, sal_True );
 
         pDoc->UpdatePageBreaks( nTab );
 
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID | PAINT_LEFT | PAINT_TOP );
 
         rDocShell.SetDocumentModified();
-        bDone = TRUE;
+        bDone = sal_True;
 
         lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
     }
@@ -537,9 +537,9 @@ BOOL ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
     return bDone;
 }
 
-BOOL ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, BOOL bApi )
+sal_Bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi )
 {
-    BOOL bDone = FALSE;
+    sal_Bool bDone = sal_False;
 
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -550,18 +550,18 @@ BOOL ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
     ScDocument* pDoc = rDocShell.GetDocument();
 
     if (bRecord && !pDoc->IsUndoEnabled())
-        bRecord = FALSE;
+        bRecord = sal_False;
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
 
     if (pTable)
     {
         ScOutlineEntry* pEntry;
-        USHORT nColLevel;
-        USHORT nRowLevel;
-        USHORT nCount;
+        sal_uInt16 nColLevel;
+        sal_uInt16 nRowLevel;
+        sal_uInt16 nCount;
         SCCOLROW nStart;
         SCCOLROW nEnd;
-        USHORT i;
+        sal_uInt16 i;
 
         SCCOLROW nEffStartCol = nStartCol;
         SCCOLROW nEffEndCol   = nEndCol;
@@ -578,16 +578,16 @@ BOOL ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
         {
             ScOutlineTable* pUndoTab = new ScOutlineTable( *pTable );
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, TRUE );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_True, sal_True );
             pDoc->CopyToDocument( static_cast<SCCOL>(nEffStartCol), 0, nTab,
                     static_cast<SCCOL>(nEffEndCol), MAXROW, nTab, IDF_NONE,
-                    FALSE, pUndoDoc );
-            pDoc->CopyToDocument( 0, nEffStartRow, nTab, MAXCOL, nEffEndRow, nTab, IDF_NONE, FALSE, pUndoDoc );
+                    sal_False, pUndoDoc );
+            pDoc->CopyToDocument( 0, nEffStartRow, nTab, MAXCOL, nEffEndRow, nTab, IDF_NONE, sal_False, pUndoDoc );
 
             rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoOutlineBlock( &rDocShell,
                                         nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab,
-                                        pUndoDoc, pUndoTab, FALSE ) );
+                                        pUndoDoc, pUndoTab, sal_False ) );
         }
 
         //  Spalten
@@ -600,7 +600,7 @@ BOOL ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
             nEnd   = pEntry->GetEnd();
 
             if ( static_cast<SCCOLROW>(nStartCol)<=nEnd && static_cast<SCCOLROW>(nEndCol)>=nStart )
-                HideOutline( nTab, TRUE, nColLevel, i, FALSE, FALSE, bApi );
+                HideOutline( nTab, sal_True, nColLevel, i, sal_False, sal_False, bApi );
         }
 
         //  Zeilen
@@ -613,7 +613,7 @@ BOOL ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
             nEnd   = pEntry->GetEnd();
 
             if ( nStartRow<=nEnd && nEndRow>=nStart )
-                HideOutline( nTab, FALSE, nRowLevel, i, FALSE, FALSE, bApi );
+                HideOutline( nTab, sal_False, nRowLevel, i, sal_False, sal_False, bApi );
         }
 
         pDoc->UpdatePageBreaks( nTab );
@@ -621,7 +621,7 @@ BOOL ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID | PAINT_LEFT | PAINT_TOP );
 
         rDocShell.SetDocumentModified();
-        bDone = TRUE;
+        bDone = sal_True;
 
         lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
     }
@@ -634,12 +634,12 @@ BOOL ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
 
 //------------------------------------------------------------------------
 
-BOOL ScOutlineDocFunc::ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, USHORT nEntry,
-                                    BOOL bRecord, BOOL bPaint, BOOL /* bApi */ )
+sal_Bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
+                                    sal_Bool bRecord, sal_Bool bPaint, sal_Bool /* bApi */ )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
-        bRecord = FALSE;
+        bRecord = sal_False;
 
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
     ScOutlineArray* pArray = bColumns ? pTable->GetColArray() : pTable->GetRowArray();
@@ -652,34 +652,34 @@ BOOL ScOutlineDocFunc::ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         if (bColumns)
         {
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, FALSE );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_True, sal_False );
             pDoc->CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
-                    static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE, FALSE,
+                    static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE, sal_False,
                     pUndoDoc );
         }
         else
         {
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, FALSE, TRUE );
-            pDoc->CopyToDocument( 0, nStart, nTab, MAXCOL, nEnd, nTab, IDF_NONE, FALSE, pUndoDoc );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_False, sal_True );
+            pDoc->CopyToDocument( 0, nStart, nTab, MAXCOL, nEnd, nTab, IDF_NONE, sal_False, pUndoDoc );
         }
 
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoDoOutline( &rDocShell,
                                     nStart, nEnd, nTab, pUndoDoc,       //! start und end berechnen
-                                    bColumns, nLevel, nEntry, TRUE ) );
+                                    bColumns, nLevel, nEntry, sal_True ) );
     }
 
 //! HideCursor();
 
-    pEntry->SetHidden(FALSE);
+    pEntry->SetHidden(sal_False);
     SCCOLROW i;
     for ( i = nStart; i <= nEnd; i++ )
     {
         if ( bColumns )
-            pDoc->ShowCol( static_cast<SCCOL>(i), nTab, TRUE );
+            pDoc->ShowCol( static_cast<SCCOL>(i), nTab, sal_True );
         else
             if ( !pDoc->RowFiltered( i,nTab ) )             // weggefilterte nicht einblenden
-                pDoc->ShowRow( i, nTab, TRUE );
+                pDoc->ShowRow( i, nTab, sal_True );
     }
 
     ScSubOutlineIterator aIter( pArray, nLevel, nEntry );
@@ -692,14 +692,14 @@ BOOL ScOutlineDocFunc::ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
             for ( i = nSubStart; i <= nSubEnd; i++ )
             {
                 if ( bColumns )
-                    pDoc->ShowCol( static_cast<SCCOL>(i), nTab, FALSE );
+                    pDoc->ShowCol( static_cast<SCCOL>(i), nTab, sal_False );
                 else
-                    pDoc->ShowRow( i, nTab, FALSE );
+                    pDoc->ShowRow( i, nTab, sal_False );
             }
         }
     }
 
-    pArray->SetVisibleBelow( nLevel, nEntry, TRUE, TRUE );
+    pArray->SetVisibleBelow( nLevel, nEntry, sal_True, sal_True );
 
     pDoc->InvalidatePageBreaks(nTab);
     pDoc->UpdatePageBreaks( nTab );
@@ -715,15 +715,15 @@ BOOL ScOutlineDocFunc::ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
 
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
-    return TRUE;        //! immer ???
+    return sal_True;        //! immer ???
 }
 
-BOOL ScOutlineDocFunc::HideOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, USHORT nEntry,
-                                    BOOL bRecord, BOOL bPaint, BOOL /* bApi */ )
+sal_Bool ScOutlineDocFunc::HideOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
+                                    sal_Bool bRecord, sal_Bool bPaint, sal_Bool /* bApi */ )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
-        bRecord = FALSE;
+        bRecord = sal_False;
 
     ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );
     ScOutlineArray* pArray = bColumns ? pTable->GetColArray() : pTable->GetRowArray();
@@ -736,36 +736,36 @@ BOOL ScOutlineDocFunc::HideOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
         ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         if (bColumns)
         {
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, TRUE, FALSE );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_True, sal_False );
             pDoc->CopyToDocument( static_cast<SCCOL>(nStart), 0, nTab,
-                    static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE, FALSE,
+                    static_cast<SCCOL>(nEnd), MAXROW, nTab, IDF_NONE, sal_False,
                     pUndoDoc );
         }
         else
         {
-            pUndoDoc->InitUndo( pDoc, nTab, nTab, FALSE, TRUE );
-            pDoc->CopyToDocument( 0, nStart, nTab, MAXCOL, nEnd, nTab, IDF_NONE, FALSE, pUndoDoc );
+            pUndoDoc->InitUndo( pDoc, nTab, nTab, sal_False, sal_True );
+            pDoc->CopyToDocument( 0, nStart, nTab, MAXCOL, nEnd, nTab, IDF_NONE, sal_False, pUndoDoc );
         }
 
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoDoOutline( &rDocShell,
                                     nStart, nEnd, nTab, pUndoDoc,
-                                    bColumns, nLevel, nEntry, FALSE ) );
+                                    bColumns, nLevel, nEntry, sal_False ) );
     }
 
 //! HideCursor();
 
-    pEntry->SetHidden(TRUE);
+    pEntry->SetHidden(sal_True);
     SCCOLROW i;
     for ( i = nStart; i <= nEnd; i++ )
     {
         if ( bColumns )
-            pDoc->ShowCol( static_cast<SCCOL>(i), nTab, FALSE );
+            pDoc->ShowCol( static_cast<SCCOL>(i), nTab, sal_False );
         else
-            pDoc->ShowRow( i, nTab, FALSE );
+            pDoc->ShowRow( i, nTab, sal_False );
     }
 
-    pArray->SetVisibleBelow( nLevel, nEntry, FALSE );
+    pArray->SetVisibleBelow( nLevel, nEntry, sal_False );
 
     pDoc->InvalidatePageBreaks(nTab);
     pDoc->UpdatePageBreaks( nTab );
@@ -781,7 +781,7 @@ BOOL ScOutlineDocFunc::HideOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
 
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
-    return TRUE;        //! immer ???
+    return sal_True;        //! immer ???
 }
 
 

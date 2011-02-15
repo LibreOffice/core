@@ -74,19 +74,19 @@ ScEditWindow* GetScEditWindow ()
 }
 
 //CHINA001
-//CHINA001 static USHORT pPageRightHeaderRanges[] = { SID_SCATTR_PAGE_HEADERRIGHT,
+//CHINA001 static sal_uInt16 pPageRightHeaderRanges[] = { SID_SCATTR_PAGE_HEADERRIGHT,
 //CHINA001 SID_SCATTR_PAGE_HEADERRIGHT,
 //CHINA001 0 };
 //CHINA001
-//CHINA001 static USHORT pPageRightFooterRanges[] = { SID_SCATTR_PAGE_FOOTERRIGHT,
+//CHINA001 static sal_uInt16 pPageRightFooterRanges[] = { SID_SCATTR_PAGE_FOOTERRIGHT,
 //CHINA001 SID_SCATTR_PAGE_FOOTERRIGHT,
 //CHINA001 0 };
 //CHINA001
-//CHINA001 static USHORT pPageLeftHeaderRanges[] =  { SID_SCATTR_PAGE_HEADERLEFT,
+//CHINA001 static sal_uInt16 pPageLeftHeaderRanges[] =  { SID_SCATTR_PAGE_HEADERLEFT,
 //CHINA001 SID_SCATTR_PAGE_HEADERLEFT,
 //CHINA001 0 };
 //CHINA001
-//CHINA001 static USHORT pPageLeftFooterRanges[] =  { SID_SCATTR_PAGE_FOOTERLEFT,
+//CHINA001 static sal_uInt16 pPageLeftFooterRanges[] =  { SID_SCATTR_PAGE_FOOTERLEFT,
 //CHINA001 SID_SCATTR_PAGE_FOOTERLEFT,
 //CHINA001 0 };
 //CHINA001
@@ -99,9 +99,9 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001 //
 //CHINA001
 //CHINA001 ScHFEditPage::ScHFEditPage( Window*          pParent,
-//CHINA001 USHORT               nResId,
+//CHINA001 sal_uInt16               nResId,
 //CHINA001 const SfxItemSet&    rCoreAttrs,
-//CHINA001 USHORT               nWhichId )
+//CHINA001 sal_uInt16               nWhichId )
 //CHINA001
 //CHINA001 :    SfxTabPage      ( pParent, ScResId( nResId ), rCoreAttrs ),
 //CHINA001
@@ -198,7 +198,7 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
 //CHINA001
-//CHINA001 BOOL __EXPORT ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
+//CHINA001 sal_Bool __EXPORT ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
 //CHINA001 {
 //CHINA001 ScPageHFItem aItem( nWhich );
 //CHINA001 EditTextObject* pLeft    = aWndLeft  .CreateTextObject();
@@ -214,7 +214,7 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001
 //CHINA001 rCoreSet.Put( aItem );
 //CHINA001
-//CHINA001 return TRUE;
+//CHINA001 return sal_True;
 //CHINA001 }
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
@@ -313,7 +313,7 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
 //CHINA001
-//CHINA001 USHORT* __EXPORT ScRightHeaderEditPage::GetRanges()
+//CHINA001 sal_uInt16* __EXPORT ScRightHeaderEditPage::GetRanges()
 //CHINA001  { return pPageRightHeaderRanges; }
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
@@ -333,7 +333,7 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
 //CHINA001
-//CHINA001 USHORT* __EXPORT ScLeftHeaderEditPage::GetRanges()
+//CHINA001 sal_uInt16* __EXPORT ScLeftHeaderEditPage::GetRanges()
 //CHINA001  { return pPageLeftHeaderRanges; }
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
@@ -352,7 +352,7 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
 //CHINA001
-//CHINA001 USHORT* __EXPORT ScRightFooterEditPage::GetRanges()
+//CHINA001 sal_uInt16* __EXPORT ScRightFooterEditPage::GetRanges()
 //CHINA001  { return pPageRightFooterRanges; }
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
@@ -371,7 +371,7 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
 //CHINA001
-//CHINA001 USHORT* __EXPORT ScLeftFooterEditPage::GetRanges()
+//CHINA001 sal_uInt16* __EXPORT ScLeftFooterEditPage::GetRanges()
 //CHINA001  { return pPageLeftFooterRanges; }
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
@@ -402,7 +402,7 @@ ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLo
     eLocation(eLoc),
     pAcc(NULL)
 {
-    EnableRTL(FALSE);
+    EnableRTL(sal_False);
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
@@ -414,7 +414,7 @@ ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLo
     Size aSize( GetOutputSize() );
     aSize.Height() *= 4;
 
-    pEdEngine = new ScHeaderEditEngine( EditEngine::CreatePool(), TRUE );
+    pEdEngine = new ScHeaderEditEngine( EditEngine::CreatePool(), sal_True );
     pEdEngine->SetPaperSize( aSize );
     pEdEngine->SetRefDevice( this );
 
@@ -466,8 +466,8 @@ EditTextObject* __EXPORT ScEditWindow::CreateTextObject()
     //  (GetAttribs beim Format-Dialog-Aufruf gibt immer gesetzte Items zurueck)
 
     const SfxItemSet& rEmpty = pEdEngine->GetEmptyItemSet();
-    USHORT nParCnt = pEdEngine->GetParagraphCount();
-    for (USHORT i=0; i<nParCnt; i++)
+    sal_uInt16 nParCnt = pEdEngine->GetParagraphCount();
+    for (sal_uInt16 i=0; i<nParCnt; i++)
         pEdEngine->SetParaAttribs( i, rEmpty );
 
     return pEdEngine->CreateTextObject();
@@ -519,7 +519,7 @@ void ScEditWindow::SetCharAttriutes()
 
     if ( pDocSh && pViewSh )
     {
-        if(pTabViewSh!=NULL) pTabViewSh->SetInFormatDialog(TRUE);
+        if(pTabViewSh!=NULL) pTabViewSh->SetInFormatDialog(sal_True);
 
         SfxItemSet aSet( pEdView->GetAttribs() );
 
@@ -538,7 +538,7 @@ void ScEditWindow::SetCharAttriutes()
             pEdView->SetAttribs( aSet );
         }
 
-        if(pTabViewSh!=NULL) pTabViewSh->SetInFormatDialog(FALSE);
+        if(pTabViewSh!=NULL) pTabViewSh->SetInFormatDialog(sal_False);
         delete pDlg;
     }
 }
@@ -587,7 +587,7 @@ void __EXPORT ScEditWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
 void __EXPORT ScEditWindow::KeyInput( const KeyEvent& rKEvt )
 {
-    USHORT nKey =  rKEvt.GetKeyCode().GetModifier()
+    sal_uInt16 nKey =  rKEvt.GetKeyCode().GetModifier()
                  + rKEvt.GetKeyCode().GetCode();
 
     if ( nKey == KEY_TAB || nKey == KEY_TAB + KEY_SHIFT )
@@ -692,7 +692,7 @@ public:
 
     void            SetPopupMenu(ScPopupMenu* pPopUp);
 
-    USHORT          GetSelected();
+    sal_uInt16          GetSelected();
 
     void            SetMenuHdl( const Link& rLink ) { aFxLink = rLink; }
     const Link&     GetMenuHdl() const { return aFxLink; }
@@ -705,7 +705,7 @@ ScExtIButton::ScExtIButton(Window* pParent, const ResId& rResId )
 {
     nSelected=0;
     aTimer.SetTimeout(600);
-    SetDropDown( TRUE);
+    SetDropDown( sal_True);
 
 //  DrawArrow();
 }
@@ -715,7 +715,7 @@ void ScExtIButton::SetPopupMenu(ScPopupMenu* pPopUp)
     pPopupMenu=pPopUp;
 }
 
-USHORT ScExtIButton::GetSelected()
+sal_uInt16 ScExtIButton::GetSelected()
 {
     return nSelected;
 }
@@ -750,7 +750,7 @@ void ScExtIButton::StartPopup()
 
     if(pPopupMenu!=NULL)
     {
-        SetPressed( TRUE );
+        SetPressed( sal_True );
         EndSelection();
         Point aPoint(0,0);
         aPoint.Y()=GetOutputSizePixel().Height();
@@ -761,13 +761,13 @@ void ScExtIButton::StartPopup()
         {
             aMLink.Call(this);
         }
-        SetPressed( FALSE);
+        SetPressed( sal_False);
     }
 }
 
 long ScExtIButton::PreNotify( NotifyEvent& rNEvt )
 {
-    USHORT nSwitch=rNEvt.GetType();
+    sal_uInt16 nSwitch=rNEvt.GetType();
     if(nSwitch==EVENT_MOUSEBUTTONUP)
     {
         MouseButtonUp(*rNEvt.GetMouseEvent());
@@ -783,8 +783,8 @@ IMPL_LINK( ScExtIButton, TimerHdl, Timer*, EMPTYARG )
 }
 
 /*
-static void ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, BOOL bBlack,
-                               BOOL bLeft = FALSE, BOOL bTop = FALSE )
+static void ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, sal_Bool bBlack,
+                               sal_Bool bLeft = sal_False, sal_Bool bTop = sal_False )
 {
     Color           aOldFillColor = pBox->GetFillColor();
     WindowAlign     eAlign = pBox->meAlign;
@@ -862,10 +862,10 @@ Click
 Timer
     if ( ??? )
     {
-    - SetPressed( TRUE );
+    - SetPressed( sal_True );
     - EndSelection();
     - Menu anzeigen
-    - SetPressed( FALSE );
+    - SetPressed( sal_False );
     }
 
 
