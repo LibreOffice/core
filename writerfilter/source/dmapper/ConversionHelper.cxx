@@ -512,49 +512,6 @@ sal_Int16 convertTableJustification( sal_Int32 nIntValue )
     }
     return nOrient;
 }
-/*-- 06.08.2007 15:27:30---------------------------------------------------
-     conversion form xsd::DateTime
-    [-]CCYY-MM-DDThh:mm:ss[Z|(+|-)hh:mm]
-  -----------------------------------------------------------------------*/
-com::sun::star::util::DateTime convertDateTime( const ::rtl::OUString& rDateTimeString )
-{
-    util::DateTime aRet( 0, 0, 0, 0, 1, 1, 1901 );
-    //
-    sal_Int32 nIndex = 0;
-    ::rtl::OUString sDate( rDateTimeString.getToken( 0, 'T', nIndex ));
-    sal_Int32 nDateIndex = 0;
-    aRet.Year = (sal_uInt16)sDate.getToken( 0, '-', nDateIndex ).toInt32();
-    if( nDateIndex > 0)
-        aRet.Month = (sal_uInt16)sDate.getToken( 0, '-', nDateIndex ).toInt32();
-    if( nDateIndex > 0)
-        aRet.Day = (sal_uInt16)sDate.getToken( 0, '-', nDateIndex ).toInt32();
-    ::rtl::OUString sTime;
-    if(nIndex > 0)
-    {
-        sTime = ( rDateTimeString.getToken( 0, 'Z', nIndex ));
-        sal_Int32 nTimeIndex = 0;
-        aRet.Hours = (sal_uInt16)sTime.getToken( 0, ':', nTimeIndex ).toInt32();
-        if( nTimeIndex > 0)
-            aRet.Minutes = (sal_uInt16)sTime.getToken( 0, ':', nTimeIndex ).toInt32();
-        if( nTimeIndex > 0)
-        {
-            ::rtl::OUString sSeconds = sTime.getToken( 0, ':', nTimeIndex );
-            nTimeIndex = 0;
-            aRet.Seconds = (sal_uInt16)sSeconds.getToken( 0, '.', nTimeIndex ).toInt32();
-            aRet.HundredthSeconds = (sal_uInt16)sSeconds.getToken( 0, '.', nTimeIndex ).toInt32();
-        }
-
-// todo: ignore time offset for a while - there's no time zone available
-//        nIndex = 0;
-//        ::rtl::OUString sOffset( rDateTimeString.getToken( 1, 'Z', nIndex ));
-//        if( sOffset.getLength() )
-//        {
-//              add hour and minute offset and increase/decrease date if necessary
-//        }
-    }
-    return aRet;
-}
-
 
 sal_Int16 ConvertNumberingType(sal_Int32 nNFC)
 {

@@ -57,7 +57,6 @@ namespace ConversionHelper{
     sal_Int32 convertEMUToMM100(sal_Int32 _t);
     sal_Int32 ConvertColor(sal_Int32 nWordColor );
     sal_Int16 convertTableJustification( sal_Int32 nIntValue );
-    ::com::sun::star::util::DateTime convertDateTime( const ::rtl::OUString& rDateTimeString );
     sal_Int16 ConvertNumberingType(sal_Int32 nNFC);
 
 } // namespace ConversionHelper
