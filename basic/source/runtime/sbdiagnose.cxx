@@ -119,7 +119,7 @@ RTLFUNC(CaptureAssertions)
 
         // ensure OSL assertions are captured, too
         DbgData aData( *DbgGetData() );
-        aData.bHookOSLAssert = TRUE;
+        aData.bHookOSLAssert = sal_True;
         DbgUpdateOslHook( &aData );
     }
 
