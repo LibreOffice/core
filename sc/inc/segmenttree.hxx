@@ -112,7 +112,6 @@ public:
     void insertSegment(SCCOL nCol, SCCOL nSize, bool bSkipStartBoundary);
 
     void enableTreeSearch(bool bEnable);
-    void setInsertFromBack(bool bInsertFromBack);
 
 private:
     ::std::auto_ptr<ScFlatBoolSegmentsImpl> mpImpl;
@@ -162,7 +161,6 @@ public:
     SCROW findLastNotOf(sal_uInt16 nValue) const;
 
     void enableTreeSearch(bool bEnable);
-    void setInsertFromBack(bool bInsertFromBack);
 
 private:
     ::std::auto_ptr<ScFlatUInt16SegmentsImpl> mpImpl;

@@ -1234,11 +1234,6 @@ void ScTable::SetRelNameDirty()
 void ScTable::SetLoadingMedium(bool bLoading)
 {
     mpRowHeights->enableTreeSearch(!bLoading);
-
-    // When loading a medium, prefer inserting row heights from the back
-    // position since the row heights are stored and read in ascending order
-    // during import.
-    mpRowHeights->setInsertFromBack(bLoading);
 }
 
 

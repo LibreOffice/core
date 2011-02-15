@@ -76,33 +76,25 @@ public:
         mbTreeSearchEnabled = b;
     }
 
-    void setInsertFromBack(bool b)
-    {
-        mbInsertFromBack = b;
-    }
-
 private:
     typedef ::mdds::flat_segment_tree<SCCOLROW, ValueType> fst_type;
     fst_type maSegments;
     typename fst_type::const_iterator maItr;
 
     bool mbTreeSearchEnabled:1;
-    bool mbInsertFromBack:1;
 };
 
 template<typename _ValueType, typename _ExtValueType>
 ScFlatSegmentsImpl<_ValueType, _ExtValueType>::ScFlatSegmentsImpl(SCCOLROW nMax, ValueType nDefault) :
     maSegments(0, nMax+1, nDefault),
-    mbTreeSearchEnabled(true),
-    mbInsertFromBack(false)
+    mbTreeSearchEnabled(true)
 {
 }
 
 template<typename _ValueType, typename _ExtValueType>
 ScFlatSegmentsImpl<_ValueType, _ExtValueType>::ScFlatSegmentsImpl(const ScFlatSegmentsImpl<_ValueType, _ExtValueType>& r) :
     maSegments(r.maSegments),
-    mbTreeSearchEnabled(r.mbTreeSearchEnabled),
-    mbInsertFromBack(r.mbInsertFromBack)
+    mbTreeSearchEnabled(r.mbTreeSearchEnabled)
 {
 }
 
@@ -115,11 +107,7 @@ template<typename _ValueType, typename _ExtValueType>
 bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::setValue(SCCOLROW nPos1, SCCOLROW nPos2, ValueType nValue)
 {
     ::std::pair<typename fst_type::const_iterator, bool> ret;
-    if (mbInsertFromBack)
-        ret = maSegments.insert_back(nPos1, nPos2+1, nValue);
-    else
-        ret = maSegments.insert(maItr, nPos1, nPos2+1, nValue);
-
+    ret = maSegments.insert(maItr, nPos1, nPos2+1, nValue);
     maItr = ret.first;
     return ret.second;
 }
@@ -424,11 +412,6 @@ void ScFlatBoolRowSegments::enableTreeSearch(bool bEnable)
     mpImpl->enableTreeSearch(bEnable);
 }
 
-void ScFlatBoolRowSegments::setInsertFromBack(bool bEnable)
-{
-    mpImpl->setInsertFromBack(bEnable);
-}
-
 SCROW ScFlatBoolRowSegments::findLastNotOf(bool bValue) const
 {
     return static_cast<SCROW>(mpImpl->findLastNotOf(bValue));
@@ -486,14 +469,6 @@ void ScFlatBoolColSegments::enableTreeSearch(bool bEnable)
 {
     mpImpl->enableTreeSearch(bEnable);
 }
-
-void ScFlatBoolColSegments::setInsertFromBack(bool bInsertFromBack)
-{
-    mpImpl->setInsertFromBack(bInsertFromBack);
-}
-
-// ============================================================================
-
 
 // ============================================================================
 
@@ -589,11 +564,6 @@ SCROW ScFlatUInt16RowSegments::findLastNotOf(sal_uInt16 nValue) const
 void ScFlatUInt16RowSegments::enableTreeSearch(bool bEnable)
 {
     mpImpl->enableTreeSearch(bEnable);
-}
-
-void ScFlatUInt16RowSegments::setInsertFromBack(bool bInsertFromBack)
-{
-    mpImpl->setInsertFromBack(bInsertFromBack);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
