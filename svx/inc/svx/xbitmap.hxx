@@ -39,10 +39,6 @@
 // class XOBitmap
 //---------------
 
-#if defined SINIX
-static Size aXOBitmapDefaultSize( 8, 8 );
-#endif
-
 class SVX_DLLPUBLIC XOBitmap
 {
 protected:
@@ -59,15 +55,9 @@ public:
     XOBitmap();
     XOBitmap( const GraphicObject& rGraphicObject, XBitmapStyle eStyle = XBITMAP_TILE );
     XOBitmap( const Bitmap& rBitmap, XBitmapStyle eStyle = XBITMAP_TILE );
-#if defined SINIX
-    XOBitmap( const USHORT* pArray, const Color& aPixelColor,
-             const Color& aBckgrColor, const Size& rSize = aXOBitmapDefaultSize,
-             XBitmapStyle eStyle = XBITMAP_TILE );
-#else
     XOBitmap( const USHORT* pArray, const Color& aPixelColor,
              const Color& aBckgrColor, const Size& rSize = Size( 8, 8 ),
              XBitmapStyle eStyle = XBITMAP_TILE );
-#endif
     XOBitmap( const XOBitmap& rXBmp );
     ~XOBitmap();
 

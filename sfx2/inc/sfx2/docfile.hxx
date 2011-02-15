@@ -164,11 +164,7 @@ public:
     void                ReOpen();
     void                CompleteReOpen();
     const String&       GetName() const {return aLogicName;}
-#if defined SINIX && defined GCC && defined C272
-    const INetURLObject& GetURLObject();
-#else
     const INetURLObject& GetURLObject() const;
-#endif
 
     void                CheckFileDate( const ::com::sun::star::util::DateTime& aInitDate );
     sal_Bool            DocNeedsFileDateCheck();
