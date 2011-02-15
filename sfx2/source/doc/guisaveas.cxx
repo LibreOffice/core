@@ -747,7 +747,7 @@ sal_Int8 ModelData_Impl::CheckFilter( const ::rtl::OUString& aFilterName )
         return STATUS_SAVEAS_STANDARDNAME;
     }
     else if ( ( !( nFiltFlags & SFX_FILTER_OWN ) || ( nFiltFlags & SFX_FILTER_ALIEN ) )
-           && !( nFiltFlags & SFX_FILTER_SILENTEXPORT ) && aDefFiltPropsHM.size()
+           && aDefFiltPropsHM.size()
            && ( nDefFiltFlags & SFX_FILTER_EXPORT ) && !( nDefFiltFlags & SFX_FILTER_INTERNAL ))
     {
         // the default filter is acceptable and the old filter is alian one

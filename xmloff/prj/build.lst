@@ -1,5 +1,2 @@
 xo	xmloff	: LIBXSLT:libxslt offapi svl vos NULL
-zxo	xmloff\prj								nmake	-	all	xo_prj NULL
-
-xo xmloff\qa\unoapi nmake - all xo_qa_unoapi NULL
-
+xo	xmloff\prj								nmake	-	all	xo_prj NULL

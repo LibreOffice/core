@@ -48,6 +48,7 @@
 
 #include <unotools/securityoptions.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include "eventsupplier.hxx"
 
 #include <sfx2/app.hxx>
@@ -88,41 +89,37 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
     {
         if ( maEventNames[i] == aName )
         {
-            Sequence< PropertyValue > aProperties;
+            const ::comphelper::NamedValueCollection aEventDescriptor( rElement );
             // check for correct type of the element
-            if ( rElement.hasValue() && !( rElement >>= aProperties ) )
+            if ( rElement.hasValue() && aEventDescriptor.empty() )
                 throw ILLEGALARGUMENTEXCEPTION();
 
             // create Configuration at first, creation might call this method also and that would overwrite everything
             // we might have stored before!
             if ( mpObjShell && !mpObjShell->IsLoading() )
-                mpObjShell->SetModified( TRUE );
+                mpObjShell->SetModified( sal_True );
 
-            if ( aProperties.getLength() )
+            ::comphelper::NamedValueCollection aNormalizedDescriptor;
+            NormalizeMacro( aEventDescriptor, aNormalizedDescriptor, mpObjShell );
+
+            ::rtl::OUString sType;
+            if  (   ( aNormalizedDescriptor.size() == 1 )
+                &&  ( aNormalizedDescriptor.has( PROP_EVENT_TYPE ) == 0 )
+                &&  ( aNormalizedDescriptor.get( PROP_EVENT_TYPE ) >>= sType )
+                &&  ( sType.getLength() == 0 )
+                )
             {
-                // "normalize" the macro descriptor
-                ANY aValue;
-                BlowUpMacro( rElement, aValue, mpObjShell );
-                aValue >>= aProperties;
-
-                ::rtl::OUString sType;
-                if  (   ( aProperties.getLength() == 1 )
-                    &&  ( aProperties[0].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
-                    &&  ( aProperties[0].Value >>= sType )
-                    &&  ( sType.getLength() == 0 )
-                    )
-                {
-                    // An empty event type means no binding. Therefore reset data
-                    // to reflect that state.
-                    // (that's for compatibility only. Nowadays, the Tools/Customize dialog should
-                    // set an empty sequence to indicate the request for resetting the assignment.)
-                    aProperties.realloc( 0 );
-                }
+                // An empty event type means no binding. Therefore reset data
+                // to reflect that state.
+                // (that's for compatibility only. Nowadays, the Tools/Customize dialog should
+                // set an empty sequence to indicate the request for resetting the assignment.)
+                OSL_ENSURE( false, "legacy event assignment format detected" );
+                aNormalizedDescriptor.clear();
             }
 
-            if ( aProperties.getLength() )
+            if ( !aNormalizedDescriptor.empty() )
             {
-                maEventData[i] = makeAny( aProperties );
+                maEventData[i] <<= aNormalizedDescriptor.getPropertyValues();
             }
             else
             {
@@ -378,13 +375,13 @@ SfxEvents_Impl::~SfxEvents_Impl()
 }
 
 //--------------------------------------------------------------------------------------------------------
-SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* pObjShell, BOOL bBlowUp )
+SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* pObjShell, sal_Bool bNormalizeMacro )
 {
     SvxMacro* pMacro = NULL;
     SEQUENCE < PROPERTYVALUE > aProperties;
     ANY aAny;
-    if ( bBlowUp )
-        BlowUpMacro( rElement, aAny, pObjShell );
+    if ( bNormalizeMacro )
+        NormalizeMacro( rElement, aAny, pObjShell );
     else
         aAny = rElement;
 
@@ -444,58 +441,38 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
     return pMacro;
 }
 
-void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* pDoc )
+void SfxEvents_Impl::NormalizeMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* pDoc )
 {
+    const ::comphelper::NamedValueCollection aEventDescriptor( rEvent );
+    ::comphelper::NamedValueCollection aEventDescriptorOut;
+
+    NormalizeMacro( aEventDescriptor, aEventDescriptorOut, pDoc );
+
+    rRet <<= aEventDescriptorOut.getPropertyValues();
+}
+
+void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i_eventDescriptor,
+        ::comphelper::NamedValueCollection& o_normalizedDescriptor, SfxObjectShell* i_document )
+{
+    SfxObjectShell* pDoc = i_document;
     if ( !pDoc )
         pDoc = SfxObjectShell::Current();
 
-    SEQUENCE < PROPERTYVALUE > aInProps;
-    SEQUENCE < PROPERTYVALUE > aOutProps(2);
+    ::rtl::OUString aType = i_eventDescriptor.getOrDefault( PROP_EVENT_TYPE, ::rtl::OUString() );
+    ::rtl::OUString aScript = i_eventDescriptor.getOrDefault( PROP_SCRIPT, ::rtl::OUString() );
+    ::rtl::OUString aLibrary = i_eventDescriptor.getOrDefault( PROP_LIBRARY, ::rtl::OUString() );
+    ::rtl::OUString aMacroName = i_eventDescriptor.getOrDefault( PROP_MACRO_NAME, ::rtl::OUString() );
 
-    if ( !( rEvent >>= aInProps ) )
-        return;
-
-    sal_Int32 nCount = aInProps.getLength();
-
-    if ( !nCount )
-        return;
-
-    OUSTRING aType;
-    OUSTRING aScript;
-    OUSTRING aLibrary;
-    OUSTRING aMacroName;
-
-    sal_Int32 nIndex = 0;
-
-    while ( nIndex < nCount )
-    {
-        if ( aInProps[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
-        {
-            aInProps[nIndex].Value >>= aType;
-            aOutProps[0] = aInProps[nIndex];
-        }
-        else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_SCRIPT ) == 0 )
-        {
-            aInProps[nIndex].Value >>= aScript;
-            aOutProps[1] = aInProps[nIndex];
-        }
-        else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_LIBRARY ) == 0 )
-        {
-            aInProps[ nIndex ].Value >>= aLibrary;
-        }
-        else if ( aInProps[ nIndex ].Name.compareToAscii( PROP_MACRO_NAME ) == 0 )
-        {
-            aInProps[ nIndex ].Value >>= aMacroName;
-        }
-        nIndex += 1;
-    }
+    if ( aType.getLength() )
+        o_normalizedDescriptor.put( PROP_EVENT_TYPE, aType );
+    if ( aScript.getLength() )
+        o_normalizedDescriptor.put( PROP_SCRIPT, aScript );
 
     if ( aType.compareToAscii( STAR_BASIC ) == 0 )
     {
-        aOutProps.realloc(4);
         if ( aScript.getLength() )
         {
-            if( ! aMacroName.getLength() || ! aLibrary.getLength() )
+            if ( !aMacroName.getLength() || !aLibrary.getLength() )
             {
                 sal_Int32 nHashPos = aScript.indexOf( '/', 8 );
                 sal_Int32 nArgsPos = aScript.indexOf( '(' );
@@ -542,22 +519,9 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
                 aLibrary = String::CreateFromAscii("application");
         }
 
-        aOutProps[1].Name = OUSTRING::createFromAscii( PROP_SCRIPT );
-        aOutProps[1].Value <<= aScript;
-        aOutProps[2].Name = OUSTRING::createFromAscii( PROP_LIBRARY );
-        aOutProps[2].Value <<= aLibrary;
-        aOutProps[3].Name = OUSTRING::createFromAscii( PROP_MACRO_NAME );
-        aOutProps[3].Value <<= aMacroName;
-        rRet <<= aOutProps;
-    }
-    else if ( aType.compareToAscii( SVX_MACRO_LANGUAGE_JAVASCRIPT ) == 0 )
-    {
-        aOutProps[1] = aInProps[1];
-        rRet <<= aOutProps;
-    }
-    else
-    {
-        rRet <<= aOutProps;
+        o_normalizedDescriptor.put( PROP_SCRIPT, aScript );
+        o_normalizedDescriptor.put( PROP_LIBRARY, aLibrary );
+        o_normalizedDescriptor.put( PROP_MACRO_NAME, aMacroName );
     }
 }
 

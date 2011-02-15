@@ -37,7 +37,7 @@ class GlobalEditData;
 class EDITENG_DLLPUBLIC EditResId: public ResId
 {
 public:
-    EditResId( USHORT nId );
+    EditResId( sal_uInt16 nId );
 };
 
 class EditDLL

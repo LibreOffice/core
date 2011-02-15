@@ -470,8 +470,8 @@ void OCalcTable::fillColumns()
     String aStrFieldName;
     aStrFieldName.AssignAscii("Column");
     ::rtl::OUString aTypeName;
-    ::comphelper::UStringMixEqual aCase(m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
-    const sal_Bool bStoresMixedCaseQuotedIdentifiers = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
+    ::comphelper::UStringMixEqual aCase(m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers());
+    const sal_Bool bStoresMixedCaseQuotedIdentifiers = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
 
     for (sal_Int32 i = 0; i < m_nDataCols; i++)
     {
@@ -829,12 +829,12 @@ sal_Bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::fetchRow" );
     // read the bookmark
 
-    BOOL bIsCurRecordDeleted = sal_False;
+    sal_Bool bIsCurRecordDeleted = sal_False;
     _rRow->setDeleted(bIsCurRecordDeleted);
     *(_rRow->get())[0] = m_nFilePos;
 
     if (!bRetrieveData)
-        return TRUE;
+        return sal_True;
 
     // fields
 

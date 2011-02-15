@@ -134,7 +134,7 @@ ImageButtonToolbarController::ImageButtonToolbarController(
     const Reference< XMultiServiceFactory >& rServiceManager,
     const Reference< XFrame >&               rFrame,
     ToolBox*                                 pToolbar,
-    USHORT                                   nID,
+    sal_uInt16                                   nID,
     const ::rtl::OUString&                          aCommand ) :
     ComplexToolbarController( rServiceManager, rFrame, pToolbar, nID, aCommand )
 {

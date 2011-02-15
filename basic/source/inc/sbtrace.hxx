@@ -33,12 +33,12 @@
 #ifdef DBG_TRACE_BASIC
 void dbg_InitTrace( void );
 void dbg_DeInitTrace( void );
-void dbg_traceStep( SbModule* pModule, UINT32 nPC, INT32 nCallLvl );
-void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, INT32 nCallLvl, bool bLeave = false );
-void dbg_traceNotifyError( SbError nTraceErr, const String& aTraceErrMsg, bool bTraceErrHandled, INT32 nCallLvl );
-void dbg_RegisterTraceTextForPC( SbModule* pModule, UINT32 nPC,
+void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl );
+void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallLvl, bool bLeave = false );
+void dbg_traceNotifyError( SbError nTraceErr, const String& aTraceErrMsg, bool bTraceErrHandled, sal_Int32 nCallLvl );
+void dbg_RegisterTraceTextForPC( SbModule* pModule, sal_uInt32 nPC,
     const String& aTraceStr_STMNT, const String& aTraceStr_PCode );
-void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
+void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
 #endif
 
 #endif

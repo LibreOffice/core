@@ -47,7 +47,7 @@
 #include <com/sun/star/linguistic2/SingleGrammarError.hpp>
 #include <com/sun/star/linguistic2/GrammarCheckingResult.hpp>
 #include "lngopt.hxx"
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 #include <unotools/processfactory.hxx>
 #include <map>
 #include <com/sun/star/text/TextMarkupType.hpp>
@@ -249,10 +249,10 @@ sal_Bool SAL_CALL GrammarChecker::supportsService( const OUString& ServiceName )
 
     uno::Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
-    for( INT32 i = 0; i < aSNL.getLength(); ++i )
+    for( sal_Int32 i = 0; i < aSNL.getLength(); ++i )
         if( pArray[i] == ServiceName )
-            return TRUE;
-    return FALSE;
+            return sal_True;
+    return sal_False;
 }
 
 uno::Sequence< OUString > GrammarChecker::getSupportedServiceNames_Static(  ) throw()

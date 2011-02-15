@@ -64,7 +64,6 @@
 #include <sfx2/dispatch.hxx>
 #include "idpool.hxx"
 #include "sfxtypes.hxx"
-#include <sfx2/macrconf.hxx>
 #include "virtmenu.hxx"
 #include <sfx2/mnuitem.hxx>
 #include <sfx2/tbxctrl.hxx>
@@ -86,7 +85,7 @@ using namespace ::com::sun::star::util;
 
 class SfxEnumMenu: public PopupMenu
 {
-    USHORT          nSlot;
+    sal_uInt16          nSlot;
     SfxEnumItem    *pItem;
     SfxBindings*    pBindings;
 
@@ -94,20 +93,20 @@ protected:
     virtual void    Select();
 
 public:
-                    SfxEnumMenu( USHORT nSlot, SfxBindings* pBind, const SfxEnumItem &rItem );
+                    SfxEnumMenu( sal_uInt16 nSlot, SfxBindings* pBind, const SfxEnumItem &rItem );
                     ~SfxEnumMenu();
 };
 
 //=========================================================================
 
-SfxEnumMenu::SfxEnumMenu( USHORT nSlotId, SfxBindings* pBind, const SfxEnumItem &rItem ):
+SfxEnumMenu::SfxEnumMenu( sal_uInt16 nSlotId, SfxBindings* pBind, const SfxEnumItem &rItem ):
     nSlot( nSlotId ),
     pItem( (SfxEnumItem*) rItem.Clone() ),
     pBindings( pBind )
 {
-    for ( USHORT nVal = 0; nVal < pItem->GetValueCount(); ++nVal )
+    for ( sal_uInt16 nVal = 0; nVal < pItem->GetValueCount(); ++nVal )
         InsertItem( nVal+1, pItem->GetValueTextByPos(nVal) );
-    CheckItem( pItem->GetValue() + 1, TRUE );
+    CheckItem( pItem->GetValue() + 1, sal_True );
 }
 
 //-------------------------------------------------------------------------
@@ -143,7 +142,7 @@ void SfxMenuControl::SetOwnMenu( SfxVirtualMenu* pMenu )
 
 void SfxMenuControl::Bind(
     SfxVirtualMenu* pOwn,
-    USHORT nSlotId,
+    sal_uInt16 nSlotId,
     const String& rTitle,
     const String &rHelpText,
     SfxBindings &rBindings )
@@ -169,7 +168,7 @@ void SfxMenuControl::Bind(
 
 void SfxMenuControl::Bind(
     SfxVirtualMenu* pOwn,
-    USHORT nSlotId,
+    sal_uInt16 nSlotId,
     SfxVirtualMenu& rMenu,
     const String& rTitle,
     const String &rHelpText,
@@ -188,7 +187,7 @@ void SfxMenuControl::Bind(
 
 // ctor for explicit registration
 
-SfxMenuControl::SfxMenuControl( BOOL bShowStrings )
+SfxMenuControl::SfxMenuControl( sal_Bool bShowStrings )
 :   pOwnMenu(0),
     pSubMenu(0),
     b_ShowStrings(bShowStrings)
@@ -203,18 +202,18 @@ SfxMenuControl::SfxMenuControl( BOOL bShowStrings )
 SfxMenuControl::SfxMenuControl():
     pOwnMenu(0),
     pSubMenu(0),
-    b_ShowStrings(FALSE)
+    b_ShowStrings(sal_False)
 {
     DBG_MEMTEST();
 }
 
 //--------------------------------------------------------------------
 
-SfxMenuControl::SfxMenuControl(USHORT nSlotId, SfxBindings& rBindings):
+SfxMenuControl::SfxMenuControl(sal_uInt16 nSlotId, SfxBindings& rBindings):
     SfxControllerItem(nSlotId, rBindings),
     pOwnMenu(0),
     pSubMenu(0),
-    b_ShowStrings(FALSE)
+    b_ShowStrings(sal_False)
 {
     DBG_MEMTEST();
 
@@ -232,8 +231,6 @@ SfxMenuControl::SfxMenuControl(USHORT nSlotId, SfxBindings& rBindings):
 
 SfxMenuControl::~SfxMenuControl()
 {
-    if ( SfxMacroConfig::IsMacroSlot( GetId() ) )
-        SFX_APP()->GetMacroConfig()->ReleaseSlotId(GetId());
     delete pSubMenu;
 }
 
@@ -248,7 +245,7 @@ void SfxMenuControl::RemovePopup()
 
 void SfxMenuControl::StateChanged
 (
-    USHORT              nSID,
+    sal_uInt16              nSID,
     SfxItemState        eState,
     const SfxPoolItem*  pState
 )
@@ -258,14 +255,14 @@ void SfxMenuControl::StateChanged
     DBG_ASSERT( nSID == GetId(), "strange SID" );
     DBG_ASSERT( pOwnMenu != 0, "setting state to dangling SfxMenuControl" );
 
-    FASTBOOL bIsObjMenu =
+    bool bIsObjMenu =
                 GetId() >= SID_OBJECTMENU0 && GetId() < SID_OBJECTMENU_LAST;
 
     // enabled/disabled-Flag pauschal korrigieren
 
 #ifdef UNIX
     if (nSID == SID_PASTE)
-        pOwnMenu->EnableItem( GetId(), TRUE );
+        pOwnMenu->EnableItem( GetId(), sal_True );
     else
 #endif
     pOwnMenu->EnableItem( GetId(), bIsObjMenu
@@ -276,7 +273,7 @@ void SfxMenuControl::StateChanged
     {
         // checken nur bei nicht-Object-Menus
         if ( !bIsObjMenu )
-            pOwnMenu->CheckItem( GetId(), FALSE );
+            pOwnMenu->CheckItem( GetId(), sal_False );
 
         // SetItemText flackert in MenuBar insbes. unter OS/2 (Bug #20658)
         if ( // !bIsObjMenu && nicht wegen "Format/Datenbank"
@@ -343,14 +340,14 @@ void SfxMenuControl::StateChanged
 
 //--------------------------------------------------------------------
 
-SfxMenuControl* SfxMenuControl::CreateImpl( USHORT /*nId*/, Menu& /*rMenu*/, SfxBindings& /*rBindings*/ )
+SfxMenuControl* SfxMenuControl::CreateImpl( sal_uInt16 /*nId*/, Menu& /*rMenu*/, SfxBindings& /*rBindings*/ )
 {
-    return new SfxMenuControl( TRUE );
+    return new SfxMenuControl( sal_True );
 }
 
 //--------------------------------------------------------------------
 
-void SfxMenuControl::RegisterControl( USHORT nSlotId, SfxModule *pMod )
+void SfxMenuControl::RegisterControl( sal_uInt16 nSlotId, SfxModule *pMod )
 {
     RegisterMenuControl( pMod, new SfxMenuCtrlFactory(
                 SfxMenuControl::CreateImpl, TYPE(SfxStringItem), nSlotId ) );
@@ -362,7 +359,7 @@ void SfxMenuControl::RegisterMenuControl(SfxModule* pMod, SfxMenuCtrlFactory* pF
     SFX_APP()->RegisterMenuControl_Impl( pMod, pFact );
 }
 
-SfxMenuControl* SfxMenuControl::CreateControl( USHORT nId, Menu &rMenu, SfxBindings &rBindings )
+SfxMenuControl* SfxMenuControl::CreateControl( sal_uInt16 nId, Menu &rMenu, SfxBindings &rBindings )
 {
     TypeId aSlotType = SFX_SLOTPOOL().GetSlotType(nId);
     if ( aSlotType )
@@ -376,7 +373,7 @@ SfxMenuControl* SfxMenuControl::CreateControl( USHORT nId, Menu &rMenu, SfxBindi
             if ( pFactories )
             {
                 SfxMenuCtrlFactArr_Impl &rFactories = *pFactories;
-                for ( USHORT nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
+                for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
                     if ( rFactories[nFactory]->nTypeId == aSlotType &&
                          ( ( rFactories[nFactory]->nSlotId == 0 ) ||
                            ( rFactories[nFactory]->nSlotId == nId) ) )
@@ -386,7 +383,7 @@ SfxMenuControl* SfxMenuControl::CreateControl( USHORT nId, Menu &rMenu, SfxBindi
 
         SfxMenuCtrlFactArr_Impl &rFactories = pApp->GetMenuCtrlFactories_Impl();
 
-        for ( USHORT nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
+        for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
             if ( rFactories[nFactory]->nTypeId == aSlotType &&
                  ( ( rFactories[nFactory]->nSlotId == 0 ) ||
                    ( rFactories[nFactory]->nSlotId == nId) ) )
@@ -395,7 +392,7 @@ SfxMenuControl* SfxMenuControl::CreateControl( USHORT nId, Menu &rMenu, SfxBindi
     return 0;
 }
 
-BOOL SfxMenuControl::IsSpecialControl( USHORT nId, SfxModule* pMod  )
+sal_Bool SfxMenuControl::IsSpecialControl( sal_uInt16 nId, SfxModule* pMod  )
 {
     TypeId aSlotType = SFX_SLOTPOOL().GetSlotType( nId );
     if ( aSlotType )
@@ -406,21 +403,21 @@ BOOL SfxMenuControl::IsSpecialControl( USHORT nId, SfxModule* pMod  )
             if ( pFactories )
             {
                 SfxMenuCtrlFactArr_Impl &rFactories = *pFactories;
-                for ( USHORT nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
+                for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
                     if ( rFactories[nFactory]->nTypeId == aSlotType &&
                          ( ( rFactories[nFactory]->nSlotId == 0 ) ||
                            ( rFactories[nFactory]->nSlotId == nId) ) )
-                        return TRUE;
+                        return sal_True;
             }
         }
 
         SfxMenuCtrlFactArr_Impl &rFactories = SFX_APP()->GetMenuCtrlFactories_Impl();
 
-        for ( USHORT nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
+        for ( sal_uInt16 nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
             if ( rFactories[nFactory]->nTypeId == aSlotType &&
                  ( ( rFactories[nFactory]->nSlotId == 0 ) ||
                    ( rFactories[nFactory]->nSlotId == nId) ) )
-                return TRUE;
+                return sal_True;
     }
     return 0;
 }
@@ -440,7 +437,7 @@ long Select_Impl( void* pHdl, void* pVoid );
 SFX_IMPL_MENU_CONTROL( SfxAppMenuControl_Impl, SfxStringItem );
 
 SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
-    USHORT nPos, Menu& rMenu, SfxBindings& rBindings )
+    sal_uInt16 nPos, Menu& rMenu, SfxBindings& rBindings )
     : SfxMenuControl( nPos, rBindings ), pMenu(0)
 {
     String aText = rMenu.GetItemText( nPos );
@@ -473,9 +470,9 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
     if ( pActMenu )
     {
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        ULONG nSymbolsStyle = rSettings.GetSymbolsStyle();
-        BOOL bIsHiContrastMode = rSettings.GetHighContrastMode();
-        BOOL bShowMenuImages = rSettings.GetUseImagesInMenus();
+        sal_uIntPtr nSymbolsStyle = rSettings.GetSymbolsStyle();
+        sal_Bool bIsHiContrastMode = rSettings.GetHighContrastMode();
+        sal_Bool bShowMenuImages = rSettings.GetUseImagesInMenus();
 
         if (( nSymbolsStyle != m_nSymbolsStyle ) ||
             ( bIsHiContrastMode != m_bWasHiContrastMode ) ||
@@ -485,10 +482,10 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
             m_bWasHiContrastMode    = bIsHiContrastMode;
             m_bShowMenuImages       = bShowMenuImages;
 
-            USHORT nCount = pActMenu->GetItemCount();
-            for ( USHORT nSVPos = 0; nSVPos < nCount; nSVPos++ )
+            sal_uInt16 nCount = pActMenu->GetItemCount();
+            for ( sal_uInt16 nSVPos = 0; nSVPos < nCount; nSVPos++ )
             {
-                USHORT nItemId = pActMenu->GetItemId( nSVPos );
+                sal_uInt16 nItemId = pActMenu->GetItemId( nSVPos );
                 if ( pActMenu->GetItemType( nSVPos ) != MENUITEM_SEPARATOR )
                 {
                     if ( bShowMenuImages )
@@ -504,7 +501,7 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
                         if ( aImageId.getLength() > 0 )
                         {
                             Reference< ::com::sun::star::frame::XFrame > xFrame;
-                            Image aImage = GetImage( xFrame, aImageId, FALSE, bIsHiContrastMode );
+                            Image aImage = GetImage( xFrame, aImageId, sal_False, bIsHiContrastMode );
                             if ( !!aImage )
                             {
                                 bImageSet = sal_True;
@@ -516,7 +513,7 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
                         if ( !bImageSet && aCmd.Len() )
                         {
                             Image aImage = SvFileInformationManager::GetImage(
-                                INetURLObject(aCmd), FALSE, bIsHiContrastMode );
+                                INetURLObject(aCmd), sal_False, bIsHiContrastMode );
                             if ( !!aImage )
                                 pActMenu->SetItemImage( nItemId, aImage );
                         }
@@ -527,26 +524,26 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
             }
         }
 
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
-        USHORT nId, Menu& rMenu, SfxBindings &rBindings, SfxVirtualMenu* pVirt )
+        sal_uInt16 nId, Menu& rMenu, SfxBindings &rBindings, SfxVirtualMenu* pVirt )
 {
     return new SfxUnoMenuControl( rCmd, nId, rMenu, rBindings, pVirt );
 }
 
 SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
-        USHORT nId, Menu& rMenu, const String& sItemText, const String& sHelpText,
+        sal_uInt16 nId, Menu& rMenu, const String& sItemText, const String& sHelpText,
         SfxBindings& rBindings, SfxVirtualMenu* pVirt)
 {
     return new SfxUnoMenuControl( rCmd, nId, rMenu, sItemText, sHelpText, rBindings, pVirt);
 }
 
-SfxUnoMenuControl::SfxUnoMenuControl( const String& rCmd, USHORT nSlotId,
+SfxUnoMenuControl::SfxUnoMenuControl( const String& rCmd, sal_uInt16 nSlotId,
     Menu& rMenu, SfxBindings& rBindings, SfxVirtualMenu* pVirt )
     : SfxMenuControl( nSlotId, rBindings )
 {
@@ -559,7 +556,7 @@ SfxUnoMenuControl::SfxUnoMenuControl( const String& rCmd, USHORT nSlotId,
 }
 
 SfxUnoMenuControl::SfxUnoMenuControl(
-    const String& rCmd, USHORT nSlotId, Menu& /*rMenu*/,
+    const String& rCmd, sal_uInt16 nSlotId, Menu& /*rMenu*/,
     const String& rItemText, const String& rHelpText,
     SfxBindings& rBindings, SfxVirtualMenu* pVirt)
     : SfxMenuControl( nSlotId, rBindings )

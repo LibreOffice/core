@@ -49,7 +49,7 @@ class SvxColorValueSet : public ValueSet, public DragSourceHelper
 
 private:
 
-    BOOL            bLeft;
+    sal_Bool            bLeft;
     Point           aDragPosPixel;
 
 protected:
@@ -70,7 +70,7 @@ public:
                     SvxColorValueSet( Window* pParent, WinBits nWinStyle = WB_ITEMBORDER );
                     SvxColorValueSet( Window* pParent, const ResId& rResId );
 
-    BOOL            IsLeftButton() const { return bLeft; }
+    sal_Bool            IsLeftButton() const { return bLeft; }
 };
 
 /*************************************************************************
@@ -82,7 +82,7 @@ public:
 class SVX_DLLPUBLIC SvxColorChildWindow : public SfxChildWindow
 {
  public:
-    SvxColorChildWindow( Window*, USHORT, SfxBindings*,
+    SvxColorChildWindow( Window*, sal_uInt16, SfxBindings*,
                          SfxChildWinInfo* );
 
     SFX_DECL_CHILDWINDOW(SvxColorChildWindow);
@@ -101,10 +101,10 @@ class SvxColorDockingWindow : public SfxDockingWindow, public SfxListener
 private:
     XColorTable*        pColorTable;
     SvxColorValueSet    aColorSet;
-    USHORT              nLeftSlot;
-    USHORT              nRightSlot;
-    USHORT              nCols;
-    USHORT              nLines;
+    sal_uInt16              nLeftSlot;
+    sal_uInt16              nRightSlot;
+    sal_uInt16              nCols;
+    sal_uInt16              nLines;
     long                nCount;
     Size                aColorSize;
     Size                aItemSize;
@@ -122,7 +122,7 @@ private:
 //#endif
 
 protected:
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
     virtual void    Resize();
     virtual void    Resizing( Size& rSize );
 
@@ -135,7 +135,7 @@ public:
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    void            SetSlotIDs( USHORT nLeft, USHORT nRight )
+    void            SetSlotIDs( sal_uInt16 nLeft, sal_uInt16 nRight )
                         { nLeftSlot = nLeft; nRightSlot = nRight; }
 
     virtual long    Notify( NotifyEvent& rNEvt );

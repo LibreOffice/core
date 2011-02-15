@@ -185,10 +185,10 @@ throw( uno::RuntimeException )
         if ( xDisp.is() )
             xDisp->dispatch( aTargetURL, aProps );
 
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 void SAL_CALL IFrameObject::cancel() throw( com::sun::star::uno::RuntimeException )
@@ -275,7 +275,7 @@ void SAL_CALL IFrameObject::setPropertyValue(const ::rtl::OUString& aPropertyNam
         sal_Bool bIsAutoBorder = sal_Bool();
         if ( (aAny >>= bIsAutoBorder) )
         {
-            BOOL bBorder = maFrmDescr.IsFrameBorderOn();
+            sal_Bool bBorder = maFrmDescr.IsFrameBorderOn();
             maFrmDescr.ResetBorder();
             if ( bIsAutoBorder )
                 maFrmDescr.SetFrameBorder( bBorder );

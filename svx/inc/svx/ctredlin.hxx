@@ -64,7 +64,7 @@ class SVX_DLLPUBLIC RedlinData
 public:
                     RedlinData();
     virtual         ~RedlinData();
-    BOOL            bDisabled;
+    sal_Bool            bDisabled;
     DateTime        aDateTime;
     void*           pData;
 };
@@ -84,12 +84,12 @@ private:
     Color           aPrivColor;
 
 public:
-                    SvLBoxColorString( SvLBoxEntry*,USHORT nFlags,const XubString& rStr,
+                    SvLBoxColorString( SvLBoxEntry*,sal_uInt16 nFlags,const XubString& rStr,
                                     const Color& rCol);
                     SvLBoxColorString();
                     ~SvLBoxColorString();
 
-    void            Paint( const Point&, SvLBox& rDev, USHORT nFlags,SvLBoxEntry* );
+    void            Paint( const Point&, SvLBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
     SvLBoxItem*     Create() const;
 };
 
@@ -99,12 +99,12 @@ class SVX_DLLPUBLIC SvxRedlinTable : public SvxSimpleTable
 
 private:
 
-    BOOL            bIsCalc;
-    USHORT          nDatePos;
-    BOOL            bAuthor;
-    BOOL            bDate;
-    BOOL            bComment;
-    USHORT          nDaTiMode;
+    sal_Bool            bIsCalc;
+    sal_uInt16          nDatePos;
+    sal_Bool            bAuthor;
+    sal_Bool            bDate;
+    sal_Bool            bComment;
+    sal_uInt16          nDaTiMode;
     DateTime        aDaTiFirst;
     DateTime        aDaTiLast;
     DateTime        aDaTiFilterFirst;
@@ -129,35 +129,35 @@ public:
                     ~SvxRedlinTable();
 
     // For FilterPage only {
-    void            SetFilterDate(BOOL bFlag=TRUE);
-    void            SetDateTimeMode(USHORT nMode);
+    void            SetFilterDate(sal_Bool bFlag=sal_True);
+    void            SetDateTimeMode(sal_uInt16 nMode);
     void            SetFirstDate(const Date&);
     void            SetLastDate(const Date&);
     void            SetFirstTime(const Time&);
     void            SetLastTime(const Time&);
-    void            SetFilterAuthor(BOOL bFlag=TRUE);
+    void            SetFilterAuthor(sal_Bool bFlag=sal_True);
     void            SetAuthor(const String &);
-    void            SetFilterComment(BOOL bFlag=TRUE);
+    void            SetFilterComment(sal_Bool bFlag=sal_True);
     void            SetCommentParams( const utl::SearchParam* pSearchPara );
 
     void            UpdateFilterTest();
     // } For FilterPage only
 
-    void            SetCalcView(BOOL bFlag=TRUE);
-    BOOL            IsValidCalcEntry(const String& ,RedlinData *pUserData);
-    BOOL            IsValidWriterEntry(const String& ,RedlinData *pUserData);
+    void            SetCalcView(sal_Bool bFlag=sal_True);
+    sal_Bool            IsValidCalcEntry(const String& ,RedlinData *pUserData);
+    sal_Bool            IsValidWriterEntry(const String& ,RedlinData *pUserData);
 
     // keine NULL-Ptr. ueberpruefung {
-    BOOL            IsValidEntry(const String* pAuthor,const DateTime *pDateTime,const String* pComment);
-    BOOL            IsValidEntry(const String* pAuthor,const DateTime *pDateTime);
-    BOOL            IsValidComment(const String* pComment);
+    sal_Bool            IsValidEntry(const String* pAuthor,const DateTime *pDateTime,const String* pComment);
+    sal_Bool            IsValidEntry(const String* pAuthor,const DateTime *pDateTime);
+    sal_Bool            IsValidComment(const String* pComment);
     // }
 
     SvLBoxEntry*    InsertEntry(const String& ,RedlinData *pUserData,
-                                SvLBoxEntry* pParent=NULL,ULONG nPos=LIST_APPEND);
+                                SvLBoxEntry* pParent=NULL,sal_uIntPtr nPos=LIST_APPEND);
 
     SvLBoxEntry*    InsertEntry(const String& ,RedlinData *pUserData,const Color&,
-                                SvLBoxEntry* pParent=NULL,ULONG nPos=LIST_APPEND);
+                                SvLBoxEntry* pParent=NULL,sal_uIntPtr nPos=LIST_APPEND);
 
 
     virtual SvLBoxEntry* CreateEntry() const;
@@ -204,7 +204,7 @@ private:
     String          aActionStr;
     String          aRangeStr;
     String          aStrMyName;
-    BOOL            bModified;
+    sal_Bool            bModified;
 
     DECL_LINK( SelDateHdl, ListBox* );
     DECL_LINK( RowEnableHdl, CheckBox* );
@@ -216,9 +216,9 @@ private:
 
 protected:
 
-    void            ShowDateFields(USHORT nKind);
-    void            EnableDateLine1(BOOL bFlag);
-    void            EnableDateLine2(BOOL bFlag);
+    void            ShowDateFields(sal_uInt16 nKind);
+    void            EnableDateLine1(sal_Bool bFlag);
+    void            EnableDateLine2(sal_Bool bFlag);
 
 public:
                     SvxTPFilter( Window * pParent);
@@ -237,15 +237,15 @@ public:
     Time            GetLastTime() const;
     void            SetLastTime(const Time &aTime);
 
-    void            SetDateMode(USHORT nMode);
-    USHORT          GetDateMode();
+    void            SetDateMode(sal_uInt16 nMode);
+    sal_uInt16          GetDateMode();
 
     void            ClearAuthors();
-    void            InsertAuthor( const String& rString, USHORT nPos = LISTBOX_APPEND );
-    USHORT          GetSelectedAuthorPos();
+    void            InsertAuthor( const String& rString, sal_uInt16 nPos = LISTBOX_APPEND );
+    sal_uInt16          GetSelectedAuthorPos();
     String          GetSelectedAuthor()const;
-    void            SelectedAuthorPos(USHORT nPos);
-    USHORT          SelectAuthor(const String& aString);
+    void            SelectedAuthorPos(sal_uInt16 nPos);
+    sal_uInt16          SelectAuthor(const String& aString);
     void            SetComment(const String &rComment);
     String          GetComment()const;
 
@@ -253,27 +253,27 @@ public:
     // Methoden fuer Calc {
     void            SetRange(const String& rString);
     String          GetRange() const;
-    void            HideRange(BOOL bHide=TRUE);
-    void            DisableRange(BOOL bFlag=TRUE);
+    void            HideRange(sal_Bool bHide=sal_True);
+    void            DisableRange(sal_Bool bFlag=sal_True);
     void            SetFocusToRange();
     // } Methoden fuer Calc
 
-    void            HideClocks(BOOL bHide=TRUE);
-    void            DisableRef(BOOL bFlag);
+    void            HideClocks(sal_Bool bHide=sal_True);
+    void            DisableRef(sal_Bool bFlag);
 
-    BOOL            IsDate();
-    BOOL            IsAuthor();
-    BOOL            IsRange();
-    BOOL            IsAction();
-    BOOL            IsComment();
+    sal_Bool            IsDate();
+    sal_Bool            IsAuthor();
+    sal_Bool            IsRange();
+    sal_Bool            IsAction();
+    sal_Bool            IsComment();
 
-    void            ShowAction(BOOL bShow=TRUE);
+    void            ShowAction(sal_Bool bShow=sal_True);
 
-    void            CheckDate(BOOL bFlag=TRUE);
-    void            CheckAuthor(BOOL bFlag=TRUE);
-    void            CheckRange(BOOL bFlag=TRUE);
-    void            CheckAction(BOOL bFlag=TRUE);
-    void            CheckComment(BOOL bFlag=TRUE);
+    void            CheckDate(sal_Bool bFlag=sal_True);
+    void            CheckAuthor(sal_Bool bFlag=sal_True);
+    void            CheckRange(sal_Bool bFlag=sal_True);
+    void            CheckAction(sal_Bool bFlag=sal_True);
+    void            CheckComment(sal_Bool bFlag=sal_True);
 
     ListBox*        GetLbAction();
 
@@ -352,21 +352,21 @@ public:
     void            InsertCalcHeader();
     SvxRedlinTable* GetTableControl();
 
-    void            EnableAccept(BOOL nFlag=TRUE);
-    void            EnableAcceptAll(BOOL nFlag=TRUE);
-    void            EnableReject(BOOL nFlag=TRUE);
-    void            EnableRejectAll(BOOL nFlag=TRUE);
-    void            EnableUndo(BOOL nFlag=TRUE);
+    void            EnableAccept(sal_Bool nFlag=sal_True);
+    void            EnableAcceptAll(sal_Bool nFlag=sal_True);
+    void            EnableReject(sal_Bool nFlag=sal_True);
+    void            EnableRejectAll(sal_Bool nFlag=sal_True);
+    void            EnableUndo(sal_Bool nFlag=sal_True);
 
-    void            DisableAccept()     {EnableAccept(FALSE);}
-    void            DisableAcceptAll()  {EnableAcceptAll(FALSE);}
-    void            DisableReject()     {EnableReject(FALSE);}
-    void            DisableRejectAll()  {EnableRejectAll(FALSE);}
-    void            DisableUndo()       {EnableUndo(FALSE);}
+    void            DisableAccept()     {EnableAccept(sal_False);}
+    void            DisableAcceptAll()  {EnableAcceptAll(sal_False);}
+    void            DisableReject()     {EnableReject(sal_False);}
+    void            DisableRejectAll()  {EnableRejectAll(sal_False);}
+    void            DisableUndo()       {EnableUndo(sal_False);}
 
-    void            ShowUndo(BOOL nFlag=TRUE);
-    void            HideUndo()          {ShowUndo(FALSE);}
-    BOOL            IsUndoVisible();
+    void            ShowUndo(sal_Bool nFlag=sal_True);
+    void            HideUndo()          {ShowUndo(sal_False);}
+    sal_Bool            IsUndoVisible();
 
     Size            GetMinSizePixel();
 
@@ -415,8 +415,8 @@ public:
     void            ShowFilterPage();
     void            ShowViewPage();
 
-    BOOL            IsFilterPageVisible();
-    BOOL            IsViewPageVisible();
+    sal_Bool            IsFilterPageVisible();
+    sal_Bool            IsViewPageVisible();
 
     SvxTPFilter*    GetFilterPage();
     SvxTPView*      GetViewPage();

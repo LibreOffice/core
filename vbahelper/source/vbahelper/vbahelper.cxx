@@ -198,9 +198,9 @@ implnCut()
 {
     ScTabViewShell* pViewShell =  getCurrentBestViewShell();
     if ( pViewShell )
-        pViewShell->CutToClip( NULL, TRUE );
+        pViewShell->CutToClip( NULL, sal_True );
 }
-void implnPasteSpecial(SfxViewShell* pViewShell, USHORT nFlags,USHORT nFunction,sal_Bool bSkipEmpty, sal_Bool bTranspose)
+void implnPasteSpecial(SfxViewShell* pViewShell, sal_uInt16 nFlags,sal_uInt16 nFunction,sal_Bool bSkipEmpty, sal_Bool bTranspose)
 {
     PasteCellsWarningReseter resetWarningBox;
     sal_Bool bAsLink(sal_False), bOtherDoc(sal_False);
@@ -225,7 +225,7 @@ void implnPasteSpecial(SfxViewShell* pViewShell, USHORT nFlags,USHORT nFunction,
                     pDoc = pOwnClip->GetDocument();
                 pTabViewShell->PasteFromClip( nFlags, pDoc,
                     nFunction, bSkipEmpty, bTranspose, bAsLink,
-                    eMoveMode, IDF_NONE, TRUE );
+                    eMoveMode, IDF_NONE, sal_True );
                 pTabViewShell->CellContentChanged();
             }
         }
@@ -298,7 +298,7 @@ aNULL()
     return aNULLL;
 }
 
-void dispatchExecute(SfxViewShell* pViewShell, USHORT nSlot, SfxCallMode nCall)
+void dispatchExecute(SfxViewShell* pViewShell, sal_uInt16 nSlot, SfxCallMode nCall)
 {
     SfxViewFrame* pViewFrame = NULL;
     if ( pViewShell )
@@ -607,7 +607,7 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
                 }
             }
             else
-                pDispatcher->Execute( (USHORT)SID_PRINTDOC, (SfxCallMode)SFX_CALLMODE_SYNCHRON, aArgs );
+                pDispatcher->Execute( (sal_uInt16)SID_PRINTDOC, (SfxCallMode)SFX_CALLMODE_SYNCHRON, aArgs );
         }
 
     }
@@ -878,6 +878,9 @@ double HmmToPoints( sal_Int32 nHmm )
 ConcreteXShapeGeometryAttributes::ConcreteXShapeGeometryAttributes( const css::uno::Reference< css::uno::XComponentContext >& /*xContext*/, const css::uno::Reference< css::drawing::XShape >& xShape )
 {
     m_pShapeHelper.reset( new ShapeHelper( xShape ) );
+}
+ConcreteXShapeGeometryAttributes::~ConcreteXShapeGeometryAttributes()
+{
 }
 
 sal_Int32 getPointerStyle( const uno::Reference< frame::XModel >& xModel )

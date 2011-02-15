@@ -72,7 +72,7 @@ using namespace ::com::sun::star::lang;
 void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::fillColumns" );
-    BOOL bRead = TRUE;
+    sal_Bool bRead = sal_True;
 
     QuotedTokenizedString aHeaderLine;
     OFlatConnection* pConnection = (OFlatConnection*)m_pConnection;
@@ -113,11 +113,11 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     m_aScales.clear();
     // reserve some space
     m_aColumns->get().reserve(nFieldCount+1);
-    m_aTypes.reserve(nFieldCount+1);
-    m_aPrecisions.reserve(nFieldCount+1);
-    m_aScales.reserve(nFieldCount+1);
+    m_aTypes.assign(nFieldCount+1,DataType::SQLNULL);
+    m_aPrecisions.assign(nFieldCount+1,-1);
+    m_aScales.assign(nFieldCount+1,-1);
 
-    const sal_Bool bCase = m_pConnection->getMetaData()->storesMixedCaseQuotedIdentifiers();
+    const sal_Bool bCase = m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers();
     CharClass aCharClass(pConnection->getDriver()->getFactory(),_aLocale);
     // read description
     const sal_Unicode cDecimalDelimiter  = pConnection->getDecimalDelimiter();
@@ -125,106 +125,186 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     String aColumnName;
     ::rtl::OUString aTypeName;
     ::comphelper::UStringMixEqual aCase(bCase);
-    xub_StrLen nStartPosHeaderLine = 0; // use for eficient way to get the tokens
-    xub_StrLen nStartPosFirstLine = 0; // use for eficient way to get the tokens
-    xub_StrLen nStartPosFirstLine2 = 0;
+    ::std::vector<String> aColumnNames,m_aTypeNames;
+    m_aTypeNames.resize(nFieldCount);
+    const sal_Int32 nMaxRowsToScan = pConnection->getMaxRowsToScan();
+    sal_Int32 nRowCount = 0;
+    do
+    {
+        xub_StrLen nStartPosHeaderLine = 0; // use for eficient way to get the tokens
+        xub_StrLen nStartPosFirstLine = 0; // use for eficient way to get the tokens
+        xub_StrLen nStartPosFirstLine2 = 0;
+        for (xub_StrLen i = 0; i < nFieldCount; i++)
+        {
+            if ( nRowCount == 0)
+            {
+                if ( bHasHeaderLine )
+                {
+                    aHeaderLine.GetTokenSpecial(aColumnName,nStartPosHeaderLine,m_cFieldDelimiter,m_cStringDelimiter);
+                    if ( !aColumnName.Len() )
+                    {
+                        aColumnName = 'C';
+                        aColumnName += String::CreateFromInt32(i+1);
+                    }
+                }
+                else
+                {
+                    // no column name so ...
+                    aColumnName = 'C';
+                    aColumnName += String::CreateFromInt32(i+1);
+                }
+                aColumnNames.push_back(aColumnName);
+            }
+            impl_fillColumnInfo_nothrow(aFirstLine,nStartPosFirstLine,nStartPosFirstLine2,m_aTypes[i],m_aPrecisions[i],m_aScales[i],m_aTypeNames[i],cDecimalDelimiter,cThousandDelimiter,aCharClass);
+        }
+        ++nRowCount;
+    }
+    while(nRowCount < nMaxRowsToScan && m_pFileStream->ReadByteStringLine(aFirstLine,nEncoding));
+
     for (xub_StrLen i = 0; i < nFieldCount; i++)
     {
-        if ( bHasHeaderLine )
+        // check if the columname already exists
+        String aAlias(aColumnNames[i]);
+        OSQLColumns::Vector::const_iterator aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
+        sal_Int32 nExprCnt = 0;
+        while(aFind != m_aColumns->get().end())
         {
-            aHeaderLine.GetTokenSpecial(aColumnName,nStartPosHeaderLine,m_cFieldDelimiter,m_cStringDelimiter);
-            if ( !aColumnName.Len() )
+            (aAlias = aColumnNames[i]) += String::CreateFromInt32(++nExprCnt);
+            aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
+        }
+
+        sdbcx::OColumn* pColumn = new sdbcx::OColumn(aAlias,m_aTypeNames[i],::rtl::OUString(),::rtl::OUString(),
+                                                ColumnValue::NULLABLE,
+                                                m_aPrecisions[i],
+                                                m_aScales[i],
+                                                m_aTypes[i],
+                                                sal_False,
+                                                sal_False,
+                                                sal_False,
+                                                bCase);
+        Reference< XPropertySet> xCol = pColumn;
+        m_aColumns->get().push_back(xCol);
+    }
+    m_pFileStream->Seek(m_nStartRowFilePos);
+}
+void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,xub_StrLen& nStartPosFirstLine,xub_StrLen& nStartPosFirstLine2
+                                             ,sal_Int32& io_nType,sal_Int32& io_nPrecisions,sal_Int32& io_nScales,String& o_sTypeName
+                                             ,const sal_Unicode cDecimalDelimiter,const sal_Unicode cThousandDelimiter,const CharClass&  aCharClass)
+{
+    if ( io_nType != DataType::VARCHAR )
+    {
+        sal_Bool bNumeric = io_nType == DataType::SQLNULL || io_nType == DataType::DOUBLE || io_nType == DataType::DECIMAL || io_nType == DataType::INTEGER;
+        sal_uLong  nIndex = 0;
+
+        if ( bNumeric )
+        {
+            // first without fielddelimiter
+            String aField;
+            aFirstLine.GetTokenSpecial(aField,nStartPosFirstLine,m_cFieldDelimiter,'\0');
+            if (aField.Len() == 0 ||
+                (m_cStringDelimiter && m_cStringDelimiter == aField.GetChar(0)))
             {
-                aColumnName = 'C';
-                aColumnName += String::CreateFromInt32(i+1);
+                bNumeric = sal_False;
+                if ( m_cStringDelimiter != '\0' )
+                    aFirstLine.GetTokenSpecial(aField,nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
+                else
+                    nStartPosFirstLine2 = nStartPosFirstLine;
             }
-        }
-        else
-        {
-            // no column name so ...
-            aColumnName = 'C';
-            aColumnName += String::CreateFromInt32(i+1);
-        }
-        sal_Int32 eType;
-        UINT16 nPrecision = 0;
-        UINT16 nScale = 0;
-
-        BOOL bNumeric = FALSE;
-        ULONG  nIndex = 0;
-
-        // first without fielddelimiter
-        String aField;
-        aFirstLine.GetTokenSpecial(aField,nStartPosFirstLine,m_cFieldDelimiter,'\0');
-        if (aField.Len() == 0 ||
-            (m_cStringDelimiter && m_cStringDelimiter == aField.GetChar(0)))
-        {
-            bNumeric = FALSE;
-            if ( m_cStringDelimiter != '\0' )
-                aFirstLine.GetTokenSpecial(aField,nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
-            else
-                nStartPosFirstLine2 = nStartPosFirstLine;
-        }
-        else
-        {
-            String aField2;
-            if ( m_cStringDelimiter != '\0' )
-                aFirstLine.GetTokenSpecial(aField2,nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
-            else
-                aField2 = aField;
-
-            if (aField2.Len() == 0)
-            {
-                bNumeric = FALSE;
-            }
             else
             {
-                bNumeric = TRUE;
-                xub_StrLen nDot = 0;
-                xub_StrLen nDecimalDelCount = 0;
-                for (xub_StrLen j = 0; j < aField2.Len(); j++)
+                String aField2;
+                if ( m_cStringDelimiter != '\0' )
+                    aFirstLine.GetTokenSpecial(aField2,nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
+                else
+                    aField2 = aField;
+
+                if (aField2.Len() == 0)
                 {
-                    const sal_Unicode c = aField2.GetChar(j);
-                    // nur Ziffern und Dezimalpunkt und Tausender-Trennzeichen?
-                    if ( ( !cDecimalDelimiter  || c != cDecimalDelimiter )  &&
-                         ( !cThousandDelimiter || c != cThousandDelimiter ) &&
-                        !aCharClass.isDigit(aField2,j)                      &&
-                        ( j != 0 || (c != '+' && c != '-' ) ) )
-                    {
-                        bNumeric = FALSE;
-                        break;
-                    }
-                    if (cDecimalDelimiter && c == cDecimalDelimiter)
-                    {
-                        nPrecision = 15; // we have an decimal value
-                        nScale = 2;
-                        ++nDecimalDelCount;
-                    } // if (cDecimalDelimiter && c == cDecimalDelimiter)
-                    if ( c == '.' )
-                        ++nDot;
+                    bNumeric = sal_False;
                 }
-
-                if (nDecimalDelCount > 1 || nDot > 1 ) // if there is more than one dot it isn't a number
-                    bNumeric = FALSE;
-                if (bNumeric && cThousandDelimiter)
+                else
                 {
-                    // Ist der Trenner richtig angegeben?
-                    const String aValue = aField2.GetToken(0,cDecimalDelimiter);
-                    for (sal_Int32 j = aValue.Len() - 4; j >= 0; j -= 4)
+                    bNumeric = sal_True;
+                    xub_StrLen nDot = 0;
+                    xub_StrLen nDecimalDelCount = 0;
+                    xub_StrLen nSpaceCount = 0;
+                    for (xub_StrLen j = 0; j < aField2.Len(); j++)
                     {
-                        const sal_Unicode c = aValue.GetChar(static_cast<sal_uInt16>(j));
-                        // nur Ziffern und Dezimalpunkt und Tausender-Trennzeichen?
-                        if (c == cThousandDelimiter && j)
-                            continue;
-                        else
+                        const sal_Unicode c = aField2.GetChar(j);
+                        if ( j == nSpaceCount && m_cFieldDelimiter != 32 && c == 32 )
                         {
-                            bNumeric = FALSE;
+                            ++nSpaceCount;
+                            continue;
+                        }
+                        // nur Ziffern und Dezimalpunkt und Tausender-Trennzeichen?
+                        if ( ( !cDecimalDelimiter  || c != cDecimalDelimiter )  &&
+                             ( !cThousandDelimiter || c != cThousandDelimiter ) &&
+                            !aCharClass.isDigit(aField2,j)                      &&
+                            ( j != 0 || (c != '+' && c != '-' ) ) )
+                        {
+                            bNumeric = sal_False;
                             break;
+                        }
+                        if (cDecimalDelimiter && c == cDecimalDelimiter)
+                        {
+                            io_nPrecisions = 15; // we have an decimal value
+                            io_nScales = 2;
+                            ++nDecimalDelCount;
+                        } // if (cDecimalDelimiter && c == cDecimalDelimiter)
+                        if ( c == '.' )
+                            ++nDot;
+                    }
+
+                    if (nDecimalDelCount > 1 || nDot > 1 ) // if there is more than one dot it isn't a number
+                        bNumeric = sal_False;
+                    if (bNumeric && cThousandDelimiter)
+                    {
+                        // Ist der Trenner richtig angegeben?
+                        const String aValue = aField2.GetToken(0,cDecimalDelimiter);
+                        for (sal_Int32 j = aValue.Len() - 4; j >= 0; j -= 4)
+                        {
+                            const sal_Unicode c = aValue.GetChar(static_cast<sal_uInt16>(j));
+                            // nur Ziffern und Dezimalpunkt und Tausender-Trennzeichen?
+                            if (c == cThousandDelimiter && j)
+                                continue;
+                            else
+                            {
+                                bNumeric = sal_False;
+                                break;
+                            }
+                        }
+                    }
+
+                    // jetzt koennte es noch ein Datumsfeld sein
+                    if (!bNumeric)
+                    {
+                        try
+                        {
+                            nIndex = m_xNumberFormatter->detectNumberFormat(::com::sun::star::util::NumberFormat::ALL,aField2);
+                        }
+                        catch(Exception&)
+                        {
                         }
                     }
                 }
-
-                // jetzt koennte es noch ein Datumsfeld sein
-                if (!bNumeric)
+            }
+        }
+        else if ( io_nType == DataType::DATE || io_nType == DataType::TIMESTAMP || io_nType == DataType::TIME)
+        {
+            String aField;
+            aFirstLine.GetTokenSpecial(aField,nStartPosFirstLine,m_cFieldDelimiter,'\0');
+            if (aField.Len() == 0 ||
+                (m_cStringDelimiter && m_cStringDelimiter == aField.GetChar(0)))
+            {
+            }
+            else
+            {
+                String aField2;
+                if ( m_cStringDelimiter != '\0' )
+                    aFirstLine.GetTokenSpecial(aField2,nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
+                else
+                    aField2 = aField;
+                if (aField2.Len() )
                 {
                     try
                     {
@@ -242,87 +322,83 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
         {
             if (cDecimalDelimiter)
             {
-                if(nPrecision)
+                if(io_nPrecisions)
                 {
-                    eType = DataType::DECIMAL;
+                    io_nType = DataType::DECIMAL;
                     static const ::rtl::OUString s_sDECIMAL(RTL_CONSTASCII_USTRINGPARAM("DECIMAL"));
-                    aTypeName = s_sDECIMAL;
+                    o_sTypeName = s_sDECIMAL;
                 }
                 else
                 {
-                    eType = DataType::DOUBLE;
+                    io_nType = DataType::DOUBLE;
                     static const ::rtl::OUString s_sDOUBLE(RTL_CONSTASCII_USTRINGPARAM("DOUBLE"));
-                    aTypeName = s_sDOUBLE;
+                    o_sTypeName = s_sDOUBLE;
                 }
             }
             else
-                eType = DataType::INTEGER;
+            {
+                io_nType = DataType::INTEGER;
+                io_nPrecisions = 0;
+                io_nScales = 0;
+            }
             nFlags = ColumnSearch::BASIC;
         }
         else
         {
-
             switch (comphelper::getNumberFormatType(m_xNumberFormatter,nIndex))
             {
                 case NUMBERFORMAT_DATE:
-                    eType = DataType::DATE;
+                    io_nType = DataType::DATE;
                     {
                         static const ::rtl::OUString s_sDATE(RTL_CONSTASCII_USTRINGPARAM("DATE"));
-                        aTypeName = s_sDATE;
+                        o_sTypeName = s_sDATE;
                     }
                     break;
                 case NUMBERFORMAT_DATETIME:
-                    eType = DataType::TIMESTAMP;
+                    io_nType = DataType::TIMESTAMP;
                     {
                         static const ::rtl::OUString s_sTIMESTAMP(RTL_CONSTASCII_USTRINGPARAM("TIMESTAMP"));
-                        aTypeName = s_sTIMESTAMP;
+                        o_sTypeName = s_sTIMESTAMP;
                     }
                     break;
                 case NUMBERFORMAT_TIME:
-                    eType = DataType::TIME;
+                    io_nType = DataType::TIME;
                     {
                         static const ::rtl::OUString s_sTIME(RTL_CONSTASCII_USTRINGPARAM("TIME"));
-                        aTypeName = s_sTIME;
+                        o_sTypeName = s_sTIME;
                     }
                     break;
                 default:
-                    eType = DataType::VARCHAR;
-                    nPrecision = 0; // nyi: Daten koennen aber laenger sein!
-                    nScale = 0;
+                    io_nType = DataType::VARCHAR;
+                    io_nPrecisions = 0; // nyi: Daten koennen aber laenger sein!
+                    io_nScales = 0;
                     {
                         static const ::rtl::OUString s_sVARCHAR(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
-                        aTypeName = s_sVARCHAR;
+                        o_sTypeName = s_sVARCHAR;
                     }
             };
             nFlags |= ColumnSearch::CHAR;
         }
-
-        // check if the columname already exists
-        String aAlias(aColumnName);
-        OSQLColumns::Vector::const_iterator aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
-        sal_Int32 nExprCnt = 0;
-        while(aFind != m_aColumns->get().end())
-        {
-            (aAlias = aColumnName) += String::CreateFromInt32(++nExprCnt);
-            aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
-        }
-
-        sdbcx::OColumn* pColumn = new sdbcx::OColumn(aAlias,aTypeName,::rtl::OUString(),::rtl::OUString(),
-                                                ColumnValue::NULLABLE,
-                                                nPrecision,
-                                                nScale,
-                                                eType,
-                                                sal_False,
-                                                sal_False,
-                                                sal_False,
-                                                bCase);
-        Reference< XPropertySet> xCol = pColumn;
-        m_aColumns->get().push_back(xCol);
-        m_aTypes.push_back(eType);
-        m_aPrecisions.push_back(nPrecision);
-        m_aScales.push_back(nScale);
     }
-    m_pFileStream->Seek(m_nStartRowFilePos);
+    else
+    {
+        String aField;
+        aFirstLine.GetTokenSpecial(aField,nStartPosFirstLine,m_cFieldDelimiter,'\0');
+        if (aField.Len() == 0 ||
+                (m_cStringDelimiter && m_cStringDelimiter == aField.GetChar(0)))
+        {
+            if ( m_cStringDelimiter != '\0' )
+                aFirstLine.GetTokenSpecial(aField,nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
+            else
+                nStartPosFirstLine2 = nStartPosFirstLine;
+        }
+        else
+        {
+            String aField2;
+            if ( m_cStringDelimiter != '\0' )
+                aFirstLine.GetTokenSpecial(aField2,nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
+        }
+    }
 }
 // -------------------------------------------------------------------------
 OFlatTable::OFlatTable(sdbcx::OCollection* _pTables,OFlatConnection* _pConnection,
@@ -530,7 +606,7 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
     *(_rRow->get())[0] = m_nFilePos;
 
     if (!bRetrieveData)
-        return TRUE;
+        return sal_True;
     if ( m_bNeedToReadLine )
     {
         sal_Int32 nCurrentPos = 0;

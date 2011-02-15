@@ -46,22 +46,22 @@ OIndexIterator::~OIndexIterator()
 }
 
 //------------------------------------------------------------------
-ULONG OIndexIterator::First()
+sal_uIntPtr OIndexIterator::First()
 {
-    return Find(TRUE);
+    return Find(sal_True);
 }
 
 //------------------------------------------------------------------
-ULONG OIndexIterator::Next()
+sal_uIntPtr OIndexIterator::Next()
 {
-    return Find(FALSE);
+    return Find(sal_False);
 }
 //------------------------------------------------------------------
-ULONG OIndexIterator::Find(BOOL bFirst)
+sal_uIntPtr OIndexIterator::Find(sal_Bool bFirst)
 {
     //  ONDXIndex* m_pIndex = GetNDXIndex();
 
-    ULONG nRes = STRING_NOTFOUND;
+    sal_uIntPtr nRes = STRING_NOTFOUND;
 //  if (!m_pIndex->IsOpen())
 //      return nRes;
 
@@ -108,7 +108,7 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
     // dieses findet beim Insert besondere Beachtung
     //  ONDXIndex* m_pIndex = GetNDXIndex();
     OOp_COMPARE aTempOp(SQLFilterOperator::GREATER);
-    USHORT i = 0;
+    sal_uInt16 i = 0;
 
     if (pPage->IsLeaf())
     {
@@ -146,7 +146,7 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
 }
 
 //------------------------------------------------------------------
-ULONG OIndexIterator::GetCompare(BOOL bFirst)
+sal_uIntPtr OIndexIterator::GetCompare(sal_Bool bFirst)
 {
     ONDXKey* pKey = NULL;
     //  ONDXIndex* m_pIndex = GetNDXIndex();
@@ -217,7 +217,7 @@ ULONG OIndexIterator::GetCompare(BOOL bFirst)
 }
 
 //------------------------------------------------------------------
-ULONG OIndexIterator::GetLike(BOOL bFirst)
+sal_uIntPtr OIndexIterator::GetLike(sal_Bool bFirst)
 {
     //  ONDXIndex* m_pIndex = GetNDXIndex();
     if (bFirst)
@@ -238,7 +238,7 @@ ULONG OIndexIterator::GetLike(BOOL bFirst)
 }
 
 //------------------------------------------------------------------
-ULONG OIndexIterator::GetNull(BOOL bFirst)
+sal_uIntPtr OIndexIterator::GetNull(sal_Bool bFirst)
 {
     //  ONDXIndex* m_pIndex = GetNDXIndex();
     if (bFirst)
@@ -261,16 +261,16 @@ ULONG OIndexIterator::GetNull(BOOL bFirst)
 }
 
 //------------------------------------------------------------------
-ULONG OIndexIterator::GetNotNull(BOOL bFirst)
+sal_uIntPtr OIndexIterator::GetNotNull(sal_Bool bFirst)
 {
     ONDXKey* pKey;
     //  ONDXIndex* m_pIndex = GetNDXIndex();
     if (bFirst)
     {
         // erst alle NULL werte abklappern
-        for (ULONG nRec = GetNull(bFirst);
+        for (sal_uIntPtr nRec = GetNull(bFirst);
              nRec != STRING_NOTFOUND;
-             nRec = GetNull(FALSE))
+             nRec = GetNull(sal_False))
                  ;
         pKey = m_aCurLeaf.Is() ? &(*m_aCurLeaf)[m_nCurNode].GetKey() : NULL;
     }
@@ -293,7 +293,7 @@ ONDXKey* OIndexIterator::GetNextKey()
             ONDXPage* pParentPage = pPage->GetParent();
             if (pParentPage)
             {
-                USHORT nPos = pParentPage->Search(pPage);
+                sal_uInt16 nPos = pParentPage->Search(pPage);
                 if (nPos != pParentPage->Count() - 1)
                 {   // Seite gefunden
                     pPage = (*pParentPage)[nPos+1].GetChild(m_pIndex,pParentPage);
