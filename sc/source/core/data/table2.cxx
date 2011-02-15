@@ -2574,7 +2574,7 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
     while (nStartRow <= nRow2)
     {
         SCROW nEndRow = -1;
-        bool bWasVis = !RowHidden(nStartRow, NULL, &nEndRow);
+        bool bWasVis = !RowHiddenLeaf(nStartRow, NULL, &nEndRow);
         if (nEndRow > nRow2)
             nEndRow = nRow2;
 
