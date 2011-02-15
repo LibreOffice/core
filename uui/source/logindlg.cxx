@@ -55,24 +55,24 @@ static void lcl_Move( Window &rWin, long nOffset )
 }
 
 
-void LoginDialog::HideControls_Impl( USHORT nFlags )
+void LoginDialog::HideControls_Impl( sal_uInt16 nFlags )
 {
-    bool bPathHide = FALSE;
-    bool bErrorHide = FALSE;
-    bool bAccountHide = FALSE;
-    bool bUseSysCredsHide = FALSE;
+    bool bPathHide = sal_False;
+    bool bErrorHide = sal_False;
+    bool bAccountHide = sal_False;
+    bool bUseSysCredsHide = sal_False;
 
     if ( ( nFlags & LF_NO_PATH ) == LF_NO_PATH )
     {
         aPathFT.Hide();
         aPathED.Hide();
         aPathBtn.Hide();
-        bPathHide = TRUE;
+        bPathHide = sal_True;
     }
     else if ( ( nFlags & LF_PATH_READONLY ) == LF_PATH_READONLY )
     {
-        aPathED.Enable( FALSE );
-        aPathBtn.Enable( FALSE );
+        aPathED.Enable( sal_False );
+        aPathBtn.Enable( sal_False );
     }
 
     if ( ( nFlags & LF_NO_USERNAME ) == LF_NO_USERNAME )
@@ -82,7 +82,7 @@ void LoginDialog::HideControls_Impl( USHORT nFlags )
     }
     else if ( ( nFlags & LF_USERNAME_READONLY ) == LF_USERNAME_READONLY )
     {
-        aNameED.Enable( FALSE );
+        aNameED.Enable( sal_False );
     }
 
     if ( ( nFlags & LF_NO_PASSWORD ) == LF_NO_PASSWORD )
@@ -99,20 +99,20 @@ void LoginDialog::HideControls_Impl( USHORT nFlags )
         aErrorInfo.Hide();
         aErrorFT.Hide();
         aLogin1FL.Hide();
-        bErrorHide = TRUE;
+        bErrorHide = sal_True;
     }
 
     if ( ( nFlags & LF_NO_ACCOUNT ) == LF_NO_ACCOUNT )
     {
         aAccountFT.Hide();
         aAccountED.Hide();
-        bAccountHide = TRUE;
+        bAccountHide = sal_True;
     }
 
     if ( ( nFlags & LF_NO_USESYSCREDS ) == LF_NO_USESYSCREDS )
     {
         aUseSysCredsCB.Hide();
-        bUseSysCredsHide = TRUE;
+        bUseSysCredsHide = sal_True;
     }
 
     if ( bErrorHide )
@@ -196,7 +196,7 @@ void LoginDialog::HideControls_Impl( USHORT nFlags )
 };
 
 // -----------------------------------------------------------------------
-void LoginDialog::EnableUseSysCredsControls_Impl( BOOL bUseSysCredsEnabled )
+void LoginDialog::EnableUseSysCredsControls_Impl( sal_Bool bUseSysCredsEnabled )
 {
     aErrorInfo.Enable( !bUseSysCredsEnabled );
     aErrorFT.Enable( !bUseSysCredsEnabled );
@@ -252,7 +252,7 @@ IMPL_LINK( LoginDialog, UseSysCredsHdl_Impl, CheckBox *, EMPTYARG )
 LoginDialog::LoginDialog
 (
     Window* pParent,
-    USHORT nFlags,
+    sal_uInt16 nFlags,
     const String& rServer,
     const String* pRealm,
     ResMgr* pResMgr
@@ -317,7 +317,7 @@ LoginDialog::~LoginDialog()
 
 // -----------------------------------------------------------------------
 
-void LoginDialog::SetUseSystemCredentials( BOOL bUse )
+void LoginDialog::SetUseSystemCredentials( sal_Bool bUse )
 {
     if ( aUseSysCredsCB.IsVisible() )
     {

@@ -45,13 +45,13 @@
 #define SVX_HIDESHADOWCTL   0x01
 
 //CHINA001 copy from chardlg.hxx
-#define DISABLE_CASEMAP             ((USHORT)0x0001)
-#define DISABLE_WORDLINE            ((USHORT)0x0002)
-#define DISABLE_BLINK               ((USHORT)0x0004)
-#define DISABLE_UNDERLINE_COLOR     ((USHORT)0x0008)
+#define DISABLE_CASEMAP             ((sal_uInt16)0x0001)
+#define DISABLE_WORDLINE            ((sal_uInt16)0x0002)
+#define DISABLE_BLINK               ((sal_uInt16)0x0004)
+#define DISABLE_UNDERLINE_COLOR     ((sal_uInt16)0x0008)
 
-#define DISABLE_LANGUAGE            ((USHORT)0x0010)
-#define DISABLE_HIDE_LANGUAGE       ((USHORT)0x0020)
+#define DISABLE_LANGUAGE            ((sal_uInt16)0x0010)
+#define DISABLE_HIDE_LANGUAGE       ((sal_uInt16)0x0020)
 
 //CHINA001 flags for SvxCharBasePage's child class
 #define SVX_PREVIEW_CHARACTER   0x01

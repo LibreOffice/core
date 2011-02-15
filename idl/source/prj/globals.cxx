@@ -93,7 +93,7 @@ IdlDll::~IdlDll()
 *************************************************************************/
 inline SvStringHashEntry * INS( const ByteString & rName )
 {
-    UINT32  nIdx;
+    sal_uInt32  nIdx;
     IDLAPP->pHashTable->Insert( rName, &nIdx );
     return (SvStringHashEntry * )IDLAPP->pHashTable->Get( nIdx );
 }

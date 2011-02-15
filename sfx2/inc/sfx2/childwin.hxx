@@ -165,7 +165,7 @@ public:
 
     virtual void        Resizing( Size& rSize );
     virtual sal_Bool        Close();
-    static void         RegisterChildWindowContext(SfxModule*, USHORT, SfxChildWinContextFactory*);
+    static void         RegisterChildWindowContext(SfxModule*, sal_uInt16, SfxChildWinContextFactory*);
 };
 
 class SFX2_DLLPUBLIC SfxChildWindow
@@ -205,7 +205,7 @@ public:
                         { return pWindow->GetPosPixel(); }
 //<!--Modified by PengYunQuan for Validity Cell Range Picker
     virtual void                Hide();
-    virtual void                Show( USHORT nFlags );
+    virtual void                Show( sal_uInt16 nFlags );
 //-->Modified by PengYunQuan for Validity Cell Range Picker
     sal_uInt16          GetFlags() const
                         { return GetInfo().nFlags; }
@@ -234,7 +234,7 @@ public:
     void                SetHideAtToggle( sal_Bool bOn );
     sal_Bool                IsHideAtToggle() const;
     sal_Bool                IsVisible() const;
-    void                SetWantsFocus( BOOL );
+    void                SetWantsFocus( sal_Bool );
     sal_Bool            WantsFocus() const;
 
     virtual sal_Bool    QueryClose();
@@ -275,7 +275,7 @@ public:
                 SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \
         {   \
             SfxChildWindowContext *pContext = new Class(pParent, \
-                    /* cast is safe here! */static_cast< USHORT >(ShellClass::GetInterfaceId()), \
+                    /* cast is safe here! */static_cast< sal_uInt16 >(ShellClass::GetInterfaceId()), \
                     pBindings,pInfo); \
             return pContext; \
         } \

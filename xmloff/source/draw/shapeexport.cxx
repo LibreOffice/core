@@ -80,7 +80,7 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     maShapesInfos(),
     maCurrentShapesIter(maShapesInfos.end()),
     mbExportLayer( sal_False ),
-    // #88546# init to FALSE
+    // #88546# init to sal_False
     mbHandleProgressBar( sal_False ),
     msZIndex( RTL_CONSTASCII_USTRINGPARAM("ZOrder") ),
     msPrintable( RTL_CONSTASCII_USTRINGPARAM("Printable") ),
@@ -1276,7 +1276,7 @@ void XMLShapeExport::ExportGraphicDefaults()
                 aStEx.exportDefaultStyle( xDefaults, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), xPropertySetMapper );
 
                 // write graphic family styles
-                aStEx.exportStyleFamily("graphics", OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), xPropertySetMapper, FALSE, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
+                aStEx.exportStyleFamily("graphics", OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)), xPropertySetMapper, sal_False, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
             }
         }
         catch( lang::ServiceNotRegisteredException& )

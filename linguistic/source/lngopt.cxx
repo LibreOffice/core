@@ -98,33 +98,33 @@ LinguOptions::~LinguOptions()
 }
 
 
-BOOL LinguOptions::SetLocale_Impl( INT16 &rLanguage, Any &rOld, const Any &rVal, sal_Int16 nType)
+sal_Bool LinguOptions::SetLocale_Impl( sal_Int16 &rLanguage, Any &rOld, const Any &rVal, sal_Int16 nType)
 {
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
 
     Locale  aNew;
     rVal >>= aNew;
-        INT16 nNew = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aNew), nType);
+        sal_Int16 nNew = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aNew), nType);
     if (nNew != rLanguage)
     {
         Locale  aLocale( CreateLocale( rLanguage ) );
         rOld.setValue( &aLocale, ::getCppuType((Locale*)0 ));
         rLanguage = nNew;
-        bRes = TRUE;
+        bRes = sal_True;
     }
 
     return bRes;
 }
 
 
-BOOL LinguOptions::SetValue( Any &rOld, const Any &rVal, INT32 nWID )
+sal_Bool LinguOptions::SetValue( Any &rOld, const Any &rVal, sal_Int32 nWID )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
 
-    INT16 *pnVal = 0;
-    BOOL  *pbVal = 0;
+    sal_Int16 *pnVal = 0;
+    sal_Bool  *pbVal = 0;
 
     switch( nWID )
     {
@@ -163,30 +163,30 @@ BOOL LinguOptions::SetValue( Any &rOld, const Any &rVal, INT32 nWID )
         default :
         {
             DBG_ASSERT( 0,"lng : unknown WID");
-            bRes = FALSE;
+            bRes = sal_False;
         }
     }
 
     if (pbVal)
     {
-        BOOL bNew = FALSE;
+        sal_Bool bNew = sal_False;
         rVal >>= bNew;
         if (bNew != *pbVal)
         {
             rOld <<= *pbVal;
             *pbVal = bNew;
-            bRes = TRUE;
+            bRes = sal_True;
         }
     }
     if (pnVal)
     {
-        INT16 nNew = 0;
+        sal_Int16 nNew = 0;
         rVal >>= nNew;
         if (nNew != *pnVal)
         {
             rOld <<= *pnVal;
             *pnVal = nNew;
-            bRes = TRUE;
+            bRes = sal_True;
         }
     }
 
@@ -196,13 +196,13 @@ BOOL LinguOptions::SetValue( Any &rOld, const Any &rVal, INT32 nWID )
     return bRes;
 }
 
-void LinguOptions::GetValue( Any &rVal, INT32 nWID ) const
+void LinguOptions::GetValue( Any &rVal, sal_Int32 nWID ) const
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    INT16 *pnVal = 0;
-    BOOL  *pbVal = 0;
-    BOOL  bDummy = FALSE;
+    sal_Int16 *pnVal = 0;
+    sal_Bool  *pbVal = 0;
+    sal_Bool  bDummy = sal_False;
 
     switch( nWID )
     {
@@ -256,7 +256,7 @@ void LinguOptions::GetValue( Any &rVal, INT32 nWID ) const
 
 struct WID_Name
 {
-    INT32        nWID;
+    sal_Int32        nWID;
     const char  *pPropertyName;
 };
 
@@ -291,13 +291,13 @@ WID_Name aWID_Name[] =
 };
 
 
-OUString LinguOptions::GetName( INT32 nWID )
+OUString LinguOptions::GetName( sal_Int32 nWID )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
     OUString aRes;
 
-    INT32 nLen = sizeof( aWID_Name ) / sizeof( aWID_Name[0] );
+    sal_Int32 nLen = sizeof( aWID_Name ) / sizeof( aWID_Name[0] );
     if (0 <= nWID  &&  nWID < nLen
         && aWID_Name[ nWID ].nWID == nWID)
     {
@@ -369,7 +369,7 @@ LinguProps::LinguProps() :
     aPropListeners  (GetLinguMutex()),
     aPropertyMap(lcl_GetLinguProps())
 {
-    bDisposing = FALSE;
+    bDisposing = sal_False;
 }
 
 void LinguProps::launchEvent( const PropertyChangeEvent &rEvt ) const
@@ -420,7 +420,7 @@ void SAL_CALL LinguProps::setPropertyValue(
         if (aOld != rValue && aConfig.SetProperty( pCur->nWID, rValue ))
         {
             PropertyChangeEvent aChgEvt( (XPropertySet *) this, rPropertyName,
-                    FALSE, pCur->nWID, aOld, rValue );
+                    sal_False, pCur->nWID, aOld, rValue );
             launchEvent( aChgEvt );
         }
     }
@@ -523,7 +523,7 @@ void SAL_CALL LinguProps::setFastPropertyValue( sal_Int32 nHandle, const Any& rV
     if (aOld != rValue && aConfig.SetProperty( nHandle, rValue ))
     {
         PropertyChangeEvent aChgEvt( (XPropertySet *) this,
-                LinguOptions::GetName( nHandle ), FALSE, nHandle, aOld, rValue );
+                LinguOptions::GetName( nHandle ), sal_False, nHandle, aOld, rValue );
         launchEvent( aChgEvt );
     }
 }
@@ -545,12 +545,12 @@ Sequence< PropertyValue > SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    INT32 nLen = aPropertyMap.getSize();
+    sal_Int32 nLen = aPropertyMap.getSize();
     Sequence< PropertyValue > aProps( nLen );
     PropertyValue *pProp = aProps.getArray();
     PropertyEntryVector_t aPropEntries = aPropertyMap.getPropertyEntries();
     PropertyEntryVector_t::const_iterator aIt = aPropEntries.begin();
-    for (INT32 i = 0;  i < nLen;  ++i, ++aIt)
+    for (sal_Int32 i = 0;  i < nLen;  ++i, ++aIt)
     {
         PropertyValue &rVal = pProp[i];
         Any aAny( aConfig.GetProperty( aIt->nWID ) );
@@ -570,9 +570,9 @@ void SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    INT32 nLen = rProps.getLength();
+    sal_Int32 nLen = rProps.getLength();
     const PropertyValue *pVal = rProps.getConstArray();
-    for (INT32 i = 0;  i < nLen;  ++i)
+    for (sal_Int32 i = 0;  i < nLen;  ++i)
     {
         const PropertyValue &rVal = pVal[i];
         setPropertyValue( rVal.Name, rVal.Value );
@@ -587,7 +587,7 @@ void SAL_CALL
 
     if (!bDisposing)
     {
-        bDisposing = TRUE;
+        bDisposing = sal_True;
 
         //! its too late to save the options here!
         // (see AppExitListener for saving)
@@ -640,10 +640,10 @@ sal_Bool SAL_CALL LinguProps::supportsService( const OUString& ServiceName )
 
     uno::Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
-    for( INT32 i = 0; i < aSNL.getLength(); i++ )
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
-            return TRUE;
-    return FALSE;
+            return sal_True;
+    return sal_False;
 }
 
 // XServiceInfo

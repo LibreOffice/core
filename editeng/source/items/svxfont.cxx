@@ -93,7 +93,7 @@ SvxFont::SvxFont( const SvxFont &rFont )
  *************************************************************************/
 
 void SvxFont::DrawArrow( OutputDevice &rOut, const Rectangle& rRect,
-    const Size& rSize, const Color& rCol, BOOL bLeft )
+    const Size& rSize, const Color& rCol, sal_Bool bLeft )
 {
     long nLeft = ( rRect.Left() + rRect.Right() - rSize.Width() )/ 2;
     long nRight = nLeft + rSize.Width();
@@ -161,12 +161,12 @@ XubString SvxFont::CalcCaseMap( const XubString &rTxt ) const
             // Jeder Wortbeginn wird gross geschrieben,
             // der Rest des Wortes wird unbesehen uebernommen.
             // Bug: wenn das Attribut mitten im Wort beginnt.
-            BOOL bBlank = TRUE;
+            sal_Bool bBlank = sal_True;
 
-            for( USHORT i = 0; i < aTxt.Len(); ++i )
+            for( sal_uInt16 i = 0; i < aTxt.Len(); ++i )
             {
                 if( sal_Unicode(' ') == aTxt.GetChar(i) || sal_Unicode('\t') == aTxt.GetChar(i) )
-                    bBlank = TRUE;
+                    bBlank = sal_True;
                 else
                 {
                     if( bBlank )
@@ -175,7 +175,7 @@ XubString SvxFont::CalcCaseMap( const XubString &rTxt ) const
                         aCharClass.toUpper( aTemp );
                         aTxt.Replace( i, 1, aTemp );
                     }
-                    bBlank = FALSE;
+                    bBlank = sal_False;
                 }
             }
             break;
@@ -216,11 +216,11 @@ public:
         : pOut(_pOut), rTxt(_rTxt), nIdx(_nIdx), nLen(_nLen)
         { }
 
-    virtual void DoSpace( const BOOL bDraw );
+    virtual void DoSpace( const sal_Bool bDraw );
     virtual void SetSpace();
     virtual void Do( const XubString &rTxt,
                      const xub_StrLen nIdx, const xub_StrLen nLen,
-                     const BOOL bUpper ) = 0;
+                     const sal_Bool bUpper ) = 0;
 
     inline OutputDevice *GetOut() { return pOut; }
     inline const XubString &GetTxt() const { return rTxt; }
@@ -228,12 +228,12 @@ public:
     xub_StrLen GetLen() const { return nLen; }
 };
 
-void SvxDoCapitals::DoSpace( const BOOL /*bDraw*/ ) { }
+void SvxDoCapitals::DoSpace( const sal_Bool /*bDraw*/ ) { }
 
 void SvxDoCapitals::SetSpace() { }
 
 void SvxDoCapitals::Do( const XubString &/*_rTxt*/, const xub_StrLen /*_nIdx*/,
-    const xub_StrLen /*_nLen*/, const BOOL /*bUpper*/ ) { }
+    const xub_StrLen /*_nLen*/, const sal_Bool /*bUpper*/ ) { }
 
 /*************************************************************************
  *                  SvxFont::DoOnCapitals() const
@@ -248,9 +248,9 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
     const xub_StrLen nLen = STRING_LEN == nPartLen ? rDo.GetLen() : nPartLen;
 
     const XubString aTxt( CalcCaseMap( rTxt ) );
-    const USHORT nTxtLen = Min( rTxt.Len(), nLen );
-    USHORT nPos = 0;
-    USHORT nOldPos = nPos;
+    const sal_uInt16 nTxtLen = Min( rTxt.Len(), nLen );
+    sal_uInt16 nPos = 0;
+    sal_uInt16 nOldPos = nPos;
 
     // #108210#
     // Test if string length differ between original and CaseMapped
@@ -290,11 +290,11 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
                 const XubString aSnippet(rTxt, nIdx + nOldPos, nPos-nOldPos);
                 XubString aNewText = CalcCaseMap(aSnippet);
 
-                rDo.Do( aNewText, 0, aNewText.Len(), TRUE );
+                rDo.Do( aNewText, 0, aNewText.Len(), sal_True );
             }
             else
             {
-                rDo.Do( aTxt, nIdx + nOldPos, nPos-nOldPos, TRUE );
+                rDo.Do( aTxt, nIdx + nOldPos, nPos-nOldPos, sal_True );
             }
 
             nOldPos = nPos;
@@ -320,11 +320,11 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
                 const XubString aSnippet(rTxt, nIdx + nOldPos, nPos - nOldPos);
                 XubString aNewText = CalcCaseMap(aSnippet);
 
-                rDo.Do( aNewText, 0, aNewText.Len(), FALSE );
+                rDo.Do( aNewText, 0, aNewText.Len(), sal_False );
             }
             else
             {
-                rDo.Do( aTxt, nIdx + nOldPos, nPos-nOldPos, FALSE );
+                rDo.Do( aTxt, nIdx + nOldPos, nPos-nOldPos, sal_False );
             }
 
             nOldPos = nPos;
@@ -335,7 +335,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
 
         if( nOldPos != nPos )
         {
-            rDo.DoSpace( FALSE );
+            rDo.DoSpace( sal_False );
 
             if(bCaseMapLengthDiffers)
             {
@@ -345,18 +345,18 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
                 const XubString aSnippet(rTxt, nIdx + nOldPos, nPos - nOldPos);
                 XubString aNewText = CalcCaseMap(aSnippet);
 
-                rDo.Do( aNewText, 0, aNewText.Len(), FALSE );
+                rDo.Do( aNewText, 0, aNewText.Len(), sal_False );
             }
             else
             {
-                rDo.Do( aTxt, nIdx + nOldPos, nPos - nOldPos, FALSE );
+                rDo.Do( aTxt, nIdx + nOldPos, nPos - nOldPos, sal_False );
             }
 
             nOldPos = nPos;
             rDo.SetSpace();
         }
     }
-    rDo.DoSpace( TRUE );
+    rDo.DoSpace( sal_True );
 }
 
 /**************************************************************************
@@ -456,7 +456,7 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const XubString &rTxt )
 }
 
 Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const XubString &rTxt,
-                         const USHORT nIdx, const USHORT nLen, sal_Int32* pDXArray ) const
+                         const sal_uInt16 nIdx, const sal_uInt16 nLen, sal_Int32* pDXArray ) const
 {
     if ( !IsCaseMap() && !IsKern() )
         return Size( pOut->GetTextArray( rTxt, pDXArray, nIdx, nLen ),
@@ -696,18 +696,18 @@ public:
             { }
 
     virtual void Do( const XubString &rTxt, const xub_StrLen nIdx,
-                     const xub_StrLen nLen, const BOOL bUpper );
+                     const xub_StrLen nLen, const sal_Bool bUpper );
 
     inline const Size &GetSize() const { return aTxtSize; };
 };
 
 void SvxDoGetCapitalSize::Do( const XubString &_rTxt, const xub_StrLen _nIdx,
-                              const xub_StrLen _nLen, const BOOL bUpper )
+                              const xub_StrLen _nLen, const sal_Bool bUpper )
 {
     Size aPartSize;
     if ( !bUpper )
     {
-        BYTE nProp = pFont->GetPropr();
+        sal_uInt8 nProp = pFont->GetPropr();
         pFont->SetProprRel( KAPITAELCHENPROP );
         pFont->SetPhysFont( pOut );
         aPartSize.setWidth( pOut->GetTextWidth( _rTxt, _nIdx, _nLen ) );
@@ -769,23 +769,23 @@ public:
           aSpacePos( rPos ),
           nKern( nKrn )
         { }
-    virtual void DoSpace( const BOOL bDraw );
+    virtual void DoSpace( const sal_Bool bDraw );
     virtual void SetSpace();
     virtual void Do( const XubString &rTxt, const xub_StrLen nIdx,
-                     const xub_StrLen nLen, const BOOL bUpper );
+                     const xub_StrLen nLen, const sal_Bool bUpper );
 };
 
-void SvxDoDrawCapital::DoSpace( const BOOL bDraw )
+void SvxDoDrawCapital::DoSpace( const sal_Bool bDraw )
 {
     if ( bDraw || pFont->IsWordLineMode() )
     {
-        USHORT nDiff = (USHORT)(aPos.X() - aSpacePos.X());
+        sal_uInt16 nDiff = (sal_uInt16)(aPos.X() - aSpacePos.X());
         if ( nDiff )
         {
-            BOOL bWordWise = pFont->IsWordLineMode();
-            BOOL bTrans = pFont->IsTransparent();
-            pFont->SetWordLineMode( FALSE );
-            pFont->SetTransparent( TRUE );
+            sal_Bool bWordWise = pFont->IsWordLineMode();
+            sal_Bool bTrans = pFont->IsTransparent();
+            pFont->SetWordLineMode( sal_False );
+            pFont->SetTransparent( sal_True );
             pFont->SetPhysFont( pOut );
             pOut->DrawStretchText( aSpacePos, nDiff, XubString( sDoubleSpace,
                             RTL_TEXTENCODING_MS_1252 ), 0, 2 );
@@ -803,9 +803,9 @@ void SvxDoDrawCapital::SetSpace()
 }
 
 void SvxDoDrawCapital::Do( const XubString &_rTxt, const xub_StrLen _nIdx,
-                           const xub_StrLen _nLen, const BOOL bUpper)
+                           const xub_StrLen _nLen, const sal_Bool bUpper)
 {
-    BYTE nProp = 0;
+    sal_uInt8 nProp = 0;
     Size aPartSize;
 
     // Einstellen der gewuenschten Fonts

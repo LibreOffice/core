@@ -33,6 +33,8 @@
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/factory.hxx>
+#include <tools/diagnose_ex.h>
+
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
@@ -60,7 +62,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::document;
 using namespace ::sf_misc;
-using namespace ::scripting_util;
 
 namespace func_provider
 {
@@ -95,10 +96,9 @@ MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext >
         m_xContext( xContext ), m_bIsValid( false ), m_bInitialised( false ),
         m_bIsPkgMSP( false ), m_pPCache( 0 )
 {
-    validateXRef( m_xContext, "MasterScriptProvider::MasterScriptProvider: No context available\n" );
+    ENSURE_OR_THROW( m_xContext.is(), "MasterScriptProvider::MasterScriptProvider: No context available\n" );
     m_xMgr = m_xContext->getServiceManager();
-    validateXRef( m_xMgr,
-                  "MasterScriptProvider::MasterScriptProvider: No service manager available\n" );
+    ENSURE_OR_THROW( m_xMgr.is(), "MasterScriptProvider::MasterScriptProvider: No service manager available\n" );
     m_bIsValid = true;
 }
 

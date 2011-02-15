@@ -54,11 +54,11 @@ SvxSimpTblContainer::SvxSimpTblContainer( Window* pParent, const ResId& rResId):
 
 long SvxSimpTblContainer::PreNotify( NotifyEvent& rNEvt )
 {
-    long nResult = TRUE;
+    long nResult = sal_True;
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyCode& aKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
-        USHORT nKey = aKeyCode.GetCode();
+        sal_uInt16 nKey = aKeyCode.GetCode();
         if ( nKey == KEY_TAB )
             GetParent()->Notify( rNEvt );
         else if ( m_pTable->IsFocusOnCellEnabled() && ( nKey == KEY_LEFT || nKey == KEY_RIGHT ) )
@@ -80,10 +80,10 @@ SvxSimpleTable::SvxSimpleTable( Window* pParent,WinBits nBits ):
         aPrivContainer(pParent,nBits|WB_DIALOGCONTROL),
         aHeaderBar(pParent,WB_BUTTONSTYLE | WB_BORDER | WB_TABSTOP),
         nHeaderItemId(1),
-        bResizeFlag(FALSE),
-        bPaintFlag(TRUE)
+        bResizeFlag(sal_False),
+        bPaintFlag(sal_True)
 {
-    bSortDirection=TRUE;
+    bSortDirection=sal_True;
     nSortCol=0xFFFF;
     nOldPos=0;
 
@@ -111,11 +111,11 @@ SvxSimpleTable::SvxSimpleTable( Window* pParent,const ResId& rResId):
         aPrivContainer(pParent,rResId),
         aHeaderBar(pParent,WB_BUTTONSTYLE | WB_BORDER  | WB_TABSTOP),
         nHeaderItemId(1),
-        bResizeFlag(TRUE),
-        bPaintFlag(TRUE)
+        bResizeFlag(sal_True),
+        bPaintFlag(sal_True)
 {
 
-    bSortDirection=TRUE;
+    bSortDirection=sal_True;
     nOldPos=0;
     nSortCol=0xFFFF;
 
@@ -198,18 +198,18 @@ void SvxSimpleTable::SetTabs()
 {
     SvHeaderTabListBox::SetTabs();
 
-    USHORT nPrivTabCount = TabCount();
+    sal_uInt16 nPrivTabCount = TabCount();
     if ( nPrivTabCount )
     {
         if ( nPrivTabCount > aHeaderBar.GetItemCount() )
             nPrivTabCount = aHeaderBar.GetItemCount();
 
-        USHORT i, nNewSize = static_cast< USHORT >( GetTab(0) ), nPos = 0;
+        sal_uInt16 i, nNewSize = static_cast< sal_uInt16 >( GetTab(0) ), nPos = 0;
         for ( i = 1; i < nPrivTabCount; ++i )
         {
-            nNewSize = static_cast< USHORT >( GetTab(i) ) - nPos;
+            nNewSize = static_cast< sal_uInt16 >( GetTab(i) ) - nPos;
             aHeaderBar.SetItemSize( i, nNewSize );
-            nPos = (USHORT)GetTab(i);
+            nPos = (sal_uInt16)GetTab(i);
         }
 
         aHeaderBar.SetItemSize( i, HEADERBAR_FULLSIZE ); // because no tab for last entry
@@ -225,9 +225,9 @@ void SvxSimpleTable::Paint( const Rectangle& rRect )
 {
     SvHeaderTabListBox::Paint(rRect );
 
-    USHORT nPrivTabCount = TabCount();
-    USHORT nPos = 0;
-    USHORT nNewSize = ( nPrivTabCount > 0 ) ? (USHORT)GetTab(0) : 0;
+    sal_uInt16 nPrivTabCount = TabCount();
+    sal_uInt16 nPos = 0;
+    sal_uInt16 nNewSize = ( nPrivTabCount > 0 ) ? (sal_uInt16)GetTab(0) : 0;
 
     long nOffset=-GetXOffset();
     nOldPos=nOffset;
@@ -240,16 +240,16 @@ void SvxSimpleTable::Paint( const Rectangle& rRect )
         if(nPrivTabCount>aHeaderBar.GetItemCount())
                 nPrivTabCount=aHeaderBar.GetItemCount();
 
-        for(USHORT i=1;i<nPrivTabCount;i++)
+        for(sal_uInt16 i=1;i<nPrivTabCount;i++)
         {
-            nNewSize = static_cast< USHORT >( GetTab(i) ) - nPos;
+            nNewSize = static_cast< sal_uInt16 >( GetTab(i) ) - nPos;
             aHeaderBar.SetItemSize( i, nNewSize );
-            nPos= static_cast< USHORT >( GetTab(i) );
+            nPos= static_cast< sal_uInt16 >( GetTab(i) );
         }
     }
-    bPaintFlag=TRUE;
+    bPaintFlag=sal_True;
 }
-void SvxSimpleTable::InsertHeaderEntry(const XubString& rText,USHORT nCol,
+void SvxSimpleTable::InsertHeaderEntry(const XubString& rText,sal_uInt16 nCol,
                                        HeaderBarItemBits nBits)
 {
     xub_StrLen nEnd = rText.Search( sal_Unicode( '\t' ) );
@@ -290,7 +290,7 @@ void SvxSimpleTable::HideTable()
     aPrivContainer.Hide();
 }
 
-BOOL SvxSimpleTable::IsVisible() const
+sal_Bool SvxSimpleTable::IsVisible() const
 {
     return aPrivContainer.IsVisible();
 }
@@ -305,7 +305,7 @@ void SvxSimpleTable::DisableTable()
     aPrivContainer.Disable();
 }
 
-BOOL SvxSimpleTable::IsEnabled() const
+sal_Bool SvxSimpleTable::IsEnabled() const
 {
     return aPrivContainer.IsEnabled();
 }
@@ -359,12 +359,12 @@ void SvxSimpleTable::SetOutputSizePixel(const Size& rNewSize )
     UpdateViewSize();
 }
 
-USHORT SvxSimpleTable::GetSelectedCol()
+sal_uInt16 SvxSimpleTable::GetSelectedCol()
 {
     return (aHeaderBar.GetCurItemId()-1);
 }
 
-void SvxSimpleTable::SortByCol(USHORT nCol,BOOL bDir)
+void SvxSimpleTable::SortByCol(sal_uInt16 nCol,sal_Bool bDir)
 {
     bSortDirection=bDir;
     if(nSortCol!=0xFFFF)
@@ -393,7 +393,7 @@ void SvxSimpleTable::SortByCol(USHORT nCol,BOOL bDir)
 
 void SvxSimpleTable::HBarClick()
 {
-    USHORT nId=aHeaderBar.GetCurItemId();
+    sal_uInt16 nId=aHeaderBar.GetCurItemId();
 
     if (aHeaderBar.GetItemBits(nId) & HIB_CLICKABLE)
     {
@@ -441,24 +441,24 @@ void SvxSimpleTable::HBarDrag()
 void SvxSimpleTable::HBarEndDrag()
 {
     HideTracking();
-    USHORT nPrivTabCount=TabCount();
-    USHORT nPos=0;
-    USHORT nNewSize=0;
+    sal_uInt16 nPrivTabCount=TabCount();
+    sal_uInt16 nPos=0;
+    sal_uInt16 nNewSize=0;
 
     if(nPrivTabCount)
     {
         if(nPrivTabCount>aHeaderBar.GetItemCount())
                 nPrivTabCount=aHeaderBar.GetItemCount();
 
-        //for(USHORT i=1;i<=nPrivTabCount;i++)
-        for(USHORT i=1;i<nPrivTabCount;i++)
+        //for(sal_uInt16 i=1;i<=nPrivTabCount;i++)
+        for(sal_uInt16 i=1;i<nPrivTabCount;i++)
         {
-            nNewSize = static_cast< USHORT >( aHeaderBar.GetItemSize(i) ) + nPos;
+            nNewSize = static_cast< sal_uInt16 >( aHeaderBar.GetItemSize(i) ) + nPos;
             SetTab( i, nNewSize, MAP_PIXEL );
             nPos = nNewSize;
         }
     }
-    bPaintFlag=FALSE;
+    bPaintFlag=sal_False;
     Invalidate();
     Update();
 }
@@ -520,14 +520,14 @@ IMPL_LINK( SvxSimpleTable, HeaderBarDblClick, HeaderBar*, pCtr)
     return 0;
 }
 
-SvLBoxItem* SvxSimpleTable::GetEntryAtPos( SvLBoxEntry* pEntry, USHORT nPos ) const
+SvLBoxItem* SvxSimpleTable::GetEntryAtPos( SvLBoxEntry* pEntry, sal_uInt16 nPos ) const
 {
     DBG_ASSERT(pEntry,"GetEntryText:Invalid Entry");
     SvLBoxItem* pItem = NULL;
 
     if( pEntry )
     {
-        USHORT nCount = pEntry->ItemCount();
+        sal_uInt16 nCount = pEntry->ItemCount();
 
         nPos++;
 
@@ -551,8 +551,8 @@ StringCompare SvxSimpleTable::ColCompare(SvLBoxEntry* pLeft,SvLBoxEntry* pRight)
 
     if(pLeftItem != NULL && pRightItem != NULL)
     {
-        USHORT nLeftKind=pLeftItem->IsA();
-        USHORT nRightKind=pRightItem->IsA();
+        sal_uInt16 nLeftKind=pLeftItem->IsA();
+        sal_uInt16 nRightKind=pRightItem->IsA();
 
         if(nRightKind == SV_ITEM_ID_LBOXSTRING &&
             nLeftKind == SV_ITEM_ID_LBOXSTRING )

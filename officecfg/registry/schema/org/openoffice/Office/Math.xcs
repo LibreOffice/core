@@ -316,6 +316,20 @@
 				<value>100</value>
 			</prop>
 		</group>
+        <group oor:name="LoadSave">
+            <info>
+                <desc>Contains settings related to load and save operations.</desc>
+            </info>
+            <prop oor:name="IsSaveOnlyUsedSymbols" oor:type="xs:boolean">
+                <!-- UIHints: - Tools/Options - OpenOffice Maths - Settings -->
+                <info>
+                    <author>TL</author>
+                    <desc>When set only symbols used in the current formula will be saved. Otherwise all user defined symbols will be saved in each formula.</desc>
+                    <label>Save only used symbols.</label>
+                </info>
+                <value>true</value>
+            </prop>
+        </group>
 		<group oor:name="Misc">
 			<info>
 				<desc>Contains miscellaneous settings.</desc>
