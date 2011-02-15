@@ -56,7 +56,7 @@ protected:
     comm_UINT16 nReceiveHeaderType;
 
 public:
-    PacketHandler( ITransmiter* pTransmitter_, IReceiver* pReceiver_, comm_BOOL bMC = FALSE );
+    PacketHandler( ITransmiter* pTransmitter_, IReceiver* pReceiver_, comm_BOOL bMC = sal_False );
 
     comm_UINT16 GetReceiveProtocol() { return nReceiveProtocol; }
     comm_UINT16 GetReceiveHeaderType() { return nReceiveHeaderType; }

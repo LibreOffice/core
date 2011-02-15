@@ -94,9 +94,9 @@ private:
 
     DECL_LINK( DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent* );
 
-    void        GetPathList( USHORT _nPathHandle, String& _rInternalPath,
+    void        GetPathList( sal_uInt16 _nPathHandle, String& _rInternalPath,
                              String& _rUserPath, String& _rWritablePath, sal_Bool& _rReadOnly );
-    void        SetPathList( USHORT _nPathHandle,
+    void        SetPathList( sal_uInt16 _nPathHandle,
                              const String& _rUserPath, const String& _rWritablePath );
 #endif
 
@@ -105,9 +105,9 @@ public:
     ~SvxPathTabPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
     virtual void        FillUserData();
 };
