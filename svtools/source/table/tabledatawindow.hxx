@@ -55,7 +55,7 @@ namespace svt { namespace table
         Link                m_aMouseButtonDownHdl;
          Link               m_aMouseButtonUpHdl;
         Link                m_aSelectHdl;
-        ULONG               m_nTipWindowHandle;
+        sal_uLong           m_nTipWindowHandle;
 
     public:
         TableDataWindow( TableControl_Impl& _rTableControl );

@@ -95,7 +95,7 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::RequestHelp( const HelpEvent& rHEvt )
     {
-        USHORT const nHelpMode = rHEvt.GetMode();
+        sal_uInt16 const nHelpMode = rHEvt.GetMode();
         if  (   ( IsMouseCaptured() )
             ||  ( ( nHelpMode & HELPMODE_QUICK ) == 0 )
             )
@@ -105,7 +105,7 @@ namespace svt { namespace table
         }
 
         ::rtl::OUString sHelpText;
-        USHORT nHelpStyle = 0;
+        sal_uInt16 nHelpStyle = 0;
 
         Point const aMousePos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
         RowPos const hitRow = m_rTableControl.getRowAtPoint( aMousePos );

@@ -491,35 +491,9 @@ namespace svt { namespace table
                 break;
             }
 
-<<<<<<< local
         }
         else
             imageSize.Width() = i_context.aContentArea.GetWidth();
-=======
-        Rectangle aRect( _rArea );
-        ++aRect.Left(); --aRect.Right();
-        aRect.Top(); aRect.Bottom();
-        if(_bSelected)
-            _rDevice.SetTextColor(_rStyle.GetHighlightTextColor());
-        else if(m_pImpl->rModel.getTextColor() != 0x000000)
-            _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
-        else
-            _rDevice.SetTextColor(_rStyle.GetFieldTextColor());
-        sal_uLong nHorFlag = TEXT_DRAW_LEFT;
-        sal_uLong nVerFlag = TEXT_DRAW_TOP;
-        if(m_pImpl->rModel.getVerticalAlign() == 1)
-            nVerFlag = TEXT_DRAW_VCENTER;
-        else if(m_pImpl->rModel.getVerticalAlign() == 2)
-            nVerFlag = TEXT_DRAW_BOTTOM;
-        if(m_pImpl->rModel.getColumnModel(_nColumn)->getHorizontalAlign() == 1)
-            nHorFlag = TEXT_DRAW_CENTER;
-        else if(m_pImpl->rModel.getColumnModel(_nColumn)->getHorizontalAlign() == 2)
-            nHorFlag = TEXT_DRAW_RIGHT;
-        Rectangle textRect(_rArea);
-        textRect.Left()+=4; textRect.Right()-=4;
-        textRect.Bottom()-=2;
-        _rDevice.DrawText( textRect, _rText, nHorFlag | nVerFlag | TEXT_DRAW_CLIP);
->>>>>>> other
 
         if ( i_context.aContentArea.GetHeight() > imageSize.Height() )
         {

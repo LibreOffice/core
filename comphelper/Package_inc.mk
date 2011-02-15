@@ -111,6 +111,7 @@ $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/numbers.hxx,comp
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/evtlistenerhlp.hxx,comphelper/evtlistenerhlp.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/optional.hxx,comphelper/optional.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/componentbase.hxx,comphelper/componentbase.hxx))
+$(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/componentguard.hxx,comphelper/componentguard.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/InlineContainer.hxx,comphelper/InlineContainer.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/propertybag.hxx,comphelper/propertybag.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/embeddedobjectcontainer.hxx,comphelper/embeddedobjectcontainer.hxx))
