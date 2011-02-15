@@ -50,15 +50,15 @@ private:
     XLineStyleItem*     pStyleItem;
     XLineDashItem*      pDashItem;
 
-    BOOL                bUpdate;
+    sal_Bool                bUpdate;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxLineStyleToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxLineStyleToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxLineStyleToolBoxControl();
 
-    virtual void        StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
     void                Update( const SfxPoolItem* pState );
     virtual Window*     CreateItemWindow( Window *pParent );
@@ -73,10 +73,10 @@ class SVX_DLLPUBLIC SvxLineWidthToolBoxControl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxLineWidthToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxLineWidthToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxLineWidthToolBoxControl();
 
-    virtual void        StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
     virtual Window*     CreateItemWindow( Window *pParent );
 };
@@ -90,10 +90,10 @@ class SVX_DLLPUBLIC SvxLineColorToolBoxControl : public SfxToolBoxControl
 public:
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SvxLineColorToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxLineColorToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxLineColorToolBoxControl();
 
-    virtual void        StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
     void                Update( const SfxPoolItem* pState );
     virtual Window*     CreateItemWindow( Window *pParent );
@@ -109,11 +109,11 @@ class SvxLineEndWindow : public SfxPopupWindow
 private:
     XLineEndList*   pLineEndList;
     ValueSet        aLineEndSet;
-    USHORT          nCols;
-    USHORT          nLines;
-    ULONG           nLineEndWidth;
+    sal_uInt16          nCols;
+    sal_uInt16          nLines;
+    sal_uIntPtr             nLineEndWidth;
     Size            aBmpSize;
-    BOOL            bPopupMode;
+    sal_Bool            bPopupMode;
     bool            mbInResize;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > mxFrame;
 
@@ -126,7 +126,7 @@ private:
 protected:
     virtual void    Resizing( Size& rSize );
     virtual void    Resize();
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
     virtual void    PopupModeEnd();
 
     /** This function is called when the window gets the focus.  It grabs
@@ -136,10 +136,10 @@ protected:
     virtual void GetFocus (void);
 
 public:
-    SvxLineEndWindow( USHORT nId,
+    SvxLineEndWindow( sal_uInt16 nId,
                       const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                       const String& rWndTitle );
-    SvxLineEndWindow( USHORT nId,
+    SvxLineEndWindow( sal_uInt16 nId,
                       const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                       Window* pParentWindow,
                       const String& rWndTitle );
@@ -147,7 +147,7 @@ public:
 
     void            StartSelection();
 
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState );
     virtual SfxPopupWindow* Clone() const;
 };
@@ -160,10 +160,10 @@ class SVX_DLLPUBLIC SvxLineEndToolBoxControl : public SfxToolBoxControl
 {
 public:
     SFX_DECL_TOOLBOX_CONTROL();
-    SvxLineEndToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SvxLineEndToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SvxLineEndToolBoxControl();
 
-    virtual void                StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();

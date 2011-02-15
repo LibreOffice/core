@@ -35,7 +35,7 @@
 //---------------------
 class SdrShadowTransparenceItem: public SdrPercentItem {
 public:
-    SdrShadowTransparenceItem(USHORT nTransp=0): SdrPercentItem(SDRATTR_SHADOWTRANSPARENCE,nTransp) {}
+    SdrShadowTransparenceItem(sal_uInt16 nTransp=0): SdrPercentItem(SDRATTR_SHADOWTRANSPARENCE,nTransp) {}
     SdrShadowTransparenceItem(SvStream& rIn)   : SdrPercentItem(SDRATTR_SHADOWTRANSPARENCE,rIn)     {}
 };
 

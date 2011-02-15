@@ -64,7 +64,7 @@ SfxPoolItem* SfxObjectShellItem::Clone( SfxItemPool *) const
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+sal_Bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     if ( pObjSh )
     {
@@ -76,12 +76,12 @@ sal_Bool SfxObjectShellItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*
     {
         rVal <<= ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >();
     }
-    return TRUE;
+    return sal_True;
 }
 
 //--------------------------------------------------------------------
 
-sal_Bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+sal_Bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     // This item MUST have a model. Please don't change this, there are UNO-based
     // implementations which need it!!
@@ -100,21 +100,21 @@ sal_Bool SfxObjectShellItem::PutValue( const com::sun::star::uno::Any& rVal, BYT
                 if ( nHandle )
                 {
                     pObjSh = reinterpret_cast< SfxObjectShell* >(sal::static_int_cast<sal_IntPtr>( nHandle ));
-                    return TRUE;
+                    return sal_True;
                 }
             }
         }
 
         pObjSh = 0;
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 //=========================================================================
 
-SfxObjectItem::SfxObjectItem( USHORT nWhichId, SfxShell *pSh )
+SfxObjectItem::SfxObjectItem( sal_uInt16 nWhichId, SfxShell *pSh )
 :   SfxPoolItem( nWhichId ),
     _pSh( pSh )
 {}

@@ -758,9 +758,10 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
                     if (repository.equals(OUSTR("user")))
                         bUserDisabled2 = false;
 
+                    ::rtl::OUString const name(xNewExtension->getName());
                     activateExtension(
                         dp_misc::getIdentifier(xNewExtension),
-                        xNewExtension->getName(), bUserDisabled2, false, xAbortChannel,
+                        name, bUserDisabled2, false, xAbortChannel,
                         Reference<ucb::XCommandEnvironment>());
                 }
                 else

@@ -140,10 +140,10 @@ class ImpSjJScriptCheckboxObject : public SjJScriptCheckboxObject, ImpSjJScriptC
     virtual String      getValue() const;
     virtual String      getType() const;
 
-    virtual BOOL        getChecked() const;
-    virtual void        setChecked( BOOL bCheck );
-    virtual BOOL        getDefaultChecked() const;
-    virtual void        setDefaultChecked( BOOL bCheck );
+    virtual sal_Bool        getChecked() const;
+    virtual void        setChecked( sal_Bool bCheck );
+    virtual sal_Bool        getDefaultChecked() const;
+    virtual void        setDefaultChecked( sal_Bool bCheck );
     // getValue() wird in der Basisklasse definiert
     virtual void        setValue( const String & aStrg );
 
@@ -170,8 +170,8 @@ class ImpSjJScriptRadioArray: public SjJSbxArrayObject
 {
     VCRadioManager* pMgr;
 public:
-    INT32 ImpSjJScriptRadioArray::getLength() const;
-    SjJSbxObject* ImpSjJScriptRadioArray::getElement( INT32 nIndex ) const;
+    sal_Int32 ImpSjJScriptRadioArray::getLength() const;
+    SjJSbxObject* ImpSjJScriptRadioArray::getElement( sal_Int32 nIndex ) const;
     SjJSbxObject* ImpSjJScriptRadioArray::getElement_String( const String & aName ) const;
 
     // Konstruktor
@@ -192,15 +192,15 @@ class ImpSjJScriptRadioObject : public SjJScriptRadioObject, ImpSjJScriptControl
     virtual String      getType() const;
 
     // Properties von SjJScriptCheckboxObject
-    virtual BOOL        getChecked() const;
-    virtual void        setChecked( BOOL bCheck );
-    virtual BOOL        getDefaultChecked() const;
-    virtual void        setDefaultChecked( BOOL bCheck );
+    virtual sal_Bool        getChecked() const;
+    virtual void        setChecked( sal_Bool bCheck );
+    virtual sal_Bool        getDefaultChecked() const;
+    virtual void        setDefaultChecked( sal_Bool bCheck );
     // getValue() wird in der Basisklasse definiert
     virtual void        setValue( const String & aStrg );
 
     // yyy Raus zum inkompatiblen
-    //virtual INT32     getLength();
+    //virtual sal_Int32     getLength();
 
     // Methoden des Objektes
     virtual void        click();
@@ -230,9 +230,9 @@ class ImpSjJScriptSelectObject : public SjJScriptSelectObject, ImpSjJScriptContr
     virtual String      getValue() const;
     virtual String      getType() const;
 
-    virtual INT32       getLength();
-    virtual INT32       getSelectedIndex() const;
-    virtual void        setSelectedIndex( INT32 nNo );
+    virtual sal_Int32       getLength();
+    virtual sal_Int32       getSelectedIndex() const;
+    virtual void        setSelectedIndex( sal_Int32 nNo );
 
     // liefert eine Array von Option-Objekten
     //yyy Raus zum inkompatiblen
@@ -262,9 +262,9 @@ class ImpSjJScriptSelectObject : public SjJScriptSelectObject, ImpSjJScriptContr
             void        onFocus();
 
     // SjJSbxArrayObject-Methoden
-    virtual INT32           getLength() const;
+    virtual sal_Int32           getLength() const;
     // Zugriff "uber den Index
-    virtual SjJSbxObject *  getElement( INT32 nIndex ) const;
+    virtual SjJSbxObject *  getElement( sal_Int32 nIndex ) const;
     // Zugriff "uber den Namen
     // native Java-Methoden k"onnen (noch) nicht "uberladen werden
     //virtual SjJSbxObject *    getElement_String( const String & aName ) const;
@@ -273,19 +273,19 @@ class ImpSjJScriptSelectObject : public SjJScriptSelectObject, ImpSjJScriptContr
     ImpSjJScriptSelectObject( VCControl* _pControl, SjJSbxObject * p );
 
     // zum Setzen von Eintr"agen am Objket (zum Aufruf von Java aus) 15.1.1997
-    virtual void        setOption( INT32 nIndex, const String & aOptionText,
+    virtual void        setOption( sal_Int32 nIndex, const String & aOptionText,
                                    const String & aOptionValue,
-                                   BOOL bDefaultSelected, BOOL bSelected );
+                                   sal_Bool bDefaultSelected, sal_Bool bSelected );
 
     // Schnittstelle fuer die Properties der Option-Objekte
-    virtual BOOL        getOptionDefaultSelected( INT32 nIndex ) const;
-    virtual void        setOptionDefaultSelected( BOOL bSelected, INT32 nIndex );
-    virtual BOOL        getOptionSelected( INT32 nIndex ) const;
-    virtual void        setOptionSelected( BOOL bSelected, INT32 nIndex );
-    virtual String      getOptionText( INT32 nIndex ) const;
-    virtual void        setOptionText( const String & sText, INT32 nIndex );
-    virtual void        setOptionValue( const String & sText, INT32 nIndex );
-    virtual String      getOptionValue( INT32 nIndex ) const;
+    virtual sal_Bool        getOptionDefaultSelected( sal_Int32 nIndex ) const;
+    virtual void        setOptionDefaultSelected( sal_Bool bSelected, sal_Int32 nIndex );
+    virtual sal_Bool        getOptionSelected( sal_Int32 nIndex ) const;
+    virtual void        setOptionSelected( sal_Bool bSelected, sal_Int32 nIndex );
+    virtual String      getOptionText( sal_Int32 nIndex ) const;
+    virtual void        setOptionText( const String & sText, sal_Int32 nIndex );
+    virtual void        setOptionValue( const String & sText, sal_Int32 nIndex );
+    virtual String      getOptionValue( sal_Int32 nIndex ) const;
 };
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -294,21 +294,21 @@ class ImpSjJScriptSelectObject : public SjJScriptSelectObject, ImpSjJScriptContr
 
 class ImpSjJScriptOptionObject : public SjJScriptOptionObject, ImpSjJScriptControlBase
 {
-    USHORT              nListBoxIndex;
+    sal_uInt16              nListBoxIndex;
   public:
     // Methoden von Java --> C++ (f"ur Properties)
     //--------------------------------------------
-    virtual BOOL        getdefaultSelected() const;
-    virtual void        setdefaultSelected( BOOL bSelected );
-    virtual INT32       getIndex() const;
-    virtual BOOL        getSelected() const;
-    virtual void        setSelected( BOOL bSelected );
+    virtual sal_Bool        getdefaultSelected() const;
+    virtual void        setdefaultSelected( sal_Bool bSelected );
+    virtual sal_Int32       getIndex() const;
+    virtual sal_Bool        getSelected() const;
+    virtual void        setSelected( sal_Bool bSelected );
 
 
     //yyy Zum Vollupdate raus:
     /*
-    virtual INT32       getSelectedIndex() const;
-    virtual void        setSelectedIndex( INT32 nNo );
+    virtual sal_Int32       getSelectedIndex() const;
+    virtual void        setSelectedIndex( sal_Int32 nNo );
     */
 
 
@@ -331,7 +331,7 @@ class ImpSjJScriptOptionObject : public SjJScriptOptionObject, ImpSjJScriptContr
     // keine !
 
     // Konstruktor
-    ImpSjJScriptOptionObject( VCControl* _pControl, SjJSbxObject * p, USHORT _nListBoxIndex );
+    ImpSjJScriptOptionObject( VCControl* _pControl, SjJSbxObject * p, sal_uInt16 _nListBoxIndex );
 };
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -343,9 +343,9 @@ class SjJSbxFormsArray: public SfxJSArray
 
   public:
     // SjJSbxArrayObject-Methoden
-    virtual INT32           getLength() const;
+    virtual sal_Int32           getLength() const;
     // Zugriff "uber den Index
-    virtual SjJSbxObject *  getElement( INT32 nIndex ) const;
+    virtual SjJSbxObject *  getElement( sal_Int32 nIndex ) const;
     // Zugriff "uber den Namen
     // native Java-Methoden k"onnen (noch) nicht "uberladen werden
     virtual SjJSbxObject *  getElement_String( const String & aName ) const;
@@ -593,8 +593,8 @@ class ImpSjJScriptFormObject : public SjJScriptFormObject
     virtual void        setTarget( const String & sValue );
 
     // SjJSbxArrayObject-Methoden
-    INT32               getLength() const;
-    SjJSbxObject*       getElement( INT32 nIndex ) const;
+    sal_Int32               getLength() const;
+    SjJSbxObject*       getElement( sal_Int32 nIndex ) const;
     SjJSbxObject*       getElement_String( const String & aName ) const;
 
     // liefert ein Array-Objekt mit Elementen vom Typ JScriptAbstractControlsObject
