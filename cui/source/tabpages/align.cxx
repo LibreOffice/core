@@ -59,7 +59,7 @@ namespace svx {
 
 // horizontal alignment -------------------------------------------------------
 
-typedef sfx::ValueItemWrapper< SvxHorJustifyItem, SvxCellHorJustify, USHORT > HorJustItemWrapper;
+typedef sfx::ValueItemWrapper< SvxHorJustifyItem, SvxCellHorJustify, sal_uInt16 > HorJustItemWrapper;
 typedef sfx::ListBoxConnection< HorJustItemWrapper > HorJustConnection;
 
 static const HorJustConnection::MapEntryType s_pHorJustMap[] =
@@ -75,7 +75,7 @@ static const HorJustConnection::MapEntryType s_pHorJustMap[] =
 
 // vertical alignment ---------------------------------------------------------
 
-typedef sfx::ValueItemWrapper< SvxVerJustifyItem, SvxCellVerJustify, USHORT > VerJustItemWrapper;
+typedef sfx::ValueItemWrapper< SvxVerJustifyItem, SvxCellVerJustify, sal_uInt16 > VerJustItemWrapper;
 typedef sfx::ListBoxConnection< VerJustItemWrapper > VerJustConnection;
 
 static const VerJustConnection::MapEntryType s_pVerJustMap[] =
@@ -89,7 +89,7 @@ static const VerJustConnection::MapEntryType s_pVerJustMap[] =
 
 // cell rotate mode -----------------------------------------------------------
 
-typedef sfx::ValueItemWrapper< SvxRotateModeItem, SvxRotateMode, USHORT > RotateModeItemWrapper;
+typedef sfx::ValueItemWrapper< SvxRotateModeItem, SvxRotateMode, sal_uInt16 > RotateModeItemWrapper;
 typedef sfx::ValueSetConnection< RotateModeItemWrapper > RotateModeConnection;
 
 static const RotateModeConnection::MapEntryType s_pRotateModeMap[] =
@@ -102,7 +102,7 @@ static const RotateModeConnection::MapEntryType s_pRotateModeMap[] =
 
 // ============================================================================
 
-static USHORT s_pRanges[] =
+static sal_uInt16 s_pRanges[] =
 {
     SID_ATTR_ALIGN_HOR_JUSTIFY,SID_ATTR_ALIGN_VER_JUSTIFY,
     SID_ATTR_ALIGN_STACKED,SID_ATTR_ALIGN_LINEBREAK,
@@ -212,7 +212,7 @@ SfxTabPage* AlignmentTabPage::Create( Window* pParent, const SfxItemSet& rAttrSe
     return new AlignmentTabPage( pParent, rAttrSet );
 }
 
-USHORT* AlignmentTabPage::GetRanges()
+sal_uInt16* AlignmentTabPage::GetRanges()
 {
     return s_pRanges;
 }
@@ -243,7 +243,7 @@ void AlignmentTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 void AlignmentTabPage::InitVsRefEgde()
 {
     // remember selection - is deleted in call to ValueSet::Clear()
-    USHORT nSel = maVsRefEdge.GetSelectItemId();
+    sal_uInt16 nSel = maVsRefEdge.GetSelectItemId();
 
     ResId aResId( GetSettings().GetStyleSettings().GetHighContrastMode() ? IL_LOCK_BMPS_HC : IL_LOCK_BMPS, CUI_MGR() );
     ImageList aImageList( aResId );
@@ -264,7 +264,7 @@ void AlignmentTabPage::InitVsRefEgde()
 
 void AlignmentTabPage::UpdateEnableControls()
 {
-    USHORT nHorAlign = maLbHorAlign.GetSelectEntryPos();
+    sal_uInt16 nHorAlign = maLbHorAlign.GetSelectEntryPos();
     bool bHorLeft  = (nHorAlign == ALIGNDLG_HORALIGN_LEFT);
     bool bHorBlock = (nHorAlign == ALIGNDLG_HORALIGN_BLOCK);
     bool bHorFill  = (nHorAlign == ALIGNDLG_HORALIGN_FILL);

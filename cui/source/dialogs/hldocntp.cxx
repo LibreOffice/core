@@ -96,7 +96,7 @@ sal_Bool SvxHyperlinkNewDocTp::ImplGetURLObject( const String& rPath, const Stri
         }
         if ( bIsValidURL )
         {
-            USHORT nPos = maLbDocTypes.GetSelectEntryPos();
+            sal_uInt16 nPos = maLbDocTypes.GetSelectEntryPos();
             if ( nPos != LISTBOX_ENTRY_NOTFOUND )
                 aURLObject.SetExtension( ((DocumentTypeData*)maLbDocTypes.GetEntryData( nPos ))->aStrExt );
         }
@@ -124,7 +124,7 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& 
 {
     // Set HC bitmaps and disable display of bitmap names.
     maBtCreate.SetModeImage( Image( CUI_RES( IMG_CREATE_HC ) ), BMP_COLOR_HIGHCONTRAST );
-    maBtCreate.EnableTextDisplay (FALSE);
+    maBtCreate.EnableTextDisplay (sal_False);
 
     InitStdControls();
     FreeResource();
@@ -150,7 +150,7 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& 
 
 SvxHyperlinkNewDocTp::~SvxHyperlinkNewDocTp ()
 {
-    for ( USHORT n=0; n<maLbDocTypes.GetEntryCount(); n++ )
+    for ( sal_uInt16 n=0; n<maLbDocTypes.GetEntryCount(); n++ )
     {
         DocumentTypeData* pTypeData = (DocumentTypeData*)
                                       maLbDocTypes.GetEntryData ( n );
@@ -282,7 +282,7 @@ void SvxHyperlinkNewDocTp::SetInitFocus()
 |*
 \************************************************************************/
 
-BOOL SvxHyperlinkNewDocTp::AskApply()
+sal_Bool SvxHyperlinkNewDocTp::AskApply()
 {
     INetURLObject aINetURLObject;
     sal_Bool bRet = ImplGetURLObject( maCbbPath.GetText(), maCbbPath.GetBaseURL(), aINetURLObject );
@@ -351,7 +351,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                 if ( aStrNewName != aEmptyStr )
                 {
                     // get private-url
-                    USHORT nPos = maLbDocTypes.GetSelectEntryPos();
+                    sal_uInt16 nPos = maLbDocTypes.GetSelectEntryPos();
                     if( nPos == LISTBOX_ENTRY_NOTFOUND )
                         nPos=0;
                     String aStrDocName ( ( ( DocumentTypeData* )
@@ -362,7 +362,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                     SfxStringItem aReferer( SID_REFERER, UniString::CreateFromAscii(
                                                 RTL_CONSTASCII_STRINGPARAM( "private:user" ) ) );
                     SfxStringItem aFrame( SID_TARGETNAME, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_blank" ) ) );
-                    //SfxBoolItem aFrame( SID_OPEN_NEW_VIEW, TRUE );
+                    //SfxBoolItem aFrame( SID_OPEN_NEW_VIEW, sal_True );
 
                     String aStrFlags ( sal_Unicode('S') );
                     if ( maRbtEditLater.IsChecked() )
@@ -432,14 +432,14 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
     utl::LocalFileHelper::ConvertSystemPathToURL( aTempStrURL, maCbbPath.GetBaseURL(), aStrURL );
 
     String              aStrPath = aStrURL;
-    BOOL                bZeroPath = ( aStrPath.Len() == 0 );
-    BOOL                bHandleFileName = bZeroPath;    // when path has length of 0, then the rest should always be handled
+    sal_Bool                bZeroPath = ( aStrPath.Len() == 0 );
+    sal_Bool                bHandleFileName = bZeroPath;    // when path has length of 0, then the rest should always be handled
                                                         //  as file name, otherwise we do not yet know
 
     if( bZeroPath )
         aStrPath = SvtPathOptions().GetWorkPath();
     else if( !::utl::UCBContentHelper::IsFolder( aStrURL ) )
-        bHandleFileName = TRUE;
+        bHandleFileName = sal_True;
 
     xFolderPicker->setDisplayDirectory( aStrPath );
     DisableClose( sal_True );
@@ -470,7 +470,7 @@ IMPL_LINK ( SvxHyperlinkNewDocTp, ClickNewHdl_Impl, void *, EMPTYARG )
             maLbDocTypes.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
         {
             // get private-url
-            USHORT nPos = maLbDocTypes.GetSelectEntryPos();
+            sal_uInt16 nPos = maLbDocTypes.GetSelectEntryPos();
             aNewURL.setExtension( ( ( DocumentTypeData* ) maLbDocTypes.GetEntryData( nPos ) )->aStrExt );
         }
 

@@ -65,7 +65,7 @@ private:
     VCLExternalSolarLock*   m_pExternalLock;
     sal_Int32               m_nIndexInParent;
     sal_Int16               m_nRole;
-    USHORT                  m_nItemId;
+    sal_uInt16                  m_nItemId;
     sal_Bool                m_bHasFocus;
     sal_Bool                m_bIsChecked;
     bool                    m_bIndeterminate;

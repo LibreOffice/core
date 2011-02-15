@@ -117,7 +117,7 @@ SvxColorTabPage::SvxColorTabPage
     rOutAttrs           ( rInAttrs ),
     pColorTab( NULL ),
 
-    bDeleteColorTable   ( TRUE ),
+    bDeleteColorTable   ( sal_True ),
 
     pXPool              ( (XOutdevItemPool*) rInAttrs.GetPool() ),
     aXFStyleItem        ( XFILL_SOLID ),
@@ -194,7 +194,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
 {
     if( *pDlgType == 0 ) // Flaechen-Dialog
     {
-        *pbAreaTP = FALSE;
+        *pbAreaTP = sal_False;
 
         if( pColorTab )
         {
@@ -209,7 +209,7 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
             else if( *pPageType == PT_COLOR && *pPos == LISTBOX_ENTRY_NOTFOUND )
             {
                 const SfxPoolItem* pPoolItem = NULL;
-                if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), TRUE, &pPoolItem ) )
+                if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), sal_True, &pPoolItem ) )
                 {
                     aLbColorModel.SelectEntryPos( CM_RGB );
 
@@ -291,7 +291,7 @@ long SvxColorTabPage::CheckChanges_Impl()
     if (eCM != CM_RGB)
         ConvertColorValues (aTmpColor, CM_RGB);
 
-    USHORT nPos = aLbColor.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbColor.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         Color aColor = pColorTab->GetColor( nPos )->GetColor();
@@ -341,7 +341,7 @@ long SvxColorTabPage::CheckChanges_Impl()
                 case RET_CANCEL:
                     // return( -1L ); <-- wuerde die Seite nicht verlassen
                 break;
-                // return( TRUE ); // Abbruch
+                // return( sal_True ); // Abbruch
             }
             delete aMessDlg; //add by CHINA001
         }
@@ -359,17 +359,17 @@ long SvxColorTabPage::CheckChanges_Impl()
 
 // -----------------------------------------------------------------------
 
-BOOL SvxColorTabPage::FillItemSet( SfxItemSet& rSet )
+sal_Bool SvxColorTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if( ( *pDlgType != 0 ) ||
-        ( *pPageType == PT_COLOR && *pbAreaTP == FALSE ) )
+        ( *pPageType == PT_COLOR && *pbAreaTP == sal_False ) )
     {
         String aString;
         Color  aColor;
 
         // CheckChanges_Impl(); <-- doppelte Abfrage ?
 
-        USHORT nPos = aLbColor.GetSelectEntryPos();
+        sal_uInt16 nPos = aLbColor.GetSelectEntryPos();
         if( nPos != LISTBOX_ENTRY_NOTFOUND )
         {
             aColor  = pColorTab->GetColor( nPos )->GetColor();
@@ -385,14 +385,14 @@ BOOL SvxColorTabPage::FillItemSet( SfxItemSet& rSet )
         rSet.Put( XFillStyleItem( XFILL_SOLID ) );
     }
 
-    return( TRUE );
+    return( sal_True );
 }
 
 // -----------------------------------------------------------------------
 
 void SvxColorTabPage::Reset( const SfxItemSet& rSet )
 {
-    USHORT nState = rSet.GetItemState( XATTR_FILLCOLOR );
+    sal_uInt16 nState = rSet.GetItemState( XATTR_FILLCOLOR );
 
     if ( nState >= SFX_ITEM_DEFAULT )
     {
@@ -404,7 +404,7 @@ void SvxColorTabPage::Reset( const SfxItemSet& rSet )
 
     // Farbmodell setzen
     String aStr = GetUserData();
-    aLbColorModel.SelectEntryPos( (USHORT) aStr.ToInt32() );
+    aLbColorModel.SelectEntryPos( (sal_uInt16) aStr.ToInt32() );
 
     ChangeColorHdl_Impl( this );
     SelectColorModelHdl_Impl( this );
@@ -444,10 +444,10 @@ SfxTabPage* SvxColorTabPage::Create( Window* pWindow,
 IMPL_LINK( SvxColorTabPage, ModifiedHdl_Impl, void *, EMPTYARG )
 {
     // lese aktuelle MtrFields aus, wenn cmyk, dann k-Wert als Trans.-Farbe
-    aAktuellColor.SetColor ( Color( (UINT8)PercentToColor_Impl( (USHORT) aMtrFldColorModel4.GetValue() ),
-                                    (UINT8)PercentToColor_Impl( (USHORT) aMtrFldColorModel1.GetValue() ),
-                                    (UINT8)PercentToColor_Impl( (USHORT) aMtrFldColorModel2.GetValue() ),
-                                    (UINT8)PercentToColor_Impl( (USHORT) aMtrFldColorModel3.GetValue() ) ).GetColor() );
+    aAktuellColor.SetColor ( Color( (sal_uInt8)PercentToColor_Impl( (sal_uInt16) aMtrFldColorModel4.GetValue() ),
+                                    (sal_uInt8)PercentToColor_Impl( (sal_uInt16) aMtrFldColorModel1.GetValue() ),
+                                    (sal_uInt8)PercentToColor_Impl( (sal_uInt16) aMtrFldColorModel2.GetValue() ),
+                                    (sal_uInt8)PercentToColor_Impl( (sal_uInt16) aMtrFldColorModel3.GetValue() ) ).GetColor() );
 
     Color aTmpColor(aAktuellColor);
     if (eCM != CM_RGB)
@@ -481,12 +481,12 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
     String aName( aEdtName.GetText() );
     XColorEntry* pEntry;
     long nCount = pColorTab->Count();
-    BOOL bDifferent = TRUE;
+    sal_Bool bDifferent = sal_True;
 
     // Pruefen, ob Name schon vorhanden ist
     for ( long i = 0; i < nCount && bDifferent; i++ )
         if ( aName == pColorTab->GetColor( i )->GetName() )
-            bDifferent = FALSE;
+            bDifferent = sal_False;
 
     // Wenn ja, wird wiederholt ein neuer Name angefordert
     if ( !bDifferent )
@@ -500,21 +500,21 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
         AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-        BOOL bLoop = TRUE;
+        sal_Bool bLoop = sal_True;
 
         while ( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
         {
             pDlg->GetName( aName );
-            bDifferent = TRUE;
+            bDifferent = sal_True;
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
                 if( aName == pColorTab->GetColor( i )->GetName() )
-                    bDifferent = FALSE;
+                    bDifferent = sal_False;
             }
 
             if( bDifferent )
-                bLoop = FALSE;
+                bLoop = sal_False;
             else
                 aWarningBox.Execute();
         }
@@ -559,7 +559,7 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 //
 IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 {
-    USHORT nPos = aLbColor.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbColor.GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -567,12 +567,12 @@ IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         String aDesc( ResId( RID_SVXSTR_DESC_COLOR, rMgr ) );
         String aName( aEdtName.GetText() );
         long nCount = pColorTab->Count();
-        BOOL bDifferent = TRUE;
+        sal_Bool bDifferent = sal_True;
 
         // Pruefen, ob Name schon vorhanden ist
         for ( long i = 0; i < nCount && bDifferent; i++ )
             if ( aName == pColorTab->GetColor( i )->GetName() && nPos != i )
-                bDifferent = FALSE;
+                bDifferent = sal_False;
 
         // Wenn ja, wird wiederholt ein neuer Name angefordert
         if ( !bDifferent )
@@ -586,19 +586,19 @@ IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
             DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
             AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
-            BOOL bLoop = TRUE;
+            sal_Bool bLoop = sal_True;
 
             while ( !bDifferent && bLoop && pDlg->Execute() == RET_OK )
             {
                 pDlg->GetName( aName );
-                bDifferent = TRUE;
+                bDifferent = sal_True;
 
                 for ( long i = 0; i < nCount && bDifferent; i++ )
                     if( aName == pColorTab->GetColor( i )->GetName() && nPos != i )
-                        bDifferent = FALSE;
+                        bDifferent = sal_False;
 
                 if( bDifferent )
-                    bLoop = FALSE;
+                    bLoop = sal_False;
                 else
                     aWarningBox.Execute();
             }
@@ -650,7 +650,7 @@ IMPL_LINK( SvxColorTabPage, ClickWorkOnHdl_Impl, void *, EMPTYARG )
 
     if( pColorDlg->Execute() == RET_OK )
     {
-        USHORT nK = 0;
+        sal_uInt16 nK = 0;
         Color aPreviewColor = pColorDlg->GetColor();
         aAktuellColor = aPreviewColor;
         if (eCM != CM_RGB)
@@ -680,7 +680,7 @@ IMPL_LINK( SvxColorTabPage, ClickWorkOnHdl_Impl, void *, EMPTYARG )
 //
 IMPL_LINK( SvxColorTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 {
-    USHORT nPos = aLbColor.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbColor.GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -690,14 +690,14 @@ IMPL_LINK( SvxColorTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
         if( aQueryBox.Execute() == RET_YES )
         {
             // Jetzt wird richtig geloescht
-            ULONG nCount = pColorTab->Count() - 1;
+            sal_uLong nCount = pColorTab->Count() - 1;
             XColorEntry* pEntry;
 
             pEntry = pColorTab->Remove( nPos );
             DBG_ASSERT( pEntry, "ColorEntry nicht vorhanden (1) !" );
             delete pEntry;
 
-            for( ULONG i = nPos; i < nCount; i++ )
+            for( sal_uLong i = nPos; i < nCount; i++ )
             {
                 pEntry = pColorTab->Remove( i + 1 );
                 DBG_ASSERT( pEntry, "ColorEntry nicht vorhanden (2) !" );
@@ -738,7 +738,7 @@ IMPL_LINK( SvxColorTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 {
     ResMgr& rMgr = CUI_MGR();
-    USHORT nReturn = RET_YES;
+    sal_uInt16 nReturn = RET_YES;
 
     if( *pnColorTableState & CT_MODIFIED )
     {
@@ -792,7 +792,7 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
                         if( bDeleteColorTable )
                             delete pColorTab;
                         else
-                            bDeleteColorTable = TRUE;
+                            bDeleteColorTable = sal_True;
                     }
 
                     pColorTab = pColTab;
@@ -939,7 +939,7 @@ IMPL_LINK( SvxColorTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxColorTabPage, SelectColorLBHdl_Impl, void *, EMPTYARG )
 {
-    USHORT nPos = aLbColor.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbColor.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         aValSetColorTable.SelectItem( nPos + 1 );
@@ -962,7 +962,7 @@ IMPL_LINK( SvxColorTabPage, SelectColorLBHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxColorTabPage, SelectValSetHdl_Impl, void *, EMPTYARG )
 {
-    USHORT nPos = aValSetColorTable.GetSelectItemId();
+    sal_uInt16 nPos = aValSetColorTable.GetSelectItemId();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         aLbColor.SelectEntryPos( nPos - 1 );
@@ -992,16 +992,16 @@ void SvxColorTabPage::ConvertColorValues (Color& rColor, ColorModel eModell)
     {
         case CM_RGB:
         {
-            CmykToRgb_Impl (rColor, (USHORT)rColor.GetTransparency() );
-            rColor.SetTransparency ((UINT8) 0);
+            CmykToRgb_Impl (rColor, (sal_uInt16)rColor.GetTransparency() );
+            rColor.SetTransparency ((sal_uInt8) 0);
         }
         break;
 
         case CM_CMYK:
         {
-            USHORT nK;
+            sal_uInt16 nK;
             RgbToCmyk_Impl (rColor, nK );
-            rColor.SetTransparency ((UINT8) nK);
+            rColor.SetTransparency ((sal_uInt8) nK);
         }
         break;
     }
@@ -1173,7 +1173,7 @@ void SvxColorTabPage::FillValueSet_Impl( ValueSet& rVs )
     for( long i = 0; i < nCount; i++ )
     {
         pColorEntry = pColorTab->GetColor( i );
-        rVs.InsertItem( (USHORT) i + 1, pColorEntry->GetColor(), pColorEntry->GetName() );
+        rVs.InsertItem( (sal_uInt16) i + 1, pColorEntry->GetColor(), pColorEntry->GetName() );
     }
 }
 
@@ -1185,10 +1185,10 @@ void SvxColorTabPage::FillValueSet_Impl( ValueSet& rVs )
 // Bei weiteren Farbmodellen sollte man hierfuer eigene Klassen entwickeln,
 // die dann auch entsprechende Casts enthalten.
 
-void SvxColorTabPage::RgbToCmyk_Impl( Color& rColor, USHORT& rK )
+void SvxColorTabPage::RgbToCmyk_Impl( Color& rColor, sal_uInt16& rK )
 {
-    USHORT nColor1, nColor2, nColor3;
-    USHORT nProzent; // nur temporaer !!!
+    sal_uInt16 nColor1, nColor2, nColor3;
+    sal_uInt16 nProzent; // nur temporaer !!!
 
     nColor1 = 255 - rColor.GetRed();
     nProzent = ColorToPercent_Impl( nColor1 );
@@ -1201,16 +1201,16 @@ void SvxColorTabPage::RgbToCmyk_Impl( Color& rColor, USHORT& rK )
 
     rK = Min( Min( nColor1, nColor2 ), nColor3 );
 
-    rColor.SetRed( sal::static_int_cast< UINT8 >( nColor1 - rK ) );
-    rColor.SetGreen( sal::static_int_cast< UINT8 >( nColor2 - rK ) );
-    rColor.SetBlue( sal::static_int_cast< UINT8 >( nColor3 - rK ) );
+    rColor.SetRed( sal::static_int_cast< sal_uInt8 >( nColor1 - rK ) );
+    rColor.SetGreen( sal::static_int_cast< sal_uInt8 >( nColor2 - rK ) );
+    rColor.SetBlue( sal::static_int_cast< sal_uInt8 >( nColor3 - rK ) );
 }
 
 //------------------------------------------------------------------------
 
 // Umgekehrter Fall zu RgbToCmyk_Impl (s.o.)
 
-void SvxColorTabPage::CmykToRgb_Impl( Color& rColor, const USHORT nK )
+void SvxColorTabPage::CmykToRgb_Impl( Color& rColor, const sal_uInt16 nK )
 {
     long lTemp;
 
@@ -1218,26 +1218,26 @@ void SvxColorTabPage::CmykToRgb_Impl( Color& rColor, const USHORT nK )
 
     if( lTemp < 0L )
         lTemp = 0L;
-    rColor.SetRed( (BYTE)lTemp );
+    rColor.SetRed( (sal_uInt8)lTemp );
 
     lTemp = 255 - ( rColor.GetGreen() + nK );
 
     if( lTemp < 0L )
         lTemp = 0L;
-    rColor.SetGreen( (BYTE)lTemp );
+    rColor.SetGreen( (sal_uInt8)lTemp );
 
     lTemp = 255 - ( rColor.GetBlue() + nK );
 
     if( lTemp < 0L )
         lTemp = 0L;
-    rColor.SetBlue( (BYTE)lTemp );
+    rColor.SetBlue( (sal_uInt8)lTemp );
 }
 
 //------------------------------------------------------------------------
 
-USHORT SvxColorTabPage::ColorToPercent_Impl( USHORT nColor )
+sal_uInt16 SvxColorTabPage::ColorToPercent_Impl( sal_uInt16 nColor )
 {
-    USHORT nWert = 0;
+    sal_uInt16 nWert = 0;
 
     switch (eCM)
     {
@@ -1246,7 +1246,7 @@ USHORT SvxColorTabPage::ColorToPercent_Impl( USHORT nColor )
             break;
 
         case CM_CMYK:
-            nWert = (USHORT) ( (double) nColor * 100.0 / 255.0 + 0.5 );
+            nWert = (sal_uInt16) ( (double) nColor * 100.0 / 255.0 + 0.5 );
             break;
     }
 
@@ -1255,9 +1255,9 @@ USHORT SvxColorTabPage::ColorToPercent_Impl( USHORT nColor )
 
 //------------------------------------------------------------------------
 
-USHORT SvxColorTabPage::PercentToColor_Impl( USHORT nPercent )
+sal_uInt16 SvxColorTabPage::PercentToColor_Impl( sal_uInt16 nPercent )
 {
-    USHORT nWert = 0;
+    sal_uInt16 nWert = 0;
 
     switch (eCM)
     {
@@ -1266,7 +1266,7 @@ USHORT SvxColorTabPage::PercentToColor_Impl( USHORT nPercent )
             break;
 
         case CM_CMYK:
-            nWert = (USHORT) ( (double) nPercent * 255.0 / 100.0 + 0.5 );
+            nWert = (sal_uInt16) ( (double) nPercent * 255.0 / 100.0 + 0.5 );
             break;
     }
 

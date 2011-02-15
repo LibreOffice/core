@@ -68,13 +68,13 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maFtPassword            ( this, CUI_RES (FT_PASSWD) ),
     maEdPassword            ( this, CUI_RES (ED_PASSWD) ),
     maCbAnonymous           ( this, CUI_RES (CBX_ANONYMOUS) ),
-    mbMarkWndOpen           ( FALSE )
+    mbMarkWndOpen           ( sal_False )
 {
     // Set HC bitmaps and display display of bitmap names.
     maBtBrowse.SetModeImage( Image( CUI_RES( IMG_BROWSE_HC ) ), BMP_COLOR_HIGHCONTRAST );
-    maBtBrowse.EnableTextDisplay (FALSE);
+    maBtBrowse.EnableTextDisplay (sal_False);
     maBtTarget.SetModeImage( Image( CUI_RES( IMG_TARGET_HC ) ), BMP_COLOR_HIGHCONTRAST );
-    maBtTarget.EnableTextDisplay (FALSE);
+    maBtTarget.EnableTextDisplay (sal_False);
 
     InitStdControls();
     FreeResource();
@@ -103,12 +103,12 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     ///////////////////////////////////////
     // set defaults
     maRbtLinktypInternet.Check ();
-    maFtLogin.Show( FALSE );
-    maFtPassword.Show( FALSE );
-    maEdLogin.Show( FALSE );
-    maEdPassword.Show( FALSE );
-    maCbAnonymous.Show( FALSE );
-    maBtTarget.Enable( FALSE );
+    maFtLogin.Show( sal_False );
+    maFtPassword.Show( sal_False );
+    maEdLogin.Show( sal_False );
+    maEdPassword.Show( sal_False );
+    maCbAnonymous.Show( sal_False );
+    maBtTarget.Enable( sal_False );
     maBtBrowse.Enable( maStrStdDocURL != aEmptyStr );
 
     ///////////////////////////////////////
@@ -193,7 +193,7 @@ void SvxHyperlinkInternetTp::setFTPUser(const String& rUser, const String& rPass
     maFtPassword.Enable ();
     maEdLogin.Enable ();
     maEdPassword.Enable ();
-    maCbAnonymous.Check(FALSE);
+    maCbAnonymous.Check(sal_False);
 }
 
 /*************************************************************************
@@ -311,11 +311,11 @@ void SvxHyperlinkInternetTp::SetScheme( const String& aScheme )
 {
     //if  aScheme is empty or unknown the default beaviour is like it where HTTP
 
-    BOOL bFTP = aScheme.SearchAscii( sFTPScheme ) == 0;
-    BOOL bTelnet = FALSE;
+    sal_Bool bFTP = aScheme.SearchAscii( sFTPScheme ) == 0;
+    sal_Bool bTelnet = sal_False;
     if( !bFTP )
         bTelnet = aScheme.SearchAscii( sTelnetScheme ) == 0;
-    BOOL bInternet = !(bFTP || bTelnet);
+    sal_Bool bInternet = !(bFTP || bTelnet);
 
     //update protocol button selection:
     maRbtLinktypFTP.Check(bFTP);
@@ -464,11 +464,11 @@ IMPL_LINK ( SvxHyperlinkInternetTp, ClickBrowseHdl_Impl, void *, EMPTYARG )
     SfxStringItem aName( SID_FILE_NAME, maStrStdDocURL );
     SfxStringItem aRefererItem( SID_REFERER, UniString::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM( "private:user" ) ) );
-    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, TRUE );
-    SfxBoolItem aSilent( SID_SILENT, TRUE );
-    SfxBoolItem aReadOnly( SID_DOC_READONLY, TRUE );
+    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_True );
+    SfxBoolItem aSilent( SID_SILENT, sal_True );
+    SfxBoolItem aReadOnly( SID_DOC_READONLY, sal_True );
 
-    SfxBoolItem aBrowse( SID_BROWSE, TRUE );
+    SfxBoolItem aBrowse( SID_BROWSE, sal_True );
 
     const SfxPoolItem *ppItems[] = { &aName, &aNewView, &aSilent, &aReadOnly, &aRefererItem, &aBrowse, NULL };
     (((SvxHpLinkDlg*)mpDialog)->GetBindings())->Execute( SID_OPENDOC, ppItems, 0, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
@@ -534,7 +534,7 @@ void SvxHyperlinkInternetTp::SetMarkStr ( String& aStrMark )
 |*
 |************************************************************************/
 
-void SvxHyperlinkInternetTp::SetOnlineMode( BOOL /*bEnable*/ )
+void SvxHyperlinkInternetTp::SetOnlineMode( sal_Bool /*bEnable*/ )
 {
     // State of target-button in subject to the current url-string
     // ( Can't display any targets in an document, if there is no
@@ -545,7 +545,7 @@ void SvxHyperlinkInternetTp::SetOnlineMode( BOOL /*bEnable*/ )
     if( aStrCurrentTarget == aEmptyStr                ||
         aStrCurrentTarget.EqualsIgnoreCaseAscii( sHTTPScheme )  ||
         aStrCurrentTarget.EqualsIgnoreCaseAscii( sHTTPSScheme ) )
-        maBtTarget.Enable( FALSE );
+        maBtTarget.Enable( sal_False );
     else
-        maBtTarget.Enable( TRUE );
+        maBtTarget.Enable( sal_True );
 }

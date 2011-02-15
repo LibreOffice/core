@@ -85,8 +85,8 @@ comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
 
     nLen = 0;
     pData = NULL;
-    comm_BOOL bWasError = FALSE;
-    comm_BOOL bForceMultiChannelThisPacket = FALSE;
+    comm_BOOL bWasError = sal_False;
+    comm_BOOL bForceMultiChannelThisPacket = sal_False;
     if ( pReceiver )
     {
         comm_UINT32 nBytes = 0;
@@ -95,14 +95,14 @@ comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
 
         READ_SOCKET( &nBytes, sizeof(nBytes) )
         if ( bWasError )
-            return FALSE;
+            return sal_False;
 
         if ( 0xFFFFFFFF == nBytes )     // Expliziter Request für dieses Datenpaket auf MultiChannel umzuschalten
         {
             READ_SOCKET( &nBytes, sizeof(nBytes) )
             if ( bWasError )
-                return FALSE;
-            bForceMultiChannelThisPacket = TRUE;
+                return sal_False;
+            bForceMultiChannelThisPacket = sal_True;
         }
 
         nBytes = NETDWORD( nBytes );
@@ -143,13 +143,13 @@ comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
             default:
                 {
                     DBG_ERROR("Unbekannter Headertyp in der Kommunikation");
-                    bWasError = TRUE;
+                    bWasError = sal_True;
                 }
 
             }
 
             if ( bWasError )
-                return FALSE;
+                return sal_False;
 
             /// Längen anpassen und ggf restheader überlesen.
             while ( nHeaderBytes > nHeaderReadSoFar )
@@ -181,12 +181,12 @@ comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
         if ( bWasError )
         {
             ::operator delete(pData), pData = 0;
-            return FALSE;
+            return sal_False;
         }
         nLen = nBytes;
     }
     else
-        bWasError = TRUE;
+        bWasError = sal_True;
 
     return !bWasError;
 }
@@ -204,7 +204,7 @@ comm_BOOL PacketHandler::ReceiveData( void* &pData, comm_UINT32 &nLen )
 comm_BOOL PacketHandler::TransferData( const void* pData, comm_UINT32 nLen, CMProtocol nProtocol )
 {
     comm_UINT32 nBuffer = nLen;
-    comm_BOOL bWasError = FALSE;
+    comm_BOOL bWasError = sal_False;
 
 #ifndef FORCE_MULTI_CHANNEL_HEADERS
     if ( bMultiChannel )
@@ -254,7 +254,7 @@ comm_BOOL PacketHandler::TransferData( const void* pData, comm_UINT32 nLen, CMPr
 
 comm_BOOL PacketHandler::SendHandshake( HandshakeType aHandshakeType, const void* pData, comm_UINT32 nLen )
 {
-    comm_BOOL bWasError = FALSE;
+    comm_BOOL bWasError = sal_False;
 
     comm_UINT32 nBuffer = 0;
 

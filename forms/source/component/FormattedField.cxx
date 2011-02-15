@@ -43,7 +43,7 @@
 #include <svl/numuno.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/debug.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <i18npool/mslangid.hxx>
 #include <rtl/textenc.h>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -1199,7 +1199,7 @@ Any OFormattedModel::translateControlValueToExternalValue( ) const
 Any OFormattedModel::translateDbColumnToControlValue()
 {
     if ( m_bNumeric )
-        m_aSaveValue <<= DBTypeConversion::getValue( m_xColumn, m_aNullDate, m_nKeyType ); // #100056# OJ
+        m_aSaveValue <<= DBTypeConversion::getValue( m_xColumn, m_aNullDate ); // #100056# OJ
     else
         m_aSaveValue <<= m_xColumn->getString();
 

@@ -50,7 +50,6 @@ class SfxSlotPool;
 class SfxStringItem;
 class SfxFontItem;
 class SfxMacroInfoItem;
-class SfxMacroInfo;
 struct SfxStyleInfo_Impl;
 struct SfxStylesInfo_Impl;
 
@@ -95,29 +94,27 @@ struct SfxStylesInfo_Impl
         static ::rtl::OUString generateCommand(const ::rtl::OUString& sFamily, const ::rtl::OUString& sStyle);
 };
 
-#define SFX_CFGGROUP_FUNCTION 1
-#define SFX_CFGGROUP_BASICMGR 2
-#define SFX_CFGGROUP_DOCBASICMGR 3
-#define SFX_CFGGROUP_BASICLIB 4
-#define SFX_CFGGROUP_BASICMOD 5
-#define SFX_CFGFUNCTION_MACRO 6
-#define SFX_CFGFUNCTION_SLOT  7
-#define SFX_CFGGROUP_SCRIPTCONTAINER  8
-#define SFX_CFGFUNCTION_SCRIPT 9
-#define SFX_CFGGROUP_STYLES  10
-#define SFX_CFGGROUP_SPECIALCHARACTERS  11
+#define SFX_CFGGROUP_FUNCTION           1
+#define SFX_CFGFUNCTION_SLOT            2
+#define SFX_CFGGROUP_SCRIPTCONTAINER    3
+#define SFX_CFGFUNCTION_SCRIPT          4
+#define SFX_CFGGROUP_STYLES             5
 
 struct SfxGroupInfo_Impl
 {
-    USHORT      nKind;
-    USHORT      nOrd;
+    sal_uInt16  nKind;
+    sal_uInt16  nUniqueID;
     void*       pObject;
-    BOOL        bWasOpened;
+    sal_Bool        bWasOpened;
     String      sCommand;
     String      sLabel;
 
-                SfxGroupInfo_Impl( USHORT n, USHORT nr, void* pObj = 0 ) :
-                    nKind( n ), nOrd( nr ), pObject( pObj ), bWasOpened(FALSE) {}
+                SfxGroupInfo_Impl( sal_uInt16 n, sal_uInt16 nr, void* pObj = 0 ) :
+                    nKind( n ), nUniqueID( nr ), pObject( pObj ), bWasOpened(sal_False) {}
+};
+
+struct CuiMacroInfo
+{
 };
 
 typedef SfxGroupInfo_Impl* SfxGroupInfoPtr;
@@ -143,7 +140,7 @@ public:
     String        GetHelpText( SvLBoxEntry *pEntry );
     String        GetCurCommand();
     String        GetCurLabel();
-    SfxMacroInfo* GetMacroInfo();
+    String        GetSelectedScriptURI();
     void          FunctionSelected();
     void          SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
@@ -155,9 +152,7 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
     //SfxSlotPool*                    pSlotPool;
     SfxConfigFunctionListBox_Impl*  pFunctionListBox;
     SfxGroupInfoArr_Impl            aArr;
-    ULONG                           nMode;
-    BOOL                            bShowSF; // show Scripting Framework scripts
-    BOOL                            bShowBasic; // show Basic scripts
+    sal_uLong                       nMode;
 
     ::rtl::OUString m_sModuleLongName;
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
@@ -181,12 +176,12 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
 protected:
     virtual void        RequestingChilds( SvLBoxEntry *pEntry);
     using SvListView::Expand;
-    virtual BOOL        Expand( SvLBoxEntry* pParent );
+    virtual sal_Bool        Expand( SvLBoxEntry* pParent );
 
 public:
     SfxConfigGroupListBox_Impl ( Window* pParent,
                                  const ResId&,
-                                 ULONG nConfigMode = 0 );
+                                 sal_uLong nConfigMode = 0 );
     ~SfxConfigGroupListBox_Impl();
     void                ClearAll();
 
@@ -195,14 +190,11 @@ public:
                              const ::rtl::OUString&                                        sModuleLongName);
     void                SetFunctionListBox( SfxConfigFunctionListBox_Impl *pBox )
                         { pFunctionListBox = pBox; }
-    void                Open( SvLBoxEntry*, BOOL );
+    void                Open( SvLBoxEntry*, sal_Bool );
     void                GroupSelected();
     void                SelectMacro( const SfxMacroInfoItem* );
-    void                AddAndSelect( const SfxStringItem*, const SfxStringItem* );
     void                SelectMacro( const String&, const String& );
     String              GetGroup();
-    BasicManager*       GetBasicManager( const SvLBoxEntry& _rEntry );
-    void                SetScriptType( const String& rScriptType );
     void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
 

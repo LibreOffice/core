@@ -177,12 +177,12 @@ void SvxBitmapTabPage::Construct()
 
 void SvxBitmapTabPage::ActivatePage( const SfxItemSet&  )
 {
-    USHORT nPos;
-    USHORT nCount;
+    sal_uInt16 nPos;
+    sal_uInt16 nCount;
 
     if( *pDlgType == 0 ) // Flaechen-Dialog
     {
-        *pbAreaTP = FALSE;
+        *pbAreaTP = sal_False;
 
         if( pColorTab )
         {
@@ -265,9 +265,9 @@ int SvxBitmapTabPage::DeactivatePage( SfxItemSet* _pSet)
 
 // -----------------------------------------------------------------------
 
-BOOL SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
+sal_Bool SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
 {
-    if( *pDlgType == 0 && *pbAreaTP == FALSE ) // Flaechen-Dialog
+    if( *pDlgType == 0 && *pbAreaTP == sal_False ) // Flaechen-Dialog
     {
         if( *pPageType == PT_BITMAP )
         {
@@ -275,7 +275,7 @@ BOOL SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
 
             XOBitmap aXOBitmap;
             String aString;
-            USHORT nPos = aLbBitmaps.GetSelectEntryPos();
+            sal_uInt16 nPos = aLbBitmaps.GetSelectEntryPos();
             if( nPos != LISTBOX_ENTRY_NOTFOUND )
             {
                 aXOBitmap = pBitmapList->GetBitmap( nPos )->GetXBitmap();
@@ -295,7 +295,7 @@ BOOL SvxBitmapTabPage::FillItemSet( SfxItemSet& _rOutAttrs )
             _rOutAttrs.Put( XFillBitmapItem( aString, aXOBitmap ) );
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -353,11 +353,11 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
     else
     {
         const SfxPoolItem* pPoolItem = NULL;
-        if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLSTYLE ), TRUE, &pPoolItem ) )
+        if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLSTYLE ), sal_True, &pPoolItem ) )
         {
             XFillStyle eXFS = (XFillStyle) ( ( const XFillStyleItem* ) pPoolItem )->GetValue();
             if( ( XFILL_BITMAP == eXFS ) &&
-                ( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLBITMAP ), TRUE, &pPoolItem ) ) )
+                ( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLBITMAP ), sal_True, &pPoolItem ) ) )
             {
                 pXOBitmap = new XOBitmap( ( ( const XFillBitmapItem* ) pPoolItem )->GetBitmapValue() );
             }
@@ -374,11 +374,11 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
     {
         //WorkWindow        aTmpWW( DLGWIN );
         //VirtualDevice aVD( aTmpWW );
-        //USHORT    nLines = aCtlPixel.GetLineCount();
+        //sal_uInt16    nLines = aCtlPixel.GetLineCount();
         //Color aPixelColor, aBackColor;
-        //BOOL  bPixelColor = FALSE;
-        //USHORT    nWidth  = pBitmap->GetSizePixel().Width();
-        //USHORT    nHeight = pBitmap->GetSizePixel().Height();
+        //sal_Bool  bPixelColor = sal_False;
+        //sal_uInt16    nWidth  = pBitmap->GetSizePixel().Width();
+        //sal_uInt16    nHeight = pBitmap->GetSizePixel().Height();
 
         // #85339# try to convert bitmapped item to array item.
         if(pXOBitmap->GetBitmapType() == XBITMAP_IMPORT)
@@ -392,7 +392,7 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
                 sal_uInt32 nCol1(0xffffffff); // background
                 sal_uInt32 nCol2(0xffffffff); // pixel
                 BitmapReadAccess* pAccess = aBitmap.AcquireReadAccess();
-                sal_Bool bValid(TRUE);
+                sal_Bool bValid(sal_True);
 
                 if(pAccess)
                 {
@@ -425,7 +425,7 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
                                     else
                                     {
                                         // Third color detected
-                                        bValid = FALSE;
+                                        bValid = sal_False;
                                     }
                                 }
                                 else
@@ -448,7 +448,7 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
                 else
                 {
                     // no access -> no success
-                    bValid = FALSE;
+                    bValid = sal_False;
                 }
 
                 if(bValid)
@@ -481,7 +481,7 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
         if( pXOBitmap->GetBitmapType() == XBITMAP_IMPORT )
         {
             aCtlPixel.Reset();
-            aCtlPixel.SetPaintable( FALSE );
+            aCtlPixel.SetPaintable( sal_False );
             aCtlPixel.Disable();
             aFtPixelEdit.Disable();
             aFtColor.Disable();
@@ -493,7 +493,7 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
         }
         else if( pXOBitmap->GetBitmapType() == XBITMAP_8X8 )
         {
-            aCtlPixel.SetPaintable( TRUE );
+            aCtlPixel.SetPaintable( sal_True );
             aCtlPixel.Enable();
             aFtPixelEdit.Enable();
             aFtColor.Enable();
@@ -542,7 +542,7 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
         aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
         aCtlPreview.Invalidate();
 
-        bBmpChanged = FALSE;
+        bBmpChanged = sal_False;
         delete pXOBitmap;
     }
     return 0L;
@@ -552,7 +552,7 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
 
 long SvxBitmapTabPage::CheckChanges_Impl()
 {
-    USHORT nPos = aLbBitmaps.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbBitmaps.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         String aString = aLbBitmaps.GetSelectEntry();
@@ -593,7 +593,7 @@ long SvxBitmapTabPage::CheckChanges_Impl()
                 case RET_CANCEL:
                     // return( -1L );
                 break;
-                // return( TRUE ); // Abbruch
+                // return( sal_True ); // Abbruch
             }
             delete aMessDlg; //add by CHINA001
         }
@@ -615,18 +615,18 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
     long nCount = pBitmapList->Count();
     long j = 1;
-    BOOL bDifferent = FALSE;
+    sal_Bool bDifferent = sal_False;
 
     while( !bDifferent )
     {
         aName  = aNewName;
         aName += sal_Unicode(' ');
         aName += UniString::CreateFromInt32( j++ );
-        bDifferent = TRUE;
+        bDifferent = sal_True;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
             if( aName == pBitmapList->GetBitmap( i )->GetName() )
-                bDifferent = FALSE;
+                bDifferent = sal_False;
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -634,17 +634,17 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
     AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     WarningBox*    pWarnBox = NULL;
-    USHORT         nError   = RID_SVXSTR_WARN_NAME_DUPLICATE;
+    sal_uInt16         nError   = RID_SVXSTR_WARN_NAME_DUPLICATE;
 
     while( pDlg->Execute() == RET_OK )
     {
         pDlg->GetName( aName );
 
-        bDifferent = TRUE;
+        bDifferent = sal_True;
 
         for( long i = 0; i < nCount && bDifferent; i++ )
             if( aName == pBitmapList->GetBitmap( i )->GetName() )
-                bDifferent = FALSE;
+                bDifferent = sal_False;
 
         if( bDifferent ) {
             nError = 0;
@@ -682,7 +682,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         else // Es muss sich um eine nicht vorhandene importierte Bitmap handeln
         {
             const SfxPoolItem* pPoolItem = NULL;
-            if( SFX_ITEM_SET == rOutAttrs.GetItemState( XATTR_FILLBITMAP, TRUE, &pPoolItem ) )
+            if( SFX_ITEM_SET == rOutAttrs.GetItemState( XATTR_FILLBITMAP, sal_True, &pPoolItem ) )
             {
                 XOBitmap aXOBitmap( ( ( const XFillBitmapItem* ) pPoolItem )->GetBitmapValue() );
                 pEntry = new XBitmapEntry( aXOBitmap, aName );
@@ -701,7 +701,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 #ifdef WNT
             // hack: #31355# W.P.
             Rectangle aRect( aLbBitmaps.GetPosPixel(), aLbBitmaps.GetSizePixel() );
-            if( TRUE ) {                // ??? overlapped with pDlg
+            if( sal_True ) {                // ??? overlapped with pDlg
                                         // and srolling
                 Invalidate( aRect );
                 //aLbBitmaps.Invalidate();
@@ -769,12 +769,12 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
             {
                 pDlg->GetName( aName );
 
-                BOOL bDifferent = TRUE;
+                sal_Bool bDifferent = sal_True;
                 long nCount     = pBitmapList->Count();
 
                 for( long i = 0; i < nCount && bDifferent; i++ )
                     if( aName == pBitmapList->GetBitmap( i )->GetName() )
-                        bDifferent = FALSE;
+                        bDifferent = sal_False;
 
                 if( bDifferent ) {
                     nError = 0;
@@ -810,7 +810,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
 #ifdef WNT
                 // hack: #31355# W.P.
                 Rectangle aRect( aLbBitmaps.GetPosPixel(), aLbBitmaps.GetSizePixel() );
-                if( TRUE ) {                // ??? overlapped with pDlg
+                if( sal_True ) {                // ??? overlapped with pDlg
                                             // and srolling
                     Invalidate( aRect );
                     //aLbBitmaps.Invalidate();
@@ -841,7 +841,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 {
-    USHORT nPos = aLbBitmaps.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbBitmaps.GetSelectEntryPos();
 
     if ( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -857,24 +857,24 @@ IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
         long nCount = pBitmapList->Count();
-        BOOL bDifferent = FALSE;
-        BOOL bLoop = TRUE;
+        sal_Bool bDifferent = sal_False;
+        sal_Bool bLoop = sal_True;
 
         while( bLoop && pDlg->Execute() == RET_OK )
         {
             pDlg->GetName( aName );
-            bDifferent = TRUE;
+            bDifferent = sal_True;
 
             for( long i = 0; i < nCount && bDifferent; i++ )
             {
                 if( aName == pBitmapList->GetBitmap( i )->GetName() &&
                     aName != aOldName )
-                    bDifferent = FALSE;
+                    bDifferent = sal_False;
             }
 
             if( bDifferent )
             {
-                bLoop = FALSE;
+                bLoop = sal_False;
                 XBitmapEntry* pEntry = pBitmapList->GetBitmap( nPos );
 
                 pEntry->SetName( aName );
@@ -893,7 +893,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
                 // Flag fuer modifiziert setzen
                 *pnBitmapListState |= CT_MODIFIED;
 
-                bBmpChanged = FALSE;
+                bBmpChanged = sal_False;
             }
             else
             {
@@ -911,7 +911,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxBitmapTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 {
-    USHORT nPos = aLbBitmaps.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbBitmaps.GetSelectEntryPos();
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
@@ -947,7 +947,7 @@ IMPL_LINK( SvxBitmapTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxBitmapTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 {
-    USHORT nReturn = RET_YES;
+    sal_uInt16 nReturn = RET_YES;
     ResMgr& rMgr = CUI_MGR();
 
     if ( *pnBitmapListState & CT_MODIFIED )
@@ -1119,7 +1119,7 @@ IMPL_LINK( SvxBitmapTabPage, ChangePixelColorHdl_Impl, void *, EMPTYARG )
     aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
     aCtlPreview.Invalidate();
 
-    bBmpChanged = TRUE;
+    bBmpChanged = sal_True;
 
     return 0L;
 }
@@ -1138,7 +1138,7 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBackgrndColorHdl_Impl, void *, EMPTYARG )
     aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
     aCtlPreview.Invalidate();
 
-    bBmpChanged = TRUE;
+    bBmpChanged = sal_True;
 
     return 0L;
 }
@@ -1156,7 +1156,7 @@ void SvxBitmapTabPage::PointChanged( Window* pWindow, RECT_POINT )
         aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
         aCtlPreview.Invalidate();
 
-        bBmpChanged = TRUE;
+        bBmpChanged = sal_True;
     }
 }
 

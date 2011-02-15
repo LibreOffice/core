@@ -32,6 +32,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
 import com.sun.star.sdb.application.DatabaseObject;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.NoValidPathException;
 import com.sun.star.wizards.common.Properties;
@@ -81,7 +82,7 @@ public class FormWizard extends DatabaseObjectWizard
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
-                    "Height", "Moveable", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Title", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Title", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -230,7 +231,7 @@ public class FormWizard extends DatabaseObjectWizard
         insertLabel("lblBinaryHelpText",
                 new String[]
                 {
-                    "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -245,7 +246,7 @@ public class FormWizard extends DatabaseObjectWizard
         insertLabel("lblSubFormBinaryHelpText",
                 new String[]
                 {
-                    "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -457,7 +458,7 @@ public class FormWizard extends DatabaseObjectWizard
             curDBCommandFieldSelection.setModified(true);
             boolean benable = curDBCommandFieldSelection.getSelectedFieldNames().length > 0;
             enablefromStep(SOSUBFORM_PAGE, benable);
-            setControlProperty("btnWizardNext", "Enabled", new Boolean(benable));
+            setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, new Boolean(benable));
             if (benable)
             {
                 if (curFormConfiguration.hasSubForm())
@@ -470,7 +471,7 @@ public class FormWizard extends DatabaseObjectWizard
                     setStepEnabled(SOFIELDLINKER_PAGE, false);
                 }
             }
-            setControlProperty("btnWizardFinish", "Enabled", new Boolean(benable));
+            setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, new Boolean(benable));
         }
     }
 }

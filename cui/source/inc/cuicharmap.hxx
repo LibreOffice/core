@@ -60,7 +60,7 @@ class SvxShowText : public Control
 public:
                     SvxShowText( Window* pParent,
                                  const ResId& rResId,
-                                 BOOL bCenter = FALSE );
+                                 sal_Bool bCenter = sal_False );
                     ~SvxShowText();
 
     void            SetFont( const Font& rFont );
@@ -71,14 +71,14 @@ protected:
 
 private:
     long            mnY;
-    BOOL            mbCenter;
+    sal_Bool            mbCenter;
 
 };
 
 class SvxCharMapData
 {
 public:
-                    SvxCharMapData( class SfxModalDialog* pDialog, BOOL bOne_, ResMgr* pResContext );
+                    SvxCharMapData( class SfxModalDialog* pDialog, sal_Bool bOne_, ResMgr* pResContext );
 
     void            SetCharFont( const Font& rFont );
 
@@ -103,7 +103,7 @@ friend class SvxCharacterMap;
     FixedText       aCharCodeText;
 //  FixedText       aAssignText;
     Font            aFont;
-    BOOL            bOne;
+    sal_Bool            bOne;
     const SubsetMap* pSubsetMap;
 
     DECL_LINK( OKHdl, OKButton* );
@@ -123,7 +123,7 @@ private:
     SvxCharMapData* mpCharMapData;
 
 public:
-                    SvxCharacterMap( Window* pParent, BOOL bOne=TRUE, const SfxItemSet* pSet=0 );
+                    SvxCharacterMap( Window* pParent, sal_Bool bOne=sal_True, const SfxItemSet* pSet=0 );
                     ~SvxCharacterMap();
 
     void            DisableFontSelection();

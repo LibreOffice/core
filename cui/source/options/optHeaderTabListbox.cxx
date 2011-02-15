@@ -40,15 +40,15 @@ namespace svx
 class OptLBoxString_Impl : public SvLBoxString
 {
 public:
-    OptLBoxString_Impl( SvLBoxEntry* pEntry, USHORT nFlags, const String& rTxt ) :
+    OptLBoxString_Impl( SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& rTxt ) :
         SvLBoxString( pEntry, nFlags, rTxt ) {}
 
-    virtual void Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags, SvLBoxEntry* pEntry );
+    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
 };
 
 // -----------------------------------------------------------------------
 
-void OptLBoxString_Impl::Paint( const Point& rPos, SvLBox& rDev, USHORT, SvLBoxEntry* pEntry )
+void OptLBoxString_Impl::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, SvLBoxEntry* pEntry )
 {
     Font aOldFont( rDev.GetFont() );
     Font aFont( aOldFont );
@@ -73,9 +73,9 @@ void OptHeaderTabListBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt,
                                      SvLBoxButtonKind eButtonKind )
 {
     SvTabListBox::InitEntry( pEntry, rTxt, rImg1, rImg2, eButtonKind );
-    USHORT _nTabCount = TabCount();
+    sal_uInt16 _nTabCount = TabCount();
 
-    for ( USHORT nCol = 1; nCol < _nTabCount; ++nCol )
+    for ( sal_uInt16 nCol = 1; nCol < _nTabCount; ++nCol )
     {
         // alle Spalten mit eigener Klasse initialisieren (Spalte 0 == Bitmap)
         SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nCol );

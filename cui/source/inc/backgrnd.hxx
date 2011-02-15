@@ -65,17 +65,17 @@ class SvxBackgroundTabPage : public SvxTabPage
     using TabPage::DeactivatePage;
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
     virtual void        FillUserData();
     virtual void        PointChanged( Window* pWindow, RECT_POINT eRP );
 
     void                ShowSelector(); // Umschalt-ListBox aktivieren
     void                ShowTblControl(); // fuer den Writer (Zellen/Zeilen/Tabelle)
-    void                ShowParaControl(BOOL bCharOnly = FALSE); // fuer den Writer (Absatz/Zeichen)
-    void                EnableTransparency(BOOL bColor, BOOL bGraphic);
+    void                ShowParaControl(sal_Bool bCharOnly = sal_False); // fuer den Writer (Absatz/Zeichen)
+    void                EnableTransparency(sal_Bool bColor, sal_Bool bGraphic);
     virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
@@ -119,13 +119,13 @@ private:
     // DDListBox fuer Writer -------------------------------
     //------------------------------------------------------
     Color       aBgdColor;
-    USHORT      nHtmlMode;
-    BOOL        bAllowShowSelector  : 1;
-    BOOL        bIsGraphicValid     : 1;
-    BOOL        bLinkOnly           : 1;
-    BOOL        bResized            : 1;
-    BOOL        bColTransparency    : 1;
-    BOOL        bGraphTransparency  : 1;
+    sal_uInt16      nHtmlMode;
+    sal_Bool        bAllowShowSelector  : 1;
+    sal_Bool        bIsGraphicValid     : 1;
+    sal_Bool        bLinkOnly           : 1;
+    sal_Bool        bResized            : 1;
+    sal_Bool        bColTransparency    : 1;
+    sal_Bool        bGraphTransparency  : 1;
     Graphic     aBgdGraphic;
     String      aBgdGraphicPath;
     String      aBgdGraphicFilter;
@@ -142,13 +142,13 @@ private:
     void                FillColorValueSets_Impl();
     void                ShowColorUI_Impl();
     void                ShowBitmapUI_Impl();
-    BOOL                LoadLinkedGraphic_Impl();
+    sal_Bool                LoadLinkedGraphic_Impl();
     void                RaiseLoadError_Impl();
     void                SetGraphicPosition_Impl( SvxGraphicPosition ePos );
     SvxGraphicPosition  GetGraphicPosition_Impl();
     void                FillControls_Impl(const SvxBrushItem& rBgdAttr,
                                             const String& rUserData);
-    BOOL                FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, USHORT nSlot);
+    sal_Bool                FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, sal_uInt16 nSlot);
     void                ResetFromWallpaperItem( const SfxItemSet& rSet );
 
     DECL_LINK( LoadTimerHdl_Impl, Timer* );
