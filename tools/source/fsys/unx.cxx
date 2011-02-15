@@ -66,7 +66,7 @@ struct mnttab
 #include "comdep.hxx"
 #include <rtl/instance.hxx>
 
-#if defined SOLARIS || defined SINIX
+#if defined SOLARIS
 #define MOUNTSPECIAL mnt_special
 #define MOUNTPOINT   mnt_mountp
 #define MOUNTOPTS    mnt_mntopts
@@ -137,7 +137,7 @@ BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
 
 static BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
 {
-#if defined SOLARIS || defined SINIX
+#if defined SOLARIS
     FILE *fp = fopen (MNTTAB, "r");
     if (! fp)
         return FALSE;

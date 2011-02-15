@@ -509,10 +509,6 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
         if ( errno == EINVAL || errno == ENOSYS )
             return sal_True;
     #endif
-    #if defined SINIX
-        if (errno == EINVAL)
-            return sal_True;
-    #endif
     #if defined SOLARIS
         if (errno == ENOSYS)
             return sal_True;
@@ -572,10 +568,6 @@ sal_Bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
 #endif
         if ( errno == EINVAL || errno == ENOSYS )
             return sal_True;
-#endif
-#if ( defined SINIX )
-    if (errno == EINVAL)
-        return sal_True;
 #endif
 
     SetError( ::GetSvError( errno ));

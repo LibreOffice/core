@@ -67,8 +67,6 @@
 #define TOOLS_INETDEF_OS "DragonFly/i386"
 #elif defined DRAGONFLY && defined X86_64
 #define TOOLS_INETDEF_OS "DragonFly/amd64"
-#elif defined SINIX
-#define TOOLS_INETDEF_OS "SINIX"
 #else // AIX, HPUX, SOLARIS, ...
 #define TOOLS_INETDEF_OS "Unix"
 #endif // AIX, HPUX, SOLARIS, ...
