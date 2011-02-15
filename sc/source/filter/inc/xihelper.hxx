@@ -328,7 +328,7 @@ public:
     /** Returns the cached Calc error code, if this value has Error type, else 0. */
     inline sal_uInt8    GetXclError() const { return (mnType == EXC_CACHEDVAL_ERROR) ? mnBoolErr : EXC_ERR_NA; }
     /** Returns the cached Calc error code, if this value has Error type, else 0. */
-    USHORT              GetScError() const;
+    sal_uInt16              GetScError() const;
     /** Returns the token array if this is a Boolean value or error value, else 0. */
     inline const ScTokenArray* GetBoolErrFmla() const { return mxTokArr.get(); }
 

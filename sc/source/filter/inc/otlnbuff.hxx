@@ -36,39 +36,39 @@ class XclImpOutlineBuffer
 {
     // -> exctools.cxx
     private:
-        BYTE*           pLevel;
-        BOOL*           pOuted;
-        BOOL*           pHidden;
+        sal_uInt8*          pLevel;
+        sal_Bool*           pOuted;
+        sal_Bool*           pHidden;
         SCSIZE          nSize;
         SCSIZE          nLast;
-        BYTE            nMaxLevel;
+        sal_uInt8           nMaxLevel;
         ScOutlineArray* pOutlineArray;
-        BOOL            bButtonNormal;  // TRUE -> right / under
+        sal_Bool            bButtonNormal;  // sal_True -> right / under
     public:
                         XclImpOutlineBuffer( SCSIZE nNewSize );
                         ~XclImpOutlineBuffer();
-        void            SetLevel( SCSIZE nIndex, BYTE nVal, BOOL bOuted, BOOL bHidden );
+        void            SetLevel( SCSIZE nIndex, sal_uInt8 nVal, sal_Bool bOuted, sal_Bool bHidden );
         void            SetOutlineArray( ScOutlineArray* pOArray );
         void            Reset( void );
         void            MakeScOutline( void );
-        void            SetLevelRange( SCSIZE nF, SCSIZE nL, BYTE nVal,
-                            BOOL bOuted, BOOL bHidden );
+        void            SetLevelRange( SCSIZE nF, SCSIZE nL, sal_uInt8 nVal,
+                            sal_Bool bOuted, sal_Bool bHidden );
 
-        inline BOOL     HasOutline( void ) const;
+        inline sal_Bool     HasOutline( void ) const;
 
-        inline void     SetButtonMode( const BOOL bRightOrUnder );
+        inline void     SetButtonMode( const sal_Bool bRightOrUnder );
 };
 
 
 
 
-inline BOOL XclImpOutlineBuffer::HasOutline( void ) const
+inline sal_Bool XclImpOutlineBuffer::HasOutline( void ) const
 {
     return nMaxLevel > 0;
 }
 
 
-inline void XclImpOutlineBuffer::SetButtonMode( const BOOL b )
+inline void XclImpOutlineBuffer::SetButtonMode( const sal_Bool b )
 {
     bButtonNormal = b;
 }

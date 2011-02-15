@@ -53,23 +53,23 @@ public:
                         ScRangePtr pR = new ScRange( rRange );
                         Insert( pR, LIST_APPEND );
                     }
-    USHORT          Parse( const String&, ScDocument* = NULL,
-                           USHORT nMask = SCA_VALID,
+    sal_uInt16          Parse( const String&, ScDocument* = NULL,
+                           sal_uInt16 nMask = SCA_VALID,
                            formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
                            sal_Unicode cDelimiter = 0 );
-    void            Format( String&, USHORT nFlags = 0, ScDocument* = NULL,
+    void            Format( String&, sal_uInt16 nFlags = 0, ScDocument* = NULL,
                             formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
                             sal_Unicode cDelimiter = 0 ) const;
-    void            Join( const ScRange&, BOOL bIsInList = FALSE );
-    BOOL            UpdateReference( UpdateRefMode, ScDocument*,
+    void            Join( const ScRange&, sal_Bool bIsInList = sal_False );
+    sal_Bool            UpdateReference( UpdateRefMode, ScDocument*,
                                     const ScRange& rWhere,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     ScRange*        Find( const ScAddress& ) const;
-    BOOL            operator==( const ScRangeList& ) const;
-    BOOL            operator!=( const ScRangeList& r ) const;
-    BOOL            Intersects( const ScRange& ) const;
-    BOOL            In( const ScRange& ) const;
-    ULONG           GetCellCount() const;
+    sal_Bool            operator==( const ScRangeList& ) const;
+    sal_Bool            operator!=( const ScRangeList& r ) const;
+    sal_Bool            Intersects( const ScRange& ) const;
+    sal_Bool            In( const ScRange& ) const;
+    sal_uLong           GetCellCount() const;
 };
 SV_DECL_IMPL_REF( ScRangeList );
 
@@ -90,15 +90,15 @@ public:
                         ScRangePair* pR = new ScRangePair( rRangePair );
                         Insert( pR, LIST_APPEND );
                     }
-    void            Join( const ScRangePair&, BOOL bIsInList = FALSE );
-    BOOL            UpdateReference( UpdateRefMode, ScDocument*,
+    void            Join( const ScRangePair&, sal_Bool bIsInList = sal_False );
+    sal_Bool            UpdateReference( UpdateRefMode, ScDocument*,
                                     const ScRange& rWhere,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     void            DeleteOnTab( SCTAB nTab );
     ScRangePair*    Find( const ScAddress& ) const;
     ScRangePair*    Find( const ScRange& ) const;
-    ScRangePair**   CreateNameSortedArray( ULONG& nCount, ScDocument* ) const;
-    BOOL            operator==( const ScRangePairList& ) const;
+    ScRangePair**   CreateNameSortedArray( sal_uLong& nCount, ScDocument* ) const;
+    sal_Bool            operator==( const ScRangePairList& ) const;
 };
 SV_DECL_IMPL_REF( ScRangePairList );
 

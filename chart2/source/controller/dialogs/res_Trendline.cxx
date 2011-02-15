@@ -187,7 +187,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     const SfxPoolItem *pPoolItem = NULL;
     SfxItemState aState = SFX_ITEM_UNKNOWN;
 
-    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_TYPE, TRUE, &pPoolItem );
+    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_TYPE, sal_True, &pPoolItem );
     m_bTrendLineUnique = ( aState != SFX_ITEM_DONTCARE );
     if( aState == SFX_ITEM_SET )
     {
@@ -196,28 +196,28 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
             m_eTrendLineType = pItem->GetValue();
     }
 
-    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SHOW_EQUATION, TRUE, &pPoolItem );
+    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SHOW_EQUATION, sal_True, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
-        m_aCBShowEquation.EnableTriState( TRUE );
+        m_aCBShowEquation.EnableTriState( sal_True );
         m_aCBShowEquation.SetState( STATE_DONTKNOW );
     }
     else
     {
-        m_aCBShowEquation.EnableTriState( FALSE );
+        m_aCBShowEquation.EnableTriState( sal_False );
         if( aState == SFX_ITEM_SET )
             m_aCBShowEquation.Check( static_cast< const SfxBoolItem * >( pPoolItem )->GetValue());
     }
 
-    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SHOW_COEFF, TRUE, &pPoolItem );
+    aState = rInAttrs.GetItemState( SCHATTR_REGRESSION_SHOW_COEFF, sal_True, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
-        m_aCBShowCorrelationCoeff.EnableTriState( TRUE );
+        m_aCBShowCorrelationCoeff.EnableTriState( sal_True );
         m_aCBShowCorrelationCoeff.SetState( STATE_DONTKNOW );
     }
     else
     {
-        m_aCBShowCorrelationCoeff.EnableTriState( FALSE );
+        m_aCBShowCorrelationCoeff.EnableTriState( sal_False );
         if( aState == SFX_ITEM_SET )
             m_aCBShowCorrelationCoeff.Check( static_cast< const SfxBoolItem * >( pPoolItem )->GetValue());
     }
@@ -246,7 +246,7 @@ void TrendlineResources::Reset( const SfxItemSet& rInAttrs )
     }
 }
 
-BOOL TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
+sal_Bool TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
 {
     if( m_bTrendLineUnique )
         rOutAttrs.Put( SvxChartRegressItem( m_eTrendLineType, SCHATTR_REGRESSION_TYPE ));
@@ -254,7 +254,7 @@ BOOL TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
         rOutAttrs.Put( SfxBoolItem( SCHATTR_REGRESSION_SHOW_EQUATION, m_aCBShowEquation.IsChecked() ));
     if( m_aCBShowCorrelationCoeff.GetState() != STATE_DONTKNOW )
         rOutAttrs.Put( SfxBoolItem( SCHATTR_REGRESSION_SHOW_COEFF, m_aCBShowCorrelationCoeff.IsChecked() ));
-    return TRUE;
+    return sal_True;
 }
 
 void TrendlineResources::FillValueSets()

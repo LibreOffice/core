@@ -60,7 +60,7 @@ public:
     virtual             ~ScPivotLayoutDlg();
 
     ScDPLabelData*      GetLabelData( SCCOL nCol, size_t* pnIndex = 0 );
-    String              GetFuncString( USHORT& rnFuncMask, bool bIsValue = true );
+    String              GetFuncString( sal_uInt16& rnFuncMask, bool bIsValue = true );
 
     void                NotifyStartTracking( ScPivotFieldWindow& rSourceWindow );
     void                NotifyDoubleClick( ScPivotFieldWindow& rSourceWindow );
@@ -69,13 +69,13 @@ public:
 protected:
     virtual void        Tracking( const TrackingEvent& rTEvt );
     virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc );
-    virtual BOOL        IsRefInputMode() const;
+    virtual sal_Bool    IsRefInputMode() const;
     virtual void        SetActive();
-    virtual BOOL        Close();
+    virtual sal_Bool    Close();
 
 private:
     /** Returns the localized function name for the specified (1-based) resource index. */
-    inline const String& GetFuncName( USHORT nFuncIdx ) const { return maFuncNames[ nFuncIdx - 1 ]; }
+    inline const String& GetFuncName( sal_uInt16 nFuncIdx ) const { return maFuncNames[ nFuncIdx - 1 ]; }
     /** Returns the specified field window. */
     ScPivotFieldWindow& GetFieldWindow( ScPivotFieldType eFieldType );
 

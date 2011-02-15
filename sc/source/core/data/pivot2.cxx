@@ -95,7 +95,7 @@ OUString ScDPLabelData::getDisplayName() const
 
 // ============================================================================
 
-ScPivotField::ScPivotField( SCCOL nNewCol, USHORT nNewFuncMask ) :
+ScPivotField::ScPivotField( SCCOL nNewCol, sal_uInt16 nNewFuncMask ) :
     nCol( nNewCol ),
     nFuncMask( nNewFuncMask ),
     nFuncCount( 0 )
@@ -116,9 +116,9 @@ bool ScPivotField::operator==( const ScPivotField& r ) const
 // ============================================================================
 
 ScPivotParam::ScPivotParam()
-    :   nCol(0), nRow(0), nTab(0),
-        bIgnoreEmptyRows(FALSE), bDetectCategories(FALSE),
-        bMakeTotalCol(TRUE), bMakeTotalRow(TRUE)
+    :   nCol( 0 ), nRow( 0 ), nTab( 0 ),
+        bIgnoreEmptyRows( false ), bDetectCategories( false ),
+        bMakeTotalCol( true ), bMakeTotalRow( true )
 {
 }
 
@@ -141,13 +141,13 @@ bool ScPivotParam::operator==( const ScPivotParam& r ) const
 
 // ============================================================================
 
-ScPivotFuncData::ScPivotFuncData( SCCOL nCol, USHORT nFuncMask ) :
+ScPivotFuncData::ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask ) :
     mnCol( nCol ),
     mnFuncMask( nFuncMask )
 {
 }
 
-ScPivotFuncData::ScPivotFuncData( SCCOL nCol, USHORT nFuncMask, const DataPilotFieldReference& rFieldRef ) :
+ScPivotFuncData::ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask, const DataPilotFieldReference& rFieldRef ) :
     mnCol( nCol ),
     mnFuncMask( nFuncMask ),
     maFieldRef( rFieldRef )

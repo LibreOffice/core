@@ -55,18 +55,18 @@ public:
     void            SetTextString( const String& rString );
     const String&   GetTextString() const;
 
-    BOOL            IsInputActive();
+    sal_Bool            IsInputActive();
     EditView*       GetEditView();
 
                         // fuer FunktionsAutopiloten
     void            MakeDialogEditView();
 
     void            StartEditEngine();
-    void            StopEditEngine( BOOL bAll );
+    void            StopEditEngine( sal_Bool bAll );
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    void            SetFormulaMode( BOOL bSet );
+    void            SetFormulaMode( sal_Bool bSet );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
@@ -103,13 +103,13 @@ private:
     ScEditEngineDefaulter*  pEditEngine;            // erst bei Bedarf angelegt
     EditView*   pEditView;
     AccTextDataVector maAccTextDatas;   // #i105267# text datas may be cloned, remember all copies
-    BOOL        bIsRTL;
-    BOOL        bIsInsertMode;
-    BOOL        bFormulaMode;
+    sal_Bool        bIsRTL;
+    sal_Bool        bIsInsertMode;
+    sal_Bool        bFormulaMode;
 
     // #102710#; this flag should be true if a key input or a command is handled
     // it prevents the call of InputChanged in the ModifyHandler of the EditEngine
-    BOOL        bInputMode;
+    sal_Bool        bInputMode;
 };
 
 //========================================================================
@@ -119,16 +119,16 @@ class ScPosWnd : public ComboBox, public SfxListener        // Positionsanzeige
 private:
     String          aPosStr;
     Accelerator*    pAccel;
-    ULONG           nTipVisible;
-    BOOL            bFormulaMode;
-    BOOL            bTopHadFocus;
+    sal_uLong           nTipVisible;
+    sal_Bool            bFormulaMode;
+    sal_Bool            bTopHadFocus;
 
 public:
                     ScPosWnd( Window* pParent );
     virtual         ~ScPosWnd();
 
     void            SetPos( const String& rPosStr );        // angezeigter Text
-    void            SetFormulaMode( BOOL bSet );
+    void            SetFormulaMode( sal_Bool bSet );
 
 protected:
     virtual void    Select();
@@ -158,17 +158,17 @@ public:
     virtual void    Resize();
     virtual void    Select();
 
-    void            SetFuncString( const String& rString, BOOL bDoEdit = TRUE );
+    void            SetFuncString( const String& rString, sal_Bool bDoEdit = sal_True );
     void            SetPosString( const String& rStr );
     void            SetTextString( const String& rString );
 
     void            SetOkCancelMode();
     void            SetSumAssignMode();
-    void            EnableButtons( BOOL bEnable = TRUE );
+    void            EnableButtons( sal_Bool bEnable = sal_True );
 
-    void            SetFormulaMode( BOOL bSet );
+    void            SetFormulaMode( sal_Bool bSet );
 
-    BOOL            IsInputActive();
+    sal_Bool            IsInputActive();
     EditView*       GetEditView();
 //UNUSED2008-05  EditView*      ActivateEdit( const String&     rText,
 //UNUSED2008-05                                const ESelection& rSel );
@@ -182,7 +182,7 @@ public:
     // Fuer FunktionsAutopiloten
     void            MakeDialogEditView();
 
-    void            StopEditEngine( BOOL bAll );
+    void            StopEditEngine( sal_Bool bAll );
 
     void            SetInputHandler( ScInputHandler* pNew );
 
@@ -207,7 +207,7 @@ private:
     String          aTextCancel;
     String          aTextSum;
     String          aTextEqual;
-    BOOL            bIsOkCancelMode;
+    sal_Bool            bIsOkCancelMode;
 };
 
 //==================================================================
@@ -216,7 +216,7 @@ class ScInputWindowWrapper : public SfxChildWindow
 {
 public:
             ScInputWindowWrapper( Window*           pParent,
-                                  USHORT            nId,
+                                  sal_uInt16            nId,
                                   SfxBindings*      pBindings,
                                   SfxChildWinInfo*  pInfo );
 

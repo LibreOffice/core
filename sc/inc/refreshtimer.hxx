@@ -43,7 +43,7 @@ class ScRefreshTimerControl
 {
 private:
             ::vos::OMutex       aMutex;
-            USHORT              nBlockRefresh;
+            sal_uInt16              nBlockRefresh;
 
 public:
 #if SC_REFRESHTIMER_CONTROL_LIST
@@ -52,14 +52,14 @@ public:
 
                                 ScRefreshTimerControl() : nBlockRefresh(0) {}
 
-            void                SetAllowRefresh( BOOL b )
+            void                SetAllowRefresh( sal_Bool b )
                                     {
                                         if ( b && nBlockRefresh )
                                             --nBlockRefresh;
-                                        else if ( !b && nBlockRefresh < (USHORT)(~0) )
+                                        else if ( !b && nBlockRefresh < (sal_uInt16)(~0) )
                                             ++nBlockRefresh;
                                     }
-            BOOL                IsRefreshAllowed() const    { return !nBlockRefresh; }
+            sal_Bool                IsRefreshAllowed() const    { return !nBlockRefresh; }
             ::vos::OMutex&      GetMutex()                  { return aMutex; }
 };
 
@@ -73,7 +73,7 @@ public:
                                 ~ScRefreshTimerProtector()
                                     {
                                         if ( ppControl && *ppControl )
-                                            (*ppControl)->SetAllowRefresh( TRUE );
+                                            (*ppControl)->SetAllowRefresh( sal_True );
                                     }
 };
 
@@ -107,7 +107,7 @@ private:
 public:
                                 ScRefreshTimer() : ppControl(0)
                                     { SetTimeout( 0 ); }
-                                ScRefreshTimer( ULONG nSeconds ) : ppControl(0)
+                                ScRefreshTimer( sal_uLong nSeconds ) : ppControl(0)
                                     {
                                         SetTimeout( nSeconds * 1000 );
                                         Start();
@@ -124,10 +124,10 @@ public:
                                         return *this;
                                     }
 
-            BOOL                operator==( const ScRefreshTimer& r ) const
+            sal_Bool                operator==( const ScRefreshTimer& r ) const
                                     { return GetTimeout() == r.GetTimeout(); }
 
-            BOOL                operator!=( const ScRefreshTimer& r ) const
+            sal_Bool                operator!=( const ScRefreshTimer& r ) const
                                     { return !ScRefreshTimer::operator==( r ); }
 
             void                StartRefreshTimer()
@@ -143,13 +143,13 @@ public:
             void                SetRefreshHandler( const Link& rLink )
                                     { SetTimeoutHdl( rLink ); }
 
-            ULONG               GetRefreshDelay() const
+            sal_uLong               GetRefreshDelay() const
                                     { return GetTimeout() / 1000; }
 
             void                StopRefreshTimer()
                                     { Stop(); }
 
-    SC_DLLPUBLIC virtual    void                SetRefreshDelay( ULONG nSeconds );
+    SC_DLLPUBLIC virtual    void                SetRefreshDelay( sal_uLong nSeconds );
     SC_DLLPUBLIC virtual    void                Timeout();
 };
 

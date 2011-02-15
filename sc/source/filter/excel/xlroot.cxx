@@ -326,6 +326,12 @@ DateTime XclRoot::GetNullDate() const
     return *GetFormatter().GetNullDate();
 }
 
+sal_uInt16 XclRoot::GetBaseYear() const
+{
+    // return 1904 for 1904-01-01, and 1900 for 1899-12-30
+    return (GetNullDate().GetYear() == 1904) ? 1904 : 1900;
+}
+
 double XclRoot::GetDoubleFromDateTime( const DateTime& rDateTime ) const
 {
     double fValue = rDateTime - GetNullDate();
@@ -352,8 +358,8 @@ ScEditEngineDefaulter& XclRoot::GetEditEngine() const
         ScEditEngineDefaulter& rEE = *mrData.mxEditEngine;
         rEE.SetRefMapMode( MAP_100TH_MM );
         rEE.SetEditTextObjectPool( GetDoc().GetEditPool() );
-        rEE.SetUpdateMode( FALSE );
-        rEE.EnableUndo( FALSE );
+        rEE.SetUpdateMode( sal_False );
+        rEE.EnableUndo( sal_False );
         rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
     }
     return *mrData.mxEditEngine;
@@ -363,11 +369,11 @@ ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
 {
     if( !mrData.mxHFEditEngine.get() )
     {
-        mrData.mxHFEditEngine.reset( new ScHeaderEditEngine( EditEngine::CreatePool(), TRUE ) );
+        mrData.mxHFEditEngine.reset( new ScHeaderEditEngine( EditEngine::CreatePool(), sal_True ) );
         ScHeaderEditEngine& rEE = *mrData.mxHFEditEngine;
         rEE.SetRefMapMode( MAP_TWIP );  // headers/footers use twips as default metric
-        rEE.SetUpdateMode( FALSE );
-        rEE.EnableUndo( FALSE );
+        rEE.SetUpdateMode( sal_False );
+        rEE.EnableUndo( sal_False );
         rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
 
         // set Calc header/footer defaults
@@ -390,8 +396,8 @@ EditEngine& XclRoot::GetDrawEditEngine() const
         mrData.mxDrawEditEng.reset( new EditEngine( &GetDoc().GetDrawLayer()->GetItemPool() ) );
         EditEngine& rEE = *mrData.mxDrawEditEng;
         rEE.SetRefMapMode( MAP_100TH_MM );
-        rEE.SetUpdateMode( FALSE );
-        rEE.EnableUndo( FALSE );
+        rEE.SetUpdateMode( sal_False );
+        rEE.EnableUndo( sal_False );
         rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
     }
     return *mrData.mxDrawEditEng;

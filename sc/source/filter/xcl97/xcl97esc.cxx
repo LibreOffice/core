@@ -196,12 +196,12 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
 {
     if ( nAdditionalText )
         nAdditionalText++;
-    BOOL bInGroup = ( pCurrXclObj != NULL );
+    sal_Bool bInGroup = ( pCurrXclObj != NULL );
     if ( bInGroup )
     {   // stacked recursive group object
         if ( !pCurrAppData->IsStackedGroup() )
         {   //! UpdateDffFragmentEnd only once
-            pCurrAppData->SetStackedGroup( TRUE );
+            pCurrAppData->SetStackedGroup( sal_True );
             UpdateDffFragmentEnd();
         }
     }
@@ -307,12 +307,12 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
         }
     }
     if ( !pCurrXclObj )
-        pCurrAppData->SetDontWriteShape( TRUE );
+        pCurrAppData->SetDontWriteShape( sal_True );
     return pCurrAppData;
 }
 
 
-void XclEscherEx::EndShape( UINT16 nShapeType, UINT32 nShapeID )
+void XclEscherEx::EndShape( sal_uInt16 nShapeType, sal_uInt32 nShapeID )
 {
     // own escher data created? -> never delete such objects
     bool bOwnEscher = pCurrXclObj && pCurrXclObj->IsOwnEscher();

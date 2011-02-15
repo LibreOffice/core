@@ -58,10 +58,10 @@
 //  Editieren von Notiz-Legendenobjekten muss immer ueber StopEditMode beendet werden,
 //  damit die Aenderungen ins Dokument uebernommen werden!
 //  (Fontwork-Execute in drawsh und drtxtob passiert nicht fuer Legendenobjekte)
-//  bTextDirection=TRUE means that this function is called from SID_TEXTDIRECTION_XXX(drtxtob.cxx).
+//  bTextDirection=sal_True means that this function is called from SID_TEXTDIRECTION_XXX(drtxtob.cxx).
 // ------------------------------------------------------------------------------------
 
-void FuText::StopEditMode(BOOL /*bTextDirection*/)
+void FuText::StopEditMode(sal_Bool /*bTextDirection*/)
 {
     SdrObject* pObject = pView->GetTextEditObject();
     if( !pObject ) return;
@@ -85,7 +85,7 @@ void FuText::StopEditMode(BOOL /*bTextDirection*/)
     }
 
     ScDocShell* pDocShell = rViewData.GetDocShell();
-    SfxUndoManager* pUndoMgr = rDoc.IsUndoEnabled() ? pDocShell->GetUndoManager() : 0;
+    ::svl::IUndoManager* pUndoMgr = rDoc.IsUndoEnabled() ? pDocShell->GetUndoManager() : 0;
     bool bNewNote = false;
     if( pNote && pUndoMgr )
     {
@@ -187,7 +187,7 @@ void FuText::StopEditMode(BOOL /*bTextDirection*/)
         // invalidate stream positions only for the affected sheet
         rDoc.LockStreamValid(false);
         if (rDoc.IsStreamValid(aNotePos.Tab()))
-            rDoc.SetStreamValid(aNotePos.Tab(), FALSE);
+            rDoc.SetStreamValid(aNotePos.Tab(), sal_False);
     }
 }
 

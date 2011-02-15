@@ -38,7 +38,7 @@
 
 // ... (8+) := neu in Biff8, ... (8*) := anders in Biff8
 
-const BYTE ExcDummy8_00a::pMyData[] = {
+const sal_uInt8 ExcDummy8_00a::pMyData[] = {
     0xe1, 0x00, 0x02, 0x00, 0xb0, 0x04,                     // INTERFACEHDR
     0xc1, 0x00, 0x02, 0x00, 0x00, 0x00,                     // MMS
     0xe2, 0x00, 0x00, 0x00,                                 // INTERFACEEND
@@ -64,13 +64,13 @@ const sal_Size ExcDummy8_00a::nMyLen = sizeof(ExcDummy8_00a::pMyData);
 
                                                             // TABID (8+): ExcTabid
 
-const BYTE ExcDummy8_00b::pMyData[] = {
+const sal_uInt8 ExcDummy8_00b::pMyData[] = {
     0x9c, 0x00, 0x02, 0x00, 0x0e, 0x00                      // FNGROUPCOUNT
 };
 const sal_Size ExcDummy8_00b::nMyLen = sizeof(ExcDummy8_00b::pMyData);
 
 
-const BYTE ExcDummy8_040::pMyData[] = {
+const sal_uInt8 ExcDummy8_040::pMyData[] = {
     0xaf, 0x01, 0x02, 0x00, 0x00, 0x00,                     // PROT4REV (8+)
     0xbc, 0x01, 0x02, 0x00, 0x00, 0x00,                     // PROT4REVPASS (8+)
 //  0x3d, 0x00, 0x12, 0x00, 0xe0, 0x01, 0x5a, 0x00, 0xcf,   // WINDOW1
@@ -82,7 +82,7 @@ const BYTE ExcDummy8_040::pMyData[] = {
 const sal_Size ExcDummy8_040::nMyLen = sizeof(ExcDummy8_040::pMyData);
 
 
-const BYTE ExcDummy8_041::pMyData[] = {
+const sal_uInt8 ExcDummy8_041::pMyData[] = {
     0xb7, 0x01, 0x02, 0x00, 0x00, 0x00,                     // REFRESHALL (8+)
     0xda, 0x00, 0x02, 0x00, 0x00, 0x00                      // BOOKBOOL
 };
@@ -90,7 +90,7 @@ const sal_Size ExcDummy8_041::nMyLen = sizeof(ExcDummy8_041::pMyData);
 
 
 
-const BYTE ExcDummy8_02::pMyData[] = {
+const sal_uInt8 ExcDummy8_02::pMyData[] = {
     0x5f, 0x00, 0x02, 0x00, 0x01, 0x00                      // SAVERECALC
     };
 const sal_Size ExcDummy8_02::nMyLen = sizeof(ExcDummy8_02::pMyData);
@@ -104,7 +104,7 @@ sal_Size ExcDummy8_00a::GetLen() const
 }
 
 
-const BYTE* ExcDummy8_00a::GetData() const
+const sal_uInt8* ExcDummy8_00a::GetData() const
 {
     return pMyData;
 }
@@ -117,7 +117,7 @@ sal_Size ExcDummy8_00b::GetLen() const
 }
 
 
-const BYTE* ExcDummy8_00b::GetData() const
+const sal_uInt8* ExcDummy8_00b::GetData() const
 {
     return pMyData;
 }
@@ -130,7 +130,7 @@ sal_Size ExcDummy8_040::GetLen() const
 }
 
 
-const BYTE* ExcDummy8_040::GetData() const
+const sal_uInt8* ExcDummy8_040::GetData() const
 {
     return pMyData;
 }
@@ -143,7 +143,7 @@ sal_Size ExcDummy8_041::GetLen() const
 }
 
 
-const BYTE* ExcDummy8_041::GetData() const
+const sal_uInt8* ExcDummy8_041::GetData() const
 {
     return pMyData;
 }
@@ -156,7 +156,7 @@ sal_Size ExcDummy8_02::GetLen() const
 }
 
 
-const BYTE* ExcDummy8_02::GetData() const
+const sal_uInt8* ExcDummy8_02::GetData() const
 {
     return pMyData;
 }

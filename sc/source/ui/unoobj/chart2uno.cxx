@@ -1099,7 +1099,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScSharedTokenRef>& rRefTokens,
     SCROW nMaxRow = 0;
     SCTAB nTab    = 0;
 
-    USHORT nFileId = 0;
+    sal_uInt16 nFileId = 0;
     String aExtTabName;
     bool bExternal = false;
 
@@ -2617,7 +2617,7 @@ void ScChart2DataSequence::BuildDataCache()
                             case CELLTYPE_FORMULA:
                             {
                                 ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
-                                USHORT nErr = pFCell->GetErrCode();
+                                sal_uInt16 nErr = pFCell->GetErrCode();
                                 if (nErr)
                                     break;
 
@@ -2834,7 +2834,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 {
     if ( rHint.ISA( SfxSimpleHint ) )
     {
-        ULONG nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
+        sal_uLong nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
         if ( nId ==SFX_HINT_DYING )
         {
             m_pDocument = NULL;
@@ -2851,7 +2851,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
                 if( m_pDocument )
                 {
-                    for ( USHORT n=0; n<m_aValueListeners.Count(); n++ )
+                    for ( sal_uInt16 n=0; n<m_aValueListeners.Count(); n++ )
                         m_pDocument->AddUnoListenerCall( *m_aValueListeners[n], aEvent );
                 }
 
@@ -3409,8 +3409,8 @@ void SAL_CALL ScChart2DataSequence::removeModifyListener( const uno::Reference< 
 
     acquire();      // in case the listeners have the last ref - released below
 
-    USHORT nCount = m_aValueListeners.Count();
-    for ( USHORT n=nCount; n--; )
+    sal_uInt16 nCount = m_aValueListeners.Count();
+    for ( sal_uInt16 n=nCount; n--; )
     {
         uno::Reference<util::XModifyListener> *pObj = m_aValueListeners[n];
         if ( *pObj == aListener )

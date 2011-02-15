@@ -76,7 +76,7 @@ struct ScDPLabelData
     ::rtl::OUString     maName;         /// Original name of the dimension.
     ::rtl::OUString     maLayoutName;   /// Layout name (display name)
     SCCOL               mnCol;
-    USHORT              mnFuncMask;     /// Page/Column/Row subtotal function.
+    sal_uInt16          mnFuncMask;     /// Page/Column/Row subtotal function.
     sal_Int32           mnUsedHier;     /// Used hierarchy.
     sal_Int32           mnFlags;        /// Flags from the DataPilotSource dimension
     bool                mbShowAll;      /// true = Show all (also empty) results.
@@ -120,11 +120,11 @@ typedef std::vector< ScDPLabelData > ScDPLabelDataVector;
 struct ScPivotField
 {
     SCCOL               nCol;
-    USHORT              nFuncMask;
-    USHORT              nFuncCount;
+    sal_uInt16          nFuncMask;
+    sal_uInt16          nFuncCount;
     ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
 
-    explicit            ScPivotField( SCCOL nNewCol = 0, USHORT nNewFuncMask = PIVOT_FUNC_NONE );
+    explicit            ScPivotField( SCCOL nNewCol = 0, sal_uInt16 nNewFuncMask = PIVOT_FUNC_NONE );
 
     bool                operator==( const ScPivotField& r ) const;
 };
@@ -143,10 +143,10 @@ struct ScPivotParam
     ScPivotFieldVector maColArr;
     ScPivotFieldVector maRowArr;
     ScPivotFieldVector maDataArr;
-    BOOL            bIgnoreEmptyRows;
-    BOOL            bDetectCategories;
-    BOOL            bMakeTotalCol;
-    BOOL            bMakeTotalRow;
+    bool            bIgnoreEmptyRows;
+    bool            bDetectCategories;
+    bool            bMakeTotalCol;
+    bool            bMakeTotalRow;
 
     ScPivotParam();
 
@@ -158,11 +158,11 @@ struct ScPivotParam
 struct ScPivotFuncData
 {
     SCCOL               mnCol;
-    USHORT              mnFuncMask;
+    sal_uInt16          mnFuncMask;
     ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
 
-    explicit            ScPivotFuncData( SCCOL nCol, USHORT nFuncMask );
-    explicit            ScPivotFuncData( SCCOL nCol, USHORT nFuncMask,
+    explicit            ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask );
+    explicit            ScPivotFuncData( SCCOL nCol, sal_uInt16 nFuncMask,
                             const ::com::sun::star::sheet::DataPilotFieldReference& rFieldRef );
 };
 

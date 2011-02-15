@@ -56,7 +56,7 @@
 #include "scabstdlg.hxx" //CHINA00
 //------------------------------------------------------------------------
 
-BOOL ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
+sal_Bool ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
                                                 SfxItemSet& rOutSet )
 {
 //CHINA001  ScCharDlg* pDlg = new ScCharDlg( pViewData->GetDialogParent(),
@@ -69,7 +69,7 @@ BOOL ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
     SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg(  pViewData->GetDialogParent(), &rArgs,
                                                         pViewData->GetSfxDocShell(),RID_SCDLG_CHAR );
     DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
-    BOOL bRet = ( pDlg->Execute() == RET_OK );
+    sal_Bool bRet = ( pDlg->Execute() == RET_OK );
 
     if ( bRet )
     {
@@ -82,7 +82,7 @@ BOOL ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
     return bRet;
 }
 
-BOOL ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
+sal_Bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
                                                 SfxItemSet& rOutSet )
 {
     SfxItemPool* pArgPool = rArgs.GetPool();
@@ -114,7 +114,7 @@ BOOL ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
 
     SfxAbstractTabDialog* pDlg = pFact->CreateScParagraphDlg( pViewData->GetDialogParent(), &aNewAttr, RID_SCDLG_PARAGRAPH);
     DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
-    BOOL bRet = ( pDlg->Execute() == RET_OK );
+    sal_Bool bRet = ( pDlg->Execute() == RET_OK );
 
     if ( bRet )
     {
@@ -139,7 +139,7 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ )
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 
-    ULONG nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
+    sal_uLong nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
 
     //! test if outliner view is still valid
 

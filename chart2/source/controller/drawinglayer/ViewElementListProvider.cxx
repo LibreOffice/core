@@ -181,7 +181,7 @@ Graphic ViewElementListProvider::GetSymbolGraphic( sal_Int32 nStandardSymbol, co
     aVDev.SetMapMode(MapMode(MAP_100TH_MM));
     SdrModel* pModel = new SdrModel();
     pModel->GetItemPool().FreezeIdRanges();
-    SdrPage* pPage = new SdrPage( *pModel, FALSE );
+    SdrPage* pPage = new SdrPage( *pModel, sal_False );
     pPage->SetSize(Size(1000,1000));
     pModel->InsertPage( pPage, 0 );
     SdrView* pView = new SdrView( pModel, &aVDev );
@@ -224,7 +224,7 @@ FontList* ViewElementListProvider::getFontList() const
         OutputDevice* pDefaultOut = Application::GetDefaultDevice();    // #67730#
         m_pFontList = new FontList( pRefDev ? pRefDev    : pDefaultOut
                                 , pRefDev ? pDefaultOut : NULL
-                                , FALSE );
+                                , sal_False );
     }
     return m_pFontList;
 }
@@ -243,14 +243,14 @@ SfxPrinter* ObjectPropertiesDialogParameter::getPrinter()
     bool bOwnPrinter = true;
     if (!pPrinter)
     {
-        SfxBoolItem aItem(SID_PRINTER_NOTFOUND_WARN, TRUE);
+        SfxBoolItem aItem(SID_PRINTER_NOTFOUND_WARN, sal_True);
         // ItemSet mit speziellem Poolbereich anlegen
         SfxItemSet* pSet = new SfxItemSet(GetPool(),
                                           SID_PRINTER_NOTFOUND_WARN,
                                           SID_PRINTER_NOTFOUND_WARN, 0);
         pSet->Put(aItem);
         pPrinter = new SfxPrinter(pSet); //@todo ->need to remember and delete
-        bOwnPrinter = TRUE;
+        bOwnPrinter = sal_True;
 
         MapMode aMapMode = pPrinter->GetMapMode();
         aMapMode.SetMapUnit(MAP_100TH_MM);

@@ -92,13 +92,13 @@ class ScViewPaneBase : public com::sun::star::sheet::XViewPane,
 {
 private:
     ScTabViewShell*         pViewShell;
-    USHORT                  nPane;          // ScSplitPos oder SC_VIEWPANE_ACTIVE
+    sal_uInt16                  nPane;          // ScSplitPos oder SC_VIEWPANE_ACTIVE
 
 protected:
     ::com::sun::star::awt::Rectangle GetVisArea() const;
 
 public:
-                            ScViewPaneBase(ScTabViewShell* pViewSh, USHORT nP);
+                            ScViewPaneBase(ScTabViewShell* pViewSh, sal_uInt16 nP);
     virtual                 ~ScViewPaneBase();
 
     ScTabViewShell*         GetViewShell() const    { return pViewShell; }
@@ -162,7 +162,7 @@ public:
 class ScViewPaneObj : public ScViewPaneBase, public cppu::OWeakObject
 {
 public:
-                            ScViewPaneObj(ScTabViewShell* pViewSh, USHORT nP);
+                            ScViewPaneObj(ScTabViewShell* pViewSh, sal_uInt16 nP);
     virtual                 ~ScViewPaneObj();
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
@@ -200,11 +200,11 @@ private:
     SCTAB                                   nPreviousTab;
     sal_Bool                                bDrawSelModeSet;
 
-    ScViewPaneObj*          GetObjectByIndex_Impl(USHORT nIndex) const;
-    INT16                   GetZoom(void) const;
-    void                    SetZoom(INT16 Zoom);
-    INT16                   GetZoomType(void) const;
-    void                    SetZoomType(INT16 ZoomType);
+    ScViewPaneObj*          GetObjectByIndex_Impl(sal_uInt16 nIndex) const;
+    sal_Int16                   GetZoom(void) const;
+    void                    SetZoom(sal_Int16 Zoom);
+    sal_Int16                   GetZoomType(void) const;
+    void                    SetZoomType(sal_Int16 ZoomType);
 
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface > GetClickedObject(const Point& rPoint) const;
     void                    StartMouseListening();

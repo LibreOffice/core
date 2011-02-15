@@ -46,7 +46,7 @@
 ScDBData::ScDBData( const String& rName,
                     SCTAB nTab,
                     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                    BOOL bByR, BOOL bHasH) :
+                    sal_Bool bByR, sal_Bool bHasH) :
     aName       (rName),
     nTable      (nTab),
     nStartCol   (nCol1),
@@ -55,16 +55,16 @@ ScDBData::ScDBData( const String& rName,
     nEndRow     (nRow2),
     bByRow      (bByR),
     bHasHeader  (bHasH),
-    bDoSize     (FALSE),
-    bKeepFmt    (FALSE),
-    bStripData  (FALSE),
-    bIsAdvanced (FALSE),
-    bDBSelection(FALSE),
+    bDoSize     (sal_False),
+    bKeepFmt    (sal_False),
+    bStripData  (sal_False),
+    bIsAdvanced (sal_False),
+    bDBSelection(sal_False),
     nIndex      (0),
-    bAutoFilter (FALSE),
-    bModified   (FALSE)
+    bAutoFilter (sal_False),
+    bModified   (sal_False)
 {
-    USHORT i;
+    sal_uInt16 i;
 
     ScSortParam aSortParam;
     ScQueryParam aQueryParam;
@@ -140,8 +140,8 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     bAutoFilter         (rData.bAutoFilter),
     bModified           (rData.bModified)
 {
-    USHORT i;
-    USHORT j;
+    sal_uInt16 i;
+    sal_uInt16 j;
 
     for (i=0; i<MAXSORT; i++)
     {
@@ -180,8 +180,8 @@ ScDBData::ScDBData( const ScDBData& rData ) :
 
 ScDBData& ScDBData::operator= (const ScDBData& rData)
 {
-    USHORT i;
-    USHORT j;
+    sal_uInt16 i;
+    sal_uInt16 j;
 
     ScRefreshTimer::operator=( rData );
     aName               = rData.aName;
@@ -272,7 +272,7 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     return *this;
 }
 
-BOOL ScDBData::operator== (const ScDBData& rData) const
+sal_Bool ScDBData::operator== (const ScDBData& rData) const
 {
     //  Daten, die nicht in den Params sind
 
@@ -285,42 +285,42 @@ BOOL ScDBData::operator== (const ScDBData& rData) const
 //         bAutoFilter!= rData.bAutoFilter||
          ScRefreshTimer::operator!=( rData )
         )
-        return FALSE;
+        return sal_False;
 
     if ( bIsAdvanced && aAdvSource != rData.aAdvSource )
-        return FALSE;
+        return sal_False;
 
     ScSortParam aSort1, aSort2;
     GetSortParam(aSort1);
     rData.GetSortParam(aSort2);
     if (!(aSort1 == aSort2))
-        return FALSE;
+        return sal_False;
 
     ScQueryParam aQuery1, aQuery2;
     GetQueryParam(aQuery1);
     rData.GetQueryParam(aQuery2);
     if (!(aQuery1 == aQuery2))
-        return FALSE;
+        return sal_False;
 
     ScSubTotalParam aSubTotal1, aSubTotal2;
     GetSubTotalParam(aSubTotal1);
     rData.GetSubTotalParam(aSubTotal2);
     if (!(aSubTotal1 == aSubTotal2))
-        return FALSE;
+        return sal_False;
 
     ScImportParam aImport1, aImport2;
     GetImportParam(aImport1);
     rData.GetImportParam(aImport2);
     if (!(aImport1 == aImport2))
-        return FALSE;
+        return sal_False;
 
-    return TRUE;
+    return sal_True;
 }
 
 ScDBData::~ScDBData()
 {
     StopRefreshTimer();
-    USHORT i;
+    sal_uInt16 i;
 
     for (i=0; i<MAXQUERY; i++)
         delete pQueryStr[i];
@@ -331,7 +331,7 @@ ScDBData::~ScDBData()
     }
 }
 
-//UNUSED2008-05  BOOL ScDBData::IsBeyond(SCROW nMaxRow) const
+//UNUSED2008-05  sal_Bool ScDBData::IsBeyond(SCROW nMaxRow) const
 //UNUSED2008-05  {
 //UNUSED2008-05      return ( nStartRow > nMaxRow ||
 //UNUSED2008-05               nEndRow > nMaxRow ||
@@ -401,7 +401,7 @@ void ScDBData::SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW 
 
 void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
-    USHORT i;
+    sal_uInt16 i;
     long nDifX = ((long) nCol1) - ((long) nStartCol);
     long nDifY = ((long) nRow1) - ((long) nStartRow);
 
@@ -414,7 +414,7 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
         if (nSortField[i] > nSortEnd)
         {
             nSortField[i] = 0;
-            bDoSort[i]    = FALSE;
+            bDoSort[i]    = sal_False;
         }
     }
     for (i=0; i<MAXQUERY; i++)
@@ -423,7 +423,7 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
         if (nQueryField[i] > nCol2)
         {
             nQueryField[i] = 0;
-            bDoQuery[i]    = FALSE;
+            bDoQuery[i]    = sal_False;
         }
     }
     for (i=0; i<MAXSUBTOTAL; i++)
@@ -432,7 +432,7 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
         if (nSubField[i] > nCol2)
         {
             nSubField[i]   = 0;
-            bDoSubTotal[i] = FALSE;
+            bDoSubTotal[i] = sal_False;
         }
     }
 
@@ -455,7 +455,7 @@ void ScDBData::GetSortParam( ScSortParam& rSortParam ) const
     rSortParam.bIncludePattern = bIncludePattern;
     rSortParam.bUserDef = bSortUserDef;
     rSortParam.nUserIndex = nSortUserIndex;
-    for (USHORT i=0; i<MAXSORT; i++)
+    for (sal_uInt16 i=0; i<MAXSORT; i++)
     {
         rSortParam.bDoSort[i]    = bDoSort[i];
         rSortParam.nField[i]     = nSortField[i];
@@ -475,7 +475,7 @@ void ScDBData::SetSortParam( const ScSortParam& rSortParam )
     nSortDestRow = rSortParam.nDestRow;
     bSortUserDef = rSortParam.bUserDef;
     nSortUserIndex = rSortParam.nUserIndex;
-    for (USHORT i=0; i<MAXSORT; i++)
+    for (sal_uInt16 i=0; i<MAXSORT; i++)
     {
         bDoSort[i]    = rSortParam.bDoSort[i];
         nSortField[i] = rSortParam.nField[i];
@@ -527,9 +527,9 @@ void ScDBData::SetQueryParam(const ScQueryParam& rQueryParam)
                 !rQueryParam.GetEntry(MAXQUERY).bDoQuery,
                 "zuviele Eintraege bei ScDBData::SetQueryParam" );
 
-    //  set bIsAdvanced to FALSE for everything that is not from the
+    //  set bIsAdvanced to sal_False for everything that is not from the
     //  advanced filter dialog
-    bIsAdvanced = FALSE;
+    bIsAdvanced = sal_False;
 
     bQueryInplace = rQueryParam.bInplace;
     bQueryCaseSens = rQueryParam.bCaseSens;
@@ -558,13 +558,13 @@ void ScDBData::SetAdvancedQuerySource(const ScRange* pSource)
     if (pSource)
     {
         aAdvSource = *pSource;
-        bIsAdvanced = TRUE;
+        bIsAdvanced = sal_True;
     }
     else
-        bIsAdvanced = FALSE;
+        bIsAdvanced = sal_False;
 }
 
-BOOL ScDBData::GetAdvancedQuerySource(ScRange& rSource) const
+sal_Bool ScDBData::GetAdvancedQuerySource(ScRange& rSource) const
 {
     rSource = aAdvSource;
     return bIsAdvanced;
@@ -572,8 +572,8 @@ BOOL ScDBData::GetAdvancedQuerySource(ScRange& rSource) const
 
 void ScDBData::GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const
 {
-    USHORT i;
-    USHORT j;
+    sal_uInt16 i;
+    sal_uInt16 j;
 
     rSubTotalParam.nCol1 = nStartCol;
     rSubTotalParam.nRow1 = nStartRow;
@@ -612,8 +612,8 @@ void ScDBData::GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const
 
 void ScDBData::SetSubTotalParam(const ScSubTotalParam& rSubTotalParam)
 {
-    USHORT i;
-    USHORT j;
+    sal_uInt16 i;
+    sal_uInt16 j;
 
     bSubRemoveOnly      = rSubTotalParam.bRemoveOnly;
     bSubReplace         = rSubTotalParam.bReplace;
@@ -669,7 +669,7 @@ void ScDBData::SetImportParam(const ScImportParam& rImportParam)
     nDBType         = rImportParam.nType;
 }
 
-BOOL ScDBData::IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, BOOL bStartOnly) const
+sal_Bool ScDBData::IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const
 {
     if (nTab == nTable)
     {
@@ -680,12 +680,12 @@ BOOL ScDBData::IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, BOOL bStartOnly)
                      nRow >= nStartRow && nRow <= nEndRow );
     }
 
-    return FALSE;
+    return sal_False;
 }
 
-BOOL ScDBData::IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
+sal_Bool ScDBData::IsDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
 {
-    return (BOOL)((nTab == nTable)
+    return (sal_Bool)((nTab == nTable)
                     && (nCol1 == nStartCol) && (nRow1 == nStartRow)
                     && (nCol2 == nEndCol) && (nRow2 == nEndRow));
 }
@@ -708,19 +708,19 @@ short ScDBCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 
 //  IsEqual - alles gleich
 
-BOOL ScDBCollection::IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const
+sal_Bool ScDBCollection::IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
     return *(ScDBData*)pKey1 == *(ScDBData*)pKey2;
 }
 
-ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, BOOL bStartOnly) const
+ScDBData* ScDBCollection::GetDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Bool bStartOnly) const
 {
     ScDBData* pNoNameData = NULL;
     if (pItems)
     {
         const String& rNoName = ScGlobal::GetRscString( STR_DB_NONAME );
 
-        for (USHORT i = 0; i < nCount; i++)
+        for (sal_uInt16 i = 0; i < nCount; i++)
             if (((ScDBData*)pItems[i])->IsDBAtCursor(nCol, nRow, nTab, bStartOnly))
             {
                 ScDBData* pDB = (ScDBData*)pItems[i];
@@ -740,7 +740,7 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
     {
         const String& rNoName = ScGlobal::GetRscString( STR_DB_NONAME );
 
-        for (USHORT i = 0; i < nCount; i++)
+        for (sal_uInt16 i = 0; i < nCount; i++)
             if (((ScDBData*)pItems[i])->IsDBAtArea(nTab, nCol1, nRow1, nCol2, nRow2))
             {
                 ScDBData* pDB = (ScDBData*)pItems[i];
@@ -753,7 +753,7 @@ ScDBData* ScDBCollection::GetDBAtArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCO
     return pNoNameData;             // "unbenannt" nur zurueck, wenn sonst nichts gefunden
 }
 
-BOOL ScDBCollection::SearchName( const String& rName, USHORT& rIndex ) const
+sal_Bool ScDBCollection::SearchName( const String& rName, sal_uInt16& rIndex ) const
 {
     ScDBData aDataObj( rName, 0,0,0,0,0 );
     return Search( &aDataObj, rIndex );
@@ -761,7 +761,7 @@ BOOL ScDBCollection::SearchName( const String& rName, USHORT& rIndex ) const
 
 void ScDBCollection::DeleteOnTab( SCTAB nTab )
 {
-    USHORT nPos = 0;
+    sal_uInt16 nPos = 0;
     while ( nPos < nCount )
     {
         // look for output positions on the deleted sheet
@@ -782,7 +782,7 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                 SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    for (USHORT i=0; i<nCount; i++)
+    for (sal_uInt16 i=0; i<nCount; i++)
     {
         SCCOL theCol1;
         SCROW theRow1;
@@ -793,7 +793,7 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
         ((ScDBData*)pItems[i])->GetArea( theTab1, theCol1, theRow1, theCol2, theRow2 );
         theTab2 = theTab1;
 
-        BOOL bDoUpdate = ScRefUpdate::Update( pDoc, eUpdateRefMode,
+        sal_Bool bDoUpdate = ScRefUpdate::Update( pDoc, eUpdateRefMode,
                                                 nCol1,nRow1,nTab1, nCol2,nRow2,nTab2, nDx,nDy,nDz,
                                                 theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 ) != UR_NOTHING;
         if (bDoUpdate)
@@ -811,7 +811,7 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
                 aAdvSource.aEnd.Set( theCol2,theRow2,theTab2 );
                 ((ScDBData*)pItems[i])->SetAdvancedQuerySource( &aAdvSource );
 
-                bDoUpdate = TRUE;       // DBData is modified
+                bDoUpdate = sal_True;       // DBData is modified
             }
         }
 
@@ -826,7 +826,7 @@ void ScDBCollection::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
     //  wenn nOldPos vor nNewPos liegt, ist nNewPos schon angepasst
 
-    for (USHORT i=0; i<nCount; i++)
+    for (sal_uInt16 i=0; i<nCount; i++)
     {
         ScRange aRange;
         ScDBData* pData = (ScDBData*)pItems[i];
@@ -848,7 +848,7 @@ void ScDBCollection::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
                 ++nTab;
         }
 
-        BOOL bChanged = ( nTab != aRange.aStart.Tab() );
+        sal_Bool bChanged = ( nTab != aRange.aStart.Tab() );
         if (bChanged)
             pData->SetArea( nTab, aRange.aStart.Col(), aRange.aStart.Row(),
                                     aRange.aEnd.Col(),aRange.aEnd .Row() );
@@ -860,9 +860,9 @@ void ScDBCollection::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 }
 
 
-ScDBData* ScDBCollection::FindIndex(USHORT nIndex)
+ScDBData* ScDBCollection::FindIndex(sal_uInt16 nIndex)
 {
-    USHORT i = 0;
+    sal_uInt16 i = 0;
     while (i < nCount)
     {
         if ((*this)[i]->GetIndex() == nIndex)
@@ -872,12 +872,12 @@ ScDBData* ScDBCollection::FindIndex(USHORT nIndex)
     return NULL;
 }
 
-BOOL ScDBCollection::Insert(ScDataObject* pScDataObject)
+sal_Bool ScDBCollection::Insert(ScDataObject* pScDataObject)
 {
     ScDBData* pData = (ScDBData*) pScDataObject;
     if (!pData->GetIndex())     // schon gesetzt?
         pData->SetIndex(nEntryIndex++);
-    BOOL bInserted = ScSortedCollection::Insert(pScDataObject);
+    sal_Bool bInserted = ScSortedCollection::Insert(pScDataObject);
     if ( bInserted && pData->HasImportParam() && !pData->HasImportSelection() )
     {
         pData->SetRefreshHandler( GetRefreshHandler() );

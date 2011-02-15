@@ -57,8 +57,8 @@ class ScDPFunctionListBox : public MultiListBox
 public:
     explicit            ScDPFunctionListBox( Window* pParent, const ResId& rResId );
 
-    void                SetSelection( USHORT nFuncMask );
-    USHORT              GetSelection() const;
+    void                SetSelection( sal_uInt16 nFuncMask );
+    sal_uInt16              GetSelection() const;
 
 private:
     void                FillFunctionNames();
@@ -72,7 +72,7 @@ public:
     explicit            ScDPFunctionDlg( Window* pParent, const ScDPLabelDataVector& rLabelVec,
                             const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData );
 
-    USHORT              GetFuncMask() const;
+    sal_uInt16              GetFuncMask() const;
     ::com::sun::star::sheet::DataPilotFieldReference GetFieldRef() const;
 
 private:
@@ -113,7 +113,7 @@ public:
                             const ScDPLabelData& rLabelData, const ScPivotFuncData& rFuncData,
                             const ScDPNameVec& rDataFields, bool bEnableLayout );
 
-    USHORT              GetFuncMask() const;
+    sal_uInt16              GetFuncMask() const;
 
     void                FillLabelData( ScDPLabelData& rLabelData ) const;
 
@@ -202,7 +202,7 @@ private:
 class ScDPShowDetailDlg : public ModalDialog
 {
 public:
-    explicit            ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, USHORT nOrient );
+    explicit            ScDPShowDetailDlg( Window* pParent, ScDPObject& rDPObj, sal_uInt16 nOrient );
 
     virtual short       Execute();
 

@@ -543,7 +543,7 @@ void ScPivotFieldWindow::KeyInput( const KeyEvent& rKEvt )
     if( !maFields.empty() )
     {
         const KeyCode& rKeyCode = rKEvt.GetKeyCode();
-        USHORT nCode = rKeyCode.GetCode();
+        sal_uInt16 nCode = rKeyCode.GetCode();
 
         // do not move fields in selection window
         if( rKeyCode.IsMod1() && (meFieldType != PIVOTFIELDTYPE_SELECT) )

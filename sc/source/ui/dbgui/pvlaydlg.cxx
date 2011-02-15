@@ -64,7 +64,7 @@ using ::rtl::OUString;
 
 namespace {
 
-const USHORT STD_FORMAT = USHORT( SCA_VALID | SCA_TAB_3D | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE );
+const sal_uInt16 STD_FORMAT = sal_uInt16( SCA_VALID | SCA_TAB_3D | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE );
 
 OUString lclGetNameWithoutMnemonic( const FixedText& rFixedText )
 {
@@ -130,7 +130,7 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
 {
     DBG_ASSERT( mpViewData && mpDoc, "ScPivotLayoutDlg::ScPivotLayoutDlg - missing document or view data" );
 
-    mxDlgDPObject->SetAlive( TRUE );     // needed to get structure information
+    mxDlgDPObject->SetAlive( true );     // needed to get structure information
     mxDlgDPObject->FillOldParam( maPivotData );
     mxDlgDPObject->FillLabelData( maPivotData );
 
@@ -139,7 +139,7 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
 
     // PIVOT_MAXFUNC defined in sc/inc/dpglobal.hxx
     maFuncNames.reserve( PIVOT_MAXFUNC );
-    for( USHORT i = 1; i <= PIVOT_MAXFUNC; ++i )
+    for( sal_uInt16 i = 1; i <= PIVOT_MAXFUNC; ++i )
         maFuncNames.push_back( String( ScResId( i ) ) );
 
     maBtnMore.AddWindow( &maFlAreas );
@@ -207,7 +207,7 @@ ScPivotLayoutDlg::ScPivotLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
         {
             if ( !aIter.WasDBName() )       // hier keine DB-Bereiche !
             {
-                USHORT nInsert = maLbOutPos.InsertEntry( aName );
+                sal_uInt16 nInsert = maLbOutPos.InsertEntry( aName );
 
                 aRange.aStart.Format( aRefStr, SCA_ABS_3D, mpDoc, mpDoc->GetAddressConvention() );
                 maLbOutPos.SetEntryData( nInsert, new String( aRefStr ) );
@@ -250,7 +250,7 @@ ScPivotLayoutDlg::~ScPivotLayoutDlg()
 {
     RemoveChildEventListener( LINK( this, ScPivotLayoutDlg, ChildEventListener ) );
 
-    for( USHORT i = 2, nEntries = maLbOutPos.GetEntryCount();  i < nEntries; ++i )
+    for( sal_uInt16 i = 2, nEntries = maLbOutPos.GetEntryCount();  i < nEntries; ++i )
         delete (String*)maLbOutPos.GetEntryData( i );
 }
 
@@ -269,7 +269,7 @@ ScDPLabelData* ScPivotLayoutDlg::GetLabelData( SCCOL nCol, size_t* pnIndex )
     return pLabelData;
 }
 
-String ScPivotLayoutDlg::GetFuncString( USHORT& rnFuncMask, bool bIsValue )
+String ScPivotLayoutDlg::GetFuncString( sal_uInt16& rnFuncMask, bool bIsValue )
 {
     String aStr;
 
@@ -374,7 +374,6 @@ void ScPivotLayoutDlg::NotifyFieldRemoved( ScPivotFieldWindow& rSourceWindow )
     GrabFieldFocus( rSourceWindow );
 }
 
-
 // protected ------------------------------------------------------------------
 
 void ScPivotLayoutDlg::Tracking( const TrackingEvent& rTEvt )
@@ -465,7 +464,7 @@ void ScPivotLayoutDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
     }
 }
 
-BOOL ScPivotLayoutDlg::IsRefInputMode() const
+sal_Bool ScPivotLayoutDlg::IsRefInputMode() const
 {
     return mbRefInputMode;
 }
@@ -490,7 +489,7 @@ void ScPivotLayoutDlg::SetActive()
     RefInputDone();
 }
 
-BOOL ScPivotLayoutDlg::Close()
+sal_Bool ScPivotLayoutDlg::Close()
 {
     return DoClose( ScPivotLayoutWrapper::GetChildWindowId() );
 }
@@ -528,7 +527,7 @@ bool ScPivotLayoutDlg::IsInsertAllowed( const ScPivotFieldWindow& rSourceWindow,
                 case PIVOTFIELDTYPE_DATA:   eOrient = sheet::DataPilotFieldOrientation_DATA;    break;
                 default:                    return false;
             }
-            return ScDPObject::IsOrientationAllowed( static_cast< USHORT >( eOrient ), pLabelData->mnFlags );
+            return ScDPObject::IsOrientationAllowed( static_cast< sal_uInt16 >( eOrient ), pLabelData->mnFlags );
         }
     }
     return false;
@@ -650,7 +649,7 @@ IMPL_LINK( ScPivotLayoutDlg, OkHdl, OKButton *, EMPTYARG )
     String aOutPosStr = maEdOutPos.GetText();
     ScAddress aAdrDest;
     bool bToNewTable = maLbOutPos.GetSelectEntryPos() == 1;
-    USHORT nResult = !bToNewTable ? aAdrDest.Parse( aOutPosStr, mpDoc, mpDoc->GetAddressConvention() ) : 0;
+    sal_uInt16 nResult = !bToNewTable ? aAdrDest.Parse( aOutPosStr, mpDoc, mpDoc->GetAddressConvention() ) : 0;
 
     if( bToNewTable || ((aOutPosStr.Len() > 0) && ((nResult & SCA_VALID) == SCA_VALID)) )
     {
@@ -750,12 +749,12 @@ IMPL_LINK( ScPivotLayoutDlg, OkHdl, OKButton *, EMPTYARG )
             }
         }
 
-        USHORT nWhichPivot = SC_MOD()->GetPool().GetWhich( SID_PIVOT_TABLE );
+        sal_uInt16 nWhichPivot = SC_MOD()->GetPool().GetWhich( SID_PIVOT_TABLE );
         ScPivotItem aOutItem( nWhichPivot, &aSaveData, &aOutRange, bToNewTable );
 
         mbRefInputMode = false;     // to allow deselecting when switching sheets
 
-        SetDispatcherLock( FALSE );
+        SetDispatcherLock( false );
         SwitchToDocument();
 
         //  #95513# don't hide the dialog before executing the slot, instead it is used as
@@ -784,7 +783,7 @@ IMPL_LINK( ScPivotLayoutDlg, OkHdl, OKButton *, EMPTYARG )
     else
     {
         if( !maBtnMore.GetState() )
-            maBtnMore.SetState( TRUE );
+            maBtnMore.SetState( true );
 
         ErrorBox( this, WinBits( WB_OK | WB_DEF_OK ), ScGlobal::GetRscString( STR_INVALID_TABREF ) ).Execute();
         maEdOutPos.GrabFocus();
@@ -803,8 +802,6 @@ IMPL_LINK( ScPivotLayoutDlg, MoreClickHdl, MoreButton *, EMPTYARG )
     if ( maBtnMore.GetState() )
     {
         mbRefInputMode = true;
-        //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-        //SFX_APPWINDOW->Enable();
         if ( maEdInPos.IsEnabled() )
         {
             maEdInPos.Enable();
@@ -821,23 +818,21 @@ IMPL_LINK( ScPivotLayoutDlg, MoreClickHdl, MoreButton *, EMPTYARG )
     else
     {
         mbRefInputMode = false;
-        //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
-        //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
     }
     return 0;
 }
 
 IMPL_LINK( ScPivotLayoutDlg, EdOutModifyHdl, Edit *, EMPTYARG )
 {
-    String  theCurPosStr = maEdOutPos.GetText();
-    USHORT  nResult = ScAddress().Parse( theCurPosStr, mpDoc, mpDoc->GetAddressConvention() );
+    String theCurPosStr = maEdOutPos.GetText();
+    sal_uInt16 nResult = ScAddress().Parse( theCurPosStr, mpDoc, mpDoc->GetAddressConvention() );
 
     if ( SCA_VALID == (nResult & SCA_VALID) )
     {
-        String* pStr    = NULL;
-        BOOL    bFound  = FALSE;
-        USHORT  i       = 0;
-        USHORT  nCount  = maLbOutPos.GetEntryCount();
+        String* pStr = 0;
+        bool bFound = false;
+        sal_uInt16 i = 0;
+        sal_uInt16 nCount = maLbOutPos.GetEntryCount();
 
         for ( i=2; i<nCount && !bFound; i++ )
         {
@@ -857,7 +852,7 @@ IMPL_LINK( ScPivotLayoutDlg, EdOutModifyHdl, Edit *, EMPTYARG )
 IMPL_LINK( ScPivotLayoutDlg, EdInModifyHdl, Edit *, EMPTYARG )
 {
     String theCurPosStr = maEdInPos.GetText();
-    USHORT nResult = ScRange().Parse( theCurPosStr, mpDoc, mpDoc->GetAddressConvention() );
+    sal_uInt16 nResult = ScRange().Parse( theCurPosStr, mpDoc, mpDoc->GetAddressConvention() );
 
     // invalid source range
     if( SCA_VALID != (nResult & SCA_VALID) )
@@ -890,7 +885,7 @@ IMPL_LINK( ScPivotLayoutDlg, EdInModifyHdl, Edit *, EMPTYARG )
 IMPL_LINK( ScPivotLayoutDlg, SelAreaHdl, ListBox *, EMPTYARG )
 {
     String aString;
-    USHORT nSelPos = maLbOutPos.GetSelectEntryPos();
+    sal_uInt16 nSelPos = maLbOutPos.GetSelectEntryPos();
     if( nSelPos > 1 )
     {
         aString = *(String*)maLbOutPos.GetEntryData( nSelPos );

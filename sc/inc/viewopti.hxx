@@ -68,8 +68,8 @@ enum ScVObjType
     VOBJ_TYPE_DRAW
 };
 
-#define MAX_OPT             (USHORT)VOPT_BIGHANDLES+1
-#define MAX_TYPE            (USHORT)VOBJ_TYPE_DRAW+1
+#define MAX_OPT             (sal_uInt16)VOPT_BIGHANDLES+1
+#define MAX_TYPE            (sal_uInt16)VOBJ_TYPE_DRAW+1
 
 #define SC_STD_GRIDCOLOR    COL_LIGHTGRAY
 
@@ -102,8 +102,8 @@ public:
 
     void                    SetDefaults();
 
-    void                    SetOption( ScViewOption eOpt, BOOL bNew = TRUE )    { aOptArr[eOpt] = bNew; }
-    BOOL                    GetOption( ScViewOption eOpt ) const                { return aOptArr[eOpt]; }
+    void                    SetOption( ScViewOption eOpt, sal_Bool bNew = sal_True )    { aOptArr[eOpt] = bNew; }
+    sal_Bool                    GetOption( ScViewOption eOpt ) const                { return aOptArr[eOpt]; }
 
     void                    SetObjMode( ScVObjType eObj, ScVObjMode eMode ) { aModeArr[eObj] = eMode; }
     ScVObjMode              GetObjMode( ScVObjType eObj ) const             { return aModeArr[eObj]; }
@@ -113,14 +113,14 @@ public:
 
     const ScGridOptions&    GetGridOptions() const                      { return aGridOpt; }
     void                    SetGridOptions( const ScGridOptions& rNew ) { aGridOpt = rNew; }
-    SvxGridItem*            CreateGridItem( USHORT nId = SID_ATTR_GRID_OPTIONS ) const;
+    SvxGridItem*            CreateGridItem( sal_uInt16 nId = SID_ATTR_GRID_OPTIONS ) const;
 
     const ScViewOptions&    operator=  ( const ScViewOptions& rCpy );
     int                     operator== ( const ScViewOptions& rOpt ) const;
     int                     operator!= ( const ScViewOptions& rOpt ) const { return !(operator==(rOpt)); }
 
 private:
-    BOOL            aOptArr     [MAX_OPT];
+    sal_Bool            aOptArr     [MAX_OPT];
     ScVObjMode      aModeArr    [MAX_TYPE];
     Color           aGridCol;
     String          aGridColName;
@@ -135,8 +135,8 @@ class SC_DLLPUBLIC ScTpViewItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-//UNUSED2008-05  ScTpViewItem( USHORT nWhich );
-                ScTpViewItem( USHORT nWhich, const ScViewOptions& rOpt );
+//UNUSED2008-05  ScTpViewItem( sal_uInt16 nWhich );
+                ScTpViewItem( sal_uInt16 nWhich, const ScViewOptions& rOpt );
                 ScTpViewItem( const ScTpViewItem&  rItem );
                 ~ScTpViewItem();
 

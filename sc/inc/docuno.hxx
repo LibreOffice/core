@@ -109,7 +109,7 @@ private:
 
     ::cppu::OInterfaceContainerHelper maChangesListeners;
 
-    BOOL                    FillRenderMarkData( const com::sun::star::uno::Any& aSelection,
+    sal_Bool                    FillRenderMarkData( const com::sun::star::uno::Any& aSelection,
                                                 const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rOptions,
                                                 ScMarkData& rMark, ScPrintSelectionStatus& rStatus, String& rPagesStr ) const;
     com::sun::star::uno::Reference<com::sun::star::uno::XAggregation> GetFormatter();
@@ -335,7 +335,7 @@ private:
     ScDocShell*             pDocShell;
 
 ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
-                            GetObjectByIndex_Impl(INT32 nIndex) const;
+                            GetObjectByIndex_Impl(sal_Int32 nIndex) const;
 
 public:
                             ScDrawPagesObj(ScDocShell* pDocSh);
@@ -802,7 +802,7 @@ private:
     ScDocShell*             pDocShell;
     SCTAB                   nTab;
 
-    BOOL                    GetScenarioIndex_Impl( const ::rtl::OUString& rName, SCTAB& rIndex );
+    sal_Bool                    GetScenarioIndex_Impl( const ::rtl::OUString& rName, SCTAB& rIndex );
     ScTableSheetObj*        GetObjectByIndex_Impl(sal_Int32 nIndex);
     ScTableSheetObj*        GetObjectByName_Impl(const ::rtl::OUString& aName);
 
