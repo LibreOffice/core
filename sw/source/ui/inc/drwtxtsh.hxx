@@ -41,12 +41,12 @@ class SwDrawTextShell: public SfxShell
 
     SdrView     *pSdrView;
 
-    BOOL        bRotate : 1;
-    BOOL        bSelMove: 1;
+    sal_Bool        bRotate : 1;
+    sal_Bool        bSelMove: 1;
 
     void        SetAttrToMarked(const SfxItemSet& rAttr);
     void        InsertSymbol(SfxRequest& rReq);
-    BOOL        IsTextEdit();
+    sal_Bool        IsTextEdit();
 public:
     SFX_DECL_INTERFACE(SW_DRWTXTSHELL)
     TYPEINFO();
@@ -57,7 +57,8 @@ public:
                 SwDrawTextShell(SwView &rView);
     virtual     ~SwDrawTextShell();
 
-    virtual SfxUndoManager*     GetUndoManager();
+    virtual ::svl::IUndoManager*
+                GetUndoManager();
 
     void        StateDisableItems(SfxItemSet &);
 

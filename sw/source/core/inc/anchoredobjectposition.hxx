@@ -452,7 +452,7 @@ namespace objectpositioning
             bool _DrawAsideFly( const SwFlyFrm* _pFly,
                                 const SwRect&   _rObjRect,
                                 const SwFrm*    _pObjContext,
-                                const ULONG     _nObjIndex,
+                                const sal_uLong     _nObjIndex,
                                 const bool      _bEvenPage,
                                 const sal_Int16 _eHoriOrient,
                                 const sal_Int16 _eRelOrient

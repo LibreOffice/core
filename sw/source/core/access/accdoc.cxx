@@ -319,7 +319,7 @@ SwAccessibleDocument::SwAccessibleDocument ( SwAccessibleMap* pInitMap ) :
     if( pWin )
     {
         pWin->AddChildEventListener( LINK( this, SwAccessibleDocument, WindowChildEventListener ));
-        USHORT nCount =   pWin->GetChildCount();
+        sal_uInt16 nCount =   pWin->GetChildCount();
         for( sal_uInt16 i=0; i < nCount; i++ )
         {
             Window* pChildWin = pWin->GetChild( i );

@@ -708,11 +708,7 @@ void SwXDocumentSettings::_postSetValues ()
         // #i86352# the printer is also used as container for options by sfx
         // when setting a printer it should have decent default options
         SfxItemSet aOptions( mpPrinter->GetOptions() );
-        SwPrintData aPrtData;
-        if( mpDoc->getPrintData() )
-            aPrtData = *mpDoc->getPrintData();
-        else
-            aPrtData = *SW_MOD()->GetPrtOptions(false);
+        SwPrintData aPrtData( mpDoc->getPrintData() );
         SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, aPrtData);
         aOptions.Put(aAddPrinterItem);
         mpPrinter->SetOptions( aOptions );
@@ -753,14 +749,14 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_FIELD_AUTO_UPDATE:
         {
             SwFldUpdateFlags nFlags = mpDoc->getFieldUpdateFlags(true);
-            BOOL bFieldUpd = (nFlags == AUTOUPD_FIELD_ONLY || nFlags == AUTOUPD_FIELD_AND_CHARTS );
+            sal_Bool bFieldUpd = (nFlags == AUTOUPD_FIELD_ONLY || nFlags == AUTOUPD_FIELD_AND_CHARTS );
             rValue.setValue(&bFieldUpd, ::getBooleanCppuType());
         }
         break;
         case HANDLE_CHART_AUTO_UPDATE:
         {
             SwFldUpdateFlags nFlags = mpDoc->getFieldUpdateFlags(true);
-            BOOL bChartUpd = nFlags == AUTOUPD_FIELD_AND_CHARTS;
+            sal_Bool bChartUpd = nFlags == AUTOUPD_FIELD_AND_CHARTS;
             rValue.setValue(&bChartUpd, ::getBooleanCppuType());
         }
         break;

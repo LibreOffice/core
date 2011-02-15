@@ -310,7 +310,7 @@ OUString SwXFootnoteProperties::getImplementationName(void) throw( RuntimeExcept
 /* -----------------------------06.04.00 11:43--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwXFootnoteProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXFootnoteProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.FootnoteSettings") == rServiceName;
 }
@@ -381,7 +381,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                 break;
                 case  WID_NUMBERING_TYPE :
                 {
-                    INT16 nTmp = 0;
+                    sal_Int16 nTmp = 0;
                     aValue >>= nTmp;
                     if(nTmp >= 0 &&
                         (nTmp <= SVX_NUM_ARABIC ||
@@ -393,14 +393,14 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                 break;
                 case  WID_START_AT:
                 {
-                    INT16 nTmp = 0;
+                    sal_Int16 nTmp = 0;
                     aValue >>= nTmp;
                     aFtnInfo.nFtnOffset = nTmp;
                 }
                 break;
                 case  WID_FOOTNOTE_COUNTING  :
                 {
-                    INT16 nTmp = 0;
+                    sal_Int16 nTmp = 0;
                     aValue >>= nTmp;
                     switch(nTmp)
                     {
@@ -645,7 +645,7 @@ OUString SwXEndnoteProperties::getImplementationName(void) throw( RuntimeExcepti
 /* -----------------------------06.04.00 11:45--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwXEndnoteProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXEndnoteProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.FootnoteSettings") == rServiceName;
 }
@@ -717,14 +717,14 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
                 break;
                 case  WID_NUMBERING_TYPE :
                 {
-                    INT16 nTmp = 0;
+                    sal_Int16 nTmp = 0;
                     aValue >>= nTmp;
                     aEndInfo.aFmt.SetNumberingType(nTmp);
                 }
                 break;
                 case  WID_START_AT:
                 {
-                    INT16 nTmp = 0;
+                    sal_Int16 nTmp = 0;
                     aValue >>= nTmp;
                     aEndInfo.nFtnOffset = nTmp;
                 }
@@ -900,7 +900,7 @@ OUString SwXLineNumberingProperties::getImplementationName(void) throw( RuntimeE
 /* -----------------------------06.04.00 11:47--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwXLineNumberingProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXLineNumberingProperties::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.LineNumberingProperties") == rServiceName;
 }
@@ -973,7 +973,7 @@ void SwXLineNumberingProperties::setPropertyValue(
                 case WID_NUMBERING_TYPE  :
                 {
                     SvxNumberType aNumType(aInfo.GetNumType());
-                    INT16 nTmp = 0;
+                    sal_Int16 nTmp = 0;
                     aValue >>= nTmp;
                     aNumType.SetNumberingType(nTmp);
                     aInfo.SetNumType(aNumType);
@@ -981,7 +981,7 @@ void SwXLineNumberingProperties::setPropertyValue(
                 break;
                 case WID_NUMBER_POSITION :
                 {
-                    INT16 nTmp = 0;
+                    sal_Int16 nTmp = 0;
                     aValue >>= nTmp;
                     switch(nTmp)
                     {
@@ -1002,17 +1002,17 @@ void SwXLineNumberingProperties::setPropertyValue(
                 break;
                 case WID_DISTANCE        :
                 {
-                    INT32 nVal = 0;
+                    sal_Int32 nVal = 0;
                     aValue >>= nVal;
-                    INT32 nTmp = MM100_TO_TWIP(nVal);
+                    sal_Int32 nTmp = MM100_TO_TWIP(nVal);
                     if (nTmp > USHRT_MAX)
                         nTmp = USHRT_MAX;
-                    aInfo.SetPosFromLeft( static_cast< USHORT >(nTmp) );
+                    aInfo.SetPosFromLeft( static_cast< sal_uInt16 >(nTmp) );
                 }
                 break;
                 case WID_INTERVAL   :
                 {
-                    INT16 nTmp = 0;
+                    sal_Int16 nTmp = 0;
                     aValue >>= nTmp;
                     if( nTmp > 0)
                         aInfo.SetCountBy(nTmp);
@@ -1027,7 +1027,7 @@ void SwXLineNumberingProperties::setPropertyValue(
                 break;
                 case WID_SEPARATOR_INTERVAL:
                 {
-                    INT16 nTmp = 0;
+                    sal_Int16 nTmp = 0;
                     aValue >>= nTmp;
                     if( nTmp >= 0)
                         aInfo.SetDividerCountBy(nTmp);
@@ -1237,7 +1237,7 @@ OUString SwXNumberingRules::getImplementationName(void) throw( RuntimeException 
 /* -----------------------------06.04.00 11:47--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwXNumberingRules::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXNumberingRules::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.NumberingRules") == rServiceName;
 }
@@ -1260,7 +1260,7 @@ SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule) :
     pDocShell(0),
     pNumRule(new SwNumRule(rRule)),
     m_pPropertySet(GetNumberingRulesSet()),
-    bOwnNumRuleCreated(TRUE)
+    bOwnNumRuleCreated(sal_True)
 {
     sal_uInt16 i;
 
@@ -1292,7 +1292,7 @@ SwXNumberingRules::SwXNumberingRules(SwDocShell& rDocSh) :
     pDocShell(&rDocSh),
     pNumRule(0),
     m_pPropertySet(GetNumberingRulesSet()),
-    bOwnNumRuleCreated(FALSE)
+    bOwnNumRuleCreated(sal_False)
 {
     pDocShell->GetDoc()->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
@@ -1304,7 +1304,7 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
     pDocShell(0),
     pNumRule(0),
     m_pPropertySet(GetNumberingRulesSet()),
-    bOwnNumRuleCreated(FALSE)
+    bOwnNumRuleCreated(sal_False)
 {
     rDoc.GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
     sCreatedNumRuleName = rDoc.GetUniqueNumRuleName();
@@ -1312,7 +1312,7 @@ SwXNumberingRules::SwXNumberingRules(SwDoc& rDoc) :
     sal_uInt16 nIndex =
 #endif
     // --> OD 2008-02-11 #newlistlevelattrs#
-    rDoc.MakeNumRule( sCreatedNumRuleName, 0, FALSE,
+    rDoc.MakeNumRule( sCreatedNumRuleName, 0, sal_False,
                       // --> OD 2008-06-06 #i89178#
                       numfunc::GetDefaultPositionAndSpaceMode() );
                       // <--
@@ -1822,7 +1822,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         SvxBrushItem* pSetBrush = 0;
         Size* pSetSize = 0;
         SwFmtVertOrient* pSetVOrient = 0;
-        BOOL bCharStyleNameSet = FALSE;
+        sal_Bool bCharStyleNameSet = sal_False;
 
         for(sal_uInt16 i = 0; i < nPropNameCount && !bExcept && !bWrongArg; i++)
         {
@@ -1850,7 +1850,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     sal_Int16 nSet = 0;
                     pData->aVal >>= nSet;
                     if(nSet >= 0 && MAXLEVEL >= nSet)
-                        aFmt.SetIncludeUpperLevels( static_cast< BYTE >(nSet) );
+                        aFmt.SetIncludeUpperLevels( static_cast< sal_uInt8 >(nSet) );
                 }
                 break;
                 case 2: //"Prefix",
@@ -1869,7 +1869,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 4: //"CharStyleName",
                 {
-                    bCharStyleNameSet = TRUE;
+                    bCharStyleNameSet = sal_True;
                     OUString uTmp;
                     pData->aVal >>= uTmp;
                     String sCharFmtName;
@@ -1921,7 +1921,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 break;
                 case 5: //"StartWith",
                 {
-                    INT16 nVal = 0;
+                    sal_Int16 nVal = 0;
                     pData->aVal >>= nVal;
                     aFmt.SetStart(nVal);
                 }
@@ -2282,13 +2282,13 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
 
     if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC)))
     {
-        BOOL bVal = *(sal_Bool*)rValue.getValue();
+        sal_Bool bVal = *(sal_Bool*)rValue.getValue();
         if(!pCreatedRule)
             pDocRule ? pDocRule->SetAutoRule(bVal) : pNumRule->SetAutoRule(bVal);
     }
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_CONTINUOUS_NUMBERING)))
     {
-        BOOL bVal = *(sal_Bool*)rValue.getValue();
+        sal_Bool bVal = *(sal_Bool*)rValue.getValue();
         pDocRule ? pDocRule->SetContinusNum(bVal) :
             pCreatedRule ? pCreatedRule->SetContinusNum(bVal) : pNumRule->SetContinusNum(bVal);
     }
@@ -2299,13 +2299,13 @@ void SwXNumberingRules::setPropertyValue( const OUString& rPropertyName, const A
     }
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_ABSOLUTE_MARGINS)))
     {
-        BOOL bVal = *(sal_Bool*)rValue.getValue();
+        sal_Bool bVal = *(sal_Bool*)rValue.getValue();
         pDocRule ? pDocRule->SetAbsSpaces(bVal) :
             pCreatedRule ? pCreatedRule->SetAbsSpaces(bVal) : pNumRule->SetAbsSpaces(bVal);
     }
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NUMBERING_IS_OUTLINE)))
     {
-        BOOL bVal = *(sal_Bool*)rValue.getValue();
+        sal_Bool bVal = *(sal_Bool*)rValue.getValue();
         SwNumRuleType eNumRuleType = bVal ? OUTLINE_RULE : NUM_RULE;
         pDocRule ? pDocRule->SetRuleType(eNumRuleType) :
             pCreatedRule ? pCreatedRule->SetRuleType(eNumRuleType) : pNumRule->SetRuleType(eNumRuleType);
@@ -2347,24 +2347,24 @@ Any SwXNumberingRules::getPropertyValue( const OUString& rPropertyName )
 
     if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC)))
     {
-        BOOL bVal = pRule->IsAutoRule();
+        sal_Bool bVal = pRule->IsAutoRule();
         aRet.setValue(&bVal, ::getBooleanCppuType());
     }
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_CONTINUOUS_NUMBERING)))
     {
-        BOOL bVal = pRule->IsContinusNum();
+        sal_Bool bVal = pRule->IsContinusNum();
         aRet.setValue(&bVal, ::getBooleanCppuType());
     }
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NAME)))
         aRet <<= OUString(pRule->GetName());
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_ABSOLUTE_MARGINS)))
     {
-        BOOL bVal = pRule->IsAbsSpaces();
+        sal_Bool bVal = pRule->IsAbsSpaces();
         aRet.setValue(&bVal, ::getBooleanCppuType());
     }
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_NUMBERING_IS_OUTLINE)))
     {
-        BOOL bVal = pRule->IsOutlineRule();
+        sal_Bool bVal = pRule->IsOutlineRule();
         aRet.setValue(&bVal, ::getBooleanCppuType());
     }
     // --> OD 2008-04-23 #refactorlists#
@@ -2466,7 +2466,7 @@ OUString SwXChapterNumbering::getImplementationName(void) throw( RuntimeExceptio
 /* -----------------------------06.04.00 11:47--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwXChapterNumbering::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXChapterNumbering::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     String sServiceName(rServiceName);
     return sServiceName.EqualsAscii("com.sun.star.text.ChapterNumbering") ||
@@ -2510,7 +2510,7 @@ OUString SwXTextColumns::getImplementationName(void) throw( RuntimeException )
 /* -----------------------------06.04.00 11:47--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwXTextColumns::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXTextColumns::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.TextColumns") == rServiceName;
 }
@@ -2550,7 +2550,7 @@ SwXTextColumns::SwXTextColumns(const SwFmtCol& rFmtCol) :
     bIsAutomaticWidth(rFmtCol.IsOrtho()),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_COLUMS))
 {
-    USHORT nItemGutterWidth = rFmtCol.GetGutterWidth();
+    sal_uInt16 nItemGutterWidth = rFmtCol.GetGutterWidth();
     nAutoDistance = bIsAutomaticWidth ?
                         USHRT_MAX == nItemGutterWidth ? DEF_GUTTER_WIDTH : (sal_Int32)nItemGutterWidth
                         : 0;

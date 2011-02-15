@@ -36,26 +36,26 @@
 #define nWW8MaxListLevel 9
 
 
-inline BYTE Get_Byte( BYTE *& p )
-    { BYTE n = SVBT8ToByte( *(SVBT8*)p );       p += 1; return n; }
+inline sal_uInt8 Get_Byte( sal_uInt8 *& p )
+    { sal_uInt8 n = SVBT8ToByte( *(SVBT8*)p );      p += 1; return n; }
 
-inline short Get_Short( BYTE *& p )
+inline short Get_Short( sal_uInt8 *& p )
     { short n = SVBT16ToShort( *(SVBT16*)p );   p += 2; return n; }
-inline USHORT Get_UShort( BYTE *& p )
-    { USHORT n = SVBT16ToShort( *(SVBT16*)p );  p += 2; return n; }
+inline sal_uInt16 Get_UShort( sal_uInt8 *& p )
+    { sal_uInt16 n = SVBT16ToShort( *(SVBT16*)p );  p += 2; return n; }
 
-inline long Get_Long( BYTE *& p )
+inline long Get_Long( sal_uInt8 *& p )
     { long n = SVBT32ToUInt32( *(SVBT32*)p );       p += 4; return n; }
-inline ULONG Get_ULong( BYTE *& p )
-    { ULONG n = SVBT32ToUInt32( *(SVBT32*)p );      p += 4; return n; }
+inline sal_uLong Get_ULong( sal_uInt8 *& p )
+    { sal_uLong n = SVBT32ToUInt32( *(SVBT32*)p );      p += 4; return n; }
 
-inline void Set_UInt8( BYTE *& p, UINT8 n )
+inline void Set_UInt8( sal_uInt8 *& p, sal_uInt8 n )
     { ByteToSVBT8( n, *(SVBT8*)p );  p+= 1; }
 
-inline void Set_UInt16( BYTE *& p, UINT16 n )
+inline void Set_UInt16( sal_uInt8 *& p, sal_uInt16 n )
     { ShortToSVBT16( n, *(SVBT16*)p );  p+= 2; }
 
-inline void Set_UInt32( BYTE *& p, UINT32 n )
+inline void Set_UInt32( sal_uInt8 *& p, sal_uInt32 n )
     { UInt32ToSVBT32( n, *(SVBT32*)p );  p+= 4; }
 
 
@@ -68,9 +68,9 @@ inline void Set_UInt32( BYTE *& p, UINT32 n )
 #endif
 #endif
 
-typedef INT16 WW8_PN;
-typedef INT32 WW8_FC;
-typedef INT32 WW8_CP;
+typedef sal_Int16 WW8_PN;
+typedef sal_Int32 WW8_FC;
+typedef sal_Int32 WW8_CP;
 
 // STD: STyle Definition
 //   The STD contains the entire definition of a style.
@@ -84,26 +84,26 @@ typedef INT32 WW8_CP;
 struct WW8_STD
 {
     // Base part of STD:
-    UINT16  sti : 12;          // invariant style identifier
-    UINT16  fScratch : 1;      // spare field for any temporary use,
+    sal_uInt16  sti : 12;          // invariant style identifier
+    sal_uInt16  fScratch : 1;      // spare field for any temporary use,
                                                          // always reset back to zero!
-    UINT16  fInvalHeight : 1;  // PHEs of all text with this style are wrong
-    UINT16  fHasUpe : 1;       // UPEs have been generated
-    UINT16  fMassCopy : 1;     // std has been mass-copied; if unused at
+    sal_uInt16  fInvalHeight : 1;  // PHEs of all text with this style are wrong
+    sal_uInt16  fHasUpe : 1;       // UPEs have been generated
+    sal_uInt16  fMassCopy : 1;     // std has been mass-copied; if unused at
                                                          // save time, style should be deleted
-    UINT16  sgc : 4;           // style type code
-    UINT16  istdBase : 12;     // base style
-    UINT16  cupx : 4;          // # of UPXs (and UPEs)
-    UINT16  istdNext : 12;     // next style
-    UINT16  bchUpe;            // offset to end of upx's, start of upe's
+    sal_uInt16  sgc : 4;           // style type code
+    sal_uInt16  istdBase : 12;     // base style
+    sal_uInt16  cupx : 4;          // # of UPXs (and UPEs)
+    sal_uInt16  istdNext : 12;     // next style
+    sal_uInt16  bchUpe;            // offset to end of upx's, start of upe's
     //-------- jetzt neu:
     // ab Ver8 gibts zwei Felder mehr:
-  UINT16    fAutoRedef : 1;    /* auto redefine style when appropriate */
-  UINT16    fHidden : 1;       /* hidden from UI? */
-  UINT16    : 14;              /* unused bits */
+  sal_uInt16    fAutoRedef : 1;    /* auto redefine style when appropriate */
+  sal_uInt16    fHidden : 1;       /* hidden from UI? */
+  sal_uInt16    : 14;              /* unused bits */
 
     // Variable length part of STD:
-    //  UINT8   stzName[2];        /* sub-names are separated by chDelimStyle
+    //  sal_uInt8   stzName[2];        /* sub-names are separated by chDelimStyle
     // char grupx[];
             // the UPEs are not stored on the file; they are a cache of the based-on
         // chain
@@ -117,17 +117,17 @@ struct WW8_STD
 struct WW8_FFN_BASE     // Font Descriptor
 {
     // ab Ver6
-    BYTE    cbFfnM1;        //  0x0     total length of FFN - 1.
+    sal_uInt8   cbFfnM1;        //  0x0     total length of FFN - 1.
 
-    BYTE    prg: 2;         //  0x1:03  pitch request
-    BYTE    fTrueType : 1;  //  0x1:04  when 1, font is a TrueType font
+    sal_uInt8   prg: 2;         //  0x1:03  pitch request
+    sal_uInt8   fTrueType : 1;  //  0x1:04  when 1, font is a TrueType font
                             //  0x1:08  reserved
-    BYTE    ff : 3;         //  0x1:70  font family id
+    sal_uInt8   ff : 3;         //  0x1:70  font family id
                             //  0x1:80  reserved
 
     short wWeight;          //  0x2     base weight of font
-    BYTE    chs;            //  0x4     character set identifier
-    BYTE    ibszAlt;        //  0x5     index into ffn.szFfn to the name of the alternate font
+    sal_uInt8   chs;            //  0x4     character set identifier
+    sal_uInt8   ibszAlt;        //  0x5     index into ffn.szFfn to the name of the alternate font
 };
 
 /*
@@ -150,28 +150,28 @@ struct WW8_FFN : public WW8_FFN_BASE
 struct WW8_BRCVer6  // alter Border Code
 {
     SVBT16 aBits1;
-//  UINT16 dxpLineWidth : 3;// 0007 When dxpLineWidth is 0, 1, 2, 3, 4, or 5, this field is the width of
+//  sal_uInt16 dxpLineWidth : 3;// 0007 When dxpLineWidth is 0, 1, 2, 3, 4, or 5, this field is the width of
                             //      a single line of border in units of 0.75 points
                             //      Must be nonzero when brcType is nonzero.
                             //      6 == dotted, 7 == dashed.
-//  UINT16 brcType : 2;     // 0018 border type code: 0 == none, 1 == single, 2 == thick, 3 == double
-//  UINT16 fShadow : 1;     // 0020 when 1, border is drawn with shadow. Must be 0 when BRC is a substructure of the TC
-//  UINT16 ico : 5;         // 07C0 color code (see chp.ico)
-//  UINT16 dxpSpace : 5;    // F800 width of space to maintain between border and text within border.
+//  sal_uInt16 brcType : 2;     // 0018 border type code: 0 == none, 1 == single, 2 == thick, 3 == double
+//  sal_uInt16 fShadow : 1;     // 0020 when 1, border is drawn with shadow. Must be 0 when BRC is a substructure of the TC
+//  sal_uInt16 ico : 5;         // 07C0 color code (see chp.ico)
+//  sal_uInt16 dxpSpace : 5;    // F800 width of space to maintain between border and text within border.
                             //      Must be 0 when BRC is a substructure of the TC.  Stored in points for Windows.
 };
 
 struct WW8_BRC : public WW8_BRCVer6 // Border Code
 {
     SVBT16 aBits2;
-//  UINT16 dxpLineWidth : 3;// 0007 When dxpLineWidth is 0, 1, 2, 3, 4, or 5, this field is the width of
+//  sal_uInt16 dxpLineWidth : 3;// 0007 When dxpLineWidth is 0, 1, 2, 3, 4, or 5, this field is the width of
                             //      a single line of border in units of 0.75 points
                             //      Must be nonzero when brcType is nonzero.
                             //      6 == dotted, 7 == dashed.
-//  UINT16 brcType : 2;     // 0018 border type code: 0 == none, 1 == single, 2 == thick, 3 == double
-//  UINT16 fShadow : 1;     // 0020 when 1, border is drawn with shadow. Must be 0 when BRC is a substructure of the TC
-//  UINT16 ico : 5;         // 07C0 color code (see chp.ico)
-//  UINT16 dxpSpace : 5;    // F800 width of space to maintain between border and text within border.
+//  sal_uInt16 brcType : 2;     // 0018 border type code: 0 == none, 1 == single, 2 == thick, 3 == double
+//  sal_uInt16 fShadow : 1;     // 0020 when 1, border is drawn with shadow. Must be 0 when BRC is a substructure of the TC
+//  sal_uInt16 ico : 5;         // 07C0 color code (see chp.ico)
+//  sal_uInt16 dxpSpace : 5;    // F800 width of space to maintain between border and text within border.
                             //      Must be 0 when BRC is a substructure of the TC.  Stored in points for Windows.
 };
 
@@ -189,9 +189,9 @@ typedef WW8_BRC WW8_BRC5[5];        // 5 * Border Code
 
 struct WW8_BordersSO            // fuer StarOffice-Border Code
 {
-    USHORT Out;
-    USHORT In;
-    USHORT Dist;
+    sal_uInt16 Out;
+    sal_uInt16 In;
+    sal_uInt16 Dist;
 };
 
 
@@ -351,39 +351,39 @@ struct WW8_DOGRID
 
 struct WW8_PIC
 {
-    INT32 lcb;          // 0x0 number of bytes in the PIC structure plus size of following picture data which may be a Window's metafile, a bitmap, or the filename of a TIFF file.
-    UINT16 cbHeader;    // 0x4 number of bytes in the PIC (to allow for future expansion).
+    sal_Int32 lcb;          // 0x0 number of bytes in the PIC structure plus size of following picture data which may be a Window's metafile, a bitmap, or the filename of a TIFF file.
+    sal_uInt16 cbHeader;    // 0x4 number of bytes in the PIC (to allow for future expansion).
     struct {
-        INT16 mm;       // 0x6  int
-        INT16 xExt;     // 0x8  int
-        INT16 yExt;     // 0xa  int
-        INT16 hMF;      // 0xc  int
+        sal_Int16 mm;       // 0x6  int
+        sal_Int16 xExt;     // 0x8  int
+        sal_Int16 yExt;     // 0xa  int
+        sal_Int16 hMF;      // 0xc  int
     }MFP;
-//  BYTE bm[14];        // 0xe  BITMAP(14 bytes)    Window's bitmap structure when PIC describes a BITMAP.
-    BYTE rcWinMF[14];   // 0xe  rc (rectangle - 8 bytes) rect for window origin
+//  sal_uInt8 bm[14];       // 0xe  BITMAP(14 bytes)    Window's bitmap structure when PIC describes a BITMAP.
+    sal_uInt8 rcWinMF[14];  // 0xe  rc (rectangle - 8 bytes) rect for window origin
                         //      and extents when  metafile is stored -- ignored if 0
-    INT16 dxaGoal;      // 0x1c horizontal  measurement in twips of the  rectangle the picture should be imaged within.
-    INT16 dyaGoal;      // 0x1e vertical  measurement in twips of the  rectangle the picture should be imaged within.
-    UINT16 mx;          // 0x20 horizontal scaling factor supplied by user in .1% units.
-    UINT16 my;          // 0x22 vertical scaling factor supplied by user in .1% units.
-    INT16 dxaCropLeft;  // 0x24 the amount the picture has been cropped on the left in twips.
-    INT16 dyaCropTop;   // 0x26 the amount the picture has been cropped on the top in twips.
-    INT16 dxaCropRight; // 0x28 the amount the picture has been cropped on the right in twips.
-    INT16 dyaCropBottom;// 0x2a the amount the picture has been cropped on the bottom in twips.
-    INT16 brcl : 4;     // 000F Obsolete, superseded by brcTop, etc.  In
-    INT16 fFrameEmpty : 1;  // 0010 picture consists of a single frame
-    INT16 fBitmap : 1;      // 0020 ==1, when picture is just a bitmap
-    INT16 fDrawHatch : 1;   // 0040 ==1, when picture is an active OLE object
-    INT16 fError : 1;       // 0080 ==1, when picture is just an error message
-    INT16 bpp : 8;      // FF00 bits per pixel, 0 = unknown
+    sal_Int16 dxaGoal;      // 0x1c horizontal  measurement in twips of the  rectangle the picture should be imaged within.
+    sal_Int16 dyaGoal;      // 0x1e vertical  measurement in twips of the  rectangle the picture should be imaged within.
+    sal_uInt16 mx;          // 0x20 horizontal scaling factor supplied by user in .1% units.
+    sal_uInt16 my;          // 0x22 vertical scaling factor supplied by user in .1% units.
+    sal_Int16 dxaCropLeft;  // 0x24 the amount the picture has been cropped on the left in twips.
+    sal_Int16 dyaCropTop;   // 0x26 the amount the picture has been cropped on the top in twips.
+    sal_Int16 dxaCropRight; // 0x28 the amount the picture has been cropped on the right in twips.
+    sal_Int16 dyaCropBottom;// 0x2a the amount the picture has been cropped on the bottom in twips.
+    sal_Int16 brcl : 4;     // 000F Obsolete, superseded by brcTop, etc.  In
+    sal_Int16 fFrameEmpty : 1;  // 0010 picture consists of a single frame
+    sal_Int16 fBitmap : 1;      // 0020 ==1, when picture is just a bitmap
+    sal_Int16 fDrawHatch : 1;   // 0040 ==1, when picture is an active OLE object
+    sal_Int16 fError : 1;       // 0080 ==1, when picture is just an error message
+    sal_Int16 bpp : 8;      // FF00 bits per pixel, 0 = unknown
     WW8_BRC rgbrc[4];
 //  BRC brcTop;         // 0x2e specification for border above picture
 //  BRC brcLeft;        // 0x30 specification for border to the left
 //  BRC brcBottom;      // 0x32 specification for border below picture
 //  BRC brcRight;       // 0x34 specification for border to the right
-    INT16 dxaOrigin;    // 0x36 horizontal offset of hand annotation origin
-    INT16 dyaOrigin;    // 0x38 vertical offset of hand annotation origin
-//  BYTE rgb[];         // 0x3a variable array of bytes containing Window's metafile, bitmap or TIFF file filename.
+    sal_Int16 dxaOrigin;    // 0x36 horizontal offset of hand annotation origin
+    sal_Int16 dyaOrigin;    // 0x38 vertical offset of hand annotation origin
+//  sal_uInt8 rgb[];            // 0x3a variable array of bytes containing Window's metafile, bitmap or TIFF file filename.
 };
 
 struct WW8_PIC_SHADOW
@@ -423,26 +423,26 @@ struct WW8_PIC_SHADOW
 struct WW8_TBD
 {
     SVBT8 aBits1;
-//  BYTE jc : 3;        // 0x07 justification code: 0=left tab, 1=centered tab, 2=right tab, 3=decimal tab, 4=bar
-//  BYTE tlc : 3;       // 0x38 tab leader code: 0=no leader, 1=dotted leader,
+//  sal_uInt8 jc : 3;       // 0x07 justification code: 0=left tab, 1=centered tab, 2=right tab, 3=decimal tab, 4=bar
+//  sal_uInt8 tlc : 3;      // 0x38 tab leader code: 0=no leader, 1=dotted leader,
                         // 2=hyphenated leader, 3=single line leader, 4=heavy line leader
 //  *   int :2  C0  reserved
 };
 
 struct WW8_TCell    // hiermit wird weitergearbeitet (entspricht weitestgehend dem Ver8-Format)
 {
-    BOOL bFirstMerged   : 1;// 0001 set to 1 when cell is first cell of a range of cells that have been merged.
-    BOOL bMerged        : 1;// 0002 set to 1 when cell has been merged with preceding cell.
-    BOOL bVertical      : 1;// set to 1 when cell has vertical text flow
-    BOOL bBackward      : 1;// for a vertical table cell, text flow is bottom to top when 1 and is bottom to top when 0.
-    BOOL bRotateFont    : 1;// set to 1 when cell has rotated characters (i.e. uses @font)
-    BOOL bVertMerge     : 1;// set to 1 when cell is vertically merged with the cell(s) above and/or below. When cells are vertically merged, the display area of the merged cells are consolidated. The consolidated area is used to display the contents of the first vertically merged cell (the cell with fVertRestart set to 1), and all other vertically merged cells (those with fVertRestart set to 0) must be empty. Cells can only be merged vertically if their left and right boundaries are (nearly) identical (i.e. if corresponding entries in rgdxaCenter of the table rows differ by at most 3).
-    BOOL bVertRestart   : 1;// set to 1 when the cell is the first of a set of vertically merged cells. The contents of a cell with fVertStart set to 1 are displayed in the consolidated area belonging to the entire set of vertically merged cells. Vertically merged cells with fVertRestart set to 0 must be empty.
-    BYTE nVertAlign     : 2;// specifies the alignment of the cell contents relative to text flow (e.g. in a cell with bottom to top text flow and bottom vertical alignment, the text is shifted horizontally to match the cell's right boundary):
+    sal_Bool bFirstMerged   : 1;// 0001 set to 1 when cell is first cell of a range of cells that have been merged.
+    sal_Bool bMerged        : 1;// 0002 set to 1 when cell has been merged with preceding cell.
+    sal_Bool bVertical      : 1;// set to 1 when cell has vertical text flow
+    sal_Bool bBackward      : 1;// for a vertical table cell, text flow is bottom to top when 1 and is bottom to top when 0.
+    sal_Bool bRotateFont    : 1;// set to 1 when cell has rotated characters (i.e. uses @font)
+    sal_Bool bVertMerge     : 1;// set to 1 when cell is vertically merged with the cell(s) above and/or below. When cells are vertically merged, the display area of the merged cells are consolidated. The consolidated area is used to display the contents of the first vertically merged cell (the cell with fVertRestart set to 1), and all other vertically merged cells (those with fVertRestart set to 0) must be empty. Cells can only be merged vertically if their left and right boundaries are (nearly) identical (i.e. if corresponding entries in rgdxaCenter of the table rows differ by at most 3).
+    sal_Bool bVertRestart   : 1;// set to 1 when the cell is the first of a set of vertically merged cells. The contents of a cell with fVertStart set to 1 are displayed in the consolidated area belonging to the entire set of vertically merged cells. Vertically merged cells with fVertRestart set to 0 must be empty.
+    sal_uInt8 nVertAlign        : 2;// specifies the alignment of the cell contents relative to text flow (e.g. in a cell with bottom to top text flow and bottom vertical alignment, the text is shifted horizontally to match the cell's right boundary):
                                                     //          0 top
                                                     //          1 center
                                                     //          2 bottom
-    UINT16 fUnused      : 7;// reserved - nicht loeschen: macht das UINT16 voll !!
+    sal_uInt16 fUnused      : 7;// reserved - nicht loeschen: macht das sal_uInt16 voll !!
 
     WW8_BRC rgbrc[4];               // border codes
 //notational convenience for referring to brcTop, brcLeft, etc fields.
@@ -458,9 +458,9 @@ struct WW8_TCellVer6    // wird aus der Datei gelesen
 {
     SVBT8  aBits1Ver6;
     SVBT8  aBits2Ver6;
-//  UINT16 fFirstMerged : 1;// 0001 set to 1 when cell is first cell of a range of cells that have been merged.
-//  UINT16 fMerged : 1;     // 0002 set to 1 when cell has been merged with preceding cell.
-//  UINT16 fUnused : 14;    // FFFC reserved
+//  sal_uInt16 fFirstMerged : 1;// 0001 set to 1 when cell is first cell of a range of cells that have been merged.
+//  sal_uInt16 fMerged : 1;     // 0002 set to 1 when cell has been merged with preceding cell.
+//  sal_uInt16 fUnused : 14;    // FFFC reserved
     WW8_BRCVer6 rgbrcVer6[4];
 // notational convenience for referring to brcTop, brcLeft, etc fields:
 //          BRC brcTop;             // specification of the top border of a table cell
@@ -482,27 +482,27 @@ struct WW8_TCellVer8    // wird aus der Datei gelesen
 struct WW8_SHD              // struct SHD fehlt in der Beschreibung
 {
 private:
-    UINT16 aBits;
-//  UINT16 nFore : 5;       // 0x001f ForegroundColor
-//  UINT16 nBack : 5;       // 0x03e0 BackgroundColor
-//  UINT16 nStyle : 5;      // 0x7c00 Percentage and Style
-//  UINT16 nDontKnow : 1;   // 0x8000 ???   ab Ver8: ebenfalls fuer Style
+    sal_uInt16 aBits;
+//  sal_uInt16 nFore : 5;       // 0x001f ForegroundColor
+//  sal_uInt16 nBack : 5;       // 0x03e0 BackgroundColor
+//  sal_uInt16 nStyle : 5;      // 0x7c00 Percentage and Style
+//  sal_uInt16 nDontKnow : 1;   // 0x8000 ???   ab Ver8: ebenfalls fuer Style
 
 public:
     WW8_SHD(){ aBits = 0; }
 
-    BYTE GetFore()  const                           { return (BYTE)( aBits        & 0x1f); }
-    BYTE GetBack()  const                           { return (BYTE)((aBits >> 5 ) & 0x1f); }
-    BYTE GetStyle(BOOL bVer67)  const { return (BYTE)((aBits >> 10) & ( bVer67?0x1f:0x3f ) ); }
+    sal_uInt8 GetFore() const                           { return (sal_uInt8)( aBits        & 0x1f); }
+    sal_uInt8 GetBack() const                           { return (sal_uInt8)((aBits >> 5 ) & 0x1f); }
+    sal_uInt8 GetStyle(sal_Bool bVer67) const { return (sal_uInt8)((aBits >> 10) & ( bVer67?0x1f:0x3f ) ); }
 
-    UINT16 GetValue()   const                       { return aBits; }
+    sal_uInt16 GetValue()   const                       { return aBits; }
 
-    void SetValue(   UINT16 nVal ){ aBits = nVal; }
-    void SetWWValue( SVBT16 nVal ){ aBits = (UINT16)SVBT16ToShort( nVal ); }
+    void SetValue(   sal_uInt16 nVal ){ aBits = nVal; }
+    void SetWWValue( SVBT16 nVal ){ aBits = (sal_uInt16)SVBT16ToShort( nVal ); }
 
-    void SetFore( BYTE nVal ){ aBits = (aBits & 0xffe0) |  (nVal & 0x1f);     }
-    void SetBack( BYTE nVal ){ aBits = (aBits & 0xfc1f) | ((nVal & 0x1f)<<5); }
-    void SetStyle( BOOL bVer67, BYTE nVal ){
+    void SetFore( sal_uInt8 nVal ){ aBits = (aBits & 0xffe0) |  (nVal & 0x1f);     }
+    void SetBack( sal_uInt8 nVal ){ aBits = (aBits & 0xfc1f) | ((nVal & 0x1f)<<5); }
+    void SetStyle( sal_Bool bVer67, sal_uInt8 nVal ){
                                          aBits = (aBits & ( bVer67?0x83ff:0x03ff ) )
                                                                                       | ((nVal & ( bVer67?0x1f:0x2f ))<<10); }
 };
@@ -515,29 +515,29 @@ struct WW8_ANLV
     SVBT8 cbTextBefore; // 1        offset into anld.rgch limit of prefix text
     SVBT8 cbTextAfter;  // 2
     SVBT8 aBits1;
-//  BYTE jc : 2;        // 3 : 0x03 justification code, 0=left, 1=center, 2=right, 3=left and right justify
-//  BYTE fPrev : 1;     //     0x04 when ==1, include previous levels
-//  BYTE fHang : 1;     //     0x08 when ==1, number will be displayed using a hanging indent
-//  BYTE fSetBold : 1;  //     0x10 when ==1, boldness of number will be determined by anld.fBold.
-//  BYTE fSetItalic : 1;//     0x20 when ==1, italicness of number will be determined by anld.fItalic
-//  BYTE fSetSmallCaps : 1;//  0x40 when ==1, anld.fSmallCaps will determine whether number will be displayed in small caps or not.
-//  BYTE fSetCaps : 1;  //     0x80 when ==1, anld.fCaps will determine whether number will be displayed capitalized or not
+//  sal_uInt8 jc : 2;       // 3 : 0x03 justification code, 0=left, 1=center, 2=right, 3=left and right justify
+//  sal_uInt8 fPrev : 1;        //     0x04 when ==1, include previous levels
+//  sal_uInt8 fHang : 1;        //     0x08 when ==1, number will be displayed using a hanging indent
+//  sal_uInt8 fSetBold : 1; //     0x10 when ==1, boldness of number will be determined by anld.fBold.
+//  sal_uInt8 fSetItalic : 1;//     0x20    when ==1, italicness of number will be determined by anld.fItalic
+//  sal_uInt8 fSetSmallCaps : 1;//  0x40    when ==1, anld.fSmallCaps will determine whether number will be displayed in small caps or not.
+//  sal_uInt8 fSetCaps : 1; //     0x80 when ==1, anld.fCaps will determine whether number will be displayed capitalized or not
     SVBT8 aBits2;
-//  BYTE fSetStrike : 1;// 4 : 0x01 when ==1, anld.fStrike will determine whether the number will be displayed using strikethrough or not.
-//  BYTE fSetKul : 1;   //     0x02 when ==1, anld.kul will determine the underlining state of the autonumber.
-//  BYTE fPrevSpace : 1;//     0x04 when ==1, autonumber will be displayed with a single prefixing space character
-//  BYTE fBold : 1;     //     0x08 determines boldness of autonumber when anld.fSetBold == 1.
-//  BYTE fItalic : 1;   //     0x10 determines italicness of autonumber when anld.fSetItalic == 1.
-//  BYTE fSmallCaps : 1;//     0x20 determines whether autonumber will be displayed using small caps when anld.fSetSmallCaps == 1.
-//  BYTE fCaps : 1;     //     0x40 determines whether autonumber will be displayed using caps when anld.fSetCaps == 1.
-//  BYTE fStrike : 1;   //     0x80 determines whether autonumber will be displayed using caps when anld.fSetStrike == 1.
+//  sal_uInt8 fSetStrike : 1;// 4 : 0x01    when ==1, anld.fStrike will determine whether the number will be displayed using strikethrough or not.
+//  sal_uInt8 fSetKul : 1;  //     0x02 when ==1, anld.kul will determine the underlining state of the autonumber.
+//  sal_uInt8 fPrevSpace : 1;//     0x04    when ==1, autonumber will be displayed with a single prefixing space character
+//  sal_uInt8 fBold : 1;        //     0x08 determines boldness of autonumber when anld.fSetBold == 1.
+//  sal_uInt8 fItalic : 1;  //     0x10 determines italicness of autonumber when anld.fSetItalic == 1.
+//  sal_uInt8 fSmallCaps : 1;//     0x20    determines whether autonumber will be displayed using small caps when anld.fSetSmallCaps == 1.
+//  sal_uInt8 fCaps : 1;        //     0x40 determines whether autonumber will be displayed using caps when anld.fSetCaps == 1.
+//  sal_uInt8 fStrike : 1;  //     0x80 determines whether autonumber will be displayed using caps when anld.fSetStrike == 1.
     SVBT8 aBits3;
-//  BYTE kul : 3;       // 5 : 0x07 determines whether  autonumber will be displayed with underlining when anld.fSetKul == 1.
-//  BYTE ico : 5;       //     0xF1 color of autonumber
+//  sal_uInt8 kul : 3;      // 5 : 0x07 determines whether  autonumber will be displayed with underlining when anld.fSetKul == 1.
+//  sal_uInt8 ico : 5;      //     0xF1 color of autonumber
     SVBT16 ftc;         // 6        font code of  autonumber
     SVBT16 hps;         // 8        font half point size (or 0=auto)
     SVBT16 iStartAt;    // 0x0a     starting value (0 to 65535)
-    SVBT16 dxaIndent;   // 0x0c     *short?* *USHORT?* width of prefix text (same as indent)
+    SVBT16 dxaIndent;   // 0x0c     *short?* *sal_uInt16?* width of prefix text (same as indent)
     SVBT16 dxaSpace;    // 0x0e     minimum space between number and paragraph
 };
 // *cbANLV (count of bytes of ANLV) is 16 (decimal), 10(hex).
@@ -549,7 +549,7 @@ struct WW8_ANLD
     SVBT8 fNumberAcross;    // 0x11     number across cells in table rows(instead of down)
     SVBT8 fRestartHdn;  // 0x12     restart heading number on section boundary
     SVBT8 fSpareX;      // 0x13     unused( should be 0)
-    BYTE  rgchAnld[32]; // 0x14 characters displayed before/after autonumber
+    sal_uInt8  rgchAnld[32];    // 0x14 characters displayed before/after autonumber
 };
 
 
@@ -560,7 +560,7 @@ struct WW8_OLST
     SVBT8 fSpareOlst2;  // 0x91 reserved
     SVBT8 fSpareOlst3;  // 0x92 reserved
     SVBT8 fSpareOlst4;  // 0x93 reserved
-    BYTE rgch[64];      // 0x94 array of 64 chars       text before/after number
+    sal_uInt8 rgch[64];     // 0x94 array of 64 chars       text before/after number
 };
 // cbOLST is 212(decimal), D4(hex).
 
@@ -578,8 +578,8 @@ struct WW8_DO
     SVBT8  by;              // 5    y position relative to anchor CP
     SVBT16 dhgt;                // 6    height of DO
     SVBT16 aBits1;
-//  UINT16 fAnchorLock : 1; // 8    1 if the DO anchor is locked
-//  BYTE[] rgdp;            // 0xa  variable length array of drawing primitives
+//  sal_uInt16 fAnchorLock : 1; // 8    1 if the DO anchor is locked
+//  sal_uInt8[] rgdp;           // 0xa  variable length array of drawing primitives
 };
 
 struct WW8_DPHEAD
@@ -621,16 +621,16 @@ struct WW8_DP_FILL
 struct WW8_DP_LINEEND
 {
     SVBT16 aStartBits;
-//  UINT16 eppsStart : 2;   // Start EndPoint Property Style
+//  sal_uInt16 eppsStart : 2;   // Start EndPoint Property Style
                             // 0=None, 1=Hollow, 2=Filled
-//  UINT16 eppwStart : 2;   // Start EndPoint Property Weight
-//  UINT16 epplStart : 2;   // Start EndPoint Property length
-//  UINT16 dummyStart : 10; // Alignment
+//  sal_uInt16 eppwStart : 2;   // Start EndPoint Property Weight
+//  sal_uInt16 epplStart : 2;   // Start EndPoint Property length
+//  sal_uInt16 dummyStart : 10; // Alignment
     SVBT16 aEndBits;
-//  UINT16 eppsEnd : 2;     // End EndPoint Property Style
-//  UINT16 eppwEnd : 2;     // End EndPoint Property Weight
-//  UINT16 epplEnd : 2;     // End EndPoint Property length
-//  UINT16 dummyEnd : 10;   // Alignment
+//  sal_uInt16 eppsEnd : 2;     // End EndPoint Property Style
+//  sal_uInt16 eppwEnd : 2;     // End EndPoint Property Weight
+//  sal_uInt16 epplEnd : 2;     // End EndPoint Property length
+//  sal_uInt16 dummyEnd : 10;   // Alignment
 };
 
 struct WW8_DP_LINE
@@ -651,8 +651,8 @@ struct WW8_DP_TXTBOX
     WW8_DP_FILL aFill;
     WW8_DP_SHADOW aShd;
     SVBT16 aBits1;
-//  UINT16 fRoundCorners : 1; //0x24    0001    1 if the textbox has rounded corners
-//  UINT16 zaShape : 15;    // 0x24     000e    REVIEW davebu
+//  sal_uInt16 fRoundCorners : 1; //0x24    0001    1 if the textbox has rounded corners
+//  sal_uInt16 zaShape : 15;    // 0x24     000e    REVIEW davebu
     SVBT16 dzaInternalMargin; // 0x26   REVIEW davebu
 };
 
@@ -662,8 +662,8 @@ struct WW8_DP_RECT
     WW8_DP_FILL aFill;
     WW8_DP_SHADOW aShd;
     SVBT16 aBits1;
-//  UINT16 fRoundCorners : 1; // 0x24   0001    1 if the textbox has rounded corners
-//  UINT16 zaShape : 15; // 0x24 000e   REVIEW davebu
+//  sal_uInt16 fRoundCorners : 1; // 0x24   0001    1 if the textbox has rounded corners
+//  sal_uInt16 zaShape : 15; // 0x24 000e   REVIEW davebu
 };
 
 struct WW8_DP_ARC
@@ -673,8 +673,8 @@ struct WW8_DP_ARC
     WW8_DP_SHADOW aShd;
     SVBT8 fLeft;        // 0x24 00ff    REVIEW davebu
     SVBT8 fUp;          // 0x24 ff00    REVIEW davebu
-//  UINT16 fLeft : 8;   // 0x24 00ff    REVIEW davebu
-//  UINT16 fUp : 8;     // 0x24 ff00    REVIEW davebu
+//  sal_uInt16 fLeft : 8;   // 0x24 00ff    REVIEW davebu
+//  sal_uInt16 fUp : 8;     // 0x24 ff00    REVIEW davebu
 };
 
 struct WW8_DP_ELIPSE
@@ -691,8 +691,8 @@ struct WW8_DP_POLYLINE
     WW8_DP_LINEEND aEpp;
     WW8_DP_SHADOW aShd;
     SVBT16 aBits1;
-//  UINT16 fPolygon : 1; // 0x28  0001  1 if this is a polygon
-//  UINT16 cpt : 15;    // 0x28   00fe  count of points
+//  sal_uInt16 fPolygon : 1; // 0x28  0001  1 if this is a polygon
+//  sal_uInt16 cpt : 15;    // 0x28   00fe  count of points
 //  short xaFirst;      // 0x2a These are the endpoints of the first line.
 //  short yaFirst;      // 0x2c
 //  short xaEnd;        // 0x2e
@@ -723,8 +723,8 @@ struct WW8_DP_DEFAULTS
     SVBT16 dzaLength;       // 0x2e REVIEW davebu
 
     SVBT16 aBits3;
-//  UINT16 fRoundCorners : 1;   // 0x30 0001    1 if the textbox has rounded corners
-//  UINT16 zaShape : 15;        // 0x30 000fe   REVIEW davebu
+//  sal_uInt16 fRoundCorners : 1;   // 0x30 0001    1 if the textbox has rounded corners
+//  sal_uInt16 zaShape : 15;        // 0x30 000fe   REVIEW davebu
     SVBT16 dzaInternalMargin;   // 0x32 REVIEW davebu
 };
 
@@ -732,9 +732,9 @@ struct WW8_DP_DEFAULTS
 struct WW8_PCD
 {
     SVBT8 aBits1;
-//  BYTE fNoParaLast : 1;   // when 1, means that piece contains no end of paragraph marks.
-//  BYTE fPaphNil : 1;      // used internally by Word
-//  BYTE fCopied : 1;       // used internally by Word
+//  sal_uInt8 fNoParaLast : 1;  // when 1, means that piece contains no end of paragraph marks.
+//  sal_uInt8 fPaphNil : 1;     // used internally by Word
+//  sal_uInt8 fCopied : 1;      // used internally by Word
 //          *   int :5
     SVBT8 aBits2;           // fn int:8, used internally by Word
     SVBT32 fc;              // file offset of beginning of piece. The size of the
@@ -747,7 +747,7 @@ struct WW8_PCD
 
 struct WW8_PHE_Base
 {
-    BYTE aBits1;            //
+    sal_uInt8 aBits1;            //
 //                              0   0   fSpare  int :1  0001    reserved
 //                              fUnk    int :1  0002    phe entry is invalid
 //                                                      when == 1
@@ -755,7 +755,7 @@ struct WW8_PHE_Base
 //                               height of paragraph is known but lines in
 //                               paragraph have different heights.
 //                              *   int :5  00F8    reserved
-    BYTE nlMac;             //  when fDiffLines is 0 is number of lines in
+    sal_uInt8 nlMac;                //  when fDiffLines is 0 is number of lines in
 //                          //  paragraph
     SVBT16 dxaCol;          //  width of lines in paragraph
     SVBT16 dyl;

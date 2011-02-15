@@ -62,11 +62,11 @@ class SW_DLLPUBLIC SwFlyFrmAttrMgr
     Point       aAbsPos;
     SwWrtShell  *pOwnSh;
 
-    BOOL        bAbsPos,
+    sal_Bool        bAbsPos,
                 bNewFrm;
-    BOOL        bIsInVertical;
+    sal_Bool        bIsInVertical;
     // --> OD 2009-09-01 #mongolianlayout#
-    BOOL        bIsInVerticalL2R;
+    sal_Bool        bIsInVerticalL2R;
     // <--
 
     // interne Verrechnung fuer Umrandung
@@ -78,10 +78,10 @@ class SW_DLLPUBLIC SwFlyFrmAttrMgr
     SW_DLLPRIVATE void _UpdateFlyFrm(); //Nacharbeit nach Einfuegen oder Update
 
 public:
-    SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell* pSh, BYTE nType );
+    SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell* pSh, sal_uInt8 nType );
 
     //CopyCtor fuer die Dialoge, zum Pruefen der Metrics
-    SwFlyFrmAttrMgr( BOOL bNew, SwWrtShell *pSh, const SfxItemSet &rSet );
+    SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell *pSh, const SfxItemSet &rSet );
 
     inline SwWrtShell*  GetShell() { return pOwnSh; }
 
@@ -102,7 +102,7 @@ public:
     void                SetSize(const Size& rLSize);
     inline const Size&  GetSize() const;
 
-    inline USHORT       GetHeightPercent() const;
+    inline sal_uInt16       GetHeightPercent() const;
 
     void                SetHeightSizeType(SwFrmSize eType);
 
@@ -119,18 +119,18 @@ public:
     void                UpdateFlyFrm();
 
     // neuen Rahmen erzeugen
-    BOOL                InsertFlyFrm();
+    sal_Bool                InsertFlyFrm();
     void                InsertFlyFrm(RndStdIds      eAnchorType,
                                    const Point    &rPos,
                                    const Size     &rSize,
-                                   BOOL           bAbsPos = FALSE);
+                                   sal_Bool           bAbsPos = sal_False);
 
     // Metriken pruefen und  aendern
     void                ValidateMetrics(SvxSwFrameValidation& rVal,
                             const SwPosition* pToCharCntntPos,
-                            BOOL bOnlyPercentRefValue = FALSE);
+                            sal_Bool bOnlyPercentRefValue = sal_False);
 
-    void                DelAttr(USHORT nId);
+    void                DelAttr(sal_uInt16 nId);
 
     // Set rausreichen
     inline const SfxItemSet &GetAttrSet() const { return aSet; }
@@ -188,7 +188,7 @@ inline RndStdIds SwFlyFrmAttrMgr::GetAnchor()  const
     return ((SwFmtAnchor&)aSet.Get(RES_ANCHOR)).GetAnchorId();
 }
 
-inline USHORT SwFlyFrmAttrMgr::GetHeightPercent() const
+inline sal_uInt16 SwFlyFrmAttrMgr::GetHeightPercent() const
 {
     return GetFrmSize().GetHeightPercent();
 }

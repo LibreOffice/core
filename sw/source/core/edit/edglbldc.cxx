@@ -28,8 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <editsh.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -43,25 +43,27 @@
 
 SV_IMPL_OP_PTRARR_SORT( SwGlblDocContents, SwGlblDocContentPtr )
 
-BOOL SwEditShell::IsGlobalDoc() const
+sal_Bool SwEditShell::IsGlobalDoc() const
 {
     return getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT);
 }
 
-void SwEditShell::SetGlblDocSaveLinks( BOOL bFlag )
+void SwEditShell::SetGlblDocSaveLinks( sal_Bool bFlag )
 {
     getIDocumentSettingAccess()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, bFlag);
     if( !GetDoc()->IsModified() )   // Bug 57028
-        GetDoc()->SetUndoNoResetModified();
+    {
+        GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
+    }
     GetDoc()->SetModified();
 }
 
-BOOL SwEditShell::IsGlblDocSaveLinks() const
+sal_Bool SwEditShell::IsGlblDocSaveLinks() const
 {
     return getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS);
 }
 
-USHORT SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
+sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
 {
     if( rArr.Count() )
         rArr.DeleteAndDestroy( 0, rArr.Count() );
@@ -72,7 +74,7 @@ USHORT SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
     // dann alle gelinkten Bereiche auf der obersten Ebene
     SwDoc* pMyDoc = GetDoc();
     const SwSectionFmts& rSectFmts = pMyDoc->GetSections();
-    USHORT n;
+    sal_uInt16 n;
 
     for( n = rSectFmts.Count(); n; )
     {
@@ -99,7 +101,7 @@ USHORT SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
 
     // und als letztes die Dummies (sonstiger Text) einfuegen
     SwNode* pNd;
-    ULONG nSttIdx = pMyDoc->GetNodes().GetEndOfExtras().GetIndex() + 2;
+    sal_uLong nSttIdx = pMyDoc->GetNodes().GetEndOfExtras().GetIndex() + 2;
     for( n = 0; n < rArr.Count(); ++n )
     {
         const SwGlblDocContent& rNew = *rArr[ n ];
@@ -125,7 +127,7 @@ USHORT SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
     // sollte man das Ende auch noch setzen??
     if( rArr.Count() )
     {
-        ULONG nNdEnd = pMyDoc->GetNodes().GetEndOfContent().GetIndex();
+        sal_uLong nNdEnd = pMyDoc->GetNodes().GetEndOfContent().GetIndex();
         for( ; nSttIdx < nNdEnd; ++nSttIdx )
             if( ( pNd = pMyDoc->GetNodes()[ nSttIdx ])->IsCntntNode()
                 || pNd->IsSectionNode() || pNd->IsTableNode() )
@@ -145,11 +147,11 @@ USHORT SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
     return rArr.Count();
 }
 
-BOOL SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
+sal_Bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
         SwSectionData & rNew)
 {
     if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
-        return FALSE;
+        return sal_False;
 
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -161,15 +163,15 @@ BOOL SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     SwPosition& rPos = *pCrsr->GetPoint();
     rPos.nNode = rInsPos.GetDocPos();
 
-    BOOL bEndUndo = FALSE;
+    sal_Bool bEndUndo = sal_False;
     SwDoc* pMyDoc = GetDoc();
-    SwTxtNode* pTxtNd = pMyDoc->GetNodes()[ rPos.nNode ]->GetTxtNode();
+    SwTxtNode *const pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( pTxtNd )
         rPos.nContent.Assign( pTxtNd, 0 );
     else
     {
-        bEndUndo = TRUE;
-        pMyDoc->StartUndo( UNDO_START, NULL );
+        bEndUndo = sal_True;
+        pMyDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         rPos.nNode--;
         pMyDoc->AppendTxtNode( rPos );
         pCrsr->SetMark();
@@ -178,17 +180,19 @@ BOOL SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     InsertSection( rNew );
 
     if( bEndUndo )
-        pMyDoc->EndUndo( UNDO_END, NULL );
+    {
+        pMyDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+    }
     EndAllAction();
 
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
+sal_Bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
                                             const SwTOXBase& rTOX )
 {
     if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
-        return FALSE;
+        return sal_False;
 
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -200,7 +204,7 @@ BOOL SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     SwPosition& rPos = *pCrsr->GetPoint();
     rPos.nNode = rInsPos.GetDocPos();
 
-    BOOL bEndUndo = FALSE;
+    sal_Bool bEndUndo = sal_False;
     SwDoc* pMyDoc = GetDoc();
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( pTxtNd && pTxtNd->GetTxt().Len() && rPos.nNode.GetIndex() + 1 !=
@@ -208,8 +212,8 @@ BOOL SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
         rPos.nContent.Assign( pTxtNd, 0 );
     else
     {
-        bEndUndo = TRUE;
-        pMyDoc->StartUndo( UNDO_START, NULL );
+        bEndUndo = sal_True;
+        pMyDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         rPos.nNode--;
         pMyDoc->AppendTxtNode( rPos );
     }
@@ -217,16 +221,18 @@ BOOL SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     InsertTableOf( rTOX );
 
     if( bEndUndo )
-        pMyDoc->EndUndo( UNDO_END, NULL );
+    {
+        pMyDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+    }
     EndAllAction();
 
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos )
+sal_Bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos )
 {
     if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
-        return FALSE;
+        return sal_False;
 
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -242,14 +248,14 @@ BOOL SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos )
     SwDoc* pMyDoc = GetDoc();
     pMyDoc->AppendTxtNode( rPos );
     EndAllAction();
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
-                                            USHORT nDelPos )
+sal_Bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
+                                            sal_uInt16 nDelPos )
 {
     if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
-        return FALSE;
+        return sal_False;
 
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -263,7 +269,7 @@ BOOL SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
 
     SwDoc* pMyDoc = GetDoc();
     const SwGlblDocContent& rDelPos = *rArr[ nDelPos ];
-    ULONG nDelIdx = rDelPos.GetDocPos();
+    sal_uLong nDelIdx = rDelPos.GetDocPos();
     if( 1 == rArr.Count() )
     {
         // ein Node muss aber da bleiben!
@@ -293,32 +299,32 @@ BOOL SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
     case GLBLDOC_TOXBASE:
         {
             SwTOXBaseSection* pTOX = (SwTOXBaseSection*)rDelPos.GetTOX();
-            pMyDoc->DeleteTOX( *pTOX, TRUE );
+            pMyDoc->DeleteTOX( *pTOX, sal_True );
         }
         break;
 
     case GLBLDOC_SECTION:
         {
             SwSectionFmt* pSectFmt = (SwSectionFmt*)rDelPos.GetSection()->GetFmt();
-            pMyDoc->DelSectionFmt( pSectFmt, TRUE );
+            pMyDoc->DelSectionFmt( pSectFmt, sal_True );
         }
         break;
     }
 
     EndUndo( UNDO_END );
     EndAllAction();
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SwEditShell::MoveGlobalDocContent( const SwGlblDocContents& rArr ,
-                                        USHORT nFromPos, USHORT nToPos,
-                                        USHORT nInsPos )
+sal_Bool SwEditShell::MoveGlobalDocContent( const SwGlblDocContents& rArr ,
+                                        sal_uInt16 nFromPos, sal_uInt16 nToPos,
+                                        sal_uInt16 nInsPos )
 {
     if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) ||
         nFromPos >= rArr.Count() || nToPos > rArr.Count() ||
         nInsPos > rArr.Count() || nFromPos >= nToPos ||
         ( nFromPos <= nInsPos && nInsPos <= nToPos ) )
-        return FALSE;
+        return sal_False;
 
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -349,10 +355,10 @@ BOOL SwEditShell::MoveGlobalDocContent( const SwGlblDocContents& rArr ,
     return bRet;
 }
 
-BOOL SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
+sal_Bool SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
 {
     if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
-        return FALSE;
+        return sal_False;
 
     SET_CURR_SHELL( this );
     SttCrsrMove();
@@ -365,17 +371,17 @@ BOOL SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
     rCrsrPos.nNode = rPos.GetDocPos();
 
     SwDoc* pMyDoc = GetDoc();
-    SwCntntNode* pCNd = pMyDoc->GetNodes()[ rCrsrPos.nNode ]->GetCntntNode();
+    SwCntntNode * pCNd = rCrsrPos.nNode.GetNode().GetCntntNode();
     if( !pCNd )
         pCNd = pMyDoc->GetNodes().GoNext( &rCrsrPos.nNode );
 
     rCrsrPos.nContent.Assign( pCNd, 0 );
 
     EndCrsrMove();
-    return TRUE;
+    return sal_True;
 }
 
-SwGlblDocContent::SwGlblDocContent( ULONG nPos )
+SwGlblDocContent::SwGlblDocContent( sal_uLong nPos )
 {
     eType = GLBLDOC_UNKNOWN;
     PTR.pTOX = 0;

@@ -325,7 +325,7 @@ void SwLayoutModeModifier::Modify( sal_Bool bChgToRTL )
 
 void SwLayoutModeModifier::SetAuto()
 {
-    const ULONG nNewLayoutMode = nOldLayoutMode & ~TEXT_LAYOUT_BIDI_STRONG;
+    const sal_uLong nNewLayoutMode = nOldLayoutMode & ~TEXT_LAYOUT_BIDI_STRONG;
     ((OutputDevice&)rOut).SetLayoutMode( nNewLayoutMode );
 }
 
@@ -490,9 +490,9 @@ void SwTxtFrm::HideFootnotes( xub_StrLen nStart, xub_StrLen nEnd )
     const SwpHints *pHints = GetTxtNode()->GetpSwpHints();
     if( pHints )
     {
-        const USHORT nSize = pHints->Count();
+        const sal_uInt16 nSize = pHints->Count();
         SwPageFrm *pPage = 0;
-        for ( USHORT i = 0; i < nSize; ++i )
+        for ( sal_uInt16 i = 0; i < nSize; ++i )
         {
             const SwTxtAttr *pHt = (*pHints)[i];
             if ( pHt->Which() == RES_TXTATR_FTN )
@@ -889,13 +889,13 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt, bool bMove )
         if ( !pTxtNode->GetWrong() && !pTxtNode->IsWrongDirty() )
         {
             pTxtNode->SetWrong( new SwWrongList( WRONGLIST_SPELL ) );
-            pTxtNode->GetWrong()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) );
+            pTxtNode->GetWrong()->SetInvalid( nPos, nPos + (sal_uInt16)( nCnt > 0 ? nCnt : 1 ) );
         }
         if ( !pTxtNode->GetSmartTags() && !pTxtNode->IsSmartTagDirty() )
         {
             // SMARTTAGS
             pTxtNode->SetSmartTags( new SwWrongList( WRONGLIST_SMARTTAG ) );
-            pTxtNode->GetSmartTags()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) );
+            pTxtNode->GetSmartTags()->SetInvalid( nPos, nPos + (sal_uInt16)( nCnt > 0 ? nCnt : 1 ) );
         }
         pTxtNode->SetWrongDirty( true );
         pTxtNode->SetGrammarCheckDirty( true );
@@ -908,7 +908,7 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt, bool bMove )
     SwRootFrm *pRootFrm = rFrm.FindRootFrm();
     if (pRootFrm)
     {
-        pRootFrm->SetNeedGrammarCheck( TRUE );
+        pRootFrm->SetNeedGrammarCheck( sal_True );
     }
 
     SwPageFrm *pPage = rFrm.FindPageFrm();
@@ -1532,7 +1532,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         switch ( ePrep )
         {
             case PREP_BOSS_CHGD:
-                SetInvalidVert( TRUE );  // Test
+                SetInvalidVert( sal_True );  // Test
             case PREP_WIDOWS_ORPHANS:
             case PREP_WIDOWS:
             case PREP_FTN_GONE :    return;
@@ -1578,7 +1578,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
 
     if( !HasPara() && PREP_MUST_FIT != ePrep )
     {
-        SetInvalidVert( TRUE );  // Test
+        SetInvalidVert( sal_True );  // Test
         ASSERT( !IsLocked(), "SwTxtFrm::Prepare: three of a perfect pair" );
         if ( bNotify )
             InvalidateSize();
@@ -1658,9 +1658,9 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         {
     // Test
             {
-                SetInvalidVert( FALSE );
-                BOOL bOld = IsVertical();
-                SetInvalidVert( TRUE );
+                SetInvalidVert( sal_False );
+                sal_Bool bOld = IsVertical();
+                SetInvalidVert( sal_True );
                 if( bOld != IsVertical() )
                     InvalidateRange( SwCharRange( GetOfst(), STRING_LEN ) );
             }
@@ -1685,10 +1685,10 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             SwpHints *pHints = GetTxtNode()->GetpSwpHints();
             if( pHints )
             {
-                const USHORT nSize = pHints->Count();
+                const sal_uInt16 nSize = pHints->Count();
                 const xub_StrLen nEnd = GetFollow() ?
                                     GetFollow()->GetOfst() : STRING_LEN;
-                for ( USHORT i = 0; i < nSize; ++i )
+                for ( sal_uInt16 i = 0; i < nSize; ++i )
                 {
                     const SwTxtAttr *pHt = (*pHints)[i];
                     const xub_StrLen nStart = *pHt->GetStart();
@@ -2242,7 +2242,7 @@ void SwTxtFrm::CalcAdditionalFirstLineOffset()
          pTxtNode->GetNumRule() )
     {
         const SwNumFmt& rNumFmt =
-                pTxtNode->GetNumRule()->Get( static_cast<USHORT>(pTxtNode->GetActualListLevel()) );
+                pTxtNode->GetNumRule()->Get( static_cast<sal_uInt16>(pTxtNode->GetActualListLevel()) );
         if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
             // keep current paragraph portion and apply dummy paragraph portion
@@ -2542,7 +2542,7 @@ void SwTxtFrm::ChgThisLines()
 {
     //not necassary to format here (GerFormatted etc.), because we have to come from there!
 
-    ULONG nNew = 0;
+    sal_uLong nNew = 0;
     const SwLineNumberInfo &rInf = GetNode()->getIDocumentLineNumberAccess()->GetLineNumberInfo();
     if ( GetTxt().Len() && HasPara() )
     {
@@ -2551,7 +2551,7 @@ void SwTxtFrm::ChgThisLines()
         if ( rInf.IsCountBlankLines() )
         {
             aLine.Bottom();
-            nNew = (ULONG)aLine.GetLineNr();
+            nNew = (sal_uLong)aLine.GetLineNr();
         }
         else
         {
@@ -2609,9 +2609,9 @@ void SwTxtFrm::RecalcAllLines()
 
     if ( !IsInTab() )
     {
-        const ULONG nOld = GetAllLines();
+        const sal_uLong nOld = GetAllLines();
         const SwFmtLineNumber &rLineNum = pAttrSet->GetLineNumber();
-        ULONG nNewNum;
+        sal_uLong nNewNum;
         const bool bRestart = GetTxtNode()->getIDocumentLineNumberAccess()->GetLineNumberInfo().IsRestartEachPage();
 
         if ( !IsFollow() && rLineNum.GetStartValue() && rLineNum.IsCount() )

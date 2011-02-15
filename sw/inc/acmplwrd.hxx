@@ -43,27 +43,27 @@ class SwAutoCompleteWord
     SvPtrarr aLRULst;
 
     SwAutoCompleteWord_Impl* pImpl;
-    USHORT nMaxCount, nMinWrdLen;
-    BOOL bLockWordLst;
+    sal_uInt16 nMaxCount, nMinWrdLen;
+    sal_Bool bLockWordLst;
 
     void DocumentDying(const SwDoc& rDoc);
 public:
-    SwAutoCompleteWord( USHORT nWords = 500, USHORT nMWrdLen = 10 );
+    SwAutoCompleteWord( sal_uInt16 nWords = 500, sal_uInt16 nMWrdLen = 10 );
     ~SwAutoCompleteWord();
 
-    BOOL InsertWord( const String& rWord, SwDoc& rDoc );
+    sal_Bool InsertWord( const String& rWord, SwDoc& rDoc );
 
-    BOOL GetRange( const String& rWord, USHORT& rStt, USHORT& rEnd ) const;
+    sal_Bool GetRange( const String& rWord, sal_uInt16& rStt, sal_uInt16& rEnd ) const;
 
-    const String& operator[]( USHORT n ) const { return *aWordLst[ n ]; }
+    const String& operator[]( sal_uInt16 n ) const { return *aWordLst[ n ]; }
 
-    BOOL IsLockWordLstLocked() const        { return bLockWordLst; }
-    void SetLockWordLstLocked( BOOL bFlag ) { bLockWordLst = bFlag; }
+    sal_Bool IsLockWordLstLocked() const        { return bLockWordLst; }
+    void SetLockWordLstLocked( sal_Bool bFlag ) { bLockWordLst = bFlag; }
 
-    void SetMaxCount( USHORT n );
+    void SetMaxCount( sal_uInt16 n );
 
-    USHORT GetMinWordLen() const                { return nMinWrdLen; }
-    void SetMinWordLen( USHORT n );
+    sal_uInt16 GetMinWordLen() const                { return nMinWrdLen; }
+    void SetMinWordLen( sal_uInt16 n );
 
     const SvStringsISortDtor& GetWordList() const { return aWordLst; }
     void CheckChangedList( const SvStringsISortDtor& rNewLst );

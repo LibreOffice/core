@@ -33,6 +33,7 @@
 #include <editeng/brkitem.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>      // fuer SwTxtFmtColls
+#include <IDocumentUndoRedo.hxx>
 #include <edimp.hxx>    // fuer MACROS
 #include <ndtxt.hxx>
 #include <paratr.hxx>
@@ -41,7 +42,7 @@
 #include <viewopt.hxx>
 // <--
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
+#include <numrule.hxx>
 #include <swundo.hxx>
 
 /*************************************
@@ -56,13 +57,13 @@ SwTxtFmtColl& SwEditShell::GetDfltTxtFmtColl() const
 }
 
 
-USHORT SwEditShell::GetTxtFmtCollCount() const
+sal_uInt16 SwEditShell::GetTxtFmtCollCount() const
 {
     return GetDoc()->GetTxtFmtColls()->Count();
 }
 
 
-SwTxtFmtColl& SwEditShell::GetTxtFmtColl( USHORT nFmtColl) const
+SwTxtFmtColl& SwEditShell::GetTxtFmtColl( sal_uInt16 nFmtColl) const
 {
     return *((*(GetDoc()->GetTxtFmtColls()))[nFmtColl]);
 }
@@ -77,7 +78,7 @@ void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
     SwRewriter aRewriter;
     aRewriter.AddRule(UNDO_ARG1, pLocal->GetName());
 
-    GetDoc()->StartUndo(UNDO_SETFMTCOLL, &aRewriter);
+    GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_SETFMTCOLL, &aRewriter);
     FOREACHPAM_START(this)
 
         if( !PCURCRSR->HasReadonlySel(
@@ -87,7 +88,7 @@ void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
             GetDoc()->SetTxtFmtColl( *PCURCRSR, pLocal, true, bResetListAttrs );
 
     FOREACHPAM_END()
-    GetDoc()->EndUndo(UNDO_SETFMTCOLL, NULL);
+    GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_SETFMTCOLL, &aRewriter);
     EndAllAction();
 }
 // <--
@@ -101,14 +102,14 @@ SwTxtFmtColl* SwEditShell::MakeTxtFmtColl(const String& rFmtCollName,
         pParent = &GetTxtFmtColl(0);
     if (  (pColl=GetDoc()->MakeTxtFmtColl(rFmtCollName, pParent)) == 0 )
     {
-        ASSERT( FALSE, "MakeTxtFmtColl failed" )
+        ASSERT( sal_False, "MakeTxtFmtColl failed" )
     }
     return pColl;
 
 }
 
 
-void SwEditShell::FillByEx(SwTxtFmtColl* pColl, BOOL bReset)
+void SwEditShell::FillByEx(SwTxtFmtColl* pColl, sal_Bool bReset)
 {
     if( bReset )
     {
@@ -130,10 +131,10 @@ void SwEditShell::FillByEx(SwTxtFmtColl* pColl, BOOL bReset)
         // AutoNumRules NICHT in die Vorlagen uebernehmen
         const SfxPoolItem* pItem;
         const SwNumRule* pRule = 0;
-        if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, FALSE ) ||
-            SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC,FALSE ) ||
+        if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, sal_False ) ||
+            SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC,sal_False ) ||
             ( SFX_ITEM_SET == pSet->GetItemState( RES_PARATR_NUMRULE,
-                FALSE, &pItem ) && 0 != (pRule = GetDoc()->FindNumRulePtr(
+                sal_False, &pItem ) && 0 != (pRule = GetDoc()->FindNumRulePtr(
                 ((SwNumRuleItem*)pItem)->GetValue() )) &&
                 pRule && pRule->IsAutoRule() )
             )
@@ -143,7 +144,7 @@ void SwEditShell::FillByEx(SwTxtFmtColl* pColl, BOOL bReset)
             aSet.ClearItem( RES_PAGEDESC );
 
             if( pRule || (SFX_ITEM_SET == pSet->GetItemState( RES_PARATR_NUMRULE,
-                FALSE, &pItem ) && 0 != (pRule = GetDoc()->FindNumRulePtr(
+                sal_False, &pItem ) && 0 != (pRule = GetDoc()->FindNumRulePtr(
                 ((SwNumRuleItem*)pItem)->GetValue() )) &&
                 pRule && pRule->IsAutoRule() ))
                 aSet.ClearItem( RES_PARATR_NUMRULE );

@@ -55,13 +55,13 @@ static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
 {
     Sequence<Any> *pRet = 0;
 
-    USHORT nCount = rArgs.Count();
+    sal_uInt16 nCount = rArgs.Count();
     if( nCount > 1 )
     {
         nCount--;
         pRet = new Sequence<Any>( nCount );
         Any *pUnoArgs = pRet->getArray();
-        for( USHORT i=0; i<nCount; i++ )
+        for( sal_uInt16 i=0; i<nCount; i++ )
         {
             SbxVariable *pVar = rArgs.Get( i+1 );
             switch( pVar->GetType() )
@@ -88,7 +88,7 @@ static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
     return pRet;
 }
 
-BOOL SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
+sal_Bool SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
 {
     ErrCode eErr = 0;
     switch( rMacro.GetScriptType() )
@@ -100,7 +100,7 @@ BOOL SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
             aRef = pRetValue;
             eErr = pDocShell->CallBasic( rMacro.GetMacName(),
                                          rMacro.GetLibName(),
-                                         0, pArgs, pRet ? pRetValue : 0 );
+                                         pArgs, pRet ? pRetValue : 0 );
 
             if( pRet && SbxNULL <  pRetValue->GetType() &&
                         SbxVOID != pRetValue->GetType() )
@@ -153,13 +153,13 @@ BOOL SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
 
 
 
-USHORT SwDoc::CallEvent( USHORT nEvent, const SwCallMouseEvent& rCallEvent,
-                    BOOL bCheckPtr, SbxArray* pArgs, const Link* )
+sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
+                    sal_Bool bCheckPtr, SbxArray* pArgs, const Link* )
 {
     if( !pDocShell )        // ohne DocShell geht das nicht!
         return 0;
 
-    USHORT nRet = 0;
+    sal_uInt16 nRet = 0;
     const SvxMacroTableDtor* pTbl = 0;
     switch( rCallEvent.eType )
     {
@@ -172,7 +172,7 @@ USHORT SwDoc::CallEvent( USHORT nEvent, const SwCallMouseEvent& rCallEvent,
                 if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_INETFMT, n ) )
                     && rCallEvent.PTR.pINetAttr == pItem )
                 {
-                    bCheckPtr = FALSE;      // als Flag missbrauchen
+                    bCheckPtr = sal_False;      // als Flag missbrauchen
                     break;
                 }
         }
@@ -186,9 +186,9 @@ USHORT SwDoc::CallEvent( USHORT nEvent, const SwCallMouseEvent& rCallEvent,
             const SwFrmFmtPtr pFmt = (SwFrmFmtPtr)rCallEvent.PTR.pFmt;
             if( bCheckPtr )
             {
-                USHORT nPos = GetSpzFrmFmts()->GetPos( pFmt );
+                sal_uInt16 nPos = GetSpzFrmFmts()->GetPos( pFmt );
                 if( USHRT_MAX != nPos )
-                    bCheckPtr = FALSE;      // als Flag missbrauchen
+                    bCheckPtr = sal_False;      // als Flag missbrauchen
             }
             if( !bCheckPtr )
                 pTbl = &pFmt->GetMacro().GetMacroTable();
@@ -201,7 +201,7 @@ USHORT SwDoc::CallEvent( USHORT nEvent, const SwCallMouseEvent& rCallEvent,
             if( bCheckPtr )
             {
                 const SwFrmFmtPtr pFmt = (SwFrmFmtPtr)rCallEvent.PTR.IMAP.pFmt;
-                USHORT nPos = GetSpzFrmFmts()->GetPos( pFmt );
+                sal_uInt16 nPos = GetSpzFrmFmts()->GetPos( pFmt );
                 const ImageMap* pIMap;
                 if( USHRT_MAX != nPos &&
                     0 != (pIMap = pFmt->GetURL().GetMap()) )
@@ -209,7 +209,7 @@ USHORT SwDoc::CallEvent( USHORT nEvent, const SwCallMouseEvent& rCallEvent,
                     for( nPos = pIMap->GetIMapObjectCount(); nPos; )
                         if( pIMapObj == pIMap->GetIMapObject( --nPos ))
                         {
-                            bCheckPtr = FALSE;      // als Flag missbrauchen
+                            bCheckPtr = sal_False;      // als Flag missbrauchen
                             break;
                         }
                 }
@@ -231,7 +231,7 @@ USHORT SwDoc::CallEvent( USHORT nEvent, const SwCallMouseEvent& rCallEvent,
             if( STARBASIC == rMacro.GetScriptType() )
             {
                 nRet += 0 == pDocShell->CallBasic( rMacro.GetMacName(),
-                                    rMacro.GetLibName(), 0, pArgs ) ? 1 : 0;
+                                    rMacro.GetLibName(), pArgs ) ? 1 : 0;
             }
             else if( EXTENDED_STYPE == rMacro.GetScriptType() )
             {

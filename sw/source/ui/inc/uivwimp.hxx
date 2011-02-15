@@ -93,7 +93,7 @@ public:
 
     void ViewDestroyed() { pView = 0; }
 
-    void AddRemoveListener( BOOL bAdd );
+    void AddRemoveListener( sal_Bool bAdd );
 };
 
 
@@ -111,8 +111,7 @@ class SwView_Impl
 
     // temporary document for printing text of selection / multi selection
     // in PDF export.
-    SfxObjectShellRef           xTmpSelDocSh;
-    SfxObjectShellRef           aEmbeddedObjRef;
+    SfxObjectShellLock           xTmpSelDocSh;
 
     SwView* pView;
     SwScannerEventListener*     pScanEvtLstnr;
@@ -148,9 +147,7 @@ public:
 
     void                            AddClipboardListener();
 
-    SfxObjectShellRef &             GetTmpSelectionDoc()    { return xTmpSelDocSh; }
-
-    SfxObjectShellRef&              GetEmbeddedObjRef()     { return *boost::addressof(aEmbeddedObjRef); }
+    SfxObjectShellLock&             GetTmpSelectionDoc()    { return xTmpSelDocSh; }
 
     void                            AddTransferable(SwTransferable& rTransferable);
 

@@ -76,7 +76,7 @@ class SwFldFuncPage : public SwFldPage
     String          sOldValueFT;
     String          sOldNameFT;
 
-    ULONG           nOldFormat;
+    sal_uLong           nOldFormat;
     bool            bDropDownLBChanged;
 
     DECL_LINK( TypeHdl, ListBox* pLB = 0 );
@@ -93,7 +93,7 @@ class SwFldFuncPage : public SwFldPage
     String              TurnMacroString(const String &rMacro);
 
 protected:
-    virtual USHORT      GetGroup();
+    virtual sal_uInt16      GetGroup();
 
 public:
                         SwFldFuncPage(Window* pParent, const SfxItemSet& rSet);
@@ -102,7 +102,7 @@ public:
 
     static SfxTabPage*  Create(Window* pParent, const SfxItemSet& rAttrSet);
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     virtual void        FillUserData();

@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,22 +25,29 @@
 #
 #*************************************************************************
 
+$(eval $(call gb_JunitTest_JunitTest,sw_unoapi))
 
-#======================================================================
-# standardmaessig mit Optimierung, muss explizit mit nopt=t ausgeschaltet
-# werden, wenn nicht gewuenscht
-#----------------------------------------------------------------------
+$(eval $(call gb_JunitTest_set_defs,sw_unoapi,\
+    $$(DEFS) \
+    -Dorg.openoffice.test.arg.sce=$(SRCDIR)/sw/qa/unoapi/sw.sce \
+    -Dorg.openoffice.test.arg.xcl=$(SRCDIR)/sw/qa/unoapi/knownissues.xcl \
+    -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/sw/qa/unoapi/testdocuments \
+))
 
-.IF "$(nopt)"!="" || "$(NOPT)"!=""
-nopt=true
-NOPT=TRUE
-optimize=
-OPTIMIZE=
-.ELSE
-.IF "$(debug)$(DEBUG)"==""
-optimize=true
-OPTIMIZE=TRUE
-.ENDIF
-.ENDIF
+$(eval $(call gb_JunitTest_add_jars,sw_unoapi,\
+    $(OUTDIR)/bin/OOoRunner.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(OUTDIR)/bin/test.jar \
+    $(OUTDIR)/bin/unoil.jar \
+    $(OUTDIR)/bin/jurt.jar \
+))
 
+$(eval $(call gb_JunitTest_add_sourcefiles,sw_unoapi,\
+    sw/qa/unoapi/Test \
+))
 
+$(eval $(call gb_JunitTest_add_classes,sw_unoapi,\
+    org.openoffice.sw.qa.unoapi.Test \
+))
+
+# vim: set noet sw=4 ts=4:

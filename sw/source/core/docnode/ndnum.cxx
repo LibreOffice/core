@@ -37,11 +37,11 @@
 #include <docary.hxx>
 
 _SV_IMPL_SORTAR_ALG( SwOutlineNodes, SwNodePtr )
-BOOL SwOutlineNodes::Seek_Entry( const SwNodePtr rSrch, USHORT* pFndPos ) const
+sal_Bool SwOutlineNodes::Seek_Entry( const SwNodePtr rSrch, sal_uInt16* pFndPos ) const
 {
-    ULONG nIdx = rSrch->GetIndex();
+    sal_uLong nIdx = rSrch->GetIndex();
 
-    USHORT nO = Count(), nM, nU = 0;
+    sal_uInt16 nO = Count(), nM, nU = 0;
     if( nO > 0 )
     {
 //JP 17.03.98: aufgrund des Bug 48592 - wo unter anderem nach Undo/Redo
@@ -49,7 +49,7 @@ BOOL SwOutlineNodes::Seek_Entry( const SwNodePtr rSrch, USHORT* pFndPos ) const
 //              jetzt mal einen Check eingebaut.
 #ifdef DBG_UTIL
         {
-            for( USHORT n = 1; n < nO; ++n )
+            for( sal_uInt16 n = 1; n < nO; ++n )
                 if( &(*this)[ n-1 ]->GetNodes() !=
                     &(*this)[ n ]->GetNodes() )
                 {
@@ -66,7 +66,7 @@ BOOL SwOutlineNodes::Seek_Entry( const SwNodePtr rSrch, USHORT* pFndPos ) const
             {
                 if( pFndPos )
                     *pFndPos = nM;
-                return TRUE;
+                return sal_True;
             }
             else if( (*this)[ nM ]->GetIndex() < nIdx )
                 nU = nM + 1;
@@ -74,7 +74,7 @@ BOOL SwOutlineNodes::Seek_Entry( const SwNodePtr rSrch, USHORT* pFndPos ) const
             {
                 if( pFndPos )
                     *pFndPos = nU;
-                return FALSE;
+                return sal_False;
             }
             else
                 nO = nM - 1;
@@ -82,7 +82,7 @@ BOOL SwOutlineNodes::Seek_Entry( const SwNodePtr rSrch, USHORT* pFndPos ) const
     }
     if( pFndPos )
         *pFndPos = nU;
-    return FALSE;
+    return sal_False;
 }
 
 void SwNodes::UpdateOutlineNode(SwNode & rNd)
@@ -91,7 +91,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
 
     if (pTxtNd && pTxtNd->IsOutlineStateChanged())
     {
-        BOOL bFound = pOutlineNds->Seek_Entry(pTxtNd);
+        sal_Bool bFound = pOutlineNds->Seek_Entry(pTxtNd);
 
         if (pTxtNd->IsOutline())
         {
@@ -124,12 +124,12 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
     }
 }
 
-//void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel, //#outline level,removed by zhaojianwei
-//                                 BYTE nNewLevel )
+//void SwNodes::UpdateOutlineNode( const SwNode& rNd, sal_uInt8 nOldLevel, //#outline level,removed by zhaojianwei
+//                                 sal_uInt8 nNewLevel )
 //{
 //  const SwNodePtr pSrch = (SwNodePtr)&rNd;
-//  USHORT nSttPos;
-//  BOOL bSeekIdx = pOutlineNds->Seek_Entry( pSrch, &nSttPos );
+//  sal_uInt16 nSttPos;
+//  sal_Bool bSeekIdx = pOutlineNds->Seek_Entry( pSrch, &nSttPos );
 //
 //  //if( NO_NUMBERING == nOldLevel )   //#outline level,zhaojianwei
 //  if( 0 == nOldLevel )                //<-end, zhaojianwei
@@ -138,7 +138,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
 //      //ASSERT( !bSeekIdx, "Der Node ist schon als OutlineNode vorhanden" );
 //
 //      //JP 12.03.99: 63293 - Nodes vom RedlineBereich NIE aufnehmen
-//      ULONG nNd = rNd.GetIndex();
+//      sal_uLong nNd = rNd.GetIndex();
 //      if( nNd < GetEndOfRedlines().GetIndex() &&
 //            nNd > GetEndOfRedlines().StartOfSectionNode()->GetIndex() )
 //          return ;
@@ -207,7 +207,7 @@ void SwNodes::UpdtOutlineIdx( const SwNode& rNd )
         return;
 
     const SwNodePtr pSrch = (SwNodePtr)&rNd;
-    USHORT nPos;
+    sal_uInt16 nPos;
     pOutlineNds->Seek_Entry( pSrch, &nPos );
     if( nPos == pOutlineNds->Count() )      // keine zum Updaten vorhanden ?
         return;

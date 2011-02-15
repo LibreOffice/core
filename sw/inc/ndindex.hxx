@@ -24,14 +24,15 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _NDINDEX_HXX
-#define _NDINDEX_HXX
+#ifndef SW_NDINDEX_HXX
+#define SW_NDINDEX_HXX
 
 #include <limits.h>
+
 #include <tools/solar.h>
 
-#include "node.hxx"
-#include "ndarr.hxx"
+#include <node.hxx>
+
 
 class SwNode;
 class SwNodes;
@@ -40,7 +41,7 @@ class SW_DLLPUBLIC SwNodeIndex
 {
     friend void SwNodes::RegisterIndex( SwNodeIndex& );
     friend void SwNodes::DeRegisterIndex( SwNodeIndex& );
-    friend void SwNodes::RemoveNode( ULONG, ULONG, BOOL );
+    friend void SwNodes::RemoveNode( sal_uLong, sal_uLong, sal_Bool );
 
 #ifdef DBG_UTIL
     static int nSerial;
@@ -53,50 +54,50 @@ class SW_DLLPUBLIC SwNodeIndex
     void Remove();                  // Ausketten
 
     // diese sind nicht erlaubt!
-    SwNodeIndex( SwNodes& rNds, USHORT nIdx );
+    SwNodeIndex( SwNodes& rNds, sal_uInt16 nIdx );
     SwNodeIndex( SwNodes& rNds, int nIdx );
 
 public:
-    SwNodeIndex( SwNodes& rNds, ULONG nIdx = 0 );
+    SwNodeIndex( SwNodes& rNds, sal_uLong nIdx = 0 );
     SwNodeIndex( const SwNodeIndex &, long nDiff = 0 );
     SwNodeIndex( const SwNode&, long nDiff = 0 );
     ~SwNodeIndex() { Remove(); }
 
-    inline ULONG operator++();
-    inline ULONG operator--();
+    inline sal_uLong operator++();
+    inline sal_uLong operator--();
 #ifndef CFRONT
-    inline ULONG operator++(int);
-    inline ULONG operator--(int);
+    inline sal_uLong operator++(int);
+    inline sal_uLong operator--(int);
 #endif
 
-    inline ULONG operator+=( ULONG );
-    inline ULONG operator-=( ULONG );
-    inline ULONG operator+=( const  SwNodeIndex& );
-    inline ULONG operator-=( const SwNodeIndex& );
+    inline sal_uLong operator+=( sal_uLong );
+    inline sal_uLong operator-=( sal_uLong );
+    inline sal_uLong operator+=( const  SwNodeIndex& );
+    inline sal_uLong operator-=( const SwNodeIndex& );
 
-    inline BOOL operator< ( const SwNodeIndex& ) const;
-    inline BOOL operator<=( const SwNodeIndex& ) const;
-    inline BOOL operator> ( const SwNodeIndex& ) const;
-    inline BOOL operator>=( const SwNodeIndex& ) const;
-    inline BOOL operator==( const SwNodeIndex& ) const;
-    inline BOOL operator!=( const SwNodeIndex& ) const;
+    inline sal_Bool operator< ( const SwNodeIndex& ) const;
+    inline sal_Bool operator<=( const SwNodeIndex& ) const;
+    inline sal_Bool operator> ( const SwNodeIndex& ) const;
+    inline sal_Bool operator>=( const SwNodeIndex& ) const;
+    inline sal_Bool operator==( const SwNodeIndex& ) const;
+    inline sal_Bool operator!=( const SwNodeIndex& ) const;
 
-    inline BOOL operator< ( ULONG nWert ) const;
-    inline BOOL operator<=( ULONG nWert ) const;
-    inline BOOL operator> ( ULONG nWert ) const;
-    inline BOOL operator>=( ULONG nWert ) const;
-    inline BOOL operator==( ULONG nWert ) const;
-    inline BOOL operator!=( ULONG nWert ) const;
+    inline sal_Bool operator< ( sal_uLong nWert ) const;
+    inline sal_Bool operator<=( sal_uLong nWert ) const;
+    inline sal_Bool operator> ( sal_uLong nWert ) const;
+    inline sal_Bool operator>=( sal_uLong nWert ) const;
+    inline sal_Bool operator==( sal_uLong nWert ) const;
+    inline sal_Bool operator!=( sal_uLong nWert ) const;
 
-    inline SwNodeIndex& operator=( ULONG );
+    inline SwNodeIndex& operator=( sal_uLong );
            SwNodeIndex& operator=( const SwNodeIndex& );
            SwNodeIndex& operator=( const SwNode& );
 
-    // gebe den Wert vom Index als ULONG zurueck
-    inline ULONG GetIndex() const;
+    // gebe den Wert vom Index als sal_uLong zurueck
+    inline sal_uLong GetIndex() const;
 
     // ermoeglicht Zuweisungen ohne Erzeugen eines temporaeren Objektes
-    SwNodeIndex& Assign( SwNodes& rNds, ULONG );
+    SwNodeIndex& Assign( SwNodes& rNds, sal_uLong );
     SwNodeIndex& Assign( const SwNode& rNd, long nOffset = 0 );
 
         // Herausgabe des Pointers auf das NodesArray,
@@ -118,7 +119,7 @@ public:
     SwNodeRange( const SwNodeIndex &rS, const SwNodeIndex &rE );
     SwNodeRange( const SwNodeRange &rRange );
 
-    SwNodeRange( SwNodes& rArr, ULONG nSttIdx = 0, ULONG nEndIdx = 0 );
+    SwNodeRange( SwNodes& rArr, sal_uLong nSttIdx = 0, sal_uLong nEndIdx = 0 );
     SwNodeRange( const SwNodeIndex& rS, long nSttDiff,
                  const SwNodeIndex& rE, long nEndDiff = 0 );
     SwNodeRange( const SwNode& rS, long nSttDiff,
@@ -132,7 +133,7 @@ public:
 // auch wieder dieses. Also alle Inlines, die auf pNd zugreifen werden
 // hier implementiert.
 
-inline ULONG SwNodeIndex::GetIndex() const
+inline sal_uLong SwNodeIndex::GetIndex() const
 {
     return pNd->GetIndex();
 }
@@ -144,109 +145,99 @@ inline SwNodes& SwNodeIndex::GetNodes()
 {
     return pNd->GetNodes();
 }
-inline BOOL SwNodeIndex::operator< ( ULONG nWert ) const
+inline sal_Bool SwNodeIndex::operator< ( sal_uLong nWert ) const
 {
     return pNd->GetIndex() < nWert;
 }
-inline BOOL SwNodeIndex::operator<=( ULONG nWert ) const
+inline sal_Bool SwNodeIndex::operator<=( sal_uLong nWert ) const
 {
     return pNd->GetIndex() <= nWert;
 }
-inline BOOL SwNodeIndex::operator> ( ULONG nWert ) const
+inline sal_Bool SwNodeIndex::operator> ( sal_uLong nWert ) const
 {
     return pNd->GetIndex() > nWert;
 }
-inline BOOL SwNodeIndex::operator>=( ULONG nWert ) const
+inline sal_Bool SwNodeIndex::operator>=( sal_uLong nWert ) const
 {
     return pNd->GetIndex() >= nWert;
 }
-inline BOOL SwNodeIndex::operator==( ULONG nWert ) const
+inline sal_Bool SwNodeIndex::operator==( sal_uLong nWert ) const
 {
     return pNd->GetIndex() == nWert;
 }
-inline BOOL SwNodeIndex::operator!=( ULONG nWert ) const
+inline sal_Bool SwNodeIndex::operator!=( sal_uLong nWert ) const
 {
     return pNd->GetIndex() != nWert;
 }
-inline BOOL SwNodeIndex::operator<( const SwNodeIndex& rIndex ) const
+inline sal_Bool SwNodeIndex::operator<( const SwNodeIndex& rIndex ) const
 {
     return pNd->GetIndex() < rIndex.GetIndex();
 }
-inline BOOL SwNodeIndex::operator<=( const SwNodeIndex& rIndex ) const
+inline sal_Bool SwNodeIndex::operator<=( const SwNodeIndex& rIndex ) const
 {
     return pNd->GetIndex() <= rIndex.GetIndex();
 }
-inline BOOL SwNodeIndex::operator>( const SwNodeIndex& rIndex ) const
+inline sal_Bool SwNodeIndex::operator>( const SwNodeIndex& rIndex ) const
 {
     return pNd->GetIndex() > rIndex.GetIndex();
 }
-inline BOOL SwNodeIndex::operator>=( const SwNodeIndex& rIndex ) const
+inline sal_Bool SwNodeIndex::operator>=( const SwNodeIndex& rIndex ) const
 {
     return pNd->GetIndex() >= rIndex.GetIndex();
 }
-inline BOOL SwNodeIndex::operator==( const SwNodeIndex& rIdx ) const
+inline sal_Bool SwNodeIndex::operator==( const SwNodeIndex& rIdx ) const
 {
     return pNd == rIdx.pNd;
 }
-inline BOOL SwNodeIndex::operator!=( const SwNodeIndex& rIdx ) const
+inline sal_Bool SwNodeIndex::operator!=( const SwNodeIndex& rIdx ) const
 {
     return pNd != rIdx.pNd;
 }
 
-inline ULONG SwNodeIndex::operator++()
+inline sal_uLong SwNodeIndex::operator++()
 {
     return ( pNd = GetNodes()[ pNd->GetIndex()+1 ] )->GetIndex();
 }
-inline ULONG SwNodeIndex::operator--()
+inline sal_uLong SwNodeIndex::operator--()
 {
     return ( pNd = GetNodes()[ pNd->GetIndex()-1 ] )->GetIndex();
 }
 #ifndef CFRONT
-inline ULONG SwNodeIndex::operator++(int)
+inline sal_uLong SwNodeIndex::operator++(int)
 {
-    ULONG nOldIndex = pNd->GetIndex();
+    sal_uLong nOldIndex = pNd->GetIndex();
     pNd = GetNodes()[ nOldIndex + 1 ];
     return nOldIndex;
 }
-inline ULONG SwNodeIndex::operator--(int)
+inline sal_uLong SwNodeIndex::operator--(int)
 {
-    ULONG nOldIndex = pNd->GetIndex();
+    sal_uLong nOldIndex = pNd->GetIndex();
     pNd = GetNodes()[ nOldIndex - 1 ];
     return nOldIndex;
 }
 #endif
 
-inline ULONG SwNodeIndex::operator+=( ULONG nWert )
+inline sal_uLong SwNodeIndex::operator+=( sal_uLong nWert )
 {
     return ( pNd = GetNodes()[ pNd->GetIndex() + nWert ] )->GetIndex();
 }
-inline ULONG SwNodeIndex::operator-=( ULONG nWert )
+inline sal_uLong SwNodeIndex::operator-=( sal_uLong nWert )
 {
     return ( pNd = GetNodes()[ pNd->GetIndex() - nWert ] )->GetIndex();
 }
-inline ULONG SwNodeIndex::operator+=( const  SwNodeIndex& rIndex )
+inline sal_uLong SwNodeIndex::operator+=( const  SwNodeIndex& rIndex )
 {
     return ( pNd = GetNodes()[ pNd->GetIndex() + rIndex.GetIndex() ] )->GetIndex();
 }
-inline ULONG SwNodeIndex::operator-=( const SwNodeIndex& rIndex )
+inline sal_uLong SwNodeIndex::operator-=( const SwNodeIndex& rIndex )
 {
     return ( pNd = GetNodes()[ pNd->GetIndex() - rIndex.GetIndex() ] )->GetIndex();
 }
 
-inline SwNodeIndex& SwNodeIndex::operator=( ULONG nWert )
+inline SwNodeIndex& SwNodeIndex::operator=( sal_uLong nWert )
 {
     pNd = GetNodes()[ nWert ];
     return *this;
 }
-
-
-
-//JP 29.09.97: impl. steht im ndindex.hxx - sollte moeglichst bald auf die
-//              neue Schnittstelle angepasst werden
-inline SwNode* SwNodes::operator[]( const SwNodeIndex& rIdx ) const
-{
-    return &rIdx.GetNode();
-}
-
 
 #endif

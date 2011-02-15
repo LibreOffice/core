@@ -54,12 +54,12 @@ class FilterGlobals
 {
 protected:
     SvPtrarr        aTblFmts;
-    USHORT          nColStart;
-    USHORT          nColEnd;
-    USHORT          nRowStart;
-    USHORT          nRowEnd;
-    USHORT          nAnzCols;
-    USHORT          nAnzRows;
+    sal_uInt16          nColStart;
+    sal_uInt16          nColEnd;
+    sal_uInt16          nRowStart;
+    sal_uInt16          nRowEnd;
+    sal_uInt16          nAnzCols;
+    sal_uInt16          nAnzRows;
 
 public:
     FilterGlobals( SwDoc& rDoc, const SwPaM& rPam );
@@ -71,41 +71,41 @@ public:
 
     SvNumberFormatter *pNumFormatter;
     LanguageType    eDefLanguage;
-    ULONG           nStandard;
-    ULONG           nDefFormat;     // = 0xFFFFFFFF
+    sal_uLong           nStandard;
+    sal_uLong           nDefFormat;     // = 0xFFFFFFFF
 
-    void SetRange( USHORT nCS, USHORT nCE, USHORT nRS, USHORT nRE );
+    void SetRange( sal_uInt16 nCS, sal_uInt16 nCE, sal_uInt16 nRS, sal_uInt16 nRE );
 
-    BOOL IsInColRange( USHORT nCol )
+    sal_Bool IsInColRange( sal_uInt16 nCol )
                 {   return ( nCol >= nColStart && nCol <= nColEnd ); }
-    BOOL IsInRowRange( USHORT nRow )
+    sal_Bool IsInRowRange( sal_uInt16 nRow )
                 {   return ( nRow >= nRowStart && nRow <= nRowEnd ); }
-    BOOL IsInRange( USHORT nCol, USHORT nRow )
+    sal_Bool IsInRange( sal_uInt16 nCol, sal_uInt16 nRow )
                 {   return IsInRowRange(nRow) && IsInColRange(nCol); }
 
-    void NormalizeCol( USHORT &rCol )   { rCol -= nColStart; }
-    void NormalizeRow( USHORT &rRow )   { rRow -= nRowStart; }
-    void Normalize( USHORT &rCol, USHORT &rRow )
+    void NormalizeCol( sal_uInt16 &rCol )   { rCol -= nColStart; }
+    void NormalizeRow( sal_uInt16 &rRow )   { rRow -= nRowStart; }
+    void Normalize( sal_uInt16 &rCol, sal_uInt16 &rRow )
                         {   NormalizeCol( rCol ); NormalizeRow( rRow ); }
 
-    USHORT AnzCols() const  { return nAnzCols; }
-    USHORT AnzRows() const  { return nAnzRows; }
+    sal_uInt16 AnzCols() const  { return nAnzCols; }
+    sal_uInt16 AnzRows() const  { return nAnzRows; }
 
-    BOOL ColRangeLimitter( USHORT &rCS, USHORT &rCE );
+    sal_Bool ColRangeLimitter( sal_uInt16 &rCS, sal_uInt16 &rCE );
 
-    void InsertText( USHORT nCol, USHORT nRow, const String& rStr );
+    void InsertText( sal_uInt16 nCol, sal_uInt16 nRow, const String& rStr );
     void CreateTable();
     void InsertAttr( const SfxPoolItem& rItem );
 
-    inline void     ColLimitter( USHORT &rCol );
-    inline void     RowLimitter( USHORT &rRow );
+    inline void     ColLimitter( sal_uInt16 &rCol );
+    inline void     RowLimitter( sal_uInt16 &rRow );
 };
 
 
 
 
 
-inline void FilterGlobals::ColLimitter( USHORT &rCol )
+inline void FilterGlobals::ColLimitter( sal_uInt16 &rCol )
 {
     if( rCol < nColStart )
         rCol = nColStart;
@@ -113,7 +113,7 @@ inline void FilterGlobals::ColLimitter( USHORT &rCol )
         rCol = nColEnd;
 }
 
-inline void FilterGlobals::RowLimitter( USHORT &rRow )
+inline void FilterGlobals::RowLimitter( sal_uInt16 &rRow )
 {
     if( rRow < nRowStart )
         rRow = nRowStart;

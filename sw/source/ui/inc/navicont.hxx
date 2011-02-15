@@ -43,19 +43,19 @@ class NaviContentBookmark
     String          aUrl;       // URL inkl. Sprungmarke
     String          aDescr;     // Description
     long            nDocSh;     // Adresse der DocShell
-    USHORT          nDefDrag;   // Description enthaelt defaultDragType
+    sal_uInt16          nDefDrag;   // Description enthaelt defaultDragType
 
 public:
     NaviContentBookmark();
     NaviContentBookmark( const String &rUrl, const String& rDesc,
-                            USHORT nDragType, const SwDocShell* );
+                            sal_uInt16 nDragType, const SwDocShell* );
 
     const String&   GetURL() const              { return aUrl; }
     const String&   GetDescription() const      { return aDescr; }
-    USHORT          GetDefaultDragType() const  { return nDefDrag; }
+    sal_uInt16          GetDefaultDragType() const  { return nDefDrag; }
     long            GetDocShell() const         { return nDocSh; }
     void            Copy( TransferDataContainer& rData ) const;
-    BOOL            Paste( TransferableDataHelper& rData );
+    sal_Bool            Paste( TransferableDataHelper& rData );
 };
 
 #endif

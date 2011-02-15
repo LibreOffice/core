@@ -66,7 +66,7 @@ public:
 // Font-Cache, globale Variable, in txtinit.Cxx angelegt/zerstoert
 extern SwFntCache *pFntCache;
 extern SwFntObj *pLastFont;
-extern BYTE *pMagicNo;
+extern sal_uInt8 *pMagicNo;
 extern Color *pWaveCol;
 
 /*************************************************************************
@@ -83,16 +83,16 @@ class SwFntObj : public SwCacheObj
     Font *pScrFont;
     Font *pPrtFont;
     OutputDevice* pPrinter;
-    USHORT nGuessedLeading;
-    USHORT nExtLeading;
-    USHORT nScrAscent;
-    USHORT nPrtAscent;
-    USHORT nScrHeight;
-    USHORT nPrtHeight;
-    USHORT nPropWidth;
-    USHORT nZoom;
-    BOOL bSymbol : 1;
-    BOOL bPaintBlank : 1;
+    sal_uInt16 nGuessedLeading;
+    sal_uInt16 nExtLeading;
+    sal_uInt16 nScrAscent;
+    sal_uInt16 nPrtAscent;
+    sal_uInt16 nScrHeight;
+    sal_uInt16 nPrtHeight;
+    sal_uInt16 nPropWidth;
+    sal_uInt16 nZoom;
+    sal_Bool bSymbol : 1;
+    sal_Bool bPaintBlank : 1;
 
     static long nPixWidth;
     static MapMode *pPixMap;
@@ -100,8 +100,8 @@ class SwFntObj : public SwCacheObj
 
     // SMARTTAGS
     void calcLinePos(SwDrawTextInfo& rInf, Point& aStart, Point& aEnd, xub_StrLen nStart,
-       xub_StrLen nWrLen, xub_StrLen nCnt, const BOOL bSwitchH2V, const BOOL bSwitchL2R,
-       long nHalfSpace, long* pKernArray, const BOOL bBidiPor);
+       xub_StrLen nWrLen, xub_StrLen nCnt, const sal_Bool bSwitchH2V, const sal_Bool bSwitchL2R,
+       long nHalfSpace, long* pKernArray, const sal_Bool bBidiPor);
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwFntObj)
@@ -115,20 +115,20 @@ public:
     inline       Font *GetFont()        { return &aFont; }
     inline const Font *GetFont() const  { return &aFont; }
 
-    inline USHORT GetGuessedLeading() const  { return nGuessedLeading; }
-    inline USHORT GetExtLeading() const  { return nExtLeading; }
+    inline sal_uInt16 GetGuessedLeading() const  { return nGuessedLeading; }
+    inline sal_uInt16 GetExtLeading() const  { return nExtLeading; }
 
-    USHORT GetFontAscent( const ViewShell *pSh, const OutputDevice& rOut );
-    USHORT GetFontHeight( const ViewShell *pSh, const OutputDevice& rOut );
-    USHORT GetFontLeading( const ViewShell *pSh, const OutputDevice& rOut );
+    sal_uInt16 GetFontAscent( const ViewShell *pSh, const OutputDevice& rOut );
+    sal_uInt16 GetFontHeight( const ViewShell *pSh, const OutputDevice& rOut );
+    sal_uInt16 GetFontLeading( const ViewShell *pSh, const OutputDevice& rOut );
 
     void GuessLeading( const ViewShell& rSh, const FontMetric& rMet );
 
     void SetDevFont( const ViewShell *pSh, OutputDevice& rOut );
     inline OutputDevice* GetPrt() const { return pPrinter; }
-    inline USHORT   GetZoom() const { return nZoom; }
-    inline USHORT   GetPropWidth() const { return nPropWidth; }
-    inline BOOL     IsSymbol() const { return bSymbol; }
+    inline sal_uInt16   GetZoom() const { return nZoom; }
+    inline sal_uInt16   GetPropWidth() const { return nPropWidth; }
+    inline sal_Bool     IsSymbol() const { return bSymbol; }
 
     void   DrawText( SwDrawTextInfo &rInf );
     Size  GetTextSize( SwDrawTextInfo &rInf );
@@ -150,9 +150,9 @@ protected:
     virtual SwCacheObj *NewObj( );
 
 public:
-    SwFntAccess( const void * &rMagic, USHORT &rIndex, const void *pOwner,
+    SwFntAccess( const void * &rMagic, sal_uInt16 &rIndex, const void *pOwner,
                  ViewShell *pShell,
-                 BOOL bCheck = FALSE  );
+                 sal_Bool bCheck = sal_False  );
     inline SwFntObj* Get() { return (SwFntObj*) SwCacheAccess::Get(); };
 };
 

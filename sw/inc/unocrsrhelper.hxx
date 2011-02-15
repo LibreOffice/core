@@ -83,8 +83,8 @@ namespace SwUnoCursorHelper
         public:
             ~SwAnyMapHelper();
 
-            void    SetValue( USHORT nWhichId, USHORT nMemberId, const com::sun::star::uno::Any& rAny );
-            bool    FillValue( USHORT nWhichId, USHORT nMemberId, const com::sun::star::uno::Any*& pAny );
+            void    SetValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const com::sun::star::uno::Any& rAny );
+            bool    FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, const com::sun::star::uno::Any*& pAny );
     };
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >
