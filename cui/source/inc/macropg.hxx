@@ -48,9 +48,9 @@ typedef ::std::hash_map< ::rtl::OUString, ::std::pair< ::rtl::OUString, ::rtl::O
 struct EventDisplayName
 {
     const sal_Char* pAsciiEventName;
-    USHORT          nEventResourceID;
+    sal_uInt16          nEventResourceID;
     EventDisplayName() : pAsciiEventName( NULL ), nEventResourceID(0) { }
-    EventDisplayName( const sal_Char* _pAsciiName, const USHORT _nResId )
+    EventDisplayName( const sal_Char* _pAsciiName, const sal_uInt16 _nResId )
         : pAsciiEventName( _pAsciiName )
         , nEventResourceID( _nResId )
     {
@@ -90,7 +90,7 @@ protected:
 
                                 _SvxMacroTabPage( Window* pParent, const ResId& rId, const SfxItemSet& rItemSet );
 
-    void                        EnableButtons( const String& rLanguage );
+    void                        EnableButtons();
     ::com::sun::star::uno::Any  GetPropsByName( const ::rtl::OUString& eventName, EventsHash& eventsHash );
     ::std::pair< ::rtl::OUString, ::rtl::OUString > GetPairFromAny( ::com::sun::star::uno::Any aAny );
 
@@ -100,14 +100,14 @@ public:
     void                        InitResources();
 
     void                        InitAndSetHandler( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xAppEvents, ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > xDocEvents, ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifiable > xModifiable );
-    virtual BOOL                FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool                FillItemSet( SfxItemSet& rSet );
 
     using SfxTabPage::Reset;
     virtual void                Reset();
 
     void                        DisplayAppEvents( bool appEvents);
-    void                        SetReadOnly( BOOL bSet );
-    BOOL                        IsReadOnly() const;
+    void                        SetReadOnly( sal_Bool bSet );
+    sal_Bool                        IsReadOnly() const;
 };
 
 class SvxMacroTabPage : public _SvxMacroTabPage
@@ -125,12 +125,12 @@ public:
 
 // class SvxMacroAssignDlg --------------------------------------------------
 
-typedef USHORT* (*GetTabPageRanges)(); // liefert internationale Which-Werte
+typedef sal_uInt16* (*GetTabPageRanges)(); // liefert internationale Which-Werte
 
 class SvxMacroAssignSingleTabDialog : public SfxModalDialog
 {
 public:
-    SvxMacroAssignSingleTabDialog( Window* pParent, const SfxItemSet& rOptionsSet, USHORT nUniqueId );
+    SvxMacroAssignSingleTabDialog( Window* pParent, const SfxItemSet& rOptionsSet, sal_uInt16 nUniqueId );
 
     virtual             ~SvxMacroAssignSingleTabDialog();
 

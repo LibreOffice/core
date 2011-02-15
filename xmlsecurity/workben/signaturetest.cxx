@@ -226,7 +226,7 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
 
     maCryptoCheckBox.SetPosSizePixel( TEXTFIELDSTARTX, nY, aOutputSize.Width()-2*TEXTFIELDSTARTX, FIXEDLINEHEIGHT );
     maCryptoCheckBox.SetText( String( RTL_CONSTASCII_USTRINGPARAM( "Use Default Token (NSS option only)" ) ) );
-    maCryptoCheckBox.Check( TRUE );
+    maCryptoCheckBox.Check( sal_True );
     maEditTokenName.Disable();
     maFixedTextTokenName.Disable();
     maCryptoCheckBox.SetClickHdl( LINK( this, MyWin, CryptoCheckBoxHdl ) );
@@ -475,7 +475,7 @@ IMPL_LINK( MyWin, SignButtonHdl, Button*, EMPTYARG )
     aSignatureHelper.AddForSigning( nSecurityId, aBINFileName, aBINFileName, sal_True );
 
     SvFileStream* pStream = new SvFileStream( aSIGFileName, STREAM_WRITE );
-    SvLockBytesRef xLockBytes = new SvLockBytes( pStream, TRUE );
+    SvLockBytesRef xLockBytes = new SvLockBytes( pStream, sal_True );
      uno::Reference< io::XOutputStream > xOutputStream = new utl::OOutputStreamHelper( xLockBytes );
     bool bDone = aSignatureHelper.CreateAndWriteSignature( xOutputStream );
 
@@ -524,9 +524,9 @@ IMPL_LINK( MyWin, VerifyButtonHdl, Button*, EMPTYARG )
 
     SvFileStream* pStream = new SvFileStream( aSIGFileName, STREAM_READ );
     pStream->Seek( STREAM_SEEK_TO_END );
-    ULONG nBytes = pStream->Tell();
+    sal_uLong nBytes = pStream->Tell();
     pStream->Seek( STREAM_SEEK_TO_BEGIN );
-    SvLockBytesRef xLockBytes = new SvLockBytes( pStream, TRUE );
+    SvLockBytesRef xLockBytes = new SvLockBytes( pStream, sal_True );
      uno::Reference< io::XInputStream > xInputStream = new utl::OInputStreamHelper( xLockBytes, nBytes );
     bool bDone = aSignatureHelper.ReadAndVerifySignature( xInputStream );
     xInputStream->closeInput();

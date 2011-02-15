@@ -80,10 +80,10 @@ namespace frm
         if ( !pEngine )
             return;
 
-        USHORT nParagraphs = pEngine->GetParagraphCount();
+        sal_uInt16 nParagraphs = pEngine->GetParagraphCount();
         if ( nParagraphs )
         {
-            USHORT nLastParaNumber = nParagraphs - 1;
+            sal_uInt16 nLastParaNumber = nParagraphs - 1;
             xub_StrLen nParaLen = pEngine->GetTextLen( nLastParaNumber );
             getEditView()->SetSelection( ESelection( 0, 0, nLastParaNumber, nParaLen ) );
         }

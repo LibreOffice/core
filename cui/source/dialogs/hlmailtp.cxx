@@ -64,7 +64,7 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rIte
 {
     // Set HC bitmaps and disable display of bitmap names.
     maBtAdrBook.SetModeImage( Image( CUI_RES( IMG_ADRESSBOOK_HC ) ), BMP_COLOR_HIGHCONTRAST );
-    maBtAdrBook.EnableTextDisplay (FALSE);
+    maBtAdrBook.EnableTextDisplay (sal_False);
 
     InitStdControls();
     FreeResource();
@@ -212,7 +212,7 @@ void SvxHyperlinkMailTp::SetScheme( const String& aScheme )
     //if  aScheme is empty or unknown the default beaviour is like it where MAIL
     const sal_Char sNewsScheme[]   = INET_NEWS_SCHEME;
 
-    BOOL bMail = aScheme.SearchAscii( sNewsScheme ) != 0;
+    sal_Bool bMail = aScheme.SearchAscii( sNewsScheme ) != 0;
 
     //update protocol button selection:
     maRbtMail.Check(bMail);

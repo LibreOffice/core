@@ -41,9 +41,6 @@ class SvTabListBox;
 class Edit;
 class String;
 
-typedef SvStringsDtor* (*FNGetRangeHdl)( _SfxMacroTabPage*, const String& rLanguage );
-typedef SvStringsDtor* (*FNGetMacrosOfRangeHdl)( _SfxMacroTabPage*, const String& rLanguage, const String& rRange );
-
 class SfxConfigGroupListBox_Impl;
 class SfxConfigFunctionListBox_Impl;
 class _HeaderTabListBox;
@@ -59,7 +56,6 @@ class _SfxMacroTabPage : public SfxTabPage
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, DoubleClickHdl_Impl, Control* );
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, AssignDeleteHdl_Impl, PushButton * );
 
-    DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, ChangeScriptHdl_Impl, RadioButton * );
     DECL_DLLPRIVATE_STATIC_LINK( _SfxMacroTabPage, TimeOut_Impl, Timer* );
 
 protected:
@@ -70,26 +66,26 @@ protected:
     void                        InitAndSetHandler();
     void                        FillEvents();
     void                        FillMacroList();
-    void                        EnableButtons( const String& rLanguage );
+    void                        EnableButtons();
 
 public:
 
     virtual                     ~_SfxMacroTabPage();
 
-    void                        AddEvent( const String & rEventName, USHORT nEventId );
+    void                        AddEvent( const String & rEventName, sal_uInt16 nEventId );
 
     const SvxMacroTableDtor&    GetMacroTbl() const;
     void                        SetMacroTbl( const SvxMacroTableDtor& rTbl );
     void                        ClearMacroTbl();
 
-    virtual void                ScriptChanged( const String& rLanguage );
+    virtual void                ScriptChanged();
     virtual void                PageCreated (SfxAllItemSet aSet);
 
     // --------- Erben aus der Basis -------------
-    virtual BOOL                FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool                FillItemSet( SfxItemSet& rSet );
     virtual void                Reset( const SfxItemSet& rSet );
 
-    BOOL                        IsReadOnly() const;
+    sal_Bool                        IsReadOnly() const;
 };
 
 inline const SvxMacroTableDtor& _SfxMacroTabPage::GetMacroTbl() const

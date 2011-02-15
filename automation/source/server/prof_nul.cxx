@@ -82,7 +82,7 @@ String TTProfiler::GetSysdepProfileHeader()
 
 
 // Zustand merken
-void TTProfiler::GetSysdepProfileSnapshot( SysdepProfileSnapshot *, USHORT )
+void TTProfiler::GetSysdepProfileSnapshot( SysdepProfileSnapshot *, sal_uInt16 )
 {};
 
 

@@ -306,47 +306,37 @@ String RID_RIDER_SLL_PERSONAL
     Text [ en-US ] = "Personal certificates" ;
 };
 
-// ******************************************************************* EOF
+#define MASK_COL    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; } ;
+#define IMGLST_IDLST \
+    IdList = {                      \
+        SID_GENERAL_OPTIONS;        \
+        SID_LANGUAGE_OPTIONS;       \
+        SID_INET_DLG;               \
+        SID_SW_EDITOPTIONS;         \
+        SID_SW_ONLINEOPTIONS;       \
+        SID_SC_EDITOPTIONS;         \
+        SID_SD_EDITOPTIONS;         \
+        SID_SD_GRAPHIC_OPTIONS;     \
+        SID_SM_EDITOPTIONS;         \
+        SID_SCH_EDITOPTIONS;        \
+        SID_SB_STARBASEOPTIONS;     \
+        SID_FILTER_DLG;             \
+    };                              \
+    IdCount = {                     \
+        12;                         \
+    };
 
+ImageList RID_IMGLIST_TREEOPT
+{
+    Prefix = "tr";
+    MASK_COL
+    IMGLST_IDLST
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ImageList RID_IMGLIST_TREEOPT_HC
+{
+    Prefix = "trh";
+    MASK_COL
+    IMGLST_IDLST
+};
 

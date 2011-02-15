@@ -34,7 +34,7 @@
 #include "accessibility/extended/accessiblebrowseboxcell.hxx"
 #endif
 #include <cppuhelper/implbase2.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 // ============================================================================
 namespace accessibility
 {
@@ -48,8 +48,8 @@ namespace accessibility
     {
     private:
         TriState m_eState;
-        BOOL m_bEnabled;
-        BOOL m_bIsTriState;
+        sal_Bool m_bEnabled;
+        sal_Bool m_bIsTriState;
 
     protected:
         virtual ~AccessibleCheckBoxCell() {}

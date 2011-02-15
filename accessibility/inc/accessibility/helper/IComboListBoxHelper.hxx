@@ -29,8 +29,7 @@
 
 #include <tools/gen.hxx>
 #include <tools/string.hxx>
-#include <vcl/wintypes.hxx>
-#include <tools/gen.hxx>
+#include <tools/wintypes.hxx>
 
 namespace com { namespace sun { namespace star { namespace datatransfer { namespace clipboard {
     class XClipboard;
@@ -42,27 +41,27 @@ namespace accessibility
     class SAL_NO_VTABLE IComboListBoxHelper
     {
     public:
-        virtual String          GetEntry( USHORT nPos ) const = 0;
+        virtual String          GetEntry( sal_uInt16 nPos ) const = 0;
         virtual Rectangle       GetDropDownPosSizePixel( ) const = 0;
-        virtual Rectangle       GetBoundingRectangle( USHORT nItem ) const = 0;
+        virtual Rectangle       GetBoundingRectangle( sal_uInt16 nItem ) const = 0;
         virtual Rectangle       GetWindowExtentsRelative( Window* pRelativeWindow ) = 0;
-        virtual BOOL            IsActive() const = 0;
-        virtual BOOL            IsEntryVisible( USHORT nPos ) const = 0;
-        virtual USHORT          GetDisplayLineCount() const = 0;
-        virtual void            GetMaxVisColumnsAndLines( USHORT& rnCols, USHORT& rnLines ) const = 0;
+        virtual sal_Bool            IsActive() const = 0;
+        virtual sal_Bool            IsEntryVisible( sal_uInt16 nPos ) const = 0;
+        virtual sal_uInt16          GetDisplayLineCount() const = 0;
+        virtual void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const = 0;
         virtual WinBits         GetStyle() const = 0;
-        virtual BOOL            IsMultiSelectionEnabled() const = 0;
-        virtual USHORT          GetTopEntry() const = 0;
-        virtual BOOL            IsEntryPosSelected( USHORT nPos ) const = 0;
-        virtual USHORT          GetEntryCount() const = 0;
+        virtual sal_Bool            IsMultiSelectionEnabled() const = 0;
+        virtual sal_uInt16          GetTopEntry() const = 0;
+        virtual sal_Bool            IsEntryPosSelected( sal_uInt16 nPos ) const = 0;
+        virtual sal_uInt16          GetEntryCount() const = 0;
         virtual void            Select() = 0;
-        virtual void            SelectEntryPos( USHORT nPos, BOOL bSelect = TRUE ) = 0;
-        virtual USHORT          GetSelectEntryCount() const = 0;
+        virtual void            SelectEntryPos( sal_uInt16 nPos, sal_Bool bSelect = sal_True ) = 0;
+        virtual sal_uInt16          GetSelectEntryCount() const = 0;
         virtual void            SetNoSelection() = 0;
-        virtual USHORT          GetSelectEntryPos( USHORT nSelIndex = 0 ) const = 0;
-        virtual BOOL            IsInDropDown() const = 0;
+        virtual sal_uInt16          GetSelectEntryPos( sal_uInt16 nSelIndex = 0 ) const = 0;
+        virtual sal_Bool            IsInDropDown() const = 0;
         virtual Rectangle       GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const = 0;
-        virtual long            GetIndexForPoint( const Point& rPoint, USHORT& nPos ) const = 0;
+        virtual long            GetIndexForPoint( const Point& rPoint, sal_uInt16& nPos ) const = 0;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >
                                 GetClipboard() = 0;
     };

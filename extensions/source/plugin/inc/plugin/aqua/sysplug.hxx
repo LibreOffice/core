@@ -136,7 +136,7 @@ public:
 
     void                drawView( XPlugin_Impl* );
 private:
-    BOOL                retrieveFunction( const char* i_pName, void** i_ppFunc ) const;
+    sal_Bool                retrieveFunction( const char* i_pName, void** i_ppFunc ) const;
     DECL_LINK( NullTimerHdl, void* );
 
 private:
