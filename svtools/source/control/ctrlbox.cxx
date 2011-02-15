@@ -482,8 +482,6 @@ sal_uInt16 ImpLineListData::GetStyle( )
     return m_nStyle;
 }
 
-DECLARE_LIST( ImpLineList, ImpLineListData* )
-
 // -----------------------------------------------------------------------
 
 void lclDrawPolygon( OutputDevice& rDev, const basegfx::B2DPolygon& rPolygon, long nWidth, sal_uInt16 nDashing )
@@ -718,10 +716,10 @@ sal_uInt16 LineListBox::GetStylePos( sal_uInt16 nListPos, long nWidth )
 
     sal_uInt16 i = 0;
     sal_uInt16 n = 0;
-    sal_uInt16 nCount = pLineList->Count( );
+    sal_uInt16 nCount = pLineList->size();
     while ( nPos == LISTBOX_ENTRY_NOTFOUND && i < nCount )
     {
-        ImpLineListData* pData = pLineList->GetObject( i );
+        ImpLineListData* pData = (*pLineList)[ i ];
         if ( pData && pData->GetMinWidth() <= nWidth )
         {
             if ( nListPos == n )
@@ -887,10 +885,10 @@ void LineListBox::UpdateEntries( long nOldWidth )
         ListBox::InsertEntry( m_sNone, LISTBOX_APPEND );
 
     sal_uInt16 n = 0;
-    sal_uInt16 nCount = pLineList->Count( );
+    sal_uInt16 nCount = pLineList->size( );
     while ( n < nCount )
     {
-        ImpLineListData* pData = pLineList->GetObject( n );
+        ImpLineListData* pData = (*pLineList)[ n ];
         if ( pData && pData->GetMinWidth() <= m_nWidth )
         {
             Bitmap      aBmp;
@@ -921,7 +919,7 @@ Color LineListBox::GetColorLine1( sal_uInt16 nPos )
     Color rResult = GetPaintColor( );
 
     sal_uInt16 nStyle = GetStylePos( nPos, m_nWidth );
-    ImpLineListData* pData = pLineList->GetObject( nStyle );
+    ImpLineListData* pData = (*pLineList)[ nStyle ];
     if ( pData )
         rResult = pData->GetColorLine1( GetColor( ) );
 
@@ -933,7 +931,7 @@ Color LineListBox::GetColorLine2( sal_uInt16 nPos )
     Color rResult = GetPaintColor( );
 
     sal_uInt16 nStyle = GetStylePos( nPos, m_nWidth );
-    ImpLineListData* pData = pLineList->GetObject( nStyle );
+    ImpLineListData* pData = (*pLineList)[ nStyle ];
     if ( pData )
         rResult = pData->GetColorLine2( GetColor( ) );
 
@@ -945,7 +943,7 @@ Color LineListBox::GetColorDist( sal_uInt16 nPos )
     Color rResult = GetSettings().GetStyleSettings().GetFieldColor();
 
     sal_uInt16 nStyle = GetStylePos( nPos, m_nWidth );
-    ImpLineListData* pData = pLineList->GetObject( nStyle );
+    ImpLineListData* pData = (*pLineList)[ nStyle ];
     if ( pData )
         rResult = pData->GetColorDist( GetColor( ), rResult );
 
