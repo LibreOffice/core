@@ -260,7 +260,7 @@ public:
     inline const ::com::sun::star::uno::Sequence< ::rtl::OUString >& GetBlackList() const { return _aBlackList; }
     void                    SetStandardDir( const String& _rDir );
     inline const String&    GetStandardDir() const          { return _aStdDir; }
-    inline void             DisableFilterBoxAutoWidth()     { _pLbFilter->EnableDDAutoWidth( FALSE ); }
+    inline void             DisableFilterBoxAutoWidth()     { _pLbFilter->EnableDDAutoWidth( sal_False ); }
 
     // ------------------------------------------
     // access to the filter listbox only as Control* - we want to maintain the entries/userdata ourself

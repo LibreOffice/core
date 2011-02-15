@@ -29,16 +29,14 @@
 #define _PAGES_HXX_
 
 #include <vcl/tabpage.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/scrbar.hxx>
+#include <vcl/throbber.hxx>
 #include <svtools/wizardmachine.hxx>
 #include <svtools/svmedit.hxx>
 #include <svl/lstner.hxx>
 #include <svtools/xtextedt.hxx>
-
-#include <com/sun/star/awt/XThrobber.hpp>
 
 namespace desktop
 {
@@ -66,7 +64,7 @@ protected:
 
 class LicenseView : public MultiLineEdit, public SfxListener
 {
-    BOOL            mbEndReached;
+    sal_Bool            mbEndReached;
     Link            maEndReachedHdl;
     Link            maScrolledHdl;
 
@@ -76,9 +74,9 @@ public:
 
     void ScrollDown( ScrollType eScroll );
 
-    BOOL IsEndReached() const;
-    BOOL EndReached() const { return mbEndReached; }
-    void SetEndReached( BOOL bEnd ) { mbEndReached = bEnd; }
+    sal_Bool IsEndReached() const;
+    sal_Bool EndReached() const { return mbEndReached; }
+    void SetEndReached( sal_Bool bEnd ) { mbEndReached = bEnd; }
 
     void SetEndReachedHdl( const Link& rHdl )  { maEndReachedHdl = rHdl; }
     const Link& GetAutocompleteHdl() const { return maEndReachedHdl; }
@@ -120,11 +118,11 @@ class MigrationPage : public svt::OWizardPage
 private:
     FixedText m_ftHead;
     FixedText m_ftBody;
-    CheckBox m_cbMigration;
+    CheckBox  m_cbMigration;
+    Throbber& m_rThrobber;
     sal_Bool m_bMigrationDone;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XThrobber > m_xThrobber;
 public:
-    MigrationPage( svt::OWizardMachine* parent, const ResId& resid, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XThrobber > xThrobber );
+    MigrationPage( svt::OWizardMachine* parent, const ResId& resid, Throbber& i_throbber );
     virtual sal_Bool commitPage( svt::WizardTypes::CommitPageReason _eReason );
 
 protected:

@@ -58,7 +58,7 @@ class SvtLanguageTable;
 
 
 // load language strings from resource
-SVX_DLLPUBLIC String    GetDicInfoStr( const String& rName, const USHORT nLang, BOOL bNeg );
+SVX_DLLPUBLIC String    GetDicInfoStr( const String& rName, const sal_uInt16 nLang, sal_Bool bNeg );
 
 class SVX_DLLPUBLIC SvxLanguageBox : public ListBox
 {
@@ -69,34 +69,34 @@ private:
     Image                   m_aCheckedImage;
     Image                   m_aCheckedImageHC;
     String                  m_aAllString;
-    com::sun::star::uno::Sequence< INT16 >  *m_pSpellUsedLang;
+    com::sun::star::uno::Sequence< sal_Int16 >  *m_pSpellUsedLang;
     SvtLanguageTable*       m_pLangTable;
-    INT16                   m_nLangList;
-    BOOL                    m_bHasLangNone;
-    BOOL                    m_bLangNoneIsLangAll;
-    BOOL                    m_bWithCheckmark;
+    sal_Int16                   m_nLangList;
+    sal_Bool                    m_bHasLangNone;
+    sal_Bool                    m_bLangNoneIsLangAll;
+    sal_Bool                    m_bWithCheckmark;
 
     SVX_DLLPRIVATE void                    Init();
-    SVX_DLLPRIVATE USHORT                  ImplInsertImgEntry( const String& rEntry, USHORT nPos, bool bChecked );
-    SVX_DLLPRIVATE USHORT                  ImplInsertLanguage(LanguageType, USHORT, sal_Int16 );
+    SVX_DLLPRIVATE sal_uInt16                  ImplInsertImgEntry( const String& rEntry, sal_uInt16 nPos, bool bChecked );
+    SVX_DLLPRIVATE sal_uInt16                  ImplInsertLanguage(LanguageType, sal_uInt16, sal_Int16 );
 
 public:
-    SvxLanguageBox( Window* pParent, WinBits nWinStyle, BOOL bCheck = FALSE);
-    SvxLanguageBox( Window* pParent, const ResId& rResId, BOOL bCheck = FALSE);
+    SvxLanguageBox( Window* pParent, WinBits nWinStyle, sal_Bool bCheck = sal_False);
+    SvxLanguageBox( Window* pParent, const ResId& rResId, sal_Bool bCheck = sal_False);
     ~SvxLanguageBox();
 
-    void            SetLanguageList( INT16 nLangList,
-                            BOOL bHasLangNone, BOOL bLangNoneIsLangAll = FALSE,
-                            BOOL bCheckSpellAvail = FALSE );
+    void            SetLanguageList( sal_Int16 nLangList,
+                            sal_Bool bHasLangNone, sal_Bool bLangNoneIsLangAll = sal_False,
+                            sal_Bool bCheckSpellAvail = sal_False );
 
-    USHORT          InsertLanguage( const LanguageType eLangType, USHORT nPos = LISTBOX_APPEND );
-    USHORT          InsertDefaultLanguage( sal_Int16 nType, USHORT nPos = LISTBOX_APPEND );
-    USHORT          InsertLanguage( const LanguageType eLangType,
-                            BOOL bCheckEntry, USHORT nPos = LISTBOX_APPEND );
+    sal_uInt16          InsertLanguage( const LanguageType eLangType, sal_uInt16 nPos = LISTBOX_APPEND );
+    sal_uInt16          InsertDefaultLanguage( sal_Int16 nType, sal_uInt16 nPos = LISTBOX_APPEND );
+    sal_uInt16          InsertLanguage( const LanguageType eLangType,
+                            sal_Bool bCheckEntry, sal_uInt16 nPos = LISTBOX_APPEND );
     void            RemoveLanguage( const LanguageType eLangType );
-    void            SelectLanguage( const LanguageType eLangType, BOOL bSelect = TRUE );
+    void            SelectLanguage( const LanguageType eLangType, sal_Bool bSelect = sal_True );
     LanguageType    GetSelectLanguage() const;
-    BOOL            IsLanguageSelected( const LanguageType eLangType ) const;
+    sal_Bool            IsLanguageSelected( const LanguageType eLangType ) const;
 };
 
 #if ENABLE_LAYOUT
@@ -110,7 +110,7 @@ class SVX_DLLPUBLIC SvxLanguageBox : public ListBox
     DECL_GET_WINDOW (SvxLanguageBox);*/
 
 public:
-    SvxLanguageBox( Context*, const char*, BOOL bCheck = FALSE );
+    SvxLanguageBox( Context*, const char*, sal_Bool bCheck = sal_False );
     ~SvxLanguageBox ();
     void SetLanguageList (sal_Int16 list, bool hasLangNone, bool langNoneIsLangAll=false, bool checkSpellAvailable=false);
 

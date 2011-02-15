@@ -50,7 +50,7 @@ TYPEINIT1_AUTOFACTORY( MediaItem, ::SfxPoolItem );
 
 // ------------------------------------------------------------------------------
 
-MediaItem::MediaItem( USHORT _nWhich, sal_uInt32 nMaskSet ) :
+MediaItem::MediaItem( sal_uInt16 _nWhich, sal_uInt32 nMaskSet ) :
     SfxPoolItem( _nWhich ),
     mnMaskSet( nMaskSet ),
     meState( MEDIASTATE_STOP ),
@@ -122,7 +122,7 @@ SfxItemPresentation MediaItem::GetPresentation( SfxItemPresentation,
 
 //------------------------------------------------------------------------
 
-BOOL MediaItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
+sal_Bool MediaItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {
     uno::Sequence< uno::Any > aSeq( 9 );
 
@@ -143,10 +143,10 @@ BOOL MediaItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
 
 //------------------------------------------------------------------------
 
-BOOL MediaItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
+sal_Bool MediaItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     uno::Sequence< uno::Any >   aSeq;
-    BOOL                        bRet = false;
+    sal_Bool                        bRet = false;
 
     if( ( rVal >>= aSeq ) && ( aSeq.getLength() == 9 ) )
     {

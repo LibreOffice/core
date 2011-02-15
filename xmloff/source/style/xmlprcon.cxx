@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
 using namespace ::std;
 
 SvXMLPropertySetContext::SvXMLPropertySetContext(
-    SvXMLImport& rImp, USHORT nPrfx,
+    SvXMLImport& rImp, sal_uInt16 nPrfx,
     const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
     sal_uInt32 nFam,
@@ -64,7 +64,7 @@ SvXMLPropertySetContext::~SvXMLPropertySetContext()
 }
 
 SvXMLImportContext *SvXMLPropertySetContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
@@ -92,7 +92,7 @@ SvXMLImportContext *SvXMLPropertySetContext::CreateChildContext(
     SvXMLImportItemMapper with the mid flag MID_FLAG_ELEMENT
 */
 SvXMLImportContext *SvXMLPropertySetContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const rtl::OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList >&,
     ::std::vector< XMLPropertyState > &,

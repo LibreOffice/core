@@ -65,7 +65,7 @@ namespace sfx2
     public:
         TaskPaneWrapper(
             Window* i_pParent,
-            USHORT i_nId,
+            sal_uInt16 i_nId,
             SfxBindings* i_pBindings,
             SfxChildWinInfo* i_pInfo
         );

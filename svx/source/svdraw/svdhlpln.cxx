@@ -47,7 +47,7 @@ Pointer SdrHelpLine::GetPointer() const
     } // switch
 }
 
-FASTBOOL SdrHelpLine::IsHit(const Point& rPnt, USHORT nTolLog, const OutputDevice& rOut) const
+FASTBOOL SdrHelpLine::IsHit(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const
 {
     Size a1Pix(rOut.PixelToLogic(Size(1,1)));
     FASTBOOL bXHit=rPnt.X()>=aPos.X()-nTolLog && rPnt.X()<=aPos.X()+nTolLog+a1Pix.Width();
@@ -63,7 +63,7 @@ FASTBOOL SdrHelpLine::IsHit(const Point& rPnt, USHORT nTolLog, const OutputDevic
             }
         } break;
     } // switch
-    return FALSE;
+    return sal_False;
 }
 
 Rectangle SdrHelpLine::GetBoundRect(const OutputDevice& rOut) const
@@ -105,8 +105,8 @@ bool SdrHelpLine::IsVisibleEqual( const SdrHelpLine& rHelpLine, const OutputDevi
 
 void SdrHelpLineList::Clear()
 {
-    USHORT nAnz=GetCount();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=GetCount();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         delete GetObject(i);
     }
     aList.Clear();
@@ -115,31 +115,31 @@ void SdrHelpLineList::Clear()
 void SdrHelpLineList::operator=(const SdrHelpLineList& rSrcList)
 {
     Clear();
-    USHORT nAnz=rSrcList.GetCount();
-    for (USHORT i=0; i<nAnz; i++) {
+    sal_uInt16 nAnz=rSrcList.GetCount();
+    for (sal_uInt16 i=0; i<nAnz; i++) {
         Insert(rSrcList[i]);
     }
 }
 
 bool SdrHelpLineList::operator==(const SdrHelpLineList& rSrcList) const
 {
-    FASTBOOL bEqual=FALSE;
-    USHORT nAnz=GetCount();
+    FASTBOOL bEqual=sal_False;
+    sal_uInt16 nAnz=GetCount();
     if (nAnz==rSrcList.GetCount()) {
-        bEqual=TRUE;
-        for (USHORT i=0; i<nAnz && bEqual; i++) {
+        bEqual=sal_True;
+        for (sal_uInt16 i=0; i<nAnz && bEqual; i++) {
             if (*GetObject(i)!=*rSrcList.GetObject(i)) {
-                bEqual=FALSE;
+                bEqual=sal_False;
             }
         }
     }
     return bEqual;
 }
 
-USHORT SdrHelpLineList::HitTest(const Point& rPnt, USHORT nTolLog, const OutputDevice& rOut) const
+sal_uInt16 SdrHelpLineList::HitTest(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const
 {
-    USHORT nAnz=GetCount();
-    for (USHORT i=nAnz; i>0;) {
+    sal_uInt16 nAnz=GetCount();
+    for (sal_uInt16 i=nAnz; i>0;) {
         i--;
         if (GetObject(i)->IsHit(rPnt,nTolLog,rOut)) return i;
     }

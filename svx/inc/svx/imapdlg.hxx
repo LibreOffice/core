@@ -74,7 +74,7 @@ class SVX_DLLPUBLIC SvxIMapDlgChildWindow : public SfxChildWindow
 {
  public:
 
-    SvxIMapDlgChildWindow( Window*, USHORT, SfxBindings*, SfxChildWinInfo* );
+    SvxIMapDlgChildWindow( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
 
     SFX_DECL_CHILDWINDOW( SvxIMapDlgChildWindow );
 
@@ -101,13 +101,13 @@ class SvxIMapDlgItem : public SfxControllerItem
 
 protected:
 
-    virtual void StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                const SfxPoolItem* pState );
 
 
 public:
 
-    SvxIMapDlgItem( USHORT nId, SvxIMapDlg& rIMapDlg, SfxBindings& rBindings );
+    SvxIMapDlgItem( sal_uInt16 nId, SvxIMapDlg& rIMapDlg, SfxBindings& rBindings );
 };
 
 
@@ -144,7 +144,7 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
     SvxIMapDlgItem      aIMapItem;
 
     virtual void        Resize();
-    virtual BOOL        Close();
+    virtual sal_Bool        Close();
 
 #ifdef _IMAPDLG_PRIVATE
 
@@ -160,7 +160,7 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
                         DECL_LINK( MiscHdl, void* );
 
     void                DoOpen();
-    BOOL                DoSave();
+    sal_Bool                DoSave();
 
 #endif
 
@@ -171,7 +171,7 @@ public:
                                     Window* pParent, const ResId& rResId );
                         ~SvxIMapDlg();
 
-    void                SetExecState( BOOL bEnable );
+    void                SetExecState( sal_Bool bEnable );
 
     void                SetGraphic( const Graphic& rGraphic );
 

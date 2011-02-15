@@ -182,7 +182,7 @@ public:
     OutputDevice*               pOut;
     const SetOfByte*            pVisiLayer;
     const SdrPageView*          pPageView;
-    USHORT                      nTol;
+    sal_uInt16                      nTol;
     FASTBOOL                    bDown;
 
 public:
@@ -191,7 +191,7 @@ public:
         pVisiLayer(NULL),
         pPageView(NULL),
         nTol(0),
-        bDown(FALSE)
+        bDown(sal_False)
     {}
 };
 
@@ -208,9 +208,9 @@ public:
 class SVX_DLLPUBLIC SdrObjUserData
 {
 protected:
-    UINT32                      nInventor;
-    UINT16                      nIdentifier;
-    UINT16                      nVersion;
+    sal_uInt32                      nInventor;
+    sal_uInt16                      nIdentifier;
+    sal_uInt16                      nVersion;
 
 private:
     SVX_DLLPRIVATE void operator=(const SdrObjUserData& rData);        // nicht implementiert
@@ -220,7 +220,7 @@ private:
 public:
     TYPEINFO();
 
-    SdrObjUserData(UINT32 nInv, UINT16 nId, UINT16 nVer)
+    SdrObjUserData(sal_uInt32 nInv, sal_uInt16 nId, sal_uInt16 nVer)
     :   nInventor(nInv),
         nIdentifier(nId),
         nVersion(nVer)
@@ -233,8 +233,8 @@ public:
     virtual ~SdrObjUserData();
 
     virtual SdrObjUserData* Clone(SdrObject* pObj1) const = 0; // #i71039# NULL -> 0
-    UINT32  GetInventor() const { return nInventor; }
-    UINT16  GetId() const { return nIdentifier; }
+    sal_uInt32  GetInventor() const { return nInventor; }
+    sal_uInt16  GetId() const { return nIdentifier; }
 
     virtual FASTBOOL HasMacro (const SdrObject* pObj) const;
     virtual SdrObject* CheckMacroHit (const SdrObjMacroHitRec& rRec, const SdrObject* pObj) const;
@@ -259,11 +259,11 @@ public:
     ~SdrObjUserDataList() { Clear(); }
 
     void Clear();
-    USHORT GetUserDataCount() const { return USHORT(aList.Count()); }
-    SdrObjUserData* GetUserData(USHORT nNum) const { return (SdrObjUserData*)aList.GetObject(nNum); }
-    void InsertUserData(SdrObjUserData* pData, USHORT nPos=0xFFFF) { aList.Insert(pData,nPos); }
-    SdrObjUserData* RemoveUserData(USHORT nNum) { return (SdrObjUserData*)aList.Remove(nNum);}
-    void DeleteUserData(USHORT nNum) { delete RemoveUserData(nNum); }
+    sal_uInt16 GetUserDataCount() const { return sal_uInt16(aList.Count()); }
+    SdrObjUserData* GetUserData(sal_uInt16 nNum) const { return (SdrObjUserData*)aList.GetObject(nNum); }
+    void InsertUserData(SdrObjUserData* pData, sal_uInt16 nPos=0xFFFF) { aList.Insert(pData,nPos); }
+    SdrObjUserData* RemoveUserData(sal_uInt16 nNum) { return (SdrObjUserData*)aList.Remove(nNum);}
+    void DeleteUserData(sal_uInt16 nNum) { delete RemoveUserData(nNum); }
 };
 
 //************************************************************
@@ -279,10 +279,10 @@ public:
     Rectangle                   aBoundRect;
     Point                       aAnchor;
     SdrGluePointList*           pGPL;
-    BOOL                        bMovProt;
-    BOOL                        bSizProt;
-    BOOL                        bNoPrint;
-    BOOL                        bClosedObj;
+    sal_Bool                        bMovProt;
+    sal_Bool                        bSizProt;
+    sal_Bool                        bNoPrint;
+    sal_Bool                        bClosedObj;
     bool                        mbVisible;
     SdrLayerID                  mnLayerID;
 
@@ -303,7 +303,7 @@ class SdrObjPlusData
     friend class                SdrObject;
 
 public:
-    SfxBroadcaster*             pBroadcast;    // Broadcaster, falls dieses Obj referenziert wird (bVirtObj=TRUE). Auch fuer Konnektoren etc.
+    SfxBroadcaster*             pBroadcast;    // Broadcaster, falls dieses Obj referenziert wird (bVirtObj=sal_True). Auch fuer Konnektoren etc.
     SdrObjUserDataList*         pUserDataList; // applikationsspeziefische Daten
     SdrGluePointList*           pGluePoints;   // Klebepunkte zum Ankleben von Objektverbindern
     AutoTimer*                  pAutoTimer;
@@ -334,49 +334,49 @@ public:
 class SdrObjTransformInfoRec
 {
 public:
-    unsigned                    bSelectAllowed : 1;     // FALSE=Obj kann nicht selektiert werden
-    unsigned                    bMoveAllowed : 1;       // FALSE=Obj kann nicht verschoben werden
-    unsigned                    bResizeFreeAllowed : 1; // FALSE=Obj kann nicht frei resized werden
-    unsigned                    bResizePropAllowed : 1; // FALSE=Obj kann nichtmal proportional resized werden
-    unsigned                    bRotateFreeAllowed : 1; // FALSE=Obj kann nicht frei gedreht werden
-    unsigned                    bRotate90Allowed : 1;   // FALSE=Obj kann nichtmal im 90deg Raster gedreht werden
-    unsigned                    bMirrorFreeAllowed : 1; // FALSE=Obj kann nicht frei gespiegelt werden
-    unsigned                    bMirror45Allowed : 1;   // FALSE=Obj kann nichtmal ueber Achse im 45deg Raster gespiegelt werden
-    unsigned                    bMirror90Allowed : 1;   // FALSE=Obj kann ebenfalls nicht ueber Achse im 90deg Raster gespiegelt werden
-    unsigned                    bTransparenceAllowed : 1; // FALSE=Obj does not have an interactive transparence control
-    unsigned                    bGradientAllowed : 1; // FALSE=Obj dooes not have an interactive gradient control
-    unsigned                    bShearAllowed : 1;      // FALSE=Obj kann nicht verzerrt werden
+    unsigned                    bSelectAllowed : 1;     // sal_False=Obj kann nicht selektiert werden
+    unsigned                    bMoveAllowed : 1;       // sal_False=Obj kann nicht verschoben werden
+    unsigned                    bResizeFreeAllowed : 1; // sal_False=Obj kann nicht frei resized werden
+    unsigned                    bResizePropAllowed : 1; // sal_False=Obj kann nichtmal proportional resized werden
+    unsigned                    bRotateFreeAllowed : 1; // sal_False=Obj kann nicht frei gedreht werden
+    unsigned                    bRotate90Allowed : 1;   // sal_False=Obj kann nichtmal im 90deg Raster gedreht werden
+    unsigned                    bMirrorFreeAllowed : 1; // sal_False=Obj kann nicht frei gespiegelt werden
+    unsigned                    bMirror45Allowed : 1;   // sal_False=Obj kann nichtmal ueber Achse im 45deg Raster gespiegelt werden
+    unsigned                    bMirror90Allowed : 1;   // sal_False=Obj kann ebenfalls nicht ueber Achse im 90deg Raster gespiegelt werden
+    unsigned                    bTransparenceAllowed : 1; // sal_False=Obj does not have an interactive transparence control
+    unsigned                    bGradientAllowed : 1; // sal_False=Obj dooes not have an interactive gradient control
+    unsigned                    bShearAllowed : 1;      // sal_False=Obj kann nicht verzerrt werden
     unsigned                    bEdgeRadiusAllowed : 1;
-    unsigned                    bNoOrthoDesired : 1;    // TRUE bei Rect; ... FALSE bei BMP,MTF;
-    unsigned                    bNoContortion : 1;      // FALSE=Kein verzerren (bei Crook) moeglich (nur TRUE bei PathObj und Gruppierten PathObjs)
-    unsigned                    bCanConvToPath : 1;     // FALSE=Keine Konvertierung in PathObj moeglich
-    unsigned                    bCanConvToPoly : 1;     // FALSE=Keine Konvertierung in PolyObj moeglich
-    unsigned                    bCanConvToContour : 1;     // FALSE=no conversion down to whole contour possible
-    unsigned                    bCanConvToPathLineToArea : 1; // FALSE=Keine Konvertierung in PathObj moeglich mit Wandlung von LineToArea
-    unsigned                    bCanConvToPolyLineToArea : 1; // FALSE=Keine Konvertierung in PolyObj moeglich mit Wandlung von LineToArea
+    unsigned                    bNoOrthoDesired : 1;    // sal_True bei Rect; ... sal_False bei BMP,MTF;
+    unsigned                    bNoContortion : 1;      // sal_False=Kein verzerren (bei Crook) moeglich (nur sal_True bei PathObj und Gruppierten PathObjs)
+    unsigned                    bCanConvToPath : 1;     // sal_False=Keine Konvertierung in PathObj moeglich
+    unsigned                    bCanConvToPoly : 1;     // sal_False=Keine Konvertierung in PolyObj moeglich
+    unsigned                    bCanConvToContour : 1;     // sal_False=no conversion down to whole contour possible
+    unsigned                    bCanConvToPathLineToArea : 1; // sal_False=Keine Konvertierung in PathObj moeglich mit Wandlung von LineToArea
+    unsigned                    bCanConvToPolyLineToArea : 1; // sal_False=Keine Konvertierung in PolyObj moeglich mit Wandlung von LineToArea
 
 public:
     SdrObjTransformInfoRec()
-    :   bSelectAllowed(TRUE),
-        bMoveAllowed(TRUE),
-        bResizeFreeAllowed(TRUE),
-        bResizePropAllowed(TRUE),
-        bRotateFreeAllowed(TRUE),
-        bRotate90Allowed(TRUE),
-        bMirrorFreeAllowed(TRUE),
-        bMirror45Allowed(TRUE),
-        bMirror90Allowed(TRUE),
-        bTransparenceAllowed(TRUE),
-        bGradientAllowed(TRUE),
-        bShearAllowed(TRUE),
-        bEdgeRadiusAllowed(TRUE),
-        bNoOrthoDesired(TRUE),
-        bNoContortion(TRUE),
-        bCanConvToPath(TRUE),
-        bCanConvToPoly(TRUE),
-        bCanConvToContour(FALSE),
-        bCanConvToPathLineToArea(TRUE),
-        bCanConvToPolyLineToArea(TRUE)
+    :   bSelectAllowed(sal_True),
+        bMoveAllowed(sal_True),
+        bResizeFreeAllowed(sal_True),
+        bResizePropAllowed(sal_True),
+        bRotateFreeAllowed(sal_True),
+        bRotate90Allowed(sal_True),
+        bMirrorFreeAllowed(sal_True),
+        bMirror45Allowed(sal_True),
+        bMirror90Allowed(sal_True),
+        bTransparenceAllowed(sal_True),
+        bGradientAllowed(sal_True),
+        bShearAllowed(sal_True),
+        bEdgeRadiusAllowed(sal_True),
+        bNoOrthoDesired(sal_True),
+        bNoContortion(sal_True),
+        bCanConvToPath(sal_True),
+        bCanConvToPoly(sal_True),
+        bCanConvToContour(sal_False),
+        bCanConvToPathLineToArea(sal_True),
+        bCanConvToPolyLineToArea(sal_True)
     {}
 };
 
@@ -466,7 +466,7 @@ protected:
     unsigned                    bVirtObj : 1;
     unsigned                    bSnapRectDirty : 1;
     unsigned                    bNetLock : 1;   // ni
-    unsigned                    bInserted : 1;  // nur wenn TRUE gibt's RepaintBroadcast & SetModify
+    unsigned                    bInserted : 1;  // nur wenn sal_True gibt's RepaintBroadcast & SetModify
     unsigned                    bGrouped : 1;   // Member eines GroupObjektes?
 
     // Die folgende Flags werden gestreamt
@@ -474,7 +474,7 @@ protected:
     unsigned                    bSizProt : 1; // If true, the size is protected
     unsigned                    bNoPrint : 1; // If true, the object is not printed.
     unsigned                    mbVisible : 1; // If false, the object is not visible on screen (but maybe on printer, depending on bNoprint
-    // Wenn bEmptyPresObj TRUE ist, handelt es sich um ein
+    // Wenn bEmptyPresObj sal_True ist, handelt es sich um ein
     // Praesentationsobjekt, dem noch kein Inhalt zugewiesen
     // wurde. Default ist das Flag auf FALSE. Die Verwaltung
     // uebernimmt die Applikation. Im Zuweisungsoperator sowie
@@ -482,10 +482,10 @@ protected:
     // Das Flag ist persistent.
     unsigned                    bEmptyPresObj : 1;     // Leeres Praesentationsobjekt (Draw)
 
-    // TRUE=Objekt ist als Objekt der MasterPage nicht sichtbar
+    // sal_True=Objekt ist als Objekt der MasterPage nicht sichtbar
     unsigned                    bNotVisibleAsMaster : 1;
 
-    // TRUE=Es handelt sich hierbei um ein geschlossenes Objekt, also nicht Linie oder Kreisbogen ...
+    // sal_True=Es handelt sich hierbei um ein geschlossenes Objekt, also nicht Linie oder Kreisbogen ...
     unsigned                    bClosedObj : 1;
 
     unsigned                    bIsEdge : 1;
@@ -518,14 +518,14 @@ protected:
     Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;
 
     // Fuer GetDragComment
-    void ImpTakeDescriptionStr(USHORT nStrCacheID, String& rStr, USHORT nVal=0) const;
+    void ImpTakeDescriptionStr(sal_uInt16 nStrCacheID, String& rStr, sal_uInt16 nVal=0) const;
 
     void ImpForcePlusData() { if (pPlusData==NULL) pPlusData=NewPlusData(); }
 
-    String GetWinkStr(long nWink, FASTBOOL bNoDegChar=FALSE) const;
-    String GetMetrStr(long nVal, MapUnit eWantMap=MAP_MM, FASTBOOL bNoUnitChars=FALSE) const;
+    String GetWinkStr(long nWink, FASTBOOL bNoDegChar=sal_False) const;
+    String GetMetrStr(long nVal, MapUnit eWantMap=MAP_MM, FASTBOOL bNoUnitChars=sal_False) const;
 
-    // bNotMyself=TRUE bedeutet: Nur die ObjList auf Dirty setzen, nicht mich.
+    // bNotMyself=sal_True bedeutet: Nur die ObjList auf Dirty setzen, nicht mich.
     // Wird z.B. benoetigt fuer NbcMove, denn da movt man SnapRect und aOutRect
     // i.d.R. gleich mit um die Neuberechnung zu sparen.
 public:
@@ -577,8 +577,8 @@ public:
 
     virtual void AddReference(SdrVirtObj& rVrtObj);
     virtual void DelReference(SdrVirtObj& rVrtObj);
-    virtual UINT32 GetObjInventor() const;
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt32 GetObjInventor() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
 
     // Layer interface
@@ -626,15 +626,15 @@ public:
     // Wird die Reihenfolge der Objekte in der Liste veraendert, so wird ein
     // Dirty-Flag gesetzt (an der Page). Beim naechsten SdrObject::GetOrdNum()
     // werden die Ordnungsnummer aller Objekte der Liste neu bestimmt.
-    UINT32 GetOrdNum() const;
+    sal_uInt32 GetOrdNum() const;
 
     // Diese Methode sollte nur verwendet werden, wenn man ganz  genau weiss,
     // was man macht:
-    UINT32 GetOrdNumDirect() const { return nOrdNum; }
+    sal_uInt32 GetOrdNumDirect() const { return nOrdNum; }
 
     // Das Setzen der Ordnungsnummer sollte nur vom Model bzw. von der Page
     // geschehen.
-    void SetOrdNum(UINT32 nNum) { nOrdNum=nNum; }
+    void SetOrdNum(sal_uInt32 nNum) { nOrdNum=nNum; }
 
     /** Return the position in the navigation order for the called object.
         Note that this method may update the navigation position of the
@@ -683,7 +683,7 @@ public:
     // Tooling for painting a single object to a OutputDevice. This will be needed as long
     // as not all painting is changed to use DrawContact objects.
     sal_Bool SingleObjectPainter(OutputDevice& rOut) const;
-    BOOL LineGeometryUsageIsNecessary() const;
+    sal_Bool LineGeometryUsageIsNecessary() const;
 
     // Clone() soll eine komplette Kopie des Objektes erzeugen.
     virtual SdrObject* Clone() const;
@@ -710,7 +710,7 @@ public:
     // Polygon wird das wohl ein einfacher Selektionshandle sein, bei einer
     // Bezierkurve dagegen koennen das schon bis zu 3 Handles werden (inkl Gewichte).
     // GetHdl() und GetPlusHdl() muessen Handleinstanzen mit new erzeugen!
-    // Ein Objekt, das bei HasSpacialDrag() TRUE liefert muss diese Methoden
+    // Ein Objekt, das bei HasSpacialDrag() sal_True liefert muss diese Methoden
     // zur Verfuegung stellen (inkl. FillHdlList).
     virtual sal_uInt32 GetHdlCount() const;
     virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
@@ -724,8 +724,8 @@ public:
     // Stuetzstellen bei Splines, Gewichte bei Bezierkurven und Pointer von
     // Labelobjekten muss vom Objekt selbst gehandled werden. Um das Model
     // Statusfrei zu halten werden die Statusdaten an der View gehalten und dem
-    // Objekt dann uebergeben. EndDrag liefrt im Normalfall TRUE fuer Erfolg.
-    // FALSE kann zurueckgegeben werden, wenn das Dragging das Objekt nicht
+    // Objekt dann uebergeben. EndDrag liefrt im Normalfall sal_True fuer Erfolg.
+    // sal_False kann zurueckgegeben werden, wenn das Dragging das Objekt nicht
     // veraendert hat, wobei dir evtl. Tatsache das die Maus nicht bewegt wurde
     // bereits von der View abgefangen wird.
     virtual bool hasSpecialDrag() const;
@@ -749,16 +749,16 @@ public:
     // BegCreate()-Methode gerufen. Bei jedem MausMode wird dann MovCreate
     // gerufen. BrkCreate() bedeutet, dass der User die interaktive Objekt-
     // erzeugung abgebrochen hat. EndCreate() wird gerufen beim MouseUp-Event.
-    // Liefert EndCreate() ein TRUE, so ist die Objekterzeugung abgeschlossen;
+    // Liefert EndCreate() ein sal_True, so ist die Objekterzeugung abgeschlossen;
     // das Objekt wird in die entsprechende Liste eingefuegt. Andernfalls
-    // (EndCreate()==FALSE) gehe ich davon aus, dass weitere Punkte zur
+    // (EndCreate()==sal_False) gehe ich davon aus, dass weitere Punkte zur
     // Objekterzeugung notwendig sind (Polygon,...). Der Parameter eCmd
     // enthaelt die Anzahl der Mausklicks (so die App diese durchreicht).
     // BckCreate() -> Letztes EndCreate() rueckgaengig machen (z.B. letzten
     // Polygonpunkt wieder loeschen).
-    // RetrunCode: TRUE=Weiter gehts, FALSE=Create dadurch abgebrochen.
+    // RetrunCode: sal_True=Weiter gehts, sal_False=Create dadurch abgebrochen.
     virtual FASTBOOL BegCreate(SdrDragStat& rStat);
-    virtual FASTBOOL MovCreate(SdrDragStat& rStat); // TRUE=Xor muss repainted werden
+    virtual FASTBOOL MovCreate(SdrDragStat& rStat); // sal_True=Xor muss repainted werden
     virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
     virtual FASTBOOL BckCreate(SdrDragStat& rStat);
     virtual void BrkCreate(SdrDragStat& rStat);
@@ -821,7 +821,7 @@ public:
 
     // Drehwinkel und Shear
     virtual long GetRotateAngle() const;
-    virtual long GetShearAngle(FASTBOOL bVertical=FALSE) const;
+    virtual long GetShearAngle(FASTBOOL bVertical=sal_False) const;
 
     // Zum Fangen von/auf ausgezeichneten Punkten eines Obj (Polygonpunkte,
     // Kreismittelpunkt, ...)
@@ -922,10 +922,10 @@ public:
     // Automatische Klebepunkte:
     // je 4 Scheitelpunkt- und Eckpositionen muss ein Knotenobjekt liefern
     // i.d.R. 0=oben, 1=rechts, 2=unten, 3=links
-    virtual SdrGluePoint GetVertexGluePoint(USHORT nNum) const;
+    virtual SdrGluePoint GetVertexGluePoint(sal_uInt16 nNum) const;
 
     // i.d.R. 0=linksoben, 1=rechtsoben, 2=rechtsunten, 3=linksunten
-    virtual SdrGluePoint GetCornerGluePoint(USHORT nNum) const;
+    virtual SdrGluePoint GetCornerGluePoint(sal_uInt16 nNum) const;
 
     // Liste aller Klebepunkte. Kann NULL sein.
     virtual const SdrGluePointList* GetGluePointList() const;
@@ -970,9 +970,9 @@ public:
     // Bezierkurve (oder beides) zu verwandeln, dann sollten die folgenden
     // Methoden ueberladen werden.
     // Z.B. Ein RectObj mit Strichstaerke 10, SOLID_PEN in Polygon wandeln:
-    // Im Modus bLineToArea=FALSE soll ein PolyObj mit 4 Stuetzstellen,
+    // Im Modus bLineToArea=sal_False soll ein PolyObj mit 4 Stuetzstellen,
     // Strichstaerke 10 und SOLiD_PEN erzeugt werden.
-    // Im Modus bLineToArea=TRUE dagegen soll das generierte Obj immer ein
+    // Im Modus bLineToArea=sal_True dagegen soll das generierte Obj immer ein
     // LinienAttribut NULL_PEN haben, und die Linie (auch Linienmuster) selbst
     // durch Polygonflaechen emuliert werden, die dadurch anschliessend vom
     // Anwender manipuliert werden koennen. Das RectObj kann sich somit also
@@ -984,21 +984,21 @@ public:
     // Der Returnwert ist jeweils ein SdrObject*, da als Rueckgabe zur Not
     // auch Gruppenobjekte erlaubt sind (z.B. fuer SdrTextObj).
     // Bei der Konvertierung von TextObj nach PathObj wird es wohl so sein,
-    // dass beide Modi (bLineToArea=TRUE/FALSE) identisch sind.
+    // dass beide Modi (bLineToArea=sal_True/sal_False) identisch sind.
     // Defaulted sind diese Methoden auf "Ich kann das nicht" (FALSE/NULL).
-    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
-    SdrObject* ConvertToPolyObj(BOOL bBezier, BOOL bLineToArea) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
+    SdrObject* ConvertToPolyObj(sal_Bool bBezier, sal_Bool bLineToArea) const;
 
     // convert this path object to contour object; bForceLineDash converts even
     // when there is no filled new polygon created from line-to-polygon conversion,
     // specially used for XLINE_DASH and 3D conversion
-    SdrObject* ConvertToContourObj(SdrObject* pRet, BOOL bForceLineDash = FALSE) const;
-    SdrObject* ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDash = FALSE) const;
+    SdrObject* ConvertToContourObj(SdrObject* pRet, sal_Bool bForceLineDash = sal_False) const;
+    SdrObject* ImpConvertToContourObj(SdrObject* pRet, sal_Bool bForceLineDash = sal_False) const;
 
     // TRUE: Referenz auf ein Obj
     sal_Bool IsVirtualObj() const { return bVirtObj; }
 
-    // TRUE=Obj kann warsch. gefuellt werden; FALSE=Obj kann warsch. Linienenden haben.
+    // sal_True=Obj kann warsch. gefuellt werden; sal_False=Obj kann warsch. Linienenden haben.
     // ungueltig, wenn es sich um ein GroupObj handelt.
     sal_Bool IsClosedObj() const { return bClosedObj; }
 
@@ -1006,8 +1006,8 @@ public:
     sal_Bool Is3DObj() const { return bIs3DObj; }
     sal_Bool IsUnoObj() const { return bIsUnoObj; }
     sal_Bool IsMasterCachable() const { return !bNotMasterCachable; }
-    sal_Bool ShareLock() { sal_Bool r=!bNetLock; bNetLock=TRUE; return r; }
-    void ShareUnlock() { bNetLock=FALSE; }
+    sal_Bool ShareLock() { sal_Bool r=!bNetLock; bNetLock=sal_True; return r; }
+    void ShareUnlock() { bNetLock=sal_False; }
     sal_Bool IsShareLock() const { return bNetLock; }
     void SetMarkProtect(sal_Bool bProt) { bMarkProt=bProt; }
     sal_Bool IsMarkProtect() const { return bMarkProt; }
@@ -1035,16 +1035,16 @@ public:
     sal_Bool DoesSupportTextIndentingOnLineWidthChange() const { return mbSupportTextIndentingOnLineWidthChange; }
 
     // applikationsspeziefische Daten
-    USHORT GetUserDataCount() const;
-    SdrObjUserData* GetUserData(USHORT nNum) const;
+    sal_uInt16 GetUserDataCount() const;
+    SdrObjUserData* GetUserData(sal_uInt16 nNum) const;
 
     // Insert uebernimmt den auf dem Heap angelegten Record in den Besitz
     // des Zeichenobjekts
-    void InsertUserData(SdrObjUserData* pData, USHORT nPos=0xFFFF);
+    void InsertUserData(SdrObjUserData* pData, sal_uInt16 nPos=0xFFFF);
 
     // Delete entfernt den Record aus der Liste und ruft
     // ein delete (FreeMem+Dtor).
-    void DeleteUserData(USHORT nNum);
+    void DeleteUserData(sal_uInt16 nNum);
 
     // ItemPool fuer dieses Objekt wechseln
     void MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel = 0L);
@@ -1108,7 +1108,7 @@ public:
     // to use (0,0) as upper left and will be scaled to the given size in the matrix.
     virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
 
-    sal_Bool IsTransparent( BOOL bCheckForAlphaChannel = FALSE ) const;
+    sal_Bool IsTransparent( sal_Bool bCheckForAlphaChannel = sal_False ) const;
 
     // #116168#
     // Give info if object is in destruction
@@ -1155,8 +1155,8 @@ private:
 class SVX_DLLPUBLIC SdrObjFactory
 {
 public:
-    UINT32                      nInventor;
-    UINT16                      nIdentifier;
+    sal_uInt32                      nInventor;
+    sal_uInt16                      nIdentifier;
 
     // fuer MakeNewObj():
     SdrPage*                    pPage;
@@ -1168,14 +1168,14 @@ public:
     SdrObjUserData*             pNewData;
 
 private:
-    SVX_DLLPRIVATE SdrObjFactory(UINT32 nInvent, UINT16 nIdent, SdrPage* pNewPage, SdrModel* pNewModel);
-    SVX_DLLPRIVATE SdrObjFactory(UINT32 nInvent, UINT16 nIdent, SdrObject* pObj1);
+    SVX_DLLPRIVATE SdrObjFactory(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pNewPage, SdrModel* pNewModel);
+    SVX_DLLPRIVATE SdrObjFactory(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrObject* pObj1);
 
 public:
-    static SdrObject* MakeNewObject(UINT32 nInvent, UINT16 nIdent, SdrPage* pPage, SdrModel* pModel=NULL);
+    static SdrObject* MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrPage* pPage, SdrModel* pModel=NULL);
     static void InsertMakeObjectHdl(const Link& rLink);
     static void RemoveMakeObjectHdl(const Link& rLink);
-    static SdrObjUserData* MakeNewObjUserData(UINT32 nInvent, UINT16 nIdent, SdrObject* pObj);
+    static SdrObjUserData* MakeNewObjUserData(sal_uInt32 nInvent, sal_uInt16 nIdent, SdrObject* pObj);
     static void InsertMakeUserDataHdl(const Link& rLink);
     static void RemoveMakeUserDataHdl(const Link& rLink);
 };

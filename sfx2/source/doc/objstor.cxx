@@ -195,7 +195,7 @@ sal_Bool SfxObjectShell::SaveAs( SfxMedium& rMedium )
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxObjectShell::QuerySlotExecutable( USHORT /*nSlotId*/ )
+sal_Bool SfxObjectShell::QuerySlotExecutable( sal_uInt16 /*nSlotId*/ )
 {
     return sal_True;
 }
@@ -889,7 +889,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
 
         if( xFilterCFG.is() )
         {
-            BOOL bAbort = FALSE;
+            sal_Bool bAbort = sal_False;
             try {
                 const SfxFilter* pFilter = pMedium->GetFilter();
                 Sequence < PropertyValue > aProps;
@@ -949,7 +949,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
                                                 pSet->Put( *pFilterData );
                                     }
                                     else
-                                        bAbort = TRUE;
+                                        bAbort = sal_True;
                                 }
                             }
 
@@ -1081,7 +1081,7 @@ sal_Bool SfxObjectShell::DoSave()
     return bOk;
 }
 
-void Lock_Impl( SfxObjectShell* pDoc, BOOL bLock )
+void Lock_Impl( SfxObjectShell* pDoc, sal_Bool bLock )
 {
     SfxViewFrame *pFrame= SfxViewFrame::GetFirst( pDoc );
     while ( pFrame )
@@ -1569,7 +1569,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
         if( bOk && !bCopyTo )
             // we also don't touch any graphical replacements here
-            bOk = SaveChildren( TRUE );
+            bOk = SaveChildren( sal_True );
     }
 
     if ( bOk )
@@ -1769,8 +1769,8 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 #define CHAR_POINTER(THE_OUSTRING) ::rtl::OUStringToOString (THE_OUSTRING, RTL_TEXTENCODING_UTF8).pData->buffer
             // Header for a single-valued ASCII EA data item
             typedef struct _EA_ASCII_header {
-            USHORT      usAttr;                 /* value: EAT_ASCII                        */
-            USHORT      usLen;                  /* length of data                          */
+            sal_uInt16      usAttr;                 /* value: EAT_ASCII                        */
+            sal_uInt16      usLen;                  /* length of data                          */
             CHAR        szType[_MAX_PATH];      /* ASCII data fits in here ...             */
             } EA_ASCII_HEADER;
             char   filePath[_MAX_PATH];
@@ -1812,7 +1812,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             eaAscii.usLen = strlen( eaAscii.szType);
             // fill libc EA data structure
             eaType.flags = 0;
-            eaType.size = sizeof(USHORT)*2 + eaAscii.usLen;
+            eaType.size = sizeof(sal_uInt16)*2 + eaAscii.usLen;
             eaType.value = &eaAscii;
             // put EA to file
             rc = _ea_put( &eaType, filePath, 0, ".TYPE");
@@ -1966,7 +1966,7 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, BOOL bCommit )
+sal_Bool SfxObjectShell::DoSaveObjectAs( SfxMedium& rMedium, sal_Bool bCommit )
 {
     sal_Bool bOk = sal_False;
     {
@@ -2293,7 +2293,7 @@ sal_Bool SfxObjectShell::InsertFrom( SfxMedium& rMedium )
         const OUString sInputStream ( RTL_CONSTASCII_USTRINGPARAM ( "InputStream" ) );
 
         sal_Bool bHasInputStream = sal_False;
-        BOOL bHasBaseURL = FALSE;
+        sal_Bool bHasBaseURL = sal_False;
         sal_Int32 i;
         sal_Int32 nEnd = lDescriptor.getLength();
 
@@ -2388,7 +2388,7 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
         const OUString sInputStream ( RTL_CONSTASCII_USTRINGPARAM ( "InputStream" ) );
 
         sal_Bool bHasInputStream = sal_False;
-        BOOL bHasBaseURL = FALSE;
+        sal_Bool bHasBaseURL = sal_False;
         sal_Int32 i;
         sal_Int32 nEnd = lDescriptor.getLength();
 
@@ -2479,9 +2479,9 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         // put in the REAL file name, and copy all PropertyValues
         const OUString sOutputStream ( RTL_CONSTASCII_USTRINGPARAM ( "OutputStream" ) );
         const OUString sStream ( RTL_CONSTASCII_USTRINGPARAM ( "StreamForOutput" ) );
-        BOOL bHasOutputStream = FALSE;
-        BOOL bHasStream = FALSE;
-        BOOL bHasBaseURL = FALSE;
+        sal_Bool bHasOutputStream = sal_False;
+        sal_Bool bHasStream = sal_False;
+        sal_Bool bHasBaseURL = sal_False;
         sal_Int32 i;
         sal_Int32 nEnd = aOldArgs.getLength();
 
@@ -2678,7 +2678,7 @@ sal_Bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
     DBG_CHKTHIS(SfxObjectShell, 0);
 
     pImp->bIsSaving = sal_True;
-    sal_Bool bSaved = FALSE;
+    sal_Bool bSaved = sal_False;
     SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
     if ( pSalvageItem )
     {
@@ -2772,7 +2772,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
     SfxMedium *pActMed = GetMedium();
     const INetURLObject aActName(pActMed->GetName());
 
-    BOOL bWasReadonly = IsReadOnly();
+    sal_Bool bWasReadonly = IsReadOnly();
 
     if ( aURL == aActName && aURL != INetURLObject( OUString::createFromAscii( "private:stream" ) )
         && IsReadOnly() )
@@ -2968,7 +2968,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
             if ( !bCopyTo )
             {
                 // reconnect to the old medium
-                BOOL bRet( FALSE );
+                sal_Bool bRet( sal_False );
                 bRet = DoSaveCompleted( pMedium );
                 DBG_ASSERT( bRet, "Error in DoSaveCompleted, can't be handled!");
             }
@@ -3025,7 +3025,7 @@ sal_Bool SfxObjectShell::IsInformationLost()
     {
         const SfxFilter *pFilt = GetMedium()->GetFilter();
         DBG_ASSERT( pFilt && aFilterName.equals( pFilt->GetName() ), "MediaDescriptor contains wrong filter!\n" );
-        return ( pFilt && pFilt->IsAlienFormat() && !(pFilt->GetFilterFlags() & SFX_FILTER_SILENTEXPORT ) );
+        return ( pFilt && pFilt->IsAlienFormat() );
     }
 
     return sal_False;
@@ -3062,7 +3062,7 @@ sal_uInt16 SfxObjectShell::GetHiddenInformationState( sal_uInt16 nStates )
 sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, Window* pParent )
 {
     sal_Int16 nRet = RET_YES;
-    USHORT nResId = 0;
+    sal_uInt16 nResId = 0;
     SvtSecurityOptions::EOption eOption = static_cast< SvtSecurityOptions::EOption >( -1 );
 
     switch ( eFact )
@@ -3242,7 +3242,7 @@ uno::Reference< embed::XStorage > SfxObjectShell::GetStorage()
 }
 
 
-sal_Bool SfxObjectShell::SaveChildren( BOOL bObjectsOnly )
+sal_Bool SfxObjectShell::SaveChildren( sal_Bool bObjectsOnly )
 {
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mv76033) SfxObjectShell::SaveChildren" );
 
@@ -3348,7 +3348,7 @@ sal_Bool SfxObjectShell::SaveCompleted( const uno::Reference< embed::XStorage >&
 
 #ifdef DBG_UTIL
     // check for wrong creation of object container
-    BOOL bHasContainer = ( pImp->mpObjectContainer != 0 );
+    sal_Bool bHasContainer = ( pImp->mpObjectContainer != 0 );
 #endif
 
     if ( !xStorage.is() || xStorage == GetStorage() )
@@ -3496,7 +3496,7 @@ sal_Bool SfxObjectShell::SwitchPersistance( const uno::Reference< embed::XStorag
     sal_Bool bResult = sal_False;
 #ifdef DBG_UTIL
     // check for wrong creation of object container
-    BOOL bHasContainer = ( pImp->mpObjectContainer != 0 );
+    sal_Bool bHasContainer = ( pImp->mpObjectContainer != 0 );
 #endif
     if ( xStorage.is() )
     {

@@ -90,7 +90,7 @@ void Svx3DPreviewControl::Construct()
 {
     // Do never mirror the preview window.  This explicitly includes right
     // to left writing environments.
-    EnableRTL (FALSE);
+    EnableRTL (sal_False);
     SetMapMode( MAP_100TH_MM );
 
     // Model
@@ -119,7 +119,7 @@ void Svx3DPreviewControl::Construct()
     double fH = rVolume.getHeight();
     double fCamZ = rVolume.getMaxZ() + ((fW + fH) / 2.0);
 
-    rCamera.SetAutoAdjustProjection(FALSE);
+    rCamera.SetAutoAdjustProjection(sal_False);
     rCamera.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
     basegfx::B3DPoint aLookAt;
     double fDefaultCamPosZ = mp3DView->GetDefaultCamPosZ();
@@ -387,7 +387,7 @@ void Svx3DLightControl::Construct2()
         double fH = rVolume.getHeight();
         double fCamZ = rVolume.getMaxZ() + ((fW + fH) / 2.0);
 
-        rCamera.SetAutoAdjustProjection(FALSE);
+        rCamera.SetAutoAdjustProjection(sal_False);
         rCamera.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
         basegfx::B3DPoint aLookAt;
         double fDefaultCamPosZ = mp3DView->GetDefaultCamPosZ();
@@ -1095,8 +1095,8 @@ void SvxLightCtl3D::CheckSelection()
     {
         double fHor, fVer;
         maLightControl.GetPosition(fHor, fVer);
-        maHorScroller.SetThumbPos( INT32(fHor * 100.0) );
-        maVerScroller.SetThumbPos( 18000 - INT32((fVer + 90.0) * 100.0) );
+        maHorScroller.SetThumbPos( sal_Int32(fHor * 100.0) );
+        maVerScroller.SetThumbPos( 18000 - sal_Int32((fVer + 90.0) * 100.0) );
     }
 }
 
@@ -1115,8 +1115,8 @@ void SvxLightCtl3D::move( double fDeltaHor, double fDeltaVer )
         return;
 
     maLightControl.SetPosition(fHor, fVer);
-    maHorScroller.SetThumbPos( INT32(fHor * 100.0) );
-    maVerScroller.SetThumbPos( 18000 - INT32((fVer + 90.0) * 100.0) );
+    maHorScroller.SetThumbPos( sal_Int32(fHor * 100.0) );
+    maVerScroller.SetThumbPos( 18000 - sal_Int32((fVer + 90.0) * 100.0) );
 
     if(maUserInteractiveChangeCallback.IsSet())
     {
@@ -1296,8 +1296,8 @@ IMPL_LINK( SvxLightCtl3D, InternalInteractiveChange, void*, EMPTYARG)
     double fHor, fVer;
 
     maLightControl.GetPosition(fHor, fVer);
-    maHorScroller.SetThumbPos( INT32(fHor * 100.0) );
-    maVerScroller.SetThumbPos( 18000 - INT32((fVer + 90.0) * 100.0) );
+    maHorScroller.SetThumbPos( sal_Int32(fHor * 100.0) );
+    maVerScroller.SetThumbPos( 18000 - sal_Int32((fVer + 90.0) * 100.0) );
 
     if(maUserInteractiveChangeCallback.IsSet())
     {
