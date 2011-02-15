@@ -149,18 +149,16 @@ private:
 public:
     ContainerSorter(Container& rNewCont): rCont(rNewCont) {}
     void DoSort(ULONG a=0, ULONG b=0xFFFFFFFF) const;
-#ifdef This_Is_Just_For_A_Comment
-    Compare() muss returnieren:
-      -1 falls *pElem1<*pElem2
-       0 falls *pElem1=*pElem2
-      +1 falls *pElem1>*pElem2
-#endif
+
+    // Compare() has to return:
+    //  -1 if *pElem1<*pElem2
+    //   0 if *pElem1=*pElem2
+    //  +1 if *pElem1>*pElem2
     virtual int Compare(const void* pElem1, const void* pElem2) const=0;
 private: // damit keiner vergessen wird
 virtual
         void
                  Is1stLessThan2nd(const void* pElem1, const void* pElem2) const;
-//  virtual bool Is1stLessThan2nd(const void* pElem1, const void* pElem2) const=NULL;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
