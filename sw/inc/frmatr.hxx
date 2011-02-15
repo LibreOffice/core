@@ -28,16 +28,13 @@
 #ifndef _FRMATR_HXX
 #define _FRMATR_HXX
 
-#include <hintids.hxx>      //die Ids der Attribute, vor frmitems damit die
-#include <format.hxx>       //fuer Implementierung der inlines
+#include <hintids.hxx> // IDs of attributes before frmitems to make sure
+#include <format.hxx>  // they are available for implementation of the inlines.
 
-//------------------------ Inlines ---------------------------------
+// Inlines
 
 
-/******************************************************************************
- *  Implementierung der FrameAttribut Methoden vom SwAttrSet
- ******************************************************************************/
-
+// Implementation of FrameAttribute methods of SwAttrSet.
 inline const SvxPaperBinItem &SwAttrSet::GetPaperBin(BOOL bInP) const
     { return (const SvxPaperBinItem&)Get( RES_PAPER_BIN,bInP); }
 inline const SvxLRSpaceItem &SwAttrSet::GetLRSpace(BOOL bInP) const
@@ -66,10 +63,7 @@ inline const SvxFrameDirectionItem &SwAttrSet::GetFrmDir(BOOL bInP) const
     { return (const SvxFrameDirectionItem&)Get( RES_FRAMEDIR,bInP); }
 
 
-/******************************************************************************
- *  Implementierung der FrameAttribut Methoden vom SwFmt
- ******************************************************************************/
-
+// Implementation of FrameAttribute methods of SwFmt.
 inline const SvxPaperBinItem &SwFmt::GetPaperBin(BOOL bInP) const
     { return aSet.GetPaperBin(bInP); }
 inline const SvxLRSpaceItem &SwFmt::GetLRSpace(BOOL bInP) const

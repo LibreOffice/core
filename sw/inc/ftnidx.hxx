@@ -36,9 +36,9 @@ class SwTxtFtn;
 class SwNodeIndex;
 class SwSectionNode;
 
-// ueberall, wo der NodeIndex gebraucht wird, werden die hier fehlenden
-// Headerfiles schon includes. Darum hier nur als define und nicht als
-// inline Methode (spart Compile-Zeit)
+// Everywhere where NodeIndex is used, the header files missing here
+// are already included. Therefore put here as defines only and
+// not as inline methods (saves compile time).
 #define _SwTxtFtn_GetIndex( pFIdx ) (pFIdx->GetTxtNode().GetIndex())
 
 
@@ -50,8 +50,8 @@ class SwFtnIdxs : public _SwFtnIdxs
 public:
     SwFtnIdxs() {}
 
-    void UpdateFtn( const SwNodeIndex& rStt );      // ab Pos. alle Updaten
-    void UpdateAllFtn();                    // alle Fussnoten updaten
+    void UpdateFtn( const SwNodeIndex& rStt ); // Update all from pos.
+    void UpdateAllFtn();                       // Update all footnotes.
 
     SwTxtFtn* SeekEntry( const SwNodeIndex& rIdx, USHORT* pPos = 0 ) const;
 };
