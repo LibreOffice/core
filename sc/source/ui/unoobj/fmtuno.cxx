@@ -82,20 +82,66 @@ SC_SIMPLE_SERVICE_INFO( ScTableValidationObj, "ScTableValidationObj", "com.sun.s
 
 //------------------------------------------------------------------------
 
+sal_Int32 lcl_ConditionModeToOperatorNew( ScConditionMode eMode )
+{
+    sal_Int32 eOper = sheet::ConditionOperator2::NONE;
+    switch (eMode)
+    {
+        case SC_COND_EQUAL:         eOper = sheet::ConditionOperator2::EQUAL;           break;
+        case SC_COND_LESS:          eOper = sheet::ConditionOperator2::LESS;            break;
+        case SC_COND_GREATER:       eOper = sheet::ConditionOperator2::GREATER;         break;
+        case SC_COND_EQLESS:        eOper = sheet::ConditionOperator2::LESS_EQUAL;      break;
+        case SC_COND_EQGREATER:     eOper = sheet::ConditionOperator2::GREATER_EQUAL;   break;
+        case SC_COND_NOTEQUAL:      eOper = sheet::ConditionOperator2::NOT_EQUAL;       break;
+        case SC_COND_BETWEEN:       eOper = sheet::ConditionOperator2::BETWEEN;         break;
+        case SC_COND_NOTBETWEEN:    eOper = sheet::ConditionOperator2::NOT_BETWEEN;     break;
+        case SC_COND_DIRECT:        eOper = sheet::ConditionOperator2::FORMULA;         break;
+        case SC_COND_DUPLICATE:     eOper = sheet::ConditionOperator2::DUPLICATE;       break;
+        default:
+        {
+            // added to avoid warnings
+        }
+    }
+    return eOper;
+}
+
+ScConditionMode lcl_ConditionOperatorToModeNew( sal_Int32 eOper )
+{
+    ScConditionMode eMode = SC_COND_NONE;
+    switch (eOper)
+    {
+        case sheet::ConditionOperator2::EQUAL:          eMode = SC_COND_EQUAL;      break;
+        case sheet::ConditionOperator2::LESS:           eMode = SC_COND_LESS;       break;
+        case sheet::ConditionOperator2::GREATER:        eMode = SC_COND_GREATER;    break;
+        case sheet::ConditionOperator2::LESS_EQUAL:     eMode = SC_COND_EQLESS;     break;
+        case sheet::ConditionOperator2::GREATER_EQUAL:  eMode = SC_COND_EQGREATER;  break;
+        case sheet::ConditionOperator2::NOT_EQUAL:      eMode = SC_COND_NOTEQUAL;   break;
+        case sheet::ConditionOperator2::BETWEEN:        eMode = SC_COND_BETWEEN;    break;
+        case sheet::ConditionOperator2::NOT_BETWEEN:    eMode = SC_COND_NOTBETWEEN; break;
+        case sheet::ConditionOperator2::FORMULA:        eMode = SC_COND_DIRECT;     break;
+        case sheet::ConditionOperator2::DUPLICATE:      eMode = SC_COND_DUPLICATE;  break;
+        default:
+        {
+            // added to avoid warnings
+        }
+    }
+    return eMode;
+}
+
 sheet::ConditionOperator lcl_ConditionModeToOperator( ScConditionMode eMode )
 {
     sheet::ConditionOperator eOper = sheet::ConditionOperator_NONE;
     switch (eMode)
     {
-        case SC_COND_EQUAL:      eOper = sheet::ConditionOperator_EQUAL;         break;
-        case SC_COND_LESS:       eOper = sheet::ConditionOperator_LESS;          break;
-        case SC_COND_GREATER:    eOper = sheet::ConditionOperator_GREATER;       break;
-        case SC_COND_EQLESS:     eOper = sheet::ConditionOperator_LESS_EQUAL;    break;
-        case SC_COND_EQGREATER:  eOper = sheet::ConditionOperator_GREATER_EQUAL; break;
-        case SC_COND_NOTEQUAL:   eOper = sheet::ConditionOperator_NOT_EQUAL;     break;
-        case SC_COND_BETWEEN:    eOper = sheet::ConditionOperator_BETWEEN;       break;
-        case SC_COND_NOTBETWEEN: eOper = sheet::ConditionOperator_NOT_BETWEEN;   break;
-        case SC_COND_DIRECT:     eOper = sheet::ConditionOperator_FORMULA;       break;
+        case SC_COND_EQUAL:         eOper = sheet::ConditionOperator_EQUAL;         break;
+        case SC_COND_LESS:          eOper = sheet::ConditionOperator_LESS;          break;
+        case SC_COND_GREATER:       eOper = sheet::ConditionOperator_GREATER;       break;
+        case SC_COND_EQLESS:        eOper = sheet::ConditionOperator_LESS_EQUAL;    break;
+        case SC_COND_EQGREATER:     eOper = sheet::ConditionOperator_GREATER_EQUAL; break;
+        case SC_COND_NOTEQUAL:      eOper = sheet::ConditionOperator_NOT_EQUAL;     break;
+        case SC_COND_BETWEEN:       eOper = sheet::ConditionOperator_BETWEEN;       break;
+        case SC_COND_NOTBETWEEN:    eOper = sheet::ConditionOperator_NOT_BETWEEN;   break;
+        case SC_COND_DIRECT:        eOper = sheet::ConditionOperator_FORMULA;       break;
         default:
         {
             // added to avoid warnings
@@ -109,15 +155,15 @@ ScConditionMode lcl_ConditionOperatorToMode( sheet::ConditionOperator eOper )
     ScConditionMode eMode = SC_COND_NONE;
     switch (eOper)
     {
-        case sheet::ConditionOperator_EQUAL:         eMode = SC_COND_EQUAL;      break;
-        case sheet::ConditionOperator_LESS:          eMode = SC_COND_LESS;       break;
-        case sheet::ConditionOperator_GREATER:       eMode = SC_COND_GREATER;    break;
-        case sheet::ConditionOperator_LESS_EQUAL:    eMode = SC_COND_EQLESS;     break;
-        case sheet::ConditionOperator_GREATER_EQUAL: eMode = SC_COND_EQGREATER;  break;
-        case sheet::ConditionOperator_NOT_EQUAL:     eMode = SC_COND_NOTEQUAL;   break;
-        case sheet::ConditionOperator_BETWEEN:       eMode = SC_COND_BETWEEN;    break;
-        case sheet::ConditionOperator_NOT_BETWEEN:   eMode = SC_COND_NOTBETWEEN; break;
-        case sheet::ConditionOperator_FORMULA:       eMode = SC_COND_DIRECT;     break;
+        case sheet::ConditionOperator_EQUAL:            eMode = SC_COND_EQUAL;      break;
+        case sheet::ConditionOperator_LESS:             eMode = SC_COND_LESS;       break;
+        case sheet::ConditionOperator_GREATER:          eMode = SC_COND_GREATER;    break;
+        case sheet::ConditionOperator_LESS_EQUAL:       eMode = SC_COND_EQLESS;     break;
+        case sheet::ConditionOperator_GREATER_EQUAL:    eMode = SC_COND_EQGREATER;  break;
+        case sheet::ConditionOperator_NOT_EQUAL:        eMode = SC_COND_NOTEQUAL;   break;
+        case sheet::ConditionOperator_BETWEEN:          eMode = SC_COND_BETWEEN;    break;
+        case sheet::ConditionOperator_NOT_BETWEEN:      eMode = SC_COND_NOTBETWEEN; break;
+        case sheet::ConditionOperator_FORMULA:          eMode = SC_COND_DIRECT;     break;
         default:
         {
             // added to avoid warnings
@@ -270,9 +316,8 @@ void SAL_CALL ScTableConditionalFormat::addNew(
 
         if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_OPERATOR ) ) )
         {
-            sheet::ConditionOperator eOper = (sheet::ConditionOperator)
-                            ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
-            aEntry.meMode = lcl_ConditionOperatorToMode( eOper );
+            sal_Int32 eOper = ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
+            aEntry.meMode = lcl_ConditionOperatorToModeNew( eOper );
         }
         else if ( rProp.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_FORMULA1 ) ) )
         {
@@ -557,6 +602,22 @@ void SAL_CALL ScTableConditionalEntry::setOperator( sheet::ConditionOperator nOp
         pParent->DataChanged();
 }
 
+sal_Int32 SAL_CALL ScTableConditionalEntry::getConditionOperator()
+                                                throw(uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    return lcl_ConditionModeToOperatorNew( aData.meMode );
+}
+
+void SAL_CALL ScTableConditionalEntry::setConditionOperator( sal_Int32 nOperator )
+                                                throw(uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    aData.meMode = lcl_ConditionOperatorToModeNew( nOperator );
+    if (pParent)
+        pParent->DataChanged();
+}
+
 rtl::OUString SAL_CALL ScTableConditionalEntry::getFormula1() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -752,6 +813,21 @@ void SAL_CALL ScTableValidationObj::setOperator( sheet::ConditionOperator nOpera
 {
     SolarMutexGuard aGuard;
     nMode = sal::static_int_cast<USHORT>( lcl_ConditionOperatorToMode( nOperator ) );
+    DataChanged();
+}
+
+sal_Int32 SAL_CALL ScTableValidationObj::getConditionOperator()
+                                                throw(uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    return lcl_ConditionModeToOperatorNew( (ScConditionMode)nMode );
+}
+
+void SAL_CALL ScTableValidationObj::setConditionOperator( sal_Int32 nOperator )
+                                                throw(uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    nMode = sal::static_int_cast<USHORT>( lcl_ConditionOperatorToModeNew( nOperator ) );
     DataChanged();
 }
 
