@@ -44,6 +44,7 @@
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentRecovery.hpp>
+#include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
 #include <com/sun/star/rdf/XDocumentMetadataAccess.hpp>
 
@@ -97,9 +98,9 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 //________________________________________________________________________________________________________
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_31)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_31
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 31
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_32)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_32
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 32
 #include <comphelper/implbase_var.hxx>
 #endif
 
@@ -238,11 +239,12 @@ namespace sfx { namespace intern {
                  SfxListener
 */
 
-typedef ::comphelper::WeakImplHelper31  <   XCHILD
+typedef ::comphelper::WeakImplHelper32  <   XCHILD
                                         ,   XDOCUMENTINFOSUPPLIER
                                         ,   ::com::sun::star::document::XDocumentPropertiesSupplier
                                         ,   ::com::sun::star::rdf::XDocumentMetadataAccess
                                         ,   ::com::sun::star::document::XDocumentRecovery
+                                        ,   ::com::sun::star::document::XUndoManagerSupplier
                                         ,   XEVENTBROADCASTER
                                         ,   XDOCUMENTEVENTBROADCASTER
                                         ,   XEVENTLISTENER
@@ -1320,6 +1322,9 @@ public:
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::lang::WrappedTargetException );
 
+    // css.document.XUndoManagerSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager > SAL_CALL getUndoManager(  ) throw (::com::sun::star::uno::RuntimeException);
+
     //____________________________________________________________________________________________________
 
     // ::com::sun::star::rdf::XNode:
@@ -1484,22 +1489,11 @@ public:
     SfxObjectShell* GetObjectShell() const ;
     SAL_DLLPRIVATE SfxObjectShell* impl_getObjectShell() const ;
 
-    /**___________________________________________________________________________________________________
-        @short      -
-        @descr      -
-
-        @seealso    -
-
-        @param      -
-
-        @return     -
-
-        @onerror    -
-    */
-
     SAL_DLLPRIVATE sal_Bool impl_isDisposed() const ;
     sal_Bool IsInitialized() const;
+    sal_Bool IsDisposed() const { return impl_isDisposed(); }
     void MethodEntryCheck( const bool i_mustBeInitialized ) const;
+    ::osl::Mutex& getMutex() const { return m_aMutex; }
 
     ::com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess > SAL_CALL getViewData() throw (::com::sun::star::uno::RuntimeException);
     void SAL_CALL setViewData( const ::com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess >& aData ) throw (::com::sun::star::uno::RuntimeException);
@@ -1575,6 +1569,44 @@ private:
 
 } ; // class SfxBaseModel
 
+/** base class for sub components of an SfxBaseModel, which share their ref count and lifetime with the SfxBaseModel
+*/
+class SFX2_DLLPUBLIC SfxModelSubComponent
+{
+public:
+    /** checks whether the instance is alive, i.e. properly initialized, and not yet disposed
+    */
+    void    MethodEntryCheck()
+    {
+        m_rModel.MethodEntryCheck( true );
+    }
+
+    // called when the SfxBaseModel which the component is superordinate of is being disposed
+    virtual void disposing();
+
+protected:
+    SfxModelSubComponent( SfxBaseModel& i_model )
+        :m_rModel( i_model )
+    {
+    }
+    virtual ~SfxModelSubComponent();
+
+    // helpers for implementing XInterface - delegates ref counting to the SfxBaseModel
+    void acquire()  {   m_rModel.acquire(); }
+    void release()  {   m_rModel.release(); }
+
+    bool isDisposed() const {   return m_rModel.IsDisposed();   }
+
+protected:
+    const SfxBaseModel& getBaseModel() const { return m_rModel; }
+          SfxBaseModel& getBaseModel()       { return m_rModel; }
+
+          ::osl::Mutex&  getMutex()          { return m_rModel.getMutex(); }
+
+private:
+    SfxBaseModel&   m_rModel;
+};
+
 class SFX2_DLLPUBLIC SfxModelGuard
 {
 public:
@@ -1591,8 +1623,18 @@ public:
     {
         i_rModel.MethodEntryCheck( i_eState != E_INITIALIZING );
     }
+    SfxModelGuard( SfxModelSubComponent& i_rSubComponent )
+        :m_aGuard( Application::GetSolarMutex() )
+    {
+        i_rSubComponent.MethodEntryCheck();
+    }
     ~SfxModelGuard()
     {
+    }
+
+    void reset()
+    {
+        m_aGuard.reset();
     }
 
     void clear()
@@ -1601,7 +1643,7 @@ public:
     }
 
 private:
-    ::vos::OClearableGuard  m_aGuard;
+    ::osl::ResettableGuard< ::vos::IMutex >  m_aGuard;
 };
 
 #undef css

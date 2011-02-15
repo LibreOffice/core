@@ -76,14 +76,7 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
     vcl \
     vos3 \
     xml2 \
-    $(gb_StdLibs) \
-))
-
-$(eval $(call gb_Library_add_linked_system_libs,sfx,\
-    icuuc \
-    dl \
-    m \
-    pthread \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sfx,\
@@ -137,7 +130,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/bindings \
     sfx2/source/control/ctrlitem \
     sfx2/source/control/dispatch \
-    sfx2/source/control/macrconf \
     sfx2/source/control/macro \
     sfx2/source/control/minfitem \
     sfx2/source/control/msg \
@@ -214,6 +206,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/doc/plugin \
     sfx2/source/doc/printhelper \
     sfx2/source/doc/querytemplate \
+    sfx2/source/doc/docundomanager \
     sfx2/source/doc/sfxbasemodel \
     sfx2/source/doc/sfxmodelfactory \
     sfx2/source/doc/syspath \
@@ -274,7 +267,9 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
     Cocoa \
 ))
 endif
+
 ifeq ($(OS),WNT)
+
 # workaround: disable PCH for these objects to avoid redeclaration
 # errors - needs to be fixed in module tools
 $(eval $(call gb_Library_add_cxxobjects,sfx,\
@@ -284,24 +279,6 @@ $(eval $(call gb_Library_add_cxxobjects,sfx,\
     , $(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_COMPILEROPTFLAGS) -nologo -UPRECOMPILED_HEADERS \
 ))
 
-ifneq ($(USE_MINGW),)
-$(eval $(call gb_Library_add_linked_libs,sfx,\
-    mingwthrd \
-    $(gb_MINGW_LIBSTDCPP) \
-    mingw32 \
-    $(gb_MINGW_LIBGCC) \
-    uwinapi \
-    mingwex \
-    advapi32 \
-    gdi32 \
-    kernel32 \
-    msvcrt \
-    ole32 \
-    shell32 \
-    user32 \
-    uuid \
-))
-else
 $(eval $(call gb_Library_add_linked_libs,sfx,\
     gdi32 \
     advapi32 \
@@ -310,8 +287,9 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
     user32 \
     uuid \
 ))
-endif
+
 else
+
 $(eval $(call gb_Library_add_cxxobjects,sfx,\
     sfx2/source/appl/shutdowniconw32 \
     sfx2/source/doc/sfxacldetect \

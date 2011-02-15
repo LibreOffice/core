@@ -32,7 +32,7 @@
 #include "buffer.hxx"
 #include <string.h>
 
-const static UINT32 UP_LIMIT=0xFFFFFF00L;
+const static sal_uInt32 UP_LIMIT=0xFFFFFF00L;
 
 // Der SbiBuffer wird in Inkrements von mindestens 16 Bytes erweitert.
 // Dies ist notwendig, da viele Klassen von einer Pufferlaenge
@@ -69,24 +69,24 @@ char* SbiBuffer::GetBuffer()
 // Test, ob der Puffer n Bytes aufnehmen kann.
 // Im Zweifelsfall wird er vergroessert
 
-BOOL SbiBuffer::Check( USHORT n )
+sal_Bool SbiBuffer::Check( sal_uInt16 n )
 {
-    if( !n ) return TRUE;
-    if( ( static_cast<UINT32>( nOff )+ n ) >  static_cast<UINT32>( nSize ) )
+    if( !n ) return sal_True;
+    if( ( static_cast<sal_uInt32>( nOff )+ n ) >  static_cast<sal_uInt32>( nSize ) )
     {
         if( nInc == 0 )
-            return FALSE;
-        USHORT nn = 0;
+            return sal_False;
+        sal_uInt16 nn = 0;
         while( nn < n ) nn = nn + nInc;
         char* p;
-        if( ( static_cast<UINT32>( nSize ) + nn ) > UP_LIMIT ) p = NULL;
+        if( ( static_cast<sal_uInt32>( nSize ) + nn ) > UP_LIMIT ) p = NULL;
         else p = new char [nSize + nn];
         if( !p )
         {
             pParser->Error( SbERR_PROG_TOO_LARGE );
             nInc = 0;
             delete[] pBuf; pBuf = NULL;
-            return FALSE;
+            return sal_False;
         }
         else
         {
@@ -97,19 +97,19 @@ BOOL SbiBuffer::Check( USHORT n )
             nSize = nSize + nn;
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 // Angleich des Puffers auf die uebergebene Byte-Grenze
 
-void SbiBuffer::Align( INT32 n )
+void SbiBuffer::Align( sal_Int32 n )
 {
     if( nOff % n ) {
-        UINT32 nn =( ( nOff + n ) / n ) * n;
+        sal_uInt32 nn =( ( nOff + n ) / n ) * n;
         if( nn <= UP_LIMIT )
         {
             nn = nn - nOff;
-            if( Check( static_cast<USHORT>(nn) ) )
+            if( Check( static_cast<sal_uInt16>(nn) ) )
             {
                 memset( pCur, 0, nn );
                 pCur += nn;
@@ -121,13 +121,13 @@ void SbiBuffer::Align( INT32 n )
 
 // Patch einer Location
 
-void SbiBuffer::Patch( UINT32 off, UINT32 val )
+void SbiBuffer::Patch( sal_uInt32 off, sal_uInt32 val )
 {
-    if( ( off + sizeof( UINT32 ) ) < nOff )
+    if( ( off + sizeof( sal_uInt32 ) ) < nOff )
     {
-        UINT16 val1 = static_cast<UINT16>( val & 0xFFFF );
-        UINT16 val2 = static_cast<UINT16>( val >> 16 );
-        BYTE* p = (BYTE*) pBuf + off;
+        sal_uInt16 val1 = static_cast<sal_uInt16>( val & 0xFFFF );
+        sal_uInt16 val2 = static_cast<sal_uInt16>( val >> 16 );
+        sal_uInt8* p = (sal_uInt8*) pBuf + off;
         *p++ = (char) ( val1 & 0xFF );
         *p++ = (char) ( val1 >> 8 );
         *p++ = (char) ( val2 & 0xFF );
@@ -139,18 +139,18 @@ void SbiBuffer::Patch( UINT32 off, UINT32 val )
 // bauen eine Kette auf. Der Anfang der Kette ist beim uebergebenen
 // Parameter, das Ende der Kette ist 0.
 
-void SbiBuffer::Chain( UINT32 off )
+void SbiBuffer::Chain( sal_uInt32 off )
 {
     if( off && pBuf )
     {
-        BYTE *ip;
-        UINT32 i = off;
-        UINT32 val1 = (nOff & 0xFFFF);
-        UINT32 val2 = (nOff >> 16);
+        sal_uInt8 *ip;
+        sal_uInt32 i = off;
+        sal_uInt32 val1 = (nOff & 0xFFFF);
+        sal_uInt32 val2 = (nOff >> 16);
         do
         {
-            ip = (BYTE*) pBuf + i;
-            BYTE* pTmp = ip;
+            ip = (sal_uInt8*) pBuf + i;
+            sal_uInt8* pTmp = ip;
                      i =  *pTmp++; i |= *pTmp++ << 8; i |= *pTmp++ << 16; i |= *pTmp++ << 24;
 
             if( i >= nOff )
@@ -166,84 +166,84 @@ void SbiBuffer::Chain( UINT32 off )
     }
 }
 
-BOOL SbiBuffer::operator +=( INT8 n )
+sal_Bool SbiBuffer::operator +=( sal_Int8 n )
 {
     if( Check( 1 ) )
     {
-        *pCur++ = (char) n; nOff++; return TRUE;
-    } else return FALSE;
+        *pCur++ = (char) n; nOff++; return sal_True;
+    } else return sal_False;
 }
 
-BOOL SbiBuffer::operator +=( UINT8 n )
+sal_Bool SbiBuffer::operator +=( sal_uInt8 n )
 {
     if( Check( 1 ) )
     {
-        *pCur++ = (char) n; nOff++; return TRUE;
-    } else return FALSE;
+        *pCur++ = (char) n; nOff++; return sal_True;
+    } else return sal_False;
 }
 
-BOOL SbiBuffer::operator +=( INT16 n )
+sal_Bool SbiBuffer::operator +=( sal_Int16 n )
 {
     if( Check( 2 ) )
     {
         *pCur++ = (char) ( n & 0xFF );
         *pCur++ = (char) ( n >> 8 );
-        nOff += 2; return TRUE;
-    } else return FALSE;
+        nOff += 2; return sal_True;
+    } else return sal_False;
 }
 
-BOOL SbiBuffer::operator +=( UINT16 n )
+sal_Bool SbiBuffer::operator +=( sal_uInt16 n )
 {
     if( Check( 2 ) )
     {
         *pCur++ = (char) ( n & 0xFF );
         *pCur++ = (char) ( n >> 8 );
-        nOff += 2; return TRUE;
-    } else return FALSE;
+        nOff += 2; return sal_True;
+    } else return sal_False;
 }
 
-BOOL SbiBuffer::operator +=( UINT32 n )
+sal_Bool SbiBuffer::operator +=( sal_uInt32 n )
 {
     if( Check( 4 ) )
     {
-        UINT16 n1 = static_cast<UINT16>( n & 0xFFFF );
-        UINT16 n2 = static_cast<UINT16>( n >> 16 );
+        sal_uInt16 n1 = static_cast<sal_uInt16>( n & 0xFFFF );
+        sal_uInt16 n2 = static_cast<sal_uInt16>( n >> 16 );
         if ( operator +=( n1 ) && operator +=( n2 ) )
-            return TRUE;
-        return TRUE;
+            return sal_True;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SbiBuffer::operator +=( INT32 n )
+sal_Bool SbiBuffer::operator +=( sal_Int32 n )
 {
-    return operator +=( (UINT32) n );
+    return operator +=( (sal_uInt32) n );
 }
 
 
-BOOL SbiBuffer::operator +=( const String& n )
+sal_Bool SbiBuffer::operator +=( const String& n )
 {
-    USHORT l = n.Len() + 1;
+    sal_uInt16 l = n.Len() + 1;
     if( Check( l ) )
     {
         ByteString aByteStr( n, gsl_getSystemTextEncoding() );
         memcpy( pCur, aByteStr.GetBuffer(), l );
         pCur += l;
         nOff = nOff + l;
-        return TRUE;
+        return sal_True;
     }
-    else return FALSE;
+    else return sal_False;
 }
 
-BOOL SbiBuffer::Add( const void* p, USHORT len )
+sal_Bool SbiBuffer::Add( const void* p, sal_uInt16 len )
 {
     if( Check( len ) )
     {
         memcpy( pCur, p, len );
         pCur += len;
         nOff = nOff + len;
-        return TRUE;
-    } else return FALSE;
+        return sal_True;
+    } else return sal_False;
 }
 
 

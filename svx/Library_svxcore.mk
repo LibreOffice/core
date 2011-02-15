@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,svxcore))
 
-$(eval $(call gb_Library_set_componentfile,svx,svx/util/svxcore))
+$(eval $(call gb_Library_set_componentfile,svxcore,svx/util/svxcore))
 
 $(eval $(call gb_Library_add_sdi_headers,svx,svx/sdi/svxslots))
 
@@ -83,7 +83,7 @@ $(eval $(call gb_Library_add_linked_libs,svxcore,\
     vcl \
     vos3 \
     xo \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,svxcore,\
@@ -430,10 +430,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/xoutdev/xtablend \
 ))
 
-#.IF ("$(OS)$(CPU)"=="SOLARISS" && "$(COM)"!="GCC") || "$(OS)"=="MACOSX" || ("$(OS)"=="LINUX" && "$(CPU)"=="P") 
-#NOOPTFILES= $(SLO)$/EnhancedCustomShapeFunctionParser.obj
-#.ENDIF
-
 # the following source file can't be compiled with optimization by some compilers (crash or endless loop):
 # Solaris Sparc with Sun compiler, gcc on MacOSX and Linux PPC
 # the latter is currently not supported by gbuild and needs a fix here later
@@ -445,14 +441,6 @@ else
 $(eval $(call gb_Library_add_cxxobjects,svxcore,\
     svx/source/customshapes/EnhancedCustomShapeFunctionParser \
     , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-endif
-
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,svxcore,\
-    dl \
-    m \
-    pthread \
 ))
 endif
 

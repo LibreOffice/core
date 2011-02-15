@@ -78,13 +78,6 @@ $(eval $(call gb_Library_add_linked_libs,qstart_gtk,\
     sfx \
 ))
 
-$(eval $(call gb_Library_add_linked_system_libs,qstart_gtk,\
-    dl \
-    icuuc \
-    m \
-    pthread \
-))
-
 $(eval $(call gb_Library_add_exception_objects,qstart_gtk,\
     sfx2/source/appl/shutdowniconunx \
 ))

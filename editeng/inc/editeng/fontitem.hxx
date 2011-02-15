@@ -55,25 +55,25 @@ class EDITENG_DLLPUBLIC SvxFontItem : public SfxPoolItem
     FontPitch ePitch;
     rtl_TextEncoding eTextEncoding;
 
-    static BOOL bEnableStoreUnicodeNames;
+    static sal_Bool bEnableStoreUnicodeNames;
 
 public:
     TYPEINFO();
 
-    SvxFontItem( const USHORT nId  );
+    SvxFontItem( const sal_uInt16 nId  );
     SvxFontItem( const FontFamily eFam, const String& rFamilyName,
         const String& rStyleName,
         const FontPitch eFontPitch /*= PITCH_DONTKNOW*/,
         const rtl_TextEncoding eFontTextEncoding /*= RTL_TEXTENCODING_DONTKNOW*/,
-        const USHORT nId  );
+        const sal_uInt16 nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const;
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -106,7 +106,7 @@ public:
         return *this;
     }
 
-    static void EnableStoreUnicodeNames( BOOL bEnable );
+    static void EnableStoreUnicodeNames( sal_Bool bEnable );
 
 };
 

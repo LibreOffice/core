@@ -73,7 +73,6 @@
 #include "sfx2/minfitem.hxx"
 #include "app.hrc"
 #include <sfx2/evntconf.hxx>
-#include <sfx2/macrconf.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include "appdata.hxx"
@@ -188,12 +187,6 @@ SbxVariable* MakeVariable( StarBASIC *pBas, SbxObject *pObject,
 
 BasicManager* SfxApplication::GetBasicManager()
 {
-//  DBG_ASSERT( pAppData_Impl->nBasicCallLevel != 0,
-//              "unnecessary call to GetBasicManager() - inefficient!" );
-    if ( pAppData_Impl->nBasicCallLevel == 0 )
-        // sicherheitshalber
-        EnterBasicCall();
-
     return BasicManagerRepository::getApplicationBasicManager( true );
 }
 
@@ -220,106 +213,6 @@ Reference< XLibraryContainer > SfxApplication::GetBasicContainer()
 StarBASIC* SfxApplication::GetBasic()
 {
     return GetBasicManager()->GetLib(0);
-}
-
-//--------------------------------------------------------------------
-
-FASTBOOL SfxApplication::IsInBasicCall() const
-{
-    return 0 != pAppData_Impl->nBasicCallLevel;
-}
-
-//--------------------------------------------------------------------
-
-void SfxApplication::EnterBasicCall()
-{
-    if ( 1 == ++pAppData_Impl->nBasicCallLevel )
-    {
-        DBG_TRACE( "SfxShellObject: BASIC-on-demand" );
-
-        // das kann l"anger dauern, da Progress nicht geht, wenigstens Sanduhr
-//(mba)/task        SfxWaitCursor aWait;
-
-        // zuerst das BASIC laden
-        GetBasic();
-/*
-        // als erstes SfxShellObject das SbxObject der SfxApplication erzeugen
-        SbxObject *pSbx = GetSbxObject();
-        DBG_ASSERT( pSbx, "SfxShellObject: can't create SbxObject for SfxApplication" );
-
-        // die SbxObjects aller Module erzeugen
-        SfxModuleArr_Impl& rArr = GetModules_Impl();
-        for ( sal_uInt16 n = 0; n < rArr.Count(); ++n )
-        {
-            SfxModule *pMod = rArr.GetObject(n);
-            if ( pMod->IsLoaded() )
-            {
-                pSbx = pMod->GetSbxObject();
-                DBG_ASSERT( pSbx, "SfxModule: can't create SbxObject" );
-            }
-        }
-
-        // die SbxObjects aller Tasks erzeugen
-        for ( SfxTask *pTask = SfxTask::GetFirst(); pTask; pTask = SfxTask::GetNext( *pTask ) )
-            pTask->GetSbxObject();
-
-        // die SbxObjects aller SfxObjectShells erzeugen (ggf. Frame-los!)
-        for ( SfxObjectShell *pObjSh = SfxObjectShell::GetFirst( NULL, sal_False );
-              pObjSh;
-              pObjSh = SfxObjectShell::GetNext(*pObjSh, NULL, sal_False) )
-        {
-            // kein IP-Object oder wenn doch dann initialisiert?
-            SvStorageRef aStorage;
-            if ( !pObjSh->IsHandsOff() )
-                aStorage = pObjSh->GetStorage();
-            if ( !pObjSh->GetInPlaceObject() || aStorage.Is() )
-            {
-                DBG( DbgOutf( "SfxShellObject: BASIC-on-demand for %s",
-                              pObjSh->SfxShell::GetName().GetBuffer() ) );
-                pSbx = pObjSh->GetSbxObject();
-                DBG_ASSERT( pSbx, "SfxShellObject: can't create SbxObject" );
-            }
-        }
-
-        // die SbxObjects der SfxShells auf den Stacks der Frames erzeugen
-        for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(0,sal_False);
-              pFrame;
-              pFrame = SfxViewFrame::GetNext(*pFrame,0,0,sal_False) )
-        {
-            // den Dispatcher des Frames rausholen
-            SfxDispatcher *pDispat = pFrame->GetDispatcher();
-            pDispat->Flush();
-
-            // "uber alle SfxShells auf dem Stack des Dispatchers iterieren
-            // Frame selbst wird ausgespart, da er indirekt angezogen wird,
-            // sofern er ein Dokument enth"alt.
-            for ( sal_uInt16 nStackIdx = pDispat->GetShellLevel(*pFrame);
-                  0 != nStackIdx;
-                  --nStackIdx )
-            {
-                DBG( DbgOutf( "SfxShellObject: BASIC-on-demand for level %u", nStackIdx-1 ); )
-                pSbx = pDispat->GetShell(nStackIdx - 1)->GetSbxObject();
-                DBG_ASSERT( pSbx, "SfxShellObject: can't create SbxObject" );
-            }
-
-            if ( !pFrame->GetObjectShell() )
-            {
-                DBG( DbgOutf( "SfxShellObject: BASIC-on-demand for empty frame" ); )
-                pSbx = pFrame->GetSbxObject();
-                DBG_ASSERT( pSbx, "SfxShellObject: can't create SbxObject" );
-            }
-        }
-*/
-        // Factories anmelden
-//        SbxBase::AddFactory( new SfxSbxObjectFactory_Impl );
-    }
-}
-
-//--------------------------------------------------------------------
-
-void SfxApplication::LeaveBasicCall()
-{
-    --pAppData_Impl->nBasicCallLevel;
 }
 
 //-------------------------------------------------------------------------
@@ -376,10 +269,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             break;
         }
 
-        case SID_PLAYMACRO:
-            PlayMacro_Impl( rReq, GetBasic() );
-            break;
-
         case SID_OFFICE_PRIVATE_USE:
         case SID_OFFICE_COMMERCIAL_USE:
         {
@@ -424,7 +313,7 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
                 break;
 
             case SID_ATTR_UNDO_COUNT:
-                rSet.Put( SfxUInt16Item( SID_ATTR_UNDO_COUNT, sal::static_int_cast< UINT16 >( SvtUndoOptions().GetUndoCount() ) ) );
+                rSet.Put( SfxUInt16Item( SID_ATTR_UNDO_COUNT, sal::static_int_cast< sal_uInt16 >( SvtUndoOptions().GetUndoCount() ) ) );
                 break;
 
             case SID_UPDATE_VERSION:
@@ -439,69 +328,4 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
         }
     }
 }
-
-//--------------------------------------------------------------------
-void SfxApplication::MacroExec_Impl( SfxRequest& rReq )
-{
-    DBG_MEMTEST();
-    if ( SfxMacroConfig::IsMacroSlot( rReq.GetSlot() ) )
-    {
-        // SlotId referenzieren, damit nicht im Execute der Slot abgeschossen
-        // werden kann
-        GetMacroConfig()->RegisterSlotId(rReq.GetSlot());
-        SFX_REQUEST_ARG(rReq, pArgs, SfxStringItem,
-                        rReq.GetSlot(), sal_False);
-        String aArgs;
-        if( pArgs ) aArgs = pArgs->GetValue();
-        if ( GetMacroConfig()->ExecuteMacro(rReq.GetSlot(), aArgs ) )
-            rReq.Done();
-        GetMacroConfig()->ReleaseSlotId(rReq.GetSlot());
-    }
-}
-
-//--------------------------------------------------------------------
-void SfxApplication::MacroState_Impl( SfxItemSet& )
-{
-    DBG_MEMTEST();
-}
-
-//-------------------------------------------------------------------------
-
-void SfxApplication::PlayMacro_Impl( SfxRequest &rReq, StarBASIC *pBasic )
-{
-    EnterBasicCall();
-    sal_Bool bOK = sal_False;
-
-    // Makro und asynch-Flag
-    SFX_REQUEST_ARG(rReq,pMacro,SfxStringItem,SID_STATEMENT,sal_False);
-    SFX_REQUEST_ARG(rReq,pAsynch,SfxBoolItem,SID_ASYNCHRON,sal_False);
-
-    if ( pAsynch && pAsynch->GetValue() )
-    {
-        // asynchron ausf"uhren
-        GetDispatcher_Impl()->Execute( SID_PLAYMACRO, SFX_CALLMODE_ASYNCHRON, pMacro, 0L );
-        rReq.Done();
-    }
-    else if ( pMacro )
-    {
-        // Statement aufbereiten
-        DBG_ASSERT( pBasic, "no BASIC found" ) ;
-        String aStatement( '[' );
-        aStatement += pMacro->GetValue();
-        aStatement += ']';
-
-        // P"aventiv den Request abschlie\sen, da er ggf. zerst"ort wird
-        rReq.Done();
-        rReq.ReleaseArgs();
-
-        // Statement ausf"uhren
-        pBasic->Execute( aStatement );
-        bOK = 0 == SbxBase::GetError();
-        SbxBase::ResetError();
-    }
-
-    LeaveBasicCall();
-    rReq.SetReturnValue(SfxBoolItem(0,bOK));
-}
-
 

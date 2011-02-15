@@ -47,14 +47,14 @@ private:
 public:
     SFX_DECL_STATUSBAR_CONTROL();
 
-    SvxPosSizeStatusBarControl( USHORT nSlotId, USHORT nId, StatusBar& rStb );
+    SvxPosSizeStatusBarControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
     ~SvxPosSizeStatusBarControl();
 
-    virtual void    StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual void    Paint( const UserDrawEvent& rEvt );
     virtual void    Command( const CommandEvent& rCEvt );
 
-    static ULONG    GetDefItemWidth( const StatusBar& rStb );
+    static sal_uIntPtr  GetDefItemWidth( const StatusBar& rStb );
 };
 
 

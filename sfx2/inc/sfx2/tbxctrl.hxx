@@ -61,17 +61,17 @@ class SfxUnoControllerItem;
 
 svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const ::rtl::OUString& aCommandURL );
 
-//typedef SfxToolBoxControl* (*SfxToolBoxControlCtor)( USHORT nId, ToolBox &rTbx, SfxBindings & );
-typedef SfxToolBoxControl* (*SfxToolBoxControlCtor)( USHORT nSlotId, USHORT nId, ToolBox& rBox );
+//typedef SfxToolBoxControl* (*SfxToolBoxControlCtor)( sal_uInt16 nId, ToolBox &rTbx, SfxBindings & );
+typedef SfxToolBoxControl* (*SfxToolBoxControlCtor)( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
 
 struct SfxTbxCtrlFactory
 {
     SfxToolBoxControlCtor   pCtor;
     TypeId                  nTypeId;
-    USHORT                  nSlotId;
+    sal_uInt16                  nSlotId;
 
     SfxTbxCtrlFactory( SfxToolBoxControlCtor pTheCtor,
-            TypeId nTheTypeId, USHORT nTheSlotId ):
+            TypeId nTheTypeId, sal_uInt16 nTheSlotId ):
         pCtor(pTheCtor),
         nTypeId(nTheTypeId),
         nSlotId(nTheSlotId)
@@ -118,11 +118,11 @@ class SfxFrameStatusListener : public svt::FrameStatusListener
 class SFX2_DLLPUBLIC SfxPopupWindow: public FloatingWindow, public SfxStatusListenerInterface
 {
 friend class SfxToolBox_Impl;
-    BOOL                                                                             m_bFloating;
-    ULONG                                                                            m_nEventId;
-    BOOL                                                                             m_bCascading;
+    sal_Bool                                                                             m_bFloating;
+    sal_uIntPtr                                                                            m_nEventId;
+    sal_Bool                                                                             m_bCascading;
     Link                                                                             m_aDeleteLink;
-    USHORT                                                                           m_nId;
+    sal_uInt16                                                                           m_nId;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >              m_xFrame;
     SfxFrameStatusListener*                                                          m_pStatusListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >           m_xStatusListener;
@@ -140,10 +140,10 @@ private:
 
 protected:
     virtual void            PopupModeEnd();
-    virtual BOOL            Close();
+    virtual sal_Bool            Close();
     virtual void            DeleteFloatingWindow();
 
-    USHORT                  GetId() const { return m_nId; }
+    sal_uInt16                  GetId() const { return m_nId; }
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& GetFrame() const { return m_xFrame; }
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& GetServiceManager() const { return m_xServiceManager; }
 
@@ -155,21 +155,21 @@ protected:
 
     // SfxStatusListenerInterface
     using FloatingWindow::StateChanged;
-    virtual void            StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                           const SfxPoolItem* pState );
 
 public:
-                            SfxPopupWindow( USHORT nId,
+                            SfxPopupWindow( sal_uInt16 nId,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                                             WinBits nBits );
-                            SfxPopupWindow( USHORT nId,
+                            SfxPopupWindow( sal_uInt16 nId,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                                             const ResId &rId );
-                            SfxPopupWindow( USHORT nId,
+                            SfxPopupWindow( sal_uInt16 nId,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                                             Window* pParentWindow,
                                             const ResId &rId );
-                            SfxPopupWindow( USHORT nId,
+                            SfxPopupWindow( sal_uInt16 nId,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                                             Window* pParentWindow,
                                             WinBits nBits );
@@ -190,8 +190,8 @@ public:
 //------------------------------------------------------------------
 
 #define SFX_DECL_TOOLBOX_CONTROL() \
-        static SfxToolBoxControl* CreateImpl( USHORT nSlotId, USHORT nId, ToolBox &rTbx ); \
-        static void RegisterControl(USHORT nSlotId = 0, SfxModule *pMod=NULL)
+        static SfxToolBoxControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ); \
+        static void RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL)
 
 /*  F"ur spezielle ToolBox-Controls, z.B. eine Font-Auswahl-Box oder
     aus ToolBoxen abrei"sbare FloatingWindows mu"s passend zur Item-Subclass
@@ -223,9 +223,9 @@ protected:
     DECL_LINK( ClosePopupWindow, SfxPopupWindow * );
 
     // old SfxToolBoxControl methods
-    virtual void               StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
-    virtual void               Select( BOOL bMod1 = FALSE );
-    virtual void               Select( USHORT nModifier );
+    virtual void               StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void               Select( sal_Bool bMod1 = sal_False );
+    virtual void               Select( sal_uInt16 nModifier );
 
     virtual void               DoubleClick();
     virtual void               Click();
@@ -288,7 +288,7 @@ protected:
 public:
                                SFX_DECL_TOOLBOX_CONTROL();
 
-                               SfxToolBoxControl( USHORT nSlotID, USHORT nId, ToolBox& rBox, BOOL bShowStrings = FALSE );
+                               SfxToolBoxControl( sal_uInt16 nSlotID, sal_uInt16 nId, ToolBox& rBox, sal_Bool bShowStrings = sal_False );
     virtual                    ~SfxToolBoxControl();
 
     ToolBox&                   GetToolBox() const;
@@ -302,21 +302,21 @@ public:
                                          ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs );
 
     static SfxItemState        GetItemState( const SfxPoolItem* pState );
-    static SfxToolBoxControl*  CreateControl( USHORT nSlotId, USHORT nTbxId, ToolBox *pBox, SfxModule *pMod );
+    static SfxToolBoxControl*  CreateControl( sal_uInt16 nSlotId, sal_uInt16 nTbxId, ToolBox *pBox, SfxModule *pMod );
     static void                RegisterToolBoxControl( SfxModule*, SfxTbxCtrlFactory*);
 };
 
 #define SFX_IMPL_TOOLBOX_CONTROL(Class, nItemClass) \
-        SfxToolBoxControl* __EXPORT Class::CreateImpl( USHORT nSlotId, USHORT nId, ToolBox &rTbx ) \
+        SfxToolBoxControl* __EXPORT Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) \
                { return new Class( nSlotId, nId, rTbx ); } \
-        void Class::RegisterControl(USHORT nSlotId, SfxModule *pMod) \
+        void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
                { SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( \
                     Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
 
 #define SFX_IMPL_TOOLBOX_CONTROL_ARG(Class, nItemClass, Arg) \
-        SfxToolBoxControl* __EXPORT Class::CreateImpl( USHORT nSlotId, USHORT nId, ToolBox &rTbx ) \
+        SfxToolBoxControl* __EXPORT Class::CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) \
                { return new Class( nSlotId, nId, rTbx, Arg); } \
-        void Class::RegisterControl(USHORT nSlotId, SfxModule *pMod) \
+        void Class::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod) \
                { SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( \
                     Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
 
@@ -342,10 +342,10 @@ class SfxDragToolBoxControl_Impl : public SfxToolBoxControl
 {
 public:
                             SFX_DECL_TOOLBOX_CONTROL();
-                            SfxDragToolBoxControl_Impl( USHORT nId, ToolBox& rBox );
+                            SfxDragToolBoxControl_Impl( sal_uInt16 nId, ToolBox& rBox );
     virtual Window*         CreateItemWindow( Window *pParent );
     using SfxToolBoxControl::Select;
-    virtual void            Select( BOOL bMod1 = FALSE );
+    virtual void            Select( sal_Bool bMod1 = sal_False );
 };
 
 //------------------------------------------------------------------------
@@ -361,7 +361,7 @@ class SfxAppToolBoxControl_Impl : public SfxToolBoxControl
 {
 public:
                             SFX_DECL_TOOLBOX_CONTROL();
-                            SfxAppToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox );
+                            SfxAppToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
                             ~SfxAppToolBoxControl_Impl();
     void                    SetImage( const String& rFacName );
 
@@ -377,17 +377,17 @@ public:
 protected:
     virtual void            Click();
     using SfxToolBoxControl::Select;
-    virtual void            Select( BOOL );
-    virtual void            StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void            Select( sal_Bool );
+    virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual SfxPopupWindow* CreatePopupWindow();
                             DECL_LINK( Activate, Menu * ); // Needed to support high contrast images
 private:
     String                  aLastURL;
-    BOOL                    bBigImages;
+    sal_Bool                    bBigImages;
     PopupMenu*              pMenu;
-    ULONG                   m_nSymbolsStyle;
-    BOOL                    m_bWasHiContrastMode;
-    BOOL                    m_bShowMenuImages;
+    sal_uIntPtr                   m_nSymbolsStyle;
+    sal_Bool                    m_bWasHiContrastMode;
+    sal_Bool                    m_bShowMenuImages;
 };
 
 class SfxHistoryToolBoxControl_Impl : public SfxToolBoxControl
@@ -400,22 +400,22 @@ private:
 protected:
     virtual void            Click( );
     using SfxToolBoxControl::Select;
-    virtual void            Select( BOOL );
+    virtual void            Select( sal_Bool );
 
 public:
                             SFX_DECL_TOOLBOX_CONTROL();
-                            SfxHistoryToolBoxControl_Impl( USHORT nId, ToolBox& rBox );
+                            SfxHistoryToolBoxControl_Impl( sal_uInt16 nId, ToolBox& rBox );
 };
 
 class SfxReloadToolBoxControl_Impl : public SfxToolBoxControl
 {
     protected:
         using SfxToolBoxControl::Select;
-        virtual void Select( USHORT nSelectModifier );
+        virtual void Select( sal_uInt16 nSelectModifier );
 
     public:
     SFX_DECL_TOOLBOX_CONTROL();
-        SfxReloadToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox );
+        SfxReloadToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
 };
 
 class SfxPopupMenuManager;
@@ -428,20 +428,20 @@ class SfxAddonsToolBoxControl_Impl : public SfxToolBoxControl
 */
 
 {
-    BOOL        bBigImages;
+    sal_Bool        bBigImages;
     PopupMenu*  pMenu;
-    BOOL        m_bWasHiContrastMode;
-    BOOL        m_bShowMenuImages;
+    sal_Bool        m_bWasHiContrastMode;
+    sal_Bool        m_bShowMenuImages;
 
 protected:
     virtual void            Click();
     using SfxToolBoxControl::Select;
-    virtual void            Select( BOOL );
-    virtual void            StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
+    virtual void            Select( sal_Bool );
+    virtual void            StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState );
                             DECL_LINK( Activate, Menu * ); // Needed to support high contrast images
 public:
                             SFX_DECL_TOOLBOX_CONTROL();
-                            SfxAddonsToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox );
+                            SfxAddonsToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
                             ~SfxAddonsToolBoxControl_Impl();
 
                             void RefreshMenuImages( Menu* pMenu );

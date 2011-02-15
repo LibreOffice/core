@@ -58,7 +58,7 @@ $(eval $(call gb_Library_add_linked_libs,fwk,\
     ucbhelper \
     utl \
     vcl \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,fwk,\
@@ -96,6 +96,8 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/helper/statusindicatorfactory \
     framework/source/helper/tagwindowasmodified \
     framework/source/helper/titlebarupdate \
+    framework/source/helper/uiconfigelementwrapperbase \
+    framework/source/helper/uielementwrapperbase \
     framework/source/helper/vclstatusindicator \
     framework/source/helper/wakeupthread \
     framework/source/interaction/quietinteraction \
@@ -183,25 +185,4 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/xml/acceleratorconfigurationwriter \
 ))
 
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,fwk,\
-    dl \
-    m \
-    pthread \
-))
-endif
-ifeq ($(OS),WNT)
-ifneq ($(USE_MINGW),)
-$(eval $(call gb_Library_add_linked_libs,fwk,\
-    mingwthrd \
-    $(gb_MINGW_LIBSTDCPP) \
-    mingw32 \
-    $(gb_MINGW_LIBGCC) \
-    uwinapi \
-    mingwex \
-    kernel32 \
-    msvcrt \
-))
-endif
-endif
 # vim: set noet sw=4 ts=4:

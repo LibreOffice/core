@@ -223,7 +223,7 @@ WrongList::~WrongList()
 {
 }
 
-void WrongList::MarkInvalid( USHORT nS, USHORT nE )
+void WrongList::MarkInvalid( sal_uInt16 nS, sal_uInt16 nE )
 {
     if ( ( nInvalidStart == NOT_INVALID ) || ( nInvalidStart > nS ) )
         nInvalidStart = nS;
@@ -498,7 +498,7 @@ bool WrongList::operator==(const WrongList& rCompare) const
         return false;
     }
 
-    for(USHORT a(0); a < Count(); a++)
+    for(sal_uInt16 a(0); a < Count(); a++)
     {
         const WrongRange& rCandA(GetObject(a));
         const WrongRange& rCandB(rCompare.GetObject(a));
@@ -654,8 +654,8 @@ sal_Bool EdtAutoCorrDoc::SetINetAttr( sal_uInt16 nStt, sal_uInt16 nEnd,
 
 sal_Bool EdtAutoCorrDoc::HasSymbolChars( sal_uInt16 nStt, sal_uInt16 nEnd )
 {
-    USHORT nScriptType = pImpEE->GetScriptType( EditPaM( pCurNode, nStt ) );
-    USHORT nScriptFontInfoItemId = GetScriptItemId( EE_CHAR_FONTINFO, nScriptType );
+    sal_uInt16 nScriptType = pImpEE->GetScriptType( EditPaM( pCurNode, nStt ) );
+    sal_uInt16 nScriptFontInfoItemId = GetScriptItemId( EE_CHAR_FONTINFO, nScriptType );
 
     CharAttribArray& rAttribs = pCurNode->GetCharAttribs().GetAttribs();
     sal_uInt16 nAttrs = rAttribs.Count();

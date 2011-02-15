@@ -65,7 +65,7 @@ namespace xmloff
     }
 
     //-------------------------------------------------------------------------
-    SvXMLImportContext* OFormsRootImport::CreateChildContext( USHORT _nPrefix, const ::rtl::OUString& _rLocalName,
+    SvXMLImportContext* OFormsRootImport::CreateChildContext( sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
             const Reference< sax::XAttributeList>& xAttrList )
     {
         return GetImport().GetFormImport()->createContext( _nPrefix, _rLocalName, xAttrList );

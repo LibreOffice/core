@@ -43,19 +43,19 @@
 
 class SvxFontWidthItem : public SfxPoolItem
 {
-    UINT16  nWidth;         // 0 = default
-    USHORT  nProp;          // default 100%
+    sal_uInt16  nWidth;         // 0 = default
+    sal_uInt16  nProp;          // default 100%
 public:
     TYPEINFO();
 
-    SvxFontWidthItem(   const USHORT nSz /*= 0*/,
-                        const USHORT nPropWidth /*= 100*/,
-                        const USHORT nId  );
+    SvxFontWidthItem(   const sal_uInt16 nSz /*= 0*/,
+                        const sal_uInt16 nPropWidth /*= 100*/,
+                        const sal_uInt16 nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -63,8 +63,8 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion) const;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const;
     virtual int              ScaleMetrics( long nMult, long nDiv );
     virtual int              HasMetrics() const;
 
@@ -75,28 +75,28 @@ public:
             return *this;
         }
 
-    void SetWidth( UINT16 nNewWidth, const USHORT nNewProp = 100 )
+    void SetWidth( sal_uInt16 nNewWidth, const sal_uInt16 nNewProp = 100 )
         {
             DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
-            nWidth = UINT16(( (UINT32)nNewWidth * nNewProp ) / 100 );
+            nWidth = sal_uInt16(( (sal_uInt32)nNewWidth * nNewProp ) / 100 );
             nProp = nNewProp;
         }
 
-    UINT16 GetWidth() const { return nWidth; }
+    sal_uInt16 GetWidth() const { return nWidth; }
 
-    void SetWidthValue( UINT16 nNewWidth )
+    void SetWidthValue( sal_uInt16 nNewWidth )
         {
             DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
             nWidth = nNewWidth;
         }
 
-    void SetProp( const USHORT nNewProp )
+    void SetProp( const sal_uInt16 nNewProp )
         {
             DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
             nProp = nNewProp;
         }
 
-    USHORT GetProp() const { return nProp; }
+    sal_uInt16 GetProp() const { return nProp; }
 };
 
 

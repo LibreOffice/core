@@ -78,7 +78,7 @@ namespace ooo
 
         VBAHELPER_DLLPUBLIC void dispatchRequests( const css::uno::Reference< css::frame::XModel>& xModel, const rtl::OUString& aUrl );
         VBAHELPER_DLLPUBLIC void dispatchRequests( const css::uno::Reference< css::frame::XModel>& xModel, const rtl::OUString& aUrl, const css::uno::Sequence< css::beans::PropertyValue >& sProps );
-        VBAHELPER_DLLPUBLIC void dispatchExecute(SfxViewShell* pView, USHORT nSlot, SfxCallMode nCall = SFX_CALLMODE_SYNCHRON );
+        VBAHELPER_DLLPUBLIC void dispatchExecute(SfxViewShell* pView, sal_uInt16 nSlot, SfxCallMode nCall = SFX_CALLMODE_SYNCHRON );
         VBAHELPER_DLLPUBLIC sal_Int32 OORGBToXLRGB( sal_Int32 );
         VBAHELPER_DLLPUBLIC sal_Int32 XLRGBToOORGB( sal_Int32 );
         VBAHELPER_DLLPUBLIC css::uno::Any OORGBToXLRGB( const css::uno::Any& );

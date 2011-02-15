@@ -105,7 +105,7 @@ $(call gb_SrsTarget_get_clean_target,svx/res) : $(WORKDIR)/inc/svx/globlmn.hrc_c
 
 # hack !!!
 # just a temporary - globlmn.hrc about to be removed!
-ifeq ($(WITH_LANG),)
+ifeq ($(strip $(WITH_LANG)),)
 $(WORKDIR)/inc/svx/globlmn.hrc : $(SRCDIR)/svx/inc/globlmn_tmpl.hrc
     echo copying $@
     -mkdir -p $(WORKDIR)/inc/svx

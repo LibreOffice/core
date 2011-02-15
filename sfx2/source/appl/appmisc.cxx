@@ -192,8 +192,8 @@ SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
             pStream = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ );
         }
 
-        BOOL bSlotsEnabled = SvtInternalOptions().SlotCFGEnabled();
-        BOOL bSlots = ( pStream && !pStream->GetError() );
+        sal_Bool bSlotsEnabled = SvtInternalOptions().SlotCFGEnabled();
+        sal_Bool bSlots = ( pStream && !pStream->GetError() );
         if( bSlots && bSlotsEnabled )
         {
             // SlotDatei einlesen
@@ -260,7 +260,7 @@ SfxModule* SfxApplication::GetModule_Impl()
 {
     SfxModule* pModule = SfxModule::GetActiveModule();
     if ( !pModule )
-        pModule = SfxModule::GetActiveModule( SfxViewFrame::GetFirst( FALSE ) );
+        pModule = SfxModule::GetActiveModule( SfxViewFrame::GetFirst( sal_False ) );
     if( pModule )
         return pModule;
     else
@@ -282,7 +282,7 @@ ISfxTemplateCommon* SfxApplication::GetCurrentTemplateCommon( SfxBindings& rBind
 }
 
 SfxResourceManager& SfxApplication::GetResourceManager() const { return *pAppData_Impl->pResMgr; }
-BOOL  SfxApplication::IsDowning() const { return pAppData_Impl->bDowning; }
+sal_Bool  SfxApplication::IsDowning() const { return pAppData_Impl->bDowning; }
 SfxDispatcher* SfxApplication::GetAppDispatcher_Impl() { return pAppData_Impl->pAppDispat; }
 SfxSlotPool& SfxApplication::GetAppSlotPool_Impl() const { return *pAppData_Impl->pSlotPool; }
 //SfxOptions&  SfxApplication::GetOptions() { return *pAppData_Impl->pOptions; }

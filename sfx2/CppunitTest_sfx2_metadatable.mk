@@ -35,7 +35,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sfx2_metadatable, \
     sal \
     sfx \
     stl \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sfx2_metadatable,\

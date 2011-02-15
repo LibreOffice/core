@@ -29,7 +29,7 @@ PRJ=..
 
 PRJNAME=linguistic
 TARGET=lng
-ENABLE_EXCEPTIONS=TRUE
+ENABLE_EXCEPTIONS=sal_True
 
 #----- Settings ---------------------------------------------------------
 
