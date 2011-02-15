@@ -825,6 +825,7 @@ elsif ( $platform =~ m/dragonfly/ )
       $CPUNAME        = "X86_64";
       $OUTPATH        = "unxdflyx";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
    }
    else
@@ -1420,7 +1421,7 @@ $SOLARINC             = $I.$cur_dir.
                         $I.'$SOLARENV'.$INC.
                         $I.'$SRC_ROOT'.$ds."res";
 
-if ($platform =~ m/solaris|linux|osf1|freebsd|netbsd|aix|openbsd/)
+if ($platform =~ m/solaris|linux|osf1|freebsd|netbsd|aix|openbsd|dragonfly/)
 {
 if ($platform =~ m/solaris/ && ! $CC =~ "gcc")
 {
