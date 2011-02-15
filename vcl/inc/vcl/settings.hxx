@@ -1179,8 +1179,6 @@ private:
     LanguageType                            meUILanguage;
     LocaleDataWrapper*                      mpLocaleDataWrapper;
     LocaleDataWrapper*                      mpUILocaleDataWrapper;
-    CollatorWrapper*                        mpCollatorWrapper;
-    CollatorWrapper*                        mpUICollatorWrapper;
     vcl::I18nHelper*                        mpI18nHelper;
     vcl::I18nHelper*                        mpUII18nHelper;
     LocaleConfigurationListener*            mpLocaleCfgListener;

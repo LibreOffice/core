@@ -1584,8 +1584,6 @@ ImplAllSettingsData::ImplAllSettingsData()
     meUILanguage                  = LANGUAGE_SYSTEM;
     mpLocaleDataWrapper         = NULL;
     mpUILocaleDataWrapper       = NULL;
-    mpCollatorWrapper           = NULL;
-    mpUICollatorWrapper         = NULL;
     mpI18nHelper                = NULL;
     mpUII18nHelper              = NULL;
     maMiscSettings.SetEnableLocalizedDecimalSep( maSysLocale.GetOptions().IsDecimalSeparatorAsLocale() );
@@ -1611,8 +1609,6 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     // called
     mpLocaleDataWrapper         = NULL;
     mpUILocaleDataWrapper       = NULL;
-    mpCollatorWrapper           = NULL;
-    mpUICollatorWrapper         = NULL;
     mpI18nHelper                = NULL;
     mpUII18nHelper              = NULL;
 }
@@ -1625,10 +1621,6 @@ ImplAllSettingsData::~ImplAllSettingsData()
         delete mpLocaleDataWrapper;
     if ( mpUILocaleDataWrapper )
         delete mpUILocaleDataWrapper;
-    if ( mpCollatorWrapper )
-        delete mpCollatorWrapper;
-    if ( mpUICollatorWrapper )
-        delete mpUICollatorWrapper;
     if ( mpI18nHelper )
         delete mpI18nHelper;
     if ( mpUII18nHelper )
@@ -2055,32 +2047,6 @@ const vcl::I18nHelper& AllSettings::GetUILocaleI18nHelper() const
     }
     return *mpData->mpUII18nHelper;
 }
-
-
-// -----------------------------------------------------------------------
-/*
-const CollatorWrapper& AllSettings::GetCollatorWrapper() const
-{
-    if ( !mpData->mpCollatorWrapper )
-    {
-        ((AllSettings*)this)->mpData->mpCollatorWrapper = new CollatorWrapper( vcl::unohelper::GetMultiServiceFactory() );
-        ((AllSettings*)this)->mpData->mpCollatorWrapper->loadDefaultCollator( GetLocale(), 0 );
-    }
-    return *mpData->mpCollatorWrapper;
-}
-*/
-// -----------------------------------------------------------------------
-/*
-const CollatorWrapper& AllSettings::GetUICollatorWrapper() const
-{
-    if ( !mpData->mpUICollatorWrapper )
-    {
-        ((AllSettings*)this)->mpData->mpUICollatorWrapper = new CollatorWrapper( vcl::unohelper::GetMultiServiceFactory() );
-        ((AllSettings*)this)->mpData->mpUICollatorWrapper->loadDefaultCollator( GetUILocale(), 0 );
-    }
-    return *mpData->mpUICollatorWrapper;
-}
-*/
 
 void AllSettings::LocaleSettingsChanged( sal_uInt32 nHint )
 {
