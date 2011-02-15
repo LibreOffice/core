@@ -1185,40 +1185,6 @@ typedef enum {
     mso_colorBParamShift = 16           // To extract the parameter value
 } MSO_SYSCOLORINDEX;
 
-#ifdef Hier_noch_was_aus_der_Doku
-/* The secondary, or data, UID - should always be set. */
-BYTE  m_rgbUid[16];
-/* The primary UID - this defaults to 0, in which case the primary ID is
-   that of the internal data. NOTE!: The primary UID is only saved to disk
-   if (blip_instance ^ blip_signature == 1). Blip_instance is MSO_FBH.inst and
-   blip_signature is one of the values defined in MSO_BI */
-BYTE  m_rgbUidPrimary[16]; // optional based on the above check
-
-/* Metafile Blip overhead = 34 bytes. m_cb gives the number of
-   bytes required to store an uncompressed version of the file, m_cbSave
-   is the compressed size.  m_mfBounds gives the boundary of all the
-   drawing calls within the metafile (this may just be the bounding box
-   or it may allow some whitespace, for a WMF this comes from the
-   SetWindowOrg and SetWindowExt records of the metafile). */
-int           m_cb;           // Cache of the metafile size
-RECT          m_rcBounds;     // Boundary of metafile drawing commands
-POINT         m_ptSize;       // Size of metafile in EMUs
-int           m_cbSave;       // Cache of saved size (size of m_pvBits)
-BYTE          m_fCompression; // MSO_BLIPCOMPRESSION
-BYTE          m_fFilter;      // always mso_filterNone
-void         *m_pvBits;       // Compressed bits of metafile.
-
-/* The secondary, or data, UID - should always be set. */
-BYTE  m_rgbUid[16];
-/* The primary UID - this defaults to 0, in which case the primary ID is
-   that of the internal data. NOTE!: The primary UID is only saved to disk
-   if (blip_instance ^ blip_signature == 1). Blip_instance is MSO_FBH.finst and
-   blip_signature is one of the values defined in MSO_BI*/
-BYTE  m_rgbUidPrimary[16];    // optional based on the above check
-BYTE  m_bTag;
-void  *m_pvBits;              // raster bits of the blip.
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
