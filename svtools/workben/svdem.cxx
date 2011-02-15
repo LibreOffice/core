@@ -78,7 +78,7 @@ public:
                     ShowBitmap( Window* pParent, const Bitmap& rBmp );
 
     virtual void    Paint( const Rectangle& );
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 };
 
 // -----------------------------------------------------------------------
@@ -282,11 +282,11 @@ void ShowBitmap::Paint( const Rectangle& )
 
 // -----------------------------------------------------------------------
 
-BOOL ShowBitmap::Close()
+sal_Bool ShowBitmap::Close()
 {
     Hide();
     delete this;
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -352,8 +352,8 @@ MyFontDialog::MyFontDialog( Window* pParent ) :
 {
     pList = NULL;
 
-    aFontBox.EnableWYSIWYG( TRUE );
-    aFontBox.EnableSymbols( TRUE );
+    aFontBox.EnableWYSIWYG( sal_True );
+    aFontBox.EnableSymbols( sal_True );
     aFontBox.SetPosSizePixel( Point( 10, 10 ), Size( 140, 140 ) );
     aFontBox.SetSelectHdl( LINK( this, MyFontDialog, SelectFont ) );
     aFontBox.SetLoseFocusHdl( LINK( this, MyFontDialog, SelectFont ) );
@@ -421,7 +421,7 @@ MyFontDialog::MyFontDialog( Window* pParent ) :
     {
     aColorBox.SetPosSizePixel( Point( 15, 305 ), Size( 130, 100 ) );
     aColorBox.SetSelectHdl( LINK( this, MyFontDialog, AttrHdl ) );
-    aColorBox.SetUpdateMode( FALSE );
+    aColorBox.SetUpdateMode( sal_False );
     aColorBox.InsertEntry( Color( COL_BLACK ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "Black" ) ) );
     aColorBox.InsertEntry( Color( COL_BLUE ),          XubString( RTL_CONSTASCII_USTRINGPARAM( "Blue" ) ) );
     aColorBox.InsertEntry( Color( COL_GREEN ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "Green" ) ) );
@@ -438,7 +438,7 @@ MyFontDialog::MyFontDialog( Window* pParent ) :
     aColorBox.InsertEntry( Color( COL_LIGHTMAGENTA ),  XubString( RTL_CONSTASCII_USTRINGPARAM( "LightMagenta" ) ) );
     aColorBox.InsertEntry( Color( COL_YELLOW ),        XubString( RTL_CONSTASCII_USTRINGPARAM( "Yellow" ) ) );
     aColorBox.InsertEntry( Color( COL_WHITE ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "White" ) ) );
-    aColorBox.SetUpdateMode( TRUE );
+    aColorBox.SetUpdateMode( sal_True );
     aColorBox.Show();
     }
 
@@ -515,7 +515,7 @@ void MyFontDialog::SetAttr()
     aFont.SetShadow( aShadowBox.IsChecked() );
     aFont.SetOutline( aOutlineBox.IsChecked() );
     aFont.SetOrientation( aLineOrientSlider.GetOrientation() );
-    aFont.SetTransparent( TRUE );
+    aFont.SetTransparent( sal_True );
     aMapText.SetText( pList->GetFontMapText( aFont ) );
     aShowFont.SetFont( aFont );
 }
@@ -545,12 +545,12 @@ long MyTabBar::DeactivatePage()
         QueryBox aQueryBox( this, WB_YES_NO | WB_DEF_YES,
                             XubString( RTL_CONSTASCII_USTRINGPARAM( "Deactivate" ) ) );
         if ( aQueryBox.Execute() == RET_YES )
-            return TRUE;
+            return sal_True;
         else
-            return FALSE;
+            return sal_False;
     }
     else
-        return TRUE;
+        return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -601,8 +601,8 @@ MyCalendar::MyCalendar( Window* pParent ) :
     uno::Sequence< i18n::CalendarItem> xItems = rCal.getDays();
     const i18n::CalendarItem* pArr = xItems.getArray();
     for ( sal_Int16 i = 0; i < nDays; i++ )
-        aWeekStartMenu.InsertItem( 10+(USHORT)i, pArr[i].FullName, MIB_AUTOCHECK | MIB_RADIOCHECK );
-    aWeekStartMenu.CheckItem( 10+(USHORT)rCal.getFirstDayOfWeek() );
+        aWeekStartMenu.InsertItem( 10+(sal_uInt16)i, pArr[i].FullName, MIB_AUTOCHECK | MIB_RADIOCHECK );
+    aWeekStartMenu.CheckItem( 10+(sal_uInt16)rCal.getFirstDayOfWeek() );
     aWeekCountMenu.InsertItem( 20, XubString( RTL_CONSTASCII_USTRINGPARAM( "~1. Januar" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
     aWeekCountMenu.InsertItem( 21, XubString( RTL_CONSTASCII_USTRINGPARAM( "~2 days" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
     aWeekCountMenu.InsertItem( 22, XubString( RTL_CONSTASCII_USTRINGPARAM( "~3 days" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
@@ -610,8 +610,8 @@ MyCalendar::MyCalendar( Window* pParent ) :
     aWeekCountMenu.InsertItem( 24, XubString( RTL_CONSTASCII_USTRINGPARAM( "~5 days" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
     aWeekCountMenu.InsertItem( 25, XubString( RTL_CONSTASCII_USTRINGPARAM( "~6 days" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
     aWeekCountMenu.InsertItem( 26, XubString( RTL_CONSTASCII_USTRINGPARAM( "Erste ~volle Woche" ) ), MIB_AUTOCHECK | MIB_RADIOCHECK );
-    //was: one of 0, 1, 2;  aWeekCountMenu.CheckItem( 20+(USHORT)rIntn.GetWeekCountStart() );
-    aWeekCountMenu.CheckItem( 20+(USHORT)rCal.getMinimumNumberOfDaysForFirstWeek() );
+    //was: one of 0, 1, 2;  aWeekCountMenu.CheckItem( 20+(sal_uInt16)rIntn.GetWeekCountStart() );
+    aWeekCountMenu.CheckItem( 20+(sal_uInt16)rCal.getMinimumNumberOfDaysForFirstWeek() );
     aMenuBar.SetSelectHdl( LINK( this, MyCalendar, MenuSelectHdl ) );
     SetMenuBar( &aMenuBar );
 
@@ -646,7 +646,7 @@ MyCalendar::~MyCalendar()
 
 IMPL_LINK( MyCalendar, RequestDateInfoHdl, Calendar*, EMPTYARG )
 {
-    USHORT nRequestYear = aCalendar.GetRequestYear();
+    sal_uInt16 nRequestYear = aCalendar.GetRequestYear();
     if ( (nRequestYear >= 1954) && (nRequestYear <= 1989) )
         aCalendar.AddDateInfo( Date(  17, 6, nRequestYear ), XubString( RTL_CONSTASCII_USTRINGPARAM( "Tag der deutschen Einheit" ) ), &aHolidayColor, NULL );
     else if ( nRequestYear >=  1990 )
@@ -669,7 +669,7 @@ IMPL_LINK( MyCalendar, DoubleClickHdl, Calendar*, EMPTYARG )
 
 IMPL_LINK( MyCalendar, MenuSelectHdl, Menu*, pMenu )
 {
-    USHORT          nItemId = pMenu->GetCurItemId();
+    sal_uInt16          nItemId = pMenu->GetCurItemId();
 
     if ( (nItemId >= 10) && (nItemId <= 19) )
         aCalendar.SetWeekStart( nItemId-10 );
@@ -750,7 +750,7 @@ MyWin::MyWin( Window* pParent, WinBits aWinStyle ) :
 
     {
     aColorList.SetPosSizePixel( Point( 10, nY ), Size( 130, 180 ) );
-    aColorList.SetUpdateMode( FALSE );
+    aColorList.SetUpdateMode( sal_False );
     aColorList.InsertEntry( Color( COL_BLACK ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "Black" ) ) );
     aColorList.InsertEntry( Color( COL_BLUE ),          XubString( RTL_CONSTASCII_USTRINGPARAM( "Blue" ) ) );
     aColorList.InsertEntry( Color( COL_GREEN ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "Green" ) ) );
@@ -767,7 +767,7 @@ MyWin::MyWin( Window* pParent, WinBits aWinStyle ) :
     aColorList.InsertEntry( Color( COL_LIGHTMAGENTA ),  XubString( RTL_CONSTASCII_USTRINGPARAM( "LightMagenta" ) ) );
     aColorList.InsertEntry( Color( COL_YELLOW ),        XubString( RTL_CONSTASCII_USTRINGPARAM( "Yellow" ) ) );
     aColorList.InsertEntry( Color( COL_WHITE ),         XubString( RTL_CONSTASCII_USTRINGPARAM( "White" ) ) );
-    aColorList.SetUpdateMode( TRUE );
+    aColorList.SetUpdateMode( sal_True );
     aColorList.SetSelectHdl( LINK( this, MyWin, SelectHdl ) );
     aColorList.Show();
     }
@@ -818,7 +818,7 @@ MyWin::MyWin( Window* pParent, WinBits aWinStyle ) :
     }
 
     {
-    aCalendarField.EnableEmptyFieldValue( TRUE );
+    aCalendarField.EnableEmptyFieldValue( sal_True );
     aCalendarField.SetCalendarStyle( aCalendarField.GetCalendarStyle() | WB_RANGESELECT );
     aCalendarField.SetSelectHdl( LINK( this, MyWin, CalSelectHdl ) );
 //    aCalendarField.SetDate( Date() );
@@ -968,7 +968,7 @@ IMPL_LINK( MyWin, SelectHdl, Window*, pCtrl )
     }
     else if ( pCtrl == &aValueSet )
     {
-        USHORT nId = aValueSet.GetSelectItemId();
+        sal_uInt16 nId = aValueSet.GetSelectItemId();
         if ( nId > 8 )
         {
             Color aColor = aValueSet.GetItemColor( nId );
@@ -977,10 +977,10 @@ IMPL_LINK( MyWin, SelectHdl, Window*, pCtrl )
     }
     else if ( pCtrl == &aHeadBar )
     {
-        USHORT nCurItemId = aHeadBar.GetCurItemId();
-        for ( USHORT i = 0; i < aHeadBar.GetItemCount(); i++ )
+        sal_uInt16 nCurItemId = aHeadBar.GetCurItemId();
+        for ( sal_uInt16 i = 0; i < aHeadBar.GetItemCount(); i++ )
         {
-            USHORT nItemId = aHeadBar.GetItemId( i );
+            sal_uInt16 nItemId = aHeadBar.GetItemId( i );
             HeaderBarItemBits nBits = aHeadBar.GetItemBits( nItemId );
             if ( nItemId == nCurItemId )
             {
@@ -1072,9 +1072,9 @@ void MyWin::KeyInput( const KeyEvent& rKEvt )
 {
     if ( rKEvt.GetKeyCode().GetCode() == KEY_P )
     {
-        for ( USHORT i = 0; i <= 130; i += 2 )
+        for ( sal_uInt16 i = 0; i <= 130; i += 2 )
         {
-            for ( USHORT j = 0; j < 6000; j++ )
+            for ( sal_uInt16 j = 0; j < 6000; j++ )
             {
                 aPrgsBar.SetValue( i );
                 Application::Reschedule();

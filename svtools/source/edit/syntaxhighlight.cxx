@@ -256,22 +256,22 @@ class BasicSimpleCharClass
     static LetterTable aLetterTable;
 
 public:
-    static BOOL isAlpha( sal_Unicode c, bool bCompatible )
+    static sal_Bool isAlpha( sal_Unicode c, bool bCompatible )
     {
-        BOOL bRet = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
+        sal_Bool bRet = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
                     || (bCompatible && aLetterTable.isLetter( c ));
         return bRet;
     }
 
-    static BOOL isDigit( sal_Unicode c )
+    static sal_Bool isDigit( sal_Unicode c )
     {
-        BOOL bRet = (c >= '0' && c <= '9');
+        sal_Bool bRet = (c >= '0' && c <= '9');
         return bRet;
     }
 
-    static BOOL isAlphaNumeric( sal_Unicode c, bool bCompatible )
+    static sal_Bool isAlphaNumeric( sal_Unicode c, bool bCompatible )
     {
-        BOOL bRet = isDigit( c ) || isAlpha( c, bCompatible );
+        sal_Bool bRet = isDigit( c ) || isAlpha( c, bCompatible );
         return bRet;
     }
 };
@@ -283,68 +283,68 @@ LetterTable::LetterTable( void )
     for( int i = 0 ; i < 256 ; ++i )
         IsLetterTab[i] = false;
 
-    IsLetterTab[0xC0] = true;   // À , CAPITAL LETTER A WITH GRAVE ACCENT
-    IsLetterTab[0xC1] = true;   // Á , CAPITAL LETTER A WITH ACUTE ACCENT
-    IsLetterTab[0xC2] = true;   // Â , CAPITAL LETTER A WITH CIRCUMFLEX ACCENT
-    IsLetterTab[0xC3] = true;   // Ã , CAPITAL LETTER A WITH TILDE
-    IsLetterTab[0xC4] = true;   // Ä , CAPITAL LETTER A WITH DIAERESIS
-    IsLetterTab[0xC5] = true;   // Å , CAPITAL LETTER A WITH RING ABOVE
-    IsLetterTab[0xC6] = true;   // Æ , CAPITAL LIGATURE AE
-    IsLetterTab[0xC7] = true;   // Ç , CAPITAL LETTER C WITH CEDILLA
-    IsLetterTab[0xC8] = true;   // È , CAPITAL LETTER E WITH GRAVE ACCENT
-    IsLetterTab[0xC9] = true;   // É , CAPITAL LETTER E WITH ACUTE ACCENT
-    IsLetterTab[0xCA] = true;   // Ê , CAPITAL LETTER E WITH CIRCUMFLEX ACCENT
-    IsLetterTab[0xCB] = true;   // Ë , CAPITAL LETTER E WITH DIAERESIS
-    IsLetterTab[0xCC] = true;   // Ì , CAPITAL LETTER I WITH GRAVE ACCENT
-    IsLetterTab[0xCD] = true;   // Í , CAPITAL LETTER I WITH ACUTE ACCENT
-    IsLetterTab[0xCE] = true;   // Î , CAPITAL LETTER I WITH CIRCUMFLEX ACCENT
-    IsLetterTab[0xCF] = true;   // Ï , CAPITAL LETTER I WITH DIAERESIS
-    IsLetterTab[0xD0] = true;   // Ð , CAPITAL LETTER ETH
-    IsLetterTab[0xD1] = true;   // Ñ , CAPITAL LETTER N WITH TILDE
-    IsLetterTab[0xD2] = true;   // Ò , CAPITAL LETTER O WITH GRAVE ACCENT
-    IsLetterTab[0xD3] = true;   // Ó , CAPITAL LETTER O WITH ACUTE ACCENT
-    IsLetterTab[0xD4] = true;   // Ô , CAPITAL LETTER O WITH CIRCUMFLEX ACCENT
-    IsLetterTab[0xD5] = true;   // Õ , CAPITAL LETTER O WITH TILDE
-    IsLetterTab[0xD6] = true;   // Ö , CAPITAL LETTER O WITH DIAERESIS
-    IsLetterTab[0xD8] = true;   // Ø , CAPITAL LETTER O WITH STROKE
-    IsLetterTab[0xD9] = true;   // Ù , CAPITAL LETTER U WITH GRAVE ACCENT
-    IsLetterTab[0xDA] = true;   // Ú , CAPITAL LETTER U WITH ACUTE ACCENT
-    IsLetterTab[0xDB] = true;   // Û , CAPITAL LETTER U WITH CIRCUMFLEX ACCENT
-    IsLetterTab[0xDC] = true;   // Ü , CAPITAL LETTER U WITH DIAERESIS
-    IsLetterTab[0xDD] = true;   // Ý , CAPITAL LETTER Y WITH ACUTE ACCENT
-    IsLetterTab[0xDE] = true;   // Þ , CAPITAL LETTER THORN
-    IsLetterTab[0xDF] = true;   // ß , SMALL LETTER SHARP S
-    IsLetterTab[0xE0] = true;   // à , SMALL LETTER A WITH GRAVE ACCENT
-    IsLetterTab[0xE1] = true;   // á , SMALL LETTER A WITH ACUTE ACCENT
-    IsLetterTab[0xE2] = true;   // â , SMALL LETTER A WITH CIRCUMFLEX ACCENT
-    IsLetterTab[0xE3] = true;   // ã , SMALL LETTER A WITH TILDE
-    IsLetterTab[0xE4] = true;   // ä , SMALL LETTER A WITH DIAERESIS
-    IsLetterTab[0xE5] = true;   // å , SMALL LETTER A WITH RING ABOVE
-    IsLetterTab[0xE6] = true;   // æ , SMALL LIGATURE AE
-    IsLetterTab[0xE7] = true;   // ç , SMALL LETTER C WITH CEDILLA
-    IsLetterTab[0xE8] = true;   // è , SMALL LETTER E WITH GRAVE ACCENT
-    IsLetterTab[0xE9] = true;   // é , SMALL LETTER E WITH ACUTE ACCENT
-    IsLetterTab[0xEA] = true;   // ê , SMALL LETTER E WITH CIRCUMFLEX ACCENT
-    IsLetterTab[0xEB] = true;   // ë , SMALL LETTER E WITH DIAERESIS
-    IsLetterTab[0xEC] = true;   // ì , SMALL LETTER I WITH GRAVE ACCENT
-    IsLetterTab[0xED] = true;   // í , SMALL LETTER I WITH ACUTE ACCENT
-    IsLetterTab[0xEE] = true;   // î , SMALL LETTER I WITH CIRCUMFLEX ACCENT
-    IsLetterTab[0xEF] = true;   // ï , SMALL LETTER I WITH DIAERESIS
-    IsLetterTab[0xF0] = true;   // ð , SMALL LETTER ETH
-    IsLetterTab[0xF1] = true;   // ñ , SMALL LETTER N WITH TILDE
-    IsLetterTab[0xF2] = true;   // ò , SMALL LETTER O WITH GRAVE ACCENT
-    IsLetterTab[0xF3] = true;   // ó , SMALL LETTER O WITH ACUTE ACCENT
-    IsLetterTab[0xF4] = true;   // ô , SMALL LETTER O WITH CIRCUMFLEX ACCENT
-    IsLetterTab[0xF5] = true;   // õ , SMALL LETTER O WITH TILDE
-    IsLetterTab[0xF6] = true;   // ö , SMALL LETTER O WITH DIAERESIS
-    IsLetterTab[0xF8] = true;   // ø , SMALL LETTER O WITH OBLIQUE BAR
-    IsLetterTab[0xF9] = true;   // ù , SMALL LETTER U WITH GRAVE ACCENT
-    IsLetterTab[0xFA] = true;   // ú , SMALL LETTER U WITH ACUTE ACCENT
-    IsLetterTab[0xFB] = true;   // û , SMALL LETTER U WITH CIRCUMFLEX ACCENT
-    IsLetterTab[0xFC] = true;   // ü , SMALL LETTER U WITH DIAERESIS
-    IsLetterTab[0xFD] = true;   // ý , SMALL LETTER Y WITH ACUTE ACCENT
-    IsLetterTab[0xFE] = true;   // þ , SMALL LETTER THORN
-    IsLetterTab[0xFF] = true;   // ÿ , SMALL LETTER Y WITH DIAERESIS
+    IsLetterTab[0xC0] = true;   // ?, CAPITAL LETTER A WITH GRAVE ACCENT
+    IsLetterTab[0xC1] = true;   // ?, CAPITAL LETTER A WITH ACUTE ACCENT
+    IsLetterTab[0xC2] = true;   // ?, CAPITAL LETTER A WITH CIRCUMFLEX ACCENT
+    IsLetterTab[0xC3] = true;   // ?, CAPITAL LETTER A WITH TILDE
+    IsLetterTab[0xC4] = true;   // ?, CAPITAL LETTER A WITH DIAERESIS
+    IsLetterTab[0xC5] = true;   // ?, CAPITAL LETTER A WITH RING ABOVE
+    IsLetterTab[0xC6] = true;   // ?, CAPITAL LIGATURE AE
+    IsLetterTab[0xC7] = true;   // ?, CAPITAL LETTER C WITH CEDILLA
+    IsLetterTab[0xC8] = true;   // ?, CAPITAL LETTER E WITH GRAVE ACCENT
+    IsLetterTab[0xC9] = true;   // ?, CAPITAL LETTER E WITH ACUTE ACCENT
+    IsLetterTab[0xCA] = true;   // ?, CAPITAL LETTER E WITH CIRCUMFLEX ACCENT
+    IsLetterTab[0xCB] = true;   // ?, CAPITAL LETTER E WITH DIAERESIS
+    IsLetterTab[0xCC] = true;   // ?, CAPITAL LETTER I WITH GRAVE ACCENT
+    IsLetterTab[0xCD] = true;   // ?, CAPITAL LETTER I WITH ACUTE ACCENT
+    IsLetterTab[0xCE] = true;   // ?, CAPITAL LETTER I WITH CIRCUMFLEX ACCENT
+    IsLetterTab[0xCF] = true;   // ?, CAPITAL LETTER I WITH DIAERESIS
+    IsLetterTab[0xD0] = true;   // ?, CAPITAL LETTER ETH
+    IsLetterTab[0xD1] = true;   // ?, CAPITAL LETTER N WITH TILDE
+    IsLetterTab[0xD2] = true;   // ?, CAPITAL LETTER O WITH GRAVE ACCENT
+    IsLetterTab[0xD3] = true;   // ?, CAPITAL LETTER O WITH ACUTE ACCENT
+    IsLetterTab[0xD4] = true;   // ?, CAPITAL LETTER O WITH CIRCUMFLEX ACCENT
+    IsLetterTab[0xD5] = true;   // ?, CAPITAL LETTER O WITH TILDE
+    IsLetterTab[0xD6] = true;   // ?, CAPITAL LETTER O WITH DIAERESIS
+    IsLetterTab[0xD8] = true;   // ?, CAPITAL LETTER O WITH STROKE
+    IsLetterTab[0xD9] = true;   // ?, CAPITAL LETTER U WITH GRAVE ACCENT
+    IsLetterTab[0xDA] = true;   // ?, CAPITAL LETTER U WITH ACUTE ACCENT
+    IsLetterTab[0xDB] = true;   // ?, CAPITAL LETTER U WITH CIRCUMFLEX ACCENT
+    IsLetterTab[0xDC] = true;   // ?, CAPITAL LETTER U WITH DIAERESIS
+    IsLetterTab[0xDD] = true;   // ?, CAPITAL LETTER Y WITH ACUTE ACCENT
+    IsLetterTab[0xDE] = true;   // ?, CAPITAL LETTER THORN
+    IsLetterTab[0xDF] = true;   // ?, SMALL LETTER SHARP S
+    IsLetterTab[0xE0] = true;   // ?, SMALL LETTER A WITH GRAVE ACCENT
+    IsLetterTab[0xE1] = true;   // ?, SMALL LETTER A WITH ACUTE ACCENT
+    IsLetterTab[0xE2] = true;   // ?, SMALL LETTER A WITH CIRCUMFLEX ACCENT
+    IsLetterTab[0xE3] = true;   // ?, SMALL LETTER A WITH TILDE
+    IsLetterTab[0xE4] = true;   // ?, SMALL LETTER A WITH DIAERESIS
+    IsLetterTab[0xE5] = true;   // ?, SMALL LETTER A WITH RING ABOVE
+    IsLetterTab[0xE6] = true;   // ?, SMALL LIGATURE AE
+    IsLetterTab[0xE7] = true;   // ?, SMALL LETTER C WITH CEDILLA
+    IsLetterTab[0xE8] = true;   // ?, SMALL LETTER E WITH GRAVE ACCENT
+    IsLetterTab[0xE9] = true;   // ?, SMALL LETTER E WITH ACUTE ACCENT
+    IsLetterTab[0xEA] = true;   // ?, SMALL LETTER E WITH CIRCUMFLEX ACCENT
+    IsLetterTab[0xEB] = true;   // ?, SMALL LETTER E WITH DIAERESIS
+    IsLetterTab[0xEC] = true;   // ?, SMALL LETTER I WITH GRAVE ACCENT
+    IsLetterTab[0xED] = true;   // ?, SMALL LETTER I WITH ACUTE ACCENT
+    IsLetterTab[0xEE] = true;   // ?, SMALL LETTER I WITH CIRCUMFLEX ACCENT
+    IsLetterTab[0xEF] = true;   // ?, SMALL LETTER I WITH DIAERESIS
+    IsLetterTab[0xF0] = true;   // ?, SMALL LETTER ETH
+    IsLetterTab[0xF1] = true;   // ?, SMALL LETTER N WITH TILDE
+    IsLetterTab[0xF2] = true;   // ?, SMALL LETTER O WITH GRAVE ACCENT
+    IsLetterTab[0xF3] = true;   // ?, SMALL LETTER O WITH ACUTE ACCENT
+    IsLetterTab[0xF4] = true;   // ?, SMALL LETTER O WITH CIRCUMFLEX ACCENT
+    IsLetterTab[0xF5] = true;   // ?, SMALL LETTER O WITH TILDE
+    IsLetterTab[0xF6] = true;   // ?, SMALL LETTER O WITH DIAERESIS
+    IsLetterTab[0xF8] = true;   // ?, SMALL LETTER O WITH OBLIQUE BAR
+    IsLetterTab[0xF9] = true;   // ?, SMALL LETTER U WITH GRAVE ACCENT
+    IsLetterTab[0xFA] = true;   // ?, SMALL LETTER U WITH ACUTE ACCENT
+    IsLetterTab[0xFB] = true;   // ?, SMALL LETTER U WITH CIRCUMFLEX ACCENT
+    IsLetterTab[0xFC] = true;   // ?, SMALL LETTER U WITH DIAERESIS
+    IsLetterTab[0xFD] = true;   // ?, SMALL LETTER Y WITH ACUTE ACCENT
+    IsLetterTab[0xFE] = true;   // ?, SMALL LETTER THORN
+    IsLetterTab[0xFF] = true;   // ï¿½ , SMALL LETTER Y WITH DIAERESIS
 }
 
 bool LetterTable::isLetterUnicode( sal_Unicode c )
@@ -358,7 +358,7 @@ bool LetterTable::isLetterUnicode( sal_Unicode c )
 }
 
 // Hilfsfunktion: Zeichen-Flag Testen
-BOOL SimpleTokenizer_Impl::testCharFlags( sal_Unicode c, USHORT nTestFlags )
+sal_Bool SimpleTokenizer_Impl::testCharFlags( sal_Unicode c, sal_uInt16 nTestFlags )
 {
     bool bRet = false;
     if( c != 0 && c <= 255 )
@@ -373,14 +373,14 @@ BOOL SimpleTokenizer_Impl::testCharFlags( sal_Unicode c, USHORT nTestFlags )
     return bRet;
 }
 
-void SimpleTokenizer_Impl::setKeyWords( const char** ppKeyWords, UINT16 nCount )
+void SimpleTokenizer_Impl::setKeyWords( const char** ppKeyWords, sal_uInt16 nCount )
 {
     ppListKeyWords = ppKeyWords;
     nKeyWordCount = nCount;
 }
 
 // Neues Token holen
-BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
+sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos )
 {
     reType = TT_UNKNOWN;
@@ -391,25 +391,25 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     // Zeichen untersuchen
     sal_Unicode c = peekChar();
     if( c == CHAR_EOF )
-        return FALSE;
+        return sal_False;
 
     // Zeichen lesen
     getChar();
 
     //*** Alle Moeglichkeiten durchgehen ***
     // Space?
-    if ( (testCharFlags( c, CHAR_SPACE ) == TRUE) )
+    if ( (testCharFlags( c, CHAR_SPACE ) == sal_True) )
     {
-        while( testCharFlags( peekChar(), CHAR_SPACE ) == TRUE )
+        while( testCharFlags( peekChar(), CHAR_SPACE ) == sal_True )
             getChar();
 
         reType = TT_WHITESPACE;
     }
 
     // Identifier?
-    else if ( (testCharFlags( c, CHAR_START_IDENTIFIER ) == TRUE) )
+    else if ( (testCharFlags( c, CHAR_START_IDENTIFIER ) == sal_True) )
     {
-        BOOL bIdentifierChar;
+        sal_Bool bIdentifierChar;
         do
         {
             // Naechstes Zeichen holen
@@ -452,7 +452,7 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
                     {
                         // Alle Zeichen bis Zeilen-Ende oder EOF entfernen
                         sal_Unicode cPeek = peekChar();
-                        while( cPeek != CHAR_EOF && testCharFlags( cPeek, CHAR_EOL ) == FALSE )
+                        while( cPeek != CHAR_EOF && testCharFlags( cPeek, CHAR_EOL ) == sal_False )
                         {
                             c = getChar();
                             cPeek = peekChar();
@@ -467,14 +467,14 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
 
     // Operator?
     // only for BASIC '\'' should be a comment, otherwise it is a normal string and handled there
-    else if ( ( testCharFlags( c, CHAR_OPERATOR ) == TRUE ) || ( (c == '\'') && (aLanguage==HIGHLIGHT_BASIC)) )
+    else if ( ( testCharFlags( c, CHAR_OPERATOR ) == sal_True ) || ( (c == '\'') && (aLanguage==HIGHLIGHT_BASIC)) )
     {
         // paramters for SQL view
         if ( (c==':') || (c=='?'))
         {
             if (c!='?')
             {
-                BOOL bIdentifierChar;
+                sal_Bool bIdentifierChar;
                 do
                 {
                     // Naechstes Zeichen holen
@@ -493,7 +493,7 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
             if (cPeekNext=='-')
             {
                 // Alle Zeichen bis Zeilen-Ende oder EOF entfernen
-                while( cPeekNext != CHAR_EOF && testCharFlags( cPeekNext, CHAR_EOL ) == FALSE )
+                while( cPeekNext != CHAR_EOF && testCharFlags( cPeekNext, CHAR_EOL ) == sal_False )
                 {
                     getChar();
                     cPeekNext = peekChar();
@@ -507,7 +507,7 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
            if (cPeekNext=='/')
            {
                // Alle Zeichen bis Zeilen-Ende oder EOF entfernen
-               while( cPeekNext != CHAR_EOF && testCharFlags( cPeekNext, CHAR_EOL ) == FALSE )
+               while( cPeekNext != CHAR_EOF && testCharFlags( cPeekNext, CHAR_EOL ) == sal_False )
                {
                    getChar();
                    cPeekNext = peekChar();
@@ -524,7 +524,7 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
 
                 // Alle Zeichen bis Zeilen-Ende oder EOF entfernen
                 sal_Unicode cPeek = c;
-                while( cPeek != CHAR_EOF && testCharFlags( cPeek, CHAR_EOL ) == FALSE )
+                while( cPeek != CHAR_EOF && testCharFlags( cPeek, CHAR_EOL ) == sal_False )
                 {
                     getChar();
                     cPeek = peekChar();
@@ -551,7 +551,7 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     }
 
     // Zahl?
-    else if( testCharFlags( c, CHAR_START_NUMBER ) == TRUE )
+    else if( testCharFlags( c, CHAR_START_NUMBER ) == sal_True )
     {
         reType = TT_NUMBER;
 
@@ -593,7 +593,7 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
         if( reType == TT_NUMBER && nRadix == 10 )
         {
             // Flag, ob das letzte Zeichen ein Exponent war
-            BOOL bAfterExpChar = FALSE;
+            sal_Bool bAfterExpChar = sal_False;
 
             // Alle Ziffern einlesen
             while( testCharFlags( peekChar(), CHAR_IN_NUMBER ) ||
@@ -610,7 +610,7 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     }
 
     // String?
-    else if( testCharFlags( c, CHAR_START_STRING ) == TRUE )
+    else if( testCharFlags( c, CHAR_START_STRING ) == sal_True )
     {
         // Merken, welches Zeichen den String eroeffnet hat
         sal_Unicode cEndString = c;
@@ -628,7 +628,7 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
                 break;
             }
             c = getChar();
-            if( testCharFlags( c, CHAR_EOL ) == TRUE )
+            if( testCharFlags( c, CHAR_EOL ) == sal_True )
             {
                 // ERROR: unterminated string literal
                 reType = TT_ERROR;
@@ -648,11 +648,11 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     }
 
     // Zeilenende?
-    else if( testCharFlags( c, CHAR_EOL ) == TRUE )
+    else if( testCharFlags( c, CHAR_EOL ) == sal_True )
     {
         // Falls ein weiteres anderes EOL-Char folgt, weg damit
         sal_Unicode cNext = peekChar();
-        if( cNext != c && testCharFlags( cNext, CHAR_EOL ) == TRUE )
+        if( cNext != c && testCharFlags( cNext, CHAR_EOL ) == sal_True )
             getChar();
 
         // Positions-Daten auf Zeilen-Beginn setzen
@@ -667,13 +667,13 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
 
     // End-Position eintragen
     rpEndPos = mpActualPos;
-    return TRUE;
+    return sal_True;
 }
 
 String SimpleTokenizer_Impl::getTokStr
     ( /*out*/const sal_Unicode* pStartPos, /*out*/const sal_Unicode* pEndPos )
 {
-    return String( pStartPos, (USHORT)( pEndPos - pStartPos ) );
+    return String( pStartPos, (sal_uInt16)( pEndPos - pStartPos ) );
 }
 
 #ifdef DBG_UTIL
@@ -698,7 +698,7 @@ String SimpleTokenizer_Impl::getFullTokenStr( /*out*/TokenTypes eType,
     }
     if( eType != TT_EOL )
     {
-        aOut += String( pStartPos, (USHORT)( pEndPos - pStartPos ) );
+        aOut += String( pStartPos, (sal_uInt16)( pEndPos - pStartPos ) );
     }
     aOut += String( RTL_CONSTASCII_USTRINGPARAM("\n") );
     return aOut;
@@ -710,10 +710,10 @@ SimpleTokenizer_Impl::SimpleTokenizer_Impl( HighlighterLanguage aLang ): aLangua
     memset( aCharTypeTab, 0, sizeof( aCharTypeTab ) );
 
     // Zeichen-Tabelle fuellen
-    USHORT i;
+    sal_uInt16 i;
 
     // Zulaessige Zeichen fuer Identifier
-    USHORT nHelpMask = (USHORT)( CHAR_START_IDENTIFIER | CHAR_IN_IDENTIFIER );
+    sal_uInt16 nHelpMask = (sal_uInt16)( CHAR_START_IDENTIFIER | CHAR_IN_IDENTIFIER );
     for( i = 'a' ; i <= 'z' ; i++ )
         aCharTypeTab[i] |= nHelpMask;
     for( i = 'A' ; i <= 'Z' ; i++ )
@@ -724,7 +724,7 @@ SimpleTokenizer_Impl::SimpleTokenizer_Impl( HighlighterLanguage aLang ): aLangua
     aCharTypeTab[(int)'$'] |= nHelpMask;
 
     // Ziffern (Identifier und Number ist moeglich)
-    nHelpMask = (USHORT)( CHAR_IN_IDENTIFIER | CHAR_START_NUMBER |
+    nHelpMask = (sal_uInt16)( CHAR_IN_IDENTIFIER | CHAR_START_NUMBER |
                          CHAR_IN_NUMBER | CHAR_IN_HEX_NUMBER );
     for( i = '0' ; i <= '9' ; i++ )
         aCharTypeTab[i] |= nHelpMask;
@@ -732,7 +732,7 @@ SimpleTokenizer_Impl::SimpleTokenizer_Impl( HighlighterLanguage aLang ): aLangua
     // e und E sowie . von Hand ergaenzen
     aCharTypeTab[(int)'e'] |= CHAR_IN_NUMBER;
     aCharTypeTab[(int)'E'] |= CHAR_IN_NUMBER;
-    aCharTypeTab[(int)'.'] |= (USHORT)( CHAR_IN_NUMBER | CHAR_START_NUMBER );
+    aCharTypeTab[(int)'.'] |= (sal_uInt16)( CHAR_IN_NUMBER | CHAR_START_NUMBER );
     aCharTypeTab[(int)'&'] |= CHAR_START_NUMBER;
 
     // Hex-Ziffern
@@ -800,7 +800,7 @@ SimpleTokenizer_Impl* getSimpleTokenizer( void )
 }
 
 // Heraussuchen der jeweils naechsten Funktion aus einem JavaScript-Modul
-UINT16 SimpleTokenizer_Impl::parseLine( UINT32 nParseLine, const String* aSource )
+sal_uInt16 SimpleTokenizer_Impl::parseLine( sal_uInt32 nParseLine, const String* aSource )
 {
     // Position auf den Anfang des Source-Strings setzen
     mpStringBegin = mpActualPos = aSource->GetBuffer();
@@ -815,14 +815,14 @@ UINT16 SimpleTokenizer_Impl::parseLine( UINT32 nParseLine, const String* aSource
     const sal_Unicode* pEndPos;
 
     // Schleife ueber alle Tokens
-    UINT16 nTokenCount = 0;
+    sal_uInt16 nTokenCount = 0;
     while( getNextToken( eType, pStartPos, pEndPos ) )
         nTokenCount++;
 
     return nTokenCount;
 }
 
-void SimpleTokenizer_Impl::getHighlightPortions( UINT32 nParseLine, const String& rLine,
+void SimpleTokenizer_Impl::getHighlightPortions( sal_uInt32 nParseLine, const String& rLine,
                                                     /*out*/HighlightPortions& portions  )
 {
     // Position auf den Anfang des Source-Strings setzen
@@ -842,8 +842,8 @@ void SimpleTokenizer_Impl::getHighlightPortions( UINT32 nParseLine, const String
     {
         HighlightPortion portion;
 
-        portion.nBegin = (UINT16)(pStartPos - mpStringBegin);
-        portion.nEnd = (UINT16)(pEndPos - mpStringBegin);
+        portion.nBegin = (sal_uInt16)(pStartPos - mpStringBegin);
+        portion.nEnd = (sal_uInt16)(pEndPos - mpStringBegin);
         portion.tokenType = eType;
 
         portions.push_back(portion);
@@ -888,18 +888,18 @@ void SyntaxHighlighter::initialize( HighlighterLanguage eLanguage_ )
     }
 }
 
-const Range SyntaxHighlighter::notifyChange( UINT32 nLine, INT32 nLineCountDifference,
-                                const String* pChangedLines, UINT32 nArrayLength)
+const Range SyntaxHighlighter::notifyChange( sal_uInt32 nLine, sal_Int32 nLineCountDifference,
+                                const String* pChangedLines, sal_uInt32 nArrayLength)
 {
     (void)nLineCountDifference;
 
-    for( UINT32 i=0 ; i < nArrayLength ; i++ )
+    for( sal_uInt32 i=0 ; i < nArrayLength ; i++ )
         m_pSimpleTokenizer->parseLine(nLine+i, &pChangedLines[i]);
 
     return Range( nLine, nLine + nArrayLength-1 );
 }
 
-void SyntaxHighlighter::getHighlightPortions( UINT32 nLine, const String& rLine,
+void SyntaxHighlighter::getHighlightPortions( sal_uInt32 nLine, const String& rLine,
                                             /*out*/HighlightPortions& portions )
 {
     m_pSimpleTokenizer->getHighlightPortions( nLine, rLine, portions );

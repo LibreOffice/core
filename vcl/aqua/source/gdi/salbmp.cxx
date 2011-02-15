@@ -104,7 +104,7 @@ bool AquaSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
 
 // ------------------------------------------------------------------
 
-bool AquaSalBitmap::Create( const Size& rSize, USHORT nBits, const BitmapPalette& rBitmapPalette )
+bool AquaSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapPalette& rBitmapPalette )
 {
     if( !isValidBitCount( nBits ) )
         return false;
@@ -131,7 +131,7 @@ bool AquaSalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
 
 // ------------------------------------------------------------------
 
-bool AquaSalBitmap::Create( const SalBitmap& rSalBmp, USHORT nNewBitCount )
+bool AquaSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount )
 {
     const AquaSalBitmap& rSourceBitmap = static_cast<const AquaSalBitmap&>(rSalBmp);
 
@@ -560,7 +560,7 @@ Size AquaSalBitmap::GetSize() const
 
 // ------------------------------------------------------------------
 
-USHORT AquaSalBitmap::GetBitCount() const
+sal_uInt16 AquaSalBitmap::GetBitCount() const
 {
     return mnBits;
 }
@@ -569,9 +569,9 @@ USHORT AquaSalBitmap::GetBitCount() const
 
 static struct pal_entry
 {
-    BYTE mnRed;
-    BYTE mnGreen;
-    BYTE mnBlue;
+    sal_uInt8 mnRed;
+    sal_uInt8 mnGreen;
+    sal_uInt8 mnBlue;
 }
 const aImplSalSysPalEntryAry[ 16 ] =
 {
@@ -626,9 +626,9 @@ const BitmapPalette& GetDefaultPalette( int mnBits, bool bMonochrome )
 
         // own palette (6/6/6)
         const int DITHER_PAL_STEPS = 6;
-        const BYTE DITHER_PAL_DELTA = 51;
+        const sal_uInt8 DITHER_PAL_DELTA = 51;
         int nB, nG, nR;
-        BYTE nRed, nGreen, nBlue;
+        sal_uInt8 nRed, nGreen, nBlue;
         for( nB=0, nBlue=0; nB < DITHER_PAL_STEPS; nB++, nBlue += DITHER_PAL_DELTA )
         {
             for( nG=0, nGreen=0; nG < DITHER_PAL_STEPS; nG++, nGreen += DITHER_PAL_DELTA )

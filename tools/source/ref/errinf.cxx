@@ -49,11 +49,11 @@ struct EDcrData
     ErrorHandler               *pFirstHdl;
     ErrorContext               *pFirstCtx;
     DisplayFnPtr               pDsp;
-    BOOL                       bIsWindowDsp;
+    sal_Bool                       bIsWindowDsp;
 
 
     DynamicErrorInfo            *ppDcr[ERRCODE_DYNAMIC_COUNT];
-    USHORT                      nNextDcr;
+    sal_uInt16                      nNextDcr;
                                 EDcrData();
 
 static  EDcrData                *GetData();
@@ -62,12 +62,12 @@ static  EDcrData                *GetData();
 
 class EDcr_Impl
 {
-    ULONG                       lErrId;
-    USHORT                      nMask;
+    sal_uIntPtr                       lErrId;
+    sal_uInt16                      nMask;
 
     void                        RegisterEDcr(DynamicErrorInfo *);
     void                        UnRegisterEDcr(DynamicErrorInfo *);
-    static ErrorInfo           *GetDynamicErrorInfo(ULONG lId);
+    static ErrorInfo           *GetDynamicErrorInfo(sal_uIntPtr lId);
 
 friend class DynamicErrorInfo;
 friend class ErrorInfo;
@@ -76,7 +76,7 @@ friend class ErrorInfo;
 
 EDcrData::EDcrData()
 {
-    for(USHORT n=0;n<ERRCODE_DYNAMIC_COUNT;n++)
+    for(sal_uInt16 n=0;n<ERRCODE_DYNAMIC_COUNT;n++)
         ppDcr[n]=0;
     nNextDcr=0;
     pFirstHdl=0;
@@ -105,10 +105,10 @@ void EDcr_Impl::RegisterEDcr(DynamicErrorInfo *pDcr)
     //Vergibt eine dynamische Id
 
     EDcrData* pData=EDcrData::GetData();
-    lErrId= (((ULONG)pData->nNextDcr + 1) << ERRCODE_DYNAMIC_SHIFT) +
+    lErrId= (((sal_uIntPtr)pData->nNextDcr + 1) << ERRCODE_DYNAMIC_SHIFT) +
         pDcr->GetErrorCode();
     DynamicErrorInfo **ppDcr=pData->ppDcr;
-    USHORT nNext=pData->nNextDcr;
+    sal_uInt16 nNext=pData->nNextDcr;
 
     // bei einem Ringbuffer koennen wir uns das ASSERT wohl sparen!
     // DBG_ASSERT(ppDcr[nNext]==0,"ErrHdl: Alle Errors belegt");
@@ -127,8 +127,8 @@ void EDcr_Impl::UnRegisterEDcr(DynamicErrorInfo *pDcr)
 
     EDcrData* pData=EDcrData::GetData();
     DynamicErrorInfo **ppDcr=pData->ppDcr;
-    ULONG lIdx=(
-        ((ULONG)(*pDcr) & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
+    sal_uIntPtr lIdx=(
+        ((sal_uIntPtr)(*pDcr) & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
     DBG_ASSERT(ppDcr[lIdx]==pDcr,"ErrHdl: Error nicht gefunden");
     if(ppDcr[lIdx]==pDcr)
         ppDcr[lIdx]=0;
@@ -142,7 +142,7 @@ TYPEINIT1(TwoStringErrorInfo, DynamicErrorInfo);
 TYPEINIT1(MessageInfo, DynamicErrorInfo);
 
 
-ErrorInfo *ErrorInfo::GetErrorInfo(ULONG lId)
+ErrorInfo *ErrorInfo::GetErrorInfo(sal_uIntPtr lId)
 {
     if(lId & ERRCODE_DYNAMIC_MASK)
         return EDcr_Impl::GetDynamicErrorInfo(lId);
@@ -150,12 +150,12 @@ ErrorInfo *ErrorInfo::GetErrorInfo(ULONG lId)
         return new ErrorInfo(lId);
 }
 
-DynamicErrorInfo::operator ULONG() const
+DynamicErrorInfo::operator sal_uIntPtr() const
 {
     return pImpl->lErrId;
 }
 
-DynamicErrorInfo::DynamicErrorInfo(ULONG lArgUserId, USHORT nMask)
+DynamicErrorInfo::DynamicErrorInfo(sal_uIntPtr lArgUserId, sal_uInt16 nMask)
 : ErrorInfo(lArgUserId)
 {
     pImpl=new EDcr_Impl;
@@ -169,32 +169,32 @@ DynamicErrorInfo::~DynamicErrorInfo()
     delete pImpl;
 }
 
-ErrorInfo* EDcr_Impl::GetDynamicErrorInfo(ULONG lId)
+ErrorInfo* EDcr_Impl::GetDynamicErrorInfo(sal_uIntPtr lId)
 {
-    ULONG lIdx=((lId & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
+    sal_uIntPtr lIdx=((lId & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
     DynamicErrorInfo* pDcr=EDcrData::GetData()->ppDcr[lIdx];
-    if(pDcr && (ULONG)(*pDcr)==lId)
+    if(pDcr && (sal_uIntPtr)(*pDcr)==lId)
         return pDcr;
     else
         return new ErrorInfo(lId & ~ERRCODE_DYNAMIC_MASK);
 }
 
 
-USHORT DynamicErrorInfo::GetDialogMask() const
+sal_uInt16 DynamicErrorInfo::GetDialogMask() const
 {
     return pImpl->nMask;
 }
 
 
 StandardErrorInfo::StandardErrorInfo(
-    ULONG UserId, ULONG lArgExtId, USHORT nFlags)
+    sal_uIntPtr UserId, sal_uIntPtr lArgExtId, sal_uInt16 nFlags)
 : DynamicErrorInfo(UserId, nFlags), lExtId(lArgExtId)
 {
 }
 
 
 StringErrorInfo::StringErrorInfo(
-    ULONG UserId, const String& aStringP,  USHORT nFlags)
+    sal_uIntPtr UserId, const String& aStringP,  sal_uInt16 nFlags)
 : DynamicErrorInfo(UserId, nFlags), aString(aStringP)
 {
 }
@@ -205,8 +205,8 @@ class ErrHdl_Impl
   public:
 
     ErrorHandler        *pNext;
-    static BOOL         CreateString(const ErrorHandler *pStart,
-                                     const ErrorInfo*, String&, USHORT&);
+    static sal_Bool         CreateString(const ErrorHandler *pStart,
+                                     const ErrorInfo*, String&, sal_uInt16&);
 };
 
 
@@ -267,19 +267,19 @@ ErrorHandler::~ErrorHandler()
 void ErrorHandler::RegisterDisplay(WindowDisplayErrorFunc *aDsp)
 {
     EDcrData *pData=EDcrData::GetData();
-    pData->bIsWindowDsp=TRUE;
+    pData->bIsWindowDsp=sal_True;
     pData->pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
 void ErrorHandler::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
 {
     EDcrData *pData=EDcrData::GetData();
-    pData->bIsWindowDsp=FALSE;
+    pData->bIsWindowDsp=sal_False;
     pData->pDsp = reinterpret_cast< DisplayFnPtr >(aDsp);
 }
 
-USHORT ErrorHandler::HandleError_Impl(
-    ULONG lId, USHORT nFlags, BOOL bJustCreateString, String & rError)
+sal_uInt16 ErrorHandler::HandleError_Impl(
+    sal_uIntPtr lId, sal_uInt16 nFlags, sal_Bool bJustCreateString, String & rError)
 {
 
 /*  [Beschreibung]
@@ -316,8 +316,8 @@ USHORT ErrorHandler::HandleError_Impl(
             break;
         }
 
-    BOOL bWarning = ((lId & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
-    USHORT nErrFlags = ERRCODE_BUTTON_DEF_OK | ERRCODE_BUTTON_OK;
+    sal_Bool bWarning = ((lId & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
+    sal_uInt16 nErrFlags = ERRCODE_BUTTON_DEF_OK | ERRCODE_BUTTON_OK;
     if (bWarning)
         nErrFlags |= ERRCODE_MSG_WARNING;
     else
@@ -326,7 +326,7 @@ USHORT ErrorHandler::HandleError_Impl(
     DynamicErrorInfo* pDynPtr=PTR_CAST(DynamicErrorInfo,pInfo);
     if(pDynPtr)
     {
-        USHORT nDynFlags = pDynPtr->GetDialogMask();
+        sal_uInt16 nDynFlags = pDynPtr->GetDialogMask();
         if( nDynFlags )
             nErrFlags = nDynFlags;
     }
@@ -379,12 +379,12 @@ USHORT ErrorHandler::HandleError_Impl(
 }
 
 // static
-BOOL ErrorHandler::GetErrorString(ULONG lId, String& rStr)
+sal_Bool ErrorHandler::GetErrorString(sal_uIntPtr lId, String& rStr)
 {
-    return (BOOL)HandleError_Impl( lId, USHRT_MAX, TRUE, rStr );
+    return (sal_Bool)HandleError_Impl( lId, USHRT_MAX, sal_True, rStr );
 }
 
-USHORT ErrorHandler::HandleError(ULONG lId, USHORT nFlags)
+sal_uInt16 ErrorHandler::HandleError(sal_uIntPtr lId, sal_uInt16 nFlags)
 {
 
 /*  [Beschreibung]
@@ -404,30 +404,30 @@ USHORT ErrorHandler::HandleError(ULONG lId, USHORT nFlags)
     */
 
     String aDummy;
-    return HandleError_Impl( lId, nFlags, FALSE, aDummy );
+    return HandleError_Impl( lId, nFlags, sal_False, aDummy );
 }
 
-BOOL ErrorHandler::ForwCreateString(const ErrorInfo* pInfo, String& rStr, USHORT &rFlags) const
+sal_Bool ErrorHandler::ForwCreateString(const ErrorInfo* pInfo, String& rStr, sal_uInt16 &rFlags) const
 {
     return ErrHdl_Impl::CreateString(this->pImpl->pNext, pInfo, rStr, rFlags);
 }
 
-BOOL ErrHdl_Impl::CreateString( const ErrorHandler *pStart,
+sal_Bool ErrHdl_Impl::CreateString( const ErrorHandler *pStart,
                                 const ErrorInfo* pInfo, String& pStr,
-                               USHORT &rFlags)
+                               sal_uInt16 &rFlags)
 {
     for(const ErrorHandler *pHdl=pStart;pHdl;pHdl=pHdl->pImpl->pNext)
     {
         if(pHdl->CreateString( pInfo, pStr, rFlags))
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SimpleErrorHandler::CreateString(
-    const ErrorInfo *pInfo, String &rStr, USHORT &) const
+sal_Bool SimpleErrorHandler::CreateString(
+    const ErrorInfo *pInfo, String &rStr, sal_uInt16 &) const
 {
-    ULONG nId = pInfo->GetErrorCode();
+    sal_uIntPtr nId = pInfo->GetErrorCode();
     ByteString aStr;
     aStr="Id ";
     aStr+=ByteString::CreateFromInt32(nId);
@@ -443,7 +443,7 @@ BOOL SimpleErrorHandler::CreateString(
     if(pDyn)
     {
         aStr+="\nDId ";
-        aStr+=ByteString::CreateFromInt32((ULONG)*pDyn);
+        aStr+=ByteString::CreateFromInt32((sal_uIntPtr)*pDyn);
     }
     StandardErrorInfo *pStd=PTR_CAST(StandardErrorInfo,pInfo);
     if(pStd)
@@ -452,7 +452,7 @@ BOOL SimpleErrorHandler::CreateString(
         aStr+=ByteString::CreateFromInt32(pStd->GetExtendedErrorCode());
     }
     rStr = String( aStr, RTL_TEXTENCODING_ASCII_US );
-    return TRUE;
+    return sal_True;
 }
 
 SimpleErrorHandler::SimpleErrorHandler()

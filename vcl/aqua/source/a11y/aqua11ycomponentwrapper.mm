@@ -75,8 +75,8 @@ using namespace ::com::sun::star::uno;
     [ pool release ];
 }
 
-+(MacOSBOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper {
-    MacOSBOOL isSettable = NO;
++(BOOL)isAttributeSettable:(NSString *)attribute forElement:(AquaA11yWrapper *)wrapper {
+    BOOL isSettable = NO;
     NSAutoreleasePool * pool = [ [ NSAutoreleasePool alloc ] init ];
     if ( [ attribute isEqualToString: NSAccessibilityFocusedAttribute ] 
       && ! [ [ AquaA11yRoleHelper getNativeRoleFrom: [ wrapper accessibleContext ] ] isEqualToString: NSAccessibilityScrollBarRole ] 

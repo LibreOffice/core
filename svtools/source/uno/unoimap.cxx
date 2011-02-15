@@ -92,7 +92,7 @@ class SvUnoImageMapObject : public OWeakAggObject,
                             public XUnoTunnel
 {
 public:
-    SvUnoImageMapObject( UINT16 nType, const SvEventDescription* pSupportedMacroItems );
+    SvUnoImageMapObject( sal_uInt16 nType, const SvEventDescription* pSupportedMacroItems );
     SvUnoImageMapObject( const IMapObject& rMapObject, const SvEventDescription* pSupportedMacroItems );
     virtual ~SvUnoImageMapObject() throw();
 
@@ -125,10 +125,10 @@ public:
     virtual Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw( RuntimeException );
 
 private:
-    static PropertySetInfo* createPropertySetInfo( UINT16 nType );
+    static PropertySetInfo* createPropertySetInfo( sal_uInt16 nType );
 
 
-    UINT16 mnType;
+    sal_uInt16 mnType;
 
     ::rtl::OUString maURL;
     ::rtl::OUString maAltText;
@@ -144,7 +144,7 @@ private:
 
 UNO3_GETIMPLEMENTATION_IMPL( SvUnoImageMapObject );
 
-PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( UINT16 nType )
+PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( sal_uInt16 nType )
 {
     switch( nType )
     {
@@ -201,7 +201,7 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( UINT16 nType )
     }
 }
 
-SvUnoImageMapObject::SvUnoImageMapObject( UINT16 nType, const SvEventDescription* pSupportedMacroItems )
+SvUnoImageMapObject::SvUnoImageMapObject( sal_uInt16 nType, const SvEventDescription* pSupportedMacroItems )
 :   PropertySetHelper( createPropertySetInfo( nType ) ),
     mnType( nType )
 ,   mbIsActive( true )
@@ -249,11 +249,11 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
         {
             const Polygon aPoly( ((IMapPolygonObject*)&rMapObject)->GetPolygon(sal_False) );
 
-            const USHORT nCount = aPoly.GetSize();
+            const sal_uInt16 nCount = aPoly.GetSize();
             maPolygon.realloc( nCount );
             awt::Point* pPoints = maPolygon.getArray();
 
-            for( USHORT nPoint = 0; nPoint < nCount; nPoint++ )
+            for( sal_uInt16 nPoint = 0; nPoint < nCount; nPoint++ )
             {
                 const Point& rPoint = aPoly.GetPoint( nPoint );
                 pPoints->X = rPoint.X();
@@ -605,8 +605,8 @@ SvUnoImageMap::SvUnoImageMap( const ImageMap& rMap, const SvEventDescription* pS
 {
     maName = rMap.GetName();
 
-    const UINT16 nCount = rMap.GetIMapObjectCount();
-    for( UINT16 nPos = 0; nPos < nCount; nPos++ )
+    const sal_uInt16 nCount = rMap.GetIMapObjectCount();
+    for( sal_uInt16 nPos = 0; nPos < nCount; nPos++ )
     {
         IMapObject* pMapObject = rMap.GetIMapObject( nPos );
         SvUnoImageMapObject* pUnoObj = new SvUnoImageMapObject( *pMapObject, pSupportedMacroItems );
