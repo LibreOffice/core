@@ -55,7 +55,7 @@ void test::oustringbuffer::ToString::testToString() {
     rtl::OUString str = sb.toString();
     CPPUNIT_ASSERT(str.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test string")));
     // returned OUString must be independent from sb
-    sb.append('a');
+    sb.append( (sal_Unicode)'a' );
     CPPUNIT_ASSERT(str.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test string")));
     sb.setLength(0);
     CPPUNIT_ASSERT(str.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test string")));
