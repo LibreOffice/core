@@ -271,7 +271,7 @@ CGPoint* AquaSalGraphics::makeCGptArray(sal_uLong nPoints, const SalPoint*  pPtA
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::UpdateWindow( NSRect& rRect )
+void AquaSalGraphics::UpdateWindow( NSRect& )
 {
     if( !mpFrame )
         return;

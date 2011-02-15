@@ -75,7 +75,7 @@ AquaA11yEventListener::~AquaA11yEventListener()
 //------------------------------------------------------------------------------
 
 void SAL_CALL
-AquaA11yEventListener::disposing( const EventObject& Source ) throw( RuntimeException )
+AquaA11yEventListener::disposing( const EventObject& ) throw( RuntimeException )
 {
     [ AquaA11yFactory removeFromWrapperRepositoryFor: [ (AquaA11yWrapper *) m_wrapperObject accessibleContext ] ];
 }

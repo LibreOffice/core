@@ -243,6 +243,7 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( sal_Bool bUseJava )
 {
     sal_IntPtr nRet = 0;
 
+    (void)bUseJava;
 #if defined WNT
     nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->hWnd );
 #elif defined QUARTZ

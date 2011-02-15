@@ -658,7 +658,7 @@ const BitmapPalette& GetDefaultPalette( int mnBits, bool bMonochrome )
     return aEmptyPalette;
 }
 
-BitmapBuffer* AquaSalBitmap::AcquireBuffer( bool bReadOnly )
+BitmapBuffer* AquaSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
 {
     if( !maUserBuffer.get() )
 //  || maContextBuffer.get() && (maUserBuffer.get() != maContextBuffer.get()) )

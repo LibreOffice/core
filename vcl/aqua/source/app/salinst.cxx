@@ -894,7 +894,7 @@ bool AquaSalInstance::AnyInput( sal_uInt16 nType )
 
 // -----------------------------------------------------------------------
 
-SalFrame* AquaSalInstance::CreateChildFrame( SystemParentData* pSystemParentData, sal_uLong nSalFrameStyle )
+SalFrame* AquaSalInstance::CreateChildFrame( SystemParentData*, sal_uLong /*nSalFrameStyle*/ )
 {
     return NULL;
 }
@@ -980,7 +980,7 @@ void AquaSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 
 // -----------------------------------------------------------------------
 
-void AquaSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
+void AquaSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
 {
 }
 
@@ -1062,13 +1062,13 @@ void AquaSalInstance::DestroySystem( SalSystem* pSystem )
 
 // -----------------------------------------------------------------------
 
-void AquaSalInstance::SetEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) )
+void AquaSalInstance::SetEventCallback( void*, bool(*)(void*,void*,int) )
 {
 }
 
 // -----------------------------------------------------------------------
 
-void AquaSalInstance::SetErrorEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) )
+void AquaSalInstance::SetErrorEventCallback( void*, bool(*)(void*,void*,int) )
 {
 }
 

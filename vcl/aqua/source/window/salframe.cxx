@@ -481,7 +481,7 @@ void AquaSalFrame::Show(sal_Bool bVisible, sal_Bool bNoActivate)
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::Enable( sal_Bool bEnable )
+void AquaSalFrame::Enable( sal_Bool )
 {
 }
 
@@ -866,7 +866,7 @@ void AquaSalFrame::StartPresentation( sal_Bool bStart )
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::SetAlwaysOnTop( sal_Bool bOnTop )
+void AquaSalFrame::SetAlwaysOnTop( sal_Bool )
 {
 }
 
@@ -1038,7 +1038,7 @@ void AquaSalFrame::SetInputContext( SalInputContext* pContext )
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::EndExtTextInput( sal_uInt16 nFlags )
+void AquaSalFrame::EndExtTextInput( sal_uInt16 )
 {
 }
 
@@ -1546,7 +1546,7 @@ SalPointerState AquaSalFrame::GetPointerState()
     return state;
 }
 
-bool AquaSalFrame::SetPluginParent( SystemParentData* pNewParent )
+bool AquaSalFrame::SetPluginParent( SystemParentData* )
 {
     // plugin parent may be killed unexpectedly by
     // plugging process;

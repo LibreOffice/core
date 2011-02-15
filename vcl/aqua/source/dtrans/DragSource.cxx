@@ -116,44 +116,50 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
 
 -(void)draggedImage:(NSImage*)anImage beganAt:(NSPoint)aPoint
 {
-  DragSourceDragEvent dsde(static_cast<OWeakObject*>(mDragSource),
-                           new DragSourceContext(mDragSource),
-                           mDragSource,
-                           DNDConstants::ACTION_COPY,
-                           DNDConstants::ACTION_COPY);
+    (void)anImage;
+    (void)aPoint;
+    DragSourceDragEvent dsde(static_cast<OWeakObject*>(mDragSource),
+                             new DragSourceContext(mDragSource),
+                             mDragSource,
+                             DNDConstants::ACTION_COPY,
+                             DNDConstants::ACTION_COPY);
 
-  mDragSource->mXDragSrcListener->dragEnter(dsde);
+    mDragSource->mXDragSrcListener->dragEnter(dsde);
 }
 
 
 -(void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
 {
-  // an internal drop can accept the drop but fail with dropComplete( false )
-  // this is different than the Cocoa API
-  bool bDropSuccess = operation != NSDragOperationNone;
-  if( DragSource::g_DropSuccessSet )
-      bDropSuccess = DragSource::g_DropSuccess;
+    (void)anImage;
+    (void)aPoint;
+    // an internal drop can accept the drop but fail with dropComplete( false )
+    // this is different than the Cocoa API
+    bool bDropSuccess = operation != NSDragOperationNone;
+    if( DragSource::g_DropSuccessSet )
+        bDropSuccess = DragSource::g_DropSuccess;
 
-  DragSourceDropEvent dsde(static_cast<OWeakObject*>(mDragSource),
-                           new DragSourceContext(mDragSource),
-                           static_cast< XDragSource* >(mDragSource),
-                           SystemToOfficeDragActions(operation),
-                           bDropSuccess );
+    DragSourceDropEvent dsde(static_cast<OWeakObject*>(mDragSource),
+                             new DragSourceContext(mDragSource),
+                             static_cast< XDragSource* >(mDragSource),
+                             SystemToOfficeDragActions(operation),
+                             bDropSuccess );
 
-  mDragSource->mXDragSrcListener->dragDropEnd(dsde);
-  mDragSource->mXDragSrcListener = Reference<XDragSourceListener>();
+    mDragSource->mXDragSrcListener->dragDropEnd(dsde);
+    mDragSource->mXDragSrcListener = Reference<XDragSourceListener>();
 }
 
 
 -(void)draggedImage:(NSImage *)draggedImage movedTo:(NSPoint)screenPoint
 {
-  DragSourceDragEvent dsde(static_cast<OWeakObject*>(mDragSource),
-                           new DragSourceContext(mDragSource),
-                           mDragSource,
-                           DNDConstants::ACTION_COPY,
-                           DNDConstants::ACTION_COPY);
+    (void)draggedImage;
+    (void)screenPoint;
+    DragSourceDragEvent dsde(static_cast<OWeakObject*>(mDragSource),
+                             new DragSourceContext(mDragSource),
+                             mDragSource,
+                             DNDConstants::ACTION_COPY,
+                             DNDConstants::ACTION_COPY);
 
-  mDragSource->mXDragSrcListener->dragOver(dsde);
+    mDragSource->mXDragSrcListener->dragOver(dsde);
 }
 
 @end
@@ -243,8 +249,8 @@ sal_Int32 SAL_CALL DragSource::getDefaultCursor( sal_Int8 /*dragAction*/ )
 
 void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
                                     sal_Int8 sourceActions,
-                                    sal_Int32 cursor,
-                                    sal_Int32 image,
+                                    sal_Int32 /*cursor*/,
+                                    sal_Int32 /*image*/,
                                     const Reference<XTransferable >& transferable,
                                     const Reference<XDragSourceListener >& listener )
   throw( RuntimeException)

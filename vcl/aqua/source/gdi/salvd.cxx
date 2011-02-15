@@ -149,7 +149,7 @@ SalGraphics* AquaSalVirtualDevice::GetGraphics()
 
 // -----------------------------------------------------------------------
 
-void AquaSalVirtualDevice::ReleaseGraphics( SalGraphics *pGraphics )
+void AquaSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 {
     mbGraphicsUsed = false;
 }

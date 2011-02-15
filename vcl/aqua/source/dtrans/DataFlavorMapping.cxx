@@ -619,7 +619,7 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider(NSString* systemFlavor, Refe
   return dp;
 }
 
-DataProviderPtr_t DataFlavorMapper::getDataProvider(const NSString* systemFlavor, NSArray* systemData) const
+DataProviderPtr_t DataFlavorMapper::getDataProvider(const NSString* /*systemFlavor*/, NSArray* systemData) const
 {
   return DataProviderPtr_t(new FileListDataProvider(systemData));
 }

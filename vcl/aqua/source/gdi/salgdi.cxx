@@ -345,7 +345,7 @@ void AquaSalGraphics::updateResolution()
     initResolution( (mbWindow && mpFrame) ?  mpFrame->mpWindow : nil );
 }
 
-void AquaSalGraphics::initResolution( NSWindow* pWin )
+void AquaSalGraphics::initResolution( NSWindow* )
 {
     // #i100617# read DPI only once; there is some kind of weird caching going on
     // if the main screen changes
@@ -564,7 +564,7 @@ void AquaSalGraphics::ResetClipRegion()
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::BeginSetClipRegion( sal_uLong nRectCount )
+void AquaSalGraphics::BeginSetClipRegion( sal_uLong )
 {
     // release old clip path
     if( mxClipPath )
@@ -1054,22 +1054,22 @@ bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalGraphics::drawPolyLineBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
+sal_Bool AquaSalGraphics::drawPolyLineBezier( sal_uLong, const SalPoint*, const sal_uInt8* )
 {
     return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalGraphics::drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
+sal_Bool AquaSalGraphics::drawPolygonBezier( sal_uLong, const SalPoint*, const sal_uInt8* )
 {
     return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalGraphics::drawPolyPolygonBezier( sal_uLong nPoly, const sal_uLong* pPoints,
-                                             const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry )
+sal_Bool AquaSalGraphics::drawPolyPolygonBezier( sal_uLong, const sal_uLong*,
+                                             const SalPoint* const*, const sal_uInt8* const* )
 {
     return sal_False;
 }
@@ -1155,7 +1155,7 @@ void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGrap
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, long nSrcWidth, long nSrcHeight, sal_uInt16 nFlags )
+void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, long nSrcWidth, long nSrcHeight, sal_uInt16 /*nFlags*/ )
 {
     ApplyXorContext();
 
@@ -1237,7 +1237,7 @@ void AquaSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rS
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,SalColor nTransparentColor )
+void AquaSalGraphics::drawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,SalColor )
 {
     DBG_ERROR("not implemented for color masking!");
     drawBitmap( pPosAry, rSalBitmap );
@@ -1339,7 +1339,7 @@ SalColor AquaSalGraphics::getPixel( long nX, long nY )
 // -----------------------------------------------------------------------
 
 
-static void DrawPattern50( void* info, CGContextRef rContext )
+static void DrawPattern50( void*, CGContextRef rContext )
 {
     static const CGRect aRects[2] = { { {0,0}, { 2, 2 } }, { { 2, 2 }, { 2, 2 } } };
     CGContextAddRects( rContext, aRects, 2 );
@@ -1606,7 +1606,7 @@ void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackL
 
 // -----------------------------------------------------------------------
 
-sal_uLong AquaSalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData*  pKernPairs )
+sal_uLong AquaSalGraphics::GetKernPairs( sal_uLong, ImplKernPairData* )
 {
     return 0;
 }
@@ -1703,8 +1703,8 @@ void AquaSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
 
 // -----------------------------------------------------------------------
 
-bool AquaSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
-    const String& rFontFileURL, const String& rFontName )
+bool AquaSalGraphics::AddTempDevFont( ImplDevFontList*,
+    const String& rFontFileURL, const String& /*rFontName*/ )
 {
     ::rtl::OUString aUSytemPath;
     OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
@@ -1862,7 +1862,7 @@ void AquaSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
 
 // -----------------------------------------------------------------------
 
-sal_uInt16 AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLevel )
+sal_uInt16 AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int /*nFallbackLevel*/ )
 {
     if( !pReqFont )
     {
@@ -2402,28 +2402,29 @@ void AquaSalGraphics::GetGlyphWidths( const ImplFontData* pFontData, bool bVerti
 // -----------------------------------------------------------------------
 
 const Ucs2SIntMap* AquaSalGraphics::GetFontEncodingVector(
-    const ImplFontData* pFontData, const Ucs2OStrMap** ppNonEncoded )
+    const ImplFontData*, const Ucs2OStrMap** /*ppNonEncoded*/ )
 {
     return NULL;
 }
 
 // -----------------------------------------------------------------------
 
-const void* AquaSalGraphics::GetEmbedFontData( const ImplFontData* pFontData,
-                              const sal_Ucs* pUnicodes,
-                              sal_Int32* pWidths,
-                              FontSubsetInfo& rInfo,
-                              long* pDataLen )
+const void* AquaSalGraphics::GetEmbedFontData( const ImplFontData*,
+                              const sal_Ucs* /*pUnicodes*/,
+                              sal_Int32* /*pWidths*/,
+                              FontSubsetInfo&,
+                              long* /*pDataLen*/ )
 {
     return NULL;
 }
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::FreeEmbedFontData( const void* pData, long nDataLen )
+void AquaSalGraphics::FreeEmbedFontData( const void* pData, long /*nDataLen*/ )
 {
     // TODO: implementing this only makes sense when the implementation of
     //      AquaSalGraphics::GetEmbedFontData() returns non-NULL
+    (void)pData;
     DBG_ASSERT( (pData!=NULL), "AquaSalGraphics::FreeEmbedFontData() is not implemented\n");
 }
 

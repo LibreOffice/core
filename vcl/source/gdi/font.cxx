@@ -877,9 +877,6 @@ namespace
     bool identifyTrueTypeFont( const void* i_pBuffer, sal_uInt32 i_nSize, Font& o_rResult )
     {
         bool bResult = false;
-// FIXME: This is HACK. We do not build psprint's part on aqua...
-// How to solve this?
-#ifndef QUARTZ
         TrueTypeFont* pTTF = NULL;
         if( OpenTTFontBuffer( const_cast<void*>(i_pBuffer), i_nSize, 0, &pTTF ) == SF_OK )
         {
@@ -953,7 +950,6 @@ namespace
             // success
             bResult = true;
         }
-#endif
         return bResult;
     }
 
