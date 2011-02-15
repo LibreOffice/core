@@ -70,12 +70,13 @@ private:
     FixedText               m_aFtTextDirection;
     TextDirectionListBox    m_aLbTextDirection;
 
-    BOOL                m_bShowStaggeringControls;
+    sal_Bool                m_bShowStaggeringControls;
 
     sal_Int32           m_nInitialDegrees;
     bool                m_bHasInitialDegrees;       /// false = DialControl in tristate
     bool                m_bInitialStacking;
     bool                m_bHasInitialStacking;      /// false = checkbox in tristate
+    bool                m_bComplexCategories;
 
     DECL_LINK ( ToggleShowLabel, void* );
 
@@ -86,10 +87,11 @@ public:
     void    Construct();
 
     static SfxTabPage* Create( Window* pParent, const SfxItemSet& rInAttrs );
-    virtual BOOL FillItemSet( SfxItemSet& rOutAttrs );
+    virtual sal_Bool FillItemSet( SfxItemSet& rOutAttrs );
     virtual void Reset( const SfxItemSet& rInAttrs );
 
-    void ShowStaggeringControls( BOOL bShowStaggeringControls );
+    void ShowStaggeringControls( sal_Bool bShowStaggeringControls );
+    void SetComplexCategories( bool bComplexCategories );
 };
 //.............................................................................
 } //namespace chart

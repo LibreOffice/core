@@ -35,18 +35,18 @@
 class SC_DLLPUBLIC ScPrintOptions
 {
 private:
-    BOOL    bSkipEmpty;
-    BOOL    bAllSheets;
+    sal_Bool    bSkipEmpty;
+    sal_Bool    bAllSheets;
 
 public:
                 ScPrintOptions();
                 ScPrintOptions( const ScPrintOptions& rCpy );
                 ~ScPrintOptions();
 
-    BOOL    GetSkipEmpty() const            { return bSkipEmpty; }
-    void    SetSkipEmpty( BOOL bVal )       { bSkipEmpty = bVal; }
-    BOOL    GetAllSheets() const            { return bAllSheets; }
-    void    SetAllSheets( BOOL bVal )       { bAllSheets = bVal; }
+    sal_Bool    GetSkipEmpty() const            { return bSkipEmpty; }
+    void    SetSkipEmpty( sal_Bool bVal )       { bSkipEmpty = bVal; }
+    sal_Bool    GetAllSheets() const            { return bAllSheets; }
+    void    SetAllSheets( sal_Bool bVal )       { bAllSheets = bVal; }
 
     void    SetDefaults();
 
@@ -63,8 +63,8 @@ class SC_DLLPUBLIC ScTpPrintItem : public SfxPoolItem
 {
 public:
                 TYPEINFO();
-//UNUSED2008-05  ScTpPrintItem( USHORT nWhich );
-                ScTpPrintItem( USHORT nWhich,
+//UNUSED2008-05  ScTpPrintItem( sal_uInt16 nWhich );
+                ScTpPrintItem( sal_uInt16 nWhich,
                                const ScPrintOptions& rOpt );
                 ScTpPrintItem( const ScTpPrintItem& rItem );
                 ~ScTpPrintItem();

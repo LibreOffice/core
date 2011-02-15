@@ -61,7 +61,7 @@ SfxTabPage* ErrorBarsTabPage::Create(
     return new ErrorBarsTabPage( pParent, rOutAttrs );
 }
 
-BOOL ErrorBarsTabPage::FillItemSet( SfxItemSet& rOutAttrs )
+sal_Bool ErrorBarsTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 {
     return m_aErrorBarResources.FillItemSet( rOutAttrs );
 }

@@ -84,12 +84,12 @@ class ScTableConditionalFormat : public cppu::WeakImplHelper5<
 private:
     List    aEntries;
 
-    ScTableConditionalEntry*    GetObjectByIndex_Impl(USHORT nIndex) const;
+    ScTableConditionalEntry*    GetObjectByIndex_Impl(sal_uInt16 nIndex) const;
     void                        AddEntry_Impl(const ScCondFormatEntryItem& aEntry);
 
     ScTableConditionalFormat(); // disable
 public:
-                            ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
+                            ScTableConditionalFormat(ScDocument* pDoc, sal_uLong nKey,
                                 formula::FormulaGrammar::Grammar eGrammar);
     virtual                 ~ScTableConditionalFormat();
 
@@ -206,7 +206,7 @@ class ScTableValidationObj : public cppu::WeakImplHelper5<
 {
 private:
     SfxItemPropertySet  aPropSet;
-    USHORT              nMode;          // enum ScConditionMode
+    sal_uInt16              nMode;          // enum ScConditionMode
     String              aExpr1;
     String              aExpr2;
     String              maExprNmsp1;
@@ -217,14 +217,14 @@ private:
     ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > aTokens2;
     ScAddress           aSrcPos;
     String              aPosString;     // formula position as text
-    USHORT              nValMode;       // enum ScValidationMode
-    BOOL                bIgnoreBlank;
+    sal_uInt16              nValMode;       // enum ScValidationMode
+    sal_Bool                bIgnoreBlank;
     sal_Int16           nShowList;
-    BOOL                bShowInput;
+    sal_Bool                bShowInput;
     String              aInputTitle;
     String              aInputMessage;
-    BOOL                bShowError;
-    USHORT              nErrorStyle;    // enum ScValidErrorStyle
+    sal_Bool                bShowError;
+    sal_uInt16              nErrorStyle;    // enum ScValidErrorStyle
     String              aErrorTitle;
     String              aErrorMessage;
 
@@ -232,7 +232,7 @@ private:
 
     ScTableValidationObj(); // disabled
 public:
-                            ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
+                            ScTableValidationObj(ScDocument* pDoc, sal_uLong nKey,
                                                 const formula::FormulaGrammar::Grammar eGrammar);
     virtual                 ~ScTableValidationObj();
 

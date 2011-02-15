@@ -464,7 +464,7 @@ public:
     explicit            XclNumFmtBuffer( const XclRoot& rRoot );
 
     /** Returns the core index of the current standard number format. */
-    inline ULONG        GetStdScNumFmt() const { return mnStdScNumFmt; }
+    inline sal_uLong        GetStdScNumFmt() const { return mnStdScNumFmt; }
 
 protected:
     typedef ::std::map< sal_uInt16, XclNumFmt > XclNumFmtMap;
@@ -487,7 +487,7 @@ private:
 
     XclNumFmtMap        maFmtMap;       /// Map containing all default and user-defined formats.
     LanguageType        meSysLang;      /// Current system language.
-    ULONG               mnStdScNumFmt;  /// Calc format key for standard number format.
+    sal_uLong               mnStdScNumFmt;  /// Calc format key for standard number format.
 };
 
 // Cell formatting data (XF) ==================================================

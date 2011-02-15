@@ -56,8 +56,8 @@ class ScStyleObj;
 class ScStyleNameConversion
 {
 public:
-    static String DisplayToProgrammaticName( const String& rDispName, UINT16 nType );
-    static String ProgrammaticToDisplayName( const String& rProgName, UINT16 nType );
+    static String DisplayToProgrammaticName( const String& rDispName, sal_uInt16 nType );
+    static String ProgrammaticToDisplayName( const String& rProgName, sal_uInt16 nType );
 };
 
 
@@ -71,8 +71,8 @@ class ScStyleFamiliesObj : public ::cppu::WeakImplHelper4<
 private:
     ScDocShell*             pDocShell;
 
-    ScStyleFamilyObj*       GetObjectByType_Impl(UINT16 Type) const;
-    ScStyleFamilyObj*       GetObjectByIndex_Impl(UINT32 nIndex) const;
+    ScStyleFamilyObj*       GetObjectByType_Impl(sal_uInt16 Type) const;
+    ScStyleFamilyObj*       GetObjectByIndex_Impl(sal_uInt32 nIndex) const;
     ScStyleFamilyObj*       GetObjectByName_Impl(const rtl::OUString& aName) const;
 
 public:
@@ -133,7 +133,7 @@ private:
     ScDocShell*             pDocShell;
     SfxStyleFamily          eFamily;        // Familie
 
-    ScStyleObj*             GetObjectByIndex_Impl(UINT32 nIndex);
+    ScStyleObj*             GetObjectByIndex_Impl(sal_uInt32 nIndex);
     ScStyleObj*             GetObjectByName_Impl(const rtl::OUString& Name);
 
 public:

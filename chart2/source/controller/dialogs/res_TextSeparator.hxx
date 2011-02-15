@@ -63,9 +63,9 @@ private:
     FixedText   m_aFT_Separator;
     ListBox     m_aLB_Separator;
 
-    ::std::map< ::rtl::OUString, USHORT > m_aEntryMap;
+    ::std::map< ::rtl::OUString, sal_uInt16 > m_aEntryMap;
 
-    const USHORT m_nDefaultPos;
+    const sal_uInt16 m_nDefaultPos;
 };
 
 //.............................................................................

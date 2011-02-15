@@ -53,9 +53,9 @@ public:
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
     virtual void    AddRefEntry();
-    virtual BOOL    IsRefInputMode() const;
+    virtual sal_Bool    IsRefInputMode() const;
     virtual void    SetActive();
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 
 private:
     CheckBox            aCbxCond1;
@@ -125,7 +125,7 @@ private:
     Size                aCond3Size3;
 
     formula::RefEdit*           pEdActive;
-    BOOL                bDlgLostFocus;
+    sal_Bool                bDlgLostFocus;
     ScDocument*         pDoc;
 
 #ifdef _CONDFRMT_CXX

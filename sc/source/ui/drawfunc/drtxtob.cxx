@@ -109,7 +109,7 @@ TYPEINIT1( ScDrawTextObjectBar, SfxShell );
 void ScDrawTextObjectBar::StateDisableItems( SfxItemSet &rSet )
 {
     SfxWhichIter aIter(rSet);
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
 
     while (nWhich)
     {
@@ -122,12 +122,12 @@ ScDrawTextObjectBar::ScDrawTextObjectBar(ScViewData* pData) :
     SfxShell(pData->GetViewShell()),
     pViewData(pData),
     pClipEvtLstnr(NULL),
-    bPastePossible(FALSE)
+    bPastePossible(sal_False)
 {
     SetPool( pViewData->GetScDrawView()->GetDefaultAttr().GetPool() );
 
     //  UndoManager wird beim Umschalten in den Edit-Modus umgesetzt...
-    SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
+    ::svl::IUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
     if ( !pViewData->GetDocument()->IsUndoEnabled() )
     {
@@ -142,7 +142,7 @@ __EXPORT ScDrawTextObjectBar::~ScDrawTextObjectBar()
 {
     if ( pClipEvtLstnr )
     {
-        pClipEvtLstnr->AddRemoveListener( pViewData->GetActiveWin(), FALSE );
+        pClipEvtLstnr->AddRemoveListener( pViewData->GetActiveWin(), sal_False );
 
         //  #122057# The listener may just now be waiting for the SolarMutex and call the link
         //  afterwards, in spite of RemoveListener. So the link has to be reset, too.
@@ -171,7 +171,7 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
     }
 
     const SfxItemSet* pReqArgs = rReq.GetArgs();
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     switch ( nSlot )
     {
         case SID_COPY:
@@ -188,10 +188,10 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
         case SID_CLIPBOARD_FORMAT_ITEMS:
             {
-                ULONG nFormat = 0;
+                sal_uLong nFormat = 0;
                 const SfxPoolItem* pItem;
                 if ( pReqArgs &&
-                     pReqArgs->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET &&
+                     pReqArgs->GetItemState(nSlot, sal_True, &pItem) == SFX_ITEM_SET &&
                      pItem->ISA(SfxUInt32Item) )
                 {
                     nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
@@ -213,8 +213,8 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
         case SID_SELECTALL:
             {
-                ULONG nCount = pOutliner->GetParagraphCount();
-                ESelection aSel( 0,0,(USHORT)nCount,0 );
+                sal_uLong nCount = pOutliner->GetParagraphCount();
+                ESelection aSel( 0,0,(sal_uInt16)nCount,0 );
                 pOutView->SetSelection( aSel );
             }
             break;
@@ -230,13 +230,13 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 const SfxItemSet *pArgs = rReq.GetArgs();
                 const SfxPoolItem* pItem = 0;
                 if( pArgs )
-                    pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), FALSE, &pItem);
+                    pArgs->GetItemState(GetPool().GetWhich(SID_CHARMAP), sal_False, &pItem);
 
                 if ( pItem )
                 {
                     aString = ((const SfxStringItem*)pItem)->GetValue();
                     const SfxPoolItem* pFtItem = NULL;
-                    pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), FALSE, &pFtItem);
+                    pArgs->GetItemState( GetPool().GetWhich(SID_ATTR_SPECIALCHAR), sal_False, &pFtItem);
                     const SfxStringItem* pFontItem = PTR_CAST( SfxStringItem, pFtItem );
                     if ( pFontItem )
                     {
@@ -269,7 +269,7 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             if( pReqArgs )
             {
                 const SfxPoolItem* pItem;
-                if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, TRUE, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, sal_True, &pItem ) == SFX_ITEM_SET )
                 {
                     const SvxHyperlinkItem* pHyper = (const SvxHyperlinkItem*) pItem;
                     const String& rName     = pHyper->GetName();
@@ -277,7 +277,7 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     const String& rTarget   = pHyper->GetTargetFrame();
                     SvxLinkInsertMode eMode = pHyper->GetInsertMode();
 
-                    BOOL bDone = FALSE;
+                    sal_Bool bDone = sal_False;
                     if ( pOutView && ( eMode == HLINK_DEFAULT || eMode == HLINK_FIELD ) )
                     {
                         const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
@@ -314,7 +314,7 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                             pOutView->SetSelection( aSel );
                         }
 
-                        bDone = TRUE;
+                        bDone = sal_True;
                     }
 
                     if (!bDone)
@@ -396,13 +396,13 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
 {
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
-    BOOL bHasFontWork = pViewFrm->HasChildWindow(SID_FONTWORK);
-    BOOL bDisableFontWork = FALSE;
+    sal_Bool bHasFontWork = pViewFrm->HasChildWindow(SID_FONTWORK);
+    sal_Bool bDisableFontWork = sal_False;
 
     if (IsNoteEdit())
     {
         // #i21255# notes now support rich text formatting (#i74140# but not fontwork)
-        bDisableFontWork = TRUE;
+        bDisableFontWork = sal_True;
     }
 
     if ( bDisableFontWork )
@@ -417,7 +417,7 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
         if ( pOutView )
         {
-            BOOL bField = FALSE;
+            sal_Bool bField = sal_False;
             const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
             if (pFieldItem)
             {
@@ -428,7 +428,7 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
                     aHLinkItem.SetName( pURLField->GetRepresentation() );
                     aHLinkItem.SetURL( pURLField->GetURL() );
                     aHLinkItem.SetTargetFrame( pURLField->GetTargetFrame() );
-                    bField = TRUE;
+                    bField = sal_True;
                 }
             }
             if (!bField)
@@ -477,7 +477,7 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         pView->GetAttributes( aAttrs );
         if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SFX_ITEM_AVAILABLE )
         {
-            BOOL bValue = ( (const SfxBoolItem&) aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
+            sal_Bool bValue = ( (const SfxBoolItem&) aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
             rSet.Put( SfxBoolItem( SID_ENABLE_HYPHENATION, bValue ) );
         }
     }
@@ -499,7 +499,7 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
 
         // disable thesaurus main menu and context menu entry if there is nothing to look up
-        BOOL bCanDoThesaurus = ScModule::HasThesaurusLanguage( nLang );
+        sal_Bool bCanDoThesaurus = ScModule::HasThesaurusLanguage( nLang );
         if (!bIsLookUpWord || !bCanDoThesaurus)
             rSet.DisableItem( SID_THES );
         if (!bCanDoThesaurus)
@@ -536,7 +536,7 @@ void __EXPORT ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
         pClipEvtLstnr = new TransferableClipboardListener( LINK( this, ScDrawTextObjectBar, ClipboardChanged ) );
         pClipEvtLstnr->acquire();
         Window* pWin = pViewData->GetActiveWin();
-        pClipEvtLstnr->AddRemoveListener( pWin, TRUE );
+        pClipEvtLstnr->AddRemoveListener( pWin, sal_True );
 
         // get initial state
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
@@ -544,7 +544,7 @@ void __EXPORT ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
     }
 
     SfxWhichIter aIter( rSet );
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
     while (nWhich)
     {
         switch (nWhich)
@@ -588,7 +588,7 @@ void __EXPORT ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
 
     SdrView* pView = pViewData->GetScDrawView();
 
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
 
     SfxItemSet aSet( pView->GetDefaultAttr() );
 
@@ -635,41 +635,41 @@ void lcl_RemoveFields( OutlinerView& rOutView )
     aSel.Adjust();
     xub_StrLen nNewEnd = aSel.nEndPos;
 
-    BOOL bUpdate = pOutliner->GetUpdateMode();
-    BOOL bChanged = FALSE;
+    sal_Bool bUpdate = pOutliner->GetUpdateMode();
+    sal_Bool bChanged = sal_False;
 
     //! GetPortions and GetAttribs should be const!
     EditEngine& rEditEng = (EditEngine&)pOutliner->GetEditEngine();
 
-    ULONG nParCount = pOutliner->GetParagraphCount();
-    for (ULONG nPar=0; nPar<nParCount; nPar++)
+    sal_uLong nParCount = pOutliner->GetParagraphCount();
+    for (sal_uLong nPar=0; nPar<nParCount; nPar++)
         if ( nPar >= aSel.nStartPara && nPar <= aSel.nEndPara )
         {
             SvUShorts aPortions;
-            rEditEng.GetPortions( (USHORT)nPar, aPortions );
+            rEditEng.GetPortions( (sal_uInt16)nPar, aPortions );
             //! GetPortions should use xub_StrLen instead of USHORT
 
-            for ( USHORT nPos = aPortions.Count(); nPos; )
+            for ( sal_uInt16 nPos = aPortions.Count(); nPos; )
             {
                 --nPos;
-                USHORT nEnd = aPortions.GetObject( nPos );
-                USHORT nStart = nPos ? aPortions.GetObject( nPos - 1 ) : 0;
+                sal_uInt16 nEnd = aPortions.GetObject( nPos );
+                sal_uInt16 nStart = nPos ? aPortions.GetObject( nPos - 1 ) : 0;
                 // fields are single characters
                 if ( nEnd == nStart+1 &&
                      ( nPar > aSel.nStartPara || nStart >= aSel.nStartPos ) &&
                      ( nPar < aSel.nEndPara   || nEnd   <= aSel.nEndPos ) )
                 {
-                    ESelection aFieldSel( (USHORT)nPar, nStart, (USHORT)nPar, nEnd );
+                    ESelection aFieldSel( (sal_uInt16)nPar, nStart, (sal_uInt16)nPar, nEnd );
                     SfxItemSet aSet = rEditEng.GetAttribs( aFieldSel );
                     if ( aSet.GetItemState( EE_FEATURE_FIELD ) == SFX_ITEM_ON )
                     {
                         if (!bChanged)
                         {
                             if (bUpdate)
-                                pOutliner->SetUpdateMode( FALSE );
+                                pOutliner->SetUpdateMode( sal_False );
                             String aName = ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
                             pOutliner->GetUndoManager().EnterListAction( aName, aName );
-                            bChanged = TRUE;
+                            bChanged = sal_True;
                         }
 
                         String aFieldText = rEditEng.GetText( aFieldSel );
@@ -687,7 +687,7 @@ void lcl_RemoveFields( OutlinerView& rOutView )
     if (bUpdate && bChanged)
     {
         pOutliner->GetUndoManager().LeaveListAction();
-        pOutliner->SetUpdateMode( TRUE );
+        pOutliner->SetUpdateMode( sal_True );
     }
 
     if ( aOldSel.IsEqual( aSel ) )          // aSel is adjusted
@@ -701,15 +701,15 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
 {
     SdrView*            pView = pViewData->GetScDrawView();
     const SfxItemSet*   pArgs = rReq.GetArgs();
-    USHORT              nSlot = rReq.GetSlot();
+    sal_uInt16              nSlot = rReq.GetSlot();
 
-    BOOL bArgsInReq = ( pArgs != NULL );
+    sal_Bool bArgsInReq = ( pArgs != NULL );
     if ( !bArgsInReq )
     {
         SfxItemSet aEditAttr(pView->GetModel()->GetItemPool());
         pView->GetAttributes(aEditAttr);
         SfxItemSet  aNewAttr( *aEditAttr.GetPool(), aEditAttr.GetRanges() );
-        BOOL        bDone = TRUE;
+        sal_Bool        bDone = sal_True;
 
         switch ( nSlot )
         {
@@ -721,7 +721,7 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
                     pOutView->Paint( Rectangle() );
 
                 SfxItemSet aEmptyAttr( *aEditAttr.GetPool(), EE_ITEMS_START, EE_ITEMS_END );
-                pView->SetAttributes( aEmptyAttr, TRUE );
+                pView->SetAttributes( aEmptyAttr, sal_True );
 
                 if ( pOutView )
                 {
@@ -731,7 +731,7 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
 
                 rReq.Done( aEmptyAttr );
                 pViewData->GetScDrawView()->InvalidateDrawTextAttrs();
-                bDone = FALSE; // bereits hier passiert
+                bDone = sal_False; // bereits hier passiert
             }
             break;
 
@@ -875,13 +875,13 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             // font items from toolbox controller have to be applied for the right script type
 
             // #i78017 establish the same behaviour as in Writer
-            USHORT nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+            sal_uInt16 nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
             if (nSlot == SID_ATTR_CHAR_FONT)
                 nScript = pView->GetScriptType();
 
             SfxItemPool& rPool = GetPool();
             SvxScriptSetItem aSetItem( nSlot, rPool );
-            USHORT nWhich = rPool.GetWhich( nSlot );
+            sal_uInt16 nWhich = rPool.GetWhich( nSlot );
             aSetItem.PutItemForScriptType( nScript, pArgs->Get( nWhich ) );
 
             pView->SetAttributes( aSetItem.GetItemSet() );
@@ -904,8 +904,8 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     }
 
     SvtLanguageOptions  aLangOpt;
-    BOOL bDisableCTLFont = !aLangOpt.IsCTLFontEnabled();
-    BOOL bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
+    sal_Bool bDisableCTLFont = !aLangOpt.IsCTLFontEnabled();
+    sal_Bool bDisableVerticalText = !aLangOpt.IsVerticalTextEnabled();
 
     SdrView* pView = pViewData->GetScDrawView();
     SfxItemSet aAttrSet(pView->GetModel()->GetItemPool());
@@ -917,10 +917,10 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 
     //  choose font info according to selection script type
 
-    USHORT nScript = pView->GetScriptType();
+    sal_uInt16 nScript = pView->GetScriptType();
 
     // #i55929# input-language-dependent script type (depends on input language if nothing selected)
-    USHORT nInputScript = nScript;
+    sal_uInt16 nInputScript = nScript;
     OutlinerView* pOutView = pView->GetTextEditOutlinerView();
     if (pOutView && !pOutView->GetSelection().HasRange())
     {
@@ -945,16 +945,16 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     switch( eAdj )
     {
         case SVX_ADJUST_LEFT:
-            rDestSet.Put( SfxBoolItem( SID_ALIGNLEFT, TRUE ) );
+            rDestSet.Put( SfxBoolItem( SID_ALIGNLEFT, sal_True ) );
             break;
         case SVX_ADJUST_CENTER:
-            rDestSet.Put( SfxBoolItem( SID_ALIGNCENTERHOR, TRUE ) );
+            rDestSet.Put( SfxBoolItem( SID_ALIGNCENTERHOR, sal_True ) );
             break;
         case SVX_ADJUST_RIGHT:
-            rDestSet.Put( SfxBoolItem( SID_ALIGNRIGHT, TRUE ) );
+            rDestSet.Put( SfxBoolItem( SID_ALIGNRIGHT, sal_True ) );
             break;
         case SVX_ADJUST_BLOCK:
-            rDestSet.Put( SfxBoolItem( SID_ALIGNBLOCK, TRUE ) );
+            rDestSet.Put( SfxBoolItem( SID_ALIGNBLOCK, sal_True ) );
             break;
         default:
         {
@@ -969,19 +969,19 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 
     //  Zeilenabstand
 
-    USHORT nLineSpace = (USHORT)
+    sal_uInt16 nLineSpace = (sal_uInt16)
                 ((const SvxLineSpacingItem&)aAttrSet.
                         Get( EE_PARA_SBL )).GetPropLineSpace();
     switch( nLineSpace )
     {
         case 100:
-            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_10, TRUE ) );
+            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_10, sal_True ) );
             break;
         case 150:
-            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_15, TRUE ) );
+            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_15, sal_True ) );
             break;
         case 200:
-            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_20, TRUE ) );
+            rDestSet.Put( SfxBoolItem( SID_ATTR_PARA_LINESPACE_20, sal_True ) );
             break;
     }
 
@@ -990,13 +990,13 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     SvxEscapement eEsc = (SvxEscapement) ( (const SvxEscapementItem&)
                     aAttrSet.Get( EE_CHAR_ESCAPEMENT ) ).GetEnumValue();
     if( eEsc == SVX_ESCAPEMENT_SUPERSCRIPT )
-        rDestSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, TRUE ) );
+        rDestSet.Put( SfxBoolItem( SID_SET_SUPER_SCRIPT, sal_True ) );
     else if( eEsc == SVX_ESCAPEMENT_SUBSCRIPT )
-        rDestSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, TRUE ) );
+        rDestSet.Put( SfxBoolItem( SID_SET_SUB_SCRIPT, sal_True ) );
 
     //  Unterstreichung
 
-    SfxItemState eState = aAttrSet.GetItemState( EE_CHAR_UNDERLINE, TRUE );
+    SfxItemState eState = aAttrSet.GetItemState( EE_CHAR_UNDERLINE, sal_True );
     if ( eState == SFX_ITEM_DONTCARE )
     {
         rDestSet.InvalidateItem( SID_ULINE_VAL_NONE );
@@ -1008,7 +1008,7 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     {
         FontUnderline eUnderline = ((const SvxUnderlineItem&)
                     aAttrSet.Get(EE_CHAR_UNDERLINE)).GetLineStyle();
-        USHORT nId = SID_ULINE_VAL_NONE;
+        sal_uInt16 nId = SID_ULINE_VAL_NONE;
         switch (eUnderline)
         {
             case UNDERLINE_SINGLE:  nId = SID_ULINE_VAL_SINGLE; break;
@@ -1017,18 +1017,18 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
             default:
                 break;
         }
-        rDestSet.Put( SfxBoolItem( nId, TRUE ) );
+        rDestSet.Put( SfxBoolItem( nId, sal_True ) );
     }
 
     //  horizontal / vertical
 
-    BOOL bLeftToRight = TRUE;
+    sal_Bool bLeftToRight = sal_True;
 
     SdrOutliner* pOutl = pView->GetTextEditOutliner();
     if( pOutl )
     {
         if( pOutl->IsVertical() )
-            bLeftToRight = FALSE;
+            bLeftToRight = sal_False;
     }
     else
         bLeftToRight = ( (const SvxWritingModeItem&) aAttrSet.Get( SDRATTR_TEXTDIRECTION ) ).GetValue() == com::sun::star::text::WritingMode_LR_TB;

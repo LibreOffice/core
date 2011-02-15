@@ -111,7 +111,7 @@ CharacterPropertyItemConverter::CharacterPropertyItemConverter(
 CharacterPropertyItemConverter::~CharacterPropertyItemConverter()
 {}
 
-const USHORT * CharacterPropertyItemConverter::GetWhichPairs() const
+const sal_uInt16 * CharacterPropertyItemConverter::GetWhichPairs() const
 {
     return nCharacterPropertyWhichPairs;
 }
@@ -129,7 +129,7 @@ bool CharacterPropertyItemConverter::GetItemProperty( tWhichIdType nWhichId, tPr
 }
 
 void CharacterPropertyItemConverter::FillSpecialItem(
-    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
     switch( nWhichId )
@@ -331,7 +331,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
 }
 
 bool CharacterPropertyItemConverter::ApplySpecialItem(
-    USHORT nWhichId, const SfxItemSet & rItemSet )
+    sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
     throw( uno::Exception )
 {
     bool bChanged = false;

@@ -114,7 +114,7 @@ class ScfProgressBar : ScfNoCopy
 {
 public:
     explicit            ScfProgressBar( SfxObjectShell* pDocShell, const String& rText );
-    explicit            ScfProgressBar( SfxObjectShell* pDocShell, USHORT nResId );
+    explicit            ScfProgressBar( SfxObjectShell* pDocShell, sal_uInt16 nResId );
     virtual             ~ScfProgressBar();
 
     /** Adds a new segment to the progress bar.
@@ -199,7 +199,7 @@ class ScfSimpleProgressBar
 {
 public:
     explicit            ScfSimpleProgressBar( sal_Size nSize, SfxObjectShell* pDocShell, const String& rText );
-    explicit            ScfSimpleProgressBar( sal_Size nSize, SfxObjectShell* pDocShell, USHORT nResId );
+    explicit            ScfSimpleProgressBar( sal_Size nSize, SfxObjectShell* pDocShell, sal_uInt16 nResId );
 
     /** Set progress bar to the specified position. */
     inline void         ProgressAbs( sal_Size nPos ) { maProgress.ProgressAbs( nPos ); }
@@ -221,7 +221,7 @@ class ScfStreamProgressBar
 {
 public:
 //UNUSED2008-05  explicit            ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, const String& rText );
-    explicit            ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, USHORT nResId = STR_LOAD_DOC );
+    explicit            ScfStreamProgressBar( SvStream& rStrm, SfxObjectShell* pDocShell, sal_uInt16 nResId = STR_LOAD_DOC );
 
     /** Sets the progress bar to the current stream position. */
     void                Progress();
