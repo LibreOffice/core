@@ -50,8 +50,8 @@ void GroupBox::ImplInit( Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
     Control::ImplInit( pParent, nStyle, NULL );
-    SetMouseTransparent( TRUE );
-    ImplInitSettings( TRUE, TRUE, TRUE );
+    SetMouseTransparent( sal_True );
+    ImplInitSettings( sal_True, sal_True, sal_True );
 }
 
 // -----------------------------------------------------------------------
@@ -78,8 +78,8 @@ const Color& GroupBox::GetCanonicalTextColor( const StyleSettings& _rStyle ) con
 
 // -----------------------------------------------------------------------
 
-void GroupBox::ImplInitSettings( BOOL bFont,
-                                 BOOL bForeground, BOOL bBackground )
+void GroupBox::ImplInitSettings( sal_Bool bFont,
+                                 sal_Bool bForeground, sal_Bool bBackground )
 {
     Control::ImplInitSettings( bFont, bForeground );
 
@@ -90,16 +90,16 @@ void GroupBox::ImplInitSettings( BOOL bFont,
               !(pParent->GetStyle() & WB_CLIPCHILDREN) ) &&
              !IsControlBackground() )
         {
-            EnableChildTransparentMode( TRUE );
+            EnableChildTransparentMode( sal_True );
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-            SetPaintTransparent( TRUE );
+            SetPaintTransparent( sal_True );
             SetBackground();
         }
         else
         {
-            EnableChildTransparentMode( FALSE );
+            EnableChildTransparentMode( sal_False );
             SetParentClipMode( 0 );
-            SetPaintTransparent( FALSE );
+            SetPaintTransparent( sal_False );
 
             if ( IsControlBackground() )
                 SetBackground( GetControlBackground() );
@@ -133,7 +133,7 @@ GroupBox::GroupBox( Window* pParent, const ResId& rResId ) :
 
 // -----------------------------------------------------------------------
 
-void GroupBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
+void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                          const Point& rPos, const Size& rSize, bool bLayout )
 {
     long                    nTop;
@@ -141,7 +141,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     XubString               aText( GetText() );
     Rectangle               aRect( rPos, rSize );
-    USHORT                  nTextStyle = TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_MNEMONIC;
+    sal_uInt16                  nTextStyle = TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_ENDELLIPSIS | TEXT_DRAW_MNEMONIC;
 
     if ( GetStyle() & WB_NOLABEL )
         nTextStyle &= ~TEXT_DRAW_MNEMONIC;
@@ -241,7 +241,7 @@ void GroupBox::Paint( const Rectangle& )
 // -----------------------------------------------------------------------
 
 void GroupBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
-                     ULONG nFlags )
+                     sal_uLong nFlags )
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
@@ -291,17 +291,17 @@ void GroupBox::StateChanged( StateChangedType nType )
     else if ( (nType == STATE_CHANGE_ZOOM)  ||
               (nType == STATE_CHANGE_CONTROLFONT) )
     {
-        ImplInitSettings( TRUE, FALSE, FALSE );
+        ImplInitSettings( sal_True, sal_False, sal_False );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
     {
-        ImplInitSettings( FALSE, TRUE, FALSE );
+        ImplInitSettings( sal_False, sal_True, sal_False );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( FALSE, FALSE, TRUE );
+        ImplInitSettings( sal_False, sal_False, sal_True );
         Invalidate();
     }
 }
@@ -317,7 +317,7 @@ void GroupBox::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        ImplInitSettings( TRUE, TRUE, TRUE );
+        ImplInitSettings( sal_True, sal_True, sal_True );
         Invalidate();
     }
 }

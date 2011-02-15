@@ -107,7 +107,7 @@ public:
 
                     SvtDefaultOptions_Impl();
 
-    String          GetDefaultPath( USHORT nId ) const;
+    String          GetDefaultPath( sal_uInt16 nId ) const;
     virtual void    Commit();
     virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
 };
@@ -200,10 +200,10 @@ void SvtDefaultOptions_Impl::Commit()
 
 // class SvtDefaultOptions_Impl ------------------------------------------
 
-String SvtDefaultOptions_Impl::GetDefaultPath( USHORT nId ) const
+String SvtDefaultOptions_Impl::GetDefaultPath( sal_uInt16 nId ) const
 {
     String aRet;
-    USHORT nIdx = 0;
+    sal_uInt16 nIdx = 0;
 
     while ( PathMap_Impl[nIdx]._ePath <= SvtPathOptions::PATH_WORK )
     {
@@ -356,7 +356,7 @@ SvtDefaultOptions::~SvtDefaultOptions()
 
 // -----------------------------------------------------------------------
 
-String SvtDefaultOptions::GetDefaultPath( USHORT nId ) const
+String SvtDefaultOptions::GetDefaultPath( sal_uInt16 nId ) const
 {
     return pImp->GetDefaultPath( nId );
 }

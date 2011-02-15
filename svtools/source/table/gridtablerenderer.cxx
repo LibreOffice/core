@@ -113,8 +113,8 @@ namespace svt { namespace table
             _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
         else
             _rDevice.SetTextColor(_rStyle.GetFieldTextColor());
-        ULONG nHorFlag = TEXT_DRAW_LEFT;
-        ULONG nVerFlag = TEXT_DRAW_TOP;
+        sal_uLong nHorFlag = TEXT_DRAW_LEFT;
+        sal_uLong nVerFlag = TEXT_DRAW_TOP;
         if(m_pImpl->rModel.getVerticalAlign() == 1)
             nVerFlag = TEXT_DRAW_VCENTER;
         else if(m_pImpl->rModel.getVerticalAlign() == 2)
@@ -207,8 +207,8 @@ namespace svt { namespace table
             _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
         else
             _rDevice.SetTextColor(_rStyle.GetFieldTextColor());
-        ULONG nHorFlag = TEXT_DRAW_LEFT;
-        ULONG nVerFlag = TEXT_DRAW_TOP;
+        sal_uLong nHorFlag = TEXT_DRAW_LEFT;
+        sal_uLong nVerFlag = TEXT_DRAW_TOP;
         if(m_pImpl->rModel.getVerticalAlign() == 1)
             nVerFlag = TEXT_DRAW_VCENTER;
         else if(m_pImpl->rModel.getVerticalAlign() == 2)
@@ -342,8 +342,8 @@ namespace svt { namespace table
             _rDevice.SetTextColor(m_pImpl->rModel.getTextColor());
         else
             _rDevice.SetTextColor(_rStyle.GetFieldTextColor());
-        ULONG nHorFlag = TEXT_DRAW_LEFT;
-        ULONG nVerFlag = TEXT_DRAW_TOP;
+        sal_uLong nHorFlag = TEXT_DRAW_LEFT;
+        sal_uLong nVerFlag = TEXT_DRAW_TOP;
         if(m_pImpl->rModel.getVerticalAlign() == 1)
             nVerFlag = TEXT_DRAW_VCENTER;
         else if(m_pImpl->rModel.getVerticalAlign() == 2)

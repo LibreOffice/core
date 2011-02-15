@@ -33,7 +33,7 @@
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
 #include <tools/resid.hxx>
-#include <vcl/mapunit.hxx>
+#include <tools/mapunit.hxx>
 
 class SvStream;
 
@@ -49,12 +49,12 @@ class ImplMapMode
     friend class    OutputDevice;
 
 private:
-    ULONG           mnRefCount;
+    sal_uLong           mnRefCount;
     MapUnit         meUnit;
     Point           maOrigin;
     Fraction        maScaleX;
     Fraction        maScaleY;
-    BOOL            mbSimple;
+    sal_Bool            mbSimple;
 
     friend SvStream& operator>>( SvStream& rIStm, ImplMapMode& rMapMode );
     friend SvStream& operator<<( SvStream& rOStm, const ImplMapMode& rMapMode );
@@ -102,11 +102,11 @@ public:
                         { return mpImplMapMode->maScaleY; }
 
     MapMode&        operator=( const MapMode& rMapMode );
-    BOOL            operator==( const MapMode& rMapMode ) const;
-    BOOL            operator!=( const MapMode& rMapMode ) const
+    sal_Bool            operator==( const MapMode& rMapMode ) const;
+    sal_Bool            operator!=( const MapMode& rMapMode ) const
                         { return !(MapMode::operator==( rMapMode )); }
-    BOOL            IsDefault() const;
-    BOOL            IsSameInstance( const MapMode& rMapMode ) const
+    sal_Bool            IsDefault() const;
+    sal_Bool            IsSameInstance( const MapMode& rMapMode ) const
                         { return (mpImplMapMode == rMapMode.mpImplMapMode); }
 
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, MapMode& rMapMode );

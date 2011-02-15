@@ -37,6 +37,7 @@
 #include <toolkit/helper/imagealign.hxx>
 #include <toolkit/helper/accessibilityclient.hxx>
 #include <toolkit/helper/fixedhyperbase.hxx>
+#include <toolkit/helper/tkresmgr.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -62,6 +63,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/tabctrl.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <boost/bind.hpp>
@@ -135,24 +137,24 @@ namespace toolkit
             sal_Int32 nWhiteLuminance = Color( COL_WHITE ).GetLuminance();
 
             Color aLightShadow( nBackgroundColor );
-            aLightShadow.IncreaseLuminance( (UINT8)( ( nWhiteLuminance - nBackgroundLuminance ) * 2 / 3 ) );
+            aLightShadow.IncreaseLuminance( (sal_uInt8)( ( nWhiteLuminance - nBackgroundLuminance ) * 2 / 3 ) );
             aStyleSettings.SetLightBorderColor( aLightShadow );
 
             Color aLight( nBackgroundColor );
-            aLight.IncreaseLuminance( (UINT8)( ( nWhiteLuminance - nBackgroundLuminance ) * 1 / 3 ) );
+            aLight.IncreaseLuminance( (sal_uInt8)( ( nWhiteLuminance - nBackgroundLuminance ) * 1 / 3 ) );
             aStyleSettings.SetLightColor( aLight );
 
             Color aShadow( nBackgroundColor );
-            aShadow.DecreaseLuminance( (UINT8)( nBackgroundLuminance * 1 / 3 ) );
+            aShadow.DecreaseLuminance( (sal_uInt8)( nBackgroundLuminance * 1 / 3 ) );
             aStyleSettings.SetShadowColor( aShadow );
 
             Color aDarkShadow( nBackgroundColor );
-            aDarkShadow.DecreaseLuminance( (UINT8)( nBackgroundLuminance * 2 / 3 ) );
+            aDarkShadow.DecreaseLuminance( (sal_uInt8)( nBackgroundLuminance * 2 / 3 ) );
             aStyleSettings.SetDarkShadowColor( aDarkShadow );
         }
 
         aSettings.SetStyleSettings( aStyleSettings );
-        _pWindow->SetSettings( aSettings, TRUE );
+        _pWindow->SetSettings( aSettings, sal_True );
     }
 
     Any getButtonLikeFaceColor( const Window* _pWindow )
@@ -173,7 +175,7 @@ namespace toolkit
         _pWindow->SetStyle( nStyle );
     }
 
-    static void setVisualEffect( const Any& _rValue, Window* _pWindow, void (StyleSettings::*pSetter)( USHORT ), sal_Int16 _nFlatBits, sal_Int16 _n3DBits )
+    static void setVisualEffect( const Any& _rValue, Window* _pWindow )
     {
         AllSettings aSettings = _pWindow->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
@@ -183,22 +185,22 @@ namespace toolkit
         switch ( nStyle )
         {
         case FLAT:
-            (aStyleSettings.*pSetter)( _nFlatBits );
+            aStyleSettings.SetOptions( aStyleSettings.GetOptions() & ~STYLE_OPTION_MONO );
             break;
         case LOOK3D:
         default:
-            (aStyleSettings.*pSetter)( _n3DBits );
+            aStyleSettings.SetOptions( aStyleSettings.GetOptions() | STYLE_OPTION_MONO );
         }
         aSettings.SetStyleSettings( aStyleSettings );
         _pWindow->SetSettings( aSettings );
     }
 
-    static Any getVisualEffect( Window* _pWindow, USHORT (StyleSettings::*pGetter)( ) const, sal_Int16 _nFlatBits )
+    static Any getVisualEffect( Window* _pWindow )
     {
         Any aEffect;
 
         StyleSettings aStyleSettings = _pWindow->GetSettings().GetStyleSettings();
-        if ( (aStyleSettings.*pGetter)() == _nFlatBits )
+        if ( (aStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
             aEffect <<= (sal_Int16)FLAT;
         else
             aEffect <<= (sal_Int16)LOOK3D;
@@ -219,7 +221,7 @@ void VCLXGraphicControl::ImplSetNewImage()
 {
     OSL_PRECOND( GetWindow(), "VCLXGraphicControl::ImplSetNewImage: window is required to be not-NULL!" );
     Button* pButton = static_cast< Button* >( GetWindow() );
-    pButton->SetModeBitmap( GetBitmap() );
+    pButton->SetModeImage( GetImage() );
 }
 
 void VCLXGraphicControl::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, short Flags ) throw(::com::sun::star::uno::RuntimeException)
@@ -660,14 +662,14 @@ void VCLXImageControl::ImplSetNewImage()
 {
     OSL_PRECOND( GetWindow(), "VCLXImageControl::ImplSetNewImage: window is required to be not-NULL!" );
     ImageControl* pControl = static_cast< ImageControl* >( GetWindow() );
-    pControl->SetBitmap( GetBitmap() );
+    pControl->SetImage( GetImage() );
 }
 
 ::com::sun::star::awt::Size VCLXImageControl::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    Size aSz = GetBitmap().GetSizePixel();
+    Size aSz = GetImage().GetSizePixel();
     aSz = ImplCalcWindowSize( aSz );
 
     return AWTSize(aSz);
@@ -961,7 +963,7 @@ void VCLXCheckBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
         switch ( nPropType )
         {
             case BASEPROPERTY_VISUALEFFECT:
-                ::toolkit::setVisualEffect( Value, pCheckBox, &StyleSettings::SetCheckBoxStyle, STYLE_CHECKBOX_MONO, STYLE_CHECKBOX_WIN );
+                ::toolkit::setVisualEffect( Value, pCheckBox );
                 break;
 
             case BASEPROPERTY_TRISTATE:
@@ -998,7 +1000,7 @@ void VCLXCheckBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
         switch ( nPropType )
         {
             case BASEPROPERTY_VISUALEFFECT:
-                aProp = ::toolkit::getVisualEffect( pCheckBox, &StyleSettings::GetCheckBoxStyle, STYLE_CHECKBOX_MONO );
+                aProp = ::toolkit::getVisualEffect( pCheckBox );
                 break;
             case BASEPROPERTY_TRISTATE:
                  aProp <<= (sal_Bool)pCheckBox->IsTriStateEnabled();
@@ -1133,7 +1135,7 @@ void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::
         switch ( nPropType )
         {
             case BASEPROPERTY_VISUALEFFECT:
-                ::toolkit::setVisualEffect( Value, pButton, &StyleSettings::SetRadioButtonStyle, STYLE_RADIOBUTTON_MONO, STYLE_RADIOBUTTON_WIN );
+                ::toolkit::setVisualEffect( Value, pButton );
                 break;
 
             case BASEPROPERTY_STATE:
@@ -1141,7 +1143,7 @@ void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::
                 sal_Int16 n = sal_Int16();
                 if ( Value >>= n )
                 {
-                    BOOL b = n ? sal_True : sal_False;
+                    sal_Bool b = n ? sal_True : sal_False;
                     if ( pButton->IsRadioCheckEnabled() )
                         pButton->Check( b );
                     else
@@ -1176,7 +1178,7 @@ void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::
         switch ( nPropType )
         {
             case BASEPROPERTY_VISUALEFFECT:
-                aProp = ::toolkit::getVisualEffect( pButton, &StyleSettings::GetRadioButtonStyle, STYLE_RADIOBUTTON_MONO );
+                aProp = ::toolkit::getVisualEffect( pButton );
                 break;
             case BASEPROPERTY_STATE:
                 aProp <<= (sal_Int16) ( pButton->IsChecked() ? 1 : 0 );
@@ -1310,11 +1312,11 @@ void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
                 aEvent.ActionCommand = maActionCommand;
                 maActionListeners.actionPerformed( aEvent );
             }
-            ImplClickedOrToggled( FALSE );
+            ImplClickedOrToggled( sal_False );
             break;
 
         case VCLEVENT_RADIOBUTTON_TOGGLE:
-            ImplClickedOrToggled( TRUE );
+            ImplClickedOrToggled( sal_True );
             break;
 
         default:
@@ -1323,7 +1325,7 @@ void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
     }
 }
 
-void VCLXRadioButton::ImplClickedOrToggled( BOOL bToggled )
+void VCLXRadioButton::ImplClickedOrToggled( sal_Bool bToggled )
 {
     // In the formulars, RadioChecked is not enabled, call itemStateChanged only for click
     // In the dialog editor, RadioChecked is enabled, call itemStateChanged only for bToggled
@@ -1716,14 +1718,14 @@ void VCLXListBox::selectItemsPos( const ::com::sun::star::uno::Sequence<sal_Int1
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox )
     {
-        BOOL bChanged = FALSE;
+        sal_Bool bChanged = sal_False;
         for ( sal_uInt16 n = (sal_uInt16)aPositions.getLength(); n; )
         {
-            USHORT nPos = (USHORT) aPositions.getConstArray()[--n];
+            sal_uInt16 nPos = (sal_uInt16) aPositions.getConstArray()[--n];
             if ( pBox->IsEntryPosSelected( nPos ) != bSelect )
             {
                 pBox->SelectEntryPos( nPos, bSelect );
-                bChanged = TRUE;
+                bChanged = sal_True;
             }
         }
 
@@ -2068,34 +2070,32 @@ void VCLXListBox::ImplCallItemListeners()
         maItemListeners.itemStateChanged( aEvent );
     }
 }
-
 namespace
 {
-    Image lcl_getImageFromURL( const ::rtl::OUString& i_rImageURL )
-    {
-        if ( !i_rImageURL.getLength() )
-            return Image();
+     Image lcl_getImageFromURL( const ::rtl::OUString& i_rImageURL )
+     {
+         if ( !i_rImageURL.getLength() )
+             return Image();
 
         try
         {
-            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-            Reference< XGraphicProvider > xProvider;
-            if ( aContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
-            {
-                ::comphelper::NamedValueCollection aMediaProperties;
-                aMediaProperties.put( "URL", i_rImageURL );
-                Reference< XGraphic > xGraphic = xProvider->queryGraphic( aMediaProperties.getPropertyValues() );
+             ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+             Reference< XGraphicProvider > xProvider;
+             if ( aContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
+             {
+                 ::comphelper::NamedValueCollection aMediaProperties;
+                 aMediaProperties.put( "URL", i_rImageURL );
+                 Reference< XGraphic > xGraphic = xProvider->queryGraphic( aMediaProperties.getPropertyValues() );
                 return Image( xGraphic );
-            }
-        }
-        catch( const uno::Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-        return Image();
-    }
+             }
+         }
+         catch( const uno::Exception& )
+         {
+             DBG_UNHANDLED_EXCEPTION();
+         }
+         return Image();
+     }
 }
-
 void SAL_CALL VCLXListBox::listItemInserted( const ItemListEvent& i_rEvent ) throw (RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -2107,7 +2107,7 @@ void SAL_CALL VCLXListBox::listItemInserted( const ItemListEvent& i_rEvent ) thr
         "VCLXListBox::listItemInserted: illegal (inconsistent) item position!" );
     pListBox->InsertEntry(
         i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : ::rtl::OUString(),
-        i_rEvent.ItemImageURL.IsPresent ? lcl_getImageFromURL( i_rEvent.ItemImageURL.Value ) : Image(),
+        i_rEvent.ItemImageURL.IsPresent ? TkResMgr::getImageFromURL( i_rEvent.ItemImageURL.Value ) : Image(),
         i_rEvent.ItemPosition );
 }
 
@@ -2137,7 +2137,7 @@ void SAL_CALL VCLXListBox::listItemModified( const ItemListEvent& i_rEvent ) thr
     // VCL's ListBox does not support changing an entry's text or image, so remove and re-insert
 
     const ::rtl::OUString sNewText = i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : ::rtl::OUString( pListBox->GetEntry( i_rEvent.ItemPosition ) );
-    const Image aNewImage( i_rEvent.ItemImageURL.IsPresent ? lcl_getImageFromURL( i_rEvent.ItemImageURL.Value ) : pListBox->GetEntryImage( i_rEvent.ItemPosition  ) );
+    const Image aNewImage( i_rEvent.ItemImageURL.IsPresent ? TkResMgr::getImageFromURL( i_rEvent.ItemImageURL.Value ) : pListBox->GetEntryImage( i_rEvent.ItemPosition  ) );
 
     pListBox->RemoveEntry( i_rEvent.ItemPosition );
     pListBox->InsertEntry( sNewText, aNewImage, i_rEvent.ItemPosition );
@@ -2554,6 +2554,15 @@ throw(::com::sun::star::uno::RuntimeException)
                 }
             }
             break;
+            case BASEPROPERTY_TITLE:
+                {
+                    ::rtl::OUString sTitle;
+                    if ( Value >>= sTitle )
+                    {
+                        pTabPage->SetText(sTitle);
+                    }
+                }
+                break;
 
             default:
             {
@@ -3251,7 +3260,7 @@ void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::co
                 }
                 AllSettings aSettings( pScrollBar->GetSettings() );
                 StyleSettings aStyle( aSettings.GetStyleSettings() );
-                ULONG nDragOptions = aStyle.GetDragFullOptions();
+                sal_uLong nDragOptions = aStyle.GetDragFullOptions();
                 if ( bDo )
                     nDragOptions |= DRAGFULL_OPTION_SCROLL;
                 else

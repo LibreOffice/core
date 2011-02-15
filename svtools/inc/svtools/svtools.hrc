@@ -35,6 +35,9 @@
 #define RID_SVTOOLS_BITMAP_START        (RID_SVTOOLS_START + 0)
 #define RID_SVTOOLS_IMAGELIST_START     (RID_SVTOOLS_START + 0)
 
+#define ABOUT_STR_COPYRIGHT             (RID_SVTOOLS_START + 1)
+#define ABOUT_STR_DEVELOPER_ARY         (RID_SVTOOLS_START + 2)
+
 //.............................................................................
 // various unsorted stuff
 

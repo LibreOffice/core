@@ -44,6 +44,7 @@ $(eval $(call gb_Executable_add_linked_libs,sspretty,\
     stl \
     tl \
     vos3 \
+    $(gb_STDLIBS) \
 ))
 # used to link against basegfxlx comphelp4gcc3 i18nisolang1gcc3 ucbhelper4gcc3 uno_cppu uno_cppuhelpergcc3 uno_salhelpergcc3 - seems to be superficial
 
@@ -55,20 +56,4 @@ $(eval $(call gb_Executable_add_exception_objects,sspretty,\
     tools/bootstrp/sspretty \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Executable_add_linked_libs,sspretty,\
-    kernel32 \
-    msvcrt \
-    oldnames \
-    user32 \
-    uwinapi \
-))
-endif
-
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Executable_add_linked_libs,sspretty,\
-    dl \
-    pthread \
-))
-endif
 # vim: set noet sw=4 ts=4:

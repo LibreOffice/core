@@ -28,7 +28,7 @@
 #ifndef _SVEDIT_HXX
 #define _SVEDIT_HXX
 
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/edit.hxx>
 
 #include <svtools/syntaxhighlight.hxx>
@@ -59,7 +59,7 @@ protected:
     virtual long    PreNotify( NotifyEvent& rNEvt );
     long            Notify( NotifyEvent& rNEvt );
     using Control::ImplInitSettings;
-    void            ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+    void            ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     WinBits         ImplInitStyle( WinBits nStyle );
 
     ExtTextEngine*  GetTextEngine() const;
@@ -78,17 +78,17 @@ public:
 
     virtual void    SetModifyFlag();
     virtual void    ClearModifyFlag();
-    virtual BOOL    IsModified() const;
+    virtual sal_Bool    IsModified() const;
 
-    virtual void    EnableUpdateData( ULONG nTimeout = EDIT_UPDATEDATA_TIMEOUT );
+    virtual void    EnableUpdateData( sal_uLong nTimeout = EDIT_UPDATEDATA_TIMEOUT );
     virtual void    DisableUpdateData() { delete pUpdateDataTimer; pUpdateDataTimer = NULL; }
-    virtual ULONG   IsUpdateDataEnabled() const;
+    virtual sal_uLong   IsUpdateDataEnabled() const;
 
-    virtual void    SetReadOnly( BOOL bReadOnly = TRUE );
-    virtual BOOL    IsReadOnly() const;
+    virtual void    SetReadOnly( sal_Bool bReadOnly = sal_True );
+    virtual sal_Bool    IsReadOnly() const;
 
-    void            EnableFocusSelectionHide( BOOL bHide );
-    BOOL            IsFocusSelectionHideEnabled() const;
+    void            EnableFocusSelectionHide( sal_Bool bHide );
+    sal_Bool            IsFocusSelectionHideEnabled() const;
 
     virtual void    SetMaxTextLen( xub_StrLen nMaxLen = 0 );
     virtual xub_StrLen GetMaxTextLen() const;
@@ -113,8 +113,8 @@ public:
     String          GetTextLines() const;
     String          GetTextLines( LineEnd aSeparator ) const;
 
-    void            SetRightToLeft( BOOL bRightToLeft );
-    BOOL            IsRightToLeft() const;
+    void            SetRightToLeft( sal_Bool bRightToLeft );
+    sal_Bool            IsRightToLeft() const;
 
     void            SaveValue()                         { aSaveValue = GetText(); }
     const XubString&    GetSavedValue() const               { return aSaveValue; }
@@ -131,22 +131,22 @@ public:
     Size            CalcMinimumSize() const;
     Size            CalcAdjustedSize( const Size& rPrefSize ) const;
     using Edit::CalcSize;
-    Size            CalcSize( USHORT nColumns, USHORT nLines ) const;
-    void            GetMaxVisColumnsAndLines( USHORT& rnCols, USHORT& rnLines ) const;
+    Size            CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
+    void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 
-    void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
 
-       void         SetLeftMargin( USHORT n );
-    USHORT          GetLeftMargin() const;
+       void         SetLeftMargin( sal_uInt16 n );
+    sal_uInt16          GetLeftMargin() const;
 
     virtual
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-    GetComponentInterface(BOOL bCreate = TRUE);
+    GetComponentInterface(sal_Bool bCreate = sal_True);
 
     void            DisableSelectionOnFocus();
 };
 
-inline ULONG MultiLineEdit::IsUpdateDataEnabled() const
+inline sal_uLong MultiLineEdit::IsUpdateDataEnabled() const
 {
     return pUpdateDataTimer ? pUpdateDataTimer->GetTimeout() : 0;
 }

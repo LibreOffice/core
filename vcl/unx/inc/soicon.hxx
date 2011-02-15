@@ -31,7 +31,7 @@ class SalDisplay;
 class SalBitmap;
 class Bitmap;
 
-BOOL SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,
-                          USHORT nIcon, USHORT iconSize,
+sal_Bool SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,
+                          sal_uInt16 nIcon, sal_uInt16 iconSize,
                           Pixmap& icon_pixmap, Pixmap& icon_mask );
 #endif

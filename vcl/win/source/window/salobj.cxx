@@ -43,7 +43,7 @@
 
 // =======================================================================
 
-static BOOL ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
+static sal_Bool ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
 {
     if ( hWndParent == hWndChild )
         return TRUE;
@@ -202,7 +202,7 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
 
 // -----------------------------------------------------------------------
 
-BOOL ImplSalPreDispatchMsg( MSG* pMsg )
+sal_Bool ImplSalPreDispatchMsg( MSG* pMsg )
 {
     // Used for Unicode and none Unicode
     SalData*        pSalData = GetSalData();
@@ -227,7 +227,7 @@ BOOL ImplSalPreDispatchMsg( MSG* pMsg )
         // SysKeys werden als WM_SYSCOMMAND verarbeitet
         // Char-Events verarbeiten wir nicht, da wir nur
         // Accelerator relevante Keys verarbeiten wollen
-        BOOL bWantedKeyCode = FALSE;
+        sal_Bool bWantedKeyCode = FALSE;
         // A-Z, 0-9 nur in Verbindung mit Control-Taste
         if ( ((pMsg->wParam >= 65) && (pMsg->wParam <= 90)) ||
              ((pMsg->wParam >= 48) && (pMsg->wParam <= 57)) )
@@ -255,13 +255,13 @@ BOOL ImplSalPreDispatchMsg( MSG* pMsg )
     {
         pSalData->mnSalObjWantKeyEvt = 0;
 
-        USHORT nKeyCode = LOWORD( pMsg->wParam );
+        sal_uInt16 nKeyCode = LOWORD( pMsg->wParam );
         // Nur 0-9 und A-Z
         if ( ((nKeyCode >= 48) && (nKeyCode <= 57)) ||
              ((nKeyCode >= 65) && (nKeyCode <= 90)) ||
              ((nKeyCode >= 97) && (nKeyCode <= 122)) )
         {
-            BOOL bRet = FALSE;
+            sal_Bool bRet = FALSE;
             ImplSalYieldMutexAcquireWithWait();
             pObject = ImplFindSalObject( pMsg->hwnd );
             if ( pObject )
@@ -379,7 +379,7 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
             {
                 pSysObj = GetSalObjWindowPtr( hWnd );
                 HWND    hFocusWnd = ::GetFocus();
-                USHORT nEvent;
+                sal_uInt16 nEvent;
                 if ( hFocusWnd && ImplIsSysWindowOrChild( hWnd, hFocusWnd ) )
                     nEvent = SALOBJ_EVENT_GETFOCUS;
                 else
@@ -534,20 +534,10 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
     // Hook installieren, wenn es das erste SalObject ist
     if ( !pSalData->mpFirstObject )
     {
-        if ( aSalShlData.mbWNT )
-        {
-            pSalData->mhSalObjMsgHook = SetWindowsHookExW( WH_CALLWNDPROC,
+        pSalData->mhSalObjMsgHook = SetWindowsHookExW( WH_CALLWNDPROC,
                                                            SalSysMsgProc,
                                                            pSalData->mhInst,
                                                            pSalData->mnAppThreadId );
-        }
-        else
-        {
-            pSalData->mhSalObjMsgHook = SetWindowsHookExA( WH_CALLWNDPROC,
-                                                           SalSysMsgProc,
-                                                           pSalData->mhInst,
-                                                           pSalData->mnAppThreadId );
-        }
     }
 
     if ( !pSalData->mbObjClassInit )
@@ -724,16 +714,16 @@ void WinSalObject::ResetClipRegion()
 
 // -----------------------------------------------------------------------
 
-USHORT WinSalObject::GetClipRegionType()
+sal_uInt16 WinSalObject::GetClipRegionType()
 {
     return SAL_OBJECT_CLIP_INCLUDERECTS;
 }
 
 // -----------------------------------------------------------------------
 
-void WinSalObject::BeginSetClipRegion( ULONG nRectCount )
+void WinSalObject::BeginSetClipRegion( sal_uLong nRectCount )
 {
-    ULONG nRectBufSize = sizeof(RECT)*nRectCount;
+    sal_uLong nRectBufSize = sizeof(RECT)*nRectCount;
     if ( nRectCount < SAL_CLIPRECT_COUNT )
     {
         if ( !mpStdClipRgnData )
@@ -805,7 +795,7 @@ void WinSalObject::EndSetClipRegion()
     }
     else
     {
-        ULONG nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
+        sal_uLong nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
         hRegion = ExtCreateRegion( NULL, nSize, mpClipRgnData );
         if ( mpClipRgnData != mpStdClipRgnData )
             delete [] (BYTE*)mpClipRgnData;
@@ -819,8 +809,8 @@ void WinSalObject::EndSetClipRegion()
 
 void WinSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 {
-    ULONG nStyle = 0;
-    BOOL bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
+    sal_uLong nStyle = 0;
+    sal_Bool bVisible = (GetWindowStyle( mhWnd ) & WS_VISIBLE) != 0;
     if ( bVisible )
     {
         ShowWindow( mhWnd, SW_HIDE );
@@ -833,7 +823,7 @@ void WinSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 
 // -----------------------------------------------------------------------
 
-void WinSalObject::Show( BOOL bVisible )
+void WinSalObject::Show( sal_Bool bVisible )
 {
     if ( bVisible )
         ShowWindow( mhWnd, SW_SHOWNORMAL );
@@ -843,7 +833,7 @@ void WinSalObject::Show( BOOL bVisible )
 
 // -----------------------------------------------------------------------
 
-void WinSalObject::Enable( BOOL bEnable )
+void WinSalObject::Enable( sal_Bool bEnable )
 {
     EnableWindow( mhWnd, bEnable );
 }

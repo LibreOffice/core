@@ -41,7 +41,7 @@ private:
 
     ParserMessageList aMessages;
     LineFormat aFormat;
-    ULONG nLineNumber;
+    sal_uLong nLineNumber;
 
     ByteString aUniqId;
     ByteString aLineType;
@@ -50,15 +50,15 @@ private:
     ByteString aQuickHelpText;
     ByteString aTitle;
 
-    BOOL bOK;
-    BOOL bFixed;
+    sal_Bool bOK;
+    sal_Bool bFixed;
 
     void              ReassembleLine();
 
 public:
-    GSILine( const ByteString &rLine, ULONG nLine );
+    GSILine( const ByteString &rLine, sal_uLong nLine );
     LineFormat  GetLineFormat() const    { return aFormat; }
-    ULONG       GetLineNumber() const    { return nLineNumber; }
+    sal_uLong       GetLineNumber() const    { return nLineNumber; }
 
     ByteString  const GetUniqId()     const    { return aUniqId; }
     ByteString  const GetLineType()   const    { return aLineType; }
@@ -74,13 +74,13 @@ public:
           void        SetTitle( ByteString &aNew ) { aTitle = aNew; ReassembleLine(); }
 
     ParserMessageList* GetMessageList() { return &aMessages; };
-    BOOL HasMessages(){ return ( aMessages.Count() > 0 ); };
+    sal_Bool HasMessages(){ return ( aMessages.Count() > 0 ); };
 
-    BOOL IsOK() const { return bOK; }
+    sal_Bool IsOK() const { return bOK; }
     void NotOK();
 
-    BOOL IsFixed() const { return bFixed; }
-    void SetFixed() { bFixed = TRUE; };
+    sal_Bool IsFixed() const { return bFixed; }
+    void SetFixed() { bFixed = sal_True; };
 };
 
 //
@@ -97,31 +97,31 @@ private:
     GSILine *pSourceLine;
     GSILine *pReferenceLine;
     void PrintList( ParserMessageList *pList, ByteString aPrefix, GSILine *pLine );
-    BOOL bPrintContext;
-    BOOL bCheckSourceLang;
-    BOOL bCheckTranslationLang;
-    BOOL bReference;
-    BOOL bAllowKeyIDs;
-    BOOL bAllowSuspicious;
+    sal_Bool bPrintContext;
+    sal_Bool bCheckSourceLang;
+    sal_Bool bCheckTranslationLang;
+    sal_Bool bReference;
+    sal_Bool bAllowKeyIDs;
+    sal_Bool bAllowSuspicious;
 
-    BOOL bHasBlockError;
+    sal_Bool bHasBlockError;
 
-    BOOL IsUTF8( const ByteString &aTestee, BOOL bFixTags, USHORT &nErrorPos, ByteString &aErrorMsg, BOOL &bHasBeenFixed, ByteString &aFixed ) const;
-    BOOL TestUTF8( GSILine* pTestee, BOOL bFixTags );
-    BOOL HasSuspiciousChars( GSILine* pTestee, GSILine* pSource );
+    sal_Bool IsUTF8( const ByteString &aTestee, sal_Bool bFixTags, sal_uInt16 &nErrorPos, ByteString &aErrorMsg, sal_Bool &bHasBeenFixed, ByteString &aFixed ) const;
+    sal_Bool TestUTF8( GSILine* pTestee, sal_Bool bFixTags );
+    sal_Bool HasSuspiciousChars( GSILine* pTestee, GSILine* pSource );
 
 public:
-    GSIBlock( BOOL PbPrintContext, BOOL bSource, BOOL bTrans, BOOL bRef, BOOL bAllowKID, BOOL bAllowSusp );
+    GSIBlock( sal_Bool PbPrintContext, sal_Bool bSource, sal_Bool bTrans, sal_Bool bRef, sal_Bool bAllowKID, sal_Bool bAllowSusp );
     ~GSIBlock();
-    void PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix, ByteString aContext, ULONG nLine, ByteString aUniqueId = ByteString() );
-    void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, ULONG nLine, ByteString aUniqueId = ByteString() );
+    void PrintMessage( ByteString aType, ByteString aMsg, ByteString aPrefix, ByteString aContext, sal_uLong nLine, ByteString aUniqueId = ByteString() );
+    void PrintError( ByteString aMsg, ByteString aPrefix, ByteString aContext, sal_uLong nLine, ByteString aUniqueId = ByteString() );
     void InsertLine( GSILine* pLine, const ByteString aSourceLang);
     void SetReferenceLine( GSILine* pLine );
-    BOOL CheckSyntax( ULONG nLine, BOOL bRequireSourceLine, BOOL bFixTags );
+    sal_Bool CheckSyntax( sal_uLong nLine, sal_Bool bRequireSourceLine, sal_Bool bFixTags );
 
-    void WriteError( LazySvFileStream &aErrOut, BOOL bRequireSourceLine );
-    void WriteCorrect( LazySvFileStream &aOkOut, BOOL bRequireSourceLine );
-    void WriteFixed( LazySvFileStream &aFixOut, BOOL bRequireSourceLine );
+    void WriteError( LazySvFileStream &aErrOut, sal_Bool bRequireSourceLine );
+    void WriteCorrect( LazySvFileStream &aOkOut, sal_Bool bRequireSourceLine );
+    void WriteFixed( LazySvFileStream &aFixOut, sal_Bool bRequireSourceLine );
 };
 
 #endif

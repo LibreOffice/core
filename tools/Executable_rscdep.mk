@@ -44,6 +44,7 @@ $(eval $(call gb_Executable_add_linked_libs,rscdep,\
     stl \
     tl \
     vos3 \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,rscdep,\
@@ -55,20 +56,16 @@ $(eval $(call gb_Executable_add_exception_objects,rscdep,\
 ))
 
 ifeq ($(OS),WNT)
+ifeq ($(HAVE_GETOPT),YES)
+$(eval $(call gb_Executable_set_cxxflags,rscdep,\
+    $$(CXXFLAGS) \
+    -DHAVE_GETOPT \
+))
+else
 $(eval $(call gb_Executable_add_linked_libs,rscdep,\
     gnu_getopt \
-    kernel32 \
-    msvcrt \
-    oldnames \
-    user32 \
-    uwinapi \
 ))
+endif
 endif
 
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Executable_add_linked_libs,rscdep,\
-    dl \
-    pthread \
-))
-endif
 # vim: set noet sw=4 ts=4:
