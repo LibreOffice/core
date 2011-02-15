@@ -664,15 +664,6 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
         {
             DBHelp* pDBHelp = new DBHelp( fileNameDBHelp, m_xSFA );
             table->setDBHelp( pDBHelp );
-
-#ifdef TEST_DBHELP
-            bool bSuccess;
-            bool bOldDbAccess = false;
-            bSuccess = pDBHelp->testAgainstDb( fileName, bOldDbAccess );
-
-            bOldDbAccess = true;
-            bSuccess = pDBHelp->testAgainstDb( fileName, bOldDbAccess );
-#endif
         }
         else if( table->open( 0,fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )
         {
@@ -1007,17 +998,6 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
                     if( pDBHelp != NULL )
                         pDBHelp->releaseHashMap();
                 }
-
-#ifdef TEST_DBHELP
-                bool bSuccess;
-                bool bOldDbAccess = false;
-                bSuccess = aDBHelp.testAgainstDb( fileName, bOldDbAccess );
-
-                bOldDbAccess = true;
-                bSuccess = aDBHelp.testAgainstDb( fileName, bOldDbAccess );
-
-                int nDummy = 0;
-#endif
             }
 
             else if( 0 == table.open( 0,fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 ) )

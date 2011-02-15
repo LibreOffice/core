@@ -89,8 +89,6 @@ namespace berkeleydbproxy {
     };
 
 
-//#define TEST_DBHELP
-
     class DBData
     {
         friend class        DBHelp;
@@ -149,10 +147,6 @@ namespace berkeleydbproxy {
 
         void createHashMap( bool bOptimizeForPerformance = false );
         void releaseHashMap( void );
-
-#ifdef TEST_DBHELP
-        bool testAgainstDb( const rtl::OString& fileName, bool bOldDbAccess );
-#endif
 
         bool getValueForKey( const rtl::OString& rKey, DBData& rValue );
 
