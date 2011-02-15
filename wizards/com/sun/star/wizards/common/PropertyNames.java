@@ -24,36 +24,26 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SVX_MULTIFIL_HXX
-#define _SVX_MULTIFIL_HXX
+package com.sun.star.wizards.common;
 
-// include ---------------------------------------------------------------
-
-#include "multipat.hxx"
-
-// #97807# ----------------------------------------------------
-#include <ucbhelper/content.hxx>
-#include <map>
-
-// class SvxMultiFileDialog ----------------------------------------------
-
-class SvxMultiFileDialog : public SvxMultiPathDialog
+/**
+ *
+ * @author Ocke Janssen
+ */
+public class PropertyNames
 {
-private:
-    // #97807# -------------------------------------
-    std::map< String, ::ucbhelper::Content >   aFileContentMap;
 
-    DECL_LINK( AddHdl_Impl, PushButton * );
-    DECL_LINK( DelHdl_Impl, PushButton * );
-
-public:
-    SvxMultiFileDialog( Window* pParent, sal_Bool bEmptyAllowed = sal_False );
-    ~SvxMultiFileDialog();
-
-    String  GetFiles() const { return SvxMultiPathDialog::GetPath(); }
-    void    SetFiles( const String& rPath ) { SvxMultiPathDialog::SetPath(rPath); aDelBtn.Enable(); }
-};
-
-
-#endif
-
+    public static String PROPERTY_ENABLED = "Enabled";
+    public static String PROPERTY_HEIGHT = "Height";
+    public static String PROPERTY_HELPURL = "HelpURL";
+    public static String PROPERTY_POSITION_X = "PositionX";
+    public static String PROPERTY_POSITION_Y = "PositionY";
+    public static String PROPERTY_LABEL = "Label";
+    public static String PROPERTY_MULTILINE = "MultiLine";
+    public static String PROPERTY_NAME = "Name";
+    public static String PROPERTY_STEP = "Step";
+    public static String PROPERTY_WIDTH = "Width";
+    public static String PROPERTY_TABINDEX = "TabIndex";
+    public static String PROPERTY_STATE = "State";
+    public static String PROPERTY_IMAGEURL = "ImageURL";
+}

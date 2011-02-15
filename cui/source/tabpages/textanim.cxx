@@ -45,7 +45,7 @@
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 
-static USHORT pRanges[] =
+static sal_uInt16 pRanges[] =
 {
     SDRATTR_TEXT_ANIKIND,
     SDRATTR_TEXT_ANIAMOUNT,
@@ -77,7 +77,7 @@ __EXPORT SvxTextTabDialog::SvxTextTabDialog( Window* pParent,
 |*
 \************************************************************************/
 
-void __EXPORT SvxTextTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
+void __EXPORT SvxTextTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     switch( nId )
     {
@@ -188,7 +188,7 @@ void __EXPORT SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     if( pItem )
     {
         eAniKind = ( ( const SdrTextAniKindItem* )pItem )->GetValue();
-        aLbEffect.SelectEntryPos( sal::static_int_cast< USHORT >(eAniKind) );
+        aLbEffect.SelectEntryPos( sal::static_int_cast< sal_uInt16 >(eAniKind) );
     }
     else
         aLbEffect.SetNoSelection();
@@ -205,10 +205,10 @@ void __EXPORT SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     }
     else
     {
-        aBtnUp.Check( FALSE );
-        aBtnLeft.Check( FALSE );
-        aBtnRight.Check( FALSE );
-        aBtnDown.Check( FALSE );
+        aBtnUp.Check( sal_False );
+        aBtnLeft.Check( sal_False );
+        aBtnRight.Check( sal_False );
+        aBtnDown.Check( sal_False );
     }
     aBtnUp.SaveValue();
     aBtnLeft.SaveValue();
@@ -221,8 +221,8 @@ void __EXPORT SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANISTARTINSIDE );
     if( pItem )
     {
-        aTsbStartInside.EnableTriState( FALSE );
-        BOOL bValue = ( ( const SdrTextAniStartInsideItem* )pItem )->GetValue();
+        aTsbStartInside.EnableTriState( sal_False );
+        sal_Bool bValue = ( ( const SdrTextAniStartInsideItem* )pItem )->GetValue();
         if( bValue )
             aTsbStartInside.SetState( STATE_CHECK );
         else
@@ -238,8 +238,8 @@ void __EXPORT SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANISTOPINSIDE );
     if( pItem )
     {
-        aTsbStopInside.EnableTriState( FALSE );
-        BOOL bValue = ( ( const SdrTextAniStopInsideItem* )pItem )->GetValue();
+        aTsbStopInside.EnableTriState( sal_False );
+        sal_Bool bValue = ( ( const SdrTextAniStopInsideItem* )pItem )->GetValue();
         if( bValue )
             aTsbStopInside.SetState( STATE_CHECK );
         else
@@ -255,7 +255,7 @@ void __EXPORT SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANICOUNT );
     if( pItem )
     {
-        aTsbEndless.EnableTriState( FALSE );
+        aTsbEndless.EnableTriState( sal_False );
         long nValue = (long) ( ( const SdrTextAniCountItem* )pItem )->GetValue();
         aNumFldCount.SetValue( nValue );
         if( nValue == 0 )
@@ -263,7 +263,7 @@ void __EXPORT SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
             if( eAniKind == SDRTEXTANI_SLIDE )
             {
                 aTsbEndless.SetState( STATE_NOCHECK );
-                aTsbEndless.Enable( FALSE );
+                aTsbEndless.Enable( sal_False );
             }
             else
             {
@@ -288,7 +288,7 @@ void __EXPORT SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIDELAY );
     if( pItem )
     {
-        aTsbAuto.EnableTriState( FALSE );
+        aTsbAuto.EnableTriState( sal_False );
         long nValue = (long) ( ( const SdrTextAniDelayItem* )pItem )->GetValue();
         aMtrFldDelay.SetValue( nValue );
         if( nValue == 0 )
@@ -313,7 +313,7 @@ void __EXPORT SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIAMOUNT );
     if( pItem )
     {
-        aTsbPixel.EnableTriState( FALSE );
+        aTsbPixel.EnableTriState( sal_False );
         long nValue = (long) ( ( const SdrTextAniAmountItem* )pItem )->GetValue();
         if( nValue <= 0 )
         {
@@ -369,10 +369,10 @@ void __EXPORT SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
 |*
 \************************************************************************/
 
-BOOL SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
+sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
 {
-    BOOL bModified = FALSE;
-    USHORT nPos;
+    sal_Bool bModified = sal_False;
+    sal_uInt16 nPos;
     TriState eState;
 
     // Animationstyp
@@ -381,7 +381,7 @@ BOOL SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
         nPos != aLbEffect.GetSavedValue() )
     {
         rAttrs.Put( SdrTextAniKindItem( (SdrTextAniKind) nPos ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     // Animationsrichtung
@@ -392,23 +392,23 @@ BOOL SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     {
         SdrTextAniDirection eValue = (SdrTextAniDirection) GetSelectedDirection();
         rAttrs.Put( SdrTextAniDirectionItem( eValue ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     // Start inside
     eState = aTsbStartInside.GetState();
     if( eState != aTsbStartInside.GetSavedValue() )
     {
-        rAttrs.Put( SdrTextAniStartInsideItem( (BOOL) STATE_CHECK == eState ) );
-        bModified = TRUE;
+        rAttrs.Put( SdrTextAniStartInsideItem( (sal_Bool) STATE_CHECK == eState ) );
+        bModified = sal_True;
     }
 
     // Stop inside
     eState = aTsbStopInside.GetState();
     if( eState != aTsbStopInside.GetSavedValue() )
     {
-        rAttrs.Put( SdrTextAniStopInsideItem( (BOOL) STATE_CHECK == eState ) );
-        bModified = TRUE;
+        rAttrs.Put( SdrTextAniStopInsideItem( (sal_Bool) STATE_CHECK == eState ) );
+        bModified = sal_True;
     }
 
     // Anzahl
@@ -419,17 +419,17 @@ BOOL SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     {
         sal_Int64 nValue = 0;
         if( eState == STATE_CHECK /*#89844#*/ && aTsbEndless.IsEnabled())
-            bModified = TRUE;
+            bModified = sal_True;
         else
         {
             if( aStr != aNumFldCount.GetSavedValue() )
             {
                 nValue = aNumFldCount.GetValue();
-                bModified = TRUE;
+                bModified = sal_True;
             }
         }
         if( bModified )
-            rAttrs.Put( SdrTextAniCountItem( (UINT16) nValue ) );
+            rAttrs.Put( SdrTextAniCountItem( (sal_uInt16) nValue ) );
     }
 
     // Verzoegerung
@@ -440,17 +440,17 @@ BOOL SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     {
         sal_Int64 nValue = 0;
         if( eState == STATE_CHECK )
-            bModified = TRUE;
+            bModified = sal_True;
         else
         {
             if( aStr != aMtrFldDelay.GetSavedValue() )
             {
                 nValue = aMtrFldDelay.GetValue();
-                bModified = TRUE;
+                bModified = sal_True;
             }
         }
         if( bModified )
-            rAttrs.Put( SdrTextAniDelayItem( (UINT16) nValue ) );
+            rAttrs.Put( SdrTextAniDelayItem( (sal_uInt16) nValue ) );
     }
 
     // Schrittweite
@@ -469,9 +469,9 @@ BOOL SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
         {
             nValue = GetCoreValue( aMtrFldAmount, eUnit );
         }
-        rAttrs.Put( SdrTextAniAmountItem( (INT16) nValue ) );
+        rAttrs.Put( SdrTextAniAmountItem( (sal_Int16) nValue ) );
 
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     return( bModified );
@@ -493,7 +493,7 @@ void SvxTextAnimationPage::Construct()
 |*
 \************************************************************************/
 
-USHORT* SvxTextAnimationPage::GetRanges()
+sal_uInt16* SvxTextAnimationPage::GetRanges()
 {
     return( pRanges );
 }
@@ -518,7 +518,7 @@ SfxTabPage* SvxTextAnimationPage::Create( Window* pWindow,
 
 IMPL_LINK( SvxTextAnimationPage, SelectEffectHdl_Impl, void *, EMPTYARG )
 {
-    USHORT nPos = aLbEffect.GetSelectEntryPos();
+    sal_uInt16 nPos = aLbEffect.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
         eAniKind = (SdrTextAniKind) nPos;
@@ -738,9 +738,9 @@ void SvxTextAnimationPage::SelectDirection( SdrTextAniDirection nValue )
 |*
 \************************************************************************/
 
-USHORT SvxTextAnimationPage::GetSelectedDirection()
+sal_uInt16 SvxTextAnimationPage::GetSelectedDirection()
 {
-    USHORT nValue = 0;
+    sal_uInt16 nValue = 0;
 
     if( aBtnUp.IsChecked() )
         nValue = SDRTEXTANI_UP;

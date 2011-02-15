@@ -155,7 +155,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
     nOff            ( 0 ),
     m_nDeltaWidth   ( 0 ),
     m_nPendingScrolls( 0 ),
-    bNormal         ( TRUE )
+    bNormal         ( sal_True )
 {
     aDevVersionStr = InitDevVersionStr();
 
@@ -176,7 +176,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
 
     // Transparenter Font
     Font aFont = GetFont();
-    aFont.SetTransparent( TRUE );
+    aFont.SetTransparent( sal_True );
     SetFont( aFont );
 
     // if necessary more info
@@ -192,12 +192,12 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
         Accelerator *pAccel = 0, *pPrevAccel = 0, *pFirstAccel = 0;
         aAccelStr.ToUpperAscii();
 
-        for ( USHORT i = 0; i < aAccelStr.Len(); ++i )
+        for ( sal_uInt16 i = 0; i < aAccelStr.Len(); ++i )
         {
             pPrevAccel = pAccel;
             pAccel = new Accelerator;
             aAccelList.Insert( pAccel, LIST_APPEND );
-            USHORT nKey = aAccelStr.GetChar(i) - 'A' + KEY_A;
+            sal_uInt16 nKey = aAccelStr.GetChar(i) - 'A' + KEY_A;
             pAccel->InsertItem( 1, KeyCode( nKey, KEY_MOD1 ) );
             if ( i > 0 )
                 pPrevAccel->SetAccel( 1, pAccel );
@@ -214,7 +214,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
     Wallpaper aWall( aWhiteCol );
     SetBackground( aWall );
     Font aNewFont( aCopyrightText.GetFont() );
-    aNewFont.SetTransparent( TRUE );
+    aNewFont.SetTransparent( sal_True );
 
     aVersionText.SetFont( aNewFont );
     aCopyrightText.SetFont( aNewFont );
@@ -331,7 +331,7 @@ IMPL_LINK( AboutDialog, AccelSelectHdl, Accelerator *, pAccelerator )
     nOff = GetOutputSizePixel().Height();
     MapMode aMapMode( MAP_PIXEL );
     SetMapMode( aMapMode );
-    bNormal = FALSE;
+    bNormal = sal_False;
 
     // start scroll Timer
     aTimer.SetTimeout( SCROLL_TIMER );
@@ -341,12 +341,12 @@ IMPL_LINK( AboutDialog, AccelSelectHdl, Accelerator *, pAccelerator )
 
 // -----------------------------------------------------------------------
 
-BOOL AboutDialog::Close()
+sal_Bool AboutDialog::Close()
 {
     // stop Timer and finish the dialog
     aTimer.Stop();
     EndDialog( RET_OK );
-    return( FALSE );
+    return( sal_False );
 }
 
 // -----------------------------------------------------------------------
@@ -418,7 +418,7 @@ void AboutDialog::Paint( const Rectangle& rRect )
     // close dialog if the whole text has been scrolled
     if ( nY <= 0 )
     {
-        bNormal = TRUE;
+        bNormal = sal_True;
         Close();
     }
 }

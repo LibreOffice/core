@@ -481,7 +481,7 @@ namespace pcr
     //------------------------------------------------------------------
     void OPropertyEditor::EnablePropertyControls( const ::rtl::OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable )
     {
-        for ( USHORT i = 0; i < m_aTabControl.GetPageCount(); ++i )
+        for ( sal_uInt16 i = 0; i < m_aTabControl.GetPageCount(); ++i )
         {
             OBrowserPage* pPage = static_cast< OBrowserPage* >( m_aTabControl.GetTabPage( m_aTabControl.GetPageId( i ) ) );
             if ( pPage )
@@ -492,7 +492,7 @@ namespace pcr
     //------------------------------------------------------------------
     void OPropertyEditor::EnablePropertyLine( const ::rtl::OUString& _rEntryName, bool _bEnable )
     {
-        for ( USHORT i = 0; i < m_aTabControl.GetPageCount(); ++i )
+        for ( sal_uInt16 i = 0; i < m_aTabControl.GetPageCount(); ++i )
         {
             OBrowserPage* pPage = static_cast< OBrowserPage* >( m_aTabControl.GetTabPage( m_aTabControl.GetPageId( i ) ) );
             if ( pPage )

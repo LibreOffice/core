@@ -184,7 +184,7 @@ struct ModuleToGroupNameMap_Impl
 {
     const char* m_pModule;
     String      m_sGroupName;
-    USHORT      m_nNodeId;
+    sal_uInt16      m_nNodeId;
 };
 
 static OfaPageResource* pPageRes = NULL;
@@ -209,7 +209,7 @@ static ModuleToGroupNameMap_Impl ModuleMap[] =
 
 static void setGroupName( const rtl::OUString& rModule, const String& rGroupName )
 {
-    USHORT nIndex = 0;
+    sal_uInt16 nIndex = 0;
     while ( ModuleMap[ nIndex ].m_pModule )
     {
         rtl::OUString sTemp =
@@ -226,7 +226,7 @@ static void setGroupName( const rtl::OUString& rModule, const String& rGroupName
 static String getGroupName( const rtl::OUString& rModule, bool bForced )
 {
     String sGroupName;
-    USHORT nIndex = 0;
+    sal_uInt16 nIndex = 0;
     while ( ModuleMap[ nIndex ].m_pModule )
     {
         rtl::OUString sTemp =
@@ -264,14 +264,14 @@ static String getGroupName( const rtl::OUString& rModule, bool bForced )
 
 static void deleteGroupNames()
 {
-    USHORT nIndex = 0;
+    sal_uInt16 nIndex = 0;
     while ( ModuleMap[ nIndex ].m_pModule )
         ModuleMap[ nIndex++ ].m_sGroupName = String::EmptyString();
 }
 
-static USHORT getGroupNodeId( const rtl::OUString& rModule )
+static sal_uInt16 getGroupNodeId( const rtl::OUString& rModule )
 {
-    USHORT nNodeId = 0xFFFF, nIndex = 0;
+    sal_uInt16 nNodeId = 0xFFFF, nIndex = 0;
     while ( ModuleMap[ nIndex ].m_pModule )
     {
         rtl::OUString sTemp =
@@ -385,7 +385,7 @@ struct OptionsMapping_Impl
 {
     const char* m_pGroupName;
     const char* m_pPageName;
-    USHORT      m_nPageId;
+    sal_uInt16      m_nPageId;
 };
 
 static OptionsMapping_Impl __READONLY_DATA OptionsMap_Impl[] =
@@ -473,11 +473,11 @@ static OptionsMapping_Impl __READONLY_DATA OptionsMap_Impl[] =
     { NULL,                 NULL,                   0 }
 };
 
-static sal_Bool lcl_getStringFromID( USHORT _nPageId, String& _rGroupName, String& _rPageName )
+static sal_Bool lcl_getStringFromID( sal_uInt16 _nPageId, String& _rGroupName, String& _rPageName )
 {
     sal_Bool bRet = sal_False;
 
-    USHORT nIdx = 0;
+    sal_uInt16 nIdx = 0;
     while ( OptionsMap_Impl[nIdx].m_pGroupName != NULL )
     {
         if ( _nPageId == OptionsMap_Impl[nIdx].m_nPageId )
@@ -494,7 +494,7 @@ static sal_Bool lcl_getStringFromID( USHORT _nPageId, String& _rGroupName, Strin
     return bRet;
 }
 
-static sal_Bool lcl_isOptionHidden( USHORT _nPageId, const SvtOptionsDialogOptions& _rOptOptions )
+static sal_Bool lcl_isOptionHidden( sal_uInt16 _nPageId, const SvtOptionsDialogOptions& _rOptOptions )
 {
     sal_Bool bIsHidden = sal_False;
     String sGroupName, sPageName;
@@ -878,7 +878,7 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
                            WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE | WB_QUICK_SEARCH );
     aTreeLB.SetSpaceBetweenEntries( 0 );
     aTreeLB.SetSelectionMode( SINGLE_SELECTION );
-    aTreeLB.SetSublistOpenWithLeftRight( TRUE );
+    aTreeLB.SetSublistOpenWithLeftRight( sal_True );
     aTreeLB.SetExpandedHdl( LINK( this, OfaTreeOptionsDialog, ExpandedHdl_Impl ) );
     aTreeLB.SetSelectHdl( LINK( this, OfaTreeOptionsDialog, ShowPageHdl_Impl ) );
     aBackPB.SetClickHdl( LINK( this, OfaTreeOptionsDialog, BackHdl_Impl ) );
@@ -1443,7 +1443,7 @@ OfaPageResource::OfaPageResource() :
     FreeResource();
 }
 
-BOOL EnableSSO( void )
+sal_Bool EnableSSO( void )
 {
     // SSO must be enabled if the configuration manager bootstrap settings
     // are configured as follows ...
@@ -1472,7 +1472,7 @@ BOOL EnableSSO( void )
     theBootstrap.getFrom( rtl::OUString::createFromAscii( "CFG_BackendService" ),
                           theBackendServiceTypeValue );
 
-    BOOL bSSOEnabled =
+    sal_Bool bSSOEnabled =
         ( theOfflineValue == theDefaultOfflineValue                     &&
           ( theServerTypeValue.getLength() == 0 ||
           theServerTypeValue == rtl::OUString::createFromAscii( "uno" ) ) &&
@@ -1481,7 +1481,7 @@ BOOL EnableSSO( void )
                 "com.sun.star.comp.configuration.backend.LdapSingleBackend" ) );
     if ( bSSOEnabled && GetSSOCreator() == 0 )
     {
-        bSSOEnabled = FALSE;
+        bSSOEnabled = sal_False;
     }
     return bSSOEnabled;
 }
@@ -1538,10 +1538,10 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                 if( SFX_ITEM_AVAILABLE <= pDispatch->QueryState( SID_ATTR_YEAR2000, pItem ) )
                     pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, ((const SfxUInt16Item*)pItem)->GetValue() ) );
                 else
-                    pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, (USHORT)aMisc.GetYear2000() ) );
+                    pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, (sal_uInt16)aMisc.GetYear2000() ) );
             }
             else
-                pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, (USHORT)aMisc.GetYear2000() ) );
+                pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, (sal_uInt16)aMisc.GetYear2000() ) );
 
 
             // Sonstiges - Tabulator
@@ -1673,7 +1673,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
 // -------------------------------------------------------------------------
 //          Year2000 auswerten
 // -------------------------------------------------------------------------
-            USHORT nY2K = USHRT_MAX;
+            sal_uInt16 nY2K = USHRT_MAX;
             if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_YEAR2000, sal_False, &pItem ) )
                 nY2K = ((const SfxUInt16Item*)pItem)->GetValue();
             if( USHRT_MAX != nY2K )
@@ -1860,7 +1860,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     sal_uInt16 i, nPageId;
 
     // %PRODUCTNAME options
-    BOOL isSSOEnabled = EnableSSO();
+    sal_Bool isSSOEnabled = EnableSSO();
     if ( !lcl_isOptionHidden( SID_GENERAL_OPTIONS, aOptionsDlgOpt ) )
     {
         ResStringArray& rGeneralArray = aDlgResource.GetGeneralArray();
@@ -2045,7 +2045,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 SfxModule* pScMod = ( *( SfxModule** ) GetAppData( SHL_CALC ) );
                 setGroupName( C2U("Calc"), rCalcArray.GetString(0) );
                 nGroup = AddGroup( rCalcArray.GetString( 0 ), pScMod, pScMod, SID_SC_EDITOPTIONS );
-                const USHORT nCount = static_cast< const USHORT >( rCalcArray.Count() );
+                const sal_uInt16 nCount = static_cast< const sal_uInt16 >( rCalcArray.Count() );
                 for ( i = 1; i < nCount; ++i )
                 {
                     nPageId = (sal_uInt16)rCalcArray.GetValue(i);
@@ -2073,7 +2073,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 setGroupName( C2U("Impress"), rImpressArray.GetString(0) );
                 nGroup = AddGroup( rImpressArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_EDITOPTIONS );
                 const sal_Bool bCTL = aLanguageOptions.IsCTLFontEnabled();
-                const USHORT nCount = static_cast< const USHORT >( rImpressArray.Count() );
+                const sal_uInt16 nCount = static_cast< const sal_uInt16 >( rImpressArray.Count() );
                 for ( i = 1; i < nCount; ++i )
                 {
                     nPageId = (sal_uInt16)rImpressArray.GetValue(i);
@@ -2097,7 +2097,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 setGroupName( C2U("Draw"), rDrawArray.GetString(0) );
                 nGroup = AddGroup( rDrawArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_GRAPHIC_OPTIONS );
                 const sal_Bool bCTL = aLanguageOptions.IsCTLFontEnabled();
-                const USHORT nCount = static_cast< const USHORT >( rDrawArray.Count() );
+                const sal_uInt16 nCount = static_cast< const sal_uInt16 >( rDrawArray.Count() );
                 for ( i = 1; i < nCount; ++i )
                 {
                     nPageId = (sal_uInt16)rDrawArray.GetValue(i);
@@ -2232,7 +2232,7 @@ void OfaTreeOptionsDialog::ResizeTreeLB( void )
     const long  nMax = aHiddenGB.GetSizePixel().Width() * 42 / 100;
                                             // don't ask where 42 comes from... but it looks / feels ok ;-)
     long        nDelta = 50;                // min.
-    USHORT      nDepth = 0;
+    sal_uInt16      nDepth = 0;
     const long  nIndent0 = PixelToLogic( Size( 28, 0 ) ).Width();
     const long  nIndent1 = PixelToLogic( Size( 52, 0 ) ).Width();
 
@@ -2577,10 +2577,10 @@ void OfaTreeOptionsDialog::LoadNodes(
     }
 }
 
-USHORT lcl_getGroupId( const rtl::OUString& rGroupName, const SvTreeListBox& rTreeLB )
+sal_uInt16 lcl_getGroupId( const rtl::OUString& rGroupName, const SvTreeListBox& rTreeLB )
 {
     String sGroupName( rGroupName );
-    USHORT nRet = 0;
+    sal_uInt16 nRet = 0;
     SvLBoxEntry* pEntry = rTreeLB.First();
     while( pEntry )
     {
@@ -2600,10 +2600,10 @@ USHORT lcl_getGroupId( const rtl::OUString& rGroupName, const SvTreeListBox& rTr
 void lcl_insertLeaf(
     OfaTreeOptionsDialog* pDlg, OptionsNode* pNode, OptionsLeaf* pLeaf, const SvTreeListBox& rTreeLB )
 {
-    USHORT nGrpId = lcl_getGroupId( pNode->m_sLabel, rTreeLB );
+    sal_uInt16 nGrpId = lcl_getGroupId( pNode->m_sLabel, rTreeLB );
     if ( USHRT_MAX == nGrpId )
     {
-        USHORT nNodeGrpId = getGroupNodeId( pNode->m_sId );
+        sal_uInt16 nNodeGrpId = getGroupNodeId( pNode->m_sId );
         nGrpId = pDlg->AddGroup( pNode->m_sLabel, NULL, NULL, nNodeGrpId );
         if ( pNode->m_sPageURL.getLength() > 0 )
         {

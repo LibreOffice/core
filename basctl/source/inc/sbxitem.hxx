@@ -30,12 +30,12 @@
 #include "scriptdocument.hxx"
 #include <svl/poolitem.hxx>
 
-const USHORT BASICIDE_TYPE_UNKNOWN  =   0;
-const USHORT BASICIDE_TYPE_SHELL    =   1;
-const USHORT BASICIDE_TYPE_LIBRARY  =   2;
-const USHORT BASICIDE_TYPE_MODULE   =   3;
-const USHORT BASICIDE_TYPE_DIALOG   =   4;
-const USHORT BASICIDE_TYPE_METHOD   =   5;
+const sal_uInt16 BASICIDE_TYPE_UNKNOWN  =   0;
+const sal_uInt16 BASICIDE_TYPE_SHELL    =   1;
+const sal_uInt16 BASICIDE_TYPE_LIBRARY  =   2;
+const sal_uInt16 BASICIDE_TYPE_MODULE   =   3;
+const sal_uInt16 BASICIDE_TYPE_DIALOG   =   4;
+const sal_uInt16 BASICIDE_TYPE_METHOD   =   5;
 
 
 class SbxItem : public SfxPoolItem
@@ -44,12 +44,12 @@ class SbxItem : public SfxPoolItem
     String                  m_aLibName;
     String                  m_aName;
     String                  m_aMethodName;
-    USHORT                  m_nType;
+    sal_uInt16                  m_nType;
 
 public:
     TYPEINFO();
-    SbxItem( USHORT nWhich, const ScriptDocument& rDocument, const String& aLibName, const String& aName, USHORT nType );
-    SbxItem( USHORT nWhich, const ScriptDocument& rDocument, const String& aLibName, const String& aName, const String& aMethodName, USHORT nType );
+    SbxItem( sal_uInt16 nWhich, const ScriptDocument& rDocument, const String& aLibName, const String& aName, sal_uInt16 nType );
+    SbxItem( sal_uInt16 nWhich, const ScriptDocument& rDocument, const String& aLibName, const String& aName, const String& aMethodName, sal_uInt16 nType );
     SbxItem( const SbxItem& );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
@@ -68,8 +68,8 @@ public:
     const String&           GetMethodName() const { return m_aMethodName; }
     void                    SetMethodName( const String& aMethodName ) { m_aMethodName = aMethodName; }
 
-    USHORT                  GetType() const { return m_nType; }
-    void                    SetType( USHORT nType ) { m_nType = nType; }
+    sal_uInt16                  GetType() const { return m_nType; }
+    void                    SetType( sal_uInt16 nType ) { m_nType = nType; }
 };
 
 

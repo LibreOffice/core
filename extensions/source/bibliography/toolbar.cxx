@@ -389,7 +389,7 @@ void BibToolBar::Click()
     {
         if(pDatMan)
             pDatMan->CreateMappingDialog(GetParent());
-        CheckItem( nId, FALSE );
+        CheckItem( nId, sal_False );
     }
     else if(nId == TBC_BT_CHANGESOURCE)
     {
@@ -399,7 +399,7 @@ void BibToolBar::Click()
             if(sNew.getLength())
                 pDatMan->setActiveDataSource(sNew);
         }
-        CheckItem( nId, FALSE );
+        CheckItem( nId, sal_False );
     }
 }
 

@@ -50,7 +50,7 @@
 
 //----------------------------------------------------------------------------
 
-const ULONG BASICIDE_UI_FEATURE_SHOW_BROWSER = 0x00000001;
+const sal_uLong BASICIDE_UI_FEATURE_SHOW_BROWSER = 0x00000001;
 
 //----------------------------------------------------------------------------
 
@@ -84,13 +84,13 @@ class BasicIDEShell :public SfxViewShell
 {
 friend class JavaDebuggingListenerImpl;
 friend class LocalizationMgr;
-friend BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocument& rDocument, const String& aLibName );
+friend sal_Bool implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocument& rDocument, const String& aLibName );
 friend bool BasicIDE::RemoveDialog( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName );
 
     ObjectCatalog*      pObjectCatalog;
 
     IDEWindowTable      aIDEWindowTable;
-    USHORT              nCurKey;
+    sal_uInt16              nCurKey;
     IDEBaseWindow*      pCurWin;
     ScriptDocument      m_aCurDocument;
     String              m_aCurLibName;
@@ -100,10 +100,10 @@ friend bool BasicIDE::RemoveDialog( const ScriptDocument& rDocument, const Strin
     ScrollBar           aVScrollBar;
     ScrollBarBox        aScrollBarBox;
     BasicIDETabBar*     pTabBar;
-    BOOL                bTabBarSplitted;
-    BOOL                bCreatingWindow;
+    sal_Bool                bTabBarSplitted;
+    sal_Bool                bCreatingWindow;
     ModulWindowLayout*  pModulLayout;
-    BOOL                m_bAppBasicModified;
+    sal_Bool                m_bAppBasicModified;
     ::basctl::DocumentEventNotifier
                         m_aNotifier;
 friend class ContainerListenerImpl;
@@ -114,13 +114,13 @@ friend class ContainerListenerImpl;
     void                InitTabBar();
     void                InitScrollBars();
     void                CheckWindows();
-    void                RemoveWindows( const ScriptDocument& rDocument, const String& rLibName, BOOL bDestroy );
+    void                RemoveWindows( const ScriptDocument& rDocument, const String& rLibName, sal_Bool bDestroy );
     void                UpdateWindows();
-    void                ShowObjectDialog( BOOL bShow, BOOL bCreateOrDestroy );
+    void                ShowObjectDialog( sal_Bool bShow, sal_Bool bCreateOrDestroy );
     void                InvalidateBasicIDESlots();
-    void                StoreAllWindowData( BOOL bPersistent = TRUE );
+    void                StoreAllWindowData( sal_Bool bPersistent = sal_True );
     void                SetMDITitle();
-    void                EnableScrollbars( BOOL bEnable );
+    void                EnableScrollbars( sal_Bool bEnable );
     void                SetCurLib( const ScriptDocument& rDocument, String aLibName, bool bUpdateWindows = true , bool bCheck = true );
     void                SetCurLibForLocalization( const ScriptDocument& rDocument, String aLibName );
 
@@ -136,28 +136,28 @@ protected:
     virtual void        AdjustPosSizePixel( const Point &rPos, const Size &rSize );
     virtual void        OuterResizePixel( const Point &rPos, const Size &rSize );
     virtual Size        GetOptimalSizePixel() const;
-    USHORT              InsertWindowInTable( IDEBaseWindow* pNewWin );
-    virtual USHORT      PrepareClose( BOOL bUI, BOOL bForBrowsing );
+    sal_uInt16              InsertWindowInTable( IDEBaseWindow* pNewWin );
+    virtual sal_uInt16      PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing );
 
-    void                SetCurWindow( IDEBaseWindow* pNewWin, BOOL bUpdateTabBar = FALSE, BOOL bRememberAsCurrent = TRUE );
+    void                SetCurWindow( IDEBaseWindow* pNewWin, sal_Bool bUpdateTabBar = sal_False, sal_Bool bRememberAsCurrent = sal_True );
     void                ManageToolbars();
-    void                RemoveWindow( IDEBaseWindow* pWindow, BOOL bDestroy, BOOL bAllowChangeCurWindow = TRUE );
+    void                RemoveWindow( IDEBaseWindow* pWindow, sal_Bool bDestroy, sal_Bool bAllowChangeCurWindow = sal_True );
     void                ArrangeTabBar();
 
     ModulWindow*        CreateBasWin( const ScriptDocument& rDocument, const String& rLibName, const String& rModName );
     DialogWindow*       CreateDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName );
 
-    ModulWindow*        FindBasWin( const ScriptDocument& rDocument, const String& rLibName, const String& rModName, BOOL bCreateIfNotExist, BOOL bFindSuspended = FALSE );
+    ModulWindow*        FindBasWin( const ScriptDocument& rDocument, const String& rLibName, const String& rModName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended = sal_False );
     ModulWindow*        ShowActiveModuleWindow( StarBASIC* pBasic );
 
     virtual void        SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                                 const SfxHint& rHint, const TypeId& rHintType );
 
-    virtual void        Activate(BOOL bMDI);
-    virtual void        Deactivate(BOOL bMDI);
+    virtual void        Activate(sal_Bool bMDI);
+    virtual void        Deactivate(sal_Bool bMDI);
 
     virtual void        Move();
-    virtual void        ShowCursor( FASTBOOL bOn = TRUE );
+    virtual void        ShowCursor( FASTBOOL bOn = sal_True );
 
     void                CreateModulWindowLayout();
     void                DestroyModulWindowLayout();
@@ -197,15 +197,16 @@ public:
 
     SdrView*            GetCurDlgView() const;
 
-    SfxUndoManager*     GetUndoManager();
+    ::svl::IUndoManager*
+                        GetUndoManager();
 
     virtual com::sun::star::uno::Reference< com::sun::star::view::XRenderable > GetRenderable();
 
-    // virtual USHORT           Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog = 0 );
-    virtual SfxPrinter*     GetPrinter( BOOL bCreate );
-    virtual USHORT          SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
-    virtual String          GetSelectionText( BOOL bCompleteWords );
-    virtual BOOL            HasSelection( BOOL bText ) const;
+    // virtual sal_uInt16           Print( SfxProgress &rProgress, sal_Bool bIsAPI, PrintDialog *pPrintDialog = 0 );
+    virtual SfxPrinter*     GetPrinter( sal_Bool bCreate );
+    virtual sal_uInt16          SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false );
+    virtual String          GetSelectionText( sal_Bool bCompleteWords );
+    virtual sal_Bool            HasSelection( sal_Bool bText ) const;
 
     void                GetState( SfxItemSet& );
     void                ExecuteGlobal( SfxRequest& rReq );
@@ -220,13 +221,13 @@ public:
 
     ModulWindowLayout*  GetLayoutWindow() const { return pModulLayout; }
 
-    IDEBaseWindow*      FindWindow( const ScriptDocument& rDocument, const String& rLibName = String(), const String& rName = String(), USHORT nType = BASICIDE_TYPE_UNKNOWN, BOOL bFindSuspended = FALSE );
-    DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName, BOOL bCreateIfNotExist, BOOL bFindSuspended = FALSE );
+    IDEBaseWindow*      FindWindow( const ScriptDocument& rDocument, const String& rLibName = String(), const String& rName = String(), sal_uInt16 nType = BASICIDE_TYPE_UNKNOWN, sal_Bool bFindSuspended = sal_False );
+    DialogWindow*       FindDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended = sal_False );
     IDEBaseWindow*      FindApplicationWindow();
-    BOOL                NextPage( BOOL bPrev = FALSE );
+    sal_Bool                NextPage( sal_Bool bPrev = sal_False );
 
-    BOOL                IsAppBasicModified() const { return m_bAppBasicModified; }
-    void                SetAppBasicModified( BOOL bModified = TRUE ) { m_bAppBasicModified = bModified; }
+    sal_Bool                IsAppBasicModified() const { return m_bAppBasicModified; }
+    void                SetAppBasicModified( sal_Bool bModified = sal_True ) { m_bAppBasicModified = bModified; }
 
     // For Dialog Drag&Drop in Dialog Organizer
     static void CopyDialogResources(
