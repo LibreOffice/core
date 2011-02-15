@@ -60,17 +60,17 @@ struct SmCfgOther;
 struct SmFontFormat
 {
     String      aName;
-    INT16       nCharSet;
-    INT16       nFamily;
-    INT16       nPitch;
-    INT16       nWeight;
-    INT16       nItalic;
+    sal_Int16       nCharSet;
+    sal_Int16       nFamily;
+    sal_Int16       nPitch;
+    sal_Int16       nWeight;
+    sal_Int16       nItalic;
 
     SmFontFormat();
     SmFontFormat( const Font &rFont );
 
     const Font      GetFont() const;
-    BOOL            operator == ( const SmFontFormat &rFntFmt ) const;
+    sal_Bool            operator == ( const SmFontFormat &rFntFmt ) const;
 };
 
 
@@ -85,7 +85,7 @@ struct SmFntFmtListEntry
 class SmFontFormatList
 {
     std::deque<SmFntFmtListEntry> aEntries;
-    BOOL                          bModified;
+    sal_Bool                          bModified;
 
     // disallow copy-constructor and assignment-operator for now
     SmFontFormatList( const SmFontFormatList & );
@@ -101,13 +101,13 @@ public:
     const SmFontFormat *    GetFontFormat( const String &rFntFmtId ) const;
     const SmFontFormat *    GetFontFormat( size_t nPos ) const;
     const String            GetFontFormatId( const SmFontFormat &rFntFmt ) const;
-    const String            GetFontFormatId( const SmFontFormat &rFntFmt, BOOL bAdd );
+    const String            GetFontFormatId( const SmFontFormat &rFntFmt, sal_Bool bAdd );
     const String            GetFontFormatId( size_t nPos ) const;
     const String            GetNewFontFormatId() const;
     size_t                  GetCount() const    { return aEntries.size(); }
 
-    BOOL    IsModified() const          { return bModified; }
-    void    SetModified( BOOL bVal )    { bModified = bVal; }
+    sal_Bool    IsModified() const          { return bModified; }
+    void    SetModified( sal_Bool bVal )    { bModified = bVal; }
 };
 
 
@@ -119,8 +119,8 @@ class SmMathConfig : public utl::ConfigItem
     SmCfgOther *        pOther;
     SmFontFormatList *  pFontFormatList;
     SmSymbolManager *   pSymbolMgr;
-    BOOL                bIsOtherModified;
-    BOOL                bIsFormatModified;
+    sal_Bool                bIsOtherModified;
+    sal_Bool                bIsFormatModified;
 
     // disallow copy-constructor and assignment-operator for now
     SmMathConfig( const SmMathConfig & );
@@ -139,7 +139,7 @@ class SmMathConfig : public utl::ConfigItem
                         const rtl::OUString &rSymbolName,
                         const rtl::OUString &rBaseNode ) const;
 
-    void            SetOtherIfNotEqual( BOOL &rbItem, BOOL bNewVal );
+    void            SetOtherIfNotEqual( sal_Bool &rbItem, sal_Bool bNewVal );
 
 protected:
     void    LoadOther();
@@ -149,12 +149,12 @@ protected:
     void    LoadFontFormatList();
     void    SaveFontFormatList();
 
-    void        SetOtherModified( BOOL bVal );
-    inline BOOL IsOtherModified() const     { return bIsOtherModified; }
-    void        SetFormatModified( BOOL bVal );
-    inline BOOL IsFormatModified() const    { return bIsFormatModified; }
-    void        SetFontFormatListModified( BOOL bVal );
-    inline BOOL IsFontFormatListModified() const    { return pFontFormatList ? pFontFormatList->IsModified(): FALSE; }
+    void        SetOtherModified( sal_Bool bVal );
+    inline sal_Bool IsOtherModified() const     { return bIsOtherModified; }
+    void        SetFormatModified( sal_Bool bVal );
+    inline sal_Bool IsFormatModified() const    { return bIsFormatModified; }
+    void        SetFontFormatListModified( sal_Bool bVal );
+    inline sal_Bool IsFontFormatListModified() const    { return pFontFormatList ? pFontFormatList->IsModified(): sal_False; }
 
     SmFontFormatList &          GetFontFormatList();
     const SmFontFormatList &    GetFontFormatList() const
@@ -183,25 +183,28 @@ public:
     void                SetSymbols( const std::vector< SmSym > &rNewSymbols );
 
     const SmFormat &    GetStandardFormat() const;
-    void                SetStandardFormat( const SmFormat &rFormat, BOOL bSaveFontFormatList = FALSE );
+    void                SetStandardFormat( const SmFormat &rFormat, sal_Bool bSaveFontFormatList = sal_False );
 
-    BOOL            IsPrintTitle() const;
-    void            SetPrintTitle( BOOL bVal );
-    BOOL            IsPrintFormulaText() const;
-    void            SetPrintFormulaText( BOOL bVal );
-    BOOL            IsPrintFrame() const;
-    void            SetPrintFrame( BOOL bVal );
+    sal_Bool            IsPrintTitle() const;
+    void            SetPrintTitle( sal_Bool bVal );
+    sal_Bool            IsPrintFormulaText() const;
+    void            SetPrintFormulaText( sal_Bool bVal );
+    sal_Bool            IsPrintFrame() const;
+    void            SetPrintFrame( sal_Bool bVal );
     SmPrintSize     GetPrintSize() const;
     void            SetPrintSize( SmPrintSize eSize );
-    USHORT          GetPrintZoomFactor() const;
-    void            SetPrintZoomFactor( USHORT nVal );
+    sal_uInt16          GetPrintZoomFactor() const;
+    void            SetPrintZoomFactor( sal_uInt16 nVal );
 
-    BOOL            IsIgnoreSpacesRight() const;
-    void            SetIgnoreSpacesRight( BOOL bVal );
-    BOOL            IsAutoRedraw() const;
-    void            SetAutoRedraw( BOOL bVal );
-    BOOL            IsShowFormulaCursor() const;
-    void            SetShowFormulaCursor( BOOL bVal );
+    sal_Bool        IsSaveOnlyUsedSymbols() const;
+    void            SetSaveOnlyUsedSymbols( sal_Bool bVal );
+
+    sal_Bool        IsIgnoreSpacesRight() const;
+    void            SetIgnoreSpacesRight( sal_Bool bVal );
+    sal_Bool        IsAutoRedraw() const;
+    void            SetAutoRedraw( sal_Bool bVal );
+    sal_Bool        IsShowFormulaCursor() const;
+    void            SetShowFormulaCursor( sal_Bool bVal );
 };
 
 /////////////////////////////////////////////////////////////////

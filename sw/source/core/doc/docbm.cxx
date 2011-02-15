@@ -58,7 +58,6 @@
 #include <swserv.hxx>
 #include <swundo.hxx>
 #include <tools/pstm.hxx>
-#include <undobj.hxx>
 #include <unocrsr.hxx>
 #include <viscrs.hxx>
 #include <stdio.h>
@@ -247,7 +246,7 @@ namespace
             bind(&::rtl::OUString::equals, bind(&IMark::GetName, _1), rName));
     }
 
-#if FALSE
+#if 0
     static void lcl_DebugMarks(IDocumentMarkAccess::container_t vMarks)
     {
         OSL_TRACE("%d Marks", vMarks.size());
@@ -321,7 +320,7 @@ namespace sw { namespace mark
         const ::rtl::OUString& rName,
         const IDocumentMarkAccess::MarkType eType)
     {
-#if FALSE
+#if 0
         {
             ::rtl::OString sName = ::rtl::OUStringToOString(rName, RTL_TEXTENCODING_UTF8);
             const SwPosition* const pPos1 = rPaM.GetPoint();
@@ -410,7 +409,7 @@ namespace sw { namespace mark
                 break;
         }
         pMarkBase->InitDoc(m_pDoc);
-#if FALSE
+#if 0
         OSL_TRACE("--- makeType ---");
         OSL_TRACE("Marks");
         lcl_DebugMarks(m_vMarks);
@@ -520,7 +519,7 @@ namespace sw { namespace mark
         // restore sorting if needed
         if(isSortingNeeded)
             sortMarks();
-#if FALSE
+#if 0
         OSL_TRACE("correctMarksAbsolute");
         lcl_DebugMarks(m_vMarks);
 #endif
@@ -560,7 +559,7 @@ namespace sw { namespace mark
         // restore sorting if needed
         if(isSortingNeeded)
             sortMarks();
-#if FALSE
+#if 0
         OSL_TRACE("correctMarksRelative");
         lcl_DebugMarks(m_vMarks);
 #endif
@@ -678,7 +677,7 @@ namespace sw { namespace mark
         }
         if(isSortingNeeded)
             sortMarks();
-#if FALSE
+#if 0
         OSL_TRACE("deleteMarks");
         lcl_DebugMarks(m_vMarks);
 #endif
@@ -885,19 +884,19 @@ namespace
     class _SwSaveTypeCountContent
     {
         union {
-            struct { USHORT nType, nCount; } TC;
-            ULONG nTypeCount;
+            struct { sal_uInt16 nType, nCount; } TC;
+            sal_uLong nTypeCount;
             } TYPECOUNT;
         xub_StrLen nContent;
 
     public:
         _SwSaveTypeCountContent() { TYPECOUNT.nTypeCount = 0; nContent = 0; }
-        _SwSaveTypeCountContent( USHORT nType )
+        _SwSaveTypeCountContent( sal_uInt16 nType )
             {
                 SetTypeAndCount( nType, 0 );
                 nContent = 0;
             }
-        _SwSaveTypeCountContent( const SvULongs& rArr, USHORT& rPos )
+        _SwSaveTypeCountContent( const SvULongs& rArr, sal_uInt16& rPos )
             {
                 TYPECOUNT.nTypeCount = rArr[ rPos++ ];
                 nContent = static_cast<xub_StrLen>(rArr[ rPos++ ]);
@@ -908,17 +907,17 @@ namespace
             rArr.Insert( nContent, rArr.Count() );
         }
 
-        void SetType( USHORT n )        { TYPECOUNT.TC.nType = n; }
-        USHORT GetType() const          { return TYPECOUNT.TC.nType; }
+        void SetType( sal_uInt16 n )        { TYPECOUNT.TC.nType = n; }
+        sal_uInt16 GetType() const          { return TYPECOUNT.TC.nType; }
         void IncType()                  { ++TYPECOUNT.TC.nType; }
         void DecType()                  { --TYPECOUNT.TC.nType; }
 
-        void SetCount( USHORT n )       { TYPECOUNT.TC.nCount = n; }
-        USHORT GetCount() const         { return TYPECOUNT.TC.nCount; }
-        USHORT IncCount()               { return ++TYPECOUNT.TC.nCount; }
-        USHORT DecCount()               { return --TYPECOUNT.TC.nCount; }
+        void SetCount( sal_uInt16 n )       { TYPECOUNT.TC.nCount = n; }
+        sal_uInt16 GetCount() const         { return TYPECOUNT.TC.nCount; }
+        sal_uInt16 IncCount()               { return ++TYPECOUNT.TC.nCount; }
+        sal_uInt16 DecCount()               { return --TYPECOUNT.TC.nCount; }
 
-        void SetTypeAndCount( USHORT nT, USHORT nC )
+        void SetTypeAndCount( sal_uInt16 nT, sal_uInt16 nC )
             { TYPECOUNT.TC.nCount = nC; TYPECOUNT.TC.nType = nT; }
 
         void SetContent( xub_StrLen n )     { nContent = n; }
@@ -934,9 +933,9 @@ namespace
     static const int BEHIND_SAME_NODE = 3;     // Same node index but content index behind given content index
     static const int BEHIND_NODE = 4;          // Position behind the given node index
 
-    static int lcl_RelativePosition( const SwPosition& rPos, ULONG nNode, xub_StrLen nCntnt )
+    static int lcl_RelativePosition( const SwPosition& rPos, sal_uLong nNode, xub_StrLen nCntnt )
     {
-        ULONG nIndex = rPos.nNode.GetIndex();
+        sal_uLong nIndex = rPos.nNode.GetIndex();
         int nReturn = BEFORE_NODE;
         if( nIndex == nNode )
         {
@@ -959,17 +958,17 @@ namespace
         return rPos.nNode > rNdIdx || ( pIdx && rPos.nNode == rNdIdx && rPos.nContent > pIdx->GetIndex() );
     }
 
-    static void lcl_ChkPaM( SvULongs& rSaveArr, ULONG nNode, xub_StrLen nCntnt,
+    static void lcl_ChkPaM( SvULongs& rSaveArr, sal_uLong nNode, xub_StrLen nCntnt,
                     const SwPaM& rPam, _SwSaveTypeCountContent& rSave,
-                    BOOL bChkSelDirection )
+                    sal_Bool bChkSelDirection )
     {
         // SelektionsRichtung beachten
-        bool bBound1IsStart = !bChkSelDirection ? TRUE :
+        bool bBound1IsStart = !bChkSelDirection ? sal_True :
                             ( *rPam.GetPoint() < *rPam.GetMark()
                                 ? rPam.GetPoint() == &rPam.GetBound()
                                 : rPam.GetMark() == &rPam.GetBound());
 
-        const SwPosition* pPos = &rPam.GetBound( TRUE );
+        const SwPosition* pPos = &rPam.GetBound( sal_True );
         if( pPos->nNode.GetIndex() == nNode &&
             ( bBound1IsStart ? pPos->nContent.GetIndex() < nCntnt
                                 : pPos->nContent.GetIndex() <= nCntnt ))
@@ -978,7 +977,7 @@ namespace
             rSave.Add( rSaveArr );
         }
 
-        pPos = &rPam.GetBound( FALSE );
+        pPos = &rPam.GetBound( sal_False );
         if( pPos->nNode.GetIndex() == nNode &&
             ( (bBound1IsStart && bChkSelDirection)
                         ? pPos->nContent.GetIndex() <= nCntnt
@@ -1075,12 +1074,12 @@ void SaveBookmark::SetInDoc(
             if(pIdx && !m_nNode2)
                 aPam.GetMark()->nContent += m_nCntnt2;
             else
-                aPam.GetMark()->nContent.Assign(aPam.GetCntntNode(FALSE), m_nCntnt2);
+                aPam.GetMark()->nContent.Assign(aPam.GetCntntNode(sal_False), m_nCntnt2);
         }
         else
         {
             aPam.GetMark()->nNode = m_nNode2;
-            aPam.GetMark()->nContent.Assign(aPam.GetCntntNode(FALSE), m_nCntnt2);
+            aPam.GetMark()->nContent.Assign(aPam.GetCntntNode(sal_False), m_nCntnt2);
         }
     }
 
@@ -1100,7 +1099,7 @@ void SaveBookmark::SetInDoc(
     }
 
     if(!aPam.HasMark()
-        || CheckNodesRange(aPam.GetPoint()->nNode, aPam.GetMark()->nNode, TRUE))
+        || CheckNodesRange(aPam.GetPoint()->nNode, aPam.GetMark()->nNode, sal_True))
     {
         ::sw::mark::IBookmark* const pBookmark = dynamic_cast< ::sw::mark::IBookmark* >(pDoc->getIDocumentMarkAccess()->makeMark(aPam, m_aName, m_eOrigBkmType));
         if(pBookmark)
@@ -1142,13 +1141,13 @@ void _DelBookmarks(
     // Array, das alle Angaben auf die Position als Offset speichert.
     // Die neue Zuordung erfolgt nach dem Moven.
     SwRedlineTbl& rTbl = (SwRedlineTbl&)pDoc->GetRedlineTbl();
-    for(USHORT nCnt = 0; nCnt < rTbl.Count(); ++nCnt )
+    for(sal_uInt16 nCnt = 0; nCnt < rTbl.Count(); ++nCnt )
     {
         // liegt auf der Position ??
         SwRedline* pRedl = rTbl[ nCnt ];
 
-        SwPosition *pRStt = &pRedl->GetBound(TRUE),
-                   *pREnd = &pRedl->GetBound(FALSE);
+        SwPosition *pRStt = &pRedl->GetBound(sal_True),
+                   *pREnd = &pRedl->GetBound(sal_False);
         if( *pRStt > *pREnd )
         {
             SwPosition *pTmp = pRStt; pRStt = pREnd, pREnd = pTmp;
@@ -1161,11 +1160,11 @@ void _DelBookmarks(
                 pRStt->nContent = *pEndIdx;
             else
             {
-                BOOL bStt = TRUE;
+                sal_Bool bStt = sal_True;
                 SwCntntNode* pCNd = pRStt->nNode.GetNode().GetCntntNode();
                 if( !pCNd && 0 == ( pCNd = pDoc->GetNodes().GoNext( &pRStt->nNode )) )
                 {
-                    bStt = FALSE;
+                    bStt = sal_False;
                     pRStt->nNode = rStt;
                     if( 0 == ( pCNd = pDoc->GetNodes().GoPrevious( &pRStt->nNode )) )
                     {
@@ -1184,11 +1183,11 @@ void _DelBookmarks(
                 pREnd->nContent = *pSttIdx;
             else
             {
-                BOOL bStt = FALSE;
+                sal_Bool bStt = sal_False;
                 SwCntntNode* pCNd = pREnd->nNode.GetNode().GetCntntNode();
                 if( !pCNd && 0 == ( pCNd = pDoc->GetNodes().GoPrevious( &pREnd->nNode )) )
                 {
-                    bStt = TRUE;
+                    bStt = sal_True;
                     pREnd->nNode = rEnd;
                     if( 0 == ( pCNd = pDoc->GetNodes().GoNext( &pREnd->nNode )) )
                     {
@@ -1204,10 +1203,10 @@ void _DelBookmarks(
 }
 
 void _SaveCntntIdx(SwDoc* pDoc,
-    ULONG nNode,
+    sal_uLong nNode,
     xub_StrLen nCntnt,
     SvULongs& rSaveArr,
-    BYTE nSaveFly)
+    sal_uInt8 nSaveFly)
 {
     // 1. Bookmarks
     _SwSaveTypeCountContent aSave;
@@ -1288,7 +1287,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
 
             SwFrm* pFrm = pNode->GetFrm();
 #if OSL_DEBUG_LEVEL > 1
-            static BOOL bViaDoc = FALSE;
+            static sal_Bool bViaDoc = sal_False;
             if( bViaDoc )
                 pFrm = NULL;
 #endif
@@ -1382,14 +1381,14 @@ void _SaveCntntIdx(SwDoc* pDoc,
                 if( _pStkCrsr )
                 do {
                     lcl_ChkPaM( rSaveArr, nNode, nCntnt, *_pStkCrsr,
-                                aSave, FALSE );
+                                aSave, sal_False );
                     aSave.IncCount();
                 } while ( (_pStkCrsr != 0 ) &&
                     ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
 
                 FOREACHPAM_START( PCURSH->_GetCrsr() )
                     lcl_ChkPaM( rSaveArr, nNode, nCntnt, *PCURCRSR,
-                                aSave, FALSE );
+                                aSave, sal_False );
                     aSave.IncCount();
                 FOREACHPAM_END()
 
@@ -1400,10 +1399,10 @@ void _SaveCntntIdx(SwDoc* pDoc,
     {
         aSave.SetTypeAndCount( 0x400, 0 );
         const SwUnoCrsrTbl& rTbl = pDoc->GetUnoCrsrTbl();
-        for( USHORT n = 0; n < rTbl.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rTbl.Count(); ++n )
         {
             FOREACHPAM_START( rTbl[ n ] )
-                lcl_ChkPaM( rSaveArr, nNode, nCntnt, *PCURCRSR, aSave, FALSE );
+                lcl_ChkPaM( rSaveArr, nNode, nCntnt, *PCURCRSR, aSave, sal_False );
                 aSave.IncCount();
             FOREACHPAM_END()
 
@@ -1412,7 +1411,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
             if( pUnoTblCrsr )
             {
                 FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
-                    lcl_ChkPaM( rSaveArr, nNode, nCntnt, *PCURCRSR, aSave, FALSE );
+                    lcl_ChkPaM( rSaveArr, nNode, nCntnt, *PCURCRSR, aSave, sal_False );
                     aSave.IncCount();
                 FOREACHPAM_END()
             }
@@ -1423,15 +1422,15 @@ void _SaveCntntIdx(SwDoc* pDoc,
 
 void _RestoreCntntIdx(SwDoc* pDoc,
     SvULongs& rSaveArr,
-    ULONG nNode,
+    sal_uLong nNode,
     xub_StrLen nOffset,
-    BOOL bAuto)
+    sal_Bool bAuto)
 {
     SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
     const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
     SwSpzFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
     IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
-    USHORT n = 0;
+    sal_uInt16 n = 0;
     while( n < rSaveArr.Count() )
     {
         _SwSaveTypeCountContent aSave( rSaveArr, n );
@@ -1497,7 +1496,7 @@ void _RestoreCntntIdx(SwDoc* pDoc,
             case 0x0800:
             case 0x0801:
                 {
-                    USHORT nCnt = 0;
+                    sal_uInt16 nCnt = 0;
                     SwCrsrShell* pShell = pDoc->GetEditShell();
                     if( pShell )
                     {
@@ -1538,9 +1537,9 @@ void _RestoreCntntIdx(SwDoc* pDoc,
         case 0x0400:
         case 0x0401:
             {
-                USHORT nCnt = 0;
+                sal_uInt16 nCnt = 0;
                 const SwUnoCrsrTbl& rTbl = pDoc->GetUnoCrsrTbl();
-                for( USHORT i = 0; i < rTbl.Count(); ++i )
+                for( sal_uInt16 i = 0; i < rTbl.Count(); ++i )
                 {
                     FOREACHPAM_START( rTbl[ i ] )
                         if( aSave.GetCount() == nCnt )
@@ -1594,7 +1593,7 @@ void _RestoreCntntIdx(SvULongs& rSaveArr,
     const IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
     SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
 
-    USHORT n = 0;
+    sal_uInt16 n = 0;
     while( n < rSaveArr.Count() )
     {
         _SwSaveTypeCountContent aSave( rSaveArr, n );
@@ -1657,7 +1656,7 @@ void _RestoreCntntIdx(SvULongs& rSaveArr,
             case 0x0800:
             case 0x0801:
                 {
-                    USHORT nCnt = 0;
+                    sal_uInt16 nCnt = 0;
                     SwCrsrShell* pShell = pDoc->GetEditShell();
                     if( pShell )
                     {
@@ -1698,9 +1697,9 @@ void _RestoreCntntIdx(SvULongs& rSaveArr,
             case 0x0400:
             case 0x0401:
                 {
-                    USHORT nCnt = 0;
+                    sal_uInt16 nCnt = 0;
                     const SwUnoCrsrTbl& rTbl = pDoc->GetUnoCrsrTbl();
-                    for( USHORT i = 0; i < rTbl.Count(); ++i )
+                    for( sal_uInt16 i = 0; i < rTbl.Count(); ++i )
                     {
                         FOREACHPAM_START( rTbl[ i ] )
                             if( aSave.GetCount() == nCnt )

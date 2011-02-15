@@ -93,9 +93,9 @@ class SmNode : public SmRect
     SmNodeType      eType;
     SmScaleMode     eScaleMode;
     RectHorAlign    eRectHorAlign;
-    USHORT          nFlags,
+    sal_uInt16          nFlags,
                     nAttributes;
-    BOOL            bIsPhantom,
+    sal_Bool            bIsPhantom,
                     bIsDebug;
 protected:
     SmNode(SmNodeType eNodeType, const SmToken &rNodeToken);
@@ -106,11 +106,11 @@ protected:
 public:
     virtual             ~SmNode();
 
-    virtual BOOL        IsVisible() const;
+    virtual sal_Bool        IsVisible() const;
 
-    virtual USHORT      GetNumSubNodes() const;
-    virtual SmNode *    GetSubNode(USHORT nIndex);
-            const SmNode * GetSubNode(USHORT nIndex) const
+    virtual sal_uInt16      GetNumSubNodes() const;
+    virtual SmNode *    GetSubNode(sal_uInt16 nIndex);
+            const SmNode * GetSubNode(sal_uInt16 nIndex) const
             {
                 return ((SmNode *) this)->GetSubNode(nIndex);
             }
@@ -121,22 +121,22 @@ public:
                 return ((SmNode *) this)->GetLeftMost();
             }
 
-            USHORT &    Flags() { return nFlags; }
-            USHORT &    Attributes() { return nAttributes; }
+            sal_uInt16 &    Flags() { return nFlags; }
+            sal_uInt16 &    Attributes() { return nAttributes; }
 
-            BOOL IsDebug() const { return bIsDebug; }
-            BOOL IsPhantom() const { return bIsPhantom; }
-            void SetPhantom(BOOL bIsPhantom);
+            sal_Bool IsDebug() const { return bIsDebug; }
+            sal_Bool IsPhantom() const { return bIsPhantom; }
+            void SetPhantom(sal_Bool bIsPhantom);
             void SetColor(const Color &rColor);
 
-            void SetAttribut(USHORT nAttrib);
-            void ClearAttribut(USHORT nAttrib);
+            void SetAttribut(sal_uInt16 nAttrib);
+            void ClearAttribut(sal_uInt16 nAttrib);
 
             const SmFace & GetFont() const { return aFace; };
                   SmFace & GetFont()       { return aFace; };
 
             void SetFont(const SmFace &rFace);
-            void SetFontSize(const Fraction &rRelSize, USHORT nType);
+            void SetFontSize(const Fraction &rRelSize, sal_uInt16 nType);
             void SetSize(const Fraction &rScale);
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
@@ -146,7 +146,7 @@ public:
             void ToggleDebug() const;
 #endif
 
-    void         SetRectHorAlign(RectHorAlign eHorAlign, BOOL bApplyToSubTree = TRUE );
+    void         SetRectHorAlign(RectHorAlign eHorAlign, sal_Bool bApplyToSubTree = sal_True );
     RectHorAlign GetRectHorAlign() const { return eRectHorAlign; }
 
     const SmRect & GetRect() const { return *this; }
@@ -166,19 +166,19 @@ public:
     sal_Int32       GetAccessibleIndex() const { return nAccIndex; }
     const SmNode *  FindNodeWithAccessibleIndex(xub_StrLen nAccIndex) const;
 
-    USHORT  GetRow() const    { return (USHORT)aNodeToken.nRow; }
-    USHORT  GetColumn() const { return (USHORT)aNodeToken.nCol; }
+    sal_uInt16  GetRow() const    { return (sal_uInt16)aNodeToken.nRow; }
+    sal_uInt16  GetColumn() const { return (sal_uInt16)aNodeToken.nCol; }
 
     SmScaleMode     GetScaleMode() const { return eScaleMode; }
     void            SetScaleMode(SmScaleMode eMode) { eScaleMode = eMode; }
 
-    virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
-    virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
+    virtual void AdaptToX(const OutputDevice &rDev, sal_uLong nWidth);
+    virtual void AdaptToY(const OutputDevice &rDev, sal_uLong nHeight);
 
     SmNodeType      GetType() const  { return eType; }
     const SmToken & GetToken() const { return aNodeToken; }
 
-    const SmNode *  FindTokenAt(USHORT nRow, USHORT nCol) const;
+    const SmNode *  FindTokenAt(sal_uInt16 nRow, sal_uInt16 nCol) const;
     const SmNode *  FindRectClosestTo(const Point &rPoint) const;
 
     // --> 4.7.2010 #i972#
@@ -203,13 +203,13 @@ public:
             SmStructureNode( const SmStructureNode &rNode );
     virtual ~SmStructureNode();
 
-    virtual BOOL        IsVisible() const;
+    virtual sal_Bool        IsVisible() const;
 
-    virtual USHORT      GetNumSubNodes() const;
-            void        SetNumSubNodes(USHORT nSize) { aSubNodes.resize(nSize); }
+    virtual sal_uInt16      GetNumSubNodes() const;
+            void        SetNumSubNodes(sal_uInt16 nSize) { aSubNodes.resize(nSize); }
 
     using   SmNode::GetSubNode;
-    virtual SmNode *    GetSubNode(USHORT nIndex);
+    virtual SmNode *    GetSubNode(sal_uInt16 nIndex);
             void SetSubNodes(SmNode *pFirst, SmNode *pSecond, SmNode *pThird = NULL);
             void SetSubNodes(const SmNodeArray &rNodeArray);
 
@@ -231,10 +231,10 @@ protected:
 
 public:
 
-    virtual BOOL        IsVisible() const;
-    virtual USHORT      GetNumSubNodes() const;
+    virtual sal_Bool        IsVisible() const;
+    virtual sal_uInt16      GetNumSubNodes() const;
     using   SmNode::GetSubNode;
-    virtual SmNode *    GetSubNode(USHORT nIndex);
+    virtual SmNode *    GetSubNode(sal_uInt16 nIndex);
 };
 
 
@@ -266,8 +266,8 @@ public:
     :   SmGraphicNode(NRECTANGLE, rNodeToken)
     {}
 
-    virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
-    virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
+    virtual void AdaptToX(const OutputDevice &rDev, sal_uLong nWidth);
+    virtual void AdaptToY(const OutputDevice &rDev, sal_uLong nHeight);
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
 
@@ -294,8 +294,8 @@ public:
 
     long         GetWidth() const { return nWidth; }
 
-    virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
-    virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
+    virtual void AdaptToX(const OutputDevice &rDev, sal_uLong nWidth);
+    virtual void AdaptToY(const OutputDevice &rDev, sal_uLong nHeight);
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
 
@@ -312,15 +312,15 @@ public:
 class SmTextNode : public SmVisibleNode
 {
     XubString   aText;
-    USHORT      nFontDesc;
+    sal_uInt16      nFontDesc;
 
 protected:
-    SmTextNode(SmNodeType eNodeType, const SmToken &rNodeToken, USHORT nFontDescP );
+    SmTextNode(SmNodeType eNodeType, const SmToken &rNodeToken, sal_uInt16 nFontDescP );
 
 public:
-    SmTextNode(const SmToken &rNodeToken, USHORT nFontDescP );
+    SmTextNode(const SmToken &rNodeToken, sal_uInt16 nFontDescP );
 
-    USHORT              GetFontDesc() const { return nFontDesc; }
+    sal_uInt16              GetFontDesc() const { return nFontDesc; }
     void                SetText(const XubString &rText) { aText = rText; }
     const XubString &   GetText() const { return aText; }
 
@@ -345,7 +345,7 @@ class SmSpecialNode : public SmTextNode
     bool    bIsFromGreekSymbolSet;
 
 protected:
-    SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, USHORT _nFontDesc);
+    SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, sal_uInt16 _nFontDesc);
 
 public:
     SmSpecialNode(const SmToken &rNodeToken);
@@ -391,8 +391,8 @@ protected:
 public:
     SmMathSymbolNode(const SmToken &rNodeToken);
 
-    virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
-    virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
+    virtual void AdaptToX(const OutputDevice &rDev, sal_uLong nWidth);
+    virtual void AdaptToY(const OutputDevice &rDev, sal_uLong nHeight);
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
@@ -405,15 +405,15 @@ public:
 
 class SmRootSymbolNode : public SmMathSymbolNode
 {
-    ULONG  nBodyWidth;  // width of body (argument) of root sign
+    sal_uLong  nBodyWidth;  // width of body (argument) of root sign
 
 public:
     SmRootSymbolNode(const SmToken &rNodeToken)
     :   SmMathSymbolNode(NROOTSYMBOL, rNodeToken)
     {}
 
-    virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
-    virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
+    virtual void AdaptToX(const OutputDevice &rDev, sal_uLong nWidth);
+    virtual void AdaptToY(const OutputDevice &rDev, sal_uLong nHeight);
 
 #ifdef SM_RECT_DEBUG
     using   SmRect::Draw;
@@ -481,24 +481,24 @@ public:
 
 class SmLineNode : public SmStructureNode
 {
-    BOOL  bUseExtraSpaces;
+    sal_Bool  bUseExtraSpaces;
 
 protected:
     SmLineNode(SmNodeType eNodeType, const SmToken &rNodeToken)
     :   SmStructureNode(eNodeType, rNodeToken)
     {
-        bUseExtraSpaces = TRUE;
+        bUseExtraSpaces = sal_True;
     }
 
 public:
     SmLineNode(const SmToken &rNodeToken)
     :   SmStructureNode(NLINE, rNodeToken)
     {
-        bUseExtraSpaces = TRUE;
+        bUseExtraSpaces = sal_True;
     }
 
-    void  SetUseExtraSpaces(BOOL bVal) { bUseExtraSpaces = bVal; }
-    BOOL  IsUseExtraSpaces() const { return bUseExtraSpaces; };
+    void  SetUseExtraSpaces(sal_Bool bVal) { bUseExtraSpaces = bVal; }
+    sal_Bool  IsUseExtraSpaces() const { return bUseExtraSpaces; };
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
@@ -599,7 +599,7 @@ public:
 
 class SmBinDiagonalNode : public SmStructureNode
 {
-    BOOL    bAscending;
+    sal_Bool    bAscending;
 
     void    GetOperPosSize(Point &rPos, Size &rSize,
                            const Point &rDiagPoint, double fAngleDeg) const;
@@ -607,8 +607,8 @@ class SmBinDiagonalNode : public SmStructureNode
 public:
     SmBinDiagonalNode(const SmToken &rNodeToken);
 
-    BOOL    IsAscending() const { return bAscending; }
-    void    SetAscending(BOOL bVal)  { bAscending = bVal; }
+    sal_Bool    IsAscending() const { return bAscending; }
+    void    SetAscending(sal_Bool bVal)  { bAscending = bVal; }
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
 };
@@ -642,14 +642,14 @@ enum SmSubSup
 
 class SmSubSupNode : public SmStructureNode
 {
-    BOOL  bUseLimits;
+    sal_Bool  bUseLimits;
 
 public:
     SmSubSupNode(const SmToken &rNodeToken)
     :   SmStructureNode(NSUBSUP, rNodeToken)
     {
         SetNumSubNodes(1 + SUBSUP_NUM_ENTRIES);
-        bUseLimits = FALSE;
+        bUseLimits = sal_False;
     }
 
     SmNode *       GetBody()    { return GetSubNode(0); }
@@ -658,10 +658,10 @@ public:
         return ((SmSubSupNode *) this)->GetBody();
     }
 
-    void  SetUseLimits(BOOL bVal) { bUseLimits = bVal; }
-    BOOL  IsUseLimits() const { return bUseLimits; };
+    void  SetUseLimits(sal_Bool bVal) { bUseLimits = bVal; }
+    sal_Bool  IsUseLimits() const { return bUseLimits; };
 
-    SmNode * GetSubSup(SmSubSup eSubSup) { return GetSubNode( sal::static_int_cast< USHORT >(1 + eSubSup) ); };
+    SmNode * GetSubSup(SmSubSup eSubSup) { return GetSubNode( sal::static_int_cast< sal_uInt16 >(1 + eSubSup) ); };
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void CreateTextFromNode(String &rText);
@@ -785,7 +785,7 @@ public:
 
 class SmFontNode : public SmStructureNode
 {
-    USHORT      nSizeType;
+    sal_uInt16      nSizeType;
     Fraction    aFontSize;
 
 public:
@@ -796,9 +796,9 @@ public:
         aFontSize = Fraction(1L);
     }
 
-    void SetSizeParameter(const Fraction &rValue, USHORT nType);
+    void SetSizeParameter(const Fraction &rValue, sal_uInt16 nType);
     const Fraction & GetSizeParameter() const {return aFontSize;}
-    const USHORT& GetSizeType() const {return nSizeType;}
+    const sal_uInt16& GetSizeType() const {return nSizeType;}
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
@@ -811,7 +811,7 @@ public:
 
 class SmMatrixNode : public SmStructureNode
 {
-    USHORT  nNumRows,
+    sal_uInt16  nNumRows,
             nNumCols;
 
 public:
@@ -821,9 +821,9 @@ public:
         nNumRows = nNumCols = 0;
     }
 
-    USHORT GetNumRows() const {return nNumRows;}
-    USHORT GetNumCols() const {return nNumCols;}
-    void SetRowCol(USHORT nMatrixRows, USHORT nMatrixCols);
+    sal_uInt16 GetNumRows() const {return nNumRows;}
+    sal_uInt16 GetNumCols() const {return nNumCols;}
+    void SetRowCol(sal_uInt16 nMatrixRows, sal_uInt16 nMatrixCols);
 
     using   SmNode::GetLeftMost;
     virtual SmNode * GetLeftMost();
@@ -838,7 +838,7 @@ public:
 
 class SmBlankNode : public SmGraphicNode
 {
-    USHORT  nNum;
+    sal_uInt16  nNum;
 
 public:
     SmBlankNode(const SmToken &rNodeToken)

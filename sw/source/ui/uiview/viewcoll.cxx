@@ -50,7 +50,7 @@ void SwView::ExecColl(SfxRequest &rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = 0;
-    USHORT nWhich = rReq.GetSlot();
+    sal_uInt16 nWhich = rReq.GetSlot();
     switch( nWhich )
     {
         case FN_SET_PAGE:
@@ -63,10 +63,10 @@ void SwView::ExecColl(SfxRequest &rReq)
             if( pArgs )
             {
                 if (pArgs &&
-                    SFX_ITEM_SET == pArgs->GetItemState( nWhich , TRUE, &pItem ))
+                    SFX_ITEM_SET == pArgs->GetItemState( nWhich , sal_True, &pItem ))
                 {
                     if( ((SfxStringItem*)pItem)->GetValue() !=
-                                            GetWrtShell().GetCurPageStyle(FALSE) )
+                                            GetWrtShell().GetCurPageStyle(sal_False) )
                     {
                         SfxStringItem aName(SID_STYLE_APPLY,
                                    ((SfxStringItem*)pItem)->GetValue());
@@ -89,7 +89,7 @@ void SwView::ExecColl(SfxRequest &rReq)
         }
         break;
         default:
-            ASSERT(FALSE, falscher CommandProcessor fuer Dispatch);
+            ASSERT(sal_False, falscher CommandProcessor fuer Dispatch);
             return;
     }
 }

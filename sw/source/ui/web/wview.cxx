@@ -130,11 +130,11 @@ SwWebView::~SwWebView()
 void SwWebView::SelectShell()
 {
     // Entscheidung, ob UpdateTable gerufen werden muss
-    BOOL bUpdateTable = FALSE;
+    sal_Bool bUpdateTable = sal_False;
     const SwFrmFmt* pCurTableFmt = GetWrtShell().GetTableFmt();
     if(pCurTableFmt && pCurTableFmt != GetLastTblFrmFmt())
     {
-        bUpdateTable = TRUE; // kann erst spaeter ausgefuehrt werden
+        bUpdateTable = sal_True; // kann erst spaeter ausgefuehrt werden
     }
     SetLastTblFrmFmt(pCurTableFmt);
     //SEL_TBL und SEL_TBL_CELLS koennen verodert sein!
@@ -144,7 +144,7 @@ void SwWebView::SelectShell()
     int _nSelectionType = GetSelectionType();
     if ( nNewSelectionType == _nSelectionType )
     {
-        GetViewFrame()->GetBindings().InvalidateAll( FALSE );
+        GetViewFrame()->GetBindings().InvalidateAll( sal_False );
         if ( _nSelectionType & nsSelectionType::SEL_OLE ||
              _nSelectionType & nsSelectionType::SEL_GRF )
             //Fuer Grafiken und OLE kann sich natuerlich das Verb aendern!
@@ -167,8 +167,8 @@ void SwWebView::SelectShell()
                 pBarCfg->SetTopToolbar( _nSelectionType, nId );
 
             SfxShell *pSfxShell;
-            USHORT i;
-            for ( i = 0; TRUE; ++i )
+            sal_uInt16 i;
+            for ( i = 0; sal_True; ++i )
             {
                 pSfxShell = rDispatcher.GetShell( i );
                 if ( !( pSfxShell->ISA( SwBaseShell ) ||
@@ -180,15 +180,15 @@ void SwWebView::SelectShell()
             rDispatcher.Pop( *pSfxShell, SFX_SHELL_POP_UNTIL | SFX_SHELL_POP_DELETE);
         }
 
-        BOOL bInitFormShell = FALSE;
+        sal_Bool bInitFormShell = sal_False;
         if( !GetFormShell() )
         {
-            bInitFormShell = TRUE;
+            bInitFormShell = sal_True;
             SetFormShell( new FmFormShell( this ) );
             rDispatcher.Push( *GetFormShell() );
         }
 
-        BOOL bSetExtInpCntxt = FALSE;
+        sal_Bool bSetExtInpCntxt = sal_False;
         _nSelectionType = nNewSelectionType;
         SetSelectionType( _nSelectionType );
         ShellModes eShellMode;
@@ -260,7 +260,7 @@ void SwWebView::SelectShell()
         }
         else
         {
-            bSetExtInpCntxt = TRUE;
+            bSetExtInpCntxt = sal_True;
             eShellMode = SHELL_MODE_TEXT;
             if ( _nSelectionType & nsSelectionType::SEL_NUM )
             {
@@ -284,7 +284,7 @@ void SwWebView::SelectShell()
         if( !GetDocShell()->IsReadOnly() )
         {
             if( bSetExtInpCntxt && GetWrtShell().HasReadonlySel() )
-                bSetExtInpCntxt = FALSE;
+                bSetExtInpCntxt = sal_False;
 
             InputContext aCntxt( GetEditWin().GetInputContext() );
             aCntxt.SetOptions( bSetExtInpCntxt
@@ -318,7 +318,7 @@ void SwWebView::SelectShell()
 
     //Guenstiger Zeitpunkt fuer die Kommunikation mit OLE-Objekten?
     if ( GetDocShell()->GetDoc()->IsOLEPrtNotifyPending() )
-        GetDocShell()->GetDoc()->PrtOLENotify( FALSE );
+        GetDocShell()->GetDoc()->PrtOLENotify( sal_False );
 
     //jetzt das Tabellen-Update
     if(bUpdateTable)

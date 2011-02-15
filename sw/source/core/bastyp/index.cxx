@@ -260,7 +260,7 @@ SwIndex& SwIndex::operator=( const SwIndex& rIdx )
         Remove();
         pArray = rIdx.pArray;
         pNext = pPrev = 0;
-        bEqual = FALSE;
+        bEqual = sal_False;
     }
     else
         bEqual = rIdx.nIndex == nIndex;
@@ -502,7 +502,7 @@ xub_StrLen SwIndex::operator-=( const SwIndex & rIndex )
 |*
 *************************************************************************/
 
-BOOL SwIndex::operator<( const SwIndex & rIndex ) const
+sal_Bool SwIndex::operator<( const SwIndex & rIndex ) const
 {
     ASSERT( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
     return nIndex < rIndex.nIndex;
@@ -518,7 +518,7 @@ BOOL SwIndex::operator<( const SwIndex & rIndex ) const
 |*
 *************************************************************************/
 
-BOOL SwIndex::operator<=( const SwIndex & rIndex ) const
+sal_Bool SwIndex::operator<=( const SwIndex & rIndex ) const
 {
     ASSERT( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
     return nIndex <= rIndex.nIndex;
@@ -534,7 +534,7 @@ BOOL SwIndex::operator<=( const SwIndex & rIndex ) const
 |*
 *************************************************************************/
 
-BOOL SwIndex::operator>( const SwIndex & rIndex ) const
+sal_Bool SwIndex::operator>( const SwIndex & rIndex ) const
 {
     ASSERT( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
     return nIndex > rIndex.nIndex;
@@ -550,7 +550,7 @@ BOOL SwIndex::operator>( const SwIndex & rIndex ) const
 |*
 *************************************************************************/
 
-BOOL SwIndex::operator>=( const SwIndex & rIndex ) const
+sal_Bool SwIndex::operator>=( const SwIndex & rIndex ) const
 {
     ASSERT( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
     return nIndex >= rIndex.nIndex;

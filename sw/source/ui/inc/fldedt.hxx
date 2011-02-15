@@ -47,7 +47,7 @@ class SwFldEditDlg : public SfxSingleTabDialog
     DECL_LINK( NextPrevHdl, Button *pBt = 0 );
 
     void            Init();
-    SfxTabPage*     CreatePage(USHORT nGroup);
+    SfxTabPage*     CreatePage(sal_uInt16 nGroup);
 
 public:
 
@@ -58,7 +58,7 @@ public:
 
     virtual short   Execute();
 
-    void            EnableInsert(BOOL bEnable);
+    void            EnableInsert(sal_Bool bEnable);
     void            InsertHdl();
 };
 

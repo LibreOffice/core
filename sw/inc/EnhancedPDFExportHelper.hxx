@@ -148,7 +148,7 @@ class SwTaggedPDFHelper
 
     // This will be incremented for each BeginTag() call.
     // It denotes the number of tags to close during EndStructureElements();
-    BYTE nEndStructureElement;
+    sal_uInt8 nEndStructureElement;
 
     //  If an already existing tag is reopened for follows of flow frames,
     // this value stores the tag id which has to be restored.

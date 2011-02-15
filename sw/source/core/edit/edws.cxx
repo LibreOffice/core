@@ -28,12 +28,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-
 #include <vcl/window.hxx>
+
 #include <editsh.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <docary.hxx>
 #include <acorrect.hxx>
@@ -59,7 +58,7 @@ SwEditShell::SwEditShell( SwEditShell& rEdSH, Window *pWindow )
 SwEditShell::SwEditShell( SwDoc& rDoc, Window *pWindow, const SwViewOption *pOptions )
     : SwCrsrShell( rDoc, pWindow, pOptions )
 {
-    GetDoc()->DoUndo(true);
+    GetDoc()->GetIDocumentUndoRedo().DoUndo(true);
 }
 
 
@@ -98,7 +97,7 @@ void SwEditShell::ResetModified()
 void SwEditShell::SetUndoNoResetModified()
 {
     GetDoc()->SetModified();
-    GetDoc()->SetUndoNoResetModified();
+    GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
 }
 
 /******************************************************************************
@@ -261,24 +260,24 @@ void SwEditShell::InsertTOXType(const SwTOXType& rTyp)
 
 
 void SwEditShell::DoUndo( sal_Bool bOn )
-{ GetDoc()->DoUndo( bOn ); }
+{ GetDoc()->GetIDocumentUndoRedo().DoUndo( bOn ); }
 
 
 sal_Bool SwEditShell::DoesUndo() const
-{ return GetDoc()->DoesUndo(); }
+{ return GetDoc()->GetIDocumentUndoRedo().DoesUndo(); }
 
 
 void SwEditShell::DoGroupUndo( sal_Bool bOn )
-{ GetDoc()->DoGroupUndo( bOn ); }
+{ GetDoc()->GetIDocumentUndoRedo().DoGroupUndo( bOn ); }
 
 
 sal_Bool SwEditShell::DoesGroupUndo() const
-{ return GetDoc()->DoesGroupUndo(); }
+{ return GetDoc()->GetIDocumentUndoRedo().DoesGroupUndo(); }
 
 
 void SwEditShell::DelAllUndoObj()
 {
-    GetDoc()->DelAllUndoObj();
+    GetDoc()->GetIDocumentUndoRedo().DelAllUndoObj();
 }
 
 // Zusammenfassen von Kontinuierlichen Insert/Delete/Overwrite von
@@ -289,44 +288,25 @@ void SwEditShell::DelAllUndoObj()
 
 SwUndoId SwEditShell::StartUndo( SwUndoId eUndoId,
                                    const SwRewriter *pRewriter )
-{ return GetDoc()->StartUndo( eUndoId, pRewriter ); }
+{ return GetDoc()->GetIDocumentUndoRedo().StartUndo( eUndoId, pRewriter ); }
 
 // schliesst Klammerung der nUndoId, nicht vom UI benutzt
 
 
 SwUndoId SwEditShell::EndUndo(SwUndoId eUndoId,
                                 const SwRewriter *pRewriter)
-{ return GetDoc()->EndUndo(eUndoId, pRewriter); }
-
-// liefert die Id der letzten undofaehigen Aktion zurueck
-// fuellt ggf. VARARR mit sdbcx::User-UndoIds
+{ return GetDoc()->GetIDocumentUndoRedo().EndUndo(eUndoId, pRewriter); }
 
 
-SwUndoId SwEditShell::GetUndoIds(String* pStr,SwUndoIds *pUndoIds) const
-{ return GetDoc()->GetUndoIds(pStr,pUndoIds); }
+bool     SwEditShell::GetLastUndoInfo(::rtl::OUString *const o_pStr,
+                                      SwUndoId *const o_pId) const
+{ return GetDoc()->GetIDocumentUndoRedo().GetLastUndoInfo(o_pStr, o_pId); }
 
-String SwEditShell::GetUndoIdsStr(String* pStr,SwUndoIds *pUndoIds) const
-{ return GetDoc()->GetUndoIdsStr(pStr,pUndoIds); }
+bool     SwEditShell::GetFirstRedoInfo(::rtl::OUString *const o_pStr) const
+{ return GetDoc()->GetIDocumentUndoRedo().GetFirstRedoInfo(o_pStr); }
 
-// liefert die Id der letzten Redofaehigen Aktion zurueck
-// fuellt ggf. VARARR mit RedoIds
-
-
-SwUndoId SwEditShell::GetRedoIds(String* pStr,SwUndoIds *pRedoIds) const
-{ return GetDoc()->GetRedoIds(pStr,pRedoIds); }
-
-String SwEditShell::GetRedoIdsStr(String* pStr,SwUndoIds *pRedoIds) const
-{ return GetDoc()->GetRedoIdsStr(pStr,pRedoIds); }
-
-// liefert die Id der letzten Repeatfaehigen Aktion zurueck
-// fuellt ggf. VARARR mit RedoIds
-
-
-SwUndoId SwEditShell::GetRepeatIds(String* pStr, SwUndoIds *pRedoIds) const
-{ return GetDoc()->GetRepeatIds(pStr,pRedoIds); }
-
-String SwEditShell::GetRepeatIdsStr(String* pStr, SwUndoIds *pRedoIds) const
-{ return GetDoc()->GetRepeatIdsStr(pStr,pRedoIds); }
+SwUndoId SwEditShell::GetRepeatInfo(::rtl::OUString *const o_pStr) const
+{ return GetDoc()->GetIDocumentUndoRedo().GetRepeatInfo(o_pStr); }
 
 
 

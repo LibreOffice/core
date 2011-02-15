@@ -43,7 +43,7 @@
 #endif
 
 
-SwMergeTblDlg::SwMergeTblDlg( Window *pParent, BOOL& rWithPrev )
+SwMergeTblDlg::SwMergeTblDlg( Window *pParent, sal_Bool& rWithPrev )
     : SvxStandardDialog(pParent, SW_RES(DLG_MERGE_TABLE)),
     aOKPB(                  this, SW_RES(PB_OK      )),
     aCancelPB(              this, SW_RES(PB_CANCEL  )),

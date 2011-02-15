@@ -56,10 +56,10 @@ public:
     void SetNewCntntIdx( const SwNodeIndex *pIdx );
 };
 
-inline const SwFmtCntnt &SwAttrSet::GetCntnt(BOOL bInP) const
+inline const SwFmtCntnt &SwAttrSet::GetCntnt(sal_Bool bInP) const
     { return (const SwFmtCntnt&)Get( RES_CNTNT,bInP); }
 
-inline const SwFmtCntnt &SwFmt::GetCntnt(BOOL bInP) const
+inline const SwFmtCntnt &SwFmt::GetCntnt(sal_Bool bInP) const
     { return aSet.GetCntnt(bInP); }
 
 #endif

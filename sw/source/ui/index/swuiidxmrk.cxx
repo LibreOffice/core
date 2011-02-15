@@ -33,9 +33,7 @@
 
 #include "swuiidxmrk.hxx"
 #include <hintids.hxx>
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 #define _SVSTDARR_STRINGSSORT
 #include <svl/svstdarr.hxx>
 #include <comphelper/processfactory.hxx>
@@ -46,9 +44,7 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <svl/stritem.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/dispatch.hxx>
 #include <svl/eitem.hxx>
 #include <svtools/txtcmp.hxx>
@@ -60,20 +56,12 @@
 #include <idxmrk.hxx>
 #include <txttxmrk.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <multmrk.hxx>
 #include <swundo.hxx>                   // fuer Undo-Ids
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _INDEX_HRC
 #include <index.hrc>
-#endif
-#ifndef _IDXMRK_HRC
 #include <idxmrk.hrc>
-#endif
 #include <swmodule.hxx>
 #include <fldmgr.hxx>
 #include <fldbas.hxx>
@@ -83,7 +71,6 @@
 #include <ndtxt.hxx>
 #include <breakit.hxx>
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
 
 #include "swuiidxmrk.hxx"
 #include <unomid.h>
@@ -158,11 +145,11 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
     bNewMark(bNewDlg),
     bSelected(sal_False),
 
-    bPhoneticED0_ChangedByUser(FALSE),
-    bPhoneticED1_ChangedByUser(FALSE),
-    bPhoneticED2_ChangedByUser(FALSE),
+    bPhoneticED0_ChangedByUser(sal_False),
+    bPhoneticED1_ChangedByUser(sal_False),
+    bPhoneticED2_ChangedByUser(sal_False),
     nLangForPhoneticReading(2052),
-    bIsPhoneticReadingEnabled(FALSE),
+    bIsPhoneticReadingEnabled(sal_False),
     xExtendedIndexEntrySupplier(NULL),
     pTOXMgr(0),
     pSh(&rWrtShell)
@@ -373,10 +360,10 @@ void    SwIndexMarkDlg::UpdateLanguageDependenciesForPhoneticReading()
     //no phonetic reading if no global cjk support
     if( !xExtendedIndexEntrySupplier.is() )
     {
-        bIsPhoneticReadingEnabled = FALSE;
+        bIsPhoneticReadingEnabled = sal_False;
         return;
     }
-    bIsPhoneticReadingEnabled = TRUE;
+    bIsPhoneticReadingEnabled = sal_True;
 
     //get the current language
     if(!bNewMark) //if dialog is opened to iterate existing marks
@@ -401,8 +388,8 @@ void    SwIndexMarkDlg::UpdateLanguageDependenciesForPhoneticReading()
     }
     else //if dialog is opened to create a new mark
     {
-        USHORT nScriptType = pSh->GetScriptType();
-        USHORT nWhich;
+        sal_uInt16 nScriptType = pSh->GetScriptType();
+        sal_uInt16 nWhich;
         switch(nScriptType)
         {
             case SCRIPTTYPE_ASIAN: nWhich = RES_CHRATR_CJK_LANGUAGE; break;
@@ -517,7 +504,7 @@ void SwIndexMarkDlg::InsertUpdate()
 /*--------------------------------------------------------------------
      Beschreibung:  Marke einfuegen
  --------------------------------------------------------------------*/
-static void lcl_SelectSameStrings(SwWrtShell& rSh, BOOL bWordOnly, BOOL bCaseSensitive)
+static void lcl_SelectSameStrings(SwWrtShell& rSh, sal_Bool bWordOnly, sal_Bool bCaseSensitive)
 {
     rSh.Push();
 
@@ -532,12 +519,12 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, BOOL bWordOnly, BOOL bCaseSen
                             : TransliterationModules_IGNORE_CASE) );
 
     rSh.ClearMark();
-    BOOL bCancel;
+    sal_Bool bCancel;
 
     //todo/mba: assuming that notes should not be searched
-    BOOL bSearchInNotes = FALSE;
+    sal_Bool bSearchInNotes = sal_False;
     rSh.Find( aSearchOpt,  bSearchInNotes, DOCPOS_START, DOCPOS_END, bCancel,
-                        (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY), FALSE );
+                        (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY), sal_False );
 }
 
 
@@ -574,9 +561,9 @@ void SwIndexMarkDlg::InsertMark()
     }
     if (aOrgStr != aEntryED.GetText())
         aDesc.SetAltStr(aEntryED.GetText());
-    BOOL bApplyAll = aApplyToAllCB.IsChecked();
-    BOOL bWordOnly = aSearchCaseWordOnlyCB.IsChecked();
-    BOOL bCaseSensitive = aSearchCaseSensitiveCB.IsChecked();
+    sal_Bool bApplyAll = aApplyToAllCB.IsChecked();
+    sal_Bool bWordOnly = aSearchCaseWordOnlyCB.IsChecked();
+    sal_Bool bCaseSensitive = aSearchCaseSensitiveCB.IsChecked();
 
     pSh->StartAllAction();
     // hier muessen alle gleichen Strings selektiert werden
@@ -589,7 +576,7 @@ void SwIndexMarkDlg::InsertMark()
     SwTOXMgr aMgr(pSh);
     aMgr.InsertTOXMark(aDesc);
     if(bApplyAll)
-        pSh->Pop(FALSE);
+        pSh->Pop(sal_False);
 
     pSh->EndAllAction();
 }
@@ -818,11 +805,11 @@ IMPL_LINK( SwIndexMarkDlg, ModifyHdl, ListBox *, pBox )
     }
     else //aEntryED  !!aEntryED is not a ListBox but a Edit
     {
-        BOOL bHasText = (aEntryED.GetText().Len()>0);
+        sal_Bool bHasText = (aEntryED.GetText().Len()>0);
         if(!bHasText)
         {
             aPhoneticED0.SetText(aEmptyStr);
-            bPhoneticED0_ChangedByUser = FALSE;
+            bPhoneticED0_ChangedByUser = sal_False;
         }
         else if(!bPhoneticED0_ChangedByUser)
             aPhoneticED0.SetText(GetDefaultPhoneticReading(aEntryED.GetText()));
@@ -1038,15 +1025,15 @@ IMPL_LINK( SwIndexMarkDlg, KeyDCBModifyHdl, ComboBox *, pBox )
             aKey2DCB.SetText(aEmptyStr);
             aPhoneticED1.SetText(aEmptyStr);
             aPhoneticED2.SetText(aEmptyStr);
-            bPhoneticED1_ChangedByUser = FALSE;
-            bPhoneticED2_ChangedByUser = FALSE;
+            bPhoneticED1_ChangedByUser = sal_False;
+            bPhoneticED2_ChangedByUser = sal_False;
         }
         else
         {
             if(pBox->IsInDropDown())
             {
                 //reset bPhoneticED1_ChangedByUser if a completly new string is selected
-                bPhoneticED1_ChangedByUser = FALSE;
+                bPhoneticED1_ChangedByUser = sal_False;
             }
             if(!bPhoneticED1_ChangedByUser)
                 aPhoneticED1.SetText(GetDefaultPhoneticReading(pBox->GetText()));
@@ -1059,14 +1046,14 @@ IMPL_LINK( SwIndexMarkDlg, KeyDCBModifyHdl, ComboBox *, pBox )
         if(!(pBox->GetText().Len()>0))
         {
             aPhoneticED2.SetText(aEmptyStr);
-            bPhoneticED2_ChangedByUser = FALSE;
+            bPhoneticED2_ChangedByUser = sal_False;
         }
         else
         {
             if(pBox->IsInDropDown())
             {
                 //reset bPhoneticED1_ChangedByUser if a completly new string is selected
-                bPhoneticED2_ChangedByUser = FALSE;
+                bPhoneticED2_ChangedByUser = sal_False;
             }
             if(!bPhoneticED2_ChangedByUser)
                 aPhoneticED2.SetText(GetDefaultPhoneticReading(pBox->GetText()));
@@ -1103,7 +1090,7 @@ void    SwIndexMarkDlg::ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark)
     pTOXMgr = new SwTOXMgr(pSh);
     if(pCurTOXMark)
     {
-        for(USHORT i = 0; i < pTOXMgr->GetTOXMarkCount(); i++)
+        for(sal_uInt16 i = 0; i < pTOXMgr->GetTOXMarkCount(); i++)
             if(pTOXMgr->GetTOXMark(i) == pCurTOXMark)
             {
                 pTOXMgr->SetCurTOXMark(i);

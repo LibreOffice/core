@@ -43,9 +43,9 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFmtSurround: public SfxEnumItem
 {
-    BOOL    bAnchorOnly :1;
-    BOOL    bContour    :1;
-    BOOL    bOutside    :1;
+    sal_Bool    bAnchorOnly :1;
+    sal_Bool    bContour    :1;
+    sal_Bool    bOutside    :1;
 public:
     SwFmtSurround( SwSurround eNew = SURROUND_PARALLEL );
     SwFmtSurround( const SwFmtSurround & );
@@ -54,24 +54,24 @@ public:
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual USHORT          GetValueCount() const;
+    virtual sal_uInt16          GetValueCount() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
 
     SwSurround GetSurround()const { return SwSurround( GetValue() ); }
-    BOOL    IsAnchorOnly()  const { return bAnchorOnly; }
-    BOOL    IsContour()     const { return bContour; }
-    BOOL    IsOutside()     const { return bOutside; }
-    void    SetSurround  ( SwSurround eNew ){ SfxEnumItem::SetValue( USHORT( eNew ) ); }
-    void    SetAnchorOnly( BOOL bNew )      { bAnchorOnly = bNew; }
-    void    SetContour( BOOL bNew )         { bContour = bNew; }
-    void    SetOutside( BOOL bNew )         { bOutside = bNew; }
+    sal_Bool    IsAnchorOnly()  const { return bAnchorOnly; }
+    sal_Bool    IsContour()     const { return bContour; }
+    sal_Bool    IsOutside()     const { return bOutside; }
+    void    SetSurround  ( SwSurround eNew ){ SfxEnumItem::SetValue( sal_uInt16( eNew ) ); }
+    void    SetAnchorOnly( sal_Bool bNew )      { bAnchorOnly = bNew; }
+    void    SetContour( sal_Bool bNew )         { bContour = bNew; }
+    void    SetOutside( sal_Bool bNew )         { bOutside = bNew; }
 };
 
 inline SwFmtSurround &SwFmtSurround::operator=( const SwFmtSurround &rCpy )
@@ -83,10 +83,10 @@ inline SwFmtSurround &SwFmtSurround::operator=( const SwFmtSurround &rCpy )
     return *this;
 }
 
-inline const SwFmtSurround &SwAttrSet::GetSurround(BOOL bInP) const
+inline const SwFmtSurround &SwAttrSet::GetSurround(sal_Bool bInP) const
     { return (const SwFmtSurround&)Get( RES_SURROUND,bInP); }
 
-inline const SwFmtSurround &SwFmt::GetSurround(BOOL bInP) const
+inline const SwFmtSurround &SwFmt::GetSurround(sal_Bool bInP) const
     { return aSet.GetSurround(bInP); }
 
 #endif

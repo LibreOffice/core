@@ -154,11 +154,11 @@ static CloseResult CloseModelAndDocSh(
 
 ////////////////////////////////////////////////////////////
 
-static BOOL LoadFromURL_impl(
+static sal_Bool LoadFromURL_impl(
         Reference< frame::XModel > &rxModel,
         SfxObjectShellRef &rxDocSh,
         const String &rURL,
-        BOOL bClose )
+        sal_Bool bClose )
     throw (RuntimeException)
 {
     // try to open the document readonly and hidden
@@ -176,7 +176,7 @@ static BOOL LoadFromURL_impl(
     }
     catch( Exception & )
     {
-        return FALSE;
+        return sal_False;
     }
 
     // try to get the DocShell
@@ -189,7 +189,7 @@ static BOOL LoadFromURL_impl(
         pTmpDocShell = pTextDoc ? pTextDoc->GetDocShell() : 0;
     }
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (xTmpModel.is() && pTmpDocShell)    // everything available?
     {
         if (bClose)
@@ -197,7 +197,7 @@ static BOOL LoadFromURL_impl(
         // set new stuff
         rxModel = xTmpModel;
         rxDocSh = pTmpDocShell;
-        bRes = TRUE;
+        bRes = sal_True;
     }
     else
     {
@@ -374,15 +374,15 @@ namespace
 
 ////////////////////////////////////////////////////////////
 
-static BOOL DeleteTmpFile_Impl(
+static sal_Bool DeleteTmpFile_Impl(
         Reference< frame::XModel > &rxModel,
         SfxObjectShellRef &rxDocSh,
         const String &rTmpFileURL )
 {
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (rTmpFileURL.Len())
     {
-        BOOL bDelete = TRUE;
+        sal_Bool bDelete = sal_True;
         if ( eVetoed == CloseModelAndDocSh( rxModel, rxDocSh ) )
         {
             // somebody vetoed the closing, and took the ownership of the document
@@ -390,7 +390,7 @@ static BOOL DeleteTmpFile_Impl(
             Reference< XEventListener > xEnsureDelete( new DelayedFileDeletion( rxModel, rTmpFileURL ) );
                 // note: as soon as #106931# is fixed, the whole DelayedFileDeletion is to be superseeded by
                 // a better solution
-            bDelete = FALSE;
+            bDelete = sal_False;
         }
 
         rxModel = 0;
@@ -405,7 +405,7 @@ static BOOL DeleteTmpFile_Impl(
             }
         }
         else
-            bRes = TRUE;    // file will be deleted delayed
+            bRes = sal_True;    // file will be deleted delayed
     }
     return bRes;
 }
@@ -495,7 +495,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         const OUString &rName   = pArguments[i].Name;
         const Any &rValue       = pArguments[i].Value;
 
-        BOOL bOK = TRUE;
+        sal_Bool bOK = sal_True;
         if (rName.equalsAscii( GetPropName( UNO_NAME_SELECTION ) ))
             bOK = rValue >>= aCurSelection;
         else if (rName.equalsAscii( GetPropName( UNO_NAME_RESULT_SET ) ))
@@ -514,7 +514,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         {
             bOK = rValue >>= aCurDocumentURL;
             if (aCurDocumentURL.getLength()
-                && !LoadFromURL_impl( xCurModel, xCurDocSh, aCurDocumentURL, FALSE ))
+                && !LoadFromURL_impl( xCurModel, xCurDocSh, aCurDocumentURL, sal_False ))
                 throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Failed to create document from URL: " ) ) + aCurDocumentURL, static_cast < cppu::OWeakObject * > ( this ) );
         }
         else if (rName.equalsAscii( GetPropName( UNO_NAME_OUTPUT_URL ) ))
@@ -625,7 +625,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         aCurSelection = aTranslated;
     }
 
-    SfxViewFrame*   pFrame = SfxViewFrame::GetFirst( xCurDocSh, FALSE);
+    SfxViewFrame*   pFrame = SfxViewFrame::GetFirst( xCurDocSh, sal_False);
     SwView *pView = PTR_CAST( SwView, pFrame->GetViewShell() );
     if (!pView)
         throw RuntimeException();
@@ -691,7 +691,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     // aDescriptor[ svx::daColumnObject ]    not used
     aDescriptor[ svx::daSelection ]          <<= aCurSelection;
 
-    USHORT nMergeType;
+    sal_uInt16 nMergeType;
     switch (nCurOutputType)
     {
         case MailMergeType::PRINTER : nMergeType = DBMGR_MERGE_MAILMERGE; break;
@@ -712,11 +712,8 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     uno::Reference< mail::XMailService > xInService;
     if (MailMergeType::PRINTER == nCurOutputType)
     {
-        SwPrintData aPrtData = *SW_MOD()->GetPrtOptions( FALSE );
         IDocumentDeviceAccess* pIDDA = rSh.getIDocumentDeviceAccess();
-        SwPrintData* pShellPrintData = pIDDA->getPrintData();
-        if (pShellPrintData)
-            aPrtData = *pShellPrintData;
+        SwPrintData aPrtData( pIDDA->getPrintData() );
         aPrtData.SetPrintSingleJobs( bCurSinglePrintJobs );
         pIDDA->setPrintData( aPrtData );
         // #i25686# printing should not be done asynchronously to prevent dangling offices
@@ -824,13 +821,13 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     if ( !bStoredAsTemporary )
         throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Failed to save temporary file." ) ), static_cast < cppu::OWeakObject * > ( this ) );
 
-    pMgr->SetMergeSilent( TRUE );       // suppress dialogs, message boxes, etc.
+    pMgr->SetMergeSilent( sal_True );       // suppress dialogs, message boxes, etc.
     const SwXMailMerge *pOldSrc = pMgr->GetMailMergeEvtSrc();
     DBG_ASSERT( !pOldSrc || pOldSrc == this, "Ooops... different event source already set." );
     pMgr->SetMailMergeEvtSrc( this );   // launch events for listeners
 
     SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), xCurDocSh));
-    BOOL bSucc = pMgr->MergeNew( aMergeDesc );
+    sal_Bool bSucc = pMgr->MergeNew( aMergeDesc );
     SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), xCurDocSh));
 
     pMgr->SetMailMergeEvtSrc( pOldSrc );
@@ -966,7 +963,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
                 OUString aText;
                 bOK = rValue >>= aText;
                 if (aText.getLength()
-                    && !LoadFromURL_impl( xModel, xDocSh, aText, TRUE ))
+                    && !LoadFromURL_impl( xModel, xDocSh, aText, sal_True ))
                     throw RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Failed to create document from URL: " ) ) + aText, static_cast < cppu::OWeakObject * > ( this ) );
                 aDocumentURL = aText;
             }
@@ -1039,7 +1036,7 @@ void SAL_CALL SwXMailMerge::setPropertyValue(
         if (bChanged)
         {
             PropertyChangeEvent aChgEvt( (XPropertySet *) this, rPropertyName,
-                    FALSE, pCur->nWID, aOld, rValue );
+                    sal_False, pCur->nWID, aOld, rValue );
             launchEvent( aChgEvt );
         }
     }

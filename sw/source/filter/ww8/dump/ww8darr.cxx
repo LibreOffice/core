@@ -513,17 +513,17 @@ static int
 }
 
 
-SprmDumpInfo& WW8GetSprmDumpInfo( USHORT nId )
+SprmDumpInfo& WW8GetSprmDumpInfo( sal_uInt16 nId )
 {
     // ggfs. Tab sortieren
-    static BOOL bInit = FALSE;
+    static sal_Bool bInit = sal_False;
     if( !bInit )
     {
         qsort( (void*)aSprmDumpTab,
             sizeof( aSprmDumpTab      ) / sizeof (aSprmDumpTab[ 0 ]),
             sizeof( aSprmDumpTab[ 0 ] ),
             CompSprmDumpId );
-        bInit = TRUE;
+        bInit = sal_True;
     }
     // Sprm heraussuchen
     void* pFound;
