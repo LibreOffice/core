@@ -113,20 +113,20 @@ public:
         long nReportSize = GetItemSize( REPORT_ID );
         long nTaskPaneSize = GetItemSize( TASKPANE_ID );
 
-        BOOL        bMod = FALSE;
+        sal_Bool        bMod = sal_False;
         if( nReportSize < nReportMinSplitSize )
         {
             nReportSize = nReportMinSplitSize;
             nTaskPaneSize = 99 - nReportMinSplitSize;
 
-            bMod = TRUE;
+            bMod = sal_True;
         }
         else if( nTaskPaneSize < nTaskPaneMinSplitSize )
         {
             nTaskPaneSize = nTaskPaneMinSplitSize;
             nReportSize = 99 - nTaskPaneMinSplitSize;
 
-            bMod = TRUE;
+            bMod = sal_True;
         }
 
         if( bMod )
@@ -155,12 +155,12 @@ ODesignView::ODesignView(   Window* pParent,
     ,m_eMode( RPTUI_SELECT )
     ,m_nCurrentPosition(USHRT_MAX)
     ,m_eActObj( OBJ_NONE )
-    ,m_bFirstDraw(FALSE)
+    ,m_bFirstDraw(sal_False)
     ,m_aGridSizeCoarse( 1000, 1000 )    // #i93595# 100TH_MM changed to grid using coarse 1 cm grid
     ,m_aGridSizeFine( 250, 250 )        // and a 0,25 cm subdivision for better visualisation
-    ,m_bGridVisible(TRUE)
-    ,m_bGridSnap(TRUE)
-    ,m_bDeleted( FALSE )
+    ,m_bGridVisible(sal_True)
+    ,m_bGridSnap(sal_True)
+    ,m_bDeleted( sal_False )
 {
     DBG_CTOR( rpt_ODesignView,NULL);
     SetHelpId(UID_RPT_RPT_APP_VIEW);
@@ -191,7 +191,7 @@ ODesignView::ODesignView(   Window* pParent,
 ODesignView::~ODesignView()
 {
     DBG_DTOR( rpt_ODesignView,NULL);
-    m_bDeleted = TRUE;
+    m_bDeleted = sal_True;
     Hide();
     m_aScrollWindow.Hide();
     m_aMarkTimer.Stop();
@@ -363,7 +363,7 @@ void ODesignView::SetMode( DlgEdMode _eNewMode )
     m_aScrollWindow.SetMode(_eNewMode);
 }
 //----------------------------------------------------------------------------
-void ODesignView::SetInsertObj( USHORT eObj,const ::rtl::OUString& _sShapeType )
+void ODesignView::SetInsertObj( sal_uInt16 eObj,const ::rtl::OUString& _sShapeType )
 {
     m_eActObj = eObj;
     m_aScrollWindow.SetInsertObj( eObj,_sShapeType );
@@ -375,7 +375,7 @@ rtl::OUString ODesignView::GetInsertObjString() const
 }
 //----------------------------------------------------------------------------
 
-USHORT ODesignView::GetInsertObj() const
+sal_uInt16 ODesignView::GetInsertObj() const
 {
     return m_eActObj;
 }
@@ -406,13 +406,13 @@ void ODesignView::Delete()
     m_aScrollWindow.Delete();
 }
 //----------------------------------------------------------------------------
-BOOL ODesignView::HasSelection() const
+sal_Bool ODesignView::HasSelection() const
 {
     return m_aScrollWindow.HasSelection();
 }
 //----------------------------------------------------------------------------
 
-BOOL ODesignView::IsPasteAllowed() const
+sal_Bool ODesignView::IsPasteAllowed() const
 {
     return m_aScrollWindow.IsPasteAllowed();
 }
@@ -440,7 +440,7 @@ void ODesignView::toggleGrid(sal_Bool _bGridVisible)
      m_aScrollWindow.toggleGrid(_bGridVisible);
 }
 //----------------------------------------------------------------------------
-USHORT ODesignView::getSectionCount() const
+sal_uInt16 ODesignView::getSectionCount() const
 {
     return m_aScrollWindow.getSectionCount();
 }
@@ -450,12 +450,12 @@ void ODesignView::showRuler(sal_Bool _bShow)
      m_aScrollWindow.showRuler(_bShow);
 }
 //----------------------------------------------------------------------------
-void ODesignView::removeSection(USHORT _nPosition)
+void ODesignView::removeSection(sal_uInt16 _nPosition)
 {
      m_aScrollWindow.removeSection(_nPosition);
 }
 //----------------------------------------------------------------------------
-void ODesignView::addSection(const uno::Reference< report::XSection >& _xSection,const ::rtl::OUString& _sColorEntry,USHORT _nPosition)
+void ODesignView::addSection(const uno::Reference< report::XSection >& _xSection,const ::rtl::OUString& _sColorEntry,sal_uInt16 _nPosition)
 {
      m_aScrollWindow.addSection(_xSection,_sColorEntry,_nPosition);
 }
@@ -553,7 +553,7 @@ void ODesignView::showProperties(const uno::Reference< uno::XInterface>& _xRepor
     }
 }
 //-----------------------------------------------------------------------------
-BOOL ODesignView::isReportExplorerVisible() const
+sal_Bool ODesignView::isReportExplorerVisible() const
 {
     return m_pReportExplorer && m_pReportExplorer->IsVisible();
 }
@@ -574,7 +574,7 @@ void ODesignView::toggleReportExplorer()
         m_pReportExplorer->Show(!m_pReportExplorer->IsVisible());
 }
 //-----------------------------------------------------------------------------
-BOOL ODesignView::isAddFieldVisible() const
+sal_Bool ODesignView::isAddFieldVisible() const
 {
     return m_pAddField && m_pAddField->IsVisible();
 }
@@ -753,13 +753,13 @@ void ODesignView::fillControlModelSelection(::std::vector< uno::Reference< uno::
     m_aScrollWindow.fillControlModelSelection(_rSelection);
 }
 // -----------------------------------------------------------------------------
-void ODesignView::setGridSnap(BOOL bOn)
+void ODesignView::setGridSnap(sal_Bool bOn)
 {
     m_aScrollWindow.setGridSnap(bOn);
 
 }
 // -----------------------------------------------------------------------------
-void ODesignView::setDragStripes(BOOL bOn)
+void ODesignView::setDragStripes(sal_Bool bOn)
 {
     m_aScrollWindow.setDragStripes(bOn);
 }

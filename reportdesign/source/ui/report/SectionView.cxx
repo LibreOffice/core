@@ -57,7 +57,7 @@ OSectionView::OSectionView( SdrModel* pModel, OReportSection* _pSectionWindow, O
     SetBufferedOverlayAllowed(true);
     SetPageBorderVisible(false);
     SetBordVisible();
-    SetQuickTextEditMode(FALSE);
+    SetQuickTextEditMode(sal_False);
 }
 
 //----------------------------------------------------------------------------
@@ -163,16 +163,16 @@ void OSectionView::ObjectRemovedInAliveMode( const SdrObject* _pObject )
 {
     DBG_CHKTHIS( rpt_OSectionView,NULL);
     const SdrMarkList& rMarkedList = GetMarkedObjectList();
-    const ULONG nMark = rMarkedList.GetMarkCount();
+    const sal_uLong nMark = rMarkedList.GetMarkCount();
 
-    for( ULONG i = 0; i < nMark; i++ )
+    for( sal_uLong i = 0; i < nMark; i++ )
     {
         SdrObject* pSdrObj = rMarkedList.GetMark(i)->GetMarkedSdrObj();
         if (_pObject == pSdrObj)
         {
             SdrPageView*    pPgView = GetSdrPageView();
             BrkAction();
-            MarkObj( pSdrObj, pPgView, TRUE );
+            MarkObj( pSdrObj, pPgView, sal_True );
             break;
         }
     }
@@ -188,8 +188,8 @@ void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
         BegUndo( );
 
         const SdrMarkList& rMark = GetMarkedObjectList();
-        ULONG nCount = rMark.GetMarkCount();
-        for (ULONG i=0; i<nCount; i++)
+        sal_uLong nCount = rMark.GetMarkCount();
+        for (sal_uLong i=0; i<nCount; i++)
         {
             SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
             if ( pObj->ISA(OCustomShape) )
@@ -219,10 +219,10 @@ void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
 bool OSectionView::OnlyShapesMarked() const
 {
     const SdrMarkList& rMark = GetMarkedObjectList();
-    const ULONG nCount = rMark.GetMarkCount();
+    const sal_uLong nCount = rMark.GetMarkCount();
     if ( !nCount )
         return false;
-    ULONG i=0;
+    sal_uLong i=0;
     for (; i<nCount; i++)
     {
         SdrObject* pObj = rMark.GetMark(i)->GetMarkedSdrObj();
@@ -230,7 +230,7 @@ bool OSectionView::OnlyShapesMarked() const
         {
             break;
         }
-    } // for (ULONG i=0; i<nCount; i++)
+    } // for (sal_uLong i=0; i<nCount; i++)
     return i == nCount;
 }
 
@@ -254,7 +254,7 @@ short OSectionView::GetLayerIdOfMarkedObjects() const
 {
     short nRet = SHRT_MAX;
     const SdrMarkList &rMrkList = GetMarkedObjectList();
-    for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
+    for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
     {
         const SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
         if ( nRet == SHRT_MAX )

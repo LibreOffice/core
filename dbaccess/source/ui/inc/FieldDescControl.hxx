@@ -124,7 +124,7 @@ namespace dbaui
         ScrollBar*              m_pHorzScroll;
 
         TOTypeInfoSP            m_pPreviousType;
-        USHORT                  nCurChildId;
+        sal_uInt16                  nCurChildId;
         short                   m_nPos;
         XubString               aYes;
         XubString               aNo;
@@ -133,7 +133,7 @@ namespace dbaui
         long                    m_nOldHThumb;
         sal_Int32               m_nWidth;
 
-        ULONG                   nDelayedGrabFocusEvent;
+        sal_uLong                   nDelayedGrabFocusEvent;
         sal_Bool                m_bAdded;
         bool                    m_bRightAligned;
 
@@ -152,15 +152,15 @@ namespace dbaui
         void                UpdateFormatSample(OFieldDescription* pFieldDescr);
         void                ArrangeAggregates();
 
-        void                SetPosSize( Control** ppControl, long nRow, USHORT nCol );
+        void                SetPosSize( Control** ppControl, long nRow, sal_uInt16 nCol );
 
         void                ScrollAggregate(Control* pText, Control* pInput, Control* pButton, long nDeltaX, long nDeltaY);
         void                ScrollAllAggregates();
 
         sal_Bool            isTextFormat(const OFieldDescription* _pFieldDescr,sal_uInt32& _nFormatKey) const;
         void                Contruct();
-        OPropNumericEditCtrl* CreateNumericControl(USHORT _nHelpStr,short _nProperty,const rtl::OString& _sHelpId);
-        FixedText*          CreateText(USHORT _nTextRes);
+        OPropNumericEditCtrl* CreateNumericControl(sal_uInt16 _nHelpStr,short _nProperty,const rtl::OString& _sHelpId);
+        FixedText*          CreateText(sal_uInt16 _nTextRes);
         void                InitializeControl(Control* _pControl,const rtl::OString& _sHelpId,bool _bAddChangeHandler);
 
     protected:
@@ -176,15 +176,15 @@ namespace dbaui
 
         virtual void        ActivateAggregate( EControlType eType );
         virtual void        DeactivateAggregate( EControlType eType );
-        virtual BOOL        IsReadOnly() { return FALSE; };
+        virtual sal_Bool        IsReadOnly() { return sal_False; };
 
         // Sind von den abgeleiteten Klassen zu impl.
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const = 0;
 
         virtual ::com::sun::star::lang::Locale  GetLocale() const = 0;
 
-        virtual void                            CellModified(long nRow, USHORT nColId ) = 0;
-        virtual void                            SetModified(BOOL bModified);    // base implementation is empty
+        virtual void                            CellModified(long nRow, sal_uInt16 nColId ) = 0;
+        virtual void                            SetModified(sal_Bool bModified);    // base implementation is empty
 
         virtual TOTypeInfoSP                    getTypeInfo(sal_Int32 _nPos)        = 0;
         virtual const OTypeInfoMap*             getTypeInfo() const  = 0;
@@ -208,9 +208,9 @@ namespace dbaui
         void                SaveData( OFieldDescription* pFieldDescr );
         //  void                SaveData( OColumn* pColumn);
 
-        void                SetControlText( USHORT nControlId, const String& rText );
-        String              GetControlText( USHORT nControlId );
-        void                SetReadOnly( BOOL bReadOnly );
+        void                SetControlText( sal_uInt16 nControlId, const String& rText );
+        String              GetControlText( sal_uInt16 nControlId );
+        void                SetReadOnly( sal_Bool bReadOnly );
 
         // Resize aufegrufen
         void                CheckScrollBars();

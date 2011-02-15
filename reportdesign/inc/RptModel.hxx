@@ -35,7 +35,7 @@
 class Window;
 namespace dbaui
 {
-    class OSingleDocumentController;
+    class DBSubComponentController;
 }
 namespace reportdesign
 {
@@ -56,7 +56,7 @@ class REPORTDESIGN_DLLPUBLIC OReportModel : public SdrModel
 
 private:
     OXUndoEnvironment*                  m_pUndoEnv;
-    ::dbaui::OSingleDocumentController* m_pController;
+    ::dbaui::DBSubComponentController*  m_pController;
     ::reportdesign::OReportDefinition*  m_pReportDefinition;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
@@ -72,15 +72,15 @@ public:
     virtual void        SetChanged(sal_Bool bFlg = sal_True);
     virtual SdrPage*    AllocPage(FASTBOOL bMasterPage);
     virtual Window*     GetCurDocViewWin();
-    virtual SdrPage*    RemovePage(USHORT nPgNum);
+    virtual SdrPage*    RemovePage(sal_uInt16 nPgNum);
     /** returns the numbering type that is used to format page fields in drawing shapes */
     virtual SvxNumType  GetPageNumType() const;
 
     OXUndoEnvironment&  GetUndoEnv();
     void                SetModified(sal_Bool _bModified);
 
-    inline dbaui::OSingleDocumentController* getController() const { return m_pController; }
-    inline void attachController( dbaui::OSingleDocumentController& _rController ) { m_pController = &_rController; }
+    inline dbaui::DBSubComponentController* getController() const { return m_pController; }
+    inline void attachController( dbaui::DBSubComponentController& _rController ) { m_pController = &_rController; }
     void detachController();
 
     OReportPage* createNewPage(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection >& _xSection);

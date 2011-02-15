@@ -74,7 +74,7 @@
 #include <com/sun/star/task/XJobExecutor.hpp>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
@@ -113,9 +113,6 @@
 #endif
 #ifndef _SB_SBUNO_HXX
 #include <basic/sbuno.hxx>
-#endif
-#ifndef _SFX_MACROCONF_HXX
-#include <sfx2/macrconf.hxx>
 #endif
 #ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>

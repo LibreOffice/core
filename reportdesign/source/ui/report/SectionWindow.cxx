@@ -136,12 +136,12 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
         {
             static bool t4 = true;
         if ( t4 )
-            m_pParent->getView()->SetUpdateMode(FALSE);
+            m_pParent->getView()->SetUpdateMode(sal_False);
             //Resize();
             m_pParent->getView()->notifySizeChanged();
             m_pParent->resize(*this);
             if ( t4 )
-            m_pParent->getView()->SetUpdateMode(TRUE);
+            m_pParent->getView()->SetUpdateMode(sal_True);
             // getViewsWindow()->getView()->getReportView()->getController().resetZoomType();
         }
         else if ( _rEvent.PropertyName.equals(PROPERTY_NAME) && !xSection->getGroup().is() )
@@ -172,7 +172,7 @@ void OSectionWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
     }
 }
 // -----------------------------------------------------------------------------
-bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReportDefinition>& _xReport,USHORT _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OReportHelper> _pGetSection,::std::mem_fun_t<sal_Bool,OReportHelper> _pIsSectionOn)
+bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReportDefinition>& _xReport,sal_uInt16 _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OReportHelper> _pGetSection,::std::mem_fun_t<sal_Bool,OReportHelper> _pIsSectionOn)
 {
     OReportHelper aReportHelper(_xReport);
     const bool bRet = _pIsSectionOn(&aReportHelper) && _pGetSection(&aReportHelper) == m_aReportSection.getSection();
@@ -185,7 +185,7 @@ bool OSectionWindow::setReportSectionTitle(const uno::Reference< report::XReport
     return bRet;
 }
 // -----------------------------------------------------------------------------
-bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>& _xGroup,USHORT _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> _pGetSection,::std::mem_fun_t<sal_Bool,OGroupHelper> _pIsSectionOn)
+bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>& _xGroup,sal_uInt16 _nResId,::std::mem_fun_t<uno::Reference<report::XSection> , OGroupHelper> _pGetSection,::std::mem_fun_t<sal_Bool,OGroupHelper> _pIsSectionOn)
 {
     OGroupHelper aGroupHelper(_xGroup);
     const bool bRet = _pIsSectionOn(&aGroupHelper) && _pGetSection(&aGroupHelper) == m_aReportSection.getSection() ;
@@ -328,15 +328,14 @@ void OSectionWindow::zoom(const Fraction& _aZoom)
 //-----------------------------------------------------------------------------
 IMPL_LINK( OSectionWindow, StartSplitHdl, Splitter*,  )
 {
-    const String sEmpty(ModuleRes(RID_STR_UNDO_CHANGE_SIZE));
-    getViewsWindow()->getView()->getReportView()->getController().getUndoMgr()->EnterListAction(sEmpty,String());
+    const String sUndoAction( ModuleRes( RID_STR_UNDO_CHANGE_SIZE ) );
+    getViewsWindow()->getView()->getReportView()->getController().getUndoManager().EnterListAction( sUndoAction, String() );
     return 0L;
 }
 //------------------------------------------------------------------------------
 IMPL_LINK( OSectionWindow, EndSplitHdl, Splitter*,  )
 {
-    getViewsWindow()->getView()->getReportView()->getController().getUndoMgr()->LeaveListAction();
-    /*getViewsWindow()->Resize();*/
+    getViewsWindow()->getView()->getReportView()->getController().getUndoManager().LeaveListAction();
     return 0L;
 }
 //-----------------------------------------------------------------------------

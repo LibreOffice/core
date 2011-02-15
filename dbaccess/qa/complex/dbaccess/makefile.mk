@@ -64,9 +64,7 @@ JAVATESTFILES = \
     RowSet.java \
     SingleSelectQueryComposer.java \
     UISettings.java \
-    CopyTableWizard.java
-
-# disable for now (#i115753#)
+    CopyTableWizard.java \
 
 # put here all other files
 JAVAFILES = $(JAVATESTFILES) \
@@ -75,7 +73,7 @@ JAVAFILES = $(JAVATESTFILES) \
     DatabaseApplication.java \
     FileHelper.java \
     RowSetEventListener.java \
-    TestCase.java 
+    TestCase.java \
 
 
 # Sample how to debug

@@ -26,21 +26,16 @@
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
 
-#include "Undo.hxx"
-#ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
+#include "RptUndo.hxx"
 #include "uistrings.hrc"
-#endif
-#ifndef _RPTUI_SLOTID_HRC_
 #include "rptui_slotid.hrc"
-#endif
-#ifndef RPTUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
+#include "UndoEnv.hxx"
+
 #include <dbaccess/IController.hxx>
 #include <com/sun/star/report/XSection.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#include "UndoEnv.hxx"
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <svx/unoshape.hxx>
@@ -129,7 +124,7 @@ DBG_NAME(rpt_OSectionUndo)
 OSectionUndo::OSectionUndo(OReportModel& _rMod
                            ,sal_uInt16 _nSlot
                            ,Action _eAction
-                           ,USHORT nCommentID)
+                           ,sal_uInt16 nCommentID)
 : OCommentUndoAction(_rMod,nCommentID)
 ,m_eAction(_eAction)
 ,m_nSlot(_nSlot)
@@ -239,7 +234,7 @@ OReportSectionUndo::OReportSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
                                             ,OReportHelper> _pMemberFunction
                                        ,const uno::Reference< report::XReportDefinition >& _xReport
                                        ,Action _eAction
-                                       ,USHORT nCommentID)
+                                       ,sal_uInt16 nCommentID)
 : OSectionUndo(_rMod,_nSlot,_eAction,nCommentID)
 ,m_aReportHelper(_xReport)
 ,m_pMemberFunction(_pMemberFunction)
@@ -278,7 +273,7 @@ OGroupSectionUndo::OGroupSectionUndo(OReportModel& _rMod,sal_uInt16 _nSlot
                                             ,OGroupHelper> _pMemberFunction
                                        ,const uno::Reference< report::XGroup >& _xGroup
                                        ,Action _eAction
-                                       ,USHORT nCommentID)
+                                       ,sal_uInt16 nCommentID)
 : OSectionUndo(_rMod,_nSlot,_eAction,nCommentID)
 ,m_aGroupHelper(_xGroup)
 ,m_pMemberFunction(_pMemberFunction)
@@ -344,7 +339,7 @@ void OGroupSectionUndo::implReRemove( )
 TYPEINIT1( OGroupUndo,         OCommentUndoAction );
 //----------------------------------------------------------------------------
 OGroupUndo::OGroupUndo(OReportModel& _rMod
-                       ,USHORT nCommentID
+                       ,sal_uInt16 nCommentID
                        ,Action  _eAction
                        ,const uno::Reference< report::XGroup>& _xGroup
                        ,const uno::Reference< report::XReportDefinition >& _xReportDefinition)

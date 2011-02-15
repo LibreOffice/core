@@ -800,7 +800,7 @@ namespace
         }
         Reference< XConnection> xConnection = static_cast<OQueryController&>(_pView->getController()).getConnection();
         if(!xConnection.is())
-            return FALSE;
+            return sal_False;
         try
         {
             const Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
@@ -1025,7 +1025,7 @@ namespace
                         aWorkStr += ::dbtools::quoteName(aQuote, aColumnName);
                     }
                     aWorkStr += ::rtl::OUString(' ');
-                    aWorkStr += String::CreateFromAscii( ";ASC;DESC" ).GetToken( (USHORT)eOrder );
+                    aWorkStr += String::CreateFromAscii( ";ASC;DESC" ).GetToken( (sal_uInt16)eOrder );
                     aWorkStr += ::rtl::OUString(',');
                 }
             }
@@ -2184,7 +2184,7 @@ namespace
         while ( false );
 
         // Durch das Neuerzeugen wurden wieder Undo-Actions in den Manager gestellt
-        rController.getUndoMgr()->Clear();
+        rController.ClearUndoManager();
         _pSelectionBrw->Invalidate();
         return eErrorCode;
     }
@@ -2545,7 +2545,7 @@ namespace
     //------------------------------------------------------------------------------
     String getParseErrorMessage( SqlParseError _eErrorCode )
     {
-        USHORT nResId;
+        sal_uInt16 nResId;
         switch(_eErrorCode)
         {
             case eIllegalJoin:
@@ -3242,7 +3242,7 @@ void OQueryDesignView::initByFieldDescriptions( const Sequence< PropertyValue >&
         InsertField( pField, sal_True, sal_False );
     }
 
-    rController.getUndoMgr()->Clear();
+    rController.ClearUndoManager();
     m_pSelectionBox->Invalidate();
 }
 

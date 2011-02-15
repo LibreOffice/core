@@ -192,7 +192,7 @@ namespace
 
         @return true when OK was pressed otherwise false
     */
-    sal_Bool openJoinDialog(OQueryTableView* _pView,const TTableConnectionData::value_type& _pConnectionData,BOOL _bSelectableTables)
+    sal_Bool openJoinDialog(OQueryTableView* _pView,const TTableConnectionData::value_type& _pConnectionData,sal_Bool _bSelectableTables)
     {
         OQueryTableConnectionData* pData = static_cast< OQueryTableConnectionData*>(_pConnectionData.get());
 
@@ -752,7 +752,7 @@ void OQueryTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJ
 void OQueryTableView::ConnDoubleClicked(OTableConnection* pConnection)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
-    if( openJoinDialog(this,pConnection->GetData(),FALSE) )
+    if( openJoinDialog(this,pConnection->GetData(),sal_False) )
     {
         connectionModified(this,pConnection,sal_False);
         SelectConn( pConnection );
@@ -762,7 +762,7 @@ void OQueryTableView::ConnDoubleClicked(OTableConnection* pConnection)
 void OQueryTableView::createNewConnection()
 {
     TTableConnectionData::value_type pData(new OQueryTableConnectionData());
-    if( openJoinDialog(this,pData,TRUE) )
+    if( openJoinDialog(this,pData,sal_True) )
     {
         OTableWindowMap* pMap = GetTabWinMap();
         OQueryTableWindow* pSourceWin   = static_cast< OQueryTableWindow*>((*pMap)[pData->getReferencingTable()->GetWinName()]);
@@ -847,8 +847,8 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
     // mein Parent brauche ich, da es vom Loeschen erfahren soll
     OQueryDesignView* pParent = static_cast<OQueryDesignView*>(getDesignView());
 
-    SfxUndoManager* pUndoMgr = m_pView->getController().getUndoMgr();
-    pUndoMgr->EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
+    SfxUndoManager& rUndoMgr = m_pView->getController().GetUndoManager();
+    rUndoMgr.EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
 
     // Undo-Action anlegen
     OQueryTabWinDelUndoAct* pUndoAction = new OQueryTabWinDelUndoAct(this);
@@ -861,7 +861,7 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
     pParent->TableDeleted( static_cast< OQueryTableWindowData*>(pTabWin->GetData().get())->GetAliasName() );
 
     m_pView->getController().addUndoActionAndInvalidate( pUndoAction );
-    pUndoMgr->LeaveListAction();
+    rUndoMgr.LeaveListAction();
 
     if (m_lnkTabWinsChangeHandler.IsSet())
     {

@@ -52,7 +52,7 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/stl_types.hxx>
 #include <vcl/svapp.hxx>
-#include <dbaccess/singledoccontroller.hxx>
+#include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <svx/unoshape.hxx>
 #include <vos/mutex.hxx>
 
@@ -96,7 +96,7 @@ namespace rptui
 TYPEINIT1( OCommentUndoAction,          SdrUndoAction );
 DBG_NAME(rpt_OCommentUndoAction)
 //----------------------------------------------------------------------------
-OCommentUndoAction::OCommentUndoAction(SdrModel& _rMod,USHORT nCommentID)
+OCommentUndoAction::OCommentUndoAction(SdrModel& _rMod,sal_uInt16 nCommentID)
     :SdrUndoAction(_rMod)
 {
     DBG_CTOR(rpt_OCommentUndoAction,NULL);
@@ -122,7 +122,7 @@ OUndoContainerAction::OUndoContainerAction(SdrModel& _rMod
                                              ,Action _eAction
                                              ,const uno::Reference< container::XIndexContainer > _xContainer
                                              ,const Reference< XInterface > & xElem
-                                             ,USHORT _nCommentId)
+                                             ,sal_uInt16 _nCommentId)
                       :OCommentUndoAction(_rMod,_nCommentId)
                       ,m_xElement(xElem)
                       ,m_xContainer(_xContainer)
@@ -268,7 +268,7 @@ OUndoGroupSectionAction::OUndoGroupSectionAction(SdrModel& _rMod
                                                     ,OGroupHelper> _pMemberFunction
                                              ,const uno::Reference< report::XGroup >& _xGroup
                                              ,const Reference< XInterface > & xElem
-                                             ,USHORT _nCommentId)
+                                             ,sal_uInt16 _nCommentId)
 :OUndoContainerAction(_rMod,_eAction,NULL,xElem,_nCommentId)
 ,m_aGroupHelper(_xGroup)
 ,m_pMemberFunction(_pMemberFunction)
@@ -314,7 +314,7 @@ OUndoReportSectionAction::OUndoReportSectionAction(SdrModel& _rMod
                                                 ,OReportHelper> _pMemberFunction
                                              ,const uno::Reference< report::XReportDefinition >& _xReport
                                              ,const Reference< XInterface > & xElem
-                                             ,USHORT _nCommentId)
+                                             ,sal_uInt16 _nCommentId)
 :OUndoContainerAction(_rMod,_eAction,NULL,xElem,_nCommentId)
 ,m_aReportHelper(_xReport)
 ,m_pMemberFunction(_pMemberFunction)

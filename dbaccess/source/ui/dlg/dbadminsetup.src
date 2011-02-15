@@ -56,7 +56,6 @@ ModalDialog DLG_DATABASE_WIZARD
     {
         OutputSize = TRUE ;
         HelpId = HID_DSADMIN_TABCONTROL;
-        SingleLine=TRUE;
     };
 
     String STR_DBWIZARDTITLE

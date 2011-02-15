@@ -27,48 +27,52 @@
 #ifndef RPTUI_REPORTCONTROLLER_HXX
 #define RPTUI_REPORTCONTROLLER_HXX
 
-#include <dbaccess/singledoccontroller.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
+#include "DesignView.hxx"
+#include "ModuleHelper.hxx"
+#include "ReportControllerObserver.hxx"
+#include "RptDef.hxx"
+
+/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#include <com/sun/star/io/XObjectOutputStream.hpp>
-#include <com/sun/star/io/XObjectInputStream.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
-#include <com/sun/star/report/XReportDefinition.hpp>
+#include <com/sun/star/io/XObjectInputStream.hpp>
+#include <com/sun/star/io/XObjectOutputStream.hpp>
 #include <com/sun/star/report/XReportControlModel.hpp>
+#include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XReportEngine.hpp>
 #include <com/sun/star/report/XSection.hpp>
+#include <com/sun/star/sdbc/XConnection.hpp>
+#include <com/sun/star/sdbc/XRowSet.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/XModeSelector.hpp>
+#include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/embed/XVisualObject.hpp>
-#include <cppuhelper/implbase5.hxx>
-#include <svtools/transfer.hxx>
-#include <svl/lstner.hxx>
-#include <svx/svdedtv.hxx>
-#include <svx/zoomitem.hxx>
-#include "ModuleHelper.hxx"
+/** === end UNO includes === **/
 
-#include <comphelper/uno3.hxx>
 #include <comphelper/implementationreference.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertystatecontainer.hxx>
+#include <comphelper/uno3.hxx>
+#include <cppuhelper/implbase5.hxx>
+#include <dbaccess/dbsubcomponentcontroller.hxx>
+#include <svl/lstner.hxx>
+#include <svtools/transfer.hxx>
+#include <svx/svdedtv.hxx>
+#include <svx/zoomitem.hxx>
 
-#include "RptDef.hxx"
-#include "DesignView.hxx"
-#include <functional>
+#include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
-#include <com/sun/star/util/XModeSelector.hpp>
-#include "ReportControllerObserver.hxx"
+#include <functional>
 
 class TransferableHelper;
 class TransferableClipboardListener;
 class VclWindowEvent;
+class SfxUndoManager;
 namespace rptui
 {
     class OGroupsSortingDialog;
@@ -78,7 +82,7 @@ namespace rptui
     class OAddFieldWindow;
     class OSectionWindow;
 
-    typedef ::dbaui::OSingleDocumentController  OReportController_BASE;
+    typedef ::dbaui::DBSubComponentController   OReportController_BASE;
     typedef ::cppu::ImplHelper5 <   ::com::sun::star::container::XContainerListener
                                 ,   ::com::sun::star::beans::XPropertyChangeListener
                                 ,   ::com::sun::star::view::XSelectionSupplier
@@ -91,6 +95,7 @@ namespace rptui
                                 ,public SfxListener
                                 ,public ::comphelper::OPropertyStateContainer
                                 ,public ::comphelper::OPropertyArrayUsageHelper < OReportController_BASE >
+                                ,public ::boost::noncopyable
     {
     private:
         OModuleClient           m_aModuleClient;
@@ -107,9 +112,9 @@ namespace rptui
 
         ODesignView*  getDesignView() const   { return static_cast< ODesignView* >( getView() ); }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>          m_xReportDefinition;
-        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportEngine>              m_xReportEngine;
-        ::com::sun::star::uno::Reference < ::com::sun::star::frame::XComponentLoader>           m_xFrameLoader;
+        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition >         m_xReportDefinition;
+        ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportEngine >             m_xReportEngine;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XComponentLoader >           m_xFrameLoader;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >            m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                     m_xRowSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >    m_xRowSetMediator;
@@ -213,18 +218,23 @@ namespace rptui
                          ,sal_Int32 _nGroupPos
                          ,bool _bShow);
 
-        void executeMethodWithUndo(USHORT _nUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun);
-        void alignControlsWithUndo(USHORT _nUndoStrId,sal_Int32 _nControlModification,bool _bAlignAtSection = false);
+        void executeMethodWithUndo(sal_uInt16 _nUndoStrId,const ::std::mem_fun_t<void,ODesignView>& _pMemfun);
+        void alignControlsWithUndo(sal_uInt16 _nUndoStrId,sal_Int32 _nControlModification,bool _bAlignAtSection = false);
+
+        // open the help agent of report designer at start time
+        void doOpenHelpAgent();
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > getXFrame();
+
         /** shrink a section
         @param _nUndoStrId the string id of the string which is shown in undo menu
         @param _nShrinkId  ID of what you would like to shrink.
         */
-    protected:
         void shrinkSectionBottom(::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection);
         void shrinkSectionTop(::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection);
-    public:
 
-        void shrinkSection(USHORT _nUndoStrId, ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection, sal_Int32 _nShrinkId);
+    public:
+        void shrinkSection(sal_uInt16 _nUndoStrId, ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection > _xSection, sal_Int32 _nShrinkId);
 
         /** opens the file open dialog to allow the user to select a image which will be
         * bound to a newly created image button.
@@ -279,7 +289,7 @@ namespace rptui
 
         /** collapse or expand the currently selected section.
         *
-        * \param _bCollapse collapse if TRUE otherwise expand
+        * \param _bCollapse collapse if sal_True otherwise expand
         */
         void collapseSection(const bool _bCollapse);
 
@@ -292,14 +302,11 @@ namespace rptui
         */
         void impl_zoom_nothrow();
 
-    private:
-        OReportController(OReportController const&);
-        OReportController& operator =(OReportController const&);
-    public:
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > getXFrame();
+        virtual void impl_onModifyChanged();
 
-        // open the help agent of report designer at start time
-        void doOpenHelpAgent();
+        virtual void onLoadedMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager );
+        virtual void impl_initialize( );
+        bool isUiVisible() const;
 
         /** creates a new default control for the currently set type when the modifier KEY_MOD1 was pressed
         * \param _aArgs must contain a properyvalue with name "KeyModifier" and value KEY_MOD1 when control should be created.
@@ -333,16 +340,15 @@ namespace rptui
         // execute a feature
         virtual void Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
-        virtual void losingConnection( );
-
         virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, ::com::sun::star::uno::Any& _rDefault ) const;
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
 
+    private:
         virtual ~OReportController();
+
     public:
         OReportController(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & the_context);
 
-        DECL_LINK( NotifyUndoActionHdl, SfxUndoAction* );
         DECL_LINK( EventLstHdl, VclWindowEvent* );
         DECL_LINK( OnCreateHdl, OAddFieldWindow*);
 
@@ -351,12 +357,6 @@ namespace rptui
 
         // SfxListener
         virtual void Notify(SfxBroadcaster & rBc, SfxHint const & rHint);
-
-        virtual void impl_onModifyChanged();
-
-        //  const ::connectivity::OSQLParseNode* getParseTree() const { return m_aSqlIterator.getParseTree();}
-        // need for undo's and redo's
-        SfxUndoManager* getUndoMgr();
 
         /** returns <TRUE/> when the command is enbaled
             @param  _nCommand   the command id
@@ -455,7 +455,7 @@ namespace rptui
         *
         * \return
         */
-        ::boost::shared_ptr<rptui::OReportModel> getSdrModel();
+        ::boost::shared_ptr<rptui::OReportModel> getSdrModel() const;
 
         inline ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  getContext() const { return m_xContext; }
         inline sal_Int16   getZoomValue() const     { return m_nZoomValue; }
@@ -477,10 +477,9 @@ namespace rptui
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getColumns() const;
         ::rtl::OUString getColumnLabel_throw(const ::rtl::OUString& i_sColumnName) const;
 
-    private:
-        virtual void onLoadedMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >& _xLayoutManager );
-        virtual void impl_initialize( );
-        bool isUiVisible() const;
+        SfxUndoManager& getUndoManager() const;
+        void            clearUndoManager() const;
+        void            addUndoAction( SfxUndoAction* i_pAction );
     };
 }
 #endif // RPTUI_REPORTCONTROLLER_HXX

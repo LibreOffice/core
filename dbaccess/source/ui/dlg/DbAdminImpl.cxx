@@ -104,7 +104,7 @@ using namespace com::sun::star::frame;
 //-------------------------------------------------------------------------
 namespace
 {
-    sal_Bool implCheckItemType( SfxItemSet& _rSet, const USHORT _nId, const TypeId _nExpectedItemType )
+    sal_Bool implCheckItemType( SfxItemSet& _rSet, const sal_uInt16 _nId, const TypeId _nExpectedItemType )
     {
         sal_Bool bCorrectType = sal_False;
 
@@ -725,7 +725,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const SfxItemSet& _r
             ++aDirect
         )
     {
-        const SfxPoolItem* pCurrentItem = _rSource.GetItem((USHORT)aDirect->first);
+        const SfxPoolItem* pCurrentItem = _rSource.GetItem((sal_uInt16)aDirect->first);
         if (pCurrentItem)
         {
             sal_Int16 nAttributes = PropertyAttribute::READONLY;
@@ -784,7 +784,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     ::std::vector< sal_Int32>::iterator aDetailsEnd = aDetailIds.end();
     for (::std::vector< sal_Int32>::iterator aIter = aDetailIds.begin();aIter != aDetailsEnd ; ++aIter)
     {
-        const SfxPoolItem* pCurrent = _rSource.GetItem((USHORT)*aIter);
+        const SfxPoolItem* pCurrent = _rSource.GetItem((sal_uInt16)*aIter);
         aTranslation = m_aIndirectPropTranslator.find(*aIter);
         if ( pCurrent && (m_aIndirectPropTranslator.end() != aTranslation) )
         {
@@ -1117,7 +1117,7 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
     ::dbaccess::ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
     DBG_ASSERT(pCollection, "ODbAdminDialog::getDatasourceType: invalid type collection!");
 
-    USHORT nPortNumberId    = 0;
+    sal_uInt16 nPortNumberId    = 0;
     sal_Int32 nPortNumber   = -1;
     String sNewHostName;
     //String sUrl = pCollection->cutPrefix(pUrlItem->GetValue());
