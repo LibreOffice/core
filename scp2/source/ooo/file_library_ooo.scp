@@ -55,7 +55,6 @@ File gid_File_Lib_Basprov
   #endif
 End
 
-#ifdef ENABLE_VBA
 File gid_File_Lib_Vbaevent
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -66,7 +65,6 @@ File gid_File_Lib_Vbaevent
     Name = STRING(CONCAT4(vbaevents,DLLPOSTFIX,.uno,.dll));
   #endif
 End
-#endif // ENABLE_VBA
 
 STD_LIB_FILE( gid_File_Lib_Bib , bib)
 
@@ -160,9 +158,9 @@ SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Cmdmail, cmdmail.uno )
 File gid_File_Lib_Comphelper2
     TXT_FILE_BODY;
   #ifdef UNX
-    Name = STRING(CONCAT3(libcomphelp4,COMID,UNXSUFFIX));
+    Name = STRING(CONCAT3(libcomphelp,COMID,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT3(comphelp4,COMID,.dll));
+    Name = STRING(CONCAT3(comphelp,COMID,.dll));
   #endif
     Dir = SCP2_OOO_BIN_DIR;
     Styles = (PACKED);
@@ -334,9 +332,6 @@ File gid_File_Lib_Stringresource
   #endif
 End
 
-#if defined ENABLE_VBA
-#ifndef VBA_EXTENSION
-
 File gid_File_Lib_Vbaobj
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -364,13 +359,12 @@ File gid_File_Lib_Vbamsforms
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
-    Name = STRING(CONCAT4(libmsforms,DLLPOSTFIX,.uno,UNXSUFFIX));
+    Name = STRING(CONCAT3(msforms,.uno,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT4(msforms,DLLPOSTFIX,.uno,.dll));
+    Name = STRING(CONCAT3(msforms,.uno,.dll));
   #endif
 End
 
-#endif // VBA_EXTENSION
 File gid_File_Lib_Vbahelper
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -381,7 +375,6 @@ File gid_File_Lib_Vbahelper
     Name = STRING(CONCAT3(vbahelper,DLLPOSTFIX,.dll));
   #endif
 End
-#endif // ENABLE_VBA
 
 
 #ifdef WNT

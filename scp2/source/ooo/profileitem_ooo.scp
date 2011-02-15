@@ -342,11 +342,7 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Types
     ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_TYPES";
-#if defined ENABLE_VBA && !defined VBA_EXTENSION
     Value = "$ORIGIN/offapi.rdb $ORIGIN/oovbaapi.rdb ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_TYPES}";
-#else
-    Value = "$ORIGIN/offapi.rdb ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_TYPES}";
-#endif
 End
 
 ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Services
