@@ -49,10 +49,10 @@ class SwUndoInsNum : public SwUndo, private SwUndRng
 {
     SwNumRule aNumRule;
     SwHistory* pHistory;
-    ULONG nSttSet;
+    sal_uLong nSttSet;
     SwNumRule* pOldNumRule;
     String sReplaceRule;
-    USHORT nLRSavePos;
+    sal_uInt16 nLRSavePos;
 public:
     SwUndoInsNum( const SwPaM& rPam, const SwNumRule& rRule );
     SwUndoInsNum( const SwNumRule& rOldRule, const SwNumRule& rNewRule,
@@ -69,7 +69,7 @@ public:
     virtual SwRewriter GetRewriter() const;
 
     SwHistory* GetHistory(); // will be created if necessary
-    void SetSttNum( ULONG nNdIdx ) { nSttSet = nNdIdx; }
+    void SetSttNum( sal_uLong nNdIdx ) { nSttSet = nNdIdx; }
     void SaveOldNumRule( const SwNumRule& rOld );
 
     void SetLRSpaceEndPos();
@@ -91,23 +91,23 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
     virtual void RepeatImpl( ::sw::RepeatContext & );
 
-    void AddNode( const SwTxtNode& rNd, BOOL bResetLRSpace );
+    void AddNode( const SwTxtNode& rNd, sal_Bool bResetLRSpace );
     SwHistory* GetHistory() { return pHistory; }
 
 };
 
 class SwUndoMoveNum : public SwUndo, private SwUndRng
 {
-    ULONG nNewStt;
+    sal_uLong nNewStt;
     long nOffset;
 public:
-    SwUndoMoveNum( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv = FALSE );
+    SwUndoMoveNum( const SwPaM& rPam, long nOffset, sal_Bool bIsOutlMv = sal_False );
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
     virtual void RepeatImpl( ::sw::RepeatContext & );
 
-    void SetStartNode( ULONG nValue ) { nNewStt = nValue; }
+    void SetStartNode( sal_uLong nValue ) { nNewStt = nValue; }
 };
 
 class SwUndoNumUpDown : public SwUndo, private SwUndRng
@@ -123,12 +123,12 @@ public:
 
 class SwUndoNumOrNoNum : public SwUndo
 {
-    ULONG nIdx;
-    BOOL mbNewNum, mbOldNum;
+    sal_uLong nIdx;
+    sal_Bool mbNewNum, mbOldNum;
 
 public:
-    SwUndoNumOrNoNum( const SwNodeIndex& rIdx, BOOL mbOldNum,
-                      BOOL mbNewNum );
+    SwUndoNumOrNoNum( const SwNodeIndex& rIdx, sal_Bool mbOldNum,
+                      sal_Bool mbNewNum );
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
@@ -137,13 +137,13 @@ public:
 
 class SwUndoNumRuleStart : public SwUndo
 {
-    ULONG nIdx;
-    USHORT nOldStt, nNewStt;
-    BOOL bSetSttValue : 1;
-    BOOL bFlag : 1;
+    sal_uLong nIdx;
+    sal_uInt16 nOldStt, nNewStt;
+    sal_Bool bSetSttValue : 1;
+    sal_Bool bFlag : 1;
 public:
-    SwUndoNumRuleStart( const SwPosition& rPos, BOOL bDelete );
-    SwUndoNumRuleStart( const SwPosition& rPos, USHORT nStt );
+    SwUndoNumRuleStart( const SwPosition& rPos, sal_Bool bDelete );
+    SwUndoNumRuleStart( const SwPosition& rPos, sal_uInt16 nStt );
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );

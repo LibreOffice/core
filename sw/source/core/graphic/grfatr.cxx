@@ -79,19 +79,19 @@ int SwMirrorGrf::operator==( const SfxPoolItem& rItem) const
             ((SwMirrorGrf&)rItem).IsGrfToggle() == IsGrfToggle();
 }
 
-BOOL lcl_IsHoriOnEvenPages(int nEnum, BOOL bToggle)
+sal_Bool lcl_IsHoriOnEvenPages(int nEnum, sal_Bool bToggle)
 {
-    BOOL bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
+    sal_Bool bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
                    nEnum == RES_MIRROR_GRAPH_BOTH;
             return bEnum != bToggle;
 }
-BOOL lcl_IsHoriOnOddPages(int nEnum)
+sal_Bool lcl_IsHoriOnOddPages(int nEnum)
 {
-    BOOL bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
+    sal_Bool bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
                    nEnum == RES_MIRROR_GRAPH_BOTH;
             return bEnum;
 }
-BOOL SwMirrorGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SwMirrorGrf::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Bool bRet = sal_True,
          bVal;
@@ -117,7 +117,7 @@ BOOL SwMirrorGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return bRet;
 }
 
-BOOL SwMirrorGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
+sal_Bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Bool bRet = sal_True;
     sal_Bool bVal = *(sal_Bool*)rVal.getValue();
@@ -128,17 +128,17 @@ BOOL SwMirrorGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_MIRROR_HORZ_EVEN_PAGES:
         case MID_MIRROR_HORZ_ODD_PAGES:
         {
-            BOOL bIsVert = GetValue() == RES_MIRROR_GRAPH_HOR ||
+            sal_Bool bIsVert = GetValue() == RES_MIRROR_GRAPH_HOR ||
                                 GetValue() == RES_MIRROR_GRAPH_BOTH;
-            BOOL bOnOddPages = nMemberId == MID_MIRROR_HORZ_EVEN_PAGES ?
+            sal_Bool bOnOddPages = nMemberId == MID_MIRROR_HORZ_EVEN_PAGES ?
                                     lcl_IsHoriOnOddPages(GetValue()) : bVal;
-            BOOL bOnEvenPages = nMemberId == MID_MIRROR_HORZ_ODD_PAGES ?
+            sal_Bool bOnEvenPages = nMemberId == MID_MIRROR_HORZ_ODD_PAGES ?
                                        lcl_IsHoriOnEvenPages(GetValue(), IsGrfToggle()) : bVal;
             MirrorGraph nEnum = bOnOddPages ?
                     bIsVert ? RES_MIRROR_GRAPH_BOTH : RES_MIRROR_GRAPH_VERT :
                         bIsVert ? RES_MIRROR_GRAPH_HOR : RES_MIRROR_GRAPH_DONT;
-            BOOL bToggle = bOnOddPages != bOnEvenPages;
-            SetValue(static_cast<USHORT>(nEnum));
+            sal_Bool bToggle = bOnOddPages != bOnEvenPages;
+            SetValue(static_cast<sal_uInt16>(nEnum));
             SetGrfToggle( bToggle );
         }
         break;
@@ -198,28 +198,28 @@ int SwRotationGrf::operator==( const SfxPoolItem& rCmp ) const
 }
 
 
-BOOL SwRotationGrf::QueryValue( uno::Any& rVal, BYTE ) const
+sal_Bool SwRotationGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
     rVal <<= (sal_Int16)GetValue();
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SwRotationGrf::PutValue( const uno::Any& rVal, BYTE )
+sal_Bool SwRotationGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
 {
     // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
     // where we still want this to be a sal_Int16
     sal_Int16 nValue = 0;
     if (rVal >>= nValue)
     {
-        // UINT16 argument needed
-        SetValue( (UINT16) nValue );
-        return TRUE;
+        // sal_uInt16 argument needed
+        SetValue( (sal_uInt16) nValue );
+        return sal_True;
     }
 
     DBG_ERROR( "SwRotationGrf::PutValue - Wrong type!" );
-    return FALSE;
+    return sal_False;
 }
 
 // ------------------------------------------------------------------
@@ -270,13 +270,13 @@ int SwGammaGrf::operator==( const SfxPoolItem& rCmp ) const
         nValue == ((SwGammaGrf&)rCmp).GetValue();
 }
 
-BOOL SwGammaGrf::QueryValue( uno::Any& rVal, BYTE ) const
+sal_Bool SwGammaGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     rVal <<= nValue;
     return sal_True;
 }
 
-BOOL SwGammaGrf::PutValue( const uno::Any& rVal, BYTE )
+sal_Bool SwGammaGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
 {
     return rVal >>= nValue;
 }
@@ -295,24 +295,24 @@ SfxPoolItem* SwTransparencyGrf::Clone( SfxItemPool * ) const
     return new SwTransparencyGrf( *this );
 }
 // ------------------------------------------------------------------
-BOOL SwTransparencyGrf::QueryValue( uno::Any& rVal,
-                                        BYTE ) const
+sal_Bool SwTransparencyGrf::QueryValue( uno::Any& rVal,
+                                        sal_uInt8 ) const
 {
     DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!");
     sal_Int16 nRet = GetValue();
     DBG_ASSERT( 0 <= nRet && nRet <= 100, "value out of range" );
     rVal <<= nRet;
-    return TRUE;
+    return sal_True;
 }
 // ------------------------------------------------------------------
-BOOL SwTransparencyGrf::PutValue( const uno::Any& rVal,
-                                        BYTE )
+sal_Bool SwTransparencyGrf::PutValue( const uno::Any& rVal,
+                                        sal_uInt8 )
 {
     //temporary conversion until this is a SfxInt16Item!
     DBG_ASSERT(ISA(SfxByteItem),"Put/QueryValue should be removed!");
     sal_Int16 nVal = 0;
     if(!(rVal >>= nVal) || nVal < -100 || nVal > 100)
-        return FALSE;
+        return sal_False;
     if(nVal < 0)
     {
         // for compatibility with old documents
@@ -322,8 +322,8 @@ BOOL SwTransparencyGrf::PutValue( const uno::Any& rVal,
         nVal += 128;
     }
     DBG_ASSERT( 0 <= nVal && nVal <= 100, "value out of range" );
-    SetValue(static_cast<BYTE>(nVal));
-    return TRUE;
+    SetValue(static_cast<sal_uInt8>(nVal));
+    return sal_True;
 }
 
 // ------------------------------------------------------------------
@@ -333,7 +333,7 @@ SfxPoolItem* SwDrawModeGrf::Clone( SfxItemPool * ) const
     return new SwDrawModeGrf( *this );
 }
 
-USHORT SwDrawModeGrf::GetValueCount() const
+sal_uInt16 SwDrawModeGrf::GetValueCount() const
 {
     // GRAPHICDRAWMODE_STANDARD = 0,
     // GRAPHICDRAWMODE_GREYS = 1,
@@ -342,24 +342,24 @@ USHORT SwDrawModeGrf::GetValueCount() const
     return GRAPHICDRAWMODE_WATERMARK + 1;
 }
 
-BOOL SwDrawModeGrf::QueryValue( uno::Any& rVal,
-                                BYTE ) const
+sal_Bool SwDrawModeGrf::QueryValue( uno::Any& rVal,
+                                sal_uInt8 ) const
 {
     drawing::ColorMode eRet = (drawing::ColorMode)GetEnumValue();
     rVal <<= eRet;
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SwDrawModeGrf::PutValue( const uno::Any& rVal,
-                                BYTE )
+sal_Bool SwDrawModeGrf::PutValue( const uno::Any& rVal,
+                                sal_uInt8 )
 {
     sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );
     if(eVal >= 0 && eVal <= GRAPHICDRAWMODE_WATERMARK)
     {
-        SetEnumValue((USHORT)eVal);
-        return TRUE;
+        SetEnumValue((sal_uInt16)eVal);
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 

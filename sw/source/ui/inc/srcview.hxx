@@ -48,7 +48,7 @@ class SwSrcView: public SfxViewShell
 
     SvxSearchItem*      pSearchItem;
 
-    BOOL                bSourceSaved    :1;
+    sal_Bool                bSourceSaved    :1;
     rtl_TextEncoding    eLoadEncoding;
     void                Init();
 
@@ -57,10 +57,10 @@ class SwSrcView: public SfxViewShell
 
 
 protected:
-    USHORT              StartSearchAndReplace(const SvxSearchItem& rItem,
-                                                        BOOL bFromStart,
-                                                        BOOL bApi,
-                                                        BOOL bRecursive = FALSE);
+    sal_uInt16              StartSearchAndReplace(const SvxSearchItem& rItem,
+                                                        sal_Bool bFromStart,
+                                                        sal_Bool bApi,
+                                                        sal_Bool bRecursive = sal_False);
 
 
 public:
@@ -79,7 +79,7 @@ public:
     void                SaveContent(const String& rTmpFile);
     void                SaveContentTo(SfxMedium& rMed);
 
-    BOOL                IsModified() {return aEditWin.IsModified();}
+    sal_Bool                IsModified() {return aEditWin.IsModified();}
 
 
 
@@ -91,13 +91,13 @@ public:
 
     void            Load(SwDocShell* pDocShell);
 
-    virtual USHORT  SetPrinter( SfxPrinter* pNew, USHORT nDiff = SFX_PRINTER_ALL, bool bIsAPI=false );
-    virtual         SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
+    virtual sal_uInt16  SetPrinter( SfxPrinter* pNew, sal_uInt16 nDiff = SFX_PRINTER_ALL, bool bIsAPI=false );
+    virtual         SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );
 
     sal_Int32       PrintSource( OutputDevice *pOutDev, sal_Int32 nPage, bool bCalcNumPagesOnly );
 
-    void            SourceSaved() {bSourceSaved = TRUE;}
-    BOOL            HasSourceSaved() const {return bSourceSaved;}
+    void            SourceSaved() {bSourceSaved = sal_True;}
+    sal_Bool            HasSourceSaved() const {return bSourceSaved;}
 
 };
 

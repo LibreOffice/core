@@ -220,10 +220,10 @@ public:
 
        @param rItem the item to be set
 
-       @retval TRUE the selected item was successfully set
-       @retval TRUE failure (empty selection)
+       @retval sal_True the selected item was successfully set
+       @retval sal_True failure (empty selection)
     */
-    BOOL SetSelectedItem(const String & rItem);
+    sal_Bool SetSelectedItem(const String & rItem);
 
     /**
        Sets the name of the field.
@@ -256,7 +256,7 @@ public:
           - FIELD_PROP_PAR3 Get the help text of the field.
           - FIELD_PROP_PAR4 Get the tool tip of the field.
     */
-    virtual BOOL QueryValue(com::sun::star::uno::Any &rVal, USHORT nWhichId) const;
+    virtual sal_Bool QueryValue(com::sun::star::uno::Any &rVal, sal_uInt16 nWhichId) const;
 
     /**
        API: Sets a property value on the dropdown field.
@@ -268,7 +268,7 @@ public:
           - FIELD_PROP_PAR3  Set the help text of the field.
           - FIELD_PROP_PAR4  Set the tool tip of the field.
     */
-        virtual BOOL PutValue(const com::sun::star::uno::Any &rVal, USHORT nWhichId);
+        virtual sal_Bool PutValue(const com::sun::star::uno::Any &rVal, sal_uInt16 nWhichId);
 };
 
 #endif

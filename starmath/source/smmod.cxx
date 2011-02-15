@@ -65,7 +65,7 @@ TYPEINIT1( SmModule, SfxModule );
 
 
 
-SmResId::SmResId( USHORT nId )
+SmResId::SmResId( sal_uInt16 nId )
     : ResId(nId, *SM_MOD()->GetResMgr())
 {
 }
@@ -101,8 +101,8 @@ const String SmLocalizedSymbolData::GetUiSymbolName( const String &rExportName )
     const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolNamesArray();
-    USHORT nCount = sal::static_int_cast< xub_StrLen >(rExportNames.Count());
-    for (USHORT i = 0;  i < nCount  &&  !aRes.Len();  ++i)
+    sal_uInt16 nCount = sal::static_int_cast< xub_StrLen >(rExportNames.Count());
+    for (sal_uInt16 i = 0;  i < nCount  &&  !aRes.Len();  ++i)
     {
         if (rExportName == rExportNames.GetString(i))
         {
@@ -122,8 +122,8 @@ const String SmLocalizedSymbolData::GetExportSymbolName( const String &rUiName )
     const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolNamesArray();
-    USHORT nCount = sal::static_int_cast< xub_StrLen >(rUiNames.Count());
-    for (USHORT i = 0;  i < nCount  &&  !aRes.Len();  ++i)
+    sal_uInt16 nCount = sal::static_int_cast< xub_StrLen >(rUiNames.Count());
+    for (sal_uInt16 i = 0;  i < nCount  &&  !aRes.Len();  ++i)
     {
         if (rUiName == rUiNames.GetString(i))
         {
@@ -143,8 +143,8 @@ const String SmLocalizedSymbolData::GetUiSymbolSetName( const String &rExportNam
     const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolSetNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolSetNamesArray();
-    USHORT nCount = sal::static_int_cast< xub_StrLen >(rExportNames.Count());
-    for (USHORT i = 0;  i < nCount  &&  !aRes.Len();  ++i)
+    sal_uInt16 nCount = sal::static_int_cast< xub_StrLen >(rExportNames.Count());
+    for (sal_uInt16 i = 0;  i < nCount  &&  !aRes.Len();  ++i)
     {
         if (rExportName == rExportNames.GetString(i))
         {
@@ -164,8 +164,8 @@ const String SmLocalizedSymbolData::GetExportSymbolSetName( const String &rUiNam
     const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolSetNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolSetNamesArray();
-    USHORT nCount = sal::static_int_cast< xub_StrLen >(rUiNames.Count());
-    for (USHORT i = 0;  i < nCount  &&  !aRes.Len();  ++i)
+    sal_uInt16 nCount = sal::static_int_cast< xub_StrLen >(rUiNames.Count());
+    for (sal_uInt16 i = 0;  i < nCount  &&  !aRes.Len();  ++i)
     {
         if (rUiName == rUiNames.GetString(i))
         {
@@ -234,7 +234,7 @@ SFX_IMPL_INTERFACE(SmModule, SfxModule, SmResId(RID_APPLICATION))
 
 
 SmModule::SmModule(SfxObjectFactory* pObjFact) :
-    SfxModule(SfxApplication::CreateResManager("sm"), FALSE, pObjFact, NULL),
+    SfxModule(SfxApplication::CreateResManager("sm"), sal_False, pObjFact, NULL),
     pColorConfig( 0 ),
     pConfig( 0 ),
     pLocSymbolData( 0 ),
@@ -327,7 +327,7 @@ void SmModule::GetState(SfxItemSet &rSet)
 {
     SfxWhichIter aIter(rSet);
 
-    for (USHORT nWh = aIter.FirstWhich(); 0 != nWh; nWh = aIter.NextWhich())
+    for (sal_uInt16 nWh = aIter.FirstWhich(); 0 != nWh; nWh = aIter.NextWhich())
         switch (nWh)
         {
             case SID_CONFIGEVENT :
@@ -339,7 +339,7 @@ void SmModule::GetState(SfxItemSet &rSet)
 /* -----------------15.02.99 12:45-------------------
  *
  * --------------------------------------------------*/
-SfxItemSet*  SmModule::CreateItemSet( USHORT nId )
+SfxItemSet*  SmModule::CreateItemSet( sal_uInt16 nId )
 {
     SfxItemSet*  pRet = 0;
     if(nId == SID_SM_EDITOPTIONS)
@@ -362,7 +362,7 @@ SfxItemSet*  SmModule::CreateItemSet( USHORT nId )
 /* -----------------15.02.99 12:45-------------------
  *
  * --------------------------------------------------*/
-void SmModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
+void SmModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
 {
     if(nId == SID_SM_EDITOPTIONS)
     {
@@ -372,7 +372,7 @@ void SmModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
 /* -----------------15.02.99 12:45-------------------
  *
  * --------------------------------------------------*/
-SfxTabPage*  SmModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
+SfxTabPage*  SmModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet )
 {
     SfxTabPage*  pRet = 0;
     if(nId == SID_SM_TP_PRINTOPTIONS)

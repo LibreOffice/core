@@ -44,8 +44,8 @@ struct SwSortUndoElement
 {
     union {
         struct {
-            ULONG nKenn;
-            ULONG nSource, nTarget;
+            sal_uLong nKenn;
+            sal_uLong nSource, nTarget;
         } TXT;
         struct {
             String *pSource, *pTarget;
@@ -57,7 +57,7 @@ struct SwSortUndoElement
         SORT_TXT_TBL.TBL.pSource = new String( aS );
         SORT_TXT_TBL.TBL.pTarget = new String( aT );
     }
-    SwSortUndoElement( ULONG nS, ULONG nT )
+    SwSortUndoElement( sal_uLong nS, sal_uLong nT )
     {
         SORT_TXT_TBL.TXT.nSource = nS;
         SORT_TXT_TBL.TXT.nTarget = nT;
@@ -75,12 +75,12 @@ class SwUndoSort : public SwUndo, private SwUndRng
     SwSortList      aSortList;
     SwUndoAttrTbl*  pUndoTblAttr;
     SwRedlineData*  pRedlData;
-    ULONG           nTblNd;
+    sal_uLong           nTblNd;
 
 public:
     SwUndoSort( const SwPaM&, const SwSortOptions& );
-    SwUndoSort( ULONG nStt, ULONG nEnd, const SwTableNode&,
-                const SwSortOptions&, BOOL bSaveTable );
+    SwUndoSort( sal_uLong nStt, sal_uLong nEnd, const SwTableNode&,
+                const SwSortOptions&, sal_Bool bSaveTable );
 
     virtual ~SwUndoSort();
 
@@ -89,7 +89,7 @@ public:
     virtual void RepeatImpl( ::sw::RepeatContext & );
 
     void Insert( const String& rOrgPos, const String& rNewPos );
-    void Insert( ULONG nOrgPos, ULONG nNewPos );
+    void Insert( sal_uLong nOrgPos, sal_uLong nNewPos );
 
 };
 

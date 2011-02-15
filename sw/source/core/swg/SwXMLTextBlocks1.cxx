@@ -65,7 +65,7 @@ using ::xmloff::token::XML_BLOCK_LIST;
 using ::xmloff::token::XML_UNFORMATTED_TEXT;
 using ::xmloff::token::GetXMLToken;
 
-ULONG SwXMLTextBlocks::GetDoc( USHORT nIdx )
+sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
 {
     String aFolderName ( GetPackageName ( nIdx ) );
 
@@ -159,7 +159,7 @@ ULONG SwXMLTextBlocks::GetDoc( USHORT nIdx )
                 // re throw ?
             }
 
-            bInfoChanged = FALSE;
+            bInfoChanged = sal_False;
             MakeBlockText(aCur);
         }
         catch( uno::Exception& )
@@ -180,7 +180,7 @@ const struct SvEventDescription aAutotextEvents[] =
     { 0, NULL }
 };
 
-ULONG SwXMLTextBlocks::GetMacroTable( USHORT nIdx,
+sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
                                       SvxMacroTableDtor& rMacroTbl,
                                       sal_Bool bFileAlreadyOpen )
 {
@@ -190,13 +190,13 @@ ULONG SwXMLTextBlocks::GetMacroTable( USHORT nIdx,
     aLong = aNames[ nIdx ]->aLong;
     aPackageName = aNames[ nIdx ]->aPackageName;
 
-    ULONG nRet = 0;
+    sal_uLong nRet = 0;
 
     // open stream in proper sub-storage
     if( !bFileAlreadyOpen )
     {
         CloseFile();
-        nRet = OpenFile ( TRUE );
+        nRet = OpenFile ( sal_True );
     }
     if ( 0 == nRet )
     {
@@ -315,9 +315,9 @@ ULONG SwXMLTextBlocks::GetMacroTable( USHORT nIdx,
 }
 
 
-ULONG SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
+sal_uLong SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
 {
-    ULONG n = 0;
+    sal_uLong n = 0;
     sal_Bool bTextOnly = sal_True;
     String aFolderName;
     GeneratePackageName ( rShort, aFolderName );
@@ -394,7 +394,7 @@ ULONG SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
     return n;
 }
 
-ULONG SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
+sal_uLong SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
                                      const String& rText,  const String& rPackageName )
 {
     GetIndex ( rShort );
@@ -420,7 +420,7 @@ ULONG SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
        uno::Reference < XInterface > xWriter (xServiceFactory->createInstance(
            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))));
        DBG_ASSERT(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
-    ULONG nRes = 0;
+    sal_uLong nRes = 0;
 
     try
     {
@@ -467,8 +467,8 @@ ULONG SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
 
     //TODO/LATER: error handling
     /*
-    ULONG nErr = xBlkRoot->GetError();
-    ULONG nRes = 0;
+    sal_uLong nErr = xBlkRoot->GetError();
+    sal_uLong nRes = 0;
     if( nErr == SVSTREAM_DISK_FULL )
         nRes = ERR_W4W_WRITE_FULL;
     else if( nErr != SVSTREAM_OK )
@@ -547,7 +547,7 @@ void SwXMLTextBlocks::ReadInfo( void )
 }
 void SwXMLTextBlocks::WriteInfo( void )
 {
-    if ( xBlkRoot.is() || 0 == OpenFile ( FALSE ) )
+    if ( xBlkRoot.is() || 0 == OpenFile ( sal_False ) )
     {
         uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
@@ -602,13 +602,13 @@ void SwXMLTextBlocks::WriteInfo( void )
         {
         }
 
-        bInfoChanged = FALSE;
+        bInfoChanged = sal_False;
         return;
     }
 }
 
-ULONG SwXMLTextBlocks::SetMacroTable(
-    USHORT nIdx,
+sal_uLong SwXMLTextBlocks::SetMacroTable(
+    sal_uInt16 nIdx,
     const SvxMacroTableDtor& rMacroTbl,
     sal_Bool bFileAlreadyOpen )
 {
@@ -618,7 +618,7 @@ ULONG SwXMLTextBlocks::SetMacroTable(
     aPackageName = aNames[ nIdx ]->aPackageName;
 
     // start XML autotext event export
-    ULONG nRes = 0;
+    sal_uLong nRes = 0;
 
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
         comphelper::getProcessServiceFactory();
@@ -638,7 +638,7 @@ ULONG SwXMLTextBlocks::SetMacroTable(
     if( !bFileAlreadyOpen )
     {
         CloseFile();    // close (it may be open in read-only-mode)
-        nRes = OpenFile ( FALSE );
+        nRes = OpenFile ( sal_False );
     }
 
     if ( 0 == nRes )

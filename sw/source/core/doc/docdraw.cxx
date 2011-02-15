@@ -221,7 +221,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
     SwDrawFrmFmt *pFmt = 0L;
     SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-    BOOL bNoGroup = ( 0 == pObj->GetUpGroup() );
+    sal_Bool bNoGroup = ( 0 == pObj->GetUpGroup() );
     SwDrawContact* pNewContact = 0;
     if( bNoGroup )
     {
@@ -231,7 +231,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 
         SwUndoDrawGroup *const pUndo = (!GetIDocumentUndoRedo().DoesUndo())
                                  ? 0
-                                 : new SwUndoDrawGroup( (USHORT)rMrkList.GetMarkCount() );
+                                 : new SwUndoDrawGroup( (sal_uInt16)rMrkList.GetMarkCount() );
 
         // --> OD 2005-08-16 #i53320#
         bool bGroupMembersNotPositioned( false );
@@ -242,7 +242,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
         }
         // <--
         //ContactObjekte und Formate vernichten.
-        for( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
+        for( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
@@ -350,7 +350,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
         {
             String sDrwFmtNm( String::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM("DrawObject" )));
-            for ( USHORT i = 0; i < nMarkCount; ++i )
+            for ( sal_uInt16 i = 0; i < nMarkCount; ++i )
             {
                 SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
                 if ( pObj->IsA( TYPE(SdrObjGroup) ) )
@@ -366,7 +366,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                         GetIDocumentUndoRedo().AppendUndo(pUndo);
                     }
 
-                    for ( USHORT i2 = 0; i2 < pLst->GetObjCount(); ++i2 )
+                    for ( sal_uInt16 i2 = 0; i2 < pLst->GetObjCount(); ++i2 )
                     {
                         SdrObject* pSubObj = pLst->GetObj( i2 );
                         SwDrawFrmFmt *pFmt = MakeDrawFrmFmt( sDrwFmtNm,
@@ -441,15 +441,15 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
 |*
 |*************************************************************************/
 
-BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
+sal_Bool SwDoc::DeleteSelection( SwDrawView& rDrawView )
 {
-    BOOL bCallBase = FALSE;
+    sal_Bool bCallBase = sal_False;
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
     if( rMrkList.GetMarkCount() )
     {
         GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
-        USHORT i;
-        BOOL bDelMarked = TRUE;
+        sal_uInt16 i;
+        sal_Bool bDelMarked = sal_True;
 
         if( 1 == rMrkList.GetMarkCount() )
         {
@@ -461,7 +461,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
                 if( pFrmFmt )
                 {
                     DelLayoutFmt( pFrmFmt );
-                    bDelMarked = FALSE;
+                    bDelMarked = sal_False;
                 }
             }
         }
@@ -476,7 +476,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
                 if( pFrmFmt &&
                     FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId() )
                 {
-                    rDrawView.MarkObj( pObj, rDrawView.Imp().GetPageView(), TRUE );
+                    rDrawView.MarkObj( pObj, rDrawView.Imp().GetPageView(), sal_True );
                     --i;
                     DelLayoutFmt( pFrmFmt );
                 }
@@ -491,7 +491,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
                 SwUndoDrawDelete *const pUndo =
                     (!GetIDocumentUndoRedo().DoesUndo())
                         ? 0
-                            : new SwUndoDrawDelete( (USHORT)rMrkList.GetMarkCount() );
+                            : new SwUndoDrawDelete( (sal_uInt16)rMrkList.GetMarkCount() );
 
                 //ContactObjekte vernichten, Formate sicherstellen.
                 for( i = 0; i < rMrkList.GetMarkCount(); ++i )
@@ -527,7 +527,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
                     GetIDocumentUndoRedo().AppendUndo( pUndo );
                 }
             }
-            bCallBase = TRUE;
+            bCallBase = sal_True;
         }
         SetModified();
 
@@ -547,7 +547,7 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
 |*************************************************************************/
 
 _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
-                      UINT32 nArrOrdNum )
+                      sal_uInt32 nArrOrdNum )
     : pFmt( pFrmFmt ), pAnchor( pFlyAn ), nOrdNum( nArrOrdNum )
 {
     // #i11176#
@@ -619,7 +619,7 @@ void SwDoc::InitDrawModel()
         pSdrPool->SetPoolDefaultItem(SdrShadowXDistItem((300 * 72) / 127));
         pSdrPool->SetPoolDefaultItem(SdrShadowYDistItem((300 * 72) / 127));
     }
-    SfxItemPool *pEEgPool = EditEngine::CreatePool( FALSE );
+    SfxItemPool *pEEgPool = EditEngine::CreatePool( sal_False );
     pSdrPool->SetSecondaryPool( pEEgPool );
      if ( !GetAttrPool().GetFrozenIdRanges () )
         GetAttrPool().FreezeIdRanges();
@@ -659,7 +659,7 @@ void SwDoc::InitDrawModel()
         nInvisibleControls = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
     }
 
-    pDrawModel->InsertPage( pDrawModel->AllocPage( FALSE ) );
+    pDrawModel->InsertPage( pDrawModel->AllocPage( sal_False ) );
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create DrawDocument" );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create Spellchecker/Hyphenator" );
@@ -701,13 +701,13 @@ void SwDoc::NotifyInvisibleLayers( SdrPageView& _rSdrPageView )
 {
     String sLayerNm;
     sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleHell" ));
-    _rSdrPageView.SetLayerVisible( sLayerNm, FALSE );
+    _rSdrPageView.SetLayerVisible( sLayerNm, sal_False );
 
     sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleHeaven" ));
-    _rSdrPageView.SetLayerVisible( sLayerNm, FALSE );
+    _rSdrPageView.SetLayerVisible( sLayerNm, sal_False );
 
     sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleControls" ));
-    _rSdrPageView.SetLayerVisible( sLayerNm, FALSE );
+    _rSdrPageView.SetLayerVisible( sLayerNm, sal_False );
 }
 
 /** method to determine, if a layer ID belongs to the visible ones.
@@ -910,7 +910,7 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             ******************************************************************/
             pInfo->SetRepresentation(
                 ((const SvxDateField*) pField)->GetFormatted(
-                        *GetNumberFormatter( TRUE ), LANGUAGE_SYSTEM) );
+                        *GetNumberFormatter( sal_True ), LANGUAGE_SYSTEM) );
         }
         else if (pField && pField->ISA(SvxURLField))
         {
@@ -936,7 +936,7 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                 break;
             }
 
-            USHORT nChrFmt;
+            sal_uInt16 nChrFmt;
 
             if (IsVisitedURL(((const SvxURLField*)pField)->GetURL()))
                 nChrFmt = RES_POOLCHR_INET_VISIT;
@@ -965,7 +965,7 @@ IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             ******************************************************************/
             pInfo->SetRepresentation(
                 ((const SvxExtTimeField*) pField)->GetFormatted(
-                        *GetNumberFormatter( TRUE ), LANGUAGE_SYSTEM) );
+                        *GetNumberFormatter( sal_True ), LANGUAGE_SYSTEM) );
         }
         else
         {

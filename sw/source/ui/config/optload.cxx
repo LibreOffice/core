@@ -96,7 +96,7 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
     aUseSquaredPageMode ( this, SW_RES( CB_USE_SQUARE_PAGE_MODE ) ),
 
     pWrtShell   ( NULL ),
-    bHTMLMode   ( FALSE ),
+    bHTMLMode   ( sal_False ),
     nLastTab    ( 0 ),
     nOldLinkMode( MANUAL )
 
@@ -104,7 +104,7 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
     FreeResource();
 
     SvxStringArray aMetricArr( SW_RES( STR_ARR_METRIC ) );
-    for ( USHORT i = 0; i < aMetricArr.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < aMetricArr.Count(); ++i )
     {
         String sMetric = aMetricArr.GetStringByPos( i );
         FieldUnit eFUnit = (FieldUnit)aMetricArr.GetValue( i );
@@ -118,7 +118,7 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
             case FUNIT_INCH:
             {
                 // nur diese Metriken benutzen
-                USHORT nPos = aMetricLB.InsertEntry( sMetric );
+                sal_uInt16 nPos = aMetricLB.InsertEntry( sMetric );
                 aMetricLB.SetEntryData( nPos, (void*)(long)eFUnit );
             }
             default:; //prevent warning
@@ -127,7 +127,7 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
     aMetricLB.SetSelectHdl(LINK(this, SwLoadOptPage, MetricHdl));
 
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, FALSE, &pItem )
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, sal_False, &pItem )
         && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
     {
         aTabFT.Hide();
@@ -161,12 +161,12 @@ SfxTabPage* __EXPORT SwLoadOptPage::Create( Window* pParent,
 
 --------------------------------------------------*/
 
-BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
+sal_Bool __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     SwModule* pMod = SW_MOD();
 
-    USHORT nNewLinkMode = AUTOMATIC;
+    sal_uInt16 nNewLinkMode = AUTOMATIC;
     if (aNeverRB.IsChecked())
         nNewLinkMode = NEVER;
     else if (aRequestRB.IsChecked())
@@ -195,23 +195,23 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
             pWrtShell->SetModified();
         }
 
-        bRet = TRUE;
+        bRet = sal_True;
     }
 
-    const USHORT nMPos = aMetricLB.GetSelectEntryPos();
+    const sal_uInt16 nMPos = aMetricLB.GetSelectEntryPos();
     if ( nMPos != aMetricLB.GetSavedValue() )
     {
         // Doppel-Cast fuer VA3.0
-        USHORT nFieldUnit = (USHORT)(long)aMetricLB.GetEntryData( nMPos );
-        rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, (UINT16)nFieldUnit ) );
-        bRet = TRUE;
+        sal_uInt16 nFieldUnit = (sal_uInt16)(long)aMetricLB.GetEntryData( nMPos );
+        rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, (sal_uInt16)nFieldUnit ) );
+        bRet = sal_True;
     }
 
     if(aTabMF.IsVisible() && aTabMF.GetText() != aTabMF.GetSavedValue())
     {
         rSet.Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
-                    (USHORT)aTabMF.Denormalize(aTabMF.GetValue(FUNIT_TWIP))));
-        bRet = TRUE;
+                    (sal_uInt16)aTabMF.Denormalize(aTabMF.GetValue(FUNIT_TWIP))));
+        bRet = sal_True;
     }
 
     sal_Bool bIsSquaredPageModeFlag = aUseSquaredPageMode.IsChecked();
@@ -224,7 +224,7 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
             pDoc->SetDefaultPageMode( bIsSquaredPageModeFlag );
             pWrtShell->SetModified();
         }
-        bRet = TRUE;
+        bRet = sal_True;
     }
 
     return bRet;
@@ -234,18 +234,18 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
 --------------------------------------------------*/
 void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
 {
-    const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref(FALSE);
+    const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref(sal_False);
     const SfxPoolItem* pItem;
 
-    if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_WRTSHELL, FALSE, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(FN_PARAM_WRTSHELL, sal_False, &pItem))
         pWrtShell = (SwWrtShell*)((const SwPtrItem*)pItem)->GetValue();
 
     SwFldUpdateFlags eFldFlags = AUTOUPD_GLOBALSETTING;
     nOldLinkMode = GLOBALSETTING;
     if (pWrtShell)
     {
-        eFldFlags = pWrtShell->GetFldUpdateFlags(TRUE);
-        nOldLinkMode = pWrtShell->GetLinkUpdMode(TRUE);
+        eFldFlags = pWrtShell->GetFldUpdateFlags(sal_True);
+        nOldLinkMode = pWrtShell->GetLinkUpdMode(sal_True);
     }
     if(GLOBALSETTING == nOldLinkMode)
         nOldLinkMode = pUsrPref->GetUpdateLinkMode();
@@ -270,7 +270,7 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
         const SfxUInt16Item& rItem = (SfxUInt16Item&)rSet.Get( SID_ATTR_METRIC );
         FieldUnit eFieldUnit = (FieldUnit)rItem.GetValue();
 
-        for ( USHORT i = 0; i < aMetricLB.GetEntryCount(); ++i )
+        for ( sal_uInt16 i = 0; i < aMetricLB.GetEntryCount(); ++i )
         {
             if ( (int)(sal_IntPtr)aMetricLB.GetEntryData( i ) == (int)eFieldUnit )
             {
@@ -281,14 +281,14 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
         ::SetFieldUnit(aTabMF, eFieldUnit);
     }
     aMetricLB.SaveValue();
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_DEFTABSTOP, FALSE, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_DEFTABSTOP, sal_False, &pItem))
     {
         nLastTab = ((SfxUInt16Item*)pItem)->GetValue();
         aTabMF.SetValue(aTabMF.Normalize(nLastTab), FUNIT_TWIP);
     }
     aTabMF.SaveValue();
 
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, FALSE, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, sal_False, &pItem))
     {
         bHTMLMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
     }
@@ -307,12 +307,12 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
 
 IMPL_LINK(SwLoadOptPage, MetricHdl, ListBox*, EMPTYARG)
 {
-    const USHORT nMPos = aMetricLB.GetSelectEntryPos();
+    const sal_uInt16 nMPos = aMetricLB.GetSelectEntryPos();
     if(nMPos != USHRT_MAX)
     {
         // Doppel-Cast fuer VA3.0
         FieldUnit eFieldUnit = (FieldUnit)(long)aMetricLB.GetEntryData( nMPos );
-        BOOL bModified = aTabMF.IsModified();
+        sal_Bool bModified = aTabMF.IsModified();
         long nVal = bModified ?
             sal::static_int_cast<sal_Int32, sal_Int64 >( aTabMF.Denormalize( aTabMF.GetValue( FUNIT_TWIP ) )) :
                 nLastTab;
@@ -432,7 +432,7 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     sNone           (SW_RESSTR( STR_CATEGORY_NONE )),
 
     pMgr            (new SwFldMgr()),
-    bHTMLMode(FALSE)
+    bHTMLMode(sal_False)
 {
     Wallpaper   aBack( GetSettings().GetStyleSettings().GetWindowColor() );
     aPreview.SetBackground( aBack );
@@ -442,11 +442,11 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     SwStyleNameMapper::FillUIName( RES_POOLCOLL_LABEL_FRAME, sText );
     SwStyleNameMapper::FillUIName( RES_POOLCOLL_LABEL_DRAWING, sDrawing );
 
-    USHORT i, nCount;
+    sal_uInt16 i, nCount;
     SwWrtShell *pSh = ::GetActiveWrtShell();
 
     // aFormatBox
-    USHORT nSelFmt = SVX_NUM_ARABIC;
+    sal_uInt16 nSelFmt = SVX_NUM_ARABIC;
     if (pSh)
     {
         nCount = pMgr->GetFldTypeCount();
@@ -455,19 +455,19 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
             if( ( pFldType = pMgr->GetFldType(USHRT_MAX, --i))->GetName() ==
                 aCategoryBox.GetText() )
             {
-                nSelFmt = (USHORT)((SwSetExpFieldType*)pFldType)->GetSeqFormat();
+                nSelFmt = (sal_uInt16)((SwSetExpFieldType*)pFldType)->GetSeqFormat();
                 break;
             }
 
-        ::FillCharStyleListBox( aCharStyleLB, pSh->GetView().GetDocShell(), TRUE, TRUE );
+        ::FillCharStyleListBox( aCharStyleLB, pSh->GetView().GetDocShell(), sal_True, sal_True );
     }
 
 
-    nCount = pMgr->GetFormatCount(TYP_SEQFLD, FALSE);
+    nCount = pMgr->GetFormatCount(TYP_SEQFLD, sal_False);
     for ( i = 0; i < nCount; ++i )
     {
         aFormatBox.InsertEntry( pMgr->GetFormatStr(TYP_SEQFLD, i) );
-        USHORT nFmtId = pMgr->GetFormatId(TYP_SEQFLD, i);
+        sal_uInt16 nFmtId = pMgr->GetFormatId(TYP_SEQFLD, i);
         aFormatBox.SetEntryData( i, reinterpret_cast<void*>(nFmtId) );
         if( nFmtId == nSelFmt )
             aFormatBox.SelectEntryPos( i );
@@ -537,9 +537,9 @@ SfxTabPage* SwCaptionOptPage::Create( Window* pParent,
 
 --------------------------------------------------*/
 
-BOOL SwCaptionOptPage::FillItemSet( SfxItemSet&  )
+sal_Bool SwCaptionOptPage::FillItemSet( SfxItemSet&  )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
     SaveEntry(aCheckLB.FirstSelected());    // Aktuellen Eintrag uebernehmen
@@ -553,7 +553,7 @@ BOOL SwCaptionOptPage::FillItemSet( SfxItemSet&  )
         pEntry = aCheckLB.Next(pEntry);
     }
 
-    USHORT nCheckCount = aCheckLB.GetCheckedEntryCount();
+    sal_uInt16 nCheckCount = aCheckLB.GetCheckedEntryCount();
     pModOpt->SetInsWithCaption( bHTMLMode, nCheckCount > 0 );
 
     sal_Int32 nPos = aLbCaptionOrder.GetSelectEntryPos();
@@ -569,7 +569,7 @@ BOOL SwCaptionOptPage::FillItemSet( SfxItemSet&  )
 void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
 {
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, FALSE, &pItem))
+    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, sal_False, &pItem))
     {
         bHTMLMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
     }
@@ -578,7 +578,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
     aCheckLB.GetModel()->Clear();   // remove all entries
 
     // Writer objects
-    USHORT nPos = 0;
+    sal_uInt16 nPos = 0;
     aCheckLB.InsertEntry(sSWTable);
     SetOptions(nPos++, TABLE_CAP);
     aCheckLB.InsertEntry(sSWFrame);
@@ -615,7 +615,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
     aObjS.FillInsertObjects();
     aObjS.Remove( SvGlobalName( SO3_SW_CLASSID ) ); // remove Writer-ID
 
-    for ( ULONG i = 0; i < aObjS.Count(); ++i )
+    for ( sal_uLong i = 0; i < aObjS.Count(); ++i )
     {
         const SvGlobalName &rOleId = aObjS[i].GetClassName();
         const String* pClassName = &aObjS[i].GetHumanName();
@@ -636,7 +636,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
 
 --------------------------------------------------*/
 
-void SwCaptionOptPage::SetOptions(const USHORT nPos,
+void SwCaptionOptPage::SetOptions(const sal_uInt16 nPos,
         const SwCapObjType eObjType, const SvGlobalName *pOleId)
 {
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
@@ -677,7 +677,7 @@ IMPL_LINK( SwCaptionOptPage, ShowEntryHdl, SvxCheckListBox *, EMPTYARG )
 
     if (pSelEntry)
     {
-        sal_Bool bChecked = aCheckLB.IsChecked((USHORT)aCheckLB.GetModel()->GetAbsPos(pSelEntry));
+        sal_Bool bChecked = aCheckLB.IsChecked((sal_uInt16)aCheckLB.GetModel()->GetAbsPos(pSelEntry));
 
         aSettingsGroupFL.Enable( bChecked );
         aCategoryText.Enable( bChecked );
@@ -710,9 +710,9 @@ IMPL_LINK( SwCaptionOptPage, ShowEntryHdl, SvxCheckListBox *, EMPTYARG )
         aCategoryBox.InsertEntry( sNone );
         if (pSh)
         {
-            USHORT nCount = pMgr->GetFldTypeCount();
+            sal_uInt16 nCount = pMgr->GetFldTypeCount();
 
-            for (USHORT i = 0; i < nCount; i++)
+            for (sal_uInt16 i = 0; i < nCount; i++)
             {
                 SwFieldType *pType = pMgr->GetFldType( USHRT_MAX, i );
                 if( pType->Which() == RES_SETEXPFLD &&
@@ -737,7 +737,7 @@ IMPL_LINK( SwCaptionOptPage, ShowEntryHdl, SvxCheckListBox *, EMPTYARG )
             aCategoryBox.InsertEntry(pOpt->GetCategory());
         if (!aCategoryBox.GetText().Len())
         {
-            USHORT nPos = 0;
+            sal_uInt16 nPos = 0;
             switch(pOpt->GetObjType())
             {
                 case OLE_CAP:
@@ -748,9 +748,9 @@ IMPL_LINK( SwCaptionOptPage, ShowEntryHdl, SvxCheckListBox *, EMPTYARG )
             aCategoryBox.SetText(aCategoryBox.GetEntry(nPos).GetName());
         }
 
-        for (USHORT i = 0; i < aFormatBox.GetEntryCount(); i++)
+        for (sal_uInt16 i = 0; i < aFormatBox.GetEntryCount(); i++)
         {
-            if (pOpt->GetNumType() == (USHORT)(ULONG)aFormatBox.GetEntryData(i))
+            if (pOpt->GetNumType() == (sal_uInt16)(sal_uLong)aFormatBox.GetEntryData(i))
             {
                 aFormatBox.SelectEntryPos(i);
                 break;
@@ -778,7 +778,7 @@ IMPL_LINK( SwCaptionOptPage, ShowEntryHdl, SvxCheckListBox *, EMPTYARG )
                 aPosText.IsEnabled() );
         aPosBox.SelectEntryPos(pOpt->GetPos());
 
-        USHORT nLevelPos = ( pOpt->GetLevel() < MAXLEVEL ) ? pOpt->GetLevel() + 1 : 0;
+        sal_uInt16 nLevelPos = ( pOpt->GetLevel() < MAXLEVEL ) ? pOpt->GetLevel() + 1 : 0;
         aLbLevel.SelectEntryPos( nLevelPos );
         aEdDelim.SetText(pOpt->GetSeparator());
         aNumberingSeparatorED.SetText( pOpt->GetNumSeparator() );
@@ -820,7 +820,7 @@ void SwCaptionOptPage::SaveEntry(SvLBoxEntry* pEntry)
     {
         InsCaptionOpt* pOpt = (InsCaptionOpt*)pEntry->GetUserData();
 
-        pOpt->UseCaption() = aCheckLB.IsChecked((USHORT)aCheckLB.GetModel()->GetAbsPos(pEntry));
+        pOpt->UseCaption() = aCheckLB.IsChecked((sal_uInt16)aCheckLB.GetModel()->GetAbsPos(pEntry));
         String aName( aCategoryBox.GetText() );
         if(aName == sNone)
             pOpt->SetCategory(aEmptyStr);
@@ -830,11 +830,11 @@ void SwCaptionOptPage::SaveEntry(SvLBoxEntry* pEntry)
             aName.EraseTrailingChars(' ');
             pOpt->SetCategory(aName);
         }
-        pOpt->SetNumType((USHORT)(ULONG)aFormatBox.GetEntryData(aFormatBox.GetSelectEntryPos()));
+        pOpt->SetNumType((sal_uInt16)(sal_uLong)aFormatBox.GetEntryData(aFormatBox.GetSelectEntryPos()));
         pOpt->SetCaption(aTextEdit.IsEnabled() ? aTextEdit.GetText() : aEmptyStr );
         pOpt->SetPos(aPosBox.GetSelectEntryPos());
-        USHORT nPos = aLbLevel.GetSelectEntryPos();
-        USHORT nLevel = ( nPos > 0 && nPos != LISTBOX_ENTRY_NOTFOUND ) ? nPos - 1 : MAXLEVEL;
+        sal_uInt16 nPos = aLbLevel.GetSelectEntryPos();
+        sal_uInt16 nLevel = ( nPos > 0 && nPos != LISTBOX_ENTRY_NOTFOUND ) ? nPos - 1 : MAXLEVEL;
         pOpt->SetLevel(nLevel);
         pOpt->SetSeparator(aEdDelim.GetText());
         pOpt->SetNumSeparator( aNumberingSeparatorED.GetText());
@@ -908,7 +908,7 @@ void SwCaptionOptPage::DrawSample()
         //#i61007# order of captions
         bool bOrderNumberingFirst = aLbCaptionOrder.GetSelectEntryPos() == 1;
         // Nummer
-        USHORT nNumFmt = (USHORT)(ULONG)aFormatBox.GetEntryData(
+        sal_uInt16 nNumFmt = (sal_uInt16)(sal_uLong)aFormatBox.GetEntryData(
                                         aFormatBox.GetSelectEntryPos() );
         if( SVX_NUM_NUMBER_NONE != nNumFmt )
         {
@@ -928,13 +928,13 @@ void SwCaptionOptPage::DrawSample()
                                                 RES_SETEXPFLD, sFldTypeName );
                 if( pFldType && pFldType->GetOutlineLvl() < MAXLEVEL )
                 {
-                    BYTE nLvl = pFldType->GetOutlineLvl();
+                    sal_uInt8 nLvl = pFldType->GetOutlineLvl();
                     SwNumberTree::tNumberVector aNumVector;
-                    for( BYTE i = 0; i <= nLvl; ++i )
+                    for( sal_uInt8 i = 0; i <= nLvl; ++i )
                         aNumVector.push_back(1);
 
                     String sNumber( pSh->GetOutlineNumRule()->MakeNumString(
-                                                            aNumVector, FALSE ));
+                                                            aNumVector, sal_False ));
                     if( sNumber.Len() )
                         (aStr += sNumber) += pFldType->GetDelimiter();
                 }

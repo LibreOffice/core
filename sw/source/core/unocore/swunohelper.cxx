@@ -66,16 +66,16 @@ sal_Int32 GetEnumAsInt32( const UNO_NMSPC::Any& rVal )
     catch( UNO_NMSPC::Exception & )
     {
         eVal = 0;
-        ASSERT( FALSE, "can't get EnumAsInt32" );
+        ASSERT( sal_False, "can't get EnumAsInt32" );
     }
     return eVal;
 }
 
 
 // methods for UCB actions
-BOOL UCB_DeleteFile( const String& rURL )
+sal_Bool UCB_DeleteFile( const String& rURL )
 {
-    BOOL bRemoved;
+    sal_Bool bRemoved;
     try
     {
         ucbhelper::Content aTempContent( rURL,
@@ -83,19 +83,19 @@ BOOL UCB_DeleteFile( const String& rURL )
         aTempContent.executeCommand(
                         rtl::OUString::createFromAscii( "delete" ),
                         UNO_NMSPC::makeAny( sal_Bool( sal_True ) ) );
-        bRemoved = TRUE;
+        bRemoved = sal_True;
     }
     catch( UNO_NMSPC::Exception& )
     {
-        bRemoved = FALSE;
-        ASSERT( FALSE, "Exeception from executeCommand( delete )" );
+        bRemoved = sal_False;
+        ASSERT( sal_False, "Exeception from executeCommand( delete )" );
     }
     return bRemoved;
 }
 
-BOOL UCB_CopyFile( const String& rURL, const String& rNewURL, BOOL bCopyIsMove )
+sal_Bool UCB_CopyFile( const String& rURL, const String& rNewURL, sal_Bool bCopyIsMove )
 {
-    BOOL bCopyCompleted = TRUE;
+    sal_Bool bCopyCompleted = sal_True;
     try
     {
         INetURLObject aURL( rNewURL );
@@ -119,15 +119,15 @@ BOOL UCB_CopyFile( const String& rURL, const String& rNewURL, BOOL bCopyIsMove )
     }
     catch( UNO_NMSPC::Exception& )
     {
-        ASSERT( FALSE, "Exeception from executeCommand( transfer )" );
-        bCopyCompleted = FALSE;
+        ASSERT( sal_False, "Exeception from executeCommand( transfer )" );
+        bCopyCompleted = sal_False;
     }
     return bCopyCompleted;
 }
 
-BOOL UCB_IsCaseSensitiveFileName( const String& rURL )
+sal_Bool UCB_IsCaseSensitiveFileName( const String& rURL )
 {
-    BOOL bCaseSensitive;
+    sal_Bool bCaseSensitive;
     try
     {
         STAR_REFERENCE( lang::XMultiServiceFactory ) xMSF =
@@ -152,15 +152,15 @@ BOOL UCB_IsCaseSensitiveFileName( const String& rURL )
     }
     catch( UNO_NMSPC::Exception& )
     {
-        bCaseSensitive = FALSE;
-        ASSERT( FALSE, "Exeception from compareContentIds()" );
+        bCaseSensitive = sal_False;
+        ASSERT( sal_False, "Exeception from compareContentIds()" );
     }
     return bCaseSensitive;
 }
 
-BOOL UCB_IsReadOnlyFileName( const String& rURL )
+sal_Bool UCB_IsReadOnlyFileName( const String& rURL )
 {
-    BOOL bIsReadOnly = FALSE;
+    sal_Bool bIsReadOnly = sal_False;
     try
     {
         ucbhelper::Content aCnt( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )());
@@ -171,14 +171,14 @@ BOOL UCB_IsReadOnlyFileName( const String& rURL )
     }
     catch( UNO_NMSPC::Exception& )
     {
-        bIsReadOnly = FALSE;
+        bIsReadOnly = sal_False;
     }
     return bIsReadOnly;
 }
 
-BOOL UCB_IsFile( const String& rURL )
+sal_Bool UCB_IsFile( const String& rURL )
 {
-    BOOL bExists = FALSE;
+    sal_Bool bExists = sal_False;
     try
     {
         ::ucbhelper::Content aContent( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )() );
@@ -190,9 +190,9 @@ BOOL UCB_IsFile( const String& rURL )
     return bExists;
 }
 
-BOOL UCB_IsDirectory( const String& rURL )
+sal_Bool UCB_IsDirectory( const String& rURL )
 {
-    BOOL bExists = FALSE;
+    sal_Bool bExists = sal_False;
     try
     {
         ::ucbhelper::Content aContent( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )() );
@@ -209,17 +209,17 @@ BOOL UCB_IsDirectory( const String& rURL )
     //          pDateTime != 0 -> returns also the modified date/time of
     //                       the files in a SvPtrarr -->
     //                       !! objects must be deleted from the caller!!
-BOOL UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
+sal_Bool UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
                                 const String* pExtension,
                                 SvPtrarr* pDateTimeList )
 {
-    BOOL bOk = FALSE;
+    sal_Bool bOk = sal_False;
     try
     {
         ucbhelper::Content aCnt( rURL, STAR_REFERENCE( ucb::XCommandEnvironment )());
         STAR_REFERENCE( sdbc::XResultSet ) xResultSet;
 
-        USHORT nSeqSize = pDateTimeList ? 2 : 1;
+        sal_uInt16 nSeqSize = pDateTimeList ? 2 : 1;
         UNO_NMSPC::Sequence < rtl::OUString > aProps( nSeqSize );
         rtl::OUString* pProps = aProps.getArray();
         pProps[ 0 ] = rtl::OUString::createFromAscii( "Title" );
@@ -272,7 +272,7 @@ BOOL UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
 
                     } while( xResultSet->next() );
                 }
-                bOk = TRUE;
+                bOk = sal_True;
             }
             catch( UNO_NMSPC::Exception& )
             {
@@ -283,7 +283,7 @@ BOOL UCB_GetFileListOfFolder( const String& rURL, SvStrings& rList,
     catch( UNO_NMSPC::Exception& )
     {
         DBG_ERRORFILE( "Exception caught!" );
-        bOk = FALSE;
+        bOk = sal_False;
     }
     return bOk;
 }

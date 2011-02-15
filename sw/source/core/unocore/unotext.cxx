@@ -504,7 +504,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
         SwCursor aCrsr(*aTmp.GetPoint(),0,false);
         SwUnoCursorHelper::SelectPam(aCrsr, true);
-        aCrsr.Left(1, CRSR_SKIP_CHARS, FALSE, FALSE);
+        aCrsr.Left(1, CRSR_SKIP_CHARS, sal_False, sal_False);
         //hier muss der uebergebene PaM umgesetzt werden:
         if (pRange)
         {
@@ -1001,7 +1001,7 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException)
         //the inserting of nodes should only be done if really necessary
         //to prevent #97924# (removes paragraph attributes when setting the text
         //e.g. of a table cell
-        BOOL bInsertNodes = FALSE;
+        sal_Bool bInsertNodes = sal_False;
         SwNodeIndex aStartIdx(*pStartNode);
         do
         {
@@ -1010,7 +1010,7 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException)
             if(rCurrentNode.GetNodeType() == ND_SECTIONNODE
                 ||rCurrentNode.GetNodeType() == ND_TABLENODE)
             {
-                bInsertNodes = TRUE;
+                bInsertNodes = sal_True;
                 break;
             }
         }
@@ -1227,12 +1227,12 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         case FN_UNO_REDLINE_NODE_END:
         {
             const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
-            const USHORT nRedTblCount = rRedTbl.Count();
+            const sal_uInt16 nRedTblCount = rRedTbl.Count();
             if (nRedTblCount > 0)
             {
                 SwStartNode const*const pStartNode = GetStartNode();
-                const ULONG nOwnIndex = pStartNode->EndOfSectionIndex();
-                for (USHORT nRed = 0; nRed < nRedTblCount; nRed++)
+                const sal_uLong nOwnIndex = pStartNode->EndOfSectionIndex();
+                for (sal_uInt16 nRed = 0; nRed < nRedTblCount; nRed++)
                 {
                     SwRedline const*const pRedline = rRedTbl[nRed];
                     SwPosition const*const pRedStart = pRedline->Start();
@@ -1240,7 +1240,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     if (nOwnIndex == nRedNode.GetIndex())
                     {
                         aRet <<= SwXRedlinePortion::CreateRedlineProperties(
-                                *pRedline, TRUE);
+                                *pRedline, sal_True);
                         break;
                     }
                 }
@@ -1978,10 +1978,10 @@ void SwXText::Impl::ConvertCell(
     else
     {
         // check the predecessor
-        const ULONG nLastNodeIndex = rLastPaM.End()->nNode.GetIndex();
-        const ULONG nStartCellNodeIndex =
+        const sal_uLong nLastNodeIndex = rLastPaM.End()->nNode.GetIndex();
+        const sal_uLong nStartCellNodeIndex =
             aStartCellPam.Start()->nNode.GetIndex();
-        const ULONG nLastNodeEndIndex = rLastPaM.End()->nNode.GetIndex();
+        const sal_uLong nLastNodeEndIndex = rLastPaM.End()->nNode.GetIndex();
         if (nLastNodeIndex == nStartCellNodeIndex)
         {
             // same node as predecessor then equal nContent?

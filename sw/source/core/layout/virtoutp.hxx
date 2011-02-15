@@ -49,22 +49,22 @@ private:
     SwRect          aRect;
     SwRect          aOrgRect;
     Size            aSize;
-    USHORT          nCount;
+    sal_uInt16          nCount;
 
-    BOOL DoesFit( const Size &rOut );
+    sal_Bool DoesFit( const Size &rOut );
 
 public:
     SwLayVout() : pSh(0), pOut(0), pVirDev(0), aSize(0, VIRTUALHEIGHT), nCount(0) {}
     ~SwLayVout() { delete pVirDev; }
 
     /// OD 27.09.2002 #103636# - change 2nd parameter <rRect> - no longer <const>
-    void Enter( ViewShell *pShell, SwRect &rRect, BOOL bOn );
+    void Enter( ViewShell *pShell, SwRect &rRect, sal_Bool bOn );
     void Leave() { --nCount; Flush(); }
 
     void SetOrgRect( SwRect &rRect ) { aOrgRect = rRect; }
     const SwRect& GetOrgRect() const { return aOrgRect; }
 
-    BOOL IsFlushable() { return 0 != pOut; }
+    sal_Bool IsFlushable() { return 0 != pOut; }
     void _Flush();
     void Flush() { if( pOut ) _Flush(); }
 };

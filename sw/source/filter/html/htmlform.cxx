@@ -1739,7 +1739,7 @@ void SwHTMLParser::InsertInput()
 
         if( bDisabled )
         {
-            BOOL bFalse = sal_False;
+            sal_Bool bFalse = sal_False;
             aTmp.setValue(&bFalse, ::getBooleanCppuType()  );
             xPropSet->setPropertyValue( OUString::createFromAscii( "Enabled" ), aTmp );
         }
@@ -2132,7 +2132,7 @@ void SwHTMLParser::NewTextArea()
     aTmp <<= OUString(sName);
     xPropSet->setPropertyValue( OUString::createFromAscii( "Name" ), aTmp );
 
-    BOOL bTrue = sal_True;
+    sal_Bool bTrue = sal_True;
     aTmp.setValue( &bTrue, ::getBooleanCppuType() );
     xPropSet->setPropertyValue( OUString::createFromAscii( "MultiLine" ),
                                 aTmp );
@@ -2155,7 +2155,7 @@ void SwHTMLParser::NewTextArea()
 
     if( bDisabled )
     {
-        BOOL bFalse = sal_False;
+        sal_Bool bFalse = sal_False;
         aTmp.setValue( &bFalse, ::getBooleanCppuType() );
         xPropSet->setPropertyValue( OUString::createFromAscii( "Enabled" ),
                                     aTmp );
@@ -2421,7 +2421,7 @@ void SwHTMLParser::NewSelect()
 
     if( bDisabled )
     {
-        BOOL bFalse = sal_False;
+        sal_Bool bFalse = sal_False;
         aTmp.setValue( &bFalse, ::getBooleanCppuType() );
         xPropSet->setPropertyValue( OUString::createFromAscii( "Enabled" ),
                                     aTmp );
@@ -2431,7 +2431,7 @@ void SwHTMLParser::NewSelect()
     sal_Bool bMinWidth = sal_True, bMinHeight = sal_True;
     if( !bMultiple && 1==nSelectEntryCnt )
     {
-        BOOL bTrue = sal_True;
+        sal_Bool bTrue = sal_True;
         aTmp.setValue( &bTrue, ::getBooleanCppuType() );
         xPropSet->setPropertyValue( OUString::createFromAscii( "Dropdown" ),
                                     aTmp );
@@ -2443,7 +2443,7 @@ void SwHTMLParser::NewSelect()
 
         if( bMultiple )
         {
-            BOOL bTrue = sal_True;
+            sal_Bool bTrue = sal_True;
             aTmp.setValue( &bTrue, ::getBooleanCppuType() );
             xPropSet->setPropertyValue(
                     OUString::createFromAscii( "MultiSelection" ), aTmp );

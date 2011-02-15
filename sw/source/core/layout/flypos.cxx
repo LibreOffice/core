@@ -49,10 +49,10 @@
 SV_IMPL_OP_PTRARR_SORT( SwPosFlyFrms, SwPosFlyFrmPtr )
 
 SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
-                            USHORT nArrPos )
+                            sal_uInt16 nArrPos )
     : pFrmFmt( pFmt ), pNdIdx( (SwNodeIndex*) &rIdx )
 {
-    BOOL bFnd = FALSE;
+    sal_Bool bFnd = sal_False;
     const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
     if (FLY_AT_PAGE == rAnchor.GetAnchorId())
     {
@@ -66,14 +66,14 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
             // Schauen, ob es ein SdrObject dafuer gibt
             if( aIter.First( TYPE( SwFlyFrm) ) )
                 nOrdNum = ((SwFlyFrm*)aIter())->GetVirtDrawObj()->GetOrdNum(),
-                bFnd = TRUE;
+                bFnd = sal_True;
         }
         else if( RES_DRAWFRMFMT == pFmt->Which() )
         {
             // Schauen, ob es ein SdrObject dafuer gibt
             if( aIter.First( TYPE(SwDrawContact) ) )
                 nOrdNum = ((SwDrawContact*)aIter())->GetMaster()->GetOrdNum(),
-                bFnd = TRUE;
+                bFnd = sal_True;
         }
     }
 
@@ -93,12 +93,12 @@ SwPosFlyFrm::~SwPosFlyFrm()
     }
 }
 
-BOOL SwPosFlyFrm::operator==( const SwPosFlyFrm& )
+sal_Bool SwPosFlyFrm::operator==( const SwPosFlyFrm& )
 {
-    return FALSE;   // FlyFrames koennen auf der gleichen Position stehen
+    return sal_False;   // FlyFrames koennen auf der gleichen Position stehen
 }
 
-BOOL SwPosFlyFrm::operator<( const SwPosFlyFrm& rPosFly )
+sal_Bool SwPosFlyFrm::operator<( const SwPosFlyFrm& rPosFly )
 {
     if( pNdIdx->GetIndex() == rPosFly.pNdIdx->GetIndex() )
     {

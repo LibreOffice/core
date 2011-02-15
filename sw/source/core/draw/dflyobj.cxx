@@ -74,7 +74,7 @@ using namespace ::com::sun::star;
 
 using namespace ::com::sun::star;
 
-static BOOL bInResize = FALSE;
+static sal_Bool bInResize = sal_False;
 
 TYPEINIT1( SwFlyDrawObj, SdrObject )
 TYPEINIT1( SwVirtFlyDrawObj, SdrVirtObj )
@@ -159,19 +159,19 @@ SwFlyDrawObj::~SwFlyDrawObj()
 |*
 *************************************************************************/
 
-UINT32 __EXPORT SwFlyDrawObj::GetObjInventor() const
+sal_uInt32 __EXPORT SwFlyDrawObj::GetObjInventor() const
 {
     return SWGInventor;
 }
 
 
-UINT16 __EXPORT SwFlyDrawObj::GetObjIdentifier()    const
+sal_uInt16 __EXPORT SwFlyDrawObj::GetObjIdentifier()    const
 {
     return SwFlyDrawObjIdentifier;
 }
 
 
-UINT16 __EXPORT SwFlyDrawObj::GetObjVersion() const
+sal_uInt16 __EXPORT SwFlyDrawObj::GetObjVersion() const
 {
     return SwDrawFirst;
 }
@@ -430,7 +430,7 @@ SwVirtFlyDrawObj::SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly) :
     pFlyFrm( pFly )
 {
     //#110094#-1
-    // bNotPersistent = bNeedColorRestore = bWriterFlyFrame = TRUE;
+    // bNotPersistent = bNeedColorRestore = bWriterFlyFrame = sal_True;
     const SvxProtectItem &rP = pFlyFrm->GetFmt()->GetProtect();
     bMovProt = rP.IsPosProtected();
     bSizProt = rP.IsSizeProtected();
@@ -523,13 +523,13 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject() const
 void __EXPORT SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 {
     rInfo.bSelectAllowed     = rInfo.bMoveAllowed =
-    rInfo.bResizeFreeAllowed = rInfo.bResizePropAllowed = TRUE;
+    rInfo.bResizeFreeAllowed = rInfo.bResizePropAllowed = sal_True;
 
     rInfo.bRotateFreeAllowed = rInfo.bRotate90Allowed =
     rInfo.bMirrorFreeAllowed = rInfo.bMirror45Allowed =
     rInfo.bMirror90Allowed   = rInfo.bShearAllowed    =
     rInfo.bCanConvToPath     = rInfo.bCanConvToPoly   =
-    rInfo.bCanConvToPathLineToArea = rInfo.bCanConvToPolyLineToArea = FALSE;
+    rInfo.bCanConvToPathLineToArea = rInfo.bCanConvToPolyLineToArea = sal_False;
 }
 
 
@@ -701,7 +701,7 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
                                             RES_VERT_ORIENT, RES_HORI_ORIENT );
     SwFmtHoriOrient aHori( pFmt->GetHoriOrient() );
     SwFmtVertOrient aVert( pFmt->GetVertOrient() );
-    BOOL bPut = FALSE;
+    sal_Bool bPut = sal_False;
 
     if( !GetFlyFrm()->IsFlyLayFrm() &&
         ::GetHtmlMode(pFmt->GetDoc()->GetDocShell()) )
@@ -710,7 +710,7 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         //Einzig einen Snap auf Links/Rechts bzw. Linker-/Rechter-Rand koennen
         //wir versuchen.
         const SwFrm* pAnch = GetFlyFrm()->GetAnchorFrm();
-        BOOL bNextLine = FALSE;
+        sal_Bool bNextLine = sal_False;
 
         if( !GetFlyFrm()->IsAutoPos() || text::RelOrientation::PAGE_FRAME != aHori.GetRelationOrient() )
         {
@@ -721,9 +721,9 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
             }
             else
             {
-                bNextLine = TRUE;
+                bNextLine = sal_True;
                 //Horizontale Ausrichtung:
-                const BOOL bLeftFrm =
+                const sal_Bool bLeftFrm =
                     aFlyRect.Left() < pAnch->Frm().Left() + pAnch->Prt().Left(),
                     bLeftPrt = aFlyRect.Left() + aFlyRect.Width() <
                                pAnch->Frm().Left() + pAnch->Prt().Width()/2;
@@ -734,7 +734,7 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
                 }
                 else
                 {
-                    const BOOL bRightFrm = aFlyRect.Left() >
+                    const sal_Bool bRightFrm = aFlyRect.Left() >
                                        pAnch->Frm().Left() + pAnch->Prt().Width();
                     aHori.SetHoriOrient( text::HoriOrientation::RIGHT );
                     aHori.SetRelationOrient( bRightFrm ? text::RelOrientation::FRAME : text::RelOrientation::PRINT_AREA );
@@ -744,7 +744,7 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         }
         //Vertikale Ausrichtung bleibt grundsaetzlich schlicht erhalten,
         //nur bei nicht automatischer Ausrichtung wird umgeschaltet.
-        BOOL bRelChar = text::RelOrientation::CHAR == eRelVert;
+        sal_Bool bRelChar = text::RelOrientation::CHAR == eRelVert;
         aVert.SetVertOrient( eVert != text::VertOrientation::NONE ? eVert :
                 GetFlyFrm()->IsFlyInCntFrm() ? text::VertOrientation::CHAR_CENTER :
                 bRelChar && bNextLine ? text::VertOrientation::CHAR_TOP : text::VertOrientation::TOP );
@@ -753,7 +753,7 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
         else
             aVert.SetRelationOrient( text::RelOrientation::PRINT_AREA );
         aSet.Put( aVert );
-        bPut = TRUE;
+        bPut = sal_True;
     }
 
     //Automatische Ausrichtungen wollen wir moeglichst nicht verlieren.
@@ -764,14 +764,14 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
             aHori.SetHoriOrient( eHori );
             aHori.SetRelationOrient( eRelHori );
             aSet.Put( aHori );
-            bPut = TRUE;
+            bPut = sal_True;
         }
         if ( text::VertOrientation::NONE != eVert )
         {
             aVert.SetVertOrient( eVert );
             aVert.SetRelationOrient( eRelVert );
             aSet.Put( aVert );
-            bPut = TRUE;
+            bPut = sal_True;
         }
     }
     if ( bPut )
@@ -809,7 +809,7 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
             const SwFmtCol& rCol = rAttrs.GetAttrSet().GetCol();
             if ( rCol.GetColumns().Count() > 1 )
             {
-                for ( USHORT i = 0; i < rCol.GetColumns().Count(); ++i )
+                for ( sal_uInt16 i = 0; i < rCol.GetColumns().Count(); ++i )
                 {
                     nMin += rCol.GetColumns()[i]->GetLeft() +
                             rCol.GetColumns()[i]->GetRight() +
@@ -847,10 +847,10 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
             }
             if ( aFrmSz.GetWidthPercent() && aFrmSz.GetWidthPercent() != 0xFF &&
                  aOldFrmSz.GetWidth() != aFrmSz.GetWidth() )
-                aFrmSz.SetWidthPercent( BYTE(aSz.Width() * 100L / nRelWidth + 0.5) );
+                aFrmSz.SetWidthPercent( sal_uInt8(aSz.Width() * 100L / nRelWidth + 0.5) );
             if ( aFrmSz.GetHeightPercent() && aFrmSz.GetHeightPercent() != 0xFF &&
                  aOldFrmSz.GetHeight() != aFrmSz.GetHeight() )
-                aFrmSz.SetHeightPercent( BYTE(aSz.Height() * 100L / nRelHeight + 0.5) );
+                aFrmSz.SetHeightPercent( sal_uInt8(aSz.Height() * 100L / nRelHeight + 0.5) );
             pFmt->GetDoc()->SetAttr( aFrmSz, *pFmt );
         }
     }
@@ -874,9 +874,9 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
         }
         else if ( aOutRect.TopLeft() != aNewPos )
             aOutRect.SetPos( aNewPos );
-        bInResize = TRUE;
+        bInResize = sal_True;
         NbcMove( Size( 0, 0 ) );
-        bInResize = FALSE;
+        bInResize = sal_False;
     }
 }
 

@@ -180,8 +180,8 @@ SwContact* GetUserCall( const SdrObject* pObj )
     return static_cast<SwContact*>(pObj->GetUserCall());
 }
 
-// liefert TRUE falls das SrdObject ein Marquee-Object (Lauftext) ist
-BOOL IsMarqueeTextObj( const SdrObject& rObj )
+// liefert sal_True falls das SrdObject ein Marquee-Object (Lauftext) ist
+sal_Bool IsMarqueeTextObj( const SdrObject& rObj )
 {
     SdrTextAniKind eTKind;
     return SdrInventor == rObj.GetObjInventor() &&
@@ -252,7 +252,7 @@ void SwContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
             if ( pAnchoredObj->GetPageFrm() )
             {
                 ::Notify_Background( _pDrawObj, pAnchoredObj->GetPageFrm(),
-                                     pAnchoredObj->GetObjRect(), PREP_FLY_ARRIVE, TRUE );
+                                     pAnchoredObj->GetObjRect(), PREP_FLY_ARRIVE, sal_True );
             }
 
             pAnchoredObj->InvalidateObjPos();
@@ -286,7 +286,7 @@ void SwContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
         if ( pAnchoredObj && pAnchoredObj->GetPageFrm() )
         {
             ::Notify_Background( _pDrawObj, pAnchoredObj->GetPageFrm(),
-                                 pAnchoredObj->GetObjRect(), PREP_FLY_LEAVE, TRUE );
+                                 pAnchoredObj->GetObjRect(), PREP_FLY_LEAVE, sal_True );
         }
     }
     // <--
@@ -365,7 +365,7 @@ void SwContact::_MoveObjToLayer( const bool _bToVisible,
                 static_cast<SdrObjGroup*>(_pDrawObj)->GetSubList();
         if ( pLst )
         {
-            for ( USHORT i = 0; i < pLst->GetObjCount(); ++i )
+            for ( sal_uInt16 i = 0; i < pLst->GetObjCount(); ++i )
             {
                 _MoveObjToLayer( _bToVisible, pLst->GetObj( i ) );
             }
@@ -565,7 +565,7 @@ SwVirtFlyDrawObj *SwFlyDrawContact::CreateNewRef( SwFlyFrm *pFly )
     SdrPage* pPg( 0L );
     if ( 0 != ( pPg = GetMaster()->GetPage() ) )
     {
-        const UINT32 nOrdNum = GetMaster()->GetOrdNum();
+        const sal_uInt32 nOrdNum = GetMaster()->GetOrdNum();
         pPg->ReplaceObject( pDrawObj, nOrdNum );
     }
     // --> OD 2004-08-16 #i27030# - insert new <SwVirtFlyDrawObj> instance
@@ -744,7 +744,7 @@ bool CheckControlLayer( const SdrObject *pObj )
     if ( pObj->ISA( SdrObjGroup ) )
     {
         const SdrObjList *pLst = ((SdrObjGroup*)pObj)->GetSubList();
-        for ( USHORT i = 0; i < pLst->GetObjCount(); ++i )
+        for ( sal_uInt16 i = 0; i < pLst->GetObjCount(); ++i )
         {
             if ( ::CheckControlLayer( pLst->GetObj( i ) ) )
             {
@@ -765,7 +765,7 @@ SwDrawContact::SwDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ) :
     // --> OD 2006-01-18 #129959#
     mbUserCallActive( false ),
     // Note: value of <meEventTypeOfCurrentUserCall> isn't of relevance, because
-    //       <mbUserCallActive> is FALSE.
+    //       <mbUserCallActive> is sal_False.
     meEventTypeOfCurrentUserCall( SDRUSERCALL_MOVEONLY )
     // <--
 {
@@ -1142,7 +1142,7 @@ void SwDrawContact::NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect )
                 aOldRect.Pos() += pDrawVirtObj->GetOffset();
                 if( aOldRect.HasArea() )
                     ::Notify_Background( pDrawVirtObj, pPage,
-                                         aOldRect, PREP_FLY_LEAVE,TRUE);
+                                         aOldRect, PREP_FLY_LEAVE,sal_True);
             }
             // --> OD 2004-10-21 #i34640# - include spacing for wrapping
             SwRect aRect( pDrawVirtObj->GetAnchoredObj()->GetObjRectWithSpaces() );
@@ -1154,7 +1154,7 @@ void SwDrawContact::NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect )
                 // <--
                 if ( pPg )
                     ::Notify_Background( pDrawVirtObj, pPg, aRect,
-                                         PREP_FLY_ARRIVE, TRUE );
+                                         PREP_FLY_ARRIVE, sal_True );
             }
             ::ClrContourCache( pDrawVirtObj );
         }
@@ -1184,7 +1184,7 @@ void lcl_NotifyBackgroundOfObj( SwDrawContact& _rDrawContact,
                 SwPageFrm* pOldPageFrm = (SwPageFrm*)::FindPage( aOldRect, pPageFrm );
                 // <--
                 ::Notify_Background( &_rObj, pOldPageFrm, aOldRect,
-                                     PREP_FLY_LEAVE, TRUE);
+                                     PREP_FLY_LEAVE, sal_True);
             }
         }
         // --> OD 2004-10-21 #i34640# - include spacing for wrapping
@@ -1194,7 +1194,7 @@ void lcl_NotifyBackgroundOfObj( SwDrawContact& _rDrawContact,
         {
             pPageFrm = (SwPageFrm*)::FindPage( aNewRect, pPageFrm );
             ::Notify_Background( &_rObj, pPageFrm, aNewRect,
-                                 PREP_FLY_ARRIVE, TRUE );
+                                 PREP_FLY_ARRIVE, sal_True );
         }
         ClrContourCache( &_rObj );
     }
@@ -1597,12 +1597,12 @@ namespace
 {
     static const SwFmtAnchor* lcl_getAnchorFmt( const SfxPoolItem& _rItem )
     {
-        USHORT nWhich = _rItem.Which();
+        sal_uInt16 nWhich = _rItem.Which();
         const SwFmtAnchor* pAnchorFmt = NULL;
         if ( RES_ATTRSET_CHG == nWhich )
         {
             static_cast<const SwAttrSetChg&>(_rItem).GetChgSet()->
-                GetItemState( RES_ANCHOR, FALSE, (const SfxPoolItem**)&pAnchorFmt );
+                GetItemState( RES_ANCHOR, sal_False, (const SfxPoolItem**)&pAnchorFmt );
         }
         else if ( RES_ANCHOR == nWhich )
         {
@@ -1627,14 +1627,14 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
     ASSERT( !mbDisconnectInProgress,
             "<SwDrawContact::Modify(..)> called during disconnection.");
 
-    USHORT nWhich = pNew ? pNew->Which() : 0;
+    sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
     const SwFmtAnchor* pNewAnchorFmt = pNew ? lcl_getAnchorFmt( *pNew ) : NULL;
 
     if ( pNewAnchorFmt )
     {
         // JP 10.04.95: nicht auf ein Reset Anchor reagieren !!!!!
         if ( SFX_ITEM_SET ==
-                GetFmt()->GetAttrSet().GetItemState( RES_ANCHOR, FALSE ) )
+                GetFmt()->GetAttrSet().GetItemState( RES_ANCHOR, sal_False ) )
         {
             // OD 10.10.2003 #112299# - no connect to layout during disconnection
             if ( !mbDisconnectInProgress )
@@ -1688,11 +1688,11 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
              RES_WRAP_INFLUENCE_ON_OBJPOS == nWhich ||
              ( RES_ATTRSET_CHG == nWhich &&
                ( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                           RES_SURROUND, FALSE ) ||
+                           RES_SURROUND, sal_False ) ||
                  SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                           RES_OPAQUE, FALSE ) ||
+                           RES_OPAQUE, sal_False ) ||
                  SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                           RES_WRAP_INFLUENCE_ON_OBJPOS, FALSE ) ) ) )
+                           RES_WRAP_INFLUENCE_ON_OBJPOS, sal_False ) ) ) )
         {
             lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
             NotifyBackgrdOfAllVirtObjs( 0L );
@@ -1704,15 +1704,15 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                   RES_FOLLOW_TEXT_FLOW == nWhich ||
                   ( RES_ATTRSET_CHG == nWhich &&
                     ( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                                RES_LR_SPACE, FALSE ) ||
+                                RES_LR_SPACE, sal_False ) ||
                       SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                                RES_UL_SPACE, FALSE ) ||
+                                RES_UL_SPACE, sal_False ) ||
                       SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                                RES_HORI_ORIENT, FALSE ) ||
+                                RES_HORI_ORIENT, sal_False ) ||
                       SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                                RES_VERT_ORIENT, FALSE ) ||
+                                RES_VERT_ORIENT, sal_False ) ||
                       SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                                RES_FOLLOW_TEXT_FLOW, FALSE ) ) ) )
+                                RES_FOLLOW_TEXT_FLOW, sal_False ) ) ) )
         {
             lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
             NotifyBackgrdOfAllVirtObjs( 0L );
@@ -1827,7 +1827,7 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
         for( SdrView* pView = aIter.FirstView(); pView;
                     pView = aIter.NextView() )
         {
-            pView->MarkObj( GetMaster(), pView->GetSdrPageView(), TRUE );
+            pView->MarkObj( GetMaster(), pView->GetSdrPageView(), sal_True );
         }
 
         // OD 25.06.2003 #108784# - Instead of removing 'master' object from
@@ -1969,10 +1969,10 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
     {
         case FLY_AT_PAGE:
                 {
-                USHORT nPgNum = pAnch->GetPageNum();
+                sal_uInt16 nPgNum = pAnch->GetPageNum();
                 SwPageFrm *pPage = static_cast<SwPageFrm*>(pRoot->Lower());
 
-                for ( USHORT i = 1; i < nPgNum && pPage; ++i )
+                for ( sal_uInt16 i = 1; i < nPgNum && pPage; ++i )
                 {
                     pPage = static_cast<SwPageFrm*>(pPage->GetNext());
                 }
@@ -2105,7 +2105,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
             }
             break;
         default:
-            ASSERT( FALSE, "Unknown Anchor." )
+            ASSERT( sal_False, "Unknown Anchor." )
             break;
     }
     if ( GetAnchorFrm() )
@@ -2636,7 +2636,7 @@ SdrHdl* SwDrawVirtObj::GetHdl(sal_uInt32 nHdlNum) const
     return pHdl;
 }
 
-SdrHdl* SwDrawVirtObj::GetPlusHdl(const SdrHdl& rHdl, USHORT nPlNum) const
+SdrHdl* SwDrawVirtObj::GetPlusHdl(const SdrHdl& rHdl, sal_uInt16 nPlNum) const
 {
     SdrHdl* pHdl = rRefObj.GetPlusHdl(rHdl, nPlNum);
     pHdl->SetPos(pHdl->GetPos() + GetOffset());

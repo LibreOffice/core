@@ -42,17 +42,17 @@ class IntlWrapper;
 //Pagedescriptor
 //Client vom SwPageDesc der durch das Attribut "beschrieben" wird.
 
-#define IVER_FMTPAGEDESC_NOAUTO ((USHORT)0x0001)
-#define IVER_FMTPAGEDESC_LONGPAGE   ((USHORT)0x0002)
+#define IVER_FMTPAGEDESC_NOAUTO ((sal_uInt16)0x0001)
+#define IVER_FMTPAGEDESC_LONGPAGE   ((sal_uInt16)0x0002)
 
 class SW_DLLPUBLIC SwFmtPageDesc : public SfxPoolItem, public SwClient
 {
     // diese "Doc"-Funktion ist friend, um nach dem kopieren das
     // Auto-Flag setzen zu koennen !!
-    friend BOOL InsAttr( SwDoc*, const SwPaM &, const SfxItemSet&, USHORT,
+    friend sal_Bool InsAttr( SwDoc*, const SwPaM &, const SfxItemSet&, sal_uInt16,
                         SwHistory* );
-    USHORT nNumOffset;          // Seitennummer Offset
-    USHORT nDescNameIdx;        // SW3-Reader: Stringpool-Index des Vorlagennamens
+    sal_uInt16 nNumOffset;          // Seitennummer Offset
+    sal_uInt16 nDescNameIdx;        // SW3-Reader: Stringpool-Index des Vorlagennamens
     SwModify* pDefinedIn;       // Verweis auf das Objekt, in dem das
                                 // Attribut gesetzt wurde (CntntNode/Format)
 
@@ -72,16 +72,16 @@ public:
                                     SfxMapUnit ePresMetric,
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 
           SwPageDesc *GetPageDesc() { return (SwPageDesc*)GetRegisteredIn(); }
     const SwPageDesc *GetPageDesc() const { return (SwPageDesc*)GetRegisteredIn(); }
 
-    USHORT  GetNumOffset() const        { return nNumOffset; }
-    void    SetNumOffset( USHORT nNum ) { nNumOffset = nNum; }
+    sal_uInt16  GetNumOffset() const        { return nNumOffset; }
+    void    SetNumOffset( sal_uInt16 nNum ) { nNumOffset = nNum; }
 
     // erfrage/setze, wo drin das Attribut verankert ist
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
@@ -89,10 +89,10 @@ public:
 };
 
 
-inline const SwFmtPageDesc &SwAttrSet::GetPageDesc(BOOL bInP) const
+inline const SwFmtPageDesc &SwAttrSet::GetPageDesc(sal_Bool bInP) const
     { return (const SwFmtPageDesc&)Get( RES_PAGEDESC,bInP); }
 
-inline const SwFmtPageDesc &SwFmt::GetPageDesc(BOOL bInP) const
+inline const SwFmtPageDesc &SwFmt::GetPageDesc(sal_Bool bInP) const
     { return aSet.GetPageDesc(bInP); }
 
 #endif

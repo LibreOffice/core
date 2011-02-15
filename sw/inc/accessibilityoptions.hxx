@@ -31,23 +31,23 @@
 
 struct SwAccessibilityOptions
 {
-    BOOL bIsAlwaysAutoColor         :1;
-    BOOL bIsStopAnimatedText        :1;
-    BOOL bIsStopAnimatedGraphics    :1;
+    sal_Bool bIsAlwaysAutoColor         :1;
+    sal_Bool bIsStopAnimatedText        :1;
+    sal_Bool bIsStopAnimatedGraphics    :1;
 
     SwAccessibilityOptions() :
-        bIsAlwaysAutoColor(FALSE),
-        bIsStopAnimatedText(FALSE),
-        bIsStopAnimatedGraphics(FALSE) {}
+        bIsAlwaysAutoColor(sal_False),
+        bIsStopAnimatedText(sal_False),
+        bIsStopAnimatedGraphics(sal_False) {}
 
-    inline BOOL IsAlwaysAutoColor() const       { return bIsAlwaysAutoColor; }
-    inline void SetAlwaysAutoColor( BOOL b )    { bIsAlwaysAutoColor = b; }
+    inline sal_Bool IsAlwaysAutoColor() const       { return bIsAlwaysAutoColor; }
+    inline void SetAlwaysAutoColor( sal_Bool b )    { bIsAlwaysAutoColor = b; }
 
-    inline BOOL IsStopAnimatedGraphics() const       { return bIsStopAnimatedText;}
-    inline void SetStopAnimatedGraphics( BOOL b )    { bIsStopAnimatedText = b; }
+    inline sal_Bool IsStopAnimatedGraphics() const       { return bIsStopAnimatedText;}
+    inline void SetStopAnimatedGraphics( sal_Bool b )    { bIsStopAnimatedText = b; }
 
-    inline BOOL IsStopAnimatedText() const       { return bIsStopAnimatedGraphics; }
-    inline void SetStopAnimatedText( BOOL b )    { bIsStopAnimatedGraphics = b;}
+    inline sal_Bool IsStopAnimatedText() const       { return bIsStopAnimatedGraphics; }
+    inline void SetStopAnimatedText( sal_Bool b )    { bIsStopAnimatedGraphics = b;}
 };
 #endif
 
