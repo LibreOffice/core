@@ -3783,39 +3783,45 @@ SCCOL ScDocument::GetNextDifferentChangedCol( SCTAB nTab, SCCOL nStart) const
 
 SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart, bool bCareManualSize) const
 {
-    const ScBitMaskCompressedArray< SCROW, BYTE> * pRowFlagsArray;
-    if ( ValidTab(nTab) && pTab[nTab] && ((pRowFlagsArray = pTab[nTab]->GetRowFlagsArray()) != NULL) &&
-            pTab[nTab]->mpRowHeights && pTab[nTab]->mpHiddenRows )
+    if (!ValidTab(nTab) || !pTab[nTab])
+        return 0;
+
+    const ScBitMaskCompressedArray<SCROW, BYTE>* pRowFlagsArray = pTab[nTab]->GetRowFlagsArray();
+    if (!pRowFlagsArray)
+        return 0;
+
+    if (!pTab[nTab]->mpRowHeights || !pTab[nTab]->mpHiddenRows)
+        return 0;
+
+    size_t nIndex;          // ignored
+    SCROW nFlagsEndRow;
+    SCROW nHiddenEndRow;
+    SCROW nHeightEndRow;
+    BYTE nFlags;
+    bool bHidden;
+    USHORT nHeight;
+    BYTE nStartFlags = nFlags = pRowFlagsArray->GetValue( nStart, nIndex, nFlagsEndRow);
+    bool bStartHidden = bHidden = pTab[nTab]->RowHidden( nStart, NULL, &nHiddenEndRow);
+    USHORT nStartHeight = nHeight = pTab[nTab]->GetRowHeight( nStart, NULL, &nHeightEndRow, false);
+    SCROW nRow;
+    while ((nRow = std::min( nHiddenEndRow, std::min( nFlagsEndRow, nHeightEndRow)) + 1) <= MAXROW)
     {
-        size_t nIndex;          // ignored
-        SCROW nFlagsEndRow;
-        SCROW nHiddenEndRow;
-        SCROW nHeightEndRow;
-        BYTE nFlags;
-        bool bHidden;
-        USHORT nHeight;
-        BYTE nStartFlags = nFlags = pRowFlagsArray->GetValue( nStart, nIndex, nFlagsEndRow);
-        bool bStartHidden = bHidden = pTab[nTab]->RowHidden( nStart, NULL, &nHiddenEndRow);
-        USHORT nStartHeight = nHeight = pTab[nTab]->GetRowHeight( nStart, NULL, &nHeightEndRow, false);
-        SCROW nRow;
-        while ((nRow = std::min( nHiddenEndRow, std::min( nFlagsEndRow, nHeightEndRow)) + 1) <= MAXROW)
-        {
-            if (nFlagsEndRow < nRow)
-                nFlags = pRowFlagsArray->GetValue( nRow, nIndex, nFlagsEndRow);
-            if (nHiddenEndRow < nRow)
-                bHidden = pTab[nTab]->RowHidden( nRow, NULL, &nHiddenEndRow);
-            if (nHeightEndRow < nRow)
-                nHeight = pTab[nTab]->GetRowHeight( nRow, NULL, &nHeightEndRow, false);
-            if (    ((nStartFlags & CR_MANUALBREAK) != (nFlags & CR_MANUALBREAK)) ||
-                    ((nStartFlags & CR_MANUALSIZE) != (nFlags & CR_MANUALSIZE)) ||
-                    (bStartHidden != bHidden) ||
-                    (bCareManualSize && (nStartFlags & CR_MANUALSIZE) && (nStartHeight != nHeight)) ||
-                    (!bCareManualSize && ((nStartHeight != nHeight))))
-                return nRow;
-        }
-        return MAXROW+1;
+        if (nFlagsEndRow < nRow)
+            nFlags = pRowFlagsArray->GetValue( nRow, nIndex, nFlagsEndRow);
+        if (nHiddenEndRow < nRow)
+            bHidden = pTab[nTab]->RowHidden( nRow, NULL, &nHiddenEndRow);
+        if (nHeightEndRow < nRow)
+            nHeight = pTab[nTab]->GetRowHeight( nRow, NULL, &nHeightEndRow, false);
+
+        if (((nStartFlags & CR_MANUALBREAK) != (nFlags & CR_MANUALBREAK)) ||
+            ((nStartFlags & CR_MANUALSIZE) != (nFlags & CR_MANUALSIZE)) ||
+            (bStartHidden != bHidden) ||
+            (bCareManualSize && (nStartFlags & CR_MANUALSIZE) && (nStartHeight != nHeight)) ||
+            (!bCareManualSize && ((nStartHeight != nHeight))))
+            return nRow;
     }
-    return 0;
+
+    return MAXROW+1;
 }
 
 BOOL ScDocument::GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& nDefault)
