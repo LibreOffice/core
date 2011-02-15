@@ -216,7 +216,7 @@ struct ImplFrameData
 
 struct ImplAccessibleInfos
 {
-    USHORT  nAccessibleRole;
+    sal_uInt16 nAccessibleRole;
     String* pAccessibleName;
     String* pAccessibleDescription;
     Window* pLabeledByWindow;

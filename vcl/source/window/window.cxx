@@ -9297,7 +9297,8 @@ sal_Bool Window::IsAccessibilityEventsSuppressed( sal_Bool bTraverseParentPath )
         return sal_False;
     }
 }
-void Window::SetAccessibilityEventsSuppressed(BOOL bSuppressed)
+
+void Window::SetAccessibilityEventsSuppressed(sal_Bool bSuppressed)
 {
     mpWindowImpl->mbSuppressAccessibilityEvents = bSuppressed;
 }

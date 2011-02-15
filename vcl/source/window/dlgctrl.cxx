@@ -1263,7 +1263,7 @@ Window* Window::GetAccessibleRelationMemberOf() const
         // which are labeled only if the fixed line or group box
         // is directly before the control
         // get form start and form end and index of this control
-        USHORT nIndex, nFormStart, nFormEnd;
+        sal_uInt16 nIndex, nFormStart, nFormEnd;
         Window* pSWindow = ::ImplFindDlgCtrlWindow( pFrameWindow,
             const_cast<Window*>(this),
             nIndex,
@@ -1278,13 +1278,13 @@ Window* Window::GetAccessibleRelationMemberOf() const
             {
                 nFormStart = nIndex-1;
             }
-            for( USHORT nSearchIndex = nIndex-1; nSearchIndex >= nFormStart; nSearchIndex-- )
+            for( sal_uInt16 nSearchIndex = nIndex-1; nSearchIndex >= nFormStart; nSearchIndex-- )
             {
-                USHORT nFoundIndex = 0;
+                sal_uInt16 nFoundIndex = 0;
                 pSWindow = ::ImplGetChildWindow( pFrameWindow,
                     nSearchIndex,
                     nFoundIndex,
-                    FALSE );
+                    sal_False );
                 if( pSWindow && pSWindow->IsVisible() &&
                     ( pSWindow->GetType() == WINDOW_FIXEDLINE   ||
                     pSWindow->GetType() == WINDOW_GROUPBOX ) )
