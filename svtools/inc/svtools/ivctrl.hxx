@@ -85,7 +85,7 @@ class SvxIconChoiceCtrlEntry
 
     Rectangle               aRect;              // Bounding-Rect des Entries
     Rectangle               aGridRect;          // nur gesetzt im Grid-Modus
-    ULONG                   nPos;
+    sal_uLong                   nPos;
 
     // die Eintragsposition in der Eintragsliste entspricht der beim Insert vorgegebenen
     // [Sortier-]Reihenfolge (->Reihenfolge der Anker in der Ankerliste!). Im AutoArrange-Modus
@@ -95,12 +95,12 @@ class SvxIconChoiceCtrlEntry
     SvxIconChoiceCtrlEntry*         pflink;     // forward  (rechter Nachbar)
 
     SvxIconChoiceCtrlTextMode       eTextMode;
-    USHORT                  nX,nY;      // fuer Tastatursteuerung
-    USHORT                  nFlags;
+    sal_uInt16                  nX,nY;      // fuer Tastatursteuerung
+    sal_uInt16                  nFlags;
 
-    void                    ClearFlags( USHORT nMask ) { nFlags &= (~nMask); }
-    void                    SetFlags( USHORT nMask ) { nFlags |= nMask; }
-    void                    AssignFlags( USHORT _nFlags ) { nFlags = _nFlags; }
+    void                    ClearFlags( sal_uInt16 nMask ) { nFlags &= (~nMask); }
+    void                    SetFlags( sal_uInt16 nMask ) { nFlags |= nMask; }
+    void                    AssignFlags( sal_uInt16 _nFlags ) { nFlags = _nFlags; }
 
     // setzt den linken Nachbarn (A <-> B  ==>  A <-> this <-> B)
     void                    SetBacklink( SvxIconChoiceCtrlEntry* pA )
@@ -120,9 +120,9 @@ class SvxIconChoiceCtrlEntry
                             }
 
 public:
-                            SvxIconChoiceCtrlEntry( USHORT nFlags = 0 );
-                            SvxIconChoiceCtrlEntry( const String& rText, const Image& rImage, USHORT nFlags = 0 );
-                            SvxIconChoiceCtrlEntry( const String& rText, const Image& rImage, const Image& rImageHC, USHORT nFlags = 0 );
+                            SvxIconChoiceCtrlEntry( sal_uInt16 nFlags = 0 );
+                            SvxIconChoiceCtrlEntry( const String& rText, const Image& rImage, sal_uInt16 nFlags = 0 );
+                            SvxIconChoiceCtrlEntry( const String& rText, const Image& rImage, const Image& rImageHC, sal_uInt16 nFlags = 0 );
                             ~SvxIconChoiceCtrlEntry () {}
 
     void                    SetImage ( const Image& rImage ) { aImage = rImage; }
@@ -139,21 +139,21 @@ public:
 
     const Rectangle &       GetBoundRect() const { return aRect; }
 
-    void                    SetFocus ( BOOL bSet )
+    void                    SetFocus ( sal_Bool bSet )
                                      { nFlags = ( bSet ? nFlags | ICNVIEW_FLAG_FOCUSED : nFlags & ~ICNVIEW_FLAG_FOCUSED ); }
 
     SvxIconChoiceCtrlTextMode       GetTextMode() const { return eTextMode; }
-    USHORT                  GetFlags() const { return nFlags; }
-    BOOL                    IsSelected() const { return (BOOL)((nFlags & ICNVIEW_FLAG_SELECTED) !=0); }
-    BOOL                    IsFocused() const { return (BOOL)((nFlags & ICNVIEW_FLAG_FOCUSED) !=0); }
-    BOOL                    IsInUse() const { return (BOOL)((nFlags & ICNVIEW_FLAG_IN_USE) !=0); }
-    BOOL                    IsCursored() const { return (BOOL)((nFlags & ICNVIEW_FLAG_CURSORED) !=0); }
-    BOOL                    IsDropTarget() const { return (BOOL)((nFlags & ICNVIEW_FLAG_DROP_TARGET) !=0); }
-    BOOL                    IsBlockingEmphasis() const { return (BOOL)((nFlags & ICNVIEW_FLAG_BLOCK_EMPHASIS) !=0); }
-    BOOL                    WasMoved() const { return (BOOL)((nFlags & ICNVIEW_FLAG_POS_MOVED) !=0); }
-    void                    SetMoved( BOOL bMoved );
-    BOOL                    IsPosLocked() const { return (BOOL)((nFlags & ICNVIEW_FLAG_POS_LOCKED) !=0); }
-    void                    LockPos( BOOL bLock );
+    sal_uInt16                  GetFlags() const { return nFlags; }
+    sal_Bool                    IsSelected() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_SELECTED) !=0); }
+    sal_Bool                    IsFocused() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_FOCUSED) !=0); }
+    sal_Bool                    IsInUse() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_IN_USE) !=0); }
+    sal_Bool                    IsCursored() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_CURSORED) !=0); }
+    sal_Bool                    IsDropTarget() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_DROP_TARGET) !=0); }
+    sal_Bool                    IsBlockingEmphasis() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_BLOCK_EMPHASIS) !=0); }
+    sal_Bool                    WasMoved() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_POS_MOVED) !=0); }
+    void                    SetMoved( sal_Bool bMoved );
+    sal_Bool                    IsPosLocked() const { return (sal_Bool)((nFlags & ICNVIEW_FLAG_POS_LOCKED) !=0); }
+    void                    LockPos( sal_Bool bLock );
     // Nur bei AutoArrange gesetzt. Den Kopf der Liste gibts per SvxIconChoiceCtrl::GetPredecessorHead
     SvxIconChoiceCtrlEntry*         GetSuccessor() const { return pflink; }
     SvxIconChoiceCtrlEntry*         GetPredecessor() const { return pblink; }
@@ -174,10 +174,10 @@ class SvxIconChoiceCtrlColumnInfo
     Image                   aColImage;
     long                    nWidth;
     SvxIconChoiceCtrlColumnAlign    eAlignment;
-    USHORT                  nSubItem;
+    sal_uInt16                  nSubItem;
 
 public:
-                            SvxIconChoiceCtrlColumnInfo( USHORT nSub, long nWd,
+                            SvxIconChoiceCtrlColumnInfo( sal_uInt16 nSub, long nWd,
                                 SvxIconChoiceCtrlColumnAlign eAlign ) :
                                 nWidth( nWd ), eAlignment( eAlign ), nSubItem( nSub ) {}
                             SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtrlColumnInfo& );
@@ -186,13 +186,13 @@ public:
     void                    SetImage( const Image& rImg ) { aColImage = rImg; }
     void                    SetWidth( long nWd ) { nWidth = nWd; }
     void                    SetAlignment( SvxIconChoiceCtrlColumnAlign eAlign ) { eAlignment = eAlign; }
-    void                    SetSubItem( USHORT nSub) { nSubItem = nSub; }
+    void                    SetSubItem( sal_uInt16 nSub) { nSubItem = nSub; }
 
     const String&           GetText() const { return aColText; }
     const Image&            GetImage() const { return aColImage; }
     long                    GetWidth() const { return nWidth; }
     SvxIconChoiceCtrlColumnAlign    GetAlignment() const { return eAlignment; }
-    USHORT                  GetSubItem() const { return nSubItem; }
+    sal_uInt16                  GetSubItem() const { return nSubItem; }
 };
 
 //###################################################################################################################################
@@ -241,15 +241,15 @@ class SVT_DLLPUBLIC SvtIconChoiceCtrl : public Control
     Link                    _aVisRectChangedHdl;
     KeyEvent*               _pCurKeyEvent;
     SvxIconChoiceCtrl_Impl* _pImp;
-    BOOL                    _bAutoFontColor;
+    sal_Bool                    _bAutoFontColor;
 
 protected:
 
     virtual void        KeyInput( const KeyEvent& rKEvt );
-    virtual BOOL        EditedEntry( SvxIconChoiceCtrlEntry*, const XubString& rNewText, BOOL bCancelled );
+    virtual sal_Bool        EditedEntry( SvxIconChoiceCtrlEntry*, const XubString& rNewText, sal_Bool bCancelled );
     virtual void        DocumentRectChanged();
     virtual void        VisibleRectChanged();
-    virtual BOOL        EditingEntry( SvxIconChoiceCtrlEntry* pEntry );
+    virtual sal_Bool        EditingEntry( SvxIconChoiceCtrlEntry* pEntry );
     virtual void        Command( const CommandEvent& rCEvt );
     virtual void        Paint( const Rectangle& rRect );
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );
@@ -269,11 +269,11 @@ protected:
 
     virtual String      GetEntryText(
                             SvxIconChoiceCtrlEntry* pEntry,
-                            BOOL bInplaceEdit );
+                            sal_Bool bInplaceEdit );
 
     virtual void        FillLayoutData() const;
 
-    void                CallImplEventListeners(ULONG nEvent, void* pData);
+    void                CallImplEventListeners(sal_uLong nEvent, void* pData);
 
 public:
 
@@ -284,9 +284,9 @@ public:
     void                SetStyle( WinBits nWinStyle );
     WinBits             GetStyle() const;
 
-    BOOL                SetChoiceWithCursor ( BOOL bDo = TRUE );
+    sal_Bool                SetChoiceWithCursor ( sal_Bool bDo = sal_True );
 
-    void                SetUpdateMode( BOOL bUpdateMode );
+    void                SetUpdateMode( sal_Bool bUpdateMode );
     void                SetFont( const Font& rFont );
     void                SetPointFont( const Font& rFont );
 
@@ -299,17 +299,17 @@ public:
     void                ArrangeIcons();
 
 
-    SvxIconChoiceCtrlEntry* InsertEntry( ULONG nPos = LIST_APPEND,
+    SvxIconChoiceCtrlEntry* InsertEntry( sal_uLong nPos = LIST_APPEND,
                                      const Point* pPos = 0,
-                                     USHORT nFlags = 0 );
+                                     sal_uInt16 nFlags = 0 );
     SvxIconChoiceCtrlEntry* InsertEntry( const String& rText, const Image& rImage,
-                                     ULONG nPos = LIST_APPEND,
+                                     sal_uLong nPos = LIST_APPEND,
                                      const Point* pPos = 0,
-                                     USHORT nFlags = 0 );
+                                     sal_uInt16 nFlags = 0 );
     SvxIconChoiceCtrlEntry* InsertEntry( const String& rText, const Image& rImage, const Image& rImageHC,
-                                     ULONG nPos = LIST_APPEND,
+                                     sal_uLong nPos = LIST_APPEND,
                                      const Point* pPos = 0,
-                                     USHORT nFlags = 0 );
+                                     sal_uInt16 nFlags = 0 );
 
     /** creates automatic mnemonics for all icon texts in the control
     */
@@ -326,14 +326,14 @@ public:
 
     void                RemoveEntry( SvxIconChoiceCtrlEntry* pEntry );
 
-    BOOL                DoKeyInput( const KeyEvent& rKEvt );
+    sal_Bool                DoKeyInput( const KeyEvent& rKEvt );
 
-    BOOL                IsEntryEditing() const;
+    sal_Bool                IsEntryEditing() const;
     void                Clear();
 
-    ULONG                   GetEntryCount() const;
-    SvxIconChoiceCtrlEntry* GetEntry( ULONG nPos ) const;
-    ULONG                   GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const;
+    sal_uLong                   GetEntryCount() const;
+    SvxIconChoiceCtrlEntry* GetEntry( sal_uLong nPos ) const;
+    sal_uLong                   GetEntryListPos( SvxIconChoiceCtrlEntry* pEntry ) const;
     using Window::SetCursor;
     void                    SetCursor( SvxIconChoiceCtrlEntry* pEntry );
     SvxIconChoiceCtrlEntry* GetCursor() const;
@@ -341,16 +341,16 @@ public:
     // Neu-Berechnung gecachter View-Daten und Invalidierung im Fenster
     void                    InvalidateEntry( SvxIconChoiceCtrlEntry* pEntry );
 
-    // bHit==FALSE: Eintrag gilt als getroffen, wenn Position im BoundRect liegt
-    //     ==TRUE : Bitmap oder Text muss getroffen sein
-    SvxIconChoiceCtrlEntry* GetEntry( const Point& rPosPixel, BOOL bHit = FALSE ) const;
+    // bHit==sal_False: Eintrag gilt als getroffen, wenn Position im BoundRect liegt
+    //     ==sal_True : Bitmap oder Text muss getroffen sein
+    SvxIconChoiceCtrlEntry* GetEntry( const Point& rPosPixel, sal_Bool bHit = sal_False ) const;
     // Gibt den naechsten ueber pCurEntry liegenden Eintrag (ZOrder)
-    SvxIconChoiceCtrlEntry* GetNextEntry( const Point& rPosPixel, SvxIconChoiceCtrlEntry* pCurEntry, BOOL  ) const;
+    SvxIconChoiceCtrlEntry* GetNextEntry( const Point& rPosPixel, SvxIconChoiceCtrlEntry* pCurEntry, sal_Bool  ) const;
     // Gibt den naechsten unter pCurEntry liegenden Eintrag (ZOrder)
-    SvxIconChoiceCtrlEntry* GetPrevEntry( const Point& rPosPixel, SvxIconChoiceCtrlEntry* pCurEntry, BOOL  ) const;
+    SvxIconChoiceCtrlEntry* GetPrevEntry( const Point& rPosPixel, SvxIconChoiceCtrlEntry* pCurEntry, sal_Bool  ) const;
 
-    // in dem ULONG wird die Position in der Liste des gefunden Eintrags zurueckgegeben
-    SvxIconChoiceCtrlEntry* GetSelectedEntry( ULONG& rPos ) const;
+    // in dem sal_uLong wird die Position in der Liste des gefunden Eintrags zurueckgegeben
+    SvxIconChoiceCtrlEntry* GetSelectedEntry( sal_uLong& rPos ) const;
 
     void                        SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, SvxIconChoiceCtrlEntry* pEntry = 0 );
     SvxIconChoiceCtrlTextMode   GetEntryTextMode( const SvxIconChoiceCtrlEntry* pEntry = 0 ) const;
@@ -360,19 +360,19 @@ public:
     void                Flush();
 
 
-    virtual BOOL        HasBackground() const;
-    virtual BOOL        HasFont() const;
-    virtual BOOL        HasFontTextColor() const;
-    virtual BOOL        HasFontFillColor() const;
+    virtual sal_Bool        HasBackground() const;
+    virtual sal_Bool        HasFont() const;
+    virtual sal_Bool        HasFontTextColor() const;
+    virtual sal_Bool        HasFontFillColor() const;
 
-    void                SetFontColorToBackground ( BOOL bDo = TRUE ) { _bAutoFontColor = bDo; }
-    BOOL                AutoFontColor () { return _bAutoFontColor; }
+    void                SetFontColorToBackground ( sal_Bool bDo = sal_True ) { _bAutoFontColor = bDo; }
+    sal_Bool                AutoFontColor () { return _bAutoFontColor; }
 
     Point               GetLogicPos( const Point& rPosPixel ) const;
     Point               GetPixelPos( const Point& rPosLogic ) const;
     void                SetSelectionMode( SelectionMode eMode );
 
-    BOOL                HandleShortCutKey( const KeyEvent& rKeyEvent );
+    sal_Bool                HandleShortCutKey( const KeyEvent& rKeyEvent );
 
     Rectangle           GetBoundingBox( SvxIconChoiceCtrlEntry* pEntry ) const;
     Rectangle           GetEntryCharacterBounds( const sal_Int32 _nEntryPos, const sal_Int32 _nCharacterIndex ) const;

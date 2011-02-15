@@ -38,8 +38,8 @@ private:
     ByteString sGID;
     ByteString sLID;
 
-    BOOL bError;
-    BOOL bText;
+    sal_Bool bError;
+    sal_Bool bText;
 
     bool sLocalized;
 
@@ -74,8 +74,8 @@ public:
 
     int Execute( int nToken, char * pToken );
 
-    void SetError( BOOL bErr = TRUE ) { bError = bErr; }
-    BOOL GetError() { return bError; }
+    void SetError( sal_Bool bErr = sal_True ) { bError = bErr; }
+    sal_Bool GetError() { return bError; }
 };
 
 //

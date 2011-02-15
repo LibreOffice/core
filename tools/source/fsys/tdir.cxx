@@ -48,7 +48,7 @@ DECLARE_LIST( DirEntryList, DirEntry* )
 DECLARE_LIST( FSysSortList, FSysSort* )
 DECLARE_LIST( FileStatList, FileStat* )
 
-#define APPEND (USHORT) 65535
+#define APPEND (sal_uInt16) 65535
 
 /*************************************************************************
 |*
@@ -60,9 +60,9 @@ DECLARE_LIST( FileStatList, FileStat* )
 |*
 *************************************************************************/
 
-BOOL Dir::ImpInsertPointReached( const DirEntry& rNewEntry,
+sal_Bool Dir::ImpInsertPointReached( const DirEntry& rNewEntry,
                                  const FileStat& rNewStat,
-                                 ULONG nCurPos, ULONG nSortIndex ) const
+                                 sal_uIntPtr nCurPos, sal_uIntPtr nSortIndex ) const
 {
 #define VALUE( nKindFlags ) \
     ( ( FSYS_KIND_FILE | FSYS_KIND_DIR | FSYS_KIND_DEV | \
@@ -70,7 +70,7 @@ BOOL Dir::ImpInsertPointReached( const DirEntry& rNewEntry,
 
     // einfache Dinge erfordern einfache Loesungen
     if ( !pLst->Count() )
-        return TRUE;
+        return sal_True;
 
     FSysSort  nSort      = *( pSortLst->GetObject( nSortIndex ) );
     FileStat *pOldStat   = NULL;
@@ -83,121 +83,121 @@ BOOL Dir::ImpInsertPointReached( const DirEntry& rNewEntry,
         case  FSYS_SORT_NAME:
         case (FSYS_SORT_NAME | FSYS_SORT_ASCENDING):
             if ( pCurLstObj->aName > rNewEntry.aName )
-                return TRUE;
+                return sal_True;
             if ( !(pCurLstObj->aName == rNewEntry.aName) )
-                return FALSE;
+                return sal_False;
             break;
         case (FSYS_SORT_NAME | FSYS_SORT_DESCENDING):
             if ( pCurLstObj->aName < rNewEntry.aName )
-                return TRUE;
+                return sal_True;
             if ( !(pCurLstObj->aName == rNewEntry.aName) )
-                return FALSE;
+                return sal_False;
             break;
 
         case  FSYS_SORT_EXT:
         case (FSYS_SORT_EXT | FSYS_SORT_ASCENDING):
         {
             if ( pCurLstObj->GetExtension() > rNewEntry.GetExtension() )
-                return TRUE;
+                return sal_True;
             if ( !(pCurLstObj->GetExtension() == rNewEntry.GetExtension()) )
-                return FALSE;
+                return sal_False;
             break;
         }
         case (FSYS_SORT_EXT | FSYS_SORT_DESCENDING):
         {
             if ( pCurLstObj->GetExtension() < rNewEntry.GetExtension() )
-                return TRUE;
+                return sal_True;
             if ( !(pCurLstObj->GetExtension() == rNewEntry.GetExtension()) )
-                return FALSE;
+                return sal_False;
             break;
         }
 
         case  FSYS_SORT_KIND:
         case (FSYS_SORT_KIND | FSYS_SORT_ASCENDING ):
             if ( VALUE(pOldStat->nKindFlags) > VALUE(rNewStat.nKindFlags) )
-                return TRUE;
+                return sal_True;
             if ( !(VALUE(pOldStat->nKindFlags) == VALUE(rNewStat.nKindFlags)) )
-                return FALSE;
+                return sal_False;
             break;
         case (FSYS_SORT_KIND | FSYS_SORT_DESCENDING):
             if ( VALUE(pOldStat->nKindFlags) < VALUE(rNewStat.nKindFlags) )
-                return TRUE;
+                return sal_True;
             if ( !(VALUE(pOldStat->nKindFlags) == VALUE(rNewStat.nKindFlags)) )
-                return FALSE;
+                return sal_False;
             break;
 
         case  FSYS_SORT_SIZE:
         case (FSYS_SORT_SIZE | FSYS_SORT_ASCENDING):
             if ( pOldStat->nSize > rNewStat.nSize )
-                return TRUE;
+                return sal_True;
             if ( !(pOldStat->nSize == rNewStat.nSize) )
-                return FALSE;
+                return sal_False;
             break;
         case (FSYS_SORT_SIZE | FSYS_SORT_DESCENDING):
             if ( pOldStat->nSize < rNewStat.nSize )
-                return TRUE;
+                return sal_True;
             if ( !(pOldStat->nSize == rNewStat.nSize) )
-                return FALSE;
+                return sal_False;
             break;
 
         case  FSYS_SORT_MODIFYED:
         case (FSYS_SORT_MODIFYED | FSYS_SORT_ASCENDING):
             if ( (pOldStat->aDateModified >= rNewStat.aDateModified) &&
                  (pOldStat->aTimeModified >  rNewStat.aTimeModified) )
-                 return TRUE;
+                 return sal_True;
             if ( !((pOldStat->aDateModified == rNewStat.aDateModified) &&
                    (pOldStat->aTimeModified == rNewStat.aTimeModified)) )
-                return FALSE;
+                return sal_False;
             break;
         case (FSYS_SORT_MODIFYED | FSYS_SORT_DESCENDING):
             if ( (pOldStat->aDateModified <= rNewStat.aDateModified) &&
                  (pOldStat->aTimeModified <  rNewStat.aTimeModified) )
-                 return TRUE;
+                 return sal_True;
             if ( !((pOldStat->aDateModified == rNewStat.aDateModified) &&
                    (pOldStat->aTimeModified == rNewStat.aTimeModified)) )
-                return FALSE;
+                return sal_False;
             break;
 
         case  FSYS_SORT_CREATED:
         case (FSYS_SORT_CREATED | FSYS_SORT_ASCENDING):
             if ( (pOldStat->aDateCreated >= rNewStat.aDateCreated) &&
                  (pOldStat->aTimeCreated >  rNewStat.aTimeCreated) )
-                 return TRUE;
+                 return sal_True;
             if ( !((pOldStat->aDateCreated == rNewStat.aDateCreated) &&
                    (pOldStat->aTimeCreated == rNewStat.aTimeCreated)) )
-                return FALSE;
+                return sal_False;
             break;
         case (FSYS_SORT_CREATED | FSYS_SORT_DESCENDING):
             if ( (pOldStat->aDateCreated <= rNewStat.aDateCreated) &&
                  (pOldStat->aTimeCreated <  rNewStat.aTimeCreated) )
-                 return TRUE;
+                 return sal_True;
             if ( !((pOldStat->aDateCreated == rNewStat.aDateCreated) &&
                    (pOldStat->aTimeCreated == rNewStat.aTimeCreated)) )
-                return FALSE;
+                return sal_False;
             break;
 
         case  FSYS_SORT_ACCESSED:
         case (FSYS_SORT_ACCESSED | FSYS_SORT_ASCENDING):
             if ( (pOldStat->aDateAccessed >= rNewStat.aDateAccessed) &&
                  (pOldStat->aTimeAccessed >  rNewStat.aTimeAccessed) )
-                 return TRUE;
+                 return sal_True;
             if ( !((pOldStat->aDateAccessed == rNewStat.aDateAccessed) &&
                    (pOldStat->aTimeAccessed == rNewStat.aTimeAccessed)) )
-                return FALSE;
+                return sal_False;
             break;
         case (FSYS_SORT_ACCESSED | FSYS_SORT_DESCENDING):
             if ( (pOldStat->aDateAccessed <= rNewStat.aDateAccessed) &&
                  (pOldStat->aTimeAccessed <  rNewStat.aTimeAccessed) )
-                 return TRUE;
+                 return sal_True;
             if ( !((pOldStat->aDateAccessed == rNewStat.aDateAccessed) &&
                    (pOldStat->aTimeAccessed == rNewStat.aTimeAccessed)) )
-                return FALSE;
+                return sal_False;
             break;
         default: /* Kann nicht sein */;
     }
 
     if ( nSortIndex == ( pSortLst->Count() - 1 ) )
-        return TRUE;
+        return sal_True;
     else
         //Rekursion
         return ImpInsertPointReached( rNewEntry, rNewStat,
@@ -226,7 +226,7 @@ void Dir::ImpSortedInsert( const DirEntry *pNewEntry, const FileStat *pNewStat )
     pLst->First();
     do {
         if ( ImpInsertPointReached( *pNewEntry, *pNewStat, pLst->GetCurPos(),
-                                    (ULONG)0  ) )
+                                    (sal_uIntPtr)0  ) )
         {
             if ( pStatLst )
                 pStatLst->Insert( (FileStat*)pNewStat, pLst->GetCurPos() );
@@ -285,7 +285,7 @@ void Dir::Construct( DirEntryKind nKindFlags )
 |*
 *************************************************************************/
 
-BOOL Dir::Update()
+sal_Bool Dir::Update()
 {
     Reset();
     return Scan( USHRT_MAX ) > 0;
@@ -377,10 +377,10 @@ void Dir::Reset()
 |*
 *************************************************************************/
 
-USHORT Dir::Scan( USHORT nCount )
+sal_uInt16 Dir::Scan( sal_uInt16 nCount )
 {
 
-    USHORT nRead = 0; // Anzahl in dieser Runde gelesener Eintr"age
+    sal_uInt16 nRead = 0; // Anzahl in dieser Runde gelesener Eintr"age
     FSysFailOnErrorImpl();
 
     // noch nicht fertig gewesen
@@ -390,7 +390,7 @@ USHORT Dir::Scan( USHORT nCount )
         if ( !pLst->Count() )
         {
             // dann ggf. Laufwerke scannen
-            pReader->bInUse = TRUE;
+            pReader->bInUse = sal_True;
             nRead = pReader->Init();
         }
 
@@ -548,7 +548,7 @@ Dir::~Dir()
 
 FSysError Dir::ImpSetSort( std::va_list pArgs, int nFirstSort )
 {
-    BOOL             bLast;
+    sal_Bool             bLast;
     FSysSort        *pSort;
     FSysSortList    *pNewSortLst = new FSysSortList;
 
@@ -559,8 +559,8 @@ FSysError Dir::ImpSetSort( std::va_list pArgs, int nFirstSort )
         bLast = FSYS_SORT_END == (*pSort & FSYS_SORT_END);
         *pSort &= ~FSYS_SORT_END;
 
-        FSysSort nSort = *pSort & ~(USHORT)FSYS_SORT_ASCENDING
-                              &  ~(USHORT)FSYS_SORT_DESCENDING;
+        FSysSort nSort = *pSort & ~(sal_uInt16)FSYS_SORT_ASCENDING
+                              &  ~(sal_uInt16)FSYS_SORT_DESCENDING;
 
         // g"utliges Sortierkriterium?
         if ( ( nSort ==  FSYS_SORT_NAME ) ||
@@ -692,7 +692,7 @@ FSysError Dir::SetSort( FSysSort nSort, ... )
 |*
 *************************************************************************/
 
-DirEntry& Dir::operator[] ( USHORT nIndex ) const
+DirEntry& Dir::operator[] ( sal_uInt16 nIndex ) const
 {
     DBG_ASSERT( nIndex < Count(), "Dir::operator[] : nIndex > Count()" );
 
@@ -722,18 +722,18 @@ Dir& Dir::operator+=( const Dir& rDir )
         pLst = new DirEntryList();
 
     //Verlangen die Sortierkriterien FileStat's?
-    BOOL bStat = FALSE;
+    sal_Bool bStat = sal_False;
     if ( pSortLst ) {
         pSortLst->First();
         do {
             if ( *(pSortLst->GetCurObject()) &
                   ( FSYS_SORT_CREATED | FSYS_SORT_MODIFYED | FSYS_SORT_SIZE |
                     FSYS_SORT_ACCESSED | FSYS_SORT_KIND ) )
-                bStat = TRUE;
+                bStat = sal_True;
         } while ( !bStat && pSortLst->Next() );
     }
     FileStat * stat = NULL;
-    for ( USHORT nNr = 0; nNr < rDir.Count(); nNr++ )
+    for ( sal_uInt16 nNr = 0; nNr < rDir.Count(); nNr++ )
     {
         if ( bStat )
         {
@@ -758,11 +758,11 @@ Dir& Dir::operator+=( const Dir& rDir )
 *************************************************************************/
 
 
-USHORT Dir::Count( BOOL bUpdated ) const
+sal_uInt16 Dir::Count( sal_Bool bUpdated ) const
 {
     // ggf. erst den Rest lesen
     if ( bUpdated && pReader )
         ((Dir*)this)->Scan( USHRT_MAX );
 
-    return pLst == NULL ? 0 : (USHORT) pLst->Count();
+    return pLst == NULL ? 0 : (sal_uInt16) pLst->Count();
 }

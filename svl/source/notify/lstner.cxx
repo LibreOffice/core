@@ -61,7 +61,7 @@ SfxListener::SfxListener( const SfxListener &rListener )
 {
     DBG_CTOR(SfxListener, 0);
 
-    for ( USHORT n = 0; n < rListener.aBCs.Count(); ++n )
+    for ( sal_uInt16 n = 0; n < rListener.aBCs.Count(); ++n )
         StartListening( *rListener.aBCs[n] );
 }
 //--------------------------------------------------------------------
@@ -73,7 +73,7 @@ SfxListener::~SfxListener()
     DBG_DTOR(SfxListener, 0);
 
     // unregister at all remainding broadcasters
-    for ( USHORT nPos = 0; nPos < aBCs.Count(); ++nPos )
+    for ( sal_uInt16 nPos = 0; nPos < aBCs.Count(); ++nPos )
     {
         SfxBroadcaster *pBC = aBCs[nPos];
         pBC->RemoveListener(*this);
@@ -96,7 +96,7 @@ void SfxListener::RemoveBroadcaster_Impl( SfxBroadcaster& rBC )
 
 // registeres at a specific SfxBroadcaster
 
-BOOL SfxListener::StartListening( SfxBroadcaster& rBroadcaster, BOOL bPreventDups )
+sal_Bool SfxListener::StartListening( SfxBroadcaster& rBroadcaster, sal_Bool bPreventDups )
 {
     DBG_CHKTHIS(SfxListener, 0);
 
@@ -108,23 +108,23 @@ BOOL SfxListener::StartListening( SfxBroadcaster& rBroadcaster, BOOL bPreventDup
             aBCs.Insert( pBC, aBCs.Count() );
 
             DBG_ASSERT( IsListening(rBroadcaster), "StartListening failed" );
-            return TRUE;
+            return sal_True;
         }
 
     }
-    return FALSE;
+    return sal_False;
 }
 
 //--------------------------------------------------------------------
 
 // unregisteres at a specific SfxBroadcaster
 
-BOOL SfxListener::EndListening( SfxBroadcaster& rBroadcaster, BOOL bAllDups )
+sal_Bool SfxListener::EndListening( SfxBroadcaster& rBroadcaster, sal_Bool bAllDups )
 {
     DBG_CHKTHIS(SfxListener, 0);
 
     if ( !IsListening( rBroadcaster ) )
-        return FALSE;
+        return sal_False;
 
     do
     {
@@ -133,14 +133,14 @@ BOOL SfxListener::EndListening( SfxBroadcaster& rBroadcaster, BOOL bAllDups )
         aBCs.Remove( aBCs.GetPos(pBC), 1 );
     }
     while ( bAllDups && IsListening( rBroadcaster ) );
-    return TRUE;
+    return sal_True;
 }
 
 //--------------------------------------------------------------------
 
 // unregisteres at a specific SfxBroadcaster by index
 
-void SfxListener::EndListening( USHORT nNo )
+void SfxListener::EndListening( sal_uInt16 nNo )
 {
     DBG_CHKTHIS(SfxListener, 0);
 
@@ -168,7 +168,7 @@ void SfxListener::EndListeningAll()
 
 //--------------------------------------------------------------------
 
-BOOL SfxListener::IsListening( SfxBroadcaster& rBroadcaster ) const
+sal_Bool SfxListener::IsListening( SfxBroadcaster& rBroadcaster ) const
 {
     const SfxBroadcaster *pBC = &rBroadcaster;
     return USHRT_MAX != aBCs.GetPos( pBC );

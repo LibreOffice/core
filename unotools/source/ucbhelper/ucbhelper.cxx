@@ -366,10 +366,10 @@ Sequence < OUString > UCBContentHelper::GetFolderContents( const String& rFolder
 
     if ( pFiles )
     {
-        ULONG nCount = pFiles->Count();
+        sal_uLong nCount = pFiles->Count();
         Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
-        for ( ULONG i = 0; i < nCount; ++i )
+        for ( sal_uLong i = 0; i < nCount; ++i )
         {
             OUString* pFile = pFiles->GetObject(i);
             pRet[i] = *( pFile );
@@ -447,10 +447,10 @@ Sequence < OUString > UCBContentHelper::GetResultSet( const String& rURL )
 
     if ( pList )
     {
-        ULONG nCount = pList->Count();
+        sal_uLong nCount = pList->Count();
         Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
-        for ( ULONG i = 0; i < nCount; ++i )
+        for ( sal_uLong i = 0; i < nCount; ++i )
         {
             OUString* pEntry = pList->GetObject(i);
             pRet[i] = *( pEntry );
@@ -626,9 +626,9 @@ sal_Bool UCBContentHelper::HasParentFolder( const String& rFolder )
 
 // -----------------------------------------------------------------------
 
-ULONG UCBContentHelper::GetSize( const String& rContent )
+sal_uLong UCBContentHelper::GetSize( const String& rContent )
 {
-    ULONG nSize = 0;
+    sal_uLong nSize = 0;
     sal_Int64 nTemp = 0;
     INetURLObject aObj( rContent );
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
@@ -643,7 +643,7 @@ ULONG UCBContentHelper::GetSize( const String& rContent )
     catch( ::com::sun::star::uno::Exception& )
     {
     }
-    nSize = (UINT32)nTemp;
+    nSize = (sal_uInt32)nTemp;
     return nSize;
 }
 
@@ -679,9 +679,9 @@ sal_Bool UCBContentHelper::IsYounger( const String& rIsYoung, const String& rIsO
 }
 
 // -----------------------------------------------------------------------
-sal_Bool UCBContentHelper::Find( const String& rFolder, const String& rName, String& rFile, BOOL bAllowWildCards )
+sal_Bool UCBContentHelper::Find( const String& rFolder, const String& rName, String& rFile, sal_Bool bAllowWildCards )
 {
-    BOOL bWild = bAllowWildCards && ( rName.Search( '*' ) != STRING_NOTFOUND || rName.Search( '?' ) != STRING_NOTFOUND );
+    sal_Bool bWild = bAllowWildCards && ( rName.Search( '*' ) != STRING_NOTFOUND || rName.Search( '?' ) != STRING_NOTFOUND );
 
     sal_Bool bRet = sal_False;
 
@@ -689,7 +689,7 @@ sal_Bool UCBContentHelper::Find( const String& rFolder, const String& rName, Str
     Sequence< ::rtl::OUString > aFiles = GetFolderContents( rFolder, sal_False );
 
     const ::rtl::OUString* pFiles  = aFiles.getConstArray();
-    UINT32 i, nCount = aFiles.getLength();
+    sal_uInt32 i, nCount = aFiles.getLength();
     for ( i = 0; i < nCount; ++i )
     {
         // get the last name of the URLs and compare it with rName
@@ -740,7 +740,7 @@ sal_Bool UCBContentHelper::Exists( const String& rURL )
     Sequence< ::rtl::OUString > aFiles = GetFolderContents( aObj.GetMainURL( INetURLObject::NO_DECODE ), sal_True, sal_False );
 
     const ::rtl::OUString* pFiles  = aFiles.getConstArray();
-    UINT32 i, nCount = aFiles.getLength();
+    sal_uInt32 i, nCount = aFiles.getLength();
     for ( i = 0; i < nCount; ++i )
     {
         // get the last name of the URLs and compare it with rName
@@ -759,18 +759,18 @@ sal_Bool UCBContentHelper::Exists( const String& rURL )
 }
 
 // -----------------------------------------------------------------------
-sal_Bool UCBContentHelper::FindInPath( const String& rPath, const String& rName, String& rFile, char cDelim, BOOL bAllowWildCards )
+sal_Bool UCBContentHelper::FindInPath( const String& rPath, const String& rName, String& rFile, char cDelim, sal_Bool bAllowWildCards )
 {
     // extract the single folder names from the path variable and try to find the file in one of these folders
-    USHORT nTokenCount = rPath.GetTokenCount( cDelim );
-    for ( USHORT nToken = 0; nToken < nTokenCount; ++nToken )
+    sal_uInt16 nTokenCount = rPath.GetTokenCount( cDelim );
+    for ( sal_uInt16 nToken = 0; nToken < nTokenCount; ++nToken )
     {
         String aPath = rPath.GetToken( nToken, cDelim );
         if ( Find( aPath, rName, rFile, bAllowWildCards ) )
-            return TRUE;
+            return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------

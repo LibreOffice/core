@@ -124,7 +124,7 @@ void DeleteOnIdleItems()
      = ImpSvtData::GetSvtData().pItemDesruptList;
     if ( rpList )
     {
-        USHORT n;
+        sal_uInt16 n;
         while ( 0 != ( n = rpList->Count() ) )
             // Remove ist implizit im Dtor
             delete rpList->GetObject( n-1 );

@@ -48,17 +48,17 @@ class X11SalVirtualDevice : public SalVirtualDevice
 
     int             nDX_;
     int             nDY_;
-    USHORT          nDepth_;
-    BOOL            bGraphics_;         // is Graphics used
-    BOOL            bExternPixmap_;
+    sal_uInt16          nDepth_;
+    sal_Bool            bGraphics_;         // is Graphics used
+    sal_Bool            bExternPixmap_;
 
 public:
     X11SalVirtualDevice();
     virtual ~X11SalVirtualDevice();
 
-    BOOL            Init( SalDisplay *pDisplay,
+    sal_Bool            Init( SalDisplay *pDisplay,
                           long nDX, long nDY,
-                          USHORT nBitCount,
+                          sal_uInt16 nBitCount,
                           int nScreen,
                           Pixmap hDrawable = None,
                           void* pRenderFormat = NULL );
@@ -66,9 +66,9 @@ public:
 
     inline  Display        *GetXDisplay() const;
     inline  SalDisplay     *GetDisplay() const;
-    inline  BOOL            IsDisplay() const;
+    inline  sal_Bool            IsDisplay() const;
     inline  Pixmap          GetDrawable() const { return hDrawable_; }
-    inline  USHORT          GetDepth() const { return nDepth_; }
+    inline  sal_uInt16          GetDepth() const { return nDepth_; }
     int                     GetWidth() const { return nDX_; }
     int                     GetHeight() const { return nDY_; }
     int                     GetScreenNumber() const { return m_nScreen; }
@@ -77,7 +77,7 @@ public:
     virtual void            ReleaseGraphics( SalGraphics* pGraphics );
 
                             // Set new size, without saving the old contents
-    virtual BOOL            SetSize( long nNewDX, long nNewDY );
+    virtual sal_Bool            SetSize( long nNewDX, long nNewDY );
     virtual void            GetSize( long& rWidth, long& rHeight );
 };
 
@@ -92,7 +92,7 @@ inline Display *X11SalVirtualDevice::GetXDisplay() const
 inline SalDisplay *X11SalVirtualDevice::GetDisplay() const
 { return pDisplay_; }
 
-inline BOOL X11SalVirtualDevice::IsDisplay() const
+inline sal_Bool X11SalVirtualDevice::IsDisplay() const
 { return pDisplay_->IsDisplay(); }
 
 #endif

@@ -41,7 +41,7 @@ static void* aAppData[SHL_COUNT];
 |*
 ***************************************************************************/
 
-void** GetAppData( USHORT nSharedLib )
+void** GetAppData( sal_uInt16 nSharedLib )
 {
     return &(aAppData[nSharedLib]);
 }

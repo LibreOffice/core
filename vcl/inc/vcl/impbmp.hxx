@@ -49,8 +49,8 @@ class ImpBitmap
 {
 private:
 
-    ULONG               mnRefCount;
-    ULONG               mnChecksum;
+    sal_uLong               mnRefCount;
+    sal_uLong               mnChecksum;
     SalBitmap*          mpSalBitmap;
     Size                maSourceSize;
 
@@ -68,29 +68,29 @@ public:
 
 public:
 
-    BOOL                ImplCreate( const Size& rSize, USHORT nBitCount, const BitmapPalette& rPal );
-    BOOL                ImplCreate( const ImpBitmap& rImpBitmap );
-    BOOL                ImplCreate( const ImpBitmap& rImpBitmap, SalGraphics* pGraphics );
-    BOOL                ImplCreate( const ImpBitmap& rImpBitmap, USHORT nNewBitCount );
+    sal_Bool                ImplCreate( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal );
+    sal_Bool                ImplCreate( const ImpBitmap& rImpBitmap );
+    sal_Bool                ImplCreate( const ImpBitmap& rImpBitmap, SalGraphics* pGraphics );
+    sal_Bool                ImplCreate( const ImpBitmap& rImpBitmap, sal_uInt16 nNewBitCount );
 
     void                ImplDestroy();
 
     Size                ImplGetSize() const;
     Size                ImplGetSourceSize() const;
     void                ImplSetSourceSize( const Size&);
-    USHORT              ImplGetBitCount() const;
+    sal_uInt16              ImplGetBitCount() const;
 
-    BitmapBuffer*       ImplAcquireBuffer( BOOL bReadOnly );
-    void                ImplReleaseBuffer( BitmapBuffer* pBuffer, BOOL bReadOnly );
+    BitmapBuffer*       ImplAcquireBuffer( sal_Bool bReadOnly );
+    void                ImplReleaseBuffer( BitmapBuffer* pBuffer, sal_Bool bReadOnly );
 
 public:
 
-    ULONG               ImplGetRefCount() const { return mnRefCount; }
+    sal_uLong               ImplGetRefCount() const { return mnRefCount; }
     void                ImplIncRefCount() { mnRefCount++; }
     void                ImplDecRefCount() { mnRefCount--; }
 
-    inline void         ImplSetChecksum( ULONG nChecksum ) { mnChecksum = nChecksum; }
-    inline ULONG        ImplGetChecksum() const { return mnChecksum; }
+    inline void         ImplSetChecksum( sal_uLong nChecksum ) { mnChecksum = nChecksum; }
+    inline sal_uLong        ImplGetChecksum() const { return mnChecksum; }
 
 #endif // PRIVATE
 };

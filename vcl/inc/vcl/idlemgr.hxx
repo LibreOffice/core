@@ -47,7 +47,7 @@ public:
                     ImplIdleMgr();
                     ~ImplIdleMgr();
 
-    BOOL            InsertIdleHdl( const Link& rLink, USHORT nPriority );
+    sal_Bool            InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority );
     void            RemoveIdleHdl( const Link& rLink );
 
     void            RestartIdler()

@@ -105,7 +105,7 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
 }
 
 
--(unsigned int)draggingSourceOperationMaskForLocal: (MacOSBOOL)isLocal
+-(unsigned int)draggingSourceOperationMaskForLocal: (BOOL)isLocal
 {
   return mDragSource->getSupportedDragOperations(isLocal);
 }

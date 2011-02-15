@@ -74,12 +74,12 @@ void ImplWriteRect( SvStream& rOStm, const Rectangle& rRect )
 
 void ImplReadPoly( SvStream& rIStm, Polygon& rPoly )
 {
-    INT32   nSize;
+    sal_Int32   nSize;
 
     rIStm >> nSize;
-    rPoly = Polygon( (USHORT) nSize );
+    rPoly = Polygon( (sal_uInt16) nSize );
 
-    for( USHORT i = 0; i < (USHORT) nSize; i++ )
+    for( sal_uInt16 i = 0; i < (sal_uInt16) nSize; i++ )
         rIStm >> rPoly[ i ];
 }
 
@@ -88,11 +88,11 @@ void ImplReadPoly( SvStream& rIStm, Polygon& rPoly )
 void ImplReadPolyPoly( SvStream& rIStm, PolyPolygon& rPolyPoly )
 {
     Polygon aPoly;
-    INT32   nPolyCount;
+    sal_Int32   nPolyCount;
 
     rIStm >> nPolyCount;
 
-    for( USHORT i = 0; i < (USHORT) nPolyCount; i++ )
+    for( sal_uInt16 i = 0; i < (sal_uInt16) nPolyCount; i++ )
     {
         ImplReadPoly( rIStm, aPoly );
         rPolyPoly.Insert( aPoly );
@@ -103,16 +103,16 @@ void ImplReadPolyPoly( SvStream& rIStm, PolyPolygon& rPolyPoly )
 
 void ImplWritePolyPolyAction( SvStream& rOStm, const PolyPolygon& rPolyPoly )
 {
-    const USHORT    nPoly = rPolyPoly.Count();
-    USHORT          nPoints = 0;
-    USHORT          n;
+    const sal_uInt16    nPoly = rPolyPoly.Count();
+    sal_uInt16          nPoints = 0;
+    sal_uInt16          n;
 
     for( n = 0; n < nPoly; n++ )
-        nPoints = sal::static_int_cast<USHORT>(nPoints + rPolyPoly[ n ].GetSize());
+        nPoints = sal::static_int_cast<sal_uInt16>(nPoints + rPolyPoly[ n ].GetSize());
 
-    rOStm << (INT16) GDI_POLYPOLYGON_ACTION;
-    rOStm << (INT32) ( 8 + ( nPoly << 2 ) + ( nPoints << 3 ) );
-    rOStm << (INT32) nPoly;
+    rOStm << (sal_Int16) GDI_POLYPOLYGON_ACTION;
+    rOStm << (sal_Int32) ( 8 + ( nPoly << 2 ) + ( nPoints << 3 ) );
+    rOStm << (sal_Int32) nPoly;
 
     for( n = 0; n < nPoly; n++ )
     {
@@ -121,11 +121,11 @@ void ImplWritePolyPolyAction( SvStream& rOStm, const PolyPolygon& rPolyPoly )
         // a polygon representing the curve as good as possible
          Polygon aSimplePoly;
          rPolyPoly[n].AdaptiveSubdivide(aSimplePoly);
-         const USHORT nSize(aSimplePoly.GetSize());
+         const sal_uInt16 nSize(aSimplePoly.GetSize());
 
-        rOStm << (INT32) nSize;
+        rOStm << (sal_Int32) nSize;
 
-        for( USHORT j = 0; j < nSize; j++ )
+        for( sal_uInt16 j = 0; j < nSize; j++ )
             rOStm << aSimplePoly[ j ];
     }
 }
@@ -134,26 +134,26 @@ void ImplWritePolyPolyAction( SvStream& rOStm, const PolyPolygon& rPolyPoly )
 
 void ImplReadColor( SvStream& rIStm, Color& rColor )
 {
-    INT16 nVal;
+    sal_Int16 nVal;
 
-    rIStm >> nVal; rColor.SetRed( sal::static_int_cast<UINT8>((USHORT)nVal >> 8) );
-    rIStm >> nVal; rColor.SetGreen( sal::static_int_cast<UINT8>((USHORT)nVal >> 8) );
-    rIStm >> nVal; rColor.SetBlue( sal::static_int_cast<UINT8>((USHORT)nVal >> 8) );
+    rIStm >> nVal; rColor.SetRed( sal::static_int_cast<sal_uInt8>((sal_uInt16)nVal >> 8) );
+    rIStm >> nVal; rColor.SetGreen( sal::static_int_cast<sal_uInt8>((sal_uInt16)nVal >> 8) );
+    rIStm >> nVal; rColor.SetBlue( sal::static_int_cast<sal_uInt8>((sal_uInt16)nVal >> 8) );
 }
 
 // ------------------------------------------------------------------------
 
 void ImplWriteColor( SvStream& rOStm, const Color& rColor )
 {
-    INT16 nVal;
+    sal_Int16 nVal;
 
-    nVal = ( (INT16) rColor.GetRed() << 8 ) | rColor.GetRed();
+    nVal = ( (sal_Int16) rColor.GetRed() << 8 ) | rColor.GetRed();
     rOStm << nVal;
 
-    nVal = ( (INT16) rColor.GetGreen() << 8 ) | rColor.GetGreen();
+    nVal = ( (sal_Int16) rColor.GetGreen() << 8 ) | rColor.GetGreen();
     rOStm << nVal;
 
-    nVal = ( (INT16) rColor.GetBlue() << 8 ) | rColor.GetBlue();
+    nVal = ( (sal_Int16) rColor.GetBlue() << 8 ) | rColor.GetBlue();
     rOStm << nVal;
 }
 
@@ -162,11 +162,11 @@ void ImplWriteColor( SvStream& rOStm, const Color& rColor )
 void ImplReadMapMode( SvStream& rIStm, MapMode& rMapMode )
 {
     Point   aOrg;
-    INT32   nXNum;
-    INT32   nXDenom;
-    INT32   nYNum;
-    INT32   nYDenom;
-    INT16   nUnit;
+    sal_Int32   nXNum;
+    sal_Int32   nXDenom;
+    sal_Int32   nYNum;
+    sal_Int32   nYDenom;
+    sal_Int16   nUnit;
 
     rIStm >> nUnit >> aOrg >> nXNum >> nXDenom >> nYNum >> nYDenom;
     rMapMode = MapMode( (MapUnit) nUnit, aOrg, Fraction( nXNum, nXDenom ), Fraction( nYNum, nYDenom ) );
@@ -176,39 +176,39 @@ void ImplReadMapMode( SvStream& rIStm, MapMode& rMapMode )
 
 void ImplWriteMapMode( SvStream& rOStm, const MapMode& rMapMode )
 {
-    rOStm << (INT16) rMapMode.GetMapUnit();
+    rOStm << (sal_Int16) rMapMode.GetMapUnit();
     rOStm << rMapMode.GetOrigin();
-    rOStm << (INT32) rMapMode.GetScaleX().GetNumerator();
-    rOStm << (INT32) rMapMode.GetScaleX().GetDenominator();
-    rOStm << (INT32) rMapMode.GetScaleY().GetNumerator();
-    rOStm << (INT32) rMapMode.GetScaleY().GetDenominator();
+    rOStm << (sal_Int32) rMapMode.GetScaleX().GetNumerator();
+    rOStm << (sal_Int32) rMapMode.GetScaleX().GetDenominator();
+    rOStm << (sal_Int32) rMapMode.GetScaleY().GetNumerator();
+    rOStm << (sal_Int32) rMapMode.GetScaleY().GetDenominator();
 }
 
 // ------------------------------------------------------------------------
 
 void ImplWritePushAction( SvStream& rOStm )
 {
-    rOStm << (INT16) GDI_PUSH_ACTION;
-    rOStm << (INT32) 4;
+    rOStm << (sal_Int16) GDI_PUSH_ACTION;
+    rOStm << (sal_Int32) 4;
 }
 
 // ------------------------------------------------------------------------
 
 void ImplWritePopAction( SvStream& rOStm )
 {
-    rOStm << (INT16) GDI_POP_ACTION;
-    rOStm << (INT32) 4;
+    rOStm << (sal_Int16) GDI_POP_ACTION;
+    rOStm << (sal_Int32) 4;
 }
 
 // ------------------------------------------------------------------------
 
-void ImplWriteLineColor( SvStream& rOStm, const Color& rColor, INT16 nStyle, INT32 nWidth = 0L )
+void ImplWriteLineColor( SvStream& rOStm, const Color& rColor, sal_Int16 nStyle, sal_Int32 nWidth = 0L )
 {
     if( rColor.GetTransparency() > 127 )
         nStyle = 0;
 
-    rOStm << (INT16) GDI_PEN_ACTION;
-    rOStm << (INT32) 16;
+    rOStm << (sal_Int16) GDI_PEN_ACTION;
+    rOStm << (sal_Int32) 16;
     ImplWriteColor( rOStm, rColor );
     rOStm << nWidth;
     rOStm << nStyle;
@@ -216,10 +216,10 @@ void ImplWriteLineColor( SvStream& rOStm, const Color& rColor, INT16 nStyle, INT
 
 // ------------------------------------------------------------------------
 
-void ImplWriteFillColor( SvStream& rOStm, const Color& rColor, INT16 nStyle )
+void ImplWriteFillColor( SvStream& rOStm, const Color& rColor, sal_Int16 nStyle )
 {
-    rOStm << (INT16) GDI_FILLBRUSH_ACTION;
-    rOStm << (INT32) 20;
+    rOStm << (sal_Int16) GDI_FILLBRUSH_ACTION;
+    rOStm << (sal_Int32) 20;
     ImplWriteColor( rOStm, rColor );
 
     if( rColor.GetTransparency() > 127 )
@@ -229,13 +229,13 @@ void ImplWriteFillColor( SvStream& rOStm, const Color& rColor, INT16 nStyle )
     {
         ImplWriteColor( rOStm, COL_WHITE );
         rOStm << nStyle;
-        rOStm << (INT16) 1;
+        rOStm << (sal_Int16) 1;
     }
     else
     {
         ImplWriteColor( rOStm, COL_BLACK );
         rOStm << nStyle;
-        rOStm << (INT16) 0;
+        rOStm << (sal_Int16) 0;
     }
 }
 
@@ -274,24 +274,24 @@ void ImplWriteFont( SvStream& rOStm, const Font& rFont,
         break;
     }
 
-    rOStm << (INT16) GDI_FONT_ACTION;
-    rOStm << (INT32) 78;
+    rOStm << (sal_Int16) GDI_FONT_ACTION;
+    rOStm << (sal_Int32) 78;
 
     rActualCharSet = GetStoreCharSet( rFont.GetCharSet() );
     ImplWriteColor( rOStm, rFont.GetColor() );
     ImplWriteColor( rOStm, rFont.GetFillColor() );
     rOStm.Write( aName, 32 );
     rOStm << rFont.GetSize();
-    rOStm << (INT16) 0; // no character orientation anymore
-    rOStm << (INT16) rFont.GetOrientation();
-    rOStm << (INT16) rActualCharSet;
-    rOStm << (INT16) rFont.GetFamily();
-    rOStm << (INT16) rFont.GetPitch();
-    rOStm << (INT16) rFont.GetAlign();
-    rOStm << (INT16) nWeight;
-    rOStm << (INT16) rFont.GetUnderline();
-    rOStm << (INT16) rFont.GetStrikeout();
-    rOStm << (BOOL) ( rFont.GetItalic() != ITALIC_NONE );
+    rOStm << (sal_Int16) 0; // no character orientation anymore
+    rOStm << (sal_Int16) rFont.GetOrientation();
+    rOStm << (sal_Int16) rActualCharSet;
+    rOStm << (sal_Int16) rFont.GetFamily();
+    rOStm << (sal_Int16) rFont.GetPitch();
+    rOStm << (sal_Int16) rFont.GetAlign();
+    rOStm << (sal_Int16) nWeight;
+    rOStm << (sal_Int16) rFont.GetUnderline();
+    rOStm << (sal_Int16) rFont.GetStrikeout();
+    rOStm << (sal_Bool) ( rFont.GetItalic() != ITALIC_NONE );
     rOStm << rFont.IsOutline();
     rOStm << rFont.IsShadow();
     rOStm << rFont.IsTransparent();
@@ -301,9 +301,9 @@ void ImplWriteFont( SvStream& rOStm, const Font& rFont,
 
 // ------------------------------------------------------------------------
 
-void ImplWriteRasterOpAction( SvStream& rOStm, INT16 nRasterOp )
+void ImplWriteRasterOpAction( SvStream& rOStm, sal_Int16 nRasterOp )
 {
-    rOStm << (INT16) GDI_RASTEROP_ACTION << (INT32) 6 << nRasterOp;
+    rOStm << (sal_Int16) GDI_RASTEROP_ACTION << (sal_Int32) 6 << nRasterOp;
 }
 
 // ------------------------------------------------------------------------
@@ -355,12 +355,12 @@ void ImplReadUnicodeComment( sal_uInt32 nStrmPos, SvStream& rIStm, String& rStri
 
 // ------------------------------------------------------------------------
 
-void ImplSkipActions( SvStream& rIStm, ULONG nSkipCount )
+void ImplSkipActions( SvStream& rIStm, sal_uLong nSkipCount )
 {
-    INT32 nActionSize;
-    INT16 nType;
+    sal_Int32 nActionSize;
+    sal_Int16 nType;
 
-    for( ULONG i = 0UL; i < nSkipCount; i++ )
+    for( sal_uLong i = 0UL; i < nSkipCount; i++ )
     {
         rIStm >> nType >> nActionSize;
         rIStm.SeekRel( nActionSize - 4L );
@@ -399,7 +399,7 @@ bool ImplWriteExtendedPolyPolygonAction(SvStream& rOStm, const PolyPolygon& rPol
 
         if((bOnlyWhenCurve && nAllFlagCount) || (!bOnlyWhenCurve && nAllPointCount))
         {
-            rOStm << (INT16) GDI_EXTENDEDPOLYGON_ACTION;
+            rOStm << (sal_Int16) GDI_EXTENDEDPOLYGON_ACTION;
 
             const sal_Int32 nActionSize(
                 4 +                         // Action size
@@ -428,16 +428,16 @@ bool ImplWriteExtendedPolyPolygonAction(SvStream& rOStm, const PolyPolygon& rPol
 
                     if(rCandidate.HasFlags())
                     {
-                        rOStm << (BYTE)true;
+                        rOStm << (sal_uInt8)true;
 
                         for(sal_uInt16 c(0); c < nPointCount; c++)
                         {
-                            rOStm << (BYTE)rCandidate.GetFlags(c);
+                            rOStm << (sal_uInt8)rCandidate.GetFlags(c);
                         }
                     }
                     else
                     {
-                        rOStm << (BYTE)false;
+                        rOStm << (sal_uInt8)false;
                     }
                 }
             }
@@ -470,12 +470,12 @@ void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, PolyPolygon& rPolyPoly)
                 rIStm >> aCandidate[b];
             }
 
-            BYTE bHasFlags(false);
+            sal_uInt8 bHasFlags(false);
             rIStm >> bHasFlags;
 
             if(bHasFlags)
             {
-                BYTE aPolyFlags(0);
+                sal_uInt8 aPolyFlags(0);
 
                 for(sal_uInt16 c(0); c < nPointCount; c++)
                 {
@@ -493,7 +493,7 @@ void ImplReadExtendedPolyPolygonAction(SvStream& rIStm, PolyPolygon& rPolyPoly)
 // - SVMConverter -
 // ----------------
 
-SVMConverter::SVMConverter( SvStream& rStm, GDIMetaFile& rMtf, ULONG nConvertMode )
+SVMConverter::SVMConverter( SvStream& rStm, GDIMetaFile& rMtf, sal_uLong nConvertMode )
 {
     if( !rStm.GetError() )
     {
@@ -508,15 +508,15 @@ SVMConverter::SVMConverter( SvStream& rStm, GDIMetaFile& rMtf, ULONG nConvertMod
 
 void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 {
-    const ULONG         nPos = rIStm.Tell();
-    const USHORT        nOldFormat = rIStm.GetNumberFormatInt();
+    const sal_uLong         nPos = rIStm.Tell();
+    const sal_uInt16        nOldFormat = rIStm.GetNumberFormatInt();
 
     rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
     char    aCode[ 5 ];
     Size    aPrefSz;
-    INT16   nSize;
-    INT16   nVersion;
+    sal_Int16   nSize;
+    sal_Int16   nVersion;
 
     // read header
     rIStm.Read( (char*) &aCode, sizeof( aCode ) );  // Kennung
@@ -540,7 +540,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     Stack               aLIStack;
     VirtualDevice       aFontVDev;
     rtl_TextEncoding    eActualCharSet = gsl_getSystemTextEncoding();
-    BOOL                bFatLine = FALSE;
+    sal_Bool                bFatLine = sal_False;
 
     // TODO: fix reindentation below if you can accept being blamed by the SCM
         MapMode     aMapMode;
@@ -549,12 +549,12 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
         Point       aPt, aPt1;
         Size        aSz;
         Color       aActionColor;
-        INT32       nTmp, nTmp1, nActionSize;
-        INT32       nActions;
-        INT16       nType;
+        sal_Int32       nTmp, nTmp1, nActionSize;
+        sal_Int32       nActions;
+        sal_Int16       nType;
 
         sal_uInt32  nUnicodeCommentStreamPos = 0;
-        INT32       nUnicodeCommentActionNumber = 0;
+        sal_Int32       nUnicodeCommentActionNumber = 0;
 
         ImplReadMapMode( rIStm, aMapMode );             // MapMode
         rIStm >> nActions;                              // Action count
@@ -563,7 +563,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
         rMtf.SetPrefMapMode( aMapMode );
         sal_uInt32 nLastPolygonAction(0);
 
-        for( INT32 i = 0L; i < nActions; i++ )
+        for( sal_Int32 i = 0L; i < nActions; i++ )
         {
             rIStm >> nType;
             sal_Int32 nActBegin = rIStm.Tell();
@@ -597,7 +597,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 case (GDI_LINEJOIN_ACTION) :
                 {
-                    INT16 nLineJoin(0);
+                    sal_Int16 nLineJoin(0);
                     rIStm >> nLineJoin;
                     aLineInfo.SetLineJoin((basegfx::B2DLineJoin)nLineJoin);
                 }
@@ -605,8 +605,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 case (GDI_LINEDASHDOT_ACTION) :
                 {
-                    INT16 a(0);
-                    INT32 b(0);
+                    sal_Int16 a(0);
+                    sal_Int32 b(0);
 
                     rIStm >> a; aLineInfo.SetDashCount(a);
                     rIStm >> b; aLineInfo.SetDashLen(b);
@@ -714,7 +714,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         const Polygon aPoly( aRect.Center(), aRect.GetWidth() >> 1, aRect.GetHeight() >> 1 );
 
                         rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
-                        rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, FALSE ) );
+                        rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, sal_False ) );
                         rMtf.AddAction( new MetaPolygonAction( aPoly ) );
                         rMtf.AddAction( new MetaPopAction() );
                         rMtf.AddAction( new MetaPolyLineAction( aPoly, aLineInfo ) );
@@ -734,7 +734,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         const Polygon aPoly( aRect, aPt, aPt1, POLY_ARC );
 
                         rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
-                        rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, FALSE ) );
+                        rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, sal_False ) );
                         rMtf.AddAction( new MetaPolygonAction( aPoly ) );
                         rMtf.AddAction( new MetaPopAction() );
                         rMtf.AddAction( new MetaPolyLineAction( aPoly, aLineInfo ) );
@@ -754,7 +754,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         const Polygon aPoly( aRect, aPt, aPt1, POLY_PIE );
 
                         rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
-                        rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, FALSE ) );
+                        rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, sal_False ) );
                         rMtf.AddAction( new MetaPolygonAction( aPoly ) );
                         rMtf.AddAction( new MetaPopAction() );
                         rMtf.AddAction( new MetaPolyLineAction( aPoly, aLineInfo ) );
@@ -794,7 +794,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     if( bFatLine )
                     {
                         rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
-                        rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, FALSE ) );
+                        rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, sal_False ) );
                         rMtf.AddAction( new MetaPolygonAction( aActionPoly ) );
                         rMtf.AddAction( new MetaPopAction() );
                         rMtf.AddAction( new MetaPolyLineAction( aActionPoly, aLineInfo ) );
@@ -816,11 +816,11 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     if( bFatLine )
                     {
                         rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR ) );
-                        rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, FALSE ) );
+                        rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, sal_False ) );
                         rMtf.AddAction( new MetaPolyPolygonAction( aPolyPoly ) );
                         rMtf.AddAction( new MetaPopAction() );
 
-                        for( USHORT nPoly = 0, nCount = aPolyPoly.Count(); nPoly < nCount; nPoly++ )
+                        for( sal_uInt16 nPoly = 0, nCount = aPolyPoly.Count(); nPoly < nCount; nPoly++ )
                             rMtf.AddAction( new MetaPolyLineAction( aPolyPoly[ nPoly ], aLineInfo ) );
                     }
                     else
@@ -835,10 +835,10 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 {
                     Font    aFont;
                     char    aName[ 32 ];
-                    INT32   nWidth, nHeight;
-                    INT16   nCharSet, nFamily, nPitch, nAlign, nWeight, nUnderline, nStrikeout;
-                    INT16   nCharOrient, nLineOrient;
-                    BOOL    bItalic, bOutline, bShadow, bTransparent;
+                    sal_Int32   nWidth, nHeight;
+                    sal_Int16   nCharSet, nFamily, nPitch, nAlign, nWeight, nUnderline, nStrikeout;
+                    sal_Int16   nCharOrient, nLineOrient;
+                    sal_Bool    bItalic, bOutline, bShadow, bTransparent;
 
                     ImplReadColor( rIStm, aActionColor ); aFont.SetColor( aActionColor );
                     ImplReadColor( rIStm, aActionColor ); aFont.SetFillColor( aActionColor );
@@ -881,16 +881,16 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_TEXT_ACTION ):
                 {
                     ByteString  aByteStr;
-                    INT32       nIndex, nLen;
+                    sal_Int32       nIndex, nLen;
 
                     rIStm >> aPt >> nIndex >> nLen >> nTmp;
                     if ( nTmp && ( static_cast< sal_uInt32 >( nTmp ) < ( SAL_MAX_UINT16 - 1 ) ) )
                                         {
-                        rIStm.Read( aByteStr.AllocBuffer( (USHORT)nTmp ), nTmp + 1 );
+                        rIStm.Read( aByteStr.AllocBuffer( (sal_uInt16)nTmp ), nTmp + 1 );
                         UniString aStr( aByteStr, eActualCharSet );
                         if ( nUnicodeCommentActionNumber == i )
                             ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
-                        rMtf.AddAction( new MetaTextAction( aPt, aStr, (USHORT) nIndex, (USHORT) nLen ) );
+                        rMtf.AddAction( new MetaTextAction( aPt, aStr, (sal_uInt16) nIndex, (sal_uInt16) nLen ) );
                     }
                             rIStm.Seek( nActBegin + nActionSize );
                 }
@@ -900,17 +900,17 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 {
                     ByteString  aByteStr;
                     sal_Int32*  pDXAry = NULL;
-                    INT32       nIndex, nLen, nAryLen;
+                    sal_Int32       nIndex, nLen, nAryLen;
 
                     rIStm >> aPt >> nIndex >> nLen >> nTmp >> nAryLen;
                     if ( nTmp && ( static_cast< sal_uInt32 >( nTmp ) < ( SAL_MAX_UINT16 - 1 ) ) )
                     {
-                        rIStm.Read( aByteStr.AllocBuffer( (USHORT)nTmp ), nTmp + 1 );
+                        rIStm.Read( aByteStr.AllocBuffer( (sal_uInt16)nTmp ), nTmp + 1 );
                         UniString aStr( aByteStr, eActualCharSet );
 
                         if( nAryLen > 0L )
                         {
-                            INT32 nStrLen( aStr.Len() );
+                            sal_Int32 nStrLen( aStr.Len() );
 
                             pDXAry = new sal_Int32[ Max( nAryLen, nStrLen ) ];
 
@@ -924,7 +924,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                                 {
                                     sal_Int32* pTmpAry = new sal_Int32[nStrLen];
 
-                                    aFontVDev.GetTextArray( aStr, pTmpAry, (USHORT) nIndex, (USHORT) nLen );
+                                    aFontVDev.GetTextArray( aStr, pTmpAry, (sal_uInt16) nIndex, (sal_uInt16) nLen );
 
                                     // now, the difference between the
                                     // last and the second last DX array
@@ -948,7 +948,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         }
                         if ( nUnicodeCommentActionNumber == i )
                             ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
-                        rMtf.AddAction( new MetaTextArrayAction( aPt, aStr, pDXAry, (USHORT) nIndex, (USHORT) nLen ) );
+                        rMtf.AddAction( new MetaTextArrayAction( aPt, aStr, pDXAry, (sal_uInt16) nIndex, (sal_uInt16) nLen ) );
 
                         if( pDXAry )
                             delete[] pDXAry;
@@ -960,16 +960,16 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_STRETCHTEXT_ACTION ):
                 {
                     ByteString  aByteStr;
-                    INT32       nIndex, nLen, nWidth;
+                    sal_Int32       nIndex, nLen, nWidth;
 
                     rIStm >> aPt >> nIndex >> nLen >> nTmp >> nWidth;
                     if ( nTmp && ( static_cast< sal_uInt32 >( nTmp ) < ( SAL_MAX_INT16 - 1 ) ) )
                     {
-                        rIStm.Read( aByteStr.AllocBuffer( (USHORT)nTmp ), nTmp + 1 );
+                        rIStm.Read( aByteStr.AllocBuffer( (sal_uInt16)nTmp ), nTmp + 1 );
                         UniString aStr( aByteStr, eActualCharSet );
                         if ( nUnicodeCommentActionNumber == i )
                             ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
-                        rMtf.AddAction( new MetaStretchTextAction( aPt, nWidth, aStr, (USHORT) nIndex, (USHORT) nLen ) );
+                        rMtf.AddAction( new MetaStretchTextAction( aPt, nWidth, aStr, (sal_uInt16) nIndex, (sal_uInt16) nLen ) );
                     }
                                         rIStm.Seek( nActBegin + nActionSize );
                 }
@@ -1005,8 +1005,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 case( GDI_PEN_ACTION ):
                 {
-                    INT32 nPenWidth;
-                    INT16 nPenStyle;
+                    sal_Int32 nPenWidth;
+                    sal_Int16 nPenStyle;
 
                     ImplReadColor( rIStm, aActionColor );
                     rIStm >> nPenWidth >> nPenStyle;
@@ -1021,7 +1021,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 case( GDI_FILLBRUSH_ACTION ):
                 {
-                    INT16 nBrushStyle;
+                    sal_Int16 nBrushStyle;
 
                     ImplReadColor( rIStm, aActionColor );
                     rIStm.SeekRel( 6L );
@@ -1044,9 +1044,9 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_CLIPREGION_ACTION ):
                 {
                     Region  aRegion;
-                    INT16   nRegType;
-                    INT16   bIntersect;
-                    BOOL    bClip = FALSE;
+                    sal_Int16   nRegType;
+                    sal_Int16   bIntersect;
+                    sal_Bool    bClip = sal_False;
 
                     rIStm >> nRegType >> bIntersect;
                     ImplReadRect( rIStm, aRect );
@@ -1062,7 +1062,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                             ImplReadRect( rIStm, aRegRect );
                             aRegion = Region( aRegRect );
-                            bClip = TRUE;
+                            bClip = sal_True;
                         }
                         break;
 
@@ -1070,25 +1070,25 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         {
                             ImplReadPoly( rIStm, aActionPoly );
                             aRegion = Region( aActionPoly );
-                            bClip = TRUE;
+                            bClip = sal_True;
                         }
                         break;
 
                         case( 3 ):
                         {
                             PolyPolygon aPolyPoly;
-                            INT32       nPolyCount;
+                            sal_Int32       nPolyCount;
 
                             rIStm >> nPolyCount;
 
-                            for( USHORT j = 0; j < (USHORT) nPolyCount; j++ )
+                            for( sal_uInt16 j = 0; j < (sal_uInt16) nPolyCount; j++ )
                             {
                                 ImplReadPoly( rIStm, aActionPoly );
                                 aPolyPoly.Insert( aActionPoly );
                             }
 
                             aRegion = Region( aPolyPoly );
-                            bClip = TRUE;
+                            bClip = sal_True;
                         }
                         break;
                     }
@@ -1117,7 +1117,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_RASTEROP_ACTION ):
                 {
                     RasterOp    eRasterOp;
-                    INT16       nRasterOp;
+                    sal_Int16       nRasterOp;
 
                     rIStm >> nRasterOp;
 
@@ -1175,13 +1175,13 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 {
                     Color   aStartCol;
                     Color   aEndCol;
-                    INT16   nStyle;
-                    INT16   nAngle;
-                    INT16   nBorder;
-                    INT16   nOfsX;
-                    INT16   nOfsY;
-                    INT16   nIntensityStart;
-                    INT16   nIntensityEnd;
+                    sal_Int16   nStyle;
+                    sal_Int16   nAngle;
+                    sal_Int16   nBorder;
+                    sal_Int16   nOfsX;
+                    sal_Int16   nOfsY;
+                    sal_Int16   nIntensityStart;
+                    sal_Int16   nIntensityEnd;
 
                     ImplReadRect( rIStm, aRect );
                     rIStm >> nStyle;
@@ -1204,8 +1204,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_TRANSPARENT_COMMENT ):
                 {
                     PolyPolygon aPolyPoly;
-                    INT32       nFollowingActionCount;
-                    INT16       nTrans;
+                    sal_Int32       nFollowingActionCount;
+                    sal_Int16       nTrans;
 
                     rIStm >> aPolyPoly >> nTrans >> nFollowingActionCount;
                     ImplSkipActions( rIStm, nFollowingActionCount );
@@ -1223,7 +1223,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     Point       aPos;
                     Size        aSize;
                     Gradient    aGradient;
-                    INT32       nFollowingActionCount;
+                    sal_Int32       nFollowingActionCount;
 
                     rIStm >> aMtf >> aPos >> aSize >> aGradient >> nFollowingActionCount;
                     ImplSkipActions( rIStm, nFollowingActionCount );
@@ -1239,7 +1239,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 {
                     PolyPolygon aPolyPoly;
                     Hatch       aHatch;
-                    INT32       nFollowingActionCount;
+                    sal_Int32       nFollowingActionCount;
 
                     rIStm >> aPolyPoly >> aHatch >> nFollowingActionCount;
                     ImplSkipActions( rIStm, nFollowingActionCount );
@@ -1254,8 +1254,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_REFPOINT_COMMENT ):
                 {
                     Point   aRefPoint;
-                    BOOL    bSet;
-                    INT32   nFollowingActionCount;
+                    sal_Bool    bSet;
+                    sal_Int32   nFollowingActionCount;
 
                     rIStm >> aRefPoint >> bSet >> nFollowingActionCount;
                     ImplSkipActions( rIStm, nFollowingActionCount );
@@ -1276,8 +1276,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 case( GDI_TEXTLINECOLOR_COMMENT ):
                 {
                     Color   aColor;
-                    BOOL    bSet;
-                    INT32   nFollowingActionCount;
+                    sal_Bool    bSet;
+                    sal_Int32   nFollowingActionCount;
 
                     rIStm >> aColor >> bSet >> nFollowingActionCount;
                     ImplSkipActions( rIStm, nFollowingActionCount );
@@ -1295,7 +1295,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     long    nWidth;
                     sal_uInt32 nStrikeout;
                     sal_uInt32 nUnderline;
-                    INT32   nFollowingActionCount;
+                    sal_Int32   nFollowingActionCount;
 
                     rIStm >> aStartPt >> nWidth >> nStrikeout >> nUnderline >> nFollowingActionCount;
                     ImplSkipActions( rIStm, nFollowingActionCount );
@@ -1314,7 +1314,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 {
                     PolyPolygon aPolyPoly;
                     Gradient    aGradient;
-                    INT32       nFollowingActionCount;
+                    sal_Int32       nFollowingActionCount;
 
                     rIStm >> aPolyPoly >> aGradient >> nFollowingActionCount;
                     ImplSkipActions( rIStm, nFollowingActionCount );
@@ -1331,14 +1331,14 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     ByteString  aComment;
                     sal_Int32   nValue;
                     sal_uInt32  nDataSize;
-                    BYTE*       pData;
-                    INT32       nFollowingActionCount;
+                    sal_uInt8*      pData;
+                    sal_Int32       nFollowingActionCount;
 
                     rIStm >> aComment >> nValue >> nDataSize;
 
                     if( nDataSize )
                     {
-                        pData = new BYTE[ nDataSize ];
+                        pData = new sal_uInt8[ nDataSize ];
                         rIStm.Read( pData, nDataSize );
                     }
                     else
@@ -1379,13 +1379,13 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
 void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
 {
-    ULONG               nPos;
-    ULONG               nCountPos;
+    sal_uLong               nPos;
+    sal_uLong               nCountPos;
     Font                aSaveFont;
-    const USHORT        nOldFormat = rOStm.GetNumberFormatInt();
+    const sal_uInt16        nOldFormat = rOStm.GetNumberFormatInt();
     rtl_TextEncoding    eActualCharSet = gsl_getSystemTextEncoding();
     const Size          aPrefSize( rMtf.GetPrefSize() );
-    BOOL                bRop_0_1 = FALSE;
+    sal_Bool                bRop_0_1 = sal_False;
     VirtualDevice       aSaveVDev;
     Color               aLineCol( COL_BLACK );
     Stack               aLineColStack;
@@ -1395,18 +1395,18 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
     //MagicCode schreiben
     rOStm << "SVGDI";                                   // Kennung
     nPos = rOStm.Tell();
-    rOStm << (INT16) 42;                                // HeaderSize
-    rOStm << (INT16) 200;                               // VERSION
-    rOStm << (INT32) aPrefSize.Width();
-    rOStm << (INT32) aPrefSize.Height();
+    rOStm << (sal_Int16) 42;                                // HeaderSize
+    rOStm << (sal_Int16) 200;                               // VERSION
+    rOStm << (sal_Int32) aPrefSize.Width();
+    rOStm << (sal_Int32) aPrefSize.Height();
     ImplWriteMapMode( rOStm, rMtf.GetPrefMapMode() );
 
     // ActionCount wird spaeter geschrieben
     nCountPos = rOStm.Tell();
     rOStm.SeekRel( 4L );
 
-    const INT32 nActCount = ImplWriteActions( rOStm, rMtf, aSaveVDev, bRop_0_1, aLineCol, aLineColStack, eActualCharSet );
-    const ULONG nActPos = rOStm.Tell();
+    const sal_Int32 nActCount = ImplWriteActions( rOStm, rMtf, aSaveVDev, bRop_0_1, aLineCol, aLineColStack, eActualCharSet );
+    const sal_uLong nActPos = rOStm.Tell();
 
     rOStm.Seek( nCountPos );
     rOStm << nActCount;
@@ -1420,13 +1420,13 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
 
 // ------------------------------------------------------------------------
 
-ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
-                                      VirtualDevice& rSaveVDev, BOOL& rRop_0_1,
+sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
+                                      VirtualDevice& rSaveVDev, sal_Bool& rRop_0_1,
                                       Color& rLineCol, Stack& rLineColStack,
                                       rtl_TextEncoding& rActualCharSet )
 {
-    ULONG nCount = 0;
-    for( ULONG i = 0, nActionCount = rMtf.GetActionCount(); i < nActionCount; i++ )
+    sal_uLong nCount = 0;
+    for( sal_uLong i = 0, nActionCount = rMtf.GetActionCount(); i < nActionCount; i++ )
     {
         const MetaAction* pAction = rMtf.GetAction( i );
 
@@ -1436,8 +1436,8 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaPixelAction* pAct = (MetaPixelAction*) pAction;
 
-                rOStm << (INT16) GDI_PIXEL_ACTION;
-                rOStm << (INT32) 18;
+                rOStm << (sal_Int16) GDI_PIXEL_ACTION;
+                rOStm << (sal_Int32) 18;
                 rOStm << pAct->GetPoint();
                 ImplWriteColor( rOStm, pAct->GetColor() );
                 nCount++;
@@ -1448,8 +1448,8 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaPointAction* pAct = (MetaPointAction*) pAction;
 
-                rOStm << (INT16) GDI_POINT_ACTION;
-                rOStm << (INT32) 12;
+                rOStm << (sal_Int16) GDI_POINT_ACTION;
+                rOStm << (sal_Int32) 12;
                 rOStm << pAct->GetPoint();
                 nCount++;
             }
@@ -1470,25 +1470,25 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
                     if(bLineJoin)
                     {
-                        rOStm << (INT16) GDI_LINEJOIN_ACTION;
-                        rOStm << (INT32) 6;
-                        rOStm << (INT16) rInfo.GetLineJoin();
+                        rOStm << (sal_Int16) GDI_LINEJOIN_ACTION;
+                        rOStm << (sal_Int32) 6;
+                        rOStm << (sal_Int16) rInfo.GetLineJoin();
                     }
 
                     if(bLineDashDot)
                     {
-                        rOStm << (INT16) GDI_LINEDASHDOT_ACTION;
-                        rOStm << (INT32) 4 + 16;
-                        rOStm << (INT16)rInfo.GetDashCount();
-                        rOStm << (INT32)rInfo.GetDashLen();
-                        rOStm << (INT16)rInfo.GetDotCount();
-                        rOStm << (INT32)rInfo.GetDotLen();
-                        rOStm << (INT32)rInfo.GetDistance();
+                        rOStm << (sal_Int16) GDI_LINEDASHDOT_ACTION;
+                        rOStm << (sal_Int32) 4 + 16;
+                        rOStm << (sal_Int16)rInfo.GetDashCount();
+                        rOStm << (sal_Int32)rInfo.GetDashLen();
+                        rOStm << (sal_Int16)rInfo.GetDotCount();
+                        rOStm << (sal_Int32)rInfo.GetDotLen();
+                        rOStm << (sal_Int32)rInfo.GetDistance();
                     }
                 }
 
-                rOStm << (INT16) GDI_LINE_ACTION;
-                rOStm << (INT32) 20;
+                rOStm << (sal_Int16) GDI_LINE_ACTION;
+                rOStm << (sal_Int32) 20;
                 rOStm << pAct->GetStartPoint();
                 rOStm << pAct->GetEndPoint();
                 nCount++;
@@ -1515,11 +1515,11 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaRectAction* pAct = (MetaRectAction*) pAction;
 
-                rOStm << (INT16) GDI_RECT_ACTION;
-                rOStm << (INT32) 28;
+                rOStm << (sal_Int16) GDI_RECT_ACTION;
+                rOStm << (sal_Int32) 28;
                 ImplWriteRect( rOStm, pAct->GetRect() );
-                rOStm << (INT32) 0;
-                rOStm << (INT32) 0;
+                rOStm << (sal_Int32) 0;
+                rOStm << (sal_Int32) 0;
                 nCount++;
             }
             break;
@@ -1528,11 +1528,11 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaRoundRectAction* pAct = (MetaRoundRectAction*) pAction;
 
-                rOStm << (INT16) GDI_RECT_ACTION;
-                rOStm << (INT32) 28;
+                rOStm << (sal_Int16) GDI_RECT_ACTION;
+                rOStm << (sal_Int32) 28;
                 ImplWriteRect( rOStm, pAct->GetRect() );
-                rOStm << (INT32) pAct->GetHorzRound();
-                rOStm << (INT32) pAct->GetVertRound();
+                rOStm << (sal_Int32) pAct->GetHorzRound();
+                rOStm << (sal_Int32) pAct->GetVertRound();
                 nCount++;
             }
             break;
@@ -1541,8 +1541,8 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaEllipseAction* pAct = (MetaEllipseAction*) pAction;
 
-                rOStm << (INT16) GDI_ELLIPSE_ACTION;
-                rOStm << (INT32) 20;
+                rOStm << (sal_Int16) GDI_ELLIPSE_ACTION;
+                rOStm << (sal_Int32) 20;
                 ImplWriteRect( rOStm, pAct->GetRect() );
                 nCount++;
             }
@@ -1552,8 +1552,8 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaArcAction* pAct = (MetaArcAction*) pAction;
 
-                rOStm << (INT16) GDI_ARC_ACTION;
-                rOStm << (INT32) 36;
+                rOStm << (sal_Int16) GDI_ARC_ACTION;
+                rOStm << (sal_Int32) 36;
                 ImplWriteRect( rOStm, pAct->GetRect() );
                 rOStm << pAct->GetStartPoint();
                 rOStm << pAct->GetEndPoint();
@@ -1565,8 +1565,8 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaPieAction* pAct = (MetaPieAction*) pAction;
 
-                rOStm << (INT16) GDI_PIE_ACTION;
-                rOStm << (INT32) 36;
+                rOStm << (sal_Int16) GDI_PIE_ACTION;
+                rOStm << (sal_Int32) 36;
                 ImplWriteRect( rOStm, pAct->GetRect() );
                 rOStm << pAct->GetStartPoint();
                 rOStm << pAct->GetEndPoint();
@@ -1579,13 +1579,13 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 MetaChordAction*    pAct = (MetaChordAction*) pAction;
                 Polygon             aChordPoly( pAct->GetRect(), pAct->GetStartPoint(),
                                                 pAct->GetEndPoint(), POLY_CHORD );
-                const USHORT        nPoints = aChordPoly.GetSize();
+                const sal_uInt16        nPoints = aChordPoly.GetSize();
 
-                rOStm << (INT16) GDI_POLYGON_ACTION;
-                rOStm << (INT32) ( 8 + ( nPoints << 3 ) );
-                rOStm << (INT32) nPoints;
+                rOStm << (sal_Int16) GDI_POLYGON_ACTION;
+                rOStm << (sal_Int32) ( 8 + ( nPoints << 3 ) );
+                rOStm << (sal_Int32) nPoints;
 
-                for( USHORT n = 0; n < nPoints; n++ )
+                for( sal_uInt16 n = 0; n < nPoints; n++ )
                     rOStm << aChordPoly[ n ];
                 nCount++;
             }
@@ -1601,7 +1601,7 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                  Polygon aSimplePoly;
                  pAct->GetPolygon().AdaptiveSubdivide(aSimplePoly);
                 const LineInfo& rInfo = pAct->GetLineInfo();
-                 const USHORT nPoints(aSimplePoly.GetSize());
+                 const sal_uInt16 nPoints(aSimplePoly.GetSize());
                 const bool bFatLine(!rInfo.IsDefault() && (LINE_NONE != rInfo.GetStyle()));
                 const bool bLineJoin(bFatLine && basegfx::B2DLINEJOIN_ROUND != rInfo.GetLineJoin());
                 const bool bLineDashDot(LINE_DASH == rInfo.GetStyle());
@@ -1613,28 +1613,28 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
                     if(bLineJoin)
                     {
-                        rOStm << (INT16) GDI_LINEJOIN_ACTION;
-                        rOStm << (INT32) 6;
-                        rOStm << (INT16) rInfo.GetLineJoin();
+                        rOStm << (sal_Int16) GDI_LINEJOIN_ACTION;
+                        rOStm << (sal_Int32) 6;
+                        rOStm << (sal_Int16) rInfo.GetLineJoin();
                     }
                 }
 
                 if(bLineDashDot)
                 {
-                    rOStm << (INT16) GDI_LINEDASHDOT_ACTION;
-                    rOStm << (INT32) 4 + 16;
-                    rOStm << (INT16)rInfo.GetDashCount();
-                    rOStm << (INT32)rInfo.GetDashLen();
-                    rOStm << (INT16)rInfo.GetDotCount();
-                    rOStm << (INT32)rInfo.GetDotLen();
-                    rOStm << (INT32)rInfo.GetDistance();
+                    rOStm << (sal_Int16) GDI_LINEDASHDOT_ACTION;
+                    rOStm << (sal_Int32) 4 + 16;
+                    rOStm << (sal_Int16)rInfo.GetDashCount();
+                    rOStm << (sal_Int32)rInfo.GetDashLen();
+                    rOStm << (sal_Int16)rInfo.GetDotCount();
+                    rOStm << (sal_Int32)rInfo.GetDotLen();
+                    rOStm << (sal_Int32)rInfo.GetDistance();
                 }
 
-                rOStm << (INT16) GDI_POLYLINE_ACTION;
-                rOStm << (INT32) ( 8 + ( nPoints << 3 ) );
-                rOStm << (INT32) nPoints;
+                rOStm << (sal_Int16) GDI_POLYLINE_ACTION;
+                rOStm << (sal_Int32) ( 8 + ( nPoints << 3 ) );
+                rOStm << (sal_Int32) nPoints;
 
-                for( USHORT n = 0; n < nPoints; n++ )
+                for( sal_uInt16 n = 0; n < nPoints; n++ )
                 {
                     rOStm << aSimplePoly[ n ];
                 }
@@ -1673,13 +1673,13 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 // a polygon representing the curve as good as possible
                  Polygon aSimplePoly;
                  pAct->GetPolygon().AdaptiveSubdivide(aSimplePoly);
-                const USHORT nPoints(aSimplePoly.GetSize());
+                const sal_uInt16 nPoints(aSimplePoly.GetSize());
 
-                rOStm << (INT16) GDI_POLYGON_ACTION;
-                rOStm << (INT32) ( 8 + ( nPoints << 3 ) );
-                rOStm << (INT32) nPoints;
+                rOStm << (sal_Int16) GDI_POLYGON_ACTION;
+                rOStm << (sal_Int32) ( 8 + ( nPoints << 3 ) );
+                rOStm << (sal_Int32) nPoints;
 
-                for( USHORT n = 0; n < nPoints; n++ )
+                for( sal_uInt16 n = 0; n < nPoints; n++ )
                     rOStm << aSimplePoly[ n ];
 
                 nCount++;
@@ -1710,17 +1710,17 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 MetaTextAction* pAct = (MetaTextAction*) pAction;
                 String          aUniText( pAct->GetText() );
                 ByteString      aText( aUniText, rActualCharSet );
-                const ULONG     nStrLen = aText.Len();
+                const sal_uLong     nStrLen = aText.Len();
 
                 if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
                     nCount++;
 
-                rOStm << (INT16) GDI_TEXT_ACTION;
-                rOStm << (INT32) ( 24 + ( nStrLen + 1 ) );
+                rOStm << (sal_Int16) GDI_TEXT_ACTION;
+                rOStm << (sal_Int32) ( 24 + ( nStrLen + 1 ) );
                 rOStm << pAct->GetPoint();
-                rOStm << (INT32) pAct->GetIndex();
-                rOStm << (INT32) pAct->GetLen();
-                rOStm << (INT32) nStrLen;
+                rOStm << (sal_Int32) pAct->GetIndex();
+                rOStm << (sal_Int32) pAct->GetLen();
+                rOStm << (sal_Int32) nStrLen;
                 rOStm.Write( aText.GetBuffer(), nStrLen + 1 );
                 nCount++;
             }
@@ -1731,9 +1731,9 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 MetaTextArrayAction*    pAct = (MetaTextArrayAction*)pAction;
                 ByteString              aText( pAct->GetText(), rActualCharSet );
                 String                  aUniText( pAct->GetText(), pAct->GetIndex(), pAct->GetLen() );
-                ULONG                   nAryLen;
-                ULONG                   nLen = pAct->GetLen();
-                const ULONG             nTextLen = aText.Len();
+                sal_uLong                   nAryLen;
+                sal_uLong                   nLen = pAct->GetLen();
+                const sal_uLong             nTextLen = aText.Len();
                 sal_Int32*              pDXArray = pAct->GetDXArray();
 
                 if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
@@ -1752,17 +1752,17 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 else
                     nAryLen = nLen; // #105987# Write out all of DX array
 
-                rOStm << (INT16) GDI_TEXTARRAY_ACTION;
-                rOStm << (INT32) ( 28 + ( nLen + 1 ) + ( nAryLen * 4 ) );
+                rOStm << (sal_Int16) GDI_TEXTARRAY_ACTION;
+                rOStm << (sal_Int32) ( 28 + ( nLen + 1 ) + ( nAryLen * 4 ) );
                 rOStm << pAct->GetPoint();
-                rOStm << (INT32) 0;
-                rOStm << (INT32) nLen;
-                rOStm << (INT32) nLen;
-                rOStm << (INT32) nAryLen;
+                rOStm << (sal_Int32) 0;
+                rOStm << (sal_Int32) nLen;
+                rOStm << (sal_Int32) nLen;
+                rOStm << (sal_Int32) nAryLen;
                 rOStm.Write( aText.GetBuffer()+pAct->GetIndex(), nLen + 1 );
 
-                for( ULONG n = 0UL ; n < nAryLen; n++ )
-                    rOStm << (INT32) pDXArray[ n ];
+                for( sal_uLong n = 0UL ; n < nAryLen; n++ )
+                    rOStm << (sal_Int32) pDXArray[ n ];
 
                 nCount++;
             }
@@ -1773,18 +1773,18 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 MetaStretchTextAction*  pAct = (MetaStretchTextAction*) pAction;
                 String                  aUniText( pAct->GetText() );
                 ByteString              aText( aUniText, rActualCharSet );
-                const ULONG             nStrLen = aText.Len();
+                const sal_uLong             nStrLen = aText.Len();
 
                 if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
                     nCount++;
 
-                rOStm << (INT16) GDI_STRETCHTEXT_ACTION;
-                rOStm << (INT32) ( 28 + ( nStrLen + 1 ) );
+                rOStm << (sal_Int16) GDI_STRETCHTEXT_ACTION;
+                rOStm << (sal_Int32) ( 28 + ( nStrLen + 1 ) );
                 rOStm << pAct->GetPoint();
-                rOStm << (INT32) pAct->GetIndex();
-                rOStm << (INT32) pAct->GetLen();
-                rOStm << (INT32) nStrLen;
-                rOStm << (INT32) pAct->GetWidth();
+                rOStm << (sal_Int32) pAct->GetIndex();
+                rOStm << (sal_Int32) pAct->GetLen();
+                rOStm << (sal_Int32) nStrLen;
+                rOStm << (sal_Int32) pAct->GetWidth();
                 rOStm.Write( aText.GetBuffer(), nStrLen + 1 );
                 nCount++;
             }
@@ -1794,8 +1794,8 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaBmpAction* pAct = (MetaBmpAction*) pAction;
 
-                rOStm << (INT16) GDI_BITMAP_ACTION;
-                rOStm << (INT32) 12;
+                rOStm << (sal_Int16) GDI_BITMAP_ACTION;
+                rOStm << (sal_Int32) 12;
                 rOStm << pAct->GetPoint();
                 rOStm << pAct->GetBitmap();
                 nCount++;
@@ -1806,8 +1806,8 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaBmpScaleAction* pAct = (MetaBmpScaleAction*) pAction;
 
-                rOStm << (INT16) GDI_BITMAPSCALE_ACTION;
-                rOStm << (INT32) 20;
+                rOStm << (sal_Int16) GDI_BITMAPSCALE_ACTION;
+                rOStm << (sal_Int32) 20;
                 rOStm << pAct->GetPoint();
                 rOStm << pAct->GetSize();
                 rOStm << pAct->GetBitmap();
@@ -1819,8 +1819,8 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaBmpScalePartAction* pAct = (MetaBmpScalePartAction*) pAction;
 
-                rOStm << (INT16) GDI_BITMAPSCALEPART_ACTION;
-                rOStm << (INT32) 36;
+                rOStm << (sal_Int16) GDI_BITMAPSCALEPART_ACTION;
+                rOStm << (sal_Int32) 36;
                 rOStm << pAct->GetDestPoint();
                 rOStm << pAct->GetDestSize();
                 rOStm << pAct->GetSrcPoint();
@@ -1835,8 +1835,8 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 MetaBmpExAction*    pAct = (MetaBmpExAction*) pAction;
                 const Bitmap        aBmp( Graphic( pAct->GetBitmapEx() ).GetBitmap() );
 
-                rOStm << (INT16) GDI_BITMAP_ACTION;
-                rOStm << (INT32) 12;
+                rOStm << (sal_Int16) GDI_BITMAP_ACTION;
+                rOStm << (sal_Int32) 12;
                 rOStm << pAct->GetPoint();
                 rOStm << aBmp;
                 nCount++;
@@ -1848,8 +1848,8 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 MetaBmpExScaleAction*   pAct = (MetaBmpExScaleAction*) pAction;
                 const Bitmap            aBmp( Graphic( pAct->GetBitmapEx() ).GetBitmap() );
 
-                rOStm << (INT16) GDI_BITMAPSCALE_ACTION;
-                rOStm << (INT32) 20;
+                rOStm << (sal_Int16) GDI_BITMAPSCALE_ACTION;
+                rOStm << (sal_Int32) 20;
                 rOStm << pAct->GetPoint();
                 rOStm << pAct->GetSize();
                 rOStm << aBmp;
@@ -1862,8 +1862,8 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 MetaBmpExScalePartAction* pAct = (MetaBmpExScalePartAction*) pAction;
                 const Bitmap            aBmp( Graphic( pAct->GetBitmapEx() ).GetBitmap() );
 
-                rOStm << (INT16) GDI_BITMAPSCALEPART_ACTION;
-                rOStm << (INT32) 36;
+                rOStm << (sal_Int16) GDI_BITMAPSCALEPART_ACTION;
+                rOStm << (sal_Int32) 36;
                 rOStm << pAct->GetDestPoint();
                 rOStm << pAct->GetDestSize();
                 rOStm << pAct->GetSrcPoint();
@@ -1878,18 +1878,18 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 MetaGradientAction* pAct = (MetaGradientAction*) pAction;
                 const Gradient&     rGrad = pAct->GetGradient();
 
-                rOStm << (INT16) GDI_GRADIENT_ACTION;
-                rOStm << (INT32) 46;
+                rOStm << (sal_Int16) GDI_GRADIENT_ACTION;
+                rOStm << (sal_Int32) 46;
                 ImplWriteRect( rOStm, pAct->GetRect() );
-                rOStm << (INT16) rGrad.GetStyle();
+                rOStm << (sal_Int16) rGrad.GetStyle();
                 ImplWriteColor( rOStm, rGrad.GetStartColor() );
                 ImplWriteColor( rOStm, rGrad.GetEndColor() );
-                rOStm << (INT16) rGrad.GetAngle();
-                rOStm << (INT16) rGrad.GetBorder();
-                rOStm << (INT16) rGrad.GetOfsX();
-                rOStm << (INT16) rGrad.GetOfsY();
-                rOStm << (INT16) rGrad.GetStartIntensity();
-                rOStm << (INT16) rGrad.GetEndIntensity();
+                rOStm << (sal_Int16) rGrad.GetAngle();
+                rOStm << (sal_Int16) rGrad.GetBorder();
+                rOStm << (sal_Int16) rGrad.GetOfsX();
+                rOStm << (sal_Int16) rGrad.GetOfsY();
+                rOStm << (sal_Int16) rGrad.GetStartIntensity();
+                rOStm << (sal_Int16) rGrad.GetEndIntensity();
                 nCount++;
             }
             break;
@@ -1897,10 +1897,10 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             case( META_GRADIENTEX_ACTION ):
             {
                 const MetaGradientExAction* pA = (MetaGradientExAction*) pAction;
-                ULONG                       nOldPos, nNewPos;
+                sal_uLong                       nOldPos, nNewPos;
 
                 // write RefPoint comment
-                rOStm << (INT16) GDI_GRADIENTEX_COMMENT;
+                rOStm << (sal_Int16) GDI_GRADIENTEX_COMMENT;
 
                 // we'll write the ActionSize later
                 nOldPos = rOStm.Tell();
@@ -1908,12 +1908,12 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
                 // write data
                 rOStm << pA->GetPolyPolygon() << pA->GetGradient();
-                rOStm << (INT32) 0; // number of actions that follow this comment
+                rOStm << (sal_Int32) 0; // number of actions that follow this comment
 
                 // calculate and write ActionSize of comment
                 nNewPos = rOStm.Tell();
                 rOStm.Seek( nOldPos );
-                rOStm << (INT32) ( nNewPos - nOldPos );
+                rOStm << (sal_Int32) ( nNewPos - nOldPos );
                 rOStm.Seek( nNewPos );
 
                 nCount++;
@@ -1929,11 +1929,11 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 ImplWriteLineColor( rOStm, rColor, 1 );
                 ImplWriteFillColor( rOStm, rColor, 1 );
 
-                rOStm << (INT16) GDI_RECT_ACTION;
-                rOStm << (INT32) 28;
+                rOStm << (sal_Int16) GDI_RECT_ACTION;
+                rOStm << (sal_Int32) 28;
                 ImplWriteRect( rOStm, pAct->GetRect() );
-                rOStm << (INT32) 0;
-                rOStm << (INT32) 0;
+                rOStm << (sal_Int32) 0;
+                rOStm << (sal_Int32) 0;
 
                 ImplWritePopAction( rOStm );
                 nCount += 5;
@@ -1946,18 +1946,18 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 const Region&           rRegion = pAct->GetRegion();
                 Rectangle               aClipRect;
 
-                rOStm << (INT16) GDI_CLIPREGION_ACTION;
-                rOStm << (INT32) 24;
+                rOStm << (sal_Int16) GDI_CLIPREGION_ACTION;
+                rOStm << (sal_Int32) 24;
 
                 if( pAct->IsClipping() )
                 {
                     aClipRect = rRegion.GetBoundRect();
-                    rOStm << (INT16) 1;
+                    rOStm << (sal_Int16) 1;
                 }
                 else
-                    rOStm << (INT16) 0;
+                    rOStm << (sal_Int16) 0;
 
-                rOStm << (INT16) 0;
+                rOStm << (sal_Int16) 0;
                 ImplWriteRect( rOStm, aClipRect );
 
                 if( pAct->IsClipping() )
@@ -1971,8 +1971,8 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaISectRectClipRegionAction* pAct = (MetaISectRectClipRegionAction*) pAction;
 
-                rOStm << (INT16) GDI_ISECTCLIPREGION_ACTION;
-                rOStm << (INT32) 20;
+                rOStm << (sal_Int16) GDI_ISECTCLIPREGION_ACTION;
+                rOStm << (sal_Int32) 20;
                 rOStm << pAct->GetRect();
                 nCount++;
             }
@@ -1982,10 +1982,10 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaMoveClipRegionAction* pAct = (MetaMoveClipRegionAction*) pAction;
 
-                rOStm << (INT16) GDI_MOVECLIPREGION_ACTION;
-                rOStm << (INT32) 12;
-                rOStm << (INT32) pAct->GetHorzMove();
-                rOStm << (INT32) pAct->GetVertMove();
+                rOStm << (sal_Int16) GDI_MOVECLIPREGION_ACTION;
+                rOStm << (sal_Int32) 12;
+                rOStm << (sal_Int32) pAct->GetHorzMove();
+                rOStm << (sal_Int32) pAct->GetVertMove();
                 nCount++;
             }
             break;
@@ -2056,8 +2056,8 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 MetaMapModeAction* pAct = (MetaMapModeAction*) pAction;
 
-                rOStm << (INT16) GDI_MAPMODE_ACTION;
-                rOStm << (INT32) 30;
+                rOStm << (sal_Int16) GDI_MAPMODE_ACTION;
+                rOStm << (sal_Int32) 30;
                 ImplWriteMapMode( rOStm, pAct->GetMapMode() );
                 nCount++;
             }
@@ -2094,7 +2094,7 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
                 if( ( pAct->GetRasterOp() != ROP_0 ) && ( pAct->GetRasterOp() != ROP_1 ) )
                 {
-                    INT16 nRasterOp;
+                    sal_Int16 nRasterOp;
 
                     // Falls vorher ROP_0/1 gesetzt war, alten
                     // Zustand durch Pop erst wieder herstellen
@@ -2102,7 +2102,7 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                     {
                         ImplWritePopAction( rOStm );
                         rSaveVDev.Pop();
-                        rRop_0_1 = FALSE;
+                        rRop_0_1 = sal_False;
                         nCount++;
                     }
 
@@ -2134,7 +2134,7 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                     }
 
                     ImplWriteRasterOpAction( rOStm, 0 );
-                    rRop_0_1 = TRUE;
+                    rRop_0_1 = sal_True;
                     nCount += 4;
                 }
             }
@@ -2143,12 +2143,12 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             case( META_TRANSPARENT_ACTION ):
             {
                 const PolyPolygon&  rPolyPoly = ( (MetaTransparentAction*) pAction )->GetPolyPolygon();
-                const INT16         nTrans = ( (MetaTransparentAction*) pAction )->GetTransparence();
-                const INT16         nBrushStyle = ( nTrans < 38 ) ? 8 : ( nTrans < 63 ) ? 9 : 10;
-                ULONG               nOldPos, nNewPos;
+                const sal_Int16         nTrans = ( (MetaTransparentAction*) pAction )->GetTransparence();
+                const sal_Int16         nBrushStyle = ( nTrans < 38 ) ? 8 : ( nTrans < 63 ) ? 9 : 10;
+                sal_uLong               nOldPos, nNewPos;
 
                 // write transparence comment
-                rOStm << (INT16) GDI_TRANSPARENT_COMMENT;
+                rOStm << (sal_Int16) GDI_TRANSPARENT_COMMENT;
 
                 // we'll write the ActionSize later
                 nOldPos = rOStm.Tell();
@@ -2157,12 +2157,12 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 // write comment data
                 rOStm << rPolyPoly;
                 rOStm << nTrans;
-                rOStm << (INT32) 15; // number of actions that follow this comment
+                rOStm << (sal_Int32) 15; // number of actions that follow this comment
 
                 // calculate and write ActionSize of comment
                 nNewPos = rOStm.Tell();
                 rOStm.Seek( nOldPos );
-                rOStm << (INT32) ( nNewPos - nOldPos );
+                rOStm << (sal_Int32) ( nNewPos - nOldPos );
                 rOStm.Seek( nNewPos );
 
                 {
@@ -2208,10 +2208,10 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 const Point&                        rPos = pA->GetPoint();
                 const Size&                         rSize = pA->GetSize();
                 const Gradient&                     rGradient = pA->GetGradient();
-                ULONG                               nOldPos, nNewPos;
+                sal_uLong                               nOldPos, nNewPos;
 
                 // write RefPoint comment
-                rOStm << (INT16) GDI_FLOATTRANSPARENT_COMMENT;
+                rOStm << (sal_Int16) GDI_FLOATTRANSPARENT_COMMENT;
 
                 // we'll write the ActionSize later
                 nOldPos = rOStm.Tell();
@@ -2223,12 +2223,12 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 // calculate and write ActionSize of comment
                 nNewPos = rOStm.Tell();
                 rOStm.Seek( nOldPos );
-                rOStm << (INT32) ( nNewPos - nOldPos + 4 );
+                rOStm << (sal_Int32) ( nNewPos - nOldPos + 4 );
                 rOStm.Seek( ( nOldPos = nNewPos ) + 4 );
 
                 {
                     // write actions for float transparence
-                    ULONG           nAddCount;
+                    sal_uLong           nAddCount;
                     GDIMetaFile     aMtf( rTransMtf );
                     const Size      aSrcSize( rTransMtf.GetPrefSize() );
                     Point           aSrcPt( rTransMtf.GetPrefMapMode().GetOrigin() );
@@ -2250,7 +2250,7 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                     nAddCount = ImplWriteActions( rOStm, aMtf, rSaveVDev, rRop_0_1, rLineCol, rLineColStack, rActualCharSet );
                     nNewPos = rOStm.Tell();
                     rOStm.Seek( nOldPos );
-                    rOStm << (INT32) nAddCount;
+                    rOStm << (sal_Int32) nAddCount;
                     rOStm.Seek( nNewPos );
 
 #ifdef CVTSVM_WRITE_SUBACTIONCOUNT
@@ -2267,10 +2267,10 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 const MetaHatchAction*  pA = (MetaHatchAction*) pAction;
                 const PolyPolygon&      rPolyPoly = pA->GetPolyPolygon();
                 const Hatch&            rHatch = pA->GetHatch();
-                ULONG                   nOldPos, nNewPos, nAddCount;
+                sal_uLong                   nOldPos, nNewPos, nAddCount;
 
                 // write hatch comment
-                rOStm << (INT16) GDI_HATCH_COMMENT;
+                rOStm << (sal_Int16) GDI_HATCH_COMMENT;
 
                 // we'll write the ActionSize later
                 nOldPos = rOStm.Tell();
@@ -2283,7 +2283,7 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 // calculate and write ActionSize of comment
                 nNewPos = rOStm.Tell();
                 rOStm.Seek( nOldPos );
-                rOStm << (INT32) ( nNewPos - nOldPos + 4 );
+                rOStm << (sal_Int32) ( nNewPos - nOldPos + 4 );
                 rOStm.Seek( ( nOldPos = nNewPos ) + 4 );
 
                 {
@@ -2295,7 +2295,7 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                     nAddCount = ImplWriteActions( rOStm, aTmpMtf, rSaveVDev, rRop_0_1, rLineCol, rLineColStack, rActualCharSet );
                     nNewPos = rOStm.Tell();
                     rOStm.Seek( nOldPos );
-                    rOStm << (INT32) nAddCount;
+                    rOStm << (sal_Int32) nAddCount;
                     rOStm.Seek( nNewPos );
 
 #ifdef CVTSVM_WRITE_SUBACTIONCOUNT
@@ -2311,11 +2311,11 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 const MetaRefPointAction*   pA = (MetaRefPointAction*) pAction;
                 const Point&                rRefPoint = pA->GetRefPoint();
-                const BOOL                  bSet = pA->IsSetting();
-                ULONG                       nOldPos, nNewPos;
+                const sal_Bool                  bSet = pA->IsSetting();
+                sal_uLong                       nOldPos, nNewPos;
 
                 // write RefPoint comment
-                rOStm << (INT16) GDI_REFPOINT_COMMENT;
+                rOStm << (sal_Int16) GDI_REFPOINT_COMMENT;
 
                 // we'll write the ActionSize later
                 nOldPos = rOStm.Tell();
@@ -2323,12 +2323,12 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
                 // write data
                 rOStm << rRefPoint << bSet;
-                rOStm << (INT32) 0; // number of actions that follow this comment
+                rOStm << (sal_Int32) 0; // number of actions that follow this comment
 
                 // calculate and write ActionSize of comment
                 nNewPos = rOStm.Tell();
                 rOStm.Seek( nOldPos );
-                rOStm << (INT32) ( nNewPos - nOldPos );
+                rOStm << (sal_Int32) ( nNewPos - nOldPos );
                 rOStm.Seek( nNewPos );
 
                 nCount++;
@@ -2339,11 +2339,11 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 const MetaTextLineColorAction*  pA = (MetaTextLineColorAction*) pAction;
                 const Color&                    rColor = pA->GetColor();
-                const BOOL                      bSet = pA->IsSetting();
-                ULONG                           nOldPos, nNewPos;
+                const sal_Bool                      bSet = pA->IsSetting();
+                sal_uLong                           nOldPos, nNewPos;
 
                 // write RefPoint comment
-                rOStm << (INT16) GDI_TEXTLINECOLOR_COMMENT;
+                rOStm << (sal_Int16) GDI_TEXTLINECOLOR_COMMENT;
 
                 // we'll write the ActionSize later
                 nOldPos = rOStm.Tell();
@@ -2351,12 +2351,12 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
                 // write data
                 rOStm << rColor << bSet;
-                rOStm << (INT32) 0; // number of actions that follow this comment
+                rOStm << (sal_Int32) 0; // number of actions that follow this comment
 
                 // calculate and write ActionSize of comment
                 nNewPos = rOStm.Tell();
                 rOStm.Seek( nOldPos );
-                rOStm << (INT32) ( nNewPos - nOldPos );
+                rOStm << (sal_Int32) ( nNewPos - nOldPos );
                 rOStm.Seek( nNewPos );
 
                 nCount++;
@@ -2375,10 +2375,10 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 const long                  nWidth = pA->GetWidth();
                 const FontStrikeout         eStrikeout = pA->GetStrikeout();
                 const FontUnderline         eUnderline = pA->GetUnderline();
-                ULONG                       nOldPos, nNewPos;
+                sal_uLong                       nOldPos, nNewPos;
 
                 // write RefPoint comment
-                rOStm << (INT16) GDI_TEXTLINE_COMMENT;
+                rOStm << (sal_Int16) GDI_TEXTLINE_COMMENT;
 
                 // we'll write the ActionSize later
                 nOldPos = rOStm.Tell();
@@ -2388,12 +2388,12 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 rOStm << rStartPt << nWidth <<
                     static_cast<sal_uInt32>(eStrikeout) <<
                     static_cast<sal_uInt32>(eUnderline);
-                rOStm << (INT32) 0; // number of actions that follow this comment
+                rOStm << (sal_Int32) 0; // number of actions that follow this comment
 
                 // calculate and write ActionSize of comment
                 nNewPos = rOStm.Tell();
                 rOStm.Seek( nOldPos );
-                rOStm << (INT32) ( nNewPos - nOldPos );
+                rOStm << (sal_Int32) ( nNewPos - nOldPos );
                 rOStm.Seek( nNewPos );
 
                 nCount++;
@@ -2407,10 +2407,10 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 const MetaCommentAction*    pA = (MetaCommentAction*) pAction;
                 const sal_uInt32            nDataSize = pA->GetDataSize();
-                ULONG                       nOldPos, nNewPos;
+                sal_uLong                       nOldPos, nNewPos;
 
                 // write RefPoint comment
-                rOStm << (INT16) GDI_COMMENT_COMMENT;
+                rOStm << (sal_Int16) GDI_COMMENT_COMMENT;
 
                 // we'll write the ActionSize later
                 nOldPos = rOStm.Tell();
@@ -2422,12 +2422,12 @@ ULONG SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 if( nDataSize )
                     rOStm.Write( pA->GetData(), nDataSize );
 
-                rOStm << (INT32) 0; // number of actions that follow this comment
+                rOStm << (sal_Int32) 0; // number of actions that follow this comment
 
                 // calculate and write ActionSize of comment
                 nNewPos = rOStm.Tell();
                 rOStm.Seek( nOldPos );
-                rOStm << (INT32) ( nNewPos - nOldPos );
+                rOStm << (sal_Int32) ( nNewPos - nOldPos );
                 rOStm.Seek( nNewPos );
 
                 nCount++;

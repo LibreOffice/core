@@ -73,9 +73,9 @@ WindowArrange::~WindowArrange()
 
 // -----------------------------------------------------------------------
 
-static USHORT ImplCeilSqareRoot( USHORT nVal )
+static sal_uInt16 ImplCeilSqareRoot( sal_uInt16 nVal )
 {
-    USHORT i;
+    sal_uInt16 i;
 
     // Ueberlauf verhindern
     if ( nVal > 0xFE * 0xFE )
@@ -103,19 +103,19 @@ static void ImplPosSizeWindow( Window* pWindow,
 
 void WindowArrange::ImplTile( const Rectangle& rRect )
 {
-    USHORT nCount = (USHORT)mpWinList->Count();
+    sal_uInt16 nCount = (sal_uInt16)mpWinList->Count();
     if ( nCount < 3 )
     {
         ImplVert( rRect );
         return;
     }
 
-    USHORT      i;
-    USHORT      j;
-    USHORT      nCols;
-    USHORT      nRows;
-    USHORT      nActRows;
-    USHORT      nOffset;
+    sal_uInt16      i;
+    sal_uInt16      j;
+    sal_uInt16      nCols;
+    sal_uInt16      nRows;
+    sal_uInt16      nActRows;
+    sal_uInt16      nOffset;
     long        nOverWidth;
     long        nOverHeight;
     Window*     pWindow;
@@ -353,7 +353,7 @@ void WindowArrange::ImplCascade( const Rectangle& rRect )
 
 // -----------------------------------------------------------------------
 
-void WindowArrange::Arrange( USHORT nType, const Rectangle& rRect )
+void WindowArrange::Arrange( sal_uInt16 nType, const Rectangle& rRect )
 {
     if ( !mpWinList->Count() )
         return;

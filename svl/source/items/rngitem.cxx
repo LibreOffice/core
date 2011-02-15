@@ -31,7 +31,7 @@
 
 #ifndef NUMTYPE
 
-#define NUMTYPE USHORT
+#define NUMTYPE sal_uInt16
 #define SfxXRangeItem SfxRangeItem
 #define SfxXRangesItem SfxUShortRangesItem
 #include <svl/rngitem.hxx>

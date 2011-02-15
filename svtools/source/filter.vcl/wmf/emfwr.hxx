@@ -50,27 +50,27 @@ private:
     MapMode             maDestMapMode;
     FilterConfigItem*   mpFilterConfigItem;
     SvStream*           mpStm;
-    BOOL*               mpHandlesUsed;
-    ULONG               mnHandleCount;
-    ULONG               mnLastPercent;
-    ULONG               mnRecordCount;
-    ULONG               mnRecordPos;
-    BOOL                mbRecordOpen;
-    BOOL                mbLineChanged;
+    sal_Bool*               mpHandlesUsed;
+    sal_uLong               mnHandleCount;
+    sal_uLong               mnLastPercent;
+    sal_uLong               mnRecordCount;
+    sal_uLong               mnRecordPos;
+    sal_Bool                mbRecordOpen;
+    sal_Bool                mbLineChanged;
     sal_uInt32          mnLineHandle;
-    BOOL                mbFillChanged;
+    sal_Bool                mbFillChanged;
     sal_uInt32          mnFillHandle;
-    BOOL                mbTextChanged;
+    sal_Bool                mbTextChanged;
     sal_uInt32          mnTextHandle;
     sal_uInt32          mnHorTextAlign;
 
     void                ImplBeginRecord( sal_uInt32 nType );
     void                ImplEndRecord();
 
-    ULONG               ImplAcquireHandle();
-    void                ImplReleaseHandle( ULONG nHandle );
+    sal_uLong               ImplAcquireHandle();
+    void                ImplReleaseHandle( sal_uLong nHandle );
 
-    BOOL                ImplPrepareHandleSelect( sal_uInt32& rHandle, ULONG nSelectType );
+    sal_Bool                ImplPrepareHandleSelect( sal_uInt32& rHandle, sal_uLong nSelectType );
     void                ImplCheckLineAttr();
     void                ImplCheckFillAttr();
     void                ImplCheckTextAttr();
@@ -82,9 +82,9 @@ private:
     void                ImplWriteSize( const Size& rSize);
     void                ImplWriteRect( const Rectangle& rRect );
     void                ImplWritePath( const PolyPolygon& rPolyPoly, sal_Bool bClose );
-    void                ImplWritePolygonRecord( const Polygon& rPoly, BOOL bClose );
+    void                ImplWritePolygonRecord( const Polygon& rPoly, sal_Bool bClose );
     void                ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly );
-    void                ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt, const Size& rSz, UINT32 nROP );
+    void                ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt, const Size& rSz, sal_uInt32 nROP );
     void                ImplWriteTextRecord( const Point& rPos, const String rText, const sal_Int32* pDXArray, sal_uInt32 nWidth );
 
     void                Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const basegfx::B2DPolygon& rLinePolygon);
@@ -94,7 +94,7 @@ public:
 
                         EMFWriter() {}
 
-    BOOL                WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm, FilterConfigItem* pConfigItem = NULL );
+    sal_Bool                WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm, FilterConfigItem* pConfigItem = NULL );
 };
 
 #endif // _EMFWR_HXX
