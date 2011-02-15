@@ -396,7 +396,7 @@ enum OpCodeEnum
 
 #ifndef DBG_UTIL
 // save memory since compilers tend to int an enum
-typedef USHORT OpCode;
+typedef sal_uInt16 OpCode;
 #else
 // have enum names in debugger
 typedef OpCodeEnum OpCode;

@@ -48,11 +48,11 @@ class EECharAttribArray;
 class EDITENG_DLLPUBLIC EditTextObject
 {
 private:
-    USHORT              nWhich;
+    sal_uInt16              nWhich;
     EDITENG_DLLPRIVATE EditTextObject&      operator=( const EditTextObject& );
 
 protected:
-                        EditTextObject( USHORT nWhich );
+                        EditTextObject( sal_uInt16 nWhich );
                         EditTextObject( const EditTextObject& r );
 
     virtual void        StoreData( SvStream& rOStream ) const;
@@ -61,59 +61,59 @@ protected:
 public:
     virtual             ~EditTextObject();
 
-    USHORT              Which() const { return nWhich; }
+    sal_uInt16              Which() const { return nWhich; }
 
-    virtual USHORT      GetUserType() const;    // Fuer OutlinerMode, der kann das aber nicht kompatibel speichern
-    virtual void        SetUserType( USHORT n );
+    virtual sal_uInt16      GetUserType() const;    // Fuer OutlinerMode, der kann das aber nicht kompatibel speichern
+    virtual void        SetUserType( sal_uInt16 n );
 
-    virtual ULONG       GetObjectSettings() const;
-    virtual void        SetObjectSettings( ULONG n );
+    virtual sal_uLong       GetObjectSettings() const;
+    virtual void        SetObjectSettings( sal_uLong n );
 
-    virtual BOOL        IsVertical() const;
-    virtual void        SetVertical( BOOL bVertical );
+    virtual sal_Bool        IsVertical() const;
+    virtual void        SetVertical( sal_Bool bVertical );
 
-    virtual USHORT      GetScriptType() const;
+    virtual sal_uInt16      GetScriptType() const;
 
-    virtual USHORT      GetVersion() const; // Solange der Outliner keine Recordlaenge speichert
+    virtual sal_uInt16      GetVersion() const; // Solange der Outliner keine Recordlaenge speichert
 
     virtual EditTextObject* Clone() const = 0;
 
-    BOOL                    Store( SvStream& rOStream ) const;
+    sal_Bool                    Store( SvStream& rOStream ) const;
     static EditTextObject*  Create( SvStream& rIStream,
                                 SfxItemPool* pGlobalTextObjectPool = 0 );
     void                    Skip( SvStream& rIStream );
 
-    virtual USHORT      GetParagraphCount() const;
+    virtual sal_uInt16      GetParagraphCount() const;
 
-    virtual XubString   GetText( USHORT nParagraph ) const;
-    virtual void        Insert( const EditTextObject& rObj, USHORT nPara );
-    virtual void        RemoveParagraph( USHORT nPara );
-    virtual EditTextObject* CreateTextObject( USHORT nPara, USHORT nParas = 1 ) const;
+    virtual XubString   GetText( sal_uInt16 nParagraph ) const;
+    virtual void        Insert( const EditTextObject& rObj, sal_uInt16 nPara );
+    virtual void        RemoveParagraph( sal_uInt16 nPara );
+    virtual EditTextObject* CreateTextObject( sal_uInt16 nPara, sal_uInt16 nParas = 1 ) const;
 
-    virtual BOOL        HasPortionInfo() const;
+    virtual sal_Bool        HasPortionInfo() const;
     virtual void        ClearPortionInfo();
 
-    virtual BOOL        HasOnlineSpellErrors() const;
+    virtual sal_Bool        HasOnlineSpellErrors() const;
 
-    virtual BOOL        HasCharAttribs( USHORT nWhich = 0 ) const;
-    virtual void        GetCharAttribs( USHORT nPara, EECharAttribArray& rLst ) const;
+    virtual sal_Bool        HasCharAttribs( sal_uInt16 nWhich = 0 ) const;
+    virtual void        GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) const;
 
-    virtual BOOL        RemoveCharAttribs( USHORT nWhich = 0 );
-    virtual BOOL        RemoveParaAttribs( USHORT nWhich = 0 );
+    virtual sal_Bool        RemoveCharAttribs( sal_uInt16 nWhich = 0 );
+    virtual sal_Bool        RemoveParaAttribs( sal_uInt16 nWhich = 0 );
 
-    virtual void        MergeParaAttribs( const SfxItemSet& rAttribs, USHORT nStart = EE_CHAR_START, USHORT nEnd = EE_CHAR_END );
+    virtual void        MergeParaAttribs( const SfxItemSet& rAttribs, sal_uInt16 nStart = EE_CHAR_START, sal_uInt16 nEnd = EE_CHAR_END );
 
-    virtual BOOL        IsFieldObject() const;
+    virtual sal_Bool        IsFieldObject() const;
     virtual const SvxFieldItem* GetField() const;
-    virtual BOOL        HasField( TypeId aType = NULL ) const;
+    virtual sal_Bool        HasField( TypeId aType = NULL ) const;
 
-    virtual SfxItemSet  GetParaAttribs( USHORT nPara ) const;
-    virtual void        SetParaAttribs( USHORT nPara, const SfxItemSet& rAttribs );
+    virtual SfxItemSet  GetParaAttribs( sal_uInt16 nPara ) const;
+    virtual void        SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rAttribs );
 
-    virtual BOOL        HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const;
-    virtual void        GetStyleSheet( USHORT nPara, XubString& rName, SfxStyleFamily& eFamily ) const;
-    virtual void        SetStyleSheet( USHORT nPara, const XubString& rName, const SfxStyleFamily& eFamily );
-    virtual BOOL        ChangeStyleSheets(  const XubString& rOldName, SfxStyleFamily eOldFamily,
+    virtual sal_Bool        HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const;
+    virtual void        GetStyleSheet( sal_uInt16 nPara, XubString& rName, SfxStyleFamily& eFamily ) const;
+    virtual void        SetStyleSheet( sal_uInt16 nPara, const XubString& rName, const SfxStyleFamily& eFamily );
+    virtual sal_Bool        ChangeStyleSheets(  const XubString& rOldName, SfxStyleFamily eOldFamily,
                                             const XubString& rNewName, SfxStyleFamily eNewFamily );
     virtual void        ChangeStyleSheetName( SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName );
 

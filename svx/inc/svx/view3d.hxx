@@ -74,17 +74,17 @@ protected:
     // Migrate selections
     Impl3DMirrorConstructOverlay*                   mpMirrorOverlay;
 
-    BOOL                        bDoubleSided;
+    sal_Bool                        bDoubleSided;
 
     void InitView();
 
-    void ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, BOOL bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat);
-    void ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, BOOL bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat);
+    void ImpCreate3DObject(E3dScene* pScene, SdrObject* pObj, sal_Bool bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat);
+    void ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, sal_Bool bExtrude, double fDepth, basegfx::B2DHomMatrix& rLatheMat);
     void ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj);
     void ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj);
 
     void InitScene(E3dScene* pScene, double fW, double fH, double fCamZ);
-    void ImpIsConvertTo3DPossible(SdrObject* pObj, BOOL& rAny3D, BOOL& rGroupSelected) const;
+    void ImpIsConvertTo3DPossible(SdrObject* pObj, sal_Bool& rAny3D, sal_Bool& rGroupSelected) const;
     void BreakSingle3DObj(E3dObject* pObj);
 
 public:
@@ -97,7 +97,7 @@ public:
 
     // Zugriff auf die Default-Attribute
     E3dDefaultAttributes& Get3DDefaultAttributes() { return a3DDefaultAttr; }
-    virtual BOOL BegDragObj(const Point& rPnt, OutputDevice* pOut = NULL, SdrHdl* pHdl = NULL, short nMinMov = -3, SdrDragMethod* pForcedMeth = NULL);
+    virtual sal_Bool BegDragObj(const Point& rPnt, OutputDevice* pOut = NULL, SdrHdl* pHdl = NULL, short nMinMov = -3, SdrDragMethod* pForcedMeth = NULL);
     virtual void CheckPossibilities();
 
     // Event setzen/rausruecken
@@ -111,21 +111,21 @@ public:
     // Bei Paste muss - falls in eine Scene eingefuegt wird - die
     // Objekte der Szene eingefuegt werden, die Szene selbst aber nicht
     using SdrView::Paste;
-    virtual BOOL Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, UINT32 nOptions=0);
+    virtual sal_Bool Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, sal_uInt32 nOptions=0);
 
     // #83403# Service routine used from local Clone() and from SdrCreateView::EndCreateObj(...)
-    BOOL ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene, Point aOffset);
+    sal_Bool ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDstScene, Point aOffset);
 
-    BOOL HasMarkedScene();
+    sal_Bool HasMarkedScene();
     E3dScene* GetMarkedScene();
 
-    BOOL IsConvertTo3DObjPossible() const;
-    void ConvertMarkedObjTo3D(BOOL bExtrude=TRUE, basegfx::B2DPoint aPnt1 = basegfx::B2DPoint(0.0, 0.0), basegfx::B2DPoint aPnt2 = basegfx::B2DPoint(0.0, 1.0));
+    sal_Bool IsConvertTo3DObjPossible() const;
+    void ConvertMarkedObjTo3D(sal_Bool bExtrude=sal_True, basegfx::B2DPoint aPnt1 = basegfx::B2DPoint(0.0, 0.0), basegfx::B2DPoint aPnt2 = basegfx::B2DPoint(0.0, 1.0));
 
     // Nachtraeglichhe Korrekturmoeglichkeit um alle Extrudes in einer
     // bestimmten Tiefensortierung anzulegen
     void DoDepthArrange(E3dScene* pScene, double fDepth);
-    void ConvertMarkedToPolyObj(BOOL bLineToArea);
+    void ConvertMarkedToPolyObj(sal_Bool bLineToArea);
     E3dScene* SetCurrent3DObj(E3dObject* p3DObj);
     void Start3DCreation();
 
@@ -133,7 +133,7 @@ public:
     sal_Bool Is3DRotationCreationActive() const { return (0L != mpMirrorOverlay); }
 
     virtual void MovAction(const Point& rPnt);
-    void End3DCreation(BOOL bUseDefaultValuesForMirrorAxes=FALSE);
+    void End3DCreation(sal_Bool bUseDefaultValuesForMirrorAxes=sal_False);
     void ResetCreationActive();
 
     double GetDefaultCamPosZ();
@@ -256,22 +256,22 @@ public:
     long GetVDefaultSegments() const { return nVDefaultSegments; }
     void SetVDefaultSegments(long nSegs) { nVDefaultSegments = nSegs; }
 
-    BOOL IsBreak3DObjPossible() const;
+    sal_Bool IsBreak3DObjPossible() const;
     void Break3DObj();
 
-    BOOL DoubleSided () const
+    sal_Bool DoubleSided () const
     {
         return bDoubleSided;
     }
 
-    BOOL &DoubleSided ()
+    sal_Bool &DoubleSided ()
     {
         return bDoubleSided;
     }
 
     void MergeScenes();
-    SfxItemSet Get3DAttributes(E3dScene* pInScene = NULL, BOOL bOnly3DAttr=FALSE) const;
-    void Set3DAttributes(const SfxItemSet& rAttr, E3dScene* pInScene = NULL, BOOL bOnly3DAttr=FALSE);
+    SfxItemSet Get3DAttributes(E3dScene* pInScene = NULL, sal_Bool bOnly3DAttr=sal_False) const;
+    void Set3DAttributes(const SfxItemSet& rAttr, E3dScene* pInScene = NULL, sal_Bool bOnly3DAttr=sal_False);
 };
 
 #endif          // _E3D_VIEW3D_HXX

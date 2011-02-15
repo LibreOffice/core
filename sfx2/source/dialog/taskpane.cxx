@@ -184,8 +184,8 @@ namespace sfx2
                         aCommandName.append( sImageURL.copy( nCommandImagePrefixLen ) );
                         const ::rtl::OUString sCommandName( aCommandName.makeStringAndClear() );
 
-                        const BOOL bHiContrast( Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
-                        const Image aPanelImage( GetImage( i_rDocFrame, sCommandName, FALSE, bHiContrast ) );
+                        const sal_Bool bHiContrast( Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
+                        const Image aPanelImage( GetImage( i_rDocFrame, sCommandName, sal_False, bHiContrast ) );
                         return aPanelImage.GetXGraphic();
                     }
 
@@ -244,7 +244,7 @@ namespace sfx2
     SFX_IMPL_DOCKINGWINDOW( TaskPaneWrapper, SID_TASKPANE );
 
     //------------------------------------------------------------------------------------------------------------------
-    TaskPaneWrapper::TaskPaneWrapper( Window* i_pParent, USHORT i_nId, SfxBindings* i_pBindings, SfxChildWinInfo* i_pInfo )
+    TaskPaneWrapper::TaskPaneWrapper( Window* i_pParent, sal_uInt16 i_nId, SfxBindings* i_pBindings, SfxChildWinInfo* i_pInfo )
         :SfxChildWindow( i_pParent, i_nId )
     {
         pWindow = new TaskPaneDockingWindow( i_pBindings, *this, i_pParent,
@@ -255,7 +255,7 @@ namespace sfx2
         pWindow->SetOutputSizePixel( Size( 300, 450 ) );
 
         dynamic_cast< SfxDockingWindow* >( pWindow )->Initialize( i_pInfo );
-        SetHideNotDelete( TRUE );
+        SetHideNotDelete( sal_True );
 
         pWindow->Show();
     }
@@ -923,7 +923,7 @@ namespace sfx2
 
         ModuleTaskPane&         m_rTaskPane;
         TitledDockingWindow&    m_rDockingWindow;
-        USHORT                  m_nViewMenuID;
+        sal_uInt16                  m_nViewMenuID;
         PanelSelectorLayout     m_eCurrentLayout;
         PanelDescriptors        m_aPanelRepository;
         bool                    m_bTogglingPanelVisibility;
@@ -1042,11 +1042,11 @@ namespace sfx2
         switch ( i_pMenu->GetCurItemId() )
         {
             case MID_UNLOCK_TASK_PANEL:
-                m_rDockingWindow.SetFloatingMode( TRUE );
+                m_rDockingWindow.SetFloatingMode( sal_True );
                 break;
 
             case MID_LOCK_TASK_PANEL:
-                m_rDockingWindow.SetFloatingMode( FALSE );
+                m_rDockingWindow.SetFloatingMode( sal_False );
                 break;
 
             case MID_LAYOUT_DRAWERS:
@@ -1233,7 +1233,7 @@ namespace sfx2
 
         // Add one entry for every tool panel element to individually make
         // them visible or hide them.
-        USHORT nIndex = MID_FIRST_PANEL;
+        sal_uInt16 nIndex = MID_FIRST_PANEL;
         for ( size_t i=0; i<m_aPanelRepository.size(); ++i, ++nIndex )
         {
             const PanelDescriptor& rPanelDesc( m_aPanelRepository[i] );
@@ -1263,7 +1263,7 @@ namespace sfx2
                 String( SfxResId( STR_SFX_UNDOCK ) )
             );
 
-        pMenu->RemoveDisabledEntries( FALSE, FALSE );
+        pMenu->RemoveDisabledEntries( sal_False, sal_False );
 
         return pMenu;
     }

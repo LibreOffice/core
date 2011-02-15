@@ -65,6 +65,8 @@ class Desktop : public Application
 {
     friend class UserInstall;
 
+    void doShutdown();
+
     public:
         enum BootstrapError
         {
@@ -89,8 +91,8 @@ class Desktop : public Application
         virtual void            Main( );
         virtual void            Init();
         virtual void            DeInit();
-        virtual BOOL            QueryExit();
-        virtual USHORT          Exception(USHORT nError);
+        virtual sal_Bool            QueryExit();
+        virtual sal_uInt16          Exception(sal_uInt16 nError);
         virtual void            SystemSettingsChanging( AllSettings& rSettings, Window* pFrame );
         virtual void            AppEvent( const ApplicationEvent& rAppEvent );
 
@@ -162,7 +164,7 @@ class Desktop : public Application
         void                    StartSetup( const ::rtl::OUString& aParameters );
 
         // Get a resource message string securely e.g. if resource cannot be retrieved return aFaultBackMsg
-        ::rtl::OUString         GetMsgString( USHORT nId, const ::rtl::OUString& aFaultBackMsg );
+        ::rtl::OUString         GetMsgString( sal_uInt16 nId, const ::rtl::OUString& aFaultBackMsg );
 
         // Create a error message depending on bootstrap failure code and an optional file url
         ::rtl::OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
@@ -201,7 +203,7 @@ class Desktop : public Application
         sal_Bool                        m_bMinimized;
         sal_Bool                        m_bInvisible;
         bool                            m_bServicesRegistered;
-        USHORT                          m_nAppEvents;
+        sal_uInt16                          m_nAppEvents;
         BootstrapError                  m_aBootstrapError;
         BootstrapStatus                 m_aBootstrapStatus;
 

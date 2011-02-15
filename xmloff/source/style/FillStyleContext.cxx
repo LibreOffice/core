@@ -90,7 +90,7 @@ void XMLGradientStyleContext::EndElement()
     {}
 }
 
-BOOL XMLGradientStyleContext::IsTransient() const
+sal_Bool XMLGradientStyleContext::IsTransient() const
 {
     return sal_True;
 }
@@ -136,7 +136,7 @@ void XMLHatchStyleContext::EndElement()
     {}
 }
 
-BOOL XMLHatchStyleContext::IsTransient() const
+sal_Bool XMLHatchStyleContext::IsTransient() const
 {
     return sal_True;
 }
@@ -216,7 +216,7 @@ void XMLBitmapStyleContext::EndElement()
     {}
 }
 
-BOOL XMLBitmapStyleContext::IsTransient() const
+sal_Bool XMLBitmapStyleContext::IsTransient() const
 {
     return sal_True;
 }
@@ -263,7 +263,7 @@ void XMLTransGradientStyleContext::EndElement()
     {}
 }
 
-BOOL XMLTransGradientStyleContext::IsTransient() const
+sal_Bool XMLTransGradientStyleContext::IsTransient() const
 {
     return sal_True;
 }
@@ -309,7 +309,7 @@ void XMLMarkerStyleContext::EndElement()
     {}
 }
 
-BOOL XMLMarkerStyleContext::IsTransient() const
+sal_Bool XMLMarkerStyleContext::IsTransient() const
 {
     return sal_True;
 }
@@ -355,7 +355,7 @@ void XMLDashStyleContext::EndElement()
     {}
 }
 
-BOOL XMLDashStyleContext::IsTransient() const
+sal_Bool XMLDashStyleContext::IsTransient() const
 {
     return sal_True;
 }

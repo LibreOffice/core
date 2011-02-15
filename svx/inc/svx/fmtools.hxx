@@ -71,7 +71,7 @@
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>

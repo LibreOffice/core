@@ -130,7 +130,7 @@ void E3dLatheObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 |*
 \************************************************************************/
 
-UINT16 E3dLatheObj::GetObjIdentifier() const
+sal_uInt16 E3dLatheObj::GetObjIdentifier() const
 {
     return E3D_LATHEOBJ_ID;
 }
@@ -158,7 +158,7 @@ void E3dLatheObj::operator=(const SdrObject& rObj)
 |*
 \************************************************************************/
 
-SdrObject *E3dLatheObj::DoConvertToPolyObj(BOOL /*bBezier*/) const
+SdrObject *E3dLatheObj::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
 {
     return NULL;
 }
@@ -248,9 +248,9 @@ void E3dLatheObj::TakeObjNamePlural(XubString& rName) const
 |*
 \************************************************************************/
 
-BOOL E3dLatheObj::IsBreakObjPossible()
+sal_Bool E3dLatheObj::IsBreakObjPossible()
 {
-    return TRUE;
+    return sal_True;
 }
 
 SdrAttrObj* E3dLatheObj::GetBreakObj()

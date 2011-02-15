@@ -64,7 +64,7 @@ protected:
 
 class LicenseView : public MultiLineEdit, public SfxListener
 {
-    BOOL            mbEndReached;
+    sal_Bool            mbEndReached;
     Link            maEndReachedHdl;
     Link            maScrolledHdl;
 
@@ -74,9 +74,9 @@ public:
 
     void ScrollDown( ScrollType eScroll );
 
-    BOOL IsEndReached() const;
-    BOOL EndReached() const { return mbEndReached; }
-    void SetEndReached( BOOL bEnd ) { mbEndReached = bEnd; }
+    sal_Bool IsEndReached() const;
+    sal_Bool EndReached() const { return mbEndReached; }
+    void SetEndReached( sal_Bool bEnd ) { mbEndReached = bEnd; }
 
     void SetEndReachedHdl( const Link& rHdl )  { maEndReachedHdl = rHdl; }
     const Link& GetAutocompleteHdl() const { return maEndReachedHdl; }

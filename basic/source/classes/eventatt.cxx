@@ -298,7 +298,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
                     if( aName == aLibName )
                     {
                         // Search only in the lib, not automatically in application basic
-                        USHORT nFlags = pBasic->GetFlags();
+                        sal_uInt16 nFlags = pBasic->GetFlags();
                         pBasic->ResetFlag( SBX_GBLSEARCH );
                         pMethVar = pBasic->Find( aMacro, SbxCLASS_DONTCARE );
                         pBasic->SetFlags( nFlags );
@@ -328,7 +328,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
             {
                 SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
                 unoToSbxValue( (SbxVariable*)xVar, pArgs[i] );
-                xArray->Put( xVar, sal::static_int_cast< USHORT >(i+1) );
+                xArray->Put( xVar, sal::static_int_cast< sal_uInt16 >(i+1) );
             }
         }
 
@@ -443,7 +443,7 @@ static ::rtl::OUString aDecorationPropName =
 static ::rtl::OUString aTitlePropName =
     ::rtl::OUString::createFromAscii( "Title" );
 
-void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
+void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
 {
     static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAscii( "ResourceResolver" );
 

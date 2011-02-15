@@ -68,8 +68,8 @@ protected:
     String                      aProgName;
 
     // wg. Kompatibilitaet erstmal am SdrTextObj
-    BOOL                        bFrame : 1;
-    BOOL                        bInDestruction : 1;
+    sal_Bool                        bFrame : 1;
+    sal_Bool                        bInDestruction : 1;
     mutable bool                m_bTypeAsked;
     mutable bool                m_bChart;
 
@@ -85,10 +85,10 @@ protected:
 public:
     TYPEINFO();
 
-    SdrOle2Obj(FASTBOOL bFrame_=FALSE);
-    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, FASTBOOL bFrame_=FALSE);
-    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, FASTBOOL bFrame_=FALSE);
-    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, const Rectangle& rNewRect, FASTBOOL bFrame_=FALSE);
+    SdrOle2Obj(FASTBOOL bFrame_=sal_False);
+    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, FASTBOOL bFrame_=sal_False);
+    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, FASTBOOL bFrame_=sal_False);
+    SdrOle2Obj(const svt::EmbeddedObjectRef& rNewObjRef, const String& rNewObjName, const Rectangle& rNewRect, FASTBOOL bFrame_=sal_False);
     virtual ~SdrOle2Obj();
 
     // access to svt::EmbeddedObjectRef
@@ -140,7 +140,7 @@ public:
     virtual SdrObject* getFullDragClone() const;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
     virtual void TakeObjNameSingul(String& rName) const;
     virtual void TakeObjNamePlural(String& rName) const;
 
@@ -155,7 +155,7 @@ public:
     static sal_Bool CanUnloadRunningObj( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj,
                                          sal_Int64 nAspect );
     static sal_Bool Unload( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject >& xObj, sal_Int64 nAspect );
-    BOOL Unload();
+    sal_Bool Unload();
     void Connect();
     void Disconnect();
     void ObjectLoaded();

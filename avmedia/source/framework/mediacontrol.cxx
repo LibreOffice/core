@@ -86,7 +86,7 @@ MediaControl::MediaControl( Window* pParent, MediaControlStyle eControlStyle ) :
     const String aTimeText( RTL_CONSTASCII_USTRINGPARAM( " 00:00:00/00:00:00 " ) );
 
     SetBackground();
-    SetPaintTransparent( TRUE );
+    SetPaintTransparent( sal_True );
     SetParentClipMode( PARENTCLIPMODE_NOCLIP );
 
     if( MEDIACONTROLSTYLE_SINGLELINE != meControlStyle )
@@ -104,11 +104,11 @@ MediaControl::MediaControl( Window* pParent, MediaControlStyle eControlStyle ) :
         mpZoomListBox->SetBackground();
 
         maZoomToolBox.SetBackground();
-        maZoomToolBox.SetPaintTransparent( TRUE );
+        maZoomToolBox.SetPaintTransparent( sal_True );
         maPlayToolBox.SetBackground();
-        maPlayToolBox.SetPaintTransparent( TRUE );
+        maPlayToolBox.SetPaintTransparent( sal_True );
         maMuteToolBox.SetBackground();
-        maMuteToolBox.SetPaintTransparent( TRUE );
+        maMuteToolBox.SetPaintTransparent( sal_True );
 
     }
 
@@ -362,7 +362,7 @@ void MediaControl::implUpdateToolboxes()
 
         if( !mpZoomListBox->IsTravelSelect() && !mpZoomListBox->IsInDropDown() )
         {
-            USHORT nSelectEntryPos ;
+            sal_uInt16 nSelectEntryPos ;
 
             switch( maItem.getZoom() )
             {
@@ -454,7 +454,7 @@ void MediaControl::implUpdateTimeField( double fCurTime )
 
 Image MediaControl::implGetImage( sal_Int32 nImageId ) const
 {
-    return maImageList.GetImage( static_cast< USHORT >( nImageId ) );
+    return maImageList.GetImage( static_cast< sal_uInt16 >( nImageId ) );
 }
 
 // ------------------------------------------------------------------------------

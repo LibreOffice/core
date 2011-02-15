@@ -45,7 +45,7 @@ TYPEINIT1_FACTORY(SvxViewLayoutItem,SfxUInt16Item, new SvxViewLayoutItem);
 
 SvxViewLayoutItem::SvxViewLayoutItem
 (
-    USHORT      nColumns,
+    sal_uInt16      nColumns,
     bool        bBookMode,
     sal_uInt16  _nWhich
 )
@@ -111,7 +111,7 @@ int SvxViewLayoutItem::operator==( const SfxPoolItem& rAttr ) const
              mbBookMode == rItem.IsBookMode() );
 }
 
-sal_Bool SvxViewLayoutItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SvxViewLayoutItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -137,7 +137,7 @@ sal_Bool SvxViewLayoutItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMe
     return sal_True;
 }
 
-sal_Bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+sal_Bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -168,7 +168,7 @@ sal_Bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
 
                 if ( bAllConverted && nConvertedCount == VIEWLAYOUT_PARAMS )
                 {
-                    SetValue( (UINT16)nColumns );
+                    SetValue( (sal_uInt16)nColumns );
                     mbBookMode = bBookMode;
                     return sal_True;
                 }
@@ -182,7 +182,7 @@ sal_Bool SvxViewLayoutItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE
             sal_Int32 nVal = 0;
             if ( rVal >>= nVal )
             {
-                SetValue( (UINT16)nVal );
+                SetValue( (sal_uInt16)nVal );
                 return sal_True;
             }
             else

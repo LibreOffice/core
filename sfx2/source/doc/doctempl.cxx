@@ -137,7 +137,11 @@ namespace DocTempl {
 class DocTempl_EntryData_Impl
 {
     RegionData_Impl*    mpParent;
+
+    // the following member must be SfxObjectShellLock since it controlls that SfxObjectShell lifetime by design
+    // and users of this class expect it to be so.
     SfxObjectShellLock  mxObjShell;
+
     OUString            maTitle;
     OUString            maOwnURL;
     OUString            maTargetURL;
@@ -193,7 +197,7 @@ public:
     void                SetTargetURL( const OUString& rURL ) { maTargetURL = rURL; }
     void                SetHierarchyURL( const OUString& rURL) { maOwnURL = rURL; }
 
-    DocTempl_EntryData_Impl*     GetEntry( ULONG nIndex ) const;
+    DocTempl_EntryData_Impl*     GetEntry( sal_uIntPtr nIndex ) const;
     DocTempl_EntryData_Impl*     GetEntry( const OUString& rName ) const;
     DocTempl_EntryData_Impl*     GetByTargetURL( const OUString& rName ) const;
 
@@ -201,14 +205,14 @@ public:
     const OUString&     GetTargetURL();
     const OUString&     GetHierarchyURL();
 
-    ULONG               GetCount() const;
+    sal_uIntPtr               GetCount() const;
 
     void                SetTitle( const OUString& rTitle ) { maTitle = rTitle; }
 
     void                AddEntry( const OUString& rTitle,
                                   const OUString& rTargetURL,
-                                  USHORT *pPos = NULL );
-    void                DeleteEntry( ULONG nIndex );
+                                  sal_uInt16 *pPos = NULL );
+    void                DeleteEntry( sal_uIntPtr nIndex );
 
     int                 Compare( const OUString& rTitle ) const
                             { return maTitle.compareTo( rTitle ); }
@@ -254,12 +258,12 @@ public:
 
     void                Rescan();
 
-    void                DeleteRegion( ULONG nIndex );
+    void                DeleteRegion( sal_uIntPtr nIndex );
 
-    ULONG               GetRegionCount() const
+    sal_uIntPtr               GetRegionCount() const
                             { return maRegions.Count(); }
     RegionData_Impl*    GetRegion( const OUString& rName ) const;
-    RegionData_Impl*    GetRegion( ULONG nIndex ) const;
+    RegionData_Impl*    GetRegion( sal_uIntPtr nIndex ) const;
     void                GetTemplates( Content& rTargetFolder,
                                       Content& rParentFolder,
                                       RegionData_Impl* pRegion );
@@ -268,7 +272,7 @@ public:
                                       sal_Bool& rFound ) const;
 
     sal_Bool            GetTitleFromURL( const OUString& rURL, OUString& aTitle );
-    sal_Bool            InsertRegion( RegionData_Impl *pData, ULONG nPos = LIST_APPEND );
+    sal_Bool            InsertRegion( RegionData_Impl *pData, sal_uIntPtr nPos = LIST_APPEND );
     OUString            GetRootURL() const { return maRootURL; }
 
     uno::Reference< XDocumentTemplates >     getDocTemplates() { return mxTemplates; }
@@ -317,7 +321,7 @@ static sal_Bool getTextProperty_Impl( Content& rContent,
 
 String SfxDocumentTemplates::GetFullRegionName
 (
-    USHORT nIdx                     // Index des Bereiches
+    sal_uInt16 nIdx                     // Index des Bereiches
 )   const
 
 /*  [Beschreibung]
@@ -354,7 +358,7 @@ String SfxDocumentTemplates::GetFullRegionName
 
 const String& SfxDocumentTemplates::GetRegionName
 (
-    USHORT nIdx                 // Index des Bereiches
+    sal_uInt16 nIdx                 // Index des Bereiches
 )   const
 
 /*  [Beschreibung]
@@ -390,7 +394,7 @@ const String& SfxDocumentTemplates::GetRegionName
 
 //------------------------------------------------------------------------
 
-USHORT SfxDocumentTemplates::GetRegionNo
+sal_uInt16 SfxDocumentTemplates::GetRegionNo
 (
     const String &rRegion       // Name der Region
 )   const
@@ -402,7 +406,7 @@ USHORT SfxDocumentTemplates::GetRegionNo
 
     [R"uckgabewert]
 
-    USHORT          Index von 'rRegion' oder USHRT_MAX falls unbekannt
+    sal_uInt16          Index von 'rRegion' oder USHRT_MAX falls unbekannt
 
 */
 {
@@ -412,10 +416,10 @@ USHORT SfxDocumentTemplates::GetRegionNo
         return USHRT_MAX;
 
     sal_Bool    bFound;
-    ULONG       nIndex = pImp->GetRegionPos( rRegion, bFound );
+    sal_uIntPtr       nIndex = pImp->GetRegionPos( rRegion, bFound );
 
     if ( bFound )
-        return (USHORT) nIndex;
+        return (sal_uInt16) nIndex;
     else
         return USHRT_MAX;
 }
@@ -423,7 +427,7 @@ USHORT SfxDocumentTemplates::GetRegionNo
 
 //------------------------------------------------------------------------
 
-USHORT SfxDocumentTemplates::GetRegionCount() const
+sal_uInt16 SfxDocumentTemplates::GetRegionCount() const
 
 /*  [Beschreibung]
 
@@ -432,7 +436,7 @@ USHORT SfxDocumentTemplates::GetRegionCount() const
 
     [R"uckgabewert]
 
-    USHORT                  Anzahl der Bereiche
+    sal_uInt16                  Anzahl der Bereiche
 
 */
 {
@@ -441,14 +445,14 @@ USHORT SfxDocumentTemplates::GetRegionCount() const
     if ( !pImp->Construct() )
         return 0;
 
-    ULONG nCount = pImp->GetRegionCount();
+    sal_uIntPtr nCount = pImp->GetRegionCount();
 
-    return (USHORT) nCount;
+    return (sal_uInt16) nCount;
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool SfxDocumentTemplates::IsRegionLoaded( USHORT nIdx ) const
+sal_Bool SfxDocumentTemplates::IsRegionLoaded( sal_uInt16 nIdx ) const
 {
     DocTemplLocker_Impl aLocker( *pImp );
 
@@ -465,7 +469,7 @@ sal_Bool SfxDocumentTemplates::IsRegionLoaded( USHORT nIdx ) const
 
 //------------------------------------------------------------------------
 
-USHORT SfxDocumentTemplates::GetCount
+sal_uInt16 SfxDocumentTemplates::GetCount
 (
     const String&   rName   /*  Name des Bereiches, dessen Eintrags-
                                 anzahl ermittelt werden soll */
@@ -490,19 +494,19 @@ USHORT SfxDocumentTemplates::GetCount
         return 0;
 
     RegionData_Impl *pData = pImp->GetRegion( rName );
-    ULONG            nCount = 0;
+    sal_uIntPtr            nCount = 0;
 
     if ( pData )
         nCount = pData->GetCount();
 
-    return (USHORT) nCount;
+    return (sal_uInt16) nCount;
 }
 
 //------------------------------------------------------------------------
 
-USHORT SfxDocumentTemplates::GetCount
+sal_uInt16 SfxDocumentTemplates::GetCount
 (
-    USHORT nRegion              /*  Index des Bereiches, dessen Eintrags-
+    sal_uInt16 nRegion              /*  Index des Bereiches, dessen Eintrags-
                                     anzahl ermittelt werden soll */
 
 )   const
@@ -523,20 +527,20 @@ USHORT SfxDocumentTemplates::GetCount
         return 0;
 
     RegionData_Impl *pData = pImp->GetRegion( nRegion );
-    ULONG            nCount = 0;
+    sal_uIntPtr            nCount = 0;
 
     if ( pData )
         nCount = pData->GetCount();
 
-    return (USHORT) nCount;
+    return (sal_uInt16) nCount;
 }
 
 //------------------------------------------------------------------------
 
 const String& SfxDocumentTemplates::GetName
 (
-    USHORT nRegion,     //  Index des Bereiches, in dem der Eintrag liegt
-    USHORT nIdx         //  Index des Eintrags
+    sal_uInt16 nRegion,     //  Index des Bereiches, in dem der Eintrag liegt
+    sal_uInt16 nIdx         //  Index des Eintrags
 )   const
 
 /*  [Beschreibung]
@@ -578,8 +582,8 @@ const String& SfxDocumentTemplates::GetName
 
 String SfxDocumentTemplates::GetFileName
 (
-    USHORT nRegion,     //  Index des Bereiches, in dem der Eintrag liegt
-    USHORT nIdx         //  Index des Eintrags
+    sal_uInt16 nRegion,     //  Index des Bereiches, in dem der Eintrag liegt
+    sal_uInt16 nIdx         //  Index des Eintrags
 )   const
 
 /*  [Beschreibung]
@@ -615,8 +619,8 @@ String SfxDocumentTemplates::GetFileName
 
 String SfxDocumentTemplates::GetPath
 (
-    USHORT  nRegion,    //  Index des Bereiches, in dem der Eintrag liegt
-    USHORT  nIdx        //  Index des Eintrags
+    sal_uInt16  nRegion,    //  Index des Bereiches, in dem der Eintrag liegt
+    sal_uInt16  nIdx        //  Index des Eintrags
 )   const
 
 /*  [Beschreibung]
@@ -652,7 +656,7 @@ String SfxDocumentTemplates::GetPath
 
 String SfxDocumentTemplates::GetTemplatePath
 (
-    USHORT          nRegion,    //  Index des Bereiches, in dem der Eintrag liegt
+    sal_uInt16          nRegion,    //  Index des Bereiches, in dem der Eintrag liegt
     const String&   rLongName   //  logischer Name des Eintrags
 )   const
 
@@ -841,7 +845,7 @@ sal_Bool SfxDocumentTemplates::SaveDir
 
 void SfxDocumentTemplates::NewTemplate
 (
-    USHORT          nRegion,    /*  Index des Bereiches, in dem die Vorlage
+    sal_uInt16          nRegion,    /*  Index des Bereiches, in dem die Vorlage
                                     angelegt werden soll */
 
     const String&   rLongName,  //  logischer Name der neuen Vorlage
@@ -885,10 +889,10 @@ void SfxDocumentTemplates::NewTemplate
 
 sal_Bool SfxDocumentTemplates::CopyOrMove
 (
-    USHORT  nTargetRegion,      //  Index des Zielbereiches
-    USHORT  nTargetIdx,         //  Index Zielposition
-    USHORT  nSourceRegion,      //  Index des Quellbereiches
-    USHORT  nSourceIdx,         /*  Index der zu kopierenden / zu verschiebenden
+    sal_uInt16  nTargetRegion,      //  Index des Zielbereiches
+    sal_uInt16  nTargetIdx,         //  Index Zielposition
+    sal_uInt16  nSourceRegion,      //  Index des Quellbereiches
+    sal_uInt16  nSourceIdx,         /*  Index der zu kopierenden / zu verschiebenden
                                     Dokumentvorlage */
     sal_Bool    bMove               //  kopieren / verschieben
 )
@@ -906,8 +910,8 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
                                     Aktion konnte nicht ausgef2uhrt werden
     [Querverweise]
 
-    <SfxDocumentTemplates::Move(USHORT,USHORT,USHORT,USHORT)>
-    <SfxDocumentTemplates::Copy(USHORT,USHORT,USHORT,USHORT)>
+    <SfxDocumentTemplates::Move(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16)>
+    <SfxDocumentTemplates::Copy(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16)>
 */
 
 {
@@ -1010,10 +1014,10 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
 
 sal_Bool SfxDocumentTemplates::Move
 (
-    USHORT nTargetRegion,       //  Index des Zielbereiches
-    USHORT nTargetIdx,          //  Index Zielposition
-    USHORT nSourceRegion,       //  Index des Quellbereiches
-    USHORT nSourceIdx           /*  Index der zu kopierenden / zu verschiebenden
+    sal_uInt16 nTargetRegion,       //  Index des Zielbereiches
+    sal_uInt16 nTargetIdx,          //  Index Zielposition
+    sal_uInt16 nSourceRegion,       //  Index des Quellbereiches
+    sal_uInt16 nSourceIdx           /*  Index der zu kopierenden / zu verschiebenden
                                     Dokumentvorlage */
 )
 
@@ -1032,7 +1036,7 @@ sal_Bool SfxDocumentTemplates::Move
 
     [Querverweise]
 
-    <SfxDocumentTemplates::CopyOrMove(USHORT,USHORT,USHORT,USHORT,sal_Bool)>
+    <SfxDocumentTemplates::CopyOrMove(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16,sal_Bool)>
 */
 {
     DocTemplLocker_Impl aLocker( *pImp );
@@ -1045,10 +1049,10 @@ sal_Bool SfxDocumentTemplates::Move
 
 sal_Bool SfxDocumentTemplates::Copy
 (
-    USHORT nTargetRegion,       //  Index des Zielbereiches
-    USHORT nTargetIdx,          //  Index Zielposition
-    USHORT nSourceRegion,       //  Index des Quellbereiches
-    USHORT nSourceIdx           /*  Index der zu kopierenden / zu verschiebenden
+    sal_uInt16 nTargetRegion,       //  Index des Zielbereiches
+    sal_uInt16 nTargetIdx,          //  Index Zielposition
+    sal_uInt16 nSourceRegion,       //  Index des Quellbereiches
+    sal_uInt16 nSourceIdx           /*  Index der zu kopierenden / zu verschiebenden
                                     Dokumentvorlage */
 )
 
@@ -1067,7 +1071,7 @@ sal_Bool SfxDocumentTemplates::Copy
 
     [Querverweise]
 
-    <SfxDocumentTemplates::CopyOrMove(USHORT,USHORT,USHORT,USHORT,sal_Bool)>
+    <SfxDocumentTemplates::CopyOrMove(sal_uInt16,sal_uInt16,sal_uInt16,sal_uInt16,sal_Bool)>
 */
 
 {
@@ -1081,9 +1085,9 @@ sal_Bool SfxDocumentTemplates::Copy
 
 sal_Bool SfxDocumentTemplates::CopyTo
 (
-    USHORT          nRegion,    /*  Bereich der Vorlage, die exportiert werden
+    sal_uInt16          nRegion,    /*  Bereich der Vorlage, die exportiert werden
                                     soll  */
-    USHORT          nIdx,       /*  Index der Vorlage, die exportiert werden
+    sal_uInt16          nIdx,       /*  Index der Vorlage, die exportiert werden
                                     soll */
     const String&   rName       /*  Dateiname, unter dem die Vorlage angelegt
                                     werden soll */
@@ -1105,7 +1109,7 @@ sal_Bool SfxDocumentTemplates::CopyTo
 
     [Querverweise]
 
-    <SfxDocumentTemplates::CopyFrom(USHORT,USHORT,String&)>
+    <SfxDocumentTemplates::CopyFrom(sal_uInt16,sal_uInt16,String&)>
 */
 
 {
@@ -1160,9 +1164,9 @@ sal_Bool SfxDocumentTemplates::CopyTo
 
 sal_Bool SfxDocumentTemplates::CopyFrom
 (
-    USHORT      nRegion,        /*  Bereich, in den die Vorlage importiert
+    sal_uInt16      nRegion,        /*  Bereich, in den die Vorlage importiert
                                     werden soll */
-    USHORT      nIdx,           //  Index der neuen Vorlage in diesem Bereich
+    sal_uInt16      nIdx,           //  Index der neuen Vorlage in diesem Bereich
     String&     rName           /*  Dateiname der Vorlage, die importiert
                                     werden soll, als out-Parameter der (auto-
                                     matisch aus dem Dateinamen generierte)
@@ -1184,7 +1188,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
 
     [Querverweise]
 
-    <SfxDocumentTemplates::CopyTo(USHORT,USHORT,const String&)>
+    <SfxDocumentTemplates::CopyTo(sal_uInt16,sal_uInt16,const String&)>
 */
 
 {
@@ -1309,8 +1313,8 @@ sal_Bool SfxDocumentTemplates::CopyFrom
 
 sal_Bool SfxDocumentTemplates::Delete
 (
-    USHORT nRegion,             //  Index des Bereiches
-    USHORT nIdx                 /*  Index des Eintrags oder USHRT_MAX,
+    sal_uInt16 nRegion,             //  Index des Bereiches
+    sal_uInt16 nIdx                 /*  Index des Eintrags oder USHRT_MAX,
                                     wenn ein Verzeichnis gemeint ist. */
 )
 
@@ -1330,7 +1334,7 @@ sal_Bool SfxDocumentTemplates::Delete
 
     [Querverweise]
 
-    <SfxDocumentTemplates::InsertDir(const String&,USHORT)>
+    <SfxDocumentTemplates::InsertDir(const String&,sal_uInt16)>
     <SfxDocumentTemplates::KillDir(SfxTemplateDir&)>
     <SfxDocumentTemplates::SaveDir(SfxTemplateDir&)>
 */
@@ -1380,7 +1384,7 @@ sal_Bool SfxDocumentTemplates::Delete
 sal_Bool SfxDocumentTemplates::InsertDir
 (
     const String&   rText,      //  der logische Name des neuen Bereiches
-    USHORT          nRegion     //  Index des Bereiches
+    sal_uInt16          nRegion     //  Index des Bereiches
 )
 
 /*  [Beschreibung]
@@ -1434,8 +1438,8 @@ sal_Bool SfxDocumentTemplates::InsertDir
 sal_Bool SfxDocumentTemplates::SetName
 (
     const String&   rName,      //  Der zu setzende Name
-    USHORT          nRegion,    //  Index des Bereiches
-    USHORT          nIdx        /*  Index des Eintrags oder USHRT_MAX,
+    sal_uInt16          nRegion,    //  Index des Bereiches
+    sal_uInt16          nIdx        /*  Index des Eintrags oder USHRT_MAX,
                                     wenn ein Verzeichnis gemeint ist. */
 )
 
@@ -1546,8 +1550,8 @@ sal_Bool SfxDocumentTemplates::Rescan()
 
 SfxObjectShellRef SfxDocumentTemplates::CreateObjectShell
 (
-    USHORT nRegion,         //  Index des Bereiches
-    USHORT nIdx             //  Index des Eintrags
+    sal_uInt16 nRegion,         //  Index des Bereiches
+    sal_uInt16 nIdx             //  Index des Eintrags
 )
 
 /*  [Beschreibung]
@@ -1563,7 +1567,7 @@ SfxObjectShellRef SfxDocumentTemplates::CreateObjectShell
     [Querverweise]
 
     <SfxTemplateDirEntry::CreateObjectShell()>
-    <SfxDocumentTemplates::DeleteObjectShell(USHORT, USHORT)>
+    <SfxDocumentTemplates::DeleteObjectShell(sal_uInt16, sal_uInt16)>
 */
 
 {
@@ -1588,8 +1592,8 @@ SfxObjectShellRef SfxDocumentTemplates::CreateObjectShell
 
 sal_Bool SfxDocumentTemplates::DeleteObjectShell
 (
-    USHORT nRegion,         //  Index des Bereiches
-    USHORT nIdx             //  Index des Eintrags
+    sal_uInt16 nRegion,         //  Index des Bereiches
+    sal_uInt16 nIdx             //  Index des Eintrags
 )
 
 /*  [Beschreibung]
@@ -1608,7 +1612,7 @@ sal_Bool SfxDocumentTemplates::DeleteObjectShell
     [Querverweise]
 
     <SfxTemplateDirEntry::DeleteObjectShell()>
-    <SfxDocumentTemplates::CreateObjectShell(USHORT, USHORT)>
+    <SfxDocumentTemplates::CreateObjectShell(sal_uInt16, sal_uInt16)>
 */
 
 {
@@ -1669,9 +1673,9 @@ sal_Bool SfxDocumentTemplates::GetFull
         return sal_False;
 
     DocTempl_EntryData_Impl* pEntry = NULL;
-    const USHORT nCount = GetRegionCount();
+    const sal_uInt16 nCount = GetRegionCount();
 
-    for ( USHORT i = 0; i < nCount; ++i )
+    for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         RegionData_Impl *pRegion = pImp->GetRegion( i );
 
@@ -1735,16 +1739,16 @@ sal_Bool SfxDocumentTemplates::GetLogicNames
     DocTempl_EntryData_Impl  *pEntry = NULL;
     sal_Bool         bFound = sal_False;
 
-    ULONG nCount = GetRegionCount();
+    sal_uIntPtr nCount = GetRegionCount();
 
-    for ( ULONG i=0; !bFound && (i<nCount); i++ )
+    for ( sal_uIntPtr i=0; !bFound && (i<nCount); i++ )
     {
         pData = pImp->GetRegion( i );
         if ( pData )
         {
-            ULONG nChildCount = pData->GetCount();
+            sal_uIntPtr nChildCount = pData->GetCount();
 
-            for ( ULONG j=0; !bFound && (j<nChildCount); j++ )
+            for ( sal_uIntPtr j=0; !bFound && (j<nChildCount); j++ )
             {
                 pEntry = pData->GetEntry( j );
                 if ( pEntry->GetTargetURL() == aPath )
@@ -1909,7 +1913,7 @@ SfxObjectShellRef DocTempl_EntryData_Impl::CreateObjectShell()
             SfxMedium *pMed=new SfxMedium(
                 aTargetURL,(STREAM_STD_READWRITE | STREAM_SHARE_DENYALL),  sal_False, 0 );
             const SfxFilter* pFilter = NULL;
-            pMed->UseInteractionHandler(TRUE);
+            pMed->UseInteractionHandler(sal_True);
             if( pSfxApp->GetFilterMatcher().GuessFilter(
                 *pMed, &pFilter, SFX_FILTER_TEMPLATE, 0 ) ||
                 (pFilter && !pFilter->IsOwnFormat()) ||
@@ -1919,7 +1923,7 @@ SfxObjectShellRef DocTempl_EntryData_Impl::CreateObjectShell()
                                      aTargetURL );
                 delete pMed;
                 mbDidConvert=sal_True;
-                ULONG lErr;
+                sal_uIntPtr lErr;
                 if ( mxObjShell.Is() ) {
                     lErr = pSfxApp->LoadTemplate( mxObjShell,aTargetURL);
                     if( lErr != ERRCODE_NONE )
@@ -1950,7 +1954,7 @@ SfxObjectShellRef DocTempl_EntryData_Impl::CreateObjectShell()
 }
 
 //------------------------------------------------------------------------
-BOOL DocTempl_EntryData_Impl::DeleteObjectShell()
+sal_Bool DocTempl_EntryData_Impl::DeleteObjectShell()
 {
     sal_Bool bRet = sal_True;
 
@@ -2068,8 +2072,8 @@ long RegionData_Impl::GetEntryPos( const OUString& rTitle,
                                    sal_Bool& rFound ) const
 {
 #if 1   // Don't use binary search today
-    ULONG i;
-    ULONG nCount = maEntries.Count();
+    sal_uIntPtr i;
+    sal_uIntPtr nCount = maEntries.Count();
 
     for ( i=0; i<nCount; i++ )
     {
@@ -2128,7 +2132,7 @@ long RegionData_Impl::GetEntryPos( const OUString& rTitle,
 // -----------------------------------------------------------------------
 void RegionData_Impl::AddEntry( const OUString& rTitle,
                                 const OUString& rTargetURL,
-                                USHORT *pPos )
+                                sal_uInt16 *pPos )
 {
     INetURLObject aLinkObj( GetHierarchyURL() );
     aLinkObj.insertName( rTitle, false,
@@ -2157,7 +2161,7 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
 }
 
 // -----------------------------------------------------------------------
-ULONG RegionData_Impl::GetCount() const
+sal_uIntPtr RegionData_Impl::GetCount() const
 {
     return maEntries.Count();
 }
@@ -2223,9 +2227,9 @@ DocTempl_EntryData_Impl* RegionData_Impl::GetByTargetURL( const OUString& rName 
 {
     DocTempl_EntryData_Impl *pEntry;
 
-    ULONG nCount = maEntries.Count();
+    sal_uIntPtr nCount = maEntries.Count();
 
-    for ( ULONG i=0; i<nCount; i++ )
+    for ( sal_uIntPtr i=0; i<nCount; i++ )
     {
         pEntry = maEntries.GetObject( i );
         if ( pEntry && ( pEntry->GetTargetURL() == rName ) )
@@ -2236,20 +2240,20 @@ DocTempl_EntryData_Impl* RegionData_Impl::GetByTargetURL( const OUString& rName 
 }
 
 // -----------------------------------------------------------------------
-DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( ULONG nIndex ) const
+DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( sal_uIntPtr nIndex ) const
 {
     return maEntries.GetObject( nIndex );
 }
 
 // -----------------------------------------------------------------------
-void RegionData_Impl::DeleteEntry( ULONG nIndex )
+void RegionData_Impl::DeleteEntry( sal_uIntPtr nIndex )
 {
     DocTempl_EntryData_Impl *pEntry = maEntries.GetObject( nIndex );
 
     if ( pEntry )
     {
         delete pEntry;
-        maEntries.Remove( (ULONG) nIndex );
+        maEntries.Remove( (sal_uIntPtr) nIndex );
     }
 }
 
@@ -2295,7 +2299,7 @@ void SfxDocTemplate_Impl::DecrementLock()
 }
 
 // -----------------------------------------------------------------------
-RegionData_Impl* SfxDocTemplate_Impl::GetRegion( ULONG nIndex ) const
+RegionData_Impl* SfxDocTemplate_Impl::GetRegion( sal_uIntPtr nIndex ) const
 {
     return maRegions.GetObject( nIndex );
 }
@@ -2304,10 +2308,10 @@ RegionData_Impl* SfxDocTemplate_Impl::GetRegion( ULONG nIndex ) const
 RegionData_Impl* SfxDocTemplate_Impl::GetRegion( const OUString& rName )
     const
 {
-    ULONG nCount = maRegions.Count();
+    sal_uIntPtr nCount = maRegions.Count();
     RegionData_Impl *pData;
 
-    for ( ULONG i=0; i<nCount; i++ )
+    for ( sal_uIntPtr i=0; i<nCount; i++ )
     {
         pData = maRegions.GetObject( i );
 
@@ -2319,14 +2323,14 @@ RegionData_Impl* SfxDocTemplate_Impl::GetRegion( const OUString& rName )
 }
 
 // -----------------------------------------------------------------------
-void SfxDocTemplate_Impl::DeleteRegion( ULONG nIndex )
+void SfxDocTemplate_Impl::DeleteRegion( sal_uIntPtr nIndex )
 {
     RegionData_Impl* pRegion = maRegions.GetObject( nIndex );
 
     if ( pRegion )
     {
         delete pRegion;
-        maRegions.Remove( (ULONG) nIndex );
+        maRegions.Remove( (sal_uIntPtr) nIndex );
     }
 }
 
@@ -2583,7 +2587,7 @@ long SfxDocTemplate_Impl::GetRegionPos( const OUString& rTitle,
 
 // -----------------------------------------------------------------------
 sal_Bool SfxDocTemplate_Impl::InsertRegion( RegionData_Impl *pNew,
-                                            ULONG nPos )
+                                            sal_uIntPtr nPos )
 {
     ::osl::MutexGuard   aGuard( maMutex );
     RegionData_Impl    *pData = maRegions.First();
@@ -2597,7 +2601,7 @@ sal_Bool SfxDocTemplate_Impl::InsertRegion( RegionData_Impl *pNew,
         // first
 
         if ( pNew->GetTitle() == maStandardGroup )
-            maRegions.Insert( pNew, (ULONG) 0 );
+            maRegions.Insert( pNew, (sal_uIntPtr) 0 );
         else
             maRegions.Insert( pNew, nPos );
     }

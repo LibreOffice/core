@@ -355,7 +355,7 @@ namespace drawinglayer
                 SvMemoryStream aMemStm;
 
                 aMemStm << *pSvtGraphicFill;
-                mpMetaFile->AddAction(new MetaCommentAction("XPATHFILL_SEQ_BEGIN", 0, static_cast< const BYTE* >(aMemStm.GetData()), aMemStm.Seek(STREAM_SEEK_TO_END)));
+                mpMetaFile->AddAction(new MetaCommentAction("XPATHFILL_SEQ_BEGIN", 0, static_cast< const sal_uInt8* >(aMemStm.GetData()), aMemStm.Seek(STREAM_SEEK_TO_END)));
                 mnSvtGraphicFillCount++;
             }
         }
@@ -508,7 +508,7 @@ namespace drawinglayer
                 SvMemoryStream aMemStm;
 
                 aMemStm << *pSvtGraphicStroke;
-                mpMetaFile->AddAction(new MetaCommentAction("XPATHSTROKE_SEQ_BEGIN", 0, static_cast< const BYTE* >(aMemStm.GetData()), aMemStm.Seek(STREAM_SEEK_TO_END)));
+                mpMetaFile->AddAction(new MetaCommentAction("XPATHSTROKE_SEQ_BEGIN", 0, static_cast< const sal_uInt8* >(aMemStm.GetData()), aMemStm.Seek(STREAM_SEEK_TO_END)));
                 mnSvtGraphicStrokeCount++;
             }
         }
@@ -964,7 +964,7 @@ namespace drawinglayer
                         {
                             const rtl::OUString& rURL = rFieldPrimitive.getString();
                             const String aOldString(rURL);
-                            mpMetaFile->AddAction(new MetaCommentAction(aCommentStringCommon, 0, reinterpret_cast< const BYTE* >(aOldString.GetBuffer()), 2 * aOldString.Len()));
+                            mpMetaFile->AddAction(new MetaCommentAction(aCommentStringCommon, 0, reinterpret_cast< const sal_uInt8* >(aOldString.GetBuffer()), 2 * aOldString.Len()));
                             break;
                         }
                     }
@@ -1379,6 +1379,7 @@ namespace drawinglayer
                 {
                     // need to handle PolyPolygonHatchPrimitive2D here to support XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END
                     const primitive2d::PolyPolygonHatchPrimitive2D& rHatchCandidate = static_cast< const primitive2d::PolyPolygonHatchPrimitive2D& >(rCandidate);
+                    const attribute::FillHatchAttribute& rFillHatchAttribute = rHatchCandidate.getFillHatch();
                     basegfx::B2DPolyPolygon aLocalPolyPolygon(rHatchCandidate.getB2DPolyPolygon());
 
                     // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
@@ -1386,8 +1387,20 @@ namespace drawinglayer
                     while(fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon))
                         ;
 
+                    if(rFillHatchAttribute.isFillBackground())
+                    {
+                        // with fixing #i111954# (see below) the possible background
+                        // fill of a hatched object was lost.Generate a background fill
+                        // primitive and render it
+                        const primitive2d::Primitive2DReference xBackground(
+                            new primitive2d::PolyPolygonColorPrimitive2D(
+                                aLocalPolyPolygon,
+                                rHatchCandidate.getBackgroundColor()));
+
+                        process(primitive2d::Primitive2DSequence(&xBackground, 1));
+                    }
+
                     SvtGraphicFill* pSvtGraphicFill = 0;
-                    const attribute::FillHatchAttribute& rFillHatchAttribute = rHatchCandidate.getFillHatch();
                     aLocalPolyPolygon.transform(maCurrentTransformation);
 
                     if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())

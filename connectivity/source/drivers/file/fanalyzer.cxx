@@ -284,12 +284,12 @@ OOperandAttr* OSQLAnalyzer::createOperandAttr(sal_Int32 _nPos,
     return new OOperandAttr(static_cast<sal_uInt16>(_nPos),_xCol);
 }
 // -----------------------------------------------------------------------------
-BOOL OSQLAnalyzer::hasRestriction() const
+sal_Bool OSQLAnalyzer::hasRestriction() const
 {
     return m_aCompiler->hasCode();
 }
 // -----------------------------------------------------------------------------
-BOOL OSQLAnalyzer::hasFunctions() const
+sal_Bool OSQLAnalyzer::hasFunctions() const
 {
     if ( m_bSelectionFirstTime )
     {
