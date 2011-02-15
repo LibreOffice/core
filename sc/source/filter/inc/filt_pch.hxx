@@ -133,7 +133,6 @@
 #include <svl/intitem.hxx>
 #include <svl/cintitem.hxx>
 #include <svl/brdcst.hxx>
-#include <sot/sotref.hxx>
 #include <tools/globname.hxx>
 #include <sot/factory.hxx>
 #include <sot/object.hxx>

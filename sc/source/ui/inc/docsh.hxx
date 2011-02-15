@@ -46,6 +46,8 @@
 #include <boost/unordered_map.hpp>
 #include <cppuhelper/implbase1.hxx>
 
+#include <sot/sotref.hxx>
+
 class ScEditEngineDefaulter;
 class FontList;
 class PrintDialog;

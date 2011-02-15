@@ -38,7 +38,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sot/sotref.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdmodel.hxx>

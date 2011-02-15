@@ -64,7 +64,6 @@
 #include <vcl/region.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/bitmap.hxx>
-#include <sot/sotref.hxx>
 #include <svx/svxids.hrc>
 #include <vcl/vclenum.hxx>
 #include <sot/object.hxx>
