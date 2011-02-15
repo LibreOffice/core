@@ -41,10 +41,10 @@ class ModifyPageUndoAction : public SdUndoAction
     String          maNewName;
     AutoLayout      meOldAutoLayout;
     AutoLayout      meNewAutoLayout;
-    BOOL            mbOldBckgrndVisible;
-    BOOL            mbNewBckgrndVisible;
-    BOOL            mbOldBckgrndObjsVisible;
-    BOOL            mbNewBckgrndObjsVisible;
+    sal_Bool            mbOldBckgrndVisible;
+    sal_Bool            mbNewBckgrndVisible;
+    sal_Bool            mbOldBckgrndObjsVisible;
+    sal_Bool            mbNewBckgrndObjsVisible;
 
     String          maComment;
 
@@ -55,8 +55,8 @@ public:
         SdPage*                 pThePage,
         String                  aTheNewName,
         AutoLayout              eTheNewAutoLayout,
-        BOOL                    bTheNewBckgrndVisible,
-        BOOL                    bTheNewBckgrndObjsVisible);
+        sal_Bool                    bTheNewBckgrndVisible,
+        sal_Bool                    bTheNewBckgrndObjsVisible);
 
     virtual ~ModifyPageUndoAction();
     virtual void Undo();

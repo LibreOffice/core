@@ -43,7 +43,7 @@ class NotesChildWindow
     : public SfxChildWindow
 {
 public:
-    NotesChildWindow (::Window*, USHORT, SfxBindings*, SfxChildWinInfo*);
+    NotesChildWindow (::Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo*);
     virtual ~NotesChildWindow (void);
 
     SFX_DECL_CHILDWINDOW (NotesChildWindow);

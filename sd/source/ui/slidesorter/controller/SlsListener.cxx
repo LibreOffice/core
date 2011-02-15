@@ -659,7 +659,7 @@ void Listener::HandleShapeModification (const SdrPage* pPage)
     // pages that are linked to this master page.
     if (pPage->IsMasterPage())
     {
-        for (USHORT nIndex=0,nCount=pDocument->GetSdPageCount(PK_STANDARD);
+        for (sal_uInt16 nIndex=0,nCount=pDocument->GetSdPageCount(PK_STANDARD);
              nIndex<nCount;
              ++nIndex)
         {

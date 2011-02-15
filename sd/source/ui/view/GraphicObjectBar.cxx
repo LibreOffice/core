@@ -128,14 +128,14 @@ void GraphicObjectBar::Execute( SfxRequest& rReq )
 void GraphicObjectBar::GetFilterState( SfxItemSet& rSet )
 {
     const SdrMarkList&  rMarkList = mpView->GetMarkedObjectList();
-    BOOL                bEnable = FALSE;
+    sal_Bool                bEnable = sal_False;
 
     if( rMarkList.GetMarkCount() == 1 )
     {
         SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
         if( pObj && pObj->ISA( SdrGrafObj ) && ( ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP ) )
-            bEnable = TRUE;
+            bEnable = sal_True;
     }
 
     if( !bEnable )
