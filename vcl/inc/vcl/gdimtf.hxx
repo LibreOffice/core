@@ -247,6 +247,7 @@ public:
     BOOL           CreateThumbnail( sal_uInt32 nMaximumExtent, BitmapEx& rBmpEx, const BitmapEx* pOverlay = NULL, const Rectangle* pOverlayRect = NULL ) const;
 
     void           UseCanvas( BOOL _bUseCanvas );
+    BOOL           GetUseCanvas() const { return bUseCanvas; }
 };
 
 /** Create a special metaaction that delegates rendering to specified

@@ -437,6 +437,8 @@ void GDIMetaFile::Play( GDIMetaFile& rMtf, ULONG nPos )
         MetaAction* pAction = GetCurAction();
         const ULONG nObjCount = Count();
 
+        rMtf.UseCanvas( rMtf.GetUseCanvas() || bUseCanvas );
+
         if( nPos > nObjCount )
             nPos = nObjCount;
 
