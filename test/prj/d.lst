@@ -11,3 +11,4 @@ mkdir: %_DEST%\inc%_EXT%\test\detail
 ..\inc\test\toabsolutefileurl.hxx %_DEST%\inc%_EXT%\test\toabsolutefileurl.hxx
 ..\inc\test\uniquepipename.hxx %_DEST%\inc%_EXT%\test\uniquepipename.hxx
 ..\%__SRC%\class\test.jar %_DEST%\bin%_EXT%\test.jar
+..\%__SRC%\class\test-tools.jar %_DEST%\bin%_EXT%\test-tools.jar
