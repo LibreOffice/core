@@ -348,7 +348,7 @@ BOOL EnhWMFReader::ReadEnhWMF()
     static sal_Bool bEnableEMFPlus = ( getenv( "EMF_PLUS_DISABLE" ) == NULL );
 #else
     // TODO: make it possible to disable emf+ on windows
-    static sal_Bool bEnableEMFPlus = sal_True;
+    static sal_Bool bEnableEMFPlus = sal_False;
 #endif
 
     while( bStatus && nRecordCount-- )
