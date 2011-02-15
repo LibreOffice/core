@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@oracle.com
+'*  owner : gregor.hartmann@oracle.com
 '*
 '*  short description : Search for a string, apply limitations
 '*

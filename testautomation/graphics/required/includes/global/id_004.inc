@@ -249,7 +249,7 @@ testcase tiInsertGraphic
     catch
         Warnlog "Insert graphic doesn't work :-("
     endcatch
-
+    WaitSlot (2000)
     printlog "close application "
     Call hCloseDocument
     

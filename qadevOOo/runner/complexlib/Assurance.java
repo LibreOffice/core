@@ -75,7 +75,7 @@ public class Assurance
      * @param actual specifies the actual boolean value
      */
     protected void assureEquals( boolean expected, boolean actual ) {
-        assureEquals( "Equality test failed", new Boolean( expected ), new Boolean( actual ), false );
+        assureEquals( "Equality test failed", expected, new Boolean( actual ), false );
     }
 
     /**
@@ -85,7 +85,7 @@ public class Assurance
      * @param actual specifies the actual boolean value
      */
     protected void assureEquals( String message, boolean expected, boolean actual ) {
-        assureEquals( message, new Boolean( expected ), new Boolean( actual ), false );
+        assureEquals( message, expected, actual, false );
     }
 
     /**
@@ -238,6 +238,27 @@ public class Assurance
      */
     protected void assureEquals( String message, Object expected, Object actual ) {
         assureEquals( message, expected, actual, false );
+    }
+
+    /**
+     * assures the two given sequences are of equal length, and have equal content
+     */
+    public <T> void assureEquals( String i_message, T[] i_expected, T[] i_actual, boolean i_continue )
+    {
+        if ( i_expected.length != i_actual.length )
+            failed( i_message + ": expected element count: " + i_expected.length + ", actual element count: " + i_actual.length );
+        for ( int i=0; i<i_expected.length; ++i )
+        {
+            assureEquals( i_message + ": mismatch at element pos " + i, i_expected[i], i_actual[i], i_continue );
+        }
+    }
+
+    /**
+     * assures the two given sequences are of equal length, and have equal content
+     */
+    public <T> void assureEquals( String i_message, T[] i_expected, T[] i_actual )
+    {
+        assureEquals( i_message, i_expected, i_actual, false );
     }
 
     /** invokes a given method on a given object, and assures a certain exception is caught

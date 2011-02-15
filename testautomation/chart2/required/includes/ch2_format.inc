@@ -47,6 +47,7 @@
 ' #1 tFormatAxisSecondaryXAxis
 ' #1 tFormatAxisSecondaryYAxis
 ' #1 tFormatAxisAllAxes
+' #1 tFormatDateAxis
 '*
 '\************************************************************************
 
@@ -1404,4 +1405,40 @@ testcase tFormatAxisAllAxes
 
 
 endcase
+'
+'-------------------------------------------------------------
+'
+testcase tFormatDateAxis
 
+    printlog "Load simple chart document"
+    if fLoadVerySimpleChartAndSaveLocal() > 0 then
+        warnlog "Loading test document seems to have failed -> Check this out!"
+        goto endsub
+    endif
+    printlog " Select chart using navigator"
+    call fSelectFirstOLE
+    printlog "Edit / Object / Edit"
+    EditObjectEdit
+    sleep(1)
+    printlog "Invoke Format::Axis::X Axis"
+    FormatAxisXAxis
+    printlog "Goto tab page Scale"
+    Kontext
+    Active.SetPage TabChartAxisScale
+    Kontext "TabChartAxisScale"
+    printlog " Switch axis type to Date"
+    AxisType.Select (3)
+    printlog " Verify that the date controls are available"
+    if MinorIntervalUnit.exists then
+        call DialogTest ( TabChartAxisScale,2 )
+        else
+            warnlog "Datecontrols are not available"
+    end if
+    printlog " Close dialog"
+    TabChartAxisScale.Cancel
+    printlog "Close document"
+    Kontext "DocumentCalc"
+    DocumentCalc.TypeKeys "<Escape>"
+    Call hCloseDocument
+
+endcase

@@ -239,10 +239,10 @@ testcase tDataSeriesWizardCalc
         call DialogTest ( TabChartTypeDataSeries )                    
         printlog "Check if the data series listbox is enabled and contains three entries"
         iDataSeries = DataSeries.GetItemCount
-        if iDataSeries = 3 then
-            printlog "    All 3 data series are available"
+        if iDataSeries = 4 then
+            printlog "    All 4 data series are available"
         else
-            warnlog "There are " & iDataSeries & " data series instead of 3"
+            warnlog "There are " & iDataSeries & " data series instead of 4"
         endif                
         printlog "Check if the ADD button is enabled and click the button"
         if AddButton.IsEnabled then
@@ -253,10 +253,10 @@ testcase tDataSeriesWizardCalc
         endif                    
         printlog "Check if there are now four entries in the data series listbox"
         iDataSeries = DataSeries.GetItemCount
-        if iDataSeries = 4 then
+        if iDataSeries = 5 then
             printlog "    Adding a data series was successfull"
         else
-            warnlog "There are " & iDataSeries & " data series instead of 4"
+            warnlog "There are " & iDataSeries & " data series instead of 5"
         endif                
         printlog "Check if the second data series was added below the highlighted one"
         if DataSeries.GetSelIndex = 2 then
@@ -271,9 +271,9 @@ testcase tDataSeriesWizardCalc
         else
             warnlog "REMOVE button is not enabled"
         endif                
-        printlog "Check if there are now 3 entries in the data series listbox"
+        printlog "Check if there are now 4 entries in the data series listbox"
         iDataSeries = DataSeries.GetItemCount
-        if iDataSeries = 3 then
+        if iDataSeries = 4 then
             printlog "    Removing a data series was successfull"
         else
             warnlog "There are " & iDataSeries & " data series instead of 3"
@@ -302,13 +302,14 @@ testcase tDataSeriesWizardCalc
         DataSeries.Select(1)
         if MoveDown.IsEnabled then
             printlog "    The MoveDown button is enabled"            
-            printlog "Click Move Down button twice"
+            printlog "Click Move Down button three times"
+            MoveDown.Click
             MoveDown.Click
             MoveDown.Click
         else
             warnlog "The MoveDown button is disabled"
         endif
-        if DataSeries.GetSelIndex = 3 then
+        if DataSeries.GetSelIndex = 4 then
             printlog "    Moving data series was successfull"
             if MoveDown.IsEnabled then
                 warnlog "MoveDown button is not disabled on first entry"

@@ -212,19 +212,9 @@ testcase tiToolsSpellcheckError
         end if
     end if
 
-    printlog "Close dialog 'Edit Custom Dictionary'."
-    BenutzerwoerterbuchBearbeiten.Close
-    Kontext "ExtrasOptionenDlg"
-    printlog "Close the Option dialog."
-    ExtrasOptionenDlg.OK
-
     printlog "Close document"
     Call hCloseDocument
 
-    ' remove the word again from the dictionary
-    delete_word_from_dictionary(sWrongWord,"IgnoreAllList")
-
-    kill (convertPath(gOfficePath+"user/work/"+"recht_"+iSprache+sExt))
 endcase 'tiToolsSpellcheckCorrect
 
 '-------------------------------------------------------------------------------

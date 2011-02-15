@@ -1377,14 +1377,7 @@ function fRegisterDatabaseFile( sFileName, sName)
     Kontext "CreateDatabaseLink"
     
         RegisteredName.setText(sName)
-
-        ' this does not work due to issue 115468
-        ' DatabaseFile.setText(sFileName)
-        ' workaround
-        CreatedatabaseLink.typeKeys("<shift tab>")
-        CreatedatabaseLink.typeKeys("<shift tab>")
-        CreatedatabaseLink.typeKeys(sFileName)
-        ' -
+        DatabaseFile.setText(sFileName)
 
         CreateDatabaseLink.OK
         

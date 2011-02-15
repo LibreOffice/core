@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@oracle.com
+'*  owner : gregor.hartmann@oracle.com
 '*
 '*  short description : CWS oxtsysint01 enables installing extensions via file open dialog
 '*
