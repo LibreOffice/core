@@ -29,11 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmlhelp.hxx"
 
-#define WORKAROUND_98119
-
-#ifdef WORKAROUND_98119
 #include "bufferedinputstream.hxx"
-#endif
 
 #include <string.h>
 #include <osl/diagnose.hxx>
@@ -537,11 +533,7 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
             {
             }
         }
-#ifdef WORKAROUND_98119
         xDataSink->setInputStream( turnToSeekable(xStream) );
-#else
-        xDataSink->setInputStream( xStream );
-#endif
     }
     else
         // a standard document or else an active help text, plug in the new input stream
