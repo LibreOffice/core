@@ -465,11 +465,6 @@ void ScFlatBoolColSegments::insertSegment(SCCOL nCol, SCCOL nSize, bool bSkipSta
     mpImpl->insertSegment(static_cast<SCCOLROW>(nCol), static_cast<SCCOLROW>(nSize), bSkipStartBoundary);
 }
 
-void ScFlatBoolColSegments::enableTreeSearch(bool bEnable)
-{
-    mpImpl->enableTreeSearch(bEnable);
-}
-
 // ============================================================================
 
 ScFlatUInt16RowSegments::ForwardIterator::ForwardIterator(ScFlatUInt16RowSegments& rSegs) :
