@@ -48,10 +48,6 @@ public:
     virtual SfxPoolItem* Create(SvStream& rIn, USHORT nVer) const;
 
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0) const;
-
-#ifdef SDR_ISPOOLABLE
-    virtual int IsPoolable() const;
-#endif
 };
 
 //------------------------------------------------------------
@@ -70,10 +66,6 @@ public:
     virtual SfxPoolItem* Create( SvStream& rIn, USHORT nVer ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres, SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String& rText, const IntlWrapper * = 0 ) const;
-
-#ifdef SDR_ISPOOLABLE
-    virtual int IsPoolable() const;
-#endif
 };
 
 

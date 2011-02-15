@@ -345,13 +345,6 @@ SfxPoolItem* SdrCustomShapeGeometryItem::Clone( SfxItemPool * /*pPool*/ ) const
     return pItem;
 }
 
-#ifdef SDR_ISPOOLABLE
-int SdrCustomShapeGeometryItem::IsPoolable() const
-{
-    USHORT nId=Which();
-    return nId < SDRATTR_NOTPERSIST_FIRST || nId > SDRATTR_NOTPERSIST_LAST;
-}
-#endif
 sal_uInt16 SdrCustomShapeGeometryItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/ ) const
 {
     return 1;

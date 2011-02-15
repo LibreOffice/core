@@ -105,9 +105,6 @@ private:
 
             const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& GetGeometry() const;
 
-#ifdef SDR_ISPOOLABLE
-            virtual int IsPoolable() const;
-#endif
             com::sun::star::uno::Any* GetPropertyValueByName( const rtl::OUString& rPropName );
             com::sun::star::uno::Any* GetPropertyValueByName( const rtl::OUString& rPropName, const rtl::OUString& rPropName2 );
 

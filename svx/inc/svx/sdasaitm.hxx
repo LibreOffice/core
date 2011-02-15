@@ -68,11 +68,6 @@ class SdrCustomShapeAdjustmentItem : public SfxPoolItem
             virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
             virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
-
-#ifdef SDR_ISPOOLABLE
-            virtual int IsPoolable() const;
-#endif
-
             sal_uInt32                          GetCount() const { return aAdjustmentValueList.Count(); };
             SVX_DLLPUBLIC const SdrCustomShapeAdjustmentValue&  GetValue( sal_uInt32 nIndex ) const;
             SVX_DLLPUBLIC void                              SetValue( sal_uInt32 nIndex,

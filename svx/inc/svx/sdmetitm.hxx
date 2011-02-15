@@ -52,10 +52,6 @@ public:
                                                 SfxMapUnit eCoreMetric,
                                                 SfxMapUnit ePresMetric,
                                                 String& rText, const IntlWrapper * = 0) const;
-
-#ifdef SDR_ISPOOLABLE
-    virtual int IsPoolable() const;
-#endif
 };
 
 

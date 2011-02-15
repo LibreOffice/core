@@ -49,10 +49,6 @@ public:
 
     SVX_DLLPRIVATE virtual  bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     SVX_DLLPRIVATE virtual  bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
-
-#ifdef SDR_ISPOOLABLE
-    SVX_DLLPRIVATE virtual int IsPoolable() const;
-#endif
 };
 
 #endif

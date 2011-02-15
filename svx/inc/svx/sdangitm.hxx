@@ -50,10 +50,6 @@ public:
                                                 String& rText,
                                                 const IntlWrapper *
                                                  pIntlWrapper = 0) const;
-
-#ifdef SDR_ISPOOLABLE
-    virtual int IsPoolable() const;
-#endif
 };
 
 
