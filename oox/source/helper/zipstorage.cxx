@@ -69,8 +69,10 @@ ZipStorage::ZipStorage(
 
             TODO: #i105410# switch to 'OFOPXMLFormat' and use its
             implementation of relations handling. */
+
         mxStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
-            ZIP_STORAGE_FORMAT_STRING, rxInStream, rxFactory, sal_True );
+            ZIP_STORAGE_FORMAT_STRING, rxInStream, rxFactory,
+            sal_False /* DEV300_m80: Was sal_True, but DOCX and others did not load */ );
     }
     catch( Exception& )
     {
