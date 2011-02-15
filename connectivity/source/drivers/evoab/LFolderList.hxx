@@ -41,8 +41,8 @@ namespace connectivity
     namespace evoab
     {
         //==================================================================
-        // Ableitung von String mit ueberladenen GetToken/GetTokenCount-Methoden
-        // Speziell fuer FLAT FILE-Format: Strings koennen gequotet sein
+        // Derivation of String with overloaded GetToken/GetTokenCount methods
+        // Especially for FLAT FILE-Format: Strings can be quoted
         //==================================================================
 
         class OEvoabConnection;
@@ -55,7 +55,7 @@ namespace connectivity
             ::std::vector<sal_Int32>        m_aScales;
             QuotedTokenizedString           m_aCurrentLine;
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > m_xNumberFormatter;
-            sal_Int32                       m_nFilePos;                 // aktuelle IResultSetHelper::Movement
+            sal_Int32                       m_nFilePos;                 // current IResultSetHelper::Movement
             SvStream*                       m_pFileStream;
             OEvoabConnection*               m_pConnection;
             ::rtl::Reference<OSQLColumns>       m_aColumns;

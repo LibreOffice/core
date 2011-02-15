@@ -41,40 +41,40 @@ xub_StrLen OEvoabString::GetTokenCount( sal_Unicode cTok, sal_Unicode cStrDel ) 
         return 0;
 
     xub_StrLen nTokCount = 1;
-    BOOL bStart = TRUE;     // Stehen wir auf dem ersten Zeichen im Token?
-    BOOL bInString = FALSE; // Befinden wir uns INNERHALB eines (cStrDel delimited) String?
+    BOOL bStart = TRUE;     // Are we on the fist character of the token?
+    BOOL bInString = FALSE; // Are we within a (cStrDel delimited) string?
 
-    // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
+    // Search for the first not-matching character (search ends at the end of string)
     for( xub_StrLen i = 0; i < Len(); i++ )
     {
         if (bStart)
         {
             bStart = FALSE;
-            // Erstes Zeichen ein String-Delimiter?
+            // First character a string delimiter?
             if ((*this).GetChar(i) == cStrDel)
             {
-                bInString = TRUE;   // dann sind wir jetzt INNERHALB des Strings!
-                continue;           // dieses Zeichen ueberlesen!
+                bInString = TRUE;   // then we are within a string!
+                continue;       // read next character!
             }
         }
 
         if (bInString) {
-            // Wenn jetzt das String-Delimiter-Zeichen auftritt ...
+            // If we see the string delimiter ...
             if ( (*this).GetChar(i) == cStrDel )
             {
                 if ((i+1 < Len()) && ((*this).GetChar(i+1) == cStrDel))
                 {
-                    // Verdoppeltes String-Delimiter-Zeichen:
-                    i++;    // kein String-Ende, naechstes Zeichen ueberlesen.
+                    // doubled string-delimiter:
+                    i++;    // no end of string, skip next character.
                 }
                 else
                 {
-                    // String-Ende
+                    // end of String
                     bInString = FALSE;
                 }
             }
         } else {
-            // Stimmt das Tokenzeichen ueberein, dann erhoehe TokCount
+            // if the token character matches, then raise TokCount
             if ( (*this).GetChar(i) == cTok )
             {
                 nTokCount++;
@@ -94,51 +94,49 @@ void OEvoabString::GetTokenSpecial( String& _rStr,xub_StrLen& nStartPos, sal_Uni
     xub_StrLen nLen = Len();
     if ( nLen )
     {
-        BOOL bInString = (nStartPos < nLen) && ((*this).GetChar(nStartPos) == cStrDel); // Befinden wir uns INNERHALB eines (cStrDel delimited) String?
+        BOOL bInString = (nStartPos < nLen) && ((*this).GetChar(nStartPos) == cStrDel); // are we within a (cStrDel delimited) String?
 
-        // Erstes Zeichen ein String-Delimiter?
+        // Is the first character a String-Delimiter?
         if (bInString )
-            ++nStartPos;            // dieses Zeichen ueberlesen!
-        // Suche bis Stringende nach dem ersten nicht uebereinstimmenden Zeichen
+            ++nStartPos;            // skip the character!
+        // Search until end of string for the first not-matching character
         for( xub_StrLen i = nStartPos; i < nLen; ++i )
         {
             if (bInString)
             {
-                // Wenn jetzt das String-Delimiter-Zeichen auftritt ...
+                // If we see the String-Delimiter ...
                 if ( (*this).GetChar(i) == cStrDel )
                 {
                     if ((i+1 < nLen) && ((*this).GetChar(i+1) == cStrDel))
                     {
-                        // Verdoppeltes String-Delimiter-Zeichen:
-                        ++i;    // kein String-Ende, naechstes Zeichen ueberlesen.
-
-                        _rStr += (*this).GetChar(i);    // Zeichen gehoert zum Resultat-String
+                        // doubled String-Delimiter:
+                        ++i;    // no end of String, skip next character
+                        _rStr += (*this).GetChar(i);    // Character belongs to Result-String
                     }
                     else
                     {
-                        // String-Ende
+                        // end of String
                         bInString = FALSE;
                     }
                 }
                 else
                 {
-                    _rStr += (*this).GetChar(i);    // Zeichen gehoert zum Resultat-String
+                    _rStr += (*this).GetChar(i);    // Character belongs to Result-String
                 }
 
             }
             else
             {
-                // Stimmt das Tokenzeichen ueberein, dann erhoehe nTok
+                // Does the Token-character match, then raise nTok
                 if ( (*this).GetChar(i) == cTok )
                 {
-                    // Vorzeitiger Abbruch der Schleife moeglich, denn
-                    // wir haben, was wir wollten.
+                    // Early termination of loop possible, because we found what we were looking for.
                     nStartPos = i+1;
                     break;
                 }
                 else
                 {
-                    _rStr += (*this).GetChar(i);    // Zeichen gehoert zum Resultat-String
+                    _rStr += (*this).GetChar(i);    // Character belongs to Result-String
                 }
             }
         }
@@ -175,7 +173,7 @@ sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
         return sal_False;
     OEvoabConnection* pConnection = (OEvoabConnection*)m_pConnection;
     // ----------------------------------------------------------
-    // Positionierung vorbereiten:
+    // prepare positioning:
     //OSL_TRACE("OEvoabTable::(before SeekRow,m_pFileStriam Exist)m_aCurrentLine = %d\n", ((OUtoCStr(::rtl::OUString(m_aCurrentLine))) ? (OUtoCStr(::rtl::OUString(m_aCurrentLine))):("NULL")) );
 
     m_nFilePos = nCurPos;
@@ -310,7 +308,7 @@ sal_Bool OEvoabTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
             if (m_pFileStream->IsEof())
                 return sal_False;
 
-            m_nFilePos = m_pFileStream->Tell(); // Byte-Position in der Datei merken (am ZeilenANFANG)
+            m_nFilePos = m_pFileStream->Tell(); // save Byte-Position in the file (at start of line)
             m_pFileStream->ReadByteStringLine(m_aCurrentLine,pConnection->getTextEncoding());
             if (m_pFileStream->IsEof())
                 return sal_False;

@@ -491,7 +491,7 @@ UINT32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Refere
 #endif
 
     ::rtl::OUString sParameterName;
-    // Parameter-Column aufsetzen:
+    // set up Parameter-Column:
     sal_Int32 eType = DataType::VARCHAR;
     UINT32 nPrecision = 255;
     sal_Int32 nScale = 0;
@@ -499,9 +499,9 @@ UINT32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Refere
 
     if (_xCol.is())
     {
-        // Typ, Precision, Scale ... der angegebenen Column verwenden,
-        // denn dieser Column wird der Wert zugewiesen bzw. mit dieser
-        // Column wird der Wert verglichen.
+    // Use type, precision, scale ... from the given column,
+    // because this Column will get a value assigned or
+    // with this Column the value will be compared.
         _xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))         >>= eType;
         _xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))    >>= nPrecision;
         _xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))        >>= nScale;
@@ -573,23 +573,22 @@ void OPreparedStatement::initializeResultSet(OResultSet* _pResult)
     m_pResultSet->setParameterColumns(m_xParamColumns);
     m_pResultSet->setParameterRow(m_aParameterRow);
 
-    // Parameter substituieren (AssignValues und Kriterien):
+    // Substitute parameter (AssignValues and criteria):
     if (!m_xParamColumns->get().empty())
     {
-        // Zunaechst AssignValues
-        USHORT nParaCount=0; // gibt die aktuelle Anzahl der bisher gesetzen Parameter an
+        // begin with AssignValues
+        USHORT nParaCount=0; // gives the current number of previously set Parameters
 
-        // Nach zu substituierenden Parametern suchen:
-        size_t nCount = m_aAssignValues.is() ? m_aAssignValues->get().size() : 1; // 1 ist wichtig fuer die Kriterien
+        // search for parameters to be substituted:
+        size_t nCount = m_aAssignValues.is() ? m_aAssignValues->get().size() : 1; // 1 is important for the Criteria
         for (size_t j = 1; j < nCount; j++)
         {
             UINT32 nParameter = (*m_aAssignValues).getParameterIndex(j);
             if (nParameter == SQL_NO_PARAMETER)
-                continue;   // dieser AssignValue ist kein Parameter
+                continue;   // this AssignValue is no Parameter
 
-            ++nParaCount; // ab hier ist der Parameter gueltig
-            // Parameter ersetzen. Wenn Parameter nicht verfuegbar,
-            //  Value auf NULL setzen.
+            ++nParaCount; // now the Parameter is valid
+            // Replace Parameter. If the Parameter isn't available, set value to NULL
             //  (*m_aAssignValues)[j] = (*m_aParameterRow)[(UINT16)nParameter];
         }
 
@@ -627,7 +626,7 @@ void OPreparedStatement::parseParamterElem(const String& _sColumnName,OSQLParseN
     }
     if(nParameter == -1)
         nParameter = AddParameter(pRow_Value_Constructor_Elem,xCol);
-    // Nr. des Parameters in der Variablen merken:
+    // Save number of parameter in the variable:
     SetAssignValue(_sColumnName, String(), TRUE, nParameter);
 }
 // -----------------------------------------------------------------------------
