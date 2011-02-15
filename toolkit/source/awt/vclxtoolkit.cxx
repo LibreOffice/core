@@ -69,6 +69,8 @@
 #include <toolkit/awt/vclxsystemdependentwindow.hxx>
 #include <toolkit/awt/vclxregion.hxx>
 #include <toolkit/awt/vclxtoolkit.hxx>
+#include <toolkit/awt/vclxtabpagecontainer.hxx>
+#include <toolkit/awt/vclxtabpagemodel.hxx>
 
 #include <toolkit/awt/xsimpleanimation.hxx>
 #include <toolkit/awt/xthrobber.hxx>
@@ -333,7 +335,9 @@ static ComponentInfo __FAR_DATA aComponentInfos [] =
     { "tristatebox",        WINDOW_TRISTATEBOX },
     { "warningbox",         WINDOW_WARNINGBOX },
     { "window",             WINDOW_WINDOW },
-    { "workwindow",         WINDOW_WORKWINDOW }
+    { "workwindow",         WINDOW_WORKWINDOW },
+    { "tabpagecontainer",   WINDOW_CONTROL },
+    { "tabpagemodel",       WINDOW_TABPAGE }
 };
 
 extern "C"
@@ -388,7 +392,7 @@ sal_uInt16 ImplGetComponentType( const String& rServiceName )
 //  ----------------------------------------------------
 
 static sal_Int32                            nVCLToolkitInstanceCount = 0;
-static BOOL                                 bInitedByVCLToolkit = sal_False;
+static sal_Bool                                 bInitedByVCLToolkit = sal_False;
 //static cppu::OInterfaceContainerHelper *  pToolkits = 0;
 
 static osl::Mutex & getInitMutex()
@@ -684,7 +688,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_CURRENCYFIELD:
                 pNewWindow = new CurrencyField( pParent, nWinBits );
-                static_cast<CurrencyField*>(pNewWindow)->EnableEmptyFieldValue( TRUE );
+                static_cast<CurrencyField*>(pNewWindow)->EnableEmptyFieldValue( sal_True );
                 *ppNewComp = new VCLXNumericField;
                 ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(CurrencyField*)pNewWindow );
             break;
@@ -693,7 +697,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_DATEFIELD:
                 pNewWindow = new DateField( pParent, nWinBits );
-                static_cast<DateField*>(pNewWindow)->EnableEmptyFieldValue( TRUE );
+                static_cast<DateField*>(pNewWindow)->EnableEmptyFieldValue( sal_True );
                 *ppNewComp = new VCLXDateField;
                 ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(DateField*)pNewWindow );
             break;
@@ -798,7 +802,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_NUMERICFIELD:
                 pNewWindow = new NumericField( pParent, nWinBits );
-                static_cast<NumericField*>(pNewWindow)->EnableEmptyFieldValue( TRUE );
+                static_cast<NumericField*>(pNewWindow)->EnableEmptyFieldValue( sal_True );
                 *ppNewComp = new VCLXNumericField;
                 ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(NumericField*)pNewWindow );
             break;
@@ -830,12 +834,12 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 // Since the VCLXRadioButton really cares for it's RadioCheck settings, this is important:
                 // if we enable it, the VCLXRadioButton will use RadioButton::Check instead of RadioButton::SetState
                 // This leads to a strange behaviour if the control is newly created: when settings the initial
-                // state to "checked", the RadioButton::Check (called because RadioCheck=TRUE) will uncheck
+                // state to "checked", the RadioButton::Check (called because RadioCheck=sal_True) will uncheck
                 // _all_other_ radio buttons in the same group. However, at this moment the grouping of the controls
                 // is not really valid: the controls are grouped after they have been created, but we're still in
                 // the creation process, so the RadioButton::Check relies on invalid grouping information.
                 // 07.08.2001 - #87254# - frank.schoenheit@sun.com
-                static_cast<RadioButton*>(pNewWindow)->EnableRadioCheck( FALSE );
+                static_cast<RadioButton*>(pNewWindow)->EnableRadioCheck( sal_False );
             break;
             case WINDOW_SCROLLBAR:
                 pNewWindow = new ScrollBar( pParent, nWinBits );
@@ -867,20 +871,32 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_TABCONTROL:
                 pNewWindow = new TabControl( pParent, nWinBits );
+                *ppNewComp = new VCLXTabPageContainer;
             break;
             case WINDOW_TABDIALOG:
                 pNewWindow = new TabDialog( pParent, nWinBits );
             break;
             case WINDOW_TABPAGE:
-                pNewWindow = new TabPage( pParent, nWinBits );
-                *ppNewComp = new VCLXTabPage;
+                /*
+                if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
+                        ::rtl::OUString::createFromAscii("tabpagemodel") ) )
+                {
+                    pNewWindow = new TabControl( pParent, nWinBits );
+                    *ppNewComp = new VCLXTabPageContainer;
+                }
+                else
+                */
+                {
+                    pNewWindow = new TabPage( pParent, nWinBits );
+                    *ppNewComp = new VCLXTabPage;
+                }
             break;
             case WINDOW_TIMEBOX:
                 pNewWindow = new TimeBox( pParent, nWinBits );
             break;
             case WINDOW_TIMEFIELD:
                 pNewWindow = new TimeField( pParent, nWinBits );
-                static_cast<TimeField*>(pNewWindow)->EnableEmptyFieldValue( TRUE );
+                static_cast<TimeField*>(pNewWindow)->EnableEmptyFieldValue( sal_True );
                 *ppNewComp = new VCLXTimeField;
                 ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(TimeField*)pNewWindow );
             break;
@@ -1002,6 +1018,12 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                         // (compatibility)
                     *ppNewComp = new ::toolkit::XThrobber;
                 }
+                else if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
+                        ::rtl::OUString::createFromAscii("tabpagecontainer") ) )
+                {
+                    pNewWindow = new TabControl( pParent, nWinBits );
+                    *ppNewComp = new VCLXTabPageContainer;
+                }
                 else if ( aServiceName.EqualsAscii( "animatedimages" ) )
                 {
                     pNewWindow = new Throbber( pParent, nWinBits );
@@ -1054,7 +1076,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     // try to load the lib
     if ( !fnSvtCreateWindow && !hSvToolsLib )
     {
-        ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName( "svt", TRUE );
+        ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName( "svt", sal_True );
         hSvToolsLib = osl_loadModuleRelative(
             &thisModule, aLibName.pData, SAL_LOADMODULE_DEFAULT );
         if ( hSvToolsLib )
@@ -1101,11 +1123,11 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         }
         else
         {
-            pNewComp->SetCreatedWithToolkit( TRUE );
+            pNewComp->SetCreatedWithToolkit( sal_True );
             xRef = pNewComp;
             pNewWindow->SetComponentInterface( xRef );
         }
-        DBG_ASSERT( pNewWindow->GetComponentInterface( FALSE ) == xRef,
+        DBG_ASSERT( pNewWindow->GetComponentInterface( sal_False ) == xRef,
             "VCLXToolkit::createWindow: did #133706# resurge?" );
 
         if ( rDescriptor.WindowAttributes & ::com::sun::star::awt::WindowAttribute::SHOW )

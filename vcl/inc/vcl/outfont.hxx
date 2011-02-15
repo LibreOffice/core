@@ -39,8 +39,6 @@
 
 #include <hash_map>
 
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
-
 class ImplDevFontListData;
 class ImplGetDevFontList;
 class ImplGetDevSizeList;
@@ -53,6 +51,8 @@ class Font;
 class ConvertChar;
 struct FontMatchStatus;
 class OutputDevice;
+
+namespace com { namespace sun { namespace star { namespace lang { struct Locale; }}}}
 
 // ----------------------
 // - ImplFontAttributes -
@@ -140,7 +140,7 @@ public:
     virtual ImplFontData*   Clone() const = 0;
 
 protected:
-                            ImplFontData( const ImplDevFontAttributes&, int nMagic );
+    explicit                ImplFontData( const ImplDevFontAttributes&, int nMagic );
     void                    SetBitmapSize( int nW, int nH ) { mnWidth=nW; mnHeight=nH; }
 
     long                    mnWidth;    // Width (in pixels)
@@ -199,8 +199,8 @@ private:
     ImplGlyphFallbackFontSubstitution* mpFallbackHook;  // device specific glyh fallback substitution
 
 public:
-                            ImplDevFontList();
-                            ~ImplDevFontList();
+    explicit                ImplDevFontList();
+    virtual                 ~ImplDevFontList();
 
     // fill the list with device fonts
     void                    Add( ImplFontData* );
@@ -226,7 +226,7 @@ public:
     ImplGetDevSizeList*     GetDevSizeList( const String& rFontName ) const;
 
     //used by 2-level font fallback
-    ImplDevFontListData* ImplFindByLocale(com::sun::star::lang::Locale lc) const;
+    ImplDevFontListData* ImplFindByLocale( com::sun::star::lang::Locale& ) const;
 
 protected:
     void                    InitMatchData() const;
@@ -235,7 +235,7 @@ protected:
     ImplDevFontListData*    ImplFindByTokenNames( const String& ) const;
     ImplDevFontListData*    ImplFindByAliasName( const String& rSearchName, const String& rShortName ) const;
     ImplDevFontListData*    ImplFindBySubstFontAttr( const utl::FontNameAttr& ) const;
-    ImplDevFontListData*    ImplFindByAttributes( ULONG nSearchType, FontWeight, FontWidth,
+    ImplDevFontListData*    ImplFindByAttributes( sal_uLong nSearchType, FontWeight, FontWidth,
                                 FontFamily, FontItalic, const String& rSearchFamily ) const;
     ImplDevFontListData*    FindDefaultFont() const;
 
@@ -254,8 +254,8 @@ private:
 
 struct ImplKernPairData
 {
-    USHORT              mnChar1;
-    USHORT              mnChar2;
+    sal_uInt16              mnChar1;
+    sal_uInt16              mnChar2;
     long                mnKern;
 };
 
@@ -267,7 +267,7 @@ struct ImplKernPairData
 class ImplFontMetricData : public ImplFontAttributes
 {
 public:
-            ImplFontMetricData( const ImplFontSelectData& );
+    explicit ImplFontMetricData( const ImplFontSelectData& );
     void    ImplInitTextLineSize( const OutputDevice* pDev );
     void    ImplInitAboveTextLineSize();
 
@@ -327,7 +327,7 @@ public: // TODO: hide members behind accessor methods
 class VCL_DLLPUBLIC ImplFontEntry
 {
 public:
-                        ImplFontEntry( const ImplFontSelectData& );
+    explicit            ImplFontEntry( const ImplFontSelectData& );
     virtual             ~ImplFontEntry();
 
 public: // TODO: make data members private
@@ -335,8 +335,8 @@ public: // TODO: make data members private
     ImplFontMetricData  maMetric;           // Font Metric
     const ConvertChar*  mpConversion;       // used e.g. for StarBats->StarSymbol
     long                mnLineHeight;
-    ULONG               mnRefCount;
-    USHORT              mnSetFontFlags;     // Flags returned by SalGraphics::SetFont()
+    sal_uLong               mnRefCount;
+    sal_uInt16              mnSetFontFlags;     // Flags returned by SalGraphics::SetFont()
     short               mnOwnOrientation;   // text angle if lower layers don't rotate text themselves
     short               mnOrientation;      // text angle in 3600 system
     bool                mbInit;             // true if maMetric member is valid
@@ -393,7 +393,7 @@ public:
     void                AddLine( ImplTextLineInfo* pLine );
     void                Clear();
 
-    ImplTextLineInfo*   GetLine( USHORT nLine ) const
+    ImplTextLineInfo*   GetLine( sal_uInt16 nLine ) const
                             { return mpLines[nLine]; }
     xub_StrLen          Count() const { return mnLines; }
 

@@ -186,7 +186,7 @@ public :
         rOutputRect, e.g. for cropped graphics.
      */
     void        EndGroup( const Graphic&    rGraphic,
-                          BYTE              nTransparency,
+                          sal_uInt8             nTransparency,
                           const Rectangle&  rOutputRect,
                           const Rectangle&  rVisibleOutputRect );
 //--->i56629

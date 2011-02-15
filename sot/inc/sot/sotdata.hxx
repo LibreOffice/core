@@ -45,7 +45,7 @@ class SotObjectList;
 
 struct SotData_Impl
 {
-    UINT32              nSvObjCount;
+    sal_uInt32              nSvObjCount;
     SotObjectList *     pObjectList;
     SotFactoryList *    pFactoryList;
     SotFactory *        pSotObjectFactory;

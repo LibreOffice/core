@@ -39,14 +39,14 @@
 #define STR_FILECTRL_BUTTONTEXT     333     // ID-Range?!
 
 // Flags for FileControl
-typedef USHORT FileControlMode;
-#define FILECTRL_RESIZEBUTTONBYPATHLEN  ((USHORT)0x0001)//if this is set, the button will become small as soon as the Text in the Edit Field is to long to be shown completely
+typedef sal_uInt16 FileControlMode;
+#define FILECTRL_RESIZEBUTTONBYPATHLEN  ((sal_uInt16)0x0001)//if this is set, the button will become small as soon as the Text in the Edit Field is to long to be shown completely
 
 
 // Flags for internal use of FileControl
-typedef USHORT FileControlMode_Internal;
-#define FILECTRL_INRESIZE               ((USHORT)0x0001)
-#define FILECTRL_ORIGINALBUTTONTEXT     ((USHORT)0x0002)
+typedef sal_uInt16 FileControlMode_Internal;
+#define FILECTRL_INRESIZE               ((sal_uInt16)0x0001)
+#define FILECTRL_ORIGINALBUTTONTEXT     ((sal_uInt16)0x0002)
 
 
 class SVT_DLLPUBLIC FileControl : public Window
@@ -56,7 +56,7 @@ private:
     PushButton      maButton;
 
     String          maButtonText;
-    BOOL            mbOpenDlg;
+    sal_Bool            mbOpenDlg;
 
     Link            maDialogCreatedHdl;
 
@@ -80,10 +80,10 @@ public:
     Edit&           GetEdit() { return maEdit; }
     PushButton&     GetButton() { return maButton; }
 
-    void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    void            Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
 
-    void            SetOpenDialog( BOOL bOpen )     { mbOpenDlg = bOpen; }
-    BOOL            IsOpenDialog() const            { return mbOpenDlg; }
+    void            SetOpenDialog( sal_Bool bOpen )     { mbOpenDlg = bOpen; }
+    sal_Bool            IsOpenDialog() const            { return mbOpenDlg; }
 
     void            SetText( const XubString& rStr );
     XubString       GetText() const;
@@ -92,8 +92,8 @@ public:
     void            SetSelection( const Selection& rSelection ) { maEdit.SetSelection( rSelection ); }
     Selection       GetSelection() const                        { return maEdit.GetSelection(); }
 
-    void            SetReadOnly( BOOL bReadOnly = TRUE )    { maEdit.SetReadOnly( bReadOnly ); }
-    BOOL            IsReadOnly() const                      { return maEdit.IsReadOnly(); }
+    void            SetReadOnly( sal_Bool bReadOnly = sal_True )    { maEdit.SetReadOnly( bReadOnly ); }
+    sal_Bool            IsReadOnly() const                      { return maEdit.IsReadOnly(); }
 
     //------
     //manipulate the Button-Text:

@@ -37,14 +37,6 @@ class Application;
      Beschreibung:
  --------------------------------------------------------------------*/
 typedef enum {
-    LookStardivision = 0,
-    LookMotif,
-    LookWindows,
-    LookOSTwo,
-    LookMacintosh
-} SystemLook;
-
-typedef enum {
     SnapToButton = 0,
     SnapToMiddle,
     NoSnap
@@ -59,7 +51,6 @@ typedef enum { // MUST match the order chosen in ListBox LB_DRAG_MODE in optgdlg
 
 class SVT_DLLPUBLIC SvtTabAppearanceCfg : public utl::ConfigItem
 {
-    short           nLookNFeel          ;
     short           nDragMode           ;
     short           nScaleFactor        ;
     short           nSnapMode           ;
@@ -68,11 +59,9 @@ class SVT_DLLPUBLIC SvtTabAppearanceCfg : public utl::ConfigItem
     short           nAAMinPixelHeight   ;
 #endif
 
-    BOOL            bMenuMouseFollow        ;
-    BOOL            bSingleLineTabCtrl      ;
-    BOOL            bColoredTabCtrl         ;
+    sal_Bool            bMenuMouseFollow        ;
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
-    BOOL            bFontAntialiasing       ;
+    sal_Bool            bFontAntialiasing       ;
 #endif
 
     static sal_Bool  bInitialized ;
@@ -86,39 +75,30 @@ public:
     virtual void    Commit();
     virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
 
-    USHORT      GetLookNFeel () const { return nLookNFeel; }
-    void        SetLookNFeel ( USHORT nSet );
+    sal_uInt16  GetDragMode  () const { return nDragMode; }
+    void        SetDragMode  ( sal_uInt16 nSet );
 
-    USHORT      GetDragMode  () const { return nDragMode; }
-    void        SetDragMode  ( USHORT nSet );
+    sal_uInt16      GetScaleFactor () const { return nScaleFactor; }
+    void        SetScaleFactor ( sal_uInt16 nSet );
 
-    USHORT      GetScaleFactor () const { return nScaleFactor; }
-    void        SetScaleFactor ( USHORT nSet );
+    sal_uInt16      GetSnapMode () const { return nSnapMode; }
+    void        SetSnapMode ( sal_uInt16 nSet );
 
-    USHORT      GetSnapMode () const { return nSnapMode; }
-    void        SetSnapMode ( USHORT nSet );
-
-    USHORT      GetMiddleMouseButton () const { return nMiddleMouse; }
-    void        SetMiddleMouseButton ( USHORT nSet );
+    sal_uInt16      GetMiddleMouseButton () const { return nMiddleMouse; }
+    void        SetMiddleMouseButton ( sal_uInt16 nSet );
 
     void        SetApplicationDefaults ( Application* pApp );
 
-    void        SetMenuMouseFollow(BOOL bSet) {bMenuMouseFollow = bSet; SetModified();}
-    BOOL        IsMenuMouseFollow() const{return bMenuMouseFollow;}
-
-    void        SetSingleLineTabCtrl(BOOL bSet) {bSingleLineTabCtrl = bSet; SetModified();}
-    BOOL        IsSingleLineTabCtrl()const {return   bSingleLineTabCtrl;}
+    void        SetMenuMouseFollow(sal_Bool bSet) {bMenuMouseFollow = bSet; SetModified();}
+    sal_Bool        IsMenuMouseFollow() const{return bMenuMouseFollow;}
 
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
-    void        SetFontAntiAliasing( BOOL bSet )    { bFontAntialiasing = bSet; SetModified(); }
-    BOOL        IsFontAntiAliasing() const { return bFontAntialiasing; }
+    void        SetFontAntiAliasing( sal_Bool bSet )    { bFontAntialiasing = bSet; SetModified(); }
+    sal_Bool        IsFontAntiAliasing() const { return bFontAntialiasing; }
 
-    USHORT      GetFontAntialiasingMinPixelHeight( ) const { return nAAMinPixelHeight; }
-    void        SetFontAntialiasingMinPixelHeight( USHORT _nMinHeight ) { nAAMinPixelHeight = _nMinHeight; SetModified(); }
+    sal_uInt16      GetFontAntialiasingMinPixelHeight( ) const { return nAAMinPixelHeight; }
+    void        SetFontAntialiasingMinPixelHeight( sal_uInt16 _nMinHeight ) { nAAMinPixelHeight = _nMinHeight; SetModified(); }
 #endif
-
-    void        SetColoredTabCtrl(BOOL bSet)   {bColoredTabCtrl = bSet; SetModified();};
-    BOOL        IsColoredTabCtrl()const {return     bColoredTabCtrl;}
 
     static sal_Bool IsInitialized()  { return bInitialized; }
     static void    SetInitialized() { bInitialized = sal_True; }

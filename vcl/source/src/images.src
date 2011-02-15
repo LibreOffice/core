@@ -38,25 +38,6 @@ Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_STDOFFSET)
     File = "check.bmp";
 };
 
-Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_WINOFFSET)
-{
-    File = "checkwin.bmp";
-};
-
-Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_OS2OFFSET)
-{
-    File = "checkos2.bmp";
-};
-
-Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_MACOFFSET)
-{
-    File = "checkmac.bmp";
-};
-
-Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_UNIXOFFSET)
-{
-    File = "checkunx.bmp";
-};
 
 Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_MONOOFFSET)
 {
@@ -78,26 +59,6 @@ Bitmap (SV_RESID_BITMAP_SCROLLMSK)
 Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_STDOFFSET)
 {
     File = "radio.bmp";
-};
-
-Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_WINOFFSET)
-{
-    File = "radiowin.bmp";
-};
-
-Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_OS2OFFSET)
-{
-    File = "radioos2.bmp";
-};
-
-Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_MACOFFSET)
-{
-    File = "radiomac.bmp";
-};
-
-Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_UNIXOFFSET)
-{
-    File = "radiounx.bmp";
 };
 
 Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_MONOOFFSET)

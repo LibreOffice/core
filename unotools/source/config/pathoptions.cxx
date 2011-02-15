@@ -206,7 +206,7 @@ class SvtPathOptions_Impl
 
         ::com::sun::star::lang::Locale  GetLocale() const { return m_aLocale; }
 
-        BOOL            IsPathReadonly(SvtPathOptions::Pathes ePath)const;
+        sal_Bool            IsPathReadonly(SvtPathOptions::Pathes ePath)const;
 };
 
 // global ----------------------------------------------------------------
@@ -310,10 +310,10 @@ const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Pathes ePath )
     return m_aPathArray[ ePath ];
 }
 // -----------------------------------------------------------------------
-BOOL SvtPathOptions_Impl::IsPathReadonly(SvtPathOptions::Pathes ePath)const
+sal_Bool SvtPathOptions_Impl::IsPathReadonly(SvtPathOptions::Pathes ePath)const
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    BOOL bReadonly = FALSE;
+    sal_Bool bReadonly = sal_False;
     if ( ePath < SvtPathOptions::PATH_COUNT )
     {
         Reference<XPropertySet> xPrSet(m_xPathSettings, UNO_QUERY);
@@ -399,7 +399,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar ) const
     OUString aWorkText = rVar;
 
     // Convert the returned path to system path!
-    BOOL bConvertLocal = FALSE;
+    sal_Bool bConvertLocal = sal_False;
 
     // Search for first occure of "$(...".
     sal_Int32 nPosition = aWorkText.indexOf( SIGN_STARTVARIABLE );  // = first position of "$(" in string
@@ -426,7 +426,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar ) const
         // Look for special variable that needs a system path.
         VarNameToEnumMap::const_iterator pIter = m_aMapVarNamesToEnum.find( aSubString );
         if ( pIter != m_aMapVarNamesToEnum.end() )
-            bConvertLocal = TRUE;
+            bConvertLocal = sal_True;
 
         nPosition += nLength;
 
@@ -995,12 +995,12 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
             sal_uInt16 j, nIdx = 0, nTokenCount = aPath.GetTokenCount( SEARCHPATH_DELIMITER );
             for ( j = 0; j < nTokenCount; ++j )
             {
-                BOOL bIsURL = TRUE;
+                sal_Bool bIsURL = sal_True;
                 String aPathToken = aPath.GetToken( 0, SEARCHPATH_DELIMITER, nIdx );
                 INetURLObject aObj( aPathToken );
                 if ( aObj.HasError() )
                 {
-                    bIsURL = FALSE;
+                    bIsURL = sal_False;
                     String aURL;
                     if ( LocalFileHelper::ConvertPhysicalNameToURL( aPathToken, aURL ) )
                         aObj.SetURL( aURL );
@@ -1045,7 +1045,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
     return pImp->GetLocale();
 }
 // -----------------------------------------------------------------------
-BOOL SvtPathOptions::IsPathReadonly(Pathes ePath)const
+sal_Bool SvtPathOptions::IsPathReadonly(Pathes ePath)const
 {
     return pImp->IsPathReadonly(ePath);
 }

@@ -76,10 +76,10 @@ void MessBox::ImplInitMessBoxData()
     mpFixedText         = NULL;
     mpFixedImage        = NULL;
     mnSoundType         = 0;
-    mbHelpBtn           = FALSE;
-    mbSound             = TRUE;
+    mbHelpBtn           = sal_False;
+    mbSound             = sal_True;
     mpCheckBox          = NULL;
-    mbCheck             = FALSE;
+    mbCheck             = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -87,11 +87,11 @@ void MessBox::ImplInitMessBoxData()
 void MessBox::ImplInitButtons()
 {
     WinBits nStyle = GetStyle();
-    USHORT  nOKFlags = BUTTONDIALOG_OKBUTTON;
-    USHORT  nCancelFlags = BUTTONDIALOG_CANCELBUTTON;
-    USHORT  nRetryFlags = 0;
-    USHORT  nYesFlags = 0;
-    USHORT  nNoFlags = 0;
+    sal_uInt16  nOKFlags = BUTTONDIALOG_OKBUTTON;
+    sal_uInt16  nCancelFlags = BUTTONDIALOG_CANCELBUTTON;
+    sal_uInt16  nRetryFlags = 0;
+    sal_uInt16  nYesFlags = 0;
+    sal_uInt16  nNoFlags = 0;
 
     if ( nStyle & WB_OK_CANCEL )
     {
@@ -139,8 +139,8 @@ void MessBox::ImplInitButtons()
     }
     else if ( nStyle & WB_ABORT_RETRY_IGNORE )
     {
-        USHORT nAbortFlags = 0;
-        USHORT nIgnoreFlags = 0;
+        sal_uInt16 nAbortFlags = 0;
+        sal_uInt16 nIgnoreFlags = 0;
 
         if ( nStyle & WB_DEF_CANCEL )
             nAbortFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
@@ -192,15 +192,15 @@ MessBox::MessBox( Window* pParent, const ResId& rResId ) :
     ImplInitMessBoxData();
 
     GetRes( rResId.SetRT( RSC_MESSBOX ) );
-    USHORT nHiButtons   = ReadShortRes();
-    USHORT nLoButtons   = ReadShortRes();
-    USHORT nHiDefButton = ReadShortRes();
-    USHORT nLoDefButton = ReadShortRes();
+    sal_uInt16 nHiButtons   = ReadShortRes();
+    sal_uInt16 nLoButtons   = ReadShortRes();
+    sal_uInt16 nHiDefButton = ReadShortRes();
+    sal_uInt16 nLoDefButton = ReadShortRes();
     rtl::OString aHelpId( ReadByteStringRes() );
-    /* USHORT bSysModal = */ ReadShortRes();
+    /* sal_uInt16 bSysModal = */ ReadShortRes();
     SetHelpId( aHelpId );
-    WinBits nBits = (((ULONG)nHiButtons << 16) + nLoButtons) |
-                    (((ULONG)nHiDefButton << 16) + nLoDefButton);
+    WinBits nBits = (((sal_uLong)nHiButtons << 16) + nLoButtons) |
+                    (((sal_uLong)nHiDefButton << 16) + nLoDefButton);
     ImplInit( pParent, nBits | WB_MOVEABLE | WB_HORZ | WB_CENTER );
 
     ImplLoadRes( rResId );
@@ -237,7 +237,7 @@ void MessBox::ImplPosControls()
         if ( !mbHelpBtn )
         {
             AddButton( BUTTON_HELP, BUTTONID_HELP, BUTTONDIALOG_HELPBUTTON, 3 );
-            mbHelpBtn = TRUE;
+            mbHelpBtn = sal_True;
         }
     }
     else
@@ -245,7 +245,7 @@ void MessBox::ImplPosControls()
         if ( mbHelpBtn )
         {
             RemoveButton( BUTTONID_HELP );
-            mbHelpBtn = FALSE;
+            mbHelpBtn = sal_False;
         }
     }
 
@@ -263,7 +263,7 @@ void MessBox::ImplPosControls()
     long            nMaxLineWidth;
     long            nWidth;
     WinBits         nWinStyle = WB_LEFT | WB_WORDBREAK | WB_NOLABEL | WB_INFO;
-    USHORT          nTextStyle = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP | TEXT_DRAW_LEFT;
+    sal_uInt16          nTextStyle = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP | TEXT_DRAW_LEFT;
 
     if ( mpFixedText )
         delete mpFixedText;
@@ -282,7 +282,7 @@ void MessBox::ImplPosControls()
 
     // Message-Text um Tabs bereinigen
     XubString   aTabStr( RTL_CONSTASCII_USTRINGPARAM( "    " ) );
-    USHORT      nIndex = 0;
+    sal_uInt16      nIndex = 0;
     while ( nIndex != STRING_NOTFOUND )
         nIndex = aMessText.SearchAndReplace( '\t', aTabStr, nIndex );
 
@@ -443,14 +443,14 @@ void MessBox::StateChanged( StateChangedType nType )
 
 // -----------------------------------------------------------------------
 
-BOOL MessBox::GetCheckBoxState() const
+sal_Bool MessBox::GetCheckBoxState() const
 {
     return mpCheckBox ? mpCheckBox->IsChecked() : mbCheck;
 }
 
 // -----------------------------------------------------------------------
 
-void MessBox::SetCheckBoxState( BOOL bCheck )
+void MessBox::SetCheckBoxState( sal_Bool bCheck )
 {
     if( mpCheckBox ) mpCheckBox->Check( bCheck );
     mbCheck = bCheck;
@@ -467,15 +467,15 @@ void MessBox::SetDefaultCheckBoxText()
 
 // -----------------------------------------------------------------------
 
-BOOL MessBox::SetModeImage( const Image& rImage, BmpColorMode eMode )
+sal_Bool MessBox::SetModeImage( const Image& rImage, BmpColorMode eMode )
 {
     if( eMode == BMP_COLOR_NORMAL )
         SetImage( rImage );
     else if( eMode == BMP_COLOR_HIGHCONTRAST )
         maImageHC = rImage;
     else
-        return FALSE;
-    return TRUE;
+        return sal_False;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -498,7 +498,7 @@ void InfoBox::ImplInitInfoBoxData()
 
     SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
                 InfoBox::GetStandardImageHC() : InfoBox::GetStandardImage() );
-    mnSoundType = ((USHORT)SOUND_INFO)+1;
+    mnSoundType = ((sal_uInt16)SOUND_INFO)+1;
 }
 
 // -----------------------------------------------------------------------
@@ -542,7 +542,7 @@ void WarningBox::ImplInitWarningBoxData()
         SetText( Application::GetDisplayName() );
 
     SetImage( WarningBox::GetStandardImage() );
-    mnSoundType = ((USHORT)SOUND_WARNING)+1;
+    mnSoundType = ((sal_uInt16)SOUND_WARNING)+1;
 }
 
 // -----------------------------------------------------------------------
@@ -589,7 +589,7 @@ void ErrorBox::ImplInitErrorBoxData()
 
     SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
         ErrorBox::GetStandardImageHC() : ErrorBox::GetStandardImage() );
-    mnSoundType = ((USHORT)SOUND_ERROR)+1;
+    mnSoundType = ((sal_uInt16)SOUND_ERROR)+1;
 }
 
 // -----------------------------------------------------------------------
@@ -635,7 +635,7 @@ void QueryBox::ImplInitQueryBoxData()
 
     SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
         QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
-    mnSoundType = ((USHORT)SOUND_QUERY)+1;
+    mnSoundType = ((sal_uInt16)SOUND_QUERY)+1;
 }
 
 // -----------------------------------------------------------------------

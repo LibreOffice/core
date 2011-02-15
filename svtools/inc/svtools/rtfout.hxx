@@ -50,15 +50,15 @@ public:
     static SvStream& Out_Char( SvStream&, sal_Unicode cChar,
                     int *pUCMode,
                     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
-                    BOOL bWriteHelpFile = FALSE );
+                    sal_Bool bWriteHelpFile = sal_False );
     static SvStream& Out_String( SvStream&, const String&,
                     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
-                    BOOL bWriteHelpFile = FALSE );
+                    sal_Bool bWriteHelpFile = sal_False );
     static SvStream& Out_Fontname( SvStream&, const String&,
                     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
-                    BOOL bWriteHelpFile = FALSE );
+                    sal_Bool bWriteHelpFile = sal_False );
 
-    static SvStream& Out_Hex( SvStream&, ULONG nHex, BYTE nLen );
+    static SvStream& Out_Hex( SvStream&, sal_uLong nHex, sal_uInt8 nLen );
 };
 
 

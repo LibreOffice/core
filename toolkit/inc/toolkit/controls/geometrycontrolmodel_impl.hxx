@@ -37,6 +37,12 @@ OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel()
 {
 }
 
+template <class CONTROLMODEL>
+OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & i_xCompContext)
+    :OGeometryControlModel_Base(new CONTROLMODEL(i_xCompContext))
+{
+}
+
 //--------------------------------------------------------------------
 template <class CONTROLMODEL>
 OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel(::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance)

@@ -38,7 +38,6 @@
 #include <vcl/salbmp.hxx>
 #include <vcl/salobj.hxx>
 #include <vcl/salmenu.hxx>
-#include <vcl/salctrlhandle.hxx>
 
 // this file contains the virtual destructors of the sal interface
 // compilers ususally put their vtables where the destructor is
@@ -74,7 +73,7 @@ void SalInstance::FillFontPathList( std::list< rtl::OString >& )
     // do nothing
 }
 
-SalMenu* SalInstance::CreateMenu( BOOL, Menu* )
+SalMenu* SalInstance::CreateMenu( sal_Bool, Menu* )
 {
     // default: no native menus
     return NULL;
@@ -117,10 +116,10 @@ SalPrinter::~SalPrinter()
 {
 }
 
-BOOL SalPrinter::StartJob( const String*, const String&, const String&,
+sal_Bool SalPrinter::StartJob( const String*, const String&, const String&,
                            ImplJobSetup*, vcl::PrinterController& )
 {
-    return FALSE;
+    return sal_False;
 }
 
 SalInfoPrinter::~SalInfoPrinter()
@@ -139,7 +138,7 @@ SalMenu::~SalMenu()
 {
 }
 
-bool SalMenu::ShowNativePopupMenu(FloatingWindow *, const Rectangle&, ULONG )
+bool SalMenu::ShowNativePopupMenu(FloatingWindow *, const Rectangle&, sal_uLong )
 {
     return false;
 }
@@ -149,19 +148,16 @@ bool SalMenu::AddMenuBarButton( const SalMenuButtonItem& )
     return false;
 }
 
-void SalMenu::RemoveMenuBarButton( USHORT )
+void SalMenu::RemoveMenuBarButton( sal_uInt16 )
 {
 }
 
-Rectangle SalMenu::GetMenuBarButtonRectPixel( USHORT, SalFrame* )
+Rectangle SalMenu::GetMenuBarButtonRectPixel( sal_uInt16, SalFrame* )
 {
     return Rectangle();
 }
 
 SalMenuItem::~SalMenuItem()
-{
-}
-SalControlHandle::~SalControlHandle()
 {
 }
 

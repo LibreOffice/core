@@ -122,7 +122,7 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
         pWindow = new CalendarField( pParent, nWinBits);
         static_cast<CalendarField*>(pWindow)->EnableToday();
         static_cast<CalendarField*>(pWindow)->EnableNone();
-        static_cast<CalendarField*>(pWindow)->EnableEmptyFieldValue( TRUE );
+        static_cast<CalendarField*>(pWindow)->EnableEmptyFieldValue( sal_True );
         *ppNewComp = new SVTXDateField;
         ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(DateField*)pWindow );
     }
@@ -839,7 +839,7 @@ void SVTXFormattedField::SetWindow( Window* _pWindow )
 {
     VCLXSpinField::SetWindow(_pWindow);
     if (GetFormattedField())
-        GetFormattedField()->SetAutoColor(TRUE);
+        GetFormattedField()->SetAutoColor(sal_True);
 }
 
 // --------------------------------------------------------------------------------------
@@ -2135,7 +2135,7 @@ void VCLXProgressBar::ImplUpdateValue()
         }
 
         // set progressbar value
-        pProgressBar->SetValue( (USHORT) nPercent );
+        pProgressBar->SetValue( (sal_uInt16) nPercent );
     }
 }
 

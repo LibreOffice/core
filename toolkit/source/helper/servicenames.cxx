@@ -105,3 +105,8 @@ const sal_Char __FAR_DATA szServiceName_GridControlModel[] = "com.sun.star.awt.g
 const sal_Char __FAR_DATA szServiceName_DefaultGridDataModel[] = "com.sun.star.awt.grid.DefaultGridDataModel";
 const sal_Char __FAR_DATA szServiceName_DefaultGridColumnModel[] = "com.sun.star.awt.grid.DefaultGridColumnModel";
 const sal_Char __FAR_DATA szServiceName_GridColumn[] = "com.sun.star.awt.grid.GridColumn";
+const sal_Char __FAR_DATA szServiceName_UnoControlTabPage[] = "com.sun.star.awt.tab.UnoControlTabPage";
+const sal_Char __FAR_DATA szServiceName_UnoControlTabPageModel[] = "com.sun.star.awt.tab.UnoControlTabPageModel";
+const sal_Char __FAR_DATA szServiceName_UnoControlTabPageContainerModel[] = "com.sun.star.awt.tab.UnoControlTabPageContainerModel";
+const sal_Char __FAR_DATA szServiceName_UnoControlTabPageContainer[] = "com.sun.star.awt.tab.UnoControlTabPageContainer";
+

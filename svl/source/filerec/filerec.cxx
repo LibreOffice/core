@@ -32,12 +32,12 @@
 
 //========================================================================
 
-SV_IMPL_VARARR( SfxUINT32s, UINT32 );
+SV_IMPL_VARARR( SfxUINT32s, sal_uInt32 );
 
 //========================================================================
 
-/*  Die folgenden Makros extrahieren Teilbereiche aus einem UINT32 Wert.
-    Diese UINT32-Werte werden anstelle der einzelnen Werte gestreamt,
+/*  Die folgenden Makros extrahieren Teilbereiche aus einem sal_uInt32 Wert.
+    Diese sal_uInt32-Werte werden anstelle der einzelnen Werte gestreamt,
     um Calls zu sparen.
 */
 
@@ -52,33 +52,33 @@ SV_IMPL_VARARR( SfxUINT32s, UINT32 );
 
 //-------------------------------------------------------------------------
 
-/*  Die folgenden Makros setzen Teilbereiche zu einem UINT32 Wert zusammen.
-    Diese UINT32-Werte werden anstelle der einzelnen Werte gestreamt,
+/*  Die folgenden Makros setzen Teilbereiche zu einem sal_uInt32 Wert zusammen.
+    Diese sal_uInt32-Werte werden anstelle der einzelnen Werte gestreamt,
     um Calls zu sparen.
 */
 
 #define SFX_REC_MINI_HEADER(nPreTag,nStartPos,nEndPos) \
-                    ( UINT32(nPreTag) | \
-                      UINT32(nEndPos-nStartPos-SFX_REC_HEADERSIZE_MINI) << 8 )
+                    ( sal_uInt32(nPreTag) | \
+                      sal_uInt32(nEndPos-nStartPos-SFX_REC_HEADERSIZE_MINI) << 8 )
 
 #define SFX_REC_HEADER(nRecType,nContentTag,nContentVer) \
-                    ( UINT32(nRecType) | \
-                      ( UINT32(nContentVer) << 8 ) | \
-                      ( UINT32(nContentTag) << 16 ) )
+                    ( sal_uInt32(nRecType) | \
+                      ( sal_uInt32(nContentVer) << 8 ) | \
+                      ( sal_uInt32(nContentTag) << 16 ) )
 
 #define SFX_REC_CONTENT_HEADER(nContentVer,n1StStartPos,nCurStartPos) \
-                    ( UINT32(nContentVer) | \
-                      UINT32( nCurStartPos - n1StStartPos ) << 8 )
+                    ( sal_uInt32(nContentVer) | \
+                      sal_uInt32( nCurStartPos - n1StStartPos ) << 8 )
 
 //=========================================================================
 
-UINT32 SfxMiniRecordWriter::Close
+sal_uInt32 SfxMiniRecordWriter::Close
 (
-    FASTBOOL    bSeekToEndOfRec     /*  TRUE (default)
+    FASTBOOL    bSeekToEndOfRec     /*  sal_True (default)
                                         Der Stream wird an das Ende des Records
                                         positioniert.
 
-                                        FALSE
+                                        sal_False
                                         Der Stream wird an den Anfang des
                                         Contents (also hinter den Header)
                                         positioniert.
@@ -95,9 +95,9 @@ UINT32 SfxMiniRecordWriter::Close
 
     [R"uckgabewert]
 
-    UINT32      != 0
+    sal_uInt32      != 0
                 Position im Stream, die direkt hinter dem Record liegt.
-                'bSeekToEndOfRecord==TRUE'
+                'bSeekToEndOfRecord==sal_True'
                 => R"uckgabewert == aktuelle Stream-Position nach Aufruf
 
                 == 0
@@ -109,7 +109,7 @@ UINT32 SfxMiniRecordWriter::Close
     if ( !_bHeaderOk )
     {
         // Header an den Anfang des Records schreiben
-        UINT32 nEndPos = _pStream->Tell();
+        sal_uInt32 nEndPos = _pStream->Tell();
         _pStream->Seek( _nStartPos );
         *_pStream << SFX_REC_MINI_HEADER( _nPreTag, _nStartPos, nEndPos );
 
@@ -118,7 +118,7 @@ UINT32 SfxMiniRecordWriter::Close
             _pStream->Seek( nEndPos );
 
         // Header wurde JETZT geschrieben
-        _bHeaderOk = TRUE;
+        _bHeaderOk = sal_True;
         return nEndPos;
     }
 #ifdef DBG_UTIL
@@ -126,14 +126,14 @@ UINT32 SfxMiniRecordWriter::Close
     else if ( SFX_BOOL_DONTCARE == _bHeaderOk )
     {
         // Header auslesen, um Soll-Gr"o\se zu bestimmen
-        UINT32 nEndPos = _pStream->Tell();
+        sal_uInt32 nEndPos = _pStream->Tell();
         _pStream->Seek( _nStartPos );
-        UINT32 nHeader;
+        sal_uInt32 nHeader;
         *_pStream >> nHeader;
         _pStream->Seek( nEndPos );
 
         // Soll-Gr"o\se mit Ist-Gr"o\se vergleichen
-        DBG_ASSERT( nEndPos - SFX_REC_OFS(nHeader) == _nStartPos + sizeof(UINT32),
+        DBG_ASSERT( nEndPos - SFX_REC_OFS(nHeader) == _nStartPos + sizeof(sal_uInt32),
                     "fixed record size incorrect" );
         DbgOutf( "SfxFileRec: written record until %ul", nEndPos );
     }
@@ -145,7 +145,7 @@ UINT32 SfxMiniRecordWriter::Close
 
 //=========================================================================
 
-USHORT SfxMiniRecordReader::ScanRecordType
+sal_uInt16 SfxMiniRecordReader::ScanRecordType
 (
     SvStream*   pStream         /*  <SvStream> an dessen aktueller Position
                                     ein Record liegt, dessen Typ erkannt werden
@@ -175,7 +175,7 @@ USHORT SfxMiniRecordReader::ScanRecordType
 
     [R"uckgabewert]
 
-    USHORT                          SFX_REC_TYPE_EOR
+    sal_uInt16                          SFX_REC_TYPE_EOR
                                     An der aktuellen Position des Streams
                                     steht eine End-Of-Records-Kennung.
 
@@ -224,7 +224,7 @@ USHORT SfxMiniRecordReader::ScanRecordType
     *pStream >> nHeader;
 
     // k"onnte es sich um einen extended-Record handeln?
-    USHORT nPreTag = sal::static_int_cast< USHORT >(SFX_REC_PRE(nHeader));
+    sal_uInt16 nPreTag = sal::static_int_cast< sal_uInt16 >(SFX_REC_PRE(nHeader));
     if ( SFX_REC_PRETAG_EXT == nPreTag )
     {
         // die n"achsten 4 Bytes als extended-Header lesen
@@ -234,7 +234,7 @@ USHORT SfxMiniRecordReader::ScanRecordType
         pStream->SeekRel(-8);
 
         // liegt eine g"ultige Record-Kennung vor?
-        USHORT nType = sal::static_int_cast< USHORT >(SFX_REC_TYP(nHeader));
+        sal_uInt16 nType = sal::static_int_cast< sal_uInt16 >(SFX_REC_TYP(nHeader));
         if ( nType >= SFX_REC_TYPE_FIRST && nType <= SFX_REC_TYPE_LAST )
             // entsprechenden extended-Record-Typ zur"uckliefern
             return nType;
@@ -251,7 +251,7 @@ USHORT SfxMiniRecordReader::ScanRecordType
         return nPreTag;
 
     // liegt ein Drawin-Engine-Record vor?
-    if ( nHeader == UINT32(*"DRMD") || nHeader == UINT32(*"DRVW") )
+    if ( nHeader == sal_uInt32(*"DRMD") || nHeader == sal_uInt32(*"DRVW") )
         return SFX_REC_TYPE_DRAWENG;
 
     // alle anderen sind grunds"atzlich g"ultige Mini-Records
@@ -260,29 +260,29 @@ USHORT SfxMiniRecordReader::ScanRecordType
 
 //-------------------------------------------------------------------------
 
-FASTBOOL SfxMiniRecordReader::SetHeader_Impl( UINT32 nHeader )
+FASTBOOL SfxMiniRecordReader::SetHeader_Impl( sal_uInt32 nHeader )
 
 /*  [Beschreibung]
 
     Interne Methode zum nachtr"aglichen Verarbeiten eines extern gelesenen
     Headers. Falls der Header eine End-Of-Records-Kennung darstellt,
-    wird am Stream ein Errorcode gesetzt und FALSE zur"uckgeliefert. Im
+    wird am Stream ein Errorcode gesetzt und sal_False zur"uckgeliefert. Im
     Fehlerfall wird der Stream jedoch nicht auf den Record-Anfang zur"uck-
     gesetzt.
 */
 
 {
-    FASTBOOL bRet = TRUE;
+    FASTBOOL bRet = sal_True;
 
     // Record-Ende und Pre-Tag aus dem Header ermitteln
     _nEofRec = _pStream->Tell() + SFX_REC_OFS(nHeader);
-    _nPreTag = sal::static_int_cast< BYTE >(SFX_REC_PRE(nHeader));
+    _nPreTag = sal::static_int_cast< sal_uInt8 >(SFX_REC_PRE(nHeader));
 
     // wenn End-Of-Record-Kennung, dann Fehler
     if ( _nPreTag == SFX_REC_PRETAG_EOR )
     {
         _pStream->SetError( ERRCODE_IO_WRONGFORMAT );
-        bRet = FALSE;
+        bRet = sal_False;
     }
     return bRet;
 }
@@ -309,12 +309,12 @@ SfxMiniRecordReader::SfxMiniRecordReader
 */
 
 :   _pStream( pStream ),
-    _bSkipped( FALSE )
+    _bSkipped( sal_False )
 {
     // Header einlesen
-    UINT32 nStartPos = pStream->Tell(); // um im Fehlerfall zur"uck zu-seeken
+    sal_uInt32 nStartPos = pStream->Tell(); // um im Fehlerfall zur"uck zu-seeken
     DBG( DbgOutf( "SfxFileRec: reading record at %ul", nStartPos ) );
-    UINT32 nHeader;
+    sal_uInt32 nHeader;
     *pStream >> nHeader;
 
     // Headerdaten extrahieren
@@ -337,7 +337,7 @@ SfxMiniRecordReader::SfxMiniRecordReader
                                         Position sich ein <SfxMiniRecord>
                                         befindet.
                                     */
-    BYTE            nTag            //  Pre-Tag des gew"unschten Records
+    sal_uInt8           nTag            //  Pre-Tag des gew"unschten Records
 )
 
 /*  [Beschreibung]
@@ -350,13 +350,13 @@ SfxMiniRecordReader::SfxMiniRecordReader
 
     Wird das Ende des Streams oder die Kennung SFX_REC_PRETAG_EOR
     erreicht, bevor ein Record mit dem ge"unschten Pre-Tag gefunden wird,
-    ist die erzeugte Instanz ung"ultig ('IsValid() == FALSE'). Ein ent-
+    ist die erzeugte Instanz ung"ultig ('IsValid() == sal_False'). Ein ent-
     sprechender Error-Code (ERRCODE_IO_EOF bzw. ERRCODE_IO_WRONGFORMAT)
     ist dann am Stream gesetzt, dessen Position ist dann au\serdem unver-
     "andert.
 
     Bei 'nTag==SFX_FILEREC_PRETAG_EOR' wird nicht versucht, einen Record
-    zu lesen, es wird sofort 'IsValid()' auf FALSE gesetzt und kein Error-Code
+    zu lesen, es wird sofort 'IsValid()' auf sal_False gesetzt und kein Error-Code
     am Stream gesetzt. Dies ist dauzu gedacht, ohne 'new' und 'delete'
     abw"rtskompatibel SfxMiniRecords einbauen zu k"onnen. Siehe dazu
     <SfxItemSet::Load()>.
@@ -384,14 +384,14 @@ SfxMiniRecordReader::SfxMiniRecordReader
     }
 
     // StartPos merken, um im Fehlerfall zur"uck-seeken zu k"onnen
-    UINT32 nStartPos = pStream->Tell();
+    sal_uInt32 nStartPos = pStream->Tell();
 
     // passenden Record suchen
-    while(TRUE)
+    while(sal_True)
     {
         // Header lesen
         DBG( DbgOutf( "SfxFileRec: searching record at %ul", pStream->Tell() ) );
-        UINT32 nHeader;
+        sal_uInt32 nHeader;
         *pStream >> nHeader;
 
         // Headerdaten von Basisklasse extrahieren lassen
@@ -423,10 +423,10 @@ SfxMiniRecordReader::SfxMiniRecordReader
 
 SfxSingleRecordWriter::SfxSingleRecordWriter
 (
-    BYTE            nRecordType,    // f"ur Subklassen
+    sal_uInt8           nRecordType,    // f"ur Subklassen
     SvStream*       pStream,        // Stream, in dem der Record angelegt wird
-    UINT16          nContentTag,    // Inhalts-Art-Kennung
-    BYTE            nContentVer     // Inhalts-Versions-Kennung
+    sal_uInt16          nContentTag,    // Inhalts-Art-Kennung
+    sal_uInt8           nContentVer     // Inhalts-Versions-Kennung
 )
 
 /*  [Beschreibung]
@@ -445,8 +445,8 @@ SfxSingleRecordWriter::SfxSingleRecordWriter
 SfxSingleRecordWriter::SfxSingleRecordWriter
 (
     SvStream*       pStream,        // Stream, in dem der Record angelegt wird
-    UINT16          nContentTag,    // Inhalts-Art-Kennung
-    BYTE            nContentVer     // Inhalts-Versions-Kennung
+    sal_uInt16          nContentTag,    // Inhalts-Art-Kennung
+    sal_uInt8           nContentVer     // Inhalts-Versions-Kennung
 )
 
 /*  [Beschreibung]
@@ -467,9 +467,9 @@ SfxSingleRecordWriter::SfxSingleRecordWriter
 SfxSingleRecordWriter::SfxSingleRecordWriter
 (
     SvStream*       pStream,        // Stream, in dem der Record angelegt wird
-    UINT16          nContentTag,    // Inhalts-Art-Kennung
-    BYTE            nContentVer,    // Inhalts-Versions-Kennung
-    UINT32          nContentSize    // Gr"o\se des Inhalts in Bytes
+    sal_uInt16          nContentTag,    // Inhalts-Art-Kennung
+    sal_uInt8           nContentVer,    // Inhalts-Versions-Kennung
+    sal_uInt32          nContentSize    // Gr"o\se des Inhalts in Bytes
 )
 
 /*  [Beschreibung]
@@ -487,7 +487,7 @@ SfxSingleRecordWriter::SfxSingleRecordWriter
 
 //=========================================================================
 
-inline FASTBOOL SfxSingleRecordReader::ReadHeader_Impl( USHORT nTypes )
+inline FASTBOOL SfxSingleRecordReader::ReadHeader_Impl( sal_uInt16 nTypes )
 
 /*  [Beschreibung]
 
@@ -501,19 +501,19 @@ inline FASTBOOL SfxSingleRecordReader::ReadHeader_Impl( USHORT nTypes )
     FASTBOOL bRet;
 
     // Basisklassen-Header einlesen
-    UINT32 nHeader=0;
+    sal_uInt32 nHeader=0;
     *_pStream >> nHeader;
     if ( !SetHeader_Impl( nHeader ) )
-        bRet = FALSE;
+        bRet = sal_False;
     else
     {
         // eigenen Header einlesen
         *_pStream >> nHeader;
-        _nRecordVer = sal::static_int_cast< BYTE >(SFX_REC_VER(nHeader));
-        _nRecordTag = sal::static_int_cast< UINT16 >(SFX_REC_TAG(nHeader));
+        _nRecordVer = sal::static_int_cast< sal_uInt8 >(SFX_REC_VER(nHeader));
+        _nRecordTag = sal::static_int_cast< sal_uInt16 >(SFX_REC_TAG(nHeader));
 
         // falscher Record-Typ?
-        _nRecordType = sal::static_int_cast< BYTE >(SFX_REC_TYP(nHeader));
+        _nRecordType = sal::static_int_cast< sal_uInt8 >(SFX_REC_TYP(nHeader));
         bRet = 0 != ( nTypes & _nRecordType);
     }
     return bRet;
@@ -526,7 +526,7 @@ SfxSingleRecordReader::SfxSingleRecordReader( SvStream *pStream )
 {
     // Startposition merken, um im Fehlerfall zur"uck-seeken zu k"onnen
     #ifdef DBG_UTIL
-    UINT32 nStartPos = pStream->Tell();
+    sal_uInt32 nStartPos = pStream->Tell();
     DBG( DbgOutf( "SfxFileRec: reading record at %ul", nStartPos ) );
     #endif
 
@@ -544,10 +544,10 @@ SfxSingleRecordReader::SfxSingleRecordReader( SvStream *pStream )
 
 //-------------------------------------------------------------------------
 
-SfxSingleRecordReader::SfxSingleRecordReader( SvStream *pStream, USHORT nTag )
+SfxSingleRecordReader::SfxSingleRecordReader( SvStream *pStream, sal_uInt16 nTag )
 {
     // StartPos merken, um im Fehlerfall zur"uck-seeken zu k"onnen
-    UINT32 nStartPos = pStream->Tell();
+    sal_uInt32 nStartPos = pStream->Tell();
 
     // richtigen Record suchen, ggf. Error-Code setzen und zur"uck-seeken
     Construct_Impl( pStream );
@@ -563,8 +563,8 @@ SfxSingleRecordReader::SfxSingleRecordReader( SvStream *pStream, USHORT nTag )
 
 FASTBOOL SfxSingleRecordReader::FindHeader_Impl
 (
-    UINT16      nTypes,     // arithm. Veroderung erlaubter Record-Typen
-    UINT16      nTag        // zu findende Record-Art-Kennung
+    sal_uInt16      nTypes,     // arithm. Veroderung erlaubter Record-Typen
+    sal_uInt16      nTag        // zu findende Record-Art-Kennung
 )
 
 /*  [Beschreibung]
@@ -574,18 +574,18 @@ FASTBOOL SfxSingleRecordReader::FindHeader_Impl
     gekennzeichnet ist.
 
     Kann ein solcher Record nicht gefunden werden, wird am Stream ein
-    Errorcode gesetzt, zur"uck-geseekt und FALSE zur"uckgeliefert.
+    Errorcode gesetzt, zur"uck-geseekt und sal_False zur"uckgeliefert.
 */
 
 {
     // StartPos merken, um im Fehlerfall zur"uck-seeken zu k"onnen
-    UINT32 nStartPos = _pStream->Tell();
+    sal_uInt32 nStartPos = _pStream->Tell();
 
     // richtigen Record suchen
     while ( !_pStream->IsEof() )
     {
         // Header lesen
-        UINT32 nHeader;
+        sal_uInt32 nHeader;
         DBG( DbgOutf( "SfxFileRec: searching record at %ul", _pStream->Tell() ) );
         *_pStream >> nHeader;
         if ( !SetHeader_Impl( nHeader ) )
@@ -597,17 +597,17 @@ FASTBOOL SfxSingleRecordReader::FindHeader_Impl
         {
             // Extended Header lesen
             *_pStream >> nHeader;
-            _nRecordTag = sal::static_int_cast< UINT16 >(SFX_REC_TAG(nHeader));
+            _nRecordTag = sal::static_int_cast< sal_uInt16 >(SFX_REC_TAG(nHeader));
 
             // richtigen Record gefunden?
             if ( _nRecordTag == nTag )
             {
                 // gefundener Record-Typ passend?
-                _nRecordType = sal::static_int_cast< BYTE >(
+                _nRecordType = sal::static_int_cast< sal_uInt8 >(
                     SFX_REC_TYP(nHeader));
                 if ( nTypes & _nRecordType )
                     // ==> gefunden
-                    return TRUE;
+                    return sal_True;
 
                 // error => Such-Schleife abbrechen
                 break;
@@ -622,18 +622,18 @@ FASTBOOL SfxSingleRecordReader::FindHeader_Impl
     // Fehler setzen und zur"uck-seeken
     _pStream->SetError( ERRCODE_IO_WRONGFORMAT );
     _pStream->Seek( nStartPos );
-    return FALSE;
+    return sal_False;
 }
 
 //=========================================================================
 
 SfxMultiFixRecordWriter::SfxMultiFixRecordWriter
 (
-    BYTE            nRecordType,    // Subklassen Record-Kennung
+    sal_uInt8           nRecordType,    // Subklassen Record-Kennung
     SvStream*       pStream,        // Stream, in dem der Record angelegt wird
-    UINT16          nContentTag,    // Content-Art-Kennung
-    BYTE            nContentVer,    // Content-Versions-Kennung
-    UINT32                          // Gr"o\se jedes einzelnen Contents in Bytes
+    sal_uInt16          nContentTag,    // Content-Art-Kennung
+    sal_uInt8           nContentVer,    // Content-Versions-Kennung
+    sal_uInt32                          // Gr"o\se jedes einzelnen Contents in Bytes
 )
 
 /*  [Beschreibung]
@@ -653,9 +653,9 @@ SfxMultiFixRecordWriter::SfxMultiFixRecordWriter
 SfxMultiFixRecordWriter::SfxMultiFixRecordWriter
 (
     SvStream*       pStream,        // Stream, in dem der Record angelegt wird
-    UINT16          nContentTag,    // Content-Art-Kennung
-    BYTE            nContentVer,    // Content-Versions-Kennung
-    UINT32                          // Gr"o\se jedes einzelnen Contents in Bytes
+    sal_uInt16          nContentTag,    // Content-Art-Kennung
+    sal_uInt8           nContentVer,    // Content-Versions-Kennung
+    sal_uInt32                          // Gr"o\se jedes einzelnen Contents in Bytes
 )
 
 /*  [Beschreibung]
@@ -674,7 +674,7 @@ SfxMultiFixRecordWriter::SfxMultiFixRecordWriter
 
 //------------------------------------------------------------------------
 
-UINT32 SfxMultiFixRecordWriter::Close( FASTBOOL bSeekToEndOfRec )
+sal_uInt32 SfxMultiFixRecordWriter::Close( FASTBOOL bSeekToEndOfRec )
 
 //  siehe <SfxMiniRecordWriter>
 
@@ -683,7 +683,7 @@ UINT32 SfxMultiFixRecordWriter::Close( FASTBOOL bSeekToEndOfRec )
     if ( !_bHeaderOk )
     {
         // Position hinter Record merken, um sie restaurieren zu k"onnen
-        UINT32 nEndPos = SfxSingleRecordWriter::Close( FALSE );
+        sal_uInt32 nEndPos = SfxSingleRecordWriter::Close( sal_False );
 
         // gegen"uber SfxSingleRecord erweiterten Header schreiben
         *_pStream << _nContentCount;
@@ -703,10 +703,10 @@ UINT32 SfxMultiFixRecordWriter::Close( FASTBOOL bSeekToEndOfRec )
 
 SfxMultiVarRecordWriter::SfxMultiVarRecordWriter
 (
-    BYTE            nRecordType,    // Record-Kennung der Subklasse
+    sal_uInt8           nRecordType,    // Record-Kennung der Subklasse
     SvStream*       pStream,        // Stream, in dem der Record angelegt wird
-    UINT16          nRecordTag,     // Gesamt-Art-Kennung
-    BYTE            nRecordVer      // Gesamt-Versions-Kennung
+    sal_uInt16          nRecordTag,     // Gesamt-Art-Kennung
+    sal_uInt8           nRecordVer      // Gesamt-Versions-Kennung
 )
 
 /*  [Beschreibung]
@@ -724,8 +724,8 @@ SfxMultiVarRecordWriter::SfxMultiVarRecordWriter
 SfxMultiVarRecordWriter::SfxMultiVarRecordWriter
 (
     SvStream*       pStream,        // Stream, in dem der Record angelegt wird
-    UINT16          nRecordTag,     // Gesamt-Art-Kennung
-    BYTE            nRecordVer      // Gesamt-Versions-Kennung
+    sal_uInt16          nRecordTag,     // Gesamt-Art-Kennung
+    sal_uInt8           nRecordVer      // Gesamt-Versions-Kennung
 )
 
 /*  [Beschreibung]
@@ -799,7 +799,7 @@ void SfxMultiVarRecordWriter::NewContent()
 
 //-------------------------------------------------------------------------
 
-UINT32 SfxMultiVarRecordWriter::Close( FASTBOOL bSeekToEndOfRec )
+sal_uInt32 SfxMultiVarRecordWriter::Close( FASTBOOL bSeekToEndOfRec )
 
 // siehe <SfxMiniRecordWriter>
 
@@ -812,24 +812,24 @@ UINT32 SfxMultiVarRecordWriter::Close( FASTBOOL bSeekToEndOfRec )
             FlushContent_Impl();
 
         // Content-Offset-Tabelle schreiben
-        UINT32 nContentOfsPos = _pStream->Tell();
+        sal_uInt32 nContentOfsPos = _pStream->Tell();
         //! darf man das so einr"ucken?
         #if defined(OSL_LITENDIAN)
             _pStream->Write( _aContentOfs.GetData(),
-                             sizeof(UINT32)*_nContentCount );
+                             sizeof(sal_uInt32)*_nContentCount );
         #else
-            for ( USHORT n = 0; n < _nContentCount; ++n )
-                *_pStream << UINT32(_aContentOfs[n]);
+            for ( sal_uInt16 n = 0; n < _nContentCount; ++n )
+                *_pStream << sal_uInt32(_aContentOfs[n]);
         #endif
 
         // SfxMultiFixRecordWriter::Close() "uberspringen!
-        UINT32 nEndPos = SfxSingleRecordWriter::Close( FALSE );
+        sal_uInt32 nEndPos = SfxSingleRecordWriter::Close( sal_False );
 
         // eigenen Header schreiben
         *_pStream << _nContentCount;
         if ( SFX_REC_TYPE_VARSIZE_RELOC == _nPreTag ||
              SFX_REC_TYPE_MIXTAGS_RELOC == _nPreTag )
-            *_pStream << static_cast<UINT32>(nContentOfsPos - ( _pStream->Tell() + sizeof(UINT32) ));
+            *_pStream << static_cast<sal_uInt32>(nContentOfsPos - ( _pStream->Tell() + sizeof(sal_uInt32) ));
         else
             *_pStream << nContentOfsPos;
 
@@ -847,8 +847,8 @@ UINT32 SfxMultiVarRecordWriter::Close( FASTBOOL bSeekToEndOfRec )
 
 void SfxMultiMixRecordWriter::NewContent
 (
-    UINT16      nContentTag,    // Kennung f"ur die Art des Contents
-    BYTE        nContentVer     // Kennung f"ur die Version des Contents
+    sal_uInt16      nContentTag,    // Kennung f"ur die Art des Contents
+    sal_uInt8       nContentVer     // Kennung f"ur die Version des Contents
 )
 
 /*  [Beschreibung]
@@ -891,18 +891,18 @@ FASTBOOL SfxMultiRecordReader::ReadHeader_Impl()
     if ( _nRecordType != SFX_REC_TYPE_FIXSIZE )
     {
         // Tabelle aus dem Stream einlesen
-        UINT32 nContentPos = _pStream->Tell();
+        sal_uInt32 nContentPos = _pStream->Tell();
         if ( _nRecordType == SFX_REC_TYPE_VARSIZE_RELOC ||
              _nRecordType == SFX_REC_TYPE_MIXTAGS_RELOC )
             _pStream->SeekRel( + _nContentSize );
         else
             _pStream->Seek( _nContentSize );
-        _pContentOfs = new UINT32[_nContentCount];
+        _pContentOfs = new sal_uInt32[_nContentCount];
         //! darf man jetzt so einr"ucken
         #if defined(OSL_LITENDIAN)
-            _pStream->Read( _pContentOfs, sizeof(UINT32)*_nContentCount );
+            _pStream->Read( _pContentOfs, sizeof(sal_uInt32)*_nContentCount );
         #else
-            for ( USHORT n = 0; n < _nContentCount; ++n )
+            for ( sal_uInt16 n = 0; n < _nContentCount; ++n )
                 *_pStream >> _pContentOfs[n];
         #endif
         _pStream->Seek( nContentPos );
@@ -934,7 +934,7 @@ SfxMultiRecordReader::SfxMultiRecordReader( SvStream *pStream )
 
 //-------------------------------------------------------------------------
 
-SfxMultiRecordReader::SfxMultiRecordReader( SvStream *pStream, UINT16 nTag )
+SfxMultiRecordReader::SfxMultiRecordReader( SvStream *pStream, sal_uInt16 nTag )
 :   _nContentNo(0)
 {
     // Position im Stream merken, um im Fehlerfall zur"uck-seeken zu k"onnen
@@ -971,8 +971,8 @@ FASTBOOL SfxMultiRecordReader::GetContent()
     auf den Anfang des ersten Contents im Record und liest ggf. dessen
     Header ein.
 
-    Liegt laut Record-Header kein Content mehr vor, wird FALSE zur"uck-
-    gegeben. Trotz einem TRUE-Returnwert kann am Stream ein Fehlercode
+    Liegt laut Record-Header kein Content mehr vor, wird sal_False zur"uck-
+    gegeben. Trotz einem sal_True-Returnwert kann am Stream ein Fehlercode
     gesetzt sein, z.B. falls er unvorhergesehenerweise (kaputtes File)
     zuende ist.
 */
@@ -982,10 +982,10 @@ FASTBOOL SfxMultiRecordReader::GetContent()
     if ( _nContentNo < _nContentCount )
     {
         // den Stream an den Anfang des Contents positionieren
-        UINT32 nOffset = _nRecordType == SFX_REC_TYPE_FIXSIZE
+        sal_uInt32 nOffset = _nRecordType == SFX_REC_TYPE_FIXSIZE
                     ? _nContentNo * _nContentSize
                     : SFX_REC_CONTENT_OFS(_pContentOfs[_nContentNo]);
-        UINT32 nNewPos = _nStartPos + nOffset;
+        sal_uInt32 nNewPos = _nStartPos + nOffset;
         DBG_ASSERT( nNewPos >= _pStream->Tell(), "SfxMultiRecordReader::GetContent() - New position before current, to much data red!" );
 
         // #99366#: correct stream pos in every case;
@@ -1000,17 +1000,17 @@ FASTBOOL SfxMultiRecordReader::GetContent()
         if ( _nRecordType == SFX_REC_TYPE_MIXTAGS ||
              _nRecordType == SFX_REC_TYPE_MIXTAGS_RELOC )
         {
-            _nContentVer = sal::static_int_cast< BYTE >(
+            _nContentVer = sal::static_int_cast< sal_uInt8 >(
                 SFX_REC_CONTENT_VER(_pContentOfs[_nContentNo]));
             *_pStream >> _nContentTag;
         }
 
         // ContentNo weiterz"ahlen
         ++_nContentNo;
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 
