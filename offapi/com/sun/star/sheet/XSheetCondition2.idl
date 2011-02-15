@@ -1,0 +1,82 @@
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Initial Developer of the Original Code is
+ *                       Novell, Inc.
+ *
+ * Portions created by the Initial Developer are Copyright (C) 2011 the
+ * Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s): Muthu Subramanian <sumuthu@novell.com>
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#ifndef __com_sun_star_sheet_XSheetCondition2_idl__
+#define __com_sun_star_sheet_XSheetCondition2_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_ConditionOperator2_idl__
+#include <com/sun/star/sheet/ConditionOperator2.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_XSheetCondition_idl__
+#include <com/sun/star/sheet/XSheetCondition.idl>
+#endif
+
+#ifndef __com_sun_star_table_CellAddress_idl__
+#include <com/sun/star/table/CellAddress.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** provides methods to access the settings of a condition in a
+    conditional format or data validation.
+
+    @see com::sun::star::sheet::TableConditionalEntry
+    @see com::sun::star::sheet::TableValidation
+    @see com::sun::star::sheet::XSheetCondition
+ */
+interface XSheetCondition2: com::sun::star::sheet::XSheetCondition
+{
+    //-------------------------------------------------------------------------
+
+    /** returns the operator in the condition (new interface).
+     */
+    long getConditionOperator();
+
+    //-------------------------------------------------------------------------
+
+    /** sets the operator in the condition (new interface).
+     */
+    void setConditionOperator(
+            [in] long nOperator );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
