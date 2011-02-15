@@ -3170,7 +3170,7 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
     BOOL bShow = nSizeTwips > 0 || eMode != SC_SIZE_DIRECT;
     BOOL bOutline = FALSE;
 
-    pDoc->IncSizeRecalcLevel( nTab );       // nicht fuer jede Spalte einzeln
+    pDoc->InitializeNoteCaptions(nTab);
     for (SCCOLROW nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
     {
         SCCOLROW nStartNo = *(pRanges++);
@@ -3255,7 +3255,7 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
                         static_cast<SCROW>(nEndNo), nTab, bShow );
         }
     }
-    pDoc->DecSizeRecalcLevel( nTab );       // nicht fuer jede Spalte einzeln
+    pDoc->SetDrawPageSize(nTab);
 
     if (!bOutline)
         DELETEZ(pUndoTab);

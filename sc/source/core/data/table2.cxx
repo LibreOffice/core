@@ -2108,11 +2108,7 @@ void ScTable::SetRowHeight( SCROW nRow, USHORT nNewHeight )
         sal_uInt16 nOldHeight = mpRowHeights->getValue(nRow);
         if ( nNewHeight != nOldHeight )
         {
-            IncRecalcLevel();
-            InitializeNoteCaptions();
             mpRowHeights->setValue(nRow, nRow, nNewHeight);
-            DecRecalcLevel();
-
             InvalidatePageBreaks();
         }
     }
@@ -2162,8 +2158,6 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
     BOOL bChanged = FALSE;
     if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && mpRowHeights)
     {
-        IncRecalcLevel();
-        InitializeNoteCaptions();
         if (!nNewHeight)
         {
             DBG_ERROR("Zeilenhoehe 0 in SetRowHeight");
