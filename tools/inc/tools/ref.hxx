@@ -82,9 +82,6 @@ public:                                         \
 #define PRV_SV_DECL_REF( ClassName )            \
 PRV_SV_DECL_REF_LOCK( ClassName, Ref )
 
-#define PRV_SV_DECL_LOCK( ClassName )           \
-PRV_SV_DECL_REF_LOCK( ClassName, Lock )
-
 #define SV_DECL_REF( ClassName )                \
 class ClassName;                                \
 class ClassName##Ref                            \
@@ -96,7 +93,7 @@ class ClassName##Ref                            \
 class ClassName;                                \
 class ClassName##Lock                           \
 {                                               \
-    PRV_SV_DECL_LOCK( ClassName )               \
+    PRV_SV_DECL_REF_LOCK( ClassName, Lock )     \
 };
 
 #define SV_IMPL_REF( ClassName )                                \
@@ -145,6 +142,7 @@ inline void Append( const CN##MemberList & );\
 
 #define SV_DECL_REF_LIST(CN,EN) \
 PRV_SV_DECL_REF_LIST(CN,EN,/* empty */)
+
 #define SV_DECL_REF_LIST_VISIBILITY(CN,EN,vis) \
 PRV_SV_DECL_REF_LIST(CN,EN,vis)
 
