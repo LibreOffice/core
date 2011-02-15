@@ -50,12 +50,6 @@ SvHashTable::SvHashTable( UINT32 nMaxEntries )
 
 SvHashTable::~SvHashTable()
 {
-#ifdef DOS_NIE
-    printf( "Maximum: %ld, FÅllung: %ld\n", (ULONG)nMax, (ULONG)nFill );
-    printf( "Anfragen: %ld, Versuche: %ld", (ULONG)lAsk, (ULONG)lTry );
-    if( lTry != 0 )
-        printf( ", V/E = %ld\n", lTry / lAsk );
-#endif
 }
 
 BOOL SvHashTable::Test_Insert( const void * pElement, BOOL bInsert,
