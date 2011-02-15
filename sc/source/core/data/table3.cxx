@@ -1614,8 +1614,6 @@ static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPa
 
 SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
 {
-    mpHiddenRows->enableTreeSearch(false);
-
     ScQueryParam    aParam( rParamOrg );
     ScStrCollection aScStrCollection;
     StrData*        pStrData = NULL;

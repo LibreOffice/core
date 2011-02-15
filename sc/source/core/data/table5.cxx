@@ -540,6 +540,36 @@ bool ScTable::RowHidden(SCROW nRow, SCROW* pFirstRow, SCROW* pLastRow) const
     return aData.mbValue;
 }
 
+bool ScTable::RowHiddenLeaf(SCROW nRow, SCROW* pFirstRow, SCROW* pLastRow) const
+{
+    if (!ValidRow(nRow))
+    {
+        if (pFirstRow)
+            *pFirstRow = nRow;
+        if (pLastRow)
+            *pLastRow = nRow;
+        return true;
+    }
+
+    ScFlatBoolRowSegments::RangeData aData;
+    if (!mpHiddenRows->getRangeDataLeaf(nRow, aData))
+    {
+        // search failed.
+        if (pFirstRow)
+            *pFirstRow = nRow;
+        if (pLastRow)
+            *pLastRow = nRow;
+        return true;
+    }
+
+    if (pFirstRow)
+        *pFirstRow = aData.mnRow1;
+    if (pLastRow)
+        *pLastRow = aData.mnRow2;
+
+    return aData.mbValue;
+}
+
 bool ScTable::HasHiddenRows(SCROW nStartRow, SCROW nEndRow) const
 {
     SCROW nRow = nStartRow;

@@ -397,6 +397,18 @@ bool ScFlatBoolRowSegments::getRangeData(SCROW nRow, RangeData& rData)
     return true;
 }
 
+bool ScFlatBoolRowSegments::getRangeDataLeaf(SCROW nRow, RangeData& rData)
+{
+    ScFlatBoolSegmentsImpl::RangeData aData;
+    if (!mpImpl->getRangeDataLeaf(static_cast<SCCOLROW>(nRow), aData))
+        return false;
+
+    rData.mbValue = aData.mnValue;
+    rData.mnRow1  = static_cast<SCROW>(aData.mnPos1);
+    rData.mnRow2  = static_cast<SCROW>(aData.mnPos2);
+    return true;
+}
+
 void ScFlatBoolRowSegments::removeSegment(SCROW nRow1, SCROW nRow2)
 {
     mpImpl->removeSegment(static_cast<SCCOLROW>(nRow1), static_cast<SCCOLROW>(nRow2));
