@@ -74,20 +74,8 @@
 #define TOOLS_INETDEF_OS "unknown OS"
 #endif // WN, ...
 
-#define TOOLS_INETDEF_PRODUCT "StarOffice/5.2"
-#define TOOLS_INETDEF_MOZILLA "Mozilla/3.0"
-
-#define INET_PRODUCTNAME TOOLS_INETDEF_PRODUCT " (" TOOLS_INETDEF_OS ")"
-#define INET_DEF_CALLERNAME TOOLS_INETDEF_MOZILLA " (compatible; "           \
-     TOOLS_INETDEF_PRODUCT "; " TOOLS_INETDEF_OS ")"
-
 //============================================================================
 // The following definitions seem obsolete and might get removed in future.
-
-#define INET_PERS_CERT_HOMEPAGE "http://www.stardivision.de/certs.html"
-#define INET_PERS_CERT_HOMEPAGE_INT                                          \
-     "http://www.stardivision.de/certs/certs##.html"
-    // the above definitions are only used in svx/source/options/optinet2.cxx
 
 #if defined __RSC
 #define INET_UNDEFINED 0
