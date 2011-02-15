@@ -110,7 +110,7 @@ public:
         );
 
     /** @param bOnlyAtFirstChartType
-            If </TRUE>, the stacking mode is only set at the series found inside
+            If </sal_True>, the stacking mode is only set at the series found inside
             the first chart type.  This is the standard for all current
             templates (the only template that has more than one chart-type and
             allows stacking is bar/line combi, and for this the stacking only
@@ -287,7 +287,7 @@ public:
         * @param bForward
         *  Direction of the move to be checked.
         *
-        * @returns </TRUE> if the series can be moved.
+        * @returns </sal_True> if the series can be moved.
         *
         */
     static bool isSeriesMoveable(
@@ -309,7 +309,7 @@ public:
         * @param bForward
         *  Direction in which the series should be moved.
         *
-        * @returns </TRUE> if the series was moved successfully.
+        * @returns </sal_True> if the series was moved successfully.
         *
         */
     static bool moveSeries(

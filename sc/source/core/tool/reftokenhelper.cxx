@@ -71,7 +71,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
 
         // There MUST be exactly one reference per range token and nothing
         // else, and it MUST be a valid reference, not some #REF!
-        USHORT nLen = pArray->GetLen();
+        sal_uInt16 nLen = pArray->GetLen();
         if (!nLen)
             continue;   // Should a missing range really be allowed?
         if (nLen != 1)

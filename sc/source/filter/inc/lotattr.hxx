@@ -46,24 +46,24 @@ class LotAttrTable;
 
 struct LotAttrWK3
 {
-    UINT8                   nFont;
-    UINT8                   nLineStyle;
-    UINT8                   nFontCol;
-    UINT8                   nBack;
+    sal_uInt8                   nFont;
+    sal_uInt8                   nLineStyle;
+    sal_uInt8                   nFontCol;
+    sal_uInt8                   nBack;
 
-    inline BOOL             HasStyles( void );
-    inline BOOL             IsCentered( void );
+    inline sal_Bool             HasStyles( void );
+    inline sal_Bool             IsCentered( void );
 };
 
 
-inline BOOL LotAttrWK3::HasStyles( void )
+inline sal_Bool LotAttrWK3::HasStyles( void )
 {
     return ( nFont || nLineStyle || nFontCol || ( nBack & 0x7F ) );
                     // !! ohne Center-Bit!!
 }
 
 
-inline BOOL LotAttrWK3::IsCentered( void )
+inline sal_Bool LotAttrWK3::IsCentered( void )
 {
     return ( nBack & 0x80 );
 }
@@ -77,7 +77,7 @@ private:
     struct ENTRY
     {
         ScPatternAttr*  pPattAttr;
-        UINT32          nHash0;
+        sal_uInt32          nHash0;
 
         inline          ENTRY( const ScPatternAttr& r )         { pPattAttr = new ScPatternAttr( r ); }
 
@@ -85,9 +85,9 @@ private:
 
         inline          ~ENTRY()                                { delete pPattAttr; }
 
-        inline BOOL     operator ==( const ENTRY& r ) const     { return nHash0 == r.nHash0; }
+        inline sal_Bool     operator ==( const ENTRY& r ) const     { return nHash0 == r.nHash0; }
 
-        inline BOOL     operator ==( const UINT32& r ) const    { return nHash0 == r; }
+        inline sal_Bool     operator ==( const sal_uInt32& r ) const    { return nHash0 == r; }
     };
 
     ScDocumentPool*     pDocPool;
@@ -96,16 +96,16 @@ private:
     SvxColorItem*       pWhite;
     Color*              pColTab;
 
-    inline static void  MakeHash( const LotAttrWK3& rAttr, UINT32& rOut )
+    inline static void  MakeHash( const LotAttrWK3& rAttr, sal_uInt32& rOut )
                         {
-                            ( ( UINT8* ) &rOut )[ 0 ] = rAttr.nFont & 0x7F;
-                            ( ( UINT8* ) &rOut )[ 1 ] = rAttr.nLineStyle;
-                            ( ( UINT8* ) &rOut )[ 2 ] = rAttr.nFontCol;
-                            ( ( UINT8* ) &rOut )[ 3 ] = rAttr.nBack;
+                            ( ( sal_uInt8* ) &rOut )[ 0 ] = rAttr.nFont & 0x7F;
+                            ( ( sal_uInt8* ) &rOut )[ 1 ] = rAttr.nLineStyle;
+                            ( ( sal_uInt8* ) &rOut )[ 2 ] = rAttr.nFontCol;
+                            ( ( sal_uInt8* ) &rOut )[ 3 ] = rAttr.nBack;
                         }
-    static void         LotusToScBorderLine( UINT8 nLine, SvxBorderLine& );
-    const SvxColorItem& GetColorItem( const UINT8 nLotIndex ) const;
-    const Color&        GetColor( const UINT8 nLotIndex ) const;
+    static void         LotusToScBorderLine( sal_uInt8 nLine, SvxBorderLine& );
+    const SvxColorItem& GetColorItem( const sal_uInt8 nLotIndex ) const;
+    const Color&        GetColor( const sal_uInt8 nLotIndex ) const;
 public:
                         LotAttrCache( void );
                         ~LotAttrCache();
@@ -127,7 +127,7 @@ private:
 public:
                                 ~LotAttrCol( void );
     void                        SetAttr( const SCROW nRow, const ScPatternAttr& );
-    void                        Apply( const SCCOL nCol, const SCTAB nTab, const BOOL bClear = TRUE );
+    void                        Apply( const SCCOL nCol, const SCTAB nTab, const sal_Bool bClear = sal_True );
     void                        Clear( void );
 };
 

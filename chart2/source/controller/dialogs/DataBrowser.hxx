@@ -68,7 +68,7 @@ protected:
     virtual void CursorMoved();
     // called whenever the control of the current cell has been modified
     virtual void CellModified();
-    virtual void ColumnResized( USHORT nColId );
+    virtual void ColumnResized( sal_uInt16 nColId );
     virtual void EndScroll();
     virtual void MouseButtonDown( const BrowserMouseEvent& rEvt );
 
@@ -86,12 +86,12 @@ public:
         @return
             the text out of the cell
     */
-    virtual String  GetCellText(long nRow, USHORT nColId) const;
+    virtual String  GetCellText(long nRow, sal_uInt16 nColId) const;
 
     /** returns the number in the given cell. If a cell is empty or contains a
         string, the result will be Nan
     */
-    double GetCellNumber( long nRow, USHORT nColumnId ) const;
+    double GetCellNumber( long nRow, sal_uInt16 nColumnId ) const;
 
     bool isDateString( rtl::OUString aInputString, double& fOutDateValue );
 

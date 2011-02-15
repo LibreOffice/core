@@ -121,7 +121,7 @@
 #define SC_IDLE_STEP    75
 #define SC_IDLE_COUNT   50
 
-static USHORT nIdleCount = 0;
+static sal_uInt16 nIdleCount = 0;
 
 //------------------------------------------------------------------
 
@@ -136,7 +136,7 @@ SFX_IMPL_INTERFACE( ScModule, SfxShell, ScResId(RID_APPTITLE) )
 //------------------------------------------------------------------
 
 ScModule::ScModule( SfxObjectFactory* pFact ) :
-    SfxModule( SfxApplication::CreateResManager( "sc" ), FALSE, pFact, NULL ),
+    SfxModule( SfxApplication::CreateResManager( "sc" ), sal_False, pFact, NULL ),
     pSelTransfer( NULL ),
     pMessagePool( NULL ),
     pRefInputHandler( NULL ),
@@ -155,9 +155,9 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     pSvxErrorHdl( NULL ),
     pFormEditData( NULL ),
     nCurRefDlgId( 0 ),
-    bIsWaterCan( FALSE ),
-    bIsInEditCommand( FALSE ),
-    bIsInExecuteDrop( FALSE ),
+    bIsWaterCan( sal_False ),
+    bIsInEditCommand( sal_False ),
+    bIsInExecuteDrop( sal_False ),
     mbIsInSharedDocLoading( false ),
     mbIsInSharedDocSaving( false )
 {
@@ -220,10 +220,10 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
         if ( ScDetectiveFunc::IsColorsInitialized() )
         {
             const svtools::ColorConfig& rColors = GetColorConfig();
-            BOOL bArrows =
+            sal_Bool bArrows =
                 ( ScDetectiveFunc::GetArrowColor() != (ColorData)rColors.GetColorValue(svtools::CALCDETECTIVE).nColor ||
                   ScDetectiveFunc::GetErrorColor() != (ColorData)rColors.GetColorValue(svtools::CALCDETECTIVEERROR).nColor );
-            BOOL bComments =
+            sal_Bool bComments =
                 ( ScDetectiveFunc::GetCommentColor() != (ColorData)rColors.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor );
             if ( bArrows || bComments )
             {
@@ -328,7 +328,7 @@ void ScModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA(SfxSimpleHint) )
     {
-        ULONG nHintId = ((SfxSimpleHint&)rHint).GetId();
+        sal_uLong nHintId = ((SfxSimpleHint&)rHint).GetId();
         if ( nHintId == SFX_HINT_DEINITIALIZING )
         {
             //  ConfigItems must be removed before ConfigManager
@@ -382,7 +382,7 @@ void ScModule::Execute( SfxRequest& rReq )
     SfxBindings* pBindings = pViewFrm ? &pViewFrm->GetBindings() : NULL;
 
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
-    USHORT              nSlot       = rReq.GetSlot();
+    sal_uInt16              nSlot       = rReq.GetSlot();
 
     switch ( nSlot )
     {
@@ -402,9 +402,9 @@ void ScModule::Execute( SfxRequest& rReq )
             break;
         case SID_AUTOSPELL_CHECK:
             {
-                BOOL bSet;
+                sal_Bool bSet;
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( nSlot, TRUE, &pItem ) )
+                if ( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( nSlot, sal_True, &pItem ) )
                     bSet = ((const SfxBoolItem*)pItem)->GetValue();
                 else
                 {                       //  Toggle
@@ -425,7 +425,7 @@ void ScModule::Execute( SfxRequest& rReq )
         case SID_ATTR_METRIC:
             {
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( nSlot, TRUE, &pItem ) )
+                if ( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( nSlot, sal_True, &pItem ) )
                 {
                     FieldUnit eUnit = (FieldUnit)((const SfxUInt16Item*)pItem)->GetValue();
                     switch( eUnit )
@@ -455,7 +455,7 @@ void ScModule::Execute( SfxRequest& rReq )
         case FID_AUTOCOMPLETE:
             {
                 ScAppOptions aNewOpts( GetAppOptions() );
-                BOOL bNew = !aNewOpts.GetAutoComplete();
+                sal_Bool bNew = !aNewOpts.GetAutoComplete();
                 aNewOpts.SetAutoComplete( bNew );
                 SetAppOptions( aNewOpts );
                 ScInputHandler::SetAutoComplete( bNew );
@@ -468,7 +468,7 @@ void ScModule::Execute( SfxRequest& rReq )
         case SID_DETECTIVE_AUTO:
             {
                 ScAppOptions aNewOpts( GetAppOptions() );
-                BOOL bNew = !aNewOpts.GetDetectiveAuto();
+                sal_Bool bNew = !aNewOpts.GetDetectiveAuto();
                 SFX_REQUEST_ARG( rReq, pAuto, SfxBoolItem, SID_DETECTIVE_AUTO, sal_False );
                 if ( pAuto )
                     bNew = pAuto->GetValue();
@@ -509,7 +509,7 @@ void ScModule::Execute( SfxRequest& rReq )
         case SID_ATTR_CHAR_CTL_LANGUAGE:
             {
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( GetPool().GetWhich(nSlot), TRUE, &pItem ) )
+                if ( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( GetPool().GetWhich(nSlot), sal_True, &pItem ) )
                 {
                     ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
                     ScDocument* pDoc = pDocSh ? pDocSh->GetDocument() : NULL;
@@ -583,7 +583,7 @@ void ScModule::Execute( SfxRequest& rReq )
 void ScModule::GetState( SfxItemSet& rSet )
 {
     SfxWhichIter aIter(rSet);
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
     while ( nWhich )
     {
         switch ( nWhich )
@@ -598,17 +598,17 @@ void ScModule::GetState( SfxItemSet& rSet )
                 rSet.Put( SfxUInt16Item( nWhich, GetAppOptions().GetStatusFunc() ) );
                 break;
             case SID_ATTR_METRIC:
-                rSet.Put( SfxUInt16Item( nWhich, sal::static_int_cast<UINT16>(GetAppOptions().GetAppMetric()) ) );
+                rSet.Put( SfxUInt16Item( nWhich, sal::static_int_cast<sal_uInt16>(GetAppOptions().GetAppMetric()) ) );
                 break;
             case SID_AUTOSPELL_CHECK:
                 {
-                    BOOL bAuto;
+                    sal_Bool bAuto;
                     ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
                     if ( pDocSh )
                         bAuto = pDocSh->GetDocument()->GetDocOptions().IsAutoSpell();
                     else
                     {
-                        USHORT nDummyLang, nDummyCjk, nDummyCtl;
+                        sal_uInt16 nDummyLang, nDummyCjk, nDummyCtl;
                         GetSpellSettings( nDummyLang, nDummyCjk, nDummyCtl, bAuto );
                     }
                     rSet.Put( SfxBoolItem( nWhich, bAuto ) );
@@ -643,7 +643,7 @@ void ScModule::HideDisabledSlots( SfxItemSet& rSet )
     {
         SfxBindings& rBindings = pViewFrm->GetBindings();
         SfxWhichIter aIter( rSet );
-        for( USHORT nWhich = aIter.FirstWhich(); nWhich != 0; nWhich = aIter.NextWhich() )
+        for( sal_uInt16 nWhich = aIter.FirstWhich(); nWhich != 0; nWhich = aIter.NextWhich() )
         {
             ScViewUtil::HideDisabledSlot( rSet, rBindings, nWhich );
             // always disable the slots
@@ -771,22 +771,22 @@ const ScDocOptions& ScModule::GetDocOptions()
 #define LRU_MAX 10
 #endif
 
-void ScModule::InsertEntryToLRUList(USHORT nFIndex)
+void ScModule::InsertEntryToLRUList(sal_uInt16 nFIndex)
 {
     if(nFIndex != 0)
     {
         const ScAppOptions& rAppOpt = GetAppOptions();
-        USHORT nLRUFuncCount = Min( rAppOpt.GetLRUFuncListCount(), (USHORT)LRU_MAX );
-        USHORT* pLRUListIds = rAppOpt.GetLRUFuncList();
+        sal_uInt16 nLRUFuncCount = Min( rAppOpt.GetLRUFuncListCount(), (sal_uInt16)LRU_MAX );
+        sal_uInt16* pLRUListIds = rAppOpt.GetLRUFuncList();
 
-        USHORT  aIdxList[LRU_MAX];
-        USHORT  n = 0;
-        BOOL    bFound = FALSE;
+        sal_uInt16  aIdxList[LRU_MAX];
+        sal_uInt16  n = 0;
+        sal_Bool    bFound = sal_False;
 
         while ((n < LRU_MAX) && n<nLRUFuncCount)                        // alte Liste abklappern
         {
             if (!bFound && (pLRUListIds[n]== nFIndex))
-                bFound = TRUE;                                          // erster! Treffer
+                bFound = sal_True;                                          // erster! Treffer
             else if (bFound)
                 aIdxList[n  ] = pLRUListIds[n];                         // hinter Treffer kopieren
             else if ((n+1) < LRU_MAX)
@@ -808,7 +808,7 @@ void ScModule::InsertEntryToLRUList(USHORT nFIndex)
 void ScModule::RecentFunctionsChanged()
 {
     //  update function list window
-    USHORT nFuncListID = ScFunctionChildWindow::GetChildWindowId();
+    sal_uInt16 nFuncListID = ScFunctionChildWindow::GetChildWindowId();
 
     //! notify all views
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
@@ -933,7 +933,7 @@ SvtUserOptions&  ScModule::GetUserOptions()
     return *pUserOptions;
 }
 
-USHORT ScModule::GetOptDigitLanguage()
+sal_uInt16 ScModule::GetOptDigitLanguage()
 {
     SvtCTLOptions::TextNumerals eNumerals = GetCTLOptions().GetCTLTextNumerals();
     return ( eNumerals == SvtCTLOptions::NUMERALS_ARABIC ) ? LANGUAGE_ENGLISH_US :
@@ -952,12 +952,12 @@ USHORT ScModule::GetOptDigitLanguage()
 //                      und SID_AUTOSPELL_CHECK
 //
 
-#define IS_AVAILABLE(w,item) (SFX_ITEM_SET==rOptSet.GetItemState((w),TRUE,&item))
+#define IS_AVAILABLE(w,item) (SFX_ITEM_SET==rOptSet.GetItemState((w),sal_True,&item))
 
 void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 {
-    USHORT nOldSpellLang, nOldCjkLang, nOldCtlLang;
-    BOOL bOldAutoSpell;
+    sal_uInt16 nOldSpellLang, nOldCjkLang, nOldCtlLang;
+    sal_Bool bOldAutoSpell;
     GetSpellSettings( nOldSpellLang, nOldCjkLang, nOldCtlLang, bOldAutoSpell );
 
     if (!pAppCfg)
@@ -977,13 +977,13 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     ScDocShell*             pDocSh  = PTR_CAST(ScDocShell, SfxObjectShell::Current());
     ScDocument*             pDoc    = pDocSh ? pDocSh->GetDocument() : NULL;
     const SfxPoolItem*      pItem   = NULL;
-    BOOL                    bRepaint            = FALSE;
-    BOOL                    bUpdateMarks        = FALSE;
-    BOOL                    bUpdateRefDev       = FALSE;
-    BOOL                    bCalcAll            = FALSE;
-    BOOL                    bSaveSpellCheck     = FALSE;
-    BOOL                    bSaveAppOptions     = FALSE;
-    BOOL                    bSaveInputOptions   = FALSE;
+    sal_Bool                    bRepaint            = sal_False;
+    sal_Bool                    bUpdateMarks        = sal_False;
+    sal_Bool                    bUpdateRefDev       = sal_False;
+    sal_Bool                    bCalcAll            = sal_False;
+    sal_Bool                    bSaveSpellCheck     = sal_False;
+    sal_Bool                    bSaveAppOptions     = sal_False;
+    sal_Bool                    bSaveInputOptions   = sal_False;
 
     //--------------------------------------------------------------------------
 
@@ -995,19 +995,19 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     {
         PutItem( *pItem );
         pAppCfg->SetAppMetric( (FieldUnit)((const SfxUInt16Item*)pItem)->GetValue() );
-        bSaveAppOptions = TRUE;
+        bSaveAppOptions = sal_True;
     }
 
     if ( IS_AVAILABLE(SCITEM_USERLIST,pItem) )
     {
         ScGlobal::SetUserList( ((const ScUserListItem*)pItem)->GetUserList() );
-        bSaveAppOptions = TRUE;
+        bSaveAppOptions = sal_True;
     }
 
     if ( IS_AVAILABLE(SID_SC_OPT_SYNCZOOM,pItem) )
     {
         pAppCfg->SetSynchronizeZoom( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
-        bSaveAppOptions = TRUE;
+        bSaveAppOptions = sal_True;
     }
 
     //============================================
@@ -1023,7 +1023,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             ScViewData*             pViewData = pViewSh->GetViewData();
             const ScViewOptions&    rOldOpt   = pViewData->GetOptions();
 
-            BOOL bAnchorList = ( rOldOpt.GetOption( VOPT_ANCHOR ) !=
+            sal_Bool bAnchorList = ( rOldOpt.GetOption( VOPT_ANCHOR ) !=
                                  rNewOpt.GetOption( VOPT_ANCHOR ) );
 
             if ( rOldOpt != rNewOpt )
@@ -1031,7 +1031,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
                 pViewData->SetOptions( rNewOpt );   // veraendert rOldOpt
                 pViewData->GetDocument()->SetViewOptions( rNewOpt );
                 pDocSh->SetDocumentModified();
-                bRepaint = TRUE;
+                bRepaint = sal_True;
             }
             if ( bAnchorList )
                 pViewSh->UpdateAnchorHandles();
@@ -1062,7 +1062,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
                 pViewData->SetOptions( aNewViewOpt );
                 pViewData->GetDocument()->SetViewOptions( aNewViewOpt );
                 pDocSh->SetDocumentModified();
-                bRepaint = TRUE;
+                bRepaint = sal_True;
             }
         }
         ScViewOptions aNewViewOpt ( GetViewOptions() );
@@ -1110,7 +1110,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     // nach den eigentlichen DocOptions auch noch die TabDistance setzen
     if ( IS_AVAILABLE(SID_ATTR_DEFTABSTOP,pItem) )
     {
-        USHORT nTabDist = ((SfxUInt16Item*)pItem)->GetValue();
+        sal_uInt16 nTabDist = ((SfxUInt16Item*)pItem)->GetValue();
         ScDocOptions aOpt(GetDocOptions());
         aOpt.SetTabDistance(nTabDist);
         SetDocOptions( aOpt );
@@ -1130,7 +1130,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
     if ( IS_AVAILABLE(SID_AUTOSPELL_CHECK,pItem) )              // an Doc-Options
     {
-        BOOL bDoAutoSpell = ((const SfxBoolItem*)pItem)->GetValue();
+        sal_Bool bDoAutoSpell = ((const SfxBoolItem*)pItem)->GetValue();
 
         if (pDoc)
         {
@@ -1151,7 +1151,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
                 //#92038#; don't set document modified, because this flag is no longer saved
 //              pDocSh->SetDocumentModified();
 
-                bRepaint = TRUE;            //  weil HideAutoSpell evtl. ungueltig
+                bRepaint = sal_True;            //  weil HideAutoSpell evtl. ungueltig
                                             //! alle Views painten ???
             }
         }
@@ -1159,7 +1159,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         if ( bOldAutoSpell != bDoAutoSpell )
         {
             SetAutoSpellProperty( bDoAutoSpell );
-            bSaveSpellCheck = TRUE;
+            bSaveSpellCheck = sal_True;
         }
         if ( pDocSh )
             pDocSh->PostPaintGridAll();                     // wegen Markierungen
@@ -1180,53 +1180,53 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     if ( IS_AVAILABLE(SID_SC_INPUT_SELECTIONPOS,pItem) )
     {
         pInputCfg->SetMoveDir( ((const SfxUInt16Item*)pItem)->GetValue() );
-        bSaveInputOptions = TRUE;
+        bSaveInputOptions = sal_True;
     }
     if ( IS_AVAILABLE(SID_SC_INPUT_SELECTION,pItem) )
     {
         pInputCfg->SetMoveSelection( ((const SfxBoolItem*)pItem)->GetValue() );
-        bSaveInputOptions = TRUE;
+        bSaveInputOptions = sal_True;
     }
     if ( IS_AVAILABLE(SID_SC_INPUT_EDITMODE,pItem) )
     {
         pInputCfg->SetEnterEdit( ((const SfxBoolItem*)pItem)->GetValue() );
-        bSaveInputOptions = TRUE;
+        bSaveInputOptions = sal_True;
     }
     if ( IS_AVAILABLE(SID_SC_INPUT_FMT_EXPAND,pItem) )
     {
         pInputCfg->SetExtendFormat( ((const SfxBoolItem*)pItem)->GetValue() );
-        bSaveInputOptions = TRUE;
+        bSaveInputOptions = sal_True;
     }
     if ( IS_AVAILABLE(SID_SC_INPUT_RANGEFINDER,pItem) )
     {
         pInputCfg->SetRangeFinder( ((const SfxBoolItem*)pItem)->GetValue() );
-        bSaveInputOptions = TRUE;
+        bSaveInputOptions = sal_True;
     }
     if ( IS_AVAILABLE(SID_SC_INPUT_REF_EXPAND,pItem) )
     {
         pInputCfg->SetExpandRefs( ((const SfxBoolItem*)pItem)->GetValue() );
-        bSaveInputOptions = TRUE;
+        bSaveInputOptions = sal_True;
     }
     if ( IS_AVAILABLE(SID_SC_INPUT_MARK_HEADER,pItem) )
     {
         pInputCfg->SetMarkHeader( ((const SfxBoolItem*)pItem)->GetValue() );
-        bSaveInputOptions = TRUE;
-        bUpdateMarks = TRUE;
+        bSaveInputOptions = sal_True;
+        bUpdateMarks = sal_True;
     }
     if ( IS_AVAILABLE(SID_SC_INPUT_TEXTWYSIWYG,pItem) )
     {
-        BOOL bNew = ((const SfxBoolItem*)pItem)->GetValue();
+        sal_Bool bNew = ((const SfxBoolItem*)pItem)->GetValue();
         if ( bNew != pInputCfg->GetTextWysiwyg() )
         {
             pInputCfg->SetTextWysiwyg( bNew );
-            bSaveInputOptions = TRUE;
-            bUpdateRefDev = TRUE;
+            bSaveInputOptions = sal_True;
+            bUpdateRefDev = sal_True;
         }
     }
     if( IS_AVAILABLE( SID_SC_INPUT_REPLCELLSWARN, pItem ) )
     {
         pInputCfg->SetReplaceCellsWarn( ((const SfxBoolItem*)pItem)->GetValue() );
-        bSaveInputOptions = TRUE;
+        bSaveInputOptions = sal_True;
     }
 
     //============================================
@@ -1263,9 +1263,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         WaitObject aWait( pDocSh->GetActiveDialogParent() );
         pDoc->CalcAll();
         if ( pViewSh )
-            pViewSh->UpdateCharts( TRUE );
+            pViewSh->UpdateCharts( sal_True );
         else
-            ScDBFunc::DoUpdateCharts( ScAddress(), pDoc, TRUE );
+            ScDBFunc::DoUpdateCharts( ScAddress(), pDoc, sal_True );
         if (pBindings)
             pBindings->Invalidate( SID_ATTR_SIZE ); //SvxPosSize-StatusControl-Update
     }
@@ -1323,7 +1323,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
             //  update view scale
             ScViewData* pViewData = pOneViewSh->GetViewData();
-            pOneViewSh->SetZoom( pViewData->GetZoomX(), pViewData->GetZoomY(), FALSE );
+            pOneViewSh->SetZoom( pViewData->GetZoomX(), pViewData->GetZoomY(), sal_False );
 
             //  repaint
             pOneViewSh->PaintGrid();
@@ -1343,7 +1343,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 //
 //------------------------------------------------------------------
 
-ScInputHandler* ScModule::GetInputHdl( ScTabViewShell* pViewSh, BOOL bUseRef )
+ScInputHandler* ScModule::GetInputHdl( ScTabViewShell* pViewSh, sal_Bool bUseRef )
 {
     if ( pRefInputHandler && bUseRef )
         return pRefInputHandler;
@@ -1382,25 +1382,25 @@ void ScModule::SetInputMode( ScInputMode eMode )
         pHdl->SetMode( eMode );
 }
 
-BOOL ScModule::IsEditMode()
+sal_Bool ScModule::IsEditMode()
 {
     ScInputHandler* pHdl = GetInputHdl();
     return pHdl && pHdl->IsEditMode();
 }
 
-BOOL ScModule::IsInputMode()
+sal_Bool ScModule::IsInputMode()
 {
     ScInputHandler* pHdl = GetInputHdl();
     return pHdl && pHdl->IsInputMode();
 }
 
-BOOL ScModule::InputKeyEvent( const KeyEvent& rKEvt, BOOL bStartEdit )
+sal_Bool ScModule::InputKeyEvent( const KeyEvent& rKEvt, sal_Bool bStartEdit )
 {
     ScInputHandler* pHdl = GetInputHdl();
-    return ( pHdl ? pHdl->KeyInput( rKEvt, bStartEdit ) : FALSE );
+    return ( pHdl ? pHdl->KeyInput( rKEvt, bStartEdit ) : sal_False );
 }
 
-void ScModule::InputEnterHandler( BYTE nBlockMode )
+void ScModule::InputEnterHandler( sal_uInt8 nBlockMode )
 {
     if ( !SFX_APP()->IsDowning() )                                  // nicht beim Programmende
     {
@@ -1481,7 +1481,7 @@ String ScModule::InputGetFormulaStr()
     return aStr;
 }
 
-void ScModule::ActivateInputWindow( const String* pStrFormula, BOOL bMatrix )
+void ScModule::ActivateInputWindow( const String* pStrFormula, sal_Bool bMatrix )
 {
     ScInputHandler* pHdl = GetInputHdl();
     if ( pHdl )
@@ -1492,10 +1492,10 @@ void ScModule::ActivateInputWindow( const String* pStrFormula, BOOL bMatrix )
             // Formel uebernehmen
             if ( pWin )
             {
-                pWin->SetFuncString( *pStrFormula, FALSE );
-                // SetSumAssignMode wegen FALSE nicht noetig
+                pWin->SetFuncString( *pStrFormula, sal_False );
+                // SetSumAssignMode wegen sal_False nicht noetig
             }
-            BYTE nMode = bMatrix ? SC_ENTER_MATRIX : SC_ENTER_NORMAL;
+            sal_uInt8 nMode = bMatrix ? SC_ENTER_MATRIX : SC_ENTER_NORMAL;
             pHdl->EnterHandler( nMode );
 
             //  ohne Invalidate bleibt die Selektion stehen, wenn die Formel unveraendert ist
@@ -1507,8 +1507,8 @@ void ScModule::ActivateInputWindow( const String* pStrFormula, BOOL bMatrix )
             // Abbrechen
             if ( pWin )
             {
-                pWin->SetFuncString( EMPTY_STRING, FALSE );
-                // SetSumAssignMode wegen FALSE nicht noetig
+                pWin->SetFuncString( EMPTY_STRING, sal_False );
+                // SetSumAssignMode wegen sal_False nicht noetig
             }
             pHdl->CancelHandler();
         }
@@ -1521,7 +1521,7 @@ void ScModule::ActivateInputWindow( const String* pStrFormula, BOOL bMatrix )
 //
 //------------------------------------------------------------------
 
-void ScModule::SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm )
+void ScModule::SetRefDialog( sal_uInt16 nId, sal_Bool bVis, SfxViewFrame* pViewFrm )
 {
     //! move reference dialog handling to view
     //! (only keep function autopilot here for references to other documents)
@@ -1547,7 +1547,7 @@ void ScModule::SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm )
             else
             {
                 // no ScTabViewShell - possible for example from a Basic macro
-                bVis = FALSE;
+                bVis = sal_False;
                 nCurRefDlgId = 0;   // don't set nCurRefDlgId if no dialog is created
             }
 
@@ -1559,7 +1559,7 @@ void ScModule::SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm )
     }
 }
 
-SfxChildWindow* lcl_GetChildWinFromAnyView( USHORT nId )
+SfxChildWindow* lcl_GetChildWinFromAnyView( sal_uInt16 nId )
 {
     //  first try the current view
 
@@ -1585,12 +1585,12 @@ SfxChildWindow* lcl_GetChildWinFromAnyView( USHORT nId )
     return NULL;                    // none found
 }
 
-BOOL ScModule::IsModalMode(SfxObjectShell* pDocSh)
+sal_Bool ScModule::IsModalMode(SfxObjectShell* pDocSh)
 {
     //! move reference dialog handling to view
     //! (only keep function autopilot here for references to other documents)
 
-    BOOL bIsModal = FALSE;
+    sal_Bool bIsModal = sal_False;
 
     if ( nCurRefDlgId )
     {
@@ -1606,7 +1606,7 @@ BOOL ScModule::IsModalMode(SfxObjectShell* pDocSh)
             // in 592 and above, the dialog isn't visible in other views
             //  if the dialog is open but can't be accessed, disable input
 
-            bIsModal = TRUE;
+            bIsModal = sal_True;
         }
 
         //  pChildWnd kann 0 sein, wenn der Dialog nach dem Umschalten
@@ -1622,12 +1622,12 @@ BOOL ScModule::IsModalMode(SfxObjectShell* pDocSh)
     return bIsModal;
 }
 
-BOOL ScModule::IsTableLocked()
+sal_Bool ScModule::IsTableLocked()
 {
     //! move reference dialog handling to view
     //! (only keep function autopilot here for references to other documents)
 
-    BOOL bLocked = FALSE;
+    sal_Bool bLocked = sal_False;
 
     //  bisher nur bei ScAnyRefDlg
 
@@ -1637,18 +1637,18 @@ BOOL ScModule::IsTableLocked()
         if ( pChildWnd )
             bLocked = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow())->IsTableLocked();
         else
-            bLocked = TRUE;     // for other views, see IsModalMode
+            bLocked = sal_True;     // for other views, see IsModalMode
     }
 
     return bLocked;
 }
 
-BOOL ScModule::IsRefDialogOpen()
+sal_Bool ScModule::IsRefDialogOpen()
 {
     //! move reference dialog handling to view
     //! (only keep function autopilot here for references to other documents)
 
-    BOOL bIsOpen = FALSE;
+    sal_Bool bIsOpen = sal_False;
 
     if ( nCurRefDlgId )
     {
@@ -1656,18 +1656,18 @@ BOOL ScModule::IsRefDialogOpen()
         if ( pChildWnd )
             bIsOpen = pChildWnd->IsVisible();
         else
-            bIsOpen = TRUE;     // for other views, see IsModalMode
+            bIsOpen = sal_True;     // for other views, see IsModalMode
     }
 
     return bIsOpen;
 }
 
-BOOL ScModule::IsFormulaMode()
+sal_Bool ScModule::IsFormulaMode()
 {
     //! move reference dialog handling to view
     //! (only keep function autopilot here for references to other documents)
 
-    BOOL bIsFormula = FALSE;
+    sal_Bool bIsFormula = sal_False;
 
     if ( nCurRefDlgId )
     {
@@ -1686,7 +1686,7 @@ BOOL ScModule::IsFormulaMode()
     }
 
     if (bIsInEditCommand)
-        bIsFormula = TRUE;
+        bIsFormula = sal_True;
 
     return bIsFormula;
 }
@@ -1695,14 +1695,14 @@ void lcl_MarkedTabs( const ScMarkData& rMark, SCTAB& rStartTab, SCTAB& rEndTab )
 {
     if (rMark.GetSelectCount() > 1)
     {
-        BOOL bFirst = TRUE;
+        sal_Bool bFirst = sal_True;
         for (SCTAB i=0; i<=MAXTAB; i++)
             if (rMark.GetTableSelect(i))
             {
                 if (bFirst)
                     rStartTab = i;
                 rEndTab = i;
-                bFirst = FALSE;
+                bFirst = sal_False;
             }
     }
 }
@@ -1737,8 +1737,8 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
             IAnyRefDialog* pRefDlg = dynamic_cast<IAnyRefDialog*>(pChildWnd->GetWindow());
 
             //  hide the (color) selection now instead of later from LoseFocus,
-            //  don't abort the ref input that causes this call (bDoneRefMode = FALSE)
-            pRefDlg->HideReference( FALSE );
+            //  don't abort the ref input that causes this call (bDoneRefMode = sal_False)
+            pRefDlg->HideReference( sal_False );
             pRefDlg->SetReference( aNew, pDoc );
         }
     }
@@ -1806,7 +1806,7 @@ void ScModule::EndReference()
 
 void ScModule::AnythingChanged()
 {
-    ULONG nOldTime = aIdleTimer.GetTimeout();
+    sal_uLong nOldTime = aIdleTimer.GetTimeout();
     if ( nOldTime != SC_IDLE_MIN )
         aIdleTimer.SetTimeout( SC_IDLE_MIN );
 
@@ -1834,15 +1834,15 @@ IMPL_LINK( ScModule, IdleHandler, Timer*, EMPTYARG )
         return 0;
     }
 
-    BOOL bMore = FALSE;
+    sal_Bool bMore = sal_False;
     ScDocShell* pDocSh = PTR_CAST( ScDocShell, SfxObjectShell::Current() );
     if ( pDocSh )
     {
         ScDocument* pDoc = pDocSh->GetDocument();
 
-        BOOL bLinks = pDoc->IdleCheckLinks();
-        BOOL bWidth = pDoc->IdleCalcTextWidth();
-        BOOL bSpell = pDoc->ContinueOnlineSpelling();
+        sal_Bool bLinks = pDoc->IdleCheckLinks();
+        sal_Bool bWidth = pDoc->IdleCalcTextWidth();
+        sal_Bool bSpell = pDoc->ContinueOnlineSpelling();
         if ( bSpell )
             aSpellTimer.Start();                    // da ist noch was
 
@@ -1854,8 +1854,8 @@ IMPL_LINK( ScModule, IdleHandler, Timer*, EMPTYARG )
             lcl_CheckNeedsRepaint( pDocSh );
     }
 
-    ULONG nOldTime = aIdleTimer.GetTimeout();
-    ULONG nNewTime = nOldTime;
+    sal_uLong nOldTime = aIdleTimer.GetTimeout();
+    sal_uLong nNewTime = nOldTime;
     if ( bMore )
     {
         nNewTime = SC_IDLE_MIN;
@@ -1900,7 +1900,7 @@ IMPL_LINK( ScModule, SpellTimerHdl, Timer*, EMPTYARG )
 }
 
     //virtuelle Methoden fuer den Optionendialog
-SfxItemSet*  ScModule::CreateItemSet( USHORT nId )
+SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
 {
     SfxItemSet*  pRet = 0;
     if(SID_SC_EDITOPTIONS == nId)
@@ -1944,7 +1944,7 @@ SfxItemSet*  ScModule::CreateItemSet( USHORT nId )
         //  SFX_APP()->GetOptions( aSet );
 
         pRet->Put( SfxUInt16Item( SID_ATTR_METRIC,
-                        sal::static_int_cast<UINT16>(GetAppOptions().GetAppMetric()) ) );
+                        sal::static_int_cast<sal_uInt16>(GetAppOptions().GetAppMetric()) ) );
 
         // TP_CALC
         pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP,
@@ -1993,7 +1993,7 @@ SfxItemSet*  ScModule::CreateItemSet( USHORT nId )
     return pRet;
 }
 
-void ScModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
+void ScModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
 {
     if(SID_SC_EDITOPTIONS == nId)
     {
@@ -2001,7 +2001,7 @@ void ScModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     }
 }
 
-SfxTabPage*  ScModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
+SfxTabPage*  ScModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet )
 {
     SfxTabPage* pRet = NULL;
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
@@ -2121,59 +2121,59 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
     return 0;
 }
 
-BOOL ScModule::RegisterRefWindow( USHORT nSlotId, Window *pWnd )
+sal_Bool ScModule::RegisterRefWindow( sal_uInt16 nSlotId, Window *pWnd )
 {
     std::list<Window*> & rlRefWindow = m_mapRefWindow[nSlotId];
 
     if( std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd ) == rlRefWindow.end() )
     {
         rlRefWindow.push_back( pWnd );
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
-BOOL  ScModule::UnregisterRefWindow( USHORT nSlotId, Window *pWnd )
+sal_Bool  ScModule::UnregisterRefWindow( sal_uInt16 nSlotId, Window *pWnd )
 {
-    std::map<USHORT, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
+    std::map<sal_uInt16, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
 
     if( iSlot == m_mapRefWindow.end() )
-        return FALSE;
+        return sal_False;
 
     std::list<Window*> & rlRefWindow = iSlot->second;
 
     std::list<Window*>::iterator i = std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd );
 
     if( i == rlRefWindow.end() )
-        return FALSE;
+        return sal_False;
 
     rlRefWindow.erase( i );
 
     if( !rlRefWindow.size() )
         m_mapRefWindow.erase( nSlotId );
 
-    return TRUE;
+    return sal_True;
 }
 
-BOOL  ScModule::IsAliveRefDlg( USHORT nSlotId, Window *pWnd )
+sal_Bool  ScModule::IsAliveRefDlg( sal_uInt16 nSlotId, Window *pWnd )
 {
-    std::map<USHORT, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
+    std::map<sal_uInt16, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
 
     if( iSlot == m_mapRefWindow.end() )
-        return FALSE;
+        return sal_False;
 
     std::list<Window*> & rlRefWindow = iSlot->second;
 
     return rlRefWindow.end() != std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd );
 }
 
-Window *  ScModule::Find1RefWindow( USHORT nSlotId, Window *pWndAncestor )
+Window *  ScModule::Find1RefWindow( sal_uInt16 nSlotId, Window *pWndAncestor )
 {
     if (!pWndAncestor)
         return NULL;
 
-    std::map<USHORT, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
+    std::map<sal_uInt16, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
 
     if( iSlot == m_mapRefWindow.end() )
         return NULL;
@@ -2196,7 +2196,7 @@ Window *  ScModule::Find1RefWindow( Window *pWndAncestor )
 
     while( Window *pParent = pWndAncestor->GetParent() ) pWndAncestor = pParent;
 
-    for( std::map<USHORT, std::list<Window*> >::iterator i = m_mapRefWindow.begin();
+    for( std::map<sal_uInt16, std::list<Window*> >::iterator i = m_mapRefWindow.begin();
         i!=m_mapRefWindow.end(); i++ )
         for( std::list<Window*>::iterator j = i->second.begin(); j!=i->second.end(); j++ )
             if ( pWndAncestor->IsWindowOrChild( *j, (*j)->IsSystemWindow() ) )

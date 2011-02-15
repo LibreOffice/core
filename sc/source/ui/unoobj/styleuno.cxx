@@ -377,7 +377,7 @@ const SfxItemPropertyMap* lcl_GetFooterStyleMap()
 #define SC_FAMILYNAME_CELL  "CellStyles"
 #define SC_FAMILYNAME_PAGE  "PageStyles"
 
-static UINT16 aStyleFamilyTypes[SC_STYLE_FAMILY_COUNT] = { SFX_STYLE_FAMILY_PARA, SFX_STYLE_FAMILY_PAGE };
+static sal_uInt16 aStyleFamilyTypes[SC_STYLE_FAMILY_COUNT] = { SFX_STYLE_FAMILY_PARA, SFX_STYLE_FAMILY_PAGE };
 
 //------------------------------------------------------------------------
 
@@ -418,11 +418,11 @@ struct ScDisplayNameMap
     String  aProgName;
 };
 
-const ScDisplayNameMap* lcl_GetStyleNameMap( UINT16 nType )
+const ScDisplayNameMap* lcl_GetStyleNameMap( sal_uInt16 nType )
 {
     if ( nType == SFX_STYLE_FAMILY_PARA )
     {
-        static BOOL bCellMapFilled = FALSE;
+        static sal_Bool bCellMapFilled = sal_False;
         static ScDisplayNameMap aCellMap[6];
         if ( !bCellMapFilled )
         {
@@ -443,13 +443,13 @@ const ScDisplayNameMap* lcl_GetStyleNameMap( UINT16 nType )
 
             //  last entry remains empty
 
-            bCellMapFilled = TRUE;
+            bCellMapFilled = sal_True;
         }
         return aCellMap;
     }
     else if ( nType == SFX_STYLE_FAMILY_PAGE )
     {
-        static BOOL bPageMapFilled = FALSE;
+        static sal_Bool bPageMapFilled = sal_False;
         static ScDisplayNameMap aPageMap[3];
         if ( !bPageMapFilled )
         {
@@ -461,7 +461,7 @@ const ScDisplayNameMap* lcl_GetStyleNameMap( UINT16 nType )
 
             //  last entry remains empty
 
-            bPageMapFilled = TRUE;
+            bPageMapFilled = sal_True;
         }
         return aPageMap;
     }
@@ -475,7 +475,7 @@ const ScDisplayNameMap* lcl_GetStyleNameMap( UINT16 nType )
 #define SC_SUFFIX_USER      " (user)"
 #define SC_SUFFIX_USER_LEN  7
 
-BOOL lcl_EndsWithUser( const String& rString )
+sal_Bool lcl_EndsWithUser( const String& rString )
 {
     const sal_Unicode *pChar = rString.GetBuffer();
     xub_StrLen nLen = rString.Len();
@@ -490,9 +490,9 @@ BOOL lcl_EndsWithUser( const String& rString )
 }
 
 // static
-String ScStyleNameConversion::DisplayToProgrammaticName( const String& rDispName, UINT16 nType )
+String ScStyleNameConversion::DisplayToProgrammaticName( const String& rDispName, sal_uInt16 nType )
 {
-    BOOL bDisplayIsProgrammatic = FALSE;
+    sal_Bool bDisplayIsProgrammatic = sal_False;
 
     const ScDisplayNameMap* pNames = lcl_GetStyleNameMap( nType );
     if (pNames)
@@ -502,7 +502,7 @@ String ScStyleNameConversion::DisplayToProgrammaticName( const String& rDispName
             if (pNames->aDispName == rDispName)
                 return pNames->aProgName;
             else if (pNames->aProgName == rDispName)
-                bDisplayIsProgrammatic = TRUE;          // display name matches any programmatic name
+                bDisplayIsProgrammatic = sal_True;          // display name matches any programmatic name
         }
         while( (++pNames)->aDispName.Len() );
     }
@@ -521,7 +521,7 @@ String ScStyleNameConversion::DisplayToProgrammaticName( const String& rDispName
 }
 
 // static
-String ScStyleNameConversion::ProgrammaticToDisplayName( const String& rProgName, UINT16 nType )
+String ScStyleNameConversion::ProgrammaticToDisplayName( const String& rProgName, sal_uInt16 nType )
 {
     if ( lcl_EndsWithUser( rProgName ) )
     {
@@ -580,7 +580,7 @@ void ScStyleFamiliesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XStyleFamilies
 
-ScStyleFamilyObj*ScStyleFamiliesObj::GetObjectByType_Impl(UINT16 nType) const
+ScStyleFamilyObj*ScStyleFamiliesObj::GetObjectByType_Impl(sal_uInt16 nType) const
 {
     if ( pDocShell )
     {
@@ -593,7 +593,7 @@ ScStyleFamilyObj*ScStyleFamiliesObj::GetObjectByType_Impl(UINT16 nType) const
     return NULL;
 }
 
-ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByIndex_Impl(UINT32 nIndex) const
+ScStyleFamilyObj* ScStyleFamiliesObj::GetObjectByIndex_Impl(sal_uInt32 nIndex) const
 {
     if ( nIndex < SC_STYLE_FAMILY_COUNT )
         return GetObjectByType_Impl(aStyleFamilyTypes[nIndex]);
@@ -699,9 +699,9 @@ void SAL_CALL ScStyleFamiliesObj::loadStylesFromURL( const rtl::OUString& aURL,
     {
         //  collect options
 
-        BOOL bLoadReplace = TRUE;           // defaults
-        BOOL bLoadCellStyles = TRUE;
-        BOOL bLoadPageStyles = TRUE;
+        sal_Bool bLoadReplace = sal_True;           // defaults
+        sal_Bool bLoadCellStyles = sal_True;
+        sal_Bool bLoadPageStyles = sal_True;
 
         const beans::PropertyValue* pPropArray = aOptions.getConstArray();
         long nPropCount = aOptions.getLength();
@@ -732,13 +732,13 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScStyleFamiliesObj::getStyleLoaderO
     beans::PropertyValue* pArray = aSequence.getArray();
 
     pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_OVERWSTL );
-    ScUnoHelpFunctions::SetBoolInAny( pArray[0].Value, TRUE );
+    ScUnoHelpFunctions::SetBoolInAny( pArray[0].Value, sal_True );
 
     pArray[1].Name = rtl::OUString::createFromAscii( SC_UNONAME_LOADCELL );
-    ScUnoHelpFunctions::SetBoolInAny( pArray[1].Value, TRUE );
+    ScUnoHelpFunctions::SetBoolInAny( pArray[1].Value, sal_True );
 
     pArray[2].Name = rtl::OUString::createFromAscii( SC_UNONAME_LOADPAGE );
-    ScUnoHelpFunctions::SetBoolInAny( pArray[2].Value, TRUE );
+    ScUnoHelpFunctions::SetBoolInAny( pArray[2].Value, sal_True );
 
     return aSequence;
 }
@@ -771,7 +771,7 @@ void ScStyleFamilyObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XStyleFamily
 
-ScStyleObj* ScStyleFamilyObj::GetObjectByIndex_Impl(UINT32 nIndex)
+ScStyleObj* ScStyleFamilyObj::GetObjectByIndex_Impl(sal_uInt32 nIndex)
 {
     if ( pDocShell )
     {
@@ -781,7 +781,7 @@ ScStyleObj* ScStyleFamilyObj::GetObjectByIndex_Impl(UINT32 nIndex)
         SfxStyleSheetIterator aIter( pStylePool, eFamily );
         if ( nIndex < aIter.Count() )
         {
-            SfxStyleSheetBase* pStyle = aIter[(USHORT)nIndex];
+            SfxStyleSheetBase* pStyle = aIter[(sal_uInt16)nIndex];
             if ( pStyle )
             {
                 return new ScStyleObj( pDocShell, eFamily, String (pStyle->GetName()) );
@@ -819,7 +819,7 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const rtl::OUString& aName, const 
         if ( pStyleObj && pStyleObj->GetFamily() == eFamily &&
                 !pStyleObj->IsInserted() )  // noch nicht eingefuegt?
         {
-            String aNameStr(ScStyleNameConversion::ProgrammaticToDisplayName( aName, sal::static_int_cast<UINT16>(eFamily) ));
+            String aNameStr(ScStyleNameConversion::ProgrammaticToDisplayName( aName, sal::static_int_cast<sal_uInt16>(eFamily) ));
 
             ScDocument* pDoc = pDocShell->GetDocument();
             ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
@@ -866,10 +866,10 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const rtl::OUString& aName )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    BOOL bFound = FALSE;
+    sal_Bool bFound = sal_False;
     if ( pDocShell )
     {
-        String aString(ScStyleNameConversion::ProgrammaticToDisplayName( aName, sal::static_int_cast<UINT16>(eFamily) ));
+        String aString(ScStyleNameConversion::ProgrammaticToDisplayName( aName, sal::static_int_cast<sal_uInt16>(eFamily) ));
 
         ScDocument* pDoc = pDocShell->GetDocument();
         ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
@@ -880,7 +880,7 @@ void SAL_CALL ScStyleFamilyObj::removeByName( const rtl::OUString& aName )
         SfxStyleSheetBase* pStyle = pStylePool->Find( aString, eFamily );
         if (pStyle)
         {
-            bFound = TRUE;
+            bFound = sal_True;
             if ( eFamily == SFX_STYLE_FAMILY_PARA )
             {
                 // wie ScViewFunc::RemoveStyleSheetInUse
@@ -965,7 +965,7 @@ uno::Any SAL_CALL ScStyleFamilyObj::getByName( const rtl::OUString& aName )
 {
     ScUnoGuard aGuard;
     uno::Reference< style::XStyle > xObj(
-        GetObjectByName_Impl( ScStyleNameConversion::ProgrammaticToDisplayName( aName, sal::static_int_cast<UINT16>(eFamily) ) ));
+        GetObjectByName_Impl( ScStyleNameConversion::ProgrammaticToDisplayName( aName, sal::static_int_cast<sal_uInt16>(eFamily) ) ));
     if (xObj.is())
         return uno::makeAny(xObj);
     else
@@ -983,19 +983,19 @@ uno::Sequence<rtl::OUString> SAL_CALL ScStyleFamilyObj::getElementNames()
         ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
 
         SfxStyleSheetIterator aIter( pStylePool, eFamily );
-        UINT16 nCount = aIter.Count();
+        sal_uInt16 nCount = aIter.Count();
 
         String aName;
         uno::Sequence<rtl::OUString> aSeq(nCount);
         rtl::OUString* pAry = aSeq.getArray();
         SfxStyleSheetBase* pStyle = aIter.First();
-        UINT16 nPos = 0;
+        sal_uInt16 nPos = 0;
         while (pStyle)
         {
             DBG_ASSERT( nPos<nCount, "Anzahl durcheinandergekommen" );
             if (nPos<nCount)
                 pAry[nPos++] = ScStyleNameConversion::DisplayToProgrammaticName(
-                                    pStyle->GetName(), sal::static_int_cast<UINT16>(eFamily) );
+                                    pStyle->GetName(), sal::static_int_cast<sal_uInt16>(eFamily) );
             pStyle = aIter.Next();
         }
         return aSeq;
@@ -1009,7 +1009,7 @@ sal_Bool SAL_CALL ScStyleFamilyObj::hasByName( const rtl::OUString& aName )
     ScUnoGuard aGuard;
     if ( pDocShell )
     {
-        String aString(ScStyleNameConversion::ProgrammaticToDisplayName( aName, sal::static_int_cast<UINT16>(eFamily) ));
+        String aString(ScStyleNameConversion::ProgrammaticToDisplayName( aName, sal::static_int_cast<sal_uInt16>(eFamily) ));
 
         ScDocument* pDoc = pDocShell->GetDocument();
         ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
@@ -1051,7 +1051,7 @@ uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const ::rtl::OUString& sPr
         }
         if ( nResId > 0 )
         {
-            ::rtl::OUString sDisplayName( ScGlobal::GetRscString( static_cast< USHORT >( nResId ) ) );
+            ::rtl::OUString sDisplayName( ScGlobal::GetRscString( static_cast< sal_uInt16 >( nResId ) ) );
             aRet = uno::makeAny( sDisplayName );
         }
     }
@@ -1211,7 +1211,7 @@ rtl::OUString SAL_CALL ScStyleObj::getParentStyle() throw(uno::RuntimeException)
     ScUnoGuard aGuard;
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
     if (pStyle)
-        return ScStyleNameConversion::DisplayToProgrammaticName( pStyle->GetParent(), sal::static_int_cast<UINT16>(eFamily) );
+        return ScStyleNameConversion::DisplayToProgrammaticName( pStyle->GetParent(), sal::static_int_cast<sal_uInt16>(eFamily) );
     return rtl::OUString();
 }
 
@@ -1229,7 +1229,7 @@ void SAL_CALL ScStyleObj::setParentStyle( const rtl::OUString& rParentStyle )
         //! DocFunc-Funktion??
         //! Undo ?????????????
 
-        String aString(ScStyleNameConversion::ProgrammaticToDisplayName( rParentStyle, sal::static_int_cast<UINT16>(eFamily) ));
+        String aString(ScStyleNameConversion::ProgrammaticToDisplayName( rParentStyle, sal::static_int_cast<sal_uInt16>(eFamily) ));
         sal_Bool bOk = pStyle->SetParent( aString );
         if (bOk)
         {
@@ -1267,7 +1267,7 @@ rtl::OUString SAL_CALL ScStyleObj::getName() throw(uno::RuntimeException)
     ScUnoGuard aGuard;
     SfxStyleSheetBase* pStyle = GetStyle_Impl();
     if (pStyle)
-        return ScStyleNameConversion::DisplayToProgrammaticName( pStyle->GetName(), sal::static_int_cast<UINT16>(eFamily) );
+        return ScStyleNameConversion::DisplayToProgrammaticName( pStyle->GetName(), sal::static_int_cast<sal_uInt16>(eFamily) );
     return rtl::OUString();
 }
 
@@ -1296,7 +1296,7 @@ void SAL_CALL ScStyleObj::setName( const rtl::OUString& aNewName )
                 pDoc->GetPool()->CellStyleCreated( aString );
 
             //  Zellvorlagen = 2, Seitenvorlagen = 4
-            UINT16 nId = ( eFamily == SFX_STYLE_FAMILY_PARA ) ?
+            sal_uInt16 nId = ( eFamily == SFX_STYLE_FAMILY_PARA ) ?
                             SID_STYLE_FAMILY2 : SID_STYLE_FAMILY4;
             SfxBindings* pBindings = pDocShell->GetViewBindings();
             if (pBindings)
@@ -1311,7 +1311,7 @@ void SAL_CALL ScStyleObj::setName( const rtl::OUString& aNewName )
 // static
 uno::Reference<container::XIndexReplace> ScStyleObj::CreateEmptyNumberingRules()
 {
-    SvxNumRule aRule( 0, 0, TRUE );         // nothing supported
+    SvxNumRule aRule( 0, 0, sal_True );         // nothing supported
     return SvxCreateNumRule( &aRule );
 }
 
@@ -1364,7 +1364,7 @@ beans::PropertyState SAL_CALL ScStyleObj::getPropertyState( const rtl::OUString&
 
     if ( pItemSet && pResultEntry )
     {
-        USHORT nWhich = pResultEntry->nWID;
+        sal_uInt16 nWhich = pResultEntry->nWID;
         if ( nWhich == SC_WID_UNO_TBLBORD )
         {
             nWhich = ATTR_BORDER;
@@ -1434,7 +1434,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const rtl::OUString& aProperty
 
     if ( pStyleSet && pResultEntry )
     {
-        USHORT nWhich = pResultEntry->nWID;
+        sal_uInt16 nWhich = pResultEntry->nWID;
 
         if ( IsScItemWid( nWhich ) )
         {
@@ -1619,9 +1619,9 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault() throw (uno::RuntimeExcepti
             // #i22448# apply the default BoxInfoItem for page styles again
             // (same content as in ScStyleSheet::GetItemSet, to control the dialog)
             SvxBoxInfoItem aBoxInfoItem( ATTR_BORDER_INNER );
-            aBoxInfoItem.SetTable( FALSE );
-            aBoxInfoItem.SetDist( TRUE );
-            aBoxInfoItem.SetValid( VALID_DISTANCE, TRUE );
+            aBoxInfoItem.SetTable( sal_False );
+            aBoxInfoItem.SetDist( sal_True );
+            aBoxInfoItem.SetValid( VALID_DISTANCE, sal_True );
             rSet.Put( aBoxInfoItem );
 
             pDocShell->PageStyleModified( aStyleName, sal_True );
@@ -1750,14 +1750,14 @@ void ScStyleObj::SetOnePropertyValue( const ::rtl::OUString& rPropertyName, cons
                                     // #67847# language for number formats
                                     SvNumberFormatter* pFormatter =
                                             pDocShell->GetDocument()->GetFormatTable();
-                                    UINT32 nOldFormat = ((const SfxUInt32Item&)
+                                    sal_uInt32 nOldFormat = ((const SfxUInt32Item&)
                                             rSet.Get( ATTR_VALUE_FORMAT )).GetValue();
                                     LanguageType eOldLang = ((const SvxLanguageItem&)
                                             rSet.Get( ATTR_LANGUAGE_FORMAT )).GetLanguage();
                                     nOldFormat = pFormatter->
                                             GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
 
-                                    UINT32 nNewFormat = 0;
+                                    sal_uInt32 nNewFormat = 0;
                                     *pValue >>= nNewFormat;
                                     rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
 
@@ -1774,7 +1774,7 @@ void ScStyleObj::SetOnePropertyValue( const ::rtl::OUString& rPropertyName, cons
                                 {
                                     sal_Int16 nVal = 0;
                                     *pValue >>= nVal;
-                                    rSet.Put( SfxUInt16Item( pEntry->nWID, (USHORT)HMMToTwips(nVal) ) );
+                                    rSet.Put( SfxUInt16Item( pEntry->nWID, (sal_uInt16)HMMToTwips(nVal) ) );
                                 }
                                 break;
                             case ATTR_ROTATE_VALUE:
@@ -1798,18 +1798,18 @@ void ScStyleObj::SetOnePropertyValue( const ::rtl::OUString& rPropertyName, cons
                                         switch( eOrient )
                                         {
                                             case table::CellOrientation_STANDARD:
-                                                rSet.Put( SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                                rSet.Put( SfxBoolItem( ATTR_STACKED, sal_False ) );
                                             break;
                                             case table::CellOrientation_TOPBOTTOM:
-                                                rSet.Put( SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                                rSet.Put( SfxBoolItem( ATTR_STACKED, sal_False ) );
                                                 rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 27000 ) );
                                             break;
                                             case table::CellOrientation_BOTTOMTOP:
-                                                rSet.Put( SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                                rSet.Put( SfxBoolItem( ATTR_STACKED, sal_False ) );
                                                 rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
                                             break;
                                             case table::CellOrientation_STACKED:
-                                                rSet.Put( SfxBoolItem( ATTR_STACKED, TRUE ) );
+                                                rSet.Put( SfxBoolItem( ATTR_STACKED, sal_True ) );
                                             break;
                                             default:
                                             {
@@ -1850,26 +1850,26 @@ void ScStyleObj::SetOnePropertyValue( const ::rtl::OUString& rPropertyName, cons
                                 break;
                             case ATTR_PAGE_PAPERBIN:
                                 {
-                                    BYTE nTray = PAPERBIN_PRINTER_SETTINGS;
-                                    BOOL bFound = FALSE;
+                                    sal_uInt8 nTray = PAPERBIN_PRINTER_SETTINGS;
+                                    sal_Bool bFound = sal_False;
 
                                     rtl::OUString aName;
                                     if ( *pValue >>= aName )
                                     {
                                         if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_PAPERBIN_DEFAULTNAME ) ) )
-                                            bFound = TRUE;
+                                            bFound = sal_True;
                                         else
                                         {
                                             Printer* pPrinter = pDocShell->GetPrinter();
                                             if (pPrinter)
                                             {
                                                 String aNameStr = aName;
-                                                USHORT nCount = pPrinter->GetPaperBinCount();
-                                                for (USHORT i=0; i<nCount; i++)
+                                                sal_uInt16 nCount = pPrinter->GetPaperBinCount();
+                                                for (sal_uInt16 i=0; i<nCount; i++)
                                                     if ( aNameStr == pPrinter->GetPaperBinName(i) )
                                                     {
-                                                        nTray = (BYTE) i;
-                                                        bFound = TRUE;
+                                                        nTray = (sal_uInt8) i;
+                                                        bFound = sal_True;
                                                         break;
                                                     }
                                             }
@@ -1995,7 +1995,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
 
         if ( pItemSet && pResultEntry )
         {
-            USHORT nWhich = pResultEntry->nWID;
+            sal_uInt16 nWhich = pResultEntry->nWID;
 
             if ( IsScItemWid( nWhich ) )
             {
@@ -2004,7 +2004,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
                     case ATTR_VALUE_FORMAT:
                         if ( pDocShell )
                         {
-                            UINT32 nOldFormat = ((const SfxUInt32Item&)
+                            sal_uInt32 nOldFormat = ((const SfxUInt32Item&)
                                     pItemSet->Get( ATTR_VALUE_FORMAT )).GetValue();
                             LanguageType eOldLang = ((const SvxLanguageItem&)
                                     pItemSet->Get( ATTR_LANGUAGE_FORMAT )).GetLanguage();
@@ -2020,7 +2020,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
                     case ATTR_STACKED:
                         {
                             sal_Int32 nRot = ((const SfxInt32Item&)pItemSet->Get(ATTR_ROTATE_VALUE)).GetValue();
-                            BOOL bStacked = ((const SfxBoolItem&)pItemSet->Get(nWhich)).GetValue();
+                            sal_Bool bStacked = ((const SfxBoolItem&)pItemSet->Get(nWhich)).GetValue();
                             SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( aAny );
                         }
                         break;
@@ -2040,7 +2040,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
                         {
                             // property PrinterPaperTray is the name of the tray
 
-                            BYTE nValue = ((const SvxPaperBinItem&)pItemSet->Get(nWhich)).GetValue();
+                            sal_uInt8 nValue = ((const SvxPaperBinItem&)pItemSet->Get(nWhich)).GetValue();
                             rtl::OUString aName;
                             if ( nValue == PAPERBIN_PRINTER_SETTINGS )
                                 aName = rtl::OUString::createFromAscii( SC_PAPERBIN_DEFAULTNAME );
@@ -2117,7 +2117,7 @@ rtl::OUString SAL_CALL ScStyleObj::getImplementationName() throw(uno::RuntimeExc
 sal_Bool SAL_CALL ScStyleObj::supportsService( const rtl::OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    BOOL bPage = ( eFamily == SFX_STYLE_FAMILY_PAGE );
+    sal_Bool bPage = ( eFamily == SFX_STYLE_FAMILY_PAGE );
     return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SCSTYLE_SERVICE ) )||
            rServiceName.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM ( bPage ? SCPAGESTYLE_SERVICE : SCCELLSTYLE_SERVICE ));
@@ -2126,7 +2126,7 @@ sal_Bool SAL_CALL ScStyleObj::supportsService( const rtl::OUString& rServiceName
 uno::Sequence<rtl::OUString> SAL_CALL ScStyleObj::getSupportedServiceNames()
                                                     throw(uno::RuntimeException)
 {
-    BOOL bPage = ( eFamily == SFX_STYLE_FAMILY_PAGE );
+    sal_Bool bPage = ( eFamily == SFX_STYLE_FAMILY_PAGE );
     uno::Sequence<rtl::OUString> aRet(2);
     rtl::OUString* pArray = aRet.getArray();
     pArray[0] = rtl::OUString::createFromAscii( SCSTYLE_SERVICE );

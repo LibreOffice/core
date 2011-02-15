@@ -68,9 +68,9 @@ public:
     virtual void RequestHelp( const HelpEvent& rHEvt );
 
     void ForceInvalidate();
-    virtual void Invalidate( USHORT nFlags = 0 );
-    virtual void Invalidate( const Rectangle& rRect, USHORT nFlags = 0 );
-    virtual void Invalidate( const Region& rRegion, USHORT nFlags = 0 );
+    virtual void Invalidate( sal_uInt16 nFlags = 0 );
+    virtual void Invalidate( const Rectangle& rRect, sal_uInt16 nFlags = 0 );
+    virtual void Invalidate( const Region& rRegion, sal_uInt16 nFlags = 0 );
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 

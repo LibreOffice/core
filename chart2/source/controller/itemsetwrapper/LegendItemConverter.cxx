@@ -93,7 +93,7 @@ bool LegendItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
-const USHORT * LegendItemConverter::GetWhichPairs() const
+const sal_uInt16 * LegendItemConverter::GetWhichPairs() const
 {
     // must span all used items!
     return nLegendWhichPairs;
@@ -106,7 +106,7 @@ bool LegendItemConverter::GetItemProperty( tWhichIdType /*nWhichId*/, tPropertyN
 }
 
 
-bool LegendItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet& rInItemSet )
+bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet& rInItemSet )
     throw( uno::Exception )
 {
     bool bChanged = false;
@@ -177,7 +177,7 @@ bool LegendItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet& r
 }
 
 void LegendItemConverter::FillSpecialItem(
-    USHORT nWhichId, SfxItemSet & rOutItemSet ) const
+    sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
     switch( nWhichId )

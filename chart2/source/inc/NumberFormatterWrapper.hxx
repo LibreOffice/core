@@ -74,7 +74,7 @@ public:
 
 private:
     NumberFormatterWrapper      m_aNumberFormatterWrapper;
-    ULONG                       m_nNumberFormatKey;
+    sal_uLong                       m_nNumberFormatKey;
 };
 
 //.............................................................................

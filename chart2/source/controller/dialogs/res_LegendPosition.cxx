@@ -182,7 +182,7 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
 
 IMPL_LINK( LegendPositionResources, PositionEnableHdl, void*, EMPTYARG )
 {
-    BOOL bEnable = m_aCbxShow.IsChecked();
+    sal_Bool bEnable = m_aCbxShow.IsChecked();
 
     m_aRbtLeft.Enable( bEnable );
     m_aRbtTop.Enable( bEnable );
@@ -197,34 +197,33 @@ IMPL_LINK( LegendPositionResources, PositionEnableHdl, void*, EMPTYARG )
 void LegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
 {
     const SfxPoolItem* pPoolItem = NULL;
-    if( rInAttrs.GetItemState( SCHATTR_LEGEND_POS, TRUE, &pPoolItem ) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState( SCHATTR_LEGEND_POS, sal_True, &pPoolItem ) == SFX_ITEM_SET )
     {
         sal_Int32 nLegendPosition = ((const SfxInt32Item*)pPoolItem)->GetValue();
         switch( nLegendPosition )
         {
             case chart2::LegendPosition_LINE_START:
-                m_aRbtLeft.Check(TRUE);
+                m_aRbtLeft.Check(sal_True);
                 break;
             case chart2::LegendPosition_PAGE_START:
-                m_aRbtTop.Check(TRUE);
+                m_aRbtTop.Check(sal_True);
                 break;
             case chart2::LegendPosition_LINE_END:
-                m_aRbtRight.Check(TRUE);
+                m_aRbtRight.Check(sal_True);
                 break;
             case chart2::LegendPosition_PAGE_END:
-                m_aRbtBottom.Check(TRUE);
+                m_aRbtBottom.Check(sal_True);
                 break;
             default:
                 break;
         }
     }
 
-    if( rInAttrs.GetItemState( SCHATTR_LEGEND_SHOW, TRUE, &pPoolItem ) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState( SCHATTR_LEGEND_SHOW, sal_True, &pPoolItem ) == SFX_ITEM_SET )
     {
         bool bShow = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         m_aCbxShow.Check(bShow);
     }
-
 }
 
 void LegendPositionResources::writeToItemSet( SfxItemSet& rOutAttrs ) const

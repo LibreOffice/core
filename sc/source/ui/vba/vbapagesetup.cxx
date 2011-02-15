@@ -76,7 +76,7 @@ rtl::OUString SAL_CALL ScVbaPageSetup::getPrintArea() throw (css::uno::RuntimeEx
     if( nCount )
     {
         ScAddress::Details aDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
-        USHORT nFlags = SCA_VALID;
+        sal_uInt16 nFlags = SCA_VALID;
         nFlags |= ( SCA_TAB_ABSOLUTE | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB2_ABSOLUTE | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE );
         ScRangeList aRangeList;
         for( sal_Int32 i=0; i<nCount; i++ )
@@ -109,7 +109,7 @@ void SAL_CALL ScVbaPageSetup::setPrintArea( const rtl::OUString& rAreas ) throw 
         if( getScRangeListForAddress( rAreas, excel::getDocShell( mxModel ) , aRange, aCellRanges ) )
         {
             uno::Sequence< table::CellRangeAddress > aSeq( aCellRanges.Count() );
-            USHORT i=0;
+            sal_uInt16 i=0;
             for( ScRange* pRange = aCellRanges.First(); pRange; pRange = aCellRanges.Next() )
             {
                 table::CellRangeAddress aRangeAddress;
@@ -148,7 +148,7 @@ uno::Any SAL_CALL ScVbaPageSetup::getFitToPagesTall() throw (css::uno::RuntimeEx
 
 void SAL_CALL ScVbaPageSetup::setFitToPagesTall( const uno::Any& fitToPagesTall) throw (css::uno::RuntimeException)
 {
-    USHORT scaleToPageY = 0;
+    sal_uInt16 scaleToPageY = 0;
     try
     {
         sal_Bool aValue;
@@ -171,7 +171,7 @@ uno::Any SAL_CALL ScVbaPageSetup::getFitToPagesWide() throw (css::uno::RuntimeEx
 
 void SAL_CALL ScVbaPageSetup::setFitToPagesWide( const uno::Any& fitToPagesWide) throw (css::uno::RuntimeException)
 {
-    USHORT scaleToPageX = 0;
+    sal_uInt16 scaleToPageX = 0;
     try
     {
         sal_Bool aValue = sal_False;
@@ -194,7 +194,7 @@ uno::Any SAL_CALL ScVbaPageSetup::getZoom() throw (css::uno::RuntimeException)
 
 void SAL_CALL ScVbaPageSetup::setZoom( const uno::Any& zoom) throw (css::uno::RuntimeException)
 {
-    USHORT pageScale = 0;
+    sal_uInt16 pageScale = 0;
     try
     {
         if( zoom.getValueTypeClass() == uno::TypeClass_BOOLEAN )
@@ -216,7 +216,7 @@ void SAL_CALL ScVbaPageSetup::setZoom( const uno::Any& zoom) throw (css::uno::Ru
         }
 
         // these only exist in S08
-        USHORT nScale = 0;
+        sal_uInt16 nScale = 0;
         mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ScaleToPages")), uno::makeAny( nScale ));
         mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ScaleToPagesX")), uno::makeAny( nScale ));
         mxPageProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ScaleToPagesY")), uno::makeAny( nScale ));

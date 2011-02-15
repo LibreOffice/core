@@ -565,7 +565,7 @@ void ChartController::startDoubleClickWaiting()
 
     m_bWaitingForDoubleClick = true;
 
-    ULONG nDblClkTime = 500;
+    sal_uLong nDblClkTime = 500;
     if( m_pChartWindow )
     {
         const MouseSettings& rMSettings = m_pChartWindow->GetSettings().GetMouseSettings();
@@ -593,7 +593,7 @@ IMPL_LINK( ChartController, DoubleClickWaitingHdl, void*, EMPTYARG )
         {
             Window::PointerState aPointerState( m_pChartWindow->GetPointerState() );
             MouseEvent aMouseEvent( aPointerState.maPos,1/*nClicks*/,
-                                    0/*nMode*/, static_cast< USHORT >( aPointerState.mnState )/*nButtons*/,
+                                    0/*nMode*/, static_cast< sal_uInt16 >( aPointerState.mnState )/*nButtons*/,
                                     0/*nModifier*/ );
             impl_SetMousePointer( aMouseEvent );
         }
@@ -711,7 +711,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
          && !rMEvt.IsRight() )
     {
         //start drag
-        USHORT  nDrgLog = (USHORT)m_pChartWindow->PixelToLogic(Size(DRGPIX,0)).Width();
+        sal_uInt16  nDrgLog = (sal_uInt16)m_pChartWindow->PixelToLogic(Size(DRGPIX,0)).Width();
         SdrDragMethod* pDragMethod = NULL;
 
         //change selection to 3D scene if rotate mode
@@ -984,12 +984,12 @@ void ChartController::execute_Resize()
 }
 void ChartController::execute_Activate()
 {
-    ///// pDrawViewWrapper->SetEditMode(TRUE);
+    ///// pDrawViewWrapper->SetEditMode(sal_True);
 }
 void ChartController::execute_Deactivate()
 {
     /*
-    pDrawViewWrapper->SetEditMode(FALSE);
+    pDrawViewWrapper->SetEditMode(sal_False);
     this->ReleaseMouse();
     */
 }
@@ -1603,7 +1603,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         {
                 // 3D-Kontext wieder zerstoeren
             GetWindow()->Invalidate();
-            bReturn = TRUE;
+            bReturn = sal_True;
         }
     }
     */
@@ -1900,7 +1900,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
     {
         Point aMousePos( m_pChartWindow->PixelToLogic( rEvent.GetPosPixel()));
         sal_uInt16 nModifier = rEvent.GetModifier();
-        BOOL bLeftDown = rEvent.IsLeft();
+        sal_Bool bLeftDown = rEvent.IsLeft();
 
         if ( m_pDrawViewWrapper->IsTextEdit() )
         {

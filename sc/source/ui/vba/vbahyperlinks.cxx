@@ -48,7 +48,7 @@ bool lclContains( const ScRangeList& rScOuter, const uno::Reference< excel::XRan
     if( (rScInner.Count() == 0) || (rScOuter.Count() == 0) )
         throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Empty range objects" ) ), uno::Reference< uno::XInterface >() );
 
-    for( ULONG nIndex = 0, nCount = rScInner.Count(); nIndex < nCount; ++nIndex )
+    for( sal_uLong nIndex = 0, nCount = rScInner.Count(); nIndex < nCount; ++nIndex )
         if( !rScOuter.In( *rScInner.GetObject( nIndex ) ) )
             return false;
     return true;

@@ -48,11 +48,11 @@
 #include "patattr.hxx"
 #include "ftools.hxx"
 
-const UINT16    LotusFontBuffer::nSize = 8;
+const sal_uInt16    LotusFontBuffer::nSize = 8;
 
-void LotusFontBuffer::Fill( const UINT8 nIndex, SfxItemSet& rItemSet )
+void LotusFontBuffer::Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet )
 {
-    UINT8   nIntIndex = nIndex & 0x07;
+    sal_uInt8   nIntIndex = nIndex & 0x07;
 
     ENTRY*  pAkt = pData + nIntIndex;
 
@@ -93,7 +93,7 @@ void LotusFontBuffer::Fill( const UINT8 nIndex, SfxItemSet& rItemSet )
 }
 
 
-void LotusFontBuffer::SetName( const UINT16 nIndex, const String& rName )
+void LotusFontBuffer::SetName( const sal_uInt16 nIndex, const String& rName )
 {
     DBG_ASSERT( nIndex < nSize, "*LotusFontBuffer::SetName(): Array zu klein!" );
     if( nIndex < nSize )
@@ -107,15 +107,15 @@ void LotusFontBuffer::SetName( const UINT16 nIndex, const String& rName )
 }
 
 
-void LotusFontBuffer::SetHeight( const UINT16 nIndex, const UINT16 nHeight )
+void LotusFontBuffer::SetHeight( const sal_uInt16 nIndex, const sal_uInt16 nHeight )
 {
     DBG_ASSERT( nIndex < nSize, "*LotusFontBuffer::SetHeight(): Array zu klein!" );
     if( nIndex < nSize )
-        pData[ nIndex ].Height( *( new SvxFontHeightItem( ( ULONG ) nHeight * 20, 100, ATTR_FONT_HEIGHT ) ) );
+        pData[ nIndex ].Height( *( new SvxFontHeightItem( ( sal_uLong ) nHeight * 20, 100, ATTR_FONT_HEIGHT ) ) );
 }
 
 
-void LotusFontBuffer::SetType( const UINT16 nIndex, const UINT16 nType )
+void LotusFontBuffer::SetType( const sal_uInt16 nIndex, const sal_uInt16 nType )
 {
     DBG_ASSERT( nIndex < nSize, "*LotusFontBuffer::SetType(): Array zu klein!" );
     if( nIndex < nSize )

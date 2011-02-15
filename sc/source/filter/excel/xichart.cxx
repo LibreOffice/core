@@ -173,7 +173,7 @@ double lclGetSerialDay( const XclImpRoot& rRoot, sal_uInt16 nValue, sal_uInt16 n
         case EXC_CHDATERANGE_DAYS:
             return nValue;
         case EXC_CHDATERANGE_MONTHS:
-            return rRoot.GetDoubleFromDateTime( Date( 1, static_cast< sal_uInt16 >( 1 + nValue % 12 ), static_cast< USHORT >( rRoot.GetBaseYear() + nValue / 12 ) ) );
+            return rRoot.GetDoubleFromDateTime( Date( 1, static_cast< sal_uInt16 >( 1 + nValue % 12 ), static_cast< sal_uInt16 >( rRoot.GetBaseYear() + nValue / 12 ) ) );
         case EXC_CHDATERANGE_YEARS:
             return rRoot.GetDoubleFromDateTime( Date( 1, 1, static_cast< sal_uInt16 >( rRoot.GetBaseYear() + nValue ) ) );
         default:
