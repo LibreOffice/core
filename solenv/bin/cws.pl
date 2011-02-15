@@ -436,7 +436,7 @@ sub hg_clone_cws_or_milestone
         # e.g. cws_l10n
         else
         {
-             $cws_remote_source = "$hg_remote_source/cws_".$rep_type."/" . $cws->child();
+            $cws_remote_source = "$hg_remote_source/cws_".$rep_type."/" . $cws->child();
         }
 
         # The outgoing repository might not yet be available. Which is not
@@ -1725,7 +1725,7 @@ sub do_fetch
                 print_error("Can't create directory '$work_master': $!.", 8);
             }
 
-            my %unique = map { $_ => 1 } split(/","/,$additional_repositories_opt);
+            my %unique = map { $_ => 1 } split( /,/ , $additional_repositories_opt);
             my @unique_repo_list = keys %unique;
 
             if (defined($additional_repositories_opt))
