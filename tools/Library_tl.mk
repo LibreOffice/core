@@ -55,7 +55,7 @@ $(eval $(call gb_Library_add_linked_libs,tl,\
     cppu \
     sal \
     vos3 \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
 
 
@@ -140,15 +140,8 @@ $(eval $(call gb_Library_add_linked_static_libs,tl,\
 ))
 endif
 
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,tl,\
-    dl \
-    m \
-    pthread \
-))
-endif
-
 ifeq ($(OS),WNT)
+
 $(eval $(call gb_Library_set_include,tl,\
     $$(INCLUDE) \
     -I$(SRCDIR)/tools/win/inc \
@@ -158,34 +151,16 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/win/source/dll/toolsdll \
 ))
 
-ifneq ($(USE_MINGW),)
 $(eval $(call gb_Library_add_linked_libs,tl,\
-    uwinapi \
-    mingwthrd \
-    $(gb_MINGW_LIBSTDCPP) \
-    mingw32 \
-    $(gb_MINGW_LIBGCC) \
-    moldname \
-    mingwex \
-    kernel32 \
     mpr \
-    msvcrt \
     ole32 \
     shell32 \
     user32 \
     uuid \
 ))
-else
-$(eval $(call gb_Library_add_linked_libs,tl,\
-    mpr \
-    oldnames \
-    ole32 \
-    shell32 \
-    user32 \
-    uuid \
-))
+
 endif
-endif
+
 # tools/source/string/debugprint -DDEBUG -DEXCEPTIONS_OFF -DOSL_DEBUG_LEVEL=2 -DSHAREDLIB -DTOOLS_DLLIMPLEMENTATION -D_DLL_ -O0 -fno-exceptions -fpic -fvisibility=hidden -g
 # -DOPTIMIZE
 # no -DTOOLS_DLLIMPLEMENTATION on toolsdll

@@ -83,35 +83,35 @@ private:
     BitmapWriteAccess*  mpMaskAcc;
     long                mnLastPos;
 
-    ULONG               mnWidth;
-    ULONG               mnHeight;
-    ULONG               mnColors;
-    ULONG               mnCpp;                              // characters per pix
-    BOOL                mbTransparent;
-    BOOL                mbStatus;
-    ULONG               mnStatus;
-    ULONG               mnIdentifier;
-    BYTE                mcThisByte;
-    BYTE                mcLastByte;
-    ULONG               mnTempAvail;
-    BYTE*               mpTempBuf;
-    BYTE*               mpTempPtr;
-    BYTE*               mpFastColorTable;
-    BYTE*               mpColMap;
-    ULONG               mnStringSize;
-    BYTE*               mpStringBuf;
-    ULONG               mnParaSize;
-    BYTE*               mpPara;
+    sal_uLong               mnWidth;
+    sal_uLong               mnHeight;
+    sal_uLong               mnColors;
+    sal_uLong               mnCpp;                              // characters per pix
+    sal_Bool                mbTransparent;
+    sal_Bool                mbStatus;
+    sal_uLong               mnStatus;
+    sal_uLong               mnIdentifier;
+    sal_uInt8               mcThisByte;
+    sal_uInt8               mcLastByte;
+    sal_uLong               mnTempAvail;
+    sal_uInt8*              mpTempBuf;
+    sal_uInt8*              mpTempPtr;
+    sal_uInt8*              mpFastColorTable;
+    sal_uInt8*              mpColMap;
+    sal_uLong               mnStringSize;
+    sal_uInt8*              mpStringBuf;
+    sal_uLong               mnParaSize;
+    sal_uInt8*              mpPara;
 
-    BOOL                ImplGetString( void );
-    BOOL                ImplGetColor( ULONG );
-    BOOL                ImplGetScanLine( ULONG );
-    BOOL                ImplGetColSub( BYTE* );
-    BOOL                ImplGetColKey( BYTE );
-    void                ImplGetRGBHex( BYTE*, ULONG );
-    BOOL                ImplGetPara( ULONG numb );
-    BOOL                ImplCompare( BYTE*, BYTE*, ULONG, ULONG nmode = XPMCASENONSENSITIVE );
-    ULONG               ImplGetULONG( ULONG nPara );
+    sal_Bool                ImplGetString( void );
+    sal_Bool                ImplGetColor( sal_uLong );
+    sal_Bool                ImplGetScanLine( sal_uLong );
+    sal_Bool                ImplGetColSub( sal_uInt8* );
+    sal_Bool                ImplGetColKey( sal_uInt8 );
+    void                ImplGetRGBHex( sal_uInt8*, sal_uLong );
+    sal_Bool                ImplGetPara( sal_uLong numb );
+    sal_Bool                ImplCompare( sal_uInt8*, sal_uInt8*, sal_uLong, sal_uLong nmode = XPMCASENONSENSITIVE );
+    sal_uLong               ImplGetULONG( sal_uLong nPara );
 
 public:
                         XPMReader( SvStream& rStm );
@@ -126,6 +126,6 @@ public:
 // - ImportXPM -
 // -------------
 
-BOOL ImportXPM( SvStream& rStream, Graphic& rGraphic );
+sal_Bool ImportXPM( SvStream& rStream, Graphic& rGraphic );
 
 #endif // _XPMREAD_HXX

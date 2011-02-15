@@ -143,7 +143,7 @@ namespace
     }
 
     void pushState( ::cppcanvas::internal::VectorOfOutDevStates& rStates,
-                    USHORT nFlags                                           )
+                    sal_uInt16 nFlags                                           )
     {
         rStates.push_back( getState( rStates ) );
         getState( rStates ).pushFlags = nFlags;
@@ -447,7 +447,7 @@ namespace
                 // translate characters to local preference
                 sal_Unicode cChar = getLocalizedChar( *pBegin, eTextLanguage );
                 if( cChar != *pBegin )
-                    rStr.SetChar( sal::static_int_cast<USHORT>(pBegin - pBase), cChar );
+                    rStr.SetChar( sal::static_int_cast<sal_uInt16>(pBegin - pBase), cChar );
             }
         }
     }
@@ -522,7 +522,7 @@ namespace cppcanvas
 
         bool ImplRenderer::isActionContained( GDIMetaFile& rMtf,
                                               const char*  pCommentString,
-                                              USHORT       nType ) const
+                                              sal_uInt16       nType ) const
         {
             ENSURE_OR_THROW( pCommentString,
                               "ImplRenderer::isActionContained(): NULL string given" );
@@ -531,7 +531,7 @@ namespace cppcanvas
 
             // at least _one_ call to GDIMetaFile::NextAction() is
             // executed
-            ULONG nPos( 1 );
+            sal_uIntPtr nPos( 1 );
 
             MetaAction* pCurrAct;
             while( (pCurrAct=rMtf.NextAction()) != NULL )
@@ -582,7 +582,7 @@ namespace cppcanvas
             // decide, whether this gradient can be rendered natively
             // by the canvas, or must be emulated via VCL gradient
             // action extraction.
-            const USHORT nSteps( rGradient.GetSteps() );
+            const sal_uInt16 nSteps( rGradient.GetSteps() );
 
             if( // step count is infinite, can use native canvas
                 // gradients here
@@ -607,17 +607,17 @@ namespace cppcanvas
                     // ----------------------------
 
                     // scale color coefficients with gradient intensities
-                    const USHORT nStartIntensity( rGradient.GetStartIntensity() );
+                    const sal_uInt16 nStartIntensity( rGradient.GetStartIntensity() );
                     ::Color aVCLStartColor( rGradient.GetStartColor() );
-                    aVCLStartColor.SetRed( (UINT8)(aVCLStartColor.GetRed() * nStartIntensity / 100) );
-                    aVCLStartColor.SetGreen( (UINT8)(aVCLStartColor.GetGreen() * nStartIntensity / 100) );
-                    aVCLStartColor.SetBlue( (UINT8)(aVCLStartColor.GetBlue() * nStartIntensity / 100) );
+                    aVCLStartColor.SetRed( (sal_uInt8)(aVCLStartColor.GetRed() * nStartIntensity / 100) );
+                    aVCLStartColor.SetGreen( (sal_uInt8)(aVCLStartColor.GetGreen() * nStartIntensity / 100) );
+                    aVCLStartColor.SetBlue( (sal_uInt8)(aVCLStartColor.GetBlue() * nStartIntensity / 100) );
 
-                    const USHORT nEndIntensity( rGradient.GetEndIntensity() );
+                    const sal_uInt16 nEndIntensity( rGradient.GetEndIntensity() );
                     ::Color aVCLEndColor( rGradient.GetEndColor() );
-                    aVCLEndColor.SetRed( (UINT8)(aVCLEndColor.GetRed() * nEndIntensity / 100) );
-                    aVCLEndColor.SetGreen( (UINT8)(aVCLEndColor.GetGreen() * nEndIntensity / 100) );
-                    aVCLEndColor.SetBlue( (UINT8)(aVCLEndColor.GetBlue() * nEndIntensity / 100) );
+                    aVCLEndColor.SetRed( (sal_uInt8)(aVCLEndColor.GetRed() * nEndIntensity / 100) );
+                    aVCLEndColor.SetGreen( (sal_uInt8)(aVCLEndColor.GetGreen() * nEndIntensity / 100) );
+                    aVCLEndColor.SetBlue( (sal_uInt8)(aVCLEndColor.GetBlue() * nEndIntensity / 100) );
 
                     uno::Reference<rendering::XColorSpace> xColorSpace(
                         rParms.mrCanvas->getUNOCanvas()->getDevice()->getDeviceColorSpace());
@@ -682,10 +682,23 @@ namespace cppcanvas
 
                         case GRADIENT_AXIAL:
                         {
-                            basegfx::tools::createLinearODFGradientInfo(aGradInfo,
+                            // Adapt the border so that it is suitable
+                            // for the axial gradient.  An axial
+                            // gradient consists of two linear
+                            // gradients.  Each of those covers half
+                            // of the total size.  In order to
+                            // compensate for the condensed display of
+                            // the linear gradients, we have to
+                            // enlarge the area taken up by the actual
+                            // gradient (1-fBorder).  After that we
+                            // have to turn the result back into a
+                            // border value, hence the second (left
+                            // most 1-...
+                            const double fAxialBorder (1-2*(1-fBorder));
+                            basegfx::tools::createAxialODFGradientInfo(aGradInfo,
                                                                         aBounds,
                                                                         nSteps,
-                                                                        fBorder,
+                                                                        fAxialBorder,
                                                                         fRotation);
                             // map odf to svg gradient orientation - x
                             // instead of y direction
@@ -1531,9 +1544,9 @@ namespace cppcanvas
                             (sal_Int8)rFont.GetUnderline();
                         rState.textStrikeoutStyle       = (sal_Int8)rFont.GetStrikeout();
                         rState.textEmphasisMarkStyle    = (sal_Int8)rFont.GetEmphasisMark();
-                        rState.isTextEffectShadowSet    = (rFont.IsShadow() != FALSE);
-                        rState.isTextWordUnderlineSet   = (rFont.IsWordLineMode() != FALSE);
-                        rState.isTextOutlineModeSet     = (rFont.IsOutline() != FALSE);
+                        rState.isTextEffectShadowSet    = (rFont.IsShadow() != sal_False);
+                        rState.isTextWordUnderlineSet   = (rFont.IsWordLineMode() != sal_False);
+                        rState.isTextOutlineModeSet     = (rFont.IsOutline() != sal_False);
                     }
                     break;
 
@@ -1695,7 +1708,7 @@ namespace cppcanvas
                         // Handle drawing layer fills
                         else if( pAct->GetComment().Equals( "XPATHFILL_SEQ_BEGIN" ) )
                         {
-                            const BYTE* pData = pAct->GetData();
+                            const sal_uInt8* pData = pAct->GetData();
                             if ( pData )
                             {
                                 SvMemoryStream  aMemStm( (void*)pData, pAct->GetDataSize(), STREAM_READ );
@@ -2496,7 +2509,7 @@ namespace cppcanvas
                             pAct->GetPoint(),
                             sText,
                             pAct->GetIndex(),
-                            pAct->GetLen() == (USHORT)STRING_LEN ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen(),
+                            pAct->GetLen() == (sal_uInt16)STRING_LEN ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen(),
                             NULL,
                             rFactoryParms,
                             bSubsettableActions );
@@ -2515,7 +2528,7 @@ namespace cppcanvas
                             pAct->GetPoint(),
                             sText,
                             pAct->GetIndex(),
-                            pAct->GetLen() == (USHORT)STRING_LEN ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen(),
+                            pAct->GetLen() == (sal_uInt16)STRING_LEN ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen(),
                             pAct->GetDXArray(),
                             rFactoryParms,
                             bSubsettableActions );
@@ -2590,7 +2603,7 @@ namespace cppcanvas
                         if( rVDev.GetDigitLanguage())
                             convertToLocalizedNumerals ( sText,rVDev.GetDigitLanguage() );
 
-                        const USHORT nLen( pAct->GetLen() == (USHORT)STRING_LEN ?
+                        const sal_uInt16 nLen( pAct->GetLen() == (sal_uInt16)STRING_LEN ?
                                            pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen() );
 
                         // #i70897# Nothing to do, actually...
@@ -2611,7 +2624,7 @@ namespace cppcanvas
 
                         // Last entry of pDXArray contains total width of the text
                         sal_Int32* p=pDXArray.get();
-                        for( USHORT i=1; i<=nLen; ++i )
+                        for( sal_uInt16 i=1; i<=nLen; ++i )
                         {
                             // calc ratio for every array entry, to
                             // distribute rounding errors 'evenly'
@@ -2626,7 +2639,7 @@ namespace cppcanvas
                             pAct->GetPoint(),
                             sText,
                             pAct->GetIndex(),
-                            pAct->GetLen() == (USHORT)STRING_LEN ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen(),
+                            pAct->GetLen() == (sal_uInt16)STRING_LEN ? pAct->GetText().Len() - pAct->GetIndex() : pAct->GetLen(),
                             pDXArray.get(),
                             rFactoryParms,
                             bSubsettableActions );
@@ -2901,7 +2914,7 @@ namespace cppcanvas
             VectorOfOutDevStates    aStateStack;
 
             VirtualDevice aVDev;
-            aVDev.EnableOutput( FALSE );
+            aVDev.EnableOutput( sal_False );
 
             // Setup VDev for state tracking and mapping
             // =========================================

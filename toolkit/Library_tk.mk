@@ -55,7 +55,7 @@ $(eval $(call gb_Library_add_linked_libs,tk,\
     tl \
     utl \
     vcl \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,tk,\
@@ -81,6 +81,8 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/awt/vclxsystemdependentwindow \
     toolkit/source/awt/vclxtabcontrol \
     toolkit/source/awt/vclxtabpage \
+    toolkit/source/awt/vclxtabpagecontainer \
+    toolkit/source/awt/animatedimagespeer \
     toolkit/source/awt/vclxtoolkit \
     toolkit/source/awt/vclxtopwindow \
     toolkit/source/awt/vclxwindow \
@@ -89,6 +91,7 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/awt/xsimpleanimation \
     toolkit/source/awt/xthrobber \
     toolkit/source/controls/accessiblecontrolcontext \
+    toolkit/source/controls/controlmodelcontainerbase \
     toolkit/source/controls/dialogcontrol \
     toolkit/source/controls/eventcontainer \
     toolkit/source/controls/formattedcontrol \
@@ -99,12 +102,16 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/grid/gridcontrol \
     toolkit/source/controls/roadmapcontrol \
     toolkit/source/controls/roadmapentry \
+    toolkit/source/controls/tabpagecontainer \
+    toolkit/source/controls/tabpagemodel \
     toolkit/source/controls/stdtabcontroller \
     toolkit/source/controls/stdtabcontrollermodel \
     toolkit/source/controls/tkscrollbar \
     toolkit/source/controls/tksimpleanimation \
     toolkit/source/controls/tkspinbutton \
     toolkit/source/controls/tkthrobber \
+    toolkit/source/controls/animatedimages \
+    toolkit/source/controls/spinningprogress \
     toolkit/source/controls/tree/treecontrol \
     toolkit/source/controls/tree/treedatamodel \
     toolkit/source/controls/unocontrol \
@@ -122,7 +129,6 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/helper/property \
     toolkit/source/helper/registerservices \
     toolkit/source/helper/servicenames \
-    toolkit/source/helper/throbberimpl \
     toolkit/source/helper/tkresmgr \
     toolkit/source/helper/unomemorystream \
     toolkit/source/helper/unopropertyarrayhelper \
@@ -159,23 +165,7 @@ endif
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_linked_libs,tk,\
     X11 \
-    dl \
-    m \
-    pthread \
 ))
 endif
-ifeq ($(OS),WNT)
-ifneq ($(USE_MINGW),)
-$(eval $(call gb_Library_add_linked_libs,tk,\
-    mingwthrd \
-    $(gb_MINGW_LIBSTDCPP) \
-    mingw32 \
-    $(gb_MINGW_LIBGCC) \
-    uwinapi \
-    mingwex \
-    kernel32 \
-    msvcrt \
-))
-endif
-endif
+
 # vim: set noet sw=4 ts=4:

@@ -50,9 +50,9 @@ public:
 
     PointerStyle    GetStyle() const { return meStyle; }
 
-    BOOL            operator==( const Pointer& rPointer ) const
+    sal_Bool            operator==( const Pointer& rPointer ) const
                         { return (meStyle == rPointer.meStyle); }
-    BOOL            operator!=( const Pointer& rPointer ) const
+    sal_Bool            operator!=( const Pointer& rPointer ) const
                         { return !(Pointer::operator==( rPointer )); }
 };
 

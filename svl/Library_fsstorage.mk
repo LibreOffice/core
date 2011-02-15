@@ -50,14 +50,7 @@ $(eval $(call gb_Library_add_linked_libs,fsstorage,\
     tl \
     ucbhelper \
     utl \
-    $(gb_StdLibs) \
-))
-
-$(eval $(call gb_Library_add_linked_system_libs,fsstorage,\
-    dl \
-    icuuc \
-    m \
-    pthread \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,fsstorage,\
@@ -67,20 +60,4 @@ $(eval $(call gb_Library_add_exception_objects,fsstorage,\
     svl/source/fsstor/ostreamcontainer \
 ))
 
-ifeq ($(OS),WNT)
-ifneq ($(USE_MINGW),)
-$(eval $(call gb_Library_add_linked_libs,fsstorage,\
-    mingwthrd \
-    $(gb_MINGW_LIBSTDCPP) \
-    mingw32 \
-    $(gb_MINGW_LIBGCC) \
-    uwinapi \
-    moldname \
-    mingwex \
-    kernel32 \
-    msvcrt \
-    user32 \
-))
-endif
-endif
 # vim: set noet sw=4 ts=4:

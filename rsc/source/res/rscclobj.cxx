@@ -78,16 +78,16 @@ sal_uInt32 RefNode::GetId() const
 |*    Letzte Aenderung  MM 27.06.90
 |*
 *************************************************************************/
-BOOL RefNode::PutObjNode( ObjNode * pPutObject ){
+sal_Bool RefNode::PutObjNode( ObjNode * pPutObject ){
 // insert a node in the b-tree pObjBiTree
 // if the node with the same name is in pObjBiTree,
-// return FALSE and no insert,
+// return sal_False and no insert,
 
     if( pObjBiTree )
         return( pObjBiTree->Insert( pPutObject ) );
 
     pObjBiTree = pPutObject;
-    return( TRUE );
+    return( sal_True );
 }
 
 /****************** O b j N o d e ****************************************/
@@ -120,7 +120,7 @@ ObjNode * RefNode :: GetObjNode( const RscId & rRscId ){
 |*    Letzte Aenderung  MM 15.05.91
 |*
 *************************************************************************/
-ObjNode::ObjNode( const RscId & rId, CLASS_DATA pData, ULONG lKey ){
+ObjNode::ObjNode( const RscId & rId, CLASS_DATA pData, sal_uLong lKey ){
     pRscObj  = pData;
     aRscId   = rId;
     lFileKey = lKey;
@@ -135,7 +135,7 @@ ObjNode::ObjNode( const RscId & rId, CLASS_DATA pData, ULONG lKey ){
 |*    Letzte Aenderung  MM 09.12.91
 |*
 *************************************************************************/
-ObjNode * ObjNode::DelObjNode( RscTop * pClass, ULONG nFileKey ){
+ObjNode * ObjNode::DelObjNode( RscTop * pClass, sal_uLong nFileKey ){
     ObjNode * pRetNode = this;
 
     if( Right() )
@@ -183,13 +183,13 @@ sal_uInt32 ObjNode::GetId() const
 |*    Letzte Aenderung  MM 23.09.91
 |*
 *************************************************************************/
-BOOL ObjNode::IsConsistent( RscInconsList * pList )
+sal_Bool ObjNode::IsConsistent( RscInconsList * pList )
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
 
     if( (long)aRscId > 0x7FFF || (long)aRscId < 1 )
     {
-        bRet = FALSE;
+        bRet = sal_False;
         if( pList )
             pList->Insert( new RscInconsistent( aRscId, aRscId ) );
     }
@@ -198,10 +198,10 @@ BOOL ObjNode::IsConsistent( RscInconsList * pList )
         if( Left() )
         {
             if( !((ObjNode *)Left())->IsConsistent( pList ) )
-                bRet = FALSE;
+                bRet = sal_False;
             if( ((ObjNode *)Left())->aRscId >= aRscId )
             {
-                bRet = FALSE;
+                bRet = sal_False;
                 if( pList )
                     pList->Insert(
                         new RscInconsistent( ((ObjNode *)Left())->GetRscId(),
@@ -212,14 +212,14 @@ BOOL ObjNode::IsConsistent( RscInconsList * pList )
         {
             if( ((ObjNode *)Right())->aRscId <= aRscId )
             {
-                bRet = FALSE;
+                bRet = sal_False;
                 if( pList )
                     pList->Insert(
                         new RscInconsistent( GetRscId(),
                                              ((ObjNode *)Right())->GetRscId() ) );
             }
             if( !((ObjNode *)Right())->IsConsistent( pList ) )
-                bRet = FALSE;
+                bRet = sal_False;
         };
     };
 

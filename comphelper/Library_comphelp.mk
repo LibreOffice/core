@@ -52,7 +52,7 @@ $(eval $(call gb_Library_add_linked_libs,comphelper,\
     ucbhelper \
     vos3 \
     stl \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,comphelper,\
@@ -154,11 +154,4 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/xml/ofopxmlhelper \
 ))
 
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,comphelper,\
-    dl \
-    m \
-    pthread \
-))
-endif
 # vim: set noet sw=4 ts=4:

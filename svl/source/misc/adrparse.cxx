@@ -774,7 +774,7 @@ SvAddressParser::SvAddressParser(UniString const & rInput): m_bHasFirst(false)
 //============================================================================
 SvAddressParser::~SvAddressParser()
 {
-    for (ULONG i = m_aRest.Count(); i != 0;)
+    for (sal_uLong i = m_aRest.Count(); i != 0;)
         delete m_aRest.Remove(--i);
 }
 

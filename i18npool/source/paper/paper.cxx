@@ -27,6 +27,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_i18npool.hxx"
+
+#include <osl/diagnose.h>
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
@@ -384,6 +386,9 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
 PaperInfo::PaperInfo(Paper eType) : m_eType(eType)
 {
+    OSL_ENSURE( sizeof(aDinTab) / sizeof(aDinTab[0]) == NUM_PAPER_ENTRIES,
+            "mismatch between array entries and enum values" );
+
     m_nPaperWidth = aDinTab[m_eType].m_nWidth;
     m_nPaperHeight = aDinTab[m_eType].m_nHeight;
 }

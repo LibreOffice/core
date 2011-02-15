@@ -26,6 +26,7 @@
 #*************************************************************************
 
 $(eval $(call gb_Package_Package,comphelper_inc,$(SRCDIR)/comphelper/inc))
+$(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/flagguard.hxx,comphelper/flagguard.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/stlunosequence.hxx,comphelper/stlunosequence.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/documentconstants.hxx,comphelper/documentconstants.hxx))
 $(eval $(call gb_Package_add_file,comphelper_inc,inc/comphelper/evtmethodhelper.hxx,comphelper/evtmethodhelper.hxx))

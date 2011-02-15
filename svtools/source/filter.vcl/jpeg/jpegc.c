@@ -100,13 +100,13 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
     jpeg_create_decompress( &cinfo );
     bDecompCreated = 1;
         jpeg_svstream_src( &cinfo, pIStm );
-    jpeg_read_header( &cinfo, TRUE );
+    jpeg_read_header( &cinfo, sal_True );
 
     cinfo.scale_num = 1;
     cinfo.scale_denom = 1;
     cinfo.output_gamma = 1.0;
-    cinfo.raw_data_out = FALSE;
-    cinfo.quantize_colors = FALSE;
+    cinfo.raw_data_out = sal_False;
+    cinfo.quantize_colors = sal_False;
     if ( cinfo.jpeg_color_space == JCS_YCbCr )
         cinfo.out_color_space = JCS_RGB;
     else if ( cinfo.jpeg_color_space == JCS_YCCK )
@@ -138,8 +138,8 @@ void ReadJPEG( void* pJPEGReader, void* pIStm, long* pLines )
         if( cinfo.scale_denom > 1 )
         {
             cinfo.dct_method            = JDCT_FASTEST;
-            cinfo.do_fancy_upsampling   = FALSE;
-            cinfo.do_block_smoothing    = FALSE;
+            cinfo.do_fancy_upsampling   = sal_False;
+            cinfo.do_block_smoothing    = sal_False;
         }
     }
 
@@ -253,12 +253,12 @@ long WriteJPEG( void* pJPEGWriter, void* pOStm,
     }
 
     jpeg_set_defaults( &cinfo );
-    jpeg_set_quality( &cinfo, (int) nQualityPercent, FALSE );
+    jpeg_set_quality( &cinfo, (int) nQualityPercent, sal_False );
 
     if ( ( nWidth > 128 ) || ( nHeight > 128 ) )
         jpeg_simple_progression( &cinfo );
 
-    jpeg_start_compress( &cinfo, TRUE );
+    jpeg_start_compress( &cinfo, sal_True );
 
     for( nY = 0; nY < nHeight; nY++ )
     {

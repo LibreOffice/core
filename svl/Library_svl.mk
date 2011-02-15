@@ -60,16 +60,8 @@ $(eval $(call gb_Library_add_linked_libs,svl,\
     ucbhelper \
     utl \
     vos3 \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
-
-$(eval $(call gb_Library_add_linked_system_libs,svl,\
-    dl \
-    icuuc \
-    m \
-    pthread \
-))
-
 
 $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/inc/pch/precompiled_svl \
@@ -166,26 +158,10 @@ $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/source/svdde/ddewrap \
 ))
 
-ifneq ($(USE_MINGW),)
-$(eval $(call gb_Library_add_linked_libs,svl,\
-    mingwthrd \
-    $(gb_MINGW_LIBSTDCPP) \
-    mingw32 \
-    $(gb_MINGW_LIBGCC) \
-    uwinapi \
-    mingwex \
-    advapi32 \
-    kernel32 \
-    gdi32 \
-    msvcrt \
-    shell32 \
-    user32 \
-))
-else
 $(eval $(call gb_Library_add_linked_libs,svl,\
     user32 \
 ))
-endif
+
 else
 $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/unx/source/svdde/ddedummy \

@@ -38,54 +38,54 @@
 // - CommandExtTextInputData -
 // ---------------------------
 
-#define EXTTEXTINPUT_ATTR_GRAYWAVELINE          ((USHORT)0x0100)
-#define EXTTEXTINPUT_ATTR_UNDERLINE             ((USHORT)0x0200)
-#define EXTTEXTINPUT_ATTR_BOLDUNDERLINE         ((USHORT)0x0400)
-#define EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE       ((USHORT)0x0800)
-#define EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE      ((USHORT)0x1000)
-#define EXTTEXTINPUT_ATTR_HIGHLIGHT             ((USHORT)0x2000)
-#define EXTTEXTINPUT_ATTR_REDTEXT               ((USHORT)0x4000)
-#define EXTTEXTINPUT_ATTR_HALFTONETEXT          ((USHORT)0x8000)
+#define EXTTEXTINPUT_ATTR_GRAYWAVELINE          ((sal_uInt16)0x0100)
+#define EXTTEXTINPUT_ATTR_UNDERLINE             ((sal_uInt16)0x0200)
+#define EXTTEXTINPUT_ATTR_BOLDUNDERLINE         ((sal_uInt16)0x0400)
+#define EXTTEXTINPUT_ATTR_DOTTEDUNDERLINE       ((sal_uInt16)0x0800)
+#define EXTTEXTINPUT_ATTR_DASHDOTUNDERLINE      ((sal_uInt16)0x1000)
+#define EXTTEXTINPUT_ATTR_HIGHLIGHT             ((sal_uInt16)0x2000)
+#define EXTTEXTINPUT_ATTR_REDTEXT               ((sal_uInt16)0x4000)
+#define EXTTEXTINPUT_ATTR_HALFTONETEXT          ((sal_uInt16)0x8000)
 
-#define EXTTEXTINPUT_CURSOR_INVISIBLE           ((USHORT)0x0001)
-#define EXTTEXTINPUT_CURSOR_OVERWRITE           ((USHORT)0x0002)
+#define EXTTEXTINPUT_CURSOR_INVISIBLE           ((sal_uInt16)0x0001)
+#define EXTTEXTINPUT_CURSOR_OVERWRITE           ((sal_uInt16)0x0002)
 
 class VCL_DLLPUBLIC CommandExtTextInputData
 {
 private:
     XubString           maText;
-    USHORT*             mpTextAttr;
+    sal_uInt16*             mpTextAttr;
     xub_StrLen          mnCursorPos;
     xub_StrLen          mnDeltaStart;
     xub_StrLen          mnOldTextLen;
-    USHORT              mnCursorFlags;
-    BOOL                mbOnlyCursor;
+    sal_uInt16              mnCursorFlags;
+    sal_Bool                mbOnlyCursor;
 
 public:
                         CommandExtTextInputData();
                         CommandExtTextInputData( const XubString& rText,
-                                                 const USHORT* pTextAttr,
+                                                 const sal_uInt16* pTextAttr,
                                                  xub_StrLen nCursorPos,
-                                                 USHORT nCursorFlags,
+                                                 sal_uInt16 nCursorFlags,
                                                  xub_StrLen nDeltaStart,
                                                  xub_StrLen nOldTextLen,
-                                                 BOOL bOnlyCursor );
+                                                 sal_Bool bOnlyCursor );
                         CommandExtTextInputData( const CommandExtTextInputData& rData );
                         ~CommandExtTextInputData();
 
     const XubString&    GetText() const { return maText; }
-    const USHORT*       GetTextAttr() const { return mpTextAttr; }
-    USHORT              GetCharTextAttr( USHORT nIndex ) const;
+    const sal_uInt16*       GetTextAttr() const { return mpTextAttr; }
+    sal_uInt16              GetCharTextAttr( sal_uInt16 nIndex ) const;
     xub_StrLen          GetCursorPos() const { return mnCursorPos; }
-    BOOL                IsCursorVisible() const { return (mnCursorFlags & EXTTEXTINPUT_CURSOR_INVISIBLE) == 0; }
-    BOOL                IsCursorOverwrite() const { return (mnCursorFlags & EXTTEXTINPUT_CURSOR_OVERWRITE) != 0; }
-    USHORT              GetCursorFlags() const { return mnCursorFlags; }
+    sal_Bool                IsCursorVisible() const { return (mnCursorFlags & EXTTEXTINPUT_CURSOR_INVISIBLE) == 0; }
+    sal_Bool                IsCursorOverwrite() const { return (mnCursorFlags & EXTTEXTINPUT_CURSOR_OVERWRITE) != 0; }
+    sal_uInt16              GetCursorFlags() const { return mnCursorFlags; }
     xub_StrLen          GetDeltaStart() const { return mnDeltaStart; }
     xub_StrLen          GetOldTextLen() const { return mnOldTextLen; }
-    BOOL                IsOnlyCursorChanged() const { return mbOnlyCursor; }
+    sal_Bool                IsOnlyCursorChanged() const { return mbOnlyCursor; }
 };
 
-inline USHORT CommandExtTextInputData::GetCharTextAttr( USHORT nIndex ) const
+inline sal_uInt16 CommandExtTextInputData::GetCharTextAttr( sal_uInt16 nIndex ) const
 {
     if ( mpTextAttr && (nIndex < maText.Len()) )
         return mpTextAttr[nIndex];
@@ -123,47 +123,47 @@ inline CommandInputContextData::CommandInputContextData( LanguageType eLang )
 // - CommandWheelData -
 // --------------------
 
-#define COMMAND_WHEEL_SCROLL            ((USHORT)0x0001)
-#define COMMAND_WHEEL_ZOOM              ((USHORT)0x0002)
-#define COMMAND_WHEEL_DATAZOOM          ((USHORT)0x0004)
+#define COMMAND_WHEEL_SCROLL            ((sal_uInt16)0x0001)
+#define COMMAND_WHEEL_ZOOM              ((sal_uInt16)0x0002)
+#define COMMAND_WHEEL_DATAZOOM          ((sal_uInt16)0x0004)
 
-#define COMMAND_WHEEL_PAGESCROLL        ((ULONG)0xFFFFFFFF)
+#define COMMAND_WHEEL_PAGESCROLL        ((sal_uLong)0xFFFFFFFF)
 
 class VCL_DLLPUBLIC CommandWheelData
 {
 private:
     long            mnDelta;
     long            mnNotchDelta;
-    ULONG           mnLines;
-    USHORT          mnMode;
-    USHORT          mnCode;
-    BOOL            mbHorz;
-    BOOL            mbDeltaIsPixel;
+    sal_uLong           mnLines;
+    sal_uInt16          mnMode;
+    sal_uInt16          mnCode;
+    sal_Bool            mbHorz;
+    sal_Bool            mbDeltaIsPixel;
 
 public:
                     CommandWheelData();
                     CommandWheelData( long nWheelDelta, long nWheelNotchDelta,
-                                      ULONG nScrollLines,
-                                      USHORT nWheelMode, USHORT nKeyModifier,
-                                      BOOL bHorz = FALSE, BOOL bDeltaIsPixel = FALSE );
+                                      sal_uLong nScrollLines,
+                                      sal_uInt16 nWheelMode, sal_uInt16 nKeyModifier,
+                                      sal_Bool bHorz = sal_False, sal_Bool bDeltaIsPixel = sal_False );
 
     long            GetDelta() const { return mnDelta; }
     long            GetNotchDelta() const { return mnNotchDelta; }
-    ULONG           GetScrollLines() const { return mnLines; }
-    BOOL            IsHorz() const { return mbHorz; }
-    BOOL            IsDeltaPixel() const { return mbDeltaIsPixel; }
+    sal_uLong           GetScrollLines() const { return mnLines; }
+    sal_Bool            IsHorz() const { return mbHorz; }
+    sal_Bool            IsDeltaPixel() const { return mbDeltaIsPixel; }
 
-    USHORT          GetMode() const { return mnMode; }
+    sal_uInt16          GetMode() const { return mnMode; }
 
-    USHORT          GetModifier() const
+    sal_uInt16          GetModifier() const
                         { return (mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)); }
-    BOOL            IsShift() const
+    sal_Bool            IsShift() const
                         { return ((mnCode & KEY_SHIFT) != 0); }
-    BOOL            IsMod1() const
+    sal_Bool            IsMod1() const
                         { return ((mnCode & KEY_MOD1) != 0); }
-    BOOL            IsMod2() const
+    sal_Bool            IsMod2() const
                         { return ((mnCode & KEY_MOD2) != 0); }
-    BOOL            IsMod3() const
+    sal_Bool            IsMod3() const
                         { return ((mnCode & KEY_MOD3) != 0); }
 };
 
@@ -174,14 +174,14 @@ inline CommandWheelData::CommandWheelData()
     mnLines         = 0;
     mnMode          = 0;
     mnCode          = 0;
-    mbHorz          = FALSE;
-    mbDeltaIsPixel  = FALSE;
+    mbHorz          = sal_False;
+    mbDeltaIsPixel  = sal_False;
 }
 
 inline CommandWheelData::CommandWheelData( long nWheelDelta, long nWheelNotchDelta,
-                                           ULONG nScrollLines,
-                                           USHORT nWheelMode, USHORT nKeyModifier,
-                                           BOOL bHorz, BOOL bDeltaIsPixel )
+                                           sal_uLong nScrollLines,
+                                           sal_uInt16 nWheelMode, sal_uInt16 nKeyModifier,
+                                           sal_Bool bHorz, sal_Bool bDeltaIsPixel )
 {
     mnDelta         = nWheelDelta;
     mnNotchDelta    = nWheelNotchDelta;
@@ -236,17 +236,17 @@ class VCL_DLLPUBLIC CommandVoiceData
 {
 private:
     XubString               maText;
-    USHORT                  mnCommand;
+    sal_uInt16                  mnCommand;
     DictationCommandType    meType;
 
 public:
                             CommandVoiceData();
                             CommandVoiceData( const XubString& rStr,
                                               DictationCommandType eType,
-                                              USHORT nCommand );
+                                              sal_uInt16 nCommand );
 
     const XubString&        GetText() const { return maText; }
-    USHORT                  GetCommand() const { return mnCommand; }
+    sal_uInt16                  GetCommand() const { return mnCommand; }
     DictationCommandType    GetType() const { return meType; }
 };
 
@@ -258,7 +258,7 @@ inline CommandVoiceData::CommandVoiceData()
 
 inline CommandVoiceData::CommandVoiceData( const XubString& rStr,
                                            DictationCommandType eType,
-                                           USHORT nCommand ) :
+                                           sal_uInt16 nCommand ) :
     maText( rStr ),
     mnCommand( nCommand ),
     meType( eType )
@@ -272,26 +272,26 @@ inline CommandVoiceData::CommandVoiceData( const XubString& rStr,
 class VCL_DLLPUBLIC CommandModKeyData
 {
 private:
-    USHORT          mnCode;
+    sal_uInt16          mnCode;
 
 public:
                     CommandModKeyData();
-                    CommandModKeyData( USHORT nCode );
+                    CommandModKeyData( sal_uInt16 nCode );
 
-    BOOL            IsShift()   const { return (mnCode & MODKEY_SHIFT) ? TRUE : FALSE; }
-    BOOL            IsMod1()    const { return (mnCode & MODKEY_MOD1) ? TRUE : FALSE; }
-    BOOL            IsMod2()    const { return (mnCode & MODKEY_MOD2) ? TRUE : FALSE; }
-    BOOL            IsMod3()    const { return (mnCode & MODKEY_MOD3) ? TRUE : FALSE; }
+    sal_Bool            IsShift()   const { return (mnCode & MODKEY_SHIFT) ? sal_True : sal_False; }
+    sal_Bool            IsMod1()    const { return (mnCode & MODKEY_MOD1) ? sal_True : sal_False; }
+    sal_Bool            IsMod2()    const { return (mnCode & MODKEY_MOD2) ? sal_True : sal_False; }
+    sal_Bool            IsMod3()    const { return (mnCode & MODKEY_MOD3) ? sal_True : sal_False; }
 
-    BOOL            IsLeftShift() const { return (mnCode & MODKEY_LSHIFT) ? TRUE : FALSE; }
-    BOOL            IsLeftMod1()  const { return (mnCode & MODKEY_LMOD1) ? TRUE : FALSE; }
-    BOOL            IsLeftMod2()  const { return (mnCode & MODKEY_LMOD2) ? TRUE : FALSE; }
-    BOOL            IsLeftMod3()  const { return (mnCode & MODKEY_LMOD3) ? TRUE : FALSE; }
+    sal_Bool            IsLeftShift() const { return (mnCode & MODKEY_LSHIFT) ? sal_True : sal_False; }
+    sal_Bool            IsLeftMod1()  const { return (mnCode & MODKEY_LMOD1) ? sal_True : sal_False; }
+    sal_Bool            IsLeftMod2()  const { return (mnCode & MODKEY_LMOD2) ? sal_True : sal_False; }
+    sal_Bool            IsLeftMod3()  const { return (mnCode & MODKEY_LMOD3) ? sal_True : sal_False; }
 
-    BOOL            IsRightShift() const { return (mnCode & MODKEY_RSHIFT) ? TRUE : FALSE; }
-    BOOL            IsRightMod1()  const { return (mnCode & MODKEY_RMOD1) ? TRUE : FALSE; }
-    BOOL            IsRightMod2()  const { return (mnCode & MODKEY_RMOD2) ? TRUE : FALSE; }
-    BOOL            IsRightMod3()  const { return (mnCode & MODKEY_RMOD3) ? TRUE : FALSE; }
+    sal_Bool            IsRightShift() const { return (mnCode & MODKEY_RSHIFT) ? sal_True : sal_False; }
+    sal_Bool            IsRightMod1()  const { return (mnCode & MODKEY_RMOD1) ? sal_True : sal_False; }
+    sal_Bool            IsRightMod2()  const { return (mnCode & MODKEY_RMOD2) ? sal_True : sal_False; }
+    sal_Bool            IsRightMod3()  const { return (mnCode & MODKEY_RMOD3) ? sal_True : sal_False; }
 };
 
 inline CommandModKeyData::CommandModKeyData()
@@ -299,7 +299,7 @@ inline CommandModKeyData::CommandModKeyData()
     mnCode = 0L;
 }
 
-inline CommandModKeyData::CommandModKeyData( USHORT nCode )
+inline CommandModKeyData::CommandModKeyData( sal_uInt16 nCode )
 {
     mnCode = nCode;
 }
@@ -357,15 +357,15 @@ class VCL_DLLPUBLIC CommandDialogData
 class VCL_DLLPUBLIC CommandSelectionChangeData
 {
 private:
-    ULONG          mnStart;
-    ULONG          mnEnd;
+    sal_uLong          mnStart;
+    sal_uLong          mnEnd;
 
 public:
     CommandSelectionChangeData();
-    CommandSelectionChangeData( ULONG nStart, ULONG nEnd );
+    CommandSelectionChangeData( sal_uLong nStart, sal_uLong nEnd );
 
-    ULONG          GetStart() const { return mnStart; }
-    ULONG          GetEnd() const { return mnEnd; }
+    sal_uLong          GetStart() const { return mnStart; }
+    sal_uLong          GetEnd() const { return mnEnd; }
 };
 
 inline CommandSelectionChangeData::CommandSelectionChangeData()
@@ -373,8 +373,8 @@ inline CommandSelectionChangeData::CommandSelectionChangeData()
     mnStart = mnEnd = 0;
 }
 
-inline CommandSelectionChangeData::CommandSelectionChangeData( ULONG nStart,
-                                   ULONG nEnd )
+inline CommandSelectionChangeData::CommandSelectionChangeData( sal_uLong nStart,
+                                   sal_uLong nEnd )
 {
     mnStart = nStart;
     mnEnd = nEnd;
@@ -384,43 +384,43 @@ inline CommandSelectionChangeData::CommandSelectionChangeData( ULONG nStart,
 // - CommandEvent -
 // ----------------
 
-#define COMMAND_CONTEXTMENU             ((USHORT)1)
-#define COMMAND_STARTDRAG               ((USHORT)2)
-#define COMMAND_WHEEL                   ((USHORT)3)
-#define COMMAND_STARTAUTOSCROLL         ((USHORT)4)
-#define COMMAND_AUTOSCROLL              ((USHORT)5)
-#define COMMAND_VOICE                   ((USHORT)6)
-#define COMMAND_STARTEXTTEXTINPUT       ((USHORT)7)
-#define COMMAND_EXTTEXTINPUT            ((USHORT)8)
-#define COMMAND_ENDEXTTEXTINPUT         ((USHORT)9)
-#define COMMAND_INPUTCONTEXTCHANGE      ((USHORT)10)
-#define COMMAND_CURSORPOS               ((USHORT)11)
-#define COMMAND_PASTESELECTION          ((USHORT)12)
-#define COMMAND_MODKEYCHANGE            ((USHORT)13)
-#define COMMAND_HANGUL_HANJA_CONVERSION ((USHORT)14)
-#define COMMAND_INPUTLANGUAGECHANGE     ((USHORT)15)
-#define COMMAND_SHOWDIALOG              ((USHORT)16)
-#define COMMAND_MEDIA                   ((USHORT)17)
-#define COMMAND_SELECTIONCHANGE         ((USHORT)18)
-#define COMMAND_PREPARERECONVERSION     ((USHORT)19)
-#define COMMAND_USER                    ((USHORT)4096)
+#define COMMAND_CONTEXTMENU             ((sal_uInt16)1)
+#define COMMAND_STARTDRAG               ((sal_uInt16)2)
+#define COMMAND_WHEEL                   ((sal_uInt16)3)
+#define COMMAND_STARTAUTOSCROLL         ((sal_uInt16)4)
+#define COMMAND_AUTOSCROLL              ((sal_uInt16)5)
+#define COMMAND_VOICE                   ((sal_uInt16)6)
+#define COMMAND_STARTEXTTEXTINPUT       ((sal_uInt16)7)
+#define COMMAND_EXTTEXTINPUT            ((sal_uInt16)8)
+#define COMMAND_ENDEXTTEXTINPUT         ((sal_uInt16)9)
+#define COMMAND_INPUTCONTEXTCHANGE      ((sal_uInt16)10)
+#define COMMAND_CURSORPOS               ((sal_uInt16)11)
+#define COMMAND_PASTESELECTION          ((sal_uInt16)12)
+#define COMMAND_MODKEYCHANGE            ((sal_uInt16)13)
+#define COMMAND_HANGUL_HANJA_CONVERSION ((sal_uInt16)14)
+#define COMMAND_INPUTLANGUAGECHANGE     ((sal_uInt16)15)
+#define COMMAND_SHOWDIALOG              ((sal_uInt16)16)
+#define COMMAND_MEDIA                   ((sal_uInt16)17)
+#define COMMAND_SELECTIONCHANGE         ((sal_uInt16)18)
+#define COMMAND_PREPARERECONVERSION     ((sal_uInt16)19)
+#define COMMAND_USER                    ((sal_uInt16)4096)
 
 class VCL_DLLPUBLIC CommandEvent
 {
 private:
     Point                               maPos;
     void*                               mpData;
-    USHORT                              mnCommand;
-    BOOL                                mbMouseEvent;
+    sal_uInt16                              mnCommand;
+    sal_Bool                                mbMouseEvent;
 
 public:
                                         CommandEvent();
-                                        CommandEvent( const Point& rMousePos, USHORT nCmd,
-                                                      BOOL bMEvt = FALSE, const void* pCmdData = NULL );
+                                        CommandEvent( const Point& rMousePos, sal_uInt16 nCmd,
+                                                      sal_Bool bMEvt = sal_False, const void* pCmdData = NULL );
 
-    USHORT                              GetCommand() const { return mnCommand; }
+    sal_uInt16                              GetCommand() const { return mnCommand; }
     const Point&                        GetMousePosPixel() const { return maPos; }
-    BOOL                                IsMouseEvent() const { return mbMouseEvent; }
+    sal_Bool                                IsMouseEvent() const { return mbMouseEvent; }
     void*                               GetData() const { return mpData; }
 
     const CommandExtTextInputData*      GetExtTextInputData() const;
@@ -438,11 +438,11 @@ inline CommandEvent::CommandEvent()
 {
     mpData          = NULL;
     mnCommand       = 0;
-    mbMouseEvent    = FALSE;
+    mbMouseEvent    = sal_False;
 }
 
 inline CommandEvent::CommandEvent( const Point& rMousePos,
-                                   USHORT nCmd, BOOL bMEvt, const void* pCmdData ) :
+                                   sal_uInt16 nCmd, sal_Bool bMEvt, const void* pCmdData ) :
             maPos( rMousePos )
 {
     mpData          = (void*)pCmdData;

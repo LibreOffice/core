@@ -53,7 +53,7 @@ $(eval $(call gb_Library_add_linked_libs,sot,\
     ucbhelper \
     stl \
     utl \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sot,\
@@ -77,13 +77,5 @@ $(eval $(call gb_Library_add_exception_objects,sot,\
     sot/source/sdstor/ucbstorage \
     sot/source/sdstor/unostorageholder \
 ))
-
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,sot,\
-    dl \
-    m \
-    pthread \
-))
-endif
 
 # vim: set noet sw=4 ts=4:

@@ -99,7 +99,7 @@ namespace svt
         m_aPreferredSize.Height() += aSize.Height() - aOutputSize.Height();
 
         SetPointer(Pointer(POINTER_REFHAND));
-        AlwaysEnableInput( TRUE, TRUE );
+        AlwaysEnableInput( sal_True, sal_True );
 
         // unique id for the testtool
         SetUniqueId( HID_HELPAGENT_WINDOW );

@@ -43,14 +43,14 @@ protected:
     REResourceList*  pParent;
     RscId            aRscId;    //Id und Name des Resourceobjektes
     ByteString       aClassName;
-    BOOL             bVisible;
+    sal_Bool             bVisible;
 
 public:
                      REResourceList();
                      REResourceList( REResourceList * pParentList,
                                      ByteString& rClassName,
                                      const RscId & rResourceID,
-                                     BOOL   bVisible = FALSE );
+                                     sal_Bool   bVisible = sal_False );
                      ~REResourceList();
 
     REResourceList*  GetParent()     { return pParent; }
@@ -59,9 +59,9 @@ public:
     RscId            GetRscId()      { return aRscId; }
     void             SetRscId( const RscId & rId ){ aRscId = rId; }
 
-    void             SetVisible( BOOL bVis )
+    void             SetVisible( sal_Bool bVis )
                                      { bVisible = bVis; }
-    BOOL             IsVisible()     { return bVisible; }
+    sal_Bool             IsVisible()     { return bVisible; }
 };
 
 #endif // _RSCLST_HXX

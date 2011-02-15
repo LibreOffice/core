@@ -532,6 +532,8 @@ void UnoControlModel::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
     aEvt.Source = (::com::sun::star::uno::XAggregation*)(::cppu::OWeakAggObject*)this;
     maDisposeListeners.disposeAndClear( aEvt );
 
+    BrdcstHelper.aLC.disposeAndClear( aEvt );
+
     // let the property set helper notify our property listeners
     OPropertySetHelper::disposing();
 }
@@ -1153,7 +1155,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
             }
             else
             {
-                BOOL bConverted = FALSE;
+                sal_Bool bConverted = sal_False;
                 // 13.03.2001 - 84923 - frank.schoenheit@germany.sun.com
 
                 switch (pDestType->getTypeClass())
