@@ -136,7 +136,7 @@ String SCSTR_PREVIEWSHELL
 
 String SCSTR_PIVOTSHELL
 {
-    Text [ en-US ] = "Data Pilot Tables" ;
+    Text [ en-US ] = "Pivot Tables" ;
 };
 
 String SCSTR_AUDITSHELL
@@ -700,17 +700,17 @@ String STR_ACC_EDITCELL_DESCR
 
 String STR_ACC_DATAPILOT_ROW_DESCR
 {
-    Text [ en-US ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text [ en-US ] = "Fields that you drop here will be displayed as rows in the final pivot table.";
 };
 
 String STR_ACC_DATAPILOT_COL_DESCR
 {
-    Text [ en-US ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text [ en-US ] = "Fields that you drop here will be displayed as columns in the final pivot table.";
 };
 
 String STR_ACC_DATAPILOT_DATA_DESCR
 {
-    Text [ en-US ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text [ en-US ] = "Fields that you drop here will be used for calculations in the final pivot table.";
 };
 
 String STR_ACC_DATAPILOT_SEL_DESCR

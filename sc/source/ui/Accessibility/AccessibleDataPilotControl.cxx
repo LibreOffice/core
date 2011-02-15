@@ -31,17 +31,11 @@
 #include "unoguard.hxx"
 #include "fieldwnd.hxx"
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
-#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
-#endif
 #include <rtl/uuid.h>
 #include <tools/gen.hxx>
 #include <toolkit/helper/convert.hxx>
@@ -58,7 +52,7 @@ public:
     ScAccessibleDataPilotButton(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>& rxParent,
-        ScDPFieldWindow* pDPFieldWindow,
+        ScPivotFieldWindow* pFieldWindow,
         sal_Int32 nIndex);
 
     virtual void Init();
@@ -151,20 +145,20 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    ScDPFieldWindow* mpDPFieldWindow;
+    ScPivotFieldWindow* mpFieldWindow;
     sal_Int32        mnIndex;
 };
 
     //=====  internal  ========================================================
 ScAccessibleDataPilotControl::ScAccessibleDataPilotControl(
         const uno::Reference<XAccessible>& rxParent,
-        ScDPFieldWindow* pDPFieldWindow)
+        ScPivotFieldWindow* pFieldWindow)
         :
     ScAccessibleContextBase(rxParent, AccessibleRole::GROUP_BOX),
-    mpDPFieldWindow(pDPFieldWindow)
+    mpFieldWindow(pFieldWindow)
 {
-    if (mpDPFieldWindow)
-        maChildren.resize(mpDPFieldWindow->GetFieldCount());
+    if (mpFieldWindow)
+        maChildren.resize(mpFieldWindow->GetFieldCount());
 }
 
 ScAccessibleDataPilotControl::~ScAccessibleDataPilotControl(void)
@@ -185,7 +179,7 @@ void ScAccessibleDataPilotControl::Init()
 void SAL_CALL ScAccessibleDataPilotControl::disposing()
 {
     ScUnoGuard aGuard;
-    mpDPFieldWindow = NULL;
+    mpFieldWindow = NULL;
 
     ScAccessibleContextBase::disposing();
 }
@@ -193,12 +187,12 @@ void SAL_CALL ScAccessibleDataPilotControl::disposing()
 void ScAccessibleDataPilotControl::AddField(sal_Int32 nNewIndex)
 {
     sal_Bool bAdded(sal_False);
-    if (static_cast<sal_uInt32>(nNewIndex) == maChildren.size())
+    if (static_cast<size_t>(nNewIndex) == maChildren.size())
     {
         maChildren.push_back(AccessibleWeak());
         bAdded = sal_True;
     }
-    else if (static_cast<sal_uInt32>(nNewIndex) < maChildren.size())
+    else if (static_cast<size_t>(nNewIndex) < maChildren.size())
     {
         ::std::vector < AccessibleWeak >::iterator aItr = maChildren.begin() + nNewIndex;
         maChildren.insert(aItr, AccessibleWeak());
@@ -238,7 +232,7 @@ void ScAccessibleDataPilotControl::RemoveField(sal_Int32 nOldIndex)
     sal_Bool bRemoved(sal_False);
     uno::Reference< XAccessible > xTempAcc;
     ScAccessibleDataPilotButton* pField = NULL;
-    if (static_cast<sal_uInt32>(nOldIndex) < maChildren.size())
+    if (static_cast<size_t>(nOldIndex) < maChildren.size())
     {
         xTempAcc = getAccessibleChild(nOldIndex);
         pField = maChildren[nOldIndex].pAcc;
@@ -279,8 +273,8 @@ void ScAccessibleDataPilotControl::RemoveField(sal_Int32 nOldIndex)
 
 void ScAccessibleDataPilotControl::FieldFocusChange(sal_Int32 nOldIndex, sal_Int32 nNewIndex)
 {
-    DBG_ASSERT(static_cast<sal_uInt32>(nOldIndex) < maChildren.size() &&
-                static_cast<sal_uInt32>(nNewIndex) < maChildren.size(), "did not recognize a child count change");
+    DBG_ASSERT(static_cast<size_t>(nOldIndex) < maChildren.size() &&
+                static_cast<size_t>(nNewIndex) < maChildren.size(), "did not recognize a child count change");
 
     uno::Reference < XAccessible > xTempAcc = maChildren[nOldIndex].xWeakAcc;
     if (xTempAcc.is() && maChildren[nOldIndex].pAcc)
@@ -293,7 +287,7 @@ void ScAccessibleDataPilotControl::FieldFocusChange(sal_Int32 nOldIndex, sal_Int
 
 void ScAccessibleDataPilotControl::FieldNameChange(sal_Int32 nIndex)
 {
-    DBG_ASSERT(static_cast<sal_uInt32>(nIndex) < maChildren.size(), "did not recognize a child count change");
+    DBG_ASSERT(static_cast<size_t>(nIndex) < maChildren.size(), "did not recognize a child count change");
 
     uno::Reference < XAccessible > xTempAcc = maChildren[nIndex].xWeakAcc;
     if (xTempAcc.is() && maChildren[nIndex].pAcc)
@@ -302,11 +296,11 @@ void ScAccessibleDataPilotControl::FieldNameChange(sal_Int32 nIndex)
 
 void ScAccessibleDataPilotControl::GotFocus()
 {
-    if (mpDPFieldWindow)
+    if (mpFieldWindow)
     {
-        DBG_ASSERT(static_cast<sal_uInt32>(mpDPFieldWindow->GetFieldCount()) == maChildren.size(), "did not recognize a child count change");
+        DBG_ASSERT(mpFieldWindow->GetFieldCount() == maChildren.size(), "did not recognize a child count change");
 
-        sal_Int32 nIndex(mpDPFieldWindow->GetSelectedField());
+        sal_Int32 nIndex(mpFieldWindow->GetSelectedIndex());
         uno::Reference < XAccessible > xTempAcc = maChildren[nIndex].xWeakAcc;
         if (xTempAcc.is() && maChildren[nIndex].pAcc)
             maChildren[nIndex].pAcc->SetFocused();
@@ -315,11 +309,11 @@ void ScAccessibleDataPilotControl::GotFocus()
 
 void ScAccessibleDataPilotControl::LostFocus()
 {
-    if (mpDPFieldWindow)
+    if (mpFieldWindow)
     {
-        DBG_ASSERT(static_cast<sal_uInt32>(mpDPFieldWindow->GetFieldCount()) == maChildren.size(), "did not recognize a child count change");
+        DBG_ASSERT(mpFieldWindow->GetFieldCount() == maChildren.size(), "did not recognize a child count change");
 
-        sal_Int32 nIndex(mpDPFieldWindow->GetSelectedField());
+        sal_Int32 nIndex(mpFieldWindow->GetSelectedIndex());
         uno::Reference < XAccessible > xTempAcc = maChildren[nIndex].xWeakAcc;
         if (xTempAcc.is() && maChildren[nIndex].pAcc)
             maChildren[nIndex].pAcc->ResetFocused();
@@ -337,13 +331,13 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDataPilotControl::getAccessib
     {
         ScUnoGuard aGuard;
         IsObjectValid();
-        if (mpDPFieldWindow)
+        if (mpFieldWindow)
         {
             Point aAbsPoint(VCLPoint(rPoint));
             Point aControlEdge(GetBoundingBoxOnScreen().TopLeft());
             Point aRelPoint(aAbsPoint - aControlEdge);
-            size_t nChildIndex(0);
-            if (mpDPFieldWindow->GetFieldIndex(aRelPoint, nChildIndex))
+            size_t nChildIndex = mpFieldWindow->GetFieldIndex( aRelPoint );
+            if( nChildIndex != PIVOTFIELD_INVALID )
                 xAcc = getAccessibleChild(static_cast< long >( nChildIndex ));
         }
     }
@@ -361,8 +355,8 @@ void SAL_CALL ScAccessibleDataPilotControl::grabFocus(  )
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-    if (mpDPFieldWindow)
-        mpDPFieldWindow->GrabFocus();
+    if (mpFieldWindow)
+        mpFieldWindow->GrabFocus();
 }
 
 sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getForeground(  )
@@ -371,9 +365,9 @@ sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getForeground(  )
     ScUnoGuard aGuard;
     IsObjectValid();
     sal_Int32 nColor(0);
-    if (mpDPFieldWindow)
+    if (mpFieldWindow)
     {
-        nColor = mpDPFieldWindow->GetSettings().GetStyleSettings().GetWindowTextColor().GetColor();
+        nColor = mpFieldWindow->GetSettings().GetStyleSettings().GetWindowTextColor().GetColor();
     }
     return nColor;
 }
@@ -384,16 +378,10 @@ sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getBackground(  )
     ScUnoGuard aGuard;
     IsObjectValid();
     sal_Int32 nColor(0);
-    if (mpDPFieldWindow)
+    if (mpFieldWindow)
     {
-        if (mpDPFieldWindow->GetType() == TYPE_SELECT)
-        {
-            nColor = mpDPFieldWindow->GetSettings().GetStyleSettings().GetFaceColor().GetColor();
-        }
-        else
-        {
-            nColor = mpDPFieldWindow->GetSettings().GetStyleSettings().GetWindowColor().GetColor();
-        }
+        const StyleSettings& rStyleSett = mpFieldWindow->GetSettings().GetStyleSettings();
+        nColor = (mpFieldWindow->GetType() == PIVOTFIELDTYPE_SELECT) ? rStyleSett.GetFaceColor().GetColor() : rStyleSett.GetWindowColor().GetColor();
     }
     return nColor;
 }
@@ -405,8 +393,8 @@ sal_Int32 SAL_CALL ScAccessibleDataPilotControl::getAccessibleChildCount(void)
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-    if (mpDPFieldWindow)
-        return mpDPFieldWindow->GetFieldCount();
+    if (mpFieldWindow)
+        return mpFieldWindow->GetFieldCount();
     else
         return 0;
 }
@@ -417,17 +405,17 @@ uno::Reference< XAccessible> SAL_CALL ScAccessibleDataPilotControl::getAccessibl
     ScUnoGuard aGuard;
     IsObjectValid();
     uno::Reference<XAccessible> xAcc;
-    if (mpDPFieldWindow)
+    if (mpFieldWindow)
     {
-        if (nIndex < 0 || static_cast< size_t >( nIndex ) >= mpDPFieldWindow->GetFieldCount())
+        if (nIndex < 0 || static_cast< size_t >( nIndex ) >= mpFieldWindow->GetFieldCount())
             throw lang::IndexOutOfBoundsException();
 
-        DBG_ASSERT(static_cast<sal_uInt32>(mpDPFieldWindow->GetFieldCount()) == maChildren.size(), "did not recognize a child count change");
+        DBG_ASSERT(mpFieldWindow->GetFieldCount() == maChildren.size(), "did not recognize a child count change");
 
         uno::Reference < XAccessible > xTempAcc = maChildren[nIndex].xWeakAcc;
         if (!xTempAcc.is())
         {
-            maChildren[nIndex].pAcc = new ScAccessibleDataPilotButton(this, mpDPFieldWindow, nIndex);
+            maChildren[nIndex].pAcc = new ScAccessibleDataPilotButton(this, mpFieldWindow, nIndex);
             xTempAcc = maChildren[nIndex].pAcc;
             maChildren[nIndex].xWeakAcc = xTempAcc;
         }
@@ -491,8 +479,8 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotControl::getImplementation
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-    if (mpDPFieldWindow)
-        return mpDPFieldWindow->GetDescription();
+    if (mpFieldWindow)
+        return mpFieldWindow->GetDescription();
 
     return rtl::OUString();
 }
@@ -502,8 +490,8 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotControl::getImplementation
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-    if (mpDPFieldWindow)
-        return mpDPFieldWindow->GetName();
+    if (mpFieldWindow)
+        return mpFieldWindow->GetName();
 
     return rtl::OUString();
 }
@@ -511,8 +499,8 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotControl::getImplementation
 Rectangle ScAccessibleDataPilotControl::GetBoundingBoxOnScreen(void) const
         throw (uno::RuntimeException)
 {
-    if (mpDPFieldWindow)
-        return mpDPFieldWindow->GetWindowExtentsRelative(NULL);
+    if (mpFieldWindow)
+        return mpFieldWindow->GetWindowExtentsRelative(NULL);
     else
         return Rectangle();
 }
@@ -520,8 +508,8 @@ Rectangle ScAccessibleDataPilotControl::GetBoundingBoxOnScreen(void) const
 Rectangle ScAccessibleDataPilotControl::GetBoundingBox(void) const
         throw (uno::RuntimeException)
 {
-    if (mpDPFieldWindow)
-        return mpDPFieldWindow->GetWindowExtentsRelative(mpDPFieldWindow->GetAccessibleParentWindow());
+    if (mpFieldWindow)
+        return mpFieldWindow->GetWindowExtentsRelative(mpFieldWindow->GetAccessibleParentWindow());
     else
         return Rectangle();
 }
@@ -532,10 +520,10 @@ Rectangle ScAccessibleDataPilotControl::GetBoundingBox(void) const
 ScAccessibleDataPilotButton::ScAccessibleDataPilotButton(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>& rxParent,
-        ScDPFieldWindow* pDPFieldWindow,
+        ScPivotFieldWindow* pFieldWindow,
         sal_Int32 nIndex)
     : ScAccessibleContextBase(rxParent, AccessibleRole::PUSH_BUTTON),
-    mpDPFieldWindow(pDPFieldWindow),
+    mpFieldWindow(pFieldWindow),
     mnIndex(nIndex)
 {
 }
@@ -558,7 +546,7 @@ void ScAccessibleDataPilotButton::Init()
 void SAL_CALL ScAccessibleDataPilotButton::disposing()
 {
     ScUnoGuard aGuard;
-    mpDPFieldWindow = NULL;
+    mpFieldWindow = NULL;
 
     ScAccessibleContextBase::disposing();
 }
@@ -593,9 +581,9 @@ void SAL_CALL ScAccessibleDataPilotButton::grabFocus(  )
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-    if (mpDPFieldWindow)
+    if (mpFieldWindow)
     {
-        mpDPFieldWindow->GrabFocusWithSel(getAccessibleIndexInParent());
+        mpFieldWindow->GrabFocusAndSelect(getAccessibleIndexInParent());
     }
 }
 
@@ -605,9 +593,9 @@ throw (uno::RuntimeException)
     ScUnoGuard aGuard;
     IsObjectValid();
     sal_Int32 nColor(0);
-    if (mpDPFieldWindow)
+    if (mpFieldWindow)
     {
-        nColor = mpDPFieldWindow->GetSettings().GetStyleSettings().GetButtonTextColor().GetColor();
+        nColor = mpFieldWindow->GetSettings().GetStyleSettings().GetButtonTextColor().GetColor();
     }
     return nColor;
 }
@@ -618,9 +606,9 @@ throw (uno::RuntimeException)
     ScUnoGuard aGuard;
     IsObjectValid();
     sal_Int32 nColor(0);
-    if (mpDPFieldWindow)
+    if (mpFieldWindow)
     {
-        nColor = mpDPFieldWindow->GetSettings().GetStyleSettings().GetFaceColor().GetColor();
+        nColor = mpFieldWindow->GetSettings().GetStyleSettings().GetFaceColor().GetColor();
     }
     return nColor;
 }
@@ -663,7 +651,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotButton::getAcc
         pStateSet->AddState(AccessibleStateType::ENABLED);
         pStateSet->AddState(AccessibleStateType::OPAQUE);
         pStateSet->AddState(AccessibleStateType::FOCUSABLE);
-        if (mpDPFieldWindow && (sal::static_int_cast<sal_Int32>(mpDPFieldWindow->GetSelectedField()) == mnIndex))
+        if (mpFieldWindow && (sal::static_int_cast<sal_Int32>(mpFieldWindow->GetSelectedIndex()) == mnIndex))
             pStateSet->AddState(AccessibleStateType::FOCUSED);
         if (isShowing())
             pStateSet->AddState(AccessibleStateType::SHOWING);
@@ -709,8 +697,8 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessibleDataPilotButton::getImplementationI
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-    if (mpDPFieldWindow)
-        return mpDPFieldWindow->GetFieldText(getAccessibleIndexInParent());
+    if (mpFieldWindow)
+        return mpFieldWindow->GetFieldText(getAccessibleIndexInParent());
 
     return rtl::OUString();
 }
@@ -720,9 +708,9 @@ Rectangle ScAccessibleDataPilotButton::GetBoundingBoxOnScreen(void) const
 {
     Rectangle aRect(GetBoundingBox());
 
-    if (mpDPFieldWindow)
+    if (mpFieldWindow)
     {
-        Point aParentPos(mpDPFieldWindow->GetWindowExtentsRelative(NULL).TopLeft());
+        Point aParentPos(mpFieldWindow->GetWindowExtentsRelative(NULL).TopLeft());
         aRect.Move(aParentPos.getX(), aParentPos.getY());
     }
 
@@ -732,8 +720,8 @@ Rectangle ScAccessibleDataPilotButton::GetBoundingBoxOnScreen(void) const
 Rectangle ScAccessibleDataPilotButton::GetBoundingBox(void) const
         throw (::com::sun::star::uno::RuntimeException)
 {
-    if (mpDPFieldWindow)
-        return Rectangle (mpDPFieldWindow->GetFieldPosition(const_cast<ScAccessibleDataPilotButton*> (this)->getAccessibleIndexInParent()), mpDPFieldWindow->GetFieldSize());
+    if (mpFieldWindow)
+        return Rectangle (mpFieldWindow->GetFieldPosition(const_cast<ScAccessibleDataPilotButton*> (this)->getAccessibleIndexInParent()), mpFieldWindow->GetFieldSize());
     else
         return Rectangle();
 }
