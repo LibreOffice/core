@@ -74,9 +74,9 @@ class DrawAnnotationContext : public SvXMLImportContext
 {
 
 public:
-    DrawAnnotationContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLocalName,const Reference< xml::sax::XAttributeList>& xAttrList, const Reference< XAnnotationAccess >& xAnnotationAccess );
+    DrawAnnotationContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,const Reference< xml::sax::XAttributeList>& xAttrList, const Reference< XAnnotationAccess >& xAnnotationAccess );
 
-    virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
+    virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
     virtual void EndElement();
 
 private:
@@ -87,7 +87,7 @@ private:
     OUStringBuffer maDateBuffer;
 };
 
-DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, USHORT nPrfx, const OUString& rLocalName,const Reference< xml::sax::XAttributeList>& xAttrList, const Reference< XAnnotationAccess >& xAnnotationAccess )
+DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName,const Reference< xml::sax::XAttributeList>& xAttrList, const Reference< XAnnotationAccess >& xAnnotationAccess )
 : SvXMLImportContext( rImport, nPrfx, rLocalName )
 , mxAnnotation( xAnnotationAccess->createAndInsertAnnotation() )
 {
@@ -141,7 +141,7 @@ DrawAnnotationContext::DrawAnnotationContext( SvXMLImport& rImport, USHORT nPrfx
     }
 }
 
-SvXMLImportContext * DrawAnnotationContext::CreateChildContext( USHORT nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
+SvXMLImportContext * DrawAnnotationContext::CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const Reference< XAttributeList >& xAttrList )
 {
     SvXMLImportContext * pContext = NULL;
 
@@ -214,7 +214,7 @@ TYPEINIT1( SdXMLGenericPageContext, SvXMLImportContext );
 
 SdXMLGenericPageContext::SdXMLGenericPageContext(
     SvXMLImport& rImport,
-    USHORT nPrfx, const OUString& rLocalName,
+    sal_uInt16 nPrfx, const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList>& xAttrList,
     Reference< drawing::XShapes >& rShapes)
 : SvXMLImportContext( rImport, nPrfx, rLocalName )
@@ -227,7 +227,7 @@ SdXMLGenericPageContext::SdXMLGenericPageContext(
     {
         OUString sAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName;
-        USHORT nPrefix = GetSdImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+        sal_uInt16 nPrefix = GetSdImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
         if( (nPrefix == XML_NAMESPACE_DRAW) && IsXMLToken( aLocalName, XML_NAV_ORDER ) )
         {
             msNavOrder = xAttrList->getValueByIndex( i );
@@ -254,7 +254,7 @@ void SdXMLGenericPageContext::StartElement( const Reference< ::com::sun::star::x
 
 //////////////////////////////////////////////////////////////////////////////
 
-SvXMLImportContext* SdXMLGenericPageContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext* SdXMLGenericPageContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference< xml::sax::XAttributeList>& xAttrList )
 {

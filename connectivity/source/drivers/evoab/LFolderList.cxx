@@ -74,7 +74,7 @@ using namespace ::com::sun::star::lang;
 // -------------------------------------------------------------------------
 void OEvoabFolderList::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
 {
-    BOOL bRead = TRUE;
+    sal_Bool bRead = sal_True;
 
     QuotedTokenizedString aHeaderLine;
     OEvoabConnection* pConnection = (OEvoabConnection*)m_pConnection;
@@ -107,7 +107,7 @@ void OEvoabFolderList::fillColumns(const ::com::sun::star::lang::Locale& _aLocal
     m_aPrecisions.reserve(nFieldCount);
     m_aScales.reserve(nFieldCount);
 
-    sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
+    sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
     CharClass aCharClass(pConnection->getDriver()->getFactory(),_aLocale);
     // read description
     sal_Unicode cDecimalDelimiter  = pConnection->getDecimalDelimiter();
@@ -125,11 +125,11 @@ void OEvoabFolderList::fillColumns(const ::com::sun::star::lang::Locale& _aLocal
         aColumnName += String::CreateFromInt32(i+1);
 
         sal_Int32 eType;
-        UINT16 nPrecision = 0;
-        UINT16 nScale = 0;
+        sal_uInt16 nPrecision = 0;
+        sal_uInt16 nScale = 0;
 
-        BOOL bNumeric = FALSE;
-        ULONG  nIndex = 0;
+        sal_Bool bNumeric = sal_False;
+        sal_uIntPtr  nIndex = 0;
 
         // first without fielddelimiter
         String aField;
@@ -137,7 +137,7 @@ void OEvoabFolderList::fillColumns(const ::com::sun::star::lang::Locale& _aLocal
         if (aField.Len() == 0 ||
             (pConnection->getStringDelimiter() && pConnection->getStringDelimiter() == aField.GetChar(0)))
         {
-            bNumeric = FALSE;
+            bNumeric = sal_False;
         }
         else
         {
@@ -149,11 +149,11 @@ void OEvoabFolderList::fillColumns(const ::com::sun::star::lang::Locale& _aLocal
 
             if (aField2.Len() == 0)
             {
-                bNumeric = FALSE;
+                bNumeric = sal_False;
             }
             else
             {
-                bNumeric = TRUE;
+                bNumeric = sal_True;
                 xub_StrLen nDot = 0;
                 for (xub_StrLen j = 0; j < aField2.Len(); j++)
                 {
@@ -163,7 +163,7 @@ void OEvoabFolderList::fillColumns(const ::com::sun::star::lang::Locale& _aLocal
                         (!cThousandDelimiter || c != cThousandDelimiter) &&
                         !aCharClass.isDigit(aField2,j))
                     {
-                        bNumeric = FALSE;
+                        bNumeric = sal_False;
                         break;
                     }
                     if (cDecimalDelimiter && c == cDecimalDelimiter)
@@ -175,7 +175,7 @@ void OEvoabFolderList::fillColumns(const ::com::sun::star::lang::Locale& _aLocal
                 }
 
                 if (nDot > 1) // if there is more than one dot it isn't a number
-                    bNumeric = FALSE;
+                    bNumeric = sal_False;
                 if (bNumeric && cThousandDelimiter)
                 {
                     // Ist der Trenner richtig angegeben?
@@ -188,7 +188,7 @@ void OEvoabFolderList::fillColumns(const ::com::sun::star::lang::Locale& _aLocal
                             continue;
                         else
                         {
-                            bNumeric = FALSE;
+                            bNumeric = sal_False;
                             break;
                         }
                     }

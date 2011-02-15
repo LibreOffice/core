@@ -51,7 +51,7 @@ class ImageButtonToolbarController : public ComplexToolbarController
         ImageButtonToolbarController( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rServiceManager,
                                       const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                       ToolBox*             pToolBar,
-                                      USHORT               nID,
+                                      sal_uInt16               nID,
                                       const rtl::OUString& aCommand );
         virtual ~ImageButtonToolbarController();
 

@@ -72,8 +72,14 @@ Reference< XPropertySet > OColumns::createDescriptor()
 sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString&, const Reference< XPropertySet >& descriptor )
 {
     OAdoColumn* pColumn = NULL;
+    Reference< XPropertySet > xColumn;
     if ( !getImplementation( pColumn, descriptor ) || pColumn == NULL )
-        m_pConnection->throwGenericSQLException( STR_INVALID_COLUMN_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
+    {
+        // m_pConnection->throwGenericSQLException( STR_INVALID_COLUMN_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
+        pColumn = new OAdoColumn(isCaseSensitive(),m_pConnection);
+        xColumn = pColumn;
+        ::comphelper::copyProperties(descriptor,xColumn);
+    }
 
     WpADOColumn aColumn = pColumn->getColumnImpl();
 

@@ -208,21 +208,9 @@
 
 #define RID_DEFAULTABOUT                    (RID_SFX_START+0)
 
-#define ABOUT_BTN_OK                        1
-
-#define ABOUT_FTXT_VERSION                  1
-#define ABOUT_FTXT_COPYRIGHT                2
-
-#define ABOUT_STR_DEVELOPER_ARY             1
-#define ABOUT_STR_FRENCH_COPYRIGHT          2
-#define ABOUT_STR_ACCEL                     3
-#define ABOUT_STR_COPYRIGHT                 4
-
 #define RID_APPTITLE                        (RID_SFX_START+4)
-#define RID_BUILDVERSION                    (RID_SFX_START+5)
 
 #define RID_DOCALREADYLOADED_DLG            (RID_SFX_START+1)
-#define RID_CANTLOADDOC_DLG                 (RID_SFX_START+2)
 
 #define TP_DOCINFODESC                      (RID_SFX_START+3)
 #define TP_DOCINFODOC                       (RID_SFX_START+4)
@@ -259,8 +247,6 @@
 #define STR_MB                              (RID_SFX_START+113)
 #define STR_GB                              (RID_SFX_START+114)
 
-#define STR_VERSION_TYPE                    (RID_SFX_START+115)
-#define STR_VERSION_ID                      (RID_SFX_START+116)
 #define STR_STANDARD_SHORTCUT               (RID_SFX_START+117)
 #define STR_REPAIREDDOCUMENT                (RID_SFX_START+118)
 
@@ -316,15 +302,7 @@
 
 // ------------------------------------------------------------------------
 
-#define BMP_COLS        21
-#define BMP_SFX_SMALL   1
-#define BMP_SFX_LARGE   2
-
 #define RID_SFX_GLOBALS 1000
-
-#define BMP_SFX_COLOR                       (RID_SFX_GLOBALS + 1)
-#define BMP_SFX_MONO                        (RID_SFX_GLOBALS + 2)
-#define SFX_MSG_RES                         (RID_SFX_GLOBALS + 3)
 
 // =========================================================================
 
@@ -332,24 +310,6 @@
 #define RID_OPTIONS_END             (RID_OPTIONS_START + 100)
 
 // ResId's ------------------------------------------------------------------
-
-#define RID_SFXLANG_BEGIN           (RID_OPTIONS_START +  0)
-#define RID_SFXLANG_NO              (RID_SFXLANG_BEGIN +  0)
-#define RID_SFXLANG_GERMAN          (RID_SFXLANG_BEGIN +  1)
-#define RID_SFXLANG_SWISS_GERMAN    (RID_SFXLANG_BEGIN +  2)
-#define RID_SFXLANG_US_ENGLISH      (RID_SFXLANG_BEGIN +  3)
-#define RID_SFXLANG_UK_ENGLISH      (RID_SFXLANG_BEGIN +  4)
-#define RID_SFXLANG_FRENCH          (RID_SFXLANG_BEGIN +  5)
-#define RID_SFXLANG_ITALIAN         (RID_SFXLANG_BEGIN +  6)
-#define RID_SFXLANG_CAST_SPANISH    (RID_SFXLANG_BEGIN +  7)
-#define RID_SFXLANG_PORTUGUESE      (RID_SFXLANG_BEGIN +  8)
-#define RID_SFXLANG_DANISH          (RID_SFXLANG_BEGIN +  9)
-#define RID_SFXLANG_DUTCH           (RID_SFXLANG_BEGIN + 10)
-#define RID_SFXLANG_SWEDISH         (RID_SFXLANG_BEGIN + 11)
-#define RID_SFXLANG_FINNISH         (RID_SFXLANG_BEGIN + 12)
-#define RID_SFXLANG_NORWEG_BOKMAL   (RID_SFXLANG_BEGIN + 13)
-#define RID_SFXLANG_NORWEG_NYNORSK  (RID_SFXLANG_BEGIN + 14)
-#define RID_SFXLANG_ALL             (RID_SFXLANG_BEGIN + 15)
 
 #define RID_SFXPAGE_SAVE            (RID_OPTIONS_START +  0)
 #define RID_SFXPAGE_GENERAL         (RID_OPTIONS_START +  1)
@@ -359,10 +319,7 @@
 #define RID_SFXQB_DELDICT           (RID_OPTIONS_START +  5)
 #define RID_SFXPAGE_PATH            (RID_OPTIONS_START +  6)
 #define RID_SFXPAGE_LINGU           (RID_OPTIONS_START +  7)
-#define RID_SFXPAGE_INET            (RID_OPTIONS_START +  8)
-#define RID_SFXQB_DEL_IGNORELIST    (RID_OPTIONS_START +  9)
 #define RID_SFXQB_SET_LANGUAGE      (RID_OPTIONS_START + 10)
-#define RID_ITEMLIST_LINGU          (RID_OPTIONS_START + 11)
 #define RID_SFXPAGE_PRINTOPTIONS    (RID_OPTIONS_START + 12)
 
 #define RID_STR_NEW_TASK                    (RID_SFX_DOC_START+ 76)

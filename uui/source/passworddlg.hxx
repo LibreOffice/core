@@ -48,7 +48,7 @@ class PasswordDialog : public ModalDialog
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
     FixedLine       aFixedLine1;
-    USHORT          nMinLen;
+    sal_uInt16          nMinLen;
     String          aPasswdMismatch;
 
 
@@ -58,7 +58,7 @@ public:
     PasswordDialog( Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr, ::rtl::OUString& aDocURL,
             bool bOpenToModify = false, bool bIsSimplePasswordRequest = false );
 
-    void            SetMinLen( USHORT nMin ) { nMinLen = nMin; }
+    void            SetMinLen( sal_uInt16 nMin ) { nMinLen = nMin; }
     String          GetPassword() const { return aEDPassword.GetText(); }
 
 private:

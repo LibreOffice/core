@@ -397,7 +397,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
         xParentFrame->setActiveFrame( xOwnFrame );
 
     OLEObjCache& rObjCache = GetSdrGlobalData().GetOLEObjCache();
-    const ULONG nCount = rObjCache.Count();
+    const sal_uIntPtr nCount = rObjCache.Count();
     for(sal_Int32 i = nCount-1 ; i >= 0;--i)
     {
         SdrOle2Obj* pObj = reinterpret_cast<SdrOle2Obj*>(rObjCache.GetObject(i));
@@ -627,7 +627,7 @@ SdrEmbedObjectLink::SdrEmbedObjectLink(SdrOle2Obj* pObject):
     ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB ),
     pObj(pObject)
 {
-    SetSynchron( FALSE );
+    SetSynchron( sal_False );
 }
 
 // -----------------------------------------------------------------------------
@@ -756,7 +756,7 @@ SdrOle2Obj::SdrOle2Obj(FASTBOOL bFrame_) : m_bTypeAsked(false)
 ,m_bChart(false)
 {
     DBG_CTOR( SdrOle2Obj,NULL);
-    bInDestruction = FALSE;
+    bInDestruction = sal_False;
     Init();
     bFrame=bFrame_;
 }
@@ -768,13 +768,13 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, FASTBOOL bFram
     , m_bChart(false)
 {
     DBG_CTOR( SdrOle2Obj,NULL);
-    bInDestruction = FALSE;
+    bInDestruction = sal_False;
     Init();
 
     bFrame=bFrame_;
 
     if ( xObjRef.is() && (xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
-        SetResizeProtect(TRUE);
+        SetResizeProtect(sal_True);
 
     // #108759# For math objects, set closed state to transparent
     if( ImplIsMathObj( xObjRef.GetObject() ) )
@@ -789,14 +789,14 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef& rNewObjRef, const XubStrin
     , m_bChart(false)
 {
     DBG_CTOR( SdrOle2Obj,NULL);
-    bInDestruction = FALSE;
+    bInDestruction = sal_False;
     Init();
 
     mpImpl->aPersistName = rNewObjName;
     bFrame=bFrame_;
 
     if ( xObjRef.is() && (xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
-        SetResizeProtect(TRUE);
+        SetResizeProtect(sal_True);
 
     // #108759# For math objects, set closed state to transparent
     if( ImplIsMathObj( xObjRef.GetObject() ) )
@@ -812,14 +812,14 @@ SdrOle2Obj::SdrOle2Obj( const svt::EmbeddedObjectRef&  rNewObjRef, const XubStri
     , m_bChart(false)
 {
     DBG_CTOR( SdrOle2Obj,NULL);
-    bInDestruction = FALSE;
+    bInDestruction = sal_False;
     Init();
 
     mpImpl->aPersistName = rNewObjName;
     bFrame=bFrame_;
 
     if ( xObjRef.is() && (xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
-        SetResizeProtect(TRUE);
+        SetResizeProtect(sal_True);
 
     // #108759# For math objects, set closed state to transparent
     if( ImplIsMathObj( xObjRef.GetObject() ) )
@@ -836,7 +836,7 @@ void SdrOle2Obj::Init()
     mpImpl->pGraphicObject=NULL;
     mpImpl->pLightClient = 0;
 
-    xObjRef.Lock( TRUE );
+    xObjRef.Lock( sal_True );
 }
 
 // -----------------------------------------------------------------------------
@@ -844,7 +844,7 @@ void SdrOle2Obj::Init()
 SdrOle2Obj::~SdrOle2Obj()
 {
     DBG_DTOR( SdrOle2Obj,NULL);
-    bInDestruction = TRUE;
+    bInDestruction = sal_True;
 
     if ( mpImpl->mbConnected )
         Disconnect();
@@ -1123,7 +1123,7 @@ void SdrOle2Obj::Connect_Impl()
                 {
                     xObjRef.AssignToContainer( &rContainer, mpImpl->aPersistName );
                     mpImpl->mbConnected = true;
-                    xObjRef.Lock( TRUE );
+                    xObjRef.Lock( sal_True );
                 }
             }
 
@@ -1174,7 +1174,7 @@ void SdrOle2Obj::Connect_Impl()
             pModel->GetRefDevice()->GetOutDevType() == OUTDEV_PRINTER)
         {
             // Kein RefDevice oder RefDevice kein Printer
-            BOOL bModified = (*ppObjRef)->IsModified();
+            sal_Bool bModified = (*ppObjRef)->IsModified();
             Printer* pPrinter = (Printer*) pModel->GetRefDevice();
             (*ppObjRef)->OnDocumentPrinterChanged( pPrinter );
             (*ppObjRef)->SetModified( bModified );
@@ -1442,7 +1442,7 @@ void SdrOle2Obj::SetObjRef( const com::sun::star::uno::Reference < com::sun::sta
     // MBA: the caller of the method is responsible to control the old object, it will not be closed here
     // Otherwise WW8 import crashes because it tranfers control to OLENode by this method
     if ( xObjRef.GetObject().is() )
-        xObjRef.Lock( FALSE );
+        xObjRef.Lock( sal_False );
 
     // MBA: avoid removal of object in Disconnect! It is definitely a HACK to call SetObjRef(0)!
     // This call will try to close the objects; so if anybody else wants to keep it, it must be locked by a CloseListener
@@ -1459,7 +1459,7 @@ void SdrOle2Obj::SetObjRef( const com::sun::star::uno::Reference < com::sun::sta
         DELETEZ( pGraphic );
 
         if ( (xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::EMBED_NEVERRESIZE ) )
-            SetResizeProtect(TRUE);
+            SetResizeProtect(sal_True);
 
         // #108759# For math objects, set closed state to transparent
         if( ImplIsMathObj( rNewObjRef ) )
@@ -1557,28 +1557,28 @@ String SdrOle2Obj::GetPersistName() const
 
 void SdrOle2Obj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
-    rInfo.bRotateFreeAllowed=FALSE;
-    rInfo.bRotate90Allowed  =FALSE;
-    rInfo.bMirrorFreeAllowed=FALSE;
-    rInfo.bMirror45Allowed  =FALSE;
-    rInfo.bMirror90Allowed  =FALSE;
-    rInfo.bTransparenceAllowed = FALSE;
-    rInfo.bGradientAllowed = FALSE;
-    rInfo.bShearAllowed     =FALSE;
-    rInfo.bEdgeRadiusAllowed=FALSE;
-    rInfo.bNoOrthoDesired   =FALSE;
-    rInfo.bCanConvToPath    =FALSE;
-    rInfo.bCanConvToPoly    =FALSE;
-    rInfo.bCanConvToPathLineToArea=FALSE;
-    rInfo.bCanConvToPolyLineToArea=FALSE;
-    rInfo.bCanConvToContour = FALSE;
+    rInfo.bRotateFreeAllowed=sal_False;
+    rInfo.bRotate90Allowed  =sal_False;
+    rInfo.bMirrorFreeAllowed=sal_False;
+    rInfo.bMirror45Allowed  =sal_False;
+    rInfo.bMirror90Allowed  =sal_False;
+    rInfo.bTransparenceAllowed = sal_False;
+    rInfo.bGradientAllowed = sal_False;
+    rInfo.bShearAllowed     =sal_False;
+    rInfo.bEdgeRadiusAllowed=sal_False;
+    rInfo.bNoOrthoDesired   =sal_False;
+    rInfo.bCanConvToPath    =sal_False;
+    rInfo.bCanConvToPoly    =sal_False;
+    rInfo.bCanConvToPathLineToArea=sal_False;
+    rInfo.bCanConvToPolyLineToArea=sal_False;
+    rInfo.bCanConvToContour = sal_False;
 }
 
 // -----------------------------------------------------------------------------
 
-UINT16 SdrOle2Obj::GetObjIdentifier() const
+sal_uInt16 SdrOle2Obj::GetObjIdentifier() const
 {
-    return bFrame ? UINT16(OBJ_FRAME) : UINT16(OBJ_OLE2);
+    return bFrame ? sal_uInt16(OBJ_FRAME) : sal_uInt16(OBJ_OLE2);
 }
 
 // -----------------------------------------------------------------------------
@@ -1980,23 +1980,23 @@ sal_Bool SdrOle2Obj::Unload( const uno::Reference< embed::XEmbeddedObject >& xOb
 
 // -----------------------------------------------------------------------------
 
-BOOL SdrOle2Obj::Unload()
+sal_Bool SdrOle2Obj::Unload()
 {
-    BOOL bUnloaded = FALSE;
+    sal_Bool bUnloaded = sal_False;
 
     if( xObjRef.is() )
     {
         //TODO/LATER: no refcounting tricks anymore!
         //"customers" must register as state change listeners
         //Nicht notwendig im Doc DTor (MM)
-        //ULONG nRefCount = (*ppObjRef)->GetRefCount();
+        //sal_uIntPtr nRefCount = (*ppObjRef)->GetRefCount();
         // prevent Unload if there are external references
         //if( nRefCount > 2 )
-        //    return FALSE;
+        //    return sal_False;
         //DBG_ASSERT( nRefCount == 2, "Wrong RefCount for unload" );
     }
     else
-        bUnloaded = TRUE;
+        bUnloaded = sal_True;
 
     if ( pModel && xObjRef.is() )
     {

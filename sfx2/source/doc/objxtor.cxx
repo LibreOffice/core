@@ -172,12 +172,7 @@ void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::Even
         SfxObjectShell::SetCurrentComponent( Reference< XInterface >() );
     }
 
-    if ( mpDoc->Get_Impl()->bHiddenLockedByAPI )
-    {
-        mpDoc->Get_Impl()->bHiddenLockedByAPI = FALSE;
-        mpDoc->OwnerLock(FALSE);
-    }
-    else if ( !mpDoc->Get_Impl()->bClosing )
+    if ( !mpDoc->Get_Impl()->bClosing )
         // GCC stuerzt ab, wenn schon im dtor, also vorher Flag abfragen
         mpDoc->DoClose();
 }
@@ -820,7 +815,7 @@ void SfxObjectShell::InitBasicManager_Impl()
         changed to return the Basic manager currently under construction, when
         called repeatedly.
 
-        The variable pImp->bBasicInitialized will be set to TRUE after
+        The variable pImp->bBasicInitialized will be set to sal_True after
         construction now, to ensure that the recursive call of the function
         lcl_getBasicManagerForDocument() will be routed into this function too.
 
@@ -831,24 +826,8 @@ void SfxObjectShell::InitBasicManager_Impl()
     DBG_ASSERT( !pImp->bBasicInitialized && !pImp->pBasicManager->isValid(), "Lokaler BasicManager bereits vorhanden");
     pImp->pBasicManager->reset( BasicManagerRepository::getDocumentBasicManager( GetModel() ) );
     DBG_ASSERT( pImp->pBasicManager->isValid(), "SfxObjectShell::InitBasicManager_Impl: did not get a BasicManager!" );
-    pImp->bBasicInitialized = TRUE;
+    pImp->bBasicInitialized = sal_True;
 }
-
-//--------------------------------------------------------------------
-#if 0 //(mba)
-SotObjectRef SfxObjectShell::CreateAggObj( const SotFactory* pFact )
-{
-    // SvDispatch?
-    SotFactory* pDispFact = SvDispatch::ClassFactory();
-    if( pFact == pDispFact )
-        return( (SfxShellObject*)GetSbxObject() );
-
-    // sonst unbekannte Aggregation
-    DBG_ERROR("unkekannte Factory");
-    SotObjectRef aSvObjectRef;
-    return aSvObjectRef;
-}
-#endif
 
 //--------------------------------------------------------------------
 
@@ -873,7 +852,7 @@ SfxObjectShell* SfxObjectShell::GetObjectShell()
 
 //--------------------------------------------------------------------
 
-SEQUENCE< OUSTRING > SfxObjectShell::GetEventNames()
+uno::Sequence< ::rtl::OUString > SfxObjectShell::GetEventNames()
 {
     static uno::Sequence< ::rtl::OUString >* pEventNameContainer = NULL;
 
@@ -962,7 +941,7 @@ String SfxObjectShell::GetServiceNameFromFactory( const String& rFact )
     String aPrefix = String::CreateFromAscii( "private:factory/" );
     if ( aPrefix.Len() == aFact.Match( aPrefix ) )
         aFact.Erase( 0, aPrefix.Len() );
-    USHORT nPos = aFact.Search( '?' );
+    sal_uInt16 nPos = aFact.Search( '?' );
     String aParam;
     if ( nPos != STRING_NOTFOUND )
     {
@@ -1055,8 +1034,8 @@ SfxObjectShell* SfxObjectShell::CreateAndLoadObject( const SfxItemSet& rSet, Sfx
 {
     uno::Sequence < beans::PropertyValue > aProps;
     TransformItems( SID_OPENDOC, rSet, aProps );
-    SFX_ITEMSET_ARG(&rSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE);
-    SFX_ITEMSET_ARG(&rSet, pTargetItem, SfxStringItem, SID_TARGETNAME, FALSE);
+    SFX_ITEMSET_ARG(&rSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False);
+    SFX_ITEMSET_ARG(&rSet, pTargetItem, SfxStringItem, SID_TARGETNAME, sal_False);
     ::rtl::OUString aURL;
     ::rtl::OUString aTarget = rtl::OUString::createFromAscii("_blank");
     if ( pFileNameItem )

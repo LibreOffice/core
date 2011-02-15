@@ -902,6 +902,9 @@ void SdrDragMovHdl::TakeSdrDragComment(XubString& rStr) const
 
 bool SdrDragMovHdl::BeginSdrDrag()
 {
+    if( !GetDragHdl() )
+        return false;
+
     DragStat().Ref1()=GetDragHdl()->GetPos();
     DragStat().SetShown(!DragStat().IsShown());
     SdrHdlKind eKind=GetDragHdl()->GetKind();
@@ -931,7 +934,7 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
 {
     Point aPnt(rNoSnapPnt);
 
-    if (DragStat().CheckMinMoved(rNoSnapPnt))
+    if ( GetDragHdl() && DragStat().CheckMinMoved(rNoSnapPnt))
     {
         if (GetDragHdl()->GetKind()==HDL_MIRX)
         {
@@ -1042,22 +1045,25 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
 
 bool SdrDragMovHdl::EndSdrDrag(bool /*bCopy*/)
 {
-    switch (GetDragHdl()->GetKind())
+    if( GetDragHdl() )
     {
-        case HDL_REF1:
-            Ref1()=DragStat().GetNow();
-            break;
+        switch (GetDragHdl()->GetKind())
+        {
+            case HDL_REF1:
+                Ref1()=DragStat().GetNow();
+                break;
 
-        case HDL_REF2:
-            Ref2()=DragStat().GetNow();
-            break;
+            case HDL_REF2:
+                Ref2()=DragStat().GetNow();
+                break;
 
-        case HDL_MIRX:
-            Ref1()+=DragStat().GetNow()-DragStat().GetStart();
-            Ref2()+=DragStat().GetNow()-DragStat().GetStart();
-            break;
+            case HDL_MIRX:
+                Ref1()+=DragStat().GetNow()-DragStat().GetStart();
+                Ref2()+=DragStat().GetNow()-DragStat().GetStart();
+                break;
 
-        default: break;
+            default: break;
+        }
     }
 
     return true;
@@ -1066,7 +1072,11 @@ bool SdrDragMovHdl::EndSdrDrag(bool /*bCopy*/)
 void SdrDragMovHdl::CancelSdrDrag()
 {
     Hide();
-    GetDragHdl()->SetPos(DragStat().GetRef1());
+
+    SdrHdl* pHdl = GetDragHdl();
+    if( pHdl )
+        pHdl->SetPos(DragStat().GetRef1());
+
     SdrHdl* pHM = GetHdlList().GetHdl(HDL_MIRX);
 
     if(pHM)
@@ -1575,13 +1585,13 @@ void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
         { // Klebepunkte aufs BoundRect des Obj limitieren
             aPt1-=DragStat().GetStart();
             const SdrMarkList& rML=GetMarkedObjectList();
-            ULONG nMarkAnz=rML.GetMarkCount();
+            sal_uLong nMarkAnz=rML.GetMarkCount();
 
-            for (ULONG nMarkNum=0; nMarkNum<nMarkAnz; nMarkNum++)
+            for (sal_uLong nMarkNum=0; nMarkNum<nMarkAnz; nMarkNum++)
             {
                 const SdrMark* pM=rML.GetMark(nMarkNum);
                 const SdrUShortCont* pPts=pM->GetMarkedGluePoints();
-                ULONG nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
+                sal_uLong nPtAnz=pPts==NULL ? 0 : pPts->GetCount();
 
                 if (nPtAnz!=0)
                 {
@@ -1589,7 +1599,7 @@ void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
                     const SdrGluePointList* pGPL=pObj->GetGluePointList();
                     Rectangle aBound(pObj->GetCurrentBoundRect());
 
-                    for (ULONG nPtNum=0; nPtNum<nPtAnz; nPtNum++)
+                    for (sal_uLong nPtNum=0; nPtNum<nPtAnz; nPtNum++)
                     {
                         sal_uInt16 nId=pPts->GetObject(nPtNum);
                         sal_uInt16 nGlueNum=pGPL->FindGluePoint(nId);
@@ -1678,12 +1688,12 @@ void SdrDragResize::TakeSdrDragComment(XubString& rStr) const
     Fraction aFact1(1,1);
     Point aStart(DragStat().GetStart());
     Point aRef(DragStat().GetRef1());
-    INT32 nXDiv(aStart.X() - aRef.X());
+    sal_Int32 nXDiv(aStart.X() - aRef.X());
 
     if(!nXDiv)
         nXDiv = 1;
 
-    INT32 nYDiv(aStart.Y() - aRef.Y());
+    sal_Int32 nYDiv(aStart.Y() - aRef.Y());
 
     if(!nYDiv)
         nYDiv = 1;
@@ -2020,7 +2030,7 @@ void SdrDragRotate::TakeSdrDragComment(XubString& rStr) const
     ImpTakeDescriptionStr(STR_DragMethRotate, rStr);
     rStr.AppendAscii(" (");
     XubString aStr;
-    INT32 nTmpWink(NormAngle360(nWink));
+    sal_Int32 nTmpWink(NormAngle360(nWink));
 
     if(bRight && nWink)
     {
@@ -2156,7 +2166,7 @@ void SdrDragShear::TakeSdrDragComment(XubString& rStr) const
     ImpTakeDescriptionStr(STR_DragMethShear, rStr);
     rStr.AppendAscii(" (");
 
-    INT32 nTmpWink(nWink);
+    sal_Int32 nTmpWink(nWink);
 
     if(bUpSideDown)
         nTmpWink += 18000;
@@ -2748,7 +2758,7 @@ void SdrDragCrook::TakeSdrDragComment(XubString& rStr) const
         rStr.AppendAscii(" (");
 
         XubString aStr;
-        INT32 nVal(nWink);
+        sal_Int32 nVal(nWink);
 
         if(bAtCenter)
             nVal *= 2;
@@ -3343,9 +3353,9 @@ bool SdrDragCrook::EndSdrDrag(bool bCopy)
                 if (bCopy)
                     getSdrDragView().CopyMarkedObj();
 
-                ULONG nMarkAnz=getSdrDragView().GetMarkedObjectList().GetMarkCount();
+                sal_uLong nMarkAnz=getSdrDragView().GetMarkedObjectList().GetMarkCount();
 
-                for (ULONG nm=0; nm<nMarkAnz; nm++)
+                for (sal_uLong nm=0; nm<nMarkAnz; nm++)
                 {
                     SdrMark* pM=getSdrDragView().GetMarkedObjectList().GetMark(nm);
                     SdrObject* pO=pM->GetMarkedSdrObj();

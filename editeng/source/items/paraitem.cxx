@@ -148,7 +148,7 @@ int SvxLineSpacingItem::operator==( const SfxPoolItem& rAttr ) const
         - ein sal_uInt32 fuer alle Werte (Abstand, Hoehe, rel. Angaben)
 
 --------------------------------------------------*/
-sal_Bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -195,7 +195,7 @@ sal_Bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 /*-----------------18.03.98 16:32-------------------
 
 --------------------------------------------------*/
-sal_Bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+sal_Bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -246,7 +246,7 @@ sal_Bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 eLineSpace = aLSp.Mode == style::LineSpacingMode::FIX ? SVX_LINE_SPACE_FIX : SVX_LINE_SPACE_MIN;
                 nLineHeight = aLSp.Height;
                 if(bConvert)
-                    nLineHeight = (USHORT)MM100_TO_TWIP_UNSIGNED(nLineHeight);
+                    nLineHeight = (sal_uInt16)MM100_TO_TWIP_UNSIGNED(nLineHeight);
             }
             break;
         }
@@ -390,7 +390,7 @@ int SvxAdjustItem::operator==( const SfxPoolItem& rAttr ) const
 /*-----------------18.03.98 16:15-------------------
 
 --------------------------------------------------*/
-sal_Bool SvxAdjustItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SvxAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -412,7 +412,7 @@ sal_Bool SvxAdjustItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 --------------------------------------------------*/
 
-sal_Bool SvxAdjustItem::PutValue( const uno::Any& rVal, BYTE nMemberId  )
+sal_Bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -433,7 +433,7 @@ sal_Bool SvxAdjustItem::PutValue( const uno::Any& rVal, BYTE nMemberId  )
                     eVal != SVX_ADJUST_LEFT &&
                     eVal != SVX_ADJUST_BLOCK &&
                     eVal != SVX_ADJUST_CENTER)
-                        return FALSE;
+                        return sal_False;
                 if(eVal < (sal_uInt16)SVX_ADJUST_END)
                     nMemberId == MID_PARA_ADJUST ?
                         SetAdjust((SvxAdjust)eVal) :
@@ -555,7 +555,7 @@ SvStream& SvxAdjustItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) const
 
 // class SvxWidowsItem ---------------------------------------------------
 
-SvxWidowsItem::SvxWidowsItem(const BYTE nL, const USHORT nId ) :
+SvxWidowsItem::SvxWidowsItem(const sal_uInt8 nL, const sal_uInt16 nId ) :
     SfxByteItem( nId, nL )
 {
 }
@@ -627,7 +627,7 @@ SfxItemPresentation SvxWidowsItem::GetPresentation
 
 // class SvxOrphansItem --------------------------------------------------
 
-SvxOrphansItem::SvxOrphansItem(const BYTE nL, const USHORT nId ) :
+SvxOrphansItem::SvxOrphansItem(const sal_uInt8 nL, const sal_uInt16 nId ) :
     SfxByteItem( nId, nL )
 {
 }
@@ -709,7 +709,7 @@ SvxHyphenZoneItem::SvxHyphenZoneItem( const sal_Bool bHyph, const sal_uInt16 nId
 }
 
 // -----------------------------------------------------------------------
-sal_Bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -731,7 +731,7 @@ sal_Bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) cons
     return sal_True;
 }
 // -----------------------------------------------------------------------
-sal_Bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+sal_Bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -747,13 +747,13 @@ sal_Bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             bHyphen = Any2Bool(rVal);
         break;
         case MID_HYPHEN_MIN_LEAD:
-            nMinLead = (BYTE)nNewVal;
+            nMinLead = (sal_uInt8)nNewVal;
         break;
         case MID_HYPHEN_MIN_TRAIL:
-            nMinTrail = (BYTE)nNewVal;
+            nMinTrail = (sal_uInt8)nNewVal;
         break;
         case MID_HYPHEN_MAX_HYPHENS:
-            nMaxHyphens = (BYTE)nNewVal;
+            nMaxHyphens = (sal_uInt8)nNewVal;
         break;
     }
     return sal_True;
@@ -1015,7 +1015,7 @@ typedef sequence ::com::sun::star::style::TabStop> TabSTopSequence;
 
 --------------------------------------------------*/
 
-sal_Bool SvxTabStopItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SvxTabStopItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1059,7 +1059,7 @@ sal_Bool SvxTabStopItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 --------------------------------------------------*/
 
-sal_Bool SvxTabStopItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+sal_Bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1380,7 +1380,7 @@ SfxPoolItem* SvxPageModelItem::Clone( SfxItemPool* ) const
 
 //------------------------------------------------------------------------
 
-sal_Bool SvxPageModelItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SvxPageModelItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1395,7 +1395,7 @@ sal_Bool SvxPageModelItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMem
     return sal_True;
 }
 
-sal_Bool SvxPageModelItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+sal_Bool SvxPageModelItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -1456,14 +1456,14 @@ SfxPoolItem* SvxScriptSpaceItem::Clone( SfxItemPool * ) const
     return new SvxScriptSpaceItem( GetValue(), Which() );
 }
 
-SfxPoolItem* SvxScriptSpaceItem::Create(SvStream & rStrm, USHORT) const
+SfxPoolItem* SvxScriptSpaceItem::Create(SvStream & rStrm, sal_uInt16) const
 {
     sal_Bool bFlag;
     rStrm >> bFlag;
     return new SvxScriptSpaceItem( bFlag, Which() );
 }
 
-USHORT  SvxScriptSpaceItem::GetVersion( USHORT nFFVer ) const
+sal_uInt16  SvxScriptSpaceItem::GetVersion( sal_uInt16 nFFVer ) const
 {
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
             SOFFICE_FILEFORMAT_40==nFFVer ||
@@ -1509,14 +1509,14 @@ SfxPoolItem* SvxHangingPunctuationItem::Clone( SfxItemPool * ) const
     return new SvxHangingPunctuationItem( GetValue(), Which() );
 }
 
-SfxPoolItem* SvxHangingPunctuationItem::Create(SvStream & rStrm, USHORT) const
+SfxPoolItem* SvxHangingPunctuationItem::Create(SvStream & rStrm, sal_uInt16) const
 {
     sal_Bool nValue;
     rStrm >> nValue;
     return new SvxHangingPunctuationItem( nValue, Which() );
 }
 
-USHORT SvxHangingPunctuationItem::GetVersion( USHORT nFFVer ) const
+sal_uInt16 SvxHangingPunctuationItem::GetVersion( sal_uInt16 nFFVer ) const
 {
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
             SOFFICE_FILEFORMAT_40==nFFVer ||
@@ -1566,7 +1566,7 @@ SfxPoolItem* SvxForbiddenRuleItem::Clone( SfxItemPool * ) const
 /* -----------------------------29.11.00 11:23--------------------------------
 
  ---------------------------------------------------------------------------*/
-SfxPoolItem* SvxForbiddenRuleItem::Create(SvStream & rStrm, USHORT) const
+SfxPoolItem* SvxForbiddenRuleItem::Create(SvStream & rStrm, sal_uInt16) const
 {
     sal_Bool nValue;
     rStrm >> nValue;
@@ -1575,7 +1575,7 @@ SfxPoolItem* SvxForbiddenRuleItem::Create(SvStream & rStrm, USHORT) const
 /* -----------------------------29.11.00 11:23--------------------------------
 
  ---------------------------------------------------------------------------*/
-USHORT SvxForbiddenRuleItem::GetVersion( USHORT nFFVer ) const
+sal_uInt16 SvxForbiddenRuleItem::GetVersion( sal_uInt16 nFFVer ) const
 {
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
             SOFFICE_FILEFORMAT_40==nFFVer ||
@@ -1626,20 +1626,20 @@ SfxPoolItem* SvxParaVertAlignItem::Clone( SfxItemPool* ) const
     return new SvxParaVertAlignItem( GetValue(), Which() );
 }
 
-SfxPoolItem* SvxParaVertAlignItem::Create( SvStream& rStrm, USHORT ) const
+SfxPoolItem* SvxParaVertAlignItem::Create( SvStream& rStrm, sal_uInt16 ) const
 {
     sal_uInt16 nVal;
     rStrm >> nVal;
     return new SvxParaVertAlignItem( nVal, Which() );
 }
 
-SvStream& SvxParaVertAlignItem::Store( SvStream & rStrm, USHORT ) const
+SvStream& SvxParaVertAlignItem::Store( SvStream & rStrm, sal_uInt16 ) const
 {
     rStrm << GetValue();
     return rStrm;
 }
 
-USHORT SvxParaVertAlignItem::GetVersion( USHORT nFFVer ) const
+sal_uInt16 SvxParaVertAlignItem::GetVersion( sal_uInt16 nFFVer ) const
 {
     return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
 }
@@ -1657,7 +1657,7 @@ SfxItemPresentation SvxParaVertAlignItem::GetPresentation(
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
             {
-                USHORT nTmp;
+                sal_uInt16 nTmp;
                 switch( GetValue() )
                 {
                     case AUTOMATIC: nTmp = RID_SVXITEMS_PARAVERTALIGN_AUTO; break;
@@ -1676,19 +1676,19 @@ SfxItemPresentation SvxParaVertAlignItem::GetPresentation(
 }
 
 sal_Bool SvxParaVertAlignItem::QueryValue( com::sun::star::uno::Any& rVal,
-                                           BYTE /*nMemberId*/ ) const
+                                           sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= (sal_Int16)GetValue();
     return sal_True;
 }
 
 sal_Bool SvxParaVertAlignItem::PutValue( const com::sun::star::uno::Any& rVal,
-                                         BYTE /*nMemberId*/ )
+                                         sal_uInt8 /*nMemberId*/ )
 {
     sal_Int16 nVal = sal_Int16();
     if((rVal >>= nVal) && nVal >=0 && nVal <= BOTTOM )
     {
-        SetValue( (USHORT)nVal );
+        SetValue( (sal_uInt16)nVal );
         return sal_True;
     }
     else
@@ -1712,14 +1712,14 @@ SfxPoolItem* SvxParaGridItem::Clone( SfxItemPool * ) const
     return new SvxParaGridItem( GetValue(), Which() );
 }
 
-SfxPoolItem* SvxParaGridItem::Create(SvStream & rStrm, USHORT) const
+SfxPoolItem* SvxParaGridItem::Create(SvStream & rStrm, sal_uInt16) const
 {
     sal_Bool bFlag;
     rStrm >> bFlag;
     return new SvxParaGridItem( bFlag, Which() );
 }
 
-USHORT  SvxParaGridItem::GetVersion( USHORT nFFVer ) const
+sal_uInt16  SvxParaGridItem::GetVersion( sal_uInt16 nFFVer ) const
 {
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
             SOFFICE_FILEFORMAT_40==nFFVer ||

@@ -204,7 +204,7 @@ Reference< awt::XWindow > SAL_CALL PopupMenuController::createPopupWindow() thro
             return xRet;
 
         // get selected button
-        USHORT nItemId = pToolBox->GetDownItemId();
+        sal_uInt16 nItemId = pToolBox->GetDownItemId();
         if( !nItemId )
             return xRet;
 
@@ -223,10 +223,10 @@ Reference< awt::XWindow > SAL_CALL PopupMenuController::createPopupWindow() thro
             mxPopupMenuController->updatePopupMenu();
 
         }
-        pToolBox->SetItemDown( nItemId, TRUE );
+        pToolBox->SetItemDown( nItemId, sal_True );
         Reference< awt::XWindowPeer > xPeer( getParent(), UNO_QUERY_THROW );
         mxPopupMenu->execute( xPeer, VCLUnoHelper::ConvertToAWTRect( aRect ), 0 );
-        pToolBox->SetItemDown( nItemId, FALSE );
+        pToolBox->SetItemDown( nItemId, sal_False );
     }
     catch( Exception& )
     {

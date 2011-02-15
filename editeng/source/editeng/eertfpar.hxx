@@ -43,7 +43,7 @@ private:
 public:
                         EditNodeIdx( ImpEditEngine* pIEE, ContentNode* pNd = 0)
                             { pImpEditEngine = pIEE; pNode = pNd; }
-    virtual ULONG       GetIdx() const;
+    virtual sal_uLong       GetIdx() const;
     virtual SvxNodeIdx* Clone() const;
     ContentNode*        GetNode() { return pNode; }
 };
@@ -58,8 +58,8 @@ public:
                     EditPosition( ImpEditEngine* pIEE, EditSelection* pSel )
                             { pImpEditEngine = pIEE; pCurSel = pSel; }
 
-    virtual ULONG   GetNodeIdx() const;
-    virtual USHORT  GetCntIdx() const;
+    virtual sal_uLong   GetNodeIdx() const;
+    virtual sal_uInt16  GetCntIdx() const;
 
     // erzeuge von sich selbst eine Kopie
     virtual SvxPosition* Clone() const;
@@ -80,22 +80,22 @@ private:
     MapMode             aRTFMapMode;
     MapMode             aEditMapMode;
 
-    USHORT              nDefFont;
-    USHORT              nDefTab;
-    USHORT              nDefFontHeight;
-    BYTE                nLastAction;
+    sal_uInt16              nDefFont;
+    sal_uInt16              nDefTab;
+    sal_uInt16              nDefFontHeight;
+    sal_uInt8               nLastAction;
 
 protected:
     virtual void        InsertPara();
     virtual void        InsertText();
-    virtual void        MovePos( int bForward = TRUE );
+    virtual void        MovePos( int bForward = sal_True );
     virtual void        SetEndPrevPara( SvxNodeIdx*& rpNodePos,
-                                            USHORT& rCntPos );
+                                            sal_uInt16& rCntPos );
 
     virtual void        UnknownAttrToken( int nToken, SfxItemSet* pSet );
     virtual void        NextToken( int nToken );
     virtual void        SetAttrInDoc( SvxRTFItemStackType &rSet );
-    virtual int         IsEndPara( SvxNodeIdx* pNd, USHORT nCnt ) const;
+    virtual int         IsEndPara( SvxNodeIdx* pNd, sal_uInt16 nCnt ) const;
     virtual void        CalcValue();
     void                CreateStyleSheets();
     SfxStyleSheet*      CreateStyleSheet( SvxRTFStyleType* pRTFStyle );
@@ -114,7 +114,7 @@ public:
     void        SetDestCharSet( CharSet eCharSet )  { eDestCharSet = eCharSet; }
     CharSet     GetDestCharSet() const              { return eDestCharSet; }
 
-    USHORT      GetDefTab() const                   { return nDefTab; }
+    sal_uInt16      GetDefTab() const                   { return nDefTab; }
     Font        GetDefFont()                        { return GetFont( nDefFont ); }
 
     EditPaM     GetCurPaM() const                   { return aCurSel.Max(); }

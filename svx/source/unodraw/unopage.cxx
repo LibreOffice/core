@@ -58,6 +58,7 @@
 #include <svx/extrud3d.hxx>
 #include <svx/lathe3d.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/diagnose_ex.h>
 
 using ::rtl::OUString;
 using namespace ::vos;
@@ -306,7 +307,7 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( (mpModel == 0) || (mpPage == 0) )
+    if ( ( mpModel == NULL ) || ( mpPage == NULL ) )
         throw lang::DisposedException();
 
     SvxShape* pShape = SvxShape::getImplementation( xShape );
@@ -319,6 +320,7 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
     if(!pObj)
     {
         pObj = CreateSdrObject( xShape );
+        ENSURE_OR_RETURN_VOID( pObj != NULL, "SvxDrawPage::add: no SdrObject was created!" );
     }
     else if ( !pObj->IsInserted() )
     {
@@ -326,14 +328,10 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
         mpPage->InsertObject( pObj );
     }
 
-    if(pObj == NULL)
-        return;
+    pShape->Create( pObj, this );
+    OSL_ENSURE( pShape->GetSdrObject() == pObj, "SvxDrawPage::add: shape does not know about its newly created SdrObject!" );
 
-    if(pShape)
-        pShape->Create( pObj, this );
-
-    if( mpModel )
-        mpModel->SetChanged();
+    mpModel->SetChanged();
 }
 
 //----------------------------------------------------------------------
@@ -625,7 +623,7 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
                 aNewPolygon.setClosed(true);
                 pObj->SetExtrudePolygon(basegfx::B2DPolyPolygon(aNewPolygon));
 
-                // #107245# pObj->SetExtrudeCharacterMode(TRUE);
+                // #107245# pObj->SetExtrudeCharacterMode(sal_True);
                 pObj->SetMergedItem(Svx3DCharacterModeItem(sal_True));
             }
             else if(pNewObj->ISA(E3dLatheObj))
@@ -638,7 +636,7 @@ SdrObject *SvxDrawPage::_CreateSdrObject( const Reference< drawing::XShape > & x
                 aNewPolygon.setClosed(true);
                 pObj->SetPolyPoly2D(basegfx::B2DPolyPolygon(aNewPolygon));
 
-                // #107245# pObj->SetLatheCharacterMode(TRUE);
+                // #107245# pObj->SetLatheCharacterMode(sal_True);
                 pObj->SetMergedItem(Svx3DCharacterModeItem(sal_True));
             }
         }
