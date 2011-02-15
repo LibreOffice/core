@@ -40,7 +40,6 @@
 #include <vcl/i18nhelp.hxx>
 #include <vcl/controldata.hxx>
 #include <vcl/unohelp.hxx>
-#include <com/sun/star/i18n/XCollator.hpp>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
