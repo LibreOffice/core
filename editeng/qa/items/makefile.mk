@@ -51,6 +51,16 @@ SHL1TARGET = borderline_test
 SHL1OBJS = \
              $(SLO)$/borderline_test.obj
 
+SHL1LIBS= \
+    $(SLB)$/items.lib     \
+    $(SLB)$/misc.lib	\
+    $(SLB)$/rtf.lib	\
+    $(SLB)$/uno.lib	\
+    $(SLB)$/accessibility.lib	\
+    $(SLB)$/editeng.lib \
+    $(SLB)$/outliner.lib \
+    $(SLB)$/xml.lib
+
 SHL1STDLIBS= \
              $(CPPUNITLIB) \
              $(XMLOFFLIB) \
@@ -71,8 +81,7 @@ SHL1STDLIBS= \
              $(CPPULIB) \
              $(SALLIB) \
              $(SALHELPERLIB) \
-             $(ICUUCLIB) \
-             $(EDITENGLIB)
+             $(ICUUCLIB)
 
 SHL1VERSIONMAP = version.map
 SHL1IMPLIB = i$(SHL1TARGET)
