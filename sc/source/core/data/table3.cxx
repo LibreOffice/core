@@ -2108,7 +2108,16 @@ void ScTable::FindConditionalFormat( ULONG nKey, ScRangeList& rList )
     }
 }
 
+void ScTable::IncRecalcLevel()
+{
+    ++nRecalcLvl;
+}
 
+void ScTable::DecRecalcLevel(bool bUpdateNoteCaptionPos)
+{
+     if (!--nRecalcLvl)
+         SetDrawPageSize(true, bUpdateNoteCaptionPos);
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

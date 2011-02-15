@@ -784,8 +784,8 @@ public:
 
     void        FindConditionalFormat( ULONG nKey, ScRangeList& rRanges );
 
-    void        IncRecalcLevel() { ++nRecalcLvl; }
-    void        DecRecalcLevel( bool bUpdateNoteCaptionPos = true ) { if (!--nRecalcLvl) SetDrawPageSize(true, bUpdateNoteCaptionPos); }
+    void        IncRecalcLevel();
+    void        DecRecalcLevel( bool bUpdateNoteCaptionPos = true );
 
     BOOL        IsSortCollatorGlobal() const;
     void        InitSortCollator( const ScSortParam& rPar );
