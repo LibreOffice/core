@@ -28,17 +28,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "doc.hxx"
 #include "swundo.hxx"           // fuer die UndoIds
 #include "pam.hxx"
 #include "ndtxt.hxx"
 
-#include "undobj.hxx"
+#include <UndoCore.hxx>
 
-
-inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 SwUndoOutlineLeftRight::SwUndoOutlineLeftRight( const SwPaM& rPam,
                                                 short nOff )
@@ -46,25 +42,20 @@ SwUndoOutlineLeftRight::SwUndoOutlineLeftRight( const SwPaM& rPam,
 {
 }
 
-
-void SwUndoOutlineLeftRight::Undo( SwUndoIter& rUndoIter )
+void SwUndoOutlineLeftRight::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SetPaM( rUndoIter );
-    rUndoIter.GetDoc().OutlineUpDown( *rUndoIter.pAktPam, -nOffset );
+    SwPaM & rPaM( AddUndoRedoPaM(rContext) );
+    rContext.GetDoc().OutlineUpDown(rPaM, -nOffset);
 }
 
-
-void SwUndoOutlineLeftRight::Redo( SwUndoIter& rUndoIter )
+void SwUndoOutlineLeftRight::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SetPaM( rUndoIter );
-    rUndoIter.GetDoc().OutlineUpDown( *rUndoIter.pAktPam, nOffset );
+    SwPaM & rPaM( AddUndoRedoPaM(rContext) );
+    rContext.GetDoc().OutlineUpDown(rPaM,  nOffset);
 }
 
-
-void SwUndoOutlineLeftRight::Repeat( SwUndoIter& rUndoIter )
+void SwUndoOutlineLeftRight::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    rUndoIter.GetDoc().OutlineUpDown( *rUndoIter.pAktPam, nOffset );
+    rContext.GetDoc().OutlineUpDown(rContext.GetRepeatPaM(), nOffset);
 }
-
-
 

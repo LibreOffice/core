@@ -58,15 +58,15 @@ class SW_DLLPUBLIC SwFrmFmt: public SwFmt
 
 protected:
     SwFrmFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
-                SwFrmFmt *pDrvdFrm, USHORT nFmtWhich = RES_FRMFMT,
-                const USHORT* pWhichRange = 0 )
+                SwFrmFmt *pDrvdFrm, sal_uInt16 nFmtWhich = RES_FRMFMT,
+                const sal_uInt16* pWhichRange = 0 )
           : SwFmt( rPool, pFmtNm, (pWhichRange ? pWhichRange : aFrmFmtSetRange),
                 pDrvdFrm, nFmtWhich )
     {}
 
     SwFrmFmt( SwAttrPool& rPool, const String &rFmtNm,
-                SwFrmFmt *pDrvdFrm, USHORT nFmtWhich = RES_FRMFMT,
-                const USHORT* pWhichRange = 0 )
+                SwFrmFmt *pDrvdFrm, sal_uInt16 nFmtWhich = RES_FRMFMT,
+                const sal_uInt16* pWhichRange = 0 )
           : SwFmt( rPool, rFmtNm, (pWhichRange ? pWhichRange : aFrmFmtSetRange),
                 pDrvdFrm, nFmtWhich )
     {}
@@ -94,9 +94,9 @@ public:
     // Gibt die tatsaechlche Groesse des Frames zurueck bzw. ein leeres
     // Rechteck, wenn kein Layout existiert. Wird pPoint angegeben, dann
     // wird der am dichtesten liegende Frame gesucht.
-    SwRect FindLayoutRect( const BOOL bPrtArea = FALSE,
+    SwRect FindLayoutRect( const sal_Bool bPrtArea = sal_False,
                             const Point* pPoint = 0,
-                            const BOOL bCalcFrm = FALSE ) const;
+                            const sal_Bool bCalcFrm = sal_False ) const;
 
     // Sucht das SdrObject. Der SdrObjUserCall ist Client vom Format.
     // Der UserCall kennt sein SdrObject.
@@ -116,7 +116,7 @@ public:
     const SdrObject *FindRealSdrObject() const
         { return ((SwFrmFmt*)this)->FindRealSdrObject(); }
 
-    BOOL IsLowerOf( const SwFrmFmt& rFmt ) const;
+    sal_Bool IsLowerOf( const SwFrmFmt& rFmt ) const;
 
     // --> OD 2004-07-27 #i31698#
     enum tLayoutDir
@@ -182,14 +182,14 @@ public:
     virtual void MakeFrms();
 
     SwFlyFrm* GetFrm( const Point* pDocPos = 0,
-                        const BOOL bCalcFrm = FALSE ) const;
+                        const sal_Bool bCalcFrm = sal_False ) const;
 
     SwAnchoredObject* GetAnchoredObj( const Point* pDocPos = 0,
-                                      const BOOL bCalcFrm = FALSE ) const;
+                                      const sal_Bool bCalcFrm = sal_False ) const;
 
     virtual Graphic MakeGraphic( ImageMap* pMap = NULL );
 
-    virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
+    virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
 
     // --> OD 2009-07-14 #i73249#
     const String GetObjTitle() const;

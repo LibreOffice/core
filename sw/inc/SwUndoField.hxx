@@ -24,10 +24,13 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SW_UNDO_FIELD_HXX
-#define _SW_UNDO_FIELD_HXX
+#ifndef SW_UNDO_FIELD_HXX
+#define SW_UNDO_FIELD_HXX
 
 #include <undobj.hxx>
+
+#include <com/sun/star/uno/Any.h>
+
 
 class SwDoc;
 class SwField;
@@ -35,7 +38,7 @@ class SwMsgPoolItem;
 
 class SwUndoField : public SwUndo
 {
-    ULONG nNodeIndex;
+    sal_uLong nNodeIndex;
     xub_StrLen nOffset;
 
 protected:
@@ -51,35 +54,40 @@ class SwUndoFieldFromDoc : public SwUndoField
 {
     SwField * pOldField, * pNewField;
     SwMsgPoolItem * pHnt;
-    BOOL bUpdate;
+    sal_Bool bUpdate;
+
+    void DoImpl();
 
 public:
     SwUndoFieldFromDoc(const SwPosition & rPos, const SwField & aOldField,
                        const SwField & aNewField,
-                       SwMsgPoolItem * pHnt, BOOL bUpdate,
+                       SwMsgPoolItem * pHnt, sal_Bool bUpdate,
                        SwUndoId nId = UNDO_FIELD );
+
     virtual ~SwUndoFieldFromDoc();
 
-    virtual void Undo(SwUndoIter & rIt);
-    virtual void Redo(SwUndoIter & rIt);
-    virtual void Repeat(SwUndoIter & rIt);
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 };
 
 class SwUndoFieldFromAPI : public SwUndoField
 {
     com::sun::star::uno::Any aOldVal, aNewVal;
-    USHORT nWhich;
+    sal_uInt16 nWhich;
+
+    void DoImpl();
 
 public:
     SwUndoFieldFromAPI(const SwPosition & rPos,
                        const com::sun::star::uno::Any & rOldVal,
                        const com::sun::star::uno::Any & rNewVal,
-                       USHORT nWhich);
+                       sal_uInt16 nWhich);
     virtual ~SwUndoFieldFromAPI();
 
-    virtual void Undo(SwUndoIter & rIt);
-    virtual void Redo(SwUndoIter & rIt);
-    virtual void Repeat(SwUndoIter & rIt);
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 };
 
-#endif // _SW_UNDO_FIELD_HXX
+#endif // SW_UNDO_FIELD_HXX

@@ -46,11 +46,11 @@ public:
     SwCellFrm( const SwTableBox &, bool bInsertContent = true );
     ~SwCellFrm();
 
-    virtual BOOL GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState* = 0 ) const;
+    virtual sal_Bool GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState* = 0 ) const;
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const;
-    virtual void CheckDirection( BOOL bVert );
+    virtual void CheckDirection( sal_Bool bVert );
 
     // --> OD 2010-02-17 #i103961#
     virtual void Cut();

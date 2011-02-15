@@ -185,7 +185,7 @@ IMPL_LINK( SwVisitingCardPage, AutoTextSelectHdl, void*, pBox )
                         aBlockNames.getConstArray() );
         }
         if(pExampleFrame->IsInitialized())
-            pExampleFrame->ClearDocument( TRUE );
+            pExampleFrame->ClearDocument( sal_True );
     }
     return 0;
 }

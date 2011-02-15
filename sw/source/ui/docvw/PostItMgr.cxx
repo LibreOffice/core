@@ -59,15 +59,11 @@
 #include <redline.hxx>
 #include <docary.hxx>
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
 #include <tools/color.hxx>
 
 #include <swmodule.hxx>
 #include <annotation.hrc>
 #include "cmdid.h"
-
-#include <SwRewriter.hxx>
-#include <undobj.hxx>
 
 #include <sfx2/request.hxx>
 #include <sfx2/event.hxx>
@@ -423,8 +419,8 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         if ((*i)->pPostIt)
                         {
-                            USHORT nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( (*i)->GetFmtFld()->GetFld()->GetLanguage() );
-                            USHORT nLangWhichId = 0;
+                            sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( (*i)->GetFmtFld()->GetFld()->GetLanguage() );
+                            sal_uInt16 nLangWhichId = 0;
                             switch (nScriptType)
                             {
                                 case SCRIPTTYPE_LATIN :    nLangWhichId = EE_CHAR_LANGUAGE ; break;
@@ -962,7 +958,7 @@ void SwPostItMgr::MakeVisible(const SwSidebarWin* pPostIt,long aPage )
         mpWrtShell->MakeVisible(SwRect(mpEditWin->PixelToLogic(aNoteRect)));
 }
 
-bool SwPostItMgr::ArrowEnabled(USHORT aDirection,unsigned long aPage) const
+bool SwPostItMgr::ArrowEnabled(sal_uInt16 aDirection,unsigned long aPage) const
 {
     switch (aDirection)
     {
@@ -978,7 +974,7 @@ bool SwPostItMgr::ArrowEnabled(USHORT aDirection,unsigned long aPage) const
     }
 }
 
-Color SwPostItMgr::GetArrowColor(USHORT aDirection,unsigned long aPage) const
+Color SwPostItMgr::GetArrowColor(sal_uInt16 aDirection,unsigned long aPage) const
 {
     if (ArrowEnabled(aDirection,aPage))
     {
@@ -1172,7 +1168,7 @@ void SwPostItMgr::AddRedlineComments(bool bCheckExistance, bool bFocus)
 {
     bool bEmpty = mvPostItFlds.empty();
     const SwRedlineTbl& aTable = mpView->GetDocShell()->GetDoc()->GetRedlineTbl();
-    for( USHORT i = 0; i < aTable.Count(); ++i )
+    for( sal_uInt16 i = 0; i < aTable.Count(); ++i )
     {
         SwRedline* pRedline = const_cast<SwRedline*>((aTable)[i]);
         if ( pRedline->GetComment() != String(rtl::OUString::createFromAscii("")) )
@@ -1251,7 +1247,7 @@ void SwPostItMgr::Delete(String aAuthor)
         mpWrtShell->GotoField( *(*i) );
         mpWrtShell->DelRight();
     }
-    mpWrtShell->EndUndo( UNDO_DELETE );
+    mpWrtShell->EndUndo();
     PrepareView();
     mpWrtShell->EndAllAction();
     mbLayout = true;
@@ -1297,7 +1293,7 @@ void SwPostItMgr::Delete()
     mvPostItFlds.clear();
 */
 
-    mpWrtShell->EndUndo( UNDO_DELETE );
+    mpWrtShell->EndUndo();
     PrepareView();
     mpWrtShell->EndAllAction();
     mbLayout = true;
@@ -1398,7 +1394,7 @@ sw::annotation::SwAnnotationWin* SwPostItMgr::GetAnnotationWin(const SwPostItFie
     return NULL;
 }
 
-SwSidebarWin* SwPostItMgr::GetNextPostIt( USHORT aDirection,
+SwSidebarWin* SwPostItMgr::GetNextPostIt( sal_uInt16 aDirection,
                                           SwSidebarWin* aPostIt )
 {
     if (mvPostItFlds.size()>1)

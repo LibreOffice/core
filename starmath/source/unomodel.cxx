@@ -81,8 +81,8 @@ using namespace ::com::sun::star::script;
 SmPrintUIOptions::SmPrintUIOptions()
 {
     ResStringArray      aLocalizedStrings( SmResId( RID_PRINTUIOPTIONS ) );
-    DBG_ASSERT( aLocalizedStrings.Count() >= 15, "resource incomplete" );
-    if( aLocalizedStrings.Count() < 15 ) // bad resource ?
+    DBG_ASSERT( aLocalizedStrings.Count() >= 9, "resource incomplete" );
+    if( aLocalizedStrings.Count() < 9 ) // bad resource ?
         return;
 
     SmModule *pp = SM_MOD();
@@ -100,42 +100,42 @@ SmPrintUIOptions::SmPrintUIOptions()
     String aAppGroupname( aLocalizedStrings.GetString( 0 ) );
     aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
                                     aOpt.GetModuleName( SvtModuleOptions::E_SMATH ) );
-    m_aUIProperties[0].Value = getGroupControlOpt( aAppGroupname, rtl::OUString() );
+    m_aUIProperties[0].Value = getGroupControlOpt( aAppGroupname, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:TabPage:AppPage" ) ) );
 
     // create subgroup for print options
     m_aUIProperties[1].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 1 ), rtl::OUString() );
 
     // create a bool option for title row (matches to SID_PRINTTITLE)
     m_aUIProperties[2].Value = getBoolControlOpt( aLocalizedStrings.GetString( 2 ),
-                                                  aLocalizedStrings.GetString( 3 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:TitleRow:CheckBox" ) ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_TITLE_ROW ) ),
                                                   pConfig->IsPrintTitle() );
     // create a bool option for formula text (matches to SID_PRINTTEXT)
-    m_aUIProperties[3].Value = getBoolControlOpt( aLocalizedStrings.GetString( 4 ),
-                                                  aLocalizedStrings.GetString( 5 ),
+    m_aUIProperties[3].Value = getBoolControlOpt( aLocalizedStrings.GetString( 3 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:FormulaText:CheckBox" ) ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_FORMULA_TEXT ) ),
                                                   pConfig->IsPrintFormulaText() );
     // create a bool option for border (matches to SID_PRINTFRAME)
-    m_aUIProperties[4].Value = getBoolControlOpt( aLocalizedStrings.GetString( 6 ),
-                                                  aLocalizedStrings.GetString( 7 ),
+    m_aUIProperties[4].Value = getBoolControlOpt( aLocalizedStrings.GetString( 4 ),
+                                                  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:Border:CheckBox" ) ),
                                                   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_BORDER ) ),
                                                   pConfig->IsPrintFrame() );
 
     // create subgroup for print format
-    m_aUIProperties[5].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 8 ), rtl::OUString() );
+    m_aUIProperties[5].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 5 ), rtl::OUString() );
 
     // create a radio button group for print format (matches to SID_PRINTSIZE)
     Sequence< rtl::OUString > aChoices( 3 );
-    aChoices[0] = aLocalizedStrings.GetString( 9 );
-    aChoices[1] = aLocalizedStrings.GetString( 11 );
-    aChoices[2] = aLocalizedStrings.GetString( 13 );
-    Sequence< rtl::OUString > aHelpTexts( 3 );
-    aHelpTexts[0] = aLocalizedStrings.GetString( 10 );
-    aHelpTexts[1] = aLocalizedStrings.GetString( 12 );
-    aHelpTexts[2] = aLocalizedStrings.GetString( 14 );
+    aChoices[0] = aLocalizedStrings.GetString( 6 );
+    aChoices[1] = aLocalizedStrings.GetString( 7 );
+    aChoices[2] = aLocalizedStrings.GetString( 8 );
+    Sequence< rtl::OUString > aHelpIds( 3 );
+    aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:0" ) );
+    aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:1" ) );
+    aHelpIds[2] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintFormat:RadioButton:2" ) );
     OUString aPrintFormatProp( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_PRINT_FORMAT ) );
     m_aUIProperties[6].Value = getChoiceControlOpt( rtl::OUString(),
-                                                    aHelpTexts,
+                                                    aHelpIds,
                                                     aPrintFormatProp,
                                                     aChoices, static_cast< sal_Int32 >(pConfig->GetPrintSize())
                                                     );
@@ -143,7 +143,7 @@ SmPrintUIOptions::SmPrintUIOptions()
     // create a numeric box for scale dependent on PrintFormat = "Scaling" (matches to SID_PRINTZOOM)
     vcl::PrinterOptionsHelper::UIControlOptions aRangeOpt( aPrintFormatProp, 2, sal_True );
     m_aUIProperties[ 7 ].Value = getRangeControlOpt( rtl::OUString(),
-                                                     aLocalizedStrings.GetString( 14 ),
+                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintScale:NumericField" ) ),
                                                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_PRINT_SCALE ) ),
                                                      pConfig->GetPrintZoomFactor(),    // initial value
                                                      10,     // min value
@@ -171,7 +171,11 @@ SmPrintUIOptions::SmPrintUIOptions()
 //
 // class SmModel
 //
-#define PROPERTY_NONE 0
+
+// values from com/sun/star/beans/PropertyAttribute
+#define PROPERTY_NONE        0
+#define PROPERTY_READONLY   16
+
 enum SmModelPropertyHandles
 {
     HANDLE_FORMULA,
@@ -233,6 +237,7 @@ enum SmModelPropertyHandles
     HANDLE_PRINTER_NAME,
     HANDLE_PRINTER_SETUP,
     HANDLE_SYMBOLS,
+    HANDLE_USED_SYMBOLS,
     HANDLE_BASIC_LIBRARIES,     /* #93295# */
     HANDLE_RUNTIME_UID,
     // --> PB 2004-08-25 #i33095# Security Options
@@ -307,6 +312,7 @@ PropertySetInfo * lcl_createModelPropertyInfo ()
         { RTL_CONSTASCII_STRINGPARAM( "RightMargin"                       ),    HANDLE_RIGHT_MARGIN                  ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_RIGHTSPACE               },
         { RTL_CONSTASCII_STRINGPARAM( "RuntimeUID"                      ), HANDLE_RUNTIME_UID                        ,      &::getCppuType(static_cast< const rtl::OUString * >(0)),    PropertyAttribute::READONLY, 0 },
         { RTL_CONSTASCII_STRINGPARAM( "Symbols"                       ),        HANDLE_SYMBOLS                       ,      &::getCppuType((const Sequence < SymbolDescriptor > *)0),   PROPERTY_NONE, 0  },
+        { RTL_CONSTASCII_STRINGPARAM( "UserDefinedSymbolsInUse"       ),        HANDLE_USED_SYMBOLS                  ,      &::getCppuType((const Sequence < SymbolDescriptor > *)0),   PropertyAttribute::READONLY, 0  },
         { RTL_CONSTASCII_STRINGPARAM( "TopMargin"                         ),    HANDLE_TOP_MARGIN                    ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_TOPSPACE               },
         // --> PB 2004-08-25 #i33095# Security Options
         { RTL_CONSTASCII_STRINGPARAM( "LoadReadonly" ), HANDLE_LOAD_READONLY, &::getBooleanCppuType(), PROPERTY_NONE, 0 },
@@ -539,7 +545,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             {
                 if((*pValues).getValueType() != ::getBooleanCppuType())
                     throw IllegalArgumentException();
-                BOOL bVal = *(sal_Bool*)(*pValues).getValue();
+                sal_Bool bVal = *(sal_Bool*)(*pValues).getValue();
                 Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
                 aNewFont.SetItalic((bVal) ? ITALIC_NORMAL : ITALIC_NONE);
                 aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
@@ -555,7 +561,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             {
                 if((*pValues).getValueType() != ::getBooleanCppuType())
                     throw IllegalArgumentException();
-                BOOL bVal = *(sal_Bool*)(*pValues).getValue();
+                sal_Bool bVal = *(sal_Bool*)(*pValues).getValue();
                 Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
                 aNewFont.SetWeight((bVal) ? WEIGHT_BOLD : WEIGHT_NORMAL);
                 aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
@@ -575,7 +581,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
 
                 // apply base size to fonts
                 const Size aTmp( aFormat.GetBaseSize() );
-                for (USHORT  i = FNT_BEGIN;  i <= FNT_END;  i++)
+                for (sal_uInt16  i = FNT_BEGIN;  i <= FNT_END;  i++)
                     aFormat.SetFontSize(i, aTmp);
             }
             break;
@@ -732,7 +738,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                         SmSym aSymbol ( pDescriptor->sName, aFont, static_cast < sal_Unicode > (pDescriptor->nCharacter),
                                         pDescriptor->sSymbolSet );
                         aSymbol.SetExportName ( pDescriptor->sExportName );
-                        aSymbol.SetDocSymbol( TRUE );
+                        aSymbol.SetDocSymbol( sal_True );
                         rManager.AddOrReplaceSymbol ( aSymbol );
                     }
                 }
@@ -745,7 +751,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             {
                 if ( (*pValues).getValueType() != ::getBooleanCppuType() )
                     throw IllegalArgumentException();
-                sal_Bool bReadonly = FALSE;
+                sal_Bool bReadonly = sal_False;
                 if ( *pValues >>= bReadonly )
                     pDocSh->SetLoadReadonly( bReadonly );
                 break;
@@ -799,7 +805,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_FONT_TEXT_POSTURE        :
             {
                 const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
-                BOOL bVal = IsItalic( rFace );
+                sal_Bool bVal = IsItalic( rFace );
                 (*pValue).setValue(&bVal, *(*ppEntries)->mpType);
             }
             break;
@@ -812,7 +818,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             case HANDLE_FONT_TEXT_WEIGHT         :
             {
                 const SmFace &  rFace = aFormat.GetFont((*ppEntries)->mnMemberId);
-                BOOL bVal = IsBold( rFace ); // bold?
+                sal_Bool bVal = IsBold( rFace ); // bold?
                 (*pValue).setValue(&bVal, *(*ppEntries)->mpType);
             }
             break;
@@ -904,7 +910,11 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             }
             break;
             case HANDLE_SYMBOLS:
+            case HANDLE_USED_SYMBOLS:
             {
+                const bool bUsedSymbolsOnly = (*ppEntries)->mnHandle == HANDLE_USED_SYMBOLS;
+                const std::set< rtl::OUString > &rUsedSymbols = pDocSh->GetUsedSymbols();
+
                 // this is get
                 SmModule *pp = SM_MOD();
                 const SmSymbolManager &rManager = pp->GetSymbolManager();
@@ -915,7 +925,9 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 for (size_t i = 0; i < aSymbols.size(); ++i)
                 {
                     const SmSym * pSymbol = aSymbols[ i ];
-                    if (pSymbol && !pSymbol->IsPredefined () )
+                    const bool bIsUsedSymbol = rUsedSymbols.find( pSymbol->GetName() ) != rUsedSymbols.end();
+                    if (pSymbol && !pSymbol->IsPredefined() &&
+                        (!bUsedSymbolsOnly || bIsUsedSymbol))
                     {
                         aVector.push_back ( pSymbol );
                         nCount++;

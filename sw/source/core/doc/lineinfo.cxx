@@ -63,10 +63,10 @@ SwLineNumberInfo::SwLineNumberInfo() :
     nCountBy( 5 ),
     nDividerCountBy( 3 ),
     ePos( LINENUMBER_POS_LEFT ),
-    bPaintLineNumbers( FALSE ),
-    bCountBlankLines( TRUE ),
-    bCountInFlys( FALSE ),
-    bRestartEachPage( FALSE )
+    bPaintLineNumbers( sal_False ),
+    bCountBlankLines( sal_True ),
+    bCountInFlys( sal_False ),
+    bRestartEachPage( sal_False )
 {
 }
 
@@ -107,7 +107,7 @@ SwLineNumberInfo& SwLineNumberInfo::operator=(const SwLineNumberInfo &rCpy)
     return *this;
 }
 
-BOOL SwLineNumberInfo::operator==( const SwLineNumberInfo& rInf ) const
+sal_Bool SwLineNumberInfo::operator==( const SwLineNumberInfo& rInf ) const
 {
     return  GetRegisteredIn() == rInf.GetRegisteredIn() &&
             aType.GetNumberingType() == rInf.GetNumType().GetNumberingType() &&

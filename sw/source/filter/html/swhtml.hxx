@@ -433,7 +433,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     sal_uInt32  aFontHeights[7];    // die Font-Hoehen 1-7
     sal_uInt32  nScriptStartLineNr; // Zeilennummer eines Script-Blocks
-    ULONG       nEventId;
+    sal_uLong       nEventId;
 
     sal_uInt16  nBaseFontStMin;     //
     sal_uInt16  nFontStMin;         //
@@ -601,7 +601,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     void GetULSpaceFromContext( sal_uInt16 &rUpper, sal_uInt16 &rLower ) const;
 
 
-    void MovePageDescAttrs( SwNode *pSrcNd, ULONG nDestIdx, sal_Bool bFmtBreak );
+    void MovePageDescAttrs( SwNode *pSrcNd, sal_uLong nDestIdx, sal_Bool bFmtBreak );
 
     // Behandlung von Tags auf Absatz-Ebene
 

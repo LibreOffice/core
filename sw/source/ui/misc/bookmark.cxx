@@ -53,17 +53,17 @@ const String BookmarkCombo::aForbiddenChars = String::CreateFromAscii("/\\@:*?\"
 
 IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
 {
-    BOOL bSelEntries = pBox->GetSelectEntryCount() != 0;
+    sal_Bool bSelEntries = pBox->GetSelectEntryCount() != 0;
     // if a string has been pasted from the clipboard then
     // there may be illegal characters in the box
     if(!bSelEntries)
     {
         String sTmp = pBox->GetText();
-        USHORT nLen = sTmp.Len();
+        sal_uInt16 nLen = sTmp.Len();
         String sMsg;
-        for(USHORT i = 0; i < BookmarkCombo::aForbiddenChars.Len(); i++)
+        for(sal_uInt16 i = 0; i < BookmarkCombo::aForbiddenChars.Len(); i++)
         {
-            USHORT nTmpLen = sTmp.Len();
+            sal_uInt16 nTmpLen = sTmp.Len();
             sTmp.EraseAllChars(BookmarkCombo::aForbiddenChars.GetChar(i));
             if(sTmp.Len() != nTmpLen)
                 sMsg += BookmarkCombo::aForbiddenChars.GetChar(i);
@@ -93,11 +93,11 @@ IMPL_LINK( SwInsertBookmarkDlg, DeleteHdl, Button *, EMPTYARG )
 {
     // Textmarken aus der ComboBox entfernen
 
-    for (USHORT i = aBookmarkBox.GetSelectEntryCount(); i; i-- )
+    for (sal_uInt16 i = aBookmarkBox.GetSelectEntryCount(); i; i-- )
         aBookmarkBox.RemoveEntry(aBookmarkBox.GetSelectEntryPos(i - 1));
 
     aBookmarkBox.SetText(aEmptyStr);
-    aDeleteBtn.Enable(FALSE);   // keine weiteren Eintraege vorhanden
+    aDeleteBtn.Enable(sal_False);   // keine weiteren Eintraege vorhanden
     // aBookmarkBox.SetText(aEmptyStr);
 
     aOkBtn.Enable();            // Im OK Handler wird geloescht
@@ -115,7 +115,7 @@ void SwInsertBookmarkDlg::Apply()
 {
     //at first remove deleted bookmarks to prevent multiple bookmarks with the same
     //name
-    for (USHORT nCount = aBookmarkBox.GetRemovedCount(); nCount > 0; nCount--)
+    for (sal_uInt16 nCount = aBookmarkBox.GetRemovedCount(); nCount > 0; nCount--)
     {
         String sRemoved = aBookmarkBox.GetRemovedEntry( nCount -1 ).GetName();
         IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
@@ -126,7 +126,7 @@ void SwInsertBookmarkDlg::Apply()
     }
 
     // Textmarke einfuegen
-    USHORT      nLen = aBookmarkBox.GetText().Len();
+    sal_uInt16      nLen = aBookmarkBox.GetText().Len();
     SwBoxEntry  aTmpEntry(aBookmarkBox.GetText(), 0 );
 
     if ( nLen && (aBookmarkBox.GetEntryPos(aTmpEntry) == COMBOBOX_ENTRY_NOTFOUND) )
@@ -162,14 +162,14 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rS, SfxRe
     rReq( rRequest )
 {
     aBookmarkBox.SetModifyHdl(LINK(this, SwInsertBookmarkDlg, ModifyHdl));
-    aBookmarkBox.EnableMultiSelection(TRUE);
-    aBookmarkBox.EnableAutocomplete( TRUE, TRUE );
+    aBookmarkBox.EnableMultiSelection(sal_True);
+    aBookmarkBox.EnableAutocomplete( sal_True, sal_True );
 
     aDeleteBtn.SetClickHdl(LINK(this, SwInsertBookmarkDlg, DeleteHdl));
 
     // Combobox mit vorhandenen Bookmarks fuellen
     IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
-    USHORT nId = 0;
+    sal_uInt16 nId = 0;
     for( IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
         ppBookmark != pMarkAccess->getBookmarksEnd();
         ppBookmark++)
@@ -202,7 +202,7 @@ BookmarkCombo::BookmarkCombo( Window* pWin, const ResId& rResId ) :
      Beschreibung:
  -----------------------------------------------------------------------*/
 
-USHORT BookmarkCombo::GetFirstSelEntryPos() const
+sal_uInt16 BookmarkCombo::GetFirstSelEntryPos() const
 {
     return GetSelEntryPos(0);
 }
@@ -211,7 +211,7 @@ USHORT BookmarkCombo::GetFirstSelEntryPos() const
      Beschreibung:
  -----------------------------------------------------------------------*/
 
-USHORT BookmarkCombo::GetNextSelEntryPos(USHORT nPos) const
+sal_uInt16 BookmarkCombo::GetNextSelEntryPos(sal_uInt16 nPos) const
 {
     return GetSelEntryPos(nPos + 1);
 }
@@ -220,11 +220,11 @@ USHORT BookmarkCombo::GetNextSelEntryPos(USHORT nPos) const
      Beschreibung:
  -----------------------------------------------------------------------*/
 
-USHORT BookmarkCombo::GetSelEntryPos(USHORT nPos) const
+sal_uInt16 BookmarkCombo::GetSelEntryPos(sal_uInt16 nPos) const
 {
     sal_Unicode cSep = GetMultiSelectionSeparator();
 
-    USHORT nCnt = GetText().GetTokenCount(cSep);
+    sal_uInt16 nCnt = GetText().GetTokenCount(cSep);
 
     for (; nPos < nCnt; nPos++)
     {
@@ -242,11 +242,11 @@ USHORT BookmarkCombo::GetSelEntryPos(USHORT nPos) const
      Beschreibung:
  -----------------------------------------------------------------------*/
 
-USHORT BookmarkCombo::GetSelectEntryCount() const
+sal_uInt16 BookmarkCombo::GetSelectEntryCount() const
 {
-    USHORT nCnt = 0;
+    sal_uInt16 nCnt = 0;
 
-    USHORT nPos = GetFirstSelEntryPos();
+    sal_uInt16 nPos = GetFirstSelEntryPos();
     while (nPos != COMBOBOX_ENTRY_NOTFOUND)
     {
         nPos = GetNextSelEntryPos(nPos);
@@ -260,10 +260,10 @@ USHORT BookmarkCombo::GetSelectEntryCount() const
      Beschreibung: Position in der Listbox (der ComboBox)
  -----------------------------------------------------------------------*/
 
-USHORT BookmarkCombo::GetSelectEntryPos( USHORT nSelIndex ) const
+sal_uInt16 BookmarkCombo::GetSelectEntryPos( sal_uInt16 nSelIndex ) const
 {
-    USHORT nCnt = 0;
-    USHORT nPos = GetFirstSelEntryPos();
+    sal_uInt16 nCnt = 0;
+    sal_uInt16 nPos = GetFirstSelEntryPos();
 
     while (nPos != COMBOBOX_ENTRY_NOTFOUND)
     {

@@ -100,7 +100,7 @@ class SwHTMLWrtTable : public SwWriteTable
 
 public:
     SwHTMLWrtTable( const SwTableLines& rLines, long nWidth, sal_uInt32 nBWidth,
-                    sal_Bool bRel, USHORT nNumOfRowsToRepeat,
+                    sal_Bool bRel, sal_uInt16 nNumOfRowsToRepeat,
                     sal_uInt16 nLeftSub=0, sal_uInt16 nRightSub=0 );
     SwHTMLWrtTable( const SwHTMLTableLayout *pLayoutInfo );
 
@@ -112,7 +112,7 @@ public:
 
 
 SwHTMLWrtTable::SwHTMLWrtTable( const SwTableLines& rLines, long nWidth,
-                                sal_uInt32 nBWidth, sal_Bool bRel, USHORT nNumOfRowsToRepeat,
+                                sal_uInt32 nBWidth, sal_Bool bRel, sal_uInt16 nNumOfRowsToRepeat,
                                 sal_uInt16 nLSub, sal_uInt16 nRSub )
     : SwWriteTable( rLines, nWidth, nBWidth, bRel, MAX_DEPTH, nLSub, nRSub, nNumOfRowsToRepeat )
 {
@@ -293,7 +293,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     sal_Bool bHead = sal_False;
     if( pSttNd )
     {
-        ULONG nNdPos = pSttNd->GetIndex()+1;
+        sal_uLong nNdPos = pSttNd->GetIndex()+1;
 
         // Art der Zelle (TD/TH) bestimmen
         SwNode* pNd;
@@ -338,7 +338,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
 
 #ifndef PURE_HTML
     long nWidth = 0;
-    sal_uInt32 nPrcWidth = ULONG_MAX;
+    sal_uInt32 nPrcWidth = USHRT_MAX;
     if( bOutWidth )
     {
         if( bLayoutExport )

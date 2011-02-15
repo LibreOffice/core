@@ -99,7 +99,7 @@ void SwTxtNode::fillSoftPageBreakList( SwSoftPageBreakList& rBreak ) const
                 }
             }
             else // No soft page break if there's a "hard" page break attribute
-            if( pFirst2 == pFrm && !pFrm->IsPageBreak( TRUE ) )
+            if( pFirst2 == pFrm && !pFrm->IsPageBreak( sal_True ) )
                 rBreak.insert( pFrm->GetOfst() );
         }
     }
@@ -125,7 +125,7 @@ bool SwTableLine::hasSoftPageBreak() const
             //   master table frames with "hard" page break attribute
             if( pTab->GetIndPrev() || pTab->FindFooterOrHeader()
                 || pTab->IsInFly() || pTab->GetUpper()->IsInTab() ||
-                ( !pTab->IsFollow() && pTab->IsPageBreak( TRUE ) ) )
+                ( !pTab->IsFollow() && pTab->IsPageBreak( sal_True ) ) )
                 return false;
             const SwPageFrm* pPage = pTab->FindPageFrm();
             // No soft page break at the first page of the document

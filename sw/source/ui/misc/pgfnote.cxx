@@ -70,7 +70,7 @@
     Beschreibung:   vordefinierte Linien in Point
  --------------------------------------------------------------------*/
 
-static const USHORT __FAR_DATA nLines[] = {
+static const sal_uInt16 __FAR_DATA nLines[] = {
     0,
     50,
     100,
@@ -79,9 +79,9 @@ static const USHORT __FAR_DATA nLines[] = {
     500
 };
 
-static const USHORT nLineCount = sizeof(nLines) / sizeof(nLines[0]);
+static const sal_uInt16 nLineCount = sizeof(nLines) / sizeof(nLines[0]);
 
-static USHORT __FAR_DATA aPageRg[] = {
+static sal_uInt16 __FAR_DATA aPageRg[] = {
     FN_PARAM_FTN_INFO, FN_PARAM_FTN_INFO,
     0
 };
@@ -93,13 +93,13 @@ static USHORT __FAR_DATA aPageRg[] = {
 ------------------------------------------------------------------------*/
 
 
-BOOL lcl_HasLineWidth(USHORT nWidth)
+sal_Bool lcl_HasLineWidth(sal_uInt16 nWidth)
 {
-    for(USHORT i = 0; i < nLineCount; ++i) {
+    for(sal_uInt16 i = 0; i < nLineCount; ++i) {
         if(nLines[i] == nWidth)
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 /*------------------------------------------------------------------------
@@ -111,7 +111,7 @@ BOOL lcl_HasLineWidth(USHORT nWidth)
 
 IMPL_LINK_INLINE_START( SwFootNotePage, HeightPage, Button *, EMPTYARG )
 {
-    aMaxHeightEdit.Enable(FALSE);
+    aMaxHeightEdit.Enable(sal_False);
     return 0;
 }
 IMPL_LINK_INLINE_END( SwFootNotePage, HeightPage, Button *, EMPTYARG )
@@ -177,7 +177,7 @@ SwFootNotePage::SwFootNotePage(Window *pParent, const SfxItemSet &rSet) :
     FreeResource();
 
     SetExchangeSupport();
-    FieldUnit aMetric = ::GetDfltMetric(FALSE);
+    FieldUnit aMetric = ::GetDfltMetric(sal_False);
     SetMetric( aMaxHeightEdit,  aMetric );
     SetMetric( aDistEdit,       aMetric );
     SetMetric( aLineDistEdit,   aMetric );
@@ -226,12 +226,12 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     if(lHeight)
     {
         aMaxHeightEdit.SetValue(aMaxHeightEdit.Normalize(lHeight),FUNIT_TWIP);
-        aMaxHeightBtn.Check(TRUE);
+        aMaxHeightBtn.Check(sal_True);
     }
     else
     {
-        aMaxHeightPageBtn.Check(TRUE);
-        aMaxHeightEdit.Enable(FALSE);
+        aMaxHeightPageBtn.Check(sal_True);
+        aMaxHeightEdit.Enable(sal_False);
     }
     aMaxHeightPageBtn.SetClickHdl(LINK(this,SwFootNotePage,HeightPage));
     aMaxHeightBtn.SetClickHdl(LINK(this,SwFootNotePage,HeightMetric));
@@ -241,16 +241,16 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
     aLineDistEdit.SetLoseFocusHdl( aLk );
 
     // Trennlinie
-    for(USHORT i = 0; i < nLineCount; ++i)
+    for(sal_uInt16 i = 0; i < nLineCount; ++i)
         aLineTypeBox.InsertEntry(nLines[i]);
 
-    const USHORT nWidth = (USHORT)pFtnInfo->GetLineWidth() * TWIP_TO_LBOX;
+    const sal_uInt16 nWidth = (sal_uInt16)pFtnInfo->GetLineWidth() * TWIP_TO_LBOX;
     if ( !lcl_HasLineWidth(nWidth) )
         aLineTypeBox.InsertEntry(nWidth);
     aLineTypeBox.SelectEntry(nWidth);
 
     // Position
-    aLinePosBox.SelectEntryPos( static_cast< USHORT >(pFtnInfo->GetAdj()) );
+    aLinePosBox.SelectEntryPos( static_cast< sal_uInt16 >(pFtnInfo->GetAdj()) );
 
         // Breite
     Fraction aTmp( 100, 1 );
@@ -270,7 +270,7 @@ void SwFootNotePage::Reset(const SfxItemSet &rSet)
  --------------------------------------------------------------------*/
 
 
-BOOL SwFootNotePage::FillItemSet(SfxItemSet &rSet)
+sal_Bool SwFootNotePage::FillItemSet(SfxItemSet &rSet)
 {
     SwPageFtnInfoItem aItem((const SwPageFtnInfoItem&)GetItemSet().Get(FN_PARAM_FTN_INFO));
 
@@ -291,7 +291,7 @@ BOOL SwFootNotePage::FillItemSet(SfxItemSet &rSet)
             aLineDistEdit.Denormalize(aLineDistEdit.GetValue(FUNIT_TWIP))));
 
         // Trennlinie
-    const USHORT nPos = aLineTypeBox.GetSelectEntryPos();
+    const sal_uInt16 nPos = aLineTypeBox.GetSelectEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND != nPos )
         rFtnInfo.SetLineWidth(nLines[nPos] / TWIP_TO_LBOX);
 
@@ -306,7 +306,7 @@ BOOL SwFootNotePage::FillItemSet(SfxItemSet &rSet)
                 aItem != *pOldItem )
         rSet.Put(aItem);
 
-    return TRUE;
+    return sal_True;
 }
 
 void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
@@ -315,7 +315,7 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
     lMaxHeight = rSize.GetSize().Height();
 
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rSet.GetItemState( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_HEADERSET), FALSE, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_HEADERSET), sal_False, &pItem ) )
     {
         const SfxItemSet& rHeaderSet = ((SvxSetItem*)pItem)->GetItemSet();
         const SfxBoolItem& rHeaderOn =
@@ -330,7 +330,7 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
     }
 
     if( SFX_ITEM_SET == rSet.GetItemState( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_FOOTERSET),
-            FALSE, &pItem ) )
+            sal_False, &pItem ) )
     {
         const SfxItemSet& rFooterSet = ((SvxSetItem*)pItem)->GetItemSet();
         const SfxBoolItem& rFooterOn =
@@ -344,7 +344,7 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
         }
     }
 
-    if ( rSet.GetItemState( RES_UL_SPACE , FALSE ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( RES_UL_SPACE , sal_False ) == SFX_ITEM_SET )
     {
         const SvxULSpaceItem &rUL = (const SvxULSpaceItem&)rSet.Get( RES_UL_SPACE );
         lMaxHeight -= rUL.GetUpper() + rUL.GetLower();
@@ -362,10 +362,10 @@ int SwFootNotePage::DeactivatePage( SfxItemSet* _pSet)
     if(_pSet)
         FillItemSet(*_pSet);
 
-    return TRUE;
+    return sal_True;
 }
 
-USHORT* SwFootNotePage::GetRanges()
+sal_uInt16* SwFootNotePage::GetRanges()
 {
     return aPageRg;
 }

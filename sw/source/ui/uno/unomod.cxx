@@ -292,9 +292,9 @@ sal_Bool SwXModule::supportsService(const OUString& rServiceName) throw( Runtime
     for(sal_Int32 nService = 0; nService < aNames.getLength(); nService++)
     {
         if(aNames.getConstArray()[nService] == rServiceName)
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 /* -----------------------------06.04.00 10:59--------------------------------
 
@@ -340,13 +340,7 @@ void SwXPrintSettings::_preSetValues ()
         {
             if (!mpDoc)
                 throw IllegalArgumentException ();
-            if ( !mpDoc->getPrintData() )
-            {
-                mpPrtOpt = new SwPrintData;
-                mpDoc->setPrintData ( *mpPrtOpt );
-                delete mpPrtOpt;
-            }
-            mpPrtOpt = mpDoc->getPrintData();
+            mpPrtOpt = const_cast< SwPrintData * >(&mpDoc->getPrintData());
         }
         break;
     }
@@ -502,13 +496,7 @@ void SwXPrintSettings::_preGetValues ()
         {
             if (!mpDoc)
                 throw IllegalArgumentException ();
-            if ( !mpDoc->getPrintData() )
-            {
-                mpPrtOpt = new SwPrintData;
-                mpDoc->setPrintData ( *mpPrtOpt );
-                delete mpPrtOpt;
-            }
-            mpPrtOpt = mpDoc->getPrintData();
+            mpPrtOpt = const_cast< SwPrintData * >(&mpDoc->getPrintData());
         }
         break;
     }
@@ -685,10 +673,10 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_DRAWINGS              :   mpViewOption->SetDraw(bVal); break;
         case  HANDLE_VIEWSET_FIELD_COMMANDS        :   mpViewOption->SetFldName(bVal);  break;
         case  HANDLE_VIEWSET_ANNOTATIONS           :   mpViewOption->SetPostIts(bVal);  break;
-        case  HANDLE_VIEWSET_INDEX_MARK_BACKGROUND :   mpViewOption->SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bVal, TRUE);  break;
+        case  HANDLE_VIEWSET_INDEX_MARK_BACKGROUND :   mpViewOption->SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bVal, sal_True);  break;
         case  HANDLE_VIEWSET_NONPRINTING_CHARACTERS:   mpViewOption->SetViewMetaChars( bVal ); break;
-        case  HANDLE_VIEWSET_FOOTNOTE_BACKGROUND   :   mpViewOption->SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bVal, TRUE); break;
-        case  HANDLE_VIEWSET_TEXT_FIELD_BACKGROUND :   mpViewOption->SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bVal, TRUE);    break;
+        case  HANDLE_VIEWSET_FOOTNOTE_BACKGROUND   :   mpViewOption->SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bVal, sal_True); break;
+        case  HANDLE_VIEWSET_TEXT_FIELD_BACKGROUND :   mpViewOption->SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bVal, sal_True);    break;
         case  HANDLE_VIEWSET_PARA_BREAKS           :   mpViewOption->SetParagraph(bVal);    break;
         case  HANDLE_VIEWSET_SOFT_HYPHENS          :   mpViewOption->SetSoftHyph(bVal); break;
         case  HANDLE_VIEWSET_SPACES                :   mpViewOption->SetBlank(bVal);    break;
@@ -698,7 +686,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_HIDDEN_TEXT           :   mpViewOption->SetShowHiddenField(bVal);  break;
         case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     :   mpViewOption->SetShowHiddenChar(bVal); break;
         case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   mpViewOption->SetShowHiddenPara(bVal);   break;
-        case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   mpViewOption->SetAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES, bVal, TRUE);    break;
+        case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   mpViewOption->SetAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES, bVal, sal_True);    break;
         case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   mpViewOption->SetDocBoundaries(bVal);    break;
         case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   mpViewOption->SetSmoothScroll(bVal); break;
         case  HANDLE_VIEWSET_SOLID_MARK_HANDLES    :   mpViewOption->SetSolidMarkHdl(bVal); break;
@@ -890,13 +878,13 @@ void SwXViewSettings::_preGetValues ()
 void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, uno::Any & rValue )
     throw(UnknownPropertyException, WrappedTargetException )
 {
-    sal_Bool bBool = TRUE;
+    sal_Bool bBool = sal_True;
     sal_Bool bBoolVal;
     switch( rInfo.mnHandle )
     {
         case  HANDLE_VIEWSET_SHOW_RULER:                bBoolVal = mpConstViewOption->IsViewAnyRuler();   break;
-        case  HANDLE_VIEWSET_HRULER :                   bBoolVal = mpConstViewOption->IsViewHRuler(TRUE);   break;
-        case  HANDLE_VIEWSET_VRULER :                   bBoolVal = mpConstViewOption->IsViewVRuler(TRUE);break;
+        case  HANDLE_VIEWSET_HRULER :                   bBoolVal = mpConstViewOption->IsViewHRuler(sal_True);   break;
+        case  HANDLE_VIEWSET_VRULER :                   bBoolVal = mpConstViewOption->IsViewVRuler(sal_True);break;
         case  HANDLE_VIEWSET_VRULER_RIGHT          :   bBoolVal = mpConstViewOption->IsVRulerRight();break;
         case  HANDLE_VIEWSET_HSCROLL:                   bBoolVal = mpConstViewOption->IsViewHScrollBar();break;
         case  HANDLE_VIEWSET_VSCROLL:                   bBoolVal = mpConstViewOption->IsViewVScrollBar();break;
@@ -926,28 +914,28 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         case  HANDLE_VIEWSET_IS_RASTER_VISIBLE     : bBoolVal = mpConstViewOption->IsGridVisible(); break;
         case  HANDLE_VIEWSET_IS_SNAP_TO_RASTER     : bBoolVal = mpConstViewOption->IsSnap(); break;
         case  HANDLE_VIEWSET_RASTER_RESOLUTION_X   :
-            bBool = FALSE;
+            bBool = sal_False;
             rValue <<= (sal_Int32) TWIP_TO_MM100(mpConstViewOption->GetSnapSize().Width());
         break;
         case  HANDLE_VIEWSET_RASTER_RESOLUTION_Y   :
-            bBool = FALSE;
+            bBool = sal_False;
             rValue <<= (sal_Int32) TWIP_TO_MM100(mpConstViewOption->GetSnapSize().Height());
         break;
         case  HANDLE_VIEWSET_RASTER_SUBDIVISION_X  :
-            bBool = FALSE;
+            bBool = sal_False;
             rValue <<= (sal_Int32) mpConstViewOption->GetDivisionX();
         break;
         case  HANDLE_VIEWSET_RASTER_SUBDIVISION_Y  :
-            bBool = FALSE;
+            bBool = sal_False;
             rValue <<= (sal_Int32) mpConstViewOption->GetDivisionY();
         break;
         case  HANDLE_VIEWSET_ZOOM                   :
-                bBool = FALSE;
+                bBool = sal_False;
                 rValue <<= (sal_Int16)mpConstViewOption->GetZoom();
         break;
         case HANDLE_VIEWSET_ZOOM_TYPE:
         {
-            bBool = FALSE;
+            bBool = sal_False;
             sal_Int16 nRet(0);
             switch (mpConstViewOption->GetZoomType())
             {

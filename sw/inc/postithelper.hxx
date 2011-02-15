@@ -57,7 +57,7 @@ struct SwLayoutInfo
     SwRect mPagePrtArea;
     unsigned long mnPageNumber;
     sw::sidebarwindows::SidebarPosition meSidebarPosition;
-    USHORT mRedlineAuthor;
+    sal_uInt16 mRedlineAuthor;
 
     SwLayoutInfo()
         : mpAnchorFrm(0)

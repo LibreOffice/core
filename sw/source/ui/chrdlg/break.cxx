@@ -74,11 +74,11 @@ void SwBreakDlg::Apply()
     else if(aPageBtn.IsChecked())
     {
         nKind = 3;
-        const USHORT nPos = aPageCollBox.GetSelectEntryPos();
+        const sal_uInt16 nPos = aPageCollBox.GetSelectEntryPos();
         if(0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos)
         {
             aTemplate = aPageCollBox.GetSelectEntry();
-            nPgNum = aPageNumBox.IsChecked() ? (USHORT)aPageNumEdit.GetValue() : 0;
+            nPgNum = aPageNumBox.IsChecked() ? (sal_uInt16)aPageNumEdit.GetValue() : 0;
         }
     }
 }
@@ -125,18 +125,18 @@ IMPL_LINK( SwBreakDlg, OkHdl, Button *, EMPTYARG )
 {
     if(aPageNumBox.IsChecked()) {
             // wenn unterschiedliche Seitenvorlagen, testen auf Gueltigkeit
-        const USHORT nPos = aPageCollBox.GetSelectEntryPos();
+        const sal_uInt16 nPos = aPageCollBox.GetSelectEntryPos();
             // auf Position 0 steht 'Ohne'.
         const SwPageDesc *pPageDesc;
         if ( 0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos )
             pPageDesc = rSh.FindPageDescByName( aPageCollBox.GetSelectEntry(),
-                                                TRUE );
+                                                sal_True );
         else
             pPageDesc = &rSh.GetPageDesc(rSh.GetCurPageDesc());
 
         ASSERT(pPageDesc, Seitenvorlage nicht gefunden.);
-        const USHORT nUserPage = USHORT(aPageNumEdit.GetValue());
-        BOOL bOk = TRUE;
+        const sal_uInt16 nUserPage = sal_uInt16(aPageNumEdit.GetValue());
+        sal_Bool bOk = sal_True;
         switch(pPageDesc->GetUseOn())
         {
             case nsUseOnPage::PD_MIRROR:
@@ -193,8 +193,8 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
 
 
     // Einfuegen der vorhandenen Seitenvorlagen in die Listbox
-    const USHORT nCount = rSh.GetPageDescCnt();
-    USHORT i;
+    const sal_uInt16 nCount = rSh.GetPageDescCnt();
+    sal_uInt16 i;
 
     for( i = 0; i < nCount; ++i)
     {
@@ -219,22 +219,22 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
 
 void SwBreakDlg::CheckEnable()
 {
-    BOOL bEnable = TRUE;
+    sal_Bool bEnable = sal_True;
     if ( bHtmlMode )
     {
-        aColumnBtn  .Enable(FALSE);
-        aPageCollBox.Enable(FALSE);
-        bEnable = FALSE;
+        aColumnBtn  .Enable(sal_False);
+        aPageCollBox.Enable(sal_False);
+        bEnable = sal_False;
     }
-    else if(rSh.GetFrmType(0,TRUE)
+    else if(rSh.GetFrmType(0,sal_True)
         & (FRMTYPE_FLY_ANY | FRMTYPE_HEADER | FRMTYPE_FOOTER  | FRMTYPE_FOOTNOTE))
     {
-        aPageBtn.Enable(FALSE);
+        aPageBtn.Enable(sal_False);
         if(aPageBtn.IsChecked())
-            aLineBtn.Check(TRUE);
-        bEnable = FALSE;
+            aLineBtn.Check(sal_True);
+        bEnable = sal_False;
     }
-    const BOOL bPage = aPageBtn.IsChecked();
+    const sal_Bool bPage = aPageBtn.IsChecked();
     aPageCollText.Enable( bPage );
     aPageCollBox.Enable ( bPage );
 
@@ -242,9 +242,9 @@ void SwBreakDlg::CheckEnable()
     if ( bEnable )
     {
         // auf Position 0 steht 'Ohne' Seitenvorlage.
-        const USHORT nPos = aPageCollBox.GetSelectEntryPos();
+        const sal_uInt16 nPos = aPageCollBox.GetSelectEntryPos();
         if ( 0 == nPos || LISTBOX_ENTRY_NOTFOUND == nPos )
-            bEnable = FALSE;
+            bEnable = sal_False;
     }
     aPageNumBox .Enable(bEnable);
     aPageNumEdit.Enable(bEnable);

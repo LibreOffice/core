@@ -31,9 +31,9 @@
 #include "htmlfly.hxx"
 
 
-#define TE(t,p,c) (BYTE)( HTML_OUT_##t | HTML_POS_##p | HTML_CNTNR_##c )
+#define TE(t,p,c) (sal_uInt8)( HTML_OUT_##t | HTML_POS_##p | HTML_CNTNR_##c )
 
-BYTE aHTMLOutFrmPageFlyTable[MAX_FRMTYPES][MAX_BROWSERS] =
+sal_uInt8 aHTMLOutFrmPageFlyTable[MAX_FRMTYPES][MAX_BROWSERS] =
 {
     {
         // Textrahmen mit Tabelle
@@ -129,7 +129,7 @@ BYTE aHTMLOutFrmPageFlyTable[MAX_FRMTYPES][MAX_BROWSERS] =
     }
 };
 
-BYTE aHTMLOutFrmParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS] =
+sal_uInt8 aHTMLOutFrmParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS] =
 {
     {
         // Textrahmen mit Tabelle
@@ -226,7 +226,7 @@ BYTE aHTMLOutFrmParaFrameTable[MAX_FRMTYPES][MAX_BROWSERS] =
     }
 };
 
-BYTE aHTMLOutFrmParaPrtAreaTable[MAX_FRMTYPES][MAX_BROWSERS] =
+sal_uInt8 aHTMLOutFrmParaPrtAreaTable[MAX_FRMTYPES][MAX_BROWSERS] =
 {
     {
         // Textrahmen mit Tabelle
@@ -322,7 +322,7 @@ BYTE aHTMLOutFrmParaPrtAreaTable[MAX_FRMTYPES][MAX_BROWSERS] =
     }
 };
 
-BYTE aHTMLOutFrmParaOtherTable[MAX_FRMTYPES][MAX_BROWSERS] =
+sal_uInt8 aHTMLOutFrmParaOtherTable[MAX_FRMTYPES][MAX_BROWSERS] =
 {
     {
         // Textrahmen mit Tabelle
@@ -418,7 +418,7 @@ BYTE aHTMLOutFrmParaOtherTable[MAX_FRMTYPES][MAX_BROWSERS] =
     }
 };
 
-BYTE aHTMLOutFrmAsCharTable[MAX_FRMTYPES][MAX_BROWSERS] =
+sal_uInt8 aHTMLOutFrmAsCharTable[MAX_FRMTYPES][MAX_BROWSERS] =
 {
     {
         // Textrahmen mit Tabelle

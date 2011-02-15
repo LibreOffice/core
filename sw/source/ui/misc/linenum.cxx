@@ -174,7 +174,7 @@ void __EXPORT SwLineNumberingPage::Reset( const SfxItemSet&  )
     IDocumentStylePoolAccess* pIDSPA = pSh->getIDocumentStylePoolAccess();
 
     String sStyleName(rInf.GetCharFmt( *pIDSPA )->GetName());
-    const USHORT nPos = aCharStyleLB.GetEntryPos(sStyleName);
+    const sal_uInt16 nPos = aCharStyleLB.GetEntryPos(sStyleName);
 
     if (nPos != LISTBOX_ENTRY_NOTFOUND)
         aCharStyleLB.SelectEntryPos(nPos);
@@ -189,13 +189,13 @@ void __EXPORT SwLineNumberingPage::Reset( const SfxItemSet&  )
 
     // Format
 //  SwFldMgr aMgr( pSh );
-    USHORT nSelFmt = rInf.GetNumType().GetNumberingType();
-//  USHORT nCnt = aMgr.GetFormatCount( TYP_SEQFLD, FALSE );
+    sal_uInt16 nSelFmt = rInf.GetNumType().GetNumberingType();
+//  sal_uInt16 nCnt = aMgr.GetFormatCount( TYP_SEQFLD, sal_False );
 
-//  for( USHORT i = 0; i < nCnt; i++)
+//  for( sal_uInt16 i = 0; i < nCnt; i++)
 //  {
 //      aFormatLB.InsertEntry(aMgr.GetFormatStr( TYP_SEQFLD, i));
-//      USHORT nFmtId = aMgr.GetFormatId( TYP_SEQFLD, i );
+//      sal_uInt16 nFmtId = aMgr.GetFormatId( TYP_SEQFLD, i );
 //      aFormatLB.SetEntryData( i, (void*)nFmtId );
 //      if( nFmtId == nSelFmt )
 //          aFormatLB.SelectEntryPos( i );
@@ -206,10 +206,10 @@ void __EXPORT SwLineNumberingPage::Reset( const SfxItemSet&  )
 //      aFormatLB.SelectEntryPos(aFormatLB.GetEntryCount() - 1);
 
     // Position
-    aPosLB.SelectEntryPos((USHORT)rInf.GetPos());
+    aPosLB.SelectEntryPos((sal_uInt16)rInf.GetPos());
 
     // Offset
-    USHORT nOffset = rInf.GetPosFromLeft();
+    sal_uInt16 nOffset = rInf.GetPosFromLeft();
     if (nOffset == USHRT_MAX)
         nOffset = 0;
 
@@ -243,7 +243,7 @@ void __EXPORT SwLineNumberingPage::Reset( const SfxItemSet&  )
 
 IMPL_LINK( SwLineNumberingPage, ModifyHdl, Edit *, EMPTYARG )
 {
-    BOOL bHasValue = aDivisorED.GetText().Len() != 0;
+    sal_Bool bHasValue = aDivisorED.GetText().Len() != 0;
 
     aDivIntervalFT.Enable(bHasValue);
     aDivIntervalNF.Enable(bHasValue);
@@ -258,7 +258,7 @@ IMPL_LINK( SwLineNumberingPage, ModifyHdl, Edit *, EMPTYARG )
 
 IMPL_LINK( SwLineNumberingPage, LineOnOffHdl, CheckBox *, EMPTYARG )
 {
-    BOOL bEnable = aNumberingOnCB.IsChecked();
+    sal_Bool bEnable = aNumberingOnCB.IsChecked();
 
     aCharStyleFT.Enable(bEnable);
     aCharStyleLB.Enable(bEnable);
@@ -290,7 +290,7 @@ IMPL_LINK( SwLineNumberingPage, LineOnOffHdl, CheckBox *, EMPTYARG )
     Beschreibung:
  -----------------------------------------------------------------------*/
 
-BOOL __EXPORT SwLineNumberingPage::FillItemSet( SfxItemSet& )
+sal_Bool __EXPORT SwLineNumberingPage::FillItemSet( SfxItemSet& )
 {
     SwLineNumberInfo aInf(pSh->GetLineNumberInfo());
 
@@ -320,16 +320,16 @@ BOOL __EXPORT SwLineNumberingPage::FillItemSet( SfxItemSet& )
     aInf.SetPos((LineNumberPosition)aPosLB.GetSelectEntryPos());
 
     // Offset
-    aInf.SetPosFromLeft((USHORT)aOffsetMF.Denormalize(aOffsetMF.GetValue(FUNIT_TWIP)));
+    aInf.SetPosFromLeft((sal_uInt16)aOffsetMF.Denormalize(aOffsetMF.GetValue(FUNIT_TWIP)));
 
     // Numerierungsoffset
-    aInf.SetCountBy((USHORT)aNumIntervalNF.GetValue());
+    aInf.SetCountBy((sal_uInt16)aNumIntervalNF.GetValue());
 
     // Teiler
     aInf.SetDivider(aDivisorED.GetText());
 
     // Teileroffset
-    aInf.SetDividerCountBy((USHORT)aDivIntervalNF.GetValue());
+    aInf.SetDividerCountBy((sal_uInt16)aDivIntervalNF.GetValue());
 
     // Zaehlen
     aInf.SetCountBlankLines(aCountEmptyLinesCB.IsChecked());
@@ -340,7 +340,7 @@ BOOL __EXPORT SwLineNumberingPage::FillItemSet( SfxItemSet& )
 
     pSh->SetLineNumberInfo(aInf);
 
-    return FALSE;
+    return sal_False;
 }
 
 
