@@ -449,6 +449,12 @@ ShowGridcontrol sym:showGridcontrol
 *GridControlDialog sym:gridcontroldialog
 gridcontrolcontrol sym:gridcontrolself
 
+*TabControlDialog sym:tabcontroldialog
+tabcontrol_1 sym:tabcontrol_1
+tabcontrol_2 sym:tabcontrol_2
+tabbutton sym:tabbutton
+tabcontainer sym:tabcontainer
+
 *GroupingDlg sym:SC_HID_SC_DPDATEGROUP
 AutoStart sym:sc:RadioButton:RID_SCDLG_DPNUMGROUP:RB_AUTOSTART
 ManualStart sym:sc:RadioButton:RID_SCDLG_DPNUMGROUP:RB_MANSTART

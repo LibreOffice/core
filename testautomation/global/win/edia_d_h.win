@@ -55,7 +55,7 @@ AdoURL              sym:DBACCESS_HID_PAGE_DBWIZARD_ADO_ET_ADOURL
 StartTableWizard    sym:DBACCESS_HID_PAGE_DBWIZARD_FINAL_CB_STARTTABLEWIZARD
 
 *CreateDatabaseLink sym:cui:ModalDialog:DLG_DOCUMENTLINK
-DatabaseFile .uno:OpenUrl
+DatabaseFile sym:cui:ComboBox:DLG_DOCUMENTLINK:CMB_URL
 Browse sym:cui:PushButton:DLG_DOCUMENTLINK:PB_BROWSEFILE
 RegisteredName sym:cui:Edit:DLG_DOCUMENTLINK:ET_NAME
 
