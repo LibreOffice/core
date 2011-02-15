@@ -1208,7 +1208,7 @@ ScRowStyles::Cache::Cache() :
 
 bool ScRowStyles::Cache::hasCache(sal_Int32 nTable, sal_Int32 nField) const
 {
-    return mnTable == nTable && mnStart <= nField && nField <= mnEnd;
+    return mnTable == nTable && mnStart <= nField && nField < mnEnd;
 }
 
 ScRowStyles::ScRowStyles()
