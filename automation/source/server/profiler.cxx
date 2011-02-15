@@ -44,10 +44,10 @@
 TTProfiler::TTProfiler()
 : mpStart( NULL )
 , mpEnd( NULL )
-, bIsProfileIntervalStarted( FALSE )
-, bIsProfilingPerCommand( FALSE )
-, bIsPartitioning( FALSE )
-, bIsAutoProfiling( FALSE )
+, bIsProfileIntervalStarted( sal_False )
+, bIsProfilingPerCommand( sal_False )
+, bIsPartitioning( sal_False )
+, bIsAutoProfiling( sal_False )
 , pSysDepStatic( NULL )
 {
     InitSysdepProfiler();
@@ -95,13 +95,13 @@ String TTProfiler::GetProfileHeader()
 }
 
 
-void TTProfiler::StartProfileInterval( BOOL bReadAnyway )
+void TTProfiler::StartProfileInterval( sal_Bool bReadAnyway )
 {
     if ( !bIsProfileIntervalStarted || bReadAnyway )
     {
         GetProfileSnapshot( mpStart );
         GetSysdepProfileSnapshot( mpStart->pSysdepProfileSnapshot, PROFILE_START );
-        bIsProfileIntervalStarted = TRUE;
+        bIsProfileIntervalStarted = sal_True;
     }
 }
 
@@ -109,10 +109,10 @@ String TTProfiler::GetProfileLine( ProfileSnapshot *pStart, ProfileSnapshot *pEn
 {
     String aProfileString;
 
-    aProfileString += Pad(GetpApp()->GetAppLocaleDataWrapper().getDuration( DIFF( pStart, pEnd, aTime) , TRUE, TRUE ), 12);
+    aProfileString += Pad(GetpApp()->GetAppLocaleDataWrapper().getDuration( DIFF( pStart, pEnd, aTime) , sal_True, sal_True ), 12);
 
-    ULONG nProcessTicks = DIFF( pStart, pEnd, nProcessTicks );
-    ULONG nSystemTicks = DIFF( pStart, pEnd, nSystemTicks );
+    sal_uLong nProcessTicks = DIFF( pStart, pEnd, nProcessTicks );
+    sal_uLong nSystemTicks = DIFF( pStart, pEnd, nSystemTicks );
     if ( nSystemTicks )
     {
         aProfileString += Pad(UniString::CreateFromInt32( (100 * nProcessTicks) / nSystemTicks ), 11);
@@ -147,7 +147,7 @@ void TTProfiler::EndProfileInterval()
 {
     GetProfileSnapshot( mpEnd );
     GetSysdepProfileSnapshot( mpEnd->pSysdepProfileSnapshot, PROFILE_END );
-    bIsProfileIntervalStarted = FALSE;
+    bIsProfileIntervalStarted = sal_False;
 }
 
 
@@ -161,32 +161,32 @@ void TTProfiler::GetProfileSnapshot( ProfileSnapshot *pProfileSnapshot )
 
 void TTProfiler::StartProfilingPerCommand()     // Jeden Befehl mitschneiden
 {
-    bIsProfilingPerCommand = TRUE;
+    bIsProfilingPerCommand = sal_True;
 }
 
 void TTProfiler::StopProfilingPerCommand()
 {
-    bIsProfilingPerCommand = FALSE;
+    bIsProfilingPerCommand = sal_False;
 }
 
 void TTProfiler::StartPartitioning()
 {
-    bIsPartitioning = TRUE;
+    bIsPartitioning = sal_True;
 }
 
 void TTProfiler::StopPartitioning()
 {
-    bIsPartitioning = TRUE;
+    bIsPartitioning = sal_True;
 }
 
-ULONG TTProfiler::GetPartitioningTime()
+sal_uLong TTProfiler::GetPartitioningTime()
 {
     return DIFF( mpStart, mpEnd, nSystemTicks );
 }
 
 
 
-void TTProfiler::StartAutoProfiling( ULONG nMSec )
+void TTProfiler::StartAutoProfiling( sal_uLong nMSec )
 {
     if ( !bIsAutoProfiling )
     {
@@ -197,7 +197,7 @@ void TTProfiler::StartAutoProfiling( ULONG nMSec )
         GetProfileSnapshot( pAutoStart );
         GetSysdepProfileSnapshot( pAutoStart->pSysdepProfileSnapshot, PROFILE_START );
         SetTimeout( nMSec );
-        bIsAutoProfiling = TRUE;
+        bIsAutoProfiling = sal_True;
         Start();
     }
 
@@ -234,14 +234,14 @@ void TTProfiler::StopAutoProfiling()
     if ( bIsAutoProfiling )
     {
         Stop();
-        bIsAutoProfiling = FALSE;
+        bIsAutoProfiling = sal_False;
     }
 }
 
 
 
-//String TTProfiler::Hex( ULONG nNr )
-String TTProfiler::Dec( ULONG nNr )
+//String TTProfiler::Hex( sal_uLong nNr )
+String TTProfiler::Dec( sal_uLong nNr )
 {
     String aRet(UniString::CreateFromInt32(nNr));
     if ( nNr < 100 )

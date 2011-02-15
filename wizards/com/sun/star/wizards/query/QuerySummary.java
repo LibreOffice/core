@@ -26,12 +26,13 @@
  ************************************************************************/
 package com.sun.star.wizards.query;
 
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.wizards.common.*;
-//import com.sun.star.wizards.ui.FilterComponent;
-import com.sun.star.wizards.ui.*;
-import com.sun.star.wizards.db.*;
-import com.sun.star.beans.*;
+import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.Resource;
+import com.sun.star.wizards.db.FieldColumn;
+import com.sun.star.wizards.db.QueryMetaData;
+import com.sun.star.wizards.ui.FilterComponent;
 
 public class QuerySummary extends QueryMetaData
 {

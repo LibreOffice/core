@@ -71,14 +71,14 @@ void fillNetscapePluginFilters( Sequence< rtl::OUString >& rPluginNames, Sequenc
 
         Sequence<PluginDescription > aDescriptions( xPMgr->getPluginDescriptions() );
         const PluginDescription * pDescriptions = aDescriptions.getConstArray();
-        for ( UINT32 nPos = aDescriptions.getLength(); nPos--; )
+        for ( sal_uInt32 nPos = aDescriptions.getLength(); nPos--; )
         {
             const PluginDescription & rDescr = pDescriptions[nPos];
 
             StrSet& rTypes = aMap[ rDescr.Description ];
             String aExtension( rDescr.Extension );
 
-            for ( USHORT nCnt = aExtension.GetTokenCount( ';' ); nCnt--; )
+            for ( sal_uInt16 nCnt = aExtension.GetTokenCount( ';' ); nCnt--; )
             {
                 // no default plugins anymore
                 String aExt( aExtension.GetToken( nCnt, ';' ) );
@@ -121,6 +121,6 @@ void fillNetscapePluginFilters( Sequence< rtl::OUString >& rPluginNames, Sequenc
     }
     else
         ShowServiceNotAvailableError( NULL,
-            String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.plugin.PluginManager" ) ), TRUE );
+            String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.plugin.PluginManager" ) ), sal_True );
 }
 

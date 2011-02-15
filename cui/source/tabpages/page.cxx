@@ -129,7 +129,7 @@ static const long MINBODY       = 284;  // 0,5cm in twips aufgerundet
 //static const long PRINT_OFFSET    = 17;   // 0,03cm in twips abgerundet
 static const long PRINT_OFFSET  = 0;    // why was this ever set to 17 ? it led to wrong right and bottom margins.
 
-static USHORT pRanges[] =
+static sal_uInt16 pRanges[] =
 {
     SID_ATTR_BORDER_OUTER,
     SID_ATTR_BORDER_SHADOW,
@@ -142,7 +142,7 @@ static USHORT pRanges[] =
 
 // ------- Mapping Seitenlayout ------------------------------------------
 
-USHORT aArr[] =
+sal_uInt16 aArr[] =
 {
     SVX_PAGE_ALL,
     SVX_PAGE_MIRROR,
@@ -152,11 +152,11 @@ USHORT aArr[] =
 
 // -----------------------------------------------------------------------
 
-USHORT PageUsageToPos_Impl( USHORT nUsage )
+sal_uInt16 PageUsageToPos_Impl( sal_uInt16 nUsage )
 {
-    const USHORT nCount = sizeof(aArr) / sizeof(USHORT);
+    const sal_uInt16 nCount = sizeof(aArr) / sizeof(sal_uInt16);
 
-    for ( USHORT i = 0; i < nCount; ++i )
+    for ( sal_uInt16 i = 0; i < nCount; ++i )
         if ( aArr[i] == ( nUsage & 0x000f ) )
             return i;
     return SVX_PAGE_ALL;
@@ -164,9 +164,9 @@ USHORT PageUsageToPos_Impl( USHORT nUsage )
 
 // -----------------------------------------------------------------------
 
-USHORT PosToPageUsage_Impl( USHORT nPos )
+sal_uInt16 PosToPageUsage_Impl( sal_uInt16 nPos )
 {
-    const USHORT nCount = sizeof(aArr) / sizeof(USHORT);
+    const sal_uInt16 nCount = sizeof(aArr) / sizeof(sal_uInt16);
 
     if ( nPos >= nCount )
         return 0;
@@ -192,7 +192,7 @@ long ConvertLong_Impl( const long nIn, SfxMapUnit eUnit )
     return OutputDevice::LogicToLogic( nIn, (MapUnit)eUnit, MAP_TWIP );
 }
 
-BOOL IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
+sal_Bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
 {
     if ( pSize )
     {
@@ -202,7 +202,7 @@ BOOL IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
         return ( nDiffW < 10 && nDiffH < 10 );
     }
     else
-        return FALSE;
+        return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -230,7 +230,7 @@ struct SvxPage_Impl
 
 // gibt den Bereich der Which-Werte zur"uck
 
-USHORT* SvxPageDescPage::GetRanges()
+sal_uInt16* SvxPageDescPage::GetRanges()
 {
     return pRanges;
 }
@@ -291,16 +291,16 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     aOutsideText        (       CUI_RES( STR_OUTSIDE ) ),
     aPrintRangeQueryText(       CUI_RES( STR_QUERY_PRINTRANGE ) ),
 
-    bLandscape          ( FALSE ),
+    bLandscape          ( sal_False ),
     eMode               ( SVX_PAGE_MODE_STANDARD ),
     ePaperStart         ( PAPER_A3 ),
     ePaperEnd           ( PAPER_ENV_DL ),
     pImpl               ( new SvxPage_Impl )
 
 {
-    bBorderModified = FALSE;
+    bBorderModified = sal_False;
     FreeResource();
-    aBspWin.EnableRTL( FALSE );
+    aBspWin.EnableRTL( sal_False );
 
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
@@ -312,7 +312,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     const SfxPoolItem* pItem;
 
     SfxObjectShell* pShell;
-    if(SFX_ITEM_SET == rAttr.GetItemState(SID_HTML_MODE, FALSE, &pItem) ||
+    if(SFX_ITEM_SET == rAttr.GetItemState(SID_HTML_MODE, sal_False, &pItem) ||
         ( 0 != (pShell = SfxObjectShell::Current()) &&
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
         bWeb = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
@@ -489,10 +489,10 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
         const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)*pItem;
         SetMetricValue( aLeftMarginEdit, rLRSpace.GetLeft(), eUnit );
         aBspWin.SetLeft(
-            (USHORT)ConvertLong_Impl( (long)rLRSpace.GetLeft(), eUnit ) );
+            (sal_uInt16)ConvertLong_Impl( (long)rLRSpace.GetLeft(), eUnit ) );
         SetMetricValue( aRightMarginEdit, rLRSpace.GetRight(), eUnit );
         aBspWin.SetRight(
-            (USHORT)ConvertLong_Impl( (long)rLRSpace.GetRight(), eUnit ) );
+            (sal_uInt16)ConvertLong_Impl( (long)rLRSpace.GetRight(), eUnit ) );
     }
 
     // R"ander (Oben/Unten) einstellen
@@ -503,16 +503,16 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
         const SvxULSpaceItem& rULSpace = (const SvxULSpaceItem&)*pItem;
         SetMetricValue( aTopMarginEdit, rULSpace.GetUpper(), eUnit );
         aBspWin.SetTop(
-            (USHORT)ConvertLong_Impl( (long)rULSpace.GetUpper(), eUnit ) );
+            (sal_uInt16)ConvertLong_Impl( (long)rULSpace.GetUpper(), eUnit ) );
         SetMetricValue( aBottomMarginEdit, rULSpace.GetLower(), eUnit );
         aBspWin.SetBottom(
-            (USHORT)ConvertLong_Impl( (long)rULSpace.GetLower(), eUnit ) );
+            (sal_uInt16)ConvertLong_Impl( (long)rULSpace.GetLower(), eUnit ) );
     }
 
     // allgemeine Seitendaten
     SvxNumType eNumType = SVX_ARABIC;
     bLandscape = ( pImpl->mpDefPrinter->GetOrientation() == ORIENTATION_LANDSCAPE );
-    USHORT nUse = (USHORT)SVX_PAGE_ALL;
+    sal_uInt16 nUse = (sal_uInt16)SVX_PAGE_ALL;
     pItem = GetItem( rSet, SID_ATTR_PAGE );
 
     if ( pItem )
@@ -529,11 +529,11 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     LayoutHdl_Impl( 0 );
 
     // Numerierungsart der Seitenvorlage einstellen
-    aNumberFormatBox.SelectEntryPos( sal::static_int_cast< USHORT >(eNumType) );
+    aNumberFormatBox.SelectEntryPos( sal::static_int_cast< sal_uInt16 >(eNumType) );
 
     // Aktueller Papierschacht
     aPaperTrayBox.Clear();
-    BYTE nPaperBin = PAPERBIN_PRINTER_SETTINGS;
+    sal_uInt8 nPaperBin = PAPERBIN_PRINTER_SETTINGS;
     pItem = GetItem( rSet, SID_ATTR_PAGE_PAPERBIN );
 
     if ( pItem )
@@ -549,10 +549,10 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     if ( PAPERBIN_PRINTER_SETTINGS  == nPaperBin )
         aBinName = EE_RESSTR( RID_SVXSTR_PAPERBIN_SETTINGS );
     else
-        aBinName = pImpl->mpDefPrinter->GetPaperBinName( (USHORT)nPaperBin );
+        aBinName = pImpl->mpDefPrinter->GetPaperBinName( (sal_uInt16)nPaperBin );
 
-    USHORT nEntryPos = aPaperTrayBox.InsertEntry( aBinName );
-    aPaperTrayBox.SetEntryData( nEntryPos, (void*)(ULONG)nPaperBin );
+    sal_uInt16 nEntryPos = aPaperTrayBox.InsertEntry( aBinName );
+    aPaperTrayBox.SetEntryData( nEntryPos, (void*)(sal_uLong)nPaperBin );
     aPaperTrayBox.SelectEntry( aBinName );
 
     // Size rausholen
@@ -565,14 +565,14 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     FASTBOOL bOrientationSupport =
         pImpl->mpDefPrinter->HasSupport( SUPPORT_SET_ORIENTATION );
 #ifdef OS2
-    // unter OS/2 wird bei HasSupport() immer TRUE returned
+    // unter OS/2 wird bei HasSupport() immer sal_True returned
     // aber nur als Dummy, deshalb FALSE
-    bOrientationSupport = FALSE;
+    bOrientationSupport = sal_False;
 #endif
 
     if ( !bOrientationSupport &&
          aPaperSize.Width() > aPaperSize.Height() )
-        bLandscape = TRUE;
+        bLandscape = sal_True;
 
     aLandscapeBtn.Check( bLandscape );
     aPortraitBtn.Check( !bLandscape );
@@ -585,7 +585,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
         Swap( aPaperSize );
 
     // Actual Paper Format
-    Paper ePaper = SvxPaperInfo::GetSvxPaper( aPaperSize, MAP_100TH_MM, TRUE );
+    Paper ePaper = SvxPaperInfo::GetSvxPaper( aPaperSize, MAP_100TH_MM, sal_True );
 
     if ( PAPER_USER != ePaper )
         aPaperSize = SvxPaperInfo::GetPaperSize( ePaper, MAP_100TH_MM );
@@ -598,8 +598,8 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     SetMetricValue( aPaperWidthEdit, aPaperSize.Width(), SFX_MAPUNIT_100TH_MM );
     aPaperSizeBox.Clear();
 
-    USHORT nActPos = LISTBOX_ENTRY_NOTFOUND;
-    USHORT nAryId = RID_SVXSTRARY_PAPERSIZE_STD;
+    sal_uInt16 nActPos = LISTBOX_ENTRY_NOTFOUND;
+    sal_uInt16 nAryId = RID_SVXSTRARY_PAPERSIZE_STD;
 
     if ( ePaperStart != PAPER_A3 )
         nAryId = RID_SVXSTRARY_PAPERSIZE_DRAW;
@@ -610,8 +610,8 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     {
         String aStr = aPaperAry.GetString(i);
         Paper eSize = (Paper)aPaperAry.GetValue(i);
-        USHORT nPos = aPaperSizeBox.InsertEntry( aStr );
-        aPaperSizeBox.SetEntryData( nPos, (void*)(ULONG)eSize );
+        sal_uInt16 nPos = aPaperSizeBox.InsertEntry( aStr );
+        aPaperSizeBox.SetEntryData( nPos, (void*)(sal_uLong)eSize );
 
         if ( eSize == ePaper )
             nActPos = nPos;
@@ -633,15 +633,15 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
             // Horizontale Ausrichtung
             pItem = GetItem( rSet, SID_ATTR_PAGE_EXT1 );
             aHorzBox.Check( pItem ? ( (const SfxBoolItem*)pItem )->GetValue()
-                                  : FALSE );
+                                  : sal_False );
 
             // Vertikale Ausrichtung
             pItem = GetItem( rSet, SID_ATTR_PAGE_EXT2 );
             aVertBox.Check( pItem ? ( (const SfxBoolItem*)pItem )->GetValue()
-                                  : FALSE );
+                                  : sal_False );
 
             // Beispiel-Fenster auf Tabelle setzen
-            aBspWin.SetTable( TRUE );
+            aBspWin.SetTable( sal_True );
             aBspWin.SetHorz( aHorzBox.IsChecked() );
             aBspWin.SetVert( aVertBox.IsChecked() );
 
@@ -654,7 +654,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
             aAdaptBox.Show();
             pItem = GetItem( rSet, SID_ATTR_PAGE_EXT1 );
             aAdaptBox.Check( pItem ?
-                ( (const SfxBoolItem*)pItem )->GetValue() : FALSE );
+                ( (const SfxBoolItem*)pItem )->GetValue() : sal_False );
 
             //!!! hidden, weil von StarDraw nicht implementiert
             aLayoutBox.Hide();
@@ -675,8 +675,8 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     InitHeadFoot_Impl( rSet );
 
     // R"ander auf Hoch/Quer updaten, dann Beispiel updaten
-    bBorderModified = FALSE;
-    SwapFirstValues_Impl( FALSE );
+    bBorderModified = sal_False;
+    SwapFirstValues_Impl( sal_False );
     UpdateExample_Impl();
 
     // Alte Werte sichern
@@ -714,7 +714,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     }
 
     SfxItemState eState = rSet.GetItemState( GetWhich( SID_ATTR_FRAMEDIRECTION ),
-                                                TRUE, &pItem );
+                                                sal_True, &pItem );
     if( SFX_ITEM_UNKNOWN != eState )
     {
         sal_uInt32 nVal  = SFX_ITEM_SET == eState
@@ -736,13 +736,13 @@ void SvxPageDescPage::FillUserData()
 
 // -----------------------------------------------------------------------
 
-BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
+sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
 {
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
     const SfxItemSet& rOldSet = GetItemSet();
     SfxItemPool* pPool = rOldSet.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
-    USHORT nWhich = GetWhich( SID_ATTR_LRSPACE );
+    sal_uInt16 nWhich = GetWhich( SID_ATTR_LRSPACE );
     SfxMapUnit eUnit = pPool->GetMetric( nWhich );
     const SfxPoolItem* pOld = 0;
 
@@ -755,14 +755,14 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
 
     if ( aLeftMarginEdit.GetText() != aLeftMarginEdit.GetSavedValue() )
     {
-        aMargin.SetLeft( (USHORT)GetCoreValue( aLeftMarginEdit, eUnit ) );
-        bModified |= TRUE;
+        aMargin.SetLeft( (sal_uInt16)GetCoreValue( aLeftMarginEdit, eUnit ) );
+        bModified |= sal_True;
     }
 
     if ( aRightMarginEdit.GetText() != aRightMarginEdit.GetSavedValue() )
     {
-        aMargin.SetRight( (USHORT)GetCoreValue( aRightMarginEdit, eUnit ) );
-        bModified |= TRUE;
+        aMargin.SetRight( (sal_uInt16)GetCoreValue( aRightMarginEdit, eUnit ) );
+        bModified |= sal_True;
     }
 
     // Linken und rechten Rand setzen
@@ -773,21 +773,21 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
         if ( !pOld || !( *(const SvxLRSpaceItem*)pOld == aMargin ) )
             rSet.Put( aMargin );
         else
-            bModified = FALSE;
+            bModified = sal_False;
     }
 
-    BOOL bMod = FALSE;
+    sal_Bool bMod = sal_False;
 
     if ( aTopMarginEdit.GetText() != aTopMarginEdit.GetSavedValue() )
     {
-        aTopMargin.SetUpper( (USHORT)GetCoreValue( aTopMarginEdit, eUnit ) );
-        bMod |= TRUE;
+        aTopMargin.SetUpper( (sal_uInt16)GetCoreValue( aTopMarginEdit, eUnit ) );
+        bMod |= sal_True;
     }
 
     if ( aBottomMarginEdit.GetText() != aBottomMarginEdit.GetSavedValue() )
     {
-        aTopMargin.SetLower( (USHORT)GetCoreValue( aBottomMarginEdit, eUnit ) );
-        bMod |= TRUE;
+        aTopMargin.SetLower( (sal_uInt16)GetCoreValue( aBottomMarginEdit, eUnit ) );
+        bMod |= sal_True;
     }
 
     // unteren oberen Rand setzen
@@ -798,27 +798,27 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
 
         if ( !pOld || !( *(const SvxULSpaceItem*)pOld == aTopMargin ) )
         {
-            bModified |= TRUE;
+            bModified |= sal_True;
             rSet.Put( aTopMargin );
         }
     }
 
     // Druckerschacht
     nWhich = GetWhich( SID_ATTR_PAGE_PAPERBIN );
-    USHORT nPos = aPaperTrayBox.GetSelectEntryPos();
-    USHORT nBin = (USHORT)(ULONG)aPaperTrayBox.GetEntryData( nPos );
+    sal_uInt16 nPos = aPaperTrayBox.GetSelectEntryPos();
+    sal_uInt16 nBin = (sal_uInt16)(sal_uLong)aPaperTrayBox.GetEntryData( nPos );
     pOld = GetOldItem( rSet, SID_ATTR_PAGE_PAPERBIN );
 
     if ( !pOld || ( (const SvxPaperBinItem*)pOld )->GetValue() != nBin )
     {
-        rSet.Put( SvxPaperBinItem( nWhich, (BYTE)nBin ) );
-        bModified |= TRUE;
+        rSet.Put( SvxPaperBinItem( nWhich, (sal_uInt8)nBin ) );
+        bModified |= sal_True;
     }
 
     nPos = aPaperSizeBox.GetSelectEntryPos();
-    Paper ePaper = (Paper)(ULONG)aPaperSizeBox.GetEntryData( nPos );
-    const USHORT nOld = aPaperSizeBox.GetSavedValue();
-    BOOL bChecked = aLandscapeBtn.IsChecked();
+    Paper ePaper = (Paper)(sal_uLong)aPaperSizeBox.GetEntryData( nPos );
+    const sal_uInt16 nOld = aPaperSizeBox.GetSavedValue();
+    sal_Bool bChecked = aLandscapeBtn.IsChecked();
 
     if ( PAPER_USER == ePaper )
     {
@@ -834,7 +834,7 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
             if ( !pOld || ( (const SvxSizeItem*)pOld )->GetSize() != aSize )
             {
                 rSet.Put( SvxSizeItem( GetWhich(SID_ATTR_PAGE_SIZE), aSize ) );
-                bModified |= TRUE;
+                bModified |= sal_True;
             }
         }
     }
@@ -852,7 +852,7 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
             if ( !pOld || ( (const SvxSizeItem*)pOld )->GetSize() != aSize )
             {
                 rSet.Put( SvxSizeItem( GetWhich(SID_ATTR_PAGE_SIZE), aSize ) );
-                bModified |= TRUE;
+                bModified |= sal_True;
             }
         }
     }
@@ -869,7 +869,7 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     if ( bChecked != aLandscapeBtn.GetSavedValue() )
     {
         aPage.SetLandscape(bChecked);
-        bMod |= TRUE;
+        bMod |= sal_True;
     }
 
     // Einstellen der Numerierungsart der Seite
@@ -878,7 +878,7 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     if ( nPos != aNumberFormatBox.GetSavedValue() )
     {
         aPage.SetNumType( (SvxNumType)nPos );
-        bMod |= TRUE;
+        bMod |= sal_True;
     }
 
     if ( bMod )
@@ -888,7 +888,7 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
         if ( !pOld || !( *(const SvxPageItem*)pOld == aPage ) )
         {
             rSet.Put( aPage );
-            bModified |= TRUE;
+            bModified |= sal_True;
         }
     }
     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich ) )
@@ -907,7 +907,7 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
                 SfxBoolItem aHorz( GetWhich( SID_ATTR_PAGE_EXT1 ),
                                    aHorzBox.IsChecked() );
                 rSet.Put( aHorz );
-                bModified |= TRUE;
+                bModified |= sal_True;
             }
 
             if ( aVertBox.IsChecked() != aVertBox.GetSavedValue() )
@@ -915,7 +915,7 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
                 SfxBoolItem aVert( GetWhich( SID_ATTR_PAGE_EXT2 ),
                                    aVertBox.IsChecked() );
                 rSet.Put( aVert );
-                bModified |= TRUE;
+                bModified |= sal_True;
             }
             break;
         }
@@ -925,7 +925,7 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
             // immer putten, damit Draw das auswerten kann
             rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_PAGE_EXT1 ),
                       aAdaptBox.IsChecked() ) );
-            bModified |= TRUE;
+            bModified |= sal_True;
             break;
         }
         default: ;//prevent warning
@@ -937,13 +937,13 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     {
         const SfxBoolItem& rRegItem = (const SfxBoolItem&)rOldSet.Get(SID_SWREGISTER_MODE);
         SfxBoolItem* pRegItem = (SfxBoolItem*)rRegItem.Clone();
-        BOOL bCheck = aRegisterCB.IsChecked();
+        sal_Bool bCheck = aRegisterCB.IsChecked();
         pRegItem->SetValue(bCheck);
         rSet.Put(*pRegItem);
-        bModified |= TRUE;
+        bModified |= sal_True;
         if(bCheck)
         {
-            bModified |= TRUE;
+            bModified |= sal_True;
             rSet.Put(SfxStringItem(SID_SWREGISTER_COLLECTION,
                             aRegisterLB.GetSelectEntry()));
         }
@@ -954,7 +954,7 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     if( aTextFlowBox.IsVisible() && (eDirection != aTextFlowBox.GetSavedValue()) )
     {
         rSet.Put( SvxFrameDirectionItem( eDirection, GetWhich( SID_ATTR_FRAMEDIRECTION ) ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     return bModified;
@@ -965,7 +965,7 @@ BOOL SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
 IMPL_LINK( SvxPageDescPage, LayoutHdl_Impl, ListBox *, EMPTYARG )
 {
     // innen au\sen umschalten
-    const USHORT nPos = PosToPageUsage_Impl( aLayoutBox.GetSelectEntryPos() );
+    const sal_uInt16 nPos = PosToPageUsage_Impl( aLayoutBox.GetSelectEntryPos() );
 
     if ( nPos == SVX_PAGE_MIRROR )
     {
@@ -997,16 +997,16 @@ IMPL_LINK( SvxPageDescPage, PaperBinHdl_Impl, ListBox *, EMPTYARG )
 
     // Schacht-Box initialisieren
     String aOldName = aPaperTrayBox.GetSelectEntry();
-    aPaperTrayBox.SetUpdateMode( FALSE );
+    aPaperTrayBox.SetUpdateMode( sal_False );
     aPaperTrayBox.Clear();
-    USHORT nEntryPos = aPaperTrayBox.InsertEntry(
+    sal_uInt16 nEntryPos = aPaperTrayBox.InsertEntry(
         EE_RESSTR( RID_SVXSTR_PAPERBIN_SETTINGS ) );
     aPaperTrayBox.SetEntryData( nEntryPos,
-        (void*)(ULONG)PAPERBIN_PRINTER_SETTINGS );
+        (void*)(sal_uLong)PAPERBIN_PRINTER_SETTINGS );
     String aPaperBin( EditResId( RID_SVXSTR_PAPERBIN ) );
-    USHORT nBinCount = pImpl->mpDefPrinter->GetPaperBinCount();
+    sal_uInt16 nBinCount = pImpl->mpDefPrinter->GetPaperBinCount();
 
-    for ( USHORT i = 0; i < nBinCount; ++i )
+    for ( sal_uInt16 i = 0; i < nBinCount; ++i )
     {
         String aName = pImpl->mpDefPrinter->GetPaperBinName(i);
 
@@ -1017,10 +1017,10 @@ IMPL_LINK( SvxPageDescPage, PaperBinHdl_Impl, ListBox *, EMPTYARG )
             aName.Append( UniString::CreateFromInt32( i+1 ) );
         }
         nEntryPos = aPaperTrayBox.InsertEntry( aName );
-        aPaperTrayBox.SetEntryData( nEntryPos, (void*)(ULONG)i );
+        aPaperTrayBox.SetEntryData( nEntryPos, (void*)(sal_uLong)i );
     }
     aPaperTrayBox.SelectEntry( aOldName );
-    aPaperTrayBox.SetUpdateMode( TRUE );
+    aPaperTrayBox.SetUpdateMode( sal_True );
 
     return 0;
 }
@@ -1029,8 +1029,8 @@ IMPL_LINK( SvxPageDescPage, PaperBinHdl_Impl, ListBox *, EMPTYARG )
 
 IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
 {
-    const USHORT nPos = pBox->GetSelectEntryPos();
-    Paper ePaper = (Paper)(ULONG)aPaperSizeBox.GetEntryData( nPos );
+    const sal_uInt16 nPos = pBox->GetSelectEntryPos();
+    Paper ePaper = (Paper)(sal_uLong)aPaperSizeBox.GetEntryData( nPos );
 
     if ( ePaper != PAPER_USER )
     {
@@ -1058,7 +1058,7 @@ IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
         {
             // Draw: bei Papierformat soll der Rand 1cm betragen
             long nTmp = 0;
-            BOOL bScreen = ( PAPER_SCREEN == ePaper );
+            sal_Bool bScreen = ( PAPER_SCREEN == ePaper );
 
             if ( !bScreen )
                 // bei Bildschirm keinen Rand
@@ -1103,16 +1103,16 @@ IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
 
 IMPL_LINK( SvxPageDescPage, PaperSizeModify_Impl, Edit *, EMPTYARG )
 {
-    USHORT nWhich = GetWhich( SID_ATTR_LRSPACE );
+    sal_uInt16 nWhich = GetWhich( SID_ATTR_LRSPACE );
     SfxMapUnit eUnit = GetItemSet().GetPool()->GetMetric( nWhich );
     Size aSize( GetCoreValue( aPaperWidthEdit, eUnit ),
                 GetCoreValue( aPaperHeightEdit, eUnit ) );
-    Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, (MapUnit)eUnit, TRUE );
-    USHORT nEntryCount = aPaperSizeBox.GetEntryCount();
+    Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, (MapUnit)eUnit, sal_True );
+    sal_uInt16 nEntryCount = aPaperSizeBox.GetEntryCount();
 
-    for ( USHORT i = 0; i < nEntryCount; ++i )
+    for ( sal_uInt16 i = 0; i < nEntryCount; ++i )
     {
-        Paper eTmp = (Paper)(ULONG)aPaperSizeBox.GetEntryData(i);
+        Paper eTmp = (Paper)(sal_uLong)aPaperSizeBox.GetEntryData(i);
 
         if ( eTmp == ePaper )
         {
@@ -1228,7 +1228,7 @@ void SvxPageDescPage::SwapFirstValues_Impl( FASTBOOL bSet )
 IMPL_LINK_INLINE_START( SvxPageDescPage, BorderModify_Impl, MetricField *, EMPTYARG )
 {
     if ( !bBorderModified )
-        bBorderModified = TRUE;
+        bBorderModified = sal_True;
     UpdateExample_Impl();
     return 0;
 }
@@ -1261,12 +1261,12 @@ void SvxPageDescPage::UpdateExample_Impl( bool bResetbackground )
 
 void SvxPageDescPage::ResetBackground_Impl( const SfxItemSet& rSet )
 {
-    USHORT nWhich = GetWhich( SID_ATTR_PAGE_HEADERSET );
+    sal_uInt16 nWhich = GetWhich( SID_ATTR_PAGE_HEADERSET );
 
-    if ( rSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
     {
         const SvxSetItem& rSetItem =
-            (const SvxSetItem&)rSet.Get( nWhich, FALSE );
+            (const SvxSetItem&)rSet.Get( nWhich, sal_False );
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
         const SfxBoolItem& rOn =
             (const SfxBoolItem&)rTmpSet.Get( GetWhich( SID_ATTR_PAGE_ON ) );
@@ -1294,10 +1294,10 @@ void SvxPageDescPage::ResetBackground_Impl( const SfxItemSet& rSet )
 
     nWhich = GetWhich( SID_ATTR_PAGE_FOOTERSET );
 
-    if ( rSet.GetItemState( nWhich, FALSE ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_SET )
     {
         const SvxSetItem& rSetItem =
-            (const SvxSetItem&)rSet.Get( nWhich, FALSE );
+            (const SvxSetItem&)rSet.Get( nWhich, sal_False );
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
         const SfxBoolItem& rOn =
             (const SfxBoolItem&)rTmpSet.Get( GetWhich( SID_ATTR_PAGE_ON ) );
@@ -1361,7 +1361,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 
     if ( SFX_ITEM_SET ==
          rSet.GetItemState( GetWhich( SID_ATTR_PAGE_HEADERSET ),
-                            FALSE, (const SfxPoolItem**)&pSetItem ) )
+                            sal_False, (const SfxPoolItem**)&pSetItem ) )
     {
         const SfxItemSet& rHeaderSet = pSetItem->GetItemSet();
         const SfxBoolItem& rHeaderOn =
@@ -1380,13 +1380,13 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
                 rHeaderSet.Get( GetWhich( SID_ATTR_LRSPACE ) );
             aBspWin.SetHdLeft( rLR.GetLeft() );
             aBspWin.SetHdRight( rLR.GetRight() );
-            aBspWin.SetHeader( TRUE );
+            aBspWin.SetHeader( sal_True );
         }
         else
-            aBspWin.SetHeader( FALSE );
+            aBspWin.SetHeader( sal_False );
 
         // im Beispiel Hintergrund und Umrandung anzeigen
-        USHORT nWhich = GetWhich( SID_ATTR_BRUSH );
+        sal_uInt16 nWhich = GetWhich( SID_ATTR_BRUSH );
 
         if ( rHeaderSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
         {
@@ -1408,7 +1408,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 
     if ( SFX_ITEM_SET ==
          rSet.GetItemState( GetWhich( SID_ATTR_PAGE_FOOTERSET ),
-                            FALSE, (const SfxPoolItem**)&pSetItem ) )
+                            sal_False, (const SfxPoolItem**)&pSetItem ) )
     {
         const SfxItemSet& rFooterSet = pSetItem->GetItemSet();
         const SfxBoolItem& rFooterOn =
@@ -1427,13 +1427,13 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
                 rFooterSet.Get( GetWhich( SID_ATTR_LRSPACE ) );
             aBspWin.SetFtLeft( rLR.GetLeft() );
             aBspWin.SetFtRight( rLR.GetRight() );
-            aBspWin.SetFooter( TRUE );
+            aBspWin.SetFooter( sal_True );
         }
         else
-            aBspWin.SetFooter( FALSE );
+            aBspWin.SetFooter( sal_False );
 
         // im Beispiel Hintergrund und Umrandung anzeigen
-        USHORT nWhich = GetWhich( SID_ATTR_BRUSH );
+        sal_uInt16 nWhich = GetWhich( SID_ATTR_BRUSH );
 
         if ( rFooterSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
         {
@@ -1468,8 +1468,8 @@ int SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
     // Abfrage, ob die Seitenr"ander ausserhalb des Druckbereichs liegen
     // Wenn nicht, dann den Anwender fragen, ob sie "ubernommen werden sollen.
     // Wenn nicht, dann auf der TabPage bleiben.
-    USHORT nPos = aPaperSizeBox.GetSelectEntryPos();
-    Paper ePaper = (Paper)(ULONG)aPaperSizeBox.GetEntryData( nPos );
+    sal_uInt16 nPos = aPaperSizeBox.GetSelectEntryPos();
+    Paper ePaper = (Paper)(sal_uLong)aPaperSizeBox.GetEntryData( nPos );
 
     if ( ePaper != PAPER_SCREEN && IsMarginOutOfRange() )
     {
@@ -1501,7 +1501,7 @@ int SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
         FillItemSet( *_pSet );
 
         // ggf. hoch/quer putten
-        USHORT nWh = GetWhich( SID_ATTR_PAGE_SIZE );
+        sal_uInt16 nWh = GetWhich( SID_ATTR_PAGE_SIZE );
         SfxMapUnit eUnit = GetItemSet().GetPool()->GetMetric( nWh );
         Size aSize( GetCoreValue( aPaperWidthEdit, eUnit ),
                     GetCoreValue( aPaperHeightEdit, eUnit ) );
@@ -1649,7 +1649,7 @@ IMPL_LINK_INLINE_END( SvxPageDescPage, CenterHdl_Impl, CheckBox *, EMPTYARG )
 void SvxPageDescPage::SetCollectionList(const List* pList)
 {
     sStandardRegister = *(String*)pList->GetObject(0);
-    for( USHORT i = 1; i < pList->Count(); i++   )
+    for( sal_uInt16 i = 1; i < pList->Count(); i++   )
     {
         aRegisterLB.InsertEntry(*(String*)pList->GetObject(i));
     }
@@ -1664,10 +1664,10 @@ void SvxPageDescPage::SetCollectionList(const List* pList)
 
 IMPL_LINK( SvxPageDescPage, RegisterModify, CheckBox*, pBox )
 {
-    BOOL bEnable = FALSE;
+    sal_Bool bEnable = sal_False;
     if(pBox->IsChecked())
     {
-        bEnable = TRUE;
+        bEnable = sal_True;
         if(USHRT_MAX == aRegisterLB.GetSelectEntryPos())
             aRegisterLB.SelectEntry(sStandardRegister);
     }

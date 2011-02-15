@@ -38,7 +38,6 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyAttribute;
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.container.XEnumeration;
@@ -65,6 +64,7 @@ import com.sun.star.util.XNumberFormatsSupplier;
 import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.PropertySetHelper;
 import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.report.IReportBuilderLayouter;
@@ -347,7 +347,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     {
         if (m_nPageWidth < 0)
         {
-            m_nPageWidth = getFromPageStyles("Width", 21000);
+            m_nPageWidth = getFromPageStyles(PropertyNames.PROPERTY_WIDTH, 21000);
         }
         return m_nPageWidth;
     }
@@ -1066,16 +1066,16 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
     public void setPageOrientation(int _nOrientation)
     {
-        final int nWidth = getFromPageStyles("Width", 0);
-        final int nHeight = getFromPageStyles("Height", 0);
+        final int nWidth = getFromPageStyles(PropertyNames.PROPERTY_WIDTH, 0);
+        final int nHeight = getFromPageStyles(PropertyNames.PROPERTY_HEIGHT, 0);
 
         if (com.sun.star.wizards.report.ReportLayouter.SOOPTLANDSCAPE == _nOrientation)
         {
             setToPageStyles("IsLandscape", Boolean.TRUE);
             if (nWidth < nHeight)
             {
-                setToPageStyles("Width", new Integer(nHeight));
-                setToPageStyles("Height", new Integer(nWidth));
+                setToPageStyles(PropertyNames.PROPERTY_WIDTH, new Integer(nHeight));
+                setToPageStyles(PropertyNames.PROPERTY_HEIGHT, new Integer(nWidth));
             }
         }
         else
@@ -1083,8 +1083,8 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             setToPageStyles("IsLandscape", Boolean.FALSE);
             if (nHeight < nWidth)
             {
-                setToPageStyles("Width", new Integer(nHeight));
-                setToPageStyles("Height", new Integer(nWidth));
+                setToPageStyles(PropertyNames.PROPERTY_WIDTH, new Integer(nHeight));
+                setToPageStyles(PropertyNames.PROPERTY_HEIGHT, new Integer(nWidth));
             }
         }
         // dirty the PageWidth

@@ -51,7 +51,7 @@
 #include <comphelper/processfactory.hxx>
 
 #define HHC editeng::HangulHanjaConversion
-#define LINE_CNT        static_cast< USHORT >(2)
+#define LINE_CNT        static_cast< sal_uInt16 >(2)
 
 //.............................................................................
 namespace svx
@@ -118,7 +118,7 @@ namespace svx
         PseudoRubyText( const String& _rPrimary, const String& _rSecondary, const RubyPosition _ePosition );
 
     public:
-        void Paint( OutputDevice& _rDevice, const Rectangle& _rRect, USHORT _nTextStyle,
+        void Paint( OutputDevice& _rDevice, const Rectangle& _rRect, sal_uInt16 _nTextStyle,
             Rectangle* _pPrimaryLocation = NULL, Rectangle* _pSecondaryLocation = NULL,
             ::vcl::ControlLayoutData* _pLayoutData = NULL );
     };
@@ -132,7 +132,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    void PseudoRubyText::Paint( OutputDevice& _rDevice, const Rectangle& _rRect, USHORT _nTextStyle,
+    void PseudoRubyText::Paint( OutputDevice& _rDevice, const Rectangle& _rRect, sal_uInt16 _nTextStyle,
         Rectangle* _pPrimaryLocation, Rectangle* _pSecondaryLocation, ::vcl::ControlLayoutData* _pLayoutData )
     {
         bool            bLayoutOnly  = NULL != _pLayoutData;
@@ -204,7 +204,7 @@ namespace svx
         // now draw the texts
         // as we already calculated the precise rectangles for the texts, we don't want to
         // use the alignment flags given - within it's rect, every text is centered
-        USHORT nDrawTextStyle( _nTextStyle );
+        sal_uInt16 nDrawTextStyle( _nTextStyle );
         nDrawTextStyle &= ~( TEXT_DRAW_RIGHT | TEXT_DRAW_LEFT | TEXT_DRAW_BOTTOM | TEXT_DRAW_TOP );
         nDrawTextStyle |= TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER;
 
@@ -267,7 +267,7 @@ namespace svx
         ++aTextRect.Top(); --aTextRect.Bottom();
 
         // calculate the text flags for the painting
-        USHORT nTextStyle = TEXT_DRAW_MNEMONIC;
+        sal_uInt16 nTextStyle = TEXT_DRAW_MNEMONIC;
         WinBits nStyle = GetStyle( );
 
         // the horizontal alignment
@@ -337,7 +337,7 @@ namespace svx
     {
         OutputDevice*  pDev = rUDEvt.GetDevice();
         Rectangle aRect = rUDEvt.GetRect();
-        USHORT  nItemId = rUDEvt.GetItemId();
+        sal_uInt16  nItemId = rUDEvt.GetItemId();
 
         String sText = *static_cast< String* >( GetItemData( nItemId ) );
         pDev->DrawText( aRect, sText, TEXT_DRAW_CENTER | TEXT_DRAW_VCENTER );
@@ -345,7 +345,7 @@ namespace svx
 
     void SuggestionSet::ClearSet()
     {
-        USHORT i, nCount = GetItemCount();
+        sal_uInt16 i, nCount = GetItemCount();
         for ( i = 0; i < nCount; ++i )
             delete static_cast< String* >( GetItemData(i) );
         Clear();
@@ -441,7 +441,7 @@ namespace svx
         if( m_bDisplayListBox != bDisplayListBox )
         {
             Control& rOldControl = implGetCurrentControl();
-            BOOL bHasFocus = rOldControl.HasFocus();
+            sal_Bool bHasFocus = rOldControl.HasFocus();
 
             m_bDisplayListBox = bDisplayListBox;
 
@@ -463,12 +463,12 @@ namespace svx
         m_bInSelectionUpdate = true;
         if(pControl==&m_aListBox)
         {
-            USHORT nPos = m_aListBox.GetSelectEntryPos();
+            sal_uInt16 nPos = m_aListBox.GetSelectEntryPos();
             m_aValueSet.SelectItem( nPos+1 ); //itemid == pos+1 (id 0 has special meaning)
         }
         else
         {
-            USHORT nPos = m_aValueSet.GetSelectItemId()-1; //itemid == pos+1 (id 0 has special meaning)
+            sal_uInt16 nPos = m_aValueSet.GetSelectItemId()-1; //itemid == pos+1 (id 0 has special meaning)
             m_aListBox.SelectEntryPos( nPos );
         }
         m_bInSelectionUpdate = false;
@@ -487,21 +487,21 @@ namespace svx
     }
     void SuggestionDisplay::InsertEntry( const XubString& rStr )
     {
-        USHORT nItemId = m_aListBox.InsertEntry( rStr ) + 1; //itemid == pos+1 (id 0 has special meaning)
+        sal_uInt16 nItemId = m_aListBox.InsertEntry( rStr ) + 1; //itemid == pos+1 (id 0 has special meaning)
         m_aValueSet.InsertItem( nItemId );
         String* pItemData = new String(rStr);
         m_aValueSet.SetItemData( nItemId, pItemData );
     }
-    void SuggestionDisplay::SelectEntryPos( USHORT nPos )
+    void SuggestionDisplay::SelectEntryPos( sal_uInt16 nPos )
     {
         m_aListBox.SelectEntryPos( nPos );
         m_aValueSet.SelectItem( nPos+1 ); //itemid == pos+1 (id 0 has special meaning)
     }
-    USHORT SuggestionDisplay::GetEntryCount() const
+    sal_uInt16 SuggestionDisplay::GetEntryCount() const
     {
         return m_aListBox.GetEntryCount();
     }
-    XubString SuggestionDisplay::GetEntry( USHORT nPos ) const
+    XubString SuggestionDisplay::GetEntry( sal_uInt16 nPos ) const
     {
         return m_aListBox.GetEntry( nPos );
     }
@@ -754,9 +754,9 @@ namespace svx
             pOtherBox = &m_aHangulOnly;
         if (pBox && pOtherBox)
         {
-            BOOL bBoxChecked = pBox->IsChecked();
+            sal_Bool bBoxChecked = pBox->IsChecked();
             if (bBoxChecked)
-                pOtherBox->Check( FALSE );
+                pOtherBox->Check( sal_False );
             pOtherBox->Enable( !bBoxChecked );
         }
 
@@ -865,10 +865,10 @@ namespace svx
             HHC::ConversionDirection _ePrimaryConversionDirection )
     {
         // default state: try both direction
-        m_aHangulOnly.Check( FALSE );
-        m_aHangulOnly.Enable( TRUE );
-        m_aHanjaOnly.Check( FALSE );
-        m_aHanjaOnly.Enable( TRUE );
+        m_aHangulOnly.Check( sal_False );
+        m_aHangulOnly.Enable( sal_True );
+        m_aHanjaOnly.Check( sal_False );
+        m_aHanjaOnly.Enable( sal_True );
 
         if (!_bTryBothDirections)
         {
@@ -1109,7 +1109,7 @@ namespace svx
 
     IMPL_LINK( HangulHanjaOptionsDialog, DeleteDictHdl, void*, EMPTYARG )
     {
-        USHORT nSelPos = m_aDictsLB.GetSelectEntryPos();
+        sal_uInt16 nSelPos = m_aDictsLB.GetSelectEntryPos();
         if( nSelPos != LISTBOX_ENTRY_NOTFOUND )
         {
             Reference< XConversionDictionary >  xDic( m_aDictList[ nSelPos ] );
@@ -1486,8 +1486,8 @@ namespace svx
         {
             const KeyEvent*             pKEvt = rNEvt.GetKeyEvent();
             const KeyCode&              rKeyCode = pKEvt->GetKeyCode();
-            USHORT                      nMod = rKeyCode.GetModifier();
-            USHORT                      nCode = rKeyCode.GetCode();
+            sal_uInt16                      nMod = rKeyCode.GetModifier();
+            sal_uInt16                      nCode = rKeyCode.GetCode();
             if( nCode == KEY_TAB && ( !nMod || KEY_SHIFT == nMod ) )
             {
                 bool        bUp = KEY_SHIFT == nMod;
@@ -1870,7 +1870,7 @@ namespace svx
                 aName = xDic->getName();
             m_aBookLB.InsertEntry( aName );
         }
-        m_aBookLB.SelectEntryPos( USHORT( _nSelDict ) );
+        m_aBookLB.SelectEntryPos( sal_uInt16( _nSelDict ) );
 
         FreeResource();
 
