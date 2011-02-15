@@ -66,14 +66,14 @@ class SwTxtFrm: public SwCntntFrm
     friend class SwTestFormat;
     friend class WidowsAndOrphans;
     friend class SwTxtFrmLocker;        // duerfen Lock()/Unlock()
-    friend sal_Bool lcl_ChangeOffset( SwTxtFrm* pFrm, USHORT nNew );
+    friend sal_Bool lcl_ChangeOffset( SwTxtFrm* pFrm, sal_uInt16 nNew );
 
     static SwCache *pTxtCache;  //Pointer auf den Line-Cache
     static long nMinPrtLine;    //Diese Linie darf beim Drucken nicht
         //unterschritten werden, Hack fuer Tabellenzellen ueber mehrere Seiten
 
-    ULONG  nAllLines        :24;//Anzahl der Zeilen fuer das Paint (inkl. nThisLines)
-    ULONG  nThisLines       :8; //Anzahl der Zeilen dieses Frames
+    sal_uLong  nAllLines        :24;//Anzahl der Zeilen fuer das Paint (inkl. nThisLines)
+    sal_uLong  nThisLines       :8; //Anzahl der Zeilen dieses Frames
 
     // The x position for flys anchored at this paragraph.
     // These values are calculated in SwTxtFrm::CalcBaseOfstForFly()
@@ -95,7 +95,7 @@ class SwTxtFrm: public SwCntntFrm
 
     xub_StrLen nOfst;           //nOfst gibt den Offset im Cntnt (Anzahl Zeichen) an.
 
-    USHORT nCacheIdx;           //Index in den Cache, USHRT_MAX wenn definitiv
+    sal_uInt16 nCacheIdx;           //Index in den Cache, USHRT_MAX wenn definitiv
                                 //kein passendes Objekt im Cache steht.
 
     //Teilt den Master ab und erzeugt einen Follow oder passt die
@@ -116,7 +116,7 @@ class SwTxtFrm: public SwCntntFrm
 
     // wertet in Format() die Preps aus.
     sal_Bool CalcPreps();
-    void PrepWidows( const USHORT nNeed, sal_Bool bNotify = sal_True );
+    void PrepWidows( const sal_uInt16 nNeed, sal_Bool bNotify = sal_True );
     void _InvalidateRange( const SwCharRange &, const long = 0);
     inline void InvalidateRange( const SwCharRange &, const long = 0);
 
@@ -236,11 +236,11 @@ public:
     void Init();
 
     // Wird von FormatSpelling( ) gerufen
-    SwRect _AutoSpell( const SwCntntNode*, const SwViewOption&, USHORT );
+    SwRect _AutoSpell( const SwCntntNode*, const SwViewOption&, sal_uInt16 );
     // is called from the FormatSpelling( ) method
-    SwRect SmartTagScan( SwCntntNode* , USHORT );
+    SwRect SmartTagScan( SwCntntNode* , sal_uInt16 );
     // Wird vom CollectAutoCmplWords gerufen
-    void CollectAutoCmplWrds( SwCntntNode* , USHORT );
+    void CollectAutoCmplWrds( SwCntntNode* , sal_uInt16 );
 
     // Returns the screen position of rPos. The values are relative to the upper
     // left position of the page frame.
@@ -314,16 +314,16 @@ public:
 
     // Prepares the cursor position for a visual cursor move (BiDi).
     // The behaviour is different for insert and overwrite cursors
-    void PrepareVisualMove( xub_StrLen& nPos, BYTE& nCrsrLevel,
+    void PrepareVisualMove( xub_StrLen& nPos, sal_uInt8& nCrsrLevel,
                             sal_Bool& bRight, sal_Bool bInsertCrsr );
 
     // Methoden zur Verwaltung von FolgeFrames
            SwCntntFrm *SplitFrm( const xub_StrLen nTxtPos );
            SwCntntFrm *JoinFrm();
-    inline USHORT      GetOfst() const { return nOfst; }
-           void        _SetOfst( const USHORT nNewOfst );
-    inline void        SetOfst ( const USHORT nNewOfst );
-    inline void        ManipOfst ( const USHORT nNewOfst ){ nOfst = nNewOfst; }
+    inline sal_uInt16      GetOfst() const { return nOfst; }
+           void        _SetOfst( const sal_uInt16 nNewOfst );
+    inline void        SetOfst ( const sal_uInt16 nNewOfst );
+    inline void        ManipOfst ( const sal_uInt16 nNewOfst ){ nOfst = nNewOfst; }
            SwTxtFrm   *GetFrmAtPos ( const SwPosition &rPos);
     inline const SwTxtFrm *GetFrmAtPos ( const SwPosition &rPos) const;
            // OD 07.10.2003 #110978# - return <reference> instead of <pointer>
@@ -444,10 +444,10 @@ public:
     inline SwTwips GetRightMargin() const;
 
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
-    virtual void  CheckDirection( BOOL bVert );
+    virtual void  CheckDirection( sal_Bool bVert );
 
     // Liefert die Summe der Zeilenhoehen in pLine zurueck.
-    USHORT GetParHeight() const;
+    sal_uInt16 GetParHeight() const;
 
     // Liefert die Resthoehe zurueck
     inline SwTwips GetRstHeight() const;
@@ -484,8 +484,8 @@ public:
     static long GetMinPrtLine() { return nMinPrtLine; }
     static void SetMinPrtLine( long nNew ) { nMinPrtLine = nNew; }
 
-    inline USHORT GetCacheIdx() const { return nCacheIdx; }
-    inline void   SetCacheIdx( const USHORT nNew ) { nCacheIdx = nNew; }
+    inline sal_uInt16 GetCacheIdx() const { return nCacheIdx; }
+    inline void   SetCacheIdx( const sal_uInt16 nNew ) { nCacheIdx = nNew; }
 
     //Entfert die Line-Informationen aus dem Cache.
     void ClearPara();
@@ -523,23 +523,23 @@ public:
     long GetLineSpace( const bool _bNoPropLineSpacing = false ) const;
 
     // liefert die erste Zeilenhoehe zurueck
-    USHORT FirstLineHeight() const;
+    sal_uInt16 FirstLineHeight() const;
 
     // Haengt FlyInCntFrm um, wenn nEnd > Index >= nStart ist.
-    void MoveFlyInCnt( SwTxtFrm *pNew, USHORT nStart, USHORT nEnd );
+    void MoveFlyInCnt( SwTxtFrm *pNew, sal_uInt16 nStart, sal_uInt16 nEnd );
 
     // Berechnet die Position von FlyInCntFrms
-    USHORT CalcFlyPos( SwFrmFmt* pSearch );
+    sal_uInt16 CalcFlyPos( SwFrmFmt* pSearch );
 
     // Ermittelt die Startposition und Schrittweite des Registers
-    sal_Bool FillRegister( SwTwips& rRegStart, USHORT& rRegDiff );
+    sal_Bool FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff );
 
 
-    USHORT GetLineCount( USHORT nPos );     //Ermittelt die Zeilenanzahl
+    sal_uInt16 GetLineCount( sal_uInt16 nPos );     //Ermittelt die Zeilenanzahl
 
     //Fuer die Anzeige der Zeilennummern.
-    ULONG GetAllLines()  const { return nAllLines; }
-    ULONG GetThisLines() const { return nThisLines;}
+    sal_uLong GetAllLines()  const { return nAllLines; }
+    sal_uLong GetThisLines() const { return nThisLines;}
     void RecalcAllLines();
 
     // Stoppt Animationen innerhalb von Numerierungen

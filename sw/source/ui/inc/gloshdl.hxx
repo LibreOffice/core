@@ -50,42 +50,42 @@ class SW_DLLPUBLIC SwGlossaryHdl
                        const SvxMacro *pStart,
                        const SvxMacro *pEnd);
 
-    SW_DLLPRIVATE BOOL  Expand( const String& rShortName,
+    SW_DLLPRIVATE sal_Bool  Expand( const String& rShortName,
                     SwGlossaries* pGlossaries,
                     SwTextBlocks *pGlossary );
 
 public:
-    BOOL    ConvertToNew(SwTextBlocks& rOld);
+    sal_Bool    ConvertToNew(SwTextBlocks& rOld);
     void    GlossaryDlg();
 
-    USHORT  GetGroupCnt() const;
-    String  GetGroupName( USHORT, String* pTitle = 0 );
-    BOOL    NewGroup(String & rGroupName, const String& rTitle);
-    BOOL    DelGroup(const String &);
-    BOOL    RenameGroup(const String & rOld, String& rNew, const String& rNewTitle);
-    void    SetCurGroup(const String &aGrp, BOOL bApi = FALSE, BOOL bAlwaysCreateNew = FALSE);
+    sal_uInt16  GetGroupCnt() const;
+    String  GetGroupName( sal_uInt16, String* pTitle = 0 );
+    sal_Bool    NewGroup(String & rGroupName, const String& rTitle);
+    sal_Bool    DelGroup(const String &);
+    sal_Bool    RenameGroup(const String & rOld, String& rNew, const String& rNewTitle);
+    void    SetCurGroup(const String &aGrp, sal_Bool bApi = sal_False, sal_Bool bAlwaysCreateNew = sal_False);
 
     const String &GetCurGroup() const { return aCurGrp; }
 
-    USHORT  GetGlossaryCnt();
-    String  GetGlossaryName(USHORT);
+    sal_uInt16  GetGlossaryCnt();
+    String  GetGlossaryName(sal_uInt16);
     String  GetGlossaryShortName(const String &rName);
-    String  GetGlossaryShortName(USHORT);
+    String  GetGlossaryShortName(sal_uInt16);
 
-    BOOL    Rename( const String& rOldShortName,  const String& rNewShortName,
+    sal_Bool    Rename( const String& rOldShortName,  const String& rNewShortName,
                         const String& rNewName);
-    BOOL    CopyOrMove( const String& rSourceGroupName,  String& rSourceShortName,
-                        const String& rDestGroupName, const String& rLongName, BOOL bMove );
-    BOOL    HasShortName(const String &rShortName) const;
+    sal_Bool    CopyOrMove( const String& rSourceGroupName,  String& rSourceShortName,
+                        const String& rDestGroupName, const String& rLongName, sal_Bool bMove );
+    sal_Bool    HasShortName(const String &rShortName) const;
     //wird NewGlossary vom Basic gerufen, dann soll dir zuvor eingestellte
     //Gruppe ggf. neu erstellt werden
-    BOOL    NewGlossary(const String &rName, const String &rShortName,
-                BOOL bApiCall = FALSE, BOOL bNoAttr = FALSE );
-    BOOL    DelGlossary(const String&);
-    BOOL    CopyToClipboard(SwWrtShell& rSh, const String& rShortName);
+    sal_Bool    NewGlossary(const String &rName, const String &rShortName,
+                sal_Bool bApiCall = sal_False, sal_Bool bNoAttr = sal_False );
+    sal_Bool    DelGlossary(const String&);
+    sal_Bool    CopyToClipboard(SwWrtShell& rSh, const String& rShortName);
 
-    BOOL    ExpandGlossary();
-    BOOL    InsertGlossary(const String &rName);
+    sal_Bool    ExpandGlossary();
+    sal_Bool    InsertGlossary(const String &rName);
 
     void    SetMacros(const String& rName,
                       const SvxMacro* pStart,
@@ -96,12 +96,12 @@ public:
                       SvxMacro& rEnd,
                       SwTextBlocks* pGlossary = 0 );
 
-    BOOL    IsReadOnly( const String* = 0 ) const;
-    BOOL    IsOld() const;
+    sal_Bool    IsReadOnly( const String* = 0 ) const;
+    sal_Bool    IsOld() const;
 
-    BOOL    FindGroupName(String & rGroup); // Gruppe ohne Pfadindex finden
+    sal_Bool    FindGroupName(String & rGroup); // Gruppe ohne Pfadindex finden
 
-    BOOL    ImportGlossaries( const String& rName );
+    sal_Bool    ImportGlossaries( const String& rName );
 
             SwGlossaryHdl(SfxViewFrame* pViewFrame, SwWrtShell *);
             ~SwGlossaryHdl();

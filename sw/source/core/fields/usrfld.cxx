@@ -28,16 +28,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
-#include <svx/svdmodel.hxx>
 
+#include <svx/svdmodel.hxx>
 
 #include <calbck.hxx>
 #include <calc.hxx>
 #include <usrfld.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <editsh.hxx>
 #include <dpage.hxx>
 #include <unofldmid.h>
@@ -129,19 +129,19 @@ void SwUserField::SetSubType(sal_uInt16 nSub)
 /*-----------------09.03.98 08:04-------------------
 
 --------------------------------------------------*/
-BOOL SwUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+sal_Bool SwUserField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
     case FIELD_PROP_BOOL2:
         {
-            BOOL bTmp = 0 != (nSubType & nsSwExtendedSubType::SUB_CMD);
+            sal_Bool bTmp = 0 != (nSubType & nsSwExtendedSubType::SUB_CMD);
             rAny.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
     case FIELD_PROP_BOOL1:
         {
-            BOOL bTmp = 0 == (nSubType & nsSwExtendedSubType::SUB_INVISIBLE);
+            sal_Bool bTmp = 0 == (nSubType & nsSwExtendedSubType::SUB_INVISIBLE);
             rAny.setValue(&bTmp, ::getBooleanCppuType());
         }
         break;
@@ -156,7 +156,7 @@ BOOL SwUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 /*-----------------09.03.98 08:04-------------------
 
 --------------------------------------------------*/
-sal_Bool SwUserField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+sal_Bool SwUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {
@@ -302,14 +302,16 @@ void SwUserFieldType::SetContent( const String& rStr, sal_uInt32 nFmt )
         sal_Bool bModified = GetDoc()->IsModified();
         GetDoc()->SetModified();
         if( !bModified )    // Bug 57028
-            GetDoc()->SetUndoNoResetModified();
+        {
+            GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
+        }
     }
 }
 
 /*-----------------04.03.98 17:05-------------------
 
 --------------------------------------------------*/
-BOOL SwUserFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+sal_Bool SwUserFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
     switch( nWhichId )
     {
@@ -321,7 +323,7 @@ BOOL SwUserFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
         break;
     case FIELD_PROP_BOOL1:
         {
-            BOOL bExpression = 0 != (nsSwGetSetExpType::GSE_EXPR&nType);
+            sal_Bool bExpression = 0 != (nsSwGetSetExpType::GSE_EXPR&nType);
             rAny.setValue(&bExpression, ::getBooleanCppuType());
         }
         break;
@@ -333,7 +335,7 @@ BOOL SwUserFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 /*-----------------04.03.98 17:05-------------------
 
 --------------------------------------------------*/
-BOOL SwUserFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
+sal_Bool SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 {
     switch( nWhichId )
     {

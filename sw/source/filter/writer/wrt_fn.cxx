@@ -41,7 +41,7 @@
 
 Writer& Out( const SwAttrFnTab pTab, const SfxPoolItem& rHt, Writer & rWrt )
 {
-    USHORT nId = rHt.Which();
+    sal_uInt16 nId = rHt.Which();
     ASSERT(  nId < POOLATTR_END && nId >= POOLATTR_BEGIN, "SwAttrFnTab::Out()" );
     FnAttrOut pOut;
     if( 0 != ( pOut = pTab[ nId - RES_CHRATR_BEGIN] ))
@@ -51,8 +51,8 @@ Writer& Out( const SwAttrFnTab pTab, const SfxPoolItem& rHt, Writer & rWrt )
 }
 
 Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
-                        const SfxItemSet& rSet, BOOL bDeep,
-                        BOOL bTstForDefault )
+                        const SfxItemSet& rSet, sal_Bool bDeep,
+                        sal_Bool bTstForDefault )
 {
     // erst die eigenen Attribute ausgeben
     const SfxItemPool& rPool = *rSet.GetPool();
@@ -81,7 +81,7 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
     else
     {
         SfxWhichIter aIter( *pSet );
-        USHORT nWhich = aIter.FirstWhich();
+        sal_uInt16 nWhich = aIter.FirstWhich();
         while( nWhich )
         {
             if( SFX_ITEM_SET == pSet->GetItemState( nWhich, bDeep, &pItem ) &&
@@ -106,7 +106,7 @@ Writer& Out( const SwNodeFnTab pTab, SwNode& rNode, Writer & rWrt )
     if( !pCNd )
         return rWrt;
 
-    USHORT nId = RES_TXTNODE;
+    sal_uInt16 nId = RES_TXTNODE;
     switch (pCNd->GetNodeType())
     {
         case ND_TEXTNODE:

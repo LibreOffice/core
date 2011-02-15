@@ -77,7 +77,7 @@ SfxPoolItem* SwFmtWrapInfluenceOnObjPos::Clone( SfxItemPool * ) const
     return new SwFmtWrapInfluenceOnObjPos(*this);
 }
 
-BOOL SwFmtWrapInfluenceOnObjPos::QueryValue( Any& rVal, BYTE nMemberId ) const
+sal_Bool SwFmtWrapInfluenceOnObjPos::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bRet = sal_True;
@@ -96,7 +96,7 @@ BOOL SwFmtWrapInfluenceOnObjPos::QueryValue( Any& rVal, BYTE nMemberId ) const
     return bRet;
 }
 
-BOOL SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, BYTE nMemberId )
+sal_Bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bRet = sal_True;

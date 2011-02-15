@@ -86,9 +86,9 @@ using namespace ::com::sun::star::lang;
  *
  * --------------------------------------------------*/
 
-SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
+SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
 {
-    BOOL bTextDialog = (nId == SID_SW_EDITOPTIONS) ? TRUE : FALSE;
+    sal_Bool bTextDialog = (nId == SID_SW_EDITOPTIONS) ? sal_True : sal_False;
 
     // hier werden die Optionen fuer die Web- und den Textdialog zusmmengesetzt
         SwViewOption aViewOpt = *GetUsrPref(!bTextDialog);
@@ -100,7 +100,7 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
         if(pAppView)
         {
         // wenn Text dann nicht WebView und umgekehrt
-            BOOL bWebView = 0 != PTR_CAST(SwWebView, pAppView);
+            sal_Bool bWebView = 0 != PTR_CAST(SwWebView, pAppView);
             if( (bWebView &&  !bTextDialog) ||(!bWebView &&  bTextDialog))
             {
                 aViewOpt = *pAppView->GetWrtShell().GetViewOptions();
@@ -197,20 +197,20 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
         pRet->Put(SwPtrItem(FN_PARAM_STDFONTS, GetStdFontConfig()));
     if( PTR_CAST( SwPagePreView, SfxViewShell::Current())!=0)
     {
-        SfxBoolItem aBool(SfxBoolItem(SID_PRINTPREVIEW, TRUE));
+        SfxBoolItem aBool(SfxBoolItem(SID_PRINTPREVIEW, sal_True));
         pRet->Put(aBool);
     }
 
     FieldUnit eUnit = pPref->GetHScrollMetric();
     if(pAppView)
         pAppView->GetHLinealMetric(eUnit);
-    pRet->Put(SfxUInt16Item( FN_HSCROLL_METRIC, static_cast< UINT16 >(eUnit)));
+    pRet->Put(SfxUInt16Item( FN_HSCROLL_METRIC, static_cast< sal_uInt16 >(eUnit)));
 
     eUnit = pPref->GetVScrollMetric();
     if(pAppView)
         pAppView->GetVLinealMetric(eUnit);
-    pRet->Put(SfxUInt16Item( FN_VSCROLL_METRIC, static_cast< UINT16 >(eUnit) ));
-    pRet->Put(SfxUInt16Item( SID_ATTR_METRIC, static_cast< UINT16 >(pPref->GetMetric()) ));
+    pRet->Put(SfxUInt16Item( FN_VSCROLL_METRIC, static_cast< sal_uInt16 >(eUnit) ));
+    pRet->Put(SfxUInt16Item( SID_ATTR_METRIC, static_cast< sal_uInt16 >(pPref->GetMetric()) ));
     if(bTextDialog)
     {
         if(pAppView)
@@ -218,10 +218,10 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
             const SvxTabStopItem& rDefTabs =
                     (const SvxTabStopItem&)pAppView->GetWrtShell().
                                         GetDefault(RES_PARATR_TABSTOP);
-                pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, (USHORT)::GetTabDist(rDefTabs)));
+                pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP, (sal_uInt16)::GetTabDist(rDefTabs)));
         }
         else
-            pRet->Put(SfxUInt16Item( SID_ATTR_DEFTABSTOP, (UINT16)pPref->GetDefTab()));
+            pRet->Put(SfxUInt16Item( SID_ATTR_DEFTABSTOP, (sal_uInt16)pPref->GetDefTab()));
     }
 
     /*-----------------01.02.97 11.13-------------------
@@ -235,8 +235,8 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
     aGridItem.SetGridVisible( aViewOpt.IsGridVisible());
 
     const Size& rSnapSize = aViewOpt.GetSnapSize();
-    aGridItem.SetFldDrawX( (USHORT) (rSnapSize.Width() ));
-    aGridItem.SetFldDrawY( (USHORT) (rSnapSize.Height()));
+    aGridItem.SetFldDrawX( (sal_uInt16) (rSnapSize.Width() ));
+    aGridItem.SetFldDrawY( (sal_uInt16) (rSnapSize.Height()));
 
     aGridItem.SetFldDivisionX( aViewOpt.GetDivisionX());
     aGridItem.SetFldDivisionY( aViewOpt.GetDivisionY());
@@ -246,8 +246,8 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
     /*-----------------01.02.97 13.02-------------------
         Optionen fuer PrintTabPage
     --------------------------------------------------*/
-    SwPrintData* pOpt = pAppView ?
-                        pAppView->GetWrtShell().getIDocumentDeviceAccess()->getPrintData() :
+    const SwPrintData* pOpt = pAppView ?
+                        &pAppView->GetWrtShell().getIDocumentDeviceAccess()->getPrintData() :
                         0;
 
     if(!pOpt)
@@ -292,16 +292,16 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
 /* -----------------12.02.99 12:28-------------------
  *
  * --------------------------------------------------*/
-void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
+void SwModule::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet )
 {
-    BOOL bTextDialog = nId == SID_SW_EDITOPTIONS;
+    sal_Bool bTextDialog = nId == SID_SW_EDITOPTIONS;
     SwView* pAppView = GetView();
     if(pAppView && pAppView->GetViewFrame() != SfxViewFrame::Current())
         pAppView = 0;
     if(pAppView)
     {
         // the text dialog mustn't apply data to the web view and vice versa
-        BOOL bWebView = 0 != PTR_CAST(SwWebView, pAppView);
+        sal_Bool bWebView = 0 != PTR_CAST(SwWebView, pAppView);
         if( (bWebView == bTextDialog))
             pAppView = 0; //
     }
@@ -316,18 +316,18 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     /*---------------------------------------------------------------------
             Seite Dokumentansicht auswerten
     -----------------------------------------------------------------------*/
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_DOCDISP, FALSE, &pItem ))
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_DOCDISP, sal_False, &pItem ))
     {
         const SwDocDisplayItem* pDocDispItem = (const SwDocDisplayItem*)pItem;
 
         if(!aViewOpt.IsViewMetaChars())
         {
-            if(     (!aViewOpt.IsTab( TRUE ) &&  pDocDispItem->bTab) ||
-                    (!aViewOpt.IsBlank( TRUE ) && pDocDispItem->bSpace) ||
-                    (!aViewOpt.IsParagraph( TRUE ) && pDocDispItem->bParagraphEnd) ||
-                    (!aViewOpt.IsLineBreak( TRUE ) && pDocDispItem->bManualBreak) )
+            if(     (!aViewOpt.IsTab( sal_True ) &&  pDocDispItem->bTab) ||
+                    (!aViewOpt.IsBlank( sal_True ) && pDocDispItem->bSpace) ||
+                    (!aViewOpt.IsParagraph( sal_True ) && pDocDispItem->bParagraphEnd) ||
+                    (!aViewOpt.IsLineBreak( sal_True ) && pDocDispItem->bManualBreak) )
             {
-                aViewOpt.SetViewMetaChars(TRUE);
+                aViewOpt.SetViewMetaChars(sal_True);
                 if(pBindings)
                     pBindings->Invalidate(FN_VIEW_META_CHARS);
             }
@@ -345,20 +345,20 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
                 Elemente - Item auswerten
     -----------------------------------------------------------------------*/
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_ELEM, FALSE, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_ELEM, sal_False, &pItem ) )
     {
         const SwElemItem* pElemItem = (const SwElemItem*)pItem;
         pElemItem->FillViewOptions( aViewOpt );
 
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_METRIC, FALSE, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_METRIC, sal_False, &pItem ) )
     {
         SFX_APP()->SetOptions(rSet);
         const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
         ::SetDfltMetric((FieldUnit)pMetricItem->GetValue(), !bTextDialog);
     }
-    if( SFX_ITEM_SET == rSet.GetItemState(FN_HSCROLL_METRIC, FALSE, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState(FN_HSCROLL_METRIC, sal_False, &pItem ) )
     {
         const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
         FieldUnit eUnit = (FieldUnit)pMetricItem->GetValue();
@@ -367,7 +367,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
             pAppView->ChangeTabMetric(eUnit);
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState(FN_VSCROLL_METRIC, FALSE, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState(FN_VSCROLL_METRIC, sal_False, &pItem ) )
     {
         const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
         FieldUnit eUnit = (FieldUnit)pMetricItem->GetValue();
@@ -376,9 +376,9 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
             pAppView->ChangeVLinealMetric(eUnit);
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_DEFTABSTOP, FALSE, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_DEFTABSTOP, sal_False, &pItem ) )
     {
-        USHORT nTabDist = ((const SfxUInt16Item*)pItem)->GetValue();
+        sal_uInt16 nTabDist = ((const SfxUInt16Item*)pItem)->GetValue();
         pPref->SetDefTab(nTabDist);
         if(pAppView)
         {
@@ -403,7 +403,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
             Seite Rastereinstellungen auswerten
     ----------------------------------------------------------------------*/
 
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS, FALSE, &pItem ))
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS, sal_False, &pItem ))
     {
         const SvxGridItem* pGridItem = (const SvxGridItem*)pItem;
 
@@ -433,7 +433,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     //      Writer Drucker Zusatzeinstellungen auswerten
     //----------------------------------------------------------------------------
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_ADDPRINTER, FALSE, &pItem ))
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_ADDPRINTER, sal_False, &pItem ))
     {
         SwPrintOptions* pOpt = GetPrtOptions(!bTextDialog);
         if (pOpt)
@@ -447,7 +447,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
 
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_SHADOWCURSOR, FALSE, &pItem ))
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_SHADOWCURSOR, sal_False, &pItem ))
     {
         ((SwShadowCursorItem*)pItem)->FillViewOptions( aViewOpt );
         if(pBindings)
@@ -465,7 +465,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
             rWrtSh.AlignAllFormulasToBaseline();
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_CRSR_IN_PROTECTED, FALSE, &pItem ))
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_CRSR_IN_PROTECTED, sal_False, &pItem ))
     {
         aViewOpt.SetCursorInProtectedArea(((const SfxBoolItem*)pItem)->GetValue());
     }
@@ -477,19 +477,19 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     ----------------------------------------------------------------------------*/
 
             if( SFX_ITEM_SET == rSet.GetItemState(
-                        FN_PARAM_SWTEST, FALSE, &pItem ))
+                        FN_PARAM_SWTEST, sal_False, &pItem ))
             {
                 const SwTestItem* pTestItem = (const SwTestItem*)pItem;
-                aViewOpt.SetTest1((BOOL)pTestItem->bTest1);
-                aViewOpt.SetTest2((BOOL)pTestItem->bTest2);
-                aViewOpt.SetTest3((BOOL)pTestItem->bTest3);
-                aViewOpt.SetTest4((BOOL)pTestItem->bTest4);
-                aViewOpt.SetTest5((BOOL)pTestItem->bTest5);
-                aViewOpt.SetTest6((BOOL)pTestItem->bTest6);
-                aViewOpt.SetTest7((BOOL)pTestItem->bTest7);
-                aViewOpt.SetTest8((BOOL)pTestItem->bTest8);
-                SwViewOption::SetTest9((BOOL)pTestItem->bTest9);
-                aViewOpt.SetTest10((BOOL)pTestItem->bTest10);
+                aViewOpt.SetTest1((sal_Bool)pTestItem->bTest1);
+                aViewOpt.SetTest2((sal_Bool)pTestItem->bTest2);
+                aViewOpt.SetTest3((sal_Bool)pTestItem->bTest3);
+                aViewOpt.SetTest4((sal_Bool)pTestItem->bTest4);
+                aViewOpt.SetTest5((sal_Bool)pTestItem->bTest5);
+                aViewOpt.SetTest6((sal_Bool)pTestItem->bTest6);
+                aViewOpt.SetTest7((sal_Bool)pTestItem->bTest7);
+                aViewOpt.SetTest8((sal_Bool)pTestItem->bTest8);
+                SwViewOption::SetTest9((sal_Bool)pTestItem->bTest9);
+                aViewOpt.SetTest10((sal_Bool)pTestItem->bTest10);
             }
 #endif
         // dann an der akt. View und Shell die entsp. Elemente setzen
@@ -498,7 +498,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
 /* -----------------12.02.99 12:28-------------------
  *
  * --------------------------------------------------*/
-SfxTabPage* SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )
+SfxTabPage* SwModule::CreateTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet )
 {
     SfxTabPage* pRet = NULL;
     SfxAllItemSet aSet(*(rSet.GetPool()));
@@ -567,7 +567,7 @@ SfxTabPage* SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemS
             if(pCurrView)
             {
                 // wenn Text dann nicht WebView und umgekehrt
-                BOOL bWebView = 0 != PTR_CAST(SwWebView, pCurrView);
+                sal_Bool bWebView = 0 != PTR_CAST(SwWebView, pCurrView);
                 if( (bWebView &&  RID_SW_TP_HTML_OPTTABLE_PAGE == nId) ||
                     (!bWebView &&  RID_SW_TP_HTML_OPTTABLE_PAGE != nId) )
                 {

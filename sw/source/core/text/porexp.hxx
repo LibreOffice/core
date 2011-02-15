@@ -58,14 +58,14 @@ public:
 class SwBlankPortion : public SwExpandPortion
 {
     xub_Unicode cChar;
-    BOOL bMulti;        // For multiportion brackets
+    sal_Bool bMulti;        // For multiportion brackets
 public:
-    inline  SwBlankPortion( xub_Unicode cCh, BOOL bMult = sal_False )
+    inline  SwBlankPortion( xub_Unicode cCh, sal_Bool bMult = sal_False )
         : cChar( cCh ), bMulti( bMult )
         { cChar = cCh; SetLen(1); SetWhichPor( POR_BLANK ); }
 
-    BOOL IsMulti() const { return bMulti; }
-    void SetMulti( BOOL bNew ) { bMulti = bNew; }
+    sal_Bool IsMulti() const { return bMulti; }
+    void SetMulti( sal_Bool bNew ) { bMulti = bNew; }
 
     virtual SwLinePortion *Compress();
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;

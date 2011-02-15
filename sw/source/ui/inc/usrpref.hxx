@@ -41,11 +41,11 @@ class SwMasterUsrPref;
 class SwContentViewConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&        rParent;
-    BOOL                    bWeb;
+    sal_Bool                    bWeb;
 
     com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
     public:
-        SwContentViewConfig(BOOL bWeb, SwMasterUsrPref& rParent);
+        SwContentViewConfig(sal_Bool bWeb, SwMasterUsrPref& rParent);
         ~SwContentViewConfig();
 
     // utl::ConfigItem
@@ -61,11 +61,11 @@ class SwContentViewConfig : public utl::ConfigItem
 class SwLayoutViewConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&    rParent;
-    BOOL                bWeb;
+    sal_Bool                bWeb;
 
     com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
     public:
-        SwLayoutViewConfig(BOOL bWeb, SwMasterUsrPref& rParent);
+        SwLayoutViewConfig(sal_Bool bWeb, SwMasterUsrPref& rParent);
         ~SwLayoutViewConfig();
 
     virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
@@ -79,11 +79,11 @@ class SwLayoutViewConfig : public utl::ConfigItem
 class SwGridConfig : public utl::ConfigItem
 {
     SwMasterUsrPref&    rParent;
-    BOOL                bWeb;
+    sal_Bool                bWeb;
 
     com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
     public:
-        SwGridConfig(BOOL bWeb, SwMasterUsrPref& rParent);
+        SwGridConfig(sal_Bool bWeb, SwMasterUsrPref& rParent);
         ~SwGridConfig();
 
     virtual void Commit();
@@ -156,7 +156,7 @@ class SwMasterUsrPref : public SwViewOption
     SwWebColorConfig*   pWebColorConfig;
 
 public:
-    SwMasterUsrPref(BOOL bWeb);
+    SwMasterUsrPref(sal_Bool bWeb);
     ~SwMasterUsrPref();
 
     void SetUsrPref(const SwViewOption &rCopy);
@@ -188,7 +188,7 @@ public:
         }
     sal_Int32 GetUpdateLinkMode() const {return nLinkUpdateMode; }
 
-    void SetUpdateFields(BOOL bSet, sal_Bool bNoModify = sal_False)
+    void SetUpdateFields(sal_Bool bSet, sal_Bool bNoModify = sal_False)
         {
             if(bSet && eFldUpdateFlags == AUTOUPD_OFF)
             {
@@ -213,7 +213,7 @@ public:
                 aContentConfig.SetModified();
         }
 
-    void SetUpdateCharts(BOOL bSet, sal_Bool bNoModify = sal_False)
+    void SetUpdateCharts(sal_Bool bSet, sal_Bool bNoModify = sal_False)
         {
             if(bSet)
             {
