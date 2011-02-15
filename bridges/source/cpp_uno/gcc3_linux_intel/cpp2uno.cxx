@@ -359,7 +359,8 @@ extern "C" typedef void (*PrivateSnippetExecutor)();
 
 int const codeSnippetSize = 16;
 
-#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(MACOSX)
+#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(MACOSX) || \
+    defined(DRAGONFLY)
 namespace
 {
     PrivateSnippetExecutor returnsInRegister(typelib_TypeDescriptionReference * pReturnTypeRef)
@@ -407,7 +408,8 @@ unsigned char * codeSnippet(
         break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
-#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(MACOSX)
+#if defined(FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(MACOSX) || \
+    defined(DRAGONFLY)
         exec = returnsInRegister(pReturnTypeRef);
         if (!exec)
         {

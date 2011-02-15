@@ -32,7 +32,8 @@
 #include <rtl/memory.h>
 
 #if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || \
-    defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD)
+    defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD) || \
+    defined(DRAGONFLY)
 #include <pthread.h>
 #ifndef MACOSX
  #include <locale.h>
@@ -234,7 +235,7 @@ static rtl_Locale * _parse_locale( const char * locale )
 }
 
 #if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || \
-    defined(FREEBSD) || defined(OPENBSD)
+    defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY)
 
 /*
  * This implementation of osl_getTextEncodingFromLocale maps
@@ -486,7 +487,7 @@ const _pair _nl_language_list[] = {
     { "WIN-SAMI-2",                 RTL_TEXTENCODING_DONTKNOW }     /* WS2 */
 };
 
-#elif defined(FREEBSD)
+#elif defined(FREEBSD) || defined(DRAGONFLY)
 
 const _pair _nl_language_list[] = {
     { "ASCII",         RTL_TEXTENCODING_ASCII_US       }, /* US-ASCII */
@@ -952,7 +953,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
         /* only change env vars that exist already */
         if( getenv( "LC_ALL" ) ) {
 #if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || \
-    defined( AIX ) || defined( OPENBSD )
+    defined( AIX ) || defined( OPENBSD ) || defined( DRAGONFLY )
             setenv( "LC_ALL", locale_buf, 1);
 #else
             setenv( "LC_ALL", locale_buf );
@@ -961,7 +962,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
 
         if( getenv( "LC_CTYPE" ) ) {
 #if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || \
-    defined( AIX ) || defined( OPENBSD )
+    defined( AIX ) || defined( OPENBSD ) || defined( DRAGONFLY )
             setenv("LC_CTYPE", locale_buf, 1 );
 #else
             setenv( "LC_CTYPE", locale_buf );
@@ -970,7 +971,7 @@ int _imp_setProcessLocale( rtl_Locale * pLocale )
 
         if( getenv( "LANG" ) ) {
 #if defined( FREEBSD ) || defined( NETBSD ) || defined( MACOSX ) || \
-    defined( AIX ) || defined( OPENBSD)
+    defined( AIX ) || defined( OPENBSD) || defined( DRAGONFLY )
             setenv("LC_CTYPE", locale_buf, 1 );
 #else
             setenv( "LANG", locale_buf );

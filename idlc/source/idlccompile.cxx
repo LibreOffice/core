@@ -44,7 +44,7 @@
 #include <errno.h>
 #include <unistd.h>
 #if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD) || \
-    defined(AIX) || defined(OPENBSD)
+    defined(AIX) || defined(OPENBSD) || defined(DRAGONFLY)
 #include <sys/wait.h>
 #else
 #include <wait.h>

@@ -115,8 +115,8 @@ SLOFILES += $(SLO)$/osxlocale.obj
 .ENDIF
 
 .IF "$(OS)"=="SOLARIS" || "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD" || \
-	"$(OS)$(CPU)"=="LINUXS" || "$(OS)"=="MACOSX" || \
-	"$(OS)"=="AIX" || "$(OS)"=="OPENBSD"
+    "$(OS)$(CPU)"=="LINUXS" || "$(OS)"=="MACOSX" || "$(OS)"=="AIX" || \
+    "$(OS)"=="OPENBSD" || "$(OS)"=="DRAGONFLY"
 SLOFILES += $(SLO)$/backtrace.obj
 OBJFILES += $(OBJ)$/backtrace.obj
 .ENDIF

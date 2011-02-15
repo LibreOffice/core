@@ -361,7 +361,7 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 
 #if defined(INTEL) \
     && (defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD) || defined(OS2) \
-        || defined(NETBSD) || defined(OPENBSD)) || defined(MACOSX) \
+        || defined(NETBSD) || defined(OPENBSD)) || defined(MACOSX) || defined(DRAGONFLY) \
         || defined(__SUNPRO_CC) && defined(SOLARIS))
 #define MAX_ALIGNMENT_4
 #endif

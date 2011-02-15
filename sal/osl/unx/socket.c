@@ -47,7 +47,7 @@
 #endif
 
 #if defined(LINUX) || defined(NETBSD) || defined ( FREEBSD ) || \
-    defined (MACOSX) || defined (OPENBSD)
+    defined (MACOSX) || defined (OPENBSD) || defined(DRAGONFLY)
 #include <sys/poll.h>
 #define HAVE_POLL_H
 #endif /* HAVE_POLL_H */
@@ -785,7 +785,7 @@ static struct hostent* _osl_gethostbyname_r (
     const char *name, struct hostent *result,
     char *buffer, int buflen, int *h_errnop)
 {
-#if defined(LINUX) || (defined(FREEBSD) && (__FreeBSD_version >= 601103))
+#if defined(LINUX) || (defined(FREEBSD) && (__FreeBSD_version >= 601103)) || defined(DRAGONFLY)
     struct hostent *__result; /* will be the same as result */
     int __error;
     __error = gethostbyname_r (name, result, buffer, buflen,

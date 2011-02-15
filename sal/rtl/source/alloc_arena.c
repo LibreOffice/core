@@ -1254,7 +1254,7 @@ static sal_Size
 rtl_machdep_pagesize (void)
 {
 #if defined(SAL_UNX)
-#if defined(FREEBSD) || defined(NETBSD)
+#if defined(FREEBSD) || defined(NETBSD) || defined(DRAGONFLY)
     return ((sal_Size)getpagesize());
 #else  /* POSIX */
     return ((sal_Size)sysconf(_SC_PAGESIZE));

@@ -351,7 +351,7 @@ typedef struct _sal_Sequence
 #ifdef __cplusplus
 #if defined SAL_W32 || defined SOLARIS || defined LINUX || defined MACOSX || \
     defined FREEBSD || defined NETBSD || defined AIX || defined OS2 || \
-    defined OPENBSD
+    defined OPENBSD || defined DRAGONFLY
 #define SAL_CONST_CAST(type, expr) (const_cast< type >(expr))
 #define SAL_REINTERPRET_CAST(type, expr) (reinterpret_cast< type >(expr))
 #define SAL_STATIC_CAST(type, expr) (static_cast< type >(expr))

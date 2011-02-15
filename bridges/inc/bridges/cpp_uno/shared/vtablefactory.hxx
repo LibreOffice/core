@@ -39,7 +39,7 @@
 
 /*See: http://people.redhat.com/drepper/selinux-mem.html*/
 #if defined(LINUX) || defined(OPENBSD) || defined(FREEBSD) \
-    || defined(NETBSD)
+    || defined(NETBSD) || defined(DRAGONFLY)
 #define USE_DOUBLE_MMAP
 #endif
 

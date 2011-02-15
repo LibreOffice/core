@@ -60,7 +60,7 @@ SHL1STDLIBS = $(SALLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=i$(TARGET)
-.IF "$(OS)"!="FREEBSD" && "$(OS)"!="NETBSD" && "$(OS)"!="OPENBSD"
+.IF "$(OS)"!="FREEBSD" && "$(OS)"!="NETBSD" && "$(OS)"!="OPENBSD" && "$(OS)"!="DRAGONFLY"
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 .ENDIF
 

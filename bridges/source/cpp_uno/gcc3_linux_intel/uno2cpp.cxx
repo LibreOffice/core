@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_bridges.hxx"
 
-#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD)
+#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(DRAGONFLY)
 #include <stdlib.h>
 #else
 #include <malloc.h>
@@ -153,7 +153,8 @@ void callVirtualMethod(
             break;
         default:
         {
-#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(MACOSX)
+#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(MACOSX) || \
+    defined(DRAGONFLY)
             sal_Int32 const nRetSize = pReturnTypeDescr->nSize;
             if (bSimpleReturn && nRetSize <= 8 && nRetSize > 0)
             {
@@ -355,7 +356,8 @@ namespace x86
     {
         if (bridges::cpp_uno::shared::isSimpleType( pTD ))
             return true;
-#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(MACOSX)
+#if defined(FREEBSD) || defined(NETBSD) || defined(OPENBSD) || \
+    defined(MACOSX) || defined(DRAGONFLY)
         // Only structs of exactly 1, 2, 4, or 8 bytes are returned through
         // registers, see <http://developer.apple.com/documentation/DeveloperTools/
         // Conceptual/LowLevelABI/Articles/IA32.html>:

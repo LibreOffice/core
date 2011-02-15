@@ -476,7 +476,7 @@ static void ChildStatusProc(void *pData)
 
             if (! INIT_GROUPS(data.m_name, data.m_gid) || (setuid(data.m_uid) != 0))
                 OSL_TRACE("Failed to change uid and guid, errno=%d (%s)\n", errno, strerror(errno));
-#if defined(LINUX) || defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD)
+#if defined(LINUX) || defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(DRAGONFLY)
             unsetenv("HOME");
 #else
             putenv("HOME=");

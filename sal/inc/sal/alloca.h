@@ -36,7 +36,7 @@
 #define INCLUDED_ALLOCA_H
 #endif
 
-#elif defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD)
+#elif defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(DRAGONFLY)
 
 #ifndef INCLUDED_STDLIB_H
 #include <stdlib.h>

@@ -146,6 +146,8 @@ $(PYUNO_MODULE) : $(SLO)$/pyuno_dlopenwrapper.obj
     @echo $(LINK) $(LINKFLAGSSHLCUI) -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
 .ELIF "$(OS)" == "OPENBSD"
     @echo ld -shared -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
+.ELIF "$(OS)" == "DRAGONFLY"
+    @echo ld -shared -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
 .ELIF "$(OS)" == "MACOSX"
     @echo $(CC) -bundle -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o $(EXTRA_LINKFLAGS) $(EXTRA_FRAMEWORK_FLAG) > $(MISC)$/$(@:b).cmd
 .ELSE

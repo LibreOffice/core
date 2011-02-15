@@ -159,7 +159,8 @@ extern "C" {
 #if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)     && \
     !defined(LINUX)   && !defined(NETBSD) && !defined(SCO)     && \
     !defined(AIX)     && !defined(HPUX)   && !defined(OPENBSD) && \
-    !defined(SOLARIS) && !defined(MACOSX) && !defined(FREEBSD)
+    !defined(SOLARIS) && !defined(MACOSX) && !defined(FREEBSD) && \
+    !defined(DRAGONFLY)
 #   error "Target platform not specified !"
 #endif
 

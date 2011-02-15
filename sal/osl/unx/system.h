@@ -226,6 +226,24 @@
 #       define  PTHREAD_SIGACTION                       pthread_sigaction
 #endif
 
+#ifdef DRAGONFLY
+#   define  ETIME ETIMEDOUT
+#   include <pthread.h>
+#   include <sys/sem.h>
+#   include <semaphore.h>
+#   include <dlfcn.h>
+#   include <sys/filio.h>
+#   include <sys/ioctl.h>
+#   include <sys/param.h>
+#   include <sys/time.h>
+#   include <sys/uio.h>
+#   include <sys/exec.h>
+#   include <sys/un.h>
+#   include <netinet/tcp.h>
+#   include <machine/endian.h>
+#   define  IORESOURCE_TRANSFER_BSD
+#endif
+
 #ifdef SCO
 #   define AF_IPX -1
 #   include <strings.h>
@@ -376,7 +394,7 @@ int macxp_resolveAlias(char *path, int buflen);
     !defined(LINUX)   && !defined(NETBSD) && !defined(FREEBSD) && !defined(SCO)  && \
     !defined(AIX)     && !defined(HPUX)   && \
     !defined(SOLARIS) && !defined(MACOSX) && \
-    !defined(OPENBSD)
+    !defined(OPENBSD) && !defined(DRAGONFLY)
 #   error "Target platform not specified!"
 #endif
 
