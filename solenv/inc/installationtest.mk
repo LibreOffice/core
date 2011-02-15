@@ -79,28 +79,27 @@ my_javaenv = \
 # on other platforms, a single installation to solver is created in
 # smoketestoo_native:
 .IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
+OOO_EXTRACT_TO:=$(shell cygpath -m `mktemp -dt ooosmoke.XXXXXX`)
 $(MISC)/$(TARGET)/installation.flag : $(shell \
         ls $(installationtest_instset)/OOo_*_install-arc_$(defaultlangiso).zip)
-    $(MKDIRHIER) $(@:d)
-    my_tmp=$$(cygpath -m $$(mktemp -dt ooosmoke.XXXXXX)) && \
-    unzip $(installationtest_instset)/OOo_*_install-arc_$(defaultlangiso).zip \
-        -d "$$my_tmp" && \
-    mv "$$my_tmp"/OOo_*_install-arc_$(defaultlangiso) "$$my_tmp"/opt && \
-    echo "$$my_tmp" > $@
+    $(COMMAND_ECHO)$(MKDIRHIER) $(@:d)
+    $(COMMAND_ECHO)unzip -q $(installationtest_instset)/OOo_*_install-arc_$(defaultlangiso).zip -d "$(OOO_EXTRACT_TO)"
+    $(COMMAND_ECHO)mv "$(OOO_EXTRACT_TO)"/OOo_*_install-arc_$(defaultlangiso) "$(OOO_EXTRACT_TO)"/opt
+    $(COMMAND_ECHO)echo "$(OOO_EXTRACT_TO)" > $@
 .END
 
 cpptest .PHONY :
-    $(RM) -r $(MISC)/$(TARGET)/user
-    $(MKDIRHIER) $(MISC)/$(TARGET)/user
+    $(COMMAND_ECHO)$(RM) -r $(MISC)/$(TARGET)/user
+    $(COMMAND_ECHO)$(MKDIRHIER) $(MISC)/$(TARGET)/user
     $(CPPUNITTESTER) \
         -env:UNO_SERVICES=$(my_file)$(SOLARXMLDIR)/ure/services.rdb \
         -env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/types.rdb \
         -env:arg-soffice=$(my_soffice) -env:arg-user=$(MISC)/$(TARGET)/user \
         $(my_cppenv) $(TEST_ARGUMENTS:^"-env:arg-testarg.") $(CPPTEST_LIBRARY)
-    # As a workaround for #i111400#, ignore failure of $(RM):
-    - $(RM) -r $(MISC)/$(TARGET)/user
+# As a workaround for #i111400#, ignore failure of $(RM):
+    $(COMMAND_ECHO)- $(RM) -r $(MISC)/$(TARGET)/user
 .IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
-    $(RM) -r $(installationtest_instpath) $(MISC)/$(TARGET)/installation.flag
+    $(COMMAND_ECHO)$(RM) -r $(installationtest_instpath) $(MISC)/$(TARGET)/installation.flag
 cpptest : $(MISC)/$(TARGET)/installation.flag
 .END
 
@@ -137,5 +136,5 @@ javatest : $(MISC)/$(TARGET)/installation.flag
 .END
 .ELSE
 javatest .PHONY :
-    echo 'javatest needs SOLAR_JAVA=TRUE and OOO_JUNIT_JAR'
+    @echo 'javatest needs SOLAR_JAVA=TRUE and OOO_JUNIT_JAR'
 .END
