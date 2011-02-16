@@ -179,36 +179,6 @@ void SAL_CALL rtl_createNamedUuid(
       0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8\
     }
 
-
-/*
-    This macro must have a value below the system time resolution of the
-    system. The uuid routines use this value  as an upper limit for adding ticks to the
-    the predecessor time value if system times are equal.
- */
-#ifdef SAL_W32
-#define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 1000
-#elif defined SAL_OS2 // YD we use posix functions for time
-#define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
-#elif LINUX
-#define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
-#elif NETBSD
-#define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
-#elif FREEBSD
-#define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
-#elif SOLARIS
-#define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
-#elif MACOSX
-#define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 100000
-#elif AIX
-#define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
-#elif OPENBSD
-#define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
-#elif DRAGONFLY
-#define UUID_SYSTEM_TIME_RESOLUTION_100NS_TICKS 10
-#else
-#error "System time resolution must be calculated!"
-#endif
-
 #ifdef __cplusplus
 }
 #endif
