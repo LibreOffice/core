@@ -329,9 +329,10 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     if( !bWeb )
     {
         if( bCJK )
+        {
             aTextFlowBox.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_RTL_VERT ), FRMDIR_VERT_TOP_RIGHT );
-//        if( ... )
 //            aTextFlowBox.InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_LTR_VERT ), FRMDIR_VERT_TOP_LEFT );
+        }
     }
 
     // #109989# show the text direction box in Writer/Web too, but only, if HTML export mode is not HTML3.2.
