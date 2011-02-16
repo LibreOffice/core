@@ -730,6 +730,8 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     FreeResource();
     SetExchangeSupport();
 
+    aRealSizeBT.SetAccessibleRelationMemberOf(&aSizeFL);
+
     Link aLk = LINK(this, SwFrmPage, RangeModifyHdl);
     aWidthED.    SetLoseFocusHdl( aLk );
     aHeightED.   SetLoseFocusHdl( aLk );
@@ -2418,6 +2420,8 @@ SwGrfExtPage::SwGrfExtPage(Window *pParent, const SfxItemSet &rSet) :
     pGrfDlg         ( 0 )
 {
     FreeResource();
+
+    aBrowseBT.SetAccessibleRelationMemberOf(&aConnectFL);
 
     SetExchangeSupport();
     aMirrorHorzBox.SetClickHdl( LINK(this, SwGrfExtPage, MirrorHdl));

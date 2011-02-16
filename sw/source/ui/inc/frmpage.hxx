@@ -54,6 +54,7 @@ struct SwPosition;
 class SwFrmPage: public SfxTabPage
 {
     // Size
+    FixedLine       aSizeFL;
     FixedText       aWidthFT;
     FixedText       aWidthAutoFT;
     PercentField    aWidthED;
@@ -66,11 +67,10 @@ class SwFrmPage: public SfxTabPage
     CheckBox        aAutoHeightCB;
     CheckBox        aFixedRatioCB;
     PushButton      aRealSizeBT;
-    FixedLine       aSizeFL;
 
     // Anker
-    FixedLine       aTypeFL;
     FixedLine       aTypeSepFL;
+    FixedLine       aTypeFL;
     RadioButton     aAnchorAtPageRB;
     RadioButton     aAnchorAtParaRB;
     RadioButton     aAnchorAtCharRB;
@@ -78,6 +78,7 @@ class SwFrmPage: public SfxTabPage
     RadioButton     aAnchorAtFrameRB;
 
     // Position
+    FixedLine       aPositionFL;
     FixedText       aHorizontalFT;
     ListBox         aHorizontalDLB;
     FixedText       aAtHorzPosFT;
@@ -93,7 +94,6 @@ class SwFrmPage: public SfxTabPage
     ListBox         aVertRelationLB;
     // OD 02.10.2003 #i18732# - check box for new option 'FollowTextFlow'
     CheckBox        aFollowTextFlowCB;
-    FixedLine       aPositionFL;
 
     // Example
     SvxSwFrameExample   aExampleWN;
@@ -289,6 +289,7 @@ public:
 
 class SwFrmAddPage : public SfxTabPage
 {
+      FixedLine   aNamesFL;
     FixedText   aNameFT;
     Edit        aNameED;
     FixedText   aAltNameFT;
@@ -297,19 +298,18 @@ class SwFrmAddPage : public SfxTabPage
     ListBox     aPrevLB;
     FixedText   aNextFT;
     ListBox     aNextLB;
-    FixedLine   aNamesFL;
+        FixedLine   aProtectFL;
 
     CheckBox    aProtectContentCB;
     CheckBox    aProtectFrameCB;
     CheckBox    aProtectSizeCB;
-    FixedLine   aProtectFL;
+    FixedLine   aExtFL;
 
     CheckBox    aEditInReadonlyCB;
     CheckBox    aPrintFrameCB;
     FixedText   aTextFlowFT;
     ListBox     aTextFlowLB;
 
-    FixedLine   aExtFL;
 
     SwWrtShell* pWrtSh;
 
