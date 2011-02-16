@@ -48,7 +48,7 @@ extern "C" {
 #if defined( ZTC ) && defined( PM2 )
     int __CLIB KeyCompare( const void * pFirst, const void * pSecond );
 #else
-#if defined( WNT ) && !defined( WTC ) && !defined (ICC)
+#if defined( WNT ) && !defined (ICC)
     int _cdecl KeyCompare( const void * pFirst, const void * pSecond );
 #else
     int KeyCompare( const void * pFirst, const void * pSecond );
@@ -56,7 +56,7 @@ extern "C" {
 #endif
 }
 
-#if defined( WNT ) && !defined( WTC ) && !defined(ICC)
+#if defined( WNT ) && !defined(ICC)
 int _cdecl KeyCompare( const void * pFirst, const void * pSecond ){
 #else
 int KeyCompare( const void * pFirst, const void * pSecond ){

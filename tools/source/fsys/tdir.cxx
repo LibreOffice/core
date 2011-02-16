@@ -251,7 +251,7 @@ void Dir::Construct( DirEntryKind nKindFlags )
     ByteString aTempName( GetName(), osl_getThreadTextEncoding() );
     if ( aTempName.Search( "*" ) != STRING_NOTFOUND ||
          aTempName.Search( "?" ) != STRING_NOTFOUND )
-#if defined( WNT ) && !defined( WTC )
+#if defined( WNT )
     {
         ByteString aTStr(CutName(), osl_getThreadTextEncoding());
         char* pBuffer = new char[aTStr.Len()+1];
