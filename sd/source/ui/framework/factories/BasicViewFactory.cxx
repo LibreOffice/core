@@ -523,7 +523,7 @@ bool BasicViewFactory::IsCacheable (const ::boost::shared_ptr<ViewDescriptor>& r
     if (xResource.is())
     {
         static ::std::vector<Reference<XResourceId> > maCacheableResources;
-        if (maCacheableResources.size() == 0)
+        if (maCacheableResources.empty() )
         {
             ::boost::shared_ptr<FrameworkHelper> pHelper (FrameworkHelper::Instance(*mpBase));
 

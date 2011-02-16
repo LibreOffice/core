@@ -183,7 +183,7 @@ OUString SAL_CALL
     ResourceId::getResourceURL (void)
     throw(com::sun::star::uno::RuntimeException)
 {
-    if (maResourceURLs.size() > 0)
+    if (!maResourceURLs.empty())
         return maResourceURLs[0];
     else
         return OUString();
@@ -200,7 +200,7 @@ util::URL SAL_CALL
         return *mpURL;
 
     Reference<util::XURLTransformer> xURLTransformer (mxURLTransformerWeak);
-    if (xURLTransformer.is() && maResourceURLs.size() > 0)
+    if (xURLTransformer.is() && !maResourceURLs.empty() )
     {
         mpURL.reset(new util::URL);
         mpURL->Complete = maResourceURLs[0];
@@ -209,7 +209,7 @@ util::URL SAL_CALL
     }
 
     util::URL aURL;
-    if (maResourceURLs.size() > 0)
+    if (!maResourceURLs.empty())
         aURL.Complete = maResourceURLs[0];
     return aURL;
 }
@@ -268,7 +268,7 @@ OUString SAL_CALL
     ResourceId::getResourceTypePrefix (void)
     throw (RuntimeException)
 {
-    if (maResourceURLs.size() > 0)
+    if (!maResourceURLs.empty() )
     {
         // Return the "private:resource/<type>/" prefix.
 
@@ -298,7 +298,7 @@ sal_Int16 SAL_CALL
     if ( ! rxResourceId.is())
     {
         // The empty reference is interpreted as empty resource id object.
-        if (maResourceURLs.size() > 0)
+        if (!maResourceURLs.empty())
             nResult = +1;
         else
             nResult = 0;
@@ -610,7 +610,7 @@ void ResourceId::ParseResourceURL (void)
             Reference<XInterface>(xURLTransformer,UNO_QUERY));
     }
 
-    if (xURLTransformer.is() && maResourceURLs.size() > 0)
+    if (xURLTransformer.is() && !maResourceURLs.empty() )
     {
         mpURL.reset(new util::URL);
         mpURL->Complete = maResourceURLs[0];
