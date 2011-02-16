@@ -628,7 +628,7 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
     String aTmpStr( GetFullPath(), gsl_getSystemTextEncoding());
     DirEntry aEntry( aTmpStr );
     if ( !aEntry.Exists()) {
-        fprintf( stdout, " ... no directory!n" );
+        fprintf( stdout, " ... no directory!\n" );
         return FALSE;
     }
 
