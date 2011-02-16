@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-// no include "precompiled_tools.hxx" because this file is included in strmsys.cxx
+// don't include "precompiled_tools.hxx" because this file is included in strmsys.cxx
 
 #include <stdio.h>
 #include <string.h>
@@ -40,6 +40,7 @@
 #include <tools/debug.hxx>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
+#include <vector>
 
 #include <osl/mutex.hxx>
 #include <osl/thread.h> // osl_getThreadTextEncoding
@@ -55,10 +56,6 @@ using namespace osl;
 // ----------------
 // - InternalLock -
 // ----------------
-
-class InternalStreamLock;
-DECLARE_LIST( InternalStreamLockList, InternalStreamLock* )
-namespace { struct LockList : public rtl::Static< InternalStreamLockList, LockList > {}; }
 
 #ifndef BOOTSTRAP
 namespace { struct LockMutex : public rtl::Static< osl::Mutex, LockMutex > {}; }
@@ -78,6 +75,9 @@ public:
     static void UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStream* );
 };
 
+typedef ::std::vector< InternalStreamLock* > InternalStreamLockList;
+namespace { struct LockList : public rtl::Static< InternalStreamLockList, LockList > {}; }
+
 InternalStreamLock::InternalStreamLock(
     sal_Size nStart,
     sal_Size nEnd,
@@ -88,7 +88,7 @@ InternalStreamLock::InternalStreamLock(
 {
     ByteString aFileName(m_pStream->GetFileName(), osl_getThreadTextEncoding());
     stat( aFileName.GetBuffer(), &m_aStat );
-    LockList::get().Insert( this, LIST_APPEND );
+    LockList::get().push_back( this );
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "locked %s", aFileName.GetBuffer() );
     if( m_nStartPos || m_nEndPos )
@@ -99,7 +99,15 @@ InternalStreamLock::InternalStreamLock(
 
 InternalStreamLock::~InternalStreamLock()
 {
-    LockList::get().Remove( this );
+    for ( InternalStreamLockList::iterator it = LockList::get().begin();
+          it < LockList::get().end();
+          ++it
+    ) {
+        if ( this == *it ) {
+            LockList::get().erase( it );
+            break;
+        }
+    }
 #if OSL_DEBUG_LEVEL > 1
     ByteString aFileName(m_pStream->GetFileName(), osl_getThreadTextEncoding());
     fprintf( stderr, "unlocked %s", aFileName.GetBuffer() );
@@ -124,9 +132,9 @@ sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStr
 
     InternalStreamLock* pLock = NULL;
     InternalStreamLockList &rLockList = LockList::get();
-    for( ULONG i = 0; i < rLockList.Count(); ++i )
+    for( size_t i = 0; i < rLockList.size(); ++i )
     {
-        pLock = rLockList.GetObject( i );
+        pLock = rLockList[ i ];
         if( aStat.st_ino == pLock->m_aStat.st_ino )
         {
             sal_Bool bDenyByOptions = sal_False;
@@ -155,6 +163,7 @@ sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStr
             }
         }
     }
+    // hint: new InternalStreamLock() adds the entry to the global list
     pLock  = new InternalStreamLock( nStart, nEnd, pStream );
     return sal_True;
 }
@@ -168,26 +177,31 @@ void InternalStreamLock::UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStrea
     InternalStreamLockList &rLockList = LockList::get();
     if( nStart == 0 && nEnd == 0 )
     {
-        for( ULONG i = 0; i < rLockList.Count(); ++i )
+        // nStart & nEnd = 0, so delete all locks
+        for( size_t i = 0; i < rLockList.size(); ++i )
         {
-            if( ( pLock = rLockList.GetObject( i ) )->m_pStream == pStream )
+            if( ( pLock = rLockList[ i ] )->m_pStream == pStream )
             {
+                // hint: delete will remove pLock from the global list
                 delete pLock;
                 i--;
             }
         }
         return;
     }
-    for( ULONG i = 0; i < rLockList.Count(); ++i )
+    for( size_t i = 0; i < rLockList.size(); ++i )
     {
-        if( ( pLock = rLockList.GetObject( i ) )->m_pStream == pStream &&
-            nStart == pLock->m_nStartPos && nEnd == pLock->m_nEndPos )
-        {
+        if (  ( pLock = rLockList[ i ] )->m_pStream == pStream
+           && nStart == pLock->m_nStartPos
+           && nEnd == pLock->m_nEndPos
+        ) {
+            // hint: delete will remove pLock from the global list
             delete pLock;
             return;
         }
     }
 }
+
 
 // --------------
 // - StreamData -
@@ -845,6 +859,5 @@ void SvFileStream::SetSize (sal_Size nSize)
         }
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
