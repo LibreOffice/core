@@ -145,7 +145,6 @@ void MkFilter::Filter()
     while(( fgets(aLineBuf, LINE_LEN, pIn)) != NULL )
     {
         ByteString aLine( aLineBuf );
-        //fprintf(stderr, "aLine :%s\n", aLine.GetBuffer());
         if ( aLine.Search("mkfilter1" ) != STRING_NOTFOUND )
         {
             // Zeilen unterdruecken

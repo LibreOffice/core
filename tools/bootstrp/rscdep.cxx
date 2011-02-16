@@ -104,12 +104,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
         if ( aBuf[0] == '-' && aBuf[1] == 'p' && aBuf[2] == '=' )
         {
             strcpy(pFileNamePrefix, &aBuf[3]);
-            //break;
         }
         if ( aBuf[0] == '-' && aBuf[1] == 'f' && aBuf[2] == 'o' && aBuf[3] == '=' )
         {
             strcpy(pOutputFileName, &aBuf[4]);
-            //break;
         }
         if ( aBuf[0] == '-' && aBuf[1] == 'f' && aBuf[2] == 'p' && aBuf[3] == '=' )
         {
@@ -117,7 +115,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
             String aName( pSrsFileName, gsl_getSystemTextEncoding());
             DirEntry aDest( aName );
             aSrsBaseName = aDest.GetBase();
-            //break;
         }
         if (aBuf[0] == '-' &&  aBuf[1] == 'i' )
         {
@@ -139,12 +136,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
                 if ( aBuf[0] == '-' && aBuf[1] == 'p' && aBuf[2] == '=' )
                 {
                     strcpy(pFileNamePrefix, &aBuf[3]);
-                    //break;
                 }
                 if ( aBuf2[0] == '-' && aBuf2[1] == 'f' && aBuf2[2] == 'o' )
                 {
                     strcpy(pOutputFileName, &aBuf2[3]);
-                    //break;
                 }
                 if ( aBuf2[0] == '-' && aBuf2[1] == 'f' && aBuf2[2] == 'p' )
                 {
@@ -152,7 +147,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
                     String aName( pSrsFileName, gsl_getSystemTextEncoding());
                     DirEntry aDest( aName );
                     aSrsBaseName = aDest.GetBase();
-                    //break;
                 }
                 if (aBuf2[0] == '-' &&  aBuf2[1] == 'i' )
                 {

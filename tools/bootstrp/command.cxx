@@ -54,8 +54,6 @@
 #pragma warning (pop)
 #endif
 
-//#define MH_TEST2  1           // fuers direkte Testen
-
 #if defined(WNT) || defined(OS2)
 #ifdef _MSC_VER
 #pragma warning (push,1)
@@ -96,7 +94,6 @@ CommandLine::CommandLine(BOOL bWrite)
 {
     CommandBuffer = new char [1];
     if (CommandBuffer == NULL) {
-        //cout << "Error: nospace" << endl;
         exit(0);
     }
     CommandBuffer[0] = '\0';
@@ -255,7 +252,6 @@ void CommandLine::BuildCommand(const char *CommandString)
     /* get space for the new command line */
     ppArgv = (char **) new char * [nArgc+1];
     if (ppArgv == NULL) {
-        //cout << "Error: no space" << endl;
         exit(0);
     }
 
