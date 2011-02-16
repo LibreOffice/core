@@ -294,7 +294,7 @@ class SwRTFParser : public SvxRTFParser
     SwRTFStyleTbl aTxtCollTbl;
     SwRTFCharStyleTbl aCharFmtTbl;
     SwFlySaveArr aFlyArr;               // Flys als Letzes im Doc setzen
-    SvBools aMergeBoxes;                // Flags fuer gemergte Zellen
+    std::vector<bool> aMergeBoxes;      // Flags fuer gemergte Zellen
     SwListArr aListArr;
     SvPtrarr aTblFmts;
     SvPtrarr aRubyCharFmts;

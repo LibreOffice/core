@@ -47,6 +47,7 @@
 #include <tblenum.hxx>
 #include <frmatr.hxx>
 #include <fmtrowsplt.hxx>
+#include <vector>
 
 using namespace ::com::sun::star;
 
@@ -162,10 +163,7 @@ void SwRTFParser::ReadTable( int nToken )
 
     enum Limits {eMAXCELLS=64000};
 
-    SvBools aMergeBackup;
-    int nCount = aMergeBoxes.Count();
-    for (USHORT i = 0; i < nCount; ++i)
-        aMergeBackup.Insert(aMergeBoxes[i], i);
+    std::vector<bool> aMergeBackup(aMergeBoxes);
 
     // kein TROWD aber ein TabellenToken -> zwischen TROWD und Tab.Token
     // waren andere Zeichen (siehe Bug 27445.rtf)
@@ -175,8 +173,8 @@ void SwRTFParser::ReadTable( int nToken )
             nToken = GetNextToken();        // RTF_TROWD ueberlesen
 
         // Flags fuer die gemergten Boxen loeschen
-        aMergeBoxes.Remove( 0, aMergeBoxes.Count() );
-        aMergeBoxes.Insert( (BOOL)FALSE, USHORT(0) );
+        aMergeBoxes.clear();
+        aMergeBoxes.push_back(false);
         nAktBox = 0;
 
         // wenn schon in einer Tabellen, dann splitte oder benutze
@@ -220,7 +218,6 @@ void SwRTFParser::ReadTable( int nToken )
 
     sal_Int16 eVerOrient = text::VertOrientation::NONE;
     long nLineHeight = 0;
-    USHORT nBoxCnt = aMergeBoxes.Count()-1;
     SwBoxFrmFmts aBoxFmts;
     SwTableBoxFmt* pBoxFmt = pDoc->MakeTableBoxFmt();
     SvxFrameDirection eDir = FRMDIR_HORI_LEFT_TOP;
@@ -287,9 +284,9 @@ void SwRTFParser::ReadTable( int nToken )
         case RTF_CLMRG:
             // would crash later on reading \cellx (#i112657#):
             // the first cell cannot be merged with earlier ones.
-            if (nBoxCnt != 0)
+            if (aMergeBoxes.size() > 1)
             {
-                aMergeBoxes[ nBoxCnt ] = TRUE;
+                aMergeBoxes.back() = TRUE;
             }
             break;
 
@@ -297,7 +294,7 @@ void SwRTFParser::ReadTable( int nToken )
             if (!bTrowdRead) {
                 SwTableBoxFmt* pFmt = pBoxFmt;
                 SwTwips nSize = nTokenValue - nTblSz;
-                if( aMergeBoxes[ nBoxCnt ] )
+                if( aMergeBoxes.back() )
                 {
                     // neue Zellen lesen und noch keine Formate vorhanden,
                     // dann benutze das der vorhergebende
@@ -333,7 +330,7 @@ void SwRTFParser::ReadTable( int nToken )
                     nSize = COL_DFLT_WIDTH;
                 pFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nSize, 0 ));
                 nTblSz = nTokenValue;
-                aMergeBoxes.Insert( (BOOL)FALSE, ++nBoxCnt );
+                aMergeBoxes.push_back(FALSE);
 
                 SvxBoxItem aBox(pFmt->GetBox());
 
@@ -412,7 +409,7 @@ void SwRTFParser::ReadTable( int nToken )
         default:
             if( ( nToken & ~(0xff | RTF_TABLEDEF)) == RTF_SHADINGDEF )
             {
-                if( aMergeBoxes[ nBoxCnt ] )
+                if( aMergeBoxes.back() )
                     break;
                 ReadBackgroundAttr( nToken,
                         (SfxItemSet&)pBoxFmt->GetAttrSet(), TRUE );
@@ -420,7 +417,7 @@ void SwRTFParser::ReadTable( int nToken )
             else if( ( nToken & ~(0xff | RTF_TABLEDEF) ) == RTF_BRDRDEF ||
                       IsBorderToken(nToken))
             {
-                if( aMergeBoxes[ nBoxCnt ] )
+                if( aMergeBoxes.back() )
                     break;
 
                 SfxItemSet& rSet = (SfxItemSet&)pBoxFmt->GetAttrSet();
@@ -441,7 +438,7 @@ void SwRTFParser::ReadTable( int nToken )
 
         if( text::VertOrientation::NONE != eVerOrient )
         {
-            if( !aMergeBoxes[ nBoxCnt ] )
+            if( !aMergeBoxes.back() )
                 pBoxFmt->SetFmtAttr( SwFmtVertOrient( 0, eVerOrient ));
             eVerOrient = text::VertOrientation::NONE;
         }
@@ -453,11 +450,9 @@ void SwRTFParser::ReadTable( int nToken )
     delete pBoxFmt;
 
     // es wurde keine einzige Box erkannt
-    if( nAktBox == nBoxCnt || ( bReadNewCell && !pTableNode ))
+    if( nAktBox == aMergeBoxes.size()-1 || ( bReadNewCell && !pTableNode ))
     {
-        int nC = aMergeBackup.Count();
-        for (USHORT i = 0; i < nC; ++i)
-            aMergeBoxes.Insert(aMergeBackup[i], i);
+        aMergeBoxes.insert(aMergeBoxes.begin(), aMergeBackup.begin(), aMergeBackup.end());
         SkipToken( -1 );            // zum Letzen gueltigen zurueck
         return;
     }
@@ -814,8 +809,8 @@ void SwRTFParser::GotoNextBox()
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
     SwTableBox* pBox = rBoxes[ rBoxes.Count()-1 ];
 
-    if( ++nAktBox >= aMergeBoxes.Count() )
-        nAktBox = aMergeBoxes.Count()-1;
+    if( ++nAktBox >= aMergeBoxes.size() )
+        nAktBox = aMergeBoxes.size()-1;
 
     if( !aMergeBoxes[ nAktBox ] )
     {
@@ -835,7 +830,7 @@ void SwRTFParser::GotoNextBox()
             }
         }
 
-        if( bMove && nAktBox + 1 == aMergeBoxes.Count() )
+        if( bMove && nAktBox + 1U == aMergeBoxes.size() )
             // dann hinter die Tabelle
             pPam->Move( fnMoveForward, fnGoNode );
     }
