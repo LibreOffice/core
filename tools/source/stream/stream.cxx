@@ -43,15 +43,11 @@
 
 #include <tools/solar.h>
 
-#if defined(BLC)
-#define SWAPNIBBLES(c) c=_crotl(c,4);
-#else
 #define SWAPNIBBLES(c)      \
 unsigned char nSwapTmp=c;   \
 nSwapTmp <<= 4;             \
 c >>= 4;                    \
 c |= nSwapTmp;
-#endif
 
 #include <tools/debug.hxx>
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
