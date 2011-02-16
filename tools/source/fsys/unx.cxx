@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <utime.h>
-#if defined HPUX || defined LINUX
+#if defined LINUX
 #include <mntent.h>
 #define mnttab mntent
 #elif defined SCO

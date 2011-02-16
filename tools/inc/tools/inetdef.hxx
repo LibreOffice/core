@@ -37,8 +37,6 @@
 #elif defined UNX
 #if defined AIX
 #define TOOLS_INETDEF_OS "AIX"
-#elif defined HPUX
-#define TOOLS_INETDEF_OS "HP/UX"
 #elif defined SOLARIS && defined SPARC
 #define TOOLS_INETDEF_OS "Solaris Sparc"
 #elif defined SOLARIS && defined INTEL
@@ -67,9 +65,9 @@
 #define TOOLS_INETDEF_OS "DragonFly/i386"
 #elif defined DRAGONFLY && defined X86_64
 #define TOOLS_INETDEF_OS "DragonFly/amd64"
-#else // AIX, HPUX, SOLARIS, ...
+#else // AIX, SOLARIS, ...
 #define TOOLS_INETDEF_OS "Unix"
-#endif // AIX, HPUX, SOLARIS, ...
+#endif // AIX, SOLARIS, ...
 #else // WNT, ...
 #define TOOLS_INETDEF_OS "unknown OS"
 #endif // WN, ...

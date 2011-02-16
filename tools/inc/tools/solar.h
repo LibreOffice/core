@@ -283,8 +283,6 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
   #define __DLLEXTENSION "go"
 #elif defined AIX
   #define __DLLEXTENSION "ap.so"
-#elif defined HPUX
-  #define __DLLEXTENSION "hr.sl"
 #elif defined SOLARIS && defined SPARC && defined IS_LP64
   #define __DLLEXTENSION "su.so"
 #elif defined SOLARIS && defined SPARC && !defined __GNUC__

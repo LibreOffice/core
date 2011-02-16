@@ -504,8 +504,6 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
     // NFS-2-Server (kein Lockdaemon) zu verhindern.
     // File-Locking ?ber NFS ist generell ein Performancekiller.
     //                      HR, 22.10.1997 fuer SOLARIS
-    //                      CP, 30.11.1997 fuer HPUX
-    //                      ER, 18.12.1997 fuer IRIX
     //                      HR, 18.05.1998 Environmentvariable
 
     if ( pFileLockEnvVar == (char*)1 )
@@ -516,13 +514,6 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
     aflock.l_type = nLockMode;
     if (fcntl(pInstanceData->nHandle, F_GETLK, &aflock) == -1)
     {
-    #if ( defined HPUX && defined BAD_UNION )
-    #ifdef DBG_UTIL
-        fprintf( stderr, "***** FCNTL(lock):errno = %d\n", errno );
-    #endif
-        if ( errno == EINVAL || errno == ENOSYS )
-            return sal_True;
-    #endif
     #if defined SOLARIS
         if (errno == ENOSYS)
             return sal_True;
@@ -575,14 +566,6 @@ sal_Bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
 
     if (fcntl(pInstanceData->nHandle, F_SETLK, &aflock) != -1)
         return sal_True;
-
-#if ( defined HPUX && defined BAD_UNION )
-#ifdef DBG_UTIL
-        fprintf( stderr, "***** FCNTL(unlock):errno = %d\n", errno );
-#endif
-        if ( errno == EINVAL || errno == ENOSYS )
-            return sal_True;
-#endif
 
     SetError( ::GetSvError( errno ));
     return sal_False;

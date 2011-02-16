@@ -1024,7 +1024,7 @@ public:\
 #define C40_PTR_REPLACE( c, p) Replace( (c const *) p )
 #define C40_GETPOS( c, r) GetPos( (c const *)r )
 #else
-#if defined WTC || defined ICC || defined HPUX || (defined GCC && __GNUC__ >= 3) || (defined(WNT) && _MSC_VER >= 1400)
+#if defined WTC || defined ICC || (defined GCC && __GNUC__ >= 3) || (defined(WNT) && _MSC_VER >= 1400)
 #define C40_INSERT( c, p, n ) Insert( (c const *&) p, n )
 #define C40_PUSH( c, p) Push( (c const *&) p )
 #define C40_PTR_INSERT( c, p ) Insert( (c const *&) p )

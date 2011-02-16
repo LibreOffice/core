@@ -80,10 +80,8 @@ typedef FT_Vector* FT_Vector_CPtr;
 
 // TODO: move file mapping stuff to OSL
 #if defined(UNX)
-    #if !defined(HPUX)
-        // PORTERS: dlfcn is used for getting symbols from FT versions newer than baseline
-        #include <dlfcn.h>
-    #endif
+    // PORTERS: dlfcn is used for getting symbols from FT versions newer than baseline
+    #include <dlfcn.h>
     #include <unistd.h>
     #include <fcntl.h>
     #include <sys/stat.h>
