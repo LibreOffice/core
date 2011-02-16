@@ -16,7 +16,6 @@ $s_str = `uname -s`;
 chop( $m_str, $s_str );
 
 %osTable    = ("SunOS",     "solaris",
-               "HP-UX",     "hpux",
                "AIX",       "aix",
                "OS/390",    "s390",
                "Linux",     "linux",
@@ -33,7 +32,6 @@ chop( $m_str, $s_str );
                );
 
 %osDefTable = ("SunOS",     "-DSYSV -DSOLARIS",
-               "HP-UX",     "-DSYSV -DHPUX",
                "AIX",       "-DSYSV -DAIX",
                "Linux",     "-DLINUX",
                "FreeBSD",   "-DFREEBSD",
@@ -49,7 +47,6 @@ chop( $m_str, $s_str );
                );
 
 %osDosTable = ("SunOS",     "sol",
-               "HP-UX", "hpx",
                "AIX",   "aix",
                "OS/390",    "mvs",
                "Linux", "lng",

@@ -37,12 +37,6 @@ $(LIB$(TNR)ARCHIV) :	$(LIB$(TNR)TARGET)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
-.IF "$(OS)" =="HPUX_FRAG_HR"
-    @-$(RM) $(MISC)/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
-    @echo $(LINK) +inst_close -c `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
-    @cat $(MISC)/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
-    @+source $(MISC)/$(LIB$(TNR)ARCHIV:b)_closetempl.cmd
-.ENDIF
     @echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)/$(LIB$(TNR)ARCHIV:b).cmd

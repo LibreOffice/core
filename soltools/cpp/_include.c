@@ -13,10 +13,6 @@
 #include <string.h>
 #include <fcntl.h>
 
-
-#ifdef __hpux
-#   define _HPUX_SOURCE
-#endif
 #if defined(__IBMC__) || defined(__EMX__)
 #   include <fcntl.h>
 #   define PATH_MAX _MAX_PATH

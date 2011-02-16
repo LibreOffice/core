@@ -8,12 +8,6 @@ $(LIB1ARCHIV) :	$(LIB1TARGET)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB1ARCHIV:b).cmd
-.IF "$(OS)" =="HPUX_FRAG_HR"
-    @-$(RM) $(MISC)/$(LIB1ARCHIV:b)_closetempl.cmd
-    @echo $(LINK) +inst_close -c `cat $(LIB1TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB1ARCHIV:b)_closetempl.cmd
-    @cat $(MISC)/$(LIB1ARCHIV:b)_closetempl.cmd
-    @+source $(MISC)/$(LIB1ARCHIV:b)_closetempl.cmd
-.ENDIF
     @echo $(LIBMGR) $(LIB1FLAGS) $(LIBFLAGS) $(LIB1ARCHIV) `cat $(LIB1TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB1ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @echo  ranlib $(LIB1ARCHIV) >> $(MISC)/$(LIB1ARCHIV:b).cmd
@@ -110,12 +104,6 @@ $(LIB2ARCHIV) :	$(LIB2TARGET)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB2ARCHIV:b).cmd
-.IF "$(OS)" =="HPUX_FRAG_HR"
-    @-$(RM) $(MISC)/$(LIB2ARCHIV:b)_closetempl.cmd
-    @echo $(LINK) +inst_close -c `cat $(LIB2TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB2ARCHIV:b)_closetempl.cmd
-    @cat $(MISC)/$(LIB2ARCHIV:b)_closetempl.cmd
-    @+source $(MISC)/$(LIB2ARCHIV:b)_closetempl.cmd
-.ENDIF
     @echo $(LIBMGR) $(LIB2FLAGS) $(LIBFLAGS) $(LIB2ARCHIV) `cat $(LIB2TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB2ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @echo  ranlib $(LIB2ARCHIV) >> $(MISC)/$(LIB2ARCHIV:b).cmd
@@ -212,12 +200,6 @@ $(LIB3ARCHIV) :	$(LIB3TARGET)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB3ARCHIV:b).cmd
-.IF "$(OS)" =="HPUX_FRAG_HR"
-    @-$(RM) $(MISC)/$(LIB3ARCHIV:b)_closetempl.cmd
-    @echo $(LINK) +inst_close -c `cat $(LIB3TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB3ARCHIV:b)_closetempl.cmd
-    @cat $(MISC)/$(LIB3ARCHIV:b)_closetempl.cmd
-    @+source $(MISC)/$(LIB3ARCHIV:b)_closetempl.cmd
-.ENDIF
     @echo $(LIBMGR) $(LIB3FLAGS) $(LIBFLAGS) $(LIB3ARCHIV) `cat $(LIB3TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB3ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @echo  ranlib $(LIB3ARCHIV) >> $(MISC)/$(LIB3ARCHIV:b).cmd
@@ -314,12 +296,6 @@ $(LIB4ARCHIV) :	$(LIB4TARGET)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB4ARCHIV:b).cmd
-.IF "$(OS)" =="HPUX_FRAG_HR"
-    @-$(RM) $(MISC)/$(LIB4ARCHIV:b)_closetempl.cmd
-    @echo $(LINK) +inst_close -c `cat $(LIB4TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB4ARCHIV:b)_closetempl.cmd
-    @cat $(MISC)/$(LIB4ARCHIV:b)_closetempl.cmd
-    @+source $(MISC)/$(LIB4ARCHIV:b)_closetempl.cmd
-.ENDIF
     @echo $(LIBMGR) $(LIB4FLAGS) $(LIBFLAGS) $(LIB4ARCHIV) `cat $(LIB4TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB4ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @echo  ranlib $(LIB4ARCHIV) >> $(MISC)/$(LIB4ARCHIV:b).cmd
@@ -416,12 +392,6 @@ $(LIB5ARCHIV) :	$(LIB5TARGET)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB5ARCHIV:b).cmd
-.IF "$(OS)" =="HPUX_FRAG_HR"
-    @-$(RM) $(MISC)/$(LIB5ARCHIV:b)_closetempl.cmd
-    @echo $(LINK) +inst_close -c `cat $(LIB5TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB5ARCHIV:b)_closetempl.cmd
-    @cat $(MISC)/$(LIB5ARCHIV:b)_closetempl.cmd
-    @+source $(MISC)/$(LIB5ARCHIV:b)_closetempl.cmd
-.ENDIF
     @echo $(LIBMGR) $(LIB5FLAGS) $(LIBFLAGS) $(LIB5ARCHIV) `cat $(LIB5TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB5ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @echo  ranlib $(LIB5ARCHIV) >> $(MISC)/$(LIB5ARCHIV:b).cmd
@@ -518,12 +488,6 @@ $(LIB6ARCHIV) :	$(LIB6TARGET)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB6ARCHIV:b).cmd
-.IF "$(OS)" =="HPUX_FRAG_HR"
-    @-$(RM) $(MISC)/$(LIB6ARCHIV:b)_closetempl.cmd
-    @echo $(LINK) +inst_close -c `cat $(LIB6TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB6ARCHIV:b)_closetempl.cmd
-    @cat $(MISC)/$(LIB6ARCHIV:b)_closetempl.cmd
-    @+source $(MISC)/$(LIB6ARCHIV:b)_closetempl.cmd
-.ENDIF
     @echo $(LIBMGR) $(LIB6FLAGS) $(LIBFLAGS) $(LIB6ARCHIV) `cat $(LIB6TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB6ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @echo  ranlib $(LIB6ARCHIV) >> $(MISC)/$(LIB6ARCHIV:b).cmd
@@ -620,12 +584,6 @@ $(LIB7ARCHIV) :	$(LIB7TARGET)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB7ARCHIV:b).cmd
-.IF "$(OS)" =="HPUX_FRAG_HR"
-    @-$(RM) $(MISC)/$(LIB7ARCHIV:b)_closetempl.cmd
-    @echo $(LINK) +inst_close -c `cat $(LIB7TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB7ARCHIV:b)_closetempl.cmd
-    @cat $(MISC)/$(LIB7ARCHIV:b)_closetempl.cmd
-    @+source $(MISC)/$(LIB7ARCHIV:b)_closetempl.cmd
-.ENDIF
     @echo $(LIBMGR) $(LIB7FLAGS) $(LIBFLAGS) $(LIB7ARCHIV) `cat $(LIB7TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB7ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @echo  ranlib $(LIB7ARCHIV) >> $(MISC)/$(LIB7ARCHIV:b).cmd
@@ -722,12 +680,6 @@ $(LIB8ARCHIV) :	$(LIB8TARGET)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB8ARCHIV:b).cmd
-.IF "$(OS)" =="HPUX_FRAG_HR"
-    @-$(RM) $(MISC)/$(LIB8ARCHIV:b)_closetempl.cmd
-    @echo $(LINK) +inst_close -c `cat $(LIB8TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB8ARCHIV:b)_closetempl.cmd
-    @cat $(MISC)/$(LIB8ARCHIV:b)_closetempl.cmd
-    @+source $(MISC)/$(LIB8ARCHIV:b)_closetempl.cmd
-.ENDIF
     @echo $(LIBMGR) $(LIB8FLAGS) $(LIBFLAGS) $(LIB8ARCHIV) `cat $(LIB8TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB8ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @echo  ranlib $(LIB8ARCHIV) >> $(MISC)/$(LIB8ARCHIV:b).cmd
@@ -824,12 +776,6 @@ $(LIB9ARCHIV) :	$(LIB9TARGET)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB9ARCHIV:b).cmd
-.IF "$(OS)" =="HPUX_FRAG_HR"
-    @-$(RM) $(MISC)/$(LIB9ARCHIV:b)_closetempl.cmd
-    @echo $(LINK) +inst_close -c `cat $(LIB9TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB9ARCHIV:b)_closetempl.cmd
-    @cat $(MISC)/$(LIB9ARCHIV:b)_closetempl.cmd
-    @+source $(MISC)/$(LIB9ARCHIV:b)_closetempl.cmd
-.ENDIF
     @echo $(LIBMGR) $(LIB9FLAGS) $(LIBFLAGS) $(LIB9ARCHIV) `cat $(LIB9TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB9ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @echo  ranlib $(LIB9ARCHIV) >> $(MISC)/$(LIB9ARCHIV:b).cmd
@@ -926,12 +872,6 @@ $(LIB10ARCHIV) :	$(LIB10TARGET)
     @@-$(RM) $@
 .IF "$(GUI)"=="UNX"
     @-$(RM) $(MISC)/$(LIB10ARCHIV:b).cmd
-.IF "$(OS)" =="HPUX_FRAG_HR"
-    @-$(RM) $(MISC)/$(LIB10ARCHIV:b)_closetempl.cmd
-    @echo $(LINK) +inst_close -c `cat $(LIB10TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB10ARCHIV:b)_closetempl.cmd
-    @cat $(MISC)/$(LIB10ARCHIV:b)_closetempl.cmd
-    @+source $(MISC)/$(LIB10ARCHIV:b)_closetempl.cmd
-.ENDIF
     @echo $(LIBMGR) $(LIB10FLAGS) $(LIBFLAGS) $(LIB10ARCHIV) `cat $(LIB10TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(MISC)/$(LIB10ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @echo  ranlib $(LIB10ARCHIV) >> $(MISC)/$(LIB10ARCHIV:b).cmd

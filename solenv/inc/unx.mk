@@ -119,14 +119,6 @@
 .INCLUDE : unxlnga.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "ACCHPUXR"
-.INCLUDE : unxhpxr.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "GCCHPUXR"
-.INCLUDE : unxhpgr.mk
-.ENDIF
-
 .IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDA"
 .INCLUDE : unxbsda.mk
 .ENDIF

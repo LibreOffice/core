@@ -5,9 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef __hpux
-#   define _HPUX_SOURCE
-#endif
 #if defined(__IBMC__) || defined(__EMX__)
 #   define PATH_MAX _MAX_PATH
 #endif
