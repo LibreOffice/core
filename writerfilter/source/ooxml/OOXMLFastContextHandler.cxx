@@ -341,7 +341,7 @@ sal_Int64 SAL_CALL OOXMLFastContextHandler::getSomething( const uno::Sequence< s
 {
     if( rId.getLength() == 16
         && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
-                                        rId.getConstArray(), 16 ) )
+                                   rId.getConstArray(), 16 ) )
     {
         return sal::static_int_cast<sal_Int64>
             (reinterpret_cast<sal_IntPtr>(this));
@@ -839,6 +839,7 @@ void OOXMLFastContextHandler::text(const ::rtl::OUString & sText)
     debug_logger->chars(sText);
     debug_logger->endElement("contexthandler.text");
 #endif
+
     if (isForwardEvents())
         mpStream->utext(reinterpret_cast < const sal_uInt8 * >
                         (sText.getStr()),
@@ -1240,13 +1241,6 @@ void OOXMLFastContextHandlerStream::handleHyperlink()
 {
     OOXMLHyperlinkHandler aHyperlinkHandler(this);
     getPropertySetAttrs()->resolve(aHyperlinkHandler);
-}
-
-void OOXMLFastContextHandlerStream::lcl_characters
-(const ::rtl::OUString & rChars)
-throw (uno::RuntimeException, xml::sax::SAXException)
-{
-    text(rChars);
 }
 
 /*

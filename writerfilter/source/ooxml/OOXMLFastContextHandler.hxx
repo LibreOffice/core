@@ -310,8 +310,6 @@ public:
 
 protected:
     virtual void resolvePropertySetAttrs();
-    virtual void lcl_characters(const ::rtl::OUString & aChars)
-                throw (uno::RuntimeException, xml::sax::SAXException);
 
 private:
     mutable OOXMLPropertySet::Pointer_t mpPropertySetAttrs;
