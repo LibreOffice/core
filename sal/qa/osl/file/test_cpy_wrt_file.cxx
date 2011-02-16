@@ -75,6 +75,11 @@ public:
 #   define WRITE_DEST_PATH "d:\\tmp_data.tmp"
 #endif
 
+//Use to deliberately silence warnings for a deliberate error
+extern "C" void SAL_CALL suppressOslDebugMessage( const sal_Char *, sal_Int32, const sal_Char * )
+{
+}
+
 class test_osl_writeFile : public CppUnit::TestFixture
 {
 public:
@@ -94,7 +99,10 @@ public:
         sal_uInt64 written = 0;
         err = tmp_file.write((void*)buffer, sizeof(buffer), written);
 
+        //deliberate error, suppress run-time warning
+        pfunc_osl_printDetailedDebugMessage pOldDebugMessageFunc = osl_setDetailedDebugMessageFunc( &suppressOslDebugMessage );
         err = tmp_file.sync();
+        osl_setDetailedDebugMessageFunc( pOldDebugMessageFunc );
 
         CPPUNIT_ASSERT_MESSAGE("Write didn't recognized disk full", err != FileBase::E_None);
 
