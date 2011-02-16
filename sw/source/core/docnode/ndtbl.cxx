@@ -31,9 +31,6 @@
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
-#ifdef WTC
-#define private public
-#endif
 #include <hintids.hxx>
 
 #include <editeng/lrspitem.hxx>

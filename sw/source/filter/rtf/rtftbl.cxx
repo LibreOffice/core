@@ -29,9 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#ifdef WTC
-#define private public
-#endif
 #include <hintids.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/boxitem.hxx>

@@ -29,10 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#ifdef WTC
-#define private public
-#endif
-
 #include <ctype.h>
 #include <float.h>
 #include <hintids.hxx>
