@@ -95,7 +95,7 @@ public:
     static HDDEDATA CALLBACK InfCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
 #else
-#if defined ( MTW ) || ( defined ( GCC ) && defined ( OS2 )) || defined( ICC )
+#if (defined ( GCC ) && defined ( OS2 )) || defined( ICC )
     static HDDEDATA CALLBACK CliCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
     static HDDEDATA CALLBACK SvrCallback

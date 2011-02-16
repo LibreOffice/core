@@ -43,7 +43,7 @@ static RscCompiler * pRscCompiler = NULL;
 /*                                                              */
 /*  Description :   Gibt die Temporaeren Dateien frei.          */
 /****************************************************************/
-#if defined( UNX ) || ( defined( OS2 ) && ( defined( TCPP ) || defined ( GCC )) ) ||  defined (WTC) || defined (MTW) || defined(__MINGW32__)
+#if defined( UNX ) || ( defined( OS2 ) && ( defined( TCPP ) || defined ( GCC )) ) ||  defined (WTC) || defined(__MINGW32__)
         void ExitProgram( void ){
 #else
 #if defined( CSET )
@@ -86,11 +86,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
 
     InitRscCompiler();
     RscError*   pErrHdl    = new RscError( lcl_determineVerbosity( argc, argv ) );
-#ifdef MTW
-    RscCmdLine* pCmdLine   = new RscCmdLine( argc, (char **)argv, pErrHdl );
-#else
     RscCmdLine* pCmdLine   = new RscCmdLine( argc, argv, pErrHdl );
-#endif
     RscTypCont* pTypCont   = new RscTypCont( pErrHdl,
                                              pCmdLine->nByteOrder,
                                              pCmdLine->aPath,

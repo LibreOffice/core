@@ -65,7 +65,7 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
             WORD nCode, WORD nCbType, HCONV hConv, HSZ hText1, HSZ hText2,
             HDDEDATA hData, DWORD, DWORD )
 #else
-#if defined ( MTW ) || ( defined ( GCC ) && defined ( OS2 )) || defined( ICC )
+#if ( defined ( GCC ) && defined ( OS2 )) || defined( ICC )
 HDDEDATA CALLBACK DdeInternal::SvrCallback(
             WORD nCode, WORD nCbType, HCONV hConv, HSZ hText1, HSZ hText2,
             HDDEDATA hData, DWORD, DWORD )
