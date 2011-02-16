@@ -9,25 +9,67 @@ SEND_MAIL=0
 NICE=
 OWNER=
 MACHINE=`uname`
+SMTP=
+TINDERNAME=
 
 ## subroutines
 usage ()
 {
 	echo "Usage: $0 [options]"
 	echo "Options:"
-	echo "-w <N>     specify timeout in secs between subsequent pull requests"
-	echo "-i         when given: run with ionice -c3, can be combined with -n"
-	echo "-l         when given: write html build log"
-	echo "-m <owner> when given: mail errors to the committer, general errors to the <owner>"
-	echo "-n         when given: run with nice, can be combined with -i"
 	echo "-h         this help"
+	echo "-i         run with ionice -c3, can be combined with -n"
+	echo "-l         write html build log"
+	echo "-m <owner> mail errors to the committer, general errors to the <owner>"
+	echo "-n         run with nice, can be combined with -i"
+	echo "-s <host>  SMTP server"
+	echo "-t <name>  send tinderbox mails, identify self as <name>"
+	echo "-w <N>     specify timeout in secs between subsequent pull requests"
 }
 
 getCommitters ()
 {
 	from_date="$1"
 
-	./g -s log '--pretty=tformat:%ce' --after="$from_date" | sort | uniq
+	./g -s log '--pretty=tformat:%ce' --after="$from_date" | sort | uniq | tr '\n' ' '
+}
+
+sendMailMsg ()
+{
+	TO="$1"
+	SUBJECT="$2"
+	HEADERS="$3"
+	perl -e "
+use Net::SMTP;
+
+\$smtp = Net::SMTP->new('$SMTP');
+
+# from
+\$smtp->mail('$OWNER');
+
+# to
+@to = split(' ', '$TO');
+print 'Sending mail to \"' . join(',', @to) . '\", subject \"$SUBJECT\"' . \"\n\";
+\$smtp->recipient(@to, { SkipBad => 1 });
+
+# headers
+\$smtp->data;
+
+\$smtp->datasend('From: $OWNER' . \"\n\");
+\$smtp->datasend('To: ' . join(',', @to) . \"\n\");
+\$smtp->datasend('Subject: $SUBJECT' . \"\n\");
+\$smtp->datasend('$HEADERS' . \"\n\") if (\"$HEADERS\" ne \"\");
+\$smtp->datasend(\"\n\");
+
+# body
+while (<>) {
+	\$smtp->datasend(\$_);
+}
+
+# end
+\$smtp->dataend;
+\$smtp->quit;
+"
 }
 
 reportError ()
@@ -35,7 +77,7 @@ reportError ()
 	error_kind="$1"
 	shift
 
-	rough_time="$2"
+	rough_time="$1"
 	shift
 
 	to_mail=
@@ -57,9 +99,7 @@ reportError ()
 	echo "$*" 1>&2
 	echo "Last success: $rough_time" 1>&2
 	if test -n "$to_mail" ; then
-		subject="Tinderbox failure, $message"
-		(
-			cat <<EOF
+		cat <<EOF | sendMailMsg "$to_mail" "Tinderbox failure, $message" ""
 Hi folks,
 
 One of you broke the build of LibreOffice master with your commit :-(
@@ -78,7 +118,6 @@ The error is:
 
 $*
 EOF
-		) | mail -r "$OWNER" -s "$subject" $to_mail
 	else
 		echo "$*" 1>&2
 		if test "$error_kind" = "owner" ; then
@@ -92,15 +131,54 @@ gitHeads ()
 	./g rev-parse --verify HEAD
 }
 
+currentTime ()
+{
+	if [ "X$MACHINE" == "XDarwin" ] ; then
+	    date -u '+%Y-%m-%d %H:%M:%S'
+	else
+	    date --utc --rfc-3339=seconds
+	fi
+}
+
+sendTinderboxLog ()
+{
+	if test "$SEND_MAIL" -ne 1 -o -z "$TINDERNAME" ; then
+		return 0
+	fi
+
+	STARTTIME="$1"
+	STATUS="$2"
+	LOG="$3"
+
+	(
+		cat <<EOF
+
+tinderbox: administrator: $OWNER
+tinderbox: builddate: deprecated
+tinderbox: starttime: `date '+%s' -d "$STARTTIME"`
+tinderbox: buildname: $TINDERNAME
+tinderbox: errorparser: unix
+tinderbox: status: $STATUS
+tinderbox: timenow: `date '+%s'`
+tinderbox: tree: MASTER
+tinderbox: END
+
+EOF
+		[ -f "$LOG" ] && cat "$LOG"
+	) | sendMailMsg "tinderbox@gimli.documentfoundation.org" "tinderbox gzipped logfile" "X-Tinder: cookie"
+}
+
 ## code
-while getopts hilm:nw: opt ; do
+while getopts hilm:ns:t:w: opt ; do
 	case "$opt" in
-		w) PAUSE_SECONDS="$OPTARG" ;;
+		h) usage; exit ;;
 		i) NICE="$NICE ionice -c3" ;;
 		l) HTML_OUTPUT=1 ;;
 		m) SEND_MAIL=1 ; OWNER="$OPTARG" ;;
 		n) NICE="$NICE nice" ;;
-		h) usage; exit ;;
+		s) SMTP="$OPTARG" ;;
+		t) TINDERNAME="$OPTARG" ;;
+		w) PAUSE_SECONDS="$OPTARG" ;;
 		?) usage; exit ;;
 	esac
 done
@@ -114,6 +192,10 @@ which git > /dev/null 2>&1 || {
 if test "$SEND_MAIL" -eq 1 ; then
 	if test -z "$OWNER" ; then
 		echo "Owner not set."
+		exit 1
+	fi
+	if test -z "$SMTP" ; then
+		echo "SMTP server not set."
 		exit 1
 	fi
 	if test "$OWNER" = `echo ${OWNER} | sed 's/\@/_/g'` ; then
@@ -135,12 +217,11 @@ while true; do
 	$NICE make clean-local
 
 	# FIXME we need a more exact way to determine a 'good' date; this is not accurate
-	if [ "X$MACHINE" == "XDarwin" ] ; then
-	    rough_checkout_date="`date -u '+%Y-%m-%d %H:%M:%S'`"
-	else
-	    rough_checkout_date="`date --utc --rfc-3339=seconds`"
-	fi
+	rough_checkout_date="`currentTime`"
+	sendTinderboxLog "$rough_checkout_date" "building"
+
 	# try to build
+	build_status="build_failed"
 	if ! err_msg=$(./autogen.sh 2>&1); then
 		reportError committer "$rough_checkout_date" `printf "autogen.sh / configure failed - error is:\n\n$err_msg"`
 	elif ! $NICE make clean >clean.log 2>&1 ; then
@@ -157,8 +238,13 @@ while true; do
 
 		prev_success=$last_success
 		last_success=$rough_checkout_date
+		build_status="success"
 	fi
 
+	# send tinderbox mail
+	sendTinderboxLog "$rough_checkout_date" "$build_status" "build.log"
+
+	# save the old logs
 	for I in clean.log build.log smoketest.log install.log ; do
 		mv $I prev-$I 2>/dev/null
 	done
