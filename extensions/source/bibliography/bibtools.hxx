@@ -33,17 +33,17 @@ namespace bib
 {
     // source in bibbeam.cxx
 
-    void HandleTaskPaneList( Window* pWindow, BOOL bAddToList );
+    void HandleTaskPaneList( Window* pWindow, sal_Bool bAddToList );
         // pWindow: just an system window or something wich is child of a system window
 
     inline void AddToTaskPaneList( Window* pWindowToBeHandled )
     {
-        HandleTaskPaneList( pWindowToBeHandled, TRUE );
+        HandleTaskPaneList( pWindowToBeHandled, sal_True );
     }
 
     inline void RemoveFromTaskPaneList( Window* pWindowToBeHandled )
     {
-        HandleTaskPaneList( pWindowToBeHandled, FALSE );
+        HandleTaskPaneList( pWindowToBeHandled, sal_False );
     }
 }
 

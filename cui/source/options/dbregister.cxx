@@ -129,7 +129,7 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage( Window* pParent, const Sfx
     pPathBox        ( NULL ),
     m_pCurEntry     ( NULL ),
     m_nOldCount     ( 0 ),
-    m_bModified     ( FALSE )
+    m_bModified     ( sal_False )
 {
     m_aNew.SetClickHdl( LINK( this, DbRegistrationOptionsPage, NewHdl ) );
     m_aEdit.SetClickHdl( LINK( this, DbRegistrationOptionsPage, EditHdl ) );
@@ -186,7 +186,7 @@ DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
     aPathCtrl.SetFocusControl( NULL );
 
     pHeaderBar->Hide();
-    for ( USHORT i = 0; i < pPathBox->GetEntryCount(); ++i )
+    for ( sal_uInt16 i = 0; i < pPathBox->GetEntryCount(); ++i )
         delete static_cast< DatabaseRegistration* >( pPathBox->GetEntry(i)->GetUserData() );
     delete pPathBox;
     delete pHeaderBar;
@@ -202,13 +202,13 @@ SfxTabPage* DbRegistrationOptionsPage::Create( Window* pParent,
 
 // -----------------------------------------------------------------------
 
-BOOL DbRegistrationOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
+sal_Bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
 {
     // the settings for the single drivers
     sal_Bool bModified = sal_False;
     DatabaseRegistrations aRegistrations;
-    ULONG nCount = pPathBox->GetEntryCount();
-    for ( ULONG i = 0; i < nCount; ++i )
+    sal_uLong nCount = pPathBox->GetEntryCount();
+    for ( sal_uLong i = 0; i < nCount; ++i )
     {
         SvLBoxEntry* pEntry = pPathBox->GetEntry(i);
         DatabaseRegistration* pRegistration = static_cast< DatabaseRegistration* >( pEntry->GetUserData() );
@@ -256,7 +256,7 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet& rSet )
         pHeaderBar->SetItemSize( ITEMID_TYPE, aUserData.GetToken(0).ToInt32() );
         HeaderEndDrag_Impl( NULL );
         // Sortierrichtung restaurieren
-        BOOL bUp = (BOOL)(USHORT)aUserData.GetToken(1).ToInt32();
+        sal_Bool bUp = (sal_Bool)(sal_uInt16)aUserData.GetToken(1).ToInt32();
         HeaderBarItemBits nBits = pHeaderBar->GetItemBits(ITEMID_TYPE);
 
         if ( bUp )
@@ -281,7 +281,7 @@ void DbRegistrationOptionsPage::FillUserData()
     String aUserData = String::CreateFromInt32( pHeaderBar->GetItemSize( ITEMID_TYPE ) );
     aUserData += ';';
     HeaderBarItemBits nBits = pHeaderBar->GetItemBits( ITEMID_TYPE );
-    BOOL bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+    sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     aUserData += bUp ? '1' : '0';
     SetUserData( aUserData );
 }
@@ -334,7 +334,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar )
         return 0;
 
     HeaderBarItemBits nBits = pHeaderBar->GetItemBits(ITEMID_TYPE);
-    BOOL bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
+    sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
     SvSortMode eMode = SortAscending;
 
     if ( bUp )
@@ -365,7 +365,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
     if ( !pHeaderBar->IsItemMode() )
     {
         Size aSz;
-        USHORT nTabs = pHeaderBar->GetItemCount();
+        sal_uInt16 nTabs = pHeaderBar->GetItemCount();
         long nTmpSz = 0;
         long nWidth = pHeaderBar->GetItemSize(ITEMID_TYPE);
         long nBarWidth = pHeaderBar->GetSizePixel().Width();
@@ -375,7 +375,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
         else if ( ( nBarWidth - nWidth ) < TAB_WIDTH_MIN )
             pHeaderBar->SetItemSize( ITEMID_TYPE, nBarWidth - TAB_WIDTH_MIN );
 
-        for ( USHORT i = 1; i <= nTabs; ++i )
+        for ( sal_uInt16 i = 1; i <= nTabs; ++i )
         {
             long _nWidth = pHeaderBar->GetItemSize(i);
             aSz.Width() =  _nWidth + nTmpSz;
@@ -453,8 +453,8 @@ IMPL_LINK( DbRegistrationOptionsPage, NameValidator, String*, _pName )
 {
     if ( _pName )
     {
-        ULONG nCount = pPathBox->GetEntryCount();
-        for ( ULONG i = 0; i < nCount; ++i )
+        sal_uLong nCount = pPathBox->GetEntryCount();
+        for ( sal_uLong i = 0; i < nCount; ++i )
         {
             SvLBoxEntry* pEntry = pPathBox->GetEntry(i);
             if ( (!m_pCurEntry || m_pCurEntry != pEntry) && pPathBox->GetEntryText(pEntry,0) == *_pName )

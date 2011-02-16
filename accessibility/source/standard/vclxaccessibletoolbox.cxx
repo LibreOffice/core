@@ -227,26 +227,26 @@ void VCLXAccessibleToolBox::UpdateFocus_Impl()
         return;
 
     // submit events only if toolbox has the focus to avoid sending events due to mouse move
-    BOOL bHasFocus = FALSE;
+    sal_Bool bHasFocus = sal_False;
     if ( pToolBox->HasFocus() )
-        bHasFocus = TRUE;
+        bHasFocus = sal_True;
     else
     {
         // check for subtoolbar, i.e. check if our parent is a toolbar
         ToolBox* pToolBoxParent = dynamic_cast< ToolBox* >( pToolBox->GetParent() );
         // subtoolbars never get the focus as key input is just forwarded, so check if the parent toolbar has it
         if ( pToolBoxParent && pToolBoxParent->HasFocus() )
-            bHasFocus = TRUE;
+            bHasFocus = sal_True;
     }
 
     if ( bHasFocus )
     {
-        USHORT nHighlightItemId = pToolBox->GetHighlightItemId();
-        USHORT nFocusCount = 0;
+        sal_uInt16 nHighlightItemId = pToolBox->GetHighlightItemId();
+        sal_uInt16 nFocusCount = 0;
         for ( ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.begin();
               aIter != m_aAccessibleChildren.end(); ++aIter )
         {
-            USHORT nItemId = pToolBox->GetItemId( (USHORT)aIter->first );
+            sal_uInt16 nItemId = pToolBox->GetItemId( (sal_uInt16)aIter->first );
 
             if ( aIter->second.is() )
             {
@@ -296,7 +296,7 @@ void VCLXAccessibleToolBox::UpdateChecked_Impl( sal_Int32  )
         for ( ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.begin();
               aIter != m_aAccessibleChildren.end(); ++aIter )
         {
-                USHORT nItemId = pToolBox->GetItemId( (USHORT)aIter->first );
+                sal_uInt16 nItemId = pToolBox->GetItemId( (sal_uInt16)aIter->first );
 
                 VCLXAccessibleToolBoxItem* pItem =
                     static_cast< VCLXAccessibleToolBoxItem* >( aIter->second.get() );
@@ -310,7 +310,7 @@ void VCLXAccessibleToolBox::UpdateIndeterminate_Impl( sal_Int32 _nPos )
     ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
     if ( pToolBox )
     {
-        USHORT nItemId = pToolBox->GetItemId( (USHORT)_nPos );
+        sal_uInt16 nItemId = pToolBox->GetItemId( (sal_uInt16)_nPos );
 
         ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.find( _nPos );
         if ( aIter != m_aAccessibleChildren.end() && aIter->second.is() )
@@ -432,7 +432,7 @@ void VCLXAccessibleToolBox::UpdateAllItems_Impl()
         m_aAccessibleChildren.clear();
 
         // register the new items
-        USHORT i, nCount = pToolBox->GetItemCount();
+        sal_uInt16 i, nCount = pToolBox->GetItemCount();
         for ( i = 0; i < nCount; ++i )
         {
             Any aNewValue;
@@ -726,8 +726,8 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleChild( sal
         ToolBoxItemsMap::iterator aIter = m_aAccessibleChildren.find(i);
         if ( m_aAccessibleChildren.end() == aIter )
         {
-            USHORT nItemId = pToolBox->GetItemId( (USHORT)i );
-            USHORT nHighlightItemId = pToolBox->GetHighlightItemId();
+            sal_uInt16 nItemId = pToolBox->GetItemId( (sal_uInt16)i );
+            sal_uInt16 nHighlightItemId = pToolBox->GetHighlightItemId();
             Window* pItemWindow = pToolBox->GetItemWindow( nItemId );
             // not found -> create a new child
             VCLXAccessibleToolBoxItem* pChild = new VCLXAccessibleToolBoxItem( pToolBox, i );
@@ -766,7 +766,7 @@ Reference< XAccessible > SAL_CALL VCLXAccessibleToolBox::getAccessibleAtPoint( c
     ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
     if ( pToolBox )
     {
-        USHORT nItemPos = pToolBox->GetItemPos( VCLPoint( _rPoint ) );
+        sal_uInt16 nItemPos = pToolBox->GetItemPos( VCLPoint( _rPoint ) );
         if ( nItemPos != TOOLBOX_ITEM_NOTFOUND )
             xAccessible = getAccessibleChild( nItemPos );
     }
@@ -781,10 +781,10 @@ Reference< XAccessible > VCLXAccessibleToolBox::GetItemWindowAccessible( const V
     ToolBox* pToolBox = static_cast< ToolBox* >( GetWindow() );
     if ( pChildWindow && pToolBox )
     {
-        USHORT nCount = pToolBox->GetItemCount();
-        for (USHORT i = 0 ; i < nCount && !xReturn.is() ; ++i)
+        sal_uInt16 nCount = pToolBox->GetItemCount();
+        for (sal_uInt16 i = 0 ; i < nCount && !xReturn.is() ; ++i)
         {
-            USHORT nItemId = pToolBox->GetItemId( i );
+            sal_uInt16 nItemId = pToolBox->GetItemId( i );
             Window* pItemWindow = pToolBox->GetItemWindow( nItemId );
             if ( pItemWindow == pChildWindow )
                 xReturn = getAccessibleChild(i);
@@ -810,7 +810,7 @@ void VCLXAccessibleToolBox::selectAccessibleChild( sal_Int32 nChildIndex ) throw
     if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
         throw IndexOutOfBoundsException();
     ToolBox * pToolBox = static_cast < ToolBox * > ( GetWindow() );
-    USHORT nPos = static_cast < USHORT > (nChildIndex);
+    sal_uInt16 nPos = static_cast < sal_uInt16 > (nChildIndex);
     pToolBox->ChangeHighlight( nPos );
 }
 // -----------------------------------------------------------------------------
@@ -820,7 +820,7 @@ sal_Bool VCLXAccessibleToolBox::isAccessibleChildSelected( sal_Int32 nChildIndex
     if ( nChildIndex < 0 || nChildIndex >= getAccessibleChildCount() )
         throw IndexOutOfBoundsException();
     ToolBox * pToolBox = static_cast < ToolBox * > ( GetWindow() );
-    USHORT nPos = static_cast < USHORT > (nChildIndex);
+    sal_uInt16 nPos = static_cast < sal_uInt16 > (nChildIndex);
     if ( pToolBox != NULL && pToolBox->GetHighlightItemId() == pToolBox->GetItemId( nPos ) )
         return sal_True;
     else

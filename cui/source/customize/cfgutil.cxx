@@ -344,8 +344,8 @@ void SfxConfigFunctionListBox_Impl::ClearAll()
     vorhandenen MacroInfos.
 */
 {
-    USHORT nCount = aArr.Count();
-    for ( USHORT i=0; i<nCount; i++ )
+    sal_uInt16 nCount = aArr.Count();
+    for ( sal_uInt16 i=0; i<nCount; i++ )
     {
         SfxGroupInfo_Impl *pData = aArr[i];
 
@@ -473,7 +473,7 @@ SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
 }
 
 SfxConfigGroupListBox_Impl::SfxConfigGroupListBox_Impl(
-    Window* pParent, const ResId& rResId, ULONG nConfigMode )
+    Window* pParent, const ResId& rResId, sal_uLong nConfigMode )
         : SvTreeListBox( pParent, rResId )
         , pImp(new SvxConfigGroupBoxResource_Impl()), pFunctionListBox(0), nMode( nConfigMode ), pStylesInfo(0)
 {
@@ -490,8 +490,8 @@ SfxConfigGroupListBox_Impl::~SfxConfigGroupListBox_Impl()
 
 void SfxConfigGroupListBox_Impl::ClearAll()
 {
-    USHORT nCount = aArr.Count();
-    for ( USHORT i=0; i<nCount; i++ )
+    sal_uInt16 nCount = aArr.Count();
+    for ( sal_uInt16 i=0; i<nCount; i++ )
     {
         SfxGroupInfo_Impl *pData = aArr[i];
         if  (   pData->nKind == SFX_CFGGROUP_SCRIPTCONTAINER
@@ -639,7 +639,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                                       const css::uno::Reference< css::frame::XFrame >&              xFrame         ,
                                       const ::rtl::OUString&                                        sModuleLongName)
 {
-    SetUpdateMode(FALSE);
+    SetUpdateMode(sal_False);
     ClearAll(); // Remove all old entries from treelist box
 
     m_xFrame = xFrame;
@@ -694,7 +694,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
             String aTitle(pImp->m_sDlgMacros);
             SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
             pNewEntry->SetUserData( pInfo );
-            pNewEntry->EnableChildsOnDemand( TRUE );
+            pNewEntry->EnableChildsOnDemand( sal_True );
             aArr.Insert( pInfo, aArr.Count() );
         }
         else
@@ -706,13 +706,13 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                 {
                     Sequence< Reference< browse::XBrowseNode > > children =
                         rootNode->getChildNodes();
-                    BOOL bIsRootNode = FALSE;
+                    sal_Bool bIsRootNode = sal_False;
 
                     ::rtl::OUString user = ::rtl::OUString::createFromAscii("user");
                     ::rtl::OUString share = ::rtl::OUString::createFromAscii("share");
                     if ( rootNode->getName().equals(::rtl::OUString::createFromAscii("Root") ))
                     {
-                        bIsRootNode = TRUE;
+                        bIsRootNode = sal_True;
                     }
 
                     //To mimic current starbasic behaviour we
@@ -731,14 +731,14 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                     for ( sal_Int32 n = 0; n < children.getLength(); n++ )
                     {
                         Reference< browse::XBrowseNode >& theChild = children[n];
-                        BOOL bDisplay = TRUE;
+                        sal_Bool bDisplay = sal_True;
                         ::rtl::OUString uiName = theChild->getName();
                         if ( bIsRootNode )
                         {
                             if (  ! ((theChild->getName().equals( user )  || theChild->getName().equals( share ) ||
                                 theChild->getName().equals( currentDocTitle ) ) ) )
                             {
-                                bDisplay=FALSE;
+                                bDisplay=sal_False;
                             }
                             else
                             {
@@ -784,7 +784,7 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
                                 {
                                     if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
                                     {
-                                        pNewEntry->EnableChildsOnDemand( TRUE );
+                                        pNewEntry->EnableChildsOnDemand( sal_True );
                                         m = grandchildren.getLength();
                                     }
                                 }
@@ -807,11 +807,11 @@ void SfxConfigGroupListBox_Impl::Init(const css::uno::Reference< css::lang::XMul
         SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_STYLES, 0, 0 ); // TODO last parameter should contain user data
         aArr.Insert( pInfo, aArr.Count() );
         pEntry->SetUserData( pInfo );
-        pEntry->EnableChildsOnDemand( TRUE );
+        pEntry->EnableChildsOnDemand( sal_True );
     }
 
     MakeVisible( GetEntry( 0,0 ) );
-    SetUpdateMode( TRUE );
+    SetUpdateMode( sal_True );
 }
 Image SfxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > node, Reference< XComponentContext > xCtx, bool bIsRootNode, bool bHighContrast )
 {
@@ -987,13 +987,13 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
 {
     SvLBoxEntry *pEntry = FirstSelected();
     SfxGroupInfo_Impl *pInfo = (SfxGroupInfo_Impl*) pEntry->GetUserData();
-    pFunctionListBox->SetUpdateMode(FALSE);
+    pFunctionListBox->SetUpdateMode(sal_False);
     pFunctionListBox->ClearAll();
     if ( pInfo->nKind != SFX_CFGGROUP_FUNCTION &&
              pInfo->nKind != SFX_CFGGROUP_SCRIPTCONTAINER &&
              pInfo->nKind != SFX_CFGGROUP_STYLES )
     {
-        pFunctionListBox->SetUpdateMode(TRUE);
+        pFunctionListBox->SetUpdateMode(sal_True);
         return;
     }
 
@@ -1001,7 +1001,7 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
     {
         case SFX_CFGGROUP_FUNCTION :
         {
-            USHORT                                                          nGroup    = pInfo->nUniqueID;
+            sal_uInt16                                                          nGroup    = pInfo->nUniqueID;
             css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider (m_xFrame, css::uno::UNO_QUERY_THROW);
             css::uno::Sequence< css::frame::DispatchInformation >           lCommands = xProvider->getConfigurableDispatchInformation(nGroup);
             sal_Int32                                                       c         = lCommands.getLength();
@@ -1110,31 +1110,31 @@ void SfxConfigGroupListBox_Impl::GroupSelected()
     if ( pFunctionListBox->GetEntryCount() )
         pFunctionListBox->Select( pFunctionListBox->GetEntry( 0, 0 ) );
 
-    pFunctionListBox->SetUpdateMode(TRUE);
+    pFunctionListBox->SetUpdateMode(sal_True);
 }
 
-BOOL SfxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
+sal_Bool SfxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
 {
-    BOOL bRet = SvTreeListBox::Expand( pParent );
+    sal_Bool bRet = SvTreeListBox::Expand( pParent );
     if ( bRet )
     {
         // Wieviele Entries k"onnen angezeigt werden ?
-        ULONG nEntries = GetOutputSizePixel().Height() / GetEntryHeight();
+        sal_uLong nEntries = GetOutputSizePixel().Height() / GetEntryHeight();
 
         // Wieviele Kinder sollen angezeigt werden ?
-        ULONG nChildCount = GetVisibleChildCount( pParent );
+        sal_uLong nChildCount = GetVisibleChildCount( pParent );
 
         // Passen alle Kinder und der parent gleichzeitig in die View ?
         if ( nChildCount+1 > nEntries )
         {
             // Wenn nicht, wenigstens parent ganz nach oben schieben
-            MakeVisible( pParent, TRUE );
+            MakeVisible( pParent, sal_True );
         }
         else
         {
             // An welcher relativen ViewPosition steht der aufzuklappende parent
             SvLBoxEntry *pEntry = GetFirstEntryInView();
-            ULONG nParentPos = 0;
+            sal_uLong nParentPos = 0;
             while ( pEntry && pEntry != pParent )
             {
                 nParentPos++;
@@ -1156,7 +1156,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
 */
 {
     SfxGroupInfo_Impl *pInfo = (SfxGroupInfo_Impl*) pEntry->GetUserData();
-    pInfo->bWasOpened = TRUE;
+    pInfo->bWasOpened = sal_True;
     switch ( pInfo->nKind )
     {
         case SFX_CFGGROUP_SCRIPTCONTAINER:
@@ -1171,19 +1171,19 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                     {
                         Sequence< Reference< browse::XBrowseNode > > children =
                             rootNode->getChildNodes();
-                        BOOL bIsRootNode = FALSE;
+                        sal_Bool bIsRootNode = sal_False;
 
                         ::rtl::OUString user = ::rtl::OUString::createFromAscii("user");
                         ::rtl::OUString share = ::rtl::OUString::createFromAscii("share");
                         if ( rootNode->getName().equals(::rtl::OUString::createFromAscii("Root") ))
                         {
-                            bIsRootNode = TRUE;
+                            bIsRootNode = sal_True;
                         }
 
                         /* To mimic current starbasic behaviour we
                         need to make sure that only the current document
                         is displayed in the config tree. Tests below
-                        set the bDisplay flag to FALSE if the current
+                        set the bDisplay flag to sal_False if the current
                         node is a first level child of the Root and is NOT
                         either the current document, user or share */
                         ::rtl::OUString currentDocTitle;
@@ -1198,11 +1198,11 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                         {
                             Reference< browse::XBrowseNode >& theChild = children[n];
                             ::rtl::OUString aName( theChild->getName() );
-                            BOOL bDisplay = TRUE;
+                            sal_Bool bDisplay = sal_True;
                             if ( bIsRootNode )
                             {
                                 if ( !( (aName.equals(user) || aName.equals(share) || aName.equals(currentDocTitle) ) ) )
-                                    bDisplay=FALSE;
+                                    bDisplay=sal_False;
                             }
                             if ( children[n].is() && children[n]->getType() != browse::BrowseNodeTypes::SCRIPT && bDisplay )
                             {
@@ -1238,7 +1238,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                                     {
                                         if ( grandchildren[m]->getType() == browse::BrowseNodeTypes::CONTAINER )
                                         {
-                                            pNewEntry->EnableChildsOnDemand( TRUE );
+                                            pNewEntry->EnableChildsOnDemand( sal_True );
                                             m = grandchildren.getLength();
                                         }
                                     }
@@ -1269,7 +1269,7 @@ void SfxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                     SfxGroupInfo_Impl *pGrpInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_STYLES, 0, pFamily );
                     aArr.Insert( pGrpInfo, aArr.Count() );
                     pStyleEntry->SetUserData( pGrpInfo );
-                    pStyleEntry->EnableChildsOnDemand( FALSE );
+                    pStyleEntry->EnableChildsOnDemand( sal_False );
                 }
             }
             break;
@@ -1294,7 +1294,7 @@ void SfxConfigGroupListBox_Impl::SelectMacro( const String& rBasic,
     aBasicName += ' ';
     aBasicName += pImp->m_sMacros;
     String aLib, aModule, aMethod;
-    USHORT nCount = rMacro.GetTokenCount('.');
+    sal_uInt16 nCount = rMacro.GetTokenCount('.');
     aMethod = rMacro.GetToken( nCount-1, '.' );
     if ( nCount > 2 )
     {

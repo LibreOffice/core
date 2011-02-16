@@ -186,7 +186,7 @@ namespace pcr
         struct
         {
             const sal_Char* programmaticName;
-            USHORT          uiNameResId;
+            sal_uInt16          uiNameResId;
             const sal_Char* helpId;
         } aCategories[] = {
             { "General",    RID_STR_PROPPAGE_DEFAULT,   HID_FM_PROPDLG_TAB_GENERAL },
