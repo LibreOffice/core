@@ -56,6 +56,7 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakagg.hxx>
+#include <osl/diagnose.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <tools/link.hxx>
@@ -256,7 +257,8 @@ class EDITENG_DLLPUBLIC SvxUnoTextRangeBase : public ::com::sun::star::text::XTe
                             public ::com::sun::star::beans::XPropertyState,
                             public ::com::sun::star::lang::XServiceInfo,
                             public ::com::sun::star::text::XTextRangeCompare,
-                            public ::com::sun::star::lang::XUnoTunnel
+                            public ::com::sun::star::lang::XUnoTunnel,
+                            private osl::DebugBase<SvxUnoTextRangeBase>
 
 {
     friend class SvxUnoTextRangeEnumeration;

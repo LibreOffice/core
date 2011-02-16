@@ -191,65 +191,11 @@ void CheckSelection( struct ESelection& rSel, SvxTextForwarder* pForwarder ) thr
 // class SvxUnoTextRangeBase
 // ====================================================================
 
-#ifdef DEBUG
-class check_me
-{
-public:
-    check_me() : mnAllocNum(0) {};
-    ~check_me();
-
-    void add( SvxUnoTextRangeBase* pRange );
-    void remove( SvxUnoTextRangeBase* pRange );
-
-    std::list< std::pair< sal_uInt32, SvxUnoTextRangeBase* > > maRanges;
-    sal_uInt32 mnAllocNum;
-};
-
-void check_me::add( SvxUnoTextRangeBase* pRange )
-{
-    maRanges.push_back( std::pair< sal_uInt32, SvxUnoTextRangeBase* >( mnAllocNum++, pRange ) );
-}
-
-void check_me::remove( SvxUnoTextRangeBase* pRange )
-{
-    std::list< std::pair< sal_uInt32, SvxUnoTextRangeBase* > >::iterator aIter;
-    for( aIter = maRanges.begin(); aIter != maRanges.end(); ++aIter )
-    {
-        if( pRange == (*aIter).second )
-        {
-            maRanges.erase( aIter );
-            break;
-        }
-    }
-}
-
-check_me::~check_me()
-{
-    if( !maRanges.empty() )
-    {
-        DBG_ERROR("living text range detected!");
-        std::list< std::pair< sal_uInt32, SvxUnoTextRangeBase* > >::iterator aIter;
-        for( aIter = maRanges.begin(); aIter != maRanges.end(); ++aIter )
-        {
-            sal_Int32 nAllocNum;
-            SvxUnoTextRangeBase* pRange;
-            nAllocNum = (*aIter).first;
-            pRange = (*aIter).second;
-        }
-    }
-}
-
-static check_me gNumRanges;
-#endif
-
 UNO3_GETIMPLEMENTATION_IMPL( SvxUnoTextRangeBase );
 
 SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxItemPropertySet* _pSet ) throw()
 : mpEditSource(NULL) , mpPropSet(_pSet)
 {
-#ifdef DEBUG
-    gNumRanges.add(this);
-#endif
 }
 
 SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet ) throw()
@@ -268,9 +214,6 @@ SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxEditSource* pSource, const Sv
 
         mpEditSource->addRange( this );
     }
-#ifdef DEBUG
-    gNumRanges.add(this);
-#endif
 }
 
 SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxUnoTextRangeBase& rRange ) throw()
@@ -297,18 +240,10 @@ SvxUnoTextRangeBase::SvxUnoTextRangeBase( const SvxUnoTextRangeBase& rRange ) th
 
     if( mpEditSource )
         mpEditSource->addRange( this );
-
-#ifdef DEBUG
-    gNumRanges.add(this);
-#endif
 }
 
 SvxUnoTextRangeBase::~SvxUnoTextRangeBase() throw()
 {
-#ifdef DEBUG
-    gNumRanges.remove(this);
-#endif
-
     if( mpEditSource )
         mpEditSource->removeRange( this );
 
