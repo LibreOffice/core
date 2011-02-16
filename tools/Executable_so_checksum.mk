@@ -42,6 +42,7 @@ $(eval $(call gb_Executable_set_cxxflags,so_checksum,\
 $(eval $(call gb_Executable_add_linked_libs,so_checksum,\
     sal \
     tl \
+    $(gb_STDLIBS) \
 ))
 # used to link against basegfxlx comphelp4gcc3 i18nisolang1gcc3 ucbhelper4gcc3 uno_cppu uno_cppuhelpergcc3 uno_salhelpergcc3 vos3gcc3 - seems to be superficial
 
@@ -50,35 +51,4 @@ $(eval $(call gb_Executable_add_exception_objects,so_checksum,\
     tools/bootstrp/so_checksum \
 ))
 
-ifeq ($(OS),WNT)
-ifneq ($(USE_MINGW),)
-$(eval $(call gb_Executable_add_linked_libs,so_checksum,\
-    mingwthrd \
-    $(gb_MINGW_LIBSTDCPP) \
-    mingw32 \
-    $(gb_MINGW_LIBGCC) \
-    uwinapi \
-    moldname \
-    mingwex \
-    kernel32 \
-    msvcrt \
-    user32 \
-))
-else
-$(eval $(call gb_Executable_add_linked_libs,so_checksum,\
-    kernel32 \
-    msvcrt \
-    oldnames \
-    user32 \
-    uwinapi \
-))
-endif
-endif
-
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Executable_add_linked_libs,so_checksum,\
-    dl \
-    pthread \
-))
-endif
 # vim: set noet sw=4 ts=4:

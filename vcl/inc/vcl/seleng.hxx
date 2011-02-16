@@ -54,11 +54,11 @@ public:
     virtual void    DestroyAnchor() = 0;
 
     // Cursor neu setzen, dabei die beim Anker beginnende
-    // Selektion der neuen Cursor-Position anpassen. TRUE == Ok
-    virtual BOOL    SetCursorAtPoint( const Point& rPointPixel,
-                                      BOOL bDontSelectAtCursor = FALSE ) = 0;
+    // Selektion der neuen Cursor-Position anpassen. sal_True == Ok
+    virtual sal_Bool    SetCursorAtPoint( const Point& rPointPixel,
+                                      sal_Bool bDontSelectAtCursor = sal_False ) = 0;
 
-    virtual BOOL    IsSelectionAtPoint( const Point& rPointPixel ) = 0;
+    virtual sal_Bool    IsSelectionAtPoint( const Point& rPointPixel ) = 0;
     virtual void    DeselectAtPoint( const Point& rPointPixel ) = 0;
     // Anker loeschen & alles deselektieren
     virtual void    DeselectAll() = 0;
@@ -88,14 +88,14 @@ private:
     MouseEvent          aLastMove;
     SelectionMode       eSelMode;
     // Stufigkeit fuer Mausbewegungen waehrend einer Selektion
-    USHORT              nMouseSensitivity;
-    USHORT              nLockedMods;
-    USHORT              nFlags;
+    sal_uInt16              nMouseSensitivity;
+    sal_uInt16              nLockedMods;
+    sal_uInt16              nFlags;
 //#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK( ImpWatchDog, Timer * );
 //#endif
 
-    inline BOOL         ShouldDeselect( BOOL bModifierKey1 ) const;
+    inline sal_Bool         ShouldDeselect( sal_Bool bModifierKey1 ) const;
                                 // determines to deselect or not when Ctrl-key is pressed on CursorPosChanging
 public:
 
@@ -103,13 +103,13 @@ public:
                                          FunctionSet* pFunctions = NULL );
                         ~SelectionEngine();
 
-    // TRUE: Event wurde von Selection-Engine verarbeitet.
-    BOOL                SelMouseButtonDown( const MouseEvent& rMEvt );
-    BOOL                SelMouseButtonUp( const MouseEvent& rMEvt );
-    BOOL                SelMouseMove( const MouseEvent& rMEvt );
+    // sal_True: Event wurde von Selection-Engine verarbeitet.
+    sal_Bool                SelMouseButtonDown( const MouseEvent& rMEvt );
+    sal_Bool                SelMouseButtonUp( const MouseEvent& rMEvt );
+    sal_Bool                SelMouseMove( const MouseEvent& rMEvt );
 
     // Tastatur
-    void                CursorPosChanging( BOOL bShift, BOOL bMod1 );
+    void                CursorPosChanging( sal_Bool bShift, sal_Bool bMod1 );
 
     // wird benoetigt, um bei ausserhalb des Bereichs stehender
     // Maus ueber einen Timer Move-Events zu erzeugen
@@ -117,16 +117,16 @@ public:
                             { aArea = rNewArea; }
     const Rectangle&    GetVisibleArea() const { return aArea; }
 
-    void                SetAddMode( BOOL);
-    BOOL                IsAddMode() const;
+    void                SetAddMode( sal_Bool);
+    sal_Bool                IsAddMode() const;
 
-    void                AddAlways( BOOL bOn );
-    BOOL                IsAlwaysAdding() const;
+    void                AddAlways( sal_Bool bOn );
+    sal_Bool                IsAlwaysAdding() const;
 
-    void                EnableDrag( BOOL bOn );
-    BOOL                IsDragEnabled() const;
+    void                EnableDrag( sal_Bool bOn );
+    sal_Bool                IsDragEnabled() const;
     void                ActivateDragMode();
-    BOOL                IsInDragMode() const;
+    sal_Bool                IsInDragMode() const;
 
     void                SetSelectionMode( SelectionMode eMode );
     SelectionMode       GetSelectionMode() const { return eSelMode; }
@@ -135,9 +135,9 @@ public:
                             { pFunctionSet = pFuncs; }
     const FunctionSet*  GetFunctionSet() const { return pFunctionSet; }
 
-    void                SetMouseSensitivity( USHORT nSensitivity )
+    void                SetMouseSensitivity( sal_uInt16 nSensitivity )
                             { nMouseSensitivity = nSensitivity; }
-    USHORT              GetMouseSensitivity() const
+    sal_uInt16              GetMouseSensitivity() const
                             { return nMouseSensitivity; }
 
     const Point&        GetMousePosPixel() const
@@ -147,20 +147,20 @@ public:
     void                SetWindow( Window*);
     Window*             GetWindow() const { return pWin; }
 
-    void                LockModifiers( USHORT nModifiers )
+    void                LockModifiers( sal_uInt16 nModifiers )
                             { nLockedMods = nModifiers; }
-    USHORT              GetLockedModifiers() const { return nLockedMods; }
+    sal_uInt16              GetLockedModifiers() const { return nLockedMods; }
 
-    BOOL                IsInSelection() const;
+    sal_Bool                IsInSelection() const;
     void                Reset();
 
     void                Command( const CommandEvent& rCEvt );
 
-    BOOL                HasAnchor() const;
-    void                SetAnchor( BOOL bAnchor );
+    sal_Bool                HasAnchor() const;
+    void                SetAnchor( sal_Bool bAnchor );
 
     // wird im Ctor eingeschaltet
-    void                ExpandSelectionOnMouseMove( BOOL bExpand = TRUE )
+    void                ExpandSelectionOnMouseMove( sal_Bool bExpand = sal_True )
                         {
                             if( bExpand )
                                 nFlags |= SELENG_EXPANDONMOVE;
@@ -169,23 +169,23 @@ public:
                         }
 };
 
-inline BOOL SelectionEngine::IsDragEnabled() const
+inline sal_Bool SelectionEngine::IsDragEnabled() const
 {
     if ( nFlags & SELENG_DRG_ENAB )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
-inline BOOL SelectionEngine::IsAddMode()  const
+inline sal_Bool SelectionEngine::IsAddMode()  const
 {
     if ( nFlags & (SELENG_IN_ADD | SELENG_ADD_ALW) )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
-inline void SelectionEngine::SetAddMode( BOOL bNewMode )
+inline void SelectionEngine::SetAddMode( sal_Bool bNewMode )
 {
     if ( bNewMode )
         nFlags |= SELENG_IN_ADD;
@@ -193,7 +193,7 @@ inline void SelectionEngine::SetAddMode( BOOL bNewMode )
         nFlags &= (~SELENG_IN_ADD);
 }
 
-inline void SelectionEngine::EnableDrag( BOOL bOn )
+inline void SelectionEngine::EnableDrag( sal_Bool bOn )
 {
     if ( bOn )
         nFlags |= SELENG_DRG_ENAB;
@@ -201,7 +201,7 @@ inline void SelectionEngine::EnableDrag( BOOL bOn )
         nFlags &= (~SELENG_DRG_ENAB);
 }
 
-inline void SelectionEngine::AddAlways( BOOL bOn )
+inline void SelectionEngine::AddAlways( sal_Bool bOn )
 {
     if( bOn )
         nFlags |= SELENG_ADD_ALW;
@@ -209,39 +209,39 @@ inline void SelectionEngine::AddAlways( BOOL bOn )
         nFlags &= (~SELENG_ADD_ALW);
 }
 
-inline BOOL SelectionEngine::IsAlwaysAdding() const
+inline sal_Bool SelectionEngine::IsAlwaysAdding() const
 {
     if ( nFlags & SELENG_ADD_ALW )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
-inline BOOL SelectionEngine::IsInDragMode() const
+inline sal_Bool SelectionEngine::IsInDragMode() const
 {
     if ( nFlags & SELENG_IN_DRG )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
-inline BOOL SelectionEngine::IsInSelection() const
+inline sal_Bool SelectionEngine::IsInSelection() const
 {
     if ( nFlags & SELENG_IN_SEL )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
-inline BOOL SelectionEngine::HasAnchor() const
+inline sal_Bool SelectionEngine::HasAnchor() const
 {
     if ( nFlags & SELENG_HAS_ANCH )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
-inline void SelectionEngine::SetAnchor( BOOL bAnchor )
+inline void SelectionEngine::SetAnchor( sal_Bool bAnchor )
 {
     if ( bAnchor )
         nFlags |= SELENG_HAS_ANCH;

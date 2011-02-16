@@ -43,9 +43,9 @@ class VCL_DLLPUBLIC MoreButton : public PushButton
 {
 private:
     ImplMoreButtonData* mpMBData;
-    ULONG               mnDelta;
+    sal_uLong               mnDelta;
     MapUnit             meUnit;
-    BOOL                mbState;
+    sal_Bool                mbState;
 
     // Copy assignment is forbidden and not implemented.
     SAL_DLLPRIVATE      MoreButton( const MoreButton & );
@@ -67,15 +67,15 @@ public:
     void                AddWindow( Window* pWindow );
     void                RemoveWindow( Window* pWindow );
 
-    void                SetDelta( ULONG nNewDelta ) { mnDelta = nNewDelta; }
-    ULONG               GetDelta() const { return mnDelta; }
+    void                SetDelta( sal_uLong nNewDelta ) { mnDelta = nNewDelta; }
+    sal_uLong               GetDelta() const { return mnDelta; }
 
     void                SetMapUnit( MapUnit eNewUnit = MAP_PIXEL ) { meUnit = eNewUnit; }
     MapUnit             GetMapUnit() const { return meUnit; }
 
     using PushButton::SetState;
-    void                SetState( BOOL bNewState = TRUE );
-    BOOL                GetState() const { return mbState; }
+    void                SetState( sal_Bool bNewState = sal_True );
+    sal_Bool                GetState() const { return mbState; }
 
     void                SetText( const XubString& rNewText );
     XubString           GetText() const;
@@ -86,7 +86,7 @@ public:
     XubString           GetLessText() const;
 };
 
-inline void MoreButton::SetState( BOOL bNewState )
+inline void MoreButton::SetState( sal_Bool bNewState )
 {
     if ( mbState != bNewState )
         Click();

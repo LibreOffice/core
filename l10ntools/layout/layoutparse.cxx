@@ -44,7 +44,7 @@ LayoutXMLFile::SearchL10NElements( XMLParentNode* pCur, int )
 
     /* Recurse int children, SearchL10NElements does not do that for us.  */
     if ( XMLChildNodeList* lst = pCur->GetChildList() )
-        for ( ULONG i = 0; i < lst->Count(); i++ )
+        for ( sal_uLong i = 0; i < lst->Count(); i++ )
             if ( lst->GetObject( i )->GetNodeType() == XML_NODE_TYPE_ELEMENT )
                 HandleElement( ( XMLElement* )lst->GetObject( i ) );
             else if ( lst->GetObject( i )->GetNodeType() == XML_NODE_TYPE_COMMENT )
@@ -56,7 +56,7 @@ interestingAttributes( XMLAttributeList* lst )
 {
     std::vector<XMLAttribute*> interesting;
     if ( lst )
-        for ( ULONG i = 0; i < lst->Count(); i++ )
+        for ( sal_uLong i = 0; i < lst->Count(); i++ )
             if ( lst->GetObject( i )->Equals( STRING( "id" ) ) )
                 interesting.insert( interesting.begin(), lst->GetObject( i ) );
             else if ( ! BSTRING( *lst->GetObject( i ) ).CompareTo( "_", 1 ) )
@@ -116,7 +116,7 @@ void LayoutXMLFile::InsertL10NElement( ByteString const& id, XMLElement* element
     (*languageMap)[ language ] = element;
 }
 
-BOOL LayoutXMLFile::Write( ByteString &aFilename )
+sal_Bool LayoutXMLFile::Write( ByteString &aFilename )
 {
 
     if ( aFilename.Len() )

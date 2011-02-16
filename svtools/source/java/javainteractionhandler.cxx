@@ -137,7 +137,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
     com::sun::star::java::RestartRequiredException e5;
     // Try to recover the Exception type in the any and
     // react accordingly.
-    USHORT      nResult = RET_CANCEL;
+    sal_uInt16      nResult = RET_CANCEL;
     ::rtl::OUString    aParameter;
 
     if ( anyExc >>= e1 )

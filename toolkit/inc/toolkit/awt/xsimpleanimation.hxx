@@ -33,39 +33,27 @@
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/awt/XSimpleAnimation.hpp>
 
+#include <boost/scoped_ptr.hpp>
+
 //........................................................................
 namespace toolkit
 {
-    class Throbber_Impl;
 //........................................................................
 
     //====================================================================
     //= XSimpleAnimation
     //====================================================================
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::awt::XSimpleAnimation
-                                >   XSimpleAnimation_Base;
+    typedef ::cppu::ImplInheritanceHelper1  <   VCLXWindow
+                                            ,   ::com::sun::star::awt::XSimpleAnimation
+                                            >   XSimpleAnimation_Base;
 
-    class XSimpleAnimation :public VCLXWindow
-                           ,public XSimpleAnimation_Base
+    class XSimpleAnimation : public XSimpleAnimation_Base
     {
-    private:
-        //::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > > maImageList;
-        sal_Bool    mbRepeat;
-        sal_Int32   mnStepTime;
-
-        Throbber_Impl   *mpThrobber;
-
     public:
         XSimpleAnimation();
 
     protected:
         ~XSimpleAnimation();
-
-        // XInterface
-        DECLARE_XINTERFACE()
-
-        // XTypeProvider
-        DECLARE_XTYPEPROVIDER()
 
         // XSimpleAnimation
         virtual void SAL_CALL start() throw (::com::sun::star::uno::RuntimeException);
@@ -75,9 +63,6 @@ namespace toolkit
         // VclWindowPeer
         virtual void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
-
-        // VCLXWindow
-        void ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent );
 
     private:
         XSimpleAnimation( const XSimpleAnimation& );            // never implemented

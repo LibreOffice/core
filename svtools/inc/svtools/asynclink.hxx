@@ -44,10 +44,10 @@ namespace svtools {
 class SVT_DLLPUBLIC AsynchronLink
 {
     Link   _aLink;
-    ULONG  _nEventId;
+    sal_uLong  _nEventId;
     Timer* _pTimer;
-    BOOL   _bInCall;
-    BOOL*  _pDeleted;
+    sal_Bool   _bInCall;
+    sal_Bool*  _pDeleted;
     void*  _pArg;
     vos::OMutex* _pMutex;
 
@@ -56,19 +56,19 @@ class SVT_DLLPUBLIC AsynchronLink
 
 public:
     AsynchronLink( const Link& rLink ) :
-        _aLink( rLink ), _nEventId( 0 ), _pTimer( 0 ), _bInCall( FALSE ),
+        _aLink( rLink ), _nEventId( 0 ), _pTimer( 0 ), _bInCall( sal_False ),
         _pDeleted( 0 ), _pMutex( 0 ){}
-    AsynchronLink() : _nEventId( 0 ), _pTimer( 0 ), _bInCall( FALSE ),
+    AsynchronLink() : _nEventId( 0 ), _pTimer( 0 ), _bInCall( sal_False ),
             _pDeleted( 0 ), _pMutex( 0 ){}
     ~AsynchronLink();
 
     void CreateMutex();
     void operator=( const Link& rLink ) { _aLink = rLink; }
-    void Call( void* pObj, BOOL bAllowDoubles = FALSE,
-               BOOL bUseTimer = FALSE );
+    void Call( void* pObj, sal_Bool bAllowDoubles = sal_False,
+               sal_Bool bUseTimer = sal_False );
     void ForcePendingCall( );
     void ClearPendingCall( );
-    BOOL IsSet() const { return _aLink.IsSet(); }
+    sal_Bool IsSet() const { return _aLink.IsSet(); }
     Link GetLink() const { return _aLink; }
 };
 

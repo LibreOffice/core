@@ -77,8 +77,8 @@ class AquaSalFrame;
 -(NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender;
 -(NSDragOperation)draggingUpdated:(id <NSDraggingInfo>)sender;
 -(void)draggingExited:(id <NSDraggingInfo>)sender;
--(MacOSBOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender;
--(MacOSBOOL)performDragOperation:(id <NSDraggingInfo>)sender;
+-(BOOL)prepareForDragOperation:(id <NSDraggingInfo>)sender;
+-(BOOL)performDragOperation:(id <NSDraggingInfo>)sender;
 -(void)concludeDragOperation:(id <NSDraggingInfo>)sender;
 
 @end
@@ -136,8 +136,8 @@ public:
   virtual NSDragOperation draggingEntered(id sender);
   virtual NSDragOperation draggingUpdated(id sender);
   virtual void draggingExited(id sender);
-  virtual MacOSBOOL prepareForDragOperation(id sender);
-  virtual MacOSBOOL performDragOperation(id sender);
+  virtual BOOL prepareForDragOperation(id sender);
+  virtual BOOL performDragOperation(id sender);
   virtual void concludeDragOperation(id sender);
 
   /* If multiple actions are supported by the drag source and

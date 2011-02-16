@@ -65,7 +65,7 @@ void ImpBitmap::ImplSetSalBitmap( SalBitmap* pBitmap )
 
 // -----------------------------------------------------------------------
 
-BOOL ImpBitmap::ImplCreate( const Size& rSize, USHORT nBitCount, const BitmapPalette& rPal )
+sal_Bool ImpBitmap::ImplCreate( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal )
 {
     maSourceSize = rSize;
     return mpSalBitmap->Create( rSize, nBitCount, rPal );
@@ -73,7 +73,7 @@ BOOL ImpBitmap::ImplCreate( const Size& rSize, USHORT nBitCount, const BitmapPal
 
 // -----------------------------------------------------------------------
 
-BOOL ImpBitmap::ImplCreate( const ImpBitmap& rImpBitmap )
+sal_Bool ImpBitmap::ImplCreate( const ImpBitmap& rImpBitmap )
 {
     maSourceSize = rImpBitmap.maSourceSize;
     mnChecksum = rImpBitmap.mnChecksum;
@@ -82,14 +82,14 @@ BOOL ImpBitmap::ImplCreate( const ImpBitmap& rImpBitmap )
 
 // -----------------------------------------------------------------------
 
-BOOL ImpBitmap::ImplCreate( const ImpBitmap& rImpBitmap, SalGraphics* pGraphics )
+sal_Bool ImpBitmap::ImplCreate( const ImpBitmap& rImpBitmap, SalGraphics* pGraphics )
 {
     return mpSalBitmap->Create( *rImpBitmap.mpSalBitmap, pGraphics );
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ImpBitmap::ImplCreate( const ImpBitmap& rImpBitmap, USHORT nNewBitCount )
+sal_Bool ImpBitmap::ImplCreate( const ImpBitmap& rImpBitmap, sal_uInt16 nNewBitCount )
 {
     return mpSalBitmap->Create( *rImpBitmap.mpSalBitmap, nNewBitCount );
 }
@@ -110,22 +110,22 @@ Size ImpBitmap::ImplGetSize() const
 
 // -----------------------------------------------------------------------
 
-USHORT ImpBitmap::ImplGetBitCount() const
+sal_uInt16 ImpBitmap::ImplGetBitCount() const
 {
-    USHORT nBitCount = mpSalBitmap->GetBitCount();
+    sal_uInt16 nBitCount = mpSalBitmap->GetBitCount();
     return( ( nBitCount <= 1 ) ? 1 : ( nBitCount <= 4 ) ? 4 : ( nBitCount <= 8 ) ? 8 : 24 );
 }
 
 // -----------------------------------------------------------------------
 
-BitmapBuffer* ImpBitmap::ImplAcquireBuffer( BOOL bReadOnly )
+BitmapBuffer* ImpBitmap::ImplAcquireBuffer( sal_Bool bReadOnly )
 {
     return mpSalBitmap->AcquireBuffer( bReadOnly );
 }
 
 // -----------------------------------------------------------------------
 
-void ImpBitmap::ImplReleaseBuffer( BitmapBuffer* pBuffer, BOOL bReadOnly )
+void ImpBitmap::ImplReleaseBuffer( BitmapBuffer* pBuffer, sal_Bool bReadOnly )
 {
     mpSalBitmap->ReleaseBuffer( pBuffer, bReadOnly );
 

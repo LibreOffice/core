@@ -46,7 +46,7 @@ enum FontRelief { RELIEF_NONE, RELIEF_EMBOSSED, RELIEF_ENGRAVED, FontRelief_FORC
 // - Font types -
 // --------------
 
-typedef BYTE FontKerning;
+typedef sal_uInt8 FontKerning;
 #define KERNING_FONTSPECIFIC        ((FontKerning)0x01)
 #define KERNING_ASIAN               ((FontKerning)0x02)
 
