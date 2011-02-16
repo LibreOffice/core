@@ -206,7 +206,7 @@ typedef SvxCSS1MapEntry *SvxCSS1MapEntryPtr;
 SV_DECL_PTRARR_SORT_DEL( SvxCSS1Map, SvxCSS1MapEntryPtr, 5, 5 )
 
 
-#if !defined( ICC ) && !defined( BLC )
+#if !defined( ICC )
 inline sal_Bool operator==( const SvxCSS1MapEntry& rE1, const SvxCSS1MapEntry& rE2 )
 {
     return  rE1.aKey==rE2.aKey;

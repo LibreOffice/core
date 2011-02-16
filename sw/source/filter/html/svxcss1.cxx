@@ -712,7 +712,7 @@ SvxCSS1MapEntry::SvxCSS1MapEntry( const String& rKey, const SfxItemSet& rItemSet
     aKey.ToUpperAscii();
 }
 
-#if defined( ICC ) || defined( BLC )
+#if defined( ICC )
 BOOL operator==( const SvxCSS1MapEntry& rE1, const SvxCSS1MapEntry& rE2 )
 {
     return  rE1.aKey==rE2.aKey;
