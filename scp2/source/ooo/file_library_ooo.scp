@@ -26,7 +26,7 @@
  ************************************************************************/
 #include "macros.inc"
 
-#ifdef WNT
+#if defined SOLAR_JAVA && defined WNT
 File gid_File_Lib_Accessbridge
     BIN_FILE_BODY;
     Styles = (PACKED);

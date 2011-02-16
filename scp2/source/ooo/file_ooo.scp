@@ -423,7 +423,7 @@ File gid_File_Help_Schart_Zip
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(schart);
 End
 
-#if defined INCLUDE_JAVA_ACCESSBRIDGE && defined WNT
+#if defined SOLAR_JAVA && defined INCLUDE_JAVA_ACCESSBRIDGE && defined WNT
 
 File gid_File_Jar_Accessbridge
     TXT_FILE_BODY;
