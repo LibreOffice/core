@@ -44,6 +44,7 @@ using namespace ::com::sun::star::uno;
 
 class TestListener : public WeakImplHelper1< XVetoableChangeListener >
 {
+public:
     // Methods
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw(::com::sun::star::uno::RuntimeException)
         {
@@ -55,7 +56,6 @@ class TestListener : public WeakImplHelper1< XVetoableChangeListener >
         {
 
         }
-
 };
 
 void test_interfacecontainer()
