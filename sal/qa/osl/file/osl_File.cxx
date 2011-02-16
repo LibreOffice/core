@@ -5102,6 +5102,10 @@ namespace osl_DirectoryItem
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_DirectoryItem::getFileStatus, "osl_DirectoryItem" );
 }// namespace osl_DirectoryItem
 
+//Use to deliberately silence warnings for a deliberate error
+extern "C" void SAL_CALL suppressOslDebugMessage( const sal_Char *, sal_Int32, const sal_Char * )
+{
+}
 
 //------------------------------------------------------------------------
 // Beginning of the test cases for Directory class
@@ -5582,7 +5586,10 @@ namespace osl_Directory
         void getNextItem_002( )
         {
              ::osl::Directory testDirectory( aTmpName3 ); //constructor
+            //deliberate error, suppress run-time warning
+            pfunc_osl_printDetailedDebugMessage pOldDebugMessageFunc = osl_setDetailedDebugMessageFunc( &suppressOslDebugMessage );
             nError1 = testDirectory.getNextItem( rItem );
+            osl_setDetailedDebugMessageFunc( pOldDebugMessageFunc );
 
             CPPUNIT_ASSERT_MESSAGE( "test for getNextItem function: retrive an item in a directory which is not opened, also test for nHint's default value.",
                                     ( ::osl::FileBase::E_INVAL == nError1 ) );
