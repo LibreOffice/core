@@ -253,7 +253,7 @@ extern FILE *GetCfgFile()
 
             // create file name, beginnig with project root
             // (e.g.: source\ui\src\menue.src)
-//          printf("sFullEntry = %s\n",sFullEntry.GetBuffer());
+//            printf("sFullEntry = %s\n",sFullEntry.GetBuffer());
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
 //            printf("sActFileName = %s\n",sActFileName.GetBuffer());
 
@@ -337,7 +337,10 @@ CfgStackData *CfgStack::GetStackData( size_t nPos )
 /*****************************************************************************/
 {
     if ( nPos == LIST_APPEND )
-        nPos = maList.size() - 1;
+        if (maList.size())
+            nPos = maList.size() - 1;
+        else
+            return 0;
 
     return maList[  nPos ];
 }
@@ -578,7 +581,7 @@ int CfgParser::Execute( int nToken, char * pToken )
 void CfgParser::Error( const ByteString &rError )
 /*****************************************************************************/
 {
-//  ByteString sError( rError );
+//    ByteString sError( rError );
 //    sError.Append("Error: In file ");
 //    sError.Append( sActFileName );
     yyerror(( char * ) rError.GetBuffer());
@@ -659,7 +662,7 @@ void CfgExport::WorkOnRessourceEnd()
             ByteString sFallback = pStackData->sText[ ByteString("en-US") ];
 
             //if ( pStackData->sText[ ByteString("en-US") ].Len())
-            //  sFallback = pStackData->sText[ ByteString("en-US") ];
+            //    sFallback = pStackData->sText[ ByteString("en-US") ];
 
             ByteString sLocalId = pStackData->sIdentifier;
             ByteString sGroupId;
@@ -777,7 +780,7 @@ void CfgMerge::WorkOnText(
         }
 
         //if ( nLangIndex.EqualsIgnoreCaseAscii("de") )
-        //  bGerman = TRUE;
+        //    bGerman = TRUE;
         if (( nLangIndex.EqualsIgnoreCaseAscii("en-US") ))
             bEnglish = TRUE;
 
