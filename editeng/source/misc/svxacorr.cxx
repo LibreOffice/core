@@ -140,7 +140,6 @@ inline int IsUpperLetter( sal_Int32 nCharType )
             0 == ( ::com::sun::star::i18n::KCharacterType::LOWER & nCharType);
 }
 
-<<<<<<< local
 bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const String& rTxt,
                            xub_StrLen nStt, xub_StrLen nEnd )
 {
@@ -176,10 +175,7 @@ bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const String& rTxt,
     return false;
 }
 
-BOOL lcl_IsSymbolChar( CharClass& rCC, const String& rTxt,
-=======
 sal_Bool lcl_IsSymbolChar( CharClass& rCC, const String& rTxt,
->>>>>>> other
                            xub_StrLen nStt, xub_StrLen nEnd )
 {
     for( ; nStt < nEnd; ++nStt )
@@ -1108,11 +1104,7 @@ sal_Bool SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
     nSttPos = sal::static_int_cast< xub_StrLen >( pWordStt - rTxt.GetBuffer() );
     String sChar( cSave );
     rCC.toUpper( sChar );
-<<<<<<< local
-    BOOL bRet = sChar.GetChar(0) != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar );
-=======
-    sal_Bool bRet = sChar.GetChar(0) != cSave && rDoc.Replace( nSttPos, sChar );
->>>>>>> other
+    sal_Bool bRet = sChar.GetChar(0) != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar );
 
     // das Wort will vielleicht jemand haben
     if( bRet && SaveWordCplSttLst & nFlags )
@@ -1412,17 +1404,11 @@ sal_uLong SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
         else
         {
             nRet = 0;
-<<<<<<< local
             bool bUnsupported = lcl_IsUnsupportedUnicodeChar( rCC, rTxt, nCapLttrPos, nInsPos );
             // Grossbuchstabe am Satz-Anfang ??
             if( !bUnsupported &&
                 IsAutoCorrFlag( CptlSttSntnc ) &&
-                FnCptlSttSntnc( rDoc, rTxt, TRUE, nCapLttrPos, nInsPos, eLang ) )
-=======
-            // Grossbuchstabe am Satz-Anfang ??
-            if( IsAutoCorrFlag( CptlSttSntnc ) &&
                 FnCptlSttSntnc( rDoc, rTxt, sal_True, nCapLttrPos, nInsPos, eLang ) )
->>>>>>> other
                 nRet |= CptlSttSntnc;
 
             // Zwei Grossbuchstaben am Wort-Anfang ??
