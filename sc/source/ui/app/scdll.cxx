@@ -287,7 +287,7 @@ void ScDLL::Init()
 
     //  Child-Windows
 
-    ScInputWindowWrapper        ::RegisterChildWindow( TRUE, pMod, SFX_CHILDWIN_TASK|SFX_CHILDWIN_FORCEDOCK|SFX_CHILDWIN_NEVERHIDEACTIVEOLE );
+    ScInputWindowWrapper        ::RegisterChildWindow( sal_True, pMod, SFX_CHILDWIN_TASK|SFX_CHILDWIN_FORCEDOCK|SFX_CHILDWIN_NEVERHIDEACTIVEOLE );
     ScNavigatorDialogWrapper    ::RegisterChildWindowContext(
             sal::static_int_cast<sal_uInt16>(ScTabViewShell::GetInterfaceId()), pMod);
     ScSolverDlgWrapper          ::RegisterChildWindow(sal_False, pMod);
