@@ -55,8 +55,6 @@ class XmlElement
     virtual void        Insert2Index(
                             Index &             o_rIndex ) const;           // Default: Does nothing, but can be overwritten.
 
-//  virtual void        Put2Dependy() = 0;
-
     const Simstr &      Name() const            { return sName; }
 
   protected:
