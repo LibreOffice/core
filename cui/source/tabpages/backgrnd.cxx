@@ -354,7 +354,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
     aBorderWin          ( this, CUI_RES(CT_BORDER) ),
     aBackgroundColorSet ( &aBorderWin, CUI_RES( SET_BGDCOLOR ) ),
     aBackgroundColorBox ( this, CUI_RES( GB_BGDCOLOR ) ),
-    pPreviewWin1        ( new BackgroundPreviewImpl( this, CUI_RES( WIN_PREVIEW1 ), FALSE ) ),
+    pPreviewWin1        ( new BackgroundPreviewImpl( this, CUI_RES( WIN_PREVIEW1 ), sal_False ) ),
 
     aColTransFT         ( this, CUI_RES( FT_COL_TRANS ) ),
     aColTransMF         ( this, CUI_RES( MF_COL_TRANS ) ),
@@ -371,7 +371,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
     aGraphTransFL       ( this, CUI_RES( FL_GRAPH_TRANS ) ),
     aGraphTransMF       ( this, CUI_RES( MF_GRAPH_TRANS ) ),
     pPreviewWin2        ( new BackgroundPreviewImpl(
-                            this, CUI_RES( WIN_PREVIEW2 ), TRUE ) ),
+                            this, CUI_RES( WIN_PREVIEW2 ), sal_True ) ),
 
     nHtmlMode           ( 0 ),
     bAllowShowSelector  ( sal_True ),
