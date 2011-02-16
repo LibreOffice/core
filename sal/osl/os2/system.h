@@ -276,34 +276,6 @@ extern unsigned int nanosleep(unsigned int);
 #   define  NO_DL_FUNCTIONS
 #endif
 
-#ifdef HPUX
-#   define  AF_IPX -1
-#   undef   howmany
-#   undef   MAXINT
-#   include <pthread.h>
-#   include <sys/un.h>
-#   include <sys/sched.h>
-#   include <sys/xti.h>
-#   include <sys/pstat.h>
-#   include <shadow.h>
-#   include <crypt.h>
-#   include <machine/param.h>
-#   define  LIBPATH "SHLIB_PATH"
-#   define  PTR_SIZE_T(s)               ((int *)&(s))
-#   define  PTR_FD_SET(s)               ((int *)&(s))
-#   define  PTHREAD_VALUE(t)            ((t).field2)
-#   define  PTHREAD_NONE_INIT           { 0, -1 }
-#   define  PTHREAD_ATTR_DEFAULT        pthread_attr_default
-#   define  PTHREAD_MUTEXATTR_DEFAULT   pthread_mutexattr_default
-#   define  PTHREAD_CONDATTR_DEFAULT    pthread_condattr_default
-#   define  pthread_detach(t)           pthread_detach(&(t))
-#   define  NO_PTHREAD_PRIORITY
-#   define  NO_PTHREAD_SEMAPHORES
-#   define  NO_DL_FUNCTIONS
-#   undef   sigaction
-#   define  PTHREAD_SIGACTION           cma_sigaction
-#endif
-
 #ifdef SOLARIS
 #   include <shadow.h>
 #   include <sys/procfs.h>
@@ -356,7 +328,7 @@ char *macxp_tempnam( const char *tmpdir, const char *prefix );
 
 #if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)  && \
     !defined(LINUX)   && !defined(NETBSD) && !defined(FREEBSD) && !defined(SCO)  && \
-    !defined(AIX)     && !defined(HPUX)   && \
+    !defined(AIX)     && \
     !defined(SOLARIS) && !defined(MAC) && \
     !defined(MACOSX)
 #   error "Target plattform not specified !"

@@ -38,9 +38,6 @@
 #include <string.h>
 #include <fcntl.h>
 
-#ifdef __hpux
-#   define _HPUX_SOURCE
-#endif
 #ifdef SCO
 #define _IBCS2
 #endif

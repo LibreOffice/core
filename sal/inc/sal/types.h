@@ -105,7 +105,7 @@ typedef unsigned char       sal_uInt8;
     #define SAL_PRIuUINT64 "I64u"
     #define SAL_PRIxUINT64 "I64x"
     #define SAL_PRIXUINT64 "I64X"
-#elif defined(__SUNPRO_CC) || defined(__SUNPRO_C) || defined (__GNUC__) || defined(__hpux) || defined (sgi)
+#elif defined(__SUNPRO_CC) || defined(__SUNPRO_C) || defined (__GNUC__) || defined (sgi)
     #if SAL_TYPES_SIZEOFLONG == 8
         typedef signed long int         sal_Int64;
         typedef unsigned long int       sal_uInt64;

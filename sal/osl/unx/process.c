@@ -1351,32 +1351,6 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
                 close(fd);
         }
 
-#elif defined(HPUX)
-
-        struct pst_status prstatus;
-
-        if (pstat_getproc(&prstatus, sizeof(prstatus), (size_t)0, pid) == 1)
-        {
-            if (Fields & osl_Process_CPUTIMES)
-            {
-                pInfo->UserTime.Seconds   = prstatus.pst_utime;
-                pInfo->UserTime.Nanosec   = 500000L;
-                pInfo->SystemTime.Seconds = prstatus.pst_stime;
-                pInfo->SystemTime.Nanosec = 500000L;
-
-                pInfo->Fields |= osl_Process_CPUTIMES;
-            }
-
-            if (Fields & osl_Process_HEAPUSAGE)
-            {
-                pInfo->HeapUsage = prstatus.pst_vdsize*PAGESIZE;
-
-                pInfo->Fields |= osl_Process_HEAPUSAGE;
-            }
-
-            return (pInfo->Fields == Fields) ? osl_Process_E_None : osl_Process_E_Unknown;
-        }
-
 #elif defined(LINUX)
 
         if ( (Fields & osl_Process_CPUTIMES) || (Fields & osl_Process_HEAPUSAGE) )

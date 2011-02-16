@@ -115,15 +115,6 @@
 #define SAL_SYSCONFIGFILE( name ) "." name "rc"
 #endif
 
-#ifdef HPUX
-#define SAL_UNX
-#define SAL_DLLEXTENSION ".sl"
-#define SAL_DLLPREFIX "lib"
-#define SAL_PRGEXTENSION ".bin"
-#define SAL_CONFIGFILE( name ) name "rc"
-#define SAL_SYSCONFIGFILE( name ) "." name "rc"
-#endif
-
 #ifdef sun
 #undef sun
 #define sun sun
