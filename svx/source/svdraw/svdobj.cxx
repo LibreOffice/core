@@ -2440,7 +2440,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, sal_Bool bForceLin
             // #i102241# check for line results
             const std::vector< basegfx::B2DPolygon >& rHairlineVector = aExtractor.getExtractedHairlines();
 
-            if(rHairlineVector.size())
+            if(!rHairlineVector.empty())
             {
                 // for SdrObject creation, just copy all to a single Hairline-PolyPolygon
                 for(sal_uInt32 a(0); a < rHairlineVector.size(); a++)
@@ -2452,7 +2452,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, sal_Bool bForceLin
             // #i102241# check for fill rsults
             const std::vector< basegfx::B2DPolyPolygon >& rLineFillVector(aExtractor.getExtractedLineFills());
 
-            if(rLineFillVector.size())
+            if(!rLineFillVector.empty())
             {
                 // merge to a single PolyPolygon (OR)
                 aMergedLineFillPolyPolygon = basegfx::tools::mergeToSinglePolyPolygon(rLineFillVector);
