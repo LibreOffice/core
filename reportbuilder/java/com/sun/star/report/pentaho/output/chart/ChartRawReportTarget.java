@@ -261,26 +261,6 @@ public class ChartRawReportTarget extends OfficeDocumentReportTarget
             throws DataSourceException, ReportProcessingException
     {
         super.endReport(report);
-        try
-        {
-            // now copy the meta.xml
-            if (getInputRepository().isReadable("meta.xml"))
-            {
-                final InputStream inputStream = getInputRepository().createInputStream("meta.xml");
-                try
-                {
-                    final OutputStream outputMetaStream = getOutputRepository().createOutputStream("meta.xml", "text/xml");
-                    IOUtils.getInstance().copyStreams(inputStream, outputMetaStream);
-                    outputMetaStream.close();
-                } finally
-                {
-                    inputStream.close();
-                }
-            }
-        }
-        catch (IOException ioe)
-        {
-            throw new ReportProcessingException("Failed to write settings document", ioe);
-        }
+        copyMeta();
     }
 }
