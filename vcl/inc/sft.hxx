@@ -543,24 +543,6 @@ namespace vcl
  */
     void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info);
 
-#ifdef TEST5
-/**
- * Returns kerning information for an array of glyphs.
- * Kerning is not cumulative.
- * kern[i] contains kerning information for a pair of glyphs at positions i and i+1
- *
- * @param ttf         pointer to a TrueTypeFont structure
- * @param glyphs      array of source glyphs
- * @param nglyphs     number of glyphs in the array
- * @param wmode       writing mode: 0 - horizontal, 1 - vertical
- * @param kern        array of KernData structures. It should contain nglyphs-1 elements
- * @see KernData
- * @ingroup sft
- *
- */
-    void KernGlyphs(TrueTypeFont *ttf, sal_uInt16 *glyphs, int nglyphs, int wmode, KernData *kern);
-#endif
-
 /**
  * Returns nonzero if font is a symbol encoded font
  */

@@ -36,11 +36,6 @@
  *
  */
 
-#if OSL_DEBUG_LEVEL == 0
-#  ifndef NDEBUG
-#    define NDEBUG
-#  endif
-#endif
 #include <assert.h>
 
 #include <stdlib.h>
@@ -64,10 +59,6 @@
 
 #include <osl/endian.h>
 #include <algorithm>
-
-#ifdef TEST7
-#include <ctype.h>
-#endif
 
 namespace vcl
 {
@@ -676,10 +667,6 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
 
         glyphlist.push_back( index );
 
-#ifdef DEBUG2
-        fprintf(stderr,"glyphlist: += %d\n", index);
-#endif
-
         if ((np = GetTTGlyphOutline(ttf, index, &nextComponent, 0, &glyphlist)) == 0)
         {
             /* XXX that probably indicates a corrupted font */
@@ -689,18 +676,6 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
 #endif
         }
 
-#ifdef DEBUG2
-        fprintf(stderr,"%d [", (int)glyphlist.size() );
-        for( std::vector< sal_uInt32 >::const_iterator it = glyphlist.begin();
-            it != glyphlist.end(); ++it )
-        {
-            fprintf( stderr,"%d ", (int) *it );
-        }
-        fprintf(stderr, "]\n");
-        if( ! glyphlist.empty() )
-            fprintf(stderr, "glyphlist: -= %d\n", (int) glyphlist.back());
-
-#endif
         if( ! glyphlist.empty() )
             glyphlist.pop_back();
 
@@ -730,23 +705,14 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
         b = c = 0;
 
         if (flags & WE_HAVE_A_SCALE) {
-#ifdef DEBUG2
-            fprintf(stderr, "WE_HAVE_A_SCALE\n");
-#endif
             a = GetInt16(ptr, 0, 1) << 2;
             d = a;
             ptr += 2;
         } else if (flags & WE_HAVE_AN_X_AND_Y_SCALE) {
-#ifdef DEBUG2
-            fprintf(stderr, "WE_HAVE_AN_X_AND_Y_SCALE\n");
-#endif
             a = GetInt16(ptr, 0, 1) << 2;
             d = GetInt16(ptr, 2, 1) << 2;
             ptr += 4;
         } else if (flags & WE_HAVE_A_TWO_BY_TWO) {
-#ifdef DEBUG2
-            fprintf(stderr, "WE_HAVE_A_TWO_BY_TWO\n");
-#endif
             a = GetInt16(ptr, 0, 1) << 2;
             b = GetInt16(ptr, 2, 1) << 2;
             c = GetInt16(ptr, 4, 1) << 2;
@@ -772,18 +738,6 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
             assert(!"ARGS_ARE_XY_VALUES is not implemented!!!\n");
         }
 
-#ifdef DEBUG2
-        fprintf(stderr, "a: %f, b: %f, c: %f, d: %f, e: %f, f: %f, m: %f, n: %f\n",
-                ((double) a) / 65536,
-                ((double) b) / 65536,
-                ((double) c) / 65536,
-                ((double) d) / 65536,
-                ((double) e) / 65536,
-                ((double) f) / 65536,
-                ((double) m) / 65536,
-                ((double) n) / 65536);
-#endif
-
         for (i=0; i<np; i++) {
             F16Dot16 t;
             ControlPoint cp;
@@ -792,10 +746,6 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
             cp.x = (sal_Int16)(fixedMul(t, m) >> 16);
             t = fixedMulDiv(b, nextComponent[i].x << 16, n) + fixedMulDiv(d, nextComponent[i].y << 16, n) + (f << 16);
             cp.y = (sal_Int16)(fixedMul(t, n) >> 16);
-
-#ifdef DEBUG2
-            fprintf(stderr, "( %d %d ) -> ( %d %d )\n", nextComponent[i].x, nextComponent[i].y, cp.x, cp.y);
-#endif
 
             myPoints.push_back( cp );
         }
@@ -857,21 +807,6 @@ static int GetTTGlyphOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint
         aPrivList.push_back( glyphID );
         res = GetCompoundTTOutline(ttf, glyphID, pointArray, metrics, glyphlist ? *glyphlist : aPrivList );
     }
-
-#ifdef DEBUG3
-    {
-        int i;
-        FILE *out = fopen("points.dat", "a");
-        assert(out != 0);
-        fprintf(out, "Glyph: %d\nPoints: %d\n", glyphID, res);
-        for (i=0; i<res; i++) {
-            fprintf(out, "%c ", ((*pointArray)[i].flags & 0x8000) ? 'X' : '.');
-            fprintf(out, "%c ", ((*pointArray)[i].flags & 1) ? '+' : '-');
-            fprintf(out, "%d %d\n", (*pointArray)[i].x, (*pointArray)[i].y);
-        }
-        fclose(out);
-    }
-#endif
 
     return res;
 }
@@ -1546,79 +1481,6 @@ static void GetKern(TrueTypeFont *ttf)
     return;
 }
 
-#ifdef TEST5
-/* KernGlyphsPrim?() functions expect the caller to ensure the validity of their arguments and
- * that x and y elements of the kern array are initialized to zeroes
- */
-static void KernGlyphsPrim1(TrueTypeFont *ttf, sal_uInt16 *glyphs, int nglyphs, int wmode, KernData *kern)
-{
-    (void)ttf; /* avoid warning */
-    (void)glyphs; /* avoid warning */
-    (void)nglyphs; /* avoid warning */
-    (void)wmode; /* avoid warning */
-    (void)nglyphs; /* avoid warning */
-    (void)kern; /* avoid warning */
-    fprintf(stderr, "MacOS kerning tables have not been implemented yet!\n");
-}
-
-static void KernGlyphsPrim2(TrueTypeFont *ttf, sal_uInt16 *glyphs, int nglyphs, int wmode, KernData *kern)
-{
-    sal_uInt32 i, j;
-    sal_uInt32 gpair;
-
-    if( ! nglyphs )
-        return;
-
-    for (i = 0; i < (sal_uInt32)nglyphs - 1; i++) {
-        gpair = (glyphs[i] << 16) | glyphs[i+1];
-#ifdef DEBUG2
-        /* All fonts with MS kern table that I've seen so far contain just one kern subtable.
-         * MS kern documentation is very poor and I doubt that font developers will be using
-         * several subtables. I expect them to be using OpenType tables instead.
-         * According to MS documention, format 2 subtables are not supported by Windows and OS/2.
-         */
-        if (ttf->nkern > 1) {
-            fprintf(stderr, "KernGlyphsPrim2: %d kern tables found.\n", ttf->nkern);
-        }
-#endif
-        for (j = 0; j < ttf->nkern; j++) {
-            sal_uInt16 coverage = GetUInt16(ttf->kerntables[j], 4, 1);
-            sal_uInt8 *ptr;
-            int npairs;
-            sal_uInt32 t;
-            int l, r, k;
-
-            if (! ((coverage & 1) ^ wmode)) continue;
-            if ((coverage & 0xFFFE) != 0) {
-#ifdef DEBUG2
-                fprintf(stderr, "KernGlyphsPrim2: coverage flags are not supported: %04X.\n", coverage);
-#endif
-                continue;
-            }
-            ptr = ttf->kerntables[j];
-            npairs = GetUInt16(ptr, 6, 1);
-            ptr += 14;
-            l = 0;
-            r = npairs;
-            do {
-                k = (l + r) >> 1;
-                t = GetUInt32(ptr, k * 6, 1);
-                if (gpair >= t) l = k + 1;
-                if (gpair <= t) r = k - 1;
-            } while (l <= r);
-            if (l - r == 2) {
-                if (!wmode) {
-                    kern[i].x = XUnits(ttf->unitsPerEm, GetInt16(ptr, 4 + (l-1) * 6, 1));
-                } else {
-                    kern[i].y = XUnits(ttf->unitsPerEm, GetInt16(ptr, 4 + (l-1) * 6, 1));
-                }
-                /* !wmode ? kern[i].x : kern[i].y = GetInt16(ptr, 4 + (l-1) * 6, 1); */
-            }
-        }
-    }
-}
-#endif
-
 /*- Public functions */ /*FOLD00*/
 
 int CountTTCFonts(const char* fname)
@@ -1753,10 +1615,6 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         CloseTTFont(t);
         return SF_TTFORMAT;
     }
-
-#ifdef DEBUG2
-    fprintf(stderr, "tdoffset: %d\n", tdoffset);
-#endif
 
     /* magic number */
     t->tag = TTFontClassTag;
@@ -2741,23 +2599,6 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
     }
 }
 
-#ifdef TEST5
-void KernGlyphs(TrueTypeFont *ttf, sal_uInt16 *glyphs, int nglyphs, int wmode, KernData *kern)
-{
-    int i;
-
-    if (!nglyphs || !glyphs || !kern) return;
-
-    for (i = 0; i < nglyphs-1; i++) kern[i].x = kern[i].y = 0;
-
-    switch (ttf->kerntype) {
-        case KT_APPLE_NEW: KernGlyphsPrim1(ttf, glyphs, nglyphs, wmode, kern);    return;
-        case KT_MICROSOFT: KernGlyphsPrim2(ttf, glyphs, nglyphs, wmode, kern);    return;
-        default: return;
-    }
-}
-#endif
-
 GlyphData *GetTTRawGlyphData(TrueTypeFont *ttf, sal_uInt32 glyphID)
 {
     const sal_uInt8* glyf = getTable(ttf, O_glyf);
@@ -2862,10 +2703,6 @@ int GetTTNameRecords(TrueTypeFont *ttf, NameRecord **nr)
             }
             else
             {
-#ifdef DEBUG
-                fprintf( stderr, "found invalid name record %d with name id %d for file %s\n",
-                         i, rec[i].nameID, ttf->fname );
-#endif
                 rec[i].sptr = 0;
                 rec[i].slen = 0;
             }
@@ -2891,423 +2728,5 @@ void DisposeNameRecords(NameRecord* nr, int n)
 }
 
 } // namespace vcl
-
-
-#ifdef TEST1
-/* This example creates a subset of a TrueType font with two encoded characters */
-int main(int ac, char **av)
-{
-    TrueTypeFont *fnt;
-    int r;
-
-    /* Array of Unicode source characters */
-    sal_uInt16 chars[2];
-
-    /* Encoding vector maps character encoding to the ordinal number
-     * of the glyph in the output file */
-    sal_uInt8 encoding[2];
-
-    /* This array is for glyph IDs that  source characters map to */
-    sal_uInt16 g[2];
-
-
-    if (ac < 2) return 0;
-
-    if ((r = OpenTTFont(av[1], 0, &fnt)) != SF_OK) {
-        fprintf(stderr, "Error %d opening font file: `%s`.\n", r, av[1]);
-        return 0;
-    }
-
-
-    /* We want to create the output file that only contains two Unicode characters:
-     * L'a' and L'A' */
-
-    chars[0] = L'a';
-    chars[1] = L'A';
-
-    /* Figure out what glyphs do these characters map in our font */
-    MapString(fnt, chars, 2, g);
-
-    /* Encode the characters. Value of encoding[i] is the number 0..255 which maps to glyph i of the
-     * newly generated font */
-    encoding[0] = chars[0];
-    encoding[1] = chars[1];
-
-
-    /* Generate a subset */
-    CreateT3FromTTGlyphs(fnt, stdout, 0, g, encoding, 2, 0);
-
-    /* Now call the dtor for the font */
-    CloseTTFont(fnt);
-    return 0;
-}
-#endif
-
-#ifdef TEST2
-/* This example extracts first 224 glyphs from a TT fonts and encodes them starting at 32 */
-int main(int ac, char **av)
-{
-    TrueTypeFont *fnt;
-    int i, r;
-
-    /* Array of Unicode source characters */
-    sal_uInt16 glyphs[224];
-
-    /* Encoding vector maps character encoding to the ordinal number
-     * of the glyph in the output file */
-    sal_uInt8 encoding[224];
-
-
-
-    for (i=0; i<224; i++) {
-        glyphs[i] = i;
-        encoding[i] = 32 + i;
-    }
-
-    if (ac < 2) return 0;
-
-    if ((r = OpenTTFont(av[1], 0, &fnt)) != SF_OK) {
-        fprintf(stderr, "Error %d opening font file: `%s`.\n", r, av[1]);
-        return 0;
-    }
-
-
-    /* Encode the characters. Value of encoding[i] is the number 0..255 which maps to glyph i of the
-     * newly generated font */
-
-    /* Generate a subset */
-    CreateT3FromTTGlyphs(fnt, stdout, 0, glyphs, encoding, 224, 0);
-
-    /* Now call the dtor for the font */
-    CloseTTFont(fnt);
-    return 0;
-}
-#endif
-
-#ifdef TEST3
-/* Glyph metrics example */
-int main(int ac, char **av)
-{
-    TrueTypeFont *fnt;
-    int i, r;
-    sal_uInt16 glyphs[224];
-    TTSimpleGlyphMetrics *m;
-
-    for (i=0; i<224; i++) {
-        glyphs[i] = i;
-    }
-
-    if (ac < 2) return 0;
-
-    if ((r = OpenTTFont(av[1], 0, &fnt)) != SF_OK) {
-        fprintf(stderr, "Error %d opening font file: `%s`.\n", r, av[1]);
-        return 0;
-    }
-
-    if ((m = GetTTSimpleGlyphMetrics(fnt, glyphs, 224, 0)) == 0) {
-        printf("Requested metrics is not available\n");
-    } else {
-        for (i=0; i<224; i++) {
-            printf("%d. advWid: %5d, LSBear: %5d\n", i, m[i].adv, m[i].sb);
-        }
-    }
-
-    /* Now call the dtor for the font */
-    free(m);
-    CloseTTFont(fnt);
-    return 0;
-}
-#endif
-
-#ifdef TEST4
-int main(int ac, char **av)
-{
-    TrueTypeFont *fnt;
-    TTGlobalFontInfo info;
-    int i, r;
-
-
-    if ((r = OpenTTFont(av[1], 0, &fnt)) != SF_OK) {
-        fprintf(stderr, "Error %d opening font file: `%s`.\n", r, av[1]);
-        return 0;
-    }
-
-    printf("Font file: %s\n", av[1]);
-
-#ifdef PRINT_KERN
-    switch (fnt->kerntype) {
-        case KT_MICROSOFT:
-            printf("\tkern: MICROSOFT, ntables: %d.", fnt->nkern);
-            if (fnt->nkern) {
-                printf(" [");
-                for (i=0; i<fnt->nkern; i++) {
-                    printf("%04X ", GetUInt16(fnt->kerntables[i], 4, 1));
-                }
-                printf("]");
-            }
-            printf("\n");
-            break;
-
-        case KT_APPLE_NEW:
-            printf("\tkern: APPLE_NEW, ntables: %d.", fnt->nkern);
-            if (fnt->nkern) {
-                printf(" [");
-                for (i=0; i<fnt->nkern; i++) {
-                    printf("%04X ", GetUInt16(fnt->kerntables[i], 4, 1));
-                }
-                printf("]");
-            }
-            printf("\n");
-            break;
-
-        case KT_NONE:
-            printf("\tkern: none.\n");
-            break;
-
-        default:
-            printf("\tkern: unrecoginzed.\n");
-            break;
-    }
-    printf("\n");
-#endif
-
-    GetTTGlobalFontInfo(fnt, &info);
-    printf("\tfamily name: `%s`\n", info.family);
-    printf("\tsubfamily name: `%s`\n", info.subfamily);
-    printf("\tpostscript name: `%s`\n", info.psname);
-    printf("\tweight: %d\n", info.weight);
-    printf("\twidth: %d\n", info.width);
-    printf("\tpitch: %d\n", info.pitch);
-    printf("\titalic angle: %d\n", info.italicAngle);
-    printf("\tbouding box: [%d %d %d %d]\n", info.xMin, info.yMin, info.xMax, info.yMax);
-    printf("\tascender: %d\n", info.ascender);
-    printf("\tdescender: %d\n", info.descender);
-    printf("\tlinegap: %d\n", info.linegap);
-    printf("\tvascent: %d\n", info.vascent);
-    printf("\tvdescent: %d\n", info.vdescent);
-    printf("\ttypoAscender: %d\n", info.typoAscender);
-    printf("\ttypoDescender: %d\n", info.typoDescender);
-    printf("\ttypoLineGap: %d\n", info.typoLineGap);
-    printf("\twinAscent: %d\n", info.winAscent);
-    printf("\twinDescent: %d\n", info.winDescent);
-    printf("\tUnicode ranges:\n");
-    for (i = 0; i < 32; i++) {
-        if ((info.ur1 >> i) & 1) {
-            printf("\t\t\t%s\n", UnicodeRangeName(i));
-        }
-    }
-    for (i = 0; i < 32; i++) {
-        if ((info.ur2 >> i) & 1) {
-            printf("\t\t\t%s\n", UnicodeRangeName(i+32));
-        }
-    }
-    for (i = 0; i < 32; i++) {
-        if ((info.ur3 >> i) & 1) {
-            printf("\t\t\t%s\n", UnicodeRangeName(i+64));
-        }
-    }
-    for (i = 0; i < 32; i++) {
-        if ((info.ur4 >> i) & 1) {
-            printf("\t\t\t%s\n", UnicodeRangeName(i+96));
-        }
-    }
-
-    CloseTTFont(fnt);
-    return 0;
-}
-#endif
-
-#ifdef TEST5
-/* Kerning example */
-int main(int ac, char **av)
-{
-    TrueTypeFont *fnt;
-    sal_uInt16 g[224];
-    KernData d[223];
-    int r, i, k = 0;
-
-    g[k++] = 11;
-    g[k++] = 36;
-    g[k++] = 11;
-    g[k++] = 98;
-    g[k++] = 11;
-    g[k++] = 144;
-    g[k++] = 41;
-    g[k++] = 171;
-    g[k++] = 51;
-    g[k++] = 15;
-
-    if (ac < 2) return 0;
-
-    if ((r = OpenTTFont(av[1], 0, &fnt)) != SF_OK) {
-        fprintf(stderr, "Error %d opening font file: `%s`.\n", r, av[1]);
-        return 0;
-    }
-
-    KernGlyphs(fnt, g, k, 0, d);
-
-    for (i = 0; i < k-1; i++) {
-        printf("%3d %3d: [%3d %3d]\n", g[i], g[i+1], d[i].x, d[i].y);
-    }
-
-    CloseTTFont(fnt);
-    return 0;
-}
-#endif
-
-
-
-#ifdef TEST6
-/* This example extracts a single glyph from a font */
-int main(int ac, char **av)
-{
-    TrueTypeFont *fnt;
-    int r, i;
-
-    sal_uInt16 glyphs[256];
-    sal_uInt8 encoding[256];
-
-    for (i=0; i<256; i++) {
-        glyphs[i] = 512 + i;
-        encoding[i] = i;
-    }
-
-    if (ac < 2) return 0;
-
-    if ((r = OpenTTFont(av[1], 0, &fnt)) != SF_OK) {
-        fprintf(stderr, "Error %d opening font file: `%s`.\n", r, av[1]);
-        return 0;
-    }
-
-    /* Generate a subset */
-    CreateT3FromTTGlyphs(fnt, stdout, 0, glyphs, encoding, 256, 0);
-
-    fprintf(stderr, "UnitsPerEm: %d.\n", fnt->unitsPerEm);
-
-    /* Now call the dtor for the font */
-    CloseTTFont(fnt);
-    return 0;
-}
-#endif
-
-#ifdef TEST7
-/* NameRecord extraction example */
-int main(int ac, char **av)
-{
-    TrueTypeFont *fnt;
-    int r, i, j,  n;
-    NameRecord *nr;
-
-    if ((r = OpenTTFont(av[1], 0, &fnt)) != SF_OK) {
-        fprintf(stderr, "Error %d opening font file: `%s`.\n", r, av[1]);
-        return 0;
-    }
-
-    if ((n = GetTTNameRecords(fnt, &nr)) == 0) {
-        fprintf(stderr, "No name records in the font.\n");
-        return 0;
-    }
-
-    printf("Number of name records: %d.\n", n);
-    for (i = 0; i < n; i++) {
-        printf("%d %d %04X %d [", nr[i].platformID, nr[i].encodingID, nr[i].languageID, nr[i].nameID);
-        for (j=0; j<nr[i].slen; j++) {
-            printf("%c", isprint(nr[i].sptr[j]) ? nr[i].sptr[j] : '.');
-        }
-        printf("]\n");
-    }
-
-
-    DisposeNameRecords(nr, n);
-    CloseTTFont(fnt);
-    return 0;
-}
-#endif
-
-#ifdef TEST8
-/* TrueType -> TrueType subsetting */
-int main(int ac, char **av)
-{
-    TrueTypeFont *fnt;
-    sal_uInt16 glyphArray[] = { 0,  98,  99,  22,  24, 25, 26,  27,  28,  29, 30, 31, 1270, 1289, 34};
-    sal_uInt8 encoding[]     = {32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46};
-    int r;
-
-    if ((r = OpenTTFont(av[1], 0, &fnt)) != SF_OK) {
-        fprintf(stderr, "Error %d opening font file: `%s`.\n", r, av[1]);
-        return 0;
-    }
-
-    CreateTTFromTTGlyphs(fnt, "subfont.ttf", glyphArray, encoding, 15, 0, 0, TTCF_AutoName | TTCF_IncludeOS2);
-
-
-    CloseTTFont(fnt);
-
-    return 0;
-}
-#endif
-
-#ifdef TEST9
-/* TrueType -> Type42 subsetting */
-int main(int ac, char **av)
-{
-    TrueTypeFont *fnt;
-    /*
-      sal_uInt16 glyphArray[] = { 0,  20,  21,  22,  24, 25, 26,  27,  28,  29, 30, 31, 32, 33, 34};
-      sal_uInt8 encoding[]     = {32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46};
-    */
-    sal_uInt16 glyphArray[] = { 0,  6711,  6724,  11133,  11144, 14360, 26,  27,  28,  29, 30, 31, 1270, 1289, 34};
-    sal_uInt8 encoding[]     = {32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46};
-    int r;
-
-    if ((r = OpenTTFont(av[1], 0, &fnt)) != SF_OK) {
-        fprintf(stderr, "Error %d opening font file: `%s`.\n", r, av[1]);
-        return 0;
-    }
-
-    CreateT42FromTTGlyphs(fnt, stdout, "testfont", glyphArray, encoding, 15);
-
-    CloseTTFont(fnt);
-
-    return 0;
-}
-#endif
-
-#ifdef TEST10
-/* Component glyph test */
-int main(int ac, char **av)
-{
-    TrueTypeFont *fnt;
-    int r, i;
-    list glyphlist = listNewEmpty();
-
-
-    if ((r = OpenTTFont(av[1], 0, &fnt)) != SF_OK) {
-        fprintf(stderr, "Error %d opening font file: `%s`.\n", r, av[1]);
-        return 0;
-    }
-
-    for (i = 0; i < fnt->nglyphs; i++) {
-        r = GetTTGlyphComponents(fnt, i, glyphlist);
-        if (r > 1) {
-            printf("%d -> ", i);
-            listToFirst(glyphlist);
-            do {
-                printf("%d ", (int) listCurrent(glyphlist));
-            } while (listNext(glyphlist));
-            printf("\n");
-        } else {
-            printf("%d: single glyph.\n", i);
-        }
-        listClear(glyphlist);
-    }
-
-    CloseTTFont(fnt);
-    listDispose(glyphlist);
-
-    return 0;
-}
-#endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
