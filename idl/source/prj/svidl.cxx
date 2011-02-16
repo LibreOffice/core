@@ -90,7 +90,7 @@ BOOL FileMove_Impl( const String & rFile1, const String & rFile2, BOOL bImmerVer
     return 0 == aF2.Kill();
 }
 
-#if defined( UNX ) || (defined( PM2 ) && defined( CSET )) || defined (WTC) || defined (MTW) || defined (__MINGW32__) || defined( OS2 )
+#if defined( UNX ) || (defined( PM2 ) && defined( CSET )) || defined (MTW) || defined (__MINGW32__) || defined( OS2 )
 int main ( int argc, char ** argv)
 {
 #else

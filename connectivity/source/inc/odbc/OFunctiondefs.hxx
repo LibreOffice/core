@@ -111,7 +111,7 @@
 
 // In der ODBC.H von Watcom werden Strings als char * erwartet
 // (nicht, wie sonst bei ODBC ueblich, als UCHAR *).
-#if defined( ICC ) || defined( WTC )
+#if defined( ICC )
 #define SDB_ODBC_CHAR unsigned char
 #else
 #define SDB_ODBC_CHAR char
