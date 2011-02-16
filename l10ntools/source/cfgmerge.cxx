@@ -337,10 +337,12 @@ CfgStackData *CfgStack::GetStackData( size_t nPos )
 /*****************************************************************************/
 {
     if ( nPos == LIST_APPEND )
-        if (maList.size())
+    {
+        if (!maList.empty())
             nPos = maList.size() - 1;
         else
             return 0;
+    }
 
     return maList[  nPos ];
 }
