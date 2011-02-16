@@ -86,7 +86,6 @@
 #include <osl/file.h>
 #include <vcl/waitobj.hxx>
 
-// #97148# ------------------------------------
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
 #include "fpinteraction.hxx"
@@ -237,7 +236,6 @@ namespace
             {
                 // check if it is a real file extension, and not only the "post-dot" part in
                 // a directory name
-                // 28.03.2002 - 98337 - fs@openoffice.org
                 sal_Bool bRealExtensions = sal_True;
                 if ( STRING_NOTFOUND != aExt.Search( '/' ) )
                     bRealExtensions = sal_False;
@@ -258,7 +256,6 @@ namespace
                     }
                     if ( INET_PROT_FILE == aURL.GetProtocol() )
                     {
-                        // #97148# & #102204# -----
                         try
                         {
                             bRealExtensions = !_pDialog->ContentIsFolder( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -799,7 +796,6 @@ void SvtFileDialog::Init_Impl
     if ( WB_SAVEAS & nStyle )
     {
         // different help ids if in save-as mode
-        // 90744 - 09.08.2001 - frank.schoenheit@sun.com
         SetHelpId( HID_FILESAVE_DIALOG );
 
         _pImp->_pEdFileName->SetHelpId( HID_FILESAVE_FILEURL );
@@ -815,7 +811,6 @@ void SvtFileDialog::Init_Impl
         // for the extra use cases, and separated _pLbFileVersion
         // I did not find out in which cases the help ID is really needed HID_FILESAVE_TEMPLATE - all
         // tests I made lead to a dialog where _no_ of the three list boxes was present.
-        // 96930 - 15.08.2002 - fs@openoffice.org
         if ( _pImp->_pLbFileVersion )
             _pImp->_pLbFileVersion->SetHelpId( HID_FILESAVE_TEMPLATE );
         if ( _pImp->_pLbTemplates )
@@ -871,7 +866,6 @@ IMPL_STATIC_LINK_NOINSTANCE( SvtFileDialog, ViewHdl_Impl, ImageButton*, EMPTYARG
     return 0;
 }
 
-//*****************************************************************************
 //-----------------------------------------------------------------------------
 sal_Bool SvtFileDialog::createNewUserFilter( const String& _rNewFilter, sal_Bool _bAllowUserDefExt )
 {
@@ -887,7 +881,6 @@ sal_Bool SvtFileDialog::createNewUserFilter( const String& _rNewFilter, sal_Bool
         SetDefaultExt( _rNewFilter.Copy( 2 ) );
         // TODO: this is nonsense. In the whole file there are a lotta places where we assume that a user filter
         // is always "*.<something>". But changing this would take some more time than I have now ...
-        // 05.12.2001 - 95486 - fs@openoffice.org
 
     // now, the default extension is set to the one of the user filter (or empty)
     // if the former is not allowed (_bAllowUserDefExt = <FALSE/>), we have to use the ext of the current filter
@@ -1023,7 +1016,6 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
         // if an entry is selected in the view ....
         if ( pThis->_pFileView->GetSelectionCount() )
         {   // -> use this one. This will allow us to step down this folder
-            // #i8928# - 2002-12-20 - fs@openoffice.org
             aFileName = pThis->_pFileView->GetCurrentURL();
         }
     }
@@ -1126,7 +1118,6 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
     // error messages for the same content a second time ....
     pThis->m_aContent.bindTo( ::rtl::OUString( ) );
 
-    // #97148# & #102204# ---------
     if ( aFileName.Len() )
     {
         // Make sure we have own Interaction Handler in place. We do not need
@@ -1264,7 +1255,6 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                     // if content does not exist: at least its path must exist
                     INetURLObject aPathObj = aFileObj;
                     aPathObj.removeSegment();
-                    // #97148# & #102204# ------------
                     BOOL bFolder = pThis->m_aContent.isFolder( aPathObj.GetMainURL( INetURLObject::NO_DECODE ) );
                     if ( !bFolder )
                     {
@@ -1279,12 +1269,10 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
         case FILEDLG_MODE_OPEN:
         {
             // do an existence check herein, again
-            // 16.11.2001 - 93107 - frank.schoenheit@sun.com
 
             if ( INET_PROT_FILE == aFileObj.GetProtocol( ) )
             {
                 sal_Bool bExists = sal_False;
-                // #102204# --------------
                 bExists = pThis->m_aContent.is( aFileObj.GetMainURL( INetURLObject::NO_DECODE ) );
 
 
@@ -1767,7 +1755,7 @@ long SvtFileDialog::Notify( NotifyEvent& rNEvt )
         if ( !rKeyCode.GetModifier() &&
              KEY_BACKSPACE == nCode && !_pImp->_pEdFileName->HasChildPathFocus() )
         {
-            nRet = 0; //! (long)_pFileView->DoBeamerKeyInput( *rNEvt.GetKeyEvent() );
+            nRet = 0;
 
             if ( !nRet && _pImp->_pBtnUp->IsEnabled() )
             {
@@ -1775,15 +1763,6 @@ long SvtFileDialog::Notify( NotifyEvent& rNEvt )
                 nRet = 1;
             }
         }
-//      else if ( rKeyCode.IsMod1() && ( KEY_C == nCode || KEY_V == nCode || KEY_X == nCode ) )
-//      {
-/* (mhu)
-            String aVerb = KEY_C == nCode ? UniString(RTL_CONSTASCII_USTRINGPARAM(SVT_MENUPART_VERB_COPY)) :
-                ( KEY_V == nCode ? UniString(RTL_CONSTASCII_USTRINGPARAM(SVT_MENUPART_VERB_PASTE)) : UniString(RTL_CONSTASCII_USTRINGPARAM(SVT_MENUPART_VERB_CUT)) );
-//(dv)          if ( !CntPopupMenu::DoVerbCommand( aVerb, _pFileView->GetView() ) )
-//(dv)              Sound::Beep();
-*/
-//      }
     }
     return nRet ? nRet : ModalDialog::Notify( rNEvt );
 }
@@ -1879,7 +1858,6 @@ String SvtFileDialog::implGetInitialURL( const String& _rPath, const String& _rF
 
     if ( bIsInvalid && m_bHasFilename && !aURLParser.hasFinalSlash() )
     {   // check if the parent folder exists
-        // #108429# - 2003-03-26 - fs@openoffice.org
         INetURLObject aParent( aURLParser );
         aParent.removeSegment( );
         aParent.setFinalSlash( );
@@ -1939,9 +1917,7 @@ short SvtFileDialog::Execute()
             // nur bei File-URL's und nicht bei virtuelle Folder
             // das ausgew"ahlte Verzeichnis merken
             sal_Int32 nLevel = aURL.getSegmentCount();
-            // #97148# & #102204# ------
             sal_Bool bDir = m_aContent.isFolder( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-            // BOOL bClassPath = ( ( _pImp->_nStyle & SFXWB_CLASSPATH ) == SFXWB_CLASSPATH );
             if ( nLevel > 1 && ( FILEDLG_TYPE_FILEDLG == _pImp->_eDlgType || !bDir ) )
                 aURL.removeSegment();
         }
@@ -1956,7 +1932,6 @@ void SvtFileDialog::StartExecuteModal( const Link& rEndDialogHdl )
     PrepareExecute();
 
     // Start des Dialogs.
-//    _bIsInExecute = TRUE;
     ModalDialog::StartExecuteModal( rEndDialogHdl );
 }
 
@@ -2093,21 +2068,7 @@ short SvtFileDialog::PrepareExecute()
                 }
                 else
                 {
-// @@@ KSO 05/18/2006: support for removable media currently hardcoded/incomplete in OSL
-//
-//                    do
-//                    {
-//                        // check, whether child is a removable volume
-//                        if ( xRow->getBoolean( 1 ) && !xRow->wasNull() )
-//                        {
-//                            if ( xRow->getBoolean( 2 ) && !xRow->wasNull() )
-//                            {
                                 bEmpty = false;
-//                                break;
-//                            }
-//                        }
-//                    }
-//                    while ( xResultSet->next() );
                 }
 
                 if ( bEmpty )
@@ -2126,16 +2087,14 @@ short SvtFileDialog::PrepareExecute()
         }
     }
 
-    // #102204# ---------------
     if ( ( _pImp->_nStyle & WB_SAVEAS ) && m_bHasFilename )
         // when doing a save-as, we do not want the handler to handle "this file does not exist" messages
         // - finally we're going to save that file, aren't we?
-        // #105812# - 2002-12-02 - fs@openoffice.org
         m_aContent.enableOwnInteractionHandler(::svt::OFilePickerInteractionHandler::E_DOESNOTEXIST);
     else
         m_aContent.enableDefaultInteractionHandler();
 
-    // #53016# evtl. nur ein Filename ohne Pfad?
+    // evtl. nur ein Filename ohne Pfad?
     String aFileNameOnly;
     if( _aPath.Len() && (_pImp->_eMode == FILEDLG_MODE_SAVE)
                      && (_aPath.Search(':') == STRING_NOTFOUND)
@@ -2152,7 +2111,7 @@ short SvtFileDialog::PrepareExecute()
         // dann das Standard-Dir verwenden
         _aPath = lcl_ensureFinalSlash( _pImp->GetStandardDir() );
 
-        // #53016# vorgegebener Dateiname an Pfad anh"angen
+        // vorgegebener Dateiname an Pfad anh"angen
         if ( aFileNameOnly.Len() )
             _aPath += aFileNameOnly;
     }
@@ -2219,7 +2178,6 @@ short SvtFileDialog::PrepareExecute()
 
     _pImp->_pDefaultFilter = _pImp->GetCurFilter();
 
-    // HACK #50065#
     // ggf. Filter isolieren.
     String aFilter;
 
@@ -2231,7 +2189,6 @@ short SvtFileDialog::PrepareExecute()
     {
         _pImp->_pEdFileName->SetText( aFilter );
     }
-    // HACK #50065#
 
     // Instanz fuer den gesetzten Pfad erzeugen und anzeigen.
     INetURLObject aFolderURL( _aPath );
@@ -2255,9 +2212,6 @@ short SvtFileDialog::PrepareExecute()
 
     // Somebody might want to enable some controls acording to the current filter
     FilterSelect();
-
-    // Zustand der Steuerelemente anpassen.
-//  EndListeningAll();
 
     ViewHdl_Impl( this, NULL );
     OpenURL_Impl( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -2427,8 +2381,6 @@ void SvtFileDialog::AddFilterGroup( const String& _rFilter, const Sequence< Stri
         implAddFilter( pSubFilters->First, pSubFilters->Second );
 }
 
-//*****************************************************************************
-
 //-----------------------------------------------------------------------------
 void SvtFileDialog::SetCurFilter( const String& rFilter )
 {
@@ -2568,7 +2520,6 @@ void SvtFileDialog::implArrangeControls()
 
         // (including the FixedTexts is important - not for tabbing order (they're irrelevant there),
         // but for working keyboard shortcuts)
-        // 96861 - 23.01.2002 - fs@openoffice.org
     };
 
     // loop through all these controls and adjust the z-order
@@ -2669,8 +2620,6 @@ BOOL SvtFileDialog::IsolateFilterFromPath_Impl( String& rPath, String& rFilter )
 
     return TRUE;
 }
-
-//*****************************************************************************
 
 //-----------------------------------------------------------------------------
 void SvtFileDialog::implUpdateImages( )
@@ -2823,8 +2772,6 @@ void SvtFileDialog::Resize()
     if ( _pFileNotifier )
         _pFileNotifier->notify( DIALOG_SIZE_CHANGED, 0 );
 }
-
-//*****************************************************************************
 
 //-----------------------------------------------------------------------------
 Control* SvtFileDialog::getControl( sal_Int16 _nControlId, sal_Bool _bLabelControl ) const
@@ -3063,7 +3010,6 @@ void SvtFileDialog::AddControls_Impl( )
             // This is strange. During the re-factoring during 96930, I discovered that this help id
             // is set in the "Templates mode". This was hidden in the previous implementation.
             // Shouldn't this be a more meaningfull help id.
-            // 96930 - 15.08.2002 - fs@openoffice.org
     }
     else if ( _nExtraBits & SFX_EXTRA_IMAGE_TEMPLATE )
     {
@@ -3141,15 +3087,6 @@ sal_Bool SvtFileDialog::setShowState( sal_Bool /*bShowState*/ )
     // of the file dialog dynamically
     // support for set/getShowState is opionally
     // see com::sun::star::ui::dialogs::XFilePreview
-    /*
-    if ( _pPrevBmp )
-    {
-        _pPrevBmp->Show( bShowState );
-        return sal_True;
-    }
-    else
-        return sal_False;
-    */
 
     return sal_False;
 }
@@ -3405,8 +3342,6 @@ void SvtFileDialog::appendDefaultExtension(String& _rFileName,
         }
     }
 }
-
-// -----------------------------------------------------------------------
 
 // QueryFolderNameDialog -------------------------------------------------------
 
