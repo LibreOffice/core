@@ -823,7 +823,7 @@ void SfxFrameWorkWin_Impl::ArrangeChilds_Impl( sal_Bool bForce )
         pClient = pF->GetViewShell()->GetIPClient();
 
     bool bForceArrange( false );
-    for ( USHORT n = 0; n < pChildWins->Count(); ++n )
+    for ( sal_uInt16 n = 0; n < pChildWins->Count(); ++n )
     {
         SfxChildWin_Impl* pCW  = (*pChildWins)[ n ];
         SfxChildWindow* pChild = pCW->pWin;

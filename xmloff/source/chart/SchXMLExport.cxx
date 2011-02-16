@@ -838,7 +838,6 @@ lcl_TableData lcl_getDataForLocalTable(
 
         tStringVector& rCategories = bSeriesFromColumns ? aResult.aRowDescriptions    : aResult.aColumnDescriptions;
         tStringVector& rLabels     = bSeriesFromColumns ? aResult.aColumnDescriptions : aResult.aRowDescriptions;
-        Sequence< Sequence< OUString > >& rComplexLabels = bSeriesFromColumns ? aResult.aComplexColumnDescriptions : aResult.aComplexRowDescriptions;//#i116544#
 
         //categories
         lcl_SequenceToVector( aSimpleCategories, rCategories );
@@ -855,10 +854,11 @@ lcl_TableData lcl_getDataForLocalTable(
 
         // iterate over all sequences
         size_t nSeqIdx = 0;
+        Sequence< Sequence< OUString > > aComplexLabels;
         for( ; aIt != aEnd; ++aIt, ++nSeqIdx )
         {
             OUString aRange;
-            Sequence< OUString >& rCurrentComplexLabel = rComplexLabels[nSeqIdx];
+            Sequence< OUString >& rCurrentComplexLabel = aComplexLabels[nSeqIdx];
             if( aIt->first.is())
             {
                 lcl_getLabelStringSequence( rCurrentComplexLabel, aIt->first );
@@ -899,6 +899,16 @@ lcl_TableData lcl_getDataForLocalTable(
             //is column hidden?
             if( !lcl_SequenceHasUnhiddenData(aIt->first) && !lcl_SequenceHasUnhiddenData(aIt->second) )
                 aResult.aHiddenColumns.push_back(nSeqIdx);
+        }
+        Sequence< Sequence< Any > >& rComplexAnyLabels = bSeriesFromColumns ? aResult.aComplexColumnDescriptions : aResult.aComplexRowDescriptions;//#i116544#
+        rComplexAnyLabels.realloc(aComplexLabels.getLength());
+        for( sal_Int32 nN=0; nN<aComplexLabels.getLength();nN++ )
+        {
+            Sequence< OUString >& rSource = aComplexLabels[nN];
+            Sequence< Any >& rTarget = rComplexAnyLabels[nN];
+            rTarget.realloc( rSource.getLength() );
+            for( sal_Int32 i=0; i<rSource.getLength(); i++ )
+                rTarget[i] = uno::makeAny( rSource[i] );
         }
     }
     catch( uno::Exception & rEx )
