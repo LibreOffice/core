@@ -120,6 +120,12 @@ GCCNUMVER:=$(shell @-$(CXX) $(GCCNUMVERSION_CMD))
 # Compiler flags for enabling optimizations
 .IF "$(PRODUCT)"!=""
 CFLAGSOPT=$(CDEFAULTOPT) # optimizing for products
+.IF "$(GCCNUMVER)" <= "000400050000"
+#At least SLED 10.2 gcc 4.3 overly agressively optimizes
+#uno::Sequence into junk, so only strict-alias on compiler
+#later than 4.5.1
+CFLAGSOPT+=-fno-strict-aliasing
+.ENDIF
 .ELSE 	# "$(PRODUCT)"!=""
 CFLAGSOPT=   							# no optimizing for non products
 .ENDIF	# "$(PRODUCT)"!=""
