@@ -75,10 +75,6 @@
 .INCLUDE : unxsogi.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCSCOI"
-.INCLUDE : unxscoi.mk
-.ENDIF
-
 .IF "$(COM)$(OS)$(CPU)" == "GCCLINUXS"
 .INCLUDE : unxlngs.mk
 .ENDIF

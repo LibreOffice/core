@@ -24,8 +24,6 @@ chop( $m_str, $s_str );
                "OpenBSD",   "openbsd",
                "DragonFly", "dragonfly"
                "OSF1",      "decunix",
-               "SCO_SV",    "scoosr5",
-#              "SCO_SV",    "scouw21",
                "Darwin",    "macosxp",
                "Mac OS",    "macosxp",
                "SINIX-N",   "sinix"
@@ -39,8 +37,6 @@ chop( $m_str, $s_str );
                "OpenBSD",   "-DOPENBSD",
                "DragonFly", "-DDRAGONFLY",
                "OSF1",      "-DSYSV -DDECUNIX",
-               "SCO_SV",    "-DSYSV -DSCO -DSCO_OSR5",
-#              "SCO_SV",    "-DSYSV -DSCO -DSCO_UW21",
                "Darwin",    "-DBSD -DMACOSX",
                "Mac OS",    "-DBSD -DMACOSX",
                "SINIX-N",   "-DSYSV -DSINIX"
@@ -53,7 +49,6 @@ chop( $m_str, $s_str );
                "FreeBSD",   "fbsd",
                "NetBSD",    "bsd",
                "OpenBSD",   "obsd",
-               "SCO_SV",    "sco",
                "Darwin",    "macx",
                "Mac OS",    "macx",
                "SINIX-N",   "sni"
@@ -73,7 +68,7 @@ chop( $m_str, $s_str );
                "0006404C4C00",  "rs6000",       # jive
                "2003",          "g3",           # ezopen4
                "i86pc",         "x86",          # blauwal
-               "i386",          "x86",          # SCO_SV, NetBSD, FreeBSD
+               "i386",          "x86",          # NetBSD, FreeBSD
                "i486",          "x86",          # tiger
                "i586",          "x86",          # blauwal
                "i686",          "x86",
@@ -101,7 +96,7 @@ chop( $m_str, $s_str );
                "0006404C4C00",  "-DRS6000",     # jive
                "2003",          "-DG3",         # ezopen4
                "i86pc",         "-DX86 -DINTEL",# gepard
-               "i386",          "-DX86",        # SCO_SV, NetBSD, FreeBSD
+               "i386",          "-DX86",        # NetBSD, FreeBSD
                "i486",          "-DX86",        # tiger
                "i586",          "-DX86",        # blauwal
                "i686",          "-DX86",        #
@@ -129,7 +124,7 @@ chop( $m_str, $s_str );
                "0006404C4C00",  "p",        # jive
                "2003",          "g",        # ezopen4
                "i86pc",         "i",        # gepard
-               "i386",          "i",        # SCO_SV, NetBSD, FreeBSD
+               "i386",          "i",        # NetBSD, FreeBSD
                "i486",          "i",        # tiger
                "i586",          "i",        # blauwal
                "i686",          "i",
