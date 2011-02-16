@@ -417,8 +417,6 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     abGP.Append( "502" );  // Windows on x64
 #elif defined SOLARIS && defined SPARC
     abGP.Append( "01" );  // Solaris SPARC
-#elif defined SCO
-    abGP.Append( "02" );  // SCO UNIX
 #elif defined LINUX && defined INTEL
     abGP.Append( "03" );  // Linux
 #elif defined AIX
