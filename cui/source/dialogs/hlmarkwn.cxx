@@ -148,6 +148,9 @@ SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
     maLbTree.SetStyle( maLbTree.GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
                             WB_HASBUTTONS |  //WB_HASLINESATROOT |
                             WB_HSCROLL | WB_HASBUTTONSATROOT );
+
+    maLbTree.SetAccessibleName(String(CUI_RES(STR_MARK_TREE)));
+
 }
 
 SvxHlinkDlgMarkWnd::~SvxHlinkDlgMarkWnd()

@@ -109,6 +109,7 @@ SvxCommonLinguisticControl::SvxCommonLinguisticControl( ModalDialog* _pParent )
     SetType( WINDOW_TABPAGE );
 #endif
 
+    aAktWord.SetAccessibleName(aWordText.GetText());
     SetPosSizePixel( Point( 0, 0 ), _pParent->GetOutputSizePixel() );
     Show();
 }

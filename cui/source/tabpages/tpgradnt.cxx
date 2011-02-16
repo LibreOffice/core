@@ -54,6 +54,7 @@
 #include <dialmgr.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
+#include "paragrph.hrc"
 
 #define DLGWIN this->GetParent()->GetParent()
 
@@ -114,6 +115,10 @@ SvxGradientTabPage::SvxGradientTabPage
 
     FreeResource();
 
+    aCtlPreview.SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
+    aLbGradients.SetAccessibleName( GetText());
+
+
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();
 
@@ -153,6 +158,11 @@ SvxGradientTabPage::SvxGradientTabPage
         LINK( this, SvxGradientTabPage, ClickLoadHdl_Impl ) );
     aBtnSave.SetClickHdl(
         LINK( this, SvxGradientTabPage, ClickSaveHdl_Impl ) );
+
+    aBtnAdd.SetAccessibleRelationMemberOf( &aFlProp );
+    aBtnModify.SetAccessibleRelationMemberOf( &aFlProp );
+    aBtnDelete.SetAccessibleRelationMemberOf( &aFlProp );
+    aLbGradients.SetAccessibleRelationLabeledBy(&aLbGradients);
 
     // #i76307# always paint the preview in LTR, because this is what the document does
     aCtlPreview.EnableRTL( sal_False );

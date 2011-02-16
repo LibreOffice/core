@@ -598,6 +598,8 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog(
     ResizeTreeLB();
     if (bActivateLastSelection)
         ActivateLastSelection();
+
+    aTreeLB.SetAccessibleName(GetDisplayText());
 }
 
 // Ctor() with ExtensionId -----------------------------------------------

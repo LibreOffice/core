@@ -63,12 +63,12 @@ namespace linguistic2{
 class SvxNewDictionaryDialog : public ModalDialog
 {
 private:
+    FixedLine            aNewDictBox;
     FixedText           aNameText;
     Edit                aNameEdit;
     FixedText           aLanguageText;
     SvxLanguageBox      aLanguageLB;
     CheckBox            aExceptBtn;
-    FixedLine            aNewDictBox;
     OKButton            aOKBtn;
     CancelButton        aCancelBtn;
     HelpButton          aHelpBtn;
@@ -132,8 +132,8 @@ private:
     PushButton              aDeletePB;
     FixedLine                aEditDictsBox;
 
-    CancelButton            aCloseBtn;
     HelpButton              aHelpBtn;
+    CancelButton            aCloseBtn;
     String                  sModify;
     String                  sNew;
     DecorationView          aDecoView;

@@ -385,6 +385,34 @@ TabPage RID_SVXPAGE_LINE
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text [ en-US ] = "Keep ratio" ;
     };
+    String STR_STYLE
+    {
+        Text [ en-US ] = "Style" ;
+    };
+    String STR_LB_START_STYLE
+    {
+        Text [ en-US ] = "Start style" ;
+    };
+    String STR_LB_END_STYLE
+    {
+        Text [ en-US ] = "End style" ;
+    };
+    String STR_MTR_FLD_START_WIDTH
+    {
+        Text [ en-US ] = "Start width" ;
+    };
+    String STR_MTR_FLD_END_WIDTH
+    {
+        Text [ en-US ] = "End width" ;
+    };
+     String STR_CENTER_START
+    {
+        Text [ en-US ] = "Start with center" ;
+    };
+    String STR_CENTER_END
+    {
+        Text [ en-US ] = "End with center" ;
+    };
 };
 
 // Defining LineStyles --------------------
@@ -635,6 +663,30 @@ TabPage RID_SVXPAGE_LINE_DEF
         Size = MAP_APPFONT ( 248 , 40 ) ;
     };
 
+    String STR_START_TYPE
+    {
+        Text [ en-US ] = "Start type" ;
+    };
+    String STR_END_TYPE
+    {
+        Text [ en-US ] = "End type" ;
+     };
+    String STR_START_NUM
+    {
+        Text [ en-US ] = "Start number" ;
+    };
+    String STR_END_NUM
+    {
+        Text [ en-US ] = "End number" ;
+    };
+    String STR_START_LENGTH
+    {
+        Text [ en-US ] = "Start length" ;
+    };
+    String STR_END_LENGTH
+    {
+        Text [ en-US ] = "End length" ;
+    };
 };
 
 // Defining LineEnds --------------------

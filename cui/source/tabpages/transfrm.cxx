@@ -249,6 +249,11 @@ SvxAngleTabPage::SvxAngleTabPage( Window* pParent, const SfxItemSet& rInAttrs  )
     ePoolUnit = pPool->GetMetric(SID_ATTR_TRANSFORM_POS_X);
 
     aMtrAngle.SetModifyHdl(LINK( this, SvxAngleTabPage, ModifiedHdl));
+
+    aCtlRect.SetAccessibleRelationLabeledBy(&aFtPosPresets);
+    aCtlRect.SetAccessibleRelationMemberOf(&aFlPosition);
+    aCtlAngle.SetAccessibleRelationLabeledBy(&aFtAnglePresets);
+    aCtlAngle.SetAccessibleRelationMemberOf(&aFlAngle);
 }
 
 // -----------------------------------------------------------------------
@@ -765,6 +770,10 @@ SvxPositionSizeTabPage::SvxPositionSizeTabPage( Window* pParent, const SfxItemSe
     maTsbPosProtect.SetClickHdl( LINK( this, SvxPositionSizeTabPage, ChangePosProtectHdl ) );
     maTsbSizeProtect.SetClickHdl( LINK( this, SvxPositionSizeTabPage, ChangeSizeProtectHdl ) );
 
+    maCtlPos.SetAccessibleRelationMemberOf( &maFlPosition );
+    maCtlSize.SetAccessibleRelationMemberOf( &maFlSize );
+    maCtlPos.SetAccessibleRelationLabeledBy( &maFtPosReference );
+    maCtlSize.SetAccessibleRelationLabeledBy( &maFtSizeReference );
 }
 
 // -----------------------------------------------------------------------

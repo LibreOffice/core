@@ -117,5 +117,9 @@
 
 #define CB_AS_SCRIPT_SPACE              7
 
+//IAccessibility2 Implementation 2009-----
+#define STR_EXAMPLE                     5010
+#define STR_PAGE_STYLE                  5011
+//-----IAccessibility2 Implementation 2009
 #endif
 
