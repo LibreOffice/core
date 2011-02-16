@@ -224,10 +224,10 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             return;
         }
 
-        USHORT nWhich = rSet.GetPool()->GetWhich(nSlotId);
-        BOOL bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
+        sal_uInt16 nWhich = rSet.GetPool()->GetWhich(nSlotId);
+        sal_Bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
         pItem->SetWhich( nWhich );
-        USHORT nSubCount = pType->nAttribs;
+        sal_uInt16 nSubCount = pType->nAttribs;
 
         const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[0];
         String aName = rProp.Name;
@@ -272,11 +272,11 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             }
 #endif
             // complex property; collect sub items from the parameter set and reconstruct complex item
-            USHORT nFound=0;
+            sal_uInt16 nFound=0;
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
                 const ::com::sun::star::beans::PropertyValue& rPropValue = pPropsVal[n];
-                USHORT nSub;
+                sal_uInt16 nSub;
                 for ( nSub=0; nSub<nSubCount; nSub++ )
                 {
                     // search sub item by name
@@ -286,7 +286,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     const char* pName = aStr.GetBuffer();
                     if ( rPropValue.Name.compareToAscii( pName ) == COMPARE_EQUAL )
                     {
-                        BYTE nSubId = (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID;
+                        sal_uInt8 nSubId = (sal_uInt8) (sal_Int8) pType->aAttrib[nSub].nAID;
                         if ( bConvertTwips )
                             nSubId |= CONVERT_TWIPS;
                         if ( pItem->PutValue( rPropValue.Value, nSubId ) )
@@ -342,11 +342,11 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 return;
             }
 
-            USHORT nWhich = rSet.GetPool()->GetWhich(rArg.nSlotId);
-            BOOL bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
+            sal_uInt16 nWhich = rSet.GetPool()->GetWhich(rArg.nSlotId);
+            sal_Bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
             pItem->SetWhich( nWhich );
             const SfxType* pType = rArg.pType;
-            USHORT nSubCount = pType->nAttribs;
+            sal_uInt16 nSubCount = pType->nAttribs;
             if ( nSubCount == 0 )
             {
                 // "simple" (base type) argument
@@ -377,14 +377,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             else
             {
                 // complex argument, could be passed in one struct
-                BOOL bAsWholeItem = FALSE;
+                sal_Bool bAsWholeItem = sal_False;
                 for ( sal_uInt16 n=0; n<nCount; n++ )
                 {
                     const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
                     String aName = rProp.Name;
                     if ( aName.CompareToAscii(rArg.pName) == COMPARE_EQUAL )
                     {
-                        bAsWholeItem = TRUE;
+                        bAsWholeItem = sal_True;
 #ifdef DBG_UTIL
                         ++nFoundArgs;
 #endif
@@ -407,11 +407,11 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     // complex argument; collect sub items from argument array and reconstruct complex item
                     // only put item if at least one member was found and had the correct type
                     // (is this a good idea?! Should we ask for *all* members?)
-                    BOOL bRet = FALSE;
+                    sal_Bool bRet = sal_False;
                     for ( sal_uInt16 n=0; n<nCount; n++ )
                     {
                         const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
-                        for ( USHORT nSub=0; nSub<nSubCount; nSub++ )
+                        for ( sal_uInt16 nSub=0; nSub<nSubCount; nSub++ )
                         {
                             // search sub item by name
                             ByteString aStr( rArg.pName );
@@ -421,17 +421,17 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                             if ( rProp.Name.compareToAscii( pName ) == COMPARE_EQUAL )
                             {
                                 // at least one member found ...
-                                bRet = TRUE;
+                                bRet = sal_True;
 #ifdef DBG_UTIL
                                 ++nFoundArgs;
 #endif
-                                BYTE nSubId = (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID;
+                                sal_uInt8 nSubId = (sal_uInt8) (sal_Int8) pType->aAttrib[nSub].nAID;
                                 if ( bConvertTwips )
                                     nSubId |= CONVERT_TWIPS;
                                 if (!pItem->PutValue( rProp.Value, nSubId ) )
                                 {
                                     // ... but it was not convertable
-                                    bRet = FALSE;
+                                    bRet = sal_False;
 #ifdef DBG_UTIL
                                     ByteString aDbgStr( "Property not convertable: ");
                                     aDbgStr += rArg.pName;
@@ -935,10 +935,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
     {
         // slot is a property
-        USHORT nWhich = rSet.GetPool()->GetWhich(nSlotId);
+        sal_uInt16 nWhich = rSet.GetPool()->GetWhich(nSlotId);
         if ( rSet.GetItemState( nWhich ) == SFX_ITEM_SET ) //???
         {
-            USHORT nSubCount = pType->nAttribs;
+            sal_uInt16 nSubCount = pType->nAttribs;
             if ( nSubCount )
                 // it's a complex property, we want it split into simple types
                 // so we expect to get as many items as we have (sub) members
@@ -964,15 +964,15 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     else
     {
         // slot is a method
-        USHORT nFormalArgs = pSlot->GetFormalArgumentCount();
-        for ( USHORT nArg=0; nArg<nFormalArgs; ++nArg )
+        sal_uInt16 nFormalArgs = pSlot->GetFormalArgumentCount();
+        for ( sal_uInt16 nArg=0; nArg<nFormalArgs; ++nArg )
         {
             // check every formal argument of the method
             const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
-            USHORT nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
+            sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
             if ( rSet.GetItemState( nWhich ) == SFX_ITEM_SET ) //???
             {
-                USHORT nSubCount = rArg.pType->nAttribs;
+                sal_uInt16 nSubCount = rArg.pType->nAttribs;
                 if ( nSubCount )
                     // argument has a complex type, we want it split into simple types
                     // so for this argument we expect to get as many items as we have (sub) members
@@ -1105,10 +1105,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     if ( rSet.Count() != nItems )
     {
         // detect unknown item and present error message
-        const USHORT *pRanges = rSet.GetRanges();
+        const sal_uInt16 *pRanges = rSet.GetRanges();
         while ( *pRanges )
         {
-            for(USHORT nId = *pRanges++; nId <= *pRanges; ++nId)
+            for(sal_uInt16 nId = *pRanges++; nId <= *pRanges; ++nId)
             {
                 if ( rSet.GetItemState(nId) < SFX_ITEM_SET ) //???
                     // not really set
@@ -1117,12 +1117,12 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 if ( !pSlot->IsMode(SFX_SLOT_METHOD) && nId == rSet.GetPool()->GetWhich( pSlot->GetSlotId() ) )
                     continue;
 
-                USHORT nFormalArgs = pSlot->GetFormalArgumentCount();
-                USHORT nArg;
+                sal_uInt16 nFormalArgs = pSlot->GetFormalArgumentCount();
+                sal_uInt16 nArg;
                 for ( nArg=0; nArg<nFormalArgs; ++nArg )
                 {
                     const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
-                    USHORT nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
+                    sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
                     if ( nId == nWhich )
                         break;
                 }
@@ -1258,12 +1258,12 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
     {
         // slot is a property
-        USHORT nWhich = rSet.GetPool()->GetWhich(nSlotId);
-        BOOL bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
+        sal_uInt16 nWhich = rSet.GetPool()->GetWhich(nSlotId);
+        sal_Bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
         SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, nWhich, sal_False );
         if ( pItem ) //???
         {
-            USHORT nSubCount = pType->nAttribs;
+            sal_uInt16 nSubCount = pType->nAttribs;
             if ( !nSubCount )
             {
                 //rPool.FillVariable( *pItem, *pVar, eUserMetric );
@@ -1278,10 +1278,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             else
             {
                 // complex type, add a property value for every member of the struct
-                for ( USHORT n=1; n<=nSubCount; ++n )
+                for ( sal_uInt16 n=1; n<=nSubCount; ++n )
                 {
                     //rPool.FillVariable( *pItem, *pVar, eUserMetric );
-                    BYTE nSubId = (BYTE) (sal_Int8) pType->aAttrib[n-1].nAID;
+                    sal_uInt8 nSubId = (sal_uInt8) (sal_Int8) pType->aAttrib[n-1].nAID;
                     if ( bConvertTwips )
                         nSubId |= CONVERT_TWIPS;
 
@@ -1305,16 +1305,16 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     else
     {
         // slot is a method
-        USHORT nFormalArgs = pSlot->GetFormalArgumentCount();
-        for ( USHORT nArg=0; nArg<nFormalArgs; ++nArg )
+        sal_uInt16 nFormalArgs = pSlot->GetFormalArgumentCount();
+        for ( sal_uInt16 nArg=0; nArg<nFormalArgs; ++nArg )
         {
             const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
-            USHORT nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
-            BOOL bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
+            sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
+            sal_Bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
             SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, nWhich, sal_False );
             if ( pItem ) //???
             {
-                USHORT nSubCount = rArg.pType->nAttribs;
+                sal_uInt16 nSubCount = rArg.pType->nAttribs;
                 if ( !nSubCount )
                 {
                     //rPool.FillVariable( *pItem, *pVar, eUserMetric );
@@ -1329,10 +1329,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 else
                 {
                     // complex type, add a property value for every member of the struct
-                    for ( USHORT n = 1; n <= nSubCount; ++n )
+                    for ( sal_uInt16 n = 1; n <= nSubCount; ++n )
                     {
                         //rPool.FillVariable( rItem, *pVar, eUserMetric );
-                        BYTE nSubId = (BYTE) (sal_Int8) rArg.pType->aAttrib[n-1].nAID;
+                        sal_uInt8 nSubId = (sal_uInt8) (sal_Int8) rArg.pType->aAttrib[n-1].nAID;
                         if ( bConvertTwips )
                             nSubId |= CONVERT_TWIPS;
 
@@ -1857,7 +1857,7 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                 if ( bSetDocMacroMode )
                 {
                     // mark document: it executes an own macro, so it's in a modal mode
-                    pDoc->SetMacroMode_Impl( TRUE );
+                    pDoc->SetMacroMode_Impl( sal_True );
                 }
 
                 if ( bSetGlobalThisComponent )
@@ -1890,7 +1890,7 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                 if ( bSetDocMacroMode )
                 {
                     // remove flag for modal mode
-                    pDoc->SetMacroMode_Impl( FALSE );
+                    pDoc->SetMacroMode_Impl( sal_False );
                 }
             }
             else
@@ -1932,7 +1932,7 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
     const ::rtl::OUString& /*sTargetFrameName*/,
     FrameSearchFlags /*eSearchFlags*/ ) throw( RuntimeException )
 {
-    USHORT                  nId( 0 );
+    sal_uInt16                  nId( 0 );
     sal_Bool                bMasterCommand( sal_False );
     Reference < XDispatch > xDisp;
     const SfxSlot* pSlot = 0;
@@ -1940,9 +1940,9 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch(
     if ( aURL.Protocol.compareToAscii( "slot:" ) == COMPARE_EQUAL ||
          aURL.Protocol.compareToAscii( "commandId:" ) == COMPARE_EQUAL )
     {
-        nId = (USHORT) aURL.Path.toInt32();
+        nId = (sal_uInt16) aURL.Path.toInt32();
         SfxShell* pShell;
-        pAppDisp->GetShellAndSlot_Impl( nId, &pShell, &pSlot, TRUE, TRUE );
+        pAppDisp->GetShellAndSlot_Impl( nId, &pShell, &pSlot, sal_True, sal_True );
     }
     else if ( aURL.Protocol.compareToAscii( ".uno:" ) == COMPARE_EQUAL )
     {
@@ -1985,10 +1985,10 @@ throw (::com::sun::star::uno::RuntimeException)
     std::list< sal_Int16 > aGroupList;
     SfxSlotPool* pAppSlotPool = &SFX_APP()->GetAppSlotPool_Impl();
 
-    const ULONG nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
+    const sal_uIntPtr nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
 
     // Gruppe anw"ahlen ( Gruppe 0 ist intern )
-    for ( USHORT i=0; i<pAppSlotPool->GetGroupCount(); i++ )
+    for ( sal_uInt16 i=0; i<pAppSlotPool->GetGroupCount(); i++ )
     {
         String aName = pAppSlotPool->SeekGroup( i );
         const SfxSlot* pSfxSlot = pAppSlotPool->FirstSlot();
@@ -2020,11 +2020,11 @@ throw (::com::sun::star::uno::RuntimeException)
 
     if ( pAppSlotPool )
     {
-        const ULONG   nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
+        const sal_uIntPtr   nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
         rtl::OUString aCmdPrefix( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
 
         // Gruppe anw"ahlen ( Gruppe 0 ist intern )
-        for ( USHORT i=0; i<pAppSlotPool->GetGroupCount(); i++ )
+        for ( sal_uInt16 i=0; i<pAppSlotPool->GetGroupCount(); i++ )
         {
             String aName = pAppSlotPool->SeekGroup( i );
             const SfxSlot* pSfxSlot = pAppSlotPool->FirstSlot();

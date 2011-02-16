@@ -252,7 +252,7 @@ ResMgr* Desktop::GetDesktopResManager()
 // Get a message string securely. There is a fallback string if the resource
 // is not available.
 
-OUString Desktop::GetMsgString( USHORT nId, const OUString& aFaultBackMsg )
+OUString Desktop::GetMsgString( sal_uInt16 nId, const OUString& aFaultBackMsg )
 {
     ResMgr* resMgr = GetDesktopResManager();
     if ( !resMgr )
@@ -823,7 +823,7 @@ void Desktop::DeInit()
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "FINISHED WITH Destop::DeInit" );
 }
 
-BOOL Desktop::QueryExit()
+sal_Bool Desktop::QueryExit()
 {
     try
     {
@@ -849,7 +849,7 @@ BOOL Desktop::QueryExit()
         xPropertySet->setPropertyValue( OUSTRING(RTL_CONSTASCII_USTRINGPARAM( SUSPEND_QUICKSTARTVETO )), a );
     }
 
-    BOOL bExit = ( !xDesktop.is() || xDesktop->terminate() );
+    sal_Bool bExit = ( !xDesktop.is() || xDesktop->terminate() );
 
 
     if ( !bExit && xPropertySet.is() )
@@ -1452,10 +1452,10 @@ void restartOnMac(bool passArguments) {
 
 }
 
-USHORT Desktop::Exception(USHORT nError)
+sal_uInt16 Desktop::Exception(sal_uInt16 nError)
 {
     // protect against recursive calls
-    static BOOL bInException = FALSE;
+    static sal_Bool bInException = sal_False;
 
     sal_uInt16 nOldMode = Application::GetSystemWindowMode();
     Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
@@ -1467,7 +1467,7 @@ USHORT Desktop::Exception(USHORT nError)
         Application::Abort( aDoubleExceptionString );
     }
 
-    bInException = TRUE;
+    bInException = sal_True;
     CommandLineArgs* pArgs = GetCommandLineArgs();
 
     // save all modified documents ... if it's allowed doing so.
@@ -1638,7 +1638,7 @@ void Desktop::Main()
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ GetEnableATToolSupport" );
         if( Application::GetSettings().GetMiscSettings().GetEnableATToolSupport() )
         {
-            BOOL bQuitApp;
+            sal_Bool bQuitApp;
 
             if( !InitAccessBridge( true, bQuitApp ) )
                 if( bQuitApp )
@@ -1666,14 +1666,8 @@ void Desktop::Main()
         // create title string
         sal_Bool bCheckOk = sal_False;
         ::com::sun::star::lang::Locale aLocale;
-        String aMgrName = String::CreateFromAscii( "iso" );
+        String aMgrName = String::CreateFromAscii( "ofa" );
         ResMgr* pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale );
-        if ( !pLabelResMgr )
-        {
-            // no "iso" resource -> search for "ooo" resource
-            aMgrName = String::CreateFromAscii( "ooo" );
-            pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale);
-        }
         String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, *pLabelResMgr ) ) : String();
         delete pLabelResMgr;
 
@@ -1989,7 +1983,7 @@ void Desktop::doShutdown()
     FlushConfiguration();
     // The acceptors in the AcceptorMap must be released (in DeregisterServices)
     // with the solar mutex unlocked, to avoid deadlock:
-    ULONG nAcquireCount = Application::ReleaseSolarMutex();
+    sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
     DeregisterServices();
     Application::AcquireSolarMutex(nAcquireCount);
     tools::DeInitTestToolLib();
@@ -2175,17 +2169,17 @@ void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* )
     hMouseSettings.SetFollow( aAppearanceCfg.IsMenuMouseFollow() ? (nFollow|MOUSE_FOLLOW_MENU) : (nFollow&~MOUSE_FOLLOW_MENU));
     rSettings.SetMouseSettings(hMouseSettings);
 
-    BOOL bUseImagesInMenus = hStyleSettings.GetUseImagesInMenus();
+    sal_Bool bUseImagesInMenus = hStyleSettings.GetUseImagesInMenus();
 
     SvtMenuOptions aMenuOpt;
     nGet = aMenuOpt.GetMenuIconsState();
     switch ( nGet )
     {
         case 0:
-            bUseImagesInMenus = FALSE;
+            bUseImagesInMenus = sal_False;
             break;
         case 1:
-            bUseImagesInMenus = TRUE;
+            bUseImagesInMenus = sal_True;
             break;
         case 2:
         default:
@@ -2623,7 +2617,7 @@ void Desktop::OpenClients()
     // check if a document has been recovered - if there is one of if a document was loaded by cmdline, no default document
     // should be created
     Reference < XComponent > xFirst;
-    BOOL bLoaded = FALSE;
+    sal_Bool bLoaded = sal_False;
 
     CommandLineArgs* pArgs = GetCommandLineArgs();
     SvtInternalOptions  aInternalOptions;
@@ -2773,7 +2767,7 @@ void Desktop::OpenClients()
                     bCrashed           ,
                     bExistsRecoveryData);
                 /* TODO we cant be shure, that at least one document could be recovered here successfully
-                    So we set bLoaded=TRUE to supress opening of the default document.
+                    So we set bLoaded=sal_True to supress opening of the default document.
                     But we should make it more safe. Otherwhise we have an office without an UI ...
                     ...
                     May be we can check the desktop if some documents are existing there.

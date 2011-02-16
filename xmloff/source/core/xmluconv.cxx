@@ -609,15 +609,15 @@ sal_Bool SvXMLUnitConverter::convertColor( Color& rColor,
         return sal_False;
 
     rColor.SetRed(
-        sal::static_int_cast< UINT8 >(
+        sal::static_int_cast< sal_uInt8 >(
             lcl_gethex( rValue[1] ) * 16 + lcl_gethex( rValue[2] ) ) );
 
     rColor.SetGreen(
-        sal::static_int_cast< UINT8 >(
+        sal::static_int_cast< sal_uInt8 >(
             lcl_gethex( rValue[3] ) * 16 + lcl_gethex( rValue[4] ) ) );
 
     rColor.SetBlue(
-        sal::static_int_cast< UINT8 >(
+        sal::static_int_cast< sal_uInt8 >(
             lcl_gethex( rValue[5] ) * 16 + lcl_gethex( rValue[6] ) ) );
 
     return sal_True;
@@ -711,7 +711,7 @@ sal_Bool SvXMLUnitConverter::convertNumber64( sal_Int64& rValue,
 
 /** convert double number to string (using ::rtl::math) */
 void SvXMLUnitConverter::convertDouble(::rtl::OUStringBuffer& rBuffer,
-    double fNumber, BOOL bWriteUnits) const
+    double fNumber, sal_Bool bWriteUnits) const
 {
     SvXMLUnitConverter::convertDouble(rBuffer, fNumber,
         bWriteUnits, meCoreMeasureUnit, meXMLMeasureUnit);
@@ -719,7 +719,7 @@ void SvXMLUnitConverter::convertDouble(::rtl::OUStringBuffer& rBuffer,
 
 /** convert double number to string (using ::rtl::math) */
 void SvXMLUnitConverter::convertDouble( ::rtl::OUStringBuffer& rBuffer,
-    double fNumber, BOOL bWriteUnits, MapUnit eCoreUnit, MapUnit eDstUnit)
+    double fNumber, sal_Bool bWriteUnits, MapUnit eCoreUnit, MapUnit eDstUnit)
 {
     if(MAP_RELATIVE == eCoreUnit)
     {
@@ -748,7 +748,7 @@ void SvXMLUnitConverter::convertDouble( ::rtl::OUStringBuffer& rBuffer, double f
 
 /** convert string to double number (using ::rtl::math) */
 sal_Bool SvXMLUnitConverter::convertDouble(double& rValue,
-    const ::rtl::OUString& rString, BOOL bLookForUnits) const
+    const ::rtl::OUString& rString, sal_Bool bLookForUnits) const
 {
     if(bLookForUnits)
     {
@@ -1113,7 +1113,7 @@ void SvXMLUnitConverter::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
     }
     rBuffer.append( sal_Int32( aDate.GetYear()));
     rBuffer.append( sal_Unicode('-'));
-    USHORT nTemp = aDate.GetMonth();
+    sal_uInt16 nTemp = aDate.GetMonth();
     if (nTemp < 10)
         rBuffer.append( sal_Unicode('0'));
     rBuffer.append( sal_Int32( nTemp));
@@ -2095,7 +2095,7 @@ bool SvXMLUnitConverter::convertTimeDuration( const rtl::OUString& rString, Time
         else
         {
             if ( c == sal_Unicode('T') )            // "T" starts time part
-                bTimePart = TRUE;
+                bTimePart = sal_True;
             else if ( c == sal_Unicode('D') )
             {
                 nDays = nTemp;

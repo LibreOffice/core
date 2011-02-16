@@ -118,7 +118,7 @@ public:
                         SfxCommonPrintOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
                         ~SfxCommonPrintOptionsTabPage();
 
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
     virtual Window*     GetParentLabeledBy( const Window* pLabel ) const;
     virtual Window*     GetParentLabelFor( const Window* pLabel ) const;
@@ -148,7 +148,7 @@ public:
                     TransparencyPrintWarningBox( Window* pParent );
                     ~TransparencyPrintWarningBox();
 
-    BOOL            IsNoWarningChecked() const { return aNoWarnCB.IsChecked(); }
+    sal_Bool            IsNoWarningChecked() const { return aNoWarnCB.IsChecked(); }
 };
 
 #endif // #ifndef _SFX_PRINTOPT_HXX

@@ -77,7 +77,7 @@ void lcl_fillNamespaceContainer( const SvXMLNamespaceMap&,
 
 XFormsBindContext::XFormsBindContext(
     SvXMLImport& rImport,
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XPropertySet>& xModel ) :
         TokenContext( rImport, nPrefix, rLocalName, aAttributeMap, aEmptyMap ),
