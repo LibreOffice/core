@@ -253,6 +253,9 @@
 #define STR_ERRUNOEVENTBINDUNG              (RID_SFX_START+119)
 #define STR_SHARED                          (RID_SFX_START+120)
 #define RID_XMLSEC_DOCUMENTSIGNED           (RID_SFX_START+121)
+// IAccessibility2 implementation 2009. ------
+#define STR_ACCTITLE_PRODUCTIVITYTOOLS      (RID_SFX_START+157)
+// ------ IAccessibility2 implementation 2009.
 
 //=========================================================================
 
