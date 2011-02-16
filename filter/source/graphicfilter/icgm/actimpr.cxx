@@ -744,7 +744,7 @@ void CGMImpressOutAct::DrawPolyLine( Polygon& rPoly )
 
 void CGMImpressOutAct::DrawPolybezier( Polygon& rPolygon )
 {
-    USHORT nPoints = rPolygon.GetSize();
+    sal_uInt16 nPoints = rPolygon.GetSize();
     if ( ( nPoints > 1 ) && ImplCreateShape( rtl::OUString::createFromAscii("com.sun.star.drawing.OpenBezierShape") ) )
     {
         drawing::PolyPolygonBezierCoords aRetval;
@@ -763,7 +763,7 @@ void CGMImpressOutAct::DrawPolybezier( Polygon& rPolygon )
         awt::Point* pInnerSequence = pOuterSequence->getArray();
         drawing::PolygonFlags* pInnerFlags = pOuterFlags->getArray();
 
-        for( USHORT i = 0; i < nPoints; i++ )
+        for( sal_uInt16 i = 0; i < nPoints; i++ )
         {
             *pInnerSequence++ = awt::Point( rPolygon[ i ].X(), rPolygon[ i ].Y() );
             *pInnerFlags++ = (drawing::PolygonFlags)rPolygon.GetFlags( i );

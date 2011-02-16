@@ -48,13 +48,13 @@ SLOFILES= \
     $(SLO)$/DomainMapperTableManager.obj \
     $(SLO)$/DomainMapper_Impl.obj \
     $(SLO)$/FFDataHandler.obj \
-    $(SLO)$/FormControlHelper.obj \
     $(SLO)$/FontTable.obj \
+    $(SLO)$/FormControlHelper.obj \
     $(SLO)$/GraphicHelpers.obj \
     $(SLO)$/GraphicImport.obj \
-    $(SLO)$/NumberingManager.obj  \
     $(SLO)$/MeasureHandler.obj \
     $(SLO)$/ModelEventListener.obj \
+    $(SLO)$/NumberingManager.obj  \
     $(SLO)$/OLEHandler.obj \
     $(SLO)$/PageBordersHandler.obj \
     $(SLO)$/PropertyIds.obj \
@@ -66,7 +66,9 @@ SLOFILES= \
     $(SLO)$/TDefTableHandler.obj \
     $(SLO)$/TablePropertiesHandler.obj \
     $(SLO)$/TblStylePrHandler.obj \
-    $(SLO)$/ThemeTable.obj 
+    $(SLO)$/ThemeTable.obj \
+    $(SLO)$/WrapPolygonHandler.obj \
+
 
 # --- Targets ----------------------------------
 

@@ -1,3 +1,29 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
 #include "ConversionHelper.hxx"
 #include "NumberingManager.hxx"
 #include "StyleSheetTable.hxx"
@@ -18,6 +44,8 @@
 #if DEBUG
 #include <stdio.h>
 #endif
+
+#include "dmapperLoggers.hxx"
 
 using namespace rtl;
 using namespace com::sun::star;
@@ -614,10 +642,12 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
 //-------------------------------------  NumberingManager implementation
 
 
-ListsManager::ListsManager( DomainMapper& rDMapper,
-        const uno::Reference< lang::XMultiServiceFactory > xFactory ) :
-    m_rDMapper( rDMapper ),
-    m_xFactory( xFactory )
+ListsManager::ListsManager(DomainMapper& rDMapper,
+                           const uno::Reference< lang::XMultiServiceFactory > xFactory) :
+LoggedProperties(dmapper_logger, "ListsManager"),
+LoggedTable(dmapper_logger, "ListsManager"),
+m_rDMapper( rDMapper ),
+m_xFactory( xFactory )
 {
 }
 
@@ -625,7 +655,7 @@ ListsManager::~ListsManager( )
 {
 }
 
-void ListsManager::attribute( Id nName, Value& rVal )
+void ListsManager::lcl_attribute( Id nName, Value& rVal )
 {
     OSL_ENSURE( m_pCurrentDefinition.get(), "current entry has to be set here");
     if(!m_pCurrentDefinition.get())
@@ -764,7 +794,7 @@ void ListsManager::attribute( Id nName, Value& rVal )
     }
 }
 
-void ListsManager::sprm( Sprm& rSprm )
+void ListsManager::lcl_sprm( Sprm& rSprm )
 {
     //fill the attributes of the style sheet
     sal_uInt32 nSprmId = rSprm.getId();
@@ -939,8 +969,8 @@ void ListsManager::sprm( Sprm& rSprm )
     }
 }
 
-void ListsManager::entry( int /* pos */,
-        writerfilter::Reference<Properties>::Pointer_t ref )
+void ListsManager::lcl_entry( int /* pos */,
+                          writerfilter::Reference<Properties>::Pointer_t ref )
 {
     if( m_rDMapper.IsOOXMLImport() )
     {
