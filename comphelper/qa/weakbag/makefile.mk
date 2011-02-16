@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-PRJ := ..
+PRJ := ..$/..
 PRJNAME := comphelper
 TARGET := qa
 
@@ -41,9 +41,9 @@ DLLPRE = # no leading "lib" on .so files
 INCPRE += $(MISC)$/$(TARGET)$/inc
 
 SHL1TARGET = $(TARGET)_weakbag
-SHL1OBJS = $(SLO)$/test_weakbag.obj  $(SLO)$/test_string.obj
+SHL1OBJS = $(SLO)$/test_weakbag.obj $(SLO)$/test_weakbag_noadditional.obj
 SHL1STDLIBS = $(CPPUHELPERLIB) $(CPPULIB) $(CPPUNITLIB) $(SALLIB) $(COMPHELPERLIB)
-SHL1VERSIONMAP = version.map
+SHL1VERSIONMAP = ..$/version.map
 SHL1IMPLIB = i$(SHL1TARGET)
 DEF1NAME = $(SHL1TARGET)
 
