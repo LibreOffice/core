@@ -43,7 +43,7 @@ namespace basegfx
 {
 namespace tools
 {
-    struct ImplB2DClipState
+    class ImplB2DClipState
     {
     public:
         enum Operation {UNION, INTERSECT, XOR, SUBTRACT};
