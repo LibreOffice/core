@@ -134,25 +134,21 @@ struct ImplCalcToTopData
     Region*             mpInvalidateRegion;
 };
 
-struct ImplAccessibleInfos
+ImplAccessibleInfos::ImplAccessibleInfos()
 {
-    sal_uInt16 nAccessibleRole;
-    String* pAccessibleName;
-    String* pAccessibleDescription;
+    nAccessibleRole = 0xFFFF;
+    pAccessibleName = NULL;
+    pAccessibleDescription = NULL;
+    pLabeledByWindow = NULL;
+    pLabelForWindow = NULL;
+    pMemberOfWindow = NULL;
+}
 
-    ImplAccessibleInfos()
-    {
-        nAccessibleRole = 0xFFFF;
-        pAccessibleName = NULL;
-        pAccessibleDescription = NULL;
-    }
-
-    ~ImplAccessibleInfos()
-    {
-        delete pAccessibleName;
-        delete pAccessibleDescription;
-    }
-};
+ImplAccessibleInfos::~ImplAccessibleInfos()
+{
+    delete pAccessibleName;
+    delete pAccessibleDescription;
+}
 
 // -----------------------------------------------------------------------
 
@@ -8086,7 +8082,7 @@ void Window::SetText( const XubString& rStr )
     // name change.
     if ( IsReallyVisible() )
     {
-        Window* pWindow = GetLabelFor();
+        Window* pWindow = GetAccessibleRelationLabelFor();
         if ( pWindow && pWindow != this )
             pWindow->ImplCallEventListeners( VCLEVENT_WINDOW_FRAMETITLECHANGED, &oldTitle );
     }
@@ -9134,6 +9130,7 @@ sal_uInt16 Window::GetAccessibleRole() const
 
             case WINDOW_HELPTEXTWINDOW: nRole = accessibility::AccessibleRole::TOOL_TIP; break;
 
+            case WINDOW_RULER:          nRole = accessibility::AccessibleRole::RULER; break;
             case WINDOW_WINDOW:
             case WINDOW_CONTROL:
             case WINDOW_BORDERWINDOW:
@@ -9160,7 +9157,7 @@ void Window::SetAccessibleName( const String& rName )
    if ( !mpWindowImpl->mpAccessibleInfos )
         mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
 
-    DBG_ASSERT( !mpWindowImpl->mpAccessibleInfos->pAccessibleName, "AccessibleName already set!" );
+    DBG_ASSERT( !mpWindowImpl->mpAccessibleInfos->pAccessibleName || !rName.Len(), "AccessibleName already set!" );
     delete mpWindowImpl->mpAccessibleInfos->pAccessibleName;
     mpWindowImpl->mpAccessibleInfos->pAccessibleName = new String( rName );
 }
@@ -9201,9 +9198,9 @@ String Window::GetAccessibleName() const
             case WINDOW_LISTBOX:
             case WINDOW_MULTILISTBOX:
             case WINDOW_TREELISTBOX:
-
+            case WINDOW_METRICBOX:
             {
-                Window *pLabel = GetLabeledBy();
+                Window *pLabel = GetAccessibleRelationLabeledBy();
                 if ( pLabel && pLabel != this )
                     aAccessibleName = pLabel->GetText();
             }
@@ -9262,6 +9259,27 @@ String Window::GetAccessibleDescription() const
     return aAccessibleDescription;
 }
 
+void Window::SetAccessibleRelationLabeledBy( Window* pLabeledBy )
+{
+    if ( !mpWindowImpl->mpAccessibleInfos )
+        mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
+    mpWindowImpl->mpAccessibleInfos->pLabeledByWindow = pLabeledBy;
+}
+
+void Window::SetAccessibleRelationLabelFor( Window* pLabelFor )
+{
+    if ( !mpWindowImpl->mpAccessibleInfos )
+        mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
+    mpWindowImpl->mpAccessibleInfos->pLabelForWindow = pLabelFor;
+}
+
+void Window::SetAccessibleRelationMemberOf( Window* pMemberOfWin )
+{
+    if ( !mpWindowImpl->mpAccessibleInfos )
+        mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
+    mpWindowImpl->mpAccessibleInfos->pMemberOfWindow = pMemberOfWin;
+}
+
 sal_Bool Window::IsAccessibilityEventsSuppressed( sal_Bool bTraverseParentPath )
 {
     if( !bTraverseParentPath )
@@ -9278,6 +9296,11 @@ sal_Bool Window::IsAccessibilityEventsSuppressed( sal_Bool bTraverseParentPath )
         }
         return sal_False;
     }
+}
+
+void Window::SetAccessibilityEventsSuppressed(sal_Bool bSuppressed)
+{
+    mpWindowImpl->mbSuppressAccessibilityEvents = bSuppressed;
 }
 
 void Window::RecordLayoutData( vcl::ControlLayoutData* pLayout, const Rectangle& rRect )
