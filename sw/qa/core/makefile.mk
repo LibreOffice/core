@@ -132,10 +132,12 @@ $(MISC)/$(TARGET)/udkapi.rdb .ERRREMOVE : $(SOLARBINDIR)$/udkapi.rdb
 $(MISC)/$(TARGET)/services.rdb .ERRREMOVE : $(MISC)/$(TARGET)/udkapi.rdb makefile.mk
     $(MKDIRHIER) $(@:d)
     $(REGCOMP) -register -br $(MISC)/$(TARGET)/udkapi.rdb -r $@ -wop \
+        -c $(DLLPRE)fileacc$(DLLPOST) \
         -c $(DLLPRE)fwk$(DLLPOSTFIX)$(DLLPOST) \
         -c $(DLLPRE)sfx$(DLLPOSTFIX)$(DLLPOST) \
         -c $(DLLPRE)unoxml$(DLLPOSTFIX)$(DLLPOST) \
-        -c i18npool.uno$(DLLPOST)
+        -c i18npool.uno$(DLLPOST) \
+        -c sax.uno$(DLLPOST)
 
 
 #Tweak things so that we use the .res files in the solver
