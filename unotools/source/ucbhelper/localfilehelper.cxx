@@ -38,9 +38,10 @@
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
+//joep #include <tools/list.hxx>
 #include <tools/urlobj.hxx>
 #include <ucbhelper/content.hxx>
+#include <vector>
 
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
@@ -172,7 +173,7 @@ sal_Bool LocalFileHelper::IsFileContent( const String& rName )
     return ConvertURLToSystemPath( rName, aTmp );
 }
 
-DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
+typedef ::std::vector< ::rtl::OUString* > StringList_Impl;
 
 ::com::sun::star::uno::Sequence < ::rtl::OUString > LocalFileHelper::GetFolderContents( const ::rtl::OUString& rFolder, sal_Bool bFolder )
 {
@@ -207,7 +208,7 @@ DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
                 {
                     ::rtl::OUString aId = xContentAccess->queryContentIdentifierString();
                     ::rtl::OUString* pFile = new ::rtl::OUString( aId );
-                    pFiles->Insert( pFile, LIST_APPEND );
+                    pFiles->push_back( pFile );
                 }
             }
             catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -224,12 +225,12 @@ DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
 
     if ( pFiles )
     {
-        ULONG nCount = pFiles->Count();
+        size_t nCount = pFiles->size();
         Sequence < ::rtl::OUString > aRet( nCount );
         ::rtl::OUString* pRet = aRet.getArray();
-        for ( USHORT i = 0; i < nCount; ++i )
+        for ( size_t i = 0; i < nCount; ++i )
         {
-            ::rtl::OUString* pFile = pFiles->GetObject(i);
+            ::rtl::OUString* pFile = (*pFiles)[ i ];
             pRet[i] = *( pFile );
             delete pFile;
         }
