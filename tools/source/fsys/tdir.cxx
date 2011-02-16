@@ -42,8 +42,6 @@
 
 DBG_NAME( Dir )
 
-DECLARE_LIST( FileStatList, FileStat* )
-
 #define APPEND (USHORT) 65535
 
 /*************************************************************************
@@ -70,7 +68,7 @@ BOOL Dir::ImpInsertPointReached( const DirEntry& rNewEntry,
     FileStat *pOldStat   = NULL;
     DirEntry *pCurLstObj = (*pLst)[ nCurPos ];
     if ( pStatLst )
-        pOldStat = pStatLst->GetObject( nCurPos );
+        pOldStat = (*pStatLst)[ nCurPos ];
 
     switch( nSort )
     {
@@ -219,8 +217,11 @@ void Dir::ImpSortedInsert( const DirEntry *pNewEntry, const FileStat *pNewStat )
     {
         if ( ImpInsertPointReached( *pNewEntry, *pNewStat, i, 0  ) )
         {
-            if ( pStatLst )
-                pStatLst->Insert( (FileStat*)pNewStat, i );
+            if ( pStatLst ) {
+                FileStatList::iterator it = pStatLst->begin();
+                ::std::advance( it, i );
+                pStatLst->insert( it, (FileStat*)pNewStat );
+            }
             DirEntryList::iterator it = pLst->begin();
             ::std::advance( it, i );
             pLst->insert( it, (DirEntry*)pNewEntry );
@@ -229,7 +230,7 @@ void Dir::ImpSortedInsert( const DirEntry *pNewEntry, const FileStat *pNewStat )
     }
 
     if ( pStatLst )
-        pStatLst->Insert( (FileStat*)pNewStat, APPEND );
+        pStatLst->push_back( (FileStat*)pNewStat );
     pLst->push_back( (DirEntry*)pNewEntry );
 }
 
@@ -304,15 +305,10 @@ void Dir::Reset()
     //  Alte File-Stat's Loeschen
     if ( pStatLst )
     {
-        //Erstmal die alten Loeschen
-        FileStat* pEntry = pStatLst->First();
-        while (pEntry)
-        {
-            FileStat*  pNext = pStatLst->Next();
-            delete pEntry;
-            pEntry = pNext;
+        for ( size_t i = 0, n = pStatLst->size(); i < n; ++i ) {
+            delete (*pStatLst)[ i ];
         }
-        pStatLst->Clear();
+        pStatLst->clear();
         delete pStatLst;
         pStatLst = NULL;
     }
@@ -470,14 +466,10 @@ Dir::~Dir()
     // alle FileStat's aus der Liste entfernen und deren Speicher freigeben
     if ( pStatLst )
     {
-        FileStat* pEntry = pStatLst->First();
-        while (pEntry)
-        {
-            FileStat*  pNext = pStatLst->Next();
-            delete pEntry;
-            pEntry = pNext;
+        for ( size_t i = 0, n = pStatLst->size(); i < n; ++i ) {
+            delete (*pStatLst)[ i ];
         }
-        pStatLst->Clear();
+        pStatLst->clear();
         delete pStatLst;
     }
 
@@ -582,7 +574,7 @@ FSysError Dir::ImpSetSort( std::va_list pArgs, int nFirstSort )
             //Sortiertes Einfuegen der Elemente aus den gemerkten Listen
             //in die 'richtigen' Listen
             if ( pOldStatLst )
-                ImpSortedInsert( (*pOldLst)[ i ], pOldStatLst->GetObject( i ) );
+                ImpSortedInsert( (*pOldLst)[ i ], (*pOldStatLst)[ i ] );
             else
                 ImpSortedInsert( (*pOldLst)[ i ], NULL );
         }
@@ -657,7 +649,7 @@ Dir& Dir::operator+=( const Dir& rDir )
         if ( bStat )
         {
             if ( rDir.pStatLst )
-                stat = new FileStat( *rDir.pStatLst->GetObject(nNr) );
+                stat = new FileStat( *(*rDir.pStatLst)[ nNr ] );
             else
                 stat = new FileStat( rDir[nNr] );
         }

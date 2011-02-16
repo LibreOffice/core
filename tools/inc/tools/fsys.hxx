@@ -46,12 +46,13 @@
 // --------------
 
 class DirEntry;
-class FileStatList;
+class FileStat;
 struct FileCopier_Impl;
 class SvFileStream;
 class BigInt;
 
 typedef ::std::vector< DirEntry* > DirEntryList;
+typedef ::std::vector< FileStat* > FileStatList;
 
 #define FSYS_BUFSIZE                1024
 #define FSYS_SHORTNAME_DELIMITER    '@'
