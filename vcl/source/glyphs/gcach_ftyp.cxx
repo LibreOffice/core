@@ -710,11 +710,6 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
 {
     maFaceFT = pFI->GetFaceFT();
 
-#ifdef HDU_DEBUG
-    fprintf( stderr, "FTSF::FTSF(\"%s\", h=%d, w=%d, sy=%d) => %d\n",
-        pFI->GetFontFileName()->getStr(), rFSD.mnHeight, rFSD.mnWidth, pFI->IsSymbolFont(), maFaceFT!=0 );
-#endif
-
     if( !maFaceFT )
         return;
 

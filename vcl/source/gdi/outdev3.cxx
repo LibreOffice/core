@@ -1392,16 +1392,6 @@ void ImplDevFontList::InitGenericGlyphFallback( void ) const
         pFallbackList[ j+1 ] = pTestFont;
     }
 
-#if defined(HDU_DEBUG)
-    for( int i = 0; i < nMaxLevel; ++i )
-    {
-        ImplDevFontListData* pFont = pFallbackList[ i ];
-        ByteString aFontName( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 );
-        fprintf( stderr, "GlyphFallbackFont[%d] (quality=%05d): \"%s\"\n",
-            i, pFont->GetMinQuality(), aFontName.GetBuffer() );
-    }
-#endif
-
     mnFallbackCount = nMaxLevel;
     mpFallbackList  = pFallbackList;
 }
@@ -5032,12 +5022,6 @@ void OutputDevice::SetFont( const Font& rNewFont )
         mpMetaFile->AddAction( new MetaTextFillColorAction( aFont.GetFillColor(), !aFont.IsTransparent() ) );
     }
 
-#if (OSL_DEBUG_LEVEL > 2) || defined (HDU_DEBUG)
-    fprintf( stderr, "   OutputDevice::SetFont( name=\"%s\", h=%ld)\n",
-         OUStringToOString( aFont.GetName(), RTL_TEXTENCODING_UTF8 ).getStr(),
-         aFont.GetSize().Height() );
-#endif
-
     if ( !maFont.IsSameInstance( aFont ) )
     {
         // Optimization MT/HDU: COL_TRANSPARENT means SetFont should ignore the font color,
@@ -6029,17 +6013,6 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     rLayoutArgs.PrepareFallback();
     rLayoutArgs.mnFlags |= SAL_LAYOUT_FOR_FALLBACK;
 
-#if defined(HDU_DEBUG)
-    {
-        int nCharPos = -1;
-        bool bRTL = false;
-        fprintf(stderr,"OD:ImplLayout Glyph Fallback for");
-        for( int i=0; i<8 && rLayoutArgs.GetNextPos( &nCharPos, &bRTL); ++i )
-            fprintf(stderr," U+%04X", rLayoutArgs.mpStr[ nCharPos ] );
-        fprintf(stderr,"\n");
-        rLayoutArgs.ResetPos();
-    }
-#endif
     // get list of unicodes that need glyph fallback
     int nCharPos = -1;
     bool bRTL = false;
@@ -6086,17 +6059,6 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
                 continue;
             }
         }
-
-#if defined(HDU_DEBUG)
-        {
-            ByteString aOrigFontName( maFont.GetName(), RTL_TEXTENCODING_UTF8);
-            ByteString aFallbackName( aFontSelData.mpFontData->GetFamilyName(),
-                RTL_TEXTENCODING_UTF8);
-            fprintf(stderr,"\tGlyphFallback[lvl=%d] \"%s\" -> \"%s\" (q=%d)\n",
-                nFallbackLevel, aOrigFontName.GetBuffer(), aFallbackName.GetBuffer(),
-                aFontSelData.mpFontData->GetQuality());
-        }
-#endif
 
         ImplFontMetricData aSubstituteMetric(aFontSelData);
         pFallbackFont->mnSetFontFlags = mpGraphics->SetFont( &aFontSelData, nFallbackLevel );
