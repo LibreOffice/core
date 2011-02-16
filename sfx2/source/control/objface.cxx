@@ -47,7 +47,7 @@ DBG_NAME(SfxInterface)
 //====================================================================
 
 EXTERN_C
-#if defined( PM2 ) && (!defined( CSET ) && !defined ( MTW ) && !defined( WTC ))
+#if defined( PM2 ) && (!defined( CSET ) && !defined( WTC ))
 int _stdcall
 #else
 #ifdef WNT
