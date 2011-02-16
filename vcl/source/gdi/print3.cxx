@@ -399,17 +399,25 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
         {
             if( nContent == 0 )
             {
-                sal_Int32 nPages = i_pController->getPageCount();
-                if( nPages > 0 )
+                // do not overwrite PageRange if it is already set
+                beans::PropertyValue* pRangeVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ) );
+                rtl::OUString aRange;
+                if( pRangeVal )
+                    pRangeVal->Value >>= aRange;
+                if( aRange.getLength() == 0 )
                 {
-                    rtl::OUStringBuffer aBuf( 32 );
-                    aBuf.appendAscii( "1" );
-                    if( nPages > 1 )
+                    sal_Int32 nPages = i_pController->getPageCount();
+                    if( nPages > 0 )
                     {
-                        aBuf.appendAscii( "-" );
-                        aBuf.append( nPages );
+                        rtl::OUStringBuffer aBuf( 32 );
+                        aBuf.appendAscii( "1" );
+                        if( nPages > 1 )
+                        {
+                            aBuf.appendAscii( "-" );
+                            aBuf.append( nPages );
+                        }
+                        i_pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ), makeAny( aBuf.makeStringAndClear() ) );
                     }
-                    i_pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ), makeAny( aBuf.makeStringAndClear() ) );
                 }
             }
         }
