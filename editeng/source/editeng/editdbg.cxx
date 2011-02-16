@@ -87,7 +87,7 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
         case EE_PARA_NUMBULLET:
             {
             aDebStr += "NumItem ";
-            for ( USHORT nLevel = 0; nLevel < 3; nLevel++ )
+            for ( sal_uInt16 nLevel = 0; nLevel < 3; nLevel++ )
             {
                 aDebStr += "Level";
                 aDebStr += ByteString::CreateFromInt32( nLevel );
@@ -147,14 +147,14 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
             else if ( ((SvxLineSpacingItem&)rItem).GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
             {
                 aDebStr += "Prop: ";
-                aDebStr += ByteString::CreateFromInt32( (ULONG)((SvxLineSpacingItem&)rItem).GetPropLineSpace() );
+                aDebStr += ByteString::CreateFromInt32( (sal_uLong)((SvxLineSpacingItem&)rItem).GetPropLineSpace() );
             }
             else
                 aDebStr += "Unsupported Type!";
         break;
         case EE_PARA_JUST:
             aDebStr += "SvxAdust=";
-            aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxAdjustItem&)rItem).GetAdjust() );
+            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxAdjustItem&)rItem).GetAdjust() );
         break;
         case EE_PARA_TABS:
         {
@@ -164,7 +164,7 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
             if ( rTabs.Count() )
             {
                 aDebStr += "( ";
-                for ( USHORT i = 0; i < rTabs.Count(); i++ )
+                for ( sal_uInt16 i = 0; i < rTabs.Count(); i++ )
                 {
                     const SvxTabStop& rTab = rTabs[i];
                     aDebStr += ByteString::CreateFromInt32( rTab.GetTabPos() );
@@ -178,17 +178,17 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
         case EE_CHAR_LANGUAGE_CJK:
         case EE_CHAR_LANGUAGE_CTL:
             aDebStr += "Language=";
-            aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxLanguageItem&)rItem).GetLanguage() );
+            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxLanguageItem&)rItem).GetLanguage() );
         break;
         case EE_CHAR_COLOR:
         {
             aDebStr += "Color= ";
             Color aColor( ((SvxColorItem&)rItem).GetValue() );
-            aDebStr += ByteString::CreateFromInt32( (USHORT)aColor.GetRed() );
+            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)aColor.GetRed() );
             aDebStr += ", ";
-            aDebStr += ByteString::CreateFromInt32( (USHORT)aColor.GetGreen() );
+            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)aColor.GetGreen() );
             aDebStr += ", ";
-            aDebStr += ByteString::CreateFromInt32( (USHORT)aColor.GetBlue() );
+            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)aColor.GetBlue() );
         }
         break;
         case EE_CHAR_FONTINFO:
@@ -198,7 +198,7 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
             aDebStr += "Font=";
             aDebStr += ByteString( ((SvxFontItem&)rItem).GetFamilyName(), RTL_TEXTENCODING_ASCII_US );
             aDebStr += " (CharSet: ";
-            aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxFontItem&)rItem).GetCharSet() );
+            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxFontItem&)rItem).GetCharSet() );
             aDebStr += ')';
         }
         break;
@@ -228,41 +228,41 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
         case EE_CHAR_WEIGHT_CJK:
         case EE_CHAR_WEIGHT_CTL:
             aDebStr += "FontWeight=";
-            aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxWeightItem&)rItem).GetWeight() );
+            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxWeightItem&)rItem).GetWeight() );
         break;
         case EE_CHAR_UNDERLINE:
             aDebStr += "FontUnderline=";
-            aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxUnderlineItem&)rItem).GetLineStyle() );
+            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxUnderlineItem&)rItem).GetLineStyle() );
         break;
         case EE_CHAR_OVERLINE:
             aDebStr += "FontOverline=";
-            aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxOverlineItem&)rItem).GetLineStyle() );
+            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxOverlineItem&)rItem).GetLineStyle() );
         break;
         case EE_CHAR_EMPHASISMARK:
             aDebStr += "FontUnderline=";
-            aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxEmphasisMarkItem&)rItem).GetEmphasisMark() );
+            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxEmphasisMarkItem&)rItem).GetEmphasisMark() );
         break;
         case EE_CHAR_RELIEF:
             aDebStr += "FontRelief=";
-            aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxCharReliefItem&)rItem).GetValue() );
+            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxCharReliefItem&)rItem).GetValue() );
         break;
         case EE_CHAR_STRIKEOUT:
             aDebStr += "FontStrikeout=";
-            aDebStr +=ByteString::CreateFromInt32(  (USHORT)((SvxCrossedOutItem&)rItem).GetStrikeout() );
+            aDebStr +=ByteString::CreateFromInt32(  (sal_uInt16)((SvxCrossedOutItem&)rItem).GetStrikeout() );
         break;
         case EE_CHAR_ITALIC:
         case EE_CHAR_ITALIC_CJK:
         case EE_CHAR_ITALIC_CTL:
             aDebStr += "FontPosture=";
-            aDebStr +=ByteString::CreateFromInt32(  (USHORT)((SvxPostureItem&)rItem).GetPosture() );
+            aDebStr +=ByteString::CreateFromInt32(  (sal_uInt16)((SvxPostureItem&)rItem).GetPosture() );
         break;
         case EE_CHAR_OUTLINE:
             aDebStr += "FontOutline=";
-            aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxContourItem&)rItem).GetValue() );
+            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxContourItem&)rItem).GetValue() );
         break;
         case EE_CHAR_SHADOW:
             aDebStr += "FontShadowed=";
-            aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxShadowedItem&)rItem).GetValue() );
+            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxShadowedItem&)rItem).GetValue() );
         break;
         case EE_CHAR_ESCAPEMENT:
             aDebStr += "Escape=";
@@ -272,7 +272,7 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
         break;
         case EE_CHAR_PAIRKERNING:
             aDebStr += "PairKerning=";
-            aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxAutoKernItem&)rItem).GetValue() );
+            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxAutoKernItem&)rItem).GetValue() );
         break;
         case EE_CHAR_KERNING:
         {
@@ -289,7 +289,7 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
         break;
         case EE_CHAR_WLM:
             aDebStr += "WordLineMode=";
-            aDebStr += ByteString::CreateFromInt32( (USHORT)((SvxWordLineModeItem&)rItem).GetValue() );
+            aDebStr += ByteString::CreateFromInt32( (sal_uInt16)((SvxWordLineModeItem&)rItem).GetValue() );
         break;
         case EE_CHAR_XMLATTRIBS:
             aDebStr += "XMLAttribs=...";
@@ -298,9 +298,9 @@ ByteString DbgOutItem( const SfxItemPool& rPool, const SfxPoolItem& rItem )
     return aDebStr;
 }
 
-void DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, BOOL bSearchInParent, BOOL bShowALL )
+void DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, sal_Bool bSearchInParent, sal_Bool bShowALL )
 {
-    for ( USHORT nWhich = EE_PARA_START; nWhich <= EE_CHAR_END; nWhich++ )
+    for ( sal_uInt16 nWhich = EE_PARA_START; nWhich <= EE_CHAR_END; nWhich++ )
     {
         fprintf( fp, "\nWhich: %i\t", nWhich );
         if ( rSet.GetItemState( nWhich, bSearchInParent ) == SFX_ITEM_OFF )
@@ -319,7 +319,7 @@ void DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, BOOL bSearchInParent, BOOL
     }
 }
 
-void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
+void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
 {
 #if defined UNX
     FILE* fp = fopen( "/tmp/debug.log", "w" );
@@ -337,7 +337,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
     fprintf( fp, "================================================================================" );
     fprintf( fp, "\n==================   Dokument   ================================================" );
     fprintf( fp, "\n================================================================================" );
-    for ( USHORT nPortion = 0; nPortion < pEE->pImpEditEngine->GetParaPortions(). Count(); nPortion++)
+    for ( sal_uInt16 nPortion = 0; nPortion < pEE->pImpEditEngine->GetParaPortions(). Count(); nPortion++)
     {
 
         ParaPortion* pPPortion = pEE->pImpEditEngine->GetParaPortions().GetObject(nPortion );
@@ -347,11 +347,11 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
         if ( pStyle )
             fprintf( fp, " %s", ByteString( pStyle->GetName(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
         fprintf( fp, "\nAbsatzattribute:" );
-        DbgOutItemSet( fp, pPPortion->GetNode()->GetContentAttribs().GetItems(), FALSE, FALSE );
+        DbgOutItemSet( fp, pPPortion->GetNode()->GetContentAttribs().GetItems(), sal_False, sal_False );
 
         fprintf( fp, "\nZeichenattribute:" );
-        BOOL bZeroAttr = FALSE;
-        USHORT z;
+        sal_Bool bZeroAttr = sal_False;
+        sal_uInt16 z;
         for ( z = 0; z < pPPortion->GetNode()->GetCharAttribs().Count(); z++ )
         {
             EditCharAttrib* pAttr = pPPortion->GetNode()->GetCharAttribs().GetAttribs().GetObject( z );
@@ -365,7 +365,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
             aCharAttribs += '\t';
             aCharAttribs += ByteString::CreateFromInt32( pAttr->GetEnd() );
             if ( pAttr->IsEmpty() )
-                bZeroAttr = TRUE;
+                bZeroAttr = sal_True;
             fprintf( fp, "%s => ", aCharAttribs.GetBuffer() );
 
             ByteString aDebStr = DbgOutItem( rPool, *pAttr->GetItem() );
@@ -374,7 +374,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
         if ( bZeroAttr )
             fprintf( fp, "\nNULL-Attribute!" );
 
-        USHORT nTextPortions = pPPortion->GetTextPortions().Count();
+        sal_uInt16 nTextPortions = pPPortion->GetTextPortions().Count();
         ByteString aPortionStr("\nTextportions: #");
         aPortionStr += ByteString::CreateFromInt32( nTextPortions );
         aPortionStr += " \nA";
@@ -384,7 +384,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
         aPortionStr += "\nA";
         aPortionStr += ByteString::CreateFromInt32( nPortion );
         aPortionStr += ": ";
-        ULONG n = 0;
+        sal_uLong n = 0;
         for ( z = 0; z < nTextPortions; z++ )
         {
             TextPortion* pPortion = pPPortion->GetTextPortions().GetObject( z );
@@ -394,7 +394,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
             aPortionStr += ByteString::CreateFromInt32( pPortion->GetSize().Width() );
             aPortionStr += ")";
             aPortionStr += "[";
-            aPortionStr += ByteString::CreateFromInt32( (USHORT)pPortion->GetKind() );
+            aPortionStr += ByteString::CreateFromInt32( (sal_uInt16)pPortion->GetKind() );
             aPortionStr += "]";
             aPortionStr += ";";
             n += pPortion->GetLen();
@@ -410,7 +410,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
 
         fprintf( fp, "\n\nZeilen:" );
         // Erstmal die Inhalte...
-        USHORT nLine;
+        sal_uInt16 nLine;
         for ( nLine = 0; nLine < pPPortion->GetLines().Count(); nLine++ )
         {
             EditLine* pLine = pPPortion->GetLines().GetObject( nLine );
@@ -431,7 +431,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
 
     if ( pEE->pImpEditEngine->GetStyleSheetPool() )
     {
-        ULONG nStyles = pEE->pImpEditEngine->GetStyleSheetPool() ? pEE->pImpEditEngine->GetStyleSheetPool()->Count() : 0;
+        sal_uLong nStyles = pEE->pImpEditEngine->GetStyleSheetPool() ? pEE->pImpEditEngine->GetStyleSheetPool()->Count() : 0;
         fprintf( fp, "\n\n================================================================================" );
         fprintf( fp, "\n==================   Stylesheets   =============================================" );
         fprintf( fp, "\n================================================================================" );
@@ -443,7 +443,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
             fprintf( fp, "\nVorlage:   %s", ByteString( pStyle->GetName(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
             fprintf( fp, "\nParent:    %s", ByteString( pStyle->GetParent(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
             fprintf( fp, "\nFollow:    %s", ByteString( pStyle->GetFollow(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
-            DbgOutItemSet( fp, pStyle->GetItemSet(), FALSE, FALSE );
+            DbgOutItemSet( fp, pStyle->GetItemSet(), sal_False, sal_False );
             fprintf( fp, "\n----------------------------------" );
 
             pStyle = aIter.Next();
@@ -453,7 +453,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
     fprintf( fp, "\n\n================================================================================" );
     fprintf( fp, "\n==================   Defaults   ================================================" );
     fprintf( fp, "\n================================================================================" );
-    DbgOutItemSet( fp, pEE->pImpEditEngine->GetEmptyItemSet(), TRUE, TRUE );
+    DbgOutItemSet( fp, pEE->pImpEditEngine->GetEmptyItemSet(), sal_True, sal_True );
 
     fprintf( fp, "\n\n================================================================================" );
     fprintf( fp, "\n==================   EditEngine & Views   ======================================" );
@@ -465,7 +465,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
     fprintf( fp, "\nMinAutoPaperSize: %li x %li", pEE->GetMinAutoPaperSize().Width(), pEE->GetMinAutoPaperSize().Height() );
     fprintf( fp, "\nUpdate: %i", pEE->GetUpdateMode() );
     fprintf( fp, "\nAnzahl der Views: %i", pEE->GetViewCount() );
-    for ( USHORT nView = 0; nView < pEE->GetViewCount(); nView++ )
+    for ( sal_uInt16 nView = 0; nView < pEE->GetViewCount(); nView++ )
     {
         EditView* pV = pEE->GetView( nView );
         DBG_ASSERT( pV, "View nicht gefunden!" );
@@ -482,7 +482,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
         fprintf( fp, "\n\n================================================================================" );
         fprintf( fp, "\n==================   Aktuelle View   ===========================================" );
         fprintf( fp, "\n================================================================================" );
-        DbgOutItemSet( fp, pEE->GetActiveView()->GetAttribs(), TRUE, FALSE );
+        DbgOutItemSet( fp, pEE->GetActiveView()->GetAttribs(), sal_True, sal_False );
     }
     fclose( fp );
     if ( bInfoBox )
@@ -491,7 +491,7 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
 
 ByteString EditDbg::GetPortionInfo( ParaPortion* pPPortion )
 {
-    USHORT z;
+    sal_uInt16 z;
 
     ByteString aDebStr( "Absatzlaenge = " );
     aDebStr += ByteString::CreateFromInt32( pPPortion->GetNode()->Len() );
@@ -509,7 +509,7 @@ ByteString EditDbg::GetPortionInfo( ParaPortion* pPPortion )
     }
 
     aDebStr += "\nTextportions:";
-    USHORT n = 0;
+    sal_uInt16 n = 0;
     for ( z = 0; z < pPPortion->GetTextPortions().Count(); z++ )
     {
         TextPortion* pPortion = pPPortion->GetTextPortions().GetObject( z );
@@ -524,7 +524,7 @@ ByteString EditDbg::GetPortionInfo( ParaPortion* pPPortion )
     aDebStr += "\nGesamtlaenge: ";
     aDebStr += ByteString::CreateFromInt32( n );
     aDebStr += "\nSortiert nach Start:";
-    for ( USHORT x = 0; x < pPPortion->GetNode()->GetCharAttribs().Count(); x++ )
+    for ( sal_uInt16 x = 0; x < pPPortion->GetNode()->GetCharAttribs().Count(); x++ )
     {
         EditCharAttrib* pCurAttrib = pPPortion->GetNode()->GetCharAttribs().GetAttribs().GetObject( x );
         aDebStr += "\nStart: ";
@@ -538,7 +538,7 @@ ByteString EditDbg::GetPortionInfo( ParaPortion* pPPortion )
 ByteString EditDbg::GetTextPortionInfo( TextPortionList& rPortions )
 {
     ByteString aDebStr;
-    for ( USHORT z = 0; z < rPortions.Count(); z++ )
+    for ( sal_uInt16 z = 0; z < rPortions.Count(); z++ )
     {
         TextPortion* pPortion = rPortions.GetObject( z );
         aDebStr += " ";
@@ -558,28 +558,28 @@ void EditDbg::ShowPortionData( ParaPortion* pPortion )
 }
 
 
-BOOL ParaPortion::DbgCheckTextPortions()
+sal_Bool ParaPortion::DbgCheckTextPortions()
 {
     // pruefen, ob Portionlaenge ok:
-    USHORT nXLen = 0;
-    for ( USHORT nPortion = 0; nPortion < aTextPortionList.Count(); nPortion++  )
+    sal_uInt16 nXLen = 0;
+    for ( sal_uInt16 nPortion = 0; nPortion < aTextPortionList.Count(); nPortion++  )
         nXLen = nXLen + aTextPortionList[nPortion]->GetLen();
-    return nXLen == pNode->Len() ? TRUE : FALSE;
+    return nXLen == pNode->Len() ? sal_True : sal_False;
 }
 
-BOOL CheckOrderedList( CharAttribArray& rAttribs, BOOL bStart )
+sal_Bool CheckOrderedList( CharAttribArray& rAttribs, sal_Bool bStart )
 {
-    USHORT nPrev = 0;
-    for ( USHORT nAttr = 0; nAttr < rAttribs.Count(); nAttr++ )
+    sal_uInt16 nPrev = 0;
+    for ( sal_uInt16 nAttr = 0; nAttr < rAttribs.Count(); nAttr++ )
     {
         EditCharAttrib* pAttr = rAttribs[nAttr];
-        USHORT nCur = bStart ? pAttr->GetStart() : pAttr->GetEnd();
+        sal_uInt16 nCur = bStart ? pAttr->GetStart() : pAttr->GetEnd();
         if ( nCur < nPrev )
-            return FALSE;
+            return sal_False;
 
         nPrev = nCur;
     }
-    return TRUE;
+    return sal_True;
 }
 
 #endif

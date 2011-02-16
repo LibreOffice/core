@@ -34,7 +34,7 @@
 class SVX_DLLPUBLIC SvxHyperlinkDlgWrapper : public SfxChildWindow
 {
 public:
-    SvxHyperlinkDlgWrapper( Window*pParent, USHORT nId,
+    SvxHyperlinkDlgWrapper( Window*pParent, sal_uInt16 nId,
                             SfxBindings* pBindings, SfxChildWinInfo* pInfo );
     SFX_DECL_CHILDWINDOW(SvxHyperlinkDlgWrapper);
 };

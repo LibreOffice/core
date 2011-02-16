@@ -67,24 +67,24 @@ public:
     static BitmapEx     CreateQuickDrawBitmapEx( const Graphic& rGraphic, const OutputDevice& rCompDev,
                                                  const MapMode& rMapMode, const Size& rLogSize,
                                                  const Point& rPoint, const Size& rSize );
-    static Graphic      MirrorGraphic( const Graphic& rGraphic, const ULONG nMirrorFlags );
-    static Animation    MirrorAnimation( const Animation& rAnimation, BOOL bHMirr, BOOL bVMirr );
-    static USHORT       WriteGraphic( const Graphic& rGraphic, String& rFileName,
-                                      const String& rFilterName, const ULONG nFlags = 0L,
+    static Graphic      MirrorGraphic( const Graphic& rGraphic, const sal_uIntPtr nMirrorFlags );
+    static Animation    MirrorAnimation( const Animation& rAnimation, sal_Bool bHMirr, sal_Bool bVMirr );
+    static sal_uInt16       WriteGraphic( const Graphic& rGraphic, String& rFileName,
+                                      const String& rFilterName, const sal_uIntPtr nFlags = 0L,
                                       const Size* pMtfSize_100TH_MM = NULL );
     static void         DrawQuickDrawBitmapEx( OutputDevice* pOutDev, const Point& rPt,
                                                const Size& rSize, const BitmapEx& rBmpEx );
     static void         DrawTiledBitmapEx( OutputDevice* pOutDev, const Point& rStartPt, const Size& rGrfSize,
                                            const Rectangle& rTileRect, const BitmapEx& rBmpEx );
 
-    static USHORT       ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
-                                       GraphicFilter& rFilter, const USHORT nFormat,
+    static sal_uInt16       ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
+                                       GraphicFilter& rFilter, const sal_uInt16 nFormat,
                                        const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData = NULL );
 
-    static Bitmap       DetectEdges( const Bitmap& rBmp, const BYTE cThreshold );
+    static Bitmap       DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold );
 
-    static Polygon      GetCountour( const Bitmap& rBmp, const ULONG nContourFlags,
-                                     const BYTE cEdgeDetectThreshold = 50,
+    static Polygon      GetCountour( const Bitmap& rBmp, const sal_uIntPtr nContourFlags,
+                                     const sal_uInt8 cEdgeDetectThreshold = 50,
                                      const Rectangle* pWorkRect = NULL );
 };
 
@@ -92,6 +92,6 @@ public:
 // - DitherBitmap -
 // ----------------
 
-SVX_DLLPUBLIC BOOL DitherBitmap( Bitmap& rBitmap );
+SVX_DLLPUBLIC sal_Bool DitherBitmap( Bitmap& rBitmap );
 
 #endif // _XOUTBMP_HXX

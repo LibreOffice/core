@@ -40,10 +40,10 @@ class XFormTextShadowTranspItem: public SfxUInt16Item
 {
 public:
                             TYPEINFO();
-                            XFormTextShadowTranspItem(USHORT nShdwTransparence = 0);
+                            XFormTextShadowTranspItem(sal_uInt16 nShdwTransparence = 0);
                             XFormTextShadowTranspItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = NULL) const;
-    virtual SfxPoolItem*    Create(SvStream& rIn, USHORT nVer) const;
+    virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;
 };
 
 #endif

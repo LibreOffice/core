@@ -63,7 +63,7 @@ class DialogHelper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
     Dialog*         m_pVCLWindow;
-    ULONG           m_nEventID;
+    sal_uLong           m_nEventID;
     bool            m_bIsBusy;
 
 public:
@@ -88,12 +88,12 @@ public:
     virtual void    prepareChecking() = 0;
     virtual void    checkEntries() = 0;
 
-    static ResId    getResId( USHORT nId );
-    static String   getResourceString( USHORT id );
+    static ResId    getResId( sal_uInt16 nId );
+    static String   getResourceString( sal_uInt16 id );
     static bool     IsSharedPkgMgr( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &);
     static bool     continueOnSharedExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
                                                Window *pParent,
-                                               const USHORT nResID,
+                                               const sal_uInt16 nResID,
                                                bool &bHadWarning );
 
     void            setBusy( const bool bBusy ) { m_bIsBusy = bBusy; }
@@ -149,7 +149,7 @@ public:
 
     virtual void    Resize();
     virtual long    Notify( NotifyEvent& rNEvt );
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 
     virtual void    showProgress( bool bStart );
     virtual void    updateProgress( const ::rtl::OUString &rText,
@@ -221,7 +221,7 @@ public:
 
     virtual short   Execute();
     virtual void    Resize();
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
 //    virtual long    Notify( NotifyEvent& rNEvt );
 
     virtual void    showProgress( bool bStart );

@@ -291,7 +291,7 @@ XMLFontPitchPropHdl::~XMLFontPitchPropHdl()
 
 sal_Bool XMLFontPitchPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
 {
-    USHORT eNewPitch;
+    sal_uInt16 eNewPitch;
     sal_Bool bRet = SvXMLUnitConverter::convertEnum( eNewPitch, rStrImpValue, aFontPitchMapping );
     if( bRet )
         rValue <<= (sal_Int16)eNewPitch;

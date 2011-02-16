@@ -57,11 +57,11 @@ DBG_NAME(XPolyPolygon);
 |*
 *************************************************************************/
 
-ImpXPolygon::ImpXPolygon( USHORT nInitSize, USHORT _nResize )
+ImpXPolygon::ImpXPolygon( sal_uInt16 nInitSize, sal_uInt16 _nResize )
 {
     pPointAry               = NULL;
     pFlagAry                = NULL;
-    bDeleteOldPoints        = FALSE;
+    bDeleteOldPoints        = sal_False;
     nSize                   = 0;
     nResize                 = _nResize;
     nPoints                 = 0;
@@ -86,7 +86,7 @@ ImpXPolygon::ImpXPolygon( const ImpXPolygon& rImpXPoly )
 
     pPointAry               = NULL;
     pFlagAry                = NULL;
-    bDeleteOldPoints        = FALSE;
+    bDeleteOldPoints        = sal_False;
     nSize                   = 0;
     ImpXPolygon::nResize    = rImpXPoly.nResize;
     nPoints                 = 0;
@@ -140,7 +140,7 @@ bool ImpXPolygon::operator==(const ImpXPolygon& rImpXPoly) const
 |*
 |*    ImpXPolygon::Resize()
 |*
-|*    !!! Polygongroesse aendern - wenn bDeletePoints FALSE, dann den
+|*    !!! Polygongroesse aendern - wenn bDeletePoints sal_False, dann den
 |*    Point-Array nicht loeschen, sondern in pOldPointAry sichern und
 |*    das Flag bDeleteOldPoints setzen. Beim naechsten Zugriff wird
 |*    das Array dann geloescht.
@@ -152,13 +152,13 @@ bool ImpXPolygon::operator==(const ImpXPolygon& rImpXPoly) const
 |*
 *************************************************************************/
 
-void ImpXPolygon::Resize( USHORT nNewSize, BOOL bDeletePoints )
+void ImpXPolygon::Resize( sal_uInt16 nNewSize, sal_Bool bDeletePoints )
 {
     if( nNewSize == nSize )
         return;
 
-    BYTE*   pOldFlagAry  = pFlagAry;
-    USHORT  nOldSize     = nSize;
+    sal_uInt8*   pOldFlagAry  = pFlagAry;
+    sal_uInt16  nOldSize     = nSize;
 
     CheckPointDelete();
     pOldPointAry = pPointAry;
@@ -176,7 +176,7 @@ void ImpXPolygon::Resize( USHORT nNewSize, BOOL bDeletePoints )
     memset( pPointAry, 0, nSize*sizeof( Point ) );
 
     // Flag Array erzeugen
-    pFlagAry = new BYTE[ nSize ];
+    pFlagAry = new sal_uInt8[ nSize ];
     memset( pFlagAry, 0, nSize );
 
     // Eventuell umkopieren
@@ -197,7 +197,7 @@ void ImpXPolygon::Resize( USHORT nNewSize, BOOL bDeletePoints )
                 nPoints = nSize;
         }
         if ( bDeletePoints )    delete[] (char*) pOldPointAry;
-        else                    bDeleteOldPoints = TRUE;
+        else                    bDeleteOldPoints = sal_True;
         delete[] pOldFlagAry;
     }
 }
@@ -213,7 +213,7 @@ void ImpXPolygon::Resize( USHORT nNewSize, BOOL bDeletePoints )
 |*
 *************************************************************************/
 
-void ImpXPolygon::InsertSpace( USHORT nPos, USHORT nCount )
+void ImpXPolygon::InsertSpace( sal_uInt16 nPos, sal_uInt16 nCount )
 {
     CheckPointDelete();
 
@@ -228,7 +228,7 @@ void ImpXPolygon::InsertSpace( USHORT nPos, USHORT nCount )
     // den Rest nach hinten schieben
     if( nPos < nPoints )
     {
-        USHORT nMove = nPoints - nPos;
+        sal_uInt16 nMove = nPoints - nPos;
         memmove( &pPointAry[nPos+nCount], &pPointAry[nPos],
                  nMove * sizeof(Point) );
         memmove( &pFlagAry[nPos+nCount], &pFlagAry[nPos], nMove );
@@ -250,13 +250,13 @@ void ImpXPolygon::InsertSpace( USHORT nPos, USHORT nCount )
 |*
 *************************************************************************/
 
-void ImpXPolygon::Remove( USHORT nPos, USHORT nCount )
+void ImpXPolygon::Remove( sal_uInt16 nPos, sal_uInt16 nCount )
 {
     CheckPointDelete();
 
     if( (nPos + nCount) <= nPoints )
     {
-        USHORT nMove = nPoints - nPos - nCount;
+        sal_uInt16 nMove = nPoints - nPos - nCount;
 
         if( nMove )
         {
@@ -281,7 +281,7 @@ void ImpXPolygon::Remove( USHORT nPos, USHORT nCount )
 |*
 *************************************************************************/
 
-XPolygon::XPolygon( USHORT nSize, USHORT nResize )
+XPolygon::XPolygon( sal_uInt16 nSize, sal_uInt16 nResize )
 {
     DBG_CTOR(XPolygon,NULL);
     pImpXPolygon = new ImpXPolygon( nSize, nResize );
@@ -318,14 +318,14 @@ XPolygon::XPolygon( const Polygon& rPoly )
 {
     DBG_CTOR(XPolygon,NULL);
 
-    USHORT nSize = rPoly.GetSize();
+    sal_uInt16 nSize = rPoly.GetSize();
     pImpXPolygon = new ImpXPolygon( nSize );
     pImpXPolygon->nPoints = nSize;
 
-    for( USHORT i = 0; i < nSize;  i++ )
+    for( sal_uInt16 i = 0; i < nSize;  i++ )
     {
         pImpXPolygon->pPointAry[i] = rPoly[i];
-        pImpXPolygon->pFlagAry[i] = (BYTE) rPoly.GetFlags( i );
+        pImpXPolygon->pFlagAry[i] = (sal_uInt8) rPoly.GetFlags( i );
     }
 }
 
@@ -355,13 +355,13 @@ XPolygon::XPolygon(const Rectangle& rRect, long nRx, long nRy)
     // Faktor fuer Kontrollpunkte der Bezierkurven: 8/3 * (sin(45g) - 0.5)
     long    nXHdl = (long)(0.552284749 * nRx);
     long    nYHdl = (long)(0.552284749 * nRy);
-    USHORT  nPos = 0;
+    sal_uInt16  nPos = 0;
 
     if ( nRx && nRy )
     {
         Point aCenter;
 
-        for (USHORT nQuad = 0; nQuad < 4; nQuad++)
+        for (sal_uInt16 nQuad = 0; nQuad < 4; nQuad++)
         {
             switch ( nQuad )
             {
@@ -383,8 +383,8 @@ XPolygon::XPolygon(const Rectangle& rRect, long nRx, long nRy)
                         break;
             }
             GenBezArc(aCenter, nRx, nRy, nXHdl, nYHdl, 0, 900, nQuad, nPos);
-            pImpXPolygon->pFlagAry[nPos  ] = (BYTE) XPOLY_SMOOTH;
-            pImpXPolygon->pFlagAry[nPos+3] = (BYTE) XPOLY_SMOOTH;
+            pImpXPolygon->pFlagAry[nPos  ] = (sal_uInt8) XPOLY_SMOOTH;
+            pImpXPolygon->pFlagAry[nPos+3] = (sal_uInt8) XPOLY_SMOOTH;
             nPos += 4;
         }
     }
@@ -410,31 +410,31 @@ XPolygon::XPolygon(const Rectangle& rRect, long nRx, long nRy)
 *************************************************************************/
 
 XPolygon::XPolygon(const Point& rCenter, long nRx, long nRy,
-                   USHORT nStartAngle, USHORT nEndAngle, BOOL bClose)
+                   sal_uInt16 nStartAngle, sal_uInt16 nEndAngle, sal_Bool bClose)
 {
     DBG_CTOR(XPolygon,NULL);
     pImpXPolygon = new ImpXPolygon(17);
 
     nStartAngle %= 3600;
     if ( nEndAngle > 3600 ) nEndAngle %= 3600;
-    BOOL bFull = (nStartAngle == 0 && nEndAngle == 3600);
+    sal_Bool bFull = (nStartAngle == 0 && nEndAngle == 3600);
 
     // Faktor fuer Kontrollpunkte der Bezierkurven: 8/3 * (sin(45g) - 0.5)
     long    nXHdl = (long)(0.552284749 * nRx);
     long    nYHdl = (long)(0.552284749 * nRy);
-    USHORT  nPos = 0;
-    BOOL    bLoopEnd = FALSE;
+    sal_uInt16  nPos = 0;
+    sal_Bool    bLoopEnd = sal_False;
 
     do
     {
-        USHORT nA1, nA2;
-        USHORT nQuad = nStartAngle / 900;
+        sal_uInt16 nA1, nA2;
+        sal_uInt16 nQuad = nStartAngle / 900;
         if ( nQuad == 4 ) nQuad = 0;
         bLoopEnd = CheckAngles(nStartAngle, nEndAngle, nA1, nA2);
         GenBezArc(rCenter, nRx, nRy, nXHdl, nYHdl, nA1, nA2, nQuad, nPos);
         nPos += 3;
         if ( !bLoopEnd )
-            pImpXPolygon->pFlagAry[nPos] = (BYTE) XPOLY_SMOOTH;
+            pImpXPolygon->pFlagAry[nPos] = (sal_uInt8) XPOLY_SMOOTH;
 
     } while ( !bLoopEnd );
 
@@ -444,8 +444,8 @@ XPolygon::XPolygon(const Point& rCenter, long nRx, long nRy,
 
     if ( bFull )
     {
-        pImpXPolygon->pFlagAry[0   ] = (BYTE) XPOLY_SMOOTH;
-        pImpXPolygon->pFlagAry[nPos] = (BYTE) XPOLY_SMOOTH;
+        pImpXPolygon->pFlagAry[0   ] = (sal_uInt8) XPOLY_SMOOTH;
+        pImpXPolygon->pFlagAry[nPos] = (sal_uInt8) XPOLY_SMOOTH;
     }
     pImpXPolygon->nPoints = nPos + 1;
 }
@@ -498,7 +498,7 @@ void XPolygon::CheckReference()
 |*
 *************************************************************************/
 
-void XPolygon::SetSize( USHORT nNewSize )
+void XPolygon::SetSize( sal_uInt16 nNewSize )
 {
     CheckReference();
     pImpXPolygon->Resize( nNewSize );
@@ -514,7 +514,7 @@ void XPolygon::SetSize( USHORT nNewSize )
 |*
 *************************************************************************/
 
-USHORT XPolygon::GetSize() const
+sal_uInt16 XPolygon::GetSize() const
 {
     pImpXPolygon->CheckPointDelete();
     return pImpXPolygon->nSize;
@@ -530,7 +530,7 @@ USHORT XPolygon::GetSize() const
 |*
 *************************************************************************/
 
-void XPolygon::SetPointCount( USHORT nPoints )
+void XPolygon::SetPointCount( sal_uInt16 nPoints )
 {
     pImpXPolygon->CheckPointDelete();
     CheckReference();
@@ -540,7 +540,7 @@ void XPolygon::SetPointCount( USHORT nPoints )
 
     if ( nPoints < pImpXPolygon->nPoints )
     {
-        USHORT nSize = pImpXPolygon->nPoints - nPoints;
+        sal_uInt16 nSize = pImpXPolygon->nPoints - nPoints;
         memset( &pImpXPolygon->pPointAry[nPoints], 0, nSize * sizeof( Point ) );
         memset( &pImpXPolygon->pFlagAry [nPoints], 0, nSize );
     }
@@ -557,7 +557,7 @@ void XPolygon::SetPointCount( USHORT nPoints )
 |*
 *************************************************************************/
 
-USHORT XPolygon::GetPointCount() const
+sal_uInt16 XPolygon::GetPointCount() const
 {
     pImpXPolygon->CheckPointDelete();
     return pImpXPolygon->nPoints;
@@ -573,13 +573,13 @@ USHORT XPolygon::GetPointCount() const
 |*
 *************************************************************************/
 
-void XPolygon::Insert( USHORT nPos, const Point& rPt, XPolyFlags eFlags )
+void XPolygon::Insert( sal_uInt16 nPos, const Point& rPt, XPolyFlags eFlags )
 {
     CheckReference();
     if (nPos>pImpXPolygon->nPoints) nPos=pImpXPolygon->nPoints;
     pImpXPolygon->InsertSpace( nPos, 1 );
     pImpXPolygon->pPointAry[nPos] = rPt;
-    pImpXPolygon->pFlagAry[nPos]  = (BYTE)eFlags;
+    pImpXPolygon->pFlagAry[nPos]  = (sal_uInt8)eFlags;
 }
 
 /*************************************************************************
@@ -592,12 +592,12 @@ void XPolygon::Insert( USHORT nPos, const Point& rPt, XPolyFlags eFlags )
 |*
 *************************************************************************/
 
-void XPolygon::Insert( USHORT nPos, const XPolygon& rXPoly )
+void XPolygon::Insert( sal_uInt16 nPos, const XPolygon& rXPoly )
 {
     CheckReference();
     if (nPos>pImpXPolygon->nPoints) nPos=pImpXPolygon->nPoints;
 
-    USHORT nPoints = rXPoly.GetPointCount();
+    sal_uInt16 nPoints = rXPoly.GetPointCount();
 
     pImpXPolygon->InsertSpace( nPos, nPoints );
 
@@ -619,16 +619,16 @@ void XPolygon::Insert( USHORT nPos, const XPolygon& rXPoly )
 |*
 *************************************************************************/
 
-void XPolygon::Insert( USHORT nPos, const Polygon& rPoly )
+void XPolygon::Insert( sal_uInt16 nPos, const Polygon& rPoly )
 {
     CheckReference();
     if (nPos>pImpXPolygon->nPoints) nPos=pImpXPolygon->nPoints;
 
-    USHORT nPoints = rPoly.GetSize();
+    sal_uInt16 nPoints = rPoly.GetSize();
 
     pImpXPolygon->InsertSpace( nPos, nPoints );
 
-    USHORT i;
+    sal_uInt16 i;
     for( i=0; i < nPoints; i++ )
         pImpXPolygon->pPointAry[i] = rPoly[i];
 
@@ -645,7 +645,7 @@ void XPolygon::Insert( USHORT nPos, const Polygon& rPoly )
 |*
 *************************************************************************/
 
-void XPolygon::Remove( USHORT nPos, USHORT nCount )
+void XPolygon::Remove( sal_uInt16 nPos, sal_uInt16 nCount )
 {
     CheckReference();
     pImpXPolygon->Remove( nPos, nCount );
@@ -669,8 +669,8 @@ void XPolygon::Move( long nHorzMove, long nVertMove )
     CheckReference();
 
     // Punkte verschieben
-    USHORT nCount = pImpXPolygon->nPoints;
-    for ( USHORT i = 0; i < nCount; i++ )
+    sal_uInt16 nCount = pImpXPolygon->nPoints;
+    for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
         Point* pPt = &(pImpXPolygon->pPointAry[i]);
         pPt->X() += nHorzMove;
@@ -720,7 +720,7 @@ Rectangle XPolygon::GetBoundRect() const
 |*
 *************************************************************************/
 
-const Point& XPolygon::operator[]( USHORT nPos ) const
+const Point& XPolygon::operator[]( sal_uInt16 nPos ) const
 {
     DBG_ASSERT(nPos < pImpXPolygon->nPoints, "Ungueltiger Index bei const-Arrayzugriff auf XPolygon");
 
@@ -738,7 +738,7 @@ const Point& XPolygon::operator[]( USHORT nPos ) const
 |*
 *************************************************************************/
 
-Point& XPolygon::operator[]( USHORT nPos )
+Point& XPolygon::operator[]( sal_uInt16 nPos )
 {
     pImpXPolygon->CheckPointDelete();
     CheckReference();
@@ -746,7 +746,7 @@ Point& XPolygon::operator[]( USHORT nPos )
     if( nPos >= pImpXPolygon->nSize )
     {
         DBG_ASSERT(pImpXPolygon->nResize, "Ungueltiger Index bei Arrayzugriff auf XPolygon");
-        pImpXPolygon->Resize(nPos + 1, FALSE);
+        pImpXPolygon->Resize(nPos + 1, sal_False);
     }
     if( nPos >= pImpXPolygon->nPoints )
         pImpXPolygon->nPoints = nPos + 1;
@@ -789,10 +789,10 @@ XPolygon& XPolygon::operator=( const XPolygon& rXPoly )
 |*
 *************************************************************************/
 
-BOOL XPolygon::operator==( const XPolygon& rXPoly ) const
+sal_Bool XPolygon::operator==( const XPolygon& rXPoly ) const
 {
     pImpXPolygon->CheckPointDelete();
-    if (rXPoly.pImpXPolygon==pImpXPolygon) return TRUE;
+    if (rXPoly.pImpXPolygon==pImpXPolygon) return sal_True;
     return *rXPoly.pImpXPolygon == *pImpXPolygon;
 }
 
@@ -806,10 +806,10 @@ BOOL XPolygon::operator==( const XPolygon& rXPoly ) const
 |*
 *************************************************************************/
 
-BOOL XPolygon::operator!=( const XPolygon& rXPoly ) const
+sal_Bool XPolygon::operator!=( const XPolygon& rXPoly ) const
 {
     pImpXPolygon->CheckPointDelete();
-    if (rXPoly.pImpXPolygon==pImpXPolygon) return FALSE;
+    if (rXPoly.pImpXPolygon==pImpXPolygon) return sal_False;
     return *rXPoly.pImpXPolygon != *pImpXPolygon;
 }
 
@@ -823,7 +823,7 @@ BOOL XPolygon::operator!=( const XPolygon& rXPoly ) const
 |*
 *************************************************************************/
 
-XPolyFlags XPolygon::GetFlags( USHORT nPos ) const
+XPolyFlags XPolygon::GetFlags( sal_uInt16 nPos ) const
 {
     pImpXPolygon->CheckPointDelete();
     return (XPolyFlags) pImpXPolygon->pFlagAry[nPos];
@@ -839,11 +839,11 @@ XPolyFlags XPolygon::GetFlags( USHORT nPos ) const
 |*
 *************************************************************************/
 
-void XPolygon::SetFlags( USHORT nPos, XPolyFlags eFlags )
+void XPolygon::SetFlags( sal_uInt16 nPos, XPolyFlags eFlags )
 {
     pImpXPolygon->CheckPointDelete();
     CheckReference();
-    pImpXPolygon->pFlagAry[nPos] = (BYTE) eFlags;
+    pImpXPolygon->pFlagAry[nPos] = (sal_uInt8) eFlags;
 }
 
 /*************************************************************************
@@ -856,7 +856,7 @@ void XPolygon::SetFlags( USHORT nPos, XPolyFlags eFlags )
 |*
 *************************************************************************/
 
-BOOL XPolygon::IsControl(USHORT nPos) const
+sal_Bool XPolygon::IsControl(sal_uInt16 nPos) const
 {
     return ( (XPolyFlags) pImpXPolygon->pFlagAry[nPos] == XPOLY_CONTROL );
 }
@@ -871,7 +871,7 @@ BOOL XPolygon::IsControl(USHORT nPos) const
 |*
 *************************************************************************/
 
-BOOL XPolygon::IsSmooth(USHORT nPos) const
+sal_Bool XPolygon::IsSmooth(sal_uInt16 nPos) const
 {
     XPolyFlags eFlag = (XPolyFlags) pImpXPolygon->pFlagAry[nPos];
     return ( eFlag == XPOLY_SMOOTH || eFlag == XPOLY_SYMMTR );
@@ -887,7 +887,7 @@ BOOL XPolygon::IsSmooth(USHORT nPos) const
 |*
 *************************************************************************/
 
-double XPolygon::CalcDistance(USHORT nP1, USHORT nP2)
+double XPolygon::CalcDistance(sal_uInt16 nP1, sal_uInt16 nP2)
 {
     const Point& rP1 = pImpXPolygon->pPointAry[nP1];
     const Point& rP2 = pImpXPolygon->pPointAry[nP2];
@@ -906,7 +906,7 @@ double XPolygon::CalcDistance(USHORT nP1, USHORT nP2)
 |*
 *************************************************************************/
 
-void XPolygon::SubdivideBezier(USHORT nPos, BOOL bCalcFirst, double fT)
+void XPolygon::SubdivideBezier(sal_uInt16 nPos, sal_Bool bCalcFirst, double fT)
 {
     Point*  pPoints = pImpXPolygon->pPointAry;
     double  fT2 = fT * fT;
@@ -914,7 +914,7 @@ void XPolygon::SubdivideBezier(USHORT nPos, BOOL bCalcFirst, double fT)
     double  fU = 1.0 - fT;
     double  fU2 = fU * fU;
     double  fU3 = fU * fU2;
-    USHORT  nIdx = nPos;
+    sal_uInt16  nIdx = nPos;
     short   nPosInc, nIdxInc;
 
     if ( bCalcFirst )
@@ -955,8 +955,8 @@ void XPolygon::SubdivideBezier(USHORT nPos, BOOL bCalcFirst, double fT)
 /************************************************************************/
 
 void XPolygon::GenBezArc(const Point& rCenter, long nRx, long nRy,
-                         long nXHdl, long nYHdl, USHORT nStart, USHORT nEnd,
-                         USHORT nQuad, USHORT nFirst)
+                         long nXHdl, long nYHdl, sal_uInt16 nStart, sal_uInt16 nEnd,
+                         sal_uInt16 nQuad, sal_uInt16 nFirst)
 {
     Point* pPoints = pImpXPolygon->pPointAry;
     pPoints[nFirst  ] = rCenter;
@@ -991,29 +991,29 @@ void XPolygon::GenBezArc(const Point& rCenter, long nRx, long nRy,
         pPoints[nFirst+1].X() += nXHdl; pPoints[nFirst+2].Y() += nYHdl;
     }
     if ( nStart > 0 )
-        SubdivideBezier(nFirst, FALSE, (double)nStart / 900);
+        SubdivideBezier(nFirst, sal_False, (double)nStart / 900);
     if ( nEnd < 900 )
-        SubdivideBezier(nFirst, TRUE, (double)(nEnd-nStart) / (900-nStart));
+        SubdivideBezier(nFirst, sal_True, (double)(nEnd-nStart) / (900-nStart));
     SetFlags(nFirst+1, XPOLY_CONTROL);
     SetFlags(nFirst+2, XPOLY_CONTROL);
 }
 
 /************************************************************************/
 
-BOOL XPolygon::CheckAngles(USHORT& nStart, USHORT nEnd, USHORT& nA1, USHORT& nA2)
+sal_Bool XPolygon::CheckAngles(sal_uInt16& nStart, sal_uInt16 nEnd, sal_uInt16& nA1, sal_uInt16& nA2)
 {
     if ( nStart == 3600 ) nStart = 0;
     if ( nEnd == 0 ) nEnd = 3600;
-    USHORT nStPrev = nStart;
-    USHORT nMax = (nStart / 900 + 1) * 900;
-    USHORT nMin = nMax - 900;
+    sal_uInt16 nStPrev = nStart;
+    sal_uInt16 nMax = (nStart / 900 + 1) * 900;
+    sal_uInt16 nMin = nMax - 900;
 
     if ( nEnd >= nMax || nEnd <= nStart )   nA2 = 900;
     else                                    nA2 = nEnd - nMin;
     nA1 = nStart - nMin;
     nStart = nMax;
 
-    // TRUE zurueck, falls letztes Segment berechnet wurde
+    // sal_True zurueck, falls letztes Segment berechnet wurde
     return (nStPrev < nEnd && nStart >= nEnd);
 }
 
@@ -1034,11 +1034,11 @@ BOOL XPolygon::CheckAngles(USHORT& nStart, USHORT nEnd, USHORT& nA1, USHORT& nA2
 |*
 \************************************************************************/
 
-void XPolygon::CalcSmoothJoin(USHORT nCenter, USHORT nDrag, USHORT nPnt)
+void XPolygon::CalcSmoothJoin(sal_uInt16 nCenter, sal_uInt16 nDrag, sal_uInt16 nPnt)
 {
     CheckReference();
 
-//  USHORT  nMaxPnt = pImpXPolygon->nPoints - 1;
+//  sal_uInt16  nMaxPnt = pImpXPolygon->nPoints - 1;
 
 //  if ( nCenter == nMaxPnt )   nPnt = 1;
 //  else if ( nCenter == 0 )    nPnt = nMaxPnt - 1;
@@ -1047,7 +1047,7 @@ void XPolygon::CalcSmoothJoin(USHORT nCenter, USHORT nDrag, USHORT nPnt)
     // statt dessen nDrag auf der Achse nCenter-nPnt verschieben
     if ( !IsControl(nPnt) )
     {
-        USHORT nTmp = nDrag;
+        sal_uInt16 nTmp = nDrag;
         nDrag = nPnt;
         nPnt = nTmp;
     }
@@ -1081,7 +1081,7 @@ void XPolygon::CalcSmoothJoin(USHORT nCenter, USHORT nDrag, USHORT nPnt)
 |*
 \************************************************************************/
 
-void XPolygon::CalcTangent(USHORT nCenter, USHORT nPrev, USHORT nNext)
+void XPolygon::CalcTangent(sal_uInt16 nCenter, sal_uInt16 nPrev, sal_uInt16 nNext)
 {
     CheckReference();
 
@@ -1119,7 +1119,7 @@ void XPolygon::CalcTangent(USHORT nCenter, USHORT nPrev, USHORT nNext)
 |*
 \************************************************************************/
 
-void XPolygon::PointsToBezier(USHORT nFirst)
+void XPolygon::PointsToBezier(sal_uInt16 nFirst)
 {
     double  nFullLength, nPart1Length, nPart2Length;
     double  fX0, fY0, fX1, fY1, fX2, fY2, fX3, fY3;
@@ -1202,9 +1202,9 @@ void XPolygon::Translate(const Point& rTrans)
     pImpXPolygon->CheckPointDelete();
     CheckReference();
 
-    USHORT nPntCnt = pImpXPolygon->nPoints;
+    sal_uInt16 nPntCnt = pImpXPolygon->nPoints;
 
-    for (USHORT i = 0; i < nPntCnt; i++)
+    for (sal_uInt16 i = 0; i < nPntCnt; i++)
         pImpXPolygon->pPointAry[i] += rTrans;
 }
 
@@ -1231,9 +1231,9 @@ void XPolygon::Rotate(const Point& rCenter, double fSin, double fCos)
     long nCenterX = rCenter.X();
     long nCenterY = rCenter.Y();
 
-    USHORT nPntCnt = pImpXPolygon->nPoints;
+    sal_uInt16 nPntCnt = pImpXPolygon->nPoints;
 
-    for (USHORT i = 0; i < nPntCnt; i++)
+    for (sal_uInt16 i = 0; i < nPntCnt; i++)
     {
         Point *pPt = &(pImpXPolygon->pPointAry[i]);
         nX = pPt->X()-nCenterX;
@@ -1245,9 +1245,9 @@ void XPolygon::Rotate(const Point& rCenter, double fSin, double fCos)
 
     /* und so stand das in einem anderen File auf T:
        dass ich am 29-11-1995 gegettet habe. Joe M.
-    USHORT nPntCnt = pImpXPolygon->nPoints;
+    sal_uInt16 nPntCnt = pImpXPolygon->nPoints;
 
-    for (USHORT i = 0; i < nPntCnt; i++)
+    for (sal_uInt16 i = 0; i < nPntCnt; i++)
     {
         Point P = pImpXPolygon->pPointAry[i] - rCenter;
         long X = P.X();
@@ -1270,7 +1270,7 @@ void XPolygon::Rotate(const Point& rCenter, double fSin, double fCos)
 |*
 *************************************************************************/
 
-void XPolygon::Rotate(const Point& rCenter, USHORT nAngle)
+void XPolygon::Rotate(const Point& rCenter, sal_uInt16 nAngle)
 {
     nAngle %= 3600;
 
@@ -1298,9 +1298,9 @@ void XPolygon::Scale(double fSx, double fSy)
     pImpXPolygon->CheckPointDelete();
     CheckReference();
 
-    USHORT nPntCnt = pImpXPolygon->nPoints;
+    sal_uInt16 nPntCnt = pImpXPolygon->nPoints;
 
-    for (USHORT i = 0; i < nPntCnt; i++)
+    for (sal_uInt16 i = 0; i < nPntCnt; i++)
     {
         Point& rPnt = pImpXPolygon->pPointAry[i];
         rPnt.X() = (long)(fSx * rPnt.X());
@@ -1324,9 +1324,9 @@ void XPolygon::SlantX(long nYRef, double fSin, double fCos)
     pImpXPolygon->CheckPointDelete();
     CheckReference();
 
-    USHORT nPntCnt = pImpXPolygon->nPoints;
+    sal_uInt16 nPntCnt = pImpXPolygon->nPoints;
 
-    for (USHORT i = 0; i < nPntCnt; i++)
+    for (sal_uInt16 i = 0; i < nPntCnt; i++)
     {
         Point& rPnt = pImpXPolygon->pPointAry[i];
         long nDy = rPnt.Y() - nYRef;
@@ -1351,9 +1351,9 @@ void XPolygon::SlantY(long nXRef, double fSin, double fCos)
     pImpXPolygon->CheckPointDelete();
     CheckReference();
 
-    USHORT nPntCnt = pImpXPolygon->nPoints;
+    sal_uInt16 nPntCnt = pImpXPolygon->nPoints;
 
-    for (USHORT i = 0; i < nPntCnt; i++)
+    for (sal_uInt16 i = 0; i < nPntCnt; i++)
     {
         Point& rPnt = pImpXPolygon->pPointAry[i];
         long nDx = rPnt.X() - nXRef;
@@ -1407,9 +1407,9 @@ void XPolygon::Distort(const Rectangle& rRefRect,
         X4 = rDistortedRect[2].X();
         Y4 = rDistortedRect[2].Y();
 
-        USHORT nPntCnt = pImpXPolygon->nPoints;
+        sal_uInt16 nPntCnt = pImpXPolygon->nPoints;
 
-        for (USHORT i = 0; i < nPntCnt; i++)
+        for (sal_uInt16 i = 0; i < nPntCnt; i++)
         {
             Point& rPnt = pImpXPolygon->pPointAry[i];
 
@@ -1487,14 +1487,14 @@ XPolygon::XPolygon(const basegfx::B2DPolygon& rPolygon)
     DBG_CTOR(XPolygon,NULL);
 
     const Polygon aSource(rPolygon);
-    USHORT nSize = aSource.GetSize();
+    sal_uInt16 nSize = aSource.GetSize();
     pImpXPolygon = new ImpXPolygon( nSize );
     pImpXPolygon->nPoints = nSize;
 
-    for( USHORT i = 0; i < nSize;  i++ )
+    for( sal_uInt16 i = 0; i < nSize;  i++ )
     {
         pImpXPolygon->pPointAry[i] = aSource[i];
-        pImpXPolygon->pFlagAry[i] = (BYTE) aSource.GetFlags( i );
+        pImpXPolygon->pFlagAry[i] = (sal_uInt8) aSource.GetFlags( i );
     }
 }
 
@@ -1559,11 +1559,11 @@ ImpXPolyPolygon::~ImpXPolyPolygon()
 
 bool ImpXPolyPolygon::operator==(const ImpXPolyPolygon& rImpXPolyPoly) const
 {
-    USHORT nAnz=(USHORT)aXPolyList.Count();
+    sal_uInt16 nAnz=(sal_uInt16)aXPolyList.Count();
     const XPolygonList& rCmpList=rImpXPolyPoly.aXPolyList;
-    if (nAnz!=(USHORT)rCmpList.Count()) return FALSE;
+    if (nAnz!=(sal_uInt16)rCmpList.Count()) return sal_False;
     bool bEq=true;
-    for (USHORT i=nAnz; i>0 && bEq;) {
+    for (sal_uInt16 i=nAnz; i>0 && bEq;) {
         i--;
         bEq= *aXPolyList.GetObject(i) == *rCmpList.GetObject(i);
     }
@@ -1580,7 +1580,7 @@ bool ImpXPolyPolygon::operator==(const ImpXPolyPolygon& rImpXPolyPoly) const
 |*
 *************************************************************************/
 
-XPolyPolygon::XPolyPolygon( USHORT nInitSize, USHORT nResize )
+XPolyPolygon::XPolyPolygon( sal_uInt16 nInitSize, sal_uInt16 nResize )
 {
     DBG_CTOR(XPolyPolygon,NULL);
     pImpXPolyPolygon = new ImpXPolyPolygon( nInitSize, nResize );
@@ -1636,7 +1636,7 @@ XPolyPolygon::XPolyPolygon( const PolyPolygon& rPolyPoly )
     DBG_CTOR(XPolyPolygon,NULL);
     pImpXPolyPolygon = new ImpXPolyPolygon;
 
-    for (USHORT i = 0; i < rPolyPoly.Count(); i++)
+    for (sal_uInt16 i = 0; i < rPolyPoly.Count(); i++)
         pImpXPolyPolygon->aXPolyList.Insert(
                                     new XPolygon(rPolyPoly.GetObject(i)) );
 }
@@ -1689,7 +1689,7 @@ void XPolyPolygon::CheckReference()
 |*
 *************************************************************************/
 
-void XPolyPolygon::Insert( const XPolygon& rXPoly, USHORT nPos )
+void XPolyPolygon::Insert( const XPolygon& rXPoly, sal_uInt16 nPos )
 {
     CheckReference();
     XPolygon* pXPoly = new XPolygon( rXPoly );
@@ -1706,11 +1706,11 @@ void XPolyPolygon::Insert( const XPolygon& rXPoly, USHORT nPos )
 |*
 *************************************************************************/
 
-void XPolyPolygon::Insert( const XPolyPolygon& rXPolyPoly, USHORT nPos )
+void XPolyPolygon::Insert( const XPolyPolygon& rXPolyPoly, sal_uInt16 nPos )
 {
     CheckReference();
 
-    for (USHORT i = 0; i < rXPolyPoly.Count(); i++)
+    for (sal_uInt16 i = 0; i < rXPolyPoly.Count(); i++)
     {
         XPolygon* pXPoly = new XPolygon(rXPolyPoly[i]);
         pImpXPolyPolygon->aXPolyList.Insert(pXPoly, nPos);
@@ -1729,7 +1729,7 @@ void XPolyPolygon::Insert( const XPolyPolygon& rXPolyPoly, USHORT nPos )
 |*
 *************************************************************************/
 
-XPolygon XPolyPolygon::Remove( USHORT nPos )
+XPolygon XPolyPolygon::Remove( sal_uInt16 nPos )
 {
     CheckReference();
     XPolygon* pTmpXPoly = pImpXPolyPolygon->aXPolyList.Remove( nPos );
@@ -1749,7 +1749,7 @@ XPolygon XPolyPolygon::Remove( USHORT nPos )
 |*
 *************************************************************************/
 
-XPolygon XPolyPolygon::Replace( const XPolygon& rXPoly, USHORT nPos )
+XPolygon XPolyPolygon::Replace( const XPolygon& rXPoly, sal_uInt16 nPos )
 {
     CheckReference();
     XPolygon* pXPoly = new XPolygon( rXPoly );
@@ -1770,7 +1770,7 @@ XPolygon XPolyPolygon::Replace( const XPolygon& rXPoly, USHORT nPos )
 |*
 *************************************************************************/
 
-const XPolygon& XPolyPolygon::GetObject( USHORT nPos ) const
+const XPolygon& XPolyPolygon::GetObject( sal_uInt16 nPos ) const
 {
     return *(pImpXPolyPolygon->aXPolyList.GetObject( nPos ));
 }
@@ -1816,9 +1816,9 @@ void XPolyPolygon::Clear()
 |*
 *************************************************************************/
 
-USHORT XPolyPolygon::Count() const
+sal_uInt16 XPolyPolygon::Count() const
 {
-    return (USHORT)(pImpXPolyPolygon->aXPolyList.Count());
+    return (sal_uInt16)(pImpXPolyPolygon->aXPolyList.Count());
 }
 
 
@@ -1862,10 +1862,10 @@ void XPolyPolygon::Move( long nHorzMove, long nVertMove )
 
 Rectangle XPolyPolygon::GetBoundRect() const
 {
-    USHORT    nXPoly = (USHORT)pImpXPolyPolygon->aXPolyList.Count();
+    sal_uInt16    nXPoly = (sal_uInt16)pImpXPolyPolygon->aXPolyList.Count();
     Rectangle aRect;
 
-    for ( USHORT n = 0; n < nXPoly; n++ )
+    for ( sal_uInt16 n = 0; n < nXPoly; n++ )
     {
         const XPolygon* pXPoly = pImpXPolyPolygon->aXPolyList.GetObject( n );
         aRect.Union( pXPoly->GetBoundRect() );
@@ -1885,7 +1885,7 @@ Rectangle XPolyPolygon::GetBoundRect() const
 |*
 *************************************************************************/
 
-XPolygon& XPolyPolygon::operator[]( USHORT nPos )
+XPolygon& XPolyPolygon::operator[]( sal_uInt16 nPos )
 {
     CheckReference();
     return *(pImpXPolyPolygon->aXPolyList.GetObject( nPos ));
@@ -1925,9 +1925,9 @@ XPolyPolygon& XPolyPolygon::operator=( const XPolyPolygon& rXPolyPoly )
 |*
 *************************************************************************/
 
-BOOL XPolyPolygon::operator==( const XPolyPolygon& rXPolyPoly ) const
+sal_Bool XPolyPolygon::operator==( const XPolyPolygon& rXPolyPoly ) const
 {
-    if (pImpXPolyPolygon==rXPolyPoly.pImpXPolyPolygon) return TRUE;
+    if (pImpXPolyPolygon==rXPolyPoly.pImpXPolyPolygon) return sal_True;
     return *pImpXPolyPolygon == *rXPolyPoly.pImpXPolyPolygon;
 }
 
@@ -1942,9 +1942,9 @@ BOOL XPolyPolygon::operator==( const XPolyPolygon& rXPolyPoly ) const
 |*
 *************************************************************************/
 
-BOOL XPolyPolygon::operator!=( const XPolyPolygon& rXPolyPoly ) const
+sal_Bool XPolyPolygon::operator!=( const XPolyPolygon& rXPolyPoly ) const
 {
-    if (pImpXPolyPolygon==rXPolyPoly.pImpXPolyPolygon) return FALSE;
+    if (pImpXPolyPolygon==rXPolyPoly.pImpXPolyPolygon) return sal_False;
     return *pImpXPolyPolygon != *rXPolyPoly.pImpXPolyPolygon;
 }
 
@@ -1962,7 +1962,7 @@ void XPolyPolygon::Translate(const Point& rTrans)
 {
     CheckReference();
 
-    for (USHORT i = 0; i < Count(); i++)
+    for (sal_uInt16 i = 0; i < Count(); i++)
         pImpXPolyPolygon->aXPolyList.GetObject(i)->Translate(rTrans);
 }
 
@@ -1981,7 +1981,7 @@ void XPolyPolygon::Rotate(const Point& rCenter, double fSin, double fCos)
 {
     CheckReference();
 
-    for (USHORT i = 0; i < Count(); i++)
+    for (sal_uInt16 i = 0; i < Count(); i++)
         pImpXPolyPolygon->aXPolyList.GetObject(i)->Rotate(rCenter, fSin, fCos);
 }
 
@@ -1996,7 +1996,7 @@ void XPolyPolygon::Rotate20()
 {
     CheckReference();
 
-    for (USHORT i = 0; i < Count(); i++)
+    for (sal_uInt16 i = 0; i < Count(); i++)
         pImpXPolyPolygon->aXPolyList.GetObject(i)->Rotate20();
 }
 
@@ -2011,7 +2011,7 @@ void XPolyPolygon::Rotate20()
 |*
 *************************************************************************/
 
-void XPolyPolygon::Rotate(const Point& rCenter, USHORT nAngle)
+void XPolyPolygon::Rotate(const Point& rCenter, sal_uInt16 nAngle)
 {
     nAngle %= 3600;
 
@@ -2038,7 +2038,7 @@ void XPolyPolygon::Scale(double fSx, double fSy)
 {
     CheckReference();
 
-    for (USHORT i = 0; i < Count(); i++)
+    for (sal_uInt16 i = 0; i < Count(); i++)
         pImpXPolyPolygon->aXPolyList.GetObject(i)->Scale(fSx, fSy);
 }
 
@@ -2057,7 +2057,7 @@ void XPolyPolygon::SlantX(long nYRef, double fSin, double fCos)
 {
     CheckReference();
 
-    for (USHORT i = 0; i < Count(); i++)
+    for (sal_uInt16 i = 0; i < Count(); i++)
         pImpXPolyPolygon->aXPolyList.GetObject(i)->SlantX(nYRef, fSin, fCos);
 }
 
@@ -2076,7 +2076,7 @@ void XPolyPolygon::SlantY(long nXRef, double fSin, double fCos)
 {
     CheckReference();
 
-    for (USHORT i = 0; i < Count(); i++)
+    for (sal_uInt16 i = 0; i < Count(); i++)
         pImpXPolyPolygon->aXPolyList.GetObject(i)->SlantY(nXRef, fSin, fCos);
 }
 
@@ -2101,7 +2101,7 @@ void XPolyPolygon::Distort(const Rectangle& rRefRect,
 {
     CheckReference();
 
-    for (USHORT i = 0; i < Count(); i++)
+    for (sal_uInt16 i = 0; i < Count(); i++)
         pImpXPolyPolygon->aXPolyList.GetObject(i)->Distort(rRefRect,
                                                            rDistortedRect);
 }

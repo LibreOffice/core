@@ -82,7 +82,7 @@ using namespace ::com::sun::star::task;
 
 SFX_IMPL_TOOLBOX_CONTROL(SfxURLToolBoxControl_Impl,SfxStringItem)
 
-SfxURLToolBoxControl_Impl::SfxURLToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox )
+SfxURLToolBoxControl_Impl::SfxURLToolBoxControl_Impl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox )
     : SfxToolBoxControl( nSlotId, nId, rBox ),
     pAccExec( 0 )
 {
@@ -101,7 +101,7 @@ SvtURLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
 
 //***************************************************************************
 
-void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, BOOL /*bNew*/ ) const
+void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, sal_Bool /*bNew*/ ) const
 {
     String aName;
     String aFilter;
@@ -190,7 +190,7 @@ IMPL_LINK( SfxURLToolBoxControl_Impl, SelectHdl, void*, EMPTYARG )
     String aName( pURLBox->GetURL() );
 
     if ( !pURLBox->IsTravelSelect() && aName.Len() )
-        OpenURL( aName, FALSE );
+        OpenURL( aName, sal_False );
 
     return 1L;
 }
@@ -240,7 +240,7 @@ IMPL_LINK( SfxURLToolBoxControl_Impl, WindowEventListener, VclSimpleEvent*, pEve
 
 void SfxURLToolBoxControl_Impl::StateChanged
 (
-    USHORT              nSID,
+    sal_uInt16              nSID,
     SfxItemState        eState,
     const SfxPoolItem*  pState
 )
