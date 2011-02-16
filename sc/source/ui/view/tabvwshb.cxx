@@ -179,6 +179,8 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             bErrorShown = TRUE;
             // SfxViewShell::DoVerb zeigt seine Fehlermeldungen selber an
 
+            SetNewVisArea();
+
             // attach listener to selection changes in chart that affect cell
             // ranges, so those can be highlighted
             // note: do that after DoVerb, so that the chart controller exists
