@@ -430,16 +430,20 @@ void ScDrawLayer::ScCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos, sal_Bool b
         SdrObject* pOldObject = aIter.Next();
         while (pOldObject)
         {
-            // #116235#
-            SdrObject* pNewObject = pOldObject->Clone();
-            //SdrObject* pNewObject = pOldObject->Clone( pNewPage, this );
-            pNewObject->SetModel(this);
-            pNewObject->SetPage(pNewPage);
+            // #i112034# do not copy internal objects (detective) and note captions
+            if ( pOldObject->GetLayer() != SC_LAYER_INTERN && !IsNoteCaption( pOldObject ) )
+            {
+                // #116235#
+                SdrObject* pNewObject = pOldObject->Clone();
+                //SdrObject* pNewObject = pOldObject->Clone( pNewPage, this );
+                pNewObject->SetModel(this);
+                pNewObject->SetPage(pNewPage);
 
-            pNewObject->NbcMove(Size(0,0));
-            pNewPage->InsertObject( pNewObject );
-            if (bRecording)
-                AddCalcUndo( new SdrUndoInsertObj( *pNewObject ) );
+                pNewObject->NbcMove(Size(0,0));
+                pNewPage->InsertObject( pNewObject );
+                if (bRecording)
+                    AddCalcUndo( new SdrUndoInsertObj( *pNewObject ) );
+            }
 
             pOldObject = aIter.Next();
         }
