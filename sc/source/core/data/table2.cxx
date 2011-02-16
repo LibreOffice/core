@@ -2494,16 +2494,11 @@ void ScTable::DBShowRow(SCROW nRow, bool bShow)
 {
     if (VALIDROW(nRow) && pRowFlags)
     {
-        bool bWasVis = !RowHidden(nRow);
-        IncRecalcLevel();
-        InitializeNoteCaptions();
-
         //  Filter-Flag immer setzen, auch wenn Hidden unveraendert
-        SetRowHidden(nRow, nRow, !bShow);
+        bool bChanged = SetRowHidden(nRow, nRow, !bShow);
         SetRowFiltered(nRow, nRow, !bShow);
-    DecRecalcLevel();
 
-        if (bWasVis != bShow)
+        if (bChanged)
         {
             ScChartListenerCollection* pCharts = pDocument->GetChartListenerCollection();
             if ( pCharts )

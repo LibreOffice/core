@@ -1639,10 +1639,9 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
                             aParam.nDestCol, aParam.nDestRow, aParam.nDestTab );
     }
 
-    InitializeNoteCaptions();
 
     if (aParam.bInplace)
-        IncRecalcLevel();       // #i116164# once for all entries
+        InitializeNoteCaptions();
 
     SCROW nRealRow2 = aParam.bUseDynamicRange ? aParam.nDynamicEndRow : aParam.nRow2;
     for (SCROW j = aParam.nRow1 + nHeader; j <= nRealRow2; ++j)
@@ -1721,8 +1720,10 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
     if (aParam.bInplace && bStarted)
         DBShowRows(nOldStart,nOldEnd, bOldResult);
 
+    if (aParam.bInplace)
+        SetDrawPageSize();
+
     delete[] pSpecial;
-    SetDrawPageSize();
     return nCount;
 }
 

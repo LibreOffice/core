@@ -1109,7 +1109,9 @@ BOOL ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
                 Sort( nTab, aSortParam, FALSE, FALSE, bApi );
             }
 
+            pDoc->InitializeNoteCaptions(nTab);
             bSuccess = pDoc->DoSubTotals( nTab, aNewParam );
+            pDoc->SetDrawPageSize(nTab);
         }
         ScRange aDirtyRange( aNewParam.nCol1, aNewParam.nRow1, nTab,
             aNewParam.nCol2, aNewParam.nRow2, nTab );
