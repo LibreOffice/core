@@ -912,14 +912,6 @@ void SvImpLBox::Paint( const Rectangle& rRect )
         pStartEntry = pView->First();
     }
 
-#ifdef XX_OV
-    ULONG nXAbsPos = (USHORT)pTree->GetAbsPos( pStartEntry );
-    ULONG nXVisPos = pView->GetVisiblePos( pStartEntry );
-    SvLBoxString* pXStr = (SvLBoxString*)pStartEntry->GetFirstItem( SV_ITEM_ID_LBOXSTRING);
-#endif
-
-
-
     if( nNodeBmpTabDistance == NODE_BMP_TABDIST_NOTVALID )
         SetNodeBmpTabDistance();
 
