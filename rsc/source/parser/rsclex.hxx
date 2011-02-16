@@ -105,7 +105,7 @@ class ObjectStack {
 extern "C" int yyparse();   // forward Deklaration fuer erzeugte Funktion
 extern "C" void yyerror( char * );
 extern "C" int  yylex( void );
-#elif defined( SCO ) || defined ( SOLARIS )
+#elif defined ( SOLARIS )
 extern "C" int yyparse();   // forward Deklaration fuer erzeugte Funktion
 extern "C" void yyerror( const char * );
 extern "C" int  yylex( void );

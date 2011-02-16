@@ -51,13 +51,7 @@ APP1STACK=64000
 APP1RPATH=NONE
 
 APP2TARGET= rsc2
-.IF "$(OS)"=="SCO"
-# SCO hat Probleme mit fork/exec und einigen shared libraries. 
-# rsc2 muss daher statisch gelinkt werden
-APP2STDLIBS=$(STATIC) -latools $(BPICONVLIB)  $(OSLLIB) $(RTLLIB) $(DYNAMIC)
-.ELSE
 APP2STDLIBS=$(TOOLSLIB) $(I18NISOLANGLIB)  $(SALLIB) # $(RTLLIB)
-.ENDIF
 APP2LIBS=   $(LB)$/rsctoo.lib \
             $(LB)$/rscres.lib \
             $(LB)$/rscpar.lib \

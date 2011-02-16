@@ -47,7 +47,7 @@ class SalPrinter;
 
 DECLARE_LIST( SalDisplays, SalDisplay* )
 
-#if defined SCO || defined LINUX || defined NETBSD || defined AIX || \
+#if defined LINUX || defined NETBSD || defined AIX || \
     defined FREEBSD || defined OPENBSD || defined DRAGONFLY
 #include <pthread.h>
 #else

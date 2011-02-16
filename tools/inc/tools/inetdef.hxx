@@ -41,8 +41,6 @@
 #define TOOLS_INETDEF_OS "Solaris Sparc"
 #elif defined SOLARIS && defined INTEL
 #define TOOLS_INETDEF_OS "Solaris x86"
-#elif defined SCO
-#define TOOLS_INETDEF_OS "SCO"
 #elif defined NETBSD && defined X86
 #define TOOLS_INETDEF_OS "NetBSD/i386"
 #elif defined NETBSD && defined X86_64

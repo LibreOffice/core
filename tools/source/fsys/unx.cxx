@@ -37,8 +37,6 @@
 #if defined LINUX
 #include <mntent.h>
 #define mnttab mntent
-#elif defined SCO
-#include <mnttab.h>
 #elif defined AIX
 #include <sys/mntctl.h>
 #include <sys/vmount.h>
@@ -71,10 +69,6 @@ struct mnttab
 #define MOUNTPOINT   mnt_mountp
 #define MOUNTOPTS    mnt_mntopts
 #define MOUNTFS      mnt_fstype
-#elif defined SCO
-#define MNTTAB       "/etc/mnttab"
-#define MOUNTSPECIAL mt_dev
-#define MOUNTPOINT   mt_filsys
 #else
 #define MOUNTSPECIAL mnt_fsname
 #define MOUNTPOINT   mnt_dir
@@ -143,12 +137,6 @@ static BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
         return FALSE;
     struct mnttab mnt[1];
     while (getmntent (fp, mnt) != -1)
-#elif defined SCO
-    FILE *fp = fopen (MNTTAB, "r");
-    if (! fp)
-        return FALSE;
-    struct mnttab mnt[1];
-    while (fread (&mnt, sizeof mnt, 1, fp) > 0)
 #elif defined DECUNIX || defined AIX
     FILE *fp = NULL;
     if (! fp)
@@ -189,11 +177,8 @@ static BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
         mytab->mountspecial = mnt->MOUNTSPECIAL;
         mytab->mountpoint   = mnt->MOUNTPOINT;
         mytab->mountdevice  = dev;
-#ifndef SCO
         mytab->mymnttab_filesystem = mnt->MOUNTFS;
-#else
-        mytab->mymnttab_filesystem = "ext2";        //default ist case sensitiv unter unix
-#endif
+
         return TRUE;
     }
 #   ifdef LINUX

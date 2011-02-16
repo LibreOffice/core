@@ -29,10 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-#ifdef SCO
-#define _IOSTREAM_H
-#endif
-
 #ifdef PRECOMPILED
 #include "first.hxx"
 #endif

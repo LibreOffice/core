@@ -293,8 +293,6 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
   #define __DLLEXTENSION "si.so"
 #elif defined SOLARIS && defined INTEL && defined __GNUC__
   #define __DLLEXTENSION "sogi.so"
-#elif defined SCO
-  #define __DLLEXTENSION "ci.so"
 #elif defined NETBSD && defined X86
   #define __DLLEXTENSION "bi.so"
 #elif defined NETBSD && defined X86_64
