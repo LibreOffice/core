@@ -65,10 +65,6 @@ using namespace rtl;
 using namespace osl;
 using namespace store;
 
-#if defined ( GCC ) && ( defined ( SCO ) )
-sal_helper::ORealDynamicLoader* sal_helper::ODynamicLoader<RegistryTypeReader_Api>::m_pLoader = NULL;
-#endif
-
 namespace {
 
 void printString(rtl::OUString const & s) {

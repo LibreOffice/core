@@ -31,10 +31,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#ifdef SCO
-#   define _IBCS2
-#endif
 #include <limits.h>
 
 #include "cpp.h"

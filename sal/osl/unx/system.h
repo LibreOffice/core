@@ -244,37 +244,6 @@
 #   define  IORESOURCE_TRANSFER_BSD
 #endif
 
-#ifdef SCO
-#   define AF_IPX -1
-#   include <strings.h>
-#   include <pthread.h>
-#   include <shadow.h>
-#   include <netdb.h>
-#   include <sys/un.h>
-#   include <sys/netinet/tcp.h>
-#   include <sys/types.h>
-#   include <sys/byteorder.h>
-#   include <dlfcn.h>
-#   if BYTE_ORDER == LITTLE_ENDIAN
-#       define _LITTLE_ENDIAN
-#   elif BYTE_ORDER == BIG_ENDIAN
-#       define _BIG_ENDIAN
-#   elif BYTE_ORDER == PDP_ENDIAN
-#       define _PDP_ENDIAN
-#   endif
-#   define  sched_yield()               pthread_yield()
-#   define  pthread_testcancel()
-#   define  NO_PTHREAD_RTL
-#   define  NO_PTHREAD_PRIORITY
-extern int pthread_cancel(pthread_t);
-extern unsigned int nanosleep(unsigned int);
-#   define  SLEEP_TIMESPEC(timespec)    (timespec .tv_sec > 0) ? sleep(timespec .tv_sec), nanosleep(timespec .tv_nsec) : nanosleep(timespec .tv_nsec)
-#   define  PATH_MAX                    _POSIX_PATH_MAX
-#   define  S_ISSOCK                    S_ISFIFO
-#   define  PTHREAD_SIGACTION           pthread_sigaction
-#   define  STAT_PARENT                 stat
-#endif
-
 #ifdef AIX
 #   define AF_IPX -1
 #   include <strings.h>
