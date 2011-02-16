@@ -332,7 +332,7 @@ int macxp_resolveAlias(char *path, int buflen);
 #endif
 #endif
 
-#if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)  && \
+#if !defined(_WIN32)  && !defined(OS2)  && \
     !defined(LINUX)   && !defined(NETBSD) && !defined(FREEBSD) && !defined(SCO)  && \
     !defined(AIX)     && \
     !defined(SOLARIS) && !defined(MACOSX) && \

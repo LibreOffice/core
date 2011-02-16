@@ -103,15 +103,6 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 #define _OSL_GLOBAL
 #endif  /* __cplusplus */
 
-#ifdef _WIN16
-#if OSL_DEBUG_LEVEL > 0
-#undef OSL_DEBUG_LEVEL
-#define OSL_DEBUG_LEVEL 0
-#endif
-#endif
-
-
-
 #if OSL_DEBUG_LEVEL > 0
 
 #define _OSL_DEBUG_ONLY(f)  (f)

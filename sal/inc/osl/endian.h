@@ -109,10 +109,6 @@ extern "C" {
 #   endif
 #endif
 
-#ifdef _WIN16
-#   define  _LITTLE_ENDIAN
-#endif
-
 #ifdef OS2
 #   include <machine/endian.h>
 #endif
@@ -140,7 +136,7 @@ extern "C" {
 
 /** Check supported platform.
  */
-#if !defined(_WIN32)  && !defined(_WIN16) && !defined(OS2)     && \
+#if !defined(_WIN32)  && !defined(OS2)     && \
     !defined(LINUX)   && !defined(NETBSD) && \
     !defined(AIX)     && !defined(OPENBSD) && \
     !defined(SOLARIS) && !defined(MACOSX) && !defined(FREEBSD) && \
