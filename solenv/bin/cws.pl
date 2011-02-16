@@ -406,8 +406,17 @@ sub hg_clone_cws_or_milestone
     $hg_remote_source = $config->get_hg_source(uc $rep_type, 'REMOTE');
 
     my $masterws = $cws->master();
-    my $master_local_source = "$hg_local_source/" . $masterws;
-    my $master_lan_source = "$hg_lan_source/" . $masterws;
+    my ($master_local_source, $master_lan_source);
+    if ($rep_type eq "ooo" || $rep_type eq "so")
+    {
+        $master_local_source = "$hg_local_source/" . $masterws;
+        $master_lan_source = "$hg_lan_source/" . $masterws;
+    }
+    else
+    {
+        $master_local_source = "$hg_local_source/master_".$rep_type."/".$masterws;
+        $master_lan_source = "$hg_lan_source/master_".$rep_type."/".$masterws;
+    }
 
     my $milestone_tag;
     if ( $clone_milestone_only ) {
@@ -449,7 +458,8 @@ sub hg_clone_cws_or_milestone
         require LWP::Simple;
         my $content = LWP::Simple::get($cws_remote_source);
         my $pattern = "<title>cws/". $cws->child();
-        if ( $content && $content =~ /$pattern/ ) {
+        my $pattern2 = "<title>cws_".$rep_type."/". $cws->child();
+        if ( $content && ($content =~ /$pattern/ || $content =~ /$pattern2/) ) {
             $pull_from_remote = 1;
         }
         else {
@@ -1588,6 +1598,7 @@ sub do_fetch
 
     my $milestone_opt = $options_ref->{'milestone'};
     my $additional_repositories_opt = $options_ref->{'additionalrepositories'};
+    $additional_repositories_opt = "", if ( !defined $additional_repositories_opt );
     my $child = $options_ref->{'childworkspace'};
     my $platforms = $options_ref->{'platforms'};
     my $noautocommon = $options_ref->{'noautocommon'};
