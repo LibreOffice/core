@@ -28,10 +28,8 @@
 #ifndef _CNTWIDS_HRC
 #define _CNTWIDS_HRC
 
-#ifndef OLD_CHAOS
 #define TF_NEW_TABPAGES
 #define CNT_COOL_ABO
-#endif
 
 //=========================================================================
 // ARGS, MSG, ALL, FOLDER, BOXALL, BOXEXT
@@ -183,11 +181,7 @@
 #define WID_BOXEXT_START                    (WID_CHAOS_START + 107)
 #define WID_CONNECTION_MODE                 (WID_CHAOS_START + 107)
 #define WID_NEWS_GROUPLIST                  (WID_CHAOS_START + 108)
-#ifdef OLD_CHAOS
-#define WID_BOX_CONNECTION_PROP             (WID_CHAOS_START + 109)
-#else
 #define WID_MESSAGE_STOREMODE               (WID_CHAOS_START + 109)
-#endif
 #define WID_DELETE_ON_SERVER                (WID_CHAOS_START + 110)
 
 //PROP BOX USER
