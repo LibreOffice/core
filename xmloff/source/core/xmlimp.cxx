@@ -351,7 +351,6 @@ SvXMLImport::SvXMLImport(
     mpNamespaceMap( new SvXMLNamespaceMap ),
 
     // #110680#
-    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
     mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, xServiceFactory ) ),
 
     mpContexts( new SvXMLImportContexts_Impl ),
@@ -381,7 +380,6 @@ SvXMLImport::SvXMLImport(
     mpImpl( new SvXMLImport_Impl() ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
     // #110680#
-    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
     mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, xServiceFactory ) ),
     mpContexts( new SvXMLImportContexts_Impl ),
     mpNumImport( NULL ),
@@ -412,7 +410,6 @@ SvXMLImport::SvXMLImport(
     mpImpl( new SvXMLImport_Impl() ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
     // #110680#
-    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
     mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM, xServiceFactory ) ),
     mpContexts( new SvXMLImportContexts_Impl ),
     mpNumImport( NULL ),
@@ -449,8 +446,6 @@ SvXMLImport::~SvXMLImport() throw ()
         }
         delete mpContexts;
     }
-
-    //  delete pImageMapImportHelper;
 
     //  #i9518# the import component might not be deleted until after the document has been closed,
     //  so the stuff that accesses the document has been moved to endDocument.
@@ -1969,7 +1964,6 @@ void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
             const uno::Reference<rdf::XMetadatable> xMeta(i_xIfc,
                 uno::UNO_QUERY);
 //FIXME: not yet
-//            OSL_ENSURE(xMeta.is(), "xml:id: not XMetadatable");
             if (xMeta.is()) {
                 const beans::StringPair mdref( GetStreamName(), i_rXmlId );
                 try {

@@ -96,7 +96,7 @@ namespace chelp {
 
         rtl::OUString getTitle()
         {
-            if( ! m_ptr ) // || getHash().getLength() )
+            if( ! m_ptr )
                 return rtl::OUString();
 
             sal_Int32 sizeOfTitle =

@@ -733,7 +733,6 @@ void SchXMLPlotAreaContext::CorrectAxisPositions()
                 {
                     Reference< chart2::XAxis > xMainXAxis = lcl_getAxis( xCooSys, 0, 0 );
                     Reference< chart2::XAxis > xMainYAxis = lcl_getAxis( xCooSys, 1, 0 );
-                    //Reference< chart2::XAxis > xMajorZAxis = lcl_getAxis( xCooSys, 2, 0 );
                     Reference< chart2::XAxis > xSecondaryXAxis = lcl_getAxis( xCooSys, 0, 1 );
                     Reference< chart2::XAxis > xSecondaryYAxis = lcl_getAxis( xCooSys, 1, 1 );
 
@@ -1668,7 +1667,6 @@ void SchXMLCategoriesContext::StartElement( const uno::Reference< xml::sax::XAtt
         {
             uno::Reference< chart2::XChartDocument > xNewDoc( GetImport().GetModel(), uno::UNO_QUERY );
             mrAddress = xAttrList->getValueByIndex( i );
-            // lcl_ConvertRange( xAttrList->getValueByIndex( i ), xNewDoc );
         }
     }
 }

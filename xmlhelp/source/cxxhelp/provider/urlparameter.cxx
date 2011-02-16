@@ -543,7 +543,6 @@ void URLParameter::open( const Reference< XMultiServiceFactory >& rxSMgr,
 
 void URLParameter::parse() throw( com::sun::star::ucb::IllegalIdentifierException )
 {
-    // fprintf(stdout,"url send to xmlhelp: %s\n",(rtl::OUStringToOString(m_aURL,RTL_TEXTENCODING_UTF8).getStr()));
     m_aExpr = m_aURL;
 
     sal_Int32 lstIdx = m_aExpr.lastIndexOf( sal_Unicode( '#' ) );
@@ -619,9 +618,6 @@ bool URLParameter::name( bool modulePresent )
     {
         sal_Int32 idx = 1;
         while( idx < length && (m_aExpr.getStr())[idx] != '?' )
-//                ( isLetterOrDigit( (m_aExpr.getStr())[idx] )
-//                  || (m_aExpr.getStr())[idx] == '/'
-//                  || (m_aExpr.getStr())[idx] == '.' ))
             ++idx;
 
         if( idx != 1 && ! modulePresent )
@@ -633,7 +629,6 @@ bool URLParameter::name( bool modulePresent )
         }
     }
 
-//    fprintf(stdout,"id %s\n",(rtl::OUStringToOString(m_aId,RTL_TEXTENCODING_UTF8).getStr()));
     return true;
 }
 
@@ -886,18 +881,6 @@ fileClose(void * context) {
 
 } // extern "C"
 
-/*
-// For debugging only
-extern "C" void StructuredXMLErrorFunction(void *userData, xmlErrorPtr error)
-{
-    (void)userData;
-    (void)error;
-
-    // Reset error handler
-    xmlSetStructuredErrorFunc( NULL, NULL );
-}
-*/
-
 InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
                                                 Databases*    pDatabases,
                                                 bool isRoot )
@@ -1065,7 +1048,6 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
         xmlRegisterInputCallbacks(zipMatch, zipOpen, zipRead, uriClose);
         xmlRegisterInputCallbacks(helpMatch, helpOpen, helpRead, uriClose);
         xmlRegisterInputCallbacks(fileMatch, fileOpen, fileRead, fileClose);
-        //xmlSetStructuredErrorFunc( NULL, (xmlStructuredErrorFunc)StructuredXMLErrorFunction );
 
         xsltStylesheetPtr cur =
             xsltParseStylesheetFile((const xmlChar *)xslURLascii.getStr());

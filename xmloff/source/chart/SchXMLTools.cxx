@@ -31,9 +31,6 @@
 
 #include "SchXMLTools.hxx"
 
-/*
-#include <tools/debug.hxx>
-*/
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/InlineContainer.hxx>
 // header for class SvXMLUnitConverter

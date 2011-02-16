@@ -280,11 +280,9 @@ uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( const ::rtl::OUStrin
 
 static SvXMLEnumMapEntry aXMLLegendAlignmentMap[] =
 {
-//  { XML_LEFT,         chart::ChartLegendPosition_LEFT     },
     // #i35421#
     { XML_START,        chart::ChartLegendPosition_LEFT     },
     { XML_TOP,          chart::ChartLegendPosition_TOP      },
-//  { XML_RIGHT,        chart::ChartLegendPosition_RIGHT    },
     // #i35421#
     { XML_END,          chart::ChartLegendPosition_RIGHT    },
     { XML_BOTTOM,       chart::ChartLegendPosition_BOTTOM   },
@@ -547,23 +545,6 @@ void lcl_swapPointAndSeriesStylesForDonutCharts( ::std::list< DataRowPointStyle 
         }
         nOldSeriesCount = nMaxOldSeriesIndex+1;
     }
-    /*
-    sal_Int32 nOldSeriesCount = 0;
-    {
-        sal_Int32 nMaxOldSeriesIndex = 0;
-        sal_Int32 nOldSeriesIndex = 0;
-        for( aIt = rStyleList.begin(); aIt != aEnd; ++aIt )
-        {
-            DataRowPointStyle aStyle(*aIt);
-            if(aStyle.meType == DataRowPointStyle::DATA_SERIES )
-            {
-                nMaxOldSeriesIndex = nOldSeriesIndex;
-                nOldSeriesIndex++;
-            }
-        }
-        nOldSeriesCount = nMaxOldSeriesIndex+1;
-    }
-    */
 
 
     //initialize new series styles

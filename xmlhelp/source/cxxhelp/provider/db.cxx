@@ -45,13 +45,9 @@ namespace berkeleydbproxy {
 //----------------------------------------------------------------------------
 namespace db_internal
 {
-    // static void raise_error(int dberr, const char * where);
-
     static inline int check_error(int dberr, const char * where)
     {
         (void)where;
-
-        // if (dberr) raise_error(dberr,where);
         return dberr;
     }
 }
@@ -390,28 +386,6 @@ Dbt::Dbt(void *data_arg, u_int32_t size_arg)
     this->set_size(size_arg);
 }
 
-/*
-Dbt::Dbt(const Dbt & other)
-{
-    using namespace std;
-    const DBT *otherpod = &other;
-    DBT *thispod = this;
-    memcpy(thispod, otherpod, sizeof *thispod);
-}
-
-Dbt& Dbt::operator = (const Dbt & other)
-{
-    if (this != &other)
-    {
-        using namespace std;
-        const DBT *otherpod = &other;
-        DBT *thispod = this;
-        memcpy(thispod, otherpod, sizeof *thispod);
-    }
-    return *this;
-}
-*/
-
 Dbt::~Dbt()
 {
 }
@@ -441,24 +415,6 @@ void Dbt::set_flags(u_int32_t value)
     this->flags = value;
 }
 
-//----------------------------------------------------------------------------
-/*
-void db_internal::raise_error(int dberr, const char * where)
-{
-    if (!where) where = "<unknown>";
-
-    const char * dberrmsg = db_strerror(dberr);
-    if (!dberrmsg || !*dberrmsg) dberrmsg = "<unknown DB error>";
-
-    rtl::OString msg = where;
-    msg += ": ";
-    msg += dberrmsg;
-
-    throw DbException(msg);
-}
-*/
-
-//----------------------------------------------------------------------------
 } // namespace ecomp
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

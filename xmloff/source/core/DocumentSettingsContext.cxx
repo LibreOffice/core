@@ -115,8 +115,6 @@ uno::Reference<container::XNameContainer> XMLMyList::GetNameContainer()
     uno::Reference<container::XNameContainer> xNameContainer;
 
     // #110680#
-    // uno::Reference<lang::XMultiServiceFactory> xServiceFactory = comphelper::getProcessServiceFactory();
-    // DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
 
     if( mxServiceFactory.is() )
     {
@@ -139,8 +137,6 @@ uno::Reference<container::XIndexContainer> XMLMyList::GetIndexContainer()
 {
     uno::Reference<container::XIndexContainer> xIndexContainer;
     // #110680#
-    // uno::Reference<lang::XMultiServiceFactory> xServiceFactory = comphelper::getProcessServiceFactory();
-    // DBG_ASSERT( xServiceFactory.is(), "got no service manager" );
 
     if( mxServiceFactory.is() )
     {

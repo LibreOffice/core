@@ -209,7 +209,6 @@ RDFaReader::ReadCURIE(::rtl::OUString const & i_rCURIE) const
             {
                 // N.B.: empty LocalName is valid!
                 const ::rtl::OUString URI(Namespace + LocalName);
-//                return GetImport().GetAbsoluteReference(URI);
                 return GetAbsoluteReference(URI);
             }
             else
@@ -275,7 +274,6 @@ RDFaReader::ReadURIOrSafeCURIE(::rtl::OUString const & i_rURIOrSafeCURIE) const
         }
         else
         {
-//            return GetImport().GetAbsoluteReference(i_rURIOrSafeCURIE);
             return GetAbsoluteReference(i_rURIOrSafeCURIE);
         }
     }

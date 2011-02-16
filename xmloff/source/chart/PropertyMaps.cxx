@@ -490,7 +490,6 @@ XMLChartImportPropertyMapper::XMLChartImportPropertyMapper( const UniReference< 
 
     // do not chain text properties: on import this is done by shape mapper
     // to import old documents
-//      ChainImportMapper( XMLTextImportHelper::CreateParaExtPropMapper());
 }
 
 XMLChartImportPropertyMapper::~XMLChartImportPropertyMapper()

@@ -78,7 +78,6 @@ namespace xmloff { namespace token {
         TOKEN( " PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"office.dtd\">",      XML_XML_DOCTYPE_SUFFIX ),
 
         // namespace prefixes and names
-//        TOKEN( "xml",                   XML_NP_XML ),
         TOKEN( "http://www.w3.org/XML/1998/namespace",      XML_N_XML ),
         TOKEN( "office",                XML_NP_OFFICE ),
         TOKEN( "urn:oasis:names:tc:opendocument:xmlns:office:1.0",      XML_N_OFFICE ),

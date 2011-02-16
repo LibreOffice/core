@@ -214,14 +214,6 @@ MultiPropertySetHandler::~MultiPropertySetHandler (void)
 }
 
 
-/*
-template<class T> void  MultiPropertySetHandler::Add (const ::rtl::OUString & sName, T& pValue)
-{
-    aPropertyList[sName] = new PropertyWrapper<T> (sName, pValue);
-}
-*/
-
-
 
 BOOL    MultiPropertySetHandler::GetProperties  (void)
 {

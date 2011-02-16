@@ -303,7 +303,6 @@ void XMLSettingsExportHelper::exportSymbolDescriptors(
                     const rtl::OUString rName) const
 {
     // #110680#
-    // uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory( m_rContext.GetServiceFactory() );
     DBG_ASSERT( xServiceFactory.is(), "XMLSettingsExportHelper::exportSymbolDescriptors: got no service manager" );
 
@@ -423,7 +422,7 @@ void XMLSettingsExportHelper::exportIndexAccess(
     DBG_ASSERT(rName.getLength(), "no name");
     DBG_ASSERT(aIndexed->getElementType().equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ),
                 "wrong IndexAccess" );
-    rtl::OUString sEmpty;// ( RTLCONSTASCII_USTRINGPARAM( "View" ) );
+    rtl::OUString sEmpty;
     if(aIndexed->hasElements())
     {
         m_rContext.AddAttribute( XML_NAME, rName );
@@ -453,7 +452,6 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
         return;
 
     // #110680#
-    // uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory( m_rContext.GetServiceFactory() );
     DBG_ASSERT( xServiceFactory.is(), "XMLSettingsExportHelper::exportForbiddenCharacters: got no service manager" );
 

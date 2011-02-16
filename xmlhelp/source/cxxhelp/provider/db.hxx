@@ -211,8 +211,6 @@ namespace berkeleydbproxy {
         Dbt(void *data_arg, u_int32_t size_arg);
 
         Dbt();
-        //Dbt(const Dbt & other);
-        //Dbt & operator=(const Dbt & other);
 
         ~Dbt();
 
@@ -227,20 +225,5 @@ namespace berkeleydbproxy {
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

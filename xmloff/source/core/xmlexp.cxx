@@ -1163,7 +1163,6 @@ void SvXMLExport::ImplExportStyles( sal_Bool )
 {
     CheckAttrList();
 
-//  AddAttribute( XML_NAMESPACE_NONE, XML_ID, XML_STYLES_ID );
     {
         // <style:styles>
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_STYLES,
@@ -1207,7 +1206,6 @@ void SvXMLExport::ImplExportAutoStyles( sal_Bool )
         mxAutoStylePool->RegisterNames( aStyleFamilies, aStyleNames );
     }
 
-//  AddAttributeASCII( XML_NAMESPACE_NONE, XML_ID, XML_AUTO_STYLES_ID );
     {
         // <style:automatic-styles>
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE,
@@ -1447,20 +1445,6 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                 AddAttribute( XML_NAMESPACE_OFFICE, XML_MIMETYPE, aTmp );
             }
         }
-
-//      if( (getExportFlags() & EXPORT_NODOCTYPE) == 0 &&
-//          xExtHandler.is() )
-//      {
-//          OUStringBuffer aDocType(
-//               GetXMLToken(XML_XML_DOCTYPE_PREFIX).getLength() +
-//              GetXMLToken(XML_XML_DOCTYPE_SUFFIX).getLength() + 30 );
-//
-//          aDocType.append( GetXMLToken(XML_XML_DOCTYPE_PREFIX) );
-//          aDocType.append( GetNamespaceMap().GetQNameByKey(
-//                         XML_NAMESPACE_OFFICE, GetXMLToken(eRootService) ) );
-//          aDocType.append( GetXMLToken(XML_XML_DOCTYPE_SUFFIX) );
-//          xExtHandler->unknown( aDocType.makeStringAndClear() );
-//      }
 
         SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, eRootService, sal_True, sal_True );
 
@@ -2505,7 +2489,6 @@ SvXMLExport::AddAttributeXmlId(uno::Reference<uno::XInterface> const & i_xIfc)
     const uno::Reference<rdf::XMetadatable> xMeta(i_xIfc,
         uno::UNO_QUERY);
 //FIXME not yet...
-//    OSL_ENSURE(xMeta.is(), "xml:id: not XMetadatable");
     if ( xMeta.is() )
     {
         const beans::StringPair mdref( xMeta->getMetadataReference() );

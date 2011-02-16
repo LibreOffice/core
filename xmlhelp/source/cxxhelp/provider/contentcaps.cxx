@@ -194,8 +194,6 @@ uno::Sequence< beans::Property > Content::getProperties(
 uno::Sequence< star::ucb::CommandInfo > Content::getCommands(
     const uno::Reference< star::ucb::XCommandEnvironment > & /*xEnv*/ )
 {
-//  osl::MutexGuard aGuard( m_aMutex );
-
     //=================================================================
     //
     // Supported commands
