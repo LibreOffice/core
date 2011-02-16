@@ -605,7 +605,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     ResStringArray aPaperAry( CUI_RES( nAryId ) );
     sal_uInt32 nCnt = aPaperAry.Count();
 
-    USHORT nUserPos = LISTBOX_ENTRY_NOTFOUND;
+    sal_uInt16 nUserPos = LISTBOX_ENTRY_NOTFOUND;
     for ( sal_uInt32 i = 0; i < nCnt; ++i )
     {
         String aStr = aPaperAry.GetString(i);
