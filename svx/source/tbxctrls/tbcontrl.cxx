@@ -2335,7 +2335,7 @@ SvxFontColorToolBoxControl::SvxFontColorToolBoxControl(
     pBtnUpdater( new ::svx::ToolboxButtonColorUpdater(
                     nSlotId, nId, &GetToolBox(), TBX_UPDATER_MODE_CHAR_COLOR_NEW ))
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
+    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
 }
 
 // -----------------------------------------------------------------------
