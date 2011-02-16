@@ -119,7 +119,6 @@ SvXMLImportContext *SvxXMLTextImportContext::CreateChildContext( USHORT nPrefix,
 class SvxXMLXTextImportComponent : public SvXMLImport
 {
 public:
-    // #110680#
     SvxXMLXTextImportComponent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         const uno::Reference< XText > & xText );
@@ -136,7 +135,6 @@ private:
 
 // --------------------------------------------------------------------
 
-// #110680#
 SvxXMLXTextImportComponent::SvxXMLXTextImportComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     const uno::Reference< XText > & xText )
@@ -227,7 +225,6 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
 
 */
 
-            // #110680#
             // uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xText ) );
             uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xServiceFactory, xText ) );
 

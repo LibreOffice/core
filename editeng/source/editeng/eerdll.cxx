@@ -96,8 +96,8 @@ GlobalEditData::GlobalEditData()
 
 GlobalEditData::~GlobalEditData()
 {
-    // DefItems zerstoeren...
-    // Oder einfach stehen lassen, da sowieso App-Ende?!
+    // Destroy DefItems...
+    // Or simply keep them, since at end of excecution?!
     if ( ppDefItems )
         SfxItemPool::ReleaseDefaults( ppDefItems, EDITITEMCOUNT, TRUE );
     delete pStdRefDevice;
@@ -174,7 +174,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[50] = new SvxCharSetColorItem( Color( COL_RED ), RTL_TEXTENCODING_DONTKNOW, EE_FEATURE_NOTCONV );
         ppDefItems[51] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
 
-        DBG_ASSERT( EDITITEMCOUNT == 52, "ITEMCOUNT geaendert, DefItems nicht angepasst!" );
+        DBG_ASSERT( EDITITEMCOUNT == 52, "ITEMCOUNT changed, DefItems not adapted!" );
 
         // Init DefFonts:
         GetDefaultFonts( *(SvxFontItem*)ppDefItems[EE_CHAR_FONTINFO - EE_ITEMS_START],

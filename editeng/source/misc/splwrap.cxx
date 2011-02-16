@@ -151,7 +151,7 @@ SvxSpellWrapper::~SvxSpellWrapper()
 }
 
 /*--------------------------------------------------------------------
- *  Beschreibung: Ctor, die Pruefreihenfolge wird festgelegt
+ *  Description: Constructor, the test sequence is determined
  *
  *  !bStart && !bOtherCntnt:    BODY_END,   BODY_START, OTHER
  *  !bStart && bOtherCntnt:     OTHER,      BODY
@@ -261,15 +261,15 @@ sal_Int16 SvxSpellWrapper::CheckHyphLang(
 
 
 void SvxSpellWrapper::SpellStart( SvxSpellArea /*eSpell*/ )
-{   // Hier muessen die notwendigen Vorbereitungen fuer SpellContinue
-}   // im uebergebenen Bereich getroffen werden.
+{ // Here, the necessary preparations be made for SpellContinue in the
+} // given area.
 
 // -----------------------------------------------------------------------
 
 
 sal_Bool SvxSpellWrapper::HasOtherCnt()
 {
-    return sal_False; // Gibt es ueberhaupt einen Sonderbereich?
+    return sal_False; // Is there a special area?
 }
 
 // -----------------------------------------------------------------------
@@ -277,14 +277,14 @@ sal_Bool SvxSpellWrapper::HasOtherCnt()
 
 sal_Bool SvxSpellWrapper::SpellMore()
 {
-    return sal_False; // Sollen weitere Dokumente geprueft werden?
+    return sal_False; // Should additional documents be examined?
 }
 
 // -----------------------------------------------------------------------
 
 
 void SvxSpellWrapper::SpellEnd()
-{   // Bereich ist abgeschlossen, ggf. Aufraeumen
+{   // Area is complete, tidy up if necessary
 
     // display error for last language not found
     ShowLanguageErrors();
@@ -308,14 +308,14 @@ void SvxSpellWrapper::AutoCorrect( const String&, const String& )
 
 
 void SvxSpellWrapper::ScrollArea()
-{   // Scrollarea einstellen
+{   // Set Scroll area
 }
 
 // -----------------------------------------------------------------------
 
 
 void SvxSpellWrapper::ChangeWord( const String&, const sal_uInt16 )
-{   // Wort ersetzen
+{   // Insert Word
 }
 
 // -----------------------------------------------------------------------
@@ -323,7 +323,7 @@ void SvxSpellWrapper::ChangeWord( const String&, const sal_uInt16 )
 
 String SvxSpellWrapper::GetThesWord()
 {
-    // Welches Wort soll nachgeschlagen werden?
+    // What word should be looked up?
     return String();
 }
 
@@ -332,7 +332,7 @@ String SvxSpellWrapper::GetThesWord()
 
 void SvxSpellWrapper::ChangeThesWord( const String& )
 {
-    // Wort wg. Thesaurus ersetzen
+    // replace word due to Thesaurus.
 }
 
 // -----------------------------------------------------------------------
@@ -360,25 +360,25 @@ void SvxSpellWrapper::StartThesaurus( const String &rWord, sal_uInt16 nLanguage 
 // -----------------------------------------------------------------------
 
 void SvxSpellWrapper::ReplaceAll( const String &, sal_Int16 )
-{   // Wort aus der Replace-Liste ersetzen
+{   // Replace Word from the the Replace list
 }
 
 // -----------------------------------------------------------------------
 
 
 void SvxSpellWrapper::SetLanguage( const sal_uInt16 )
-{   // Sprache aendern
+{   // Set Language
 }
 
 // -----------------------------------------------------------------------
 
 
 void SvxSpellWrapper::InsertHyphen( const sal_uInt16 )
-{   // Hyphen einfuegen bzw. loeschen
+{   // inserting and deleting Hyphae
 }
 
 // -----------------------------------------------------------------------
-// Pruefung der Dokumentbereiche in der durch die Flags angegebenen Reihenfolge
+// Testing of the document areas in the order specified by the flags
 
 
 void SvxSpellWrapper::SpellDocument( )
@@ -418,7 +418,7 @@ void SvxSpellWrapper::SpellDocument( )
 }
 
 // -----------------------------------------------------------------------
-// Naechsten Bereich auswaehlen
+// Select the next area
 
 
 sal_Bool SvxSpellWrapper::SpellNext( )
@@ -430,26 +430,27 @@ sal_Bool SvxSpellWrapper::SpellNext( )
             : sal_False;
     sal_Bool bActRev = bRevAllowed && bWrapReverse;
 
-    // bActRev ist die Richtung nach dem Spellen, bReverse die am Anfang.
+    // bActRev is the direction after Spell checking, bReverse is the one
+    // at the beginning.
     if( bActRev == bReverse )
-    {                           // Keine Richtungsaenderung, also ist
-        if( bStartChk )         // der gewuenschte Bereich ( bStartChk )
-            bStartDone = sal_True;  // vollstaendig abgearbeitet.
+    {                           // No change of direction, thus is the
+        if( bStartChk )         // desired area ( bStartChk )
+            bStartDone = sal_True;  // completely processed.
         else
             bEndDone = sal_True;
     }
-    else if( bReverse == bStartChk ) // Bei einer Richtungsaenderung kann
-    {                          // u.U. auch ein Bereich abgearbeitet sein.
-        if( bStartChk )        // Sollte der vordere Teil rueckwaerts gespellt
-            bEndDone = sal_True;   // werden und wir kehren unterwegs um, so ist
-        else                   // der hintere Teil abgearbeitet (und umgekehrt).
+    else if( bReverse == bStartChk ) //For a change of direction, an area can
+    {                          // be processed during certain circumstances
+        if( bStartChk )        // If the firdt part is spell checked in backwards
+            bEndDone = sal_True;   // and this is reversed in the process, then
+        else                   // then the end part is processed (and vice-versa).
             bStartDone = sal_True;
     }
 
     bReverse = bActRev;
-    if( bOtherCntnt && bStartDone && bEndDone ) // Dokument komplett geprueft?
+    if( bOtherCntnt && bStartDone && bEndDone ) // Document has been fully checked?
     {
-        if ( SpellMore() )  // ein weiteres Dokument pruefen?
+        if ( SpellMore() )  // spell check another document?
         {
             bOtherCntnt = sal_False;
             bStartDone = !bReverse;
@@ -474,13 +475,13 @@ sal_Bool SvxSpellWrapper::SpellNext( )
             *(sal_Bool*)xProp->getPropertyValue(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UPN_IS_SPELL_SPECIAL)) ).getValue()
             : sal_False;
-        // Bodybereich erledigt, Frage nach Sonderbereich
+        // Body area done, ask for special area
         if( !IsHyphen() && bIsSpellSpecial && HasOtherCnt() )
         {
             SpellStart( SVX_SPELL_OTHER );
             bOtherCntnt = bGoOn = sal_True;
         }
-        else if ( SpellMore() )  // ein weiteres Dokument pruefen?
+        else if ( SpellMore() )  // check another document?
         {
             bOtherCntnt = sal_False;
             bStartDone = !bReverse;
@@ -491,14 +492,14 @@ sal_Bool SvxSpellWrapper::SpellNext( )
     }
     else
     {
-        // Ein BODY_Bereich erledigt, Frage nach dem anderen BODY_Bereich
+        // a BODY_area done, ask for the other BODY_area
         WAIT_OFF();
 
         sal_uInt16 nResId = bReverse ? RID_SVXQB_BW_CONTINUE : RID_SVXQB_CONTINUE;
         QueryBox aBox( pWin, EditResId( nResId ) );
         if ( aBox.Execute() != RET_YES )
         {
-            // Verzicht auf den anderen Bereich, ggf. Frage nach Sonderbereich
+            // sacrifice the other area if necessary ask for special area
             WAIT_ON();
             bStartDone = bEndDone = sal_True;
             return SpellNext();

@@ -39,9 +39,9 @@
 
 // class SvxPaperBinItem -------------------------------------------------
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Dieses Item beschreibt die Auswahl eines Papierschachts des Drucker.
+    This item describes selecting a paper tray of the printer.
 */
 
 class EDITENG_DLLPUBLIC SvxPaperBinItem : public SfxByteItem
@@ -53,7 +53,7 @@ public:
                             const BYTE nTray = PAPERBIN_PRINTER_SETTINGS );
     inline SvxPaperBinItem &operator=( const SvxPaperBinItem &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create( SvStream &, USHORT ) const;
     virtual SvStream&       Store( SvStream &, USHORT nItemVersion ) const;

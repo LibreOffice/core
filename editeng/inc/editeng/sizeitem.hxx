@@ -36,9 +36,9 @@
 
 // class SvxSizeItem -----------------------------------------------------
 
-/*
-[Beschreibung]
-Dieses Item beschreibt eine zweidimensionale Groesse (Size).
+/*  [Description]
+
+    This item describes a two-dimensional size.
 */
 
 class EDITENG_DLLPUBLIC SvxSizeItem : public SfxPoolItem
@@ -54,7 +54,7 @@ public:
 
     inline SvxSizeItem& operator=( const SvxSizeItem &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );

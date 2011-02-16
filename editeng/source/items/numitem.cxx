@@ -54,8 +54,8 @@
 
 #define MM100_TO_TWIP(MM100)    ((MM100*72L+63L)/127L)
 
-#define DEF_WRITER_LSPACE   500     //Standardeinrueckung
-#define DEF_DRAW_LSPACE     800     //Standardeinrueckung
+#define DEF_WRITER_LSPACE   500     //Standard Indentation
+#define DEF_DRAW_LSPACE     800     //Standard Indentation
 
 #define NUMITEM_VERSION_01        0x01
 #define NUMITEM_VERSION_02        0x02
@@ -133,7 +133,7 @@ String  SvxNumberType::GetNumStr( ULONG nNo, const Locale& rLocale ) const
             break;
             default:
                 {
-                    //#95525# '0' allowed for ARABIC numberings
+                    // '0' allowed for ARABIC numberings
                     if(NumberingType::ARABIC == nNumType && 0 == nNo )
                         aTmpStr = '0';
                     else
@@ -334,7 +334,7 @@ SvStream&   SvxNumberFormat::Store(SvStream &rStream, FontToSubsFontConverter pC
     {
         rStream << (USHORT)1;
 
-        // #75113# in SD or SI force bullet itself to be stored,
+        // in SD or SI force bullet itself to be stored,
         // for that purpose throw away link when link and graphic
         // are present, so Brush save is forced
         if(pGraphicBrush->GetGraphicLink() && pGraphicBrush->GetGraphic())
@@ -579,7 +579,7 @@ long SvxNumberFormat::GetIndentAt() const
 
 IMPL_STATIC_LINK( SvxNumberFormat, GraphicArrived, void *, EMPTYARG )
 {
-    // ggfs. die GrfSize setzen:
+    // if necessary, set the GrfSize:
     if( !pThis->aGraphicSize.Width() || !pThis->aGraphicSize.Height() )
     {
         const Graphic* pGrf = pThis->pGraphicBrush->GetGraphic();
@@ -614,12 +614,12 @@ Size SvxNumberFormat::GetGraphicSizeMM100(const Graphic* pGraphic)
 
 String SvxNumberFormat::CreateRomanString( ULONG nNo, BOOL bUpper )
 {
-    nNo %= 4000;            // mehr kann nicht dargestellt werden
+    nNo %= 4000;            // more can not be displayed
 //      i, ii, iii, iv, v, vi, vii, vii, viii, ix
 //                          (Dummy),1000,500,100,50,10,5,1
     const char *cRomanArr = bUpper
-                        ? "MDCLXVI--"   // +2 Dummy-Eintraege !!
-                        : "mdclxvi--";  // +2 Dummy-Eintraege !!
+                        ? "MDCLXVI--"   // +2 Dummy entries!
+                        : "mdclxvi--";  // +2 Dummy entries!
 
     String sRet;
     USHORT nMask = 1000;
@@ -652,7 +652,7 @@ String SvxNumberFormat::CreateRomanString( ULONG nNo, BOOL bUpper )
                     break;
         }
 
-        nMask /= 10;            // zur naechsten Dekade
+        nMask /= 10;            // for the next decade
         cRomanArr += 2;
     }
     return sRet;
@@ -685,7 +685,7 @@ SvxNumRule::SvxNumRule( ULONG nFeatures,
         if(i < nLevels)
         {
             aFmts[i] = new SvxNumberFormat(SVX_NUM_CHARS_UPPER_LETTER);
-            //daran wird zwischen writer und draw unterschieden
+            // It is a distinction between writer and draw
             if(nFeatures & NUM_CONTINUOUS)
             {
                 if ( eDefaultNumberFormatPositionAndSpaceMode ==
@@ -866,7 +866,7 @@ int   SvxNumRule::operator==( const SvxNumRule& rCopy) const
 
 const SvxNumberFormat*  SvxNumRule::Get(USHORT nLevel)const
 {
-    DBG_ASSERT(nLevel < SVX_MAX_NUM, "falsches Level" );
+    DBG_ASSERT(nLevel < SVX_MAX_NUM, "Wrong Level" );
     if( nLevel < SVX_MAX_NUM )
         return aFmtsSet[nLevel] ? aFmts[nLevel] : 0;
     else
@@ -881,7 +881,7 @@ const SvxNumberFormat&  SvxNumRule::GetLevel(USHORT nLevel)const
          pStdOutlineNumFmt = new SvxNumberFormat(SVX_NUM_NUMBER_NONE);
     }
 
-    DBG_ASSERT(nLevel < SVX_MAX_NUM, "falsches Level" );
+    DBG_ASSERT(nLevel < SVX_MAX_NUM, "Wrong Level" );
 
     return ( ( nLevel < SVX_MAX_NUM ) && aFmts[nLevel] ) ?
             *aFmts[nLevel] :  eNumberingType == SVX_RULETYPE_NUMBERING ?
@@ -891,7 +891,7 @@ const SvxNumberFormat&  SvxNumRule::GetLevel(USHORT nLevel)const
 
 void SvxNumRule::SetLevel( USHORT i, const SvxNumberFormat& rNumFmt, BOOL bIsValid )
 {
-    DBG_ASSERT(i < SVX_MAX_NUM, "falsches Level" );
+    DBG_ASSERT(i < SVX_MAX_NUM, "Wrong Level" );
 
     if( (i < SVX_MAX_NUM) && (!aFmtsSet[i] || !(rNumFmt == *Get( i ))) )
     {
@@ -903,7 +903,7 @@ void SvxNumRule::SetLevel( USHORT i, const SvxNumberFormat& rNumFmt, BOOL bIsVal
 
 void SvxNumRule::SetLevel(USHORT nLevel, const SvxNumberFormat* pFmt)
 {
-    DBG_ASSERT(nLevel < SVX_MAX_NUM, "falsches Level" );
+    DBG_ASSERT(nLevel < SVX_MAX_NUM, "Wrong Level" );
 
     if( nLevel < SVX_MAX_NUM )
     {
@@ -929,7 +929,7 @@ String  SvxNumRule::MakeNumString( const SvxNodeNum& rNum, BOOL bInclStrings ) c
             BYTE i = rNum.GetLevel();
 
             if( !IsContinuousNumbering() &&
-                1 < rMyNFmt.GetIncludeUpperLevels() )       // nur der eigene Level ?
+                1 < rMyNFmt.GetIncludeUpperLevels() )       // only on own level?
             {
                 BYTE n = rMyNFmt.GetIncludeUpperLevels();
                 if( 1 < n )
@@ -946,9 +946,6 @@ String  SvxNumRule::MakeNumString( const SvxNodeNum& rNum, BOOL bInclStrings ) c
                 const SvxNumberFormat& rNFmt = GetLevel( i );
                 if( SVX_NUM_NUMBER_NONE == rNFmt.GetNumberingType() )
                 {
-    // Soll aus 1.1.1 --> 2. NoNum --> 1..1 oder 1.1 ??
-    //                 if( i != rNum.nMyLevel )
-    //                    aStr += aDotStr;
                     continue;
                 }
 
@@ -961,7 +958,7 @@ String  SvxNumRule::MakeNumString( const SvxNodeNum& rNum, BOOL bInclStrings ) c
                         bDot = sal_False;
                 }
                 else
-                    aStr += sal_Unicode('0');       // alle 0-Level sind eine 0
+                    aStr += sal_Unicode('0');       // all 0-levels are a 0
                 if( i != rNum.GetLevel() && bDot)
                     aStr += sal_Unicode('.');
             }

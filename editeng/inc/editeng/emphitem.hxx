@@ -42,9 +42,9 @@ namespace rtl
 
 // class SvxEmphasisMarkItem ----------------------------------------------
 
-/* [Beschreibung]
+/* [Description]
 
-    Dieses Item beschreibt die Font-Betonung.
+    This item describes the Font emphasis.
 */
 
 class EDITENG_DLLPUBLIC SvxEmphasisMarkItem : public SfxUInt16Item
@@ -55,7 +55,7 @@ public:
     SvxEmphasisMarkItem(  const FontEmphasisMark eVal /*= EMPHASISMARK_NONE*/,
                           const USHORT nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem + SfxEnumItem
+    // "pure virtual Methods" from SfxPoolItem + SfxEnumItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

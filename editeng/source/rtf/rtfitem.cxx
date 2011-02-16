@@ -96,7 +96,7 @@
 #define BRACERIGHT  '}'
 
 
-// einige Hilfs-Funktionen
+// Some helper functions
 // char
 inline const SvxEscapementItem& GetEscapement(const SfxItemSet& rSet,USHORT nId,BOOL bInP=TRUE)
     { return (const SvxEscapementItem&)rSet.Get( nId,bInP); }
@@ -217,7 +217,7 @@ void SvxRTFParser::SetScriptAttr( RTF_CharTypeDef eType, SfxItemSet& rSet,
 
 void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
 {
-    DBG_ASSERT( pSet, "Es muss ein SfxItemSet uebergeben werden!" );
+    DBG_ASSERT( pSet, "A SfxItemSet has to be provided as argument!" );
     int bFirstToken = TRUE, bWeiter = TRUE;
     USHORT nStyleNo = 0;        // default
     FontUnderline eUnderline;
@@ -229,7 +229,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
 
     int bChkStkPos = !bNewGroup && aAttrStack.Top();
 
-    while( bWeiter && IsParserWorking() )           // solange bekannte Attribute erkannt werden
+    while( bWeiter && IsParserWorking() )  // as long as known Attribute are recognized
     {
         switch( nToken )
         {
@@ -261,12 +261,12 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 if( pAkt->aAttrSet.Count() || pAkt->pChildList ||
                     pAkt->nStyleNo )
                 {
-                    // eine neue Gruppe aufmachen
+                    // Open a new Group
                     SvxRTFItemStackType* pNew = new SvxRTFItemStackType(
                                                 *pAkt, *pInsPos, TRUE );
                     pNew->SetRTFDefaults( GetRTFDefaults() );
 
-                    // alle bis hierher gueltigen Attribute "setzen"
+                    // "Set" all valid attributes up until this point
                     AttrGroupEnd();
                     pAkt = aAttrStack.Top();  // can be changed after AttrGroupEnd!
                     pNew->aAttrSet.SetParent( pAkt ? &pAkt->aAttrSet : 0 );
@@ -275,7 +275,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     pAkt = pNew;
                 }
                 else
-                    // diesen Eintrag als neuen weiterbenutzen
+                    // continue to use this entry as a new one
                     pAkt->SetStartPos( *pInsPos );
 
                 pSet = &pAkt->aAttrSet;
@@ -302,8 +302,8 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 else
                 {
                     nStyleNo = -1 == nTokenValue ? 0 : USHORT(nTokenValue);
-                    // setze am akt. auf dem AttrStack stehenden Style die
-                    // StyleNummer
+                    // Set the StyleNumber for the current style on
+                    // the attribute stack
                     SvxRTFItemStackType* pAkt = aAttrStack.Top();
                     if( !pAkt )
                         break;
@@ -445,14 +445,14 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             case RTF_SLMULT:
                 if( PARDID->nLinespacing && 1 == nTokenValue )
                 {
-                    // dann wird auf mehrzeilig umgeschaltet!
+                    // then switches to multi-line!
                     SvxLineSpacingItem aLSpace( GetLineSpacing( *pSet,
                                                 PARDID->nLinespacing, FALSE ));
 
-                    // wieviel bekommt man aus dem LineHeight Wert heraus
+                    // how much do you get from the line height value?
 
-                    // Proportionale-Groesse:
-                    // D.H. das Verhaeltnis ergibt sich aus ( n / 240 ) Twips
+                    // Proportional-Size:
+                    // Ie, the ratio is (n / 240) twips
 
                     nTokenValue = 240;
                     if( IsCalcValue() )
@@ -461,8 +461,8 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     nTokenValue = short( 100L * aLSpace.GetLineHeight()
                                             / long( nTokenValue ) );
 
-                    if( nTokenValue > 200 )     // Datenwert fuer PropLnSp
-                        nTokenValue = 200;      // ist ein BYTE !!!
+                    if( nTokenValue > 200 )     // Data value for PropLnSp
+                        nTokenValue = 200;      // is one BYTE !!!
 
                     aLSpace.SetPropLineSpace( (const BYTE)nTokenValue );
                     aLSpace.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
@@ -474,9 +474,9 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
             case RTF_SL:
                 if( PARDID->nLinespacing )
                 {
-                    // errechne das Verhaeltnis aus dem default Font zu der
-                    // Size Angabe. Der Abstand besteht aus der Zeilenhoehe
-                    // (100%) und dem Leerraum ueber der Zeile (20%).
+                    // Calculate the ratio between the default font and the
+                    // specified size. The distance consists of the line height
+                    // (100%) and the space above the line (20%).
                     SvxLineSpacingItem aLSpace(0, PARDID->nLinespacing);
 
                     nTokenValue = !bTokenHasValue ? 0 : nTokenValue;
@@ -551,10 +551,9 @@ SET_FONTALIGNMENT:
             }
             break;
 
-/*  */
             case RTF_B:
             case RTF_AB:
-                if( IsAttrSttPos() )    // nicht im Textfluss ?
+                if( IsAttrSttPos() )    // not in the text flow?
                 {
 
                     SvxWeightItem aTmpItem(
@@ -567,7 +566,7 @@ SET_FONTALIGNMENT:
             case RTF_CAPS:
             case RTF_SCAPS:
                 if( PLAINID->nCaseMap &&
-                    IsAttrSttPos() )        // nicht im Textfluss ?
+                    IsAttrSttPos() )        // not in the text flow?
                 {
                     SvxCaseMap eCaseMap;
                     if( !nTokenValue )
@@ -692,7 +691,7 @@ SET_FONTALIGNMENT:
 
             case RTF_I:
             case RTF_AI:
-                if( IsAttrSttPos() )        // nicht im Textfluss ?
+                if( IsAttrSttPos() )        // not in the text flow?
                 {
                     SvxPostureItem aTmpItem(
                                     nTokenValue ? ITALIC_NORMAL : ITALIC_NONE,
@@ -703,7 +702,7 @@ SET_FONTALIGNMENT:
 
             case RTF_OUTL:
                 if( PLAINID->nContour &&
-                    IsAttrSttPos() )        // nicht im Textfluss ?
+                    IsAttrSttPos() )        // not in the text flow?
                 {
                     pSet->Put( SvxContourItem( nTokenValue ? TRUE : FALSE,
                                 PLAINID->nContour ));
@@ -712,7 +711,7 @@ SET_FONTALIGNMENT:
 
             case RTF_SHAD:
                 if( PLAINID->nShadowed &&
-                    IsAttrSttPos() )        // nicht im Textfluss ?
+                    IsAttrSttPos() )        // not in the text flow?
                 {
                     pSet->Put( SvxShadowedItem( nTokenValue ? TRUE : FALSE,
                                 PLAINID->nShadowed ));
@@ -721,7 +720,7 @@ SET_FONTALIGNMENT:
 
             case RTF_STRIKE:
                 if( PLAINID->nCrossedOut &&
-                    IsAttrSttPos() )        // nicht im Textfluss ?
+                    IsAttrSttPos() )        // not in the text flow?
                 {
                     pSet->Put( SvxCrossedOutItem(
                         nTokenValue ? STRIKEOUT_SINGLE : STRIKEOUT_NONE,
@@ -730,7 +729,7 @@ SET_FONTALIGNMENT:
                 break;
 
             case RTF_STRIKED:
-                if( PLAINID->nCrossedOut )      // nicht im Textfluss ?
+                if( PLAINID->nCrossedOut )      // not in the text flow?
                 {
                     pSet->Put( SvxCrossedOutItem(
                         nTokenValue ? STRIKEOUT_DOUBLE : STRIKEOUT_NONE,
@@ -1107,12 +1106,9 @@ ATTR_SETEMPHASIS:
                     ReadBackgroundAttr( nToken, *pSet );
                 break;
 
-
-/*  */
-
             case BRACELEFT:
                 {
-                    // teste auf Swg-Interne Tokens
+                    // tests on Swg internal tokens
                     bool bHandled = false;
                     short nSkip = 0;
                     if( RTF_IGNOREFLAG != GetNextToken())
@@ -1126,16 +1122,16 @@ ATTR_SETEMPHASIS:
                         case RTF_PGBRK:
                         case RTF_SOUTLVL:
                             UnknownAttrToken( nToken, pSet );
-                            // ueberlese die schliessende Klammer
+                            // overwrite the closing parenthesis
                             break;
 
                         case RTF_SWG_ESCPROP:
                             {
-                                // prozentuale Veraenderung speichern !
+                                // Store percentage change!
                                 BYTE nProp = BYTE( nTokenValue / 100 );
                                 short nEsc = 0;
                                 if( 1 == ( nTokenValue % 100 ))
-                                    // Erkennung unseres AutoFlags!
+                                    // Recognize own auto-flags!
                                     nEsc = DFLT_ESC_AUTO_SUPER;
 
                                 if( PLAINID->nEscapement )
@@ -1167,7 +1163,7 @@ ATTR_SETEMPHASIS:
                                     pSet->Put( aHypenZone );
                                 }
                                 else
-                                    SkipGroup();        // ans Ende der Gruppe
+                                    SkipGroup();  // at the end of the group
                             }
                             break;
 
@@ -1182,8 +1178,6 @@ ATTR_SETEMPHASIS:
 
                                     if( RTF_SHDW_STYLE != GetNextToken() )
                                         break;
-                                    //! (pb) class Brush removed -> obsolete
-                                    //! BrushStyle eStyle = BrushStyle( nTokenValue );
 
                                     if( RTF_SHDW_COL != GetNextToken() )
                                         break;
@@ -1191,7 +1185,6 @@ ATTR_SETEMPHASIS:
 
                                     if( RTF_SHDW_FCOL != GetNextToken() )
                                         break;
-//                                  USHORT nFillCol = USHORT( nTokenValue );
 
                                     Color aColor = GetColor( nCol );
 
@@ -1203,7 +1196,7 @@ ATTR_SETEMPHASIS:
                                 } while( FALSE );
 
                                 if( bSkip )
-                                    SkipGroup();        // ans Ende der Gruppe
+                                    SkipGroup();  // at the end of the group
                             }
                             break;
 
@@ -1236,7 +1229,7 @@ ATTR_SETEMPHASIS:
                                 nToken = SkipToken( -2 );
                                 ReadBorderAttr( nToken, *pSet );
                             }
-                            else        // also kein Attribut mehr
+                            else        // so no more attribute
                                 nSkip = -2;
                             break;
                         }
@@ -1258,10 +1251,10 @@ ATTR_SETEMPHASIS:
                     else
                         nSkip = -2;
 
-                    if( nSkip )             // alles voellig unbekannt
+                    if( nSkip )             // all completely unknown
                     {
                         if (!bFirstToken)
-                            --nSkip;    // BRACELEFT: ist das naechste Token
+                            --nSkip;    // BRACELEFT: is the next token
                         SkipToken( nSkip );
                         bWeiter = FALSE;
                     }
@@ -1276,7 +1269,7 @@ ATTR_SETEMPHASIS:
                     ReadBackgroundAttr( nToken, *pSet );
                 else
                 {
-                    // kenne das Token nicht also das Token "in den Parser zurueck"
+                    // unknown token, so token "returned in Parser"
                     if( !bFirstToken )
                         SkipToken( -1 );
                     bWeiter = FALSE;
@@ -1289,38 +1282,12 @@ ATTR_SETEMPHASIS:
         }
         bFirstToken = FALSE;
     }
-
-/*
-    // teste Attribute gegen ihre Styles
-    if( IsChkStyleAttr() && pSet->Count() && !pInsPos->GetCntIdx() )
-    {
-        SvxRTFStyleType* pStyle = aStyleTbl.Get( nStyleNo );
-        if( pStyle && pStyle->aAttrSet.Count() )
-        {
-            // alle Attribute, die schon vom Style definiert sind, aus dem
-            // akt. Set entfernen
-            const SfxPoolItem* pItem;
-            SfxItemIter aIter( *pSet );
-            USHORT nWhich = aIter.GetCurItem()->Which();
-            while( TRUE )
-            {
-                if( SFX_ITEM_SET == pStyle->aAttrSet.GetItemState(
-                    nWhich, FALSE, &pItem ) && *pItem == *aIter.GetCurItem())
-                    pSet->ClearItem( nWhich );      // loeschen
-
-                if( aIter.IsAtEnd() )
-                    break;
-                nWhich = aIter.NextItem()->Which();
-            }
-        }
-    }
-*/
 }
 
 void SvxRTFParser::ReadTabAttr( int nToken, SfxItemSet& rSet )
 {
     bool bMethodOwnsToken = false; // #i52542# patch from cmc.
-// dann lese doch mal alle TabStops ein
+// then read all the TabStops
     SvxTabStop aTabStop;
     SvxTabStopItem aAttr( 0, 0, SVX_TAB_ADJUST_DEFAULT, PARDID->nTabStop );
     int bWeiter = TRUE;
@@ -1334,7 +1301,7 @@ void SvxRTFParser::ReadTabAttr( int nToken, SfxItemSet& rSet )
                     CalcValue();
                 aTabStop.GetTabPos() = nTokenValue;
                 aAttr.Insert( aTabStop );
-                aTabStop = SvxTabStop();    // alle Werte default
+                aTabStop = SvxTabStop();    // all values default
             }
             break;
 
@@ -1359,7 +1326,7 @@ void SvxRTFParser::ReadTabAttr( int nToken, SfxItemSet& rSet )
 
         case BRACELEFT:
             {
-                // Swg - Kontrol BRACELEFT RTF_IGNOREFLAG RTF_TLSWG BRACERIGHT
+                // Swg - control BRACELEFT RTF_IGNOREFLAG RTF_TLSWG BRACERIGHT
                 short nSkip = 0;
                 if( RTF_IGNOREFLAG != GetNextToken() )
                     nSkip = -1;
@@ -1369,13 +1336,13 @@ void SvxRTFParser::ReadTabAttr( int nToken, SfxItemSet& rSet )
                 {
                     aTabStop.GetDecimal() = BYTE(nTokenValue & 0xff);
                     aTabStop.GetFill() = BYTE((nTokenValue >> 8) & 0xff);
-                    // ueberlese noch die schliessende Klammer
+                    // overwrite the closing parenthesis
                     if (bMethodOwnsToken)
                         GetNextToken();
                 }
                 if( nSkip )
                 {
-                    SkipToken( nSkip );     // Ignore wieder zurueck
+                    SkipToken( nSkip );     // Ignore back again
                     bWeiter = FALSE;
                 }
             }
@@ -1391,7 +1358,7 @@ void SvxRTFParser::ReadTabAttr( int nToken, SfxItemSet& rSet )
         }
     } while( bWeiter );
 
-    // mit Defaults aufuellen fehlt noch !!!
+    // Fill with defaults is still missing!
     rSet.Put( aAttr );
     SkipToken( -1 );
 }
@@ -1401,7 +1368,7 @@ static void SetBorderLine( int nBorderTyp, SvxBoxItem& rItem,
 {
     switch( nBorderTyp )
     {
-    case RTF_BOX:           // alle Stufen durchlaufen
+    case RTF_BOX:           // run through all levels
 
     case RTF_BRDRT:
         rItem.SetLine( &rBorder, BOX_LINE_TOP );
@@ -1428,13 +1395,13 @@ static void SetBorderLine( int nBorderTyp, SvxBoxItem& rItem,
 void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
                                     int bTableDef )
 {
-    // dann lese doch mal das BoderAttribut ein
+    // then read the border attribute
     SvxBoxItem aAttr( PARDID->nBox );
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == rSet.GetItemState( PARDID->nBox, FALSE, &pItem ) )
         aAttr = *(SvxBoxItem*)pItem;
 
-    SvxBorderLine aBrd( 0, DEF_LINE_WIDTH_0, 0, 0 );    // einfache Linien
+    SvxBorderLine aBrd( 0, DEF_LINE_WIDTH_0, 0, 0 );    // simple lines
     int bWeiter = TRUE, nBorderTyp = 0;
 
     do {
@@ -1471,7 +1438,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
 
 SETBORDER:
             {
-                // auf defaults setzen
+                // set to defaults
                 aBrd.SetOutWidth( DEF_LINE_WIDTH_0 );
                 aBrd.SetInWidth( 0 );
                 aBrd.SetDistance( 0 );
@@ -1480,7 +1447,7 @@ SETBORDER:
             break;
 
 
-// werden noch nicht ausgewertet
+// yet to be evaluated
         case RTF_BRSP:
             {
                 switch( nBorderTyp )
@@ -1532,7 +1499,7 @@ case RTF_BRDRBAR:           break;
             goto SETBORDERLINE;
 
         case RTF_BRDRSH:
-            // schattierte Box
+            // shaded box
             {
                 rSet.Put( SvxShadowItem( PARDID->nShadow, (Color*) 0, 60 /*3pt*/,
                                         SVX_SHADOW_BOTTOMRIGHT ) );
@@ -1542,14 +1509,14 @@ case RTF_BRDRBAR:           break;
         case RTF_BRDRW:
             if( -1 != nTokenValue )
             {
-                // sollte es eine "dicke" Linie sein ?
+                // It should be a "thick" line?
                 if( DEF_LINE_WIDTH_0 != aBrd.GetOutWidth() )
                     nTokenValue *= 2;
 
-                // eine Doppelline?
+                // a double line?
                 if( aBrd.GetInWidth() )
                 {
-                    // WinWord - Werte an StarOffice anpassen
+                    // WinWord - adapt values to StarOffice
                     if( nTokenValue < DEF_LINE_WIDTH_1 - (DEF_LINE_WIDTH_1/10))
                     {
                         aBrd.SetOutWidth( DEF_DOUBLE_LINE0_OUT );
@@ -1572,7 +1539,7 @@ case RTF_BRDRBAR:           break;
                 }
                 else
                 {
-                    // WinWord - Werte an StarOffice anpassen
+                    // WinWord - adapt values to StarOffice
                     if( nTokenValue < DEF_LINE_WIDTH_1 - (DEF_LINE_WIDTH_1/10))
                         aBrd.SetOutWidth( DEF_LINE_WIDTH_0 );
                     else
@@ -1667,16 +1634,15 @@ SETBORDERLINE:
                         }
                     } while( bSwgControl );
 
-                    // Ende der Swg-Gruppe
-                    // -> lese noch die schliessende Klammer
+                    // End of the Swg-Group
+                    // -> still read the closing parenthesis
                     if( BRACERIGHT == nToken )
                         ;
                     else if( !bFirstToken )
                     {
-                        // es ist ein Parser-Fehler, springe zum
-                        // Ende der Gruppe
+                        // It is a parser error, jump to the end of the group
                         SkipGroup();
-                        // schliessende BRACERIGHT ueberspringen
+                        // Disregard closing BRACERIGHT
                         GetNextToken();
                     }
                     else
@@ -1685,7 +1651,7 @@ SETBORDERLINE:
 
                 if( nSkip )
                 {
-                    SkipToken( nSkip );     // Ignore wieder zurueck
+                    SkipToken( nSkip );     // Ignore back again
                     bWeiter = FALSE;
                 }
             }
@@ -1711,7 +1677,7 @@ inline ULONG CalcShading( ULONG nColor, ULONG nFillColor, BYTE nShading )
 void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet,
                                         int bTableDef )
 {
-    // dann lese doch mal das BoderAttribut ein
+    // then read the border attribute
     int bWeiter = TRUE;
     USHORT nColor = USHRT_MAX, nFillColor = USHRT_MAX;
     BYTE nFillValue = 0;
@@ -1798,7 +1764,7 @@ void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet,
     Color aCol( COL_WHITE ), aFCol;
     if( !nFillValue )
     {
-        // es wurde nur eine von beiden Farben angegeben oder kein BrushTyp
+        // there was only one of two colors specified or no BrushTyp
         if( USHRT_MAX != nFillColor )
         {
             nFillValue = 100;
@@ -1837,7 +1803,7 @@ void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet,
 // pard / plain abarbeiten
 void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
 {
-    if( !bNewGroup && aAttrStack.Top() )    // nicht am Anfang einer neuen Gruppe
+    if( !bNewGroup && aAttrStack.Top() )    // not at the beginning of a new group
     {
         SvxRTFItemStackType* pAkt = aAttrStack.Top();
 
@@ -1849,11 +1815,11 @@ void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
         {
             if( pAkt->aAttrSet.Count() || pAkt->pChildList || pAkt->nStyleNo )
             {
-                // eine neue Gruppe aufmachen
+                // open a new group
                 SvxRTFItemStackType* pNew = new SvxRTFItemStackType( *pAkt, *pInsPos, TRUE );
                 pNew->SetRTFDefaults( GetRTFDefaults() );
 
-                // alle bis hierher gueltigen Attribute "setzen"
+                // Set all until here valid attributes
                 AttrGroupEnd();
                 pAkt = aAttrStack.Top();  // can be changed after AttrGroupEnd!
                 pNew->aAttrSet.SetParent( pAkt ? &pAkt->aAttrSet : 0 );
@@ -1862,13 +1828,13 @@ void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
             }
             else
             {
-                // diesen Eintrag als neuen weiterbenutzen
+                // continue to use this entry as new
                 pAkt->SetStartPos( *pInsPos );
                 bNewStkEntry = FALSE;
             }
         }
 
-        // jetzt noch alle auf default zuruecksetzen
+        // now reset all to default
         if( bNewStkEntry &&
             ( pAkt->aAttrSet.GetParent() || pAkt->aAttrSet.Count() ))
         {
@@ -1890,10 +1856,7 @@ void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
 
             for( USHORT n = 0; n < nCnt; ++n, ++pPtr )
             {
-                // Item gesetzt und unterschiedlich -> das Pooldefault setzen
-                //JP 06.04.98: bei Items die nur SlotItems sind, darf nicht
-                //              auf das Default zugefriffen werden. Diese
-                //              werden gecleart
+                // Item set and different -> Set the Default Pool
                 if( !*pPtr )
                     ;
                 else if( SFX_WHICH_MAX < *pPtr )
@@ -1923,7 +1886,7 @@ void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
             }
         }
         else if( bPard )
-            pAkt->nStyleNo = 0;     // Style-Nummer zuruecksetzen
+            pAkt->nStyleNo = 0;     // reset Style number
 
         *ppSet = &pAkt->aAttrSet;
 
@@ -1969,7 +1932,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
 
     case RTF_ADEFLANG:  bIsLeftToRightDef = FALSE;  // no break!
     case RTF_DEFLANG:
-        // default Language merken
+        // store default Language
         if( -1 != nValue )
         {
             SvxLanguageItem aTmpItem( (const LanguageType)nValue,
@@ -1981,45 +1944,22 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
     case RTF_DEFTAB:
         if( PARDID->nTabStop )
         {
-            // RTF definiert 720 twips als default
+            // RTF defines 720 twips as default
             bIsSetDfltTab = TRUE;
             if( -1 == nValue || !nValue )
                 nValue = 720;
 
-            // wer keine Twips haben moechte ...
+            // who would like to have no twips  ...
             if( IsCalcValue() )
             {
                 nTokenValue = nValue;
                 CalcValue();
                 nValue = nTokenValue;
             }
-#if 1
-            /*
-            cmc:
-             This stuff looks a little hairy indeed, this should be totally
-             unnecessary where default tabstops are understood. Just make one
-             tabstop and stick the value in there, the first one is all that
-             matters.
 
-             e.g.
-
-            SvxTabStopItem aNewTab(1, USHORT(nValue), SVX_TAB_ADJUST_DEFAULT,
-                PARDID->nTabStop);
-            ((SvxTabStop&)aNewTab[0]).GetAdjustment() = SVX_TAB_ADJUST_DEFAULT;
-
-
-             It must exist as a foul hack to support somebody that does not
-             have a true concept of default tabstops by making a tabsetting
-             result from the default tabstop, creating a lot of them all at
-             the default locations to give the effect of the first real
-             default tabstop being in use just in case the receiving
-             application doesn't do that for itself.
-             */
-#endif
-
-            // Verhaeltnis der def. TabWidth / Tabs errechnen und
-            // enstsprechend die neue Anzahl errechnen.
-            // ?? wie kommt man auf die 13 ??
+            // Calculate the ratio of default TabWidth / Tabs and
+            // calculate the corresponding new number.
+            // ?? how did one come up with 13 ??
             USHORT nAnzTabs = (SVX_TAB_DEFDIST * 13 ) / USHORT(nValue);
             /*
              cmc, make sure we have at least one, or all hell breaks loose in
@@ -2028,7 +1968,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
             if (nAnzTabs < 1)
                 nAnzTabs = 1;
 
-            // wir wollen Defaulttabs
+            // we want Defaulttabs
             SvxTabStopItem aNewTab( nAnzTabs, USHORT(nValue),
                                 SVX_TAB_ADJUST_DEFAULT, PARDID->nTabStop );
             while( nAnzTabs )
@@ -2054,12 +1994,12 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
     }
 }
 
-// default: keine Umrechnung, alles bei Twips lassen.
+// default: no conversion, leaving everything in twips.
 void SvxRTFParser::CalcValue()
 {
 }
 
-    // fuer Tokens, die im ReadAttr nicht ausgewertet werden
+// for tokens that are not evaluated in ReadAttr
 void SvxRTFParser::UnknownAttrToken( int, SfxItemSet* )
 {
 }

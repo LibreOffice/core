@@ -33,7 +33,7 @@
 #include <editeng/unoedsrc.hxx>
 #include "editeng/editengdllapi.h"
 
-//  SvxEditEngineForwarder - SvxTextForwarder fuer EditEngine
+//  SvxEditEngineForwarder - SvxTextForwarder for EditEngine
 
 class EDITENG_DLLPUBLIC SvxEditEngineForwarder : public SvxTextForwarder
 {

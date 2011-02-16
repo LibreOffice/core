@@ -185,14 +185,12 @@ Point SvxEditSourceHelper::UserSpaceToEE( const Point& rPoint, const Size& rEESi
 
 Rectangle SvxEditSourceHelper::EEToUserSpace( const Rectangle& rRect, const Size& rEESize, bool bIsVertical )
 {
-    // #106775# Don't touch rect if not vertical
     return bIsVertical ? Rectangle( EEToUserSpace(rRect.BottomLeft(), rEESize, bIsVertical),
                                     EEToUserSpace(rRect.TopRight(), rEESize, bIsVertical) ) : rRect;
 }
 
 Rectangle SvxEditSourceHelper::UserSpaceToEE( const Rectangle& rRect, const Size& rEESize, bool bIsVertical )
 {
-    // #106775# Don't touch rect if not vertical
     return bIsVertical ? Rectangle( UserSpaceToEE(rRect.TopRight(), rEESize, bIsVertical),
                                     UserSpaceToEE(rRect.BottomLeft(), rEESize, bIsVertical) ) : rRect;
 }

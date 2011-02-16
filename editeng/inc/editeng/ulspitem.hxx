@@ -40,18 +40,18 @@ namespace rtl
 
 // class SvxULSpaceItem --------------------------------------------------
 
-/*
-[Beschreibung]
-Dieses Item beschreibt den oberen und unteren Rand einer Seite oder Absatz.
+/*  [Description]
+
+    This item describes the Upper- and Lower space of a page or paragraph.
 */
 
 #define ULSPACE_16_VERSION  ((USHORT)0x0001)
 
 class EDITENG_DLLPUBLIC SvxULSpaceItem : public SfxPoolItem
 {
-    USHORT nUpper;  //Oberer Rand
-    USHORT nLower;  //Unterer Rand
-    USHORT nPropUpper, nPropLower;      // relativ oder absolut (=100%)
+    USHORT nUpper;  // Upper space
+    USHORT nLower;  // Lower space
+    USHORT nPropUpper, nPropLower;      // relative or absolute (=100%)
 public:
     TYPEINFO();
 
@@ -60,7 +60,7 @@ public:
                     const USHORT nId  );
     inline SvxULSpaceItem& operator=( const SvxULSpaceItem &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
 
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;

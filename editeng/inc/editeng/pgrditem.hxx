@@ -36,8 +36,8 @@
 // class SvxParaGridItem -------------------------------------------------
 
 
-/*
-    [Beschreibung]
+/*  [Description]
+
     Paragraph snap to grid
 */
 
@@ -49,7 +49,7 @@ public:
     SvxParaGridItem( const BOOL bSnapToGrid /*= TRUE*/,
                      const USHORT nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
     virtual USHORT          GetVersion( USHORT nFileVersion ) const;

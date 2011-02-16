@@ -110,7 +110,6 @@
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
 
-// #90477#
 #include <tools/tenccvt.hxx>
 
 #define STORE_UNICODE_MAGIC_MARKER  0xFE331188
@@ -119,7 +118,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 
-// Konvertierung fuer UNO
+// Conversion for UNO
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 #define TWIP_TO_MM100_UNSIGNED(TWIP)     ((((TWIP)*127L+36L)/72L))
@@ -260,7 +259,6 @@ SvxFontItem::SvxFontItem( const FontFamily eFam, const XubString& aName,
 
 bool SvxFontItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -290,7 +288,6 @@ bool SvxFontItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 // -----------------------------------------------------------------------
 bool SvxFontItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -368,7 +365,7 @@ int SvxFontItem::operator==( const SfxPoolItem& rAttr ) const
         if ( ePitch != rItem.ePitch || eTextEncoding != rItem.eTextEncoding )
         {
             bRet = sal_False;
-            DBG_WARNING( "FontItem::operator==(): nur Pitch oder rtl_TextEncoding unterschiedlich" );
+            DBG_WARNING( "FontItem::operator==(): only pitch or rtl_TextEncoding different ");
         }
     }
     return bRet;
@@ -389,9 +386,6 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , USHORT /*nItemVersion*/ ) const
         GetFamilyName().EqualsAscii( "StarSymbol", 0, sizeof("StarSymbol")-1 ) ||
         GetFamilyName().EqualsAscii( "OpenSymbol", 0, sizeof("OpenSymbol")-1 );
 
-    // #90477# rStrm << (BYTE) GetFamily()
-    //    << (BYTE) GetPitch()
-    //    << (BYTE)(bToBats ? RTL_TEXTENCODING_SYMBOL : GetStoreCharSet( GetCharSet(), (USHORT)rStrm.GetVersion() ) );
     rStrm << (BYTE) GetFamily() << (BYTE) GetPitch()
           << (BYTE)(bToBats ? RTL_TEXTENCODING_SYMBOL : GetSOStoreTextEncoding(GetCharSet(), (sal_uInt16)rStrm.GetVersion()));
 
@@ -401,7 +395,7 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , USHORT /*nItemVersion*/ ) const
     rStrm.WriteByteString(aStoreFamilyName);
     rStrm.WriteByteString(GetStyleName());
 
-    // #96441# Kach for EditEngine, only set while creating clipboard stream.
+    // cach for EditEngine, only set while creating clipboard stream.
     if ( bEnableStoreUnicodeNames )
     {
         sal_uInt32 nMagic = STORE_UNICODE_MAGIC_MARKER;
@@ -429,10 +423,10 @@ SfxPoolItem* SvxFontItem::Create(SvStream& rStrm, USHORT) const
     // UNICODE: rStrm >> aStyle;
     rStrm.ReadByteString(aStyle);
 
-    // Task 91008/90471: set the "correct" textencoding
+    // Set the "correct" textencoding
     eFontTextEncoding = (BYTE)GetSOLoadTextEncoding( eFontTextEncoding, (USHORT)rStrm.GetVersion() );
 
-    // irgendwann wandelte sich der StarBats vom ANSI- zum SYMBOL-Font
+    // at some point, the StarBats changes from  ANSI font to SYMBOL font
     if ( RTL_TEXTENCODING_SYMBOL != eFontTextEncoding && aName.EqualsAscii("StarBats") )
         eFontTextEncoding = RTL_TEXTENCODING_SYMBOL;
 
@@ -505,7 +499,7 @@ SfxPoolItem* SvxPostureItem::Clone( SfxItemPool * ) const
 
 USHORT SvxPostureItem::GetValueCount() const
 {
-    return ITALIC_NORMAL + 1;   // auch ITALIC_NONE geh"ort dazu
+    return ITALIC_NORMAL + 1;   // ITALIC_NONE also belongs here
 }
 
 // -----------------------------------------------------------------------
@@ -574,7 +568,6 @@ XubString SvxPostureItem::GetValueTextByPos( USHORT nPos ) const
 
 bool SvxPostureItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -582,7 +575,7 @@ bool SvxPostureItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             rVal = Bool2Any(GetBoolValue());
             break;
         case MID_POSTURE:
-            rVal <<= (awt::FontSlant)GetValue();    // Werte von awt::FontSlant und FontItalic sind gleich
+            rVal <<= (awt::FontSlant)GetValue();    // values from awt::FontSlant and FontItalic are equal
             break;
     }
     return true;
@@ -590,7 +583,6 @@ bool SvxPostureItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 bool SvxPostureItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -668,7 +660,7 @@ void SvxWeightItem::SetBoolValue( sal_Bool bVal )
 
 USHORT SvxWeightItem::GetValueCount() const
 {
-    return WEIGHT_BLACK;    // WEIGHT_DONTKNOW geh"ort nicht dazu
+    return WEIGHT_BLACK;    // WEIGHT_DONTKNOW does not belong
 }
 
 // -----------------------------------------------------------------------
@@ -729,7 +721,6 @@ XubString SvxWeightItem::GetValueTextByPos( USHORT nPos ) const
 
 bool SvxWeightItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -747,7 +738,6 @@ bool SvxWeightItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 bool SvxWeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -778,7 +768,7 @@ SvxFontHeightItem::SvxFontHeightItem( const ULONG nSz,
                                       const USHORT nId ) :
     SfxPoolItem( nId )
 {
-    SetHeight( nSz,nPrp );  // mit den Prozenten rechnen
+    SetHeight( nSz,nPrp );  // calculate in percentage
 }
 
 // -----------------------------------------------------------------------
@@ -798,8 +788,8 @@ SvStream& SvxFontHeightItem::Store( SvStream& rStrm , USHORT nItemVersion ) cons
         rStrm << GetProp() << (USHORT)GetPropUnit();
     else
     {
-        // JP 30.06.98: beim Export in alte Versionen geht die relative
-        // Angabe verloren, wenn es keine Prozentuale ist
+        // When exporting to the old versions the relative information is lost
+        // when there is no percentage
         USHORT _nProp = GetProp();
         if( SFX_MAPUNIT_RELATIVE != GetPropUnit() )
             _nProp = 100;
@@ -846,8 +836,8 @@ int SvxFontHeightItem::operator==( const SfxPoolItem& rItem ) const
 
 bool SvxFontHeightItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    //  In StarOne sind im uno::Any immer 1/100mm. Ueber die MemberId wird
-    //  gesteuert, ob der Wert im Item 1/100mm oder Twips sind.
+    //  In StarOne is the uno::Any always 1/100mm. Through the MemberId it is
+    //  controlled if the value in the Item should be 1/100mm or Twips.
 
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -857,8 +847,8 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         {
             ::com::sun::star::frame::status::FontHeight aFontHeight;
 
-            //  Point (also Twips) sind gefragt,
-            //  also umrechnen, wenn CONVERT_TWIPS nicht gesetzt ist
+            // Point (i.e. Twips) is asked for, thus re-calculate if
+            // CONVERT_TWIPS is not set.
             if( bConvert )
             {
                 long nTwips = bConvert ? nHeight : MM100_TO_TWIP_UNSIGNED(nHeight);
@@ -898,8 +888,8 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         break;
         case MID_FONTHEIGHT:
         {
-            //  Point (also Twips) sind gefragt,
-            //  also umrechnen, wenn CONVERT_TWIPS nicht gesetzt ist
+            // Point (i.e. Twips) is asked for, thus re-calculate if
+            // CONVERT_TWIPS is not set.
             if( bConvert )
             {
                 long nTwips = bConvert ? nHeight : MM100_TO_TWIP_UNSIGNED(nHeight);
@@ -944,7 +934,7 @@ bool SvxFontHeightItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return sal_True;
 }
 
-// Relative Abweichung aus der Hoehe herausrechnen
+// Calculate the relative deviation from the expected height.
 sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, SfxMapUnit eProp, sal_Bool bCoreInTwip)
 {
     sal_uInt32 nRet = nHeight;
@@ -964,11 +954,11 @@ sal_uInt32 lcl_GetRealHeight_Impl(sal_uInt32 nHeight, sal_uInt16 nProp, SfxMapUn
         }
         break;
         case SFX_MAPUNIT_100TH_MM:
-            //dann ist die Core doch wohl auch in 1/100 mm
+            //then the core is surely also in 1/100 mm
             nDiff = (short)nProp;
         break;
         case SFX_MAPUNIT_TWIP:
-            // hier doch sicher TWIP
+            // Here surely TWIP
             nDiff = ((short)nProp);
         break;
         default: ;//prevent warning
@@ -998,7 +988,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
                 nHeight = (long)( fPoint * 20.0 + 0.5 );        // Twips
                 if (!bConvert)
-                    nHeight = TWIP_TO_MM100_UNSIGNED(nHeight);  // umrechnen, wenn das Item 1/100mm enthaelt
+                    nHeight = TWIP_TO_MM100_UNSIGNED(nHeight);  // Convert, if the item contains 1/100mm
 
                 nProp = aFontHeight.Prop;
             }
@@ -1023,7 +1013,7 @@ bool SvxFontHeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
             nHeight = (long)( fPoint * 20.0 + 0.5 );        // Twips
             if (!bConvert)
-                nHeight = TWIP_TO_MM100_UNSIGNED(nHeight);  // umrechnen, wenn das Item 1/100mm enthaelt
+                nHeight = TWIP_TO_MM100_UNSIGNED(nHeight);  // Convert, if the item contains 1/100mm
         }
         break;
         case MID_FONTHEIGHT_PROP:
@@ -1344,7 +1334,7 @@ SfxPoolItem* SvxTextLineItem::Clone( SfxItemPool * ) const
 
 USHORT SvxTextLineItem::GetValueCount() const
 {
-    return UNDERLINE_DOTTED + 1;    // auch UNDERLINE_NONE geh"ort dazu
+    return UNDERLINE_DOTTED + 1;    // UNDERLINE_NONE also belongs here
 }
 
 // -----------------------------------------------------------------------
@@ -1402,7 +1392,6 @@ XubString SvxTextLineItem::GetValueTextByPos( USHORT /*nPos*/ ) const
 
 bool SvxTextLineItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -1425,7 +1414,6 @@ bool SvxTextLineItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 bool SvxTextLineItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bRet = sal_True;
     switch(nMemberId)
@@ -1569,7 +1557,7 @@ void SvxCrossedOutItem::SetBoolValue( sal_Bool bVal )
 
 USHORT SvxCrossedOutItem::GetValueCount() const
 {
-    return STRIKEOUT_DOUBLE + 1;    // auch STRIKEOUT_NONE geh"ort dazu
+    return STRIKEOUT_DOUBLE + 1;    // STRIKEOUT_NONE belongs also here
 }
 
 // -----------------------------------------------------------------------
@@ -1630,7 +1618,6 @@ XubString SvxCrossedOutItem::GetValueTextByPos( USHORT nPos ) const
 
 bool SvxCrossedOutItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -1646,7 +1633,6 @@ bool SvxCrossedOutItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 bool SvxCrossedOutItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -2000,7 +1986,7 @@ USHORT SvxColorItem::GetVersion( USHORT nFFVer ) const
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
             SOFFICE_FILEFORMAT_40==nFFVer ||
             SOFFICE_FILEFORMAT_50==nFFVer,
-            "SvxColorItem: Gibt es ein neues Fileformat?" );
+            "SvxColorItem: Is there a new file format? ");
     return  SOFFICE_FILEFORMAT_50 >= nFFVer ? VERSION_USEAUTOCOLOR : 0;
 }
 
@@ -2124,8 +2110,6 @@ SfxPoolItem* SvxCharSetColorItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxCharSetColorItem::Store( SvStream& rStrm , USHORT /*nItemVersion*/ ) const
 {
-    // #90477# rStrm << (BYTE) GetStoreCharSet( GetCharSet(), (USHORT)rStrm.GetVersion() )
-    //    << GetValue();
     rStrm << (BYTE)GetSOStoreTextEncoding(GetCharSet(), (sal_uInt16)rStrm.GetVersion())
           << GetValue();
     return rStrm;
@@ -2338,7 +2322,6 @@ bool SvxCaseMapItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
     sal_Int16 nRet = style::CaseMap::NONE;
     switch( GetValue() )
     {
-//      case SVX_CASEMAP_NOT_MAPPED  :      nRet = style::CaseMap::NONE     ; break;
         case SVX_CASEMAP_VERSALIEN   :      nRet = style::CaseMap::UPPERCASE; break;
         case SVX_CASEMAP_GEMEINE     :      nRet = style::CaseMap::LOWERCASE; break;
         case SVX_CASEMAP_TITEL       :      nRet = style::CaseMap::TITLE    ; break;
@@ -2512,7 +2495,6 @@ void SvxEscapementItem::SetEnumValue( USHORT nVal )
 
 bool SvxEscapementItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -2531,7 +2513,6 @@ bool SvxEscapementItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 bool SvxEscapementItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -2648,7 +2629,6 @@ SfxItemPresentation SvxLanguageItem::GetPresentation
 
 bool SvxLanguageItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -2665,7 +2645,6 @@ bool SvxLanguageItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 bool SvxLanguageItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
@@ -2784,7 +2763,7 @@ SfxItemPresentation SvxNoHyphenItem::GetPresentation
 }
 
 /*
- * Dummy-Item fuer ToolBox-Controls:
+ * Dummy item for ToolBox controls:
  *
  */
 
@@ -2974,7 +2953,6 @@ SfxItemPresentation SvxEmphasisMarkItem::GetPresentation
 
 bool SvxEmphasisMarkItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -3001,7 +2979,6 @@ bool SvxEmphasisMarkItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 bool SvxEmphasisMarkItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bRet = true;
     switch( nMemberId )
@@ -3035,7 +3012,7 @@ USHORT SvxEmphasisMarkItem::GetVersion( USHORT nFFVer ) const
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
             SOFFICE_FILEFORMAT_40==nFFVer ||
             SOFFICE_FILEFORMAT_50==nFFVer,
-            "SvxEmphasisMarkItem: Gibt es ein neues Fileformat?" );
+            "SvxEmphasisMarkItem: Is there a new file format? ");
 
     return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
 }
@@ -3080,7 +3057,6 @@ SfxPoolItem* SvxTwoLinesItem::Clone( SfxItemPool* ) const
 bool SvxTwoLinesItem::QueryValue( com::sun::star::uno::Any& rVal,
                                 BYTE nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bRet = true;
     switch( nMemberId )
@@ -3114,7 +3090,6 @@ bool SvxTwoLinesItem::QueryValue( com::sun::star::uno::Any& rVal,
 bool SvxTwoLinesItem::PutValue( const com::sun::star::uno::Any& rVal,
                                     BYTE nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bRet = sal_False;
     OUString s;
@@ -3266,7 +3241,6 @@ SfxItemPresentation SvxCharRotateItem::GetPresentation(
 bool SvxCharRotateItem::QueryValue( com::sun::star::uno::Any& rVal,
                                 BYTE nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = true;
     switch( nMemberId )
@@ -3287,7 +3261,6 @@ bool SvxCharRotateItem::QueryValue( com::sun::star::uno::Any& rVal,
 bool SvxCharRotateItem::PutValue( const com::sun::star::uno::Any& rVal,
                                     BYTE nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = true;
     switch( nMemberId )
@@ -3342,7 +3315,7 @@ SfxPoolItem* SvxCharScaleWidthItem::Create( SvStream& rStrm, USHORT ) const
 
     if ( Which() == EE_CHAR_FONTWIDTH )
     {
-        // #87271#: Was a SvxFontWidthItem in 5.2
+        // Was a SvxFontWidthItem in 5.2
         // USHORT nFixWidth, USHORT nPropWidth.
         // nFixWidth has never been used...
         rStrm >> nVal;
@@ -3504,7 +3477,6 @@ SfxItemPresentation SvxCharReliefItem::GetPresentation
 bool SvxCharReliefItem::PutValue( const com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = true;
     switch( nMemberId )
@@ -3529,7 +3501,6 @@ bool SvxCharReliefItem::PutValue( const com::sun::star::uno::Any& rVal,
 bool SvxCharReliefItem::QueryValue( com::sun::star::uno::Any& rVal,
                                         BYTE nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     bool bRet = true;
     switch( nMemberId )

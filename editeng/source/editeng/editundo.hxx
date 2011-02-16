@@ -50,8 +50,8 @@ class EditUndoDelContent : public EditUndo
 private:
     BOOL            bDelObject;
     USHORT          nNode;
-    ContentNode*    pContentNode;   // Zeigt auf das gueltige,
-                                    // nicht zerstoerte Objekt!
+    ContentNode*    pContentNode;   // Points to the valid,
+                                    // undestroyed object!
 
 public:
                     TYPEINFO();
@@ -73,7 +73,7 @@ private:
     SfxItemSet      aLeftParaAttribs;
     SfxItemSet      aRightParaAttribs;
 
-    // 2 Pointer waeren schoener, aber dann muesste es ein SfxListener sein.
+    // 2 Pointers would be nicer but then it would have to be a SfxListener.
     String          aLeftStyleName;
     String          aRightStyleName;
     SfxStyleFamily  eLeftStyleFamily;

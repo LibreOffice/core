@@ -41,9 +41,9 @@ namespace rtl
 
 // class SvxShadowedItem -------------------------------------------------
 
-/*
-    [Beschreibung]
-    Dieses Item beschreibt, ob und wie schattiert ist.
+/*  [Description]
+
+    This item describes, whether and how it is shaded.
 */
 
 class EDITENG_DLLPUBLIC SvxShadowedItem : public SfxBoolItem
@@ -54,7 +54,7 @@ public:
     SvxShadowedItem( const BOOL bShadowed /*= FALSE*/,
                      const USHORT nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
     virtual SvStream&       Store(SvStream &, USHORT nItemVersion) const;

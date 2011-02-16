@@ -42,9 +42,9 @@ namespace rtl
 
 // class SvxCaseMapItem --------------------------------------------------
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Dieses Item beschreibt die Schrift-Ausrichtung (Versalien, Kapitaelchen,...).
+    This item describe the font type (uppercase, small caps ,...).
 */
 
 class EDITENG_DLLPUBLIC SvxCaseMapItem : public SfxEnumItem
@@ -55,7 +55,7 @@ public:
     SvxCaseMapItem( const SvxCaseMap eMap /*= SVX_CASEMAP_NOT_MAPPED*/,
                     const USHORT nId );
 
-    // "pure virtual Methoden" vom SfxPoolItem + SfxEnumItem
+    // "pure virtual Methods" from SfxPoolItem + SfxEnumItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

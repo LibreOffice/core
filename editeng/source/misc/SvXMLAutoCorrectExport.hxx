@@ -39,7 +39,6 @@ class SvXMLAutoCorrectExport : public SvXMLExport
 private:
     const SvxAutocorrWordList   *pAutocorr_List;
 public:
-    // #110680#
     SvXMLAutoCorrectExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         const SvxAutocorrWordList * pNewAutocorr_List,
@@ -60,7 +59,6 @@ class SvXMLExceptionListExport : public SvXMLExport
 private:
     const SvStringsISortDtor & rList;
 public:
-    // #110680#
     SvXMLExceptionListExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         const SvStringsISortDtor &rNewList,

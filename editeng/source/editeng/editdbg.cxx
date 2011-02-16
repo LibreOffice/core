@@ -329,28 +329,28 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
 #endif
     if ( fp == 0 )
     {
-        DBG_ERROR( "Log-File konnte nicht angelegt werden!" );
+        DBG_ERROR( "Log file could not be created!" );
         return;
     }
 
     const SfxItemPool& rPool = *pEE->GetEmptyItemSet().GetPool();
 
     fprintf( fp, "================================================================================" );
-    fprintf( fp, "\n==================   Dokument   ================================================" );
+    fprintf( fp, "\n==================   Document   ================================================" );
     fprintf( fp, "\n================================================================================" );
     for ( USHORT nPortion = 0; nPortion < pEE->pImpEditEngine->GetParaPortions(). Count(); nPortion++)
     {
 
         ParaPortion* pPPortion = pEE->pImpEditEngine->GetParaPortions().GetObject(nPortion );
-        fprintf( fp, "\nAbsatz %i: Laenge = %i, Invalid = %i\nText = '%s'", nPortion, pPPortion->GetNode()->Len(), pPPortion->IsInvalid(), ByteString( *pPPortion->GetNode(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+        fprintf( fp, "\nParagraph %i: Length = %i, Invalid = %i\nText = '%s'", nPortion, pPPortion->GetNode()->Len(), pPPortion->IsInvalid(), ByteString( *pPPortion->GetNode(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
         fprintf( fp, "\nVorlage:" );
         SfxStyleSheet* pStyle = pPPortion->GetNode()->GetStyleSheet();
         if ( pStyle )
             fprintf( fp, " %s", ByteString( pStyle->GetName(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
-        fprintf( fp, "\nAbsatzattribute:" );
+        fprintf( fp, "\nParagraph attribute:" );
         DbgOutItemSet( fp, pPPortion->GetNode()->GetContentAttribs().GetItems(), FALSE, FALSE );
 
-        fprintf( fp, "\nZeichenattribute:" );
+        fprintf( fp, "\nCharacter attribute:" );
         BOOL bZeroAttr = FALSE;
         USHORT z;
         for ( z = 0; z < pPPortion->GetNode()->GetCharAttribs().Count(); z++ )
@@ -376,11 +376,11 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
             fprintf( fp, "\nNULL-Attribute!" );
 
         USHORT nTextPortions = pPPortion->GetTextPortions().Count();
-        ByteString aPortionStr("\nTextportions: #");
+        ByteString aPortionStr("\nText portions: #");
         aPortionStr += ByteString::CreateFromInt32( nTextPortions );
         aPortionStr += " \nA";
         aPortionStr += ByteString::CreateFromInt32( nPortion );
-        aPortionStr += ": Absatzlaenge = ";
+        aPortionStr += ": Paragraph Length = ";
         aPortionStr += ByteString::CreateFromInt32( pPPortion->GetNode()->Len() );
         aPortionStr += "\nA";
         aPortionStr += ByteString::CreateFromInt32( nPortion );
@@ -402,29 +402,29 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
         }
         aPortionStr += "\nA";
         aPortionStr += ByteString::CreateFromInt32( nPortion );
-        aPortionStr += ": Gesamtlaenge: ";
+        aPortionStr += ": Total length: ";
         aPortionStr += ByteString::CreateFromInt32( n );
         if ( pPPortion->GetNode()->Len() != n )
-            aPortionStr += " => Fehler !!!";
+            aPortionStr += " => Error !!!";
         fprintf( fp, "%s", aPortionStr.GetBuffer() );
 
 
-        fprintf( fp, "\n\nZeilen:" );
-        // Erstmal die Inhalte...
+        fprintf( fp, "\n\nLines:" );
+        // First the content ...
         USHORT nLine;
         for ( nLine = 0; nLine < pPPortion->GetLines().Count(); nLine++ )
         {
             EditLine* pLine = pPPortion->GetLines().GetObject( nLine );
 
             ByteString aLine( *(pPPortion->GetNode()), pLine->GetStart(), pLine->GetEnd() - pLine->GetStart(), RTL_TEXTENCODING_ASCII_US );
-            fprintf( fp, "\nZeile %i\t>%s<", nLine, aLine.GetBuffer() );
+            fprintf( fp, "\nLine %i\t>%s<", nLine, aLine.GetBuffer() );
         }
-        // dann die internen Daten...
+        // then the internal data ...
         for ( nLine = 0; nLine < pPPortion->GetLines().Count(); nLine++ )
         {
             EditLine* pLine = pPPortion->GetLines().GetObject( nLine );
             fprintf( fp, "\nZeile %i:\tStart: %i,\tEnd: %i", nLine, pLine->GetStart(), pLine->GetEnd() );
-            fprintf( fp, "\t\tPortions: %i - %i.\tHoehe: %i, Ascent=%i", pLine->GetStartPortion(), pLine->GetEndPortion(), pLine->GetHeight(), pLine->GetMaxAscent() );
+            fprintf( fp, "\t\tPortions: %i - %i.\tHight: %i, Ascent=%i", pLine->GetStartPortion(), pLine->GetEndPortion(), pLine->GetHeight(), pLine->GetMaxAscent() );
         }
 
         fprintf( fp, "\n-----------------------------------------------------------------------------" );
@@ -433,15 +433,15 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
     if ( pEE->pImpEditEngine->GetStyleSheetPool() )
     {
         ULONG nStyles = pEE->pImpEditEngine->GetStyleSheetPool() ? pEE->pImpEditEngine->GetStyleSheetPool()->Count() : 0;
-        fprintf( fp, "\n\n================================================================================" );
+        fprintf( fp, "\n\n================================================================================" );
         fprintf( fp, "\n==================   Stylesheets   =============================================" );
         fprintf( fp, "\n================================================================================" );
-        fprintf( fp, "\n#Vorlagen:   %lu\n", nStyles );
+        fprintf( fp, "\n#Template:   %lu\n", nStyles );
         SfxStyleSheetIterator aIter( pEE->pImpEditEngine->GetStyleSheetPool(), SFX_STYLE_FAMILY_ALL );
         SfxStyleSheetBase* pStyle = aIter.First();
         while ( pStyle )
         {
-            fprintf( fp, "\nVorlage:   %s", ByteString( pStyle->GetName(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+            fprintf( fp, "\nTemplate:   %s", ByteString( pStyle->GetName(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
             fprintf( fp, "\nParent:    %s", ByteString( pStyle->GetParent(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
             fprintf( fp, "\nFollow:    %s", ByteString( pStyle->GetFollow(), RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
             DbgOutItemSet( fp, pStyle->GetItemSet(), FALSE, FALSE );
@@ -451,12 +451,12 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
         }
     }
 
-    fprintf( fp, "\n\n================================================================================" );
+    fprintf( fp, "\n\n================================================================================" );
     fprintf( fp, "\n==================   Defaults   ================================================" );
     fprintf( fp, "\n================================================================================" );
     DbgOutItemSet( fp, pEE->pImpEditEngine->GetEmptyItemSet(), TRUE, TRUE );
 
-    fprintf( fp, "\n\n================================================================================" );
+    fprintf( fp, "\n\n================================================================================" );
     fprintf( fp, "\n==================   EditEngine & Views   ======================================" );
     fprintf( fp, "\n================================================================================" );
     fprintf( fp, "\nControl: %"SAL_PRIxUINT32, pEE->GetControlWord() );
@@ -465,23 +465,23 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, BOOL bInfoBox )
     fprintf( fp, "\nMaxAutoPaperSize: %li x %li", pEE->GetMaxAutoPaperSize().Width(), pEE->GetMaxAutoPaperSize().Height() );
     fprintf( fp, "\nMinAutoPaperSize: %li x %li", pEE->GetMinAutoPaperSize().Width(), pEE->GetMinAutoPaperSize().Height() );
     fprintf( fp, "\nUpdate: %i", pEE->GetUpdateMode() );
-    fprintf( fp, "\nAnzahl der Views: %i", pEE->GetViewCount() );
+    fprintf( fp, "\nNumber of Views: %i", pEE->GetViewCount() );
     for ( USHORT nView = 0; nView < pEE->GetViewCount(); nView++ )
     {
         EditView* pV = pEE->GetView( nView );
-        DBG_ASSERT( pV, "View nicht gefunden!" );
+        DBG_ASSERT( pV, "View not found!" );
         fprintf( fp, "\nView %i: Focus=%i", nView, pV->GetWindow()->HasFocus() );
         Rectangle aR( pV->GetOutputArea() );
         fprintf( fp, "\n  OutputArea: nX=%li, nY=%li, dX=%li, dY=%li, MapMode = %i", aR.TopLeft().X(), aR.TopLeft().Y(), aR.GetSize().Width(), aR.GetSize().Height() , pV->GetWindow()->GetMapMode().GetMapUnit() );
         aR = pV->GetVisArea();
         fprintf( fp, "\n  VisArea: nX=%li, nY=%li, dX=%li, dY=%li", aR.TopLeft().X(), aR.TopLeft().Y(), aR.GetSize().Width(), aR.GetSize().Height() );
         ESelection aSel = pV->GetSelection();
-        fprintf( fp, "\n  Selektion: Start=%u,%u, End=%u,%u", aSel.nStartPara, aSel.nStartPos, aSel.nEndPara, aSel.nEndPos );
+        fprintf( fp, "\n  Selection: Start=%u,%u, End=%u,%u", aSel.nStartPara, aSel.nStartPos, aSel.nEndPara, aSel.nEndPos );
     }
     if ( pEE->GetActiveView() )
     {
-        fprintf( fp, "\n\n================================================================================" );
-        fprintf( fp, "\n==================   Aktuelle View   ===========================================" );
+        fprintf( fp, "\n\n================================================================================" );
+        fprintf( fp, "\n==================   Current View   ===========================================" );
         fprintf( fp, "\n================================================================================" );
         DbgOutItemSet( fp, pEE->GetActiveView()->GetAttribs(), TRUE, FALSE );
     }
@@ -494,10 +494,10 @@ ByteString EditDbg::GetPortionInfo( ParaPortion* pPPortion )
 {
     USHORT z;
 
-    ByteString aDebStr( "Absatzlaenge = " );
+    ByteString aDebStr( "Paragraph Length = " );
     aDebStr += ByteString::CreateFromInt32( pPPortion->GetNode()->Len() );
 
-    aDebStr += "\nZeichenattribute:";
+    aDebStr += "\nCharacter attribute:";
     for ( z = 0; z < pPPortion->GetNode()->GetCharAttribs().Count(); z++ )
     {
         EditCharAttrib* pAttr = pPPortion->GetNode()->GetCharAttribs().GetAttribs().GetObject( z );
@@ -509,7 +509,7 @@ ByteString EditDbg::GetPortionInfo( ParaPortion* pPPortion )
         aDebStr += ByteString::CreateFromInt32( pAttr->GetEnd() );
     }
 
-    aDebStr += "\nTextportions:";
+    aDebStr += "\nText portions:";
     USHORT n = 0;
     for ( z = 0; z < pPPortion->GetTextPortions().Count(); z++ )
     {
@@ -522,15 +522,15 @@ ByteString EditDbg::GetPortionInfo( ParaPortion* pPPortion )
         aDebStr += ";";
         n = n + pPortion->GetLen();
     }
-    aDebStr += "\nGesamtlaenge: ";
+    aDebStr += "\nTotal length: ";
     aDebStr += ByteString::CreateFromInt32( n );
-    aDebStr += "\nSortiert nach Start:";
+    aDebStr += "\nSorted after Start:";
     for ( USHORT x = 0; x < pPPortion->GetNode()->GetCharAttribs().Count(); x++ )
     {
         EditCharAttrib* pCurAttrib = pPPortion->GetNode()->GetCharAttribs().GetAttribs().GetObject( x );
         aDebStr += "\nStart: ";
         aDebStr += ByteString::CreateFromInt32( pCurAttrib->GetStart() );
-        aDebStr += "\tEnde: ";
+        aDebStr += "\tEnd: ";
         aDebStr += ByteString::CreateFromInt32( pCurAttrib->GetEnd() );
     }
     return aDebStr;
@@ -561,7 +561,7 @@ void EditDbg::ShowPortionData( ParaPortion* pPortion )
 
 BOOL ParaPortion::DbgCheckTextPortions()
 {
-    // pruefen, ob Portionlaenge ok:
+    // check, if Portion length ok:
     USHORT nXLen = 0;
     for ( USHORT nPortion = 0; nPortion < aTextPortionList.Count(); nPortion++  )
         nXLen = nXLen + aTextPortionList[nPortion]->GetLen();

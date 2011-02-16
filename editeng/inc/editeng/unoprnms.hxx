@@ -258,7 +258,7 @@
 #define UNO_NAME_3D_TEXTUREPOLYGON3D            "D3DTexturePolygon3D"
 #define UNO_NAME_3D_LINEONLY                    "D3DLineOnly"
 
-// #107245# New 3D properties which are possible for lathe and extrude 3d objects
+// New 3D properties which are possible for lathe and extrude 3d objects
 #define UNO_NAME_3D_SMOOTH_NORMALS              "D3DSmoothNormals"
 #define UNO_NAME_3D_SMOOTH_LIDS                 "D3DSmoothLids"
 #define UNO_NAME_3D_CHARACTER_MODE              "D3DCharacterMode"
@@ -357,7 +357,7 @@
 
 #define UNO_NAME_CUSTOMSHAPE_ADJUSTMENT         "CustomShapeAdjustment"
 
-// Die folgenden Properties sind veraltet und koennen irgendwann mal raus
+// The following properties are obsolete and can eventually be removed
 #define UNO_NAME_EDIT_FONT_COLOR                "FontColor"
 #define UNO_NAME_EDIT_FONT_ESCAPEMENT           "FontEscapement"
 #define UNO_NAME_EDIT_FONT_HEIGHT               "FontHeight"
@@ -370,7 +370,7 @@
 #define UNO_NAME_EDIT_FONT_FAMILY               "FontFamily"
 #define UNO_NAME_EDIT_FONT_NAME                 "FontName"
 #define UNO_NAME_EDIT_FONT_CHARSET              "FontCharset"
-// Ende der veralteten Properties
+// End of the obsolete properties
 
 #endif
 

@@ -41,10 +41,10 @@ namespace rtl
 
 // class SvxHyphenZoneItem -----------------------------------------------
 
-/*
-[Beschreibung]
-Dieses Item beschreibt ein Silbentrennungsattribut (Automatisch?, Anzahl der
-Zeichen am Zeilenende und -anfang).
+/*  [Description]
+
+    This item describes a hyphenation attribute  (automatic?, number of
+    characters at the end of the line and start).
 */
 
 class EDITENG_DLLPUBLIC SvxHyphenZoneItem : public SfxPoolItem
@@ -63,7 +63,7 @@ public:
     SvxHyphenZoneItem( const BOOL bHyph /*= FALSE*/,
                        const USHORT nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );

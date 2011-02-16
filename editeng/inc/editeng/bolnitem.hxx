@@ -41,8 +41,8 @@
 
 
 /*
-[Beschreibung]
-Dieses Item transportiert eine SvxBorderLine.
+[Description]
+This Item transports a SvxBorderLine.
 */
 
 class SvxBorderLine;

@@ -42,8 +42,8 @@
 using namespace ::rtl;
 
 static BYTE aPal1[ 2 * 4 ] = {
-        0x00, 0x00, 0x00, 0x00,             // Schwarz
-        0xFF, 0xFF, 0xFF, 0x00              // Weiss
+        0x00, 0x00, 0x00, 0x00,             // Black
+        0xFF, 0xFF, 0xFF, 0x00              // White
 };
 
 static BYTE aPal4[ 16 * 4 ] = {
@@ -185,7 +185,7 @@ static void WriteBMPHeader( SvStream& rStream,
     ULONG n4Height = rPicType.nHeight;
     USHORT n4ColBits = rPicType.nBitsPerPixel;
 
-    USHORT nColors = (1 << n4ColBits);  // Anzahl der Farben ( 1, 16, 256 )
+    USHORT nColors = (1 << n4ColBits);  // Number of colors (1, 16, 256)
     USHORT nWdtOut = rPicType.nWidthBytes;
     if( !nWdtOut )
         nWdtOut = (USHORT)((( n4Width * n4ColBits + 31 ) / 32 ) * 4 );
@@ -196,8 +196,8 @@ static void WriteBMPHeader( SvStream& rStream,
     long nSize = nOffset + nWdtOut * n4Height;
     rStream << "BM"                     // = "BM"
             << SwapLong(nSize)          // Filesize in Bytes
-            << SwapShort(0)             // Reserviert
-            << SwapShort(0)             // Reserviert
+            << SwapShort(0)             // Reserved
+            << SwapShort(0)             // Reserved
             << SwapLong(nOffset);       // Offset?
 
     rStream << SwapLong(40)             // sizeof( BmpInfo )
@@ -225,16 +225,14 @@ static void WriteBMPHeader( SvStream& rStream,
     }
 }
 
-/*  */
-
-        // wandel die ASCII-HexCodes in binaere Zeichen um. Werden
-        // ungueltige Daten gefunden (Zeichen ausser 0-9|a-f|A-F, so
-        // wird USHRT_MAX returnt, ansonsten die Anzahl der umgewandelten Ze.
+        // Converts the ASCII characters to hexadecimal codes in binary.
+        // If invalid data is found (eg. characters outside 0-9|a-f|A-F), then
+        // USHRT_MAX is returned, else the number of converted charachters.
 xub_StrLen SvxRTFParser::HexToBin( String& rToken )
 {
-    // dann mache aus den Hex-Werten mal "Binare Daten"
-    // (missbrauche den String als temp Buffer)
-    if( rToken.Len() & 1 )      // ungerade Anzahl, mit 0 auffuellen
+    // then create "Binary data" from the hex values.
+    // (missuse the String as temp Buffer)
+    if( rToken.Len() & 1 )      // odd number, fill out with 0
         rToken += '0';
 
     xub_StrLen n, nLen;
@@ -252,7 +250,7 @@ xub_StrLen SvxRTFParser::HexToBin( String& rToken )
             nVal -= 'a' - 10;
         else
         {
-            DBG_ASSERT( !this, "ungueltiger Hex-Wert" );
+            DBG_ASSERT( !this, "invalid Hex value" );
             bValidData = FALSE;
             break;
         }
@@ -268,9 +266,8 @@ xub_StrLen SvxRTFParser::HexToBin( String& rToken )
 
 BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
 {
-    // die alten Daten loeschen
+    // Delete the old data
     rGrf.Clear();
-//  ULONG nBmpSize = 0;
 
     rtl_TextEncoding eOldEnc = GetSrcEncoding();
     SetSrcEncoding( RTL_TEXTENCODING_MS_1252 );
@@ -280,7 +277,7 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
 
     int nToken = 0;
     bool bValidBmp = true, bFirstTextToken = true;
-    int _nOpenBrakets = 1,      // die erste wurde schon vorher erkannt !!
+    int _nOpenBrakets = 1,      // the first was already recognized before!
         nValidDataBraket = 1;
 
     if( RTF_SHPPICT == GetStackPtr(0)->nTokenId )
@@ -327,7 +324,7 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
         case RTF_MACPICT:
             {
                 rPicType.eStyle = SvxRTFPictureType::MAC_QUICKDRAW;
-                // Mac-Pict bekommt einen leeren Header voran
+                // Mac-Pict gets a empty header above
                 pTmpFile = new SvCacheStream;
                 ByteString aStr;
                 aStr.Fill( 512, '\0' );
@@ -435,9 +432,6 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
                 nToken = SkipToken( -1 );
         break;
         case RTF_TEXTTOKEN:
-            // JP 26.06.98: Bug #51719# - nur TextToken auf 1. Ebene
-            //              auswerten. Alle anderen sind irgendwelche
-            //              nicht auszuwertende Daten
             if( nValidDataBraket != _nOpenBrakets )
                 break;
 
@@ -446,7 +440,7 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
                 switch( rPicType.eStyle )
                 {
                 case SvxRTFPictureType::RTF_BITMAP:
-                    // erstmal die Header und Info-Struktur schreiben
+                    // first write the header and the info structure
                     if( pTmpFile )
                         ::WriteBMPHeader( *pTmpFile, rPicType );
                     break;
@@ -508,7 +502,7 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
     if( !bValidBmp )
     {
         rGrf.Clear();
-        //TODO  If nToken were not initialized to 0 above, it would potentially
+        // TODO: If nToken were not initialized to 0 above, it would potentially
         // be used uninitialized here (if IsParserWorking() is false at the
         // start of the while loop above):
         if( '}' != nToken )
@@ -518,7 +512,6 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
     {
         switch( rPicType.eStyle )
         {
-//??        ENHANCED_MF,        // in den Pict.Daten steht ein Enhanced-Metafile
         case SvxRTFPictureType::RTF_PNG:
         case SvxRTFPictureType::RTF_JPG:
             {
@@ -541,7 +534,7 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
     }
     SetSrcEncoding( eOldEnc );
 
-    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );        // the closing brace is evaluated "above"
     return bValidBmp;
 }
 

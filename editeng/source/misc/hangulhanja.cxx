@@ -598,15 +598,6 @@ namespace editeng
             }
         }
 
-        /*
-        if ( bDocumentDone )
-            return sal_True;            // we explicitly know that the complete document is done
-        else if ( bNeedUserInteraction )
-            return sal_False;           // the doc is not done, we found a convertible, but need the user to decide
-        else
-            return sal_True;            // we did not find a next convertible, so the document is implicitly done
-        */
-
         return  bDocumentDone || !bNeedUserInteraction;
     }
 

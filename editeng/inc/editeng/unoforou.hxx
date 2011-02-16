@@ -36,7 +36,7 @@
 
 class Outliner;
 
-//  SvxOutlinerForwarder - SvxTextForwarder fuer Outliner
+//  SvxOutlinerForwarder - SvxTextForwarder for Outliner
 
 class EDITENG_DLLPUBLIC SvxOutlinerForwarder : public SvxTextForwarder
 {

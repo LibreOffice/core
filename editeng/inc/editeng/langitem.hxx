@@ -42,9 +42,9 @@ namespace rtl
 
 // class SvxLanguageItem -------------------------------------------------
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Dieses Item beschreibt eine Sprache.
+    This item describes a Language.
 */
 
 class EDITENG_DLLPUBLIC SvxLanguageItem : public SfxEnumItem
@@ -55,7 +55,7 @@ public:
     SvxLanguageItem( const LanguageType eLang /*= LANGUAGE_GERMAN*/,
                      const USHORT nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

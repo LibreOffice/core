@@ -69,7 +69,7 @@ uno::Any EditDataObject::getTransferData( const datatransfer::DataFlavor& rFlavo
     }
     else if ( ( nT == SOT_FORMATSTR_ID_EDITENGINE ) || ( nT == SOT_FORMAT_RTF ) )
     {
-        // MT 01/2002: No RTF on demand any more:
+        // No RTF on demand any more:
         // 1) Was not working, because I had to flush() the clipboard immediately anyway
         // 2) Don't have the old pool defaults and the StyleSheetPool here.
 

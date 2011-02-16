@@ -39,7 +39,7 @@
 #include <editeng/unoedhlp.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/outliner.hxx>
-#include <editeng/editobj.hxx>      // nur fuer die GetText-Kruecke
+#include <editeng/editobj.hxx>      // only for the GetText crutch
 
 #include <editeng/unofored.hxx>
 
@@ -54,7 +54,7 @@ SvxEditEngineForwarder::SvxEditEngineForwarder( EditEngine& rEngine ) :
 
 SvxEditEngineForwarder::~SvxEditEngineForwarder()
 {
-    //  die EditEngine muss ggf. von aussen geloescht werden
+    // the EditEngine may need to be deleted from the outside
 }
 
 USHORT SvxEditEngineForwarder::GetParagraphCount() const
@@ -428,7 +428,6 @@ OutputDevice* SvxEditEngineForwarder::GetRefDevice() const
 
 sal_Bool SvxEditEngineForwarder::GetIndexAtPoint( const Point& rPos, USHORT& nPara, USHORT& nIndex ) const
 {
-    // #101701#
     Size aSize( rEditEngine.CalcTextWidth(), rEditEngine.GetTextHeight() );
     ::std::swap( aSize.Width(), aSize.Height() );
     Point aEEPos( SvxEditSourceHelper::UserSpaceToEE( rPos,

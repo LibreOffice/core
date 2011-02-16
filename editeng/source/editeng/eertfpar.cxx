@@ -44,16 +44,16 @@
 
 #include <svtools/rtftoken.h>
 
-// alle Werte auf default; wird nach einlesen der Bitmap aufgerufen !
+// Set all values to defaultt; is called after loading the bitmap!
 void SvxRTFPictureType::ResetValues()
-{   // setze alle Werte RTF-Defaults
+{   // Set all values RTF-Defaults
     eStyle = RTF_BITMAP;
     nMode = HEX_MODE;
     nType = nGoalWidth = nGoalHeight = 0;
     nWidth = nHeight = nWidthBytes = 0;
     uPicLen = 0;
     nBitsPerPixel = nPlanes = 1;
-    nScalX = nScalY = 100;      // Skalierung in Prozent
+    nScalX = nScalY = 100;      // Scale in percent
     nCropT = nCropB = nCropL = nCropR = 0;
     aPropertyPairs.clear();
 }
@@ -87,11 +87,10 @@ EditRTFParser::EditRTFParser( SvStream& rIn, EditSelection aSel, SfxItemPool& rA
 
     SetInsPos( EditPosition( pImpEditEngine, &aCurSel ) );
 
-    // Umwandeln der Twips-Werte...
+    // Convert the twips values ...
     SetCalcValue( TRUE );
     SetChkStyleAttr( pImpEE->GetStatus().DoImportRTFStyleSheets() );
-    SetNewDoc( FALSE );     // damit die Pool-Defaults nicht
-                            // ueberschrieben werden...
+    SetNewDoc( FALSE );     // So that the Pool-Defaults are not overwritten...
     aEditMapMode = MapMode( pImpEE->GetRefDevice()->GetMapMode().GetMapUnit() );
 }
 
@@ -101,21 +100,21 @@ EditRTFParser::~EditRTFParser()
 
 SvParserState EditRTFParser::CallParser()
 {
-    DBG_ASSERT( !aCurSel.HasRange(), "Selection bei CallParser!" );
-    // Den Teil, in den importiert wird, vom Rest abtrennen.
-    // Diese Mimik sollte fuer alle Imports verwendet werden.
-    // aStart1PaM: Letzte Position vor dem importierten Inhalt
-    // aEnd1PaM: Erste Position nach dem importierten Inhalt
-    // aStart2PaM: Erste Position des importierten Inhaltes
-    // aEnd2PaM: Letzte Position des importierten Inhaltes
+    DBG_ASSERT( !aCurSel.HasRange(), "Selection for CallParser!" );
+    // Separate the part that is imported from the rest.
+    // This expression should be used for all imports.
+    // aStart1PaM: Last position before the imported content
+    // aEnd1PaM: First position after the imported content
+    // aStart2PaM: First position of the imported content
+    // aEnd2PaM: Last position of the imported content
     EditPaM aStart1PaM( aCurSel.Min().GetNode(), aCurSel.Min().GetIndex() );
     aCurSel = pImpEditEngine->ImpInsertParaBreak( aCurSel );
     EditPaM aStart2PaM = aCurSel.Min();
-    // Sinnvoll oder nicht?:
+    // Useful or not?
     aStart2PaM.GetNode()->GetContentAttribs().GetItems().ClearItem();
     AddRTFDefaultValues( aStart2PaM, aStart2PaM );
     EditPaM aEnd1PaM( pImpEditEngine->ImpInsertParaBreak( aCurSel.Max() ) );
-    // aCurCel zeigt jetzt auf den Zwischenraum
+    // aCurCel now points to the gap
 
     if ( pImpEditEngine->aImportHdl.IsSet() )
     {
@@ -136,7 +135,7 @@ SvParserState EditRTFParser::CallParser()
         ContentNode* pCurNode = aCurSel.Max().GetNode();
         USHORT nPara = pImpEditEngine->GetEditDoc().GetPos( pCurNode );
         ContentNode* pPrevNode = pImpEditEngine->GetEditDoc().SaveGetObject( nPara-1 );
-        DBG_ASSERT( pPrevNode, "Ungueltiges RTF-Dokument ?!" );
+        DBG_ASSERT( pPrevNode, "Invalid RTF-Document?!" );
         EditSelection aSel;
         aSel.Min() = EditPaM( pPrevNode, pPrevNode->Len() );
         aSel.Max() = EditPaM( pCurNode, 0 );
@@ -145,9 +144,9 @@ SvParserState EditRTFParser::CallParser()
     EditPaM aEnd2PaM( aCurSel.Max() );
     //AddRTFDefaultValues( aStart2PaM, aEnd2PaM );
     BOOL bOnlyOnePara = ( aEnd2PaM.GetNode() == aStart2PaM.GetNode() );
-    // Den Brocken wieder einfuegen...
-    // Problem: Absatzattribute duerfen ggf. nicht uebernommen werden
-    // => Zeichenattribute machen.
+    // Paste the chunk again ...
+    // Problem: Paragraph attributes may not possibly be taken over
+    // => Do Character attributes.
 
     BOOL bSpecialBackward = aStart1PaM.GetNode()->Len() ? FALSE : TRUE;
     if ( bOnlyOnePara || aStart1PaM.GetNode()->Len() )
@@ -155,7 +154,7 @@ SvParserState EditRTFParser::CallParser()
     aCurSel.Min() = pImpEditEngine->ImpConnectParagraphs(
         aStart1PaM.GetNode(), aStart2PaM.GetNode(), bSpecialBackward );
     bSpecialBackward = aEnd1PaM.GetNode()->Len() ? TRUE : FALSE;
-    // wenn bOnlyOnePara, dann ist der Node beim Connect verschwunden.
+    // when bOnlyOnePara, then the node is gone on Connect.
     if ( !bOnlyOnePara && aEnd1PaM.GetNode()->Len() )
         pImpEditEngine->ParaAttribsToCharAttribs( aEnd2PaM.GetNode() );
     aCurSel.Max() = pImpEditEngine->ImpConnectParagraphs(
@@ -167,7 +166,7 @@ SvParserState EditRTFParser::CallParser()
 
 void EditRTFParser::AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& rEnd )
 {
-    // Problem: DefFont und DefFontHeight
+    // Problem: DefFont and DefFontHeight
     Size aSz( 12, 0 );
     MapMode aPntMode( MAP_POINT );
     MapMode _aEditMapMode( pImpEditEngine->GetRefDevice()->GetMapMode().GetMapUnit() );
@@ -182,7 +181,7 @@ void EditRTFParser::AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& r
     for ( USHORT nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
         ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( nPara );
-        DBG_ASSERT( pNode, "AddRTFDefaultValues - Kein Absatz ?!" );
+        DBG_ASSERT( pNode, "AddRTFDefaultValues - No paragraph?!" );
         if ( !pNode->GetContentAttribs().HasItem( EE_CHAR_FONTINFO ) )
             pNode->GetContentAttribs().GetItems().Put( aFontItem );
         if ( !pNode->GetContentAttribs().HasItem( EE_CHAR_FONTHEIGHT ) )
@@ -244,8 +243,8 @@ void EditRTFParser::NextToken( int nToken )
 
 void EditRTFParser::UnknownAttrToken( int nToken, SfxItemSet* )
 {
-    // fuer Tokens, die im ReadAttr nicht ausgewertet werden
-    // Eigentlich nur fuer Calc (RTFTokenHdl), damit RTF_INTBL
+    // for Tokens which are not evaluated in ReadAttr
+    // Actually, only for Calc (RTFTokenHdl), so that RTF_INTBL
     if ( pImpEditEngine->aImportHdl.IsSet() )
     {
         ImportInfo aImportInfo( RTFIMP_UNKNOWNATTR, this, pImpEditEngine->CreateESel( aCurSel ) );
@@ -290,14 +289,13 @@ void EditRTFParser::MovePos( int bForward )
 void EditRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos,
                                     USHORT& rCntPos )
 {
-    //    Gewollt ist: von der aktuellen Einfuegeposition den vorherigen
-    //              Absatz bestimmen und von dem das Ende setzen.
-    //              Dadurch wird "\pard" immer auf den richtigen Absatz
-    //              angewendet.
+    // The Intention is to: determine the current insert position of the
+    //                      previous paragraph and set the end from this.
+    //                      This "\pard" always apply on the right paragraph.
 
     ContentNode* pN = aCurSel.Max().GetNode();
     USHORT nCurPara = pImpEditEngine->GetEditDoc().GetPos( pN );
-    DBG_ASSERT( nCurPara != 0, "Absatz gleich 0: SetEnfPrevPara" );
+    DBG_ASSERT( nCurPara != 0, "Paragraph equal to 0: SetEnfPrevPara" );
     if ( nCurPara )
         nCurPara--;
     ContentNode* pPrevNode = pImpEditEngine->GetEditDoc().SaveGetObject( nCurPara );
@@ -319,7 +317,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     EditPaM aStartPaM( pSttNode, rSet.GetSttCnt() );
     EditPaM aEndPaM( pEndNode, rSet.GetEndCnt() );
 
-    // ggf. noch das Escapemant-Item umbiegen:
+    // If possible adjust the Escapemant-Item:
     const SfxPoolItem* pItem;
 
     // #i66167# adapt font heights to destination MapUnit if necessary
@@ -349,7 +347,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 
         if( ( DFLT_ESC_AUTO_SUPER != nEsc ) && ( DFLT_ESC_AUTO_SUB != nEsc ) )
         {
-            nEsc *= 10; //HalPoints => Twips wurde in RTFITEM.CXX unterschlagen!
+            nEsc *= 10; //HalPoints => Twips was embezzled in RTFITEM.CXX!
             SvxFont aFont;
             pImpEditEngine->SeekCursor( aStartPaM.GetNode(), aStartPaM.GetIndex()+1, aFont );
             nEsc = nEsc * 100 / aFont.GetSize().Height();
@@ -376,7 +374,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     if ( rSet.StyleNo() && pImpEditEngine->GetStyleSheetPool() && pImpEditEngine->GetStatus().DoImportRTFStyleSheets() )
     {
         SvxRTFStyleType* pS = GetStyleTbl().Get( rSet.StyleNo() );
-        DBG_ASSERT( pS, "Vorlage in RTF nicht definiert!" );
+        DBG_ASSERT( pS, "Template not defined in RTF!" );
         if ( pS )
         {
             pImpEditEngine->SetStyleSheet( EditSelection( aStartPaM, aEndPaM ), (SfxStyleSheet*)pImpEditEngine->GetStyleSheetPool()->Find( pS->sName, SFX_STYLE_FAMILY_ALL ) );
@@ -384,26 +382,26 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
         }
     }
 
-    // Wenn ein Attribut von 0 bis aktuelle Absatzlaenge geht,
-    // soll es ein Absatz-Attribut sein!
+    // When an Attribute goes from 0 to the current paragraph length,
+    // it should be a paragraph attribute!
 
-    // Achtung: Selektion kann ueber mehrere Absaetze gehen.
-    // Alle vollstaendigen Absaetze sind Absatzattribute...
+    // Note: Selection can reach over several paragraphs.
+    // All Complete paragraphs are paragraph attributes ...
     for ( USHORT z = nStartNode+1; z < nEndNode; z++ )
     {
-        DBG_ASSERT( pImpEditEngine->GetEditDoc().SaveGetObject( z ), "Node existiert noch nicht(RTF)" );
+        DBG_ASSERT( pImpEditEngine->GetEditDoc().SaveGetObject( z ), "Node does not exist yet(RTF)" );
         pImpEditEngine->SetParaAttribs( z, rSet.GetAttrSet() );
     }
 
     if ( aStartPaM.GetNode() != aEndPaM.GetNode() )
     {
-        // Den Rest des StartNodes...
+        // The rest dof the StartNodes...
         if ( aStartPaM.GetIndex() == 0 )
             pImpEditEngine->SetParaAttribs( nStartNode, rSet.GetAttrSet() );
         else
             pImpEditEngine->SetAttribs( EditSelection( aStartPaM, EditPaM( aStartPaM.GetNode(), aStartPaM.GetNode()->Len() ) ), rSet.GetAttrSet() );
 
-        // Den Anfang des EndNodes....
+        // the beginning of the EndNodes....
         if ( aEndPaM.GetIndex() == aEndPaM.GetNode()->Len() )
             pImpEditEngine->SetParaAttribs( nEndNode, rSet.GetAttrSet() );
         else
@@ -413,7 +411,7 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
     {
         if ( ( aStartPaM.GetIndex() == 0 ) && ( aEndPaM.GetIndex() == aEndPaM.GetNode()->Len() ) )
         {
-            // #96298# When settings char attribs as para attribs, we must merge with existing attribs, not overwrite the ItemSet!
+            // When settings char attribs as para attribs, we must merge with existing attribs, not overwrite the ItemSet!
             SfxItemSet aAttrs = pImpEditEngine->GetParaAttribs( nStartNode );
             aAttrs.Put( rSet.GetAttrSet() );
             pImpEditEngine->SetParaAttribs( nStartNode, aAttrs );
@@ -446,8 +444,7 @@ SvxRTFStyleType* EditRTFParser::FindStyleSheet( const XubString& rName )
 
 SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
 {
-    // Prueffen, ob so eine Vorlage existiert....
-    // dann wird sie auch nicht geaendert!
+    // Check if a template exists, then it will not be changed!
     SfxStyleSheet* pStyle = (SfxStyleSheet*)pImpEditEngine->GetStyleSheetPool()->Find( pRTFStyle->sName, SFX_STYLE_FAMILY_ALL );
     if ( pStyle )
         return pStyle;
@@ -463,21 +460,21 @@ SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
 
     pStyle = (SfxStyleSheet*) &pImpEditEngine->GetStyleSheetPool()->Make( aName, SFX_STYLE_FAMILY_PARA );
 
-    // 1) Items konvertieren und uebernehmen...
+    // 1) convert and take over Items ...
     ConvertAndPutItems( pStyle->GetItemSet(), pRTFStyle->aAttrSet );
 
-    // 2) Solange Parent nicht im Pool, auch diesen kreieren...
+    // 2) As long as Parent is not in the pool, also create this ...
     if ( aParent.Len() && ( aParent != aName ) )
     {
         SfxStyleSheet* pS = (SfxStyleSheet*)pImpEditEngine->GetStyleSheetPool()->Find( aParent, SFX_STYLE_FAMILY_ALL );
         if ( !pS )
         {
-            // Wenn nirgendwo gefunden, aus RTF erzeugen...
+            // If not found anywhere, create from RTF ...
             SvxRTFStyleType* _pRTFStyle = FindStyleSheet( aParent );
             if ( _pRTFStyle )
                 pS = CreateStyleSheet( _pRTFStyle );
         }
-        // 2b) ItemSet mit Parent verknuepfen...
+        // 2b) Link Itemset with Parent ...
         if ( pS )
             pStyle->GetItemSet().SetParent( &pS->GetItemSet() );
     }
@@ -486,7 +483,7 @@ SfxStyleSheet* EditRTFParser::CreateStyleSheet( SvxRTFStyleType* pRTFStyle )
 
 void EditRTFParser::CreateStyleSheets()
 {
-    // der SvxRTFParser hat jetzt die Vorlagen erzeugt...
+    // the SvxRTFParser haa  now created the template...
     if ( pImpEditEngine->GetStyleSheetPool() && pImpEditEngine->GetStatus().DoImportRTFStyleSheets() )
     {
         SvxRTFStyleType* pRTFStyle = GetStyleTbl().First();
@@ -509,8 +506,8 @@ void EditRTFParser::CalcValue()
 
 void EditRTFParser::ReadField()
 {
-    // Aus SwRTFParser::ReadField()
-    int _nOpenBrakets = 1;      // die erste wurde schon vorher erkannt
+    // From SwRTFParser::ReadField()
+    int _nOpenBrakets = 1;      // the first was already detected earlier
     BOOL bFldInst = FALSE;
     BOOL bFldRslt = FALSE;
     String aFldInst;
@@ -574,12 +571,12 @@ void EditRTFParser::ReadField()
         }
     }
 
-    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );        // the closing brace is evaluated "above"
 }
 
 void EditRTFParser::SkipGroup()
 {
-    int _nOpenBrakets = 1;      // die erste wurde schon vorher erkannt
+    int _nOpenBrakets = 1;      // the first was already detected earlier
 
     while( _nOpenBrakets && IsParserWorking() )
     {
@@ -599,7 +596,7 @@ void EditRTFParser::SkipGroup()
         }
     }
 
-    SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
+    SkipToken( -1 );        // the closing brace is evaluated "above"
 }
 
 ULONG EditNodeIdx::GetIdx() const

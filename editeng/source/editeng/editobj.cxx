@@ -142,7 +142,7 @@ BOOL lcl_CreateBulletItem( const SvxNumBulletItem& rNumBullet, USHORT nLevel, Sv
 
 XEditAttribute* MakeXEditAttribute( SfxItemPool& rPool, const SfxPoolItem& rItem, USHORT nStart, USHORT nEnd )
 {
-    // das neue Attribut im Pool anlegen
+    // Create thw new attribute in the pool
     const SfxPoolItem& rNew = rPool.Put( rItem );
 
     XEditAttribute* pNew = new XEditAttribute( rNew, nStart, nEnd );
@@ -169,7 +169,7 @@ XEditAttribute::XEditAttribute( const SfxPoolItem& rAttr, USHORT nS, USHORT nE )
 XEditAttribute::~XEditAttribute()
 {
     DBG_DTOR( XEditAttribute, 0 );
-    pItem = 0;  // Gehoert dem Pool.
+    pItem = 0;  // belongs to the Pool.
 }
 
 XEditAttribute* XEditAttributeList::FindAttrib( USHORT _nWhich, USHORT nChar ) const
@@ -187,28 +187,22 @@ ContentInfo::ContentInfo( SfxItemPool& rPool ) : aParaAttribs( rPool, EE_PARA_ST
 {
     eFamily = SFX_STYLE_FAMILY_PARA;
     pWrongs = NULL;
-/* cl removed because not needed anymore since binfilter
-    pTempLoadStoreInfos = NULL;
-*/
 }
 
-// Richtiger CopyCTOR unsinning, weil ich mit einem anderen Pool arbeiten muss!
+// the real Copy constructor is nonsens, since I have to work with another Pool!
 ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse )
     : aParaAttribs( rPoolToUse, EE_PARA_START, EE_CHAR_END )
 {
     pWrongs = NULL;
-/* cl removed because not needed anymore since binfilter
-    pTempLoadStoreInfos = NULL;
-*/
+
     if ( rCopyFrom.GetWrongList() )
         pWrongs = rCopyFrom.GetWrongList()->Clone();
-    // So sollten die Items im richtigen Pool landen!
+    // this should ensure that the Items end up in the correct Pool!
     aParaAttribs.Set( rCopyFrom.GetParaAttribs() );
     aText = rCopyFrom.GetText();
     aStyle = rCopyFrom.GetStyle();
     eFamily = rCopyFrom.GetFamily();
 
-    // Attribute kopieren...
     for ( USHORT n = 0; n < rCopyFrom.GetAttribs().Count(); n++  )
     {
         XEditAttribute* pAttr = rCopyFrom.GetAttribs().GetObject( n );
@@ -216,7 +210,6 @@ ContentInfo::ContentInfo( const ContentInfo& rCopyFrom, SfxItemPool& rPoolToUse 
         aAttribs.Insert( pMyAttr, aAttribs.Count()  );
     }
 
-    // Wrongs
     pWrongs = NULL;
 #ifndef SVX_LIGHT
     if ( rCopyFrom.GetWrongList() )
@@ -229,7 +222,6 @@ ContentInfo::~ContentInfo()
     for ( USHORT nAttr = 0; nAttr < aAttribs.Count(); nAttr++ )
     {
         XEditAttribute* pAttr = aAttribs.GetObject(nAttr);
-        // Item aus Pool entfernen!
         aParaAttribs.GetPool()->Remove( *pAttr->GetItem() );
         delete pAttr;
     }
@@ -238,20 +230,6 @@ ContentInfo::~ContentInfo()
     delete pWrongs;
 #endif
 }
-
-/* cl removed because not needed anymore since binfilter
-void ContentInfo::CreateLoadStoreTempInfos()
-{
-    delete pTempLoadStoreInfos;
-    pTempLoadStoreInfos = new LoadStoreTempInfos;
-}
-
-void ContentInfo::DestroyLoadStoreTempInfos()
-{
-    delete pTempLoadStoreInfos;
-    pTempLoadStoreInfos = NULL;
-}
-*/
 
 // #i102062#
 bool ContentInfo::isWrongListEqual(const ContentInfo& rCompare) const
@@ -309,172 +287,172 @@ EditTextObject::~EditTextObject()
 
 USHORT EditTextObject::GetParagraphCount() const
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     return 0;
 }
 
 XubString EditTextObject::GetText( USHORT /* nParagraph */ ) const
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     return XubString();
 }
 
 void EditTextObject::Insert( const EditTextObject& /* rObj */, USHORT /* nPara */)
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
 }
 
 EditTextObject* EditTextObject::CreateTextObject( USHORT /*nPara*/, USHORT /*nParas*/ ) const
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     return 0;
 }
 
 void EditTextObject::RemoveParagraph( USHORT /*nPara*/ )
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
 }
 
 BOOL EditTextObject::HasPortionInfo() const
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 void EditTextObject::ClearPortionInfo()
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
 }
 
 BOOL EditTextObject::HasOnlineSpellErrors() const
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 BOOL EditTextObject::HasCharAttribs( USHORT ) const
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 void EditTextObject::GetCharAttribs( USHORT /*nPara*/, EECharAttribArray& /*rLst*/ ) const
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
 }
 
 void EditTextObject::MergeParaAttribs( const SfxItemSet& /*rAttribs*/, USHORT /*nStart*/, USHORT /*nEnd*/ )
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
 }
 
 BOOL EditTextObject::IsFieldObject() const
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 const SvxFieldItem* EditTextObject::GetField() const
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     return 0;
 }
 
 BOOL EditTextObject::HasField( TypeId /*aType*/ ) const
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 SfxItemSet EditTextObject::GetParaAttribs( USHORT /*nPara*/ ) const
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     return SfxItemSet( *(SfxItemPool*)NULL );
 }
 
 void EditTextObject::SetParaAttribs( USHORT /*nPara*/, const SfxItemSet& /*rAttribs*/ )
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
 }
 
 BOOL EditTextObject::RemoveCharAttribs( USHORT /*nWhich*/ )
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 BOOL EditTextObject::RemoveParaAttribs( USHORT /*nWhich*/ )
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 BOOL EditTextObject::HasStyleSheet( const XubString& /*rName*/, SfxStyleFamily /*eFamily*/ ) const
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 void EditTextObject::GetStyleSheet( USHORT /*nPara*/, XubString& /*rName*/, SfxStyleFamily& /*eFamily*/ ) const
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
 }
 
 void EditTextObject::SetStyleSheet( USHORT /*nPara*/, const XubString& /*rName*/, const SfxStyleFamily& /*eFamily*/ )
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
 }
 
 BOOL EditTextObject::ChangeStyleSheets( const XubString&, SfxStyleFamily,
                                             const XubString&, SfxStyleFamily )
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 void EditTextObject::ChangeStyleSheetName( SfxStyleFamily /*eFamily*/,
                 const XubString& /*rOldName*/, const XubString& /*rNewName*/ )
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
 }
 
 USHORT EditTextObject::GetUserType() const
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     return 0;
 }
 
 void EditTextObject::SetUserType( USHORT )
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
 }
 
 ULONG EditTextObject::GetObjectSettings() const
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     return 0;
 }
 
 void EditTextObject::SetObjectSettings( ULONG )
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
 }
 
 BOOL EditTextObject::IsVertical() const
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     return FALSE;
 }
 
 void EditTextObject::SetVertical( BOOL bVertical )
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     ((BinTextObject*)this)->SetVertical( bVertical );
 }
 
 USHORT EditTextObject::GetScriptType() const
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     return ((const BinTextObject*)this)->GetScriptType();
 }
 
@@ -484,7 +462,6 @@ BOOL EditTextObject::Store( SvStream& rOStream ) const
     if ( rOStream.GetError() )
         return FALSE;
 
-    // Vorspann:
     sal_Size nStartPos = rOStream.Tell();
 
     rOStream << (USHORT)Which();
@@ -492,10 +469,8 @@ BOOL EditTextObject::Store( SvStream& rOStream ) const
     sal_uInt32 nStructSz = 0;
     rOStream << nStructSz;
 
-    // Eigene Daten:
     StoreData( rOStream );
 
-    // Nachspann:
     sal_Size nEndPos = rOStream.Tell();
     nStructSz = nEndPos - nStartPos - sizeof( nWhich ) - sizeof( nStructSz );
     rOStream.Seek( nStartPos + sizeof( nWhich ) );
@@ -509,14 +484,14 @@ EditTextObject* EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobal
 {
     ULONG nStartPos = rIStream.Tell();
 
-    // Ertmal sehen, was fuer ein Object...
+    // First check what type of Object...
     USHORT nWhich;
     rIStream >> nWhich;
 
     sal_uInt32 nStructSz;
     rIStream >> nStructSz;
 
-    DBG_ASSERT( ( nWhich == 0x22 /*EE_FORMAT_BIN300*/ ) || ( nWhich == EE_FORMAT_BIN ), "CreateTextObject: Unbekanntes Objekt!" );
+    DBG_ASSERT( ( nWhich == 0x22 /*EE_FORMAT_BIN300*/ ) || ( nWhich == EE_FORMAT_BIN ), "CreateTextObject: Unknown Object!" );
 
     if ( rIStream.GetError() )
         return NULL;
@@ -532,12 +507,12 @@ EditTextObject* EditTextObject::Create( SvStream& rIStream, SfxItemPool* pGlobal
                                     break;
         default:
         {
-            // Wenn ich das Format nicht kenne, ueberlese ich den Inhalt:
+            // If I do not know the format, I overwrite the contents:
             rIStream.SetError( EE_READWRITE_WRONGFORMAT );
         }
     }
 
-    // Sicherstellen, dass der Stream an der richtigen Stelle hinterlassen wird.
+    // Make sure that the stream is left at the correct place.
     sal_Size nFullSz = sizeof( nWhich ) + sizeof( nStructSz ) + nStructSz;
     rIStream.Seek( nStartPos + nFullSz );
     return pTxtObj;
@@ -559,17 +534,17 @@ void EditTextObject::Skip( SvStream& rIStream )
 
 void EditTextObject::StoreData( SvStream& ) const
 {
-    DBG_ERROR( "StoreData: Basisklasse!" );
+    DBG_ERROR( "StoreData: Base class!" );
 }
 
 void EditTextObject::CreateData( SvStream& )
 {
-    DBG_ERROR( "CreateData: Basisklasse!" );
+    DBG_ERROR( "CreateData: Base class!" );
 }
 
 USHORT EditTextObject::GetVersion() const
 {
-    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+    DBG_ERROR( "Virtual method direct from EditTextObject!" );
     return 0;
 }
 
@@ -683,7 +658,7 @@ BinTextObject::BinTextObject( const BinTextObject& r ) :
     nObjSettings = r.nObjSettings;
     bVertical = r.bVertical;
     nScriptType = r.nScriptType;
-    pPortionInfo = NULL;    // PortionInfo nicht kopieren
+    pPortionInfo = NULL;    // Do not copy PortionInfo
     bStoreUnicodeStrings = FALSE;
 
     if ( !r.bOwnerOfPool )
@@ -730,9 +705,6 @@ BinTextObject::~BinTextObject()
     DeleteContents();
     if ( bOwnerOfPool )
     {
-        // Nicht mehr, wegen 1xDefItems.
-        // siehe auch ~EditDoc().
-//      pPool->ReleaseDefaults( TRUE /* bDelete */ );
         SfxItemPool::Free(pPool);
     }
 }
@@ -823,7 +795,7 @@ USHORT BinTextObject::GetParagraphCount() const
 
 XubString BinTextObject::GetText( USHORT nPara ) const
 {
-    DBG_ASSERT( nPara < aContents.Count(), "BinTextObject::GetText: Absatz existiert nicht!" );
+    DBG_ASSERT( nPara < aContents.Count(), "BinTextObject::GetText: Paragraph does not exist!" );
     if ( nPara < aContents.Count() )
     {
         ContentInfo* pC = aContents[ nPara ];
@@ -834,7 +806,7 @@ XubString BinTextObject::GetText( USHORT nPara ) const
 
 void BinTextObject::Insert( const EditTextObject& rObj, USHORT nDestPara )
 {
-    DBG_ASSERT( rObj.Which() == EE_FORMAT_BIN, "UTO: Unbekanntes Textobjekt" );
+    DBG_ASSERT( rObj.Which() == EE_FORMAT_BIN, "UTO: unknown Textobjekt" );
 
     const BinTextObject& rBinObj = (const BinTextObject&)rObj;
 
@@ -856,7 +828,7 @@ EditTextObject* BinTextObject::CreateTextObject( USHORT nPara, USHORT nParas ) c
     if ( ( nPara >= aContents.Count() ) || !nParas )
         return NULL;
 
-    // Pool nur teilen, wenn von aussen eingestellter Pool.
+    // Only split the Pool, when a the Pool is set externally.
     BinTextObject* pObj = new BinTextObject( bOwnerOfPool ? 0 : pPool );
     if ( bOwnerOfPool && pPool )
         pObj->GetPool()->SetDefaultMetric( pPool->GetMetric( DEF_METRIC ) );
@@ -877,7 +849,7 @@ EditTextObject* BinTextObject::CreateTextObject( USHORT nPara, USHORT nParas ) c
 
 void BinTextObject::RemoveParagraph( USHORT nPara )
 {
-    DBG_ASSERT( nPara < aContents.Count(), "BinTextObject::GetText: Absatz existiert nicht!" );
+    DBG_ASSERT( nPara < aContents.Count(), "BinTextObject::GetText: Paragraph does not exist!" );
     if ( nPara < aContents.Count() )
     {
         ContentInfo* pC = aContents[ nPara ];
@@ -1175,25 +1147,24 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
 
     rOStream << bOwnerOfPool;
 
-    // Erst den Pool speichern, spaeter nur noch Surregate
+    // First store the pool, later only the Surregate
     if ( bOwnerOfPool )
     {
         GetPool()->SetFileFormatVersion( SOFFICE_FILEFORMAT_50 );
         GetPool()->Store( rOStream );
     }
 
-    // Aktuelle Zeichensatz speichern...
-    // #90477# GetSOStoreTextEncoding: Bug in 5.2, when default char set is multi byte text encoding
+    // Store Current text encoding ...
     rtl_TextEncoding eEncoding = GetSOStoreTextEncoding( gsl_getSystemTextEncoding(), (USHORT) rOStream.GetVersion() );
     rOStream << (USHORT) eEncoding;
 
-    // Die Anzahl der Absaetze...
+    // The number of paragraphs ...
     USHORT nParagraphs = GetContents().Count();
     rOStream << nParagraphs;
 
     char cFeatureConverted = ByteString( CH_FEATURE, eEncoding ).GetChar(0);
 
-    // Die einzelnen Absaetze...
+    // The individual paragraphs ...
     for ( USHORT nPara = 0; nPara < nParagraphs; nPara++ )
     {
         ContentInfo* pC = GetContents().GetObject( nPara );
@@ -1229,7 +1200,7 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
                     aText.Insert( aNew, pAttr->GetStart() );
                 }
 
-                // #88414# Convert StarSymbol back to StarBats
+                // Convert StarSymbol back to StarBats
                 FontToSubsFontConverter hConv = CreateFontToSubsFontConverter( rFontItem.GetFamilyName(), FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
                 if ( hConv )
                 {
@@ -1248,7 +1219,7 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
             }
         }
 
-        // #88414# Convert StarSymbol back to StarBats
+        // Convert StarSymbol back to StarBats
         // StarSymbol as paragraph attribute or in StyleSheet?
 
         FontToSubsFontConverter hConv = NULL;
@@ -1256,13 +1227,6 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
         {
             hConv = CreateFontToSubsFontConverter( ((const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO )).GetFamilyName(), FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
         }
-/* cl removed because not needed anymore since binfilter
-
-        else if ( pC->GetStyle().Len() && pC->GetLoadStoreTempInfos() )
-        {
-            hConv = pC->GetLoadStoreTempInfos()->hOldSymbolConv_Store;
-        }
-*/
         if ( hConv )
         {
             for ( USHORT nChar = 0; nChar < pC->GetText().Len(); nChar++ )
@@ -1285,19 +1249,19 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
         aText.SearchAndReplaceAll( cFeatureConverted, CH_FEATURE_OLD );
         rOStream.WriteByteString( aText );
 
-        // StyleName und Family...
+        // StyleName and Family...
         rOStream.WriteByteString( ByteString( pC->GetStyle(), eEncoding ) );
         rOStream << (USHORT)pC->GetFamily();
 
-        // Absatzattribute...
+        // Paragraph attributes ...
         pC->GetParaAttribs().Store( rOStream );
 
-        // Die Anzahl der Attribute...
+        // The number of attributes ...
         USHORT nAttribs = pC->GetAttribs().Count();
         rOStream << nAttribs;
 
-        // Und die einzelnen Attribute
-        // Items als Surregate => immer 8 Byte pro Attrib
+        // And the individual attributes
+        // Items as Surregate => always 8 bytes per Attribute
         // Which = 2; Surregat = 2; Start = 2; End = 2;
         for ( USHORT nAttr = 0; nAttr < nAttribs; nAttr++ )
         {
@@ -1310,17 +1274,12 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
         }
     }
 
-    // Ab 400:
     rOStream << nMetric;
 
-    // Ab 600
     rOStream << nUserType;
     rOStream << nObjSettings;
 
-    // Ab 601
     rOStream << bVertical;
-
-    // Ab 602
     rOStream << nScriptType;
 
     rOStream << bStoreUnicodeStrings;
@@ -1333,7 +1292,7 @@ void BinTextObject::StoreData( SvStream& rOStream ) const
             rOStream << nL;
             rOStream.Write( pC->GetText().GetBuffer(), nL*sizeof(sal_Unicode) );
 
-            // #91575# StyleSheetName must be Unicode too!
+            // StyleSheetName must be Unicode too!
             // Copy/Paste from EA3 to BETA or from BETA to EA3 not possible, not needed...
             // If needed, change nL back to ULONG and increase version...
             nL = pC->GetStyle().Len();
@@ -1347,63 +1306,61 @@ void BinTextObject::CreateData( SvStream& rIStream )
 {
     rIStream >> nVersion;
 
-    // Das Textobject wurde erstmal mit der aktuellen Einstellung
-    // von pTextObjectPool erzeugt.
+    // The text object was first created with the current setting of
+    // pTextObjectPool.
     BOOL bOwnerOfCurrent = bOwnerOfPool;
     rIStream >> bOwnerOfPool;
 
     if ( bOwnerOfCurrent && !bOwnerOfPool )
     {
-        // Es wurde ein globaler Pool verwendet, mir jetzt nicht uebergeben,
-        // aber ich brauche ihn!
-        DBG_ERROR( "Man gebe mir den globalen TextObjectPool!" );
+        // A global Pool was used, but not handed over to me, but I need it!
+        DBG_ERROR( "Give me the global TextObjectPool!" );
         return;
     }
     else if ( !bOwnerOfCurrent && bOwnerOfPool )
     {
-        // Es soll ein globaler Pool verwendet werden, aber dieses
-        // Textobject hat einen eigenen.
+        // A global Pool should be used, but this Textobject has its own.
         pPool = EditEngine::CreatePool();
     }
 
     if ( bOwnerOfPool )
         GetPool()->Load( rIStream );
 
-    // CharSet, in dem gespeichert wurde:
+    // CharSet, in which it was saved:
     USHORT nCharSet;
     rIStream >> nCharSet;
 
     rtl_TextEncoding eSrcEncoding = GetSOLoadTextEncoding( (rtl_TextEncoding)nCharSet, (USHORT)rIStream.GetVersion() );
 
-    // Die Anzahl der Absaetze...
+    // The number of paragraphs ...
     USHORT nParagraphs;
     rIStream >> nParagraphs;
 
-    // Die einzelnen Absaetze...
+    // The individual paragraphs ...
     for ( ULONG nPara = 0; nPara < nParagraphs; nPara++ )
     {
         ContentInfo* pC = CreateAndInsertContent();
 
-        // Der Text...
+        // The Text...
         ByteString aByteString;
         rIStream.ReadByteString( aByteString );
         pC->GetText() = String( aByteString, eSrcEncoding );
 
-        // StyleName und Family...
+        // StyleName and Family...
         rIStream.ReadByteString( pC->GetStyle(), eSrcEncoding );
         USHORT nStyleFamily;
         rIStream >> nStyleFamily;
         pC->GetFamily() = (SfxStyleFamily)nStyleFamily;
 
-        // Absatzattribute...
+        // Paragraph attributes ...
         pC->GetParaAttribs().Load( rIStream );
 
-        // Die Anzahl der Attribute...
+        // The number of attributes ...
         USHORT nAttribs;
         rIStream >> nAttribs;
 
-        // Und die einzelnen Attribute
-        // Items als Surregate => immer 8 Byte pro Attrib
+        // And the individual attributes
+        // Items as Surregate => always 8 bytes per Attributes
         // Which = 2; Surregat = 2; Start = 2; End = 2;
         USHORT nAttr;
         for ( nAttr = 0; nAttr < nAttribs; nAttr++ )
@@ -1468,7 +1425,7 @@ void BinTextObject::CreateData( SvStream& rIStream )
                     pC->GetText().Insert( aNew, pAttr->GetStart() );
                 }
 
-                // #88414# Convert StarMath and StarBats to StarSymbol
+                // Convert StarMath and StarBats to StarSymbol
                 FontToSubsFontConverter hConv = CreateFontToSubsFontConverter( rFontItem.GetFamilyName(), FONTTOSUBSFONT_IMPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
                 if ( hConv )
                 {
@@ -1495,7 +1452,7 @@ void BinTextObject::CreateData( SvStream& rIStream )
         }
 
 
-        // #88414# Convert StarMath and StarBats to StarSymbol
+        // Convert StarMath and StarBats to StarSymbol
         // Maybe old symbol font as paragraph attribute?
         if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )
         {
@@ -1524,15 +1481,15 @@ void BinTextObject::CreateData( SvStream& rIStream )
         }
     }
 
-    // Ab 400 auch die DefMetric:
+    // From 400 also the DefMetric:
     if ( nVersion >= 400 )
     {
         USHORT nTmpMetric;
         rIStream >> nTmpMetric;
         if ( nVersion >= 401 )
         {
-            // In der 400 gab es noch einen Bug bei Textobjekten mit eigenem
-            // Pool, deshalb erst ab 401 auswerten.
+            // In the 400 there was a bug in text objects with the own Pool,
+            // therefore evaluate only from 401
             nMetric = nTmpMetric;
             if ( bOwnerOfPool && pPool && ( nMetric != 0xFFFF ) )
                 pPool->SetDefaultMetric( (SfxMapUnit)nMetric );
@@ -1585,8 +1542,8 @@ void BinTextObject::CreateData( SvStream& rIStream )
     }
 
 
-    // Ab 500 werden die Tabs anders interpretiert: TabPos + LI, vorher nur TabPos.
-    // Wirkt nur wenn auch Tab-Positionen eingestellt wurden, nicht beim DefTab.
+    // from 500 the tabs are interpreted differently: TabPos + LI, previously only TabPos.
+    // Works only if tab positions are set, not when DefTab.
     if ( nVersion < 500 )
     {
         for ( USHORT n = 0; n < aContents.Count(); n++ )
@@ -1663,39 +1620,39 @@ bool BinTextObject::isWrongListEqual(const BinTextObject& rCompare) const
 
 void BinTextObject::CreateData300( SvStream& rIStream )
 {
-    // Fuer Aufwaertskompatibilitaet.
+    // For forward compatibility.
 
-    // Erst den Pool laden...
-    // Ist in der 300 immer gespeichert worden!
+    // First load the Pool...
+    // Is always saved in the 300!
     GetPool()->Load( rIStream );
 
-    // Die Anzahl der Absaetze...
+    // The number of paragraphs ...
     sal_uInt32 nParagraphs;
     rIStream >> nParagraphs;
 
-    // Die einzelnen Absaetze...
+    // The individual paragraphs...
     for ( ULONG nPara = 0; nPara < nParagraphs; nPara++ )
     {
         ContentInfo* pC = CreateAndInsertContent();
 
-        // Der Text...
+        // The Text...
         rIStream.ReadByteString( pC->GetText() );
 
-        // StyleName und Family...
+        // StyleName and Family...
         rIStream.ReadByteString( pC->GetStyle() );
         USHORT nStyleFamily;
         rIStream >> nStyleFamily;
         pC->GetFamily() = (SfxStyleFamily)nStyleFamily;
 
-        // Absatzattribute...
+        // Paragraph attributes ...
         pC->GetParaAttribs().Load( rIStream );
 
-        // Die Anzahl der Attribute...
+        // The number of attributes ...
         sal_uInt32 nAttribs;
         rIStream >> nAttribs;
 
-        // Und die einzelnen Attribute
-        // Items als Surregate => immer 8 Byte pro Attrib
+        // And the individual attributes
+        // Items as Surregate => always 8 bytes per Attribute
         // Which = 2; Surregat = 2; Start = 2; End = 2;
         for ( ULONG nAttr = 0; nAttr < nAttribs; nAttr++ )
         {
@@ -1715,7 +1672,7 @@ void BinTextObject::CreateData300( SvStream& rIStream )
         }
     }
 
-    // Prueffen, ob ein Zeichensatz gespeichert wurde
+    // Check whether a font was saved
     USHORT nCharSetMarker;
     rIStream >> nCharSetMarker;
     if ( nCharSetMarker == CHARSETMARKER )

@@ -42,9 +42,9 @@ namespace rtl
 
 // class SvxWeightItem ---------------------------------------------------
 
-/* [Beschreibung]
+/* [Description]
 
-    Dieses Item beschreibt die Font-Staerke.
+    This item describes the font weight.
 */
 
 class EDITENG_DLLPUBLIC SvxWeightItem : public SfxEnumItem
@@ -55,7 +55,7 @@ public:
     SvxWeightItem(  const FontWeight eWght /*= WEIGHT_NORMAL*/,
                     const USHORT nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem + SfxEnumItem
+    // "pure virtual Methods" from SfxPoolItem + SfxEnumItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

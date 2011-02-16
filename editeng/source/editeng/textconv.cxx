@@ -101,7 +101,7 @@ sal_Bool TextConvWrapper::ConvNext_impl()
 
     if ( bStartDone && bEndDone )
     {
-        if ( ConvMore_impl() )  // ein weiteres Dokument pruefen?
+        if ( ConvMore_impl() )  // examine another document?
         {
             bStartDone = sal_True;
             bEndDone  = sal_False;
@@ -116,7 +116,7 @@ sal_Bool TextConvWrapper::ConvNext_impl()
 
     if ( bStartDone && bEndDone )
     {
-        if ( ConvMore_impl() )  // ein weiteres Dokument pruefen?
+        if ( ConvMore_impl() )  // examine another document?
         {
             bStartDone = sal_True;
             bEndDone  = sal_False;
@@ -124,34 +124,11 @@ sal_Bool TextConvWrapper::ConvNext_impl()
             return sal_True;
         }
     }
-    else
+    else if (!aConvSel.HasRange())
     {
-        // Ein BODY_Bereich erledigt, Frage nach dem anderen BODY_Bereich
-/*
-        pWin->LeaveWait();
-
-        sal_uInt16 nResId = bReverse ? RID_SVXQB_BW_CONTINUE : RID_SVXQB_CONTINUE;
-        QueryBox aBox( pWin, ResId( nResId, pMgr ) );
-        if ( aBox.Execute() != RET_YES )
-        {
-            // Verzicht auf den anderen Bereich, ggf. Frage nach Sonderbereich
-            pWin->EnterWait();
-            bStartDone = bEndDone = sal_True;
-            return ConvNext_impl();
-        }
-        else
-        {
-*/
-            if (!aConvSel.HasRange())
-            {
-                bStartChk = !bStartDone;
-                ConvStart_impl( bStartChk ? SVX_SPELL_BODY_START : SVX_SPELL_BODY_END );
-                bGoOn = sal_True;
-            }
-/*
-        }
-        pWin->EnterWait();
-*/
+        bStartChk = !bStartDone;
+        ConvStart_impl( bStartChk ? SVX_SPELL_BODY_START : SVX_SPELL_BODY_END );
+        bGoOn = sal_True;
     }
     return bGoOn;
 }
@@ -196,7 +173,7 @@ sal_Bool TextConvWrapper::ConvMore_impl()
         bMore = pImpEE->GetEditEnginePtr()->ConvertNextDocument();
         if ( bMore )
         {
-            // Der Text wurde in diese Engine getreten...
+            // The text has been entered in this engine ...
             pEditView->GetImpEditView()->SetEditSelection(
                         pImpEE->GetEditDoc().GetStartPaM() );
         }
@@ -214,8 +191,7 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
 
     if ( eArea == SVX_SPELL_BODY_START )
     {
-        // Wird gerufen, wenn Spell-Forwad am Ende angekomment ist
-        // und soll von vorne beginnen
+        // Is called when Spell-forward has reached the end, and to start over
         if ( bEndDone )
         {
             pConvInfo->bConvToEnd = sal_False;
@@ -233,7 +209,7 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
     }
     else if ( eArea == SVX_SPELL_BODY_END )
     {
-        // Wird gerufen, wenn Spell-Forwad gestartet wird
+        // Is called when Spell-forward starts
         pConvInfo->bConvToEnd = sal_True;
         if (aConvSel.HasRange())
         {
@@ -255,7 +231,6 @@ void TextConvWrapper::ConvStart_impl( SvxSpellArea eArea )
         pConvInfo->aConvContinue = pConvInfo->aConvStart;
         pConvInfo->aConvTo = pImpEE->CreateEPaM(
             pImpEE->GetEditDoc().GetEndPaM() );
-        // pSpellInfo->bSpellToEnd = sal_True;
     }
     else
     {
@@ -436,7 +411,6 @@ void TextConvWrapper::ReplaceUnit(
         ESelection aNewSel( aOldSel );
         aNewSel.nStartPos = sal::static_int_cast< xub_StrLen >(
             aNewSel.nStartPos - aNewTxt.getLength());
-//      DBG_ASSERT( aOldSel.nEndPos >= 0, "error while building selection" );
 
         if (pNewUnitLanguage)
         {

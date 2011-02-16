@@ -54,7 +54,7 @@ private:
     AnchorInfo*             pCurAnchor;
 
     BOOL                    bInPara;
-    BOOL                    bWasInPara; // bInPara vor HeadingStart merken, weil sonst hinterher weg
+    BOOL                    bWasInPara; // Remember bInPara before HeadingStart, because afterwards it will be gone.
     BOOL                    bFieldsInserted;
     BYTE                    nInTable;
     BYTE                    nInCell;

@@ -57,17 +57,17 @@ namespace com{namespace sun{ namespace star{
 
 // -----------------------------------------------------------------------
 //Feature-Flags (only USHORT!)
-#define NUM_CONTINUOUS          0x0001 // fortlaufende Numerierung moeglich?
-#define NUM_CHAR_TEXT_DISTANCE  0x0002 // Abstand Symbol<->Text?
-#define NUM_CHAR_STYLE          0x0004 // Zeichenvorlagen?
-#define NUM_BULLET_REL_SIZE     0x0008 // rel. Bulletgroesse?
+#define NUM_CONTINUOUS          0x0001 // consecutive numbers possible?
+#define NUM_CHAR_TEXT_DISTANCE  0x0002 // Distance Symbol<->Text?
+#define NUM_CHAR_STYLE          0x0004 // Character styles?
+#define NUM_BULLET_REL_SIZE     0x0008 // relative bullet size?
 #define NUM_BULLET_COLOR        0x0010 // Bullet color
-#define NUM_SYMBOL_ALIGNMENT    0x0040 // alignment soll unter den Optionen angezeigt werden
-#define NUM_NO_NUMBERS          0x0080 // Numberierungen sind nicht erlaubt
+#define NUM_SYMBOL_ALIGNMENT    0x0040 // alignment to be shown in the options
+#define NUM_NO_NUMBERS          0x0080 // Numbering are not allowed
 #define NUM_ENABLE_LINKED_BMP   0x0100 // linked bitmaps are available
 #define NUM_ENABLE_EMBEDDED_BMP 0x0200 // embedded bitmaps are available
 
-#define SVX_NO_NUM              200 // Markierung fuer keine Numerierung
+#define SVX_NO_NUM              200 // Marker for no numbering
 #define SVX_NO_NUMLEVEL         0x20
 
 #define LINK_TOKEN  0x80 //indicate linked bitmaps - for use in dialog only
@@ -77,7 +77,7 @@ class EDITENG_DLLPUBLIC SvxNumberType
     static com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter> xFormatter;
 
     sal_Int16       nNumType;
-    sal_Bool        bShowSymbol;        // Symbol auch anzeigen?
+    sal_Bool        bShowSymbol;        // Also show Symbol ?
 
 public:
     SvxNumberType(sal_Int16 nType = com::sun::star::style::NumberingType::ARABIC);
@@ -122,12 +122,12 @@ private:
 
     SvxAdjust           eNumAdjust;
 
-    BYTE                nInclUpperLevels;   //Nummern aus der vorigen Ebenen uebernehmen
-    USHORT              nStart;             //Start der Zaehlung
+    BYTE                nInclUpperLevels;   // Take over numbers from the previous level.
+    USHORT              nStart;             // Start of counting
 
-    sal_Unicode         cBullet;            //Symbol
-    USHORT              nBulletRelSize;     //proz. Groesse des Bullets
-    Color               nBulletColor;       //Bullet color
+    sal_Unicode         cBullet;            // Symbol
+    USHORT              nBulletRelSize;     // percentage size of bullets
+    Color               nBulletColor;       // Bullet color
 
     // mode indicating, if the position and spacing of the list label is
     // determined by the former attributes (nFirstLineOffset, nAbsLSpace,
@@ -140,10 +140,10 @@ private:
     //         LABEL_ALIGNMENT is active.
     SvxNumPositionAndSpaceMode mePositionAndSpaceMode;
 
-    short               nFirstLineOffset;   //Erstzeileneinzug
-    short               nAbsLSpace;         //Abstand Rand<->Nummer
-    short               nLSpace;            //relative Einrueckung zum Vorgaenger
-    short               nCharTextDistance;  //Abstand Nummer<->Text
+    short               nFirstLineOffset;   // First line indent
+    short               nAbsLSpace;         // Distance Border<->Number
+    short               nLSpace;            // relative to the previous indentation
+    short               nCharTextDistance;  // Distance Number<->Text
 
     // specifies what follows the list label before the text of the first line
     // of the list item starts
@@ -155,13 +155,13 @@ private:
     // specifies the indent before the text, e.g. in L2R-layout the left margin
     long                        mnIndentAt;
 
-    SvxBrushItem*       pGraphicBrush;          //
-    sal_Int16           eVertOrient;        // vert. Ausrichtung einer Bitmap
+    SvxBrushItem*       pGraphicBrush;
+    sal_Int16           eVertOrient;        // vertical alignment of a bitmap
 
-    Size                aGraphicSize;       // immer! in 1/100 mm
-    Font*               pBulletFont;        // Pointer auf den BulletFont
+    Size                aGraphicSize;       // Always! in 1/100 mm
+    Font*               pBulletFont;        // Pointer to the bullet font
 
-    String              sCharStyleName;     // Zeichenvorlage
+    String              sCharStyleName;     // Character Style
 
     BitmapEx*           pScaledImageCache;  // Image scaled to aGraphicSize, only cached for WINDOW/VDEV
 
@@ -248,13 +248,13 @@ enum SvxNumRuleType
 
 class EDITENG_DLLPUBLIC SvxNumRule
 {
-    USHORT              nLevelCount;            // Anzahl der unterstuetzten Levels
-    ULONG               nFeatureFlags;          // was wird unterstuetzt?
-    SvxNumRuleType      eNumberingType;         // was fuer eine Numerierung
-    BOOL                bContinuousNumbering;   // fortlaufende Numerierung
+    USHORT              nLevelCount;            // Number of supported levels
+    ULONG               nFeatureFlags;          // What is supported?
+    SvxNumRuleType      eNumberingType;         // Type of numbering
+    BOOL                bContinuousNumbering;   // sequential numbering
 
     SvxNumberFormat*    aFmts[SVX_MAX_NUM];
-    BOOL                aFmtsSet[SVX_MAX_NUM]; //Flags ueber Gueltigkeit der Ebenen
+    BOOL                aFmtsSet[SVX_MAX_NUM]; // Flags indicating valid levels
 
     static sal_Int32    nRefCount;
     com::sun::star::lang::Locale aLocale;
@@ -324,10 +324,10 @@ public:
 
 class SvxNodeNum
 {
-    USHORT nLevelVal[ SVX_MAX_NUM ];    // Nummern aller Levels
-    USHORT nSetValue;                   // vorgegebene Nummer
-    BYTE nMyLevel;                      // akt. Level
-    BOOL bStartNum;                     // Numerierung neu starten
+    USHORT nLevelVal[ SVX_MAX_NUM ];    // Numbers of all levels
+    USHORT nSetValue;                   // predetermined number
+    BYTE nMyLevel;                      // Current Level
+    BOOL bStartNum;                     // Restart numbering
 
 public:
     inline SvxNodeNum( BYTE nLevel = SVX_NO_NUM, USHORT nSetVal = USHRT_MAX );

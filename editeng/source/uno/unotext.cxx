@@ -72,7 +72,7 @@ const SvxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSvxPropertySet()
 
 const SfxItemPropertyMapEntry* ImplGetSvxTextPortionPropertyMap()
 {
-    // Propertymap fuer einen Outliner Text
+    // Propertymap for an Outliner Text
     static const SfxItemPropertyMapEntry aSvxTextPortionPropertyMap[] =
     {
         SVX_UNOEDIT_CHAR_PROPERTIES,
@@ -101,7 +101,7 @@ const SfxItemPropertySet* ImplGetSvxTextPortionSfxPropertySet()
 
 const SfxItemPropertyMapEntry* ImplGetSvxUnoOutlinerTextCursorPropertyMap()
 {
-    // Propertymap fuer einen Outliner Text
+    // Propertymap for an Outliner Text
     static const SfxItemPropertyMapEntry aSvxUnoOutlinerTextCursorPropertyMap[] =
     {
         SVX_UNOEDIT_CHAR_PROPERTIES,
@@ -122,7 +122,7 @@ const SfxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSfxPropertySet()
 }
 
 // ====================================================================
-// helper fuer Item/Property Konvertierung
+// helper for Item/Property conversion
 // ====================================================================
 
 void GetSelection( struct ESelection& rSel, SvxTextForwarder* pForwarder ) throw()
@@ -379,14 +379,14 @@ void SAL_CALL SvxUnoTextRangeBase::setString(const OUString& aString)
         CheckSelection( maSelection, pForwarder );
 
         String aConverted( aString );
-        aConverted.ConvertLineEnd( LINEEND_LF );        // Zeilenenden nur einfach zaehlen
+        aConverted.ConvertLineEnd( LINEEND_LF );  // Simply count the number of line endings
 
         pForwarder->QuickInsertText( aConverted, maSelection );
         mpEditSource->UpdateData();
 
-        //  Selektion anpassen
-        //! Wenn die EditEngine bei QuickInsertText die Selektion zurueckgeben wuerde,
-        //! waer's einfacher...
+        //  Adapt selection
+        //! It would be easier if the EditEngine would return the selection
+        //! on QuickInsertText...
         CollapseToStart();
 
         sal_uInt16 nLen = aConverted.Len();
@@ -473,9 +473,9 @@ void SvxUnoTextRangeBase::setPropertyValue( const SfxItemPropertySimpleEntry* pM
 {
     if(!SetPropertyValueHelper( rOldSet, pMap, rValue, rNewSet, &rSelection, GetEditSource() ))
     {
-        //  Fuer Teile von zusammengesetzten Items mit mehreren Properties (z.B. Hintergrund)
-        //  muss vorher das alte Item aus dem Dokument geholt werden
-        rNewSet.Put(rOldSet.Get(pMap->nWID));           // altes Item in neuen Set
+        // For parts of composite items with multiple properties (eg background)
+        // must be taken from the document before the old item.
+        rNewSet.Put(rOldSet.Get(pMap->nWID));  // Old Item in new Set
         mpPropSet->setPropertyValue(pMap, rValue, rNewSet, false );
     }
 }
@@ -593,7 +593,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::_getPropertyValue(const OUString& Propert
             else
                 pAttribs = pForwarder->GetAttribs( GetSelection() ).Clone();
 
-            //  Dontcare durch Default ersetzen, damit man immer eine Reflection hat
+            //  Replace Dontcare with Default, so that one always has a mirror
             pAttribs->ClearInvalidItems();
 
             getPropertyValue( pMap, aAny, *pAttribs );
@@ -724,7 +724,7 @@ sal_Bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const S
     return sal_True;
 }
 
-// wird (noch) nicht unterstuetzt
+// is not (yet) supported
 void SAL_CALL SvxUnoTextRangeBase::addPropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 void SAL_CALL SvxUnoTextRangeBase::removePropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 void SAL_CALL SvxUnoTextRangeBase::addVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >& ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
@@ -1259,7 +1259,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyDefault( const OUString& aProp
 
             default:
                 {
-                    // Default aus ItemPool holen
+                    // Get Default from ItemPool
                     if(pPool->IsWhich(pMap->nWID))
                     {
                         SfxItemSet aSet( *pPool,    pMap->nWID, pMap->nWID);
@@ -1357,7 +1357,7 @@ sal_Bool SvxUnoTextRangeBase::GoLeft(sal_Int16 nCount, sal_Bool Expand) throw()
         else
         {
             if ( !pForwarder )
-                pForwarder = mpEditSource->GetTextForwarder();  // erst hier, wenn's noetig ist...
+                pForwarder = mpEditSource->GetTextForwarder();  // first here, it it is necessary...
 
             --nNewPar;
             nCount -= nNewPos + 1;
@@ -1386,7 +1386,7 @@ sal_Bool SvxUnoTextRangeBase::GoRight(sal_Int16 nCount, sal_Bool Expand)  throw(
         CheckSelection( maSelection, pForwarder );
 
 
-        sal_uInt16 nNewPos = maSelection.nEndPos + nCount;          //! Ueberlauf ???
+        sal_uInt16 nNewPos = maSelection.nEndPos + nCount; //! Overflow???
         sal_uInt16 nNewPar = maSelection.nEndPara;
 
         sal_Bool bOk = sal_True;
@@ -1693,15 +1693,14 @@ ESelection SvxUnoTextBase::InsertField( const SvxFieldItem& rField ) throw()
         pForwarder->QuickInsertField( rField, GetSelection() );
         GetEditSource()->UpdateData();
 
-        //  Selektion anpassen
-        //! Wenn die EditEngine bei QuickInsertText die Selektion zurueckgeben wuerde,
-        //! waer's einfacher...
-
+        //  Adapt selection
+        //! It would be easier if the EditEngine would return the selection
+        //! on QuickInsertText...
         CollapseToStart();
-        GoRight( 1, sal_True );     // Feld ist immer 1 Zeichen
+        GoRight( 1, sal_True );  // Field is always 1 character
     }
 
-    return GetSelection();  // Selektion mit dem Feld
+    return GetSelection();  // Selection with the field
 }
 
 // XInterface
@@ -1826,11 +1825,12 @@ void SAL_CALL SvxUnoTextBase::insertString( const uno::Reference< text::XTextRan
     SvxUnoTextRangeBase* pRange = SvxUnoTextRange::getImplementation( xRange );
     if(pRange)
     {
-        //  setString am SvxUnoTextRangeBase statt selber QuickInsertText und UpdateData,
-        //  damit die Selektion am SvxUnoTextRangeBase angepasst wird.
-        //! Eigentlich muessten alle Cursor-Objekte dieses Textes angepasst werden!
+        // setString on SvxUnoTextRangeBase instead of itself QuickInsertText
+        // and UpdateData, so that the selection will be adjusted to
+        // SvxUnoTextRangeBase. Actually all cursor objects of this Text must
+        // to be statement to be adapted!
 
-        if (!bAbsorb)                   // nicht ersetzen -> hinten anhaengen
+        if (!bAbsorb)                   // do not replace -> append on tail
             pRange->CollapseToEnd();
 
         pRange->setString( aString );
@@ -1856,7 +1856,7 @@ void SAL_CALL SvxUnoTextBase::insertControlCharacter( const uno::Reference< text
         {
         case text::ControlCharacter::PARAGRAPH_BREAK:
         {
-            const String aText( (sal_Unicode)13 );  // '\r' geht auf'm Mac nicht
+            const String aText( (sal_Unicode)13 );  // '\r' does not work on Mac
             insertString( xRange, aText, bAbsorb );
 
             return;
@@ -2465,7 +2465,7 @@ String SvxDummyTextSource::GetText( const ESelection& ) const
 
 SfxItemSet SvxDummyTextSource::GetAttribs( const ESelection&, BOOL ) const
 {
-    // AW: Very dangerous: The former implementation used a SfxItemPool created on the
+    // Very dangerous: The former implementation used a SfxItemPool created on the
     // fly which of course was deleted again ASAP. Thus, the returned SfxItemSet was using
     // a deleted Pool by design.
     return SfxItemSet(EditEngine::GetGlobalItemPool());

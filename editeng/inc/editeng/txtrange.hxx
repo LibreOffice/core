@@ -55,19 +55,19 @@ class EDITENG_DLLPUBLIC TextRanger
 {
     Range *pRangeArr;
     SvLongsPtr *pCache;
-    PolyPolygon *mpPolyPolygon; // Flaechenpolygon
-    PolyPolygon *mpLinePolyPolygon; // Linienpolygon
-    Rectangle *pBound;  // Umfassendes Rechteck
+    PolyPolygon *mpPolyPolygon; // Surface polygon
+    PolyPolygon *mpLinePolyPolygon; // Line polygon
+    Rectangle *pBound;  // Comprehensive rectangle
     USHORT nCacheSize;  // Cache-Size
     USHORT nCacheIdx;   // Cache-Index
-    USHORT nRight;      // Abstand Kontur-Text
-    USHORT nLeft;       // Abstand Text-Kontur
-    USHORT nUpper;      // Abstand Kontur-Text
-    USHORT nLower;      // Abstand Text-Kontur
-    sal_uInt32 nPointCount; // Anzahl der Polygonpunkte
-    BOOL bSimple : 1;   // Nur Aussenkante
-    BOOL bInner  : 1;   // TRUE: Objekt beschriften (EditEngine);
-                        // FALSE: Objekt umfliessen (StarWriter);
+    USHORT nRight;      // Distance Contour-Text
+    USHORT nLeft;       // Distance Text-Contour
+    USHORT nUpper;      // Distance Contour-Text
+    USHORT nLower;      // Distance Text-Contour
+    sal_uInt32 nPointCount; // Number of polygon points
+    BOOL bSimple : 1;   // Just outside edge
+    BOOL bInner  : 1;   // TRUE: Objekt inline (EditEngine);
+                        // FALSE: Objekt flow (StarWriter);
     BOOL bVertical :1;  // for vertical writing mode
     BOOL bFlag3 :1;
     BOOL bFlag4 :1;

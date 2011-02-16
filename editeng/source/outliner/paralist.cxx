@@ -30,7 +30,7 @@
 #include "precompiled_editeng.hxx"
 
 #include <paralist.hxx>
-#include <editeng/outliner.hxx>     // nur wegen Paragraph, muss geaendert werden!
+#include <editeng/outliner.hxx>  // only because of Paragraph, this must be changed!
 #include <editeng/numdef.hxx>
 
 DBG_NAME(Paragraph)

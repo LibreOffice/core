@@ -38,9 +38,9 @@
 // class SvxPrintItem ----------------------------------------------------
 
 
-/*
-[Beschreibung]
-Dieses Item beschreibt eine logische Variable "Drucken ja oder nein".
+/*  [Description]
+
+    This item describes a logical variable "Print yes or no".
 */
 
 
@@ -52,7 +52,7 @@ public:
     SvxPrintItem( const USHORT nId , const BOOL bPrt = TRUE );
     inline SvxPrintItem &operator=( const SvxPrintItem &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
     virtual SvStream&       Store(SvStream &, USHORT nItemVersion ) const;

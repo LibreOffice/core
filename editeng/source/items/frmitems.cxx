@@ -97,7 +97,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 
 
-// Konvertierung fuer UNO
+// Conversion for UNO
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 #define TWIP_TO_MM100_UNSIGNED(TWIP)     ((((TWIP)*127L+36L)/72L))
@@ -438,7 +438,7 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
-        //  jetzt alles signed
+        // now all signed
         case MID_L_MARGIN:
             rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100(nLeftMargin) : nLeftMargin);
             break;
@@ -535,7 +535,7 @@ bool SvxLRSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 
 // -----------------------------------------------------------------------
 
-// nLeftMargin und nTxtLeft anpassen.
+// Adapt nLeftMargin and nTxtLeft.
 
 void SvxLRSpaceItem::AdjustLeft()
 {
@@ -650,15 +650,14 @@ SfxItemPresentation SvxLRSpaceItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-// MT: BulletFI: Vor 501 wurde im Outliner das Bullet nicht auf der Position des
-// FI positioniert, deshalb muss in aelteren Dokumenten der FI auf 0 stehen.
-
+// BulletFI: Before 501 in the Outliner the bullet was not on the position of
+// the FI, so in older documents one must set FI to 0.
 #define BULLETLR_MARKER 0x599401FE
 
 SvStream& SvxLRSpaceItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
 {
     short nSaveFI = nFirstLineOfst;
-    ((SvxLRSpaceItem*)this)->SetTxtFirstLineOfst( 0 );  // nLeftMargin wird mitmanipuliert, siehe Create()
+    ((SvxLRSpaceItem*)this)->SetTxtFirstLineOfst( 0 );  // nLeftMargin is manipulated together with this, see Create()
 
     sal_uInt16 nMargin = 0;
     if( nLeftMargin > 0 )
@@ -686,8 +685,8 @@ SvStream& SvxLRSpaceItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) con
             nAutoFirst |= 0x80;
         rStrm << nAutoFirst;
 
-        // Ab 6.0 keine Magicnumber schreiben...
-        DBG_ASSERT( rStrm.GetVersion() <= SOFFICE_FILEFORMAT_50, "MT: Fileformat SvxLRSpaceItem aendern!" );
+        // From 6.0 onwards, do not write Magic numbers...
+        DBG_ASSERT( rStrm.GetVersion() <= SOFFICE_FILEFORMAT_50, "Change File format SvxLRSpaceItem!" );
         rStrm << (sal_uInt32) BULLETLR_MARKER;
         rStrm << nSaveFI;
 
@@ -723,7 +722,7 @@ SfxPoolItem* SvxLRSpaceItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) cons
         {
             rStrm >> firstline;
             if ( firstline < 0 )
-                left = left + static_cast<sal_uInt16>(firstline);   // s.u.: txtleft = ...
+                left = left + static_cast<sal_uInt16>(firstline);   // see below: txtleft = ...
         }
         else
             rStrm.Seek( nPos );
@@ -831,7 +830,7 @@ bool SvxULSpaceItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
-        //  jetzt alles signed
+        // now all signed
         case 0:
         {
             ::com::sun::star::frame::status::UpperLowerMarginScale aUpperLowerMarginScale;
@@ -1168,7 +1167,6 @@ int SvxProtectItem::operator==( const SfxPoolItem& rAttr ) const
 
 bool SvxProtectItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-//  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bValue;
     switch(nMemberId)
@@ -1177,7 +1175,7 @@ bool SvxProtectItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_PROTECT_SIZE    :  bValue = bSize; break;
         case MID_PROTECT_POSITION:  bValue = bPos; break;
         default:
-            DBG_ERROR("falsche MemberId");
+            DBG_ERROR("Wrong MemberId");
             return false;
     }
 
@@ -1187,7 +1185,6 @@ bool SvxProtectItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 bool    SvxProtectItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-//  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bVal( Any2Bool(rVal) );
     switch(nMemberId)
@@ -1196,7 +1193,7 @@ bool    SvxProtectItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         case MID_PROTECT_SIZE    :  bSize  = bVal;  break;
         case MID_PROTECT_POSITION:  bPos   = bVal;  break;
         default:
-            DBG_ERROR("falsche MemberId");
+            DBG_ERROR("Wrong MemberId");
             return false;
     }
     return true;
@@ -1640,7 +1637,7 @@ XubString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
     }
     else if ( DEF_LINE_WIDTH_1 == nDistance )
     {
-        // doppelte Linie, kleiner Abstand
+        // double line, small gap
         if ( DEF_LINE_WIDTH_0 == nOutWidth && DEF_LINE_WIDTH_0 == nInWidth )
             nResId = RID_DOUBLE_LINE0;
         else if ( DEF_LINE_WIDTH_1 == nOutWidth &&
@@ -1652,7 +1649,7 @@ XubString SvxBorderLine::GetValueString( SfxMapUnit eSrcUnit,
     }
     else if ( DEF_LINE_WIDTH_2 == nDistance )
     {
-        // doppelte Linie, gro\ser Abstand
+        // double line, large gap
         if ( DEF_LINE_WIDTH_0 == nOutWidth && DEF_LINE_WIDTH_0 == nInWidth )
             nResId = RID_DOUBLE_LINE1;
         else if ( DEF_LINE_WIDTH_2 == nOutWidth &&
@@ -2681,39 +2678,7 @@ SfxItemPresentation SvxBoxInfoItem::GetPresentation
     XubString&          rText, const IntlWrapper *
 )   const
 {
-#ifndef SVX_LIGHT
-/*!!!
-    ResMgr* pMgr = DIALOG_MGR();
-    if ( pHori )
-    {
-        rText += pHori->GetValueString();
-        rText += cpDelim;
-    }
-    if ( pVert )
-    {
-        rText += pVert->GetValueString();
-        rText += cpDelim;
-    }
-    if ( bTable )
-        rText += String( ResId( RID_SVXITEMS_BOXINF_TABLE_TRUE, pMgr ) );
-    else
-        rText += String( ResId( RID_SVXITEMS_BOXINF_TABLE_FALSE, pMgr ) );
-    rText += cpDelim;
-    if ( bDist )
-        rText += String( ResId( RID_SVXITEMS_BOXINF_DIST_TRUE, pMgr ) );
-    else
-        rText += String( ResId( RID_SVXITEMS_BOXINF_DIST_FALSE, pMgr ) );
-    rText += cpDelim;
-    if ( bMinDist )
-        rText += String( ResId( RID_SVXITEMS_BOXINF_MDIST_TRUE, pMgr ) );
-    else
-        rText += String( ResId( RID_SVXITEMS_BOXINF_MDIST_FALSE, pMgr ) );
-    rText += cpDelim;
-    rText += nDefDist;
-    return SFX_ITEM_PRESENTATION_NAMELESS;
-*/
     rText.Erase();
-#endif // !SVX_LIGHT
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
@@ -2808,7 +2773,7 @@ SfxPoolItem* SvxBoxInfoItem::Create( SvStream& rStrm, sal_uInt16 ) const
 
 void SvxBoxInfoItem::ResetFlags()
 {
-    nValidFlags = 0x7F; // alles g"ultig au/ser Disable
+    nValidFlags = 0x7F; // all valid except Disable
 }
 
 bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
@@ -2879,8 +2844,6 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
 bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
-//  sal_uInt16 nLine = BOX_LINE_TOP;
-//  sal_Bool bDistMember = sal_False;
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bRet;
     switch(nMemberId)
@@ -3136,7 +3099,7 @@ sal_uInt16 SvxFmtBreakItem::GetVersion( sal_uInt16 nFFVer ) const
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
             SOFFICE_FILEFORMAT_40==nFFVer ||
             SOFFICE_FILEFORMAT_50==nFFVer,
-            "SvxFmtBreakItem: Gibt es ein neues Fileformat?" );
+            "SvxFmtBreakItem: Is there a new file format? ");
     return SOFFICE_FILEFORMAT_31==nFFVer ||
            SOFFICE_FILEFORMAT_40==nFFVer ? 0 : FMTBREAK_NOAUTO;
 }
@@ -3706,7 +3669,6 @@ inline sal_Int8 lcl_TransparencyToPercent(sal_Int32 nTrans)
 
 bool SvxBrushItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId)
     {
@@ -3768,7 +3730,6 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
 bool SvxBrushItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
-//    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId)
     {
@@ -4042,9 +4003,9 @@ SvStream& SvxBrushItem::Store( SvStream& rStream , sal_uInt16 /*nItemVersion*/ )
 }
 
 // -----------------------------------------------------------------------
-// const wegcasten, da const als logisches const zu verstehen ist
-// wenn GetGraphic() gerufen wird, soll sich das Item darum kuemmern,
-// eine gelinkte Grafik zu holen.
+// cast away const, since const is to be understood as a logical const
+// if GetGraphic() is called, the item should take care of getting a linked
+// graphic.
 // -----------------------------------------------------------------------
 
 void SvxBrushItem::PurgeGraphic() const
@@ -4065,26 +4026,11 @@ void SvxBrushItem::PurgeMedium() const
 const GraphicObject* SvxBrushItem::GetGraphicObject() const
 {
     if ( bLoadAgain && pStrLink && !pImpl->pGraphicObject )
-    // wenn Grafik schon geladen, als Cache benutzen
+    // when graphics already loaded, use as a cache
     {
-        //JP 29.6.2001: only with "valid" names - empty names now allowed
+        // only with "valid" names - empty names now allowed
         if( pStrLink->Len() )
         {
-            // currently we don't have asynchronous processing
-/*          if( pImpl->aDoneLink.IsSet() )
-            {
-                // Auf besonderen Wunsch des Writers wird der synchrone und der
-                // asynchrone Fall was die Benachrichtigung angeht unterschiedlich
-                // behandelt. Der Callback erfolgt nur bei asynchronem Eintreffen
-                // der Daten
-
-                Link aTmp = pImpl->aDoneLink;
-                pImpl->aDoneLink = Link();
-                pImpl->xMedium->DownLoad(
-                    STATIC_LINK( this, SvxBrushItem, DoneHdl_Impl ) );
-                pImpl->aDoneLink = aTmp;
-            } */
-
             pImpl->pStream = utl::UcbStreamHelper::CreateStream( *pStrLink, STREAM_STD_READ );
             if( pImpl->pStream && !pImpl->pStream->GetError() )
             {
@@ -4110,9 +4056,6 @@ const GraphicObject* SvxBrushItem::GetGraphicObject() const
             {
                 const_cast < SvxBrushItem*> (this)->bLoadAgain = sal_False;
             }
-
-            // currently we don't have asynchronous processing
-//          pThis->pImpl->aDoneLink.Call( pThis );
         }
     }
 
@@ -4143,7 +4086,7 @@ void SvxBrushItem::SetGraphicPos( SvxGraphicPosition eNew )
     {
         if ( !pImpl->pGraphicObject && !pStrLink )
         {
-            pImpl->pGraphicObject = new GraphicObject; // dummy anlegen
+            pImpl->pGraphicObject = new GraphicObject; // Creating a dummy
         }
     }
 }
@@ -4162,7 +4105,7 @@ void SvxBrushItem::SetGraphic( const Graphic& rNew )
         ApplyGraphicTransparency_Impl();
 
         if ( GPOS_NONE == eGraphicPos )
-            eGraphicPos = GPOS_MM; // None waere Brush, also Default: Mitte
+            eGraphicPos = GPOS_MM; // None would be brush, then Default: middle
     }
     else
     {
@@ -4184,7 +4127,7 @@ void SvxBrushItem::SetGraphicObject( const GraphicObject& rNewObj )
         ApplyGraphicTransparency_Impl();
 
         if ( GPOS_NONE == eGraphicPos )
-            eGraphicPos = GPOS_MM; // None waere Brush, also Default: Mitte
+            eGraphicPos = GPOS_MM; // None would be brush, then Default: middle
     }
     else
     {
@@ -4228,7 +4171,7 @@ void SvxBrushItem::SetGraphicFilter( const String& rNew )
 SvxGraphicPosition SvxBrushItem::WallpaperStyle2GraphicPos( WallpaperStyle eStyle )
 {
     SvxGraphicPosition eResult;
-    // der Switch ist nicht der schnellste, dafuer aber am sichersten
+    // The switch is not the fastest, but the safest
     switch( eStyle )
     {
         case WALLPAPER_NULL: eResult = GPOS_NONE; break;
@@ -4303,7 +4246,6 @@ CntWallpaperItem* SvxBrushItem::CreateCntWallpaperItem() const
     {
         DBG_ERRORFILE( "Don't know what to do with a graphic" );
     }
-//      pItem->SetGraphic( *pImpl->pGraphic, bLink );
 
     return pItem;
 }

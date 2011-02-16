@@ -41,9 +41,9 @@ namespace rtl
 
 // class SvxOrphansItem --------------------------------------------------
 
-/*
-[Beschreibung]
-Dieses Item beschreibt die Anzahl der Zeilen fuer die Schusterjungenregelung.
+/*  [Description]
+
+    This item describes the number of lines for the orphans system.
 */
 
 class EDITENG_DLLPUBLIC SvxOrphansItem: public SfxByteItem
@@ -54,7 +54,7 @@ public:
 
     SvxOrphansItem( const BYTE nL /*= 0*/, const USHORT nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
     virtual SvStream&       Store(SvStream &, USHORT nItemVersion ) const;

@@ -42,9 +42,9 @@ namespace rtl
 
 // class SvxColorItem ----------------------------------------------------
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Dieses Item beschreibt eine Farbe.
+    This item describes a color.
 */
 
 #define VERSION_USEAUTOCOLOR    1
@@ -63,7 +63,7 @@ public:
     SvxColorItem( const SvxColorItem& rCopy );
     ~SvxColorItem();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );

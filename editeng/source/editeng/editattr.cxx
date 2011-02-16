@@ -99,7 +99,7 @@ void EditCharAttrib::SetFont( SvxFont&, OutputDevice* )
 EditCharAttribFont::EditCharAttribFont( const SvxFontItem& rAttr, USHORT _nStart, USHORT _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_FONTINFO || rAttr.Which() == EE_CHAR_FONTINFO_CJK || rAttr.Which() == EE_CHAR_FONTINFO_CTL, "Kein Fontattribut!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_FONTINFO || rAttr.Which() == EE_CHAR_FONTINFO_CJK || rAttr.Which() == EE_CHAR_FONTINFO_CTL, "Not a Font attribute!" );
 }
 
 void EditCharAttribFont::SetFont( SvxFont& rFont, OutputDevice* )
@@ -118,7 +118,7 @@ void EditCharAttribFont::SetFont( SvxFont& rFont, OutputDevice* )
 EditCharAttribItalic::EditCharAttribItalic( const SvxPostureItem& rAttr, USHORT _nStart, USHORT _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_ITALIC || rAttr.Which() == EE_CHAR_ITALIC_CJK || rAttr.Which() == EE_CHAR_ITALIC_CTL, "Kein Italicattribut!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_ITALIC || rAttr.Which() == EE_CHAR_ITALIC_CJK || rAttr.Which() == EE_CHAR_ITALIC_CTL, "Not a Italic attribute!" );
 }
 
 void EditCharAttribItalic::SetFont( SvxFont& rFont, OutputDevice* )
@@ -132,7 +132,7 @@ void EditCharAttribItalic::SetFont( SvxFont& rFont, OutputDevice* )
 EditCharAttribWeight::EditCharAttribWeight( const SvxWeightItem& rAttr, USHORT _nStart, USHORT _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_WEIGHT || rAttr.Which() == EE_CHAR_WEIGHT_CJK || rAttr.Which() == EE_CHAR_WEIGHT_CTL, "Kein Weightttribut!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_WEIGHT || rAttr.Which() == EE_CHAR_WEIGHT_CJK || rAttr.Which() == EE_CHAR_WEIGHT_CTL, "Not a Weight attribute!" );
 }
 
 void EditCharAttribWeight::SetFont( SvxFont& rFont, OutputDevice* )
@@ -146,7 +146,7 @@ void EditCharAttribWeight::SetFont( SvxFont& rFont, OutputDevice* )
 EditCharAttribUnderline::EditCharAttribUnderline( const SvxUnderlineItem& rAttr, USHORT _nStart, USHORT _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_UNDERLINE, "Kein Underlineattribut!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_UNDERLINE, "Not a Underline attribute!" );
 }
 
 void EditCharAttribUnderline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
@@ -162,7 +162,7 @@ void EditCharAttribUnderline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
 EditCharAttribOverline::EditCharAttribOverline( const SvxOverlineItem& rAttr, USHORT _nStart, USHORT _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_OVERLINE, "Kein Overlineattribut!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_OVERLINE, "Not a overline attribute!" );
 }
 
 void EditCharAttribOverline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
@@ -178,12 +178,12 @@ void EditCharAttribOverline::SetFont( SvxFont& rFont, OutputDevice* pOutDev )
 EditCharAttribFontHeight::EditCharAttribFontHeight( const SvxFontHeightItem& rAttr, USHORT _nStart, USHORT _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_FONTHEIGHT || rAttr.Which() == EE_CHAR_FONTHEIGHT_CJK || rAttr.Which() == EE_CHAR_FONTHEIGHT_CTL, "Kein Heightattribut!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_FONTHEIGHT || rAttr.Which() == EE_CHAR_FONTHEIGHT_CJK || rAttr.Which() == EE_CHAR_FONTHEIGHT_CTL, "Not a Height attribute!" );
 }
 
 void EditCharAttribFontHeight::SetFont( SvxFont& rFont, OutputDevice* )
 {
-    // Prop wird ignoriert
+    // Property is ignored
     rFont.SetSize( Size( rFont.GetSize().Width(), ((const SvxFontHeightItem*)GetItem())->GetHeight() ) );
 }
 
@@ -193,7 +193,7 @@ void EditCharAttribFontHeight::SetFont( SvxFont& rFont, OutputDevice* )
 EditCharAttribFontWidth::EditCharAttribFontWidth( const SvxCharScaleWidthItem& rAttr, USHORT _nStart, USHORT _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_FONTWIDTH, "Kein Widthattribut!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_FONTWIDTH, "Not a Width attribute!" );
 }
 
 void EditCharAttribFontWidth::SetFont( SvxFont& /*rFont*/, OutputDevice* )
@@ -207,7 +207,7 @@ void EditCharAttribFontWidth::SetFont( SvxFont& /*rFont*/, OutputDevice* )
 EditCharAttribStrikeout::EditCharAttribStrikeout( const SvxCrossedOutItem& rAttr, USHORT _nStart, USHORT _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_STRIKEOUT, "Kein Sizeattribut!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_STRIKEOUT, "Not a Size attribute!" );
 }
 
 void EditCharAttribStrikeout::SetFont( SvxFont& rFont, OutputDevice* )
@@ -221,7 +221,7 @@ void EditCharAttribStrikeout::SetFont( SvxFont& rFont, OutputDevice* )
 EditCharAttribColor::EditCharAttribColor( const SvxColorItem& rAttr, USHORT _nStart, USHORT _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_COLOR, "Kein Colorattribut!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_COLOR, "Not a Color attribute!" );
 }
 
 void EditCharAttribColor::SetFont( SvxFont& rFont, OutputDevice* )
@@ -235,7 +235,7 @@ void EditCharAttribColor::SetFont( SvxFont& rFont, OutputDevice* )
 EditCharAttribLanguage::EditCharAttribLanguage( const SvxLanguageItem& rAttr, USHORT _nStart, USHORT _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( ( rAttr.Which() == EE_CHAR_LANGUAGE ) || ( rAttr.Which() == EE_CHAR_LANGUAGE_CJK ) || ( rAttr.Which() == EE_CHAR_LANGUAGE_CTL ), "Kein Languageattribut!" );
+    DBG_ASSERT( ( rAttr.Which() == EE_CHAR_LANGUAGE ) || ( rAttr.Which() == EE_CHAR_LANGUAGE_CJK ) || ( rAttr.Which() == EE_CHAR_LANGUAGE_CTL ), "Not a Language attribute!" );
 }
 
 void EditCharAttribLanguage::SetFont( SvxFont& rFont, OutputDevice* )
@@ -249,7 +249,7 @@ void EditCharAttribLanguage::SetFont( SvxFont& rFont, OutputDevice* )
 EditCharAttribShadow::EditCharAttribShadow( const SvxShadowedItem& rAttr, USHORT _nStart, USHORT _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_SHADOW, "Kein Shadowattribut!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_SHADOW, "Not a Shadow attribute!" );
 }
 
 void EditCharAttribShadow::SetFont( SvxFont& rFont, OutputDevice* )
@@ -263,7 +263,7 @@ void EditCharAttribShadow::SetFont( SvxFont& rFont, OutputDevice* )
 EditCharAttribEscapement::EditCharAttribEscapement( const SvxEscapementItem& rAttr, USHORT _nStart, USHORT _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_ESCAPEMENT, "Kein Escapementattribut!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_ESCAPEMENT, "Not a escapement attribute!" );
 }
 
 #if defined( WIN ) && !defined( WNT )
@@ -294,7 +294,7 @@ void EditCharAttribEscapement::SetFont( SvxFont& rFont, OutputDevice* )
 EditCharAttribOutline::EditCharAttribOutline( const SvxContourItem& rAttr, USHORT _nStart, USHORT _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_OUTLINE, "Kein Outlineattribut!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_OUTLINE, "Not a Outline attribute!" );
 }
 
 void EditCharAttribOutline::SetFont( SvxFont& rFont, OutputDevice* )
@@ -354,8 +354,7 @@ EditCharAttribField::EditCharAttribField( const EditCharAttribField& rAttr )
     : EditCharAttrib( *rAttr.GetItem(), rAttr.GetStart(), rAttr.GetEnd() ),
         aFieldValue( rAttr.aFieldValue )
 {
-    // Diesen CCTOR nur fuer temporaeres Object verwenden,
-    // Item wird nicht gepoolt.
+    // Use this constructor only for temporary Objects, Item is not pooled.
     pTxtColor = rAttr.pTxtColor ? new Color( *rAttr.pTxtColor ) : 0;
     pFldColor = rAttr.pFldColor ? new Color( *rAttr.pFldColor ) : 0;
 }
@@ -389,7 +388,7 @@ BOOL EditCharAttribField::operator == ( const EditCharAttribField& rAttr ) const
 EditCharAttribPairKerning::EditCharAttribPairKerning( const SvxAutoKernItem& rAttr, USHORT _nStart, USHORT _nEnd )
 : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_PAIRKERNING, "Kein PairKerning!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_PAIRKERNING, "Not a Pair Kerning!" );
 }
 
 void EditCharAttribPairKerning::SetFont( SvxFont& rFont, OutputDevice* )
@@ -403,7 +402,7 @@ void EditCharAttribPairKerning::SetFont( SvxFont& rFont, OutputDevice* )
 EditCharAttribKerning::EditCharAttribKerning( const SvxKerningItem& rAttr, USHORT _nStart, USHORT _nEnd )
 : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_KERNING, "Kein Kerning!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_KERNING, "Not a Kerning!" );
 }
 
 void EditCharAttribKerning::SetFont( SvxFont& rFont, OutputDevice* )
@@ -417,7 +416,7 @@ void EditCharAttribKerning::SetFont( SvxFont& rFont, OutputDevice* )
 EditCharAttribWordLineMode::EditCharAttribWordLineMode( const SvxWordLineModeItem& rAttr, USHORT _nStart, USHORT _nEnd )
 : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_WLM, "Kein Kerning!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_WLM, "Not a Kerning!" );
 }
 
 void EditCharAttribWordLineMode::SetFont( SvxFont& rFont, OutputDevice* )
@@ -431,7 +430,7 @@ void EditCharAttribWordLineMode::SetFont( SvxFont& rFont, OutputDevice* )
 EditCharAttribEmphasisMark::EditCharAttribEmphasisMark( const SvxEmphasisMarkItem& rAttr, USHORT _nStart, USHORT _nEnd )
     : EditCharAttrib( rAttr, _nStart, _nEnd )
 {
-    DBG_ASSERT( rAttr.Which() == EE_CHAR_EMPHASISMARK, "Kein Emphasisattribut!" );
+    DBG_ASSERT( rAttr.Which() == EE_CHAR_EMPHASISMARK, "Not a Emphasis attribute!" );
 }
 
 void EditCharAttribEmphasisMark::SetFont( SvxFont& rFont, OutputDevice* )

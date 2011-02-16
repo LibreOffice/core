@@ -63,7 +63,7 @@
 #include <editeng/wrlmitem.hxx>
 #include <editeng/charscaleitem.hxx>
 
-#include <vcl/svapp.hxx>    // Fuer AppWindow...
+#include <vcl/svapp.hxx>    // For AppWindow...
 
 DBG_NAME( EE_ParaPortion )
 
@@ -96,7 +96,7 @@ void TextPortionList::DeleteFromPortion( USHORT nDelFrom )
 
 USHORT TextPortionList::FindPortion( USHORT nCharPos, USHORT& nPortionStart, BOOL bPreferStartingPortion )
 {
-    // Bei nCharPos an Portion-Grenze wird die linke Portion gefunden
+    // When nCharPos at portion limit, the left portion is found
     USHORT nTmpPos = 0;
     for ( USHORT nPortion = 0; nPortion < Count(); nPortion++ )
     {
@@ -112,7 +112,7 @@ USHORT TextPortionList::FindPortion( USHORT nCharPos, USHORT& nPortionStart, BOO
             }
         }
     }
-    DBG_ERROR( "FindPortion: Nicht gefunden!" );
+    DBG_ERROR( "FindPortion: Not found!" );
     return ( Count() - 1 );
 }
 
@@ -190,13 +190,13 @@ void ParaPortion::MarkInvalid( USHORT nStart, short nDiff )
     }
     else
     {
-        // Einfaches hintereinander tippen
+        // Simple tap in succession
         if ( ( nDiff > 0 ) && ( nInvalidDiff > 0 ) &&
              ( ( nInvalidPosStart+nInvalidDiff ) == nStart ) )
         {
             nInvalidDiff = nInvalidDiff + nDiff;
         }
-        // Einfaches hintereinander loeschen
+        // Simple delete in succession
         else if ( ( nDiff < 0 ) && ( nInvalidDiff < 0 ) && ( nInvalidPosStart == nStart ) )
         {
             nInvalidPosStart = nInvalidPosStart + nDiff;
@@ -239,8 +239,8 @@ void ParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT /* nEnd */ )
 
 USHORT ParaPortion::GetLineNumber( USHORT nIndex )
 {
-    DBG_ASSERTWARNING( aLineList.Count(), "Leere ParaPortion in GetLine!" );
-    DBG_ASSERT( bVisible, "Wozu GetLine() bei einem unsichtbaren Absatz?" );
+    DBG_ASSERTWARNING( aLineList.Count(), "Empty ParaPortion in GetLine!" );
+    DBG_ASSERT( bVisible, "Why GetLine() on an invisible paragraph?" );
 
     for ( USHORT nLine = 0; nLine < aLineList.Count(); nLine++ )
     {
@@ -248,8 +248,8 @@ USHORT ParaPortion::GetLineNumber( USHORT nIndex )
             return nLine;
     }
 
-    // Dann sollte es am Ende der letzten Zeile sein!
-    DBG_ASSERT( nIndex == aLineList[ aLineList.Count() - 1 ]->GetEnd(), "Index voll daneben!" );
+    // Then it should be at the end of the last line!
+    DBG_ASSERT( nIndex == aLineList[ aLineList.Count() - 1 ]->GetEnd(), "Index dead wrong!" );
     return (aLineList.Count()-1);
 }
 
@@ -261,19 +261,19 @@ void ParaPortion::SetVisible( BOOL bMakeVisible )
 void ParaPortion::CorrectValuesBehindLastFormattedLine( USHORT nLastFormattedLine )
 {
     USHORT nLines = aLineList.Count();
-    DBG_ASSERT( nLines, "CorrectPortionNumbersFromLine: Leere Portion?" );
+    DBG_ASSERT( nLines, "CorrectPortionNumbersFromLine: Empty Portion?" );
     if ( nLastFormattedLine < ( nLines - 1 ) )
     {
         const EditLine* pLastFormatted = aLineList[ nLastFormattedLine ];
         const EditLine* pUnformatted = aLineList[ nLastFormattedLine+1 ];
         short nPortionDiff = pUnformatted->GetStartPortion() - pLastFormatted->GetEndPortion();
         short nTextDiff = pUnformatted->GetStart() - pLastFormatted->GetEnd();
-        nTextDiff++;    // LastFormatted->GetEnd() war incl. => 1 zuviel abgezogen!
+        nTextDiff++;    // LastFormatted->GetEnd() was included => 1 deducted too much!
 
-        // Die erste unformatierte muss genau eine Portion hinter der letzten der
-        // formatierten beginnen:
-        // Wenn in der geaenderten Zeile eine Portion gesplittet wurde,
-        // kann nLastEnd > nNextStart sein!
+        // The first unformatted must begin exactly one Portion behind the last
+        // of the formatted:
+        // If the modified line was split into one portion, can
+        // nLastEnd > nNextStart!
         int nPDiff = -( nPortionDiff-1 );
         int nTDiff = -( nTextDiff-1 );
         if ( nPDiff || nTDiff )
@@ -296,7 +296,7 @@ void ParaPortion::CorrectValuesBehindLastFormattedLine( USHORT nLastFormattedLin
             }
         }
     }
-    DBG_ASSERT( aLineList[ aLineList.Count()-1 ]->GetEnd() == pNode->Len(), "CorrectLines: Ende stimmt nicht!" );
+    DBG_ASSERT( aLineList[ aLineList.Count()-1 ]->GetEnd() == pNode->Len(), "CorrectLines: The end is not right!" );
 }
 
 // Shared reverse lookup acceleration pieces ...
@@ -371,7 +371,7 @@ long ParaPortionList::GetYOffset( ParaPortion* pPPortion )
             return nHeight;
         nHeight += pTmpPortion->GetHeight();
     }
-    DBG_ERROR( "GetYOffset: Portion nicht gefunden" );
+    DBG_ERROR( "GetYOffset: Portion not found" );
     return nHeight;
 }
 
@@ -380,11 +380,11 @@ USHORT ParaPortionList::FindParagraph( long nYOffset )
     long nY = 0;
     for ( USHORT nPortion = 0; nPortion < Count(); nPortion++ )
     {
-        nY += GetObject(nPortion)->GetHeight(); // sollte auch bei !bVisible richtig sein!
+        nY += GetObject(nPortion)->GetHeight(); // should also be correct even in bVisible!
         if ( nY > nYOffset )
             return nPortion;
     }
-    return 0xFFFF;  // solte mal ueber EE_PARA_NOT_FOUND erreicht werden!
+    return 0xFFFF;  // Should be reachable through EE_PARA_NOT_FOUND!
 }
 
 void ParaPortionList::DbgCheck( EditDoc&
@@ -394,12 +394,12 @@ void ParaPortionList::DbgCheck( EditDoc&
                                 )
 {
 #ifdef DBG_UTIL
-    DBG_ASSERT( Count() == rDoc.Count(), "ParaPortionList::DbgCheck() - Count() ungleich!" );
+    DBG_ASSERT( Count() == rDoc.Count(), "ParaPortionList::DbgCheck() - Count() unequal!" );
     for ( USHORT i = 0; i < Count(); i++ )
     {
-        DBG_ASSERT( SaveGetObject(i), "ParaPortionList::DbgCheck() - Null-Pointer in Liste!" );
-        DBG_ASSERT( GetObject(i)->GetNode(), "ParaPortionList::DbgCheck() - Null-Pointer in Liste(2)!" );
-        DBG_ASSERT( GetObject(i)->GetNode() == rDoc.GetObject(i), "ParaPortionList::DbgCheck() - Eintraege kreuzen sich!" );
+        DBG_ASSERT( SaveGetObject(i), "ParaPortionList::DbgCheck() - Null-Pointer in List!" );
+        DBG_ASSERT( GetObject(i)->GetNode(), "ParaPortionList::DbgCheck() - Null-Pointer in List(2)!" );
+        DBG_ASSERT( GetObject(i)->GetNode() == rDoc.GetObject(i), "ParaPortionList::DbgCheck() - Entries intersect!" );
     }
 #endif
 }
@@ -419,17 +419,16 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
     {
         case EE_PARA_LRSPACE:
         {
-            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxLRSpaceItem ) ), "ConvertItem: Ungueltiges Item!" );
+            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxLRSpaceItem ) ), "ConvertItem: invalid Item!" );
             SvxLRSpaceItem& rItem = (SvxLRSpaceItem&)rPoolItem;
             rItem.SetTxtFirstLineOfst( sal::static_int_cast< short >( OutputDevice::LogicToLogic( rItem.GetTxtFirstLineOfst(), eSourceUnit, eDestUnit ) ) );
             rItem.SetTxtLeft( OutputDevice::LogicToLogic( rItem.GetTxtLeft(), eSourceUnit, eDestUnit ) );
-//          rItem.SetLeft( OutputDevice::LogicToLogic( rItem.GetLeft(), eSourceUnit, eDestUnit ) ); // #96298# SetLeft manipulates nTxtLeft!
             rItem.SetRight( OutputDevice::LogicToLogic( rItem.GetRight(), eSourceUnit, eDestUnit ) );
         }
         break;
         case EE_PARA_ULSPACE:
         {
-            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxULSpaceItem ) ), "ConvertItem: Ungueltiges Item!" );
+            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxULSpaceItem ) ), "ConvertItem: Invalid Item!" );
             SvxULSpaceItem& rItem = (SvxULSpaceItem&)rPoolItem;
             rItem.SetUpper( sal::static_int_cast< USHORT >( OutputDevice::LogicToLogic( rItem.GetUpper(), eSourceUnit, eDestUnit ) ) );
             rItem.SetLower( sal::static_int_cast< USHORT >( OutputDevice::LogicToLogic( rItem.GetLower(), eSourceUnit, eDestUnit ) ) );
@@ -437,16 +436,16 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         break;
         case EE_PARA_SBL:
         {
-            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxLineSpacingItem ) ), "ConvertItem: Ungueltiges Item!" );
+            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxLineSpacingItem ) ), "ConvertItem: Invalid Item!" );
             SvxLineSpacingItem& rItem = (SvxLineSpacingItem&)rPoolItem;
-            // #96298# SetLineHeight changes also eLineSpace!
+            // SetLineHeight changes also eLineSpace!
             if ( rItem.GetLineSpaceRule() == SVX_LINE_SPACE_MIN )
                 rItem.SetLineHeight( sal::static_int_cast< USHORT >( OutputDevice::LogicToLogic( rItem.GetLineHeight(), eSourceUnit, eDestUnit ) ) );
         }
         break;
         case EE_PARA_TABS:
         {
-            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxTabStopItem ) ), "ConvertItem: Ungueltiges Item!" );
+            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxTabStopItem ) ), "ConvertItem: Invalid Item!" );
             SvxTabStopItem& rItem = (SvxTabStopItem&)rPoolItem;
             SvxTabStopItem aNewItem( EE_PARA_TABS );
             for ( USHORT i = 0; i < rItem.Count(); i++ )
@@ -462,7 +461,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         case EE_CHAR_FONTHEIGHT_CJK:
         case EE_CHAR_FONTHEIGHT_CTL:
         {
-            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxFontHeightItem ) ), "ConvertItem: Ungueltiges Item!" );
+            DBG_ASSERT( rPoolItem.IsA( TYPE( SvxFontHeightItem ) ), "ConvertItem: Invalid Item!" );
             SvxFontHeightItem& rItem = (SvxFontHeightItem&)rPoolItem;
             rItem.SetHeight( OutputDevice::LogicToLogic( rItem.GetHeight(), eSourceUnit, eDestUnit ) );
         }
@@ -477,7 +476,7 @@ void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const Map
 
     for ( USHORT nWhich = EE_PARA_START; nWhich <= EE_CHAR_END; nWhich++ )
     {
-        // Wenn moeglich ueber SlotID gehen...
+        // If possible go through SlotID ...
 
         USHORT nSourceWhich = nWhich;
         USHORT nSlot = pDestPool->GetTrueSlotId( nWhich );
@@ -504,11 +503,6 @@ void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const Map
             {
                 rDest.Put( rSource.Get( nSourceWhich ), nWhich );
             }
-        }
-        else
-        {
-            // MT 3.3.99: Waere so eigentlich richtig, aber schon seit Jahren nicht so...
-//          rDest.ClearItem( nWhich );
         }
     }
 }

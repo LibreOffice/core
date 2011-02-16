@@ -76,8 +76,8 @@ USHORT SvxOutlinerForwarder::GetTextLen( USHORT nParagraph ) const
 
 String SvxOutlinerForwarder::GetText( const ESelection& rSel ) const
 {
-    //! GetText(ESelection) sollte es wohl auch mal am Outliner geben
-    //  solange den Hack fuer die EditEngine uebernehmen:
+    //! GetText (ESelection) should probably also be in the Outliner
+    // in the time beeing use as the hack for the EditEngine:
     EditEngine* pEditEngine = (EditEngine*)&rOutliner.GetEditEngine();
     return pEditEngine->GetText( rSel, LINEEND_LF );
 }
@@ -128,8 +128,8 @@ SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, BOOL bOnlyH
         }
     }
 
-    //! gibt's das nicht am Outliner ???
-    //! und warum ist GetAttribs an der EditEngine nicht const?
+    //! Does it not exist on the Outliner?
+    //! and why is the GetAttribs on the EditEngine not a const?
     EditEngine& rEditEngine = (EditEngine&)rOutliner.GetEditEngine();
 
     SfxItemSet aSet( ImplOutlinerForwarderGetAttribs( rSel, bOnlyHardAttrib, rEditEngine ) );
@@ -305,7 +305,6 @@ EBulletInfo SvxOutlinerForwarder::GetBulletInfo( USHORT nPara ) const
 
 Rectangle SvxOutlinerForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) const
 {
-    // #101701#
     // EditEngine's 'internal' methods like GetCharacterBounds()
     // don't rotate for vertical text.
     Size aSize( rOutliner.CalcTextSize() );
@@ -358,7 +357,6 @@ Rectangle SvxOutlinerForwarder::GetParaBounds( USHORT nPara ) const
 
     if( rOutliner.IsVertical() )
     {
-        // #101701#
         // Hargl. Outliner's 'external' methods return the rotated
         // dimensions, 'internal' methods like GetTextHeight( n )
         // don't rotate.
@@ -386,7 +384,6 @@ OutputDevice* SvxOutlinerForwarder::GetRefDevice() const
 
 sal_Bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, USHORT& nPara, USHORT& nIndex ) const
 {
-    // #101701#
     Size aSize( rOutliner.CalcTextSize() );
     ::std::swap( aSize.Width(), aSize.Height() );
     Point aEEPos( SvxEditSourceHelper::UserSpaceToEE( rPos,

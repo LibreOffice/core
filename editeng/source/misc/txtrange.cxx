@@ -92,7 +92,6 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon, const baseg
 #pragma optimize ( "", on )
 #endif
 
-
 TextRanger::~TextRanger()
 {
     for( USHORT i = 0; i < nCacheSize; ++i )
@@ -273,18 +272,17 @@ void SvxBoundArgs::NoteRange( BOOL bToggle )
     while( nIdx < nCount && (*pLongArr)[ nIdx ] < nMin )
         ++nIdx;
     BOOL bOdd = nIdx % 2 ? TRUE : FALSE;
-    // Kein Ueberlappung mit vorhandenen Intervallen?
+    // No overlap with existing intervals?
     if( nIdx == nCount || ( !bOdd && nMax < (*pLongArr)[ nIdx ] ) )
-    {   // Dann wird ein neues eingefuegt ...
+    {   // Then a new one is inserted ...
         pLongArr->Insert( nMin, nIdx );
         pLongArr->Insert( nMax, nIdx + 1 );
         aBoolArr.Insert( bToggle, nIdx / 2 );
     }
     else
-    {   // ein vorhandes Intervall erweitern ...
+    {   // expand an existing interval ...
         USHORT nMaxIdx = nIdx;
-        // Wenn wir auf einer linken Intervallgrenze gelandet sind, muss diese
-        // auf nMin gesenkt werden.
+        // If we end up on a left interval boundary, it must be reduced to nMin.
         if( bOdd )
             --nIdx;
         else
@@ -296,13 +294,12 @@ void SvxBoundArgs::NoteRange( BOOL bToggle )
             --nMaxIdx;
         if( nMaxIdx < nIdx )
             nMaxIdx = nIdx;
-        // Wenn wir auf einer rechten Intervallgrenze landen, muss diese
-        // auf nMax angehoben werden.
+        // If we end up on a right interval boundary, it must be raised to nMax.
         if( nMaxIdx % 2 )
             (*pLongArr)[ nMaxIdx-- ] = nMax;
-        // Jetzt werden eventuell noch Intervalle verschmolzen
+        // Possible merge of intervals.
         USHORT nDiff = nMaxIdx - nIdx;
-        nMaxIdx = nIdx / 2; // Ab hier ist nMaxIdx der Index im BoolArray.
+        nMaxIdx = nIdx / 2; // From here on is nMaxIdx the Index in BoolArray.
         if( nDiff )
         {
             (*pLongArr).Remove( nIdx + 1, nDiff );
@@ -338,7 +335,7 @@ void SvxBoundArgs::Calc( const PolyPolygon& rPoly )
             }
             else
             {
-                // Der erste Punkt des Polygons liegt innerhalb der Zeile.
+                // The first point of the polygon is within the line.
                 if( nLast )
                 {
                     if( bMultiple || !nAct )
@@ -362,8 +359,8 @@ void SvxBoundArgs::Calc( const PolyPolygon& rPoly )
                     else
                         NotePoint( A(rNull) );
                 }
-                nFirst = 0; // In welcher Richtung wird die Zeile verlassen?
-                nAct = 3;   // Wir sind z.Z. innerhalb der Zeile.
+                nFirst = 0; // leaving the line in which direction?
+                nAct = 3;   // we are within the line at the moment.
             }
             if( nCount > 1 )
             {
@@ -497,12 +494,10 @@ void SvxBoundArgs::Add()
             pLongArr->Remove( 0, 1 );
             pLongArr->Remove( pLongArr->Count() - 1, 1 );
 
-            // Hier wird die Zeile beim "einfachen" Konturumfluss im Innern
-            // in ein grosses Rechteck zusammengefasst.
-            // Zur Zeit (April 1999) wertet die EditEngine nur das erste Rechteck
-            // aus, falls sie eines Tages in der Lage ist, eine Zeile in mehreren
-            // Teilen auszugeben, kann es sinnvoll sein, die folgenden Zeilen
-            // zu loeschen.
+            // Here the line is held inside a large rectangle for "simple"
+            // contour wrap. Currently (April 1999) the EditEngine evaluates
+            // only the first rectangle. If it one day is able to output a line
+            // in several parts, it may be advisable to delete the following lines.
             if( pTextRanger->IsSimple() && pLongArr->Count() > 2 )
                 pLongArr->Remove( 1, pLongArr->Count() - 2 );
 
@@ -527,7 +522,7 @@ void SvxBoundArgs::Concat( const PolyPolygon* pPoly )
     {
         USHORT nOldCount = pOld->Count();
         if( nIdx == nOldCount )
-        {   // Am Ende des alten Arrays angelangt...
+        {   // Reached the end of the old Array...
             if( !bSubtract )
                 pOld->Insert( pLongArr, nIdx, i, USHRT_MAX );
             break;
@@ -538,7 +533,7 @@ void SvxBoundArgs::Concat( const PolyPolygon* pPoly )
         while( nLeftPos < nOldCount && nLeft > (*pOld)[ nLeftPos ] )
             nLeftPos += 2;
         if( nLeftPos >= nOldCount )
-        {   // Das aktuelle Intervall gehoert ans Ende des alten Arrays...
+        {   // The current interval belongs to the end of the old array ...
             if( !bSubtract )
                 pOld->Insert( pLongArr, nOldCount, i - 2, USHRT_MAX );
             break;
@@ -547,16 +542,16 @@ void SvxBoundArgs::Concat( const PolyPolygon* pPoly )
         while( nRightPos < nOldCount && nRight >= (*pOld)[ nRightPos ] )
             nRightPos += 2;
         if( nRightPos < nLeftPos )
-        {   // Das aktuelle Intervall gehoert zwischen zwei alte Intervalle
+        {   // The current interval belongs between two old intervals
             if( !bSubtract )
                 pOld->Insert( pLongArr, nRightPos, i - 2, i );
             nIdx = nRightPos + 2;
         }
-        else if( bSubtract ) // Subtrahieren ggf. Trennen
+        else if( bSubtract ) // Subtract, if necessary separate
         {
             long nOld;
             if( nLeft > ( nOld = (*pOld)[ nLeftPos - 1 ] ) )
-            {   // Jetzt spalten wir den linken Teil ab...
+            {   // Now we split the left part...
                 if( nLeft - 1 > nOld )
                 {
                     pOld->Insert( nOld, nLeftPos - 1 );
@@ -572,7 +567,7 @@ void SvxBoundArgs::Concat( const PolyPolygon* pPoly )
             else
                 (*pOld)[ nLeftPos - 1 ] = nRight;
         }
-        else // Verschmelzen
+        else // Merge
         {
             if( nLeft < (*pOld)[ nLeftPos - 1 ] )
                 (*pOld)[ nLeftPos - 1 ] = nLeft;
@@ -588,12 +583,12 @@ void SvxBoundArgs::Concat( const PolyPolygon* pPoly )
 }
 
 /*************************************************************************
- * SvxBoundArgs::Area ermittelt den Bereich, in dem sich der Punkt befindet
- * 0 = innerhalb der Zeile
- * 1 = unterhalb, aber innerhalb der oberen Randes
- * 2 = oberhalb, aber innerhalb der unteren Randes
- * 5 = unterhalb des oberen Randes
- *10 = oberhalb des unteren Randes
+ * SvxBoundArgs::Area returns the area in which the point is located.
+ * 0 = within the line
+ * 1 = below, but within the upper edge
+ * 2 = above, but within the lower edge
+ * 5 = below the upper edge
+ *10 = above the lower edge
  *************************************************************************/
 
 USHORT SvxBoundArgs::Area( const Point& rPt )
@@ -615,10 +610,10 @@ USHORT SvxBoundArgs::Area( const Point& rPt )
 }
 
 /*************************************************************************
- * lcl_Cut berechnet die X-Koordinate der Strecke (Pt1-Pt2) auf der
- * Y-Koordinate nY.
- * Vorausgesetzt wird, dass einer der Punkte oberhalb und der andere
- * unterhalb der Y-Koordinate liegt.
+ * lcl_Cut calculates the X-Coordinate of the distance (Pt1-Pt2) at the
+ * Y-Coordinate nY.
+ * It is assumed that the one of the points are located above and the other
+ * one below the Y-Coordinate.
  *************************************************************************/
 
 long SvxBoundArgs::Cut( long nB, const Point& rPt1, const Point& rPt2 )

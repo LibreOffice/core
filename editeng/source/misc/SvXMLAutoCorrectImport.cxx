@@ -43,7 +43,6 @@ using namespace ::rtl;
 
 static OUString sBlockList ( RTL_CONSTASCII_USTRINGPARAM ( "_block-list" ) );
 
-// #110680#
 SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     SvxAutocorrWordList *pNewAutocorr_List,
@@ -162,7 +161,6 @@ SvXMLWordContext::~SvXMLWordContext ( void )
 {
 }
 
-// #110680#
 SvXMLExceptionListImport::SvXMLExceptionListImport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
     SvStringsISortDtor & rNewList )

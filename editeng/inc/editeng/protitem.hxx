@@ -43,17 +43,16 @@ namespace rtl
 // class SvxProtectItem --------------------------------------------------
 
 
-/*
-[Beschreibung]
-Dieses Item beschreibt, ob Inhalt, Groesse oder Position geschuetzt werden
-sollen.
+/*  [Description]
+
+    This item describes, if content, size or position should be protected.
 */
 
 class EDITENG_DLLPUBLIC SvxProtectItem : public SfxPoolItem
 {
-    BOOL bCntnt :1;     //Inhalt geschuetzt
-    BOOL bSize  :1;     //Groesse geschuetzt
-    BOOL bPos   :1;     //Position geschuetzt
+    BOOL bCntnt :1;     // Content protected
+    BOOL bSize  :1;     // Size protected
+    BOOL bPos   :1;     // Position protected
 
 public:
     TYPEINFO();
@@ -61,7 +60,7 @@ public:
     inline SvxProtectItem( const USHORT nId  );
     inline SvxProtectItem &operator=( const SvxProtectItem &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

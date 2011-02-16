@@ -43,11 +43,11 @@
 #include <editeng/svxfont.hxx>
 #include <editeng/escpitem.hxx>
 
-// Minimum: Prozentwert fuers kernen
+// Minimum: Percentage of kernel
 #define MINKERNPERCENT 5
 
 #ifndef REDUCEDSVXFONT
-    const sal_Unicode CH_BLANK = sal_Unicode(' ');      // ' ' Leerzeichen
+    const sal_Unicode CH_BLANK = sal_Unicode(' ');  // ' ' Space character
     static sal_Char const sDoubleSpace[] = "  ";
 #endif
 
@@ -68,7 +68,6 @@ SvxFont::SvxFont( const Font &rFont )
     eCaseMap = SVX_CASEMAP_NOT_MAPPED;
     eLang = LANGUAGE_SYSTEM;
 }
-
 
 SvxFont::SvxFont( const SvxFont &rFont )
     : Font( rFont )
@@ -122,7 +121,7 @@ XubString SvxFont::CalcCaseMap( const XubString &rTxt ) const
 {
     if( !IsCaseMap() || !rTxt.Len() ) return rTxt;
     XubString aTxt( rTxt );
-    // Ich muss mir noch die Sprache besorgen
+    // I still have to get the language
     const LanguageType eLng = LANGUAGE_DONTKNOW == eLang
                             ? LANGUAGE_SYSTEM : eLang;
 
@@ -144,9 +143,9 @@ XubString SvxFont::CalcCaseMap( const XubString &rTxt ) const
         }
         case SVX_CASEMAP_TITEL:
         {
-            // Jeder Wortbeginn wird gross geschrieben,
-            // der Rest des Wortes wird unbesehen uebernommen.
-            // Bug: wenn das Attribut mitten im Wort beginnt.
+            // Every beginning of a word is capitalized,  the rest of the word
+            // is taken over as is.
+            // Bug: if the attribute starts in the middle of the word.
             BOOL bBlank = TRUE;
 
             for( USHORT i = 0; i < aTxt.Len(); ++i )
@@ -176,16 +175,16 @@ XubString SvxFont::CalcCaseMap( const XubString &rTxt ) const
 }
 
 /*************************************************************************
- * Hier beginnen die Methoden, die im Writer nicht benutzt werden koennen,
- * deshalb kann man diesen Bereich durch setzen von REDUCEDSVXFONT ausklammern.
+* Starting form here are the methods that can not be used in Writer,
+* so we put this section to be excluded by REDUCEDSVXFONT.
  *************************************************************************/
 #ifndef REDUCEDSVXFONT
 
 /*************************************************************************
  *                      class SvxDoCapitals
- * die virtuelle Methode Do wird von SvxFont::DoOnCapitals abwechselnd mit
- * den "Gross-" und "Kleinbuchstaben"-Teilen aufgerufen.
- * Die Ableitungen von SvxDoCapitals erfuellen diese Methode mit Leben.
+ * The virtual Method Do si called by SvxFont::DoOnCapitals alternately
+ * the uppercase and lowercase parts. The derivate of SvxDoCapitals fills
+ * this method with life.
  *************************************************************************/
 
 class SvxDoCapitals
@@ -223,8 +222,8 @@ void SvxDoCapitals::Do( const XubString &/*_rTxt*/, const xub_StrLen /*_nIdx*/,
 
 /*************************************************************************
  *                  SvxFont::DoOnCapitals() const
- * zerlegt den String in Gross- und Kleinbuchstaben und ruft jeweils die
- * Methode SvxDoCapitals::Do( ) auf.
+ * Decomposes the String into uppercase and lowercase letters and then
+ * calls the method SvxDoCapitals::Do( ).
  *************************************************************************/
 
 void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
@@ -250,11 +249,11 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
 
     while( nPos < nTxtLen )
     {
-        // Erst kommen die Upper-Chars dran
+        // first in turn are teh uppercase letters
 
-        // 4251: Es gibt Zeichen, die Upper _und_ Lower sind (z.B. das Blank).
-        // Solche Zweideutigkeiten fuehren ins Chaos, deswegen werden diese
-        // Zeichen der Menge Lower zugeordnet !
+        // There are characters that are both upper- and lower-case L (eg blank)
+        // Such ambiguities lead to chaos, this is why these characters are
+        // allocated to the lowercase characters!
 
         while( nPos < nTxtLen )
         {
@@ -285,7 +284,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
 
             nOldPos = nPos;
         }
-        // Nun werden die Lower-Chars verarbeitet (ohne Blanks)
+        // Now the lowercase are processed (without blanks)
         while( nPos < nTxtLen )
         {
             sal_uInt32  nCharacterType = aCharClass.getCharacterType( aCharString, 0 );
@@ -315,7 +314,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
 
             nOldPos = nPos;
         }
-        // Nun werden die Blanks verarbeitet
+        // Now the blanks are<processed
         while( nPos < nTxtLen && CH_BLANK == aCharString && ++nPos < nTxtLen )
             aCharString = rTxt.GetChar( nPos + nIdx );
 
@@ -455,7 +454,7 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const XubString &rTxt,
         {
             for ( xub_StrLen i = 0; i < nLen; i++ )
                 pDXArray[i] += ( (i+1) * long( nKern ) );
-            // Der letzte ist um ein nKern zu gross:
+            // The last one is a nKern too big:
             pDXArray[nLen-1] -= nKern;
         }
     }
@@ -467,7 +466,7 @@ Size SvxFont::GetTxtSize( const OutputDevice *pOut, const XubString &rTxt,
                          const xub_StrLen nIdx, const xub_StrLen nLen )
 {
     xub_StrLen nTmp = nLen;
-    if ( nTmp == STRING_LEN )   // schon initialisiert?
+    if ( nTmp == STRING_LEN )   // already initialized?
         nTmp = rTxt.Len();
     Font aOldFont( ChgPhysFont((OutputDevice *)pOut) );
     Size aTxtSize;
@@ -487,7 +486,7 @@ void SvxFont::DrawText( OutputDevice *pOut,
 {
     if( !nLen || !rTxt.Len() )  return;
     xub_StrLen nTmp = nLen;
-    if ( nTmp == STRING_LEN )   // schon initialisiert?
+    if ( nTmp == STRING_LEN )   // already initialized?
         nTmp = rTxt.Len();
     Point aPos( rPos );
     if ( nEsc )
@@ -516,7 +515,7 @@ void SvxFont::QuickDrawText( OutputDevice *pOut,
     const Point &rPos, const XubString &rTxt,
     const xub_StrLen nIdx, const xub_StrLen nLen, const sal_Int32* pDXArray ) const
 {
-    // Font muss ins OutputDevice selektiert sein...
+    // Font has to be selected in OutputDevice...
     if ( !IsCaseMap() && !IsCapital() && !IsKern() && !IsEsc() )
     {
         pOut->DrawTextArray( rPos, rTxt, pDXArray, nIdx, nLen );
@@ -539,7 +538,7 @@ void SvxFont::QuickDrawText( OutputDevice *pOut,
 
     if( IsCapital() )
     {
-        DBG_ASSERT( !pDXArray, "DrawCapital nicht fuer TextArray!" );
+        DBG_ASSERT( !pDXArray, "DrawCapital not for TextArray!" );
         DrawCapital( pOut, aPos, rTxt, nIdx, nLen );
     }
     else
@@ -572,7 +571,7 @@ void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
         return;
     xub_StrLen nTmp = nLen;
 
-    if ( nTmp == STRING_LEN )   // schon initialisiert?
+    if ( nTmp == STRING_LEN )   // already initialized?
         nTmp = rTxt.Len();
     Point aPos( rPos );
 
@@ -642,8 +641,6 @@ SvxFont& SvxFont::operator=( const SvxFont& rFont )
     return *this;
 }
 
-
-
 class SvxDoGetCapitalSize : public SvxDoCapitals
 {
 protected:
@@ -689,7 +686,6 @@ void SvxDoGetCapitalSize::Do( const XubString &_rTxt, const xub_StrLen _nIdx,
     aTxtSize.Width() += ( _nLen * long( nKern ) );
 }
 
-
 Size SvxFont::GetCapitalSize( const OutputDevice *pOut, const XubString &rTxt,
                              const xub_StrLen nIdx, const xub_StrLen nLen) const
 {
@@ -706,7 +702,6 @@ Size SvxFont::GetCapitalSize( const OutputDevice *pOut, const XubString &rTxt,
     }
     return aTxtSize;
 }
-
 
 class SvxDoDrawCapital : public SvxDoCapitals
 {
@@ -764,7 +759,7 @@ void SvxDoDrawCapital::Do( const XubString &_rTxt, const xub_StrLen _nIdx,
     BYTE nProp = 0;
     Size aPartSize;
 
-    // Einstellen der gewuenschten Fonts
+    // Set the desired font
     FontUnderline eUnder = pFont->GetUnderline();
     FontStrikeout eStrike = pFont->GetStrikeout();
     pFont->SetUnderline( UNDERLINE_NONE );
@@ -786,7 +781,7 @@ void SvxDoDrawCapital::Do( const XubString &_rTxt, const xub_StrLen _nIdx,
     }
     pOut->DrawStretchText(aPos,nWidth-nKern,_rTxt,_nIdx,_nLen);
 
-    // Font restaurieren
+    // Restore Font
     pFont->SetUnderline( eUnder );
     pFont->SetStrikeout( eStrike );
     if ( !bUpper )
@@ -797,7 +792,7 @@ void SvxDoDrawCapital::Do( const XubString &_rTxt, const xub_StrLen _nIdx,
 }
 
 /*************************************************************************
- * SvxFont::DrawCapital() gibt Kapitaelchen aus.
+ * SvxFont::DrawCapital() draws the uppercase letter.
  *************************************************************************/
 
 void SvxFont::DrawCapital( OutputDevice *pOut,

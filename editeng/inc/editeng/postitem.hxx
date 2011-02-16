@@ -42,9 +42,9 @@ namespace rtl
 
 // class SvxPostureItem --------------------------------------------------
 
-/*
-    [Beschreibung]
-    Dieses Item beschreibt die Font-Stellung (Italic)
+/*  [Description]
+
+    This item describes the font setting (Italic)
 */
 
 class EDITENG_DLLPUBLIC SvxPostureItem : public SfxEnumItem
@@ -55,7 +55,7 @@ public:
     SvxPostureItem( const FontItalic ePost /*= ITALIC_NONE*/,
                     const USHORT nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem + SwEnumItem
+    // "pure virtual Methods" from SfxPoolItem + SwEnumItem
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

@@ -36,7 +36,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-# --- Allgemein ----------------------------------------------------------
+# --- General ----------------------------------------------------------
 
 .IF "$(editdebug)" != "" || "$(EDITDEBUG)" != ""
 CDEFS+=-DEDITDEBUG

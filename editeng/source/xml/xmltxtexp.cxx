@@ -358,7 +358,6 @@ void SAL_CALL SvxSimpleUnoModel::removeEventListener( const ::com::sun::star::un
 class SvxXMLTextExportComponent : public SvXMLExport
 {
 public:
-    // #110680#
     SvxXMLTextExportComponent(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         EditEngine* pEditEngine,
@@ -381,7 +380,6 @@ private:
 
 ///////////////////////////////////////////////////////////////////////
 
-// #110680#
 SvxXMLTextExportComponent::SvxXMLTextExportComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     EditEngine* pEditEngine,
@@ -463,7 +461,6 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
             // export text
             const OUString aName;
 
-            // #110680#
             // SvxXMLTextExportComponent aExporter( &rEditEngine, rSel, aName, xHandler );
             SvxXMLTextExportComponent aExporter( xServiceFactory, &rEditEngine, rSel, aName, xHandler );
 

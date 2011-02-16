@@ -51,7 +51,7 @@ public:
     SvxTwoLinesItem( const SvxTwoLinesItem& rAttr );
     virtual ~SvxTwoLinesItem();
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, USHORT nVer) const;

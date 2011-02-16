@@ -81,7 +81,7 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(com::sun::star::uno::RuntimeException);
     virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(com::sun::star::uno::RuntimeException);
 
-    // intern
+    // internal
     com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> getNumberingRuleByIndex( sal_Int32 nIndex) const throw();
     void setNumberingRuleByIndex( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rProperties, sal_Int32 nIndex) throw( com::sun::star::uno::RuntimeException, com::sun::star::lang::IllegalArgumentException );
 

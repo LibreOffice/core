@@ -41,12 +41,12 @@ namespace rtl
 
 // class SvxKerningItem --------------------------------------------------
 
-// Achtung: Twips-Werte
-// Twips: 0 = kein Kerning
+// Note: Twips value
+// Twips: 0 = no kerning
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Dieses Item beschreibt die Schrift-Laufweite.
+    This item describes the kerning.
 */
 
 class EDITENG_DLLPUBLIC SvxKerningItem : public SfxInt16Item
@@ -56,7 +56,7 @@ public:
 
     SvxKerningItem( const short nKern /*= 0*/, const USHORT nId  );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
     virtual SvStream&       Store(SvStream &, USHORT nItemVersion) const;

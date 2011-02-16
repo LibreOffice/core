@@ -279,7 +279,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sa
     aVal <<= (sal_Int16)rFmt.GetBulletRelSize();
     pArray[nIdx++] = beans::PropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_NRULE_BULLET_RELSIZE)), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
-    DBG_ASSERT( nIdx <= nProps, "FixMe: Array uebergelaufen!!!! [CL]" );
+    DBG_ASSERT( nIdx <= nProps, "FixMe: overflow in Array!!! [CL]" );
     Sequence< beans::PropertyValue> aSeq(pArray, nIdx);
 
     delete [] pArray;

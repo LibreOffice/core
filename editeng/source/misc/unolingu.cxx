@@ -918,9 +918,6 @@ void LinguMgrExitLstnr::AtExit()
 
     LinguMgr::bExiting      = sal_True;
 
-    //TL:TODO: MBA fragen wie ich ohne Absturz hier meinen Speicher
-    //  wieder freibekomme...
-    //delete LinguMgr::pExitLstnr;
     LinguMgr::pExitLstnr    = 0;
 }
 
@@ -1190,7 +1187,7 @@ uno::Reference< XPropertySet >  SvxGetLinguPropertySet()
     return LinguMgr::GetLinguPropertySet();
 }
 
-//TL:TODO: remove argument or provide SvxGetIgnoreAllList with the same one
+//TODO: remove argument or provide SvxGetIgnoreAllList with the same one
 uno::Reference< XDictionary >  SvxGetOrCreatePosDic(
         uno::Reference< XDictionaryList >  /* xDicList */ )
 {
@@ -1288,7 +1285,6 @@ short SvxDicError( Window *pParent, sal_Int16 nError )
 
 LanguageType SvxLocaleToLanguage( const Locale& rLocale )
 {
-    //  empty Locale -> LANGUAGE_NONE
     if ( rLocale.Language.getLength() == 0 )
         return LANGUAGE_NONE;
 

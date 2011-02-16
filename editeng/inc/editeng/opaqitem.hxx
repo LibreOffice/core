@@ -42,9 +42,9 @@ namespace rtl
 // class SvxOpaqueItem ---------------------------------------------------
 
 
-/*
-[Beschreibung]
-Dieses Item beschreibt eine logische Variable "Undurchsichtig ja oder nein".
+/*  [Description]
+
+    This item describes a logical variable "Opaque yes or no."
 */
 
 class EDITENG_DLLPUBLIC SvxOpaqueItem : public SfxBoolItem
@@ -55,7 +55,7 @@ public:
     SvxOpaqueItem( const USHORT nId , const BOOL bOpa = TRUE );
     inline SvxOpaqueItem &operator=( const SvxOpaqueItem &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create(SvStream &, USHORT) const;
     virtual SvStream&       Store(SvStream &, USHORT nItemVersion ) const;

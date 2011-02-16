@@ -41,9 +41,9 @@ namespace rtl
 
 // class SvxFmtSplitItem -------------------------------------------------
 
-/*
-[Beschreibung]
-Dieses Item beschreibt eine logische Variable "Absatz trennen ja oder nein".
+/*  [Description]
+
+    This item describes a logical variable "split paragraph yes or no".
 */
 
 class EDITENG_DLLPUBLIC SvxFmtSplitItem : public SfxBoolItem
@@ -56,7 +56,7 @@ public:
                             const USHORT nWh  );
     inline SvxFmtSplitItem& operator=( const SvxFmtSplitItem& rSplit );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxPoolItem*    Create( SvStream&, USHORT ) const;
     virtual SvStream&       Store( SvStream& , USHORT nItemVersion ) const;

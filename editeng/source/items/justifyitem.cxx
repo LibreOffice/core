@@ -205,7 +205,7 @@ SfxPoolItem* SvxHorJustifyItem::Create( SvStream& rStream, USHORT ) const
 
 USHORT SvxHorJustifyItem::GetValueCount() const
 {
-    return SVX_HOR_JUSTIFY_REPEAT + 1;  // letzter Enum-Wert + 1
+    return SVX_HOR_JUSTIFY_REPEAT + 1;  // Last Enum value + 1
 }
 
 
@@ -351,7 +351,7 @@ SfxPoolItem* SvxVerJustifyItem::Create( SvStream& rStream, USHORT ) const
 
 USHORT SvxVerJustifyItem::GetValueCount() const
 {
-    return SVX_VER_JUSTIFY_BOTTOM + 1;  // letzter Enum-Wert + 1
+    return SVX_VER_JUSTIFY_BOTTOM + 1;  // Last Enum value + 1
 }
 
 
@@ -449,7 +449,7 @@ SfxPoolItem* SvxJustifyMethodItem::Create( SvStream& rStream, USHORT ) const
 
 USHORT SvxJustifyMethodItem::GetValueCount() const
 {
-    return SVX_JUSTIFY_METHOD_DISTRIBUTE + 1;   // letzter Enum-Wert + 1
+    return SVX_JUSTIFY_METHOD_DISTRIBUTE + 1;   // Last Enum value + 1
 }
 
 SvxJustifyMethodItem& SvxJustifyMethodItem::operator=(const SvxJustifyMethodItem& r)

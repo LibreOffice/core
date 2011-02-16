@@ -124,7 +124,6 @@ XubString GetMetricText( long nVal, SfxMapUnit eSrcUnit, SfxMapUnit eDestUnit, c
         nRet %= nDiff;
         if( 4 == nDigits )
         {
-//            DBG_ASSERT(pIntl, "no IntlWrapper* set")
             if(pIntl)
                 sRet += pIntl->getLocaleData()->getNumDecimalSep();
             else

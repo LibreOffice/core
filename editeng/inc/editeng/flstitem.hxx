@@ -40,10 +40,10 @@
 class FontList;
 
 /*
-    [Beschreibung]
+    [Description]
 
-    Dieses Item dient als Transport-Medium fuer eine FontListe.
-    Die Fontliste wird nicht kopiert und nicht geloescht!
+    This item serves as a transport medium for a font list. The font list is
+    not copied and not deleted!
 */
 
 class EDITENG_DLLPUBLIC SvxFontListItem : public SfxPoolItem

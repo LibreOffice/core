@@ -34,7 +34,7 @@
 class SvStringsISortDtor;
 class SmartTagMgr;
 
-// Klasse fuer Optionen vom Autoformat
+// Class of options for AutoFormat
 struct EDITENG_DLLPUBLIC SvxSwAutoFmtFlags
 {
     Font aBulletFont;
@@ -80,7 +80,7 @@ struct EDITENG_DLLPUBLIC SvxSwAutoFmtFlags
     BOOL bAutoCompleteWords : 1;
     BOOL bAutoCmpltCollectWords : 1;
     BOOL bAutoCmpltEndless : 1;
-// -- under NT hier starts a new long
+// -- under NT here starts a new long
     BOOL bAutoCmpltAppendBlanc : 1;
     BOOL bAutoCmpltShowAsTip : 1;
 

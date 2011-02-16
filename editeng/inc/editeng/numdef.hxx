@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#define SVX_MAX_NUM             10 // max. moegliche Numerierungsebenen
-#define SVX_DEF_BULLET          (0xF000 + 149)// Charakter fuer Aufzaehlungen
+#define SVX_MAX_NUM             10 // max. possible numbering level
+#define SVX_DEF_BULLET          (0xF000 + 149)// Character for lists
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

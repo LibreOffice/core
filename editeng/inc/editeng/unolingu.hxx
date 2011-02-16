@@ -193,7 +193,7 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////
 
-//TL:TODO: remove those functions or make them inline
+//TODO: remove those functions or make them inline
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XSpellChecker1 > SvxGetSpellChecker();
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
@@ -204,7 +204,7 @@ EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XDictionaryList > SvxGetDictionaryList();
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet >         SvxGetLinguPropertySet();
-//TL:TODO: remove argument or provide SvxGetIgnoreAllList with the same one
+//TODO: remove argument or provide SvxGetIgnoreAllList with the same one
 EDITENG_DLLPUBLIC ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XDictionary >    SvxGetOrCreatePosDic(
             ::com::sun::star::uno::Reference<

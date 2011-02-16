@@ -335,7 +335,7 @@ public:
 
     BOOL            IsBulletArea( const Point& rPos, sal_uInt16* pPara );
 
-//  Fuer die SelectionEngine...
+//  For the Selection Engine...
     void            CreateAnchor();
     void            DeselectAll();
     sal_Bool        SetCursorAtPoint( const Point& rPointPixel );
@@ -376,7 +376,7 @@ public:
     const SvxFieldItem* GetField( const Point& rPos, sal_uInt16* pPara, sal_uInt16* pPos ) const;
     void                DeleteSelected();
 
-    // Ggf. mehr als OutputArea invalidieren, fuer den DrawingEngine-Textrahmen...
+    //  If possible invalidate more than OutputArea, for the DrawingEngine text frame
     void            SetInvalidateMore( sal_uInt16 nPixel ) { nInvMore = nPixel; }
     sal_uInt16      GetInvalidateMore() const { return (sal_uInt16)nInvMore; }
 };
@@ -390,8 +390,8 @@ SV_DECL_PTRARR( EditViews, EditViewPtr, 0, 1 )
 
 class ImpEditEngine : public SfxListener
 {
-    // Die Undos muessen direkt manipulieren ( private-Methoden ),
-    // damit keine neues Undos eingefuegt werden!
+    // The Undos have to manipulate directly ( private-Methods ),
+    // do that no new Undo is inserted!
     friend class EditUndoInsertChars;
     friend class EditUndoRemoveChars;
     friend class EditUndoDelContent;
@@ -402,26 +402,26 @@ class ImpEditEngine : public SfxListener
 
     friend class EditView;
     friend class ImpEditView;
-    friend class EditEngine;        // Fuer Zugriff auf Imp-Methoden
-    friend class EditRTFParser;     // Fuer Zugriff auf Imp-Methoden
-    friend class EditHTMLParser;    // Fuer Zugriff auf Imp-Methoden
-    friend class EdtAutoCorrDoc;    // Fuer Zugriff auf Imp-Methoden
-    friend class EditDbg;           // DebugRoutinen
+    friend class EditEngine;        // For access to Imp-Methods
+    friend class EditRTFParser;     // For access to Imp-Methods
+    friend class EditHTMLParser;    // For access to Imp-Methods
+    friend class EdtAutoCorrDoc;    // For access to Imp-Methods
+    friend class EditDbg;           // Debug Routines
 
 private:
 
     // ================================================================
-    // Daten...
+    // Data ...
     // ================================================================
 
-    // Dokument-Spezifische Daten...
-    ParaPortionList     aParaPortionList;       // Formatierung
+    // Document Specific data ...
+    ParaPortionList     aParaPortionList;       // Formatting
     Size                aPaperSize;             // Layout
     Size                aMinAutoPaperSize;      // Layout ?
     Size                aMaxAutoPaperSize;      // Layout ?
-    EditDoc             aEditDoc;               // Dokumenteninhalt
+    EditDoc             aEditDoc;               // Document content
 
-    // Engine-Spezifische Daten....
+    // Engine Specific data ...
     EditEngine*         pEditEngine;
     EditViews           aEditViews;
     EditView*           pActiveView;
@@ -496,7 +496,7 @@ private:
     sal_Bool            bImpConvertFirstCall;   // specifies if ImpConvert is called the very first time after Convert was called
     sal_Bool            bFirstWordCapitalization;   // specifies if auto-correction should capitalize the first word or not
 
-    // Fuer Formatierung / Update....
+    // For Formatting / Update ....
     DeletedNodesList    aDeletedNodes;
     Rectangle           aInvalidRec;
     sal_uInt32          nCurTextHeight;
@@ -506,8 +506,8 @@ private:
 
     Timer               aOnlineSpellTimer;
 
-    // Wenn an einer Stelle erkannt wird, dass der StatusHdl gerufen werden
-    // muss, dies aber nicht sofort geschehen darf (kritischer Abschnitt):
+    // If it is detected at one point that the StatusHdl has to be called, but
+    // this should not happen immediately (critical section):
     Timer               aStatusTimer;
     Link                aStatusHdlLink;
     Link                aNotifyHdl;
@@ -524,7 +524,7 @@ private:
 
 
     // ================================================================
-    // Methoden...
+    // Methods...
     // ================================================================
 
     void                CursorMoved( ContentNode* pPrevNode );
@@ -532,7 +532,7 @@ private:
     void                TextModified();
     void                CalcHeight( ParaPortion* pPortion );
 
-    // ggf. lieber inline, aber so einiges...
+    // may prefer in-line, but so few ...
     void                InsertUndo( EditUndo* pUndo, sal_Bool bTryMerge = sal_False );
     void                ResetUndoManager();
     sal_Bool            HasUndoManager() const  { return pUndoManager ? sal_True : sal_False; }
@@ -844,7 +844,7 @@ public:
 
     void            IndentBlock( EditView* pView, sal_Bool bRight );
 
-//  Fuer Undo/Redo
+//  For Undo/Redo
     sal_Bool        Undo( EditView* pView );
     sal_Bool        Redo( EditView* pView );
     sal_Bool        Repeat( EditView* pView );
@@ -1048,8 +1048,8 @@ inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )
 
 inline EditPaM ImpEditEngine::CreateEditPaM( const EPaM& rEPaM )
 {
-    DBG_ASSERT( rEPaM.nPara < aEditDoc.Count(), "CreateEditPaM: Ungueltiger Absatz" );
-    DBG_ASSERT( aEditDoc[ rEPaM.nPara ]->Len() >= rEPaM.nIndex, "CreateEditPaM: Ungueltiger Index" );
+    DBG_ASSERT( rEPaM.nPara < aEditDoc.Count(), "CreateEditPaM: invalid paragraph" );
+    DBG_ASSERT( aEditDoc[ rEPaM.nPara ]->Len() >= rEPaM.nIndex, "CreateEditPaM: invalid Index" );
     return EditPaM( aEditDoc[ rEPaM.nPara], rEPaM.nIndex );
 }
 
@@ -1067,14 +1067,14 @@ inline ESelection ImpEditEngine::CreateESel( const EditSelection& rSel )
 
 inline EditSelection ImpEditEngine::CreateSel( const ESelection& rSel )
 {
-    DBG_ASSERT( rSel.nStartPara < aEditDoc.Count(), "CreateSel: Ungueltiger Start-Absatz" );
-    DBG_ASSERT( rSel.nEndPara < aEditDoc.Count(), "CreateSel: Ungueltiger End-Absatz" );
+    DBG_ASSERT( rSel.nStartPara < aEditDoc.Count(), "CreateSel: invalid start paragraph" );
+    DBG_ASSERT( rSel.nEndPara < aEditDoc.Count(), "CreateSel: invalid end paragraph" );
     EditSelection aSel;
     aSel.Min().SetNode( aEditDoc[ rSel.nStartPara ] );
     aSel.Min().SetIndex( rSel.nStartPos );
     aSel.Max().SetNode( aEditDoc[ rSel.nEndPara ] );
     aSel.Max().SetIndex( rSel.nEndPos );
-    DBG_ASSERT( !aSel.DbgIsBuggy( aEditDoc ), "CreateSel: Fehlerhafte Selektion!" );
+    DBG_ASSERT( !aSel.DbgIsBuggy( aEditDoc ), "CreateSel: incorrect selection!" );
     return aSel;
 }
 

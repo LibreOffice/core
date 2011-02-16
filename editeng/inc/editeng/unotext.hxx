@@ -174,8 +174,8 @@ EDITENG_DLLPUBLIC void GetSelection( struct ESelection& rSel, SvxTextForwarder* 
 EDITENG_DLLPUBLIC void CheckSelection( struct ESelection& rSel, SvxTextForwarder* pForwarder ) throw();
 
 // ====================================================================
-// Diese Klasse implementiert eine SvxEditSource und einen SvxTextForwarder
-// und macht ansonsten rein garnichts
+// This class implements a SvxEditSource and SvxTextForwarder and does
+// nothing otherwise
 // ====================================================================
 
 class SvxDummyTextSource : public SvxEditSource, public SvxTextForwarder

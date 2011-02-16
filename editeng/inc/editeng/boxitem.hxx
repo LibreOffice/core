@@ -37,10 +37,10 @@ namespace rtl { class OUString; }
 
 // class SvxBoxItem ------------------------------------------------------
 
-/*
-[Beschreibung]
-Dieses Item beschreibt ein Umrandungsattribut (alle vier Kanten und
-Abstand nach innen.
+/*  [Description]
+
+    This item describes a border attribute
+    (all four edges and the inward distance)
 */
 
 #define BOX_LINE_TOP    ((USHORT)0)
@@ -69,7 +69,7 @@ public:
     ~SvxBoxItem();
     SvxBoxItem &operator=( const SvxBoxItem& rBox );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
@@ -94,7 +94,7 @@ public:
 
     const   SvxBorderLine* GetLine( USHORT nLine ) const;
 
-        //Die Pointer werden kopiert!
+        //The Pointers are being copied!
     void    SetLine( const SvxBorderLine* pNew, USHORT nLine );
 
     USHORT  GetDistance( USHORT nLine ) const;
@@ -103,9 +103,8 @@ public:
     void    SetDistance( USHORT nNew, USHORT nLine );
     inline void SetDistance( USHORT nNew );
 
-        //Breite der Linien plus Zwischenraum plus Abstand nach innen.
-        //JP 09.06.99: bIgnoreLine = TRUE -> Distance auch returnen, wenn
-        //                          keine Line gesetzt ist
+        // Line width plus Space plus inward distance
+        //bIgnoreLine = TRUE -> Also return distance, when no Line is set
     USHORT  CalcLineSpace( USHORT nLine, BOOL bIgnoreLine = FALSE ) const;
     static com::sun::star::table::BorderLine2 SvxLineToLine( const SvxBorderLine* pLine, sal_Bool bConvert );
     static sal_Bool LineToSvxLine(const ::com::sun::star::table::BorderLine& rLine, SvxBorderLine& rSvxLine, sal_Bool bConvert);
@@ -119,13 +118,12 @@ inline void SvxBoxItem::SetDistance( USHORT nNew )
 
 // class SvxBoxInfoItem --------------------------------------------------
 
-/*
-[Beschreibung]
-Noch ein Item fuer die Umrandung. Dieses Item hat lediglich SS-Funktionalitaet.
-Einerseits wird dem allgemeinen Dialog mit diesem Item mitgeteilt, welche
-Moeglichkeiten er anbieten soll.
-Andererseits werden ueber dieses Attribut ggf. die BorderLines fuer die
-horizontalen und vertikalen innerern Linien transportiert.
+/*  [Description]
+
+    Another item for the border. This item has only limited functionality.
+    On one hand, the general Dialog is told by the item which options it
+    should offer. On the other hand, this attribute  may be used to
+    transported the borderline for the inner horizontal and vertical lines.
 */
 
 #define BOXINFO_LINE_HORI   ((USHORT)0)
@@ -142,24 +140,24 @@ horizontalen und vertikalen innerern Linien transportiert.
 
 class EDITENG_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
 {
-    SvxBorderLine* pHori;   //innere horizontale Linie
-    SvxBorderLine* pVert;   //innere vertikale Linie
+    SvxBorderLine* pHori;   //inner horizontal Line
+    SvxBorderLine* pVert;   //inner vertical Line
 
-    bool                mbEnableHor;   /// true = Enable inner horizonal line.
+    bool                mbEnableHor;   /// true = Enable inner horizontal line.
     bool                mbEnableVer;   /// true = Enable inner vertical line.
 
     /*
-     z.Z. nur fuer StarWriter: Abstand nach innen von SvxBoxItem.
-     Wenn der Abstand gewuenscht ist, so muss das Feld fuer den Abstand vom
-     Dialog freigeschaltet werden. nDefDist ist als Defaultwert anzusehen.
-     Wenn irgendeine    Linie eingeschalt ist oder wird, so muss dieser
-     Abstand defaultet werden. bMinDist gibt an, ob der Wert durch den
-     Anwender unterschritten werden darf. Mit nDist wird der aktuelle
-     Abstand von der App zum Dialog und zurueck transportiert.
+     Currently only for StarWriter: distance inward from SvxBoxItem. If the
+     distance is requested, then the field for the distance from the dialog be
+     activated. nDefDist is regarded as a default value. If any line is
+     turned on or will be turned on it must this distance be set to default.
+     bMinDist indicates whether the user can go below this value or not.
+     With NDIST is the current distance from the app transported back and
+     forth to the dialogue.
     */
 
-    BOOL    bDist      :1;  // TRUE, Abstand freischalten.
-    BOOL    bMinDist   :1;  // TRUE, Abstand darf nicht unterschritten werden.
+    BOOL    bDist      :1;  // TRUE, Unlock Distance.
+    BOOL    bMinDist   :1;  // TRUE, Going below minimum Distance is prohibited
 
     BYTE    nValidFlags;    // 0000 0000
                             // ³³³³ ³³³ÀÄ VALID_TOP
@@ -171,7 +169,7 @@ class EDITENG_DLLPUBLIC SvxBoxInfoItem : public SfxPoolItem
                             // ³ÀÄÄÄÄÄÄÄÄ VALID_DIST
                             // ÀÄÄÄÄÄÄÄÄÄ VALID_DISABLE
 
-    USHORT  nDefDist;       // Der Default- bzw. Minimalabstand.
+    USHORT  nDefDist;       // The default or minimum distance.
 
 public:
     TYPEINFO();
@@ -181,7 +179,7 @@ public:
     ~SvxBoxInfoItem();
     SvxBoxInfoItem &operator=( const SvxBoxInfoItem &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" from SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -199,7 +197,7 @@ public:
     const SvxBorderLine*    GetHori() const { return pHori; }
     const SvxBorderLine*    GetVert() const { return pVert; }
 
-    //Die Pointer werden kopiert!
+        //The Pointers are being copied!
     void                    SetLine( const SvxBorderLine* pNew, USHORT nLine );
 
     BOOL    IsTable() const             { return mbEnableHor && mbEnableVer; }

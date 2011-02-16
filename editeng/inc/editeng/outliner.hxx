@@ -45,7 +45,7 @@
 
 #include <svtools/grfmgr.hxx>
 
-#include <tools/rtti.hxx>   // wegen typedef TypeId
+#include <tools/rtti.hxx>   // due to typedef TypeId
 #include <vector>
 
 class OutlinerEditEng;
@@ -100,7 +100,7 @@ typedef std::vector<SpellPortion> SpellPortions;
 
 namespace basegfx { class B2DPolyPolygon; }
 
-// nur interner Gebrauch!
+// internal use only!
 #define PARAFLAG_DROPTARGET         0x1000
 #define PARAFLAG_DROPTARGET_EMPTY   0x2000
 #define PARAFLAG_HOLDDEPTH          0x4000
@@ -218,8 +218,8 @@ private:
     enum MouseTarget {
         MouseText = 0,
         MouseBullet = 1,
-        MouseHypertext = 2,    //            ausserhalb OutputArea
-        MouseOutside = 3,    //            ausserhalb OutputArea
+        MouseHypertext = 2,  // Outside OutputArea
+        MouseOutside = 3,    // Outside OutputArea
         MouseDontKnow = 4
     };
     MouseTarget OLD_ePrevMouseTarget;
@@ -284,8 +284,7 @@ public:
 
     List*       CreateSelectionList();
 
-    // gibt Anzahl selektierter Absaetze zurueck
-    // MT 07/00: Who needs this?
+    // Retruns the number of selected paragraphs
     ULONG       Select( Paragraph* pParagraph,
                     BOOL bSelect=TRUE,
                     BOOL bWChilds=TRUE);
@@ -294,7 +293,7 @@ public:
     void        SelectRange( ULONG nFirst, USHORT nCount );
     void        SetAttribs( const SfxItemSet& );
     void        Indent( short nDiff );
-    void        AdjustDepth( short nDX );   // Spaeter gegeb Indent ersetzen!
+    void        AdjustDepth( short nDX );   // Later replace with Indent!
 
     BOOL        AdjustHeight( long nDY );
     void        AdjustDepth( Paragraph* pPara, short nDX,
@@ -415,7 +414,6 @@ public:
     const Color maOverlineColor;
     const Color maTextLineColor;
 
-    // #101498# BiDi level needs to be transported, too.
     BYTE                mnBiDiLevel;
 
     bool                mbFilled;
@@ -633,7 +631,7 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
 
     USHORT              nOutlinerMode;
 
-    BOOL                bIsExpanding; // Nur in Expand/Collaps-Hdl gueltig, mal umstellen
+    BOOL                bIsExpanding; // Only valid in Expand/Collaps-Hdl, reset
     BOOL                bFirstParaIsEmpty;
     BOOL                bBlockInsCallback;
     BOOL                bStrippingPortions;
@@ -813,9 +811,10 @@ public:
     virtual long    IndentingPagesHdl( OutlinerView* );
     void            SetIndentingPagesHdl(const Link& rLink){aIndentingPagesHdl=rLink;}
     Link            GetIndentingPagesHdl() const { return aIndentingPagesHdl; }
-    // nur gueltig in den beiden oberen Handlern
+    // valid only in the two upper handlers
     USHORT          GetSelPageCount() const { return nDepthChangedHdlPrevDepth; }
-    // nur gueltig in den beiden oberen Handlern
+
+    // valid only in the two upper handlers
     ULONG           GetFirstSelPage() const { return mnFirstSelPage; }
 
     void            SetCalcFieldValueHdl(const Link& rLink ) { aCalcFieldValueHdl= rLink; }
@@ -883,7 +882,6 @@ public:
 
     void            StripPortions();
 
-    // #101498#
     virtual void DrawingText(
         const Point& rStartPos, const String& rText, USHORT nTextStart, USHORT nTextLen,
         const sal_Int32* pDXArray, const SvxFont& rFont, USHORT nPara, xub_StrLen nIndex, BYTE nRightToLeft,
@@ -927,8 +925,8 @@ public:
     void            RemoveParaFlag( Paragraph* pPara, sal_uInt16 nFlag );
     bool            HasParaFlag( const Paragraph* pPara, sal_uInt16 nFlag ) const;
 
-    // gibt ein Array mit den Bulletbreiten der n Einrueckebenen
-    // zurueck. Letzter Wert muss -1 sein. Wird vom Outliner geloescht.
+    // Returns an array containing the widths of the Bullet Indentations
+    // Last value must be -1. Is deleted by the outliner.
     Link            GetWidthArrReqHdl() const{ return aWidthArrReqHdl; }
     void            SetWidthArrReqHdl(const Link& rLink){aWidthArrReqHdl=rLink; }
 
@@ -944,7 +942,7 @@ public:
     USHORT          GetLineLen( ULONG nParagraph, USHORT nLine ) const;
     ULONG           GetLineHeight( ULONG nParagraph, ULONG nLine = 0 );
 
-    // nFormat muss ein Wert aus dem enum EETextFormat sein (wg.CLOOKS)
+    // nFormat must be a value from the enum EETextFormat (due to CLOOKS)
     ULONG           Read( SvStream& rInput, const String& rBaseURL, USHORT, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
 
     SfxUndoManager& GetUndoManager();
@@ -953,7 +951,7 @@ public:
     void            QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );
     void            QuickInsertLineBreak( const ESelection& rSel );
 
-    // nur fuer EditEngine-Modus
+    // Only for EditEngine mode
     void            QuickInsertText( const String& rText, const ESelection& rSel );
     void            QuickDelete( const ESelection& rSel );
     void            QuickRemoveCharAttribs( USHORT nPara, USHORT nWhich = 0 );
@@ -1027,11 +1025,11 @@ public:
     USHORT  GetOutlinerMode() const { return nOutlinerMode & OUTLINERMODE_USERMASK; }
 
     void            StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc);
-    //spell and return a sentence
+    // spell and return a sentence
     bool            SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking );
     // put spell position to start of current sentence
     void            PutSpellingToSentenceStart( EditView& rEditView );
-    //applies a changed sentence
+    // applies a changed sentence
     void            ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck );
     void            EndSpelling();
 
