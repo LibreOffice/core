@@ -494,7 +494,6 @@ void BackendImpl::initServiceRdbFiles()
             m_xComponentContext ), UNO_QUERY_THROW );
         m_xCommonRDB->open(
             makeURL( expandUnoRcUrl(getCachePath()), m_commonRDB ),
-//            m_readOnly, !m_readOnly );
             false, true);
     }
     if (m_nativeRDB.getLength() > 0) {
@@ -505,7 +504,6 @@ void BackendImpl::initServiceRdbFiles()
             m_xComponentContext ), UNO_QUERY_THROW );
         m_xNativeRDB->open(
             makeURL( expandUnoRcUrl(getCachePath()), m_nativeRDB ),
-//            m_readOnly, !m_readOnly );
             false, true);
     }
 }

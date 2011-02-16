@@ -807,12 +807,6 @@ void ExtensionCmdQueue::Thread::execute()
                     break;
                 }
             }
-            //catch ( deployment::DeploymentException &)
-            //{
-            //}
-            //catch ( lang::IllegalArgumentException &)
-            //{
-            //}
             catch ( ucb::CommandAbortedException & )
             {
                 //This exception is thrown when the user clicks cancel on the progressbar.
@@ -874,9 +868,6 @@ void ExtensionCmdQueue::Thread::execute()
             currentCmdEnv->stopProgress();
     }
     //end for
-    //enable all buttons
-//     m_pDialog->m_bAddingExtensions = false;
-//     m_pDialog->updateButtonStates();
 #ifdef WNT
     CoUninitialize();
 #endif

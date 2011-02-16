@@ -47,7 +47,6 @@ AutoScrollEdit::AutoScrollEdit( Window* pParent, const ResId& rResId )
     ScrollBar*  pScroll = GetVScrollBar();
     if (pScroll)
         pScroll->Hide();
-//    SetLeftMargin( 0 );
     StartListening( *GetTextEngine() );
 }
 

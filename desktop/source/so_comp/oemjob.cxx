@@ -163,33 +163,6 @@ throw ( RuntimeException )
             } else {
                 // user declined...
                 // terminate.
-                /*
-                Reference< XDesktop > xDesktop( m_xServiceManager->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))),
-                    UNO_QUERY );
-                xDesktop->terminate();
-                */
-                /*
-                OUString aName;
-                OUString aEnvType;
-                Reference<XFrame> rFrame;
-                Reference<XModel> rModel;
-                Reference<XCloseable> rClose;
-                for (int i=0; i<args.getLength(); i++)
-                {
-                    if (args[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EnvType")))
-                        args[i].Value >>= aEnvType;
-                    else if (args[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Frame"))) {
-                        args[i].Value >>= rFrame;
-                        rClose = Reference<XCloseable>(rFrame, UNO_QUERY);
-                    }
-                    else if (args[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Model"))) {
-                        args[i].Value >>= rModel;
-                        rClose = Reference<XCloseable>(rModel, UNO_QUERY);
-                    }
-                }
-                if (rClose.is()) rClose->close(sal_True);
-                */
                 bCont = sal_False;
             }
         }
@@ -197,13 +170,6 @@ throw ( RuntimeException )
         // don't try again
         bCont = sal_True;
     }
-    /*
-    NamedValue nv;
-    nv.Name  = OUString(RTL_CONSTASCII_USTRINGPARAM("Deactivate"));
-    nv.Value <<=  bDeactivate;
-    Sequence<NamedValue> s(1);
-    s[0] = nv;
-    */
     Any r;
     r <<= bCont;
     return r;

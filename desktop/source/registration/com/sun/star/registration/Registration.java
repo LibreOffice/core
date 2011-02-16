@@ -315,7 +315,6 @@ public class Registration {
                         out.close();
 
                         int returnCode = con.getResponseCode();
-//                      if (returnCode == HttpURLConnection.HTTP_OK);
                     } catch(java.lang.Exception e) {
                         // IOException and UnknownHostException
                     }

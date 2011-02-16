@@ -271,14 +271,6 @@ UPDATE_SOURCE isUpdateUserExtension(
                 retVal = UPDATE_SOURCE_ONLINE;
 
         }
-        //No update for bundled extensions, they are updated only by the setup
-        //else if (bundledVersion.getLength())
-        //{
-        //    int index = determineHighestVersion(
-        //        OUString(), OUString(), bundledVersion, onlineVersion);
-        //    if (index == 3)
-        //        retVal = UPDATE_SOURCE_ONLINE;
-        //}
     }
     else
     {
@@ -317,14 +309,6 @@ UPDATE_SOURCE isUpdateSharedExtension(
         else if (index == 3)
             retVal = UPDATE_SOURCE_ONLINE;
     }
-    //No update for bundled extensions, they are updated only by the setup
-    //else if (bundledVersion.getLength())
-    //{
-    //    int index = determineHighestVersion(
-    //        OUString(), OUString(), bundledVersion, onlineVersion);
-    //    if (index == 3)
-    //        retVal = UPDATE_SOURCE_ONLINE;
-    //}
     return retVal;
 }
 

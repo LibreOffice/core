@@ -254,9 +254,7 @@ void SplashScreen::updateStatus()
 {
     if (!_bVisible || _bProgressEnd) return;
     if (!_bPaintProgress) _bPaintProgress = sal_True;
-    //_bPaintBitmap=sal_False;
     Paint(Rectangle());
-    //_bPaintBitmap=sal_True;
     Flush();
 }
 

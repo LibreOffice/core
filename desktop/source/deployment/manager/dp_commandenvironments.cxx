@@ -250,11 +250,6 @@ void NoLicenseCommandEnv::handle(
     handle_(approve, abort, xRequest);
 }
 
-// SilentCheckPrerequisitesCommandEnv::SilentCheckPrerequisitesCommandEnv(
-//     css::uno::Reference< css::task::XInteractionHandler> const & handler):
-//     BaseCommandEnv(handler)
-// {
-// }
 SilentCheckPrerequisitesCommandEnv::SilentCheckPrerequisitesCommandEnv()
 {
 }

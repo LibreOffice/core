@@ -555,7 +555,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
                 return IPC_STATUS_BOOTSTRAP_ERROR;
             }
         }
-        // finaly, write the string onto the pipe
+        // finally, write the string onto the pipe
         aStreamPipe.write( aArguments.GetBuffer(), aArguments.Len() );
         aStreamPipe.write( "\0", 1 );
 

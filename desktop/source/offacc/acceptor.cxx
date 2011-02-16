@@ -286,18 +286,6 @@ Reference<XInterface> SAL_CALL AccInstanceProvider::getInstance (const OUString&
             rInstance = rNamingService;
         }
     }
-    /*
-    else if ( aName.compareToAscii("com.sun.star.ucb.RemoteContentProviderAcceptor" ))
-    {
-        Reference< XMultiServiceFactory > rSMgr = ::comphelper::getProcessServiceFactory();
-        if ( rSMgr.is() ) {
-            try {
-                rInstance = rSMgr->createInstance( sObjectName );
-            }
-            catch (Exception const &) {}
-        }
-    }
-    */
     return rInstance;
 }
 

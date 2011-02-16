@@ -172,43 +172,6 @@ BackendImpl::BackendImpl(
 {
     if (! transientMode())
     {
-/*
-        if (office_is_running())
-        {
-            Reference<XComponentContext> xContext( getComponentContext() );
-            m_xScriptLibs.set(
-                xContext->getServiceManager()->createInstanceWithContext(
-                    OUSTR("com.sun.star."
-                          "script.ApplicationScriptLibraryContainer"),
-                    xContext ), UNO_QUERY_THROW );
-            m_xDialogLibs.set(
-                xContext->getServiceManager()->createInstanceWithContext(
-                    OUSTR("com.sun.star."
-                          "script.ApplicationDialogLibraryContainer"),
-                    xContext ), UNO_QUERY_THROW );
-        }
-        else
-        {
-            OUString basic_path(
-                m_eContext == CONTEXT_USER
-                ? OUSTR("vnd.sun.star.expand:${$BRAND_BASE_DIR/program/"
-                        SAL_CONFIGFILE("bootstrap")
-                        ":UserInstallation}/user/basic")
-                : OUSTR("vnd.sun.star.expand:${$BRAND_BASE_DIR/program/"
-                        SAL_CONFIGFILE("bootstrap")
-                        ":BaseInstallation}/share/basic") );
-            m_basic_script_libs.reset(
-                new LibraryContainer(
-                    makeURL( basic_path, OUSTR("script.xlc") ),
-                    getMutex(),
-                    getComponentContext() ) );
-            m_dialog_libs.reset(
-                new LibraryContainer(
-                    makeURL( basic_path, OUSTR("dialog.xlc") ),
-                    getMutex(),
-                    getComponentContext() ) );
-        }
-*/
     }
 }
 
