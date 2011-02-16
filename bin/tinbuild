@@ -31,7 +31,7 @@ getCommitters ()
 {
 	from_date="$1"
 
-	./g -s log '--pretty=tformat:%ce' --after="$from_date" | sort | uniq | tr '\n' ' '
+	./g -s log '--pretty=tformat:%ce' --after="$from_date" | sort | uniq | tr '\n' ','
 }
 
 sendMailMsg ()
@@ -39,36 +39,37 @@ sendMailMsg ()
 	TO="$1"
 	SUBJECT="$2"
 	HEADERS="$3"
+	LOG="$4"
 	perl -e "
+use MIME::Lite;
 use Net::SMTP;
 
-\$smtp = Net::SMTP->new('$SMTP');
-
-# from
-\$smtp->mail('$OWNER');
-
-# to
-@to = split(' ', '$TO');
-print 'Sending mail to \"' . join(',', @to) . '\", subject \"$SUBJECT\"' . \"\n\";
-\$smtp->recipient(@to, { SkipBad => 1 });
-
-# headers
-\$smtp->data;
-
-\$smtp->datasend('From: $OWNER' . \"\n\");
-\$smtp->datasend('To: ' . join(',', @to) . \"\n\");
-\$smtp->datasend('Subject: $SUBJECT' . \"\n\");
-\$smtp->datasend('$HEADERS' . \"\n\") if (\"$HEADERS\" ne \"\");
-\$smtp->datasend(\"\n\");
-
-# body
+my \$text;
 while (<>) {
-	\$smtp->datasend(\$_);
+    \$text .= \$_;
 }
 
-# end
-\$smtp->dataend;
-\$smtp->quit;
+\$msg = MIME::Lite->new(
+    From => '$OWNER',
+    To => '$TO',
+    Subject => '$SUBJECT',
+    Type => 'TEXT',
+    Data => \$text
+    $HEADERS
+) or die \"Error creating multipart container: \$!\n\";
+
+if ('$LOG' ne '' && -f '$LOG') {
+    \$msg->attach (
+        Type => 'application/x-gzip',
+        Path => '$LOG',
+        Filename => '$LOG',
+        Disposition => 'attachment'
+    ) or die \"Error adding $LOG: \$!\n\";
+}
+
+MIME::Lite->send('smtp', '$SMTP', Timeout=>60);
+\$msg->send;
+print 'Sent a mail to \"$TO\" with subject \"$SUBJECT\".' . \"\n\";
 "
 }
 
@@ -99,16 +100,22 @@ reportError ()
 	echo "$*" 1>&2
 	echo "Last success: $rough_time" 1>&2
 	if test -n "$to_mail" ; then
-		cat <<EOF | sendMailMsg "$to_mail" "Tinderbox failure, $message" ""
+		TINDER1=
+		TINDER2=
+		if test "$SEND_MAIL" -eq 1 -a -n "$TINDERNAME" ; then
+			TINDER1=`echo -e "Full log available at http://tinderbox.go-oo.org/MASTER/status.html\n"`
+			TINDER2=`echo "  Box name: $TINDERNAME"`
+		fi
+		cat <<EOF | sendMailMsg "$to_mail" "Tinderbox failure, $message"
 Hi folks,
 
 One of you broke the build of LibreOffice master with your commit :-(
 Please commit and push a fix ASAP!
 
-Tinderbox info:
+${TINDER1}Tinderbox info:
 
-  `uname -a`
-`grep '\$ \.\/configure' config.log`
+${TINDER2}  `uname -a`
+  Configured with `cat autogen.lastrun`
 
 Commits since the last success:
 
@@ -150,22 +157,27 @@ sendTinderboxLog ()
 	STATUS="$2"
 	LOG="$3"
 
-	(
-		cat <<EOF
-
+	XTINDER=",'X-Tinder:'=>'cookie'"
+	GZLOG=
+	MESSAGE="
 tinderbox: administrator: $OWNER
 tinderbox: builddate: deprecated
-tinderbox: starttime: `date '+%s' -d "$STARTTIME"`
+tinderbox: starttime: `date '+%s' -d \"$STARTTIME\"`
 tinderbox: buildname: $TINDERNAME
 tinderbox: errorparser: unix
 tinderbox: status: $STATUS
 tinderbox: timenow: `date '+%s'`
 tinderbox: tree: MASTER
 tinderbox: END
+"
 
-EOF
-		[ -f "$LOG" ] && cat "$LOG"
-	) | sendMailMsg "tinderbox@gimli.documentfoundation.org" "tinderbox gzipped logfile" "X-Tinder: cookie"
+	if [ -n "$3" -a -f "$3" ] ; then
+		GZLOG="$LOG".gz
+		( echo "$MESSAGE" ; cat "$LOG" ) | gzip -c "$LOG" > "$GZLOG"
+		XTINDER=",'X-Tinder:'=>'gzookie'"
+	fi
+
+	echo "$MESSAGE" | sendMailMsg "tinderbox@gimli.documentfoundation.org" "tinderbox gzipped logfile" "$XTINDER" "$GZLOG"
 }
 
 ## code
@@ -234,7 +246,7 @@ while true; do
 		reportError committer "$rough_checkout_date" `printf "dev installation failed - error is:\n\n"` "$(tail -n100 install.log)"
 	else
 		echo "Build done - checkout from $rough_checkout_date successful."
-		gitHeads > build/git-heads.txt
+		gitHeads > prev-git-heads.txt
 
 		prev_success=$last_success
 		last_success=$rough_checkout_date
