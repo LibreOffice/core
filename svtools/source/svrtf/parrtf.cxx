@@ -687,16 +687,4 @@ void SvRTFParser::SetEncoding( rtl_TextEncoding eEnc )
     SetSrcEncoding(eEnc);
 }
 
-#ifdef USED
-void SvRTFParser::SaveState( int nToken )
-{
-    SvParser::SaveState( nToken );
-}
-
-void SvRTFParser::RestoreState()
-{
-    SvParser::RestoreState();
-}
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
