@@ -60,8 +60,8 @@ LegendPositionResources::LegendPositionResources( Window* pWindow )
     : m_xCC() //unused in this scenario
     , m_aCbxShow( pWindow ) //unused in this scenario
     , m_aRbtLeft( pWindow, SchResId(RBT_LEFT) )
-    , m_aRbtTop( pWindow, SchResId(RBT_TOP) )
     , m_aRbtRight( pWindow, SchResId(RBT_RIGHT) )
+    , m_aRbtTop( pWindow, SchResId(RBT_TOP) )
     , m_aRbtBottom( pWindow, SchResId(RBT_BOTTOM) )
 {
     m_aCbxShow.Check();//legend is assumed to be visible in this scenario
@@ -72,12 +72,17 @@ LegendPositionResources::LegendPositionResources( Window* pWindow, const uno::Re
     : m_xCC( xCC )
     , m_aCbxShow( pWindow, SchResId(CBX_SHOWLEGEND) )
     , m_aRbtLeft( pWindow, SchResId(RBT_LEFT) )
-    , m_aRbtTop( pWindow, SchResId(RBT_TOP) )
     , m_aRbtRight( pWindow, SchResId(RBT_RIGHT) )
+    , m_aRbtTop( pWindow, SchResId(RBT_TOP) )
     , m_aRbtBottom( pWindow, SchResId(RBT_BOTTOM) )
 {
     m_aCbxShow.SetToggleHdl( LINK( this, LegendPositionResources, PositionEnableHdl ) );
     impl_setRadioButtonToggleHdl();
+    m_aCbxShow.SetAccessibleRelationMemberOf(&m_aCbxShow);
+    m_aRbtLeft.SetAccessibleRelationMemberOf(&m_aCbxShow);
+    m_aRbtRight.SetAccessibleRelationMemberOf(&m_aCbxShow);
+    m_aRbtTop.SetAccessibleRelationMemberOf(&m_aCbxShow);
+    m_aRbtBottom.SetAccessibleRelationMemberOf(&m_aCbxShow);
 }
 
 void LegendPositionResources::impl_setRadioButtonToggleHdl()
@@ -255,6 +260,14 @@ IMPL_LINK( LegendPositionResources, PositionChangeHdl, RadioButton*, pRadio )
 void LegendPositionResources::SetChangeHdl( const Link& rLink )
 {
     m_aChangeLink = rLink;
+}
+
+void LegendPositionResources::SetAccessibleRelationMemberOf(Window* pMemberOf)
+{
+    m_aRbtLeft.SetAccessibleRelationMemberOf(pMemberOf);
+    m_aRbtRight.SetAccessibleRelationMemberOf(pMemberOf);
+    m_aRbtTop.SetAccessibleRelationMemberOf(pMemberOf);
+    m_aRbtBottom.SetAccessibleRelationMemberOf(pMemberOf);
 }
 
 //.............................................................................
