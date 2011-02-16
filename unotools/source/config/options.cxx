@@ -30,13 +30,7 @@
 #include "precompiled_unotools.hxx"
 
 #include "sal/config.h"
-#include <tools/list.hxx>
 #include <unotools/options.hxx>
-
-namespace utl
-{
-    DECLARE_LIST( IMPL_ConfigurationListenerList, ConfigurationListener* )
-}
 
 using utl::detail::Options;
 using utl::ConfigurationBroadcaster;
@@ -57,13 +51,22 @@ void ConfigurationBroadcaster::AddListener( utl::ConfigurationListener* pListene
 {
     if ( !mpList )
         mpList = new IMPL_ConfigurationListenerList;
-    mpList->Insert( pListener );
+    mpList->push_back( pListener );
 }
 
 void ConfigurationBroadcaster::RemoveListener( utl::ConfigurationListener* pListener )
 {
-    if ( mpList )
-        mpList->Remove( pListener );
+    if ( mpList ) {
+        for ( IMPL_ConfigurationListenerList::iterator it = mpList->begin();
+              it < mpList->end();
+              ++it
+        ) {
+            if ( *it == pListener ) {
+                mpList->erase( it );
+                break;
+            }
+        }
+    }
 }
 
 void ConfigurationBroadcaster::NotifyListeners( sal_uInt32 nHint )
@@ -74,9 +77,11 @@ void ConfigurationBroadcaster::NotifyListeners( sal_uInt32 nHint )
     {
         nHint |= m_nBlockedHint;
         m_nBlockedHint = 0;
-        if ( mpList )
-            for ( sal_uInt32 n=0; n<mpList->Count(); n++ )
-                mpList->GetObject(n)->ConfigurationChanged( this, nHint );
+        if ( mpList ) {
+            for ( size_t n = 0; n < mpList->size(); n++ ) {
+                (*mpList)[ n ]->ConfigurationChanged( this, nHint );
+            }
+        }
     }
 }
 
