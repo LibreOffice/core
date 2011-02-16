@@ -235,18 +235,6 @@ void InitSettings_Impl( Window *pWin,
 
 //===================================================================
 
-#ifdef DBG_MI
-
-void DoLog_Impl( const BrowseBox *pThis, const char *pWhat, const char *pWho );
-#define LOG(pThis,what,who) DoLog_Impl(pThis,what,who)
-
-#else
-
-#define LOG(pThis,what,who)
-
-#endif
-
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

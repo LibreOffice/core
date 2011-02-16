@@ -59,27 +59,6 @@ using namespace svt;
 
 //-------------------------------------------------------------------
 
-#ifdef DBG_MI
-void DoLog_Impl( const BrowseBox *pThis, const char *pWhat, const char *pWho )
-{
-    SvFileStream aLog( "d:\\cursor.log", STREAM_WRITE|STREAM_NOCREATE );
-    if ( aLog.IsOpen() )
-    {
-        aLog.Seek( STREAM_SEEK_TO_END );
-        String aEntry( (long) pThis );
-        aEntry += "(row=";
-        aEntry += pThis->GetCurRow();
-        aEntry += "): ";
-        aEntry += pWhat;
-        aEntry += " from ";
-        aEntry += pWho;
-        aEntry += " => ";
-        aEntry += pThis->GetCursorHideCount();
-        aLog.WriteLine( aEntry );
-    }
-}
-#endif
-
 namespace
 {
     void disposeAndClearHeaderCell(::svt::BrowseBoxImpl::THeaderCellMap& _rHeaderCell)
@@ -146,7 +125,6 @@ void BrowseBox::ConstructImpl( BrowserMode nMode )
     bHasFocus = HasChildPathFocus();
     getDataWindow()->nCursorHidden =
                 ( bHasFocus ? 0 : 1 ) + ( GetUpdateMode() ? 0 : 1 );
-    LOG( this, "ConstructImpl", "*" );
 }
 
 //-------------------------------------------------------------------
@@ -211,11 +189,7 @@ short BrowseBox::GetCursorHideCount() const
 
 //-------------------------------------------------------------------
 
-void BrowseBox::DoShowCursor( const char *
-#ifdef DBG_MI
-pWhoLogs
-#endif
-)
+void BrowseBox::DoShowCursor( const char * )
 {
     short nHiddenCount = --getDataWindow()->nCursorHidden;
     if (PaintCursorIfHiddenOnce())
@@ -228,16 +202,11 @@ pWhoLogs
         if (0 == nHiddenCount)
             DrawCursor();
     }
-    LOG( this, "DoShowCursor", pWhoLogs );
 }
 
 //-------------------------------------------------------------------
 
-void BrowseBox::DoHideCursor( const char *
-#ifdef DBG_MI
-pWhoLogs
-#endif
-)
+void BrowseBox::DoHideCursor( const char * )
 {
     short nHiddenCount = ++getDataWindow()->nCursorHidden;
     if (PaintCursorIfHiddenOnce())
@@ -250,7 +219,6 @@ pWhoLogs
         if (1 == nHiddenCount)
             DrawCursor();
     }
-    LOG( this, "DoHideCursor", pWhoLogs );
 }
 
 //-------------------------------------------------------------------
@@ -2452,20 +2420,6 @@ Rectangle BrowseBox::GetControlArea() const
 void BrowseBox::SetMode( BrowserMode nMode )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-
-#ifdef DBG_MIx
-    Sound::Beep();
-    nMode =
-            BROWSER_THUMBDRAGGING |
-            BROWSER_KEEPHIGHLIGHT |
-            BROWSER_HLINES |
-            BROWSER_VLINES |
-            BROWSER_AUTO_VSCROLL |
-            BROWSER_AUTO_HSCROLL |
-            BROWSER_TRACKING_TIPS |
-            BROWSER_HEADERBAR_NEW |
-            0;
-#endif
 
     getDataWindow()->bAutoHScroll = BROWSER_AUTO_HSCROLL == ( nMode & BROWSER_AUTO_HSCROLL );
     getDataWindow()->bAutoVScroll = BROWSER_AUTO_VSCROLL == ( nMode & BROWSER_AUTO_VSCROLL );

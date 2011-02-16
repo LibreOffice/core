@@ -243,10 +243,6 @@ class SVT_DLLPUBLIC BrowseBox
     friend class BrowserDataWin;
     friend class ::svt::BrowseBoxImpl;
 
-#ifdef DBG_MI
-    friend void DoLog_Impl( const BrowseBox *pThis, const char *pWhat, const char *pWho );
-#endif
-
 #ifdef DBG_UTIL
     friend const char* BrowseBoxCheckInvariants( const void * pVoid );
 #endif
