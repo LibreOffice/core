@@ -80,15 +80,6 @@ typedef void (CALLTYPE* FARPROC) ( void );
 
 }
 
-#if defined(OS2) && defined(BLC)
-#define GETFUNCTIONCOUNT        "_GetFunctionCount"
-#define GETFUNCTIONDATA         "_GetFunctionData"
-#define SETLANGUAGE             "_SetLanguage"
-#define GETPARAMDESC            "_GetParameterDescription"
-#define ISASYNC                 "_IsAsync"
-#define ADVICE                  "_Advice"
-#define UNADVICE                "_Unadvice"
-#else // Pascal oder extern "C"
 #define GETFUNCTIONCOUNT        "GetFunctionCount"
 #define GETFUNCTIONDATA         "GetFunctionData"
 #define SETLANGUAGE             "SetLanguage"
@@ -96,7 +87,6 @@ typedef void (CALLTYPE* FARPROC) ( void );
 #define ISASYNC                 "IsAsync"
 #define ADVICE                  "Advice"
 #define UNADVICE                "Unadvice"
-#endif
 
 #define LIBFUNCNAME( name ) \
     (String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( name ) ))
