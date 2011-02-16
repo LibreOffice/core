@@ -5875,10 +5875,19 @@ namespace osl_Directory
         void create_002( )
         {
             //create directory in /tmpname
-            nError1 = ::osl::Directory::create( aTmpName7 );
 #if defined ( WNT ) || defined ( MACOSX )
             nError1 = osl::FileBase::E_ACCES;  /// in Windows, you can create directory in c:/ any way.
+#elif defined (SAL_UNX)
+            nError1 = ::osl::Directory::create( aTmpName7 );
+            CPPUNIT_ASSERT_MESSAGE( "test for create function: create a directory and check its existence.",
+                                    ( osl::FileBase::E_None == nError1 ) );
+            osl_setFileAttributes(aTmpName7.pData, 0);
+            nError1 = ::osl::Directory::create( aTmpName11 );
+
+            osl_setFileAttributes(aTmpName7.pData, osl_File_Attribute_OwnWrite);
             deleteTestDirectory( aTmpName7 );
+#else
+            nError1 = osl::FileBase::E_ACCES;
 #endif
 
             CPPUNIT_ASSERT_MESSAGE( "test for create function: create a directory in root for access test.",
