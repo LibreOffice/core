@@ -1188,9 +1188,9 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     if( aState == ::utl::Bootstrap::PATH_EXISTS ) {
         aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ] = ConvertOSLtoUCBURL( sVal );
     }
-    else {
-        LOG_ERROR( "SubstitutePathVariables::SetPredefinedPathVariables", "Bootstrap code has no value for userpath");
-    }
+    // We use to have a LOG_ERROR here in an else branch, but that
+    // always fired in some unit tests, and if you then just ignored
+    // it, nothing bad happened, so it seems fairly pointless.
 
     // Set $(inst), $(instpath), $(insturl)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTURL ]    = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
@@ -1222,10 +1222,11 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     rtl::OUString aLocaleStr;
     if ( utl::ConfigManager::GetConfigManager().GetDirectConfigProperty( utl::ConfigManager::LOCALE ) >>= aLocaleStr )
         aPreDefPathVariables.m_eLanguageType = MsLangId::convertIsoStringToLanguage( aLocaleStr );
-    else
-    {
-        LOG_ERROR( "SubstitutePathVariables::SetPredefinedPathVariables", "Wrong Any type for language!" );
-    }
+    // We used to have an else branch here with a LOG_ERROR, but that
+    // always fired in some unit tests when this code was built with
+    // debug=t, so it seems fairly pointless, especially as
+    // aPreDefPathVariables.m_eLanguageType has been initialized to a
+    // default value above anyway.
 
     // Set $(lang)
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_LANG ] = ConvertOSLtoUCBURL(
