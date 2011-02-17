@@ -38,7 +38,6 @@ namespace dbaui
 {
     class OColumnControl :  public UnoControl
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xORB;
     public:
         OColumnControl(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
