@@ -25,76 +25,73 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_toolkit.hxx"
+/** === begin UNO includes === **/
 #include <com/sun/star/awt/grid/XGridColumnModel.hpp>
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
-//#include <com/sun/star/awt/grid/GridColumnEvent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
-#include <rtl/ref.hxx>
-#include <vector>
-#include <toolkit/helper/mutexandbroadcasthelper.hxx>
-#include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
-#include <com/sun/star/awt/grid/XGridColumnListener.hpp>
+#include <com/sun/star/util/Color.hpp>
+/** === end UNO includes === **/
 
-using ::rtl::OUString;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::awt::grid;
-using namespace ::com::sun::star::lang;
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase2.hxx>
+#include <comphelper/componentcontext.hxx>
+#include <vector>
+
+namespace comphelper
+{
+    class ComponentGuard;
+}
 
 namespace toolkit
 {
 
 //enum broadcast_type { column_added, column_removed, column_changed};
 
-class DefaultGridColumnModel : public ::cppu::WeakImplHelper2< XGridColumnModel, XServiceInfo >,
-                             public MutexAndBroadcastHelper
+typedef ::cppu::WeakComponentImplHelper2    <   ::com::sun::star::awt::grid::XGridColumnModel
+                                            ,   ::com::sun::star::lang::XServiceInfo
+                                            >   DefaultGridColumnModel_Base;
+
+class DefaultGridColumnModel    :public ::cppu::BaseMutex
+                                ,public DefaultGridColumnModel_Base
 {
 public:
-    DefaultGridColumnModel(const Reference< XMultiServiceFactory >& xFactory);
+    DefaultGridColumnModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+    DefaultGridColumnModel( DefaultGridColumnModel const & i_copySource );
     virtual ~DefaultGridColumnModel();
 
     // XGridColumnModel
-
-    //virtual ::sal_Bool SAL_CALL getColumnSelectionAllowed() throw (::com::sun::star::uno::RuntimeException);
-    //virtual void SAL_CALL setColumnSelectionAllowed(::sal_Bool the_value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getColumnCount() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > & column) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > SAL_CALL createColumn(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > & column) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException);
+    virtual void SAL_CALL removeColumn( ::sal_Int32 i_columnIndex )  throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > > SAL_CALL getColumns() throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > SAL_CALL getColumn(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException);
-    //virtual void SAL_CALL addColumnListener( const Reference< XGridColumnListener >& xListener ) throw (RuntimeException);
-    //virtual void SAL_CALL removeColumnListener( const Reference< XGridColumnListener >& xListener ) throw (RuntimeException);
-    virtual void SAL_CALL setColumnHeaderHeight( sal_Int32 _value) throw (com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getColumnHeaderHeight() throw (com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > SAL_CALL getColumn(::sal_Int32 index) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDefaultColumns(sal_Int32 rowElements) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > SAL_CALL copyColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > & column)  throw (::com::sun::star::uno::RuntimeException);
-    // XComponent
-    virtual void SAL_CALL dispose(  ) throw (RuntimeException);
-    virtual void SAL_CALL addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException);
-    virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& aListener ) throw (RuntimeException);
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XContainer
+    virtual void SAL_CALL addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XCloneable
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // OComponentHelper
+    virtual void SAL_CALL disposing();
+
 private:
+    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > >   Columns;
 
-    /*void broadcast( broadcast_type eType, const GridColumnEvent& aEvent );
-    void broadcast_changed( ::rtl::OUString name, Any oldValue, Any newValue, sal_Int32 index,const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > & rColumn );
-    void broadcast_add( sal_Int32 index,const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > & rColumn );
-    void broadcast_remove( sal_Int32 index, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > & rColumn );*/
-
-    std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > > columns;
-    sal_Bool selectionAllowed;
-    sal_Int32 m_nColumnHeaderHeight;
-    Reference< XMultiServiceFactory > m_xFactory;
+    ::comphelper::ComponentContext      m_aContext;
+    ::cppu::OInterfaceContainerHelper   m_aContainerListeners;
+    Columns                             m_aColumns;
 };
 
 }
