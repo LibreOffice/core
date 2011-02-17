@@ -63,11 +63,15 @@
 #include "stringutil.hxx"
 #include "scmatrix.hxx"
 #include "drwlayer.hxx"
+
 #include "docsh.hxx"
+#include "funcdesc.hxx"
 
 #include "dpshttab.hxx"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
+
+#include "formula/IFunctionDescription.hxx"
 
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
@@ -220,6 +224,12 @@ public:
     void testDataPilot();
     void testSheetCopy();
 
+    /**
+     * Test built-in cell functions to make sure their categories and order
+     * are correct.
+     */
+    void testFunctionLists();
+
     void testGraphicsInGroup();
 
     CPPUNIT_TEST_SUITE(Test);
@@ -231,12 +241,13 @@ public:
     CPPUNIT_TEST(testDataPilot);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testGraphicsInGroup);
+    CPPUNIT_TEST(testFunctionLists);
     CPPUNIT_TEST_SUITE_END();
 
 private:
     uno::Reference< uno::XComponentContext > m_xContext;
     ScDocument *m_pDoc;
-    ScDocShellRef m_pDocShellRef;
+    ScDocShellRef m_pDocShell;
 };
 
 Test::Test()
@@ -259,13 +270,13 @@ Test::Test()
 
 void Test::setUp()
 {
-    m_pDocShellRef = new ScDocShell;
-    m_pDoc = m_pDocShellRef->GetDocument();
+    m_pDocShell = new ScDocShell;
+    m_pDoc = m_pDocShell->GetDocument();
 }
 
 void Test::tearDown()
 {
-    m_pDocShellRef.Clear();
+    m_pDocShell.Clear();
 }
 
 Test::~Test()
@@ -738,6 +749,356 @@ void Test::testSheetCopy()
     bHidden = m_pDoc->RowHidden(11, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden && nRow1 == 11 && nRow2 == MAXROW);
     m_pDoc->DeleteTab(0);
+}
+
+void Test::testFunctionLists()
+{
+    const char* aDataBase[] = {
+        "DAVERAGE",
+        "DCOUNT",
+        "DCOUNTA",
+        "DGET",
+        "DMAX",
+        "DMIN",
+        "DPRODUCT",
+        "DSTDEV",
+        "DSTDEVP",
+        "DSUM",
+        "DVAR",
+        "DVARP",
+        0
+    };
+
+    const char* aDateTime[] = {
+        "DATE",
+        "DATEVALUE",
+        "DAY",
+        "DAYS",
+        "DAYS360",
+        "EASTERSUNDAY",
+        "HOUR",
+        "MINUTE",
+        "MONTH",
+        "NOW",
+        "SECOND",
+        "TIME",
+        "TIMEVALUE",
+        "TODAY",
+        "WEEKDAY",
+        "WEEKNUM",
+        "YEAR",
+        0
+    };
+
+    const char* aFinancial[] = {
+        "CUMIPMT",
+        "CUMPRINC",
+        "DB",
+        "DDB",
+        "DURATION",
+        "EFFECTIVE",
+        "FV",
+        "IPMT",
+        "IRR",
+        "ISPMT",
+        "MIRR",
+        "NOMINAL",
+        "NPER",
+        "NPV",
+        "PMT",
+        "PPMT",
+        "PV",
+        "RATE",
+        "RRI",
+        "SLN",
+        "SYD",
+        "VDB",
+        0
+    };
+
+    const char* aInformation[] = {
+        "CELL",
+        "CURRENT",
+        "FORMULA",
+        "INFO",
+        "ISBLANK",
+        "ISERR",
+        "ISERROR",
+        "ISFORMULA",
+        "ISLOGICAL",
+        "ISNA",
+        "ISNONTEXT",
+        "ISNUMBER",
+        "ISREF",
+        "ISTEXT",
+        "N",
+        "NA",
+        "TYPE",
+        0
+    };
+
+    const char* aLogical[] = {
+        "AND",
+        "FALSE",
+        "IF",
+        "NOT",
+        "OR",
+        "TRUE",
+        0
+    };
+
+    const char* aMathematical[] = {
+        "ABS",
+        "ACOS",
+        "ACOSH",
+        "ACOT",
+        "ACOTH",
+        "ASIN",
+        "ASINH",
+        "ATAN",
+        "ATAN2",
+        "ATANH",
+        "CEILING",
+        "COMBIN",
+        "COMBINA",
+        "CONVERT",
+        "COS",
+        "COSH",
+        "COT",
+        "COTH",
+        "COUNTBLANK",
+        "COUNTIF",
+        "DEGREES",
+        "EUROCONVERT",
+        "EVEN",
+        "EXP",
+        "FACT",
+        "FLOOR",
+        "GCD",
+        "INT",
+        "ISEVEN",
+        "ISODD",
+        "LCM",
+        "LN",
+        "LOG",
+        "LOG10",
+        "MOD",
+        "ODD",
+        "PI",
+        "POWER",
+        "PRODUCT",
+        "RADIANS",
+        "RAND",
+        "ROUND",
+        "ROUNDDOWN",
+        "ROUNDUP",
+        "SIGN",
+        "SIN",
+        "SINH",
+        "SQRT",
+        "SUBTOTAL",
+        "SUM",
+        "SUMIF",
+        "SUMSQ",
+        "TAN",
+        "TANH",
+        "TRUNC",
+        0
+    };
+
+    const char* aArray[] = {
+        "FREQUENCY",
+        "GROWTH",
+        "LINEST",
+        "LOGEST",
+        "MDETERM",
+        "MINVERSE",
+        "MMULT",
+        "MUNIT",
+        "SUMPRODUCT",
+        "SUMX2MY2",
+        "SUMX2PY2",
+        "SUMXMY2",
+        "TRANSPOSE",
+        "TREND",
+        0
+    };
+
+    const char* aStatistical[] = {
+        "AVEDEV",
+        "AVERAGE",
+        "AVERAGEA",
+        "B",
+        "BETADIST",
+        "BETAINV",
+        "BINOMDIST",
+        "CHIDIST",
+        "CHIINV",
+        "CHISQDIST",
+        "CHISQINV",
+        "CHITEST",
+        "CONFIDENCE",
+        "CORREL",
+        "COUNT",
+        "COUNTA",
+        "COVAR",
+        "CRITBINOM",
+        "DEVSQ",
+        "EXPONDIST",
+        "FDIST",
+        "FINV",
+        "FISHER",
+        "FISHERINV",
+        "FORECAST",
+        "FTEST",
+        "GAMMA",
+        "GAMMADIST",
+        "GAMMAINV",
+        "GAMMALN",
+        "GAUSS",
+        "GEOMEAN",
+        "HARMEAN",
+        "HYPGEOMDIST",
+        "INTERCEPT",
+        "KURT",
+        "LARGE",
+        "LOGINV",
+        "LOGNORMDIST",
+        "MAX",
+        "MAXA",
+        "MEDIAN",
+        "MIN",
+        "MINA",
+        "MODE",
+        "NEGBINOMDIST",
+        "NORMDIST",
+        "NORMINV",
+        "NORMSDIST",
+        "NORMSINV",
+        "PEARSON",
+        "PERCENTILE",
+        "PERCENTRANK",
+        "PERMUT",
+        "PERMUTATIONA",
+        "PHI",
+        "POISSON",
+        "PROB",
+        "QUARTILE",
+        "RANK",
+        "RSQ",
+        "SKEW",
+        "SLOPE",
+        "SMALL",
+        "STANDARDIZE",
+        "STDEV",
+        "STDEVA",
+        "STDEVP",
+        "STDEVPA",
+        "STEYX",
+        "TDIST",
+        "TINV",
+        "TRIMMEAN",
+        "TTEST",
+        "VAR",
+        "VARA",
+        "VARP",
+        "VARPA",
+        "WEIBULL",
+        "ZTEST",
+        0
+    };
+
+    const char* aSpreadsheet[] = {
+        "ADDRESS",
+        "AREAS",
+        "CHOOSE",
+        "COLUMN",
+        "COLUMNS",
+        "DDE",
+        "ERRORTYPE",
+        "GETPIVOTDATA",
+        "HLOOKUP",
+        "HYPERLINK",
+        "INDEX",
+        "INDIRECT",
+        "LOOKUP",
+        "MATCH",
+        "OFFSET",
+        "ROW",
+        "ROWS",
+        "SHEET",
+        "SHEETS",
+        "STYLE",
+        "VLOOKUP",
+        0
+    };
+
+    const char* aText[] = {
+        "ARABIC",
+        "ASC",
+        "BAHTTEXT",
+        "BASE",
+        "CHAR",
+        "CLEAN",
+        "CODE",
+        "CONCATENATE",
+        "DECIMAL",
+        "DOLLAR",
+        "EXACT",
+        "FIND",
+        "FIXED",
+        "JIS",
+        "LEFT",
+        "LEN",
+        "LOWER",
+        "MID",
+        "PROPER",
+        "REPLACE",
+        "REPT",
+        "RIGHT",
+        "ROMAN",
+        "SEARCH",
+        "SUBSTITUTE",
+        "T",
+        "TEXT",
+        "TRIM",
+        "UNICHAR",
+        "UNICODE",
+        "UPPER",
+        "VALUE",
+        0
+    };
+
+    struct {
+        const char* Category; const char** Functions;
+    } aTests[] = {
+        { "Database",     aDataBase },
+        { "Date&Time",    aDateTime },
+        { "Financial",    aFinancial },
+        { "Information",  aInformation },
+        { "Logical",      aLogical },
+        { "Mathematical", aMathematical },
+        { "Array",        aArray },
+        { "Statistical",  aStatistical },
+        { "Spreadsheet",  aSpreadsheet },
+        { "Text",         aText },
+        { "Add-in",       0 },
+        { 0, 0 }
+    };
+
+    ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
+    sal_uInt32 n = pFuncMgr->getCount();
+    for (sal_uInt32 i = 0; i < n; ++i)
+    {
+        const formula::IFunctionCategory* pCat = pFuncMgr->getCategory(i);
+        CPPUNIT_ASSERT_MESSAGE("Unexpected category name", pCat->getName().equalsAscii(aTests[i].Category));
+        sal_uInt32 nFuncCount = pCat->getCount();
+        for (sal_uInt32 j = 0; j < nFuncCount; ++j)
+        {
+            const formula::IFunctionDescription* pFunc = pCat->getFunction(j);
+            CPPUNIT_ASSERT_MESSAGE("Unexpected function name", pFunc->getFunctionName().equalsAscii(aTests[i].Functions[j]));
+        }
+    }
 }
 
 void Test::testGraphicsInGroup()
