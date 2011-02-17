@@ -394,6 +394,7 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         }
 #endif
         UpdateSelectionOverlay();
+        SelectionChanged();
 
         nOldCurX = nCurX;
         nOldCurY = nCurY;
