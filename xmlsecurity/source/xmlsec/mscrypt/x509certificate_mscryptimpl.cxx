@@ -481,7 +481,7 @@ void X509Certificate_MSCryptImpl :: setRawCert( Sequence< sal_Int8 > rawCert ) t
     }
 
     if( rawCert.getLength() != 0 ) {
-        m_pCertContext = CertCreateCertificateContext( X509_ASN_ENCODING, ( const BYTE* )&rawCert[0], rawCert.getLength() ) ;
+        m_pCertContext = CertCreateCertificateContext( X509_ASN_ENCODING, ( const sal_uInt8* )&rawCert[0], rawCert.getLength() ) ;
     }
 }
 

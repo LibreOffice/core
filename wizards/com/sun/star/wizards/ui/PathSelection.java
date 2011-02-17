@@ -31,6 +31,7 @@ import com.sun.star.awt.XTextComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Exception;
 import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.SystemDialog;
 
 public class PathSelection
@@ -77,7 +78,7 @@ public class PathSelection
 
         CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblSaveAs", new String[]
                 {
-                    "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 }, new Object[]
                 {
                     new Boolean(Enabled), new Integer(8), LabelText, new Integer(XPos), new Integer(YPos), new Integer(DialogStep), new Short(CurTabIndex), new Integer(Width)
@@ -85,16 +86,16 @@ public class PathSelection
 
         xSaveTextBox = CurUnoDialog.insertTextField("txtSavePath", "callXPathSelectionListener", this, new String[]
                 {
-                    "Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 }, new Object[]
                 {
                     new Boolean(Enabled), new Integer(12), TxtHelpURL, new Integer(XPos), new Integer(YPos + 10), new Integer(DialogStep), new Short((short) (CurTabIndex + 1)), new Integer(Width - 26)
                 });
         //CurUnoDialog.setControlProperty("txtSavePath", "ReadOnly", Boolean.TRUE);
-        CurUnoDialog.setControlProperty("txtSavePath", "Enabled", Boolean.FALSE);
+        CurUnoDialog.setControlProperty("txtSavePath", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
         CurUnoDialog.insertButton("cmdSelectPath", "triggerPathPicker", this, new String[]
                 {
-                    "Enabled", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 }, new Object[]
                 {
                     new Boolean(Enabled), new Integer(14), BtnHelpURL, "...", new Integer(XPos + Width - 16), new Integer(YPos + 9), new Integer(DialogStep), new Short((short) (CurTabIndex + 2)), new Integer(16)

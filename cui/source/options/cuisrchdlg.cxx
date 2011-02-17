@@ -64,14 +64,14 @@
 
 SvxJSearchOptionsDialog::SvxJSearchOptionsDialog(
             Window *pParent,
-            const SfxItemSet& rOptionsSet, INT32 nInitialFlags ) :
+            const SfxItemSet& rOptionsSet, sal_Int32 nInitialFlags ) :
     SfxSingleTabDialog  ( pParent, rOptionsSet, RID_SVXPAGE_JSEARCH_OPTIONS ),
     nInitialTlFlags( nInitialFlags )
 {
     pPage = (SvxJSearchOptionsPage *)
                     SvxJSearchOptionsPage::Create( this, rOptionsSet );
     SetTabPage( pPage );    //! implicitly calls pPage->Reset(...)!
-    pPage->EnableSaveOptions( FALSE );
+    pPage->EnableSaveOptions( sal_False );
 }
 
 
@@ -88,7 +88,7 @@ void SvxJSearchOptionsDialog::Activate()
 }
 
 
-INT32 SvxJSearchOptionsDialog::GetTransliterationFlags() const
+sal_Int32 SvxJSearchOptionsDialog::GetTransliterationFlags() const
 {
     return pPage->GetTransliterationFlags();
 }

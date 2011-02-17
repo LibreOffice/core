@@ -72,7 +72,7 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
         ::rtl::OUString aOULibName( aLibName );
 
         // check password
-        BOOL bOK = TRUE;
+        sal_Bool bOK = sal_True;
         Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
         if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
         {
@@ -87,7 +87,7 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
         if ( bOK )
         {
             // load module library
-            BOOL bModLibLoaded = FALSE;
+            sal_Bool bModLibLoaded = sal_False;
             if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
             {
                 if ( !xModLibContainer->isLibraryLoaded( aOULibName ) )
@@ -100,7 +100,7 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
             }
 
             // load dialog library
-            BOOL bDlgLibLoaded = FALSE;
+            sal_Bool bDlgLibLoaded = sal_False;
             Reference< script::XLibraryContainer > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
             if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
             {
@@ -187,7 +187,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
 
     while ( pEntry )
     {
-        USHORT nDepth = GetModel()->GetDepth( pEntry );
+        sal_uInt16 nDepth = GetModel()->GetDepth( pEntry );
         switch ( nDepth )
         {
             case 4:
@@ -292,7 +292,7 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
 
     while ( pEntry )
     {
-        USHORT nDepth = GetModel()->GetDepth( pEntry );
+        sal_uInt16 nDepth = GetModel()->GetDepth( pEntry );
         switch ( nDepth )
         {
             case 4:
@@ -378,9 +378,9 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
     return BasicEntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, aName, aMethodName, eType );
 }
 
-USHORT BasicTreeListBox::ConvertType( BasicEntryType eType )
+sal_uInt16 BasicTreeListBox::ConvertType( BasicEntryType eType )
 {
-    USHORT nType = OBJ_TYPE_UNKNOWN;
+    sal_uInt16 nType = OBJ_TYPE_UNKNOWN;
 
     switch ( eType )
     {
@@ -482,7 +482,7 @@ SbModule* BasicTreeListBox::FindModule( SvLBoxEntry* pEntry )
 SvLBoxEntry* BasicTreeListBox::FindRootEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
     OSL_ENSURE( rDocument.isValid(), "BasicTreeListBox::FindRootEntry: invalid document!" );
-    ULONG nRootPos = 0;
+    sal_uLong nRootPos = 0;
     SvLBoxEntry* pRootEntry = GetEntry( nRootPos );
     while ( pRootEntry )
     {

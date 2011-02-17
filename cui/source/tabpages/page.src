@@ -389,6 +389,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
 {
     ItemList [ en-US ] =
     {
+        < "A6" ; PAPERSIZE_A6 ; > ;
         < "A5" ; PAPERSIZE_A5 ; > ;
         < "A4" ; PAPERSIZE_A4 ; > ;
         < "A3" ; PAPERSIZE_A3 ; > ;
@@ -423,6 +424,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
 {
     ItemList [ en-US ] =
     {
+        < "A6" ; PAPERSIZE_A6 ; > ;
         < "A5" ; PAPERSIZE_A5 ; > ;
         < "A4" ; PAPERSIZE_A4 ; > ;
         < "A3" ; PAPERSIZE_A3 ; > ;

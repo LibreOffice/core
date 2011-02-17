@@ -920,7 +920,7 @@ void OControlModel::read(const Reference<stario::XObjectInputStream>& InStream) 
     }
 
     // 2. Lesen des Versionsnummer
-    UINT16 nVersion = InStream->readShort();
+    sal_uInt16 nVersion = InStream->readShort();
 
     // 3. Lesen der allgemeinen Properties
     ::comphelper::operator>>( InStream, m_aName);
@@ -1758,7 +1758,7 @@ void SAL_CALL OBoundControlModel::read( const Reference< stario::XObjectInputStr
     OControlModel::read(_rxInStream);
 
     osl::MutexGuard aGuard(m_aMutex);
-    UINT16 nVersion = _rxInStream->readShort(); (void)nVersion;
+    sal_uInt16 nVersion = _rxInStream->readShort(); (void)nVersion;
     ::comphelper::operator>>( _rxInStream, m_aControlSource);
 }
 
@@ -2128,7 +2128,7 @@ sal_Bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
                     m_xColumnUpdate = Reference< XColumnUpdate >( m_xField, UNO_QUERY );
                     m_xColumn = Reference< XColumn >( m_xField, UNO_QUERY );
 
-                    INT32 nNullableFlag = ColumnValue::NO_NULLS;
+                    sal_Int32 nNullableFlag = ColumnValue::NO_NULLS;
                     m_xField->getPropertyValue(PROPERTY_ISNULLABLE) >>= nNullableFlag;
                     m_bRequired = (ColumnValue::NO_NULLS == nNullableFlag);
                         // we're optimistic : in case of ColumnValue_NULLABLE_UNKNOWN we assume nullability ....
