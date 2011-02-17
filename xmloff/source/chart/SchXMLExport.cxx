@@ -854,7 +854,7 @@ lcl_TableData lcl_getDataForLocalTable(
 
         // iterate over all sequences
         size_t nSeqIdx = 0;
-        Sequence< Sequence< OUString > > aComplexLabels;
+        Sequence< Sequence< OUString > > aComplexLabels(nNumSequences);
         for( ; aIt != aEnd; ++aIt, ++nSeqIdx )
         {
             OUString aRange;
