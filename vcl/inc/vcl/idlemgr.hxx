@@ -31,8 +31,10 @@
 
 #include <vcl/sv.h>
 #include <vcl/timer.hxx>
+#include <vector>
 
-class ImplIdleList;
+struct ImplIdleData;
+typedef ::std::vector< ImplIdleData* > ImplIdleList;
 
 // ---------------
 // - ImplIdleMgr -
