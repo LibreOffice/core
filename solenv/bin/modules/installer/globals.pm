@@ -375,6 +375,10 @@ BEGIN
     %spellcheckerlanguagehash = ();
     %spellcheckerfilehash = ();
     $registryrootcomponent = "";
+    %allcomponents = ();
+    %allcomponents_in_this_database = ();
+    %allshortcomponents = ();
+    %alluniquedirectorynames = ();
 
     $installlocationdirectory = "";
     $installlocationdirectoryset = 0;
