@@ -199,20 +199,20 @@ private:
     PolyPolygon&            ImplMap( const PolyPolygon& rPolyPoly, PolyPolygon& rDstPolyPoly ) const;
 
     void                    ImplWriteLine( const Point& rPt1, const Point& rPt2, const Color* pLineColor = NULL,
-                                           bool bApplyMapping = true );
+                                           sal_Bool bApplyMapping = sal_True );
     void                    ImplWriteRect( const Rectangle& rRect, long nRadX = 0, long nRadY = 0,
-                                           bool bApplyMapping = true );
+                                           sal_Bool bApplyMapping = sal_True );
     void                    ImplWriteEllipse( const Point& rCenter, long nRadX, long nRadY,
-                                              bool bApplyMapping = true );
+                                              sal_Bool bApplyMapping = sal_True );
     void                    ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bLineOnly,
-                                                  bool bApplyMapping = true );
-    void                    ImplWriteShape( const SVGShapeDescriptor& rShape, bool bApplyMapping = true );
+                                                  sal_Bool bApplyMapping = sal_True );
+    void                    ImplWriteShape( const SVGShapeDescriptor& rShape, sal_Bool bApplyMapping = sal_True );
     void                    ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient, sal_uInt32 nWriteFlags,
-                                                 bool bApplyMapping = true );
+                                                 sal_Bool bApplyMapping = sal_True );
     void                    ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth,
-                                           bool bApplyMapping = true );
+                                           sal_Bool bApplyMapping = sal_True );
     void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz,
-                                          bool bApplyMapping = true );
+                                          sal_Bool bApplyMapping = sal_True );
 
     void                    ImplCheckFontAttributes();
     void                    ImplCheckPaintAttributes();

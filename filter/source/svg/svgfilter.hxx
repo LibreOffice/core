@@ -128,26 +128,25 @@ public:
 
     virtual ~SVGExport();
 
-    bool IsUseTinyProfile() const;
-    bool IsEmbedFonts() const;
-    bool IsUseNativeTextDecoration() const;
+    sal_Bool IsUseTinyProfile() const;
+    sal_Bool IsEmbedFonts() const;
+    sal_Bool IsUseNativeTextDecoration() const;
     ::rtl::OUString GetGlyphPlacement() const;
-    bool IsUseOpacity() const;
-    bool IsUseGradient() const;
+    sal_Bool IsUseOpacity() const;
+    sal_Bool IsUseGradient() const;
 
     void  pushClip( const ::basegfx::B2DPolyPolygon& rPolyPoly );
     void  popClip();
-    bool  hasClip() const;
+    sal_Bool  hasClip() const;
     const ::basegfx::B2DPolyPolygon* getCurClip() const;
 
 protected:
 
-virtual void            _ExportMeta() {}
-virtual void            _ExportStyles( BOOL ) {}
+virtual void            _ExportStyles( sal_Bool /* bUsed */ ) {}
 virtual void            _ExportAutoStyles() {}
 virtual void            _ExportContent() {}
 virtual void            _ExportMasterStyles() {}
-virtual sal_uInt32      exportDoc( enum ::xmloff::token::XMLTokenEnum ) { return 0; }
+virtual sal_uInt32      exportDoc( enum ::xmloff::token::XMLTokenEnum /* eClass */ ) { return 0; }
 
 private:
 
@@ -177,7 +176,7 @@ public:
                                     ~ObjectRepresentation();
 
     ObjectRepresentation&           operator=( const ObjectRepresentation& rPresentation );
-    bool                            operator==( const ObjectRepresentation& rPresentation ) const;
+    sal_Bool                            operator==( const ObjectRepresentation& rPresentation ) const;
 
     const Reference< XInterface >&  GetObject() const { return mxObject; }
     sal_Bool                        HasRepresentation() const { return mpMtf != NULL; }
@@ -276,9 +275,9 @@ private:
     sal_Bool                            implCreateObjectsFromBackground( const Reference< XDrawPage >& rxMasterPage );
 
     ::rtl::OUString                     implGetDescriptionFromShape( const Reference< XShape >& rxShape );
-    ::rtl::OUString                     implGetValidIDFromInterface( const Reference< XInterface >& rxIf, bool bUnique = false );
+    ::rtl::OUString                     implGetValidIDFromInterface( const Reference< XInterface >& rxIf, sal_Bool bUnique = sal_False );
 
-    bool                                implHasText( const GDIMetaFile& rMtf ) const;
+    sal_Bool                                implHasText( const GDIMetaFile& rMtf ) const;
 
                                         DECL_LINK( CalcFieldHdl, EditFieldInfo* );
 

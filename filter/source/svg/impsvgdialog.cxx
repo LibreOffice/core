@@ -63,7 +63,7 @@ ImpSVGDialog::ImpSVGDialog( Window* pParent/*, ResMgr& rResMgr*/, Sequence< Prop
     maBTCancel( this ),
     maBTHelp( this ),
     maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( SVG_EXPORTFILTER_CONFIGPATH ) ), &rFilterData ),
-    mbOldNativeDecoration( false )
+    mbOldNativeDecoration( sal_False )
 {
     SetText( String( RTL_CONSTASCII_USTRINGPARAM( "SVG Export Options" ) ) );
     SetOutputSizePixel( Size( implMap( *this, 177 ), implMap( *this, 77 ) ) );
@@ -84,9 +84,9 @@ ImpSVGDialog::ImpSVGDialog( Window* pParent/*, ResMgr& rResMgr*/, Sequence< Prop
     maCBUseNativeDecoration.SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 41 ) ),
                                              Size( implMap( *this, 142 ), implMap( *this, 10 ) ) );
 
-    maCBTinyProfile.Check( maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( SVG_PROP_TINYPROFILE ) ), false ) );
-    maCBEmbedFonts.Check( maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( SVG_PROP_EMBEDFONTS ) ), true ) );
-    maCBUseNativeDecoration.Check( maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( SVG_PROP_NATIVEDECORATION ) ), true ) );
+    maCBTinyProfile.Check( maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( SVG_PROP_TINYPROFILE ) ), sal_False ) );
+    maCBEmbedFonts.Check( maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( SVG_PROP_EMBEDFONTS ) ), sal_True ) );
+    maCBUseNativeDecoration.Check( maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( SVG_PROP_NATIVEDECORATION ) ), sal_True ) );
 
     maBTOK.SetPosSizePixel( Point( implMap( *this, 12 ), implMap( *this, 57 ) ),
                             Size( implMap( *this, 50 ), implMap( *this, 14 ) ) );
@@ -136,7 +136,7 @@ IMPL_LINK( ImpSVGDialog, OnToggleCheckbox, CheckBox*, pBox )
         {
             mbOldNativeDecoration = maCBUseNativeDecoration.IsChecked();
 
-            maCBUseNativeDecoration.Check( false );
+            maCBUseNativeDecoration.Check( sal_False );
             maCBUseNativeDecoration.Disable();
         }
         else

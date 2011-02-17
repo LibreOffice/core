@@ -43,14 +43,14 @@ class PBMWriter {
 private:
 
     SvStream*           mpOStm;             // Die auszugebende PBM-Datei
-    USHORT              mpOStmOldModus;
+    sal_uInt16              mpOStmOldModus;
 
-    BOOL                mbStatus;
+    sal_Bool                mbStatus;
     sal_Int32           mnMode;             // 0 -> raw, 1-> ascii
     BitmapReadAccess*   mpAcc;
-    ULONG               mnWidth, mnHeight;  // Bildausmass in Pixeln
+    sal_uLong               mnWidth, mnHeight;  // Bildausmass in Pixeln
 
-    BOOL                ImplWriteHeader();
+    sal_Bool                ImplWriteHeader();
     void                ImplWriteBody();
     void                ImplWriteNumber( sal_Int32 );
 
@@ -60,13 +60,13 @@ public:
                         PBMWriter();
                         ~PBMWriter();
 
-    BOOL                WritePBM( const Graphic& rGraphic, SvStream& rPBM, FilterConfigItem* pFilterConfigItem );
+    sal_Bool                WritePBM( const Graphic& rGraphic, SvStream& rPBM, FilterConfigItem* pFilterConfigItem );
 };
 
 //=================== Methoden von PBMWriter ==============================
 
 PBMWriter::PBMWriter() :
-    mbStatus    ( TRUE ),
+    mbStatus    ( sal_True ),
     mpAcc       ( NULL )
 {
 }
@@ -79,7 +79,7 @@ PBMWriter::~PBMWriter()
 
 // ------------------------------------------------------------------------
 
-BOOL PBMWriter::WritePBM( const Graphic& rGraphic, SvStream& rPBM, FilterConfigItem* pFilterConfigItem )
+sal_Bool PBMWriter::WritePBM( const Graphic& rGraphic, SvStream& rPBM, FilterConfigItem* pFilterConfigItem )
 {
 
     mpOStm = &rPBM;
@@ -112,7 +112,7 @@ BOOL PBMWriter::WritePBM( const Graphic& rGraphic, SvStream& rPBM, FilterConfigI
         aBmp.ReleaseAccess( mpAcc );
     }
     else
-        mbStatus = FALSE;
+        mbStatus = sal_False;
 
     mpOStm->SetNumberFormatInt( mpOStmOldModus );
 
@@ -124,7 +124,7 @@ BOOL PBMWriter::WritePBM( const Graphic& rGraphic, SvStream& rPBM, FilterConfigI
 
 // ------------------------------------------------------------------------
 
-BOOL PBMWriter::ImplWriteHeader()
+sal_Bool PBMWriter::ImplWriteHeader()
 {
     mnWidth = mpAcc->Width();
     mnHeight = mpAcc->Height();
@@ -136,11 +136,11 @@ BOOL PBMWriter::ImplWriteHeader()
             *mpOStm << "P1\x0a";
 
         ImplWriteNumber( mnWidth );
-        *mpOStm << (BYTE)32;
+        *mpOStm << (sal_uInt8)32;
         ImplWriteNumber( mnHeight );
-        *mpOStm << (BYTE)10;
+        *mpOStm << (sal_uInt8)10;
     }
-    else mbStatus = FALSE;
+    else mbStatus = sal_False;
     return mbStatus;
 }
 
@@ -150,10 +150,10 @@ void PBMWriter::ImplWriteBody()
 {
     if ( mnMode == 0 )
     {
-        BYTE    nBYTE = 0;
-        for ( ULONG y = 0; y < mnHeight; y++ )
+        sal_uInt8   nBYTE = 0;
+        for ( sal_uLong y = 0; y < mnHeight; y++ )
         {
-            ULONG x;
+            sal_uLong x;
             for ( x = 0; x < mnWidth; x++ )
             {
                 nBYTE <<= 1;
@@ -163,25 +163,25 @@ void PBMWriter::ImplWriteBody()
                     *mpOStm << nBYTE;
             }
             if ( ( x & 7 ) != 0 )
-                *mpOStm << (BYTE)( nBYTE << ( ( x ^ 7 ) + 1 ) );
+                *mpOStm << (sal_uInt8)( nBYTE << ( ( x ^ 7 ) + 1 ) );
         }
     }
     else
     {
         int nxCount;
-        for ( ULONG y = 0; y < mnHeight; y++ )
+        for ( sal_uLong y = 0; y < mnHeight; y++ )
         {
             nxCount = 70;
-            for ( ULONG x = 0; x < mnWidth; x++ )
+            for ( sal_uLong x = 0; x < mnWidth; x++ )
             {
                 if (!( --nxCount ) )
                 {
                     nxCount = 69;
-                    *mpOStm << (BYTE)10;
+                    *mpOStm << (sal_uInt8)10;
                 }
-                *mpOStm << (BYTE)( ( mpAcc->GetPixel( y, x ) ^ 1 ) + '0' ) ;
+                *mpOStm << (sal_uInt8)( ( mpAcc->GetPixel( y, x ) ^ 1 ) + '0' ) ;
             }
-            *mpOStm << (BYTE)10;
+            *mpOStm << (sal_uInt8)10;
         }
     }
 }
@@ -204,7 +204,7 @@ void PBMWriter::ImplWriteNumber( sal_Int32 nNumber )
 // - exported function -
 // ---------------------
 
-extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, BOOL )
+extern "C" sal_Bool __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool )
 {
     PBMWriter aPBMWriter;
 

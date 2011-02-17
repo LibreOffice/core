@@ -143,7 +143,7 @@ void Writer::Impl_addPolygon( BitStream& rBits, const Polygon& rPoly, sal_Bool b
 
     Impl_addShapeRecordChange( rBits, _Int16(aLastPoint.X()),_Int16(aLastPoint.Y()), bFilled );
 
-    USHORT i = 0, nSize = rPoly.GetSize();
+    sal_uInt16 i = 0, nSize = rPoly.GetSize();
 
     double d = 16.0f;
 
@@ -540,7 +540,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
     {
         // todo: optimize me as this will generate a huge amount of duplicate polygons
         PolyPolygon aPolyPoygon;
-        mpVDev->GetTextOutline( aPolyPoygon, rText, 0, 0, (USHORT)nLen, TRUE, nWidth, pDXArray );
+        mpVDev->GetTextOutline( aPolyPoygon, rText, 0, 0, (sal_uInt16)nLen, sal_True, nWidth, pDXArray );
         aPolyPoygon.Translate( rPos );
         Impl_writePolyPolygon( aPolyPoygon, sal_True, aTextColor, aTextColor );
     }
@@ -566,7 +566,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
 
         if( nLen > 1 )
         {
-            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( rText.GetChar(  (USHORT) nLen - 1 ) );
+            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( rText.GetChar(  (sal_uInt16) nLen - 1 ) );
 
             if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
             {
@@ -620,7 +620,7 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
             Rectangle   aTmpRectangle(aTmpPoint, aTextSize );
             Polygon     aPoly( aTmpRectangle );
 
-            aPoly.Rotate( aTmpPoint, (USHORT) nOrientation );
+            aPoly.Rotate( aTmpPoint, (sal_uInt16) nOrientation );
 
             Rectangle   aTextBoundRect( aPoly.GetBoundRect() );
 
@@ -832,7 +832,7 @@ void getBitmapData( const BitmapEx& aBmpEx, sal_uInt8*& tgadata, sal_uInt8*& tga
 // -----------------------------------------------------------------------------
 sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQualityLevel )
 {
-    ULONG bmpChecksum = bmpSource.GetChecksum();
+    sal_uLong bmpChecksum = bmpSource.GetChecksum();
 
     ChecksumCache::iterator it = mBitmapCache.find(bmpChecksum);
 
@@ -1260,7 +1260,7 @@ bool Writer::Impl_writeStroke( SvtGraphicStroke& rStroke )
     Color aColor( mpVDev->GetLineColor() );
 
     if( 0.0 != rStroke.getTransparency() )
-        aColor.SetTransparency( sal::static_int_cast<UINT8>( MinMax( (long int)( rStroke.getTransparency() * 0xff ), 0, 0xff ) ) );
+        aColor.SetTransparency( sal::static_int_cast<sal_uInt8>( MinMax( (long int)( rStroke.getTransparency() * 0xff ), 0, 0xff ) ) );
 
     sal_uInt16 nShapeId = defineShape( aPolyPolygon, sal::static_int_cast<sal_uInt16>( mapRelative( (sal_Int32)( rStroke.getStrokeWidth() ) ) ), aColor );
     maShapeIds.push_back( nShapeId );
@@ -1290,7 +1290,7 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
             Color aColor( rFilling.getFillColor() );
 
             if( 0.0 != rFilling.getTransparency() )
-                aColor.SetTransparency( sal::static_int_cast<UINT8>( MinMax( (long int)( rFilling.getTransparency() * 0xff ) , 0, 0xff ) ) );
+                aColor.SetTransparency( sal::static_int_cast<sal_uInt8>( MinMax( (long int)( rFilling.getTransparency() * 0xff ) , 0, 0xff ) ) );
 
             FillStyle aFillStyle( aColor );
 
@@ -1441,10 +1441,10 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
 {
     Rectangle clipRect;
     int bMap = 0;
-    for( ULONG i = 0, nCount = rMtf.GetActionCount(); i < nCount; i++ )
+    for( sal_uLong i = 0, nCount = rMtf.GetActionCount(); i < nCount; i++ )
     {
         const MetaAction*   pAction = rMtf.GetAction( i );
-        const USHORT        nType = pAction->GetType();
+        const sal_uInt16        nType = pAction->GetType();
 
         switch( nType )
         {
@@ -1662,7 +1662,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
                 const GDIMetaFile       aGDIMetaFile( pA->GetSubstitute() );
                 sal_Bool                bFound = sal_False;
 
-                for( ULONG j = 0, nC = aGDIMetaFile.GetActionCount(); ( j < nC ) && !bFound; j++ )
+                for( sal_uLong j = 0, nC = aGDIMetaFile.GetActionCount(); ( j < nC ) && !bFound; j++ )
                 {
                     const MetaAction* pSubstAct = aGDIMetaFile.GetAction( j );
 
@@ -1681,7 +1681,7 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case( META_COMMENT_ACTION ):
             {
                 const MetaCommentAction*    pA = (const MetaCommentAction*) pAction;
-                const BYTE*                 pData = pA->GetData();
+                const sal_uInt8*                pData = pA->GetData();
                 String                      aSkipComment;
 
                 if( pA->GetComment().CompareIgnoreCaseToAscii( "XGRAD_SEQ_BEGIN" ) == COMPARE_EQUAL )

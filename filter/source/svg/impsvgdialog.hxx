@@ -80,7 +80,7 @@ private:
     HelpButton          maBTHelp;
 
     FilterConfigItem    maConfigItem;
-    bool                mbOldNativeDecoration;
+    sal_Bool            mbOldNativeDecoration;
 
     DECL_LINK( OnToggleCheckbox, CheckBox* );
 
