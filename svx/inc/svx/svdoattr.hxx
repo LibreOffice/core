@@ -74,10 +74,10 @@ public:
     TYPEINFO();
 
     // Feststellen, ob bFilledObj && Fuellung!=FillNone
-    BOOL HasFill() const;
+    sal_Bool HasFill() const;
 
     // Feststellen, ob Linie!=LineNone
-    BOOL HasLine() const;
+    sal_Bool HasLine() const;
 
     virtual const Rectangle& GetSnapRect() const;
 

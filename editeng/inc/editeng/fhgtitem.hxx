@@ -47,24 +47,24 @@ namespace rtl
     Dieses Item beschreibt die Font-Hoehe.
 */
 
-#define FONTHEIGHT_16_VERSION   ((USHORT)0x0001)
-#define FONTHEIGHT_UNIT_VERSION ((USHORT)0x0002)
+#define FONTHEIGHT_16_VERSION   ((sal_uInt16)0x0001)
+#define FONTHEIGHT_UNIT_VERSION ((sal_uInt16)0x0002)
 
 class EDITENG_DLLPUBLIC SvxFontHeightItem : public SfxPoolItem
 {
-    UINT32  nHeight;
-    USHORT  nProp;              // default 100%
+    sal_uInt32  nHeight;
+    sal_uInt16  nProp;              // default 100%
     SfxMapUnit ePropUnit;       // Percent, Twip, ...
 public:
     TYPEINFO();
 
-    SvxFontHeightItem( const ULONG nSz /*= 240*/, const USHORT nPropHeight /*= 100*/,
-                       const USHORT nId  );
+    SvxFontHeightItem( const sal_uLong nSz /*= 240*/, const sal_uInt16 nPropHeight /*= 100*/,
+                       const sal_uInt16 nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -72,9 +72,9 @@ public:
                                     String &rText, const IntlWrapper * = 0 ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion) const;
-    virtual USHORT           GetVersion( USHORT nItemVersion) const;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const;
+    virtual sal_uInt16           GetVersion( sal_uInt16 nItemVersion) const;
     virtual int              ScaleMetrics( long nMult, long nDiv );
     virtual int              HasMetrics() const;
 
@@ -85,21 +85,21 @@ public:
             return *this;
         }
 
-    void SetHeight( UINT32 nNewHeight, const USHORT nNewProp = 100,
+    void SetHeight( sal_uInt32 nNewHeight, const sal_uInt16 nNewProp = 100,
                      SfxMapUnit eUnit = SFX_MAPUNIT_RELATIVE );
 
-    void SetHeight( UINT32 nNewHeight, USHORT nNewProp,
+    void SetHeight( sal_uInt32 nNewHeight, sal_uInt16 nNewProp,
                      SfxMapUnit eUnit, SfxMapUnit eCoreUnit );
 
-    UINT32 GetHeight() const { return nHeight; }
+    sal_uInt32 GetHeight() const { return nHeight; }
 
-    void SetHeightValue( UINT32 nNewHeight )
+    void SetHeightValue( sal_uInt32 nNewHeight )
         {
             DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
             nHeight = nNewHeight;
         }
 
-    void SetProp( const USHORT nNewProp,
+    void SetProp( const sal_uInt16 nNewProp,
                     SfxMapUnit eUnit = SFX_MAPUNIT_RELATIVE )
         {
             DBG_ASSERT( GetRefCount() == 0, "SetValue() with pooled item" );
@@ -107,7 +107,7 @@ public:
             ePropUnit = eUnit;
         }
 
-    USHORT GetProp() const { return nProp; }
+    sal_uInt16 GetProp() const { return nProp; }
 
     SfxMapUnit GetPropUnit() const { return ePropUnit;  }   // Percent, Twip, ...
 };

@@ -37,7 +37,7 @@
 //------------------------------
 class SdrLayerIdItem: public SfxUInt16Item {
 public:
-    SdrLayerIdItem(USHORT nId=0): SfxUInt16Item(SDRATTR_LAYERID,nId)  {}
+    SdrLayerIdItem(sal_uInt16 nId=0): SfxUInt16Item(SDRATTR_LAYERID,nId)  {}
     SdrLayerIdItem(SvStream& rIn): SfxUInt16Item(SDRATTR_LAYERID,rIn) {}
     SdrLayerID GetValue() const { return (SdrLayerID)SfxUInt16Item::GetValue(); }
 };

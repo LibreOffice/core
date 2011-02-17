@@ -83,7 +83,7 @@ DecoToolBox::DecoToolBox( Window* pParent, WinBits nStyle ) :
     ToolBox( pParent, nStyle )
 {
         SetBackground();
-        SetPaintTransparent( TRUE );
+        SetPaintTransparent( sal_True );
 }
 
 void DecoToolBox::DataChanged( const DataChangedEvent& rDCEvt )
@@ -94,17 +94,17 @@ void DecoToolBox::DataChanged( const DataChangedEvent& rDCEvt )
     {
         calcMinSize();
         SetBackground();
-        SetPaintTransparent( TRUE );
+        SetPaintTransparent( sal_True );
     }
 }
 
 void DecoToolBox::calcMinSize()
 {
     ToolBox aTbx( GetParent() );
-    USHORT nItems = GetItemCount();
-    for( USHORT i = 0; i < nItems; i++ )
+    sal_uInt16 nItems = GetItemCount();
+    for( sal_uInt16 i = 0; i < nItems; i++ )
     {
-        USHORT nId = GetItemId( i );
+        sal_uInt16 nId = GetItemId( i );
         aTbx.InsertItem( nId, GetItemImage( nId ) );
     }
     aTbx.SetOutStyle( TOOLBOX_STYLE_FLAT );
@@ -193,8 +193,8 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     // clean up resource stack
     FreeResource();
 
-    maWelcome.SetPaintTransparent( TRUE );
-    maProduct.SetPaintTransparent( TRUE );
+    maWelcome.SetPaintTransparent( sal_True );
+    maProduct.SetPaintTransparent( sal_True );
     EnableChildTransparentMode();
 
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
@@ -387,7 +387,7 @@ void BackingWindow::prepareRecentFileMenu()
                 aBuf.append( i+1 );
             aBuf.appendAscii( ": " );
             aBuf.append( aMenuTitle );
-            mpRecentMenu->InsertItem( static_cast<USHORT>(i+1), aBuf.makeStringAndClear() );
+            mpRecentMenu->InsertItem( static_cast<sal_uInt16>(i+1), aBuf.makeStringAndClear() );
         }
     }
     else
@@ -564,9 +564,9 @@ void BackingWindow::initControls()
         MenuBar* pMBar = pSysWin->GetMenuBar();
         if( pMBar )
         {
-            for( USHORT i = 0; i < pMBar->GetItemCount(); i++ )
+            for( sal_uInt16 i = 0; i < pMBar->GetItemCount(); i++ )
             {
-                USHORT nItemId = pMBar->GetItemId( i );
+                sal_uInt16 nItemId = pMBar->GetItemId( i );
                 String aItemText( pMBar->GetItemText( nItemId ) );
                 if( aItemText.Len() )
                     aMnemns.RegisterMnemonic( aItemText );
@@ -677,11 +677,11 @@ void BackingWindow::layoutButton(
 {
     rtl::OUString aURL( rtl::OUString::createFromAscii( i_pURL ? i_pURL : "" ) );
     // setup button
-    i_rBtn.SetPaintTransparent( TRUE );
+    i_rBtn.SetPaintTransparent( sal_True );
     i_rBtn.SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
     if( i_pURL && (! i_rOpt.IsModuleInstalled( i_eMod ) || i_rURLS.find( aURL ) == i_rURLS.end()) )
     {
-        i_rBtn.Enable( FALSE );
+        i_rBtn.Enable( sal_False );
     }
 
     // setup text
@@ -1136,7 +1136,7 @@ void BackingWindow::dispatchURL( const rtl::OUString& i_rURL,
             if ( xDispatch.is() )
             {
                 ImplDelayedDispatch* pDisp = new ImplDelayedDispatch( xDispatch, aDispatchURL, i_rArgs );
-                ULONG nEventId = 0;
+                sal_uLong nEventId = 0;
                 if( ! Application::PostUserEvent( nEventId, Link( NULL, implDispatchDelayed ), pDisp ) )
                     delete pDisp; // event could not be posted for unknown reason, at least don't leak
             }

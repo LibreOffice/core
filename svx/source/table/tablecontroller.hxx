@@ -161,7 +161,7 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > mxModifyListener;
 
-    ULONG mnUpdateEvent;
+    sal_uLong mnUpdateEvent;
 };
 
 } }

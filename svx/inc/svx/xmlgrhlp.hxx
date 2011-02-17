@@ -85,7 +85,7 @@ private:
     SVX_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage > ImplGetGraphicStorage( const ::rtl::OUString& rPictureStorageName );
     SVX_DLLPRIVATE SvxGraphicHelperStream_Impl ImplGetGraphicStream( const ::rtl::OUString& rPictureStorageName,
                                                       const ::rtl::OUString& rPictureStreamName,
-                                                      BOOL bTruncate );
+                                                      sal_Bool bTruncate );
     SVX_DLLPRIVATE String                      ImplGetGraphicMimeType( const String& rFileName ) const;
     SVX_DLLPRIVATE Graphic                      ImplReadGraphic( const ::rtl::OUString& rPictureStorageName,
                                                  const ::rtl::OUString& rPictureStreamName );
@@ -99,7 +99,7 @@ protected:
                                 ~SvXMLGraphicHelper();
     void                        Init( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage >& xXMLStorage,
                                       SvXMLGraphicHelperMode eCreateMode,
-                                      BOOL bDirect );
+                                      sal_Bool bDirect );
 
     virtual void SAL_CALL       disposing();
 
@@ -108,7 +108,7 @@ public:
 
     static SvXMLGraphicHelper*  Create( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XStorage >& rXMLStorage,
                                         SvXMLGraphicHelperMode eCreateMode,
-                                        BOOL bDirect = TRUE );
+                                        sal_Bool bDirect = sal_True );
     static SvXMLGraphicHelper*  Create( SvXMLGraphicHelperMode eCreateMode );
 
     static void                 Destroy( SvXMLGraphicHelper* pSvXMLGraphicHelper );
@@ -136,7 +136,7 @@ namespace svx
 
     You should call dispose after you no longer need this component.
 
-    uses eCreateMode == GRAPHICHELPER_MODE_READ, bDirect == TRUE in
+    uses eCreateMode == GRAPHICHELPER_MODE_READ, bDirect == sal_True in
     SvXMLGraphicHelper
  */
 SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvXMLGraphicImportHelper_createInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw( ::com::sun::star::uno::Exception );
@@ -152,7 +152,7 @@ SVX_DLLPUBLIC ::rtl::OUString SAL_CALL SvXMLGraphicImportHelper_getImplementatio
     To write the Pictures stream, you have to call dispose at this component.
     Make sure you call dipose before you commit the parent storage.
 
-    uses eCreateMode == GRAPHICHELPER_MODE_WRITE, bDirect == TRUE in
+    uses eCreateMode == GRAPHICHELPER_MODE_WRITE, bDirect == sal_True in
     SvXMLGraphicHelper
  */
 SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SvXMLGraphicExportHelper_createInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw( ::com::sun::star::uno::Exception );

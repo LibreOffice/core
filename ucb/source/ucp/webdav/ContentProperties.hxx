@@ -102,10 +102,12 @@ struct DAVResource;
 class ContentProperties
 {
 public:
-      ContentProperties( const DAVResource& rResource );
+    ContentProperties();
+
+    ContentProperties( const DAVResource& rResource );
 
     // Mini props for transient contents.
-      ContentProperties( const rtl::OUString & rTitle, sal_Bool bFolder );
+    ContentProperties( const rtl::OUString & rTitle, sal_Bool bFolder );
 
     // Micro props for non-existing contents.
     ContentProperties( const rtl::OUString & rTitle );
@@ -181,7 +183,7 @@ public:
     { return m_xProps; }
 
 private:
-    ::rtl::OUString m_aEscapedTitle;  // escaped Title
+    ::rtl::OUString m_aEscapedTitle;
     std::auto_ptr< PropertyValueMap > m_xProps;
     bool m_bTrailingSlash;
 
@@ -192,6 +194,34 @@ private:
     const PropertyValue * get( const rtl::OUString & rName ) const;
 };
 
-}
+class CachableContentProperties
+{
+private:
+    ContentProperties m_aProps;
+
+    CachableContentProperties & operator=( const CachableContentProperties & ); // n.i.
+    CachableContentProperties( const CachableContentProperties & ); // n.i.
+
+public:
+    CachableContentProperties( const ContentProperties & rProps );
+
+    void addProperties( const ContentProperties & rProps );
+
+    void addProperties( const std::vector< DAVPropertyValue > & rProps );
+
+    bool containsAllNames(
+                    const com::sun::star::uno::Sequence<
+                        com::sun::star::beans::Property >& rProps,
+                    std::vector< rtl::OUString > & rNamesNotContained ) const
+    { return m_aProps.containsAllNames( rProps, rNamesNotContained ); }
+
+    const com::sun::star::uno::Any &
+    getValue( const rtl::OUString & rName ) const
+    { return m_aProps.getValue( rName ); }
+
+    operator const ContentProperties & () const { return m_aProps; }
+};
+
+} // namespace webdav_ucp
 
 #endif /* !_WEBDAV_UCP_CONTENTPROPERTIES_HXX */

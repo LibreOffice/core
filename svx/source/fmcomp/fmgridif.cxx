@@ -1974,10 +1974,12 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_HELPURL ) )
     {
-        INetURLObject aHID( ::comphelper::getString(Value) );
-        DBG_ASSERT( aHID.GetProtocol() == INET_PROT_HID, "Wrong HelpURL!" );
+        ::rtl::OUString sHelpURL;
+        OSL_VERIFY( Value >>= sHelpURL );
+        INetURLObject aHID( sHelpURL );
         if ( aHID.GetProtocol() == INET_PROT_HID )
-              pGrid->SetHelpId( rtl::OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 ) );
+            sHelpURL = aHID.GetURLPath();
+        pGrid->SetHelpId( rtl::OUStringToOString( sHelpURL, RTL_TEXTENCODING_UTF8 ) );
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_DISPLAYSYNCHRON ) )
     {
@@ -2073,25 +2075,28 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_HASNAVIGATION ) )
     {
-        if (Value.getValueType() == ::getBooleanCppuType())
-            pGrid->EnableNavigationBar(*(sal_Bool*)Value.getValue());
+        sal_Bool bValue( sal_True );
+        OSL_VERIFY( Value >>= bValue );
+        pGrid->EnableNavigationBar( bValue );
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_RECORDMARKER ) )
     {
-        if (Value.getValueType() == ::getBooleanCppuType())
-            pGrid->EnableHandle(*(sal_Bool*)Value.getValue());
+        sal_Bool bValue( sal_True );
+        OSL_VERIFY( Value >>= bValue );
+        pGrid->EnableHandle( bValue );
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_ENABLED ) )
     {
-        if (Value.getValueType() == ::getBooleanCppuType())
-        {
-            // Im DesignModus nur das Datenfenster disablen
-            // Sonst kann das Control nicht mehr konfiguriert werden
-            if (isDesignMode())
-                pGrid->GetDataWindow().Enable(*(sal_Bool*)Value.getValue());
-            else
-                pGrid->Enable(*(sal_Bool*)Value.getValue());
-        }
+        sal_Bool bValue( sal_True );
+        OSL_VERIFY( Value >>= bValue );
+        pGrid->EnableHandle( bValue );
+
+        // Im DesignModus nur das Datenfenster disablen
+        // Sonst kann das Control nicht mehr konfiguriert werden
+        if (isDesignMode())
+            pGrid->GetDataWindow().Enable( bValue );
+        else
+            pGrid->Enable( bValue );
     }
     else
         VCLXWindow::setProperty( PropertyName, Value );
@@ -2106,7 +2111,7 @@ Reference< XAccessibleContext > FmXGridPeer::CreateAccessibleContext()
     Window* pGrid = GetWindow();
     if ( pGrid )
     {
-        Reference< XAccessible > xAcc( pGrid->GetAccessible( TRUE ) );
+        Reference< XAccessible > xAcc( pGrid->GetAccessible( sal_True ) );
         if ( xAcc.is() )
             xContext = xAcc->getAccessibleContext();
         // TODO: this has a slight conceptual problem:

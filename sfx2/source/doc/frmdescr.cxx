@@ -40,15 +40,15 @@
 
 DBG_NAME(SfxFrameDescriptor);
 
-#define VERSION (USHORT) 3
+#define VERSION (sal_uInt16) 3
 
 struct SfxFrameDescriptor_Impl
 {
     Wallpaper*  pWallpaper;
     SfxItemSet* pArgs;
-    BOOL        bEditable;
+    sal_Bool        bEditable;
 
-    SfxFrameDescriptor_Impl() : pWallpaper( NULL ), pArgs( NULL ), bEditable( TRUE ) {}
+    SfxFrameDescriptor_Impl() : pWallpaper( NULL ), pArgs( NULL ), bEditable( sal_True ) {}
     ~SfxFrameDescriptor_Impl()
     {
         delete pWallpaper;
@@ -63,10 +63,10 @@ SfxFrameDescriptor::SfxFrameDescriptor() :
     eSizeSelector( SIZE_ABS ),
     nHasBorder( BORDER_YES ),
     nItemId( 0 ),
-    bResizeHorizontal( TRUE ),
-    bResizeVertical( TRUE ),
-    bHasUI( TRUE ),
-    bReadOnly( FALSE )
+    bResizeHorizontal( sal_True ),
+    bResizeVertical( sal_True ),
+    bHasUI( sal_True ),
+    bReadOnly( sal_False )
 {
     DBG_CTOR(SfxFrameDescriptor, 0);
 
@@ -110,31 +110,31 @@ void SfxFrameDescriptor::SetActualURL( const INetURLObject& rURL )
     SetActualURL(String(rURL.GetMainURL( INetURLObject::DECODE_TO_IURI )));
 }
 
-void SfxFrameDescriptor::SetEditable( BOOL bSet )
+void SfxFrameDescriptor::SetEditable( sal_Bool bSet )
 {
     pImp->bEditable = bSet;
 }
 
-BOOL SfxFrameDescriptor::IsEditable() const
+sal_Bool SfxFrameDescriptor::IsEditable() const
 {
     return pImp->bEditable;
 }
 
-BOOL SfxFrameDescriptor::CompareOriginal( SfxFrameDescriptor& rDescr ) const
+sal_Bool SfxFrameDescriptor::CompareOriginal( SfxFrameDescriptor& rDescr ) const
 {
     if( aURL != rDescr.aURL )
-        return FALSE;
+        return sal_False;
     else
-        return TRUE;
+        return sal_True;
 }
 
-BOOL SfxFrameDescriptor::CheckContent() const
+sal_Bool SfxFrameDescriptor::CheckContent() const
 {
-    BOOL bRet = !( aURL == aActualURL );
+    sal_Bool bRet = !( aURL == aActualURL );
     return bRet;
 }
 
-void SfxFrameDescriptor::UnifyContent( BOOL bTakeActual )
+void SfxFrameDescriptor::UnifyContent( sal_Bool bTakeActual )
 {
     if ( bTakeActual )
         aURL = aActualURL;
@@ -142,7 +142,7 @@ void SfxFrameDescriptor::UnifyContent( BOOL bTakeActual )
         aActualURL = aURL;
 }
 
-SfxFrameDescriptor* SfxFrameDescriptor::Clone( BOOL bWithIds ) const
+SfxFrameDescriptor* SfxFrameDescriptor::Clone( sal_Bool bWithIds ) const
 {
     SfxFrameDescriptor *pFrame = new SfxFrameDescriptor;
 
@@ -176,9 +176,9 @@ SfxFrameDescriptor* SfxFrameDescriptor::Clone( BOOL bWithIds ) const
     return pFrame;
 }
 
-USHORT SfxFrameDescriptor::GetWinBits() const
+sal_uInt16 SfxFrameDescriptor::GetWinBits() const
 {
-    USHORT nBits = 0;
+    sal_uInt16 nBits = 0;
     if ( eSizeSelector == SIZE_REL )
         nBits |= SWIB_RELATIVESIZE;
     if ( eSizeSelector == SIZE_PERCENT )
@@ -190,7 +190,7 @@ USHORT SfxFrameDescriptor::GetWinBits() const
     return nBits;
 }
 
-BOOL SfxFrameDescriptor::HasFrameBorder() const
+sal_Bool SfxFrameDescriptor::HasFrameBorder() const
 {
     return (nHasBorder & BORDER_YES) != 0;
 }
@@ -228,7 +228,7 @@ const Wallpaper* SfxFrameDescriptor::GetWallpaper() const
     return pImp->pWallpaper;
 }
 
-USHORT SfxFrameDescriptor::GetItemPos() const
+sal_uInt16 SfxFrameDescriptor::GetItemPos() const
 {
     return USHRT_MAX;
 }
@@ -249,13 +249,13 @@ SfxFrameProperties::SfxFrameProperties( const SfxFrameDescriptor *pD )
     , bHasBorder( pD->HasFrameBorder() )
     , bBorderSet( pD->IsFrameBorderSet() )
     , bResizable( pD->IsResizable() )
-    , bSetResizable( FALSE )
-    , bIsRootSet( FALSE )
-    , bIsInColSet( FALSE )
-    , bHasBorderInherited( FALSE )
+    , bSetResizable( sal_False )
+    , bIsRootSet( sal_False )
+    , bIsInColSet( sal_False )
+    , bHasBorderInherited( sal_False )
     , pFrame( pD->Clone() )
 {
-    bBorderSet = TRUE;
+    bBorderSet = sal_True;
 }
 
 SfxFrameProperties& SfxFrameProperties::operator =(

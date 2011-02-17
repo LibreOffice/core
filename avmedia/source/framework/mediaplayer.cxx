@@ -45,7 +45,7 @@ namespace avmedia
 // - MediaPlayer -
 // ---------------
 
-MediaPlayer::MediaPlayer( Window* _pParent, USHORT nId, SfxBindings* _pBindings, SfxChildWinInfo* pInfo ) :
+MediaPlayer::MediaPlayer( Window* _pParent, sal_uInt16 nId, SfxBindings* _pBindings, SfxChildWinInfo* pInfo ) :
     SfxChildWindow( _pParent, nId )
 {
     pWindow = new MediaFloater( _pBindings, this, _pParent );

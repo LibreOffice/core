@@ -221,9 +221,9 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 
                 ::rtl::OUString aTitle( aMenuShortCut + aMenuTitle );
 
-                pVCLPopupMenu->InsertItem( USHORT( i+1 ), aTitle );
-                pVCLPopupMenu->SetTipHelpText( USHORT( i+1 ), aTipHelpText );
-                pVCLPopupMenu->SetItemCommand( USHORT( i+1 ), aURLString );
+                pVCLPopupMenu->InsertItem( sal_uInt16( i+1 ), aTitle );
+                pVCLPopupMenu->SetTipHelpText( sal_uInt16( i+1 ), aTipHelpText );
+                pVCLPopupMenu->SetItemCommand( sal_uInt16( i+1 ), aURLString );
             }
         }
         else
@@ -231,7 +231,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             // No recent documents => insert "no document" string
             String aNoDocumentStr = String( FwkResId( STR_NODOCUMENT ));
             pVCLPopupMenu->InsertItem( 1, aNoDocumentStr );
-            pVCLPopupMenu->EnableItem( 1, FALSE );
+            pVCLPopupMenu->EnableItem( 1, sal_False );
         }
     }
 }

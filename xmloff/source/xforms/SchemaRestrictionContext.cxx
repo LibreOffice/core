@@ -93,7 +93,7 @@ static SvXMLTokenMapEntry aChildren[] =
 
 SchemaRestrictionContext::SchemaRestrictionContext(
     SvXMLImport& rImport,
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     Reference<com::sun::star::xforms::XDataTypeRepository>& rRepository,
     const OUString& sTypeName ) :
