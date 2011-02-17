@@ -90,8 +90,6 @@ class XColorEntry : public XPropertyEntry
 public:
             XColorEntry(const Color& rColor, const String& rName) :
                 XPropertyEntry(rName), aColor(rColor) {}
-            XColorEntry(const XColorEntry& rOther) :
-                XPropertyEntry(rOther), aColor(rOther.aColor) {}
 
     void    SetColor(const Color& rColor)   { aColor = rColor; }
     Color&  GetColor()                      { return aColor; }
@@ -109,11 +107,6 @@ public:
     XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const String& rName)
     :   XPropertyEntry(rName),
         aB2DPolyPolygon(rB2DPolyPolygon)
-    {}
-
-    XLineEndEntry(const XLineEndEntry& rOther)
-    :   XPropertyEntry(rOther),
-        aB2DPolyPolygon(rOther.aB2DPolyPolygon)
     {}
 
     void SetLineEnd(const basegfx::B2DPolyPolygon& rB2DPolyPolygon)
@@ -138,8 +131,6 @@ class XDashEntry : public XPropertyEntry
 public:
             XDashEntry(const XDash& rDash, const String& rName) :
                 XPropertyEntry(rName), aDash(rDash) {}
-            XDashEntry(const XDashEntry& rOther) :
-                XPropertyEntry(rOther), aDash(rOther.aDash) {}
 
     void    SetDash(const XDash& rDash)    { aDash = rDash; }
     XDash&  GetDash()                      { return aDash; }
@@ -156,8 +147,6 @@ class XHatchEntry : public XPropertyEntry
 public:
             XHatchEntry(const XHatch& rHatch, const String& rName) :
                 XPropertyEntry(rName), aHatch(rHatch) {}
-            XHatchEntry(const XHatchEntry& rOther) :
-                XPropertyEntry(rOther), aHatch(rOther.aHatch) {}
 
     void    SetHatch(const XHatch& rHatch)  { aHatch = rHatch; }
     XHatch& GetHatch()                      { return aHatch; }
@@ -174,8 +163,6 @@ class XGradientEntry : public XPropertyEntry
 public:
                 XGradientEntry(const XGradient& rGradient, const String& rName):
                     XPropertyEntry(rName), aGradient(rGradient) {}
-                XGradientEntry(const XGradientEntry& rOther) :
-                    XPropertyEntry(rOther), aGradient(rOther.aGradient) {}
 
     void        SetGradient(const XGradient& rGrad) { aGradient = rGrad; }
     XGradient&  GetGradient()                       { return aGradient; }
@@ -192,8 +179,6 @@ class XBitmapEntry : public XPropertyEntry
 public:
             XBitmapEntry( const XOBitmap& rXOBitmap, const String& rName ):
                 XPropertyEntry( rName ), aXOBitmap( rXOBitmap ) {}
-            XBitmapEntry( const XBitmapEntry& rOther ) :
-                XPropertyEntry( rOther ), aXOBitmap( rOther.aXOBitmap ) {}
 
     void     SetXBitmap(const XOBitmap& rXOBitmap) { aXOBitmap = rXOBitmap; }
     XOBitmap& GetXBitmap()                    { return aXOBitmap; }
