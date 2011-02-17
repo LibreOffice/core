@@ -890,8 +890,6 @@ CRYPT_LINK
 PAM_LINK
 NEW_SHADOW_API
 PAM
-VBA_EXTENSION
-ENABLE_VBA
 LFS_CFLAGS
 WORDS_BIGENDIAN
 SIZEOF_LONG
@@ -8761,50 +8759,6 @@ fi
 if test -n "$ac_cv_sys_large_files" && test "$ac_cv_sys_large_files" != "no"; then
    LFS_CFLAGS="$LFS_CFLAGS -D_LARGE_FILES"
 fi
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to disable vba feature" >&5
-$as_echo_n "checking whether to disable vba feature... " >&6; }
-if test -n "$enable_vba" && test "$enable_vba" = "no"; then
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-   ENABLE_VBA=NO
-else
-   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-   ENABLE_VBA=YES
-fi
-
-
-if test "$ENABLE_VBA" = "YES"; then
-   { $as_echo "$as_me:${as_lineno-$LINENO}: checking how to package the vba compatibility api" >&5
-$as_echo_n "checking how to package the vba compatibility api... " >&6; }
-   if test -n "$with_vba_package_format"; then
-      if test "$with_vba_package_format" = "extn"; then
-         VBA_EXTENSION=YES
-         { $as_echo "$as_me:${as_lineno-$LINENO}: result: uno extension" >&5
-$as_echo "uno extension" >&6; }
-         { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: --with-vba-package-format=extn can cause problems" >&5
-$as_echo "$as_me: WARNING: --with-vba-package-format=extn can cause problems" >&2;}
-      else if test "$with_vba_package_format" = "builtin"; then
-            VBA_EXTENSION=NO
-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: build into installset" >&5
-$as_echo "build into installset" >&6; }
-         else
-            as_fn_error $? "unknown packaging method" "$LINENO" 5
-         fi
-      fi
-
-   else
-      VBA_EXTENSION=NO
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: defaulting to build into installset" >&5
-$as_echo "defaulting to build into installset" >&6; }
-   fi
-else
-      VBA_EXTENSION=NO
-fi
-
-
 
 
 if test "$test_cups" = "yes" -a "$ENABLE_CUPS" = "TRUE" ; then
@@ -19494,23 +19448,23 @@ else
    fi
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether $GNUCP is GNU cp" >&5
-$as_echo_n "checking whether $GNUCP is GNU cp... " >&6; }
-if $GNUCP --version 2>/dev/null | grep "Free Software Foundation" >/dev/null 2>/dev/null; then
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether $GNUCP is GNU cp from coreutils with preserve= support" >&5
+$as_echo_n "checking whether $GNUCP is GNU cp from coreutils with preserve= support... " >&6; }
+if $GNUCP --version 2>/dev/null | grep "coreutils" >/dev/null 2>/dev/null; then
    { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 $as_echo "yes" >&6; }
 else
-   if $GNUCP --version 2>/dev/null | grep "GNU fileutils" >/dev/null 2>/dev/null; then
-      { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+   GNUCP=''
+fi
+
+if test -z "$GNUCP"; then
+   if test "$_os" = "SunOS" -o "$_os" = "FreeBSD"; then
+      as_fn_error $? "no, GNU cp from coreutils is needed. install or specify with --with-gnu-cp=/path/to/it" "$LINENO" 5
    else
-      if test "$_os" = "SunOS" -o "$_os" = "FreeBSD"; then
-         as_fn_error $? "no, GNU cp needed. install or specify with --with-gnu-cp=/path/to/it" "$LINENO" 5
-      else
-         GNUCP=''
-         { $as_echo "$as_me:${as_lineno-$LINENO}: result: no gnucp found - using the system's cp command" >&5
-$as_echo "no gnucp found - using the system's cp command" >&6; }
-      fi
+      { $as_echo "$as_me:${as_lineno-$LINENO}: result: no GNU cp from coreutils found - using the system's cp command" >&5
+$as_echo "no GNU cp from coreutils found - using the system's cp command" >&6; }
    fi
 fi
 
