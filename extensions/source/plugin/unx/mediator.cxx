@@ -56,7 +56,7 @@ Mediator::~Mediator()
         m_pListener = NULL;
         if( m_bValid )
         {
-            ULONG aHeader[3];
+            sal_uLong aHeader[3];
             aHeader[0] = 0;
             aHeader[1] = 0;
             aHeader[2] = MEDIATOR_MAGIC;
@@ -75,7 +75,7 @@ Mediator::~Mediator()
 }
 
 
-ULONG Mediator::SendMessage( ULONG nBytes, const char* pBytes, ULONG nMessageID )
+sal_uLong Mediator::SendMessage( sal_uLong nBytes, const char* pBytes, sal_uLong nMessageID )
 {
     if( ! m_pListener )
         return 0;
@@ -91,26 +91,26 @@ ULONG Mediator::SendMessage( ULONG nBytes, const char* pBytes, ULONG nMessageID 
     if( ! m_bValid )
         return nMessageID;
 
-    ULONG* pBuffer = new ULONG[ (nBytes/sizeof(ULONG)) + 4 ];
+    sal_uLong* pBuffer = new sal_uLong[ (nBytes/sizeof(sal_uLong)) + 4 ];
     pBuffer[ 0 ] = nMessageID;
     pBuffer[ 1 ] = nBytes;
     pBuffer[ 2 ] = MEDIATOR_MAGIC;
     memcpy( &pBuffer[3], pBytes, (size_t)nBytes );
-    write( m_nSocket, pBuffer, nBytes + 3*sizeof( ULONG ) );
+    write( m_nSocket, pBuffer, nBytes + 3*sizeof( sal_uLong ) );
     delete [] pBuffer;
 
     return nMessageID;
 }
 
-BOOL Mediator::WaitForMessage( ULONG nTimeOut )
+sal_Bool Mediator::WaitForMessage( sal_uLong nTimeOut )
 {
     if( ! m_pListener )
-        return FALSE;
+        return sal_False;
 
     size_t nItems = m_aMessageQueue.size();
 
     if( ! nTimeOut && nItems > 0 )
-        return TRUE;
+        return sal_True;
 
     TimeValue aValue;
     aValue.Seconds = nTimeOut/1000;
@@ -121,12 +121,12 @@ BOOL Mediator::WaitForMessage( ULONG nTimeOut )
         m_aNewMessageCdtn.wait( & aValue );
         m_aNewMessageCdtn.reset();
         if( nTimeOut && m_aMessageQueue.size() == nItems )
-            return FALSE;
+            return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
-MediatorMessage* Mediator::WaitForAnswer( ULONG nMessageID )
+MediatorMessage* Mediator::WaitForAnswer( sal_uLong nMessageID )
 {
     nMessageID &= 0x00ffffff;
     while( m_pListener )
@@ -136,7 +136,7 @@ MediatorMessage* Mediator::WaitForAnswer( ULONG nMessageID )
             for( size_t i = 0; i < m_aMessageQueue.size(); i++ )
             {
                 MediatorMessage* pMessage = m_aMessageQueue[ i ];
-                ULONG nID = pMessage->m_nID;
+                sal_uLong nID = pMessage->m_nID;
                 if(  ( nID & 0xff000000 ) &&
                      ( ( nID & 0x00ffffff ) == nMessageID ) )
                 {
@@ -150,7 +150,7 @@ MediatorMessage* Mediator::WaitForAnswer( ULONG nMessageID )
     return NULL;
 }
 
-MediatorMessage* Mediator::GetNextMessage( BOOL bWait )
+MediatorMessage* Mediator::GetNextMessage( sal_Bool bWait )
 {
     while( m_pListener )
     {
@@ -175,9 +175,9 @@ MediatorMessage* Mediator::GetNextMessage( BOOL bWait )
     return NULL;
 }
 
-MediatorMessage* Mediator::TransactMessage( ULONG nBytes, char* pBytes )
+MediatorMessage* Mediator::TransactMessage( sal_uLong nBytes, char* pBytes )
 {
-    ULONG nID = SendMessage( nBytes, pBytes );
+    sal_uLong nID = SendMessage( nBytes, pBytes );
     return WaitForAnswer( nID );
 }
 
@@ -195,7 +195,7 @@ void MediatorListener::run()
     bool bRun = true;
     while( schedule() && m_pMediator && bRun )
     {
-        ULONG nHeader[ 3 ];
+        sal_uLong nHeader[ 3 ];
         int nBytes;
 
         if( m_pMediator && ( nBytes = read( m_pMediator->m_nSocket, nHeader, sizeof( nHeader ) ) ) == sizeof( nHeader ) && nHeader[2] == MEDIATOR_MAGIC)
@@ -203,7 +203,7 @@ void MediatorListener::run()
             if( nHeader[ 0 ] == 0 && nHeader[ 1 ] == 0 )
                 return;
             char* pBuffer = new char[ nHeader[ 1 ] ];
-            if( m_pMediator && (ULONG)read( m_pMediator->m_nSocket, pBuffer, nHeader[ 1 ] ) == nHeader[ 1 ] )
+            if( m_pMediator && (sal_uLong)read( m_pMediator->m_nSocket, pBuffer, nHeader[ 1 ] ) == nHeader[ 1 ] )
             {
                 ::vos::OGuard aMyGuard( m_aMutex );
                 {
@@ -243,30 +243,30 @@ void MediatorListener::onTerminated()
     delete this;
 }
 
-ULONG MediatorMessage::ExtractULONG()
+sal_uLong MediatorMessage::ExtractULONG()
 {
     if( ! m_pRun )
         m_pRun = m_pBytes;
 
-    medDebug( (ULONG)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::ExtractULONG\n" );
-    ULONG nCount;
-    memcpy( &nCount, m_pRun, sizeof( ULONG ) );
-    m_pRun += sizeof( ULONG );
+    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::ExtractULONG\n" );
+    sal_uLong nCount;
+    memcpy( &nCount, m_pRun, sizeof( sal_uLong ) );
+    m_pRun += sizeof( sal_uLong );
     return nCount;
 }
 
-void* MediatorMessage::GetBytes( ULONG& rBytes )
+void* MediatorMessage::GetBytes( sal_uLong& rBytes )
 {
     if( ! m_pRun )
         m_pRun = m_pBytes;
 
-    medDebug( (ULONG)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetBytes\n" );
-    ULONG nBytes = ExtractULONG();
+    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetBytes\n" );
+    sal_uLong nBytes = ExtractULONG();
 
     if( nBytes == 0 )
         return NULL;
 
-    medDebug( (ULONG)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetBytes\n" );
+    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetBytes\n" );
     char* pBuffer = new char[ nBytes ];
     memcpy( pBuffer, m_pRun, nBytes );
     m_pRun += nBytes;
@@ -279,13 +279,13 @@ char* MediatorMessage::GetString()
     if( ! m_pRun )
         m_pRun = m_pBytes;
 
-    medDebug( (ULONG)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetString\n" );
-    ULONG nBytes = ExtractULONG();
+    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetString\n" );
+    sal_uLong nBytes = ExtractULONG();
 
     if( nBytes == 0 )
         return NULL;
 
-    medDebug( (ULONG)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetString\n" );
+    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetString\n" );
     char* pBuffer = new char[ nBytes+1 ];
     memcpy( pBuffer, m_pRun, nBytes );
     pBuffer[ nBytes ] = 0;
@@ -293,17 +293,17 @@ char* MediatorMessage::GetString()
     return pBuffer;
 }
 
-UINT32 MediatorMessage::GetUINT32()
+sal_uInt32 MediatorMessage::GetUINT32()
 {
     if( ! m_pRun )
         m_pRun = m_pBytes;
 
-    medDebug( (ULONG)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetUINT32\n" );
-    ULONG nBytes = ExtractULONG();
-    medDebug( nBytes != sizeof( UINT32 ), "No UINT32 in MediatorMessage::GetUINT32\n" );
-    medDebug( (ULONG)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetUINT32\n" );
-    UINT32 nRet;
+    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetUINT32\n" );
+    sal_uLong nBytes = ExtractULONG();
+    medDebug( nBytes != sizeof( sal_uInt32 ), "No sal_uInt32 in MediatorMessage::GetUINT32\n" );
+    medDebug( (sal_uLong)(m_pRun - m_pBytes) >= m_nBytes, "Overflow in MediatorMessage::GetUINT32\n" );
+    sal_uInt32 nRet;
     memcpy( &nRet, m_pRun, sizeof( nRet ) );
-    m_pRun += sizeof( UINT32 );
+    m_pRun += sizeof( sal_uInt32 );
     return nRet;
 }

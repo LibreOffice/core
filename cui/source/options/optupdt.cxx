@@ -187,48 +187,48 @@ SvxOnlineUpdateTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 // -----------------------------------------------------------------------
 
 
-BOOL SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
+sal_Bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
 {
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
 
     sal_Bool bValue;
     sal_Int64 nValue;
 
     if( m_aAutoCheckCheckBox.GetSavedValue() != m_aAutoCheckCheckBox.IsChecked() )
     {
-        bValue = (TRUE == m_aAutoCheckCheckBox.IsChecked());
+        bValue = (sal_True == m_aAutoCheckCheckBox.IsChecked());
         m_xUpdateAccess->replaceByName( UNISTRING("AutoCheckEnabled"), uno::makeAny( bValue ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     nValue = 0;
-    if( TRUE == m_aEveryDayButton.IsChecked() )
+    if( sal_True == m_aEveryDayButton.IsChecked() )
     {
-        if( FALSE == m_aEveryDayButton.GetSavedValue() )
+        if( sal_False == m_aEveryDayButton.GetSavedValue() )
             nValue = 86400;
     }
-    else if( TRUE == m_aEveryWeekButton.IsChecked() )
+    else if( sal_True == m_aEveryWeekButton.IsChecked() )
     {
-        if( FALSE == m_aEveryWeekButton.GetSavedValue() )
+        if( sal_False == m_aEveryWeekButton.GetSavedValue() )
             nValue = 604800;
     }
-    else if( TRUE == m_aEveryMonthButton.IsChecked() )
+    else if( sal_True == m_aEveryMonthButton.IsChecked() )
     {
-        if( FALSE == m_aEveryMonthButton.GetSavedValue() )
+        if( sal_False == m_aEveryMonthButton.GetSavedValue() )
             nValue = 2592000;
     }
 
     if( nValue > 0 )
     {
         m_xUpdateAccess->replaceByName( UNISTRING("CheckInterval"), uno::makeAny( nValue ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     if( m_aAutoDownloadCheckBox.GetSavedValue() != m_aAutoDownloadCheckBox.IsChecked() )
     {
-        bValue = (TRUE == m_aAutoDownloadCheckBox.IsChecked());
+        bValue = (sal_True == m_aAutoDownloadCheckBox.IsChecked());
         m_xUpdateAccess->replaceByName( UNISTRING("AutoDownloadEnabled"), uno::makeAny( bValue ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     rtl::OUString sValue, aURL;
@@ -238,7 +238,7 @@ BOOL SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
         ( ! aURL.equals( sValue ) ) )
     {
         m_xUpdateAccess->replaceByName( UNISTRING("DownloadDestination"), uno::makeAny( aURL ) );
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     uno::Reference< util::XChangesBatch > xChangesBatch(m_xUpdateAccess, uno::UNO_QUERY);
@@ -277,9 +277,9 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet& )
 
     m_xUpdateAccess->getByName( UNISTRING("AutoDownloadEnabled") ) >>= bValue;
     m_aAutoDownloadCheckBox.Check(bValue);
-    m_aDestPathLabel.Enable(TRUE);
-    m_aDestPath.Enable(TRUE);
-    m_aChangePathButton.Enable(TRUE);
+    m_aDestPathLabel.Enable(sal_True);
+    m_aDestPath.Enable(sal_True);
+    m_aChangePathButton.Enable(sal_True);
 
     rtl::OUString sValue, aPath;
     m_xUpdateAccess->getByName( UNISTRING("DownloadDestination") ) >>= sValue;
@@ -300,7 +300,7 @@ void SvxOnlineUpdateTabPage::FillUserData()
 
 IMPL_LINK( SvxOnlineUpdateTabPage, AutoCheckHdl_Impl, CheckBox *, pBox )
 {
-    BOOL bEnabled = pBox->IsChecked();
+    sal_Bool bEnabled = pBox->IsChecked();
 
     m_aEveryDayButton.Enable(bEnabled);
     m_aEveryWeekButton.Enable(bEnabled);

@@ -75,11 +75,11 @@ namespace svx
 
         void Clear();
         void InsertEntry( const XubString& rStr );
-        void SelectEntryPos( USHORT nPos );
+        void SelectEntryPos( sal_uInt16 nPos );
 
-        USHORT GetEntryCount() const;
+        sal_uInt16 GetEntryCount() const;
 
-        XubString GetEntry( USHORT nPos ) const;
+        XubString GetEntry( sal_uInt16 nPos ) const;
         XubString GetSelectEntry() const;
 
         virtual void StateChanged( StateChangedType nStateChange );

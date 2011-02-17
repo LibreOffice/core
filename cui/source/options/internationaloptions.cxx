@@ -48,14 +48,14 @@ namespace offapp
         CheckBox            m_aCB_ShtVwRight2Left;
         CheckBox            m_aCB_ShtVwCurrentDocOnly;
 
-        BOOL                m_bEnable_SheetView_Opt : 1;
+        sal_Bool                m_bEnable_SheetView_Opt : 1;
 
         inline              IMPL( Window* _pParent );
 
-        inline void         EnableOption_SheetView( BOOL _bEnable = TRUE );
-        void                ShowOption_SheetView( BOOL _bShow = TRUE );
+        inline void         EnableOption_SheetView( sal_Bool _bEnable = sal_True );
+        void                ShowOption_SheetView( sal_Bool _bShow = sal_True );
 
-        BOOL                FillItemSet( SfxItemSet& _rSet );
+        sal_Bool                FillItemSet( SfxItemSet& _rSet );
         void                Reset( const SfxItemSet& _rSet );
     };
 
@@ -67,12 +67,12 @@ namespace offapp
         ,m_aCB_ShtVwRight2Left      ( _pParent, CUI_RES( CB_SHTVW_RIGHT2LEFT ) )
         ,m_aCB_ShtVwCurrentDocOnly  ( _pParent, CUI_RES( CB_SHTVW_CURRENTDOCONLY ) )
 
-        ,m_bEnable_SheetView_Opt    ( FALSE )
+        ,m_bEnable_SheetView_Opt    ( sal_False )
     {
         ShowOption_SheetView( m_bEnable_SheetView_Opt );
     }
 
-    inline void InternationalOptionsPage::IMPL::EnableOption_SheetView( BOOL _bEnable )
+    inline void InternationalOptionsPage::IMPL::EnableOption_SheetView( sal_Bool _bEnable )
     {
         if( m_bEnable_SheetView_Opt != _bEnable )
         {
@@ -82,14 +82,14 @@ namespace offapp
         }
     }
 
-    void InternationalOptionsPage::IMPL::ShowOption_SheetView( BOOL _bShow )
+    void InternationalOptionsPage::IMPL::ShowOption_SheetView( sal_Bool _bShow )
     {
         m_aFL_SheetView.Show( _bShow );
         m_aCB_ShtVwRight2Left.Show( _bShow );
         m_aCB_ShtVwCurrentDocOnly.Show( _bShow );
     }
 
-    BOOL InternationalOptionsPage::IMPL::FillItemSet( SfxItemSet& _rSet )
+    sal_Bool InternationalOptionsPage::IMPL::FillItemSet( SfxItemSet& _rSet )
     {
         DBG_ASSERT( _rSet.GetPool(), "-InternationalOptionsPage::FillItemSet(): no pool gives rums!" );
 
@@ -103,7 +103,7 @@ namespace offapp
 //      {
 //      }
 
-        return TRUE;
+        return sal_True;
     }
 
     void InternationalOptionsPage::IMPL::Reset( const SfxItemSet& _rSet )
@@ -113,15 +113,15 @@ namespace offapp
 
         DBG_ASSERT( pLeft2RightItem, "+InternationalOptionsPage::Reset(): SID_ATTR_PARA_LEFT_TO_RIGHT not set!" );
 
-        BOOL                bLeft2Right = pLeft2RightItem? pLeft2RightItem->GetValue() : TRUE;
+        sal_Bool                bLeft2Right = pLeft2RightItem? pLeft2RightItem->GetValue() : sal_True;
         m_aRB_TxtDirLeft2Right.Check( bLeft2Right );
 
         // handling of SheetView stuff
 //      if( m_bEnable_SheetView_Opt )
 //      {
-//          m_aCB_ShtVwRight2Left.Check( FALSE );
+//          m_aCB_ShtVwRight2Left.Check( sal_False );
 //
-//          m_aCB_ShtVwCurrentDocOnly.Check( FALSE );
+//          m_aCB_ShtVwCurrentDocOnly.Check( sal_False );
 //      }
     }
 
@@ -150,7 +150,7 @@ namespace offapp
         DELETEZ( m_pImpl );
     }
 
-    BOOL InternationalOptionsPage::FillItemSet( SfxItemSet& _rSet )
+    sal_Bool InternationalOptionsPage::FillItemSet( SfxItemSet& _rSet )
     {
         return m_pImpl->FillItemSet( _rSet );
     }
