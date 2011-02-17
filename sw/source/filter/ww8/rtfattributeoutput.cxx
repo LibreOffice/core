@@ -154,72 +154,75 @@ using namespace ::com::sun::star;
 static OString OutTBLBorderLine(RtfExport &rExport, const SvxBorderLine* pLine, const sal_Char* pStr)
 {
     OStringBuffer aRet;
-    aRet.append(pStr);
-    // single line
-    switch ( pLine->GetStyle( ) )
+    if ( !pLine->isEmpty() )
     {
-        case SOLID:
-            {
-                if( DEF_LINE_WIDTH_0 == pLine->GetWidth() )
-                    aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRHAIR);
-                else
-                    aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRS);
-            }
-            break;
-        case DOTTED:
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDOT);
-            break;
-        case DASHED:
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDASH);
-            break;
-        case DOUBLE:
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDB);
-            break;
-        case THINTHICK_SMALLGAP:
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTNTHSG);
-            break;
-        case THINTHICK_MEDIUMGAP:
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTNTHMG);
-            break;
-        case THINTHICK_LARGEGAP:
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTNTHLG);
-            break;
-        case THICKTHIN_SMALLGAP:
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTHTNSG);
-            break;
-        case THICKTHIN_MEDIUMGAP:
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTHTNMG);
-            break;
-        case THICKTHIN_LARGEGAP:
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTHTNLG);
-            break;
-        case EMBOSSED:
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDREMBOSS);
-            break;
-        case ENGRAVED:
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRENGRAVE);
-            break;
-        case OUTSET:
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDROUTSET);
-            break;
-        case INSET:
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRINSET);
-            break;
-        case NO_STYLE:
-        default:
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRNONE);
-            break;
-    }
+        aRet.append(pStr);
+        // single line
+        switch ( pLine->GetStyle( ) )
+        {
+            case SOLID:
+                {
+                    if( DEF_LINE_WIDTH_0 == pLine->GetWidth() )
+                        aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRHAIR);
+                    else
+                        aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRS);
+                }
+                break;
+            case DOTTED:
+                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDOT);
+                break;
+            case DASHED:
+                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDASH);
+                break;
+            case DOUBLE:
+                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDB);
+                break;
+            case THINTHICK_SMALLGAP:
+                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTNTHSG);
+                break;
+            case THINTHICK_MEDIUMGAP:
+                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTNTHMG);
+                break;
+            case THINTHICK_LARGEGAP:
+                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTNTHLG);
+                break;
+            case THICKTHIN_SMALLGAP:
+                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTHTNSG);
+                break;
+            case THICKTHIN_MEDIUMGAP:
+                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTHTNMG);
+                break;
+            case THICKTHIN_LARGEGAP:
+                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTHTNLG);
+                break;
+            case EMBOSSED:
+                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDREMBOSS);
+                break;
+            case ENGRAVED:
+                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRENGRAVE);
+                break;
+            case OUTSET:
+                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDROUTSET);
+                break;
+            case INSET:
+                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRINSET);
+                break;
+            case NO_STYLE:
+            default:
+                aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRNONE);
+                break;
+        }
 
-    if ( 255 >= pLine->GetWidth() ) // That value comes from RTF specs
-    {
-        aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRW).append((sal_Int32)pLine->GetWidth());
-    }
-    else
-        aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTH OOO_STRING_SVTOOLS_RTF_BRDRW).append((sal_Int32)pLine->GetWidth() / 2);
+        if ( 255 >= pLine->GetWidth() ) // That value comes from RTF specs
+        {
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRW).append((sal_Int32)pLine->GetWidth());
+        }
+        else
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTH OOO_STRING_SVTOOLS_RTF_BRDRW).append((sal_Int32)pLine->GetWidth() / 2);
 
-    aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRCF);
-    aRet.append((sal_Int32)rExport.GetColor(pLine->GetColor()));
+        aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRCF);
+        aRet.append((sal_Int32)rExport.GetColor(pLine->GetColor()));
+    }
     return aRet.makeStringAndClear();
 }
 
@@ -230,22 +233,6 @@ static OString OutBorderLine(RtfExport &rExport, const SvxBorderLine* pLine,
     aRet.append(OutTBLBorderLine(rExport, pLine, pStr));
     aRet.append(OOO_STRING_SVTOOLS_RTF_BRSP);
     aRet.append((sal_Int32)nDist);
-    return aRet.makeStringAndClear();
-}
-
-static OString OutBorderLine( RtfExport &rExport, const SvxBorderLine* pLine,
-                            const char* pStr )
-{
-    OStringBuffer aRet;
-    aRet.append(pStr);
-    aRet.append(OOO_STRING_SVTOOLS_RTF_BRDLNCOL);
-    aRet.append((sal_Int32)rExport.GetColor( pLine->GetColor() ) );
-    aRet.append(OOO_STRING_SVTOOLS_RTF_BRDLNIN);
-    aRet.append((sal_Int32)pLine->GetInWidth());
-    aRet.append(OOO_STRING_SVTOOLS_RTF_BRDLNOUT);
-    aRet.append((sal_Int32)pLine->GetOutWidth());
-    aRet.append(OOO_STRING_SVTOOLS_RTF_BRDLNDIST);
-    aRet.append((sal_Int32)pLine->GetDistance());
     return aRet.makeStringAndClear();
 }
 
@@ -2889,20 +2876,6 @@ void RtfAttributeOutput::FormatBox( const SvxBoxItem& rBox )
                 m_aSectionBreaks.append(OutBorderLine(m_rExport, pLn, *pBrdNms,
                         rBox.GetDistance(*pBrd)));
             }
-        }
-    }
-
-    const sal_uInt16* pBrd = aBorders;
-    const sal_Char** pBrdNms = (const sal_Char**)aBorderNames;
-    for( int i = 0; i < 4; ++i, ++pBrd, ++pBrdNms )
-    {
-        const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
-        if( pLn )
-        {
-            m_aSectionBreaks.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE);
-            m_aSectionBreaks.append(OutBorderLine( m_rExport, pLn, *pBrdNms ));
-            m_aSectionBreaks.append("}" OOO_STRING_SVTOOLS_RTF_BRSP);
-            m_aSectionBreaks.append((sal_Int32)rBox.GetDistance( *pBrd ));
         }
     }
 
