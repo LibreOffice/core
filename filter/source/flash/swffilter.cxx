@@ -333,6 +333,9 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
         err = osl_writeFile(xBackgroundConfig, "slides=", strlen("slides="), &bytesWritten);
     }
 
+    // TODO: check for errors
+    (void) err;
+
     FlashExporter aFlashExporter( mxMSF, findPropertyValue<sal_Int32>(aFilterData, "CompressMode", 75),
                                          findPropertyValue<sal_Bool>(aFilterData, "ExportOLEAsJPEG", false));
 
