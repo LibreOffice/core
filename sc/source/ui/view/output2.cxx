@@ -3297,11 +3297,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                         if (!bHidden)
                         {
                             long nOutWidth = nCellWidth - 1;
-                            long nOutHeight;
-                            if (pInfo)
-                                nOutHeight = nCellHeight;
-                            else
-                                nOutHeight = (long) ( pDoc->GetRowHeight(nY,nTab) * nPPTY );
+                            long nOutHeight = nCellHeight;
 
                             if ( bMerged )                              // Zusammengefasst
                             {
