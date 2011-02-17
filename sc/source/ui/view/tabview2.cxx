@@ -356,6 +356,7 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         rMark.SetMarkArea( ScRange( nBlockStartX, nBlockStartY, nTab, nBlockEndX, nBlockEndY, nTab ) );
 
         UpdateSelectionOverlay();
+        SelectionChanged();
 
         nOldCurX = nCurX;
         nOldCurY = nCurY;
