@@ -453,10 +453,8 @@ IMPL_LINK( SvxColorTabPage, ModifiedHdl_Impl, void *, EMPTYARG )
 IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 {
     Window *pWindow = this;
-    bool bEnabled;
     while( pWindow )
     {
-        bEnabled = pWindow->IsEnabled();
         pWindow = pWindow->GetParent();
     }
 
