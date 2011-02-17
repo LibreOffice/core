@@ -1855,6 +1855,9 @@ if ($SYSTEM_PYTHON eq "NO") {
 ToFile( "HOME",              "@HOME@",             "e" );
 }
 ToFile( "SYSTEM_ICU",        "@SYSTEM_ICU@",       "e" );
+ToFile( "ICU_MAJOR",         "@ICU_MAJOR@",        "e" );
+ToFile( "ICU_MINOR",         "@ICU_MINOR@",        "e" );
+ToFile( "ICU_MICRO",         "@ICU_MICRO@",        "e" );
 ToFile( "SYSTEM_GENBRK",     "@SYSTEM_GENBRK@",    "e" );
 ToFile( "SYSTEM_GENCCODE",   "@SYSTEM_GENCCODE@",  "e" );
 ToFile( "SYSTEM_GENCMN",     "@SYSTEM_GENCMN@",    "e" );
