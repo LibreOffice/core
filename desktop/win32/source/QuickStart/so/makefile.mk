@@ -46,6 +46,8 @@ INCPRE=..
 
 # --- Files --------------------------------------------------------
 
+.IF "$(LINK_SO)"=="TRUE"
+
 OBJFILES=$(OBJ)$/QuickStart.obj
 
 APP1OBJS=$(OBJFILES)
@@ -67,6 +69,8 @@ APP1STDLIBS+=$(SHELL32LIB)\
             $(OLEAUT32LIB)
 
 APP1NOSVRES=$(RES)$/$(TARGET).res
+
+.ENDIF # "$(LINK_SO)"=="TRUE"
 
 # --- Targets ------------------------------------------------------
 
