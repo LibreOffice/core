@@ -1161,17 +1161,9 @@ void SvxColorTabPage::FillValueSet_Impl( ValueSet& rVs )
 
 void SvxColorTabPage::RgbToCmyk_Impl( Color& rColor, USHORT& rK )
 {
-    USHORT nColor1, nColor2, nColor3;
-    USHORT nProzent; // nur temporaer !!!
-
-    nColor1 = 255 - rColor.GetRed();
-    nProzent = ColorToPercent_Impl( nColor1 );
-
-    nColor2 = 255 - rColor.GetGreen();
-    nProzent = ColorToPercent_Impl( nColor2 );
-
-    nColor3 = 255 - rColor.GetBlue();
-    nProzent = ColorToPercent_Impl( nColor3 );
+    USHORT const nColor1 = 255 - rColor.GetRed();
+    USHORT const nColor2 = 255 - rColor.GetGreen();
+    USHORT const nColor3 = 255 - rColor.GetBlue();
 
     rK = Min( Min( nColor1, nColor2 ), nColor3 );
 
