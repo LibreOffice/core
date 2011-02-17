@@ -122,6 +122,27 @@ COMPHELPER_DLLPUBLIC ::rtl::OUString&
 COMPHELPER_DLLPUBLIC ::rtl::OUString convertCommaSeparated(
     ::com::sun::star::uno::Sequence< ::rtl::OUString > const & i_rSeq);
 
+/** Convert a decimal string to a number.
+
+    The string must be base-10, no sign but can contain any
+    codepoint listed in the "Number, Decimal Digit" Unicode
+    category.
+
+    No verification is made about the validity of the string,
+    passing string not containing decimal digit code points
+    gives unspecified results
+
+    If your string is guaranteed to contain only ASCII digit
+    use rtl::OUString::toInt32 instead.
+
+    @param str  The string to convert containing only decimal
+                digit codepoints.
+
+    @return     The value of the string as an int32.
+ */
+COMPHELPER_DLLPUBLIC sal_uInt32 decimalStringToNumber(
+    ::rtl::OUString const & str );
+
 /** Convert a single comma separated string to a sequence of strings.
 
     Note that no escaping of commas or anything fancy is done.

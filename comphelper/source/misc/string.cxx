@@ -94,6 +94,103 @@ rtl::OUString searchAndReplaceAsciiL(
     return _source;
 }
 
+sal_uInt32 decimalStringToNumber(
+    ::rtl::OUString const & str )
+{
+    sal_uInt32 result = 0;
+    for( sal_Int32 i = 0 ; i < str.getLength() ; )
+    {
+        sal_uInt32 c = str.iterateCodePoints(&i);
+        sal_uInt8 value = 0;
+        if( c <= 0x0039)    // ASCII decimal digits, most common
+            value = c - 0x0030;
+        else if( c >= 0x1D7F6 )    // mathematical monospace digits
+            value = c - 0x1D7F6;
+        else if( c >= 0x1D7EC ) // mathematical sans-serif bold digits
+            value = c - 0x1D7EC;
+        else if( c >= 0x1D7E2 ) // mathematical sans-serif digits
+            value = c - 0x1D7E2;
+        else if( c >= 0x1D7D8 ) // mathematical double-struck digits
+            value = c - 0x1D7D8;
+        else if( c >= 0x1D7CE ) // mathematical bold digits
+            value = c - 0x1D7CE;
+        else if( c >= 0x11066 ) // brahmi digits
+            value = c - 0x11066;
+        else if( c >= 0x104A0 ) // osmanya digits
+            value = c - 0x104A0;
+        else if( c >= 0xFF10 ) // fullwidth digits
+            value = c - 0xFF10;
+        else if( c >= 0xABF0 ) // meetei mayek digits
+            value = c - 0xABF0;
+        else if( c >= 0xAA50 ) // cham digits
+            value = c - 0xAA50;
+        else if( c >= 0xA9D0 ) // javanese digits
+            value = c - 0xA9D0;
+        else if( c >= 0xA900 ) // kayah li digits
+            value = c - 0xA900;
+        else if( c >= 0xA8D0 ) // saurashtra digits
+            value = c - 0xA8D0;
+        else if( c >= 0xA620 ) // vai digits
+            value = c - 0xA620;
+        else if( c >= 0x1C50 ) // ol chiki digits
+            value = c - 0x1C50;
+        else if( c >= 0x1C40 ) // lepcha digits
+            value = c - 0x1C40;
+        else if( c >= 0x1BB0 ) // sundanese digits
+            value = c - 0x1BB0;
+        else if( c >= 0x1B50 ) // balinese digits
+            value = c - 0x1B50;
+        else if( c >= 0x1A90 ) // tai tham tham digits
+            value = c - 0x1A90;
+        else if( c >= 0x1A80 ) // tai tham hora digits
+            value = c - 0x1A80;
+        else if( c >= 0x19D0 ) // new tai lue digits
+            value = c - 0x19D0;
+        else if( c >= 0x1946 ) // limbu digits
+            value = c - 0x1946;
+        else if( c >= 0x1810 ) // mongolian digits
+            value = c - 0x1810;
+        else if( c >= 0x17E0 ) // khmer digits
+            value = c - 0x17E0;
+        else if( c >= 0x1090 ) // myanmar shan digits
+            value = c - 0x1090;
+        else if( c >= 0x1040 ) // myanmar digits
+            value = c - 0x1040;
+        else if( c >= 0x0F20 ) // tibetan digits
+            value = c - 0x0F20;
+        else if( c >= 0x0ED0 ) // lao digits
+            value = c - 0x0ED0;
+        else if( c >= 0x0E50 ) // thai digits
+            value = c - 0x0E50;
+        else if( c >= 0x0D66 ) // malayalam digits
+            value = c - 0x0D66;
+        else if( c >= 0x0CE6 ) // kannada digits
+            value = c - 0x0CE6;
+        else if( c >= 0x0C66 ) // telugu digits
+            value = c - 0x0C66;
+        else if( c >= 0x0BE6 ) // tamil digits
+            value = c - 0x0BE6;
+        else if( c >= 0x0B66 ) // oriya digits
+            value = c - 0x0B66;
+        else if( c >= 0x0AE6 ) // gujarati digits
+            value = c - 0x0AE6;
+        else if( c >= 0x0A66 ) // gurmukhi digits
+            value = c - 0x0A66;
+        else if( c >= 0x09E6 ) // bengali digits
+            value = c - 0x09E6;
+        else if( c >= 0x0966 ) // devanagari digit
+            value = c - 0x0966;
+        else if( c >= 0x07C0 ) // nko digits
+            value = c - 0x07C0;
+        else if( c >= 0x06F0 ) // extended arabic-indic digits
+            value = c - 0x06F0;
+        else if( c >= 0x0660 ) // arabic-indic digits
+            value = c - 0x0660;
+        result = result * 10 + value;
+    }
+    return result;
+}
+
 using namespace ::com::sun::star;
 
 // convert between sequence of string and comma separated string
@@ -177,6 +274,7 @@ sal_Int32 compareNatural( const ::rtl::OUString & rLHS, const ::rtl::OUString & 
         //To-Do: Possibly scale down those unicode codepoints that relate to
         //numbers outside of the normal 0-9 range, e.g. see GetLocalizedChar in
         //vcl
+
         sal_Int32 nLHS = rLHS.copy(nLHSFirstDigitPos, nLHSChunkLen).toInt32();
         sal_Int32 nRHS = rRHS.copy(nRHSFirstDigitPos, nRHSChunkLen).toInt32();
 

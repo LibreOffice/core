@@ -49,10 +49,12 @@ class TestString: public CppUnit::TestFixture
 public:
     void test();
     void testNatural();
+    void testDecimalStringToNumber();
 
     CPPUNIT_TEST_SUITE(TestString);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST(testNatural);
+    CPPUNIT_TEST(testDecimalStringToNumber);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -84,6 +86,17 @@ void TestString::test()
             n2 + RTL_CONSTASCII_LENGTH("bz"), &n3));
     CPPUNIT_ASSERT(s4 == s3);
     CPPUNIT_ASSERT(n3 == -1);
+}
+
+void TestString::testDecimalStringToNumber() {
+    rtl::OUString s1(RTL_CONSTASCII_USTRINGPARAM("1234"));
+    CPPUNIT_ASSERT_EQUAL((sal_uInt32)1234, comphelper::string::decimalStringToNumber(s1));
+    s1 += rtl::OUString(L'\u07C6');
+    CPPUNIT_ASSERT_EQUAL((sal_uInt32)12346, comphelper::string::decimalStringToNumber(s1));
+    // Codepoints on 2 16bits words
+    sal_uInt32 utf16String[] = { 0x1D7FE /* 8 */, 0x1D7F7 /* 1 */};
+    s1 = rtl::OUString(utf16String, 2);
+    CPPUNIT_ASSERT_EQUAL((sal_uInt32)81, comphelper::string::decimalStringToNumber(s1));
 }
 
 using namespace ::com::sun::star;
