@@ -297,7 +297,7 @@ public:
 class SVX_DLLPUBLIC XColorTable : public XPropertyTable
 {
 public:
-                    XColorTable( const String& rPath,
+    explicit        XColorTable( const String& rPath,
                                  XOutdevItemPool* pXPool = NULL,
                                  USHORT nInitSize = 16,
                                  USHORT nReSize = 16 );
@@ -326,7 +326,7 @@ public:
 class XColorList : public XPropertyList
 {
 public:
-                    XColorList( const String& rPath,
+    explicit        XColorList( const String& rPath,
                                 XOutdevItemPool* pXPool = NULL,
                                 USHORT nInitSize = 16,
                                 USHORT nReSize = 16 );
@@ -353,7 +353,7 @@ public:
 class XLineEndTable : public XPropertyTable
 {
 public:
-                    XLineEndTable( const String& rPath,
+    explicit        XLineEndTable( const String& rPath,
                                     XOutdevItemPool* pXPool = NULL,
                                     USHORT nInitSize = 16,
                                     USHORT nReSize = 16 );
@@ -387,7 +387,7 @@ private:
     void impDestroy();
 
 public:
-    XLineEndList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
+    explicit XLineEndList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
     virtual ~XLineEndList();
 
     using XPropertyList::Replace;
@@ -411,7 +411,7 @@ public:
 class XDashTable : public XPropertyTable
 {
 public:
-                    XDashTable( const String& rPath,
+    explicit        XDashTable( const String& rPath,
                                 XOutdevItemPool* pXPool = NULL,
                                 USHORT nInitSize = 16,
                                 USHORT nReSize = 16 );
@@ -445,7 +445,7 @@ private:
     void impDestroy();
 
 public:
-    XDashList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
+    explicit XDashList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
     virtual ~XDashList();
 
     using XPropertyList::Replace;
@@ -469,7 +469,7 @@ public:
 class XHatchTable : public XPropertyTable
 {
 public:
-                    XHatchTable( const String& rPath,
+    explicit        XHatchTable( const String& rPath,
                                     XOutdevItemPool* pXPool = NULL,
                                     USHORT nInitSize = 16,
                                     USHORT nReSize = 16 );
@@ -503,7 +503,7 @@ private:
     void impDestroy();
 
 public:
-    XHatchList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
+    explicit XHatchList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
     ~XHatchList();
 
     using XPropertyList::Replace;
@@ -527,7 +527,7 @@ public:
 class XGradientTable : public XPropertyTable
 {
 public:
-                    XGradientTable( const String& rPath,
+    explicit        XGradientTable( const String& rPath,
                                     XOutdevItemPool* pXPool = NULL,
                                     USHORT nInitSize = 16,
                                     USHORT nReSize = 16 );
@@ -561,7 +561,7 @@ private:
     void impDestroy();
 
 public:
-    XGradientList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
+    explicit XGradientList(const String& rPath, XOutdevItemPool* pXPool = 0, sal_uInt16 nInitSize = 16, sal_uInt16 nReSize = 16);
     virtual ~XGradientList();
 
     using XPropertyList::Replace;
@@ -585,7 +585,7 @@ public:
 class XBitmapTable : public XPropertyTable
 {
 public:
-                    XBitmapTable( const String& rPath,
+    explicit        XBitmapTable( const String& rPath,
                                     XOutdevItemPool* pXPool = NULL,
                                     USHORT nInitSize = 16,
                                     USHORT nReSize = 16 );
@@ -612,7 +612,7 @@ public:
 class SVX_DLLPUBLIC XBitmapList : public XPropertyList
 {
 public:
-                    XBitmapList( const String& rPath,
+    explicit        XBitmapList( const String& rPath,
                                     XOutdevItemPool* pXPool = NULL,
                                     USHORT nInitSize = 16,
                                     USHORT nReSize = 16 );
