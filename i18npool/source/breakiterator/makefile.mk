@@ -79,7 +79,17 @@ GENBRK:=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/genbrk
 GENCCODE:=$(AUGMENT_LIBRARY_PATH) $(SOLARBINDIR)$/genccode
 .ENDIF
 
-$(MISC)$/%.brk : data/%.txt
+.INCLUDE .IGNORE :  icuversion.mk
+
+$(MISC)$/%.txt : data/%.txt
+# fdo#31271 ")" reclassified in more recent ICU/Unicode Standards
+.IF "$(ICU_MAJOR)" >= "5" || ("$(ICU_MAJOR)" == "4" && "$(ICU_MINOR)" >= "4")
+    $(SED) "s#\[:LineBreak =  Close_Punctuation:\]#\[\[:LineBreak =  Close_Punctuation:\] \[:LineBreak = Close_Parenthesis:\]\]#" $< > $@
+.ELSE
+    $(COPY) $< $@
+.ENDIF
+
+$(MISC)$/%.brk : $(MISC)/%.txt
     $(WRAPCMD) $(GENBRK) -r $< -o $(MISC)$/$*.brk
 
 $(MISC)$/%_brk.c : $(MISC)$/%.brk

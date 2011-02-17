@@ -3,97 +3,97 @@
 <Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.0">
   <LC_INFO>
     <Language>
-      <LangID>hsb</LangID>
-      <DefaultName>Sorbian, Upper</DefaultName>
+      <LangID>ur</LangID>
+      <DefaultName>Urdu</DefaultName>
     </Language>
     <Country>
-      <CountryID>DE</CountryID>
-      <DefaultName>Germany</DefaultName>
+      <CountryID>PK</CountryID>
+      <DefaultName>Pakistan</DefaultName>
     </Country>
   </LC_INFO>
   <LC_CTYPE unoid="generic">
     <Separators>
-      <DateSeparator>.</DateSeparator>
-      <ThousandSeparator>.</ThousandSeparator>
-      <DecimalSeparator>,</DecimalSeparator>
+      <DateSeparator>/</DateSeparator>
+      <ThousandSeparator>,</ThousandSeparator>
+      <DecimalSeparator>.</DecimalSeparator>
       <TimeSeparator>:</TimeSeparator>
-      <Time100SecSeparator>,</Time100SecSeparator>
+      <Time100SecSeparator>.</Time100SecSeparator>
       <ListSeparator>;</ListSeparator>
       <LongDateDayOfWeekSeparator>, </LongDateDayOfWeekSeparator>
-      <LongDateDaySeparator>. </LongDateDaySeparator>
+      <LongDateDaySeparator>, </LongDateDaySeparator>
       <LongDateMonthSeparator> </LongDateMonthSeparator>
       <LongDateYearSeparator> </LongDateYearSeparator>
     </Separators>
     <Markers>
-      <QuotationStart>‚</QuotationStart>
-      <QuotationEnd>‘</QuotationEnd>
-      <DoubleQuotationStart>„</DoubleQuotationStart>
-      <DoubleQuotationEnd>“</DoubleQuotationEnd>
+      <QuotationStart>‘</QuotationStart>
+      <QuotationEnd>’</QuotationEnd>
+      <DoubleQuotationStart>“</DoubleQuotationStart>
+      <DoubleQuotationEnd>”</DoubleQuotationEnd>
     </Markers>
-    <TimeAM>dopołdnja</TimeAM>
-    <TimePM>popołdnju</TimePM>
+    <TimeAM>قبل دوپہر</TimeAM>
+    <TimePM>بعد دوپہر</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$€-42E]">
+  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$₨-420]">
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
-      <FormatCode>Standard</FormatCode>
+      <FormatCode>General</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey2" default="true" type="short" usage="FIXED_NUMBER" formatindex="1">
       <FormatCode>0</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey3" default="false" type="medium" usage="FIXED_NUMBER" formatindex="2">
-      <FormatCode>0,00</FormatCode>
+      <FormatCode>0.00</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey4" default="false" type="short" usage="FIXED_NUMBER" formatindex="3">
-      <FormatCode>#.##0</FormatCode>
+      <FormatCode>#,##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey5" default="false" type="medium" usage="FIXED_NUMBER" formatindex="4">
-      <FormatCode>#.##0,00</FormatCode>
+      <FormatCode>#,##0.00</FormatCode>
     </FormatElement>
     <FormatElement msgid="FixedFormatskey6" default="false" type="medium" usage="FIXED_NUMBER" formatindex="5">
-      <FormatCode>#.###,00</FormatCode>
+      <FormatCode>#,###.00</FormatCode>
     </FormatElement>
     <FormatElement msgid="ScientificFormatskey1" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="6">
-      <FormatCode>0,00E+000</FormatCode>
+      <FormatCode>0.00E+00</FormatCode>
     </FormatElement>
     <FormatElement msgid="ScientificFormatskey2" default="false" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="7">
-      <FormatCode>0,00E+00</FormatCode>
+      <FormatCode>0.00E+000</FormatCode>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER" formatindex="8">
       <FormatCode>0%</FormatCode>
     </FormatElement>
     <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER" formatindex="9">
-      <FormatCode>0,00%</FormatCode>
+      <FormatCode>0.00%</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
-      <FormatCode>[CURRENCY]#.##0;-[CURRENCY]#.##0</FormatCode>
+      <FormatCode>[CURRENCY]#,##0;-[CURRENCY]#,##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode>[CURRENCY]#.##0,00;-[CURRENCY]#.##0,00</FormatCode>
+      <FormatCode>[CURRENCY]#,##0.00;-[CURRENCY]#,##0.00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
-      <FormatCode>[CURRENCY]#.##0;[RED]-[CURRENCY]#.##0</FormatCode>
+      <FormatCode>[CURRENCY]#,##0;[RED]-[CURRENCY]#,##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY" formatindex="15">
-      <FormatCode>[CURRENCY]#.##0,00;[RED]-[CURRENCY]#.##0,00</FormatCode>
+      <FormatCode>[CURRENCY]#,##0.00;[RED]-[CURRENCY]#,##0.00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
-      <FormatCode>CCC#.##0,00</FormatCode>
+      <FormatCode>CCC#,##0.00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-      <FormatCode>[CURRENCY]#.##0,--;[RED]-[CURRENCY]#.##0,--</FormatCode>
+      <FormatCode>[CURRENCY]#,##0.--;[RED]-[CURRENCY]#,##0.--</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="true" type="short" usage="DATE" formatindex="18">
-      <FormatCode>D.MM.YY</FormatCode>
+      <FormatCode>D/MM/YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey14" default="true" type="long" usage="DATE" formatindex="19">
       <FormatCode>NNNNDD, MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey6" default="true" type="medium" usage="DATE" formatindex="20">
-      <FormatCode>DD.MM.YY</FormatCode>
+      <FormatCode>DD/MM/YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="21">
-      <FormatCode>DD.MM.YYYY</FormatCode>
+      <FormatCode>DD/MM/YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="22">
       <FormatCode>D, MMM YY</FormatCode>
@@ -111,7 +111,7 @@
       <FormatCode>D, MMMM YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey10" default="false" type="medium" usage="DATE" formatindex="27">
-      <FormatCode>NN, DD.MMM.YY</FormatCode>
+      <FormatCode>NN, DD/MMM/YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey18" default="false" type="long" usage="DATE" formatindex="28">
       <FormatCode>NN, D, MMM YY</FormatCode>
@@ -123,7 +123,7 @@
       <FormatCode>NNNND, MMMM YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey12" default="false" type="short" usage="DATE" formatindex="31">
-      <FormatCode>MM.DD</FormatCode>
+      <FormatCode>MM/DD</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="32">
       <FormatCode>YY-MM-DD</FormatCode>
@@ -134,10 +134,10 @@
       <DefaultName>ISO 8601</DefaultName>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="false" type="medium" usage="DATE" formatindex="34">
-      <FormatCode>MM.YY</FormatCode>
+      <FormatCode>MM/YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="35">
-      <FormatCode>MMM.DD</FormatCode>
+      <FormatCode>MMM/DD</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="36">
       <FormatCode>MMMM</FormatCode>
@@ -164,16 +164,16 @@
       <FormatCode>[HH]:MM:SS</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey6" default="false" type="short" usage="TIME" formatindex="44">
-      <FormatCode>MM:SS,00</FormatCode>
+      <FormatCode>MM:SS.00</FormatCode>
     </FormatElement>
     <FormatElement msgid="TimeFormatskey7" default="false" type="medium" usage="TIME" formatindex="45">
-      <FormatCode>[HH]:MM:SS,00</FormatCode>
+      <FormatCode>[HH]:MM:SS.00</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey1" default="true" type="medium" usage="DATE_TIME" formatindex="46">
-      <FormatCode>DD.MM.YY HH:MM</FormatCode>
+      <FormatCode>DD/MM/YY HH:MM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME" formatindex="47">
-      <FormatCode>DD.MM.YYYY HH:MM:SS AM/PM</FormatCode>
+      <FormatCode>DD/MM/YYYY HH:MM:SS AM/PM</FormatCode>
     </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION>
@@ -188,138 +188,137 @@
     </SearchOptions>
   </LC_SEARCH>
   <LC_INDEX>
-    <IndexKey unoid="alphanumeric" default="true" phonetic="false">A-C Č Ć D {Dź} E F-H {Ch} I-K Ł L-N Ń O Ó P {Př} Q R S Š T {Tř} U-Z Ž</IndexKey>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">أ ؤ ا آ ب پ ت ٹ ث ج چ ح خ د ڈ ذ ر ڑ ز ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن ں و ہ ی ء ئ ے ٻ ة ٺ ټ ٽ ه ھ ي</IndexKey>
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
-    <UnicodeScript>2</UnicodeScript>
-    <FollowPageWord>sć.</FollowPageWord>
-    <FollowPageWord>sć.sć.</FollowPageWord>
+    <FollowPageWord>صفحہ</FollowPageWord>
+    <FollowPageWord>صفحے</FollowPageWord>
   </LC_INDEX>
   <LC_CALENDAR>
     <Calendar unoid="gregorian" default="true">
       <DaysOfWeek>
         <Day>
           <DayID>sun</DayID>
-          <DefaultAbbrvName>nje</DefaultAbbrvName>
-          <DefaultFullName>njedźela</DefaultFullName>
+          <DefaultAbbrvName>ا</DefaultAbbrvName>
+          <DefaultFullName>اتوار</DefaultFullName>
         </Day>
         <Day>
           <DayID>mon</DayID>
-          <DefaultAbbrvName>pón</DefaultAbbrvName>
-          <DefaultFullName>póndźela</DefaultFullName>
+          <DefaultAbbrvName>پ</DefaultAbbrvName>
+          <DefaultFullName>پير</DefaultFullName>
         </Day>
         <Day>
           <DayID>tue</DayID>
-          <DefaultAbbrvName>wut</DefaultAbbrvName>
-          <DefaultFullName>wutora</DefaultFullName>
+          <DefaultAbbrvName>م</DefaultAbbrvName>
+          <DefaultFullName>منگل</DefaultFullName>
         </Day>
         <Day>
           <DayID>wed</DayID>
-          <DefaultAbbrvName>srj</DefaultAbbrvName>
-          <DefaultFullName>srjeda</DefaultFullName>
+          <DefaultAbbrvName>ب</DefaultAbbrvName>
+          <DefaultFullName>بده</DefaultFullName>
         </Day>
         <Day>
           <DayID>thu</DayID>
-          <DefaultAbbrvName>štw</DefaultAbbrvName>
-          <DefaultFullName>štwórtk</DefaultFullName>
+          <DefaultAbbrvName>ج</DefaultAbbrvName>
+          <DefaultFullName>جمعرات</DefaultFullName>
         </Day>
         <Day>
           <DayID>fri</DayID>
-          <DefaultAbbrvName>pja</DefaultAbbrvName>
-          <DefaultFullName>pjatk</DefaultFullName>
+          <DefaultAbbrvName>ج</DefaultAbbrvName>
+          <DefaultFullName>جمعہ</DefaultFullName>
         </Day>
         <Day>
           <DayID>sat</DayID>
-          <DefaultAbbrvName>sob</DefaultAbbrvName>
-          <DefaultFullName>sobota</DefaultFullName>
+          <DefaultAbbrvName>ہ</DefaultAbbrvName>
+          <DefaultFullName>ہفتہ</DefaultFullName>
         </Day>
       </DaysOfWeek>
       <MonthsOfYear>
         <Month>
           <MonthID>jan</MonthID>
-          <DefaultAbbrvName>jan</DefaultAbbrvName>
-          <DefaultFullName>januar</DefaultFullName>
+          <DefaultAbbrvName>ج</DefaultAbbrvName>
+          <DefaultFullName>جنوری</DefaultFullName>
         </Month>
         <Month>
           <MonthID>feb</MonthID>
-          <DefaultAbbrvName>feb</DefaultAbbrvName>
-          <DefaultFullName>februar</DefaultFullName>
+          <DefaultAbbrvName>ف</DefaultAbbrvName>
+          <DefaultFullName>فروری</DefaultFullName>
         </Month>
         <Month>
           <MonthID>mar</MonthID>
-          <DefaultAbbrvName>měrc</DefaultAbbrvName>
-          <DefaultFullName>měrc</DefaultFullName>
+          <DefaultAbbrvName>م</DefaultAbbrvName>
+          <DefaultFullName>مار چ</DefaultFullName>
         </Month>
         <Month>
           <MonthID>apr</MonthID>
-          <DefaultAbbrvName>apr</DefaultAbbrvName>
-          <DefaultFullName>apryl</DefaultFullName>
+          <DefaultAbbrvName>ا</DefaultAbbrvName>
+          <DefaultFullName>اپريل</DefaultFullName>
         </Month>
         <Month>
           <MonthID>may</MonthID>
-          <DefaultAbbrvName>meja</DefaultAbbrvName>
-          <DefaultFullName>meja</DefaultFullName>
+          <DefaultAbbrvName>م</DefaultAbbrvName>
+          <DefaultFullName>مئ</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jun</MonthID>
-          <DefaultAbbrvName>jun</DefaultAbbrvName>
-          <DefaultFullName>junij</DefaultFullName>
+          <DefaultAbbrvName>ج</DefaultAbbrvName>
+          <DefaultFullName>جون</DefaultFullName>
         </Month>
         <Month>
           <MonthID>jul</MonthID>
-          <DefaultAbbrvName>jul</DefaultAbbrvName>
-          <DefaultFullName>julij</DefaultFullName>
+          <DefaultAbbrvName>ج</DefaultAbbrvName>
+          <DefaultFullName>جولائ</DefaultFullName>
         </Month>
         <Month>
           <MonthID>aug</MonthID>
-          <DefaultAbbrvName>awg</DefaultAbbrvName>
-          <DefaultFullName>awgust</DefaultFullName>
+          <DefaultAbbrvName>ا</DefaultAbbrvName>
+          <DefaultFullName>اگست</DefaultFullName>
         </Month>
         <Month>
           <MonthID>sep</MonthID>
-          <DefaultAbbrvName>sep</DefaultAbbrvName>
-          <DefaultFullName>september</DefaultFullName>
+          <DefaultAbbrvName>س</DefaultAbbrvName>
+          <DefaultFullName>ستمبر</DefaultFullName>
         </Month>
         <Month>
           <MonthID>oct</MonthID>
-          <DefaultAbbrvName>okt</DefaultAbbrvName>
-          <DefaultFullName>oktober</DefaultFullName>
+          <DefaultAbbrvName>ا</DefaultAbbrvName>
+          <DefaultFullName>اکتوبر</DefaultFullName>
         </Month>
         <Month>
           <MonthID>nov</MonthID>
-          <DefaultAbbrvName>now</DefaultAbbrvName>
-          <DefaultFullName>nowember</DefaultFullName>
+          <DefaultAbbrvName>ن</DefaultAbbrvName>
+          <DefaultFullName>نومبر</DefaultFullName>
         </Month>
         <Month>
           <MonthID>dec</MonthID>
-          <DefaultAbbrvName>dec</DefaultAbbrvName>
-          <DefaultFullName>december</DefaultFullName>
+          <DefaultAbbrvName>د</DefaultAbbrvName>
+          <DefaultFullName>دسمبر</DefaultFullName>
         </Month>
       </MonthsOfYear>
       <Eras>
         <Era>
           <EraID>bc</EraID>
-          <DefaultAbbrvName>př. Chr.</DefaultAbbrvName>
-          <DefaultFullName>před Chrystusom</DefaultFullName>
+          <DefaultAbbrvName>ق م</DefaultAbbrvName>
+          <DefaultFullName>قبل مسيح</DefaultFullName>
         </Era>
         <Era>
           <EraID>ad</EraID>
-          <DefaultAbbrvName>po Chr.</DefaultAbbrvName>
-          <DefaultFullName>po Chrystusu</DefaultFullName>
+          <DefaultAbbrvName>ء</DefaultAbbrvName>
+          <DefaultFullName>عيسوی سن</DefaultFullName>
         </Era>
       </Eras>
       <StartDayOfWeek>
-        <DayID>mon</DayID>
+        <DayID>sun</DayID>
       </StartDayOfWeek>
-      <MinimalDaysInFirstWeek>4</MinimalDaysInFirstWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
     </Calendar>
   </LC_CALENDAR>
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
-      <CurrencyID>EUR</CurrencyID>
-      <CurrencySymbol>€</CurrencySymbol>
-      <BankSymbol>EUR</BankSymbol>
-      <CurrencyName>Euro</CurrencyName>
+      <CurrencyID>PKR</CurrencyID>
+      <CurrencySymbol>₨</CurrencySymbol>
+      <BankSymbol>PKR</BankSymbol>
+      <CurrencyName>پاکستانی روپیہ</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
     </Currency>
   </LC_CURRENCY>
@@ -330,21 +329,30 @@
   </LC_TRANSLITERATION>
   <LC_MISC>
     <ReservedWords>
-      <trueWord>prawje</trueWord>
-      <falseWord>wopak</falseWord>
-      <quarter1Word>prěni kwartal</quarter1Word>
-      <quarter2Word>druhi kwartal</quarter2Word>
-      <quarter3Word>třeći kwartal</quarter3Word>
-      <quarter4Word>štwórty kwartal</quarter4Word>
-      <aboveWord>horjeka</aboveWord>
-      <belowWord>deleka</belowWord>
-      <quarter1Abbreviation>K1</quarter1Abbreviation>
-      <quarter2Abbreviation>K2</quarter2Abbreviation>
-      <quarter3Abbreviation>K3</quarter3Abbreviation>
-      <quarter4Abbreviation>K4</quarter4Abbreviation>
+      <trueWord>راست</trueWord>
+      <falseWord>غلط</falseWord>
+      <quarter1Word>ایک چوتھائی</quarter1Word>
+      <quarter2Word>دو چوتھائی</quarter2Word>
+      <quarter3Word>تین چوتھائی</quarter3Word>
+      <quarter4Word>چار چوتھائی</quarter4Word>
+      <aboveWord>اوپر</aboveWord>
+      <belowWord>نیچے</belowWord>
+      <quarter1Abbreviation>چوتھائی 1</quarter1Abbreviation>
+      <quarter2Abbreviation>چوتھائی 2 </quarter2Abbreviation>
+      <quarter3Abbreviation>چوتھائی 3</quarter3Abbreviation>
+      <quarter4Abbreviation>چوتھائی 4</quarter4Abbreviation>
     </ReservedWords>
   </LC_MISC>
-  <LC_NumberingLevel ref="en_US"/>
+  <LC_NumberingLevel>
+    <NumberingLevel NumType="4" Prefix=" "  Suffix=")"/>
+    <NumberingLevel NumType="4" Prefix=" "  Suffix="."/>
+    <NumberingLevel NumType="4" Prefix="("  Suffix=")"/>
+    <NumberingLevel NumType="2" Prefix=" "  Suffix="."/>
+    <NumberingLevel NumType="0" Prefix=" "  Suffix=")"/>
+    <NumberingLevel NumType="1" Prefix=" "  Suffix=")"/>
+    <NumberingLevel NumType="1" Prefix="("  Suffix=")"/>
+    <NumberingLevel NumType="3" Prefix=" "  Suffix="."/>
+  </LC_NumberingLevel>
   <LC_OutLineNumberingLevel ref="en_US"/>
 </Locale>
 <!--Version 1.0  -->
