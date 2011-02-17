@@ -1,29 +1,12 @@
 #ifndef com_sun_star_chart2_ScaleData_idl
 #define com_sun_star_chart2_ScaleData_idl
 
-#ifndef com_sun_star_chart2_Break_idl
-#include <com/sun/star/chart2/Break.idl>
-#endif
-
-#ifndef com_sun_star_chart2_XScaling_idl
 #include <com/sun/star/chart2/XScaling.idl>
-#endif
-
-#ifndef com_sun_star_chart2_AxisOrientation_idl
 #include <com/sun/star/chart2/AxisOrientation.idl>
-#endif
-
-#ifndef com_sun_star_chart2_data_XLabeledDataSequence_idl
 #include <com/sun/star/chart2/data/XLabeledDataSequence.idl>
-#endif
-
-#ifndef com_sun_star_chart2_AxisType_idl
 #include <com/sun/star/chart2/AxisType.idl>
-#endif
-
-#ifndef com_sun_star_chart_IncrementData_idl
 #include <com/sun/star/chart2/IncrementData.idl>
-#endif
+#include <com/sun/star/chart/TimeIncrement.idl>
 
 //=============================================================================
 
@@ -76,8 +59,6 @@ struct ScaleData
 
     XScaling            Scaling;
 
-    sequence< Break >   Breaks;
-
     data::XLabeledDataSequence Categories;
 
     /** describes the type of the axis.
@@ -87,7 +68,22 @@ struct ScaleData
     */
     long   AxisType;
 
+    /** if true an AxisType CATEGORY is interpreted as DATE if the underlying data given in Categories are dates
+    */
+    boolean AutoDateAxis;
+
+    /** describes wether data points on category or date axis are placed between tickmarks or not
+    if true the maximum on the scale will be expanded for one interval
+    */
+    boolean ShiftedCategoryPosition;
+
+    /** increment data to be used for not date-time axis
+    */
     IncrementData IncrementData;
+
+    /** increment data to be used in case of date-time axis
+    */
+    ::com::sun::star::chart::TimeIncrement TimeIncrement;
 };
 
 //=============================================================================

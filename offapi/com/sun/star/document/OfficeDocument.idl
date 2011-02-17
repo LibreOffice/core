@@ -27,53 +27,19 @@
 #ifndef __com_sun_star_document_OfficeDocument_idl__
 #define __com_sun_star_document_OfficeDocument_idl__
 
-#ifndef __com_sun_star_frame_XModel_idl__
 #include <com/sun/star/frame/XModel.idl>
-#endif
-
-#ifndef __com_sun_star_util_XModifiable_idl__
 #include <com/sun/star/util/XModifiable.idl>
-#endif
-
-#ifndef __com_sun_star_frame_XStorable_idl__
 #include <com/sun/star/frame/XStorable.idl>
-#endif
-
-#ifndef __com_sun_star_view_XPrintable_idl__
 #include <com/sun/star/view/XPrintable.idl>
-#endif
-
-#ifndef __com_sun_star_view_XPrintJobBroadcaster_idl__
 #include <com/sun/star/view/XPrintJobBroadcaster.idl>
-#endif
-
-#ifndef __com_sun_star_document_XEventBroadcaster_idl__
 #include <com/sun/star/document/XEventBroadcaster.idl>
-#endif
-
-#ifndef __com_sun_star_document_XEventsSupplier_idl__
 #include <com/sun/star/document/XEventsSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_document_XDocumentInfoSupplier_idl__
 #include <com/sun/star/document/XDocumentInfoSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_document_XViewDataSupplier_idl__
 #include <com/sun/star/document/XViewDataSupplier.idl>
-#endif
-
-#ifndef __com_sun_star_document_XDocumentEventBroadcaster_idl__
 #include <com/sun/star/document/XDocumentEventBroadcaster.idl>
-#endif
-
-#ifndef __com_sun_star_document_XEmbeddedScripts_idl__
 #include <com/sun/star/document/XEmbeddedScripts.idl>
-#endif
-
-#ifndef __com_sun_star_document_XDocumentPropertiesSupplier_idl__
 #include <com/sun/star/document/XDocumentPropertiesSupplier.idl>
-#endif
+#include <com/sun/star/document/XUndoManagerSupplier.idl>
 
 //=============================================================================
 
@@ -191,6 +157,10 @@ published service OfficeDocument
         @since OOo 3.0
      */
     [optional] interface XDocumentPropertiesSupplier;
+
+    /** provides access to the document's undo manager.
+    */
+    [optional] interface XUndoManagerSupplier;
 
     //-------------------------------------------------------------------------
     /** controls the focus behaviour of the form controls in the document

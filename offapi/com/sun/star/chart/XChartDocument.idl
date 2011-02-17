@@ -144,9 +144,12 @@ published interface XChartDocument: com::sun::star::frame::XModel
         <p>Since OOo 3.3 the returned object also supports interface <type>XComplexDescriptionAccess</type>
         which can be used to access complex hierarchical axis descriptions.</p>
 
+        <p>Since OOo 3.4 the returned object also supports interface <type>XDateCategories</type>.</p>
+
         @see XChartData
         @see XChartDataArray
         @see XComplexDescriptionAccess
+        @see XDateCategories
      */
     com::sun::star::chart::XChartData getData();
 
@@ -159,12 +162,16 @@ published interface XChartDocument: com::sun::star::frame::XModel
         <p>Since OOo 3.3 if the given object might support interface <type>XComplexDescriptionAccess</type>
         which allows to set complex hierarchical axis descriptions.</p>
 
+        <p>Since OOo 3.4 if the given object might support interface <type>XDateCategories</type>
+        which allows to set date values as x values for category charts.</p>
+
         <p>The given data is copied before it is applied to the chart.
         So changing xData after this call will have no effect on the chart.</p>
 
         @see XChartData
         @see XChartDataArray
         @see XComplexDescriptionAccess
+        @see XDateCategories
 
         @param xData
             the object that provides the new data.

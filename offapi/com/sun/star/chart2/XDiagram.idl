@@ -32,9 +32,10 @@
 #endif
 
 #include <com/sun/star/beans/XPropertySet.idl>
-
+#include <com/sun/star/beans/PropertyValue.idl>
 #include <com/sun/star/chart2/XLegend.idl>
 #include <com/sun/star/chart2/XColorScheme.idl>
+#include <com/sun/star/chart2/data/XDataSource.idl>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.idl>
 
 module com
@@ -48,11 +49,6 @@ module chart2
 
 interface XDiagram : ::com::sun::star::uno::XInterface
 {
-    /** gets the component that creates a new diagram or modifies
-        an existing diagram according to its rules.
-     */
-//     string getChartTypeTemplateServiceName();
-
     /** returns the property set that determines the visual appearance
         of the wall.
 
@@ -87,6 +83,25 @@ interface XDiagram : ::com::sun::star::uno::XInterface
         colors for data series (or data points) in the diagram.
      */
     void setDefaultColorScheme( [in] XColorScheme xColorScheme );
+
+    /** sets new data to the diagram.
+
+        @param xDataSource
+            This data source will be interpreted in a chart-type
+            specific way and the <type>DataSeries</type> found in
+            <code>xDiagram</code> will be adapted to the new data.
+            Missing data series will be created and unused ones will
+            be deleted.
+
+        @param aArguments
+            Arguments tells how to slice the given data.
+
+            <p>For standard parameters that may be used, see the
+            service <type>StandardDiagramCreationParameters</type>.
+            </p>
+     */
+    void setDiagramData( [in] data::XDataSource xDataSource,
+        [in] sequence< com::sun::star::beans::PropertyValue > aArguments );
 };
 
 } ; // chart2
