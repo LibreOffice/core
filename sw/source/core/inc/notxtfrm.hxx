@@ -58,21 +58,21 @@ public:
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const;
-    virtual BOOL GetCharRect( SwRect &, const SwPosition&,
+    virtual sal_Bool GetCharRect( SwRect &, const SwPosition&,
                               SwCrsrMoveState* = 0) const;
-    BOOL GetCrsrOfst(SwPosition* pPos, Point& aPoint,
+    sal_Bool GetCrsrOfst(SwPosition* pPos, Point& aPoint,
                      SwCrsrMoveState* = 0) const;
 
     const Size &GetGrfSize() const  { return GetSize(); }
-    void GetGrfArea( SwRect &rRect, SwRect * = 0, BOOL bMirror = TRUE ) const;
+    void GetGrfArea( SwRect &rRect, SwRect * = 0, sal_Bool bMirror = sal_True ) const;
 
-    BOOL IsTransparent() const;
+    sal_Bool IsTransparent() const;
 
     void StopAnimation( OutputDevice* = 0 ) const;
-    BOOL HasAnimation()  const;
+    sal_Bool HasAnimation()  const;
 
     // Routinen fuer den Grafik-Cache
-    USHORT GetWeight() { return nWeight; }
+    sal_uInt16 GetWeight() { return nWeight; }
 };
 
 #endif

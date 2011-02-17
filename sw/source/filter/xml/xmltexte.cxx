@@ -602,7 +602,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 while ( i > 0 )
                 {
                     beans::PropertyValue& aProp = aProps[--i];
-                    USHORT nType2 = SwApplet_Impl::GetOptionType( aProp.Name, TRUE );
+                    sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, sal_True );
                     if ( nType2 == SWHTML_OPTTYPE_TAG)
                     {
                         ::rtl::OUString aStr2;
@@ -698,7 +698,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                     while ( i > 0 )
                     {
                         beans::PropertyValue& aProp = aProps[--i];
-                        USHORT nType2 = SwApplet_Impl::GetOptionType( aProp.Name, TRUE );
+                        sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, sal_True );
                         if (SWHTML_OPTTYPE_PARAM == nType2 || SWHTML_OPTTYPE_SIZE == nType2 )
                         {
                             ::rtl::OUString aStr;
@@ -724,7 +724,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                     while ( i > 0 )
                     {
                         beans::PropertyValue& aProp = aProps[--i];
-                        USHORT nType2 = SwApplet_Impl::GetOptionType( aProp.Name, FALSE );
+                        sal_uInt16 nType2 = SwApplet_Impl::GetOptionType( aProp.Name, sal_False );
                         if ( nType2 == SWHTML_OPTTYPE_TAG)
                         {
                             ::rtl::OUString aStr;

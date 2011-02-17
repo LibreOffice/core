@@ -44,7 +44,7 @@
 using namespace com::sun::star;
 
 SwOleClient::SwOleClient( SwView *pView, SwEditWin *pWin, const svt::EmbeddedObjectRef& xObj ) :
-    SfxInPlaceClient( pView, pWin, xObj.GetViewAspect() ), bInDoVerb( FALSE ),
+    SfxInPlaceClient( pView, pWin, xObj.GetViewAspect() ), bInDoVerb( sal_False ),
     bOldCheckForOLEInCaption( pView->GetWrtShell().IsCheckForOLEInCaption() )
 {
     SetObject( xObj.GetObject() );
@@ -158,11 +158,11 @@ void SwOleClient::ViewChanged()
     aVisSize.Height()= Fraction( aVisSize.Height() ) * GetScaleHeight();
 
     SwRect aRect( Point( LONG_MIN, LONG_MIN ), aVisSize );
-    rSh.LockView( TRUE );   //Scrollen im EndAction verhindern
+    rSh.LockView( sal_True );   //Scrollen im EndAction verhindern
     rSh.StartAllAction();
     rSh.RequestObjectResize( aRect, GetObject() );
     rSh.EndAllAction();
-    rSh.LockView( FALSE );
+    rSh.LockView( sal_False );
 }
 
 void SwOleClient::MakeVisible()

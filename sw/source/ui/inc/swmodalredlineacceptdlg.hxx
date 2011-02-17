@@ -41,7 +41,7 @@ public:
     SwModalRedlineAcceptDlg(Window *pParent);
     ~SwModalRedlineAcceptDlg();
 
-    void            AcceptAll( BOOL bAccept );
+    void            AcceptAll( sal_Bool bAccept );
     virtual void    Activate();
 };
 

@@ -83,13 +83,13 @@ class SmSym
     String              m_aExportName;
     String              m_aSetName;
     sal_UCS4            m_cChar;
-    BOOL                m_bPredefined;
-    BOOL                m_bDocSymbol;
+    sal_Bool                m_bPredefined;
+    sal_Bool                m_bDocSymbol;
 
 public:
     SmSym();
     SmSym(const String& rName, const Font& rFont, sal_UCS4 cChar,
-          const String& rSet, BOOL bIsPredefined = FALSE);
+          const String& rSet, sal_Bool bIsPredefined = sal_False);
     SmSym(const SmSym& rSymbol);
 
     SmSym&      operator = (const SmSym& rSymbol);
@@ -105,14 +105,14 @@ public:
 //! because ten the key would not be the same as its supposed copy here
 //    void            SetName( const String &rTxt )       { m_aName = rTxt; }
 
-    BOOL            IsPredefined() const        { return m_bPredefined; }
+    sal_Bool            IsPredefined() const        { return m_bPredefined; }
     const String &  GetSymbolSetName() const    { return m_aSetName; }
     void            SetSymbolSetName( const String &rName )     { m_aSetName = rName; }
     const String &  GetExportName() const       { return m_aExportName; }
     void            SetExportName( const String &rName )        { m_aExportName = rName; }
 
-    BOOL            IsDocSymbol() const         { return m_bDocSymbol; }
-    void            SetDocSymbol( BOOL bVal )   { m_bDocSymbol = bVal; }
+    sal_Bool            IsDocSymbol() const         { return m_bDocSymbol; }
+    void            SetDocSymbol( sal_Bool bVal )   { m_bDocSymbol = bVal; }
 
     // true if rSymbol has the same name, font and character
     bool            IsEqualInUI( const SmSym& rSymbol ) const;
@@ -167,7 +167,7 @@ public:
     std::set< String >      GetSymbolSetNames() const;
     const SymbolPtrVec_t    GetSymbolSet(  const String& rSymbolSetName );
 
-    USHORT                  GetSymbolCount() const  { return static_cast< USHORT >(m_aSymbols.size()); }
+    sal_uInt16                  GetSymbolCount() const  { return static_cast< sal_uInt16 >(m_aSymbols.size()); }
     const SymbolPtrVec_t    GetSymbols() const;
     bool                    AddOrReplaceSymbol( const SmSym & rSymbol, bool bForceChange = false );
     void                    RemoveSymbol( const String & rSymbolName );

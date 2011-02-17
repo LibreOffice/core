@@ -1085,7 +1085,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
     // prepare paint
     if ( maPrevwPages.size() > 0 )
     {
-        mrParentViewShell.Imp()->bFirstPageInvalid = FALSE;
+        mrParentViewShell.Imp()->bFirstPageInvalid = sal_False;
         mrParentViewShell.Imp()->pFirstVisPage =
                 const_cast<SwPageFrm*>(maPrevwPages[0]->pPage);
     }
@@ -1238,7 +1238,7 @@ void SwPagePreviewLayout::Repaint( const Rectangle _aInvalidCoreRect ) const
     // prepare paint
     if ( maPrevwPages.size() > 0 )
     {
-        mrParentViewShell.Imp()->bFirstPageInvalid = FALSE;
+        mrParentViewShell.Imp()->bFirstPageInvalid = sal_False;
         mrParentViewShell.Imp()->pFirstVisPage =
                 const_cast<SwPageFrm*>(maPrevwPages[0]->pPage);
     }
@@ -1533,7 +1533,7 @@ sal_uInt16 SwPagePreviewLayout::ConvertRelativeToAbsolutePageNum( sal_uInt16 _nR
     const SwPageFrm* pTmpPage = static_cast<const SwPageFrm*>(mrLayoutRootFrm.Lower());
     const SwPageFrm* pRet = 0;
 
-    USHORT i = 0;
+    sal_uInt16 i = 0;
     while( pTmpPage && i != _nRelPageNum )
     {
         if ( !pTmpPage->IsEmptyPage() )

@@ -68,7 +68,7 @@ SwPosition SwUndoField::GetPosition()
 SwUndoFieldFromDoc::SwUndoFieldFromDoc(const SwPosition & rPos,
                          const SwField & rOldField,
                          const SwField & rNewField,
-                         SwMsgPoolItem * _pHnt, BOOL _bUpdate, SwUndoId _nId)
+                         SwMsgPoolItem * _pHnt, sal_Bool _bUpdate, SwUndoId _nId)
     : SwUndoField(rPos,_nId)
     , pOldField(rOldField.CopyField())
     , pNewField(rNewField.CopyField())
@@ -125,7 +125,7 @@ void SwUndoFieldFromDoc::RepeatImpl(::sw::RepeatContext &)
 
 SwUndoFieldFromAPI::SwUndoFieldFromAPI(const SwPosition & rPos,
                                        const Any & rOldVal, const Any & rNewVal,
-                                       USHORT _nWhich)
+                                       sal_uInt16 _nWhich)
     : SwUndoField(rPos), aOldVal(rOldVal), aNewVal(rNewVal), nWhich(_nWhich)
 {
 }

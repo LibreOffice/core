@@ -183,7 +183,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     if(pWrtShell->IsInVerticalText())
                         aImgItem.SetRotation(2700);
                     if(pWrtShell->IsInRightToLeftText())
-                        aImgItem.SetMirrored(TRUE);
+                        aImgItem.SetMirrored(sal_True);
                 }
                 rSet.Put(aImgItem);
             }
@@ -201,7 +201,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     if(pWrtShell->IsInVerticalText())
                         aImgItem.SetRotation(2700);
                     if(pWrtShell->IsInRightToLeftText())
-                        aImgItem.SetMirrored(TRUE);
+                        aImgItem.SetMirrored(sal_True);
                 }
                 rSet.Put(aImgItem);
             }
@@ -355,7 +355,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 if(pWrtShell->IsInVerticalText())
                     aImageItem.SetRotation( 2700 );
                 if(pWrtShell->IsInRightToLeftText())
-                    aImageItem.SetMirrored( TRUE );
+                    aImageItem.SetMirrored( sal_True );
                 rSet.Put(aImageItem);
             }
             break;
@@ -383,7 +383,7 @@ void SwView::GetState(SfxItemSet &rSet)
             {
                 if( !pShell )
                     SelectShell();
-                USHORT nAlias = 0;
+                sal_uInt16 nAlias = 0;
                 bool bDraw = false;
                 if( nSelectionType & (nsSelectionType::SEL_DRW_TXT|nsSelectionType::SEL_TXT) )
                 {

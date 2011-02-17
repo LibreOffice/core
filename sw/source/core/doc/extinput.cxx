@@ -52,8 +52,8 @@ SwExtTextInput::SwExtTextInput( const SwPaM& rPam, Ring* pRing )
     : SwPaM( *rPam.GetPoint(), (SwPaM*)pRing ),
     eInputLanguage(LANGUAGE_DONTKNOW)
 {
-    bIsOverwriteCursor = FALSE;
-    bInsText = TRUE;
+    bIsOverwriteCursor = sal_False;
+    bInsText = sal_True;
 }
 
 SwExtTextInput::~SwExtTextInput()
@@ -82,7 +82,7 @@ SwExtTextInput::~SwExtTextInput()
                 // for CJK/CTL scripts.
                 bool bLang = true;
                 // <--
-                USHORT nWhich = RES_CHRATR_LANGUAGE;
+                sal_uInt16 nWhich = RES_CHRATR_LANGUAGE;
                 switch(GetI18NScriptTypeOfLanguage(eInputLanguage))
                 {
                     case  i18n::ScriptType::ASIAN:     nWhich = RES_CHRATR_CJK_LANGUAGE; break;
@@ -211,7 +211,7 @@ void SwExtTextInput::SetInputData( const CommandExtTextInputData& rData )
     }
 }
 
-void SwExtTextInput::SetOverwriteCursor( BOOL bFlag )
+void SwExtTextInput::SetOverwriteCursor( sal_Bool bFlag )
 {
     bIsOverwriteCursor = bFlag;
 
@@ -264,17 +264,17 @@ SwExtTextInput* SwDoc::GetExtTextInput( const SwNode& rNd,
     SwExtTextInput* pRet = 0;
     if( pExtInputRing )
     {
-        ULONG nNdIdx = rNd.GetIndex();
+        sal_uLong nNdIdx = rNd.GetIndex();
         SwExtTextInput* pTmp = (SwExtTextInput*)pExtInputRing;
         do {
-            ULONG nPt = pTmp->GetPoint()->nNode.GetIndex(),
+            sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
                   nMk = pTmp->GetMark()->nNode.GetIndex();
             xub_StrLen nPtCnt = pTmp->GetPoint()->nContent.GetIndex(),
                          nMkCnt = pTmp->GetMark()->nContent.GetIndex();
 
             if( nPt < nMk || ( nPt == nMk && nPtCnt < nMkCnt ))
             {
-                ULONG nTmp = nMk; nMk = nPt; nPt = nTmp;
+                sal_uLong nTmp = nMk; nMk = nPt; nPt = nTmp;
                 nTmp = nMkCnt; nMkCnt = nPtCnt; nPtCnt = (xub_StrLen)nTmp;
             }
 

@@ -64,7 +64,7 @@ SFX_IMPL_FLOATINGWINDOW( SwMailMergeChildWindow, FN_MAILMERGE_CHILDWINDOW )
 ------------------------------------------------------------------------*/
 
 SwMailMergeChildWindow::SwMailMergeChildWindow( Window* _pParent,
-                                USHORT nId,
+                                sal_uInt16 nId,
                                 SfxBindings* pBindings,
                                 SfxChildWinInfo* pInfo ) :
                                 SfxChildWindow( _pParent, nId )
@@ -781,7 +781,7 @@ void SwSendMailDialog::UpdateTransferStatus()
     m_aErrorStatusFT.SetText(sStatus);
 
     if(m_pImpl->aDescriptors.size())
-        m_aProgressBar.SetValue((USHORT)(m_nSendCount * 100 / m_pImpl->aDescriptors.size()));
+        m_aProgressBar.SetValue((sal_uInt16)(m_nSendCount * 100 / m_pImpl->aDescriptors.size()));
     else
         m_aProgressBar.SetValue(0);
 }

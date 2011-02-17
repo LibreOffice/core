@@ -69,25 +69,25 @@ class SwDrawTextInfo
     xub_StrLen nIdx;
     xub_StrLen nLen;
     xub_StrLen nOfst;
-    USHORT nWidth;
-    USHORT nAscent;
-    USHORT nCompress;
+    sal_uInt16 nWidth;
+    sal_uInt16 nAscent;
+    sal_uInt16 nCompress;
     long nSperren;
     long nSpace;
     long nKern;
     xub_StrLen nNumberOfBlanks;
-    BYTE nCursorBidiLevel;
-    BOOL bBullet : 1;
-    BOOL bUpper : 1;        // Fuer Kapitaelchen: Grossbuchstaben-Flag
-    BOOL bDrawSpace : 1;    // Fuer Kapitaelchen: Unter/Durchstreichung
-    BOOL bGreyWave  : 1;    // Graue Wellenlinie beim extended TextInput
-    BOOL bSpaceStop : 1;    // For underlining we need to know, if a portion
+    sal_uInt8 nCursorBidiLevel;
+    sal_Bool bBullet : 1;
+    sal_Bool bUpper : 1;        // Fuer Kapitaelchen: Grossbuchstaben-Flag
+    sal_Bool bDrawSpace : 1;    // Fuer Kapitaelchen: Unter/Durchstreichung
+    sal_Bool bGreyWave  : 1;    // Graue Wellenlinie beim extended TextInput
+    sal_Bool bSpaceStop : 1;    // For underlining we need to know, if a portion
                             // is right in front of a hole portion or a
                             // fix margin portion.
-    BOOL bSnapToGrid : 1;   // Does paragraph snap to grid?
-    BOOL bIgnoreFrmRTL : 1; // Paint text as if text has LTR direction, used for
+    sal_Bool bSnapToGrid : 1;   // Does paragraph snap to grid?
+    sal_Bool bIgnoreFrmRTL : 1; // Paint text as if text has LTR direction, used for
                             // line numbering
-    BOOL bPosMatchesBounds :1;  // GetCrsrOfst should not return the next
+    sal_Bool bPosMatchesBounds :1;  // GetCrsrOfst should not return the next
                                 // position if screen position is inside second
                                 // half of bound rect, used for Accessibility
 
@@ -95,27 +95,27 @@ class SwDrawTextInfo
 public:
 
 #ifdef DBG_UTIL
-    BOOL bPos   : 1;            // These flags should control, that the appropriate
-    BOOL bWrong : 1;            // Set-function has been called before calling
-    BOOL bGrammarCheck : 1;     //  the Get-function of a member
-    BOOL bSize  : 1;
-    BOOL bFnt   : 1;
-    BOOL bHyph  : 1;
-    BOOL bLeft  : 1;
-    BOOL bRight : 1;
-    BOOL bKana  : 1;
-    BOOL bOfst  : 1;
-    BOOL bAscent: 1;
-    BOOL bSperr : 1;
-    BOOL bSpace : 1;
-    BOOL bNumberOfBlanks : 1;
-    BOOL bUppr  : 1;
-    BOOL bDrawSp: 1;
+    sal_Bool bPos   : 1;            // These flags should control, that the appropriate
+    sal_Bool bWrong : 1;            // Set-function has been called before calling
+    sal_Bool bGrammarCheck : 1;     //  the Get-function of a member
+    sal_Bool bSize  : 1;
+    sal_Bool bFnt   : 1;
+    sal_Bool bHyph  : 1;
+    sal_Bool bLeft  : 1;
+    sal_Bool bRight : 1;
+    sal_Bool bKana  : 1;
+    sal_Bool bOfst  : 1;
+    sal_Bool bAscent: 1;
+    sal_Bool bSperr : 1;
+    sal_Bool bSpace : 1;
+    sal_Bool bNumberOfBlanks : 1;
+    sal_Bool bUppr  : 1;
+    sal_Bool bDrawSp: 1;
 #endif
 
     SwDrawTextInfo( ViewShell *pS, OutputDevice &rO, const SwScriptInfo* pSI,
                     const XubString &rSt, xub_StrLen nI, xub_StrLen nL,
-                    USHORT nW = 0, BOOL bB = FALSE )
+                    sal_uInt16 nW = 0, sal_Bool bB = sal_False )
     {
         pFrm = NULL;
         pSh = pS;
@@ -131,11 +131,11 @@ public:
         nCursorBidiLevel = 0;
         bBullet = bB;
         pUnderFnt = 0;
-        bGreyWave = FALSE;
-        bSpaceStop = FALSE;
-        bSnapToGrid = FALSE;
-        bIgnoreFrmRTL = FALSE;
-        bPosMatchesBounds = FALSE;
+        bGreyWave = sal_False;
+        bSpaceStop = sal_False;
+        bSnapToGrid = sal_False;
+        bIgnoreFrmRTL = sal_False;
+        bPosMatchesBounds = sal_False;
 
         // These values are initialized but, they have to be
         // set explicitly via their Set-function before they may
@@ -154,15 +154,15 @@ public:
         nAscent = 0;
         nSperren = 0;
         nSpace = 0;
-        bUpper = FALSE;
-        bDrawSpace = FALSE;
+        bUpper = sal_False;
+        bDrawSpace = sal_False;
 
 #ifdef DBG_UTIL
         // these flags control, whether the matching member variables have
         // been set by using the Set-function before they may be accessed
         // by their Get-function:
         bPos = bWrong = bGrammarCheck = bSize = bFnt = bAscent = bSpace = bNumberOfBlanks = bUppr =
-        bDrawSp = bLeft = bRight = bKana = bOfst = bHyph = bSperr = FALSE;
+        bDrawSp = bLeft = bRight = bKana = bOfst = bHyph = bSperr = sal_False;
 #endif
     }
 
@@ -286,18 +286,18 @@ public:
         return nKanaDiff;
     }
 
-    USHORT GetWidth() const
+    sal_uInt16 GetWidth() const
     {
         return nWidth;
     }
 
-    USHORT GetAscent() const
+    sal_uInt16 GetAscent() const
     {
         ASSERT( bAscent, "DrawTextInfo: Undefined Ascent" );
         return nAscent;
     }
 
-    USHORT GetKanaComp() const
+    sal_uInt16 GetKanaComp() const
     {
         return nCompress;
     }
@@ -325,49 +325,49 @@ public:
         return nNumberOfBlanks;
     }
 
-    BYTE GetCursorBidiLevel() const
+    sal_uInt8 GetCursorBidiLevel() const
     {
         return nCursorBidiLevel;
     }
 
-    BOOL GetBullet() const
+    sal_Bool GetBullet() const
     {
         return bBullet;
     }
 
-    BOOL GetUpper() const
+    sal_Bool GetUpper() const
     {
         ASSERT( bUppr, "DrawTextInfo: Undefined Upperflag" );
         return bUpper;
     }
 
-    BOOL GetDrawSpace() const
+    sal_Bool GetDrawSpace() const
     {
         ASSERT( bDrawSp, "DrawTextInfo: Undefined DrawSpaceflag" );
         return bDrawSpace;
     }
 
-    BOOL GetGreyWave() const
+    sal_Bool GetGreyWave() const
     {
         return bGreyWave;
     }
 
-    BOOL IsSpaceStop() const
+    sal_Bool IsSpaceStop() const
     {
         return bSpaceStop;
     }
 
-    BOOL SnapToGrid() const
+    sal_Bool SnapToGrid() const
     {
         return bSnapToGrid;
     }
 
-    BOOL IsIgnoreFrmRTL() const
+    sal_Bool IsIgnoreFrmRTL() const
     {
         return bIgnoreFrmRTL;
     }
 
-    BOOL IsPosMatchesBounds() const
+    sal_Bool IsPosMatchesBounds() const
     {
         return bPosMatchesBounds;
     }
@@ -381,7 +381,7 @@ public:
     {
         pPos = &rNew;
 #ifdef DBG_UTIL
-        bPos = TRUE;
+        bPos = sal_True;
 #endif
     }
 
@@ -389,7 +389,7 @@ public:
     {
         pHyphPos = pNew;
 #ifdef DBG_UTIL
-        bHyph = TRUE;
+        bHyph = sal_True;
 #endif
     }
 
@@ -402,7 +402,7 @@ public:
     {
         pWrong = pNew;
 #ifdef DBG_UTIL
-        bWrong = TRUE;
+        bWrong = sal_True;
 #endif
     }
 
@@ -410,7 +410,7 @@ public:
     {
         pGrammarCheck = pNew;
 #ifdef DBG_UTIL
-        bGrammarCheck = TRUE;
+        bGrammarCheck = sal_True;
 #endif
     }
 
@@ -423,7 +423,7 @@ public:
     {
         pSize = &rNew;
 #ifdef DBG_UTIL
-        bSize = TRUE;
+        bSize = sal_True;
 #endif
     }
 
@@ -431,7 +431,7 @@ public:
     {
         pFnt = pNew;
 #ifdef DBG_UTIL
-        bFnt = TRUE;
+        bFnt = sal_True;
 #endif
     }
 
@@ -449,7 +449,7 @@ public:
     {
         nOfst = nNew;
 #ifdef DBG_UTIL
-        bOfst = TRUE;
+        bOfst = sal_True;
 #endif
     }
 
@@ -457,7 +457,7 @@ public:
     {
         nLeft = nNew;
 #ifdef DBG_UTIL
-        bLeft = TRUE;
+        bLeft = sal_True;
 #endif
     }
 
@@ -465,7 +465,7 @@ public:
     {
         nRight = nNew;
 #ifdef DBG_UTIL
-        bRight = TRUE;
+        bRight = sal_True;
 #endif
     }
 
@@ -473,20 +473,20 @@ public:
     {
         nKanaDiff = nNew;
 #ifdef DBG_UTIL
-        bKana = TRUE;
+        bKana = sal_True;
 #endif
     }
 
-    void SetWidth( USHORT nNew )
+    void SetWidth( sal_uInt16 nNew )
     {
         nWidth = nNew;
     }
 
-    void SetAscent( USHORT nNew )
+    void SetAscent( sal_uInt16 nNew )
     {
         nAscent = nNew;
 #ifdef DBG_UTIL
-        bAscent = TRUE;
+        bAscent = sal_True;
 #endif
     }
 
@@ -508,20 +508,20 @@ public:
             nSperren = 0;
         }
 #ifdef DBG_UTIL
-        bSpace = TRUE;
-        bSperr = TRUE;
+        bSpace = sal_True;
+        bSperr = sal_True;
 #endif
     }
 
     void SetNumberOfBlanks( xub_StrLen nNew )
     {
 #ifdef DBG_UTIL
-        bNumberOfBlanks = TRUE;
+        bNumberOfBlanks = sal_True;
 #endif
         nNumberOfBlanks = nNew;
     }
 
-    void SetCursorBidiLevel( BYTE nNew )
+    void SetCursorBidiLevel( sal_uInt8 nNew )
     {
         nCursorBidiLevel = nNew;
     }
@@ -531,7 +531,7 @@ public:
         nCompress = nNew;
     }
 
-    void SetBullet( BOOL bNew )
+    void SetBullet( sal_Bool bNew )
     {
         bBullet = bNew;
     }
@@ -541,48 +541,48 @@ public:
         pUnderFnt = pULFnt;
     }
 
-    void SetUpper( BOOL bNew )
+    void SetUpper( sal_Bool bNew )
     {
         bUpper = bNew;
 #ifdef DBG_UTIL
-        bUppr = TRUE;
+        bUppr = sal_True;
 #endif
     }
 
-    void SetDrawSpace( BOOL bNew )
+    void SetDrawSpace( sal_Bool bNew )
     {
         bDrawSpace = bNew;
 #ifdef DBG_UTIL
-        bDrawSp = TRUE;
+        bDrawSp = sal_True;
 #endif
     }
 
-    void SetGreyWave( BOOL bNew )
+    void SetGreyWave( sal_Bool bNew )
     {
         bGreyWave = bNew;
     }
 
-    void SetSpaceStop( BOOL bNew )
+    void SetSpaceStop( sal_Bool bNew )
     {
         bSpaceStop = bNew;
     }
 
-    void SetSnapToGrid( BOOL bNew )
+    void SetSnapToGrid( sal_Bool bNew )
     {
         bSnapToGrid = bNew;
     }
 
-    void SetIgnoreFrmRTL( BOOL bNew )
+    void SetIgnoreFrmRTL( sal_Bool bNew )
     {
         bIgnoreFrmRTL = bNew;
     }
 
-    void SetPosMatchesBounds( BOOL bNew )
+    void SetPosMatchesBounds( sal_Bool bNew )
     {
         bPosMatchesBounds = bNew;
     }
 
-    void Shift( USHORT nDir );
+    void Shift( sal_uInt16 nDir );
 
     // sets a new color at the output device if necessary
     // if a font is passed as argument, the change if made to the font
