@@ -52,7 +52,7 @@
 #define SID_ALIGN                               (SID_SMA_START + 53)
 
 #define SID_AUTO_REDRAW             (SID_SMA_START + 55)
-#define SID_SYMBOLS                 (SID_SMA_START + 56) // Muss erstmal wieder aufgenommen werden !
+#define SID_SYMBOLS                 (SID_SMA_START + 56) // Has to be picked up again for now!
 #define SID_TEXTMODE                (SID_SMA_START + 57)
 #define SID_INSERT_FORMULA          (SID_SMA_START + 58)
 #define SID_TEXT                                (SID_SMA_START + 100)
@@ -750,8 +750,8 @@
 #define MN_SUB_SPELLING 34
 #define MN_SUB_TEMPLATES 35
 
-// 342 == SCH_IF_SMAVIEWSHELL, da SFX_INTERFACE_LIB kein
-// Define sondern neuerdings ein Enum ist
+// 342 == SCH_IF_SMAVIEWSHELL, because SFX_INTERFACE_LIB is no
+// Define but latterly an Enum
 #define HID_SMA_VIEWSHELL_DOCUMENT      (342)
 
 #endif
