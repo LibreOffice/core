@@ -147,7 +147,7 @@ namespace vclcanvas
             SvFileStream aStream( aFilename, STREAM_STD_READWRITE );
 
             const ::Point aEmptyPoint;
-            mpBackBuffer->getOutDev().EnableMapMode( FALSE );
+            mpBackBuffer->getOutDev().EnableMapMode( sal_False );
             aStream << mpBackBuffer->getOutDev().GetBitmap(aEmptyPoint,
                                                             mpBackBuffer->getOutDev().GetOutputSizePixel());
         }

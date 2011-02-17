@@ -123,7 +123,7 @@ private:
     ::rtl::OUString         maMimeType;
     Size                    maSizePixel;
     Size                    maSize100thMM;
-    USHORT                  mnBitsPerPixel;
+    sal_uInt16              mnBitsPerPixel;
     bool                    mbTransparent;
     bool                    mbAlpha;
     bool                    mbAnimated;

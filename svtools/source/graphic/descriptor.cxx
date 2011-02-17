@@ -458,7 +458,7 @@ void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry**
 
             case( UNOGRAPHIC_BITSPERPIXEL ):
             {
-                USHORT nBitsPerPixel = 0;
+                sal_uInt16 nBitsPerPixel = 0;
 
                 if( mpGraphic )
                 {

@@ -157,8 +157,8 @@ Meta##Name##Action::~Meta##Name##Action() {}
 class VCL_DLLPUBLIC MetaAction
 {
 private:
-    ULONG               mnRefCount;
-    UINT16              mnType;
+    sal_uLong               mnRefCount;
+    sal_uInt16              mnType;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
@@ -167,7 +167,7 @@ protected:
 
 public:
                         MetaAction();
-                        MetaAction( USHORT nType );
+                        MetaAction( sal_uInt16 nType );
 
     virtual void        Execute( OutputDevice* pOut );
 
@@ -181,8 +181,8 @@ public:
 
     sal_Bool            IsEqual( const MetaAction& ) const;
 
-    USHORT              GetType() const { return mnType; }
-    ULONG               GetRefCount() const { return mnRefCount; }
+    sal_uInt16              GetType() const { return mnType; }
+    sal_uLong               GetRefCount() const { return mnRefCount; }
     void                ResetRefCount() { mnRefCount = 1; }
     void                Duplicate()  { mnRefCount++; }
     void                Delete() { if ( 0 == --mnRefCount ) delete this; }
@@ -505,8 +505,8 @@ private:
 
     Point               maPt;
     XubString           maStr;
-    USHORT              mnIndex;
-    USHORT              mnLen;
+    sal_uInt16              mnIndex;
+    sal_uInt16              mnLen;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
@@ -514,15 +514,15 @@ public:
                         DECL_META_ACTION( Text, META_TEXT_ACTION )
 
                         MetaTextAction( const Point& rPt, const XubString& rStr,
-                                        USHORT nIndex, USHORT nLen );
+                                        sal_uInt16 nIndex, sal_uInt16 nLen );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
 
     const Point&        GetPoint() const { return maPt; }
     const XubString&    GetText() const { return maStr; }
-    USHORT              GetIndex() const { return mnIndex; }
-    USHORT              GetLen() const { return mnLen; }
+    sal_uInt16              GetIndex() const { return mnIndex; }
+    sal_uInt16              GetLen() const { return mnLen; }
 };
 
 // -----------------------
@@ -536,8 +536,8 @@ private:
     Point               maStartPt;
     XubString           maStr;
     sal_Int32*          mpDXAry;
-    USHORT              mnIndex;
-    USHORT              mnLen;
+    sal_uInt16              mnIndex;
+    sal_uInt16              mnLen;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
@@ -550,8 +550,8 @@ public:
                         MetaTextArrayAction( const Point& rStartPt,
                                              const XubString& rStr,
                                              const sal_Int32* pDXAry,
-                                             USHORT nIndex,
-                                             USHORT nLen );
+                                             sal_uInt16 nIndex,
+                                             sal_uInt16 nLen );
 
     virtual void        Execute( OutputDevice* pOut );
 
@@ -565,8 +565,8 @@ public:
 
     const Point&        GetPoint() const { return maStartPt; }
     const XubString&    GetText() const { return maStr; }
-    USHORT              GetIndex() const { return mnIndex; }
-    USHORT              GetLen() const { return mnLen; }
+    sal_uInt16              GetIndex() const { return mnIndex; }
+    sal_uInt16              GetLen() const { return mnLen; }
     sal_Int32*          GetDXArray() const { return mpDXAry; }
 };
 
@@ -581,8 +581,8 @@ private:
     Point               maPt;
     XubString           maStr;
     sal_uInt32          mnWidth;
-    USHORT              mnIndex;
-    USHORT              mnLen;
+    sal_uInt16              mnIndex;
+    sal_uInt16              mnLen;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
@@ -591,7 +591,7 @@ public:
 
                         MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidth,
                                                const XubString& rStr,
-                                               USHORT nIndex, USHORT nLen );
+                                               sal_uInt16 nIndex, sal_uInt16 nLen );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
@@ -599,8 +599,8 @@ public:
     const Point&        GetPoint() const { return maPt; }
     const XubString&    GetText() const { return maStr; }
     sal_uInt32          GetWidth() const { return mnWidth; }
-    USHORT              GetIndex() const { return mnIndex; }
-    USHORT              GetLen() const { return mnLen; }
+    sal_uInt16              GetIndex() const { return mnIndex; }
+    sal_uInt16              GetLen() const { return mnLen; }
 };
 
 // ----------------------
@@ -613,7 +613,7 @@ private:
 
     Rectangle           maRect;
     XubString           maStr;
-    USHORT              mnStyle;
+    sal_uInt16              mnStyle;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
@@ -621,14 +621,14 @@ public:
                         DECL_META_ACTION( TextRect, META_TEXTRECT_ACTION )
 
                         MetaTextRectAction( const Rectangle& rRect,
-                                            const XubString& rStr, USHORT nStyle );
+                                            const XubString& rStr, sal_uInt16 nStyle );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
 
     const Rectangle&    GetRect() const { return maRect; }
     const XubString&    GetText() const { return maStr; }
-    USHORT              GetStyle() const { return mnStyle; }
+    sal_uInt16              GetStyle() const { return mnStyle; }
 };
 
 // ----------------------
@@ -1042,20 +1042,20 @@ class VCL_DLLPUBLIC MetaClipRegionAction : public MetaAction
 private:
 
     Region              maRegion;
-    BOOL                mbClip;
+    sal_Bool                mbClip;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( ClipRegion, META_CLIPREGION_ACTION )
 
-                        MetaClipRegionAction( const Region& rRegion, BOOL bClip );
+                        MetaClipRegionAction( const Region& rRegion, sal_Bool bClip );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
 
     const Region&       GetRegion() const { return maRegion; }
-    BOOL                IsClipping() const { return mbClip; }
+    sal_Bool                IsClipping() const { return mbClip; }
 };
 
 // ---------------------------------
@@ -1137,17 +1137,17 @@ class VCL_DLLPUBLIC MetaLineColorAction : public MetaAction
 private:
 
     Color               maColor;
-    BOOL                mbSet;
+    sal_Bool                mbSet;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( LineColor, META_LINECOLOR_ACTION )
 
-                        MetaLineColorAction( const Color& rColor, BOOL bSet );
+                        MetaLineColorAction( const Color& rColor, sal_Bool bSet );
 
     const Color&        GetColor() const { return maColor; }
-    BOOL                IsSetting() const { return mbSet; }
+    sal_Bool                IsSetting() const { return mbSet; }
 };
 
 // -----------------------
@@ -1159,17 +1159,17 @@ class VCL_DLLPUBLIC MetaFillColorAction : public MetaAction
 private:
 
     Color               maColor;
-    BOOL                mbSet;
+    sal_Bool                mbSet;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( FillColor, META_FILLCOLOR_ACTION )
 
-                        MetaFillColorAction( const Color& rColor, BOOL bSet );
+                        MetaFillColorAction( const Color& rColor, sal_Bool bSet );
 
     const Color&        GetColor() const { return maColor; }
-    BOOL                IsSetting() const { return mbSet; }
+    sal_Bool                IsSetting() const { return mbSet; }
 };
 
 // -----------------------
@@ -1201,17 +1201,17 @@ class VCL_DLLPUBLIC MetaTextFillColorAction : public MetaAction
 private:
 
     Color               maColor;
-    BOOL                mbSet;
+    sal_Bool                mbSet;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( TextFillColor, META_TEXTFILLCOLOR_ACTION )
 
-                        MetaTextFillColorAction( const Color& rColor, BOOL bSet );
+                        MetaTextFillColorAction( const Color& rColor, sal_Bool bSet );
 
     const Color&        GetColor() const { return maColor; }
-    BOOL                IsSetting() const { return mbSet; }
+    sal_Bool                IsSetting() const { return mbSet; }
 };
 
 // ---------------------------
@@ -1223,17 +1223,17 @@ class VCL_DLLPUBLIC MetaTextLineColorAction : public MetaAction
 private:
 
     Color               maColor;
-    BOOL                mbSet;
+    sal_Bool                mbSet;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( TextLineColor, META_TEXTLINECOLOR_ACTION )
 
-                        MetaTextLineColorAction( const Color& rColor, BOOL bSet );
+                        MetaTextLineColorAction( const Color& rColor, sal_Bool bSet );
 
     const Color&        GetColor() const { return maColor; }
-    BOOL                IsSetting() const { return mbSet; }
+    sal_Bool                IsSetting() const { return mbSet; }
 };
 
 // ---------------------------
@@ -1245,17 +1245,17 @@ class VCL_DLLPUBLIC MetaOverlineColorAction : public MetaAction
 private:
 
     Color               maColor;
-    BOOL                mbSet;
+    sal_Bool                mbSet;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( OverlineColor, META_OVERLINECOLOR_ACTION )
 
-                        MetaOverlineColorAction( const Color& rColor, BOOL bSet );
+                        MetaOverlineColorAction( const Color& rColor, sal_Bool bSet );
 
     const Color&        GetColor() const { return maColor; }
-    BOOL                IsSetting() const { return mbSet; }
+    sal_Bool                IsSetting() const { return mbSet; }
 };
 
 // -----------------------
@@ -1330,16 +1330,16 @@ class VCL_DLLPUBLIC MetaPushAction : public MetaAction
 {
 private:
 
-    USHORT              mnFlags;
+    sal_uInt16              mnFlags;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( Push, META_PUSH_ACTION )
 
-                        MetaPushAction( USHORT nFlags );
+                        MetaPushAction( sal_uInt16 nFlags );
 
-    USHORT              GetFlags() const { return mnFlags; }
+    sal_uInt16              GetFlags() const { return mnFlags; }
 };
 
 // -----------------
@@ -1382,20 +1382,20 @@ class VCL_DLLPUBLIC MetaTransparentAction : public MetaAction
 private:
 
     PolyPolygon         maPolyPoly;
-    USHORT              mnTransPercent;
+    sal_uInt16              mnTransPercent;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( Transparent, META_TRANSPARENT_ACTION )
 
-                        MetaTransparentAction( const PolyPolygon& rPolyPoly, USHORT nTransPercent );
+                        MetaTransparentAction( const PolyPolygon& rPolyPoly, sal_uInt16 nTransPercent );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
 
     const PolyPolygon&  GetPolyPolygon() const { return maPolyPoly; }
-    USHORT              GetTransparence() const { return mnTransPercent; }
+    sal_uInt16              GetTransparence() const { return mnTransPercent; }
 };
 
 // ------------------------------
@@ -1467,17 +1467,17 @@ class VCL_DLLPUBLIC MetaRefPointAction : public MetaAction
 private:
 
     Point               maRefPoint;
-    BOOL                mbSet;
+    sal_Bool                mbSet;
 
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
 public:
                         DECL_META_ACTION( RefPoint, META_REFPOINT_ACTION )
 
-                        MetaRefPointAction( const Point& rRefPoint, BOOL bSet );
+                        MetaRefPointAction( const Point& rRefPoint, sal_Bool bSet );
 
     const Point&        GetRefPoint() const { return maRefPoint; }
-    BOOL                IsSetting() const { return mbSet; }
+    sal_Bool                IsSetting() const { return mbSet; }
 };
 
 // ---------------------
@@ -1491,9 +1491,9 @@ private:
     ByteString          maComment;
     sal_Int32           mnValue;
     sal_uInt32          mnDataSize;
-    BYTE*               mpData;
+    sal_uInt8*              mpData;
 
-    SAL_DLLPRIVATE void ImplInitDynamicData( const BYTE* pData, sal_uInt32 nDataSize );
+    SAL_DLLPRIVATE void ImplInitDynamicData( const sal_uInt8* pData, sal_uInt32 nDataSize );
     virtual sal_Bool    Compare( const MetaAction& ) const;
 
 protected:
@@ -1502,8 +1502,8 @@ protected:
 public:
                         MetaCommentAction( sal_Int32 nValue = 0L );
                         MetaCommentAction( const MetaCommentAction& rAct );
-                        MetaCommentAction( const ByteString& rComment, sal_Int32 nValue = 0L, const BYTE* pData = NULL, sal_uInt32 nDataSize = 0UL );
-                        MetaCommentAction( const BYTE* pData, sal_uInt32 nDataSize );
+                        MetaCommentAction( const ByteString& rComment, sal_Int32 nValue = 0L, const sal_uInt8* pData = NULL, sal_uInt32 nDataSize = 0UL );
+                        MetaCommentAction( const sal_uInt8* pData, sal_uInt32 nDataSize );
 
     virtual void        Move( long nHorzMove, long nVertMove );
     virtual void        Scale( double fScaleX, double fScaleY );
@@ -1516,7 +1516,7 @@ public:
     const ByteString&   GetComment() const { return maComment; }
     sal_Int32           GetValue() const { return mnValue; }
     sal_uInt32          GetDataSize() const { return mnDataSize; }
-    const BYTE*         GetData() const { return mpData; }
+    const sal_uInt8*        GetData() const { return mpData; }
 };
 
 // ------------------------

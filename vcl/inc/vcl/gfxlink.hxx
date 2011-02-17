@@ -39,16 +39,16 @@
 
 struct ImpBuffer
 {
-    ULONG       mnRefCount;
-    BYTE*       mpBuffer;
+    sal_uLong       mnRefCount;
+    sal_uInt8*      mpBuffer;
 
-                ImpBuffer( ULONG nSize )
+                ImpBuffer( sal_uLong nSize )
                 {
                     mnRefCount = 1UL;
-                    mpBuffer = nSize ? new BYTE[ nSize ] : NULL;
+                    mpBuffer = nSize ? new sal_uInt8[ nSize ] : NULL;
                 }
 
-                ImpBuffer( BYTE* pBuf ) { mnRefCount = 1UL; mpBuffer = pBuf; }
+                ImpBuffer( sal_uInt8* pBuf ) { mnRefCount = 1UL; mpBuffer = pBuf; }
 
                 ~ImpBuffer() { delete[] mpBuffer; }
 };
@@ -60,15 +60,15 @@ struct ImpBuffer
 struct ImpSwap
 {
     rtl::OUString   maURL;
-    ULONG           mnDataSize;
-    ULONG           mnRefCount;
+    sal_uLong           mnDataSize;
+    sal_uLong           mnRefCount;
 
-                    ImpSwap( BYTE* pData, ULONG nDataSize );
+                    ImpSwap( sal_uInt8* pData, sal_uLong nDataSize );
                     ~ImpSwap();
 
-    BYTE*           GetData() const;
+    sal_uInt8*          GetData() const;
 
-    BOOL            IsSwapped() const { return maURL.getLength() > 0; }
+    sal_Bool            IsSwapped() const { return maURL.getLength() > 0; }
 
     void            WriteTo( SvStream& rOStm ) const;
 };
@@ -135,7 +135,7 @@ private:
     sal_uInt32          mnBufSize;
     sal_uInt32          mnUserId;
     ImpGfxLink*         mpImpData;
-    ULONG               mnExtra2;
+    sal_uLong               mnExtra2;
 
     SAL_DLLPRIVATE void ImplCopy( const GfxLink& rGfxLink );
 
@@ -143,7 +143,7 @@ public:
                         GfxLink();
                         GfxLink( const GfxLink& );
                         GfxLink( const String& rPath, GfxLinkType nType );
-                        GfxLink( BYTE* pBuf, sal_uInt32 nBufSize, GfxLinkType nType, BOOL bOwns );
+                        GfxLink( sal_uInt8* pBuf, sal_uInt32 nBufSize, GfxLinkType nType, sal_Bool bOwns );
                         ~GfxLink();
 
     GfxLink&            operator=( const GfxLink& );
@@ -155,8 +155,8 @@ public:
     sal_uInt32          GetUserId() const { return mnUserId; }
 
     sal_uInt32          GetDataSize() const;
-    void                SetData( BYTE* pBuf, sal_uInt32 nSize, GfxLinkType nType, BOOL bOwns );
-    const BYTE*         GetData() const;
+    void                SetData( sal_uInt8* pBuf, sal_uInt32 nSize, GfxLinkType nType, sal_Bool bOwns );
+    const sal_uInt8*            GetData() const;
 
     const Size&         GetPrefSize() const;
     void                SetPrefSize( const Size& rPrefSize );
@@ -166,16 +166,16 @@ public:
     void                SetPrefMapMode( const MapMode& rPrefMapMode );
     bool                IsPrefMapModeValid();
 
-    BOOL                IsNative() const;
-    BOOL                IsUser() const { return( GFX_LINK_TYPE_USER == meType ); }
+    sal_Bool                IsNative() const;
+    sal_Bool                IsUser() const { return( GFX_LINK_TYPE_USER == meType ); }
 
-    BOOL                LoadNative( Graphic& rGraphic );
+    sal_Bool                LoadNative( Graphic& rGraphic );
 
-    BOOL                ExportNative( SvStream& rOStream ) const;
+    sal_Bool                ExportNative( SvStream& rOStream ) const;
 
     void                SwapOut();
     void                SwapIn();
-    BOOL                IsSwappedOut() const { return( mpSwap != NULL ); }
+    sal_Bool                IsSwappedOut() const { return( mpSwap != NULL ); }
 
 public:
 

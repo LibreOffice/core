@@ -35,10 +35,10 @@
 
 void ScrollableWindow::ImpInitialize( ScrollableWindowFlags nFlags )
 {
-    bHandleDragging = (BOOL) ( nFlags & SCRWIN_THUMBDRAGGING );
+    bHandleDragging = (sal_Bool) ( nFlags & SCRWIN_THUMBDRAGGING );
     bVCenter = (nFlags & SCRWIN_VCENTER) == SCRWIN_VCENTER;
     bHCenter = (nFlags & SCRWIN_HCENTER) == SCRWIN_HCENTER;
-    bScrolling = FALSE;
+    bScrolling = sal_False;
 
     // set the handlers for the scrollbars
     aVScroll.SetScrollHdl( LINK(this, ScrollableWindow, ScrollHdl) );
@@ -139,7 +139,7 @@ IMPL_LINK( ScrollableWindow, EndScrollHdl, ScrollBar *, pScroll )
 {
     // notify the start of scrolling, if not already scrolling
     if ( !bScrolling )
-        StartScroll(), bScrolling = TRUE;
+        StartScroll(), bScrolling = sal_True;
 
     // get the delta in logic coordinates
     Size aDelta( PixelToLogic( Size( aHScroll.GetDelta(), aVScroll.GetDelta() ) ) );
@@ -154,7 +154,7 @@ IMPL_LINK( ScrollableWindow, EndScrollHdl, ScrollBar *, pScroll )
     }
 
     // notify the end of scrolling
-    bScrolling = FALSE;
+    bScrolling = sal_False;
     EndScroll( aDelta.Width(), aDelta.Height() );
     return 0;
 }
@@ -165,7 +165,7 @@ IMPL_LINK( ScrollableWindow, ScrollHdl, ScrollBar *, pScroll )
 {
     // notify the start of scrolling, if not already scrolling
     if ( !bScrolling )
-        StartScroll(), bScrolling = TRUE;
+        StartScroll(), bScrolling = sal_True;
 
     if ( bHandleDragging )
     {
@@ -189,25 +189,25 @@ void __EXPORT ScrollableWindow::Resize()
 
     // determine the size of the output-area and if we need scrollbars
     const long nScrSize = GetSettings().GetStyleSettings().GetScrollBarSize();
-    BOOL bVVisible = FALSE; // by default no vertical-ScrollBar
-    BOOL bHVisible = FALSE; // by default no horizontal-ScrollBar
-    BOOL bChanged;          // determines if a visiblility was changed
+    sal_Bool bVVisible = sal_False; // by default no vertical-ScrollBar
+    sal_Bool bHVisible = sal_False; // by default no horizontal-ScrollBar
+    sal_Bool bChanged;          // determines if a visiblility was changed
     do
     {
-        bChanged = FALSE;
+        bChanged = sal_False;
 
         // does we need a vertical ScrollBar
         if ( aOutPixSz.Width() < aTotPixSz.Width() && !bHVisible )
-        {   bHVisible = TRUE;
+        {   bHVisible = sal_True;
             aOutPixSz.Height() -= nScrSize;
-            bChanged = TRUE;
+            bChanged = sal_True;
         }
 
         // does we need a horizontal ScrollBar
         if ( aOutPixSz.Height() < aTotPixSz.Height() && !bVVisible )
-        {   bVVisible = TRUE;
+        {   bVVisible = sal_True;
             aOutPixSz.Width() -= nScrSize;
-            bChanged = TRUE;
+            bChanged = sal_True;
         }
 
     }
@@ -355,10 +355,10 @@ void ScrollableWindow::SetVisibleSize( const Size& rNewSize )
                      Window::GetOutputSizePixel().Height());
 
     Size aWill( aWish.GetIntersection(aMax).GetSize() );
-    BOOL bHScroll = FALSE;
+    sal_Bool bHScroll = sal_False;
     const long nScrSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     if ( aWill.Width() < aWish.GetSize().Width() )
-    {   bHScroll = TRUE;
+    {   bHScroll = sal_True;
         aWill.Height() =
             Min( aWill.Height()+nScrSize, aMax.GetSize().Height() );
     }
@@ -373,7 +373,7 @@ void ScrollableWindow::SetVisibleSize( const Size& rNewSize )
 
 //-------------------------------------------------------------------
 
-BOOL ScrollableWindow::MakeVisible( const Rectangle& rTarget, BOOL bSloppy )
+sal_Bool ScrollableWindow::MakeVisible( const Rectangle& rTarget, sal_Bool bSloppy )
 {
     Rectangle aTarget;
     Rectangle aTotRect( Point(0, 0), PixelToLogic( aTotPixSz ) );
@@ -436,7 +436,7 @@ BOOL ScrollableWindow::MakeVisible( const Rectangle& rTarget, BOOL bSloppy )
     // is the area already visible?
     Rectangle aVisArea( GetVisibleArea() );
     if ( aVisArea.IsInside(rTarget) )
-        return TRUE;
+        return sal_True;
 
     // is there somewhat to scroll?
     if ( aVisArea.TopLeft() != aTarget.TopLeft() )
@@ -465,7 +465,7 @@ Rectangle ScrollableWindow::GetVisibleArea() const
 
 //-------------------------------------------------------------------
 
-void ScrollableWindow::SetLineSize( ULONG nHorz, ULONG nVert )
+void ScrollableWindow::SetLineSize( sal_uLong nHorz, sal_uLong nVert )
 {
     Size aPixSz( LogicToPixel( Size(nHorz, nVert) ) );
     nColumnPixW = aPixSz.Width();
@@ -476,7 +476,7 @@ void ScrollableWindow::SetLineSize( ULONG nHorz, ULONG nVert )
 
 //-------------------------------------------------------------------
 
-void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, USHORT )
+void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, sal_uInt16 )
 {
     if ( !bScrolling )
         StartScroll();
@@ -561,8 +561,8 @@ void ScrollableWindow::ScrollLines( long nLinesX, long nLinesY )
 
 //-------------------------------------------------------------------
 
-void ScrollableWindow::ScrollPages( long nPagesX, ULONG nOverlapX,
-                                    long nPagesY, ULONG nOverlapY )
+void ScrollableWindow::ScrollPages( long nPagesX, sal_uLong nOverlapX,
+                                    long nPagesY, sal_uLong nOverlapY )
 {
     Size aOutSz( GetVisibleArea().GetSize() );
     Scroll( nPagesX * aOutSz.Width() + (nPagesX>0 ? 1 : -1) * nOverlapX,

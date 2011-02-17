@@ -704,7 +704,7 @@ namespace svt { namespace table
         }
 
         //................................................................
-        void lcl_setButtonRepeat( Window& _rWindow, ULONG _nDelay )
+        void lcl_setButtonRepeat( Window& _rWindow, sal_uLong _nDelay )
         {
             AllSettings aSettings = _rWindow.GetSettings();
             MouseSettings aMouseSettings = aSettings.GetMouseSettings();
@@ -712,7 +712,7 @@ namespace svt { namespace table
             aMouseSettings.SetButtonRepeat( _nDelay );
             aSettings.SetMouseSettings( aMouseSettings );
 
-            _rWindow.SetSettings( aSettings, TRUE );
+            _rWindow.SetSettings( aSettings, sal_True );
         }
 
         //................................................................
@@ -1379,7 +1379,7 @@ namespace svt { namespace table
                     invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
                 }
             }
-            m_pSelEngine->SetAnchor(TRUE);
+            m_pSelEngine->SetAnchor(sal_True);
             m_nAnchor = m_nCurRow;
             ensureVisible(m_nCurColumn, m_nCurRow, false);
             m_rAntiImpl.selectionChanged(true);
@@ -1464,7 +1464,7 @@ namespace svt { namespace table
                     invalidateSelectedRegion(m_nCurRow, m_nCurRow, rCells);
                 }
             }
-            m_pSelEngine->SetAnchor(TRUE);
+            m_pSelEngine->SetAnchor(sal_True);
             m_nAnchor = m_nCurRow;
             ensureVisible(m_nCurColumn, m_nCurRow, false);
             m_rAntiImpl.selectionChanged(true);
@@ -1492,7 +1492,7 @@ namespace svt { namespace table
             }
             m_nCurRow = 0;
             m_nAnchor = m_nCurRow;
-            m_pSelEngine->SetAnchor(TRUE);
+            m_pSelEngine->SetAnchor(sal_True);
             ensureVisible(m_nCurColumn, 0, false);
             m_rAntiImpl.selectionChanged(true);
             bSuccess = true;
@@ -1517,7 +1517,7 @@ namespace svt { namespace table
         }
         m_nCurRow = m_nRowCount-1;
         m_nAnchor = m_nCurRow;
-        m_pSelEngine->SetAnchor(TRUE);
+        m_pSelEngine->SetAnchor(sal_True);
         ensureVisible(m_nCurColumn, m_nRowCount-1, false);
         m_rAntiImpl.selectionChanged(true);
         bSuccess = true;
@@ -1912,7 +1912,7 @@ namespace svt { namespace table
         return m_pVScroll;
     }
     //-------------------------------------------------------------------------------
-    BOOL TableControl_Impl::isRowSelected(const ::std::vector<RowPos>& selectedRows, RowPos current)
+    sal_Bool TableControl_Impl::isRowSelected(const ::std::vector<RowPos>& selectedRows, RowPos current)
     {
         return ::std::find(selectedRows.begin(),selectedRows.end(),current) != selectedRows.end();
     }
@@ -2246,19 +2246,19 @@ namespace svt { namespace table
         m_pTableControl->m_nAnchor = -1;
     }
     //-------------------------------------------------------------------------------
-    BOOL TableFunctionSet::SetCursorAtPoint(const Point& rPoint, BOOL bDontSelectAtCursor)
+    sal_Bool TableFunctionSet::SetCursorAtPoint(const Point& rPoint, sal_Bool bDontSelectAtCursor)
     {
-        BOOL bHandled = FALSE;
+        sal_Bool bHandled = sal_False;
         Rectangle rCells;
         //curRow is the row where the mouse click happened, m_nCurRow is the last selected row, before the mouse click
         RowPos curRow = m_pTableControl->getCurrentRow(rPoint);
         if(curRow == -2)
-            return FALSE;
+            return sal_False;
         if( bDontSelectAtCursor )
         {
             if(m_pTableControl->m_nRowSelected.size()>1)
-                m_pTableControl->m_pSelEngine->AddAlways(TRUE);
-            bHandled = TRUE;
+                m_pTableControl->m_pSelEngine->AddAlways(sal_True);
+            bHandled = sal_True;
         }
         else if(m_pTableControl->m_nAnchor == m_pTableControl->m_nCurRow)
         {
@@ -2293,7 +2293,7 @@ namespace svt { namespace table
                 m_pTableControl->m_nAnchor--;
             }
             m_pTableControl->invalidateSelectedRegion(m_pTableControl->m_nCurRow, curRow, rCells);
-            bHandled = TRUE;
+            bHandled = sal_True;
         }
         //no region selected
         else
@@ -2315,20 +2315,20 @@ namespace svt { namespace table
                 }
             }
             if(m_pTableControl->m_nRowSelected.size()>1 && m_pTableControl->m_pSelEngine->GetSelectionMode()!=SINGLE_SELECTION)
-                m_pTableControl->m_pSelEngine->AddAlways(TRUE);
+                m_pTableControl->m_pSelEngine->AddAlways(sal_True);
             m_pTableControl->invalidateSelectedRegion(curRow, curRow, rCells);
-            bHandled = TRUE;
+            bHandled = sal_True;
         }
         m_pTableControl->m_nCurRow = curRow;
         m_pTableControl->ensureVisible(m_pTableControl->m_nCurColumn,m_pTableControl->m_nCurRow,false);
         return bHandled;
     }
     //-------------------------------------------------------------------------------
-    BOOL TableFunctionSet::IsSelectionAtPoint( const Point& rPoint )
+    sal_Bool TableFunctionSet::IsSelectionAtPoint( const Point& rPoint )
     {
-        m_pTableControl->m_pSelEngine->AddAlways(FALSE);
+        m_pTableControl->m_pSelEngine->AddAlways(sal_False);
         if(m_pTableControl->m_nRowSelected.empty())
-            return FALSE;
+            return sal_False;
         else
         {
             RowPos curRow = m_pTableControl->getCurrentRow(rPoint);

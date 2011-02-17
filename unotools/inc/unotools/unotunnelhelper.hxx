@@ -33,10 +33,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
-
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
-#endif
+#include <comphelper/extract.hxx>
 
 namespace utl
 {

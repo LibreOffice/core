@@ -40,7 +40,7 @@ class DataChangedEvent;
 // - ScrollableWindow-Type -
 // -------------------------
 
-typedef USHORT ScrollableWindowFlags;
+typedef sal_uInt16 ScrollableWindowFlags;
 
 #define SCRWIN_THUMBDRAGGING 1
 #define SCRWIN_VCENTER       2
@@ -62,7 +62,7 @@ private:
     ScrollBar       aVScroll;           // the scrollbars
     ScrollBar       aHScroll;
     ScrollBarBox    aCornerWin;         // window in the bottom right corner
-    BOOL            bScrolling:1,       // user controlled scrolling
+    sal_Bool            bScrolling:1,       // user controlled scrolling
                     bHandleDragging:1,  // scroll window while dragging
                     bHCenter:1,
                     bVCenter:1;
@@ -94,15 +94,15 @@ public:
     Size            GetTotalSize() { return PixelToLogic( aTotPixSz ); }
 
     void            SetVisibleSize( const Size& rNewSize );
-    BOOL            MakeVisible( const Rectangle& rTarget, BOOL bSloppy = FALSE );
+    sal_Bool            MakeVisible( const Rectangle& rTarget, sal_Bool bSloppy = sal_False );
     Rectangle       GetVisibleArea() const;
 
-    void            SetLineSize( ULONG nHorz, ULONG nVert );
+    void            SetLineSize( sal_uLong nHorz, sal_uLong nVert );
     using Window::Scroll;
-    virtual void    Scroll( long nDeltaX, long nDeltaY, USHORT nFlags = 0 );
+    virtual void    Scroll( long nDeltaX, long nDeltaY, sal_uInt16 nFlags = 0 );
     void            ScrollLines( long nLinesX, long nLinesY );
-    void            ScrollPages( long nPagesX, ULONG nOverlapX,
-                                 long nPagesY, ULONG nOverlapY );
+    void            ScrollPages( long nPagesX, sal_uLong nOverlapX,
+                                 long nPagesY, sal_uLong nOverlapY );
 
 private:
     SVT_DLLPRIVATE Size         GetOutputSizePixel() const;
