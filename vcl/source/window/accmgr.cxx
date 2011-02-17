@@ -28,17 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
-#include <tools/list.hxx>
+
 #include <tools/debug.hxx>
 #include <vcl/accel.h>
 #include <vcl/accel.hxx>
 #include <vcl/accmgr.hxx>
-
-
-
-// =======================================================================
-
-DECLARE_LIST( ImplAccelList, Accelerator* )
 
 // =======================================================================
 
@@ -58,18 +52,17 @@ ImplAccelManager::~ImplAccelManager()
 
 BOOL ImplAccelManager::InsertAccel( Accelerator* pAccel )
 {
-    if ( !mpAccelList )
+    if ( !mpAccelList ) {
         mpAccelList = new ImplAccelList;
-    else
-    {
-        // Gibts den schon ?
-        if ( mpAccelList->GetPos( pAccel ) != LIST_ENTRY_NOTFOUND )
-            return FALSE;
+    } else {
+        for ( size_t i = 0, n = mpAccelList->size(); i < n; ++i ) {
+            if ( (*mpAccelList)[ i ] == pAccel ) {
+                return FALSE;
+            }
+        }
     }
 
-    // Am Anfang der Liste einfuegen
-    mpAccelList->Insert( pAccel, (ULONG)0 );
-
+    mpAccelList->insert( mpAccelList->begin(), pAccel );
     return TRUE;
 }
 
@@ -85,21 +78,29 @@ void ImplAccelManager::RemoveAccel( Accelerator* pAccel )
     //end it, and then closes the dialog, deleting the accelerators. So if
     //we're removing an accelerator that a sub-accelerator which is in the
     //sequence list, throw away the entire sequence
-    if ( mpSequenceList )
-    {
-        for (USHORT i = 0; i < pAccel->GetItemCount(); ++i)
-        {
-            Accelerator* pSubAccel = pAccel->GetAccel(pAccel->GetItemId(i));
-            if ( mpSequenceList->GetPos( pSubAccel ) != LIST_ENTRY_NOTFOUND )
-            {
-                EndSequence( true );
-                break;
+    if ( mpSequenceList ) {
+        for (USHORT i = 0; i < pAccel->GetItemCount(); ++i) {
+            Accelerator* pSubAccel = pAccel->GetAccel( pAccel->GetItemId(i) );
+            for ( size_t j = 0, n = mpSequenceList->size(); j < n; ++j ) {
+                if ( (*mpSequenceList)[ j ] == pSubAccel ) {
+                    EndSequence( true );
+                    i = pAccel->GetItemCount();
+                    break;
+                }
             }
         }
     }
 
     // Raus damit
-    mpAccelList->Remove( pAccel );
+    for ( ImplAccelList::iterator it = mpAccelList->begin();
+          it < mpAccelList->end();
+          ++it
+    ) {
+        if ( *it == pAccel ) {
+            mpAccelList->erase( it );
+            break;
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -111,9 +112,9 @@ void ImplAccelManager::EndSequence( BOOL bCancel )
         return;
 
     // Alle Deactivate-Handler der Acceleratoren in der Sequenz rufen
-    Accelerator* pTempAccel = mpSequenceList->First();
-    while( pTempAccel )
+    for ( size_t i = 0, n = mpSequenceList->size(); i < n; ++i )
     {
+        Accelerator* pTempAccel = (*mpSequenceList)[ i ];
         BOOL bDel = FALSE;
         pTempAccel->mbIsCancel = bCancel;
         pTempAccel->mpDel = &bDel;
@@ -123,8 +124,6 @@ void ImplAccelManager::EndSequence( BOOL bCancel )
             pTempAccel->mbIsCancel = FALSE;
             pTempAccel->mpDel = NULL;
         }
-
-        pTempAccel = mpSequenceList->Next();
     }
 
     // Sequenz-Liste loeschen
@@ -141,13 +140,13 @@ BOOL ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, USHORT nRepeat )
     // Haben wir ueberhaupt Acceleratoren ??
     if ( !mpAccelList )
         return FALSE;
-    if ( !mpAccelList->Count() )
+    if ( mpAccelList->empty() )
         return FALSE;
 
     // Sind wir in einer Sequenz ?
     if ( mpSequenceList )
     {
-        pAccel = mpSequenceList->GetObject( 0 );
+        pAccel = mpSequenceList->empty() ? NULL : (*mpSequenceList)[ 0 ];
         DBG_CHKOBJ( pAccel, Accelerator, NULL );
 
         // Nicht Gefunden ?
@@ -169,7 +168,7 @@ BOOL ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, USHORT nRepeat )
             {
                 DBG_CHKOBJ( pNextAccel, Accelerator, NULL );
 
-                mpSequenceList->Insert( pNextAccel, (ULONG)0 );
+                mpSequenceList->insert( mpSequenceList->begin(), pNextAccel );
 
                 // Activate-Handler vom Neuen rufen
                 pNextAccel->Activate();
@@ -222,9 +221,9 @@ BOOL ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, USHORT nRepeat )
     }
 
     // Durch die Liste der Acceleratoren wuehlen
-    pAccel = mpAccelList->First();
-    while ( pAccel )
+    for ( size_t i = 0, n = mpAccelList->size(); i < n; ++i )
     {
+        pAccel = (*mpAccelList)[ i ];
         DBG_CHKOBJ( pAccel, Accelerator, NULL );
 
         // Ist der Eintrag da drin ?
@@ -240,8 +239,8 @@ BOOL ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, USHORT nRepeat )
 
                 // Sequenz-Liste erzeugen
                 mpSequenceList = new ImplAccelList;
-                mpSequenceList->Insert( pAccel, (ULONG)0 );
-                mpSequenceList->Insert( pNextAccel, (ULONG)0 );
+                mpSequenceList->insert( mpSequenceList->begin(), pAccel     );
+                mpSequenceList->insert( mpSequenceList->begin(), pNextAccel );
 
                 // Activate-Handler vom Neuen rufen
                 pNextAccel->Activate();
@@ -282,9 +281,6 @@ BOOL ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, USHORT nRepeat )
                     return FALSE;
             }
         }
-
-        // Nicht gefunden, vielleicht im naechsten Accelerator
-        pAccel = mpAccelList->Next();
     }
 
     return FALSE;

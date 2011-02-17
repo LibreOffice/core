@@ -30,10 +30,12 @@
 #define _SV_ACCMGR_HXX
 
 #include <vcl/sv.h>
+#include <vector>
 
-class ImplAccelList;
 class Accelerator;
 class KeyCode;
+
+typedef ::std::vector< Accelerator* > ImplAccelList;
 
 // --------------------
 // - ImplAccelManager -
