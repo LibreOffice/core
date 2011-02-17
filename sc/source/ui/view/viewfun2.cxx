@@ -1705,7 +1705,7 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         }
     }
     else
-    {   //! mindestens eine ist immer selektiert
+    {   //! at least one is always selected
         nStartTab = nEndTab = rMark.GetFirstSelected();
         for ( SCTAB j = nStartTab + 1; j <= nLastTab; j++ )
         {
@@ -1734,14 +1734,14 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
         || nCommand == SVX_SEARCHCMD_FIND_ALL)
         bAddUndo = FALSE;
 
-    //!     bAttrib bei Undo beruecksichtigen !!!
+    //!     account for bAttrib during Undo !!!
 
     ScDocument* pUndoDoc = NULL;
     ScMarkData* pUndoMark = NULL;
     String aUndoStr;
     if (bAddUndo)
     {
-        pUndoMark = new ScMarkData( rMark );                // Markierung wird veraendert
+        pUndoMark = new ScMarkData( rMark );                // Mark is being modified
         if ( nCommand == SVX_SEARCHCMD_REPLACE_ALL )
         {
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
@@ -1750,17 +1750,17 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     }
 
     if ( bAllTables )
-    {   //! alles selektieren, erst nachdem pUndoMark erzeugt wurde
+    {   //! select all, after pUndoMark has been created
         for ( SCTAB j = nStartTab; j <= nEndTab; j++ )
         {
             rMark.SelectTable( j, TRUE );
         }
     }
 
-    DoneBlockMode(TRUE);                // Markierung nicht loeschen!
+    DoneBlockMode(TRUE);                // don't delete mark
     InitOwnBlockMode();
 
-    //  wenn vom Anfang an gesucht wird, nicht nochmal fragen ob vom Anfang gesucht werden soll
+    //  If search starts at the beginning don't ask again whether it shall start at the beginning
     BOOL bFirst = TRUE;
     if ( nCol == 0 && nRow == 0 && nTab == nStartTab && !pSearchItem->GetBackward()  )
         bFirst = FALSE;
@@ -1782,7 +1782,7 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 pUndoDoc = NULL;
             }
 
-            break;                  // Abbruch while True
+            break;                  // break 'while (TRUE)'
         }
         else if ( bFirst && (nCommand == SVX_SEARCHCMD_FIND ||
                 nCommand == SVX_SEARCHCMD_REPLACE) )
@@ -1794,7 +1794,7 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
                 nRetVal = RET_NO;
             else
             {
-                //  Suchen-Dialog als Parent, wenn vorhanden
+                //  search dialog as parent (if available)
                 Window* pParent = GetParentOrChild(SID_SEARCH_DLG);
                 USHORT nStrId;
                 if ( pSearchItem->GetBackward() )
@@ -1827,32 +1827,32 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
             }
             else
             {
-                break;                  // Abbruch while True
+                break;                  // break 'while (TRUE)'
             }
         }
-        else                            // nichts gefunden
+        else                            // nothing found
         {
             if ( nCommand == SVX_SEARCHCMD_FIND_ALL || nCommand == SVX_SEARCHCMD_REPLACE_ALL )
             {
-                pDocSh->PostPaintGridAll();                             // Markierung
+                pDocSh->PostPaintGridAll();                             // Mark
             }
 
             GetFrameWin()->LeaveWait();
             if (!bIsApi)
             {
-                //  Suchen-Dialog als Parent, wenn vorhanden
+                //  search dialog as parent if available
                 Window* pParent = GetParentOrChild(SID_SEARCH_DLG);
-                // "nichts gefunden"
+                // "nothing found"
                 InfoBox aBox( pParent, ScGlobal::GetRscString( STR_MSSG_SEARCHANDREPLACE_0 ) );
                 aBox.Execute();
             }
 
-            break;                      // Abbruch while True
+            break;                      // break 'while (TRUE)'
         }
     }                               // of while TRUE
 
     if ( pOldSelectedTables )
-    {   // urspruenglich selektierte Tabellen wiederherstellen
+    {   // restore originally selected table
         for ( SCTAB j = nStartTab; j <= nEndTab; j++ )
         {
             rMark.SelectTable( j, pOldSelectedTables[j] );
