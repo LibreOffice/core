@@ -202,7 +202,7 @@ public:
 
     bool            HasPriority( const SvxBorderLine& rOtherLine ) const;
 
-    bool isEmpty() const { return m_aWidthImpl.IsEmpty( ); }
+    bool isEmpty() const { return m_aWidthImpl.IsEmpty( ) || m_nStyle == NO_STYLE || m_nWidth == 0; }
     bool isDouble() const { return m_aWidthImpl.IsDouble(); }
     sal_uInt16 GetScaledWidth() const { return GetOutWidth() + GetInWidth() + GetDistance(); }
 
