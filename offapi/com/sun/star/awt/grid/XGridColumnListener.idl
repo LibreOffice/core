@@ -27,13 +27,8 @@
 #ifndef __com_sun_star_awt_grid_XGridColumnListener_idl__
 #define __com_sun_star_awt_grid_XGridColumnListener_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __com_sun_star_awt_grid_GridColumnEvent_idl__
 #include <com/sun/star/awt/grid/GridColumnEvent.idl>
-#endif
+#include <com/sun/star/lang/XEventListener.idl>
 
 //=============================================================================
 
@@ -44,25 +39,11 @@ module com {  module sun {  module star {  module awt { module grid {
 /** An instance of this interface is used by the <type>XGridColumnModel</type> to
     get notifications about column model changes.
 
-    <p>Usually you must not implement this interface yourself, but you must notify it correctly if
-    you implement the <type>XGridColumnModel</type> yourself</p>.
-
     @since OOo 3.3.0
  */
-interface XGridColumnListener
+interface XGridColumnListener : ::com::sun::star::lang::XEventListener
 {
- //   /**
-    //  Invoked after a column was added to the column model.
-    //*/
-    //void columnAdded( [in] GridColumnEvent event );
-    //
- //   /**
-    //  Invoked after a column was removed from the column model.
-    //*/
-    //void columnRemoved( [in] GridColumnEvent event );
-
-    /**
-        Invoked after a column was modified.
+    /** Invoked after a column was modified.
     */
     void columnChanged( [in] GridColumnEvent event );
 };

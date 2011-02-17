@@ -1,0 +1,163 @@
+/*************************************************************************
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_awt_grid_XMutableGridDataModel_idl__
+#define __com_sun_star_awt_grid_XMutableGridDataModel_idl__
+
+#include <com/sun/star/awt/grid/XGridDataModel.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+
+//==================================================================================================================
+
+module com { module sun { module star { module awt { module grid {
+
+//==================================================================================================================
+
+/** allows to modify the data represented by a <type>XGridDataModel</type>
+ */
+interface XMutableGridDataModel : XGridDataModel
+{
+    /** adds a row to the model.
+
+        @param Heading
+            denotes the heading of the row.
+        @param Data
+            specifies the content of the row.
+    */
+    void addRow( [in] any Heading, [in] sequence< any > Data );
+
+    /** adds multiple rows of data to the model.
+        @param Headings
+            denotes the headings of the to-be-added rows.
+        @param Data
+            specifies the data of the rows to be added.
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if <code>Titles</code> and <code>Data</code> are of different length.
+    */
+    void addRows( [in] sequence< any > Headings, [in] sequence< sequence< any > > Data )
+        raises ( ::com::sun::star::lang::IllegalArgumentException );
+
+    /** removes a row of data from the model
+
+        @param RowIndex
+            the index of the row that should be removed.
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the given index is invalid
+    */
+    void removeRow( [in] long RowIndex )
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** Removes all rows from the model.
+    */
+    void removeAllRows();
+
+    /** updates the content of the given cell
+        @param ColumnIndex
+            the column index of the to-be-updated cell
+        @param RowIndex
+            the row index of the to-be-updated cell
+        @param Value
+            the new value of the cell.
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the row or column index is invalid
+    */
+    void updateCellData( [in] long ColumnIndex, [in] long RowIndex, [in] any Value )
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** updates the content of a given row.
+
+        <p>The change in the data model will be notified to registered listeners via
+        <member">XGridDataListener::dataChanged</member>. The <member>GridDataEvent::FirstColumn</member> and
+        <member>GridDataEvent::LastColumn</member> will denote the smallest respectively largest column
+        index from <argColumnIndexes</arg>.</p>
+
+        @param ColumnIndexes
+            contains the column indexes of the cells, which should be updated
+        @param RowIndex
+            contains the index of the row whose data is to be updated
+        @param Values
+            specifies the new values of the cells.
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if one of the row indexes or the column index is invalid
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the lengths of the <code>ColumnIndexes</code> and <code>Values</code> sequences are not equal.
+    */
+    void updateRowData( [in] sequence< long > ColumnIndexes, [in] long RowIndex, [in] sequence< any > Values )
+            raises ( ::com::sun::star::lang::IndexOutOfBoundsException
+                   , ::com::sun::star::lang::IllegalArgumentException);
+
+    /** sets a new title for a given row.
+
+        @throws ::com::sun::star::lang::IndexOutOfBoundsException
+            if the given index does not denote a valid row.
+    */
+    void
+        updateRowHeading( [in] long RowIndex, [in] any Heading )
+            raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** updates the tooltip to be displayed for a given cell
+
+        @see XGridDataModel::getCellToolTip
+    */
+    void updateCellToolTip( [in] long ColumnIndex, [in] long RowIndex, [in] any Value )
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    /** updates the tooltip for all cells of a given row
+
+        <p>Effectively this method is a shortcut for calling <member>updateCellToolTip</member> multiple
+        times in a row, for all cells of a given row.</p>
+
+        @see XGridDataModel::getCellToolTip
+        @see updateCellToolTip
+    */
+    void updateRowToolTip( [in] long RowIndex, [in] any Value )
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
+
+    //-------------------------------------------------------------------------
+
+    /** registers listener to be notified of data changes in the model
+        @param Listener
+            specifies the listener to register
+    */
+    void addGridDataListener( [in] XGridDataListener Listener );
+
+    //-------------------------------------------------------------------------
+
+    /** revokes a listener which was previously registered via <member>addGridDataListener</member>
+        @param Listener
+            specifies the listener to revoke.
+    */
+    void removeGridDataListener( [in] XGridDataListener Listener );
+};
+
+//==================================================================================================================
+
+}; }; }; }; };
+
+//==================================================================================================================
+
+#endif
