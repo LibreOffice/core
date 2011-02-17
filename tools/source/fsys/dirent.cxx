@@ -927,28 +927,6 @@ DirEntry* DirEntry::ImpGetTopPtr()
 
 /*************************************************************************
 |*
-|*    DirEntry::ImpGetPreTopPtr()
-|*
-|*    Beschreibung      liefert einen Pointer auf den vorletzten Entry
-|*
-*************************************************************************/
-
-DirEntry* DirEntry::ImpGetPreTopPtr()
-{
-    DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
-
-    DirEntry *pTemp = this;
-    if ( pTemp->pParent )
-    {
-        while ( pTemp->pParent->pParent )
-            pTemp = pTemp->pParent;
-    }
-
-    return pTemp;
-}
-
-/*************************************************************************
-|*
 |*    DirEntry::ImpChangeParent()
 |*
 *************************************************************************/

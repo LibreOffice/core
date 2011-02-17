@@ -282,10 +282,8 @@ private:
                                          FSysPathStyle eStyle );
     TOOLS_DLLPRIVATE FSysError          ImpParseUnixName( const ByteString& rPfad,
                                           FSysPathStyle eStyle );
-    TOOLS_DLLPRIVATE USHORT             ImpTryUrl( DirEntryStack& rStack, const String& rPfad, FSysPathStyle eStyle );
     TOOLS_DLLPRIVATE const DirEntry*    ImpGetTopPtr() const;
     TOOLS_DLLPRIVATE DirEntry*          ImpGetTopPtr();
-    TOOLS_DLLPRIVATE DirEntry*          ImpGetPreTopPtr();
     TOOLS_DLLPRIVATE BOOL               ImpToRel( String aStart );
 
 protected:
