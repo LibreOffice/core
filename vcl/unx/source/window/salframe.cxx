@@ -679,7 +679,6 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentD
     nKeyCode_                   = 0;
     nKeyState_                  = 0;
     nCompose_                   = -1;
-    mbKeyMenu                   = false;
     mbSendExtKeyModChange       = false;
     mnExtKeyMod                 = 0;
 
@@ -3294,29 +3293,10 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
 
         int nRet = CallCallback( SALEVENT_KEYMODCHANGE, &aModEvt );
 
-        // emulate KEY_MENU
-        if ( ( (nKeySym == XK_Alt_L) || (nKeySym == XK_Alt_R) ) &&
-             ( (nModCode & ~(KEY_MOD3|KEY_MOD2)) == 0 ) )
-        {
-            if( pEvent->type == XLIB_KeyPress )
-                mbKeyMenu = true;
-            else if( mbKeyMenu )
-            {
-                // simulate KEY_MENU
-                aKeyEvt.mnCode     = KEY_MENU | nModCode;
-                aKeyEvt.mnRepeat   = 0;
-                aKeyEvt.mnTime     = pEvent->time;
-                aKeyEvt.mnCharCode = 0;
-                nRet = CallCallback( SALEVENT_KEYINPUT, &aKeyEvt );
-                nRet = CallCallback( SALEVENT_KEYUP, &aKeyEvt );
-            }
-        }
-        else
-            mbKeyMenu = false;
         return nRet;
     }
 
-    mbSendExtKeyModChange = mbKeyMenu = false;
+    mbSendExtKeyModChange = false;
 
     // try to figure out the vcl code for the keysym
     // #i52338# use the unmodified KeySym if there is none for the real KeySym
@@ -3515,7 +3495,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
         else
         {
             mbInputFocus = False;
-            mbSendExtKeyModChange = mbKeyMenu = false;
+            mbSendExtKeyModChange = false;
             mnExtKeyMod = 0;
             return CallCallback( SALEVENT_LOSEFOCUS, 0 );
         }
