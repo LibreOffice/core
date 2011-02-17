@@ -86,11 +86,6 @@ void FFDataHandler::setCalcOnExit(bool r_calcOnExit)
     m_bCalcOnExit = r_calcOnExit;
 }
 
-bool FFDataHandler::getCalcOnExit() const
-{
-    return m_bCalcOnExit;
-}
-
 // member: FFDataHandler::entryMacro
 void FFDataHandler::setEntryMacro(const rtl::OUString & r_sEntryMacro)
 {
@@ -185,11 +180,6 @@ void FFDataHandler::setCheckboxDefault(bool r_checkboxDefault)
     m_bCheckboxDefault = r_checkboxDefault;
 }
 
-bool FFDataHandler::getCheckboxDefault() const
-{
-    return m_bCheckboxDefault;
-}
-
 // member: FFDataHandler::checkboxChecked
 void FFDataHandler::setCheckboxChecked(bool r_checkboxChecked)
 {
@@ -232,11 +222,6 @@ void FFDataHandler::setDropDownEntries(const FFDataHandler::DropDownEntries_t & 
 const FFDataHandler::DropDownEntries_t & FFDataHandler::getDropDownEntries() const
 {
     return m_DropDownEntries;
-}
-
-void FFDataHandler::dropDownEntriesPushBack(const rtl::OUString & r_Element)
-{
-    m_DropDownEntries.push_back(r_Element);
 }
 
 // member: FFDataHandler::textType

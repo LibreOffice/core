@@ -53,7 +53,6 @@ public:
 
     // member: calcOnExit
     void setCalcOnExit(bool r_calcOnExit);
-    bool getCalcOnExit() const;
 
     // member: entryMacro
     void setEntryMacro(const rtl::OUString & r_sEntryMacro);
@@ -89,7 +88,6 @@ public:
 
     // member: checkboxDefault
     void setCheckboxDefault(bool r_checkboxDefault);
-    bool getCheckboxDefault() const;
 
     // member: checkboxChecked
     void setCheckboxChecked(bool r_checkboxChecked);
@@ -106,7 +104,6 @@ public:
     // member: dropDownEntries
     void setDropDownEntries(const DropDownEntries_t & r_dropDownEntries);
     const DropDownEntries_t & getDropDownEntries() const;
-    void dropDownEntriesPushBack(const rtl::OUString & r_Element);
 
     // member: textType
     void setTextType(sal_uInt32 r_textType);
