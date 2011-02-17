@@ -91,13 +91,7 @@ void SvxChartColorTable::replace( size_t _nIndex, const XColorEntry & _rEntry )
     DBG_ASSERT( _nIndex <= m_aColorEntries.size(),
                 "SvxChartColorTable::replace invalid index" );
 
-    Color aCol1 = m_aColorEntries[ _nIndex ].GetColor(), aCol2;
     m_aColorEntries[ _nIndex ] = _rEntry;
-    aCol2 = m_aColorEntries[ _nIndex ].GetColor();
-    if ( aCol2 != const_cast< XColorEntry& >( _rEntry ).GetColor() )
-    {
-        DBG_ERRORFILE( "wrong color" );
-    }
 }
 
 void SvxChartColorTable::useDefault()
