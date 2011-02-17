@@ -71,7 +71,7 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const ::rtl::OUString& _sCol
     initDefaultNodeImages();
     ImplInitSettings();
     m_aText.SetHelpId(HID_RPT_START_TITLE);
-    m_aText.SetPaintTransparent(TRUE);
+    m_aText.SetPaintTransparent(sal_True);
     m_aImage.SetHelpId(HID_RPT_START_IMAGE);
     m_aText.Show();
     m_aImage.Show();
@@ -84,7 +84,7 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const ::rtl::OUString& _sCol
     m_aVRuler.SetMargin2();
     const MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
     m_aVRuler.SetUnit(MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH);
-    EnableChildTransparentMode( TRUE );
+    EnableChildTransparentMode( sal_True );
     SetParentClipMode( PARENTCLIPMODE_NOCLIP );
     SetPaintTransparent( sal_True );
 }
