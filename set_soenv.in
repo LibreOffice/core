@@ -78,7 +78,7 @@ my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV
 
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
-     $UPD, $WORK_STAMP, $SOURCE_ROOT_DIR ,
+     $UPD, $WORK_STAMP, $SOURCE_ROOT_DIR , $gb_REPOS,
      $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $WORKDIR, $OUTDIR, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
@@ -1496,6 +1496,12 @@ else
 
 #
 print "done\n";
+$gb_REPOS = $SRC_ROOT;
+
+if ('@WITH_LANG@' ne "")
+{
+    $gb_REPOS .= " ".$SOURCE_ROOT_DIR."/l10n";
+}
 
 #
 # F. Setting the different aliases.
@@ -1965,6 +1971,8 @@ if ($platform !~ m/cygwin|os2/) {
 }
 ToFile( "SOLARSRC",           $SOLARSRC,           "e" );
 ToFile( "SOURCE_ROOT_DIR",    $SOURCE_ROOT_DIR,    "e" );
+ToFile( "gb_REPOS",           $gb_REPOS,           "e" );
+
 if ( $platform =~ m/cygwin/ )
 {
    ToFile( "ILIB",              $ILIB,              "e" );
