@@ -1786,7 +1786,6 @@ IMPL_LINK( SvxNumOptionsTabPage, AllLevelHdl_Impl, NumericField*, pBox )
 IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
 {
     String sSelectStyle;
-    sal_Int16 eOldType;
     BOOL bShowOrient = FALSE;
     BOOL bBmp = FALSE;
     String aEmptyStr;
@@ -1796,7 +1795,6 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
         if(nActNumLvl & nMask)
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
-            eOldType = aNumFmt.GetNumberingType();
             // PAGEDESC gibt es nicht
             USHORT nNumType = (USHORT)(ULONG)pBox->GetEntryData(pBox->GetSelectEntryPos());
             aNumFmt.SetNumberingType((sal_Int16)nNumType);
