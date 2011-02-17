@@ -35,7 +35,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE : settings.mk
 
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
+CFLAGSCXX += $(CPPUNIT_CFLAGS) -I../../source/ui/inc
 
 SHL1TARGET = $(TARGET)
 SHL1OBJS = $(SLO)$/ucalc.obj

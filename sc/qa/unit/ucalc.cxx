@@ -58,15 +58,16 @@
 #include <comphelper/processfactory.hxx>
 
 #include <vcl/svapp.hxx>
-#include <scdll.hxx>
-#include <document.hxx>
-#include <stringutil.hxx>
-#include <scmatrix.hxx>
-#include <drwlayer.hxx>
+#include "scdll.hxx"
+#include "document.hxx"
+#include "stringutil.hxx"
+#include "scmatrix.hxx"
+#include "drwlayer.hxx"
+#include "docsh.hxx"
 
-#include <dpshttab.hxx>
-#include <dpobject.hxx>
-#include <dpsave.hxx>
+#include "dpshttab.hxx"
+#include "dpobject.hxx"
+#include "dpsave.hxx"
 
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
@@ -235,6 +236,7 @@ public:
 private:
     uno::Reference< uno::XComponentContext > m_xContext;
     ScDocument *m_pDoc;
+    ScDocShellRef m_pDocShellRef;
 };
 
 Test::Test()
@@ -257,12 +259,13 @@ Test::Test()
 
 void Test::setUp()
 {
-    m_pDoc = new ScDocument;
+    m_pDocShellRef = new ScDocShell;
+    m_pDoc = m_pDocShellRef->GetDocument();
 }
 
 void Test::tearDown()
 {
-    delete m_pDoc;
+    m_pDocShellRef.Clear();
 }
 
 Test::~Test()
