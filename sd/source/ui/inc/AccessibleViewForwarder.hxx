@@ -65,7 +65,7 @@ public:
         @return
             Return <true/> if the view forwarder is valid and <false/> else.
      */
-    virtual BOOL IsValid (void) const;
+    virtual sal_Bool IsValid (void) const;
 
     /** Returns the area of the underlying document that is visible in the
     * corresponding window.
@@ -123,7 +123,7 @@ public:
 
 protected:
     SdrPaintView* mpView;
-    USHORT mnWindowId;
+    sal_uInt16 mnWindowId;
     OutputDevice& mrDevice;
 
 private:

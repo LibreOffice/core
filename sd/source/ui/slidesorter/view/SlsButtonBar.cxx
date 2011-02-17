@@ -154,8 +154,8 @@ namespace {
             for (sal_Int32 nY = 0; nY<nHeight; ++nY)
                 for (sal_Int32 nX = 0; nX<nWidth; ++nX)
                 {
-                    const BYTE nValue (255 - pSourceBitmap->GetPixel(nY, nX).GetBlueOrIndex());
-                    const BYTE nNewValue (nValue * (1-nAlpha));
+                    const sal_uInt8 nValue (255 - pSourceBitmap->GetPixel(nY, nX).GetBlueOrIndex());
+                    const sal_uInt8 nNewValue (nValue * (1-nAlpha));
                     pBitmap->SetPixel(nY, nX, 255-nNewValue);
                 }
         }
@@ -1291,7 +1291,7 @@ void ImageButton::Paint (
     if ( ! mbIsActive)
         return;
 
-    const USHORT nSavedAntialiasingMode (rDevice.GetAntialiasing());
+    const sal_uInt16 nSavedAntialiasingMode (rDevice.GetAntialiasing());
     rDevice.SetAntialiasing(nSavedAntialiasingMode | ANTIALIASING_ENABLE_B2DDRAW);
 
     rDevice.SetLineColor();

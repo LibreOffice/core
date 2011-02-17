@@ -60,7 +60,7 @@ SFX_IMPL_TOOLBOX_CONTROL( SdTbxControl, TbxImageItem )
 |*
 \************************************************************************/
 /*
-SdPopupWindowTbx::SdPopupWindowTbx( USHORT nId, WindowAlign eAlign,
+SdPopupWindowTbx::SdPopupWindowTbx( sal_uInt16 nId, WindowAlign eAlign,
                                     SdResId aRIdWin, SdResId aRIdTbx,
                                     SfxBindings& rBindings ) :
                 SfxPopupWindow  ( nId, aRIdWin, rBindings ),
@@ -99,10 +99,10 @@ void SdPopupWindowTbx::AdaptToCTL (void)
 
             // Iterate over all tool box items and remove those that are
             // specific to complex text layout.
-            USHORT i=0;
+            sal_uInt16 i=0;
             while (i < aToolBox.GetItemCount())
             {
-                USHORT nIndex = aToolBox.GetItemId(i);
+                sal_uInt16 nIndex = aToolBox.GetItemId(i);
                 switch (nIndex)
                 {
                     case 0: // Line break.
@@ -121,7 +121,7 @@ void SdPopupWindowTbx::AdaptToCTL (void)
             aToolBox.RecalcItems();
             // Why is this necessary?
             aToolBox.SetLineCount(1);
-            USHORT nLineCount = aToolBox.GetLineCount();
+            sal_uInt16 nLineCount = aToolBox.GetLineCount();
             aSize = aToolBox.CalcWindowSizePixel(nLineCount);
         }
     }
@@ -194,7 +194,7 @@ IMPL_LINK( SdPopupWindowTbx, TbxSelectHdl, ToolBox*, pBox)
 |*
 \************************************************************************/
 
-SdTbxControl::SdTbxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+SdTbxControl::SdTbxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
         SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
@@ -281,7 +281,7 @@ SfxPopupWindow* SdTbxControl::CreatePopupWindow()
 
 /*-------------------------------------------------------------------------*/
 
-void SdTbxControl::StateChanged( USHORT nSId,
+void SdTbxControl::StateChanged( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pState )
 {
     SfxToolBoxControl::StateChanged( nSId, eState, pState );
@@ -295,11 +295,11 @@ void SdTbxControl::StateChanged( USHORT nSId,
         if( pItem )
         {
             ToolBox& rTbx = GetToolBox();
-            USHORT nImage = pItem->GetValue();
+            sal_uInt16 nImage = pItem->GetValue();
             if( nImage == 0 )
             {
                 if( rTbx.IsItemChecked( nSId ) )
-                    rTbx.CheckItem( nSId, FALSE );
+                    rTbx.CheckItem( nSId, sal_False );
             }
             else
             {
@@ -323,28 +323,28 @@ void SdTbxControl::StateChanged( USHORT nSId,
                     {
                         if( nSId != SID_OBJECT_CHOOSE_MODE &&
                             rTbx.IsItemChecked( SID_OBJECT_CHOOSE_MODE ) )
-                            rTbx.CheckItem( SID_OBJECT_CHOOSE_MODE, FALSE );
+                            rTbx.CheckItem( SID_OBJECT_CHOOSE_MODE, sal_False );
                         if( nSId != SID_DRAWTBX_TEXT &&
                             rTbx.IsItemChecked( SID_DRAWTBX_TEXT ) )
-                             rTbx.CheckItem( SID_DRAWTBX_TEXT, FALSE );
+                             rTbx.CheckItem( SID_DRAWTBX_TEXT, sal_False );
                         if( nSId != SID_DRAWTBX_RECTANGLES &&
                             rTbx.IsItemChecked( SID_DRAWTBX_RECTANGLES ) )
-                               rTbx.CheckItem( SID_DRAWTBX_RECTANGLES, FALSE );
+                               rTbx.CheckItem( SID_DRAWTBX_RECTANGLES, sal_False );
                         if( nSId != SID_DRAWTBX_ELLIPSES &&
                             rTbx.IsItemChecked( SID_DRAWTBX_ELLIPSES ) )
-                               rTbx.CheckItem( SID_DRAWTBX_ELLIPSES, FALSE );
+                               rTbx.CheckItem( SID_DRAWTBX_ELLIPSES, sal_False );
                         if( nSId != SID_DRAWTBX_LINES &&
                             rTbx.IsItemChecked( SID_DRAWTBX_LINES ) )
-                            rTbx.CheckItem( SID_DRAWTBX_LINES, FALSE );
+                            rTbx.CheckItem( SID_DRAWTBX_LINES, sal_False );
                         if( nSId != SID_DRAWTBX_ARROWS &&
                             rTbx.IsItemChecked( SID_DRAWTBX_ARROWS ) )
-                            rTbx.CheckItem( SID_DRAWTBX_ARROWS, FALSE );
+                            rTbx.CheckItem( SID_DRAWTBX_ARROWS, sal_False );
                         if( nSId != SID_DRAWTBX_3D_OBJECTS &&
                             rTbx.IsItemChecked( SID_DRAWTBX_3D_OBJECTS ) )
-                            rTbx.CheckItem( SID_DRAWTBX_3D_OBJECTS, FALSE );
+                            rTbx.CheckItem( SID_DRAWTBX_3D_OBJECTS, sal_False );
                         if( nSId != SID_DRAWTBX_CONNECTORS &&
                             rTbx.IsItemChecked( SID_DRAWTBX_CONNECTORS ) )
-                            rTbx.CheckItem( SID_DRAWTBX_CONNECTORS, FALSE );
+                            rTbx.CheckItem( SID_DRAWTBX_CONNECTORS, sal_False );
                     }
                 }
             }
@@ -354,7 +354,7 @@ void SdTbxControl::StateChanged( USHORT nSId,
 
 /*-------------------------------------------------------------------------*/
 
-BOOL SdTbxControl::IsCheckable( USHORT nSId )
+sal_Bool SdTbxControl::IsCheckable( sal_uInt16 nSId )
 {
     switch( nSId )
     {
@@ -463,9 +463,9 @@ BOOL SdTbxControl::IsCheckable( USHORT nSId )
 
 
         //case SID_ZOOM_OUT:
-            return( TRUE );
+            return( sal_True );
     }
-    return( FALSE );
+    return( sal_False );
 }
 
 

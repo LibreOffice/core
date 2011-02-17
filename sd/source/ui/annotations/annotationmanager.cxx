@@ -196,7 +196,7 @@ AnnotationManagerImpl::AnnotationManagerImpl( ViewShellBase& rViewShellBase )
 {
     SdOptions* pOptions = SD_MOD()->GetSdOptions(mpDoc->GetDocumentType());
     if( pOptions )
-        mbShowAnnotations = pOptions->IsShowComments() == TRUE;
+        mbShowAnnotations = pOptions->IsShowComments() == sal_True;
 }
 
 // --------------------------------------------------------------------
@@ -338,7 +338,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
         if( pArgs )
         {
             const SfxPoolItem*  pPoolItem = NULL;
-            if( SFX_ITEM_SET == pArgs->GetItemState( SID_DELETEALLBYAUTHOR_POSTIT, TRUE, &pPoolItem ) )
+            if( SFX_ITEM_SET == pArgs->GetItemState( SID_DELETEALLBYAUTHOR_POSTIT, sal_True, &pPoolItem ) )
             {
                 OUString sAuthor( (( const SfxStringItem* ) pPoolItem )->GetValue() );
                 DeleteAnnotationsByAuthor( sAuthor );
@@ -354,7 +354,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
                 if( pArgs )
                 {
                     const SfxPoolItem*  pPoolItem = NULL;
-                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_DELETE_POSTIT, TRUE, &pPoolItem ) )
+                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_DELETE_POSTIT, sal_True, &pPoolItem ) )
                         ( ( const SfxUnoAnyItem* ) pPoolItem )->GetValue() >>= xAnnotation;
                 }
             }
@@ -458,7 +458,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
     if( pArgs )
     {
         const SfxPoolItem*  pPoolItem = NULL;
-        if( SFX_ITEM_SET == pArgs->GetItemState( rReq.GetSlot(), TRUE, &pPoolItem ) )
+        if( SFX_ITEM_SET == pArgs->GetItemState( rReq.GetSlot(), sal_True, &pPoolItem ) )
             ( ( const SfxUnoAnyItem* ) pPoolItem )->GetValue() >>= xAnnotation;
     }
 
@@ -469,7 +469,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
         std::auto_ptr< ::Outliner > pOutliner( new ::Outliner(GetAnnotationPool(),OUTLINERMODE_TEXTOBJECT) );
 
         mpDoc->SetCalcFieldValueHdl( pOutliner.get() );
-        pOutliner->SetUpdateMode( TRUE );
+        pOutliner->SetUpdateMode( sal_True );
 
         String aStr(SdResId(STR_ANNOTATION_REPLY));
         OUString sAuthor( xAnnotation->getAuthor() );
@@ -489,8 +489,8 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
         aStr.Append( sQuote );
         aStr.Append( String(RTL_CONSTASCII_USTRINGPARAM("\"\n") ) );
 
-        USHORT nParaCount = aStr.GetTokenCount( '\n' );
-        for( USHORT nPara = 0; nPara < nParaCount; nPara++ )
+        sal_uInt16 nParaCount = aStr.GetTokenCount( '\n' );
+        for( sal_uInt16 nPara = 0; nPara < nParaCount; nPara++ )
             pOutliner->Insert( aStr.GetToken( nPara, '\n' ), LIST_APPEND, -1 );
 
         if( pOutliner->GetParagraphCount() > 1 )
@@ -499,7 +499,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
             aAnswerSet.Put(SvxPostureItem(ITALIC_NORMAL,EE_CHAR_ITALIC));
 
             ESelection aSel;
-            aSel.nEndPara = (USHORT)pOutliner->GetParagraphCount()-2;
+            aSel.nEndPara = (sal_uInt16)pOutliner->GetParagraphCount()-2;
             aSel.nEndPos = pOutliner->GetText( pOutliner->GetParagraph( aSel.nEndPara ) ).Len();
 
             pOutliner->QuickSetAttribs( aAnswerSet, aSel );
@@ -721,7 +721,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
                 ::boost::shared_ptr<DrawViewShell> pDrawViewShell(::boost::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
                 if (pDrawViewShell.get() != NULL)
                 {
-                    pDrawViewShell->ChangeEditMode(pPage->IsMasterPage() ? EM_MASTERPAGE : EM_PAGE, FALSE);
+                    pDrawViewShell->ChangeEditMode(pPage->IsMasterPage() ? EM_MASTERPAGE : EM_PAGE, sal_False);
                     pDrawViewShell->SwitchPage((pPage->GetPageNum() - 1) >> 1);
 
                     SfxDispatcher* pDispatcher = getDispatcher( mrBase );
@@ -749,7 +749,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
             WB_YES_NO | WB_DEF_YES,
             String(SdResId(nStringId)));
         aQuestionBox.SetImage (QueryBox::GetStandardImage());
-        USHORT nBoxResult = aQuestionBox.Execute();
+        sal_uInt16 nBoxResult = aQuestionBox.Execute();
         if(nBoxResult != BUTTONID_YES)
             break;
     }
@@ -777,7 +777,7 @@ void AnnotationManagerImpl::onTagDeselected( AnnotationTag& rTag )
 
 // --------------------------------------------------------------------
 
-void AnnotationManagerImpl::SelectAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation, bool bEdit /* = FALSE */ )
+void AnnotationManagerImpl::SelectAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation, bool bEdit /* = sal_False */ )
 {
     mxSelectedAnnotation = xAnnotation;
 
@@ -1021,7 +1021,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
     aStr.SearchAndReplaceAscii("%1", aReplace);
     pMenu->SetItemText( SID_DELETEALLBYAUTHOR_POSTIT, aStr );
     pMenu->EnableItem( SID_REPLYTO_POSTIT, (sAuthor != sCurrentAuthor) && !bReadOnly );
-    pMenu->EnableItem( SID_DELETE_POSTIT, (xAnnotation.is() && !bReadOnly) ? TRUE : FALSE );
+    pMenu->EnableItem( SID_DELETE_POSTIT, (xAnnotation.is() && !bReadOnly) ? sal_True : sal_False );
     pMenu->EnableItem( SID_DELETEALLBYAUTHOR_POSTIT, !bReadOnly );
     pMenu->EnableItem( SID_DELETEALL_POSTIT, !bReadOnly );
 
@@ -1029,11 +1029,11 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
     {
         if( pAnnotationWindow->IsProtected() || bReadOnly )
         {
-            pMenu->EnableItem( SID_ATTR_CHAR_WEIGHT, FALSE );
-            pMenu->EnableItem( SID_ATTR_CHAR_POSTURE, FALSE );
-            pMenu->EnableItem( SID_ATTR_CHAR_UNDERLINE, FALSE );
-            pMenu->EnableItem( SID_ATTR_CHAR_STRIKEOUT, FALSE );
-            pMenu->EnableItem( SID_PASTE, FALSE );
+            pMenu->EnableItem( SID_ATTR_CHAR_WEIGHT, sal_False );
+            pMenu->EnableItem( SID_ATTR_CHAR_POSTURE, sal_False );
+            pMenu->EnableItem( SID_ATTR_CHAR_UNDERLINE, sal_False );
+            pMenu->EnableItem( SID_ATTR_CHAR_STRIKEOUT, sal_False );
+            pMenu->EnableItem( SID_PASTE, sal_False );
         }
         else
         {
@@ -1069,14 +1069,14 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
         pMenu->EnableItem( SID_COPY, pAnnotationWindow->getView()->HasSelection() );
     }
 
-    USHORT nId = 0;
+    sal_uInt16 nId = 0;
 
     // set slot images
     Reference< ::com::sun::star::frame::XFrame > xFrame( mrBase.GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface() );
     if( xFrame.is() )
     {
         const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-        for( USHORT nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
+        for( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
         {
             nId = pMenu->GetItemId( nPos );
             if( pMenu->IsItemEnabled( nId ) )

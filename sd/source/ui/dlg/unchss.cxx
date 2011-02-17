@@ -75,7 +75,7 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
 
     // Layoutnamen und Separator loeschen
     String aSep( RTL_CONSTASCII_USTRINGPARAM( SD_LT_SEPARATOR ) );
-    USHORT nPos = aName.Search(aSep);
+    sal_uInt16 nPos = aName.Search(aSep);
     if( nPos != STRING_NOTFOUND )
         aName.Erase(0, nPos + aSep.Len());
 

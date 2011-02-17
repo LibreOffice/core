@@ -379,7 +379,7 @@ bool SlideSorterController::Command (
         case COMMAND_CONTEXTMENU:
         {
             SdPage* pPage = NULL;
-            USHORT nPopupId;
+            sal_uInt16 nPopupId;
 
             model::PageEnumeration aSelectedPages (
                 PageEnumerationProvider::CreateSelectedPagesEnumeration(mrModel));
@@ -660,7 +660,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
                 cache::PageCacheManager::Instance()->InvalidateAllCaches();
 
                 // Update the draw mode.
-                ULONG nDrawMode (Application::GetSettings().GetStyleSettings().GetHighContrastMode()
+                sal_uLong nDrawMode (Application::GetSettings().GetStyleSettings().GetHighContrastMode()
                     ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
                     : ViewShell::OUTPUT_DRAWMODE_COLOR);
                 if (mrSlideSorter.GetViewShell() != NULL)
@@ -685,7 +685,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
         }
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -717,8 +717,8 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
     {
         if (mrSlideSorter.GetContentWindow())
         {
-            ULONG nMode = mrSlideSorter.GetContentWindow()->GetDrawMode();
-            UINT16 nQuality = 0;
+            sal_uLong nMode = mrSlideSorter.GetContentWindow()->GetDrawMode();
+            sal_uInt16 nQuality = 0;
 
             switch (nMode)
             {
@@ -737,19 +737,19 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
             }
 
             rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_COLOR,
-                    (BOOL)(nQuality==0)));
+                    (sal_Bool)(nQuality==0)));
             rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_GRAYSCALE,
-                    (BOOL)(nQuality==1)));
+                    (sal_Bool)(nQuality==1)));
             rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_BLACKWHITE,
-                    (BOOL)(nQuality==2)));
+                    (sal_Bool)(nQuality==2)));
             rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_CONTRAST,
-                    (BOOL)(nQuality==3)));
+                    (sal_Bool)(nQuality==3)));
         }
     }
 
     if (rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) == SFX_ITEM_AVAILABLE)
     {
-        rSet.Put (SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, TRUE));
+        rSet.Put (SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, sal_True));
     }
 }
 
@@ -996,7 +996,7 @@ void SlideSorterController::PageNameHasChanged (int nPageIndex, const String& rs
             break;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-            xAccessible (pWindow->GetAccessible(FALSE));
+            xAccessible (pWindow->GetAccessible(sal_False));
         if ( ! xAccessible.is())
             break;
 

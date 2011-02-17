@@ -654,10 +654,10 @@ ViewShell::ShellType FrameworkHelper::GetViewId (const rtl::OUString& rsViewURL)
 
 
 void FrameworkHelper::HandleModeChangeSlot (
-    ULONG nSlotId,
+    sal_uLong nSlotId,
     SfxRequest& rRequest)
 {
-    BOOL bIsActive = TRUE;
+    sal_Bool bIsActive = sal_True;
 
     if ( ! mxConfigurationController.is())
         return;
@@ -676,8 +676,8 @@ void FrameworkHelper::HandleModeChangeSlot (
                 SFX_REQUEST_ARG (rRequest,
                     pIsActive,
                     SfxBoolItem,
-                    (USHORT)nSlotId,
-                    FALSE);
+                    (sal_uInt16)nSlotId,
+                    sal_False);
                 bIsActive = pIsActive->GetValue ();
             }
         }

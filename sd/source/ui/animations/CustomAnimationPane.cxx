@@ -729,15 +729,15 @@ void CustomAnimationPane::updateControls()
 
     if( !mxView.is() )
     {
-        mpPBAddEffect->Enable( FALSE );
-        mpPBChangeEffect->Enable( FALSE );
-        mpPBRemoveEffect->Enable( FALSE );
-        mpFLEffect->Enable( FALSE );
-        mpFTStart->Enable( FALSE );
-        mpLBStart->Enable( FALSE );
-        mpPBPropertyMore->Enable( FALSE );
-        mpLBProperty->Enable( FALSE );
-        mpFTProperty->Enable( FALSE );
+        mpPBAddEffect->Enable( sal_False );
+        mpPBChangeEffect->Enable( sal_False );
+        mpPBRemoveEffect->Enable( sal_False );
+        mpFLEffect->Enable( sal_False );
+        mpFTStart->Enable( sal_False );
+        mpLBStart->Enable( sal_False );
+        mpPBPropertyMore->Enable( sal_False );
+        mpLBProperty->Enable( sal_False );
+        mpFTProperty->Enable( sal_False );
         mpCustomAnimationList->clear();
         return;
     }
@@ -818,15 +818,15 @@ void CustomAnimationPane::updateControls()
         else
         {
             mpLBProperty->setSubControl( 0 );
-            mpFTProperty->Enable( FALSE );
-            mpLBProperty->Enable( FALSE );
-            mpPBPropertyMore->Enable( FALSE );
+            mpFTProperty->Enable( sal_False );
+            mpLBProperty->Enable( sal_False );
+            mpPBPropertyMore->Enable( sal_False );
         }
 
         //
         // ---
         //
-        USHORT nPos = 0xffff;
+        sal_uInt16 nPos = 0xffff;
 
         sal_Int16 nNodeType = pEffect->getNodeType();
         switch( nNodeType )
@@ -862,19 +862,19 @@ void CustomAnimationPane::updateControls()
             mpCBSpeed->SelectEntryPos( nPos );
         }
 
-        mpPBPropertyMore->Enable( TRUE );
+        mpPBPropertyMore->Enable( sal_True );
 
-        mpFTChangeOrder->Enable( TRUE );
+        mpFTChangeOrder->Enable( sal_True );
     }
     else
     {
         mpLBProperty->setSubControl( 0 );
-        mpFTProperty->Enable( FALSE );
-        mpLBProperty->Enable( FALSE );
-        mpPBPropertyMore->Enable( FALSE );
-        mpFTSpeed->Enable(FALSE);
-        mpCBSpeed->Enable(FALSE);
-        mpFTChangeOrder->Enable( FALSE );
+        mpFTProperty->Enable( sal_False );
+        mpLBProperty->Enable( sal_False );
+        mpPBPropertyMore->Enable( sal_False );
+        mpFTSpeed->Enable(sal_False);
+        mpCBSpeed->Enable(sal_False);
+        mpFTChangeOrder->Enable( sal_False );
         mpLBStart->SetNoSelection();
         mpCBSpeed->SetNoSelection();
         mpFLEffect->SetText( maStrModify );
@@ -1061,7 +1061,7 @@ void CustomAnimationPane::onDoubleClick()
     showOptions();
 }
 
-void CustomAnimationPane::onContextMenu( USHORT nSelectedPopupEntry )
+void CustomAnimationPane::onContextMenu( sal_uInt16 nSelectedPopupEntry )
 {
     switch( nSelectedPopupEntry )
     {
@@ -1747,7 +1747,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
     }
 }
 
-void CustomAnimationPane::showOptions( USHORT nPage /* = 0 */ )
+void CustomAnimationPane::showOptions( sal_uInt16 nPage /* = 0 */ )
 {
     STLPropertySet* pSet = createSelectionSet();
 
@@ -1943,7 +1943,7 @@ void CustomAnimationPane::onChange( bool bCreate )
         {
             if( bCreate )
             {
-                mpCustomAnimationList->SelectAll( FALSE );
+                mpCustomAnimationList->SelectAll( sal_False );
 
                 // gather shapes from the selection
                 std::vector< Any >::iterator aIter( aTargets.begin() );
@@ -2012,7 +2012,7 @@ void CustomAnimationPane::onChange( bool bCreate )
 
 void CustomAnimationPane::createPath( PathKind eKind, std::vector< Any >& rTargets, double fDuration)
 {
-    USHORT nSID = 0;
+    sal_uInt16 nSID = 0;
 
     switch( eKind )
     {
@@ -2081,7 +2081,7 @@ void CustomAnimationPane::onChangeStart()
     if( mpLBStart->GetSelectEntryCount() == 1 )
     {
         sal_Int16 nNodeType;
-        USHORT nPos= mpLBStart->GetSelectEntryPos();
+        sal_uInt16 nPos= mpLBStart->GetSelectEntryPos();
         switch( nPos )
         {
         case 0: nNodeType = EffectNodeType::ON_CLICK; break;
@@ -2167,7 +2167,7 @@ void CustomAnimationPane::onChangeSpeed()
 
         double fDuration;
 
-        USHORT nPos= mpCBSpeed->GetSelectEntryPos();
+        sal_uInt16 nPos= mpCBSpeed->GetSelectEntryPos();
 
         switch( nPos )
         {
@@ -2445,7 +2445,7 @@ void CustomAnimationPane::markShapesFromSelectedEffects()
                 Reference< XShape > xShape( pEffect->getTargetShape() );
                 SdrObject* pObj = GetSdrObjectFromXShape( xShape );
                 if( pObj )
-                    pView->MarkObj(pObj, pView->GetSdrPageView(), FALSE, FALSE);
+                    pView->MarkObj(pObj, pView->GetSdrPageView(), sal_False, sal_False);
             }
         }
     }

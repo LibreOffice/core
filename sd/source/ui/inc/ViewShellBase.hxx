@@ -136,12 +136,12 @@ public:
     virtual com::sun::star::uno::Reference<com::sun::star::view::XRenderable> GetRenderable (void);
 
     /// Forwarded to the print manager.
-    virtual SfxPrinter* GetPrinter (BOOL bCreate = FALSE);
+    virtual SfxPrinter* GetPrinter (sal_Bool bCreate = sal_False);
 
     /// Forwarded to the print manager.
-    virtual USHORT SetPrinter (
+    virtual sal_uInt16 SetPrinter (
         SfxPrinter* pNewPrinter,
-        USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false);
+        sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsApi=false);
 
     /// Forwarded to the print manager.
     virtual SfxTabPage* CreatePrintOptionsPage (
@@ -165,14 +165,14 @@ public:
 
     virtual void UIActivating( SfxInPlaceClient* );
     virtual void UIDeactivated( SfxInPlaceClient* );
-    virtual void Activate (BOOL IsMDIActivate);
-    virtual void Deactivate (BOOL IsMDIActivate);
+    virtual void Activate (sal_Bool IsMDIActivate);
+    virtual void Deactivate (sal_Bool IsMDIActivate);
     virtual void SetZoomFactor (
         const Fraction &rZoomX,
         const Fraction &rZoomY);
-    virtual USHORT PrepareClose (BOOL bUI = TRUE, BOOL bForBrowsing = FALSE);
-    virtual void WriteUserData (String&, BOOL bBrowse = FALSE);
-    virtual void ReadUserData (const String&, BOOL bBrowse = FALSE);
+    virtual sal_uInt16 PrepareClose (sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False);
+    virtual void WriteUserData (String&, sal_Bool bBrowse = sal_False);
+    virtual void ReadUserData (const String&, sal_Bool bBrowse = sal_False);
     virtual SdrView* GetDrawView (void) const;
     virtual void AdjustPosSizePixel (const Point &rOfs, const Size &rSize);
 
