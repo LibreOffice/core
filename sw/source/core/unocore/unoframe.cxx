@@ -2310,21 +2310,11 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
     else if(0 != (pFmt = GetFrmFmt()))
     {
         uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
-        SwXTextRange* pRange = 0;
-        OTextCursorHelper* pCursor = 0;
-        if(xRangeTunnel.is())
-        {
-            pRange  = reinterpret_cast< SwXTextRange * >(
-                    sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( SwXTextRange::getUnoTunnelId()) ));
-            pCursor = reinterpret_cast< OTextCursorHelper * >(
-                    sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
-        }
         SwDoc* pDoc = pFmt->GetDoc();
         SwUnoInternalPaM aIntPam(*pDoc);
         if (::sw::XTextRangeToSwPaM(aIntPam, xTextRange))
         {
-            SfxItemSet aSet( pDoc->GetAttrPool(),
-                        RES_ANCHOR, RES_ANCHOR );
+            SfxItemSet aSet( pDoc->GetAttrPool(), RES_ANCHOR, RES_ANCHOR );
             aSet.SetParent(&pFmt->GetAttrSet());
             SwFmtAnchor aAnchor = (const SwFmtAnchor&)aSet.Get(RES_ANCHOR);
             aAnchor.SetAnchor( aIntPam.Start() );
