@@ -35,50 +35,60 @@
 module com { module sun { module star { module security {
 
 /**
- * Constant definiton of a single entry from Subject Alternative Name extension.
- *
+ * Constant definiton of a certificate container status.
  */
 enum ExtAltNameType
 {
     /**
      * Cutomize name/value pair
-     * The value of @see com::sun::star::security::CertAltNameEntry contains a NamedValue
+     * The value of CertAltNameEntry contains a NamedValue.
+     *
+     * @see com::sun::star::security::CertAltNameEntry
      */
     OTHER_NAME,
 
     /**
      * The entry contains rfc822 name.
-     * The value of @see com::sun::star::security::CertAltNameEntry contains a OUString
+     * The value of CertAltNameEntry contains a OUString.
+     *
+     * @see com::sun::star::security::CertAltNameEntry
      */
     RFC822_NAME,
 
     /**
      * The entry contains a dns name.
-     * The value of @see com::sun::star::security::CertAltNameEntry contains a OUString
+     * The value of CertAltNameEntry contains a OUString.
+     *
+     * @see com::sun::star::security::CertAltNameEntry
      */
     DNS_NAME,
 
     /**
-     * The entry contains a directory name.
-     * The value of @see com::sun::star::security::CertAltNameEntry contains a Sequence of sal_Int8
+     * Currently unsupported.
      */
     DIRECTORY_NAME,
 
     /**
      * The entry contains an url.
-     * The value of @see com::sun::star::security::CertAltNameEntry contains a OUString
+     * The value of CertAltNameEntry contains a OUString.
+     *
+     * @see com::sun::star::security::CertAltNameEntry
      */
     URL,
 
     /**
      * The entry contains a ip address.
-     * The value of @see com::sun::star::security::CertAltNameEntry contains a Sequence of sal_Int8
+     * The value of CertAltNameEntry contains a Sequence of sal_Int8.
+     *
+     * @see com::sun::star::security::CertAltNameEntry
      */
     IP_ADDRESS,
 
     /**
      * The entry contains a registered id.
-     * The value of @see com::sun::star::security::CertAltNameEntry contains a OUString
+     * The value of CertAltNameEntry contains a OUString.
+     *
+     * @see com::sun::star::security::CertAltNameEntry
      */
     REGISTERED_ID,
 
@@ -91,9 +101,10 @@ enum ExtAltNameType
      * Currently unsupported.
      */
     X400_ADDRESS
+
 };
 
 } ; } ; } ; } ;
 
 #endif
- 
+
