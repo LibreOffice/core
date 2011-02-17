@@ -161,19 +161,18 @@ sendTinderboxLog ()
 	GZLOG=
 	MESSAGE="
 tinderbox: administrator: $OWNER
-tinderbox: builddate: deprecated
-tinderbox: starttime: `date '+%s' -d \"$STARTTIME\"`
 tinderbox: buildname: $TINDERNAME
+tinderbox: tree: MASTER
+tinderbox: starttime: `date '+%s' -d \"$STARTTIME\"`
+tinderbox: timenow: `date '+%s'`
 tinderbox: errorparser: unix
 tinderbox: status: $STATUS
-tinderbox: timenow: `date '+%s'`
-tinderbox: tree: MASTER
 tinderbox: END
 "
 
-	if [ -n "$3" -a -f "$3" ] ; then
-		GZLOG="$LOG".gz
-		( echo "$MESSAGE" ; cat "$LOG" ) | gzip -c "$LOG" > "$GZLOG"
+	if [ "$LOG" = "yes" ] ; then
+		GZLOG="tinder.log.gz"
+		( echo "$MESSAGE" ; cat autogen.log clean.log build.log smoketest.log install.log 2>/dev/null ) | gzip -c > "$GZLOG"
 		XTINDER=",'X-Tinder:'=>'gzookie'"
 	fi
 
@@ -234,8 +233,8 @@ while true; do
 
 	# try to build
 	build_status="build_failed"
-	if ! err_msg=$(./autogen.sh 2>&1); then
-		reportError committer "$rough_checkout_date" `printf "autogen.sh / configure failed - error is:\n\n$err_msg"`
+	if ! $NICE ./autogen.sh >autogen.log 2>&1 ; then
+		reportError committer "$rough_checkout_date" `printf "autogen.sh / configure failed - error is:\n\n"` "$(cat autogen.log)"
 	elif ! $NICE make clean >clean.log 2>&1 ; then
 		reportError committer "$rough_checkout_date" `printf "cleaning up failed - error is:\n\n"` "$(tail -n100 clean.log)"
 	elif ! $NICE make >build.log 2>&1 ; then
@@ -254,10 +253,10 @@ while true; do
 	fi
 
 	# send tinderbox mail
-	sendTinderboxLog "$rough_checkout_date" "$build_status" "build.log"
+	sendTinderboxLog "$rough_checkout_date" "$build_status" "yes"
 
 	# save the old logs
-	for I in clean.log build.log smoketest.log install.log ; do
+	for I in autogen.log clean.log build.log smoketest.log install.log ; do
 		mv $I prev-$I 2>/dev/null
 	done
 
