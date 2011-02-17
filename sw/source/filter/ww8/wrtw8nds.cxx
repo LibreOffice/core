@@ -1807,6 +1807,8 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         const SwRedlineData* pRedlineData = aAttrIter.GetRedline( nAktPos );
 
         AttrOutput().StartRun( pRedlineData );
+        if( nTxtTyp == TXT_FTN || nTxtTyp == TXT_EDN )
+            AttrOutput().FootnoteEndnoteRefTag();
 
         xub_StrLen nNextAttr = GetNextPos( &aAttrIter, rNode, nAktPos );
 

@@ -170,6 +170,9 @@ public:
     /// Called after we end outputting the attributes.
     virtual void EndRunProperties( const SwRedlineData* pRedlineData ) = 0;
 
+    /// docx requires footnoteRef/endnoteRef tag at the beginning of each of them
+    virtual void FootnoteEndnoteRefTag() {};
+
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet ) = 0;
 

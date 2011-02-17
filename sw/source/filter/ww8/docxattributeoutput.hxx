@@ -101,6 +101,8 @@ public:
     /// Called after we end outputting the attributes.
     virtual void EndRunProperties( const SwRedlineData* pRedlineData );
 
+    virtual void FootnoteEndnoteRefTag();
+
     /// Output text (inside a run).
     virtual void RunText( const String& rText, rtl_TextEncoding eCharSet = RTL_TEXTENCODING_UTF8 );
 
@@ -536,6 +538,7 @@ private:
 
     ::docx::FootnotesList *m_pFootnotesList;
     ::docx::FootnotesList *m_pEndnotesList;
+    int m_footnoteEndnoteRefTag;
 
     const WW8_SepInfo *m_pSectionInfo;
 

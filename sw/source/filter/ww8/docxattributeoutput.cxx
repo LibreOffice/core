@@ -965,6 +965,14 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* /*pRedlineData*
     m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
 }
 
+void DocxAttributeOutput::FootnoteEndnoteRefTag()
+{
+    if( m_footnoteEndnoteRefTag == 0 )
+        return;
+    m_pSerializer->singleElementNS( XML_w, m_footnoteEndnoteRefTag, FSEND );
+    m_footnoteEndnoteRefTag = 0;
+}
+
 /** Output sal_Unicode* as a run text (<t>the text</t>).
 
     When bMove is true, update rBegin to point _after_ the end of the text +
@@ -3347,6 +3355,8 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
                 FSEND );
 
         const SwNodeIndex* pIndex = (*i)->GetTxtFtn()->GetStartNode();
+        // tag required at the start of each footnote/endnote
+        m_footnoteEndnoteRefTag = bFootnotes ? XML_footnoteRef : XML_endnoteRef;
 
         m_rExport.WriteSpecialText( pIndex->GetIndex() + 1,
                 pIndex->GetNode().EndOfSectionIndex(),
@@ -4072,6 +4082,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pFlyAttrList( NULL ),
       m_pFootnotesList( new ::docx::FootnotesList() ),
       m_pEndnotesList( new ::docx::FootnotesList() ),
+      m_footnoteEndnoteRefTag( 0 ),
       m_pSectionInfo( NULL ),
       m_pRedlineData( NULL ),
       m_nRedlineId( 0 ),
