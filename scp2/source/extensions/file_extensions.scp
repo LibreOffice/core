@@ -304,6 +304,8 @@ File gid_File_Optional_Extensions_Sun_Template_Pack
     Name (hu) = "Sun_ODF_Template_Pack_hu.oxt";
 End
 
+#endif
+
 /* script providers */
 
 File gid_File_Oxt_Script_Provider_For_Beanshell
@@ -326,7 +328,5 @@ File gid_File_Oxt_Script_Provider_For_Python
     Dir = gid_Brand_Dir_Share_Extensions_Script_Provider_For_Python;
     Name = "script-provider-for-python.oxt";
 End
-
-#endif
 
 #endif
