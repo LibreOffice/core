@@ -275,8 +275,8 @@ sal_Int32 compareNatural( const ::rtl::OUString & rLHS, const ::rtl::OUString & 
         //numbers outside of the normal 0-9 range, e.g. see GetLocalizedChar in
         //vcl
 
-        sal_Int32 nLHS = rLHS.copy(nLHSFirstDigitPos, nLHSChunkLen).toInt32();
-        sal_Int32 nRHS = rRHS.copy(nRHSFirstDigitPos, nRHSChunkLen).toInt32();
+        sal_uInt32 nLHS = comphelper::string::decimalStringToNumber(rLHS.copy(nLHSFirstDigitPos, nLHSChunkLen));
+        sal_uInt32 nRHS = comphelper::string::decimalStringToNumber(rRHS.copy(nRHSFirstDigitPos, nRHSChunkLen));
 
         nRet = nLHS-nRHS;
         if (nRet != 0)
