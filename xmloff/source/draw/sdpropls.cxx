@@ -530,7 +530,6 @@ SvXMLEnumMapEntry  aXML_TexGenerationY_EnumMap[] =
 SvXMLEnumMapEntry  aXML_TexKind_EnumMap[] =
 {
     { XML_LUMINANCE,    drawing::TextureKind_LUMINANCE },
-//    { XML_INTENSITY,  drawing::TextureKind_INTENSITY },
     { XML_COLOR,        drawing::TextureKind_COLOR },
     { XML_TOKEN_INVALID, 0 }
 };
@@ -1661,10 +1660,6 @@ void XMLPageExportPropertyMapper::ContextFilter(
                 }
                 break;
             case CTF_PAGE_VISIBLE:
-//          case CTF_HEADER_VISIBLE:
-//          case CTF_FOOTER_VISIBLE:
-//          case CTF_PAGE_NUMBER_VISIBLE:
-//          case CTF_DATE_TIME_VISIBLE:
                 {
                     sal_Bool bVisible = false;
                     (*property).maValue >>= bVisible;

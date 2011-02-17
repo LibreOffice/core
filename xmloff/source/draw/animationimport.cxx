@@ -481,38 +481,6 @@ Any AnimationsImportHelperImpl::convertValue( XMLTokenEnum eAttributeName, const
             pHandler->importXML( rValue, aAny, mrImport.GetMM100UnitConverter() );
 
         return aAny;
-
-/*
-        if( rValue.getLength() == 0 )
-        {
-            Any aAny;
-            return aAny;
-        }
-        else if( rValue.indexOf( '#' ) == 0 )
-        {
-            // color
-            Color aColor;
-            SvXMLUnitConverter::convertColor( aColor, rValue );
-
-            return makeAny( static_cast< sal_Int32 >( aColor.GetRGBColor() ) );
-        }
-        else if( rValue.indexOf( '$' ) != -1 )
-        {
-            // formula
-            return makeAny( rValue );
-        }
-        else
-        {
-            if( isDouble( rValue ) )
-            {
-                return makeAny( rValue.toDouble() );
-            }
-            else
-            {
-                return makeAny( rValue );
-            }
-        }
-*/
     }
 }
 

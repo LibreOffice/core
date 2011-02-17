@@ -262,10 +262,6 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
             {
                 msMacroName = sValue;
             }
-//          else if( IsXMLToken( aLocalName, XML_LIBRARY ) )
-//          {
-//              msLibrary = sValue;
-//          }
             break;
 
         case XML_NAMESPACE_XLINK:

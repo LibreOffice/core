@@ -164,11 +164,7 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
                     aEngine = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.EnhancedCustomShapeEngine" ) );
 
                 uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-        /*
-                uno::Reference< drawing::XShape > aXShape = GetXShapeForSdrObject( (SdrObjCustomShape*)pCustomShape );
-                if ( !aXShape.is() )
-                    aXShape = new SvxCustomShape( (SdrObjCustomShape*)pCustomShape );
-        */
+
                 if ( aEngine.getLength() && xFactory.is() )
                 {
                     uno::Sequence< uno::Any > aArgument( 1 );
@@ -227,7 +223,6 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     ImpCalcShapeType(xShape, aShapeInfo.meShapeType);
 
     const bool bObjSupportsText =
-//      aShapeInfo.meShapeType != XmlShapeTypeDrawControlShape &&
         aShapeInfo.meShapeType != XmlShapeTypeDrawChartShape &&
         aShapeInfo.meShapeType != XmlShapeTypePresChartShape &&
         aShapeInfo.meShapeType != XmlShapeTypeDrawOLE2Shape &&
@@ -1002,7 +997,6 @@ void XMLShapeExport::exportAutoStyles()
     // export all autostyle infos
 
     // ...for graphic
-//  if(IsFamilyGraphicUsed())
     {
         GetExport().GetAutoStylePool()->exportXML(
             XML_STYLE_FAMILY_SD_GRAPHICS_ID
@@ -1013,7 +1007,6 @@ void XMLShapeExport::exportAutoStyles()
     }
 
     // ...for presentation
-//  if(IsFamilyPresentationUsed())
     {
         GetExport().GetAutoStylePool()->exportXML(
             XML_STYLE_FAMILY_SD_PRESENTATION_ID

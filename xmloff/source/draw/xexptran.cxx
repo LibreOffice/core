@@ -2607,11 +2607,6 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
                     // #104076# remember closed state of current polygon
                     mbIsClosed = true;
 
-                    // closed: add first point again
-                    // sal_Int32 nX(pInnerSequence[0].X);
-                    // sal_Int32 nY(pInnerSequence[0].Y);
-                    // Imp_AddExportPoints(nX, nY, pInnerSequence, pInnerFlags, nInnerIndex++, drawing::PolygonFlags_NORMAL);
-
                     break;
                 }
 

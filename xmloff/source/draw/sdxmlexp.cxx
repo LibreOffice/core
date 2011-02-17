@@ -2629,18 +2629,12 @@ void SdXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
     beans::PropertyValue* pProps = rProps.getArray();
     if(pProps)
     {
-//      SvXMLElementExport aViewSettingsElem(*this, XML_NAMESPACE_DRAW, XML_VIEW_SETTINGS, sal_True, sal_True);
-
         Reference< beans::XPropertySet > xPropSet( GetModel(), UNO_QUERY );
         if( !xPropSet.is() )
             return;
 
         awt::Rectangle aVisArea;
         xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "VisibleArea" ) ) ) >>= aVisArea;
-/*
-        sal_Int16 nMapUnit;
-        xPropSet->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "MapUnit" ) ) ) >>= nMapUnit;
-*/
 
         sal_uInt16 i = 0;
         pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VisibleAreaTop"));

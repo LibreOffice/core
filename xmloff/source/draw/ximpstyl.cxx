@@ -1019,14 +1019,8 @@ SdXMLStylesContext::SdXMLStylesContext(
 :   SvXMLStylesContext(rImport, nPrfx, rLName, xAttrList),
     mbIsAutoStyle(bIsAutoStyle)
 {
-    // #110680#
-    // Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     Reference< lang::XMultiServiceFactory > xMSF = rImport.getServiceFactory();
-
     mpNumFormatter = new SvNumberFormatter( xMSF, LANGUAGE_SYSTEM );
-
-    // #110680#
-    // mpNumFmtHelper = new SvXMLNumFmtHelper( mpNumFormatter );
     mpNumFmtHelper = new SvXMLNumFmtHelper( mpNumFormatter, xMSF );
 }
 
@@ -1166,21 +1160,6 @@ SvXMLStyleContext* SdXMLStylesContext::CreateDefaultStyleStyleChildContext(
 
 sal_uInt16 SdXMLStylesContext::GetFamily( const OUString& rFamily ) const
 {
-//  if(rFamily.getLength())
-//  {
-//      if(rFamily.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME))))
-//          return XML_STYLE_FAMILY_SD_GRAPHICS_ID;
-//
-//      if(rFamily.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_PRESENTATION_NAME))))
-//          return XML_STYLE_FAMILY_SD_PRESENTATION_ID;
-//
-//      if(rFamily.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_POOL_NAME))))
-//          return XML_STYLE_FAMILY_SD_POOL_ID;
-//
-//      if(rFamily.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_DRAWINGPAGE_NAME))))
-//          return XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID;
-//  }
-
     // call base class
     return SvXMLStylesContext::GetFamily(rFamily);
 }
@@ -1191,20 +1170,6 @@ UniReference< SvXMLImportPropertyMapper > SdXMLStylesContext::GetImportPropertyM
     sal_uInt16 nFamily) const
 {
     UniReference < SvXMLImportPropertyMapper > xMapper;
-
-//  if(XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily
-//      || XML_STYLE_FAMILY_SD_PRESENTATION_ID == nFamily
-//      || XML_STYLE_FAMILY_SD_POOL_ID == nFamily)
-//  {
-//      if(!xPropImpPropMapper.is())
-//      {
-//          UniReference< XMLShapeImportHelper > aImpHelper = ((SvXMLImport&)GetImport()).GetShapeImport();
-//          ((SdXMLStylesContext*)this)->xPropImpPropMapper =
-//              new SvXMLImportPropertyMapper(aImpHelper->GetPropertySetMapper());
-//      }
-//      xMapper = xPropImpPropMapper;
-//      return xMapper;
-//  }
 
     switch( nFamily )
     {
@@ -1265,7 +1230,6 @@ void SdXMLStylesContext::EndElement()
             if(pStyle && pStyle->ISA(XMLShapeStyleContext))
             {
                 XMLShapeStyleContext* pDocStyle = (XMLShapeStyleContext*)pStyle;
-//              pDocStyle->Filter();
 
                 SvXMLStylesContext* pStylesContext = GetSdImport().GetShapeImport()->GetStylesContext();
                 if( pStylesContext )

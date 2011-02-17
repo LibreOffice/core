@@ -1492,37 +1492,6 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
         {
             if( rValue >>= aString )
             {
-                /*
-                const sal_Char* pSource[] = { "$X", "$Y", "$Width", "$Height", NULL };
-                const sal_Char* pDest[] = { "$x", "$y", "$width", "$height", NULL };
-                const sal_Int32 nLength[] = { 2, 2, 6, 7, 0 };
-
-                sal_Int32 nIndex = 0;
-                while( (nIndex = aString.indexOf( (sal_Unicode)'$', nIndex )) != -1  )
-                {
-                    const sal_Char** ps = pSource;
-                    const sal_Char** pd = pDest;
-                    const sal_Int32* pl = nLength;
-
-                    while( *ps )
-                    {
-                        if( aString.matchAsciiL( *ps, *pl, nIndex ) )
-                        {
-                            const OUString aNew( OUString::createFromAscii( *pd ) );
-                            aString = aString.replaceAt( nIndex, *pl, aNew );
-                            nIndex += aNew.getLength();
-                            break;
-                        }
-
-                        ps++;
-                        pd++;
-                        pl++;
-                    }
-
-                    if( *ps == 0 )
-                        nIndex++;
-                }
-                */
                 sTmp.append( aString );
             }
             else if( rValue.getValueType() == ::getCppuType((const double*)0) )
@@ -1564,21 +1533,6 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
             sTmp.append( aString );
         }
     }
-
-/*
-    if( rValue.getValueType() == ::getCppuType((const double*)0) )
-    {
-        sTmp.append( *(static_cast< const double* >( rValue.getValue() )) );
-    }
-    else if( rValue.getValueType() == ::getCppuType((const OUString*)0) )
-    {
-        sTmp.append( *(static_cast< const OUString* >( rValue.getValue() )) );
-    }
-    else
-    {
-        DBG_ERROR( "xmloff::AnimationsExporterImpl::convertValue(), invalid value type!" );
-    }
-*/
 }
 
 void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rValue ) const

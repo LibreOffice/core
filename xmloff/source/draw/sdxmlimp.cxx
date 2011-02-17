@@ -451,15 +451,6 @@ void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
 
 SdXMLImport::~SdXMLImport() throw ()
 {
-// #80365# removed ending of progress bar here, this was an old implementation
-// and maybe removed on demand
-//  // stop progress view
-//  if(mxStatusIndicator.is())
-//  {
-//      mxStatusIndicator->end();
-//      mxStatusIndicator->reset();
-//  }
-
     // Styles or AutoStyles context?
     if(mpMasterStylesContext)
         mpMasterStylesContext->ReleaseRef();

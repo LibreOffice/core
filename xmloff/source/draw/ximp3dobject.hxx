@@ -50,10 +50,6 @@ protected:
     com::sun::star::drawing::HomogenMatrix mxHomMat;
     BOOL                        mbSetTransform;
 
-/*
-    void SetStyle();
-    void AddShape(com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape);
-*/
 public:
     TYPEINFO();
 
