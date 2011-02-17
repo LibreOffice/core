@@ -465,6 +465,7 @@ void __EXPORT EditorWindow::KeyInput( const KeyEvent& rKEvt )
             {
                 pBindings->Invalidate( SID_SAVEDOC );
                 pBindings->Invalidate( SID_DOC_MODIFIED );
+                pBindings->Invalidate( SID_UNDO );
             }
             if ( rKEvt.GetKeyCode().GetCode() == KEY_INSERT )
                 pBindings->Invalidate( SID_ATTR_INSERT );
