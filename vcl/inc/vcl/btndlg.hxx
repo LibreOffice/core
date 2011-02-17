@@ -32,10 +32,12 @@
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
 #include <vcl/dialog.hxx>
+#include <vector>
 
 struct ImplBtnDlgItem;
-class ImplBtnDlgItemList;
 class PushButton;
+
+typedef ::std::vector< ImplBtnDlgItem* > ImplBtnDlgItemList;
 
 // ----------------------
 // - ButtonDialog-Types -

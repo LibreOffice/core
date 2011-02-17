@@ -37,8 +37,6 @@
 
 #include <tools/rc.h>
 
-
-
 // =======================================================================
 
 struct ImplBtnDlgItem
@@ -50,13 +48,11 @@ struct ImplBtnDlgItem
     PushButton*         mpPushButton;
 };
 
-DECLARE_LIST( ImplBtnDlgItemList, ImplBtnDlgItem* )
-
 // =======================================================================
 
 void ButtonDialog::ImplInitButtonDialogData()
 {
-    mpItemList              = new ImplBtnDlgItemList( 8, 8 );
+    mpItemList              = new ImplBtnDlgItemList();
     mnButtonSize            = 0;
     mnCurButtonId           = 0;
     mnFocusButtonId         = BUTTONDIALOG_BUTTON_NOTFOUND;
@@ -95,15 +91,13 @@ ButtonDialog::ButtonDialog( Window* pParent, const ResId& rResId ) :
 
 ButtonDialog::~ButtonDialog()
 {
-    ImplBtnDlgItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
-        if ( pItem->mpPushButton && pItem->mbOwnButton )
+    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
+        ImplBtnDlgItem* pItem = (*mpItemList)[ i ];
+        if ( pItem->mpPushButton && pItem->mbOwnButton ) {
             delete pItem->mpPushButton;
+        }
         delete pItem;
-        pItem = mpItemList->Next();
     }
-
     delete mpItemList;
 }
 
@@ -135,13 +129,11 @@ PushButton* ButtonDialog::ImplCreatePushButton( USHORT nBtnFlags )
 
 ImplBtnDlgItem* ButtonDialog::ImplGetItem( USHORT nId ) const
 {
-    ImplBtnDlgItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
-        if ( pItem->mnId == nId )
+    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
+        ImplBtnDlgItem* pItem = (*mpItemList)[ i ];
+        if ( pItem->mnId == nId ) {
             return pItem;
-
-        pItem = mpItemList->Next();
+        }
     }
 
     return NULL;
@@ -159,9 +151,10 @@ long ButtonDialog::ImplGetButtonSize()
     long    nSepSize = 0;
     long    nButtonCount = 0;
     maCtrlSize = Size( IMPL_MINSIZE_BUTTON_WIDTH, IMPL_MINSIZE_BUTTON_HEIGHT );
-    ImplBtnDlgItem* pItem = mpItemList->First();
-    while ( pItem )
+
+    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i )
     {
+        ImplBtnDlgItem* pItem = (*mpItemList)[ i ];
         nSepSize += nLastSepSize;
 
         long nTxtWidth = pItem->mpPushButton->GetCtrlTextWidth( pItem->mpPushButton->GetText() );
@@ -181,8 +174,6 @@ long ButtonDialog::ImplGetButtonSize()
             nLastSepSize = IMPL_SEP_BUTTON_Y;
 
         nButtonCount++;
-
-        pItem = mpItemList->Next();
     }
 
     if ( GetStyle() & WB_HORZ )
@@ -238,9 +229,9 @@ void ButtonDialog::ImplPosControls()
     }
 
     // Arrange PushButtons
-    pItem = mpItemList->First();
-    while ( pItem )
+    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i )
     {
+        pItem = (*mpItemList)[ i ];
         if ( GetStyle() & WB_HORZ )
             nX += pItem->mnSepSize;
         else
@@ -251,8 +242,6 @@ void ButtonDialog::ImplPosControls()
             nX += maCtrlSize.Width()+IMPL_SEP_BUTTON_X;
         else
             nY += maCtrlSize.Height()+IMPL_SEP_BUTTON_Y;
-
-        pItem = mpItemList->Next();
     }
 
     SetOutputSizePixel( aDlgSize );
@@ -264,17 +253,15 @@ void ButtonDialog::ImplPosControls()
 
 IMPL_LINK( ButtonDialog, ImplClickHdl, PushButton*, pBtn )
 {
-    ImplBtnDlgItem* pItem = mpItemList->First();
-    while ( pItem )
+    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i )
     {
+        ImplBtnDlgItem* pItem = (*mpItemList)[ i ];
         if ( pItem->mpPushButton == pBtn )
         {
             mnCurButtonId = pItem->mnId;
             Click();
             break;
         }
-
-        pItem = mpItemList->Next();
     }
 
     return 0;
@@ -297,17 +284,15 @@ void ButtonDialog::StateChanged( StateChangedType nType )
         // Focus evt. auf den entsprechenden Button setzen
         if ( mnFocusButtonId != BUTTONDIALOG_BUTTON_NOTFOUND )
         {
-            ImplBtnDlgItem* pItem = mpItemList->First();
-            while ( pItem )
+            for ( size_t i = 0, n = mpItemList->size(); i < n; ++i )
             {
+                ImplBtnDlgItem* pItem = (*mpItemList)[ i ];
                 if ( pItem->mnId == mnFocusButtonId )
                 {
                     if ( pItem->mpPushButton->IsVisible() )
                         pItem->mpPushButton->GrabFocus();
                     break;
                 }
-
-                pItem = mpItemList->Next();
             }
         }
     }
@@ -343,7 +328,7 @@ void ButtonDialog::AddButton( const XubString& rText, USHORT nId,
         pItem->mpPushButton->SetText( rText );
 
     // In die Liste eintragen
-    mpItemList->Insert( pItem, LIST_APPEND );
+    mpItemList->push_back( pItem );
 
     if ( nBtnFlags & BUTTONDIALOG_FOCUSBUTTON )
         mnFocusButtonId = nId;
@@ -383,7 +368,7 @@ void ButtonDialog::AddButton( StandardButtonType eType, USHORT nId,
         mnFocusButtonId = nId;
 
     // In die Liste eintragen
-    mpItemList->Insert( pItem, LIST_APPEND );
+    mpItemList->push_back( pItem );
 
     mbFormat = TRUE;
 }
@@ -404,7 +389,7 @@ void ButtonDialog::AddButton( PushButton* pBtn, USHORT nId,
         mnFocusButtonId = nId;
 
     // In die View-Liste eintragen
-    mpItemList->Insert( pItem, LIST_APPEND );
+    mpItemList->push_back( pItem );
 
     mbFormat = TRUE;
 }
@@ -413,21 +398,20 @@ void ButtonDialog::AddButton( PushButton* pBtn, USHORT nId,
 
 void ButtonDialog::RemoveButton( USHORT nId )
 {
-    ImplBtnDlgItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
-        if ( pItem->mnId == nId )
-        {
-            pItem->mpPushButton->Hide();
-            if ( pItem->mbOwnButton )
-                delete pItem->mpPushButton;
-            delete pItem;
-            mpItemList->Remove();
+    for ( ImplBtnDlgItemList::iterator it = mpItemList->begin();
+          it < mpItemList->end();
+          ++it
+    ) {
+        if ( (*it)->mnId == nId ) {
+            (*it)->mpPushButton->Hide();
+            if ( (*it)->mbOwnButton ) {
+                delete (*it)->mpPushButton;
+            }
+            delete *it;
+            mpItemList->erase( it );
             mbFormat = TRUE;
             break;
         }
-
-        pItem = mpItemList->Next();
     }
 
     DBG_ERRORFILE( "ButtonDialog::RemoveButton(): ButtonId invalid" );
@@ -437,17 +421,16 @@ void ButtonDialog::RemoveButton( USHORT nId )
 
 void ButtonDialog::Clear()
 {
-    ImplBtnDlgItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
+    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
+        ImplBtnDlgItem* pItem = (*mpItemList)[ i ];
         pItem->mpPushButton->Hide();
-        if ( pItem->mbOwnButton )
+        if ( pItem->mbOwnButton ) {
             delete pItem->mpPushButton;
+        }
         delete pItem;
-        pItem = mpItemList->Next();
     }
+    mpItemList->clear();
 
-    mpItemList->Clear();
     mbFormat = TRUE;
 }
 
@@ -455,15 +438,15 @@ void ButtonDialog::Clear()
 
 USHORT ButtonDialog::GetButtonCount() const
 {
-    return (USHORT)mpItemList->Count();
+    return (USHORT)mpItemList->size();
 }
 
 // -----------------------------------------------------------------------
 
 USHORT ButtonDialog::GetButtonId( USHORT nButton ) const
 {
-    if ( nButton < mpItemList->Count() )
-        return (USHORT)mpItemList->GetObject( nButton )->mnId;
+    if ( nButton < mpItemList->size() )
+        return (USHORT)( (*mpItemList)[ nButton ]->mnId );
     else
         return BUTTONDIALOG_BUTTON_NOTFOUND;
 }
