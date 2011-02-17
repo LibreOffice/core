@@ -68,7 +68,7 @@ public:
     const Point&    GetPos() const                    { return aPos; }
 
     Pointer         GetPointer() const;
-    FASTBOOL        IsHit(const Point& rPnt, USHORT nTolLog, const OutputDevice& rOut) const;
+    FASTBOOL        IsHit(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const;
     // OutputDevice wird benoetigt, da Fangpunkte eine feste Pixelgroesse haben
     Rectangle       GetBoundRect(const OutputDevice& rOut) const;
 
@@ -83,7 +83,7 @@ public:
 class SVX_DLLPUBLIC SdrHelpLineList {
     Container aList;
 protected:
-    SdrHelpLine* GetObject(USHORT i) const { return (SdrHelpLine*)(aList.GetObject(i)); }
+    SdrHelpLine* GetObject(sal_uInt16 i) const { return (SdrHelpLine*)(aList.GetObject(i)); }
 public:
     SdrHelpLineList(): aList(1024,4,4) {}
     SdrHelpLineList(const SdrHelpLineList& rSrcList): aList(1024,4,4)      { *this=rSrcList; }
@@ -92,13 +92,13 @@ public:
     void               operator=(const SdrHelpLineList& rSrcList);
     bool operator==(const SdrHelpLineList& rCmp) const;
     bool operator!=(const SdrHelpLineList& rCmp) const                 { return !operator==(rCmp); }
-    USHORT             GetCount() const                                    { return USHORT(aList.Count()); }
-    void               Insert(const SdrHelpLine& rHL, USHORT nPos=0xFFFF)  { aList.Insert(new SdrHelpLine(rHL),nPos); }
-    void               Delete(USHORT nPos)                                 { delete (SdrHelpLine*)aList.Remove(nPos); } // #i24900#
-    void               Move(USHORT nPos, USHORT nNewPos)                   { aList.Insert(aList.Remove(nPos),nNewPos); }
-    SdrHelpLine&       operator[](USHORT nPos)                             { return *GetObject(nPos); }
-    const SdrHelpLine& operator[](USHORT nPos) const                       { return *GetObject(nPos); }
-    USHORT             HitTest(const Point& rPnt, USHORT nTolLog, const OutputDevice& rOut) const;
+    sal_uInt16             GetCount() const                                    { return sal_uInt16(aList.Count()); }
+    void               Insert(const SdrHelpLine& rHL, sal_uInt16 nPos=0xFFFF)  { aList.Insert(new SdrHelpLine(rHL),nPos); }
+    void               Delete(sal_uInt16 nPos)                                 { delete (SdrHelpLine*)aList.Remove(nPos); } // #i24900#
+    void               Move(sal_uInt16 nPos, sal_uInt16 nNewPos)                   { aList.Insert(aList.Remove(nPos),nNewPos); }
+    SdrHelpLine&       operator[](sal_uInt16 nPos)                             { return *GetObject(nPos); }
+    const SdrHelpLine& operator[](sal_uInt16 nPos) const                       { return *GetObject(nPos); }
+    sal_uInt16             HitTest(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

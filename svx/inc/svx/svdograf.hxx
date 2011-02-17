@@ -140,7 +140,7 @@ public:
     void                    SetGraphic(const Graphic& rGrf);
     const Graphic&          GetGraphic() const;
 
-    Graphic                 GetTransformedGraphic( ULONG nTransformFlags = SDRGRAFOBJ_TRANSFORMATTR_ALL ) const;
+    Graphic                 GetTransformedGraphic( sal_uIntPtr nTransformFlags = SDRGRAFOBJ_TRANSFORMATTR_ALL ) const;
 
     GraphicType             GetGraphicType() const;
 
@@ -163,7 +163,7 @@ public:
 
     void                    SetGraphicLink(const String& rFileName, const String& rFilterName);
     void                    ReleaseGraphicLink();
-    sal_Bool IsLinkedGraphic() const { return (BOOL)aFileName.Len(); }
+    sal_Bool IsLinkedGraphic() const { return (sal_Bool)aFileName.Len(); }
 
     void                    SetFileName(const String& rFileName);
     const String&           GetFileName() const { return aFileName; }
@@ -174,7 +174,7 @@ public:
     void                    StopAnimation(OutputDevice* pOutDev=NULL, long nExtraData=0L);
 
     virtual void            TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual UINT16          GetObjIdentifier() const;
+    virtual sal_uInt16          GetObjIdentifier() const;
 
     virtual void            TakeObjNameSingul(String& rName) const;
     virtual void            TakeObjNamePlural(String& rName) const;
@@ -203,7 +203,7 @@ public:
     virtual void            SetPage(SdrPage* pNewPage);
     virtual void            SetModel(SdrModel* pNewModel);
 
-    virtual SdrObject*      DoConvertToPolyObj(BOOL bBezier) const;
+    virtual SdrObject*      DoConvertToPolyObj(sal_Bool bBezier) const;
 
     virtual void            AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
 

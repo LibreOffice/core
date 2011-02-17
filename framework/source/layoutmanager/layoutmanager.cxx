@@ -1695,7 +1695,7 @@ throw (uno::RuntimeException)
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
                 if ( pWindow )
                 {
-                    pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                    pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
                     bResult   = true;
                     bNotify   = true;
                     bDoLayout = true;
@@ -2612,7 +2612,7 @@ void LayoutManager::implts_updateMenuBarClose()
             MenuBar* pMenuBar = pSysWindow->GetMenuBar();
             if ( pMenuBar )
             {
-                // TODO remove link on FALSE ?!
+                // TODO remove link on sal_False ?!
                 pMenuBar->ShowCloser( bShowCloser );
                 pMenuBar->SetCloserHdl( LINK( this, LayoutManager, MenuBarClose ));
             }

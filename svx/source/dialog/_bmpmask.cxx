@@ -61,7 +61,7 @@
              ( pMinG[i] <= nG ) && ( pMaxG[i] >= nG ) &&            \
              ( pMinB[i] <= nB ) && ( pMaxB[i] >= nB ) )             \
         {                                                           \
-            aCol = pDstCols[i]; bReplace = TRUE; break;             \
+            aCol = pDstCols[i]; bReplace = sal_True; break;             \
         }                                                           \
     }                                                               \
 }
@@ -186,16 +186,16 @@ void MaskSet::onEditColor()
 class MaskData
 {
     SvxBmpMask*     pMask;
-    BOOL            bIsReady;
-    BOOL            bExecState;
+    sal_Bool            bIsReady;
+    sal_Bool            bExecState;
     SfxBindings&    rBindings;
 
 public:
                 MaskData( SvxBmpMask* pBmpMask, SfxBindings& rBind );
 
-    BOOL        IsCbxReady() const { return bIsReady; }
-    void        SetExecState( BOOL bState ) { bExecState = bState; }
-    BOOL        IsExecReady() const { return bExecState; }
+    sal_Bool        IsCbxReady() const { return bIsReady; }
+    void        SetExecState( sal_Bool bState ) { bExecState = bState; }
+    sal_Bool        IsExecReady() const { return bExecState; }
 
                 DECL_LINK( PipetteHdl, ToolBox* pTbx );
                 DECL_LINK( CbxHdl, CheckBox* pCbx );
@@ -209,8 +209,8 @@ public:
 MaskData::MaskData( SvxBmpMask* pBmpMask, SfxBindings& rBind ) :
 
     pMask       ( pBmpMask ),
-    bIsReady    ( FALSE ),
-    bExecState  ( FALSE ),
+    bIsReady    ( sal_False ),
+    bExecState  ( sal_False ),
     rBindings   ( rBind )
 
 {
@@ -257,7 +257,7 @@ IMPL_LINK( MaskData, CbxHdl, CheckBox*, pCbx )
         pSet->SelectItem( 1 );
         pSet->Select();
 
-        pMask->aTbxPipette.CheckItem( TBI_PIPETTE, TRUE );
+        pMask->aTbxPipette.CheckItem( TBI_PIPETTE, sal_True );
         PipetteHdl( &( pMask->aTbxPipette ) );
     }
 
@@ -343,7 +343,7 @@ IMPL_LINK( MaskData, FocusLbHdl, ColorLB*, pLb )
 
 IMPL_LINK( MaskData, ExecHdl, PushButton*, EMPTYARG )
 {
-    SfxBoolItem aBItem( SID_BMPMASK_EXEC, TRUE );
+    SfxBoolItem aBItem( SID_BMPMASK_EXEC, sal_True );
     rBindings.GetDispatcher()->Execute( SID_BMPMASK_EXEC, OWN_CALLMODE, &aBItem, 0L );
 
     return 0L;
@@ -367,7 +367,7 @@ void ColorWindow::Paint( const Rectangle &/*Rect*/ )
 
 //-------------------------------------------------------------------------
 
-SvxBmpMaskSelectItem::SvxBmpMaskSelectItem( USHORT nId_, SvxBmpMask& rMask,
+SvxBmpMaskSelectItem::SvxBmpMaskSelectItem( sal_uInt16 nId_, SvxBmpMask& rMask,
                                             SfxBindings& rBindings ) :
             SfxControllerItem   ( nId_, rBindings ),
             rBmpMask            ( rMask)
@@ -376,7 +376,7 @@ SvxBmpMaskSelectItem::SvxBmpMaskSelectItem( USHORT nId_, SvxBmpMask& rMask,
 
 //-------------------------------------------------------------------------
 
-void SvxBmpMaskSelectItem::StateChanged( USHORT nSID, SfxItemState /*eState*/,
+void SvxBmpMaskSelectItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
                                          const SfxPoolItem* pItem )
 {
     if ( ( nSID == SID_BMPMASK_EXEC ) && pItem )
@@ -391,7 +391,7 @@ void SvxBmpMaskSelectItem::StateChanged( USHORT nSID, SfxItemState /*eState*/,
 
 //-------------------------------------------------------------------------
 
-SvxBmpMaskChildWindow::SvxBmpMaskChildWindow( Window* pParent_, USHORT nId,
+SvxBmpMaskChildWindow::SvxBmpMaskChildWindow( Window* pParent_, sal_uInt16 nId,
                                               SfxBindings* pBindings,
                                               SfxChildWinInfo* pInfo ) :
         SfxChildWindow( pParent_, nId )
@@ -555,9 +555,9 @@ void SvxBmpMask::onSelect( MaskSet* pSet )
 
 //-------------------------------------------------------------------------
 
-BOOL SvxBmpMask::Close()
+sal_Bool SvxBmpMask::Close()
 {
-    SfxBoolItem aItem2( SID_BMPMASK_PIPETTE, FALSE );
+    SfxBoolItem aItem2( SID_BMPMASK_PIPETTE, sal_False );
     GetBindings().GetDispatcher()->Execute( SID_BMPMASK_PIPETTE, OWN_CALLMODE, &aItem2, 0L );
 
     return SfxDockingWindow::Close();
@@ -565,7 +565,7 @@ BOOL SvxBmpMask::Close()
 
 //-------------------------------------------------------------------------
 
-BOOL SvxBmpMask::NeedsColorTable() const
+sal_Bool SvxBmpMask::NeedsColorTable() const
 {
     return ( aLbColor1.GetEntryCount() == 0 );
 }
@@ -615,36 +615,36 @@ void SvxBmpMask::PipetteClicked()
 {
     if( pQSet1->GetSelectItemId() == 1 )
     {
-        aCbx1.Check( TRUE );
+        aCbx1.Check( sal_True );
         pData->CbxHdl( &aCbx1 );
         pQSet1->SetItemColor( 1, aPipetteColor );
     }
     else if( pQSet2->GetSelectItemId() == 1 )
     {
-        aCbx2.Check( TRUE );
+        aCbx2.Check( sal_True );
         pData->CbxHdl( &aCbx2 );
         pQSet2->SetItemColor( 1, aPipetteColor );
     }
     else if( pQSet3->GetSelectItemId() == 1 )
     {
-        aCbx3.Check( TRUE );
+        aCbx3.Check( sal_True );
         pData->CbxHdl( &aCbx3 );
         pQSet3->SetItemColor( 1, aPipetteColor );
     }
     else if( pQSet4->GetSelectItemId() == 1 )
     {
-        aCbx4.Check( TRUE );
+        aCbx4.Check( sal_True );
         pData->CbxHdl( &aCbx4 );
         pQSet4->SetItemColor( 1, aPipetteColor );
     }
 
-    aTbxPipette.CheckItem( TBI_PIPETTE, FALSE );
+    aTbxPipette.CheckItem( TBI_PIPETTE, sal_False );
     pData->PipetteHdl( &aTbxPipette );
 }
 
 //-------------------------------------------------------------------------
 
-void SvxBmpMask::SetExecState( BOOL bEnable )
+void SvxBmpMask::SetExecState( sal_Bool bEnable )
 {
     pData->SetExecState( bEnable );
 
@@ -656,36 +656,36 @@ void SvxBmpMask::SetExecState( BOOL bEnable )
 
 //-------------------------------------------------------------------------
 
-USHORT SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, ULONG* pTols )
+sal_uInt16 SvxBmpMask::InitColorArrays( Color* pSrcCols, Color* pDstCols, sal_uIntPtr* pTols )
 {
-    USHORT  nCount = 0;
+    sal_uInt16  nCount = 0;
 
     if ( aCbx1.IsChecked() )
     {
         pSrcCols[nCount] = pQSet1->GetItemColor( 1 );
         pDstCols[nCount] = aLbColor1.GetSelectEntryColor();
-        pTols[nCount++] = static_cast<ULONG>(aSp1.GetValue());
+        pTols[nCount++] = static_cast<sal_uIntPtr>(aSp1.GetValue());
     }
 
     if ( aCbx2.IsChecked() )
     {
         pSrcCols[nCount] = pQSet2->GetItemColor( 1 );
         pDstCols[nCount] = aLbColor2.GetSelectEntryColor();
-        pTols[nCount++] = static_cast<ULONG>(aSp2.GetValue());
+        pTols[nCount++] = static_cast<sal_uIntPtr>(aSp2.GetValue());
     }
 
     if ( aCbx3.IsChecked() )
     {
         pSrcCols[nCount] = pQSet3->GetItemColor( 1 );
         pDstCols[nCount] = aLbColor3.GetSelectEntryColor();
-        pTols[nCount++] = static_cast<ULONG>(aSp3.GetValue());
+        pTols[nCount++] = static_cast<sal_uIntPtr>(aSp3.GetValue());
     }
 
     if ( aCbx4.IsChecked() )
     {
         pSrcCols[nCount] = pQSet4->GetItemColor( 1 );
         pDstCols[nCount] = aLbColor4.GetSelectEntryColor();
-        pTols[nCount++] = static_cast<ULONG>(aSp4.GetValue());
+        pTols[nCount++] = static_cast<sal_uIntPtr>(aSp4.GetValue());
     }
 
     return nCount;
@@ -698,8 +698,8 @@ Bitmap SvxBmpMask::ImpMask( const Bitmap& rBitmap )
     Bitmap          aBitmap( rBitmap );
     Color           pSrcCols[4];
     Color           pDstCols[4];
-    ULONG           pTols[4];
-    const USHORT    nCount = InitColorArrays( pSrcCols, pDstCols, pTols );
+    sal_uIntPtr         pTols[4];
+    const sal_uInt16    nCount = InitColorArrays( pSrcCols, pDstCols, pTols );
 
     EnterWait();
     aBitmap.Replace( pSrcCols, pDstCols, nCount, pTols );
@@ -740,11 +740,11 @@ Animation SvxBmpMask::ImpMask( const Animation& rAnimation )
     Animation   aAnimation( rAnimation );
     Color       pSrcCols[4];
     Color       pDstCols[4];
-    ULONG       pTols[4];
+    sal_uIntPtr     pTols[4];
     InitColorArrays( pSrcCols, pDstCols, pTols );
-    USHORT      nAnimationCount = aAnimation.Count();
+    sal_uInt16      nAnimationCount = aAnimation.Count();
 
-    for( USHORT i = 0; i < nAnimationCount; i++ )
+    for( sal_uInt16 i = 0; i < nAnimationCount; i++ )
     {
         AnimationBitmap aAnimBmp( aAnimation.Get( i ) );
         aAnimBmp.aBmpEx = Mask( aAnimBmp.aBmpEx ).GetBitmapEx();
@@ -761,9 +761,9 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
     GDIMetaFile aMtf;
     Color       pSrcCols[4];
     Color       pDstCols[4];
-    ULONG       pTols[4];
-    USHORT      nCount = InitColorArrays( pSrcCols, pDstCols, pTols );
-    BOOL        pTrans[4];
+    sal_uIntPtr     pTols[4];
+    sal_uInt16      nCount = InitColorArrays( pSrcCols, pDstCols, pTols );
+    sal_Bool        pTrans[4];
 
     // Falls keine Farben ausgewaehlt, kopieren wir nur das Mtf
     if( !nCount )
@@ -782,8 +782,8 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
         long*       pMaxG = new long[nCount];
         long*       pMinB = new long[nCount];
         long*       pMaxB = new long[nCount];
-        USHORT      i;
-        BOOL        bReplace;
+        sal_uInt16      i;
+        sal_Bool        bReplace;
 
         aMtf.SetPrefSize( rMtf.GetPrefSize() );
         aMtf.SetPrefMapMode( rMtf.GetPrefMapMode() );
@@ -809,11 +809,11 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
         }
 
         // Actions untersuchen und Farben ggf. ersetzen
-        for( ULONG nAct = 0UL, nActCount = rMtf.GetActionCount(); nAct < nActCount; nAct++ )
+        for( sal_uIntPtr nAct = 0UL, nActCount = rMtf.GetActionCount(); nAct < nActCount; nAct++ )
         {
             MetaAction* pAction = rMtf.GetAction( nAct );
 
-            bReplace = FALSE;
+            bReplace = sal_False;
 
             switch( pAction->GetType() )
             {
@@ -1043,9 +1043,9 @@ BitmapEx SvxBmpMask::ImpReplaceTransparency( const BitmapEx& rBmpEx, const Color
 Animation SvxBmpMask::ImpReplaceTransparency( const Animation& rAnim, const Color& rColor )
 {
     Animation   aAnimation( rAnim );
-    USHORT      nAnimationCount = aAnimation.Count();
+    sal_uInt16      nAnimationCount = aAnimation.Count();
 
-    for( USHORT i = 0; i < nAnimationCount; i++ )
+    for( sal_uInt16 i = 0; i < nAnimationCount; i++ )
     {
         AnimationBitmap aAnimBmp( aAnimation.Get( i ) );
         aAnimBmp.aBmpEx = ImpReplaceTransparency( aAnimBmp.aBmpEx, rColor );
@@ -1063,9 +1063,9 @@ GDIMetaFile SvxBmpMask::ImpReplaceTransparency( const GDIMetaFile& rMtf, const C
     GDIMetaFile     aMtf;
     const MapMode&  rPrefMap = rMtf.GetPrefMapMode();
     const Size&     rPrefSize = rMtf.GetPrefSize();
-    const ULONG     nActionCount = rMtf.GetActionCount();
+    const sal_uIntPtr       nActionCount = rMtf.GetActionCount();
 
-    aVDev.EnableOutput( FALSE );
+    aVDev.EnableOutput( sal_False );
     aMtf.Record( &aVDev );
     aMtf.SetPrefSize( rPrefSize );
     aMtf.SetPrefMapMode( rPrefMap );
@@ -1075,7 +1075,7 @@ GDIMetaFile SvxBmpMask::ImpReplaceTransparency( const GDIMetaFile& rMtf, const C
     // Actions nacheinander abspielen; zuerst
     // den gesamten Bereich auf die Ersatzfarbe setzen
     aVDev.DrawRect( Rectangle( rPrefMap.GetOrigin(), rPrefSize ) );
-    for ( ULONG i = 0; i < nActionCount; i++ )
+    for ( sal_uIntPtr i = 0; i < nActionCount; i++ )
     {
         MetaAction* pAct = rMtf.GetAction( i );
 
@@ -1126,13 +1126,13 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
                 {
                     Color   pSrcCols[4];
                     Color   pDstCols[4];
-                    ULONG   pTols[4];
-                    USHORT  nCount = InitColorArrays( pSrcCols, pDstCols, pTols );
+                    sal_uIntPtr pTols[4];
+                    sal_uInt16  nCount = InitColorArrays( pSrcCols, pDstCols, pTols );
 
                     if( nCount )
                     {
                         // erstmal alle Transparent-Farben setzen
-                        for( USHORT i = 0; i < nCount; i++ )
+                        for( sal_uInt16 i = 0; i < nCount; i++ )
                         {
                             // Haben wir eine Transparenzfarbe?
                             if( pDstCols[i] == TRANSP_COL )
@@ -1197,7 +1197,7 @@ Graphic SvxBmpMask::Mask( const Graphic& rGraphic )
 
 //-------------------------------------------------------------------------
 
-BOOL SvxBmpMask::IsEyedropping() const
+sal_Bool SvxBmpMask::IsEyedropping() const
 {
     return aTbxPipette.IsItemChecked( TBI_PIPETTE );
 }

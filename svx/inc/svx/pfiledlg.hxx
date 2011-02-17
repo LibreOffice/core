@@ -46,13 +46,13 @@ private:
 public:
     // with nKind = SID_INSERT_SOUND    or
     //      nKind = SID_INSERT_VIDEO
-    SvxPluginFileDlg (Window *pParent, USHORT nKind );
+    SvxPluginFileDlg (Window *pParent, sal_uInt16 nKind );
     ~SvxPluginFileDlg ();
 
     ErrCode                  Execute();
     String                   GetPath() const;
 
-    static bool IsAvailable (USHORT nKind);
+    static bool IsAvailable (sal_uInt16 nKind);
 
     void                    SetContext( sfx2::FileDialogHelper::Context eNewContext );
 };

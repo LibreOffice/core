@@ -41,6 +41,7 @@
 #include <memory>
 
 //typedef ::cppu::WeakImplHelper1< ov::msforms::XControl > ControlImpl_BASE;
+//template SAL_DLLPUBLIC_IMPORT InheritedHelperInterfaceImpl1< ov::msforms::XControl >;
 typedef InheritedHelperInterfaceImpl1< ov::msforms::XControl > ControlImpl_BASE;
 
 class ScVbaControl : public ControlImpl_BASE

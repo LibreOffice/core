@@ -69,13 +69,13 @@ private:
     Color       aFtColor;
     SvxBoxItem* pFtBorder;
 
-    BOOL        bFooter :1;
-    BOOL        bHeader :1;
-    BOOL        bTable  :1;
-    BOOL        bHorz   :1;
-    BOOL        bVert   :1;
+    sal_Bool        bFooter :1;
+    sal_Bool        bHeader :1;
+    sal_Bool        bTable  :1;
+    sal_Bool        bHorz   :1;
+    sal_Bool        bVert   :1;
 
-    USHORT      eUsage;
+    sal_uInt16      eUsage;
 
     String      aLeftText;
     String      aRightText;
@@ -84,8 +84,8 @@ protected:
     virtual void Paint( const Rectangle& rRect );
 
     virtual void DrawPage( const Point& rPoint,
-                           const BOOL bSecond,
-                           const BOOL bEnabled );
+                           const sal_Bool bSecond,
+                           const sal_Bool bEnabled );
 
 public:
     SvxPageWindow( Window* pParent, const ResId& rId );
@@ -143,20 +143,20 @@ public:
     const Color&        GetFtColor() const              { return aFtColor; }
     const SvxBoxItem&   GetFtBorder() const             { return *pFtBorder; }
 
-    void        SetUsage( USHORT eU )                   { eUsage = eU;  }
-    USHORT      GetUsage() const                        { return eUsage;}
+    void        SetUsage( sal_uInt16 eU )                   { eUsage = eU;  }
+    sal_uInt16      GetUsage() const                        { return eUsage;}
 
-    void        SetHeader( BOOL bNew )                  { bHeader = bNew; }
-    BOOL        GetHeader() const                       { return bHeader;}
-    void        SetFooter( BOOL bNew )                  { bFooter = bNew; }
-    BOOL        GetFooter() const                       { return bFooter;}
+    void        SetHeader( sal_Bool bNew )                  { bHeader = bNew; }
+    sal_Bool        GetHeader() const                       { return bHeader;}
+    void        SetFooter( sal_Bool bNew )                  { bFooter = bNew; }
+    sal_Bool        GetFooter() const                       { return bFooter;}
 
-    void        SetTable( BOOL bNew )                   { bTable = bNew; }
-    BOOL        GetTable() const                        { return bTable;}
-    void        SetHorz( BOOL bNew )                    { bHorz = bNew; }
-    BOOL        GetHorz() const                         { return bHorz;}
-    void        SetVert( BOOL bNew )                    { bVert = bNew; }
-    BOOL        GetVert() const                         { return bVert;}
+    void        SetTable( sal_Bool bNew )                   { bTable = bNew; }
+    sal_Bool        GetTable() const                        { return bTable;}
+    void        SetHorz( sal_Bool bNew )                    { bHorz = bNew; }
+    sal_Bool        GetHorz() const                         { return bHorz;}
+    void        SetVert( sal_Bool bNew )                    { bVert = bNew; }
+    sal_Bool        GetVert() const                         { return bVert;}
 
     void        EnableFrameDirection(sal_Bool bEnable);
     //uses enum SvxFrameDirection

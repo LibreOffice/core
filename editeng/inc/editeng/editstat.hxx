@@ -88,7 +88,7 @@
     EE_STAT_CRSRLEFTPARA zur Zeit bei Cursorbewegungen und Return.
 */
 
-inline void SetFlags( ULONG& rBits, const ULONG nMask, FASTBOOL bOn )
+inline void SetFlags( sal_uLong& rBits, const sal_uInt32 nMask, sal_Bool bOn )
 {
     if ( bOn )
         rBits |= nMask;
@@ -99,25 +99,25 @@ inline void SetFlags( ULONG& rBits, const ULONG nMask, FASTBOOL bOn )
 class EditStatus
 {
 protected:
-    ULONG   nStatusBits;
-    ULONG   nControlBits;
-    USHORT  nPrevPara;                  // fuer EE_STAT_CRSRLEFTPARA
+    sal_uLong   nStatusBits;
+    sal_uLong   nControlBits;
+    sal_uInt16  nPrevPara;                  // fuer EE_STAT_CRSRLEFTPARA
 
 public:
             EditStatus()                { nStatusBits = 0; nControlBits = 0; nPrevPara = 0xFFFF; }
 
     void    Clear()                     { nStatusBits = 0; }
-    void    SetControlBits( ULONG nMask, FASTBOOL bOn )
+    void    SetControlBits( sal_uLong nMask, sal_Bool bOn )
                 { SetFlags( nControlBits, nMask, bOn ); }
 
-    ULONG   GetStatusWord() const       { return nStatusBits; }
-    ULONG&  GetStatusWord()             { return nStatusBits; }
+    sal_uLong   GetStatusWord() const       { return nStatusBits; }
+    sal_uLong&  GetStatusWord()             { return nStatusBits; }
 
-    ULONG   GetControlWord() const      { return nControlBits; }
-    ULONG&  GetControlWord()            { return nControlBits; }
+    sal_uLong   GetControlWord() const      { return nControlBits; }
+    sal_uLong&  GetControlWord()            { return nControlBits; }
 
-    USHORT  GetPrevParagraph() const    { return nPrevPara; }
-    USHORT& GetPrevParagraph()          { return nPrevPara; }
+    sal_uInt16  GetPrevParagraph() const    { return nPrevPara; }
+    sal_uInt16& GetPrevParagraph()          { return nPrevPara; }
 };
 
 #define SPELLCMD_IGNOREWORD         0x0001
@@ -128,18 +128,18 @@ public:
 
 struct SpellCallbackInfo
 {
-    USHORT          nCommand;
+    sal_uInt16          nCommand;
     String          aWord;
     LanguageType    eLanguage;
 
-    SpellCallbackInfo( USHORT nCMD, const String& rWord )
+    SpellCallbackInfo( sal_uInt16 nCMD, const String& rWord )
     : aWord( rWord )
     {
         nCommand = nCMD;
         eLanguage = LANGUAGE_DONTKNOW;
     }
 
-    SpellCallbackInfo( USHORT nCMD, LanguageType eLang )
+    SpellCallbackInfo( sal_uInt16 nCMD, LanguageType eLang )
     {
         nCommand = nCMD;
         eLanguage = eLang;

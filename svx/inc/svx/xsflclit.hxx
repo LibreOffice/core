@@ -38,19 +38,19 @@ class SVX_DLLPUBLIC XSecondaryFillColorItem : public XColorItem
 public:
             TYPEINFO();
             SVX_DLLPRIVATE XSecondaryFillColorItem() {}
-            SVX_DLLPRIVATE XSecondaryFillColorItem(INT32 nIndex, const Color& rTheColor);
+            SVX_DLLPRIVATE XSecondaryFillColorItem(sal_Int32 nIndex, const Color& rTheColor);
             XSecondaryFillColorItem(const String& rName, const Color& rTheColor);
             SVX_DLLPRIVATE XSecondaryFillColorItem(SvStream& rIn);
 
     SVX_DLLPRIVATE virtual SfxPoolItem*    Clone(SfxItemPool* pPool = 0) const;
-    SVX_DLLPRIVATE virtual SfxPoolItem*    Create(SvStream& rIn, USHORT nVer) const;
+    SVX_DLLPRIVATE virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const;
 
     SVX_DLLPRIVATE virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
                                     String &rText, const IntlWrapper * = 0 ) const;
 
-    SVX_DLLPRIVATE virtual USHORT GetVersion( USHORT nFileFormatVersion ) const;
+    SVX_DLLPRIVATE virtual sal_uInt16 GetVersion( sal_uInt16 nFileFormatVersion ) const;
 
 };
 

@@ -35,54 +35,54 @@ class BitSet
 {
 private:
     void CopyFrom( const BitSet& rSet );
-    USHORT nBlocks;
-    USHORT nCount;
-    ULONG* pBitmap;
+    sal_uInt16 nBlocks;
+    sal_uInt16 nCount;
+    sal_uIntPtr* pBitmap;
 public:
-    BitSet operator<<( USHORT nOffset ) const;
-    BitSet operator>>( USHORT nOffset ) const;
-    static USHORT CountBits( ULONG nBits );
-    BOOL operator!() const;
+    BitSet operator<<( sal_uInt16 nOffset ) const;
+    BitSet operator>>( sal_uInt16 nOffset ) const;
+    static sal_uInt16 CountBits( sal_uIntPtr nBits );
+    sal_Bool operator!() const;
     BitSet();
     BitSet( const BitSet& rOrig );
-    BitSet( USHORT* pArray, USHORT nSize );
+    BitSet( sal_uInt16* pArray, sal_uInt16 nSize );
     ~BitSet();
     BitSet( const Range& rRange );
-    USHORT Count() const;
+    sal_uInt16 Count() const;
     BitSet& operator=( const BitSet& rOrig );
-    BitSet& operator=( USHORT nBit );
+    BitSet& operator=( sal_uInt16 nBit );
     BitSet operator|( const BitSet& rSet ) const;
-    BitSet operator|( USHORT nBit ) const;
+    BitSet operator|( sal_uInt16 nBit ) const;
     BitSet& operator|=( const BitSet& rSet );
-    BitSet& operator|=( USHORT nBit );
+    BitSet& operator|=( sal_uInt16 nBit );
     BitSet operator-( const BitSet& rSet ) const;
-    BitSet operator-( USHORT nId ) const;
+    BitSet operator-( sal_uInt16 nId ) const;
     BitSet& operator-=( const BitSet& rSet );
-    BitSet& operator-=( USHORT nBit );
+    BitSet& operator-=( sal_uInt16 nBit );
     BitSet operator&( const BitSet& rSet ) const;
     BitSet& operator&=( const BitSet& rSet );
     BitSet operator^( const BitSet& rSet ) const;
-    BitSet operator^( USHORT nBit ) const;
+    BitSet operator^( sal_uInt16 nBit ) const;
     BitSet& operator^=( const BitSet& rSet );
-    BitSet& operator^=( USHORT nBit );
-    BOOL IsRealSubSet( const BitSet& rSet ) const;
-    BOOL IsSubSet( const BitSet& rSet ) const;
-    BOOL IsRealSuperSet( const BitSet& rSet ) const;
-    BOOL Contains( USHORT nBit ) const;
-    BOOL IsSuperSet( const BitSet& rSet ) const;
-    BOOL operator==( const BitSet& rSet ) const;
-    BOOL operator==( USHORT nBit ) const;
-    BOOL operator!=( const BitSet& rSet ) const;
-    BOOL operator!=( USHORT nBit ) const;
+    BitSet& operator^=( sal_uInt16 nBit );
+    sal_Bool IsRealSubSet( const BitSet& rSet ) const;
+    sal_Bool IsSubSet( const BitSet& rSet ) const;
+    sal_Bool IsRealSuperSet( const BitSet& rSet ) const;
+    sal_Bool Contains( sal_uInt16 nBit ) const;
+    sal_Bool IsSuperSet( const BitSet& rSet ) const;
+    sal_Bool operator==( const BitSet& rSet ) const;
+    sal_Bool operator==( sal_uInt16 nBit ) const;
+    sal_Bool operator!=( const BitSet& rSet ) const;
+    sal_Bool operator!=( sal_uInt16 nBit ) const;
 
 };
 //--------------------------------------------------------------------
 
-// returns TRUE if the set is empty
+// returns sal_True if the set is empty
 
 
 
-inline BOOL BitSet::operator!() const
+inline sal_Bool BitSet::operator!() const
 {
     return nCount == 0;
 }
@@ -90,7 +90,7 @@ inline BOOL BitSet::operator!() const
 
 // returns the number of bits in the bitset
 
-inline USHORT BitSet::Count() const
+inline sal_uInt16 BitSet::Count() const
 {
     return nCount;
 }
@@ -106,7 +106,7 @@ inline BitSet BitSet::operator|( const BitSet& rSet ) const
 
 // creates the union of a bitset with a single bit
 
-inline BitSet BitSet::operator|( USHORT nBit ) const
+inline BitSet BitSet::operator|( sal_uInt16 nBit ) const
 {
     return BitSet(*this) |= nBit;
 }
@@ -123,7 +123,7 @@ inline BitSet BitSet::operator-( const BitSet& ) const
 // creates the asymetric difference with a single bit
 
 
-inline BitSet BitSet::operator-( USHORT ) const
+inline BitSet BitSet::operator-( sal_uInt16 ) const
 {
     return BitSet();
 }
@@ -164,7 +164,7 @@ inline BitSet BitSet::operator^( const BitSet& ) const
 
 // creates the symetric difference with a single bit
 
-inline BitSet BitSet::operator^( USHORT ) const
+inline BitSet BitSet::operator^( sal_uInt16 ) const
 {
     return BitSet();
 }
@@ -180,7 +180,7 @@ inline BitSet& BitSet::operator^=( const BitSet& )
 #ifdef BITSET_READY
 // builds the symetric difference with a single bit
 
-inline BitSet& BitSet::operator^=( USHORT )
+inline BitSet& BitSet::operator^=( sal_uInt16 )
 {
     // crash!!!
     return BitSet();
@@ -190,48 +190,48 @@ inline BitSet& BitSet::operator^=( USHORT )
 
 // determines if the other bitset is a real superset
 
-inline BOOL BitSet::IsRealSubSet( const BitSet& ) const
+inline sal_Bool BitSet::IsRealSubSet( const BitSet& ) const
 {
-    return FALSE;
+    return sal_False;
 }
 //--------------------------------------------------------------------
 
 // detsermines if the other bitset is a superset or equal
 
-inline BOOL BitSet::IsSubSet( const BitSet& ) const
+inline sal_Bool BitSet::IsSubSet( const BitSet& ) const
 {
-    return FALSE;
+    return sal_False;
 }
 //--------------------------------------------------------------------
 
 // determines if the other bitset is a real subset
 
-inline BOOL BitSet::IsRealSuperSet( const BitSet& ) const
+inline sal_Bool BitSet::IsRealSuperSet( const BitSet& ) const
 {
-    return FALSE;
+    return sal_False;
 }
 
 //--------------------------------------------------------------------
 
 // determines if the other bitset is a subset or equal
 
-inline BOOL BitSet::IsSuperSet( const BitSet& ) const
+inline sal_Bool BitSet::IsSuperSet( const BitSet& ) const
 {
-    return FALSE;
+    return sal_False;
 }
 //--------------------------------------------------------------------
 
 // determines if the bit is the only one in the bitset
 
-inline BOOL BitSet::operator==( USHORT ) const
+inline sal_Bool BitSet::operator==( sal_uInt16 ) const
 {
-    return FALSE;
+    return sal_False;
 }
 //--------------------------------------------------------------------
 
 // determines if the bitsets aren't equal
 
-inline BOOL BitSet::operator!=( const BitSet& rSet ) const
+inline sal_Bool BitSet::operator!=( const BitSet& rSet ) const
 {
     return !( *this == rSet );
 }
@@ -239,7 +239,7 @@ inline BOOL BitSet::operator!=( const BitSet& rSet ) const
 
 // determines if the bitset doesn't contain only this bit
 
-inline BOOL BitSet::operator!=( USHORT nBit ) const
+inline sal_Bool BitSet::operator!=( sal_uInt16 nBit ) const
 {
     return !( *this == nBit );
 }
@@ -248,8 +248,8 @@ inline BOOL BitSet::operator!=( USHORT nBit ) const
 class IndexBitSet : BitSet
 {
 public:
-  USHORT GetFreeIndex();
-  void ReleaseIndex(USHORT i){*this-=i;}
+  sal_uInt16 GetFreeIndex();
+  void ReleaseIndex(sal_uInt16 i){*this-=i;}
 };
 
 

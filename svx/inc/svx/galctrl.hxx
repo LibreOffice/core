@@ -65,7 +65,7 @@ private:
     Rectangle           aPreviewRect;
     GalleryTheme*       mpTheme;
 
-    SVX_DLLPRIVATE BOOL             ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
+    SVX_DLLPRIVATE sal_Bool             ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const;
     SVX_DLLPRIVATE void                InitSettings();
 
     // Window
@@ -145,14 +145,14 @@ private:
 
     Link                maSelectHdl;
     GalleryTheme*       mpTheme;
-    ULONG               mnCurRow;
-    BOOL                mbInit;
+    sal_uIntPtr               mnCurRow;
+    sal_Bool                mbInit;
 
     void                InitSettings();
 
     // BrowseBox
-    virtual BOOL        SeekRow( long nRow );
-    virtual void        PaintField( OutputDevice& rDev, const Rectangle& rRect, USHORT nColumnId ) const;
+    virtual sal_Bool        SeekRow( long nRow );
+    virtual void        PaintField( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const;
     virtual void        DoubleClick( const BrowserMouseEvent& rEvt );
     virtual void        Select();
     virtual sal_Int8    AcceptDrop( const BrowserAcceptDropEvent& rEvt );
@@ -181,7 +181,7 @@ public:
         @return
             the text out of the cell
     */
-    virtual String  GetCellText(long _nRow, USHORT _nColId) const;
+    virtual String  GetCellText(long _nRow, sal_uInt16 _nColId) const;
 
     // from IAccessibleTableProvider
     virtual Rectangle GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex);

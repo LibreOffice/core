@@ -83,14 +83,14 @@ public:
 
     inline String       GetSearchText() const { return m_aSearchEdit.GetText(); }
     inline void         SetSearchText( const String& _rText ) { m_aSearchEdit.SetText( _rText ); }
-    inline bool         IsOnlyWholeWords() const { return ( m_aWholeWordsBox.IsChecked() != FALSE ); }
-    inline bool         IsMarchCase() const { return ( m_aMatchCaseBox.IsChecked() != FALSE ); }
-    inline bool         IsWrapAround() const { return ( m_aWrapAroundBox.IsChecked() != FALSE ); }
-    inline bool         IsSearchBackwards() const { return ( m_aBackwardsBox.IsChecked() != FALSE ); }
+    inline bool         IsOnlyWholeWords() const { return ( m_aWholeWordsBox.IsChecked() != sal_False ); }
+    inline bool         IsMarchCase() const { return ( m_aMatchCaseBox.IsChecked() != sal_False ); }
+    inline bool         IsWrapAround() const { return ( m_aWrapAroundBox.IsChecked() != sal_False ); }
+    inline bool         IsSearchBackwards() const { return ( m_aBackwardsBox.IsChecked() != sal_False ); }
 
     void                SetFocusOnEdit();
 
-    virtual BOOL        Close();
+    virtual sal_Bool        Close();
     virtual void        Move();
     virtual void        StateChanged( StateChangedType nStateChange );
 };

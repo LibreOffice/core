@@ -563,7 +563,7 @@ bool ToolbarLayoutManager::showToolbar( const ::rtl::OUString& rResourceURL )
         if ( !aUIElement.m_bFloating )
             implts_setLayoutDirty();
         else
-            pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+            pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
 
         aUIElement.m_bVisible = true;
         implts_writeWindowStateData( aUIElement );
@@ -582,7 +582,7 @@ bool ToolbarLayoutManager::hideToolbar( const ::rtl::OUString& rResourceURL )
     Window* pWindow = getWindowFromXUIElement( aUIElement.m_xUIElement );
     if ( pWindow )
     {
-        pWindow->Show( FALSE );
+        pWindow->Show( sal_False );
         if ( !aUIElement.m_bFloating )
             implts_setLayoutDirty();
 
@@ -642,10 +642,10 @@ void ToolbarLayoutManager::setFloatingToolbarsVisibility( bool bVisible )
             if ( bVisible )
             {
                 if ( pIter->m_bVisible && !pIter->m_bMasterHide )
-                    pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+                    pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
             }
             else
-                pWindow->Show( FALSE );
+                pWindow->Show( sal_False );
         }
     }
 }
@@ -807,7 +807,7 @@ long ToolbarLayoutManager::childWindowEvent( VclSimpleEvent* pEvent )
             if ( pToolBox )
             {
                 aToolbarName = retrieveToolbarNameFromHelpURL( pToolBox );
-                USHORT nId = pToolBox->GetCurItemId();
+                sal_uInt16 nId = pToolBox->GetCurItemId();
                 if ( nId > 0 )
                     aCommand = pToolBox->GetItemCommand( nId );
             }
@@ -938,7 +938,7 @@ rtl::OUString ToolbarLayoutManager::implts_generateGenericAddonToolbarTitle( sal
     aAddonGenericTitle = String( FwkResId( STR_TOOLBAR_TITLE_ADDON ));
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
 
-    String aNumStr = rI18nHelper.GetNum( nNumber, 0, FALSE, FALSE );
+    String aNumStr = rI18nHelper.GetNum( nNumber, 0, sal_False, sal_False );
     aAddonGenericTitle.SearchAndReplaceAscii( "%num%", aNumStr );
 
     return rtl::OUString( aAddonGenericTitle );
@@ -1331,7 +1331,7 @@ void ToolbarLayoutManager::implts_createToolBar( const ::rtl::OUString& aName, b
             if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
             {
                 ToolBox* pToolbar = (ToolBox *)pWindow;
-                USHORT nMenuType = pToolbar->GetMenuType();
+                sal_uInt16 nMenuType = pToolbar->GetMenuType();
                 if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, m_aCustomizeCmd ))
                     pToolbar->SetMenuType( nMenuType & ~TOOLBOX_MENUTYPE_CUSTOMIZE );
                 else
@@ -2706,7 +2706,7 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
             if ( aWinRect.X < nCurrPos )
                 aWinRect.X = nCurrPos;
             pWindow->SetPosSizePixel( ::Point( aWinRect.X, nOffset ), ::Size( aWinRect.Width, rRowColumnWindowData.nStaticSize ));
-            pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+            pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
             nCurrPos += ( aWinRect.X - nCurrPos ) + aWinRect.Width;
         }
         else
@@ -2714,7 +2714,7 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
             if ( aWinRect.Y < nCurrPos )
                 aWinRect.Y = nCurrPos;
             pWindow->SetPosSizePixel( ::Point( nOffset, aWinRect.Y ), ::Size( rRowColumnWindowData.nStaticSize, aWinRect.Height ));
-            pWindow->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
+            pWindow->Show( sal_True, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
             nCurrPos += ( aWinRect.Y - nCurrPos ) + aWinRect.Height;
         }
     }
