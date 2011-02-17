@@ -52,6 +52,7 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
+#include <ucbhelper/contentbroker.hxx>
 
 #include "init.hxx"
 #include "swtypes.hxx"
@@ -122,10 +123,10 @@ void SwDocTest::testFileNameFields()
 
     INetURLObject aTempFileURL(aTempFile.GetURL());
     String sFileURL = aTempFileURL.GetMainURL(INetURLObject::NO_DECODE);
-    SfxMedium* pDstMed = new SfxMedium(sFileURL, STREAM_STD_READWRITE, true);
+    SfxMedium aDstMed(sFileURL, STREAM_STD_READWRITE, true);
 
-    m_xDocShRef->DoSaveAs(*pDstMed);
-    m_xDocShRef->DoSaveCompleted(pDstMed);
+    m_xDocShRef->DoSaveAs(aDstMed);
+    m_xDocShRef->DoSaveCompleted(&aDstMed);
 
     const INetURLObject &rUrlObj = m_xDocShRef->GetMedium()->GetURLObject();
 
@@ -160,6 +161,8 @@ void SwDocTest::testFileNameFields()
         sExpected = sExpected.copy(0, sExpected.getLength() - 4);
         CPPUNIT_ASSERT_MESSAGE("Expected Readable FileName", sResult == sExpected);
     }
+
+    m_xDocShRef->DoInitNew(0);
 }
 
 void SwDocTest::randomTest()
