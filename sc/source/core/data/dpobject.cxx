@@ -281,7 +281,7 @@ void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
     aParam.nCol1 = rSrcRange.aStart.Col();
     aParam.nRow1 = rSrcRange.aStart.Row();
     aParam.nCol2 = rSrcRange.aEnd.Col();
-    aParam.nRow2 = rSrcRange.aEnd.Row();;
+    aParam.nRow2 = rSrcRange.aEnd.Row();
     aParam.bHasHeader = true;
     pSheetDesc->SetQueryParam(aParam);
 
