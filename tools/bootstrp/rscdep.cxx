@@ -206,8 +206,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     }
 
 
-    DirEntry aEntry(".");
-    aEntry.ToAbs();
     String aCwd(pFileNamePrefix, gsl_getSystemTextEncoding());
     SvFileStream aOutStream;
     String aOutputFileName( pOutputFileName, gsl_getSystemTextEncoding());
