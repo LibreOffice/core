@@ -254,7 +254,6 @@ void OSQLAnalyzer::describeParam(::rtl::Reference<OSQLColumns> rParameterColumns
         OSL_ENSURE(0,"Illegal here!");
 
     rParameterColumns = aNewParamColumns;
-    //  m_aCompiler->setParameterColumns(rParameterColumns);
 }
 
 // -----------------------------------------------------------------------------

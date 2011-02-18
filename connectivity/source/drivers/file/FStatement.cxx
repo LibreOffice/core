@@ -430,20 +430,10 @@ void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
         aColumnName = pColumnRef->getChild(0)->getTokenValue();
     else if (pColumnRef->count() == 3)
     {
-        // Just the Table Range-variable may appear here:
-//      if (!(pColumnRef->getChild(0)->getTokenValue() == aTableRange))
-//      {
-//          aStatus.Set(SQL_STAT_ERROR,
-//                      String::CreateFromAscii("S1000"),
-//                      aStatus.CreateErrorMessage(String(SdbResId(STR_STAT_INVALID_RANGE_VAR))),
-//                      0, String() );
-            //  return;
-        //  }
         pColumnRef->getChild(2)->parseNodeToStr( aColumnName, getOwnConnection(), NULL, sal_False, sal_False );
     }
     else
     {
-        //  aStatus.SetStatementTooComplex();
         throw SQLException();
     }
 
@@ -655,7 +645,7 @@ void OStatement_Base::GetAssignValues()
 
         OSL_ENSURE(pValuesOrQuerySpec->count() == 4,"OResultSet: pValuesOrQuerySpec->count() != 4");
 
-        // Liste of values
+        // List of values
         OSQLParseNode * pInsertAtomCommalist = pValuesOrQuerySpec->getChild(2);
         OSL_ENSURE(pInsertAtomCommalist != NULL,"OResultSet: pInsertAtomCommalist darf nicht NULL sein!");
         OSL_ENSURE(pInsertAtomCommalist->count() > 0,"OResultSet: pInsertAtomCommalist <= 0");
@@ -720,7 +710,6 @@ void OStatement_Base::GetAssignValues()
             OSL_ENSURE(pComp->getNodeType() == SQL_NODE_EQUAL,"OResultSet: pComp->getNodeType() != SQL_NODE_COMPARISON");
             if (pComp->getTokenValue().toChar() != '=')
             {
-                //  aStatus.SetInvalidStatement();
                 throwFunctionSequenceException(*this);
             }
 
@@ -757,7 +746,6 @@ void OStatement_Base::ParseAssignValues(const ::std::vector< String>& aColumnNam
         parseParamterElem(aColumnName,pRow_Value_Constructor_Elem);
     else
     {
-        //  aStatus.SetStatementTooComplex();
         throwFunctionSequenceException(*this);
     }
 }
@@ -776,15 +764,9 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
     if (!xCol.is())
     {
         // This Column doesn't exist!
-//      aStatus.Set(SQL_STAT_ERROR,
-//                  String::CreateFromAscii("S0022"),
-//                  aStatus.CreateErrorMessage(String(SdbResId(STR_STAT_COLUMN_NOT_FOUND))),
-//                  0, String() );
         throwFunctionSequenceException(*this);
     }
 
-    // tie Value to the Row with values that shall be assigned:
-    //  const ODbVariantRef& xValue = (*aAssignValues)[pFileColumn->GetId()];
 
     // Everything tested and we have the names of the Column.
     // Now allocate one Value, set the value and tie the value to the Row.
@@ -810,7 +792,6 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
                         *(m_aAssignValues->get())[nId] = sal_False;
                     else
                     {
-                        //  aStatus.Set(SQL_STAT_ERROR);    // nyi: more accurate!
                         throwFunctionSequenceException(*this);
                     }
                 }
@@ -826,16 +807,7 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
             case DataType::TIME:
             case DataType::TIMESTAMP:
             {
-                *(m_aAssignValues->get())[nId] = ORowSetValue(aValue); // .ToDouble
-//              try
-//              {
-//                  double n = xValue->toDouble();
-//                  xValue->setDouble(n);
-//              }
-//              catch ( ... )
-//              {
-//                  aStatus.SetDriverNotCapableError();
-//              }
+                *(m_aAssignValues->get())[nId] = ORowSetValue(aValue);
             }   break;
             default:
                 throwFunctionSequenceException(*this);
