@@ -37,6 +37,7 @@
 #include "UndoGuard.hxx"
 #include "Strings.hrc"
 #include "ObjectNameProvider.hxx"
+#include "DiagramHelper.hxx"
 #include "chartview/ExplicitValueProvider.hxx"
 #include "CommonConverters.hxx"
 #include <svx/ActionDescriptionProvider.hxx>
@@ -135,10 +136,12 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
     if( pProvider )
         aSelectedSize = ToSize( ( pProvider->getRectangleOfObject( aCID ) ) );
 
+    ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
+
     UndoGuard aUndoGuard(
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::POS_SIZE,
-            ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aCID ))),
+            ObjectNameProvider::getName( eObjectType)),
         m_xUndoManager );
 
     SfxAbstractTabDialog * pDlg = NULL;
@@ -169,11 +172,14 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
                 awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
                 Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
 
-                bool bChanged = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
-                            , getModel()
+                bool bChanged = false;
+                if ( eObjectType == OBJECTTYPE_LEGEND )
+                    bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning( getModel(), false , true );
+
+                bool bMoved = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID(), getModel()
                             , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
                             , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight()) );
-                if( bChanged )
+                if( bMoved || bChanged )
                     aUndoGuard.commit();
             }
         }

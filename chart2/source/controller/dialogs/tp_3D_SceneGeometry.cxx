@@ -162,6 +162,8 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( Window* pWindow
     {
         m_aCbxRightAngledAxes.Enable(false);
     }
+    m_aMFPerspective.SetAccessibleName(m_aCbxPerspective.GetText());
+    m_aMFPerspective.SetAccessibleRelationLabeledBy(&m_aCbxPerspective);
 }
 
 ThreeD_SceneGeometry_TabPage::~ThreeD_SceneGeometry_TabPage()
