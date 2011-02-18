@@ -118,6 +118,11 @@ RtfSdrExport& RtfExport::SdrExporter() const
     return *m_pSdrExport;
 }
 
+bool RtfExport::HackIsWW8OrHigher() const
+{
+    return true;
+}
+
 bool RtfExport::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich )
 {
     // FIXME is this actually true for rtf? - this is copied from DOCX
