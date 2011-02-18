@@ -113,7 +113,7 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
         if ( rMark.GetTableSelect( nTab ) )
         {
             ScPrintFunc aFunc( pDev, pDocSh, nTab, nFirstAttr[nTab], nTotalPages, pSelRange, &aSelection.GetOptions() );
-            aFunc.SetRenderFlag( TRUE );
+            aFunc.SetRenderFlag( sal_True );
 
             long nDisplayStart = GetDisplayStart( nTab );
 
@@ -125,7 +125,7 @@ void ScPrintFuncCache::InitLocations( const ScMarkData& rMark, OutputDevice* pDe
                 aPage.Select( aPageRange );
 
                 ScPreviewLocationData aLocData( pDoc, pDev );
-                aFunc.DoPrint( aPage, nTabStart, nDisplayStart, FALSE, NULL, &aLocData );
+                aFunc.DoPrint( aPage, nTabStart, nDisplayStart, sal_False, NULL, &aLocData );
 
                 ScRange aCellRange;
                 Rectangle aPixRect;
@@ -156,7 +156,7 @@ bool ScPrintFuncCache::FindLocation( const ScAddress& rCell, ScPrintPageLocation
     return false;   // not found
 }
 
-BOOL ScPrintFuncCache::IsSameSelection( const ScPrintSelectionStatus& rStatus ) const
+sal_Bool ScPrintFuncCache::IsSameSelection( const ScPrintSelectionStatus& rStatus ) const
 {
     return aSelection == rStatus;
 }

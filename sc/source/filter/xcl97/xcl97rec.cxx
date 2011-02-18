@@ -110,13 +110,13 @@ XclExpObjList::~XclExpObjList()
     delete pSolverContainer;
 }
 
-UINT16 XclExpObjList::Add( XclObj* pObj )
+sal_uInt16 XclExpObjList::Add( XclObj* pObj )
 {
     DBG_ASSERT( Count() < 0xFFFF, "XclExpObjList::Add: too much for Xcl" );
     if ( Count() < 0xFFFF )
     {
         Insert( pObj, LIST_APPEND );
-        UINT16 nCnt = (UINT16) Count();
+        sal_uInt16 nCnt = (sal_uInt16) Count();
         pObj->SetId( nCnt );
         return nCnt;
     }
@@ -190,7 +190,7 @@ void XclObj::ImplWriteAnchor( const XclExpRoot& /*rRoot*/, const SdrObject* pSdr
     }
 }
 
-void XclObj::SetEscherShapeType( UINT16 nType )
+void XclObj::SetEscherShapeType( sal_uInt16 nType )
 {
 //2do: what about the other defined ot... types?
     switch ( nType )
@@ -321,7 +321,7 @@ void XclObjComment::ProcessEscherObj( const XclExpRoot& rRoot, const Rectangle& 
                 // If the Colour is the same as the 'ToolTip' System colour then
                 // use the default rather than the explicit colour value. This will
                 // be incorrect where user has chosen to use this colour explicity.
-                Color aColor = Color( (BYTE)nValue, (BYTE)( nValue >> 8 ), (BYTE)( nValue >> 16 ) );
+                Color aColor = Color( (sal_uInt8)nValue, (sal_uInt8)( nValue >> 8 ), (sal_uInt8)( nValue >> 16 ) );
                 const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
                 if(aColor == rSett.GetHelpColor().GetColor())
                 {
@@ -376,14 +376,14 @@ void XclObjComment::Save( XclExpStream& rStrm )
 
 // --- class XclObjDropDown ------------------------------------------
 
-XclObjDropDown::XclObjDropDown( XclExpObjectManager& rObjMgr, const ScAddress& rPos, BOOL bFilt ) :
+XclObjDropDown::XclObjDropDown( XclExpObjectManager& rObjMgr, const ScAddress& rPos, sal_Bool bFilt ) :
     XclObj( rObjMgr, EXC_OBJTYPE_DROPDOWN, true ),
     bIsFiltered( bFilt )
 {
-    SetLocked( TRUE );
-    SetPrintable( FALSE );
-    SetAutoFill( TRUE );
-    SetAutoLine( FALSE );
+    SetLocked( sal_True );
+    SetPrintable( sal_False );
+    SetAutoFill( sal_True );
+    SetAutoLine( sal_False );
     nGrbit |= 0x0100;   // undocumented
     mrEscherEx.OpenContainer( ESCHER_SpContainer );
     mrEscherEx.AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
@@ -421,7 +421,7 @@ void XclObjDropDown::WriteSubRecs( XclExpStream& rStrm )
     ::insert_value( nDropDownFlags, EXC_OBJ_DROPDOWN_SIMPLE, 0, 2 );
     ::set_flag( nDropDownFlags, EXC_OBJ_DROPDOWN_FILTERED, bIsFiltered );
     rStrm.StartRecord( EXC_ID_OBJLBSDATA, 16 );
-    rStrm   << (UINT32)0 << (UINT16)0 << (UINT16)0x0301 << (UINT16)0
+    rStrm   << (sal_uInt32)0 << (sal_uInt16)0 << (sal_uInt16)0x0301 << (sal_uInt16)0
             << nDropDownFlags << sal_uInt16( 20 ) << sal_uInt16( 130 );
     rStrm.EndRecord();
 }
@@ -512,7 +512,7 @@ XclTxo::XclTxo( const XclExpRoot& rRoot, const EditTextObject& rEditObj, SdrObje
         {
             SfxItemSet aSet( rEditObj.GetParaAttribs( 0));
             const SfxPoolItem* pItem = NULL;
-            if( aSet.GetItemState( EE_PARA_JUST, TRUE, &pItem ) == SFX_ITEM_SET )
+            if( aSet.GetItemState( EE_PARA_JUST, sal_True, &pItem ) == SFX_ITEM_SET )
             {
                 SvxAdjust eEEAlign = static_cast< const SvxAdjustItem& >( *pItem ).GetAdjust();
                 pCaption->SetMergedItem( SvxAdjustItem( eEEAlign, EE_PARA_JUST ) );
@@ -572,7 +572,7 @@ void XclTxo::Save( XclExpStream& rStrm )
     }
 }
 
-UINT16 XclTxo::GetNum() const
+sal_uInt16 XclTxo::GetNum() const
 {
     return EXC_ID_TXO;
 }
@@ -599,9 +599,9 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
 {
     // write only as embedded, not linked
     String          aStorageName( RTL_CONSTASCII_USTRINGPARAM( "MBD" ) );
-    sal_Char        aBuf[ sizeof(UINT32) * 2 + 1 ];
+    sal_Char        aBuf[ sizeof(sal_uInt32) * 2 + 1 ];
     // FIXME Eeek! Is this just a way to get a unique id?
-    UINT32          nPictureId = UINT32(sal_uIntPtr(this) >> 2);
+    sal_uInt32          nPictureId = sal_uInt32(sal_uIntPtr(this) >> 2);
     sprintf( aBuf, "%08X", static_cast< unsigned int >( nPictureId ) );        // #100211# - checked
     aStorageName.AppendAscii( aBuf );
     SotStorageRef    xOleStg = pRootStorage->OpenSotStorage( aStorageName,
@@ -613,7 +613,7 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
         {
             // set version to "old" version, because it must be
             // saved in MS notation.
-            UINT32                  nFl = 0;
+            sal_uInt32                  nFl = 0;
             SvtFilterOptions*       pFltOpts = SvtFilterOptions::Get();
             if( pFltOpts )
             {
@@ -635,7 +635,7 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
 
             // OBJCF subrecord, undocumented as usual
             rStrm.StartRecord( EXC_ID_OBJCF, 2 );
-            rStrm << UINT16(0x0002);
+            rStrm << sal_uInt16(0x0002);
             rStrm.EndRecord();
 
             // OBJFLAGS subrecord, undocumented as usual
@@ -647,9 +647,9 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
 
             // OBJPICTFMLA subrecord, undocumented as usual
             XclExpString aName( xOleStg->GetUserName() );
-            UINT16 nPadLen = (UINT16)(aName.GetSize() & 0x01);
-            UINT16 nFmlaLen = static_cast< sal_uInt16 >( 12 + aName.GetSize() + nPadLen );
-            UINT16 nSubRecLen = nFmlaLen + 6;
+            sal_uInt16 nPadLen = (sal_uInt16)(aName.GetSize() & 0x01);
+            sal_uInt16 nFmlaLen = static_cast< sal_uInt16 >( 12 + aName.GetSize() + nPadLen );
+            sal_uInt16 nSubRecLen = nFmlaLen + 6;
 
             rStrm.StartRecord( EXC_ID_OBJPICTFMLA, nSubRecLen );
             rStrm   << nFmlaLen
@@ -685,7 +685,7 @@ void XclObjAny::WriteSubRecs( XclExpStream& rStrm )
 {
     if( mnObjType == EXC_OBJTYPE_GROUP )
         // ftGmo subrecord
-        rStrm << EXC_ID_OBJGMO << UINT16(2) << UINT16(0);
+        rStrm << EXC_ID_OBJGMO << sal_uInt16(2) << sal_uInt16(0);
 }
 
 void XclObjAny::Save( XclExpStream& rStrm )
@@ -719,7 +719,7 @@ void ExcBof8_Base::SaveCont( XclExpStream& rStrm )
 }
 
 
-UINT16 ExcBof8_Base::GetNum() const
+sal_uInt16 ExcBof8_Base::GetNum() const
 {
     return 0x0809;
 }
@@ -809,7 +809,7 @@ void ExcBundlesheet8::SaveXml( XclExpXmlStream& rStrm )
 
 // --- class XclObproj -----------------------------------------------
 
-UINT16 XclObproj::GetNum() const
+sal_uInt16 XclObproj::GetNum() const
 {
     return 0x00D3;
 }
@@ -834,7 +834,7 @@ void XclCodename::SaveCont( XclExpStream& rStrm )
 }
 
 
-UINT16 XclCodename::GetNum() const
+sal_uInt16 XclCodename::GetNum() const
 {
     return 0x01BA;
 }
@@ -849,7 +849,7 @@ sal_Size XclCodename::GetLen() const
 
 // ---- Scenarios ----------------------------------------------------
 
-ExcEScenarioCell::ExcEScenarioCell( UINT16 nC, UINT16 nR, const String& rTxt ) :
+ExcEScenarioCell::ExcEScenarioCell( sal_uInt16 nC, sal_uInt16 nR, const String& rTxt ) :
         nCol( nC ),
         nRow( nR ),
         sText( rTxt, EXC_STR_DEFAULT, 255 )
@@ -885,7 +885,7 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
     String  sTmpName;
     String  sTmpComm;
     Color   aDummyCol;
-    USHORT  nFlags;
+    sal_uInt16  nFlags;
 
     ScDocument& rDoc = rRoot.GetDoc();
     rDoc.GetName( nTab, sTmpName );
@@ -905,13 +905,13 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
     if( !pRList )
         return;
 
-    BOOL    bContLoop = TRUE;
+    sal_Bool    bContLoop = sal_True;
     SCROW   nRow;
     SCCOL   nCol;
     String  sText;
     double  fVal;
 
-    for( UINT32 nRange = 0; (nRange < pRList->Count()) && bContLoop; nRange++ )
+    for( sal_uInt32 nRange = 0; (nRange < pRList->Count()) && bContLoop; nRange++ )
     {
         const ScRange* pRange = pRList->GetObject( nRange );
         for( nRow = pRange->aStart.Row(); (nRow <= pRange->aEnd.Row()) && bContLoop; nRow++ )
@@ -924,7 +924,7 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
                             rtl_math_StringFormat_Automatic,
                             rtl_math_DecimalPlaces_Max,
                             ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0),
-                            TRUE );
+                            sal_True );
                 }
                 else
                     rDoc.GetString( nCol, nRow, nTab, sText );
@@ -940,25 +940,25 @@ ExcEScenario::~ExcEScenario()
         delete pCell;
 }
 
-BOOL ExcEScenario::Append( UINT16 nCol, UINT16 nRow, const String& rTxt )
+sal_Bool ExcEScenario::Append( sal_uInt16 nCol, sal_uInt16 nRow, const String& rTxt )
 {
     if( List::Count() == EXC_SCEN_MAXCELL )
-        return FALSE;
+        return sal_False;
 
     ExcEScenarioCell* pCell = new ExcEScenarioCell( nCol, nRow, rTxt );
     List::Insert( pCell, LIST_APPEND );
     nRecLen += 6 + pCell->GetStringBytes();        // 4 bytes address, 2 bytes ifmt
-    return TRUE;
+    return sal_True;
 }
 
 void ExcEScenario::SaveCont( XclExpStream& rStrm )
 {
-    rStrm   << (UINT16) List::Count()       // number of cells
+    rStrm   << (sal_uInt16) List::Count()       // number of cells
             << nProtected                   // fProtection
-            << (UINT8) 0                    // fHidden
-            << (UINT8) sName.Len()          // length of scen name
-            << (UINT8) sComment.Len()       // length of comment
-            << (UINT8) sUserName.Len();     // length of user name
+            << (sal_uInt8) 0                    // fHidden
+            << (sal_uInt8) sName.Len()          // length of scen name
+            << (sal_uInt8) sComment.Len()       // length of comment
+            << (sal_uInt8) sUserName.Len();     // length of user name
     sName.WriteFlagField( rStrm );
     sName.WriteBuffer( rStrm );
 
@@ -976,7 +976,7 @@ void ExcEScenario::SaveCont( XclExpStream& rStrm )
     rStrm.WriteZeroBytes( 2 * List::Count() );  // date format
 }
 
-UINT16 ExcEScenario::GetNum() const
+sal_uInt16 ExcEScenario::GetNum() const
 {
     return 0x00AF;
 }
@@ -1035,10 +1035,10 @@ ExcEScenarioManager::~ExcEScenarioManager()
 
 void ExcEScenarioManager::SaveCont( XclExpStream& rStrm )
 {
-    rStrm   << (UINT16) List::Count()       // number of scenarios
+    rStrm   << (sal_uInt16) List::Count()       // number of scenarios
             << nActive                      // active scen
             << nActive                      // last displayed
-            << (UINT16) 0;                  // reference areas
+            << (sal_uInt16) 0;                  // reference areas
 }
 
 void ExcEScenarioManager::Save( XclExpStream& rStrm )
@@ -1068,7 +1068,7 @@ void ExcEScenarioManager::SaveXml( XclExpXmlStream& rStrm )
     rWorkbook->endElement( XML_scenarios );
 }
 
-UINT16 ExcEScenarioManager::GetNum() const
+sal_uInt16 ExcEScenarioManager::GetNum() const
 {
     return 0x00AE;
 }
@@ -1161,7 +1161,7 @@ XclCalccount::XclCalccount( const ScDocument& rDoc )
 }
 
 
-UINT16 XclCalccount::GetNum() const
+sal_uInt16 XclCalccount::GetNum() const
 {
     return 0x000C;
 }
@@ -1195,7 +1195,7 @@ XclIteration::XclIteration( const ScDocument& rDoc )
 }
 
 
-UINT16 XclIteration::GetNum() const
+sal_uInt16 XclIteration::GetNum() const
 {
     return 0x0011;
 }
@@ -1230,7 +1230,7 @@ XclDelta::XclDelta( const ScDocument& rDoc )
 }
 
 
-UINT16 XclDelta::GetNum() const
+sal_uInt16 XclDelta::GetNum() const
 {
     return 0x0010;
 }

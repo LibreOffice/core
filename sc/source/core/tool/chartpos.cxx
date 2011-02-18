@@ -36,6 +36,22 @@
 #include "document.hxx"
 #include "rechead.hxx"
 
+namespace
+{
+    bool lcl_hasValueDataButNoDates( ScDocument* pDocument, SCCOL nCol, SCROW nRow, SCTAB nTab )
+    {
+        bool bReturn = false;
+        if (pDocument->HasValueData( nCol, nRow, nTab ))
+        {
+            //treat dates like text #i25706#
+            sal_uInt32 nNumberFormat = pDocument->GetNumberFormat( ScAddress( nCol, nRow, nTab ) );
+            short nType = pDocument->GetFormatTable()->GetType(nNumberFormat);
+            bool bIsDate = (nType & NUMBERFORMAT_DATE);
+            bReturn = !bIsDate;
+        }
+        return bReturn;
+    }
+}
 
 ScChartPositioner::ScChartPositioner( ScDocument* pDoc, SCTAB nTab,
                     SCCOL nStartColP, SCROW nStartRowP, SCCOL nEndColP, SCROW nEndRowP) :
@@ -44,9 +60,9 @@ ScChartPositioner::ScChartPositioner( ScDocument* pDoc, SCTAB nTab,
         eGlue( SC_CHARTGLUE_NA ),
         nStartCol(0),
         nStartRow(0),
-        bColHeaders( FALSE ),
-        bRowHeaders( FALSE ),
-        bDummyUpperLeft( FALSE )
+        bColHeaders( sal_False ),
+        bRowHeaders( sal_False ),
+        bDummyUpperLeft( sal_False )
 {
     SetRangeList( ScRange( nStartColP, nStartRowP, nTab, nEndColP, nEndRowP, nTab ) );
     CheckColRowHeaders();
@@ -59,9 +75,9 @@ ScChartPositioner::ScChartPositioner( ScDocument* pDoc, const ScRangeListRef& rR
         eGlue( SC_CHARTGLUE_NA ),
         nStartCol(0),
         nStartRow(0),
-        bColHeaders( FALSE ),
-        bRowHeaders( FALSE ),
-        bDummyUpperLeft( FALSE )
+        bColHeaders( sal_False ),
+        bRowHeaders( sal_False ),
+        bDummyUpperLeft( sal_False )
 {
     if ( aRangeListRef.Is() )
         CheckColRowHeaders();
@@ -85,7 +101,7 @@ ScChartPositioner::~ScChartPositioner()
     delete pPositionMap;
 }
 
-BOOL ScChartPositioner::operator==(const ScChartPositioner& rCmp) const
+sal_Bool ScChartPositioner::operator==(const ScChartPositioner& rCmp) const
 {
     return bColHeaders == rCmp.bColHeaders
         && bRowHeaders == rCmp.bRowHeaders
@@ -103,7 +119,7 @@ void ScChartPositioner::GlueState()
 {
     if ( eGlue != SC_CHARTGLUE_NA )
         return;
-    bDummyUpperLeft = FALSE;
+    bDummyUpperLeft = sal_False;
     ScRangePtr pR;
     if ( aRangeListRef->Count() <= 1 )
     {
@@ -124,7 +140,7 @@ void ScChartPositioner::GlueState()
         }
         return;
     }
-//  ULONG nOldPos = aRangeListRef->GetCurPos();
+//  sal_uLong nOldPos = aRangeListRef->GetCurPos();
 
     pR = aRangeListRef->First();
     nStartCol = pR->aStart.Col();
@@ -161,7 +177,7 @@ void ScChartPositioner::GlueState()
         eGlue = SC_CHARTGLUE_COLS;
         return;
     }
-    ULONG nCR = (ULONG)nC * nR;
+    sal_uLong nCR = (sal_uLong)nC * nR;
 //2do:
 /*
     Erstmal simpel ohne Bitmaskiererei, maximal koennten so 8MB alloziert
@@ -171,13 +187,13 @@ void ScChartPositioner::GlueState()
     Zeilen/Spalten abzulegen, wuerde aber ein weiteres durchlaufen der
     RangeList und indirekten Zugriff auf das Array bedeuten.
  */
-    const BYTE nHole = 0;
-    const BYTE nOccu = 1;
-    const BYTE nFree = 2;
-    const BYTE nGlue = 3;
-    BYTE* p;
-    BYTE* pA = new BYTE[ nCR ];
-    memset( pA, 0, nCR * sizeof(BYTE) );
+    const sal_uInt8 nHole = 0;
+    const sal_uInt8 nOccu = 1;
+    const sal_uInt8 nFree = 2;
+    const sal_uInt8 nGlue = 3;
+    sal_uInt8* p;
+    sal_uInt8* pA = new sal_uInt8[ nCR ];
+    memset( pA, 0, nCR * sizeof(sal_uInt8) );
 
     SCCOL nCol, nCol1, nCol2;
     SCROW nRow, nRow1, nRow2;
@@ -189,17 +205,17 @@ void ScChartPositioner::GlueState()
         nRow2 = pR->aEnd.Row() - nStartRow;
         for ( nCol = nCol1; nCol <= nCol2; nCol++ )
         {
-            p = pA + (ULONG)nCol * nR + nRow1;
+            p = pA + (sal_uLong)nCol * nR + nRow1;
             for ( nRow = nRow1; nRow <= nRow2; nRow++, p++ )
                 *p = nOccu;
         }
     }
-    BOOL bGlue = TRUE;
+    sal_Bool bGlue = sal_True;
 
-    BOOL bGlueCols = FALSE;
+    sal_Bool bGlueCols = sal_False;
     for ( nCol = 0; bGlue && nCol < nC; nCol++ )
     {   // Spalten probieren durchzugehen und als frei markieren
-        p = pA + (ULONG)nCol * nR;
+        p = pA + (sal_uLong)nCol * nR;
         for ( nRow = 0; bGlue && nRow < nR; nRow++, p++ )
         {
             if ( *p == nOccu )
@@ -207,21 +223,21 @@ void ScChartPositioner::GlueState()
                 // moeglich. Am Rand koennte ok sein, wenn in dieser Spalte
                 // in jeder belegten Zeile einer belegt ist.
                 if ( nRow > 0 && nCol > 0 )
-                    bGlue = FALSE;      // nCol==0 kann DummyUpperLeft sein
+                    bGlue = sal_False;      // nCol==0 kann DummyUpperLeft sein
                 else
                     nRow = nR;
             }
             else
                 *p = nFree;
         }
-        if ( bGlue && *(p = (pA + ((((ULONG)nCol+1) * nR) - 1))) == nFree )
+        if ( bGlue && *(p = (pA + ((((sal_uLong)nCol+1) * nR) - 1))) == nFree )
         {   // Spalte als komplett frei markieren
             *p = nGlue;
-            bGlueCols = TRUE;       // mindestens eine freie Spalte
+            bGlueCols = sal_True;       // mindestens eine freie Spalte
         }
     }
 
-    BOOL bGlueRows = FALSE;
+    sal_Bool bGlueRows = sal_False;
     for ( nRow = 0; bGlue && nRow < nR; nRow++ )
     {   // Zeilen probieren durchzugehen und als frei markieren
         p = pA + nRow;
@@ -230,28 +246,28 @@ void ScChartPositioner::GlueState()
             if ( *p == nOccu )
             {
                 if ( nCol > 0 && nRow > 0 )
-                    bGlue = FALSE;      // nRow==0 kann DummyUpperLeft sein
+                    bGlue = sal_False;      // nRow==0 kann DummyUpperLeft sein
                 else
                     nCol = nC;
             }
             else
                 *p = nFree;
         }
-        if ( bGlue && *(p = (pA + ((((ULONG)nC-1) * nR) + nRow))) == nFree )
+        if ( bGlue && *(p = (pA + ((((sal_uLong)nC-1) * nR) + nRow))) == nFree )
         {   // Zeile als komplett frei markieren
             *p = nGlue;
-            bGlueRows = TRUE;       // mindestens eine freie Zeile
+            bGlueRows = sal_True;       // mindestens eine freie Zeile
         }
     }
 
     // n=1: die linke obere Ecke koennte bei Beschriftung automagisch
     // hinzugezogen werden
     p = pA + 1;
-    for ( ULONG n = 1; bGlue && n < nCR; n++, p++ )
+    for ( sal_uLong n = 1; bGlue && n < nCR; n++, p++ )
     {   // ein unberuehrtes Feld heisst, dass es weder spaltenweise noch
         // zeilenweise zu erreichen war, also nichts zusamenzufassen
         if ( *p == nHole )
-            bGlue = FALSE;
+            bGlue = sal_False;
     }
     if ( bGlue )
     {
@@ -262,7 +278,7 @@ void ScChartPositioner::GlueState()
         else
             eGlue = SC_CHARTGLUE_COLS;
         if ( *pA != nOccu )
-            bDummyUpperLeft = TRUE;
+            bDummyUpperLeft = sal_True;
     }
     else
     {
@@ -278,45 +294,45 @@ void ScChartPositioner::CheckColRowHeaders()
     SCROW nRow1, nRow2, iRow;
     SCTAB nTab1, nTab2;
 
-    BOOL bColStrings = TRUE;
-    BOOL bRowStrings = TRUE;
+    sal_Bool bColStrings = sal_True;
+    sal_Bool bRowStrings = sal_True;
     GlueState();
     if ( aRangeListRef->Count() == 1 )
     {
         aRangeListRef->First()->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         if ( nCol1 > nCol2 || nRow1 > nRow2 )
-            bColStrings = bRowStrings = FALSE;
+            bColStrings = bRowStrings = sal_False;
         else
         {
             for (iCol=nCol1; iCol<=nCol2 && bColStrings; iCol++)
             {
-                if (pDocument->HasValueData( iCol, nRow1, nTab1 ))
-                        bColStrings = FALSE;
+                if (lcl_hasValueDataButNoDates( pDocument, iCol, nRow1, nTab1 ))
+                        bColStrings = sal_False;
             }
             for (iRow=nRow1; iRow<=nRow2 && bRowStrings; iRow++)
             {
-                if (pDocument->HasValueData( nCol1, iRow, nTab1 ))
-                        bRowStrings = FALSE;
+                if (lcl_hasValueDataButNoDates( pDocument, nCol1, iRow, nTab1 ))
+                        bRowStrings = sal_False;
             }
         }
     }
     else
     {
-        BOOL bVert = (eGlue == SC_CHARTGLUE_NONE || eGlue == SC_CHARTGLUE_ROWS);
+        sal_Bool bVert = (eGlue == SC_CHARTGLUE_NONE || eGlue == SC_CHARTGLUE_ROWS);
         for ( ScRangePtr pR = aRangeListRef->First();
                 pR && (bColStrings || bRowStrings);
                 pR = aRangeListRef->Next() )
         {
             pR->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-            BOOL bTopRow = (nRow1 == nStartRow);
+            sal_Bool bTopRow = (nRow1 == nStartRow);
             if ( bRowStrings && (bVert || nCol1 == nStartCol) )
             {   // NONE oder ROWS: RowStrings in jeder Selektion moeglich
                 // COLS oder BOTH: nur aus der ersten Spalte
                 if ( nCol1 <= nCol2 )
                     for (iRow=nRow1; iRow<=nRow2 && bRowStrings; iRow++)
                     {
-                        if (pDocument->HasValueData( nCol1, iRow, nTab1 ))
-                                bRowStrings = FALSE;
+                        if (lcl_hasValueDataButNoDates( pDocument, nCol1, iRow, nTab1 ))
+                                bRowStrings = sal_False;
                     }
             }
             if ( bColStrings && bTopRow )
@@ -324,8 +340,8 @@ void ScChartPositioner::CheckColRowHeaders()
                 if ( nRow1 <= nRow2 )
                     for (iCol=nCol1; iCol<=nCol2 && bColStrings; iCol++)
                     {
-                        if (pDocument->HasValueData( iCol, nRow1, nTab1 ))
-                                bColStrings = FALSE;
+                        if (lcl_hasValueDataButNoDates( pDocument, iCol, nRow1, nTab1 ))
+                                bColStrings = sal_False;
                     }
             }
         }
@@ -368,7 +384,7 @@ void ScChartPositioner::CreatePositionMap()
 
     GlueState();
 
-    BOOL bNoGlue = (eGlue == SC_CHARTGLUE_NONE);
+    sal_Bool bNoGlue = (eGlue == SC_CHARTGLUE_NONE);
     Table* pCols = new Table;
     Table* pNewRowTable = new Table;
     ScAddress* pNewAddress = new ScAddress;
@@ -382,8 +398,8 @@ void ScChartPositioner::CreatePositionMap()
         for ( nTab = nTab1; nTab <= nTab2; nTab++ )
         {
             // nTab im ColKey, um gleiche Col/Row in anderer Table haben zu koennen
-            ULONG nInsCol = (static_cast<ULONG>(nTab) << 16) | (bNoGlue ? 0 :
-                    static_cast<ULONG>(nCol1));
+            sal_uLong nInsCol = (static_cast<sal_uLong>(nTab) << 16) | (bNoGlue ? 0 :
+                    static_cast<sal_uLong>(nCol1));
             for ( nCol = nCol1; nCol <= nCol2; ++nCol, ++nInsCol )
             {
                 if ( bNoGlue || eGlue == SC_CHARTGLUE_ROWS )
@@ -407,7 +423,7 @@ void ScChartPositioner::CreatePositionMap()
                 }
                 // bei anderer Tabelle wurde bereits neuer ColKey erzeugt,
                 // die Zeilen muessen fuer's Dummy fuellen gleich sein!
-                ULONG nInsRow = (bNoGlue ? nNoGlueRow : nRow1);
+                sal_uLong nInsRow = (bNoGlue ? nNoGlueRow : nRow1);
                 for ( nRow = nRow1; nRow <= nRow2; nRow++, nInsRow++ )
                 {
                     if ( pCol->Insert( nInsRow, pNewAddress ) )
@@ -470,11 +486,11 @@ void ScChartPositioner::CreatePositionMap()
         if ( bNoGlue )
         {   // Luecken mit Dummies fuellen, erste Spalte ist Master
             Table* pFirstCol = (Table*) pCols->First();
-            ULONG nCount = pFirstCol->Count();
+            sal_uLong nCount = pFirstCol->Count();
             pFirstCol->First();
-            for ( ULONG n = 0; n < nCount; n++, pFirstCol->Next() )
+            for ( sal_uLong n = 0; n < nCount; n++, pFirstCol->Next() )
             {
-                ULONG nKey = pFirstCol->GetCurKey();
+                sal_uLong nKey = pFirstCol->GetCurKey();
                 pCols->First();
                 while ( (pCol = (Table*) pCols->Next())!=NULL )
                     pCol->Insert( nKey, (void*)0 );     // keine Daten
@@ -499,7 +515,7 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
         ppData( new ScAddress* [ nChartCols * nChartRows ] ),
         ppColHeader( new ScAddress* [ nChartCols ] ),
         ppRowHeader( new ScAddress* [ nChartRows ] ),
-        nCount( (ULONG) nChartCols * nChartRows ),
+        nCount( (sal_uLong) nChartCols * nChartRows ),
         nColCount( nChartCols ),
         nRowCount( nChartRows )
 {
@@ -535,7 +551,7 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
         pCol = (Table*) rCols.Next();
 
     // Daten spaltenweise und Spalten-Header
-    ULONG nIndex = 0;
+    sal_uLong nIndex = 0;
     for ( nCol = 0; nCol < nColCount; nCol++ )
     {
         if ( pCol )
@@ -569,7 +585,7 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
 
 ScChartPositionMap::~ScChartPositionMap()
 {
-    for ( ULONG nIndex=0; nIndex < nCount; nIndex++ )
+    for ( sal_uLong nIndex=0; nIndex < nCount; nIndex++ )
     {
         delete ppData[nIndex];
     }
@@ -595,8 +611,8 @@ ScChartPositionMap::~ScChartPositionMap()
 //UNUSED2009-05     ScRangeListRef xRangeList = new ScRangeList;
 //UNUSED2009-05     if ( nChartCol < nColCount )
 //UNUSED2009-05     {
-//UNUSED2009-05         ULONG nStop = GetIndex( nChartCol, nRowCount );
-//UNUSED2009-05         for ( ULONG nIndex = GetIndex( nChartCol, 0 ); nIndex < nStop; nIndex++ )
+//UNUSED2009-05         sal_uLong nStop = GetIndex( nChartCol, nRowCount );
+//UNUSED2009-05         for ( sal_uLong nIndex = GetIndex( nChartCol, 0 ); nIndex < nStop; nIndex++ )
 //UNUSED2009-05         {
 //UNUSED2009-05             if ( ppData[ nIndex ] )
 //UNUSED2009-05                 xRangeList->Join( *ppData[ nIndex ] );
@@ -611,8 +627,8 @@ ScChartPositionMap::~ScChartPositionMap()
 //UNUSED2009-05     ScRangeListRef xRangeList = new ScRangeList;
 //UNUSED2009-05     if ( nChartRow < nRowCount )
 //UNUSED2009-05     {
-//UNUSED2009-05         ULONG nStop = GetIndex( nColCount, nChartRow );
-//UNUSED2009-05         for ( ULONG nIndex = GetIndex( 0, nChartRow ); nIndex < nStop;
+//UNUSED2009-05         sal_uLong nStop = GetIndex( nColCount, nChartRow );
+//UNUSED2009-05         for ( sal_uLong nIndex = GetIndex( 0, nChartRow ); nIndex < nStop;
 //UNUSED2009-05                 nIndex += nRowCount )
 //UNUSED2009-05         {
 //UNUSED2009-05             if ( ppData[ nIndex ] )

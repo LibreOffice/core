@@ -124,14 +124,14 @@ bool ScDPTableData::IsRepeatIfEmpty()
     return false;
 }
 
-ULONG ScDPTableData::GetNumberFormat(long)
+sal_uLong ScDPTableData::GetNumberFormat(long)
 {
     return 0;           // default format
 }
 
-BOOL ScDPTableData::IsBaseForGroup(long) const
+sal_Bool ScDPTableData::IsBaseForGroup(long) const
 {
-    return FALSE;       // always false
+    return sal_False;       // always false
 }
 
 long ScDPTableData::GetGroupBase(long) const
@@ -139,23 +139,23 @@ long ScDPTableData::GetGroupBase(long) const
     return -1;          // always none
 }
 
-BOOL ScDPTableData::IsNumOrDateGroup(long) const
+sal_Bool ScDPTableData::IsNumOrDateGroup(long) const
 {
-    return FALSE;       // always false
+    return sal_False;       // always false
 }
 
-BOOL ScDPTableData::IsInGroup( const ScDPItemData&, long,
+sal_Bool ScDPTableData::IsInGroup( const ScDPItemData&, long,
                                const ScDPItemData&, long ) const
 {
     DBG_ERROR("IsInGroup shouldn't be called for non-group data");
-    return FALSE;
+    return sal_False;
 }
 
-BOOL ScDPTableData::HasCommonElement( const ScDPItemData&, long,
+sal_Bool ScDPTableData::HasCommonElement( const ScDPItemData&, long,
                                       const ScDPItemData&, long ) const
 {
     DBG_ERROR("HasCommonElement shouldn't be called for non-group data");
-    return FALSE;
+    return sal_False;
 }
 void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTable& rCacheTable,
                                         const CalcInfo& rInfo, CalcRowData& rData)
@@ -191,13 +191,13 @@ void ScDPTableData::ProcessRowData(CalcInfo& rInfo, CalcRowData& rData, bool bAu
         // DataPilot Migration
     if (!bAutoShow)
     {
-            LateInitParams  aColParams( rInfo.aColDims, rInfo.aColLevels, FALSE );
-            LateInitParams  aRowParams ( rInfo.aRowDims, rInfo.aRowLevels, TRUE );
+            LateInitParams  aColParams( rInfo.aColDims, rInfo.aColLevels, sal_False );
+            LateInitParams  aRowParams ( rInfo.aRowDims, rInfo.aRowLevels, sal_True );
             // root always init child
-            aColParams.SetInitChild( TRUE );
-            aColParams.SetInitAllChildren( FALSE);
-            aRowParams.SetInitChild( TRUE );
-            aRowParams.SetInitAllChildren( FALSE);
+            aColParams.SetInitChild( sal_True );
+            aColParams.SetInitAllChildren( sal_False);
+            aRowParams.SetInitChild( sal_True );
+            aRowParams.SetInitAllChildren( sal_False);
 
             rInfo.pColRoot->LateInitFrom( aColParams, rData.aColData,0, *rInfo.pInitState);
             rInfo.pRowRoot->LateInitFrom( aRowParams, rData.aRowData, 0, *rInfo.pInitState);

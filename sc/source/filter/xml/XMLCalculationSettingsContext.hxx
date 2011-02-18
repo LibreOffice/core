@@ -49,14 +49,14 @@ class ScXMLCalculationSettingsContext : public SvXMLImportContext
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
-    ScXMLCalculationSettingsContext( ScXMLImport& rImport, USHORT nPrfx,
+    ScXMLCalculationSettingsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     virtual ~ScXMLCalculationSettingsContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -73,14 +73,14 @@ class ScXMLNullDateContext : public SvXMLImportContext
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
-    ScXMLNullDateContext( ScXMLImport& rImport, USHORT nPrfx,
+    ScXMLNullDateContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList, ScXMLCalculationSettingsContext* pCalcSet);
 
     virtual ~ScXMLNullDateContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
@@ -93,14 +93,14 @@ class ScXMLIterationContext : public SvXMLImportContext
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
-    ScXMLIterationContext( ScXMLImport& rImport, USHORT nPrfx,
+    ScXMLIterationContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList, ScXMLCalculationSettingsContext* pCalcSet);
 
     virtual ~ScXMLIterationContext();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );

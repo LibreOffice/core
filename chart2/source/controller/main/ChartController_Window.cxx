@@ -565,7 +565,7 @@ void ChartController::startDoubleClickWaiting()
 
     m_bWaitingForDoubleClick = true;
 
-    ULONG nDblClkTime = 500;
+    sal_uLong nDblClkTime = 500;
     if( m_pChartWindow )
     {
         const MouseSettings& rMSettings = m_pChartWindow->GetSettings().GetMouseSettings();
@@ -593,7 +593,7 @@ IMPL_LINK( ChartController, DoubleClickWaitingHdl, void*, EMPTYARG )
         {
             Window::PointerState aPointerState( m_pChartWindow->GetPointerState() );
             MouseEvent aMouseEvent( aPointerState.maPos,1/*nClicks*/,
-                                    0/*nMode*/, static_cast< USHORT >( aPointerState.mnState )/*nButtons*/,
+                                    0/*nMode*/, static_cast< sal_uInt16 >( aPointerState.mnState )/*nButtons*/,
                                     0/*nModifier*/ );
             impl_SetMousePointer( aMouseEvent );
         }
@@ -711,7 +711,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
          && !rMEvt.IsRight() )
     {
         //start drag
-        USHORT  nDrgLog = (USHORT)m_pChartWindow->PixelToLogic(Size(DRGPIX,0)).Width();
+        sal_uInt16  nDrgLog = (sal_uInt16)m_pChartWindow->PixelToLogic(Size(DRGPIX,0)).Width();
         SdrDragMethod* pDragMethod = NULL;
 
         //change selection to 3D scene if rotate mode
@@ -801,7 +801,11 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
         if ( m_eDrawMode == CHARTDRAW_INSERT && pDrawViewWrapper->IsCreateObj() )
         {
             pDrawViewWrapper->EndCreateObj( SDRCREATE_FORCEEND );
-            impl_switchDiagramPositioningToExcludingPositioning();
+            {
+                HiddenUndoContext aUndoContext( m_xUndoManager );
+                    // don't want the positioning Undo action to appear in the UI
+                impl_switchDiagramPositioningToExcludingPositioning();
+            }
             if ( pDrawViewWrapper->AreObjectsMarked() )
             {
                 if ( pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_TEXT )
@@ -838,12 +842,12 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
             if( pChartDragMethod )
             {
                 UndoGuard aUndoGuard( pChartDragMethod->getUndoDescription(),
-                        m_xUndoManager, getModel() );
+                        m_xUndoManager );
 
                 if( pDrawViewWrapper->EndDragObj(false) )
                 {
                     bDraggingDone = true;
-                    aUndoGuard.commitAction();
+                    aUndoGuard.commit();
                 }
             }
 
@@ -871,7 +875,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                             ActionDescriptionProvider::createDescription(
                                 eActionType,
                                 ObjectNameProvider::getName( ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() ))),
-                            m_xUndoManager, getModel() );
+                            m_xUndoManager );
                         bool bChanged = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
                                         , getModel()
                                         , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
@@ -879,7 +883,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                         if( bChanged )
                         {
                             bDraggingDone = true;
-                            aUndoGuard.commitAction();
+                            aUndoGuard.commit();
                         }
                     }
                 }
@@ -974,12 +978,12 @@ void ChartController::execute_Resize()
 }
 void ChartController::execute_Activate()
 {
-    ///// pDrawViewWrapper->SetEditMode(TRUE);
+    ///// pDrawViewWrapper->SetEditMode(sal_True);
 }
 void ChartController::execute_Deactivate()
 {
     /*
-    pDrawViewWrapper->SetEditMode(FALSE);
+    pDrawViewWrapper->SetEditMode(sal_False);
     this->ReleaseMouse();
     */
 }
@@ -1593,7 +1597,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
         {
                 // 3D-Kontext wieder zerstoeren
             GetWindow()->Invalidate();
-            bReturn = TRUE;
+            bReturn = sal_True;
         }
     }
     */
@@ -1832,7 +1836,7 @@ bool ChartController::impl_moveOrResizeObject(
 
             ObjectType eObjectType = ObjectIdentifier::getObjectType( rCID );
             UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription(
-                    eActionType, ObjectNameProvider::getName( eObjectType )), m_xUndoManager, xChartModel );
+                    eActionType, ObjectNameProvider::getName( eObjectType )), m_xUndoManager );
             {
                 ControllerLockGuard aCLGuard( xChartModel );
                 if( bNeedShift )
@@ -1840,7 +1844,7 @@ bool ChartController::impl_moveOrResizeObject(
                 if( bNeedResize || (eObjectType == OBJECTTYPE_DIAGRAM) )//Also set an explicat size at the diagram when an explicit position is set
                     xObjProp->setPropertyValue( C2U("RelativeSize"), uno::makeAny( aRelSize ));
             }
-            aUndoGuard.commitAction();
+            aUndoGuard.commit();
         }
     }
     return bResult;
@@ -1890,7 +1894,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
     {
         Point aMousePos( m_pChartWindow->PixelToLogic( rEvent.GetPosPixel()));
         sal_uInt16 nModifier = rEvent.GetModifier();
-        BOOL bLeftDown = rEvent.IsLeft();
+        sal_Bool bLeftDown = rEvent.IsLeft();
 
         if ( m_pDrawViewWrapper->IsTextEdit() )
         {

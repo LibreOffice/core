@@ -196,8 +196,8 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     SCTAB   nC;
     String  aTmpString;
     SCTAB  nScTabCount     = rTabInfo.GetScTabCount();
-    UINT16  nExcTabCount    = rTabInfo.GetXclTabCount();
-    UINT16  nCodenames      = static_cast< UINT16 >( GetExtDocOptions().GetCodeNameCount() );
+    sal_uInt16  nExcTabCount    = rTabInfo.GetXclTabCount();
+    sal_uInt16  nCodenames      = static_cast< sal_uInt16 >( GetExtDocOptions().GetCodeNameCount() );
 
     SfxObjectShell* pShell = GetDocShell();
     sal_uInt16 nWriteProtHash = pShell ? pShell->GetModifyPasswordHash() : 0;

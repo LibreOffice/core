@@ -914,7 +914,7 @@ void ScXMLExport::GetDetectiveOpList( ScMyDetectiveOpContainer& rDetOp )
             sal_uInt32 nCount(pOpList->Count());
             for( sal_uInt32 nIndex = 0; nIndex < nCount; ++nIndex )
             {
-                ScDetOpData* pDetData(pOpList->GetObject( static_cast<USHORT>(nIndex) ));
+                ScDetOpData* pDetData(pOpList->GetObject( static_cast<sal_uInt16>(nIndex) ));
                 if( pDetData )
                 {
                     const ScAddress& rDetPos = pDetData->GetPos();
@@ -1479,11 +1479,11 @@ void ScXMLExport::FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRow
     sal_Int32 nDepth(pFields->GetDepth());
     for(sal_Int32 i = 0; i < nDepth; ++i)
     {
-        sal_Int32 nFields = pFields->GetCount(static_cast<USHORT>(i));
+        sal_Int32 nFields = pFields->GetCount(static_cast<sal_uInt16>(i));
         for (sal_Int32 j = 0; j < nFields; ++j)
         {
             ScMyColumnRowGroup aGroup;
-            ScOutlineEntry* pEntry(pFields->GetEntry(static_cast<USHORT>(i), static_cast<USHORT>(j)));
+            ScOutlineEntry* pEntry(pFields->GetEntry(static_cast<sal_uInt16>(i), static_cast<sal_uInt16>(j)));
             aGroup.nField = pEntry->GetStart();
             aGroup.nLevel = static_cast<sal_Int16>(i);
             aGroup.bDisplay = !(pEntry->IsHidden());
@@ -1916,7 +1916,7 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
     exportDataStyles();
 
     aStylesExp.exportStyleFamily(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellStyles")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)), xCellStylesExportPropertySetMapper, FALSE, XML_STYLE_FAMILY_TABLE_CELL);
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME)), xCellStylesExportPropertySetMapper, sal_False, XML_STYLE_FAMILY_TABLE_CELL);
 
     SvXMLExport::_ExportStyles(bUsed);
 }
@@ -3086,7 +3086,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                         xShapeProps->getPropertyValue( sPersistName ) >>= aChartName;
                         ScRange aEmptyRange;
                         ScChartListener aSearcher( aChartName, pDoc, aEmptyRange );
-                        USHORT nIndex = 0;
+                        sal_uInt16 nIndex = 0;
                         ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
                         if ( pCollection && pCollection->Search( &aSearcher, nIndex ) )
                         {
@@ -3156,7 +3156,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
 //BM                    }
 //BM                    if(pChartListener)
 //BM                    {
-//BM                        USHORT nIndex(0);
+//BM                        sal_uInt16 nIndex(0);
 //BM                        pChartListener->SetString( sName );
 //BM                        if ( GetDocument() && GetDocument()->GetChartListenerCollection()->Search( pChartListener, nIndex ) )
 //BM                        {
@@ -3213,7 +3213,7 @@ void ScXMLExport::WriteShapes(const ScMyCell& rMyCell)
         awt::Point aPoint;
         Rectangle aRec = pDoc->GetMMRect(static_cast<SCCOL>(rMyCell.aCellAddress.Column), static_cast<SCROW>(rMyCell.aCellAddress.Row),
             static_cast<SCCOL>(rMyCell.aCellAddress.Column), static_cast<SCROW>(rMyCell.aCellAddress.Row), static_cast<SCTAB>(rMyCell.aCellAddress.Sheet));
-        BOOL bNegativePage(pDoc->IsNegativePage(rMyCell.aCellAddress.Sheet));
+        sal_Bool bNegativePage(pDoc->IsNegativePage(rMyCell.aCellAddress.Sheet));
         if (bNegativePage)
             aPoint.X = aRec.Right();
         else
@@ -4519,10 +4519,10 @@ sal_Bool SAL_CALL ScXMLExport::filter( const ::com::sun::star::uno::Sequence< ::
 {
     ScUnoGuard aGuard;
     if (pDoc)
-        pDoc->DisableIdle(TRUE);
+        pDoc->DisableIdle(sal_True);
     sal_Bool bReturn(SvXMLExport::filter(aDescriptor));
     if (pDoc)
-        pDoc->DisableIdle(FALSE);
+        pDoc->DisableIdle(sal_False);
     return bReturn;
 }
 
@@ -4531,7 +4531,7 @@ void SAL_CALL ScXMLExport::cancel()
 {
     ScUnoGuard aGuard;
     if (pDoc)
-        pDoc->DisableIdle(FALSE);
+        pDoc->DisableIdle(sal_False);
     SvXMLExport::cancel();
 }
 

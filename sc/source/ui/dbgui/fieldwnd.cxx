@@ -282,7 +282,7 @@ void ScDPFieldWindow::Redraw()
     Point           aPos0;
     Size            aSize( GetSizePixel() );
     Font            aFont( GetFont() );         // Font vom Window
-    aFont.SetTransparent( TRUE );
+    aFont.SetTransparent( sal_True );
     aVirDev.SetFont( aFont );
     aVirDev.SetOutputSizePixel( aSize );
 
@@ -402,7 +402,7 @@ void ScDPFieldWindow::SetSelectionEnd()
     }
 }
 
-void ScDPFieldWindow::MoveSelection( USHORT nKeyCode, SCsCOL nDX, SCsROW nDY )
+void ScDPFieldWindow::MoveSelection( sal_uInt16 nKeyCode, SCsCOL nDX, SCsROW nDY )
 {
     size_t nNewIndex = CalcNewFieldIndex( nDX, nDY );
     if( (eType == TYPE_SELECT) && (nNewIndex == nFieldSelected) )
@@ -541,12 +541,12 @@ void __EXPORT ScDPFieldWindow::MouseMove( const MouseEvent& rMEvt )
 void __EXPORT ScDPFieldWindow::KeyInput( const KeyEvent& rKEvt )
 {
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
-    USHORT nCode = rKeyCode.GetCode();
-    BOOL bKeyEvaluated = FALSE;
+    sal_uInt16 nCode = rKeyCode.GetCode();
+    sal_Bool bKeyEvaluated = sal_False;
 
     if( rKeyCode.IsMod1() && (eType != TYPE_SELECT) )
     {
-        bKeyEvaluated = TRUE;
+        bKeyEvaluated = sal_True;
         switch( nCode )
         {
             case KEY_UP:    MoveFieldRel( 0, -1 );              break;
@@ -555,12 +555,12 @@ void __EXPORT ScDPFieldWindow::KeyInput( const KeyEvent& rKEvt )
             case KEY_RIGHT: MoveFieldRel( 1, 0 );               break;
             case KEY_HOME:  MoveField( 0 );                     break;
             case KEY_END:   MoveField( aFieldArr.size() - 1 );  break;
-            default:        bKeyEvaluated = FALSE;
+            default:        bKeyEvaluated = sal_False;
         }
     }
     else
     {
-        bKeyEvaluated = TRUE;
+        bKeyEvaluated = sal_True;
         switch( nCode )
         {
             case KEY_UP:    MoveSelection( nCode, 0, -1 );          break;
@@ -571,7 +571,7 @@ void __EXPORT ScDPFieldWindow::KeyInput( const KeyEvent& rKEvt )
             case KEY_END:   SetSelectionEnd();                      break;
             case KEY_DELETE:
                 pDlg->NotifyRemoveField( eType, nFieldSelected );   break;
-            default:        bKeyEvaluated = FALSE;
+            default:        bKeyEvaluated = sal_False;
         }
     }
 
@@ -586,7 +586,7 @@ void __EXPORT ScDPFieldWindow::GetFocus()
     if( GetGetFocusFlags() & GETFOCUS_MNEMONIC )    // move field on shortcut
         pDlg->NotifyMoveField( eType );
     else                                            // else change focus
-        pDlg->NotifyFieldFocus( eType, TRUE );
+        pDlg->NotifyFieldFocus( eType, sal_True );
 
     if (pAccessible)
     {
@@ -602,7 +602,7 @@ void __EXPORT ScDPFieldWindow::LoseFocus()
 {
     Control::LoseFocus();
     Redraw();
-    pDlg->NotifyFieldFocus( eType, FALSE );
+    pDlg->NotifyFieldFocus( eType, sal_False );
 
     if (pAccessible)
     {
@@ -695,7 +695,7 @@ const String& ScDPFieldWindow::GetFieldText( size_t nIndex ) const
 bool ScDPFieldWindow::AddField( const String& rText, const Point& rPos, size_t& rnIndex )
 {
     if ( aFieldArr.size() == nFieldSize )
-        return FALSE;
+        return sal_False;
 
     size_t nNewIndex = 0;
     if( GetFieldIndex( rPos, nNewIndex ) )

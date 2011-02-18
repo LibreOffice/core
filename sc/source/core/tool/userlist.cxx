@@ -49,12 +49,12 @@
 void ScUserListData::InitTokens()
 {
     sal_Unicode cSep = ScGlobal::cListDelimiter;
-    nTokenCount = (USHORT) aStr.GetTokenCount(cSep);
+    nTokenCount = (sal_uInt16) aStr.GetTokenCount(cSep);
     if (nTokenCount)
     {
         pSubStrings = new String[nTokenCount];
         pUpperSub   = new String[nTokenCount];
-        for (USHORT i=0; i<nTokenCount; i++)
+        for (sal_uInt16 i=0; i<nTokenCount; i++)
         {
             pUpperSub[i] = pSubStrings[i] = aStr.GetToken((xub_StrLen)i,cSep);
             ScGlobal::pCharClass->toUpper(pUpperSub[i]);
@@ -92,19 +92,19 @@ void ScUserListData::SetString( const String& rStr )
     InitTokens();
 }
 
-USHORT ScUserListData::GetSubCount() const
+sal_uInt16 ScUserListData::GetSubCount() const
 {
     return nTokenCount;
 }
 
-BOOL ScUserListData::GetSubIndex(const String& rSubStr, USHORT& rIndex) const
+sal_Bool ScUserListData::GetSubIndex(const String& rSubStr, sal_uInt16& rIndex) const
 {
-    USHORT i;
+    sal_uInt16 i;
     for (i=0; i<nTokenCount; i++)
         if (rSubStr == pSubStrings[i])
         {
             rIndex = i;
-            return TRUE;
+            return sal_True;
         }
 
     String aUpStr = rSubStr;
@@ -113,13 +113,13 @@ BOOL ScUserListData::GetSubIndex(const String& rSubStr, USHORT& rIndex) const
         if (aUpStr == pUpperSub[i])
         {
             rIndex = i;
-            return TRUE;
+            return sal_True;
         }
 
-    return FALSE;
+    return sal_False;
 }
 
-String ScUserListData::GetSubStr(USHORT nIndex) const
+String ScUserListData::GetSubStr(sal_uInt16 nIndex) const
 {
     if (nIndex < nTokenCount)
         return pSubStrings[nIndex];
@@ -129,10 +129,10 @@ String ScUserListData::GetSubStr(USHORT nIndex) const
 
 StringCompare ScUserListData::Compare(const String& rSubStr1, const String& rSubStr2) const
 {
-    USHORT nIndex1;
-    USHORT nIndex2;
-    BOOL bFound1 = GetSubIndex(rSubStr1, nIndex1);
-    BOOL bFound2 = GetSubIndex(rSubStr2, nIndex2);
+    sal_uInt16 nIndex1;
+    sal_uInt16 nIndex2;
+    sal_Bool bFound1 = GetSubIndex(rSubStr1, nIndex1);
+    sal_Bool bFound2 = GetSubIndex(rSubStr2, nIndex2);
     if (bFound1)
     {
         if (bFound2)
@@ -155,10 +155,10 @@ StringCompare ScUserListData::Compare(const String& rSubStr1, const String& rSub
 
 StringCompare ScUserListData::ICompare(const String& rSubStr1, const String& rSubStr2) const
 {
-    USHORT nIndex1;
-    USHORT nIndex2;
-    BOOL bFound1 = GetSubIndex(rSubStr1, nIndex1);
-    BOOL bFound2 = GetSubIndex(rSubStr2, nIndex2);
+    sal_uInt16 nIndex1;
+    sal_uInt16 nIndex2;
+    sal_Bool bFound1 = GetSubIndex(rSubStr1, nIndex1);
+    sal_Bool bFound2 = GetSubIndex(rSubStr2, nIndex2);
     if (bFound1)
     {
         if (bFound2)
@@ -179,7 +179,7 @@ StringCompare ScUserListData::ICompare(const String& rSubStr1, const String& rSu
         return (StringCompare) ScGlobal::GetpTransliteration()->compareString( rSubStr1, rSubStr2 );
 }
 
-ScUserList::ScUserList(USHORT nLim, USHORT nDel) :
+ScUserList::ScUserList(sal_uInt16 nLim, sal_uInt16 nDel) :
     ScCollection    ( nLim, nDel )
 {
     using namespace ::com::sun::star;
@@ -253,24 +253,24 @@ ScDataObject* ScUserList::Clone() const
 
 ScUserListData* ScUserList::GetData(const String& rSubStr) const
 {
-    USHORT  nIndex;
-    USHORT  i = 0;
+    sal_uInt16  nIndex;
+    sal_uInt16  i = 0;
     for (i=0; i < nCount; i++)
         if (((ScUserListData*)pItems[i])->GetSubIndex(rSubStr, nIndex))
             return (ScUserListData*)pItems[i];
     return NULL;
 }
 
-BOOL ScUserList::operator==( const ScUserList& r ) const
+sal_Bool ScUserList::operator==( const ScUserList& r ) const
 {
-    BOOL bEqual = (nCount == r.nCount);
+    sal_Bool bEqual = (nCount == r.nCount);
 
     if ( bEqual )
     {
         ScUserListData* pMyData    = NULL;
         ScUserListData* pOtherData = NULL;
 
-        for ( USHORT i=0; i<nCount && bEqual; i++)
+        for ( sal_uInt16 i=0; i<nCount && bEqual; i++)
         {
             pMyData    = (ScUserListData*)At(i);
             pOtherData = (ScUserListData*)r.At(i);
@@ -284,14 +284,14 @@ BOOL ScUserList::operator==( const ScUserList& r ) const
 }
 
 
-BOOL ScUserList::HasEntry( const String& rStr ) const
+sal_Bool ScUserList::HasEntry( const String& rStr ) const
 {
-    for ( USHORT i=0; i<nCount; i++)
+    for ( sal_uInt16 i=0; i<nCount; i++)
     {
         const ScUserListData* pMyData = (ScUserListData*) At(i);
         if ( pMyData->aStr == rStr )
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 

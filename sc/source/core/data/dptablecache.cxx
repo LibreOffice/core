@@ -59,15 +59,15 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 // -----------------------------------------------------------------------
 namespace
 {
-    BOOL lcl_isDate( ULONG nNumType )
+    sal_Bool lcl_isDate( sal_uLong nNumType )
     {
         return ( (nNumType & NUMBERFORMAT_DATE) != 0 )? 1:0 ;
     }
 
-    BOOL lcl_Search( const std::vector<ScDPItemData*>& list, const ::std::vector<SCROW>& rOrder, const ScDPItemData& item, SCROW& rIndex)
+    sal_Bool lcl_Search( const std::vector<ScDPItemData*>& list, const ::std::vector<SCROW>& rOrder, const ScDPItemData& item, SCROW& rIndex)
     {
         rIndex = list.size();
-        BOOL bFound = FALSE;
+        sal_Bool bFound = sal_False;
         SCROW nLo = 0;
         SCROW nHi = list.size() - 1;
         SCROW nIndex;
@@ -83,7 +83,7 @@ namespace
                 nHi = nIndex - 1;
                 if (nCompare == 0)
                 {
-                    bFound = TRUE;
+                    bFound = sal_True;
                     nLo = nIndex;
                 }
             }
@@ -107,7 +107,7 @@ namespace
                 {
                     nNumType = NUMBERFORMAT_LOGICAL;
                     fValue  = xRow->getBoolean(nCol) ? 1 : 0;
-                    return new ScDPItemData( rStr, fValue,TRUE,nNumType);
+                    return new ScDPItemData( rStr, fValue,sal_True,nNumType);
                 }
                 //break;
 
@@ -123,7 +123,7 @@ namespace
                 {
                     //! do the conversion here?
                     fValue = xRow->getDouble(nCol);
-                    return new ScDPItemData( rStr, fValue,TRUE);
+                    return new ScDPItemData( rStr, fValue,sal_True);
                 }
                 //break;
 
@@ -133,7 +133,7 @@ namespace
 
                     util::Date aDate = xRow->getDate(nCol);
                     fValue = Date(aDate.Day, aDate.Month, aDate.Year) - rNullDate;
-                    return new ScDPItemData( rStr, fValue, TRUE, nNumType );
+                    return new ScDPItemData( rStr, fValue, sal_True, nNumType );
                 }
                 //break;
 
@@ -144,7 +144,7 @@ namespace
                     util::Time aTime = xRow->getTime(nCol);
                     fValue = ( aTime.Hours * 3600 + aTime.Minutes * 60 +
                         aTime.Seconds + aTime.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
-                    return new ScDPItemData( rStr,fValue, TRUE, nNumType );
+                    return new ScDPItemData( rStr,fValue, sal_True, nNumType );
                 }
                 //break;
 
@@ -156,7 +156,7 @@ namespace
                     fValue = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) - rNullDate ) +
                         ( aStamp.Hours * 3600 + aStamp.Minutes * 60 +
                         aStamp.Seconds + aStamp.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
-                    return new ScDPItemData( rStr,fValue, TRUE, nNumType );
+                    return new ScDPItemData( rStr,fValue, sal_True, nNumType );
                 }
                 //break;
             case sdbc::DataType::CHAR:
@@ -183,13 +183,13 @@ namespace
 }
 // Wang Xu Ming -- 12/23/2008
 //Refactor cache data
-ScDPItemData::ScDPItemData( const String& rS, double fV/* = 0.0*/, BOOL bHV/* = FALSE*/, const ULONG nNumFormatP /*= 0*/ , BOOL bData/* = TRUE*/) :
+ScDPItemData::ScDPItemData( const String& rS, double fV/* = 0.0*/, sal_Bool bHV/* = sal_False*/, const sal_uLong nNumFormatP /*= 0*/ , sal_Bool bData/* = sal_True*/) :
 nNumFormat( nNumFormatP ), aString(rS), fValue(fV),
-mbFlag( (MK_VAL*!!bHV) | (MK_DATA*!!bData) | (MK_ERR*!!FALSE) | (MK_DATE*!!lcl_isDate( nNumFormat ) ) )
+mbFlag( (MK_VAL*!!bHV) | (MK_DATA*!!bData) | (MK_ERR*!!sal_False) | (MK_DATE*!!lcl_isDate( nNumFormat ) ) )
 {
 }
 
-ScDPItemData::ScDPItemData( ScDocument* pDoc, SCROW nRow, USHORT nCol, USHORT nDocTab  ):
+ScDPItemData::ScDPItemData( ScDocument* pDoc, SCROW nRow, sal_uInt16 nCol, sal_uInt16 nDocTab  ):
         nNumFormat( 0 ), fValue(0.0), mbFlag( 0 )
 {
     String aDocStr;
@@ -203,13 +203,13 @@ ScDPItemData::ScDPItemData( ScDocument* pDoc, SCROW nRow, USHORT nCol, USHORT nD
     if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA && ((ScFormulaCell*)pCell)->GetErrCode() )
     {
         SetString ( aDocStr );      //[SODC_19347] add liyi
-        //bErr = TRUE;              //[SODC_19347] del liyi
+        //bErr = sal_True;              //[SODC_19347] del liyi
         mbFlag |= MK_ERR;
     }
     else if ( pDoc->HasValueData( nCol, nRow, nDocTab ) )
     {
         double fVal = pDoc->GetValue(ScAddress(nCol, nRow, nDocTab));
-        ULONG nFormat = NUMBERFORMAT_NUMBER;
+        sal_uLong nFormat = NUMBERFORMAT_NUMBER;
         if ( pFormatter )
             nFormat = pFormatter->GetType( pDoc->GetNumberFormat( ScAddress( nCol, nRow, nDocTab ) ) );
         aString = aDocStr;
@@ -223,7 +223,7 @@ ScDPItemData::ScDPItemData( ScDocument* pDoc, SCROW nRow, USHORT nCol, USHORT nD
 }
 // End Comments
 
-BOOL ScDPItemData::IsCaseInsEqual( const ScDPItemData& r ) const
+sal_Bool ScDPItemData::IsCaseInsEqual( const ScDPItemData& r ) const
 { //TODO: indified Date?
     //! pass Transliteration?
     //! inline?
@@ -242,27 +242,27 @@ size_t ScDPItemData::Hash() const
         return rtl_ustr_hashCode_WithLength( aString.GetBuffer(), aString.Len() );
 }
 
-BOOL ScDPItemData::operator==( const ScDPItemData& r ) const
+sal_Bool ScDPItemData::operator==( const ScDPItemData& r ) const
 {
     if ( IsValue() )
     {
         if( (HasDatePart() != r.HasDatePart())  || (HasDatePart() && mnDatePart != r.mnDatePart) )
-            return FALSE;
+            return sal_False;
 
 // Wang Xu Ming -- 1/9/2009
 // Add Data Cache Support.
 // Identify date
         if ( IsDate() != r.IsDate() )
-            return FALSE;
+            return sal_False;
       else
         if ( r.IsValue() )
             return rtl::math::approxEqual( fValue, r.fValue );
         else
-            return FALSE;
+            return sal_False;
 // End Comments
     }
     else if ( r.IsValue() )
-        return FALSE;
+        return sal_False;
     else
         // need exact equality until we have a safe case insensitive string hash
         return aString == r.aString;
@@ -334,17 +334,17 @@ sal_uInt8 ScDPItemData::GetType() const
 
 }
 
-BOOL ScDPItemData::IsHasData() const
+sal_Bool ScDPItemData::IsHasData() const
 {
     return !!(mbFlag&MK_DATA);
 }
 
-BOOL ScDPItemData::IsHasErr() const
+sal_Bool ScDPItemData::IsHasErr() const
 {
     return !!(mbFlag&MK_ERR);
 }
 
-BOOL ScDPItemData::IsValue() const
+sal_Bool ScDPItemData::IsValue() const
 {
     return !!(mbFlag&MK_VAL);
 }
@@ -359,25 +359,25 @@ double ScDPItemData::GetValue() const
 {
     return fValue;
 }
-ULONG  ScDPItemData::GetNumFormat() const
+sal_uLong  ScDPItemData::GetNumFormat() const
 {
     return nNumFormat;
 }
 
-BOOL ScDPItemData::HasStringData() const
+sal_Bool ScDPItemData::HasStringData() const
 
 {
     return IsHasData()&&!IsHasErr()&&!IsValue();
 }
-BOOL ScDPItemData::IsDate() const
+sal_Bool ScDPItemData::IsDate() const
 {
     return !!(mbFlag&MK_DATE);
 }
-BOOL ScDPItemData::HasDatePart() const
+sal_Bool ScDPItemData::HasDatePart() const
 {
     return !!(mbFlag&MK_DATEPART);
 }
-void ScDPItemData::SetDate( BOOL b )
+void ScDPItemData::SetDate( sal_Bool b )
 {
     b ? ( mbFlag |= MK_DATE ) : ( mbFlag &= ~MK_DATE );
 }
@@ -386,17 +386,17 @@ void ScDPItemData::SetDate( BOOL b )
 //class ScDPTableDataCache
 //To cache the pivot table data source
 
-BOOL ScDPTableDataCache::operator== ( const ScDPTableDataCache& r ) const
+sal_Bool ScDPTableDataCache::operator== ( const ScDPTableDataCache& r ) const
 {
     if ( GetColumnCount() == r.GetColumnCount() )
     {
         for ( SCCOL i = 0 ; i < GetColumnCount(); i++ )
         {   //check dim names
             if ( GetDimensionName( i ) != r.GetDimensionName( i ) )
-                return FALSE;
+                return sal_False;
             //check rows count
             if ( GetRowCount() != r.GetRowCount() )
-                return FALSE;
+                return sal_False;
             //check dim member values
             size_t nMembersCount = GetDimMemberValues( i ).size();
             if ( GetDimMemberValues( i ).size() == r. GetDimMemberValues( i ).size() )
@@ -406,22 +406,22 @@ BOOL ScDPTableDataCache::operator== ( const ScDPTableDataCache& r ) const
                     if ( *( GetDimMemberValues( i )[j] ) == *( r.GetDimMemberValues( i )[j] ) )
                         continue;
                     else
-                        return FALSE;
+                        return sal_False;
                 }
             }
             else
-                return FALSE;
+                return sal_False;
             //check source table index
             for ( SCROW k=0 ; k < GetRowCount(); k ++ )
             {
-                if ( GetItemDataId( i, k, FALSE ) == r.GetItemDataId( i,k,FALSE) )
+                if ( GetItemDataId( i, k, sal_False ) == r.GetItemDataId( i,k,sal_False) )
                     continue;
                 else
-                    return FALSE;
+                    return sal_False;
             }
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 ScDPTableDataCache::ScDPTableDataCache(  ScDocument* pDoc  ) :
@@ -441,10 +441,10 @@ ScDPTableDataCache::~ScDPTableDataCache()
     {
 // Wang Xu Ming -- 2/17/2009
 // Performance issue
-        USHORT nCol;
+        sal_uInt16 nCol;
         for (  nCol=0; nCol < GetColumnCount() ; nCol++ )
         {
-            for ( ULONG row = 0 ;  row < mpTableDataValues[nCol].size(); row++ )
+            for ( sal_uLong row = 0 ;  row < mpTableDataValues[nCol].size(); row++ )
                 delete mpTableDataValues[nCol][row];
         }
         for ( nCol =0; nCol < mrLabelNames.size(); nCol++ )
@@ -464,7 +464,7 @@ ScDPTableDataCache::~ScDPTableDataCache()
 }
 
 // -----------------------------------------------------------------------
-void ScDPTableDataCache::AddRow( ScDPItemData* pRow, USHORT nCount )
+void ScDPTableDataCache::AddRow( ScDPItemData* pRow, sal_uInt16 nCount )
 {
     DBG_ASSERT( pRow , " empty pointer" );
     if ( !mrLabelNames.size() )
@@ -475,12 +475,12 @@ void ScDPTableDataCache::AddRow( ScDPItemData* pRow, USHORT nCount )
         mpGlobalOrder     = new std::vector<SCROW>[ mnColumnCount ];
         mpIndexOrder      = new std::vector<SCROW>[ mnColumnCount ];
 
-        for ( USHORT i = 0; i < nCount ; i ++ )
+        for ( sal_uInt16 i = 0; i < nCount ; i ++ )
             AddLabel( new ScDPItemData( pRow[i] ) );
     }
     else
     {
-        for ( USHORT i = 0; i < nCount && i < mnColumnCount; i ++ )
+        for ( sal_uInt16 i = 0; i < nCount && i < mnColumnCount; i ++ )
             AddData( i, new ScDPItemData( pRow[i] ) );
     }
 }
@@ -529,18 +529,18 @@ bool ScDPTableDataCache::InitFromDoc(  ScDocument* pDoc, const ScRange& rRange )
     //
     SCROW nStartRow = rRange.aStart.Row();  // start of data
     SCROW nEndRow = rRange.aEnd.Row();
-    USHORT nStartCol = rRange.aStart.Col();
-    USHORT nEndCol = rRange.aEnd.Col();
-    USHORT nDocTab = rRange.aStart.Tab();
+    sal_uInt16 nStartCol = rRange.aStart.Col();
+    sal_uInt16 nEndCol = rRange.aEnd.Col();
+    sal_uInt16 nDocTab = rRange.aStart.Tab();
 
     //init
      long nOldColumCount = mnColumnCount;
     mnColumnCount = nEndCol - nStartCol + 1;
     if ( IsValid() )
     {
-        for ( USHORT nCol=0; nCol < nOldColumCount ; nCol++ )
+        for ( sal_uInt16 nCol=0; nCol < nOldColumCount ; nCol++ )
         {
-            for ( ULONG row = 0 ;  row < mpTableDataValues[nCol].size(); row++ )
+            for ( sal_uLong row = 0 ;  row < mpTableDataValues[nCol].size(); row++ )
                 delete mpTableDataValues[nCol][row];
             delete mrLabelNames[nCol];
         }
@@ -558,7 +558,7 @@ bool ScDPTableDataCache::InitFromDoc(  ScDocument* pDoc, const ScRange& rRange )
     //check valid
     for ( SCROW nRow = nStartRow; nRow <= nEndRow; nRow ++ )
     {
-        for ( USHORT nCol = nStartCol; nCol <= nEndCol; nCol++ )
+        for ( sal_uInt16 nCol = nStartCol; nCol <= nEndCol; nCol++ )
         {
             if ( nRow == nStartRow )
                 AddLabel( new ScDPItemData( pDoc, nRow, nCol, nDocTab  ) );
@@ -566,7 +566,7 @@ bool ScDPTableDataCache::InitFromDoc(  ScDocument* pDoc, const ScRange& rRange )
                 AddData( nCol - nStartCol, new ScDPItemData( pDoc, nRow, nCol, nDocTab  ) );
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -586,9 +586,9 @@ bool ScDPTableDataCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowS
     mnColumnCount = xMeta->getColumnCount();
     if ( IsValid() )
     {
-        for ( USHORT nCol=0; nCol < nOldColumCount ; nCol++ )
+        for ( sal_uInt16 nCol=0; nCol < nOldColumCount ; nCol++ )
         {
-            for ( ULONG row = 0 ;  row < mpTableDataValues[nCol].size(); row++ )
+            for ( sal_uLong row = 0 ;  row < mpTableDataValues[nCol].size(); row++ )
                 delete mpTableDataValues[nCol][row];
             delete mrLabelNames[nCol];
         }
@@ -638,7 +638,7 @@ bool ScDPTableDataCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowS
     }
 }
 // -----------------------------------------------------------------------
-ULONG ScDPTableDataCache::GetDimNumType( SCCOL nDim) const
+sal_uLong ScDPTableDataCache::GetDimNumType( SCCOL nDim) const
 {
     DBG_ASSERT( IsValid(), "  IsValid() == false " );
     DBG_ASSERT( nDim < mnColumnCount && nDim >=0, " dimention out of bound " );
@@ -649,20 +649,20 @@ ULONG ScDPTableDataCache::GetDimNumType( SCCOL nDim) const
 }
 
 // -----------------------------------------------------------------------
-bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, BOOL *pSpecial)
+bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, sal_Bool *pSpecial)
 { //Copied and modified from ScTable::ValidQuery
         if (!rParam.GetEntry(0).bDoQuery)
-            return TRUE;
-        BOOL    bMatchWholeCell = mpDoc->GetDocOptions().IsMatchWholeCell();
+            return sal_True;
+        sal_Bool    bMatchWholeCell = mpDoc->GetDocOptions().IsMatchWholeCell();
 
         //---------------------------------------------------------------
 
         const SCSIZE nFixedBools = 32;
-        BOOL aBool[nFixedBools];
-        BOOL aTest[nFixedBools];
+        sal_Bool aBool[nFixedBools];
+        sal_Bool aTest[nFixedBools];
         SCSIZE nEntryCount = rParam.GetEntryCount();
-        BOOL* pPasst = ( nEntryCount <= nFixedBools ? &aBool[0] : new BOOL[nEntryCount] );
-        BOOL* pTest = ( nEntryCount <= nFixedBools ? &aTest[0] : new BOOL[nEntryCount] );
+        sal_Bool* pPasst = ( nEntryCount <= nFixedBools ? &aBool[0] : new sal_Bool[nEntryCount] );
+        sal_Bool* pTest = ( nEntryCount <= nFixedBools ? &aTest[0] : new sal_Bool[nEntryCount] );
 
         long    nPos = -1;
         SCSIZE  i    = 0;
@@ -682,11 +682,11 @@ bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, BOO
             if ( nQueryCol > rParam.nCol2 )
                 nQueryCol = rParam.nCol2;
             SCCOL nSourceField = nQueryCol - rParam.nCol1;
-            SCROW nId = GetItemDataId( nSourceField, nRow, FALSE );
+            SCROW nId = GetItemDataId( nSourceField, nRow, sal_False );
             const ScDPItemData* pCellData = GetItemDataById( nSourceField, nId );
 
-            BOOL bOk = FALSE;
-            BOOL bTestEqual = FALSE;
+            sal_Bool bOk = sal_False;
+            sal_Bool bTestEqual = sal_False;
 
             if ( pSpecial && pSpecial[i] )
             {
@@ -720,7 +720,7 @@ bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, BOO
                         bOk = !::rtl::math::approxEqual( nCellVal, rEntry.nVal );
                         break;
                                  default:
-                                    bOk= FALSE;
+                                    bOk= sal_False;
                                     break;
                 }
             }
@@ -731,19 +731,19 @@ bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, BOO
             {   // by String
                 String  aCellStr = pCellData->GetString();
 
-                BOOL bRealRegExp = (rParam.bRegExp && ((rEntry.eOp == SC_EQUAL)
+                sal_Bool bRealRegExp = (rParam.bRegExp && ((rEntry.eOp == SC_EQUAL)
                     || (rEntry.eOp == SC_NOT_EQUAL)));
-                BOOL bTestRegExp = FALSE;
+                sal_Bool bTestRegExp = sal_False;
                 if ( bRealRegExp || bTestRegExp )
                 {
                     xub_StrLen nStart = 0;
                     xub_StrLen nEnd   = aCellStr.Len();
-                    BOOL bMatch = (BOOL) rEntry.GetSearchTextPtr( rParam.bCaseSens )
+                    sal_Bool bMatch = (sal_Bool) rEntry.GetSearchTextPtr( rParam.bCaseSens )
                         ->SearchFrwrd( aCellStr, &nStart, &nEnd );
                     // from 614 on, nEnd is behind the found text
                     if ( bMatch && bMatchWholeCell
                             && (nStart != 0 || nEnd != aCellStr.Len()) )
-                        bMatch = FALSE;    // RegExp must match entire cell string
+                        bMatch = sal_False;    // RegExp must match entire cell string
                     if ( bRealRegExp )
                         bOk = ((rEntry.eOp == SC_NOT_EQUAL) ? !bMatch : bMatch);
                     else
@@ -768,7 +768,7 @@ bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, BOO
                             {
                                 for(i=0;(i<nIndex) && (i< aCellStr.Len()) ; i++)
                                 {
-                                    if(aCellStr.GetChar( (USHORT)i ) == aStr.GetChar((USHORT) i ))
+                                    if(aCellStr.GetChar( (sal_uInt16)i ) == aStr.GetChar((sal_uInt16) i ))
                                     {
                                         bOk=1;
                                     }
@@ -857,7 +857,7 @@ bool ScDPTableDataCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam, BOO
             pTest[0] = pTest[0] || pTest[j];
         }
 
-        BOOL bRet = pPasst[0];
+        sal_Bool bRet = pPasst[0];
         if ( pPasst != &aBool[0] )
             delete [] pPasst;
         if ( pTest != &aTest[0] )
@@ -874,18 +874,18 @@ bool ScDPTableDataCache::IsRowEmpty( SCROW nRow ) const
 }
 
 // -----------------------------------------------------------------------
-bool ScDPTableDataCache::IsEmptyMember( SCROW nRow, USHORT nColumn ) const
+bool ScDPTableDataCache::IsEmptyMember( SCROW nRow, sal_uInt16 nColumn ) const
 {
-    return !GetItemDataById( nColumn, GetItemDataId( nColumn, nRow, FALSE ) )->IsHasData();
+    return !GetItemDataById( nColumn, GetItemDataId( nColumn, nRow, sal_False ) )->IsHasData();
 }
 
-BOOL ScDPTableDataCache::AddData(long nDim, ScDPItemData* pitemData)
+sal_Bool ScDPTableDataCache::AddData(long nDim, ScDPItemData* pitemData)
 {
     DBG_ASSERT( IsValid(), "  IsValid() == false " );
     DBG_ASSERT( nDim < mnColumnCount && nDim >=0 , "dimension out of bound" );
     SCROW nIndex = 0;
 
-    BOOL    bInserted = FALSE;
+    sal_Bool    bInserted = sal_False;
 
     pitemData->SetDate( lcl_isDate( GetNumType( pitemData->nNumFormat ) ) );
 
@@ -895,7 +895,7 @@ BOOL ScDPTableDataCache::AddData(long nDim, ScDPItemData* pitemData)
         mpGlobalOrder[nDim].insert( mpGlobalOrder[nDim].begin()+nIndex, mpTableDataValues[nDim].size()-1  );
         DBG_ASSERT( (size_t) mpGlobalOrder[nDim][nIndex] == mpTableDataValues[nDim].size()-1 ,"ScDPTableDataCache::AddData ");
         mpSourceData[nDim].push_back( mpTableDataValues[nDim].size()-1 );
-        bInserted = TRUE;
+        bInserted = sal_True;
     }
     else
         mpSourceData[nDim].push_back( mpGlobalOrder[nDim][nIndex] );
@@ -903,22 +903,22 @@ BOOL ScDPTableDataCache::AddData(long nDim, ScDPItemData* pitemData)
     size_t  nCurRow = mpSourceData[nDim].size() -1 ;
 
     while ( mbEmptyRow.size() <= nCurRow )
-        mbEmptyRow.push_back( TRUE );
+        mbEmptyRow.push_back( sal_True );
 
     if ( pitemData->IsHasData() )
-        mbEmptyRow[ nCurRow ] = FALSE;
+        mbEmptyRow[ nCurRow ] = sal_False;
 
     if ( !bInserted )
         delete pitemData;
 
-    return TRUE;
+    return sal_True;
 }
 
 
-String ScDPTableDataCache::GetDimensionName( USHORT nColumn ) const
+String ScDPTableDataCache::GetDimensionName( sal_uInt16 nColumn ) const
 {
     DBG_ASSERT( /* nColumn>=0 && */ nColumn < mrLabelNames.size()-1 , "ScDPTableDataCache::GetDimensionName");
-    DBG_ASSERT( mrLabelNames.size() == static_cast <USHORT> (mnColumnCount+1), "ScDPTableDataCache::GetDimensionName");
+    DBG_ASSERT( mrLabelNames.size() == static_cast <sal_uInt16> (mnColumnCount+1), "ScDPTableDataCache::GetDimensionName");
     if ( static_cast<size_t>(nColumn+1) < mrLabelNames.size() )
     {
         return mrLabelNames[nColumn+1]->aString;
@@ -937,7 +937,7 @@ void ScDPTableDataCache::AddLabel(ScDPItemData *pData)
 
     //reset name if needed
     String strNewName = pData->aString;
-    BOOL bFound = FALSE;
+    sal_Bool bFound = sal_False;
     long nIndex = 1;
     do
     {
@@ -948,7 +948,7 @@ void ScDPTableDataCache::AddLabel(ScDPItemData *pData)
                 strNewName  =  pData->aString;
                 strNewName += String::CreateFromInt32( nIndex );
                 nIndex ++ ;
-                bFound = TRUE;
+                bFound = sal_True;
             }
         }
         bFound = !bFound;
@@ -959,7 +959,7 @@ void ScDPTableDataCache::AddLabel(ScDPItemData *pData)
     mrLabelNames.push_back( pData );
 }
 
-SCROW ScDPTableDataCache::GetItemDataId(USHORT nDim, SCROW nRow, BOOL bRepeatIfEmpty) const
+SCROW ScDPTableDataCache::GetItemDataId(sal_uInt16 nDim, SCROW nRow, sal_Bool bRepeatIfEmpty) const
 { //
     DBG_ASSERT( IsValid(), "  IsValid() == false " );
     DBG_ASSERT( /* nDim >= 0 && */ nDim < mnColumnCount, "ScDPTableDataCache::GetItemDataId " );
@@ -1007,16 +1007,16 @@ SCROW ScDPTableDataCache::GetSortedItemDataId(SCCOL nDim, SCROW nOrder) const
     return mpGlobalOrder[nDim][nOrder];
 }
 
-ULONG ScDPTableDataCache::GetNumType(ULONG nFormat) const
+sal_uLong ScDPTableDataCache::GetNumType(sal_uLong nFormat) const
 {
     SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
-    ULONG nType = NUMBERFORMAT_NUMBER;
+    sal_uLong nType = NUMBERFORMAT_NUMBER;
     if ( pFormatter )
         nType = pFormatter->GetType( nFormat );
     return nType;
 }
 
-ULONG ScDPTableDataCache::GetNumberFormat( long nDim ) const
+sal_uLong ScDPTableDataCache::GetNumberFormat( long nDim ) const
 {
     if ( nDim >= mnColumnCount )
         return 0;
@@ -1026,7 +1026,7 @@ ULONG ScDPTableDataCache::GetNumberFormat( long nDim ) const
         return mpTableDataValues[nDim][0]->nNumFormat;
 }
 
-BOOL ScDPTableDataCache::IsDateDimension( long nDim ) const
+sal_Bool ScDPTableDataCache::IsDateDimension( long nDim ) const
 {
     if ( nDim >= mnColumnCount )
         return false;

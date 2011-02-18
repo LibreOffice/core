@@ -78,7 +78,7 @@ ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrameP,
     AddTabPage( TP_NUMBER, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_NUMBERFORMAT ), 0 ); //CHINA001 AddTabPage( TP_NUMBER,     SvxNumberFormatTabPage::Create, 0 );
 #else
     String number = rtl::OUString::createFromAscii ("Numbers");
-    AddTabPage( TP_NUMBER, number, pFact->GetTabPageCreatorFunc (RID_SVXPAGE_NUMBERFORMAT), 0, FALSE, TAB_APPEND);
+    AddTabPage( TP_NUMBER, number, pFact->GetTabPageCreatorFunc (RID_SVXPAGE_NUMBERFORMAT), 0, sal_False, TAB_APPEND);
 #endif
     DBG_ASSERT(pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), "GetTabPageCreatorFunc fail!");//CHINA001
     AddTabPage( TP_FONT, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_CHAR_NAME ), 0 ); //CHINA001 AddTabPage( TP_FONT,        SvxCharNamePage::Create,        0 );
@@ -112,7 +112,7 @@ __EXPORT ScAttrDlg::~ScAttrDlg()
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScAttrDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
+void __EXPORT ScAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool())); //CHINA001

@@ -61,9 +61,11 @@
 #include <sfx2/viewfrm.hxx>
 #include <svtools/soerr.hxx>
 #include <svl/rectitem.hxx>
+#include <svl/slstitm.hxx>
 #include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <sot/exchange.hxx>
+#include <tools/diagnose_ex.h>
 
 #include "tabvwsh.hxx"
 #include "globstr.hrc"
@@ -114,7 +116,7 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
     }
 }
 
-BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
+sal_Bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 {
     // #41081# Gueltigkeits-Hinweisfenster nicht ueber dem Objekt stehenlassen
     RemoveHintWindow();
@@ -122,7 +124,7 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     Window* pWin = GetActiveWin();
     ErrCode nErr = ERRCODE_NONE;
-    BOOL bErrorShown = FALSE;
+    sal_Bool bErrorShown = sal_False;
 
     // linked objects aren't supported
 //  if ( xIPObj->IsLink() )
@@ -176,7 +178,7 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             ((ScClient*)pClient)->SetGrafEdit( NULL );
 
             nErr = pClient->DoVerb( nVerb );
-            bErrorShown = TRUE;
+            bErrorShown = sal_True;
             // SfxViewShell::DoVerb zeigt seine Fehlermeldungen selber an
 
             SetNewVisArea();
@@ -270,7 +272,7 @@ void ScTabViewShell::DeactivateOle()
 
 void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 {
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     if (nSlot != SID_OBJECTRESIZE )
     {
         SC_MOD()->InputEnterHandler();
@@ -340,7 +342,7 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
                             SdrMark* pMark = rMarkList.GetMark(0);
                             SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-                            UINT16 nSdrObjKind = pObj->GetObjIdentifier();
+                            sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
 
                             if (nSdrObjKind == OBJ_OLE2)
                             {
@@ -433,13 +435,13 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
 
 void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 {
-    BOOL bOle = GetViewFrame()->GetFrame().IsInPlace();
-    BOOL bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
+    sal_Bool bOle = GetViewFrame()->GetFrame().IsInPlace();
+    sal_Bool bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
     ScDocShell* pDocShell = ( GetViewData() ? GetViewData()->GetDocShell() : NULL );
     bool bShared = ( pDocShell ? pDocShell->IsDocShared() : false );
 
     SfxWhichIter aIter(rSet);
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
     while ( nWhich )
     {
         switch ( nWhich )
@@ -488,6 +490,99 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
     }
 }
 
+
+//------------------------------------------------------------------
+
+void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
+{
+    SfxShell* pSh = GetViewData()->GetDispatcher().GetShell(0);
+    ::svl::IUndoManager* pUndoManager = pSh->GetUndoManager();
+
+    const SfxItemSet* pReqArgs = rReq.GetArgs();
+    ScDocShell* pDocSh = GetViewData()->GetDocShell();
+
+    sal_uInt16 nSlot = rReq.GetSlot();
+    switch ( nSlot )
+    {
+        case SID_UNDO:
+        case SID_REDO:
+            if ( pUndoManager )
+            {
+                sal_Bool bIsUndo = ( nSlot == SID_UNDO );
+
+                sal_uInt16 nCount = 1;
+                const SfxPoolItem* pItem;
+                if ( pReqArgs && pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET )
+                    nCount = ((const SfxUInt16Item*)pItem)->GetValue();
+
+                // lock paint for more than one cell undo action (not for editing within a cell)
+                sal_Bool bLockPaint = ( nCount > 1 && pUndoManager == GetUndoManager() );
+                if ( bLockPaint )
+                    pDocSh->LockPaint();
+
+                try
+                {
+                    for (sal_uInt16 i=0; i<nCount; i++)
+                    {
+                        if ( bIsUndo )
+                            pUndoManager->Undo();
+                        else
+                            pUndoManager->Redo();
+                    }
+                }
+                catch ( const uno::Exception& )
+                {
+                    // no need to handle. By definition, the UndoManager handled this by clearing the
+                    // Undo/Redo stacks
+                }
+
+                if ( bLockPaint )
+                    pDocSh->UnlockPaint();
+
+                GetViewFrame()->GetBindings().InvalidateAll(sal_False);
+            }
+            break;
+//      default:
+//          GetViewFrame()->ExecuteSlot( rReq );
+    }
+}
+
+void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
+{
+    SfxShell* pSh = GetViewData()->GetDispatcher().GetShell(0);
+    ::svl::IUndoManager* pUndoManager = pSh->GetUndoManager();
+
+    SfxWhichIter aIter(rSet);
+    sal_uInt16 nWhich = aIter.FirstWhich();
+    while ( nWhich )
+    {
+        switch (nWhich)
+        {
+            case SID_GETUNDOSTRINGS:
+            case SID_GETREDOSTRINGS:
+                {
+                    SfxStringListItem aStrLst( nWhich );
+                    if ( pUndoManager )
+                    {
+                        List* pList = aStrLst.GetList();
+                        sal_Bool bIsUndo = ( nWhich == SID_GETUNDOSTRINGS );
+                        size_t nCount = bIsUndo ? pUndoManager->GetUndoActionCount() : pUndoManager->GetRedoActionCount();
+                        for (size_t i=0; i<nCount; i++)
+                            pList->Insert( new String( bIsUndo ? pUndoManager->GetUndoActionComment(i) :
+                                                                 pUndoManager->GetRedoActionComment(i) ),
+                                           LIST_APPEND );
+                    }
+                    rSet.Put( aStrLst );
+                }
+                break;
+            default:
+                // get state from sfx view frame
+                GetViewFrame()->GetSlotState( nWhich, NULL, &rSet );
+        }
+
+        nWhich = aIter.NextWhich();
+    }
+}
 
 
 

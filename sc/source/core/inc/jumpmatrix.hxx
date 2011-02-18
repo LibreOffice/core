@@ -122,7 +122,7 @@ public:
                                             short nStart, short nNext,
                                             short nStop = SHRT_MAX )
                                     {
-                                        pJump[ (ULONG)nCol * nRows + nRow ].
+                                        pJump[ (sal_uLong)nCol * nRows + nRow ].
                                             SetJump( fBool, nStart, nNext, nStop);
                                     }
             void                GetJump( SCSIZE nCol, SCSIZE nRow, double& rBool,
@@ -144,15 +144,15 @@ public:
                                             nCol = 0;
                                             nRow = 0;
                                         }
-                                        pJump[ (ULONG)nCol * nRows + nRow ].
+                                        pJump[ (sal_uLong)nCol * nRows + nRow ].
                                             GetJump( rBool, rStart, rNext, rStop);
                                     }
             void                SetAllJumps( double fBool,
                                             short nStart, short nNext,
                                             short nStop = SHRT_MAX )
                                     {
-                                        ULONG n = (ULONG)nCols * nRows;
-                                        for ( ULONG j=0; j<n; ++j )
+                                        sal_uLong n = (sal_uLong)nCols * nRows;
+                                        for ( sal_uLong j=0; j<n; ++j )
                                         {
                                             pJump[ j ].SetJump( fBool, nStart,
                                                     nNext, nStop);

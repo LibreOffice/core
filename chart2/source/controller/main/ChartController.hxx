@@ -42,7 +42,7 @@
 #include <cppuhelper/implbase12.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <com/sun/star/chart2/XUndoManager.hpp>
+#include <com/sun/star/document/XUndoManager.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -89,6 +89,8 @@ namespace chart
 {
 //.............................................................................
 
+class UndoGuard;
+
 enum ChartDrawMode { CHARTDRAW_INSERT, CHARTDRAW_SELECT };
 
 class WindowController
@@ -124,7 +126,7 @@ public:
         @param rOutEqualRect is filled with a rectangle that denotes the region
                              in which the quick help does not change.
 
-        @return </TRUE>, if a quick help should be shown.
+        @return </sal_True>, if a quick help should be shown.
      */
     virtual bool requestQuickHelp(
         ::Point aAtLogicPosition, bool bIsBalloonHelp,
@@ -578,7 +580,8 @@ private:
 
     bool volatile       m_bConnectingToView;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager > m_xUndoManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager >    m_xUndoManager;
+    ::std::auto_ptr< UndoGuard >                                                    m_pTextActionUndoGuard;
     /// needed for dispatching URLs in FeatureStateEvents
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > m_xURLTransformer;
 
@@ -700,7 +703,7 @@ private:
         MOVE_OBJECT,
         CENTERED_RESIZE_OBJECT
     };
-    /// @return </TRUE>, if resize/move was successful
+    /// @return </sal_True>, if resize/move was successful
     bool impl_moveOrResizeObject(
         const ::rtl::OUString & rCID, eMoveOrResizeType eType, double fAmountLogicX, double fAmountLogicY );
     bool impl_DragDataPoint( const ::rtl::OUString & rCID, double fOffset );

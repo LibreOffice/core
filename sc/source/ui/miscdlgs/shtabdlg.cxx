@@ -70,7 +70,7 @@ void ScShowTabDlg::SetDescription(
     aLb.SetHelpId( sLbHelpId );
 }
 
-void ScShowTabDlg::Insert( const String& rString, BOOL bSelected )
+void ScShowTabDlg::Insert( const String& rString, sal_Bool bSelected )
 {
     aLb.InsertEntry( rString );
     if( bSelected )
@@ -79,17 +79,17 @@ void ScShowTabDlg::Insert( const String& rString, BOOL bSelected )
 
 //------------------------------------------------------------------------
 
-USHORT ScShowTabDlg::GetSelectEntryCount() const
+sal_uInt16 ScShowTabDlg::GetSelectEntryCount() const
 {
     return aLb.GetSelectEntryCount();
 }
 
-String ScShowTabDlg::GetSelectEntry(USHORT nPos) const
+String ScShowTabDlg::GetSelectEntry(sal_uInt16 nPos) const
 {
     return aLb.GetSelectEntry(nPos);
 }
 
-USHORT ScShowTabDlg::GetSelectEntryPos(USHORT nPos) const
+sal_uInt16 ScShowTabDlg::GetSelectEntryPos(sal_uInt16 nPos) const
 {
     return aLb.GetSelectEntryPos(nPos);
 }

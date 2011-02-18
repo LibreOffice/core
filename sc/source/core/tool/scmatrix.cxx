@@ -100,15 +100,15 @@ ScMatrix* ScMatrix::CloneAndExtend( SCSIZE nNewCols, SCSIZE nNewRows ) const
     return pScMat;
 }
 
-void ScMatrix::SetErrorAtInterpreter( USHORT nError ) const
+void ScMatrix::SetErrorAtInterpreter( sal_uInt16 nError ) const
 {
     if ( pErrorInterpreter )
         pErrorInterpreter->SetError( nError);
 }
 
 //
-//  File format: USHORT columns, USHORT rows, (columns*rows) entries:
-//  BYTE type ( CELLTYPE_NONE, CELLTYPE_VALUE, CELLTYPE_STRING ); nothing, double or String
+//  File format: sal_uInt16 columns, sal_uInt16 rows, (columns*rows) entries:
+//  sal_uInt8 type ( CELLTYPE_NONE, CELLTYPE_VALUE, CELLTYPE_STRING ); nothing, double or String
 //
 
 ScMatrix::ScMatrix(SvStream& /* rStream */)
@@ -117,8 +117,8 @@ ScMatrix::ScMatrix(SvStream& /* rStream */)
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
-    USHORT nC;
-    USHORT nR;
+    sal_uInt16 nC;
+    sal_uInt16 nR;
 
     rStream >> nC;
     rStream >> nR;
@@ -133,7 +133,7 @@ ScMatrix::ScMatrix(SvStream& /* rStream */)
     SCSIZE nReadCount = (SCSIZE) nC * nR;
     for (SCSIZE i=0; i<nReadCount; i++)
     {
-        BYTE nType;
+        sal_uInt8 nType;
         rStream >> nType;
         if ( nType == CELLTYPE_VALUE )
         {
@@ -173,34 +173,34 @@ void ScMatrix::Store(SvStream& /* rStream */) const
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
     SCSIZE nCount = nColCount * nRowCount;
-    // Don't store matrix with more than USHORT max elements, old versions
-    // might get confused in loops for(USHORT i=0; i<nC*nR; i++)
-    if ( !pMat || nCount > ((USHORT)(~0)) )
+    // Don't store matrix with more than sal_uInt16 max elements, old versions
+    // might get confused in loops for(sal_uInt16 i=0; i<nC*nR; i++)
+    if ( !pMat || nCount > ((sal_uInt16)(~0)) )
     {
         DBG_ASSERT( pMat, "ScMatrix::Store: pMat == NULL" );
         // We can't store a 0 dimension because old versions rely on some
         // matrix being present, e.g. DDE link results, and old versions didn't
         // create a matrix if dimension was 0. Store an error result.
-        rStream << (USHORT) 1;
-        rStream << (USHORT) 1;
-        rStream << (BYTE) CELLTYPE_VALUE;
+        rStream << (sal_uInt16) 1;
+        rStream << (sal_uInt16) 1;
+        rStream << (sal_uInt8) CELLTYPE_VALUE;
         double fVal;
         ::rtl::math::setNan( &fVal );
         rStream << fVal;
         return;
     }
 
-    rStream << (USHORT) nColCount;
+    rStream << (sal_uInt16) nColCount;
 #if SC_ROWLIMIT_MORE_THAN_32K
     #error row32k
 #endif
-    rStream << (USHORT) nRowCount;
+    rStream << (sal_uInt16) nRowCount;
 
     String aMatStr;
     rtl_TextEncoding eCharSet = rStream.GetStreamCharSet();
     for (SCSIZE i=0; i<nCount; i++)
     {
-        BYTE nType = CELLTYPE_VALUE;
+        sal_uInt8 nType = CELLTYPE_VALUE;
         if ( mnValType && IsNonValueType( mnValType[i]))
         {
             if ( pMat[i].pS )
@@ -234,8 +234,8 @@ void ScMatrix::ResetIsString()
         }
     }
     else
-        mnValType = new BYTE[nCount];
-    memset( mnValType, 0, nCount * sizeof( BYTE ) );
+        mnValType = new sal_uInt8[nCount];
+    memset( mnValType, 0, nCount * sizeof( sal_uInt8 ) );
     mnNonValue = 0;
 }
 
@@ -289,7 +289,7 @@ void ScMatrix::PutString(const String& rStr, SCSIZE nIndex)
     mnValType[nIndex] = SC_MATVAL_STRING;
 }
 
-void ScMatrix::PutStringEntry( const String* pStr, BYTE bFlag, SCSIZE nIndex )
+void ScMatrix::PutStringEntry( const String* pStr, sal_uInt8 bFlag, SCSIZE nIndex )
 {
     DBG_ASSERT( bFlag, "ScMatrix::PutStringEntry: bFlag == 0" );
     if (mnValType == NULL)
@@ -299,7 +299,7 @@ void ScMatrix::PutStringEntry( const String* pStr, BYTE bFlag, SCSIZE nIndex )
     String* pS = pMat[nIndex].pS;
     pMat[nIndex].fVal = 0.0;
     // An EMPTY or EMPTYPATH entry must not have a string pointer therefor.
-    DBG_ASSERT( (((bFlag & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY) && !pStr) || TRUE,
+    DBG_ASSERT( (((bFlag & SC_MATVAL_EMPTY) == SC_MATVAL_EMPTY) && !pStr) || sal_True,
             "ScMatrix::PutStringEntry: pStr passed through EMPTY entry");
     if ( IsNonValueType( mnValType[nIndex]) && pS )
     {
@@ -398,7 +398,7 @@ void ScMatrix::PutBoolean( bool bVal, SCSIZE nIndex)
     pMat[nIndex].fVal = bVal ? 1. : 0.;
 }
 
-USHORT ScMatrix::GetError( SCSIZE nC, SCSIZE nR) const
+sal_uInt16 ScMatrix::GetError( SCSIZE nC, SCSIZE nR) const
 {
     if (ValidColRowOrReplicated( nC, nR ))
         return GetError( CalcOffset( nC, nR) );
@@ -446,8 +446,8 @@ String ScMatrix::GetString( SvNumberFormatter& rFormatter, SCSIZE nIndex) const
     if (IsString( nIndex))
     {
         if (IsEmptyPath( nIndex))
-        {   // result of empty FALSE jump path
-            ULONG nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_LOGICAL,
+        {   // result of empty sal_False jump path
+            sal_uLong nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_LOGICAL,
                     ScGlobal::eLnge);
             String aStr;
             Color* pColor = NULL;
@@ -457,7 +457,7 @@ String ScMatrix::GetString( SvNumberFormatter& rFormatter, SCSIZE nIndex) const
         return GetString( nIndex );
     }
 
-    USHORT nError = GetError( nIndex);
+    sal_uInt16 nError = GetError( nIndex);
     if (nError)
     {
         SetErrorAtInterpreter( nError);
@@ -465,7 +465,7 @@ String ScMatrix::GetString( SvNumberFormatter& rFormatter, SCSIZE nIndex) const
     }
 
     double fVal= GetDouble( nIndex);
-    ULONG nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_NUMBER,
+    sal_uLong nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_NUMBER,
             ScGlobal::eLnge);
     String aStr;
     rFormatter.GetInputLineString( fVal, nKey, aStr);
