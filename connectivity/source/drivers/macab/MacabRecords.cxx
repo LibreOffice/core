@@ -1154,10 +1154,11 @@ MacabRecords::iterator::~iterator ()
 }
 
 // -------------------------------------------------------------------------
-void MacabRecords::iterator::operator= (MacabRecords *_records)
+MacabRecords::iterator& MacabRecords::iterator::operator= (MacabRecords *_records)
 {
     id = 0;
     records = _records;
+    return *this;
 }
 
 // -------------------------------------------------------------------------

@@ -121,7 +121,7 @@ namespace connectivity
                         MacabRecords *records;
                     public:
                         sal_Int32 id;
-                        void operator= (MacabRecords *_records);
+                        iterator& operator= (MacabRecords *_records);
                         iterator();
                         ~iterator();
                         void operator++ ();

@@ -57,7 +57,7 @@ namespace connectivity
                         sal_Int32 id;
                         MacabHeader *record;
                     public:
-                        void operator= (MacabHeader *_record);
+                        iterator& operator= (MacabHeader *_record);
                         iterator();
                         ~iterator();
                         void operator++ ();
