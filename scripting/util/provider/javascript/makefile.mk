@@ -38,6 +38,11 @@ EXTENSION_ZIPNAME:=script-provider-for-javascript
 COMPONENT_JARFILES=$(EXTENSIONDIR)$/$(EXTENSIONNAME).jar
 EXTENSION_PACKDEPS=$(SOLARBINDIR)$/js.jar
 
+.IF "$(ENABLE_SCRIPTING_JAVASCRIPT)" != "YES"
+@all:
+    @echo "Script Provider for JavaScript build disabled."
+.ENDIF
+
 .INCLUDE : extension_pre.mk
 .INCLUDE : target.mk
 .INCLUDE : extension_post.mk

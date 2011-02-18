@@ -36,6 +36,11 @@ TARGET=pyprov
 
 # ------------------------------------------------------------------
 
+.IF "$(ENABLE_SCRIPTING_PYTHON)" != "YES"
+@all:
+    @echo "Script Provider for Python build disabled."
+.ENDIF
+
 
 # --- Targets ------------------------------------------------------
 ALL : ALLTAR \
