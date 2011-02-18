@@ -53,9 +53,12 @@
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <sal/config.h>
+#include <osl/file.hxx>
+#include <osl/process.h>
 
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/oslfile2streamwrap.hxx>
 
 #include <vcl/svapp.hxx>
 #include "scdll.hxx"
@@ -76,8 +79,13 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
 
+#include <sfx2/docfilt.hxx>
+#include <sfx2/docfile.hxx>
+
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
+
+#include <ucbhelper/contentbroker.hxx>
 
 #include <iostream>
 #include <vector>
@@ -216,6 +224,8 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
+    bool testLoad(const rtl::OUString &rFilter, const rtl::OUString &rURL);
+
     void testCollator();
     void testSUM();
     void testNamedRange();
@@ -232,6 +242,11 @@ public:
 
     void testGraphicsInGroup();
 
+    /**
+     * Ensure CVEs remain unbroken
+     */
+    void testCVEs();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testSUM);
@@ -242,12 +257,14 @@ public:
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testGraphicsInGroup);
     CPPUNIT_TEST(testFunctionLists);
+    CPPUNIT_TEST(testCVEs);
     CPPUNIT_TEST_SUITE_END();
 
 private:
     uno::Reference< uno::XComponentContext > m_xContext;
     ScDocument *m_pDoc;
-    ScDocShellRef m_pDocShell;
+    ScDocShellRef m_xDocShRef;
+    ::rtl::OUString m_aPWDURL;
 };
 
 Test::Test()
@@ -263,20 +280,40 @@ Test::Test()
     //of retaining references to the root ServiceFactory as its passed around
     comphelper::setProcessServiceFactory(xSM);
 
+    // initialise UCB-Broker
+    uno::Sequence<uno::Any> aUcbInitSequence(2);
+    aUcbInitSequence[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Local"));
+    aUcbInitSequence[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office"));
+    bool bInitUcb = ucbhelper::ContentBroker::initialize(xSM, aUcbInitSequence);
+    CPPUNIT_ASSERT_MESSAGE("Should be able to initialize UCB", bInitUcb);
+
+    uno::Reference<ucb::XContentProviderManager> xUcb =
+        ucbhelper::ContentBroker::get()->getContentProviderManagerInterface();
+    uno::Reference<ucb::XContentProvider> xFileProvider(xSM->createInstance(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider"))), uno::UNO_QUERY);
+    xUcb->registerContentProvider(xFileProvider, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file")), sal_True);
+
     InitVCL(xSM);
 
     ScDLL::Init();
+
+    oslProcessError err = osl_getProcessWorkingDir(&m_aPWDURL.pData);
+    CPPUNIT_ASSERT_MESSAGE("no PWD!", err == osl_Process_E_None);
 }
 
 void Test::setUp()
 {
-    m_pDocShell = new ScDocShell;
-    m_pDoc = m_pDocShell->GetDocument();
+    m_xDocShRef = new ScDocShell(
+        SFXMODEL_STANDARD |
+        SFXMODEL_DISABLE_EMBEDDED_SCRIPTS |
+        SFXMODEL_DISABLE_DOCUMENT_RECOVERY);
+
+    m_pDoc = m_xDocShRef->GetDocument();
 }
 
 void Test::tearDown()
 {
-    m_pDocShell.Clear();
+    m_xDocShRef.Clear();
 }
 
 Test::~Test()
@@ -369,6 +406,36 @@ void Test::testCSV()
         CPPUNIT_ASSERT_MESSAGE ("CSV numeric detection failure", bResult == aTests[i].bResult);
         CPPUNIT_ASSERT_MESSAGE ("CSV numeric value failure", nValue == aTests[i].nValue);
     }
+}
+
+bool Test::testLoad(const rtl::OUString &rFilter, const rtl::OUString &rURL)
+{
+    SfxFilter aFilter(
+        rFilter,
+        rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
+        rtl::OUString(), rtl::OUString() );
+
+    ScDocShellRef xDocShRef = new ScDocShell;
+    SfxMedium aSrcMed(rURL, STREAM_STD_READ, true);
+    aSrcMed.SetFilter(&aFilter);
+    return xDocShRef->DoLoad(&aSrcMed);
+}
+
+void Test::testCVEs()
+{
+    bool bResult;
+
+    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
+        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2007-5745-1.wb2")));
+    CPPUNIT_ASSERT_MESSAGE("CVE-2007-5745 regression", bResult == true);
+
+    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
+        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2007-5745-2.wb2")));
+    CPPUNIT_ASSERT_MESSAGE("CVE-2007-5745 regression", bResult == true);
+
+    bResult = testLoad(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Quattro Pro 6.0")),
+        m_aPWDURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/CVE/CVE-2007-5747-1.wb2")));
+    CPPUNIT_ASSERT_MESSAGE("CVE-2007-5747 regression", bResult == false);
 }
 
 template<typename Evaluator>

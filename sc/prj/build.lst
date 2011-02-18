@@ -1,4 +1,4 @@
-sc      sc      :       filter l10n vbahelper oovbaapi svx uui stoc BOOST:boost formula MDDS:mdds oox NULL
+sc      sc      :       filter l10n vbahelper oovbaapi svx uui stoc BOOST:boost formula MDDS:mdds oox unoxml NULL
 sc	sc							usr1	-	all	sc_mkout NULL
 sc	sc\inc							nmake	-	all	sc_inc NULL
 sc	sc\prj							get	-	all	sc_prj NULL

@@ -95,6 +95,11 @@ $(MISC)/$(TARGET)/services.rdb .ERRREMOVE : $(MISC)/$(TARGET)/udkapi.rdb makefil
     $(MKDIRHIER) $(@:d)
     $(REGCOMP) -register -br $(MISC)/$(TARGET)/udkapi.rdb -r $@ -wop \
         -c $(DLLPRE)fwk$(DLLPOSTFIX)$(DLLPOST) \
+        -c $(DLLPRE)sfx$(DLLPOSTFIX)$(DLLPOST) \
+        -c $(DLLPRE)ucb1$(DLLPOST) \
+        -c $(DLLPRE)ucpfile1$(DLLPOST) \
+        -c $(DLLPRE)unoxml$(DLLPOSTFIX)$(DLLPOST) \
+        -c stocservices.uno$(DLLPOST) \
         -c i18npool.uno$(DLLPOST)
 
 #Tweak things so that we use the .res files in the solver
