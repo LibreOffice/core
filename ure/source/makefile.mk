@@ -35,8 +35,8 @@ ZIP1LIST = uretest
 
 my_components = \
     acceptor \
+    binaryurp \
     bootstrap \
-    bridgefac \
     connector \
     introspection \
     invocadapt \
@@ -47,7 +47,6 @@ my_components = \
     namingservice \
     proxyfac \
     reflection \
-    remotebridge \
     stocservices \
     streams \
     textinstream \

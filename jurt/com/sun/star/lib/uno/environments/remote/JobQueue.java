@@ -27,6 +27,7 @@
 
 package com.sun.star.lib.uno.environments.remote;
 
+import com.sun.star.lang.DisposedException;
 
 /**
  * The <code>JobQueue</code> implements a queue for jobs.
@@ -200,7 +201,7 @@ public class JobQueue {
      * @return a job or null if timed out
      * @param  waitTime        the maximum amount of time to wait for a job
      */
-    private Job removeJob(int waitTime) throws Throwable {
+    private Job removeJob(int waitTime) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".removeJob:" + _head + " " + _threadId);
 
         Job job = null;
@@ -210,7 +211,8 @@ public class JobQueue {
             while(_head == null && (waitTime == 0 || !waited)) {
                 if(_doDispose == _disposeId) {
                     _doDispose = null;
-                    throw _throwable;
+                    throw (DisposedException)
+                        new DisposedException().initCause(_throwable);
                 }
 
                 // notify sync queues
@@ -250,7 +252,8 @@ public class JobQueue {
 
                     if(_doDispose == _disposeId) {
                         _doDispose = null;
-                        throw _throwable;
+                        throw (DisposedException)
+                            new DisposedException().initCause(_throwable);
                     }
 
                     try {
