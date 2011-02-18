@@ -3533,20 +3533,13 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
                                    const sal_Char *pProperty,
                                    const SvxBorderLine *pLine )
 {
-    if( !pLine )
+    if( !pLine || pLine->isEmpty() )
     {
         rHTMLWrt.OutCSS1_PropertyAscii( pProperty, sCSS1_PV_none );
         return;
     }
 
-    sal_Bool bDouble = sal_False;
-    sal_Int32 nWidth = pLine->GetOutWidth();
-    if( pLine->GetInWidth() )
-    {
-        nWidth += pLine->GetDistance();
-        nWidth += pLine->GetInWidth();
-        bDouble = sal_True;
-    }
+    sal_Int32 nWidth = pLine->GetWidth();
 
     ByteString sOut;
     if( Application::GetDefaultDevice() &&
@@ -3570,21 +3563,40 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
 
     // Linien-Stil: solid oder double
     sOut += ' ';
-    if ( bDouble )
-        sOut += sCSS1_PV_double;
-    else
+    switch ( pLine->GetStyle( ) )
     {
-        switch ( pLine->GetStyle( ) )
-        {
-            case DOTTED:
-                sOut += sCSS1_PV_dotted;
-                break;
-            case DASHED:
-                sOut += sCSS1_PV_dashed;
-                break;
-            default:
-                sOut += sCSS1_PV_solid;
-        }
+        case SOLID:
+            sOut += sCSS1_PV_solid;
+            break;
+        case DOTTED:
+            sOut += sCSS1_PV_dotted;
+            break;
+        case DASHED:
+            sOut += sCSS1_PV_dashed;
+            break;
+        case DOUBLE:
+        case THINTHICK_SMALLGAP:
+        case THINTHICK_MEDIUMGAP:
+        case THINTHICK_LARGEGAP:
+        case THICKTHIN_SMALLGAP:
+        case THICKTHIN_MEDIUMGAP:
+        case THICKTHIN_LARGEGAP:
+            sOut += sCSS1_PV_double;
+            break;
+        case EMBOSSED:
+            sOut += sCSS1_PV_ridge;
+            break;
+        case ENGRAVED:
+            sOut += sCSS1_PV_groove;
+            break;
+        case INSET:
+            sOut += sCSS1_PV_inset;
+            break;
+        case OUTSET:
+            sOut += sCSS1_PV_outset;
+            break;
+        default:
+            sOut += sCSS1_PV_none;
     }
     sOut += ' ';
 

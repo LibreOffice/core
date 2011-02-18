@@ -184,7 +184,7 @@ static CSS1PropertyEnum const aBorderWidthTable[] =
     { 0,                    0   }
 };
 
-enum CSS1BorderStyle { CSS1_BS_NONE, CSS1_BS_SINGLE, CSS1_BS_DOUBLE, CSS1_BS_DOTTED, CSS1_BS_DASHED };
+enum CSS1BorderStyle { CSS1_BS_NONE, CSS1_BS_SINGLE, CSS1_BS_DOUBLE, CSS1_BS_DOTTED, CSS1_BS_DASHED, CSS1_BS_GROOVE, CSS1_BS_RIDGE, CSS1_BS_INSET, CSS1_BS_OUTSET };
 
 static CSS1PropertyEnum const aBorderStyleTable[] =
 {
@@ -193,10 +193,10 @@ static CSS1PropertyEnum const aBorderStyleTable[] =
     { sCSS1_PV_dashed,      CSS1_BS_DASHED      },
     { sCSS1_PV_solid,       CSS1_BS_SINGLE      },
     { sCSS1_PV_double,      CSS1_BS_DOUBLE      },
-    { sCSS1_PV_groove,      CSS1_BS_SINGLE      },
-    { sCSS1_PV_ridge,       CSS1_BS_SINGLE      },
-    { sCSS1_PV_inset,       CSS1_BS_SINGLE      },
-    { sCSS1_PV_outset,      CSS1_BS_SINGLE      },
+    { sCSS1_PV_groove,      CSS1_BS_GROOVE      },
+    { sCSS1_PV_ridge,       CSS1_BS_RIDGE       },
+    { sCSS1_PV_inset,       CSS1_BS_INSET       },
+    { sCSS1_PV_outset,      CSS1_BS_OUTSET      },
     { 0,                    0                   }
 };
 
@@ -328,14 +328,36 @@ void SvxCSS1BorderInfo::SetBorderLine( sal_uInt16 nLine, SvxBoxItem &rBoxItem ) 
     SvxBorderLine aBorderLine( &aColor );
 
     // Linien-Stil doppelt oder einfach?
-    if ( eStyle == CSS1_BS_DOTTED )
-        aBorderLine.SetStyle( DOTTED );
-    else if ( eStyle == CSS1_BS_DASHED )
-        aBorderLine.SetStyle( DASHED );
-    else if ( eStyle == CSS1_BS_DOUBLE )
-        aBorderLine.SetStyle( DOUBLE );
-    else
-        aBorderLine.SetStyle( SOLID );
+    switch ( eStyle )
+    {
+        case CSS1_BS_SINGLE:
+            aBorderLine.SetStyle( SOLID );
+            break;
+        case CSS1_BS_DOUBLE:
+            aBorderLine.SetStyle( DOUBLE );
+            break;
+        case CSS1_BS_DOTTED:
+            aBorderLine.SetStyle( DOTTED );
+            break;
+        case CSS1_BS_DASHED:
+            aBorderLine.SetStyle( DASHED );
+            break;
+        case CSS1_BS_GROOVE:
+            aBorderLine.SetStyle( ENGRAVED );
+            break;
+        case CSS1_BS_RIDGE:
+            aBorderLine.SetStyle( EMBOSSED );
+            break;
+        case CSS1_BS_INSET:
+            aBorderLine.SetStyle( INSET );
+            break;
+        case CSS1_BS_OUTSET:
+            aBorderLine.SetStyle( OUTSET );
+            break;
+        default:
+            aBorderLine.SetStyle( NO_STYLE );
+            break;
+    }
 
     // benannte Breite umrechnenen, wenn keine absolute gegeben ist
     if( nAbsWidth==USHRT_MAX )
