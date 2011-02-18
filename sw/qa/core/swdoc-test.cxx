@@ -66,6 +66,11 @@ SO2_IMPL_REF(SwDocShell)
 
 using namespace ::com::sun::star;
 
+static USHORT aWndFunc(Window *, USHORT, const String &, const String &)
+{
+    return ERRCODE_BUTTON_OK;
+}
+
 /* Implementation of Swdoc-Test class */
 
 class SwDocTest : public CppUnit::TestFixture
@@ -185,6 +190,8 @@ SwDocTest::SwDocTest()
     InitVCL(xSM);
 
     SwDLL::Init();
+
+    ErrorHandler::RegisterDisplay(&aWndFunc);
 }
 
 void SwDocTest::setUp()
