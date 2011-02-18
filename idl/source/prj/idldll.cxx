@@ -29,48 +29,4 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idl.hxx"
 
-#ifdef WIN
-#include <svwin.h>
-
-#include <sysdep.hxx>
-
-// static  DLL handle
-static HINSTANCE hDLLInst = 0;      // HANDLE of the DLL
-
-
-/***************************************************************************
-|*
-|*    LibMain()
-|*
-|*    description       initializing function of the DLL
-|*
-***************************************************************************/
-
-extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
-{
-#ifndef WNT
-    if ( nHeap )
-        UnlockData( 0 );
-#endif
-
-    hDLLInst = hDLL;
-
-    return TRUE;
-}
-
-/***************************************************************************
-|*
-|*    WEP()
-|*
-|*    description      DLL de-initializing
-|*
-***************************************************************************/
-
-extern "C" int CALLBACK WEP( int )
-{
-    return 1;
-}
-
-#endif
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
