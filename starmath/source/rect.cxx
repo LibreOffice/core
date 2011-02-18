@@ -46,9 +46,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-// '\0' terminiertes Array mit Zeichen, die im StarMath Font als Buchstaben
-// betrachtet werden sollen, (um im Gegensatz zu den anderen Operatoren
-// und Symbolen ein "normales"(ungecliptes) SmRect zu erhalten).
+// '\0' terminated Array with symbol, which should be treat as letters in
+// StarMath Font, (to get a normal (non-clipped) SmRect in contrast to the
+// other operators and symbols).
 static xub_Unicode const aMathAlpha[] =
 {
     MS_ALEPH,               MS_IM,                  MS_RE,
@@ -63,8 +63,7 @@ static xub_Unicode const aMathAlpha[] =
 };
 
 bool SmIsMathAlpha(const XubString &rText)
-    // ergibt genau dann true, wenn das Zeichen (aus dem StarMath Font) wie ein
-    // Buchstabe behandelt werden soll.
+    // true iff symbol (from StarMath Font) should be treated as letter
 {
     if (rText.Len() == 0)
         return false;
@@ -72,12 +71,12 @@ bool SmIsMathAlpha(const XubString &rText)
     OSL_ENSURE(rText.Len() == 1, "Sm : string must be exactly one character long");
     xub_Unicode cChar = rText.GetChar(0);
 
-    // ist es ein griechisches Zeichen ?
+    // is it a greek symbol?
     if (xub_Unicode(0xE0AC) <= cChar  &&  cChar <= xub_Unicode(0xE0D4))
         return true;
     else
     {
-        // kommt es in 'aMathAlpha' vor ?
+        // appears it in 'aMathAlpha'?
         const xub_Unicode *pChar = aMathAlpha;
         while (*pChar  &&  *pChar != cChar)
             pChar++;
@@ -176,8 +175,8 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
         long  nDelta = pWindow->GetFontMetric().GetIntLeading();
         if (nDelta == 0)
-        {   // dieser Wert entspricht etwa einem Leading von 80 bei einer
-            // Fonthoehe von 422 (12pt)
+        {   // this value approx. fits a Leading of 80 at a
+            // Fontheight of 422 (12pt)
             nDelta = nFontHeight * 8L / 43;
         }
         SetTop(GetTop() - nDelta);
@@ -218,8 +217,8 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
     if (bAllowSmaller)
     {
-        // fuer Symbole und Operatoren aus dem StarMath Font passen wir den
-        // oberen und unteren Rand dem Zeichen an.
+        // for symbols and operators from the StarMath Font
+        // we adjust upper and lower margin of the symbol
         SetTop(nGlyphTop);
         SetBottom(nGlyphBottom);
     }

@@ -497,7 +497,7 @@ SmTmpDevice2::SmTmpDevice2( OutputDevice &rTheDev, bool bUseMap100th_mm ) :
     if ( bUseMap100th_mm  &&  MAP_100TH_MM != rOutDev.GetMapMode( ).GetMapUnit( ) )
     {
         DBG_ERROR( "incorrect MapMode?" );
-        rOutDev.SetMapMode( MAP_100TH_MM );     //Immer fuer 100% fomatieren
+        rOutDev.SetMapMode( MAP_100TH_MM );     //format for 100% always
     }
 }
 

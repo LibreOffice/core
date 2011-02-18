@@ -919,7 +919,7 @@ SFX_IMPL_INTERFACE(SmViewShell, SfxViewShell, SmResId(0))
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_TOOLS | SFX_VISIBILITY_STANDARD |
                                 SFX_VISIBILITY_FULLSCREEN | SFX_VISIBILITY_SERVER,
                                 SmResId(RID_MATH_TOOLBOX ));
-    //Dummy-Objectbar, damit es bei aktivieren nicht staendig zuppelt.
+    //Dummy-Objectbar, to avoid quiver while activating
 
     SFX_CHILDWINDOW_REGISTRATION(SID_TASKPANE);
     SFX_CHILDWINDOW_REGISTRATION(SmToolBoxWrapper::GetChildWindowId());
@@ -994,8 +994,8 @@ void SmViewShell::SetZoomFactor( const Fraction &rX, const Fraction &rY )
     const Fraction &rFrac = rX < rY ? rX : rY;
     GetGraphicWindow().SetZoom( (USHORT) long(rFrac * Fraction( 100, 1 )) );
 
-    //Um Rundungsfehler zu minimieren lassen wir von der Basisklasse ggf.
-    //auch die krummen Werte einstellen
+    //To avoid rounding errors base class regulates crooked values too
+    //if necessary
     SfxViewShell::SetZoomFactor( rX, rY );
 }
 

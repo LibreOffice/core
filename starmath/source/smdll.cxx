@@ -54,11 +54,9 @@
 
 bool SmDLL::bInitialized = false;
 
-/*************************************************************************
-|*
-|* Initialisierung
-|*
-\************************************************************************/
+
+// Initialization
+
 void SmDLL::Init()
 {
     if ( bInitialized )
@@ -94,11 +92,9 @@ void SmDLL::Init()
     ::sfx2::TaskPaneWrapper::RegisterChildWindow( false, pp );
 }
 
-/*************************************************************************
-|*
-|* Deinitialisierung
-|*
-\************************************************************************/
+
+// Deinitialization
+
 void SmDLL::Exit()
 {
     // the SdModule must be destroyed
