@@ -71,7 +71,7 @@
 #include <srcview.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
-#include <cmdid.h>          // Funktion-Ids
+#include <cmdid.h>          // Function-Ids
 #include <initui.hxx>
 #include <uitool.hxx>
 #include <swmodule.hxx>
@@ -84,7 +84,7 @@
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
 #include <modcfg.hxx>
-#include <globals.h>        // globale Konstanten z.B.
+#include <globals.h>        // e.g. global Constants
 #include <app.hrc>
 #include <fontcfg.hxx>
 #include <barcfg.hxx>
@@ -117,12 +117,12 @@
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
-    Beschreibung: Slotmaps fuer Methoden der Applikation
+    Description: Slotmaps for the application's methods
  --------------------------------------------------------------------*/
 
 
-// hier werden die SlotID's included
-// siehe Idl-File
+// here are the SlotID's being included
+// see Idl-file
 //
 #define SwModule
 #define ViewSettings
@@ -147,7 +147,7 @@ SFX_IMPL_INTERFACE( SwModule, SfxModule, SW_RES(RID_SW_NAME) )
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: Andere States
+    Description: other states
  --------------------------------------------------------------------*/
 
 
@@ -255,7 +255,7 @@ SwView* lcl_LoadDoc(SwView* pView, const String& rURL)
     return pNewView;
 }
 /*--------------------------------------------------------------------
-    Beschreibung:   Felddialog starten
+    Description: start field dialog
  --------------------------------------------------------------------*/
 
 void NewXForms( SfxRequest& rReq ); // implementation: below
@@ -484,7 +484,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, EM
             }
             else
             {
-                //should not happen - just in case no target view has been created
+                // should not happen - just in case no target view has been created
                 ExecutionFinished( true );
             }
             break;
@@ -530,7 +530,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, EM
             }
             else
             {
-                //should not happen - just in case no target view has been created
+                // should not happen - just in case no target view has been created
                 ExecutionFinished( true );
             }
             break;
@@ -542,7 +542,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, EM
                 LINK( this, SwMailMergeWizardExecutor, CancelHdl ), m_pWizard );
             break;
         }
-    default: //finish
+    default: // finish
         {
             SwView* pSourceView = m_pMMConfig->GetSourceView();
             if(pSourceView)
@@ -677,7 +677,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Catch notifications
+    Description: Catch notifications
  --------------------------------------------------------------------*/
 
 
@@ -694,7 +694,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             switch( rEvHint.GetEventId() )
             {
             case SFX_EVENT_CREATEDOC:
-                // alle FIX-Date/Time Felder auf akt. setzen
+                // Update all FIX-Date/Time fields
                 if( pWrtSh )
                 {
                     SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
@@ -706,14 +706,14 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     {
                         pWrtSh->UpdateInputFlds();
 
-                        // Sind Datenbankfelder enthalten?
-                        // Erstmal alle verwendeten Datenbanken holen
+                        // Are database fields contained?
+                        // Get all used databases for the first time
                         SwDoc *pDoc = pDocSh->GetDoc();
                         SvStringsDtor aDBNameList;
                         pDoc->GetAllUsedDB( aDBNameList );
                         sal_uInt16 nCount = aDBNameList.Count();
                         if (nCount)
-                        {   // Datenbankbeamer oeffnen
+                        {   // Open database beamer
                             ShowDBObj(pWrtSh->GetView(), pDoc->GetDBData());
                         }
                     }
@@ -919,8 +919,8 @@ const SwMasterUsrPref *SwModule::GetUsrPref(sal_Bool bWeb) const
     SwModule* pNonConstModule = (SwModule*)this;
     if(bWeb && !pWebUsrPref)
     {
-        // im Load der SwMasterUsrPref wird der SpellChecker gebraucht, dort darf
-        // er aber nicht angelegt werden #58256#
+        // The SpellChecker is needed in SwMasterUsrPref's Load, but it must not
+        // be created there #58256#
         pNonConstModule->pWebUsrPref = new SwMasterUsrPref(TRUE);
     }
     else if(!bWeb && !pUsrPref)

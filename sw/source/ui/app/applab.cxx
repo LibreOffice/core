@@ -154,7 +154,7 @@ const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rItem,
 
     rSh.SetTxtFmtColl( rSh.GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
 
-    // Ggf. "Naechster Datensatz"
+    // If applicable "next dataset"
     String sDBName;
     if( (!rItem.bSynchron || !(nCol|nRow)) && (sDBName = InsertLabEnvText( rSh, rFldMgr, rItem.aWriting )).Len() && !bLast )
     {
@@ -172,13 +172,13 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
     static sal_uInt16 nLabelTitleNo = 0;
     static sal_uInt16 nBCTitleNo = 0;
 
-    // DB-Manager anlegen
+    // Create DB-Manager
     SwNewDBMgr* pNewDBMgr = new SwNewDBMgr;
 
-    // SwLabItem aus Config lesen
+    // Read SwLabItem from Config
     SwLabCfgItem aLabCfg(bLabel);
 
-    // Dialog hochfahren
+    // Move up Dialog
     SfxItemSet aSet( GetPool(), FN_LABEL, FN_LABEL, 0 );
     aSet.Put( aLabCfg.GetItem() );
 
@@ -211,7 +211,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
         SfxViewFrame* pViewFrame = SfxViewFrame::DisplayNewDocument( *xDocSh, rReq );
 
         SwView      *pNewView = (SwView*) pViewFrame->GetViewShell();
-        pNewView->AttrChangedNotify( &pNewView->GetWrtShell() );//Damit SelectShell gerufen wird.
+        pNewView->AttrChangedNotify( &pNewView->GetWrtShell() );// So that SelectShell is being called.
 
         // Set document title
         String aTmp;
@@ -229,7 +229,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
 
         pViewFrame->GetFrame().Appear();
 
-        // Shell ermitteln
+        // Determine Shell
         SwWrtShell *pSh = pNewView->GetWrtShellPtr();
         OSL_ENSURE( pSh, "missing WrtShell" );
 
@@ -247,7 +247,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
             SwPageDesc aDesc = pSh->GetPageDesc( 0 );
             SwFrmFmt&  rFmt  = aDesc.GetMaster();
 
-            // Raender
+            // Borders
             SvxLRSpaceItem aLRMargin( RES_LR_SPACE );
             SvxULSpaceItem aULMargin( RES_UL_SPACE );
             aLRMargin.SetLeft ((sal_uInt16) rItem.lLeft );
@@ -264,19 +264,19 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
             aDesc.ChgFooterShare(sal_False);
 
 
-            aDesc.SetUseOn(nsUseOnPage::PD_ALL);                // Seitennumerierung
+            aDesc.SetUseOn(nsUseOnPage::PD_ALL);                // Site numbering
 
-            // Einstellen der Seitengroesse
+            // Set page size
             rFmt.SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE,
                                         rItem.lLeft  + rItem.nCols * rItem.lHDist + MINLAY,
                                         rItem.lUpper + rItem.nRows * rItem.lVDist + MINLAY));
 
-            // Numerierungsart
+            // Numbering type
             SvxNumberType aType;
             aType.SetNumberingType(SVX_NUM_NUMBER_NONE);
             aDesc.SetNumType( aType );
 
-            // Folgevorlage
+            // Followup template
             const SwPageDesc &rFollow = pSh->GetPageDesc( pSh->GetCurPageDesc() );
             aDesc.SetFollow( &rFollow );
 
@@ -285,23 +285,22 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
             aItem.SetValue((sal_Int8)pPrt->GetPaperBin());
             rFmt.SetFmtAttr(aItem);
 
-            //determine orientation by calculating the width and height of the resulting page
+            // Determine orientation by calculating the width and height of the resulting page
             const int nResultWidth = rItem.lHDist * (rItem.nCols - 1) + rItem.lWidth + rItem.lLeft;
             const int nResultHeight = rItem.lVDist * (rItem.nRows - 1) + rItem.lHeight + rItem.lUpper;
             aDesc.SetLandscape(nResultWidth > nResultHeight);
 
             pSh->ChgPageDesc( 0, aDesc );
 
-            // Rahmen einfuegen
+            // Insert frame
             SwFldMgr*        pFldMgr = new SwFldMgr;
             pFldMgr->SetEvalExpFlds(sal_False);
 
-            //fix(24446): Damit der Text der Ettiketten nicht im unbedruckbaren
-            //Bereich landet stellen wir entsprechende Raender ein. Um das Handling
-            //so Optimal wie moeglich zu halten stellen wir zunaechst an der
-            //aktuellen Absatzvorlage keinen Rand als hartes Attribut ein (Damit die
-            //Formatierung wg. der Zeichengeb. Rahmen passt. Dann stellen wir die
-            //Standarabsatzvorlage anhand des unbedruckbaren Bereiches ein.
+            //fix(24446): To avoid that labels end up in unprintable area, we set
+            //borders accordingly. To keep the handling as good as possible, we
+            //don't set any border as hard attribute at the current paragraph template
+            //(so that formating works, because of character-bound borders). Then
+            //we set the default paragraph template using the unprintable area.
             const long nMin = pPrt->GetPageOffset().X() - rItem.lLeft;
             if ( nMin > 0 )
             {
@@ -313,7 +312,7 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                 pStandard->SetFmtAttr( aLR );
             }
 
-            // Rahmenvorlage vorbereiten
+            // Prepare border template
             SwFrmFmt* pFmt = pSh->GetFrmFmtFromPool( RES_POOLFRM_LABEL );
             SwFmtFrmSize aFrmSize(  ATT_FIX_SIZE,
                                     rItem.lHDist - (rItem.lHDist-rItem.lWidth),
@@ -380,9 +379,9 @@ void SwModule::InsertLab(SfxRequest& rReq, sal_Bool bLabel)
                             sLinkName += String::CreateFromAscii(MASTER_LABEL);
                             aSect.SetLinkFileName(sLinkName);
                             aSect.SetProtectFlag(true);
-                            pSh->Insert(aDotStr);   // Dummytext zum Zuweisen der Section
+                            pSh->Insert(aDotStr);   // Dummytext to allocate the Section
                             pSh->SttDoc();
-                            pSh->EndDoc(sal_True);  // Alles im Rahmen selektieren
+                            pSh->EndDoc(sal_True);  // Select everything in the frame
                             pSh->InsertSection(aSect);
                         }
                         pSh->Pop( sal_False );
