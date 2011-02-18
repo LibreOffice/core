@@ -628,7 +628,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x0868, 1, L_FIX}, // "sprmCFUsePgsuSettings"
                             // chp.fUsePgsuSettings;1 or 0
         {0x486B, 2, L_FIX}, // "sprmCCpg" ;;word;
-        {0x486D, 2, L_FIX}, // "sprmCRgLid0" chp.rglid[0];LID: for non-FE text
+        {0x486D, 2, L_FIX}, // "sprmCRgLid0_80" chp.rglid[0];LID: for non-FE text
         {0x486E, 2, L_FIX}, // "sprmCRgLid1" chp.rglid[1];LID: for Far East text
         {0x286F, 1, L_FIX}, // "sprmCIdctHint" chp.idctHint;IDCT:
         {0x2E00, 1, L_FIX}, // "sprmPicBrcl" pic.brcl;brcl (see PIC definition)

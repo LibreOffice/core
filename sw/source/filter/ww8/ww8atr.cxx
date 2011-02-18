@@ -1312,7 +1312,7 @@ void WW8AttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
         switch ( rLanguage.Which() )
         {
             case RES_CHRATR_LANGUAGE:
-                nId = NS_sprm::LN_CRgLid0;
+                nId = NS_sprm::LN_CRgLid0_80;
                 break;
             case RES_CHRATR_CJK_LANGUAGE:
                 nId = NS_sprm::LN_CRgLid1;
@@ -1327,7 +1327,7 @@ void WW8AttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
 
     if ( nId )
     {
-        if ( m_rWW8Export.bWrtWW8 ) // use sprmCRgLid0 rather than sprmCLid
+        if ( m_rWW8Export.bWrtWW8 ) // use sprmCRgLid0_80 rather than sprmCLid
             m_rWW8Export.InsUInt16( nId );
         else
             m_rWW8Export.pO->Insert( (BYTE)nId, m_rWW8Export.pO->Count() );
@@ -1335,7 +1335,7 @@ void WW8AttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
 
         // unknown as to exactly why, but this seems to shadow the other
         // paramater in word 2000 and without it spellchecking doesn't work
-        if ( nId == NS_sprm::LN_CRgLid0 )
+        if ( nId == NS_sprm::LN_CRgLid0_80 )
         {
             m_rWW8Export.InsUInt16( 0x4873 );
             m_rWW8Export.InsUInt16( rLanguage.GetLanguage() );

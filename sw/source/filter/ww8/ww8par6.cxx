@@ -3836,7 +3836,7 @@ void SwWW8ImplReader::Read_Language( USHORT nId, const BYTE* pData, short nLen )
     switch( nId )
     {
         case 97:
-        case 0x486D:
+        case 0x486D: //sprmCRgLid0_80
         case 0x4873: //Methinks, uncertain
             nId = RES_CHRATR_LANGUAGE;
             break;
@@ -5937,7 +5937,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //chp.fUsePgsuSettings; 1 or 0;
                                                      //bit;
         {0x486B, 0},                                 //"sprmCCpg" ;;word;
-        {0x486D, &SwWW8ImplReader::Read_Language},   //"sprmCRgLid0" chp.rglid[0];
+        {0x486D, &SwWW8ImplReader::Read_Language},   //"sprmCRgLid0_80" chp.rglid[0];
                                                      //LID: for non-Far East text;
                                                      //word;
         {0x486E, &SwWW8ImplReader::Read_Language},   //"sprmCRgLid1" chp.rglid[1];
