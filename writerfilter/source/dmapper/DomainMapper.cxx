@@ -2207,18 +2207,32 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         break;  // sprmCFUsePgsuSettings
     case NS_sprm::LN_CCpg:
         break;  // sprmCCpg
-    case NS_sprm::LN_CLidBi:  // sprmCLidBi      language complex
-    case NS_sprm::LN_CRgLid0_80: //sprmCRgLid0_80
-        //undocumented but interpreted as western language
-    case NS_sprm::LN_CRgLid0:   // sprmCRgLid0    language Western
-    case NS_sprm::LN_CRgLid1:   // sprmCRgLid1    language Asian
+    case NS_sprm::LN_CLidBi:     // sprmCLidBi     language complex
+    case NS_sprm::LN_CRgLid0_80: // sprmCRgLid0_80 older language Western
+    case NS_sprm::LN_CRgLid0:    // sprmCRgLid0    language Western
+    case NS_sprm::LN_CRgLid1:    // sprmCRgLid1    language Asian
+    case NS_sprm::LN_CRgLid1_80: // sprmCRgLid1_80 older language Asian
         {
             lang::Locale aLocale;
             MsLangId::convertLanguageToLocale( (LanguageType)nIntValue, aLocale );
-            rContext->Insert(NS_sprm::LN_CRgLid0 == nSprmId ? PROP_CHAR_LOCALE :
-                             NS_sprm::LN_CRgLid1 == nSprmId ? PROP_CHAR_LOCALE_ASIAN : PROP_CHAR_LOCALE_COMPLEX,
-                             true,
-                             uno::makeAny( aLocale ) );
+
+            PropertyIds aPropId;
+            switch (nSprmId)
+            {
+                case NS_sprm::LN_CRgLid0:
+                case NS_sprm::LN_CRgLid0_80:
+                    aPropId = PROP_CHAR_LOCALE;
+                    break;
+                case NS_sprm::LN_CRgLid1:
+                case NS_sprm::LN_CRgLid1_80:
+                    aPropId = PROP_CHAR_LOCALE_ASIAN;
+                    break;
+                default:
+                    aPropId = PROP_CHAR_LOCALE_COMPLEX;
+                    break;
+            }
+
+            rContext->Insert(aPropId, true, uno::makeAny( aLocale ) );
         }
         break;
 
@@ -2685,8 +2699,6 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
             rContext->Insert(PROP_CHAR_COLOR, true, uno::makeAny( nColor ) );
         }
         break;
-    case 0x4874:
-        break; //seems to be a language id for Asian text - undocumented
     case 0x6877: //underlining color
         {
             sal_Int32 nColor = ConversionHelper::ConvertColor(nIntValue);

@@ -295,8 +295,11 @@ sed "s/0x486b/NS_sprm::LN_CCpg/g" < $1 > $1.out && mv $1.out $1
 sed "s/0x486B/NS_sprm::LN_CCpg/g" < $1 > $1.out && mv $1.out $1 
 sed "s/0x486d/NS_sprm::LN_CRgLid0_80/g" < $1 > $1.out && mv $1.out $1 
 sed "s/0x486D/NS_sprm::LN_CRgLid0_80/g" < $1 > $1.out && mv $1.out $1 
-sed "s/0x486e/NS_sprm::LN_CRgLid1/g" < $1 > $1.out && mv $1.out $1 
-sed "s/0x486E/NS_sprm::LN_CRgLid1/g" < $1 > $1.out && mv $1.out $1 
+sed "s/0x486e/NS_sprm::LN_CRgLid1_80/g" < $1 > $1.out && mv $1.out $1 
+sed "s/0x486E/NS_sprm::LN_CRgLid1_80/g" < $1 > $1.out && mv $1.out $1 
+sed "s/0x486B/NS_sprm::LN_CCpg/g" < $1 > $1.out && mv $1.out $1 
+sed "s/0x4873/NS_sprm::LN_CRgLid0/g" < $1 > $1.out && mv $1.out $1 
+sed "s/0x4874/NS_sprm::LN_CRgLid1/g" < $1 > $1.out && mv $1.out $1 
 sed "s/0x286f/NS_sprm::LN_CIdctHint/g" < $1 > $1.out && mv $1.out $1 
 sed "s/0x286F/NS_sprm::LN_CIdctHint/g" < $1 > $1.out && mv $1.out $1 
 sed "s/0x2e00/NS_sprm::LN_PicBrcl/g" < $1 > $1.out && mv $1.out $1 
