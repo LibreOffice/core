@@ -159,7 +159,7 @@ private:
     void                    SetDupCount( long nNew );
 
 public:
-                                ScDPSource( ScDPTableData* pD );    // TableData is deleted by Source
+                                ScDPSource( ScDPTableData* pD );
     virtual                     ~ScDPSource();
 
     ScDPTableData*          GetData()       { return pData; }
