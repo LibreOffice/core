@@ -656,6 +656,9 @@ ENABLE_PRESENTER_SCREEN
 ENABLE_MINIMIZER
 ENABLE_PRESENTER_EXTRA_UI
 ENABLE_OPENGL
+ENABLE_LIBRSVG
+LIBRSVG_LIBS
+LIBRSVG_CFLAGS
 SYSTEM_CAIRO
 BUILD_PIXMAN
 ENABLE_CAIRO
@@ -1051,6 +1054,7 @@ enable_gstreamer
 enable_systray
 enable_cairo
 with_system_cairo
+enable_librsvg
 enable_opengl
 enable_dbus
 enable_gconf
@@ -1911,6 +1915,19 @@ Optional Features:
 
   --enable-cairo          Determines whether to use Cairo library on
                           platforms where Cairo is available.
+
+  --enable-librsvg        Determines whether to use librsvg library on
+                          platforms where librsvg is available.
+                          (actually, it is possible to build with
+                          --disable-librsvg and to still have SVG support
+                          within a running soffice instance, since this
+                          dependency is a runtime only dependency.
+                          To have SVG suppport at runtime, the librsvg, the cairo
+                          and the gobject library - and all depending libraries
+                          as well - need to be accessible by the running soffice
+                          instance.
+                          The intention of defaulting this flag to yes is to
+                          indicate this fact to the build maintainer)
 
   --enable-opengl         Determines whether to build the OpenGL 3D slide
                           transitions component
@@ -3939,6 +3956,13 @@ if test "${with_system_cairo+set}" = set; then :
   withval=$with_system_cairo;
 fi
 
+# Check whether --enable-librsvg was given.
+if test "${enable_librsvg+set}" = set; then :
+  enableval=$enable_librsvg;
+else
+  enable_librsvg=yes
+fi
+
 # Check whether --enable-opengl was given.
 if test "${enable_opengl+set}" = set; then :
   enableval=$enable_opengl;
@@ -5258,6 +5282,7 @@ case "$build_os" in
 	solaris*)
 		test_gtk=yes
 		test_cairo=yes
+		test_librsvg=yes
 		test_kde=yes
 		test_cups=yes
         test_randr=yes
@@ -5332,6 +5357,7 @@ $as_echo "ok ($build_cpu)" >&6; }
 	linux-gnu*|k*bsd*-gnu*)
 		test_gtk=yes
 		test_cairo=yes
+		test_librsvg=yes
 		test_kde=yes
 		test_kde4=yes
 		test_cups=yes
@@ -5347,6 +5373,7 @@ $as_echo "ok ($build_cpu)" >&6; }
 	cygwin*) # Windows
 		test_cups=no
 		test_cairo=yes
+		test_librsvg=no
 		test_freetype=no
         test_gstreamer=no
 		_os=WINNT
@@ -5355,6 +5382,7 @@ $as_echo "ok ($build_cpu)" >&6; }
 		test_cups=yes
 		test_gtk=yes
 		test_cairo=yes
+		test_librsvg=no
         test_randr=no
 		test_freetype=no
         test_gstreamer=no
@@ -5371,6 +5399,7 @@ $as_echo "$as_me: WARNING: Disabling gtk-quickstarter - not supported on Mac. Us
 		test_cups=no
         test_randr=no
 		test_gtk=no
+		test_librsvg=no
 		test_freetype=no
         test_gstreamer=no
 		_os=OS2
@@ -5378,6 +5407,7 @@ $as_echo "$as_me: WARNING: Disabling gtk-quickstarter - not supported on Mac. Us
 	freebsd*)
 		test_gtk=yes
 		test_cairo=yes
+		test_librsvg=yes
 		test_kde=yes
 		test_kde4=yes
 		test_cups=yes
@@ -5417,6 +5447,7 @@ $as_echo "$PTHREAD_LIBS" >&6; }
 	netbsd)
 		test_gtk=yes
 		test_cairo=yes
+		test_librsvg=yes
 		test_kde=yes
 		test_kde4=yes
 		test_cups=no
@@ -20756,6 +20787,125 @@ $as_echo "no" >&6; }
 fi
 
 
+
+
+
+
+
+
+ENABLE_LIBRSVG=""
+LIBRSVG_CFLAGS=""
+LIBRSVG_LIBS=""
+
+if test  "$test_librsvg" = "yes"; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to use librsvg" >&5
+$as_echo_n "checking whether to use librsvg... " >&6; }
+    if test "x$enable_librsvg" != "xno" ; then
+
+  succeeded=no
+
+  if test -z "$PKG_CONFIG"; then
+    # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then :
+  $as_echo_n "(cached) " >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+if test -n "$PKG_CONFIG"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PKG_CONFIG" >&5
+$as_echo "$PKG_CONFIG" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  fi
+
+  if test "$PKG_CONFIG" = "no" ; then
+     echo "*** The pkg-config script could not be found. Make sure it is"
+     echo "*** in your path, or set the PKG_CONFIG environment variable"
+     echo "*** to the full path to pkg-config."
+     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+  else
+     PKG_CONFIG_MIN_VERSION=0.9.0
+     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for librsvg-2.0 >= 2.14" >&5
+$as_echo_n "checking for librsvg-2.0 >= 2.14... " >&6; }
+
+        if $PKG_CONFIG --exists "librsvg-2.0 >= 2.14" ; then
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+            succeeded=yes
+
+            { $as_echo "$as_me:${as_lineno-$LINENO}: checking LIBRSVG_CFLAGS" >&5
+$as_echo_n "checking LIBRSVG_CFLAGS... " >&6; }
+            LIBRSVG_CFLAGS=`$PKG_CONFIG --cflags "librsvg-2.0 >= 2.14"`
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: $LIBRSVG_CFLAGS" >&5
+$as_echo "$LIBRSVG_CFLAGS" >&6; }
+
+            { $as_echo "$as_me:${as_lineno-$LINENO}: checking LIBRSVG_LIBS" >&5
+$as_echo_n "checking LIBRSVG_LIBS... " >&6; }
+            LIBRSVG_LIBS=`$PKG_CONFIG --libs "librsvg-2.0 >= 2.14"`
+            { $as_echo "$as_me:${as_lineno-$LINENO}: result: $LIBRSVG_LIBS" >&5
+$as_echo "$LIBRSVG_LIBS" >&6; }
+        else
+            LIBRSVG_CFLAGS=""
+            LIBRSVG_LIBS=""
+            ## If we have a custom action on failure, don't print errors, but
+            ## do set a variable so people can do so.
+            LIBRSVG_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "librsvg-2.0 >= 2.14"`
+
+        fi
+
+
+
+     else
+        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** See http://www.freedesktop.org/software/pkgconfig"
+     fi
+  fi
+
+  if test $succeeded = yes; then
+     :
+  else
+     as_fn_error $? "requirements to build with librsvg support not met. Use --disable-librsvg or install the missing packages" "$LINENO" 5
+  fi
+
+        ENABLE_LIBRSVG="TRUE"
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+    fi
+fi
 
 
 
