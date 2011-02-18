@@ -45,7 +45,7 @@
 #ifndef _SFX_STYFITEM_HXX_NOLIST
 struct SfxFilterTupel {
     String aName;
-    USHORT nFlags;
+    sal_uInt16 nFlags;
 };
 
 DECLARE_LIST(SfxStyleFilter, SfxFilterTupel*)
@@ -61,7 +61,7 @@ class SfxStyleFamilyItem: public Resource
     Bitmap          aBitmap;
     String          aText;
     String          aHelpText;
-    USHORT          nFamily;
+    sal_uInt16          nFamily;
     SfxStyleFilter  aFilterList;
 
 public:
@@ -98,10 +98,10 @@ public:
                         SfxStyleFamilies( ) {};
                         ~SfxStyleFamilies();
 
-    USHORT              Count() const
-                        { return (USHORT)aEntryList.Count(); }
+    sal_uInt16              Count() const
+                        { return (sal_uInt16)aEntryList.Count(); }
 
-    const SfxStyleFamilyItem* GetObject(ULONG nIdx) const
+    const SfxStyleFamilyItem* GetObject(sal_uIntPtr nIdx) const
                         { return (SfxStyleFamilyItem*)aEntryList.GetObject(nIdx); }
 
     /** updates the images of all single SfxStyleFamilyItems with new images from the given resource

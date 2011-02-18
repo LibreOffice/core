@@ -159,7 +159,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     mpImpl = new XMLShapeImportHelperImpl();
     mpImpl->mpSortContext = 0;
 
-    // #88546# init to FALSE
+    // #88546# init to sal_False
     mpImpl->mbHandleProgressBar = sal_False;
 
     mpSdPropHdlFactory = new XMLSdPropHdlFactory( rModel, rImporter );
@@ -709,7 +709,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetGraphicObjectShapeAttrTokenMap()
 
 SvXMLShapeContext* XMLShapeImportHelper::Create3DSceneChildContext(
     SvXMLImport& rImport,
-    USHORT p_nPrefix,
+    sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
@@ -789,7 +789,7 @@ void XMLShapeImportHelper::SetAutoStylesContext(SvXMLStylesContext* pNew)
 
 SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
     SvXMLImport& rImport,
-    USHORT p_nPrefix,
+    sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
@@ -838,7 +838,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
         {
             // draw:polygon or draw:polyline inside group context
             pContext = new SdXMLPolygonShapeContext( rImport, p_nPrefix, rLocalName, xAttrList, rShapes,
-                rTokenMap.Get(p_nPrefix, rLocalName) == XML_TOK_GROUP_POLYGON ? TRUE : FALSE, bTemporaryShape );
+                rTokenMap.Get(p_nPrefix, rLocalName) == XML_TOK_GROUP_POLYGON ? sal_True : sal_False, bTemporaryShape );
             break;
         }
         case XML_TOK_GROUP_PATH:
@@ -922,7 +922,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateGroupChildContext(
 // This method is called from SdXMLFrameContext to create children of drawe:frame
 SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
     SvXMLImport& rImport,
-    USHORT p_nPrefix,
+    sal_uInt16 p_nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& rAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
@@ -1010,7 +1010,7 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
 
 SvXMLImportContext *XMLShapeImportHelper::CreateFrameChildContext(
     SvXMLImportContext *pThisContext,
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {

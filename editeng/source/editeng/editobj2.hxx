@@ -43,8 +43,8 @@ class XEditAttribute
 
 private:
     const SfxPoolItem*  pItem;
-    USHORT              nStart;
-    USHORT              nEnd;
+    sal_uInt16              nStart;
+    sal_uInt16              nEnd;
 
                         XEditAttribute();
                         XEditAttribute( const XEditAttribute& rCopyFrom );
@@ -53,19 +53,19 @@ private:
 
 public:
                         XEditAttribute( const SfxPoolItem& rAttr );
-                        XEditAttribute( const SfxPoolItem& rAttr, USHORT nStart, USHORT nEnd );
+                        XEditAttribute( const SfxPoolItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
 
     const SfxPoolItem*  GetItem() const             { return pItem; }
 
-    USHORT&             GetStart()                  { return nStart; }
-    USHORT&             GetEnd()                    { return nEnd; }
+    sal_uInt16&             GetStart()                  { return nStart; }
+    sal_uInt16&             GetEnd()                    { return nEnd; }
 
-    USHORT              GetStart() const            { return nStart; }
-    USHORT              GetEnd() const              { return nEnd; }
+    sal_uInt16              GetStart() const            { return nStart; }
+    sal_uInt16              GetEnd() const              { return nEnd; }
 
-    USHORT              GetLen() const              { return nEnd-nStart; }
+    sal_uInt16              GetLen() const              { return nEnd-nStart; }
 
-    inline BOOL         IsFeature();
+    inline sal_Bool         IsFeature();
 
     inline bool         operator==( const XEditAttribute& rCompare );
 };
@@ -79,9 +79,9 @@ inline bool XEditAttribute::operator==( const XEditAttribute& rCompare )
             (*pItem == *rCompare.pItem));
 }
 
-inline BOOL XEditAttribute::IsFeature()
+inline sal_Bool XEditAttribute::IsFeature()
 {
-    USHORT nWhich = pItem->Which();
+    sal_uInt16 nWhich = pItem->Which();
     return  ( ( nWhich >= EE_FEATURE_START ) &&
               ( nWhich <=  EE_FEATURE_END ) );
 }
@@ -92,13 +92,13 @@ SV_DECL_PTRARR( XEditAttributeListImpl, XEditAttributePtr, 0, 4 )
 class XEditAttributeList : public XEditAttributeListImpl
 {
 public:
-    XEditAttribute* FindAttrib( USHORT nWhich, USHORT nChar ) const;
+    XEditAttribute* FindAttrib( sal_uInt16 nWhich, sal_uInt16 nChar ) const;
 };
 
 struct XParaPortion
 {
     long                nHeight;
-    USHORT              nFirstLineOffset;
+    sal_uInt16              nFirstLineOffset;
 
     EditLineList        aLines;
     TextPortionList     aTextPortions;
@@ -109,22 +109,22 @@ SV_DECL_PTRARR( XBaseParaPortionList, XParaPortionPtr, 0, 4 )
 
 class XParaPortionList : public  XBaseParaPortionList
 {
-    ULONG       nRefDevPtr;
+    sal_uIntPtr         nRefDevPtr;
     OutDevType  eRefDevType;
     MapMode     aRefMapMode;
-    ULONG       nPaperWidth;
+    sal_uLong       nPaperWidth;
 
 
 public:
-            XParaPortionList( OutputDevice* pRefDev, ULONG nPW ) :
+            XParaPortionList( OutputDevice* pRefDev, sal_uLong nPW ) :
                 aRefMapMode( pRefDev->GetMapMode() )
                 {
-                    nRefDevPtr = (ULONG)pRefDev; nPaperWidth = nPW;
+                    nRefDevPtr = (sal_uIntPtr)pRefDev; nPaperWidth = nPW;
                     eRefDevType = pRefDev->GetOutDevType();
                 }
 
-    ULONG           GetRefDevPtr() const        { return nRefDevPtr; }
-    ULONG           GetPaperWidth() const       { return nPaperWidth; }
+    sal_uIntPtr         GetRefDevPtr() const        { return nRefDevPtr; }
+    sal_uLong           GetPaperWidth() const       { return nPaperWidth; }
     OutDevType      GetRefDevType() const       { return eRefDevType; }
     const MapMode&  GetRefMapMode() const       { return aRefMapMode; }
 };
@@ -135,10 +135,10 @@ struct LoadStoreTempInfos
     ByteString              aOrgString_Load;
 
     FontToSubsFontConverter hOldSymbolConv_Store;
-    BOOL                    bSymbolParagraph_Store;
+    sal_Bool                    bSymbolParagraph_Store;
 
 
-    LoadStoreTempInfos() { bSymbolParagraph_Store = FALSE; hOldSymbolConv_Store = NULL; }
+    LoadStoreTempInfos() { bSymbolParagraph_Store = sal_False; hOldSymbolConv_Store = NULL; }
 };
 */
 
@@ -197,23 +197,23 @@ class BinTextObject : public EditTextObject, public SfxItemPoolUser
 private:
     ContentInfoList         aContents;
     SfxItemPool*            pPool;
-    BOOL                    bOwnerOfPool;
+    sal_Bool                    bOwnerOfPool;
     XParaPortionList*       pPortionInfo;
 
     sal_uInt32              nObjSettings;
-    USHORT                  nMetric;
-    USHORT                  nVersion;
-    USHORT                  nUserType;
-    USHORT                  nScriptType;
+    sal_uInt16                  nMetric;
+    sal_uInt16                  nVersion;
+    sal_uInt16                  nUserType;
+    sal_uInt16                  nScriptType;
 
-    BOOL                    bVertical;
-    BOOL                    bStoreUnicodeStrings;
+    sal_Bool                    bVertical;
+    sal_Bool                    bStoreUnicodeStrings;
 
 protected:
     void                    DeleteContents();
     virtual void            StoreData( SvStream& rOStream ) const;
     virtual void            CreateData( SvStream& rIStream );
-    BOOL                    ImpChangeStyleSheets( const String& rOldName, SfxStyleFamily eOldFamily,
+    sal_Bool                    ImpChangeStyleSheets( const String& rOldName, SfxStyleFamily eOldFamily,
                                         const String& rNewName, SfxStyleFamily eNewFamily );
 
 public:
@@ -223,22 +223,22 @@ public:
 
     virtual EditTextObject* Clone() const;
 
-    USHORT                  GetUserType() const;
-    void                    SetUserType( USHORT n );
+    sal_uInt16                  GetUserType() const;
+    void                    SetUserType( sal_uInt16 n );
 
-    ULONG                   GetObjectSettings() const;
-    void                    SetObjectSettings( ULONG n );
+    sal_uLong                   GetObjectSettings() const;
+    void                    SetObjectSettings( sal_uLong n );
 
-    BOOL                    IsVertical() const;
-    void                    SetVertical( BOOL b );
+    sal_Bool                    IsVertical() const;
+    void                    SetVertical( sal_Bool b );
 
-    USHORT                  GetScriptType() const;
-    void                    SetScriptType( USHORT nType );
+    sal_uInt16                  GetScriptType() const;
+    void                    SetScriptType( sal_uInt16 nType );
 
-    USHORT                  GetVersion() const; // Solange der Outliner keine Recordlaenge speichert
+    sal_uInt16                  GetVersion() const; // Solange der Outliner keine Recordlaenge speichert
 
     ContentInfo*            CreateAndInsertContent();
-    XEditAttribute*         CreateAttrib( const SfxPoolItem& rItem, USHORT nStart, USHORT nEnd );
+    XEditAttribute*         CreateAttrib( const SfxPoolItem& rItem, sal_uInt16 nStart, sal_uInt16 nEnd );
     void                    DestroyAttrib( XEditAttribute* pAttr );
 
     ContentInfoList&        GetContents()           { return aContents; }
@@ -248,47 +248,47 @@ public:
     void                    SetPortionInfo( XParaPortionList* pP )
                                 { pPortionInfo = pP; }
 
-    virtual USHORT          GetParagraphCount() const;
-    virtual String          GetText( USHORT nParagraph ) const;
-    virtual void            Insert( const EditTextObject& rObj, USHORT nPara );
-    virtual EditTextObject* CreateTextObject( USHORT nPara, USHORT nParas = 1 ) const;
-    virtual void            RemoveParagraph( USHORT nPara );
+    virtual sal_uInt16          GetParagraphCount() const;
+    virtual String          GetText( sal_uInt16 nParagraph ) const;
+    virtual void            Insert( const EditTextObject& rObj, sal_uInt16 nPara );
+    virtual EditTextObject* CreateTextObject( sal_uInt16 nPara, sal_uInt16 nParas = 1 ) const;
+    virtual void            RemoveParagraph( sal_uInt16 nPara );
 
-    virtual BOOL            HasPortionInfo() const;
+    virtual sal_Bool            HasPortionInfo() const;
     virtual void            ClearPortionInfo();
 
-    virtual BOOL            HasOnlineSpellErrors() const;
+    virtual sal_Bool            HasOnlineSpellErrors() const;
 
-    virtual BOOL            HasCharAttribs( USHORT nWhich = 0 ) const;
-    virtual void            GetCharAttribs( USHORT nPara, EECharAttribArray& rLst ) const;
+    virtual sal_Bool            HasCharAttribs( sal_uInt16 nWhich = 0 ) const;
+    virtual void            GetCharAttribs( sal_uInt16 nPara, EECharAttribArray& rLst ) const;
 
-    virtual BOOL            RemoveCharAttribs( USHORT nWhich = 0 );
-    virtual BOOL            RemoveParaAttribs( USHORT nWhich = 0 );
+    virtual sal_Bool            RemoveCharAttribs( sal_uInt16 nWhich = 0 );
+    virtual sal_Bool            RemoveParaAttribs( sal_uInt16 nWhich = 0 );
 
-    virtual void            MergeParaAttribs( const SfxItemSet& rAttribs, USHORT nStart, USHORT nEnd );
+    virtual void            MergeParaAttribs( const SfxItemSet& rAttribs, sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    virtual BOOL            IsFieldObject() const;
+    virtual sal_Bool            IsFieldObject() const;
     virtual const SvxFieldItem* GetField() const;
-    virtual BOOL            HasField( TypeId Type = NULL ) const;
+    virtual sal_Bool            HasField( TypeId Type = NULL ) const;
 
-    SfxItemSet              GetParaAttribs( USHORT nPara ) const;
-    void                    SetParaAttribs( USHORT nPara, const SfxItemSet& rAttribs );
+    SfxItemSet              GetParaAttribs( sal_uInt16 nPara ) const;
+    void                    SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rAttribs );
 
-    virtual BOOL            HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const;
-    virtual void            GetStyleSheet( USHORT nPara, XubString& rName, SfxStyleFamily& eFamily ) const;
-    virtual void            SetStyleSheet( USHORT nPara, const XubString& rName, const SfxStyleFamily& eFamily );
-    virtual BOOL            ChangeStyleSheets(  const XubString& rOldName, SfxStyleFamily eOldFamily,
+    virtual sal_Bool            HasStyleSheet( const XubString& rName, SfxStyleFamily eFamily ) const;
+    virtual void            GetStyleSheet( sal_uInt16 nPara, XubString& rName, SfxStyleFamily& eFamily ) const;
+    virtual void            SetStyleSheet( sal_uInt16 nPara, const XubString& rName, const SfxStyleFamily& eFamily );
+    virtual sal_Bool            ChangeStyleSheets(  const XubString& rOldName, SfxStyleFamily eOldFamily,
                                                 const String& rNewName, SfxStyleFamily eNewFamily );
     virtual void            ChangeStyleSheetName( SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName );
 
     void                    CreateData300( SvStream& rIStream );
 
-    BOOL                    HasMetric() const           { return nMetric != 0xFFFF; }
-    USHORT                  GetMetric() const           { return nMetric; }
-    void                    SetMetric( USHORT n )       { nMetric = n; }
+    sal_Bool                    HasMetric() const           { return nMetric != 0xFFFF; }
+    sal_uInt16                  GetMetric() const           { return nMetric; }
+    void                    SetMetric( sal_uInt16 n )       { nMetric = n; }
 
-    BOOL                    IsOwnerOfPool() const       { return bOwnerOfPool; }
-    void                    StoreUnicodeStrings( BOOL b ) { bStoreUnicodeStrings = b; }
+    sal_Bool                    IsOwnerOfPool() const       { return bOwnerOfPool; }
+    void                    StoreUnicodeStrings( sal_Bool b ) { bStoreUnicodeStrings = b; }
 
 /* cl removed because not needed anymore since binfilter
     void                    PrepareStore( SfxStyleSheetPool* pStyleSheetPool );

@@ -52,45 +52,45 @@ DBG_NAMEEX( EE_TextPortion )
 #define DEFTAB          720
 
 void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent = true, short nScriptType = 0 );
-USHORT GetScriptItemId( USHORT nItemId, short nScriptType );
-BOOL IsScriptItemValid( USHORT nItemId, short nScriptType );
+sal_uInt16 GetScriptItemId( sal_uInt16 nItemId, short nScriptType );
+sal_Bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType );
 
-EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, USHORT nS, USHORT nE );
+EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_uInt16 nS, sal_uInt16 nE );
 
 class ContentNode;
 class EditDoc;
 
 struct EPaM
 {
-    USHORT nPara;
-    USHORT nIndex;
+    sal_uInt16 nPara;
+    sal_uInt16 nIndex;
 
     EPaM()                              { nPara = 0; nIndex = 0; }
-    EPaM( USHORT nP, USHORT nI )        { nPara = nP; nIndex = nI; }
+    EPaM( sal_uInt16 nP, sal_uInt16 nI )        { nPara = nP; nIndex = nI; }
     EPaM( const EPaM& r)                { nPara = r.nPara; nIndex = r.nIndex; }
     EPaM& operator = ( const EPaM& r )  { nPara = r.nPara; nIndex = r.nIndex; return *this; }
-    inline BOOL operator == ( const EPaM& r ) const;
-    inline BOOL operator < ( const EPaM& r ) const;
+    inline sal_Bool operator == ( const EPaM& r ) const;
+    inline sal_Bool operator < ( const EPaM& r ) const;
 };
 
-inline BOOL EPaM::operator < ( const EPaM& r ) const
+inline sal_Bool EPaM::operator < ( const EPaM& r ) const
 {
     return ( ( nPara < r.nPara ) ||
-             ( ( nPara == r.nPara ) && nIndex < r.nIndex ) ) ? TRUE : FALSE;
+             ( ( nPara == r.nPara ) && nIndex < r.nIndex ) ) ? sal_True : sal_False;
 }
 
-inline BOOL EPaM::operator == ( const EPaM& r ) const
+inline sal_Bool EPaM::operator == ( const EPaM& r ) const
 {
-    return ( ( nPara == r.nPara ) && ( nIndex == r.nIndex ) ) ? TRUE : FALSE;
+    return ( ( nPara == r.nPara ) && ( nIndex == r.nIndex ) ) ? sal_True : sal_False;
 }
 
 struct ScriptTypePosInfo
 {
     short   nScriptType;
-    USHORT  nStartPos;
-    USHORT  nEndPos;
+    sal_uInt16  nStartPos;
+    sal_uInt16  nEndPos;
 
-    ScriptTypePosInfo( short _Type, USHORT _Start, USHORT _End )
+    ScriptTypePosInfo( short _Type, sal_uInt16 _Start, sal_uInt16 _End )
     {
         nScriptType = _Type;
         nStartPos = _Start;
@@ -102,11 +102,11 @@ typedef std::deque< ScriptTypePosInfo > ScriptTypePosInfos;
 
 struct WritingDirectionInfo
 {
-    BYTE    nType;
-    USHORT  nStartPos;
-    USHORT  nEndPos;
+    sal_uInt8   nType;
+    sal_uInt16  nStartPos;
+    sal_uInt16  nEndPos;
 
-    WritingDirectionInfo( BYTE _Type, USHORT _Start, USHORT _End )
+    WritingDirectionInfo( sal_uInt8 _Type, sal_uInt16 _Start, sal_uInt16 _End )
     {
         nType = _Type;
         nStartPos = _Start;
@@ -148,7 +148,7 @@ public:
             SvxFontTable();
             ~SvxFontTable();
 
-    ULONG   GetId( const SvxFontItem& rFont );
+    sal_uLong   GetId( const SvxFontItem& rFont );
 };
 
 //  ----------------------------------------------------------------------
@@ -162,7 +162,7 @@ public:
             SvxColorList();
             ~SvxColorList();
 
-    ULONG   GetId( const SvxColorItem& rColor );
+    sal_uLong   GetId( const SvxColorItem& rColor );
 };
 
 //  ----------------------------------------------------------------------
@@ -173,7 +173,7 @@ DECLARE_LIST( DummyItemList, ConstPoolItemPtr )
 class ItemList : public DummyItemList
 {
 public:
-    const SfxPoolItem*  FindAttrib( USHORT nWhich );
+    const SfxPoolItem*  FindAttrib( sal_uInt16 nWhich );
 };
 
 // -------------------------------------------------------------------------
@@ -190,13 +190,13 @@ public:
                     ContentAttribs( const ContentAttribs& );
                     ~ContentAttribs();  // erst bei umfangreicheren Tabs
 
-    SvxTabStop      FindTabStop( long nCurPos, USHORT nDefTab );
+    SvxTabStop      FindTabStop( long nCurPos, sal_uInt16 nDefTab );
     SfxItemSet&     GetItems()                          { return aAttribSet; }
     SfxStyleSheet*  GetStyleSheet() const               { return pStyle; }
     void            SetStyleSheet( SfxStyleSheet* pS );
 
-    const SfxPoolItem&  GetItem( USHORT nWhich );
-    BOOL                HasItem( USHORT nWhich );
+    const SfxPoolItem&  GetItem( sal_uInt16 nWhich );
+    sal_Bool                HasItem( sal_uInt16 nWhich );
 };
 
 // -------------------------------------------------------------------------
@@ -207,7 +207,7 @@ class CharAttribList
 private:
     CharAttribArray aAttribs;
     SvxFont         aDefFont;               // schneller, als jedesmal vom Pool!
-    BOOL            bHasEmptyAttribs;
+    sal_Bool            bHasEmptyAttribs;
 
                     CharAttribList( const CharAttribList& ) {;}
 
@@ -218,32 +218,32 @@ public:
     void            DeleteEmptyAttribs(  SfxItemPool& rItemPool );
     void            RemoveItemsFromPool( SfxItemPool* pItemPool );
 
-    EditCharAttrib* FindAttrib( USHORT nWhich, USHORT nPos );
-    EditCharAttrib* FindNextAttrib( USHORT nWhich, USHORT nFromPos ) const;
-    EditCharAttrib* FindEmptyAttrib( USHORT nWhich, USHORT nPos );
-    EditCharAttrib* FindFeature( USHORT nPos ) const;
+    EditCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
+    EditCharAttrib* FindNextAttrib( sal_uInt16 nWhich, sal_uInt16 nFromPos ) const;
+    EditCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
+    EditCharAttrib* FindFeature( sal_uInt16 nPos ) const;
 
 
     void            ResortAttribs();
     void            OptimizeRanges( SfxItemPool& rItemPool );
 
-    USHORT          Count()                 { return aAttribs.Count(); }
+    sal_uInt16          Count()                 { return aAttribs.Count(); }
     void            Clear()                 { aAttribs.Remove( 0, aAttribs.Count()); }
     void            InsertAttrib( EditCharAttrib* pAttrib );
 
     SvxFont&        GetDefFont()            { return aDefFont; }
 
-    BOOL            HasEmptyAttribs() const { return bHasEmptyAttribs; }
-    BOOL&           HasEmptyAttribs()       { return bHasEmptyAttribs; }
-    BOOL            HasBoundingAttrib( USHORT nBound );
-    BOOL            HasAttrib( USHORT nWhich ) const;
-    BOOL            HasAttrib( USHORT nStartPos, USHORT nEndPos ) const;
+    sal_Bool            HasEmptyAttribs() const { return bHasEmptyAttribs; }
+    sal_Bool&           HasEmptyAttribs()       { return bHasEmptyAttribs; }
+    sal_Bool            HasBoundingAttrib( sal_uInt16 nBound );
+    sal_Bool            HasAttrib( sal_uInt16 nWhich ) const;
+    sal_Bool            HasAttrib( sal_uInt16 nStartPos, sal_uInt16 nEndPos ) const;
 
     CharAttribArray&        GetAttribs()        { return aAttribs; }
     const CharAttribArray&  GetAttribs() const  { return aAttribs; }
 
     // Debug:
-    BOOL            DbgCheckAttribs();
+    sal_Bool            DbgCheckAttribs();
 };
 
 // -------------------------------------------------------------------------
@@ -264,12 +264,12 @@ public:
     ContentAttribs& GetContentAttribs()     { return aContentAttribs; }
     CharAttribList& GetCharAttribs()        { return aCharAttribList; }
 
-    void            ExpandAttribs( USHORT nIndex, USHORT nNewChars, SfxItemPool& rItemPool );
-    void            CollapsAttribs( USHORT nIndex, USHORT nDelChars, SfxItemPool& rItemPool );
+    void            ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNewChars, SfxItemPool& rItemPool );
+    void            CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDelChars, SfxItemPool& rItemPool );
     void            AppendAttribs( ContentNode* pNextNode );
-    void            CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool, BOOL bKeepEndingAttribs );
+    void            CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool, sal_Bool bKeepEndingAttribs );
 
-    void            SetStyleSheet( SfxStyleSheet* pS, BOOL bRecalcFont = TRUE );
+    void            SetStyleSheet( SfxStyleSheet* pS, sal_Bool bRecalcFont = sal_True );
     void            SetStyleSheet( SfxStyleSheet* pS, const SvxFont& rFontFromStyle );
     SfxStyleSheet*  GetStyleSheet() { return aContentAttribs.GetStyleSheet(); }
 
@@ -281,7 +281,7 @@ public:
     void            CreateWrongList();
     void            DestroyWrongList();
 
-    BOOL            IsFeature( USHORT nPos ) const { return ( GetChar( nPos ) == CH_FEATURE ); }
+    sal_Bool            IsFeature( sal_uInt16 nPos ) const { return ( GetChar( nPos ) == CH_FEATURE ); }
 };
 
 typedef ContentNode* ContentNodePtr;
@@ -289,10 +289,10 @@ SV_DECL_PTRARR( DummyContentList, ContentNodePtr, 0, 4 )
 
 class ContentList : public DummyContentList
 {
-  USHORT nLastCache;
+  sal_uInt16 nLastCache;
 public:
   ContentList() : DummyContentList( 0, 4 ), nLastCache(0) {}
-  USHORT GetPos( const ContentNodePtr &rPtr ) const;
+  sal_uInt16 GetPos( const ContentNodePtr &rPtr ) const;
 };
 
 // -------------------------------------------------------------------------
@@ -302,27 +302,27 @@ class EditPaM
 {
 private:
     ContentNode*    pNode;
-    USHORT          nIndex;
+    sal_uInt16          nIndex;
 
 public:
                     EditPaM()                           { pNode = NULL; nIndex = 0; }
-                    EditPaM( ContentNode* p, USHORT n ) { pNode = p; nIndex = n; }
+                    EditPaM( ContentNode* p, sal_uInt16 n ) { pNode = p; nIndex = n; }
 
     ContentNode*    GetNode() const                 { return pNode; }
     void            SetNode( ContentNode* p)        { pNode = p; }
 
-    USHORT          GetIndex() const                { return nIndex; }
-    USHORT&         GetIndex()                      { return nIndex; }
-    void            SetIndex( USHORT n )            { nIndex = n; }
+    sal_uInt16          GetIndex() const                { return nIndex; }
+    sal_uInt16&         GetIndex()                      { return nIndex; }
+    void            SetIndex( sal_uInt16 n )            { nIndex = n; }
 
-    BOOL            IsParaStart() const             { return nIndex == 0; }
-    BOOL            IsParaEnd() const               { return nIndex == pNode->Len(); }
+    sal_Bool            IsParaStart() const             { return nIndex == 0; }
+    sal_Bool            IsParaEnd() const               { return nIndex == pNode->Len(); }
 
-    BOOL            DbgIsBuggy( EditDoc& rDoc );
+    sal_Bool            DbgIsBuggy( EditDoc& rDoc );
 
     EditPaM&    operator = ( const EditPaM& rPaM );
-    friend BOOL operator == ( const EditPaM& r1,  const EditPaM& r2  );
-    friend BOOL operator != ( const EditPaM& r1,  const EditPaM& r2  );
+    friend sal_Bool operator == ( const EditPaM& r1,  const EditPaM& r2  );
+    friend sal_Bool operator != ( const EditPaM& r1,  const EditPaM& r2  );
 };
 
 #define PORTIONKIND_TEXT        0
@@ -351,11 +351,11 @@ struct ExtraPortionInfo
 
     long    nPortionOffsetX;
 
-    USHORT  nMaxCompression100thPercent;
+    sal_uInt16  nMaxCompression100thPercent;
 
-    BYTE    nAsianCompressionTypes;
-    BOOL    bFirstCharIsRightPunktuation;
-    BOOL    bCompressed;
+    sal_uInt8    nAsianCompressionTypes;
+    sal_Bool    bFirstCharIsRightPunktuation;
+    sal_Bool    bCompressed;
 
     sal_Int32*    pOrgDXArray;
 
@@ -363,7 +363,7 @@ struct ExtraPortionInfo
             ExtraPortionInfo();
             ~ExtraPortionInfo();
 
-    void    SaveOrgDXArray( const sal_Int32* pDXArray, USHORT nLen );
+    void    SaveOrgDXArray( const sal_Int32* pDXArray, sal_uInt16 nLen );
     void    DestroyOrgDXArray();
 };
 
@@ -375,44 +375,44 @@ class TextPortion
 {
 private:
     ExtraPortionInfo*   pExtraInfos;
-    USHORT              nLen;
+    sal_uInt16              nLen;
     Size                aOutSz;
-    BYTE                nKind;
-    BYTE                nRightToLeft;
+    sal_uInt8               nKind;
+    sal_uInt8                nRightToLeft;
     sal_Unicode         nExtraValue;
 
 
                 TextPortion()               { DBG_CTOR( EE_TextPortion, 0 );
-                                              pExtraInfos = NULL; nLen = 0; nKind = PORTIONKIND_TEXT; nExtraValue = 0; nRightToLeft = FALSE;}
+                                              pExtraInfos = NULL; nLen = 0; nKind = PORTIONKIND_TEXT; nExtraValue = 0; nRightToLeft = sal_False;}
 
 public:
-                TextPortion( USHORT nL ) : aOutSz( -1, -1 )
+                TextPortion( sal_uInt16 nL ) : aOutSz( -1, -1 )
                                             {   DBG_CTOR( EE_TextPortion, 0 );
-                                                pExtraInfos = NULL; nLen = nL; nKind = PORTIONKIND_TEXT; nExtraValue = 0; nRightToLeft = FALSE;}
+                                                pExtraInfos = NULL; nLen = nL; nKind = PORTIONKIND_TEXT; nExtraValue = 0; nRightToLeft = sal_False;}
                 TextPortion( const TextPortion& r ) : aOutSz( r.aOutSz )
                                             { DBG_CTOR( EE_TextPortion, 0 );
                                                 pExtraInfos = NULL; nLen = r.nLen; nKind = r.nKind; nExtraValue = r.nExtraValue; nRightToLeft = r.nRightToLeft; }
 
                 ~TextPortion()              {   DBG_DTOR( EE_TextPortion, 0 ); delete pExtraInfos; }
 
-    USHORT      GetLen() const              { return nLen; }
-    USHORT&     GetLen()                    { return nLen; }
-    void        SetLen( USHORT nL )         { nLen = nL; }
+    sal_uInt16      GetLen() const              { return nLen; }
+    sal_uInt16&     GetLen()                    { return nLen; }
+    void        SetLen( sal_uInt16 nL )         { nLen = nL; }
 
     Size&       GetSize()                   { return aOutSz; }
     Size        GetSize() const             { return aOutSz; }
 
-    BYTE&       GetKind()                   { return nKind; }
-    BYTE        GetKind() const             { return nKind; }
+    sal_uInt8&      GetKind()                   { return nKind; }
+    sal_uInt8       GetKind() const             { return nKind; }
 
-    void        SetRightToLeft( BYTE b )    { nRightToLeft = b; }
-    BYTE        GetRightToLeft() const      { return nRightToLeft; }
-    BOOL        IsRightToLeft() const       { return (nRightToLeft&1); }
+    void        SetRightToLeft( sal_uInt8 b )    { nRightToLeft = b; }
+    sal_uInt8        GetRightToLeft() const      { return nRightToLeft; }
+    sal_Bool        IsRightToLeft() const       { return (nRightToLeft&1); }
 
     sal_Unicode GetExtraValue() const       { return nExtraValue; }
     void        SetExtraValue( sal_Unicode n )  { nExtraValue = n; }
 
-    BOOL        HasValidSize() const        { return aOutSz.Width() != (-1); }
+    sal_Bool        HasValidSize() const        { return aOutSz.Width() != (-1); }
 
     ExtraPortionInfo*   GetExtraInfos() const { return pExtraInfos; }
     void                SetExtraInfos( ExtraPortionInfo* p ) { delete pExtraInfos; pExtraInfos = p; }
@@ -431,9 +431,9 @@ public:
             ~TextPortionList();
 
     void    Reset();
-    USHORT  FindPortion( USHORT nCharPos, USHORT& rPortionStart, BOOL bPreferStartingPortion = FALSE );
-    USHORT  GetStartPos( USHORT nPortion );
-    void    DeleteFromPortion( USHORT nDelFrom );
+    sal_uInt16  FindPortion( sal_uInt16 nCharPos, sal_uInt16& rPortionStart, sal_Bool bPreferStartingPortion = sal_False );
+    sal_uInt16  GetStartPos( sal_uInt16 nPortion );
+    void    DeleteFromPortion( sal_uInt16 nDelFrom );
 };
 
 class ParaPortion;
@@ -448,84 +448,84 @@ class EditLine
 private:
     CharPosArray    aPositions;
     long            nTxtWidth;
-    USHORT          nStartPosX;
-    USHORT          nStart;     // koennte durch nStartPortion ersetzt werden
-    USHORT          nEnd;       // koennte durch nEndPortion ersetzt werden
-    USHORT          nStartPortion;
-    USHORT          nEndPortion;
-    USHORT          nHeight;    // Gesamthoehe der Zeile
-    USHORT          nTxtHeight; // Reine Texthoehe
-    USHORT          nCrsrHeight;    // Bei Konturfluss hohe Zeilen => Cursor zu groá.
-    USHORT          nMaxAscent;
-    BOOL            bHangingPunctuation;
-    BOOL            bInvalid;   // fuer geschickte Formatierung
+    sal_uInt16          nStartPosX;
+    sal_uInt16          nStart;     // koennte durch nStartPortion ersetzt werden
+    sal_uInt16          nEnd;       // koennte durch nEndPortion ersetzt werden
+    sal_uInt16          nStartPortion;
+    sal_uInt16          nEndPortion;
+    sal_uInt16          nHeight;    // Gesamthoehe der Zeile
+    sal_uInt16          nTxtHeight; // Reine Texthoehe
+    sal_uInt16          nCrsrHeight;    // Bei Konturfluss hohe Zeilen => Cursor zu groï¿½.
+    sal_uInt16          nMaxAscent;
+    sal_Bool            bHangingPunctuation;
+    sal_Bool            bInvalid;   // fuer geschickte Formatierung
 
 public:
                     EditLine();
                     EditLine( const EditLine& );
                     ~EditLine();
 
-    BOOL            IsIn( USHORT nIndex ) const
+    sal_Bool            IsIn( sal_uInt16 nIndex ) const
                         { return ( (nIndex >= nStart ) && ( nIndex < nEnd ) ); }
 
-    BOOL            IsIn( USHORT nIndex, BOOL bInclEnd ) const
+    sal_Bool            IsIn( sal_uInt16 nIndex, sal_Bool bInclEnd ) const
                         { return ( ( nIndex >= nStart ) && ( bInclEnd ? ( nIndex <= nEnd ) : ( nIndex < nEnd ) ) ); }
 
-    void            SetStart( USHORT n )            { nStart = n; }
-    USHORT          GetStart() const                { return nStart; }
-    USHORT&         GetStart()                      { return nStart; }
+    void            SetStart( sal_uInt16 n )            { nStart = n; }
+    sal_uInt16          GetStart() const                { return nStart; }
+    sal_uInt16&         GetStart()                      { return nStart; }
 
-    void            SetEnd( USHORT n )              { nEnd = n; }
-    USHORT          GetEnd() const                  { return nEnd; }
-    USHORT&         GetEnd()                        { return nEnd; }
+    void            SetEnd( sal_uInt16 n )              { nEnd = n; }
+    sal_uInt16          GetEnd() const                  { return nEnd; }
+    sal_uInt16&         GetEnd()                        { return nEnd; }
 
-    void            SetStartPortion( USHORT n )     { nStartPortion = n; }
-    USHORT          GetStartPortion() const         { return nStartPortion; }
-    USHORT&         GetStartPortion()               { return nStartPortion; }
+    void            SetStartPortion( sal_uInt16 n )     { nStartPortion = n; }
+    sal_uInt16          GetStartPortion() const         { return nStartPortion; }
+    sal_uInt16&         GetStartPortion()               { return nStartPortion; }
 
-    void            SetEndPortion( USHORT n )       { nEndPortion = n; }
-    USHORT          GetEndPortion() const           { return nEndPortion; }
-    USHORT&         GetEndPortion()                 { return nEndPortion; }
+    void            SetEndPortion( sal_uInt16 n )       { nEndPortion = n; }
+    sal_uInt16          GetEndPortion() const           { return nEndPortion; }
+    sal_uInt16&         GetEndPortion()                 { return nEndPortion; }
 
-    void            SetHeight( USHORT nH, USHORT nTxtH = 0, USHORT nCrsrH = 0 )
+    void            SetHeight( sal_uInt16 nH, sal_uInt16 nTxtH = 0, sal_uInt16 nCrsrH = 0 )
                     {   nHeight = nH;
                         nTxtHeight = ( nTxtH ? nTxtH : nH );
                         nCrsrHeight = ( nCrsrH ? nCrsrH : nTxtHeight );
                     }
-    USHORT          GetHeight() const               { return nHeight; }
-    USHORT          GetTxtHeight() const            { return nTxtHeight; }
-    USHORT          GetCrsrHeight() const           { return nCrsrHeight; }
+    sal_uInt16          GetHeight() const               { return nHeight; }
+    sal_uInt16          GetTxtHeight() const            { return nTxtHeight; }
+    sal_uInt16          GetCrsrHeight() const           { return nCrsrHeight; }
 
     void            SetTextWidth( long n )          { nTxtWidth = n; }
     long            GetTextWidth() const            { return nTxtWidth; }
 
-    void            SetMaxAscent( USHORT n )        { nMaxAscent = n; }
-    USHORT          GetMaxAscent() const            { return nMaxAscent; }
+    void            SetMaxAscent( sal_uInt16 n )        { nMaxAscent = n; }
+    sal_uInt16          GetMaxAscent() const            { return nMaxAscent; }
 
-    void            SetHangingPunctuation( BOOL b )     { bHangingPunctuation = b; }
-    BOOL            IsHangingPunctuation() const        { return bHangingPunctuation; }
+    void            SetHangingPunctuation( sal_Bool b )     { bHangingPunctuation = b; }
+    sal_Bool            IsHangingPunctuation() const        { return bHangingPunctuation; }
 
-    USHORT          GetLen() const                  { return nEnd - nStart; }
+    sal_uInt16          GetLen() const                  { return nEnd - nStart; }
 
-    USHORT          GetStartPosX() const            { return nStartPosX; }
-    void            SetStartPosX( USHORT start )    { nStartPosX = start; }
+    sal_uInt16          GetStartPosX() const            { return nStartPosX; }
+    void            SetStartPosX( sal_uInt16 start )    { nStartPosX = start; }
 
     Size            CalcTextSize( ParaPortion& rParaPortion );
 
-    BOOL            IsInvalid() const               { return bInvalid; }
-    BOOL            IsValid() const                 { return !bInvalid; }
-    void            SetInvalid()                    { bInvalid = TRUE; }
-    void            SetValid()                      { bInvalid = FALSE; }
+    sal_Bool            IsInvalid() const               { return bInvalid; }
+    sal_Bool            IsValid() const                 { return !bInvalid; }
+    void            SetInvalid()                    { bInvalid = sal_True; }
+    void            SetValid()                      { bInvalid = sal_False; }
 
-    BOOL            IsEmpty() const                 { return (nEnd > nStart) ? FALSE : TRUE; }
+    sal_Bool            IsEmpty() const                 { return (nEnd > nStart) ? sal_False : sal_True; }
 
     CharPosArray&   GetCharPosArray()               { return aPositions; }
 
     EditLine*       Clone() const;
 
     EditLine&   operator = ( const EditLine& rLine );
-    friend BOOL operator == ( const EditLine& r1,  const EditLine& r2  );
-    friend BOOL operator != ( const EditLine& r1,  const EditLine& r2  );
+    friend sal_Bool operator == ( const EditLine& r1,  const EditLine& r2  );
+    friend sal_Bool operator != ( const EditLine& r1,  const EditLine& r2  );
 };
 
 
@@ -542,8 +542,8 @@ public:
             ~EditLineList();
 
     void    Reset();
-    void    DeleteFromLine( USHORT nDelFrom );
-    USHORT  FindLine( USHORT nChar, BOOL bInclEnd );
+    void    DeleteFromLine( sal_uInt16 nDelFrom );
+    sal_uInt16  FindLine( sal_uInt16 nChar, sal_Bool bInclEnd );
 };
 
 // -------------------------------------------------------------------------
@@ -561,15 +561,15 @@ private:
     ScriptTypePosInfos      aScriptInfos;
     WritingDirectionInfos   aWritingDirectionInfos;
 
-    USHORT              nInvalidPosStart;
-    USHORT              nFirstLineOffset;   // Fuer Writer-LineSpacing-Interpretation
-    USHORT              nBulletX;
+    sal_uInt16              nInvalidPosStart;
+    sal_uInt16              nFirstLineOffset;   // Fuer Writer-LineSpacing-Interpretation
+    sal_uInt16              nBulletX;
     short               nInvalidDiff;
 
-    BOOL                bInvalid            : 1;
-    BOOL                bSimple             : 1;    // nur lineares Tippen
-    BOOL                bVisible            : 1;    // MT 05/00: Gehoert an den Node!!!
-    BOOL                bForceRepaint       : 1;
+    sal_Bool                bInvalid            : 1;
+    sal_Bool                bSimple             : 1;    // nur lineares Tippen
+    sal_Bool                bVisible            : 1;    // MT 05/00: Gehoert an den Node!!!
+    sal_Bool                bForceRepaint       : 1;
 
                         ParaPortion( const ParaPortion& );
 
@@ -577,39 +577,39 @@ public:
                         ParaPortion( ContentNode* pNode );
                         ~ParaPortion();
 
-    USHORT              GetLineNumber( USHORT nIndex );
+    sal_uInt16              GetLineNumber( sal_uInt16 nIndex );
 
     EditLineList&       GetLines()                  { return aLineList; }
 
-    BOOL                IsInvalid() const           { return bInvalid; }
-    BOOL                IsSimpleInvalid()   const   { return bSimple; }
-    void                SetValid()                  { bInvalid = FALSE; bSimple = TRUE;}
+    sal_Bool                IsInvalid() const           { return bInvalid; }
+    sal_Bool                IsSimpleInvalid()   const   { return bSimple; }
+    void                SetValid()                  { bInvalid = sal_False; bSimple = sal_True;}
 
-    BOOL                MustRepaint() const         { return bForceRepaint; }
-    void                SetMustRepaint( BOOL bRP )  { bForceRepaint = bRP; }
+    sal_Bool                MustRepaint() const         { return bForceRepaint; }
+    void                SetMustRepaint( sal_Bool bRP )  { bForceRepaint = bRP; }
 
-    USHORT              GetBulletX() const          { return nBulletX; }
-    void                SetBulletX( USHORT n )      { nBulletX = n; }
+    sal_uInt16              GetBulletX() const          { return nBulletX; }
+    void                SetBulletX( sal_uInt16 n )      { nBulletX = n; }
 
-    void                MarkInvalid( USHORT nStart, short nDiff);
-    void                MarkSelectionInvalid( USHORT nStart, USHORT nEnd );
+    void                MarkInvalid( sal_uInt16 nStart, short nDiff);
+    void                MarkSelectionInvalid( sal_uInt16 nStart, sal_uInt16 nEnd );
 
-    void                SetVisible( BOOL bVisible );
-    BOOL                IsVisible()                 { return bVisible; }
+    void                SetVisible( sal_Bool bVisible );
+    sal_Bool                IsVisible()                 { return bVisible; }
 
     long                GetHeight() const           { return ( bVisible ? nHeight : 0 ); }
-    USHORT              GetFirstLineOffset() const  { return ( bVisible ? nFirstLineOffset : 0 ); }
+    sal_uInt16              GetFirstLineOffset() const  { return ( bVisible ? nFirstLineOffset : 0 ); }
     void                ResetHeight()   { nHeight = 0; nFirstLineOffset = 0; }
 
     ContentNode*        GetNode() const             { return pNode; }
     TextPortionList&    GetTextPortions()           { return aTextPortionList; }
 
-    USHORT              GetInvalidPosStart() const  { return nInvalidPosStart; }
+    sal_uInt16              GetInvalidPosStart() const  { return nInvalidPosStart; }
     short               GetInvalidDiff() const      { return nInvalidDiff; }
 
-    void                CorrectValuesBehindLastFormattedLine( USHORT nLastFormattedLine );
+    void                CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormattedLine );
 
-    BOOL                DbgCheckTextPortions();
+    sal_Bool                DbgCheckTextPortions();
 };
 
 typedef ParaPortion* ParaPortionPtr;
@@ -620,19 +620,19 @@ SV_DECL_PTRARR( DummyParaPortionList, ParaPortionPtr, 0, 4 )
 // -------------------------------------------------------------------------
 class ParaPortionList : public DummyParaPortionList
 {
-    USHORT nLastCache;
+    sal_uInt16 nLastCache;
 public:
                     ParaPortionList();
                     ~ParaPortionList();
 
     void            Reset();
     long            GetYOffset( ParaPortion* pPPortion );
-    USHORT          FindParagraph( long nYOffset );
+    sal_uInt16          FindParagraph( long nYOffset );
 
-    inline ParaPortion* SaveGetObject( USHORT nPos ) const
+    inline ParaPortion* SaveGetObject( sal_uInt16 nPos ) const
         { return ( nPos < Count() ) ? GetObject( nPos ) : 0; }
 
-    USHORT                  GetPos( const ParaPortionPtr &rPtr ) const;
+    sal_uInt16                  GetPos( const ParaPortionPtr &rPtr ) const;
 
     // temporaer:
     void            DbgCheck( EditDoc& rDoc );
@@ -658,17 +658,17 @@ public:
     const EditPaM&  Min() const         { return aStartPaM; }
     const EditPaM&  Max() const         { return aEndPaM; }
 
-    BOOL            HasRange() const    { return aStartPaM != aEndPaM; }
-    BOOL            IsInvalid() const;
-    BOOL            DbgIsBuggy( EditDoc& rDoc );
+    sal_Bool            HasRange() const    { return aStartPaM != aEndPaM; }
+    sal_Bool            IsInvalid() const;
+    sal_Bool            DbgIsBuggy( EditDoc& rDoc );
 
-    BOOL            Adjust( const ContentList& rNodes );
+    sal_Bool            Adjust( const ContentList& rNodes );
 
     EditSelection&  operator = ( const EditPaM& r );
-    BOOL            operator == ( const EditSelection& r ) const
+    sal_Bool            operator == ( const EditSelection& r ) const
                     { return ( ( aStartPaM == r.aStartPaM ) && ( aEndPaM == r.aEndPaM ) )
-                            ? TRUE : FALSE; }
-    BOOL            operator != ( const EditSelection& r ) const { return !( r == *this ); }
+                            ? sal_True : sal_False; }
+    sal_Bool            operator != ( const EditSelection& r ) const { return !( r == *this ); }
 };
 
 // -------------------------------------------------------------------------
@@ -677,16 +677,16 @@ public:
 class DeletedNodeInfo
 {
 private:
-    ULONG   nInvalidAdressPtr;
-    USHORT  nInvalidParagraph;
+    sal_uIntPtr     nInvalidAdressPtr;
+    sal_uInt16  nInvalidParagraph;
 
 public:
-            DeletedNodeInfo( ULONG nInvAdr, USHORT nPos )
+            DeletedNodeInfo( sal_uIntPtr nInvAdr, sal_uInt16 nPos )
                                             {   nInvalidAdressPtr = nInvAdr;
                                                 nInvalidParagraph = nPos; }
 
-    ULONG   GetInvalidAdress()              {   return nInvalidAdressPtr; }
-    USHORT  GetPosition()                   {   return nInvalidParagraph; }
+    sal_uIntPtr GetInvalidAdress()              {   return nInvalidAdressPtr; }
+    sal_uInt16  GetPosition()                   {   return nInvalidParagraph; }
 };
 
 typedef DeletedNodeInfo* DeletedNodeInfoPtr;
@@ -702,12 +702,12 @@ private:
     Link            aModifyHdl;
 
     SvxFont         aDefFont;           //schneller, als jedesmal vom Pool!
-    USHORT          nDefTab;
-    BOOL            bIsVertical;
-    BOOL            bIsFixedCellHeight;
+    sal_uInt16          nDefTab;
+    sal_Bool            bIsVertical;
+    sal_Bool            bIsFixedCellHeight;
 
-    BOOL            bOwnerOfPool;
-    BOOL            bModified;
+    sal_Bool            bOwnerOfPool;
+    sal_Bool            bModified;
 
 protected:
     void            ImplDestroyContents();
@@ -716,38 +716,38 @@ public:
                     EditDoc( SfxItemPool* pItemPool );
                     ~EditDoc();
 
-    BOOL            IsModified() const      { return bModified; }
-    void            SetModified( BOOL b );
+    sal_Bool            IsModified() const      { return bModified; }
+    void            SetModified( sal_Bool b );
 
     void            SetModifyHdl( const Link& rLink ) { aModifyHdl = rLink; }
     Link            GetModifyHdl() const { return aModifyHdl; }
 
-    void            CreateDefFont( BOOL bUseStyles );
+    void            CreateDefFont( sal_Bool bUseStyles );
     const SvxFont&  GetDefFont() { return aDefFont; }
 
-    void            SetDefTab( USHORT nTab )    { nDefTab = nTab ? nTab : DEFTAB; }
-    USHORT          GetDefTab() const           { return nDefTab; }
+    void            SetDefTab( sal_uInt16 nTab )    { nDefTab = nTab ? nTab : DEFTAB; }
+    sal_uInt16          GetDefTab() const           { return nDefTab; }
 
-    void            SetVertical( BOOL bVertical )   { bIsVertical = bVertical; }
-    BOOL            IsVertical() const              { return bIsVertical; }
+    void            SetVertical( sal_Bool bVertical )   { bIsVertical = bVertical; }
+    sal_Bool            IsVertical() const              { return bIsVertical; }
 
-    void            SetFixedCellHeight( BOOL bUseFixedCellHeight )  { bIsFixedCellHeight = bUseFixedCellHeight; }
-    BOOL            IsFixedCellHeight() const               { return bIsFixedCellHeight; }
+    void            SetFixedCellHeight( sal_Bool bUseFixedCellHeight )  { bIsFixedCellHeight = bUseFixedCellHeight; }
+    sal_Bool            IsFixedCellHeight() const               { return bIsFixedCellHeight; }
 
     EditPaM         Clear();
     EditPaM         RemoveText();
-    EditPaM         RemoveChars( EditPaM aPaM, USHORT nChars );
+    EditPaM         RemoveChars( EditPaM aPaM, sal_uInt16 nChars );
     void            InsertText( const EditPaM& rPaM, xub_Unicode c );
     EditPaM         InsertText( EditPaM aPaM, const XubString& rStr );
-    EditPaM         InsertParaBreak( EditPaM aPaM, BOOL bKeepEndingAttribs );
+    EditPaM         InsertParaBreak( EditPaM aPaM, sal_Bool bKeepEndingAttribs );
     EditPaM         InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem );
     EditPaM         ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight );
 
     String          GetText( LineEnd eEnd ) const;
-    ULONG           GetTextLen() const;
+    sal_uLong           GetTextLen() const;
 
-    XubString       GetParaAsString( USHORT nNode ) const;
-    XubString       GetParaAsString( ContentNode* pNode, USHORT nStartPos = 0, USHORT nEndPos = 0xFFFF, BOOL bResolveFields = TRUE ) const;
+    XubString       GetParaAsString( sal_uInt16 nNode ) const;
+    XubString       GetParaAsString( ContentNode* pNode, sal_uInt16 nStartPos = 0, sal_uInt16 nEndPos = 0xFFFF, sal_Bool bResolveFields = sal_True ) const;
 
     inline EditPaM  GetStartPaM() const;
     inline EditPaM  GetEndPaM() const;
@@ -757,15 +757,15 @@ public:
 
     void            RemoveItemsFromPool( ContentNode* pNode );
 
-    void            InsertAttrib( const SfxPoolItem& rItem, ContentNode* pNode, USHORT nStart, USHORT nEnd );
-    void            InsertAttrib( ContentNode* pNode, USHORT nStart, USHORT nEnd, const SfxPoolItem& rPoolItem );
-    void            InsertAttribInSelection( ContentNode* pNode, USHORT nStart, USHORT nEnd, const SfxPoolItem& rPoolItem );
-    BOOL            RemoveAttribs( ContentNode* pNode, USHORT nStart, USHORT nEnd, USHORT nWhich = 0 );
-    BOOL            RemoveAttribs( ContentNode* pNode, USHORT nStart, USHORT nEnd, EditCharAttrib*& rpStarting, EditCharAttrib*& rpEnding, USHORT nWhich = 0 );
-    void            FindAttribs( ContentNode* pNode, USHORT nStartPos, USHORT nEndPos, SfxItemSet& rCurSet );
+    void            InsertAttrib( const SfxPoolItem& rItem, ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd );
+    void            InsertAttrib( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, const SfxPoolItem& rPoolItem );
+    void            InsertAttribInSelection( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, const SfxPoolItem& rPoolItem );
+    sal_Bool            RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, sal_uInt16 nWhich = 0 );
+    sal_Bool            RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, EditCharAttrib*& rpStarting, EditCharAttrib*& rpEnding, sal_uInt16 nWhich = 0 );
+    void            FindAttribs( ContentNode* pNode, sal_uInt16 nStartPos, sal_uInt16 nEndPos, SfxItemSet& rCurSet );
 
-    USHORT          GetPos( ContentNode* pNode ) const { return ContentList::GetPos(pNode); }
-    ContentNode*    SaveGetObject( USHORT nPos ) const { return ( nPos < Count() ) ? GetObject( nPos ) : 0; }
+    sal_uInt16          GetPos( ContentNode* pNode ) const { return ContentList::GetPos(pNode); }
+    ContentNode*    SaveGetObject( sal_uInt16 nPos ) const { return ( nPos < Count() ) ? GetObject( nPos ) : 0; }
 
     static XubString    GetSepStr( LineEnd eEnd );
 };
@@ -781,12 +781,12 @@ inline EditPaM EditDoc::GetEndPaM() const
     return EditPaM( pLastNode, pLastNode->Len() );
 }
 
-inline EditCharAttrib* GetAttrib( const CharAttribArray& rAttribs, USHORT nAttr )
+inline EditCharAttrib* GetAttrib( const CharAttribArray& rAttribs, sal_uInt16 nAttr )
 {
     return ( nAttr < rAttribs.Count() ) ? rAttribs[nAttr] : 0;
 }
 
-BOOL CheckOrderedList( CharAttribArray& rAttribs, BOOL bStart );
+sal_Bool CheckOrderedList( CharAttribArray& rAttribs, sal_Bool bStart );
 
 // -------------------------------------------------------------------------
 // class EditEngineItemPool
@@ -794,7 +794,7 @@ BOOL CheckOrderedList( CharAttribArray& rAttribs, BOOL bStart );
 class EditEngineItemPool : public SfxItemPool
 {
 public:
-                        EditEngineItemPool( BOOL bPersistenRefCounts );
+                        EditEngineItemPool( sal_Bool bPersistenRefCounts );
 protected:
                         virtual ~EditEngineItemPool();
 public:

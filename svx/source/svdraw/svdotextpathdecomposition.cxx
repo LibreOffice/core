@@ -568,7 +568,7 @@ namespace
                             }
                         }
 
-                        // consume from portion // no += here, xub_StrLen is USHORT and the compiler will gererate a warning here
+                        // consume from portion // no += here, xub_StrLen is sal_uInt16 and the compiler will gererate a warning here
                         nUsedTextLength = nUsedTextLength + nNextGlyphLen;
 
                         // consume from polygon

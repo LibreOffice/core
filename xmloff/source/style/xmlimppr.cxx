@@ -134,7 +134,7 @@ void SvXMLImportPropertyMapper::importXML(
         sal_Int32 nStartIdx,
         sal_Int32 nEndIdx ) const
 {
-    INT16 nAttr = xAttrList->getLength();
+    sal_Int16 nAttr = xAttrList->getLength();
 
     Reference< XNameContainer > xAttrContainer;
 
@@ -142,11 +142,11 @@ void SvXMLImportPropertyMapper::importXML(
         nStartIdx = 0;
     if( -1 == nEndIdx )
         nEndIdx = maPropMapper->GetEntryCount();
-    for( INT16 i=0; i < nAttr; i++ )
+    for( sal_Int16 i=0; i < nAttr; i++ )
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         OUString aLocalName, aPrefix, aNamespace;
-        USHORT nPrefix = rNamespaceMap.GetKeyByAttrName( rAttrName, &aPrefix,
+        sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName( rAttrName, &aPrefix,
                                                     &aLocalName, &aNamespace );
 
         if( XML_NAMESPACE_XMLNS == nPrefix )
@@ -354,7 +354,7 @@ void SvXMLImportPropertyMapper::importXML(
 }
 
 /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_IMPORT flag set */
-BOOL SvXMLImportPropertyMapper::handleSpecialItem(
+sal_Bool SvXMLImportPropertyMapper::handleSpecialItem(
         XMLPropertyState& rProperty,
         vector< XMLPropertyState >& rProperties,
         const OUString& rValue,
@@ -366,7 +366,7 @@ BOOL SvXMLImportPropertyMapper::handleSpecialItem(
         return mxNextMapper->handleSpecialItem( rProperty, rProperties, rValue,
                                                rUnitConverter, rNamespaceMap );
     else
-        return FALSE;
+        return sal_False;
 }
 
 void SvXMLImportPropertyMapper::FillPropertySequence(

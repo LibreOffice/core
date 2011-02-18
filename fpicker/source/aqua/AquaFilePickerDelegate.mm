@@ -56,7 +56,7 @@
 
 #pragma mark NSSavePanel delegate methods
 
-- (MacOSBOOL)panel:(id)sender shouldShowFilename:(NSString *)filename
+- (BOOL)panel:(id)sender shouldShowFilename:(NSString *)filename
 {
     if( filterHelper == NULL )
         return true;

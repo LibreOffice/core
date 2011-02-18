@@ -1,13 +1,3 @@
 ed	editeng	:	l10n svtools xmloff linguistic NULL
-ed	editeng										usr1	-	all	ed_mkout NULL
-ed	editeng\inc									nmake	-	all	ed_inc NULL
-ed	editeng\source\items						nmake	-	all	ed_items ed_inc NULL
-ed	editeng\source\editeng						nmake	-	all	ed_eeng ed_inc NULL
-ed	editeng\source\misc							nmake	-	all	ed_misc ed_inc NULL
-ed	editeng\source\outliner						nmake	-	all	ed_outl ed_inc NULL
-ed	editeng\source\rtf							nmake	-	all	ed_rtf ed_inc NULL
-ed	editeng\source\uno							nmake	-	all	ed_uno ed_inc NULL
-ed	editeng\source\xml							nmake	-	all	ed_xml ed_inc NULL
-ed	editeng\source\accessibility				nmake	-	all	ed_accessibility ed_inc NULL
-ed  editeng\util                                nmake   -   all ed_util ed_rtf ed_eeng ed_items ed_outl ed_uno ed_xml ed_accessibility ed_misc NULL
+ed	editeng\prj									nmake	-	all	ed_prj NULL
 

@@ -40,7 +40,7 @@
 // #90477#
 #include <tools/tenccvt.hxx>
 
-#define BULITEM_VERSION     ((USHORT)2)
+#define BULITEM_VERSION     ((sal_uInt16)2)
 
 // -----------------------------------------------------------------------
 
@@ -50,21 +50,21 @@ TYPEINIT1(SvxBulletItem,SfxPoolItem);
 
 void SvxBulletItem::StoreFont( SvStream& rStream, const Font& rFont )
 {
-    USHORT nTemp;
+    sal_uInt16 nTemp;
 
     rStream << rFont.GetColor();
-    nTemp = (USHORT)rFont.GetFamily(); rStream << nTemp;
+    nTemp = (sal_uInt16)rFont.GetFamily(); rStream << nTemp;
 
-    // #90477# nTemp = (USHORT)GetStoreCharSet( rFont.GetCharSet(), rStream.GetVersion() );
-    nTemp = (USHORT)GetSOStoreTextEncoding((rtl_TextEncoding)rFont.GetCharSet(), (sal_uInt16)rStream.GetVersion());
+    // #90477# nTemp = (sal_uInt16)GetStoreCharSet( rFont.GetCharSet(), rStream.GetVersion() );
+    nTemp = (sal_uInt16)GetSOStoreTextEncoding((rtl_TextEncoding)rFont.GetCharSet(), (sal_uInt16)rStream.GetVersion());
     rStream << nTemp;
 
-    nTemp = (USHORT)rFont.GetPitch(); rStream << nTemp;
-    nTemp = (USHORT)rFont.GetAlign(); rStream << nTemp;
-    nTemp = (USHORT)rFont.GetWeight(); rStream << nTemp;
-    nTemp = (USHORT)rFont.GetUnderline(); rStream << nTemp;
-    nTemp = (USHORT)rFont.GetStrikeout(); rStream << nTemp;
-    nTemp = (USHORT)rFont.GetItalic(); rStream << nTemp;
+    nTemp = (sal_uInt16)rFont.GetPitch(); rStream << nTemp;
+    nTemp = (sal_uInt16)rFont.GetAlign(); rStream << nTemp;
+    nTemp = (sal_uInt16)rFont.GetWeight(); rStream << nTemp;
+    nTemp = (sal_uInt16)rFont.GetUnderline(); rStream << nTemp;
+    nTemp = (sal_uInt16)rFont.GetStrikeout(); rStream << nTemp;
+    nTemp = (sal_uInt16)rFont.GetItalic(); rStream << nTemp;
 
     // UNICODE: rStream << rFont.GetName();
     rStream.WriteByteString(rFont.GetName());
@@ -76,12 +76,12 @@ void SvxBulletItem::StoreFont( SvStream& rStream, const Font& rFont )
 
 // -----------------------------------------------------------------------
 
-Font SvxBulletItem::CreateFont( SvStream& rStream, USHORT nVer )
+Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
 {
     Font aFont;
     Color aColor;
     rStream >> aColor;    aFont.SetColor( aColor );
-    USHORT nTemp;
+    sal_uInt16 nTemp;
     rStream >> nTemp; aFont.SetFamily((FontFamily)nTemp);
 
     // #90477#
@@ -108,7 +108,7 @@ Font SvxBulletItem::CreateFont( SvStream& rStream, USHORT nVer )
         aFont.SetSize( aSize );
     }
 
-    BOOL bTemp;
+    sal_Bool bTemp;
     rStream >> bTemp; aFont.SetOutline( bTemp );
     rStream >> bTemp; aFont.SetShadow( bTemp );
     rStream >> bTemp; aFont.SetTransparent( bTemp );
@@ -118,7 +118,7 @@ Font SvxBulletItem::CreateFont( SvStream& rStream, USHORT nVer )
 
 // -----------------------------------------------------------------------
 
-SvxBulletItem::SvxBulletItem( USHORT _nWhich ) : SfxPoolItem( _nWhich )
+SvxBulletItem::SvxBulletItem( sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
 {
     SetDefaultFont_Impl();
     SetDefaults_Impl();
@@ -127,7 +127,7 @@ SvxBulletItem::SvxBulletItem( USHORT _nWhich ) : SfxPoolItem( _nWhich )
 
 // -----------------------------------------------------------------------
 
-SvxBulletItem::SvxBulletItem( BYTE nNewStyle, const Font& rFont, USHORT /*nStart*/, USHORT _nWhich ) : SfxPoolItem( _nWhich )
+SvxBulletItem::SvxBulletItem( sal_uInt8 nNewStyle, const Font& rFont, sal_uInt16 /*nStart*/, sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
 {
     SetDefaults_Impl();
     nStyle = nNewStyle;
@@ -137,7 +137,7 @@ SvxBulletItem::SvxBulletItem( BYTE nNewStyle, const Font& rFont, USHORT /*nStart
 
 // -----------------------------------------------------------------------
 
-SvxBulletItem::SvxBulletItem( const Font& rFont, xub_Unicode cSymb, USHORT _nWhich ) : SfxPoolItem( _nWhich )
+SvxBulletItem::SvxBulletItem( const Font& rFont, xub_Unicode cSymb, sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
 {
     SetDefaults_Impl();
     aFont   = rFont;
@@ -148,7 +148,7 @@ SvxBulletItem::SvxBulletItem( const Font& rFont, xub_Unicode cSymb, USHORT _nWhi
 
 // -----------------------------------------------------------------------
 
-SvxBulletItem::SvxBulletItem( const Bitmap& rBmp, USHORT _nWhich ) : SfxPoolItem( _nWhich )
+SvxBulletItem::SvxBulletItem( const Bitmap& rBmp, sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
 {
     SetDefaults_Impl();
 
@@ -163,7 +163,7 @@ SvxBulletItem::SvxBulletItem( const Bitmap& rBmp, USHORT _nWhich ) : SfxPoolItem
 
 // -----------------------------------------------------------------------
 
-SvxBulletItem::SvxBulletItem( const GraphicObject& rGraphicObject, USHORT _nWhich ) : SfxPoolItem( _nWhich )
+SvxBulletItem::SvxBulletItem( const GraphicObject& rGraphicObject, sal_uInt16 _nWhich ) : SfxPoolItem( _nWhich )
 {
     SetDefaults_Impl();
 
@@ -178,7 +178,7 @@ SvxBulletItem::SvxBulletItem( const GraphicObject& rGraphicObject, USHORT _nWhic
 
 // -----------------------------------------------------------------------
 
-SvxBulletItem::SvxBulletItem( SvStream& rStrm, USHORT _nWhich ) :
+SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich ) :
     SfxPoolItem( _nWhich ),
     pGraphicObject( NULL )
 {
@@ -190,10 +190,10 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, USHORT _nWhich ) :
     {
         // Sicheres Laden mit Test auf leere Bitmap
         Bitmap          aBmp;
-        const UINT32    nOldPos = rStrm.Tell();
+        const sal_uInt32    nOldPos = rStrm.Tell();
         // #69345# Errorcode beim Bitmap lesen ignorieren,
         // siehe Kommentar #67581# in SvxBulletItem::Store()
-        BOOL bOldError = rStrm.GetError() ? TRUE : FALSE;
+        sal_Bool bOldError = rStrm.GetError() ? sal_True : sal_False;
         rStrm >> aBmp;
         if ( !bOldError && rStrm.GetError() )
         {
@@ -264,7 +264,7 @@ SfxPoolItem* SvxBulletItem::Clone( SfxItemPool * /*pPool*/ ) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SvxBulletItem::Create( SvStream& rStrm, USHORT /*nVersion*/ ) const
+SfxPoolItem* SvxBulletItem::Create( SvStream& rStrm, sal_uInt16 /*nVersion*/ ) const
 {
     return new SvxBulletItem( rStrm, Which() );
 }
@@ -275,7 +275,7 @@ void SvxBulletItem::SetDefaultFont_Impl()
 {
     aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, LANGUAGE_SYSTEM, 0 );
     aFont.SetAlign( ALIGN_BOTTOM);
-    aFont.SetTransparent( TRUE );
+    aFont.SetTransparent( sal_True );
 }
 
 // -----------------------------------------------------------------------
@@ -293,7 +293,7 @@ void SvxBulletItem::SetDefaults_Impl()
 
 // -----------------------------------------------------------------------
 
-USHORT SvxBulletItem::GetVersion( USHORT /*nVersion*/ ) const
+sal_uInt16 SvxBulletItem::GetVersion( sal_uInt16 /*nVersion*/ ) const
 {
     return BULITEM_VERSION;
 }
@@ -371,7 +371,7 @@ int SvxBulletItem::operator==( const SfxPoolItem& rItem ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SvxBulletItem::Store( SvStream& rStrm, USHORT /*nItemVersion*/ ) const
+SvStream& SvxBulletItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
     // Korrektur bei leerer Bitmap
     if( ( nStyle == BS_BMP ) &&
@@ -392,16 +392,16 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, USHORT /*nItemVersion*/ ) const
         StoreFont( rStrm, aFont );
     else
     {
-        ULONG _nStart = rStrm.Tell();
+        sal_uLong _nStart = rStrm.Tell();
 
         // Kleine Vorab-Schaetzung der Groesse...
-        USHORT nFac = ( rStrm.GetCompressMode() != COMPRESSMODE_NONE ) ? 3 : 1;
+        sal_uInt16 nFac = ( rStrm.GetCompressMode() != COMPRESSMODE_NONE ) ? 3 : 1;
         const Bitmap aBmp( pGraphicObject->GetGraphic().GetBitmap() );
-        ULONG nBytes = aBmp.GetSizeBytes();
-        if ( nBytes < ULONG(0xFF00*nFac) )
+        sal_uLong nBytes = aBmp.GetSizeBytes();
+        if ( nBytes < sal_uLong(0xFF00*nFac) )
             rStrm << aBmp;
 
-        ULONG nEnd = rStrm.Tell();
+        sal_uLong nEnd = rStrm.Tell();
         // #67581# Item darf mit Overhead nicht mehr als 64K schreiben,
         // sonst platzt der SfxMultiRecord
         // Dann lieber auf die Bitmap verzichten, ist nur fuer Outliner

@@ -121,7 +121,7 @@ public:
                         SfxMedium();
                         SfxMedium( const String &rName,
                                    StreamMode nOpenMode,
-                                   sal_Bool bDirect=FALSE,
+                                   sal_Bool bDirect=sal_False,
                                    const SfxFilter *pFilter = 0,
                                    SfxItemSet *pSet = 0 );
 
@@ -135,7 +135,7 @@ public:
 
                         ~SfxMedium();
 
-    void                UseInteractionHandler( BOOL );
+    void                UseInteractionHandler( sal_Bool );
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >
                         GetInteractionHandler();
 
@@ -239,7 +239,7 @@ public:
     ::rtl::OUString     GetBaseURL( bool bForSaving=false );
 
 #if _SOLAR__PRIVATE
-    SAL_DLLPRIVATE BOOL HasStorage_Impl() const;
+    SAL_DLLPRIVATE sal_Bool HasStorage_Impl() const;
 
     SAL_DLLPRIVATE void StorageBackup_Impl();
     SAL_DLLPRIVATE ::rtl::OUString GetBackup_Impl();

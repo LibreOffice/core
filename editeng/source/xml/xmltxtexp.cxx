@@ -450,7 +450,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
 
 /* testcode
             const OUString aURL( RTL_CONSTASCII_USTRINGPARAM( "file:///e:/test.xml" ) );
-            SfxMedium aMedium( aURL, STREAM_WRITE | STREAM_TRUNC, TRUE );
+            SfxMedium aMedium( aURL, STREAM_WRITE | STREAM_TRUNC, sal_True );
             aMedium.IsRemote();
             uno::Reference<io::XOutputStream> xOut( new utl::OOutputStreamWrapper( *aMedium.GetOutStream() ) );
 */

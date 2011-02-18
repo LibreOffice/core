@@ -66,7 +66,7 @@ namespace connectivity
             bool                            m_bNeedToReadLine;
         private:
             void fillColumns(const ::com::sun::star::lang::Locale& _aLocale);
-            BOOL CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo);
+            sal_Bool CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMemo);
             sal_Bool readLine(sal_Int32& _rnCurrentPos);
             void impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,xub_StrLen& nStartPosFirstLine,xub_StrLen& nStartPosFirstLine2
                                              ,sal_Int32& io_nType,sal_Int32& io_nPrecisions,sal_Int32& io_nScales,String& o_sTypeName

@@ -258,7 +258,7 @@ public:
                                 GetCurrentComponent();
     static void                 SetCurrentComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent );
 
-    virtual void                Invalidate(USHORT nId = 0);
+    virtual void                Invalidate(sal_uInt16 nId = 0);
 
     void                        SetFlags( SfxObjectShellFlags eFlags );
     SfxObjectShellFlags         GetFlags( ) const ;
@@ -317,7 +317,7 @@ public:
     sal_Bool                    DoLoad( SfxMedium* pMedium );
     sal_Bool                    DoSave();
     sal_Bool                    DoSaveAs( SfxMedium &rNewStor );
-    sal_Bool                    DoSaveObjectAs( SfxMedium &rNewStor, BOOL bCommit );
+    sal_Bool                    DoSaveObjectAs( SfxMedium &rNewStor, sal_Bool bCommit );
 
     // TODO/LATER: currently only overloaded in Calc, should be made non-virtual
     virtual sal_Bool            DoSaveCompleted( SfxMedium* pNewStor=0 );
@@ -337,9 +337,9 @@ public:
     virtual void                UpdateLinks();
 
     // called for a few slots like SID_SAVE[AS]DOC, SID_PRINTDOC[DIRECT], derived classes may abort the action
-    virtual sal_Bool            QuerySlotExecutable( USHORT nSlotId );
+    virtual sal_Bool            QuerySlotExecutable( sal_uInt16 nSlotId );
 
-    sal_Bool                    SaveChildren(BOOL bObjectsOnly=FALSE);
+    sal_Bool                    SaveChildren(sal_Bool bObjectsOnly=sal_False);
     sal_Bool                    SaveAsChildren( SfxMedium &rMedium );
     sal_Bool                    SwitchChildrenPersistance(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
@@ -463,7 +463,7 @@ public:
     SfxObjectCreateMode         GetCreateMode() const { return eCreateMode; }
     virtual void                MemoryError();
     SfxProgress*                GetProgress() const;
-    void                        SetWaitCursor( BOOL bSet ) const;
+    void                        SetWaitCursor( sal_Bool bSet ) const;
 
 //(mba)    virtual SotObjectRef        CreateAggObj( const SotFactory* pFact );
 
@@ -584,15 +584,15 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > GetEventNames();
 
     Window*                     GetDialogParent( SfxMedium* pMedium=0 );
-    String                      UpdateTitle( SfxMedium* pMed=NULL, USHORT nDocViewNo=0 );
+    String                      UpdateTitle( SfxMedium* pMed=NULL, sal_uInt16 nDocViewNo=0 );
     static SfxObjectShell*      CreateObject( const String& rServiceName, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
     static SfxObjectShell*      CreateObjectByFactoryName( const String& rURL, SfxObjectCreateMode = SFX_CREATE_MODE_STANDARD );
     static SfxObjectShell*      CreateAndLoadObject( const SfxItemSet& rSet, SfxFrame* pFrame=0 );
     static String               GetServiceNameFromFactory( const String& rFact );
-    BOOL                        IsInPlaceActive();
-    BOOL                        IsUIActive();
-    virtual void                InPlaceActivate( BOOL );
-    virtual void                UIActivate( BOOL );
+    sal_Bool                        IsInPlaceActive();
+    sal_Bool                        IsUIActive();
+    virtual void                InPlaceActivate( sal_Bool );
+    virtual void                UIActivate( sal_Bool );
 
     static sal_Bool             CopyStoragesOfUnknownMediaType(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xSource,
@@ -635,11 +635,11 @@ public:
     virtual Printer *       GetDocumentPrinter();
     virtual OutputDevice*    GetDocumentRefDev();
     virtual void            OnDocumentPrinterChanged( Printer * pNewPrinter );
-    virtual Rectangle GetVisArea( USHORT nAspect ) const;
+    virtual Rectangle GetVisArea( sal_uInt16 nAspect ) const;
     virtual void    SetVisArea( const Rectangle & rVisArea );
     const Rectangle & GetVisArea() const;
     void            SetVisAreaSize( const Size & rVisSize );
-    virtual ULONG   GetMiscStatus() const;
+    virtual sal_uIntPtr GetMiscStatus() const;
 
     MapUnit         GetMapUnit() const;
     void            SetMapUnit( MapUnit nMUnit );
@@ -648,9 +648,9 @@ public:
     void            DoDraw( OutputDevice *, const Point & rObjPos,
                             const Size & rSize,
                             const JobSetup & rSetup,
-                            USHORT nAspect = ASPECT_CONTENT );
+                            sal_uInt16 nAspect = ASPECT_CONTENT );
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,
-                          USHORT nAspect = ASPECT_CONTENT ) = 0;
+                          sal_uInt16 nAspect = ASPECT_CONTENT ) = 0;
 
 
     virtual void    FillClass( SvGlobalName * pClassName,
@@ -716,7 +716,7 @@ public:
                                             const Fraction & rScaleX,
                                             const Fraction & rScaleY,
                                             const JobSetup & rSetup,
-                                            USHORT nAspect );
+                                            sal_uInt16 nAspect );
 
     // Shell Interface
     SAL_DLLPRIVATE void ExecFile_Impl(SfxRequest &);
@@ -756,7 +756,7 @@ public:
 
     // configuration items
     SAL_DLLPRIVATE SfxToolBoxConfig* GetToolBoxConfig_Impl();
-    SAL_DLLPRIVATE sal_uInt16 ImplGetSignatureState( sal_Bool bScriptingContent = FALSE );
+    SAL_DLLPRIVATE sal_uInt16 ImplGetSignatureState( sal_Bool bScriptingContent = sal_False );
 
     SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation >
         ImplAnalyzeSignature(
@@ -764,7 +764,7 @@ public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures >& xSigner
                 = ::com::sun::star::uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures >() );
 
-    SAL_DLLPRIVATE void ImplSign( sal_Bool bScriptingContent = FALSE );
+    SAL_DLLPRIVATE void ImplSign( sal_Bool bScriptingContent = sal_False );
     SAL_DLLPRIVATE sal_Bool QuerySaveSizeExceededModules_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
 //#endif
 };
@@ -842,8 +842,8 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual String          GetValueText() const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
     SfxObjectShell*         GetObjectShell() const
                             { return pObjSh; }
 

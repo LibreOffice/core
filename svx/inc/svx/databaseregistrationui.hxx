@@ -44,7 +44,7 @@ namespace svx
 
     /** opens a dialog which allows the user to administrate the database registrations
     */
-    USHORT  SVX_DLLPUBLIC  administrateDatabaseRegistration( Window* _parentWindow );
+    sal_uInt16  SVX_DLLPUBLIC  administrateDatabaseRegistration( Window* _parentWindow );
 
 //........................................................................
 }   // namespace svx
