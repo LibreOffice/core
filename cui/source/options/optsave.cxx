@@ -330,26 +330,6 @@ OUString lcl_ExtractUIName(const Sequence<PropertyValue> rProperties)
     return sRet;
 }
 // -----------------------------------------------------------------------
-bool SfxSaveTabPage::AcceptFilter( USHORT nPos )
-{
-    const OUString* pFilters = pImpl->aFilterArr[nPos].getConstArray();
-    sal_Bool bAlien = sal_False, bODF = sal_False;
-    OUString* pUIFilters = pImpl->aUIFilterArr[nPos].getArray();
-    OUString sUIName;
-    for(int nFilter = 0; nFilter < pImpl->aFilterArr[nPos].getLength(); nFilter++)
-    {
-        if( pImpl->aDefaultArr[nPos] == pFilters[nFilter] )
-        {
-            bAlien = pImpl->aAlienArr[nPos][nFilter];
-            bODF = pImpl->aODFArr[nPos][nFilter];
-            sUIName = pUIFilters[nFilter];;
-            break;
-        }
-    }
-    bool bSet = true;
-    return bSet;
-}
-// -----------------------------------------------------------------------
 void SfxSaveTabPage::DetectHiddenControls()
 {
     long nDelta = 0;
@@ -466,38 +446,31 @@ BOOL SfxSaveTabPage::FillItemSet( SfxItemSet& rSet )
 
     SvtModuleOptions aModuleOpt;
     if(pImpl->aDefaultArr[APP_MATH].getLength() &&
-            pImpl->aDefaultArr[APP_MATH] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_MATH) &&
-            AcceptFilter( APP_MATH ))
+            pImpl->aDefaultArr[APP_MATH] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_MATH))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_MATH, pImpl->aDefaultArr[APP_MATH]);
 
     if( pImpl->aDefaultArr[APP_DRAW].getLength() &&
-            pImpl->aDefaultArr[APP_DRAW] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_DRAW) &&
-            AcceptFilter( APP_DRAW ))
+            pImpl->aDefaultArr[APP_DRAW] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_DRAW))
             aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_DRAW, pImpl->aDefaultArr[APP_DRAW]);
 
     if(pImpl->aDefaultArr[APP_IMPRESS].getLength() &&
-            pImpl->aDefaultArr[APP_IMPRESS] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_IMPRESS)&&
-            AcceptFilter( APP_IMPRESS ))
+            pImpl->aDefaultArr[APP_IMPRESS] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_IMPRESS))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_IMPRESS, pImpl->aDefaultArr[APP_IMPRESS]);
 
     if(pImpl->aDefaultArr[APP_CALC].getLength() &&
-            pImpl->aDefaultArr[APP_CALC] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_CALC)&&
-            AcceptFilter( APP_CALC ))
+            pImpl->aDefaultArr[APP_CALC] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_CALC))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_CALC, pImpl->aDefaultArr[APP_CALC]);
 
     if(pImpl->aDefaultArr[APP_WRITER].getLength() &&
-            pImpl->aDefaultArr[APP_WRITER] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITER)&&
-            AcceptFilter( APP_WRITER))
+            pImpl->aDefaultArr[APP_WRITER] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITER))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_WRITER, pImpl->aDefaultArr[APP_WRITER]);
 
     if(pImpl->aDefaultArr[APP_WRITER_WEB].getLength() &&
-            pImpl->aDefaultArr[APP_WRITER_WEB] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITERWEB)&&
-            AcceptFilter( APP_WRITER_WEB ))
+            pImpl->aDefaultArr[APP_WRITER_WEB] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITERWEB))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_WRITERWEB, pImpl->aDefaultArr[APP_WRITER_WEB]);
 
     if(pImpl->aDefaultArr[APP_WRITER_GLOBAL].getLength() &&
-            pImpl->aDefaultArr[APP_WRITER_GLOBAL] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITERGLOBAL)&&
-            AcceptFilter( APP_WRITER_GLOBAL ))
+            pImpl->aDefaultArr[APP_WRITER_GLOBAL] != aModuleOpt.GetFactoryDefaultFilter(SvtModuleOptions::E_WRITERGLOBAL))
         aModuleOpt.SetFactoryDefaultFilter(SvtModuleOptions::E_WRITERGLOBAL, pImpl->aDefaultArr[APP_WRITER_GLOBAL]);
 
     return bModified;
