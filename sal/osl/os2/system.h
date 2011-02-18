@@ -296,7 +296,7 @@ char *macxp_tempnam( const char *tmpdir, const char *prefix );
 #endif
 
 #if !defined(_WIN32)  && !defined(OS2)  && \
-    !defined(LINUX)   && !defined(NETBSD) && !defined(FREEBSD) && !defined(SCO)  && \
+    !defined(LINUX)   && !defined(NETBSD) && !defined(FREEBSD) && \
     !defined(AIX)     && \
     !defined(SOLARIS) && !defined(MAC) && \
     !defined(MACOSX)
