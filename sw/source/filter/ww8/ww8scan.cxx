@@ -629,7 +629,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
                             // chp.fUsePgsuSettings;1 or 0
         {0x486B, 2, L_FIX}, // "sprmCCpg" ;;word;
         {0x486D, 2, L_FIX}, // "sprmCRgLid0_80" chp.rglid[0];LID: for non-FE text
-        {0x486E, 2, L_FIX}, // "sprmCRgLid1" chp.rglid[1];LID: for Far East text
+        {0x486E, 2, L_FIX}, // "sprmCRgLid1_80" chp.rglid[1];LID: for Far East text
         {0x286F, 1, L_FIX}, // "sprmCIdctHint" chp.idctHint;IDCT:
         {0x2E00, 1, L_FIX}, // "sprmPicBrcl" pic.brcl;brcl (see PIC definition)
         {0xCE01, 0, L_VAR}, // "sprmPicScale" pic.mx, pic.my, pic.dxaCropleft,
@@ -745,8 +745,8 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0xC650, 0, L_VAR}, // undocumented
         {0xC651, 0, L_VAR}, // undocumented
         {0xF661, 3, L_FIX}, // undocumented
-        {0x4873, 2, L_FIX}, // undocumented
-        {0x4874, 2, L_FIX}, // undocumented
+        {0x4873, 2, L_FIX}, // "sprmCRgLid0" chp.rglid[0];LID: for non-FE text
+        {0x4874, 2, L_FIX}, // "sprmCRgLid1" chp.rglid[1];LID: for Far East text
         {0x6463, 4, L_FIX}, // undocumented
         {0x2461, 1, L_FIX}, // undoc, must be asian version of "sprmPJc"
         {0x845D, 2, L_FIX}, // undoc, must be asian version of "sprmPDxaRight"

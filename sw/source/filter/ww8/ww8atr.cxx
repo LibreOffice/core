@@ -1315,7 +1315,7 @@ void WW8AttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
                 nId = NS_sprm::LN_CRgLid0_80;
                 break;
             case RES_CHRATR_CJK_LANGUAGE:
-                nId = NS_sprm::LN_CRgLid1;
+                nId = NS_sprm::LN_CRgLid1_80;
                 break;
             case RES_CHRATR_CTL_LANGUAGE:
                 nId = NS_sprm::LN_CLidBi;
@@ -1333,19 +1333,18 @@ void WW8AttributeOutput::CharLanguage( const SvxLanguageItem& rLanguage )
             m_rWW8Export.pO->Insert( (BYTE)nId, m_rWW8Export.pO->Count() );
         m_rWW8Export.InsUInt16( rLanguage.GetLanguage() );
 
-        // unknown as to exactly why, but this seems to shadow the other
-        // paramater in word 2000 and without it spellchecking doesn't work
+        // Word 2000 and above apparently require both old and new versions of
+        // these sprms to be set, without it spellchecking doesn't work
         if ( nId == NS_sprm::LN_CRgLid0_80 )
         {
-            m_rWW8Export.InsUInt16( 0x4873 );
+            m_rWW8Export.InsUInt16( NS_sprm::LN_CRgLid0 );
             m_rWW8Export.InsUInt16( rLanguage.GetLanguage() );
         }
-        else if ( nId == NS_sprm::LN_CLidBi )
+        else if ( nId == NS_sprm::LN_CRgLid1_80 )
         {
-            m_rWW8Export.InsUInt16( 0x4874 );
+            m_rWW8Export.InsUInt16( NS_sprm::LN_CRgLid1 );
             m_rWW8Export.InsUInt16( rLanguage.GetLanguage() );
         }
-
     }
 }
 

@@ -3840,7 +3840,8 @@ void SwWW8ImplReader::Read_Language( USHORT nId, const BYTE* pData, short nLen )
         case 0x4873: //Methinks, uncertain
             nId = RES_CHRATR_LANGUAGE;
             break;
-        case 0x486E:
+        case 0x486E: //sprmCRgLid1_80
+        case 0x4874: //Methinks, uncertain
             nId = RES_CHRATR_CJK_LANGUAGE;
             break;
         case 83:
@@ -5940,7 +5941,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x486D, &SwWW8ImplReader::Read_Language},   //"sprmCRgLid0_80" chp.rglid[0];
                                                      //LID: for non-Far East text;
                                                      //word;
-        {0x486E, &SwWW8ImplReader::Read_Language},   //"sprmCRgLid1" chp.rglid[1];
+        {0x486E, &SwWW8ImplReader::Read_Language},   //"sprmCRgLid1_80" chp.rglid[1];
                                                      //LID: for Far East text;word;
         {0x286F, &SwWW8ImplReader::Read_IdctHint},   //"sprmCIdctHint" chp.idctHint;
                                                      //IDCT: byte;
@@ -6154,10 +6155,12 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0xC650, 0},                                 //undocumented
         {0xC651, 0},                                 //undocumented
         {0xF661, 0},                                 //undocumented
-        {0x4873, &SwWW8ImplReader::Read_Language},   //"sprmCRgLid3?" chp.rglid[0];
-                                                     //LID: for non-Far East text
+        {0x4873, &SwWW8ImplReader::Read_Language},   //"sprmCRgLid0" chp.rglid[0];
+                                                     //LID: for non-Far East text;
                                                      //(like a duplicate of 486D)
-        {0x4874, 0},                                 //undocumented
+        {0x4874, 0},                                 //"sprmCRgLid1" chp.rglid[1];
+                                                     //LID: for Far East text
+                                                     //(like a duplicate of 486E)
         {0x6463, 0},                                 //undocumented
         {0x2461, &SwWW8ImplReader::Read_RTLJustify}, //undoc, must be asian version
                                                      //of "sprmPJc"
