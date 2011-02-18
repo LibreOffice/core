@@ -828,6 +828,7 @@ SfxDocumentPage::SfxDocumentPage( Window* pParent, const SfxItemSet& rItemSet ) 
     bHandleDelete       ( sal_False )
 
 {
+    aNameED.SetAccessibleName(String(SfxResId(EDIT_FILE_NAME)));
     FreeResource();
 
     ImplUpdateSignatures();
@@ -1818,6 +1819,11 @@ CustomPropertiesWindow::CustomPropertiesWindow( Window* pParent, const ResId& rR
     m_aEditLoseFocusTimer.SetTimeoutHdl( LINK( this, CustomPropertiesWindow, EditTimeoutHdl ) );
     m_aBoxLoseFocusTimer.SetTimeout( 300 );
     m_aBoxLoseFocusTimer.SetTimeoutHdl( LINK( this, CustomPropertiesWindow, BoxTimeoutHdl ) );
+
+    ResMgr* pResMgr = rResId.GetResMgr();
+    m_aNameBox.SetAccessibleName( String( ResId( STR_HEADER_NAME, *pResMgr ) ) );
+    m_aTypeBox.SetAccessibleName( String( ResId( STR_HEADER_TYPE, *pResMgr ) ) );
+    m_aValueEdit.SetAccessibleName( String( ResId( STR_HEADER_VALUE, *pResMgr ) ) );
 }
 
 CustomPropertiesWindow::~CustomPropertiesWindow()
@@ -2064,6 +2070,11 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
     //add lose focus handlers of date/time fields
 
     pNewLine->m_aTypeBox.SetLoseFocusHdl( LINK( this, CustomPropertiesWindow, BoxLoseFocusHdl ) );
+
+    pNewLine->m_aNameBox.SetAccessibleName(m_aNameBox.GetAccessibleName());
+    pNewLine->m_aTypeBox.SetAccessibleName(m_aTypeBox.GetAccessibleName());
+    pNewLine->m_aValueEdit.SetAccessibleName(m_aValueEdit.GetAccessibleName());
+
     long nPos = GetVisibleLineCount() * GetLineHeight();
     m_aCustomPropertiesLines.push_back( pNewLine );
     Window* pWindows[] = {  &m_aNameBox, &m_aTypeBox, &m_aValueEdit,
