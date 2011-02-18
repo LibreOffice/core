@@ -70,7 +70,8 @@ fi
 sd_binary=`basename "$0" | sed 's/libreoffice/soffice/g'`.bin
 
 case "`uname -s`" in
-NetBSD|OpenBSD|FreeBSD) # this is a temporary hack until we can live with the default search paths
+NetBSD|OpenBSD|FreeBSD|DragonFly)
+# this is a temporary hack until we can live with the default search paths
     sd_prog1="$sd_prog/../basis-link/program"
     sd_prog2="$sd_prog/../basis-link/ure-link/lib"
     LD_LIBRARY_PATH=$sd_prog1:$sd_prog2${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
