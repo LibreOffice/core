@@ -174,8 +174,7 @@ COMPHELPER_DLLPUBLIC ::com::sun::star::uno::Sequence< ::rtl::OUString >
 COMPHELPER_DLLPUBLIC sal_Int32 compareNatural( const ::rtl::OUString &rLHS, const ::rtl::OUString &rRHS,
     const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator > &rCollator,
     const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator > &rBI,
-    const ::com::sun::star::lang::Locale &rLocale )
-    SAL_THROW(());
+    const ::com::sun::star::lang::Locale &rLocale );
 
 class COMPHELPER_DLLPUBLIC NaturalStringSorter
 {

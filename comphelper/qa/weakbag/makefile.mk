@@ -27,7 +27,7 @@
 
 PRJ := ..$/..
 PRJNAME := comphelper
-TARGET := qa
+TARGET := qa_weakbag
 
 ENABLE_EXCEPTIONS := TRUE
 

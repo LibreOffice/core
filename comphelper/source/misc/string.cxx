@@ -228,19 +228,19 @@ uno::Sequence< ::rtl::OUString >
 sal_Int32 compareNatural( const ::rtl::OUString & rLHS, const ::rtl::OUString & rRHS,
     const uno::Reference< i18n::XCollator > &rCollator,
     const uno::Reference< i18n::XBreakIterator > &rBI,
-    const lang::Locale &rLocale) SAL_THROW(())
+    const lang::Locale &rLocale )
 {
-    sal_Int16 nRet = 0;
+    sal_Int32 nRet = 0;
 
-    sal_Int16 nLHSLastNonDigitPos = 0;
-    sal_Int16 nRHSLastNonDigitPos = 0;
-    sal_Int16 nLHSFirstDigitPos = 0;
-    sal_Int16 nRHSFirstDigitPos = 0;
+    sal_Int32 nLHSLastNonDigitPos = 0;
+    sal_Int32 nRHSLastNonDigitPos = 0;
+    sal_Int32 nLHSFirstDigitPos = 0;
+    sal_Int32 nRHSFirstDigitPos = 0;
 
     while (nLHSFirstDigitPos < rLHS.getLength() || nRHSFirstDigitPos < rRHS.getLength())
     {
-        sal_Int16 nLHSChunkLen;
-        sal_Int16 nRHSChunkLen;
+        sal_Int32 nLHSChunkLen;
+        sal_Int32 nRHSChunkLen;
 
         //Compare non digit block as normal strings
         nLHSFirstDigitPos = rBI->nextCharBlock(rLHS, nLHSLastNonDigitPos,
