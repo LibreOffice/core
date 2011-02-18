@@ -2723,8 +2723,20 @@ ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( ImplDevFontList* pFontList,
     // e.g. PsPrint Arial->Helvetica for udiaeresis when Helvetica doesn't support it
     if( nFallbackLevel >= 1)
     {
-        ImplDevFontListData* pFallbackData = pFontList->GetGlyphFallbackFont(
-            rFontSelData, rMissingCodes, nFallbackLevel-1 );
+        ImplDevFontListData* pFallbackData = NULL;
+
+        //fdo#33898 If someone has EUDC installed then they really want that to
+        //be used as the first-choice glyph fallback seeing as it's filled with
+        //private area codes with don't make any sense in any other font so
+        //prioritise it here if it's available. Ideally we would remove from
+        //rMissingCodes all the glyphs which it is able to resolve as an
+        //optimization, but that's tricky to achieve cross-platform without
+        //sufficient heavy-weight code that's likely to undo the value of the
+        //optimization
+        if (nFallbackLevel == 1)
+            pFallbackData = pFontList->FindFontFamily(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EUDC")));
+        if (!pFallbackData)
+            pFallbackData = pFontList->GetGlyphFallbackFont(rFontSelData, rMissingCodes, nFallbackLevel-1);
         // escape when there are no font candidates
         if( !pFallbackData  )
             return NULL;
