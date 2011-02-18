@@ -103,8 +103,8 @@ reportError ()
 		TINDER1=
 		TINDER2=
 		if test "$SEND_MAIL" -eq 1 -a -n "$TINDERNAME" ; then
-			TINDER1=`echo -e "Full log available at http://tinderbox.go-oo.org/MASTER/status.html\n"`
-			TINDER2=`echo "  Box name: $TINDERNAME"`
+			TINDER1="`echo 'Full log available at http://tinderbox.go-oo.org/MASTER/status.html'`"
+			TINDER2="`echo \"Box name: $TINDERNAME\"`"
 		fi
 		cat <<EOF | sendMailMsg "$to_mail" "Tinderbox failure, $message"
 Hi folks,
@@ -112,10 +112,13 @@ Hi folks,
 One of you broke the build of LibreOffice master with your commit :-(
 Please commit and push a fix ASAP!
 
-${TINDER1}Tinderbox info:
+${TINDER1}
 
-${TINDER2}  `uname -a`
-  Configured with `cat autogen.lastrun`
+Tinderbox info:
+
+  ${TINDER2}
+  Machine: `uname -a`
+  Configured with: `cat autogen.lastrun`
 
 Commits since the last success:
 
