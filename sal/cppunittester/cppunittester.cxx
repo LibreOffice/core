@@ -32,6 +32,11 @@
 #include <cstdlib>
 #include <iostream>
 
+#ifdef WNT
+#include <windows.h>
+#endif
+
+
 #include "cppunit/CompilerOutputter.h"
 #include "cppunit/TestResult.h"
 #include "cppunit/TestResultCollector.h"
@@ -46,8 +51,10 @@
 #include "sal/main.h"
 
 SAL_IMPLEMENT_MAIN() {
+
 #ifdef WNT
-    _set_abort_behavior(0, _WRITE_ABORT_MSG);
+    DWORD dwMode = SetErrorMode(SEM_NOGPFAULTERRORBOX);
+    SetErrorMode(SEM_NOGPFAULTERRORBOX|dwMode);
 #endif
 
     if (rtl_getAppCommandArgCount() < 1) {
