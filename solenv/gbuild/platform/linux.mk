@@ -122,7 +122,7 @@ gb_LinkTarget_NOEXCEPTIONFLAGS := \
 
 gb_LinkTarget_LDFLAGS := \
     -Wl,--sysroot=$(SYSBASE) \
-    -Wl,-rpath-link=$(SOLARLIBDIR):$(SYSBASE)/lib:$(SYSBASE)/usr/lib \
+    -Wl,-rpath-link,$(SYSBASE)/lib:$(SYSBASE)/usr/lib \
     -Wl,-z,combreloc \
     -Wl,-z,defs \
     $(subst -L../lib , ,$(SOLARLIB)) \
