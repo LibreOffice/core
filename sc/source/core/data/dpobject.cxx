@@ -271,7 +271,7 @@ void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
     DELETEZ( pImpDesc );
     DELETEZ( pServDesc );
 
-    delete pImpDesc;
+    delete pSheetDesc;
     pSheetDesc = new ScSheetSourceDesc(rDesc);
 
     //  make valid QueryParam
