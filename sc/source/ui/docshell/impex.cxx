@@ -40,14 +40,11 @@ class StarBASIC;
 #define GLOBALOVERFLOW
 #endif
 
-// INCLUDE ---------------------------------------------------------------
-
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <osl/endian.h>
 #include <i18npool/mslangid.hxx>
-#include <tools/list.hxx>
 #include <tools/string.hxx>
 #include <rtl/math.hxx>
 #include <svtools/htmlout.hxx>

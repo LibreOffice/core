@@ -29,10 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-// INCLUDE ---------------------------------------------------------------
-#include <tools/list.hxx>
 #include "scitems.hxx"
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>

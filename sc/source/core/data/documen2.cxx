@@ -49,7 +49,6 @@
 #include <comphelper/processfactory.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <tools/tenccvt.hxx>
-#include <tools/list.hxx>
 #include <rtl/crc.h>
 #include <basic/basmgr.hxx>
 

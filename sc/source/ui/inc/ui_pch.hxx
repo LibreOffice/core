@@ -43,7 +43,6 @@
 #include <tools/contnr.hxx>
 #include <vcl/sv.h>
 #include <tools/ref.hxx>
-#include <tools/list.hxx>
 #include <tools/link.hxx>
 #include <i18npool/lang.h>
 #include <sfx2/sfx.hrc>
