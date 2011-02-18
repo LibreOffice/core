@@ -115,10 +115,9 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
 //------------------------------------------------------------------
 void OSQLAnalyzer::bindRow(OCodeList& rCodeList,const OValueRefRow& _pRow,OEvaluateSetList& _rEvaluateSetList)
 {
-    // Zaehlen, wieviele Kriterien
-    // wenn nur ein Kriterium, und das entsprechende Feld ist indiziert
-    // dann wird der Index verwendet
-
+    // count criteria
+    // if only one criterion, and the corresponding field is indexed
+    // then the index will be used
     OEvaluateSet*       pEvaluateSet = NULL;
 
     for (OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end(); ++aIter)
@@ -166,10 +165,10 @@ void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
     ::std::vector<sal_Int32>*   pKeySet      = NULL;
     OEvaluateSet*               pEvaluateSet = NULL;
 
-    // Keyset erzeugen mit kleinster Liste
+    // create Keyset with smallest list
     if(!aEvaluateSetList.empty())
     {
-        // welche Liste hat den kleinsten count ?
+        // which list has the smallest count?
         OEvaluateSetList::iterator i = aEvaluateSetList.begin();
         pEvaluateSet = *(i);
         for(++i; i != aEvaluateSetList.end();++i)
@@ -188,7 +187,7 @@ void OSQLAnalyzer::bindSelectRow(const OValueRefRow& _pRow)
             (*pKeySet)[k] = j->second;
         }
 
-        // alle loeschen
+        // delete all
         for(i = aEvaluateSetList.begin(); i != aEvaluateSetList.end();++i)
             delete (*i);
     }
@@ -203,20 +202,20 @@ void OSQLAnalyzer::describeParam(::rtl::Reference<OSQLColumns> rParameterColumns
     OCodeStack aCodeStack;
 
     if (!rCodeList.size())
-        return;     // kein Praedikat
+        return;     // no predicate
     if (!rParameterColumns->get().size())
-        return; // keine Parameter
+        return; // no parameters
 
-    // Anlegen von Columns, die eine genauere Beschreibung fuer die enthalten
+    // Create columns, that have a more precise description for the included
     ::rtl::Reference<OSQLColumns> aNewParamColumns = new OSQLColumns(*rParameterColumns);
 
 
-    // Anlegen einer Testzeile, wird benoetigt um die Parameter zu beschreiben
+    // Create a Test-row, is needed to describe the parameters
     OValueRefRow aParameterRow  = new OValueRefVector(rParameterColumns->get().size());
     bindParameterRow(aParameterRow);
 
     OValueRefRow aTestRow = new OValueRefVector(Reference< XIndexAccess>(m_aCompiler->getOrigColumns(),UNO_QUERY)->getCount());
-    delete bindEvaluationRow(aTestRow);                 // Binden der Attribute an die Values
+    delete bindEvaluationRow(aTestRow);                 // Bind the attributes to the values
 
     for(OCodeList::iterator aIter = rCodeList.begin(); aIter != rCodeList.end(); ++aIter)
     {
@@ -226,10 +225,10 @@ void OSQLAnalyzer::describeParam(::rtl::Reference<OSQLColumns> rParameterColumns
             aCodeStack.push(pOperand);
         else
         {
-            if (pOperator->getRequestedOperands() == 2)     // bei zwei Operatoren ist es moeglich
-            {                                               // einen Parameter weiter zu spezifizieren
+            if (pOperator->getRequestedOperands() == 2)     // with two Operands it is possible
+            {                                               // to specify one parameter better
                 OOperandParam *pParam  = PTR_CAST(OOperandParam,aCodeStack.top());
-                if (pParam)  // Anpassen des ParameterTyps, wenn der linke Operand ein Attribut ist
+                if (pParam)  // adjust the Parameter-types, if the left Operand is an attribute
                 {
                     OOperandAttr *pLeft  = PTR_CAST(OOperandAttr,*(rCodeList.end() - 2));
                     if (pLeft)

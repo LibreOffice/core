@@ -430,7 +430,7 @@ void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
         aColumnName = pColumnRef->getChild(0)->getTokenValue();
     else if (pColumnRef->count() == 3)
     {
-        // Nur die Table Range-Variable darf hier vorkommen:
+        // Just the Table Range-variable may appear here:
 //      if (!(pColumnRef->getChild(0)->getTokenValue() == aTableRange))
 //      {
 //          aStatus.Set(SQL_STAT_ERROR,
@@ -450,8 +450,8 @@ void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
     Reference<XColumnLocate> xColLocate(m_xColNames,UNO_QUERY);
     if(!xColLocate.is())
         return;
-    // Alles geprueft und wir haben den Namen der Column.
-    // Die wievielte Column ist das?
+    // Everything tested and we have the name of the Column.
+    // What number is the Column?
     try
     {
         m_aOrderbyColumnNumber.push_back(xColLocate->findColumn(aColumnName));
@@ -579,7 +579,7 @@ void OStatement_Base::initializeResultSet(OResultSet* _pResult)
     _pResult->setSelectRow(m_aSelectRow);
 
     m_pSQLAnalyzer->bindSelectRow(m_aRow);
-    m_pEvaluationKeySet = m_pSQLAnalyzer->bindEvaluationRow(m_aEvaluateRow);    // Werte im Code des Compilers setzen
+    m_pEvaluationKeySet = m_pSQLAnalyzer->bindEvaluationRow(m_aEvaluateRow);    // Set values in the code of the Compiler
     _pResult->setEvaluationKeySet(m_pEvaluationKeySet);
 }
 // -----------------------------------------------------------------------------
@@ -593,11 +593,11 @@ void OStatement_Base::GetAssignValues()
     }
 
     if (SQL_ISRULE(m_pParseTree,select_statement))
-        // Keine zu setzenden Werte bei SELECT
+        // no values have to be set for SELECT
         return;
     else if (SQL_ISRULE(m_pParseTree,insert_statement))
     {
-        // Row fuer die zu setzenden Werte anlegen (Referenz durch new)
+        // Create Row for the values to be set (Reference trough new)
         if(m_aAssignValues.is())
             m_aAssignValues->get().clear();
         sal_Int32 nCount = Reference<XIndexAccess>(m_xColNames,UNO_QUERY)->getCount();
@@ -607,7 +607,7 @@ void OStatement_Base::GetAssignValues()
 
         m_aParameterIndexes.resize(nCount+1,SQL_NO_PARAMETER);
 
-        // Liste der Columns-Namen, die in der column_commalist vorkommen (mit ; getrennt):
+        // List of Column-Names, that exist in the column_commalist (seperated by ;):
         ::std::vector<String> aColumnNameList;
 
         OSL_ENSURE(m_pParseTree->count() >= 4,"OResultSet: Fehler im Parse Tree");
@@ -632,7 +632,7 @@ void OStatement_Base::GetAssignValues()
             OSL_ENSURE(SQL_ISRULE(pColumnCommalist,column_commalist),"OResultSet: Fehler im Parse Tree");
             OSL_ENSURE(pColumnCommalist->count() > 0,"OResultSet: Fehler im Parse Tree");
 
-            // Alle Columns in der column_commalist ...
+            // All Columns in the column_commalist ...
             for (sal_uInt32 i = 0; i < pColumnCommalist->count(); i++)
             {
                 OSQLParseNode * pCol = pColumnCommalist->getChild(i);
@@ -643,19 +643,19 @@ void OStatement_Base::GetAssignValues()
         if ( aColumnNameList.empty() )
             throwFunctionSequenceException(*this);
 
-        // Werte ...
+        // Values ...
         OSQLParseNode * pValuesOrQuerySpec = m_pParseTree->getChild(4);
         OSL_ENSURE(pValuesOrQuerySpec != NULL,"OResultSet: pValuesOrQuerySpec darf nicht NULL sein!");
         OSL_ENSURE(SQL_ISRULE(pValuesOrQuerySpec,values_or_query_spec),"OResultSet: ! SQL_ISRULE(pValuesOrQuerySpec,values_or_query_spec)");
         OSL_ENSURE(pValuesOrQuerySpec->count() > 0,"OResultSet: pValuesOrQuerySpec->count() <= 0");
 
-        // nur "VALUES" ist erlaubt ...
+        // just "VALUES" is allowed ...
         if (! SQL_ISTOKEN(pValuesOrQuerySpec->getChild(0),VALUES))
             throwFunctionSequenceException(*this);
 
         OSL_ENSURE(pValuesOrQuerySpec->count() == 4,"OResultSet: pValuesOrQuerySpec->count() != 4");
 
-        // Liste von Werten
+        // Liste of values
         OSQLParseNode * pInsertAtomCommalist = pValuesOrQuerySpec->getChild(2);
         OSL_ENSURE(pInsertAtomCommalist != NULL,"OResultSet: pInsertAtomCommalist darf nicht NULL sein!");
         OSL_ENSURE(pInsertAtomCommalist->count() > 0,"OResultSet: pInsertAtomCommalist <= 0");
@@ -669,7 +669,7 @@ void OStatement_Base::GetAssignValues()
             OSL_ENSURE(pRow_Value_Const != NULL,"OResultSet: pRow_Value_Const darf nicht NULL sein!");
             if(SQL_ISRULE(pRow_Value_Const,parameter))
             {
-                ParseAssignValues(aColumnNameList,pRow_Value_Const,nIndex++); // kann nur ein Columnname vorhanden sein pro Schleife
+                ParseAssignValues(aColumnNameList,pRow_Value_Const,nIndex++); // only one Columnname allowed per loop
             }
             else if(pRow_Value_Const->isToken())
                 ParseAssignValues(aColumnNameList,pRow_Value_Const,static_cast<xub_StrLen>(i));
@@ -703,7 +703,7 @@ void OStatement_Base::GetAssignValues()
         OSL_ENSURE(SQL_ISRULE(pAssignmentCommalist,assignment_commalist),"OResultSet: Fehler im Parse Tree");
         OSL_ENSURE(pAssignmentCommalist->count() > 0,"OResultSet: pAssignmentCommalist->count() <= 0");
 
-        // Alle Zuweisungen (Kommaliste) bearbeiten ...
+        // work on all assignments (commalist) ...
         ::std::vector< String> aList(1);
         for (sal_uInt32 i = 0; i < pAssignmentCommalist->count(); i++)
         {
@@ -745,12 +745,12 @@ void OStatement_Base::ParseAssignValues(const ::std::vector< String>& aColumnNam
         pRow_Value_Constructor_Elem->getNodeType() == SQL_NODE_INTNUM ||
         pRow_Value_Constructor_Elem->getNodeType() == SQL_NODE_APPROXNUM)
     {
-        // Wert setzen:
+        // set value:
         SetAssignValue(aColumnName, pRow_Value_Constructor_Elem->getTokenValue());
     }
     else if (SQL_ISTOKEN(pRow_Value_Constructor_Elem,NULL))
     {
-        // NULL setzen
+        // set NULL
         SetAssignValue(aColumnName, String(), TRUE);
     }
     else if (SQL_ISRULE(pRow_Value_Constructor_Elem,parameter))
@@ -771,11 +771,11 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
     Reference<XPropertySet> xCol;
     m_xColNames->getByName(aColumnName) >>= xCol;
     sal_Int32 nId = Reference<XColumnLocate>(m_xColNames,UNO_QUERY)->findColumn(aColumnName);
-    // Kommt diese Column ueberhaupt in der Datei vor?
+    // does this column actually exist in the file?
 
     if (!xCol.is())
     {
-        // Diese Column gibt es nicht!
+        // This Column doesn't exist!
 //      aStatus.Set(SQL_STAT_ERROR,
 //                  String::CreateFromAscii("S0022"),
 //                  aStatus.CreateErrorMessage(String(SdbResId(STR_STAT_COLUMN_NOT_FOUND))),
@@ -783,23 +783,23 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
         throwFunctionSequenceException(*this);
     }
 
-    // Value an die Row mit den zuzuweisenden Werten binden:
+    // tie Value to the Row with values that shall be assigned:
     //  const ODbVariantRef& xValue = (*aAssignValues)[pFileColumn->GetId()];
 
-    // Alles geprueft und wir haben den Namen der Column.
-    // Jetzt eine Value allozieren, den Wert setzen und die Value an die Row binden.
+    // Everything tested and we have the names of the Column.
+    // Now allocate one Value, set the value and tie the value to the Row.
     if (bSetNull)
         (m_aAssignValues->get())[nId]->setNull();
     else
     {
         switch (::comphelper::getINT32(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
         {
-            // Kriterium je nach Typ als String oder double in die Variable packen ...
+            // put criteria depending on the Type as String or double in the variable
             case DataType::CHAR:
             case DataType::VARCHAR:
             case DataType::LONGVARCHAR:
                 *(m_aAssignValues->get())[nId] = ORowSetValue(aValue);
-                // Zeichensatz ist bereits konvertiert, da ja das gesamte Statement konvertiert wurde
+                //Characterset is already converted, since the entire statement was converted
                 break;
 
             case DataType::BIT:
@@ -810,7 +810,7 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
                         *(m_aAssignValues->get())[nId] = sal_False;
                     else
                     {
-                        //  aStatus.Set(SQL_STAT_ERROR);    // nyi: genauer!
+                        //  aStatus.Set(SQL_STAT_ERROR);    // nyi: more accurate!
                         throwFunctionSequenceException(*this);
                     }
                 }
@@ -842,8 +842,8 @@ void OStatement_Base::SetAssignValue(const String& aColumnName,
         }
     }
 
-    // Parameter-Nr. merken (als User Data)
-    // SQL_NO_PARAMETER = kein Parameter.
+    // save Parameter-No. (as User Data)
+    // SQL_NO_PARAMETER = no Parameter.
     m_aAssignValues->setParameterIndex(nId,nParameter);
     if(nParameter != SQL_NO_PARAMETER)
         m_aParameterIndexes[nParameter] = nId;

@@ -130,7 +130,7 @@ sal_Bool OOperandAttr::isIndexed() const
 }
 //------------------------------------------------------------------
 OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
-    : OOperandRow(static_cast<sal_uInt16>(_nPos), DataType::VARCHAR)         // Standard-Typ
+    : OOperandRow(static_cast<sal_uInt16>(_nPos), DataType::VARCHAR)         // Standard-Type
 {
     OSL_ENSURE(SQL_ISRULE(pNode,parameter),"Argument ist kein Parameter");
     OSL_ENSURE(pNode->count() > 0,"Fehler im Parse Tree");
@@ -146,17 +146,15 @@ OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
         OSL_ASSERT("Fehler im Parse Tree");
     }
 
-    // Parameter-Column aufsetzen mit defult typ, kann zu einem spaeteren Zeitpunkt ueber DescribeParameter
-    // genauer spezifiziert werden
+    // set up Parameter-Column with default type, can be specified more precisely later using Describe-Parameter
 
-    // Identitaet merken (hier eigentlich nicht erforderlich, aber aus
-    // Symmetriegruenden ...)
+    // save Identity (not escpecially necessary here, just for the sake of symmetry)
 
     // todo
     //  OColumn* pColumn = new OFILEColumn(aParameterName,eDBType,255,0,SQL_FLAGS_NULLALLOWED);
     //  rParamColumns->AddColumn(pColumn);
 
-    // der Wert wird erst kurz vor der Auswertung gesetzt
+    // the value will be set just before the evaluation
 }
 
 
@@ -343,7 +341,7 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
     sal_Bool bResult = sal_False;
     sal_Int32 eDBType = pLeft->getDBType();
 
-    // Vergleich (je nach Datentyp):
+    // Comparison (depending on Data-type):
     switch (eDBType)
     {
         case DataType::CHAR:

@@ -88,8 +88,8 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
         return;
 
     m_nParamCounter = 0;
-    // Parse Tree analysieren (je nach Statement-Typ)
-    // und Zeiger auf WHERE-Klausel setzen:
+    // analyse Parse Tree (depending on Statement-type)
+    // and set pointer on WHERE-clause:
     OSQLParseNode * pWhereClause = NULL;
     OSQLParseNode * pOrderbyClause = NULL;
 
@@ -132,12 +132,12 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
         pWhereClause = pSQLParseNode->getChild(3);
     }
     else
-            // Anderes Statement. Keine Selektionskriterien.
+            // Other Statement. no selection-criteria
         return;
 
     if (SQL_ISRULE(pWhereClause,where_clause))
     {
-        // Wenn es aber eine where_clause ist, dann darf sie nicht leer sein:
+        // a where-clause is not allowed to be empty:
         DBG_ASSERT(pWhereClause->count() == 2,"OFILECursor: Fehler im Parse Tree");
 
         OSQLParseNode * pComparisonPredicate = pWhereClause->getChild(1);
@@ -147,8 +147,7 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
     }
     else
     {
-        // Die Where Clause ist meistens optional, d. h. es koennte sich auch
-        // um "optional_where_clause" handeln.
+        // The where-clause is optionally in the majority of cases, i.e. it might be an "optional-where-clause".
         DBG_ASSERT(SQL_ISRULE(pWhereClause,opt_where_clause),"OPredicateCompiler: Fehler im Parse Tree");
     }
 }
@@ -157,18 +156,18 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
 OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
 {
     OOperand* pOperand = NULL;
-    if (pPredicateNode->count() == 3 &&                         // Ausdruck is geklammert
+    if (pPredicateNode->count() == 3 &&                         // Expression is bracketed
         SQL_ISPUNCTUATION(pPredicateNode->getChild(0),"(") &&
         SQL_ISPUNCTUATION(pPredicateNode->getChild(2),")"))
     {
         execute(pPredicateNode->getChild(1));
     }
     else if ((SQL_ISRULE(pPredicateNode,search_condition) || (SQL_ISRULE(pPredicateNode,boolean_term)))
-                            &&          // AND/OR-Verknuepfung:
+                            &&          // AND/OR-linkage:
                             pPredicateNode->count() == 3)
     {
-        execute(pPredicateNode->getChild(0));                           // Bearbeiten des linken Zweigs
-        execute(pPredicateNode->getChild(2));                           // Bearbeiten des rechten Zweigs
+        execute(pPredicateNode->getChild(0));                           // process the left branch
+        execute(pPredicateNode->getChild(2));                           // process the right branch
 
         if (SQL_ISTOKEN(pPredicateNode->getChild(1),OR))                // OR-Operator
         {
@@ -205,8 +204,8 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
     }
     else if(SQL_ISRULE(pPredicateNode,num_value_exp))
     {
-        execute(pPredicateNode->getChild(0));                           // Bearbeiten des linken Zweigs
-        execute(pPredicateNode->getChild(2));                           // Bearbeiten des rechten Zweigs
+        execute(pPredicateNode->getChild(0));                           // process the left branch
+        execute(pPredicateNode->getChild(2));                           // process the right branch
         if (SQL_ISPUNCTUATION(pPredicateNode->getChild(1),"+"))
         {
             m_aCodeList.push_back(new OOp_ADD());
@@ -220,8 +219,8 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
     }
     else if(SQL_ISRULE(pPredicateNode,term))
     {
-        execute(pPredicateNode->getChild(0));                           // Bearbeiten des linken Zweigs
-        execute(pPredicateNode->getChild(2));                           // Bearbeiten des rechten Zweigs
+        execute(pPredicateNode->getChild(0));                           // process the left branch
+        execute(pPredicateNode->getChild(2));                           // process the right branch
         if (SQL_ISPUNCTUATION(pPredicateNode->getChild(1),"*"))
         {
             m_aCodeList.push_back(new OOp_MUL());
@@ -234,7 +233,7 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
         }
     }
     else
-        pOperand = execute_Operand(pPredicateNode);                     // jetzt werden nur einfache Operanden verarbeitet
+        pOperand = execute_Operand(pPredicateNode);                     // now only simple operands will be processed
 
     return pOperand;
 }
@@ -465,7 +464,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
                 pOperand = m_pAnalyzer->createOperandAttr(Reference< XColumnLocate>(m_orgColumns,UNO_QUERY)->findColumn(aColumnName),xCol,m_xIndexes);
             }
             else
-            {// Column existiert nicht im Resultset
+            {// Column doesn't exist in the Result-set
                 const ::rtl::OUString sError( m_pAnalyzer->getConnection()->getResources().getResourceStringWithSubstitution(
                     STR_INVALID_COLUMNNAME,
                     "$columnname$", aColumnName
@@ -495,7 +494,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
     else if((pPredicateNode->count() == 2) &&
             (SQL_ISPUNCTUATION(pPredicateNode->getChild(0),"+") || SQL_ISPUNCTUATION(pPredicateNode->getChild(0),"-")) &&
             pPredicateNode->getChild(1)->getNodeType() == SQL_NODE_INTNUM)
-    { // falls -1 bzw. +1 vorhanden ist
+    { // if -1 or +1 is there
         ::rtl::OUString aValue(pPredicateNode->getChild(0)->getTokenValue());
         aValue += pPredicateNode->getChild(1)->getTokenValue();
         pOperand = new OOperandConst(*pPredicateNode->getChild(1), aValue);
@@ -561,7 +560,7 @@ sal_Bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
 
     OCodeList::iterator aIter = rCodeList.begin();
     if (!(*aIter))
-        return sal_True;        // kein Praedikat
+        return sal_True;        // no Predicate
 
     for(;aIter != rCodeList.end();++aIter)
     {
@@ -588,7 +587,7 @@ void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList,ORowSetValueD
 {
     OCodeList::iterator aIter = rCodeList.begin();
     if (!(*aIter))
-        return ;        // kein Praedikat
+        return ;        // no Predicate
 
     for(;aIter != rCodeList.end();++aIter)
     {
