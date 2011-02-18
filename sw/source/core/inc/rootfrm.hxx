@@ -178,6 +178,7 @@ public:
 
     SwRootFrm( SwFrmFmt*, ViewShell* );
     ~SwRootFrm();
+    void Init(SwFrmFmt*, ViewShell* );
 
     ViewShell *GetCurrShell() const { return pCurrShell; }
     void DeRegisterShell( ViewShell *pSh );

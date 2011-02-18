@@ -447,7 +447,10 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     bIdleFormat = bTurboAllowed = bAssertFlyPages = bIsNewLayout = sal_True;
     bCheckSuperfluous = bBrowseWidthValid = sal_False;
     setRootFrm( this );
+}
 
+void SwRootFrm::Init( SwFrmFmt* pFmt, ViewShell* pSh )
+{
     InitCurrShells( this );
 
     IDocumentTimerAccess *pTimerAccess = pFmt->getIDocumentTimerAccess();
