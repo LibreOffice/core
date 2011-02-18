@@ -3124,6 +3124,8 @@ namespace xmloff { namespace token {
         XML_MIN_VALUE,
         XML_MAX_VALUE,
 
+        XML_MARGIN, // #i117001#
+
         XML_TOKEN_END
     };
 

@@ -468,6 +468,9 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pClip11State = NULL;
     XMLPropertyState* pClipState = NULL;
 
+    XMLPropertyState* pAllParaMargin = NULL;
+    XMLPropertyState* pAllMargin = NULL;
+
     sal_Bool bNeedsAnchor = sal_False;
 
     for( ::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
@@ -584,6 +587,8 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_NUMBERINGSTYLENAME:    pListStyleName = propertie; break;
         case CTF_TEXT_CLIP11:           pClip11State = propertie; break;
         case CTF_TEXT_CLIP:             pClipState = propertie; break;
+        case CTF_PARAMARGINALL:         pAllParaMargin = propertie; break;
+        case CTF_MARGINALL:             pAllMargin = propertie; break;
         }
     }
 
@@ -634,6 +639,17 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     lcl_checkMultiProperty(pParaTopMarginState, pParaTopMarginRelState);
     lcl_checkMultiProperty(pParaBottomMarginState, pParaBottomMarginRelState);
     lcl_checkMultiProperty(pParaFirstLineState, pParaFirstLineRelState);
+
+    if (pAllParaMargin)
+    {
+        pAllParaMargin->mnIndex = -1; // just export individual attributes...
+        pAllParaMargin->maValue.clear();
+    }
+    if (pAllMargin)
+    {
+        pAllMargin->mnIndex = -1; // just export individual attributes...
+        pAllMargin->maValue.clear();
+    }
 
     if( pAllBorderWidthState )
     {

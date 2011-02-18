@@ -3124,6 +3124,8 @@ namespace xmloff { namespace token {
         TOKEN( "min-value", XML_MIN_VALUE ),
         TOKEN( "max-value", XML_MAX_VALUE ),
 
+        TOKEN( "margin", XML_MARGIN),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
 #else
