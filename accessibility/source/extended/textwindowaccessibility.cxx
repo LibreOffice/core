@@ -898,7 +898,7 @@ Document::retrieveParagraphText(ParagraphImpl const * pParagraph)
 {
     ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
     ::osl::MutexGuard aInternalGuard(GetMutex());
-    return m_rEngine.GetText(static_cast< ::ULONG >(pParagraph->getNumber()));
+    return m_rEngine.GetText(static_cast< ::sal_uLong >(pParagraph->getNumber()));
         // numeric overflow cannot happen here
 }
 
@@ -922,7 +922,7 @@ void Document::retrieveParagraphSelection(ParagraphImpl const * pParagraph,
             : static_cast< ::sal_Int32 >( aMinPaM.GetIndex() );
             // XXX numeric overflow
         *pEnd = nNumber < aMaxPaM.GetPara()
-            ? static_cast< ::sal_Int32 >( m_rEngine.GetText(static_cast< ::ULONG >(nNumber)).Len() )
+            ? static_cast< ::sal_Int32 >( m_rEngine.GetText(static_cast< ::sal_uLong >(nNumber)).Len() )
             : static_cast< ::sal_Int32 >( aMaxPaM.GetIndex() );
             // XXX  numeric overflow (3x)
 
@@ -954,7 +954,7 @@ Document::retrieveCharacterBounds(ParagraphImpl const * pParagraph,
 {
     ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
     ::osl::MutexGuard aInternalGuard(GetMutex());
-    ::ULONG nNumber = static_cast< ::ULONG >(pParagraph->getNumber());
+    ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
     sal_Int32 nLength = m_rEngine.GetText(nNumber).Len();
         // XXX  numeric overflow
     if (nIndex < 0 || nIndex > nLength)
@@ -969,17 +969,17 @@ Document::retrieveCharacterBounds(ParagraphImpl const * pParagraph,
     {
         aBounds = AWTRectangle(
             m_rEngine.PaMtoEditCursor(::TextPaM(nNumber,
-                                                static_cast< ::USHORT >(nIndex))));
+                                                static_cast< ::sal_uInt16 >(nIndex))));
     }
     else
     {
         ::Rectangle aLeft(
             m_rEngine.PaMtoEditCursor(::TextPaM(nNumber,
-                                                static_cast< ::USHORT >(nIndex))));
+                                                static_cast< ::sal_uInt16 >(nIndex))));
             // XXX  numeric overflow
         ::Rectangle aRight(
             m_rEngine.PaMtoEditCursor(::TextPaM(nNumber,
-                                                static_cast< ::USHORT >(nIndex)
+                                                static_cast< ::sal_uInt16 >(nIndex)
                                                 + 1)));
             // XXX  numeric overflow (2x)
         // FIXME  If the vertical extends of the two cursors do not match, assume
@@ -1006,7 +1006,7 @@ Document::retrieveCharacterBounds(ParagraphImpl const * pParagraph,
 {
     ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
     ::osl::MutexGuard aInternalGuard(GetMutex());
-    ::ULONG nNumber = static_cast< ::ULONG >(pParagraph->getNumber());
+    ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
         // XXX  numeric overflow
     ::TextPaM aPaM(m_rEngine.GetPaM(::Point(static_cast< long >(rPoint.X),
                                             static_cast< long >(rPoint.Y))));
@@ -1023,7 +1023,7 @@ Document::retrieveCharacterAttributes(
 {
     ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
     ::osl::MutexGuard aInternalGuard(GetMutex());
-    ::ULONG nNumber = static_cast< ::ULONG >(pParagraph->getNumber());
+    ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
         // XXX  numeric overflow
     if (nIndex < 0 || nIndex >= m_rEngine.GetText(nNumber).Len())
         throw ::css::lang::IndexOutOfBoundsException(
@@ -1098,8 +1098,8 @@ void Document::retrieveRunAttributesImpl(
     const ::css::uno::Sequence< ::rtl::OUString >& RequestedAttributes,
     tPropValMap& rRunAttrSeq)
 {
-    ::ULONG nNumber = static_cast< ::ULONG >( pParagraph->getNumber() );
-    ::TextPaM aPaM( nNumber, static_cast< ::USHORT >( Index ) );
+    ::sal_uLong nNumber = static_cast< ::sal_uLong >( pParagraph->getNumber() );
+    ::TextPaM aPaM( nNumber, static_cast< ::sal_uInt16 >( Index ) );
         // XXX  numeric overflow
     // FIXME  TEXTATTR_HYPERLINK ignored:
     ::TextAttribFontColor const * pColor
@@ -1155,7 +1155,7 @@ Document::retrieveRunAttributes(
 {
     ::osl::Guard< ::comphelper::IMutex > aExternalGuard( getExternalLock() );
     ::osl::MutexGuard aInternalGuard( GetMutex() );
-    ::ULONG nNumber = static_cast< ::ULONG >( pParagraph->getNumber() );
+    ::sal_uLong nNumber = static_cast< ::sal_uLong >( pParagraph->getNumber() );
         // XXX  numeric overflow
     if ( Index < 0 || Index >= m_rEngine.GetText(nNumber).Len() )
         throw ::css::lang::IndexOutOfBoundsException(
@@ -1176,7 +1176,7 @@ void Document::changeParagraphText(ParagraphImpl * pParagraph,
     ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
     {
         ::osl::MutexGuard aInternalGuard(GetMutex());
-        ::ULONG nNumber = static_cast< ::ULONG >(pParagraph->getNumber());
+        ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
             // XXX  numeric overflow
         changeParagraphText(nNumber, 0, m_rEngine.GetTextLen(nNumber), false,
                             false, rText);
@@ -1191,7 +1191,7 @@ void Document::changeParagraphText(ParagraphImpl * pParagraph,
     ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
     {
         ::osl::MutexGuard aInternalGuard(GetMutex());
-        ::ULONG nNumber = static_cast< ::ULONG >(pParagraph->getNumber());
+        ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
             // XXX  numeric overflow
         if (nBegin < 0 || nBegin > nEnd
             || nEnd > m_rEngine.GetText(nNumber).Len())
@@ -1201,8 +1201,8 @@ void Document::changeParagraphText(ParagraphImpl * pParagraph,
                         "textwindowaccessibility.cxx:"
                         " Document::changeParagraphText")),
                 static_cast< ::css::uno::XWeak * >(this));
-        changeParagraphText(nNumber, static_cast< ::USHORT >(nBegin),
-                            static_cast< ::USHORT >(nEnd), bCut, bPaste, rText);
+        changeParagraphText(nNumber, static_cast< ::sal_uInt16 >(nBegin),
+                            static_cast< ::sal_uInt16 >(nEnd), bCut, bPaste, rText);
             // XXX  numeric overflow (2x)
     }
 }
@@ -1213,7 +1213,7 @@ void Document::copyParagraphText(ParagraphImpl const * pParagraph,
     ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
     {
         ::osl::MutexGuard aInternalGuard(GetMutex());
-        ::ULONG nNumber = static_cast< ::ULONG >(pParagraph->getNumber());
+        ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
             // XXX  numeric overflow
         if (nBegin < 0 || nBegin > nEnd
             || nEnd > m_rEngine.GetText(nNumber).Len())
@@ -1223,8 +1223,8 @@ void Document::copyParagraphText(ParagraphImpl const * pParagraph,
                                     " Document::copyParagraphText")),
                 static_cast< ::css::uno::XWeak * >(this));
         m_rView.SetSelection(
-            ::TextSelection(::TextPaM(nNumber, static_cast< ::USHORT >(nBegin)),
-                            ::TextPaM(nNumber, static_cast< ::USHORT >(nEnd))));
+            ::TextSelection(::TextPaM(nNumber, static_cast< ::sal_uInt16 >(nBegin)),
+                            ::TextPaM(nNumber, static_cast< ::sal_uInt16 >(nEnd))));
             // XXX  numeric overflow (2x)
         m_rView.Copy();
     }
@@ -1237,7 +1237,7 @@ void Document::changeParagraphAttributes(
     ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
     {
         ::osl::MutexGuard aInternalGuard(GetMutex());
-        ::ULONG nNumber = static_cast< ::ULONG >(pParagraph->getNumber());
+        ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
         // XXX  numeric overflow
         if (nBegin < 0 || nBegin > nEnd
             || nEnd > m_rEngine.GetText(nNumber).Len())
@@ -1256,15 +1256,15 @@ void Document::changeParagraphAttributes(
                     RTL_CONSTASCII_STRINGPARAM("CharColor")))
                 m_rEngine.SetAttrib(::TextAttribFontColor(
                                         mapFontColor(rAttributeSet[i].Value)),
-                                    nNumber, static_cast< ::USHORT >(nBegin),
-                                    static_cast< ::USHORT >(nEnd));
+                                    nNumber, static_cast< ::sal_uInt16 >(nBegin),
+                                    static_cast< ::sal_uInt16 >(nEnd));
                     // XXX  numeric overflow (2x)
             else if (rAttributeSet[i].Name.equalsAsciiL(
                          RTL_CONSTASCII_STRINGPARAM("CharWeight")))
                 m_rEngine.SetAttrib(::TextAttribFontWeight(
                                         mapFontWeight(rAttributeSet[i].Value)),
-                                    nNumber, static_cast< ::USHORT >(nBegin),
-                                    static_cast< ::USHORT >(nEnd));
+                                    nNumber, static_cast< ::sal_uInt16 >(nBegin),
+                                    static_cast< ::sal_uInt16 >(nEnd));
                     // XXX  numeric overflow (2x)
     }
 }
@@ -1275,7 +1275,7 @@ void Document::changeParagraphSelection(ParagraphImpl * pParagraph,
     ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
     {
         ::osl::MutexGuard aInternalGuard(GetMutex());
-        ::ULONG nNumber = static_cast< ::ULONG >(pParagraph->getNumber());
+        ::sal_uLong nNumber = static_cast< ::sal_uLong >(pParagraph->getNumber());
             // XXX  numeric overflow
         if (nBegin < 0 || nBegin > nEnd
             || nEnd > m_rEngine.GetText(nNumber).Len())
@@ -1285,8 +1285,8 @@ void Document::changeParagraphSelection(ParagraphImpl * pParagraph,
                                     " Document::changeParagraphSelection")),
                 static_cast< ::css::uno::XWeak * >(this));
         m_rView.SetSelection(
-            ::TextSelection(::TextPaM(nNumber, static_cast< ::USHORT >(nBegin)),
-                            ::TextPaM(nNumber, static_cast< ::USHORT >(nEnd))));
+            ::TextSelection(::TextPaM(nNumber, static_cast< ::sal_uInt16 >(nBegin)),
+                            ::TextPaM(nNumber, static_cast< ::sal_uInt16 >(nEnd))));
             // XXX  numeric overflow (2x)
     }
 }
@@ -1302,7 +1302,7 @@ Document::retrieveParagraphLineBoundary( ParagraphImpl const * pParagraph,
     ::osl::Guard< ::comphelper::IMutex > aExternalGuard( getExternalLock() );
     {
         ::osl::MutexGuard aInternalGuard( GetMutex() );
-        ::ULONG nNumber = static_cast< ::ULONG >( pParagraph->getNumber() );
+        ::sal_uLong nNumber = static_cast< ::sal_uLong >( pParagraph->getNumber() );
         if ( nIndex < 0 || nIndex > m_rEngine.GetText( nNumber ).Len() )
             throw ::css::lang::IndexOutOfBoundsException(
                 ::rtl::OUString(
@@ -1312,8 +1312,8 @@ Document::retrieveParagraphLineBoundary( ParagraphImpl const * pParagraph,
                 static_cast< ::css::uno::XWeak * >( this ) );
         ::sal_Int32 nLineStart = 0;
         ::sal_Int32 nLineEnd = 0;
-        ::USHORT nLineCount = m_rEngine.GetLineCount( nNumber );
-        for ( ::USHORT nLine = 0; nLine < nLineCount; ++nLine )
+        ::sal_uInt16 nLineCount = m_rEngine.GetLineCount( nNumber );
+        for ( ::sal_uInt16 nLine = 0; nLine < nLineCount; ++nLine )
         {
             ::sal_Int32 nLineLength = static_cast< ::sal_Int32 >(
                 m_rEngine.GetLineLen( nNumber, nLine ) );
@@ -1344,7 +1344,7 @@ Document::retrieveParagraphBoundaryOfLine( ParagraphImpl const * pParagraph,
     ::osl::Guard< ::comphelper::IMutex > aExternalGuard( getExternalLock() );
     {
         ::osl::MutexGuard aInternalGuard( GetMutex() );
-        ::ULONG nNumber = static_cast< ::ULONG >( pParagraph->getNumber() );
+        ::sal_uLong nNumber = static_cast< ::sal_uLong >( pParagraph->getNumber() );
         if ( nLineNo >= m_rEngine.GetLineCount( nNumber ) )
             throw ::css::lang::IndexOutOfBoundsException(
                 ::rtl::OUString(
@@ -1354,7 +1354,7 @@ Document::retrieveParagraphBoundaryOfLine( ParagraphImpl const * pParagraph,
                 static_cast< ::css::uno::XWeak * >( this ) );
         ::sal_Int32 nLineStart = 0;
         ::sal_Int32 nLineEnd = 0;
-        for ( ::USHORT nLine = 0; nLine <= nLineNo; ++nLine )
+        for ( ::sal_uInt16 nLine = 0; nLine <= nLineNo; ++nLine )
         {
             ::sal_Int32 nLineLength = static_cast< ::sal_Int32 >(
                 m_rEngine.GetLineLen( nNumber, nLine ) );
@@ -1675,11 +1675,11 @@ void Document::init()
 {
     if (m_xParagraphs.get() == 0)
     {
-        ::ULONG nCount = m_rEngine.GetParagraphCount();
+        ::sal_uLong nCount = m_rEngine.GetParagraphCount();
         ::std::auto_ptr< Paragraphs > p(new Paragraphs);
         p->reserve(static_cast< Paragraphs::size_type >(nCount));
             // numeric overflow is harmless here
-        for (::ULONG i = 0; i < nCount; ++i)
+        for (::sal_uLong i = 0; i < nCount; ++i)
             p->push_back(ParagraphInfo(static_cast< ::sal_Int32 >(
                                            m_rEngine.GetTextHeight(i))));
                 // XXX  numeric overflow
@@ -1783,7 +1783,7 @@ void Document::notifyVisibleRangeChanges(
 }
 
 void
-Document::changeParagraphText(::ULONG nNumber, ::USHORT nBegin, ::USHORT nEnd,
+Document::changeParagraphText(::sal_uLong nNumber, ::sal_uInt16 nBegin, ::sal_uInt16 nEnd,
                               bool bCut, bool bPaste,
                               ::rtl::OUString const & rText)
 {
@@ -1809,7 +1809,7 @@ void Document::handleParagraphNotifications()
         {
         case TEXT_HINT_PARAINSERTED:
             {
-                ::ULONG n = aHint.GetValue();
+                ::sal_uLong n = aHint.GetValue();
                 OSL_ENSURE(n <= m_xParagraphs->size(),
                            "bad TEXT_HINT_PARAINSERTED event");
 
@@ -1861,7 +1861,7 @@ void Document::handleParagraphNotifications()
             }
         case TEXT_HINT_PARAREMOVED:
             {
-                ::ULONG n = aHint.GetValue();
+                ::sal_uLong n = aHint.GetValue();
                 if (n == TEXT_PARA_ALL)
                 {
                     {for (Paragraphs::iterator aIt(m_aVisibleBegin);
@@ -1976,7 +1976,7 @@ void Document::handleParagraphNotifications()
             }
         case TEXT_HINT_FORMATPARA:
             {
-                ::ULONG n = aHint.GetValue();
+                ::sal_uLong n = aHint.GetValue();
                 OSL_ENSURE(n < m_xParagraphs->size(),
                            "Bad TEXT_HINT_FORMATPARA event");
 
@@ -2077,10 +2077,10 @@ void Document::handleSelectionChangeNotification()
     // overlap---the overlap and/or the range to the right of it possibly being
     // empty.  Only for these two ranges notifications have to be sent.)
 
-    TextPaM aOldTextStart( static_cast< ULONG >( m_nSelectionFirstPara ), static_cast< USHORT >( m_nSelectionFirstPos ) );
-    TextPaM aOldTextEnd( static_cast< ULONG >( m_nSelectionLastPara ), static_cast< USHORT >( m_nSelectionLastPos ) );
-    TextPaM aNewTextStart( static_cast< ULONG >( nNewFirstPara ), static_cast< USHORT >( nNewFirstPos ) );
-    TextPaM aNewTextEnd( static_cast< ULONG >( nNewLastPara ), static_cast< USHORT >( nNewLastPos ) );
+    TextPaM aOldTextStart( static_cast< sal_uLong >( m_nSelectionFirstPara ), static_cast< sal_uInt16 >( m_nSelectionFirstPos ) );
+    TextPaM aOldTextEnd( static_cast< sal_uLong >( m_nSelectionLastPara ), static_cast< sal_uInt16 >( m_nSelectionLastPos ) );
+    TextPaM aNewTextStart( static_cast< sal_uLong >( nNewFirstPara ), static_cast< sal_uInt16 >( nNewFirstPos ) );
+    TextPaM aNewTextEnd( static_cast< sal_uLong >( nNewLastPara ), static_cast< sal_uInt16 >( nNewLastPos ) );
 
     // justify selections
     justifySelection( aOldTextStart, aOldTextEnd );

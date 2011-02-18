@@ -331,7 +331,7 @@ void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificate >
-    getCertificateFromEnvironment( ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >  xSecurityEnvironment , BOOL nType)
+    getCertificateFromEnvironment( ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >  xSecurityEnvironment , sal_Bool nType)
 {
     cssu::Sequence< cssu::Reference< ::com::sun::star::security::XCertificate > > xPersonalCerts ;
     int length = 0;
@@ -344,7 +344,7 @@ void convertDateTime( ::rtl::OUStringBuffer& rBuffer,
     encoding = osl_getTextEncodingFromLocale( pLocale ) ;
     // CP end
 
-    if( nType != FALSE )
+    if( nType != sal_False )
         xPersonalCerts = xSecurityEnvironment->getPersonalCertificates() ;
     else
         return NULL; // not support then;

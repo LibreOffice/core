@@ -29,8 +29,8 @@
 
 // define ----------------------------------------------------------------
 
-#define MESS_BTN_1  ((USHORT)0)
-#define MESS_BTN_2  ((USHORT)1)
+#define MESS_BTN_1  ((sal_uInt16)0)
+#define MESS_BTN_2  ((sal_uInt16)1)
 
 // const -----------------------------------------------------------------
 

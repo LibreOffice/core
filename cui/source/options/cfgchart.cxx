@@ -171,7 +171,7 @@ bool SvxChartColorTable::operator==( const SvxChartColorTable & _rOther ) const
 
 SvxChartOptions::SvxChartOptions() :
     ::utl::ConfigItem( rtl::OUString::createFromAscii( "Office.Chart" )),
-    mbIsInitialized( FALSE )
+    mbIsInitialized( sal_False )
 {
     maPropertyNames.realloc( 1 );
     maPropertyNames[ 0 ] = ::rtl::OUString::createFromAscii( "DefaultColor/Series" );
@@ -194,7 +194,7 @@ void SvxChartOptions::SetDefaultColors( const SvxChartColorTable& aCol )
     SetModified();
 }
 
-BOOL SvxChartOptions::RetrieveOptions()
+sal_Bool SvxChartOptions::RetrieveOptions()
 {
     // get sequence containing all properties
 
@@ -235,9 +235,9 @@ BOOL SvxChartOptions::RetrieveOptions()
 
             maDefColors.append( XColorEntry( aCol, aName ));
         }
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 void SvxChartOptions::Commit()
@@ -271,7 +271,7 @@ void SvxChartOptions::Notify( const com::sun::star::uno::Sequence< rtl::OUString
 // class SvxChartColorTableItem
 // --------------------
 
-SvxChartColorTableItem::SvxChartColorTableItem( USHORT nWhich_, const SvxChartColorTable& aTable ) :
+SvxChartColorTableItem::SvxChartColorTableItem( sal_uInt16 nWhich_, const SvxChartColorTable& aTable ) :
     SfxPoolItem( nWhich_ ),
     m_aColorTable( aTable )
 {
