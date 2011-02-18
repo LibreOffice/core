@@ -1352,6 +1352,7 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
 {
     FastAttributeList* pAttr = pSerializer->createAttrList();
 
+
     // Compute val attribute value
     // Can be one of:
     //      single, double,
@@ -1360,76 +1361,83 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
     //      thickThinMediumGap, thickThinLargeGap, thickThinSmallGap
     //      thinThickLargeGap, thinThickMediumGap, thinThickSmallGap
     const char* pVal = "none";
-    switch ( pBorderLine->GetStyle( ) )
+    if ( !pBorderLine->isEmpty( ) )
     {
-        case SOLID:
-            pVal = ( sal_Char* )"single";
-        case DOTTED:
-            pVal = ( sal_Char* )"dotted";
-            break;
-        case DASHED:
-            pVal = ( sal_Char* )"dashed";
-            break;
-        case DOUBLE:
-            pVal = ( sal_Char* )"double";
-            break;
-        case THINTHICK_SMALLGAP:
-            pVal = ( sal_Char* )"thinThickSmallGap";
-            break;
-        case THINTHICK_MEDIUMGAP:
-            pVal = ( sal_Char* )"thinThickMediumGap";
-            break;
-        case THINTHICK_LARGEGAP:
-            pVal = ( sal_Char* )"thinThickLargeGap";
-            break;
-        case THICKTHIN_SMALLGAP:
-            pVal = ( sal_Char* )"thickThinSmallGap";
-            break;
-        case THICKTHIN_MEDIUMGAP:
-            pVal = ( sal_Char* )"thickThinMediumGap";
-            break;
-        case THICKTHIN_LARGEGAP:
-            pVal = ( sal_Char* )"thickThinLargeGap";
-            break;
-        case EMBOSSED:
-            pVal = ( sal_Char* )"embossed";
-            break;
-        case ENGRAVED:
-            pVal = ( sal_Char* )"engraved";
-            break;
-        case OUTSET:
-            pVal = ( sal_Char* )"outset";
-            break;
-        case INSET:
-            pVal = ( sal_Char* )"inset";
-            break;
-        case NO_STYLE:
-        default:
-            break;
+        switch ( pBorderLine->GetStyle( ) )
+        {
+            case SOLID:
+                pVal = ( sal_Char* )"single";
+                break;
+            case DOTTED:
+                pVal = ( sal_Char* )"dotted";
+                break;
+            case DASHED:
+                pVal = ( sal_Char* )"dashed";
+                break;
+            case DOUBLE:
+                pVal = ( sal_Char* )"double";
+                break;
+            case THINTHICK_SMALLGAP:
+                pVal = ( sal_Char* )"thinThickSmallGap";
+                break;
+            case THINTHICK_MEDIUMGAP:
+                pVal = ( sal_Char* )"thinThickMediumGap";
+                break;
+            case THINTHICK_LARGEGAP:
+                pVal = ( sal_Char* )"thinThickLargeGap";
+                break;
+            case THICKTHIN_SMALLGAP:
+                pVal = ( sal_Char* )"thickThinSmallGap";
+                break;
+            case THICKTHIN_MEDIUMGAP:
+                pVal = ( sal_Char* )"thickThinMediumGap";
+                break;
+            case THICKTHIN_LARGEGAP:
+                pVal = ( sal_Char* )"thickThinLargeGap";
+                break;
+            case EMBOSSED:
+                pVal = ( sal_Char* )"threeDEmboss";
+                break;
+            case ENGRAVED:
+                pVal = ( sal_Char* )"threeDEngrave";
+                break;
+            case OUTSET:
+                pVal = ( sal_Char* )"outset";
+                break;
+            case INSET:
+                pVal = ( sal_Char* )"inset";
+                break;
+            case NO_STYLE:
+            default:
+                break;
+        }
     }
 
     pAttr->add( FSNS( XML_w, XML_val ), OString( pVal ) );
 
-    // Compute the sz attribute
+    if ( !pBorderLine->isEmpty() )
+    {
+        // Compute the sz attribute
 
-    // The unit is the 8th of point
-    sal_Int32 nWidth = sal_Int32( pBorderLine->GetWidth() / 2.5 );
-    sal_uInt16 nMinWidth = 2;
-    sal_uInt16 nMaxWidth = 96;
+        // The unit is the 8th of point
+        sal_Int32 nWidth = sal_Int32( pBorderLine->GetWidth() / 2.5 );
+        sal_uInt16 nMinWidth = 2;
+        sal_uInt16 nMaxWidth = 96;
 
-    if ( nWidth > nMaxWidth )
-        nWidth = nMaxWidth;
-    else if ( nWidth < nMinWidth )
-        nWidth = nMinWidth;
+        if ( nWidth > nMaxWidth )
+            nWidth = nMaxWidth;
+        else if ( nWidth < nMinWidth )
+            nWidth = nMinWidth;
 
-    pAttr->add( FSNS( XML_w, XML_sz ), OString::valueOf( sal_Int32( nWidth ) ) );
+        pAttr->add( FSNS( XML_w, XML_sz ), OString::valueOf( sal_Int32( nWidth ) ) );
 
-    // Get the distance (in pt)
-    pAttr->add( FSNS( XML_w, XML_space ), OString::valueOf( sal_Int32( nDist / 20 ) ) );
+        // Get the distance (in pt)
+        pAttr->add( FSNS( XML_w, XML_space ), OString::valueOf( sal_Int32( nDist / 20 ) ) );
 
-    // Get the color code as an RRGGBB hex value
-    OString sColor( impl_ConvertColor( pBorderLine->GetColor( ) ) );
-    pAttr->add( FSNS( XML_w, XML_color ), sColor );
+        // Get the color code as an RRGGBB hex value
+        OString sColor( impl_ConvertColor( pBorderLine->GetColor( ) ) );
+        pAttr->add( FSNS( XML_w, XML_color ), sColor );
+    }
 
     XFastAttributeListRef xAttrs( pAttr );
     pSerializer->singleElementNS( XML_w, elementToken, xAttrs );
