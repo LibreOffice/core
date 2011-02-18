@@ -46,7 +46,7 @@
 #include <dialmgr.hxx>
 #include "svx/dlgutil.hxx"
 #include <cuitabline.hxx>
-
+#include "paragrph.hrc"
 #include <svx/xlineit0.hxx>
 #include <sfx2/request.hxx> //add CHINA001
 
@@ -188,6 +188,8 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
     aMtrTransparent.SetModifyHdl( aLink );
     aMtrDistance.SetModifyHdl( aLink );
 
+    aCtlXRectPreview.SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
+    aCtlPosition.SetAccessibleRelationMemberOf( &aFlProp );
 }
 
 // -----------------------------------------------------------------------

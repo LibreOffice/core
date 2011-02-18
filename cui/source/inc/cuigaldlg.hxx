@@ -309,13 +309,13 @@ class TPGalleryThemeProperties : public SfxTabPage
     friend class TakeProgress;
     friend class TakeThread;
 
+    FixedText           aFtFileType;
+    ComboBox            aCbbFileType;
+    MultiListBox        aLbxFound;
     PushButton          aBtnSearch;
     PushButton          aBtnTake;
     PushButton          aBtnTakeAll;
     CheckBox            aCbxPreview;
-    ComboBox            aCbbFileType;
-    MultiListBox        aLbxFound;
-    FixedText           aFtFileType;
     GalleryPreview      aWndPreview;
 
     ExchangeData*       pData;

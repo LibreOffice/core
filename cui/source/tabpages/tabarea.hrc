@@ -185,3 +185,7 @@
 
 #define IMG_LOAD_H  23
 #define IMG_SAVE_H  24
+// IAccessibility2 implementation 2009 ------
+#define STR_CUI_COLORMODEL  5030
+#define STR_LB_HATCHINGSTYLE 5031
+// ------ IAccessibility2 implementation 2009.

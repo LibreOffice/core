@@ -90,6 +90,10 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemS
 
     maCbbPath.SetLoseFocusHdl( LINK ( this, SvxHyperlinkDocTp, LostFocusPathHdl_Impl ) );
 
+    maBtBrowse.SetAccessibleRelationMemberOf( &maGrpTarget );
+    maBtBrowse.SetAccessibleRelationLabeledBy( &maFtTarget );
+    maBtFileopen.SetAccessibleRelationMemberOf( &maGrpDocument );
+    maBtFileopen.SetAccessibleRelationLabeledBy( &maFtPath );
     maTimer.SetTimeoutHdl ( LINK ( this, SvxHyperlinkDocTp, TimeoutHdl_Impl ) );
 }
 

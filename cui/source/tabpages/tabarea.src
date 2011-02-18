@@ -1563,59 +1563,13 @@ Image RID_SVXIMG_SAVE_H
     MASKCOLOR
 };
 
- // ********************************************************************** EOF
+String STR_LB_HATCHINGSTYLE
+{
+    Text [ en-US ] = "Hatching Style" ;
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String STR_CUI_COLORMODEL
+{
+    Text [ en-US ] = "Color Mode" ;
+};
 
