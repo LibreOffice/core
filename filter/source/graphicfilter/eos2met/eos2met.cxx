@@ -208,7 +208,7 @@ private:
 
     void METSetAndPushLineInfo( const LineInfo& rLineInfo );
     void METPopLineInfo( const LineInfo& rLineInfo );
-    void METBitBlt(Point aPt, Size aSize, const Bitmap & rBitmap);
+    void METBitBlt(Point aPt, Size aSize, const Size& rSizePixel);
     void METBeginArea(sal_Bool bBoundaryLine);
     void METEndArea();
     void METBeginPath(sal_uInt32 nPathId);

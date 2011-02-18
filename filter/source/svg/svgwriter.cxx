@@ -806,7 +806,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
         aTransform += ')';
 
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform );
-        apTransform.reset( new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE ) );
+        apTransform.reset( new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, sal_True, sal_True ) );
     }
 
     if( nLen > 1 )
