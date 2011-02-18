@@ -38,37 +38,37 @@
 
 using namespace ::osl;
 using namespace ::rtl;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::cppu;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 
 
-Reference< XInterface > AquaSalInstance::CreateClipboard( const Sequence< Any >& i_rArguments )
+uno::Reference< XInterface > AquaSalInstance::CreateClipboard( const Sequence< Any >& i_rArguments )
 {
     if ( Application::IsHeadlessModeEnabled() )
         return SalInstance::CreateClipboard( i_rArguments );
 
     SalData* pSalData = GetSalData();
     if( ! pSalData->mxClipboard.is() )
-        pSalData->mxClipboard = Reference<XInterface>(static_cast< XClipboard* >(new AquaClipboard()), UNO_QUERY);
+        pSalData->mxClipboard = uno::Reference<XInterface>(static_cast< XClipboard* >(new AquaClipboard()), UNO_QUERY);
     return pSalData->mxClipboard;
 }
 
-
-Reference<XInterface> AquaSalInstance::CreateDragSource()
+uno::Reference<XInterface> AquaSalInstance::CreateDragSource()
 {
     if ( Application::IsHeadlessModeEnabled() )
         return SalInstance::CreateDragSource();
 
-    return Reference<XInterface>(static_cast< XInitialization* >(new DragSource()), UNO_QUERY);
+    return uno::Reference<XInterface>(static_cast< XInitialization* >(new DragSource()), UNO_QUERY);
 }
 
-Reference<XInterface> AquaSalInstance::CreateDropTarget()
+uno::Reference<XInterface> AquaSalInstance::CreateDropTarget()
 {
     if ( Application::IsHeadlessModeEnabled() )
         return SalInstance::CreateDropTarget();
 
-    return Reference<XInterface>(static_cast< XInitialization* >(new DropTarget()), UNO_QUERY);
+    return uno::Reference<XInterface>(static_cast< XInitialization* >(new DropTarget()), UNO_QUERY);
 }
 

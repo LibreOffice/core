@@ -37,9 +37,10 @@
 #include <tools/debug.hxx>
 #include <salframe.h>
 #include <tools/poly.hxx>
-#ifndef _RTL_STRINGBUF_HXX
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <rtl/strbuf.hxx>
-#endif
+#include <vcl/region.h>
 
 using namespace rtl;
 
@@ -849,7 +850,7 @@ void WinSalGraphics::ResetClipRegion()
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::BeginSetClipRegion( sal_uLong nRectCount )
+bool WinSalGraphics::setClipRegion( const Region& i_rClip )
 {
     if ( mhRegion )
     {
@@ -857,123 +858,143 @@ void WinSalGraphics::BeginSetClipRegion( sal_uLong nRectCount )
         mhRegion = 0;
     }
 
-    sal_uLong nRectBufSize = sizeof(RECT)*nRectCount;
-    if ( nRectCount < SAL_CLIPRECT_COUNT )
+    if( i_rClip.HasPolyPolygon() )
     {
-        if ( !mpStdClipRgnData )
-            mpStdClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+(SAL_CLIPRECT_COUNT*sizeof(RECT))];
-        mpClipRgnData = mpStdClipRgnData;
-    }
-    else
-        mpClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+nRectBufSize];
-    mpClipRgnData->rdh.dwSize   = sizeof( RGNDATAHEADER );
-    mpClipRgnData->rdh.iType    = RDH_RECTANGLES;
-    mpClipRgnData->rdh.nCount   = nRectCount;
-    mpClipRgnData->rdh.nRgnSize = nRectBufSize;
-    SetRectEmpty( &(mpClipRgnData->rdh.rcBound) );
-    mpNextClipRect          = (RECT*)(&(mpClipRgnData->Buffer));
-    mbFirstClipRect         = TRUE;
-}
+        // TODO: ConvertToB2DPolyPolygon actually is kind of const, just it does not advertise it in the header
+        basegfx::B2DPolyPolygon aPolyPolygon( const_cast<Region&>(i_rClip).ConvertToB2DPolyPolygon() );
+        const sal_uInt32 nCount(aPolyPolygon.count());
 
-
-// -----------------------------------------------------------------------
-
-sal_Bool WinSalGraphics::unionClipRegion( long nX, long nY, long nWidth, long nHeight )
-{
-    if ( nWidth && nHeight )
-    {
-        RECT*       pRect = mpNextClipRect;
-        RECT*       pBoundRect = &(mpClipRgnData->rdh.rcBound);
-        long        nRight = nX + nWidth;
-        long        nBottom = nY + nHeight;
-
-        if ( mbFirstClipRect )
+        if( nCount )
         {
-            pBoundRect->left    = nX;
-            pBoundRect->top     = nY;
-            pBoundRect->right   = nRight;
-            pBoundRect->bottom  = nBottom;
-            mbFirstClipRect = FALSE;
-        }
-        else
-        {
-            if ( nX < pBoundRect->left )
-                pBoundRect->left = (int)nX;
-
-            if ( nY < pBoundRect->top )
-                pBoundRect->top = (int)nY;
-
-            if ( nRight > pBoundRect->right )
-                pBoundRect->right = (int)nRight;
-
-            if ( nBottom > pBoundRect->bottom )
-                pBoundRect->bottom = (int)nBottom;
-        }
-
-        pRect->left     = (int)nX;
-        pRect->top      = (int)nY;
-        pRect->right    = (int)nRight;
-        pRect->bottom   = (int)nBottom;
-        mpNextClipRect++;
-    }
-    else
-    {
-        mpClipRgnData->rdh.nCount--;
-        mpClipRgnData->rdh.nRgnSize -= sizeof( RECT );
-    }
-
-    return TRUE;
-}
-
-// -----------------------------------------------------------------------
-
-bool WinSalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& )
-{
-    // TODO: implement and advertise OutDevSupport_B2DClip support
-    return false;
-}
-
-// -----------------------------------------------------------------------
-
-void WinSalGraphics::EndSetClipRegion()
-{
-    // create clip region from ClipRgnData
-    if ( mpClipRgnData->rdh.nCount == 1 )
-    {
-        RECT* pRect = &(mpClipRgnData->rdh.rcBound);
-        mhRegion = CreateRectRgn( pRect->left, pRect->top,
-                                                 pRect->right, pRect->bottom );
-    }
-    else
-    {
-        sal_uLong nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
-        mhRegion = ExtCreateRegion( NULL, nSize, mpClipRgnData );
-
-        // if ExtCreateRegion(...) is not supported
-        if( !mhRegion )
-        {
-            RGNDATAHEADER* pHeader = (RGNDATAHEADER*) mpClipRgnData;
-
-            if( pHeader->nCount )
+            std::vector< POINT > aPolyPoints;
+            aPolyPoints.reserve( 1024 );
+            std::vector< INT > aPolyCounts( nCount, 0 );
+            for(sal_uInt32 a(0); a < nCount; a++)
             {
-                RECT* pRect = (RECT*) mpClipRgnData->Buffer;
-                mhRegion = CreateRectRgn( pRect->left, pRect->top, pRect->right, pRect->bottom );
-                pRect++;
-
-                for( sal_uLong n = 1; n < pHeader->nCount; n++, pRect++ )
+                basegfx::B2DPolygon aPoly( aPolyPolygon.getB2DPolygon(a) );
+                aPoly = basegfx::tools::adaptiveSubdivideByDistance( aPoly, 1 );
+                const sal_uInt32 nPoints = aPoly.count();
+                aPolyCounts[a] = nPoints;
+                for( sal_uInt32 b = 0; b < nPoints; b++ )
                 {
-                    HRGN hRgn = CreateRectRgn( pRect->left, pRect->top, pRect->right, pRect->bottom );
-                    CombineRgn( mhRegion, mhRegion, hRgn, RGN_OR );
-                    DeleteRegion( hRgn );
+                    basegfx::B2DPoint aPt( aPoly.getB2DPoint( b ) );
+                    POINT aPOINT;
+                    aPOINT.x = (LONG)aPt.getX();
+                    aPOINT.y = (LONG)aPt.getY();
+                    aPolyPoints.push_back( aPOINT );
                 }
             }
+            mhRegion = CreatePolyPolygonRgn( &aPolyPoints[0], &aPolyCounts[0], nCount, ALTERNATE );
         }
+    }
+    else
+    {
+        ULONG nRectCount = i_rClip.GetRectCount();
 
-        if ( mpClipRgnData != mpStdClipRgnData )
-            delete [] mpClipRgnData;
+        ULONG nRectBufSize = sizeof(RECT)*nRectCount;
+        if ( nRectCount < SAL_CLIPRECT_COUNT )
+        {
+            if ( !mpStdClipRgnData )
+                mpStdClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+(SAL_CLIPRECT_COUNT*sizeof(RECT))];
+            mpClipRgnData = mpStdClipRgnData;
+        }
+        else
+            mpClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+nRectBufSize];
+        mpClipRgnData->rdh.dwSize   = sizeof( RGNDATAHEADER );
+        mpClipRgnData->rdh.iType    = RDH_RECTANGLES;
+        mpClipRgnData->rdh.nCount   = nRectCount;
+        mpClipRgnData->rdh.nRgnSize = nRectBufSize;
+        RECT*       pBoundRect = &(mpClipRgnData->rdh.rcBound);
+        SetRectEmpty( pBoundRect );
+        RECT* pNextClipRect         = (RECT*)(&(mpClipRgnData->Buffer));
+        bool bFirstClipRect         = true;
+
+        ImplRegionInfo aInfo;
+        long nX, nY, nW, nH;
+        bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
+        while( bRegionRect )
+        {
+            if ( nW && nH )
+            {
+                long        nRight = nX + nW;
+                long        nBottom = nY + nH;
+
+                if ( bFirstClipRect )
+                {
+                    pBoundRect->left    = nX;
+                    pBoundRect->top     = nY;
+                    pBoundRect->right   = nRight;
+                    pBoundRect->bottom  = nBottom;
+                    bFirstClipRect = false;
+                }
+                else
+                {
+                    if ( nX < pBoundRect->left )
+                        pBoundRect->left = (int)nX;
+
+                    if ( nY < pBoundRect->top )
+                        pBoundRect->top = (int)nY;
+
+                    if ( nRight > pBoundRect->right )
+                        pBoundRect->right = (int)nRight;
+
+                    if ( nBottom > pBoundRect->bottom )
+                        pBoundRect->bottom = (int)nBottom;
+                }
+
+                pNextClipRect->left     = (int)nX;
+                pNextClipRect->top      = (int)nY;
+                pNextClipRect->right    = (int)nRight;
+                pNextClipRect->bottom   = (int)nBottom;
+                pNextClipRect++;
+            }
+            else
+            {
+                mpClipRgnData->rdh.nCount--;
+                mpClipRgnData->rdh.nRgnSize -= sizeof( RECT );
+            }
+            bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
+        }
+        // create clip region from ClipRgnData
+        if ( mpClipRgnData->rdh.nCount == 1 )
+        {
+            RECT* pRect = &(mpClipRgnData->rdh.rcBound);
+            mhRegion = CreateRectRgn( pRect->left, pRect->top,
+                                                     pRect->right, pRect->bottom );
+        }
+        else if( mpClipRgnData->rdh.nCount > 1 )
+        {
+            ULONG nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
+            mhRegion = ExtCreateRegion( NULL, nSize, mpClipRgnData );
+
+            // if ExtCreateRegion(...) is not supported
+            if( !mhRegion )
+            {
+                RGNDATAHEADER* pHeader = (RGNDATAHEADER*) mpClipRgnData;
+
+                if( pHeader->nCount )
+                {
+                    RECT* pRect = (RECT*) mpClipRgnData->Buffer;
+                    mhRegion = CreateRectRgn( pRect->left, pRect->top, pRect->right, pRect->bottom );
+                    pRect++;
+
+                    for( ULONG n = 1; n < pHeader->nCount; n++, pRect++ )
+                    {
+                        HRGN hRgn = CreateRectRgn( pRect->left, pRect->top, pRect->right, pRect->bottom );
+                        CombineRgn( mhRegion, mhRegion, hRgn, RGN_OR );
+                        DeleteRegion( hRgn );
+                    }
+                }
+            }
+
+            if ( mpClipRgnData != mpStdClipRgnData )
+                delete [] mpClipRgnData;
+        }
     }
 
-    SelectClipRgn( mhDC, mhRegion );
+    if( mhRegion )
+        SelectClipRgn( mhDC, mhRegion );
+    return mhRegion != 0;
 }
 
 // -----------------------------------------------------------------------
