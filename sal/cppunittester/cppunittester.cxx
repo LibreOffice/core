@@ -46,6 +46,10 @@
 #include "sal/main.h"
 
 SAL_IMPLEMENT_MAIN() {
+#ifdef WNT
+    _set_abort_behavior(0, _WRITE_ABORT_MSG);
+#endif
+
     if (rtl_getAppCommandArgCount() < 1) {
         std::cerr << "Usage: cppunittester <shared-library-path>" << std::endl;
         return EXIT_FAILURE;
