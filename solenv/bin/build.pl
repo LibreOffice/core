@@ -2031,7 +2031,9 @@ sub run_job {
         };
         $error_code = system ("$job_to_do > $log_file 2>&1");
         if ((!$grab_output || $verbose) && -f $log_file) {
-            system("cat $log_file");
+            open(LOGFILE, "< $log_file");
+            print while(<LOGFILE>);
+            close(LOGFILE);
         };
     } else {
         $error_code = system ("$job_to_do");
@@ -2118,7 +2120,7 @@ sub zenity_enabled {
 
 sub zenity_open {
     if (zenity_enabled()) {
-    $SIG{PIPE} = 'IGNORE';
+        $SIG{PIPE} = 'IGNORE';
         $zenity_pid = open3($zenity_in, $zenity_out, $zenity_err,
                                "zenity --notification --listen");
     };
