@@ -120,9 +120,6 @@ public: // XServiceInfo
 
 private:
 
-    // DEBUG
-    inline void checkInvariant();
-
     Reference < XConnectable >  m_succ;
     Reference < XConnectable >  m_pred;
 
@@ -159,12 +156,6 @@ OPipeImpl::~OPipeImpl()
     g_moduleCount.modCnt.release( &g_moduleCount.modCnt );
 }
 
-
-// These invariants must hold when entering a guarded method or leaving a guarded method.
-void OPipeImpl::checkInvariant()
-{
-
-}
 
 sal_Int32 OPipeImpl::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
     throw( NotConnectedException, BufferSizeExceededException,RuntimeException )
@@ -278,7 +269,6 @@ sal_Int32 OPipeImpl::available(void)
             OUString( RTL_CONSTASCII_USTRINGPARAM( "Pipe::available NotConnectedException" ) ),
             *this );
     }
-    checkInvariant();
     return m_pFIFO->getSize();
 }
 
@@ -307,7 +297,6 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
            RuntimeException)
 {
     MutexGuard guard( m_mutexAccess );
-    checkInvariant();
 
     if( m_bOutputStreamClosed )
     {
@@ -362,8 +351,6 @@ void OPipeImpl::writeBytes(const Sequence< sal_Int8 >& aData)
 
     // readBytes may check again if enough bytes are available
     osl_setCondition( m_conditionBytesAvail );
-
-    checkInvariant();
 }
 
 
