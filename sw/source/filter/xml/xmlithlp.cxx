@@ -51,7 +51,7 @@ using namespace ::xmloff::token;
 using namespace ::com::sun::star;
 
 
-#define API_LINE_NONE USHRT_MAX
+#define API_LINE_NONE -1
 #define API_LINE_SOLID 0
 #define API_LINE_DOTTED 1
 #define API_LINE_DASHED 2
@@ -166,7 +166,7 @@ sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
                                     sal_Bool bHasColor, const Color& rColor )
 {
     // first of all, delete an empty line
-    if( (bHasStyle && SVX_XML_BORDER_STYLE_NONE == nStyle) ||
+    if( (bHasStyle && API_LINE_NONE == nStyle) ||
         (bHasWidth && USHRT_MAX == nNamedWidth && 0 == nWidth) )
     {
         sal_Bool bRet = 0 != rpLine;
@@ -191,10 +191,10 @@ sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
     if( ( bHasWidth &&
           (USHRT_MAX != nNamedWidth || (nWidth != rpLine->GetWidth() ) ) ) ||
         ( bHasStyle &&
-          ((SVX_XML_BORDER_STYLE_SOLID == nStyle && rpLine->GetDistance()) ||
-            (SVX_XML_BORDER_STYLE_DOUBLE == nStyle && !rpLine->GetDistance())) ) )
+          ((API_LINE_SOLID == nStyle && rpLine->GetDistance()) ||
+            (API_LINE_DOUBLE == nStyle && !rpLine->GetDistance())) ) )
    {
-       sal_Bool bDouble = (bHasWidth && SVX_XML_BORDER_STYLE_DOUBLE == nStyle ) ||
+       sal_Bool bDouble = (bHasWidth && API_LINE_DOUBLE == nStyle ) ||
            rpLine->GetDistance();
 
        // The width has to be changed
