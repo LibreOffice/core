@@ -44,7 +44,8 @@ sub sToolsCustomizeKeyboardFunction
     for i = 0 to a
         
         if ( i = 7 and gtSysName = "Solaris x86" ) then
-            qaerrorlog( "#i62423# Solaris: Crash when opening new database" )
+            '#i62423# 
+            warnlog( "Solaris: Crash when opening new database" )
         else
             gApplication = aApplication(i)
             tToolsCustomizeKeyboardFunction(lList())
@@ -87,6 +88,7 @@ testcase tToolsCustomizeKeyboardFunction(lList())
     dim i92080 as string
     dim i96322 as string
     dim i100037 as string
+    dim i115370 as string
     
     i60617 = ".uno:ContinueNumbering"
     i43969 = ".uno:MacroOrganizer"
@@ -94,12 +96,13 @@ testcase tToolsCustomizeKeyboardFunction(lList())
     i80850 = ".uno:ToggleFormula.uno:AssignMacro"
     i84982 = ".uno:FontDialogForParagraph"
     i84983 = ".uno:DBNewReportWithPreSelection"
-	i87950 = ".uno:DBMigrateScripts"
-	i87951 = ".uno:DeleteAllNotes.uno:DeleteAuthor.uno:DeleteNote.uno:HideAllNotes.uno:HideAuthor.uno:HideNote"
-	i87952 = ".uno:InsertApplet"
-	i92080 = ".uno:SaveGraphic"
-	i96322 = ".uno:ActivateStyleApply"
-	i100037 = ".uno:AcceptTracedChange, .uno:DeleteComment, .uno:RejectTracedChange, .uno:ReplyNote, .uno:TaskPaneInsertPage, .uno:ValidityReference"
+    i87950 = ".uno:DBMigrateScripts"
+    i87951 = ".uno:DeleteAllNotes.uno:DeleteAuthor.uno:DeleteNote.uno:HideAllNotes.uno:HideAuthor.uno:HideNote"
+    i87952 = ".uno:InsertApplet"
+    i92080 = ".uno:SaveGraphic"
+    i96322 = ".uno:ActivateStyleApply"
+    i100037 = ".uno:AcceptTracedChange, .uno:DeleteComment, .uno:RejectTracedChange, .uno:ReplyNote, .uno:TaskPaneInsertPage, .uno:ValidityReference"
+    i115370 = ".uno:TaskPaneInsertPage"
     
     Call hNewDocument
     sleep 2
@@ -130,53 +133,8 @@ testcase tToolsCustomizeKeyboardFunction(lList())
                     if (((mid(sTemp2,d+1,1)<>" ")AND(abs(asc(mid(sTemp2,d+1,1)))<128)) AND (abs(asc(mid(sTemp2,d-1,1)))<128))then
                         listAppend(lList(),sTemp2)
                         bErrorFound = false
-                        if (inStr(i60617,sTemp2)>0) then
-                            WarnLog "#i60617# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
-                            bErrorFound = true
-                        endif
-                        if (inStr(sTemp2,i64346)>0) then
-                            WarnLog "#i64346# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
-                            bErrorFound = true
-                        endif
-                        if (inStr(i43969,sTemp2)>0) then
-                            WarnLog "#i41265# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
-                            bErrorFound = true
-                        endif
-                        if (inStr(i80850,sTemp2)>0) then
-                            WarnLog "#i80850# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
-                            bErrorFound = true
-                        endif
-                        if (inStr(i84982,sTemp2)>0) then
-                            WarnLog "#i84982# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
-                            bErrorFound = true
-                        endif
-                        if (inStr(i84983,sTemp2)>0) then
-                            WarnLog "#i84983# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
-                            bErrorFound = true
-                        endif
-                        if (inStr(i87950,sTemp2)>0) then
-                            WarnLog "#i87950# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
-                            bErrorFound = true
-                        endif
-                        if (inStr(i87951,sTemp2)>0) then
-                            WarnLog "#i87951# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
-                            bErrorFound = true
-                        endif
-                        if (inStr(i87952,sTemp2)>0) then
-                            warnLog "#i87952# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
-                            bErrorFound = true
-                        endif
-                        if (inStr(i92080,sTemp2)>0) then
-                            WarnLog "#i92080# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
-                            bErrorFound = true
-                        endif
-                        if (inStr(i96322,sTemp2)>0) then
-                            WarnLog "#i96322# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
-                            bErrorFound = true
-                        endif
-                        
-                        if (inStr(i100037,sTemp2)>0) then
-                            WarnLog "#i100037# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
+                        if (inStr(i115370,sTemp2)>0) then
+                            qaerrorlog "#i115370# ("+c+"/"+a+"/"+b+"): Provide real Name for Function: '"+sTemp+"'::'"+sTemp2+"'"
                             bErrorFound = true
                         endif
                         if ( not bErrorFound ) then
