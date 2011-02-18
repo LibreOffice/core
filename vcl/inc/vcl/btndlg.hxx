@@ -29,15 +29,14 @@
 #ifndef _SV_BTNDLG_HXX
 #define _SV_BTNDLG_HXX
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <vcl/sv.h>
 #include <vcl/dllapi.h>
 #include <vcl/dialog.hxx>
-#include <vector>
 
 struct ImplBtnDlgItem;
 class PushButton;
-
-typedef ::std::vector< ImplBtnDlgItem* > ImplBtnDlgItemList;
 
 // ----------------------
 // - ButtonDialog-Types -
@@ -58,7 +57,7 @@ typedef ::std::vector< ImplBtnDlgItem* > ImplBtnDlgItemList;
 class VCL_DLLPUBLIC ButtonDialog : public Dialog
 {
 private:
-    ImplBtnDlgItemList* mpItemList;
+    boost::ptr_vector<ImplBtnDlgItem> maItemList;
     Size                maPageSize;
     Size                maCtrlSize;
     long                mnButtonSize;
