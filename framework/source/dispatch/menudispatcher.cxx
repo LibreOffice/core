@@ -91,7 +91,7 @@ using namespace ::vos                           ;
 //  non exported const
 //_________________________________________________________________________________________________________________
 
-const USHORT SLOTID_MDIWINDOWLIST = 5610;
+const sal_uInt16 SLOTID_MDIWINDOWLIST = 5610;
 
 //_________________________________________________________________________________________________________________
 //  non exported definitions
@@ -277,9 +277,9 @@ void SAL_CALL MenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
 //*****************************************************************************************************************
 void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAccel )
 {
-    for ( USHORT nPos = 0; nPos < pMenu->GetItemCount(); ++nPos )
+    for ( sal_uInt16 nPos = 0; nPos < pMenu->GetItemCount(); ++nPos )
     {
-        USHORT     nId    = pMenu->GetItemId(nPos);
+        sal_uInt16     nId    = pMenu->GetItemId(nPos);
         PopupMenu* pPopup = pMenu->GetPopupMenu(nId);
         if ( pPopup )
             impl_setAccelerators( (Menu *)pPopup, aAccel );
@@ -336,7 +336,7 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
 
             if ( pMenuBar != NULL )
             {
-                USHORT nPos = pMenuBar->GetItemPos( SLOTID_MDIWINDOWLIST );
+                sal_uInt16 nPos = pMenuBar->GetItemPos( SLOTID_MDIWINDOWLIST );
                 if ( nPos != MENU_ITEM_NOTFOUND )
                 {
                     OUString aNoContext;

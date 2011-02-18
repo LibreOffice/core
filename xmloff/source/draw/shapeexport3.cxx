@@ -212,7 +212,7 @@ void XMLShapeExport::ImpExport3DShape(
                 double fXMax = 0;
                 double fYMin = 0;
                 double fYMax = 0;
-                BOOL bInit(FALSE);
+                sal_Bool bInit(sal_False);
                 sal_Int32 nOuterSequenceCount(xPolyPolygon3D.SequenceX.getLength());
                 drawing::DoubleSequence* pInnerSequenceX = xPolyPolygon3D.SequenceX.getArray();
                 drawing::DoubleSequence* pInnerSequenceY = xPolyPolygon3D.SequenceY.getArray();
@@ -247,7 +247,7 @@ void XMLShapeExport::ImpExport3DShape(
                         {
                             fXMin = fXMax = fX;
                             fYMin = fYMax = fY;
-                            bInit = TRUE;
+                            bInit = sal_True;
                         }
                     }
 
@@ -288,7 +288,7 @@ void XMLShapeExport::ImpExport3DShape(
                     // calculate closed flag
                     awt::Point* pFirst = aPoly.getArray();
                     awt::Point* pLast = pFirst + (nInnerSequenceCount - 1);
-                    BOOL bClosed = (pFirst->X == pLast->X && pFirst->Y == pLast->Y);
+                    sal_Bool bClosed = (pFirst->X == pLast->X && pFirst->Y == pLast->Y);
 
                     aSvgDElement.AddPolygon(&aPoly, 0L, aMinPoint,
                         aMaxSize, bClosed);

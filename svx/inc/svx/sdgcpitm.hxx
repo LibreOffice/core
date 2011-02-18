@@ -43,12 +43,12 @@ public:
 
                             SdrGrafCropItem( sal_Int32 nLeftCrop = 0, sal_Int32 nTopCrop = 0,
                                              sal_Int32 nRightCrop = 0, sal_Int32 nBottomCrop = 0,
-                                             USHORT nWhichId = SDRATTR_GRAFCROP ) :
+                                             sal_uInt16 nWhichId = SDRATTR_GRAFCROP ) :
                                 SvxGrfCrop( nLeftCrop, nRightCrop, nTopCrop, nBottomCrop, nWhichId ) {}
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
-    virtual SfxPoolItem*    Create( SvStream& rIn, USHORT nVer ) const;
-    virtual USHORT          GetVersion( USHORT nFileVersion ) const;
+    virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const;
+    virtual sal_uInt16          GetVersion( sal_uInt16 nFileVersion ) const;
 };
 
 #endif // _SDGCPITM_HXX
