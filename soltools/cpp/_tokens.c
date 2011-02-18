@@ -276,7 +276,6 @@ void
 {
     size_t nby;
 
-    /* nby = sizeof(Token) * (str->lp - str->bp); */
     nby = (char *) str->lp - (char *) str->bp;
     memmove(dtr->tp, str->bp, nby);
 }
@@ -297,7 +296,6 @@ void
     size = (trp->lp - trp->bp) + nt;
     while (size > trp->max)
         growtokenrow(trp);
-    /* nby = sizeof(Token) * (trp->lp - trp->tp); */
     nby = (char *) trp->lp - (char *) trp->tp;
     if (nby)
         memmove(trp->tp + nt, trp->tp, nby);

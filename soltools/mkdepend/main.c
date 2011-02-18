@@ -351,7 +351,6 @@ int main(argc, argv)
             break;
         default:
             if (endmarker) break;
-    /*      fatalerr("unknown opt = %s\n", argv[0]); */
             warning("ignoring option %s\n", argv[0]);
         }
     }

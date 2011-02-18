@@ -26,7 +26,6 @@ BINDIR=`dirname $0`
 . ./*.Set.sh
 
 # get list of modules in build order - bah, blows RAM & disk, static list below
-#INPUT_PROJECTS=`build --all --show | sed -n -e '/Entering module/ s/Entering module // p'`
 INPUT_PROJECTS="o3tl basegfx basebmp comphelper svl vcl canvas cppcanvas oox svtools goodies drawinglayer xmloff slideshow sfx2 editeng svx cui chart2 dbaccess sd starmath sc sw"
 
 # output directory for generated documentation

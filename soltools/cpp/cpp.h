@@ -144,16 +144,7 @@ void        mvl_add(
                                 inout_pValidators,
                 Nlist *         in_pMacro,
                 Token *         in_pTokenWhereMacroBecomesValid);
-/*  Updates all token pointers within the list, when the tokens have
-    moved, by
-        pTokenWhereMacroBecomesValid += in_nNrofTokens;
-    .
 
-void        mvl_move(
-                MacroValidatorList *
-                                inout_pValidators,
-                int             in_nSpace); // in pointer units.
-*/
 /*  Checks if one of the validators within the list points to
     the token in_pTokenToCheck. If so, the macro is set valid and
     the validator is removed.

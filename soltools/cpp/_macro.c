@@ -289,7 +289,6 @@ void
 void
     expand(Tokenrow * trp, Nlist * np, MacroValidatorList * pValidators)
 {
-//  Token * pOldNextTp;
     Tokenrow ntr;
     int ntokc, narg;
     Tokenrow *atr[NARG + 1];
@@ -340,32 +339,12 @@ void
         }
     }
 
-/* old
-    np->flag |= ISACTIVE;
-*/
-
-/* rh
-*/
     doconcat(&ntr);                     /* execute ## operators */
     ntr.tp = ntr.bp;
     makespace(&ntr, trp->tp);
 
-/* old
-//  expandrow(&ntr, "<expand>");
-//  insertrow(trp, ntokc, &ntr);
-//  dofree(ntr.bp);
-//  np->flag &= ~ISACTIVE;
-*/
-
-/* NP
-        // Replace macro by its value:
-*/
-//  pOldNextTp = trp->tp+ntokc;
     tokenrow_zeroTokenIdentifiers(&ntr);
     insertrow(trp, ntokc, &ntr);
-        /* Reassign old macro validators:
-        */
-//  mvl_move(pValidators, trp->tp - pOldNextTp);
 
         /* add validator for just invalidated macro:
         */

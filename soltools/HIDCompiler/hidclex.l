@@ -200,12 +200,10 @@ char* listfilename;
 char* filename_tab[MAXSRCFILES];
 char* project_tab[MAXSRCFILES];
 int tab_entries = 0;
-//int fileno = 0; /* currently used filenumber */
 
 /* globale variablen */
 FILE* outfile;
 char const *filename = ""; //incl. path
-//char *basename = "";
 char const *project = "";
 char const *subpath = "";	//from project name downwards like source\ui\xxx.src
 

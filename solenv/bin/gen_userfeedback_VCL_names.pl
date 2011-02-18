@@ -131,7 +131,6 @@ foreach ( glob("$winpath/*win") ) {
     }
 
     $iteminfo = "$shortname $longname $ID";
-#    print "$iteminfo\n" if ( ! ( $shortname && $longname && $ID ));
     $iteminfo =~ s/^\*//;
     $iteminfo =~ s/^\+//;
 

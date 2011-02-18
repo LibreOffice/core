@@ -101,19 +101,6 @@ HashTable::~HashTable()
     // Problem: Virtuelle Funktionen sind im Destructor nicht virtuell!!
     //          Der Code muﬂ deshalb ins Macro
 
-    /*
-    if (m_bOwner)
-    {
-        for (ULONG i=0; i<GetSize(); i++)
-        {
-            void *pObject = GetObjectAt(i);
-
-            if (pObject != NULL)
-                OnDeleteObject(pObject());
-        }
-    }
-    */
-
     // Speicher f¸r HashItems freigeben
     delete [] m_pData;
 }

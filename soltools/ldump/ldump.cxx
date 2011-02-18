@@ -165,7 +165,6 @@ bool LibDump::Dump()
                         *pEnd = '\0';
                     strncpy( aBuf, pFound, strlen( pFound));
                     aBuf[ strlen( pFound) ] = '\0';
-//                    fprintf( stderr, "\n--- %s\n", aBuf);
                     break;
                 }
                 else
@@ -211,7 +210,6 @@ bool LibDump::Dump()
                   nName++;
               }
             }
-            //fprintf( stderr, "Gefundenen Prefix : %s %d \n", aTmpBuf, nPreLen );
             // den ersten _ raus
             nLen = (int) strlen(aName);
 #ifndef _WIN64
@@ -580,7 +578,6 @@ LibDump::~LibDump()
 {
     delete [] cBName;
     delete [] cAPrefix;
-//  delete [] cLibName;
     delete [] cFilterName;
     delete [] cModName;
 }
