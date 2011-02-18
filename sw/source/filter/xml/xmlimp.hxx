@@ -182,6 +182,7 @@ public:
 
     inline const SvXMLUnitConverter& GetTwipUnitConverter() const;
     inline const SvXMLImportItemMapper& GetTableItemMapper() const;
+    inline       SvXMLImportItemMapper& GetTableItemMapper();
     SvXMLImportContext *CreateTableItemImportContext( sal_uInt16 nPrefix,
                 const ::rtl::OUString& rLocalName,
                 const ::com::sun::star::uno::Reference<
@@ -218,6 +219,11 @@ inline const SvXMLUnitConverter& SwXMLImport::GetTwipUnitConverter() const
 }
 
 inline const SvXMLImportItemMapper& SwXMLImport::GetTableItemMapper() const
+{
+    return *pTableItemMapper;
+}
+
+inline       SvXMLImportItemMapper& SwXMLImport::GetTableItemMapper()
 {
     return *pTableItemMapper;
 }

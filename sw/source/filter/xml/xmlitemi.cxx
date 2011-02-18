@@ -28,37 +28,35 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-#include <hintids.hxx>
 #include <rtl/ustring.hxx>
+
 #include <rsc/rscsfx.hxx>
-#include "xmlitmap.hxx"
-#include "xmlimpit.hxx"
-#include "xmlitem.hxx"
+
 #include <xmloff/i18nmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#ifndef _XMLOFF_FAMILIES_HXX
 #include <xmloff/families.hxx>
-#endif
-#include <svx/unomid.hxx>
+#include <xmloff/xmlnmspe.hxx>
+#include <xmloff/xmltoken.hxx>
+
 #include <editeng/boxitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/langitem.hxx>
+#include <editeng/memberids.hrc>
 
-#ifndef _XMLOFF_XMLTABI_HXX
-//#include <xmloff/xmltabi.hxx>
-#endif
-#include "xmlbrshi.hxx"
+#include <svx/unomid.hxx>
+
+#include <hintids.hxx>
 #include <paratr.hxx>
 #include <doc.hxx>
-#ifndef _UNOMID_H
 #include <unomid.h>
-#endif
+#include "xmlbrshi.hxx"
 #include "xmlimp.hxx"
+#include "xmlitmap.hxx"
+#include "xmlimpit.hxx"
+#include "xmlitem.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -82,18 +80,53 @@ public:
                                 SfxItemSet& rSet,
                                 const OUString& rValue,
                                 const SvXMLUnitConverter& rUnitConverter,
-                                const SvXMLNamespaceMap& rNamespaceMap ) const;
-    virtual void finished( SfxItemSet& rSet ) const;
+                                const SvXMLNamespaceMap& rNamespaceMap );
+
+    virtual sal_Bool
+    handleNoItem(SvXMLItemMapEntry const& rEntry,
+                 SfxItemSet & rSet,
+                 ::rtl::OUString const& rValue,
+                 SvXMLUnitConverter const& rUnitConverter,
+                 SvXMLNamespaceMap const& rNamespaceMap);
+
+    virtual void finished(SfxItemSet & rSet,
+                          SvXMLUnitConverter const& rUnitConverter) const;
+
+    virtual void setMapEntries( SvXMLItemMapEntriesRef rMapEntries );
+
+private:
+    void Reset();
+
+    ::rtl::OUString m_FoMarginValue;
+    enum { LEFT = 0, RIGHT = 1, TOP = 2, BOTTOM = 3 };
+    bool m_bHaveMargin[4];
 };
 
 SwXMLImportTableItemMapper_Impl::SwXMLImportTableItemMapper_Impl(
                                         SvXMLItemMapEntriesRef rMapEntries ) :
     SvXMLImportItemMapper( rMapEntries, RES_UNKNOWNATR_CONTAINER)
 {
+    Reset();
 }
 
 SwXMLImportTableItemMapper_Impl::~SwXMLImportTableItemMapper_Impl()
 {
+}
+
+void SwXMLImportTableItemMapper_Impl::Reset()
+{
+    m_FoMarginValue = ::rtl::OUString();
+    for (int i = 0; i < 3; ++i)
+    {
+        m_bHaveMargin[i] = false;
+    }
+}
+
+void SwXMLImportTableItemMapper_Impl::setMapEntries(
+        SvXMLItemMapEntriesRef rMapEntries )
+{
+    Reset();
+    SvXMLImportItemMapper::setMapEntries(rMapEntries);
 }
 
 sal_Bool SwXMLImportTableItemMapper_Impl::handleSpecialItem(
@@ -102,12 +135,38 @@ sal_Bool SwXMLImportTableItemMapper_Impl::handleSpecialItem(
                                         SfxItemSet& rItemSet,
                                         const OUString& rValue,
                                         const SvXMLUnitConverter& rUnitConv,
-                                        const SvXMLNamespaceMap& ) const
+                                        const SvXMLNamespaceMap& )
 {
     sal_Bool bRet = sal_False;
     sal_uInt16 nMemberId = static_cast< sal_Int16 >(rEntry.nMemberId & MID_SW_FLAG_MASK);
     switch( rItem.Which() )
     {
+    case RES_LR_SPACE:
+        switch (nMemberId)
+        {
+            case MID_L_MARGIN:
+                m_bHaveMargin[LEFT] = true;
+                break;
+            case MID_R_MARGIN:
+                m_bHaveMargin[RIGHT] = true;
+                break;
+        }
+        bRet = SvXMLImportItemMapper::PutXMLValue(
+                rItem, rValue, nMemberId, rUnitConv);
+        break;
+    case RES_UL_SPACE:
+        switch (nMemberId)
+        {
+            case MID_UP_MARGIN:
+                m_bHaveMargin[TOP] = true;
+                break;
+            case MID_LO_MARGIN:
+                m_bHaveMargin[BOTTOM] = true;
+                break;
+        }
+        bRet = SvXMLImportItemMapper::PutXMLValue(
+                rItem, rValue, nMemberId, rUnitConv);
+        break;
     case RES_FRM_SIZE:
         switch( nMemberId )
         {
@@ -125,8 +184,72 @@ sal_Bool SwXMLImportTableItemMapper_Impl::handleSpecialItem(
     return bRet;
 }
 
-void SwXMLImportTableItemMapper_Impl::finished( SfxItemSet& /*rSet*/ ) const
+
+sal_Bool SwXMLImportTableItemMapper_Impl::handleNoItem(
+     SvXMLItemMapEntry const& rEntry,
+     SfxItemSet & rSet,
+     ::rtl::OUString const& rValue,
+     SvXMLUnitConverter const& rUnitConverter,
+     SvXMLNamespaceMap const& rNamespaceMap)
 {
+    if ((XML_NAMESPACE_FO == rEntry.nNameSpace) &&
+        (xmloff::token::XML_MARGIN == rEntry.eLocalName))
+    {
+        m_FoMarginValue = rValue;
+        return true;
+    }
+    else
+    {
+        return SvXMLImportItemMapper::handleNoItem(
+                rEntry, rSet, rValue, rUnitConverter, rNamespaceMap);
+    }
+}
+
+void SwXMLImportTableItemMapper_Impl::finished(
+        SfxItemSet & rSet, SvXMLUnitConverter const& rUnitConverter) const
+{
+    if (m_FoMarginValue.getLength())
+    {
+        sal_uInt16 const Ids[4][2] = {
+            { RES_LR_SPACE, MID_L_MARGIN },
+            { RES_LR_SPACE, MID_R_MARGIN },
+            { RES_UL_SPACE, MID_UP_MARGIN },
+            { RES_UL_SPACE, MID_LO_MARGIN },
+        };
+        for (int i = 0; i < 4; ++i)
+        {
+            if (m_bHaveMargin[i])
+            {
+                continue; // already read fo:margin-top etc.
+            }
+            // first get item from itemset
+            SfxPoolItem const* pItem = 0;
+            SfxItemState eState =
+                rSet.GetItemState(Ids[i][0], sal_True, &pItem);
+
+            // if not set, try the pool
+            if ((SFX_ITEM_SET != eState) && (SFX_WHICH_MAX > Ids[i][0]))
+            {
+                pItem = &rSet.GetPool()->GetDefaultItem(Ids[i][0]);
+            }
+
+            // do we have an item?
+            if (eState >= SFX_ITEM_DEFAULT && pItem)
+            {
+                SfxPoolItem *const pNewItem = pItem->Clone();
+                bool const bPut = PutXMLValue(
+                        *pNewItem, m_FoMarginValue, Ids[i][1], rUnitConverter);
+                if (bPut)
+                {
+                    rSet.Put(*pNewItem);
+                }
+            }
+            else
+            {
+                OSL_ENSURE(false, "could not get item");
+            }
+        }
+    }
 }
 
 // ---------------------------------------------------------------------
@@ -142,7 +265,7 @@ public:
                   const OUString& rLName,
                   const Reference< xml::sax::XAttributeList > & xAttrList,
                   SfxItemSet&  rItemSet,
-                  const SvXMLImportItemMapper& rIMapper,
+                  SvXMLImportItemMapper & rIMapper,
                   const SvXMLUnitConverter& rUnitConv );
     virtual ~SwXMLItemSetContext_Impl();
 
@@ -159,7 +282,7 @@ SwXMLItemSetContext_Impl::SwXMLItemSetContext_Impl(
                  const OUString& rLName,
                  const Reference< xml::sax::XAttributeList > & xAttrList,
                  SfxItemSet&  _rItemSet,
-                 const SvXMLImportItemMapper& _rIMapper,
+                 SvXMLImportItemMapper & _rIMapper,
                  const SvXMLUnitConverter& _rUnitConv ) :
     SvXMLItemSetContext( rImport, nPrfx, rLName, xAttrList,
                          _rItemSet, _rIMapper, _rUnitConv )
