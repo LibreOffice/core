@@ -267,21 +267,37 @@ End
 
 #endif
 
-/* script providers */
+/* ** Script provider for BeanShell ** */
+
+#ifndef WITHOUT_EXTENSION_SCRIPTING_BEANSHELL
 
 Directory gid_Brand_Dir_Share_Extensions_Script_Provider_For_Beanshell
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "script-provider-for-beanshell";
 End
 
+#endif
+
+/* ** Script provider for JavaScript ** */
+
+#ifndef WITHOUT_EXTENSION_SCRIPTING_BEANSHELL
+
 Directory gid_Brand_Dir_Share_Extensions_Script_Provider_For_Javascript
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "script-provider-for-javascript";
 End
 
+#endif
+
+/* ** Script provider for Python ** */
+
+#ifndef WITHOUT_EXTENSION_SCRIPTING_BEANSHELL
+
 Directory gid_Brand_Dir_Share_Extensions_Script_Provider_For_Python
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "script-provider-for-python";
 End
+
+#endif
 
 #endif

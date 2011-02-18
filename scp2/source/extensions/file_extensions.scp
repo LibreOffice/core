@@ -287,7 +287,6 @@ End
 
 #endif
 
-
 /* ** Sun Template Pack ** */
 
 #ifdef WITH_EXTENSION_SUN_TEMPLATE_PACK
@@ -306,7 +305,9 @@ End
 
 #endif
 
-/* script providers */
+/* ** Script provider for BeanShell ** */
+
+#ifndef WITHOUT_EXTENSION_SCRIPTING_BEANSHELL
 
 File gid_File_Oxt_Script_Provider_For_Beanshell
     TXT_FILE_BODY;
@@ -315,6 +316,12 @@ File gid_File_Oxt_Script_Provider_For_Beanshell
     Name = "script-provider-for-beanshell.oxt";
 End
 
+#endif
+
+/* ** Script provider for JavaScript ** */
+
+#ifndef WITHOUT_EXTENSION_SCRIPTING_JAVASCRIPT
+
 File gid_File_Oxt_Script_Provider_For_Javascript
     TXT_FILE_BODY;
     Styles = (PACKED, ARCHIVE);
@@ -322,11 +329,19 @@ File gid_File_Oxt_Script_Provider_For_Javascript
     Name = "script-provider-for-javascript.oxt";
 End
 
+#endif
+
+/* ** Script provider for Python ** */
+
+#ifndef WITHOUT_EXTENSION_SCRIPTING_PYTHON
+
 File gid_File_Oxt_Script_Provider_For_Python
     TXT_FILE_BODY;
     Styles = (PACKED, ARCHIVE);
     Dir = gid_Brand_Dir_Share_Extensions_Script_Provider_For_Python;
     Name = "script-provider-for-python.oxt";
 End
+
+#endif
 
 #endif

@@ -83,6 +83,21 @@ AC_ARG_ENABLE(ext-report-builder,
         [Enables the build of the Report Builder extension.]),
 ,)
 
+AC_ARG_ENABLE(ext-scripting-beanshell,
+    AS_HELP_STRING([--enable-ext-scripting-beanshell],
+        [Enables support for scripts in BeanShell]),
+,)
+
+AC_ARG_ENABLE(ext-scripting-javascript,
+    AS_HELP_STRING([--enable-ext-scripting-javascript],
+        [Enables support for scripts in JavaScript]),
+,)
+
+AC_ARG_ENABLE(ext-scripting-python,
+    AS_HELP_STRING([--enable-ext-scripting-python],
+        [Enables support for scripts in Python]),
+,)
+
 AC_ARG_ENABLE(ext-typo,
     AS_HELP_STRING([--enable-ext-typo],
         [Enables the Typography Toolbar extension.]),
@@ -6681,6 +6696,42 @@ AC_SUBST(COMMONS_CODEC_JAR)
 AC_SUBST(COMMONS_LANG_JAR)
 AC_SUBST(COMMONS_HTTPCLIENT_JAR)
 AC_SUBST(COMMONS_LOGGING_JAR)
+
+# scripting provider for BeanShell extension?
+AC_MSG_CHECKING([whether to build extension for support of scripts in BeanShell])
+AS_IF([test "x$enable_ext_scripting_beanshell" = "xyes"], [
+   AC_MSG_RESULT([yes])
+   ENABLE_SCRIPTING_BEANSHELL=YES
+],[
+   AC_MSG_RESULT([no])
+   ENABLE_SCRIPTING_BEANSHELL=NO
+   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_SCRIPTING_BEANSHELL"
+])
+AC_SUBST(ENABLE_SCRIPTING_BEANSHELL)
+
+# scripting provider for JavaScript extension?
+AC_MSG_CHECKING([whether to build extension for support of scripts in JavaScript])
+AS_IF([test "x$enable_ext_scripting_javascript" = "xyes"], [
+   AC_MSG_RESULT([yes])
+   ENABLE_SCRIPTING_JAVASCRIPT=YES
+],[
+   AC_MSG_RESULT([no])
+   ENABLE_SCRIPTING_JAVASCRIPT=NO
+   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_SCRIPTING_JAVASCRIPT"
+])
+AC_SUBST(ENABLE_SCRIPTING_JAVASCRIPT)
+
+# scripting provider for Python extension?
+AC_MSG_CHECKING([whether to build extension for support of scripts in Python])
+AS_IF([test "x$enable_ext_scripting_python" = "xyes"], [
+   AC_MSG_RESULT([yes])
+   ENABLE_SCRIPTING_PYTHON=YES
+],[
+   AC_MSG_RESULT([no])
+   ENABLE_SCRIPTING_PYTHON=NO
+   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_SCRIPTING_PYTHON"
+])
+AC_SUBST(ENABLE_SCRIPTING_PYTHON)
 
 dnl ===================================================================
 dnl Check whether the Qt3 and KDE3 libraries are available.

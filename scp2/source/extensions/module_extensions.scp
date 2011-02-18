@@ -343,9 +343,10 @@ Module gid_Module_Optional_Extensions_Sun_Template_Pack
 End
 #endif
 
-#endif
+/* ** Script provider for BeanShell ** */
 
-#ifdef WITH_EXTENSION_INTEGRATION
+#ifndef WITHOUT_EXTENSION_SCRIPTING_BEANSHELL
+
 Module gid_Module_Optional_Extensions_Script_Provider_For_Beanshell
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_BEANSHELL);
@@ -356,9 +357,13 @@ Module gid_Module_Optional_Extensions_Script_Provider_For_Beanshell
     Default = YES;
     Styles = ( );
 End
+
 #endif
 
-#ifdef WITH_EXTENSION_INTEGRATION
+/* ** Script provider for JavaScript ** */
+
+#ifndef WITHOUT_EXTENSION_SCRIPTING_JAVASCRIPT
+
 Module gid_Module_Optional_Extensions_Script_Provider_For_Javascript
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_JAVASCRIPT);
@@ -369,9 +374,13 @@ Module gid_Module_Optional_Extensions_Script_Provider_For_Javascript
     Default = YES;
     Styles = ( );
 End
+
 #endif
 
-#ifdef WITH_EXTENSION_INTEGRATION
+/* ** Script provider for Python ** */
+
+#ifndef WITHOUT_EXTENSION_SCRIPTING_PYTHON
+
 Module gid_Module_Optional_Extensions_Script_Provider_For_Python
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SCRIPT_PROVIDER_FOR_PYTHON);
@@ -382,4 +391,7 @@ Module gid_Module_Optional_Extensions_Script_Provider_For_Python
     Default = YES;
     Styles = ( );
 End
+
+#endif
+
 #endif
