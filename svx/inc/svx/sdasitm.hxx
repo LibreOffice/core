@@ -60,11 +60,11 @@ public:
     typedef std::pair < const ::rtl::OUString, const ::rtl::OUString > PropertyPair;
 
 private:
-    struct SVX_DLLPRIVATE PropertyEq
+    struct SVX_DLLPUBLIC PropertyEq
     {
         bool operator()( const rtl::OUString&, const rtl::OUString& ) const;
     };
-    struct SVX_DLLPRIVATE PropertyPairEq
+    struct SVX_DLLPUBLIC PropertyPairEq
     {
         bool operator()( const SdrCustomShapeGeometryItem::PropertyPair&, const SdrCustomShapeGeometryItem::PropertyPair& ) const;
     };
