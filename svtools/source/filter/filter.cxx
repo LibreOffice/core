@@ -136,7 +136,7 @@ public:
 
 sal_Bool ImplDirEntryHelper::Exists( const INetURLObject& rObj )
 {
-    sal_Bool bExists = FALSE;
+    sal_Bool bExists = sal_False;
 
     try
     {
@@ -189,7 +189,7 @@ void ImplDirEntryHelper::Kill( const String& rMainUrl )
 
 //--------------------------------------------------------------------------
 
-BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, sal_uLong nComp, sal_uLong nSize )
+sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLong nComp, sal_uLong nSize )
 {
     while ( nComp-- >= nSize )
     {
@@ -226,9 +226,9 @@ inline String ImpGetExtension( const String &rPath )
 |*            Eingabe-prarameter:
 |*              rPath            - Dateipfad
 |*              rFormatExtension - Inhalt egal
-|*              bTest            - setze FALSE
+|*              bTest            - setze sal_False
 |*            Ausgabe-parameter:
-|*              Funkionswert     - TRUE wenn Erfolg
+|*              Funkionswert     - sal_True wenn Erfolg
 |*              rFormatExtension - Bei Erfolg: uebliche Dateiendung
 |*                                 des Formats (Grossbuchstaben)
 |*        2.) Datei anlesen, Dateiformat ueberpruefen
@@ -236,11 +236,11 @@ inline String ImpGetExtension( const String &rPath )
 |*              rPath            - Dateipfad
 |*              rFormatExtension - uebliche Dateiendung des Formats
 |*                                 (Grossbuchstaben)
-|*              bTest            - setze TRUE
+|*              bTest            - setze sal_True
 |*            Ausgabe-parameter:
-|*              Funkionswert     - FALSE, wenn die Datei bestimmt nicht
+|*              Funkionswert     - sal_False, wenn die Datei bestimmt nicht
 |*                                 vom uebgebenen Format ist.
-|*                                 TRUE, wenn die Datei WAHRSCHEINLICH von
+|*                                 sal_True, wenn die Datei WAHRSCHEINLICH von
 |*                                 dem Format ist, ODER WENN DAS FORMAT
 |*                                 DIESER FUNKTION NICHT BEKANNT IST!
 |*
@@ -249,22 +249,22 @@ inline String ImpGetExtension( const String &rPath )
 |*
 *************************************************************************/
 
-static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtension, BOOL bTest )
+static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtension, sal_Bool bTest )
 {
     sal_uInt16  i;
-    BYTE    sFirstBytes[ 256 ];
+    sal_uInt8    sFirstBytes[ 256 ];
     sal_uLong   nFirstLong,nSecondLong;
     sal_uLong   nStreamPos = rStream.Tell();
 
     rStream.Seek( STREAM_SEEK_TO_END );
-    ULONG nStreamLen = rStream.Tell() - nStreamPos;
+    sal_uLong nStreamLen = rStream.Tell() - nStreamPos;
     rStream.Seek( nStreamPos );
 
     if ( !nStreamLen )
     {
         SvLockBytes* pLockBytes = rStream.GetLockBytes();
         if ( pLockBytes  )
-            pLockBytes->SetSynchronMode( TRUE );
+            pLockBytes->SetSynchronMode( sal_True );
 
         rStream.Seek( STREAM_SEEK_TO_END );
         nStreamLen = rStream.Tell() - nStreamPos;
@@ -282,20 +282,20 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     }
 
     if( rStream.GetError() )
-        return FALSE;
+        return sal_False;
 
     // Die ersten 8 Bytes in nFirstLong, nSecondLong unterbringen,
     // Big-Endian:
     for( i = 0, nFirstLong = 0L, nSecondLong = 0L; i < 4; i++ )
     {
-        nFirstLong=(nFirstLong<<8)|(ULONG)sFirstBytes[i];
-        nSecondLong=(nSecondLong<<8)|(ULONG)sFirstBytes[i+4];
+        nFirstLong=(nFirstLong<<8)|(sal_uLong)sFirstBytes[i];
+        nSecondLong=(nSecondLong<<8)|(sal_uLong)sFirstBytes[i+4];
     }
 
-    // Folgende Variable ist nur bei bTest==TRUE interessant. Sie
-    // bleibt FALSE, wenn das Format (rFormatExtension) hier noch nicht
+    // Folgende Variable ist nur bei bTest==sal_True interessant. Sie
+    // bleibt sal_False, wenn das Format (rFormatExtension) hier noch nicht
     // einprogrammiert wurde.
-    sal_Bool bSomethingTested = FALSE;
+    sal_Bool bSomethingTested = sal_False;
 
     // Nun werden die verschieden Formate ueberprueft. Dabei ist die
     // Reihenfolge nicht egal. Z.b. koennte eine MET-Datei auch durch
@@ -304,7 +304,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     // Theoretisch waere aber vielleicht auch eine BMP-Datei denkbar,
     // die durch den MET-Test geht.
     // Diese Probleme gibt es natuerlich nicht nur bei MET und BMP.
-    // Deshalb wird im Falle der Uberpruefung eines Formats (bTest==TRUE)
+    // Deshalb wird im Falle der Uberpruefung eines Formats (bTest==sal_True)
     // nur genau dieses eine Format getestet. Alles andere koennte fatale
     // Folgen haben, z.B. wenn der Benutzer sagt, es sei BMP-Datei (und es
     // ist BMP-Datei), und hier wuerde die Datei durch den MET-Test gehen...
@@ -312,26 +312,26 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     //--------------------------- MET ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "MET", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=TRUE;
+        bSomethingTested=sal_True;
         if( sFirstBytes[2] == 0xd3 )
         {
             rStream.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
             rStream.Seek( nStreamPos );
             sal_uInt16 nFieldSize;
-            BYTE nMagic;
-            sal_Bool bOK=TRUE;
+            sal_uInt8 nMagic;
+            sal_Bool bOK=sal_True;
             rStream >> nFieldSize >> nMagic;
             for (i=0; i<3; i++) {
-                if (nFieldSize<6) { bOK=FALSE; break; }
-                if (nStreamLen < rStream.Tell() + nFieldSize ) { bOK=FALSE; break; }
+                if (nFieldSize<6) { bOK=sal_False; break; }
+                if (nStreamLen < rStream.Tell() + nFieldSize ) { bOK=sal_False; break; }
                 rStream.SeekRel(nFieldSize-3);
                 rStream >> nFieldSize >> nMagic;
-                if (nMagic!=0xd3) { bOK=FALSE; break; }
+                if (nMagic!=0xd3) { bOK=sal_False; break; }
             }
             rStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
             if (bOK && !rStream.GetError()) {
                 rFormatExtension= UniString::CreateFromAscii( "MET", 3 );
-                return TRUE;
+                return sal_True;
             }
         }
     }
@@ -339,9 +339,9 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     //--------------------------- BMP ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "BMP", 3 ) == COMPARE_EQUAL ) )
     {
-        BYTE nOffs;
+        sal_uInt8 nOffs;
 
-        bSomethingTested=TRUE;
+        bSomethingTested=sal_True;
 
         // OS/2-Bitmaparray ('BA') koennen wir evtl. auch lesen,
         // dementspr. muessen wir den Offset anpassen,
@@ -365,7 +365,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
                    sFirstBytes[14+nOffs] == 0x0c )
             {
                 rFormatExtension = UniString::CreateFromAscii( "BMP", 3 );
-                return TRUE;
+                return sal_True;
             }
         }
     }
@@ -376,33 +376,33 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
         ( rFormatExtension.CompareToAscii( "WMF", 3 ) == COMPARE_EQUAL ) ||
             ( rFormatExtension.CompareToAscii( "EMF", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested = TRUE;
+        bSomethingTested = sal_True;
 
         if ( nFirstLong==0xd7cdc69a || nFirstLong==0x01000900 )
         {
             rFormatExtension = UniString::CreateFromAscii( "WMF", 3 );
-            return TRUE;
+            return sal_True;
         }
         else if( nFirstLong == 0x01000000 && sFirstBytes[ 40 ] == 0x20 && sFirstBytes[ 41 ] == 0x45 &&
             sFirstBytes[ 42 ] == 0x4d && sFirstBytes[ 43 ] == 0x46 )
         {
             rFormatExtension = UniString::CreateFromAscii( "EMF", 3 );
-            return TRUE;
+            return sal_True;
         }
     }
 
     //--------------------------- PCX ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "PCX", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=TRUE;
+        bSomethingTested=sal_True;
         if (sFirstBytes[0]==0x0a)
         {
-            BYTE nVersion=sFirstBytes[1];
-            BYTE nEncoding=sFirstBytes[2];
+            sal_uInt8 nVersion=sFirstBytes[1];
+            sal_uInt8 nEncoding=sFirstBytes[2];
             if( ( nVersion==0 || nVersion==2 || nVersion==3 || nVersion==5 ) && nEncoding<=1 )
             {
                 rFormatExtension = UniString::CreateFromAscii( "PCX", 3 );
-                return TRUE;
+                return sal_True;
             }
         }
     }
@@ -410,69 +410,69 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     //--------------------------- TIF ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "TIF", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=TRUE;
+        bSomethingTested=sal_True;
         if ( nFirstLong==0x49492a00 || nFirstLong==0x4d4d002a )
         {
             rFormatExtension=UniString::CreateFromAscii( "TIF", 3 );
-            return TRUE;
+            return sal_True;
         }
     }
 
     //--------------------------- GIF ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "GIF", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=TRUE;
+        bSomethingTested=sal_True;
         if ( nFirstLong==0x47494638 && (sFirstBytes[4]==0x37 || sFirstBytes[4]==0x39) && sFirstBytes[5]==0x61 )
         {
             rFormatExtension = UniString::CreateFromAscii( "GIF", 3 );
-            return TRUE;
+            return sal_True;
         }
     }
 
     //--------------------------- PNG ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "PNG", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=TRUE;
+        bSomethingTested=sal_True;
         if (nFirstLong==0x89504e47 && nSecondLong==0x0d0a1a0a)
         {
             rFormatExtension = UniString::CreateFromAscii( "PNG", 3 );
-            return TRUE;
+            return sal_True;
         }
     }
 
     //--------------------------- JPG ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "JPG", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=TRUE;
+        bSomethingTested=sal_True;
         if ( ( nFirstLong==0xffd8ffe0 && sFirstBytes[6]==0x4a && sFirstBytes[7]==0x46 && sFirstBytes[8]==0x49 && sFirstBytes[9]==0x46 ) ||
              ( nFirstLong==0xffd8fffe ) || ( 0xffd8ff00 == ( nFirstLong & 0xffffff00 ) ) )
         {
             rFormatExtension = UniString::CreateFromAscii( "JPG", 3 );
-            return TRUE;
+            return sal_True;
         }
     }
 
     //--------------------------- SVM ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "SVM", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=TRUE;
+        bSomethingTested=sal_True;
         if( nFirstLong==0x53564744 && sFirstBytes[4]==0x49 )
         {
             rFormatExtension = UniString::CreateFromAscii( "SVM", 3 );
-            return TRUE;
+            return sal_True;
         }
         else if( sFirstBytes[0]==0x56 && sFirstBytes[1]==0x43 && sFirstBytes[2]==0x4C &&
                  sFirstBytes[3]==0x4D && sFirstBytes[4]==0x54 && sFirstBytes[5]==0x46 )
         {
             rFormatExtension = UniString::CreateFromAscii( "SVM", 3 );
-            return TRUE;
+            return sal_True;
         }
     }
 
     //--------------------------- PCD ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "PCD", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested = TRUE;
+        bSomethingTested = sal_True;
         if( nStreamLen >= 2055 )
         {
             char sBuf[8];
@@ -482,7 +482,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
             if( strncmp( sBuf, "PCD_IPI", 7 ) ==  0 )
             {
                 rFormatExtension = UniString::CreateFromAscii( "PCD", 3 );
-                return TRUE;
+                return sal_True;
             }
         }
     }
@@ -490,30 +490,30 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     //--------------------------- PSD ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "PSD", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested = TRUE;
+        bSomethingTested = sal_True;
         if ( ( nFirstLong == 0x38425053 ) && ( (nSecondLong >> 16 ) == 1 ) )
         {
             rFormatExtension = UniString::CreateFromAscii( "PSD", 3 );
-            return TRUE;
+            return sal_True;
         }
     }
 
     //--------------------------- EPS ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "EPS", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested = TRUE;
-        if ( ( nFirstLong == 0xC5D0D3C6 ) || ( ImplSearchEntry( sFirstBytes, (BYTE*)"%!PS-Adobe", 10, 10 ) &&
-             ImplSearchEntry( &sFirstBytes[15], (BYTE*)"EPS", 3, 3 ) ) )
+        bSomethingTested = sal_True;
+        if ( ( nFirstLong == 0xC5D0D3C6 ) || ( ImplSearchEntry( sFirstBytes, (sal_uInt8*)"%!PS-Adobe", 10, 10 ) &&
+             ImplSearchEntry( &sFirstBytes[15], (sal_uInt8*)"EPS", 3, 3 ) ) )
         {
             rFormatExtension = UniString::CreateFromAscii( "EPS", 3 );
-            return TRUE;
+            return sal_True;
         }
     }
 
     //--------------------------- DXF ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "DXF", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=TRUE;
+        bSomethingTested=sal_True;
 
         i=0;
         while (i<256 && sFirstBytes[i]<=32)
@@ -534,22 +534,22 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
             if (strncmp((char*)(sFirstBytes+i),"SECTION",7)==0)
             {
                 rFormatExtension = UniString::CreateFromAscii( "DXF", 3 );
-                return TRUE;
+                return sal_True;
             }
         }
 
         if( strncmp( (char*) sFirstBytes, "AutoCAD Binary DXF", 18 ) == 0 )
         {
             rFormatExtension = UniString::CreateFromAscii( "DXF", 3 );
-            return TRUE;
+            return sal_True;
         }
     }
 
     //--------------------------- PCT ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "PCT", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested = TRUE;
-        BYTE sBuf[3];
+        bSomethingTested = sal_True;
+        sal_uInt8 sBuf[3];
         // store number format
         sal_uInt16 oldNumberFormat = rStream.GetNumberFormatInt();
         sal_uInt32 nOffset; // in ms documents the pict format is used without the first 512 bytes
@@ -578,19 +578,19 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
             if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && sBuf[ 2 ] == 0x02)
             {
               rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
-              return TRUE;
+              return sal_True;
             }
             // normal version 1 - page A25
             else if (sBuf[ 0 ] == 0x11 && sBuf[ 1 ] == 0x01 && bdBoxOk) {
               rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
-              return TRUE;
+              return sal_True;
             }
             // previous code kept in order to do not break any compatibility
             // probably eroneous
             else if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && sBuf[ 2 ] == 0x01 && bdBoxOk)
             {
               rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
-              return TRUE;
+              return sal_True;
             }
         }
     }
@@ -601,7 +601,7 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
             ( rFormatExtension.CompareToAscii( "PGM", 3 ) == COMPARE_EQUAL ) ||
                 ( rFormatExtension.CompareToAscii( "PPM", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=TRUE;
+        bSomethingTested=sal_True;
         if ( sFirstBytes[ 0 ] == 'P' )
         {
             switch( sFirstBytes[ 1 ] )
@@ -609,17 +609,17 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
                 case '1' :
                 case '4' :
                     rFormatExtension = UniString::CreateFromAscii( "PBM", 3 );
-                return TRUE;
+                return sal_True;
 
                 case '2' :
                 case '5' :
                     rFormatExtension = UniString::CreateFromAscii( "PGM", 3 );
-                return TRUE;
+                return sal_True;
 
                 case '3' :
                 case '6' :
                     rFormatExtension = UniString::CreateFromAscii( "PPM", 3 );
-                return TRUE;
+                return sal_True;
             }
         }
     }
@@ -627,95 +627,95 @@ static sal_Bool ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtensio
     //--------------------------- RAS( SUN RasterFile )------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "RAS", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=TRUE;
+        bSomethingTested=sal_True;
         if( nFirstLong == 0x59a66a95 )
         {
             rFormatExtension = UniString::CreateFromAscii( "RAS", 3 );
-            return TRUE;
+            return sal_True;
         }
     }
 
     //--------------------------- XPM ------------------------------------
     if( !bTest )
     {
-        bSomethingTested = TRUE;
-        if( ImplSearchEntry( sFirstBytes, (BYTE*)"/* XPM */", 256, 9 ) )
+        bSomethingTested = sal_True;
+        if( ImplSearchEntry( sFirstBytes, (sal_uInt8*)"/* XPM */", 256, 9 ) )
         {
             rFormatExtension = UniString::CreateFromAscii( "XPM", 3 );
-            return TRUE;
+            return sal_True;
         }
     }
     else if( rFormatExtension.CompareToAscii( "XPM", 3 ) == COMPARE_EQUAL )
     {
-        bSomethingTested = TRUE;
-        return TRUE;
+        bSomethingTested = sal_True;
+        return sal_True;
     }
 
     //--------------------------- XBM ------------------------------------
     if( !bTest )
     {
         sal_uLong nSize = ( nStreamLen > 2048 ) ? 2048 : nStreamLen;
-        BYTE* pBuf = new BYTE [ nSize ];
+        sal_uInt8* pBuf = new sal_uInt8 [ nSize ];
 
         rStream.Seek( nStreamPos );
         rStream.Read( pBuf, nSize );
-        BYTE* pPtr = ImplSearchEntry( pBuf, (BYTE*)"#define", nSize, 7 );
+        sal_uInt8* pPtr = ImplSearchEntry( pBuf, (sal_uInt8*)"#define", nSize, 7 );
 
         if( pPtr )
         {
-            if( ImplSearchEntry( pPtr, (BYTE*)"_width", pBuf + nSize - pPtr, 6 ) )
+            if( ImplSearchEntry( pPtr, (sal_uInt8*)"_width", pBuf + nSize - pPtr, 6 ) )
             {
                 rFormatExtension = UniString::CreateFromAscii( "XBM", 3 );
                 delete[] pBuf;
-                return TRUE;
+                return sal_True;
             }
         }
         delete[] pBuf;
     }
     else if( rFormatExtension.CompareToAscii( "XBM", 3 ) == COMPARE_EQUAL )
     {
-        bSomethingTested = TRUE;
-        return TRUE;
+        bSomethingTested = sal_True;
+        return sal_True;
     }
 
     //--------------------------- SVG ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "SVG", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=TRUE;
+        bSomethingTested=sal_True;
 
         // just a simple test for the extension
         if( rFormatExtension.CompareToAscii( "SVG", 3 ) == COMPARE_EQUAL )
-            return TRUE;
+            return sal_True;
     }
 
     //--------------------------- TGA ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "TGA", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested = TRUE;
+        bSomethingTested = sal_True;
 
         // just a simple test for the extension
         if( rFormatExtension.CompareToAscii( "TGA", 3 ) == COMPARE_EQUAL )
-            return TRUE;
+            return sal_True;
     }
 
     //--------------------------- SGV ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "SGV", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested = TRUE;
+        bSomethingTested = sal_True;
 
         // just a simple test for the extension
         if( rFormatExtension.CompareToAscii( "SGV", 3 ) == COMPARE_EQUAL )
-            return TRUE;
+            return sal_True;
     }
 
     //--------------------------- SGF ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "SGF", 3 ) == COMPARE_EQUAL ) )
     {
-        bSomethingTested=TRUE;
+        bSomethingTested=sal_True;
         if( sFirstBytes[ 0 ] == 'J' && sFirstBytes[ 1 ] == 'J' )
         {
             rFormatExtension = UniString::CreateFromAscii( "SGF", 3 );
-            return TRUE;
+            return sal_True;
         }
     }
 
@@ -733,7 +733,7 @@ sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const String& rPath, SvStream& rS
     if( rFormat == GRFILTER_FORMAT_DONTKNOW )
     {
         String aFormatExt;
-        if( ImpPeekGraphicFormat( rStream, aFormatExt, FALSE ) )
+        if( ImpPeekGraphicFormat( rStream, aFormatExt, sal_False ) )
         {
             for( sal_uInt16 i = 0; i < n; i++ )
             {
@@ -762,7 +762,7 @@ sal_uInt16 GraphicFilter::ImpTestOrFindFormat( const String& rPath, SvStream& rS
     else
     {
         String aTmpStr( pConfig->GetImportFormatExtension( rFormat ) );
-        if( !ImpPeekGraphicFormat( rStream, aTmpStr, TRUE ) )
+        if( !ImpPeekGraphicFormat( rStream, aTmpStr, sal_True ) )
             return GRFILTER_FORMATERROR;
         if ( pConfig->GetImportFormatExtension( rFormat ).EqualsIgnoreCaseAscii( "pcd" ) )
         {
@@ -1391,7 +1391,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
         else
             nStmBegin = rIStream.Tell();
 
-        bAbort = FALSE;
+        bAbort = sal_False;
         nStatus = ImpTestOrFindFormat( rPath, rIStream, nFormat );
         // Falls Pending, geben wir GRFILTER_OK zurueck,
         // um mehr Bytes anzufordern
@@ -1678,10 +1678,10 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
 
         if( nBufSize )
         {
-            BYTE*   pBuf=0;
+            sal_uInt8*  pBuf=0;
             try
             {
-                pBuf = new BYTE[ nBufSize ];
+                pBuf = new sal_uInt8[ nBufSize ];
             }
                 catch (std::bad_alloc)
             {
@@ -1692,7 +1692,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath,
             {
                 rIStream.Seek( nStmBegin );
                 rIStream.Read( pBuf, nBufSize );
-                rGraphic.SetLink( GfxLink( pBuf, nBufSize, eLinkType, TRUE ) );
+                rGraphic.SetLink( GfxLink( pBuf, nBufSize, eLinkType, sal_True ) );
             }
         }
     }
@@ -1766,7 +1766,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
     FilterConfigItem aConfigItem( (uno::Sequence< beans::PropertyValue >*)pFilterData );
     String aFilterName( pConfig->GetExportFilterName( nFormat ) );
 
-    bAbort              = FALSE;
+    bAbort              = sal_False;
     sal_uInt16      nStatus = GRFILTER_OK;
     GraphicType eType;
     Graphic     aGraphic( rGraphic );
@@ -1916,7 +1916,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
             }
             else if( aFilterName.EqualsIgnoreCaseAscii( EXP_JPEG ) )
             {
-                sal_Bool bExportedGrayJPEG = sal_False;
+                bool bExportedGrayJPEG = false;
                 if( !ExportJPEG( rOStm, aGraphic, pFilterData, &bExportedGrayJPEG ) )
                     nStatus = GRFILTER_FORMATERROR;
                 nExpGraphHint = bExportedGrayJPEG ? GRFILTER_OUTHINT_GREY : 0;
@@ -2082,7 +2082,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
 
 sal_Bool GraphicFilter::Setup( sal_uInt16 )
 {
-    return FALSE;
+    return sal_False;
 }
 
 /* ------------------------------------------------------------------------

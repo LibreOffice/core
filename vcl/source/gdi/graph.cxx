@@ -427,21 +427,21 @@ sal_Bool Graphic::IsAnimated() const
 
 // ------------------------------------------------------------------------
 
-BOOL Graphic::IsEPS() const
+sal_Bool Graphic::IsEPS() const
 {
     return mpImpGraphic->ImplIsEPS();
 }
 
 // ------------------------------------------------------------------------
 
-BOOL Graphic::IsRenderGraphic() const
+sal_Bool Graphic::IsRenderGraphic() const
 {
     return mpImpGraphic->ImplIsRenderGraphic();
 }
 
 // ------------------------------------------------------------------------
 
-BOOL Graphic::HasRenderGraphic() const
+sal_Bool Graphic::HasRenderGraphic() const
 {
     return mpImpGraphic->ImplHasRenderGraphic();
 }

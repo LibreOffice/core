@@ -480,7 +480,7 @@ sal_Bool ImpGraphic::ImplIsAnimated() const
 
 // ------------------------------------------------------------------------
 
-BOOL ImpGraphic::ImplIsEPS() const
+sal_Bool ImpGraphic::ImplIsEPS() const
 {
     return( ( meType == GRAPHIC_GDIMETAFILE ) &&
             ( maMetaFile.GetActionCount() > 0 ) &&
@@ -489,7 +489,7 @@ BOOL ImpGraphic::ImplIsEPS() const
 
 // ------------------------------------------------------------------------
 
-BOOL ImpGraphic::ImplIsRenderGraphic() const
+sal_Bool ImpGraphic::ImplIsRenderGraphic() const
 {
     return( ( GRAPHIC_GDIMETAFILE == meType ) &&
             ( 1 == maMetaFile.GetActionCount() ) &&
@@ -498,9 +498,9 @@ BOOL ImpGraphic::ImplIsRenderGraphic() const
 
 // ------------------------------------------------------------------------
 
-BOOL ImpGraphic::ImplHasRenderGraphic() const
+sal_Bool ImpGraphic::ImplHasRenderGraphic() const
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if( GRAPHIC_GDIMETAFILE == meType )
     {
@@ -510,7 +510,7 @@ BOOL ImpGraphic::ImplHasRenderGraphic() const
         {
             if( META_RENDERGRAPHIC_ACTION == pAct->GetType() )
             {
-                bRet = TRUE;
+                bRet = sal_True;
             }
         }
 

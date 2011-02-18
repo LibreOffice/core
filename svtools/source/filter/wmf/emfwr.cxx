@@ -169,18 +169,18 @@
 // - EMFWriter -
 // -------------
 
-BOOL EMFWriter::WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm, FilterConfigItem* pFilterConfigItem )
+sal_Bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm, FilterConfigItem* pFilterConfigItem )
 {
-    const ULONG nHeaderPos = rOStm.Tell();
+    const sal_uLong nHeaderPos = rOStm.Tell();
 
-    mpHandlesUsed = new BOOL[ MAXHANDLES ];
-    memset( mpHandlesUsed, 0, MAXHANDLES * sizeof( BOOL ) );
+    mpHandlesUsed = new sal_Bool[ MAXHANDLES ];
+    memset( mpHandlesUsed, 0, MAXHANDLES * sizeof( sal_Bool ) );
     mnHorTextAlign = mnHandleCount = mnLastPercent = mnRecordPos = mnRecordCount = 0;
     mnLineHandle = mnFillHandle = mnTextHandle = HANDLE_INVALID;
-    mbRecordOpen = FALSE;
+    mbRecordOpen = sal_False;
 
     mpStm = &rOStm;
-    maVDev.EnableOutput( FALSE );
+    maVDev.EnableOutput( sal_False );
     maVDev.SetMapMode( rMtf.GetPrefMapMode() );
     mpFilterConfigItem = pFilterConfigItem;
 
@@ -198,29 +198,29 @@ BOOL EMFWriter::WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm, FilterConfig
 
     // set 100th mm map mode in EMF
     ImplBeginRecord( WIN_EMR_SETMAPMODE );
-    (*mpStm) << (INT32) MM_ANISOTROPIC;
+    (*mpStm) << (sal_Int32) MM_ANISOTROPIC;
     ImplEndRecord();
 
     ImplBeginRecord( WIN_EMR_SETVIEWPORTEXTEX );
-    (*mpStm) << (INT32) maVDev.ImplGetDPIX() << (INT32) maVDev.ImplGetDPIY();
+    (*mpStm) << (sal_Int32) maVDev.ImplGetDPIX() << (sal_Int32) maVDev.ImplGetDPIY();
     ImplEndRecord();
 
     ImplBeginRecord( WIN_EMR_SETWINDOWEXTEX );
-    (*mpStm) << (INT32) 2540 << (INT32) 2540;
+    (*mpStm) << (sal_Int32) 2540 << (sal_Int32) 2540;
     ImplEndRecord();
 
     ImplBeginRecord( WIN_EMR_SETVIEWPORTORGEX );
-    (*mpStm) << (INT32) 0 << (INT32) 0;
+    (*mpStm) << (sal_Int32) 0 << (sal_Int32) 0;
     ImplEndRecord();
 
     ImplBeginRecord( WIN_EMR_SETWINDOWORGEX );
-    (*mpStm) << (INT32) 0 << (INT32) 0;
+    (*mpStm) << (sal_Int32) 0 << (sal_Int32) 0;
     ImplEndRecord();
 
     ImplWriteRasterOp( ROP_OVERPAINT );
 
     ImplBeginRecord( WIN_EMR_SETBKMODE );
-    (*mpStm) << (UINT32) 1; // TRANSPARENT
+    (*mpStm) << (sal_uInt32) 1; // TRANSPARENT
     ImplEndRecord();
 
     // write emf data
@@ -234,17 +234,17 @@ BOOL EMFWriter::WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm, FilterConfig
 
 
     // write header
-    const ULONG nEndPos = mpStm->Tell(); mpStm->Seek( nHeaderPos );
+    const sal_uLong nEndPos = mpStm->Tell(); mpStm->Seek( nHeaderPos );
 
-    (*mpStm) << (UINT32) 0x00000001 << (UINT32) 108 //use [MS-EMF 2.2.11] HeaderExtension2 Object
-             << (INT32) 0 << (INT32) 0 << (INT32) ( aMtfSizePix.Width() - 1 ) << (INT32) ( aMtfSizePix.Height() - 1 )
-             << (INT32) 0 << (INT32) 0 << (INT32) ( aMtfSizeLog.Width() - 1 ) << (INT32) ( aMtfSizeLog.Height() - 1 )
-             << (UINT32) 0x464d4520 << (UINT32) 0x10000 << (UINT32) ( nEndPos - nHeaderPos )
-             << (UINT32) mnRecordCount << (UINT16) ( mnHandleCount + 1 ) << (UINT16) 0 << (UINT32) 0 << (UINT32) 0 << (UINT32) 0
-             << (INT32) aMtfSizePix.Width() << (INT32) aMtfSizePix.Height()
-             << (INT32) ( aMtfSizeLog.Width() / 100 ) << (INT32) ( aMtfSizeLog.Height() / 100 )
-             << (UINT32) 0 << (UINT32) 0 << (UINT32) 0
-             << (INT32) (  aMtfSizeLog.Width() * 10 ) << (INT32) ( aMtfSizeLog.Height() * 10 ); //use [MS-EMF 2.2.11] HeaderExtension2 Object
+    (*mpStm) << (sal_uInt32) 0x00000001 << (sal_uInt32) 108 //use [MS-EMF 2.2.11] HeaderExtension2 Object
+             << (sal_Int32) 0 << (sal_Int32) 0 << (sal_Int32) ( aMtfSizePix.Width() - 1 ) << (sal_Int32) ( aMtfSizePix.Height() - 1 )
+             << (sal_Int32) 0 << (sal_Int32) 0 << (sal_Int32) ( aMtfSizeLog.Width() - 1 ) << (sal_Int32) ( aMtfSizeLog.Height() - 1 )
+             << (sal_uInt32) 0x464d4520 << (sal_uInt32) 0x10000 << (sal_uInt32) ( nEndPos - nHeaderPos )
+             << (sal_uInt32) mnRecordCount << (sal_uInt16) ( mnHandleCount + 1 ) << (sal_uInt16) 0 << (sal_uInt32) 0 << (sal_uInt32) 0 << (sal_uInt32) 0
+             << (sal_Int32) aMtfSizePix.Width() << (sal_Int32) aMtfSizePix.Height()
+             << (sal_Int32) ( aMtfSizeLog.Width() / 100 ) << (sal_Int32) ( aMtfSizeLog.Height() / 100 )
+             << (sal_uInt32) 0 << (sal_uInt32) 0 << (sal_uInt32) 0
+             << (sal_Int32) (  aMtfSizeLog.Width() * 10 ) << (sal_Int32) ( aMtfSizeLog.Height() * 10 ); //use [MS-EMF 2.2.11] HeaderExtension2 Object
 
     mpStm->Seek( nEndPos );
     delete[] mpHandlesUsed;
@@ -254,15 +254,15 @@ BOOL EMFWriter::WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm, FilterConfig
 
 // -----------------------------------------------------------------------------
 
-ULONG EMFWriter::ImplAcquireHandle()
+sal_uLong EMFWriter::ImplAcquireHandle()
 {
-    ULONG nHandle = HANDLE_INVALID;
+    sal_uLong nHandle = HANDLE_INVALID;
 
-    for( ULONG i = 0; i < MAXHANDLES && ( HANDLE_INVALID == nHandle ); i++ )
+    for( sal_uLong i = 0; i < MAXHANDLES && ( HANDLE_INVALID == nHandle ); i++ )
     {
         if( !mpHandlesUsed[ i ] )
         {
-            mpHandlesUsed[ i ] = TRUE;
+            mpHandlesUsed[ i ] = sal_True;
 
             if( ( nHandle = i ) == mnHandleCount )
                 mnHandleCount++;
@@ -275,10 +275,10 @@ ULONG EMFWriter::ImplAcquireHandle()
 
 // -----------------------------------------------------------------------------
 
-void EMFWriter::ImplReleaseHandle( ULONG nHandle )
+void EMFWriter::ImplReleaseHandle( sal_uLong nHandle )
 {
     DBG_ASSERT( nHandle && ( nHandle < MAXHANDLES ), "Handle out of range" );
-    mpHandlesUsed[ nHandle - 1 ] = FALSE;
+    mpHandlesUsed[ nHandle - 1 ] = sal_False;
 }
 
 // -----------------------------------------------------------------------------
@@ -289,7 +289,7 @@ void EMFWriter::ImplBeginRecord( sal_uInt32 nType )
 
     if( !mbRecordOpen )
     {
-        mbRecordOpen = TRUE;
+        mbRecordOpen = sal_True;
         mnRecordPos = mpStm->Tell();
 
         (*mpStm) << nType;
@@ -316,17 +316,17 @@ void EMFWriter::ImplEndRecord()
         while( nFillBytes-- )
             *mpStm << (sal_uInt8)0;
         mnRecordCount++;
-        mbRecordOpen = FALSE;
+        mbRecordOpen = sal_False;
     }
 }
 
 // -----------------------------------------------------------------------------
 
-BOOL EMFWriter::ImplPrepareHandleSelect( sal_uInt32& rHandle, ULONG nSelectType )
+sal_Bool EMFWriter::ImplPrepareHandleSelect( sal_uInt32& rHandle, sal_uLong nSelectType )
 {
     if( rHandle != HANDLE_INVALID )
     {
-        UINT32 nStockObject = 0x80000000;
+        sal_uInt32 nStockObject = 0x80000000;
 
         if( LINE_SELECT == nSelectType )
             nStockObject |= 0x00000007;
@@ -411,7 +411,7 @@ void EMFWriter::ImplCheckTextAttr()
         (*mpStm) << mnTextHandle;
         ImplWriteExtent( -rFont.GetSize().Height() );
         ImplWriteExtent( rFont.GetSize().Width() );
-        (*mpStm) << (INT32) rFont.GetOrientation() << (INT32) rFont.GetOrientation();
+        (*mpStm) << (sal_Int32) rFont.GetOrientation() << (sal_Int32) rFont.GetOrientation();
 
         switch( rFont.GetWeight() )
         {
@@ -429,11 +429,11 @@ void EMFWriter::ImplCheckTextAttr()
         }
 
         (*mpStm) << nWeight;
-        (*mpStm) << (BYTE) ( ( ITALIC_NONE == rFont.GetItalic() ) ? 0 : 1 );
-        (*mpStm) << (BYTE) ( ( UNDERLINE_NONE == rFont.GetUnderline() ) ? 0 : 1 );
-        (*mpStm) << (BYTE) ( ( STRIKEOUT_NONE == rFont.GetStrikeout() ) ? 0 : 1 );
-        (*mpStm) << (BYTE) ( ( RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet() ) ? 2 : 0 );
-        (*mpStm) << (BYTE) 0 << (BYTE) 0 << (BYTE) 0;
+        (*mpStm) << (sal_uInt8) ( ( ITALIC_NONE == rFont.GetItalic() ) ? 0 : 1 );
+        (*mpStm) << (sal_uInt8) ( ( UNDERLINE_NONE == rFont.GetUnderline() ) ? 0 : 1 );
+        (*mpStm) << (sal_uInt8) ( ( STRIKEOUT_NONE == rFont.GetStrikeout() ) ? 0 : 1 );
+        (*mpStm) << (sal_uInt8) ( ( RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet() ) ? 2 : 0 );
+        (*mpStm) << (sal_uInt8) 0 << (sal_uInt8) 0 << (sal_uInt8) 0;
 
         switch( rFont.GetPitch() )
         {
@@ -466,24 +466,24 @@ void EMFWriter::ImplCheckTextAttr()
             (*mpStm) << (sal_Unicode) 0;
 
         // dummy elfVersion, elfStyleSize, elfMatch, elfReserved
-        (*mpStm) << (UINT32) 0 << (UINT32) 0 << (UINT32) 0 << (UINT32) 0 ;
+        (*mpStm) << (sal_uInt32) 0 << (sal_uInt32) 0 << (sal_uInt32) 0 << (sal_uInt32) 0 ;
 
         // dummy elfVendorId
-        (*mpStm) << (UINT32) 0;
+        (*mpStm) << (sal_uInt32) 0;
 
         // dummy elfCulture
-        (*mpStm) << (UINT32) 0;
+        (*mpStm) << (sal_uInt32) 0;
 
         // dummy elfPanose
-        (*mpStm) << (BYTE) 0 << (BYTE) 0 << (BYTE) 0 << (BYTE) 0 << (BYTE) 0 << (BYTE) 0 << (BYTE) 0 << (BYTE) 0 << (BYTE) 0 << (BYTE) 0;
+        (*mpStm) << (sal_uInt8) 0 << (sal_uInt8) 0 << (sal_uInt8) 0 << (sal_uInt8) 0 << (sal_uInt8) 0 << (sal_uInt8) 0 << (sal_uInt8) 0 << (sal_uInt8) 0 << (sal_uInt8) 0 << (sal_uInt8) 0;
 
         // fill record to get a record size divideable by 4
-        (*mpStm) << (UINT16) 0;
+        (*mpStm) << (sal_uInt16) 0;
 
         ImplEndRecord();
 
         // TextAlign
-        UINT32 nTextAlign;
+        sal_uInt32 nTextAlign;
 
         switch( rFont.GetAlign() )
         {
@@ -512,10 +512,10 @@ void EMFWriter::ImplCheckTextAttr()
 
 void EMFWriter::ImplWriteColor( const Color& rColor )
 {
-    UINT32 nCol = rColor.GetRed();
+    sal_uInt32 nCol = rColor.GetRed();
 
-    nCol |= ( (UINT32) rColor.GetGreen() ) << 8;
-    nCol |= ( (UINT32) rColor.GetBlue() ) << 16;
+    nCol |= ( (sal_uInt32) rColor.GetGreen() ) << 8;
+    nCol |= ( (sal_uInt32) rColor.GetBlue() ) << 16;
 
     (*mpStm) << nCol;
 }
@@ -524,7 +524,7 @@ void EMFWriter::ImplWriteColor( const Color& rColor )
 
 void EMFWriter::ImplWriteRasterOp( RasterOp eRop )
 {
-    UINT32 nROP2;
+    sal_uInt32 nROP2;
 
     switch( eRop )
     {
@@ -543,7 +543,7 @@ void EMFWriter::ImplWriteRasterOp( RasterOp eRop )
 void EMFWriter::ImplWriteExtent( long nExtent )
 {
     nExtent = maVDev.LogicToLogic( Size( nExtent, 0 ), maVDev.GetMapMode(), maDestMapMode ).Width();
-    (*mpStm) << (INT32) nExtent;
+    (*mpStm) << (sal_Int32) nExtent;
 }
 
 // -----------------------------------------------------------------------------
@@ -551,7 +551,7 @@ void EMFWriter::ImplWriteExtent( long nExtent )
 void EMFWriter::ImplWritePoint( const Point& rPoint )
 {
     const Point aPoint( maVDev.LogicToLogic( rPoint, maVDev.GetMapMode(), maDestMapMode ));
-     (*mpStm) << (INT32) aPoint.X() << (INT32) aPoint.Y();
+     (*mpStm) << (sal_Int32) aPoint.X() << (sal_Int32) aPoint.Y();
 }
 
 // -----------------------------------------------------------------------------
@@ -559,7 +559,7 @@ void EMFWriter::ImplWritePoint( const Point& rPoint )
 void EMFWriter::ImplWriteSize( const Size& rSize)
 {
     const Size aSize( maVDev.LogicToLogic( rSize, maVDev.GetMapMode(), maDestMapMode ));
-     (*mpStm) << (INT32) aSize.Width() << (INT32) aSize.Height();
+     (*mpStm) << (sal_Int32) aSize.Width() << (sal_Int32) aSize.Height();
 }
 
 // -----------------------------------------------------------------------------
@@ -572,7 +572,7 @@ void EMFWriter::ImplWriteRect( const Rectangle& rRect )
 
 // -----------------------------------------------------------------------------
 
-void EMFWriter::ImplWritePolygonRecord( const Polygon& rPoly, BOOL bClose )
+void EMFWriter::ImplWritePolygonRecord( const Polygon& rPoly, sal_Bool bClose )
 {
     if( rPoly.GetSize() )
     {
@@ -587,9 +587,9 @@ void EMFWriter::ImplWritePolygonRecord( const Polygon& rPoly, BOOL bClose )
 
             ImplBeginRecord( bClose ? WIN_EMR_POLYGON : WIN_EMR_POLYLINE );
             ImplWriteRect( rPoly.GetBoundRect() );
-            (*mpStm) << (UINT32) rPoly.GetSize();
+            (*mpStm) << (sal_uInt32) rPoly.GetSize();
 
-            for( USHORT i = 0; i < rPoly.GetSize(); i++ )
+            for( sal_uInt16 i = 0; i < rPoly.GetSize(); i++ )
                 ImplWritePoint( rPoly[ i ] );
 
             ImplEndRecord();
@@ -606,7 +606,7 @@ void EMFWriter::ImplWritePolyPolygonRecord( const PolyPolygon& rPolyPoly )
     if( nPolyCount )
     {
         if( 1 == nPolyCount )
-            ImplWritePolygonRecord( rPolyPoly[ 0 ], TRUE );
+            ImplWritePolygonRecord( rPolyPoly[ 0 ], sal_True );
         else
         {
             sal_Bool    bHasFlags = sal_False;
@@ -738,7 +738,7 @@ void EMFWriter::ImplWritePath( const PolyPolygon& rPolyPoly, sal_Bool bClosed )
 // -----------------------------------------------------------------------------
 
 void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
-                                    const Size& rSz, UINT32 nROP )
+                                    const Size& rSz, sal_uInt32 nROP )
 {
     if( !!rBmp )
     {
@@ -748,19 +748,19 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
         ImplBeginRecord( WIN_EMR_STRETCHDIBITS );
         ImplWriteRect( Rectangle( rPt, rSz ) );
         ImplWritePoint( rPt );
-        (*mpStm) << (INT32) 0 << (INT32) 0 << (INT32) aBmpSizePixel.Width() << (INT32) aBmpSizePixel.Height();
+        (*mpStm) << (sal_Int32) 0 << (sal_Int32) 0 << (sal_Int32) aBmpSizePixel.Width() << (sal_Int32) aBmpSizePixel.Height();
 
         // write offset positions and sizes later
-        const ULONG nOffPos = mpStm->Tell();
+        const sal_uLong nOffPos = mpStm->Tell();
         mpStm->SeekRel( 16 );
 
-        (*mpStm) << (UINT32) 0 << ( ( ROP_XOR == maVDev.GetRasterOp() && WIN_SRCCOPY == nROP ) ? WIN_SRCINVERT : nROP );
+        (*mpStm) << (sal_uInt32) 0 << ( ( ROP_XOR == maVDev.GetRasterOp() && WIN_SRCCOPY == nROP ) ? WIN_SRCINVERT : nROP );
         ImplWriteSize( rSz );
 
-        rBmp.Write( aMemStm, TRUE, FALSE );
+        rBmp.Write( aMemStm, sal_True, sal_False );
 
-        UINT32  nDIBSize = aMemStm.Tell(), nHeaderSize, nCompression, nColsUsed, nPalCount, nImageSize;
-        UINT16  nBitCount;
+        sal_uInt32  nDIBSize = aMemStm.Tell(), nHeaderSize, nCompression, nColsUsed, nPalCount, nImageSize;
+        sal_uInt16  nBitCount;
 
         // get DIB parameters
         aMemStm.Seek( 0 );
@@ -770,15 +770,15 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
         aMemStm.SeekRel( 8 );
         aMemStm >> nColsUsed;
 
-        nPalCount = ( nBitCount <= 8 ) ? ( nColsUsed ? nColsUsed : ( 1 << (UINT32) nBitCount ) ) :
+        nPalCount = ( nBitCount <= 8 ) ? ( nColsUsed ? nColsUsed : ( 1 << (sal_uInt32) nBitCount ) ) :
                                          ( ( 3 == nCompression ) ? 12 : 0 );
 
         mpStm->Write( aMemStm.GetData(), nDIBSize );
 
-        const ULONG nEndPos = mpStm->Tell();
+        const sal_uLong nEndPos = mpStm->Tell();
         mpStm->Seek( nOffPos );
-        (*mpStm) << (UINT32) 80 << (UINT32)( nHeaderSize + ( nPalCount << 2 ) );
-        (*mpStm) << (UINT32)( 80 + ( nHeaderSize + ( nPalCount << 2 ) ) ) << nImageSize;
+        (*mpStm) << (sal_uInt32) 80 << (sal_uInt32)( nHeaderSize + ( nPalCount << 2 ) );
+        (*mpStm) << (sal_uInt32)( 80 + ( nHeaderSize + ( nPalCount << 2 ) ) ) << nImageSize;
         mpStm->Seek( nEndPos );
 
         ImplEndRecord();
@@ -828,12 +828,12 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const String rText, cons
         ImplBeginRecord( WIN_EMR_EXTTEXTOUTW );
 
         ImplWriteRect( Rectangle( rPos, Size( nNormWidth, maVDev.GetTextHeight() ) ) );
-        (*mpStm) << (UINT32)1;
-        (*mpStm) << (INT32) 0 << (INT32) 0;
+        (*mpStm) << (sal_uInt32)1;
+        (*mpStm) << (sal_Int32) 0 << (sal_Int32) 0;
         ImplWritePoint( rPos );
-        (*mpStm) << (UINT32) nLen << (UINT32) 76 << (UINT32) 2;
-        (*mpStm) << (INT32) 0 << (INT32) 0 << (INT32) 0 << (INT32) 0;
-        (*mpStm) << (UINT32) ( 76 + ( nLen << 1 ) + ( (nLen & 1 ) ? 2 : 0 ) );
+        (*mpStm) << (sal_uInt32) nLen << (sal_uInt32) 76 << (sal_uInt32) 2;
+        (*mpStm) << (sal_Int32) 0 << (sal_Int32) 0 << (sal_Int32) 0 << (sal_Int32) 0;
+        (*mpStm) << (sal_uInt32) ( 76 + ( nLen << 1 ) + ( (nLen & 1 ) ? 2 : 0 ) );
 
         // write text
         for( i = 0; i < nLen; i++ )
@@ -841,7 +841,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const String rText, cons
 
         // padding word
         if( nLen & 1 )
-            (*mpStm) << (UINT16) 0;
+            (*mpStm) << (sal_uInt16) 0;
 
         // write DX array
         ImplWriteExtent( pDX[ 0 ] );
@@ -875,7 +875,7 @@ void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const bas
             for(sal_uInt32 a(0); a < aLinePolyPolygon.count(); a++)
             {
                 const basegfx::B2DPolygon aCandidate(aLinePolyPolygon.getB2DPolygon(a));
-                ImplWritePolygonRecord( Polygon(aCandidate), FALSE );
+                ImplWritePolygonRecord( Polygon(aCandidate), sal_False );
             }
         }
 
@@ -903,10 +903,10 @@ void EMFWriter::Impl_handleLineInfoPolyPolygons(const LineInfo& rInfo, const bas
 
 void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 {
-    for( ULONG j = 0, nActionCount = rMtf.GetActionCount(); j < nActionCount; j++ )
+    for( sal_uLong j = 0, nActionCount = rMtf.GetActionCount(); j < nActionCount; j++ )
     {
         const MetaAction*   pAction = rMtf.GetAction( j );
-        const USHORT        nType = pAction->GetType();
+        const sal_uInt16        nType = pAction->GetType();
 
         switch( nType )
         {
@@ -1074,7 +1074,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                     {
                         if(pA->GetLineInfo().IsDefault())
                         {
-                            ImplWritePolygonRecord( rPoly, FALSE );
+                            ImplWritePolygonRecord( rPoly, sal_False );
                         }
                         else
                         {
@@ -1157,7 +1157,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 const MetaEPSAction*    pA = (const MetaEPSAction*) pAction;
                 const GDIMetaFile       aSubstitute( pA->GetSubstitute() );
 
-                for( ULONG i = 0, nCount = aSubstitute.GetActionCount(); i < nCount; i++ )
+                for( sal_uLong i = 0, nCount = aSubstitute.GetActionCount(); i < nCount; i++ )
                 {
                     const MetaAction* pSubstAct = aSubstitute.GetAction( i );
                     if( pSubstAct->GetType() == META_BMPSCALE_ACTION )
@@ -1176,7 +1176,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
                         maVDev.Pop();
                         ImplBeginRecord( WIN_EMR_RESTOREDC );
-                        (*mpStm) << (INT32) -1;
+                        (*mpStm) << (sal_Int32) -1;
                         ImplEndRecord();
                         break;
                     }
@@ -1307,14 +1307,14 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case( META_LINECOLOR_ACTION ):
             {
                 ( (MetaAction*) pAction )->Execute( &maVDev );
-                mbLineChanged = TRUE;
+                mbLineChanged = sal_True;
             }
             break;
 
             case( META_FILLCOLOR_ACTION ):
             {
                 ( (MetaAction*) pAction )->Execute( &maVDev );
-                mbFillChanged = TRUE;
+                mbFillChanged = sal_True;
             }
             break;
 
@@ -1325,7 +1325,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case( META_FONT_ACTION ):
             {
                 ( (MetaAction*) pAction )->Execute( &maVDev );
-                mbTextChanged = TRUE;
+                mbTextChanged = sal_True;
             }
             break;
 
@@ -1366,11 +1366,11 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 ( (MetaAction*) pAction )->Execute( &maVDev );
 
                 ImplBeginRecord( WIN_EMR_RESTOREDC );
-                (*mpStm) << (INT32) -1;
+                (*mpStm) << (sal_Int32) -1;
                 ImplEndRecord();
 
                 ImplWriteRasterOp( maVDev.GetRasterOp() );
-                mbLineChanged = mbFillChanged = mbTextChanged = TRUE;
+                mbLineChanged = mbFillChanged = mbTextChanged = sal_True;
             }
             break;
 

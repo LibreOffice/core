@@ -2906,7 +2906,7 @@ SvStream& operator>>( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
                         ( META_RENDERGRAPHIC_ACTION == pAction->GetType() ) &&
                         ( ++nAction < nCount ) && !rIStm.IsEof() )
                     {
-                        UINT16 nFollowingType;
+                        sal_uInt16 nFollowingType;
 
                         // dummy read of the next following META_BMPEXSCALE_ACTION
                         // RenderGraphic replacement action (KA 01/2011)

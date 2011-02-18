@@ -123,6 +123,7 @@ public:
     sal_Bool            IsTransparent() const;
     sal_Bool            IsAlpha() const;
     sal_Bool            IsAnimated() const;
+    sal_Bool            IsEPS() const;
     sal_Bool            IsRenderGraphic() const;
     sal_Bool            HasRenderGraphic() const;
 

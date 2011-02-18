@@ -100,6 +100,7 @@ private:
     sal_Bool            ImplIsTransparent() const;
     sal_Bool            ImplIsAlpha() const;
     sal_Bool            ImplIsAnimated() const;
+    sal_Bool            ImplIsEPS() const;
     sal_Bool            ImplIsRenderGraphic() const;
     sal_Bool            ImplHasRenderGraphic() const;
 
