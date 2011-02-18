@@ -2891,6 +2891,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                 aTmpSize = pPrinter->LogicToLogic( aTmpSize,
                             pPrinter->GetMapMode(), MapMode( MAP_100TH_MM ));
                 aPageSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
+                #if 0
+                // #i115048# it seems users didn't like getting double the formatted page size
+                // revert to "old" behavior scaling to the current paper size of the printer
                 if (bPrintProspect)
                 {
                     // we just state what output size we would need
@@ -2900,6 +2903,20 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
                     aPreferredPageSize = awt::Size ( TWIP_TO_MM100( 2 * aTmpSize.Width() ),
                                                      TWIP_TO_MM100( aTmpSize.Height() ));
                 }
+                #else
+                if( bPrintProspect )
+                {
+                    // just switch to an appropriate portrait/landscape format
+                    // FIXME: brochure printing with landscape pages puts the
+                    // pages next to each other, so landscape is currently always
+                    // the better choice
+                    if( aPageSize.Width < aPageSize.Height )
+                    {
+                        aPreferredPageSize.Width = aPageSize.Height;
+                        aPreferredPageSize.Height = aPageSize.Width;
+                    }
+                }
+                #endif
             }
         }
         else

@@ -45,3 +45,6 @@
 #define BT_AUTOFORMAT   102
 #define BT_HELP         103
 #define WIN_REPEAT_HEADER   104
+//IAccessibility2 Implementation 2009-----
+#define STR_SYMBOL      105
+//-----IAccessibility2 Implementation 2009

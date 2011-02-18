@@ -249,6 +249,10 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, sal_Bool
     aPrevBT         (this,SW_RES(BT_PREV)),
     aNextBT         (this,SW_RES(BT_NEXT))
 {
+    aNumberCharEdit.SetAccessibleName(String(SW_RES(STR_CHAR)));
+    aNumberExtChar.SetAccessibleRelationMemberOf(&aNumberFL);
+    aNumberCharEdit.SetAccessibleRelationLabeledBy(&aNumberCharBtn);
+
     aNumberAutoBtn.SetClickHdl(LINK(this,SwInsFootNoteDlg,NumberAutoBtnHdl));
     aNumberExtChar.SetClickHdl(LINK(this,SwInsFootNoteDlg,NumberExtCharHdl));
     aNumberCharBtn.SetClickHdl(LINK(this,SwInsFootNoteDlg,NumberCharHdl));

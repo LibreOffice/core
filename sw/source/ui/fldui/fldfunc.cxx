@@ -335,12 +335,16 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
                 aNameFT.SetText(SW_RESSTR(STR_MACNAME));
                 aValueFT.SetText(SW_RESSTR(STR_PROMPT));
                 aNameED.SetText(GetFldMgr().GetMacroName());
+                aNameED.SetAccessibleName(aNameFT.GetText());
+                aValueED.SetAccessibleName(aValueFT.GetText());
                 break;
 
             case TYP_HIDDENPARAFLD:
                 aNameFT.SetText(SW_RESSTR(STR_COND));
                 aNameED.SetDropEnable(sal_True);
                 bName = sal_True;
+                aNameED.SetAccessibleName(aNameFT.GetText());
+                aValueED.SetAccessibleName(aValueFT.GetText());
                 break;
 
             case TYP_HIDDENTXTFLD:
@@ -352,6 +356,8 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
                 if (!IsFldEdit() && pSh )
                     aValueED.SetText(pSh->GetSelTxt());
                 bName = bValue = sal_True;
+                aNameED.SetAccessibleName(aNameFT.GetText());
+                aValueED.SetAccessibleName(aValueFT.GetText());
             }
             break;
 
@@ -365,18 +371,24 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
                 }
 
                 bName = bValue = sal_True;
+                aNameED.SetAccessibleName(aNameFT.GetText());
+                aValueED.SetAccessibleName(aValueFT.GetText());
                 break;
 
             case TYP_JUMPEDITFLD:
                 aNameFT.SetText(SW_RESSTR(STR_JUMPEDITFLD));
                 aValueFT.SetText(SW_RESSTR(STR_PROMPT));
                 bName = bValue = sal_True;
+                aNameED.SetAccessibleName(aNameFT.GetText());
+                aValueED.SetAccessibleName(aValueFT.GetText());
                 break;
 
             case TYP_INPUTFLD:
                 aValueFT.SetText(SW_RESSTR(STR_PROMPT));
                 bValue = sal_True;
-                // bShowSelection = sal_True;
+                // bShowSelection = TRUE;
+                aNameED.SetAccessibleName(aNameFT.GetText());
+                aValueED.SetAccessibleName(aValueFT.GetText());
                 break;
 
             case TYP_COMBINED_CHARS:
@@ -388,6 +400,8 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
                     const sal_uInt16 nLen = aNameED.GetText().Len();
                     if( !nLen || nLen > MAX_COMBINED_CHARACTERS )
                         bInsert = sal_False;
+                    aNameED.SetAccessibleName(aNameFT.GetText());
+                    aValueED.SetAccessibleName(aValueFT.GetText());
                 }
                 break;
             case TYP_DROPDOWN :

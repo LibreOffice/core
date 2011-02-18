@@ -71,7 +71,8 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell* pSh, sal_uInt8 nTyp
     pOwnSh( pSh ),
     bAbsPos( sal_False ),
     bNewFrm( bNew ),
-    bIsInVertical( sal_False )
+    bIsInVertical( sal_False ),
+    bIsInVerticalL2R( sal_False )
 {
     if ( bNewFrm )
     {
@@ -92,7 +93,7 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell* pSh, sal_uInt8 nTyp
     {
         pOwnSh->GetFlyFrmAttr( aSet );
         sal_Bool bRightToLeft;
-        bIsInVertical = pOwnSh->IsFrmVertical(sal_True, bRightToLeft);
+        bIsInVertical = pOwnSh->IsFrmVertical(sal_True, bRightToLeft, bIsInVerticalL2R);
     }
     ::PrepareBoxInfo( aSet, *pOwnSh );
 }
@@ -102,12 +103,13 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell* pSh, const SfxItemS
     pOwnSh( pSh ),
     bAbsPos( sal_False ),
     bNewFrm( bNew ),
-    bIsInVertical(sal_False)
+    bIsInVertical(sal_False),
+    bIsInVerticalL2R(sal_False)
 {
     if(!bNew)
     {
         sal_Bool bRightToLeft;
-        bIsInVertical = pSh->IsFrmVertical(sal_True, bRightToLeft);
+        bIsInVertical = pSh->IsFrmVertical(sal_True, bRightToLeft, bIsInVerticalL2R);
     }
 }
 
@@ -297,7 +299,9 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     if (bOnlyPercentRefValue)
         return;
 
-    if(bIsInVertical)
+    // --> OD 2009-09-01 #mongolianlayout#
+    if ( bIsInVertical || bIsInVerticalL2R )
+    // <--
     {
         Point aPos(aBoundRect.Pos());
         long nTmp = aPos.X();
@@ -494,7 +498,9 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
             rVal.nMaxVPos = -aBoundRect.Height();
         }
     }
-    if(bIsInVertical)
+    // --> OD 2009-09-01 #mongolianlayout#
+    if ( bIsInVertical || bIsInVerticalL2R )
+    // <--
     {
         //restore width/height exchange
         long nTmp = rVal.nWidth;

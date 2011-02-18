@@ -156,6 +156,8 @@ SwEndNoteOptionPage::SwEndNoteOptionPage( Window *pParent, sal_Bool bEN,
     aPosChapterBox.SetClickHdl(LINK(this, SwEndNoteOptionPage, PosChapterHdl));
     aNumCountBox.SetSelectHdl(LINK(this, SwEndNoteOptionPage, NumCountHdl));
 
+    aPosPageBox.SetAccessibleRelationMemberOf(&aPosFT);
+    aPosChapterBox.SetAccessibleRelationMemberOf(&aPosFT);
 }
 
 void SwEndNoteOptionPage::Reset( const SfxItemSet& )

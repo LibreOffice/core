@@ -1964,6 +1964,13 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
     aLk = LINK(this, SwRedlineOptionsTabPage, ChangedMaskPrevHdl);
     aMarkPosLB.SetSelectHdl( aLk );
     aMarkColorLB.SetSelectHdl( aLk );
+//IAccessibility2 Impplementaton 2009-----
+    //solution: set different accessible name of four color box
+    aInsertColorLB.SetAccessibleName(::rtl::OUString( aInsertFT.GetDisplayText()) + ::rtl::OUString(aInsertColorFT.GetDisplayText()));
+    aDeletedColorLB.SetAccessibleName(::rtl::OUString( aDeletedFT.GetDisplayText()) + ::rtl::OUString( aDeletedColorFT.GetDisplayText()));
+    aChangedColorLB.SetAccessibleName(::rtl::OUString( aChangedFT.GetDisplayText()) + ::rtl::OUString( aChangedColorFT.GetDisplayText()));
+    aMarkColorLB.SetAccessibleName(::rtl::OUString( aMarkPosFT.GetDisplayText()) + ::rtl::OUString( aMarkColorFT.GetDisplayText()));
+//-----IAccessibility2 Impplementaton 2009
 }
 
 SwRedlineOptionsTabPage::~SwRedlineOptionsTabPage()

@@ -91,6 +91,8 @@
 #include <swmodule.hxx>
 #include <sfx2/filedlghelper.hxx>
 
+#include "access.hrc"
+
 #define LONG_LENGTH 60
 #define SHORT_LENGTH 30
 
@@ -152,11 +154,11 @@ class SwNewGlosNameDlg : public ModalDialog
     NoSpaceEdit     aNewShort;
     OKButton        aOk;
     CancelButton    aCancel;
-    FixedLine       aFL;
     FixedText       aONFT;
     Edit            aOldName;
     FixedText       aOSFT;
     Edit            aOldShort;
+    FixedLine       aFL;
 
 protected:
     DECL_LINK( Modify, Edit * );
@@ -298,6 +300,8 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     aCategoryBox.GetModel()->SetSortMode(SortAscending);
     aCategoryBox.SetHighlightRange();   // ueber volle Breite selektieren
     aCategoryBox.SetNodeDefaultImages( );
+    aCategoryBox.SetAccessibleName(SW_RES(STR_ACCESS_SW_CATEGORY));
+    aCategoryBox.SetAccessibleRelationLabeledBy(&aInsertTipCB);
 
     Init();
 }
