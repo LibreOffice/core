@@ -140,7 +140,7 @@ struct ImplToolSizeArray
 
 // -----------------------------------------------------------------------
 
-DECLARE_LIST( ImplTBList, ToolBox* )
+typedef ::std::vector< ToolBox* > ImplTBList;
 
 class ImplTBDragMgr
 {
@@ -164,12 +164,19 @@ public:
                     ImplTBDragMgr();
                     ~ImplTBDragMgr();
 
-    void            Insert( ToolBox* pBox )
-                        { mpBoxList->Insert( pBox ); }
-    void            Remove( ToolBox* pBox )
-                        { mpBoxList->Remove( pBox ); }
-    ULONG           Count() const
-                        { return mpBoxList->Count(); }
+    void            push_back( ToolBox* pBox )
+                        { mpBoxList->push_back( pBox ); }
+    void            erase( ToolBox* pBox )
+                    {
+                        for ( ImplTBList::iterator it = mpBoxList->begin(); it < mpBoxList->end(); ++it ) {
+                            if ( *it == pBox ) {
+                                mpBoxList->erase( it );
+                                break;
+                            }
+                        }
+                    }
+    size_t          size() const
+                    { return mpBoxList->size(); }
 
     ToolBox*        FindToolBox( const Rectangle& rRect );
 
@@ -1249,7 +1256,7 @@ USHORT ToolBox::ImplFindItemPos( ToolBox* pBox, const Point& rPos )
 
 ImplTBDragMgr::ImplTBDragMgr()
 {
-    mpBoxList       = new ImplTBList( 4, 4 );
+    mpBoxList       = new ImplTBList();
     mnLineMode      = 0;
     mnStartLines    = 0;
     mbCustomizeMode = FALSE;
@@ -1273,9 +1280,9 @@ ImplTBDragMgr::~ImplTBDragMgr()
 
 ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
 {
-    ToolBox* pBox = mpBoxList->First();
-    while ( pBox )
+    for ( size_t i = 0, n = mpBoxList->size(); i < n; ++i )
     {
+        ToolBox* pBox = (*mpBoxList)[ i ];
         /*
          *  FIXME: since we can have multiple frames now we cannot
          *  find the drag target by its position alone.
@@ -1283,8 +1290,9 @@ ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
          *  this works in one frame only anyway. If the dialogue
          *  changes to a system window, we need a new implementation here
          */
-        if ( pBox->IsReallyVisible() && pBox->ImplGetWindowImpl()->mpFrame == mpDragBox->ImplGetWindowImpl()->mpFrame )
-        {
+        if (  pBox->IsReallyVisible()
+           && pBox->ImplGetWindowImpl()->mpFrame == mpDragBox->ImplGetWindowImpl()->mpFrame
+        ) {
             if ( !pBox->ImplIsFloatingMode() )
             {
                 Point aPos = pBox->GetPosPixel();
@@ -1294,11 +1302,9 @@ ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
                     return pBox;
             }
         }
-
-        pBox = mpBoxList->Next();
     }
 
-    return pBox;
+    return NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -1497,11 +1503,8 @@ void ImplTBDragMgr::StartCustomizeMode()
 {
     mbCustomizeMode = TRUE;
 
-    ToolBox* pBox = mpBoxList->First();
-    while ( pBox )
-    {
-        pBox->ImplStartCustomizeMode();
-        pBox = mpBoxList->Next();
+    for ( size_t i = 0, n = mpBoxList->size(); i < n; ++i ) {
+        (*mpBoxList)[ i ]->ImplStartCustomizeMode();
     }
 }
 
@@ -1511,11 +1514,8 @@ void ImplTBDragMgr::EndCustomizeMode()
 {
     mbCustomizeMode = FALSE;
 
-    ToolBox* pBox = mpBoxList->First();
-    while ( pBox )
-    {
-        pBox->ImplEndCustomizeMode();
-        pBox = mpBoxList->Next();
+    for ( size_t i = 0, n = mpBoxList->size(); i < n; ++i ) {
+        (*mpBoxList)[ i ]->ImplEndCustomizeMode();
     }
 }
 
@@ -1835,9 +1835,9 @@ ToolBox::~ToolBox()
     {
         // Wenn im TBDrag-Manager, dann wieder rausnehmen
         if ( mbCustomize )
-            pSVData->maCtrlData.mpTBDragMgr->Remove( this );
+            pSVData->maCtrlData.mpTBDragMgr->erase( this );
 
-        if ( !pSVData->maCtrlData.mpTBDragMgr->Count() )
+        if ( !pSVData->maCtrlData.mpTBDragMgr->size() )
         {
             delete pSVData->maCtrlData.mpTBDragMgr;
             pSVData->maCtrlData.mpTBDragMgr = NULL;
@@ -5526,9 +5526,9 @@ void ToolBox::EnableCustomize( BOOL bEnable )
 
         ImplTBDragMgr* pMgr = ImplGetTBDragMgr();
         if ( bEnable )
-            pMgr->Insert( this );
+            pMgr->push_back( this );
         else
-            pMgr->Remove( this );
+            pMgr->erase( this );
     }
 }
 
