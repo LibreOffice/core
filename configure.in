@@ -85,17 +85,17 @@ AC_ARG_ENABLE(ext-report-builder,
 
 AC_ARG_ENABLE(ext-scripting-beanshell,
     AS_HELP_STRING([--enable-ext-scripting-beanshell],
-        [Enables support for scripts in BeanShell]),
+        [Enables support for scripts in BeanShell.]),
 ,)
 
 AC_ARG_ENABLE(ext-scripting-javascript,
     AS_HELP_STRING([--enable-ext-scripting-javascript],
-        [Enables support for scripts in JavaScript]),
+        [Enables support for scripts in JavaScript.]),
 ,)
 
 AC_ARG_ENABLE(ext-scripting-python,
     AS_HELP_STRING([--enable-ext-scripting-python],
-        [Enables support for scripts in Python]),
+        [Enables support for scripts in Python.]),
 ,)
 
 AC_ARG_ENABLE(ext-typo,
