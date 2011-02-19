@@ -129,7 +129,6 @@ void ScInputHandler::InitRangeFinder( const String& rFormula )
     if ( !pActiveViewSh || !SC_MOD()->GetInputOptions().GetRangeFinder() )
         return;
 
-//  String aDelimiters = pEngine->GetWordDelimiters();
     String aDelimiters = ScEditUtil::ModifyDelimiters(
                             String::CreateFromAscii( pMinDelimiters ) );
 
@@ -2104,9 +2103,6 @@ void ScInputHandler::DataChanged( BOOL bFromTopNotify )
 
     UpdateParenthesis();    //  Hervorhebung der Klammern neu
 
-    // ER 31.08.00  New SetDefaults sets ParaAttribs, don't clear them away ...
-//  RemoveAdjust();     //  #40255# harte Ausrichtungs-Attribute loeschen
-
     if (eMode==SC_INPUT_TYPE || eMode==SC_INPUT_TABLE)
     {
         String aText = GetEditText(pEngine);
@@ -2863,7 +2859,6 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
 
         SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
         // #i75893# convert escaped URL of the document to something user friendly
-//       String aFileName = pObjSh->GetMedium()->GetName();
         String aFileName = pObjSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
 
         aRefStr = '\'';
@@ -3140,8 +3135,6 @@ BOOL ScInputHandler::KeyInput( const KeyEvent& rKEvt, BOOL bStartEdit /* = FALSE
 
             if (pTableView || pTopView)
             {
-//              pActiveView->SetEditEngineUpdateMode(TRUE);         //! gibt Muell !!!!
-
                 if (bDoEnter)
                 {
                     if (pTableView)
@@ -3378,7 +3371,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                         bIgnore = TRUE;
                 }
 
-                if ( !bIgnore /* || bRepeat */ )
+                if ( !bIgnore )
                 {
                     const ScAddress&        rSPos   = pState->GetStartPos();
                     const ScAddress&        rEPos   = pState->GetEndPos();
@@ -3390,7 +3383,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
                     aCursorPos  = pState->GetPos();
 
-                    if ( pData /* || bRepeat */ )
+                    if ( pData )
                         bTxtMod = TRUE;
                     else if ( bHadObject )
                         bTxtMod = TRUE;
@@ -3468,8 +3461,6 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                 }
             }
         }
-
-//      bProtected = FALSE;
 
         if ( pInputWin)
         {
@@ -3749,7 +3740,6 @@ void ScInputHandler::InputReplaceSelection( const String& rStr )
     if (pView)
     {
         pView->SetEditEngineUpdateMode( FALSE );
-//      pView->InsertText( rStr, TRUE );
         pView->GetEditEngine()->SetText( aFormText );
         pView->SetSelection( ESelection(0,nFormSelStart, 0,nFormSelEnd) );
         pView->SetEditEngineUpdateMode( TRUE );
