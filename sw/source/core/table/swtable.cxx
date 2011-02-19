@@ -706,7 +706,7 @@ struct Parm
     SwShareBoxFmts aShareFmts;
 
     Parm( const SwTabCols &rN, const SwTabCols &rO ) :
-        rNew( rN ), rOld( rO ), aBoxArr( 10, 1 ) {}
+        rNew( rN ), rOld( rO ), nNewWish(0), nOldWish(0), aBoxArr( 10, 1 ){}
 };
 inline BOOL BoxInArr( SvPtrarr& rArr, SwTableBox* pBox )
 {
