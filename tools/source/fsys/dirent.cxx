@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-
 #if !defined UNX
 #include <io.h>
 #include <process.h>
@@ -47,7 +46,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include "comdep.hxx"
 #include <tools/fsys.hxx>
 #define _TOOLS_HXX

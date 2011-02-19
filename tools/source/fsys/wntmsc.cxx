@@ -42,7 +42,6 @@
 #include "wntmsc.hxx"
 #include <tools/errinf.hxx>
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <tools/wldcrd.hxx>
 #include <tools/fsys.hxx>
 #include <tools/bigint.hxx>

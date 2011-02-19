@@ -34,7 +34,6 @@
 #include <rtl/textenc.h>
 
 #include <tools/inetmime.hxx>
-#include <tools/list.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 

@@ -47,17 +47,8 @@
 #include <postwin.h>
 #include "ddewrap.hxx"
 
-/*
-extern "C"
-{
-#define BOOL WIN_BOOL
-#define BYTE WIN_BYTE
-#undef BOOL
-#undef BYTE
-};
-*/
-
 #endif
+
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include <tools/shl.hxx>

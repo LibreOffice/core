@@ -32,7 +32,6 @@
 #define _SV_HEADBAR_CXX
 #include <svtools/headbar.hxx>
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>

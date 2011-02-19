@@ -30,7 +30,6 @@
 #define _CFG_MERGE_HXX
 
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <boost/unordered_map.hpp>
 #include <vector>
 

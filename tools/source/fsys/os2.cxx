@@ -36,7 +36,6 @@
 #include <malloc.h>
 #endif
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <tools/bigint.hxx>
 #include <tools/fsys.hxx>
 #include "comdep.hxx"

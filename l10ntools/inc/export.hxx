@@ -35,7 +35,6 @@
 #endif
 
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <tools/stream.hxx>
 #include <tools/fsys.hxx>
 #include <osl/file.hxx>

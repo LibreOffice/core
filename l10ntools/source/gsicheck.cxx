@@ -31,7 +31,6 @@
 #include <stdio.h>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
-#include <tools/list.hxx>
 
 // local includes
 #include "tagtest.hxx"

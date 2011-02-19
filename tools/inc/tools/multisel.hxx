@@ -30,7 +30,6 @@
 
 #include "tools/toolsdllapi.h"
 #include <tools/gen.hxx>
-#include <tools/list.hxx>
 #include <tools/string.hxx>
 
 #include <vector>
@@ -40,7 +39,7 @@
 
 typedef ::std::vector< Range* > ImpSelList;
 
-#define SFX_ENDOFSELECTION      CONTAINER_ENTRY_NOTFOUND
+#define SFX_ENDOFSELECTION      ULONG_MAX
 
 //------------------------------------------------------------------
 

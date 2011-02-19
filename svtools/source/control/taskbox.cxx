@@ -31,7 +31,6 @@
 
 #define _TASKBAR_CXX
 
-#include <tools/list.hxx>
 #include <tools/debug.hxx>
 #include <vcl/image.hxx>
 #include <vcl/help.hxx>

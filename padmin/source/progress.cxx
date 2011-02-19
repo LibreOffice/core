@@ -30,7 +30,6 @@
 #include <stdio.h>
 #include <tools/string.hxx>
 #include <tools/stream.hxx>
-#include <tools/list.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <progress.hxx>

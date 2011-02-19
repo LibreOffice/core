@@ -31,7 +31,6 @@
 
 #include "svsys.h"
 #include "vcl/salinst.hxx"
-#include "tools/list.hxx"
 #include "tools/debug.hxx"
 #include "tools/diagnose_ex.h"
 #include "vcl/svdata.hxx"

@@ -31,8 +31,8 @@
 
 #include <vcl/dllapi.h>
 #include <tools/gen.hxx>
-#include <tools/list.hxx>
 #include <tools/link.hxx>
+#include <tools/list.hxx>
 #include <tools/string.hxx>
 #include <vcl/mapmod.hxx>
 

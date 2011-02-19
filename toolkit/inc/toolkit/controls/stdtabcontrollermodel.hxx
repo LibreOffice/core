@@ -41,7 +41,6 @@
 #include <toolkit/helper/servicenames.hxx>
 #include <osl/mutex.hxx>
 
-#include <tools/list.hxx>
 #include <tools/gen.hxx>
 #include <vector>
 

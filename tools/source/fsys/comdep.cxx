@@ -31,7 +31,6 @@
 
 #include "comdep.hxx"
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <tools/fsys.hxx>
 
 DBG_NAMEEX( DirEntry )

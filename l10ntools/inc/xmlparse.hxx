@@ -34,7 +34,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "tools/string.hxx"
-#include "tools/list.hxx"
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include "tools/stream.hxx"
 #include "tools/isofallback.hxx"

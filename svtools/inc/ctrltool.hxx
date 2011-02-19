@@ -30,9 +30,9 @@
 #define _CTRLTOOL_HXX
 
 #include "svtools/svtdllapi.h"
+#include <tools/list.hxx>
 
 #include <sal/types.h>
-#include <tools/list.hxx>
 #include <vcl/metric.hxx>
 
 class ImplFontListNameInfo;

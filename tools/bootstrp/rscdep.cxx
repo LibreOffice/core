@@ -40,7 +40,6 @@
 #include "sal/main.h"
 
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 

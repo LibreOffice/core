@@ -31,7 +31,6 @@
 #include "tools/toolsdllapi.h"
 
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <vector>
 
 // forwards

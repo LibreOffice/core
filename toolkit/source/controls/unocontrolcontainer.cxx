@@ -44,7 +44,6 @@
 #include <comphelper/sequence.hxx>
 
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 

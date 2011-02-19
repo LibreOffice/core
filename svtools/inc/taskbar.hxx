@@ -31,7 +31,6 @@
 
 #include "svtools/svtdllapi.h"
 #include <tools/time.hxx>
-#include <tools/list.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/status.hxx>

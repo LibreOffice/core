@@ -30,7 +30,6 @@
 #define _TAGTEST_HXX_
 
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <boost/unordered_map.hpp>
 #include <vector>
 
@@ -242,7 +241,7 @@ public:
             maList.clear();
         }
 
-    void insert( TokenInfo p, size_t nIndex = LIST_APPEND )
+    void insert( TokenInfo p, size_t nIndex = size_t(-1) )
         {
             if ( nIndex < maList.size() ) {
                 TokenListImpl::iterator it = maList.begin();

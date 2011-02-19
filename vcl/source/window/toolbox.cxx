@@ -31,7 +31,6 @@
 
 #include <svsys.h>
 #include <rtl/logfile.hxx>
-#include <tools/list.hxx>
 #include <tools/debug.hxx>
 
 #include <tools/rc.h>

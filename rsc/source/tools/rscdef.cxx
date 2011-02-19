@@ -32,6 +32,7 @@
 
 // Programmuebergreifende Includes.
 #include <rscdef.hxx>
+#include <tools/list.hxx>
 
 /****************** C o d e **********************************************/
 /****************** R s c I d ********************************************/

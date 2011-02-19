@@ -30,7 +30,6 @@
 #define _SV_OUTFONT_HXX
 
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <i18npool/lang.h>
 #include <tools/gen.hxx>
 #include <tools/solar.h>

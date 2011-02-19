@@ -59,7 +59,6 @@ struct mnttab
 #endif
 
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <tools/fsys.hxx>
 #include "comdep.hxx"
 #include <rtl/instance.hxx>

@@ -30,7 +30,6 @@
 #define _SSTRING_HXX
 
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <vector>
 
 #define NOT_THERE       LIST_ENTRY_NOTFOUND

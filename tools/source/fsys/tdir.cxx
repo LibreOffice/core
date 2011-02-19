@@ -35,7 +35,6 @@
 #include <cstdarg>
 #include <limits.h>
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 
 #include "comdep.hxx"
 #include <tools/fsys.hxx>

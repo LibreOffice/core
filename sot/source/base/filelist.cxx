@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sot.hxx"
 
-#include <tools/list.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <tools/rtti.hxx>
