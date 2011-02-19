@@ -10,6 +10,7 @@ pk  setup_native\source\win32\customactions\regactivex    nmake   -  w   sn_rega
 pk  setup_native\source\win32\customactions\regpatchactivex nmake -  w   sn_regpatchactivex NULL
 pk  setup_native\source\win32\customactions\reg4allmsdoc  nmake   -  w   sn_reg4allmsdoc NULL
 pk  setup_native\source\win32\customactions\sellang       nmake   -  w   sn_sellang NULL
+pk  setup_native\source\win32\customactions\thesaurus     nmake   -  w   sn_thesaurus NULL
 pk  setup_native\source\win32\customactions\reg64		  nmake   -  w   sn_reg64 NULL
 pk  setup_native\source\win32\customactions\javafilter    nmake   -  w   sn_javafilter NULL
 pk  setup_native\source\win32\customactions\quickstarter  nmake   -  w   sn_quickstarter NULL
