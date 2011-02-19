@@ -78,9 +78,7 @@ void OPredicateCompiler::dispose()
     m_orgColumns        = NULL;
 m_xIndexes.clear();
 }
-//------------------------------------------------------------------
-//  inline OCursor& OPredicateCompiler::Cursor() const {return m_rCursor;}
-//------------------------------------------------------------------
+
 void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
 {
     if (!pSQLParseNode)
