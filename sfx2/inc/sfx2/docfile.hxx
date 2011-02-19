@@ -45,7 +45,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <svl/lstner.hxx>
 
 #include <tools/globname.hxx>

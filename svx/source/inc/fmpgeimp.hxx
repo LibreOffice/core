@@ -37,7 +37,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XMap.hpp>
 
-#include <tools/list.hxx>
 #include <tools/link.hxx>
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/weakref.hxx>

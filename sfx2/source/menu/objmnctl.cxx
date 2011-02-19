@@ -31,7 +31,6 @@
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/VerbAttributes.hpp>
 
-#include <tools/list.hxx>
 #include <vcl/menu.hxx>
 #include <svl/stritem.hxx>
 

@@ -35,7 +35,6 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/list.hxx>
 #include <svl/itemprop.hxx>
 #include <svtools/unoevent.hxx>
 #include <comphelper/sequence.hxx>

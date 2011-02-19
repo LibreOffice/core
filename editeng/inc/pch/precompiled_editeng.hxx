@@ -796,7 +796,6 @@
 #include "tools/inetdef.hxx"
 #include "tools/line.hxx"
 #include "tools/link.hxx"
-#include "tools/list.hxx"
 #include "tools/multisel.hxx"
 #include "tools/poly.hxx"
 #include "tools/rc.h"

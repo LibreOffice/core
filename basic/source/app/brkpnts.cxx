@@ -28,7 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
-#include <tools/list.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/sbstar.hxx>

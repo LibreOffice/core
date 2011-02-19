@@ -30,7 +30,6 @@
 #define _SBXBASE_HXX
 
 #include <i18npool/lang.h>
-#include "tools/list.hxx"
 #include "svl/svarray.hxx"
 #include <basic/sbxdef.hxx>
 

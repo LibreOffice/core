@@ -30,7 +30,6 @@
 #include "precompiled_editeng.hxx"
 
 // include ---------------------------------------------------------------
-#include <tools/list.hxx>
 #include <vcl/outdev.hxx>
 #include <editeng/editrids.hrc>
 #include <unotools/intlwrapper.hxx>

@@ -78,7 +78,6 @@
 
 #include "VisAreaExport.hxx"
 #include "XMLNumberStylesExport.hxx"
-#include <tools/list.hxx>
 #include <tools/string.hxx>
 
 #include "animationexport.hxx"

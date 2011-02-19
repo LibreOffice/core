@@ -28,7 +28,6 @@
 #ifndef _SFX_ARRDECL_HXX
 #define _SFX_ARRDECL_HXX
 
-#include <tools/list.hxx>
 #include <svl/svarray.hxx>
 #include <sfx2/minarray.hxx>
 #include <vector>

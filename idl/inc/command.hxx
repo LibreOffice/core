@@ -29,8 +29,6 @@
 #ifndef _COMMAND_HXX
 #define _COMMAND_HXX
 
-
-#include <tools/list.hxx>
 #include <tools/string.hxx>
 #include <vector>
 

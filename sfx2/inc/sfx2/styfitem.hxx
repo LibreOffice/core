@@ -33,7 +33,6 @@
 
 #include <vcl/bitmap.hxx>
 #include <vcl/image.hxx>
-#include <tools/list.hxx>
 #include <tools/rc.hxx>
 #include <rsc/rscsfx.hxx>
 #include <vector>

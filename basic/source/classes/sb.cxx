@@ -37,7 +37,6 @@
 #include <tools/stream.hxx>
 #include <tools/errinf.hxx>
 #include <basic/sbx.hxx>
-#include <tools/list.hxx>
 #include <tools/shl.hxx>
 #include <tools/rc.hxx>
 #include <vcl/svapp.hxx>

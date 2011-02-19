@@ -28,7 +28,6 @@
 #ifndef _SVX_GRIDCTRL_HXX
 #define _SVX_GRIDCTRL_HXX
 
-#include <tools/list.hxx>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
 #include <com/sun/star/sdb/XRowsChangeListener.hpp>

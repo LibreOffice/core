@@ -38,7 +38,6 @@
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <tools/config.hxx>
-#include <tools/list.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/floatwin.hxx>
 #include <vcl/toolbox.hxx>

@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#include <tools/list.hxx>
 #include <tools/table.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/asynclink.hxx>

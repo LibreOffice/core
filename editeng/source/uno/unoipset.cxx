@@ -30,7 +30,6 @@
 #include "precompiled_editeng.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svl/eitem.hxx>
-#include <tools/list.hxx>
 
 #include <boost/unordered_map.hpp>
 #include <svl/itemprop.hxx>

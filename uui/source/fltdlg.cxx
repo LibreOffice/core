@@ -42,7 +42,6 @@
 #include <com/sun/star/util/XStringWidth.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <tools/list.hxx>
 #include <tools/urlobj.hxx>
 
 #include <vcl/button.hxx>

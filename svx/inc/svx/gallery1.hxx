@@ -30,7 +30,6 @@
 #define _SVX_GALLERY1_HXX_
 
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/brdcst.hxx>
 #include "svx/svxdllapi.h"

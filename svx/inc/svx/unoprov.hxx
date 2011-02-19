@@ -32,7 +32,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svl/itemprop.hxx>
-#include <tools/list.hxx>
 #include "svx/svxdllapi.h"
 
 class SvxItemPropertySet;

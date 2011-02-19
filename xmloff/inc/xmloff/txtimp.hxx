@@ -38,7 +38,6 @@
 #include <boost/utility.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include <tools/list.hxx>
 #include <xmloff/xmltkmap.hxx>
 
 // functional.hxx is obsolete and should be replaced by its comphelper
