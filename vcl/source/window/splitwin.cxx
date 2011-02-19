@@ -30,7 +30,6 @@
 #include "precompiled_vcl.hxx"
 
 #include <string.h>
-#include <tools/list.hxx>
 #include <tools/debug.hxx>
 #include <tools/rcid.h>
 #include <vcl/event.hxx>
@@ -43,7 +42,6 @@
 #include <vcl/svdata.hxx>
 #include <vcl/help.hxx>
 #include <vcl/splitwin.hxx>
-
 
 
 // =======================================================================
@@ -94,10 +92,6 @@ struct ImplSplitSet
 #define SPLIT_VERT              ((USHORT)0x0002)
 #define SPLIT_WINDOW            ((USHORT)0x0004)
 #define SPLIT_NOSPLIT           ((USHORT)0x8000)
-
-// -----------------------------------------------------------------------
-
-DECLARE_LIST( ImplSplitList, SplitWindow* )
 
 // =======================================================================
 
@@ -161,42 +155,7 @@ void SplitWindow::ImplDrawBorder( SplitWindow* pWin )
         aDecoView.DrawFrame( aRect, FRAME_DRAW_DOUBLEIN );
     }
     else
-    {/*
-        if ( pWin->meAlign == WINDOWALIGN_BOTTOM )
-        {
-            pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-1, nDY-2 ) );
-            pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
-        }
-        else
-        {
-            pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-            pWin->DrawLine( Point( 0, 0 ), Point( nDX-1, 0 ) );
-            pWin->SetLineColor( rStyleSettings.GetLightColor() );
-            pWin->DrawLine( Point( 0, 1 ), Point( nDX-1, 1 ) );
-            if ( (pWin->meAlign == WINDOWALIGN_LEFT) || (pWin->meAlign == WINDOWALIGN_RIGHT) )
-            {
-                if ( pWin->meAlign == WINDOWALIGN_LEFT )
-                {
-                    pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-                    pWin->DrawLine( Point( 0, 0 ), Point( 0, nDY-1 ) );
-                    pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-1, nDY-2 ) );
-                    pWin->SetLineColor( rStyleSettings.GetLightColor() );
-                    pWin->DrawLine( Point( 1, 1 ), Point( 1, nDY-3 ) );
-                    pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
-                }
-                else
-                {
-                    pWin->SetLineColor( rStyleSettings.GetShadowColor() );
-                    pWin->DrawLine( Point( nDX-2, 0 ), Point( nDX-2, nDY-3 ) );
-                    pWin->DrawLine( Point( 0, nDY-2 ), Point( nDX-2, nDY-2 ) );
-                    pWin->SetLineColor( rStyleSettings.GetLightColor() );
-                    pWin->DrawLine( Point( nDX-1, 0 ), Point( nDX-1, nDY-1 ) );
-                    pWin->DrawLine( Point( 0, nDY-1 ), Point( nDX-1, nDY-1 ) );
-                }
-            }
-        }*/
+    {
         if ( pWin->meAlign == WINDOWALIGN_BOTTOM )
         {
             pWin->SetLineColor( rStyleSettings.GetShadowColor() );
