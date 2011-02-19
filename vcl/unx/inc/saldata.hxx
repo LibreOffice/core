@@ -45,8 +45,6 @@ class SalPrinter;
 
 // -=-= typedefs -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-DECLARE_LIST( SalDisplays, SalDisplay* )
-
 #if defined LINUX || defined NETBSD || defined AIX || \
     defined FREEBSD || defined OPENBSD || defined DRAGONFLY
 #include <pthread.h>
