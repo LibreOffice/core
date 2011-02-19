@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
-#include <tools/list.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/cmdevt.hxx>
 #include <unotools/charclass.hxx>

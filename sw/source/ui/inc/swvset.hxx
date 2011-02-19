@@ -27,7 +27,6 @@
  ************************************************************************/
 #ifndef _SWVSET_HXX
 #define _SWVSET_HXX
-#include <tools/list.hxx>
 #include <svx/numvset.hxx>
 
 class SwRulerValueSet : public SvxBmpNumValueSet

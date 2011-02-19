@@ -28,7 +28,6 @@
 #ifndef _ROMENU_HXX
 #define _ROMENU_HXX
 
-
 #include <vcl/graph.hxx>
 #include <tools/list.hxx>
 #include <vcl/menu.hxx>

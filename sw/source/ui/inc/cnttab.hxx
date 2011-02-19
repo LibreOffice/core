@@ -41,13 +41,13 @@
 #include <sfx2/tabdlg.hxx>
 
 #include "tox.hxx"
-#include <tools/list.hxx>
 #include <toxmgr.hxx>
 #include <svx/checklbx.hxx>
 #include <tools/resary.hxx>
 #include <svtools/svtreebx.hxx>
 #include <vcl/menubtn.hxx>
 #include <svx/langbox.hxx>
+
 #define TOX_PAGE_SELECT 1
 #define TOX_PAGE_ENTRY  2
 #define TOX_PAGE_STYLES 3

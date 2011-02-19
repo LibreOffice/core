@@ -34,13 +34,11 @@
 #endif
 
 #include "cmdid.h"
-#include <tools/list.hxx>
 #include "swmodule.hxx"
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "globals.hrc"
 #include "helpid.h"
-
 
 #include <sfx2/styfitem.hxx>
 

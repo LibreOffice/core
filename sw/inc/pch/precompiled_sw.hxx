@@ -852,7 +852,6 @@
 #include "tools/gen.hxx"
 #include "tools/globname.hxx"
 #include "tools/link.hxx"
-#include "tools/list.hxx"
 #include "tools/mempool.hxx"
 #include "tools/multisel.hxx"
 #include "tools/poly.hxx"

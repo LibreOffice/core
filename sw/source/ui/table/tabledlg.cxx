@@ -33,9 +33,7 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
 #include <hintids.hxx>
-#include <tools/list.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>

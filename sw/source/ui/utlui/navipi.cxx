@@ -29,12 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #define NAVIPI_CXX
 
 #include <string>
-#include <tools/list.hxx>
 #include <svl/urlbmk.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/filter.hxx>
@@ -68,7 +65,6 @@
 #include <utlui.hrc>
 
 #include <unomid.h>
-
 
 #define PAGE_CHANGE_TIMEOUT 1000 //Timeout fuer Seitenwechsel
 

@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <tools/list.hxx>
 #include <swtypes.hxx>
 #include <hintids.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>

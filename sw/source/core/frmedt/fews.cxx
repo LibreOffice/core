@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <tools/list.hxx>
 #include <svx/svdobj.hxx>
 #include <init.hxx>
 #include <fesh.hxx>

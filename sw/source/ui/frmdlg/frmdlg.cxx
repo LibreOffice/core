@@ -35,7 +35,6 @@
 
 #include <svx/dialogs.hrc>
 #include <hintids.hxx>
-#include <tools/list.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/htmlmode.hxx>
 #include <fmtfsize.hxx>

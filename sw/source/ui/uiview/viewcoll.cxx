@@ -31,7 +31,6 @@
 
 #include "cmdid.h"
 #include "uiitems.hxx"
-#include <tools/list.hxx>
 #include <vcl/window.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -42,7 +41,6 @@
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "basesh.hxx"
-
 
 void SwView::ExecColl(SfxRequest &rReq)
 {
