@@ -71,13 +71,9 @@ INSTALLDIR=$(OUT)
 LOCALPYFILES= \
     $(BIN)$/uno.py \
     $(BIN)$/unohelper.py \
-    $(BIN)$/pythonloader.py
-
-.IF "$(ENABLE_SCRIPTING_PYTHON)" == "YES"
-LOCALPYFILES+= \
+    $(BIN)$/pythonloader.py \
     $(BIN)$/officehelper.py \
     $(BIN)$/mailmerge.py
-.ENDIF
 
 xxxx:
     echo $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product LibreOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml
