@@ -969,7 +969,7 @@ void ScInputHandler::UseFormulaData()
         ESelection aSel = pActiveView->GetSelection();
         aSel.Adjust();
 
-        //  #59348# Durch Differenzen zwischen Tabelle und Eingabezeile
+        //  Durch Differenzen zwischen Tabelle und Eingabezeile
         //  (z.B. Clipboard mit Zeilenumbruechen) kann es sein, dass die Selektion
         //  nicht mehr zur EditEngine passt. Dann halt kommentarlos abbrechen:
 
@@ -1011,7 +1011,7 @@ void ScInputHandler::UseFormulaData()
                 if( nLeftParentPos == STRING_NOTFOUND )
                     break;
 
-                // #160063# nLeftParentPos can be 0 if a parenthesis is inserted before the formula
+                // nLeftParentPos can be 0 if a parenthesis is inserted before the formula
                 sal_Unicode c = ( nLeftParentPos > 0 ) ? aFormula.GetChar( nLeftParentPos-1 ) : 0;
                 if( !((c >= 'A' && c<= 'Z') || (c>= 'a' && c<= 'z') ) )
                     continue;
@@ -1159,8 +1159,7 @@ void lcl_CompleteFunction( EditView* pView, const String& rInsert, BOOL& rParIns
         if ( bDoParen )
         {
             //  Klammern hinter Funktionsnamen nicht einfuegen, wenn direkt dahinter
-            //  schon eine Klammer steht (z.B. wenn der Funktionsname geaendert wurde,
-            //  #39393#).
+            //  schon eine Klammer steht (z.B. wenn der Funktionsname geaendert wurde).
 
             ESelection aWordSel = pView->GetSelection();
             String aOld = pView->GetEditEngine()->GetText((USHORT)0);
@@ -1229,7 +1228,7 @@ String lcl_Calculate( const String& rFormula, ScDocument* pDoc, const ScAddress 
     {
         ScFormulaCell* pCell = new ScFormulaCell( pDoc, rPos, rFormula );
 
-        // #35521# HACK! um bei ColRowNames kein #REF! zu bekommen,
+        // HACK! um bei ColRowNames kein #REF! zu bekommen,
         // wenn ein Name eigentlich als Bereich in die Gesamt-Formel
         // eingefuegt wird, bei der Einzeldarstellung aber als
         // single-Zellbezug interpretiert wird
@@ -1469,7 +1468,7 @@ void ScInputHandler::UseColData()           // beim Tippen
                     nAutoPos = SCPOS_INVALID;   // nix
                     if ( pColumnData->FindText( aText, aNew, nAutoPos, FALSE ) )
                     {
-                        //  #45434# durch dBase Import etc. koennen Umbrueche im String sein,
+                        //  durch dBase Import etc. koennen Umbrueche im String sein,
                         //  das wuerde hier mehrere Absaetze ergeben -> nicht gut
                         //! GetExactMatch funktioniert dann auch nicht
                         lcl_RemoveLineEnd( aNew );
@@ -1802,7 +1801,7 @@ void ScInputHandler::RemoveAdjust()
     if ( bUndo )
         pEngine->EnableUndo( FALSE );
 
-    //  #89403# non-default paragraph attributes (e.g. from clipboard)
+    //  non-default paragraph attributes (e.g. from clipboard)
     //  must be turned into character attributes
     pEngine->RemoveParaAttribs();
 
@@ -1866,7 +1865,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 UpdateFormulaMode();
                 if ( pActiveViewSh && ( !bFromCommand || !bCommandErrorShown ) )
                 {
-                    //  #97673# Prevent repeated error messages for the same cell from command events
+                    //  Prevent repeated error messages for the same cell from command events
                     //  (for keyboard events, multiple messages are wanted).
                     //  Set the flag before showing the error message because the command handler
                     //  for the next IME command may be called when showing the dialog.
@@ -1919,7 +1918,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 //  schon gefuellt ist (bei Edit-Zellen).
                 //  SetParaAttribs wuerde dann den Inhalt aendern
 
-                //! ER 30.08.00  The SetDefaults is now (since MUST/src602
+                //! The SetDefaults is now (since MUST/src602
                 //! EditEngine changes) implemented as a SetParaAttribs.
                 //! Any problems?
 
@@ -1934,7 +1933,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 Color aBackCol = ((const SvxBrushItem&)
                                 pPattern->GetItem( ATTR_BACKGROUND )).GetColor();
                 ScModule* pScMod = SC_MOD();
-                //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
+                //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
                 if ( aBackCol.GetTransparency() > 0 ||
                         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
                     aBackCol.SetColor( pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
@@ -2055,7 +2054,7 @@ IMPL_LINK( ScInputHandler, ModifyHdl, void *, EMPTYARG )
     if ( !bInOwnChange && ( eMode==SC_INPUT_TYPE || eMode==SC_INPUT_TABLE ) &&
          pEngine && pEngine->GetUpdateMode() && pInputWin )
     {
-        //  #102745# update input line from ModifyHdl for changes that are not
+        //  update input line from ModifyHdl for changes that are not
         //  wrapped by DataChanging/DataChanged calls (like Drag&Drop)
 
         String aText = GetEditText(pEngine);
@@ -2116,7 +2115,7 @@ void ScInputHandler::DataChanged( BOOL bFromTopNotify )
         //  (unabhaengig von eMode)     -> View anpassen!
         //  wenn der Cursor am Ende steht, reicht der Status-Handler an der ViewData
 
-    //  #93767# first make sure the status handler is called now if the cursor
+    //  first make sure the status handler is called now if the cursor
     //  is outside the visible area
     pEngine->QuickFormatDoc();
 
@@ -2194,7 +2193,7 @@ void ScInputHandler::UpdateFormulaMode()
 
 void ScInputHandler::ShowRefFrame()
 {
-    // #123169# Modifying pActiveViewSh here would interfere with the bInEnterHandler / bRepeat
+    // Modifying pActiveViewSh here would interfere with the bInEnterHandler / bRepeat
     // checks in NotifyChange, and lead to keeping the wrong value in pActiveViewSh.
     // A local variable is used instead.
     ScTabViewShell* pVisibleSh = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
@@ -2374,7 +2373,7 @@ void lcl_SelectionToEnd( EditView* pView )
 
 void ScInputHandler::EnterHandler( BYTE nBlockMode )
 {
-    //  #62806# Bei Makro-Aufrufen fuer Gueltigkeit kann Tod und Teufel passieren,
+    //  Bei Makro-Aufrufen fuer Gueltigkeit kann Tod und Teufel passieren,
     //  darum dafuer sorgen, dass EnterHandler nicht verschachtelt gerufen wird:
 
     if (bInEnterHandler) return;
@@ -2407,7 +2406,7 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
         Window* pFrameWin = pActiveViewSh ? pActiveViewSh->GetFrameWin() : NULL;
 
         if (pTopView)
-            pTopView->CompleteAutoCorrect();    // #59759# CompleteAutoCorrect fuer beide Views
+            pTopView->CompleteAutoCorrect();    // CompleteAutoCorrect fuer beide Views
         if (pTableView)
             pTableView->CompleteAutoCorrect(pFrameWin);
         aString = GetEditText(pEngine);
@@ -2631,7 +2630,7 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
     eMode     = SC_INPUT_NONE;
     StopInputWinEngine( TRUE );
 
-    // #123344# Text input (through number formats) or ApplySelectionPattern modify
+    // Text input (through number formats) or ApplySelectionPattern modify
     // the cell's attributes, so pLastPattern is no longer valid
     pLastPattern = NULL;
 
@@ -3214,7 +3213,7 @@ BOOL ScInputHandler::InputCommand( const CommandEvent& rCEvt, BOOL bForce )
 
     if ( rCEvt.GetCommand() == COMMAND_CURSORPOS )
     {
-        //  #90346# for COMMAND_CURSORPOS, do as little as possible, because
+        //  for COMMAND_CURSORPOS, do as little as possible, because
         //  with remote VCL, even a ShowCursor will generate another event.
         if ( eMode != SC_INPUT_NONE )
         {
@@ -3315,7 +3314,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                                    BOOL bForce, ScTabViewShell* pSourceSh,
                                    BOOL bStopEditing)
 {
-    //  #62806# Wenn der Aufruf aus einem Makro-Aufruf im EnterHandler kommt,
+    //  Wenn der Aufruf aus einem Makro-Aufruf im EnterHandler kommt,
     //  gleich abbrechen und nicht den Status durcheinander bringen
     if (bInEnterHandler)
         return;
@@ -3541,7 +3540,7 @@ IMPL_LINK( ScInputHandler, DelayTimer, Timer*, pTimer )
                     pInputWin->Disable();
                 }
             }
-            else if ( !bFormulaMode )   // #39210# Formel auch z.B. bei Hilfe behalten
+            else if ( !bFormulaMode )   // Formel auch z.B. bei Hilfe behalten
             {
                 bInOwnChange = TRUE;    // disable ModifyHdl (reset below)
 
