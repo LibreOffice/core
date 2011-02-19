@@ -41,7 +41,6 @@
 //--------- ab hier die "generierten"
 #include <tools/string.hxx>
 #include <tools/solar.h>
-#include <tools/list.hxx>
 #include <tools/contnr.hxx>
 #include <tools/rtti.hxx>
 #include <tools/ref.hxx>

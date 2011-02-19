@@ -31,7 +31,6 @@
 
 #include <vcl/svapp.hxx>
 #include <tools/stack.hxx>
-#include <tools/list.hxx>
 #include <tools/string.hxx>
 
 #include "types.hxx"
