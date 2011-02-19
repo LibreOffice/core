@@ -273,7 +273,7 @@ class AttributeProvider;
 class SalUnicodeConverter;
 class SalConverterCache;
 
-DECLARE_LIST( SalFontCache, ExtendedFontStruct* )
+typedef ::std::vector< ExtendedFontStruct* > SalFontCache;
 
 extern "C" {
     struct SnDisplay;

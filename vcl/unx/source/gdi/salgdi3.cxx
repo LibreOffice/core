@@ -420,21 +420,20 @@ SalDisplay::GetFont( const ExtendedXlfd *pRequestedFont,
     // TODO: either get rid of X11 fonts or get rid of the non-hashmapped cache
     if( !m_pFontCache )
     {
-        m_pFontCache = new SalFontCache( 64, 64, 16 ); // ???
+        m_pFontCache = new SalFontCache();
     }
     else
     {
         ExtendedFontStruct *pItem;
-        for ( pItem  = m_pFontCache->First();
-              pItem != NULL;
-              pItem  = m_pFontCache->Next() )
+        for ( size_t i = 0, n = m_pFontCache->size(); i < n; ++i )
         {
+            pItem = (*m_pFontCache)[ i ];
             if ( pItem->Match(pRequestedFont, rPixelSize, bVertical) )
             {
-                if( m_pFontCache->GetCurPos() )
+                if( i > 0 )
                 {
-                    m_pFontCache->Remove( pItem );
-                    m_pFontCache->Insert( pItem, 0UL );
+                    m_pFontCache->erase( m_pFontCache->begin() + i );
+                    m_pFontCache->insert( m_pFontCache->begin(), pItem );
                 }
                 return pItem;
             }
@@ -442,18 +441,17 @@ SalDisplay::GetFont( const ExtendedXlfd *pRequestedFont,
     }
 
     // before we expand the cache, we look for very old and unused items
-    if( m_pFontCache->Count() >= 64 )
+    if( m_pFontCache->size() >= 64 )
     {
         ExtendedFontStruct *pItem;
-        for ( pItem = m_pFontCache->Last();
-              pItem != NULL;
-              pItem = m_pFontCache->Prev() )
+        for ( size_t i = m_pFontCache->size(); i > 0; )
         {
+            pItem  = (*m_pFontCache)[ --i ];
             if( 1 == pItem->GetRefCount() )
             {
-                m_pFontCache->Remove( pItem );
+                m_pFontCache->erase( m_pFontCache->begin() + i );
                 pItem->ReleaseRef();
-                if( m_pFontCache->Count() < 64 )
+                if( m_pFontCache->size() < 64 )
                     break;
             }
         }
@@ -462,7 +460,7 @@ SalDisplay::GetFont( const ExtendedXlfd *pRequestedFont,
     ExtendedFontStruct *pItem = new ExtendedFontStruct( GetDisplay(),
                                         rPixelSize, bVertical,
                                         const_cast<ExtendedXlfd*>(pRequestedFont) );
-    m_pFontCache->Insert( pItem, 0UL );
+    m_pFontCache->insert( m_pFontCache->begin(), pItem );
     pItem->AddRef();
 
     return pItem;
@@ -475,13 +473,9 @@ SalDisplay::DestroyFontCache()
 {
     if( m_pFontCache )
     {
-        ExtendedFontStruct *pItem = m_pFontCache->First();
-        while( pItem )
-        {
-            delete pItem;
-            pItem = m_pFontCache->Next();
+        for ( size_t i = 0, n = m_pFontCache->size(); i < n; ++i ) {
+            delete (*m_pFontCache)[ i ];
         }
-        delete m_pFontCache;
     }
     if( mpFontList )
     {
