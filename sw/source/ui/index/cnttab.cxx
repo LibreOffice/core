@@ -3209,7 +3209,7 @@ void SwTokenWindow::RemoveControl(SwTOXButton* pDel, sal_Bool bInternalCall )
 
     // the two neighbours of the box must be merged
     // the properties of the right one will be lost
-    OSL_ENSURE(it != aControlList.begin() && it != aControlList.rbegin(),
+    OSL_ENSURE(it != aControlList.begin() && it != aControlList.end() - 1,
         "Button at first or last position?");
 
     ctrl_iterator itLeft = it, itRight = it;
