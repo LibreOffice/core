@@ -45,7 +45,7 @@ extern void ScrollMDI(ViewShell* pVwSh, const SwRect &, USHORT nRangeX, USHORT n
 extern BOOL IsScrollMDI(ViewShell* pVwSh, const SwRect &);
 extern void SizeNotify(ViewShell* pVwSh, const Size &);
 
-//Update der Statusleiste, waehrend einer Action.
+// Update of status bar during an action.
 extern void PageNumNotify( ViewShell* pVwSh,
                             USHORT nPhyNum,
                             USHORT nVirtNum,
@@ -67,10 +67,10 @@ LAYOUT_NS Dialog* GetSearchDialog();
 void RepaintPagePreview( ViewShell* pVwSh, const SwRect& rRect );
 
 // ndgrf.cxx
-// alle QuickDraw-Bitmaps des speziellen Docs loeschen
+// Delete all QuickDraw-bitmaps of the specific Document.
 void DelAllGrfCacheEntries( SwDoc* pDoc );
 
-// ChgMode fuer Tabellen aus der Konfiguration lesen
+// Read ChgMode for tables from configuration.
 TblChgMode GetTblChgDefaultMode();
 
 BOOL JumpToSwMark( ViewShell* pVwSh, const UniString& rMark );

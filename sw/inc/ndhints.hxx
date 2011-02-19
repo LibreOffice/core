@@ -35,7 +35,7 @@
 #include "swtypes.hxx"
 
 class SwTxtNode;
-class SwRegHistory;                 // steht im RolBck.hxx
+class SwRegHistory;                 // Is in RolBck.hxx.
 class SwTxtAttr;
 class SwTxtAttrNesting;
 
@@ -55,26 +55,21 @@ SW_DLLPRIVATE SwTxtAttr*
 MakeRedlineTxtAttr( SwDoc & rDoc, SfxPoolItem& rAttr );
 
 
-/*
- * Ableitung der Klasse SwpHints ueber den Umweg ueber SwpHts, da
- * lediglich die Klasse SwTxtNode Attribute einfuegen und
- * loeschen koennen soll. Anderen Klassen wie den Frames steht
- * lediglich ein lesender Zugriff ueber den Index-Operator zur
- * Verfuegung.
- * Groesse beim Anlegen gleich 1, weil nur dann ein Array erzeug wird, wenn
- * auch ein Hint eingefuegt wird.
- */
+// Class SwpHints is derived indirectly via SwpHts, because only the
+// class SwTxtNode should be allowed to insert and remove attributes.
+// Other classes like the Frames are given only reading access via
+// the index-operator.
+// Size when created is 1 because an array is created only if
+// also a hint is inserted.
 
-/*************************************************************************
- *                      class SwpHtStart/End
- *************************************************************************/
+ // Class SwpHtStart/End
+
 
 SV_DECL_PTRARR_SORT(SwpHtStart,SwTxtAttr*,1,1)
 SV_DECL_PTRARR_SORT(SwpHtEnd,SwTxtAttr*,1,1)
 
-/*************************************************************************
- *                      class SwpHintsArr
- *************************************************************************/
+// Class SwpHintsArr
+
 
 /// the Hints array
 class SwpHintsArray
@@ -118,9 +113,9 @@ public:
 #endif
 };
 
-/*************************************************************************
- *                      class SwpHints
- *************************************************************************/
+
+// Class SwpHints
+
 
 // public interface
 class SwpHints : public SwpHintsArray
@@ -194,12 +189,12 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwpHints)
 };
 
-// Ausgabeoperator fuer die Texthints
+// Output operator for text hints.
 SvStream &operator<<(SvStream &aS, const SwpHints &rHints); //$ ostream
 
-/*************************************************************************
- *                         Inline Implementations
- *************************************************************************/
+
+// Inline Implementations
+
 
 inline USHORT SwpHintsArray::GetStartOf( const SwTxtAttr *pHt ) const
 {

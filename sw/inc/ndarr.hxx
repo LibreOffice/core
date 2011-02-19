@@ -87,39 +87,39 @@ class SW_DLLPUBLIC SwNodes: private BigPtrArray
     friend class SwNode;
     friend class SwNodeIndex;
 
-    SwNodeIndex* pRoot;                 // Liste aller Indizies auf Nodes
+    SwNodeIndex* pRoot;                 // List of all indices on nodes.
 
     void InsertNode( const SwNodePtr pNode,
                      const SwNodeIndex& rPos );
     void InsertNode( const SwNodePtr pNode,
                      ULONG nPos );
 
-    SwDoc* pMyDoc;                      // in diesem Doc ist das Nodes-Array
+    SwDoc* pMyDoc;                      // This Doc contains the nodes-array.
 
-    SwNode *pEndOfPostIts, *pEndOfInserts,  // das sind die festen Bereiche
+    SwNode *pEndOfPostIts, *pEndOfInserts,  // These are the fixed ranges.
            *pEndOfAutotext, *pEndOfRedlines,
            *pEndOfContent;
 
-    mutable SwOutlineNodes* pOutlineNds;        // Array aller GliederiungsNodes
+    mutable SwOutlineNodes* pOutlineNds;        // Array of all outline nodes.
 
-    BOOL bInNodesDel : 1;               // falls rekursiv aufgerufen wird
-                                        // Num/Outline nicht aktualisierem
-    BOOL bInDelUpdOutl : 1;             // Flags fuers aktualisieren von Outl.
-    BOOL bInDelUpdNum : 1;              // Flags fuers aktualisieren von Outl.
+    BOOL bInNodesDel : 1;               // In Case of recursive calling.
+                                        // Do not update Num/Outline.
+    BOOL bInDelUpdOutl : 1;             // Flag for updating of Outline.
+    BOOL bInDelUpdNum : 1;              // Flag for updating of Outline.
 
-    // fuer dier Verwaltung der Indizies
+    // For administering indices.
     void RegisterIndex( SwNodeIndex& rIdx );
     void DeRegisterIndex( SwNodeIndex& rIdx );
     void RemoveNode( ULONG nDelPos, ULONG nLen, BOOL bDel );
 
-    // Aktionen auf die Nodes
+    // Actions on the nodes.
     void SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEnd );
     void DelNodes( const SwNodeIndex& rStart, ULONG nCnt = 1 );
 
     void ChgNode( SwNodeIndex& rDelPos, ULONG nSize,
                   SwNodeIndex& rInsPos, BOOL bNewFrms );
 
-    void UpdtOutlineIdx( const SwNode& );   // Update ab Node alle OutlineNodes
+    void UpdtOutlineIdx( const SwNode& );   // Update all OutlineNodes starting from Node.
 
     void _CopyNodes( const SwNodeRange&, const SwNodeIndex&,
                     BOOL bNewFrms = TRUE, BOOL bTblInsDummyNode = FALSE ) const;
@@ -137,8 +137,8 @@ public:
     SwNodePtr operator[]( ULONG n ) const
         { return (SwNodePtr)BigPtrArray::operator[] ( n ); }
 
-    // impl. steht im ndindex.hxx - sollte moeglichst bald auf die
-    // neue Schnittstelle angepasst werden
+    // Implementaition in ndindex.hxx - it should be adapted to the
+    // new interface as soon as possible.
     inline SwNodePtr operator[]( const SwNodeIndex& rIdx ) const;
 
     ULONG Count() const { return BigPtrArray::Count(); }
@@ -154,22 +154,22 @@ public:
     void ForEach( const SwNodeIndex& rStart, const SwNodeIndex& rEnd,
                     FnForEach_SwNodes fnForEach, void* pArgs = 0 );
 
-    // eine noch leere Section
+    // A still empty section.
     SwNode& GetEndOfPostIts() const     { return *pEndOfPostIts; }
-    // Section fuer alle Fussnoten
+    // Section fpr all footnotes.
     SwNode& GetEndOfInserts() const     { return *pEndOfInserts; }
-    // Section fuer alle Flys/Header/Footers
+    // Section for all Flys/Header/Footers.
     SwNode& GetEndOfAutotext() const    { return *pEndOfAutotext; }
-    // Section fuer alle Redlines
+    // Section for all Redlines.
     SwNode& GetEndOfRedlines() const    { return *pEndOfRedlines; }
-    // das ist der letzte EndNode einer SonderSection. Hier nach kommt nur
-    // noch die normale ContentSection (also der BodyText)
+    // This is the last EndNode of a special section. After it
+    // there is only the regular ContentSection (i.e. the BodyText).
     SwNode& GetEndOfExtras() const      { return *pEndOfRedlines; }
-    // die normale ContentSection (also der BodyText)
+    // Regular ContentSection (i.e. the BodyText).
     SwNode& GetEndOfContent() const     { return *pEndOfContent; }
 
-    // ist das NodesArray das normale vom Doc? (nicht das UndoNds, .. )
-    // Implementierung steht im doc.hxx (weil man dazu Doc kennen muss) !
+    // Is the NodesArray the regular one of Doc? (and not the UndoNds, ...)
+    // Implementation in doc.hxx (because one needs to know Doc for it) !
     BOOL IsDocNodes() const;
 
     USHORT GetSectionLevel(const SwNodeIndex &rIndex) const;
@@ -194,25 +194,25 @@ public:
     SwCntntNode* GoNext(SwNodeIndex *) const;
     SwCntntNode* GoPrevious(SwNodeIndex *) const;
 
-    //Gehe zum naechsten/vorherigen Cntnt/Tabellennode, fuer den
-    //es LayoutFrames gibt, dabei Kopf-/Fusszeilen/Rahmen etc. nicht verlassen
+    // Go to next/previous Cntnt/Table-node for which LayoutFrames exist.
+    // While doing this do not leave Header/Footer/Frame etc.
     SwNode* GoNextWithFrm(SwNodeIndex *) const;
     SwNode* GoPreviousWithFrm(SwNodeIndex *) const;
 
-    // zum naechsten Content-Node, der nicht geschuetzt oder versteckt ist
-    // (beides auf FALSE ==> GoNext/GoPrevious!!!)
+    // Go to next content-node that is not protected or hidden
+    // (Both set FALSE ==> GoNext/GoPrevious!!!).
     SwCntntNode* GoNextSection( SwNodeIndex *, int bSkipHidden  = TRUE,
                                            int bSkipProtect = TRUE ) const;
     SwCntntNode* GoPrevSection( SwNodeIndex *, int bSkipHidden  = TRUE,
                                            int bSkipProtect = TRUE ) const;
 
-    // erzeuge ein leere Section von Start und EndNode. Darf nur gerufen
-    // werden, wenn eine neue Section mit Inhalt erzeugt werden soll.
-    // Zum Beispiel bei den Filtern/Undo/...
+    // Create an empty section of Start- and EndNote. It may be called
+    // only if a new section with content is to be created,
+    // e.g. at filters/Undo/...
     SwStartNode* MakeEmptySection( const SwNodeIndex& rIdx,
                                     SwStartNodeType = SwNormalStartNode );
 
-    // die Impl. von "Make...Node" stehen in den angegebenen .ccx-Files
+    // Implementations of "Make...Node" are in the given .cxx-files.
     SwTxtNode *MakeTxtNode( const SwNodeIndex & rWhere,
                             SwTxtFmtColl *pColl,
                             SwAttrSet* pAutoAttr = 0 ); // in ndtxt.cxx
@@ -244,30 +244,29 @@ public:
                             SwGrfFmtColl *pColl,
                             SwAttrSet* pAutoAttr ); // in ndole.cxx
 
-        // Array aller GliederiungsNodes;
+    // Array of all OutlineNodes.
     const SwOutlineNodes& GetOutLineNds() const;
 
-    //void UpdateOutlineNode( const SwNode&, BYTE nOldLevel, BYTE nNewLevel );//#outline level,removed by zhaojianwei
-        // alle Nodes Updaten - Rule/Format-Aenderung
+    // void UpdateOutlineNode( const SwNode&, BYTE nOldLevel, BYTE nNewLevel );//#outline level,removed by zhaojianwei
+
+    // Update all Nodes - Rule/Format-Change.
     void UpdateOutlineNode(SwNode & rNd);
 
-        // fuege die Nodes fuer die Tabelle ein
-        // wenn Lines angegeben, erzeuge die Matrix aus Lines & Boxen
-        // ansonsten nur die Anzahl von Boxen.
-    /*
-       New parameter pAttrSet: If pAttrSet is non-null and contains an
-       adjust item it is propagated to the table cells. If there is an
-       adjust in pCntntTxtColl or pHeadlineTxtColl this adjust item
-       overrides the item in pAttrSet.
+    // Insert nodes for tables. If Lines is given, create the matrix
+    // from lines and boxes, else only the count of boxes.
 
-     */
+    // New parameter pAttrSet: If pAttrSet is non-null and contains an
+    // adjust item it is propagated to the table cells. If there is an
+    // adjust in pCntntTxtColl or pHeadlineTxtColl this adjust item
+    // overrides the item in pAttrSet.
+
     SwTableNode* InsertTable( const SwNodeIndex& rNdIdx,
                         USHORT nBoxes, SwTxtFmtColl* pCntntTxtColl,
                         USHORT nLines = 0, USHORT nRepeat = 0,
                         SwTxtFmtColl* pHeadlineTxtColl = 0,
                         const SwAttrSet * pAttrSet = 0);
 
-        // erzeuge aus dem makierten Bereich eine ausgeglichene Tabelle
+    // Create balanced table from selected range.
     SwTableNode* TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                                 SwTableFmt* pTblFmt,
                                 SwTableLineFmt* pLineFmt,
@@ -285,33 +284,34 @@ public:
                                 SwTxtFmtColl* pTxtColl
                                 /*, SwUndo... pUndo*/ );
 
-        // erzeuge aus der Tabelle wieder normalen Text
+
+    // Create regular text from what was table.
     BOOL TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
                         SwUndoTblToTxt* = 0 );
-        // steht im untbl.cxx und darf nur vom Undoobject gerufen werden
+    // Is in untbl.cxx and may called only by Undo-object.
     SwTableNode* UndoTableToText( ULONG nStt, ULONG nEnd,
                         const SwTblToTxtSaves& rSavedData );
 
-        // fuege in der Line, vor der InsPos eine neue Box ein. Das Format
-        // wird von der nachfolgenden (vorhergenden;wenn an Ende) genommen
-        // in der Line muss schon eine Box vorhanden sein !
+    // Insert a new box in the line before InsPos. Its format
+    // is taken from the following one (or from the previous one if we are
+    // at the end). In the line there must be a box already.
     BOOL InsBoxen( SwTableNode*, SwTableLine*, SwTableBoxFmt*,
-                        // Formate fuer den TextNode der Box
+                        // Formats for TextNode of box.
                         SwTxtFmtColl*, const SfxItemSet* pAutoAttr,
                         USHORT nInsPos, USHORT nCnt = 1 );
-        // Splittet eine Tabelle in der Grund-Zeile, in der der Index steht.
-        // Alle GrundZeilen dahinter wandern in eine neue Tabelle/-Node.
-        // Ist das Flag bCalcNewSize auf TRUE, wird fuer beide neuen Tabellen
-        // die neue SSize aus dem Max der Boxen errechnet; vorrausgesetzt,
-        // die SSize ist "absolut" gesetzt (LONG_MAX)
-        // (Wird zur Zeit nur fuer den RTF-Parser benoetigt)
+    // Splits a table at the base-line which contains the index.
+    // All base lines behind it are moved to a new table/ -node.
+    // Is the flag bCalcNewSize set to TRUE, the new SSize for both
+    // tables is calculated from the Maximum of the boxes, provided
+    // SSize is set "absolute" (LONG_MAX).
+    // (Momentarily this is needed only for the RTF-parser.)
     SwTableNode* SplitTable( const SwNodeIndex& rPos, BOOL bAfter = TRUE,
                                 BOOL bCalcNewSize = FALSE );
-        // fuegt 2 Tabellen, die hintereinander stehen, wieder zusammen
+    // Two Tables that are following one another are merged.
     BOOL MergeTable( const SwNodeIndex& rPos, BOOL bWithPrev = TRUE,
                     USHORT nMode = 0, SwHistory* pHistory = 0 );
 
-        // fuege eine neue SwSection ein
+    // Insert a new SwSection.
     SwSectionNode* InsertTextSection(SwNodeIndex const& rNdIdx,
                                 SwSectionFmt& rSectionFmt,
                                 SwSectionData const&,
@@ -320,23 +320,21 @@ public:
                                 bool const bInsAtStart = true,
                                 bool const bCreateFrms = true);
 
-        // in welchem Doc steht das Nodes-Array ?
+    // Which Doc contains the nodes-array?
             SwDoc* GetDoc()         { return pMyDoc; }
     const   SwDoc* GetDoc() const   { return pMyDoc; }
 
-        // suche den vorhergehenden [/nachfolgenden ] ContentNode oder
-        // TabellenNode mit Frames. Wird kein Ende angeben, dann wird mit
-        // dem FrameIndex begonnen; ansonsten, wird mit dem vor rFrmIdx und
-        // dem hintern pEnd die Suche gestartet. Sollte kein gueltiger Node
-        // gefunden werden, wird 0 returnt. rFrmIdx zeigt auf dem Node mit
-        // Frames
+    // Search previous / next content node or table node with frames.
+    // If no end is given begin with the FrameIndex, else start search
+    // with that before rFrmIdx and pEnd at the back.
+    // If no valid node is found, return 0. rFrmIdx points to the node with frames.
     SwNode* FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                                 const SwNode* pEnd = 0 ) const;
 
     SwNode * DocumentSectionStartNode(SwNode * pNode) const;
     SwNode * DocumentSectionEndNode(SwNode * pNode) const;
 private:
-    // privater Constructor, weil nie kopiert werden darf !!
+    // Private constructor because copying is never allowed!!
     SwNodes( const SwNodes & rNodes );
 };
 
