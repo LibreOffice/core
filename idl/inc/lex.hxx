@@ -32,6 +32,7 @@
 #include <hash.hxx>
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
+#include <tools/list.hxx>
 
 enum SVTOKEN_ENUM { SVTOKEN_EMPTY,      SVTOKEN_COMMENT,
                     SVTOKEN_INTEGER,    SVTOKEN_STRING,

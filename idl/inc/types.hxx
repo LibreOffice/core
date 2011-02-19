@@ -29,6 +29,7 @@
 #ifndef _TYPES_HXX
 #define _TYPES_HXX
 
+#include <tools/list.hxx>
 #include <tools/ref.hxx>
 #include <basobj.hxx>
 
