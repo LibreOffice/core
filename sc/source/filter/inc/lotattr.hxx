@@ -30,7 +30,6 @@
 #define SC_LOTATTR_HXX
 
 #include <tools/solar.h>
-#include <tools/list.hxx>
 #include "patattr.hxx"
 #include "scitems.hxx"
 #include "address.hxx"

@@ -31,7 +31,6 @@
 #define SC_DIF_HXX
 
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <tools/string.hxx>
 #include "global.hxx"
 #include "address.hxx"

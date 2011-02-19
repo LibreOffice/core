@@ -35,7 +35,6 @@
 #include <list>
 #include <memory>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include "global.hxx"       // enum ScSubTotalFunc
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #include <com/sun/star/sheet/XHierarchiesSupplier.hpp>

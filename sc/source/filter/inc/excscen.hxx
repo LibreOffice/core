@@ -30,7 +30,6 @@
 #define SC_EXCSCEN_HXX
 
 #include <tools/solar.h>
-#include <tools/list.hxx>
 #include <tools/string.hxx>
 
 

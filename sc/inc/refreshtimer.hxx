@@ -29,7 +29,6 @@
 #ifndef SC_REFRESHTIMER_HXX
 #define SC_REFRESHTIMER_HXX
 
-#include <tools/list.hxx>
 #include <vcl/timer.hxx>
 #include <osl/mutex.hxx>
 #include <scdllapi.h>

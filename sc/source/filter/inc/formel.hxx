@@ -30,7 +30,6 @@
 #define SC_FORMEL_HXX
 
 #include <tools/solar.h>
-#include <tools/list.hxx>
 #include <tools/string.hxx>
 #include "tokstack.hxx"
 #include "root.hxx"

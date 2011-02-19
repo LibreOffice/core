@@ -34,7 +34,6 @@
 #include <limits>
 #include <memory>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
 #include <tools/debug.hxx>
 #include <sal/macros.h>
 #include <oox/helper/helper.hxx>
