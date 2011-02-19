@@ -1488,10 +1488,10 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
 {
 
     SwDrawContact* pContact = (SwDrawContact*)GetUserCall( &rSdrObj );
-    OSL_ENSURE( RES_DRAWFRMFMT == pContact->GetFmt()->Which(),
-            "Kein DrawFrmFmt" );
     if ( !pContact )
         return 0;
+    OSL_ENSURE( RES_DRAWFRMFMT == pContact->GetFmt()->Which(),
+            "Kein DrawFrmFmt" );
 
     SwDrawFrmFmt* pOldFmt = (SwDrawFrmFmt *)pContact->GetFmt();
     if( !pOldFmt )

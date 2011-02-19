@@ -53,12 +53,6 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
     ULONG nHeaderLeft = ULONG_MAX;
     ULONG nFooterMaster = ULONG_MAX;
     ULONG nFooterLeft = ULONG_MAX;
-    int nHeaderCount = 0;
-    int nLeftHeaderCount = 0;
-    int nFooterCount = 0;
-    int nLeftFooterCount = 0;
-    bool bSharedHeader = false;
-    bool bSharedFooter = false;
 
     SwFmtHeader& rHead = (SwFmtHeader&)rPageDesc.GetMaster().GetHeader();
     SwFmtFooter& rFoot = (SwFmtFooter&)rPageDesc.GetMaster().GetFooter();
@@ -72,27 +66,32 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
             SwClientIter aIter( *pHeaderFmt );
             SwClient *pLast = aIter.GoStart();
             if( pLast )
+            {
+                int nHeaderCount = 0;
                 do
                 {
                     ++nHeaderCount;
                 } while( 0 != ( pLast = aIter++ ));
+            }
             const SwFmtCntnt* pCntnt = &pHeaderFmt->GetCntnt();
             if( pCntnt->GetCntntIdx() )
                 nHeaderMaster = pCntnt->GetCntntIdx()->GetIndex();
             else
                 nHeaderMaster = 0;
         }
-        bSharedHeader = rPageDesc.IsHeaderShared();
         SwFrmFmt* pLeftHeaderFmt = rLeftHead.GetHeaderFmt();
         if( pLeftHeaderFmt )
         {
             SwClientIter aIter( *pLeftHeaderFmt );
             SwClient *pLast = aIter.GoStart();
             if( pLast )
+            {
+                int nLeftHeaderCount = 0;
                 do
                 {
                     ++nLeftHeaderCount;
                 } while( 0 != ( pLast = aIter++ ));
+            }
             const SwFmtCntnt* pLeftCntnt = &pLeftHeaderFmt->GetCntnt();
             if( pLeftCntnt->GetCntntIdx() )
                 nHeaderLeft = pLeftCntnt->GetCntntIdx()->GetIndex();
@@ -108,27 +107,32 @@ void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
             SwClientIter aIter( *pFooterFmt );
             SwClient *pLast = aIter.GoStart();
             if( pLast )
+            {
+                int nFooterCount = 0;
                 do
                 {
                     ++nFooterCount;
                 } while( 0 != ( pLast = aIter++ ));
+            }
             const SwFmtCntnt* pCntnt = &pFooterFmt->GetCntnt();
             if( pCntnt->GetCntntIdx() )
                 nFooterMaster = pCntnt->GetCntntIdx()->GetIndex();
             else
                 nFooterMaster = 0;
         }
-        bSharedFooter = rPageDesc.IsFooterShared();
         SwFrmFmt* pLeftFooterFmt = rLeftFoot.GetFooterFmt();
         if( pLeftFooterFmt )
         {
             SwClientIter aIter( *pLeftFooterFmt );
             SwClient *pLast = aIter.GoStart();
             if( pLast )
+            {
+                int nLeftFooterCount = 0;
                 do
                 {
                     ++nLeftFooterCount;
                 } while( 0 != ( pLast = aIter++ ));
+            }
             const SwFmtCntnt* pLeftCntnt = &pLeftFooterFmt->GetCntnt();
             if( pLeftCntnt->GetCntntIdx() )
                 nFooterLeft = pLeftCntnt->GetCntntIdx()->GetIndex();
