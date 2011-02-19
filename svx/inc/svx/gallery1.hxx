@@ -31,6 +31,7 @@
 
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
+#include <tools/list.hxx>
 #include <svl/brdcst.hxx>
 #include "svx/svxdllapi.h"
 
