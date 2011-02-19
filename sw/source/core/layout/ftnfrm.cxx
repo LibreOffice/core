@@ -2677,11 +2677,11 @@ void SwPageFrm::UpdateFtnNum()
                     else
                     {
                         SwFtnBossFrm* pTmpBoss = pFtn->FindFtnBossFrm( TRUE );
-                        SwPageFrm* pPage = pTmpBoss->FindPageFrm();
-                        pFtn = NULL;
-                        lcl_NextFtnBoss( pTmpBoss, pPage, FALSE );
                         if( pTmpBoss )
                         {
+                            SwPageFrm* pPage = pTmpBoss->FindPageFrm();
+                            pFtn = NULL;
+                            lcl_NextFtnBoss( pTmpBoss, pPage, FALSE );
                             SwFtnContFrm *pCont = pTmpBoss->FindNearestFtnCont();
                             if ( pCont )
                                 pFtn = (SwFtnFrm*)pCont->Lower();
