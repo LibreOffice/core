@@ -47,24 +47,24 @@ class SwFrmFmt;
 
 class SwHTMLTableLayoutCnts
 {
-    SwHTMLTableLayoutCnts *pNext;   // der naechste Inhalt
+    SwHTMLTableLayoutCnts *pNext;   // The next content.
 
-    // von den beiden naechsten Pointern darf nur einer gesetzt sein!
-    SwTableBox *pBox;           // ein Box
-    SwHTMLTableLayout *pTable;  // eine "Tabelle in der Tabelle"
+    // Only one of the following two pointers may be set!
+    SwTableBox *pBox;           // A Box.
+    SwHTMLTableLayout *pTable;  // A "table within a table".
 
-    // Beim ersten Durchlauf gibt es noch keine Boxen. Es wird dann
-    // pStartNode anstelle von pBox verwendet.
+    // During first run there are still no boxes. In this case
+    // pStartNode is used instead of pBox.
     const SwStartNode *pStartNode;
 
-    // Die folgenden Zahler geben an, wie oft ein Pass bereits fuer diesen
-    // Inhalt durchgefuehrt wurde. Dazu werden sie mit einer Soll-Vorgabe
-    // verglichen. Wird 255 erreicht laufen sie bei 0 weiter. So wird
-    // eine Reinitialisierung bei jedem Resize vermieden.
-    BYTE nPass1Done;            // Wieoft wurde Pass 1 aufgerufen?
-    BYTE nWidthSet;             // Wieoft wurde die Breite gesetzt?
+    // The following counters indicate how often a pass has been
+    // done for this content. Therefore they are compared against
+    // a reference value. If 255 is reached the continue with 0.
+    // This avoids reinitialization on every resize.
+    BYTE nPass1Done;            // How many times has Pass 1 been called?
+    BYTE nWidthSet;             // How many times has the width been set?
 
-    BOOL bNoBreakTag;       // <NOBR>-Tag ueber gesamten Inhalt
+    BOOL bNoBreakTag;       // <NOBR>-Tag over complete content.
 
 public:
 
@@ -80,7 +80,7 @@ public:
 
     const SwStartNode *GetStartNode() const;
 
-    // Ermitteln des naechsten Knotens
+    // Calculation of next node.
     SwHTMLTableLayoutCnts *GetNext() const { return pNext; }
 
     void SetWidthSet( BYTE nRef ) { nWidthSet = nRef; }
@@ -94,14 +94,14 @@ public:
 
 class SwHTMLTableLayoutCell
 {
-    SwHTMLTableLayoutCnts *pContents;       // der Inhalt der Zelle
+    SwHTMLTableLayoutCnts *pContents;       // Content of cell.
 
-    USHORT nRowSpan;    // ROWSPAN der Zelle
-    USHORT nColSpan;    // COLSPAN der Zelle
-    USHORT nWidthOption;// angegebene Breite der Zelle in Twip oder %
+    USHORT nRowSpan;    // ROWSPAN of cell.
+    USHORT nColSpan;    // COLSPAN of cell.
+    USHORT nWidthOption;// Given width of cell in Twip or %.
 
-    BOOL bPrcWidthOption : 1;// nWidth ist %-Angabe
-    BOOL bNoWrapOption : 1; // NOWRAP-Option
+    BOOL bPrcWidthOption : 1;// nWidth is %-value.
+    BOOL bNoWrapOption : 1; // NOWRAP-option.
 
 public:
 
@@ -112,13 +112,13 @@ public:
 
     ~SwHTMLTableLayoutCell();
 
-    // Setzen/Ermitteln des Inhalts einer Zelle
+    // Set or get content of a cell.
     void SetContents( SwHTMLTableLayoutCnts *pCnts ) { pContents = pCnts; }
     SwHTMLTableLayoutCnts *GetContents() const { return pContents; }
 
     inline void SetProtected();
 
-    // ROWSPAN/COLSPAN der Zelle Setzen/Ermitteln
+    // Set or get ROWSPAN/COLSPAN of cell.
     void SetRowSpan( USHORT nRSpan ) { nRowSpan = nRSpan; }
     USHORT GetRowSpan() const { return nRowSpan; }
     USHORT GetColSpan() const { return nColSpan; }
@@ -131,17 +131,18 @@ public:
 
 class SwHTMLTableLayoutColumn
 {
-    // Zwischenwerte von AutoLayoutPass1
+
+    // Interim values of AutoLayoutPass1,
     ULONG nMinNoAlign, nMaxNoAlign, nAbsMinNoAlign;
 
-    // Ergebnisse von AutoLayoutPass1
+    // Results of AutoLayoutPass1
     ULONG nMin, nMax;
 
-    // Ergibnisse von Pass 2
-    USHORT nAbsColWidth;                // in Twips
-    USHORT nRelColWidth;                // in Twips bzw. relativ zu USHRT_MAX
+    // Results of Pass 2.
+    USHORT nAbsColWidth;                // In Twips.
+    USHORT nRelColWidth;                // In Twips or relative to USHRT_MAX.
 
-    USHORT nWidthOption;                // Optionen von <COL> oder <TD>/<TH>
+    USHORT nWidthOption;                // Options of <COL> or <TD>/<TH>.
 
     BOOL bRelWidthOption : 1;
     BOOL bLeftBorder : 1;
@@ -183,37 +184,37 @@ public:
 
 class SwHTMLTableLayout
 {
-    Timer aResizeTimer;             // Timer fuer DelayedResize
+    Timer aResizeTimer;             // Timer for DelayedResize.
 
     SwHTMLTableLayoutColumn **aColumns;
     SwHTMLTableLayoutCell **aCells;
 
-    const SwTable *pSwTable;        // die SwTable (nur Top-Table)
-    SwTableBox *pLeftFillerBox;     // linke Filler-Zelle (nur Tab in Tab)
-    SwTableBox *pRightFillerBox;    // rechte Filler-Zelle (nur Tab-in Tab)
+    const SwTable *pSwTable;        // SwTable (Top-Table only).
+    SwTableBox *pLeftFillerBox;     // Left filler-box (table in table only).
+    SwTableBox *pRightFillerBox;    // Right filler-box (table in Table only).
 
-    ULONG nMin;                     // minimale Breite der Tabelle (Twips)
-    ULONG nMax;                     // maximale Breite der Tabelle (Twips)
+    ULONG nMin;                     // Minimal width of table (Twips).
+    ULONG nMax;                     // Maximal width of table (Twips).
 
-    USHORT nRows;                   // Anzahl Zeilen
-    USHORT nCols;                   // Anzahl Spalten
+    USHORT nRows;                   // Row count.
+    USHORT nCols;                   // Column count.
 
-    USHORT nLeftMargin;             // Abstand zum linken Rand (aus Absatz)
-    USHORT nRightMargin;            // Abstand zum rechten Rand (aus Absatz)
+    USHORT nLeftMargin;             // Space to left margin (from paragraph).
+    USHORT nRightMargin;            // Space to left margin (from paragraph).
 
-    USHORT nInhAbsLeftSpace;        // von umgebender Zelle geerbter Abstand,
-    USHORT nInhAbsRightSpace;       // der Zellen zugeschlagen wurde
+    USHORT nInhAbsLeftSpace;        // Space inherited from surrounding box
+    USHORT nInhAbsRightSpace;       // that was added to boxes.
 
-    USHORT nRelLeftFill;            // relative Breiten der Zellen zur
-    USHORT nRelRightFill;           // Ausrichtung von Tabellen in Tabellen
+    USHORT nRelLeftFill;            // Width of boxes relative to alignment
+    USHORT nRelRightFill;           // of tables in tables.
 
-    USHORT nRelTabWidth;            // Die relative Breite der Tabelle
+    USHORT nRelTabWidth;            // Relative width of table.
 
-    USHORT nWidthOption;            // die Breite der Tabelle (in Twip oder %)
-    USHORT nCellPadding;            // Abstand zum Inhalt (in Twip)
-    USHORT nCellSpacing;            // Absatnd zwischen Zellen (in Twip)
-    USHORT nBorder;                 // Dicke der ausseren Umrandung bzw.
-                                    // Platz, den Netscape hierfuer einrechnet.
+    USHORT nWidthOption;            // Width of table (in Twips oder %).
+    USHORT nCellPadding;            // Space to contents (in Twips).
+    USHORT nCellSpacing;            // Cell spacing (in Twips).
+    USHORT nBorder;                 // Line strength of outer border, or rather the
+                                    // space needed for it as calculated by Netscape.
 
     USHORT nLeftBorderWidth;
     USHORT nRightBorderWidth;
@@ -221,28 +222,27 @@ class SwHTMLTableLayout
     USHORT nInhRightBorderWidth;
     USHORT nBorderWidth;
 
-    USHORT nDelayedResizeAbsAvail;  // Param fuer's verzoegerte Resize
+    USHORT nDelayedResizeAbsAvail;  // Param for delayed Resize.
     USHORT nLastResizeAbsAvail;
 
-    BYTE nPass1Done;                // Vorgabe-Werte fuer die einzelen
-    BYTE nWidthSet;                 // Schleifen-Durchlauefe
+    BYTE nPass1Done;                // Reference-values for
+    BYTE nWidthSet;                 // the runs through loop.
 
-    SvxAdjust eTableAdjust;         // Die Ausrichtung der Tabelle
+    SvxAdjust eTableAdjust;         // Alignment of table.
 
-    BOOL bColsOption : 1;           // Tabelle besitzt eine COLS-Option
-    BOOL bColTags : 1;              // Tabelle besitzt COL/COLGRP-Tags
-    BOOL bPrcWidthOption : 1;       // Breite ist eine %-Angabe
-    BOOL bUseRelWidth : 1;          // SwTable bekommt relative Breite
+    BOOL bColsOption : 1;           // Table has a COLS-option.
+    BOOL bColTags : 1;              // Tabelle has COL/COLGRP-tags.
+    BOOL bPrcWidthOption : 1;       // Width is given in percent.
+    BOOL bUseRelWidth : 1;          // SwTable gets relative width.
 
-    BOOL bMustResize : 1;           // Tabelle muss in der Breite ang. werden
-    BOOL bExportable : 1;           // Layout kann zum Export genutzt werden
-    BOOL bBordersChanged : 1;       // Umrandung wurde geaendert
-    BOOL bMayBeInFlyFrame : 1;      // Die Tabelle koennte im Rahmen sein
+    BOOL bMustResize : 1;           // Table width must be defined.
+    BOOL bExportable : 1;           // Layout may be used for export.
+    BOOL bBordersChanged : 1;       // Borders have been changed.
+    BOOL bMayBeInFlyFrame : 1;      // Table could be within frame.
 
-    BOOL bDelayedResizeRecalc : 1;  // Param fuer's verzoegerte Resize
-    BOOL bMustNotResize : 1;        // Die Tabelle darf nicht reseized werden
-    BOOL bMustNotRecalc : 1;        // Tabelle darf nicht an Inhalt angepasst
-                                    // werden
+    BOOL bDelayedResizeRecalc : 1;  // Param for delayed Resize.
+    BOOL bMustNotResize : 1;        // Table may not be resized.
+    BOOL bMustNotRecalc : 1;        // Table may not be adapted to its contents.
 
     void AddBorderWidth( ULONG &rMin, ULONG &rMax, ULONG& rAbsMin,
                          USHORT nCol, USHORT nColSpan,
@@ -318,38 +318,34 @@ public:
     void SetMustNotResize( BOOL bSet ) { bMustNotResize = bSet; }
     void SetMustNotRecalc( BOOL bSet ) { bMustNotRecalc = bSet; }
 
-    // Neueberechnung der Tabellenbreiten fuer die uebergebene verfuegbare
-    // Breite.
-    // - Wenn bRecalc gesetzt ist, werden auch der Inhalt der Boxen
-    //   zur Berechnung herangezogen.
-    //   neu berechnet.
-    // - Wenn bForce gesetzt ist, wird die Tabelle auch neu berechnet, wenn
-    //   dies mit SetMustNotResize unterdrueckt werden soll.
-    // - Wenn nDelay>0 wird die Berechnung entsprechend verzoegert.
-    //   Innerhalb der Verzeoegerung auftretende Resize-Aufrufe werden
-    //   ignoriert, die Verzeogerung wird aber ggf. uebernommen.
-    // - Wenn nDelay==HTMLTABLE_RESIZE_NOW ist, wird sofort Resized und
-    //   eventuell noch asstehende Resize-Aufrufe werden nicht mehr
-    //   ausgefuehrt.
-    // - Der Rueckgabewert gibt an, ob sich die Tabelle geaendert hat.
+    // Recalculation of table widths for available width that has been passed.
+    // - If bRecalc is set, contents of boxes are included into calculation.
+    // - If bForce is set, table will be recalculated even if this was
+    //   disallowed by SetMustNotResize.
+    // - If nDelay > 0 the calculation is delayed accordingly. Resizing calls
+    //   occuring during delay-time are ignored, but the delay may be counted
+    //   under certain circumstances.
+    // - If nDelay == HTMLTABLE_RESIZE_NOW, resize immediately and do not
+    //   consider any resize-calls that might possibly be in order.
+    // - The return value indicates whether the table has been changed.
     BOOL Resize( USHORT nAbsAvail, BOOL bRecalc=FALSE, BOOL bForce=FALSE,
                  ULONG nDelay=0 );
 
     void BordersChanged( USHORT nAbsAvail, BOOL bRecalc=FALSE );
 
-    // Ermitteln der verfuegbaren Breite. Das geht nur, wenn ein Layout
-    // oder eine ViewShell vorhanden ist. Sonst wird 0 zurueckgegeben.
-    // (Wird vom HTML-Filter benoetigt, da der nicht an das Layout kommt.)
+    // Calculate available width. This works only if a layout or a
+    // ViewShell exists. Otherwise returns 0.
+    // This is needed by HTML-filter because it doesn't have access to the layout.)
     static USHORT GetBrowseWidth( const SwDoc& rDoc );
 
-    // Ermitteln der verfuegbaren Breite uber den Tabellen-Frame
+    // Calculates available width by table-frame.
     USHORT GetBrowseWidthByTabFrm( const SwTabFrm& rTabFrm ) const;
 
-    // Ermitteln der verfuegbaren Breite uber den Tabellen-Frame oder
-    // das statische GetBrowseWidth, wenn kein Layout existiert.
+    // Calculates available width by the table-frame or
+    // static GetBrowseWidth if no layout exists.
     USHORT GetBrowseWidthByTable( const SwDoc& rDoc ) const;
 
-    // Fuer Export
+    // For Export.
     USHORT GetWidthOption() const { return nWidthOption; }
     BOOL   HasPrcWidthOption() const { return bPrcWidthOption; }
 

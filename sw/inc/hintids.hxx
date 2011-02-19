@@ -32,7 +32,7 @@
 #include <sal/types.h>          // for sal_Unicode
 #include "swdllapi.h"
 
-// fuer SwTxtHints ohne Endindex wird folgendes Zeichen eingefuegt:
+// For SwTxtHints without end index the following char is added:
 
 #define CH_TXTATR_BREAKWORD     ((sal_Unicode)0x01)
 #define CH_TXTATR_INWORD        ((sal_Unicode)0x02)
@@ -53,8 +53,8 @@
 #define POOLATTR_BEGIN      HINT_BEGIN
 #define POOLATTR_END        RES_UNKNOWNATR_END
 
-// Bereiche fuer die Id's der einzelnen Format-Attribute
-// die Which-Werte fuer die Charakter-Format Attribute
+// Ranges for the IDs of the format-attributes.
+// Which-values for character-format attributes.
 enum RES_CHRATR
 {
 RES_CHRATR_BEGIN = HINT_BEGIN,
@@ -339,12 +339,10 @@ RES_MSG_BEGIN = RES_FMT_END,
 RES_MSG_END
 };
 
-
-// eine ID fuer den RTF-Reader. Die Stylesheets werden wie
-// Attribute behandelt, d.H. es gibt ein StyleSheet Attribut. Um
-// nicht mit anderen Which()-Werten zu kollidieren, ist der Wert
-// hier mit aufgefuehrt. (Auch das Hilfesystem definiert neue
-// Attribute !!)
+// An ID for the RTF-reader. The stylesheets are treated like attributes,
+// i.e. there is a StyleSheet-attribute. To avoid collision with other
+// Which()-values, the value is listed here. (The help system too defines
+// new attributes!)
 enum RES_FLTRATTR
 {
 RES_FLTRATTR_BEGIN = RES_MSG_END,
@@ -366,7 +364,7 @@ RES_FLTRATTR_END
 
 #define HINT_END RES_TBX_DUMMY
 
-// Fehler-Erkennung !!
+// Error recognition!!
 #define INVALID_HINT HINT_END
 #define RES_WHICHHINT_END HINT_END
 
@@ -418,15 +416,12 @@ inline bool isUNKNOWNATR(const USHORT nWhich)
 }
 
 
-/*
- * hole aus der statischen Default-Attribut Tabelle ueber den Which-Wert
- * das entsprechende default Attribut.
- * Ist keines vorhanden, returnt ein 0-Pointer !!!
- *
- * Diese Funktion ist im Init.CXX implementiert. Damit die Formate darauf
- * zugreifen koennen, ist sie hier als extern deklariert.
- * Im PRODUCT ist das Teil inline.
- */
+// Take the respective default attribute from the statistical default
+// attributes table over the Which-value.
+// If none exists, return a 0 pointer!!!
+// This function is implemented in Init.cxx. It is declared here as external
+// in order to allow the formats to access it.
+// Inline in PRODUCT.
 class SfxPoolItem;
 struct SfxItemInfo;
 typedef SfxPoolItem* SwDfltAttrTab[ POOLATTR_END - POOLATTR_BEGIN  ];
