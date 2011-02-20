@@ -654,8 +654,14 @@ BOOL SvxAutoCorrect::FnAddNonBrkSpace(
         {
             // Get the last word delimiter position
             xub_StrLen nSttWdPos = nEndPos;
-            while( nSttWdPos && !IsWordDelim( rTxt.GetChar( --nSttWdPos )))
+            bool bWasWordDelim = false;
+            while( nSttWdPos && !(bWasWordDelim = IsWordDelim( rTxt.GetChar( --nSttWdPos ))))
                 ;
+
+            if(INetURLObject::CompareProtocolScheme(rTxt.Copy(nSttWdPos + (bWasWordDelim ? 1 : 0), nEndPos - nSttWdPos + 1)) != INET_PROT_NOT_VALID) {
+                return FALSE;
+            }
+
 
             // Check the presence of "://" in the word
             xub_StrLen nStrPos = rTxt.Search( String::CreateFromAscii( "://" ), nSttWdPos + 1 );
@@ -791,11 +797,11 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
                                     xub_StrLen nSttPos, xub_StrLen nEndPos,
                                     LanguageType eLang )
 {
-    // Two capital letters at the beginning of a paragraph?
+
     if( !rTxt.Len() || nEndPos <= nSttPos )
         return FALSE;
 
-     CharClass& rCC = GetCharClass( eLang );
+    CharClass& rCC = GetCharClass( eLang );
     String aText( rTxt );
     const sal_Unicode *pStart = aText.GetBuffer(),
                       *pStr = pStart + nEndPos,
