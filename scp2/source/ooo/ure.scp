@@ -1000,7 +1000,7 @@ End
 #endif
 
 #if defined _gcc3 && !(defined FREEBSD || defined NETBSD || defined OPENBSD \
-	|| defined MACOSX || defined SYSTEM_STDLIBS || defined(WNT))
+	|| defined MACOSX || defined SYSTEM_STDLIBS || defined(WNT) || defined(DRAGONFLY))
 File gid_File_Dl_GccS
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -1015,7 +1015,7 @@ End
 #endif
 
 #if defined _gcc3 && !(defined FREEBSD || defined NETBSD || defined OPENBSD \
-	|| defined MACOSX || defined SYSTEM_STDLIBS || defined(WNT))
+	|| defined MACOSX || defined SYSTEM_STDLIBS || defined(WNT) || defined(DRAGONFLY))
 File gid_File_Dl_Stdcpp
     Dir = SCP2_URE_DL_DIR;
     TXT_FILE_BODY;
