@@ -64,20 +64,6 @@ using namespace com::sun::star::plugin;
 
 typedef map< OString, OUString, less< OString > > PluginLocationMap;
 
-
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-
-static void logPlugin( OUString const & path_ )
-{
-    static FILE * s_file = 0;
-    if (! s_file)
-        s_file = fopen( "d:\\plugins.log", "a+" );
-    OString path( OUStringToOString( path_, RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( s_file, "%s\n", path.getStr() );
-}
-#endif
-
 //__________________________________________________________________________________________________
 static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & rPlugins )
 {
@@ -121,9 +107,6 @@ static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & 
 
             OUString path( OStringToOUString( arComplete, RTL_TEXTENCODING_MS_1252 ) );
             rPlugins[ aName ] = path;
-#if OSL_DEBUG_LEVEL > 1
-            logPlugin( path );
-#endif
         }
 
         if (! ::FindNextFile( hFind, &aFindData ))
@@ -252,9 +235,6 @@ static void add_MozPlugin( HKEY hKey, PluginLocationMap & rPlugins )
              rPlugins.find( aName ) == rPlugins.end())
         {
             rPlugins[ aName ] = aUPath;
-#if OSL_DEBUG_LEVEL > 1
-            logPlugin( aUPath );
-#endif
         }
     }
 }
