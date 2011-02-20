@@ -113,7 +113,7 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
 
 SwPaM& SwPamRanges::SetPam( USHORT nArrPos, SwPaM& rPam )
 {
-    ASSERT_ID( nArrPos < Count(), ERR_VAR_IDX );
+    OSL_ASSERT( nArrPos < Count() );
     const SwPamRange& rTmp = *(GetData() + nArrPos );
     rPam.GetPoint()->nNode = rTmp.nStart;
     rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), 0 );

@@ -35,10 +35,10 @@
 #include <node.hxx>
 #include <hintids.hxx>
 #include <ndhints.hxx>
-#include <errhdl.hxx>
 #include <modeltoviewhelper.hxx>
 #include <SwNumberTreeTypes.hxx>
 #include <IDocumentContentOperations.hxx>
+#include <osl/diagnose.h>
 
 #include <sfx2/Metadatable.hxx>
 
@@ -807,12 +807,12 @@ public:
 
 inline SwpHints & SwTxtNode::GetSwpHints()
 {
-    ASSERT_ID( m_pSwpHints, ERR_NOHINTS);
+    OSL_ASSERT( m_pSwpHints );
     return *m_pSwpHints;
 }
 inline const SwpHints &SwTxtNode::GetSwpHints() const
 {
-    ASSERT_ID( m_pSwpHints, ERR_NOHINTS);
+    OSL_ASSERT( m_pSwpHints );
     return *m_pSwpHints;
 }
 

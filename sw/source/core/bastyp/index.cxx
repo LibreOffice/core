@@ -33,9 +33,7 @@
 #include <stdlib.h>             // fuer qsort
 #include <tools/solar.h>
 
-#include "errhdl.hxx"           // fuers ASSERT
 #include "index.hxx"
-#include "error.h"              // fuers ASSERT
 
 #if OSL_DEBUG_LEVEL > 1
 int SwIndex::nSerial = 0;
@@ -315,7 +313,7 @@ void SwIndexReg::Update( SwIndex const & rIdx, const xub_StrLen nDiff,
 *************************************************************************/
 xub_StrLen SwIndex::operator++(int)
 {
-    ASSERT_ID( nIndex < INVALID_INDEX, ERR_OUTOFSCOPE );
+    OSL_ASSERT( nIndex < INVALID_INDEX );
 
     xub_StrLen nOldIndex = nIndex;
     ChgValue( *this, nIndex+1 );
@@ -325,7 +323,7 @@ xub_StrLen SwIndex::operator++(int)
 
 xub_StrLen SwIndex::operator++()
 {
-    ASSERT_ID( nIndex < INVALID_INDEX, ERR_OUTOFSCOPE );
+    OSL_ASSERT( nIndex < INVALID_INDEX );
 
     ChgValue( *this, nIndex+1 );
     return nIndex;
@@ -338,7 +336,7 @@ xub_StrLen SwIndex::operator++()
 
 xub_StrLen SwIndex::operator--(int)
 {
-    ASSERT_ID( nIndex, ERR_OUTOFSCOPE );
+    OSL_ASSERT( nIndex );
 
     xub_StrLen nOldIndex = nIndex;
     ChgValue( *this, nIndex-1 );
@@ -348,7 +346,7 @@ xub_StrLen SwIndex::operator--(int)
 
 xub_StrLen SwIndex::operator--()
 {
-    ASSERT_ID( nIndex, ERR_OUTOFSCOPE );
+    OSL_ASSERT( nIndex );
     return ChgValue( *this, nIndex-1 ).nIndex;
 }
 
@@ -358,7 +356,7 @@ xub_StrLen SwIndex::operator--()
 
 xub_StrLen SwIndex::operator+=( xub_StrLen nWert )
 {
-    ASSERT_ID( nIndex < INVALID_INDEX - nWert, ERR_OUTOFSCOPE);
+    OSL_ASSERT( nIndex < INVALID_INDEX - nWert );
     return ChgValue( *this, nIndex + nWert ).nIndex;
 }
 
@@ -368,7 +366,7 @@ xub_StrLen SwIndex::operator+=( xub_StrLen nWert )
 
 xub_StrLen SwIndex::operator-=( xub_StrLen nWert )
 {
-    ASSERT_ID( nIndex >= nWert, ERR_OUTOFSCOPE );
+    OSL_ASSERT( nIndex >= nWert );
     return ChgValue( *this, nIndex - nWert ).nIndex;
 }
 
@@ -378,7 +376,7 @@ xub_StrLen SwIndex::operator-=( xub_StrLen nWert )
 
 xub_StrLen SwIndex::operator+=( const SwIndex & rIndex )
 {
-    ASSERT_ID( nIndex < INVALID_INDEX - rIndex.nIndex, ERR_OUTOFSCOPE );
+    OSL_ASSERT( nIndex < INVALID_INDEX - rIndex.nIndex );
     return ChgValue( *this, nIndex + rIndex.nIndex ).nIndex;
 }
 
@@ -388,7 +386,7 @@ xub_StrLen SwIndex::operator+=( const SwIndex & rIndex )
 
 xub_StrLen SwIndex::operator-=( const SwIndex & rIndex )
 {
-    ASSERT_ID( nIndex >= rIndex.nIndex, ERR_OUTOFSCOPE );
+    OSL_ASSERT( nIndex >= rIndex.nIndex );
     return ChgValue( *this, nIndex - rIndex.nIndex ).nIndex;
 }
 

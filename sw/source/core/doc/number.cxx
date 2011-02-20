@@ -84,7 +84,7 @@ USHORT SwNumRule::aDefNumIndents[ MAXLEVEL ] = {
 
 const SwNumFmt& SwNumRule::Get( USHORT i ) const
 {
-    ASSERT_ID( i < MAXLEVEL && eRuleType < RULE_END, ERR_NUMLEVEL);
+    OSL_ASSERT( i < MAXLEVEL && eRuleType < RULE_END );
     return aFmts[ i ]
            ? *aFmts[ i ]
            : ( meDefaultNumberFormatPositionAndSpaceMode == SvxNumberFormat::LABEL_WIDTH_AND_POSITION
@@ -96,7 +96,7 @@ const SwNumFmt* SwNumRule::GetNumFmt( USHORT i ) const
 {
     const SwNumFmt * pResult = NULL;
 
-    ASSERT_ID( i < MAXLEVEL && eRuleType < RULE_END, ERR_NUMLEVEL);
+    OSL_ASSERT( i < MAXLEVEL && eRuleType < RULE_END );
     if ( i < MAXLEVEL && eRuleType < RULE_END)
     {
         pResult = aFmts[ i ];
