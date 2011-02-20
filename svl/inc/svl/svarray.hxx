@@ -843,27 +843,10 @@ void nm::Remove( const AE &aE, USHORT nL )\
         nm##_SAR::Remove( nP, nL);\
 }\
 
-#if defined(TCPP)
-
-#define _SORTARR_BLC_CASTS(nm, AE )\
-    BOOL Insert(  AE &aE ) {\
-        return Insert( (const AE&)aE );\
-    }\
-    USHORT GetPos( AE& aE ) const { \
-        return SvPtrarr::GetPos((const VoidPtr&)aE);\
-    }\
-    void Remove( AE& aE, USHORT nL = 1 ) { \
-        Remove( (const AE&) aE, nL  );\
-    }
-
-#else
-
 #define _SORTARR_BLC_CASTS(nm, AE )\
     USHORT GetPos( const AE& aE ) const { \
         return SvPtrarr::GetPos((const VoidPtr&)aE);\
     }
-
-#endif
 
 #define _SV_DECL_PTRARR_SORT_ALG(nm, AE, IS, GS, vis)\
 SV_DECL_PTRARR_VISIBILITY(nm##_SAR, AE, IS, GS, vis)\
