@@ -1485,12 +1485,6 @@ case "$host_os" in
         AC_MSG_RESULT([$PTHREAD_LIBS])
         _os=FreeBSD
         ;;
-    osf)
-        test_cups=no
-        test_cairo=no
-        test_randr=no
-        _os=OSF1
-        ;;
     *netbsd*)
         test_gtk=yes
         build_gstreamer=yes
@@ -2065,27 +2059,6 @@ fi
 AC_SUBST(HAVE_LD_HASH_STYLE)
 
 dnl ===================================================================
-dnl  Test the Compaq compiler for OSF1
-dnl ===================================================================
-if test "$_os" = "OSF1"; then
-   if test "$CC" = "cc"; then
-      AC_PATH_PROGS(_cc, cc)
-      COMPATH=`echo $_cc | $SED -n "s/\/bin\/cc//p"`
-      AC_MSG_WARN([******* $_cc , $COMPATH])
-      AC_MSG_CHECKING([the Compaq C compiler version])
-      dnl cc -V outputs to standard error!!!!
-      _compaqc_version=`$CC -V 2>&1 | $AWK '{ print $3 }'`
-      _compaqc_major=`echo $_compaqc_version | $AWK -F. '{ print $1 }'`
-      if test "$_compaqc_major" != "T6"; then
-         AC_MSG_ERROR([found version "$_compaqc_version", use version 6 of the Compaq C compiler])
-      else
-         dnl compiler will do
-         AC_MSG_RESULT([checked])
-      fi
-   fi
-fi
-
-dnl ===================================================================
 dnl Check whether there's a Perl version available.
 dnl ===================================================================
 if test -z "$with_perl_home"; then
@@ -2658,22 +2631,6 @@ if test "$_os" = "SunOS"; then
       else
          AC_MSG_RESULT([checked])
       fi
-   fi
-fi
-dnl ===================================================================
-dnl Extra checking for the OSF compiler
-dnl ===================================================================
-if test "$_os" = "OSF1"; then
-   AC_MSG_CHECKING([Compaq C++ compiler version])
-   dnl cxx -V outputs to standard error!!!!
-   _compaqcxx_version=`$CXX -V 2>&1 | $AWK '{ print $3 }'`
-   _compaqcxx_major=`echo $_compaqcxx_version | $AWK -F. '{ print $1 }'`
-   if test "$_compaqcxx_major" != "V6"; then
-      AC_MSG_WARN([found version "$_compaqc_version", use version 6 of the Compaq C++ compiler])
-      echo "found version $_compaqc_version, use version 6 of the Compaq C++ compiler" >> warn
-   else
-      dnl compiler will do
-      AC_MSG_RESULT([checked])
    fi
 fi
 
@@ -3693,9 +3650,6 @@ if test "$enable_epm" = "yes"; then
         ;;
     *BSD)
         PKGFORMAT=bsd
-        ;;
-    OSF1)
-        PKGFORMAT=setld
         ;;
     WINNT)
         PKGFORMAT=msi

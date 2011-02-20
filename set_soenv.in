@@ -648,26 +648,6 @@ elsif ( $platform =~ m/linux/ )
 
    $INPATH         = $OUTPATH.$PROEXT;
 }
-elsif ( $platform =~ m/osf1/ )
-{     print "Setting Tru64 specific values... ";
-      $outfile        = "Tru64AlphaEnv.Set.sh";
-      $BIG_SVX        = "TRUE";
-      $COM            = "CXX";
-      $COMPATH        = '@COMPATH@';
-      $CPU            = "A";
-      $CPUNAME        = "ALPHA_";
-      $CVER           = "C62";
-      $GUI            = "UNX";
-      $GUIBASE        = "unx";
-      $GVER           = "VCL";
-      $OUTPATH        = "unxt64";
-      $INPATH         = $OUTPATH.$PROEXT;
-      $OS             = "TRU64";
-      $PATH_SEPERATOR = $ps;
-      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha";
-      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."client";
-      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."native_threads";
-}
 elsif ( $platform =~ m/cygwin/ )
 {
       $MSPDB_PATH     = PathFormat('@MSPDB_PATH@');
@@ -1089,7 +1069,7 @@ if ($platform =~ m/solaris/)
                         $L.$USR_DT.$LIB.
                         $L.$USR_OPENWIN.$LIB;
 }
-elsif ($platform =~ m/linux|netbsd|osf1|freebsd|aix|openbsd|dragonfly/)
+elsif ($platform =~ m/linux|netbsd|freebsd|aix|openbsd|dragonfly/)
 {
    $SOLAREXTRALIB     = $L.$par_dir.$LIB64;
 }
@@ -1152,7 +1132,7 @@ if ($platform =~ m/cygwin|os2/)
 }
 
 # The general environment path.
-if ($platform =~ m/linux|netbsd|osf1|freebsd|aix|solaris|openbsd|dragonfly/)
+if ($platform =~ m/linux|netbsd|freebsd|aix|solaris|openbsd|dragonfly/)
 {  $PATH              = $cur_dir.
 #                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
@@ -1375,7 +1355,7 @@ if ($platform =~ m/solaris/)
                         $L.$JRETHREADDIR.
                         $L.$XLIB;
 }
-elsif ($platform =~ m/linux|netbsd|osf1|aix|freebsd|openbsd|dragonfly/)
+elsif ($platform =~ m/linux|netbsd|aix|freebsd|openbsd|dragonfly/)
 {  $SOLARLIB          = $L.$par_dir.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
                         $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
@@ -1421,7 +1401,7 @@ $SOLARINC             = $I.$cur_dir.
                         $I.'$SOLARENV'.$INC.
                         $I.'$SRC_ROOT'.$ds."res";
 
-if ($platform =~ m/solaris|linux|osf1|freebsd|netbsd|aix|openbsd|dragonfly/)
+if ($platform =~ m/solaris|linux|freebsd|netbsd|aix|openbsd|dragonfly/)
 {
 if ($platform =~ m/solaris/ && ! $CC =~ "gcc")
 {
@@ -1449,7 +1429,7 @@ if ($platform =~ m/solaris/)
    		if ($platform =~ m/solaris/)
    		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."solaris";
    		}
-   		elsif  ($platform =~ m/linux|osf1/)
+   		elsif  ($platform =~ m/linux/)
    		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."linux";
    		}
    		elsif ($platform =~ m/freebsd/)
@@ -1475,10 +1455,6 @@ if ($platform =~ m/solaris/)
     #The tail, if needed
     if ($platform =~ m/linux|freebsd|netbsd|aix|openbsd|dragonfly/)
     {  $SOLARINC  .= $I.$XINC;
-    }
-    elsif ($platform =~ m/osf1/)
-    {  $SOLARINC  .= $I.$XINC.
-                     $I.$USR.$INCLUDE;
     }
 }
 elsif ($platform =~ m/cygwin/)

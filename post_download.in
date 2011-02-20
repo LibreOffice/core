@@ -33,9 +33,6 @@ case "$build_os" in
     freebsd*)
         _os=FreeBSD
         ;;
-    osf)
-        _os=OSF1
-        ;;
     *netbsd*)
         _os=NetBSD
         ;;
