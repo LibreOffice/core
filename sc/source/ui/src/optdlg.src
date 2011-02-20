@@ -152,20 +152,20 @@ TabPage RID_SCPAGE_CALC
     CheckBox BTN_GENERAL_PREC
     {
         Pos = MAP_APPFONT ( 12 , 147 ) ;
-        Size = MAP_APPFONT ( 148 , 10 ) ;
-        Text [ en-US ] = "Limit decimals for general number format" ;
+        Size = MAP_APPFONT ( 164 , 10 ) ;
+        Text [ en-US ] = "~Limit decimals for general number format" ;
     };
     FixedText FT_PREC
     {
-        Pos = MAP_APPFONT ( 138 , 148 ) ;
-        Size = MAP_APPFONT ( 84 , 8 ) ;
+        Pos = MAP_APPFONT ( 169 , 147 ) ;
+        Size = MAP_APPFONT ( 53 , 8 ) ;
         Text [ en-US ] = "~Decimal places" ;
         Right = TRUE ;
     };
     NumericField ED_PREC
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 226 , 146 ) ;
+        Pos = MAP_APPFONT ( 226 , 145 ) ;
         Size = MAP_APPFONT ( 25 , 12 ) ;
         Maximum = 20 ;
         Spin = TRUE ;
