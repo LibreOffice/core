@@ -48,8 +48,12 @@
 #include <pwd.h>
 #endif
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+#include <cppunit/plugin/TestPlugInDefaultImpl.h>
 
+#define t_print printf
 
 #define BUFSIZE 1024
 const char pTestString[17] = "Sun Microsystems";

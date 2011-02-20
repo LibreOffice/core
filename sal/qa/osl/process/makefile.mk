@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -77,6 +77,9 @@ APP3TARGET=osl_process_child
 APP3OBJS=$(OBJ3FILES)
 APP3STDLIBS=$(SALLIB)
 
+#TODO: The Linux and WinDOS batch file must be copied to $(BIN) directory!
+#   I dont't know how to do this....
+
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
 
@@ -94,3 +97,4 @@ SLOFILES=$(SHL1OBJS) $(SHL2OBJS)
 
 .INCLUDE :  target.mk
 .INCLUDE : _cppunit.mk
+

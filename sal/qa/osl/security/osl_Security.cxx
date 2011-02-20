@@ -334,33 +334,38 @@ namespace osl_Security
     }; // class loginUserOnFileServer
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::ctors, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::logonUser, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::getUserIdent, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::getUserName, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::getHomeDir, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::getConfigDir, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::isAdministrator, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::getHandle, "osl_Security");
-
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::UserProfile, "osl_Security");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Security::loginUserOnFileServer, "osl_Security");
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::ctors);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::logonUser);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getUserIdent);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getUserName);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getHomeDir);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getConfigDir);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::isAdministrator);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getHandle);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::UserProfile);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::loginUserOnFileServer);
 
 // -----------------------------------------------------------------------------
 
 } // namespace osl_Security
 
 
-// -----------------------------------------------------------------------------
+/* This defines an own TestPlugIn implementation with an own initialize()
+    method that will be called after loading the PlugIn
+    */
+#include <cppunit/plugin/TestPlugInDefaultImpl.h>
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
+class MyTestPlugInImpl: public CPPUNIT_NS::TestPlugInDefaultImpl
+{
+    public:
+    MyTestPlugInImpl() {};
+    void initialize( CPPUNIT_NS::TestFactoryRegistry *registry,
+                   const CPPUNIT_NS::PlugInParameters &parameters );
+};
 
-/** to do some initialized work, we replace the NOADDITIONAL macro with the initialize work which
-      get current user name, .
-*/
 
-void RegisterAdditionalFunctions(FktRegFuncPtr)
+void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
+                   const CPPUNIT_NS::PlugInParameters & parameters)
 {
     /// start message
     t_print("#Initializing ...\n" );
@@ -638,7 +643,7 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
 
 
     /// get and display forwarded text if available.
-    aStringForward = ::rtl::OUString::createFromAscii( getForwardString() );
+    aStringForward = ::rtl::OUString::createFromAscii( parameters.getCommandLine().c_str() );
     if ( !aStringForward.equals( aNullURL ) && aStringForward.indexOf( (sal_Unicode)' ' ) != -1 )
     {
         sal_Int32 nFirstSpacePoint = aStringForward.indexOf( (sal_Unicode)' ' );;
@@ -677,5 +682,14 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
     t_print("#\n#Initialization Done.\n" );
 
 }
+
+/* Instantiate and register the own TestPlugIn and instantiate the default
+    main() function.
+    (This is done by CPPUNIT_PLUGIN_IMPLEMENT() for TestPlugInDefaultImpl)
+    */
+
+CPPUNIT_PLUGIN_EXPORTED_FUNCTION_IMPL( MyTestPlugInImpl );
+CPPUNIT_PLUGIN_IMPLEMENT_MAIN();
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
