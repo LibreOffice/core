@@ -92,6 +92,7 @@
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
 #include <PostItMgr.hxx>
+#include <vector>
 
 // <--
 //#pragma optimize("ity",on)
@@ -2363,7 +2364,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         //Veraenderungen der Seitenzahl nicht zu unerwuenschten Effekten kommt.
         //Wir merken uns bei welchen Shells der Cursor sichtbar ist, damit
         //wir ihn bei Dokumentaenderung ggf. wieder sichbar machen koennen.
-        SvBools aBools;
+        std::vector<bool> aBools;
         ViewShell *pSh = pImp->GetShell();
         do
         {   ++pSh->nStartAction;
@@ -2375,7 +2376,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 #endif
                 bVis = ((SwCrsrShell*)pSh)->GetCharRect().IsOver(pSh->VisArea());
             }
-            aBools.Insert( bVis, aBools.Count() );
+            aBools.push_back(bVis);
             pSh = (ViewShell*)pSh->GetNext();
         } while ( pSh != pImp->GetShell() );
 
