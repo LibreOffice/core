@@ -318,7 +318,7 @@ struct SwHTMLFmtInfo
 
     // Konstruktor fuer einen Dummy zum Suchen
     SwHTMLFmtInfo( const SwFmt *pF ) :
-        pFmt( pF ), pItemSet( 0 )
+        pFmt( pF ), pRefFmt(0), pItemSet( 0 ), nFirstLineIndent(0)
     {}
 
 
@@ -349,7 +349,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
                               BOOL bOutStyles,
                               LanguageType eDfltLang,
                               sal_uInt16 nCSS1Script, BOOL bHardDrop ) :
-    pFmt( pF ), pItemSet( 0 ), bScriptDependent( sal_False )
+    pFmt( pF ), pRefFmt(0), pItemSet( 0 ), bScriptDependent( sal_False )
 {
     USHORT nRefPoolId = 0;
     // Den Selektor des Formats holen

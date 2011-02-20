@@ -289,7 +289,7 @@ protected:
     SwFntObj *pLowerFnt;
 public:
     SwDoDrawCapital( SwDrawTextInfo &rInfo ) :
-        SwDoCapitals( rInfo )
+        SwDoCapitals( rInfo ), pUpperFnt(0), pLowerFnt(0)
         { }
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont );
     virtual void Do();
@@ -387,7 +387,7 @@ protected:
     USHORT nOfst;
 public:
     SwDoCapitalCrsrOfst( SwDrawTextInfo &rInfo, const USHORT nOfs ) :
-        SwDoCapitals( rInfo ), nCrsr( 0 ), nOfst( nOfs )
+        SwDoCapitals( rInfo ), pUpperFnt(0), pLowerFnt(0), nCrsr( 0 ), nOfst( nOfs )
         { }
     virtual void Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont );
     virtual void Do();
