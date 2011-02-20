@@ -44,7 +44,7 @@ extern "C" int mntctl( int cmd, size_t size, char* buf );
 #elif defined(NETBSD)
 #include <sys/mount.h>
 #elif defined(FREEBSD) || defined(MACOSX) || defined(OPENBSD) || \
-      defined(DECUNIX) || defined(DRAGONFLY)
+      defined(DRAGONFLY)
 struct mnttab
 {
   char *mnt_dir;
@@ -136,7 +136,7 @@ static BOOL GetMountEntry(dev_t dev, struct mymnttab *mytab)
         return FALSE;
     struct mnttab mnt[1];
     while (getmntent (fp, mnt) != -1)
-#elif defined DECUNIX || defined AIX
+#elif defined AIX
     FILE *fp = NULL;
     if (! fp)
         return FALSE;
