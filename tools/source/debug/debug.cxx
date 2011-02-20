@@ -152,6 +152,7 @@ struct DebugData
     DbgPrintLine            pDbgPrintMsgBox;
     DbgPrintLine            pDbgPrintWindow;
     DbgPrintLine            pDbgPrintTestTool;
+    DbgPrintLine            pDbgAbort;
     ::std::vector< DbgPrintLine >
                             aDbgPrintUserChannels;
     PointerList*            pProfList;
@@ -163,9 +164,10 @@ struct DebugData
 
     DebugData()
         :bInit( sal_False )
-        ,pDbgPrintMsgBox( sal_False )
+        ,pDbgPrintMsgBox( NULL )
         ,pDbgPrintWindow( NULL )
         ,pDbgPrintTestTool( NULL )
+        ,pDbgAbort( NULL )
         ,pProfList( NULL )
         ,pXtorList( NULL )
         ,pDbgTestSolarMutex( NULL )
@@ -420,7 +422,7 @@ namespace
     {
         const sal_Char* names[ DBG_OUT_COUNT ] =
         {
-            "dev/null", "file", "window", "shell", "messagebox", "testtool", "debugger", "coredump"
+            "dev/null", "file", "window", "shell", "messagebox", "testtool", "debugger", "abort"
         };
         lcl_writeConfigString( _pFile, _pKeyName, names[ _nValue ] );
     }
@@ -475,7 +477,7 @@ namespace
     {
         const sal_Char* names[ DBG_OUT_COUNT ] =
         {
-            "dev/null", "file", "window", "shell", "messagebox", "testtool", "debugger", "coredump"
+            "dev/null", "file", "window", "shell", "messagebox", "testtool", "debugger", "abort"
         };
         sal_Char aBuf[20];
         size_t nValueLen = lcl_tryReadConfigString( _pLine, _nLineLen, _pKeyName, aBuf, sizeof( aBuf ) );
@@ -1199,6 +1201,10 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
                 pDebugData->pDbgPrintTestTool = (DbgPrintLine)(long)pParam;
                 break;
 
+            case DBG_FUNC_SET_ABORT:
+                pDebugData->pDbgAbort = (DbgPrintLine)(long)pParam;
+                break;
+
             case DBG_FUNC_SAVEDATA:
                 {
                 const DbgData* pData = static_cast< const DbgData* >( pParam );
@@ -1706,10 +1712,12 @@ void DbgOut( const sal_Char* pMsg, sal_uInt16 nDbgOut, const sal_Char* pFile, sa
             nOut = DBG_OUT_DEBUGGER;
     }
 
-    if ( nOut == DBG_OUT_COREDUMP )
+    if ( nOut == DBG_OUT_ABORT )
     {
-        if ( !ImplCoreDump() )
-            nOut = DBG_OUT_DEBUGGER;
+        if ( pData->pDbgAbort != NULL )
+            pData->pDbgAbort( aBufOut );
+        abort();
+        nOut = DBG_OUT_DEBUGGER;
     }
 
     if ( nOut == DBG_OUT_DEBUGGER )
