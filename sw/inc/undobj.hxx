@@ -870,7 +870,7 @@ class SwUndoTblNdsChg : public SwUndo
         SvULongs* pNewSttNds;
         SwUndoSaveSections* pDelSects;
     } Ptrs;
-    SvBools aMvBoxes;       // fuers SplitRow (aufgeteilte Nodes einer Box)
+    std::vector<bool> aMvBoxes;  // fuers SplitRow (aufgeteilte Nodes einer Box)
     long nMin, nMax;        // for redo of delete column
     ULONG nSttNode, nCurrBox;
     USHORT nCount, nRelDiff, nAbsDiff, nSetColType;

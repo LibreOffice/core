@@ -1739,7 +1739,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
                 ( nNodes != ( pSourceBox->GetSttNd()->EndOfSectionIndex() -
                               pSourceBox->GetSttIdx() ) )
                 && ( nNodes - 1 > nLineDiff );
-            aMvBoxes.Insert( bNodesMoved, nInsPos );
+            aMvBoxes.insert( aMvBoxes.begin() + nInsPos, bNodesMoved );
         }
     }
 }
@@ -1799,7 +1799,7 @@ void SwUndoTblNdsChg::Undo( SwUndoIter& rUndoIter )
         }
         Ptrs.pDelSects->DeleteAndDestroy( 0, Ptrs.pDelSects->Count() );
     }
-    else if( aMvBoxes.Count() )
+    else if( !aMvBoxes.empty() )
     {
         // dann muessen Nodes verschoben und nicht geloescht werden!
         // Dafuer brauchen wir aber ein temp Array
@@ -3193,7 +3193,7 @@ void InsertSort( SvUShorts& rArr, USHORT nIdx, USHORT* pInsPos )
             nM = nU + ( nO - nU ) / 2;
             if( *(rArr.GetData() + nM) == nIdx )
             {
-                OSL_ENSURE( FALSE, "Index ist schon vorhanden, darf nie sein!" );
+                OSL_ENSURE( FALSE, "Index already exists. This should never happen." );
                 return;
             }
             if( *(rArr.GetData() + nM) < nIdx )
