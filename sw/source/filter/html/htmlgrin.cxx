@@ -1014,9 +1014,9 @@ void SwHTMLParser::InsertBodyOptions()
     if( aLang.Len() )
     {
         LanguageType eLang = MsLangId::convertIsoStringToLanguage( aLang );
-        sal_uInt16 nWhich = 0;
         if( LANGUAGE_DONTKNOW != eLang )
         {
+            sal_uInt16 nWhich = 0;
             switch( SvtLanguageOptions::GetScriptTypeOfLanguage( eLang ) )
             {
             case SCRIPTTYPE_LATIN:

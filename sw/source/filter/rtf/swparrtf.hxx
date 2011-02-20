@@ -242,7 +242,7 @@ private:
     {
         bool bHasHeader, bHasFooter;
         short nSwHLo, nHdUL, nSwFUp, nFtUL, nSwUp,  nSwLo;
-        wwULSpaceData() : bHasHeader(false), bHasFooter(false) {}
+        wwULSpaceData() : bHasHeader(false), bHasFooter(false), nSwHLo(0), nHdUL(0), nSwFUp(0), nFtUL(0), nSwUp(0),  nSwLo(0) {}
     };
 
     void SetSegmentToPageDesc(const rtfSection &rSection, bool bTitlePage,
