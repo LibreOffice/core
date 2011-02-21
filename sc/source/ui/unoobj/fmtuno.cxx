@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
+#include <boost/bind.hpp>
 
 #include <tools/debug.hxx>
 #include <rtl/uuid.h>
@@ -237,15 +237,12 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
     //  ScConditionalFormat = Core-Struktur, muss leer sein
 
     DBG_ASSERT( rFormat.IsEmpty(), "FillFormat: Format nicht leer" );
-    USHORT nCount = (USHORT)aEntries.Count();
-    for (USHORT i=0; i<nCount; i++)
-    {
-        ScTableConditionalEntry* pEntry = (ScTableConditionalEntry*)aEntries.GetObject(i);
-        if ( !pEntry )
-            continue;
 
+    std::vector<ScTableConditionalEntry*>::const_iterator iter;
+    for (iter = aEntries.begin(); iter != aEntries.end(); ++iter)
+    {
         ScCondFormatEntryItem aData;
-        pEntry->GetData(aData);
+        (*iter)->GetData(aData);
 
         FormulaGrammar::Grammar eGrammar1 = lclResolveGrammar( eGrammar, aData.meGrammar1 );
         FormulaGrammar::Grammar eGrammar2 = lclResolveGrammar( eGrammar, aData.meGrammar2 );
@@ -275,17 +272,14 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
 
 ScTableConditionalFormat::~ScTableConditionalFormat()
 {
-    ScTableConditionalEntry* pEntry;
-    aEntries.First();
-    while ( ( pEntry = (ScTableConditionalEntry*)aEntries.Remove() ) != NULL )
-        pEntry->release();
+    std::for_each(aEntries.begin(),aEntries.end(),boost::bind(&ScTableConditionalEntry::release,_1));
 }
 
 void ScTableConditionalFormat::AddEntry_Impl(const ScCondFormatEntryItem& aEntry)
 {
     ScTableConditionalEntry* pNew = new ScTableConditionalEntry(this, aEntry);
     pNew->acquire();
-    aEntries.Insert( pNew, LIST_APPEND );
+    aEntries.push_back(pNew);
 }
 
 void ScTableConditionalFormat::DataChanged()
@@ -297,7 +291,7 @@ void ScTableConditionalFormat::DataChanged()
 
 ScTableConditionalEntry* ScTableConditionalFormat::GetObjectByIndex_Impl(USHORT nIndex) const
 {
-    return (ScTableConditionalEntry*)aEntries.GetObject(nIndex);
+    return aEntries[nIndex];
 }
 
 void SAL_CALL ScTableConditionalFormat::addNew(
@@ -401,11 +395,13 @@ void SAL_CALL ScTableConditionalFormat::removeByIndex( sal_Int32 nIndex )
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    ScTableConditionalEntry* pEntry = (ScTableConditionalEntry*)aEntries.GetObject(nIndex);
-    if (pEntry)
+
+    if (nIndex < static_cast<sal_Int32>(aEntries.size()))
     {
-        aEntries.Remove(pEntry);
-        pEntry->release();
+        std::vector<ScTableConditionalEntry*>::iterator iter = aEntries.begin()+nIndex;
+
+        (*iter)->release();
+        aEntries.erase(iter);
         DataChanged();
     }
 }
@@ -413,10 +409,10 @@ void SAL_CALL ScTableConditionalFormat::removeByIndex( sal_Int32 nIndex )
 void SAL_CALL ScTableConditionalFormat::clear() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    ScTableConditionalEntry* pEntry;
-    aEntries.First();
-    while ( ( pEntry = (ScTableConditionalEntry*)aEntries.Remove() ) != NULL )
-        pEntry->release();
+    std::for_each(aEntries.begin(),aEntries.end(),
+                  boost::bind(&ScTableConditionalEntry::release,_1));
+
+    aEntries.clear();
 
     DataChanged();
 }
@@ -435,7 +431,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScTableConditionalFormat::creat
 sal_Int32 SAL_CALL ScTableConditionalFormat::getCount() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return aEntries.Count();
+    return aEntries.size();
 }
 
 uno::Any SAL_CALL ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
@@ -480,7 +476,7 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByName( const rtl::OUString& aNam
     SolarMutexGuard aGuard;
 
     uno::Reference<sheet::XSheetConditionalEntry> xEntry;
-    long nCount = aEntries.Count();
+    long nCount = aEntries.size();
     for (long i=0; i<nCount; i++)
         if ( aName == lcl_GetEntryNameFromIndex(i) )
         {
@@ -500,7 +496,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScTableConditionalFormat::getElementNames(
 {
     SolarMutexGuard aGuard;
 
-    long nCount = aEntries.Count();
+    long nCount = aEntries.size();
     uno::Sequence<rtl::OUString> aNames(nCount);
     rtl::OUString* pArray = aNames.getArray();
     for (long i=0; i<nCount; i++)
@@ -514,7 +510,7 @@ sal_Bool SAL_CALL ScTableConditionalFormat::hasByName( const rtl::OUString& aNam
 {
     SolarMutexGuard aGuard;
 
-    long nCount = aEntries.Count();
+    long nCount = aEntries.size();
     for (long i=0; i<nCount; i++)
         if ( aName == lcl_GetEntryNameFromIndex(i) )
             return TRUE;

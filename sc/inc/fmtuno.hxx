@@ -29,8 +29,8 @@
 #ifndef SC_FMTUNO_HXX
 #define SC_FMTUNO_HXX
 
-#include "address.hxx"
-#include "conditio.hxx"
+#include <vector>
+
 #include <formula/grammar.hxx>
 #include <svl/itemprop.hxx>
 #include <com/sun/star/sheet/XSheetConditionalEntries.hpp>
@@ -49,6 +49,9 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
+
+#include "address.hxx"
+#include "conditio.hxx"
 
 class ScDocument;
 class ScTableConditionalEntry;
@@ -83,7 +86,7 @@ class ScTableConditionalFormat : public cppu::WeakImplHelper5<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    List    aEntries;
+    std::vector<ScTableConditionalEntry*>   aEntries;
 
     ScTableConditionalEntry*    GetObjectByIndex_Impl(USHORT nIndex) const;
     void                        AddEntry_Impl(const ScCondFormatEntryItem& aEntry);
