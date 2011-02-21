@@ -64,9 +64,6 @@
 #include <editeng/brshitem.hxx>
 #include <SwSmartTagMgr.hxx>
 
-#define _SVSTDARR_BOOLS
-#include <svl/svstdarr.hxx>
-
 #define _LAYACT_CXX
 #include "layact.hxx"
 #include <swwait.hxx>

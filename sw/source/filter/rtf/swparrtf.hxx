@@ -33,10 +33,6 @@
 #include <deque>
 #include <vector>
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_BOOLS
-#include <svl/svstdarr.hxx>
-#endif
 #include <editeng/svxrtf.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/boxitem.hxx>

@@ -35,9 +35,8 @@
 #include <boost/unordered_map.hpp>
 #include <vector>
 
-#if !defined(_SVSTDARR_USHORTS_DECL) || !defined(_SVSTDARR_BOOLS_DECL) || !defined(_SVSTDARR_STRINGSDTOR_DECL)
+#if !defined(_SVSTDARR_USHORTS_DECL) || !defined(_SVSTDARR_STRINGSDTOR_DECL)
 #define _SVSTDARR_USHORTS
-#define _SVSTDARR_BOOLS
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #endif

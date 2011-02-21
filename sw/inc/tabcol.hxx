@@ -30,7 +30,6 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_LONGS
-#define _SVSTDARR_BOOLS
 #include <svl/svstdarr.hxx>
 #endif
 

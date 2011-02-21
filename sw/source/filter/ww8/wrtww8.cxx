@@ -42,7 +42,6 @@
 #include <osl/endian.h>
 #include <docsh.hxx>
 
-#define _SVSTDARR_BOOLS
 #include <svl/svstdarr.hxx>
 
 #include <unotools/fltrcfg.hxx>
