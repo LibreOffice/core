@@ -28,27 +28,25 @@
 #ifndef _SWUI_CNTTAB_HXX
 #define _SWUI_CNTTAB_HXX
 
-#include <svx/stddlg.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 
-#include <vcl/button.hxx>
-
-#include <vcl/edit.hxx>
-
-#include <vcl/fixed.hxx>
-
-#include <vcl/field.hxx>
-#include <vcl/lstbox.hxx>
+#include <tools/resary.hxx>
 #include <sfx2/tabdlg.hxx>
+#include <svtools/svtreebx.hxx>
+#include <svx/checklbx.hxx>
+#include <svx/langbox.hxx>
+#include <svx/stddlg.hxx>
+#include <vcl/button.hxx>
+#include <vcl/edit.hxx>
+#include <vcl/field.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/menubtn.hxx>
+
+#include <cnttab.hxx>
+#include <toxmgr.hxx>
 
 #include "tox.hxx"
-#include <toxmgr.hxx>
-#include <svx/checklbx.hxx>
-#include <tools/resary.hxx>
-#include <svtools/svtreebx.hxx>
-#include <vcl/menubtn.hxx>
-#include <svx/langbox.hxx>
-#include <cnttab.hxx>
-#include <vector>
 
 class SwWrtShell;
 class SwTOXMgr;
@@ -259,15 +257,16 @@ class SwTOXEntryTabPage;
 
 class SwTokenWindow : public Window
 {
-    typedef std::vector<Control*>::iterator ctrl_iterator;
-    typedef std::vector<Control*>::const_iterator ctrl_const_iterator;
-    typedef std::vector<Control*>::reverse_iterator ctrl_reverse_iterator;
-    typedef std::vector<Control*>::const_reverse_iterator ctrl_const_reverse_iterator;
+    typedef boost::ptr_vector<Control> TOXControlList;
+    typedef TOXControlList::iterator ctrl_iterator;
+    typedef TOXControlList::const_iterator ctrl_const_iterator;
+    typedef TOXControlList::reverse_iterator ctrl_reverse_iterator;
+    typedef TOXControlList::const_reverse_iterator ctrl_const_reverse_iterator;
 
     ImageButton     aLeftScrollWin;
     Window          aCtrlParentWin;
     ImageButton     aRightScrollWin;
-    std::vector<Control*>   aControlList;
+    TOXControlList  aControlList;
     SwForm*         pForm;
     USHORT          nLevel;
     BOOL            bValid;

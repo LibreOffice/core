@@ -111,6 +111,17 @@ static const sal_Unicode aDeliEnd    = ']'; //fuer die form
 #define IDX_FILE_EXTENSION String::CreateFromAscii( \
                             RTL_CONSTASCII_STRINGPARAM( "*.sdi" ))
 
+boost::ptr_vector<Control>::iterator FindControl (boost::ptr_vector<Control> &list, Control *ctrl)
+{
+    for (boost::ptr_vector<Control>::iterator it = list.begin(); it != list.end(); ++it)
+    {
+        if ((&(*it)) == ctrl)
+            return it;
+    }
+
+    return list.end();
+}
+
 String lcl_CreateAutoMarkFileDlg( const String& rURL,
                                 const String& rFileString, sal_Bool bOpen )
 {
@@ -2833,13 +2844,6 @@ SwTokenWindow::SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId) :
 
 SwTokenWindow::~SwTokenWindow()
 {
-    for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
-    {
-        Control* pControl = (*it);
-        pControl->SetGetFocusHdl( Link() );
-        pControl->SetLoseFocusHdl( Link() );
-        delete pControl;
-    }
 }
 
 void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
@@ -2847,14 +2851,9 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
     SetActiveControl(0);
     bValid = sal_True;
 
+    //apply current level settings to the form
     if(pForm)
-    {
-        //apply current level settings to the form
-        for (ctrl_iterator iter = aControlList.begin(); iter != aControlList.end(); ++iter)
-            delete (*iter);
-
         aControlList.clear();
-    }
 
     nLevel = nL;
     pForm = &rForm;
@@ -2952,17 +2951,17 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
     Point aControlPos;
 
     if(!aControlList.empty())
-    {
-        Control* pLast = *(aControlList.rbegin());
+     {
+        ctrl_const_reverse_iterator iterLast = aControlList.rbegin();
 
-        aControlSize = pLast->GetSizePixel();
-        aControlPos = pLast->GetPosPixel();
+        aControlSize = iterLast->GetSizePixel();
+        aControlPos = iterLast->GetPosPixel();
         aControlPos.X() += aControlSize.Width();
     }
 
     if(TOKEN_TEXT == rToken.eTokenType)
     {
-        SwTOXEdit* pEdit = new SwTOXEdit(&aCtrlParentWin, this, rToken);
+        SwTOXEdit *pEdit = new SwTOXEdit(&aCtrlParentWin, this, rToken);
         pEdit->SetPosPixel(aControlPos);
 
         aControlList.push_back(pEdit);
@@ -3029,71 +3028,73 @@ void    SwTokenWindow::InsertAtSelection(
         //<insert> LS
         //<insert> LE
         //<insert>
-        sal_Bool bPreStartLinkFound = sal_False;
-        sal_Bool bPreEndLinkFound = sal_False;
+        bool bPreStartLinkFound = false;
+        bool bPreEndLinkFound = false;
 
-        const Control* pControl = 0;
-        const Control* pExchange = 0;
-
+        const Control *pExchange = 0;
         ctrl_const_iterator it = aControlList.begin();
-        for( ; it != aControlList.end() && pActiveCtrl != (*it); ++it )
-        {
-            pControl = *it;
 
-            if( WINDOW_EDIT != pControl->GetType())
+        while ( it != aControlList.end())
+        {
+            if ((&(*it)) == pActiveCtrl)
+                break;
+
+            if( WINDOW_EDIT != it->GetType())
             {
                 const SwFormToken& rNewToken =
-                                ((SwTOXButton*)pControl)->GetFormToken();
+                                (reinterpret_cast<const SwTOXButton&>(*it)).GetFormToken();
 
                 if( TOKEN_LINK_START == rNewToken.eTokenType )
                 {
-                    bPreStartLinkFound = sal_True;
+                    bPreStartLinkFound = true;
                     pExchange = 0;
                 }
                 else if(TOKEN_LINK_END == rNewToken.eTokenType)
                 {
                     if( bPreStartLinkFound )
-                        bPreStartLinkFound = sal_False;
+                        bPreStartLinkFound = false;
                     else
                     {
-                        bPreEndLinkFound = sal_False;
-                        pExchange = pControl;
+                        bPreEndLinkFound = false;
+                        pExchange = const_cast<Control*>(&(*it));
                     }
                 }
             }
+
+            ++it;
         }
 
         bool bPostLinkStartFound = false;
 
         if(!bPreStartLinkFound && !bPreEndLinkFound)
         {
-            for( ; it != aControlList.end(); ++it )
+            while(it != aControlList.end())
             {
-                pControl = *it;
-
-                if( pControl != pActiveCtrl &&
-                    WINDOW_EDIT != pControl->GetType())
+                if( (&(*it)) != pActiveCtrl &&
+                    WINDOW_EDIT != it->GetType())
                 {
                     const SwFormToken& rNewToken =
-                                    ((SwTOXButton*)pControl)->GetFormToken();
+                                    reinterpret_cast<const SwTOXButton&>(*it).GetFormToken();
 
                     if( TOKEN_LINK_START == rNewToken.eTokenType )
                     {
                         if(bPostLinkStartFound)
                             break;
-                        bPostLinkStartFound = sal_True;
-                        pExchange = pControl;
+                        bPostLinkStartFound = true;
+                        pExchange = const_cast<Control*>(&(*it));
                     }
                     else if(TOKEN_LINK_END == rNewToken.eTokenType )
                     {
                         if(bPostLinkStartFound)
                         {
-                            bPostLinkStartFound = sal_False;
+                            bPostLinkStartFound = false;
                             pExchange = 0;
                         }
                         break;
                     }
                 }
+
+                ++it;
             }
         }
 
@@ -3106,6 +3107,7 @@ void    SwTokenWindow::InsertAtSelection(
         if(bPostLinkStartFound)
         {
             OSL_ENSURE(pExchange, "no control to exchange?");
+
             if(pExchange)
             {
                 ((SwTOXButton*)pExchange)->SetLinkEnd();
@@ -3115,7 +3117,8 @@ void    SwTokenWindow::InsertAtSelection(
 
         if(bPreEndLinkFound)
         {
-            OSL_ENSURE(pExchange, "no control to exchange?");
+            OSL_ENSURE(iterExchange != aControlList.end(), "no control to exchange?");
+
             if(pExchange)
             {
                 ((SwTOXButton*)pExchange)->SetLinkStart();
@@ -3126,9 +3129,7 @@ void    SwTokenWindow::InsertAtSelection(
 
     //if the active control is text then insert a new button at the selection
     //else replace the button
-    ctrl_iterator iterActive = std::find(aControlList.begin(),
-                                         aControlList.end(), pActiveCtrl);
-
+    ctrl_iterator iterActive = FindControl(aControlList,pActiveCtrl);
     ctrl_iterator iterInsert = iterActive;
 
     Size aControlSize(GetOutputSizePixel());
@@ -3151,7 +3152,7 @@ void    SwTokenWindow::InsertAtSelection(
         SwFormToken aTmpToken(TOKEN_TEXT);
         SwTOXEdit* pEdit = new SwTOXEdit(&aCtrlParentWin, this, aTmpToken);
 
-        aControlList.insert(iterInsert, pEdit);
+        aControlList.insert(iterInsert,pEdit);
 
         pEdit->SetText(sRight);
         pEdit->SetSizePixel(aControlSize);
@@ -3163,15 +3164,13 @@ void    SwTokenWindow::InsertAtSelection(
     }
     else
     {
-        aControlList.erase(iterActive);
         pActiveCtrl->Hide();
-        delete pActiveCtrl;
+        aControlList.erase(iterActive);
     }
 
     //now the new button
     SwTOXButton* pButton = new SwTOXButton(&aCtrlParentWin, this, aToInsertToken);
-
-    aControlList.insert(iterInsert, pButton);
+    aControlList.insert(iterInsert,pButton);
 
     pButton->SetPrevNextLink(LINK(this, SwTokenWindow, NextItemBtnHdl));
     pButton->SetGetFocusHdl(LINK(this, SwTokenWindow, TbxFocusBtnHdl));
@@ -3203,7 +3202,7 @@ void SwTokenWindow::RemoveControl(SwTOXButton* pDel, sal_Bool bInternalCall )
     if(bInternalCall && TOX_AUTHORITIES == pForm->GetTOXType())
         m_pParent->PreTokenButtonRemoved(pDel->GetFormToken());
 
-    ctrl_iterator it = std::find(aControlList.begin(), aControlList.end(), pDel);
+    ctrl_iterator it = FindControl(aControlList,pDel);
 
     OSL_ENSURE(it != aControlList.end(), "Control does not exist!");
 
@@ -3212,26 +3211,22 @@ void SwTokenWindow::RemoveControl(SwTOXButton* pDel, sal_Bool bInternalCall )
     OSL_ENSURE(it != aControlList.begin() && it != aControlList.end() - 1,
         "Button at first or last position?");
 
-    ctrl_iterator itLeft = it, itRight = it;
-    --itLeft;
-    ++itRight;
-    Control *pLeftEdit = *itLeft;
-    Control *pRightEdit = *itRight;
+    Control *pLeftCtrl = const_cast<Control*>(&(*(it-1)));
+    Control *pRightCtrl = const_cast<Control*>(&(*(it+1)));
 
-    String sTemp(((SwTOXEdit*)pLeftEdit)->GetText());
-    sTemp += ((SwTOXEdit*)pRightEdit)->GetText();
-    ((SwTOXEdit*)pLeftEdit)->SetText(sTemp);
-    ((SwTOXEdit*)pLeftEdit)->AdjustSize();
+    String sTemp(((SwTOXEdit*)pLeftCtrl)->GetText());
+    sTemp += ((SwTOXEdit*)pRightCtrl)->GetText();
+    ((SwTOXEdit*)pLeftCtrl)->SetText(sTemp);
+    ((SwTOXEdit*)pLeftCtrl)->AdjustSize();
 
-    aControlList.erase(itRight);
-    delete pRightEdit;
-
+    aControlList.erase(it+1);
     aControlList.erase(it);
-    pActiveCtrl->Hide();
-    delete pActiveCtrl;
 
-    SetActiveControl(pLeftEdit);
+    pActiveCtrl->Hide();
+
+    SetActiveControl(pLeftCtrl);
     AdjustPositions();
+
     if(aModifyHdl.IsSet())
         aModifyHdl.Call(0);
 }
@@ -3241,17 +3236,14 @@ void SwTokenWindow::AdjustPositions()
     if(aControlList.size() > 1)
     {
         ctrl_iterator it = aControlList.begin();
-        Control* pCtrl = *it;
-        ++it;
 
-        Point aNextPos = pCtrl->GetPosPixel();
-        aNextPos.X() += pCtrl->GetSizePixel().Width();
+        Point aNextPos = it->GetPosPixel();
+        aNextPos.X() += it->GetSizePixel().Width();
 
-        for(; it != aControlList.end(); ++it)
-        {
-            pCtrl = *it;
-            pCtrl->SetPosPixel(aNextPos);
-            aNextPos.X() += pCtrl->GetSizePixel().Width();
+        for (++it; it != aControlList.end(); ++it)
+         {
+            it->SetPosPixel(aNextPos);
+            aNextPos.X() += it->GetSizePixel().Width();
         }
 
         AdjustScrolling();
@@ -3263,12 +3255,10 @@ void SwTokenWindow::MoveControls(long nOffset)
     // move the complete list
     for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
-        Control *pCtrl = *it;
-
-        Point aPos = pCtrl->GetPosPixel();
+        Point aPos = it->GetPosPixel();
         aPos.X() += nOffset;
 
-        pCtrl->SetPosPixel(aPos);
+        it->SetPosPixel(aPos);
     }
 }
 
@@ -3277,20 +3267,18 @@ void SwTokenWindow::AdjustScrolling()
     if(aControlList.size() > 1)
     {
         //validate scroll buttons
-        Control* pFirstCtrl = *(aControlList.begin());
-        Control* pLastCtrl = *(aControlList.rbegin());
+        ctrl_const_reverse_iterator iterLast = aControlList.rbegin();
+        ctrl_const_iterator iterFirst = aControlList.begin();
 
         long nSpace = aCtrlParentWin.GetSizePixel().Width();
-        long nWidth = pLastCtrl->GetPosPixel().X() - pFirstCtrl->GetPosPixel().X()
-                                                    + pLastCtrl->GetSizePixel().Width();
+        long nWidth = iterLast->GetPosPixel().X() - iterFirst->GetPosPixel().X()
+                                                    + iterLast->GetSizePixel().Width();
         bool bEnable = nWidth > nSpace;
-
         //the active control must be visible
         if(bEnable && pActiveCtrl)
         {
-            Point aActivePos(pActiveCtrl->GetPosPixel());
-
             long nMove = 0;
+            Point aActivePos(pActiveCtrl->GetPosPixel());
 
             if(aActivePos.X() < 0)
                 nMove = -aActivePos.X();
@@ -3300,20 +3288,16 @@ void SwTokenWindow::AdjustScrolling()
             if(nMove)
                 MoveControls(nMove);
 
-            aLeftScrollWin.Enable(pFirstCtrl->GetPosPixel().X() < 0);
-
-            aRightScrollWin.Enable((pLastCtrl->GetPosPixel().X() + pLastCtrl->GetSizePixel().Width()) > nSpace);
+            aLeftScrollWin.Enable(iterFirst->GetPosPixel().X() < 0);
+            aRightScrollWin.Enable((iterLast->GetPosPixel().X() + iterLast->GetSizePixel().Width()) > nSpace);
         }
         else
         {
-            if(pFirstCtrl)
-            {
-                //if the control fits into the space then the first control must be at postion 0
-                long nFirstPos = pFirstCtrl->GetPosPixel().X();
+            //if the control fits into the space then the first control must be at postion 0
+            long nFirstPos = iterFirst->GetPosPixel().X();
 
-                if(nFirstPos != 0)
-                    MoveControls(-nFirstPos);
-            }
+            if(nFirstPos != 0)
+                MoveControls(-nFirstPos);
 
             aRightScrollWin.Enable(false);
             aLeftScrollWin.Enable(false);
@@ -3327,6 +3311,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
         return 0;
 
     const long nSpace = aCtrlParentWin.GetSizePixel().Width();
+
 #if OSL_DEBUG_LEVEL > 1
     //find all start/end positions and print it
     String sMessage(String::CreateFromAscii("Space: "));
@@ -3335,10 +3320,8 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
 
     for (const_ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
-        Control *pDebugCtrl = *it;
-
-        long nDebugXPos = pDebugCtrl->GetPosPixel().X();
-        long nDebugWidth = pDebugCtrl->GetSizePixel().Width();
+        long nDebugXPos = it->GetPosPixel().X();
+        long nDebugWidth = it->GetSizePixel().Width();
 
         sMessage += String::CreateFromInt32( nDebugXPos );
         sMessage += String::CreateFromAscii(" ");
@@ -3354,13 +3337,11 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
         //find the first completely visible control (left edge visible)
         for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
         {
-            Control *pCtrl = *it;
-
-            long nXPos = pCtrl->GetPosPixel().X();
+            long nXPos = it->GetPosPixel().X();
 
             if (nXPos >= 0)
             {
-                if (it == aControlList.begin())
+                if(it == aControlList.begin())
                 {
                     //move the current control to the left edge
                     nMove = -nXPos;
@@ -3368,11 +3349,8 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
                 else
                 {
                     //move the left neighbor to the start position
-                    ctrl_iterator itLeft = it;
-                    --itLeft;
-                    Control *pLeft = *itLeft;
-
-                    nMove = -pLeft->GetPosPixel().X();
+                    ctrl_iterator iterLeft = it-1;
+                    nMove = -iterLeft->GetPosPixel().X();
                 }
 
                 break;
@@ -3384,20 +3362,16 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
         //find the first completely visible control (right edge visible)
         for (ctrl_reverse_iterator it = aControlList.rbegin(); it != aControlList.rend(); ++it)
         {
-            Control *pCtrl = *it;
-
-            long nCtrlWidth = pCtrl->GetSizePixel().Width();
-            long nXPos = pCtrl->GetPosPixel().X() + nCtrlWidth;
+            long nCtrlWidth = it->GetSizePixel().Width();
+            long nXPos = it->GetPosPixel().X() + nCtrlWidth;
 
             if (nXPos <= nSpace)
             {
                 if (it != aControlList.rbegin())
                 {
                     //move the right neighbor  to the right edge right aligned
-                    ctrl_reverse_iterator itRight = it;
-                    --it;
-                    Control *pRight = *itRight;
-                    nMove = nSpace - pRight->GetPosPixel().X() - pRight->GetSizePixel().Width();
+                    ctrl_reverse_iterator iterRight = it-1;
+                    nMove = nSpace - iterRight->GetPosPixel().X() - iterRight->GetSizePixel().Width();
                 }
 
                 break;
@@ -3410,23 +3384,20 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
     if(nMove)
     {
         // move the complete list
-
-        Control *pCtrl = 0;
-
         for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
         {
-            pCtrl = *it;
+            Point aPos = it->GetPosPixel();
 
-            Point aPos = pCtrl->GetPosPixel();
             aPos.X() += nMove;
-            pCtrl->SetPosPixel(aPos);
+
+            it->SetPosPixel(aPos);
         }
 
-        pCtrl = *(aControlList.begin());
-        aLeftScrollWin.Enable(pCtrl->GetPosPixel().X() < 0);
+        ctrl_iterator iterCtrl = aControlList.begin();
+        aLeftScrollWin.Enable(iterCtrl->GetPosPixel().X() < 0);
 
-        pCtrl = *(aControlList.rbegin());
-        aRightScrollWin.Enable((pCtrl->GetPosPixel().X() + pCtrl->GetSizePixel().Width()) > nSpace);
+        iterCtrl = aControlList.end()-1;
+        aRightScrollWin.Enable((iterCtrl->GetPosPixel().X() + iterCtrl->GetSizePixel().Width()) > nSpace);
 
 #if OSL_DEBUG_LEVEL > 1
         sMessage.AppendAscii("Move: ");
@@ -3441,14 +3412,14 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
 String  SwTokenWindow::GetPattern() const
 {
     String sRet;
-
+    const Control *ctrl = 0;
     for (ctrl_const_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
-        const Control *pCtrl = *it;
+        ctrl = &(*it);
 
-        const SwFormToken &rNewToken = pCtrl->GetType() == WINDOW_EDIT
-                ? ((SwTOXEdit*)pCtrl)->GetFormToken()
-                : ((SwTOXButton*)pCtrl)->GetFormToken();
+        const SwFormToken& rNewToken = WINDOW_EDIT == ctrl->GetType()
+                    ? ((SwTOXEdit*)ctrl)->GetFormToken()
+                    : ((SwTOXButton*)ctrl)->GetFormToken();
 
         //TODO: prevent input of TOX_STYLE_DELIMITER in KeyInput
         sRet += rNewToken.GetString();
@@ -3463,14 +3434,15 @@ String  SwTokenWindow::GetPattern() const
 sal_Bool SwTokenWindow::Contains(FormTokenType eSearchFor) const
 {
     bool bRet = false;
+    const Control* pControl = 0;
 
     for (ctrl_const_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
-        const Control *pCtrl = *it;
+        pControl = &(*it);
 
-        const SwFormToken &rNewToken = pCtrl->GetType() == WINDOW_EDIT
-                ? ((SwTOXEdit*)pCtrl)->GetFormToken()
-                : ((SwTOXButton*)pCtrl)->GetFormToken();
+        const SwFormToken& rNewToken = WINDOW_EDIT == pControl->GetType()
+                    ? ((SwTOXEdit*)pControl)->GetFormToken()
+                    : ((SwTOXButton*)pControl)->GetFormToken();
 
         if (eSearchFor == rNewToken.eTokenType)
         {
@@ -3556,22 +3528,24 @@ IMPL_LINK(SwTokenWindow, EditResize, Edit*, pEdit)
 
 IMPL_LINK(SwTokenWindow, NextItemHdl, SwTOXEdit*,  pEdit)
 {
-    ctrl_iterator it = std::find(aControlList.begin(),aControlList.end(),pEdit);
+    ctrl_iterator it = FindControl(aControlList,pEdit);
 
     if (it == aControlList.end())
         return 0;
 
-    ctrl_iterator itTest = it;
-    ++itTest;
+    ctrl_iterator lastIter = aControlList.end()-1;
 
     if ((it != aControlList.begin() && !pEdit->IsNextControl()) ||
-        (itTest != aControlList.end() && pEdit->IsNextControl()))
+        (it != lastIter && pEdit->IsNextControl()))
     {
         ctrl_iterator iterFocus = it;
+
         pEdit->IsNextControl() ? ++iterFocus : --iterFocus;
 
-        Control *pCtrlFocus = *iterFocus;
+        Control *pCtrlFocus = &(*iterFocus);
+
         pCtrlFocus->GrabFocus();
+
         reinterpret_cast<SwTOXButton*>(pCtrlFocus)->Check();
 
         AdjustScrolling();
@@ -3584,7 +3558,7 @@ IMPL_LINK(SwTokenWindow, TbxFocusHdl, SwTOXEdit*, pEdit)
 {
     for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
-        Control *pCtrl = *it;
+        Control *pCtrl = &(*it);
 
         if (pCtrl && pCtrl->GetType() != WINDOW_EDIT)
             reinterpret_cast<SwTOXButton*>(pCtrl)->Check(false);
@@ -3597,29 +3571,31 @@ IMPL_LINK(SwTokenWindow, TbxFocusHdl, SwTOXEdit*, pEdit)
 
 IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton*, pBtn )
 {
-    ctrl_iterator it = std::find(aControlList.begin(),aControlList.end(),pBtn);
+    ctrl_iterator iter = FindControl(aControlList,pBtn);
 
-    if (it == aControlList.end())
+    if (iter == aControlList.end())
         return 0;
 
-    ctrl_iterator itTest = it;
-    ++itTest;
+    ctrl_iterator lastIter = aControlList.end()-1;
 
-    if (!pBtn->IsNextControl() || (itTest != aControlList.end() && pBtn->IsNextControl()))
+    if((iter != aControlList.begin() && !pBtn->IsNextControl()) ||
+       (iter != lastIter && pBtn->IsNextControl()))
     {
-        bool isNext = pBtn->IsNextControl();
+        bool bNext = pBtn->IsNextControl();
 
-        ctrl_iterator iterFocus = it;
-        isNext ? ++iterFocus : --iterFocus;
+        ctrl_iterator iterFocus = iter;
 
-        Control *pCtrlFocus = *iterFocus;
+        bNext ? ++iterFocus : --iterFocus;
+
+        Control *pCtrlFocus = &(*iterFocus);
+
         pCtrlFocus->GrabFocus();
+
         Selection aSel(0,0);
 
-        if (!isNext)
+        if(!bNext)
         {
-            sal_uInt16 nLen = reinterpret_cast<SwTOXEdit*>(pCtrlFocus)->GetText().Len();
-
+            sal_uInt16 nLen = ((SwTOXEdit*)pCtrlFocus)->GetText().Len();
             aSel.A() = nLen;
             aSel.B() = nLen;
         }
@@ -3636,9 +3612,10 @@ IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton*, pBtn )
 
 IMPL_LINK(SwTokenWindow, TbxFocusBtnHdl, SwTOXButton*, pBtn )
 {
-    for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
+    Control *pControl = 0;
+    for (ctrl_iterator sit = aControlList.begin(); sit != aControlList.end(); ++sit)
     {
-        Control *pControl = *it;
+        pControl = &(*sit);
 
         if (pControl && WINDOW_EDIT != pControl->GetType())
             reinterpret_cast<SwTOXButton*>(pControl)->Check(pBtn == pControl);
@@ -3655,14 +3632,11 @@ void SwTokenWindow::GetFocus()
     {
         if (!aControlList.empty())
         {
-            Control *pFirst = *aControlList.begin();
+            Control *pFirst = &(*aControlList.begin());
 
-            if (pFirst)
-            {
-                pFirst->GrabFocus();
-                SetActiveControl(pFirst);
-                AdjustScrolling();
-            }
+            pFirst->GrabFocus();
+            SetActiveControl(pFirst);
+            AdjustScrolling();
         }
     }
 }
