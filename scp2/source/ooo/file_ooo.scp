@@ -2119,14 +2119,14 @@ End
 // End
 // #endif
 
-// #if defined WNT || defined MACOSX
-// File gid_File_Lib_Librsvg
-//     Dir = gid_Dir_Program;
-//     ARCHIVE_TXT_FILE_BODY;
-// #if defined WNT
-//     Name = "librsvg_w32.zip";
-// #else
-//     Name = "librsvg_mac.zip";
-// #endif
-// End
-// #endif
+#if defined WNT || defined MACOSX
+File gid_File_Lib_Librsvg
+    Dir = gid_Dir_Program;
+    ARCHIVE_TXT_FILE_BODY;
+#if defined WNT
+    Name = "librsvg_w32.zip";
+#else
+    Name = "librsvg_mac.zip";
+#endif
+End
+#endif
