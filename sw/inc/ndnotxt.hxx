@@ -32,28 +32,26 @@
 
 class PolyPolygon;
 
-// --------------------
 // SwNoTxtNode
-// --------------------
 
 class SW_DLLPUBLIC SwNoTxtNode : public SwCntntNode
 {
     friend class SwNodes;
     friend class SwNoTxtFrm;
 
-    PolyPolygon *pContour;      // Polygon fuer Konturumlauf
+    PolyPolygon *pContour;
     BOOL bAutomaticContour : 1; // automatic contour polygon, not manipulated
     BOOL bContourMapModeValid : 1; // contour map mode is not the graphics's
                                    // prefered map mode, but either
                                       // MM100 or or pixel
     BOOL bPixelContour : 1;     // contour map mode is invalid and pixel.
 
-    // erzeugt fuer alle Ableitungen einen AttrSet mit Bereichen
-    // fuer Frame- und Grafik-Attributen (wird nur vom SwCntntNode gerufen)
+    // Creates for all derivations an AttrSet with ranges for frame- and
+    // graphics-attributes (only called by SwCntntNode).
     virtual void NewAttrSet( SwAttrPool& );
 
-    SwNoTxtNode( const SwNoTxtNode& );              //nicht erlaubt
-    SwNoTxtNode &operator=( const SwNoTxtNode& );   //nicht erlaubt
+    SwNoTxtNode( const SwNoTxtNode& );              // Not allowed.
+    SwNoTxtNode &operator=( const SwNoTxtNode& );   // Not allowed.
 
 protected:
     SwNoTxtNode( const SwNodeIndex &rWhere, const BYTE nNdType,
@@ -99,11 +97,11 @@ public:
 
     BOOL               IsContourMapModeValid() const { return bContourMapModeValid; }
 
-    //Besorgt die Graphic, mit SwapIn fuer GrfNode, per GetData fuer OLE.
+    // Obtains the graphic with SwapIn for GrfNode via GetData for OLE.
     Graphic GetGraphic() const;
 };
 
-// Inline Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!
+// Inline methods from Node.hxx - we know TxtNode only here!!
 inline SwNoTxtNode *SwNode::GetNoTxtNode()
 {
     return ND_NOTXTNODE & nNodeType ? (SwNoTxtNode*)this : 0;

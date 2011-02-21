@@ -30,7 +30,7 @@
 
 #include <tools/link.hxx>
 
-#include "errhdl.hxx"       // hier kommt auch swtypes rein, was ich brauche
+#include "errhdl.hxx"   // here swtypes comes in (need that).
 
 // ----------------------------------------------------------------------------
 

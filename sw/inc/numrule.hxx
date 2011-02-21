@@ -36,8 +36,8 @@
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <calbck.hxx>
-#include <errhdl.hxx>       // Fuer die inline ASSERT
-#include <error.h>          // Fuer die inline ASSERT
+#include <errhdl.hxx>  // For inline ASSERT.
+#include <error.h>     // For inline ASSERT.
 #include <hints.hxx>
 #include <boost/unordered_map.hpp>
 #include <stringhash.hxx>
@@ -55,7 +55,7 @@ class SwDoc;
 class SwFmtVertOrient;
 class SwTxtNode;
 
-const sal_Unicode cBulletChar   = 0x2022;   // Charakter fuer Aufzaehlungen
+const sal_Unicode cBulletChar = 0x2022; // Character for lists.
 
 class SW_DLLPUBLIC SwNumFmt : public SvxNumberFormat, public SwClient
 {
@@ -132,13 +132,13 @@ private:
 
     String sName;
     SwNumRuleType eRuleType;
-    USHORT nPoolFmtId;      // Id-fuer "automatich" erzeugte NumRules
-    USHORT nPoolHelpId;     // HelpId fuer diese Pool-Vorlage
-    BYTE nPoolHlpFileId;    // FilePos ans Doc auf die Vorlagen-Hilfen
+    USHORT nPoolFmtId;      // Id-for NumRules created "automatically"
+    USHORT nPoolHelpId;     // HelpId for this Pool-style.
+    BYTE nPoolHlpFileId;    // FilePos at Doc on style helps.
     BOOL bAutoRuleFlag : 1;
     BOOL bInvalidRuleFlag : 1;
-    BOOL bContinusNum : 1;  // Fortlaufende Numerierung - ohne Ebenen
-    BOOL bAbsSpaces : 1;    // die Ebenen repraesentieren absol. Einzuege
+    BOOL bContinusNum : 1;  // Continuous numbering without levels.
+    BOOL bAbsSpaces : 1;    // Levels represent absolute indents.
     bool mbCountPhantoms;
 
     const SvxNumberFormat::SvxNumPositionAndSpaceMode meDefaultNumberFormatPositionAndSpaceMode;
@@ -217,13 +217,13 @@ public:
     void SetRuleType( SwNumRuleType eNew )      { eRuleType = eNew;
                                                   bInvalidRuleFlag = TRUE; }
 
-    // eine Art Copy-Constructor, damit die Num-Formate auch an den
-    // richtigen CharFormaten eines Dokumentes haengen !!
-    // (Kopiert die NumFormate und returnt sich selbst)
+    // A kind of copy-constructor to make sure the num formats are
+    // attached to the correctCharFormats of a document!!
+    // (Copies the NumFormats and returns itself).
     SwNumRule& CopyNumRule( SwDoc*, const SwNumRule& );
 
-    // testet ob die CharFormate aus dem angegeben Doc sind und kopiert
-    // die gegebenfalls
+    // Tests whether the CharFormats are from the given doc
+    // and copies them if appropriate.
     void CheckCharFmts( SwDoc* pDoc );
 
     const String& GetName() const       { return sName; }
@@ -248,11 +248,11 @@ public:
     bool IsCountPhantoms() const;
     void SetCountPhantoms(bool bCountPhantoms);
 
-    // erfragen und setzen der Poolvorlagen-Id's
+    // Query and set PoolFormat IDs.
     USHORT GetPoolFmtId() const         { return nPoolFmtId; }
     void SetPoolFmtId( USHORT nId )     { nPoolFmtId = nId; }
 
-    // erfragen und setzen der Hilfe-Id's fuer die Document-Vorlagen
+    // Query and set Help-IDs for document styles.
     USHORT GetPoolHelpId() const        { return nPoolHelpId; }
     void SetPoolHelpId( USHORT nId )    { nPoolHelpId = nId; }
     BYTE GetPoolHlpFileId() const       { return nPoolHlpFileId; }

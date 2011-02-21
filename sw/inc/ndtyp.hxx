@@ -31,8 +31,8 @@
 
 #include <tools/solar.h>
 
-// Ids fuer die verschiedenden Nodes; in der Basisklasse steht der Member,
-// der angibt, um was fuer einen es sich handelt
+// IDs for different nodes. The member indicating the type of node is
+// in base class.
 const BYTE ND_ENDNODE       = 0x01;
 const BYTE ND_STARTNODE     = 0x02;
 const BYTE ND_TABLENODE     = 0x06;
@@ -40,15 +40,15 @@ const BYTE ND_TEXTNODE      = 0x08;
 const BYTE ND_GRFNODE       = 0x10;
 const BYTE ND_OLENODE       = 0x20;
 
-const BYTE ND_CONTENTNODE   = 0x38; // ContentNode (eines von den 3 Bits)
-const BYTE ND_NOTXTNODE     = 0x30; // NoTxtNode (eines von den 2 Bits)
+const BYTE ND_CONTENTNODE   = 0x38; // ContentNode (one of the 3 bits).
+const BYTE ND_NOTXTNODE     = 0x30; // NoTxtNode (one of the 2 bits).
 
 const BYTE ND_SECTIONNODE   = 0x42;
-// nur fuer internen Gebrauch!!
+// For internal use only!!
 const BYTE ND_SECTIONDUMMY  = 0x40; //(ND_SECTIONNODE & ~ND_STARTNODE);
 
-// spezielle Types der StartNodes, die keine Ableitungen sind, aber
-// "Bereiche" zusammenhalten.
+// Special types of StartNodes that are not derivations but keep
+// "sections" together.
 enum SwStartNodeType
 {
     SwNormalStartNode = 0,

@@ -56,14 +56,14 @@ namespace utl {
 
 class SwTxtFmtColl;
 class SwCntntFrm;
-class SwTxtFld;          // Fuer GetTxtFld()
+class SwTxtFld;          // For GetTxtFld().
 class SfxItemSet;
 class SwUndoTransliterate;
 
 struct SwSpellArgs;             // for Spell(), splargs.hxx
 struct SwConversionArgs;        // for Convert(), splargs.hxx
 class SwInterHyphInfo;          // for Hyphenate(), splargs.hxx
-class SwWrongList;      // fuer OnlineSpelling
+class SwWrongList;      // For OnlineSpelling.
 class SwGrammarMarkUp;
 class OutputDevice;
 class SwScriptInfo;
@@ -79,23 +79,21 @@ namespace com { namespace sun { namespace star {
 
 typedef std::set< xub_StrLen > SwSoftPageBreakList;
 
-// --------------------
 // SwTxtNode
-// --------------------
 class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
 {
 
-    // fuer das Erzeugen des ersten TextNode
-    friend class SwDoc;         // CTOR und AppendTxtNode()
+    // For creating the first TextNode.
+    friend class SwDoc;         // CTOR and AppendTxtNode()
     friend class SwNodes;
     friend class SwTxtFrm;
     friend class SwScriptInfo;
 
-    //Kann 0 sein, nur dann nicht 0 wenn harte Attribute drin stehen.
-    //Also niemals direkt zugreifen!
+    // May be 0. It is only then not 0 if it contains hard attributes.
+    // Therefore: never access directly!
     SwpHints    *m_pSwpHints;
 
-    mutable SwNodeNum* mpNodeNum;  // Numerierung fuer diesen Absatz
+    mutable SwNodeNum* mpNodeNum;  // Numbering for this paragraph.
 
     XubString   m_Text;
 
@@ -131,7 +129,7 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     SW_DLLPRIVATE SwTxtNode( const SwNodeIndex &rWhere, SwTxtFmtColl *pTxtColl,
                              const SfxItemSet* pAutoAttr = 0 );
 
-    // Kopiert die Attribute an nStart nach pDest.
+    // Copies the attributes at nStart to pDest.
     SW_DLLPRIVATE void CopyAttr( SwTxtNode *pDest, const xub_StrLen nStart, const xub_StrLen nOldPos);
 
     SW_DLLPRIVATE SwTxtNode* _MakeNewTxtNode( const SwNodeIndex&, BOOL bNext = TRUE,
@@ -142,10 +140,10 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
           const SwIndex & rStart, /*const*/ xub_StrLen nLen,
           const bool bUpdate = true );
 
-    // Verlagere alles umfassende harte Attribute in den AttrSet des Absatzes
-    SW_DLLPRIVATE void MoveTxtAttr_To_AttrSet();  // wird von SplitNode gerufen.
+    // Move all comprising hard attributes to the AttrSet of the paragraph.
+    SW_DLLPRIVATE void MoveTxtAttr_To_AttrSet();  // Called by SplitNode.
 
-    // lege den spz. AttrSet an
+    // Create the specific AttrSet.
     SW_DLLPRIVATE virtual void NewAttrSet( SwAttrPool& );
 
     SW_DLLPRIVATE void Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
@@ -232,7 +230,7 @@ public:
 
     virtual xub_StrLen Len() const;
 
-    // steht in itratr
+    // Is in itratr.
     void GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax, ULONG &rAbs,
                         OutputDevice* pOut = 0 ) const;
 
@@ -271,7 +269,7 @@ public:
                     const SfxItemSet* pSet = 0, BOOL bInclRefToxMark = FALSE );
     void    GCAttr();
 
-    // loesche das Text-Attribut (muss beim Pool abgemeldet werden!)
+    // Delete text attribute (needs to be deregistered at Pool!)
     void    DestroyAttr( SwTxtAttr* pAttr );
 
     // delete all attributes from SwpHintsArray.
@@ -286,12 +284,12 @@ public:
                   const xub_StrLen nStart, const xub_StrLen nEnd,
                   const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );
 
-    // setze diese Attribute am TextNode. Wird der gesamte Bereich umspannt,
-    // dann setze sie nur im AutoAttrSet (SwCntntNode:: SetAttr)
+    // Set these attributes at TextNode. If the whole range is comprised
+    // set them only in AutoAttrSet (SwCntntNode::SetAttr).
     BOOL SetAttr( const SfxItemSet& rSet,
                   xub_StrLen nStt, xub_StrLen nEnd,
                   const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );
-    // erfrage die Attribute vom TextNode ueber den Bereich
+    // Query the attributes of textnode over the range.
     // Introduce 4th optional parameter <bMergeIndentValuesOfNumRule>.
     // If <bMergeIndentValuesOfNumRule> == TRUE, the indent attributes of
     // the corresponding list level of an applied list style is merged into
@@ -303,7 +301,7 @@ public:
                   BOOL bGetFromChrFmt = TRUE,
                   const bool bMergeIndentValuesOfNumRule = false ) const;
 
-    // uebertrage Attribute eines AttrSets ( AutoFmt ) in das SwpHintsArray
+    // Convey attributes of an AttrSet (AutoFmt) to SwpHintsArray.
     void FmtToTxtAttr( SwTxtNode* pNd );
 
     /// delete all attributes of type nWhich at nStart (opt. end nEnd)
@@ -312,7 +310,7 @@ public:
     /// delete the attribute pTxtAttr
     void DeleteAttribute ( SwTxtAttr * const pTxtAttr );
 
-    // Aktionen auf Text und Attributen
+    // Actions on text and attributes.
     // introduce optional parameter to control, if all attributes have to be copied.
     void CopyText( SwTxtNode * const pDest,
                const SwIndex &rStart,
@@ -335,7 +333,7 @@ public:
     void ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen, const XubString& rText,
                     const ::com::sun::star::uno::Sequence<sal_Int32>& rOffsets );
 
-    // virtuelle Methoden aus dem CntntNode
+    // Virtual methods from CntntNode.
     virtual SwCntntFrm *MakeFrm();
     virtual SwCntntNode *SplitCntntNode( const SwPosition & );
     virtual SwCntntNode *JoinNext();
@@ -343,7 +341,7 @@ public:
 
     SwCntntNode *AppendNode( const SwPosition & );
 
-    // setze ggf. das DontExpand-Flag an INet bzw. Zeichenvorlagen
+    // When appropriate set DontExpand-flag at INet or character styles respectively.
     BOOL DontExpandFmt( const SwIndex& rIdx, bool bFlag = true,
                         BOOL bFmtToTxtAttributes = TRUE );
 
@@ -382,7 +380,6 @@ public:
     SwTxtAttr *GetTxtAttrForCharAt( const xub_StrLen nIndex,
                        const RES_TXTATR nWhich = RES_TXTATR_END ) const;
 
-    // Aktuelles Wort zurueckliefern
     XubString GetCurWord(xub_StrLen) const;
     USHORT Spell(SwSpellArgs*);
     USHORT Convert( SwConversionArgs & );
@@ -392,9 +389,9 @@ public:
     void _ChgTxtCollUpdateNum( const SwTxtFmtColl* pOld,
                                 const SwTxtFmtColl* pNew );
 
-    // kopiere die Collection mit allen Autoformaten zum Dest-Node
-    // dieser kann auch in einem anderen Dokument stehen!
-    // (Methode steht im ndcopy.cxx!!)
+    // Copy collection with all auto formats to dest-node.
+    // The latter might be in an other document!
+    // (Method in ndcopy.cxx!!).
     void CopyCollFmt( SwTxtNode& rDestNd );
 
     //const SwNodeNum* _GetNodeNum() const { return pNdNum; }
@@ -673,10 +670,10 @@ public:
                     USHORT nScript = 0 ) const;
 
     // in ndcopy.cxx
-    BOOL IsSymbol( const xub_StrLen nBegin ) const; // steht in itratr.cxx
+    BOOL IsSymbol( const xub_StrLen nBegin ) const; // In itratr.cxx.
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
 
-    // interaktive Trennung: wir finden den TxtFrm und rufen sein CalcHyph
+    // Interactive hyphenation: we find TxtFrm and call its CalcHyph.
     BOOL Hyphenate( SwInterHyphInfo &rHyphInf );
     void DelSoftHyph( const xub_StrLen nStart, const xub_StrLen nEnd );
 
@@ -703,8 +700,9 @@ public:
                           xub_StrLen nLen = STRING_LEN,
                           BOOL bExpandFlds = FALSE,
                           BOOL bWithNum = FALSE ) const;
-    //Liefert fuer die Initalfunktion tatsaechliche Anzahl der Initialzeichen
-    //bei nWishLen == 0 die des ersten Wortes
+
+    // Returns actual count of initial chars for initial-function.
+    // If nWishLen == 0 that of first word.
     USHORT GetDropLen( USHORT nWishLen) const;
 
     // Passes back info needed on the dropcap dimensions
@@ -744,7 +742,7 @@ public:
 
     TYPEINFO(); // fuer rtti
 
-    // fuers Umhaengen der TxtFmtCollections (Outline-Nummerierung!!)
+    // For re-arranging TxtFmtCollections (outline-numbering!!).
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
 
     // override SwIndexReg
@@ -840,9 +838,9 @@ inline SwTxtFmtColl* SwTxtNode::GetTxtColl() const
     return static_cast<SwTxtFmtColl*>(const_cast<SwModify*>(GetRegisteredIn()));
 }
 
-// fuer den IBM-Compiler nicht inlinen wg. 42876
+// For IBM-Compiler do not inline this because of 42876
 #ifndef ICC
-// Inline Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!
+// Inline methods from Node.hxx - we know TxtNode only now!!
 inline       SwTxtNode   *SwNode::GetTxtNode()
 {
      return ND_TEXTNODE == nNodeType ? static_cast<SwTxtNode*>(this) : 0;
