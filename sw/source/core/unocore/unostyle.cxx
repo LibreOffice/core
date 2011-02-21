@@ -3013,7 +3013,6 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                 case FN_UNO_FOOTER_HEIGHT:
                 case FN_UNO_FOOTER_EAT_SPACING:
                 {
-                    sal_Bool bSetItem = sal_False;
                     sal_Bool bFooter = sal_False;
                     sal_uInt16 nItemType = TYPE_BOOL;
                     sal_uInt16 nRes = 0;
@@ -3089,7 +3088,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                                 case TYPE_BOX: pNewItem = new SvxBoxItem(nRes);         break;
                             }
                         }
-                        bSetItem = pNewItem->PutValue(pValues[nProp], pEntry->nMemberId);
+                        pNewItem->PutValue(pValues[nProp], pEntry->nMemberId);
                         rSetSet.Put(*pNewItem);
                         aBaseImpl.GetItemSet().Put(*pNewSetItem);
                         delete pNewItem;
@@ -3246,7 +3245,7 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
             }
             sal_uInt16 nRes = 0;
             bool bHeader = false;
-            sal_Bool bAll = sal_False, bLeft = sal_False, bRight = sal_False;
+            sal_Bool bLeft = sal_False;
             switch(pEntry->nWID)
             {
                 case FN_UNO_HEADER_ON:
@@ -3346,20 +3345,19 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                 }
                 break;
                 case  FN_UNO_HEADER       :
-                    bAll = sal_True; goto Header;
+                    goto Header;
                 case  FN_UNO_HEADER_LEFT  :
                     bLeft = sal_True; goto Header;
                 case  FN_UNO_HEADER_RIGHT :
-                    bRight = sal_True; goto Header;
+                    goto Header;
 Header:
                     bHeader = true;
                     nRes = RES_HEADER; goto MakeObject;
                 case  FN_UNO_FOOTER       :
-                    bAll = sal_True; goto Footer;
+                    goto Footer;
                 case  FN_UNO_FOOTER_LEFT  :
                     bLeft = sal_True; goto Footer;
                 case  FN_UNO_FOOTER_RIGHT :
-                    bRight = sal_True;
 Footer:
                     nRes = RES_FOOTER;
 MakeObject:
