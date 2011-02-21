@@ -85,7 +85,7 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
 
 #ifdef SOLAR_JAVA
     if( mxDstDoc.is() )
-        sal_Bool bRet = sal_False;//implImport( rDescriptor );
+        bRet = sal_False;//implImport( rDescriptor );
     else
 #endif
     if( mxSrcDoc.is() )

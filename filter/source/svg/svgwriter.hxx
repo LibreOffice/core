@@ -76,7 +76,7 @@
 
 // -----------------------------------------------------------------------------
 
-#undef _SVG_WRITE_EXTENTS
+#define _SVG_WRITE_EXTENTS      1
 #undef _SVG_WRITE_TEXT_DESC
 #undef _SVG_USE_CONFIG
 
