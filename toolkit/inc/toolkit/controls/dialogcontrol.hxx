@@ -30,12 +30,13 @@
 
 #include <toolkit/controls/controlmodelcontainerbase.hxx>
 #include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/awt/XDialog.hpp>
+#include <com/sun/star/awt/XDialog2.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include "toolkit/helper/servicenames.hxx"
 #include "toolkit/helper/macros.hxx"
 #include <toolkit/controls/unocontrolcontainer.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <list>
 
 //  ----------------------------------------------------
@@ -64,10 +65,12 @@ public:
 
 };
 
-class UnoDialogControl :public ControlContainerBase,
-                        public ::com::sun::star::awt::XTopWindow,
-                        public ::com::sun::star::awt::XDialog,
-                        public ::com::sun::star::awt::XWindowListener
+typedef ::cppu::AggImplInheritanceHelper3   <   ControlContainerBase
+                                            ,   ::com::sun::star::awt::XTopWindow
+                                            ,   ::com::sun::star::awt::XDialog2
+                                            ,   ::com::sun::star::awt::XWindowListener
+                                            >   UnoDialogControl_Base;
+class UnoDialogControl : public UnoDialogControl_Base
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >         mxMenuBar;
@@ -79,11 +82,6 @@ public:
                                 UnoDialogControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                                 ~UnoDialogControl();
     ::rtl::OUString             GetComponentServiceName();
-
-    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlContainer::queryInterface(rType); }
-    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
 
     void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
@@ -102,15 +100,15 @@ public:
     virtual void SAL_CALL windowShown( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL windowHidden( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
 
+    // ::com::sun::star::awt::XDialog2
+    virtual void SAL_CALL endDialog( ::sal_Int32 Result ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setHelpId( const rtl::OUString& Id ) throw (::com::sun::star::uno::RuntimeException);
+
     // ::com::sun::star::awt::XDialog
     void SAL_CALL setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException);
     ::rtl::OUString SAL_CALL getTitle() throw(::com::sun::star::uno::RuntimeException);
     sal_Int16 SAL_CALL execute() throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL endExecute() throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XControl
     sal_Bool SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& Model ) throw(::com::sun::star::uno::RuntimeException);
