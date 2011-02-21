@@ -33,7 +33,6 @@
 #include <osl/mutex.hxx>
 #include <scdllapi.h>
 
-//=============================================================================
 class ScRefreshTimerControl
 {
 private:
@@ -56,7 +55,6 @@ public:
     ::osl::Mutex& GetMutex() { return aMutex; }
 };
 
-//=============================================================================
 class ScRefreshTimerProtector
 {
 private:
@@ -72,8 +70,6 @@ public:
     }
 };
 
-
-//=============================================================================
 class ScRefreshTimer : public AutoTimer
 {
 private:
