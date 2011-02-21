@@ -29,22 +29,27 @@
 #ifndef SC_AUTOSTYL_HXX
 #define SC_AUTOSTYL_HXX
 
-#include <vcl/timer.hxx>
-#include <tools/list.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <tools/string.hxx>
+
+#include <vcl/timer.hxx>
 
 class ScDocShell;
 class ScRange;
+class ScAutoStyleData;
+class ScAutoStyleInitData;
 
 class ScAutoStyleList
 {
 private:
+
     ScDocShell*     pDocSh;
     Timer           aTimer;
     Timer           aInitTimer;
     ULONG           nTimerStart;
-    List            aEntries;
-    List            aInitials;
+    boost::ptr_vector<ScAutoStyleData> aEntries;
+    boost::ptr_vector<ScAutoStyleInitData> aInitials;
 
     void    ExecuteEntries();
     void    AdjustEntries(ULONG nDiff);
