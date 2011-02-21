@@ -37,7 +37,6 @@
 #include <svtools/langtab.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dlgutil.hxx>
-#include <tools/list.hxx>
 #include <tools/shl.hxx>
 #include <vcl/msgbox.hxx>
 

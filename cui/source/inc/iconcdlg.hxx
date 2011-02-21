@@ -36,7 +36,6 @@
 #include <svtools/ivctrl.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
-#include <tools/list.hxx>
 #include <tools/string.hxx>
 #include <vector>
 

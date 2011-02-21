@@ -363,7 +363,6 @@
 #include "tools/diagnose_ex.h"
 #include "tools/inetmsg.hxx"
 #include "tools/link.hxx"
-#include "tools/list.hxx"
 #include "tools/resid.hxx"
 #include "tools/simplerm.hxx"
 #include "tools/solar.h"
