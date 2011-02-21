@@ -36,7 +36,6 @@
 #include <windows.h>
 #endif
 
-
 #include "cppunit/CompilerOutputter.h"
 #include "cppunit/TestResult.h"
 #include "cppunit/TestResultCollector.h"
@@ -50,22 +49,38 @@
 #include "rtl/ustring.hxx"
 #include "sal/main.h"
 
-SAL_IMPLEMENT_MAIN() {
+SAL_IMPLEMENT_MAIN()
+{
 
 #ifdef WNT
+    //Disable Dr-Watson in order to crash simply without popup dialogs under
+    //windows
     DWORD dwMode = SetErrorMode(SEM_NOGPFAULTERRORBOX);
     SetErrorMode(SEM_NOGPFAULTERRORBOX|dwMode);
 #endif
 
-    if (rtl_getAppCommandArgCount() < 1) {
+    sal_uInt32 nCommandArgs = rtl_getAppCommandArgCount();
+    if (nCommandArgs < 1)
+    {
         std::cerr << "Usage: cppunittester <shared-library-path>" << std::endl;
         return EXIT_FAILURE;
     }
-    rtl::OUString path;
-    rtl_getAppCommandArg(0, &path.pData);
+    std::string testlib;
+    {
+        rtl::OUString path;
+        rtl_getAppCommandArg(0, &path.pData);
+        testlib = rtl::OUStringToOString(path, osl_getThreadTextEncoding()).getStr();
+    }
+    std::string args = testlib;
+    for (sal_uInt32 i = 1; i < nCommandArgs; ++i)
+    {
+        rtl::OUString arg;
+        rtl_getAppCommandArg(i, &arg.pData);
+        args += ' ';
+        args += rtl::OUStringToOString(arg, osl_getThreadTextEncoding()).getStr();
+    }
     CppUnit::PlugInManager manager;
-    manager.load(
-        rtl::OUStringToOString(path, osl_getThreadTextEncoding()).getStr());
+    manager.load(testlib, args);
     CppUnit::TestRunner runner;
     runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
     CppUnit::TestResult result;
