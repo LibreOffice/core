@@ -561,8 +561,8 @@ void ScDPSource::disposeData()
         delete[] pRowResults;
         pColResults = NULL;
         pRowResults = NULL;
-        aColLevelList.Clear();
-        aRowLevelList.Clear();
+        aColLevelList.clear();
+        aRowLevelList.clear();
     }
 
     if ( pDimensions )
@@ -998,9 +998,9 @@ void ScDPSource::CreateRes_Impl()
 }
 
 
-void ScDPSource::FillLevelList( USHORT nOrientation, List& rList )
+void ScDPSource::FillLevelList( USHORT nOrientation, std::vector<ScDPLevel*> &rList )
 {
-    rList.Clear();
+    rList.clear();
 
     long nDimCount = 0;
     long* pDimIndex = NULL;
@@ -1048,7 +1048,7 @@ void ScDPSource::FillLevelList( USHORT nOrientation, List& rList )
         for (long nLev=0; nLev<nLevCount; nLev++)
         {
             ScDPLevel* pLevel = pLevels->getByIndex(nLev);
-            rList.Insert( pLevel, LIST_APPEND );
+            rList.push_back(pLevel);
         }
     }
 }
@@ -1067,7 +1067,7 @@ void ScDPSource::FillMemberResults()
         }
 
         FillLevelList( sheet::DataPilotFieldOrientation_COLUMN, aColLevelList );
-        long nColLevelCount = aColLevelList.Count();
+        long nColLevelCount = aColLevelList.size();
         if (nColLevelCount)
         {
             long nColDimSize = pColResRoot->GetSize(pResData->GetColStartMeasure());
@@ -1081,7 +1081,7 @@ void ScDPSource::FillMemberResults()
         }
 
         FillLevelList( sheet::DataPilotFieldOrientation_ROW, aRowLevelList );
-        long nRowLevelCount = aRowLevelList.Count();
+        long nRowLevelCount = aRowLevelList.size();
         if (nRowLevelCount)
         {
             long nRowDimSize = pRowResRoot->GetSize(pResData->GetRowStartMeasure());
@@ -1100,18 +1100,18 @@ const uno::Sequence<sheet::MemberResult>* ScDPSource::GetMemberResults( ScDPLeve
 {
     FillMemberResults();
 
-    long i;
-    long nColCount = aColLevelList.Count();
+    long i = 0;
+    long nColCount = aColLevelList.size();
     for (i=0; i<nColCount; i++)
     {
-        ScDPLevel* pColLevel = (ScDPLevel*)aColLevelList.GetObject(i);
+        ScDPLevel* pColLevel = aColLevelList[i];
         if ( pColLevel == pLevel )
             return pColResults+i;
     }
-    long nRowCount = aRowLevelList.Count();
+    long nRowCount = aRowLevelList.size();
     for (i=0; i<nRowCount; i++)
     {
-        ScDPLevel* pRowLevel = (ScDPLevel*)aRowLevelList.GetObject(i);
+        ScDPLevel* pRowLevel = aRowLevelList[i];
         if ( pRowLevel == pLevel )
             return pRowResults+i;
     }

@@ -34,6 +34,7 @@
 #include <boost/unordered_set.hpp>
 #include <list>
 #include <memory>
+
 #include <tools/string.hxx>
 #include "global.hxx"       // enum ScSubTotalFunc
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
@@ -132,15 +133,15 @@ private:
     ScDPResultMember*       pRowResRoot;
     com::sun::star::uno::Sequence<com::sun::star::sheet::MemberResult>* pColResults;
     com::sun::star::uno::Sequence<com::sun::star::sheet::MemberResult>* pRowResults;
-    List                    aColLevelList;
-    List                    aRowLevelList;
+    std::vector<ScDPLevel*> aColLevelList;
+    std::vector<ScDPLevel*> aRowLevelList;
     BOOL                    bResultOverflow;
 
     ::std::auto_ptr<rtl::OUString> mpGrandTotalName;
 
     void                    CreateRes_Impl();
     void                    FillMemberResults();
-    void                    FillLevelList( USHORT nOrientation, List& rList );
+    void                    FillLevelList( USHORT nOrientation, std::vector<ScDPLevel*> &rList );
     void                    FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool &bHasAutoShow);
 
     /**
