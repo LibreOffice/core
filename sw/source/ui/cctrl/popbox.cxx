@@ -44,7 +44,7 @@ SwHelpToolBox::SwHelpToolBox( SwNavigationPI* pParent, const ResId& rResId )
 
 void SwHelpToolBox::MouseButtonDown(const MouseEvent &rEvt)
 {
-    // If doubleclick is detected use doublelick handler
+    // If doubleclick is detected use doubleclick handler
     if(rEvt.GetButtons() == MOUSE_RIGHT &&
         0 == GetItemId(rEvt.GetPosPixel()))
     {
