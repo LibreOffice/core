@@ -759,12 +759,7 @@ ScDPSaveData::ScDPSaveData(const ScDPSaveData& r) :
     else
         pDimensionData = NULL;
 
-    long nCount = r.aDimList.Count();
-    for (long i=0; i<nCount; i++)
-    {
-        ScDPSaveDimension* pNew = new ScDPSaveDimension( *(ScDPSaveDimension*)r.aDimList.GetObject(i) );
-        aDimList.Insert( pNew, LIST_APPEND );
-    }
+    aDimList = r.aDimList.clone();
 
     if (r.mpGrandTotalName.get())
         mpGrandTotalName.reset(new OUString(*r.mpGrandTotalName));
@@ -796,14 +791,11 @@ bool ScDPSaveData::operator== ( const ScDPSaveData& r ) const
         if ( !pDimensionData || !r.pDimensionData || !( *pDimensionData == *r.pDimensionData ) )
             return false;
 
-    sal_uInt32 nCount = aDimList.Count();
-    if ( nCount != r.aDimList.Count() )
+    if ( aDimList.size() != r.aDimList.size() )
         return false;
 
-    for (sal_uInt32 i=0; i<nCount; ++i)
-        if ( !( *(ScDPSaveDimension*)aDimList.GetObject(i) ==
-                *(ScDPSaveDimension*)r.aDimList.GetObject(i) ) )
-            return false;
+    if (aDimList != r.aDimList)
+        return false;
 
     if (mpGrandTotalName.get())
     {
@@ -820,11 +812,6 @@ bool ScDPSaveData::operator== ( const ScDPSaveData& r ) const
 
 ScDPSaveData::~ScDPSaveData()
 {
-    long nCount = aDimList.Count();
-    for (long i=0; i<nCount; i++)
-        delete (ScDPSaveDimension*)aDimList.GetObject(i);
-    aDimList.Clear();
-
     delete pDimensionData;
 }
 
@@ -840,41 +827,40 @@ const OUString* ScDPSaveData::GetGrandTotalName() const
 
 ScDPSaveDimension* ScDPSaveData::GetDimensionByName(const ::rtl::OUString& rName)
 {
-    long nCount = aDimList.Count();
-    for (long i=0; i<nCount; i++)
+    boost::ptr_vector<ScDPSaveDimension>::const_iterator iter;
+    for (iter = aDimList.begin(); iter != aDimList.end(); ++iter)
     {
-        ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
-        if ( pDim->GetName() == rName && !pDim->IsDataLayout() )
-            return pDim;
+        if (iter->GetName() == rName && !iter->IsDataLayout() )
+            return const_cast<ScDPSaveDimension*>(&(*iter));
     }
+
     ScDPSaveDimension* pNew = new ScDPSaveDimension( rName, false );
-    aDimList.Insert( pNew, LIST_APPEND );
+    aDimList.push_back(pNew);
     return pNew;
 }
 
 ScDPSaveDimension* ScDPSaveData::GetExistingDimensionByName(const ::rtl::OUString& rName) const
 {
-    long nCount = aDimList.Count();
-    for (long i=0; i<nCount; i++)
+    boost::ptr_vector<ScDPSaveDimension>::const_iterator iter;
+    for (iter = aDimList.begin(); iter != aDimList.end(); ++iter)
     {
-        ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
-        if ( pDim->GetName() == rName && !pDim->IsDataLayout() )
-            return pDim;
+        if (iter->GetName() == rName && !iter->IsDataLayout() )
+            return const_cast<ScDPSaveDimension*>(&(*iter));
     }
     return NULL; // don't create new
 }
 
 ScDPSaveDimension* ScDPSaveData::GetNewDimensionByName(const ::rtl::OUString& rName)
 {
-    long nCount = aDimList.Count();
-    for (long i=0; i<nCount; i++)
+    boost::ptr_vector<ScDPSaveDimension>::const_iterator iter;
+    for (iter = aDimList.begin(); iter != aDimList.end(); ++iter)
     {
-        ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
-        if ( pDim->GetName() == rName && !pDim->IsDataLayout() )
+        if (iter->GetName() == rName && !iter->IsDataLayout() )
             return DuplicateDimension(rName);
     }
+
     ScDPSaveDimension* pNew = new ScDPSaveDimension( rName, false );
-    aDimList.Insert( pNew, LIST_APPEND );
+    aDimList.push_back(pNew);
     return pNew;
 }
 
@@ -885,18 +871,17 @@ ScDPSaveDimension* ScDPSaveData::GetDataLayoutDimension()
         return pDim;
 
     ScDPSaveDimension* pNew = new ScDPSaveDimension( ::rtl::OUString(), true );
-    aDimList.Insert( pNew, LIST_APPEND );
+    aDimList.push_back(pNew);
     return pNew;
 }
 
 ScDPSaveDimension* ScDPSaveData::GetExistingDataLayoutDimension() const
 {
-    long nCount = aDimList.Count();
-    for (long i=0; i<nCount; i++)
+    boost::ptr_vector<ScDPSaveDimension>::const_iterator iter;
+    for (iter = aDimList.begin(); iter != aDimList.end(); ++iter)
     {
-        ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
-        if ( pDim->IsDataLayout() )
-            return pDim;
+        if ( iter->IsDataLayout() )
+            return const_cast<ScDPSaveDimension*>(&(*iter));
     }
     return NULL;
 }
@@ -909,20 +894,18 @@ ScDPSaveDimension* ScDPSaveData::DuplicateDimension(const ::rtl::OUString& rName
     ScDPSaveDimension* pOld = GetDimensionByName( rName );
     ScDPSaveDimension* pNew = new ScDPSaveDimension( *pOld );
     pNew->SetDupFlag( true );
-    aDimList.Insert( pNew, LIST_APPEND );
+    aDimList.push_back(pNew);
     return pNew;
 }
 
 void ScDPSaveData::RemoveDimensionByName(const ::rtl::OUString& rName)
 {
-    long nCount = aDimList.Count();
-    for (long i=0; i<nCount; i++)
+    boost::ptr_vector<ScDPSaveDimension>::iterator iter;
+    for (iter = aDimList.begin(); iter != aDimList.end(); ++iter)
     {
-        ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
-        if ( pDim->GetName() == rName && !pDim->IsDataLayout() )
+        if ( iter->GetName() == rName && !iter->IsDataLayout() )
         {
-            delete pDim;
-            aDimList.Remove(i);
+            aDimList.erase(iter);
             break;
         }
     }
@@ -932,7 +915,7 @@ ScDPSaveDimension& ScDPSaveData::DuplicateDimension( const ScDPSaveDimension& rD
 {
     ScDPSaveDimension* pNew = new ScDPSaveDimension( rDim );
     pNew->SetDupFlag( true );
-    aDimList.Insert( pNew, LIST_APPEND );
+    aDimList.push_back(pNew);
     return *pNew;
 }
 
@@ -941,25 +924,23 @@ ScDPSaveDimension* ScDPSaveData::GetInnermostDimension(sal_uInt16 nOrientation)
     // return the innermost dimension for the given orientation,
     // excluding data layout dimension
 
-    ScDPSaveDimension* pInner = NULL;
-    long nCount = aDimList.Count();
-    for (long i=0; i<nCount; i++)
+    boost::ptr_vector<ScDPSaveDimension>::const_reverse_iterator iter;
+    for (iter = aDimList.rbegin(); iter != aDimList.rend(); ++iter)
     {
-        ScDPSaveDimension* pDim = static_cast<ScDPSaveDimension*>(aDimList.GetObject(i));
-        if ( pDim->GetOrientation() == nOrientation && !pDim->IsDataLayout() )
-            pInner = pDim;
+        if (iter->GetOrientation() == nOrientation && !iter->IsDataLayout())
+            return const_cast<ScDPSaveDimension*>(&(*iter));
     }
-    return pInner; // the last matching one
+
+    return NULL;
 }
 
 ScDPSaveDimension* ScDPSaveData::GetFirstDimension(sheet::DataPilotFieldOrientation eOrientation)
 {
-    long nCount = aDimList.Count();
-    for (long i = 0; i < nCount; ++i)
+    boost::ptr_vector<ScDPSaveDimension>::const_iterator iter;
+    for (iter = aDimList.begin(); iter != aDimList.end(); ++iter)
     {
-        ScDPSaveDimension* pDim = static_cast<ScDPSaveDimension*>(aDimList.GetObject(i));
-        if (pDim->GetOrientation() == eOrientation && !pDim->IsDataLayout())
-            return pDim;
+        if (iter->GetOrientation() == eOrientation && !iter->IsDataLayout())
+            return const_cast<ScDPSaveDimension*>(&(*iter));
     }
     return NULL;
 }
@@ -968,11 +949,10 @@ long ScDPSaveData::GetDataDimensionCount() const
 {
     long nDataCount = 0;
 
-    long nCount = aDimList.Count();
-    for (long i=0; i<nCount; i++)
+    boost::ptr_vector<ScDPSaveDimension>::const_iterator iter;
+    for (iter = aDimList.begin(); iter != aDimList.end(); ++iter)
     {
-        const ScDPSaveDimension* pDim = static_cast<const ScDPSaveDimension*>(aDimList.GetObject(i));
-        if ( pDim->GetOrientation() == sheet::DataPilotFieldOrientation_DATA )
+        if (iter->GetOrientation() == sheet::DataPilotFieldOrientation_DATA)
             ++nDataCount;
     }
 
@@ -985,18 +965,26 @@ void ScDPSaveData::SetPosition( ScDPSaveDimension* pDim, long nNew )
 
     sal_uInt16 nOrient = pDim->GetOrientation();
 
-    aDimList.Remove( pDim );
-    sal_uInt32 nCount = aDimList.Count(); // after remove
-
-    sal_uInt32 nInsPos = 0;
-    while ( nNew > 0 && nInsPos < nCount )
+    boost::ptr_vector<ScDPSaveDimension>::iterator it;
+    for ( it = aDimList.begin(); it != aDimList.end(); ++it)
     {
-        if ( ((ScDPSaveDimension*)aDimList.GetObject(nInsPos))->GetOrientation() == nOrient )
-            --nNew;
-        ++nInsPos;
+        if (pDim == &(*it))
+        {
+            aDimList.erase(it);
+            break;
+        }
     }
 
-    aDimList.Insert( pDim, nInsPos );
+    boost::ptr_vector<ScDPSaveDimension>::iterator iterInsert = aDimList.begin();
+    while ( nNew > 0 && iterInsert != aDimList.end())
+    {
+        if (iterInsert->GetOrientation() == nOrient )
+            --nNew;
+
+        ++iterInsert;
+    }
+
+    aDimList.insert(iterInsert,pDim);
 }
 
 void ScDPSaveData::SetColumnGrand(bool bSet)
@@ -1092,15 +1080,14 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
 
         lcl_ResetOrient( xSource );
 
-        long nCount = aDimList.Count();
-        for (long i=0; i<nCount; i++)
+        boost::ptr_vector<ScDPSaveDimension>::iterator iter = aDimList.begin();
+        for (long i = 0; iter != aDimList.end(); ++iter, ++i)
         {
-            ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
-            rtl::OUString aName = pDim->GetName();
+            rtl::OUString aName = iter->GetName();
 
-            DBG_TRACESTR(String(pDim->GetName()));
+            DBG_TRACESTR(String(iter->GetName()));
 
-            bool bData = pDim->IsDataLayout();
+            bool bData = iter->IsDataLayout();
 
             //! getByName for ScDPSource, including DataLayoutDimension !!!!!!!!
 
@@ -1130,9 +1117,9 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
 
                 if ( bFound )
                 {
-                    if ( pDim->GetDupFlag() )
+                    if ( iter->GetDupFlag() )
                     {
-                        OUStringBuffer aBuf(pDim->GetName());
+                        OUStringBuffer aBuf(iter->GetName());
 
                         // different name for each duplication of a (real) dimension...
                         for (long j=0; j<=i; ++j) //! Test !!!!!!
@@ -1147,12 +1134,12 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                             if (xNewName.is())
                             {
                                 xNewName->setName(aBuf.makeStringAndClear());
-                                pDim->WriteToSource( xNew );
+                                iter->WriteToSource( xNew );
                             }
                         }
                     }
                     else
-                        pDim->WriteToSource( xIntDim );
+                        iter->WriteToSource( xIntDim );
                 }
             }
             DBG_ASSERT(bFound, "WriteToSource: Dimension not found");
@@ -1176,11 +1163,10 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
 
 bool ScDPSaveData::IsEmpty() const
 {
-    long nCount = aDimList.Count();
-    for (long i=0; i<nCount; i++)
+    boost::ptr_vector<ScDPSaveDimension>::const_iterator iter;
+    for (iter = aDimList.begin(); iter != aDimList.end(); ++iter)
     {
-        ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
-        if ( pDim->GetOrientation() != sheet::DataPilotFieldOrientation_HIDDEN && !pDim->IsDataLayout() )
+        if (iter->GetOrientation() != sheet::DataPilotFieldOrientation_HIDDEN && !iter->IsDataLayout())
             return false;
     }
     return true; // no entries that are not hidden
@@ -1216,11 +1202,10 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
 
     NameIndexMap::const_iterator itrEnd = aMap.end();
 
-    sal_uInt32 n = aDimList.Count();
-    for (sal_uInt32 i = 0; i < n; ++i)
+    boost::ptr_vector<ScDPSaveDimension>::iterator iter;
+    for (iter = aDimList.begin(); iter != aDimList.end(); ++iter)
     {
-        ScDPSaveDimension* pDim = static_cast<ScDPSaveDimension*>(aDimList.GetObject(i));
-        const ::rtl::OUString& rDimName = pDim->GetName();
+        const ::rtl::OUString& rDimName = iter->GetName();
         if (!rDimName.getLength())
             // empty dimension name. It must be data layout.
             continue;
@@ -1237,13 +1222,13 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
         {
             const ScDPItemData* pMemberData = pData->GetMemberById( nDimIndex, rMembers[j] );
             ::rtl::OUString aMemName = pMemberData->GetString();
-            if (pDim->GetExistingMemberByName(aMemName))
+            if (iter->GetExistingMemberByName(aMemName))
                 // this member instance already exists. nothing to do.
                 continue;
 
             auto_ptr<ScDPSaveMember> pNewMember(new ScDPSaveMember(aMemName));
             pNewMember->SetIsVisible(true);
-            pDim->AddMember(pNewMember.release());
+            iter->AddMember(pNewMember.release());
         }
     }
 
@@ -1263,47 +1248,49 @@ void ScDPSaveData::Refresh( const uno::Reference<sheet::XDimensionsSupplier>& xS
 {
     try
     {
-        long nCount = aDimList.Count();
         std::list<rtl::OUString> deletedDims;
-        for (long i=nCount-1; i >=0 ; i--)
+
         {
-            ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
-
-            rtl::OUString aName = pDim->GetName();
-            if ( pDim->IsDataLayout() )
-                continue;
-
-            uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
-            uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
-            long nIntCount = xIntDims->getCount();
-            bool bFound = false;
-            for (long nIntDim=0; nIntDim<nIntCount && !bFound; nIntDim++)
+            boost::ptr_vector<ScDPSaveDimension>::iterator iter = aDimList.end()-1;
+            for (long i = aDimList.size()-1; i >= 0; ++i,--iter)
             {
-                uno::Reference<uno::XInterface> xIntDim = ScUnoHelpFunctions::AnyToInterface( xIntDims->getByIndex(nIntDim) );
-                uno::Reference<container::XNamed> xDimName( xIntDim, uno::UNO_QUERY );
-                if ( xDimName.is() && xDimName->getName() == aName )
-                    bFound = true;
-            }
-            if ( !bFound )
-            {
-                deletedDims.push_back( aName );
-                aDimList.Remove(i);
-                DBG_TRACE( "\n Remove dim: \t" );
-                DBG_TRACESTR( String( aName ) );
-            }
+                rtl::OUString aName = iter->GetName();
+                if ( iter->IsDataLayout() )
+                    continue;
 
+                uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+                uno::Reference<container::XIndexAccess> xIntDims = new ScNameToIndexAccess( xDimsName );
+                long nIntCount = xIntDims->getCount();
+                bool bFound = false;
+                for (long nIntDim=0; nIntDim<nIntCount && !bFound; nIntDim++)
+                {
+                    uno::Reference<uno::XInterface> xIntDim = ScUnoHelpFunctions::AnyToInterface( xIntDims->getByIndex(nIntDim) );
+                    uno::Reference<container::XNamed> xDimName( xIntDim, uno::UNO_QUERY );
+                    if ( xDimName.is() && xDimName->getName() == aName )
+                        bFound = true;
+                }
+
+                if ( !bFound )
+                {
+                    deletedDims.push_back( aName );
+                    iter = aDimList.erase(iter);
+                    DBG_TRACE( "\n Remove dim: \t" );
+                    DBG_TRACESTR( String( aName ) );
+                }
+
+            }
         }
 
-        nCount = aDimList.Count();
-        for (long i=nCount-1; i >=0 ; --i) //check every dimension ??
         {
-            ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
+            boost::ptr_vector<ScDPSaveDimension>::reverse_iterator iter;
+            for (iter = aDimList.rbegin(); iter != aDimList.rend(); ++iter) //check every dimension ??
+            {
+                rtl::OUString aName = iter->GetName();
+                if ( iter->IsDataLayout() )
+                    continue;
+                iter->Refresh( xSource, deletedDims );
 
-            rtl::OUString aName = pDim->GetName();
-            if ( pDim->IsDataLayout() )
-                continue;
-            pDim->Refresh( xSource, deletedDims );
-
+            }
         }
 
         mbDimensionMembersBuilt = false; // there may be new members

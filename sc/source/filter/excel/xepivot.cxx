@@ -1290,21 +1290,19 @@ XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& r
             for( sal_uInt16 nFieldIdx = 0, nFieldCount = mrPCache.GetFieldCount(); nFieldIdx < nFieldCount; ++nFieldIdx )
                 maFieldList.AppendNewRecord( new XclExpPTField( *this, nFieldIdx ) );
 
-            const List& rDimList = pSaveData->GetDimensions();
-            ULONG nDimIdx, nDimCount = rDimList.Count();
+            boost::ptr_vector<ScDPSaveDimension>::const_iterator iter;
+            const boost::ptr_vector<ScDPSaveDimension>& rDimList = pSaveData->GetDimensions();
 
             /*  2)  First process all data dimensions, they are needed for extended
                     settings of row/column/page fields (sorting/auto show). */
-            for( nDimIdx = 0; nDimIdx < nDimCount; ++nDimIdx )
-                if( const ScDPSaveDimension* pSaveDim = static_cast< const ScDPSaveDimension* >( rDimList.GetObject( nDimIdx ) ) )
-                    if( pSaveDim->GetOrientation() == DataPilotFieldOrientation_DATA )
-                        SetDataFieldPropertiesFromDim( *pSaveDim );
+            for (iter = rDimList.begin(); iter != rDimList.end(); ++iter)
+                if (iter->GetOrientation() == DataPilotFieldOrientation_DATA)
+                    SetDataFieldPropertiesFromDim(*iter);
 
             /*  3)  Row/column/page/hidden fields. */
-            for( nDimIdx = 0; nDimIdx < nDimCount; ++nDimIdx )
-                if( const ScDPSaveDimension* pSaveDim = static_cast< const ScDPSaveDimension* >( rDimList.GetObject( nDimIdx ) ) )
-                    if( pSaveDim->GetOrientation() != DataPilotFieldOrientation_DATA )
-                        SetFieldPropertiesFromDim( *pSaveDim );
+            for (iter = rDimList.begin(); iter != rDimList.end(); ++iter)
+                if (iter->GetOrientation() != DataPilotFieldOrientation_DATA)
+                    SetDataFieldPropertiesFromDim(*iter);
 
             // Finalize -------------------------------------------------------
 

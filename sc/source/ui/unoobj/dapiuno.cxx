@@ -1515,16 +1515,16 @@ ScDPSaveDimension* ScDataPilotChildObjBase::GetDPDimension( ScDPObject** ppDPObj
                 return pSaveData->GetDimensionByName( maFieldId.maFieldName );
 
             // find dimension with specified index (search in duplicated dimensions)
-            const List& rDimensions = pSaveData->GetDimensions();
-            ULONG nDimCount = rDimensions.Count();
+            const boost::ptr_vector<ScDPSaveDimension>& rDimensions = pSaveData->GetDimensions();
+
             sal_Int32 nFoundIdx = 0;
-            for( ULONG nDim = 0; nDim < nDimCount; ++nDim )
+            boost::ptr_vector<ScDPSaveDimension>::const_iterator it;
+            for(it = rDimensions.begin(); it != rDimensions.end(); ++it)
             {
-                ScDPSaveDimension* pDim = static_cast< ScDPSaveDimension* >( rDimensions.GetObject( nDim ) );
-                if( !pDim->IsDataLayout() && (pDim->GetName() == maFieldId.maFieldName) )
+                if( !it->IsDataLayout() && (it->GetName() == maFieldId.maFieldName) )
                 {
                     if( nFoundIdx == maFieldId.mnFieldIdx )
-                        return pDim;
+                        return const_cast<ScDPSaveDimension*>(&(*it));
                     ++nFoundIdx;
                 }
             }
@@ -1787,14 +1787,14 @@ Sequence<OUString> SAL_CALL ScDataPilotFieldsObj::getElementNames()
     {
         Sequence< OUString > aSeq( lcl_GetFieldCount( pDPObj->GetSource(), maOrient ) );
         OUString* pAry = aSeq.getArray();
-        const List& rDimensions = pDPObj->GetSaveData()->GetDimensions();
-        sal_Int32 nDimCount = rDimensions.Count();
-        for (sal_Int32 nDim = 0; nDim < nDimCount; nDim++)
+
+        const boost::ptr_vector<ScDPSaveDimension>& rDimensions = pDPObj->GetSaveData()->GetDimensions();
+        boost::ptr_vector<ScDPSaveDimension>::const_iterator it;
+        for (it = rDimensions.begin(); it != rDimensions.end(); ++it)
         {
-            ScDPSaveDimension* pDim = (ScDPSaveDimension*)rDimensions.GetObject(nDim);
-            if(maOrient.hasValue() && (pDim->GetOrientation() == maOrient.get< DataPilotFieldOrientation >()))
+            if(maOrient.hasValue() && (it->GetOrientation() == maOrient.get< DataPilotFieldOrientation >()))
             {
-                *pAry = pDim->GetName();
+                *pAry = it->GetName();
                 ++pAry;
             }
         }
@@ -2077,16 +2077,15 @@ void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
 
             // look for existing duplicate with orientation "hidden"
 
-            const List& rDimensions = pSaveData->GetDimensions();
-            sal_Int32 nDimCount = rDimensions.Count();
             sal_Int32 nFound = 0;
-            for ( sal_Int32 nDim = 0; nDim < nDimCount && !pNewDim; nDim++ )
+            const boost::ptr_vector<ScDPSaveDimension>& rDimensions = pSaveData->GetDimensions();
+            boost::ptr_vector<ScDPSaveDimension>::const_iterator it;
+            for ( it = rDimensions.begin(); it != rDimensions.end() && !pNewDim; ++it )
             {
-                ScDPSaveDimension* pOneDim = static_cast<ScDPSaveDimension*>(rDimensions.GetObject(nDim));
-                if ( !pOneDim->IsDataLayout() && (pOneDim->GetName() == maFieldId.maFieldName) )
+                if ( !it->IsDataLayout() && (it->GetName() == maFieldId.maFieldName) )
                 {
-                    if ( pOneDim->GetOrientation() == DataPilotFieldOrientation_HIDDEN )
-                        pNewDim = pOneDim;      // use this one
+                    if ( it->GetOrientation() == DataPilotFieldOrientation_HIDDEN )
+                        pNewDim = const_cast<ScDPSaveDimension*>(&(*it));      // use this one
                     else
                         ++nFound;               // count existing non-hidden occurrences
                 }
@@ -2102,7 +2101,7 @@ void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
         pDim->SetOrientation(sal::static_int_cast<USHORT>(eNew));
 
         // move changed field behind all other fields (make it the last field in dimension)
-        pSaveData->SetPosition( pDim, pSaveData->GetDimensions().Count() );
+        pSaveData->SetPosition( pDim, pSaveData->GetDimensions().size() );
 
         SetDPObject( pDPObj );
 

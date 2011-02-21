@@ -719,12 +719,10 @@ void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDim
 
 void ScXMLExportDataPilot::WriteDimensions(ScDPSaveData* pDPSave)
 {
-    List aDimensions = pDPSave->GetDimensions();
-    sal_Int32 nDimCount = aDimensions.Count();
-    for (sal_Int32 nDim = 0; nDim < nDimCount; nDim++)
-    {
-        WriteDimension((ScDPSaveDimension*)aDimensions.GetObject(nDim), pDPSave->GetExistingDimensionData());
-    }
+    const boost::ptr_vector<ScDPSaveDimension> &rDimensions = pDPSave->GetDimensions();
+    boost::ptr_vector<ScDPSaveDimension>::const_iterator iter;
+    for (iter = rDimensions.begin(); iter != rDimensions.end(); ++iter)
+        WriteDimension(const_cast<ScDPSaveDimension*>(&(*iter)), pDPSave->GetExistingDimensionData());
 }
 
 void ScXMLExportDataPilot::WriteGrandTotal(::xmloff::token::XMLTokenEnum eOrient, bool bVisible, const OUString* pGrandTotal)

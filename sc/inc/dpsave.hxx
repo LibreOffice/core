@@ -29,16 +29,19 @@
 #ifndef SC_DPSAVE_HXX
 #define SC_DPSAVE_HXX
 
+#include <list>
+#include <memory>
+
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/unordered_map.hpp>
+
+#include <com/sun/star/sheet/XDimensionsSupplier.hpp>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/string.hxx>
-#include <tools/list.hxx>
-#include <com/sun/star/sheet/XDimensionsSupplier.hpp>
-#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+
 #include "scdllapi.h"
-#include <boost/unordered_map.hpp>
-#include <list>
-#include <memory>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldReference;
@@ -236,7 +239,7 @@ public:
 class ScDPSaveData
 {
 private:
-    List aDimList;
+    boost::ptr_vector<ScDPSaveDimension> aDimList;
     ScDPDimensionSaveData* pDimensionData; // settings that create new dimensions
     sal_uInt16 nColumnGrandMode;
     sal_uInt16 nRowGrandMode;
@@ -264,11 +267,11 @@ public:
     SC_DLLPUBLIC void SetGrandTotalName(const ::rtl::OUString& rName);
     SC_DLLPUBLIC const ::rtl::OUString* GetGrandTotalName() const;
 
-    const List& GetDimensions() const
+    const boost::ptr_vector<ScDPSaveDimension>& GetDimensions() const
         { return aDimList; }
 
     void AddDimension(ScDPSaveDimension* pDim)
-        { aDimList.Insert(pDim, LIST_APPEND); }
+        { aDimList.push_back(pDim); }
 
     /**
      * Get a dimension object by its name.  <i>If one doesn't exist for the
