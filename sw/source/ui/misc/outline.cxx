@@ -190,9 +190,9 @@ IMPL_LINK_INLINE_END( SwNumNamesDlg, DoubleClickHdl, ListBox *, EMPTYARG )
 
 SwNumNamesDlg::SwNumNamesDlg(Window *pParent)
     : ModalDialog(pParent, SW_RES(DLG_NUM_NAMES)),
+    aFormFL(this, SW_RES(FL_FORM)),
     aFormEdit(this, SW_RES(ED_FORM)),
     aFormBox(this, SW_RES(LB_FORM)),
-    aFormFL(this, SW_RES(FL_FORM)),
     aOKBtn(this, SW_RES(BT_OK)),
     aCancelBtn(this, SW_RES(BT_CANCEL)),
     aHelpBtn(this, SW_RES(BT_HELP))
@@ -548,8 +548,9 @@ short SwOutlineTabDialog::Ok()
  * --------------------------------------------------*/
 SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_OUTLINE_NUM), rSet),
-    aLevelLB(       this, SW_RES(LB_LEVEL   )),
     aLevelFL(       this, SW_RES(FL_LEVEL    )),
+    aLevelLB(       this, SW_RES(LB_LEVEL   )),
+    aNumberFL(this, SW_RES(FL_NUMBER)),
     aCollLbl(this, SW_RES(FT_COLL)),
     aCollBox(this, SW_RES(LB_COLL)),
     aNumberLbl(this, SW_RES(FT_NUMBER)),
@@ -565,7 +566,6 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxIte
     aSuffixED(this, SW_RES(ED_SUFFIX)),
     aStartLbl(this, SW_RES(FT_START)),
     aStartEdit(this, SW_RES(ED_START)),
-    aNumberFL(this, SW_RES(FL_NUMBER)),
     aPreviewWIN(    this, SW_RES(WIN_PREVIEW )),
 
     aNoFmtName(SW_RES(ST_NO_COLL)),

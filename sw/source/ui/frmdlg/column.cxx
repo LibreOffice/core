@@ -453,12 +453,13 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
 
     : SfxTabPage(pParent, SW_RES(TP_COLUMN), rSet),
 
+    aFLGroup(this,          SW_RES(FL_COLUMNS )),
     aClNrLbl(this,          SW_RES(FT_NUMBER  )),
     aCLNrEdt(this,          SW_RES(ED_NUMBER  )),
     aDefaultVS(this,        SW_RES(VS_DEFAULTS)),
     aBalanceColsCB(this,    SW_RES(CB_BALANCECOLS)),
-    aFLGroup(this,          SW_RES(FL_COLUMNS )),
 
+    aFLLayout(this,         SW_RES(FL_LAYOUT)),
     aBtnUp(this,            SW_RES(BTN_DOWN)),
     aColumnFT(this,         SW_RES(FT_COLUMN)),
     aWidthFT(this,          SW_RES(FT_WIDTH)),
@@ -474,15 +475,13 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     aBtnDown(this,          SW_RES(BTN_UP)),
     aAutoWidthBox(this,     SW_RES(CB_AUTO_WIDTH)),
 
-    aFLLayout(this,         SW_RES(FL_LAYOUT)),
-
+    aFLLineType(this,       SW_RES(FL_LINETYPE)),
     aLineTypeLbl(this,      SW_RES(FT_STYLE)),
     aLineTypeDLB(this,      SW_RES(LB_STYLE)),
     aLineHeightLbl(this,    SW_RES(FT_HEIGHT)),
     aLineHeightEdit(this,   SW_RES(ED_HEIGHT)),
     aLinePosLbl(this,       SW_RES(FT_POSITION)),
     aLinePosDLB(this,       SW_RES(LB_POSITION)),
-    aFLLineType(this,       SW_RES(FL_LINETYPE)),
 
     aVertFL(this,         SW_RES(FL_VERT)),
     aPropertiesFL(  this,    SW_RES( FL_PROPERTIES    )),

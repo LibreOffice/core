@@ -110,6 +110,8 @@ IMPL_LINK( SwFootNoteOptionDlg, OkHdl, Button *, pBtn )
 SwEndNoteOptionPage::SwEndNoteOptionPage( Window *pParent, sal_Bool bEN,
                                           const SfxItemSet &rSet ) :
     SfxTabPage( pParent, SW_RES(bEN ? TP_ENDNOTEOPTION : TP_FOOTNOTEOPTION), rSet ),
+    aNumFL         (this, SW_RES( FL_NUM        )),
+
     aNumTypeFT      (this, SW_RES( FT_NUMTYPE    )),
     aNumViewBox     (this, SW_RES( LB_NUMVIEW   ), INSERT_NUM_EXTENDED_TYPES),
     aOffsetLbl      (this, SW_RES( FT_OFFSET    )),
@@ -123,25 +125,24 @@ SwEndNoteOptionPage::SwEndNoteOptionPage( Window *pParent, sal_Bool bEN,
     aPosFT          (this, SW_RES( FT_POS    )),
     aPosPageBox     (this, SW_RES( RB_POS_PAGE   )),
     aPosChapterBox  (this, SW_RES( RB_POS_CHAPTER)),
-    aNumFL         (this, SW_RES( FL_NUM        )),
 
+    aTemplFL       (this, SW_RES( FL_TEMPL      )),
     aParaTemplLbl   (this, SW_RES( FT_PARA_TEMPL)),
     aParaTemplBox   (this, SW_RES( LB_PARA_TEMPL)),
     aPageTemplLbl   (this, SW_RES( FT_PAGE_TEMPL)),
     aPageTemplBox   (this, SW_RES( LB_PAGE_TEMPL)),
-    aTemplFL       (this, SW_RES( FL_TEMPL      )),
 
+    aCharTemplFL(          this, SW_RES(FL_CHAR_TEMPL)),
     aFtnCharAnchorTemplLbl( this, SW_RES( FT_ANCHR_CHARFMT)),
     aFtnCharAnchorTemplBox( this, SW_RES( LB_ANCHR_CHARFMT)),
     aFtnCharTextTemplLbl(   this, SW_RES( FT_TEXT_CHARFMT)),
     aFtnCharTextTemplBox(   this, SW_RES( LB_TEXT_CHARFMT)),
-    aCharTemplFL(          this, SW_RES(FL_CHAR_TEMPL)),
 
+    aContFL        (this, SW_RES( FL_CONT       )),
     aContLbl        (this, SW_RES( FT_CONT      )),
     aContEdit       (this, SW_RES( ED_CONT      )),
     aContFromLbl    (this, SW_RES( FT_CONT_FROM )),
     aContFromEdit   (this, SW_RES( ED_CONT_FROM )),
-    aContFL        (this, SW_RES( FL_CONT       )),
 
     aNumDoc(aNumCountBox.GetEntry(FTNNUM_DOC)),
     aNumPage(aNumCountBox.GetEntry(FTNNUM_PAGE)),

@@ -160,6 +160,7 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     SvxStandardDialog( pParent,SW_RES(DLG_BREAK) ),
 
     rSh(rS),
+    aBreakFL(this,SW_RES(FL_BREAK)),
     aLineBtn(this,SW_RES(RB_LINE)),
     aColumnBtn(this,SW_RES(RB_COL)),
     aPageBtn(this,SW_RES(RB_PAGE)),
@@ -167,7 +168,6 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     aPageCollBox(this, SW_RES(LB_COLL)),
     aPageNumBox(this, SW_RES(CB_PAGENUM)),
     aPageNumEdit(this, SW_RES(ED_PAGENUM)),
-    aBreakFL(this,SW_RES(FL_BREAK)),
 
     aOkBtn(this,SW_RES(BT_OK)),
     aCancelBtn(this,SW_RES(BT_CANCEL)),

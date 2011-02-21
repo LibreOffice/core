@@ -654,6 +654,7 @@ namespace
 SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     SfxTabPage      (pParent, SW_RES(TP_FRM_STD), rSet),
 
+    aSizeFL         (this, SW_RES(FL_SIZE)),
     aWidthFT        (this, SW_RES(FT_WIDTH)),
     aWidthAutoFT    (this, SW_RES(FT_WIDTH_AUTO)),
     aWidthED        (this, SW_RES(ED_WIDTH)),
@@ -666,16 +667,16 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     aAutoHeightCB   (this, SW_RES(CB_AUTOHEIGHT)),
     aFixedRatioCB   (this, SW_RES(CB_FIXEDRATIO)),
     aRealSizeBT     (this, SW_RES(BT_REALSIZE)),
-    aSizeFL         (this, SW_RES(FL_SIZE)),
 
-    aTypeFL        (this, SW_RES(FL_TYPE)),
     aTypeSepFL     (this, SW_RES(FL_TYPE_SEP)),
+    aTypeFL        (this, SW_RES(FL_TYPE)),
     aAnchorAtPageRB (this, SW_RES(RB_ANCHOR_PAGE)),
     aAnchorAtParaRB (this, SW_RES(RB_ANCHOR_PARA)),
     aAnchorAtCharRB (this, SW_RES(RB_ANCHOR_AT_CHAR)),
     aAnchorAsCharRB (this, SW_RES(RB_ANCHOR_AS_CHAR)),
     aAnchorAtFrameRB(this, SW_RES(RB_ANCHOR_FRAME)),
 
+    aPositionFL     (this, SW_RES(FL_POSITION)),
     aHorizontalFT   (this, SW_RES(FT_HORIZONTAL)),
     aHorizontalDLB  (this, SW_RES(DLB_HORIZONTAL)),
     aAtHorzPosFT    (this, SW_RES(FT_AT_HORZ_POS)),
@@ -691,7 +692,6 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     aVertRelationLB (this, SW_RES(LB_VERT_RELATION)),
     // OD 19.09.2003 #i18732# - new checkbox
     aFollowTextFlowCB(this, SW_RES(CB_FOLLOWTEXTFLOW)),
-    aPositionFL     (this, SW_RES(FL_POSITION)),
 
     aExampleWN      (this, SW_RES(WN_BSP)),
 
@@ -2935,6 +2935,7 @@ void lcl_Move(Window& rWin, sal_Int32 nDiff)
 SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet ) :
     SfxTabPage(pParent,     SW_RES(TP_FRM_ADD), rSet),
 
+    aNamesFL           (this, SW_RES(FL_NAME)),
     aNameFT            (this, SW_RES(FT_NAME)),
     aNameED            (this, SW_RES(ED_NAME)),
     aAltNameFT         (this, SW_RES(FT_ALT_NAME)),
@@ -2943,19 +2944,17 @@ SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet ) :
     aPrevLB            (this, SW_RES(LB_PREV)),
     aNextFT            (this, SW_RES(FT_NEXT)),
     aNextLB            (this, SW_RES(LB_NEXT)),
-    aNamesFL           (this, SW_RES(FL_NAME)),
 
+    aProtectFL         (this, SW_RES(FL_PROTECT)),
     aProtectContentCB  (this, SW_RES(CB_PROTECT_CONTENT)),
     aProtectFrameCB    (this, SW_RES(CB_PROTECT_FRAME)),
     aProtectSizeCB     (this, SW_RES(CB_PROTECT_SIZE)),
-    aProtectFL         (this, SW_RES(FL_PROTECT)),
+    aExtFL             (this, SW_RES(FL_EXT)),
 
     aEditInReadonlyCB  (this, SW_RES(CB_EDIT_IN_READONLY)),
     aPrintFrameCB      (this, SW_RES(CB_PRINT_FRAME)),
     aTextFlowFT        (this, SW_RES(FT_TEXTFLOW)),
     aTextFlowLB        (this, SW_RES(LB_TEXTFLOW)),
-
-    aExtFL             (this, SW_RES(FL_EXT)),
 
     pWrtSh(0),
 

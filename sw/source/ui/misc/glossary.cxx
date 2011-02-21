@@ -183,11 +183,12 @@ SwNewGlosNameDlg::SwNewGlosNameDlg(Window* pParent,
     aNewShort(this,SW_RES( ED_NS    )),
     aOk     (this, SW_RES( BT_OKNEW)),
     aCancel (this, SW_RES( BT_CANCEL)),
-    aFL    (this, SW_RES( FL_NN    )),
     aONFT   (this, SW_RES( FT_ON    )),
     aOldName(this, SW_RES( ED_ON    )),
     aOSFT   (this, SW_RES( FT_OS    )),
-    aOldShort(this,SW_RES( ED_OS    ))
+    aOldShort(this,SW_RES( ED_OS    )),
+    aFL    (this, SW_RES( FL_NN    ))
+
 {
     FreeResource();
     aOldName.SetText( rOldName );

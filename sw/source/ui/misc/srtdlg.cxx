@@ -133,11 +133,12 @@ sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
 
     SvxStandardDialog(pParent, SW_RES(DLG_SORTING)),
+
     aColLbl(this,       SW_RES(FT_COL   )),
     aTypLbl(this,       SW_RES(FT_KEYTYP)),
     aDirLbl(this,       SW_RES(FT_DIR   )),
+    aSortFL(this,      SW_RES(FL_SORT_2  )),
 
-    aDirFL(this,       SW_RES(FL_DIR   )),
 
     aKeyCB1(this,       SW_RES(CB_KEY1  )),
     aColEdt1(this,      SW_RES(ED_KEY1  )),
@@ -156,8 +157,8 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
     aTypDLB3(this,      SW_RES(DLB_KEY3 )),
     aSortUp3RB(this,    SW_RES(RB_UP3    )),
     aSortDn3RB(this,    SW_RES(RB_DN3    )),
+    aDirFL(this,       SW_RES(FL_DIR   )),
 
-    aSortFL(this,      SW_RES(FL_SORT_2  )),
     aColumnRB(this,     SW_RES(RB_COL   )),
     aRowRB(this,        SW_RES(RB_ROW   )),
 

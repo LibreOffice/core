@@ -156,14 +156,14 @@ IMPL_LINK( SwFootNotePage, HeightModify, MetricField *, EMPTYARG )
 SwFootNotePage::SwFootNotePage(Window *pParent, const SfxItemSet &rSet) :
 
     SfxTabPage(pParent, SW_RES(TP_FOOTNOTE_PAGE), rSet),
-
+    aPosHeader(this,        SW_RES(FL_FOOTNOTE_SIZE)),
     aMaxHeightPageBtn(this, SW_RES(RB_MAXHEIGHT_PAGE)),
     aMaxHeightBtn(this,     SW_RES(RB_MAXHEIGHT)),
     aMaxHeightEdit(this,    SW_RES(ED_MAXHEIGHT)),
     aDistLbl(this,          SW_RES(FT_DIST)),
     aDistEdit(this,         SW_RES(ED_DIST)),
-    aPosHeader(this,        SW_RES(FL_FOOTNOTE_SIZE)),
 
+    aLineHeader(this,       SW_RES(FL_LINE)),
     aLinePosLbl(this,       SW_RES(FT_LINEPOS)),
     aLinePosBox(this,       SW_RES(DLB_LINEPOS)),
     aLineTypeLbl(this,      SW_RES(FT_LINETYPE)),
@@ -171,9 +171,8 @@ SwFootNotePage::SwFootNotePage(Window *pParent, const SfxItemSet &rSet) :
     aLineWidthLbl(this,     SW_RES(FT_LINEWIDTH)),
     aLineWidthEdit(this,    SW_RES(ED_LINEWIDTH)),
     aLineDistLbl(this,      SW_RES(FT_LINEDIST)),
-    aLineDistEdit(this,     SW_RES(ED_LINEDIST)),
-    aLineHeader(this,       SW_RES(FL_LINE))
-{
+    aLineDistEdit(this,     SW_RES(ED_LINEDIST))
+    {
     FreeResource();
 
     SetExchangeSupport();

@@ -76,9 +76,11 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
                         const SvStrings* pPathArr,
                         SwGlossaryHdl *pHdl) :
     SvxStandardDialog(pParent, SW_RES(DLG_BIB_BASE)),
-
+    aBibFT(     this, SW_RES(FT_BIB)),
     aNameED(    this, SW_RES(ED_NAME)),
+    aPathFT(     this, SW_RES(FT_PATH)),
     aPathLB(    this, SW_RES(LB_PATH)),
+    aSelectFT(   this, SW_RES(FT_SELECT)),
     aGroupTLB(  this, SW_RES(TLB_GROUPS)),
 
     aOkPB(      this, SW_RES(BT_OK)),
@@ -87,9 +89,6 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
     aNewPB(     this, SW_RES(PB_NEW)),
     aDelPB(     this, SW_RES(PB_DELETE)),
     aRenamePB(  this, SW_RES(PB_RENAME)),
-    aBibFT(     this, SW_RES(FT_BIB)),
-    aPathFT(     this, SW_RES(FT_PATH)),
-    aSelectFT(   this, SW_RES(FT_SELECT)),
 
     pRemovedArr(0),
     pInsertedArr(0),

@@ -102,6 +102,7 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
                                const ResId& rResId,
                                sal_Int32 _nOptionsId, SwWrtShell& rWrtShell ) :
       Window(pParent, rResId),
+    aIndexFL(this,  SW_RES(FL_INDEX )),
     aTypeFT (this,  SW_RES(LBL_INDEX    )),
     aTypeDCB(this,  SW_RES(DCB_INDEX    )),
     aNewBT(this,    SW_RES(BT_NEW   )),
@@ -128,7 +129,6 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
     aSearchCaseSensitiveCB(this,    SW_RES(CB_CASESENSITIVE )),
     aSearchCaseWordOnlyCB(this,     SW_RES(CB_WORDONLY      )),
 
-    aIndexFL(this,  SW_RES(FL_INDEX )),
 
     aOKBT(this,     SW_RES(BT_OK    )),
     aCancelBT(this, SW_RES(BT_CANCEL )),
