@@ -309,7 +309,7 @@ bool Options::initOptions(std::vector< std::string > & rArgs) throw(IllegalArgum
           (void) fprintf(stdout, "%s", prepareHelp().getStr());
           return (false);
         }
-        break;
+        // break; // Unreachable
       }
     case 's':
       {
