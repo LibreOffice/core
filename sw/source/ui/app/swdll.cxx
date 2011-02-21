@@ -84,26 +84,26 @@ void SwDLL::Init()
         pDocFact->SetDocumentServiceName(C2S("com.sun.star.text.TextDocument"));
     }
 
-    // SvDraw-Felder registrieren
+    // register SvDraw-Fields
     SdrRegisterFieldClasses();
 
-    // 3D-Objekt-Factory eintragen
+    // register 3D-Objekt-Factory
     E3dObjFactory();
 
-    // form::component::Form-Objekt-Factory eintragen
+    // register form::component::Form-Objekt-Factory
     FmFormObjFactory();
 
     SdrObjFactory::InsertMakeObjectHdl( LINK( &aSwObjectFactory, SwObjectFactory, MakeObject ) );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "Init Core/UI/Filter" );
 
-    //Initialisierung der Statics
+    // Initialisation of Statics
     ::_InitCore();
     ::_InitFilter();
     ::_InitUI();
 
     pModule->InitAttrPool();
-    //jetzt darf das SwModule seinen Pool anlegen
+    // now SWModule can create its Pool
 
     // register your view-factories here
     RegisterFactories();
@@ -120,15 +120,15 @@ void SwDLL::Exit()
     // called directly befor unloading the DLL
     // do whatever you want, Sw-DLL is accessible
 
-    // der Pool muss vor den statics geloescht werden
+    // Pool has to be deleted before statics are
     SW_MOD()->RemoveAttrPool();
 
     ::_FinitUI();
     ::_FinitFilter();
     ::_FinitCore();
-    // Objekt-Factory austragen
+    // sign out Objekt-Factory
     SdrObjFactory::RemoveMakeObjectHdl(LINK(&aSwObjectFactory, SwObjectFactory, MakeObject ));
-   // the SwModule must be destroyed
+    // the SwModule must be destroyed
     SwModule** ppShlPtr = (SwModule**) GetAppData(SHL_WRITER);
     delete (*ppShlPtr);
     (*ppShlPtr) = NULL;

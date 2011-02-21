@@ -30,11 +30,10 @@
 #include "globals.hrc"
 #include "app.hrc"
 #include "swerror.h"
-#include "comcore.hrc" // MS:   Warum gibst auf der Core-Seite
- //         jetzt Resourcen
+#include "comcore.hrc" // MS:   Why are there resources at the Core-Side now
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Strings
+    Description:    Strings
  --------------------------------------------------------------------*/
 
 String STR_COMCORE_READERROR
@@ -46,7 +45,7 @@ String STR_COMCORE_CANT_SHOW
     Text [ en-US ] = "Graphic cannot be displayed." ;
 };
 /*--------------------------------------------------------------------
-    Beschreibung:   Boxes
+    Description:    Boxes
  --------------------------------------------------------------------*/
 InfoBox ERR_CLPBRD_WRITE
 {
