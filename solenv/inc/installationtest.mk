@@ -23,6 +23,16 @@
 # for a copy of the LGPLv3 License.
 #***********************************************************************/
 
+# relevant for non-product builds only, but built unconditionally
+DIAGNOSTICS_CONTROL_FILE=$(MISC)/dbgsvrc
+DBGSV_INIT:=$(MAKEDIR)/$(DIAGNOSTICS_CONTROL_FILE)
+.EXPORT: DBGSV_INIT
+
+.IF "$(ABORT_ON_ASSERTION)" != ""
+    SAL_DIAGNOSE_ABORT:=TRUE
+    .EXPORT: SAL_DIAGNOSE_ABORT
+.ENDIF
+
 .IF "$(OS)" == "WNT"
 my_file = file:///
 .ELSE
@@ -88,7 +98,7 @@ $(MISC)/$(TARGET)/installation.flag : $(shell \
     $(COMMAND_ECHO)echo "$(OOO_EXTRACT_TO)" > $@
 .END
 
-cpptest .PHONY :
+cpptest .PHONY : $(DIAGNOSTICS_CONTROL_FILE)
     $(COMMAND_ECHO)$(RM) -r $(MISC)/$(TARGET)/user
     $(COMMAND_ECHO)$(MKDIRHIER) $(MISC)/$(TARGET)/user
     $(CPPUNITTESTER) \
@@ -104,7 +114,7 @@ cpptest : $(MISC)/$(TARGET)/installation.flag
 .END
 
 .IF "$(SOLAR_JAVA)" == "TRUE" && "$(OOO_JUNIT_JAR)" != ""
-javatest_% .PHONY : $(JAVATARGET)
+javatest_% .PHONY : $(JAVATARGET) $(DIAGNOSTICS_CONTROL_FILE)
     $(COMMAND_ECHO)$(RM) -r $(MISC)/$(TARGET)/user
     $(COMMAND_ECHO)$(MKDIRHIER) $(MISC)/$(TARGET)/user
     $(COMMAND_ECHO)$(JAVAI) $(JAVAIFLAGS) $(JAVACPS) \
@@ -119,7 +129,7 @@ javatest_% .PHONY : $(JAVATARGET)
     $(RM) -r $(installationtest_instpath) $(MISC)/$(TARGET)/installation.flag
 javatest : $(MISC)/$(TARGET)/installation.flag
 .END
-javatest .PHONY : $(JAVATARGET)
+javatest .PHONY : $(JAVATARGET) $(DIAGNOSTICS_CONTROL_FILE)
     $(COMMAND_ECHO)$(RM) -r $(MISC)/$(TARGET)/user
     $(COMMAND_ECHO)$(MKDIRHIER) $(MISC)/$(TARGET)/user
     $(COMMAND_ECHO)$(JAVAI) $(JAVAIFLAGS) $(JAVACPS) \
@@ -138,3 +148,12 @@ javatest : $(MISC)/$(TARGET)/installation.flag
 javatest .PHONY :
     @echo 'javatest needs SOLAR_JAVA=TRUE and OOO_JUNIT_JAR'
 .END
+
+# relevant for non-product builds only, but built unconditionally
+$(DIAGNOSTICS_CONTROL_FILE):
+    $(COMMAND_ECHO)echo [output] > $@
+.IF "$(ABORT_ON_ASSERTION)" != ""
+    $(COMMAND_ECHO)echo error=abort >> $@
+.ELSE
+    $(COMMAND_ECHO)echo error=shell >> $@
+.ENDIF
