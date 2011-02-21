@@ -29,6 +29,6 @@
 
 PICSWITCH:=-fPIC
 .INCLUDE : unxlng.mk
-CFLAGS+=-DAXP
+CFLAGS+=-DAXP -Wl,--no-relax
 DLLPOSTFIX=ll
 BUILD64=1
