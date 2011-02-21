@@ -287,13 +287,13 @@ void ImportExcel8::Scenman( void )
     aIn.Ignore( 4 );
     aIn >> nLastDispl;
 
-    aScenList.SetLast( nLastDispl );
+    aScenList.nLastScenario = nLastDispl;
 }
 
 
 void ImportExcel8::Scenario( void )
 {
-    aScenList.Append( new ExcScenario( aIn, *pExcRoot ) );
+    aScenList.aEntries.push_back( new ExcScenario( aIn, *pExcRoot ) );
 }
 
 
@@ -423,7 +423,7 @@ void ImportExcel8::PostDocLoad( void )
     ImportExcel::PostDocLoad();
 
     // Scenarien bemachen! ACHTUNG: Hier wird Tabellen-Anzahl im Dokument erhoeht!!
-    if( !pD->IsClipboard() && aScenList.Count() )
+    if( !pD->IsClipboard() && aScenList.aEntries.size() )
     {
         pD->UpdateChartListenerCollection();    // references in charts must be updated
 
