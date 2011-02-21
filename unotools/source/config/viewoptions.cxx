@@ -104,7 +104,6 @@ namespace css = ::com::sun::star;
         sMsg.appendAscii("Unexpected exception catched. Original message was:\n\""      );                          \
         sMsg.append     (SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION_PARAM_EXCEPTION.Message);                          \
         sMsg.appendAscii("\""                                                           );                          \
-        OSL_ENSURE(sal_False, ::rtl::OUStringToOString(sMsg.makeStringAndClear(), RTL_TEXTENCODING_UTF8).getStr()); \
     }
 
 //_________________________________________________________________________________________________________________

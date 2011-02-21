@@ -1324,12 +1324,6 @@ Reference< XHierarchicalNameAccess> ConfigItem::GetTree()
         xRet = pImpl->pManager->AcquireTree(*this);
     else
         xRet = m_xHierarchyAccess;
-#if OSL_DEBUG_LEVEL > 1
-    // I think this is a pointless assertion, the callers seem to cope
-    // fine with returning an invalid reference, no need to crash in a
-    // dbglevel=1 build.
-    OSL_ENSURE(xRet.is(), "AcquireTree failed");
-#endif
     return xRet;
 }
 
