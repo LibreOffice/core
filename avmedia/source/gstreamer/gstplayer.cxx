@@ -155,7 +155,17 @@ void Player::processMessage( GstMessage *message )
 
 GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 {
-    DBG( "%p processSyncMessage", this );
+    DBG( "%p processSyncMessage: %s", this, GST_MESSAGE_TYPE_NAME( message ) );
+
+#if DEBUG
+    if ( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ERROR ) {
+        GError* error;
+        gchar* error_debug;
+
+        gst_message_parse_error( message, &error, &error_debug );
+        DBG("error: '%s' debug: '%s'", error->message, error_debug);
+    }
+#endif
 
     if (message->structure) {
         if( !strcmp( gst_structure_get_name( message->structure ), "prepare-xwindow-id" ) && mnWindowID != 0 ) {
@@ -272,6 +282,8 @@ bool Player::create( const ::rtl::OUString& rURL )
     bool    bRet = false;
 
     // create all the elements and link them
+
+    DBG("create player, URL: %s", OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 ).getStr());
 
     if( mbInitialized )
     {
