@@ -1597,6 +1597,60 @@ void ScExternalRefManager::storeRangeNameTokens(sal_uInt16 nFileId, const String
     maRefCache.setRangeNameTokens(nFileId, rName, pArray);
 }
 
+namespace {
+
+void putCellDataIntoCache(
+    ScExternalRefCache& rRefCache, const ScExternalRefCache::TokenRef& pToken,
+    sal_uInt16 nFileId, const String& rTabName, const ScAddress& rCell,
+    ScExternalRefCache::CellFormat* pFmt)
+{
+    // Now, insert the token into cache table but don't cache empty cells.
+    if (pToken->GetType() != formula::svEmptyCell)
+    {
+        sal_uInt32 nFmtIndex = (pFmt && pFmt->mbIsSet) ? pFmt->mnIndex : 0;
+        rRefCache.setCellData(nFileId, rTabName, rCell.Col(), rCell.Row(), pToken, nFmtIndex);
+    }
+}
+
+/**
+ * Put the data into our internal cache table.
+ *
+ * @param rRefCache cache table set.
+ * @param pArray single range data to be returned.
+ * @param nFileId external file ID
+ * @param rTabName name of the table where the data should be cached.
+ * @param rCacheData range data to be cached.
+ * @param rCacheRange original cache range, including the empty region if
+ *                    any.
+ * @param rDataRange reduced cache range that includes only the non-empty
+ *                   data area.
+ */
+void putRangeDataIntoCache(
+    ScExternalRefCache& rRefCache, ScExternalRefCache::TokenArrayRef& pArray,
+    sal_uInt16 nFileId, const String& rTabName,
+    const vector<ScExternalRefCache::SingleRangeData>& rCacheData,
+    const ScRange& rCacheRange, const ScRange& rDataRange)
+{
+    if (pArray)
+        // Cache these values.
+        rRefCache.setCellRangeData(nFileId, rDataRange, rCacheData, pArray);
+    else
+    {
+        // Array is empty.  Fill it with an empty matrix of the required size.
+        pArray.reset(lcl_fillEmptyMatrix(rCacheRange));
+
+        // Make sure to set this range 'cached', to prevent unnecessarily
+        // accessing the src document time and time again.
+        ScExternalRefCache::TableTypeRef pCacheTab =
+            rRefCache.getCacheTable(nFileId, rTabName, true, NULL);
+        if (pCacheTab)
+            pCacheTab->setCachedCellRange(
+                rCacheRange.aStart.Col(), rCacheRange.aStart.Row(), rCacheRange.aEnd.Col(), rCacheRange.aEnd.Row());
+    }
+}
+
+}
+
 ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     sal_uInt16 nFileId, const String& rTabName, const ScAddress& rCell,
     const ScAddress* pCurPos, SCTAB* pTab, ScExternalRefCache::CellFormat* pFmt)
@@ -1633,13 +1687,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
             getSingleRefTokenFromSrcDoc(
                 nFileId, pSrcDoc, ScAddress(rCell.Col(),rCell.Row(),nTab), pFmt);
 
-        // Now, insert the token into cache table but don't cache empty cells.
-        if (pToken->GetType() != formula::svEmptyCell)
-        {
-            sal_uInt32 nFmtIndex = (pFmt && pFmt->mbIsSet) ? pFmt->mnIndex : 0;
-            maRefCache.setCellData(nFileId, rTabName, rCell.Col(), rCell.Row(), pToken, nFmtIndex);
-        }
-
+        putCellDataIntoCache(maRefCache, pToken, nFileId, rTabName, rCell, pFmt);
         return pToken;
     }
 
@@ -1694,55 +1742,8 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     pToken = getSingleRefTokenFromSrcDoc(
         nFileId, pSrcDoc, ScAddress(rCell.Col(),rCell.Row(),nTab), pFmt);
 
-    // Now, insert the token into cache table but don't cache empty cells.
-    if (pToken->GetType() != formula::svEmptyCell)
-    {
-        nFmtIndex = (pFmt && pFmt->mbIsSet) ? pFmt->mnIndex : 0;
-        maRefCache.setCellData(nFileId, rTabName, rCell.Col(), rCell.Row(), pToken, nFmtIndex);
-    }
-
+    putCellDataIntoCache(maRefCache, pToken, nFileId, rTabName, rCell, pFmt);
     return pToken;
-}
-
-namespace {
-
-/**
- * Put the data into our internal cache table.
- *
- * @param rRefCache cache table set.
- * @param pArray single range data to be returned.
- * @param nFileId external file ID
- * @param rTabName name of the table where the data should be cached.
- * @param rCacheData range data to be cached.
- * @param rCacheRange original cache range, including the empty region if
- *                    any.
- * @param rDataRange reduced cache range that includes only the non-empty
- *                   data area.
- */
-void putRangeDataIntoCache(
-    ScExternalRefCache& rRefCache, ScExternalRefCache::TokenArrayRef& pArray,
-    sal_uInt16 nFileId, const String& rTabName,
-    const vector<ScExternalRefCache::SingleRangeData>& rCacheData,
-    const ScRange& rCacheRange, const ScRange& rDataRange)
-{
-    if (pArray)
-        // Cache these values.
-        rRefCache.setCellRangeData(nFileId, rDataRange, rCacheData, pArray);
-    else
-    {
-        // Array is empty.  Fill it with an empty matrix of the required size.
-        pArray.reset(lcl_fillEmptyMatrix(rCacheRange));
-
-        // Make sure to set this range 'cached', to prevent unnecessarily
-        // accessing the src document time and time again.
-        ScExternalRefCache::TableTypeRef pCacheTab =
-            rRefCache.getCacheTable(nFileId, rTabName, true, NULL);
-        if (pCacheTab)
-            pCacheTab->setCachedCellRange(
-                rCacheRange.aStart.Col(), rCacheRange.aStart.Row(), rCacheRange.aEnd.Col(), rCacheRange.aEnd.Row());
-    }
-}
-
 }
 
 ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
