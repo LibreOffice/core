@@ -29,11 +29,12 @@
 #ifndef SC_PREVLOC_HXX
 #define SC_PREVLOC_HXX
 
-#include "address.hxx"
-#include <tools/list.hxx>
-#include <vcl/mapmod.hxx>
-#include <sal/types.h>
+#include <boost/ptr_container/ptr_list.hpp>
 
+#include <sal/types.h>
+#include <vcl/mapmod.hxx>
+
+#include "address.hxx"
 
 #define SC_PREVIEW_MAXRANGES    4
 #define SC_PREVIEW_RANGE_EDGE   0
@@ -48,6 +49,7 @@ class Rectangle;
 class ScAddress;
 class ScRange;
 class ScDocument;
+class ScPreviewLocationEntry;
 
 struct ScPreviewColRowInfo
 {
@@ -100,7 +102,7 @@ class ScPreviewLocationData
         sal_uInt8       aDrawRangeId[SC_PREVIEW_MAXRANGES];
     USHORT      nDrawRanges;
     SCTAB       nPrintTab;
-    List        aEntries;
+    boost::ptr_list<ScPreviewLocationEntry> aEntries;
 
     Rectangle   GetOffsetPixel( const ScAddress& rCellPos, const ScRange& rRange ) const;
 
