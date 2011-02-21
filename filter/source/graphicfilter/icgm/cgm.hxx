@@ -49,7 +49,6 @@
 
 // ---------------------------------------------------------------
 
-class   List;
 class   Bundle;
 class   Graphic;
 class   SvStream;

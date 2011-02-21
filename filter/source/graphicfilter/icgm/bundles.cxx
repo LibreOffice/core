@@ -33,7 +33,6 @@
 
 #include <vcl/salbtype.hxx>
 #include <tools/stream.hxx>
-#include <tools/list.hxx>
 
 Bundle& Bundle::operator=( Bundle& rSource )
 {
