@@ -31,7 +31,6 @@
 
 #include "controller/SlsSlideFunction.hxx"
 #include "model/SlsSharedPageDescriptor.hxx"
-#include <tools/list.hxx>
 #include <memory>
 
 class SdSlideViewShell;
