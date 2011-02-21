@@ -1602,7 +1602,7 @@ namespace {
 void putCellDataIntoCache(
     ScExternalRefCache& rRefCache, const ScExternalRefCache::TokenRef& pToken,
     sal_uInt16 nFileId, const String& rTabName, const ScAddress& rCell,
-    ScExternalRefCache::CellFormat* pFmt)
+    const ScExternalRefCache::CellFormat* pFmt)
 {
     // Now, insert the token into cache table but don't cache empty cells.
     if (pToken->GetType() != formula::svEmptyCell)
