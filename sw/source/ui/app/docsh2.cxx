@@ -74,8 +74,8 @@
 #include <swunodef.hxx>
 #include <fmtcol.hxx>
 #include <swevent.hxx>
-#include <view.hxx>         // fuer die aktuelle Sicht
-#include <docsh.hxx>        // Dokumenterzeugung
+#include <view.hxx>         // for the current view
+#include <docsh.hxx>        // creation of documents
 #include <wrtsh.hxx>
 #include <fldbas.hxx>
 #include <viewopt.hxx>
@@ -132,19 +132,19 @@ using namespace ::sfx2;
 extern BOOL FindPhyStyle( SwDoc& , const String& , SfxStyleFamily );
 
 /*--------------------------------------------------------------------
-    Beschreibung:   DocInfo kreieren (virtuell)
+    Description:    create DocInfo (virtual)
  --------------------------------------------------------------------*/
 
 SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
                                 Window *pParent, const SfxItemSet &rSet)
 {
     SfxDocumentInfoDialog* pDlg = new SfxDocumentInfoDialog(pParent, rSet);
-    //nur mit Statistik, wenn dieses Doc auch angezeigt wird, nicht
-    //aus dem Doc-Manager
+    //only with statistics, when this document is being shown, not
+    //from within the Doc-Manager
     SwDocShell* pDocSh = (SwDocShell*) SfxObjectShell::Current();
     if( pDocSh == this )
     {
-        //Nicht fuer SourceView.
+        //Not for SourceView.
         SfxViewShell *pVSh = SfxViewShell::Current();
         if ( pVSh && !pVSh->ISA(SwSrcView) )
         {
@@ -157,7 +157,7 @@ SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
 }
 
 
-/// update text fields on document properties changes
+// update text fields on document properties changes
 void SwDocShell::DoFlushDocInfo()
 {
     if ( !pDoc ) return;
@@ -199,7 +199,7 @@ void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVBAEventP
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Benachrichtigung bei geaenderter DocInfo
+    Description: Notification on DocInfo changes
  --------------------------------------------------------------------*/
 
 void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -216,7 +216,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     USHORT nAction = 0;
     if( rHint.ISA(SfxSimpleHint) )
     {
-        // swithc for more actions
+        // switch for more actions
         switch( ((SfxSimpleHint&) rHint).GetId() )
         {
             case SFX_HINT_TITLECHANGED:
@@ -282,14 +282,14 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Benachrichtigung Doc schliessen
+    Description:    Notification Close Doc
  --------------------------------------------------------------------*/
 
 USHORT SwDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 {
     USHORT nRet = SfxObjectShell::PrepareClose( bUI, bForBrowsing );
 
-    if( TRUE == nRet ) //Unbedingt auf TRUE abfragen! (RET_NEWTASK)
+    if( TRUE == nRet ) //has to be queried against TRUE! (RET_NEWTASK)
         EndListening( *this );
 
     if( pDoc && IsInPrepareClose() )
@@ -306,17 +306,17 @@ USHORT SwDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Organizer
+    Description:    Organizer
  --------------------------------------------------------------------*/
 
 BOOL SwDocShell::Insert( SfxObjectShell &rSource,
-    USHORT  nSourceIdx1,        // SourcePool: oberste Inhaltsebene (Vorlagen/Makros)
-    USHORT  nSourceIdx2,        // Index in den Inhalt
-    USHORT  nSourceIdx3,        // Index in die Inhaltsebene
-    USHORT &rIdx1,              // und das gleiche fuer den DestinationPool
+    USHORT  nSourceIdx1,        // SourcePool: uppermost content level (templates/macros)
+    USHORT  nSourceIdx2,        // Index in the content
+    USHORT  nSourceIdx3,        // Index in the content level
+    USHORT &rIdx1,              // and the same for the DestinationPool
     USHORT &rIdx2,              //      ""
     USHORT &rIdx3,              //      ""
-    USHORT &rRemovedIdx )       // falls doppelte geloescht werden, Pos zurueck
+    USHORT &rRemovedIdx )       // if doubles are being deleted, Pos back
 {
     // --> OD 2005-05-10 #i48949# - actions aren't undoable. Thus, allow no undo
     // actions
@@ -336,22 +336,22 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
         SwDocStyleSheetPool* pMyPool =
             (SwDocStyleSheetPool*)GetStyleSheetPool();
 
-        //  wir koennen nicht in uns selbst hin und her moven
+        // we can't move back and forth within ourselves
         if( pHisPool == pMyPool )
             return FALSE;
 
         if( INDEX_IGNORE == rIdx2 )
             rIdx2 = pMyPool->Count();
 
-        // erstmal auf die Such-Maske "positionieren"
+        // firstly "position" to the search-mask
         pHisPool->First();
         SfxStyleSheetBase* pHisSheet = (*pHisPool)[nSourceIdx2];
 
-        // wenn so eine Vorlage schon existiert: loeschen!
+        // when such a template already exists: delete!
         const String& rOldName = pHisSheet->GetName();
         SfxStyleFamily eOldFamily( pHisSheet->GetFamily() );
 
-        // dflt. PageDesc und StandardZeichenvorlage nie loeschen !!!
+        // never delete default PageDesc and Standard Charactertemplate !!!
         if( ( SFX_STYLE_FAMILY_PAGE == eOldFamily &&
               const_cast<const SwDoc *>(pDoc)->GetPageDesc(0).GetName() ==
               rOldName ) ||
@@ -366,20 +366,20 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
         SfxStyleSheetBase* pExist;
         if( ::FindPhyStyle( *pDoc, rOldName, eOldFamily ) )
         {
-            // Bug 20365: nur uebernehmen, wenn das gewuenscht ist!
+            // Bug 20365: only take over, if desired!
             if( ERRCODE_BUTTON_OK != ErrorHandler::HandleError(
                 *new MessageInfo( ERRCODE_SFXMSG_STYLEREPLACE, rOldName )) )
             {
                 return FALSE;
             }
 
-            // Da Replace den aStyleSheet-Member selbst benoetigt, muss
-            // das Ergebnis vom Find kopiert werden (s.u.))
+            // Because Replace needs the aStyleSheet-Member itself, the result
+            // has to be copied from Find (see below))
             rtl::Reference< SwDocStyleSheet > xExist( new SwDocStyleSheet(
                     *(SwDocStyleSheet*)pMyPool->Find( rOldName, eOldFamily ) ) );
             pMyPool->Replace( *pHisSheet, *xExist.get() );
 
-            // An der Reihenfolge der Vorlagen im Pool aendert sich nichts.
+            // The ordering of the templates in the Pool nothing is changed.
             rIdx2 = rIdx1 = INDEX_IGNORE;
 
             GetDoc()->SetModified();
@@ -389,34 +389,32 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
 
         pMyPool->SetSearchMask( eOldFamily, nMySrchMask );
 
-        // MIB 18.12.98: SwDocStyleSheetPool::Make liefert einen
-        // Pointer auf SwDocStyleSheetPool::aStyleSheet zurueck.
-        // Der gleiche Member von SwDocStyleSheetPool::Find benutzt.
-        // Deshalb muss hier mit einer Kopie gearbeitet werden.
-        // Vorsicht: SfxStyleSheetBase::SetFollow ruft seinerseits
-        // ein SwDocStyleSheetPool::Find auf, do dass es nicht genuegt
-        // die Find-Aufrufe in dieser Methode zu eleminieren.
+        // MIB 18.12.98: SwDocStyleSheetPool::Make returns a pointer to
+        // SwDocStyleSheetPool::aStyleSheet that uses same members of
+        // SwDocStyleSheetPool::Find. Therefore a copy has to be used
+        // here. Attention: SfxStylessheetBase::SetFollow calls itself
+        // a SwDocStyleSheetBase::Find, so that it's not sufficiant to
+        // to eliminate the Find-calls in this method.
 
         rtl::Reference< SwDocStyleSheet > xNewSheet( new SwDocStyleSheet( (SwDocStyleSheet&)pMyPool
                 ->Make(rOldName, eOldFamily, pHisSheet->GetMask() ) ) );
         if( SFX_STYLE_FAMILY_PAGE == eOldFamily && rSource.ISA(SwDocShell) )
         {
-            // gesondert behandeln!!
+            // to deal with seperately!!
             SwPageDesc* pDestDsc = (SwPageDesc*)xNewSheet->GetPageDesc();
             SwPageDesc* pCpyDsc = (SwPageDesc*)((SwDocStyleSheet*)pHisSheet)->GetPageDesc();
             pDoc->CopyPageDesc( *pCpyDsc, *pDestDsc );
         }
         else
-            // die neue Vorlage mit den Attributen fuellen
+            // populate the new templates with the attributes
             xNewSheet->SetItemSet( pHisSheet->GetItemSet() );
 
         pMyPool->SetSearchMask( SFX_STYLE_FAMILY_ALL, nMySrchMask );
 
         if( xNewSheet->IsUserDefined() || xNewSheet->IsUsed() )
         {
-            // Benutzte und Benutzer-definierte Vorlagen werden angezeigt.
-            // Dshalb muss hier der Index der neuen Vorlage im Pool
-            // ermittelt werden.
+            // Used and User-defined templates are being showed. That's why
+            // the Index of the template in the pool has to be found out.
             pExist = pMyPool->First();
             USHORT nIdx = 0;
             while( pExist )
@@ -433,12 +431,12 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
         }
         else
         {
-            // Andere Vorlagen werden nicht angezeigt.
+            // Other templates are not being showed.
             rIdx1 = rIdx2 = INDEX_IGNORE;
         }
 
-        // wer bekommt den Neuen als Parent? wer benutzt den Neuen als Follow?
-        // (immer nur ueber die Instanziierten!!!)
+        // who gets the new one as parent? who uses the new one as Follow?
+        // (always using the instanciated!!!)
         pMyPool->SetSearchMask( eOldFamily, nMySrchMask );
         pMyPool->SetOrganizerMode( TRUE );
         SfxStyleSheetBase* pTestSheet = pMyPool->First();
@@ -448,21 +446,21 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
                 pTestSheet->HasParentSupport()        &&
                 pTestSheet->GetParent() == rOldName)
             {
-                pTestSheet->SetParent(rOldName); // Verknuepfung neu aufbauen
+                pTestSheet->SetParent(rOldName); // establish the link newly
             }
 
             if (pTestSheet->GetFamily() == eOldFamily &&
                 pTestSheet->HasFollowSupport()        &&
                 pTestSheet->GetFollow() == rOldName)
             {
-                pTestSheet->SetFollow(rOldName); // Verknuepfung neu aufbauen
+                pTestSheet->SetFollow(rOldName); // establish the link newly
             }
 
             pTestSheet = pMyPool->Next();
         }
         pMyPool->SetOrganizerMode( SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
 
-        // hat der Neue einen Parent? wenn ja, mit gleichem Namen bei uns suchen
+        // does the new one have a parent? if yes, search with the same name at our place.
         if (pHisSheet->HasParentSupport())
         {
             const String& rParentName = pHisSheet->GetParent();
@@ -478,7 +476,7 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
             }
         }
 
-        // hat der Neue einen Follow? wenn ja, mit gleichem Namen bei uns suchen
+        // does the new one have a Follow? if yes, search with the same name at our place.
         if (pHisSheet->HasFollowSupport())
         {
             const String& rFollowName = pHisSheet->GetFollow();
@@ -494,10 +492,10 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
             }
         }
 
-        // Bug 27347: alte Einstellung wieder setzen
+        // Bug 27347: set old settings again
         pMyPool->SetSearchMask( eMyOldFamily, nMySrchMask );
 
-        // Model geaendert
+        // Model changed
         OSL_ENSURE(pDoc, "Doc missing");
         GetDoc()->SetModified();
 
@@ -526,10 +524,10 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Vorlagen Remove
+    Description:    template Remove
  --------------------------------------------------------------------*/
 
-BOOL SwDocShell::Remove(USHORT nIdx1,       // siehe Insert
+BOOL SwDocShell::Remove(USHORT nIdx1,       // see Insert
                         USHORT nIdx2,
                         USHORT nIdx3)
 {
@@ -539,13 +537,13 @@ BOOL SwDocShell::Remove(USHORT nIdx1,       // siehe Insert
     {
         SwDocStyleSheetPool* pMyPool = (SwDocStyleSheetPool*)GetStyleSheetPool();
 
-        pMyPool->First();       // vorm Zugriff Pool aktualisieren!!
+        pMyPool->First();       // update Pool before access!!
         SfxStyleSheetBase* pMySheet = (*pMyPool)[nIdx2];
 
         String aName( pMySheet->GetName() );
         SfxStyleFamily eFamily( pMySheet->GetFamily() );
 
-        // dflt. PageDesc und StandardZeichenvorlage nie loeschen !!!
+        // never delete default PageDesc and Standard Character template!!!
         if( ( SFX_STYLE_FAMILY_PAGE == eFamily &&
               const_cast<const SwDoc *>(pDoc)->GetPageDesc(0).GetName()
               == aName ) ||
@@ -554,10 +552,10 @@ BOOL SwDocShell::Remove(USHORT nIdx1,       // siehe Insert
                                                 RES_POOLCOLL_TEXT_BEGIN ] ))
             return FALSE;
 
-        // also loeschen
+        // so delete
         pMyPool->Remove( pMySheet );
 
-        // jetzt noch die Parents/Follows aller Instanziierten korrigieren
+        // now correct the Parents/Follows of all instanciated
         pMyPool->SetOrganizerMode( TRUE );
         SfxStyleSheetBase* pTestSheet = pMyPool->First();
         while (pTestSheet)
@@ -566,14 +564,14 @@ BOOL SwDocShell::Remove(USHORT nIdx1,       // siehe Insert
                 pTestSheet->HasParentSupport()     &&
                 pTestSheet->GetParent() == aName)
             {
-                pTestSheet->SetParent( aEmptyStr ); // Verknuepfung aufloesen
+                pTestSheet->SetParent( aEmptyStr ); // resolve link
             }
 
             if (pTestSheet->GetFamily() == eFamily &&
                 pTestSheet->HasFollowSupport()        &&
                 pTestSheet->GetFollow() == aName)
             {
-                pTestSheet->SetFollow( aEmptyStr ); // Verknuepfung aufloesen
+                pTestSheet->SetFollow( aEmptyStr ); // resolve link
             }
 
             pTestSheet = pMyPool->Next();
@@ -698,9 +696,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     bSet = !bCurrent;
 
                 USHORT nSlotId = 0;
-                if( bSet && !bFound )   // Keine gefunden, daher neue Preview anlegen
+                if( bSet && !bFound )   // Nothing found, so create new Preview
                 {
-                    //Keine neue anlegen fuer BrowseView!
+                    // Don't create new one for BrowseView!
                     if( !GetDoc()->get(IDocumentSettingAccess::BROWSE_MODE) )
                         nSlotId = SID_VIEWSHELL1;
                 }
@@ -898,7 +896,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     OSL_ENSURE(bWeb == TRUE, "SourceView only in WebDocShell");
                 }
 #endif
-                // die SourceView ist fuer die SwWebDocShell die 1
+                // the SourceView is not the 1 for SwWebDocShell
                 USHORT nSlot = SID_VIEWSHELL1;
                 BOOL bSetModified = FALSE;
                 SfxPrinter* pSavePrinter = 0;
@@ -935,7 +933,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if(pSavePrinter)
                 {
                     GetDoc()->setPrinter( pSavePrinter, true, true);
-                    //pSavePrinter darf nicht wieder geloescht werden
+                    //pSavePrinter must not be deleted again
                 }
                 pViewFrm->GetBindings().SetState(SfxBoolItem(SID_SOURCEVIEW, nSlot == SID_VIEWSHELL2));
                 pViewFrm->GetBindings().Invalidate( SID_BROWSER_MODE );
@@ -1015,11 +1013,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 }
                 else
                 {
-                    // Neues Dokument erzeugen.
+                    // Create new document
                     SfxViewFrame *pFrame = SfxViewFrame::LoadDocument( *xDocSh, 0 );
                     SwView      *pCurrView = (SwView*) pFrame->GetViewShell();
 
-                    // Dokumenttitel setzen
+                    // Set document's title
                     String aTmp( SW_RES(STR_ABSTRACT_TITLE) );
                     aTmp += GetTitle();
                     xDocSh->SetTitle( aTmp );
@@ -1105,7 +1103,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             break;
 
             case SID_BROWSER_MODE:
-            case FN_PRINT_LAYOUT:   //Fuer Web, genau umgekehrt zum BrowserMode
+            case FN_PRINT_LAYOUT:   // for Web, inverse to BrowserMode
             {
                 int eState = STATE_TOGGLE;
                 BOOL bSet = sal_True;
@@ -1123,7 +1121,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 ToggleBrowserMode(bSet, 0);
 
-                // OS: numerische Reihenfolge beachten!
+                // OS: mind the numerical order!
                 static USHORT const aInva[] =
                                     {
                                         SID_NEWWINDOW,/*5620*/
@@ -1217,7 +1215,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                     if( bCreateHtml )
                     {
-                        // fuer HTML gibts es nur einen Filter!!
+                        // for HTML there is only one filter!!
                         pFlt = SwIoSystem::GetFilterOfFormat(
                                 String::CreateFromAscii("HTML"),
                                 SwWebDocShell::Factory().GetFilterContainer() );
@@ -1225,8 +1223,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     }
                     else
                     {
-                        // Fuer Global-Dokumente bieten wir jetzt auch nur
-                        // noch den aktuellen an.
+                        // for Global-documents we now only offer the current one.
                         pFlt = SwGlobalDocShell::Factory().GetFilterContainer()->
                                     GetFilter4Extension( String::CreateFromAscii("odm")  );
                         nStrId = STR_LOAD_GLOBAL_DOC;
@@ -1406,7 +1403,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             {
                 OSL_ENSURE(pItem->ISA(SfxUInt16Item), "wrong Item");
                 USHORT nYear2K = ((SfxUInt16Item*)pItem)->GetValue();
-                //ueber Views iterieren und den State an den FormShells setzen
+                // iterate over Views and put the State to FormShells
 
                 SfxViewFrame* pVFrame = SfxViewFrame::GetFirst( this );
                 SfxViewShell* pViewShell = pVFrame ? pVFrame->GetViewShell() : 0;
@@ -1540,7 +1537,7 @@ void SwDocShell::SetModified( BOOL bSet )
 
 void SwDocShell::UpdateChildWindows()
 {
-    // Flddlg ggf neu initialisieren (z.B. fuer TYP_SETVAR)
+    // if necessary newly initialize Flddlg (i.e. for TYP_SETVAR)
     if(!GetView())
         return;
     SfxViewFrame* pVFrame = GetView()->GetViewFrame();
@@ -1549,7 +1546,7 @@ void SwDocShell::UpdateChildWindows()
     if( pWrp )
         pWrp->ReInitDlg( this );
 
-    // RedlineDlg ggf neu initialisieren
+    // if necessary newly initialize RedlineDlg
     SwRedlineAcceptChild *pRed = (SwRedlineAcceptChild*)pVFrame->
             GetChildWindow( SwRedlineAcceptChild::GetChildWindowId() );
     if( pRed )
@@ -1573,18 +1570,18 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
 {
     BOOL bModified = IsModified();
 
-    // MIB 23.6.97: Die HTTP-Header-Felder muessen geloescht werden,
-    // sonst gibt es welche aus Meta-Tags hinter doppelt und dreifach.
+    // MIB 23.6.97: The HTTP-Header fields have to be removed, otherwise
+    // there are some from Meta-Tags dublicated or triplicated afterwards.
     ClearHeaderAttributesForSourceViewHack();
 
-    // MIB 24.07.97: Das Dokument-Basic muss auch noch d'ran glauben ...
-    // Ein EnterBasicCall braucht man hier nicht, weil man nichts ruft und
-    // in HTML-Dokument kein Dok-Basic vorhanden sein kann, das noch nicht
-    // geladen wurde.
+    // MIB 24.07.97: The Document-Basic also bites the dust ...
+    // A EnterBasicCall is not needed here, because nothing is called and
+    // there can't be any Dok-Basic, that has not yet been loaded inside
+    // of an HTML document.
     SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
-    //#59620# HasBasic() zeigt an, dass es schon einen BasicManager an der DocShell
-    //          gibt. Der wurde im HTML-Import immer angelegt, wenn Macros im Quelltext
-    //          vorhanden sind.
+    //#59620# HasBasic() shows, that there already is a BasicManager at the DocShell.
+    //          That was always generated in HTML-Import, when there are
+    //          Macros in the source code.
     if( pHtmlOptions && pHtmlOptions->IsStarBasic() && HasBasic())
     {
         BasicManager *pBasicMan = GetBasicManager();
@@ -1596,7 +1593,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
                 StarBASIC *pBasic = pBasicMan->GetLib( --nLibCount );
                 if( pBasic )
                 {
-                    // Die IDE benachrichtigen
+                    // Notify the IDE
                     SfxUsrAnyItem aShellItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, makeAny( GetModel() ) );
                     String aLibName( pBasic->GetName() );
                     SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
@@ -1605,7 +1602,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
                                             SFX_CALLMODE_SYNCHRON,
                                             &aShellItem, &aLibNameItem, 0L );
 
-                    // Aus der Standard-Lib werden nur die Module geloescht
+                    // Only the modules are deleted from the standard-lib
                     if( nLibCount )
                         pBasicMan->RemoveLib( nLibCount, TRUE );
                     else
@@ -1620,7 +1617,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     sal_Bool bWasBrowseMode = pDoc->get(IDocumentSettingAccess::BROWSE_MODE);
     RemoveLink();
 
-    //jetzt muss auch das UNO-Model ueber das neue Doc informiert werden #51535#
+    // now also the UNO-Model has to be informed about the new Doc #51535#
     uno::Reference<text::XTextDocument> xDoc(GetBaseModel(), uno::UNO_QUERY);
     text::XTextDocument* pxDoc = xDoc.get();
     ((SwXTextDocument*)pxDoc)->InitNewDoc();
@@ -1634,8 +1631,8 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
 
     const String& rMedname = GetMedium()->GetName();
 
-    // fix #51032#: Die HTML-Vorlage muss noch gesetzt werden
-    SetHTMLTemplate( *GetDoc() );   //Styles aus HTML.vor
+    // fix #51032#: The HTML template still has to be set
+    SetHTMLTemplate( *GetDoc() );   //Styles from HTML.vor
 
     SfxViewShell* pViewShell = GetView() ? (SfxViewShell*)GetView()
                                          : SfxViewShell::Current();
@@ -1664,9 +1661,9 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     }
 
 
-    // MIB 23.6.97: Die HTTP-Header-Attribute wieder in die DokInfo
-    // uebernehmen. Die Base-URL ist hier egal, da TLX zum absolutieren die
-    // vom Dokument nimmt.
+    // MIB 23.6.97: take HTTP-Header-Attibutes over into the DokInfo again.
+    // The Base-URL doesn't matter here because TLX uses the one from the document
+    // for absolutization.
     SetHeaderAttributesForSourceViewHack();
 
     if(bModified && !IsReadOnly())
@@ -1756,7 +1753,7 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     SwReader* pReader = 0;
     SwPaM* pPam = 0;
 
-    // Filter bestimmen:
+    // Set filter:
     String sFactory(String::CreateFromAscii(SwDocShell::Factory().GetShortName()));
     SfxFilterMatcher aMatcher( sFactory );
 
