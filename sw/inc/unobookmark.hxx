@@ -236,10 +236,9 @@ class SwXFieldmark
     : public SwXFieldmark_Base
 {
 
-private:
+protected:
 
     bool isReplacementObject;
-
 public:
 
     static ::com::sun::star::uno::Reference<
@@ -263,6 +262,22 @@ public:
 
 };
 
+class SwXODFCheckboxField : public SwXFieldmark
+{
+public:
+    SwXODFCheckboxField( ::sw::mark::IMark* pBkm = 0, SwDoc* pDoc = 0) : SwXFieldmark(true,
+            pBkm, pDoc) {}
+
+    virtual void SAL_CALL setPropertyValue(
+            const ::rtl::OUString& rPropertyName,
+            const ::com::sun::star::uno::Any& rValue)
+        throw (::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::beans::PropertyVetoException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
+
+};
 #endif // SW_UNOBOOKMARK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

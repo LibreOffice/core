@@ -617,6 +617,7 @@ IFieldmark::parameter_map_t* SwXFieldmarkParameters::getCoreParameters()
 void SwXFieldmark::attachToRange( const uno::Reference < text::XTextRange >& xTextRange )
     throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
+
     attachToRangeEx( xTextRange,
                      ( isReplacementObject ? IDocumentMarkAccess::CHECKBOX_FIELDMARK : IDocumentMarkAccess::TEXT_FIELDMARK ) );
 }
@@ -675,6 +676,29 @@ SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark & rMark)
         pXBkmk->registerInMark(*pXBkmk, pMarkBase);
     }
     return xMark;
+}
+
+void SAL_CALL
+SwXODFCheckboxField::setPropertyValue(const OUString& PropertyName,
+        const uno::Any& rValue)
+throw (beans::UnknownPropertyException, beans::PropertyVetoException,
+    lang::IllegalArgumentException, lang::WrappedTargetException,
+    uno::RuntimeException)
+{
+    if ( PropertyName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Checked") ) ) )
+    {
+        const ::sw::mark::ICheckboxFieldmark* pCheckboxFm = dynamic_cast< const ::sw::mark::ICheckboxFieldmark* >( GetBookmark());
+        sal_Bool bChecked( sal_False );
+        if ( pCheckboxFm && ( rValue >>= bChecked ) )
+        {
+            // evil #TODO #FIXME
+            ((::sw::mark::ICheckboxFieldmark*)(pCheckboxFm))->SetChecked( bChecked );
+        }
+        else
+            throw uno::RuntimeException();
+    }
+    else
+        throw  lang::IllegalArgumentException();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

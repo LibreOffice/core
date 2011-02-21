@@ -399,6 +399,8 @@ const ProvNamesId_Type aProvNamesId[] =
     { "ooo.vba.VBAObjectModuleObjectProvider",                SW_SERVICE_VBAOBJECTPROVIDER },
     { "ooo.vba.VBACodeNameProvider",                          SW_SERVICE_VBACODENAMEPROVIDER },
     { "ooo.vba.VBAProjectNameProvider",                       SW_SERVICE_VBAPROJECTNAMEPROVIDER },
+    { "com.sun.star.text.FormFieldmark.ODFFormCheckbox",                    SW_SERVICE_ODF_FORM_CHECKBOX },
+    { "com.sun.star.text.FormFieldmark.ODFFormListbox",                     SW_SERVICE_ODF_FORM_LISTBOX },
     { "ooo.vba.VBAGlobals",                       SW_SERVICE_VBAGLOBALS },
 
     // case-correct versions of the service names (see #i67811)
@@ -561,6 +563,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
             xRet =  (cppu::OWeakObject*)pFieldmark;
         }
         break;
+        case  SW_SERVICE_ODF_FORM_LISTBOX:
         case  SW_SERVICE_TYPE_FORMFIELDMARK :
         {
             SwXFieldmark* pFieldmark = new SwXFieldmark(true);
@@ -834,6 +837,12 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         break;
         case SW_SERVICE_FIELDTYPE_METAFIELD:
             xRet = static_cast< ::cppu::OWeakObject* >(new SwXMetaField(pDoc));
+        break;
+        case SW_SERVICE_ODF_FORM_CHECKBOX:
+        {
+            SwXFieldmark* pFormCheckbox = new SwXODFCheckboxField();
+            xRet =  (cppu::OWeakObject*)pFormCheckbox;
+        }
         break;
         default:
             throw uno::RuntimeException();
