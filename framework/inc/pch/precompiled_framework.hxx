@@ -370,7 +370,6 @@
 #include "rtl/ustring.hxx"
 
 #include "sal/alloca.h"
-#include "sal/main.h"
 
 #include "salhelper/simplereferenceobject.hxx"
 #include "salhelper/singletonref.hxx"
