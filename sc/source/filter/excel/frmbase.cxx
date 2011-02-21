@@ -29,29 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-
 #include "formel.hxx"
 
-
-
-
-_ScRangeList::~_ScRangeList()
-{
-    ScRange*    p = ( ScRange* ) First();
-
-    while( p )
-    {
-        delete p;
-        p = ( ScRange* ) Next();
-    }
-}
-
-
-
-
-_ScRangeListTabs::_ScRangeListTabs( void )
+_ScRangeListTabs::_ScRangeListTabs()
 {
     ppTabLists = new _ScRangeList*[ MAXTAB + 1 ];
 
@@ -62,7 +42,6 @@ _ScRangeListTabs::_ScRangeListTabs( void )
     pAct = NULL;
     nAct = 0;
 }
-
 
 _ScRangeListTabs::~_ScRangeListTabs()
 {
@@ -111,10 +90,9 @@ void _ScRangeListTabs::Append( ScSingleRefData a, SCsTAB nTab, const BOOL b )
         if( !p )
             p = ppTabLists[ nTab ] = new _ScRangeList;
 
-        p->Append( a );
+        p->push_back(new ScRange(a.nCol,a.nRow,a.nTab));
     }
 }
-
 
 void _ScRangeListTabs::Append( ScComplexRefData a, SCsTAB nTab, const BOOL b )
 {
@@ -166,6 +144,7 @@ void _ScRangeListTabs::Append( ScComplexRefData a, SCsTAB nTab, const BOOL b )
 
     if( nTab == SCTAB_MAX)
         return;
+
     if( nTab < -1)
         nTab = a.Ref1.nTab;
 
@@ -176,10 +155,10 @@ void _ScRangeListTabs::Append( ScComplexRefData a, SCsTAB nTab, const BOOL b )
         if( !p )
             p = ppTabLists[ nTab ] = new _ScRangeList;
 
-        p->Append( a );
+        p->push_back(new ScRange(a.Ref1.nCol,a.Ref1.nRow,a.Ref1.nTab,
+                                 a.Ref2.nCol,a.Ref2.nRow,a.Ref2.nTab));
     }
 }
-
 
 const ScRange* _ScRangeListTabs::First( const UINT16 n )
 {
@@ -189,27 +168,25 @@ const ScRange* _ScRangeListTabs::First( const UINT16 n )
     {
         pAct = ppTabLists[ n ];
         nAct = n;
-        return pAct->First();
+        pAct->iterCur = pAct->begin();
+        return &(*(pAct->iterCur));
     }
-    else
-    {
-        pAct = NULL;
-        nAct = 0;
-        return NULL;
-    }
+
+    pAct = NULL;
+    nAct = 0;
+    return NULL;
 }
 
-
-const ScRange* _ScRangeListTabs::Next( void )
+const ScRange* _ScRangeListTabs::Next ()
 {
     if( pAct )
-        return pAct->Next();
-    else
-        return NULL;
+    {
+        ++pAct->iterCur;
+        return &(*(pAct->iterCur));
+    }
+
+    return NULL;
 }
-
-
-
 
 ConverterBase::ConverterBase( UINT16 nNewBuffer ) :
     aEingPos( 0, 0, 0 ),

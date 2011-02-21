@@ -29,26 +29,22 @@
 #ifndef SC_FORMEL_HXX
 #define SC_FORMEL_HXX
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <tools/solar.h>
 #include <tools/string.hxx>
-#include "tokstack.hxx"
-#include "root.hxx"
-#include <global.hxx>
+
 #include <compiler.hxx>
+#include <global.hxx>
 
-
-// ----- forwards --------------------------------------------------------
+#include "root.hxx"
+#include "tokstack.hxx"
 
 class XclImpStream;
 class ScTokenArray;
 class ScFormulaCell;
 struct ScSingleRefData;
 struct ScComplexRefData;
-
-
-
-
-//------------------------------------------------------------------------
 
 enum ConvErr
 {
@@ -59,7 +55,6 @@ enum ConvErr
     ConvErrCount    // Nicht alle Bytes der Formel 'erwischt'
 };
 
-
 enum FORMULA_TYPE
 {
     FT_CellFormula,
@@ -67,115 +62,34 @@ enum FORMULA_TYPE
     FT_SharedFormula
 };
 
-
-
-
-//--------------------------------------------------------- class ScRangeList -
-
-class _ScRangeList : protected List
-{
-private:
-protected:
-public:
-    virtual                 ~_ScRangeList();
-    inline void             Append( const ScRange& rRange );
-    inline void             Append( ScRange* pRange );
-    inline void             Append( const ScSingleRefData& rSRD );
-    inline void             Append( const ScComplexRefData& rCRD );
-
-    using                   List::Count;
-    inline BOOL             HasRanges( void ) const;
-
-    inline const ScRange*   First( void );
-    inline const ScRange*   Next( void );
-};
-
-
-inline void _ScRangeList::Append( const ScRange& r )
-{
-    List::Insert( new ScRange( r ), LIST_APPEND );
-}
-
-
-inline void _ScRangeList::Append( ScRange* p )
-{
-    List::Insert( p, LIST_APPEND );
-}
-
-
-inline BOOL _ScRangeList::HasRanges( void ) const
-{
-    return Count() > 0;
-}
-
-
-inline const ScRange* _ScRangeList::First( void )
-{
-    return ( const ScRange* ) List::First();
-}
-
-
-inline const ScRange* _ScRangeList::Next( void )
-{
-    return ( const ScRange* ) List::Next();
-}
-
-
-inline void _ScRangeList::Append( const ScSingleRefData& r )
-{
-    List::Insert( new ScRange( r.nCol, r.nRow, r.nTab ), LIST_APPEND );
-}
-
-
-inline void _ScRangeList::Append( const ScComplexRefData& r )
-{
-    List::Insert(   new ScRange(    r.Ref1.nCol, r.Ref1.nRow, r.Ref1.nTab,
-                                    r.Ref2.nCol, r.Ref2.nRow, r.Ref2.nTab ),
-                    LIST_APPEND );
-}
-
-
-
-
-//----------------------------------------------------- class ScRangeListTabs -
-
 class _ScRangeListTabs
 {
-private:
-protected:
+    struct _ScRangeList : public boost::ptr_vector<ScRange>
+    {
+        iterator iterCur;
+    };
+
     BOOL                        bHasRanges;
     _ScRangeList**              ppTabLists;
     _ScRangeList*               pAct;
     UINT16                      nAct;
+
 public:
-                                _ScRangeListTabs( void );
-    virtual                     ~_ScRangeListTabs();
 
-    void                        Append( ScSingleRefData aSRD, SCsTAB nTab, const BOOL bLimit = TRUE );
-    void                        Append( ScComplexRefData aCRD, SCsTAB nTab, const BOOL bLimit = TRUE );
+    _ScRangeListTabs ();
 
-    inline BOOL                 HasRanges( void ) const;
+    ~_ScRangeListTabs();
 
-    const ScRange*              First( const UINT16 nTab = 0 );
-    const ScRange*              Next( void );
-//      const ScRange*              NextContinue( void );
-    inline const _ScRangeList*  GetActList( void ) const;
+    void Append( ScSingleRefData aSRD, SCsTAB nTab, const BOOL bLimit = TRUE );
+    void Append( ScComplexRefData aCRD, SCsTAB nTab, const BOOL bLimit = TRUE );
+
+    const ScRange* First ( const UINT16 nTab = 0 );
+    const ScRange* Next ();
+
+    inline bool HasRanges () const { return bHasRanges; }
+
+    inline bool HasActList () const { return pAct != NULL; }
 };
-
-
-inline BOOL _ScRangeListTabs::HasRanges( void ) const
-{
-    return bHasRanges;
-}
-
-
-inline const _ScRangeList* _ScRangeListTabs::GetActList( void ) const
-{
-    return pAct;
-}
-
-
-
 
 class ConverterBase
 {
