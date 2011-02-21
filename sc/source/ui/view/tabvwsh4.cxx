@@ -1416,7 +1416,6 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
                     bIsType = !bControl && !bAlt;       // ohne Modifier oder Shift-Space
                     break;
                 case KEY_ESCAPE:
-                case KEY_BACKSPACE:
                     bIsType = (nModi == 0); // nur ohne Modifier
                     break;
                 default:
