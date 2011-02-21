@@ -36,10 +36,11 @@
 #include <cacheddynamicresultset.hxx>
 #include <cacheddynamicresultsetstub.hxx>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
+
+using ::rtl::OUString;
 
 //=========================================================================
 static sal_Bool writeInfo( void * pRegistryKey,

@@ -50,7 +50,8 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace cppu;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 //=========================================================================
 

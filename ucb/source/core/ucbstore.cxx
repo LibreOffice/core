@@ -55,12 +55,14 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace cppu;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 //=========================================================================
-rtl::OUString makeHierarchalNameSegment( const rtl::OUString & rIn  )
+OUString makeHierarchalNameSegment( const OUString & rIn  )
 {
-    rtl::OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer;
     aBuffer.appendAscii( "['" );
 
     sal_Int32 nCount = rIn.getLength();
@@ -96,7 +98,7 @@ rtl::OUString makeHierarchalNameSegment( const rtl::OUString & rIn  )
     }
 
     aBuffer.appendAscii( "']" );
-    return rtl::OUString( aBuffer.makeStringAndClear() );
+    return OUString( aBuffer.makeStringAndClear() );
 }
 
 //=========================================================================
@@ -843,7 +845,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
 
                 try
                 {
-                    rtl::OUString aOldValuesKey
+                    OUString aOldValuesKey
                         = makeHierarchalNameSegment( rOldKey );
                     aOldValuesKey += OUString(RTL_CONSTASCII_USTRINGPARAM("/Values"));
 
@@ -865,7 +867,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                     sal_Int32 nCount = aElems.getLength();
                     if ( nCount )
                     {
-                        rtl::OUString aNewValuesKey
+                        OUString aNewValuesKey
                             = makeHierarchalNameSegment( rNewKey );
                         aNewValuesKey += OUString(RTL_CONSTASCII_USTRINGPARAM("/Values"));
 
@@ -1134,10 +1136,10 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
                 Sequence< Any > aArguments( 1 );
                 PropertyValue aProperty;
                 aProperty.Name
-                    = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    = OUString( RTL_CONSTASCII_USTRINGPARAM(
                                             CFGPROPERTY_NODEPATH ) );
                 aProperty.Value
-                    <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                    <<= OUString( RTL_CONSTASCII_USTRINGPARAM(
                                             STORE_CONTENTPROPERTIES_KEY ) );
                 aArguments[ 0 ] <<= aProperty;
 
@@ -1718,7 +1720,7 @@ OUString SAL_CALL PersistentPropertySet::getKey()
 //=========================================================================
 
 // virtual
-rtl::OUString SAL_CALL PersistentPropertySet::getName()
+OUString SAL_CALL PersistentPropertySet::getName()
     throw( RuntimeException )
 {
     // same as getKey()
@@ -2434,7 +2436,7 @@ const OUString& PersistentPropertySet::getFullKey()
             m_pImpl->m_aFullKey
                 = makeHierarchalNameSegment( m_pImpl->m_aKey );
             m_pImpl->m_aFullKey
-                += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/Values" ) );
+                += OUString( RTL_CONSTASCII_USTRINGPARAM( "/Values" ) );
         }
     }
 
@@ -2558,7 +2560,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                                 try
                                 {
                                     // Obtain and set property handle
-                                    rtl::OUString aHierName = aXMLName;
+                                    OUString aHierName = aXMLName;
                                     aHierName += aHandleName;
                                     Any aKeyValue
                                         = xHierNameAccess->getByHierarchicalName(
@@ -2581,7 +2583,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                                 try
                                 {
                                     // Obtain and set property type
-                                    rtl::OUString aHierName = aXMLName;
+                                    OUString aHierName = aXMLName;
                                     aHierName += aValueName;
                                     Any aKeyValue
                                         = xHierNameAccess->getByHierarchicalName(
@@ -2605,7 +2607,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                                 try
                                 {
                                     // Obtain and set property attributes
-                                    rtl::OUString aHierName = aXMLName;
+                                    OUString aHierName = aXMLName;
                                     aHierName += aAttrName;
                                     Any aKeyValue
                                         = xHierNameAccess->getByHierarchicalName(

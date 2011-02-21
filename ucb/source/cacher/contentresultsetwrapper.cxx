@@ -45,7 +45,8 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace cppu;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
@@ -320,7 +321,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
         }
         aGuard.reacquire();
 
-        rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("ResultSetType"));
+        OUString aName(RTL_CONSTASCII_USTRINGPARAM("ResultSetType"));
         //find out, if we are ForwardOnly and cache the value:
 
         impl_init_xPropertySetOrigin();
@@ -1216,7 +1217,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 }
 
 //virtual
-rtl::OUString SAL_CALL ContentResultSetWrapper
+OUString SAL_CALL ContentResultSetWrapper
     ::getString( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException )

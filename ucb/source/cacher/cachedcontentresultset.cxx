@@ -47,7 +47,8 @@ using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace cppu;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 #define COMSUNSTARUCBCCRS_DEFAULT_FETCH_SIZE 256
 #define COMSUNSTARUCBCCRS_DEFAULT_FETCH_DIRECTION FetchDirection::FORWARD
@@ -309,7 +310,7 @@ const Any& SAL_CALL CachedContentResultSet::CCRS_Cache
     return rRow[nColumnIndex-1];
 }
 
-const rtl::OUString& SAL_CALL CachedContentResultSet::CCRS_Cache
+const OUString& SAL_CALL CachedContentResultSet::CCRS_Cache
     ::getContentIdentifierString( sal_Int32 nRow )
     throw( com::sun::star::uno::RuntimeException )
 {
@@ -318,12 +319,12 @@ const rtl::OUString& SAL_CALL CachedContentResultSet::CCRS_Cache
         if( m_xContentIdentifierMapping.is() && !isRowMapped( nRow ) )
         {
             Any& rRow = getRowAny( nRow );
-            rtl::OUString aValue;
+            OUString aValue;
             rRow >>= aValue;
             rRow <<= m_xContentIdentifierMapping->mapContentIdentifierString( aValue );
             remindMapped( nRow );
         }
-        return (* reinterpret_cast< const rtl::OUString * >
+        return (* reinterpret_cast< const OUString * >
                 (getRowAny( nRow ).getValue() ));
     }
     catch( SQLException )
@@ -396,10 +397,10 @@ class CCRS_PropertySetInfo :
                             m_pProperties;
 
     //some helping variables ( names for my special properties )
-    static rtl::OUString    m_aPropertyNameForCount;
-    static rtl::OUString    m_aPropertyNameForFinalCount;
-    static rtl::OUString    m_aPropertyNameForFetchSize;
-    static rtl::OUString    m_aPropertyNameForFetchDirection;
+    static OUString m_aPropertyNameForCount;
+    static OUString m_aPropertyNameForFinalCount;
+    static OUString m_aPropertyNameForFetchSize;
+    static OUString m_aPropertyNameForFetchDirection;
 
     long                    m_nFetchSizePropertyHandle;
     long                    m_nFetchDirectionPropertyHandle;
@@ -410,13 +411,13 @@ private:
 
     sal_Bool SAL_CALL
     impl_queryProperty(
-            const rtl::OUString& rName
+            const OUString& rName
             , com::sun::star::beans::Property& rProp ) const;
     sal_Int32 SAL_CALL
-    impl_getPos( const rtl::OUString& rName ) const;
+    impl_getPos( const OUString& rName ) const;
 
     static sal_Bool SAL_CALL
-    impl_isMyPropertyName( const rtl::OUString& rName );
+    impl_isMyPropertyName( const OUString& rName );
 
 public:
     CCRS_PropertySetInfo(   Reference<
@@ -436,11 +437,11 @@ public:
         throw( RuntimeException );
 
     virtual com::sun::star::beans::Property SAL_CALL
-    getPropertyByName( const rtl::OUString& aName )
+    getPropertyByName( const OUString& aName )
         throw( com::sun::star::beans::UnknownPropertyException, RuntimeException );
 
     virtual sal_Bool SAL_CALL
-    hasPropertyByName( const rtl::OUString& Name )
+    hasPropertyByName( const OUString& Name )
         throw( RuntimeException );
 };
 
@@ -556,7 +557,7 @@ Sequence< Property > SAL_CALL CCRS_PropertySetInfo
 
 //virtual
 Property SAL_CALL CCRS_PropertySetInfo
-    ::getPropertyByName( const rtl::OUString& aName )
+    ::getPropertyByName( const OUString& aName )
         throw( UnknownPropertyException, RuntimeException )
 {
     if ( !aName.getLength() )
@@ -571,7 +572,7 @@ Property SAL_CALL CCRS_PropertySetInfo
 
 //virtual
 sal_Bool SAL_CALL CCRS_PropertySetInfo
-    ::hasPropertyByName( const rtl::OUString& Name )
+    ::hasPropertyByName( const OUString& Name )
         throw( RuntimeException )
 {
     return ( impl_getPos( Name ) != -1 );
@@ -1929,7 +1930,7 @@ sal_Bool SAL_CALL CachedContentResultSet
 }
 
 //virtual
-rtl::OUString SAL_CALL CachedContentResultSet
+OUString SAL_CALL CachedContentResultSet
     ::getString( sal_Int32 columnIndex )
     throw( SQLException,
            RuntimeException )
