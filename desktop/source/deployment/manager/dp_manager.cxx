@@ -647,7 +647,7 @@ OUString PackageManagerImpl::insertToActivationLayer(
     //         OUSTR("::osl::File::createTempFile() failed!"), 0 );
     //::utl::TempFile::SetTempNameBaseDirectory(m_activePackages_expanded);
     String baseDir(m_activePackages_expanded);
-    ::utl::TempFile aTemp(OUSTR("jl123"), NULL, &baseDir, sal_False);
+    ::utl::TempFile aTemp(&baseDir, sal_False);
     if (m_activePackages_expanded.getLength() == 0) {
 //        destFolder = tempEntry;
         destFolder = aTemp.GetFileName();
