@@ -54,7 +54,7 @@
 #include <basic/basrdll.hxx>
 #include <vos/mutex.hxx>
 #include <basic/sbobjmod.hxx>
-//#include <basic/vbahelper.hxx>
+#include <basic/vbahelper.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <unotools/eventcfg.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
