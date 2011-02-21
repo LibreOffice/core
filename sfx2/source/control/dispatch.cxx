@@ -2128,7 +2128,7 @@ void SfxDispatcher::SetSlotFilter
 
 //--------------------------------------------------------------------
 EXTERN_C
-#if defined( PM2 ) && !defined( CSET )
+#if defined( PM2 )
 int _stdcall
 #else
 #ifdef WNT

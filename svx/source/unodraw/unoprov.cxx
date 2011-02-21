@@ -934,7 +934,7 @@ UINT32 UHashMap::getId( const OUString& rCompareString )
 SvxUnoPropertyMapProvider aSvxMapProvider;
 
 EXTERN_C
-#if defined( PM2 ) && !defined( CSET )
+#if defined( PM2 )
 int _stdcall
 #else
 #ifdef WNT
