@@ -108,7 +108,7 @@ using ::rtl::OUString;
 
 
 /*--------------------------------------------------------------------
-    Beschreibung: Document laden
+    Description: Load Document
  --------------------------------------------------------------------*/
 
 
@@ -121,11 +121,11 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
     sal_Bool bHTMLTemplSet = sal_False;
     if( bRet )
     {
-        AddLink();      // pDoc / pIo ggf. anlegen
+        AddLink();      // create pDoc / pIo if applicable
 
         sal_Bool bWeb = ISA( SwWebDocShell );
         if ( bWeb )
-            bHTMLTemplSet = SetHTMLTemplate( *GetDoc() );//Styles aus HTML.vor
+            bHTMLTemplSet = SetHTMLTemplate( *GetDoc() );// Styles from HTML.vor
         else if( ISA( SwGlobalDocShell ) )
             GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);       // Globaldokument
 
@@ -358,7 +358,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Ctor mit SfxCreateMode ?????
+    Description:    Ctor with SfxCreateMode ?????
  --------------------------------------------------------------------*/
 
 
@@ -377,7 +377,7 @@ SwDocShell::SwDocShell( SfxObjectCreateMode eMode ) :
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Ctor / Dtor
+    Description: Ctor / Dtor
  --------------------------------------------------------------------*/
 
 
@@ -396,7 +396,7 @@ SwDocShell::SwDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Ctor / Dtor
+    Description: Ctor / Dtor
  --------------------------------------------------------------------*/
 
 
@@ -415,7 +415,7 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Dtor
+    Description:    Dtor
  --------------------------------------------------------------------*/
 
 
@@ -433,15 +433,15 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     RemoveLink();
     delete pFontList;
 
-    // wir als BroadCaster werden auch unser eigener Listener
-    // (fuer DocInfo/FileNamen/....)
+    // we, as BroadCaster also become our own Listener
+    // (for DocInfo/FileNames/....)
     EndListening( *this );
     SvxColorTableItem* pColItem = (SvxColorTableItem*)GetItem(SID_COLOR_TABLE);
-    // wird nur die DocInfo fuer den Explorer gelesen, ist das Item nicht da
+    // when only DocInfo is read for the Explorer, the Item is not there
     if(pColItem)
     {
         XColorTable* pTable = pColItem->GetColorTable();
-        // wurde eine neue Table angelegt, muss sie auch geloescht werden.
+        // when a new Table was created, it has to be deleted as well.
         if((void*)pTable  != (void*)(XColorTable::GetStdColorTable()) )
             delete pTable;
     }
@@ -453,8 +453,8 @@ void  SwDocShell::Init_Impl()
 {
     SetPool(&SW_MOD()->GetPool());
     SetBaseModel(new SwXTextDocument(this));
-    // wir als BroadCaster werden auch unser eigener Listener
-    // (fuer DocInfo/FileNamen/....)
+    // we, as BroadCaster also become our own Listener
+    // (for DocInfo/FileNames/....)
     StartListening( *this );
     //position of the "Automatic" style filter for the stylist (app.src)
     SetAutoStyleFilterIndex(3);
@@ -463,7 +463,7 @@ void  SwDocShell::Init_Impl()
     SetMapUnit( MAP_TWIP );
 }
 /*--------------------------------------------------------------------
-    Beschreibung: AddLink
+    Description: AddLink
  --------------------------------------------------------------------*/
 
 
@@ -478,18 +478,18 @@ void SwDocShell::AddLink()
     }
     else
         pDoc->acquire();
-    pDoc->SetDocShell( this );      // am Doc den DocShell-Pointer setzen
+    pDoc->SetDocShell( this );      // set the DocShell-Pointer for Doc
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
     ((SwXTextDocument*)xDoc.get())->Reactivate(this);
 
     SetPool(&pDoc->GetAttrPool());
 
-    // am besten erst wenn eine sdbcx::View erzeugt wird !!!
+    // most suitably not until a sdbcx::View is created!!!
     pDoc->SetOle2Link(LINK(this, SwDocShell, Ole2ModifiedHdl));
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   neue FontList erzeugen Aenderung Drucker
+    Description:    create new FontList Change Printer
  --------------------------------------------------------------------*/
 
 
@@ -510,13 +510,13 @@ void SwDocShell::UpdateFontList()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: RemoveLink
+    Description: RemoveLink
  --------------------------------------------------------------------*/
 
 
 void SwDocShell::RemoveLink()
 {
-    // Uno-Object abklemmen
+    // disconnect Uno-Object
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
     ((SwXTextDocument*)xDoc.get())->Invalidate();
     aFinishedTimer.Stop();
@@ -532,24 +532,24 @@ void SwDocShell::RemoveLink()
         pDoc->SetDocShell( 0 );
         if( !nRefCt )
             delete pDoc;
-        pDoc = 0;       // wir haben das Doc nicht mehr !!
+        pDoc = 0;       // we don't have the Doc anymore!!
     }
 }
 void SwDocShell::InvalidateModel()
 {
-    // Uno-Object abklemmen
+    // disconnect Uno-Object
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
     ((SwXTextDocument*)xDoc.get())->Invalidate();
 }
 void SwDocShell::ReactivateModel()
 {
-    // Uno-Object abklemmen
+    // disconnect Uno-Object
     uno::Reference< text::XTextDocument >  xDoc(GetBaseModel(), uno::UNO_QUERY);
     ((SwXTextDocument*)xDoc.get())->Reactivate(this);
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Laden, Default-Format
+    Description: Load, Default-Format
  --------------------------------------------------------------------*/
 
 
@@ -560,13 +560,13 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
     if( SfxObjectShell::Load( rMedium ))
     {
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "after SfxInPlaceObject::Load" );
-        if( pDoc )              // fuer Letzte Version !!
-            RemoveLink();       // das existierende Loslassen
+        if( pDoc )              // for last version!!
+            RemoveLink();       // release the existing
 
-        AddLink();      // Link setzen und Daten updaten !!
+        AddLink();      // set Link and update Data!!
 
-        // Das Laden
-        // fuer MD
+        // Loading
+        // for MD
             OSL_ENSURE( !mxBasePool.is(), "who hasn't destroyed their Pool?" );
             mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
             if(GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
@@ -595,12 +595,12 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
         case SFX_CREATE_MODE_INTERNAL:
         case SFX_CREATE_MODE_EMBEDDED:
             {
-                // fuer MWERKS (Mac-Compiler): kann nicht selbststaendig casten
+                // for MWERKS (Mac-Compiler): can't cast autonomously
                 SwTransferable::InitOle( this, *pDoc );
             }
-            // SfxProgress unterdruecken, wenn man Embedded ist
+            // suppress SfxProgress, when we are Embedded
             SW_MOD()->SetEmbeddedLoadSave( sal_True );
-            // kein break;
+            // no break;
 
         case SFX_CREATE_MODE_STANDARD:
         case SFX_CREATE_MODE_PREVIEW:
@@ -608,7 +608,7 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
                 Reader *pReader = ReadXML;
                 if( pReader )
                 {
-                    // die DocInfo vom Doc am DocShell-Medium setzen
+                    // set Doc's DocInfo at DocShell-Medium
                     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before ReadDocInfo" );
                     SwReader aRdr( rMedium, aEmptyStr, pDoc );
                     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before Read" );
@@ -653,7 +653,7 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
             LoadingFinished();
         }
 
-        // SfxProgress unterdruecken, wenn man Embedded ist
+        // suppress SfxProgress, when we are Embedded
         SW_MOD()->SetEmbeddedLoadSave( sal_False );
     }
 
@@ -667,7 +667,7 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
     if( pDoc )
         RemoveLink();
 
-    AddLink();      // Link setzen und Daten updaten !!
+    AddLink();      // set Link and update Data!!
 
     do {        // middle check loop
         sal_uInt32 nErr = ERR_SWG_READ_ERROR;
@@ -676,7 +676,7 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
         uno::Reference < container::XNameAccess > xAccess( rMedium.GetStorage(), uno::UNO_QUERY );
         if ( xAccess->hasByName( aStreamName ) && rMedium.GetStorage()->isStreamElement( aStreamName ) )
         {
-            // Das Laden
+            // Loading
             SwWait aWait( *this, sal_True );
             {
                 OSL_ENSURE( !mxBasePool.is(), "who hasn't destroyed their Pool?" );

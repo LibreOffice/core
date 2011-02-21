@@ -113,14 +113,13 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 
     while (nWhich)
     {
-        // aktuelle Vorlage zu jeder Familie ermitteln
-        //
+        // determine current template to every family
         String aName;
         switch (nWhich)
         {
             case SID_STYLE_APPLY:
-            {//hier wird die Vorlage und ihre Familie an die StyleBox
-             //uebergeben, damit diese Familie angezeigt wird
+            {// here the template and its family are passed to the StyleBox
+             // so that this family is being showed
                 if(pShell->IsFrmSelected())
                 {
                     SwFrmFmt* pFmt = pShell->GetCurFrmFmt();
@@ -260,7 +259,7 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:   StyleSheet-Requeste auswerten
+    Description:    evaluate StyleSheet-Requests
  --------------------------------------------------------------------*/
 
 
@@ -460,7 +459,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         nRet = Delete(aParam, nFamily);
                         break;
                     case SID_STYLE_APPLY:
-                        // Shellwechsel in ApplyStyles
+                        // Shell-switch in ApplyStyles
                         nRet = ApplyStyles(aParam, nFamily, pActShell, rReq.GetModifier() );
                         break;
                     case SID_STYLE_WATERCAN:
@@ -492,7 +491,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 
     if(bSetReturn)
     {
-        if(rReq.IsAPI()) // Basic bekommt nur TRUE oder FALSE
+        if(rReq.IsAPI()) // Basic only gets TRUE or FALSE
             rReq.SetReturnValue(SfxUInt16Item(nSlot, nRet !=0));
         else
             rReq.SetReturnValue(SfxUInt16Item(nSlot, nRet));
@@ -501,7 +500,7 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Edit
+    Description:    Edit
  --------------------------------------------------------------------*/
 
 
@@ -524,7 +523,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
 
         pStyle = &mxBasePool->Make( rName, (SfxStyleFamily)nFamily, nMask );
 
-        // die aktuellen als Parent setzen
+        // set the current one as Parent
         SwDocStyleSheet* pDStyle = (SwDocStyleSheet*)pStyle;
         switch( nFamily )
         {
@@ -616,14 +615,13 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
     if(!pStyle)
         return FALSE;
 
-    // Dialoge zusammenstoepseln
-    //
+    // put dialogues together
     rtl::Reference< SwDocStyleSheet > xTmp( new SwDocStyleSheet( *(SwDocStyleSheet*)pStyle ) );
     if( SFX_STYLE_FAMILY_PARA == nFamily )
     {
         SfxItemSet& rSet = xTmp->GetItemSet();
         ::SwToSfxPageDescAttr( rSet );
-        // erstmal nur eine Null
+        // firstly only a Zero
         rSet.Put(SwBackgroundDestinationItem(SID_PARA_BACKGRND_DESTINATION, 0));
         // merge list level indent attributes into the item set if needed
         xTmp->MergeIndentAttrsOfListStyle( rSet );
@@ -642,7 +640,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
     }
     if (!bBasic)
     {
-        // vor dem Dialog wird der HtmlMode an der DocShell versenkt
+        // prior to the dialog the HtmlMode at the DocShell is being sunk
         USHORT nHtmlMode = ::GetHtmlMode(this);
 
         // In HTML mode, we do not always have a printer. In order to show
@@ -666,7 +664,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
         {
             GetWrtShell()->StartAllAction();
 
-            // nur bei Absatz-Vorlagen die Maske neu setzen
+            // newly set the mask only with paragraph-templates
             if( bNew )
             {
                 nRet = SFX_STYLE_FAMILY_PARA == pStyle->GetFamily()
@@ -723,9 +721,9 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
                 mxBasePool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *xTmp.get() ) );
 
             // JP 19.09.97:
-            // Dialog vorm EndAction zerstoeren - bei Seitenvorlagen kann
-            // muss der ItemSet zerstoert werden, damit die Cursor aus den
-            // Kopf-/Fusszeilen entfernt werden. Sonst kommts zu GPFs!!!
+            // Destroy dialog before EndAction - with page-templates the
+            // ItemSet must be destroyed, so that the cursors get removed
+            // from Headers/Footers. Otherwise "GPF" happen!!!
             delete pDlg;
 
             pDoc->SetModified();
@@ -749,12 +747,12 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
     }
     else
     {
-        // vor dem Dialog wird der HtmlMode an der DocShell versenkt
+        // prior to the dialog the HtmlMode at the DocShell is being sunk
         PutItem(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(this)));
 
         GetWrtShell()->StartAllAction();
 
-        // nur bei Absatz-Vorlagen die Maske neu setzen
+        // newly set the mask only with paragraph-templates
         if( bNew )
         {
             nRet = SFX_STYLE_FAMILY_PARA == pStyle->GetFamily()
@@ -799,7 +797,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Delete
+    Description:    Delete
  --------------------------------------------------------------------*/
 
 
@@ -821,7 +819,7 @@ USHORT SwDocShell::Delete(const String &rName, USHORT nFamily)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Vorlage anwenden
+    Description:    apply template
  --------------------------------------------------------------------*/
 
 
@@ -889,7 +887,7 @@ USHORT SwDocShell::ApplyStyles(const String &rName, USHORT nFamily,
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Giesskanne starten
+    Description:    start watering-can
  --------------------------------------------------------------------*/
 
 
@@ -948,7 +946,7 @@ USHORT SwDocShell::DoWaterCan(const String &rName, USHORT nFamily)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Vorlage Updaten
+    Description:    update template
  --------------------------------------------------------------------*/
 
 
@@ -977,8 +975,7 @@ USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* 
 
                 GetWrtShell()->StartUndo(UNDO_INSFMTATTR, &aRewriter);
                 GetWrtShell()->FillByEx(pColl);
-                    // Vorlage auch anwenden, um harte Attributierung
-                    // zu entfernen
+                    // also apply template to remove hard set attributes
                 GetWrtShell()->SetTxtFmtColl( pColl );
                 GetWrtShell()->EndUndo(UNDO_INSFMTATTR, NULL);
                 GetWrtShell()->EndAllAction();
@@ -1001,8 +998,7 @@ USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* 
 
                 pFrm->SetFmtAttr( aSet );
 
-                    // Vorlage auch anwenden, um harte Attributierung
-                    // zu entfernen
+                    // also apply template to remove hard set attributes
                 pCurrWrtShell->SetFrmFmt( pFrm, TRUE );
                 pCurrWrtShell->EndAllAction();
             }
@@ -1015,8 +1011,7 @@ USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* 
             {
                 pCurrWrtShell->StartAllAction();
                 pCurrWrtShell->FillByEx(pChar);
-                    // Vorlage auch anwenden, um harte Attributierung
-                    // zu entfernen
+                    // also apply template to remove hard set attributes
                 pCurrWrtShell->EndAllAction();
             }
 
@@ -1041,7 +1036,7 @@ USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* 
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   NewByExample
+    Description:    NewByExample
  --------------------------------------------------------------------*/
 
 
@@ -1053,8 +1048,8 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
                                             rName, (SfxStyleFamily)nFamily );
     if(!pStyle)
     {
-        // JP 07.07.95: behalte die akt. Maske vom PI bei, dadurch werden
-        //              neue sofort in den sichtbaren Bereich einsortiert
+        // JP 07.07.95: preserve the current mask of PI, then the new one is
+        //              immediately merged with the viewable area
         if( SFXSTYLEBIT_ALL == nMask || SFXSTYLEBIT_USED == nMask )
             nMask = SFXSTYLEBIT_USERDEF;
         else
@@ -1073,11 +1068,10 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
             {
                 pCurrWrtShell->StartAllAction();
                 pCurrWrtShell->FillByEx(pColl);
-                    // Vorlage auch anwenden, um harte Attributierung
-                    // zu entfernen
+                    // also apply template to remove hard set attributes
                 pColl->SetDerivedFrom(pCurrWrtShell->GetCurTxtFmtColl());
 
-                    // setze die Maske noch an der Collection:
+                    // set the mask at the Collection:
                 USHORT nId = pColl->GetPoolFmtId() & 0x87ff;
                 switch( nMask & 0x0fff )
                 {
@@ -1121,8 +1115,7 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
                 pFrm->SetDerivedFrom( pFFmt );
 
                 pFrm->SetFmtAttr( aSet );
-                    // Vorlage auch anwenden, um harte Attributierung
-                    // zu entfernen
+                    // also apply template to remove hard set attributes
                 pCurrWrtShell->SetFrmFmt( pFrm );
                 pCurrWrtShell->EndAllAction();
             }
@@ -1156,12 +1149,12 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
 
             pCurrWrtShell->GetDoc()->CopyPageDesc( rSrc, rDest );
 
-            // PoolId darf NIE kopiert werden!
+            // PoolId must NEVER be copied!
             rDest.SetPoolFmtId( nPoolId );
             rDest.SetPoolHelpId( nHId );
             rDest.SetPoolHlpFileId( nHFId );
 
-            // werden Kopf-/Fusszeilen angelegt, so gibt es kein Undo mehr!
+            // when Headers/Footers are created, there is no Undo anymore!
             pCurrWrtShell->GetDoc()->DelAllUndoObj();
 
             pCurrWrtShell->EndAllAction();
@@ -1202,23 +1195,21 @@ void  SwDocShell::LoadStyles( SfxObjectShell& rSource )
  --------------------------------------------------*/
 void SwDocShell::_LoadStyles( SfxObjectShell& rSource, BOOL bPreserveCurrentDocument )
 {
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese Methode wird vom SFx gerufen, wenn aus einer Dokument-Vorlage
-    Styles nachgeladen werden sollen. Bestehende Styles soll dabei
-    "uberschrieben werden. Das Dokument mu"s daher neu formatiert werden.
-    Daher werden die Applikationen in der Regel diese Methode "uberladen
-    und in ihrer Implementierung die Implementierung der Basisklasse
-    rufen.
+    This method is called by SFx if Styles have to be reloaded from a
+    document-template. Existing Styples should be overwritten by that.
+    That's why the document has to be reformatted. Therefore applications
+    will usually overload this method and call the baseclass' implementation
+    in their implementation.
 */
-    // ist die Source unser Document, dann uebernehmen wir das
-    // abpruefen selbst (wesentlich schneller und laeuft nicht ueber
-    // die Kruecke SfxStylePool
+    // When the source is our document, we do the checking ourselves
+    // (much quicker and doesn't use the crutch StxStylePool).
     if( rSource.ISA( SwDocShell ))
     {
-        //JP 28.05.99: damit die Kopf-/Fusszeilen nicht den fixen Inhalt
-        //              der Vorlage erhalten, einmal alle FixFelder der
-        //              Source aktualisieren
+        //JP 28.05.99: in order for the Headers/Footers not to get the fixed content
+        //              of the template, update all the Source's
+        //              FixFields once.
         if(!bPreserveCurrentDocument)
             ((SwDocShell&)rSource).pDoc->SetFixFields(false, NULL);
         if( pWrtShell )
@@ -1233,8 +1224,8 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, BOOL bPreserveCurrentDocu
             pDoc->ReplaceStyles( *((SwDocShell&)rSource).pDoc );
             if( !bModified && pDoc->IsModified() && !pView )
             {
-                // die View wird spaeter angelegt, ueberschreibt aber das
-                // Modify-Flag. Per Undo ist sowieso nichts mehr zu machen
+                // the View is created later, but overwrites the Modify-Flag.
+                // Undo doesn't work anymore anyways.
                 pDoc->SetUndoNoResetModified();
             }
         }
