@@ -360,12 +360,33 @@ public class XSLTransformer
                         if (is != null) {
                             is.close();
                         }
+                    } catch (java.lang.Throwable ex) {
+                        if (statsp != null) {
+                            statsp.println(ex.getClass().getName() + ": " + ex.getMessage());
+                            ex.printStackTrace(statsp);
+                        }
+                    }
+                    try {
                         if (os != null) {
                             os.close();
                         }
+                    } catch (java.lang.Throwable ex) {
+                        if (statsp != null) {
+                            statsp.println(ex.getClass().getName() + ": " + ex.getMessage());
+                            ex.printStackTrace(statsp);
+                        }
+                    }
+                    try {
                         if (m_xis != null) {
                             m_xis.closeInput();
                         }
+                    } catch (java.lang.Throwable ex) {
+                        if (statsp != null) {
+                            statsp.println(ex.getClass().getName() + ": " + ex.getMessage());
+                            ex.printStackTrace(statsp);
+                        }
+                    }
+                    try {
                         if (m_xos != null) {
                             m_xos.closeOutput();
                         }
