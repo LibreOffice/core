@@ -185,7 +185,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                 for (xub_StrLen j = 0; j < aField2.Len(); j++)
                 {
                     const sal_Unicode c = aField2.GetChar(j);
-                    // nur Ziffern und Dezimalpunkt und Tausender-Trennzeichen?
+                    // just digits, decimal- and thousands-delimiter?
                     if ( ( !cDecimalDelimiter  || c != cDecimalDelimiter )  &&
                          ( !cThousandDelimiter || c != cThousandDelimiter ) &&
                         !aCharClass.isDigit(aField2,j)                      &&
@@ -208,12 +208,12 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                     bNumeric = FALSE;
                 if (bNumeric && cThousandDelimiter)
                 {
-                    // Ist der Trenner richtig angegeben?
+                    // is the delimiter correctly given?
                     const String aValue = aField2.GetToken(0,cDecimalDelimiter);
                     for (sal_Int32 j = aValue.Len() - 4; j >= 0; j -= 4)
                     {
                         const sal_Unicode c = aValue.GetChar(static_cast<sal_uInt16>(j));
-                        // nur Ziffern und Dezimalpunkt und Tausender-Trennzeichen?
+                        // just digits, decimal- and thousands-delimiter?
                         if (c == cThousandDelimiter && j)
                             continue;
                         else
@@ -224,7 +224,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                     }
                 }
 
-                // jetzt koennte es noch ein Datumsfeld sein
+                // now it still can be a Date-field
                 if (!bNumeric)
                 {
                     try
@@ -288,7 +288,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                     break;
                 default:
                     eType = DataType::VARCHAR;
-                    nPrecision = 0; // nyi: Daten koennen aber laenger sein!
+                    nPrecision = 0; // nyi: Data can be longer!
                     nScale = 0;
                     {
                         static const ::rtl::OUString s_sVARCHAR(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
@@ -381,7 +381,7 @@ void OFlatTable::construct()
         sal_Int32 nSize = m_pFileStream->Tell();
         m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
 
-        // Buffersize abhaengig von der Filegroesse
+        // Buffersize is dependent on the file-size
         m_pFileStream->SetBufferSize(nSize > 1000000 ? 32768 :
                                     nSize > 100000  ? 16384 :
                                     nSize > 10000   ? 4096  : 1024);
@@ -543,7 +543,7 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
     OFlatConnection* pConnection = (OFlatConnection*)m_pConnection;
     const sal_Unicode cDecimalDelimiter = pConnection->getDecimalDelimiter();
     const sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();
-    // Felder:
+    // Fields:
     xub_StrLen nStartPos = 0;
     String aStr;
     OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
@@ -558,7 +558,7 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
             (_rRow->get())[i]->setNull();
         else
         {
-            // Laengen je nach Datentyp:
+            // lengths depending on data-type:
             sal_Int32   nLen,
                         nType = 0;
             if(bIsTable)
@@ -601,7 +601,7 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
                 }   break;
                 case DataType::DOUBLE:
                 case DataType::INTEGER:
-                case DataType::DECIMAL:             // #99178# OJ
+                case DataType::DECIMAL:
                 case DataType::NUMERIC:
                 {
 
@@ -615,7 +615,7 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
                                    (!cDecimalDelimiter && nType == DataType::INTEGER),
                                    "FalscherTyp");
 
-                        // In Standard-Notation (DezimalPUNKT ohne Tausender-Komma) umwandeln:
+                        // convert to Standard-Notation (DecimalPOINT without thousands-comma):
                         for (xub_StrLen j = 0; j < aStr.Len(); ++j)
                         {
                             const sal_Unicode cChar = aStr.GetChar(j);
@@ -623,10 +623,10 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
                                 *pData++ = '.';
                                 //aStrConverted.Append( '.' );
                             else if ( cChar == '.' ) // special case, if decimal seperator isn't '.' we have to put the string after it
-                                continue; // #99189# OJ
+                                continue;
                             else if (cThousandDelimiter && cChar == cThousandDelimiter)
                             {
-                                // weglassen
+                                // leave out
                             }
                             else
                                 *pData++ = cChar;
@@ -651,7 +651,7 @@ sal_Bool OFlatTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sal
 
                 default:
                 {
-                    // Wert als String in Variable der Row uebernehmen
+                    // Copy Value as String in Row-Variable
                     *(_rRow->get())[i] = ORowSetValue(aStr);
                 }
                 break;
@@ -671,7 +671,7 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "flat", "Ocke.Janssen@sun.com", "OFlatTable::seekRow" );
     OSL_ENSURE(m_pFileStream,"OFlatTable::seekRow: FileStream is NULL!");
     // ----------------------------------------------------------
-    // Positionierung vorbereiten:
+    // Prepare positioning:
     m_nFilePos = nCurPos;
 
     switch(eCursorPosition)

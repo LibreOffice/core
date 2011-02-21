@@ -50,11 +50,8 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
         );
 
 //***************************************************************************************
-//
-// Die vorgeschriebene C-Api muss erfuellt werden!
-// Sie besteht aus drei Funktionen, die von dem Modul exportiert werden muessen.
-//
-
+// The prescribed C-Api must be met!
+// It consists of three functions, which must be exported by the Module.
 //---------------------------------------------------------------------------------------
 void REGISTER_PROVIDER(
         const OUString& aServiceImplName,
@@ -72,7 +69,6 @@ void REGISTER_PROVIDER(
     for (sal_Int32 i=0; i<Services.getLength(); ++i)
         xNewKey->createKey(Services[i]);
 }
-
 
 //---------------------------------------------------------------------------------------
 struct ProviderRequest
@@ -113,7 +109,6 @@ struct ProviderRequest
 };
 
 //---------------------------------------------------------------------------------------
-
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL
 component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,

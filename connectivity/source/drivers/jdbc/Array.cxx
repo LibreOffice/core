@@ -44,7 +44,7 @@ java_sql_Array::~java_sql_Array()
 
 jclass java_sql_Array::getMyClass() const
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched once, therefore its static
     if( !theClass )
         theClass = findMyClass("java/sql/Array");
 
@@ -72,10 +72,10 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
         static const char * cMethodName = "getArray";
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
-        // Java-Call absetzen
+        // submit Java-Call
         (jobjectArray)t.pEnv->CallObjectMethod( object, mID, obj);
         ThrowSQLException(t.pEnv,*this);
-        // und aufraeumen
+        // and clean up
         t.pEnv->DeleteLocalRef(obj);
     } //t.pEnv
     return ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >();
@@ -88,12 +88,12 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
         jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
         static const char * cSignature = "(IILjava/util/Map;)[Ljava/lang/Object;";
         static const char * cMethodName = "getArray";
-        // Java-Call absetzen
+        // submit Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         (jobjectArray)t.pEnv->CallObjectMethod( object, mID, index,count,obj);
         ThrowSQLException(t.pEnv,*this);
-        // und aufraeumen
+        // and clean up
         t.pEnv->DeleteLocalRef(obj);
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >();
@@ -103,17 +103,17 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
-        // Parameter konvertieren
+        // convert Parameter
         jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
-        // temporaere Variable initialisieren
+        // initialize temporary variable
         static const char * cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
         static const char * cMethodName = "getResultSet";
-        // Java-Call absetzen
+        // submit Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         t.pEnv->CallObjectMethod( object, mID, obj);
         ThrowSQLException(t.pEnv,*this);
-        // und aufraeumen
+        // and cleanup
         t.pEnv->DeleteLocalRef(obj);
     }
     return NULL;
@@ -123,9 +123,9 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
-        // Parameter konvertieren
+        // convert parameter
         jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
-        // temporaere Variable initialisieren
+        // initialize temporary variable
         static const char * cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
         static const char * cMethodName = "getResultSetAtIndex";
         // Java-Call absetzen
@@ -133,7 +133,7 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         t.pEnv->CallObjectMethod( object, mID, index,count,obj);
         ThrowSQLException(t.pEnv,*this);
-        // und aufraeumen
+        // and cleanup
         t.pEnv->DeleteLocalRef(obj);
     }
     return NULL;
