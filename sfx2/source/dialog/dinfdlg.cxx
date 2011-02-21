@@ -2395,9 +2395,9 @@ void CustomPropertiesControl::AddLine( const ::rtl::OUString& sName, Any& rAny, 
 SfxCustomPropertiesPage::SfxCustomPropertiesPage( Window* pParent, const SfxItemSet& rItemSet ) :
 
     SfxTabPage( pParent, SfxResId( TP_CUSTOMPROPERTIES ), rItemSet ),
-    m_aPropertiesFT     ( this, SfxResId( FT_PROPERTIES ) ),
     m_aPropertiesCtrl   ( this, SfxResId( CTRL_PROPERTIES ) ),
-    m_aAddBtn           ( this, SfxResId( BTN_ADD ) )
+    m_aAddBtn           ( this, SfxResId( BTN_ADD ) ),
+    m_aPropertiesFT     ( this, SfxResId( FT_PROPERTIES ) )
 
 {
     FreeResource();
