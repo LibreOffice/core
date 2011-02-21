@@ -720,7 +720,6 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
             if( bNew )
                 mxBasePool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *xTmp.get() ) );
 
-            // JP 19.09.97:
             // Destroy dialog before EndAction - with page-templates the
             // ItemSet must be destroyed, so that the cursors get removed
             // from Headers/Footers. Otherwise "GPF" happen!!!
@@ -1048,8 +1047,8 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
                                             rName, (SfxStyleFamily)nFamily );
     if(!pStyle)
     {
-        // JP 07.07.95: preserve the current mask of PI, then the new one is
-        //              immediately merged with the viewable area
+        // preserve the current mask of PI, then the new one is
+        // immediately merged with the viewable area
         if( SFXSTYLEBIT_ALL == nMask || SFXSTYLEBIT_USED == nMask )
             nMask = SFXSTYLEBIT_USERDEF;
         else
@@ -1198,7 +1197,7 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, BOOL bPreserveCurrentDocu
 /*  [Description]
 
     This method is called by SFx if Styles have to be reloaded from a
-    document-template. Existing Styples should be overwritten by that.
+    document-template. Existing Styles should be overwritten by that.
     That's why the document has to be reformatted. Therefore applications
     will usually overload this method and call the baseclass' implementation
     in their implementation.
@@ -1207,9 +1206,9 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, BOOL bPreserveCurrentDocu
     // (much quicker and doesn't use the crutch StxStylePool).
     if( rSource.ISA( SwDocShell ))
     {
-        //JP 28.05.99: in order for the Headers/Footers not to get the fixed content
-        //              of the template, update all the Source's
-        //              FixFields once.
+        // in order for the Headers/Footers not to get the fixed content
+        // of the template, update all the Source's
+        // FixFields once.
         if(!bPreserveCurrentDocument)
             ((SwDocShell&)rSource).pDoc->SetFixFields(false, NULL);
         if( pWrtShell )

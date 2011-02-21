@@ -366,7 +366,7 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
         SfxStyleSheetBase* pExist;
         if( ::FindPhyStyle( *pDoc, rOldName, eOldFamily ) )
         {
-            // Bug 20365: only take over, if desired!
+            // only take over, if desired!
             if( ERRCODE_BUTTON_OK != ErrorHandler::HandleError(
                 *new MessageInfo( ERRCODE_SFXMSG_STYLEREPLACE, rOldName )) )
             {
@@ -379,7 +379,7 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
                     *(SwDocStyleSheet*)pMyPool->Find( rOldName, eOldFamily ) ) );
             pMyPool->Replace( *pHisSheet, *xExist.get() );
 
-            // The ordering of the templates in the Pool nothing is changed.
+            // The ordering of the templates in the Pool is not changed.
             rIdx2 = rIdx1 = INDEX_IGNORE;
 
             GetDoc()->SetModified();
@@ -389,7 +389,7 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
 
         pMyPool->SetSearchMask( eOldFamily, nMySrchMask );
 
-        // MIB 18.12.98: SwDocStyleSheetPool::Make returns a pointer to
+        // SwDocStyleSheetPool::Make returns a pointer to
         // SwDocStyleSheetPool::aStyleSheet that uses same members of
         // SwDocStyleSheetPool::Find. Therefore a copy has to be used
         // here. Attention: SfxStylessheetBase::SetFollow calls itself
@@ -400,7 +400,7 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
                 ->Make(rOldName, eOldFamily, pHisSheet->GetMask() ) ) );
         if( SFX_STYLE_FAMILY_PAGE == eOldFamily && rSource.ISA(SwDocShell) )
         {
-            // to deal with seperately!!
+            // to deal with separately!!
             SwPageDesc* pDestDsc = (SwPageDesc*)xNewSheet->GetPageDesc();
             SwPageDesc* pCpyDsc = (SwPageDesc*)((SwDocStyleSheet*)pHisSheet)->GetPageDesc();
             pDoc->CopyPageDesc( *pCpyDsc, *pDestDsc );
@@ -492,7 +492,7 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
             }
         }
 
-        // Bug 27347: set old settings again
+        // set old settings again
         pMyPool->SetSearchMask( eMyOldFamily, nMySrchMask );
 
         // Model changed
@@ -707,8 +707,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                 if( nSlotId )
                 {
-                    //JP 23.8.2001: Bug 91360 - PagePreView in the WebDocShell
-                    //              is found under Id ViewShell2.
+                    // PagePreView in the WebDocShell
+                    // is found under Id ViewShell2.
                     if( ISA(SwWebDocShell) && SID_VIEWSHELL1 == nSlotId )
                         nSlotId = SID_VIEWSHELL2;
 
@@ -789,7 +789,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                 SwDocShell::Factory().GetFilterContainer()->
                                 GetFilter4FilterName(String::CreateFromAscii("writer8"));
 
-                        //#b6439685# make sure the default file format is also available
+                        // make sure the default file format is also available
                         if(bWeb)
                         {
                             const String sWild = ((WildCard&)pOwnFlt->GetWildcard()).GetWildCard();
@@ -797,7 +797,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         }
 
                         bool bError = false;
-                        //#b6439685# catch expception if wrong filter is selected - should not happen anymore
+                        // catch expception if wrong filter is selected - should not happen anymore
                         try
                         {
                             xFltMgr->setCurrentFilter( pOwnFlt->GetUIName() );
@@ -1570,11 +1570,11 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
 {
     BOOL bModified = IsModified();
 
-    // MIB 23.6.97: The HTTP-Header fields have to be removed, otherwise
+    // The HTTP-Header fields have to be removed, otherwise
     // there are some from Meta-Tags dublicated or triplicated afterwards.
     ClearHeaderAttributesForSourceViewHack();
 
-    // MIB 24.07.97: The Document-Basic also bites the dust ...
+    // The Document-Basic also bites the dust ...
     // A EnterBasicCall is not needed here, because nothing is called and
     // there can't be any Dok-Basic, that has not yet been loaded inside
     // of an HTML document.
@@ -1661,7 +1661,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     }
 
 
-    // MIB 23.6.97: take HTTP-Header-Attibutes over into the DokInfo again.
+    // Take HTTP-Header-Attibutes over into the DokInfo again.
     // The Base-URL doesn't matter here because TLX uses the one from the document
     // for absolutization.
     SetHeaderAttributesForSourceViewHack();
@@ -1757,7 +1757,7 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
     String sFactory(String::CreateFromAscii(SwDocShell::Factory().GetShortName()));
     SfxFilterMatcher aMatcher( sFactory );
 
-    //#b6445961#  search for filter in WebDocShell, too
+    // search for filter in WebDocShell, too
     SfxMedium aMed( rURL, STREAM_STD_READ, FALSE );
     const SfxFilter* pFlt = 0;
     aMatcher.DetectFilter( aMed, &pFlt, FALSE, FALSE );
