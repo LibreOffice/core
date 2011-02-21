@@ -81,92 +81,164 @@ typedef uint32_t rva_t;
 ///\note the calling convention should not matter since this has no arguments
 typedef void generic_function_t();
 
-  struct ptrtomember // _PMD
-  {
-    typedef __w64 int32_t  mdiff_t;
-    mdiff_t member_offset;
-    mdiff_t vbtable_offset; // -1 if not a virtual base
-    mdiff_t vdisp_offset;   // offset to the displacement value inside the vbtable
+struct ptrtomember // _PMD
+{
+  typedef __w64 int32_t  mdiff_t;
+  mdiff_t member_offset;
+  mdiff_t vbtable_offset; // -1 if not a virtual base
+  mdiff_t vdisp_offset;   // offset to the displacement value inside the vbtable
 
-    template<typename T>
-    T * operator()(T * const thisptr) const
+  template<typename T>
+  T * operator()(T * const thisptr) const
+  {
+    uintptr_t tp = reinterpret_cast<uintptr_t>(thisptr);
+    uintptr_t ptr = tp + member_offset;
+    if ( vbtable_offset != -1 ) // !(vbtable_offset < 0)
     {
-      uintptr_t tp = reinterpret_cast<uintptr_t>(thisptr);
-      uintptr_t ptr = tp + member_offset;
-      if ( vbtable_offset != -1 ) // !(vbtable_offset < 0)
-      {
-        ptr += *reinterpret_cast<mdiff_t*>( static_cast<intptr_t>(vdisp_offset + *reinterpret_cast<mdiff_t*>(tp + vbtable_offset)) )
-          + vbtable_offset;
-      }
-      return reinterpret_cast<T*>(ptr);
+      ptr += *reinterpret_cast<mdiff_t*>( static_cast<intptr_t>(vdisp_offset + *reinterpret_cast<mdiff_t*>(tp + vbtable_offset)) )
+        + vbtable_offset;
     }
-  };
+    return reinterpret_cast<T*>(ptr);
+  }
+};
+
+struct eobject
+{
+  typedef void (* dtor_ptr )(eobject*);
+  typedef void (* ctor_ptr )(eobject*, eobject*);
+  typedef void (* ctor_ptr2)(eobject*, eobject*, int);
+};
 
 struct catchabletype
 {
-    /** is simple type */
-    uint32_t    memmoveable : 1;
-    /** catchable as reference only */
-    uint32_t    refonly     : 1;
-    /** class with virtual base */
-    uint32_t    hasvirtbase : 1;
-    /** offset to the type descriptor */
-    rva_t       typeinfo;
+  /** is simple type */
+  uint32_t    memmoveable : 1;
+  /** catchable as reference only */
+  uint32_t    refonly     : 1;
+  /** class with virtual base */
+  uint32_t    hasvirtbase : 1;
+  /** offset to the type descriptor */
+  rva_t       typeinfo;
 
-    /** catch type instance location within a thrown object  */
-    ptrtomember thiscast;
-    /** size of the simple type or offset into buffer of \c this pointer for catch object */
-    uint32_t    object_size;
+  /** catch type instance location within a thrown object  */
+  ptrtomember thiscast;
+  /** size of the simple type or offset into buffer of \c this pointer for catch object */
+  uint32_t    object_size;
 
-    union
-    {
-      rva_t               copyctor;
-      rva_t               copyctor2;
-    };
+  union
+  {
+    rva_t               copyctor;
+    rva_t               copyctor2;
   };
+};
 
 #pragma pack(push, 4)
-  struct catchabletypearray
-  {
-    uint32_t        size;
-    rva_t           type[1];
-  };
+struct catchabletypearray
+{
+  uint32_t        size;
+  rva_t           type[1];
+};
 #pragma pack(pop)
 
 #pragma pack(push, 4)
- struct throwinfo
-  {
-    typedef exception_disposition __cdecl forwardcompathandler_t(...);
+struct throwinfo
+{
+  typedef exception_disposition __cdecl forwardcompathandler_t(...);
 
-    /* 0x00 */  uint32_t  econst    : 1;
-    /* 0x00 */  uint32_t  evolatile : 1;
-    /* 0x00 */  uint32_t            : 1;
-    /* 0x00 */  uint32_t  e8        : 1;
-    /* 0x04 */  rva_t     exception_dtor;
-    /* 0x08 */  rva_t     forwardcompathandler;
-    /* 0x0C */  rva_t     catchabletypearray; ///< types able to catch the exception.
-  };
+  /* 0x00 */  uint32_t  econst    : 1;
+  /* 0x00 */  uint32_t  evolatile : 1;
+  /* 0x00 */  uint32_t            : 1;
+  /* 0x00 */  uint32_t  e8        : 1;
+  /* 0x04 */  rva_t     exception_dtor;
+  /* 0x08 */  rva_t     forwardcompathandler;
+  /* 0x0C */  rva_t     catchabletypearray; ///< types able to catch the exception.
+};
 #pragma pack(pop)
 
-  /// This type represents the catch clause
-  struct ehandler
-  {
-    //  union { uint32_t  adjectives; void * ptr; };
-    uint32_t isconst      : 1;
-    uint32_t isvolatile   : 1;
-    uint32_t isunaligned  : 1;// guess it is not used on x86
-    uint32_t isreference  : 1;
+/// This type represents the catch clause
+struct ehandler
+{
+  //  union { uint32_t  adjectives; void * ptr; };
+  uint32_t isconst      : 1;
+  uint32_t isvolatile   : 1;
+  uint32_t isunaligned  : 1;// guess it is not used on x86
+  uint32_t isreference  : 1;
 
-    uint32_t              :27;
-    uint32_t ishz         : 1;
+  uint32_t              :27;
+  uint32_t ishz         : 1;
 
-    /** offset to the type descriptor of this catch object */
-    /*0x04*/ rva_t        typeinfo;         // dispType
-    /*0x08*/ int          eobject_bpoffset; // dispCatchObj
-    /** offset to the catch clause funclet */
-    /*0x0C*/ rva_t        handler;          // dispOfHandler
-    /*0x10*/ uint32_t     frame;            // dispFrame
+  /** offset to the type descriptor of this catch object */
+  /*0x04*/ rva_t        typeinfo;         // dispType
+  /*0x08*/ int          eobject_bpoffset; // dispCatchObj
+  /** offset to the catch clause funclet */
+  /*0x0C*/ rva_t        handler;          // dispOfHandler
+  /*0x10*/ uint32_t     frame;            // dispFrame
+}
+
+// ___BuildCatchObject
+/// 15.3/16 When the exception-declaration specifies a class type, a copy
+///         constructor is used to initialize either the object declared
+///         in the exception-declaration or,
+///         if the exception-declaration does not specify a name,
+///         a temporary object of that type.
+///\note    This is the question may we optimize out the last case.
+///\warning If the copy constructor throws an exception, std::unexpected would be called
+void
+  constructcatchobject(
+  cxxregistration *             cxxreg,
+  const ehandler *        const catchblock,
+  catchabletype *         const convertable,
+  const dispatcher_context* const dispatch
+  )
+  const
+{
+  _EH_TRACE_ENTER();
+  // build helper
+  __try {
+    struct typeinfo_t { void* vtbl; void* spare; char name[1]; };
+    enum catchable_info { cidefault, cicomplex, civirtual } cinfo = cidefault;
+
+    const typeinfo_t* ti = catchblock->typeinfo ? dispatch->va<typeinfo_t*>(catchblock->typeinfo) : NULL;
+    if(ti && *ti->name && (catchblock->eobject_bpoffset || catchblock->ishz)){
+      eobject** objplace = catchblock->ishz
+        ? reinterpret_cast<eobject**>(cxxreg)
+        : reinterpret_cast<eobject**>(catchblock->eobject_bpoffset + cxxreg->fp.FramePointers);
+      if(catchblock->isreference){
+        // just ref/pointer
+        *objplace = adjust_pointer(get_object(), convertable);
+      }else if(convertable->memmoveable){
+        // POD
+        std::memcpy(objplace, get_object(), convertable->object_size);
+        if(convertable->object_size == sizeof(void*) && *objplace)
+          *objplace = adjust_pointer((void*)*objplace, convertable);
+      }else{
+        // if copy ctor exists, call it; binary copy otherwise
+        if(convertable->copyctor){
+          cinfo = convertable->hasvirtbase ? civirtual : cicomplex;
+        }else{
+          std::memcpy(objplace, (const void*)adjust_pointer(get_object(), convertable), convertable->object_size);
+        }
+      }
+    }
+    // end of build helper
+    if(cinfo != cidefault){
+      eobject* objthis = catchblock->ishz
+        ? reinterpret_cast<eobject*>(cxxreg)
+        : reinterpret_cast<eobject*>(catchblock->eobject_bpoffset + cxxreg->fp.FramePointers);
+      void* copyctor = thrown_va(convertable->copyctor);
+      eobject* copyarg = adjust_pointer(get_object(), convertable);
+      if(cinfo == cicomplex)
+        (eobject::ctor_ptr (copyctor))(objthis, copyarg);
+      else
+        (eobject::ctor_ptr2(copyctor))(objthis, copyarg, 1);
+    }
   }
+  __except(cxxregistration::unwindfilter(static_cast<nt::ntstatus>(_exception_code())))
+  {
+    nt::exception::inconsistency();
+  }
+  _EH_TRACE_LEAVE();
+}
 
 #endif // 0
 
@@ -345,29 +417,43 @@ void * __cdecl destruct(
 const int codeSnippetSize = 40;
 
 void GenerateConstructorTrampoline(
-    sal_uChar * pCode,
+    unsigned char * code,
     typelib_TypeDescription * pTD ) throw ()
 {
-    // push typelib_TypeDescription pTD
-    *pCode++ = 0x68;
-    *(void **)pCode = pTD;
-    pCode += sizeof(void *);
-    // jmp rel64 fpFunc
-    *pCode++ = 0xe9;
-    *(sal_Int64 *)pCode = (sal_uChar *)&copyConstruct - pCode - sizeof(sal_Int64);
+    unsigned char *p = code;
+
+    // mov r8, pTD
+    *p++ = 0x49; *p++ = 0xB8;
+    *((void **)p) = pTD; p += 8;
+
+    // mov r11, copyConstruct
+    *p++ = 0x49; *p++ = 0xBB;
+    *((void **)p) = &copyConstruct; p += 8;
+
+    // jmp r11
+    *p++ = 0x41; *p++ = 0xFF; *p++ = 0xE3;
+
+    OSL_ASSERT( p < code + codeSnippetSize );
 }
 
 void GenerateDestructorTrampoline(
-    sal_uChar * pCode,
+    unsigned char * code,
     typelib_TypeDescription * pTD ) throw ()
 {
+    unsigned char *p = code;
+
     // mov rdx, pTD
-    *pCode++ = 0x68;
-    *(void **)pCode = pTD;
-    pCode += sizeof(void *);
-    // jmp rel64 fpFunc
-    *pCode++ = 0xe9;
-    *(sal_Int64 *)pCode = (sal_uChar *)destruct - pCode - sizeof(sal_Int64);
+    *p++ = 0x48; *p++ = 0xBA;
+    *((void **)p) = pTD; p += 8;
+
+    // mov r11, destruct
+    *p++ = 0x49; *p++ = 0xBB;
+    *((void **)p) = &destruct; p += 8;
+
+    // jmp r11
+    *p++ = 0x41; *p++ = 0xFF; *p++ = 0xE3;
+
+    OSL_ASSERT( p < code + codeSnippetSize );
 }
 
 // This looks like it is the struct catchabletype above
@@ -390,6 +476,9 @@ struct ExceptionType
         , _n3( 0 )
         , _n4( pTD->nSize )
         {
+            // As _n0 is always initialized to zero, that means the
+            // hasvirtbase flag (see the ONTL catchabletype struct) is
+            // off, and thus the copyctor is of the ctor_ptr kind.
             _pTypeInfo = (sal_uInt32) ((sal_uInt64) mscx_getRTTI( pTD->pTypeName ) - pCodeBase);
             GenerateConstructorTrampoline( pCode, pTD );
             _pCopyCtor = (sal_uInt32) ((sal_uInt64) pCode - pCodeBase);
