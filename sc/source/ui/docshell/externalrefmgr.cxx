@@ -935,26 +935,6 @@ void ScExternalRefCache::getAllNumberFormats(vector<sal_uInt32>& rNumFmts) const
     rNumFmts.swap(aNumFmts);
 }
 
-bool ScExternalRefCache::hasCacheTable(sal_uInt16 nFileId, const String& rTabName) const
-{
-    DocItem* pDoc = getDocItem(nFileId);
-    if (!pDoc)
-        return false;
-
-    String aUpperName = ScGlobal::pCharClass->upper(rTabName);
-    vector<TableName>::const_iterator itrBeg = pDoc->maTableNames.begin(), itrEnd = pDoc->maTableNames.end();
-    vector<TableName>::const_iterator itr = ::std::find_if(
-        itrBeg, itrEnd, TabNameSearchPredicate(aUpperName));
-
-    return itr != itrEnd;
-}
-
-size_t ScExternalRefCache::getCacheTableCount(sal_uInt16 nFileId) const
-{
-    DocItem* pDoc = getDocItem(nFileId);
-    return pDoc ? pDoc->maTables.size() : 0;
-}
-
 bool ScExternalRefCache::setCacheDocReferenced( sal_uInt16 nFileId )
 {
     DocItem* pDocItem = getDocItem(nFileId);
@@ -1575,16 +1555,6 @@ SCsTAB ScExternalRefManager::getCachedTabSpan( sal_uInt16 nFileId, const String&
 void ScExternalRefManager::getAllCachedNumberFormats(vector<sal_uInt32>& rNumFmts) const
 {
     maRefCache.getAllNumberFormats(rNumFmts);
-}
-
-bool ScExternalRefManager::hasCacheTable(sal_uInt16 nFileId, const String& rTabName) const
-{
-    return maRefCache.hasCacheTable(nFileId, rTabName);
-}
-
-size_t ScExternalRefManager::getCacheTableCount(sal_uInt16 nFileId) const
-{
-    return maRefCache.getCacheTableCount(nFileId);
 }
 
 sal_uInt16 ScExternalRefManager::getExternalFileCount() const
@@ -2362,6 +2332,22 @@ void ScExternalRefManager::resetSrcFileData(const String& rBaseFileUrl)
 
         itr->maRelativeName = URIHelper::simpleNormalizedMakeRelative(
             rBaseFileUrl, aAbsName);
+    }
+}
+
+void ScExternalRefManager::updateAbsAfterLoad()
+{
+    String aOwn( getOwnDocumentName() );
+    for (vector<SrcFileData>::iterator itr = maSrcFiles.begin(), itrEnd = maSrcFiles.end();
+          itr != itrEnd; ++itr)
+    {
+        // update maFileName to the real file name,
+        // to be called when the original name is no longer needed (after CompileXML)
+
+        itr->maybeCreateRealFileName( aOwn );
+        String aReal = itr->maRealFileName;
+        if (aReal.Len())
+            itr->maFileName = aReal;
     }
 }
 

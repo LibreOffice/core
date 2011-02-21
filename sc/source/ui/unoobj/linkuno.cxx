@@ -1641,10 +1641,17 @@ Sequence< OUString > SAL_CALL ScExternalDocLinkObj::getElementNames()
     ScUnoGuard aGuard;
     vector<String> aTabNames;
     mpRefMgr->getAllCachedTableNames(mnFileId, aTabNames);
-    size_t n = aTabNames.size();
+
+    // #i116940# be consistent with getByName: include only table names which have a cache already
+    vector<String> aValidNames;
+    for (vector<String>::const_iterator aIter = aTabNames.begin(); aIter != aTabNames.end(); ++aIter)
+        if (mpRefMgr->getCacheTable(mnFileId, *aIter, false))
+            aValidNames.push_back(*aIter);
+
+    size_t n = aValidNames.size();
     Sequence<OUString> aSeq(n);
     for (size_t i = 0; i < n; ++i)
-        aSeq[i] = aTabNames[i];
+        aSeq[i] = aValidNames[i];
     return aSeq;
 }
 
@@ -1652,25 +1659,35 @@ sal_Bool SAL_CALL ScExternalDocLinkObj::hasByName(const OUString &aName)
         throw (RuntimeException)
 {
     ScUnoGuard aGuard;
-    return static_cast<sal_Bool>(mpRefMgr->hasCacheTable(mnFileId, aName));
+
+    // #i116940# be consistent with getByName: allow only table names which have a cache already
+    ScExternalRefCache::TableTypeRef pTable = mpRefMgr->getCacheTable(mnFileId, aName, false);
+    return (pTable.get() != NULL);
 }
 
 sal_Int32 SAL_CALL ScExternalDocLinkObj::getCount()
         throw (RuntimeException)
 {
     ScUnoGuard aGuard;
-    return static_cast<sal_Int32>(mpRefMgr->getCacheTableCount(mnFileId));
+
+    // #i116940# be consistent with getByName: count only table names which have a cache already
+    return getElementNames().getLength();
 }
 
-Any SAL_CALL ScExternalDocLinkObj::getByIndex(sal_Int32 nIndex)
+Any SAL_CALL ScExternalDocLinkObj::getByIndex(sal_Int32 nApiIndex)
         throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, RuntimeException)
 {
     ScUnoGuard aGuard;
-    size_t nTabCount = mpRefMgr->getCacheTableCount(mnFileId);
-    if (nIndex < 0 || nIndex >= static_cast<sal_Int32>(nTabCount))
+
+    // #i116940# Can't use nApiIndex as index for the ref manager, because the API counts only
+    // the entries which have a cache already. Quick solution: Use getElementNames.
+
+    Sequence< OUString > aNames( getElementNames() );
+    if (nApiIndex < 0 || nApiIndex >= aNames.getLength())
         throw lang::IndexOutOfBoundsException();
 
-    ScExternalRefCache::TableTypeRef pTable = mpRefMgr->getCacheTable(mnFileId, static_cast<size_t>(nIndex));
+    size_t nIndex = 0;
+    ScExternalRefCache::TableTypeRef pTable = mpRefMgr->getCacheTable(mnFileId, aNames[nApiIndex], false, &nIndex);
     if (!pTable)
         throw lang::IndexOutOfBoundsException();
 
@@ -1702,7 +1719,9 @@ sal_Bool SAL_CALL ScExternalDocLinkObj::hasElements()
         throw (RuntimeException)
 {
     ScUnoGuard aGuard;
-    return static_cast<sal_Bool>(mpRefMgr->getCacheTableCount(mnFileId) > 0);
+
+    // #i116940# be consistent with getByName: count only table names which have a cache already
+    return ( getElementNames().getLength() > 0 );
 }
 
 sal_Int32 SAL_CALL ScExternalDocLinkObj::getTokenIndex()
