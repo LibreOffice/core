@@ -83,7 +83,7 @@ using namespace ::com::sun::star::lang;
 
 void lcl_SetUIPrefs(const SwViewOption* pPref, SwView* pView, ViewShell* pSh )
 {
-    // in FrameSets kann die tatsaechliche Sichtbarkeit von der Einstellung der ViewOptions abweichen
+    // in FrameSets the actual visibility cat differ from the VewOption's setting
     sal_Bool bVScrollChanged = pPref->IsViewVScrollBar() != pSh->GetViewOptions()->IsViewVScrollBar();
     sal_Bool bHScrollChanged = pPref->IsViewHScrollBar() != pSh->GetViewOptions()->IsViewHScrollBar();
     sal_Bool bVAlignChanged = pPref->IsVRulerRight() != pSh->GetViewOptions()->IsVRulerRight();
@@ -91,7 +91,7 @@ void lcl_SetUIPrefs(const SwViewOption* pPref, SwView* pView, ViewShell* pSh )
     pSh->SetUIOptions(*pPref);
     const SwViewOption* pNewPref = pSh->GetViewOptions();
 
-    // Scrollbars an / aus
+    // Scrollbars on / off
     if(bVScrollChanged)
     {
         pView->ShowVScrollbar(pNewPref->IsViewVScrollBar());
@@ -104,13 +104,13 @@ void lcl_SetUIPrefs(const SwViewOption* pPref, SwView* pView, ViewShell* pSh )
     if(bVAlignChanged && !bHScrollChanged && !bVScrollChanged)
         pView->InvalidateBorder();
 
-    // Lineale an / aus
+    // Rulers on / off
     if(pNewPref->IsViewVRuler())
         pView->CreateVLineal();
     else
         pView->KillVLineal();
 
-    // TabWindow an/aus
+    // TabWindow on / off
     if(pNewPref->IsViewHRuler())
         pView->CreateTab();
     else
@@ -150,9 +150,8 @@ SwView* SwModule::GetNextView(SwView* pView)
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Neuer Master fuer die Einstellungen wird gesetzt;
-                dieser wirkt sich auf die aktuelle Sicht und alle
-                folgenden aus.
+ Description:   New Master for the settings is set; this affects the
+                current view and all following.
 ------------------------------------------------------------------------*/
 
 void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
@@ -166,9 +165,9 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
                                          VIEWOPT_DEST_TEXT== nDest ? sal_False :
                                          pCurrView && pCurrView->ISA(SwWebView) ));
 
-    //per Uno soll nur die sdbcx::View, aber nicht das Module veraendert werden
+    // with Uno, only sdbcx::View, but not the Module should be changed
     sal_Bool bViewOnly = VIEWOPT_DEST_VIEW_ONLY == nDest;
-    //PreView abfruehstuecken
+    // fob PreView off
     SwPagePreView* pPPView;
     if( !pCurrView && 0 != (pPPView = PTR_CAST( SwPagePreView, SfxViewShell::Current())) )
     {
@@ -193,7 +192,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     if( !pCurrView )
         return;
 
-    // Weitergabe an die CORE
+    // Passing on to CORE
     sal_Bool bReadonly;
     const SwDocShell* pDocSh = pCurrView->GetDocShell();
     if (pDocSh)
@@ -208,7 +207,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     pViewOpt->SetReadonly( bReadonly );
     if( !(*pSh->GetViewOptions() == *pViewOpt) )
     {
-        //Ist evtl. nur eine ViewShell
+        //is maybe only a ViewShell
         pSh->StartAction();
         pSh->ApplyViewOptions( *pViewOpt );
         ((SwWrtShell*)pSh)->SetReadOnlyAvailable(pViewOpt->IsCursorInProtectedArea());
@@ -219,7 +218,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
 
     lcl_SetUIPrefs(pViewOpt, pCurrView, pSh);
 
-    // zum Schluss wird das Idle-Flag wieder gesetzt
+    // in the end the Idle-Flag is set again
     pPref->SetIdle(sal_True);
 }
 
@@ -246,7 +245,7 @@ void SwModule::ApplyUserMetric( FieldUnit eMetric, BOOL bWeb )
         FieldUnit eVScrollMetric = pPref->IsVScrollMetric() ? pPref->GetVScrollMetric() : eMetric;
 
         SwView* pTmpView = SwModule::GetFirstView();
-        // fuer alle MDI-Fenster das Lineal umschalten
+        // switch the ruler for all MDI-Windows
         while(pTmpView)
         {
             if(bWeb == (0 != PTR_CAST(SwWebView, pTmpView)))
@@ -344,7 +343,7 @@ void SwModule::ApplyUserCharUnit(BOOL bApplyChar, BOOL bWeb)
             eVScrollMetric = FUNIT_CM;
     }
     SwView* pTmpView = SwModule::GetFirstView();
-    // fuer alle MDI-Fenster das Lineal umschalten
+    // switch rulers for all MDI-Windows
     while(pTmpView)
     {
         if(bWeb == (0 != PTR_CAST(SwWebView, pTmpView)))
@@ -527,7 +526,7 @@ void SwModule::GetDeletedAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Fuer zukuenftige Erweiterung:
+    Description:    For future extension:
  --------------------------------------------------------------------*/
 
 void SwModule::GetFormatAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet )
@@ -570,7 +569,7 @@ const String& SwModule::GetDocStatWordDelim() const
     return pModuleConfig->GetWordDelimiter();
 }
 
-// Durchreichen der Metric von der ModuleConfig (fuer HTML-Export)
+// Passing-through of the ModuleConfig's Metric (for HTML-Export)
 sal_uInt16 SwModule::GetMetric( sal_Bool bWeb ) const
 {
     SwMasterUsrPref* pPref;
@@ -589,7 +588,7 @@ sal_uInt16 SwModule::GetMetric( sal_Bool bWeb ) const
     return static_cast< sal_uInt16 >(pPref->GetMetric());
 }
 
-// Update-Stati durchreichen
+// Pass-through Update-Stati
 sal_uInt16 SwModule::GetLinkUpdMode( sal_Bool ) const
 {
     if(!pUsrPref)
