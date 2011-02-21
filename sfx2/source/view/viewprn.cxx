@@ -307,6 +307,7 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
 {
     if ( mpObjectShell )
     {
+        bool bCopyJobSetup = false;
         mpObjectShell->Broadcast( SfxPrintingHint( nState ) );
         switch ( nState )
         {
@@ -334,11 +335,28 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
                 rBind.Invalidate( SID_PRINTDOC );
                 rBind.Invalidate( SID_PRINTDOCDIRECT );
                 rBind.Invalidate( SID_SETUPPRINTER );
+                bCopyJobSetup = true;
                 break;
             }
 
             default:
                 break;
+        }
+
+        if( bCopyJobSetup && mpViewShell )
+        {
+            SfxPrinter* pDocPrt = mpViewShell->GetPrinter(sal_False);
+            if( pDocPrt )
+            {
+                if( pDocPrt->GetName() == getPrinter()->GetName() )
+                    pDocPrt->SetJobSetup( getPrinter()->GetJobSetup() );
+                else
+                {
+                    SfxPrinter* pNewPrt = new SfxPrinter( pDocPrt->GetOptions().Clone(), getPrinter()->GetName() );
+                    pNewPrt->SetJobSetup( getPrinter()->GetJobSetup() );
+                    mpViewShell->SetPrinter( pNewPrt, SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP );
+                }
+            }
         }
 
         if ( m_bNeedsChange )
