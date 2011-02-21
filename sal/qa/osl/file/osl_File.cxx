@@ -443,32 +443,13 @@ inline void deleteTestDirectory( const ::rtl::OUString dirname )
 
     ::osl::Directory testDir( aPathURL );
     if ( testDir.isOpen( ) == sal_True )
-    {
-        // LLA: printf("#close Dir\n");
         testDir.close( );  //close if still open.
-        }
 
     nError = ::osl::Directory::remove( aPathURL );
-    // LLA: printError(nError);
-    // LLA: if (( ::osl::FileBase::E_None == nError ))
-    // LLA: {
-    // LLA:     printf("nError == E_None\n");
-    // LLA: }
-    // LLA: else if ( ( nError == ::osl::FileBase::E_NOENT ))
-    // LLA: {
-    // LLA:     printf("nError == E_NOENT\n");
-    // LLA: }
-    // LLA: else
-    // LLA: {
-    // LLA:     // printf("nError == %d\n", nError);
-    // LLA: }
+
     rtl::OString strError (RTL_CONSTASCII_STRINGPARAM("In deleteTestDirectory function: remove Directory "));
     strError += ::rtl::OUStringToOString( aPathURL, RTL_TEXTENCODING_ASCII_US );
     CPPUNIT_ASSERT_MESSAGE( strError.getStr(), ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_NOENT ) );
-    // LLA: if (! ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_NOENT ))
-    // LLA: {
-    // LLA:     printf("In deleteTestDirectory function: remove\n");
-    // LLA: }
 }
 
 /** delete a temp test directory using OUString name of full qualified URL or system path in a base directory.
@@ -4282,7 +4263,7 @@ namespace osl_File
         CPPUNIT_TEST( copy_003 );
         CPPUNIT_TEST( copy_004 );
         CPPUNIT_TEST( copy_005 );
-      CPPUNIT_TEST( copy_006 );
+        CPPUNIT_TEST( copy_006 );
         CPPUNIT_TEST_SUITE_END( );
     };// class copy
 
@@ -5881,24 +5862,39 @@ namespace osl_Directory
 
         void create_002( )
         {
-            //create directory in /tmpname
-#if defined ( WNT ) || defined ( MACOSX )
-            nError1 = osl::FileBase::E_ACCES;  /// in Windows, you can create directory in c:/ any way.
-#elif defined (SAL_UNX)
-            nError1 = ::osl::Directory::create( aTmpName7 );
-            CPPUNIT_ASSERT_MESSAGE( "test for create function: create a directory and check its existence.",
-                                    ( osl::FileBase::E_None == nError1 ) );
-            osl_setFileAttributes(aTmpName7.pData, 0);
-            nError1 = ::osl::Directory::create( aTmpName11 );
+#if !defined (WNT) && !defined (MACOSX) && defined (SAL_UNX)
+            if (geteuid() == 0) //don't test if building as root
+                return;
 
-            osl_setFileAttributes(aTmpName7.pData, osl_File_Attribute_OwnWrite);
-            deleteTestDirectory( aTmpName7 );
-#else
-            nError1 = osl::FileBase::E_ACCES;
+            rtl::OUString aTmpDir;
+            nError1 = FileBase::createTempFile(NULL, NULL, &aTmpDir);
+            CPPUNIT_ASSERT_MESSAGE("temp File creation failed", osl::FileBase::E_None == nError1);
+
+            nError1 = ::osl::File::remove(aTmpDir);
+            CPPUNIT_ASSERT_MESSAGE("temp File removal failed", osl::FileBase::E_None == nError1);
+
+            nError1 = ::osl::Directory::create(aTmpDir);
+            ::rtl::OString sError("test for create function: create a directory '");
+            sError += ::rtl::OUStringToOString(aTmpDir, RTL_TEXTENCODING_ASCII_US);
+            sError += "' and check its existence.";
+            CPPUNIT_ASSERT_MESSAGE(sError.getStr(), osl::FileBase::E_None == nError1);
+            osl_setFileAttributes(aTmpDir.pData, 0); //no access allowed now
+
+            //Shouldn't be possible now to create a dir underneath it
+            rtl::OUString aTmpSubLevel = aTmpDir + OUString(RTL_CONSTASCII_USTRINGPARAM("/notallowedhere"));
+            nError1 = ::osl::Directory::create(aTmpSubLevel);
+
+            //allow removal
+            osl_setFileAttributes(aTmpDir.pData,
+                osl_File_Attribute_OwnRead |
+                osl_File_Attribute_OwnWrite |
+                osl_File_Attribute_OwnExe);
+            deleteTestDirectory(aTmpDir);
+            sError = ::rtl::OString("test for create function: create a directory under '");
+            sError += ::rtl::OUStringToOString(aTmpDir, RTL_TEXTENCODING_ASCII_US);
+            sError += "' for access test.";
+            CPPUNIT_ASSERT_MESSAGE(sError.getStr(), osl::FileBase::E_ACCES == nError1);
 #endif
-
-            CPPUNIT_ASSERT_MESSAGE( "test for create function: create a directory in root for access test.",
-                                    ( osl::FileBase::E_ACCES == nError1 ) );
         }
 
         void create_003( )
