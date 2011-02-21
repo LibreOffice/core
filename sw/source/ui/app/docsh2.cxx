@@ -393,7 +393,7 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
         // SwDocStyleSheetPool::aStyleSheet that uses same members of
         // SwDocStyleSheetPool::Find. Therefore a copy has to be used
         // here. Attention: SfxStylessheetBase::SetFollow calls itself
-        // a SwDocStyleSheetBase::Find, so that it's not sufficiant to
+        // a SwDocStyleSheetPool::Find, so that it's not sufficiant to
         // to eliminate the Find-calls in this method.
 
         rtl::Reference< SwDocStyleSheet > xNewSheet( new SwDocStyleSheet( (SwDocStyleSheet&)pMyPool
