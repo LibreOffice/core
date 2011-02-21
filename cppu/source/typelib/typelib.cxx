@@ -330,7 +330,6 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
         delete pWeakMap;
         pWeakMap = 0;
     }
-    OSL_ASSERT( !pCallbacks || pCallbacks->empty() );
     delete pCallbacks;
     pCallbacks = 0;
 
