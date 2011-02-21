@@ -36,11 +36,6 @@
 #include <tools/debug.hxx>
 #include <osl/thread.h>
 
-//static long         hCurConv  = 0;
-//static DWORD        hDdeInst  = NULL;
-//static short        nInstance = 0;
-//static DdeServices* pServices;
-
 enum DdeItemType
 {
     DDEITEM,
@@ -588,7 +583,10 @@ void DdeService::RemoveTopic( const DdeTopic& rTopic )
 
 BOOL DdeService::HasCbFormat( USHORT nFmt )
 {
-    return BOOL( aFormats.GetPos( nFmt ) != LIST_ENTRY_NOTFOUND );
+    for ( size_t i = 0, n = aFormats.size(); i < n; ++i )
+        if ( aFormats[ i ] == nFmt )
+            return true;
+    return false;
 }
 
 // --- DdeService::HasFormat() -------------------------------------
@@ -603,15 +601,23 @@ BOOL DdeService::HasFormat( ULONG nFmt )
 void DdeService::AddFormat( ULONG nFmt )
 {
     nFmt = DdeData::GetExternalFormat( nFmt );
-    aFormats.Remove( nFmt );
-    aFormats.Insert( nFmt );
+    for ( size_t i = 0, n = aFormats.size(); i < n; ++i )
+        if ( aFormats[ i ] == nFmt )
+            return;
+    aFormats->push_back( nFmt );
 }
 
 // --- DdeService::RemoveFormat() ----------------------------------
 
 void DdeService::RemoveFormat( ULONG nFmt )
 {
-    aFormats.Remove( DdeData::GetExternalFormat( nFmt ) );
+    nFmt = DdeData::GetExternalFormat( nFmt );
+    for ( DdeFormats::iterator it = aFormats.begin(); it < aFormats.end(); ++it ) {
+        if ( *it == nFmt ) {
+            aFormats.erase( it );
+            break;
+        }
+    }
 }
 
 // --- DdeTopic::DdeTopic() ----------------------------------------
@@ -1018,8 +1024,9 @@ String DdeService::Formats()
     LPCTSTR     p;
     short       n = 0;
 
-    for ( f = aFormats.First(); f; f = aFormats.Next(), n++ )
+    for ( size_t i = 0; i < aFormats.size(); ++i, n++ )
     {
+        f = aFormats[ i ];
         if ( n )
             s += '\t';
         p = buf;

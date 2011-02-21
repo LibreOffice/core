@@ -67,7 +67,7 @@ typedef List DdeItems;
 #endif
 
 DECLARE_LIST( DdeTransactions, DdeTransaction* )
-DECLARE_LIST( DdeFormats, long )
+typedef ::std::vector< long > DdeFormats;
 
 // -----------
 // - DdeData -
