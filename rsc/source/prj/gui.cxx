@@ -46,11 +46,7 @@ static RscCompiler * pRscCompiler = NULL;
 #if defined( UNX ) || defined ( GCC ) || defined(__MINGW32__)
         void ExitProgram( void ){
 #else
-#if defined( CSET )
-    void _Optlink ExitProgram( void ){
-#else
     void cdecl ExitProgram( void ){
-#endif
 #endif
     if( pRscCompiler )
         delete pRscCompiler;
@@ -72,11 +68,7 @@ RscVerbosity lcl_determineVerbosity( int argc, char ** argv )
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
 #ifndef UNX
-#ifdef CSET
     atexit( ExitProgram );
-#else
-    atexit( ExitProgram );
-#endif
 #endif
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "debugging %s\n", argv[0] );

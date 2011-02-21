@@ -44,7 +44,7 @@
 #if defined ( OS2 ) && !defined ( GCC )
 #include <direct.h>
 #endif
-#if !defined ( CSET ) && !defined ( OS2 )
+#if !defined ( OS2 )
 #include <dos.h>
 #endif
 
@@ -173,8 +173,6 @@ static BOOL CallPrePro( const ByteString& rPrePro,
 
 #if defined UNX || defined OS2
     nExit = spawnvp( P_WAIT, rPrePro.GetBuffer(), (char* const*)pCmdL->GetBlock() );
-#elif defined CSET
-    nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), (const char**)pCmdL->GetBlock() );
 #else
     nExit = spawnvp( P_WAIT, (char*)rPrePro.GetBuffer(), (const char**)pCmdL->GetBlock() );
 #endif
@@ -285,8 +283,6 @@ static BOOL CallRsc2( ByteString aRsc2Name,
 
 #if defined UNX || defined OS2
     nExit = spawnvp( P_WAIT, aRsc2Name.GetBuffer(), (char* const*)aNewCmdL.GetBlock() );
-#elif defined CSET
-    nExit = spawnvp( P_WAIT, (char*)aRsc2Name.GetBuffer(), (char **)(const char**)aNewCmdL.GetBlock() );
 #else
     nExit = spawnvp( P_WAIT, (char*)aRsc2Name.GetBuffer(), (const char**)aNewCmdL.GetBlock() );
 #endif
