@@ -1636,7 +1636,7 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
         // Now, insert the token into cache table but don't cache empty cells.
         if (pToken->GetType() != formula::svEmptyCell)
         {
-            sal_uInt32 nFmtIndex = pFmt->mbIsSet ? pFmt->mnIndex : 0;
+            sal_uInt32 nFmtIndex = (pFmt && pFmt->mbIsSet) ? pFmt->mnIndex : 0;
             maRefCache.setCellData(nFileId, rTabName, rCell.Col(), rCell.Row(), pToken, nFmtIndex);
         }
 
