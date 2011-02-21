@@ -344,15 +344,19 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
     if( ! pController->getPrinter() )
     {
         rtl::OUString aPrinterName( i_rInitSetup.GetPrinterName() );
+        bool bSetJobSetup = true;
         if( ! aPrinterName.getLength() && pController->isShowDialogs() && ! pController->isDirectPrint() )
         {
             // get printer name from configuration
             SettingsConfigItem* pItem = SettingsConfigItem::get();
             aPrinterName = pItem->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintDialog" ) ),
                                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LastPrinterUsed" ) ) );
+            bSetJobSetup = false;
         }
 
         boost::shared_ptr<Printer> pPrinter( new Printer( aPrinterName ) );
+        if( bSetJobSetup )
+            pPrinter->SetJobSetup( i_rInitSetup );
         pController->setPrinter( pPrinter );
     }
 
