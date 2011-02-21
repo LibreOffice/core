@@ -39,28 +39,23 @@
 class SwCharFmt;
 class IntlWrapper;
 
-/*************************************************************************
-|*    class     SwFmtDrop
-*************************************************************************/
-
 #define DROP_WHOLEWORD ((USHORT)0x0001)
 
-//Wenn ein SwFmtDrop Client ist, so ist dies das CharFmt welches den Font fuer
-//die DropCaps beschreibt. Ist es kein Client, so wird von der Formatierung
-//das CharFmt des Absatzes benutzt.
-//Wird das CharFmt verandert, so wird diese Aenderung ueber das Modify des
-//SwFmtDrop an die Absatze propagiert.
+// If SwFmtDrop is a Client, it is the CharFmt that describes the font for the
+// DropCaps. If it is not a Client, formating uses the CharFmt of the paragraph.
+// If the CharFmt is modified, this change is propagated to the paragraphs
+// via the Modify of SwFmtDrop.
 class SW_DLLPUBLIC SwFmtDrop: public SfxPoolItem, public SwClient
 {
-    SwModify* pDefinedIn;   // Modify-Object, in dem der DropCaps steht
-                            // kann nur TxtFmtCollection/TxtNode sein
-    USHORT nDistance;   // Abstand zum Textbeginn
-    USHORT nReadFmt;    // fuer den Sw3-Reader: CharFormat-Id (Pool laden!)
-    BYTE   nLines;       // Anzahl der Zeilen
-    BYTE   nChars;       // Anzahl der Zeichen
-    BOOL   bWholeWord;   // Erstes Wort als Initialen
+    SwModify* pDefinedIn;   // Modify-Object, that contains DropCaps.
+                            // Can only be TxtFmtCollection/TxtNode.
+    USHORT nDistance;       // Distance to beginning of text.
+    USHORT nReadFmt;        // For Sw3-Reader: CharFormat-Id (load Pool!).
+    BYTE   nLines;          // Line count.
+    BYTE   nChars;          // Character count.
+    BOOL   bWholeWord;      // First word with initials.
 public:
-    TYPEINFO(); //Bereits in der Basisklasse SwClient
+    TYPEINFO(); // Already in base class SwClient.
 
     SwFmtDrop();
     virtual ~SwFmtDrop();
@@ -99,10 +94,10 @@ public:
     inline SwCharFmt *GetCharFmt()       { return (SwCharFmt*)pRegisteredIn; }
     void SetCharFmt( SwCharFmt *pNew );
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
-        // erfrage vom Client Informationen
+    // Get information from Client.
     virtual BOOL GetInfo( SfxPoolItem& ) const;
 
-    // erfrage und setze den Modify-Pointer
+    // Get and set Modify pointer.
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
     inline void ChgDefinedIn( const SwModify* pNew )
     { pDefinedIn = (SwModify*)pNew; }
@@ -201,7 +196,7 @@ inline SwParaConnectBorderItem& SwParaConnectBorderItem::operator=(
 
 
 /******************************************************************************
- *  Implementierung der Paragraph-Attribut Methoden vom SwAttrSet
+ *  Implementation of paragraph-attributes methods of SwAttrSet
  ******************************************************************************/
 
 inline const SvxLineSpacingItem &SwAttrSet::GetLineSpacing(BOOL bInP) const
@@ -238,7 +233,7 @@ inline const SwParaConnectBorderItem &SwAttrSet::GetParaConnectBorder(BOOL bInP)
     {   return (const SwParaConnectBorderItem&)Get( RES_PARATR_CONNECT_BORDER, bInP ); }
 
 /******************************************************************************
- *  Implementierung der Paragraph-Attribut Methoden vom SwFmt
+ *  Implementation of paragraph-attributes methods of SwFmt
  ******************************************************************************/
 
 inline const SvxLineSpacingItem &SwFmt::GetLineSpacing(BOOL bInP) const

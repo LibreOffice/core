@@ -28,13 +28,13 @@
 #ifndef _PAM_HXX
 #define _PAM_HXX
 
-#include <stddef.h>         // fuer MemPool
+#include <stddef.h>         // For MemPool.
 #include <tools/gen.hxx>
 #include <tools/mempool.hxx>
-#include <cshtyp.hxx>       // fuer die Funktions-Definitionen
-#include <ring.hxx>         // Superklasse
-#include <index.hxx>        // fuer SwIndex
-#include <ndindex.hxx>      // fuer SwNodeIndex
+#include <cshtyp.hxx>       // For function definitions.
+#include <ring.hxx>         // Super class.
+#include <index.hxx>        // For SwIndex.
+#include <ndindex.hxx>      // For SwNodeIndex.
 #include "swdllapi.h"
 
 class SwFmt;
@@ -82,17 +82,17 @@ struct SW_DLLPUBLIC SwPosition
 };
 
 
-// das Ergebnis eines Positions Vergleiches
+// Result of comparing positions.
 enum SwComparePosition {
-    POS_BEFORE,             // Pos1 liegt vor Pos2
-    POS_BEHIND,             // Pos1 liegt hinter Pos2
-    POS_INSIDE,             // Pos1 liegt vollstaendig in Pos2
-    POS_OUTSIDE,            // Pos2 liegt vollstaendig in Pos1
-    POS_EQUAL,              // Pos1 ist genauso gross wie Pos2
-    POS_OVERLAP_BEFORE,     // Pos1 ueberlappt Pos2 am Anfang
-    POS_OVERLAP_BEHIND,     // Pos1 ueberlappt Pos2 am Ende
-    POS_COLLIDE_START,      // Pos1 Start stoesst an Pos2 Ende
-    POS_COLLIDE_END         // Pos1 End stoesst an Pos2 Start
+    POS_BEFORE,             // Pos1 before Pos2.
+    POS_BEHIND,             // Pos1 behind Pos2.
+    POS_INSIDE,             // Pos1 completely contained in Pos2.
+    POS_OUTSIDE,            // Pos2 completely contained in Pos1.
+    POS_EQUAL,              // Pos1 is as large as Pos2.
+    POS_OVERLAP_BEFORE,     // Pos1 overlaps Pos2 at the beginning.
+    POS_OVERLAP_BEHIND,     // Pos1 overlaps Pos2 at the end.
+    POS_COLLIDE_START,      // Pos1 start touches at Pos2 end.
+    POS_COLLIDE_END         // Pos1 end touches at Pos2 start.
 };
 SwComparePosition ComparePosition(
             const SwPosition& rStt1, const SwPosition& rEnd1,
@@ -150,11 +150,11 @@ public:
     // @@@ semantic: no copy assignment for super class Ring.
     SwPaM& operator=( const SwPaM & );
 
-    // Bewegen des Cursors
+    // Movement of cursor.
     BOOL Move( SwMoveFn fnMove = fnMoveForward,
                     SwGoInDoc fnGo = fnGoCntnt );
 
-    // Suchen
+    // Search.
     BYTE Find(  const com::sun::star::util::SearchOptions& rSearchOpt,
                 BOOL bSearchInNotes,
                 utl::TextSearch& rSTxt,
@@ -252,11 +252,11 @@ public:
     const SwPosition& GetBound( bool bOne = true ) const
                             { return bOne ? m_Bound1 : m_Bound2; }
 
-    // erfrage die Seitennummer auf der der Cursor steht
+    // Get number of page which contains cursor.
     USHORT GetPageNum( BOOL bAtPoint = TRUE, const Point* pLayPos = 0 );
 
-    // steht in etwas geschuetztem oder in die Selektion umspannt
-    // etwas geschuetztes.
+    // Is in something protected (readonly) or selection contains
+    // something protected.
     BOOL HasReadonlySel( bool bFormView ) const;
 
     BOOL ContainsPosition(const SwPosition & rPos)
