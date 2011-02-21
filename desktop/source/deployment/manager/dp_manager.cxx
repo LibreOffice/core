@@ -63,6 +63,7 @@
 #include "com/sun/star/ucb/UnsupportedCommandException.hpp"
 #include "boost/bind.hpp"
 #include "tools/urlobj.hxx"
+#include "unotools/tempfile.hxx"
 
 #include "osl/file.hxx"
 #include <vector>
@@ -636,20 +637,28 @@ OUString PackageManagerImpl::insertToActivationLayer(
     ::ucbhelper::Content sourceContent(sourceContent_);
     Reference<XCommandEnvironment> xCmdEnv(
         sourceContent.getCommandEnvironment() );
-    OUString destFolder, tempEntry;
-    if (::osl::File::createTempFile(
-            m_activePackages_expanded.getLength() == 0
-            ? 0 : &m_activePackages_expanded,
-            0, &tempEntry ) != ::osl::File::E_None)
-        throw RuntimeException(
-            OUSTR("::osl::File::createTempFile() failed!"), 0 );
+    OUString destFolder;
+    OUString tempEntry;
+    // if (::osl::File::createTempFile(
+    //         m_activePackages_expanded.getLength() == 0
+    //         ? 0 : &m_activePackages_expanded,
+    //         0, &tempEntry ) != ::osl::File::E_None)
+    //     throw RuntimeException(
+    //         OUSTR("::osl::File::createTempFile() failed!"), 0 );
+    //::utl::TempFile::SetTempNameBaseDirectory(m_activePackages_expanded);
+    String baseDir(m_activePackages_expanded);
+    ::utl::TempFile aTemp(OUSTR("jl123"), NULL, &baseDir, sal_False);
     if (m_activePackages_expanded.getLength() == 0) {
-        destFolder = tempEntry;
+//        destFolder = tempEntry;
+        destFolder = aTemp.GetFileName();
     }
     else {
-        tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
+//        tempEntry = tempEntry.copy( tempEntry.lastIndexOf( '/' ) + 1 );
         // tweak user|share to macrofied url:
-        destFolder = makeURL( m_activePackages, tempEntry );
+//        destFolder = makeURL( m_activePackages, tempEntry );
+        tempEntry = aTemp.GetURL();
+        tempEntry = tempEntry.copy(tempEntry.lastIndexOf('/') + 1);
+        destFolder = makeURL( m_activePackages, tempEntry);
     }
     destFolder += OUSTR("_");
 
