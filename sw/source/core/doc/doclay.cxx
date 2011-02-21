@@ -56,7 +56,6 @@
 #include <rtl/logfile.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <fchrfmt.hxx>
-#include <errhdl.hxx>
 #include <frmatr.hxx>
 #include <txatbase.hxx>
 #include <fmtfld.hxx>

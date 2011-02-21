@@ -30,7 +30,6 @@
 
 #include <tools/solar.h>
 #include "swdllapi.h"
-#include <errhdl.hxx>       // For ASSERT.
 #include <swatrset.hxx>     // For SfxItemPool/-Set, Attr forward decl.
 #include <calbck.hxx>       // For SwModify.
 #include <hintids.hxx>

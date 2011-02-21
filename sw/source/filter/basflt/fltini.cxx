@@ -50,7 +50,6 @@
 #include <docary.hxx>
 #include <pam.hxx>
 #include <shellio.hxx>
-#include <errhdl.hxx>
 #include <docsh.hxx>
 #include <wdocsh.hxx>
 #include <fltini.hxx>

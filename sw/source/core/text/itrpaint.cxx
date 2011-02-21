@@ -33,7 +33,6 @@
 #include "hintids.hxx"
 #include "flyfrm.hxx"     // SwFlyInCntFrm
 #include "viewopt.hxx"  // SwViewOptions
-#include "errhdl.hxx"
 #include "txtatr.hxx"  // SwINetFmt
 #include <tools/multisel.hxx>
 #include <editeng/escpitem.hxx>

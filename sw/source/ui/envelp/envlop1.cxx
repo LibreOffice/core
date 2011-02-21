@@ -39,7 +39,6 @@
 #include <viewopt.hxx>
 
 #include "wrtsh.hxx"
-#include "errhdl.hxx"
 #include "cmdid.h"
 #include "helpid.h"
 #include "envfmt.hxx"

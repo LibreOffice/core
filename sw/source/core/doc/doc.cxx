@@ -74,7 +74,6 @@
 #include <txtrfmrk.hxx>
 #include <frmatr.hxx>
 #include <linkenum.hxx>
-#include <errhdl.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <swtable.hxx>

@@ -39,7 +39,6 @@
 #include "ftnfrm.hxx"
 #include "frmtool.hxx"
 #include "frmfmt.hxx"
-#include "errhdl.hxx"
 #include "hints.hxx"
 #include "pam.hxx"
 #include "sectfrm.hxx"

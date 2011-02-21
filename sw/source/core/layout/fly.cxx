@@ -81,7 +81,6 @@
 #include "pam.hxx"
 #include "frmatr.hxx"
 #include "viewimp.hxx"
-#include "errhdl.hxx"
 #include "dcontact.hxx"
 #include "dflyobj.hxx"
 #include "dview.hxx"

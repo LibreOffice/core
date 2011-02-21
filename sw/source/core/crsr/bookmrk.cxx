@@ -33,7 +33,6 @@
 #include <bookmrk.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <doc.hxx>
-#include <errhdl.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <swserv.hxx>

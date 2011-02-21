@@ -50,7 +50,6 @@
 #include <shellio.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
-#include <errhdl.hxx>
 
 #include <dialog.hrc>
 #include <ascfldlg.hrc>

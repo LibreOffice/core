@@ -35,7 +35,6 @@
 #include <algorithm>
 #include <comphelper/stlunosequence.hxx>
 
-#include <errhdl.hxx>
 
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>

@@ -34,7 +34,6 @@
 
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <hintids.hxx>     // CH_TXTATR
-#include <errhdl.hxx>   // ASSERT
 #include <SwPortionHandler.hxx>
 #include <txtcfg.hxx>
 #include <porlay.hxx>

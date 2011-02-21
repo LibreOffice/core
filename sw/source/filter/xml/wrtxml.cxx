@@ -55,7 +55,6 @@
 #include <docsh.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
-#include <errhdl.hxx>
 #include <swerror.h>
 #include <wrtxml.hxx>
 #include <statstr.hrc>

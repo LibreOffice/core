@@ -30,7 +30,6 @@
 
 #include <tools/solar.h>
 #include <tools/string.hxx>
-#include <errhdl.hxx>
 
 class SwTxtFrm;
 class OutputDevice;

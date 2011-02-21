@@ -29,10 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-#include "errhdl.hxx"           // fuers ASSERT
-#include "error.h"              // fuers ASSERT
 #include "ndindex.hxx"
 
 #if OSL_DEBUG_LEVEL > 1

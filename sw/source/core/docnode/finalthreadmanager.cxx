@@ -29,7 +29,6 @@
 #include <finalthreadmanager.hxx>
 
 #include <osl/thread.hxx>
-#include <errhdl.hxx>
 #include <pausethreadstarting.hxx>
 #include <swthreadjoiner.hxx>
 

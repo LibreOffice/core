@@ -33,7 +33,6 @@
 #include <vcl/outdev.hxx>
 #include <SwPortionHandler.hxx>
 
-#include "errhdl.hxx"   // ASSERT
 
 #include "txtcfg.hxx"
 #include "porlin.hxx"

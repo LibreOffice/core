@@ -46,7 +46,6 @@
 #include <cmdid.h>
 #include <helpid.h>
 #include <swtypes.hxx>
-#include <errhdl.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>

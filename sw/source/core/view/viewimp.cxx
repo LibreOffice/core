@@ -34,7 +34,6 @@
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"
 #include "viewimp.hxx"
-#include "errhdl.hxx"
 #include "viewopt.hxx"
 #include "flyfrm.hxx"
 #include "frmfmt.hxx"

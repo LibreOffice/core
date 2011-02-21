@@ -48,7 +48,6 @@
 #include <charatr.hxx>
 #include <frmatr.hxx>
 #include <doc.hxx>
-#include <errhdl.hxx>
 #include <fltini.hxx>
 #include <docufld.hxx>
 #include <pagedesc.hxx>

@@ -31,7 +31,6 @@
 
 
 
-#include "errhdl.hxx"
 #include "txtcfg.hxx"
 #include "swcache.hxx"
 #include "fntcache.hxx"     // pFntCache  ( SwFont/ScrFont-PrtFont Cache )

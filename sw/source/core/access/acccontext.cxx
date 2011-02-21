@@ -39,7 +39,6 @@
 #endif // #if (OSL_DEBUG_LEVEL > 1) && defined TEST_MIB
 #include <tools/debug.hxx>
 #include <vcl/window.hxx>
-#include <errhdl.hxx>
 #include <swtypes.hxx>
 
 #include <com/sun/star/accessibility/XAccessible.hpp>

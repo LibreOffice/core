@@ -30,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 #include "hintids.hxx"
-#include "errhdl.hxx"
 #include "ndtxt.hxx"
 #include "frmfmt.hxx"
 #include "paratr.hxx"

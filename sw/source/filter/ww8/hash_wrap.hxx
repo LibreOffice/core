@@ -33,7 +33,6 @@
 
 #include <boost/unordered_set.hpp>
 #include <tools/debug.hxx>
-#include <errhdl.hxx>       // OSL_ENSURE()
 
 //simple wrapper around boost::unordered_set to behave like sorted array
 namespace ww

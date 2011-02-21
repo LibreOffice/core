@@ -44,7 +44,6 @@
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
-#include <errhdl.hxx>
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
 #include <poolfmt.hxx>

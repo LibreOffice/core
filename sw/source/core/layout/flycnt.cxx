@@ -44,7 +44,6 @@
 #include "hints.hxx"
 #include "ndtxt.hxx"
 #include "swundo.hxx"
-#include "errhdl.hxx"
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <fmtanchr.hxx>

@@ -47,7 +47,6 @@
 #include <swdllapi.h>
 #include <swtypes.hxx>
 #include <docfac.hxx>   // SwDocFac
-#include <errhdl.hxx>
 #include <iodetect.hxx>
 
 // einige Forward - Deklarationen

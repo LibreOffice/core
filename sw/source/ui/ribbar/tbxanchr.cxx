@@ -48,7 +48,6 @@
 #include "wrtsh.hxx"
 #include "view.hxx"
 #include "viewopt.hxx"
-#include "errhdl.hxx"
 #include "ribbar.hrc"
 #include "tbxanchr.hxx"
 

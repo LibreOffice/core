@@ -36,8 +36,6 @@
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <calbck.hxx>
-#include <errhdl.hxx>  // For inline ASSERT.
-#include <error.h>     // For inline ASSERT.
 #include <hints.hxx>
 #include <boost/unordered_map.hpp>
 #include <stringhash.hxx>

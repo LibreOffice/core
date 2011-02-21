@@ -31,7 +31,6 @@
 
 #include <algorithm>
 #include <functional>
-#include <errhdl.hxx>
 #include <SwNumberTree.hxx>
 
 using std::vector;

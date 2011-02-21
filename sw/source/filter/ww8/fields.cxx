@@ -30,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 #include "fields.hxx"
-#include <errhdl.hxx>
 #include <osl/diagnose.h>
 #include <sal/macros.h>
 #include <stddef.h>

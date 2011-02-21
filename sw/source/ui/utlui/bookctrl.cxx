@@ -42,7 +42,6 @@
 #include <vcl/status.hxx>
 #include <vcl/menu.hxx>
 #include "cmdid.h"
-#include "errhdl.hxx"
 #include "swmodule.hxx"
 #include "wrtsh.hxx"
 #include "IMark.hxx"

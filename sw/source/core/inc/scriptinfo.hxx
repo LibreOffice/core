@@ -36,7 +36,6 @@
 #include <list>
 #include <modeltoviewhelper.hxx>
 
-#include <errhdl.hxx>
 
 class SwTxtNode;
 class Point;

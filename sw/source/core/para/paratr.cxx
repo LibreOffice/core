@@ -48,7 +48,6 @@
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <unostyle.hxx>
 #include <SwStyleNameMapper.hxx>
-#include "errhdl.hxx"
 #include "paratr.hxx"
 #include "charfmt.hxx"
 #include "cmdid.h"

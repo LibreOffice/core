@@ -38,7 +38,6 @@
 #include <sot/clsids.hxx>
 
 #include "edtwin.hxx"
-#include "errhdl.hxx"
 #include "wrtsh.hxx"
 #include "cmdid.h"
 #include "frmatr.hxx"

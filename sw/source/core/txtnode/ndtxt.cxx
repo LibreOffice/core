@@ -66,7 +66,6 @@
 #include <docary.hxx>
 #include <pam.hxx>                  // fuer SwPosition
 #include <fldbas.hxx>
-#include <errhdl.hxx>
 #include <paratr.hxx>
 #include <txtfrm.hxx>
 #include <ftnfrm.hxx>

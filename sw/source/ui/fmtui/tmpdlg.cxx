@@ -51,7 +51,6 @@
 #include <fmtclds.hxx>
 #include <swtypes.hxx>
 #include <swmodule.hxx>
-#include <errhdl.hxx>       // fuer Create-Methoden
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <wdocsh.hxx>

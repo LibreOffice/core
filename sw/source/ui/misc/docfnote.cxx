@@ -35,7 +35,6 @@
 
 
 #include <svl/style.hxx>
-#include <errhdl.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <docsh.hxx>

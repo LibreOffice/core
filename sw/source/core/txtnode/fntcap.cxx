@@ -39,7 +39,6 @@
 #include <com/sun/star/i18n/WordType.hdl>
 
 #include <vcl/print.hxx>
-#include <errhdl.hxx>
 #include <fntcache.hxx>
 #include <swfont.hxx>
 #include <breakit.hxx>

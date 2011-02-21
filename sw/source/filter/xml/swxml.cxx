@@ -66,7 +66,6 @@
 #include <sfx2/frame.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <swerror.h>
-#include <errhdl.hxx>
 #include <fltini.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>

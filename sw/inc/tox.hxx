@@ -41,7 +41,6 @@
 #include <swtypes.hxx>
 #include <toxe.hxx>
 #include <calbck.hxx>
-#include <errhdl.hxx>
 
 #ifndef INCLUDED_VECTOR
 #include <vector> // #i21237#

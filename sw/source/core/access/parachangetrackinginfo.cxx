@@ -30,7 +30,6 @@
 
 #include <parachangetrackinginfo.hxx>
 
-#include <errhdl.hxx>
 #include <wrong.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
 

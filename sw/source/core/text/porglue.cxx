@@ -34,7 +34,6 @@
 #include "swrect.hxx"
 #include "paratr.hxx"   // pTabStop, ADJ*
 #include "viewopt.hxx"  // SwViewOptions
-#include "errhdl.hxx"   // ASSERT
 #include <SwPortionHandler.hxx>
 
 #include "txtcfg.hxx"

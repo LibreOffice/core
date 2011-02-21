@@ -52,7 +52,6 @@
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
-#include <errhdl.hxx>
 #include <docsh.hxx>
 #include <content.hxx>
 #include <edglbldc.hxx>

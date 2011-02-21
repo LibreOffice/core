@@ -47,7 +47,6 @@
 #include <SwXMLBlockExport.hxx>
 #include <swevent.hxx>
 #include <swerror.h>
-#include <errhdl.hxx>
 
 
 #define STREAM_STGREAD  ( STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE )

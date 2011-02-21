@@ -47,7 +47,6 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/tempfile.hxx>
 #include <swtypes.hxx>
-#include <errhdl.hxx>       // ASSERT
 #include <uitool.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>

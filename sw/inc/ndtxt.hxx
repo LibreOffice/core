@@ -31,7 +31,6 @@
 #include <cppuhelper/weakref.hxx>
 
 #include "swdllapi.h"
-#include <error.h>
 #include <node.hxx>
 #include <hintids.hxx>
 #include <ndhints.hxx>

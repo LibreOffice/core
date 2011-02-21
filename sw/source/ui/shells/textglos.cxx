@@ -34,7 +34,6 @@
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 
-#include "errhdl.hxx"
 #include "view.hxx"
 #include "cmdid.h"
 #include "textsh.hxx"

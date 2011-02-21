@@ -44,7 +44,6 @@
 #include <sfx2/dockwin.hxx>
 #include <vcl/toolbox.hxx>
 #include <swtypes.hxx>  // fuer Pathfinder
-#include <errhdl.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <navicfg.hxx>

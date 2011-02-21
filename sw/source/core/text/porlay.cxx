@@ -30,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 
-#include "errhdl.hxx"   // ASSERT
 
 #include "txtcfg.hxx"
 #include "porlay.hxx"

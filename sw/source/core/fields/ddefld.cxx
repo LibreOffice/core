@@ -33,7 +33,6 @@
 #include <sfx2/linkmgr.hxx>
 #include <doc.hxx>
 #include <editsh.hxx>
-#include <errhdl.hxx>
 #include <ndtxt.hxx>
 #include <fmtfld.hxx>
 #include <txtfld.hxx>

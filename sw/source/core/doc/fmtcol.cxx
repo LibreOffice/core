@@ -35,7 +35,6 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <doc.hxx>          // fuer GetAttrPool
-#include <errhdl.hxx>
 #include <fmtcol.hxx>
 #include <fmtcolfunc.hxx> // #i71574#
 #include <hints.hxx>

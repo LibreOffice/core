@@ -37,7 +37,6 @@
 #include "viewsh.hxx"       // IsDbg()
 #include "viewopt.hxx"      // IsDbg()
 #include "txtatr.hxx"
-#include "errhdl.hxx"
 #include "txtcfg.hxx"
 #include "txtfrm.hxx"       // IsDbg()
 #include "flyfrms.hxx"

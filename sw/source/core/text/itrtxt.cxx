@@ -33,7 +33,6 @@
 #include "ndtxt.hxx"
 #include "flyfrm.hxx"
 #include "paratr.hxx"
-#include "errhdl.hxx"
 #include <vcl/outdev.hxx>
 #include <editeng/paravertalignitem.hxx>
 

@@ -30,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 
-#include <errhdl.hxx>   // ASSERT
 #include <atrhndl.hxx>
 #include <svl/itemiter.hxx>
 #include <vcl/outdev.hxx>

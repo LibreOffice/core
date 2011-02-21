@@ -30,7 +30,6 @@
 #include "precompiled_sw.hxx"
 
 #include <tools/debug.hxx>
-#include <errhdl.hxx>
 #include <swcache.hxx>
 
 SV_IMPL_PTRARR(SwCacheObjArr,SwCacheObj*);

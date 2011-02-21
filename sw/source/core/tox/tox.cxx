@@ -35,7 +35,6 @@
 #include <tools/resid.hxx>
 #include <hintids.hxx>
 #include <swtypes.hxx>
-#include <errhdl.hxx>
 #include <txtatr.hxx>
 #include <ndtxt.hxx>
 #include <txttxmrk.hxx>

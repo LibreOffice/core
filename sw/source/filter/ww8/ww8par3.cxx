@@ -73,7 +73,6 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/postitem.hxx>
 #include <filter/msfilter/msocximex.hxx>
-#include <errhdl.hxx>
 #include <unotextrange.hxx>
 #include <doc.hxx>
 #include <docary.hxx>

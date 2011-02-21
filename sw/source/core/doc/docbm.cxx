@@ -40,7 +40,6 @@
 #include <docary.hxx>
 #include <xmloff/odffields.hxx>
 #include <editsh.hxx>
-#include <errhdl.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <functional>

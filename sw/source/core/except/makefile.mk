@@ -47,11 +47,9 @@ CXXFILES =
 
 .IF "$(DBG_LEVEL)">="2"
 CXXFILES += \
-        errhdl.cxx			\
         dbgloop.cxx
 
 SLOFILES +=  \
-        $(SLO)$/errhdl.obj 	\
         $(SLO)$/dbgloop.obj
 .ENDIF
 # --- Tagets -------------------------------------------------------

@@ -39,7 +39,6 @@
 #include <unotools/useroptions.hxx>
 #include <tools/shl.hxx>
 #include <swmodule.hxx>
-#include <errhdl.hxx>
 #include <swtypes.hxx>
 #include <envimg.hxx>
 

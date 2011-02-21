@@ -31,7 +31,6 @@
 
 #include <iodetect.hxx>
 
-#include <errhdl.hxx>
 #include <osl/endian.h>
 #include <sot/storage.hxx>
 #include <svtools/parhtml.hxx>

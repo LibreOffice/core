@@ -34,7 +34,6 @@
 
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
-#include <errhdl.hxx>
 #include <ndindex.hxx>
 #include <fmtftn.hxx>
 #include <txtftn.hxx>

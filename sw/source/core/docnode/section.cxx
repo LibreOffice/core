@@ -45,7 +45,6 @@
 #include <docary.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtpdsc.hxx>
-#include <errhdl.hxx>
 #include <doc.hxx>
 #include <node.hxx>
 #include <pam.hxx>

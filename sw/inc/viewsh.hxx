@@ -35,7 +35,6 @@
 #include <swtypes.hxx>
 #include <ring.hxx>
 #include <swrect.hxx>
-#include <errhdl.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/print.hxx>
 

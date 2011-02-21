@@ -37,7 +37,6 @@
 #include <svl/stritem.hxx>
 #include <rsc/rscsfx.hxx>
 
-#include "errhdl.hxx"
 #include "view.hxx"
 #include "wrtsh.hxx"
 #include "basesh.hxx"
