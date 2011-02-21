@@ -29,23 +29,22 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-//------------------------------------------------------------------------
+#include <math.h>
 
-#include "scitems.hxx"
 #include <svl/zforlist.hxx>
+#include <tools/debug.hxx>
 
+#include "attrib.hxx"
+#include "cell.hxx"
 #include "dif.hxx"
+#include "docpool.hxx"
+#include "document.hxx"
 #include "filter.hxx"
 #include "fprogressbar.hxx"
-#include "scerrors.hxx"
-#include "document.hxx"
-#include "cell.hxx"
-#include "patattr.hxx"
-#include "docpool.hxx"
-#include "attrib.hxx"
 #include "ftools.hxx"
-
-#include <math.h>
+#include "patattr.hxx"
+#include "scerrors.hxx"
+#include "scitems.hxx"
 
 const sal_Unicode pKeyTABLE[]   = { 'T', 'A', 'B', 'L', 'E', 0 };
 const sal_Unicode pKeyVECTORS[] = { 'V', 'E', 'C', 'T', 'O', 'R', 'S', 0 };
@@ -824,18 +823,10 @@ BOOL DifParser::ScanFloatVal( const sal_Unicode* pStart )
     return bRet;
 }
 
-
-DifColumn::~DifColumn( void )
+DifColumn::DifColumn ()
+    : pAkt(NULL)
 {
-    ENTRY*  pEntry = ( ENTRY* ) List::First();
-
-    while( pEntry )
-    {
-        delete pEntry;
-        pEntry = ( ENTRY* ) List::Next();
-    }
 }
-
 
 void DifColumn::SetLogical( SCROW nRow )
 {
@@ -844,7 +835,9 @@ void DifColumn::SetLogical( SCROW nRow )
     if( pAkt )
     {
         DBG_ASSERT( nRow > 0, "*DifColumn::SetLogical(): weitere koennen nicht 0 sein!" );
+
         nRow--;
+
         if( pAkt->nEnd == nRow )
             pAkt->nEnd++;
         else
@@ -854,7 +847,8 @@ void DifColumn::SetLogical( SCROW nRow )
     {
         pAkt = new ENTRY;
         pAkt->nStart = pAkt->nEnd = nRow;
-        List::Insert( pAkt, LIST_APPEND );
+
+        aEntries.push_back(pAkt);
     }
 }
 
@@ -865,7 +859,7 @@ void DifColumn::SetNumFormat( SCROW nRow, const UINT32 nNumFormat )
 
     if( nNumFormat > 0 )
     {
-        if( pAkt )
+        if(pAkt)
         {
             DBG_ASSERT( nRow > 0,
                 "*DifColumn::SetNumFormat(): weitere koennen nicht 0 sein!" );
@@ -876,10 +870,10 @@ void DifColumn::SetNumFormat( SCROW nRow, const UINT32 nNumFormat )
                 pAkt->nEnd = nRow;
             else
                 NewEntry( nRow, nNumFormat );
-            }
-        else
-            NewEntry( nRow, nNumFormat );
         }
+        else
+            NewEntry(nRow,nNumFormat );
+    }
     else
         pAkt = NULL;
 }
@@ -890,41 +884,33 @@ void DifColumn::NewEntry( const SCROW nPos, const UINT32 nNumFormat )
     pAkt = new ENTRY;
     pAkt->nStart = pAkt->nEnd = nPos;
     pAkt->nNumFormat = nNumFormat;
-    List::Insert( pAkt, LIST_APPEND );
+
+    aEntries.push_back(pAkt);
 }
 
 
 void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab, const ScPatternAttr& rPattAttr )
 {
-    ENTRY*  pEntry = ( ENTRY* ) List::First();
-
-    while( pEntry )
-    {
-        rDoc.ApplyPatternAreaTab( nCol, pEntry->nStart, nCol, pEntry->nEnd,
-                nTab, rPattAttr );
-        pEntry = ( ENTRY* ) List::Next();
-    }
+    for (boost::ptr_vector<ENTRY>::const_iterator it = aEntries.begin(); it != aEntries.end(); ++it)
+        rDoc.ApplyPatternAreaTab( nCol, it->nStart, nCol, it->nEnd, nTab, rPattAttr );
 }
 
 
 void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab )
 {
-    ScPatternAttr   aAttr( rDoc.GetPool() );
-    SfxItemSet&     rItemSet = aAttr.GetItemSet();
+    ScPatternAttr aAttr( rDoc.GetPool() );
+    SfxItemSet &rItemSet = aAttr.GetItemSet();
 
-    ENTRY*          pEntry = ( ENTRY* ) List::First();
-
-    while( pEntry )
-        {
-        DBG_ASSERT( pEntry->nNumFormat > 0,
+    for (boost::ptr_vector<ENTRY>::const_iterator it = aEntries.begin(); it != aEntries.end(); ++it)
+    {
+        DBG_ASSERT( it->nNumFormat > 0,
             "+DifColumn::Apply(): Numberformat darf hier nicht 0 sein!" );
-        rItemSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, pEntry->nNumFormat ) );
 
-        rDoc.ApplyPatternAreaTab( nCol, pEntry->nStart, nCol, pEntry->nEnd, nTab, aAttr );
+        rItemSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, it->nNumFormat ) );
+
+        rDoc.ApplyPatternAreaTab( nCol, it->nStart, nCol, it->nEnd, nTab, aAttr );
 
         rItemSet.ClearItem();
-
-        pEntry = ( ENTRY* ) List::Next();
     }
 }
 
@@ -947,6 +933,16 @@ DifAttrCache::~DifAttrCache()
     }
 }
 
+void DifAttrCache::SetLogical( const SCCOL nCol, const SCROW nRow )
+{
+    DBG_ASSERT( ValidCol(nCol), "-DifAttrCache::SetLogical(): Col zu gross!" );
+    DBG_ASSERT( bPlain, "*DifAttrCache::SetLogical(): muss Plain sein!" );
+
+    if( !ppCols[ nCol ] )
+        ppCols[ nCol ] = new DifColumn;
+
+    ppCols[ nCol ]->SetLogical( nRow );
+}
 
 void DifAttrCache::SetNumFormat( const SCCOL nCol, const SCROW nRow, const UINT32 nNumFormat )
 {
