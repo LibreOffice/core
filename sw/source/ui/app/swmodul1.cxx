@@ -83,7 +83,7 @@ using namespace ::com::sun::star::lang;
 
 void lcl_SetUIPrefs(const SwViewOption* pPref, SwView* pView, ViewShell* pSh )
 {
-    // in FrameSets the actual visibility cat differ from the VewOption's setting
+    // in FrameSets the actual visibility can differ from the ViewOption's setting
     sal_Bool bVScrollChanged = pPref->IsViewVScrollBar() != pSh->GetViewOptions()->IsViewVScrollBar();
     sal_Bool bHScrollChanged = pPref->IsViewHScrollBar() != pSh->GetViewOptions()->IsViewHScrollBar();
     sal_Bool bVAlignChanged = pPref->IsVRulerRight() != pSh->GetViewOptions()->IsVRulerRight();

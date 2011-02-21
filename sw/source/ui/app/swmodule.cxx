@@ -201,7 +201,7 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
 
     pAuthorNames = new SvStringsDtor(5, 1);    // All Redlining-Authors
 
-    //JP 18.10.96: replace SvxAutocorrect with SwAutocorrect
+    // replace SvxAutocorrect with SwAutocorrect
     SvxAutoCorrCfg*    pACfg = SvxAutoCorrCfg::Get();
     if( pACfg )
     {
@@ -268,7 +268,7 @@ void SwModule::CreateLngSvcEvtListener()
 
 void SwDLL::RegisterFactories()
 {
-    // These Id's must not be changed. Trough these Id's the View (resume Documentview)
+    // These Id's must not be changed. Through these Id's the View (resume Documentview)
     // is created by Sfx.
     if ( SvtModuleOptions().IsWriter() )
         SwView::RegisterFactory         ( 2 );

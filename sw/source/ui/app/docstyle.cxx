@@ -68,7 +68,7 @@
 #include <SwRewriter.hxx>
 #include <undobj.hxx>
 
-// MD 06.02.95: The Format names in the list of all names have the
+// The Format names in the list of all names have the
 // following family as their first character:
 
 #define cCHAR       (sal_Unicode)'c'
@@ -165,7 +165,7 @@ SwCharFmt* lcl_FindCharFmt( SwDoc& rDoc,
 
 
 /*--------------------------------------------------------------------
-    Description:    find/create ParaFormate
+    Description:    find/create ParaFormats
                     fill Style
  --------------------------------------------------------------------*/
 
@@ -246,7 +246,7 @@ SwFrmFmt* lcl_FindFrmFmt(   SwDoc& rDoc,
 }
 
 /*--------------------------------------------------------------------
-    Description:    Site descriptors
+    Description:    Page descriptors
  --------------------------------------------------------------------*/
 
 
@@ -725,7 +725,7 @@ String  SwDocStyleSheet::GetDescription(SfxMapUnit eUnit)
                 }
             pItem = aIter.NextItem();
         }
-        // Special treatment for Break, Site template and Site offset
+        // Special treatment for Break, Page template and Site offset
         if(sBreak.Len() && !sModel.Len())  // when Model, break is invalid
         {
             if(aDesc.Len())
@@ -888,7 +888,7 @@ BOOL  SwDocStyleSheet::SetName( const String& rStr)
 }
 
 /*--------------------------------------------------------------------
-    Description:    hirarchy of deduction
+    Description:    hierarchy of deduction
  --------------------------------------------------------------------*/
 
 
@@ -2114,7 +2114,7 @@ void  SwDocStyleSheetPool::Replace( SfxStyleSheetBase& rSource,
     BOOL bSwSrcPool = GetAppName() == rSource.GetPool().GetAppName();
     if( SFX_STYLE_FAMILY_PAGE == eFamily && bSwSrcPool )
     {
-        // deal with seperately!
+        // deal with separately!
         SwPageDesc* pDestDsc =
             (SwPageDesc*)((SwDocStyleSheet&)rTarget).GetPageDesc();
         SwPageDesc* pCpyDsc =
@@ -2454,7 +2454,7 @@ SfxStyleSheetBase*  SwStyleSheetIterator::First()
             const BOOL  bUsed = bIsSearchUsed && (bOrganizer || rDoc.IsUsed(*pFmt));
             if( !bUsed )
             {
-                // Standard is no User template #46181#
+                // Standard is no User template
                 const USHORT nId = rDoc.GetDfltCharFmt() == pFmt ?
                         USHORT( RES_POOLCHR_INET_NORMAL ):
                                 pFmt->GetPoolFmtId();
