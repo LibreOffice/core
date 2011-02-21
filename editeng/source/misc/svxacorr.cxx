@@ -836,7 +836,6 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
         }
     } while( 0 == ( bAtStart = (pStart == pStr)) );
 
-
     if( !pWordStt ||
         rCC.isDigit(
             aText, sal::static_int_cast< xub_StrLen >( pStr - pStart ) ) ||
@@ -844,6 +843,7 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
             rCC.getCharacterType(
                 aText,
                 sal::static_int_cast< xub_StrLen >( pWordStt - pStart ) ) ) ||
+        INetURLObject::CompareProtocolScheme(rTxt.Copy(pWordStt - pStart, pDelim - pWordStt + 1)) != INET_PROT_NOT_VALID ||
         0x1 == *pWordStt || 0x2 == *pWordStt )
         return FALSE;       // no character to be replaced, or already ok
 
