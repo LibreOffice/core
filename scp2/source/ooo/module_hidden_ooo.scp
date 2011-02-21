@@ -248,8 +248,7 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Lprxw,
     gid_File_Lib_Libtextcat,
     gid_File_Lib_Guesslang,
-	gid_File_Lib_Tfu,
-    gid_File_Lib_Librsvg);
+	gid_File_Lib_Tfu);
 End
 
 Module gid_Module_Root_Files_5
