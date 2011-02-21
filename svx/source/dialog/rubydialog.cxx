@@ -239,7 +239,7 @@ SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
 {
     xImpl = pImpl = new SvxRubyData_Impl;
     FreeResource();
-    //#85638# automatic detection not yet available
+    // automatic detection not yet available
     aAutoDetectionCB.Hide();
     aEditArr[0] = &aLeft1ED; aEditArr[1] = &aRight1ED;
     aEditArr[2] = &aLeft2ED; aEditArr[3] = &aRight2ED;

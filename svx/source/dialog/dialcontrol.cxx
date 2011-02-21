@@ -186,7 +186,7 @@ void DialControlBmp::DrawBackground()
     SetFillColor();
     Erase();
 
-    EnableRTL( TRUE ); // #107807# draw 3D effect in correct direction
+    EnableRTL( TRUE ); // draw 3D effect in correct direction
 
     sal_uInt8 nDiff = mbEnabled ? 0x18 : 0x10;
     Color aColor;
@@ -456,7 +456,7 @@ const Link& DialControl::GetModifyHdl() const
 void DialControl::Init( const Size& rWinSize, const Font& rWinFont )
 {
     mpImpl->Init( rWinSize, rWinFont );
-    EnableRTL( FALSE ); // #107807# don't mirror mouse handling
+    EnableRTL( FALSE ); // don't mirror mouse handling
     SetOutputSizePixel( mpImpl->maWinSize );
     SetBackground();
 }

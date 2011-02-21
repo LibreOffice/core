@@ -61,10 +61,6 @@ void    lcl_SetMinMax(MetricField& rField, long nFirst, long nLast, long nMin, l
     rField.SetMax( rField.Normalize( nMax ), FUNIT_TWIP );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Rastereinstellungen Ctor
- --------------------------------------------------------------------*/
-
 SvxOptionsGrid::SvxOptionsGrid() :
     nFldDrawX       ( 100 ),
     nFldDivisionX   ( 0 ),
@@ -79,17 +75,9 @@ SvxOptionsGrid::SvxOptionsGrid() :
 {
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Rastereinstellungen Dtor
- --------------------------------------------------------------------*/
-
 SvxOptionsGrid::~SvxOptionsGrid()
 {
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung: Item fuer Rastereinstellungen
- --------------------------------------------------------------------*/
 
 SvxGridItem::SvxGridItem( const SvxGridItem& rItem )
 :   SvxOptionsGrid()
@@ -115,7 +103,7 @@ SfxPoolItem*  SvxGridItem::Clone( SfxItemPool* ) const
 
 int SvxGridItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unterschiedliche Typen" );
+    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "different types ");
 
     const SvxGridItem& rItem = (const SvxGridItem&) rAttr;
 
@@ -153,7 +141,7 @@ SfxItemPresentation  SvxGridItem::GetPresentation
     }
 }
 
-// TabPage Rastereinstellungen
+// TabPage Screen Settings
 SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
 
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_GRID ), rCoreSet ),
@@ -199,13 +187,13 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
 
     bAttrModified( FALSE )
 {
-    // diese Page braucht ExchangeSupport
+    // This page requires exchange Support
     SetExchangeSupport();
 
     FreeResource();
 
     aDivisionPointY.SetText(aDivisionPointX.GetText());
-    // Metrik einstellen
+    // Set Metrics
     FieldUnit eFUnit = GetModuleFieldUnit( rCoreSet );
     long nFirst, nLast, nMin, nMax;
 
@@ -286,10 +274,6 @@ void SvxGridTabPage::Reset( const SfxItemSet& rSet )
         SetMetricValue( aMtrFldDrawX , pGridAttr->nFldDrawX, eUnit );
         SetMetricValue( aMtrFldDrawY , pGridAttr->nFldDrawY, eUnit );
 
-//      UINT32 nFineX = pGridAttr->nFldDivisionX;
-//      UINT32 nFineY = pGridAttr->nFldDivisionY;
-//      aNumFldDivisionX.SetValue( nFineX ? (pGridAttr->nFldDrawX / nFineX - 1) : 0 );
-//      aNumFldDivisionY.SetValue( nFineY ? (pGridAttr->nFldDrawY / nFineY - 1) : 0 );
         aNumFldDivisionX.SetValue( pGridAttr->nFldDivisionX );
         aNumFldDivisionY.SetValue( pGridAttr->nFldDivisionY );
     }
@@ -312,10 +296,8 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
         ChangeGridsnapHdl_Impl( &aCbxUseGridsnap );
     }
 
-    // Metrik ggfs. aendern (da TabPage im Dialog liegt,
-    // wo die Metrik eingestellt werden kann
-    //USHORT nWhich = GetWhich( SID_ATTR_METRIC );
-    //if( rSet.GetItemState( GetWhich( SID_ATTR_METRIC ) ) >= SFX_ITEM_AVAILABLE )
+    // Metric Change if necessary (as TabPage is in the dialog, where the
+    // metric can be set
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC , FALSE,
                                     (const SfxPoolItem**)&pAttr ))
     {
@@ -325,7 +307,7 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 
         if( eFUnit != aMtrFldDrawX.GetUnit() )
         {
-            // Metriken einstellen
+            // Set Metrics
             long nFirst, nLast, nMin, nMax;
             long nVal = static_cast<long>(aMtrFldDrawX.Denormalize( aMtrFldDrawX.GetValue( FUNIT_TWIP ) ));
 

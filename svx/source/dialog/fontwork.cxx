@@ -53,11 +53,7 @@
 
 SFX_IMPL_DOCKINGWINDOW( SvxFontWorkChildWindow, SID_FONTWORK );
 
-/*************************************************************************
-|*
-|* ControllerItem fuer Fontwork
-|*
-\************************************************************************/
+// ControllerItem for Fontwork
 
 SvxFontWorkControllerItem::SvxFontWorkControllerItem
 (
@@ -72,11 +68,7 @@ SvxFontWorkControllerItem::SvxFontWorkControllerItem
 {
 }
 
-/*************************************************************************
-|*
-|* StateChanged-Methode fuer FontWork-Items
-|*
-\************************************************************************/
+// StateChanged method for FontWork items
 
 void SvxFontWorkControllerItem::StateChanged( USHORT /*nSID*/, SfxItemState /*eState*/,
                                               const SfxPoolItem* pItem )
@@ -87,7 +79,7 @@ void SvxFontWorkControllerItem::StateChanged( USHORT /*nSID*/, SfxItemState /*eS
         {
             const XFormTextStyleItem* pStateItem =
                                 PTR_CAST(XFormTextStyleItem, pItem);
-            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextStyleItem erwartet");
+            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextStyleItem expected");
             rFontWorkDlg.SetStyle_Impl(pStateItem);
             break;
         }
@@ -95,7 +87,7 @@ void SvxFontWorkControllerItem::StateChanged( USHORT /*nSID*/, SfxItemState /*eS
         {
             const XFormTextAdjustItem* pStateItem =
                                 PTR_CAST(XFormTextAdjustItem, pItem);
-            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextAdjustItem erwartet");
+            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextAdjustItem expected");
             rFontWorkDlg.SetAdjust_Impl(pStateItem);
             break;
         }
@@ -111,7 +103,7 @@ void SvxFontWorkControllerItem::StateChanged( USHORT /*nSID*/, SfxItemState /*eS
         {
             const XFormTextStartItem* pStateItem =
                                 PTR_CAST(XFormTextStartItem, pItem);
-            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextStartItem erwartet");
+            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextStartItem expected");
             rFontWorkDlg.SetStart_Impl(pStateItem);
             break;
         }
@@ -119,7 +111,7 @@ void SvxFontWorkControllerItem::StateChanged( USHORT /*nSID*/, SfxItemState /*eS
         {
             const XFormTextMirrorItem* pStateItem =
                                 PTR_CAST(XFormTextMirrorItem, pItem);
-            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextMirrorItem erwartet");
+            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextMirrorItem expected");
             rFontWorkDlg.SetMirror_Impl(pStateItem);
             break;
         }
@@ -127,7 +119,7 @@ void SvxFontWorkControllerItem::StateChanged( USHORT /*nSID*/, SfxItemState /*eS
         {
             const XFormTextStdFormItem* pStateItem =
                                 PTR_CAST(XFormTextStdFormItem, pItem);
-            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextStdFormItem erwartet");
+            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextStdFormItem expected");
             rFontWorkDlg.SetStdForm_Impl(pStateItem);
             break;
         }
@@ -135,7 +127,7 @@ void SvxFontWorkControllerItem::StateChanged( USHORT /*nSID*/, SfxItemState /*eS
         {
             const XFormTextHideFormItem* pStateItem =
                                 PTR_CAST(XFormTextHideFormItem, pItem);
-            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextHideFormItem erwartet");
+            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextHideFormItem expected");
             rFontWorkDlg.SetShowForm_Impl(pStateItem);
             break;
         }
@@ -143,7 +135,7 @@ void SvxFontWorkControllerItem::StateChanged( USHORT /*nSID*/, SfxItemState /*eS
         {
             const XFormTextOutlineItem* pStateItem =
                                 PTR_CAST(XFormTextOutlineItem, pItem);
-            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextOutlineItem erwartet");
+            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextOutlineItem expected");
             rFontWorkDlg.SetOutline_Impl(pStateItem);
             break;
         }
@@ -151,7 +143,7 @@ void SvxFontWorkControllerItem::StateChanged( USHORT /*nSID*/, SfxItemState /*eS
         {
             const XFormTextShadowItem* pStateItem =
                                 PTR_CAST(XFormTextShadowItem, pItem);
-            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextShadowItem erwartet");
+            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextShadowItem expected");
             rFontWorkDlg.SetShadow_Impl(pStateItem);
             break;
         }
@@ -159,7 +151,7 @@ void SvxFontWorkControllerItem::StateChanged( USHORT /*nSID*/, SfxItemState /*eS
         {
             const XFormTextShadowColorItem* pStateItem =
                                 PTR_CAST(XFormTextShadowColorItem, pItem);
-            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextShadowColorItem erwartet");
+            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextShadowColorItem expected");
             rFontWorkDlg.SetShadowColor_Impl(pStateItem);
             break;
         }
@@ -167,7 +159,7 @@ void SvxFontWorkControllerItem::StateChanged( USHORT /*nSID*/, SfxItemState /*eS
         {
             const XFormTextShadowXValItem* pStateItem =
                                 PTR_CAST(XFormTextShadowXValItem, pItem);
-            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextShadowXValItem erwartet");
+            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextShadowXValItem expected");
             rFontWorkDlg.SetShadowXVal_Impl(pStateItem);
             break;
         }
@@ -175,18 +167,14 @@ void SvxFontWorkControllerItem::StateChanged( USHORT /*nSID*/, SfxItemState /*eS
         {
             const XFormTextShadowYValItem* pStateItem =
                                 PTR_CAST(XFormTextShadowYValItem, pItem);
-            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextShadowYValItem erwartet");
+            DBG_ASSERT(pStateItem || pItem == 0, "XFormTextShadowYValItem expected");
             rFontWorkDlg.SetShadowYVal_Impl(pStateItem);
             break;
         }
     }
 }
 
-/*************************************************************************
-|*
-|* Ableitung vom SfxChildWindow als "Behaelter" fuer Fontwork-Dialog
-|*
-\************************************************************************/
+// Derivation from SfxChildWindow as "containers" for Fontwork dialog
 
 SvxFontWorkChildWindow::SvxFontWorkChildWindow
 (
@@ -208,11 +196,7 @@ SvxFontWorkChildWindow::SvxFontWorkChildWindow
     pDlg->Initialize( pInfo );
 }
 
-/*************************************************************************
-|*
-|* Floating Window zur Attributierung von Texteffekten
-|*
-\************************************************************************/
+// Floating Window to the attribution of text effects
 
 SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
                                       SfxChildWindow *pCW,
@@ -288,7 +272,7 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
     aMtrFldShadowX.SetModifyHdl( aLink );
     aMtrFldShadowY.SetModifyHdl( aLink );
 
-    // System-Metrik setzen
+    // Set System metric
     const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
     SetFieldUnit( aMtrFldDistance, eDlgUnit, TRUE );
     SetFieldUnit( aMtrFldTextStart, eDlgUnit, TRUE );
@@ -322,12 +306,6 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
     aSize.Height() = aFormSet.CalcWindowSizePixel(aBmp.GetSizePixel()).Height() + 2;
     aFormSet.SetSizePixel(aSize);
 }
-
-/*************************************************************************
-|*
-|* Destruktor
-|*
-\************************************************************************/
 
 SvxFontWorkDialog::~SvxFontWorkDialog()
 {
@@ -379,12 +357,7 @@ SfxChildAlignment SvxFontWorkDialog::CheckAlignment( SfxChildAlignment eActAlign
     return eAlignment;
 }
 
-
-/*************************************************************************
-|*
-|* Style-Buttons setzen
-|*
-\************************************************************************/
+// Set style buttons
 
 void SvxFontWorkDialog::SetStyle_Impl(const XFormTextStyleItem* pItem)
 {
@@ -424,11 +397,7 @@ void SvxFontWorkDialog::SetStyle_Impl(const XFormTextStyleItem* pItem)
         aTbxStyle.Disable();
 }
 
-/*************************************************************************
-|*
-|* Adjust-Buttons setzen
-|*
-\************************************************************************/
+// Set adjust buttons
 
 void SvxFontWorkDialog::SetAdjust_Impl(const XFormTextAdjustItem* pItem)
 {
@@ -466,41 +435,29 @@ void SvxFontWorkDialog::SetAdjust_Impl(const XFormTextAdjustItem* pItem)
     }
 }
 
-/*************************************************************************
-|*
-|* Abstand-Wert in Editfeld eintragen
-|*
-\************************************************************************/
+// Enter Distance value in the edit field
 
 void SvxFontWorkDialog::SetDistance_Impl(const XFormTextDistanceItem* pItem)
 {
-    // #104596# Use HasChildPathFocus() instead of HasFocus() at SpinFields
+    // Use HasChildPathFocus() instead of HasFocus() at SpinFields
     if ( pItem && !aMtrFldDistance.HasChildPathFocus() )
     {
         SetMetricValue( aMtrFldDistance, pItem->GetValue(), SFX_MAPUNIT_100TH_MM );
     }
 }
 
-/*************************************************************************
-|*
-|* Einzug-Wert in Editfeld eintragen
-|*
-\************************************************************************/
+// Enter indent value in the edit field
 
 void SvxFontWorkDialog::SetStart_Impl(const XFormTextStartItem* pItem)
 {
-    // #104596# Use HasChildPathFocus() instead of HasFocus() at SpinFields
+    // Use HasChildPathFocus() instead of HasFocus() at SpinFields
     if ( pItem && !aMtrFldTextStart.HasChildPathFocus() )
     {
         SetMetricValue( aMtrFldTextStart, pItem->GetValue(), SFX_MAPUNIT_100TH_MM );
     }
 }
 
-/*************************************************************************
-|*
-|* Button fuer Umkehrung der Textrichtung setzen
-|*
-\************************************************************************/
+// Set button for reversing the direction of text
 
 void SvxFontWorkDialog::SetMirror_Impl(const XFormTextMirrorItem* pItem)
 {
@@ -508,11 +465,7 @@ void SvxFontWorkDialog::SetMirror_Impl(const XFormTextMirrorItem* pItem)
         aTbxAdjust.CheckItem(TBI_ADJUST_MIRROR, pItem->GetValue());
 }
 
-/*************************************************************************
-|*
-|* Standardform im ValueSet anzeigen
-|*
-\************************************************************************/
+// Standard form in ValueSet View
 
 void SvxFontWorkDialog::SetStdForm_Impl(const XFormTextStdFormItem* pItem)
 {
@@ -529,11 +482,7 @@ void SvxFontWorkDialog::SetStdForm_Impl(const XFormTextStdFormItem* pItem)
         aFormSet.Disable();
 }
 
-/*************************************************************************
-|*
-|* Button fuer Konturanzeige setzen
-|*
-\************************************************************************/
+// Set button for contour display
 
 void SvxFontWorkDialog::SetShowForm_Impl(const XFormTextHideFormItem* pItem)
 {
@@ -541,11 +490,7 @@ void SvxFontWorkDialog::SetShowForm_Impl(const XFormTextHideFormItem* pItem)
         aTbxShadow.CheckItem(TBI_SHOWFORM, !pItem->GetValue());
 }
 
-/*************************************************************************
-|*
-|* Button fuer Zeichenumrandung setzen
-|*
-\************************************************************************/
+// Set button for text border
 
 void SvxFontWorkDialog::SetOutline_Impl(const XFormTextOutlineItem* pItem)
 {
@@ -553,11 +498,7 @@ void SvxFontWorkDialog::SetOutline_Impl(const XFormTextOutlineItem* pItem)
         aTbxShadow.CheckItem(TBI_OUTLINE, pItem->GetValue());
 }
 
-/*************************************************************************
-|*
-|* Shadow-Buttons setzen
-|*
-\************************************************************************/
+// Set shadow buttons
 
 void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
                                         BOOL bRestoreValues)
@@ -665,11 +606,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
     }
 }
 
-/*************************************************************************
-|*
-|* Schattenfarbe in Listbox eintragen
-|*
-\************************************************************************/
+// Insert shadow color in listbox
 
 void SvxFontWorkDialog::SetShadowColor_Impl(const XFormTextShadowColorItem* pItem)
 {
@@ -677,15 +614,11 @@ void SvxFontWorkDialog::SetShadowColor_Impl(const XFormTextShadowColorItem* pIte
         aShadowColorLB.SelectEntry(pItem->GetColorValue());
 }
 
-/*************************************************************************
-|*
-|* X-Wert fuer Schatten in Editfeld eintragen
-|*
-\************************************************************************/
+// Enter X-value for shadow in edit field
 
 void SvxFontWorkDialog::SetShadowXVal_Impl(const XFormTextShadowXValItem* pItem)
 {
-    // #104596# Use HasChildPathFocus() instead of HasFocus() at SpinFields
+    // Use HasChildPathFocus() instead of HasFocus() at SpinFields
     if ( pItem && !aMtrFldShadowX.HasChildPathFocus() )
     {
         // #i19251#
@@ -712,15 +645,11 @@ void SvxFontWorkDialog::SetShadowXVal_Impl(const XFormTextShadowXValItem* pItem)
     }
 }
 
-/*************************************************************************
-|*
-|* Y-Wert fuer Schatten in Editfeld eintragen
-|*
-\************************************************************************/
+// Enter Y-value for shadow in edit field
 
 void SvxFontWorkDialog::SetShadowYVal_Impl(const XFormTextShadowYValItem* pItem)
 {
-    // #104596# Use HasChildPathFocus() instead of HasFocus() at SpinFields
+    // Use HasChildPathFocus() instead of HasFocus() at SpinFields
     if ( pItem && !aMtrFldShadowY.HasChildPathFocus() )
     {
         // #i19251#
@@ -842,9 +771,9 @@ IMPL_LINK_INLINE_END( SvxFontWorkDialog, ModifyInputHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxFontWorkDialog, InputTimoutHdl_Impl, void *, EMPTYARG )
 {
-    // System-Metrik evtl. neu setzen
-    // Dieses sollte mal als Listener passieren, ist aber aus
-    // inkompatibilitaetsgruenden z.Z. nicht moeglich
+    // Possibly set the Metric system again. This should be done with a
+    // listen, this is however not possible at the moment due to compabillity
+    // issues.
     const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
     if( eDlgUnit != aMtrFldDistance.GetUnit() )
     {
@@ -888,7 +817,7 @@ IMPL_LINK( SvxFontWorkDialog, InputTimoutHdl_Impl, void *, EMPTYARG )
     XFormTextShadowXValItem aShadowXItem( nValueX );
     XFormTextShadowYValItem aShadowYItem( nValueY );
 
-    // Slot-ID ist egal, die Exec-Methode wertet das gesamte ItemSet aus
+    // Slot-ID does not matter, the Exec method evaluates the entire item set
     GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_DISTANCE, SFX_CALLMODE_RECORD, &aDistItem,
                                             &aStartItem, &aShadowXItem, &aShadowYItem, 0L );
     return 0;
@@ -929,11 +858,7 @@ void SvxFontWorkDialog::SetActive(BOOL /*bActivate*/)
 {
 }
 
-/*************************************************************************
-|*
-|* Standard-FontWork-Objekt erzeugen
-|*
-\************************************************************************/
+// Create standard fontWork Object
 
 void SvxFontWorkDialog::CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
                                          const SfxItemSet& rAttr,
@@ -1031,7 +956,7 @@ void SvxFontWorkDialog::CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
             basegfx::B2DPolygon aTopArc(XPolygon(aCenter, -nR, nR, 50, 1750, FALSE).getB2DPolygon());
             basegfx::B2DPolygon aBottomArc(XPolygon(aCenter, -nR, nR, 1850, 3550, FALSE).getB2DPolygon());
 
-            // Polygone schliessen
+            // Close Polygon
             aTopArc.setClosed(true);
             aBottomArc.setClosed(true);
             aPolyPolygon.append(aTopArc);
@@ -1102,7 +1027,7 @@ void SvxFontWorkDialog::CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
     }
     if ( pNewObj )
     {
-        // #78478# due to DLs changes in Outliner the object needs
+        // due to DLs changes in Outliner the object needs
         // a model to get an outliner for later calls to
         // pNewObj->SetOutlinerParaObject(pPara) (see below).
         pNewObj->SetModel(rOldObj.GetModel());

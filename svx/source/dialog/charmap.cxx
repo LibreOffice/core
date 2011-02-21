@@ -760,11 +760,9 @@ void SubsetMap::InitList()
         aAllSubsets.push_back( Subset( 0x02B0, 0x02FF, RID_SUBSETSTR_SPACING_MODIFIERS ) );
         aAllSubsets.push_back( Subset( 0x0300, 0x036F, RID_SUBSETSTR_COMB_DIACRITICAL ) );
         aAllSubsets.push_back( Subset( 0x0370, 0x03FF, RID_SUBSETSTR_BASIC_GREEK ) );
-    //  aAllSubsets.push_back( Subset( 0x03D0, 0x03F3, RID_SUBSETSTR_GREEK_SYMS_COPTIC ) );
         aAllSubsets.push_back( Subset( 0x0400, 0x04FF, RID_SUBSETSTR_CYRILLIC ) );
         aAllSubsets.push_back( Subset( 0x0530, 0x058F, RID_SUBSETSTR_ARMENIAN ) );
         aAllSubsets.push_back( Subset( 0x0590, 0x05FF, RID_SUBSETSTR_BASIC_HEBREW ) );
-    //  aAllSubsets.push_back( Subset( 0x0591, 0x05C4, RID_SUBSETSTR_HEBREW_EXTENDED ) );
         aAllSubsets.push_back( Subset( 0x0600, 0x065F, RID_SUBSETSTR_BASIC_ARABIC ) );
         aAllSubsets.push_back( Subset( 0x0660, 0x06FF, RID_SUBSETSTR_ARABIC_EXTENDED ) );
         aAllSubsets.push_back( Subset( 0x0700, 0x074F, RID_SUBSETSTR_SYRIAC ) );

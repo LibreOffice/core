@@ -104,9 +104,6 @@ using namespace comphelper;
 
 SV_IMPL_VARARR(SrchAttrItemList, SearchAttrItem);
 
-//#define NotifyApp( nId )
-//    rBindings.ExecuteSynchron( nId, (const SfxPoolItem**)&pSearchItem, 0L )
-
 #define GetCheckBoxValue( rBox )                                \
     rBox.IsEnabled() ? rBox.IsChecked() : FALSE
 
@@ -176,7 +173,7 @@ void ListToStrArr_Impl( USHORT nId, SvStringsDtor& rStrLst, ComboBox& rCBox )
 
 void StrArrToList_Impl( USHORT nId, const SvStringsDtor& rStrLst )
 {
-    DBG_ASSERT( rStrLst.Count(), "vorher abpruefen!!" );
+    DBG_ASSERT( rStrLst.Count(), "check in advance");
     List aLst;
 
     for ( USHORT i = 0; i < rStrLst.Count(); ++i )
@@ -222,7 +219,7 @@ void SearchAttrItemList::Put( const SfxItemSet& rSet )
 
     while ( TRUE )
     {
-        // nur testen, ob vorhanden ist ?
+        // only test that it is available?
         if( IsInvalidItem( pItem ) )
         {
             nWhich = rSet.GetWhichByPos( aIter.GetCurPos() );
@@ -272,7 +269,7 @@ void SearchAttrItemList::Clear()
 
 // -----------------------------------------------------------------------
 
-// l"oscht die Pointer auf die Items
+// Deletes the pointer to the items
 void SearchAttrItemList::Remove( USHORT nPos, USHORT nLen )
 {
     if ( nPos + nLen > Count() )
@@ -440,14 +437,14 @@ void SvxSearchDialog::Construct_Impl()
 #endif /* !ENABLE_LAYOUT */
     EnableControls_Impl( 0 );
 
-    // alten Text des aWordBtn's merken
+    // Store old Text from aWordBtn
     aCalcStr += sal_Unicode('#');
     aCalcStr += aWordBtn.GetText();
 
     aLayoutStr = SVX_RESSTR( RID_SVXSTR_SEARCH_STYLES );
     aStylesStr = aLayoutBtn.GetText();
 
-    // gemerkte Such-Strings von der Applikation holen
+    // Get stored search-strings from the application
     ListToStrArr_Impl( SID_SEARCHDLG_SEARCHSTRINGS,
                        aSearchStrings, aSearchLB    );
     ListToStrArr_Impl( SID_SEARCHDLG_REPLACESTRINGS,
@@ -459,7 +456,7 @@ void SvxSearchDialog::Construct_Impl()
     FreeResource();
     InitControls_Impl();
 
-    // Attribut-Sets nur einmal im Ctor() besorgen
+    // Get attribut sets only once in construtor()
     const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
     const SvxSetItem* pSrchSetItem =
         (const SvxSetItem*) rBindings.GetDispatcher()->Execute( FID_SEARCH_SEARCHSET, SFX_CALLMODE_SLOT, ppArgs );
@@ -473,7 +470,7 @@ void SvxSearchDialog::Construct_Impl()
     if ( pReplSetItem )
         InitAttrList_Impl( 0, &pReplSetItem->GetItemSet() );
 
-    // Controller erzeugen und gleich aktualisieren
+    // Create controller and update at once
     rBindings.EnterRegistrations();
     pSearchController =
         new SvxSearchController( SID_SEARCH_ITEM, rBindings, *this );
@@ -516,10 +513,6 @@ void SvxSearchDialog::Construct_Impl()
 
     if( bSearchComponent1 || bSearchComponent2 )
     {
-        //get the labels of the FixedLine and the buttons
-        // "/org.openoffice.Office.Common/SearchOptions/ComponentSearchGroupLabel
-        // "/org.openoffice.Office.Common/SearchOptions/ComponentSearchCommandLabel1
-        // "/org.openoffice.Office.Common/SearchOptions/ComponentSearchCommandLabel2
         try
         {
             uno::Reference< lang::XMultiServiceFactory >  xMgr = getProcessServiceFactory();
@@ -631,10 +624,8 @@ BOOL SvxSearchDialog::Close()
     aOpt.SetWholeWordsOnly          ( aWordBtn                .IsChecked() );
     aOpt.SetBackwards               ( aBackwardsBtn           .IsChecked() );
     aOpt.SetUseRegularExpression    ( aRegExpBtn              .IsChecked() );
-    //aOpt.SetMatchCase             ( aMatchCaseCB            .IsChecked() );
     aOpt.SetSearchForStyles         ( aLayoutBtn              .IsChecked() );
     aOpt.SetSimilaritySearch        ( aSimilarityBox          .IsChecked() );
-    //aOpt.SetMatchFullHalfWidthForms   ( !aJapMatchFullHalfWidthCB.IsChecked() );
     aOpt.SetUseAsianOptions         ( aJapOptionsCB           .IsChecked() );
         aOpt.SetNotes                   ( aNotesBtn               .IsChecked() );
 
@@ -1050,7 +1041,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         if ( ( nModifyFlag & MODIFY_ALLTABLES ) == 0 )
             aAllSheetsCB.Check( pSearchItem->IsAllTables() );
 
-        // nur im Writer Suche nach Formatierung
+        // only look for formatting in Writer
         aFormatBtn.Hide();
         aNoFormatBtn.Hide();
         aAttributeBtn.Hide();
@@ -1066,7 +1057,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
             aRegExpBtn.Hide();
             aLayoutBtn.Hide();
 
-            // nur im Writer Suche nach Formatierung
+            // only look for formatting in Writer
             aFormatBtn.Hide();
             aNoFormatBtn.Hide();
             aAttributeBtn.Hide();
@@ -1076,7 +1067,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         {
             if ( !pSearchList )
             {
-                // Attribut-Sets besorgen, wenn noch nicht geschehen
+                // Get attribute sets, if it not has been done already
                 const SfxPoolItem* ppArgs[] = { pSearchItem, 0 };
                 const SvxSetItem* pSrchSetItem =
                 (const SvxSetItem*)rBindings.GetDispatcher()->Execute( FID_SEARCH_SEARCHSET, SFX_CALLMODE_SLOT, ppArgs );
@@ -1090,14 +1081,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
                 if ( pReplSetItem )
                     InitAttrList_Impl( 0, &pReplSetItem->GetItemSet() );
             }
-/*
-            aFormatBtn.Show();
-            aNoFormatBtn.Show();
-            aAttributeBtn.Show();
-*/
         }
-//       pMoreBtn->SetState( FALSE );
-//       pMoreBtn->Hide();
     }
 
     if ( 0 && !bDraw ) //!!!!!
@@ -1106,7 +1090,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         aLayoutBtn.Show();
     }
 
-    // "Ahnlichkeitssuche?
+    // similarity search?
     if ( ( nModifyFlag & MODIFY_SIMILARITY ) == 0 )
         aSimilarityBox.Check( pSearchItem->IsLevenshtein() );
     bSet = TRUE;
@@ -1130,14 +1114,14 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         }
     }
 
-    // Patternsuche und es wurden keine AttrSets "ubergeben
+    // Pattern Search and there were no AttrSets given
     if ( bSearchPattern )
     {
         SfxObjectShell* pShell = SfxObjectShell::Current();
 
         if ( pShell && pShell->GetStyleSheetPool() )
         {
-            // Vorlagen beschaffen
+            // Templates designed
             aSearchTmplLB .Clear();
             aReplaceTmplLB.Clear();
             SfxStyleSheetBasePool* pStylePool = pShell->GetStyleSheetPool();
@@ -1159,7 +1143,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         aSearchTmplLB.Show();
 
         if ( bConstruct )
-            // nur nach dem Erzeugen den Fokus grappen
+            // Grab focus only after creating
             aSearchTmplLB.GrabFocus();
         aReplaceTmplLB.Show();
         aSearchLB.Hide();
@@ -1198,7 +1182,7 @@ void SvxSearchDialog::Init_Impl( int bSearchPattern )
         aSearchLB.Show();
 
         if ( bConstruct )
-            // nur nach dem Erzeugen den Fokus grappen
+            // Grab focus only after creating
             aSearchLB.GrabFocus();
         aReplaceLB.Show();
         aSearchTmplLB.Hide();
@@ -1293,7 +1277,7 @@ void SvxSearchDialog::InitAttrList_Impl( const SfxItemSet* pSSet,
         memcpy( pImpl->pRanges, pTmp, sizeof(USHORT) * nCnt );
     }
 
-    // sorge daf"ur, das die Texte der Attribute richtig stehen
+    // See to it that are the texts of the attributes are correct
     String aDesc;
 
     if ( pSSet )
@@ -1431,7 +1415,7 @@ IMPL_LINK( SvxSearchDialog, FlagHdl_Impl, Control *, pCtrl )
                 EnableControl_Impl( &aSimilarityBox );
             }
 
-            // Such-String vorhanden? dann Buttons enablen
+            // Search-string in place? then enable Buttons
             bSet = TRUE;
             ModifyHdl_Impl( &aSearchLB );
         }
@@ -1531,7 +1515,7 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn )
         else if ( pBtn == &aReplaceAllBtn )
             pSearchItem->SetCommand( SVX_SEARCHCMD_REPLACE_ALL );
 
-        // wenn nach Vorlagen gesucht wird, dann Format-Listen l"oschen
+        // when looking for templates, delete format lists
         if ( !bFormat && pSearchItem->GetPattern() )
         {
             if ( pSearchList )
@@ -1691,7 +1675,7 @@ IMPL_LINK( SvxSearchDialog, TemplateHdl_Impl, Button *, EMPTYARG )
         {
             USHORT nId = 0;
 
-            // Vorlagen-Controller enablen
+            // Enable templates controller
             switch ( pSearchItem->GetFamily() )
             {
                 case SFX_STYLE_FAMILY_CHAR:
@@ -1710,7 +1694,7 @@ IMPL_LINK( SvxSearchDialog, TemplateHdl_Impl, Button *, EMPTYARG )
                     break;
 
                 default:
-                    DBG_ERROR( "StyleSheetFamily wurde geaendert?" );
+                    DBG_ERROR( "StyleSheetFamily was changed?" );
             }
 
             rBindings.EnterRegistrations();
@@ -1744,7 +1728,7 @@ IMPL_LINK( SvxSearchDialog, TemplateHdl_Impl, Button *, EMPTYARG )
     }
     else
     {
-        // Vorlagen-Controller disablen
+        // Disable templates controller
         rBindings.EnterRegistrations();
         DELETEZ( pFamilyController );
         rBindings.LeaveRegistrations();
@@ -1788,14 +1772,14 @@ void SvxSearchDialog::Remember_Impl( const String &rStr,BOOL _bSearch )
     SvStringsDtor* pArr = _bSearch ? &aSearchStrings : &aReplaceStrings;
     ComboBox* pListBox = _bSearch ? &aSearchLB : &aReplaceLB;
 
-    // identische Strings ignorieren
+    // ignore identical strings
     for ( USHORT i = 0; i < pArr->Count(); ++i )
     {
         if ( COMPARE_EQUAL == (*pArr)[i]->CompareTo( rStr ) )
             return;
     }
 
-    // bei maximaler Belegung "altesten Eintrag l"oschen (ListBox und Array)
+    // delete oldest entry at maximum occupancy (ListBox and Array)
     String* pInsStr;
 
     if ( pArr->Count() >= REMEMBER_SIZE )
@@ -1816,7 +1800,6 @@ void SvxSearchDialog::Remember_Impl( const String &rStr,BOOL _bSearch )
 
 void SvxSearchDialog::TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool )
 {
-//  SetUpdateMode( FALSE );
     String aOldSrch( aSearchTmplLB .GetSelectEntry() );
     String aOldRepl( aReplaceTmplLB.GetSelectEntry() );
     aSearchTmplLB .Clear();
@@ -1851,8 +1834,6 @@ void SvxSearchDialog::TemplatesChanged_Impl( SfxStyleSheetBasePool& rPool )
         EnableControl_Impl( &aReplaceBtn );
         EnableControl_Impl( &aReplaceAllBtn );
     }
-//  FlagHdl_Impl(0);
-//  SetUpdateMode( TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -1927,10 +1908,7 @@ void SvxSearchDialog::EnableControls_Impl( const USHORT nFlags )
         aBackwardsBtn.Enable();
     else
         aBackwardsBtn.Disable();
-    //!if ( ( SEARCH_OPTIONS_NOTES & nOptions ) != 0 )
         aNotesBtn.Enable();
-    //!else
-    //!    aNotesBtn.Disable();
     if ( ( SEARCH_OPTIONS_REG_EXP & nOptions ) != 0 )
         aRegExpBtn.Enable();
     else
@@ -1959,16 +1937,7 @@ void SvxSearchDialog::EnableControls_Impl( const USHORT nFlags )
         aFormatBtn.Disable();
         aNoFormatBtn.Disable();
     }
-/*
-    if ( ( SEARCH_OPTIONS_MORE & nOptions ) != 0 &&
-         pSearchItem && pSearchItem->GetAppFlag() == SVX_SEARCHAPP_CALC )
-        pMoreBtn->Enable();
-    else
-    {
-        pMoreBtn->SetState( FALSE );
-        pMoreBtn->Disable();
-    }
-*/
+
     if ( ( SEARCH_OPTIONS_SIMILARITY & nOptions ) != 0 )
     {
         aSimilarityBox.Enable();
@@ -2024,7 +1993,7 @@ void SvxSearchDialog::EnableControl_Impl( Control* pCtrl )
         aBackwardsBtn.Enable();
         return;
     }
-    if ( &aNotesBtn == pCtrl /*! && ( SEARCH_OPTIONS_NOTES & nOptions ) != 0 */ )
+    if ( &aNotesBtn == pCtrl ) != 0 */ )
     {
         aNotesBtn.Enable();
         return;
@@ -2233,7 +2202,7 @@ IMPL_LINK( SvxSearchDialog, FormatHdl_Impl, Button *, EMPTYARG )
             if( aOutSet.Count() )
                 pList->Put( aOutSet );
 
-            PaintAttrText_Impl(); // AttributText in GroupBox setzen
+            PaintAttrText_Impl(); // Set AttributText in GroupBox
         }
         delete pDlg;
     }
@@ -2362,7 +2331,7 @@ String& SvxSearchDialog::BuildAttrText_Impl( String& rStr,
     if ( !pList )
         return rStr;
 
-    // Metrik abfragen
+    // Metric query
     SfxMapUnit eMapUnit = SFX_MAPUNIT_CM;
     FieldUnit eFieldUnit = pSh->GetModule()->GetFieldUnit();
     switch ( eFieldUnit )
@@ -2400,7 +2369,7 @@ String& SvxSearchDialog::BuildAttrText_Impl( String& rStr,
         }
         else if ( rItem.nSlot == SID_ATTR_BRUSH_CHAR )
         {
-            //Sonderbehandlung fuer Zeichenhintergrund
+            // Special treatment for text background
             rStr += SVX_RESSTR( RID_SVXITEMS_BRUSH_CHAR );
         }
         else

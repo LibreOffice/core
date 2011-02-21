@@ -45,12 +45,6 @@
 
 #define TRANSCOL Color( COL_WHITE )
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 ContourWindow::ContourWindow( Window* pParent, const ResId& rResId ) :
             GraphCtrl       ( pParent, rResId ),
             aWorkRect       ( 0, 0, 0, 0 ),
@@ -61,33 +55,18 @@ ContourWindow::ContourWindow( Window* pParent, const ResId& rResId ) :
     SetWinStyle( WB_SDRMODE );
 }
 
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 ContourWindow::~ContourWindow()
 {
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
 {
     SdrPage*        pPage = (SdrPage*) pModel->GetPage( 0 );
     const USHORT    nPolyCount = rPolyPoly.Count();
 
-    // zuerst alle Zeichenobjekte loeschen
+    // First delete all drawing objects
     aPolyPoly = rPolyPoly;
 
-    // #117412#
     // To avoid to have destroyed objects which are still selected, it is necessary to deselect
     // them first (!)
     pView->UnmarkAllObj();
@@ -108,7 +87,6 @@ void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
             aSet.Put( XFillColorItem( String(), TRANSCOL ) );
             aSet.Put( XFillTransparenceItem( 50 ) );
 
-            //pPathObj->SetItemSetAndBroadcast(aSet);
             pPathObj->SetMergedItemSetAndBroadcast(aSet);
 
             pPage->InsertObject( pPathObj );
@@ -123,13 +101,6 @@ void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
 
     pModel->SetChanged( sal_False );
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 const PolyPolygon& ContourWindow::GetPolyPolygon()
 {
@@ -154,13 +125,6 @@ const PolyPolygon& ContourWindow::GetPolyPolygon()
     return aPolyPoly;
 }
 
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void ContourWindow::InitSdrModel()
 {
     GraphCtrl::InitSdrModel();
@@ -173,25 +137,11 @@ void ContourWindow::InitSdrModel()
     pView->SetFrameDragSingles( TRUE );
 }
 
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void ContourWindow::SdrObjCreated( const SdrObject&  )
 {
     pView->MarkAll();
     pView->CombineMarkedObjects( sal_False );
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 BOOL ContourWindow::IsContourChanged() const
 {
@@ -203,13 +153,6 @@ BOOL ContourWindow::IsContourChanged() const
 
     return bRet;
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void ContourWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -226,13 +169,6 @@ void ContourWindow::MouseButtonDown( const MouseEvent& rMEvt )
     if ( !bPipetteMode )
         GraphCtrl::MouseButtonDown( rMEvt );
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void ContourWindow::MouseMove( const MouseEvent& rMEvt )
 {
@@ -254,13 +190,6 @@ void ContourWindow::MouseMove( const MouseEvent& rMEvt )
     else
         GraphCtrl::MouseMove( rMEvt );
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -306,13 +235,6 @@ void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
     else
         GraphCtrl::MouseButtonUp( rMEvt );
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void ContourWindow::Paint( const Rectangle& rRect )
 {

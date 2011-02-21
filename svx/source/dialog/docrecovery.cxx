@@ -1737,12 +1737,6 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 
             ReadParams();
 
-            /*
-            maDocTypeED.SetText( maParams.maSubject );
-            maUsingML.SetText( maParams.maBody );
-            maContactCB.Check( maParams.mbAllowContact );
-            maEMailAddrED.SetText( maParams.maReturnAddress );
-            */
             ContactCBHdl( 0 );
         }
 
@@ -2043,26 +2037,6 @@ void BrokenRecoveryDialog::impl_askForSavePath()
 #define STKFILE ".crash_report_frames"
 #define PRVFILE ".crash_report_preview"
 #endif
-
-//      static ::rtl::OUString GetChecksumURL()
-//      {
-//          ::rtl::OUString aURL = GetCrashConfigDir();
-
-//          aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-//          aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CHKFILE ) );
-
-//          return aURL;
-//      }
-
-//      static ::rtl::OUString GetStackURL()
-//      {
-//          ::rtl::OUString aURL = GetCrashConfigDir();
-
-//          aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
-//          aURL += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STKFILE ) );
-
-//          return aURL;
-//      }
 
         static ::rtl::OUString GetPreviewURL()
         {

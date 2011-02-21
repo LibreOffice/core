@@ -35,12 +35,6 @@
 
 #define CONT_RESID(nId)  ResId( nId, DIALOG_MGR() )
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 class SvxSuperContourDlg : public SvxContourDlg
 {
     using SvxContourDlg::GetPolyPolygon;

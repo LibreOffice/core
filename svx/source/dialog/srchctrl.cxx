@@ -36,7 +36,7 @@
 
 #include <svx/svxids.hrc>
 
-#define _SVX_SRCHDLG_CXX // damit private-Methoden vom SrchDlg bekannt sind
+#define _SVX_SRCHDLG_CXX // so that private methods from SrchDlgare known
 
 
 

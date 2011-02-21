@@ -67,7 +67,7 @@ void SvxRulerItem::StateChanged( USHORT nSID, SfxItemState eState,
 
     switch(nSID)
     {
-        // Linker / rechter Seitenrand
+        // Left / right margin
         case SID_RULER_LR_MIN_MAX:
         {
             const SfxRectangleItem *pItem = PTR_CAST(SfxRectangleItem, pState);
@@ -77,14 +77,14 @@ void SvxRulerItem::StateChanged( USHORT nSID, SfxItemState eState,
         case SID_ATTR_LONG_LRSPACE:
         {
             const SvxLongLRSpaceItem *pItem = PTR_CAST(SvxLongLRSpaceItem, pState);
-            DBG_ASSERT(pState? 0 != pItem: TRUE, "SvxLRSpaceItem erwartet");
+            DBG_ASSERT(pState? 0 != pItem: TRUE, "SvxLRSpaceItem expected");
             rRuler.UpdateFrame(pItem);
             break;
         }
         case SID_ATTR_LONG_ULSPACE:
         {
             const SvxLongULSpaceItem *pItem = PTR_CAST(SvxLongULSpaceItem, pState);
-            DBG_ASSERT(pState? 0 != pItem: TRUE, "SvxULSpaceItem erwartet");
+            DBG_ASSERT(pState? 0 != pItem: TRUE, "SvxULSpaceItem expected");
             rRuler.UpdateFrame(pItem);
             break;
         }
@@ -92,7 +92,7 @@ void SvxRulerItem::StateChanged( USHORT nSID, SfxItemState eState,
         case SID_ATTR_TABSTOP:
         {
             const SvxTabStopItem *pItem = PTR_CAST(SvxTabStopItem, pState);
-            DBG_ASSERT(pState?  0 != pItem: TRUE, "SvxTabStopItem erwartet");
+            DBG_ASSERT(pState?  0 != pItem: TRUE, "SvxTabStopItem expected");
             rRuler.Update(pItem);
             break;
         }
@@ -100,7 +100,7 @@ void SvxRulerItem::StateChanged( USHORT nSID, SfxItemState eState,
         case SID_ATTR_PARA_LRSPACE:
         {
             const SvxLRSpaceItem *pItem = PTR_CAST(SvxLRSpaceItem, pState);
-            DBG_ASSERT(pState?  0 != pItem: TRUE, "SvxLRSpaceItem erwartet");
+            DBG_ASSERT(pState?  0 != pItem: TRUE, "SvxLRSpaceItem expected");
             rRuler.UpdatePara(pItem);
             break;
         }
@@ -110,14 +110,14 @@ void SvxRulerItem::StateChanged( USHORT nSID, SfxItemState eState,
         case SID_RULER_ROWS_VERTICAL:
         {
             const SvxColumnItem *pItem = PTR_CAST(SvxColumnItem, pState);
-            DBG_ASSERT(pState?  0 != pItem: TRUE, "SvxColumnItem erwartet");
+            DBG_ASSERT(pState?  0 != pItem: TRUE, "SvxColumnItem expected");
 #ifdef DBG_UTIL
             if(pItem)
             {
                 if(pItem->IsConsistent())
                     rRuler.Update(pItem, nSID);
                 else
-                    DBG_ERROR("Spaltenitem corrupted");
+                    DBG_ERROR("Column item corrupted");
             }
             else
                 rRuler.Update(pItem, nSID);
@@ -127,37 +127,37 @@ void SvxRulerItem::StateChanged( USHORT nSID, SfxItemState eState,
             break;
         }
         case SID_RULER_PAGE_POS:
-        {   // Position Seite, Seitenbreite
+        {   // Position page, page width
             const SvxPagePosSizeItem *pItem = PTR_CAST(SvxPagePosSizeItem, pState);
-            DBG_ASSERT(pState?  0 != pItem: TRUE, "SvxPagePosSizeItem erwartet");
+            DBG_ASSERT(pState?  0 != pItem: TRUE, "SvxPagePosSizeItem expected");
             rRuler.Update(pItem);
             break;
         }
         case SID_RULER_OBJECT:
-        {   // Object-Selektion
+        {   // Object selection
             const SvxObjectItem *pItem = PTR_CAST(SvxObjectItem, pState);
-            DBG_ASSERT(pState?  0 != pItem: TRUE, "SvxObjectItem erwartet");
+            DBG_ASSERT(pState?  0 != pItem: TRUE, "SvxObjectItem expected");
             rRuler.Update(pItem);
             break;
         }
         case SID_RULER_PROTECT:
         {
             const SvxProtectItem *pItem = PTR_CAST(SvxProtectItem, pState);
-            DBG_ASSERT(pState?  0 != pItem: TRUE, "SvxProtectItem erwartet");
+            DBG_ASSERT(pState?  0 != pItem: TRUE, "SvxProtectItem expected");
             rRuler.Update(pItem);
             break;
         }
         case SID_RULER_BORDER_DISTANCE:
         {
             const SvxLRSpaceItem *pItem = PTR_CAST(SvxLRSpaceItem, pState);
-            DBG_ASSERT(pState?  0 != pItem: TRUE, "SvxLRSpaceItem erwartet");
+            DBG_ASSERT(pState?  0 != pItem: TRUE, "SvxLRSpaceItem expected");
             rRuler.UpdateParaBorder(pItem);
         }
         break;
         case SID_RULER_TEXT_RIGHT_TO_LEFT :
         {
             const SfxBoolItem *pItem = PTR_CAST(SfxBoolItem, pState);
-            DBG_ASSERT(pState?  0 != pItem: TRUE, "SfxBoolItem erwartet");
+            DBG_ASSERT(pState?  0 != pItem: TRUE, "SfxBoolItem expected");
             rRuler.UpdateTextRTL(pItem);
         }
         break;

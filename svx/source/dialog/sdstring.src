@@ -28,11 +28,10 @@
 #include <svx/dialogs.hrc>
  // pragma -------------------------------------------------------------------
 
- // Strings fuer die Draw-Dialoge --------------------------------------------
+ // Strings for the Draw-Dialog --------------------------------------------
 String RID_SVXSTR_SOLID
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Durchgängig : Durchgõngig */
-    /* ### ACHTUNG: Neuer Text in Resource? Durchgängig : Durchgõngig */
+    /* ### ATTENTION: New text in Resource? Continuous : Continuous  */
     Text [ en-US ] = "Continuous" ;
 };
 String RID_SVXSTR_GRADIENT
@@ -66,8 +65,7 @@ String RID_SVXSTR_LINEEND
 
 String RID_SVXSTR_CLOSE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
-    /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
+    /* ### ATTENTION: New text in Resource? Close : Close  */
     Text [ en-US ] = "Close" ;
 };
 String RID_SVXSTR_BLACK
@@ -80,14 +78,12 @@ String RID_SVXSTR_BLUE
 };
 String RID_SVXSTR_GREEN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Grün : Gr³n */
-    /* ### ACHTUNG: Neuer Text in Resource? Grün : Gr³n */
+    /* ### ATTENTION: New text in Resource? Green : Green */
     Text [ en-US ] = "Green" ;
 };
 String RID_SVXSTR_CYAN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Türkis : T³rkis */
-    /* ### ACHTUNG: Neuer Text in Resource? Türkis : T³rkis */
+    /* ### ATTENTION: New text in Resource? Turquoise : Turquoise */
     Text [ en-US ] = "Turquoise" ;
 };
 String RID_SVXSTR_RED
@@ -96,7 +92,7 @@ String RID_SVXSTR_RED
 };
 String RID_SVXSTR_MAGENTA
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Magenta : Violett */
+    /* ### ATTENTION: New text in Resource? Magenta : Violett */
     Text [ en-US ] = "Magenta" ;
 };
 String RID_SVXSTR_BROWN
@@ -117,14 +113,12 @@ String RID_SVXSTR_LIGHTBLUE
 };
 String RID_SVXSTR_LIGHTGREEN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Hellgrün : Hellgr³n */
-    /* ### ACHTUNG: Neuer Text in Resource? Hellgrün : Hellgr³n */
+    /* ### ATTENTION: New text in Resource? Light green : Light green */
     Text [ en-US ] = "Light green" ;
 };
 String RID_SVXSTR_LIGHTCYAN
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Helltürkis : Hellt³rkis */
-    /* ### ACHTUNG: Neuer Text in Resource? Helltürkis : Hellt³rkis */
+    /* ### ATTENTION: New text in Resource? Light cyan : Light cyan */
     Text [ en-US ] = "Light cyan" ;
 };
 String RID_SVXSTR_LIGHTRED
@@ -133,7 +127,7 @@ String RID_SVXSTR_LIGHTRED
 };
 String RID_SVXSTR_LIGHTMAGENTA
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Hellmagenta : Hellviolett */
+    /* ### ATTENTION: New text in Resource? Light magenta : Light magenta */
     Text [ en-US ] = "Light magenta" ;
 };
 String RID_SVXSTR_YELLOW
@@ -142,8 +136,7 @@ String RID_SVXSTR_YELLOW
 };
 String RID_SVXSTR_WHITE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Weiß : Wei˜ */
-    /* ### ACHTUNG: Neuer Text in Resource? Weiß : Wei˜ */
+    /* ### ATTENTION: New text in Resource? White : White */
     Text [ en-US ] = "White" ;
 };
 String RID_SVXSTR_BLUEGREY
@@ -369,138 +362,138 @@ String RID_SVXSTR_LINEJOINT_ROUND
 // Reference-strings for standardcolor-table
 //
 
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BLACK_DEF
 {
     Text = "Black" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BLUE_DEF
 {
     Text = "Blue" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_GREEN_DEF
 {
     Text = "Green" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_CYAN_DEF
 {
     Text = "Turquoise" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_RED_DEF
 {
     Text = "Red" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_MAGENTA_DEF
 {
     Text = "Magenta" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BROWN_DEF
 {
     Text = "Brown" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_GREY_DEF
 {
     Text = "Gray" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_LIGHTGREY_DEF
 {
     Text = "Light gray" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_LIGHTBLUE_DEF
 {
     Text = "Light blue" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_LIGHTGREEN_DEF
 {
     Text = "Light green" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_LIGHTCYAN_DEF
 {
     Text = "Light cyan" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_LIGHTRED_DEF
 {
     Text = "Light red" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_LIGHTMAGENTA_DEF
 {
     Text = "Light magenta" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_YELLOW_DEF
 {
     Text = "Yellow" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_WHITE_DEF
 {
     Text = "White" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BLUEGREY_DEF
 {
     Text = "Blue gray" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_ORANGE_DEF
 {
     Text = "Orange" ;
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_VIOLET_DEF
 {
     Text = "Violet";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BORDEAUX_DEF
 {
     Text = "Bordeaux";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_PALE_YELLOW_DEF
 {
     Text = "Pale yellow";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_PALE_GREEN_DEF
 {
     Text = "Pale green";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_DKVIOLET_DEF
 {
     Text = "Dark violet";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_SALMON_DEF
 {
     Text = "Salmon";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_SEABLUE_DEF
 {
     Text = "Sea blue";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_COLOR_SUN_DEF
 {
     // attention: this is the color string for the Sun Microsystems specific colors !!!
     Text = "Sun";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_COLOR_CHART_DEF
 {
     Text = "Chart";
@@ -511,52 +504,52 @@ String RID_SVXSTR_COLOR_CHART_DEF
 // Reference-strings for standard-gradient-table
 //
 
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_GRDT0_DEF
 {
     Text = "Gradient";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_GRDT1_DEF
 {
     Text = "Linear blue/white";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_GRDT2_DEF
 {
     Text = "Linear magenta/green";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_GRDT3_DEF
 {
     Text = "Linear yellow/brown";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_GRDT4_DEF
 {
     Text = "Radial green/black";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_GRDT5_DEF
 {
     Text = "Radial red/yellow";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_GRDT6_DEF
 {
     Text = "Rectangular red/white";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_GRDT7_DEF
 {
     Text = "Square yellow/white";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_GRDT8_DEF
 {
     Text = "Ellipsoid blue grey/light blue";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_GRDT9_DEF
 {
     Text = "Axial light red/white";
@@ -608,57 +601,57 @@ String RID_SVXSTR_GRDT9
 // Reference-strings for standard-hatch-table
 //
 
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_HATCH0_DEF
 {
     Text = "Black 45 Degrees Wide";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_HATCH1_DEF
 {
     Text = "Black 45 Degrees";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_HATCH2_DEF
 {
     Text = "Black -45 Degrees";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_HATCH3_DEF
 {
     Text = "Black 90 Degrees";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_HATCH4_DEF
 {
     Text = "Red Crossed 45 Degrees";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_HATCH5_DEF
 {
     Text = "Red Crossed 0 Degrees";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_HATCH6_DEF
 {
     Text = "Blue Crossed 45 Degrees";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_HATCH7_DEF
 {
     Text = "Blue Crossed 0 Degrees";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_HATCH8_DEF
 {
     Text = "Blue Triple 90 Degrees";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_HATCH9_DEF
 {
     Text = "Black 0 Degrees";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_HATCH10_DEF
 {
     Text = "Hatch";
@@ -714,113 +707,113 @@ String RID_SVXSTR_HATCH10
 // Reference-strings for standard-bitmap-table
 //
 
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP0_DEF
 {
     Text = "Empty";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP1_DEF
 {
     Text = "Sky";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP2_DEF
 {
     Text = "Aqua";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP3_DEF
 {
     Text = "Coarse";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP4_DEF
 {
     Text = "Space Metal";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP5_DEF
 {
     Text = "Space";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP6_DEF
 {
     Text = "Metal";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP7_DEF
 {
     Text = "Wet";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP8_DEF
 {
     Text = "Marble";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP9_DEF
 {
     Text = "Linen";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP10_DEF
 {
     Text = "Stone";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP11_DEF
 {
     Text = "Pebbles";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP12_DEF
 {
     Text = "Wall";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP13_DEF
 {
     Text = "Red Wall";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP14_DEF
 {
     Text = "Pattern";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP15_DEF
 {
     Text = "Leaves";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP16_DEF
 {
     Text = "Lawn Artificial";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP17_DEF
 {
     Text = "Daisy";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP18_DEF
 {
     Text = "Orange";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP19_DEF
 {
     Text = "Fiery";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP20_DEF
 {
     Text = "Roses";
 };
 
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_BMP21_DEF
 {
     Text = "Bitmape";
@@ -920,62 +913,62 @@ String RID_SVXSTR_BMP21
 // Reference-strings for standard-dash-table
 //
 
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_DASH0_DEF
 {
     Text = "Ultrafine Dashed";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_DASH1_DEF
 {
     Text = "Fine Dashed";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_DASH2_DEF
 {
     Text = "Ultrafine 2 Dots 3 Dashes";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_DASH3_DEF
 {
     Text = "Fine Dotted";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_DASH4_DEF
 {
     Text = "Line with Fine Dots";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_DASH5_DEF
 {
     Text = "Fine Dashed (var)";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_DASH6_DEF
 {
     Text = "3 Dashes 3 Dots (var)";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_DASH7_DEF
 {
     Text = "Ultrafine Dotted (var)";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_DASH8_DEF
 {
     Text = "Line Style 9";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_DASH9_DEF
 {
     Text = "2 Dots 1 Dash";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_DASH10_DEF
 {
     Text = "Dashed (var)";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_DASH11_DEF
 {
     Text = "Dash";
@@ -1035,62 +1028,62 @@ String RID_SVXSTR_DASH11
 // Reference-strings for standard-line-end-table
 //
 
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_LEND0_DEF
 {
     Text = "Arrow concave";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_LEND1_DEF
 {
     Text = "Square 45";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_LEND2_DEF
 {
     Text = "Small Arrow";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_LEND3_DEF
 {
     Text = "Dimension Lines";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_LEND4_DEF
 {
     Text = "Double Arrow";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_LEND5_DEF
 {
     Text = "Rounded short Arrow";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_LEND6_DEF
 {
     Text = "Symmetric Arrow";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_LEND7_DEF
 {
     Text = "Line Arrow";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_LEND8_DEF
 {
     Text = "Rounded large Arrow";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_LEND9_DEF
 {
     Text = "Circle";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_LEND10_DEF
 {
     Text = "Square";
 };
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_LEND11_DEF
 {
     Text = "Arrow";
@@ -1150,7 +1143,7 @@ String RID_SVXSTR_LEND11
 // Reference-strings for standard transparence gradients
 //
 
-/* nicht uebersetzen */
+/* do not translate */
 String RID_SVXSTR_TRASNGR0_DEF
 {
     Text = "Transparency";
@@ -1183,7 +1176,7 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
     };
     };
 
-// unbekannte Zeichenfarbe
+// unknown text color
 String RID_SVXSTR_COLOR_USER
 {
     Text [ en-US ] = "User" ;

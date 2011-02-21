@@ -41,12 +41,6 @@
 
 #include <com/sun/star/frame/XFrame.hpp>
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 struct NotifyInfo
 {
     String  aMarkURL;
@@ -65,13 +59,6 @@ struct NotifyPosSize
     BOOL    bPictureSize;
     BOOL    bMousePos;
 };
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 #define SVD_IMAP_USERDATA   0x0001
 
@@ -110,13 +97,6 @@ public:
     const IMapObjectPtr     GetObject() const { return mpObj; }
     void                    ReplaceObject( const IMapObjectPtr& pNewIMapObject ) { mpObj = pNewIMapObject; }
 };
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 class IMapWindow : public GraphCtrl, public DropTargetHelper
 {

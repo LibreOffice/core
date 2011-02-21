@@ -27,7 +27,7 @@
 #include <svx/dialogs.hrc>
 
 
-// ImapDlg-Dialoge
+// ImapDlg-Dialog
 #define RID_SVX_IMAPDLG_START   RID_SVX_IMAP_START
 
 

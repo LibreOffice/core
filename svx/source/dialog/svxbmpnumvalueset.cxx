@@ -100,7 +100,7 @@ static const sal_Char cSuffix[] = "Suffix";
 static const sal_Char cBulletChar[] = "BulletChar";
 static const sal_Char cBulletFontName[] = "BulletFontName";
 
-// Die Auswahl an Bullets aus den StarSymbol
+// The selection of bullets from the star symbol
 static const sal_Unicode aBulletTypes[] =
 {
     0x2022,
@@ -203,8 +203,8 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
     if(!pVDev)
     {
-        // Die Linien werden nur einmalig in das VirtualDevice gepainted
-        // nur die Gliederungspage bekommt es aktuell
+        // The lines are only one time in the virtual device, only the outline
+        // page is currently done
         pVDev = new VirtualDevice(*pDev);
         pVDev->SetMapMode(pDev->GetMapMode());
         pVDev->EnableRTL( IsRTLEnabled() );
@@ -216,7 +216,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
         if(aBackColor == aLineColor)
             aLineColor.Invert();
         pVDev->SetLineColor(aLineColor);
-        // Linien nur einmalig Zeichnen
+        // Draw line only once
         if(nPageType != NUM_PAGETYPE_NUM)
         {
             Point aStart(aBLPos.X() + nRectWidth *25 / 100,0);
@@ -233,7 +233,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     pDev->DrawOutDev(   aRect.TopLeft(), aRectSize,
                         aOrgRect.TopLeft(), aRectSize,
                         *pVDev );
-    // jetzt kommt der Text
+    // Now comes the text
     const OUString sValue(C2U(cValue));
     if( NUM_PAGETYPE_SINGLENUM == nPageType ||
             NUM_PAGETYPE_BULLET == nPageType )
@@ -268,7 +268,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                         DBG_ERROR("Exception in DefaultNumberingProvider::makeNumberingString");
                     }
                 }
-                // knapp neben dem linken Rand beginnen
+                // start just next to the left edge
                 aStart.X() = aBLPos.X() + 2;
                 aStart.Y() -= pDev->GetTextHeight()/2;
             }
@@ -385,7 +385,7 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
                     }
 
                     long nLineTop = nStartY + nRectHeight * aLinesArr[2 * i + 1]/100 ;
-                    Point aLineLeft(aLeft.X() /*+ nStartX + nRectWidth * aLinesArr[2 * i]/ 100*/, nLineTop );
+                    Point aLineLeft(aLeft.X(), nLineTop );
                     Point aLineRight(nStartX + nRectWidth * 90 /100, nLineTop );
                     pVDev->DrawLine(aLineLeft,  aLineRight);
                 }
@@ -415,11 +415,6 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     pDev->SetFont(aOldFont);
     pDev->SetLineColor(aOldColor);
 }
-
-/**************************************************************************/
-/*                                                                        */
-/*                                                                        */
-/**************************************************************************/
 
 SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, USHORT nType ) :
 
@@ -484,10 +479,9 @@ void SvxNumValueSet::SetOutlineNumberingSettings(
     }
 }
 
-SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId/*, const List& rStrNames*/ ) :
+SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId ) :
 
     SvxNumValueSet( pParent, rResId, NUM_PAGETYPE_BMP ),
-//    rStrList    ( rStrNames ),
     bGrfNotFound( FALSE )
 
 {
@@ -536,7 +530,7 @@ void SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 
 IMPL_LINK(SvxBmpNumValueSet, FormatHdl_Impl, Timer*, EMPTYARG)
 {
-    // nur, wenn eine Grafik nicht da war, muss formatiert werden
+    // only when a graphics was not there, it needs to be formatted
     if(bGrfNotFound)
     {
         bGrfNotFound = FALSE;

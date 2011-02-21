@@ -569,7 +569,7 @@ const SvxColumnItem &SvxColumnItem::operator=(const SvxColumnItem &rCopy)
 BOOL SvxColumnItem::CalcOrtho() const
 {
     const USHORT nCount = Count();
-    DBG_ASSERT(nCount >= 2, "keine Spalten");
+    DBG_ASSERT(nCount >= 2, "no columns");
     if(nCount < 2)
         return FALSE;
 
@@ -578,7 +578,7 @@ BOOL SvxColumnItem::CalcOrtho() const
         if( (*this)[i].GetWidth() != nColWidth)
             return FALSE;
     }
-    //!! Breite Trenner
+    //!! Wide divider
     return TRUE;
 }
 

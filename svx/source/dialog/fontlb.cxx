@@ -72,7 +72,6 @@ void SvLBoxFontString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags
     Font aOldFont( rDev.GetFont() );
     Font aNewFont( maFont );
     bool bSel = (nFlags & SVLISTENTRYFLAG_SELECTED) != 0;
-//  if( !mbUseColor )               // selection gets font color, if available
     if( !mbUseColor || bSel )       // selection always gets highlight color
     {
         const StyleSettings& rSett = Application::GetSettings().GetStyleSettings();
@@ -176,11 +175,6 @@ SvxFontListBox::SvxFontListBox( Context* pParent, const char* pFile)
 : ListBox( pParent, pFile )
 {
 }
-
-/*IMPL_IMPL (SvxFontListBox, ListBox);
-IMPL_CONSTRUCTORS (SvxFontListBox, ListBox, "svxfontlistbox");
-IMPL_GET_IMPL (SvxFontListBox);
-IMPL_GET_WINDOW (SvxFontListBox);*/
 
 };
 

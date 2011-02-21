@@ -70,7 +70,7 @@ BOOL GetApplyCharUnit( const SfxItemSet& rSet )
         SfxObjectShell* pSh = NULL;
         if ( pFrame )
             pSh = pFrame->GetObjectShell();
-        if ( pSh )  // #93209# the object shell is not always available during reload
+        if ( pSh )  // the object shell is not always available during reload
         {
             SfxModule* pModule = pSh->GetModule();
             if ( pModule )
