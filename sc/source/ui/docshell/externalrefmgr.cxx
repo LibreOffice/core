@@ -1599,6 +1599,12 @@ void ScExternalRefManager::storeRangeNameTokens(sal_uInt16 nFileId, const String
 
 namespace {
 
+/**
+ * Put a single cell data into internal cache table.
+ *
+ * @param pFmt optional cell format index that may need to be stored with
+ *             the cell value.
+ */
 void putCellDataIntoCache(
     ScExternalRefCache& rRefCache, const ScExternalRefCache::TokenRef& pToken,
     sal_uInt16 nFileId, const String& rTabName, const ScAddress& rCell,
