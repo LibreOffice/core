@@ -60,7 +60,7 @@ SvxShowCharSetVirtualAcc::SvxShowCharSetVirtualAcc( SvxShowCharSet* pParent ) : 
 ,m_pTable(NULL)
 {
     osl_incrementInterlockedCount(&m_refCount);
-    { // #b6211265 #
+    {
         lateInit(this);
     }
     osl_decrementInterlockedCount(&m_refCount);
@@ -301,7 +301,7 @@ SvxShowCharSetAcc::SvxShowCharSetAcc( SvxShowCharSetVirtualAcc* _pParent ) : OAc
   ,m_pParent( _pParent )
 {
     osl_incrementInterlockedCount(&m_refCount);
-    { // #b6211265 #
+    {
         lateInit(this);
     }
     osl_decrementInterlockedCount(&m_refCount);

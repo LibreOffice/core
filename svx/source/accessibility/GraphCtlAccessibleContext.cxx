@@ -432,8 +432,6 @@ Reference< XAccessibleStateSet > SAL_CALL SvxGraphCtrlAccessibleContext::getAcce
     }
     else
     {
-        // pStateSetHelper->AddState( AccessibleStateType::ENABLED );
-        // pStateSetHelper->AddState( AccessibleStateType::SENSITIVE );
         pStateSetHelper->AddState( AccessibleStateType::FOCUSABLE );
         if( mpControl->HasFocus() )
             pStateSetHelper->AddState( AccessibleStateType::FOCUSED );
@@ -949,7 +947,7 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
     {
         const SfxSimpleHint* pSfxHint = PTR_CAST(SfxSimpleHint, &rHint );
 
-        // ist unser SdDrawDocument gerade gestorben?
+        // Has our SdDrawDocument just died?
         if(pSfxHint && pSfxHint->GetId() == SFX_HINT_DYING)
         {
             dispose();

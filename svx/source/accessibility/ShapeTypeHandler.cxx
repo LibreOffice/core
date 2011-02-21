@@ -94,7 +94,6 @@ ShapeTypeId ShapeTypeHandler::GetTypeId (const OUString& aServiceName) const
     tServiceNameToSlotId::iterator I (maServiceNameToSlotId.find (aServiceName));
     if (I != maServiceNameToSlotId.end())
     {
-        //  long nSlotId = maServiceNameToSlotId[aServiceName];
         return maShapeTypeDescriptorList[I->second].mnShapeTypeId;
     }
     else

@@ -683,14 +683,6 @@ namespace accessibility
                         else if ( maLastSelection.HasRange() &&
                                   aSelection.HasRange() )
                         {
-                            // send event TEXT_SELECTION_CHANGED for difference
-                            // between last and new selection. (#i27299#)
-//                            // selection was on, now is different: take union of ranges
-//                            maParaManager.FireEvent( ::std::min(sortedSelection.first,
-//                                                           sortedLastSelection.second),
-//                                                     ::std::max(sortedSelection.first,
-//                                                           sortedLastSelection.second)+1,
-//                                                     nTextSelChgEventId );
                             // use sorted last and new selection
                             ESelection aTmpLastSel( maLastSelection );
                             aTmpLastSel.Adjust();
