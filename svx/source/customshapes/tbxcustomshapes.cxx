@@ -108,7 +108,7 @@ SvxTbxCtlCustomShapes::SvxTbxCtlCustomShapes( USHORT nSlotId, USHORT nId, ToolBo
 
 /*************************************************************************
 |*
-|* Benachrichtigung, wenn sich der Applikationsstatus geaendert hat
+|* Notification when the application status has changed
 |*
 \************************************************************************/
 
@@ -120,7 +120,7 @@ void SvxTbxCtlCustomShapes::StateChanged( USHORT nSID, SfxItemState eState,
 
 /*************************************************************************
 |*
-|* Wenn man ein PopupWindow erzeugen will
+|* when one wants to create a popup window
 |*
 \************************************************************************/
 
@@ -131,9 +131,9 @@ SfxPopupWindowType SvxTbxCtlCustomShapes::GetPopupWindowType() const
 
 /*************************************************************************
 |*
-|* Hier wird das Fenster erzeugt
-|* Lage der Toolbox mit GetToolBox() abfragbar
-|* rItemRect sind die Screen-Koordinaten
+|* Here is the window created
+|* The location of the Toolbox is queried through GetToolBox()
+|* rItemRect are the screen coordinates
 |*
 \************************************************************************/
 
@@ -157,7 +157,7 @@ void SvxTbxCtlCustomShapes::Select( BOOL /*bMod1*/ )
 
 ::sal_Bool SAL_CALL SvxTbxCtlCustomShapes::opensSubToolbar() throw (::com::sun::star::uno::RuntimeException)
 {
-    // We control a sub-toolbar therefor, we have to return true.
+    // We control a sub-toolbar therefore we have to return true.
     return sal_True;
 }
 

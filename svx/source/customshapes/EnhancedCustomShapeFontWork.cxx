@@ -260,7 +260,6 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             Font aFont;
             aFont.SetHeight( rFWData.nSingleLineHeight );
             aFont.SetAlign( ALIGN_TOP );
-    //      aFont.SetAlign( )
 
             aFont.SetName( rFontItem.GetFamilyName() );
             aFont.SetFamily( rFontItem.GetFamily() );
@@ -797,8 +796,6 @@ SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const Sd
     if ( rFWData.vTextAreas.size() )
     {
         pRet = new SdrObjGroup();
-// SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-//      pRet->SetModel( pCustomShape->GetModel() );
         std::vector< FWTextArea >::const_iterator aTextAreaIter = rFWData.vTextAreas.begin();
         std::vector< FWTextArea >::const_iterator aTextAreaIEnd = rFWData.vTextAreas.end();
         while ( aTextAreaIter != aTextAreaIEnd )
@@ -816,8 +813,6 @@ SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const Sd
                     while( aOutlineIter != aOutlineIEnd )
                     {
                         SdrObject* pPathObj = new SdrPathObj( OBJ_POLY, aOutlineIter->getB2DPolyPolygon() );
-    // SJ: not setting model, so we save a lot of broadcasting and the model is not modified any longer
-    //                  pPathObj->SetModel( pCustomShape->GetModel() );
                         ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pPathObj );
                         ++aOutlineIter;
                     }

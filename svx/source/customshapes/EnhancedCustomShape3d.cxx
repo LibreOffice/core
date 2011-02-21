@@ -346,8 +346,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         if ( pAny )
             *pAny >>= eProjectionMode;
         ProjectionType eProjectionType( eProjectionMode == drawing::ProjectionMode_PARALLEL ? PR_PARALLEL : PR_PERSPECTIVE );
-
-        // pShape2d Umwandeln in Szene mit 3D Objekt
+        // pShape2d Convert in scenes which include 3D Objects
         E3dDefaultAttributes a3DDefaultAttr;
         a3DDefaultAttr.SetDefaultLatheCharacterMode( TRUE );
         a3DDefaultAttr.SetDefaultExtrudeCharacterMode( TRUE );
@@ -508,7 +507,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             // then we can change the return value
             pRet = pScene;
 
-            // Kameraeinstellungen, Perspektive ...
+            // Camera settings, Perspective ...
             Camera3D& rCamera = (Camera3D&)pScene->GetCamera();
             const basegfx::B3DRange& rVolume = pScene->GetBoundVolume();
             pScene->NbcSetSnapRect( aSnapRect );
@@ -712,14 +711,6 @@ Rectangle EnhancedCustomShape3d::CalculateNewSnapRect( const SdrObject* pCustomS
     const rtl::OUString sRotationCenter( RTL_CONSTASCII_USTRINGPARAM ( "RotationCenter" ) );
     drawing::Direction3D aRotationCenterDefault( 0, 0, 0 ); // default seems to be wrong, a fractional size of shape has to be used!!
     drawing::Direction3D aRotationCenter( GetDirection3D( rGeometryItem, sRotationCenter, aRotationCenterDefault ) );
-
-    // double XCenterInGUnits = rPropSet.GetPropertyValue( DFF_Prop_c3DRotationCenterX, 0 );
-    // double YCenterInGUnits = rPropSet.GetPropertyValue( DFF_Prop_c3DRotationCenterY, 0 );
-
-    // sal_Int32 nRotationXAxisInProz = rPropSet.GetPropertyValue( DFF_Prop_c3DRotationAxisX, 100 );
-    // sal_Int32 nRotationYAxisInProz = rPropSet.GetPropertyValue( DFF_Prop_c3DRotationAxisY, 0 );
-    // sal_Int32 nRotationZAxisInProz = rPropSet.GetPropertyValue( DFF_Prop_c3DRotationAxisZ, 0 );
-
 
     double fXRotate, fYRotate;
     GetRotateAngle( rGeometryItem, fXRotate, fYRotate );
