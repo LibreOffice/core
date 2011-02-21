@@ -274,7 +274,7 @@ char *cpp_argv[ARGUMENTS] = {
 #ifdef unix
     "-Uunix",   /* remove unix symbol so that filename unix.c okay */
 #endif
-#if defined(__386BSD__) || defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__) || \
+#if defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__) || \
     defined(MACH) || defined(DRAGONFLY)
 /* FIXME: strange list of obsolete systems */
 # ifdef __i386__
