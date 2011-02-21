@@ -50,13 +50,6 @@
 #include <ctype.h>
 #include <errno.h>
 
-#if defined( PM2 ) && defined( ZTC )
-#include <svpm.h>
-#ifndef unlink
-#define unlink( p ) DosDelete( (PSZ)(const char*)p )
-#endif
-#endif
-
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <rscerror.h>

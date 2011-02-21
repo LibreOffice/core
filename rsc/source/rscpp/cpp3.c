@@ -170,7 +170,7 @@ void setincdirs()
  * verwendete knallte es in strcpy() !
  */
 
-#if !defined( ZTC ) && !defined( WNT ) && ! defined UNX && ! defined OS2
+#if !defined( WNT ) && ! defined UNX && ! defined OS2
         extern   char     *getenv( char *pStr ); /* BP */
 #endif
                  char     *pIncGetEnv = NULL;    /* Pointer auf INCLUDE   */
@@ -465,7 +465,7 @@ void initdefines()
         int                     i;
         time_t                  tvec;
 
-#if !defined( ZTC ) && !defined( WNT ) && !defined(G3)
+#if !defined( WNT ) && !defined(G3)
         extern char             *ctime();
 #endif
 
