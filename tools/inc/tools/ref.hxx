@@ -305,9 +305,6 @@ public:\
     PRV_SV_DECL_MEMBER_LIST(ClassName,EntryName)\
 };
 
-#define SV_IMPL_MEMBER_LIST(ClassName,EntryName)\
-    PRV_SV_IMPL_MEMBER_LIST(ClassName,EntryName,SvRefBaseMemberList)
-
 /************************** S v R e f B a s e ****************************/
 #define SV_NO_DELETE_REFCOUNT  0x80000000
 class TOOLS_DLLPUBLIC SvRefBase
