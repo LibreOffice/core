@@ -26,6 +26,9 @@
  * instead of those above.
  */
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_tools.hxx"
+
 #include <rtl/textenc.h>
 #include <tools/tenccvt.hxx>
 
