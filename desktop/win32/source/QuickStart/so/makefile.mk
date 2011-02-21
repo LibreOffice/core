@@ -41,12 +41,12 @@ UWINAPILIB =
 
 # --- Resources ----------------------------------------------------
 
+.IF "$(LINK_SO)"=="TRUE"
+
 RCFILES=QuickStart.rc
 INCPRE=..
 
 # --- Files --------------------------------------------------------
-
-.IF "$(LINK_SO)"=="TRUE"
 
 OBJFILES=$(OBJ)$/QuickStart.obj
 
