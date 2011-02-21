@@ -44,6 +44,8 @@
 #include <com/sun/star/uno/Type.hxx>
 
 #include "FormControlHelper.hxx"
+#include <xmloff/odffields.hxx>
+#include <comphelper/stlunosequence.hxx>
 
 namespace writerfilter {
 namespace dmapper {
@@ -153,92 +155,6 @@ FormControlHelper::~FormControlHelper()
 {
 }
 
-bool FormControlHelper::createDropdown(uno::Reference<text::XTextRange> xTextRange,
-                                       const ::rtl::OUString & rControlName)
-{
-    uno::Reference<lang::XMultiServiceFactory>
-        xServiceFactory(m_pImpl->getServiceFactory());
-
-    if (! xServiceFactory.is())
-        return false;
-
-    uno::Reference<uno::XInterface> xInterface =
-        xServiceFactory->createInstance
-        (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.ComboBox")));
-
-    if (!xInterface.is())
-        return false;
-
-    m_pImpl->rFormComponent = uno::Reference<form::XFormComponent>(xInterface, uno::UNO_QUERY);
-    if (!m_pImpl->rFormComponent.is())
-        return false;
-
-    uno::Reference<beans::XPropertySet> xPropSet(xInterface, uno::UNO_QUERY);
-
-    uno::Any aAny;
-
-    aAny <<= rControlName;
-    xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), aAny);
-    xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dropdown")), uno::makeAny( sal_True ));
-
-    uno::Sequence< rtl::OUString > sItems;
-
-    sal_Int32 nMaxChars = 0;
-    if ( m_pFFData->getDropDownEntries().size() )
-    {
-        sItems.realloc( m_pFFData->getDropDownEntries().size() );
-        FFDataHandler::DropDownEntries_t::const_iterator it_end =  m_pFFData->getDropDownEntries().end();
-        FFDataHandler::DropDownEntries_t::const_iterator it =  m_pFFData->getDropDownEntries().begin();
-
-        rtl::OUString* pItem = sItems.getArray();
-
-        for( ;it != it_end; ++it, ++pItem )
-        {
-           *pItem = *it;
-           if ( (*pItem).getLength() > nMaxChars )
-               nMaxChars = (*pItem).getLength();
-        }
-    }
-
-    if ( sItems.getLength() )
-    {
-        aAny <<= sItems;
-        xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StringItemList")), aAny);
-        if ( m_pFFData->getDropDownResult().getLength() )
-        {
-            sal_Int32 nResult = m_pFFData->getDropDownResult().toInt32();
-            if ( nResult )
-            {
-                aAny <<= sItems[ nResult ];
-                xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text")), aAny);
-            }
-        }
-    }
-
-    // some fallback values ( to display something )
-
-    m_pImpl->aSize.Width = 2381;
-    m_pImpl->aSize.Height = 713;
-
-    try
-    {
-        uno::Reference<beans::XPropertySet> xTextRangeProps(xTextRange, uno::UNO_QUERY_THROW);
-        static ::rtl::OUString sCharHeight(RTL_CONSTASCII_USTRINGPARAM("CharHeight"));
-        // #FIXME improve the auto height width calculation ( but this
-        // should be removed when we use form fields instead of controls
-        float fComboBoxHeight = 0.0;
-        xTextRangeProps->getPropertyValue(sCharHeight) >>= fComboBoxHeight;
-        m_pImpl->aSize.Height = floor(fComboBoxHeight * 35.3);
-        if ( nMaxChars )
-            m_pImpl->aSize.Width =  m_pImpl->aSize.Height * nMaxChars;
-    }
-    catch( uno::Exception& e )
-    {
-    }
-    return true;
-}
-
-
 bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRange,
                                        const ::rtl::OUString & rControlName)
 {
@@ -305,6 +221,48 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRan
     return true;
 }
 
+bool FormControlHelper::processField(uno::Reference<text::XFormField> xFormField)
+{
+    if (m_pImpl->m_eFieldId == FIELD_FORMCHECKBOX )
+    {
+        xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.oasis.opendocument.field.FORMCHECKBOX")));
+        uno::Reference<beans::XPropertySet> xPropSet(xFormField, uno::UNO_QUERY);
+        uno::Any aAny;
+        aAny <<= m_pFFData->getCheckboxChecked();
+        if ( xPropSet.is() )
+            xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Checked")), aAny);
+        rtl::OUString sName;
+    }
+    else if (m_pImpl->m_eFieldId == FIELD_FORMDROPDOWN )
+    {
+        xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN)));
+        uno::Reference<container::XNameContainer> xNameCont = xFormField->getParameters();
+        if ( xNameCont.is() )
+        {
+            uno::Sequence< rtl::OUString > sItems;
+            sItems.realloc( m_pFFData->getDropDownEntries().size() );
+            ::std::copy( m_pFFData->getDropDownEntries().begin(), m_pFFData->getDropDownEntries().end(), ::comphelper::stl_begin(sItems));
+            if ( sItems.getLength() )
+            {
+                if ( xNameCont->hasByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY)) ) )
+                    xNameCont->replaceByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY)), uno::makeAny( sItems ) );
+                else
+                    xNameCont->insertByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY)), uno::makeAny( sItems ) );
+
+                sal_Int32 nResult = m_pFFData->getDropDownResult().toInt32();
+                if ( nResult )
+                {
+                    if ( xNameCont->hasByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT)) ) )
+                        xNameCont->replaceByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT)), uno::makeAny( nResult ) );
+                    else
+                        xNameCont->insertByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT)), uno::makeAny( nResult ) );
+                }
+            }
+        }
+    }
+    return false;
+}
+
 bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> xTextRange)
 {
     bool bCreated = false;
@@ -336,9 +294,6 @@ bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> xTextRang
 
     switch (m_pImpl->m_eFieldId)
     {
-    case FIELD_FORMDROPDOWN:
-        bCreated = createDropdown(xTextRange, sControlName);
-        break;
     case FIELD_FORMCHECKBOX:
         bCreated = createCheckbox(xTextRange, sControlName);
         break;

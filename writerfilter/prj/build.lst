@@ -1,4 +1,4 @@
-wf	writerfilter	: soltools sal BOOST:boost cppu cppuhelper ucbhelper tools svx LIBXSLT:libxslt oox NULL
+wf	writerfilter	: soltools sal BOOST:boost cppu cppuhelper ucbhelper tools svx LIBXSLT:libxslt oox xmloff NULL
 wf	writerfilter	usr1	-	all	wf_mkout NULL
 wf	writerfilter\source\resourcemodel	nmake	-	all	wf_resourcemodel NULL
 wf	writerfilter\source\doctok	nmake	-	all	wf_doctok wf_resourcemodel NULL

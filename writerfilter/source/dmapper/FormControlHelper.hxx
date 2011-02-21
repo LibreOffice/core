@@ -30,6 +30,7 @@
 
 #include <FFDataHandler.hxx>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XFormField.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include "FieldTypes.hxx"
 
@@ -48,6 +49,7 @@ public:
     ~FormControlHelper();
 
     bool insertControl(uno::Reference<text::XTextRange> xTextRange);
+    bool processField(uno::Reference<text::XFormField> xFormField);
 
 private:
     FFDataHandler::Pointer_t m_pFFData;

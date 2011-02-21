@@ -70,6 +70,7 @@ namespace com{ namespace sun{ namespace star{
         namespace text
         {
                 class XTextField;
+                class XFormField;
         }
         namespace beans{ class XPropertySet;}
 }}}
@@ -134,6 +135,7 @@ class FieldContext
     ::rtl::OUString                                                                 m_sCommand;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >          m_xTextField;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField >          m_xFormField;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTOC;//TOX
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTC;//TOX entry
     ::rtl::OUString                                                                 m_sHyperlinkURL;
@@ -154,6 +156,8 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField >      GetTextField() const { return m_xTextField;}
     void    SetTextField(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextField > xTextField) { m_xTextField = xTextField;}
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField >      GetFormField() const { return m_xFormField;}
+    void    SetFormField(::com::sun::star::uno::Reference< ::com::sun::star::text::XFormField > xFormField) { m_xFormField = xFormField;}
 
     void    SetTOC( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xTOC ) { m_xTOC = xTOC; }
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   GetTOC() { return m_xTOC; }
@@ -344,6 +348,7 @@ private:
 
     bool                            m_bParaChanged;
     bool                            m_bIsLastParaInSection;
+    bool                            m_bUsingEnhancedFields;
 
     //annotation import
     uno::Reference< beans::XPropertySet >                                      m_xAnnotationField;
