@@ -1498,7 +1498,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
     catch ( const uno::Exception& e )
     {
         (void) e;
-#if DEBUG
+#if DEBUG_DOMAINMAPPER
         dmapper_logger->element("exception");
 #endif
     }
