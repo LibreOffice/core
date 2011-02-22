@@ -31,14 +31,16 @@ gb_JavaClassSet_JAVACCOMMAND := $(JAVACOMPILER)
 define gb_JavaClassSet__command
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
-    $(gb_JavaClassSet_JAVACCOMMAND) -cp "$(CLASSPATH)" -d $(call gb_JavaClassSet_get_classdir,$(2)) $(3) && \
+	$(gb_JavaClassSet_JAVACCOMMAND) -cp "$(CLASSPATH)" -d $(call gb_JavaClassSet_get_classdir,$(2)) $(if $(filter-out $(JARDEPS),$(3)),\
+			$(filter-out $(JARDEPS),$(3)),\
+			$(filter-out $(JARDEPS),$(4))) &&\
     touch $(1))
 
 endef
 
 define gb_JavaClassSet__rules
 $$(call gb_JavaClassSet_get_repo_target,$(1),%) :
-    $$(call gb_JavaClassSet__command,$$@,$$*,$$?)
+	$$(call gb_JavaClassSet__command,$$@,$$*,$$?,$$^)
 
 $$(call gb_JavaClassSet_get_target,%) : $$(call gb_JavaClassSet_get_repo_target,$(1),%)
     $$(call gb_Output_announce,$$*,$$(true),JCS,3)
@@ -56,6 +58,7 @@ $(foreach reponame,$(gb_JavaClassSet_REPOSITORYNAMES),$(eval $(call gb_JavaClass
 
 # no initialization of scoped variable CLASSPATH as it is "inherited" from controlling instance (e.g. JUnitTest, Jar)
 define gb_JavaClassSet_JavaClassSet
+$(call gb_JavaClassSet_get_target,$(1)) : JARDEPS :=
 endef
 
 define gb_JavaClassSet__get_sourcefile
@@ -82,7 +85,8 @@ endef
 # build order dependency is a hack to get these prerequisites out of the way in the build command
 define gb_JavaClassSet_add_jar
 $(foreach reponame,$(gb_JavaClassSet_REPOSITORYNAMES),\
-	$(eval $(call gb_JavaClassSet_get_repo_target,$(reponame),$(1)) :| $(2)))
+$(eval $(call gb_JavaClassSet_get_repo_target,$(reponame),$(1)) : $(2)) 
+$(eval $(call gb_JavaClassSet_get_repo_target,$(reponame),$(1)) : JARDEPS += $(2)))
 
 endef
 # vim: set noet sw=4 ts=4:
