@@ -75,10 +75,9 @@ APP3TARGET=osl_process_child
 APP3OBJS=$(OBJ3FILES)
 APP3STDLIBS=$(SALLIB)
 
-SHL2DEPN=$(APP3TARGETN)
-
-#TODO: The Linux and WinDOS batch file must be copied to $(BIN) directory!
-#   I dont't know how to do this....
+SHL2DEPN=$(APP3TARGETN) \
+         $(BIN)/batch.sh \
+         $(BIN)/batch.bat
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
@@ -96,4 +95,11 @@ SLOFILES=$(SHL1OBJS) $(SHL2OBJS)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+$(BIN)/batch.sh: batch.sh
+    $(COPY) $< $@
+
+$(BIN)/batch.bat: batch.bat
+    $(COPY) $< $@
+
 .INCLUDE : $(PRJ)$/qa$/cppunit_local.mk
