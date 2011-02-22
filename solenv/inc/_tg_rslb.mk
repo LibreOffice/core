@@ -25,7 +25,7 @@ $(RSC_MULTI1) : \
     @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB1NAME)$i.res} \
@@ -40,7 +40,7 @@ $(RSC_MULTI1) : \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)/$(RESLIB1NAME)$i.res} \
@@ -102,7 +102,7 @@ $(RSC_MULTI2) : \
     @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB2NAME)$i.res} \
@@ -117,7 +117,7 @@ $(RSC_MULTI2) : \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)/$(RESLIB2NAME)$i.res} \
@@ -179,7 +179,7 @@ $(RSC_MULTI3) : \
     @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB3NAME)$i.res} \
@@ -194,7 +194,7 @@ $(RSC_MULTI3) : \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)/$(RESLIB3NAME)$i.res} \
@@ -256,7 +256,7 @@ $(RSC_MULTI4) : \
     @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB4NAME)$i.res} \
@@ -271,7 +271,7 @@ $(RSC_MULTI4) : \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)/$(RESLIB4NAME)$i.res} \
@@ -333,7 +333,7 @@ $(RSC_MULTI5) : \
     @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB5NAME)$i.res} \
@@ -348,7 +348,7 @@ $(RSC_MULTI5) : \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)/$(RESLIB5NAME)$i.res} \
@@ -410,7 +410,7 @@ $(RSC_MULTI6) : \
     @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB6NAME)$i.res} \
@@ -425,7 +425,7 @@ $(RSC_MULTI6) : \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)/$(RESLIB6NAME)$i.res} \
@@ -487,7 +487,7 @@ $(RSC_MULTI7) : \
     @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB7NAME)$i.res} \
@@ -502,7 +502,7 @@ $(RSC_MULTI7) : \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)/$(RESLIB7NAME)$i.res} \
@@ -564,7 +564,7 @@ $(RSC_MULTI8) : \
     @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB8NAME)$i.res} \
@@ -579,7 +579,7 @@ $(RSC_MULTI8) : \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)/$(RESLIB8NAME)$i.res} \
@@ -641,7 +641,7 @@ $(RSC_MULTI9) : \
     @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB9NAME)$i.res} \
@@ -656,7 +656,7 @@ $(RSC_MULTI9) : \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)/$(RESLIB9NAME)$i.res} \
@@ -718,7 +718,7 @@ $(RSC_MULTI10) : \
     @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB10NAME)$i.res} \
@@ -733,7 +733,7 @@ $(RSC_MULTI10) : \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)/$(RESLIB10NAME)$i.res} \

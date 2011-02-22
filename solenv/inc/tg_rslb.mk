@@ -53,7 +53,7 @@ $(RSC_MULTI$(TNR)) : \
     @echo Compiling: $(@:f)
 .IF "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB$(TNR)NAME)$i.res} \
@@ -68,7 +68,7 @@ $(RSC_MULTI$(TNR)) : \
     ) > $(NULLDEV)
 .ELSE			# "$(common_build_reslib)"!=""
     $(COMMAND_ECHO)$(RSC) -presponse $(VERBOSITY) @$(mktmp \
-    -r -p \
+    -p \
     $(foreach,i,$(alllangiso) -lg$i \
     $(null,$(rescharset_{$i}) $(default$(LANG_GUI)) $(rescharset_{$i})) \
     -fs={$(BIN)/$(RESLIB$(TNR)NAME)$i.res} \
