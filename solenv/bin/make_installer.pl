@@ -45,7 +45,6 @@ use installer::files;
 use installer::followme;
 use installer::globals;
 use installer::helppack;
-use installer::javainstaller;
 use installer::languagepack;
 use installer::languages;
 use installer::logger;
@@ -273,7 +272,6 @@ installer::simplepackage::check_simple_packager_project($allvariableshashref);
 ####################################################################
 
 installer::control::set_addchildprojects($allvariableshashref);
-installer::control::set_addjavainstaller($allvariableshashref);
 installer::control::set_addsystemintegration($allvariableshashref);
 
 ########################################################
@@ -1855,12 +1853,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if (( $allvariableshashref->{'XPDINSTALLER'} ) && ( $installer::globals::isxpdplatform ) && ( $installer::globals::xpd_files_prepared ))
             {
                 installer::xpdinstaller::create_xpd_installer($installdir, $allvariableshashref, $languagestringref);
-                $installer::globals::addjavainstaller = 0;  # only one java installer possible
             }
 
-            # Copying the java installer into the installation set
             chdir($currentdir); # changing back into start directory
-            if ( $installer::globals::addjavainstaller ) { installer::javainstaller::create_java_installer($installdir, $installer::globals::epmoutpath, $languagestringref, $languagesarrayref, $allvariableshashref, $includepatharrayref, $modulesinproductarrayref); }
         }
 
         if ( $installer::globals::postprocess_standardepm )

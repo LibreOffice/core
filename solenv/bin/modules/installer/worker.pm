@@ -105,12 +105,6 @@ sub copy_install_sets_to_ship
     installer::logger::print_message( "... copy installation set from " . $destdir . " to " . $localshipinstalldir . "\n" );
     installer::systemactions::copy_complete_directory($destdir, $localshipinstalldir);
 
-    if (( ! $installer::globals::iswindowsbuild ) && ( $installer::globals::addjavainstaller ))
-    {
-        # Setting Unix rights for Java starter ("setup")
-        chmod 0775, "$localshipinstalldir/setup";
-    }
-
     # unpacking the tar.gz file for Solaris
     if ( $installer::globals::issolarisbuild ) { unpack_all_targzfiles_in_directory($localshipinstalldir); }
 

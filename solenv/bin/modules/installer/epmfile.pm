@@ -3176,8 +3176,7 @@ sub put_installsetfiles_into_installset
         my $onefile = $installer::globals::installsetfiles[$i];
         my $sourcefile = $onefile->{'sourcepath'};
         my $destfile = "";
-        if ( $installer::globals::addjavainstaller ) { $destfile = $onefile->{'Name'}; }
-        else { $destfile = $destdir . $installer::globals::separator . $onefile->{'Name'}; }
+        $destfile = $destdir . $installer::globals::separator . $onefile->{'Name'};
         installer::systemactions::copy_one_file($sourcefile, $destfile);
 
         my $infoline = "Adding to installation set \"$destfile\" from source \"$sourcefile\".\n";

@@ -313,7 +313,6 @@ BEGIN
     $javasettozero = 0;
     $addlicensefile = 1;
     $addsystemintegration = 0;
-    $addjavainstaller = 0;
     $added_directories = 0;
     $makedownload = 1;
     $makejds = 1;
