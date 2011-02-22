@@ -53,9 +53,7 @@ SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 #-------------------------------------------------------------------
 
 SHL2OBJS=$(SLO)$/test_cpy_wrt_file.obj
-# TODO: disabled because it makes assumption on the build-environment
-# (assumes a target with not enough free disk-space exists)
-# SHL2TARGET=tcwf
+SHL2TARGET=tcwf
 SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 SHL2IMPLIB=i$(SHL2TARGET)
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
