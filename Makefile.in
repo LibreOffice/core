@@ -18,7 +18,7 @@ install:
 dev-install:
 	. ./*[Ee]nv.[Ss]et.sh && \
         ooinstall -l @abs_builddir@/install
-        @echo && \
+	@echo && \
         echo "Developer installation finished, you can now execute:" && \
         echo "@abs_builddir@/install/program/soffice"
 
