@@ -272,7 +272,13 @@ X11SalData::X11SalData()
     m_pPlugin       = NULL;
 
     hMainThread_    = pthread_self();
-    osl_getLocalHostname( &maLocalHostName.pData );
+}
+
+const rtl::OUString& X11SalData::GetLocalHostName()
+{
+    if (!maLocalHostName.getLength())
+            osl_getLocalHostname( &maLocalHostName.pData );
+    return maLocalHostName;
 }
 
 X11SalData::~X11SalData()
