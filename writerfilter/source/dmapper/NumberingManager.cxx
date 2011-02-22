@@ -537,8 +537,6 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 // Get the merged level properties
                 uno::Sequence< beans::PropertyValue > aLvlProps = aProps[sal_Int32( nLevel )];
 
-                lcl_printProperties( aLvlProps );
-
                 // Get the char style
                 uno::Sequence< beans::PropertyValue > aAbsCharStyleProps = pAbsLevel->GetCharStyleProperties( );
                 uno::Sequence< beans::PropertyValue >& rAbsCharStyleProps = aAbsCharStyleProps;
