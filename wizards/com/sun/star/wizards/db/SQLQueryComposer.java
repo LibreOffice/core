@@ -286,8 +286,9 @@ public class SQLQueryComposer
             bincludeGrouping = _bincludeGrouping;
             if (addQuery)
             {
+                StringBuilder fromClause = getFromClause();
                 String sSelectClause = getSelectClause(_baddAliasFieldNames);
-                StringBuilder queryclause = new StringBuilder(sSelectClause).append(" ").append(getFromClause());
+                StringBuilder queryclause = new StringBuilder(sSelectClause).append(" ").append(fromClause);
                 m_xQueryAnalyzer.setQuery(queryclause.toString());
                 if (CurDBMetaData.getFilterConditions() != null && CurDBMetaData.getFilterConditions().length > 0)
                 {
