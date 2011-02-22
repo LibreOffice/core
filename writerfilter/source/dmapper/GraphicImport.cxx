@@ -1747,8 +1747,15 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
     }
     catch( const uno::Exception& e )
     {
-        clog << __FILE__ << ":" << __LINE__ << " failed. Message :" ;
-        clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( )  << endl;
+        (void) e;
+
+#ifdef DEBUG_DMAPPER_GRAPHIC_IMPORT
+        dmapper_logger->startElement("exception");
+        dmapper_logger->attribute("file", __FILE__);
+        dmapper_logger->attribute("line", __LINE__);
+        dmapper_logger->chars(e.Message);
+        dmapper_logger->endElement("exceptiion");
+#endif
     }
     return xGraphicObject;
 }

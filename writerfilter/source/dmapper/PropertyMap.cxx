@@ -663,8 +663,8 @@ bool SectionPropertyMap::HasFooter(bool bFirstPage) const
 
 void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl )
 {
-#if DEBUG
-    clog << "START>>> SectionPropertyMap::CopyLastHeaderFooter()" << endl;
+#if DEBUG_DMAPPER_PROPERTY_MAP
+    dmapper_logger->startElement(__FUNCTION__);
 #endif
     SectionPropertyMap* pLastContext = rDM_Impl.GetLastSectionContext( );
     if ( pLastContext )
@@ -719,9 +719,10 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
 
                 if ( ( bIsHeader && bCopyHeader ) || ( !bIsHeader && bCopyFooter ) )
                 {
-#if DEBUG
-                    clog << "Copying ";
-                    clog << rtl::OUStringToOString( sName, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
+#if DEBUG_DMAPPER_PROPERTY_MAP
+                    dmapper_logger->startElement("copy");
+                    dmapper_logger->chars(sName);
+                    dmapper_logger->endElement("copy");
 #endif
                     // TODO has to be copied
                     uno::Reference< text::XTextCopy > xTxt(
@@ -737,14 +738,15 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
         catch ( const uno::Exception& e )
         {
             (void) e;
-#if DEBUG
-            clog << "An exception occured in SectionPropertyMap::CopyLastHeaderFooter( ) - ";
-            clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
+#if DEBUG_DMAPPER_PROPERTY_MAP
+            dmapper_logger->startElement("exception");
+            dmapper_logger->chars(e.Message);
+            dmapper_logger->endElement("exception");
 #endif
         }
     }
-#if DEBUG
-    clog << "END>>> SectionPropertyMap::CopyLastHeaderFooter()" << endl;
+#if DEBUG_DMAPPER_PROPERTY_MAP
+    dmapper_logger->endElement(__FUNCTION__);
 #endif
 }
 

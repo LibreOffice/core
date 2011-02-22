@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include <rtl/ustrbuf.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 #include <resourcemodel/LoggedResources.hxx>
 #include <resourcemodel/QNameToString.hxx>
 
@@ -286,7 +287,7 @@ void LoggedProperties::sprm(Sprm & _sprm)
 #ifdef DEBUG_LOGGING
     mHelper.startElement("sprm");
     mHelper.attribute("name", (*QNameToString::Instance())(_sprm.getId()));
-    mHelper.chars(sprm.toString());
+    mHelper.chars(_sprm.toString());
 #endif
 
     lcl_sprm(_sprm);

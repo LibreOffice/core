@@ -72,7 +72,6 @@ void FontTable::lcl_attribute(Id Name, Value & val)
         return ;
     int nIntValue = val.getInt();
     ::rtl::OUString sValue = val.getString();
-    //printf ( "FontTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     /* WRITERFILTERSTATUS: table: FontTable_attributedata */
     switch(Name)
     {
@@ -550,8 +549,6 @@ void FontTable::lcl_sprm(Sprm& rSprm)
     sal_Int32 nIntValue = pValue->getInt();
     (void)nIntValue;
     rtl::OUString sStringValue = pValue->getString();
-
-    //printf ( "FontTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nSprmId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
 
 /*    switch(nSprmId)
     {

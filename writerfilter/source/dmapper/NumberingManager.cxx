@@ -63,26 +63,6 @@ namespace dmapper {
 
 //---------------------------------------------------  Utility functions
 
-void lcl_printProperties( uno::Sequence< beans::PropertyValue > aProps )
-{
-    sal_Int32 nLen = aProps.getLength( );
-    for ( sal_Int32 i = 0; i < nLen; i++ )
-    {
-        uno::Any aValue = aProps[i].Value;
-        sal_Int32 nValue = 0;
-        OUString sValue;
-
-        if ( !( aValue >>= sValue ) && ( aValue >>= nValue ) )
-            sValue = OUString::valueOf( nValue );
-
-#if DEBUG
-        fprintf( stderr, "Property %s: %s\n",
-                OUSTR_TO_C( aProps[i].Name ),
-                OUSTR_TO_C( sValue ) );
-#endif
-    }
-}
-
 sal_Int32 lcl_findProperty( uno::Sequence< beans::PropertyValue > aProps, OUString sName )
 {
     sal_Int32 i = 0;

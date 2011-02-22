@@ -54,7 +54,6 @@ ThemeTable::ThemeTable()
 , LoggedTable(dmapper_logger, "ThemeTable")
 , m_pImpl( new ThemeTable_Impl )
 {
-    // printf("ThemeTable::ThemeTable()\n");
 }
 
 ThemeTable::~ThemeTable()
@@ -71,7 +70,6 @@ void ThemeTable::lcl_attribute(Id Name, Value & val)
 #endif
     // int nIntValue = val.getInt();
     ::rtl::OUString sValue = val.getString();
-    // printf ( "ThemeTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     /* WRITERFILTERSTATUS: table: ThemeTable_attributedata */
     switch(Name)
     {
@@ -106,8 +104,6 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
     sal_Int32 nIntValue = pValue->getInt();
     (void)nIntValue;
     rtl::OUString sStringValue = pValue->getString();
-
-    // printf ( "ThemeTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nSprmId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
 
     /* WRITERFILTERSTATUS: table: ThemeTable_sprm */
     switch(nSprmId)

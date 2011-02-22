@@ -50,11 +50,6 @@ Token_t::Token_t(sal_Int32 nId)
 void Token_t::assign(sal_Int32 nId)
 {
     m_nId = nId;
-
-#ifdef DEBUG
-    m_string = ooxml::fastTokenToId(nId);
-    ::std::clog << m_string << ::std::endl;
-#endif
 }
 
 Token_t::~Token_t()

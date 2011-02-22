@@ -58,8 +58,9 @@ static void  lcl_printProperties( PropertyMapPtr pProps )
         for( ; aMapIter != aEndIter; ++aMapIter )
         {
             rtl::OUString aOUStr = rPropSupplier.GetName( aMapIter->first.eId );
-            rtl::OString aOStr(aOUStr.getStr(), aOUStr.getLength(),  RTL_TEXTENCODING_ASCII_US );
-            clog << aOStr.getStr();
+            dmapper_logger->startElement("entry");
+            dmapper_logger->chars(aOUStr);
+            dmapper_logger->endElement("entry");
 
             table::BorderLine aLine;
             sal_Int32 nColor;
@@ -822,7 +823,6 @@ void DomainMapperTableHandler::endCell(const Handle_t & end)
     dmapper_logger->chars(toString(end));
     dmapper_logger->endElement("table.cell.end");
     dmapper_logger->endElement("table.cell");
-    clog << "</table.cell>" << endl;
 #endif
 
     if (!end.get())
