@@ -187,10 +187,8 @@ void RscError::WriteError( const ERRTYPE& rError, const char * pMessage )
             StdLstOut( "Command line: rsc @<Command File>\n" );
             StdLstOut( "-h  shows this help.\n" );
             StdLstOut( "-p  No Preprocessor.\n" );
-            StdLstOut( "-s  Syntax analysis, creates .srs file\n");
             StdLstOut( "-l  Linker, links files created with rsc -s,\n" );
             StdLstOut( "    creates .rc file and .res file.\n" );
-            StdLstOut( "-r  Prevents .res file.\n" );
             StdLstOut( "-d  Symbol definitions for the Preprocessor.\n" );
             StdLstOut( "-i  Include directives for the Preprocessor.\n" );
             StdLstOut( "-presponse     Use response file for Preprocessor.\n" );

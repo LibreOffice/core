@@ -306,7 +306,6 @@ static BOOL CallRsc2( ByteString aRsc2Name,
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     BOOL            bPrePro  = TRUE;
-    BOOL            bResFile = TRUE;
     BOOL            bHelp    = FALSE;
     BOOL            bError   = FALSE;
     BOOL            bResponse = FALSE;
@@ -351,11 +350,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
               || !rsc_stricmp( (*ppStr) + 1, "l" ) )
             { // kein Preprozessor
                 bPrePro = FALSE;
-            }
-            else if( !rsc_stricmp( (*ppStr) + 1, "r" )
-              || !rsc_stricmp( (*ppStr) + 1, "s" ) )
-            { // erzeugt kein .res-file
-                bResFile = FALSE;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "h" ) )
             { // Hilfe anzeigen
@@ -405,10 +399,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     };
 
     if( bHelp )
-    {
         bPrePro = FALSE;
-        bResFile = FALSE;
-    };
     if( bPrePro && !aInputList.empty() )
     {
         ByteString aTmpName;
