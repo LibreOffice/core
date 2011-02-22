@@ -1328,7 +1328,7 @@ Size SwFEShell::GetGraphicDefaultSize() const
  ---------------------------------------------------------------------------*/
 // --> OD 2009-08-31 #mongolianlayou#
 // add output parameter <bVertL2R>
-sal_Bool SwFEShell::IsFrmVertical(sal_Bool bEnvironment, sal_Bool& bRTL, sal_Bool& bVertL2R) const
+sal_Bool SwFEShell::IsFrmVertical(const sal_Bool bEnvironment, sal_Bool& bRTL, sal_Bool& bVertL2R) const
 {
     sal_Bool bVert = sal_False;
     bRTL = sal_False;
