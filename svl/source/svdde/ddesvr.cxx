@@ -604,7 +604,7 @@ void DdeService::AddFormat( ULONG nFmt )
     for ( size_t i = 0, n = aFormats.size(); i < n; ++i )
         if ( aFormats[ i ] == nFmt )
             return;
-    aFormats->push_back( nFmt );
+    aFormats.push_back( nFmt );
 }
 
 // --- DdeService::RemoveFormat() ----------------------------------
