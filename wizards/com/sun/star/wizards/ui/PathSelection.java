@@ -41,9 +41,9 @@ public class PathSelection
     XMultiServiceFactory xMSF;
     int iDialogType;
     int iTransferMode;
-    public String sDefaultDirectory = "";
-    public String sDefaultName = "";
-    public String sDefaultFilter = "";
+    public String sDefaultDirectory = PropertyNames.EMPTY_STRING;
+    public String sDefaultName = PropertyNames.EMPTY_STRING;
+    public String sDefaultFilter = PropertyNames.EMPTY_STRING;
     public boolean usedPathPicker = false;
     public XPathSelectionListener xAction;
     public XTextComponent xSaveTextBox;
@@ -91,7 +91,7 @@ public class PathSelection
                 {
                     new Boolean(Enabled), 12, TxtHelpURL, new Integer(XPos), new Integer(YPos + 10), new Integer(DialogStep), new Short((short) (CurTabIndex + 1)), new Integer(Width - 26)
                 });
-        //CurUnoDialog.setControlProperty("txtSavePath", "ReadOnly", Boolean.TRUE);
+        //CurUnoDialog.setControlProperty("txtSavePath", PropertyNames.READ_ONLY, Boolean.TRUE);
         CurUnoDialog.setControlProperty("txtSavePath", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
         CurUnoDialog.insertButton("cmdSelectPath", "triggerPathPicker", this, new String[]
                 {

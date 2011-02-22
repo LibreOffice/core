@@ -43,9 +43,11 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/form/binding/XBindableValue.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
+#include <com/sun/star/text/XText.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/basicio.hxx>
+#include <comphelper/types.hxx>
 #include "services.hxx"
 #ifndef _FRM_RESOURCE_HRC_
 #include "frm_resource.hrc"
@@ -66,6 +68,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::form::binding;
 
 const sal_uInt16 WIDTH              = 0x0001;
@@ -176,12 +179,17 @@ Sequence<Type> SAL_CALL OGridColumn::getTypes() throw(RuntimeException)
     aTypes.removeType( XServiceInfo::static_type() );
     aTypes.removeType( XBindableValue::static_type() );
     aTypes.removeType( XPropertyContainer::static_type() );
+
     // but re-add their base class(es)
     aTypes.addType( XChild::static_type() );
 
     Reference< XTypeProvider > xProv;
     if ( query_aggregation( m_xAggregate, xProv ))
         aTypes.addTypes( xProv->getTypes() );
+
+    aTypes.removeType( XTextRange::static_type() );
+    aTypes.removeType( XSimpleText::static_type() );
+    aTypes.removeType( XText::static_type() );
 
     return aTypes.getTypes();
 }
@@ -195,6 +203,7 @@ Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeE
         ||  _rType.equals(::getCppuType(static_cast< Reference< XServiceInfo >* >(NULL)))
         ||  _rType.equals(::getCppuType(static_cast< Reference< XBindableValue >* >(NULL)))
         ||  _rType.equals(::getCppuType(static_cast< Reference< XPropertyContainer >* >(NULL)))
+        ||  comphelper::isAssignableFrom(::getCppuType(static_cast< Reference< XTextRange >* >(NULL)),_rType)
         )
         return aReturn;
 

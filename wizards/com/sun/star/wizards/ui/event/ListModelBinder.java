@@ -34,6 +34,7 @@ import com.sun.star.awt.XComboBox;
 import com.sun.star.awt.XListBox;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.PropertyNames;
 
 /**
  * @author rpiterman
@@ -52,7 +53,7 @@ public class ListModelBinder implements ListDataListener
         {
             if (item == null)
             {
-                return "";
+                return PropertyNames.EMPTY_STRING;
             }
             else
             {
@@ -119,12 +120,12 @@ public class ListModelBinder implements ListDataListener
 
     protected short[] getSelectedItems()
     {
-        return (short[]) Helper.getUnoPropertyValue(unoListModel, "SelectedItems");
+        return (short[]) Helper.getUnoPropertyValue(unoListModel, PropertyNames.SELECTED_ITEMS);
     }
 
     protected void setSelectedItems(short[] selected)
     {
-        Helper.setUnoPropertyValue(unoListModel, "SelectedItems", selected);
+        Helper.setUnoPropertyValue(unoListModel, PropertyNames.SELECTED_ITEMS, selected);
     }
 
     /* (non-Javadoc)
@@ -180,7 +181,7 @@ public class ListModelBinder implements ListDataListener
     public static void fillList(Object list, Object[] items, Renderer renderer)
     {
         XListBox xlist = (XListBox) UnoRuntime.queryInterface(XListBox.class, list);
-        Helper.setUnoPropertyValue(UnoDataAware.getModel(list), "StringItemList", new String[]
+        Helper.setUnoPropertyValue(UnoDataAware.getModel(list), PropertyNames.STRING_ITEM_LIST, new String[]
                 {
                 });
         for (short i = 0; i < items.length; i++)
@@ -195,7 +196,7 @@ public class ListModelBinder implements ListDataListener
     public static void fillComboBox(Object list, Object[] items, Renderer renderer)
     {
         XComboBox xComboBox = (XComboBox) UnoRuntime.queryInterface(XComboBox.class, list);
-        Helper.setUnoPropertyValue(UnoDataAware.getModel(list), "StringItemList", new String[]
+        Helper.setUnoPropertyValue(UnoDataAware.getModel(list), PropertyNames.STRING_ITEM_LIST, new String[]
                 {
                 });
         for (short i = 0; i < items.length; i++)

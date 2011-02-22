@@ -40,7 +40,7 @@ import com.sun.star.wizards.common.PropertyNames;
 
 public class FieldDescription
 {
-    private String tablename = "";
+    private String tablename = PropertyNames.EMPTY_STRING;
 //  String fieldname;
     private String keyname;
     private XNameAccess xNameAccessTableNode;

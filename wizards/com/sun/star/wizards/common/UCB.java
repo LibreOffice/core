@@ -121,11 +121,11 @@ public class UCB
      */
     public void copy(String sourceDir, String filename, String targetDir) throws Exception
     {
-        copy(sourceDir,filename, targetDir, "");
+        copy(sourceDir,filename, targetDir, PropertyNames.EMPTY_STRING);
     }
 
     /**
-     * target name can be "", in which case the name stays lige the source name
+     * target name can be PropertyNames.EMPTY_STRING, in which case the name stays lige the source name
      * @param sourceDir
      * @param sourceFilename
      * @param targetDir

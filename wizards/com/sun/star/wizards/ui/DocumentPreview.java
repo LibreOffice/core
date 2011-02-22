@@ -37,6 +37,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.XCloseable;
 import com.sun.star.wizards.common.Properties;
+import com.sun.star.wizards.common.PropertyNames;
 
 /**
  * @author rpiterman
@@ -126,7 +127,7 @@ public class DocumentPreview
             case PREVIEW_MODE:
                 return setDocument(url, new String[]
                         {
-                            "Preview", "ReadOnly"
+                            "Preview", PropertyNames.READ_ONLY
                         }, new Object[]
                         {
                             Boolean.TRUE, Boolean.TRUE

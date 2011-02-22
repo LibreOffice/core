@@ -158,7 +158,7 @@ public class LetterDocument extends TextDocument
         }
         else
         {
-            myFieldHandler.changeUserFieldContent(sFieldName, "");
+            myFieldHandler.changeUserFieldContent(sFieldName, PropertyNames.EMPTY_STRING);
         }
     }
 
@@ -183,7 +183,7 @@ public class LetterDocument extends TextDocument
     public void killEmptyUserFields()
     {
         TextFieldHandler myFieldHandler = new TextFieldHandler(xMSF, xTextDocument);
-        myFieldHandler.removeUserFieldByContent("");
+        myFieldHandler.removeUserFieldByContent(PropertyNames.EMPTY_STRING);
     }
 
     public void killEmptyFrames()

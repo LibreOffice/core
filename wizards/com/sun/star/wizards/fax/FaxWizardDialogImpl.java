@@ -162,7 +162,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
             //update the dialog UI according to the loaded Configuration
             updateUI();
 
-            if (myPathSelection.xSaveTextBox.getText().equalsIgnoreCase(""))
+            if (myPathSelection.xSaveTextBox.getText().equalsIgnoreCase(PropertyNames.EMPTY_STRING))
             {
                 myPathSelection.initializePath();
             }
@@ -217,7 +217,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
             //myFaxDoc.xTextDocument.lockControllers();
             FileAccess fileAccess = new FileAccess(xMSF);
             sPath = myPathSelection.getSelectedPath();
-            if (sPath.equals(""))
+            if (sPath.equals(PropertyNames.EMPTY_STRING))
             {
                 myPathSelection.triggerPathPicker();
                 sPath = myPathSelection.getSelectedPath();
@@ -356,7 +356,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
 
             PropertyValue GraphicValues[] = new PropertyValue[1];
             GraphicValues[0] = new PropertyValue();
-            GraphicValues[0].Name = "URL";
+            GraphicValues[0].Name = PropertyNames.URL;
             GraphicValues[0].Value = "private:resource/svx/imagelist/18000/18022";
             XGraphic xGraphic = xGraphicProvider.queryGraphic(GraphicValues);
 
@@ -380,7 +380,7 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
         try
         {
             sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
-            sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", "");
+            sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", PropertyNames.EMPTY_STRING);
             sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../wizard/bitmap");
         }
         catch (NoValidPathException e)
@@ -395,19 +395,19 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
         {
             String sFaxSubPath = "/wizard/fax";
             sFaxPath = FileAccess.combinePaths(xMSF, sTemplatePath, sFaxSubPath);
-            sWorkPath = FileAccess.getOfficePath(xMSF, "Work", "", "");
+            sWorkPath = FileAccess.getOfficePath(xMSF, "Work", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
 
             BusinessFiles = FileAccess.getFolderTitles(xMSF, "bus", sFaxPath);
             PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri", sFaxPath);
 
-            setControlProperty("lstBusinessStyle", "StringItemList", BusinessFiles[0]);
-            setControlProperty("lstPrivateStyle", "StringItemList", PrivateFiles[0]);
+            setControlProperty("lstBusinessStyle", PropertyNames.STRING_ITEM_LIST, BusinessFiles[0]);
+            setControlProperty("lstPrivateStyle", PropertyNames.STRING_ITEM_LIST, PrivateFiles[0]);
 
-            setControlProperty("lstBusinessStyle", "SelectedItems", new short[]
+            setControlProperty("lstBusinessStyle", PropertyNames.SELECTED_ITEMS, new short[]
                     {
                         0
                     });
-            setControlProperty("lstPrivateStyle", "SelectedItems", new short[]
+            setControlProperty("lstPrivateStyle", PropertyNames.SELECTED_ITEMS, new short[]
                     {
                         0
                     });
@@ -432,34 +432,34 @@ public class FaxWizardDialogImpl extends FaxWizardDialog
 
     public void initializeSalutation()
     {
-        setControlProperty("lstSalutation", "StringItemList", resources.SalutationLabels);
+        setControlProperty("lstSalutation", PropertyNames.STRING_ITEM_LIST, resources.SalutationLabels);
     }
 
     public void initializeGreeting()
     {
-        setControlProperty("lstGreeting", "StringItemList", resources.GreetingLabels);
+        setControlProperty("lstGreeting", PropertyNames.STRING_ITEM_LIST, resources.GreetingLabels);
     }
 
     public void initializeCommunication()
     {
-        setControlProperty("lstCommunicationType", "StringItemList", resources.CommunicationLabels);
+        setControlProperty("lstCommunicationType", PropertyNames.STRING_ITEM_LIST, resources.CommunicationLabels);
     }
 
     private void setDefaultForGreetingAndSalutationAndCommunication()
     {
         XTextComponent xTextComponent;
         xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
-        if (xTextComponent.getText().equals(""))
+        if (xTextComponent.getText().equals(PropertyNames.EMPTY_STRING))
         {
             xTextComponent.setText(resources.SalutationLabels[0]);
         }
         xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
-        if (xTextComponent.getText().equals(""))
+        if (xTextComponent.getText().equals(PropertyNames.EMPTY_STRING))
         {
             xTextComponent.setText(resources.GreetingLabels[0]);
         }
         xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstCommunicationType);
-        if (xTextComponent.getText().equals(""))
+        if (xTextComponent.getText().equals(PropertyNames.EMPTY_STRING))
         {
             xTextComponent.setText(resources.CommunicationLabels[0]);
         }

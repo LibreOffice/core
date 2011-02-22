@@ -277,19 +277,19 @@ public class UnoDialog implements EventNames
         // This function may look ugly, but this is the only way to check the count
         // of values in the model,which is always right.
         // the control is only a view and could be right or not.
-        final String[] fieldnames = (String[]) Helper.getUnoPropertyValue(getModel(_xListBox), "StringItemList");
+        final String[] fieldnames = (String[]) Helper.getUnoPropertyValue(getModel(_xListBox), PropertyNames.STRING_ITEM_LIST);
         return fieldnames.length;
     }
 
     public static short getSelectedItemPos(XListBox _xListBox)
     {
-        short ipos[] = (short[]) Helper.getUnoPropertyValue(getModel(_xListBox), "SelectedItems");
+        short ipos[] = (short[]) Helper.getUnoPropertyValue(getModel(_xListBox), PropertyNames.SELECTED_ITEMS);
         return ipos[0];
     }
 
     public static boolean isListBoxSelected(XListBox _xListBox)
     {
-        short ipos[] = (short[]) Helper.getUnoPropertyValue(getModel(_xListBox), "SelectedItems");
+        short ipos[] = (short[]) Helper.getUnoPropertyValue(getModel(_xListBox), PropertyNames.SELECTED_ITEMS);
         return ipos.length > 0;
     }
 
@@ -697,11 +697,11 @@ public class UnoDialog implements EventNames
     public static void deselectListBox(XInterface _xBasisListBox)
     {
         Object oListBoxModel = getModel(_xBasisListBox);
-        Object sList = Helper.getUnoPropertyValue(oListBoxModel, "StringItemList");
-        Helper.setUnoPropertyValue(oListBoxModel, "StringItemList", new String[]
+        Object sList = Helper.getUnoPropertyValue(oListBoxModel, PropertyNames.STRING_ITEM_LIST);
+        Helper.setUnoPropertyValue(oListBoxModel, PropertyNames.STRING_ITEM_LIST, new String[]
                 {
                 });
-        Helper.setUnoPropertyValue(oListBoxModel, "StringItemList", sList);
+        Helper.setUnoPropertyValue(oListBoxModel, PropertyNames.STRING_ITEM_LIST, sList);
     }
 
     public void calculateDialogPosition(Rectangle FramePosSize)
@@ -811,7 +811,7 @@ public class UnoDialog implements EventNames
     {
         FontDescriptor oFontDesc = new FontDescriptor();
         oFontDesc.Weight = FontWeight;
-        setControlProperty(ControlName, "FontDescriptor", oFontDesc);
+        setControlProperty(ControlName, PropertyNames.FONT_DESCRIPTOR, oFontDesc);
     }
 
     /**
@@ -863,7 +863,7 @@ public class UnoDialog implements EventNames
             xListBox.removeItems((short) 0, (short) 1);
             if (SelPos > 0)
             {
-                setControlProperty(ListBoxName, "SelectedItems", new short[SelPos]);
+                setControlProperty(ListBoxName, PropertyNames.SELECTED_ITEMS, new short[SelPos]);
                 xListBox.selectItemPos((short) (SelPos - 1), true);
             }
         }
@@ -1000,7 +1000,7 @@ public class UnoDialog implements EventNames
      */
     public static String getDisplayProperty(int itype)
     {
-        // String propertyname = "";
+        // String propertyname = PropertyNames.EMPTY_STRING;
         switch (itype)
         {
             case UIConsts.CONTROLTYPE.FIXEDTEXT:
@@ -1036,9 +1036,9 @@ public class UnoDialog implements EventNames
             case UIConsts.CONTROLTYPE.PATTERNFIELD:
                 return "Text";
             case UIConsts.CONTROLTYPE.LISTBOX:
-                return "SelectedItems";
+                return PropertyNames.SELECTED_ITEMS;
             default:
-                return "";
+                return PropertyNames.EMPTY_STRING;
         }
     }
 

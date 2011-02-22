@@ -56,8 +56,8 @@ public class FormWizard extends DatabaseObjectWizard
     private Finalizer curFinalizer;
     private static String slblFields;
     private static String slblSelFields;
-    private String sShowBinaryFields = "";
-    private String serrFormNameexists = "";
+    private String sShowBinaryFields = PropertyNames.EMPTY_STRING;
+    private String serrFormNameexists = PropertyNames.EMPTY_STRING;
     public static final int SOMAIN_PAGE = 1;
     public static final int SOSUBFORM_PAGE = 2;
     public static final int SOSUBFORMFIELDS_PAGE = 3;
@@ -343,7 +343,7 @@ public class FormWizard extends DatabaseObjectWizard
             {
                 curFormDocument.oSubFormDBMetaData.getConnection(new PropertyValue[]
                         {
-                            Properties.createProperty("ActiveConnection", curFormDocument.oMainFormDBMetaData.DBConnection)
+                            Properties.createProperty(PropertyNames.ACTIVE_CONNECTION, curFormDocument.oMainFormDBMetaData.DBConnection)
                         });
                 curFormDocument.xProgressBar.setValue(20);
                 buildSteps();
@@ -398,7 +398,7 @@ public class FormWizard extends DatabaseObjectWizard
             ID = 1;
             if (sIncSuffix != null)
             {
-                if ((!sIncSuffix.equals("")) && (!sIncSuffix.equals("_")))
+                if ((!sIncSuffix.equals(PropertyNames.EMPTY_STRING)) && (!sIncSuffix.equals("_")))
                 {
                     String sID = JavaTools.ArrayoutofString(sIncSuffix, "_")[1];
                     ID = Integer.parseInt(sID);
