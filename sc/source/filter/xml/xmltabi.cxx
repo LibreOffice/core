@@ -55,6 +55,8 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLEventsImportContext.hxx>
 
+#include <tools/urlobj.hxx>
+
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
@@ -83,27 +85,29 @@ static bool lcl_isExternalRefCache(const rtl::OUString& rName, rtl::OUString& rU
     // 'file:///path/to/file's.ods'#Sheet (Notice the quote in the file name.
     //  That's allowed.)
 
-    static const sal_Unicode aPrefix[] = {
-        '\'', 'f', 'i', 'l', 'e', ':', '/', '/'
-    };
+    if ( rName.toChar() != '\'' )       // initial quote
+        return false;
+
+    // #i114504# Other schemes besides "file:" are also allowed.
+    // CompareProtocolScheme is quick, only looks at the start of the string.
+    INetProtocol eProt = INetURLObject::CompareProtocolScheme( rName.copy(1) );
+    if ( eProt == INET_PROT_NOT_VALID )
+        return false;
+
+    rtl::OUString aPrefix = INetURLObject::GetScheme( eProt );
+    sal_Int32 nPrefLen = aPrefix.getLength();
 
     rtl::OUStringBuffer aUrlBuf, aTabNameBuf;
-    aUrlBuf.appendAscii("file://");
+    aUrlBuf.append( aPrefix );
     sal_Int32 n = rName.getLength();
     const sal_Unicode* p = rName.getStr();
 
     bool bInUrl = true;
     sal_Unicode cPrev = 0;
-    for (sal_Int32 i = 0; i < n; ++i)
+    for (sal_Int32 i = nPrefLen+1; i < n; ++i)      // start the loop after quote and prefix
     {
         const sal_Unicode c = p[i];
-        if (i <= 7)
-        {
-            // Checking the prefix 'file://'.
-            if (c != aPrefix[i])
-                return false;
-        }
-        else if (bInUrl)
+        if (bInUrl)
         {
             // parsing file URL
             if (c == '#')

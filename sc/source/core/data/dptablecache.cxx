@@ -209,13 +209,13 @@ ScDPItemData::ScDPItemData( ScDocument* pDoc, SCROW nRow, sal_uInt16 nCol, sal_u
     else if ( pDoc->HasValueData( nCol, nRow, nDocTab ) )
     {
         double fVal = pDoc->GetValue(ScAddress(nCol, nRow, nDocTab));
+        nNumFormat = pDoc->GetNumberFormat( ScAddress( nCol, nRow, nDocTab ) );
         sal_uLong nFormat = NUMBERFORMAT_NUMBER;
         if ( pFormatter )
-            nFormat = pFormatter->GetType( pDoc->GetNumberFormat( ScAddress( nCol, nRow, nDocTab ) ) );
+            nFormat = pFormatter->GetType( nNumFormat );
         aString = aDocStr;
         fValue = fVal;
         mbFlag |= MK_VAL|MK_DATA;
-        nNumFormat = pDoc->GetNumberFormat( ScAddress( nCol, nRow, nDocTab ) );
         lcl_isDate( nFormat ) ? ( mbFlag |= MK_DATE ) : (mbFlag &= ~MK_DATE);
     }
     else if ( pDoc->HasData( nCol,nRow, nDocTab ) )
@@ -1020,10 +1020,15 @@ sal_uLong ScDPTableDataCache::GetNumberFormat( long nDim ) const
 {
     if ( nDim >= mnColumnCount )
         return 0;
-    if ( mpTableDataValues[nDim].size()==0 )
-        return 0;
-    else
-        return mpTableDataValues[nDim][0]->nNumFormat;
+
+    // #i113411# take the number format from the first value entry
+    size_t nSize = mpTableDataValues[nDim].size();
+    size_t nPos = 0;
+    while ( nPos < nSize && mpTableDataValues[nDim][nPos]->GetType() != SC_VALTYPE_VALUE )
+        ++nPos;
+    if ( nPos < nSize )
+        return mpTableDataValues[nDim][nPos]->nNumFormat;
+    return 0;
 }
 
 sal_Bool ScDPTableDataCache::IsDateDimension( long nDim ) const
