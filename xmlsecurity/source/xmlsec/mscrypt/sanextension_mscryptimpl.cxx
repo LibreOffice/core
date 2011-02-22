@@ -105,11 +105,11 @@ sal_Bool SAL_CALL SanExtensionImpl :: isCritical() throw( ::com::sun::star::uno:
                 }
             case CERT_ALT_NAME_RFC822_NAME :
                 arrCertAltNameEntry[i].Type = ExtAltNameType_RFC822_NAME;
-                arrCertAltNameEntry[i].Value <<= ::rtl::OUString(pEntry->pwszRfc822Name);
+                arrCertAltNameEntry[i].Value <<= ::rtl::OUString((const sal_Unicode*)pEntry->pwszRfc822Name);
                 break;
             case CERT_ALT_NAME_DNS_NAME :
                 arrCertAltNameEntry[i].Type = ExtAltNameType_DNS_NAME;
-                arrCertAltNameEntry[i].Value <<= ::rtl::OUString(pEntry->pwszDNSName);
+                arrCertAltNameEntry[i].Value <<= ::rtl::OUString((const sal_Unicode*)pEntry->pwszDNSName);
                 break;
             case CERT_ALT_NAME_DIRECTORY_NAME :
                 {
@@ -118,7 +118,7 @@ sal_Bool SAL_CALL SanExtensionImpl :: isCritical() throw( ::com::sun::star::uno:
                 }
             case CERT_ALT_NAME_URL :
                 arrCertAltNameEntry[i].Type = ExtAltNameType_URL;
-                arrCertAltNameEntry[i].Value <<= ::rtl::OUString(pEntry->pwszURL);
+                arrCertAltNameEntry[i].Value <<= ::rtl::OUString((const sal_Unicode*)pEntry->pwszURL);
                 break;
             case CERT_ALT_NAME_IP_ADDRESS :
                 {
