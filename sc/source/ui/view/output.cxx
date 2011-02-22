@@ -47,9 +47,15 @@
 #include <vcl/pdfextoutdevdata.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svx/framelinkarray.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <svx/sdr/contact/objectcontacttools.hxx>
+#include <svx/unoapi.hxx>
 
 #include "output.hxx"
 #include "document.hxx"
+#include "drwlayer.hxx"
 #include "cell.hxx"
 #include "attrib.hxx"
 #include "patattr.hxx"
@@ -1215,6 +1221,7 @@ void ScOutputData::DrawFrame()
 
     // draw only rows with set RowInfo::bChanged flag
     size_t nRow1 = nFirstRow;
+    drawinglayer::processor2d::BaseProcessor2D* pProcessor = CreateProcessor2D();
     while( nRow1 <= nLastRow )
     {
         while( (nRow1 <= nLastRow) && !pRowInfo[ nRow1 ].bChanged ) ++nRow1;
@@ -1222,10 +1229,12 @@ void ScOutputData::DrawFrame()
         {
             size_t nRow2 = nRow1;
             while( (nRow2 + 1 <= nLastRow) && pRowInfo[ nRow2 + 1 ].bChanged ) ++nRow2;
-            rArray.DrawRange( *pDev, nFirstCol, nRow1, nLastCol, nRow2, pForceColor );
+            rArray.DrawRange( pProcessor, nFirstCol, nRow1, nLastCol, nRow2, pForceColor );
             nRow1 = nRow2 + 1;
         }
     }
+    if ( pProcessor )
+        delete pProcessor;
 
     pDev->SetDrawMode(nOldDrawMode);
 }
@@ -1657,6 +1666,23 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
         pDev->Pop();
     else
         pDev->SetClipRegion();
+}
+
+drawinglayer::processor2d::BaseProcessor2D* ScOutputData::CreateProcessor2D( )
+{
+    basegfx::B2DRange aViewRange;
+
+    SdrPage *pDrawPage = pDoc->GetDrawLayer()->GetPage( static_cast< sal_uInt16 >( nTab ) );
+    const drawinglayer::geometry::ViewInformation2D aNewViewInfos(
+            basegfx::B2DHomMatrix(  ),
+            pDev->GetViewTransformation(),
+            aViewRange,
+            GetXDrawPageForSdrPage( pDrawPage ),
+            0.0,
+            uno::Sequence< beans::PropertyValue >() );
+
+    return sdr::contact::createBaseProcessor2DFromOutputDevice(
+                    *pDev, aNewViewInfos );
 }
 
 //  Drucker

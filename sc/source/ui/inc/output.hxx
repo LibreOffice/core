@@ -33,6 +33,7 @@
 #include <tools/color.hxx>
 #include <tools/fract.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
 
 class Rectangle;
 class Font;
@@ -181,6 +182,8 @@ private:
     double          GetStretch();
 
     void            DrawRotatedFrame( const Color* pForceColor );       // pixel
+
+    drawinglayer::processor2d::BaseProcessor2D*  CreateProcessor2D( );
 
 public:
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
