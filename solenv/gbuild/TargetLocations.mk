@@ -33,6 +33,8 @@ gb_PackagePart_get_destinations = $(OUTDIR)/xml $(OUTDIR)/inc $(OUTDIR)/bin
 gb_PackagePart_get_target = $(OUTDIR)/$(1)
 gb_ResTarget_get_outdir_imagelist_target = $(OUTDIR)/res/img/$(1).ilst
 gb_ResTarget_get_outdir_target = $(OUTDIR)/bin/$(1).res
+gb_Jar_get_outdir_target = $(OUTDIR)/bin/$(1).jar
+gb_Zip_get_outdir_target = $(OUTDIR)/pck/$(1).zip
 
 define gb_Library_get_target
 $(patsubst $(1):%,$(gb_Library_OUTDIRLOCATION)/%,$(filter $(filter $(1),$(gb_Library_TARGETS)):%,$(gb_Library_FILENAMES)))
@@ -56,6 +58,9 @@ gb_CxxObject_get_target = $(WORKDIR)/CxxObject/$(1).o
 gb_GenCxxObject_get_target = $(WORKDIR)/GenCxxObject/$(1).o
 gb_Executable_get_external_headers_target = $(WORKDIR)/ExternalHeaders/Executable/$(1)
 gb_Executable_get_headers_target = $(WORKDIR)/Headers/Executable/$(1)
+gb_Jar_get_target = $(WORKDIR)/Jar/$(1)/$(1).jar
+gb_Jar_get_final_target = $(WORKDIR)/Jar/$(1).done
+gb_Jar_get_classsetname = Jar/$(1)
 gb_JavaClassSet_get_classdir = $(WORKDIR)/JavaClassSet/$(1)
 gb_JavaClassSet_get_repo_target = $(WORKDIR)/JavaClassSet/$(2)/$(1).done
 gb_JavaClassSet_get_target = $(WORKDIR)/JavaClassSet/$(1)/done
@@ -82,6 +87,8 @@ gb_SrsPartMergeTarget_get_target = $(WORKDIR)/SrsPartMergeTarget/$(1)
 gb_SrsPartTarget_get_target = $(WORKDIR)/SrsPartTarget/$(1)
 gb_SrsTarget_get_target = $(WORKDIR)/SrsTarget/$(1).srs
 gb_WinResTarget_get_target = $(WORKDIR)/WinResTarget/$(1)$(gb_WinResTarget_POSTFIX)
+gb_Zip_get_target = $(WORKDIR)/Zip/$(1)/$(1).zip
+gb_Zip_get_final_target = $(WORKDIR)/Zip/$(1).done
 
 define gb_Library_get_external_headers_target
 $(patsubst $(1):%,$(WORKDIR)/ExternalHeaders/Library/%,$(filter $(1):%,$(gb_Library_FILENAMES)))

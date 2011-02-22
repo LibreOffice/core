@@ -52,9 +52,9 @@ $(call gb_JavaClassSet_get_clean_target,%) :
     $(call gb_Helper_abbreviate_dirs,\
         rm -rf $(dir $(call gb_JavaClassSet_get_target,$*)))
 
-
 $(foreach reponame,$(gb_JavaClassSet_REPOSITORYNAMES),$(eval $(call gb_JavaClassSet__rules,$(reponame))))
 
+# no initialization of scoped variable CLASSPATH as it is "inherited" from controlling instance (e.g. JUnitTest, Jar)
 define gb_JavaClassSet_JavaClassSet
 endef
 
@@ -78,4 +78,11 @@ $(call gb_JavaClassSet_get_target,$(1)) : CLASSPATH := $(2)
 
 endef
 
+# problem: currently we can't get these dependencies to work
+# build order dependency is a hack to get these prerequisites out of the way in the build command
+define gb_JavaClassSet_add_jar
+$(foreach reponame,$(gb_JavaClassSet_REPOSITORYNAMES),\
+	$(eval $(call gb_JavaClassSet_get_repo_target,$(reponame),$(1)) :| $(2)))
+
+endef
 # vim: set noet sw=4 ts=4:
