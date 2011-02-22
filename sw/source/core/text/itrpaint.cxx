@@ -132,7 +132,6 @@ SwLinePortion *SwTxtPainter::CalcPaintOfst( const SwRect &rPaint )
         while( pPor && GetInfo().X() + pPor->Width() + (pPor->Height()/2)
                        < nPaintOfst )
         {
-            DBG_LOOP;
             if( pPor->InSpaceGrp() && GetInfo().GetSpaceAdd() )
             {
                 long nTmp = GetInfo().X() +pPor->Width() +
@@ -310,7 +309,6 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
     while( pPor )
     {
-        DBG_LOOP;
         sal_Bool bSeeked = sal_True;
         GetInfo().SetLen( pPor->GetLen() );
 

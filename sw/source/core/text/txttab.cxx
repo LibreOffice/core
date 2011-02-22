@@ -493,7 +493,6 @@ sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
     KSHORT nPorWidth = 0;
     while( pPor )
     {
-           DBG_LOOP;
         nPorWidth = nPorWidth + pPor->Width();
         pPor = pPor->GetPortion();
     }

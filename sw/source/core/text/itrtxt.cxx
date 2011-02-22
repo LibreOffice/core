@@ -176,7 +176,6 @@ const SwLineLayout *SwTxtIter::NextLine()
     const SwLineLayout *pNext = Next();
     while( pNext && pNext->IsDummy() && pNext->GetNext() )
     {
-        DBG_LOOP;
         pNext = Next();
     }
     return pNext;
@@ -191,7 +190,6 @@ const SwLineLayout *SwTxtIter::GetNextLine() const
     const SwLineLayout *pNext = pCurr->GetNext();
     while( pNext && pNext->IsDummy() && pNext->GetNext() )
     {
-        DBG_LOOP;
         pNext = pNext->GetNext();
     }
     return (SwLineLayout*)pNext;
@@ -240,7 +238,6 @@ const SwLineLayout *SwTxtIter::PrevLine()
     const SwLineLayout *pLast = pMyPrev;
     while( pMyPrev && pMyPrev->IsDummy() )
     {
-        DBG_LOOP;
         pLast = pMyPrev;
         pMyPrev = Prev();
     }
@@ -255,7 +252,7 @@ void SwTxtIter::Bottom()
 {
     while( Next() )
     {
-        DBG_LOOP;
+        // nothing
     }
 }
 
@@ -473,7 +470,6 @@ void SwTxtIter::CntHyphens( sal_uInt8 &nEndCnt, sal_uInt8 &nMidCnt) const
         return;
     while( pLay != pCurr )
     {
-        DBG_LOOP;
         if ( pLay->IsEndHyph() )
             nEndCnt++;
         else

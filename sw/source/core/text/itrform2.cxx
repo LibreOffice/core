@@ -209,7 +209,6 @@ SwLinePortion *SwTxtFormatter::UnderFlow( SwTxtFormatInfo &rInf )
         SwLinePortion *pTmpPrev = pPor;
         while( pPor && pPor != pUnderFlow )
         {
-            DBG_LOOP;
             if( !pPor->IsKernPortion() &&
                 ( pPor->Width() || pPor->IsSoftHyphPortion() ) )
             {
@@ -367,7 +366,6 @@ void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
     rInf.SetLast( pPor );
     while( pPor )
     {
-        DBG_LOOP;
         pPor->Move( rInf );
         rInf.SetLast( pPor );
         pPor = pPor->GetPortion();
@@ -435,7 +433,6 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         OSL_ENSURE( rInf.GetLen() < STRING_LEN &&
                 rInf.GetIdx() <= rInf.GetTxt().Len(),
                 "SwTxtFormatter::BuildPortions: bad length in info" );
-        DBG_LOOP;
 
         // We have to check the script for fields in order to set the
         // correct nActual value for the font.
@@ -1677,7 +1674,6 @@ void SwTxtFormatter::RecalcRealHeight()
     sal_Bool bMore = sal_True;
     while(bMore)
     {
-        DBG_LOOP;
         CalcRealHeight();
         bMore = Next() != 0;
     }

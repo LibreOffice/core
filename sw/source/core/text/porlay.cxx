@@ -340,7 +340,6 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
     SwLinePortion *pPos = pLeft->GetPortion();
     while( pPos )
     {
-        DBG_LOOP;
         if( pPos->IsFlyPortion() )
         {
             // Die FlyPortion wird ausgesogen ...
@@ -451,7 +450,6 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
             //  Fix-Portion.
             while( pPos )
             {
-                DBG_LOOP;
                 OSL_ENSURE( POR_LIN != pPos->GetWhichPor(),
                         "SwLineLayout::CalcLine: don't use SwLinePortions !" );
 
@@ -2261,7 +2259,6 @@ xub_StrLen SwParaPortion::GetParLen() const
     const SwLineLayout *pLay = this;
     while( pLay )
     {
-        DBG_LOOP;
         nLen = nLen + pLay->GetLen();
         pLay = pLay->GetNext();
     }

@@ -583,7 +583,6 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
         while( GetFollow() && GetFollow()->GetFollow() &&
                nNewOfst >= GetFollow()->GetFollow()->GetOfst() )
         {
-            DBG_LOOP;
             JoinFrm();
         }
     }
@@ -1463,7 +1462,6 @@ void SwTxtFrm::_Format( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf,
      */
     do
     {
-        DBG_LOOP;
         if( bFirst )
             bFirst = sal_False;
         else
@@ -1746,7 +1744,6 @@ void SwTxtFrm::_Format( SwParaPortion *pPara )
 
 void SwTxtFrm::Format( const SwBorderAttrs * )
 {
-    DBG_LOOP;
 #if OSL_DEBUG_LEVEL > 1
     const XubString aXXX = GetTxtNode()->GetTxt();
     const SwTwips nDbgY = Frm().Top();
@@ -1976,7 +1973,6 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
     OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
             "SwTxtFrm::FormatQuick with swapped frame" );
 
-    DBG_LOOP;
 #if OSL_DEBUG_LEVEL > 1
     const XubString aXXX = GetTxtNode()->GetTxt();
     const SwTwips nDbgY = Frm().Top();
@@ -2022,11 +2018,6 @@ sal_Bool SwTxtFrm::FormatQuick( bool bForceQuickFormat )
                       ? GetFollow()->GetOfst() : aInf.GetTxt().Len();
     do
     {
-        //DBG_LOOP; shadows declaration above.
-        //resolved into:
-#if OSL_DEBUG_LEVEL > 1
-        DbgLoop aDbgLoop2( (const void*) this );
-#endif
         nStart = aLine.FormatLine( nStart );
         if( aInf.IsNewLine() || (!aInf.IsStop() && nStart < nEnd) )
             aLine.Insert( new SwLineLayout() );

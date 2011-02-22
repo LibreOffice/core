@@ -122,7 +122,6 @@ sal_Bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
         const xub_StrLen nEnd = rHyphInf.GetEnd();
         while( !bRet && aLine.GetStart() < nEnd )
         {
-            DBG_LOOP;
             bRet = aLine.Hyphenate( rHyphInf );
             if( !aLine.Next() )
                 break;

@@ -276,7 +276,6 @@ void SwLineLayout::DebugPortions( SvStream &rOs, const XubString &/*rTxt*/, //$ 
 
     while( pPortion2 )
     {
-        DBG_LOOP;
         SwTxtPortion *pTxtPor = pPortion2->InTxtGrp() ?
                                 (SwTxtPortion *)pPortion2 : NULL ;
         (void)pTxtPor;
@@ -385,7 +384,6 @@ SvStream &SwLineLayout::operator<<( SvStream &rOs ) const //$ ostream
     SwLinePortion *pPos = GetPortion();
     while( pPos )
     {
-        DBG_LOOP;
         rOs << "\t";
         pPos->operator<<( rOs );
         pPos = pPos->GetPortion();

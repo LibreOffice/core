@@ -1041,7 +1041,6 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 // Ausgleich vor 's'.
                 while( pPor && !pPor->GetLen() )
                 {
-                    DBG_LOOP;
                     nX += pPor->Width();
                     if( !pPor->IsMarginPortion() )
                     {

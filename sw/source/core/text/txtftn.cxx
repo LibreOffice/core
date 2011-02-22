@@ -1650,7 +1650,6 @@ void SwParaPortion::SetErgoSumNum( const XubString& rErgo )
     SwLineLayout *pLay = this;
     while( pLay->GetNext() )
     {
-        DBG_LOOP;
         pLay = pLay->GetNext();
     }
     SwLinePortion     *pPor = pLay;
@@ -1676,7 +1675,6 @@ sal_Bool SwParaPortion::UpdateQuoVadis( const XubString &rQuo )
     SwLineLayout *pLay = this;
     while( pLay->GetNext() )
     {
-        DBG_LOOP;
         pLay = pLay->GetNext();
     }
     SwLinePortion     *pPor = pLay;

@@ -525,7 +525,6 @@ sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sa
 
     while( nMinLines > rLine.GetLineNr() )
     {
-        DBG_LOOP;
         if( !rLine.NextLine() )
             return sal_False;
         nLineSum += rLine.GetLineHeight();
