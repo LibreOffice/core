@@ -378,6 +378,7 @@ class Test_osl_executeProcess : public CppUnit::TestFixture
 {
     const OUString env_param_;
 
+    OUString     temp_file_url_;
     OUString     temp_file_path_;
     rtl_uString* parameters_[2];
     int          parameters_count_;
@@ -402,14 +403,18 @@ public:
     //------------------------------------------------
     virtual void setUp()
     {
-        temp_file_path_ = create_temp_file();
+        temp_file_path_ = create_temp_file(temp_file_url_);
         parameters_[1]  = temp_file_path_.pData;
     }
 
-    //------------------------------------------------
-    OUString create_temp_file()
+    virtual void tearDown()
     {
-        OUString temp_file_url;
+        osl::File::remove(temp_file_url_);
+    }
+
+    //------------------------------------------------
+    OUString create_temp_file(OUString &temp_file_url)
+    {
         FileBase::RC rc = FileBase::createTempFile(0, 0, &temp_file_url);
         CPPUNIT_ASSERT_MESSAGE("createTempFile failed", FileBase::E_None == rc);
 
@@ -434,17 +439,8 @@ public:
         );
 
         std::string line;
-        while (std::getline(file, line))
+        while (std::getline(file, line, '\0'))
             env_container->push_back(line);
-    }
-
-    //------------------------------------------------
-    void dump_env(const string_container_t& env, OUString file_name)
-    {
-        OString fname = OUStringToOString(file_name, osl_getThreadTextEncoding());
-        std::ofstream file(fname.getStr());
-        std::ostream_iterator<std::string> oi(file, "\n");
-        std::copy(env.begin(), env.end(), oi);
     }
 
     //------------------------------------------------
@@ -677,9 +673,6 @@ public:
     }
 
     CPPUNIT_TEST_SUITE(Test_osl_executeProcess);
-    //TODO: very odd, these pass locally for me, but fail on tinderbox,
-    //disable until I can reproduce the failure
-#if 0
     //TODO: Repair these under windows.
 #ifndef WNT
     CPPUNIT_TEST(osl_execProc_parent_equals_child_environment);
@@ -689,7 +682,6 @@ public:
     // CPPUNIT_TEST(osl_execProc_test_batch);
     ///TODO: Repair test (or tested function ;-) - test fails.
     // CPPUNIT_TEST(osl_execProc_exe_name_in_argument_list);
-#endif
     CPPUNIT_TEST_SUITE_END();
 };
 

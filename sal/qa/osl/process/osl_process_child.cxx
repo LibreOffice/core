@@ -89,7 +89,7 @@ void w_to_a(LPCTSTR _strW, LPSTR strA, DWORD size)
         while (size_t l = _tcslen(reinterpret_cast<wchar_t*>(p)))
         {
             w_to_a(p, buffer, sizeof(buffer));
-            file << buffer << std::endl;
+            file << buffer << '\0';
             p += l + 1;
         }
         FreeEnvironmentStrings(env);
@@ -100,8 +100,8 @@ void w_to_a(LPCTSTR _strW, LPSTR strA, DWORD size)
     void dump_env(char* file_path)
     {
         std::ofstream file(file_path);
-        for (int i = 0; NULL != environ[i]; i++)
-            file << environ[i] << std::endl;
+        for (int i = 0; NULL != environ[i]; ++i)
+            file << environ[i] << '\0';
     }
 #endif
 
