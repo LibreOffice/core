@@ -3124,6 +3124,7 @@ void SAL_CALL SwXTextDocument::render(
                             pSet->Put( SfxBoolItem( SID_HIDDEN, sal_False ) );
 
                         }
+                        pView->GetViewFrame()->GetBindings().Invalidate( FN_VIEW_META_CHARS );
                     }
                 }
             }
