@@ -290,8 +290,15 @@ IMPL_LINK( ListBox, ImplSelectionChangedHdl, void*, n )
                 Image aImage = mpImplLB->GetEntryList()->GetEntryImage( nChanged );
                 mpImplWin->SetImage( aImage );
             }
-            mpImplWin->Invalidate();
         }
+        else
+        {
+            mpImplWin->SetItemPos( LISTBOX_ENTRY_NOTFOUND );
+            mpImplWin->SetString( ImplGetSVEmptyStr() );
+            Image aImage;
+            mpImplWin->SetImage( aImage );
+        }
+        mpImplWin->Invalidate();
     }
     return 1;
 }
