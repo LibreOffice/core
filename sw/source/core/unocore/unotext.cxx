@@ -1793,11 +1793,6 @@ void SwXText::copyText(
     const uno::Reference< text::XTextCopy >& xSource )
         throw ( uno::RuntimeException )
 {
-    uno::Reference< lang::XUnoTunnel > xTTunnel( xSource, uno::UNO_QUERY_THROW );
-    SwXText* pText = 0;
-    pText = reinterpret_cast< SwXText* >(
-                   sal::static_int_cast< sal_IntPtr >( xTTunnel->getSomething( SwXText::getUnoTunnelId()) ));
-
     uno::Reference< text::XText > xText( xSource, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextCursor > xCursor = xText->createTextCursor( );
     xCursor->gotoEnd( sal_True );
