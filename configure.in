@@ -1155,6 +1155,11 @@ AC_SUBST(PRODUCT)
 AC_SUBST(PROFULLSWITCH)
 AC_SUBST(PROEXT)
 
+if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
+   AC_CHECK_HEADER([valgrind/memcheck.h], [HAVE_VALGRIND_MEMCHECK_H=TRUE], [HAVE_VALGRIND_MEMCHECK_H=FALSE])
+fi
+AC_SUBST(HAVE_VALGRIND_MEMCHECK_H)
+
 dnl ===================================================================
 dnl First setting is whether to include symbols into final build.
 dnl ===================================================================
