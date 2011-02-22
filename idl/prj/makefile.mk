@@ -25,23 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=..
+TARGET=prj
 
-PRJNAME=idl
-TARGET=cmptools
+.INCLUDE : settings.mk
 
-# --- Settings -----------------------------------------------------------
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-.INCLUDE :  settings.mk
-
-CDEFS+=-DIDL_COMPILER
-# --- Files --------------------------------------------------------------
-
-OBJFILES=   $(OBJ)$/lex.obj          \
-            $(OBJ)$/char.obj         \
-            $(OBJ)$/hash.obj
-
-# --- Targets ------------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

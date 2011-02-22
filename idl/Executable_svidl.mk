@@ -14,37 +14,52 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
+# version 3 along with OpenOffice.org.	If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
-PRJ=..$/..
+$(eval $(call gb_Executable_Executable,svidl))
 
-PRJNAME=idl
-TARGET=objects
+$(eval $(call gb_Executable_set_include,svidl,\
+	$$(INCLUDE) \
+	-I$(OUTDIR)/inc/ \
+	-I$(OUTDIR)/inc/offuh/ \
+	-I$(SRCDIR)/idl/inc/pch \
+	-I$(SRCDIR)/idl/inc \
+))
 
-# --- Settings -----------------------------------------------------------
+$(eval $(call gb_Executable_set_cxxflags,svidl,\
+	$$(CXXFLAGS) \
+	-DIDL_COMPILER \
+))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_Executable_add_linked_libs,svidl,\
+	sal \
+	tl \
+    $(gb_STDLIBS) \
+))
 
-CDEFS+=-DIDL_COMPILER
-# --- Files --------------------------------------------------------------
+$(eval $(call gb_Executable_add_exception_objects,svidl,\
+	idl/source/cmptools/char \
+	idl/source/cmptools/hash \
+	idl/source/cmptools/lex \
+	idl/source/objects/basobj \
+	idl/source/objects/bastype \
+	idl/source/objects/module \
+	idl/source/objects/object \
+	idl/source/objects/slot \
+	idl/source/objects/types \
+	idl/source/prj/command \
+	idl/source/prj/database \
+	idl/source/prj/globals \
+	idl/source/prj/svidl \
+))
 
-OBJFILES=   $(OBJ)$/bastype.obj      \
-            $(OBJ)$/basobj.obj       \
-            $(OBJ)$/types.obj        \
-            $(OBJ)$/object.obj       \
-            $(OBJ)$/slot.obj         \
-            $(OBJ)$/module.obj
-
-# --- Targets ------------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4 ts=4:
