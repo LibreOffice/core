@@ -40,8 +40,7 @@ TARGET=app
 SLOFILES =  \
     $(EXCEPTIONSFILES) \
     $(SLO)$/msgpool.obj \
-    $(SLO)$/rfindlst.obj \
-    $(SLO)$/uiitems.obj
+    $(SLO)$/rfindlst.obj
 
 EXCEPTIONSFILES= \
     $(SLO)$/client.obj \
@@ -54,7 +53,8 @@ EXCEPTIONSFILES= \
     $(SLO)$/scmod2.obj \
     $(SLO)$/seltrans.obj \
     $(SLO)$/typemap.obj \
-    $(SLO)$/transobj.obj
+    $(SLO)$/transobj.obj \
+    $(SLO)$/uiitems.obj
 
 # --- Targets -------------------------------------------------------
 
