@@ -64,19 +64,16 @@
   <xsl:include href="factorytools.xsl"/>
 
   <xsl:template name="fasttokens">
-    <xsl:text>
-typedef sal_Int32 Token_t;
-    </xsl:text>
     <xsl:for-each select="/model/fasttoken">
       <xsl:text>
-const Token_t OOXML_</xsl:text>
+const sal_Int32 OOXML_</xsl:text>
 <xsl:value-of select="translate(., '-', '_')"/>
 <xsl:text> = </xsl:text>
 <xsl:value-of select="position() - 1"/>
 <xsl:text>;</xsl:text>
     </xsl:for-each>
     <xsl:text>
-const Token_t OOXML_FAST_TOKENS_END =</xsl:text>
+const sal_Int32 OOXML_FAST_TOKENS_END = </xsl:text>
 <xsl:value-of select="count(/model/fasttoken)"/>
 <xsl:text>;&#xa;</xsl:text>
   </xsl:template>
