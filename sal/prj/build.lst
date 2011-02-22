@@ -25,3 +25,4 @@ sa sal\qa\osl\security nmake - all sa_qa_osl_security sa_cppunittester sa_util N
 sa sal\qa\osl\process nmake - all sa_qa_osl_process sa_cppunittester sa_util NULL
 sa sal\qa\rtl\strings nmake - all sa_qa_rt_strings sa_cppunittester sa_util NULL
 sa sal\qa\rtl\oustringbuffer nmake - all sa_qa_rt_oustringbuffer sa_cppunittester sa_util NULL
+sa sal\qa\rtl\alloc nmake - all sa_qa_rt_alloc sa_cppunittester sa_util NULL
