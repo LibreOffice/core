@@ -31,6 +31,7 @@
 #include "oox/vml/vmlshape.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
 #include "tokens.hxx"
+#include "oox/token/tokenmap.hxx"
 
 namespace oox { namespace shape {
 
@@ -223,7 +224,7 @@ ShapeContextHandler::getShape() throw (uno::RuntimeException)
 
     if (mxFilterBase.is() && xShapes.is())
     {
-        if (mpDrawing.get() != NULL)
+        if ( getContextHandler() == getDrawingShapeContext() )
         {
             mpDrawing->finalizeFragmentImport();
             if( const ::oox::vml::ShapeBase* pShape = mpDrawing->getShapes().getFirstShape() )
