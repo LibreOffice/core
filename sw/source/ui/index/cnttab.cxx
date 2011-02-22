@@ -3117,7 +3117,7 @@ void    SwTokenWindow::InsertAtSelection(
 
         if(bPreEndLinkFound)
         {
-            OSL_ENSURE(iterExchange != aControlList.end(), "no control to exchange?");
+            OSL_ENSURE(pExchange, "no control to exchange?");
 
             if(pExchange)
             {
