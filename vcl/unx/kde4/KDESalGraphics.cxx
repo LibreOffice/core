@@ -156,10 +156,48 @@ BOOL KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart par
     return false;
 }
 
-BOOL KDESalGraphics::hitTestNativeControl( ControlType, ControlPart,
-                                           const Rectangle&, const Point&,
-                                           BOOL& )
+/** Test whether the position is in the native widget.
+    If the return value is TRUE, bIsInside contains information whether
+    aPos was or was not inside the native widget specified by the
+    nType/nPart combination.
+*/
+BOOL KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
+                                           const Rectangle& rControlRegion, const Point& rPos,
+                                           BOOL& rIsInside )
 {
+    if ( nType == CTRL_SCROLLBAR )
+    {
+        if( nPart != PART_BUTTON_UP && nPart != PART_BUTTON_DOWN
+            && nPart != PART_BUTTON_LEFT && nPart != PART_BUTTON_RIGHT )
+        { // we adjust only for buttons (because some scrollbars have 3 buttons)
+            return FALSE;
+        }
+        rIsInside = FALSE;
+        bool bHorizontal = ( nPart == PART_BUTTON_LEFT || nPart == PART_BUTTON_RIGHT );
+        QRect rect = region2QRect( rControlRegion );
+        QPoint pos( rPos.X(), rPos.Y());
+        // Adjust coordinates to make the widget appear to be at (0,0), i.e. make
+        // widget and screen coordinates the same. QStyle functions should use screen
+        // coordinates but at least QPlastiqueStyle::subControlRect() is buggy
+        // and sometimes uses widget coordinates.
+        pos -= rect.topLeft();
+        rect.moveTo( 0, 0 );
+        QStyleOptionSlider options;
+        options.orientation = bHorizontal ? Qt::Horizontal : Qt::Vertical;
+        options.rect = rect;
+        // some random sensible values, since we call this code only for scrollbar buttons,
+        // the slider position does not exactly matter
+        options.maximum = 10;
+        options.minimum = 0;
+        options.sliderPosition = options.sliderValue = 4;
+        options.pageStep = 2;
+        QStyle::SubControl control = kapp->style()->hitTestComplexControl( QStyle::CC_ScrollBar, &options, pos );
+        if( nPart == PART_BUTTON_UP || nPart == PART_BUTTON_LEFT )
+            rIsInside = ( control == QStyle::SC_ScrollBarSubLine );
+        else // DOWN, RIGHT
+            rIsInside = ( control == QStyle::SC_ScrollBarAddLine );
+        return TRUE;
+    }
     return FALSE;
 }
 
