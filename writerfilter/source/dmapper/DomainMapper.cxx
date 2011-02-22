@@ -687,6 +687,8 @@ void DomainMapper::attribute(Id nName, Value & val)
             //todo: where to put the border properties
             //rContext->Insert(eBorderId, uno::makeAny( aBorderLine ));
             //rContext->Insert(eBorderDistId, uno::makeAny( nLineDistance ));
+            (void)eBorderId;
+            (void)eBorderDistId;
         }
         break;
         case NS_rtf::LN_ITCFIRST:
@@ -2144,6 +2146,8 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
                     eFontPitch =    PROP_CHAR_FONT_PITCH_COMPLEX;
                     break;
                 }
+                (void)eFontFamily;
+                (void)eFontStyle;
                 const FontEntry::Pointer_t pFontEntry(pFontTable->getFontEntry(sal_uInt32(nIntValue)));
                 rContext->Insert(eFontName, true, uno::makeAny( pFontEntry->sFontName  ));
                 rContext->Insert(eFontCharSet, true, uno::makeAny( (sal_Int16)pFontEntry->nTextEncoding  ));
