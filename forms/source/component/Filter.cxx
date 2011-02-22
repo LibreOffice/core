@@ -631,19 +631,39 @@ namespace frm
                 if (xListBox.is())
                 {
                     m_aText = aText;
-                    xListBox->selectItem(m_aText, sal_True);
-                    if ( xListBox->getSelectedItemPos() >= 0 )
+                    MapString2String::const_iterator itemPos = m_aDisplayItemToValueItem.find( m_aText );
+                    if ( itemPos == m_aDisplayItemToValueItem.end() )
                     {
-                        const bool isQuoted =   ( aText.getLength() > 0 )
-                                            &&  ( aText[0] == '\'' )
-                                            &&  ( aText[aText.getLength() - 1] == '\'' );
+                        const bool isQuoted =   ( m_aText.getLength() > 1 )
+                                            &&  ( m_aText[0] == '\'' )
+                                            &&  ( m_aText[ m_aText.getLength() - 1 ] == '\'' );
                         if ( isQuoted )
                         {
-                            xListBox->selectItem( aText.copy( 1, aText.getLength() - 2 ), sal_True );
+                            m_aText = m_aText.copy( 1, m_aText.getLength() - 2 );
+                            itemPos = m_aDisplayItemToValueItem.find( m_aText );
                         }
                     }
+
+                    OSL_ENSURE( ( itemPos != m_aDisplayItemToValueItem.end() ) || ( m_aText.getLength() == 0 ),
+                        "OFilterControl::setText: this text is not in my display list!" );
+                    if ( itemPos == m_aDisplayItemToValueItem.end() )
+                        m_aText = ::rtl::OUString();
+
+                    if ( m_aText.getLength() == 0)
+                    {
+                        while ( xListBox->getSelectedItemPos() >= 0 )
+                        {
+                            xListBox->selectItemPos( xListBox->getSelectedItemPos(), sal_False );
+                        }
+                    }
+                    else
+                    {
+                        xListBox->selectItem( m_aText, sal_True );
+                    }
                 }
-            } break;
+            }
+            break;
+
             default:
             {
                 Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
