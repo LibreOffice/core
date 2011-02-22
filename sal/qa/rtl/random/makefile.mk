@@ -55,4 +55,4 @@ SLOFILES= \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+.INCLUDE : $(PRJ)$/qa$/cppunit_local.mk
