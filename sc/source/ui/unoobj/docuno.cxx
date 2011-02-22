@@ -1152,17 +1152,15 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
             sal_Int32 nParent = -1;     // top-level
             pPDFData->CreateOutlineItem( nParent, aTabName, nDestID );
         }
-        //--->i56629
-        // add the named destination stuff
+        // #i56629# add the named destination stuff
         if( pPDFData && pPDFData->GetIsExportNamedDestinations() )
         {
             Rectangle aArea( pDev->PixelToLogic( Rectangle( 0,0,0,0 ) ) );
             String aTabName;
             pDoc->GetName( nTab, aTabName );
-//need the PDF page number here
+            //need the PDF page number here
             pPDFData->CreateNamedDest( aTabName, aArea );
         }
-        //<---i56629
     }
 
     (void)aFunc.DoPrint( aPage, nTabStart, nDisplayStart, TRUE, NULL, NULL );
