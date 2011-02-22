@@ -1501,6 +1501,7 @@ $gb_REPOS = $SRC_ROOT;
 if ('@WITH_LANG@' ne "")
 {
     $gb_REPOS .= " ".$SOURCE_ROOT_DIR."/l10n";
+    $BUILD_TYPE = "@BUILD_TYPE@ L10N";
 }
 
 #
@@ -1837,7 +1838,7 @@ ToFile( "WITH_FONTS",        "@WITH_FONTS@",       "e" );
 ToFile( "WITHOUT_AFMS",      "@WITHOUT_AFMS@",     "e" );
 ToFile( "WITHOUT_PPDS",      "@WITHOUT_PPDS@",     "e" );
 ToFile( "WITH_BINFILTER",    "@WITH_BINFILTER@",   "e" );
-ToFile( "BUILD_TYPE",        "@BUILD_TYPE@",       "e" );
+ToFile( "BUILD_TYPE",        "$BUILD_TYPE",       "e" );
 ToFile( "VERBOSE",           "@VERBOSE@",          "e" );
 ToFile( "ENABLE_EVOAB2",     "@ENABLE_EVOAB2@",    "e" );
 ToFile( "GOBJECT_CFLAGS",    "@GOBJECT_CFLAGS@",   "e" );
