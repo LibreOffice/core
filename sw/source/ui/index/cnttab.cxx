@@ -111,7 +111,7 @@ static const sal_Unicode aDeliEnd    = ']'; //fuer die form
 #define IDX_FILE_EXTENSION String::CreateFromAscii( \
                             RTL_CONSTASCII_STRINGPARAM( "*.sdi" ))
 
-boost::ptr_vector<Control>::iterator FindControl (boost::ptr_vector<Control> &list, Control *ctrl)
+static boost::ptr_vector<Control>::iterator FindControl (boost::ptr_vector<Control> &list, Control *ctrl)
 {
     for (boost::ptr_vector<Control>::iterator it = list.begin(); it != list.end(); ++it)
     {
