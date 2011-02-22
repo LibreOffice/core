@@ -1,2 +1,0 @@
-..\%__SRC%\bin\*.jar %_DEST%\bin%_EXT%
-..\%__SRC%\bin\*.html %_DEST%\pck%_EXT%

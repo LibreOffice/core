@@ -1,5 +1,0 @@
-jl2    javainstaller2    :    l10n setup_native NULL
-jl2    javainstaller2\src\Localization   nmake    -    u    jl2_local NULL
-jl2    javainstaller2\src\Properties     nmake    -    u    jl2_properties jl2_local.u NULL
-jl2    javainstaller2\src\Helpfiles      nmake    -    u    jl2_helpfiles jl2_local.u NULL
-jl2    javainstaller2                    nmake    -    u    jl2_mkout jl2_properties.u jl2_helpfiles.u NULL
