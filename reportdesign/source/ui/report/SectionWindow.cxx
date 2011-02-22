@@ -211,9 +211,9 @@ void OSectionWindow::ImplInitSettings()
     static bool t = false;
     if ( t )
     {
-    EnableChildTransparentMode( TRUE );
+    EnableChildTransparentMode( sal_True );
     SetParentClipMode( PARENTCLIPMODE_NOCLIP );
-    SetPaintTransparent( TRUE );
+    SetPaintTransparent( sal_True );
     }
     SetBackground( );
 }

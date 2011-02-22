@@ -446,6 +446,7 @@ sal_uInt16 OReportWindow::getZoomFactor(SvxZoomType _eType) const
 // -----------------------------------------------------------------------------
 void OReportWindow::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw( uno::RuntimeException)
 {
+    (void)_rEvent;
     Resize();
     m_aViewsWindow.Resize();
     static sal_Int32 nIn = INVALIDATE_TRANSPARENT;
