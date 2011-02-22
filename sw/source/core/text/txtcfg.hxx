@@ -29,17 +29,6 @@
 #ifndef _TXTCFG_HXX
 #define _TXTCFG_HXX
 
-#if OSL_DEBUG_LEVEL > 1
-#include "dbgloop.hxx"  // DBG_LOOP
-#else
-#ifdef DBG_LOOP     //kann per precompiled hereinkommen
-#undef DBG_LOOP
-#undef DBG_LOOP_RESET
-#endif
-#define DBG_LOOP
-#define DBG_LOOP_RESET
-#endif
-
 // Toleranzwert in der Formatierung und Textausgabe.
 #define SLOPPY_TWIPS    5
 

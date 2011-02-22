@@ -69,11 +69,6 @@ SUBLIBS3= \
                 $(SLB)$/SwNumberTree.lib \
                 $(SLB)$/tablecore.lib
 
-.IF "$(DBG_LEVEL)">="2"
-SUBLIBS3+= \
-        $(SLB)$/except.lib
-.ENDIF
-
 SUBLIBS4= \
         $(SLB)$/frmedt.lib \
         $(SLB)$/ole.lib \
@@ -82,8 +77,6 @@ SUBLIBS4= \
         $(SLB)$/undo.lib \
         $(SLB)$/bastyp.lib
 #-------------------------------------------------------------------------
-
-################################################################
 
 LIB1TARGET=$(SLB)$/core1.lib
 LIB1FILES= \
@@ -103,8 +96,4 @@ LIB4FILES= \
 
 .INCLUDE :  target.mk
 
-################################################################
-
 #-------------------------------------------------------------------------
-
-
