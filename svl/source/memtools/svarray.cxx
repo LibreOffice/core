@@ -31,7 +31,6 @@
 
 #define _SVARRAY_CXX
 
-#define _SVSTDARR_BOOLS
 #define _SVSTDARR_ULONGS
 #define _SVSTDARR_ULONGSSORT
 #define _SVSTDARR_USHORTS
@@ -75,7 +74,6 @@ USHORT SvPtrarrPlain::GetPos( const VoidPtr aElement ) const
 }
 
 
-SV_IMPL_VARARR( SvBools, BOOL )
 SV_IMPL_VARARR( SvULongs, ULONG )
 SV_IMPL_VARARR( SvUShorts, USHORT )
 SV_IMPL_VARARR( SvLongs, long)

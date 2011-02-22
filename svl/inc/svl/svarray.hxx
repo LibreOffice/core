@@ -91,7 +91,7 @@
 *           ein Stack mit einem PtrArray als Grundlage.
 *
 * JP 09.10.96:  vordefinierte Arrays:
-*   VarArr:     SvBools, SvULongs, SvUShorts, SvLongs
+*   VarArr:     SvULongs, SvUShorts, SvLongs
 *   PtrArr:     SvStrings, SvStringsDtor
 *   SortArr:    SvStringsSort, SvStringsSortDtor,
 *               SvStringsISort, SvStringsISortDtor
