@@ -546,21 +546,21 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     {
         dwSidSize+=wsprintf(Ident + strlen(Ident),
                     TEXT("0x%02hx%02hx%02hx%02hx%02hx%02hx"),
-                    (USHORT)psia->Value[0],
-                    (USHORT)psia->Value[1],
-                    (USHORT)psia->Value[2],
-                    (USHORT)psia->Value[3],
-                    (USHORT)psia->Value[4],
-                    (USHORT)psia->Value[5]);
+                    (sal_uInt16)psia->Value[0],
+                    (sal_uInt16)psia->Value[1],
+                    (sal_uInt16)psia->Value[2],
+                    (sal_uInt16)psia->Value[3],
+                    (sal_uInt16)psia->Value[4],
+                    (sal_uInt16)psia->Value[5]);
     }
     else
     {
         dwSidSize+=wsprintf(Ident + strlen(Ident),
                     TEXT("%lu"),
-                    (ULONG)(psia->Value[5]      )   +
-                    (ULONG)(psia->Value[4] <<  8)   +
-                    (ULONG)(psia->Value[3] << 16)   +
-                    (ULONG)(psia->Value[2] << 24)   );
+                    (sal_uInt32)(psia->Value[5]      )   +
+                    (sal_uInt32)(psia->Value[4] <<  8)   +
+                    (sal_uInt32)(psia->Value[3] << 16)   +
+                    (sal_uInt32)(psia->Value[2] << 24)   );
     }
 
     /* loop through SidSubAuthorities */
