@@ -35,6 +35,10 @@ module com {  module sun {  module star {  module table {
 
 constants BorderLineStyle
 {
+    /** No border line
+     */
+    const short NONE = -1;
+
     /** Solid border line.
      */
     const short SOLID = 0;
