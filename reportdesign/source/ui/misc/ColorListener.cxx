@@ -82,15 +82,21 @@ void OColorListener::DataChanged( const DataChangedEvent& rDCEvt )
 // -----------------------------------------------------------------------------
 void OColorListener::setCollapsed(sal_Bool _bCollapsed)
 {
-    m_bCollapsed = _bCollapsed;
-    if ( m_aCollapsedLink.IsSet() )
-        m_aCollapsedLink.Call(this);
+    if ( m_bCollapsed != _bCollapsed )
+    {
+        m_bCollapsed = _bCollapsed;
+        if ( m_aCollapsedLink.IsSet() )
+            m_aCollapsedLink.Call(this);
+    }
 }
 // -----------------------------------------------------------------------------
 void OColorListener::setMarked(sal_Bool _bMark)
 {
-    m_bMarked = _bMark;
-    Invalidate();
+    if ( m_bMarked != _bMark)
+    {
+        m_bMarked = _bMark;
+        Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_NOERASE);
+    }
 }
 // =======================================================================
 }
