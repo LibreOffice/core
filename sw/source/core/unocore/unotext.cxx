@@ -1793,6 +1793,8 @@ void SwXText::copyText(
     const uno::Reference< text::XTextCopy >& xSource )
         throw ( uno::RuntimeException )
 {
+    SolarMutexGuard aGuard;
+
     uno::Reference< text::XText > xText( xSource, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextCursor > xCursor = xText->createTextCursor( );
     xCursor->gotoEnd( sal_True );
