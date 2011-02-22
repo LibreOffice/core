@@ -1,4 +1,4 @@
-ba      dbaccess        :       l10n BOOST:boost connectivity svx stoc qadevOOo xmlscript LIBXSLT:libxslt test NULL
+ba      dbaccess        :       L10N:l10n BOOST:boost connectivity svx stoc qadevOOo xmlscript LIBXSLT:libxslt test NULL
 ba	dbaccess								usr1	-	all	ba_mkout NULL
 ba	dbaccess\inc							nmake	-	all	ba_inc NULL
 ba	dbaccess\source\ui\inc					nmake	-	all	ba_uiinc ba_inc NULL

@@ -1,2 +1,2 @@
-sx	svx	:	sfx2 l10n oovbaapi connectivity xmloff linguistic jvmfwk avmedia drawinglayer editeng LIBXSLT:libxslt NULL
+sx	svx	:	sfx2 L10N:l10n oovbaapi connectivity xmloff linguistic jvmfwk avmedia drawinglayer editeng LIBXSLT:libxslt NULL
 sx	svx\prj								nmake	-	all	sx_prj NULL

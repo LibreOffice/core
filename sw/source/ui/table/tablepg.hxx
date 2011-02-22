@@ -121,7 +121,7 @@ class SwTableColumnPage : public SfxTabPage
     CheckBox        aProportionalCB;
     FixedText       aSpaceFT;
     MetricField     aSpaceED;
-
+     FixedLine        aColFL;
     ImageButton     aUpBtn;
     FixedText       aFT1;
     PercentField    aMF1;
@@ -136,7 +136,6 @@ class SwTableColumnPage : public SfxTabPage
     FixedText       aFT6;
     PercentField    aMF6;
     ImageButton     aDownBtn;
-    FixedLine        aColFL;
 
     SwTableRep*     pTblData;
     PercentField*   pFieldArr[MET_FIELDS];

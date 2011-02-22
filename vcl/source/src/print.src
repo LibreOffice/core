@@ -412,6 +412,14 @@ ModalDialog SV_DLG_PRINT
         {
             ImageBitmap = Bitmap { File = "ncollate_h.png" ; };
         };
+
+        CheckBox SV_PRINT_OPT_REVERSE
+        {
+            HelpID = ".HelpID:vcl:PrintDialog:OptPage:ToReverse";
+            Pos = MAP_APPFONT( 10, 50 );
+            Size = MAP_APPFONT( 200, 12 );
+            Text [en-US] = "Print in ~reverse page order";
+        };
     };
 
     TabPage SV_PRINT_TAB_OPT
@@ -439,13 +447,6 @@ ModalDialog SV_DLG_PRINT
             Pos = MAP_APPFONT( 10, 35 );
             Size = MAP_APPFONT( 200, 12 );
             Text [en-US] = "~Create single print jobs for collated output";
-        };
-        CheckBox SV_PRINT_OPT_REVERSE
-        {
-            HelpID = ".HelpID:vcl:PrintDialog:OptPage:ToReverse";
-            Pos = MAP_APPFONT( 10, 50 );
-            Size = MAP_APPFONT( 200, 12 );
-            Text [en-US] = "Print in ~reverse page order";
         };
     };
 };
@@ -498,3 +499,48 @@ StringArray SV_PRINT_NATIVE_STRINGS
         < "Print selection only"; >;
     };
 };
+
+StringArray RID_STR_PAPERNAMES
+{
+    ItemList [en-US] =
+    {
+        < "A0"; >;
+        < "A1"; >;
+        < "A2"; >;
+        < "A3"; >;
+        < "A4"; >;
+        < "A5"; >;
+        < "B4 (ISO)"; >;
+        < "B5 (ISO)"; >;
+        < "Letter"; >;
+        < "Legal"; >;
+        < "Tabloid"; >;
+        < "User Defined"; >;
+        < "B6 (ISO)"; >;
+        < "C4 Envelope"; >;
+        < "C5 Envelope"; >;
+        < "C6 Envelope"; >;
+        < "C6/5 Envelope"; >;
+        < "DL Envelope"; >;
+        < "Dia Slide"; >;
+        < "Screen"; >;
+        < "C"; >;
+        < "D"; >;
+        < "E"; >;
+        < "Executive"; >;
+        < "Long Bond"; >;
+        < "#8 (Monarch) Envelope"; >;
+        < "#6 3/4 (Personal) Envelope"; >;
+        < "#9 Envelope"; >;
+        < "#10 Envelope"; >;
+        < "#11 Envelope"; >;
+        < "#12 Envelope"; >;
+        < "16 Kai"; >;
+        < "32 Kai"; >;
+        < "Big 32 Kai"; >;
+        < "B4 (JIS)"; >;
+        < "B5 (JIS)"; >;
+        < "B6 (JIS)"; >;
+    };
+};
+

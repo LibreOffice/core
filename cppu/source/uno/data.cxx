@@ -28,6 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppu.hxx"
 
+#include <cstddef>
+#include <stdio.h>
+
 #include "cppu/macros.hxx"
 
 #include "osl/mutex.hxx"
@@ -350,8 +353,6 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 
 #if OSL_DEBUG_LEVEL > 1
 
-#include <stdio.h>
-
 #if defined( SAL_W32)
 #pragma pack(push, 8)
 #elif defined(SAL_OS2)
@@ -364,12 +365,12 @@ sal_Bool SAL_CALL uno_type_isAssignableFromData(
 #define MAX_ALIGNMENT_4
 #endif
 
-#define OFFSET_OF( s, m ) ((sal_Size)((char *)&((s *)16)->m -16))
+#define OFFSET_OF( s, m ) reinterpret_cast< std::size_t >((char *)&((s *)16)->m -16)
 
 #define BINTEST_VERIFY( c ) \
-    if (! (c)) { fprintf( stderr, "### binary compatibility test failed: " #c " [line %d]!!!\n", __LINE__ ); abort(); }
+    if (! (c)) { fprintf( stderr, "### binary compatibility test failed: %s [line %d]!!!\n", #c, __LINE__ ); abort(); }
 #define BINTEST_VERIFYOFFSET( s, m, n ) \
-    if (OFFSET_OF(s, m) != n) { fprintf( stderr, "### OFFSET_OF(" #s ", "  #m ") = %d instead of expected %d!!!\n", OFFSET_OF(s, m), n ); abort(); }
+    if (OFFSET_OF(s, m) != n) { fprintf( stderr, "### OFFSET_OF(" #s ", "  #m ") = %" SAL_PRI_SIZET "u instead of expected %d!!!\n", OFFSET_OF(s, m), n ); abort(); }
 
 #if OSL_DEBUG_LEVEL > 1
 #if defined(__GNUC__) && (defined(LINUX) || defined(FREEBSD)) && (defined(INTEL) || defined(POWERPC) || defined(X86_64) || defined(S390))

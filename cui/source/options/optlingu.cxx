@@ -1176,6 +1176,13 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
     else
         aMoreDictsLink.Hide();
 
+    String sAccessibleNameModuleEdit( CUI_RES( STR_LINGU_MODULES_EDIT ) );
+    String sAccessibleNameDicsEdit  ( CUI_RES( STR_LINGU_DICS_EDIT_DIC ) );
+    String sAccessibleNameOptionEdit( CUI_RES( STR_LINGU_OPTIONS_EDIT ) );
+
+    aLinguModulesEditPB.SetAccessibleName(sAccessibleNameModuleEdit);
+    aLinguDicsEditPB.SetAccessibleName(sAccessibleNameDicsEdit);
+    aLinguOptionsEditPB.SetAccessibleName(sAccessibleNameOptionEdit);
 
     // force recalculation of hash value used for checking the need of updating
     // because new dictionaries might be installed / downloaded.

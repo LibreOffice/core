@@ -340,6 +340,9 @@ public:
     sal_Bool                        SetPaperSizeUser( const Size& rSize );
     sal_Bool                        SetPaperSizeUser( const Size& rSize, bool bMatchNearest );
     Paper                   GetPaper() const;
+    static rtl::OUString        GetPaperName( Paper ePaper );
+    // return a UI string for the current paper; i_bPaperUser == false means an empty string for PAPER_USER
+    rtl::OUString               GetPaperName( bool i_bPaperUser = true ) const;
 
     // returns number of available paper formats
     int                         GetPaperInfoCount() const;
@@ -520,24 +523,24 @@ public:
     bool isDirectPrint() const;
 
     // implementation details, not usable outside vcl
-    // don't use outside vcl. Some of these ar exported for
+    // don't use outside vcl. Some of these are exported for
     // the benefit of vcl's plugins.
     // Still: DO NOT USE OUTSIDE VCL
-    int getFilteredPageCount();
+    VCL_PLUGIN_PUBLIC int getFilteredPageCount();
     SAL_DLLPRIVATE PageSize getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf, bool i_bMayUseCache = false );
-    PageSize getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache = false );
+    VCL_PLUGIN_PUBLIC PageSize getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache = false );
     SAL_DLLPRIVATE void printFilteredPage( int i_nPage );
     SAL_DLLPRIVATE void setPrinter( const boost::shared_ptr<Printer>& );
     SAL_DLLPRIVATE void setOptionChangeHdl( const Link& );
-    void createProgressDialog();
-    bool isProgressCanceled() const;
+    VCL_PLUGIN_PUBLIC void createProgressDialog();
+    VCL_PLUGIN_PUBLIC bool isProgressCanceled() const;
     SAL_DLLPRIVATE void setMultipage( const MultiPageSetup& );
     SAL_DLLPRIVATE const MultiPageSetup& getMultipage() const;
-    void setLastPage( sal_Bool i_bLastPage );
+    VCL_PLUGIN_PUBLIC void setLastPage( sal_Bool i_bLastPage );
     SAL_DLLPRIVATE void setReversePrint( sal_Bool i_bReverse );
     SAL_DLLPRIVATE bool getReversePrint() const;
     SAL_DLLPRIVATE void pushPropertiesToPrinter();
-    void setJobState( com::sun::star::view::PrintableState );
+    VCL_PLUGIN_PUBLIC void setJobState( com::sun::star::view::PrintableState );
     SAL_DLLPRIVATE bool setupPrinter( Window* i_pDlgParent );
 
     SAL_DLLPRIVATE int getPageCountProtected() const;

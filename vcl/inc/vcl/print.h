@@ -55,7 +55,7 @@ struct ImplPrnQueueData
 // - ImplPrnQueueList -
 // --------------------
 
-class VCL_DLLPUBLIC ImplPrnQueueList
+class VCL_PLUGIN_PUBLIC ImplPrnQueueList
 {
 public:
     std::hash_map< rtl::OUString, sal_Int32, rtl::OUStringHash >

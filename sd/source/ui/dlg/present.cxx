@@ -111,6 +111,12 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     aTmfPause.SetModifyHdl( LINK( this, SdStartPresentationDlg, ChangePauseHdl ) );
     aTmfPause.SetFormat( TIMEF_SEC );
 
+    aLbDias.SetAccessibleRelationLabeledBy( &aRbtAtDia );
+    aLbDias.SetAccessibleName(aRbtAtDia.GetText());
+    aLbCustomshow.SetAccessibleRelationLabeledBy( &aRbtCustomshow );
+    aTmfPause.SetAccessibleRelationLabeledBy( &aRbtAuto );
+    aTmfPause.SetAccessibleName(aRbtAuto.GetText());
+
     // Listbox mit Seitennamen fuellen
     rPageNames.First();
     for( sal_uInt16 i = 0;

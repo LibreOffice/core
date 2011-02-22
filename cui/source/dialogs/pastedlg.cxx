@@ -53,10 +53,10 @@ SvPasteObjectDialog::SvPasteObjectDialog( Window* pParent )
     aFtObjectSource( this, CUI_RES( FT_OBJECT_SOURCE ) ),
     aRbPaste( this, CUI_RES( RB_PASTE ) ),
     aRbPasteLink( this, CUI_RES( RB_PASTE_LINK ) ),
-    aLbInsertList( this, CUI_RES( LB_INSERT_LIST ) ),
     aCbDisplayAsIcon( this, CUI_RES( CB_DISPLAY_AS_ICON ) ),
     aPbChangeIcon( this, CUI_RES( PB_CHANGE_ICON ) ),
     aFlChoice( this, CUI_RES( FL_CHOICE ) ),
+    aLbInsertList( this, CUI_RES( LB_INSERT_LIST ) ),
     aOKButton1( this, CUI_RES( 1 ) ),
     aCancelButton1( this, CUI_RES( 1 ) ),
     aHelpButton1( this, CUI_RES( 1 ) ),
@@ -74,6 +74,8 @@ SvPasteObjectDialog::SvPasteObjectDialog( Window* pParent )
     ObjectLB().SetSelectHdl( LINK( this, SvPasteObjectDialog, SelectHdl ) );
     ObjectLB().SetDoubleClickHdl( LINK( this, SvPasteObjectDialog, DoubleClickHdl ) );
     SetDefault();
+
+    aLbInsertList.SetAccessibleName(aFlChoice.GetText());
 }
 
 void SvPasteObjectDialog::SelectObject()

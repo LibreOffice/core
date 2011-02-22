@@ -101,9 +101,9 @@ static sal_Bool bLastRelative = sal_False;
 SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
                                const SfxItemSet& rSet) :
     SfxTabPage( pParent, SW_RES( TP_NUM_POSITION ), rSet ),
-    aPositionFL(    this, SW_RES(FL_POSITION )),
     aLevelFL(       this, SW_RES(FL_LEVEL    )),
     aLevelLB(       this, SW_RES(LB_LEVEL   )),
+    aPositionFL(    this, SW_RES(FL_POSITION )),
 
     aDistBorderFT(  this, SW_RES(FT_BORDERDIST  )),
     aDistBorderMF(  this, SW_RES(MF_BORDERDIST  )),
@@ -143,6 +143,9 @@ SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
     FreeResource();
     SetExchangeSupport();
     aPreviewWIN.SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
+
+    aStandardPB.SetAccessibleRelationMemberOf(&aPositionFL);
+
 
     aRelativeCB.Check();
     aAlignLB.SetSelectHdl(LINK(this, SwNumPositionTabPage, EditModifyHdl));

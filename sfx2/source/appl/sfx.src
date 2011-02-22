@@ -40,3 +40,8 @@ String STR_STYLE_FILTER_ALL
     Text [ en-US ] = "All Styles" ;
 };
 
+String STR_ACCTITLE_PRODUCTIVITYTOOLS
+{
+    Text [ en-US ] = "%PRODUCTNAME";
+};
+

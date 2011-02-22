@@ -139,4 +139,7 @@
   <implementation name="com.sun.star.comp.framework.jobs.JobDispatch">
     <service name="com.sun.star.frame.ProtocolHandler"/>
   </implementation>
+  <implementation name="com.sun.star.comp.framework.TabWindowService">
+    <service name="com.sun.star.ui.dialogs.TabContainerWindow"/>
+  </implementation>
 </component>

@@ -69,8 +69,6 @@ private:
     FixedText           aFtCond1Template;
     ListBox             aLbCond1Template;
     PushButton          aBtnNew1;
-    FixedLine           aFlSep1;
-
     CheckBox            aCbxCond2;
     ListBox             aLbCond21;
     ListBox             aLbCond22;
@@ -82,8 +80,6 @@ private:
     FixedText           aFtCond2Template;
     ListBox             aLbCond2Template;
     PushButton          aBtnNew2;
-    FixedLine           aFlSep2;
-
     CheckBox            aCbxCond3;
     ListBox             aLbCond31;
     ListBox             aLbCond32;
@@ -123,7 +119,8 @@ private:
     Size                aCond3Size1;
     Size                aCond3Size2;
     Size                aCond3Size3;
-
+    FixedLine           aFlSep2;
+    FixedLine           aFlSep1;
     formula::RefEdit*           pEdActive;
     sal_Bool                bDlgLostFocus;
     ScDocument*         pDoc;

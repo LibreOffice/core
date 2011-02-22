@@ -48,6 +48,7 @@ class BasicLibInfo;                 // info block for basic manager
 class SbTextPortions;
 class SbMethod;
 class BasicManager;
+class DocBasicItem;
 
 class StarBASICImpl;
 
@@ -57,6 +58,7 @@ class StarBASIC : public SbxObject
     friend class SbiExpression; // Access to RTL
     friend class SbiInstance;
     friend class SbiRuntime;
+    friend class DocBasicItem;
 
     StarBASICImpl*  mpStarBASICImpl;
 

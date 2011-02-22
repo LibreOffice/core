@@ -176,7 +176,8 @@ testcase tLoadSaveGeneral
         printlog( "Doctype: " & Dokumenttyp.getSelText() & " has filter: " & Filter.getSelText() )
 
         if Filter.GetSelIndex <> 3 then
-            warnlog( "#i79150# some options in Tools/Options->Load/Save->General are not saved" )
+            '#i79150# 
+            warnlog( "Some options in Tools/Options->Load/Save->General are not saved" )
         endif
     next i
 

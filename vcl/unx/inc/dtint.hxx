@@ -31,11 +31,11 @@
 #include <tools/string.hxx>
 #include <tools/color.hxx>
 #include <vcl/font.hxx>
+#include "svunx.h"
 
 class SalBitmap;
 class SalDisplay;
 class AllSettings;
-
 
 enum DtType {
     DtGeneric,

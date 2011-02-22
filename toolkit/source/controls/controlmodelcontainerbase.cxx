@@ -220,8 +220,9 @@ static const ::rtl::OUString& getStepPropertyName( )
 //  ----------------------------------------------------
 //  class ControlModelContainerBase
 //  ----------------------------------------------------
-ControlModelContainerBase::ControlModelContainerBase()
-    :maContainerListeners( *this )
+ControlModelContainerBase::ControlModelContainerBase( const Reference< XMultiServiceFactory >& i_factory )
+    :ControlModelContainer_IBase( i_factory )
+    ,maContainerListeners( *this )
     ,maChangeListeners ( GetMutex() )
     ,mbGroupsUpToDate( sal_False )
 {
@@ -339,61 +340,61 @@ Reference< XInterface > ControlModelContainerBase::createInstance( const ::rtl::
 
     OGeometryControlModel_Base* pNewModel = NULL;
 
+    const Reference< XMultiServiceFactory > xFactory( maContext.getLegacyServiceFactory() );
     if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlEditModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlEditModel >;
+        pNewModel = new OGeometryControlModel< UnoControlEditModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlFormattedFieldModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlFormattedFieldModel >;
+        pNewModel = new OGeometryControlModel< UnoControlFormattedFieldModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlFileControlModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlFileControlModel >;
+        pNewModel = new OGeometryControlModel< UnoControlFileControlModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlButtonModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlButtonModel >;
+        pNewModel = new OGeometryControlModel< UnoControlButtonModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlImageControlModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlImageControlModel >;
+        pNewModel = new OGeometryControlModel< UnoControlImageControlModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlRadioButtonModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlRadioButtonModel >;
+        pNewModel = new OGeometryControlModel< UnoControlRadioButtonModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlCheckBoxModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlCheckBoxModel >;
+        pNewModel = new OGeometryControlModel< UnoControlCheckBoxModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoControlFixedHyperlinkModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlFixedHyperlinkModel >;
+        pNewModel = new OGeometryControlModel< UnoControlFixedHyperlinkModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoControlFixedTextModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlFixedTextModel >;
+        pNewModel = new OGeometryControlModel< UnoControlFixedTextModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlGroupBoxModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlGroupBoxModel >;
+        pNewModel = new OGeometryControlModel< UnoControlGroupBoxModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlListBoxModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlListBoxModel >;
+        pNewModel = new OGeometryControlModel< UnoControlListBoxModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlComboBoxModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlComboBoxModel >;
+        pNewModel = new OGeometryControlModel< UnoControlComboBoxModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlDateFieldModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlDateFieldModel >;
+        pNewModel = new OGeometryControlModel< UnoControlDateFieldModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlTimeFieldModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlTimeFieldModel >;
+        pNewModel = new OGeometryControlModel< UnoControlTimeFieldModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlNumericFieldModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlNumericFieldModel >;
+        pNewModel = new OGeometryControlModel< UnoControlNumericFieldModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlCurrencyFieldModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlCurrencyFieldModel >;
+        pNewModel = new OGeometryControlModel< UnoControlCurrencyFieldModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlPatternFieldModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlPatternFieldModel >;
+        pNewModel = new OGeometryControlModel< UnoControlPatternFieldModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlProgressBarModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlProgressBarModel >;
+        pNewModel = new OGeometryControlModel< UnoControlProgressBarModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlScrollBarModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlScrollBarModel >;
+        pNewModel = new OGeometryControlModel< UnoControlScrollBarModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlFixedLineModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlFixedLineModel >;
+        pNewModel = new OGeometryControlModel< UnoControlFixedLineModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlRoadmapModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlRoadmapModel >;
+        pNewModel = new OGeometryControlModel< UnoControlRoadmapModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName_TreeControlModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoTreeModel >;
+        pNewModel = new OGeometryControlModel< UnoTreeModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName_GridControlModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoGridModel >;
+        pNewModel = new OGeometryControlModel< UnoGridModel >( xFactory );
     else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoControlTabPageContainerModel ) == 0 )
-        pNewModel = new OGeometryControlModel< UnoControlTabPageContainerModel >;
+        pNewModel = new OGeometryControlModel< UnoControlTabPageContainerModel >( xFactory );
 
     if ( !pNewModel )
     {
-        Reference< XMultiServiceFactory > xORB( ::comphelper::getProcessServiceFactory() );
-        if ( xORB.is() )
+        if ( xFactory.is() )
         {
-            Reference< XInterface > xObject = xORB->createInstance( aServiceSpecifier );
+            Reference< XInterface > xObject = xFactory->createInstance( aServiceSpecifier );
             Reference< XServiceInfo > xSI( xObject, UNO_QUERY );
             Reference< XCloneable > xCloneAccess( xSI, UNO_QUERY );
             Reference< XAggregation > xAgg( xCloneAccess, UNO_QUERY );
@@ -1313,9 +1314,10 @@ throw ( RuntimeException )
 //  ----------------------------------------------------
 //  class DialogContainerControl
 //  ----------------------------------------------------
-ControlContainerBase::ControlContainerBase() :
-    mbSizeModified(false),
-    mbPosModified(false)
+ControlContainerBase::ControlContainerBase( const Reference< XMultiServiceFactory >& i_factory )
+    :ContainerControl_IBase( i_factory )
+    ,mbSizeModified(false)
+    ,mbPosModified(false)
 {
     maComponentInfos.nWidth = 280;
     maComponentInfos.nHeight = 400;
@@ -1339,8 +1341,8 @@ void ControlContainerBase::ImplInsertControl( Reference< XControlModel >& rxMode
 
     ::rtl::OUString aDefCtrl;
     xP->getPropertyValue( GetPropertyName( BASEPROPERTY_DEFAULTCONTROL ) ) >>= aDefCtrl;
-    Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    Reference < XControl > xCtrl( xMSF->createInstance( aDefCtrl ), UNO_QUERY );
+    Reference < XControl > xCtrl;
+    maContext.createComponent( aDefCtrl, xCtrl );
 
     DBG_ASSERT( xCtrl.is(), "UnoDialogControl::ImplInsertControl: could not create the control!" );
     if ( xCtrl.is() )
@@ -1360,7 +1362,18 @@ void ControlContainerBase::ImplRemoveControl( Reference< XControlModel >& rxMode
     Sequence< Reference< XControl > > aControls = getControls();
     Reference< XControl > xCtrl = StdTabController::FindControl( aControls, rxModel );
     if ( xCtrl.is() )
+    {
         removeControl( xCtrl );
+        try
+        {
+            Reference< XComponent > const xControlComp( xCtrl, UNO_QUERY_THROW );
+            xControlComp->dispose();
+        }
+        catch( Exception const & )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
 }
 
 void ControlContainerBase::ImplSetPosSize( Reference< XControl >& rxCtrl )
@@ -1549,7 +1562,16 @@ void ControlContainerBase::elementInserted( const ContainerEvent& Event ) throw(
 
     Event.Accessor >>= aName;
     Event.Element >>= xModel;
-    ImplInsertControl( xModel, aName );
+    ENSURE_OR_RETURN_VOID( xModel.is(), "UnoDialogControl::elementInserted: illegal element!" );
+    try
+    {
+        ImplInsertControl( xModel, aName );
+    }
+    catch ( const RuntimeException& e ) { throw; }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 void ControlContainerBase::elementRemoved( const ContainerEvent& Event ) throw(RuntimeException)
@@ -1558,8 +1580,16 @@ void ControlContainerBase::elementRemoved( const ContainerEvent& Event ) throw(R
 
     Reference< XControlModel > xModel;
     Event.Element >>= xModel;
-    if ( xModel.is() )
+    ENSURE_OR_RETURN_VOID( xModel.is(), "UnoDialogControl::elementRemoved: illegal element!" );
+    try
+    {
         ImplRemoveControl( xModel );
+    }
+    catch ( const RuntimeException& e ) { throw; }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 void ControlContainerBase::elementReplaced( const ContainerEvent& Event ) throw(RuntimeException)
@@ -1568,13 +1598,31 @@ void ControlContainerBase::elementReplaced( const ContainerEvent& Event ) throw(
 
     Reference< XControlModel > xModel;
     Event.ReplacedElement >>= xModel;
-    if ( xModel.is() )
-        ImplRemoveControl( xModel );
+    try
+    {
+        OSL_ENSURE( xModel.is(), "UnoDialogControl::elementReplaced: invalid ReplacedElement!" );
+        if ( xModel.is() )
+            ImplRemoveControl( xModel );
+    }
+    catch ( const RuntimeException& e ) { throw; }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 
     ::rtl::OUString aName;
     Event.Accessor >>= aName;
     Event.Element >>= xModel;
-    ImplInsertControl( xModel, aName );
+    ENSURE_OR_RETURN_VOID( xModel.is(), "UnoDialogControl::elementReplaced: invalid new element!" );
+    try
+    {
+        ImplInsertControl( xModel, aName );
+    }
+    catch ( const RuntimeException& e ) { throw; }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 // XPropertiesChangeListener
@@ -1761,9 +1809,8 @@ uno::Reference< graphic::XGraphic > ControlContainerBase::Impl_getGraphicFromURL
 
     try
     {
-        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
         uno::Reference< graphic::XGraphicProvider > xProvider;
-        if ( aContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
+        if ( maContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
         {
             uno::Sequence< beans::PropertyValue > aMediaProperties(1);
             aMediaProperties[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );

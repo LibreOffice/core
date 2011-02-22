@@ -216,8 +216,8 @@ public:
     virtual sal_Bool    Close();
 
 private:
-    ListBox     aLbFilterArea;
     FixedText   aFtFilterArea;
+    ListBox     aLbFilterArea;
     formula::RefEdit    aEdFilterArea;
     formula::RefButton  aRbFilterArea;
 

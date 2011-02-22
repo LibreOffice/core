@@ -97,16 +97,16 @@ private:
     double          mfScaleX;
     double          mfScaleY;
     Size            maSizePixel;
-    PreviewWindow   maPreview;
-    FixedLine       maFlParameter;
-    OKButton        maBtnOK;
-    CancelButton    maBtnCancel;
-    HelpButton      maBtnHelp;
 
                     DECL_LINK( ImplPreviewTimeoutHdl, Timer* pTimer );
                     DECL_LINK( ImplModifyHdl, void* p );
 
 protected:
+    PreviewWindow   maPreview;
+    OKButton        maBtnOK;
+    CancelButton    maBtnCancel;
+    HelpButton      maBtnHelp;
+    FixedLine       maFlParameter;
 
     const Link&     GetModifyHdl() const { return maModifyHdl; }
     const Size&     GetGraphicSizePixel() const { return maSizePixel; }

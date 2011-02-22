@@ -382,6 +382,8 @@ public:
 
     /** Converts frame formatting properties from the passed property set. */
     void                Convert( const ScfPropertySet& rPropSet );
+    /** Sets the specified automatic flags. */
+    void                SetAutoFlags( bool bAutoPos, bool bAutoSize );
 
     /** Returns true, if the frame object contains default formats. */
     bool                IsDefault() const;

@@ -96,6 +96,9 @@ class SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
     PushButton          aBtnExec;
     FixedLine           aGrpQ;
 
+    FixedText           aFt1;
+    FixedText           aFt2;
+    FixedText           aFt3;
     CheckBox            aCbx1;
     MaskSet*            pQSet1;
     MetricField         aSp1;
@@ -119,9 +122,7 @@ class SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
     MaskData*           pData;
     CheckBox            aCbxTrans;
     ColorLB             aLbColorTrans;
-    FixedText           aFt1;
-    FixedText           aFt2;
-    FixedText           aFt3;
+
     const XColorTable*  pColTab;
     Color               aPipetteColor;
     SvxBmpMaskSelectItem aSelItem;

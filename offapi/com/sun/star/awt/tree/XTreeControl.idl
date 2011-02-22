@@ -154,7 +154,7 @@ interface XTreeControl
         @throws ::com::sun::star::lang::IllegalArgumentException
             if <var>Node</var> is not a valid node of the corresponding <type>XTreeDataModel</type>.
 
-        @raises ExpandVetoException
+        @throws ExpandVetoException
             if collapsing <var>Node</var> failed because at least one of the registered
             <type>XTreeExpansionListener</type> raised a <type>ExpandVetoException</type>.
     */

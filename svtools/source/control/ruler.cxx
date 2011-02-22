@@ -303,6 +303,7 @@ void Ruler::ImplInit( WinBits nWinBits )
     else
         aDefSize.Width() = nDefHeight;
     SetOutputSizePixel( aDefSize );
+    SetType(WINDOW_RULER);
 }
 
 // -----------------------------------------------------------------------

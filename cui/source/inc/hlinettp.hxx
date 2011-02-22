@@ -46,13 +46,13 @@ private:
     RadioButton         maRbtLinktypTelnet;
     FixedText           maFtTarget;
     SvxHyperURLBox      maCbbTarget;
+    ImageButton         maBtBrowse;
     FixedText           maFtLogin;
     Edit                maEdLogin;
+    ImageButton         maBtTarget;
     FixedText           maFtPassword;
     Edit                maEdPassword;
     CheckBox            maCbAnonymous;
-    ImageButton         maBtBrowse;
-    ImageButton         maBtTarget;
 
     String              maStrOldUser;
     String              maStrOldPassword;

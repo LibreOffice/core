@@ -41,6 +41,7 @@
 #include "vcl/sysdata.hxx"
 #include "vcl/sallayout.hxx"
 #include "vcl/svapp.hxx"
+#include "vcl/region.h"
 
 #include "osl/file.hxx"
 #include "osl/process.h"
@@ -562,7 +563,7 @@ void AquaSalGraphics::ResetClipRegion()
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::BeginSetClipRegion( sal_uLong nRectCount )
+bool AquaSalGraphics::setClipRegion( const Region& i_rClip )
 {
     // release old clip path
     if( mxClipPath )
@@ -570,41 +571,33 @@ void AquaSalGraphics::BeginSetClipRegion( sal_uLong nRectCount )
         CGPathRelease( mxClipPath );
         mxClipPath = NULL;
     }
-}
+    mxClipPath = CGPathCreateMutable();
 
-// -----------------------------------------------------------------------
-
-sal_Bool AquaSalGraphics::unionClipRegion( long nX, long nY, long nWidth, long nHeight )
-{
-    if( (nWidth <= 0) || (nHeight <= 0) )
-        return sal_True;
-
-    if( !mxClipPath )
-        mxClipPath = CGPathCreateMutable();
-    const CGRect aClipRect = {{nX,nY},{nWidth,nHeight}};
-    CGPathAddRect( mxClipPath, NULL, aClipRect );
-    return sal_True;
-}
-
-// -----------------------------------------------------------------------
-
-bool AquaSalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& rPolyPolygon )
-{
-    if( rPolyPolygon.count() <= 0 )
-        return true;
-
-    if( !mxClipPath )
-        mxClipPath = CGPathCreateMutable();
-    AddPolyPolygonToPath( mxClipPath, rPolyPolygon, !getAntiAliasB2DDraw(), false );
-    return true;
-}
-
-// -----------------------------------------------------------------------
-
-void AquaSalGraphics::EndSetClipRegion()
-{
+    // set current path, either as polypolgon or sequence of rectangles
+    if( i_rClip.HasPolyPolygon() )
+    {
+        basegfx::B2DPolyPolygon aClip( const_cast<Region&>(i_rClip).ConvertToB2DPolyPolygon() );
+        AddPolyPolygonToPath( mxClipPath, aClip, !getAntiAliasB2DDraw(), false );
+    }
+    else
+    {
+        long nX, nY, nW, nH;
+        ImplRegionInfo aInfo;
+        bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
+        while( bRegionRect )
+        {
+            if( nW && nH )
+            {
+                CGRect aRect = {{nX,nY}, {nW,nH}};
+                CGPathAddRect( mxClipPath, NULL, aRect );
+            }
+            bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
+        }
+    }
+    // set the current path as clip region
     if( CheckContext() )
         SetState();
+    return true;
 }
 
 // -----------------------------------------------------------------------

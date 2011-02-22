@@ -84,6 +84,13 @@ private:
     SvxBackgroundTabPage( Window* pParent, const SfxItemSet& rCoreSet );
     ~SvxBackgroundTabPage();
 
+    FixedText               aSelectTxt;
+    ListBox                 aLbSelect;
+    const String            aStrBrowse;
+    const String            aStrUnlinked;
+     FixedText               aTblDesc;
+     ListBox                 aTblLBox;
+     ListBox                 aParaLBox;
     // Hintergrundfarbe ------------------------------------
     Control                 aBorderWin;
     ValueSet                aBackgroundColorSet;
@@ -92,34 +99,24 @@ private:
     //color transparency
     FixedText               aColTransFT;
     MetricField             aColTransMF;
+    CheckBox                aBtnPreview;
     // Hintergrund-Bitmap ----------------------------------
+     FixedLine               aGbFile;
     PushButton              aBtnBrowse;
     CheckBox                aBtnLink;
-    CheckBox                aBtnPreview;
-    FixedInfo               aFtFile;
-    FixedLine               aGbFile;
+      FixedLine               aGbPosition;
     RadioButton             aBtnPosition;
     RadioButton             aBtnArea;
     RadioButton             aBtnTile;
     SvxRectCtl              aWndPosition;
-    FixedLine               aGbPosition;
+    FixedInfo               aFtFile;
     //transparency of graphics
     FixedLine               aGraphTransFL;
     MetricField             aGraphTransMF;
 
     BackgroundPreviewImpl*  pPreviewWin2;
-    // Selektor --------------------------------------------
-    FixedText               aSelectTxt;
-    ListBox                 aLbSelect;
-    const String            aStrBrowse;
-    const String            aStrUnlinked;
 
     // DDListBox fuer Writer -------------------------------
-
-    FixedText               aTblDesc;
-    ListBox                 aTblLBox;
-    ListBox                 aParaLBox;
-
     //------------------------------------------------------
     Color       aBgdColor;
     sal_uInt16      nHtmlMode;

@@ -1,0 +1,102 @@
+/*************************************************************************
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_awt_grid_SortableGridDataModel_idl__
+#define __com_sun_star_awt_grid_SortableGridDataModel_idl__
+
+#include <com/sun/star/i18n/XCollator.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+//==================================================================================================================
+
+module com { module sun { module star { module awt { module grid {
+
+interface XSortableMutableGridDataModel;
+interface XMutableGridDataModel;
+
+//==================================================================================================================
+
+/** provides a default implementation of a <type>XSortableGridData</type>.
+
+    <p>This service must be created with a secondary grid data model, which all actual data requests are delegated to.
+    But before providing this data to the service's own clients, it is sorted, according to the sort order defined
+    via the <code>XSortableGridData</code> interface.</p>
+
+    <p>The service implementation is able to compare the default scalar types, plus strings.</p>
+
+    <p>For determining the data type of a column which the data should be sorted by, the first non-<VOID/> data encountered
+    in this column is taken into account. Further read requests to this column will assume that all non-<VOID/> data is of
+    the same type.</p>
+
+    <p>Consequently, you cannot use this service with data sets containing heterogenous data in a given column.</p>
+
+    <p>All requests made via the <type>XMutableGridDataModel</type> are delegated to the <code>XMutableGridDataModel</code>
+    instance passed in the service constructor.</p>
+
+    <p>Note that changing the data might result in the sort order being destroyed. If you want to ensure
+    that the data represented by the model is still sorted after your modifications, you should call
+    <member>XSortableGridData::sortByColumn</member>, again.</p>
+ */
+service SortableGridDataModel : XSortableMutableGridDataModel
+{
+    /** creates a new instance of the <code>SortableGridDataModel</code>
+
+        <p>For string comparison, a default <type scope="::com::sun::star::i18n">Collator</type>, based on the system's
+        locale, will be used.</p>
+
+        @param DelegatorModel
+            the data model to which read requests are delegated.
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given <code>DelegatorModel</code> is <NULL/>
+    */
+    create(
+            [in] XMutableGridDataModel DelegatorModel
+        )
+        raises ( ::com::sun::star::lang::IllegalArgumentException );
+
+    /** creates a new instance of the ScortableDefaultGridDataModel, passing a collator to be used for string comparison.
+
+        @param DelegatorModel
+            is the data model to which read requests are delegated
+        @param Collator
+            is the collator to be used for string comparison
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given <code>DelegatorModel</code> is <NULL/>
+    */
+    createWithCollator(
+            [in] XMutableGridDataModel DelegatorModel,
+            [in] ::com::sun::star::i18n::XCollator Collator
+        )
+        raises ( ::com::sun::star::lang::IllegalArgumentException );
+};
+
+//==================================================================================================================
+
+}; }; }; }; };
+
+//==================================================================================================================
+
+#endif

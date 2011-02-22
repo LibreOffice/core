@@ -993,6 +993,14 @@
 #define STR_ACC_DATAPILOT_DATA_DESCR (STR_START + 180)
 #define STR_ACC_DATAPILOT_SEL_DESCR (STR_START + 181)
 
+//IAccessibility2 Implementation 2009-----
+#define STR_ACC_TOOLBAR_FORMULA     (STR_START + 182)
+#define STR_ACC_DOC_SPREADSHEET     (STR_START + 185)
+#define STR_ACC_DOC_PREVIEW_SUFFIX (STR_START + 186)
+#define STR_ACC_DOC_SPREADSHEET_READONLY        (STR_START + 187)
+
+//-----IAccessibility2 Implementation 2009
+
 // --------------------------------------------------
 
 #define SCSTR_HUMAN_SCDOC_NAME      (STR_START + 210)

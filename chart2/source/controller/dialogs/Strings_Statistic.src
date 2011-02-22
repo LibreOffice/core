@@ -51,22 +51,22 @@ String STR_CONTROLTEXT_ERROR_BARS_FROM_DATA
 
 String STR_REGRESSION_LINEAR
 {
-    Text [ en-US ] = "Linear Regression" ;
+    Text [ en-US ] = "Linear (%SERIESNAME)" ;
 };
 String STR_REGRESSION_LOG
 {
-    Text [ en-US ] = "Logarithmic Regression" ;
+    Text [ en-US ] = "Logarithmic (%SERIESNAME)" ;
 };
 String STR_REGRESSION_EXP
 {
-    Text [ en-US ] = "Exponential Regression" ;
+    Text [ en-US ] = "Exponential (%SERIESNAME)" ;
 };
 String STR_REGRESSION_POWER
 {
-    Text [ en-US ] = "Power Regression" ;
+    Text [ en-US ] = "Power (%SERIESNAME)" ;
 };
 
-String STR_STATISTICS_IN_LEGEND
+String STR_REGRESSION_MEAN
 {
-    Text [ en-US ] = "%REGRESSIONCURVE for %SERIESNAME" ;
+    Text [ en-US ] = "Mean (%SERIESNAME)" ;
 };

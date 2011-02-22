@@ -445,7 +445,7 @@ void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelation
     Window* pWindow = GetWindow();
     if ( pWindow )
     {
-        Window *pLabeledBy = pWindow->GetLabeledBy();
+        Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
         if ( pLabeledBy && pLabeledBy != pWindow )
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
@@ -453,7 +453,7 @@ void VCLXAccessibleComponent::FillAccessibleRelationSet( utl::AccessibleRelation
             rRelationSet.AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
         }
 
-        Window* pLabelFor = pWindow->GetLabelFor();
+        Window* pLabelFor = pWindow->GetAccessibleRelationLabelFor();
         if ( pLabelFor && pLabelFor != pWindow )
         {
             uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);

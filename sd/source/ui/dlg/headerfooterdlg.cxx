@@ -544,6 +544,19 @@ HeaderFooterTabPage::HeaderFooterTabPage( HeaderFooterDialog* pDialog, ::Window*
 
     FillFormatList(SVXDATEFORMAT_A);
 
+    maTBHeader.SetAccessibleRelationMemberOf(&maCBHeader);
+    maRBDateTimeFixed.SetAccessibleRelationMemberOf(&maCBDateTime);
+    maRBDateTimeAutomatic.SetAccessibleRelationMemberOf(&maCBDateTime);
+    maTBDateTimeFixed.SetAccessibleName(maRBDateTimeFixed.GetText());
+    maTBDateTimeFixed.SetAccessibleRelationMemberOf(&maCBDateTime);
+    maTBDateTimeFixed.SetAccessibleRelationLabeledBy(&maRBDateTimeFixed);
+    maCBDateTimeFormat.SetAccessibleRelationMemberOf(&maCBDateTime);
+    maCBDateTimeFormat.SetAccessibleName(maRBDateTimeAutomatic.GetText());
+    maCBDateTimeFormat.SetAccessibleRelationLabeledBy(&maRBDateTimeAutomatic);
+    maCBDateTimeLanguage.SetAccessibleRelationMemberOf(&maCBDateTime);
+    maTBFooter.SetAccessibleRelationMemberOf(&maCBFooter);
+    maCBSlideNumber.SetAccessibleRelationMemberOf(&maFLIncludeOnPage);
+    maCBFooter.SetAccessibleRelationMemberOf(&maFLIncludeOnPage);
 }
 // -----------------------------------------------------------------------
 

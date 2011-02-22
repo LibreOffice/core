@@ -92,7 +92,7 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
         @returns
             The integer token of the value from the attribute or <const>FastToken::Invalid</const>
 
-        @raises SAXEXception
+        @throws SAXEXception
             if the attribute is not available
 
     */
@@ -137,7 +137,7 @@ interface XFastAttributeList: com::sun::star::uno::XInterface
         @returns
             The string value from the attribute.
 
-        @raises SAXEXception
+        @throws SAXEXception
             if the attribute is not available
 
     */

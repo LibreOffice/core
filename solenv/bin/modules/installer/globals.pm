@@ -87,7 +87,8 @@ BEGIN
         "oc",
         "ml",
         "as",
-        "ast"
+        "ast",
+        "ht"
     );
     @items_at_modules = ("Files", "Dirs", "Unixlinks");
     @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");
@@ -374,6 +375,10 @@ BEGIN
     %spellcheckerlanguagehash = ();
     %spellcheckerfilehash = ();
     $registryrootcomponent = "";
+    %allcomponents = ();
+    %allcomponents_in_this_database = ();
+    %allshortcomponents = ();
+    %alluniquedirectorynames = ();
 
     $installlocationdirectory = "";
     $installlocationdirectoryset = 0;

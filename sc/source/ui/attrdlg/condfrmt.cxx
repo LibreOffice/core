@@ -71,7 +71,6 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
         aFtCond1Template    ( this, ScResId( FT_COND1_TEMPLATE ) ),
         aLbCond1Template    ( this, ScResId( LB_COND1_TEMPLATE ) ),
         aBtnNew1            ( this, ScResId( BTN_COND1_NEW ) ),
-        aFlSep1             ( this, ScResId( FL_SEP1 ) ),
 
         aCbxCond2           ( this, ScResId( CBX_COND2 ) ),
         aLbCond21           ( this, ScResId( LB_COND2_1 ) ),
@@ -84,7 +83,6 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
         aFtCond2Template    ( this, ScResId( FT_COND2_TEMPLATE ) ),
         aLbCond2Template    ( this, ScResId( LB_COND2_TEMPLATE ) ),
         aBtnNew2            ( this, ScResId( BTN_COND2_NEW ) ),
-        aFlSep2             ( this, ScResId( FL_SEP2 ) ),
 
         aCbxCond3           ( this, ScResId( CBX_COND3 ) ),
         aLbCond31           ( this, ScResId( LB_COND3_1 ) ),
@@ -101,6 +99,8 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
         aBtnOk              ( this, ScResId( BTN_OK ) ),
         aBtnCancel          ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp            ( this, ScResId( BTN_HELP ) ),
+        aFlSep2             ( this, ScResId( FL_SEP2 ) ),
+        aFlSep1             ( this, ScResId( FL_SEP1 ) ),
         pEdActive           ( NULL ),
         bDlgLostFocus       ( sal_False ),
 
@@ -322,6 +322,32 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
     //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
     //SFX_APPWINDOW->Enable();      // Ref-Feld hat Focus
 //  SFX_APPWINDOW->Disable();
+
+    aLbCond11.SetAccessibleRelationLabeledBy( &aCbxCond1 );
+    aLbCond12.SetAccessibleRelationLabeledBy( &aCbxCond1 );
+    aEdtCond11.SetAccessibleRelationLabeledBy( &aCbxCond1 );
+    aRbCond11.SetAccessibleRelationLabeledBy( &aCbxCond1 );
+
+    aLbCond21.SetAccessibleRelationLabeledBy( &aCbxCond2 );
+    aLbCond22.SetAccessibleRelationLabeledBy( &aCbxCond2 );
+    aEdtCond21.SetAccessibleRelationLabeledBy( &aCbxCond2 );
+    aRbCond21.SetAccessibleRelationLabeledBy( &aCbxCond2 );
+
+    aLbCond31.SetAccessibleRelationLabeledBy( &aCbxCond3 );
+    aLbCond32.SetAccessibleRelationLabeledBy( &aCbxCond3 );
+    aEdtCond31.SetAccessibleRelationLabeledBy( &aCbxCond3 );
+    aRbCond31.SetAccessibleRelationLabeledBy( &aCbxCond3 );
+    aLbCond11.SetAccessibleName( ScResId(LABEL_FORMARTTING_CONDITIONS) );
+    aLbCond12.SetAccessibleName( ScResId(LABEL_CONDITIONS) );
+    aEdtCond11.SetAccessibleName( ScResId(LABEL_CONDITION_VALUE) );
+
+    aLbCond21.SetAccessibleName( ScResId(LABEL_FORMARTTING_CONDITIONS) );
+    aLbCond22.SetAccessibleName( ScResId(LABEL_CONDITIONS) );
+    aEdtCond21.SetAccessibleName( ScResId(LABEL_CONDITION_VALUE) );
+
+    aLbCond31.SetAccessibleName( ScResId(LABEL_FORMARTTING_CONDITIONS) );
+    aLbCond32.SetAccessibleName( ScResId(LABEL_CONDITIONS) );
+    aEdtCond31.SetAccessibleName( ScResId(LABEL_CONDITION_VALUE) );
 }
 
 

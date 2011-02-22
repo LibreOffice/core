@@ -54,8 +54,9 @@
 #include "gallery.hrc"
 #include <vcl/svapp.hxx>
 #include <svx/fmmodel.hxx>
-#include <svx/svxdlg.hxx> //CHINA001
-//CHINA001 #include <svx/dialogs.hrc> //CHINA001
+#include <svx/dialmgr.hxx>
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 // -----------
 // - Defines -
@@ -338,6 +339,9 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
     maViewBox.SetSelectHdl( LINK( this, GalleryBrowser2, SelectTbxHdl ) );
     maViewBox.Show();
 
+    mpIconView->SetAccessibleName(String( SVX_RES( RID_SVXSTR_GALLERY_THEMEITEMS ) ));
+    mpListView->SetAccessibleName(String( SVX_RES( RID_SVXSTR_GALLERY_THEMEITEMS ) ));
+
     maInfoBar.Show();
     maSeparator.Show();
 
@@ -347,6 +351,12 @@ GalleryBrowser2::GalleryBrowser2( GalleryBrowser* pParent, const ResId& rResId, 
     InitSettings();
 
     SetMode( ( GALLERYBROWSERMODE_PREVIEW != GalleryBrowser2::meInitMode ) ? GalleryBrowser2::meInitMode : GALLERYBROWSERMODE_ICON );
+
+    if(maInfoBar.GetText().Len() == 0)
+        mpIconView->SetAccessibleRelationLabeledBy(mpIconView);
+    else
+        mpIconView->SetAccessibleRelationLabeledBy(&maInfoBar);
+    mpIconView->SetAccessibleRelationMemberOf(mpIconView);
 }
 
 // -----------------------------------------------------------------------------
@@ -641,6 +651,10 @@ void GalleryBrowser2::SelectTheme( const String& rThemeName )
     mpListView = new GalleryListView( this, mpCurTheme );
     mpPreview = new GalleryPreview( this, mpCurTheme );
 
+    mpIconView->SetAccessibleName(String( SVX_RES( RID_SVXSTR_GALLERY_THEMEITEMS ) ));
+    mpListView->SetAccessibleName(String( SVX_RES( RID_SVXSTR_GALLERY_THEMEITEMS ) ));
+    mpPreview->SetAccessibleName(String( SVX_RES( RID_SVXSTR_GALLERY_PREVIEW ) ));
+
     const Link aSelectHdl( LINK( this, GalleryBrowser2, SelectObjectHdl ) );
 
     mpIconView->SetSelectHdl( aSelectHdl );
@@ -655,6 +669,12 @@ void GalleryBrowser2::SelectTheme( const String& rThemeName )
     maViewBox.EnableItem( TBX_ID_ICON, sal_True );
     maViewBox.EnableItem( TBX_ID_LIST, sal_True );
     maViewBox.CheckItem( ( GALLERYBROWSERMODE_ICON == GetMode() ) ? TBX_ID_ICON : TBX_ID_LIST, sal_True );
+
+    if(maInfoBar.GetText().Len() == 0)
+        mpIconView->SetAccessibleRelationLabeledBy(mpIconView);
+    else
+        mpIconView->SetAccessibleRelationLabeledBy(&maInfoBar);
+    mpIconView->SetAccessibleRelationMemberOf(mpIconView);
 }
 
 // -----------------------------------------------------------------------------

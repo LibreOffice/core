@@ -43,6 +43,7 @@
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
+#include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart/TimeInterval.hpp>
 #include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -61,11 +62,11 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
-#include <com/sun/star/chart2/LegendExpansion.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
@@ -109,6 +110,7 @@ using ::com::sun::star::drawing::XShape;
 
 using ::com::sun::star::chart2::IncrementData;
 using ::com::sun::star::chart2::RelativePosition;
+using ::com::sun::star::chart2::RelativeSize;
 using ::com::sun::star::chart2::ScaleData;
 using ::com::sun::star::chart2::SubIncrement;
 using ::com::sun::star::chart2::XAxis;
@@ -337,14 +339,24 @@ sal_Int32 XclImpChRoot::CalcHmmFromChartY( sal_Int32 nPosY ) const
         CalcHmmFromChartY( rRect.mnHeight ) );
 }
 
+double XclImpChRoot::CalcRelativeFromHmmX( sal_Int32 nPosX ) const
+{
+    return static_cast< double >( nPosX ) / mxChData->maChartRect.GetWidth();
+}
+
+double XclImpChRoot::CalcRelativeFromHmmY( sal_Int32 nPosY ) const
+{
+    return static_cast< double >( nPosY ) / mxChData->maChartRect.GetHeight();
+}
+
 double XclImpChRoot::CalcRelativeFromChartX( sal_Int32 nPosX ) const
 {
-    return static_cast< double >( CalcHmmFromChartX( nPosX ) ) / mxChData->maChartRect.GetWidth();
+    return CalcRelativeFromHmmX( CalcHmmFromChartX( nPosX ) );
 }
 
 double XclImpChRoot::CalcRelativeFromChartY( sal_Int32 nPosY ) const
 {
-    return static_cast< double >( CalcHmmFromChartY( nPosY ) ) / mxChData->maChartRect.GetHeight();
+    return CalcRelativeFromHmmY( CalcHmmFromChartY( nPosY ) );
 }
 
 void XclImpChRoot::ConvertLineFormat( ScfPropertySet& rPropSet,
@@ -2468,18 +2480,30 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
             manual mode, if the legend is moved or resized). With manual plot
             areas, Excel ignores the value in maData.mnDockMode completely. */
         cssc2::LegendPosition eApiPos = cssc2::LegendPosition_CUSTOM;
-        cssc2::LegendExpansion eApiExpand = cssc2::LegendExpansion_BALANCED;
+        cssc::ChartLegendExpansion eApiExpand = cssc::ChartLegendExpansion_CUSTOM;
         if( !GetChartData().IsManualPlotArea() ) switch( maData.mnDockMode )
         {
-            case EXC_CHLEGEND_LEFT:     eApiPos = cssc2::LegendPosition_LINE_START; eApiExpand = cssc2::LegendExpansion_HIGH;   break;
-            case EXC_CHLEGEND_RIGHT:    eApiPos = cssc2::LegendPosition_LINE_END;   eApiExpand = cssc2::LegendExpansion_HIGH;   break;
-            case EXC_CHLEGEND_TOP:      eApiPos = cssc2::LegendPosition_PAGE_START; eApiExpand = cssc2::LegendExpansion_WIDE;   break;
-            case EXC_CHLEGEND_BOTTOM:   eApiPos = cssc2::LegendPosition_PAGE_END;   eApiExpand = cssc2::LegendExpansion_WIDE;   break;
+            case EXC_CHLEGEND_LEFT:
+                eApiPos = cssc2::LegendPosition_LINE_START;
+                eApiExpand = cssc::ChartLegendExpansion_HIGH;
+            break;
+            case EXC_CHLEGEND_RIGHT:
             // top-right not supported
-            case EXC_CHLEGEND_CORNER:   eApiPos = cssc2::LegendPosition_LINE_END;   eApiExpand = cssc2::LegendExpansion_HIGH;   break;
+            case EXC_CHLEGEND_CORNER:
+                eApiPos = cssc2::LegendPosition_LINE_END;
+                eApiExpand = cssc::ChartLegendExpansion_HIGH;
+            break;
+            case EXC_CHLEGEND_TOP:
+                eApiPos = cssc2::LegendPosition_PAGE_START;
+                eApiExpand = cssc::ChartLegendExpansion_WIDE;
+            break;
+            case EXC_CHLEGEND_BOTTOM:
+                eApiPos = cssc2::LegendPosition_PAGE_END;
+                eApiExpand = cssc::ChartLegendExpansion_WIDE;
+            break;
         }
 
-        // no automatic position: try to find the correct position and size
+        // no automatic position/size: try to find the correct position and size
         if( eApiPos == cssc2::LegendPosition_CUSTOM )
         {
             const XclChFramePos* pFramePos = mxFramePos.is() ? &mxFramePos->GetFramePosData() : 0;
@@ -2489,38 +2513,35 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
                 ignored. */
             if( pFramePos )
             {
-                RelativePosition aRelPos;
-                aRelPos.Primary = CalcRelativeFromChartX( pFramePos->maRect.mnX );
-                aRelPos.Secondary = CalcRelativeFromChartY( pFramePos->maRect.mnY );
-                aRelPos.Anchor = ::com::sun::star::drawing::Alignment_TOP_LEFT;
+                RelativePosition aRelPos(
+                    CalcRelativeFromChartX( pFramePos->maRect.mnX ),
+                    CalcRelativeFromChartY( pFramePos->maRect.mnY ),
+                    ::com::sun::star::drawing::Alignment_TOP_LEFT );
                 aLegendProp.SetProperty( EXC_CHPROP_RELATIVEPOSITION, aRelPos );
             }
             else
             {
-                // no manual position found, just go for the default
+                // no manual position/size found, just go for the default
                 eApiPos = cssc2::LegendPosition_LINE_END;
             }
 
-
-            /*  Legend size. #i71697# It is not possible to set the legend size
-                directly in the Chart, do some magic here. */
-            if( !pFramePos || (pFramePos->mnBRMode != EXC_CHFRAMEPOS_ABSSIZE_POINTS) ||
-                (pFramePos->maRect.mnWidth == 0) || (pFramePos->maRect.mnHeight == 0) )
+            /*  Legend size. The member mnBRMode specifies whether size is
+                automatic or changes manually. Manual size is given in points,
+                not in chart units. */
+            if( pFramePos && (pFramePos->mnBRMode == EXC_CHFRAMEPOS_ABSSIZE_POINTS) &&
+                (pFramePos->maRect.mnWidth > 0) && (pFramePos->maRect.mnHeight > 0) )
             {
-                // automatic size: determine entry direction from flags
-                eApiExpand = ::get_flagvalue( maData.mnFlags, EXC_CHLEGEND_STACKED,
-                    cssc2::LegendExpansion_HIGH, cssc2::LegendExpansion_WIDE );
+                eApiExpand = cssc::ChartLegendExpansion_CUSTOM;
+                sal_Int32 nWidthHmm = static_cast< sal_Int32 >( pFramePos->maRect.mnWidth / EXC_POINTS_PER_HMM );
+                sal_Int32 nHeightHmm = static_cast< sal_Int32 >( pFramePos->maRect.mnHeight / EXC_POINTS_PER_HMM );
+                RelativeSize aRelSize( CalcRelativeFromHmmX( nWidthHmm ), CalcRelativeFromHmmY( nHeightHmm ) );
+                aLegendProp.SetProperty( EXC_CHPROP_RELATIVESIZE, aRelSize );
             }
             else
             {
-                // legend size is given in points, not in chart units
-                double fRatio = static_cast< double >( pFramePos->maRect.mnWidth ) / pFramePos->maRect.mnHeight;
-                if( fRatio > 1.5 )
-                    eApiExpand = cssc2::LegendExpansion_WIDE;
-                else if( fRatio < 0.75 )
-                    eApiExpand = cssc2::LegendExpansion_HIGH;
-                else
-                    eApiExpand = cssc2::LegendExpansion_BALANCED;
+                // automatic size: determine entry direction from flags
+                eApiExpand = ::get_flagvalue( maData.mnFlags, EXC_CHLEGEND_STACKED,
+                    cssc::ChartLegendExpansion_HIGH, cssc::ChartLegendExpansion_WIDE );
             }
         }
         aLegendProp.SetProperty( EXC_CHPROP_ANCHORPOSITION, eApiPos );

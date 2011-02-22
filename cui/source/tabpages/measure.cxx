@@ -130,6 +130,7 @@ SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
 
         bPositionModified       ( sal_False )
 {
+    aCtlPreview.SetAccessibleName(aCtlPreview.GetHelpText());
     FillUnitLB();
 
     FreeResource();
@@ -168,6 +169,9 @@ SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
     aTsbParallel.SetClickHdl( aLink );
     aTsbShowUnit.SetClickHdl( aLink );
     aLbUnit.SetSelectHdl( aLink );
+    aLbUnit.SetAccessibleName(GetNonMnemonicString(aTsbShowUnit.GetText()));
+    aCtlPosition.SetAccessibleRelationMemberOf( &aFlLabel );
+    aLbUnit.SetAccessibleRelationLabeledBy( &aTsbShowUnit );
 }
 
 /*************************************************************************

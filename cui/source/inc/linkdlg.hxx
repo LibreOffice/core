@@ -57,21 +57,22 @@ class SvBaseLinksDlg : public ModalDialog
     FixedText aFtLinks;
     FixedText aFtType;
     FixedText aFtStatus;
+    SvTabListBox aTbLinks;
+    FixedText aFtFiles2;
+    FixedText aFtFullFileName;
+    FixedText aFtSource2;
+    FixedText aFtFullSourceName;
+    FixedText aFtType2;
+    FixedText aFtFullTypeName;
+    FixedText aFtUpdate;
+    RadioButton aRbAutomatic;
+    RadioButton aRbManual;
     CancelButton aCancelButton1;
     HelpButton aHelpButton1;
     PushButton aPbUpdateNow;
     PushButton aPbOpenSource;
     PushButton aPbChangeSource;
     PushButton aPbBreakLink;
-    FixedText aFtFiles2;
-    FixedText aFtSource2;
-    FixedText aFtType2;
-    FixedText aFtUpdate;
-    RadioButton aRbAutomatic;
-    RadioButton aRbManual;
-    FixedText aFtFullFileName;
-    FixedText aFtFullSourceName;
-    FixedText aFtFullTypeName;
     String aStrAutolink;
     String aStrManuallink;
     String aStrBrokenlink;
@@ -82,7 +83,6 @@ class SvBaseLinksDlg : public ModalDialog
     String aStrWaitinglink;
     sfx2::LinkManager*  pLinkMgr;
     sal_Bool            bHtmlMode;
-    SvTabListBox aTbLinks;
     Timer aUpdateTimer;
 
 #if _SOLAR__PRIVATE

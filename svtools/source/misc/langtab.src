@@ -301,7 +301,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Shuswap" ; LANGUAGE_USER_SHUSWAP ; > ;
         < "Oromo" ; LANGUAGE_OROMO ; > ;
         < "Greek, Ancient" ; LANGUAGE_USER_ANCIENT_GREEK ; > ;
-        < "Yiddish" ; LANGUAGE_YIDDISH ; > ;
+        < "Yiddish (Israel)" ; LANGUAGE_YIDDISH ; > ;
         < "Quechua (Ecuador)" ; LANGUAGE_QUECHUA_ECUADOR ; > ;
         < "Uyghur" ; LANGUAGE_UIGHUR_CHINA ; > ;
         < "Asturian" ; LANGUAGE_USER_ASTURIAN ; > ;
@@ -323,6 +323,12 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Yoruba" ; LANGUAGE_YORUBA ; > ;
         < "Rusyn (Ukraine)" ; LANGUAGE_USER_RUSYN_UKRAINE ; > ;
         < "Rusyn (Slovakia)" ; LANGUAGE_USER_RUSYN_SLOVAKIA ; > ;
+        < "Yiddish (USA)" ; LANGUAGE_USER_YIDDISH_US ; > ;
+        < "Hawaiian" ; LANGUAGE_HAWAIIAN_UNITED_STATES ; > ;
+        < "Limbu" ; LANGUAGE_USER_LIMBU ; > ;
+        < "Lojban" ; LANGUAGE_USER_LOJBAN ; > ;
+        < "Kabyle" ; LANGUAGE_USER_KABYLE ; > ;
+        < "Haitian" ; LANGUAGE_USER_HAITIAN ; > ;
     };
 };
 

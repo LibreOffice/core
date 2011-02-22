@@ -222,6 +222,10 @@ AxisPositionsTabPage::AxisPositionsTabPage(Window* pWindow,const SfxItemSet& rIn
     m_aLB_PlaceLabels.SetSelectHdl( LINK( this, AxisPositionsTabPage, PlaceLabelsSelectHdl ) );
     m_aLB_PlaceLabels.SetDropDownLineCount( m_aLB_PlaceLabels.GetEntryCount() );
     m_aLB_PlaceTicks.SetDropDownLineCount( m_aLB_PlaceTicks.GetEntryCount() );
+    m_aCB_TicksInner.SetAccessibleRelationLabeledBy(&m_aFT_Major);
+    m_aCB_TicksOuter.SetAccessibleRelationLabeledBy(&m_aFT_Major);
+    m_aCB_MinorInner.SetAccessibleRelationLabeledBy(&m_aFT_Minor);
+    m_aCB_MinorOuter.SetAccessibleRelationLabeledBy(&m_aFT_Minor);
 }
 
 SfxTabPage* AxisPositionsTabPage::Create(Window* pWindow,const SfxItemSet& rOutAttrs)

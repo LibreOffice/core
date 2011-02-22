@@ -50,6 +50,7 @@
 #include <basic/sbuno.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
+#include <basic/vbahelper.hxx>
 
 #include "vbacommandbars.hxx"
 
@@ -200,10 +201,8 @@ void SAL_CALL
 VbaApplicationBase::setScreenUpdating(sal_Bool bUpdate) throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
-    if (bUpdate)
-        xModel->unlockControllers();
-    else
-        xModel->lockControllers();
+    // #163808# use helper from module "basic" to lock all documents of this application
+    ::basic::vba::lockControllersOfAllDocuments( xModel, !bUpdate );
 }
 
 sal_Bool SAL_CALL
@@ -262,10 +261,8 @@ void SAL_CALL VbaApplicationBase::setInteractive( ::sal_Bool bInteractive )
     throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
-    uno::Reference< frame::XFrame > xFrame( xModel->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
-    uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
-
-    xWindow->setEnable( bInteractive );
+    // #163808# use helper from module "basic" to enable/disable all container windows of all documents of this application
+    ::basic::vba::enableContainerWindowsOfAllDocuments( xModel, bInteractive );
 }
 
 sal_Bool SAL_CALL VbaApplicationBase::getVisible() throw (uno::RuntimeException)

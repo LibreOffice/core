@@ -126,6 +126,11 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
 
 };
 
+String STR_XML_FILTER_LISTBOX
+{
+    Text [ en-US ]  = "XML Filter List";
+};
+
 
 
 

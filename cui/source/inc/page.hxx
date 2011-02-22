@@ -125,6 +125,7 @@ class SvxPageDescPage : public SfxTabPage
     FixedText           aBottomMarginLbl;
     MetricField         aBottomMarginEdit;
 
+    FixedLine           aBottomSeparatorFl;
     // layout settings
     FixedLine           aLayoutFL;
     FixedText           aPageText;
@@ -132,7 +133,6 @@ class SvxPageDescPage : public SfxTabPage
     FixedText           aNumberFormatText;
     ListBox             aNumberFormatBox;
 
-    FixedLine           aBottomSeparatorFl;
 
     //Extras Calc
     FixedText           aTblAlignFT;

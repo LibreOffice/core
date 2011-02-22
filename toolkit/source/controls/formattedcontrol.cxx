@@ -125,8 +125,9 @@ namespace toolkit
     // = UnoControlFormattedFieldModel
     // ===================================================================
     // -------------------------------------------------------------------
-    UnoControlFormattedFieldModel::UnoControlFormattedFieldModel()
-        :m_bRevokedAsClient( false )
+    UnoControlFormattedFieldModel::UnoControlFormattedFieldModel( const Reference< XMultiServiceFactory >& i_factory )
+        :UnoControlModel( i_factory )
+        ,m_bRevokedAsClient( false )
         ,m_bSettingValueAndText( false )
     {
         ImplRegisterProperty( BASEPROPERTY_ALIGN );
@@ -433,7 +434,8 @@ namespace toolkit
     // = UnoFormattedFieldControl
     // ===================================================================
     // -------------------------------------------------------------------
-    UnoFormattedFieldControl::UnoFormattedFieldControl()
+    UnoFormattedFieldControl::UnoFormattedFieldControl( const Reference< XMultiServiceFactory >& i_factory )
+        :UnoSpinFieldControl( i_factory )
     {
     }
 

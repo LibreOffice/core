@@ -159,3 +159,8 @@ Window FLT_NAVIGATOR
            NAVIGATR_IDLIST
     };
 };
+
+String STR_OBJECTS_TREE
+{
+    Text [ en-US ] = "Page Tree";
+};

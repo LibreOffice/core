@@ -99,6 +99,10 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     FreeResource();
     SetExchangeSupport();
 
+    aRemovePB.SetAccessibleRelationMemberOf(&aConditionFL);
+    aAssignPB.SetAccessibleRelationMemberOf(&aConditionFL);
+    aTbLinks.SetAccessibleRelationLabeledBy(&aConditionCB);
+
     // Handler installieren
     aConditionCB.SetClickHdl(   LINK(this, SwCondCollPage, OnOffHdl));
     aTbLinks.SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));

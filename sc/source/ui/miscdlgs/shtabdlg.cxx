@@ -45,11 +45,11 @@
 
 ScShowTabDlg::ScShowTabDlg( Window* pParent ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_SHOW_TAB ) ),
+    aFtLbTitle      ( this, ScResId( FT_LABEL ) ),
     aLb             ( this, ScResId( LB_ENTRYLIST ) ),
     aBtnOk          ( this, ScResId( BTN_OK ) ),
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-    aFtLbTitle      ( this, ScResId( FT_LABEL ) )
+    aBtnHelp        ( this, ScResId( BTN_HELP ) )
 {
     aLb.Clear();
     aLb.SetDoubleClickHdl( LINK( this, ScShowTabDlg, DblClkHdl ) );

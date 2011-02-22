@@ -41,37 +41,27 @@ module com {  module sun {  module star {  module awt { module grid {
  */
 interface XGridSelection
 {
-    /** Returns the lowest index of the selection.
-        @returns
-            the lowest index.
-    */
-    long getMinSelectionIndex();
-
-    /** Returns the highest index of the selection.
-        @returns
-            the highest index.
-    */
-    long getMaxSelectionIndex();
-
     /** Selects all rows.
     */
-    [oneway] void selectAllRows();
+    void selectAllRows();
 
-    /** Selects multiple rows. Previous selections will be removed.
-        @param rangeOfRows
-                array of rows indexes, which will be selected.
+    /** selects a given row
+
+        @param RowIndex
+            denotes the index of the row to select
     */
-    [oneway] void selectRows( [in] sequence< long > rangeOfRows);
+    void selectRow( [in] long RowIndex );
 
     /** Deselects all selected rows.
     */
-    [oneway] void deselectAllRows();
+    void deselectAllRows();
 
-    /** Deselects selected rows. Selected rows, which aren't in the range remain selected.
-        @param rangeOfRows
-                array of rows indexes, which will be deselected.
+    /** removes the selection for a given row
+
+        @param RowIndex
+            denotes the index of the row to deselect
     */
-    [oneway] void deselectRows( [in] sequence< long > rangeOfRows);
+    void deselectRow( [in] long RowIndex );
 
     /** Returns the indicies of all selected rows.
         @returns
@@ -93,21 +83,11 @@ interface XGridSelection
     */
     boolean isSelectedIndex( [in] long index);
 
-    /** Marks a row as selected.
-        @param index
-            the index of a row.
-    */
-    [oneway] void selectRow( [in] long index);
-
-    /*
-    [oneway] void selectColumn( [in] long x);
-    */
-
     /** Adds a listener for the <type>GridSelectionEvent</type> posted after the grid changes.
         @param listener
             the listener to add.
     */
-    [oneway] void addSelectionListener( [in] XGridSelectionListener  listener);
+    void addSelectionListener( [in] XGridSelectionListener  listener);
 
     //-------------------------------------------------------------------------
 
@@ -115,7 +95,7 @@ interface XGridSelection
         @param listener
             the listener to remove.
     */
-    [oneway] void removeSelectionListener( [in] XGridSelectionListener listener);
+    void removeSelectionListener( [in] XGridSelectionListener listener);
 
 
 };

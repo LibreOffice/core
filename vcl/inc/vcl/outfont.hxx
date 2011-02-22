@@ -116,7 +116,7 @@ public: // TODO: hide members behind accessor methods
 // TODO: make cloning cheaper
 
 // abstract base class for physical font faces
-class VCL_DLLPUBLIC ImplFontData : public ImplDevFontAttributes
+class VCL_PLUGIN_PUBLIC ImplFontData : public ImplDevFontAttributes
 {
 public:
     // by using an ImplFontData object as a factory for its corresponding
@@ -185,7 +185,7 @@ public: // TODO: change to private
 // TODO: merge with ImplFontCache
 // TODO: rename to LogicalFontManager
 
-class VCL_DLLPUBLIC ImplDevFontList
+class VCL_PLUGIN_PUBLIC ImplDevFontList
 {
 private:
     friend class WinGlyphFallbackSubstititution;
@@ -324,7 +324,7 @@ public: // TODO: hide members behind accessor methods
 // TODO: rename ImplFontEntry to LogicalFontInstance
 // TODO: allow sharing of metrics for related fonts
 
-class VCL_DLLPUBLIC ImplFontEntry
+class VCL_PLUGIN_PUBLIC ImplFontEntry
 {
 public:
     explicit            ImplFontEntry( const ImplFontSelectData& );

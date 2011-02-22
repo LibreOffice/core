@@ -7414,7 +7414,6 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
     // setup glyphs
     Point aPos;
     sal_GlyphId aGlyphId;
-    int nFallbacklevel = 0;
     for( int nStart = 0; rLayout->GetNextGlyphs( 1, &aGlyphId, aPos, nStart ); )
     {
         // NOTE: Windows backend is producing unicode chars (ucs4), so on windows,
@@ -7424,15 +7423,12 @@ SystemTextLayoutData OutputDevice::GetSysTextLayoutData(const Point& rStartPt, c
         aGlyph.index = static_cast<unsigned long> (aGlyphId & GF_IDXMASK);
         aGlyph.x = aPos.X();
         aGlyph.y = aPos.Y();
-        aSysLayoutData.rGlyphData.push_back(aGlyph);
-
         int nLevel = (aGlyphId & GF_FONTMASK) >> GF_FONTSHIFT;
-        if (nLevel > nFallbacklevel && nLevel < MAX_FALLBACK)
-            nFallbacklevel = nLevel;
+        aGlyph.fallbacklevel = nLevel < MAX_FALLBACK ? nLevel : 0;
+        aSysLayoutData.rGlyphData.push_back(aGlyph);
     }
 
     // Get font data
-    aSysLayoutData.aSysFontData = GetSysFontData(nFallbacklevel);
     aSysLayoutData.orientation = rLayout->GetOrientation();
 
     rLayout->Release();

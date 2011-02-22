@@ -752,17 +752,18 @@ void BrowserScrollBar::Tracking( const TrackingEvent& rTEvt )
     sal_uLong nPos = GetThumbPos();
     if ( nPos != _nLastPos )
     {
-        if ( _nTip )
-            Help::HideTip( _nTip );
-
         String aTip( String::CreateFromInt32(nPos) );
         aTip += '/';
         if ( _pDataWin->GetRealRowCount().Len() )
             aTip += _pDataWin->GetRealRowCount();
         else
             aTip += String::CreateFromInt32(GetRangeMax());
+
         Rectangle aRect( GetPointerPosPixel(), Size( GetTextHeight(), GetTextWidth( aTip ) ) );
-        _nTip = Help::ShowTip( this, aRect, aTip );
+        if ( _nTip )
+            Help::UpdateTip( _nTip, this, aRect, aTip );
+        else
+            _nTip = Help::ShowTip( this, aRect, aTip );
         _nLastPos = nPos;
     }
 

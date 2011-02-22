@@ -114,6 +114,9 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
     xRowNameRanges = pDoc->GetRowNameRanges()->Clone();
     Init();
     FreeResource();
+
+    aRbAssign.SetAccessibleRelationMemberOf(&aEdAssign);
+    aRbAssign2.SetAccessibleRelationMemberOf(&aEdAssign);
 }
 
 

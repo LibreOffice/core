@@ -74,9 +74,11 @@ public:
 
 class SwGlossaryGroupDlg : public SvxStandardDialog
 {
-
+    FixedText           aBibFT;
     FEdit               aNameED;
+    FixedText           aPathFT;
     ListBox             aPathLB;
+    FixedText           aSelectFT;
     SwGlossaryGroupTLB  aGroupTLB;
 
     OKButton        aOkPB;
@@ -85,9 +87,6 @@ class SwGlossaryGroupDlg : public SvxStandardDialog
     PushButton      aNewPB;
     PushButton      aDelPB;
     PushButton      aRenamePB;
-    FixedText       aBibFT;
-    FixedText       aPathFT;
-    FixedText       aSelectFT;
 
     SvStrings*      pRemovedArr;
     SvStrings*      pInsertedArr;

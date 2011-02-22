@@ -1053,9 +1053,20 @@ public:
     void    SetAccessibleDescription( const String& rDescr );
     String  GetAccessibleDescription() const;
 
+    void    SetAccessibleRelationLabeledBy( Window* pLabeledBy );
+    Window* GetAccessibleRelationLabeledBy() const;
+
+    void    SetAccessibleRelationLabelFor( Window* pLabelFor );
+    Window* GetAccessibleRelationLabelFor() const;
+
+    void    SetAccessibleRelationMemberOf( Window* pMemberOf );
+    Window* GetAccessibleRelationMemberOf() const;
+
+
     // to avoid sending accessibility events in cases like closing dialogs
     // by default checks complete parent path
     sal_Bool    IsAccessibilityEventsSuppressed( sal_Bool bTraverseParentPath = sal_True );
+    void    SetAccessibilityEventsSuppressed(sal_Bool bSuppressed);
 
     /// request XCanvas render interface for this window
     ::com::sun::star::uno::Reference<
@@ -1080,8 +1091,7 @@ public:
     sal_Bool                    IsCreatedWithToolkit() const;
     void                    SetCreatedWithToolkit( sal_Bool b );
 
-    Window*             GetLabelFor() const;
-    Window*             GetLabeledBy() const;
+            // Deprecated - can use SetAccessibleRelationLabelFor/By nowadys
     virtual Window* GetParentLabelFor( const Window* pLabel ) const;
     virtual Window* GetParentLabeledBy( const Window* pLabeled ) const;
     KeyEvent            GetActivationKey() const;

@@ -500,6 +500,9 @@
 #define STR_NAVIGATOR_SHOW_NAMED_SHAPES                 (RID_APP_START+718)
 #define STR_NAVIGATOR_SHOW_ALL_SHAPES                   (RID_APP_START+719)
 #define STR_NAVIGATOR_SHAPE_BASE_NAME                   (RID_APP_START+720)
+//IAccessibility2 Implementation 2009-----
+#define STR_ACC_DIALOG_DESC             (RID_APP_START + 730)
+//-----IAccessibility2 Implementation 2009
 
 #define STR_RESET_LAYOUT                                (RID_APP_START+721)
 #define STR_INSERT_TABLE                                (RID_APP_START+722)

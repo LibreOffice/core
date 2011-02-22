@@ -69,14 +69,19 @@ private:
     SAL_DLLPRIVATE inline void      ImplPolyPolyRegionToBandRegion();
     SAL_DLLPRIVATE const ImplRegion*    ImplGetImplRegion() const { return mpImplRegion; }
     SAL_DLLPRIVATE ImplRegion*      ImplGetImplRegion() { return mpImplRegion; }
-    SAL_DLLPRIVATE sal_Bool             ImplGetFirstRect( ImplRegionInfo& rImplRegionInfo,
-                                          long& nX, long& nY, long& nWidth, long& nHeight ) const;
-    SAL_DLLPRIVATE sal_Bool             ImplGetNextRect( ImplRegionInfo& rImplRegionInfo,
-                                         long& nX, long& nY, long& nWidth, long& nHeight ) const;
     SAL_DLLPRIVATE void             ImplBeginAddRect( );
     SAL_DLLPRIVATE sal_Bool             ImplAddRect( const Rectangle& rRect );
     SAL_DLLPRIVATE void             ImplEndAddRect( );
+    SAL_DLLPRIVATE void             ImplIntersectWithPolyPolygon( const Region& );
+    SAL_DLLPRIVATE void             ImplExcludePolyPolygon( const Region& );
+    SAL_DLLPRIVATE void             ImplUnionPolyPolygon( const Region& );
+    SAL_DLLPRIVATE void             ImplXOrPolyPolygon( const Region& );
 
+public: // public within vcl
+    VCL_PLUGIN_PUBLIC bool              ImplGetFirstRect( ImplRegionInfo& rImplRegionInfo,
+                                          long& nX, long& nY, long& nWidth, long& nHeight ) const;
+    VCL_PLUGIN_PUBLIC bool              ImplGetNextRect( ImplRegionInfo& rImplRegionInfo,
+                                         long& nX, long& nY, long& nWidth, long& nHeight ) const;
 #ifdef DBG_UTIL
     friend const char*  ImplDbgTestRegion( const void* pObj );
 #endif

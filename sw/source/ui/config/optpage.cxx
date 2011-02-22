@@ -345,11 +345,11 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
     aProspectCB      (this, SW_RES(CB_PROSPECT)),
     aProspectCB_RTL      (this, SW_RES(CB_PROSPECT_RTL)),
     aSeparatorRFL    (this, SW_RES(FL_SEP_PRT_RIGHT)),
+    aFL3          (this, SW_RES(FL_3)),
     aNoRB            (this, SW_RES(RB_NO)),
     aOnlyRB          (this, SW_RES(RB_ONLY)),
     aEndRB           (this, SW_RES(RB_END)),
     aEndPageRB       (this, SW_RES(RB_PAGEEND)),
-    aFL3          (this, SW_RES(FL_3)),
     aFL4          (this, SW_RES(FL_4)),
     aPrintEmptyPagesCB(this, SW_RES(CB_PRINTEMPTYPAGES)),
 //    aSingleJobsCB    (this, SW_RES(CB_SINGLEJOBS)),
@@ -1964,6 +1964,13 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
     aLk = LINK(this, SwRedlineOptionsTabPage, ChangedMaskPrevHdl);
     aMarkPosLB.SetSelectHdl( aLk );
     aMarkColorLB.SetSelectHdl( aLk );
+//IAccessibility2 Impplementaton 2009-----
+    //solution: set different accessible name of four color box
+    aInsertColorLB.SetAccessibleName(::rtl::OUString( aInsertFT.GetDisplayText()) + ::rtl::OUString(aInsertColorFT.GetDisplayText()));
+    aDeletedColorLB.SetAccessibleName(::rtl::OUString( aDeletedFT.GetDisplayText()) + ::rtl::OUString( aDeletedColorFT.GetDisplayText()));
+    aChangedColorLB.SetAccessibleName(::rtl::OUString( aChangedFT.GetDisplayText()) + ::rtl::OUString( aChangedColorFT.GetDisplayText()));
+    aMarkColorLB.SetAccessibleName(::rtl::OUString( aMarkPosFT.GetDisplayText()) + ::rtl::OUString( aMarkColorFT.GetDisplayText()));
+//-----IAccessibility2 Impplementaton 2009
 }
 
 SwRedlineOptionsTabPage::~SwRedlineOptionsTabPage()

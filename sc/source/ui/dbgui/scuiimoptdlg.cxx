@@ -132,11 +132,12 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         aEdFieldSep ( this, ScResId( ED_FIELDSEP ) ),
         aFtTextSep  ( this, ScResId( FT_TEXTSEP ) ),
         aEdTextSep  ( this, ScResId( ED_TEXTSEP ) ),
+        aCbQuoteAll ( this, ScResId( CB_QUOTEALL ) ),
+        aCbShown    ( this, ScResId( CB_SAVESHOWN ) ),
         aCbFixed    ( this, ScResId( CB_FIXEDWIDTH ) ),
         aBtnOk      ( this, ScResId( BTN_OK ) ),
         aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp    ( this, ScResId( BTN_HELP ) ),
-        aCbShown    ( this, ScResId( CB_SAVESHOWN ) )
+        aBtnHelp    ( this, ScResId( BTN_HELP ) )
 {
     // im Ctor-Initializer nicht moeglich (MSC kann das nicht):
     pFieldSepTab = new ScDelimiterTable( String(ScResId(SCSTR_FIELDSEP)) );
@@ -214,6 +215,8 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         aCbFixed.Check( sal_False );
         aCbShown.Show();
         aCbShown.Check( sal_True );
+        aCbQuoteAll.Show();
+        aCbQuoteAll.Check( sal_False );
     }
     else
     {
@@ -225,6 +228,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         aEdTextSep.Hide();
         aCbFixed.Hide();
         aCbShown.Hide();
+        aCbQuoteAll.Hide();
         aLbFont.GrabFocus();
         aLbFont.SetDoubleClickHdl( LINK( this, ScImportOptionsDlg, DoubleClickHdl ) );
     }
@@ -259,6 +263,7 @@ void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
         rOptions.nTextSepCode  = GetCodeFromCombo( aEdTextSep );
         rOptions.bFixedWidth = aCbFixed.IsChecked();
         rOptions.bSaveAsShown = aCbShown.IsChecked();
+        rOptions.bQuoteAllText = aCbQuoteAll.IsChecked();
     }
 }
 
@@ -302,6 +307,7 @@ IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, CheckBox*, pCheckBox )
         aFtTextSep.Enable( bEnable );
         aEdTextSep.Enable( bEnable );
         aCbShown.Enable( bEnable );
+        aCbQuoteAll.Enable( bEnable );
     }
     return 0;
 }

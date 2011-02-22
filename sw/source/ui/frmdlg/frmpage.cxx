@@ -500,17 +500,32 @@ void lcl_InsertVectors(ListBox& rBox,
 /* -----------------------------20.08.2002 16:12------------------------------
 
  ---------------------------------------------------------------------------*/
-SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString::StringId eStringId, sal_Bool bVertical, sal_Bool bRTL)
+// --> OD 2009-08-31 #mongolianlayout#
+// add input parameter
+SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString::StringId eStringId, sal_Bool bVertical, sal_Bool bVerticalL2R, sal_Bool bRTL)
 {
     //special handling of STR_FROMLEFT
-    if(SwFPos::FROMLEFT == eStringId)
+    if ( SwFPos::FROMLEFT == eStringId )
     {
-        eStringId = bVertical ?
-            bRTL ? SwFPos::FROMBOTTOM : SwFPos::FROMTOP :
-            bRTL ? SwFPos::FROMRIGHT : SwFPos::FROMLEFT;
+        eStringId = bVertical
+                    ? ( bRTL
+                        ? SwFPos::FROMBOTTOM
+                        : SwFPos::FROMTOP )
+                    : ( bRTL
+                        ? SwFPos::FROMRIGHT
+                        : SwFPos::FROMLEFT );
         return eStringId;
     }
-    if(bVertical)
+    // --> OD 2009-08-31 #mongolianlayout#
+    // special handling of STR_FROMTOP in case of mongolianlayout (vertical left-to-right)
+    if ( SwFPos::FROMTOP == eStringId &&
+         bVertical && bVerticalL2R )
+    {
+        eStringId = SwFPos::FROMLEFT;
+        return eStringId;
+    }
+    // <--
+    if ( bVertical )
     {
         //exchange horizontal strings with vertical strings and vice versa
         static const StringIdPair_Impl aHoriIds[] =
@@ -535,6 +550,19 @@ SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString
             {SwFPos::REL_FRM_TOP,    SwFPos::REL_FRM_LEFT },
             {SwFPos::REL_FRM_BOTTOM, SwFPos::REL_FRM_RIGHT }
         };
+        // --> OD 2009-08-31 #monglianlayout#
+        static const StringIdPair_Impl aVertL2RIds[] =
+        {
+            {SwFPos::TOP,            SwFPos::LEFT },
+            {SwFPos::BOTTOM,         SwFPos::RIGHT },
+            {SwFPos::CENTER_VERT,    SwFPos::CENTER_HORI },
+            {SwFPos::FROMTOP,        SwFPos::FROMLEFT },
+            {SwFPos::REL_PG_TOP,     SwFPos::REL_PG_LEFT },
+            {SwFPos::REL_PG_BOTTOM,  SwFPos::REL_PG_RIGHT } ,
+            {SwFPos::REL_FRM_TOP,    SwFPos::REL_FRM_LEFT },
+            {SwFPos::REL_FRM_BOTTOM, SwFPos::REL_FRM_RIGHT }
+        };
+        // <--
         sal_uInt16 nIndex;
         for(nIndex = 0; nIndex < sizeof(aHoriIds) / sizeof(StringIdPair_Impl); ++nIndex)
         {
@@ -547,11 +575,24 @@ SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString
         nIndex = 0;
         for(nIndex = 0; nIndex < sizeof(aVertIds) / sizeof(StringIdPair_Impl); ++nIndex)
         {
-            if(aVertIds[nIndex].eHori == eStringId)
+            // --> OD 2009-08-31 #mongolianlayout#
+            if ( !bVerticalL2R )
             {
-                eStringId = aVertIds[nIndex].eVert;
-                break;
+                if(aVertIds[nIndex].eHori == eStringId)
+                {
+                    eStringId = aVertIds[nIndex].eVert;
+                    break;
+                }
             }
+            else
+            {
+                if(aVertL2RIds[nIndex].eHori == eStringId)
+                {
+                    eStringId = aVertL2RIds[nIndex].eVert;
+                    break;
+                }
+            }
+            // <--
         }
     }
     return eStringId;
@@ -613,6 +654,7 @@ namespace
 SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     SfxTabPage      (pParent, SW_RES(TP_FRM_STD), rSet),
 
+    aSizeFL         (this, SW_RES(FL_SIZE)),
     aWidthFT        (this, SW_RES(FT_WIDTH)),
     aWidthAutoFT    (this, SW_RES(FT_WIDTH_AUTO)),
     aWidthED        (this, SW_RES(ED_WIDTH)),
@@ -625,16 +667,16 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     aAutoHeightCB   (this, SW_RES(CB_AUTOHEIGHT)),
     aFixedRatioCB   (this, SW_RES(CB_FIXEDRATIO)),
     aRealSizeBT     (this, SW_RES(BT_REALSIZE)),
-    aSizeFL         (this, SW_RES(FL_SIZE)),
 
-    aTypeFL        (this, SW_RES(FL_TYPE)),
     aTypeSepFL     (this, SW_RES(FL_TYPE_SEP)),
+    aTypeFL        (this, SW_RES(FL_TYPE)),
     aAnchorAtPageRB (this, SW_RES(RB_ANCHOR_PAGE)),
     aAnchorAtParaRB (this, SW_RES(RB_ANCHOR_PARA)),
     aAnchorAtCharRB (this, SW_RES(RB_ANCHOR_AT_CHAR)),
     aAnchorAsCharRB (this, SW_RES(RB_ANCHOR_AS_CHAR)),
     aAnchorAtFrameRB(this, SW_RES(RB_ANCHOR_FRAME)),
 
+    aPositionFL     (this, SW_RES(FL_POSITION)),
     aHorizontalFT   (this, SW_RES(FT_HORIZONTAL)),
     aHorizontalDLB  (this, SW_RES(DLB_HORIZONTAL)),
     aAtHorzPosFT    (this, SW_RES(FT_AT_HORZ_POS)),
@@ -650,18 +692,21 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     aVertRelationLB (this, SW_RES(LB_VERT_RELATION)),
     // OD 19.09.2003 #i18732# - new checkbox
     aFollowTextFlowCB(this, SW_RES(CB_FOLLOWTEXTFLOW)),
-    aPositionFL     (this, SW_RES(FL_POSITION)),
 
     aExampleWN      (this, SW_RES(WN_BSP)),
 
     bAtHorzPosModified( sal_False ),
     bAtVertPosModified( sal_False ),
-
     bFormat(sal_False),
     bNew(sal_True),
     bNoModifyHdl(sal_True),
-    bVerticalChanged(sal_False),
+    // --> OD 2009-08-31 #mongolianlayout# - no used
+//    bVerticalChanged(FALSE),
+    // <--
     bIsVerticalFrame(sal_False),
+    // --> OD 2009-08-31 #mongolianlayou#
+    bIsVerticalL2R(sal_False),
+    // <--
     bIsInRightToLeft(sal_False),
     bHtmlMode(sal_False),
     nHtmlMode(0),
@@ -684,6 +729,8 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
 {
     FreeResource();
     SetExchangeSupport();
+
+    aRealSizeBT.SetAccessibleRelationMemberOf(&aSizeFL);
 
     Link aLk = LINK(this, SwFrmPage, RangeModifyHdl);
     aWidthED.    SetLoseFocusHdl( aLk );
@@ -811,7 +858,10 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     {
         if (rAnchor.GetAnchorId() != FLY_AT_FLY && !pSh->IsFlyInFly())
             aAnchorAtFrameRB.Hide();
-        if(!bVerticalChanged && pSh->IsFrmVertical(sal_True, bIsInRightToLeft))
+        // --> OD 2009-08-31 #mongolianlayout#
+//        if ( !bVerticalChanged && pSh->IsFrmVertical(sal_True, bIsInRightToLeft) )
+        if ( pSh->IsFrmVertical( sal_True, bIsInRightToLeft, bIsVerticalL2R ) )
+        // <--
         {
             String sHLabel = aHorizontalFT.GetText();
             aHorizontalFT.SetText(aVerticalFT.GetText());
@@ -1323,7 +1373,12 @@ sal_uInt16 SwFrmPage::FillPosLB(const FrmMap* _pMap,
 //      if (!bFormat || (pMap[i].eStrId != SwFPos::FROMLEFT && pMap[i].eStrId != SwFPos::FROMTOP))
         {
             SvxSwFramePosString::StringId eStrId = aMirrorPagesCB.IsChecked() ? _pMap[i].eMirrorStrId : _pMap[i].eStrId;
-            eStrId = lcl_ChangeResIdToVerticalOrRTL(eStrId, bIsVerticalFrame, bIsInRightToLeft);
+            // --> OD 2009-08-31 #mongolianlayout#
+            eStrId = lcl_ChangeResIdToVerticalOrRTL( eStrId,
+                                                     bIsVerticalFrame,
+                                                     bIsVerticalL2R,
+                                                     bIsInRightToLeft);
+            // <--
             String sEntry(aFramePosString.GetString(eStrId));
             if (_rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
             {
@@ -1387,7 +1442,13 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                         {
                             SvxSwFramePosString::StringId sStrId1 = aAsCharRelationMap[nRelPos].eStrId;
 
-                            sStrId1 = lcl_ChangeResIdToVerticalOrRTL(sStrId1, bIsVerticalFrame, bIsInRightToLeft);
+                            // --> OD 2009-08-31 #mongolianlayout#
+                            sStrId1 =
+                                lcl_ChangeResIdToVerticalOrRTL( sStrId1,
+                                                                bIsVerticalFrame,
+                                                                bIsVerticalL2R,
+                                                                bIsInRightToLeft);
+                            // <--
                             String sEntry = aFramePosString.GetString(sStrId1);
                             sal_uInt16 nPos = _rLB.InsertEntry(sEntry);
                             _rLB.SetEntryData(nPos, &aAsCharRelationMap[nRelPos]);
@@ -1447,7 +1508,13 @@ sal_uLong SwFrmPage::FillRelLB( const FrmMap* _pMap,
                         {
                             SvxSwFramePosString::StringId eStrId1 = aMirrorPagesCB.IsChecked() ?
                                             aRelationMap[nRelPos].eMirrorStrId : aRelationMap[nRelPos].eStrId;
-                            eStrId1 = lcl_ChangeResIdToVerticalOrRTL(eStrId1, bIsVerticalFrame, bIsInRightToLeft);
+                            // --> OD 2009-08-31 #mongolianlayout#
+                            eStrId1 =
+                                lcl_ChangeResIdToVerticalOrRTL( eStrId1,
+                                                                bIsVerticalFrame,
+                                                                bIsVerticalL2R,
+                                                                bIsInRightToLeft);
+                            // <--
                             String sEntry = aFramePosString.GetString(eStrId1);
                             sal_uInt16 nPos = _rLB.InsertEntry(sEntry);
                             _rLB.SetEntryData(nPos, &aRelationMap[nRelPos]);
@@ -2354,6 +2421,8 @@ SwGrfExtPage::SwGrfExtPage(Window *pParent, const SfxItemSet &rSet) :
 {
     FreeResource();
 
+    aBrowseBT.SetAccessibleRelationMemberOf(&aConnectFL);
+
     SetExchangeSupport();
     aMirrorHorzBox.SetClickHdl( LINK(this, SwGrfExtPage, MirrorHdl));
     aMirrorVertBox.SetClickHdl( LINK(this, SwGrfExtPage, MirrorHdl));
@@ -2866,6 +2935,7 @@ void lcl_Move(Window& rWin, sal_Int32 nDiff)
 SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet ) :
     SfxTabPage(pParent,     SW_RES(TP_FRM_ADD), rSet),
 
+    aNamesFL           (this, SW_RES(FL_NAME)),
     aNameFT            (this, SW_RES(FT_NAME)),
     aNameED            (this, SW_RES(ED_NAME)),
     aAltNameFT         (this, SW_RES(FT_ALT_NAME)),
@@ -2874,19 +2944,17 @@ SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet ) :
     aPrevLB            (this, SW_RES(LB_PREV)),
     aNextFT            (this, SW_RES(FT_NEXT)),
     aNextLB            (this, SW_RES(LB_NEXT)),
-    aNamesFL           (this, SW_RES(FL_NAME)),
 
+    aProtectFL         (this, SW_RES(FL_PROTECT)),
     aProtectContentCB  (this, SW_RES(CB_PROTECT_CONTENT)),
     aProtectFrameCB    (this, SW_RES(CB_PROTECT_FRAME)),
     aProtectSizeCB     (this, SW_RES(CB_PROTECT_SIZE)),
-    aProtectFL         (this, SW_RES(FL_PROTECT)),
+    aExtFL             (this, SW_RES(FL_EXT)),
 
     aEditInReadonlyCB  (this, SW_RES(CB_EDIT_IN_READONLY)),
     aPrintFrameCB      (this, SW_RES(CB_PRINT_FRAME)),
     aTextFlowFT        (this, SW_RES(FT_TEXTFLOW)),
     aTextFlowLB        (this, SW_RES(LB_TEXTFLOW)),
-
-    aExtFL             (this, SW_RES(FL_EXT)),
 
     pWrtSh(0),
 

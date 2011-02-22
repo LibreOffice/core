@@ -88,6 +88,10 @@
 #include <app.hrc>
 // <--
 
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
+#endif
+
 using namespace ::com::sun::star;
 
 /* -----------------------------31.01.01 10:23--------------------------------
@@ -102,9 +106,9 @@ DBG_NAME(outlinehdl)
 
 class SwNumNamesDlg: public ModalDialog
 {
+    FixedLine    aFormFL;
     Edit         aFormEdit;
     ListBox      aFormBox;
-    FixedLine    aFormFL;
     OKButton     aOKBtn;
     CancelButton aCancelBtn;
     HelpButton   aHelpBtn;
@@ -186,9 +190,9 @@ IMPL_LINK_INLINE_END( SwNumNamesDlg, DoubleClickHdl, ListBox *, EMPTYARG )
 
 SwNumNamesDlg::SwNumNamesDlg(Window *pParent)
     : ModalDialog(pParent, SW_RES(DLG_NUM_NAMES)),
+    aFormFL(this, SW_RES(FL_FORM)),
     aFormEdit(this, SW_RES(ED_FORM)),
     aFormBox(this, SW_RES(LB_FORM)),
-    aFormFL(this, SW_RES(FL_FORM)),
     aOKBtn(this, SW_RES(BT_OK)),
     aCancelBtn(this, SW_RES(BT_CANCEL)),
     aHelpBtn(this, SW_RES(BT_HELP))
@@ -241,6 +245,7 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
     pUserButton->SetText(SW_RES(ST_FORM));
     pUserButton->SetHelpId(HID_OUTLINE_FORM);
     pUserButton->SetClickHdl(LINK(this, SwOutlineTabDialog, FormHdl));
+    pUserButton->SetAccessibleRole( com::sun::star::accessibility::AccessibleRole::BUTTON_MENU );
 
     FreeResource();
     pNumRule = new SwNumRule( *rSh.GetOutlineNumRule() );
@@ -543,8 +548,9 @@ short SwOutlineTabDialog::Ok()
  * --------------------------------------------------*/
 SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_OUTLINE_NUM), rSet),
-    aLevelLB(       this, SW_RES(LB_LEVEL   )),
     aLevelFL(       this, SW_RES(FL_LEVEL    )),
+    aLevelLB(       this, SW_RES(LB_LEVEL   )),
+    aNumberFL(this, SW_RES(FL_NUMBER)),
     aCollLbl(this, SW_RES(FT_COLL)),
     aCollBox(this, SW_RES(LB_COLL)),
     aNumberLbl(this, SW_RES(FT_NUMBER)),
@@ -560,7 +566,6 @@ SwOutlineSettingsTabPage::SwOutlineSettingsTabPage(Window* pParent, const SfxIte
     aSuffixED(this, SW_RES(ED_SUFFIX)),
     aStartLbl(this, SW_RES(FT_START)),
     aStartEdit(this, SW_RES(ED_START)),
-    aNumberFL(this, SW_RES(FL_NUMBER)),
     aPreviewWIN(    this, SW_RES(WIN_PREVIEW )),
 
     aNoFmtName(SW_RES(ST_NO_COLL)),

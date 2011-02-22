@@ -42,7 +42,7 @@
 //  class VCLXContainer
 //  ----------------------------------------------------
 
-class VCLXContainer :   public ::com::sun::star::awt::XVclContainer,
+class TOOLKIT_DLLPUBLIC VCLXContainer : public ::com::sun::star::awt::XVclContainer,
                         public ::com::sun::star::awt::XVclContainerPeer,
                         public VCLXWindow
 {

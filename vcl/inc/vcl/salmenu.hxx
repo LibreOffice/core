@@ -60,14 +60,14 @@ struct SalMenuButtonItem
     : mnId( i_nId ), maImage( rImg ), maToolTipText( i_rTTText ) {}
 };
 
-class VCL_DLLPUBLIC SalMenuItem
+class VCL_PLUGIN_PUBLIC SalMenuItem
 {
 public:
     SalMenuItem() {}
     virtual ~SalMenuItem();
 };
 
-class VCL_DLLPUBLIC SalMenu
+class VCL_PLUGIN_PUBLIC SalMenu
 {
 public:
     SalMenu() {}

@@ -37,7 +37,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
-#include <osl/mutex.hxx>
+#include <osl/conditn.hxx>
 #include <osl/thread.hxx>
 #include <osl/time.h>
 #include <cppuhelper/implbase1.hxx>
@@ -108,49 +108,41 @@ namespace
         public:
             OnLogRotateThread(Reference<XMultiServiceFactory> sf);
             virtual void SAL_CALL run();
-            OnLogRotateThread* disposing();
+            void stop();
 
         private:
             Reference<XMultiServiceFactory> m_ServiceFactory;
-            ::osl::Mutex m_ServiceFactoryMutex;
+            ::osl::Condition m_Stop;
     };
 
     OnLogRotateThread::OnLogRotateThread(Reference<XMultiServiceFactory> sf)
         : m_ServiceFactory(sf)
-    { }
+    {
+        OSL_ASSERT(sf.is());
+    }
 
     void SAL_CALL OnLogRotateThread::run()
     {
+        TimeValue wait_intervall = {30,0};
+        if (m_Stop.wait(&wait_intervall) == ::osl::Condition::result_timeout)
         {
-            ::osl::Thread::yield();
-            TimeValue wait_intervall = {30,0};
-            osl_waitThread(&wait_intervall);
-        }
-        {
-            ::osl::Guard< ::osl::Mutex> service_factory_guard(m_ServiceFactoryMutex);
             try
             {
-                if(m_ServiceFactory.is())
+                if(Config(m_ServiceFactory).getInvitationAccepted())
                 {
-                    if(Config(m_ServiceFactory).getInvitationAccepted())
-                    {
-                        packLogs(m_ServiceFactory);
-                        uploadLogs(m_ServiceFactory);
-                    }
-                    else
-                        LogStorage(m_ServiceFactory).clear();
+                    packLogs(m_ServiceFactory);
+                    uploadLogs(m_ServiceFactory);
                 }
-                m_ServiceFactory.clear();
+                else
+                    LogStorage(m_ServiceFactory).clear();
             }
             catch(...) {}
         }
     }
 
-    OnLogRotateThread* OnLogRotateThread::disposing()
+    void OnLogRotateThread::stop()
     {
-        ::osl::Guard< ::osl::Mutex> service_factory_guard(m_ServiceFactoryMutex);
-        m_ServiceFactory.clear();
-        return this;
+        m_Stop.set();
     }
 
     class OnLogRotateThreadWatcher : public ::cppu::WeakImplHelper1<XTerminateListener>
@@ -163,7 +155,7 @@ namespace
             }
             virtual ~OnLogRotateThreadWatcher()
             {
-                m_Thread->disposing()->terminate();
+                m_Thread->stop();
                 m_Thread->join();
             };
 
@@ -172,13 +164,13 @@ namespace
                 { };
             virtual void SAL_CALL notifyTermination(const EventObject&) throw(RuntimeException)
             {
-                m_Thread->disposing()->terminate();
+                m_Thread->stop();
                 m_Thread->join();
             };
             // XEventListener
             virtual void SAL_CALL disposing(const EventObject&) throw(RuntimeException)
             {
-                m_Thread->disposing()->terminate();
+                m_Thread->stop();
                 m_Thread->join();
             };
         private:

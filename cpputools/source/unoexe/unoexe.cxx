@@ -275,23 +275,14 @@ void createInstance(
                         OUString( RTL_CONSTASCII_USTRINGPARAM(
                                       "com.sun.star.comp.io.Connector") ),
                         xSF, Reference< XRegistryKey >() ) ) );
-                    // iiop bridge
-                    xSet->insert( makeAny( loadSharedLibComponentFactory(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                      "remotebridge.uno" SAL_DLLEXTENSION) ),
-                        OUString(),
-                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                      "com.sun.star.comp.remotebridges."
-                                      "Bridge.various") ),
-                        xSF, Reference< XRegistryKey >() ) ) );
                     // bridge factory
                     xSet->insert( makeAny( loadSharedLibComponentFactory(
                         OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                      "bridgefac.uno" SAL_DLLEXTENSION) ),
+                                      "binaryurp.uno" SAL_DLLEXTENSION) ),
                         OUString(),
-                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                      "com.sun.star.comp.remotebridges."
-                                      "BridgeFactory") ),
+                        OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.comp.bridge.BridgeFactory") ),
                         xSF, Reference< XRegistryKey >() ) ) );
                 }
                 s_bSet = sal_True;

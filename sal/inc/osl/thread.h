@@ -159,6 +159,18 @@ sal_Bool SAL_CALL osl_scheduleThread(oslThread Thread);
 */
 void SAL_CALL osl_yieldThread(void);
 
+/** Attempts to set the name of the current thread.
+
+    The name of a thread is usually evaluated for debugging purposes.  Not all
+    platforms support this.  On Linux, a set thread name can be observed with
+    "ps -L".  On Windows with the Microsoft compiler, a thread name set while a
+    debugger is attached can be observed within the debugger.
+
+    @param name  the name of the thread; must not be null; on Linux, only the
+    first 16 characters are used
+*/
+void SAL_CALL osl_setThreadName(char const * name);
+
 /* Callback when data stored in a thread key is no longer needed */
 
 typedef void (SAL_CALL *oslThreadKeyCallbackFunction)(void *);

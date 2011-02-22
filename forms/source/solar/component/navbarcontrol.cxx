@@ -106,7 +106,7 @@ namespace frm
     DBG_NAME( ONavigationBarControl )
     //------------------------------------------------------------------
     ONavigationBarControl::ONavigationBarControl( const Reference< XMultiServiceFactory >& _rxORB )
-        :m_xORB( _rxORB )
+        :UnoControl( _rxORB )
     {
         DBG_CTOR( ONavigationBarControl, NULL );
     }
@@ -181,7 +181,7 @@ namespace frm
             }
 
             // create the peer
-            ONavigationBarPeer* pPeer = ONavigationBarPeer::Create( m_xORB, pParentWin, getModel() );
+            ONavigationBarPeer* pPeer = ONavigationBarPeer::Create( maContext.getLegacyServiceFactory(), pParentWin, getModel() );
             DBG_ASSERT( pPeer, "ONavigationBarControl::createPeer: invalid peer returned!" );
             if ( pPeer )
                 // by definition, the returned component is aquired once

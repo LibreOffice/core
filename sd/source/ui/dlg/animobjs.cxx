@@ -157,21 +157,19 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
         aNumFldBitmap       ( this, SdResId( NUM_FLD_BITMAP ) ),
         aTimeField          ( this, SdResId( TIME_FIELD ) ),
         aLbLoopCount        ( this, SdResId( LB_LOOP_COUNT ) ),
-
+        aGrpBitmap          ( this, SdResId( GRP_BITMAP ) ),
         aBtnGetOneObject    ( this, SdResId( BTN_GET_ONE_OBJECT ) ),
         aBtnGetAllObjects   ( this, SdResId( BTN_GET_ALL_OBJECTS ) ),
         aBtnRemoveBitmap    ( this, SdResId( BTN_REMOVE_BITMAP ) ),
         aBtnRemoveAll       ( this, SdResId( BTN_REMOVE_ALL ) ),
         aFtCount            ( this, SdResId( FT_COUNT ) ),
         aFiCount            ( this, SdResId( FI_COUNT ) ),
-        aGrpBitmap          ( this, SdResId( GRP_BITMAP ) ),
-
+        aGrpAnimation       ( this, SdResId( GRP_ANIMATION_GROUP ) ),
         aRbtGroup           ( this, SdResId( RBT_GROUP ) ),
         aRbtBitmap          ( this, SdResId( RBT_BITMAP ) ),
         aFtAdjustment       ( this, SdResId( FT_ADJUSTMENT ) ),
         aLbAdjustment       ( this, SdResId( LB_ADJUSTMENT ) ),
         aBtnCreateGroup     ( this, SdResId( BTN_CREATE_GROUP ) ),
-        aGrpAnimation       ( this, SdResId( GRP_ANIMATION_GROUP ) ),
 
         pWin                ( pParent ),
         pBitmapEx           ( NULL ),
@@ -181,6 +179,7 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
 
         pBindings           ( pInBindings )
 {
+    aCtlDisplay.SetAccessibleName(String (SdResId(STR_DISPLAY)));
     FreeResource();
 
     aBtnGetOneObject.SetModeImage( Image( SdResId( IMG_GET1OBJECT_H ) ), BMP_COLOR_HIGHCONTRAST );
@@ -226,6 +225,11 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
 
     // der Animator ist leer; es kann keine Animationsgruppe erstellt werden
     aBtnCreateGroup.Disable();
+
+    aBtnGetOneObject.SetAccessibleRelationMemberOf( &aGrpBitmap );
+    aBtnGetAllObjects.SetAccessibleRelationMemberOf( &aGrpBitmap );
+    aBtnRemoveBitmap.SetAccessibleRelationMemberOf( &aGrpBitmap );
+    aBtnRemoveAll.SetAccessibleRelationMemberOf( &aGrpBitmap );
 }
 
 // -----------------------------------------------------------------------

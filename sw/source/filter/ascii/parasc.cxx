@@ -310,7 +310,7 @@ sal_uLong SwASCIIParser::ReadChars()
     }
     else if (pUseMe != &aEmpty)  //Already successfully figured out type
     {
-        rInput.StartReadingUnicodeText();
+        rInput.StartReadingUnicodeText( currentCharSet );
         bSwapUnicode = rInput.IsEndianSwap();
     }
 

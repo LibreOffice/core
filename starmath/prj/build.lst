@@ -1,4 +1,4 @@
-sm	starmath	: LIBXSLT:libxslt l10n svx NULL
+sm	starmath	: LIBXSLT:libxslt L10N:l10n svx NULL
 sm	starmath								usr1	-	all	sm_mkout NULL
 sm	starmath\inc							nmake	-	all	sm_inc NULL
 sm	starmath\prj							get		-	all	sm_prj NULL

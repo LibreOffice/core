@@ -357,6 +357,15 @@ ThreeD_SceneIllumination_TabPage::ThreeD_SceneIllumination_TabPage( Window* pWin
     //m_aDelyedModelChangeTimer.SetTimeout( 4*EDIT_UPDATEDATA_TIMEOUT );
 
     m_aModelChangeListener.startListening( uno::Reference< util::XModifyBroadcaster >(m_xSceneProperties, uno::UNO_QUERY) );
+    m_aBtn_Light1.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light2.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light3.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light4.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light5.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light6.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light7.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aBtn_Light8.SetAccessibleRelationLabeledBy(&m_aFT_LightSource);
+    m_aCtl_Preview.SetAccessibleName(String(SchResId( STR_LIGHT_PREVIEW )));
 }
 
 ThreeD_SceneIllumination_TabPage::~ThreeD_SceneIllumination_TabPage()

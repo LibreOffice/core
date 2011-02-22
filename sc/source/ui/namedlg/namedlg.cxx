@@ -154,6 +154,8 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     pSaveObj = new SaveData;
     Init();
     FreeResource();
+
+    aRbAssign.SetAccessibleRelationMemberOf(&aFlAssign);
 }
 
 

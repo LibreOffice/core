@@ -55,7 +55,8 @@ namespace toolkit
 //  ----------------------------------------------------
 //  class UnoTreeModel
 //  ----------------------------------------------------
-UnoTreeModel::UnoTreeModel()
+UnoTreeModel::UnoTreeModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
+    :UnoControlModel( i_factory )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
@@ -74,7 +75,7 @@ UnoTreeModel::UnoTreeModel()
     ImplRegisterProperty( BASEPROPERTY_TREE_ROOTDISPLAYED );
     ImplRegisterProperty( BASEPROPERTY_TREE_SHOWSHANDLES );
     ImplRegisterProperty( BASEPROPERTY_TREE_SHOWSROOTHANDLES );
-    ImplRegisterProperty( BASEPROPERTY_TREE_ROWHEIGHT );
+    ImplRegisterProperty( BASEPROPERTY_ROW_HEIGHT );
     ImplRegisterProperty( BASEPROPERTY_TREE_INVOKESSTOPNODEEDITING );
     ImplRegisterProperty( BASEPROPERTY_HIDEINACTIVESELECTION );
 }
@@ -100,7 +101,7 @@ Any UnoTreeModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     {
     case BASEPROPERTY_TREE_SELECTIONTYPE:
         return Any( SelectionType_NONE );
-    case BASEPROPERTY_TREE_ROWHEIGHT:
+    case BASEPROPERTY_ROW_HEIGHT:
         return Any( sal_Int32( 0 ) );
     case BASEPROPERTY_TREE_DATAMODEL:
         return Any( Reference< XTreeDataModel >( 0 ) );
@@ -140,8 +141,9 @@ Reference< XPropertySetInfo > UnoTreeModel::getPropertySetInfo(  ) throw(Runtime
 //  ----------------------------------------------------
 //  class UnoTreeControl
 //  ----------------------------------------------------
-UnoTreeControl::UnoTreeControl()
-: maSelectionListeners( *this )
+UnoTreeControl::UnoTreeControl( const Reference< XMultiServiceFactory >& i_factory )
+: UnoTreeControl_Base( i_factory )
+, maSelectionListeners( *this )
 , maTreeExpansionListeners( *this )
 , maTreeEditListeners( *this )
 {
@@ -452,14 +454,14 @@ void UnoTreeControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolk
 
 }
 
-Reference< XInterface > SAL_CALL TreeControl_CreateInstance( const Reference< XMultiServiceFactory >& )
+Reference< XInterface > SAL_CALL TreeControl_CreateInstance( const Reference< XMultiServiceFactory >& i_factory )
 {
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoTreeControl );
+    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoTreeControl( i_factory ) );
 }
 
-Reference< XInterface > SAL_CALL TreeControlModel_CreateInstance( const Reference< XMultiServiceFactory >& )
+Reference< XInterface > SAL_CALL TreeControlModel_CreateInstance( const Reference< XMultiServiceFactory >& i_factory )
 {
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoTreeModel );
+    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoTreeModel( i_factory ) );
 }
 
 void SAL_CALL TreeEditListenerMultiplexer::nodeEditing( const Reference< XTreeNode >& Node ) throw (RuntimeException, ::com::sun::star::util::VetoException)

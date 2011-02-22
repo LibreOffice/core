@@ -71,6 +71,7 @@ class SvxStdParagraphTabPage: public SfxTabPage
 private:
     SvxStdParagraphTabPage( Window* pParent, const SfxItemSet& rSet );
 
+    FixedLine               aIndentFrm;
     // Einzug
     FixedText               aLeftLabel;
     SvxRelativeField        aLeftIndent;
@@ -82,27 +83,26 @@ private:
     SvxRelativeField        aFLineIndent;
     CheckBox                aAutoCB;
 
-    FixedLine               aIndentFrm;
+    FixedLine               aDistFrm;
 
     // Abstaende
     FixedText               aTopLabel;
     SvxRelativeField        aTopDist;
     FixedText               aBottomLabel;
     SvxRelativeField        aBottomDist;
-    FixedLine               aDistFrm;
 
     // Zeilenabstand
+    FixedLine               aLineDistFrm;
     ListBox                 aLineDist;
     FixedText               aLineDistAtLabel;
     MetricField             aLineDistAtPercentBox;
     MetricField             aLineDistAtMetricBox;
-    FixedLine               aLineDistFrm;
     String                  sAbsDist;
     SvxParaPrevWindow       aExampleWin;
 
     //Registerhaltigkeit - nur Writer
-    CheckBox                aRegisterCB;
     FixedLine               aRegisterFL;
+    CheckBox                aRegisterCB;
 
     Edit*                   pActLineDistFld;
     long                    nAbst;
@@ -237,6 +237,7 @@ private:
                         SvxExtParagraphTabPage( Window* pParent, const SfxItemSet& rSet );
 
     // Silbentrennung
+    FixedLine           aExtFL;
     TriStateBox         aHyphenBox;
     FixedText           aBeforeText;
     NumericField        aExtHyphenBeforeBox;
@@ -246,7 +247,6 @@ private:
 //  FixedText           aHyphenAfterLabel;
     FixedText           aMaxHyphenLabel;
     NumericField        aMaxHyphenEdit;
-    FixedLine           aExtFL;
 
     // Seitenumbruch
     FixedLine           aBreaksFL;

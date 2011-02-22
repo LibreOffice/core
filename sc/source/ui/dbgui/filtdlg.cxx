@@ -132,6 +132,65 @@ ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     pTimer = new Timer;
     pTimer->SetTimeout( 50 ); // 50ms warten
     pTimer->SetTimeoutHdl( LINK( this, ScFilterDlg, TimeOutHdl ) );
+
+    String sAccName (ScResId(RID_FILTER_OPERATOR));
+    String sIndexName(sAccName);
+    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 1"));
+    aLbConnect1.SetAccessibleName(sIndexName);
+    sIndexName = sAccName;
+    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 2"));
+    aLbConnect2.SetAccessibleName(sIndexName);
+
+    sAccName = String(ScResId(RID_FILTER_FIELDNAME));
+    sIndexName = sAccName;
+    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 1"));
+    aLbField1.SetAccessibleName(sIndexName);
+    sIndexName = sAccName;
+    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 2"));
+    aLbField2.SetAccessibleName(sIndexName);
+    sIndexName = sAccName;
+    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 3"));
+    aLbField3.SetAccessibleName(sIndexName);
+
+
+    sAccName = String(ScResId(RID_FILTER_CONDITION));
+    sIndexName = sAccName;
+    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 1"));
+    aLbCond1.SetAccessibleName(sIndexName);
+    sIndexName = sAccName;
+    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 2"));
+    aLbCond2.SetAccessibleName(sIndexName);
+    sIndexName = sAccName;
+    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 3"));
+    aLbCond3.SetAccessibleName(sIndexName);
+
+    sAccName = String(ScResId(RID_FILTER_VALUE));
+    sIndexName = sAccName;
+    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 1"));
+    aEdVal1.SetAccessibleName(sIndexName);
+    sIndexName = sAccName;
+    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 2"));
+    aEdVal2.SetAccessibleName(sIndexName);
+    sIndexName = sAccName;
+    sIndexName.AppendAscii (RTL_CONSTASCII_STRINGPARAM (" 3"));
+    aEdVal3.SetAccessibleName(sIndexName);
+
+    aLbCopyArea.SetAccessibleName(ScResId(STR_COPY_AREA_TO));
+    aEdCopyArea.SetAccessibleName(ScResId(STR_COPY_AREA_TO));
+    aLbCopyArea.SetAccessibleRelationLabeledBy(&aBtnCopyResult);
+    aEdCopyArea.SetAccessibleRelationLabeledBy(&aBtnCopyResult);
+
+    aLbConnect1.SetAccessibleRelationLabeledBy(&aFtConnect);
+    aLbConnect2.SetAccessibleRelationLabeledBy(&aFtConnect);
+    aLbField1.SetAccessibleRelationLabeledBy(&aFtField);
+    aLbField2.SetAccessibleRelationLabeledBy(&aFtField);
+    aLbField3.SetAccessibleRelationLabeledBy(&aFtField);
+    aLbCond1.SetAccessibleRelationLabeledBy(&aFtCond);
+    aLbCond2.SetAccessibleRelationLabeledBy(&aFtCond);
+    aLbCond3.SetAccessibleRelationLabeledBy(&aFtCond);
+    aEdVal1.SetAccessibleRelationLabeledBy(&aFtVal);
+    aEdVal2.SetAccessibleRelationLabeledBy(&aFtVal);
+    aEdVal3.SetAccessibleRelationLabeledBy(&aFtVal);
 }
 
 

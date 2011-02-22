@@ -101,12 +101,12 @@ SvxNewDictionaryDialog::SvxNewDictionaryDialog( Window* pParent,
 
     ModalDialog( pParent, CUI_RES( RID_SFXDLG_NEWDICT ) ),
 
+    aNewDictBox     ( this, CUI_RES( GB_NEWDICT ) ),
     aNameText       ( this, CUI_RES( FT_DICTNAME ) ),
     aNameEdit       ( this, CUI_RES( ED_DICTNAME ) ),
     aLanguageText   ( this, CUI_RES( FT_DICTLANG ) ),
     aLanguageLB     ( this, CUI_RES( LB_DICTLANG ) ),
     aExceptBtn      ( this, CUI_RES( BTN_EXCEPT ) ),
-    aNewDictBox     ( this, CUI_RES( GB_NEWDICT ) ),
     aOKBtn          ( this, CUI_RES( BTN_NEWDICT_OK ) ),
     aCancelBtn      ( this, CUI_RES( BTN_NEWDICT_ESC ) ),
     aHelpBtn        ( this, CUI_RES( BTN_NEWDICT_HLP ) ),
@@ -120,6 +120,11 @@ SvxNewDictionaryDialog::SvxNewDictionaryDialog( Window* pParent,
     // Sprachen anzeigen
     aLanguageLB.SetLanguageList( LANG_LIST_ALL, sal_True, sal_True );
     aLanguageLB.SelectEntryPos(0);
+
+    aNameText.SetAccessibleRelationMemberOf( &aNewDictBox );
+    aNameEdit.SetAccessibleRelationMemberOf( &aNewDictBox );
+    aLanguageText.SetAccessibleRelationMemberOf( &aNewDictBox );
+    aLanguageLB.SetAccessibleRelationMemberOf( &aNewDictBox );
 
     FreeResource();
 }
@@ -230,6 +235,7 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     aAllDictsLB     ( this, CUI_RES( LB_ALLDICTS ) ),
     aLangFT         ( this, CUI_RES( FT_DICTLANG ) ),
     aLangLB         ( this, CUI_RES( LB_DICTLANG ) ),
+
     aWordFT         ( this, CUI_RES( FT_WORD ) ),
     aWordED         ( this, CUI_RES( ED_WORD ) ),
     aReplaceFT      ( this, CUI_RES( FT_REPLACE ) ),
@@ -238,8 +244,8 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
     aNewReplacePB   ( this, CUI_RES( PB_NEW_REPLACE ) ),
     aDeletePB       ( this, CUI_RES( PB_DELETE_REPLACE ) ),
     aEditDictsBox   ( this, CUI_RES( GB_EDITDICTS ) ),
-    aCloseBtn       ( this, CUI_RES( BTN_EDITCLOSE ) ),
     aHelpBtn        ( this, CUI_RES( BTN_EDITHELP ) ),
+    aCloseBtn       ( this, CUI_RES( BTN_EDITCLOSE ) ),
     sModify         (CUI_RES(STR_MODIFY)),
     sNew            (aNewReplacePB.GetText()),
     aDecoView       ( this),

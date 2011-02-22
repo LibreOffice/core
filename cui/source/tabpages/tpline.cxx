@@ -68,6 +68,7 @@
 #include <svx/gallery.hxx>
 #include <svx/xbitmap.hxx>
 #include <unotools/localfilehelper.hxx>
+#include "paragrph.hrc"
 #include "sfx2/opengrf.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
@@ -105,6 +106,7 @@ SvxLineTabPage::SvxLineTabPage
     const SfxItemSet& rInAttrs
 ) :
     SvxTabPage          ( pParent, CUI_RES( RID_SVXPAGE_LINE ), rInAttrs ),
+    aFlLine             ( this, CUI_RES( FL_LINE ) ),
     aFtLineStyle        ( this, CUI_RES( FT_LINE_STYLE ) ),
     aLbLineStyle        ( this, CUI_RES( LB_LINE_STYLE ) ),
     aFtColor            ( this, CUI_RES( FT_COLOR ) ),
@@ -113,19 +115,18 @@ SvxLineTabPage::SvxLineTabPage
     aMtrLineWidth       ( this, CUI_RES( MTR_FLD_LINE_WIDTH ) ),
     aFtTransparent      ( this, CUI_RES( FT_TRANSPARENT ) ),
     aMtrTransparent     ( this, CUI_RES( MTR_LINE_TRANSPARENT ) ),
-    aFlLine             ( this, CUI_RES( FL_LINE ) ),
-    aFtLineEndsStyle    ( this, CUI_RES( FT_LINE_ENDS_STYLE ) ),
+    aFlLineEnds         ( this, CUI_RES( FL_LINE_ENDS ) ),
     aLbStartStyle       ( this, CUI_RES( LB_START_STYLE ) ),
-    aFtLineEndsWidth    ( this, CUI_RES( FT_LINE_ENDS_WIDTH ) ),
     aMtrStartWidth      ( this, CUI_RES( MTR_FLD_START_WIDTH ) ),
     aTsbCenterStart     ( this, CUI_RES( TSB_CENTER_START ) ),
+    aFtLineEndsStyle    ( this, CUI_RES( FT_LINE_ENDS_STYLE ) ),
     aLbEndStyle         ( this, CUI_RES( LB_END_STYLE ) ),
+    aFtLineEndsWidth    ( this, CUI_RES( FT_LINE_ENDS_WIDTH ) ),
     aMtrEndWidth        ( this, CUI_RES( MTR_FLD_END_WIDTH ) ),
     aTsbCenterEnd       ( this, CUI_RES( TSB_CENTER_END ) ),
     aCbxSynchronize     ( this, CUI_RES( CBX_SYNCHRONIZE ) ),
-    aFlLineEnds         ( this, CUI_RES( FL_LINE_ENDS ) ),
-    aCtlPreview         ( this, CUI_RES( CTL_PREVIEW ) ),
     aFLSeparator        ( this, CUI_RES( FL_SEPARATOR ) ),
+    aCtlPreview         ( this, CUI_RES( CTL_PREVIEW ) ),
 
     // #116827#
     maFLEdgeStyle       ( this, CUI_RES( FL_EDGE_STYLE ) ),
@@ -165,7 +166,17 @@ SvxLineTabPage::SvxLineTabPage
     pnColorTableState( 0 ),
    nPageType           ( 0 )//CHINA001 pPageType           ( NULL ),
 {
+    aLbEndStyle.SetAccessibleName(String(CUI_RES(STR_STYLE)));
+    aLbStartStyle.SetAccessibleName(String(CUI_RES( STR_LB_START_STYLE ) ) );
+    aMtrStartWidth.SetAccessibleName(String(CUI_RES( STR_MTR_FLD_START_WIDTH ) ) );
+    aLbEndStyle.SetAccessibleName(String(CUI_RES( STR_LB_END_STYLE ) ) );
+    aMtrEndWidth.SetAccessibleName(String(CUI_RES( STR_MTR_FLD_END_WIDTH ) ) );
+    aTsbCenterStart.SetAccessibleName(String(CUI_RES( STR_CENTER_START ) ) );
+    aTsbCenterEnd.SetAccessibleName(String(CUI_RES( STR_CENTER_END ) ) );
+
     FreeResource();
+
+    aCtlPreview.SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
 
     // diese Page braucht ExchangeSupport
     SetExchangeSupport();

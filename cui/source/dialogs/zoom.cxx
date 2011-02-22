@@ -230,6 +230,14 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
     aUserEdit.SetLast( nMax );
     aUserEdit.SetValue( nValue );
 
+    aUserEdit.SetAccessibleRelationLabeledBy( &aUserBtn );
+    aUserEdit.SetAccessibleName(aUserBtn.GetText());
+    aColumnsEdit.SetAccessibleRelationLabeledBy(&aColumnsBtn);
+    aColumnsEdit.SetAccessibleName(aColumnsBtn.GetText());
+    aColumnsEdit.SetAccessibleRelationMemberOf(&aColumnsBtn);
+    aBookModeChk.SetAccessibleRelationLabeledBy(&aColumnsBtn);
+    aBookModeChk.SetAccessibleRelationMemberOf(&aColumnsBtn);
+
     const SfxPoolItem& rItem = rSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_ZOOM ) );
 
     if ( rItem.ISA(SvxZoomItem) )

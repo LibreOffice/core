@@ -70,8 +70,8 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
 
     :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_SPEC_FILTER ),
         //
-        aLbFilterArea   ( this, ScResId( LB_CRITERIA_AREA ) ),
         aFtFilterArea   ( this, ScResId( FT_CRITERIA_AREA ) ),
+        aLbFilterArea   ( this, ScResId( LB_CRITERIA_AREA ) ),
         aEdFilterArea   ( this, this, ScResId( ED_CRITERIA_AREA ) ),
         aRbFilterArea   ( this, ScResId( RB_CRITERIA_AREA ), &aEdFilterArea, this ),
         //
@@ -103,6 +103,11 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
     pTimer->SetTimeout( 50 ); // 50ms warten
     pTimer->SetTimeoutHdl( LINK( this, ScSpecialFilterDlg, TimeOutHdl ) );
     pTimer->Start();
+
+    aLbCopyArea.SetAccessibleName(aBtnCopyResult.GetText());
+    aEdCopyArea.SetAccessibleName(aBtnCopyResult.GetText());
+    aLbCopyArea.SetAccessibleRelationLabeledBy(&aBtnCopyResult);
+    aEdCopyArea.SetAccessibleRelationLabeledBy(&aBtnCopyResult);
 }
 
 

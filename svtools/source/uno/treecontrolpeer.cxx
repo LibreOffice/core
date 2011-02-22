@@ -1360,7 +1360,7 @@ void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const An
         case BASEPROPERTY_TREE_DATAMODEL:
             onChangeDataModel( rTree, Reference< XTreeDataModel >( aValue, UNO_QUERY ) );
             break;
-        case BASEPROPERTY_TREE_ROWHEIGHT:
+        case BASEPROPERTY_ROW_HEIGHT:
         {
             sal_Int32 nHeight = 0;
             if( aValue >>= nHeight )
@@ -1445,7 +1445,7 @@ Any TreeControlPeer::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
             }
             return Any( eSelectionType );
         }
-        case BASEPROPERTY_TREE_ROWHEIGHT:
+        case BASEPROPERTY_ROW_HEIGHT:
             return Any( (sal_Int32)rTree.GetEntryHeight() );
         case BASEPROPERTY_TREE_DATAMODEL:
             return Any( mxDataModel );

@@ -119,6 +119,7 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aBtnMaterial        ( this, SVX_RES( BTN_MATERIAL ) ),
         aBtnUpdate          ( this, SVX_RES( BTN_UPDATE ) ),
         aBtnAssign          ( this, SVX_RES( BTN_ASSIGN ) ),
+        aFLGeometrie       ( this, SVX_RES( FL_GEOMETRIE ) ),
 
         // Geometrie
         aFtPercentDiagonal  ( this, SVX_RES( FT_PERCENT_DIAGONAL ) ),
@@ -129,36 +130,36 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aMtrEndAngle        ( this, SVX_RES( MTR_END_ANGLE ) ),
         aFtDepth            ( this, SVX_RES( FT_DEPTH ) ),
         aMtrDepth           ( this, SVX_RES( MTR_DEPTH ) ),
-        aFLGeometrie       ( this, SVX_RES( FL_GEOMETRIE ) ),
+        aFLSegments        ( this, SVX_RES( FL_SEGMENTS ) ),
 
         aFtHorizontal       ( this, SVX_RES( FT_HORIZONTAL ) ),
         aNumHorizontal      ( this, SVX_RES( NUM_HORIZONTAL ) ),
         aFtVertical         ( this, SVX_RES( FT_VERTICAL ) ),
         aNumVertical        ( this, SVX_RES( NUM_VERTICAL ) ),
-        aFLSegments        ( this, SVX_RES( FL_SEGMENTS ) ),
 
+        aFLNormals         ( this, SVX_RES( FL_NORMALS ) ),
         aBtnNormalsObj      ( this, SVX_RES( BTN_NORMALS_OBJ ) ),
         aBtnNormalsFlat     ( this, SVX_RES( BTN_NORMALS_FLAT ) ),
         aBtnNormalsSphere   ( this, SVX_RES( BTN_NORMALS_SPHERE ) ),
         aBtnNormalsInvert   ( this, SVX_RES( BTN_NORMALS_INVERT ) ),
         aBtnTwoSidedLighting( this, SVX_RES( BTN_TWO_SIDED_LIGHTING ) ),
-        aFLNormals         ( this, SVX_RES( FL_NORMALS ) ),
 
         aBtnDoubleSided     ( this, SVX_RES( BTN_DOUBLE_SIDED ) ),
 
         // Darstellung
+        aFLRepresentation  ( this, SVX_RES( FL_REPRESENTATION ) ),
         aFtShademode        ( this, SVX_RES( FT_SHADEMODE ) ),
         aLbShademode        ( this, SVX_RES( LB_SHADEMODE ) ),
+        aFLShadow          ( this, SVX_RES( FL_SHADOW ) ),
         aBtnShadow3d        ( this, SVX_RES( BTN_SHADOW_3D ) ),
         aFtSlant            ( this, SVX_RES( FT_SLANT ) ),
         aMtrSlant           ( this, SVX_RES( MTR_SLANT ) ),
-        aFLShadow          ( this, SVX_RES( FL_SHADOW ) ),
         aFtDistance         ( this, SVX_RES( FT_DISTANCE ) ),
         aMtrDistance        ( this, SVX_RES( MTR_DISTANCE ) ),
         aFtFocalLeng        ( this, SVX_RES( FT_FOCAL_LENGTH ) ),
         aMtrFocalLength     ( this, SVX_RES( MTR_FOCAL_LENGTH ) ),
         aFLCamera          ( this, SVX_RES( FL_CAMERA ) ),
-        aFLRepresentation  ( this, SVX_RES( FL_REPRESENTATION ) ),
+        aFLLight           ( this, SVX_RES( FL_LIGHT ) ),
 
         // Beleuchtung
         aBtnLight1          ( this, SVX_RES( BTN_LIGHT_1 ) ),
@@ -169,6 +170,7 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aBtnLight6          ( this, SVX_RES( BTN_LIGHT_6 ) ),
         aBtnLight7          ( this, SVX_RES( BTN_LIGHT_7 ) ),
         aBtnLight8          ( this, SVX_RES( BTN_LIGHT_8 ) ),
+        aFTLightsource     ( this, SVX_RES( FT_LIGHTSOURCE ) ),
         aLbLight1           ( this, SVX_RES( LB_LIGHT_1 ) ),
         aLbLight2           ( this, SVX_RES( LB_LIGHT_2 ) ),
         aLbLight3           ( this, SVX_RES( LB_LIGHT_3 ) ),
@@ -179,15 +181,13 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aLbLight8           ( this, SVX_RES( LB_LIGHT_8 ) ),
 
         aBtnLightColor      ( this, SVX_RES( BTN_LIGHT_COLOR ) ),
-        aFTLightsource     ( this, SVX_RES( FT_LIGHTSOURCE ) ),
 
         // #99694# Keyboard shortcuts activate the next control, so the
         // order needed to be changed here
         aFTAmbientlight    ( this, SVX_RES( FT_AMBIENTLIGHT ) ),    // Text label
         aLbAmbientlight     ( this, SVX_RES( LB_AMBIENTLIGHT ) ),   // ListBox
         aBtnAmbientColor    ( this, SVX_RES( BTN_AMBIENT_COLOR ) ), // color button
-
-        aFLLight           ( this, SVX_RES( FL_LIGHT ) ),
+        aFLTexture         ( this, SVX_RES( FL_TEXTURE ) ),
 
         // Texturen
         aFtTexKind          ( this, SVX_RES( FT_TEX_KIND ) ),
@@ -207,7 +207,7 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aBtnTexCircleY      ( this, SVX_RES( BTN_TEX_CIRCLE_Y ) ),
         aFtTexFilter        ( this, SVX_RES( FT_TEX_FILTER ) ),
         aBtnTexFilter       ( this, SVX_RES( BTN_TEX_FILTER ) ),
-        aFLTexture         ( this, SVX_RES( FL_TEXTURE ) ),
+        aFLMaterial        ( this, SVX_RES( FL_MATERIAL ) ),
 
         // Material
         aFtMatFavorites     ( this, SVX_RES( FT_MAT_FAVORITES ) ),
@@ -218,20 +218,19 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aFtMatEmission      ( this, SVX_RES( FT_MAT_EMISSION ) ),
         aLbMatEmission      ( this, SVX_RES( LB_MAT_EMISSION ) ),
         aBtnEmissionColor   ( this, SVX_RES( BTN_EMISSION_COLOR ) ),
+        aFLMatSpecular     ( this, SVX_RES( FL_MAT_SPECULAR ) ),
         aFtMatSpecular      ( this, SVX_RES( FT_MAT_SPECULAR ) ),
         aLbMatSpecular      ( this, SVX_RES( LB_MAT_SPECULAR ) ),
         aBtnSpecularColor   ( this, SVX_RES( BTN_SPECULAR_COLOR ) ),
         aFtMatSpecularIntensity( this, SVX_RES( FT_MAT_SPECULAR_INTENSITY ) ),
         aMtrMatSpecularIntensity( this, SVX_RES( MTR_MAT_SPECULAR_INTENSITY ) ),
-        aFLMatSpecular     ( this, SVX_RES( FL_MAT_SPECULAR ) ),
-        aFLMaterial        ( this, SVX_RES( FL_MATERIAL ) ),
+        aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ) ),
+        aCtlLightPreview    ( this, SVX_RES( CTL_LIGHT_PREVIEW ) ),
 
         // Unterer Bereich
         aBtnConvertTo3D     ( this, SVX_RES( BTN_CHANGE_TO_3D ) ),
         aBtnLatheObject     ( this, SVX_RES( BTN_LATHE_OBJ ) ),
         aBtnPerspective     ( this, SVX_RES( BTN_PERSPECTIVE ) ),
-        aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ) ),
-        aCtlLightPreview    ( this, SVX_RES( CTL_LIGHT_PREVIEW ) ),
 
         aImgLightOn         ( SVX_RES( RID_SVXIMAGE_LIGHT_ON ) ),
         aImgLightOff        ( SVX_RES( RID_SVXIMAGE_LIGHT_OFF ) ),
@@ -255,6 +254,11 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         mpRemember2DAttributes(NULL),
         bOnly3DChanged      ( sal_False )
 {
+    String accname(SVX_RES(STR_COLOR_LIGHT_PRE));
+    aCtlLightPreview.SetAccessibleName(accname);
+    aCtlPreview.SetAccessibleName(accname);
+    aLbAmbientlight.SetAccessibleName(aFTAmbientlight.GetDisplayText());
+
     SETHCIMAGE( aBtnGeo, BMP_GEO_H );
     SETHCIMAGE( aBtnRepresentation, BMP_REPRESENTATION_H );
     SETHCIMAGE( aBtnLight, BMP_3DLIGHT_H );
@@ -416,6 +420,86 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
     }
 
     Reset();
+
+    aBtnNormalsObj.SetAccessibleRelationMemberOf( &aFLNormals );
+    aBtnNormalsFlat.SetAccessibleRelationMemberOf( &aFLNormals );
+    aBtnNormalsSphere.SetAccessibleRelationMemberOf( &aFLNormals );
+    aBtnNormalsInvert.SetAccessibleRelationMemberOf( &aFLNormals );
+    aBtnTwoSidedLighting.SetAccessibleRelationMemberOf( &aFLNormals );
+    aBtnDoubleSided.SetAccessibleRelationMemberOf( &aFLNormals );
+
+    aBtnLight1.SetAccessibleRelationMemberOf( &aFLLight );
+    aBtnLight2.SetAccessibleRelationMemberOf( &aFLLight );
+    aBtnLight3.SetAccessibleRelationMemberOf( &aFLLight );
+    aBtnLight4.SetAccessibleRelationMemberOf( &aFLLight );
+    aBtnLight5.SetAccessibleRelationMemberOf( &aFLLight );
+    aBtnLight6.SetAccessibleRelationMemberOf( &aFLLight );
+    aBtnLight7.SetAccessibleRelationMemberOf( &aFLLight );
+    aBtnLight8.SetAccessibleRelationMemberOf( &aFLLight );
+
+    aBtnLight1.SetAccessibleRelationLabeledBy( &aFTLightsource );
+    aBtnLight2.SetAccessibleRelationLabeledBy( &aFTLightsource );
+    aBtnLight3.SetAccessibleRelationLabeledBy( &aFTLightsource );
+    aBtnLight4.SetAccessibleRelationLabeledBy( &aFTLightsource );
+    aBtnLight5.SetAccessibleRelationLabeledBy( &aFTLightsource );
+    aBtnLight6.SetAccessibleRelationLabeledBy( &aFTLightsource );
+    aBtnLight7.SetAccessibleRelationLabeledBy( &aFTLightsource );
+    aBtnLight8.SetAccessibleRelationLabeledBy( &aFTLightsource );
+    aBtnLightColor.SetAccessibleRelationMemberOf( &aFLLight );
+    aBtnLightColor.SetAccessibleRelationLabeledBy( &aFTLightsource );
+    aBtnAmbientColor.SetAccessibleRelationMemberOf( &aFLLight );
+    aBtnAmbientColor.SetAccessibleRelationLabeledBy( &aFTAmbientlight );
+
+    aBtnSpecularColor.SetAccessibleRelationLabeledBy( &aFtMatSpecular );
+    aBtnMatColor.SetAccessibleRelationLabeledBy( &aFtMatColor );
+    aBtnEmissionColor.SetAccessibleRelationLabeledBy( &aFtMatEmission );
+    aBtnTexLuminance.SetAccessibleRelationLabeledBy( &aFtTexKind );
+    aBtnTexColor.SetAccessibleRelationLabeledBy( &aFtTexKind );
+    aBtnTexReplace.SetAccessibleRelationLabeledBy( &aFtTexMode );
+    aBtnTexModulate.SetAccessibleRelationLabeledBy( &aFtTexMode );
+    aBtnTexBlend.SetAccessibleRelationLabeledBy( &aFtTexMode );
+    aBtnTexObjectX.SetAccessibleRelationLabeledBy( &aFtTexProjectionX );
+    aBtnTexParallelX.SetAccessibleRelationLabeledBy( &aFtTexProjectionX );
+    aBtnTexCircleX.SetAccessibleRelationLabeledBy( &aFtTexProjectionX );
+    aBtnTexObjectY.SetAccessibleRelationLabeledBy( &aFtTexProjectionY );
+    aBtnTexParallelY.SetAccessibleRelationLabeledBy( &aFtTexProjectionY );
+    aBtnTexCircleY.SetAccessibleRelationLabeledBy( &aFtTexProjectionY );
+    aBtnTexFilter.SetAccessibleRelationLabeledBy( &aFtTexFilter );
+    aCtlLightPreview.SetAccessibleRelationLabeledBy( &aCtlLightPreview );
+    aBtnNormalsObj.SetAccessibleRelationMemberOf(&aFLNormals);
+    aBtnNormalsFlat.SetAccessibleRelationMemberOf(&aFLNormals);
+    aBtnNormalsSphere.SetAccessibleRelationMemberOf(&aFLNormals);
+    aBtnNormalsInvert.SetAccessibleRelationMemberOf(&aFLNormals);
+    aBtnTwoSidedLighting.SetAccessibleRelationMemberOf(&aFLNormals);
+
+    aBtnShadow3d.SetAccessibleRelationMemberOf(&aFLShadow);
+
+    aBtnLight1.SetAccessibleRelationMemberOf(&aFLLight);
+    aBtnLight2.SetAccessibleRelationMemberOf(&aFLLight);
+    aBtnLight3.SetAccessibleRelationMemberOf(&aFLLight);
+    aBtnLight4.SetAccessibleRelationMemberOf(&aFLLight);
+    aBtnLight5.SetAccessibleRelationMemberOf(&aFLLight);
+    aBtnLight6.SetAccessibleRelationMemberOf(&aFLLight);
+    aBtnLight7.SetAccessibleRelationMemberOf(&aFLLight);
+    aBtnLight8.SetAccessibleRelationMemberOf(&aFLLight);
+
+    aBtnTexLuminance.SetAccessibleRelationMemberOf(&aFLTexture);
+    aBtnTexColor.SetAccessibleRelationMemberOf(&aFLTexture);
+    aBtnTexReplace.SetAccessibleRelationMemberOf(&aFLTexture);
+    aBtnTexModulate.SetAccessibleRelationMemberOf(&aFLTexture);
+    aBtnTexBlend.SetAccessibleRelationMemberOf(&aFLTexture);
+    aBtnTexObjectX.SetAccessibleRelationMemberOf(&aFLTexture);
+    aBtnTexParallelX.SetAccessibleRelationMemberOf(&aFLTexture);
+    aBtnTexCircleX.SetAccessibleRelationMemberOf(&aFLTexture);
+    aBtnTexObjectY.SetAccessibleRelationMemberOf(&aFLTexture);
+    aBtnTexParallelY.SetAccessibleRelationMemberOf(&aFLTexture);
+    aBtnTexCircleY.SetAccessibleRelationMemberOf(&aFLTexture);
+    aBtnTexFilter.SetAccessibleRelationMemberOf(&aFLTexture);
+
+    aBtnMatColor.SetAccessibleRelationMemberOf(&aFLMaterial);
+    aBtnEmissionColor.SetAccessibleRelationMemberOf(&aFLMaterial);
+
+    aBtnSpecularColor.SetAccessibleRelationMemberOf(&aFLMatSpecular);
 }
 
 // -----------------------------------------------------------------------

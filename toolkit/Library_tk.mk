@@ -99,6 +99,8 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/grid/defaultgridcolumnmodel \
     toolkit/source/controls/grid/defaultgriddatamodel \
     toolkit/source/controls/grid/gridcolumn \
+    toolkit/source/controls/grid/grideventforwarder \
+    toolkit/source/controls/grid/sortablegriddatamodel \
     toolkit/source/controls/grid/gridcontrol \
     toolkit/source/controls/roadmapcontrol \
     toolkit/source/controls/roadmapentry \

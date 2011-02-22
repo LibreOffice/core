@@ -31,7 +31,6 @@
 #include <accessibility/standard/vclxaccessibletextfield.hxx>
 #include <accessibility/standard/vclxaccessibleedit.hxx>
 #include <accessibility/standard/vclxaccessiblelist.hxx>
-#include <accessibility/standard/vclxaccessiblelistboxlist.hxx>
 #include <accessibility/helper/listboxhelper.hxx>
 
 #include <unotools/accessiblestatesethelper.hxx>

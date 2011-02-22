@@ -51,7 +51,7 @@ class ScQueryItem;
 class ScImportOptions;
 class SfxStyleSheetBase;
 class ScDPObject;
-struct ScDPFuncData;
+struct ScPivotFuncData;
 struct ScDPNumGroupInfo;
 //<!--Added by PengYunQuan for Validity Cell Range Picker
 class ScTabViewShell;
@@ -405,14 +405,14 @@ public:
                                                                 const SfxItemSet&   rArgSet, sal_uInt16 nSourceTab , int nId ) = 0;
 
     virtual AbstractScDPFunctionDlg * CreateScDPFunctionDlg( Window* pParent, int nId,
-                                                                const ScDPLabelDataVec& rLabelVec,
+                                                                const ScDPLabelDataVector& rLabelVec,
                                                                 const ScDPLabelData& rLabelData,
-                                                                const ScDPFuncData& rFuncData ) = 0;
+                                                                const ScPivotFuncData& rFuncData ) = 0;
 
     virtual AbstractScDPSubtotalDlg * CreateScDPSubtotalDlg( Window* pParent, int nId,
                                                                 ScDPObject& rDPObj,
                                                                 const ScDPLabelData& rLabelData,
-                                                                const ScDPFuncData& rFuncData,
+                                                                const ScPivotFuncData& rFuncData,
                                                                 const ScDPNameVec& rDataFields,
                                                                 bool bEnableLayout ) = 0;
 

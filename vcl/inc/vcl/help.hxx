@@ -40,16 +40,22 @@ class Window;
 // - Help-Types -
 // --------------
 
-#define QUICKHELP_LEFT      ((sal_uInt16)0x0001)
-#define QUICKHELP_CENTER    ((sal_uInt16)0x0002)
-#define QUICKHELP_RIGHT     ((sal_uInt16)0x0004)
-#define QUICKHELP_TOP       ((sal_uInt16)0x0008)
-#define QUICKHELP_VCENTER   ((sal_uInt16)0x0010)
-#define QUICKHELP_BOTTOM    ((sal_uInt16)0x0020)
-#define QUICKHELP_NOAUTOPOS (QUICKHELP_LEFT | QUICKHELP_CENTER | QUICKHELP_RIGHT | QUICKHELP_TOP | QUICKHELP_VCENTER | QUICKHELP_BOTTOM)
-#define QUICKHELP_CTRLTEXT  ((sal_uInt16)0x0040)
-#define QUICKHELP_NOEVADEPOINTER ((sal_uInt16)0x4000)
-#define QUICKHELP_BIDI_RTL  ((sal_uInt16)0x8000)
+#define QUICKHELP_LEFT              ((sal_uInt16)0x0001)
+#define QUICKHELP_CENTER            ((sal_uInt16)0x0002)
+#define QUICKHELP_RIGHT             ((sal_uInt16)0x0004)
+#define QUICKHELP_TOP               ((sal_uInt16)0x0008)
+#define QUICKHELP_VCENTER           ((sal_uInt16)0x0010)
+#define QUICKHELP_BOTTOM            ((sal_uInt16)0x0020)
+#define QUICKHELP_NOAUTOPOS         (QUICKHELP_LEFT | QUICKHELP_CENTER | QUICKHELP_RIGHT | QUICKHELP_TOP | QUICKHELP_VCENTER | QUICKHELP_BOTTOM)
+#define QUICKHELP_CTRLTEXT          ((sal_uInt16)0x0040)
+/// force the existent tip window to be re-positioned, even if the previous incarnation has the same text. Applies to ShowBallon and ShowQuickHelp.
+#define QUICKHELP_FORCE_REPOSITION  ((sal_uInt16)0x0080)
+/// no delay when opening the quick help. Applies to ShowBallon and ShowQuickHelp
+#define QUICKHELP_NO_DELAY          ((sal_uInt16)0x0100)
+/// force balloon-style in ShowTip
+#define QUICKHELP_TIP_STYLE_BALLOON ((sal_uInt16)0x0200)
+#define QUICKHELP_NOEVADEPOINTER    ((sal_uInt16)0x4000)
+#define QUICKHELP_BIDI_RTL          ((sal_uInt16)0x8000)
 
 // By changes you must also change: rsc/vclrsc.hxx
 #define OOO_HELP_INDEX          ".help:index"
@@ -101,21 +107,25 @@ public:
 
     static void         EnableQuickHelp();
     static void         DisableQuickHelp();
-    static sal_Bool         IsQuickHelpEnabled();
-    static sal_Bool         ShowQuickHelp( Window* pParent,
+    static sal_Bool     IsQuickHelpEnabled();
+    static sal_Bool     ShowQuickHelp( Window* pParent,
                                        const Rectangle& rScreenRect,
                                        const XubString& rHelpText,
                                        const XubString& rLongHelpText,
                                        sal_uInt16 nStyle = 0 );
-    static sal_Bool         ShowQuickHelp( Window* pParent,
+    static sal_Bool     ShowQuickHelp( Window* pParent,
                                        const Rectangle& rScreenRect,
                                        const XubString& rHelpText,
                                        sal_uInt16 nStyle = 0 )
                             { return Help::ShowQuickHelp( pParent, rScreenRect, rHelpText, XubString(), nStyle ); }
 
-    static sal_uLong        ShowTip( Window* pParent,
+    static sal_uLong    ShowTip( Window* pParent,
                                  const Rectangle& rScreenRect,
                                  const XubString& rText, sal_uInt16 nStyle = 0 );
+    static void         UpdateTip( sal_uLong nId,
+                                   Window* pParent,
+                                   const Rectangle& rScreenRect,
+                                   const XubString& rText );
     static void         HideTip( sal_uLong nId );
 };
 

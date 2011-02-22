@@ -33,6 +33,8 @@
 #define RID_PDF_TAB_OPNFTR          (RID_PDF_DIALOG_START +   3)
 #define RID_PDF_TAB_SECURITY        (RID_PDF_DIALOG_START +   4)
 #define RID_PDF_TAB_LINKS           (RID_PDF_DIALOG_START +   12)
+#define RID_PDF_WARNPDFAPASSWORD    (RID_PDF_DIALOG_START +   6)
+
 //strings
 #define STR_PDF_EXPORT              (RID_PDF_DIALOG_START +   5)
 
@@ -152,12 +154,14 @@
 #define STR_USER_PWD_UNSET      124
 #define STR_USER_PWD_UNENC      125
 #define STR_SET_PWD             126
+#define STR_USER_PWD_PDFA       127
 
 #define FT_OWNER_PWD            128
 #define STR_OWNER_PWD_SET       129
 #define STR_OWNER_PWD_REST      130
 #define STR_OWNER_PWD_UNSET     131
 #define STR_OWNER_PWD_UNREST    132
+#define STR_OWNER_PWD_PDFA      133
 
 #define FL_PRINT_PERMISSIONS    133
 #define RB_PRINT_NONE           134

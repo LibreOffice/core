@@ -268,7 +268,14 @@
 #define STR_POOLNUMRULE_BUL3                (RC_POOLNUMRULE_BEGIN+  7)
 #define STR_POOLNUMRULE_BUL4                (RC_POOLNUMRULE_BEGIN+  8)
 #define STR_POOLNUMRULE_BUL5                (RC_POOLNUMRULE_BEGIN+  9)
-
+//IAccessibility2 Impplementaton 2009-----
+//Solution:Define column item's accessible name ID.
+#define STR_COLUMN_VALUESET_ITEM0       (RC_POOLNUMRULE_BEGIN + 10 )
+#define STR_COLUMN_VALUESET_ITEM1       (RC_POOLNUMRULE_BEGIN + 11 )
+#define STR_COLUMN_VALUESET_ITEM2       (RC_POOLNUMRULE_BEGIN + 12 )
+#define STR_COLUMN_VALUESET_ITEM3       (RC_POOLNUMRULE_BEGIN + 13 )
+#define STR_COLUMN_VALUESET_ITEM4       (RC_POOLNUMRULE_BEGIN + 14 )
+//-----IAccessibility2 Impplementaton 2009
 //-----------------
 // Paragraph styles
 //-----------------

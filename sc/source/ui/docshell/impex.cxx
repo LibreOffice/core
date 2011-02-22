@@ -826,8 +826,7 @@ sal_Bool ScImportExport::Text2Doc( SvStream& rStrm )
     SCCOL nEndCol = aRange.aEnd.Col();
     SCROW nEndRow = aRange.aEnd.Row();
     sal_uLong  nOldPos = rStrm.Tell();
-    if ( rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
-        rStrm.StartReadingUnicodeText();
+    rStrm.StartReadingUnicodeText( rStrm.GetStreamCharSet() );
     sal_Bool   bData = sal_Bool( !bSingle );
     if( !bSingle)
         bOk = StartPaste();
@@ -1167,8 +1166,7 @@ sal_Bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     ::std::auto_ptr<ScProgress> xProgress( new ScProgress( pDocSh,
             ScGlobal::GetRscString( STR_LOAD_DOC ), rStrm.Tell() - nOldPos ));
     rStrm.Seek( nOldPos );
-    if ( rStrm.GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
-        rStrm.StartReadingUnicodeText();
+    rStrm.StartReadingUnicodeText( rStrm.GetStreamCharSet() );
 
     sal_Bool bOld = ScColumn::bDoubleAlloc;
     ScColumn::bDoubleAlloc = sal_True;

@@ -69,10 +69,22 @@ $(COMPONENT_JARFILES) : $(CLASSDIR)/$$(@:f)
 .ENDIF			# "$(COMPONENT_JARFILES)"!=""
 
 .IF "$(COMPONENT_LIBRARIES)"!=""
+PACK_RUNTIME!:=TRUE
 # TODO(Q3): strip the binary?
 $(COMPONENT_LIBRARIES) : $(DLLDEST)/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COMMAND_ECHO)$(COPY) $< $@
+.ENDIF			# "$(COMPONENT_LIBRARIES)"!=""
+
+.IF "$(PACK_RUNTIME)"!=""
+PACK_RUNTIME_FLAG:=$(MISC)/$(TARGET)_pack_runtime.flag
+$(EXTENSION_TARGET) : $(PACK_RUNTIME_FLAG)
+
+$(EXTENSIONDIR) :
+    @@-$(MKDIRHIER) $(@:d)
+
+$(PACK_RUNTIME_FLAG) : $(EXTENSIONDIR)
+    @@-$(MKDIRHIER) $(@:d)
 .IF "$(OS)$(CPU)"=="WNTI"
 .IF "$(COM)"=="GCC"
    $(GNUCOPY) $(SOLARBINDIR)/mingwm10.dll $(EXTENSIONDIR)
@@ -120,7 +132,8 @@ $(COMPONENT_LIBRARIES) : $(DLLDEST)/$$(@:f)
 .ENDIF          # "$(PACKMS)"!=""
 .ENDIF	#"$(COM)"=="GCC" 
 .ENDIF 			# "$(OS)$(CPU)"=="WNTI"
-.ENDIF			# "$(COMPONENT_LIBRARIES)"!=""
+    @$(TOUCH) $@
+.ENDIF			# "$(PACK_RUNTIME)"!=""
 
 IMPLEMENTATION_IDENTIFIER*="com.sun.star.$(EXTENSIONNAME)-$(PLATFORMID)"
 

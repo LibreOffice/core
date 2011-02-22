@@ -93,6 +93,7 @@
 #endif
 
 
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ui::dialogs;
@@ -2084,16 +2085,16 @@ sal_Bool WinSalPrinter::StartJob( const XubString* pFileName,
     if( mpInfoPrinter->maPortName.EqualsIgnoreCaseAscii( "FILE:" ) && !(pFileName && pFileName->Len()) )
     {
 
-        Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+        uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
         if( xFactory.is() )
         {
-            Reference< XFilePicker > xFilePicker( xFactory->createInstance(
+            uno::Reference< XFilePicker > xFilePicker( xFactory->createInstance(
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ) ),
                 UNO_QUERY );
             DBG_ASSERT( xFilePicker.is(), "could not get FilePicker service" );
 
-            Reference< XInitialization > xInit( xFilePicker, UNO_QUERY );
-            Reference< XFilterManager > xFilterMgr( xFilePicker, UNO_QUERY );
+            uno::Reference< XInitialization > xInit( xFilePicker, UNO_QUERY );
+            uno::Reference< XFilterManager > xFilterMgr( xFilePicker, UNO_QUERY );
             if( xInit.is() && xFilePicker.is() && xFilterMgr.is() )
             {
                 Sequence< Any > aServiceType( 1 );

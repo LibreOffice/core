@@ -41,6 +41,7 @@
 #include "vcl/svapp.hxx"
 #include "vcl/salprn.hxx"
 #include "vcl/sysdata.hxx"
+#include "vcl/region.h"
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -290,28 +291,27 @@ long PspGraphics::GetGraphicsWidth() const
 
 void PspGraphics::ResetClipRegion()
 {
-    m_pPrinterGfx->ResetClipRegion ();
+    m_pPrinterGfx->ResetClipRegion();
 }
 
-void PspGraphics::BeginSetClipRegion( sal_uLong n )
+bool PspGraphics::setClipRegion( const Region& i_rClip )
 {
-    m_pPrinterGfx->BeginSetClipRegion(n);
-}
+    // TODO: support polygonal clipregions here
+    m_pPrinterGfx->BeginSetClipRegion( i_rClip.GetRectCount() );
 
-sal_Bool PspGraphics::unionClipRegion( long nX, long nY, long nDX, long nDY )
-{
-    return (sal_Bool)m_pPrinterGfx->UnionClipRegion (nX, nY, nDX, nDY);
-}
-
-bool PspGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& )
-{
-    // TODO: implement and advertise OutDevSupport_B2DClip support
-    return false;
-}
-
-void PspGraphics::EndSetClipRegion()
-{
-    m_pPrinterGfx->EndSetClipRegion ();
+    ImplRegionInfo aInfo;
+    long nX, nY, nW, nH;
+    bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
+    while( bRegionRect )
+    {
+        if ( nW && nH )
+        {
+            m_pPrinterGfx->UnionClipRegion( nX, nY, nW, nH );
+        }
+        bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
+    }
+    m_pPrinterGfx->EndSetClipRegion();
+    return true;
 }
 
 void PspGraphics::SetLineColor()

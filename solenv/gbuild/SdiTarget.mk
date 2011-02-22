@@ -32,10 +32,9 @@
 # SdiTarget class
 
 gb_SdiTarget_SVIDLTARGET := $(call gb_Executable_get_target,svidl)
-gb_SdiTarget_SVIDLAUXDEPS := $(call gb_Library_get_target,tl) $(call gb_Library_get_target,sal)
 gb_SdiTarget_SVIDLCOMMAND := $(gb_SdiTarget_SVIDLPRECOMMAND) $(gb_SdiTarget_SVIDLTARGET)
 
-$(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi | $(gb_SdiTarget_SVIDLTARGET) $(gb_SdiTarget_SVIDLAUXDEPS)
+$(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi | $(gb_SdiTarget_SVIDLTARGET)
     $(call gb_Output_announce,$*,$(true),SDI,1)
     $(call gb_Helper_abbreviate_dirs,\
         mkdir -p $(dir $@))

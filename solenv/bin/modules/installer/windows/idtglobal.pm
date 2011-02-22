@@ -90,10 +90,8 @@ sub get_next_free_number
     }
     until (!($alreadyexists));
 
-    if (( $counter > 9 ) && ( length($name) > 6 ))
-    {
-        $dontsave = 1;
-    }
+    if (( $counter > 9 ) && ( length($name) > 6 )) { $dontsave = 1; }
+    if (( $counter > 99 ) && ( length($name) > 5 )) { $dontsave = 1; }
 
     if (!($dontsave))
     {
@@ -192,6 +190,14 @@ sub make_eight_three_conform
                 $name =~ s/\s*$//; # removing ending whitespaces
                 $name = $name . "\~";
                 $number = get_next_free_number($name, $shortnamesref);
+
+                if ( $number > 99 )
+                {
+                    $name = substr($name, 0, 4);    # name, offset, length
+                    $name =~ s/\s*$//; # removing ending whitespaces
+                    $name = $name . "\~";
+                    $number = get_next_free_number($name, $shortnamesref);
+                }
             }
 
             $name = $name . "$number";
@@ -224,6 +230,14 @@ sub make_eight_three_conform
                 $name =~ s/\s*$//; # removing ending whitespaces
                 $name = $name . "\~";
                 $number = get_next_free_number($name, $shortnamesref);
+
+                if ( $number > 99 )
+                {
+                    $name = substr($name, 0, 4);    # name, offset, length
+                    $name =~ s/\s*$//; # removing ending whitespaces
+                    $name = $name . "\~";
+                    $number = get_next_free_number($name, $shortnamesref);
+                }
             }
 
             $name = $name . "$number";

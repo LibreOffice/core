@@ -175,7 +175,7 @@ bool BubbleChart::isSeperateStackingForDifferentSigns( sal_Int32 /*nDimensionInd
 
 LegendSymbolStyle BubbleChart::getLegendSymbolStyle()
 {
-    return chart2::LegendSymbolStyle_CIRCLE;
+    return LegendSymbolStyle_CIRCLE;
 }
 
 drawing::Direction3D BubbleChart::getPreferredDiagramAspectRatio() const

@@ -83,9 +83,10 @@ public:
     SCTAB           GetTableCount() { return nTableCount;}
 
 private:
+    FixedLine               aFlPos;
     RadioButton             aBtnBefore;
     RadioButton             aBtnBehind;
-    FixedLine               aFlPos;
+    FixedLine               aFlTable;
     RadioButton             aBtnNew;
     RadioButton             aBtnFromFile;
     FixedText               aFtCount;
@@ -96,7 +97,6 @@ private:
     ScExpandedFixedText     aFtPath;
     PushButton              aBtnBrowse;
     CheckBox                aBtnLink;
-    FixedLine               aFlTable;
     OKButton                aBtnOk;
     CancelButton            aBtnCancel;
     HelpButton              aBtnHelp;

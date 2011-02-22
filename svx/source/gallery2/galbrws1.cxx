@@ -41,6 +41,8 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include "gallery.hrc"
 #include <algorithm>
+#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
 
 #include <svx/svxdlg.hxx> //CHINA001
 //CHINA001 #include <svx/dialogs.hrc> //CHINA001
@@ -162,6 +164,7 @@ GalleryBrowser1::GalleryBrowser1( GalleryBrowser* pParent, const ResId& rResId, 
 
     mpThemes->SetHelpId( HID_GALLERY_THEMELIST );
     mpThemes->SetSelectHdl( LINK( this, GalleryBrowser1, SelectThemeHdl ) );
+    mpThemes->SetAccessibleName(String(SVX_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) ) );
 
     for( sal_uIntPtr i = 0, nCount = mpGallery->GetThemeCount(); i < nCount; i++ )
         ImplInsertThemeEntry( mpGallery->GetThemeInfo( i ) );

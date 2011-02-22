@@ -131,7 +131,8 @@ void SwBodyFrm::Format( const SwBorderAttrs * )
         if ( nHeight < 0 )
             nHeight = 0;
         Frm().Height( nHeight );
-        if( IsVertical() && !IsReverse() && nWidth != Frm().Width() )
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if( IsVertical() && !IsVertLR() && !IsReverse() && nWidth != Frm().Width() )
             Frm().Pos().X() += Frm().Width() - nWidth;
         Frm().Width( nWidth );
     }
@@ -342,9 +343,19 @@ void SwPageFrm::CheckDirection( sal_Bool bVert )
     {
         if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir ||
             GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        {
             bVertical = 0;
+            bVertLR = 0;
+        }
         else
+        {
             bVertical = 1;
+            if(FRMDIR_VERT_TOP_RIGHT == nDir)
+                bVertLR = 0;
+                else if(FRMDIR_VERT_TOP_LEFT==nDir)
+                   bVertLR = 1;
+        }
 /*
         if( pDesc && pDesc->GetName().GetChar(0)=='x')
             bReverse = 1;

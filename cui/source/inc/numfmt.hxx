@@ -116,14 +116,14 @@ private:
     FixedText               aFtLanguage;
     SvxLanguageBox          aLbLanguage;
     CheckBox                aCbSourceFormat;
-
+    SvxNumberPreviewImpl    aWndPreview;
+    FixedLine               aFlOptions;
     FixedText               aFtDecimals;
     NumericField            aEdDecimals;
+    CheckBox                aBtnNegRed;
     FixedText               aFtLeadZeroes;
     NumericField            aEdLeadZeroes;
-    CheckBox                aBtnNegRed;
     CheckBox                aBtnThousand;
-    FixedLine               aFlOptions;
 
     FixedText               aFtEdFormat;
     Edit                    aEdFormat;
@@ -135,7 +135,6 @@ private:
     Edit                    aEdComment;
     Timer                   aResetWinTimer;
 
-    SvxNumberPreviewImpl    aWndPreview;
 
     SvxNumberInfoItem*      pNumItem;
     SvxNumberFormatShell*   pNumFmtShell;

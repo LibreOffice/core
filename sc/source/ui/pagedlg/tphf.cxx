@@ -101,6 +101,8 @@ ScHFPage::ScHFPage( Window* pParent, sal_uInt16 nResId,
         aBtnEdit.SetHelpId( HID_SC_HEADER_EDIT );
     else
         aBtnEdit.SetHelpId( HID_SC_FOOTER_EDIT );
+
+    aBtnEdit.SetAccessibleRelationMemberOf(&aFrm);
 }
 
 //------------------------------------------------------------------

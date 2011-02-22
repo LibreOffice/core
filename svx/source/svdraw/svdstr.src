@@ -2865,76 +2865,14 @@ Bitmap SIP_SA_ACCESSIBILITY_CROP_MARKERS
     File = "cropmarkersACC.bmp";
 };
 
-// ******************************************************************* EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//IAccessibility2 Implementation 2009-----
+String STR_ObjNameSingulFONTWORK
+{
+    Text [ en-US ] = "font work" ;
+};
+String STR_ObjNamePluralFONTWORK
+{
+    Text [ en-US ] = "font works" ;
+};
+//-----IAccessibility2 Implementation 2009
 

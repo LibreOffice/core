@@ -134,6 +134,11 @@ public:
     /** Converts the passed rectangle from Excel chart units into 1/100 mm. */
     ::com::sun::star::awt::Rectangle CalcHmmFromChartRect( const XclChRectangle& rRect ) const;
 
+    /** Converts the passed horizontal coordinate from 1/100 mm into a relative position. */
+    double              CalcRelativeFromHmmX( sal_Int32 nPosX ) const;
+    /** Converts the passed vertical coordinate from 1/100 mm into a relative position. */
+    double              CalcRelativeFromHmmY( sal_Int32 nPosY ) const;
+
     /** Converts the passed horizontal coordinate from Excel chart units into a relative position. */
     double              CalcRelativeFromChartX( sal_Int32 nPosX ) const;
     /** Converts the passed vertical coordinate from Excel chart units into a relative position. */

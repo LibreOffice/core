@@ -28,6 +28,7 @@
 #ifndef _SV_SVDATA_HXX
 #define _SV_SVDATA_HXX
 
+#include "rtl/ref.hxx"
 #include "vos/thread.hxx"
 #include "tools/string.hxx"
 #include "tools/gen.hxx"
@@ -42,6 +43,8 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "unotools/options.hxx"
 
+#include <hash_map>
+
 namespace com {
 namespace sun {
 namespace star {
@@ -50,9 +53,6 @@ namespace lang {
 }
 namespace frame {
     class XSessionManagerClient;
-}
-namespace awt {
-    class XDisplayConnection;
 }
 }}}
 
@@ -361,21 +361,21 @@ struct ImplSVData
     sal_Bool                    mbIsTestTool;
 
     vos::OThread::TThreadIdentifier                     mnMainThreadId;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::awt::XDisplayConnection >     mxDisplayConnection;
+    rtl::Reference< vcl::DisplayConnection >            mxDisplayConnection;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxAccessBridge;
     com::sun::star::uno::Reference< com::sun::star::frame::XSessionManagerClient > xSMClient;
     ::vcl::SettingsConfigItem*          mpSettingsConfigItem;
     std::list< vcl::DeleteOnDeinitBase* >*   mpDeinitDeleteList;
+    std::hash_map< int, rtl::OUString >*     mpPaperNames;
 };
 
 void        ImplInitSVData();
 void        ImplDeInitSVData();
 void        ImplDestroySVData();
 Window*     ImplGetDefaultWindow();
-VCL_DLLPUBLIC ResMgr*     ImplGetResMgr();
-VCL_DLLPUBLIC ResId VclResId( sal_Int32 nId ); // throws std::bad_alloc if no res mgr
+VCL_PLUGIN_PUBLIC ResMgr*     ImplGetResMgr();
+VCL_PLUGIN_PUBLIC ResId VclResId( sal_Int32 nId ); // throws std::bad_alloc if no res mgr
 DockingManager*     ImplGetDockingManager();
 void        ImplWindowAutoMnemonic( Window* pWindow );
 
@@ -391,8 +391,8 @@ void        ImplFreeEventHookData();
 long        ImplCallPreNotify( NotifyEvent& rEvt );
 long        ImplCallEvent( NotifyEvent& rEvt );
 
-extern VCL_DLLPUBLIC ImplSVData* pImplSVData;
-inline VCL_DLLPUBLIC ImplSVData* ImplGetSVData() { return pImplSVData; }
+extern VCL_PLUGIN_PUBLIC ImplSVData* pImplSVData;
+inline VCL_PLUGIN_PUBLIC ImplSVData* ImplGetSVData() { return pImplSVData; }
 inline ImplSVData* ImplGetAppSVData() { return ImplGetSVData(); }
 
 bool ImplInitAccessBridge( sal_Bool bAllowCancel, sal_Bool &rCancelled );

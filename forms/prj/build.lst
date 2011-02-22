@@ -1,4 +1,4 @@
-fm	forms	:    l10n oovbaapi svx sfx2 qadevOOo LIBXSLT:libxslt NULL
+fm	forms	:    L10N:l10n oovbaapi svx sfx2 qadevOOo LIBXSLT:libxslt NULL
 fm  forms                                   usr1    -   all fm_mkofrm NULL
 fm	forms\inc								nmake	-	all	fm_inc NULL
 fm	forms\source\inc						get		-	all	fm_sinc NULL

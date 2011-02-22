@@ -1,2 +1,2 @@
-sw      sw      :    filter l10n connectivity OOo:writerperfect vbahelper svx stoc writerfilter LIBXSLT:libxslt NULL
+sw      sw      :    filter L10N:l10n connectivity OOo:writerperfect vbahelper svx stoc writerfilter LIBXSLT:libxslt NULL
 sw sw\prj nmake - all sw_prj   NULL

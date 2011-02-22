@@ -46,6 +46,9 @@
 #define FT_PASSWD_CONFIRM2 27
 #define ED_PASSWD_CONFIRM2 28
 
+//IAccessibility2 Implementation 2009-----
+#define TEXT_PASSWD     31
+//-----IAccessibility2 Implementation 2009
 #endif
 
 // ******************************************************************* EOF

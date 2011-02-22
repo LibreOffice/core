@@ -483,47 +483,47 @@ String RID_YOU_SURE
 
 Bitmap RID_BUTTERFLY
 {
-    File = "butter.png" ;
+    File = "source/butter.png" ;
 };
 
 Bitmap RID_BMP_SMALL_PRINTER
 {
-    File = "print.png";
+    File = "source/print.png";
 };
 
 Bitmap RID_BMP_SMALL_FAX
 {
-    File = "fax.png";
+    File = "source/fax.png";
 };
 
 Bitmap RID_BMP_SMALL_PDF
 {
-    File = "pdf.png";
+    File = "source/pdf.png";
 };
 
 Bitmap RID_BMP_PRINTER
 {
-    File = "printer_large.png";
+    File = "source/printer_large.png";
 };
 
 Bitmap RID_BMP_SMALL_PRINTER_HC
 {
-    File = "printer_16_h.png";
+    File = "source/printer_16_h.png";
 };
 
 Bitmap RID_BMP_SMALL_FAX_HC
 {
-    File = "fax_16_h.png";
+    File = "source/fax_16_h.png";
 };
 
 Bitmap RID_BMP_SMALL_PDF_HC
 {
-    File = "printpdf_16_h.png";
+    File = "source/printpdf_16_h.png";
 };
 
 Bitmap RID_BMP_PRINTER_HC
 {
-    File = "printer_40x48_h.png";
+    File = "source/printer_40x48_h.png";
 };
 
 

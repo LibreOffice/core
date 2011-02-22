@@ -482,9 +482,17 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
         if ( IsVertical() )
         {
             ASSERT( ! IsSwapped(),"Swapped frame while calculating nRstHeight" );
-            nRstHeight = Frm().Left() + Frm().Width() -
-                         ( GetUpper()->Frm().Left() + GetUpper()->Prt().Left() );
-        }
+
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            if ( IsVertLR() )
+                    nRstHeight = GetUpper()->Frm().Left()
+                               + GetUpper()->Prt().Left()
+                               + GetUpper()->Prt().Width()
+                               - Frm().Left();
+            else
+                nRstHeight = Frm().Left() + Frm().Width() -
+                            ( GetUpper()->Frm().Left() + GetUpper()->Prt().Left() );
+         }
         else
             nRstHeight = GetUpper()->Frm().Top()
                        + GetUpper()->Prt().Top()
@@ -1137,7 +1145,9 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
     // If the frame grows (or shirks) the repaint rectangle cannot simply
     // be rotated back after formatting, because we use the upper left point
     // of the frame for rotation. This point changes when growing/shrinking.
-    if ( IsVertical() && nChg )
+
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    if ( IsVertical() && !IsVertLR() && nChg )
     {
         SwRect &rRepaint = *(pPara->GetRepaint());
         rRepaint.Left( rRepaint.Left() - nChg );

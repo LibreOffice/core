@@ -85,7 +85,7 @@ namespace grutils { class GrFeatureParser; }
 // This class uses the SIL Graphite engine to provide complex text layout services to the VCL
 // @author tse
 //
-class VCL_DLLPUBLIC GraphiteLayout : public SalLayout
+class VCL_PLUGIN_PUBLIC GraphiteLayout : public SalLayout
 {
 public:
     // Mask to allow Word break status to be stored within mvChar2BaseGlyph
@@ -133,7 +133,7 @@ private:
     const grutils::GrFeatureParser * mpFeatures;
 
 public:
-    GraphiteLayout(const gr::Font & font, const grutils::GrFeatureParser * features = NULL) throw();
+    explicit GraphiteLayout( const gr::Font& font, const grutils::GrFeatureParser* features = NULL ) throw();
 
     // used by upper layers
     virtual bool  LayoutText( ImplLayoutArgs& );    // first step of layout
@@ -182,7 +182,5 @@ private:
     std::pair<long,long>  caret_positions(size_t) const;
     void expandOrCondense(ImplLayoutArgs &rArgs);
 };
-
-
 
 #endif // _SV_GRAPHITELAYOUT_HXX

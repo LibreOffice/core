@@ -778,6 +778,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
     bHierarchical           ( sal_False ),
     bBindingUpdate          ( sal_True )
 {
+    aFmtLb.SetAccessibleName(SfxResId(STR_STYLE_ELEMTLIST));
     aFmtLb.SetHelpId( HID_TEMPLATE_FMT );
     aFilterLb.SetHelpId( HID_TEMPLATE_FILTER );
     aFmtLb.SetStyle( aFmtLb.GetStyle() | WB_SORT | WB_HIDESELECTION );
@@ -1792,6 +1793,7 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FilterSelectHdl, ListBox *, pBox )
 
             FillTreeBox();
             SelectStyle(aSelectEntry);
+            pTreeBox->SetAccessibleName(SfxResId(STR_STYLE_ELEMTLIST));
             pTreeBox->Show();
         }
     }

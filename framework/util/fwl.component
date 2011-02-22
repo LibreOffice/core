@@ -85,9 +85,6 @@
   <implementation name="com.sun.star.comp.framework.SimpleTextStatusbarController">
     <service name="com.sun.star.frame.StatusbarController"/>
   </implementation>
-  <implementation name="com.sun.star.comp.framework.TabWindowService">
-    <service name="com.sun.star.ui.dialogs.TabContainerWindow"/>
-  </implementation>
   <implementation name="com.sun.star.comp.framework.ToolBarsMenuController">
     <service name="com.sun.star.frame.PopupMenuController"/>
   </implementation>

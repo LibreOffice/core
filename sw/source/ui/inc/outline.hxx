@@ -104,9 +104,10 @@ class SwOutlineTabDialog : public SfxTabDialog
  * --------------------------------------------------*/
 class SwOutlineSettingsTabPage : public SfxTabPage
 {
-    ListBox         aLevelLB;
     FixedLine       aLevelFL;
+    ListBox         aLevelLB;
 
+    FixedLine        aNumberFL;
     FixedText       aCollLbl;
     ListBox         aCollBox;
     FixedText       aNumberLbl;
@@ -122,7 +123,6 @@ class SwOutlineSettingsTabPage : public SfxTabPage
     Edit            aSuffixED;
     FixedText       aStartLbl;
     NumericField    aStartEdit;
-    FixedLine        aNumberFL;
     NumberingPreview aPreviewWIN;
 
     String              aNoFmtName;

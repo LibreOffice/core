@@ -167,6 +167,7 @@ SHL3OBJS=	\
     $(SLO)$/localedata_de_DE.obj	\
     $(SLO)$/localedata_de_LI.obj	\
     $(SLO)$/localedata_de_LU.obj	\
+    $(SLO)$/localedata_dsb_DE.obj	\
     $(SLO)$/localedata_el_GR.obj	\
     $(SLO)$/localedata_et_EE.obj	\
     $(SLO)$/localedata_eu.obj	\
@@ -260,15 +261,18 @@ SHL4OBJS= \
     $(SLO)$/localedata_fa_IR.obj \
     $(SLO)$/localedata_gu_IN.obj \
     $(SLO)$/localedata_gug_PY.obj \
+    $(SLO)$/localedata_haw_US.obj \
     $(SLO)$/localedata_ha_GH.obj \
     $(SLO)$/localedata_he_IL.obj \
     $(SLO)$/localedata_hi_IN.obj \
     $(SLO)$/localedata_hil_PH.obj \
+    $(SLO)$/localedata_ht_HT.obj \
     $(SLO)$/localedata_hu_HU.obj \
     $(SLO)$/localedata_hy_AM.obj \
     $(SLO)$/localedata_ia.obj    \
     $(SLO)$/localedata_id_ID.obj \
     $(SLO)$/localedata_ja_JP.obj \
+    $(SLO)$/localedata_jbo.obj \
     $(SLO)$/localedata_kk_KZ.obj \
     $(SLO)$/localedata_km_KH.obj \
     $(SLO)$/localedata_kn_IN.obj \
@@ -276,6 +280,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_ku_TR.obj \
     $(SLO)$/localedata_ky_KG.obj \
     $(SLO)$/localedata_lg_UG.obj \
+    $(SLO)$/localedata_lif_NP.obj \
     $(SLO)$/localedata_ln_CD.obj \
     $(SLO)$/localedata_lo_LA.obj \
     $(SLO)$/localedata_mai_IN.obj \
@@ -308,10 +313,12 @@ SHL4OBJS= \
     $(SLO)$/localedata_tpi_PG.obj \
     $(SLO)$/localedata_ts_ZA.obj \
     $(SLO)$/localedata_ug_CN.obj \
+    $(SLO)$/localedata_ur_PK.obj \
     $(SLO)$/localedata_uz_UZ.obj \
     $(SLO)$/localedata_ve_ZA.obj \
     $(SLO)$/localedata_vi_VN.obj \
     $(SLO)$/localedata_xh_ZA.obj \
+    $(SLO)$/localedata_yi_US.obj \
     $(SLO)$/localedata_zh_CN.obj \
     $(SLO)$/localedata_zh_HK.obj \
     $(SLO)$/localedata_zh_MO.obj \

@@ -147,6 +147,10 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     {
         Text [ en-US ] = "on" ;
     };
+    String STR_COLOR
+    {
+        Text [ en-US ] = "Display border in" ;
+    };
     FixedLine FL_NAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;

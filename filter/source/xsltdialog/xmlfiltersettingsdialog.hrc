@@ -39,5 +39,5 @@
 #define PB_XML_FILTER_OPEN              7
 #define BTN_XML_FILTER_HELP             8
 #define PB_XML_FILTER_CLOSE             9
-
+#define STR_XML_FILTER_LISTBOX              10
 #endif

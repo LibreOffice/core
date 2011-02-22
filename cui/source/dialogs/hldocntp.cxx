@@ -142,6 +142,9 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& 
 
     maBtCreate.SetClickHdl        ( LINK ( this, SvxHyperlinkNewDocTp, ClickNewHdl_Impl ) );
 
+    maBtCreate.SetAccessibleRelationMemberOf( &maGrpNewDoc );
+    maBtCreate.SetAccessibleRelationLabeledBy( &maFtPath );
+
     FillDocumentList ();
 }
 

@@ -298,7 +298,8 @@ testcase tToolsExtensionManager
                             ExtensionSoftwareLicenseAgreement.CANCEL
                     kontext
                     if active.exists(5) then
-                    	qaerrorlog "#i73307# Alzheimer feature extension licensing '" + active.getText + "'"
+                        '#i73307# 
+                    	warnlog "Alzheimer feature extension licensing '" + active.getText + "'"
                     	active.ok
                     endif
                 endif

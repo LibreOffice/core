@@ -197,6 +197,10 @@ AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttr
     AddItemConnection( new sfx::CheckBoxConnection( SID_ATTR_ALIGN_SHRINKTOFIT, maBtnShrink, sfx::ITEMCONN_HIDE_UNKNOWN ) );
     AddItemConnection( new sfx::DummyItemConnection( SID_ATTR_FRAMEDIRECTION, maFtFrameDir, sfx::ITEMCONN_HIDE_UNKNOWN ) );
     AddItemConnection( new FrameDirListBoxConnection( SID_ATTR_FRAMEDIRECTION, maLbFrameDir, sfx::ITEMCONN_HIDE_UNKNOWN ) );
+
+    maLbHorAlign.SetAccessibleRelationMemberOf( &maFlAlignment );
+    maEdIndent.SetAccessibleRelationMemberOf( &maFlAlignment );
+    maLbVerAlign.SetAccessibleRelationMemberOf( &maFlAlignment );
 }
 
 AlignmentTabPage::~AlignmentTabPage()

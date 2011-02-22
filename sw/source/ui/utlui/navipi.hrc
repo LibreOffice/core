@@ -88,4 +88,3 @@
 #define ST_POSTIT_SHOW              (ST_GLOBAL_CONTEXT_FIRST +35)
 #define ST_POSTIT_HIDE              (ST_GLOBAL_CONTEXT_FIRST +36)
 #define ST_POSTIT_DELETE            (ST_GLOBAL_CONTEXT_FIRST +37)
-

@@ -3,15 +3,6 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
-#include <com/sun/star/container/NoSuchElementException.idl>
-#endif
-
-#include <com/sun/star/chart2/XLegendEntry.idl>
-
 module com
 {
 module sun
@@ -25,30 +16,6 @@ module chart2
  */
 interface XLegend : ::com::sun::star::uno::XInterface
 {
-    /** The entry added is appended to the list, such that it appears
-        at the end of the legend.
-
-        @param xEntry
-
-            If it supports <type>CustomLegendEntry</type>,
-            the <type>XTitle</type> is used for displaying a text, and
-            the symbol is displayed according to the
-            <member>CustomLegendEntry::SymbolStyle</member> property.
-     */
-    void registerEntry( [in] XLegendEntry xEntry )
-        raises( com::sun::star::lang::IllegalArgumentException );
-
-    /** Removes an entry that was registered before
-
-        <p>(see <member>registerEntry</member>)</p>
-     */
-    void revokeEntry( [in] XLegendEntry xEntry )
-        raises( com::sun::star::container::NoSuchElementException );
-
-    /** Returns a list of all legend entries in the order in which
-        they were registered.
-     */
-    sequence< XLegendEntry > getEntries();
 };
 
 } ; // chart2

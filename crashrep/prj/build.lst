@@ -1,4 +1,4 @@
-cr	crashrep	:    l10n sal sysui SO:tools shell NULL
+cr	crashrep	:    L10N:l10n sal sysui SO:tools shell NULL
 cr	crashrep				usr1	-	all	cr_mkout NULL
 cr	crashrep\source\all		nmake	-	all	cr_sresource NULL
 cr	crashrep\source\unx		nmake	-	u	cr_sunx NULL

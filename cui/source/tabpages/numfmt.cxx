@@ -260,13 +260,18 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
         aFtLanguage     ( this, CUI_RES( FT_LANGUAGE ) ),
         aLbLanguage     ( this, CUI_RES( LB_LANGUAGE ), sal_False ),
         aCbSourceFormat ( this, CUI_RES( CB_SOURCEFORMAT ) ),
+#if ENABLE_LAYOUT
+        aWndPreview     ( LAYOUT_THIS_WINDOW(this), CUI_RES_PLAIN( WND_NUMBER_PREVIEW ) ),
+#else
+        aWndPreview     ( this, CUI_RES_PLAIN( WND_NUMBER_PREVIEW ) ),
+#endif
+        aFlOptions      ( this, CUI_RES( FL_OPTIONS ) ),
         aFtDecimals     ( this, CUI_RES( FT_DECIMALS ) ),
         aEdDecimals     ( this, CUI_RES( ED_DECIMALS ) ),
+        aBtnNegRed      ( this, CUI_RES( BTN_NEGRED ) ),
         aFtLeadZeroes   ( this, CUI_RES( FT_LEADZEROES ) ),
         aEdLeadZeroes   ( this, CUI_RES( ED_LEADZEROES ) ),
-        aBtnNegRed      ( this, CUI_RES( BTN_NEGRED ) ),
         aBtnThousand    ( this, CUI_RES( BTN_THOUSAND ) ),
-        aFlOptions      ( this, CUI_RES( FL_OPTIONS ) ),
 
         aFtEdFormat     ( this, CUI_RES( FT_EDFORMAT ) ),
         aEdFormat       ( this, CUI_RES( ED_FORMAT ) ),
@@ -276,11 +281,6 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
         aFtComment      ( this, CUI_RES( FT_COMMENT ) ),
         aEdComment      ( this, CUI_RES( ED_COMMENT ) ),
 
-#if ENABLE_LAYOUT
-        aWndPreview     ( LAYOUT_THIS_WINDOW(this), CUI_RES_PLAIN( WND_NUMBER_PREVIEW ) ),
-#else
-        aWndPreview     ( this, CUI_RES_PLAIN( WND_NUMBER_PREVIEW ) ),
-#endif
         pNumItem        ( NULL ),
         pNumFmtShell    ( NULL ),
         nInitFormat     ( ULONG_MAX ),
@@ -380,6 +380,13 @@ void SvxNumberFormatTabPage::Init_Impl()
     {
         aLbLanguage.InsertLanguage( xLang[i] );
     }
+
+    aIbAdd.SetAccessibleRelationLabeledBy( &aFtEdFormat );
+    aIbInfo.SetAccessibleRelationLabeledBy( &aFtEdFormat );
+    aIbRemove.SetAccessibleRelationLabeledBy( &aFtEdFormat );
+    aIbAdd.SetAccessibleRelationMemberOf( &aIbAdd );
+    aIbInfo.SetAccessibleRelationMemberOf( &aIbInfo );
+    aIbRemove.SetAccessibleRelationMemberOf( &aIbRemove );
 }
 
 /*************************************************************************

@@ -312,6 +312,7 @@ OpenOffice_SDK
             IGNOREDIRECTORYLAYER 1
             NOVERSIONINDIRNAME 0
             NOSPACEINDIRECTORYNAME 1
+            NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
             DOWNLOADBANNER ooosdkbanner.bmp
             DOWNLOADBITMAP ooosdkbitmap.bmp
@@ -364,6 +365,7 @@ OpenOffice_Dev_SDK
             IGNOREDIRECTORYLAYER 1
             NOVERSIONINDIRNAME 0
             NOSPACEINDIRECTORYNAME 1
+            NOSHORTDIRECTORYNAMES 1
             CHANGETARGETDIR 1
             DOWNLOADBANNER ooosdkbanner.bmp
             DOWNLOADBITMAP ooosdkbitmap.bmp

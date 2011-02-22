@@ -155,7 +155,7 @@ public class java_remote_bridge
                         new Job(obj, java_remote_bridge.this, msg));
                 }
             } catch (Throwable e) {
-                dispose(new DisposedException(e.toString()));
+                dispose(e);
             }
         }
 
@@ -478,12 +478,12 @@ public class java_remote_bridge
             dispose = _life_count <= 0;
         }
         if (dispose) {
-            dispose(new com.sun.star.uno.RuntimeException("end of life"));
+            dispose(new Throwable("end of life"));
         }
     }
 
     public void dispose() {
-        dispose(new com.sun.star.uno.RuntimeException("user dispose"));
+        dispose(new Throwable("user dispose"));
     }
 
     private void dispose(Throwable throwable) {
@@ -498,6 +498,8 @@ public class java_remote_bridge
         for (Iterator i = disposeListeners.iterator(); i.hasNext();) {
             ((DisposeListener) i.next()).notifyDispose(this);
         }
+
+        _iProtocol.terminate();
 
         try {
             _messageDispatcher.terminate();
@@ -602,7 +604,8 @@ public class java_remote_bridge
             _iProtocol.writeReply(exception, threadId, result);
         } catch (IOException e) {
             dispose(e);
-            throw new DisposedException("unexpected " + e);
+            throw (DisposedException)
+                (new DisposedException("unexpected " + e).initCause(e));
         } catch (RuntimeException e) {
             dispose(e);
             throw e;
@@ -631,9 +634,9 @@ public class java_remote_bridge
                     oid, TypeDescription.getTypeDescription(type), operation,
                     threadId, params);
             } catch (IOException e) {
-                DisposedException d = new DisposedException(e.toString());
-                dispose(d);
-                throw d;
+                dispose(e);
+                throw (DisposedException)
+                    new DisposedException(e.toString()).initCause(e);
             }
             if (sync && Thread.currentThread() != _messageDispatcher) {
                 result = _iThreadPool.enter(handle, threadId);

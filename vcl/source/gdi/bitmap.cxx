@@ -236,9 +236,13 @@ bool BitmapPalette::IsGreyPalette() const
     const int nEntryCount = GetEntryCount();
     if( !nEntryCount ) // NOTE: an empty palette means 1:1 mapping
         return true;
-    const BitmapPalette& rGreyPalette = Bitmap::GetGreyPalette( nEntryCount );
-    if( rGreyPalette == *this )
-        return true;
+    // see above: only certain entry values will result in a valid call to GetGreyPalette
+    if( nEntryCount == 2 || nEntryCount == 4 || nEntryCount == 16 || nEntryCount == 256 )
+    {
+        const BitmapPalette& rGreyPalette = Bitmap::GetGreyPalette( nEntryCount );
+        if( rGreyPalette == *this )
+            return true;
+    }
     // TODO: is it worth to compare the entries?
     return false;
 }

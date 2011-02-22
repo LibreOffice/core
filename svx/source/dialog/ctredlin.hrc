@@ -66,5 +66,12 @@
 #define STR_TITLE3      3
 #define STR_TITLE4      4
 #define STR_TITLE5      5
-//
 
+//IAccessibility2 Implementation 2009-----
+#define STR_DATE_COMBOX 6
+#define STR_DATE_SPIN   7
+#define STR_DATE_SPIN1  8
+#define STR_DATE_TIME_SPIN 9
+#define STR_DATE_TIME_SPIN1 10
+#define STR_TREE            11
+//-----IAccessibility2 Implementation 2009

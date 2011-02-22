@@ -307,7 +307,7 @@ class VCL_DLLPUBLIC ImplControlValue
  *
  *   Value container for scrollbars.
  */
- class VCL_DLLPUBLIC ScrollbarValue : public ImplControlValue
+class VCL_DLLPUBLIC ScrollbarValue : public ImplControlValue
 {
     public:
         long            mnMin;

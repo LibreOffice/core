@@ -697,6 +697,11 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText )
         pExampleSet = new SfxItemSet( *pSet );
         pOutSet = new SfxItemSet( *pSet->GetPool(), pSet->GetRanges() );
     }
+
+    aOKBtn.SetAccessibleRelationMemberOf( &aOKBtn );
+    aCancelBtn.SetAccessibleRelationMemberOf( &aCancelBtn );
+    aHelpBtn.SetAccessibleRelationMemberOf( &aHelpBtn );
+    aResetBtn.SetAccessibleRelationMemberOf( &aResetBtn );
 }
 
 // -----------------------------------------------------------------------

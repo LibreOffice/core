@@ -125,6 +125,7 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
     mbAsciiOnly     ( false )
 
 {
+    maPasswordED.SetAccessibleName(String(SfxResId(TEXT_PASSWD)));
     FreeResource();
 
     // setup layout

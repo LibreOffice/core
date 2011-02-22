@@ -122,13 +122,14 @@ class ColumnValueSet : public ValueSet
  --------------------------------------------------------------------*/
 class SwColumnPage : public SfxTabPage
 {
+    FixedLine       aFLGroup;
     FixedText       aClNrLbl;
     NumericField    aCLNrEdt;
     ColumnValueSet  aDefaultVS;
     ImageList       aPreColsIL;
     CheckBox        aBalanceColsCB;
-    FixedLine       aFLGroup;
 
+    FixedLine       aFLLayout;
     ImageButton     aBtnUp;
     FixedText       aColumnFT;
     FixedText       aWidthFT;
@@ -144,15 +145,14 @@ class SwColumnPage : public SfxTabPage
     ImageButton     aBtnDown;
     CheckBox        aAutoWidthBox;
 
-    FixedLine       aFLLayout;
 
+    FixedLine       aFLLineType;
     FixedText       aLineTypeLbl;
     LineListBox     aLineTypeDLB;
     FixedText       aLineHeightLbl;
     MetricField     aLineHeightEdit;
     FixedText       aLinePosLbl;
     ListBox         aLinePosDLB;
-    FixedLine       aFLLineType;
 
     FixedLine       aVertFL;
     FixedLine       aPropertiesFL;

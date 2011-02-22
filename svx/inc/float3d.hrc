@@ -181,4 +181,6 @@
 #define BMP_TEX_CIRCLE_H            159
 #define BMP_TEX_FILTER_H            160
 #define BMP_COLORDLG_H              161
-
+// IAccessibility2 implementation 2009. ------
+#define STR_COLOR_LIGHT_PRE             162
+// ------ IAccessibility2 implementation 2009.

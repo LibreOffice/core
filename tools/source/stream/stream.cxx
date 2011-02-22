@@ -1046,21 +1046,59 @@ sal_Bool SvStream::StartWritingUnicodeText()
 |*
 *************************************************************************/
 
-sal_Bool SvStream::StartReadingUnicodeText()
+sal_Bool SvStream::StartReadingUnicodeText( rtl_TextEncoding eReadBomCharSet )
 {
+    if (!(  eReadBomCharSet == RTL_TEXTENCODING_DONTKNOW ||
+            eReadBomCharSet == RTL_TEXTENCODING_UNICODE ||
+            eReadBomCharSet == RTL_TEXTENCODING_UTF8))
+        return sal_True;    // nothing to read
+
+    bool bTryUtf8 = false;
     sal_uInt16 nFlag;
+    sal_sSize nBack = sizeof(nFlag);
     *this >> nFlag;
     switch ( nFlag )
     {
         case 0xfeff :
-            // native
+            // native UTF-16
+            if (    eReadBomCharSet == RTL_TEXTENCODING_DONTKNOW ||
+                    eReadBomCharSet == RTL_TEXTENCODING_UNICODE)
+                nBack = 0;
         break;
         case 0xfffe :
-            SetEndianSwap( !bSwap );
+            // swapped UTF-16
+            if (    eReadBomCharSet == RTL_TEXTENCODING_DONTKNOW ||
+                    eReadBomCharSet == RTL_TEXTENCODING_UNICODE)
+            {
+                SetEndianSwap( !bSwap );
+                nBack = 0;
+            }
+        break;
+        case 0xefbb :
+            if (nNumberFormatInt == NUMBERFORMAT_INT_BIGENDIAN &&
+                    (eReadBomCharSet == RTL_TEXTENCODING_DONTKNOW ||
+                     eReadBomCharSet == RTL_TEXTENCODING_UTF8))
+                bTryUtf8 = true;
+        break;
+        case 0xbbef :
+            if (nNumberFormatInt == NUMBERFORMAT_INT_LITTLEENDIAN &&
+                    (eReadBomCharSet == RTL_TEXTENCODING_DONTKNOW ||
+                     eReadBomCharSet == RTL_TEXTENCODING_UTF8))
+                bTryUtf8 = true;
         break;
         default:
-            SeekRel( -((sal_sSize)sizeof(nFlag)) );      // no BOM, pure data
+            ;   // nothing
     }
+    if (bTryUtf8)
+    {
+        sal_uChar nChar;
+        nBack += sizeof(nChar);
+        *this >> nChar;
+        if (nChar == 0xbf)
+            nBack = 0;      // it is UTF-8
+    }
+    if (nBack)
+        SeekRel( -nBack );      // no BOM, pure data
     return nError == SVSTREAM_OK;
 }
 

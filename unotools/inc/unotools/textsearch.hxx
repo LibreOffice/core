@@ -127,15 +127,6 @@ public:
 
 class UNOTOOLS_DLLPUBLIC TextSearch
 {
-    struct CachedTextSearch
-    {
-        ::osl::Mutex mutex;
-        ::com::sun::star::util::SearchOptions Options;
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XTextSearch > xTextSearch;
-    };
-
-    static CachedTextSearch maCache;
-
     static ::com::sun::star::uno::Reference< ::com::sun::star::util::XTextSearch >
         getXTextSearch( const ::com::sun::star::util::SearchOptions& rPara );
 

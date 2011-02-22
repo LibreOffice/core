@@ -1183,6 +1183,9 @@ WatchWindow::WatchWindow( Window* pParent ) :
                                   | WB_HASLINESATROOT | WB_HASBUTTONSATROOT ),
     aHeaderBar( this, WB_BUTTONSTYLE | WB_BORDER )
 {
+    aXEdit.SetAccessibleName(String(IDEResId( RID_STR_WATCHNAME)));
+    aTreeListBox.SetAccessibleName(String(IDEResId(RID_STR_WATCHNAME)));
+
     nVirtToolBoxHeight = aXEdit.GetSizePixel().Height() + 7;
     nHeaderBarHeight = 16;
 
@@ -1521,7 +1524,8 @@ StackWindow::StackWindow( Window* pParent ) :
     aGotoCallButton( this, IDEResId( RID_IMGBTN_GOTOCALL ) ),
     aStackStr( IDEResId( RID_STR_STACK ) )
 {
-    aTreeListBox.SetHelpId(HID_BASICIDE_STACKWINDOW_LIST);
+       aTreeListBox.SetHelpId(HID_BASICIDE_STACKWINDOW_LIST);
+    aTreeListBox.SetAccessibleName(String( IDEResId(RID_STR_STACKNAME)));
     aTreeListBox.SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight ) );
     aTreeListBox.SetHighlightRange();
     aTreeListBox.SetSelectionMode( NO_SELECTION );

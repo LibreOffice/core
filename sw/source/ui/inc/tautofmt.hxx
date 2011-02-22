@@ -63,12 +63,12 @@ class SwAutoFormatDlg : public SfxModalDialog
 {
     FixedLine       aFlFormat;
     ListBox         aLbFormat;
+    FixedLine       aFlFormats;
     CheckBox        aBtnNumFormat;
     CheckBox        aBtnBorder;
     CheckBox        aBtnFont;
     CheckBox        aBtnPattern;
     CheckBox        aBtnAlignment;
-    FixedLine       aFlFormats;
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;

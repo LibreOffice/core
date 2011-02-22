@@ -16,7 +16,7 @@ module com {  module sun {  module star {  module awt {
 
     @since OOo 3.0
  */
-interface XDialog2: com::sun::star::awt::XDialog
+published interface XDialog2: com::sun::star::awt::XDialog
 {
     /** hides the dialog and then causes <member>XDialog::execute</member>
         to return with the given result value.

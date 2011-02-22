@@ -1986,7 +1986,7 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
                     SetInsertingFromOtherDoc( sal_True);
                     UpdateReference( URM_MOVE,
                         nCol1, nRow1, i, nCol2, nRow2, i+nFollow,
-                        nDx, nDy, nDz, pCBFCP->pRefUndoDoc );
+                        nDx, nDy, nDz, pCBFCP->pRefUndoDoc, sal_False );
                     SetInsertingFromOtherDoc( bOldInserting);
                 }
                 else

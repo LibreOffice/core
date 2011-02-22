@@ -91,6 +91,7 @@ SfxNewStyleDlg::SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& rInPool 
     aOKBtn.SetClickHdl(LINK(this, SfxNewStyleDlg, OKHdl));
     aColBox.SetModifyHdl(LINK(this, SfxNewStyleDlg, ModifyHdl));
     aColBox.SetDoubleClickHdl(LINK(this, SfxNewStyleDlg, OKHdl));
+    aColBox.SetAccessibleName(SfxResId(FL_COL));
 
     SfxStyleSheetBase *pStyle = rPool.First();
     while ( pStyle )

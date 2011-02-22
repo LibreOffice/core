@@ -473,6 +473,10 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
         aNewPos.Y() -= nDelta;
         maCbEmbedStandardFonts.SetPosPixel( aNewPos );
     }
+
+    maEdPages.SetAccessibleName(maRbRange.GetText());
+    maEdPages.SetAccessibleRelationLabeledBy(&maRbRange);
+
     maCbExportEmptyPages.SetStyle( maCbExportEmptyPages.GetStyle() | WB_VCENTER );
 }
 
@@ -658,7 +662,8 @@ SfxTabPage*  ImpPDFTabGeneralPage::Create( Window* pParent,
 IMPL_LINK( ImpPDFTabGeneralPage, TogglePagesHdl, void*, EMPTYARG )
 {
     maEdPages.Enable( maRbRange.IsChecked() );
-    maEdPages.SetReadOnly( !maRbRange.IsChecked() );
+    //Sym2_5805, When the control is disabled, it is also readonly. So here, it is not necessary to set it as readonly.
+    //maEdPages.SetReadOnly( !maRbRange.IsChecked() );
     return 0;
 }
 
@@ -695,7 +700,8 @@ IMPL_LINK( ImpPDFTabGeneralPage, ToggleAddStreamHdl, void*, EMPTYARG )
             maRbRange.Enable( sal_False );
             maRbSelection.Enable( sal_False );
             maEdPages.Enable( sal_False );
-            maEdPages.SetReadOnly( sal_True );
+            //Sym2_5805, When the control is disabled, it is also readonly. So here, it is not necessary to set it as readonly.
+            //maEdPages.SetReadOnly( sal_True );
             maRbAll.Enable( sal_False );
         }
         else
@@ -711,9 +717,13 @@ IMPL_LINK( ImpPDFTabGeneralPage, ToggleAddStreamHdl, void*, EMPTYARG )
 // -----------------------------------------------------------------------------
 IMPL_LINK( ImpPDFTabGeneralPage, ToggleExportPDFAHdl, void*, EMPTYARG )
 {
+    ImpPDFTabSecurityPage* pSecPage = NULL;
 //set the security page status (and its controls as well)
     if( mpaParent && mpaParent->GetTabPage( RID_PDF_TAB_SECURITY ) )
-        ( ( ImpPDFTabSecurityPage* )mpaParent->GetTabPage( RID_PDF_TAB_SECURITY ) )->ImplPDFASecurityControl( !maCbPDFA1b.IsChecked() );
+    {
+        pSecPage = static_cast<ImpPDFTabSecurityPage*>(mpaParent->GetTabPage( RID_PDF_TAB_SECURITY ));
+        pSecPage->ImplPDFASecurityControl( !maCbPDFA1b.IsChecked() );
+    }
 
 //PDF/A-1 needs tagged PDF, so  force disable the control, will be forced in pdfexport.
     sal_Bool bPDFA1Sel = maCbPDFA1b.IsChecked();
@@ -747,6 +757,13 @@ IMPL_LINK( ImpPDFTabGeneralPage, ToggleExportPDFAHdl, void*, EMPTYARG )
 // Link page
     if( mpaParent && mpaParent->GetTabPage( RID_PDF_TAB_LINKS ) )
         ( ( ImpPDFTabLinksPage* )mpaParent->GetTabPage( RID_PDF_TAB_LINKS ) )->ImplPDFALinkControl( !maCbPDFA1b.IsChecked() );
+
+    // if a password was set, inform the user that this will not be used in PDF/A case
+    if( maCbPDFA1b.IsChecked() && pSecPage && pSecPage->hasPassword() )
+    {
+        WarningBox aBox( this, PDFFilterResId( RID_PDF_WARNPDFAPASSWORD ) );
+        aBox.Execute();
+    }
 
     return 0;
 }
@@ -788,6 +805,8 @@ ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage( Window* pParent,
     maRbMagnFitWidth.SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
     maRbMagnFitVisible.SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
     maRbMagnZoom.SetToggleHdl( LINK( this, ImpPDFTabOpnFtrPage, ToggleRbMagnHdl ) );
+    maNumZoom.SetAccessibleName(maRbMagnZoom.GetText());
+    maNumZoom.SetAccessibleRelationLabeledBy(&maRbMagnZoom);
 }
 
 // -----------------------------------------------------------------------------
@@ -910,9 +929,8 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     }
 }
 
-IMPL_LINK( ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl, void*, p )
+IMPL_LINK( ImpPDFTabOpnFtrPage, ToggleRbPgLyContinueFacingHdl, void*, EMPTYARG )
 {
-    p = p; //for compiler warning
     maCbPgLyFirstOnLeft.Enable( maRbPgLyContinueFacing.IsChecked() );
     return 0;
 }
@@ -951,6 +969,8 @@ ImpPDFTabViewerPage::ImpPDFTabViewerPage( Window* pParent,
     FreeResource();
     maRbAllBookmarkLevels.SetToggleHdl( LINK( this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl ) );
     maRbVisibleBookmarkLevels.SetToggleHdl( LINK( this, ImpPDFTabViewerPage, ToggleRbBookmarksHdl ) );
+    maNumBookmarkLevels.SetAccessibleName(maRbVisibleBookmarkLevels.GetText());
+    maNumBookmarkLevels.SetAccessibleRelationLabeledBy(&maRbVisibleBookmarkLevels);
 }
 
 // -----------------------------------------------------------------------------
@@ -1024,10 +1044,13 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage( Window* i_pParent,
     maFtUserPwd( this, PDFFilterResId( FT_USER_PWD ) ),
     maUserPwdSet( PDFFilterResId( STR_USER_PWD_SET ) ),
     maUserPwdUnset( PDFFilterResId( STR_USER_PWD_UNSET ) ),
+    maUserPwdPdfa( PDFFilterResId( STR_USER_PWD_PDFA ) ),
+
     maStrSetPwd( PDFFilterResId( STR_SET_PWD ) ),
     maFtOwnerPwd( this, PDFFilterResId( FT_OWNER_PWD ) ),
     maOwnerPwdSet( PDFFilterResId( STR_OWNER_PWD_SET ) ),
     maOwnerPwdUnset( PDFFilterResId( STR_OWNER_PWD_UNSET ) ),
+    maOwnerPwdPdfa( PDFFilterResId( STR_OWNER_PWD_PDFA ) ),
 
     maFlPrintPermissions( this, PDFFilterResId( FL_PRINT_PERMISSIONS ) ),
     maRbPrintNone( this, PDFFilterResId( RB_PRINT_NONE ) ),
@@ -1219,10 +1242,21 @@ IMPL_LINK( ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, void*, EMPTYARG )
 
 void ImpPDFTabSecurityPage::enablePermissionControls()
 {
-    maFtUserPwd.SetText( (mbHaveUserPassword && IsEnabled()) ? maUserPwdSet : maUserPwdUnset );
+    sal_Bool bIsPDFASel =  sal_False;
+    ImpPDFTabDialog* pParent = static_cast<ImpPDFTabDialog*>(GetTabDialog());
+    if( pParent && pParent->GetTabPage( RID_PDF_TAB_GENER ) )
+        bIsPDFASel = ( ( ImpPDFTabGeneralPage* )pParent->
+                       GetTabPage( RID_PDF_TAB_GENER ) )->IsPdfaSelected();
+    if( bIsPDFASel )
+        maFtUserPwd.SetText( maUserPwdPdfa );
+    else
+        maFtUserPwd.SetText( (mbHaveUserPassword && IsEnabled()) ? maUserPwdSet : maUserPwdUnset );
 
     sal_Bool bLocalEnable = mbHaveOwnerPassword && IsEnabled();
-    maFtOwnerPwd.SetText( bLocalEnable ? maOwnerPwdSet : maOwnerPwdUnset );
+    if( bIsPDFASel )
+        maFtOwnerPwd.SetText( maOwnerPwdPdfa );
+    else
+        maFtOwnerPwd.SetText( bLocalEnable ? maOwnerPwdSet : maOwnerPwdUnset );
 
     maFlPrintPermissions.Enable( bLocalEnable );
     maRbPrintNone.Enable( bLocalEnable );

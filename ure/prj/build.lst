@@ -1,2 +1,2 @@
-ur ure : LIBXSLT:libxslt cli_ure io javaunohelper remotebridges solenv stoc NULL
+ur ure : LIBXSLT:libxslt binaryurp cli_ure io javaunohelper remotebridges solenv stoc NULL
 ur ure\source nmake - all ur_source NULL

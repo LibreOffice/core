@@ -374,7 +374,10 @@ public:
     void SetFlyPos( const Point &rAbsPos);
     Point FindAnchorPos( const Point &rAbsPos, sal_Bool bMoveIt = sal_False );
     // determines whether a frame or its environment is vertically formatted and right-to-left
-    sal_Bool IsFrmVertical(sal_Bool bEnvironment, sal_Bool& bRightToLeft) const;
+    // --> OD 2009-08-31 #mongolianlayout#
+    // also determines, if frame or its environmane is in mongolianlayout (vertical left-to-right)
+    // - add output parameter <bVertL2R>
+    sal_Bool IsFrmVertical(const sal_Bool bEnvironment, sal_Bool& bRightToLeft, sal_Bool& bVertL2R) const;
 
     SwFrmFmt* GetCurFrmFmt() const; //Wenn Rahmen, dann Rahmenvorlage, sonst 0
     void SetFrmFmt( SwFrmFmt *pFmt, sal_Bool bKeepOrient = sal_False, Point* pDocPos = 0 ); //Wenn Rahmen, dann Rahmenvorlage setzen

@@ -70,6 +70,7 @@
 #define STR_PATHSELECT                      5
 #define STR_BUTTONSELECT                    6
 #define STR_ACTUALVERSION                   7
+#define STR_PREVIEW             8
 
 // DLG_SVT_QUERYFOLDERNAME -----------------------
 

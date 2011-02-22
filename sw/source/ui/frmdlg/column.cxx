@@ -68,6 +68,8 @@
 #include <docary.hxx>
 #include <pagedesc.hxx>
 
+#include "access.hrc"
+
 #define FRAME_FORMAT_WIDTH 1000
 
 // sw/inc/fmtclds.hxx
@@ -451,12 +453,13 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
 
     : SfxTabPage(pParent, SW_RES(TP_COLUMN), rSet),
 
+    aFLGroup(this,          SW_RES(FL_COLUMNS )),
     aClNrLbl(this,          SW_RES(FT_NUMBER  )),
     aCLNrEdt(this,          SW_RES(ED_NUMBER  )),
     aDefaultVS(this,        SW_RES(VS_DEFAULTS)),
     aBalanceColsCB(this,    SW_RES(CB_BALANCECOLS)),
-    aFLGroup(this,          SW_RES(FL_COLUMNS )),
 
+    aFLLayout(this,         SW_RES(FL_LAYOUT)),
     aBtnUp(this,            SW_RES(BTN_DOWN)),
     aColumnFT(this,         SW_RES(FT_COLUMN)),
     aWidthFT(this,          SW_RES(FT_WIDTH)),
@@ -472,15 +475,13 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     aBtnDown(this,          SW_RES(BTN_UP)),
     aAutoWidthBox(this,     SW_RES(CB_AUTO_WIDTH)),
 
-    aFLLayout(this,         SW_RES(FL_LAYOUT)),
-
+    aFLLineType(this,       SW_RES(FL_LINETYPE)),
     aLineTypeLbl(this,      SW_RES(FT_STYLE)),
     aLineTypeDLB(this,      SW_RES(LB_STYLE)),
     aLineHeightLbl(this,    SW_RES(FT_HEIGHT)),
     aLineHeightEdit(this,   SW_RES(ED_HEIGHT)),
     aLinePosLbl(this,       SW_RES(FT_POSITION)),
     aLinePosDLB(this,       SW_RES(LB_POSITION)),
-    aFLLineType(this,       SW_RES(FL_LINETYPE)),
 
     aVertFL(this,         SW_RES(FL_VERT)),
     aPropertiesFL(  this,    SW_RES( FL_PROPERTIES    )),
@@ -504,6 +505,15 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
 
     FreeResource();
     SetExchangeSupport();
+
+    aBtnDown.SetAccessibleRelationMemberOf(&aFLLayout);
+    aEd1.SetAccessibleRelationLabeledBy(&aWidthFT);
+    aEd2.SetAccessibleRelationLabeledBy(&aWidthFT);
+    aEd3.SetAccessibleRelationLabeledBy(&aWidthFT);
+    aDistEd1.SetAccessibleRelationLabeledBy(&aDistFT);
+    aDistEd2.SetAccessibleRelationLabeledBy(&aDistFT);
+    aBtnUp.SetAccessibleRelationLabeledBy(&aColumnFT);
+    aBtnDown.SetAccessibleRelationLabeledBy(&aColumnFT);
 
     aDefaultVS.SetHelpId(HID_COLUMN_VALUESET);
     aDefaultVS.SetColCount( 5 );
@@ -909,16 +919,41 @@ void SwColumnPage::SetLabels( sal_uInt16 nVis )
     String sLbl( '~' );
 
     String sLbl2( String::CreateFromInt32( nVis + 1 ));
+    String tmp1(sLbl2);
     sLbl2.Insert(sLbl, sLbl2.Len() - 1);
     aLbl1.SetText(sLbl2);
 
     sLbl2 = String::CreateFromInt32( nVis + 2 );
+    String tmp2(sLbl2);
     sLbl2.Insert(sLbl, sLbl2.Len() - 1);
     aLbl2.SetText(sLbl2);
 
     sLbl2 = String::CreateFromInt32( nVis + 3 );
+    String tmp3(sLbl2);
     sLbl2.Insert(sLbl, sLbl2.Len() - 1);
     aLbl3.SetText(sLbl2);
+    String sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH ) ;
+    sColumnWidth.SearchAndReplaceAscii("%1", tmp1);
+    aEd1.SetAccessibleName(sColumnWidth);
+
+    sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH ) ;
+    sColumnWidth.SearchAndReplaceAscii("%1", tmp2);
+    aEd2.SetAccessibleName(sColumnWidth);
+
+    sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH ) ;
+    sColumnWidth.SearchAndReplaceAscii("%1", tmp3);
+    aEd3.SetAccessibleName(sColumnWidth);
+
+    String sDist = SW_RESSTR( STR_ACCESS_PAGESETUP_SPACING ) ;
+    String sDist1 = sDist;
+    sDist1.SearchAndReplaceAscii("%1", tmp1);
+    sDist1.SearchAndReplaceAscii("%2", tmp2);
+    aDistEd1.SetAccessibleName(sDist1);
+
+    String sDist2 = sDist;
+    sDist2.SearchAndReplaceAscii("%1", tmp2);
+    sDist2.SearchAndReplaceAscii("%2", tmp3);
+    aDistEd2.SetAccessibleName(sDist2);
 }
 
 /*------------------------------------------------------------------------

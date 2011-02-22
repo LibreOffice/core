@@ -69,9 +69,10 @@ ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nT
 
     :   ModalDialog ( pParent, ScResId( RID_SCDLG_INSERT_TABLE ) ),
         //
+        aFlPos          ( this, ScResId( FL_POSITION ) ),
         aBtnBefore      ( this, ScResId( RB_BEFORE ) ),
         aBtnBehind      ( this, ScResId( RB_BEHIND ) ),
-        aFlPos          ( this, ScResId( FL_POSITION ) ),
+        aFlTable        ( this, ScResId( FL_TABLE ) ),
         aBtnNew         ( this, ScResId( RB_NEW ) ),
         aBtnFromFile    ( this, ScResId( RB_FROMFILE ) ),
         aFtCount        ( this, ScResId( FT_COUNT ) ),
@@ -82,7 +83,6 @@ ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nT
         aFtPath         ( this, ScResId( FT_PATH ) ),
         aBtnBrowse      ( this, ScResId( BTN_BROWSE ) ),
         aBtnLink        ( this, ScResId( CB_LINK ) ),
-        aFlTable        ( this, ScResId( FL_TABLE ) ),
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
@@ -100,6 +100,7 @@ ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nT
 #endif /* ENABLE_LAYOUT */
     Init_Impl( bFromFile );
     FreeResource();
+    aLbTables.SetAccessibleName(aBtnFromFile.GetText());
 }
 
 //------------------------------------------------------------------------

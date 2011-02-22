@@ -78,11 +78,8 @@ public:
     //helper methods for frame's UpdateSettings
     void updateSettings( AllSettings& rSettings );
 
+    virtual bool            setClipRegion( const Region& );
     virtual void            ResetClipRegion();
-    virtual void            BeginSetClipRegion( sal_uLong nCount );
-    virtual sal_Bool            unionClipRegion( long nX, long nY, long nWidth, long nHeight );
-    virtual bool            unionClipRegion(  const ::basegfx::B2DPolyPolygon& );
-    virtual void            EndSetClipRegion();
 
     // some themes set the background pixmap of our window EVERY time
     // a control is painted; but presentation effects need

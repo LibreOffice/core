@@ -634,6 +634,7 @@ SvxTPView::SvxTPView( Window * pParent)
     aTitle5     ( SVX_RES( STR_TITLE5 ) ),
     aStrMyName  ( SVX_RES( STR_VIEW) )
 {
+    aViewData.SetAccessibleName(String(SVX_RES(STR_TREE)));
     FreeResource();
 
     aViewData.SetHelpId(HID_REDLINING_VIEW_DG_VIEW_TABLE);
@@ -826,6 +827,14 @@ SvxTPFilter::SvxTPFilter( Window * pParent)
     aStrMyName  (       SVX_RES( STR_FILTER) ),
     bModified   (sal_False)
 {
+    aLbDate.SetAccessibleName( String( SVX_RES( STR_DATE_COMBOX) ) );
+    aDfDate.SetAccessibleName( String( SVX_RES( STR_DATE_SPIN) ) );
+    aTfDate.SetAccessibleName( String( SVX_RES( STR_DATE_TIME_SPIN) ) );
+    aDfDate2.SetAccessibleName( String( SVX_RES( STR_DATE_SPIN1) ) );
+    aTfDate2.SetAccessibleName( String( SVX_RES( STR_DATE_TIME_SPIN1) ) );
+    aLbAuthor.SetAccessibleName(aCbAuthor.GetText());
+    aLbAction.SetAccessibleName( String( SVX_RES( STR_ACTION) ) );
+    aEdComment.SetAccessibleName(aCbComment.GetText());
     Image aImgTimeHC( SVX_RES( IMG_TIME_H ) );
     FreeResource();
 
@@ -874,6 +883,15 @@ SvxTPFilter::SvxTPFilter( Window * pParent)
     HideRange();
     ShowAction();
     bModified=sal_False;
+
+    aLbDate.SetAccessibleRelationLabeledBy(&aCbDate);
+    aLbAuthor.SetAccessibleRelationLabeledBy(&aCbAuthor);
+    aLbAction.SetAccessibleRelationLabeledBy(&aCbRange);
+    aEdRange.SetAccessibleRelationLabeledBy(&aCbRange);
+    aBtnRange.SetAccessibleRelationLabeledBy(&aCbRange);
+    aEdComment.SetAccessibleRelationLabeledBy(&aCbComment);
+    aDfDate2.SetAccessibleRelationLabeledBy(&aDfDate2);
+    aTfDate2.SetAccessibleRelationLabeledBy(&aTfDate2);
 }
 
 void SvxTPFilter::SetRedlinTable(SvxRedlinTable* pTable)

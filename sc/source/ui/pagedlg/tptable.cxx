@@ -162,6 +162,9 @@ ScTablePage::ScTablePage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
     aBmpPageDir.SetOutputSizePixel( aBmpSize );
 
     FreeResource();
+
+    aEdPageNo.SetAccessibleName(aBtnPageNo.GetText());
+    aEdPageNo.SetAccessibleRelationLabeledBy(&aBtnPageNo);
 }
 
 // -----------------------------------------------------------------------

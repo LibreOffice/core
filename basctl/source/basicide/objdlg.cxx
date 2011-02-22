@@ -108,8 +108,10 @@ ObjectCatalog::ObjectCatalog( Window * pParent )
                              WB_HSCROLL );
 
     aMacroTreeList.SetSelectHdl( LINK( this, ObjectCatalog, TreeListHighlightHdl ) );
-
+    aMacroTreeList.SetAccessibleName(String(IDEResId(RID_STR_TLB_MACROS)));
     aMacroTreeList.ScanAllEntries();
+    aMacroTreeList.GrabFocus();
+
     CheckButtons();
 
     Point aPos = IDE_DLL()->GetExtraData()->GetObjectCatalogPos();

@@ -44,6 +44,9 @@
 
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <cppuhelper/implbase7.hxx>
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/uno3.hxx>
 
 #include <list>
 
@@ -53,21 +56,25 @@ class ImplPropertyTable;
 //  class UnoControlModel
 //  ----------------------------------------------------
 
-class TOOLKIT_DLLPUBLIC UnoControlModel :   public ::com::sun::star::awt::XControlModel,
-                        public ::com::sun::star::beans::XPropertyState,
-                        public ::com::sun::star::io::XPersistObject,
-                        public ::com::sun::star::lang::XComponent,
-                        public ::com::sun::star::lang::XServiceInfo,
-                        public ::com::sun::star::lang::XTypeProvider,
-                        public ::com::sun::star::lang::XUnoTunnel,
-                        public ::com::sun::star::util::XCloneable,
-                        public MutexAndBroadcastHelper,
-                        public ::cppu::OPropertySetHelper,
-                        public ::cppu::OWeakAggObject
+typedef ::cppu::WeakAggImplHelper7  <   ::com::sun::star::awt::XControlModel
+                                    ,   ::com::sun::star::beans::XPropertyState
+                                    ,   ::com::sun::star::io::XPersistObject
+                                    ,   ::com::sun::star::lang::XComponent
+                                    ,   ::com::sun::star::lang::XServiceInfo
+                                    ,   ::com::sun::star::lang::XUnoTunnel
+                                    ,   ::com::sun::star::util::XCloneable
+                                    >   UnoControlModel_Base;
+
+class TOOLKIT_DLLPUBLIC UnoControlModel :public UnoControlModel_Base
+                                        ,public MutexAndBroadcastHelper
+                                        ,public ::cppu::OPropertySetHelper
 {
 private:
-    ImplPropertyTable*          mpData;
-    EventListenerMultiplexer    maDisposeListeners;
+    ImplPropertyTable*                      mpData;
+    EventListenerMultiplexer                maDisposeListeners;
+
+protected:
+    const ::comphelper::ComponentContext    maContext;
 
 protected:
     void                                        ImplRegisterProperty( sal_uInt16 nPropType );
@@ -99,18 +106,21 @@ protected:
                 sal_Int32 _nSecondHandle                /// second handle, which should supersede _nFirstHandle in the sequence
             ) const;
 
-public:
+protected:
                 UnoControlModel();
+public:
+                UnoControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                 UnoControlModel( const UnoControlModel& rModel );
                 ~UnoControlModel();
 
     virtual UnoControlModel*    Clone() const = 0;
 
-    // ::com::sun::star::uno::XAggregation
+    // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return OWeakAggObject::queryInterface(rType); }
-    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
-    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
+    void                        SAL_CALL acquire() throw();
+    void                        SAL_CALL release() throw();
 
+    // ::com::sun::star::uno::XAggregation
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XUnoTunnel
@@ -122,10 +132,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-
-    // ::com::sun::star::awt::XControlModel
+    DECLARE_XTYPEPROVIDER()
 
     // ::com::sun::star::lang::XComponent
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);

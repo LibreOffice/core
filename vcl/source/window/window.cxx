@@ -134,25 +134,21 @@ struct ImplCalcToTopData
     Region*             mpInvalidateRegion;
 };
 
-struct ImplAccessibleInfos
+ImplAccessibleInfos::ImplAccessibleInfos()
 {
-    sal_uInt16 nAccessibleRole;
-    String* pAccessibleName;
-    String* pAccessibleDescription;
+    nAccessibleRole = 0xFFFF;
+    pAccessibleName = NULL;
+    pAccessibleDescription = NULL;
+    pLabeledByWindow = NULL;
+    pLabelForWindow = NULL;
+    pMemberOfWindow = NULL;
+}
 
-    ImplAccessibleInfos()
-    {
-        nAccessibleRole = 0xFFFF;
-        pAccessibleName = NULL;
-        pAccessibleDescription = NULL;
-    }
-
-    ~ImplAccessibleInfos()
-    {
-        delete pAccessibleName;
-        delete pAccessibleDescription;
-    }
-};
+ImplAccessibleInfos::~ImplAccessibleInfos()
+{
+    delete pAccessibleName;
+    delete pAccessibleDescription;
+}
 
 // -----------------------------------------------------------------------
 
@@ -4380,7 +4376,7 @@ Window::~Window()
 
     // Dispose of the canvas implementation (which, currently, has an
     // own wrapper window as a child to this one.
-    Reference< rendering::XCanvas > xCanvas( mpWindowImpl->mxCanvas );
+    uno::Reference< rendering::XCanvas > xCanvas( mpWindowImpl->mxCanvas );
     if( xCanvas.is() )
     {
         uno::Reference < lang::XComponent > xCanvasComponent( xCanvas,
@@ -4425,12 +4421,12 @@ Window::~Window()
             // deregister drop target listener
             if( mpWindowImpl->mpFrameData->mxDropTargetListener.is() )
             {
-                Reference< XDragGestureRecognizer > xDragGestureRecognizer =
-                    Reference< XDragGestureRecognizer > (mpWindowImpl->mpFrameData->mxDragSource, UNO_QUERY);
+                uno::Reference< XDragGestureRecognizer > xDragGestureRecognizer =
+                    uno::Reference< XDragGestureRecognizer > (mpWindowImpl->mpFrameData->mxDragSource, UNO_QUERY);
                 if( xDragGestureRecognizer.is() )
                 {
                     xDragGestureRecognizer->removeDragGestureListener(
-                        Reference< XDragGestureListener > (mpWindowImpl->mpFrameData->mxDropTargetListener, UNO_QUERY));
+                        uno::Reference< XDragGestureListener > (mpWindowImpl->mpFrameData->mxDropTargetListener, UNO_QUERY));
                 }
 
                 mpWindowImpl->mpFrameData->mxDropTarget->removeDropTargetListener( mpWindowImpl->mpFrameData->mxDropTargetListener );
@@ -4438,7 +4434,7 @@ Window::~Window()
             }
 
             // shutdown drag and drop for this frame window
-            Reference< XComponent > xComponent( mpWindowImpl->mpFrameData->mxDropTarget, UNO_QUERY );
+            uno::Reference< XComponent > xComponent( mpWindowImpl->mpFrameData->mxDropTarget, UNO_QUERY );
 
             // DNDEventDispatcher does not hold a reference of the DropTarget,
             // so it's ok if it does not support XComponent
@@ -8086,7 +8082,7 @@ void Window::SetText( const XubString& rStr )
     // name change.
     if ( IsReallyVisible() )
     {
-        Window* pWindow = GetLabelFor();
+        Window* pWindow = GetAccessibleRelationLabelFor();
         if ( pWindow && pWindow != this )
             pWindow->ImplCallEventListeners( VCLEVENT_WINDOW_FRAMETITLECHANGED, &oldTitle );
     }
@@ -8482,7 +8478,7 @@ void Window::ImplStartDnd()
 
 // -----------------------------------------------------------------------
 
-Reference< XDropTarget > Window::GetDropTarget()
+uno::Reference< XDropTarget > Window::GetDropTarget()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
@@ -8495,7 +8491,7 @@ Reference< XDropTarget > Window::GetDropTarget()
             if( ! mpWindowImpl->mpFrameData->mxDropTarget.is() )
             {
                 // initialization is done in GetDragSource
-                Reference< XDragSource > xDragSource = GetDragSource();
+                uno::Reference< XDragSource > xDragSource = GetDragSource();
             }
 
             if( mpWindowImpl->mpFrameData->mxDropTarget.is() )
@@ -8511,13 +8507,13 @@ Reference< XDropTarget > Window::GetDropTarget()
                         mpWindowImpl->mpFrameData->mxDropTarget->addDropTargetListener( mpWindowImpl->mpFrameData->mxDropTargetListener );
 
                         // register also as drag gesture listener if directly supported by drag source
-                        Reference< XDragGestureRecognizer > xDragGestureRecognizer =
-                            Reference< XDragGestureRecognizer > (mpWindowImpl->mpFrameData->mxDragSource, UNO_QUERY);
+                        uno::Reference< XDragGestureRecognizer > xDragGestureRecognizer =
+                            uno::Reference< XDragGestureRecognizer > (mpWindowImpl->mpFrameData->mxDragSource, UNO_QUERY);
 
                         if( xDragGestureRecognizer.is() )
                         {
                             xDragGestureRecognizer->addDragGestureListener(
-                                Reference< XDragGestureListener > (mpWindowImpl->mpFrameData->mxDropTargetListener, UNO_QUERY));
+                                uno::Reference< XDragGestureListener > (mpWindowImpl->mpFrameData->mxDropTargetListener, UNO_QUERY));
                         }
                         else
                             mpWindowImpl->mpFrameData->mbInternalDragGestureRecognizer = sal_True;
@@ -8539,12 +8535,12 @@ Reference< XDropTarget > Window::GetDropTarget()
     }
 
     // this object is located in the same process, so there will be no runtime exception
-    return Reference< XDropTarget > ( mpWindowImpl->mxDNDListenerContainer, UNO_QUERY );
+    return uno::Reference< XDropTarget > ( mpWindowImpl->mxDNDListenerContainer, UNO_QUERY );
 }
 
 // -----------------------------------------------------------------------
 
-Reference< XDragSource > Window::GetDragSource()
+uno::Reference< XDragSource > Window::GetDragSource()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
@@ -8554,7 +8550,7 @@ Reference< XDragSource > Window::GetDragSource()
         {
             try
             {
-                Reference< XMultiServiceFactory > xFactory = vcl::unohelper::GetMultiServiceFactory();
+                uno::Reference< XMultiServiceFactory > xFactory = vcl::unohelper::GetMultiServiceFactory();
                 if ( xFactory.is() )
                 {
                     const SystemEnvData * pEnvData = GetSystemData();
@@ -8588,10 +8584,10 @@ Reference< XDragSource > Window::GetDragSource()
                         aDropTargetAL[ 2 ] = makeAny( vcl::createBmpConverter() );
 #endif
                         if( aDragSourceSN.getLength() )
-                            mpWindowImpl->mpFrameData->mxDragSource = Reference< XDragSource > ( xFactory->createInstanceWithArguments( aDragSourceSN, aDragSourceAL ), UNO_QUERY );
+                            mpWindowImpl->mpFrameData->mxDragSource = uno::Reference< XDragSource > ( xFactory->createInstanceWithArguments( aDragSourceSN, aDragSourceAL ), UNO_QUERY );
 
                         if( aDropTargetSN.getLength() )
-                            mpWindowImpl->mpFrameData->mxDropTarget = Reference< XDropTarget > ( xFactory->createInstanceWithArguments( aDropTargetSN, aDropTargetAL ), UNO_QUERY );
+                            mpWindowImpl->mpFrameData->mxDropTarget = uno::Reference< XDropTarget > ( xFactory->createInstanceWithArguments( aDropTargetSN, aDropTargetAL ), UNO_QUERY );
                     }
                 }
             }
@@ -8608,12 +8604,12 @@ Reference< XDragSource > Window::GetDragSource()
         return mpWindowImpl->mpFrameData->mxDragSource;
     }
 
-    return Reference< XDragSource > ();
+    return uno::Reference< XDragSource > ();
 }
 
 // -----------------------------------------------------------------------
 
-void Window::GetDragSourceDropTarget(Reference< XDragSource >& xDragSource, Reference< XDropTarget > &xDropTarget )
+void Window::GetDragSourceDropTarget(uno::Reference< XDragSource >& xDragSource, uno::Reference< XDropTarget > &xDropTarget )
 // only for RVP transmission
 {
     if( mpWindowImpl->mpFrameData )
@@ -8631,14 +8627,14 @@ void Window::GetDragSourceDropTarget(Reference< XDragSource >& xDragSource, Refe
 
 // -----------------------------------------------------------------------
 
-Reference< XDragGestureRecognizer > Window::GetDragGestureRecognizer()
+uno::Reference< XDragGestureRecognizer > Window::GetDragGestureRecognizer()
 {
-    return Reference< XDragGestureRecognizer > ( GetDropTarget(), UNO_QUERY );
+    return uno::Reference< XDragGestureRecognizer > ( GetDropTarget(), UNO_QUERY );
 }
 
 // -----------------------------------------------------------------------
 
-Reference< XClipboard > Window::GetClipboard()
+uno::Reference< XClipboard > Window::GetClipboard()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
@@ -8648,19 +8644,19 @@ Reference< XClipboard > Window::GetClipboard()
         {
             try
             {
-                Reference< XMultiServiceFactory > xFactory( vcl::unohelper::GetMultiServiceFactory() );
+                uno::Reference< XMultiServiceFactory > xFactory( vcl::unohelper::GetMultiServiceFactory() );
 
                 if( xFactory.is() )
                 {
-                    mpWindowImpl->mpFrameData->mxClipboard = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboardExt" ) ), UNO_QUERY );
+                    mpWindowImpl->mpFrameData->mxClipboard = uno::Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboardExt" ) ), UNO_QUERY );
 
                     if( !mpWindowImpl->mpFrameData->mxClipboard.is() )
-                        mpWindowImpl->mpFrameData->mxClipboard = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
+                        mpWindowImpl->mpFrameData->mxClipboard = uno::Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
 
 #if defined(UNX) && !defined(QUARTZ)          // unix clipboard needs to be initialized
                     if( mpWindowImpl->mpFrameData->mxClipboard.is() )
                     {
-                        Reference< XInitialization > xInit = Reference< XInitialization >( mpWindowImpl->mpFrameData->mxClipboard, UNO_QUERY );
+                        uno::Reference< XInitialization > xInit = uno::Reference< XInitialization >( mpWindowImpl->mpFrameData->mxClipboard, UNO_QUERY );
 
                         if( xInit.is() )
                         {
@@ -8692,7 +8688,7 @@ Reference< XClipboard > Window::GetClipboard()
 
 // -----------------------------------------------------------------------
 
-Reference< XClipboard > Window::GetPrimarySelection()
+uno::Reference< XClipboard > Window::GetPrimarySelection()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
@@ -8702,7 +8698,7 @@ Reference< XClipboard > Window::GetPrimarySelection()
         {
             try
             {
-                Reference< XMultiServiceFactory > xFactory( vcl::unohelper::GetMultiServiceFactory() );
+                uno::Reference< XMultiServiceFactory > xFactory( vcl::unohelper::GetMultiServiceFactory() );
 
                 if( xFactory.is() )
                 {
@@ -8712,16 +8708,16 @@ Reference< XClipboard > Window::GetPrimarySelection()
                     aArgumentList[ 1 ] = makeAny( OUString::createFromAscii( "PRIMARY" ) );
                     aArgumentList[ 2 ] = makeAny( vcl::createBmpConverter() );
 
-                    mpWindowImpl->mpFrameData->mxSelection = Reference< XClipboard >( xFactory->createInstanceWithArguments(
+                    mpWindowImpl->mpFrameData->mxSelection = uno::Reference< XClipboard >( xFactory->createInstanceWithArguments(
                     OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ), aArgumentList ), UNO_QUERY );
 #   else
-                    static Reference< XClipboard >  s_xSelection;
+                    static uno::Reference< XClipboard > s_xSelection;
 
                     if ( !s_xSelection.is() )
-                         s_xSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboardExt" ) ), UNO_QUERY );
+                         s_xSelection = uno::Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboardExt" ) ), UNO_QUERY );
 
                     if ( !s_xSelection.is() )
-                         s_xSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboard" ) ), UNO_QUERY );
+                         s_xSelection = uno::Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboard" ) ), UNO_QUERY );
 
                     mpWindowImpl->mpFrameData->mxSelection = s_xSelection;
 #   endif
@@ -9134,6 +9130,7 @@ sal_uInt16 Window::GetAccessibleRole() const
 
             case WINDOW_HELPTEXTWINDOW: nRole = accessibility::AccessibleRole::TOOL_TIP; break;
 
+            case WINDOW_RULER:          nRole = accessibility::AccessibleRole::RULER; break;
             case WINDOW_WINDOW:
             case WINDOW_CONTROL:
             case WINDOW_BORDERWINDOW:
@@ -9160,7 +9157,7 @@ void Window::SetAccessibleName( const String& rName )
    if ( !mpWindowImpl->mpAccessibleInfos )
         mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
 
-    DBG_ASSERT( !mpWindowImpl->mpAccessibleInfos->pAccessibleName, "AccessibleName already set!" );
+    DBG_ASSERT( !mpWindowImpl->mpAccessibleInfos->pAccessibleName || !rName.Len(), "AccessibleName already set!" );
     delete mpWindowImpl->mpAccessibleInfos->pAccessibleName;
     mpWindowImpl->mpAccessibleInfos->pAccessibleName = new String( rName );
 }
@@ -9201,9 +9198,9 @@ String Window::GetAccessibleName() const
             case WINDOW_LISTBOX:
             case WINDOW_MULTILISTBOX:
             case WINDOW_TREELISTBOX:
-
+            case WINDOW_METRICBOX:
             {
-                Window *pLabel = GetLabeledBy();
+                Window *pLabel = GetAccessibleRelationLabeledBy();
                 if ( pLabel && pLabel != this )
                     aAccessibleName = pLabel->GetText();
             }
@@ -9262,6 +9259,27 @@ String Window::GetAccessibleDescription() const
     return aAccessibleDescription;
 }
 
+void Window::SetAccessibleRelationLabeledBy( Window* pLabeledBy )
+{
+    if ( !mpWindowImpl->mpAccessibleInfos )
+        mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
+    mpWindowImpl->mpAccessibleInfos->pLabeledByWindow = pLabeledBy;
+}
+
+void Window::SetAccessibleRelationLabelFor( Window* pLabelFor )
+{
+    if ( !mpWindowImpl->mpAccessibleInfos )
+        mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
+    mpWindowImpl->mpAccessibleInfos->pLabelForWindow = pLabelFor;
+}
+
+void Window::SetAccessibleRelationMemberOf( Window* pMemberOfWin )
+{
+    if ( !mpWindowImpl->mpAccessibleInfos )
+        mpWindowImpl->mpAccessibleInfos = new ImplAccessibleInfos;
+    mpWindowImpl->mpAccessibleInfos->pMemberOfWindow = pMemberOfWin;
+}
+
 sal_Bool Window::IsAccessibilityEventsSuppressed( sal_Bool bTraverseParentPath )
 {
     if( !bTraverseParentPath )
@@ -9278,6 +9296,11 @@ sal_Bool Window::IsAccessibilityEventsSuppressed( sal_Bool bTraverseParentPath )
         }
         return sal_False;
     }
+}
+
+void Window::SetAccessibilityEventsSuppressed(sal_Bool bSuppressed)
+{
+    mpWindowImpl->mbSuppressAccessibilityEvents = bSuppressed;
 }
 
 void Window::RecordLayoutData( vcl::ControlLayoutData* pLayout, const Rectangle& rRect )
@@ -9546,7 +9569,7 @@ sal_Bool Window::IsTopWindow() const
     {
         // #113722#, cache result of expensive queryInterface call
         Window *pThisWin = (Window*)this;
-        Reference< XTopWindow > xTopWindow( pThisWin->GetComponentInterface(), UNO_QUERY );
+        uno::Reference< XTopWindow > xTopWindow( pThisWin->GetComponentInterface(), UNO_QUERY );
         pThisWin->mpWindowImpl->mpWinData->mnIsTopWindow = xTopWindow.is() ? 1 : 0;
     }
     return mpWindowImpl->mpWinData->mnIsTopWindow == 1 ? sal_True : sal_False;
@@ -9682,12 +9705,12 @@ sal_Bool Window::IsNativeWidgetEnabled() const
 #include <salframe.h>
 #endif
 
-Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSize,
+uno::Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSize,
                                                        bool        bFullscreen,
                                                        bool        bSpriteCanvas ) const
 {
     // try to retrieve hard reference from weak member
-    Reference< rendering::XCanvas > xCanvas( mpWindowImpl->mxCanvas );
+    uno::Reference< rendering::XCanvas > xCanvas( mpWindowImpl->mxCanvas );
 
     // canvas still valid? Then we're done.
     if( xCanvas.is() )
@@ -9726,23 +9749,23 @@ Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSi
         aArg[ 2 ] = makeAny( ::com::sun::star::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight ) );
 
     aArg[ 3 ] = makeAny( mpWindowImpl->mbAlwaysOnTop ? sal_True : sal_False );
-    aArg[ 4 ] = makeAny( Reference< awt::XWindow >(
+    aArg[ 4 ] = makeAny( uno::Reference< awt::XWindow >(
                              const_cast<Window*>(this)->GetComponentInterface(),
                              uno::UNO_QUERY ));
 
-    Reference< XMultiServiceFactory > xFactory = vcl::unohelper::GetMultiServiceFactory();
+    uno::Reference< XMultiServiceFactory > xFactory = vcl::unohelper::GetMultiServiceFactory();
 
     // Create canvas instance with window handle
     // =========================================
     if ( xFactory.is() )
     {
-        static ::vcl::DeleteUnoReferenceOnDeinit<XMultiServiceFactory> xStaticCanvasFactory(
-            Reference<XMultiServiceFactory>(
+        static ::vcl::DeleteUnoReferenceOnDeinit<lang::XMultiServiceFactory> xStaticCanvasFactory(
+            uno::Reference<lang::XMultiServiceFactory>(
                 xFactory->createInstance(
                     OUString( RTL_CONSTASCII_USTRINGPARAM(
                             "com.sun.star.rendering.CanvasFactory") ) ),
                 UNO_QUERY ));
-        uno::Reference<XMultiServiceFactory> xCanvasFactory(xStaticCanvasFactory.get());
+        uno::Reference<lang::XMultiServiceFactory> xCanvasFactory(xStaticCanvasFactory.get());
 
         if(xCanvasFactory.is())
         {
@@ -9789,21 +9812,21 @@ Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSi
     return xCanvas;
 }
 
-Reference< rendering::XCanvas > Window::GetCanvas() const
+uno::Reference< rendering::XCanvas > Window::GetCanvas() const
 {
     return ImplGetCanvas( Size(), false, false );
 }
 
-Reference< rendering::XSpriteCanvas > Window::GetSpriteCanvas() const
+uno::Reference< rendering::XSpriteCanvas > Window::GetSpriteCanvas() const
 {
-    Reference< rendering::XSpriteCanvas > xSpriteCanvas(
+    uno::Reference< rendering::XSpriteCanvas > xSpriteCanvas(
         ImplGetCanvas( Size(), false, true ), uno::UNO_QUERY );
     return xSpriteCanvas;
 }
 
-Reference< ::com::sun::star::rendering::XSpriteCanvas > Window::GetFullscreenSpriteCanvas( const Size& rFullscreenSize ) const
+uno::Reference< ::com::sun::star::rendering::XSpriteCanvas > Window::GetFullscreenSpriteCanvas( const Size& rFullscreenSize ) const
 {
-    Reference< rendering::XSpriteCanvas > xSpriteCanvas(
+    uno::Reference< rendering::XSpriteCanvas > xSpriteCanvas(
         ImplGetCanvas( rFullscreenSize, true, true ), uno::UNO_QUERY );
     return xSpriteCanvas;
 }

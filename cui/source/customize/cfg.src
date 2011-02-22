@@ -888,4 +888,12 @@ String RID_SVXSTR_RENAME_TOOLBAR
     Text [ en-US ] = "Rename Toolbar";
 };
 
+String BUTTON_STR_UP
+{
+    Text [ en-US ] = "Up";
+};
+String BUTTON_STR_DOWN
+{
+    Text [ en-US ] = "Down";
+};
 

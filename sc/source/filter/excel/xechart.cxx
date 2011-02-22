@@ -36,6 +36,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
+#include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
@@ -57,9 +58,9 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
-#include <com/sun/star/chart2/LegendExpansion.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
 
@@ -94,6 +95,7 @@ using ::com::sun::star::drawing::XShapes;
 
 using ::com::sun::star::chart2::IncrementData;
 using ::com::sun::star::chart2::RelativePosition;
+using ::com::sun::star::chart2::RelativeSize;
 using ::com::sun::star::chart2::ScaleData;
 using ::com::sun::star::chart2::SubIncrement;
 using ::com::sun::star::chart2::XAxis;
@@ -818,6 +820,12 @@ XclExpChFrame::XclExpChFrame( const XclExpChRoot& rRoot, XclChObjectType eObjTyp
 void XclExpChFrame::Convert( const ScfPropertySet& rPropSet )
 {
     ConvertFrameBase( GetChRoot(), rPropSet, meObjType );
+}
+
+void XclExpChFrame::SetAutoFlags( bool bAutoPos, bool bAutoSize )
+{
+    ::set_flag( maData.mnFlags, EXC_CHFRAME_AUTOPOS, bAutoPos );
+    ::set_flag( maData.mnFlags, EXC_CHFRAME_AUTOSIZE, bAutoSize );
 }
 
 bool XclExpChFrame::IsDefault() const
@@ -2287,33 +2295,52 @@ void XclExpChLegend::Convert( const ScfPropertySet& rPropSet )
     mxText.reset( new XclExpChText( GetChRoot() ) );
     mxText->ConvertLegend( rPropSet );
 
-    // legend position
-    Any aRelPosAny;
+    // legend position and size
+    Any aRelPosAny, aRelSizeAny;
     rPropSet.GetAnyProperty( aRelPosAny, EXC_CHPROP_RELATIVEPOSITION );
-    if( aRelPosAny.has< RelativePosition >() )
+    rPropSet.GetAnyProperty( aRelSizeAny, EXC_CHPROP_RELATIVESIZE );
+    cssc::ChartLegendExpansion eApiExpand = cssc::ChartLegendExpansion_CUSTOM;
+    rPropSet.GetProperty( eApiExpand, EXC_CHPROP_EXPANSION );
+    if( aRelPosAny.has< RelativePosition >() || ((eApiExpand == cssc::ChartLegendExpansion_CUSTOM) && aRelSizeAny.has< RelativeSize >()) )
     {
         try
         {
-            /*  The 'RelativePosition' property is used as indicator of manually
-                changed legend position, but due to the different anchor modes
-                used by this property (in the RelativePosition.Anchor member)
-                it cannot be used to calculate the position easily. For this,
-                the Chart1 API will be used instead. */
+            /*  The 'RelativePosition' or 'RelativeSize' properties are used as
+                indicator of manually changed legend position/size, but due to
+                the different anchor modes used by this property (in the
+                RelativePosition.Anchor member) it cannot be used to calculate
+                the position easily. For this, the Chart1 API will be used
+                instead. */
             Reference< cssc::XChartDocument > xChart1Doc( GetChartDocument(), UNO_QUERY_THROW );
             Reference< XShape > xChart1Legend( xChart1Doc->getLegend(), UNO_SET_THROW );
             // coordinates in CHLEGEND record written but not used by Excel
             mxFramePos.reset( new XclExpChFramePos( EXC_CHFRAMEPOS_CHARTSIZE, EXC_CHFRAMEPOS_PARENT ) );
             XclChFramePos& rFramePos = mxFramePos->GetFramePosData();
-            rFramePos.maRect.mnX = maData.maRect.mnX = CalcChartXFromHmm( xChart1Legend->getPosition().X );
-            rFramePos.maRect.mnY = maData.maRect.mnY = CalcChartYFromHmm( xChart1Legend->getPosition().Y );
+            rFramePos.mnTLMode = EXC_CHFRAMEPOS_CHARTSIZE;
+            ::com::sun::star::awt::Point aLegendPos = xChart1Legend->getPosition();
+            rFramePos.maRect.mnX = maData.maRect.mnX = CalcChartXFromHmm( aLegendPos.X );
+            rFramePos.maRect.mnY = maData.maRect.mnY = CalcChartYFromHmm( aLegendPos.Y );
+            // legend size, Excel expects points in CHFRAMEPOS record
+            rFramePos.mnBRMode = EXC_CHFRAMEPOS_ABSSIZE_POINTS;
+            ::com::sun::star::awt::Size aLegendSize = xChart1Legend->getSize();
+            rFramePos.maRect.mnWidth = static_cast< sal_uInt16 >( aLegendSize.Width * EXC_POINTS_PER_HMM + 0.5 );
+            rFramePos.maRect.mnHeight = static_cast< sal_uInt16 >( aLegendSize.Height * EXC_POINTS_PER_HMM + 0.5 );
+            maData.maRect.mnWidth = CalcChartXFromHmm( aLegendSize.Width );
+            maData.maRect.mnHeight = CalcChartYFromHmm( aLegendSize.Height );
+            eApiExpand = cssc::ChartLegendExpansion_CUSTOM;
             // manual legend position implies manual plot area
             GetChartData().SetManualPlotArea();
             maData.mnDockMode = EXC_CHLEGEND_NOTDOCKED;
+            // a CHFRAME record with cleared auto flags is needed
+            if( !mxFrame )
+                mxFrame.reset( new XclExpChFrame( GetChRoot(), EXC_CHOBJTYPE_LEGEND ) );
+            mxFrame->SetAutoFlags( false, false );
         }
         catch( Exception& )
         {
             OSL_ENSURE( false, "XclExpChLegend::Convert - cannot get legend shape" );
             maData.mnDockMode = EXC_CHLEGEND_RIGHT;
+            eApiExpand = cssc::ChartLegendExpansion_HIGH;
         }
     }
     else
@@ -2329,13 +2356,10 @@ void XclExpChLegend::Convert( const ScfPropertySet& rPropSet )
             default:
                 OSL_ENSURE( false, "XclExpChLegend::Convert - unrecognized legend position" );
                 maData.mnDockMode = EXC_CHLEGEND_RIGHT;
+                eApiExpand = cssc::ChartLegendExpansion_HIGH;
         }
     }
-
-    // legend expansion
-    cssc2::LegendExpansion eApiExpand = cssc2::LegendExpansion_BALANCED;
-    rPropSet.GetProperty( eApiExpand, EXC_CHPROP_EXPANSION );
-    ::set_flag( maData.mnFlags, EXC_CHLEGEND_STACKED, eApiExpand != cssc2::LegendExpansion_WIDE );
+    ::set_flag( maData.mnFlags, EXC_CHLEGEND_STACKED, eApiExpand == cssc::ChartLegendExpansion_HIGH );
 
     // other flags
     ::set_flag( maData.mnFlags, EXC_CHLEGEND_AUTOSERIES );

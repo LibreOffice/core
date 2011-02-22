@@ -61,6 +61,7 @@ SwLabPrtPage::SwLabPrtPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_LAB_PRT), rSet),
 
     pPrinter( 0 ),
+    aFLDontKnow    (this, SW_RES(FL_DONTKNOW)),
     aPageButton    (this, SW_RES(BTN_PAGE   )),
     aSingleButton  (this, SW_RES(BTN_SINGLE )),
     aColText       (this, SW_RES(TXT_COL    )),
@@ -68,10 +69,9 @@ SwLabPrtPage::SwLabPrtPage(Window* pParent, const SfxItemSet& rSet) :
     aRowText       (this, SW_RES(TXT_ROW    )),
     aRowField      (this, SW_RES(FLD_ROW    )),
     aSynchronCB    (this, SW_RES(CB_SYNCHRON)),
-    aFLDontKnow    (this, SW_RES(FL_DONTKNOW)),
+    aFLPrinter     (this, SW_RES(FL_PRINTER )),
     aPrinterInfo   (this, SW_RES(INF_PRINTER)),
-    aPrtSetup      (this, SW_RES(BTN_PRTSETUP)),
-    aFLPrinter     (this, SW_RES(FL_PRINTER ))
+    aPrtSetup      (this, SW_RES(BTN_PRTSETUP))
 
 {
     FreeResource();

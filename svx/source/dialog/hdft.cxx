@@ -146,6 +146,7 @@ SvxHFPage::SvxHFPage( Window* pParent, sal_uInt16 nResId, const SfxItemSet& rAtt
 
     SfxTabPage( pParent, SVX_RES( nResId ), rAttr ),
 
+    aFrm            ( this, SVX_RES( FL_FRAME ) ),
     aTurnOnBox      ( this, SVX_RES( CB_TURNON ) ),
     aCntSharedBox   ( this, SVX_RES( CB_SHARED ) ),
     aLMLbl          ( this, SVX_RES( FT_LMARGIN ) ),
@@ -158,7 +159,6 @@ SvxHFPage::SvxHFPage( Window* pParent, sal_uInt16 nResId, const SfxItemSet& rAtt
     aHeightFT       ( this, SVX_RES( FT_HEIGHT ) ),
     aHeightEdit     ( this, SVX_RES( ED_HEIGHT ) ),
     aHeightDynBtn   ( this, SVX_RES( CB_HEIGHT_DYN ) ),
-    aFrm            ( this, SVX_RES( FL_FRAME ) ),
     aBspWin         ( this, SVX_RES( WN_BSP ) ),
     aBackgroundBtn  ( this, SVX_RES( BTN_EXTRAS ) ),
 
@@ -182,6 +182,20 @@ SvxHFPage::SvxHFPage( Window* pParent, sal_uInt16 nResId, const SfxItemSet& rAtt
     SetFieldUnit( aHeightEdit, eFUnit );
     SetFieldUnit( aLMEdit, eFUnit );
     SetFieldUnit( aRMEdit, eFUnit );
+
+    aTurnOnBox.SetAccessibleRelationMemberOf( &aFrm );
+    aCntSharedBox.SetAccessibleRelationMemberOf( &aFrm );
+    aLMLbl.SetAccessibleRelationMemberOf( &aFrm );
+    aLMEdit.SetAccessibleRelationMemberOf( &aFrm );
+    aRMLbl.SetAccessibleRelationMemberOf( &aFrm );
+    aRMEdit.SetAccessibleRelationMemberOf( &aFrm );
+    aDistFT.SetAccessibleRelationMemberOf( &aFrm );
+    aDistEdit.SetAccessibleRelationMemberOf( &aFrm );
+    aDynSpacingCB.SetAccessibleRelationMemberOf( &aFrm );
+    aHeightFT.SetAccessibleRelationMemberOf( &aFrm );
+    aHeightEdit.SetAccessibleRelationMemberOf( &aFrm );
+    aHeightDynBtn.SetAccessibleRelationMemberOf( &aFrm );
+    aBackgroundBtn.SetAccessibleRelationMemberOf(&aFrm);
 }
 
 // -----------------------------------------------------------------------

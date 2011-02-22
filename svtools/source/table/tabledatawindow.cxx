@@ -28,23 +28,31 @@
 #include "precompiled_svtools.hxx"
 
 #include "svtools/table/tablecontrol.hxx"
-#include "svtools/table/tabledatawindow.hxx"
+
+#include "tabledatawindow.hxx"
 #include "tablecontrol_impl.hxx"
+#include "tablegeometry.hxx"
+#include "cellvalueconversion.hxx"
+
 #include <vcl/help.hxx>
 
-//........................................................................
+//......................................................................................................................
 namespace svt { namespace table
 {
-     class TableControl_Impl;
-//........................................................................
+//......................................................................................................................
 
-    //====================================================================
+    /** === begin UNO using === **/
+    using ::com::sun::star::uno::Any;
+    /** === end UNO using === **/
+
+    //==================================================================================================================
     //= TableDataWindow
-    //====================================================================
-    //--------------------------------------------------------------------
+    //==================================================================================================================
+    //------------------------------------------------------------------------------------------------------------------
     TableDataWindow::TableDataWindow( TableControl_Impl& _rTableControl )
         :Window( &_rTableControl.getAntiImpl() )
-        ,m_rTableControl        ( _rTableControl )
+        ,m_rTableControl( _rTableControl )
+        ,m_nTipWindowHandle( 0 )
     {
         // by default, use the background as determined by the style settings
         const Color aWindowColor( GetSettings().GetStyleSettings().GetFieldColor() );
@@ -52,105 +60,164 @@ namespace svt { namespace table
         SetFillColor( aWindowColor );
     }
 
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
+    TableDataWindow::~TableDataWindow()
+    {
+        impl_hideTipWindow();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::Paint( const Rectangle& rUpdateRect )
     {
         m_rTableControl.doPaintContent( rUpdateRect );
     }
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::SetBackground( const Wallpaper& rColor )
     {
         Window::SetBackground( rColor );
     }
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::SetControlBackground( const Color& rColor )
     {
         Window::SetControlBackground( rColor );
     }
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::SetBackground()
     {
         Window::SetBackground();
     }
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::SetControlBackground()
     {
         Window::SetControlBackground();
     }
-    //--------------------------------------------------------------------
+
+    //------------------------------------------------------------------------------------------------------------------
+    void TableDataWindow::RequestHelp( const HelpEvent& rHEvt )
+    {
+        sal_uInt16 const nHelpMode = rHEvt.GetMode();
+        if  (   ( IsMouseCaptured() )
+            ||  ( ( nHelpMode & HELPMODE_QUICK ) == 0 )
+            )
+        {
+            Window::RequestHelp( rHEvt );
+            return;
+        }
+
+        ::rtl::OUString sHelpText;
+        sal_uInt16 nHelpStyle = 0;
+
+        Point const aMousePos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
+        RowPos const hitRow = m_rTableControl.getRowAtPoint( aMousePos );
+        ColPos const hitCol = m_rTableControl.getColAtPoint( aMousePos );
+
+        PTableModel const pTableModel( m_rTableControl.getModel() );
+        if ( ( hitCol >= 0 ) && ( hitCol < pTableModel->getColumnCount() ) )
+        {
+            if ( hitRow == ROW_COL_HEADERS )
+            {
+                sHelpText = pTableModel->getColumnModel( hitCol )->getHelpText();
+            }
+            else if ( ( hitRow >= 0 ) && ( hitRow < pTableModel->getRowCount() ) )
+            {
+                Any aCellToolTip;
+                pTableModel->getCellToolTip( hitCol, hitRow, aCellToolTip );
+                if ( !aCellToolTip.hasValue() )
+                {
+                    // use the cell content
+                    pTableModel->getCellContent( hitCol, hitRow, aCellToolTip );
+
+                    // use the cell content as tool tip only if it doesn't fit into the cell.
+                    bool const activeCell = ( hitRow == m_rTableControl.getCurrentRow() ) && ( hitCol == m_rTableControl.getCurrentColumn() );
+                    bool const selectedCell = m_rTableControl.isRowSelected( hitRow );
+
+                    Rectangle const aWindowRect( Point( 0, 0 ), GetOutputSizePixel() );
+                    TableCellGeometry const aCell( m_rTableControl, aWindowRect, hitCol, hitRow );
+                    Rectangle const aCellRect( aCell.getRect() );
+
+                    PTableRenderer const pRenderer = pTableModel->getRenderer();
+                    if ( pRenderer->FitsIntoCell( aCellToolTip, hitCol, hitRow, activeCell, selectedCell, *this, aCellRect ) )
+                        aCellToolTip.clear();
+                }
+
+                sHelpText = CellValueConversion::convertToString( aCellToolTip );
+
+                if ( sHelpText.indexOf( '\n' ) >= 0 )
+                    nHelpStyle = QUICKHELP_TIP_STYLE_BALLOON;
+            }
+        }
+
+        if ( sHelpText.getLength() )
+        {
+            Rectangle const aControlScreenRect(
+                OutputToScreenPixel( Point( 0, 0 ) ),
+                GetOutputSizePixel()
+            );
+
+            if ( m_nTipWindowHandle )
+                Help::UpdateTip( m_nTipWindowHandle, this, aControlScreenRect, sHelpText );
+            else
+                m_nTipWindowHandle = Help::ShowTip( this, aControlScreenRect, sHelpText, nHelpStyle );
+        }
+        else
+            impl_hideTipWindow();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void TableDataWindow::impl_hideTipWindow()
+    {
+        if ( m_nTipWindowHandle != 0 )
+        {
+            Help::HideTip( m_nTipWindowHandle );
+            m_nTipWindowHandle = 0;
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::MouseMove( const MouseEvent& rMEvt )
     {
-        Point aPoint = rMEvt.GetPosPixel();
+        if ( rMEvt.IsLeaveWindow() )
+            impl_hideTipWindow();
+
         if ( !m_rTableControl.getInputHandler()->MouseMove( m_rTableControl, rMEvt ) )
         {
-            if(m_rTableControl.getCurrentRow(aPoint)>=0 && m_rTableControl.isTooltipActive() )
-            {
-                SetPointer(POINTER_ARROW);
-                rtl::OUString& rHelpText = m_rTableControl.setTooltip(aPoint);
-                Help::EnableBalloonHelp();
-                Window::SetHelpText( rHelpText.getStr());
-            }
-            else if(m_rTableControl.getCurrentRow(aPoint) == -1)
-            {
-                if(Help::IsBalloonHelpEnabled())
-                    Help::DisableBalloonHelp();
-                m_rTableControl.resizeColumn(aPoint);
-            }
-            else
-            {
-                if(Help::IsBalloonHelpEnabled())
-                    Help::DisableBalloonHelp();
-                Window::MouseMove( rMEvt );
-            }
+            Window::MouseMove( rMEvt );
         }
     }
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::MouseButtonDown( const MouseEvent& rMEvt )
     {
-        Point aPoint = rMEvt.GetPosPixel();
-        RowPos nCurRow = m_rTableControl.getCurrentRow(aPoint);
-        std::vector<RowPos> selectedRows(m_rTableControl.getSelectedRows());
-        if ( !m_rTableControl.getInputHandler()->MouseButtonDown( m_rTableControl, rMEvt ) )
-            Window::MouseButtonDown( rMEvt );
-        else
-        {
-            if(nCurRow >= 0 && m_rTableControl.getSelEngine()->GetSelectionMode() != NO_SELECTION)
-            {
-                bool found = std::find(selectedRows.begin(),selectedRows.end(), nCurRow) != selectedRows.end();
+        impl_hideTipWindow();
 
-                if( !found )
-                {
-                    m_aSelectHdl.Call( NULL );
-                }
-            }
+        Point const aPoint = rMEvt.GetPosPixel();
+        RowPos const hitRow = m_rTableControl.getRowAtPoint( aPoint );
+        bool const wasRowSelected = m_rTableControl.isRowSelected( hitRow );
+
+        if ( !m_rTableControl.getInputHandler()->MouseButtonDown( m_rTableControl, rMEvt ) )
+        {
+            Window::MouseButtonDown( rMEvt );
+            return;
+        }
+
+        bool const isRowSelected = m_rTableControl.isRowSelected( hitRow );
+        if ( isRowSelected != wasRowSelected )
+        {
+            m_aSelectHdl.Call( NULL );
         }
         m_aMouseButtonDownHdl.Call((MouseEvent*) &rMEvt);
-        m_rTableControl.getAntiImpl().LoseFocus();
     }
-    //--------------------------------------------------------------------
+
+    //------------------------------------------------------------------------------------------------------------------
     void TableDataWindow::MouseButtonUp( const MouseEvent& rMEvt )
     {
         if ( !m_rTableControl.getInputHandler()->MouseButtonUp( m_rTableControl, rMEvt ) )
             Window::MouseButtonUp( rMEvt );
+
         m_aMouseButtonUpHdl.Call((MouseEvent*) &rMEvt);
-        m_rTableControl.getAntiImpl().GetFocus();
+        m_rTableControl.getAntiImpl().GrabFocus();
     }
-    //--------------------------------------------------------------------
-    void TableDataWindow::SetPointer( const Pointer& rPointer )
-    {
-        Window::SetPointer(rPointer);
-    }
-    //--------------------------------------------------------------------
-    void TableDataWindow::CaptureMouse()
-    {
-        Window::CaptureMouse();
-    }
-    //--------------------------------------------------------------------
-    void TableDataWindow::ReleaseMouse(  )
-    {
-        Window::ReleaseMouse();
-    }
-    // -----------------------------------------------------------------------
+
+    //------------------------------------------------------------------------------------------------------------------
     long TableDataWindow::Notify(NotifyEvent& rNEvt )
     {
         long nDone = 0;
@@ -168,6 +235,6 @@ namespace svt { namespace table
         }
         return nDone ? nDone : Window::Notify( rNEvt );
     }
-//........................................................................
+//......................................................................................................................
 } } // namespace svt::table
-//........................................................................
+//......................................................................................................................

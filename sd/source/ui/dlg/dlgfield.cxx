@@ -61,9 +61,9 @@
 
 SdModifyFieldDlg::SdModifyFieldDlg( Window* pWindow, const SvxFieldData* pInField, const SfxItemSet& rSet ) :
     ModalDialog ( pWindow, SdResId( DLG_FIELD_MODIFY ) ),
+    aGrpType    ( this, SdResId( GRP_TYPE ) ),
     aRbtFix     ( this, SdResId( RBT_FIX ) ),
     aRbtVar     ( this, SdResId( RBT_VAR ) ),
-    aGrpType    ( this, SdResId( GRP_TYPE ) ),
     maFtLanguage( this, SdResId( FT_LANGUAGE ) ),
     maLbLanguage( this, SdResId( LB_LANGUAGE ) ),
     aFtFormat   ( this, SdResId( FT_FORMAT ) ),

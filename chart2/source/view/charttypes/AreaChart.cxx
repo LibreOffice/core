@@ -48,9 +48,11 @@
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
+
 #include <tools/debug.hxx>
 #include <editeng/unoprnms.hxx>
 #include <rtl/math.hxx>
+
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/NormalsKind.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -152,8 +154,8 @@ bool AreaChart::isSeperateStackingForDifferentSigns( sal_Int32 /*nDimensionIndex
 LegendSymbolStyle AreaChart::getLegendSymbolStyle()
 {
     if( m_bArea || m_nDimension == 3 )
-        return chart2::LegendSymbolStyle_BOX;
-    return chart2::LegendSymbolStyle_LINE_WITH_SYMBOL;
+        return LegendSymbolStyle_BOX;
+    return LegendSymbolStyle_LINE;
 }
 
 uno::Any AreaChart::getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex )

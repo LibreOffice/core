@@ -280,7 +280,8 @@ testcase tFilePassword
       if Passwort.isEnabled then
          if NOT((instr(sTemp,gMathFilter) = 1)OR(instr(sTemp," (.sxm)") > 1)) then 
              if (4=i) then
-                warnlog "#i112895# (" + i + "/" + x +"): '"+sTemp+"' Password Checkbox: Enabled"
+                '#i112895#
+                warnlog "(" + i + "/" + x +"): '"+sTemp+"' Password Checkbox: Enabled"
              else
                 warnlog "(" + i + "/" + x +"): '"+sTemp+"' Password Checkbox: Enabled"
             endif

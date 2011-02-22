@@ -2564,7 +2564,8 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
             //At least the endframe...
             bVert = pEndFrm->IsVertical();
             bRev = pEndFrm->IsReverse();
-            fnRect = bVert ? ( bRev ? fnRectVL2R : fnRectVert ) :
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            fnRect = bVert ? ( bRev ? fnRectVL2R : ( pEndFrm->IsVertLR() ? fnRectVertL2R : fnRectVert ) ) :
                              ( bRev ? fnRectB2T : fnRectHori );
             nTmpTwips = (aEndRect.*fnRect->fnGetTop)();
             if( (aEndFrm.*fnRect->fnGetTop)() != nTmpTwips )

@@ -91,7 +91,7 @@ public:
 //  class VCLXTopWindow
 //  ----------------------------------------------------
 
-class VCLXTopWindow: public VCLXTopWindow_Base,
+class TOOLKIT_DLLPUBLIC VCLXTopWindow: public VCLXTopWindow_Base,
                      public VCLXContainer
 {
 protected:

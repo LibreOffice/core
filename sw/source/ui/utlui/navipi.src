@@ -29,6 +29,7 @@
 #include "utlui.hrc"
 #include "navipi.hrc"
 #include "helpid.h"
+#include "access.hrc"
 
 Window DLG_NAVIGATION_PI
 {
@@ -534,3 +535,15 @@ ImageList IMG_NAVI_ENTRYBMPH
     MaskColor = IMAGE_MASK_COLOR ;
     NAVI_ENTRY_IDS
 };
+
+//IAccessibility2 Implementation 2009-----
+String STR_ACCESS_TL_GLOBAL
+{
+    Text [ en-US ] = "Global View";
+};
+String STR_ACCESS_TL_CONTENT
+{
+    Text [ en-US ] = "Content View";
+};
+//-----IAccessibility2 Implementation 2009
+

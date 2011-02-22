@@ -48,9 +48,7 @@ IDLFILES= \
     FillBitmap.idl \
     IncrementData.idl \
     InterpretedData.idl \
-    LegendExpansion.idl \
     LegendPosition.idl \
-    LegendSymbolStyle.idl \
     LightSource.idl \
     PieChartOffsetMode.idl \
     RelativePosition.idl \
@@ -62,7 +60,6 @@ IDLFILES= \
     SymbolStyle.idl \
     TickmarkStyle.idl \
     TransparencyStyle.idl \
-    ViewLegendEntry.idl \
     XAnyDescriptionAccess.idl\
     XAxis.idl \
     XCoordinateSystem.idl \
@@ -86,8 +83,6 @@ IDLFILES= \
     XInternalDataProvider.idl \
     XLabeled.idl \
     XLegend.idl \
-    XLegendEntry.idl \
-    XLegendSymbolProvider.idl \
     XRegressionCurve.idl \
     XRegressionCurveCalculator.idl \
     XRegressionCurveContainer.idl \

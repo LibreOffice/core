@@ -191,6 +191,12 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Hide = TRUE ;
         Text [ en-US ] = "Auto~Format..." ;
     };
+    /*IAccessibility2 Implementation 2009-----*/
+    String STR_SYMBOL
+    {
+        Text [ en-US ] = "Symbol" ;
+    };
+    /*-----IAccessibility2 Implementation 2009*/
 };
 
 

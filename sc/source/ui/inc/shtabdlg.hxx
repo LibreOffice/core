@@ -44,11 +44,11 @@
 class ScShowTabDlg : public ModalDialog
 {
 private:
+    FixedText                       aFtLbTitle;
     ::svtools::ToolTipMultiListBox  aLb;
     OKButton                        aBtnOk;
     CancelButton                    aBtnCancel;
     HelpButton                      aBtnHelp;
-    FixedText                       aFtLbTitle;
 
     DECL_LINK( DblClkHdl, void * );
 

@@ -400,7 +400,6 @@ public:
     SAL_DLLPRIVATE void         ImplInitClipRegion();
     SAL_DLLPRIVATE bool         ImplSelectClipRegion( const Region&, SalGraphics* pGraphics = NULL );
     SAL_DLLPRIVATE void         ImplSetClipRegion( const Region* pRegion );
-    SAL_DLLPRIVATE void         ImplSetTriangleClipRegion( const PolyPolygon &rPolyPolygon );
 
     SAL_DLLPRIVATE SalLayout*   ImplLayout( const String&, xub_StrLen nIndex,
                                             xub_StrLen nLen, const Point& rLogicPos = Point(0,0),
@@ -838,7 +837,6 @@ public:
 
     void                SetClipRegion();
     void                SetClipRegion( const Region& rRegion );
-    void                SetTriangleClipRegion( const PolyPolygon &rRegion );
     Region              GetClipRegion() const;
     sal_Bool                IsClipRegion() const { return mbClipRegion; }
     Region              GetActiveClipRegion() const;
@@ -1108,6 +1106,10 @@ public:
 
     void                Push( sal_uInt16 nFlags = PUSH_ALL );
     void                Pop();
+    // returns the curren stack depth; that is the number of Push() calls minus the number of Pop() calls
+    // this should not normally be used since Push and Pop must always be used symmetrically
+    // however this may be e.g. a help when debugging code in which this somehow is not the case
+    sal_uInt32          GetGCStackDepth() const;
 
     /** Query availability of alpha channel
 

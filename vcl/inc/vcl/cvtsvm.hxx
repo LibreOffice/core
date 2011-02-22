@@ -92,7 +92,7 @@
 
 class Stack;
 
-class VCL_DLLPUBLIC SVMConverter
+class VCL_PLUGIN_PUBLIC SVMConverter
 {
 private:
 //#if 0 // _SOLAR__PRIVATE

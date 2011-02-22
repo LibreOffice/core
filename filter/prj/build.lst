@@ -1,4 +1,4 @@
-fl      filter  :    l10n svtools unotools xmloff cppu tools cppuhelper sal svx javaunohelper XPDF:xpdf jvmaccess canvas SAXON:saxon LIBXSLT:libxslt basegfx NULL
+fl      filter  :    L10N:l10n svtools unotools xmloff cppu tools cppuhelper sal svx javaunohelper XPDF:xpdf jvmaccess canvas SAXON:saxon LIBXSLT:libxslt basegfx NULL
 fl	filter									usr1	-	all	fl_mkout			NULL
 fl	filter\prj								get		-	all	fl_prj				NULL
 fl	filter\inc								nmake	-	all	fl_inc				NULL

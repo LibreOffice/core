@@ -1165,9 +1165,9 @@ AbstractScPivotFilterDlg * ScAbstractDialogFactory_Impl::CreateScPivotFilterDlg 
 //add for ScDPFunctionDlg begin
 AbstractScDPFunctionDlg * ScAbstractDialogFactory_Impl::CreateScDPFunctionDlg ( Window* pParent,
                                                                 int nId,
-                                                                const ScDPLabelDataVec& rLabelVec,
+                                                                const ScDPLabelDataVector& rLabelVec,
                                                                 const ScDPLabelData& rLabelData,
-                                                                const ScDPFuncData& rFuncData )
+                                                                const ScPivotFuncData& rFuncData )
 {
     ScDPFunctionDlg * pDlg=NULL;
     switch ( nId )
@@ -1190,7 +1190,7 @@ AbstractScDPSubtotalDlg * ScAbstractDialogFactory_Impl::CreateScDPSubtotalDlg ( 
                                                                 int nId,
                                                                 ScDPObject& rDPObj,
                                                                 const ScDPLabelData& rLabelData,
-                                                                const ScDPFuncData& rFuncData,
+                                                                const ScPivotFuncData& rFuncData,
                                                                 const ScDPNameVec& rDataFields,
                                                                 bool bEnableLayout )
 {

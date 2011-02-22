@@ -457,6 +457,10 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
         aTree.Select( aTree.First() );
     aTree.Show();
     bDontCheckPasswd = sal_False;
+
+    aPasswdPB.SetAccessibleRelationMemberOf(&aProtectFL);
+    aPasswdPB.SetAccessibleRelationLabeledBy(&aPasswdCB);
+    aSubRegionED.SetAccessibleName(aSubRegionFT.GetText());
 }
 /* -----------------------------26.04.01 14:56--------------------------------
 
@@ -1353,6 +1357,7 @@ IMPL_LINK( SwEditRegionDlg, DDEHdl, CheckBox*, pBox )
                 rData.SetLinkFilePassword( aEmptyStr );
             }
             rData.SetType(DDE_LINK_SECTION);
+            aFileNameED.SetAccessibleName(aDDECommandFT.GetText());
         }
         else
         {
@@ -1371,6 +1376,7 @@ IMPL_LINK( SwEditRegionDlg, DDEHdl, CheckBox*, pBox )
                 rData.SetLinkFilePassword( aEmptyStr );
                 aFileNameED.SetText(aEmptyStr);
             }
+            aFileNameED.SetAccessibleName(aFileNameFT.GetText());
         }
         aFilePB.Enable(bFile && !bDDE);
     }
@@ -1734,6 +1740,7 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
     aCurName.SetModifyHdl   ( LINK( this, SwInsertSectionTabPage, NameEditHdl));
     aDDECB.SetClickHdl      ( LINK( this, SwInsertSectionTabPage, DDEHdl ));
     ChangeProtectHdl(&aProtectCB);
+    aPasswdPB.SetAccessibleRelationMemberOf(&aProtectFL);
     aSubRegionED.EnableAutocomplete( sal_True, sal_True );
 }
 /* -----------------21.05.99 10:31-------------------
@@ -1999,6 +2006,7 @@ IMPL_LINK( SwInsertSectionTabPage, DDEHdl, CheckBox*, pBox )
         aDDECommandFT.Show();
         aSubRegionFT.Hide();
         aSubRegionED.Hide();
+        aFileNameED.SetAccessibleName(aDDECommandFT.GetText());
     }
     else
     {
@@ -2008,6 +2016,7 @@ IMPL_LINK( SwInsertSectionTabPage, DDEHdl, CheckBox*, pBox )
         aSubRegionFT.Show();
         aSubRegionED.Show();
         aSubRegionED.Enable(bFile);
+        aFileNameED.SetAccessibleName(aFileNameFT.GetText());
     }
     return 0;
 }
@@ -2375,6 +2384,7 @@ SwSectionIndentTabPage::SwSectionIndentTabPage( Window *pParent, const SfxItemSe
     Link aLk = LINK(this, SwSectionIndentTabPage, IndentModifyHdl);
     aBeforeMF.SetModifyHdl(aLk);
     aAfterMF.SetModifyHdl(aLk);
+    aPreviewWin.SetAccessibleName(aIndentFL.GetText());
 }
 /*-- 13.06.2003 09:59:23---------------------------------------------------
 

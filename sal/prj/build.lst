@@ -20,4 +20,5 @@ sa sal\qa\OStringBuffer nmake - all sa_qa_OStringBuffer sa_cppunittester sa_util
 sa sal\qa\osl\mutex nmake - all sa_qa_osl_mutex sa_cppunittester sa_util NULL
 sa sal\qa\osl\pipe nmake - all sa_qa_osl_pipe sa_cppunittester sa_util NULL
 sa sal\qa\osl\profile nmake - all sa_qa_osl_profile sa_cppunittester sa_util NULL
+sa sal\qa\osl\setthreadname nmake - all sa_qa_osl_setthreadname sa_cppunittester sa_util NULL
 sa sal\qa\rtl\math nmake - all sa_qa_rtl_math sa_cppunittester sa_util NULL

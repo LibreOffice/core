@@ -233,15 +233,15 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, sal_Bool
     rSh(rShell),
     bExtCharAvailable(sal_False),
     bEdit(bEd),
+    aNumberFL      (this,SW_RES(FL_NUMBER)),
     aNumberAutoBtn  (this,SW_RES(RB_NUMBER_AUTO)),
     aNumberCharBtn  (this,SW_RES(RB_NUMBER_CHAR)),
     aNumberCharEdit (this,SW_RES(ED_NUMBER_CHAR)),
     aNumberExtChar  (this,SW_RES(BT_NUMBER_CHAR)),
-    aNumberFL      (this,SW_RES(FL_NUMBER)),
 
+    aTypeFL        (this,SW_RES(FL_TYPE)),
     aFtnBtn         (this,SW_RES(RB_TYPE_FTN)),
     aEndNoteBtn     (this,SW_RES(RB_TYPE_ENDNOTE)),
-    aTypeFL        (this,SW_RES(FL_TYPE)),
 
     aOkBtn          (this,SW_RES(BT_OK)),
     aCancelBtn      (this,SW_RES(BT_CANCEL)),
@@ -249,6 +249,10 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, sal_Bool
     aPrevBT         (this,SW_RES(BT_PREV)),
     aNextBT         (this,SW_RES(BT_NEXT))
 {
+    aNumberCharEdit.SetAccessibleName(String(SW_RES(STR_CHAR)));
+    aNumberExtChar.SetAccessibleRelationMemberOf(&aNumberFL);
+    aNumberCharEdit.SetAccessibleRelationLabeledBy(&aNumberCharBtn);
+
     aNumberAutoBtn.SetClickHdl(LINK(this,SwInsFootNoteDlg,NumberAutoBtnHdl));
     aNumberExtChar.SetClickHdl(LINK(this,SwInsFootNoteDlg,NumberExtCharHdl));
     aNumberCharBtn.SetClickHdl(LINK(this,SwInsFootNoteDlg,NumberCharHdl));

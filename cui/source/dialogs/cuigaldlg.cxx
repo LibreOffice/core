@@ -54,6 +54,9 @@
 #include <sfx2/sfxuno.hxx>
 #include "dialmgr.hxx"
 #include "gallery.hrc"
+#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
+
 
 // --------------
 // - Namespaces -
@@ -662,6 +665,11 @@ TPGalleryThemeGeneral::TPGalleryThemeGeneral( Window* pParent, const SfxItemSet&
             aFtMSShowChangeDate     ( this, CUI_RES( FT_MS_SHOW_CHANGEDATE ) )
 {
     FreeResource();
+
+    String aAccName(SVX_RES(RID_SVXSTR_GALLERY_THEMENAME));
+    aEdtMSName.SetAccessibleName(aAccName);
+    aFiMSImage.SetAccessibleName(aAccName);
+    aEdtMSName.SetAccessibleRelationLabeledBy( &aFiMSImage );
 }
 
 // ------------------------------------------------------------------------
@@ -674,8 +682,8 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     String              aOutStr( String::CreateFromInt32( pThm->GetObjectCount() ) );
     String              aObjStr( CUI_RES( RID_SVXSTR_GALLERYPROPS_OBJECT ) );
     String              aAccess;
-    String              aType( CUI_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
-    sal_Bool                bReadOnly = pThm->IsReadOnly() && !pThm->IsImported();
+    String              aType( SVX_RES( RID_SVXSTR_GALLERYPROPS_GALTHEME ) );
+    sal_Bool            bReadOnly = pThm->IsReadOnly() && !pThm->IsImported();
 
     aEdtMSName.SetHelpId( HID_GALLERY_EDIT_MSNAME );
     aEdtMSName.SetText( pThm->GetName() );
@@ -748,13 +756,13 @@ SfxTabPage* TPGalleryThemeGeneral::Create( Window* pParent, const SfxItemSet& rS
 
 TPGalleryThemeProperties::TPGalleryThemeProperties( Window* pWindow, const SfxItemSet& rSet ) :
         SfxTabPage          ( pWindow, CUI_RES( RID_SVXTABPAGE_GALLERYTHEME_FILES ), rSet ),
+        aFtFileType         ( this, CUI_RES(FT_FILETYPE ) ),
+        aCbbFileType        ( this, CUI_RES(CBB_FILETYPE ) ),
+        aLbxFound           ( this, CUI_RES(LBX_FOUND ) ),
         aBtnSearch          ( this, CUI_RES(BTN_SEARCH ) ),
         aBtnTake            ( this, CUI_RES(BTN_TAKE ) ),
         aBtnTakeAll         ( this, CUI_RES(BTN_TAKEALL ) ),
         aCbxPreview         ( this, CUI_RES(CBX_PREVIEW ) ),
-        aCbbFileType        ( this, CUI_RES(CBB_FILETYPE ) ),
-        aLbxFound           ( this, CUI_RES(LBX_FOUND ) ),
-        aFtFileType         ( this, CUI_RES(FT_FILETYPE ) ),
         aWndPreview         ( this, CUI_RES( WND_BRSPRV ) ),
         nCurFilterPos       (0),
         nFirstExtFilterPos  (0),
@@ -766,6 +774,9 @@ TPGalleryThemeProperties::TPGalleryThemeProperties( Window* pWindow, const SfxIt
     FreeResource();
 
     xDialogListener->SetDialogClosedLink( LINK( this, TPGalleryThemeProperties, DialogClosedHdl ) );
+    aLbxFound.SetAccessibleName(String(SVX_RES(RID_SVXSTR_GALLERY_FILESFOUND)));
+    aWndPreview.SetAccessibleName(aCbxPreview.GetText());
+    aLbxFound.SetAccessibleRelationLabeledBy(&aLbxFound);
 }
 
 // ------------------------------------------------------------------------

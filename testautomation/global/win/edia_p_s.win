@@ -150,6 +150,7 @@ PageCount .HelpID:vcl:PrintDialog:NumPagesText
 PartsToPrint .HelpID:vcl:PrintDialog:PageContentType:ListBox
 SlidesPerPage .HelpID:vcl:PrintDialog:SlidesPerPage:ListBox
 ArrangeSlides .HelpID:vcl:PrintDialog:SlidesPerPageOrder:ListBox            
+PrintReverse .HelpID:vcl:PrintDialog:OptPage:ToReverse
 
 *TabApplication .HelpID:vcl:PrintDialog:TabPage:AppPage
 PrintPageBackground .HelpID:vcl:PrintDialog:PrintPageBackground:CheckBox
@@ -197,7 +198,6 @@ BrochurePageSides .HelpID:vcl:PrintDialog:PrintProspectInclude:ListBox
 *TabOptions .HelpID:vcl:PrintDialog:OptPage
 PrintToFile .HelpID:vcl:PrintDialog:OptPage:ToFile
 PrintAsSingleJobs .HelpID:vcl:PrintDialog:OptPage:SingleJobs
-PrintReverse .HelpID:vcl:PrintDialog:OptPage:ToReverse
 PaperTrayFromPrefs .HelpID:vcl:PrintDialog:PrintPaperFromSetup:CheckBox        
 
 *PurchaseStarOffice sym:TAB_HID_LICENSING_DIALOG

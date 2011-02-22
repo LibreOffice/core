@@ -251,7 +251,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             if( pDialogDPObject )
             {
                 GetViewData()->SetRefTabNo( GetViewData()->GetTabNo() );
-                pResult = new ScDPLayoutDlg( pB, pCW, pParent, *pDialogDPObject );
+                pResult = new ScPivotLayoutDlg( pB, pCW, pParent, *pDialogDPObject );
             }
         }
         break;

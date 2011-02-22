@@ -96,7 +96,7 @@ typedef std::vector< sal_Int32 > Int32Vector;
 // note: all positions are in pixel and relative to
 // the top/left-position of the virtual output area
 
-class VCL_DLLPUBLIC SalGraphics
+class VCL_PLUGIN_PUBLIC SalGraphics
 {
     int                     m_nLayout; // 0: mirroring off, 1: mirror x-axis
 
@@ -113,8 +113,7 @@ public:
     virtual ~SalGraphics();
 
 protected:
-    virtual sal_Bool        unionClipRegion( long nX, long nY, long nWidth, long nHeight ) = 0;
-    virtual bool        unionClipRegion( const ::basegfx::B2DPolyPolygon& ) = 0;
+    virtual bool        setClipRegion( const Region& ) = 0;
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void        drawPixel( long nX, long nY ) = 0;
     virtual void        drawPixel( long nX, long nY, SalColor nSalColor ) = 0;
@@ -204,11 +203,6 @@ public:
 
     // set the clip region to empty
     virtual void            ResetClipRegion() = 0;
-    // begin setting the clip region, add rectangles to the
-    // region with the UnionClipRegion call
-    virtual void            BeginSetClipRegion( sal_uLong nCount ) = 0;
-    // all rectangles were added and the clip region should be set now
-    virtual void            EndSetClipRegion() = 0;
 
     // set the line color to transparent (= don't draw lines)
     virtual void            SetLineColor() = 0;
@@ -355,10 +349,9 @@ public:
     basegfx::B2DPolygon     mirror( const basegfx::B2DPolygon& i_rPoly, const OutputDevice *pOutDev, bool bBack = false ) const;
     basegfx::B2DPolyPolygon mirror( const basegfx::B2DPolyPolygon& i_rPoly, const OutputDevice *pOutDev, bool bBack = false ) const;
 
-    // non virtual methods; these do eventual coordinate mirroring and
+    // non virtual methods; these do possible coordinate mirroring and
     // then delegate to protected virtual methods
-    sal_Bool                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight, const OutputDevice *pOutDev );
-    sal_Bool                    UnionClipRegion( const ::basegfx::B2DPolyPolygon&, const OutputDevice* );
+    bool                    SetClipRegion( const Region&, const OutputDevice *pOutDev );
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
     void                    DrawPixel( long nX, long nY, const OutputDevice *pOutDev );

@@ -99,6 +99,9 @@ SdPrintOptions::SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs ) :
 #ifndef QUARTZ
     SetDrawMode();
 #endif
+
+    aCbxFront.SetAccessibleRelationLabeledBy( &aRbtBooklet );
+    aCbxBack.SetAccessibleRelationLabeledBy( &aRbtBooklet );
 }
 
 // -----------------------------------------------------------------------

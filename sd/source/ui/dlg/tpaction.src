@@ -173,7 +173,10 @@ TabPage TP_ANIMATION
         Hide = TRUE ;
         Text [ en-US ] = "~Find" ;
     };
-
+    String STR_PATHNAME
+    {
+       Text [ en-US ] = "Path Name";
+    };
     Text [ en-US ] = "Interaction";
 };
 

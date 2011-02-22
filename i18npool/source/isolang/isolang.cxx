@@ -292,7 +292,6 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
 //    { LANGUAGE_USER_CATALAN_VALENCIAN,      "ca", "ES" },   // In case MS format files escaped into the wild, map them back.
     { LANGUAGE_FRENCH_CAMEROON,             "fr", "CM" },
     { LANGUAGE_FRENCH_COTE_D_IVOIRE,        "fr", "CI" },
-    { LANGUAGE_FRENCH_HAITI,                "fr", "HT" },
     { LANGUAGE_FRENCH_MALI,                 "fr", "ML" },
     { LANGUAGE_FRENCH_SENEGAL,              "fr", "SN" },
     { LANGUAGE_FRENCH_ZAIRE,                "fr", "CD" },   // Democratic Republic Of Congo
@@ -353,6 +352,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_PAPIAMENTU,                 "pap", "AN" },
     { LANGUAGE_USER_PAPIAMENTU_ARUBA,      "pap", "AW" },
     { LANGUAGE_ENGLISH_SINGAPORE,           "en", "SG" },
+    { LANGUAGE_USER_YIDDISH_US,             "yi", "US" },
     { LANGUAGE_YIDDISH,                     "yi", "IL" },   // new: old was "ji"
     { LANGUAGE_YIDDISH,                     "ji", "IL" },   // old: new is "yi"
     { LANGUAGE_SYRIAC,                     "syr", "TR" },   // "TR" according to http://www.ethnologue.com/show_language.asp?code=SYC
@@ -461,6 +461,11 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_GIKUYU,                 "ki", "KE" },
     { LANGUAGE_USER_RUSYN_UKRAINE,         "rue", "UA" },
     { LANGUAGE_USER_RUSYN_SLOVAKIA,        "rue", "SK" },
+    { LANGUAGE_USER_LIMBU,                 "lif", "NP" },
+    { LANGUAGE_USER_LOJBAN,                "jbo", ""   },
+    { LANGUAGE_USER_KABYLE,                "kab", "DZ" },
+    { LANGUAGE_USER_HAITIAN,                "ht", "HT" },
+    { LANGUAGE_FRENCH_HAITI,                "fr", "HT" },
     { LANGUAGE_NONE,                       "zxx", ""   },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
@@ -685,6 +690,7 @@ static const MsLangId::IsoLangEntry & lcl_lookupFallbackEntry( LanguageType nLan
                 case LANGUAGE_BASQUE:
                 case LANGUAGE_USER_ESPERANTO:
                 case LANGUAGE_USER_INTERLINGUA:
+                case LANGUAGE_USER_LOJBAN:
                     return *pEntry;
                 default:
                     ;   // nothing
@@ -765,6 +771,7 @@ static const MsLangId::IsoLangEntry & lcl_lookupFallbackEntry(
                     case LANGUAGE_BASQUE:
                     case LANGUAGE_USER_ESPERANTO:
                     case LANGUAGE_USER_INTERLINGUA:
+                    case LANGUAGE_USER_LOJBAN:
                         return *pEntry;
                     default:
                         ;   // nothing

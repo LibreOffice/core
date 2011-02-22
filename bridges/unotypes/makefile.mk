@@ -41,20 +41,7 @@ UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCROUT=$(OUT)$/inc
 
 UNOTYPES = \
-    com.sun.star.bridge.XProtocolProperties		\
-    com.sun.star.corba.giop.MessageHeader_1_2	\
-    com.sun.star.corba.giop.MsgType_1_1		\
-    com.sun.star.corba.iop.ServiceContextList	\
-    com.sun.star.corba.iop.ProfileIdGroup		\
-    com.sun.star.corba.iiop.ProfileBody_1_1		\
-    com.sun.star.corba.LogicalThreadID		\
-    com.sun.star.corba.iop.ServiceIdGroup		\
-    com.sun.star.corba.giop.ReplyHeader_1_2		\
-    com.sun.star.corba.giop.RequestHeader_1_2	\
-    com.sun.star.corba.TCKind			\
-    com.sun.star.corba.ObjectKey			\
     com.sun.star.uno.XInterface			\
-    com.sun.star.lang.DisposedException		\
     com.sun.star.uno.TypeClass
 
 # --- Targets ------------------------------------------------------

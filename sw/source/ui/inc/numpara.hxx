@@ -48,10 +48,10 @@ class SwParagraphNumTabPage : public SfxTabPage
     FixedText               aOutlineLvFT;
     ListBox                 aOutlineLvLB;
 
+    FixedLine               aNewStartFL;
     FixedText               aNumberStyleFT;
     ListBox                 aNumberStyleLB;
 
-    FixedLine               aNewStartFL;
     TriStateBox             aNewStartCB;
     TriStateBox             aNewStartNumberCB;
     NumericField            aNewStartNF;

@@ -1,4 +1,4 @@
-cp    scp2    :    l10n i18npool setup_native l10ntools PYTHON:python ICU:icu REDLAND:redland LIBXSLT:libxslt NULL
+cp    scp2    :    L10N:l10n i18npool setup_native l10ntools PYTHON:python ICU:icu REDLAND:redland LIBXSLT:libxslt NULL
 cp    scp2                        usr1     -    all    cp_mkout NULL
 cp    scp2\macros                 nmake    -    all    cp_langmacros NULL
 cp    scp2\source\templates       nmake    -    all    cp_langtemplates NULL

@@ -1,2 +1,2 @@
-fr framework : LIBXSLT:libxslt l10n svtools NULL
+fr framework : LIBXSLT:libxslt L10N:l10n svtools NULL
 fr framework\prj nmake - all fr_all NULL

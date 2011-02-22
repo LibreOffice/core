@@ -108,7 +108,9 @@ SwFrm::SwFrm( SwModify *pMod ) :
 
     ASSERT( pMod, "Kein Frameformat uebergeben." );
     bInvalidR2L = bInvalidVert = 1;
-    bDerivedR2L = bDerivedVert = bRightToLeft = bVertical = bReverse = 0;
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    bDerivedR2L = bDerivedVert = bRightToLeft = bVertical = bReverse = bVertLR = 0;
+
     bValidPos = bValidPrtArea = bValidSize = bValidLineNum = bRetouche =
     bFixSize = bColLocked = sal_False;
     bCompletePaint = bInfInvalid = sal_True;
@@ -138,9 +140,19 @@ void SwFrm::CheckDir( sal_uInt16 nDir, sal_Bool bVert, sal_Bool bOnlyBiDi, sal_B
         bInvalidVert = 0;
         if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir
             || bBrowse )
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        {
             bVertical = 0;
+            bVertLR = 0;
+        }
         else
+           {
             bVertical = 1;
+            if(FRMDIR_VERT_TOP_RIGHT == nDir)
+                bVertLR = 0;
+               else if(FRMDIR_VERT_TOP_LEFT==nDir)
+                       bVertLR = 1;
+        }
     }
     else
     {
@@ -1134,9 +1146,12 @@ void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
     if ( IsHeaderFrm() || IsFooterFrm() )
         fnRect = fnRectHori;
     else if ( IsCellFrm() || IsColumnFrm() )
-        fnRect = GetUpper()->IsVertical() ? fnRectHori : fnRectVert;
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        fnRect = GetUpper()->IsVertical() ? fnRectHori : ( GetUpper()->IsVertLR() ? fnRectVertL2R : fnRectVert );
     else
-        fnRect = GetUpper()->IsVertical() ? fnRectVert : fnRectHori;
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        fnRect = GetUpper()->IsVertical() ? ( GetUpper()->IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
+
 
     if( (Frm().*fnRect->fnGetWidth)() != (pParent->Prt().*fnRect->fnGetWidth)())
         _InvalidateSize();
@@ -1621,7 +1636,8 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
                 if ( !bTst )
                 {
                     (pFrm->GetNext()->Frm().*fnRect->fnSetHeight)(nAddMax-nAdd);
-                    if( bVert && !bRev )
+                    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                    if( bVert && !bVertL2R && !bRev )
                         pFrm->GetNext()->Frm().Pos().X() += nAdd;
                     pFrm->GetNext()->InvalidatePrt();
                     if ( pFrm->GetNext()->GetNext() )
@@ -1635,7 +1651,8 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
     {
         SwTwips nTmp = (pFrm->Frm().*fnRect->fnGetHeight)();
         (pFrm->Frm().*fnRect->fnSetHeight)( nTmp - nReal );
-        if( bVert && !bRev )
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if( bVert && !bVertL2R && !bRev )
             pFrm->Frm().Pos().X() += nReal;
         pFrm->InvalidatePrt();
         if ( pFrm->GetNext() )
@@ -1896,7 +1913,8 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
         if ( !bTst )
         {
             (Frm().*fnRect->fnSetHeight)( nFrmHeight + nDist );
-            if( IsVertical() && !IsReverse() )
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            if( IsVertical() && !IsVertLR() && !IsReverse() )
                 Frm().Pos().X() -= nDist;
             if ( GetNext() )
             {
@@ -1928,7 +1946,8 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
         //Cntnts werden immer auf den gewuenschten Wert gebracht.
         long nOld = (Frm().*fnRect->fnGetHeight)();
         (Frm().*fnRect->fnSetHeight)( nOld + nDist );
-        if( IsVertical() && !IsReverse() )
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if( IsVertical()&& !IsVertLR() && !IsReverse() )
             Frm().Pos().X() -= nDist;
         if ( nOld && IsInTab() )
         {
@@ -2024,7 +2043,8 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
         else
             nRstHeight = nDist;
         (Frm().*fnRect->fnSetHeight)( (Frm().*fnRect->fnGetHeight)() - nDist );
-        if( IsVertical() )
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if( IsVertical() && !IsVertLR() )
             Frm().Pos().X() += nDist;
         nDist = nRstHeight;
         if ( IsInTab() )
@@ -2443,7 +2463,8 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     if ( !bTst )
     {
         (Frm().*fnRect->fnSetHeight)( nFrmHeight + nDist );
-        if( bChgPos )
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if( bChgPos && !IsVertLR() )
             Frm().Pos().X() -= nDist;
         bMoveAccFrm = sal_True;
     }
@@ -2524,7 +2545,8 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             ( !IsCellFrm() || static_cast<SwCellFrm*>(this)->GetLayoutRowSpan() > 1 ) )
         {
             (Frm().*fnRect->fnSetHeight)( nFrmHeight + nReal );
-            if( bChgPos )
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            if( bChgPos && !IsVertLR() )
                 Frm().Pos().X() = nFrmPos - nReal;
             bMoveAccFrm = sal_True;
         }
@@ -2615,7 +2637,8 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
     if ( !bTst )
     {
         (Frm().*fnRect->fnSetHeight)( nFrmHeight - nReal );
-        if( bChgPos )
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if( bChgPos && !IsVertLR() )
             Frm().Pos().X() += nReal;
         bMoveAccFrm = sal_True;
     }
@@ -2636,7 +2659,8 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             {
                 (Frm().*fnRect->fnSetHeight)( (Frm().*fnRect->fnGetHeight)()
                                             + nRealDist - nReal );
-                if( bChgPos )
+                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                if( bChgPos && !IsVertLR() )
                     Frm().Pos().X() += nRealDist - nReal;
                 ASSERT( !IsAccessibleFrm(), "bMoveAccFrm has to be set!" );
             }
@@ -2649,7 +2673,8 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
         {
             (Frm().*fnRect->fnSetHeight)( (Frm().*fnRect->fnGetHeight)()
                                           + nReal - nTmp );
-            if( bChgPos )
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            if( bChgPos && !IsVertLR() )
                 Frm().Pos().X() += nTmp - nReal;
             ASSERT( !IsAccessibleFrm(), "bMoveAccFrm has to be set!" );
             nReal = nTmp;
@@ -3169,7 +3194,8 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
     const sal_uInt16 nRight = (sal_uInt16)((SwBorderAttrs*)pAttrs)->CalcRight( this );
     const sal_uInt16 nLower = pAttrs->CalcBottom();
     sal_Bool bVert = IsVertical() && !IsPageFrm();
-    SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    SwRectFn fnRect = bVert ? ( IsVertLR() ? fnRectVertL2R : fnRectVert ) : fnRectHori;
     if ( !bValidPrtArea )
     {
         bValidPrtArea = sal_True;

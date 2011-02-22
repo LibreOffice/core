@@ -152,6 +152,16 @@ static SbxDataType GetSuffixType( sal_Unicode c )
 // Returnwert ist sal_False bei EOF oder Fehlern
 #define BUF_SIZE 80
 
+namespace {
+
+/** Returns true, if the passed character is a white space character. */
+inline bool lclIsWhitespace( sal_Unicode cChar )
+{
+    return (cChar == ' ') || (cChar == '\t') || (cChar == '\f');
+}
+
+} // namespace
+
 sal_Bool SbiScanner::NextSym()
 {
     // Fuer den EOLN-Fall merken
@@ -177,7 +187,11 @@ sal_Bool SbiScanner::NextSym()
         p2 += n;
         while( ( n < nLen ) && ( *p2 != '\n' ) && ( *p2 != '\r' ) )
             p2++, n++;
-        aLine = aBuf.copy( nBufPos, n - nBufPos );
+        // #163944# ignore trailing whitespace
+        sal_Int32 nCopyEndPos = n;
+        while( (nBufPos < nCopyEndPos) && lclIsWhitespace( aBuf[ nCopyEndPos - 1 ] ) )
+            --nCopyEndPos;
+        aLine = aBuf.copy( nBufPos, nCopyEndPos - nBufPos );
         if( n < nLen )
         {
             if( *p2 == '\r' && *( p2+1 ) == '\n' )
@@ -193,7 +207,7 @@ sal_Bool SbiScanner::NextSym()
     }
 
     // Leerstellen weg:
-    while( *pLine && (( *pLine == ' ' ) || ( *pLine == '\t' ) || ( *pLine == '\f' )) )
+    while( lclIsWhitespace( *pLine ) )
         pLine++, nCol++, bSpaces = sal_True;
 
     nCol1 = nCol;
@@ -230,7 +244,7 @@ sal_Bool SbiScanner::NextSym()
         {
             const sal_Unicode* pTestLine = pLine;
             short nTestCol = nCol;
-            while( *pTestLine && (( *pTestLine == ' ' ) || ( *pTestLine == '\t' )) )
+            while( lclIsWhitespace( *pTestLine ) )
             {
                 pTestLine++;
                 nTestCol++;

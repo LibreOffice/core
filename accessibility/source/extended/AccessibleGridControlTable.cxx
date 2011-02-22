@@ -245,8 +245,7 @@ void SAL_CALL AccessibleGridControlTable::selectAccessibleChild( sal_Int32 nChil
     ensureIsValidIndex( nChildIndex );
     sal_Int32 nColumns = m_aTable.GetColumnCount();
     sal_Int32 nRow = (nChildIndex / nColumns);
-    std::vector< sal_Int32 > selectedRows = m_aTable.GetSelectedRows();
-    selectedRows.push_back(nRow);
+    m_aTable.SelectRow( nRow, sal_True );
 }
 sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleChildSelected( sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
@@ -265,8 +264,7 @@ void SAL_CALL AccessibleGridControlTable::clearAccessibleSelection()
     TCSolarGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
-    for(unsigned int i=0;i<m_aTable.GetSelectedRows().size();i++)
-        m_aTable.RemoveSelectedRow((sal_Int32)i);
+    m_aTable.SelectAllRows( false );
 }
 void SAL_CALL AccessibleGridControlTable::selectAllAccessibleChildren()
     throw ( uno::RuntimeException )

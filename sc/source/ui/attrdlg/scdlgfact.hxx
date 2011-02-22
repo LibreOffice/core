@@ -490,14 +490,14 @@ public:
                                                                 const SfxItemSet&   rArgSet, sal_uInt16 nSourceTab , int nId );
 
     virtual AbstractScDPFunctionDlg * CreateScDPFunctionDlg( Window* pParent, int nId,
-                                                                const ScDPLabelDataVec& rLabelVec,
+                                                                const ScDPLabelDataVector& rLabelVec,
                                                                 const ScDPLabelData& rLabelData,
-                                                                const ScDPFuncData& rFuncData );
+                                                                const ScPivotFuncData& rFuncData );
 
     virtual AbstractScDPSubtotalDlg * CreateScDPSubtotalDlg( Window* pParent, int nId,
                                                                 ScDPObject& rDPObj,
                                                                 const ScDPLabelData& rLabelData,
-                                                                const ScDPFuncData& rFuncData,
+                                                                const ScPivotFuncData& rFuncData,
                                                                 const ScDPNameVec& rDataFields,
                                                                 bool bEnableLayout );
 

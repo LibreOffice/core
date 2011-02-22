@@ -49,6 +49,12 @@ ModalDialog DLG_INS_FOOTNOTE
         Group = TRUE ;
         Left = TRUE ;
     };
+    //IAccessibility2 Implementation 2009-----
+    String STR_CHAR
+    {
+        Text [ en-US ] = "Character" ;
+    };
+    //-----IAccessibility2 Implementation 2009
     OKButton BT_OK
     {
         Pos = MAP_APPFONT ( 104 , 6 ) ;

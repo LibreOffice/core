@@ -39,6 +39,14 @@
 class TOOLKIT_DLLPUBLIC UnoControlBase : public UnoControl
 {
 protected:
+    UnoControlBase();
+
+protected:
+    UnoControlBase( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
+        :UnoControl( i_factory )
+    {
+    }
+
     sal_Bool                    ImplHasProperty( sal_uInt16 nProp );
     sal_Bool                    ImplHasProperty( const ::rtl::OUString& aPropertyName );
     void                        ImplSetPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue, sal_Bool bUpdateThis );

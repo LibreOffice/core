@@ -600,6 +600,13 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
     Init();
     FreeResource();
     SetExchangeSupport();
+
+    aLbOutPos.SetAccessibleRelationLabeledBy(&aBtnCopyResult);
+    aLbOutPos.SetAccessibleName(aBtnCopyResult.GetText());
+    aEdOutPos.SetAccessibleRelationLabeledBy(&aBtnCopyResult);
+    aEdOutPos.SetAccessibleName(aBtnCopyResult.GetText());
+    aLbSortUser.SetAccessibleRelationLabeledBy(&aBtnSortUser);
+    aLbSortUser.SetAccessibleName(aBtnSortUser.GetText());
 }
 
 // -----------------------------------------------------------------------

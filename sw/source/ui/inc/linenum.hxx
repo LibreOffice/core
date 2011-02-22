@@ -66,6 +66,7 @@ public:
 class SwLineNumberingPage : public SfxTabPage
 {
     CheckBox        aNumberingOnCB;
+    FixedLine        aDisplayFL;
     FixedText       aCharStyleFT;
     ListBox         aCharStyleLB;
     FixedText       aFormatFT;
@@ -77,17 +78,16 @@ class SwLineNumberingPage : public SfxTabPage
     FixedText       aNumIntervalFT;
     NumericField    aNumIntervalNF;
     FixedText       aNumRowsFT;
-    FixedLine        aDisplayFL;
+    FixedLine        aDivisorFL;
     FixedText       aDivisorFT;
     Edit            aDivisorED;
     FixedText       aDivIntervalFT;
     NumericField    aDivIntervalNF;
     FixedText       aDivRowsFT;
-    FixedLine        aDivisorFL;
+    FixedLine        aCountFL;
     CheckBox        aCountEmptyLinesCB;
     CheckBox        aCountFrameLinesCB;
     CheckBox        aRestartEachPageCB;
-    FixedLine        aCountFL;
 
     SwWrtShell*     pSh;
 

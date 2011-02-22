@@ -71,6 +71,7 @@ class SwIndexMarkDlg : public Window
 {
     friend class SwIndexMarkFloatDlg;
     friend class SwIndexMarkModalDlg;
+    FixedLine       aIndexFL;
     FixedText       aTypeFT;
     ListBox         aTypeDCB;
     ImageButton     aNewBT;
@@ -97,7 +98,6 @@ class SwIndexMarkDlg : public Window
      CheckBox       aSearchCaseSensitiveCB;
      CheckBox       aSearchCaseWordOnlyCB;
 
-    FixedLine       aIndexFL;
 
     OKButton        aOKBT;
     CancelButton    aCancelBT;
