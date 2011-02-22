@@ -79,10 +79,6 @@ public:
     // Table
     virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
 
-    // BinaryObj
-//    virtual void data(const sal_Int8* buf, size_t len,
-//                      writerfilter::Reference<Properties>::Pointer_t ref);
-
     // Stream
     virtual void startSectionGroup();
     virtual void endSectionGroup();

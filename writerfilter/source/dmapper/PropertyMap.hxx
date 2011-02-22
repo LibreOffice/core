@@ -394,7 +394,6 @@ class StyleSheetPropertyMap : public PropertyMap, public ParagraphProperties
 
 {
     //special table style properties
-//    sal_Int32               mnCT_Spacing_after;
     sal_Int32               mnCT_Spacing_line;
     sal_Int32               mnCT_Spacing_lineRule;
 
@@ -406,7 +405,6 @@ class StyleSheetPropertyMap : public PropertyMap, public ParagraphProperties
     sal_Int32               mnCT_TblWidth_w;
     sal_Int32               mnCT_TblWidth_type;
 
-//    bool                    mbCT_Spacing_afterSet;
     bool                    mbCT_Spacing_lineSet;
     bool                    mbCT_Spacing_lineRuleSet;
 
@@ -425,8 +423,6 @@ public:
     explicit StyleSheetPropertyMap();
     ~StyleSheetPropertyMap();
 
-//    void SetCT_Spacing_after(      sal_Int32 nSet )
-//        {mnCT_Spacing_after = nSet;    mbCT_Spacing_afterSet = true;        }
     void SetCT_Spacing_line(       sal_Int32 nSet )
         {mnCT_Spacing_line = nSet;     mbCT_Spacing_lineSet = true;         }
     void SetCT_Spacing_lineRule(   sal_Int32  nSet )
@@ -446,12 +442,6 @@ public:
     void SetCT_TblWidth_type( sal_Int32 nSet )
         {mnCT_TblWidth_type = nSet;    mbCT_TblWidth_typeSet = true; }
 
-//    bool GetCT_Spacing_after(   sal_Int32& rToFill) const
-//    {
-//        if( mbCT_Spacing_afterSet )
-//            rToFill = mnCT_Spacing_after;
-//        return mbCT_Spacing_afterSet;
-//    }
     bool GetCT_Spacing_line(    sal_Int32& rToFill) const
     {
         if( mbCT_Spacing_lineSet )

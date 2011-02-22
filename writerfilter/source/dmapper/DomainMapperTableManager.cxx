@@ -253,7 +253,6 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             {
                 TablePropertyMapPtr pPropMap( new TablePropertyMap );
                 const sal_Int16 HORI_LEFT_TOP = 0;
-                /*const sal_Int16 HORI_RIGHT_TOP = 1;*/ // currently not used below
                 const sal_Int16 VERT_TOP_RIGHT = 2;
                 bool bInsertCellProps = true;
                 switch ( nIntValue )
@@ -398,7 +397,6 @@ void DomainMapperTableManager::endOfRowAction()
         if( m_nTableWidth > 0)
         {
             TablePropertyMapPtr pPropMap( new TablePropertyMap );
-//            pPropMap->Insert( PROP_WIDTH, false, uno::makeAny( m_nTableWidth ));
             pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nTableWidth );
             insertTableProps(pPropMap);
         }

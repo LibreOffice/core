@@ -113,9 +113,6 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CHAR_ROTATION:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharRotation")); break;
             case PROP_CHAR_ROTATION_IS_FIT_TO_LINE:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharRotationIsFitToLine")); break;
             case PROP_CHAR_FLASH:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFlash")); break;
-//            case PROP_CHAR_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Char")); break;
-//            case PROP_CHAR_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Char")); break;
-//            case PROP_CHAR_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Char")); break;
 
             case PROP_PARA_STYLE_NAME:      sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName")); break;
             case PROP_PARA_ADJUST:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaAdjust")); break;
@@ -134,10 +131,6 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_PARA_WIDOWS:          sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaWidows")); break;
             case PROP_PARA_ORPHANS:         sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaOrphans")); break;
             case PROP_PARA_LINE_NUMBER_START_VALUE:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaLineNumberStartValue")); break;
-//            case PROP_PARA_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Para")); break;
-//            case PROP_PARA_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Para")); break;
-//            case PROP_PARA_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Para")); break;
-//            case PROP_PARA_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Para")); break;
             case PROP_NUMBERING_LEVEL:  sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingLevel")); break;
             case PROP_NUMBERING_RULES:  sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingRules")); break;
             case PROP_NUMBERING_TYPE:   sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingType")); break;
@@ -322,14 +315,6 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_HELP:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Help")); break;
             case PROP_HEADING_STYLE_NAME:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeadingStyleName")); break;
             case PROP_FRM_DIRECTION:        sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FRMDirection")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));

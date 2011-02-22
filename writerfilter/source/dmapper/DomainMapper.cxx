@@ -2146,8 +2146,6 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
                 }
                 const FontEntry::Pointer_t pFontEntry(pFontTable->getFontEntry(sal_uInt32(nIntValue)));
                 rContext->Insert(eFontName, true, uno::makeAny( pFontEntry->sFontName  ));
-                //                rContext->Insert(eFontStyle, uno::makeAny( pFontEntry->  ));
-                //                rContext->Insert(eFontFamily, uno::makeAny( pFontEntry->  ));
                 rContext->Insert(eFontCharSet, true, uno::makeAny( (sal_Int16)pFontEntry->nTextEncoding  ));
                 rContext->Insert(eFontPitch, true, uno::makeAny( pFontEntry->nPitchRequest  ));
             }
@@ -3100,7 +3098,6 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         }
     }
     break;
-    //break;
     case NS_ooxml::LN_EG_HdrFtrReferences_headerReference: // header reference - not needed
     case NS_ooxml::LN_EG_HdrFtrReferences_footerReference: // footer reference - not needed
     break;
@@ -3459,8 +3456,6 @@ void DomainMapper::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
     dmapper_logger->startElement("table");
     dmapper_logger->attribute("id", (*QNameToString::Instance())(name));
 #endif
-
-    // printf ( "DomainMapper::table(0x%.4x)\n", (unsigned int)name);
     m_pImpl->SetAnyTableImport(true);
     switch(name)
     {

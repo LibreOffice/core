@@ -653,7 +653,6 @@ void ListsManager::attribute( Id nName, Value& rVal )
                 pCurrentLvl->SetBulletChar( rVal.getString() );
         }
         break;
-//        case NS_rtf::LN_ISTD: break;
         case NS_rtf::LN_ISTARTAT:
         case NS_rtf::LN_NFC:
         case NS_rtf::LN_JC:

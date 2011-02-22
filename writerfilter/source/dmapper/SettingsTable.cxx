@@ -100,7 +100,7 @@ struct SettingsTable_Impl
 SettingsTable::SettingsTable(DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory) :
 m_pImpl( new SettingsTable_Impl(rDMapper, xTextFactory) )
 {
-    // printf("SettingsTable::SettingsTable()\n");
+
 }
 
 SettingsTable::~SettingsTable()
@@ -121,7 +121,7 @@ void SettingsTable::attribute(Id nName, Value & val)
     (void)nIntValue;
     ::rtl::OUString sValue = val.getString();
     (void)sValue;
-    //printf ( "SettingsTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
+
 #if 0 //no values known, yet
 
     switch(Name)
@@ -151,8 +151,6 @@ void SettingsTable::sprm(Sprm& rSprm)
     sal_Int32 nIntValue = pValue->getInt();
     (void)nIntValue;
     rtl::OUString sStringValue = pValue->getString();
-
-    //printf ( "SettingsTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nSprmId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
 
     switch(nSprmId)
     {
@@ -224,7 +222,6 @@ void SettingsTable::sprm(Sprm& rSprm)
 
 void SettingsTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
-    // printf ( "SettingsTable::entry\n");
     ref->resolve(*this);
 }
 //returns default TabStop in 1/100th mm

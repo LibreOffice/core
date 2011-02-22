@@ -80,9 +80,6 @@ namespace dmapper {
 
 using namespace com::sun::star;
 
-//#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
-//sal_Int32 lcl_convertToMM100(sal_Int32 _t);
-
 struct _PageMar
 {
     sal_Int32 top;
@@ -414,8 +411,6 @@ public:
     void appendOLE( const ::rtl::OUString& rStreamName, OLEHandlerPtr pOleHandler );
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > appendTextSectionAfter(
                     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xBefore );
-
-//    void appendTextSection();
 
     FIB&    GetFIB() {return m_aFIB;}
     // push the new properties onto the stack and make it the 'current' property map

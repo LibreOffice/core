@@ -175,14 +175,12 @@ void XInputStreamHelper::closeInput(  ) throw (io::NotConnectedException, io::IO
 struct GraphicBorderLine
 {
     sal_Int32   nLineWidth;
-//    sal_Int32   nLineType;
     sal_Int32   nLineColor;
     sal_Int32   nLineDistance;
     bool        bHasShadow;
 
     GraphicBorderLine() :
         nLineWidth(0)
-//        ,nLineType(0)
         ,nLineColor(0)
         ,nLineDistance(0)
         ,bHasShadow(false)
@@ -465,9 +463,6 @@ void GraphicImport::attribute(Id nName, Value & val)
         case NS_rtf::LN_CPROPS:break;// unknown - ignored
         //metafilepict
         case NS_rtf::LN_MM:
-//      according to the documentation 99 or 98 are provided - but they are not!
-//            m_pImpl->bIsBitmap = 99 == nIntValue ? true : false;
-//            m_pImpl->bIsTiff = 98 == nIntValue ? true : false;
 
         break; //mapmode
         case NS_rtf::LN_XEXT:
@@ -496,16 +491,6 @@ void GraphicImport::attribute(Id nName, Value & val)
 
                     {
 
-//                        rBLIPStream.SeekRel( nSkip + 20 );
-//                        // read in size of metafile in EMUS
-//                        rBLIPStream >> aMtfSize100.Width() >> aMtfSize100.Height();
-//                        // scale to 1/100mm
-//                        aMtfSize100.Width() /= 360, aMtfSize100.Height() /= 360;
-//                        if ( pVisArea )     // seem that we currently are skipping the visarea position
-//                            *pVisArea = Rectangle( Point(), aMtfSize100 );
-//                        // skip rest of header
-//                        nSkip = 6;
-//                        bMtfBLIP = bZCodecCompression = TRUE;
                     }
 
                     break;
@@ -515,7 +500,6 @@ void GraphicImport::attribute(Id nName, Value & val)
                     case 0x6E0 :            break;// One byte tag then PNG data
 
                     case 0x7A8 : m_pImpl->bIsBitmap = true;
-//                        nSkip += 1;         // One byte tag then DIB data
                     break;
 
                 }
@@ -611,7 +595,6 @@ void GraphicImport::attribute(Id nName, Value & val)
         break;
         case NS_rtf::LN_BRCTYPE:   // 0x175a
             //graphic borders don't support different line types
-            //m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineType = nIntValue;
         break;
         case NS_rtf::LN_ICO:   // 0x175b
             m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineColor = ConversionHelper::ConvertColor( nIntValue );
@@ -642,18 +625,6 @@ void GraphicImport::attribute(Id nName, Value & val)
             break;//bottom position
         case NS_rtf::LN_FHDR:
         case NS_rtf::LN_XAlign:
-/*
-        static const SwHoriOrient aHoriOriTab[ nCntXAlign ] =
-        {
-            HORI_NONE,     // From left position
-            HORI_LEFT,     // left
-            HORI_CENTER,   // centered
-            HORI_RIGHT,    // right
-            // --> OD 2004-12-06 #i36649#
-            // - inside -> HORI_LEFT and outside -> HORI_RIGHT
-            HORI_LEFT,   // inside
-            HORI_RIGHT   // outside
-*/
             if( nIntValue < 6 && nIntValue > 0 )
             {
                 static const sal_Int16 aHoriOrientTab[ 6 ] =
@@ -670,36 +641,6 @@ void GraphicImport::attribute(Id nName, Value & val)
             }
         break;
         case NS_rtf::LN_YAlign:
-/*
-        static const SwVertOrient aVertOriTab[ nCntYAlign ] =
-        {
-            VERT_NONE,         // From Top position
-            VERT_TOP,          // top
-            VERT_CENTER,       // centered
-            VERT_BOTTOM,       // bottom
-            VERT_LINE_TOP,     // inside (obscure)
-            VERT_LINE_BOTTOM   // outside (obscure)
-        };
-        // CMC,OD 24.11.2003 #i22673# - to-line vertical alignment
-        static const SwVertOrient aToLineVertOriTab[ nCntYAlign ] =
-        {
-            VERT_NONE,         // below
-            VERT_LINE_BOTTOM,  // top
-            VERT_LINE_CENTER,  // centered
-            VERT_LINE_TOP,     // bottom
-            VERT_LINE_BOTTOM,  // inside (obscure)
-            VERT_LINE_TOP      // outside (obscure)
-        };
-        if ( eVertRel == REL_VERT_LINE ) //m_pImpl->nVertRelation == text::RelOrientation::TEXT_LINE
-        {
-            eVertOri = aToLineVertOriTab[ nYAlign ];
-        }
-        else
-        {
-            eVertOri = aVertOriTab[ nYAlign ];
-        }
-
-*/
             if( nIntValue < 6 && nIntValue > 0)
             {
                 static const sal_Int16 aVertOrientTab[ 6 ] =
@@ -797,20 +738,10 @@ void GraphicImport::attribute(Id nName, Value & val)
         case NS_rtf::LN_FBELOWTEXT:
         case NS_rtf::LN_FANCHORLOCK:
         case NS_rtf::LN_CTXBX:
-//        {
-//            sal_Int32 nValue1 = val.getInt();
-//            nValue1++;
-//        }
         break;
         case NS_rtf::LN_shptxt:
             //todo: text content
         break;
-    /*    case NS_rtf::LN_CH = 10421;
-        case NS_rtf::LN_UNUSED0_5 = 10422;
-        case NS_rtf::LN_FLT = 10423;
-        case NS_rtf::LN_shpLeft = 10424;
-        case NS_rtf::LN_shpTop = 10425;
-            break;*/
         case NS_rtf::LN_dffheader: break;
         case NS_ooxml::LN_CT_PositiveSize2D_cx:// 90407;
         case NS_ooxml::LN_CT_PositiveSize2D_cy:// 90408;
@@ -1064,26 +995,6 @@ void GraphicImport::ProcessShapeOptions(Value& val)
         case NS_dff::LN_shppibName/*261*/:
             break;  // rtf:shppibName
         case NS_dff::LN_shppibFlags/*262*/:  // rtf:shppibFlags
-        /*
-         * // MSOBLIPFLAGS ñ flags for pictures
-            typedef enum
-               {
-               msoblipflagDefault = 0,
-               msoblipflagComment = 0,   // Blip name is a comment
-               msoblipflagFile,          // Blip name is a file name
-               msoblipflagURL,           // Blip name is a full URL
-               msoblipflagType = 3,      // Mask to extract type
-               // Or the following flags with any of the above.
-               msoblipflagDontSave = 4,  // A "dont" is the depression in the metal
-                                         // body work of an automobile caused when a
-                                         // cyclist violently thrusts his or her nose
-                                         // at it, thus a DontSave is another name for
-                                         // a cycle lane.
-               msoblipflagDoNotSave = 4, // For those who prefer English
-               msoblipflagLinkToFile = 8,
-               };
-                             *
-         * */
         break;
         case NS_dff::LN_shppictureContrast/*264*/: // rtf:shppictureContrast docu: "1<<16"
             /*
@@ -1172,14 +1083,12 @@ void GraphicImport::ProcessShapeOptions(Value& val)
                 msolineDashDotGEL,         // dash short dash
                 msolineLongDashDotGEL,     // long dash short dash
                 msolineLongDashDotDotGEL   // long dash short dash short dash*/
-            //m_pImpl->aBorders[nCurrentBorderLine].nLineType = nIntValue;
         break;
         case NS_dff::LN_shpfNoLineDrawDash     /*511*/:
         break;  // rtf:shpfNoLineDrawDash
         case NS_dff::LN_shpwzDescription /*897*/: //alternative text
             m_pImpl->sAlternativeText = val.getString();
         break;
-//        case NS_dff::LN_shppihlShape /*898*/:
         case NS_dff::LN_shppWrapPolygonVertices/*899*/:
             break;  // rtf:shppWrapPolygonVertices
         case NS_dff::LN_shpdxWrapDistLeft /*900*/: // contains a twip/635 value

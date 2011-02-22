@@ -114,8 +114,6 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues()
 
 void PropertyMap::Insert( PropertyIds eId, bool bIsTextProperty, const uno::Any& rAny, bool bOverwrite )
 {
-//    const ::rtl::OUString& rInsert = PropertyNameSupplier::
-//                           GetPropertyNameSupplier().GetName(eId);
     PropertyMap::iterator aElement = find(PropertyDefinition( eId, bIsTextProperty ) );
     if( aElement != end())
     {
@@ -546,7 +544,6 @@ uno::Reference< text::XTextColumns > SectionPropertyMap::ApplyColumnProperties(
             nColSum = 0;
             for( sal_Int32 nCol = 0; nCol <= m_nColumnCount; ++nCol)
             {
-                //nColSum : nRefValue == (nAbsColWidth + colDist /2) : nRelColWidth;
                 pColumn[nCol].LeftMargin = nCol ? m_aColDistance[nCol - 1 ] / 2 : 0;
                 pColumn[nCol].RightMargin = nCol == m_nColumnCount ? 0 : m_aColDistance[nCol] / 2;
                 pColumn[nCol].Width = sal_Int32((double( m_aColWidth[nCol] + pColumn[nCol].RightMargin + pColumn[nCol].LeftMargin ) + 0.5 ) * fRel );
@@ -802,10 +799,6 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
     if(m_nBreakType == 0)
     {
         //todo: insert a section or access the already inserted section
-        //-->debug
-//        ::rtl::OUString sSelection = m_xStartingRange->getString();
-//        sSelection.getLength();
-        //-->debug
         uno::Reference< beans::XPropertySet > xSection =
                                     rDM_Impl.appendTextSectionAfter( m_xStartingRange );
         if( m_nColumnCount > 0 && xSection.is())
@@ -819,7 +812,6 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         if( m_nDzaGutter > 0 )
         {
             //todo: iGutterPos from DocProperties are missing
-            // if( m_iGutterPos > 0 ) m_nTopMargin += m_nDzaGutter; else
             if( m_bGutterRTL )
                 m_nRightMargin += m_nDzaGutter;
             else
@@ -827,9 +819,6 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         }
         operator[]( PropertyDefinition( PROP_LEFT_MARGIN, false )) =  uno::makeAny( m_nLeftMargin  );
         operator[]( PropertyDefinition( PROP_RIGHT_MARGIN, false )) = uno::makeAny( m_nRightMargin );
-
-//        if( iGutterPos && fRTLGutter )
-//        m_nTopMargin += nGutter
 
         /*** if headers/footers are available then the top/bottom margins of the
             header/footer are copied to the top/bottom margin of the page
@@ -941,7 +930,6 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
 
         try
         {
-//            if( m_xStartingRange.is() )
             {
                 //now apply this break at the first paragraph of this section
                 uno::Reference< beans::XPropertySet > xRangeProperties;
@@ -1018,7 +1006,6 @@ void SectionPropertyMap::SetFirstPaperBin( sal_Int32 nSet )
 
 
 StyleSheetPropertyMap::StyleSheetPropertyMap() :
-//    mnCT_Spacing_after( 0 ),
     mnCT_Spacing_line( 0 ),
     mnCT_Spacing_lineRule( 0 ),
     mbCT_TrPrBase_tblHeader( false ),
@@ -1026,7 +1013,6 @@ StyleSheetPropertyMap::StyleSheetPropertyMap() :
     mnCT_TcPrBase_vAlign( 0 ),
     mnCT_TblWidth_w( 0 ),
     mnCT_TblWidth_type( 0 ),
-//    mbCT_Spacing_afterSet( false ),
     mbCT_Spacing_lineSet( false ),
     mbCT_Spacing_lineRuleSet( false ),
     mbCT_TrPrBase_tblHeaderSet( false ),

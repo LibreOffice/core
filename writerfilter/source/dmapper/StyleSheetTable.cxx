@@ -436,7 +436,7 @@ void StyleSheetTable::attribute(Id Name, Value & val)
     int nIntValue = val.getInt();
     (void)nIntValue;
     ::rtl::OUString sValue = val.getString();
-//    printf ( "StyleSheetTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
+
     switch(Name)
     {
         case NS_rtf::LN_ISTD:
@@ -541,7 +541,6 @@ void StyleSheetTable::sprm(Sprm & rSprm)
     sal_Int32 nIntValue = pValue.get() ? pValue->getInt() : 0;
     (void)nIntValue;
     rtl::OUString sStringValue = pValue.get() ? pValue->getString() : rtl::OUString();
-    //printf ( "StyleSheetTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nSprmId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
 
     switch(nSprmId)
     {
@@ -688,7 +687,6 @@ void StyleSheetTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Po
 #endif
 
     //create a new style entry
-    // printf("StyleSheetTable::entry(...)\n");
     OSL_ENSURE( !m_pImpl->m_pCurrentEntry, "current entry has to be NULL here");
     StyleSheetEntryPtr pNewEntry( new StyleSheetEntry );
     m_pImpl->m_pCurrentEntry = pNewEntry;
@@ -1374,8 +1372,6 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
     {
         uno::Reference< style::XStyle > xStyle( xDocFactory->createInstance(
             rPropNameSupplier.GetName( PROP_SERVICE_CHAR_STYLE )), uno::UNO_QUERY_THROW);
-        //uno::Reference< container::XNamed >xNamed( xStyle, uno::UNO_QUERY_THROW );
-        //xNamed->setName( sListLabel );
         uno::Reference< beans::XPropertySet > xStyleProps(xStyle, uno::UNO_QUERY_THROW );
         PropertyValueVector_t::const_iterator aCharPropIter = rCharProperties.begin();
         while( aCharPropIter != rCharProperties.end())
