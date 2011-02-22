@@ -86,8 +86,7 @@ public:
     inline  void            StopTimer();
     void                    Timeout() const;
 
-    const rtl::OUString&    GetLocalHostName() const
-    { return maLocalHostName; }
+    const rtl::OUString&    GetLocalHostName();
 
     static int XErrorHdl( Display*, XErrorEvent* );
     static int XIOErrorHdl( Display* );
