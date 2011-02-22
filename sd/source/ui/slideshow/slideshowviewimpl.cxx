@@ -500,7 +500,17 @@ void SlideShowView::updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImp
     if( pSlideShow )
     {
         ::rtl::Reference< SlideshowImpl > aSLGuard( pSlideShow );
-        rGuard.clear();
+
+        if( mbFirstPaint )
+        {
+            mbFirstPaint = false;
+            SlideshowImpl* pSlideShow = mpSlideShow;
+            rGuard.clear();
+            if( pSlideShow )
+                pSlideShow->onFirstPaint();
+        } else
+            rGuard.clear();
+
         pSlideShow->startUpdateTimer();
     }
 }
