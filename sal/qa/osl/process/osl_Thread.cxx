@@ -28,6 +28,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
+
+#ifdef WNT
+#define NOMINMAX
+#include <windows.h>
+#else
+#include <unistd.h>
+#include <time.h>
+#endif
+
 //------------------------------------------------------------------------
 // include files
 //------------------------------------------------------------------------
@@ -53,10 +62,6 @@
 using namespace osl;
 using namespace rtl;
 
-#ifdef UNX
-#include <unistd.h>
-#include <time.h>
-#endif
 // -----------------------------------------------------------------------------
 // Kleine Stopuhr
 class StopWatch {
@@ -110,14 +115,6 @@ void StopWatch::stop()
 
     if (m_bIsRunning)
     {                                // check ob gestartet.
-// LLA: old         m_nNanoSec = static_cast<sal_Int32>(t2.Nanosec) - static_cast<sal_Int32>(t1.Nanosec);
-// LLA: old         m_nSeconds = static_cast<sal_Int32>(t2.Seconds) - static_cast<sal_Int32>(t1.Seconds);
-// LLA: old         if (m_nNanoSec < 0)
-// LLA: old         {
-// LLA: old             m_nNanoSec += 1000000000;
-// LLA: old             m_nSeconds -= 1;
-// LLA: old         }
-        //m_nNanoSec = t2.Nanosec - t1.Nanosec;
         m_nSeconds = static_cast<sal_Int32>(t2.Seconds) - static_cast<sal_Int32>(t1.Seconds);
         if ( t2.Nanosec > t1.Nanosec )
                m_nNanoSec = static_cast<sal_Int32>(t2.Nanosec) - static_cast<sal_Int32>(t1.Nanosec);
@@ -187,31 +184,16 @@ public:
 // -----------------------------------------------------------------------------
 namespace ThreadHelper
 {
-    // typedef enum {
-    //     QUIET=1,
-    //     VERBOSE
-    // } eSleepVerboseMode;
-
-    void thread_sleep_tenth_sec(sal_Int32 _nTenthSec/*, eSleepVerboseMode nVerbose = VERBOSE*/)
+    void thread_sleep_tenth_sec(sal_Int32 _nTenthSec)
     {
-        // if (nVerbose == VERBOSE)
-        // {
-        //     t_print("wait %d tenth seconds. ", _nTenthSec );
-        //     fflush(stdout);
-        // }
-#ifdef WNT      //Windows
+#ifdef WNT
         Sleep(_nTenthSec * 100 );
-#endif
-#if ( defined UNX ) || ( defined OS2 )  //Unix
+#else
         TimeValue nTV;
         nTV.Seconds = static_cast<sal_uInt32>( _nTenthSec/10 );
         nTV.Nanosec = ( (_nTenthSec%10 ) * 100000000 );
         osl_waitThread(&nTV);
 #endif
-        // if (nVerbose == VERBOSE)
-        // {
-        //     t_print("done\n");
-        // }
     }
 
     void outputPriority(oslThreadPriority const& _aPriority)
@@ -324,14 +306,9 @@ protected:
             {
                 m_aFlag.addValue(1);
                 ThreadHelper::thread_sleep_tenth_sec(1);
-                // TimeValue nTV;
-                // nTV.Seconds = 1;
-                // nTV.Nanosec = 0;
-                // wait(nTV);
 
                 if (m_nWaitSec != 0)
                 {
-                    //ThreadHelper::thread_sleep_tenth_sec(m_nWaitSec * 10);
                     TimeValue nTV;
                     nTV.Seconds = m_nWaitSec / 10 ;
                     nTV.Nanosec = ( m_nWaitSec%10 ) * 100000000 ;
@@ -384,11 +361,6 @@ protected:
                 m_aFlag.addValue(1);
 
                 ThreadHelper::thread_sleep_tenth_sec(1);
-                // m_bWait =    sal_False;
-                // TimeValue nTV;
-                // nTV.Seconds = 1;
-                // nTV.Nanosec = 0;
-                // wait(nTV);
                 if (m_bSuspend == sal_True)
                 {
                     suspend();
@@ -429,10 +401,6 @@ protected:
             {
                 m_aFlag.addValue(1);
                 ThreadHelper::thread_sleep_tenth_sec(1);
-                // TimeValue nTV;
-                // nTV.Seconds = 1;
-                // nTV.Nanosec = 0;
-                // wait(nTV);
             }
         }
     void SAL_CALL onTerminated()
@@ -513,9 +481,6 @@ namespace osl_Thread
 #else
         _pThread->resume();
 #endif
-        // ThreadHelper::thread_sleep_tenth_sec(1);
-        // _pThread->suspend();
-        // ThreadHelper::thread_sleep_tenth_sec(1);
     }
 
     // kill a running thread and join it, if it has terminated, do nothing
@@ -2140,8 +2105,6 @@ namespace osl_ThreadData
         CPPUNIT_TEST(setData_003);
         CPPUNIT_TEST_SUITE_END();
     }; // class setData
-
-    //sal_Bool buildTwoThreads(char)
 
     class getData : public CppUnit::TestFixture
     {

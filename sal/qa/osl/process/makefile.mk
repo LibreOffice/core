@@ -45,28 +45,21 @@ CXXFLAGS+= $(LFS_CFLAGS)
     CFLAGS+=/Ob1
 .ENDIF
 
-SHL1OBJS=  \
-    $(SLO)$/osl_Thread.obj
-
-SHL1TARGET= osl_Thread
-SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
-
-SHL1IMPLIB= i$(SHL1TARGET)
-
-DEF1NAME    =$(SHL1TARGET)
-
+SHL1OBJS=$(SLO)$/osl_Thread.obj
+SHL1TARGET=osl_Thread
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
+SHL1IMPLIB=i$(SHL1TARGET)
+DEF1NAME=$(SHL1TARGET)
 SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 
 # END ------------------------------------------------------------------
 
 SHL2OBJS=$(SLO)$/osl_process.obj
 SHL2TARGET=osl_process
-SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
-
+SHL2STDLIBS= $(SALLIB) $(CPPUNITLIB)
 SHL2IMPLIB=i$(SHL2TARGET)
-SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=$(SHL2TARGET)
-DEF2EXPORTFILE=export.exp
+SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
 
 # END ------------------------------------------------------------------
 
