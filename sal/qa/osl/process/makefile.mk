@@ -28,8 +28,6 @@ PRJ=..$/..$/..
 
 PRJNAME=sal
 TARGET=qa_osl_process
-# this is removed at the moment because we need some enhancements
-# TESTDIR=TRUE
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -76,6 +74,8 @@ OBJ3FILES=$(OBJ)$/osl_process_child.obj
 APP3TARGET=osl_process_child
 APP3OBJS=$(OBJ3FILES)
 APP3STDLIBS=$(SALLIB)
+
+SHL2DEPN=$(APP3TARGETN)
 
 #TODO: The Linux and WinDOS batch file must be copied to $(BIN) directory!
 #   I dont't know how to do this....
