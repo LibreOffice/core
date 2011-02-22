@@ -53,7 +53,7 @@ String STR_PAGE_COUNT_MACRO
     Text [ en-US ] = "Changing the page count" ;
 };
 
- // Image-Liste ----------------------------------------------------------------
+ // Image-list ----------------------------------------------------------------
  // Don't use this image list for normal toolbar images. We have now our commandimagelist
  // folder in default_images. This list is now only used for special toolboxes that are
  // used in floating windows.
@@ -82,7 +82,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
     IMAGELIST_AND_COUNT
 };
 
-// Vorlagen
+// Templates
 #define STYLE_IMAGE_LISTEF \
     MaskColor = IMAGE_MASK_COLOR ; \
     IdList = \
@@ -169,10 +169,10 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
 
 
 
-// Default Bitmap fuer Toolbox
+// Default Bitmap for Toolbox
 BITMAP BMP_FEHLT { FILE = "x.bmp" ; };
 
-// Bitmap fuer die NumerierungsVorlagen im Organizer
+// Bitmap for the NumberingTemplates in the Organizer
 Bitmap BMP_STYLES_FAMILY_NUM { File = "styfamnu.bmp" ; };
 
 String STR_ENV_TITLE
@@ -242,8 +242,8 @@ InfoBox MSG_ERROR_PASSWD
 };
 
 /*
- * auskommentiert, da die Toolbox z. Zt. nicht aus der Resource
- * geladen werden kann
+ * commented out, because the Toolbox can't be loaded from the resource
+ * at this time.
 Window WIN_TOOLBOX {
        "Bearbeitung von Text, Rahmen, Grafik, Tabellen oder "
        "Numerierungen.";
@@ -267,7 +267,7 @@ String STR_DOC_STAT
 };
 
  // ----------------------------
- // Statusleisten-Ueberschriften
+ // Statusbar-titles
  // ----------------------------
 
 String STR_STATSTR_W4WREAD

@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
-#include <cmdid.h>          // Funktion-Ids
+#include <cmdid.h>          // Function-Ids
 
 #include <com/sun/star/i18n/ScriptType.hpp>
 
@@ -58,8 +58,8 @@
 #include <wrtsh.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <uitool.hxx>
-#include <initui.hxx>                   // fuer ::GetGlossaries()
-#include <fldbas.hxx>      //fuer UpdateFields
+#include <initui.hxx>                   // for ::GetGlossaries()
+#include <fldbas.hxx>      //for UpdateFields
 #include <wview.hxx>
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
@@ -73,7 +73,7 @@
 #include <editeng/unolingu.hxx>
 
 #include <globals.hrc>
-#include <globals.h>        // globale Konstanten z.B.
+#include <globals.h>        // e.g. global Constants
 #include <svl/slstitm.hxx>
 #include "swabstdlg.hxx"
 #include <swwrtshitem.hxx>
@@ -87,27 +87,27 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
 {
     BOOL bTextDialog = (nId == SID_SW_EDITOPTIONS) ? TRUE : FALSE;
 
-    // hier werden die Optionen fuer die Web- und den Textdialog zusmmengesetzt
+    // the options for the Web- and Textdialog are put together here
         SwViewOption aViewOpt = *GetUsrPref(!bTextDialog);
         SwMasterUsrPref* pPref = bTextDialog ? pUsrPref : pWebUsrPref;
-        //kein MakeUsrPref, da hier nur die Optionen von Textdoks genommen werden duerfen
+        // no MakeUsrPref, because only options from textdoks can be used here
         SwView* pAppView = GetView();
         if(pAppView && pAppView->GetViewFrame() != SfxViewFrame::Current())
             pAppView = 0;
         if(pAppView)
         {
-        // wenn Text dann nicht WebView und umgekehrt
+        // if Text then no WebView and vice versa
             BOOL bWebView = 0 != PTR_CAST(SwWebView, pAppView);
             if( (bWebView &&  !bTextDialog) ||(!bWebView &&  bTextDialog))
             {
                 aViewOpt = *pAppView->GetWrtShell().GetViewOptions();
             }
             else
-                pAppView = 0; // mit View kann hier nichts gewonnen werden
+                pAppView = 0; // with View, there's nothing to win here
         }
 
     /********************************************************************/
-    /* Options/Edit                                              */
+    /* Options/Edit                                                     */
     /********************************************************************/
     SfxItemSet* pRet = new SfxItemSet (GetPool(),   FN_PARAM_DOCDISP,       FN_PARAM_ELEM,
                                     SID_PRINTPREVIEW,       SID_PRINTPREVIEW,
@@ -272,7 +272,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
                                  : NULL;
 
     /*---------------------------------------------------------------------
-            Seite Dokumentansicht auswerten
+            Interpret the page Documentview
     -----------------------------------------------------------------------*/
     if( SFX_ITEM_SET == rSet.GetItemState(
                 FN_PARAM_DOCDISP, FALSE, &pItem ))
@@ -301,7 +301,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     }
 
     /*---------------------------------------------------------------------
-                Elemente - Item auswerten
+                Elements - interpret Item
     -----------------------------------------------------------------------*/
 
     if( SFX_ITEM_SET == rSet.GetItemState(
@@ -363,7 +363,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
 
 
     /*-----------------01.02.97 11.36-------------------
-        Hintergrund nur im WebDialog
+        Background only in WebDialog
     --------------------------------------------------*/
     if(SFX_ITEM_SET == rSet.GetItemState(RES_BACKGROUND))
     {
@@ -373,7 +373,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     }
 
     /*--------------------------------------------------------------------
-            Seite Rastereinstellungen auswerten
+            Interpret page Grid Settings
     ----------------------------------------------------------------------*/
 
     if( SFX_ITEM_SET == rSet.GetItemState(
@@ -403,9 +403,9 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
         }
     }
 
-    //--------------------------------------------------------------------------
-    //      Writer Drucker Zusatzeinstellungen auswerten
-    //----------------------------------------------------------------------------
+    /*--------------------------------------------------------------------
+            Interpret Writer Printer Options
+    ----------------------------------------------------------------------*/
 
     if( SFX_ITEM_SET == rSet.GetItemState(
                                 FN_PARAM_ADDPRINTER, FALSE, &pItem ))

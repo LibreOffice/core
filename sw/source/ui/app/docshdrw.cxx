@@ -43,7 +43,7 @@
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
-    Beschreibung: Document laden
+    Description: Load Document
  --------------------------------------------------------------------*/
 
 
@@ -52,7 +52,7 @@ void  SwDocShell::InitDraw()
     SdrModel *pDrDoc = pDoc->GetDrawModel();
     if( pDrDoc )
     {
-        // Listen, bzw. Tables im ItemSet der DocShell anlegen
+        // create Lists and Tables DocShell's ItemSet
         PutItem( SvxGradientListItem( pDrDoc->GetGradientList(), SID_GRADIENT_LIST ) );
         PutItem( SvxHatchListItem( pDrDoc->GetHatchList(), SID_HATCH_LIST ) );
         PutItem( SvxBitmapListItem( pDrDoc->GetBitmapList(), SID_BITMAP_LIST ) );
