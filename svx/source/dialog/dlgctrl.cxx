@@ -502,8 +502,6 @@ void SvxRectCtl::Paint( const Rectangle& )
 }
 
 // Convert RECT_POINT Point
-|*
-\************************************************************************/
 
 Point SvxRectCtl::GetPointFromRP( RECT_POINT _eRP) const
 {

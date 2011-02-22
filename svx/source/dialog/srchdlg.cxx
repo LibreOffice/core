@@ -1993,7 +1993,7 @@ void SvxSearchDialog::EnableControl_Impl( Control* pCtrl )
         aBackwardsBtn.Enable();
         return;
     }
-    if ( &aNotesBtn == pCtrl ) != 0 */ )
+    if ( &aNotesBtn == pCtrl ) != 0 )
     {
         aNotesBtn.Enable();
         return;
