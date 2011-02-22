@@ -1594,11 +1594,13 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
                                 std::swap( aLeftLine, aRightLine );
                         }
 
-                        lcl_HorizLine( *pDev, aPoints[bLayoutRTL?1:0], aPoints[bLayoutRTL?0:1], aTopLine, pForceColor );
-                        lcl_HorizLine( *pDev, aPoints[bLayoutRTL?2:3], aPoints[bLayoutRTL?3:2], aBottomLine, pForceColor );
+                        drawinglayer::processor2d::BaseProcessor2D* pProcessor = CreateProcessor2D( );
+                        pProcessor->process( svx::frame::CreateBorderPrimitives( aPoints[bLayoutRTL?1:0], aPoints[bLayoutRTL?0:1], aTopLine, pForceColor ) );
+                        pProcessor->process( svx::frame::CreateBorderPrimitives( aPoints[bLayoutRTL?2:3], aPoints[bLayoutRTL?3:2], aBottomLine, pForceColor ) );
 
                         lcl_VertLine( *pDev, aPoints[0], aPoints[3], aLeftLine, aTopLine, aBottomLine, pForceColor );
                         lcl_VertLine( *pDev, aPoints[1], aPoints[2], aRightLine, aTopLine, aBottomLine, pForceColor );
+                        if ( pProcessor ) delete pProcessor;
                     }
                 }
                 nPosX += nColWidth * nLayoutSign;
