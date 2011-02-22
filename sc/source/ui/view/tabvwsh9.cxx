@@ -43,7 +43,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/whiter.hxx>
-#include <avmedia/mediaplayer.hxx>
 
 #include "tabvwsh.hxx"
 #include "viewdata.hxx"
@@ -84,15 +83,6 @@ void ScTabViewShell::ExecChildWin(SfxRequest& rReq)
             rReq.Ignore();
         }
         break;
-
-        case SID_AVMEDIA_PLAYER:
-        {
-            SfxViewFrame* pThisFrame = GetViewFrame();
-            pThisFrame->ToggleChildWindow( ::avmedia::MediaPlayer::GetChildWindowId() );
-            pThisFrame->GetBindings().Invalidate( SID_AVMEDIA_PLAYER );
-            rReq.Ignore();
-        }
-        break;
     }
 }
 
@@ -102,11 +92,6 @@ void ScTabViewShell::GetChildWinState( SfxItemSet& rSet )
     {
         USHORT nId = GalleryChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_GALLERY, GetViewFrame()->HasChildWindow( nId ) ) );
-    }
-    else if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_AVMEDIA_PLAYER ) )
-    {
-        USHORT nId = ::avmedia::MediaPlayer::GetChildWindowId();
-        rSet.Put( SfxBoolItem( SID_AVMEDIA_PLAYER, GetViewFrame()->HasChildWindow( nId ) ) );
     }
 }
 

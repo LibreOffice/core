@@ -290,7 +290,6 @@ void ScDLL::Init()
     SvxIMapDlgChildWindow       ::RegisterChildWindow(FALSE, pMod);
     GalleryChildWindow          ::RegisterChildWindow(FALSE, pMod);
     ScSpellDialogChildWindow    ::RegisterChildWindow(FALSE, pMod);
-    ::avmedia::MediaPlayer      ::RegisterChildWindow(FALSE, pMod);
 
     ScValidityRefChildWin::RegisterChildWindow(FALSE, pMod);
 
