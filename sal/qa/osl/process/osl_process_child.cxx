@@ -108,27 +108,15 @@ void w_to_a(LPCTSTR _strW, LPSTR strA, DWORD size)
 //########################################
 int main(int argc, char* argv[])
 {
-    rtl::OUString s;
-
-    //t_print("Parameter: ");
-    printf("child process Parameter: ");
-    for (int i = 1; i < argc; i++)
-        printf("%s ", argv[i]);
-    printf("\n");
-
     if (argc > 2)
     {
         if (0 == strcmp("-join", argv[1]))
-        {
             wait_for_seconds(argv[2]);
-        }
         else if (0 == strcmp("-env", argv[1]))
-        {
             dump_env(argv[2]);
-        }
     }
 
-    return (0);
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

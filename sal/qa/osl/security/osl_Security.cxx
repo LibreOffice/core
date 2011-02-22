@@ -607,40 +607,39 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
 
     t_print("Computer Name:              ");
     if ( strComputerName == aNullURL )
-        t_print(" Not retrived\n" );
+        t_print("Not retrived\n" );
     else
         printUString( strComputerName );
 
     t_print("Current User Name:          ");
     if ( strUserName == aNullURL )
-        t_print(" Not retrived\n" );
+        t_print("Not retrived\n" );
     else
         printUString( strUserName );
 
     t_print("Current User Home Directory:");
     if ( strHomeDirectory == aNullURL )
-        t_print(" Not retrived\n" );
+        t_print("Not retrived\n" );
     else
         printUString( strHomeDirectory );
 
     t_print("Current Config Directory:   ");
     if ( strConfigDirectory == aNullURL )
-        t_print(" Not retrived\n" );
+        t_print("Not retrived\n" );
     else
         printUString( strConfigDirectory );
 
     t_print("Current UserID:             ");
     if ( strUserID == aNullURL )
-        t_print(" Not retrived\n" );
+        t_print("Not retrived\n" );
     else
         printUString( strUserID );
 
-    t_print("Current User is");
+    t_print("Current User is:            ");
     if ( isAdmin == sal_False )
-        t_print(" NOT Administrator.\n" );
+        t_print("NOT Administrator.\n" );
     else
-        t_print(" Administrator.\n" );
-
+        t_print("Administrator.\n" );
 
     /// get and display forwarded text if available.
     aStringForward = ::rtl::OUString::createFromAscii( parameters.getCommandLine().c_str() );

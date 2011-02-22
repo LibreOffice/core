@@ -1283,24 +1283,11 @@ namespace osl_Thread
                 sal_Int32 nValueNormal = 0;
                 nValueNormal = aNormalThread.getValue();
 
-                // sal_Int32 nValueBelowNormal = 0;
-                //nValueBelowNormal = aBelowNormalThread->getValue();
-                // sal_Int32 nValueLowest = 0;
-                //nValueLowest = aLowestThread->getValue();
                 t_print("After 10 tenth seconds\n");
                 t_print("nValue in Highest Prio Thread is %d\n", (int) nValueHighest);
                 t_print("nValue in AboveNormal Prio Thread is %d\n", (int) nValueAboveNormal);
                 t_print("nValue in Normal Prio Thread is %d\n", (int) nValueNormal);
 
-                // LLA: this is not a save test, so we only check if all values not zero
-                // LLA: CPPUNIT_ASSERT_MESSAGE(
-                // LLA:     "SetPriority",
-                // LLA:     nValueHighest >= nValueAboveNormal &&
-                // LLA:     nValueAboveNormal >= nValueNormal &&
-                // LLA:     nValueNormal > 0
-                // LLA:     );
-
-// LLA: windows let starve threads with lower priority
 #ifndef WNT
                 CPPUNIT_ASSERT_MESSAGE(
                     "SetPriority",
@@ -1384,17 +1371,6 @@ namespace osl_Thread
                 delete pBelowNormalThread;
                 delete pLowestThread;
 
-                // LLA: this is not a save test, so we only check if all values not zero
-                // LLA: CPPUNIT_ASSERT_MESSAGE(
-                // LLA:     "SetPriority",
-                // LLA:     nValueHighest > nValueAboveNormal &&
-                // LLA:     nValueAboveNormal > nValueNormal &&
-                // LLA:     nValueNormal > nValueBelowNormal &&
-                // LLA:     nValueBelowNormal > nValueLowest &&
-                // LLA:     nValueLowest > 0
-                // LLA:     );
-
-// LLA: windows let starve threads with lower priority
 #ifndef WNT
                 CPPUNIT_ASSERT_MESSAGE(
                     "SetPriority",
@@ -1468,7 +1444,6 @@ namespace osl_Thread
                 nValueLowest = pLowestThread->getValue();
 
                 t_print("After 5 tenth seconds\n");
-                // t_print("nValue in Highest Prio Thread  is     %d\n",nValueHighest);
                 t_print("nValue in AboveNormal Prio Thread is %d\n", (int) nValueAboveNormal);
                 t_print("nValue in Normal Prio Thread is      %d\n", (int) nValueNormal);
                 t_print("nValue in BelowNormal Prio Thread is %d\n", (int) nValueBelowNormal);
@@ -1480,17 +1455,6 @@ namespace osl_Thread
                 delete pBelowNormalThread;
                 delete pLowestThread;
 
-                // LLA: this is not a save test, so we only check if all values not zero
-                // LLA: CPPUNIT_ASSERT_MESSAGE(
-                // LLA:     "SetPriority",
-                // LLA:     nValueHighest > nValueAboveNormal &&
-                // LLA:     nValueAboveNormal > nValueNormal &&
-                // LLA:     nValueNormal > nValueBelowNormal &&
-                // LLA:     nValueBelowNormal > nValueLowest &&
-                // LLA:     nValueLowest > 0
-                // LLA:     );
-
-// LLA: windows let starve threads with lower priority
 #ifndef WNT
                 CPPUNIT_ASSERT_MESSAGE(
                     "SetPriority",
@@ -1563,29 +1527,14 @@ namespace osl_Thread
                 nValueLowest = pLowestThread->getValue();
 
                 t_print("After 5 tenth seconds\n");
-                // t_print("nValue in Highest Prio Thread  is     %d\n",nValueHighest);
-                // t_print("nValue in AboveNormal  Prio Thread is %d\n",nValueAboveNormal);
                 t_print("nValue in Normal Prio Thread is      %d\n", (int) nValueNormal);
                 t_print("nValue in BelowNormal Prio Thread is %d\n", (int) nValueBelowNormal);
                 t_print("nValue in Lowest Prio Thread is      %d\n", (int) nValueLowest);
 
-                // delete pHighestThread;
-                // delete pAboveNormalThread;
                 delete pNormalThread;
                 delete pBelowNormalThread;
                 delete pLowestThread;
 
-                // LLA: this is not a save test, so we only check if all values not zero
-                // LLA: CPPUNIT_ASSERT_MESSAGE(
-                // LLA:     "SetPriority",
-                // LLA:     nValueHighest > nValueAboveNormal &&
-                // LLA:     nValueAboveNormal > nValueNormal &&
-                // LLA:     nValueNormal > nValueBelowNormal &&
-                // LLA:     nValueBelowNormal > nValueLowest &&
-                // LLA:     nValueLowest > 0
-                // LLA:     );
-
-// LLA: windows let starve threads with lower priority
 #ifndef WNT
                 CPPUNIT_ASSERT_MESSAGE(
                     "SetPriority",
@@ -1719,17 +1668,12 @@ namespace osl_Thread
             {
                 oslThreadIdentifier oId;
                 OCountThread* pCountThread = new OCountThread;
-                //OCountThread* pCountThread2 = new OCountThread;
                 pCountThread->create();
-                //pCountThread2->create();
                 pCountThread->setWait(3);
                 oId = Thread::getCurrentIdentifier();
                 oslThreadIdentifier oIdChild = pCountThread->getIdentifier();
-                //t_print("CurrentId is %ld, Child1 id is %ld, Child2 id is %ld\n",oId, oIdChild,pCountThread2->m_id );
                 termAndJoinThread(pCountThread);
                 delete pCountThread;
-                //termAndJoinThread(pCountThread2);
-                //delete pCountThread2;
 
                 CPPUNIT_ASSERT_MESSAGE(
                     "Get the identifier for the current active thread.",
@@ -1808,48 +1752,9 @@ namespace osl_Thread
                     );
 
             }
-// LLA: wait_001 does the same.
-// LLA:         /** wait then terminate the thread
-// LLA:
-// LLA:         ALGORITHM:
-// LLA:         wait nWaitSec seconds, and terminate when the wait does not finish
-// LLA:         Windows & UNX: thread terminates immediatlly
-// LLA:     */
-// LLA:     void wait_002()
-// LLA:     {
-// LLA:         OCountThread aThread;
-// LLA:
-// LLA:         sal_Int32 nWaitSec = 3;
-// LLA:         aThread.setWait(nWaitSec);
-// LLA:
-// LLA:         sal_Bool bRes = aThread.create();
-// LLA:         CPPUNIT_ASSERT_MESSAGE ( "Can't start thread!", bRes == sal_True );
-// LLA:
-// LLA:         StopWatch aStopWatch;
-// LLA:         // TimeValue aTimeVal_befor;
-// LLA:         // osl_getSystemTime( &aTimeVal_befor );
-// LLA:         aStopWatch.start();
-// LLA:
-// LLA:         termAndJoinThread(&aThread);
-// LLA:         sal_Int32 nValue = aThread.getValue();
-// LLA:
-// LLA:         // TimeValue aTimeVal_after;
-// LLA:         // osl_getSystemTime( &aTimeVal_after );
-// LLA:         aStopWatch.stop();
-// LLA:         // sal_Int32 nSec = aTimeVal_after.Seconds  - aTimeVal_befor.Seconds;
-// LLA:         double nSec = aStopWatch.getSeconds();
-// LLA:         t_print("sec=%f\n", nSec);
-// LLA:         t_print("nValue = %d\n", nValue);
-// LLA:
-// LLA:         CPPUNIT_ASSERT_MESSAGE(
-// LLA:             "Wait: Blocks the calling thread for the given number of time.",
-// LLA:             nSec < 1 && nValue == 0
-// LLA:         );
-// LLA:     }
 
         CPPUNIT_TEST_SUITE(wait);
         CPPUNIT_TEST(wait_001);
-        // LLA: CPPUNIT_TEST(wait_002);
         CPPUNIT_TEST_SUITE_END();
     }; // class wait
 
@@ -2023,7 +1928,6 @@ namespace osl_Thread
 // destroy function when the binding thread terminate
 void SAL_CALL destroyCallback(void * data)
 {
-    t_print("destroying local data %s\n", (char *) data);
     delete[] (char *) data;
 }
 
@@ -2197,7 +2101,6 @@ namespace osl_ThreadData
                 // at first, set the data a value
                 char* pc = new char[2];
                 char m_nData = 'm';
-//          strcpy(pc, &m_nData);
                 memcpy(pc, &m_nData, 1);
                 pc[1] = '\0';
                 myThreadData.setData(pc);
@@ -2210,7 +2113,6 @@ namespace osl_ThreadData
                 // setData the second time
                 char* pc2 = new char[2];
                 m_nData = 'o';
-//          strcpy(pc2, &m_nData);
                 memcpy(pc2, &m_nData, 1);
                 pc2[1] = '\0';
 
@@ -2259,7 +2161,6 @@ namespace osl_ThreadData
                 char* pc = new char[2];
                 char m_nData[] = "i";
                 strcpy(pc, m_nData);
-                t_print("pc %s\n", pc);
                 myThreadData.setData(pc);
 
                 myKeyThread aThread1('c');
@@ -2289,12 +2190,9 @@ namespace osl_ThreadData
             {
                 char* pc = new char[2];
                 char m_nData = 'i';
-//          strcpy(pc, &m_nData);
                 memcpy(pc, &m_nData, 1);
                 pc[1] = '\0';
-//          strncpy(pc, &m_nData, sizeof(char);
 
-                t_print("pc %s\n", pc);
                 myThreadData.setData(pc);
 
                 myKeyThread aThread1('a');
@@ -2304,11 +2202,9 @@ namespace osl_ThreadData
 
                 // change the value which pc points
                 char m_nData2 = 'j';
-                // strcpy(pc, &m_nData2);
                 memcpy(pc, &m_nData2, 1);
                 pc[1] = '\0';
 
-                //t_print("pc %s\n", pc);
                 void* pChar = myThreadData.getData();
                 char aChar = *(char*)pChar;
 
