@@ -415,12 +415,15 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
     }
 
     //___________________________________________
+    // This method not longer necessary since OOo 3.4 where the component registration
+    // was changed to passive component registration. For more details see
+    // http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
 
-    public synchronized static boolean __writeRegistryServiceInfo(com.sun.star.registry.XRegistryKey xRegKey)
-    {
-        return Factory.writeRegistryServiceInfo(
-            AsyncJob.IMPLEMENTATIONNAME,
-            AsyncJob.SERVICENAMES,
-            xRegKey);
-    }
+//     public synchronized static boolean __writeRegistryServiceInfo(com.sun.star.registry.XRegistryKey xRegKey)
+//     {
+//         return Factory.writeRegistryServiceInfo(
+//             AsyncJob.IMPLEMENTATIONNAME,
+//             AsyncJob.SERVICENAMES,
+//             xRegKey);
+//     }
 }

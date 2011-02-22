@@ -273,11 +273,15 @@ public class ProtocolHandlerAddon {
      * structures) of a single
      * registry key accessible.
      */
-    public static boolean __writeRegistryServiceInfo(
-        XRegistryKey xRegistryKey ) {
-        return Factory.writeRegistryServiceInfo(
-            ProtocolHandlerAddonImpl.class.getName(),
-            ProtocolHandlerAddonImpl.getServiceNames(),
-            xRegistryKey );
-  }
+    // This method not longer necessary since OOo 3.4 where the component registration
+    // was changed to passive component registration. For more details see
+    // http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
+
+//     public static boolean __writeRegistryServiceInfo(
+//         XRegistryKey xRegistryKey ) {
+//         return Factory.writeRegistryServiceInfo(
+//             ProtocolHandlerAddonImpl.class.getName(),
+//             ProtocolHandlerAddonImpl.getServiceNames(),
+//             xRegistryKey );
+//   }
 }

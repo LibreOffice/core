@@ -199,20 +199,25 @@ static struct ::cppu::ImplementationEntry s_component_entries [] =
 
 extern "C"
 {
-void SAL_CALL component_getImplementationEnvironment(
+SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
     sal_Char const ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-sal_Bool SAL_CALL component_writeInfo(
-    lang::XMultiServiceFactory * xMgr, registry::XRegistryKey * xRegistry )
-{
-    return ::cppu::component_writeInfoHelper(
-        xMgr, xRegistry, ::my_sc_impl::s_component_entries );
-}
+// This method not longer necessary since OOo 3.4 where the component registration was
+// was changed to passive component registration. For more details see
+// http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
+//
+// sal_Bool SAL_CALL component_writeInfo(
+//     lang::XMultiServiceFactory * xMgr, registry::XRegistryKey * xRegistry )
+// {
+//     return ::cppu::component_writeInfoHelper(
+//         xMgr, xRegistry, ::my_sc_impl::s_component_entries );
+// }
 
-void * SAL_CALL component_getFactory(
+
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     sal_Char const * implName, lang::XMultiServiceFactory * xMgr,
     registry::XRegistryKey * xRegistry )
 {
