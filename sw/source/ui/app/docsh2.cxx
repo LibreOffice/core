@@ -228,9 +228,8 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     else if( rHint.ISA(SfxEventHint) &&
         ((SfxEventHint&) rHint).GetEventId() == SFX_EVENT_LOADFINISHED )
     {
-        // --> OD 2004-12-03 #i38126# - own action id
+        // #i38126# - own action id
         nAction = 3;
-        // <--
     }
 
     if( nAction )
@@ -247,9 +246,9 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         case 2:
             pDoc->GetSysFldType( RES_FILENAMEFLD )->UpdateFlds();
             break;
-        // --> OD 2004-12-03 #i38126# - own action for event LOADFINISHED
+        // #i38126# - own action for event LOADFINISHED
         // in order to avoid a modified document.
-        // --> OD 2005-02-01 #i41679# - Also for the instance of <SwDoc>
+        // #i41679# - Also for the instance of <SwDoc>
         // it has to be assured, that it's not modified.
         // Perform the same as for action id 1, but disable <SetModified>.
         case 3:
@@ -269,7 +268,6 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     EnableSetModified( TRUE );
             }
             break;
-        // <--
         }
 
         if( pWrtShell )
@@ -318,12 +316,11 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
     USHORT &rIdx3,              //      ""
     USHORT &rRemovedIdx )       // if doubles are being deleted, Pos back
 {
-    // --> OD 2005-05-10 #i48949# - actions aren't undoable. Thus, allow no undo
+    // #i48949# - actions aren't undoable. Thus, allow no undo
     // actions
     // Note: The undo action stack is cleared at the end of this method.
     bool bDoesUndo( GetDoc()->DoesUndo() );
     GetDoc()->DoUndo( sal_False );
-    // <--
 
     BOOL bRet = FALSE;
 
@@ -511,14 +508,13 @@ BOOL SwDocShell::Insert( SfxObjectShell &rSource,
                     rIdx3,
                     rRemovedIdx);
 
-    // --> OD 2005-05-10 #i48949# - actions aren't undoable and could have change
+    // #i48949# - actions aren't undoable and could have change
     // the document node array. Thus, clear the undo action stack.
     if ( bDoesUndo )
     {
         GetDoc()->DelAllUndoObj();
     }
     GetDoc()->DoUndo( bDoesUndo );
-    // <--
 
     return bRet;
 }
@@ -1631,7 +1627,7 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
 
     const String& rMedname = GetMedium()->GetName();
 
-    // fix #51032#: The HTML template still has to be set
+    // The HTML template still has to be set
     SetHTMLTemplate( *GetDoc() );   //Styles from HTML.vor
 
     SfxViewShell* pViewShell = GetView() ? (SfxViewShell*)GetView()
@@ -1642,12 +1638,12 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     SubInitNew();
 
     SfxMedium aMed( rStreamName, STREAM_READ, FALSE );
-    // --> OD 2005-08-01 #i48748# - use class <SwReloadFromHtmlReader>, because
+    // #i48748# - use class <SwReloadFromHtmlReader>, because
     // the base URL has to be set to the filename of the document <rMedname>
     // and not to the base URL of the temporary file <aMed> in order to get
     // the URLs of the linked graphics correctly resolved.
     SwReloadFromHtmlReader aReader( aMed, rMedname, pDoc );
-    // <--
+
     aReader.Read( *ReadHTML );
 
     const SwView* pCurrView = GetView();
@@ -1690,10 +1686,9 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* _pView )
                                    SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP );
         }
 
-        // --> FME 2005-03-16 #i44963# Good occasion to check if page sizes in
+        // #i44963# Good occasion to check if page sizes in
         // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
         GetDoc()->CheckDefaultPageFmt();
-        // <--
 
         // Currently there can be only one view (layout) if the document is viewed in Web layout
         // So if there are more views we are in print layout and for toggling to Web layout all other views must be closed

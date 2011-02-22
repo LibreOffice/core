@@ -94,10 +94,9 @@
 #include <txtftn.hxx>
 #include <ftnidx.hxx>
 
-// --> FME 2004-08-05 #i20883# Digital Signatures and Encryption
+// #i20883# Digital Signatures and Encryption
 #include <fldbas.hxx>
 #include <docary.hxx>
-// <--
 #include <swerror.h>        // Error messages
 #include <helpid.h>
 #include <cmdid.h>
@@ -617,10 +616,10 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         UpdateDocInfoForSave();
     }
 
-    // --> FME 2007-5-7 #i76360# Update document statistics
+    // #i76360# Update document statistics
     SwDocStat aDocStat( pDoc->GetDocStat() );;
     pDoc->UpdateDocStat( aDocStat );
-    // <--
+
     CalcLayoutForOLEObjects();  // format for OLE objets
     // #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
@@ -944,7 +943,7 @@ ULONG SwDocShell::GetMiscStatus() const
     return SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE;
 }
 
-// --> FME 2004-08-05 #i20883# Digital Signatures and Encryption
+// #i20883# Digital Signatures and Encryption
 sal_uInt16 SwDocShell::GetHiddenInformationState( sal_uInt16 nStates )
 {
     // get global state like HIDDENINFORMATION_DOCUMENTVERSIONS
@@ -978,7 +977,7 @@ sal_uInt16 SwDocShell::GetHiddenInformationState( sal_uInt16 nStates )
 
     return nState;
 }
-// <--
+
 
 void SwDocShell::GetState(SfxItemSet& rSet)
 {
@@ -1127,13 +1126,13 @@ void SwDocShell::PrepareReload()
     ::DelAllGrfCacheEntries( pDoc );
 }
 
-// --> OD 2006-11-07 #i59688#
+// #i59688#
 // linked graphics are now loaded on demand.
 // Thus, loading of linked graphics no longer needed and necessary for
 // the load of document being finished.
 void SwDocShell::LoadingFinished()
 {
-    // --> OD 2007-10-08 #i38810#
+    // #i38810#
     // Original fix fails after integration of cws xmlsec11:
     // interface <SfxObjectShell::EnableSetModified(..)> no longer works, because
     // <SfxObjectShell::FinishedLoading(..)> doesn't care about its status and
@@ -1141,7 +1140,7 @@ void SwDocShell::LoadingFinished()
     // Thus, manuell modify the document, if its modified and its links are updated
     // before <FinishedLoading(..)> is called.
     const bool bHasDocToStayModified( pDoc->IsModified() && pDoc->LinksUpdated() );
-    // <--
+
     FinishedLoading( SFX_LOADED_ALL );
     SfxViewFrame* pVFrame = SfxViewFrame::GetFirst(this);
     if(pVFrame)
@@ -1217,26 +1216,24 @@ void SwDocShell::CalcLayoutForOLEObjects()
 }
 
 
-// --> FME 2005-02-25 #i42634# Overwrites SfxObjectShell::UpdateLinks
+// #i42634# Overwrites SfxObjectShell::UpdateLinks
 // This new function is necessary to trigger update of links in docs
 // read by the binary filter:
 void SwDocShell::UpdateLinks()
 {
     GetDoc()->UpdateLinks(TRUE);
-    // --> FME 2005-07-27 #i50703# Update footnote numbers
+    // #i50703# Update footnote numbers
     SwTxtFtn::SetUniqueSeqRefNo( *GetDoc() );
     SwNodeIndex aTmp( GetDoc()->GetNodes() );
     GetDoc()->GetFtnIdxs().UpdateFtn( aTmp );
-    // <--
 }
 
 uno::Reference< frame::XController >
                                 SwDocShell::GetController()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > aRet;
-    // --> FME 2007-10-15 #i82346# No view in page preview
+    // #i82346# No view in page preview
     if ( GetView() )
-    // <--
         aRet = GetView()->GetController();
     return aRet;
 }
