@@ -362,7 +362,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     }
 
 
-    /*-----------------01.02.97 11.36-------------------
+    /*------------------------------------------------
         Background only in WebDialog
     --------------------------------------------------*/
     if(SFX_ITEM_SET == rSet.GetItemState(RES_BACKGROUND))
@@ -437,7 +437,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     }
 
 
-        // dann an der akt. View und Shell die entsp. Elemente setzen
+        // set elements for the current view and shell
     ApplyUsrPref( aViewOpt, pAppView,
                  bTextDialog? VIEWOPT_DEST_TEXT : VIEWOPT_DEST_WEB);
 }
@@ -510,7 +510,7 @@ SfxTabPage* SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemS
             SwView* pCurrView = GetView();
             if(pCurrView)
             {
-                // wenn Text dann nicht WebView und umgekehrt
+                // if text then not WebView and vice versa
                 BOOL bWebView = 0 != PTR_CAST(SwWebView, pCurrView);
                 if( (bWebView &&  RID_SW_TP_HTML_OPTTABLE_PAGE == nId) ||
                     (!bWebView &&  RID_SW_TP_HTML_OPTTABLE_PAGE != nId) )
