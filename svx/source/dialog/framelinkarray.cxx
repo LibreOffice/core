@@ -1011,6 +1011,209 @@ void Array::DrawCell( OutputDevice& rDev, size_t nCol, size_t nRow, const Color*
     DrawRange( rDev, nCol, nRow, nCol, nRow, pForceColor );
 }
 
+void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
+        size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow,
+        const Color* pForceColor ) const
+{
+    DBG_FRAME_CHECK_COLROW( nFirstCol, nFirstRow, "DrawRange" );
+    DBG_FRAME_CHECK_COLROW( nLastCol, nLastRow, "DrawRange" );
+
+    size_t nCol, nRow;
+
+    // *** diagonal frame borders ***
+    for( nRow = nFirstRow; nRow <= nLastRow; ++nRow )
+    {
+        for( nCol = nFirstCol; nCol <= nLastCol; ++nCol )
+        {
+            const Cell& rCell = CELL( nCol, nRow );
+            bool bOverlapX = rCell.mbOverlapX;
+            bool bOverlapY = rCell.mbOverlapY;
+            bool bFirstCol = nCol == nFirstCol;
+            bool bFirstRow = nRow == nFirstRow;
+            if( (!bOverlapX && !bOverlapY) || (bFirstCol && bFirstRow) ||
+                (!bOverlapY && bFirstCol) || (!bOverlapX && bFirstRow) )
+            {
+                Rectangle aRect( GetCellRect( nCol, nRow ) );
+                if( (aRect.GetWidth() > 1) && (aRect.GetHeight() > 1) )
+                {
+                    size_t _nFirstCol = mxImpl->GetMergedFirstCol( nCol, nRow );
+                    size_t _nFirstRow = mxImpl->GetMergedFirstRow( nCol, nRow );
+                    size_t _nLastCol = mxImpl->GetMergedLastCol( nCol, nRow );
+                    size_t _nLastRow = mxImpl->GetMergedLastRow( nCol, nRow );
+
+                    const Style aTlbrStyle = GetCellStyleTLBR( _nFirstCol, _nFirstRow, true );
+                    if ( aTlbrStyle.GetWidth( ) )
+                        pProcessor->process( CreateClippedBorderPrimitives(
+                                    aRect.TopLeft(), aRect.BottomRight(),
+                                    aTlbrStyle, aRect ) );
+
+                    const Style aBltrStyle = GetCellStyleBLTR( _nFirstCol, _nFirstRow, true );
+                    if ( aTlbrStyle.GetWidth( ) )
+                        pProcessor->process( CreateClippedBorderPrimitives(
+                                    aRect.BottomLeft(), aRect.TopRight(),
+                                    aBltrStyle, aRect ) );
+                }
+            }
+        }
+    }
+
+    // *** horizontal frame borders ***
+
+    for( nRow = nFirstRow; nRow <= nLastRow + 1; ++nRow )
+    {
+        double fAngle = mxImpl->GetHorDiagAngle( nFirstCol, nRow );
+        double fTAngle = mxImpl->GetHorDiagAngle( nFirstCol, nRow - 1 );
+
+        // *Start*** variables store the data of the left end of the cached frame border
+        Point aStartPos( mxImpl->GetColPosition( nFirstCol ), mxImpl->GetRowPosition( nRow ) );
+        const Style* pStart = &GetCellStyleTop( nFirstCol, nRow );
+        DiagStyle aStartLFromTR( GetCellStyleBL( nFirstCol, nRow - 1 ), fTAngle );
+        const Style* pStartLFromT = &GetCellStyleLeft( nFirstCol, nRow - 1 );
+        const Style* pStartLFromL = &GetCellStyleTop( nFirstCol - 1, nRow );
+        const Style* pStartLFromB = &GetCellStyleLeft( nFirstCol, nRow );
+        DiagStyle aStartLFromBR( GetCellStyleTL( nFirstCol, nRow ), fAngle );
+
+        // *End*** variables store the data of the right end of the cached frame border
+        DiagStyle aEndRFromTL( GetCellStyleBR( nFirstCol, nRow - 1 ), fTAngle );
+        const Style* pEndRFromT = &GetCellStyleRight( nFirstCol, nRow - 1 );
+        const Style* pEndRFromR = &GetCellStyleTop( nFirstCol + 1, nRow );
+        const Style* pEndRFromB = &GetCellStyleRight( nFirstCol, nRow );
+        DiagStyle aEndRFromBL( GetCellStyleTR( nFirstCol, nRow ), fAngle );
+
+        for( nCol = nFirstCol + 1; nCol <= nLastCol; ++nCol )
+        {
+            fAngle = mxImpl->GetHorDiagAngle( nCol, nRow );
+            fTAngle = mxImpl->GetHorDiagAngle( nCol, nRow - 1 );
+
+            const Style& rCurr = *pEndRFromR;
+
+            DiagStyle aLFromTR( GetCellStyleBL( nCol, nRow - 1 ), fTAngle );
+            const Style& rLFromT = *pEndRFromT;
+            const Style& rLFromL = *pStart;
+            const Style& rLFromB = *pEndRFromB;
+            DiagStyle aLFromBR( GetCellStyleTL( nCol, nRow ), fAngle );
+
+            DiagStyle aRFromTL( GetCellStyleBR( nCol, nRow - 1 ), fTAngle );
+            const Style& rRFromT = GetCellStyleRight( nCol, nRow - 1 );
+            const Style& rRFromR = GetCellStyleTop( nCol + 1, nRow );
+            const Style& rRFromB = GetCellStyleRight( nCol, nRow );
+            DiagStyle aRFromBL( GetCellStyleTR( nCol, nRow ), fAngle );
+
+            // check if current frame border can be connected to cached frame border
+            if( !CheckFrameBorderConnectable( *pStart, rCurr,
+                    aEndRFromTL, rLFromT, aLFromTR, aEndRFromBL, rLFromB, aLFromBR ) )
+            {
+                // draw previous frame border
+                Point aEndPos( mxImpl->GetColPosition( nCol ), aStartPos.Y() );
+                if( pStart->Prim() && (aStartPos.X() <= aEndPos.X()) )
+                   pProcessor->process( CreateBorderPrimitives( aStartPos, aEndPos, *pStart,
+                        aStartLFromTR, *pStartLFromT, *pStartLFromL, *pStartLFromB, aStartLFromBR,
+                        aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor ) );
+
+                // re-init "*Start***" variables
+                aStartPos = aEndPos;
+                pStart = &rCurr;
+                aStartLFromTR = aLFromTR;
+                pStartLFromT = &rLFromT;
+                pStartLFromL = &rLFromL;
+                pStartLFromB = &rLFromB;
+                aStartLFromBR = aLFromBR;
+            }
+
+            // store current styles in "*End***" variables
+            aEndRFromTL = aRFromTL;
+            pEndRFromT = &rRFromT;
+            pEndRFromR = &rRFromR;
+            pEndRFromB = &rRFromB;
+            aEndRFromBL = aRFromBL;
+        }
+
+        // draw last frame border
+        Point aEndPos( mxImpl->GetColPosition( nCol ), aStartPos.Y() );
+        if( pStart->Prim() && (aStartPos.X() <= aEndPos.X()) )
+            pProcessor->process( CreateBorderPrimitives( aStartPos, aEndPos, *pStart,
+                aStartLFromTR, *pStartLFromT, *pStartLFromL, *pStartLFromB, aStartLFromBR,
+                aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor ) );
+    }
+
+    // *** vertical frame borders ***
+    for( nCol = nFirstCol; nCol <= nLastCol + 1; ++nCol )
+    {
+        double fAngle = mxImpl->GetVerDiagAngle( nCol, nFirstRow );
+        double fLAngle = mxImpl->GetVerDiagAngle( nCol - 1, nFirstRow );
+
+        // *Start*** variables store the data of the top end of the cached frame border
+        Point aStartPos( mxImpl->GetColPosition( nCol ), mxImpl->GetRowPosition( nFirstRow ) );
+        const Style* pStart = &GetCellStyleLeft( nCol, nFirstRow );
+        DiagStyle aStartTFromBL( GetCellStyleTR( nCol - 1, nFirstRow ), fLAngle );
+        const Style* pStartTFromL = &GetCellStyleTop( nCol - 1, nFirstRow );
+        const Style* pStartTFromT = &GetCellStyleLeft( nCol, nFirstRow - 1 );
+        const Style* pStartTFromR = &GetCellStyleTop( nCol, nFirstRow );
+        DiagStyle aStartTFromBR( GetCellStyleTL( nCol, nFirstRow ), fAngle );
+
+        // *End*** variables store the data of the bottom end of the cached frame border
+        DiagStyle aEndBFromTL( GetCellStyleBR( nCol - 1, nFirstRow ), fLAngle );
+        const Style* pEndBFromL = &GetCellStyleBottom( nCol - 1, nFirstRow );
+        const Style* pEndBFromB = &GetCellStyleLeft( nCol, nFirstRow + 1 );
+        const Style* pEndBFromR = &GetCellStyleBottom( nCol, nFirstRow );
+        DiagStyle aEndBFromTR( GetCellStyleBL( nCol, nFirstRow ), fAngle );
+
+        for( nRow = nFirstRow + 1; nRow <= nLastRow; ++nRow )
+        {
+            fAngle = mxImpl->GetVerDiagAngle( nCol, nRow );
+            fLAngle = mxImpl->GetVerDiagAngle( nCol - 1, nRow );
+
+            const Style& rCurr = *pEndBFromB;
+
+            DiagStyle aTFromBL( GetCellStyleTR( nCol - 1, nRow ), fLAngle );
+            const Style& rTFromL = *pEndBFromL;
+            const Style& rTFromT = *pStart;
+            const Style& rTFromR = *pEndBFromR;
+            DiagStyle aTFromBR( GetCellStyleTL( nCol, nRow ), fAngle );
+
+            DiagStyle aBFromTL( GetCellStyleBR( nCol - 1, nRow ), fLAngle );
+            const Style& rBFromL = GetCellStyleBottom( nCol - 1, nRow );
+            const Style& rBFromB = GetCellStyleLeft( nCol, nRow + 1 );
+            const Style& rBFromR = GetCellStyleBottom( nCol, nRow );
+            DiagStyle aBFromTR( GetCellStyleBL( nCol, nRow ), fAngle );
+
+            // check if current frame border can be connected to cached frame border
+            if( !CheckFrameBorderConnectable( *pStart, rCurr,
+                    aEndBFromTL, rTFromL, aTFromBL, aEndBFromTR, rTFromR, aTFromBR ) )
+            {
+                // draw previous frame border
+                Point aEndPos( aStartPos.X(), mxImpl->GetRowPosition( nRow ) );
+                if( pStart->Prim() && (aStartPos.Y() <= aEndPos.Y()) )
+                    pProcessor->process( CreateBorderPrimitives( aEndPos, aStartPos, *pStart,
+                        aEndBFromTL, *pEndBFromL, *pEndBFromB, *pEndBFromR, aEndBFromTR,
+                        aStartTFromBL, *pStartTFromL, *pStartTFromT, *pStartTFromR, aStartTFromBR, pForceColor ) );
+
+                // re-init "*Start***" variables
+                aStartPos = aEndPos;
+                pStart = &rCurr;
+                aStartTFromBL = aTFromBL;
+                pStartTFromL = &rTFromL;
+                pStartTFromT = &rTFromT;
+                pStartTFromR = &rTFromR;
+                aStartTFromBR = aTFromBR;
+            }
+
+            // store current styles in "*End***" variables
+            aEndBFromTL = aBFromTL;
+            pEndBFromL = &rBFromL;
+            pEndBFromB = &rBFromB;
+            pEndBFromR = &rBFromR;
+            aEndBFromTR = aBFromTR;
+        }
+
+        // draw last frame border
+        Point aEndPos( aStartPos.X(), mxImpl->GetRowPosition( nRow ) );
+        if( pStart->Prim() && (aStartPos.Y() <= aEndPos.Y()) )
+            pProcessor->process( CreateBorderPrimitives( aEndPos, aStartPos, *pStart,
+                aEndBFromTL, *pEndBFromL, *pEndBFromB, *pEndBFromR, aEndBFromTR,
+                aStartTFromBL, *pStartTFromL, *pStartTFromT, *pStartTFromR, aStartTFromBR, pForceColor ) );
+    }
+}
 void Array::DrawRange( OutputDevice& rDev,
         size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow,
         const Color* pForceColor ) const

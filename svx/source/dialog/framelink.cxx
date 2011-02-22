@@ -56,6 +56,7 @@
 #endif
 
 #include <drawinglayer/primitive2d/borderlineprimitive2d.hxx>
+#include <drawinglayer/primitive2d/clippedborderlineprimitive2d.hxx>
 
 namespace svx {
 namespace frame {
@@ -1377,10 +1378,42 @@ double lcl_GetExtent( const Style& rSide, const Style& rOpposite )
     return nExtent;
 }
 
+basegfx::B2DPoint lcl_PointToB2DPoint( Point aPoint )
+{
+    return basegfx::B2DPoint( aPoint.getX(), aPoint.getY() );
+}
+
+drawinglayer::primitive2d::Primitive2DSequence CreateClippedBorderPrimitives (
+        const Point& rStart, const Point& rEnd, const Style& rBorder,
+        const Rectangle& rClipRect )
+{
+    drawinglayer::primitive2d::Primitive2DSequence aSequence( 1 );
+    basegfx::B2DPolygon aPolygon;
+    aPolygon.append( lcl_PointToB2DPoint( rClipRect.TopLeft( ) ) );
+    aPolygon.append( lcl_PointToB2DPoint( rClipRect.TopRight( ) ) );
+    aPolygon.append( lcl_PointToB2DPoint( rClipRect.BottomRight( ) ) );
+    aPolygon.append( lcl_PointToB2DPoint( rClipRect.BottomLeft( ) ) );
+    aPolygon.setClosed( true );
+
+    aSequence[0] = new drawinglayer::primitive2d::ClippedBorderLinePrimitive2D(
+        lcl_PointToB2DPoint( rStart ),
+        lcl_PointToB2DPoint( rEnd ),
+        rBorder.Prim(),
+        rBorder.Dist(),
+        rBorder.Secn(),
+        aPolygon,
+        rBorder.GetColorSecn().getBColor(),
+        rBorder.GetColorPrim().getBColor(),
+        rBorder.GetColorGap().getBColor(),
+        rBorder.UseGapColor(), rBorder.Type() );
+
+    return aSequence;
+}
+
 drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
         const Point& rLPos, const Point& rRPos, const Style& rBorder,
-        const Style& rLFromT, const Style& rLFromL, const Style& rLFromB,
-        const Style& rRFromT, const Style& rRFromR, const Style& rRFromB,
+        const DiagStyle& rLFromTR, const Style& rLFromT, const Style& rLFromL, const Style& rLFromB, const DiagStyle& rLFromBR,
+        const DiagStyle& rRFromTL, const Style& rRFromT, const Style& rRFromR, const Style& rRFromB, const DiagStyle& rRFromBL,
         const Color* pForceColor )
 {
     const DiagStyle aNoStyle;
@@ -1389,32 +1422,11 @@ drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
     basegfx::B2DPoint aStart( rLPos.getX(), rLPos.getY() );
     basegfx::B2DPoint aEnd( rRPos.getX(), rRPos.getY() );
 
-    // Compute the offset for the start and end points
-    basegfx::B2DVector aVector( aStart - aEnd );
-    aVector.normalize();
-    double nOffStart = rBorder.GetWidth() / 2.0;
-    double nOffEnd = rBorder.GetWidth() / 2.0;
-    if ( aVector.getY( ) == 1.0 && aVector.getX() == 0.0 )
-    {
-        // Deal with vertical lines
-        sal_uInt16 nWS1 = ( rLFromT.GetWidth() == 0 ) ? -1 : rLFromT.GetWidth( );
-        sal_uInt16 nWS2 = ( rLFromB.GetWidth() == 0 ) ? -1 : rLFromB.GetWidth( );
-        nOffStart = std::min( nWS1, nWS2 ) / 2.0;
-
-        sal_uInt16 nWE1 = ( rRFromT.GetWidth() == 0 ) ? -1 : rRFromT.GetWidth( );
-        sal_uInt16 nWE2 = ( rRFromB.GetWidth() == 0 ) ? -1 : rRFromB.GetWidth( );
-        nOffEnd = std::min( nWE1, nWE2 ) / 2.0;
-    }
-
-    basegfx::B2DVector aOffsetV( 0.0, 1.0 );
-    aStart = aStart + aOffsetV * nOffStart;
-    aEnd = aEnd + aOffsetV * nOffEnd;
-
     aSequence[0] = new drawinglayer::primitive2d::BorderLinePrimitive2D(
         aStart, aEnd,
-        rBorder.Prim() + 1,
-        rBorder.Dist() + 1,
-        rBorder.Secn() + 1,
+        rBorder.Prim(),
+        rBorder.Dist(),
+        rBorder.Secn(),
         lcl_GetExtent( rLFromT, rLFromB ),
         lcl_GetExtent( rRFromT, rRFromB ),
         lcl_GetExtent( rLFromB, rLFromT ),
@@ -1425,6 +1437,30 @@ drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
         rBorder.UseGapColor(), rBorder.Type() );
 
     return aSequence;
+}
+
+drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
+        const Point& rLPos, const Point& rRPos, const Style& rBorder,
+        const Style& rLFromT, const Style& rLFromL, const Style& rLFromB,
+        const Style& rRFromT, const Style& rRFromR, const Style& rRFromB,
+        const Color* pForceColor )
+{
+    const DiagStyle noDiagStyle;
+    return CreateBorderPrimitives( rLPos, rRPos, rBorder,
+            noDiagStyle, rLFromT, rLFromL, rLFromB, noDiagStyle,
+            noDiagStyle, rRFromT, rRFromR, rRFromB, noDiagStyle,
+            pForceColor );
+}
+
+drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
+        const Point& rLPos, const Point& rRPos,
+        const Style& rBorder, const Color* pForceColor )
+{
+    const Style noStyle;
+    return CreateBorderPrimitives( rLPos, rRPos, rBorder,
+            noStyle, noStyle, noStyle,
+            noStyle, noStyle, noStyle,
+            pForceColor );
 }
 
 void DrawHorFrameBorder( OutputDevice& rDev,

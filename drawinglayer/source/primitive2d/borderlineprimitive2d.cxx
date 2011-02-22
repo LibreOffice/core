@@ -74,7 +74,7 @@ namespace drawinglayer
             Primitive2DSequence xRetval;
 
             if(!getStart().equal(getEnd()) && getWidth() > 0)
-              {
+            {
                 // get data and vectors
                 const double fWidth(getWidth());
                 basegfx::B2DVector aVector(getEnd() - getStart());

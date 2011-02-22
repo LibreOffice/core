@@ -461,6 +461,68 @@ SVX_DLLPUBLIC bool CheckFrameBorderConnectable(
 // Drawing functions
 // ============================================================================
 
+/** Draws a horizontal frame border, regards all connected frame styles.
+
+    The frame style to draw is passed as parameter rBorder. The function
+    calculates the adjustment in X direction for left and right end of primary
+    and secondary line of the frame border (the style may present a double
+    line). The line ends may differ according to the connected frame styles
+    coming from top, bottom, left, right, and/or diagonal.
+
+    Thick frame styles are always drawn centered (in width) to the passed
+    reference points. The Y coordinates of both reference points must be equal
+    (the line cannot be drawn slanted).
+
+    The function preserves all settings of the passed output device.
+
+    All parameters starting with "rL" refer to the left end of the processed
+    frame border, all parameters starting with "rR" refer to the right end.
+    The following part of the parameter name starting with "From" specifies
+    where the frame border comes from. Example: "rLFromTR" means the frame
+    border coming from top-right, connected to the left end of rBorder (and
+    therefore a diagonal frame border).
+
+    The follong picture shows the meaning of all passed parameters:
+
+                 rLFromT      /                   \      rRFromT
+                    |       /                       \       |
+                    |   rLFromTR               rRFromTL     |
+                    |   /                               \   |
+                    | /                                   \ |
+    --- rLFromL ---   ============== rBorder ==============   --- rRFromR ---
+                    | \                                   / |
+                    |   \                               /   |
+                    |   rLFromBR               rRFromBL     |
+                    |       \                       /       |
+                 rLFromB      \                   /      rRFromB
+ */
+SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
+    const Point&        rLPos,          /// Reference point for left end of the processed frame border.
+    const Point&        rRPos,          /// Reference point for right end of the processed frame border.
+    const Style&        rBorder,        /// Style of the processed frame border.
+
+    const DiagStyle&    rLFromTR,       /// Diagonal frame border from top-right to left end of rBorder.
+    const Style&        rLFromT,        /// Vertical frame border from top to left end of rBorder.
+    const Style&        rLFromL,        /// Horizontal frame border from left to left end of rBorder.
+    const Style&        rLFromB,        /// Vertical frame border from bottom to left end of rBorder.
+    const DiagStyle&    rLFromBR,       /// Diagonal frame border from bottom-right to left end of rBorder.
+
+    const DiagStyle&    rRFromTL,       /// Diagonal frame border from top-left to right end of rBorder.
+    const Style&        rRFromT,        /// Vertical frame border from top to right end of rBorder.
+    const Style&        rRFromR,        /// Horizontal frame border from right to right end of rBorder.
+    const Style&        rRFromB,        /// Vertical frame border from bottom to right end of rBorder.
+    const DiagStyle&    rRFromBL,       /// Diagonal frame border from bottom-left to right end of rBorder.
+
+    const Color*        pForceColor = 0 /// If specified, overrides frame border color.
+);
+
+SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
+    const Point&        rLPos,          /// Reference point for left end of the processed frame border.
+    const Point&        rRPos,          /// Reference point for right end of the processed frame border.
+    const Style&        rBorder,        /// Style of the frame border to draw.
+    const Color*        pForceColor = 0 /// If specified, overrides frame border color.
+);
+
 SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimitives(
     const Point&        rLPos,          /// Reference point for left end of the processed frame border.
     const Point&        rRPos,          /// Reference point for right end of the processed frame border.
@@ -476,6 +538,10 @@ SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DSequence CreateBorderPrimiti
 
     const Color*        pForceColor = 0 /// If specified, overrides frame border color.
 );
+
+SVX_DLLPUBLIC drawinglayer::primitive2d::Primitive2DSequence CreateClippedBorderPrimitives (
+        const Point& rStart, const Point& rEnd, const Style& rBorder,
+        const Rectangle& rClipRect );
 
 /** Draws a horizontal frame border, regards all connected frame styles.
 

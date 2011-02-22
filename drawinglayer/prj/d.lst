@@ -14,6 +14,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive2d
 ..\inc\drawinglayer\primitive2d\baseprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\baseprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\bitmapprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\bitmapprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\borderlineprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\borderlineprimitive2d.hxx
+..\inc\drawinglayer\primitive2d\clippedborderlineprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\clippedborderlineprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\chartprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\chartprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\controlprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\controlprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\discretebitmapprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\discretebitmapprimitive2d.hxx

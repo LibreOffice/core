@@ -120,9 +120,9 @@ namespace drawinglayer
                 return !basegfx::fTools::equalZero(mfRightWidth);
             }
 
-            basegfx::B2DPolyPolygon getClipPolygon( ) const;
-
         protected:
+            virtual basegfx::B2DPolyPolygon getClipPolygon( ) const;
+
             /// create local decomposition
             virtual Primitive2DSequence create2DDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
