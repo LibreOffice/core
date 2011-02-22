@@ -1293,33 +1293,59 @@ oslGenericFunction SAL_CALL LocaleData::getFunctionSymbol( const Locale& rLocale
 
     LocaleDataLookupTableItem *pCachedItem = 0;
 
-    if ((l > 0 && c > 0 && v > 0 &&
-            // load function with name <func>_<lang>_<country>_<varian>
-            (pSymbol = rLookupTable.getFunctionSymbolByName(aBuf.append(rLocale.Language).append(under).append(
-                    rLocale.Country).append(under).append(rLocale.Variant).makeStringAndClear(), pFunction, &pCachedItem)) != 0) ||
-        (l > 0 && c > 0 &&
-            // load function with name <ase>_<lang>_<country>
-            (pSymbol = rLookupTable.getFunctionSymbolByName(aBuf.append(rLocale.Language).append(under).append(
-                    rLocale.Country).makeStringAndClear(), pFunction, &pCachedItem)) != 0) ||
-        (l > 0 && c > 0 && rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")) &&
-                            (rLocale.Country.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HK")) ||
-                            rLocale.Country.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MO"))) &&
-            // if the country code is HK or MO, one more step to try TW.
-            (pSymbol = rLookupTable.getFunctionSymbolByName(aBuf.append(rLocale.Language).append(under).append(tw).makeStringAndClear(),
-                    pFunction, &pCachedItem)) != 0) ||
-        (l > 0 &&
-            // load function with name <func>_<lang>
-            (pSymbol = rLookupTable.getFunctionSymbolByName(rLocale.Language, pFunction, &pCachedItem)) != 0) ||
-            // load default function with name <func>_en_US
-            (pSymbol = rLookupTable.getFunctionSymbolByName(en_US, pFunction, &pCachedItem)) != 0)
+    if (l <= 0)
+        // At minimum we need the lang name.
+        throw RuntimeException();
+
+    if (c > 0 && v > 0)
     {
-        if( pCachedItem )
-            cachedItem.reset( pCachedItem );
-        if( cachedItem.get())
-            cachedItem->aLocale = rLocale;
-        return pSymbol;
+        // load function with name <func>_<lang>_<country>_<variant>
+        pSymbol = rLookupTable.getFunctionSymbolByName(
+            aBuf.append(rLocale.Language).append(under).append(rLocale.Country).append(under).append(rLocale.Variant).makeStringAndClear(),
+            pFunction, &pCachedItem);
     }
-    throw RuntimeException();
+
+    if (!pSymbol && c > 0)
+    {
+        // load function with name <ase>_<lang>_<country>
+        pSymbol = rLookupTable.getFunctionSymbolByName(
+            aBuf.append(rLocale.Language).append(under).append(rLocale.Country).makeStringAndClear(),
+            pFunction, &pCachedItem);
+    }
+
+    if (!pSymbol && c > 0 &&
+        rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")) &&
+        (rLocale.Country.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HK")) ||
+         rLocale.Country.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MO"))))
+    {
+        // if the country code is HK or MO, one more step to try TW.
+        pSymbol = rLookupTable.getFunctionSymbolByName(
+            aBuf.append(rLocale.Language).append(under).append(tw).makeStringAndClear(),
+            pFunction, &pCachedItem);
+    }
+
+    if (!pSymbol)
+    {
+        // load function with name <func>_<lang>
+        pSymbol = rLookupTable.getFunctionSymbolByName(rLocale.Language, pFunction, &pCachedItem);
+    }
+
+    if (!pSymbol)
+    {
+        // load default function with name <func>_en_US
+        pSymbol = rLookupTable.getFunctionSymbolByName(en_US, pFunction, &pCachedItem);
+    }
+
+    if (!pSymbol)
+        // Appropriate symbol could not be found.  Give up.
+        throw RuntimeException();
+
+    if (pCachedItem)
+        cachedItem.reset(pCachedItem);
+    if (cachedItem.get())
+        cachedItem->aLocale = rLocale;
+
+    return pSymbol;
 }
 
 Sequence< Locale > SAL_CALL
