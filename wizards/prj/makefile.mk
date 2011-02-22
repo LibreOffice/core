@@ -24,30 +24,17 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..
 
-PRJNAME=wizards
-TARGET=scheduleall
+PRJ=..
+TARGET=prj
 
-# --- Settings -----------------------------------------------------
+.INCLUDE : settings.mk
 
-.INCLUDE :  settings.mk
-.INCLUDE : $(PRJ)$/util$/target.pmk
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-# --- Files --------------------------------------------------------
-
-#
-# testresource.
-#
-SRS2NAME =              schedule
-SRC2FILES=		schedule.src
-RESLIB2SRSFILES= $(SRS)$/schedule.srs
-RESLIB2NAME=	cal
-
-ZIP1TARGET      = $(SCHEDULE_ALL_TARGET)
-ZIP1LIST        = *.xdl *.xba *.xlb
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

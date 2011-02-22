@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,26 +25,32 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
-PRJNAME=wizards
-TARGET=wzimglst
+$(eval $(call gb_Jar_Jar,query))
 
-# --- Settings ----------------------------------
+$(eval $(call gb_Jar_add_jars,query,\
+	$(OUTDIR)/bin/ridl.jar \
+	$(OUTDIR)/bin/unoil.jar \
+	$(OUTDIR)/bin/jurt.jar \
+	$(OUTDIR)/bin/juh.jar \
+	$(OUTDIR)/bin/java_uno.jar \
+	$(OUTDIR)/bin/commonwizards.jar \
+))
 
-.INCLUDE : settings.mk
-# --- Files -------------------------------------
-# ... resource files ............................
+$(eval $(call gb_Jar_set_manifest,query,$(SRCDIR)/wizards/com/sun/star/wizards/query/MANIFEST.MF))
 
-SRS1NAME=$(TARGET)
-SRC1FILES=imagelists.src
+$(eval $(call gb_Jar_set_packageroot,query,com))
 
-RESLIB1SRSFILES= $(SRS)$/wzimglst.srs
-RESLIB1NAME=wzi
-RESLIB1IMAGES=$(PRJ)$/res
+$(eval $(call gb_Jar_set_jarclasspath,query,\
+	commonwizards.jar \
+))
 
-# ... object files ............................
-# --- Targets ----------------------------------
+$(eval $(call gb_Jar_add_sourcefiles,query,\
+	wizards/com/sun/star/wizards/query/CallQueryWizard \
+	wizards/com/sun/star/wizards/query/Finalizer \
+	wizards/com/sun/star/wizards/query/QuerySummary \
+	wizards/com/sun/star/wizards/query/QueryWizard \
+))
 
-.INCLUDE : target.mk
+$(eval $(call gb_Jar_set_componentfile,query,wizards/com/sun/star/wizards/query/query,OOO))
 
-
+# vim: set noet sw=4 ts=4:

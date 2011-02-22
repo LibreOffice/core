@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -24,30 +24,22 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..
 
-PRJNAME=wizards
-TARGET=importwizardall
+$(eval $(call gb_Zip_Zip,basicsrveuro,$(SRCDIR)/wizards/source/euro))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Zip_add_files,basicsrveuro,\
+	AutoPilotRun.xba \
+	Common.xba \
+	ConvertRun.xba \
+	dialog.xlb \
+	DlgConvert.xdl \
+	DlgPassword.xdl \
+	Hard.xba \
+	Init.xba \
+	Protect.xba \
+	script.xlb \
+	Soft.xba \
+	Writer.xba \
+))
 
-.INCLUDE :  settings.mk
-.INCLUDE : $(PRJ)$/util$/target.pmk
-
-# --- Files --------------------------------------------------------
-
-#
-# testresource.
-#
-SRS2NAME =              importwi
-SRC2FILES=		importwi.src
-RESLIB2SRSFILES= $(SRS)$/importwi.srs
-RESLIB2NAME=	imp
-
-ZIP1TARGET      = $(IMPORTWIZARD_ALL_TARGET)
-ZIP1LIST        = *.xdl *.xba *.xlb
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4 ts=4:

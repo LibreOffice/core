@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -24,30 +24,13 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..
 
-PRJNAME=wizards
-TARGET=depotall
+$(eval $(call gb_Zip_Zip,basicsrvlauncher,$(SRCDIR)/wizards/source/launcher))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Zip_add_files,basicsrvlauncher,\
+	dialog.xlb \
+	DicOOo.xba \
+	script.xlb \
+))
 
-.INCLUDE :  settings.mk
-.INCLUDE : $(PRJ)$/util$/target.pmk
-
-# --- Files --------------------------------------------------------
-
-#
-# testresource.
-#
-# SRS2NAME =              depot
-# SRC2FILES=              webwizar.src
-# RESLIB2SRSFILES= $(SRS)$/webwizar.srs
-# RESLIB2NAME=    wwz
-
-ZIP1TARGET      = $(DEPOT_ALL_TARGET)
-ZIP1LIST        = *.xdl *.xba *.xlb
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4 ts=4:

@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,18 +25,11 @@
 #
 #*************************************************************************
 
-PRJ=..
+$(eval $(call gb_Zip_Zip,basicusr,$(SRCDIR)/wizards/source/config))
 
-PRJNAME=wizards
-TARGET=NOTARGET
-GEN_HID=TRUE
-GEN_HID_OTHER=TRUE
+$(eval $(call gb_Zip_add_files,basicusr,\
+	dialog.xlc \
+	script.xlc \
+))
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-# --- Targets ------------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4 ts=4:

@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -24,22 +24,41 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..
 
-PRJNAME=wizards
-TARGET=tutorials
+$(eval $(call gb_Module_Module,wizards))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Module_add_targets,wizards,\
+	AllLangResTarget_cal \
+	AllLangResTarget_dbw \
+	AllLangResTarget_eur \
+	AllLangResTarget_imp \
+	AllLangResTarget_tpl \
+	AllLangResTarget_wwz \
+	AllLangResTarget_wzi \
+	Jar_commonwizards \
+	Jar_agenda \
+	Jar_fax \
+	Jar_form \
+	Jar_letter \
+	Jar_query \
+	Jar_report \
+	Jar_reportbuilder \
+	Jar_table \
+	Jar_web \
+	Zip_depot \
+	Zip_euro \
+	Zip_form \
+	Zip_gimmicks \
+	Zip_import \
+	Zip_launcher \
+	Zip_schedule \
+	Zip_share \
+	Zip_standard \
+	Zip_template \
+	Zip_tools \
+	Zip_tutorials \
+	Zip_usr \
+	Zip_web \
+))
 
-.INCLUDE :  settings.mk
-.INCLUDE : $(PRJ)$/util$/target.pmk
-
-# --- Files --------------------------------------------------------
-
-ZIP1TARGET      = $(TUTORIALS_ALL_TARGET)
-ZIP1LIST        = *.xdl *.xba *.xlb
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4 ts=4:

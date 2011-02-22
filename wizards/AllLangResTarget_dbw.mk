@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -24,29 +24,22 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..
 
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,dbw))
 
+$(eval $(call gb_AllLangResTarget_add_srs,dbw,\
+	dbw/res \
+))
 
-PRJNAME=wizards
-TARGET=configall
+$(eval $(call gb_SrsTarget_SrsTarget,dbw/res))
 
-.INCLUDE : settings.mk
+$(eval $(call gb_SrsTarget_set_include,dbw/res,\
+	$$(INCLUDE) \
+	-I$(WORKDIR)/inc \
+))
 
-.INCLUDE : $(PRJ)$/util$/target.pmk
-
-
-
-ZIP1TARGET      = $(CONFIG_ALL_TARGET)
-
-ZIP1LIST        = * -x makefile.*
-
-
-
-
-.INCLUDE : target.mk
-
-
-
+$(eval $(call gb_SrsTarget_add_files,dbw/res,\
+	wizards/source/formwizard/dbwizres.src \
+))
 
 

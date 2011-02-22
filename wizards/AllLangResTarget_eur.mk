@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,31 +25,21 @@
 #
 #*************************************************************************
 
-PRJ		= ..$/..$/..$/..$/..
-PRJNAME = wizards
-TARGET  = reportbuilderwizard
-PACKAGE = com$/sun$/star$/wizards$/reportbuilder
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,eur))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_AllLangResTarget_add_srs,eur,\
+	eur/res \
+))
 
-.INCLUDE : settings.mk
-#.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+$(eval $(call gb_SrsTarget_SrsTarget,eur/res))
 
-JARFILES= unoil.jar jurt.jar ridl.jar juh.jar java_uno.jar commonwizards.jar report.jar
+$(eval $(call gb_SrsTarget_set_include,eur/res,\
+	$$(INCLUDE) \
+	-I$(WORKDIR)/inc \
+))
 
-# CUSTOMMANIFESTFILE= Manifest.mf
+$(eval $(call gb_SrsTarget_add_files,eur/res,\
+	wizards/source/euro/euro.src \
+))
 
-JARCLASSDIRS	= com$/sun$/star$/wizards$/reportbuilder
-JARTARGET	= $(TARGET).jar
-JARCLASSPATH = commonwizards.jar report.jar
 
-# --- Files --------------------------------------------------------
-
-JAVAFILES=                             \
-    ReportBuilderImplementation.java
-
-JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk

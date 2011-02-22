@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -24,29 +24,19 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..
 
+$(eval $(call gb_Zip_Zip,basicsrvform,$(SRCDIR)/wizards/source/formwizard))
 
+$(eval $(call gb_Zip_add_files,basicsrvform,\
+	DBMeta.xba \
+	develop.xba \
+	dialog.xlb \
+	DlgFormDB.xdl \
+	FormWizard.xba \
+	Language.xba \
+	Layouter.xba \
+	script.xlb \
+	tools.xba \
+))
 
-PRJNAME=wizards
-TARGET=configshare
-
-.INCLUDE : settings.mk
-
-.INCLUDE : $(PRJ)$/util$/target.pmk
-
-
-
-ZIP1TARGET      = $(CONFIG_SHARE_TARGET)
-
-ZIP1LIST        = * -x makefile.*
-
-
-
-
-.INCLUDE : target.mk
-
-
-
-
-
+# vim: set noet sw=4 ts=4:

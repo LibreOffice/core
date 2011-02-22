@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -24,18 +24,19 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-CONFIG_ALL_TARGET               = basicusr
-CONFIG_SHARE_TARGET             = basicshare
-EURO_ALL_TARGET                 = basicsrveuro
-FORMWIZARD_ALL_TARGET           = basicsrvform
-GIMMICKS_ALL_TARGET             = basicsrvgimmicks
-IMPORTWIZARD_ALL_TARGET         = basicsrvimport
-SCHEDULE_ALL_TARGET             = basicsrvschedule
-TEMPLATE_ALL_TARGET             = basicsrvtemplate
-TOOLS_ALL_TARGET                = basicsrvtools
-WEBWIZARD_ALL_TARGET            = basicsrvweb
-DEPOT_ALL_TARGET                = basicsrvdepot
-STANDARD_ALL_TARGET             = basicsrvstandard
-LAUNCHER_ALL_TARGET             = basicsrvlauncher
-TUTORIALS_ALL_TARGET            = basicsrvtutorials
 
+$(eval $(call gb_Zip_Zip,basicsrvgimmicks,$(SRCDIR)/wizards/source/gimmicks))
+
+$(eval $(call gb_Zip_add_files,basicsrvgimmicks,\
+	AutoText.xba \
+	ChangeAllChars.xba \
+	dialog.xlb \
+	GetTexts.xba \
+	ReadDir.xba \
+	ReadFolderDlg.xdl \
+	script.xlb \
+	UserfieldDlg.xdl \
+	Userfields.xba \
+))
+
+# vim: set noet sw=4 ts=4:

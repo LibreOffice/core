@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,29 +25,21 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,cal))
 
-PRJNAME=wizards
-TARGET=euro
+$(eval $(call gb_AllLangResTarget_add_srs,cal,\
+	cal/res \
+))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_SrsTarget_SrsTarget,cal/res))
 
-.INCLUDE :  settings.mk
-.INCLUDE : $(PRJ)$/util$/target.pmk
+$(eval $(call gb_SrsTarget_set_include,cal/res,\
+	$$(INCLUDE) \
+	-I$(WORKDIR)/inc \
+))
 
-# --- Files --------------------------------------------------------
+$(eval $(call gb_SrsTarget_add_files,cal/res,\
+	wizards/source/schedule/schedule.src \
+))
 
-#
-# testresource.
-#
-SRS2NAME =              euro
-SRC2FILES=              euro.src
-RESLIB2SRSFILES= $(SRS)$/euro.srs
-RESLIB2NAME=    eur
 
-ZIP1TARGET      = $(EURO_ALL_TARGET)
-ZIP1LIST        = *.xdl *.xba *.xlb
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
