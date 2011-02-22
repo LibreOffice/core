@@ -29,9 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-#include "txtcfg.hxx"
 #include "swcache.hxx"
 #include "fntcache.hxx"     // pFntCache  ( SwFont/ScrFont-PrtFont Cache )
 #include "swfntcch.hxx"     // pSwFontCache  ( SwAttrSet/SwFont Cache )

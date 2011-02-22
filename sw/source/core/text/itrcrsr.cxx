@@ -47,7 +47,6 @@
 #include <IDocumentSettingAccess.hxx>
 #include <pagefrm.hxx>
 
-#include "txtcfg.hxx"
 #include "itrtxt.hxx"
 #include "txtfrm.hxx"
 #include "flyfrms.hxx"
@@ -1287,7 +1286,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 
     // x ist der horizontale Offset innerhalb der Zeile.
     SwTwips x = rPoint.X();
-    CONST SwTwips nLeftMargin  = GetLineStart();
+    const SwTwips nLeftMargin  = GetLineStart();
     SwTwips nRightMargin = GetLineEnd();
     if( nRightMargin == nLeftMargin )
         nRightMargin += 30;

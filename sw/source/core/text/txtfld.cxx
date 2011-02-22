@@ -45,7 +45,6 @@
 #include "flyfrm.hxx"   //IsInBody()
 #include "viewimp.hxx"
 #include "txtatr.hxx"   // SwTxtFld
-#include "txtcfg.hxx"
 #include "swfont.hxx"   // NewFldPortion, new SwFont
 #include "fntcache.hxx"   // NewFldPortion, SwFntAccess
 #include "porfld.hxx"

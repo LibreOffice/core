@@ -36,7 +36,6 @@
 #include <dlelstnr.hxx>
 #include <swmodule.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <txtcfg.hxx>
 #include <guess.hxx>
 #include <inftxt.hxx>
 #include <pagefrm.hxx>

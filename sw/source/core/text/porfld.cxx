@@ -39,7 +39,6 @@
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <viewopt.hxx>  // SwViewOptions
-#include <txtcfg.hxx>
 #include <SwPortionHandler.hxx>
 #include <porlay.hxx>
 #include <porfld.hxx>

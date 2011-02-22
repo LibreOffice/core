@@ -49,7 +49,6 @@
 
 #include <unicode/ubidi.h>
 
-#include "txtcfg.hxx"
 #include "txtfrm.hxx"       // SwTxtFrm
 #include "inftxt.hxx"       // SwTxtSizeInfo
 #include "itrtxt.hxx"       // SwTxtCursor

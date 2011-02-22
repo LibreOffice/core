@@ -66,7 +66,6 @@
 #include <fmtline.hxx>
 #include <txtfrm.hxx>       // SwTxtFrm
 #include <sectfrm.hxx>      // SwSectFrm
-#include <txtcfg.hxx>       // DBG_LOOP
 #include <itrform2.hxx>       // Iteratoren
 #include <widorp.hxx>       // SwFrmBreak
 #include <txtcache.hxx>

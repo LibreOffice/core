@@ -50,7 +50,6 @@
 #include "txtfly.hxx"     // SwTxtFly
 #include "txtpaint.hxx"   // SwSaveClip
 #include "txtatr.hxx"     // SwTxtFlyCnt
-#include "txtcfg.hxx"
 #include "notxtfrm.hxx"
 #include "flyfrms.hxx"
 #include "fmtcnct.hxx"  // SwFmtChain

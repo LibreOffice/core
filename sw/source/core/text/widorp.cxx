@@ -45,7 +45,6 @@
 #include <fmtftn.hxx>
 #include <rowfrm.hxx>
 
-#include "txtcfg.hxx"
 #include "widorp.hxx"
 #include "txtfrm.hxx"
 #include "itrtxt.hxx"

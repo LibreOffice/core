@@ -34,7 +34,6 @@
 
 #include "frame.hxx"       // CalcFlyAdjust()
 #include "paratr.hxx"
-#include "txtcfg.hxx"
 #include "itrtxt.hxx"
 #include "porglue.hxx"
 #include "porlay.hxx"

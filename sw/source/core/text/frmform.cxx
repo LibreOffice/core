@@ -47,7 +47,6 @@
 #include <pam.hxx>
 #include <flyfrms.hxx>
 #include <fmtanchr.hxx>
-#include <txtcfg.hxx>
 #include <itrform2.hxx>     // SwTxtFormatter
 #include <widorp.hxx>       // Widows and Orphans
 #include <txtcache.hxx>
@@ -61,6 +60,9 @@
 #include <frmfmt.hxx>       // SwFrmFmt
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
+
+// Toleranzwert in der Formatierung und Textausgabe.
+#define SLOPPY_TWIPS    5
 
 class FormatLevel
 {

@@ -37,7 +37,6 @@
 #include <SwPortionHandler.hxx>
 
 #include "viewopt.hxx"  // SwViewOptions
-#include "txtcfg.hxx"
 #include "portab.hxx"
 #include "inftxt.hxx"
 #include "itrform2.hxx"

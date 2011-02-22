@@ -47,7 +47,6 @@
 #include <viewimp.hxx>  // SwViewImp
 #include <viewopt.hxx>  // SwViewOption
 #include <frmtool.hxx>  // DrawGraphic
-#include <txtcfg.hxx>
 #include <txtfrm.hxx>       // SwTxtFrm
 #include <itrpaint.hxx>     // SwTxtPainter
 #include <txtpaint.hxx>     // SwSaveClip

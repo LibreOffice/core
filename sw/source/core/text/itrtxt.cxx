@@ -42,7 +42,6 @@
 #include <tgrditem.hxx>
 #include <porfld.hxx>
 
-#include "txtcfg.hxx"
 #include "itrtxt.hxx"
 #include "txtfrm.hxx"
 #include "porfly.hxx"

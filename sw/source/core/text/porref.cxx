@@ -33,7 +33,6 @@
 #include <SwPortionHandler.hxx>
 #include "viewopt.hxx"  // SwViewOptions
 
-#include "txtcfg.hxx"
 #include "porref.hxx"
 #include "inftxt.hxx"       // GetTxtSize()
 

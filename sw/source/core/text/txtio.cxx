@@ -37,7 +37,6 @@
 #include "viewsh.hxx"       // IsDbg()
 #include "viewopt.hxx"      // IsDbg()
 #include "txtatr.hxx"
-#include "txtcfg.hxx"
 #include "txtfrm.hxx"       // IsDbg()
 #include "flyfrms.hxx"
 #include "inftxt.hxx"
@@ -57,6 +56,8 @@
 #include "pordrop.hxx"
 #include "pormulti.hxx"
 #include "ndhints.hxx"
+
+#define CONSTCHAR( name, string ) static const sal_Char name[] = string
 
 SvStream &operator<<( SvStream &rOs, const SwpHints & ) //$ ostream
 {

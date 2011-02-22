@@ -29,9 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
-#include "txtcfg.hxx"
 #include "porlay.hxx"
 #include "itrform2.hxx"
 #include "porglue.hxx"

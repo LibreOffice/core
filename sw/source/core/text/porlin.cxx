@@ -33,8 +33,6 @@
 #include <vcl/outdev.hxx>
 #include <SwPortionHandler.hxx>
 
-
-#include "txtcfg.hxx"
 #include "porlin.hxx"
 #include "inftxt.hxx"
 #include "portxt.hxx"

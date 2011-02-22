@@ -57,7 +57,6 @@
 
 #include "flyfrms.hxx"
 #include "viewsh.hxx"
-#include "txtcfg.hxx"
 #include "itrpaint.hxx"
 #include "txtfrm.hxx"   // pFrm
 #include "txtfly.hxx"

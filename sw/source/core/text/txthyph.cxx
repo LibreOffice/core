@@ -36,7 +36,6 @@
 #include <EnhancedPDFExportHelper.hxx>
 #include <viewopt.hxx>  // SwViewOptions
 #include <viewsh.hxx>
-#include <txtcfg.hxx>
 #include <SwPortionHandler.hxx>
 #include <porhyph.hxx>  //
 #include <inftxt.hxx>

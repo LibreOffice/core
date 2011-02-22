@@ -42,7 +42,6 @@
 #include <viewsh.hxx>
 #include <viewopt.hxx>      // SwViewOptions
 #include <paratr.hxx>       // SwFmtDrop
-#include <txtcfg.hxx>
 #include <itrform2.hxx>
 #include <porrst.hxx>
 #include <portab.hxx>       // pLastTab->

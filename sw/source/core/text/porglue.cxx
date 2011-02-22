@@ -36,7 +36,6 @@
 #include "viewopt.hxx"  // SwViewOptions
 #include <SwPortionHandler.hxx>
 
-#include "txtcfg.hxx"
 #include "porglue.hxx"
 #include "inftxt.hxx"
 #include "porlay.hxx"   // SwParaPortion, SetFull

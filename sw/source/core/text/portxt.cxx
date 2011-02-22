@@ -35,7 +35,6 @@
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <hintids.hxx>     // CH_TXTATR
 #include <SwPortionHandler.hxx>
-#include <txtcfg.hxx>
 #include <porlay.hxx>
 #include <inftxt.hxx>
 #include <guess.hxx>    // SwTxtGuess, Zeilenumbruch
