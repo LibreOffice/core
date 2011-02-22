@@ -31,6 +31,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     comphelper \
         editeng \
     framework \
+    idl \
     padmin \
     sfx2 \
     sot \
