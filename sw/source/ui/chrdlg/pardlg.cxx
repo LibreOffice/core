@@ -215,8 +215,7 @@ void SwParaDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
     }
     else if( TP_PARA_EXT == nId )
     {
-        // Seitenumbruch nur, wenn der Cursor im Body-Bereich und nicht in
-        // einer Tabelle steht
+        // pagebreak only when the cursor is in the body-area and not in a table
         const USHORT eType = rSh.GetFrmType(0,TRUE);
         if( !(FRMTYPE_BODY & eType) ||
             rSh.GetSelectionType() & nsSelectionType::SEL_TBL )

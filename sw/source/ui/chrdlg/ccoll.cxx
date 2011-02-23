@@ -149,7 +149,7 @@ CommandStruct SwCondCollItem::aCmds[] =
 TYPEINIT1_AUTOFACTORY(SwCondCollItem, SfxPoolItem)
 
 /****************************************************************************
-    Item fuer den Transport der Bedingungstabelle
+    Item for the transport of the condition table
 ****************************************************************************/
 
 

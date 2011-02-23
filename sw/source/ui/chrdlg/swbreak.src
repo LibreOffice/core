@@ -36,7 +36,7 @@ ModalDialog DLG_BREAK
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 161 , 114 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? Umbruch einfügen : Umbruch einf³gen */
+    /* ### ATTENTION: New Text in resource? Insert break : Insert break */
     Text [ en-US ] = "Insert Break" ;
     Moveable = TRUE ;
     OKButton BT_OK
@@ -114,7 +114,7 @@ ModalDialog DLG_BREAK
     {
         Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Seitennummer ~ändern : Seitennummer ~õndern */
+        /* ### ATTENTION: New text in resource? Change page number : Change page number */
         Text [ en-US ] = "Change page ~number" ;
         TabStop = TRUE ;
     };
