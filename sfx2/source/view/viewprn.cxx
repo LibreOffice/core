@@ -191,15 +191,19 @@ SfxPrinterController::~SfxPrinterController()
 
 const Any& SfxPrinterController::getSelectionObject() const
 {
+    const beans::PropertyValue* pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintSelectionOnly" ) ) );
+    if( pVal )
+    {
+        sal_Bool bSel = sal_False;
+        pVal->Value >>= bSel;
+        return bSel ? maSelection : maCompleteSelection;
+    }
+
     sal_Int32 nChoice = 0;
-    sal_Bool bSel = sal_False;
-    const beans::PropertyValue* pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ) );
+    pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) ) );
     if( pVal )
         pVal->Value >>= nChoice;
-    pVal = getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintSelectionOnly" ) ) );
-    if( pVal )
-        pVal->Value >>= bSel;
-    return (nChoice > 1 || bSel) ? maSelection : maCompleteSelection;
+    return (nChoice > 1) ? maSelection : maCompleteSelection;
 }
 
 Sequence< beans::PropertyValue > SfxPrinterController::getMergedOptions() const
@@ -722,10 +726,18 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                     }
                 }
             }
-            sal_Int32 nLen = aProps.getLength();
-            aProps.realloc( nLen + 1 );
-            aProps[nLen].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintSelectionOnly" ) );
-            aProps[nLen].Value = makeAny( bSelection );
+            // HACK: writer sets the SID_SELECTION item when printing directly and expects
+            // to get only the selection document in that case (see getSelectionObject)
+            // however it also reacts to the PrintContent property. We need this distinction here, too,
+            // else one of the combinations print / print direct and selection / all will not work.
+            // it would be better if writer handled this internally
+            if( nId == SID_PRINTDOCDIRECT )
+            {
+                sal_Int32 nLen = aProps.getLength();
+                aProps.realloc( nLen + 1 );
+                aProps[nLen].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintSelectionOnly" ) );
+                aProps[nLen].Value = makeAny( bSelection );
+            }
 
             ExecPrint( aProps, bIsAPI, (nId == SID_PRINTDOCDIRECT) );
 
