@@ -296,14 +296,6 @@ File gid_File_Dl_Reg
     // CompID = "D5313B1F-D09F-401F-B180-891F70D489ED";
 End
 
-File gid_File_Dl_Rmcxt
-    TXT_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_VER("rmcxt", "3");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "E0C091E3-7C18-4C32-B9CF-4D95AC243801";
-End
-
 File gid_File_Dl_Store
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -389,14 +381,6 @@ Shortcut gid_Shortcut_Dl_JavaUno
     Styles = (RELATIVE);
 End
 #endif
-
-File gid_File_Dl_UrpUno
-    TXT_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_NORMAL("urp_uno");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "D9F647ED-8E6F-4F80-8D2B-A45372B6AB60";
-End
 
 File gid_File_Dl_UnsafeUnoUno
     TXT_FILE_BODY;
@@ -678,20 +662,19 @@ File gid_File_Dl_Acceptor
     // CompID = "31183C51-C9A4-4D7A-A2F4-103252E1FEB0";
 End
 
+File gid_File_Dl_Binaryurp
+    TXT_FILE_BODY;
+    Dir = SCP2_URE_DL_DIR;
+    Name = SCP2_URE_DL_BARE("binaryurp.uno");
+    Styles = (PACKED);
+End
+
 File gid_File_Dl_Bootstrap
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("bootstrap.uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "2620B307-25DB-498F-B2B8-46D928165331";
-End
-
-File gid_File_Dl_Bridgefac
-    TXT_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_BARE("bridgefac.uno");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "E025163F-FE1E-4E8C-B0E5-49C08924A646";
 End
 
 File gid_File_Dl_Connector
@@ -777,14 +760,6 @@ File gid_File_Dl_Reflection
     Name = SCP2_URE_DL_BARE("reflection.uno");
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "601C7946-CFEB-4F56-9429-6D5963188DF3";
-End
-
-File gid_File_Dl_Remotebridge
-    TXT_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_BARE("remotebridge.uno");
-    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
-    // CompID = "B440B28E-B7AD-40C7-89E1-1508CA798347";
 End
 
 File gid_File_Dl_Streams
@@ -1131,7 +1106,6 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Dl_Salhelper,
             gid_File_Dl_Profile_Uno,
             gid_File_Dl_Reg,
-            gid_File_Dl_Rmcxt,
             gid_File_Dl_Store,
             gid_File_Dl_Xmlreader,
             gid_File_Dl_Jvmaccess,
@@ -1141,7 +1115,6 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Dl_Profile_Jvmfwk3rc,
             gid_File_Dl_ComnameUno,
             gid_File_Dl_JavaUno,
-            gid_File_Dl_UrpUno,
             gid_File_Dl_UnsafeUnoUno,
             gid_File_Dl_AffineUnoUno,
             gid_File_Dl_LogUnoUno,
@@ -1150,8 +1123,8 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Dl_Juh,
             gid_File_Dl_Juhx,
             gid_File_Dl_Acceptor,
+            gid_File_Dl_Binaryurp,
             gid_File_Dl_Bootstrap,
-            gid_File_Dl_Bridgefac,
             gid_File_Dl_Connector,
             gid_File_Dl_Introspection,
             gid_File_Dl_Invocadapt,
@@ -1161,7 +1134,6 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Dl_Namingservice,
             gid_File_Dl_Proxyfac,
             gid_File_Dl_Reflection,
-            gid_File_Dl_Remotebridge,
             gid_File_Dl_Stocservices,
             gid_File_Dl_Streams,
             gid_File_Dl_Textinstream,

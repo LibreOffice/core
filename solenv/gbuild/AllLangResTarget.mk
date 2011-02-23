@@ -28,11 +28,10 @@
 # SrsPartMergeTarget class
 
 gb_SrsPartMergeTarget_TRANSEXTARGET := $(call gb_Executable_get_target,transex3)
-gb_SrsPartMergeTarget_TRANSEXAUXDEPS := $(call gb_Library_get_target,tl) $(call gb_Library_get_target,sal)
 # gb_SrsPartMergeTarget_TRANSEXPRECOMMAND is set by the platforms
 
 gb_SrsPartMergeTarget_TRANSEXCOMMAND := $(gb_SrsPartMergeTarget_TRANSEXPRECOMMAND) $(gb_SrsPartMergeTarget_TRANSEXTARGET)
-gb_SrsPartMergeTarget_SDFLOCATION := $(SRCDIR)/l10n/$(INPATH)/misc/sdf/
+gb_SrsPartMergeTarget_SDFLOCATION := $(LOCDIR)/l10n/$(INPATH)/misc/sdf/
 gb_SrsPartMergeTarget_REPOS := $(gb_REPOS)
 
 define gb_SrsPartMergeTarget__command
@@ -49,7 +48,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 endef
 
 define gb_SrsPartMergeTarget__rules
-$$(call gb_SrsPartMergeTarget_get_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY) | $$(gb_SrsPartMergeTarget_TRANSEXTARGET) $$(gb_SrsPartMergeTarget_TRANSEXAUXDEPS)
+$$(call gb_SrsPartMergeTarget_get_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY) | $$(gb_SrsPartMergeTarget_TRANSEXTARGET)
     $$(if $$(SDF),$$(call gb_SrsPartMergeTarget__command,$$@,$$*,$$<),mkdir -p $$(dir $$@) && cp $$< $$@)
 
 endef
