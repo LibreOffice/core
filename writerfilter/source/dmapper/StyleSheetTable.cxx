@@ -136,7 +136,7 @@ void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, PropertyMapPtr pPr
     dmapper_logger->endElement();
 #endif
 
-    static TblStyleType pTypesToFix[] =
+    static const TblStyleType pTypesToFix[] =
     {
         TBL_STYLE_FIRSTROW,
         TBL_STYLE_LASTROW,
@@ -144,7 +144,7 @@ void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, PropertyMapPtr pPr
         TBL_STYLE_LASTCOL
     };
 
-    static PropertyIds pPropsToCheck[] =
+    static const PropertyIds pPropsToCheck[] =
     {
         PROP_BOTTOM_BORDER,
         PROP_TOP_BORDER,
@@ -237,7 +237,7 @@ void TableStyleSheetEntry::dumpXml( const TagLogger::Pointer_t pLogger )
 
 void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleType nStyleId )
 {
-    static PropertyIds pPropsToCheck[] =
+    static const PropertyIds pPropsToCheck[] =
     {
         PROP_BOTTOM_BORDER,
         PROP_TOP_BORDER,
@@ -280,7 +280,7 @@ void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleTyp
 PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask )
 {
     // Order from right to left
-    static TblStyleType aBitsOrder[] =
+    static const TblStyleType aBitsOrder[] =
     {
         TBL_STYLE_SWCELL,
         TBL_STYLE_SECELL,
@@ -1086,7 +1086,7 @@ const StyleSheetEntryPtr StyleSheetTable::FindParentStyleSheet(::rtl::OUString s
 }
 
 
-static const sal_Char *aStyleNamePairs[] =
+static const sal_Char* const aStyleNamePairs[] =
 {
     "Normal",                     "Standard",
     "heading 1",                  "Heading 1",
