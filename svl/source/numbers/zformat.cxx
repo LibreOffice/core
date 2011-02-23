@@ -59,48 +59,6 @@
 
 using namespace svt;
 
-#include <stdio.h>
-#include <string>
-#include <sys/time.h>
-
-namespace {
-
-class StackPrinter
-{
-public:
-    explicit StackPrinter(const char* msg) :
-        msMsg(msg)
-    {
-        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
-        mfStartTime = getTime();
-    }
-
-    ~StackPrinter()
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
-    }
-
-    void printTime(int line) const
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
-    }
-
-private:
-    double getTime() const
-    {
-        timeval tv;
-        gettimeofday(&tv, NULL);
-        return tv.tv_sec + tv.tv_usec / 1000000.0;
-    }
-
-    ::std::string msMsg;
-    double mfStartTime;
-};
-
-}
-
 namespace {
 struct Gregorian
     : public rtl::StaticWithInit<const ::rtl::OUString, Gregorian> {
@@ -645,8 +603,6 @@ SvNumberformat::SvNumberformat(String& rString,
         nNewStandardDefined(0),
         bStarFlag( FALSE )
 {
-    StackPrinter __stack_printer__("SvNumberformat::SvNumberformat");
-    fprintf(stdout, "SvNumberformat::SvNumberformat:   string = '%s'\n", rtl::OUStringToOString(rString, RTL_TEXTENCODING_UTF8).getStr());
     // If the group (AKA thousand) separator is a Non-Breaking Space (French)
     // replace all occurrences by a simple space.
     // The tokens will be changed to the LocaleData separator again later on.
@@ -1143,9 +1099,6 @@ xub_StrLen SvNumberformat::ImpGetNumber(String& rString,
 LanguageType SvNumberformat::ImpGetLanguageType( const String& rString,
         xub_StrLen& nPos )
 {
-    StackPrinter __stack_printer__("SvNumberformat::ImpGetLanguageType");
-    fprintf(stdout, "SvNumberformat::ImpGetLanguageType:   string = '%s'\n", rtl::OUStringToOString(rString, RTL_TEXTENCODING_UTF8).getStr());
-
     sal_Int32 nNum = 0;
     sal_Unicode cToken = 0;
     xub_StrLen nLen = rString.Len();
@@ -1170,7 +1123,6 @@ LanguageType SvNumberformat::ImpGetLanguageType( const String& rString,
             return LANGUAGE_DONTKNOW;
         ++nPos;
     }
-    fprintf(stdout, "SvNumberformat::ImpGetLanguageType:   number = %ld\n", nNum);
     return (nNum && (cToken == ']' || nPos == nLen)) ? (LanguageType)nNum :
         LANGUAGE_DONTKNOW;
 }
@@ -1179,7 +1131,6 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                                  xub_StrLen& nPos,
                                  String& sSymbol)
 {
-    StackPrinter __stack_printer__("SvNumberformat::ImpNextSymbol");
     short eSymbolType = BRACKET_SYMBOLTYPE_FORMAT;
     sal_Unicode cToken;
     sal_Unicode cLetter = ' ';                               // Zwischenergebnis
@@ -1445,7 +1396,6 @@ short SvNumberformat::ImpNextSymbol(String& rString,
         }                                   // of switch
     }                                       // of while
 
-    fprintf(stdout, "SvNumberformat::ImpNextSymbol:   symbol = '%s'\n", rtl::OUStringToOString(sSymbol, RTL_TEXTENCODING_UTF8).getStr());
     return eSymbolType;
 }
 
