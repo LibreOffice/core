@@ -595,6 +595,7 @@ void ORowSet::freeResources( bool _bComplete )
         m_bAfterLast    = sal_False;
         m_bNew          = sal_False;
         m_bModified     = sal_False;
+        m_bIsInsertRow  = sal_False;
         m_bLastKnownRowCountFinal = sal_False;
         m_nLastKnownRowCount      = 0;
         if ( m_aOldRow.isValid() )
@@ -707,6 +708,7 @@ void ORowSet::updateValue(sal_Int32 columnIndex,const ORowSetValue& x)
     ORowSetValueVector::Vector& rRow = ((*m_aCurrentRow)->get());
     ORowSetNotifier aNotify(this,rRow);
     m_pCache->updateValue(columnIndex,x,rRow,aNotify.getChangedColumns());
+    m_bModified = m_bModified || !aNotify.getChangedColumns().empty();
     aNotify.firePropertyChange();
 }
 // -------------------------------------------------------------------------
@@ -722,6 +724,7 @@ void SAL_CALL ORowSet::updateNull( sal_Int32 columnIndex ) throw(SQLException, R
     ORowSetValueVector::Vector& rRow = ((*m_aCurrentRow)->get());
     ORowSetNotifier aNotify(this,rRow);
     m_pCache->updateNull(columnIndex,rRow,aNotify.getChangedColumns());
+    m_bModified = m_bModified || !aNotify.getChangedColumns().empty();
     aNotify.firePropertyChange();
 }
 // -------------------------------------------------------------------------
@@ -819,6 +822,7 @@ void SAL_CALL ORowSet::updateCharacterStream( sal_Int32 columnIndex, const Refer
     ORowSetValueVector::Vector& rRow = ((*m_aCurrentRow)->get());
     ORowSetNotifier aNotify(this,rRow);
     m_pCache->updateCharacterStream(columnIndex,x,length,rRow,aNotify.getChangedColumns());
+    m_bModified = m_bModified || !aNotify.getChangedColumns().empty();
     aNotify.firePropertyChange();
 }
 // -------------------------------------------------------------------------
@@ -862,6 +866,7 @@ void SAL_CALL ORowSet::updateObject( sal_Int32 columnIndex, const Any& x ) throw
         ORowSetValueVector::Vector& rRow = ((*m_aCurrentRow)->get());
         ORowSetNotifier aNotify(this,rRow);
         m_pCache->updateObject(columnIndex,aNewValue,rRow,aNotify.getChangedColumns());
+        m_bModified = m_bModified || !aNotify.getChangedColumns().empty();
         aNotify.firePropertyChange();
     }
 }
@@ -875,6 +880,7 @@ void SAL_CALL ORowSet::updateNumericObject( sal_Int32 columnIndex, const Any& x,
     ORowSetValueVector::Vector& rRow = ((*m_aCurrentRow)->get());
     ORowSetNotifier aNotify(this,rRow);
     m_pCache->updateNumericObject(columnIndex,x,scale,rRow,aNotify.getChangedColumns());
+    m_bModified = m_bModified || !aNotify.getChangedColumns().empty();
     aNotify.firePropertyChange();
 }
 // -------------------------------------------------------------------------
@@ -892,52 +898,49 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
     if(!m_pCache || !m_bNew || !m_bModified || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throwFunctionSequenceException(*this);
 
-    if(m_bModified)
+    // remember old value for fire
+    sal_Bool bOld = m_bNew;
+
+    ORowSetRow aOldValues;
+    if ( !m_aCurrentRow.isNull() )
+        aOldValues = new ORowSetValueVector( m_aCurrentRow->getBody() );
+    Sequence<Any> aChangedBookmarks;
+    RowsChangeEvent aEvt(*this,RowChangeAction::INSERT,1,aChangedBookmarks);
+    notifyAllListenersRowBeforeChange(aGuard,aEvt);
+
+    ::std::vector< Any > aBookmarks;
+    sal_Bool bInserted = m_pCache->insertRow(aBookmarks);
+
+    // make sure that our row is set to the new inserted row before clearing the insert flags in the cache
+    m_pCache->resetInsertRow(bInserted);
+
+    // notification order
+    // - column values
+    setCurrentRow( sal_False, sal_True, aOldValues, aGuard ); // we don't move here
+
+    // read-only flag restored
+    impl_restoreDataColumnsWriteable_throw();
+
+    // - rowChanged
+    notifyAllListenersRowChanged(aGuard,aEvt);
+
+    if ( !aBookmarks.empty() )
     {
-        // remember old value for fire
-        sal_Bool bOld = m_bNew;
-
-        ORowSetRow aOldValues;
-        if ( !m_aCurrentRow.isNull() )
-            aOldValues = new ORowSetValueVector( m_aCurrentRow->getBody() );
-        Sequence<Any> aChangedBookmarks;
-        RowsChangeEvent aEvt(*this,RowChangeAction::INSERT,1,aChangedBookmarks);
-        notifyAllListenersRowBeforeChange(aGuard,aEvt);
-
-        ::std::vector< Any > aBookmarks;
-        sal_Bool bInserted = m_pCache->insertRow(aBookmarks);
-
-        // make sure that our row is set to the new inserted row before clearing the insert flags in the cache
-        m_pCache->resetInsertRow(bInserted);
-
-        // notification order
-        // - column values
-        setCurrentRow( sal_False, sal_True, aOldValues, aGuard ); // we don't move here
-
-        // read-only flag restored
-        impl_restoreDataColumnsWriteable_throw();
-
-        // - rowChanged
-        notifyAllListenersRowChanged(aGuard,aEvt);
-
-        if ( !aBookmarks.empty() )
-        {
-            RowsChangeEvent aUpEvt(*this,RowChangeAction::UPDATE,aBookmarks.size(),Sequence<Any>(&(*aBookmarks.begin()),aBookmarks.size()));
-            notifyAllListenersRowChanged(aGuard,aUpEvt);
-        }
-
-        // - IsModified
-        if(!m_bModified)
-            fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
-        OSL_ENSURE( !m_bModified, "ORowSet::insertRow: just updated, but _still_ modified?" );
-
-        // - IsNew
-        if(m_bNew != bOld)
-            fireProperty(PROPERTY_ID_ISNEW,m_bNew,bOld);
-
-        // - RowCount/IsRowCountFinal
-        fireRowcount();
+        RowsChangeEvent aUpEvt(*this,RowChangeAction::UPDATE,aBookmarks.size(),Sequence<Any>(&(*aBookmarks.begin()),aBookmarks.size()));
+        notifyAllListenersRowChanged(aGuard,aUpEvt);
     }
+
+    // - IsModified
+    if(!m_bModified)
+        fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
+    OSL_ENSURE( !m_bModified, "ORowSet::insertRow: just updated, but _still_ modified?" );
+
+    // - IsNew
+    if(m_bNew != bOld)
+        fireProperty(PROPERTY_ID_ISNEW,m_bNew,bOld);
+
+    // - RowCount/IsRowCountFinal
+    fireRowcount();
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ORowSet::getRow(  ) throw(SQLException, RuntimeException)
@@ -946,7 +949,7 @@ sal_Int32 SAL_CALL ORowSet::getRow(  ) throw(SQLException, RuntimeException)
     checkCache();
 
     // check if we are inserting a row
-    return (m_pCache && ( m_pCache->m_bNew || m_bModified )) ? 0 : ORowSetBase::getRow();
+    return (m_pCache && isInsertRow()) ? 0 : ORowSetBase::getRow();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
@@ -975,6 +978,7 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
         aEvt.Rows += aBookmarks.size();
         m_aBookmark     = m_pCache->getBookmark();
         m_aCurrentRow   = m_pCache->m_aMatrixIter;
+        m_bIsInsertRow  = sal_False;
         if ( m_pCache->m_aMatrixIter != m_pCache->getEnd() && (*m_pCache->m_aMatrixIter).isValid() )
         {
             if ( m_pCache->isResultSetChanged() )
@@ -1085,6 +1089,7 @@ void ORowSet::implCancelRowUpdates( sal_Bool _bNotifyModified ) SAL_THROW( ( SQL
 
     m_aBookmark     = m_pCache->getBookmark();
     m_aCurrentRow   = m_pCache->m_aMatrixIter;
+    m_bIsInsertRow  = sal_False;
     m_aCurrentRow.setBookmark(m_aBookmark);
 
     // notification order
@@ -1219,6 +1224,7 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
 
         m_pCache->moveToInsertRow();
         m_aCurrentRow = m_pCache->m_aInsertRow;
+        m_bIsInsertRow  = sal_True;
 
         // set read-only flag to false
         impl_setDataColumnsWriteable_throw();
@@ -1829,6 +1835,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
             }
             m_pCache->setFetchSize(m_nFetchSize);
             m_aCurrentRow   = m_pCache->createIterator(this);
+            m_bIsInsertRow  = sal_False;
             m_aOldRow       = m_pCache->registerOldRow();
         }
 
@@ -2716,6 +2723,7 @@ void ORowSet::doCancelModification( )
         m_pCache->cancelRowModification();
     }
     m_bModified = sal_False;
+    m_bIsInsertRow = sal_False;
 }
 
 // -----------------------------------------------------------------------------
@@ -2739,14 +2747,12 @@ sal_Bool ORowSet::isNew( )
 // -----------------------------------------------------------------------------
 void ORowSet::checkUpdateIterator()
 {
-    if(!m_bModified && !m_bNew)
+    if(!m_bIsInsertRow)
     {
         m_pCache->setUpdateIterator(m_aCurrentRow);
         m_aCurrentRow = m_pCache->m_aInsertRow;
-        m_bModified = sal_True;
-    } // if(!m_bModified && !m_bNew)
-    else if ( m_bNew ) // here we are modifing a value
-        m_bModified = sal_True;
+        m_bIsInsertRow = sal_True;
+    }
 }
 // -----------------------------------------------------------------------------
 void ORowSet::checkUpdateConditions(sal_Int32 columnIndex)

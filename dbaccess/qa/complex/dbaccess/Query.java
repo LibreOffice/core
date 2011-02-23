@@ -40,7 +40,8 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 // ------------------------------------------
 
-public class Query extends TestCase {
+public class Query extends TestCase
+{
 
     connectivity.tools.HsqlDatabase m_database;
 
@@ -49,17 +50,17 @@ public class Query extends TestCase {
     {
         try
         {
-            if ( m_database == null )
+            if (m_database == null)
             {
-                final CRMDatabase database = new CRMDatabase( getMSF(), false );
+                final CRMDatabase database = new CRMDatabase(getMSF(), false);
                 m_database = database.getDatabase();
             }
         }
-        catch( Exception e )
+        catch (Exception e)
         {
-            System.out.println( "could not create the test case, error message:\n" + e.getMessage() );
-            e.printStackTrace( System.err );
-            fail( "failed to created the test case");
+            System.out.println("could not create the test case, error message:\n" + e.getMessage());
+            e.printStackTrace(System.err);
+            fail("failed to created the test case");
         }
     }
 
@@ -68,7 +69,6 @@ public class Query extends TestCase {
 //    {
 //        return (XMultiServiceFactory)param.getMSF();
 //    }
-
     // --------------------------------------------------------------------------------------------------------
     @Test
     public void testQueryColumns()
