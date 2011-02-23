@@ -149,7 +149,7 @@ public:
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
+    virtual ::com::sun::star::uno::Any SAL_CALL GetPropertyValue(
             const ::rtl::OUString& rPropertyName)
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
@@ -264,6 +264,8 @@ public:
 
 class SwXODFCheckboxField : public SwXFieldmark
 {
+private:
+    ::sw::mark::ICheckboxFieldmark* getCheckboxFieldmark();
 public:
     SwXODFCheckboxField( ::sw::mark::IMark* pBkm = 0, SwDoc* pDoc = 0) : SwXFieldmark(true,
             pBkm, pDoc) {}
@@ -274,6 +276,12 @@ public:
         throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::beans::PropertyVetoException,
                 ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
+            const ::rtl::OUString& rPropertyName)
+        throw (::com::sun::star::beans::UnknownPropertyException,
                 ::com::sun::star::lang::WrappedTargetException,
                 ::com::sun::star::uno::RuntimeException);
 
