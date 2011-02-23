@@ -489,7 +489,23 @@ private:
                    xub_StrLen& nPos,
                    String& sSymbol );
 
-    // get xxx of "[$-xxx]" as LanguageType, starting at and advancing position nPos
+    /**
+     * Parse the content of '[$-xxx] or '[$-xxxxxxxx]' and extract the
+     * language type from it.  Given the string, start parsing at position
+     * specified by nPos, and store the end position with nPos when the
+     * parsing is complete.  The nPos should point to the '$' before the
+     * parsing, and to the closing bracket after the parsing.  When the
+     * content is [$-xxx], the xxx part represents the language type (aka
+     * LCID) in hex numerals.  When the content is [$-xxxxxxxx] the last 4
+     * digits is the LCID (again in hex).
+     *
+     * @param rString input string
+     * @param nPos position (see above).
+     *
+     * @return LCID that specifies language type.  See i18npool/lang.h for a
+     *         complete list of language types.  These numbers also correspond
+     *         with the numbers used by Microsoft Office.
+     */
     SVL_DLLPRIVATE static LanguageType ImpGetLanguageType( const String& rString, xub_StrLen& nPos );
 
     // standard number output
