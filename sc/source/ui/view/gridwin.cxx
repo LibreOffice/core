@@ -4399,7 +4399,6 @@ void ScGridWindow::UpdateFormulas()
     Point aScrPos = pViewData->GetScrPos( nX1, nY1, eWhich );
     long nMirrorWidth = GetSizePixel().Width();
     BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
-    // unused variable long nLayoutSign = bLayoutRTL ? -1 : 1;
     if ( bLayoutRTL )
     {
         long nEndPixel = pViewData->GetScrPos( nX2+1, nPosY, eWhich ).X();
