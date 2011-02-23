@@ -1293,11 +1293,7 @@ oslGenericFunction SAL_CALL LocaleData::getFunctionSymbol( const Locale& rLocale
 
     LocaleDataLookupTableItem *pCachedItem = 0;
 
-    if (l <= 0)
-        // At minimum we need the lang name.
-        throw RuntimeException();
-
-    if (c > 0 && v > 0)
+    if (l > 0 && c > 0 && v > 0)
     {
         // load function with name <func>_<lang>_<country>_<variant>
         pSymbol = rLookupTable.getFunctionSymbolByName(
@@ -1305,7 +1301,7 @@ oslGenericFunction SAL_CALL LocaleData::getFunctionSymbol( const Locale& rLocale
             pFunction, &pCachedItem);
     }
 
-    if (!pSymbol && c > 0)
+    if (!pSymbol && l > 0 && c > 0)
     {
         // load function with name <ase>_<lang>_<country>
         pSymbol = rLookupTable.getFunctionSymbolByName(
@@ -1313,7 +1309,7 @@ oslGenericFunction SAL_CALL LocaleData::getFunctionSymbol( const Locale& rLocale
             pFunction, &pCachedItem);
     }
 
-    if (!pSymbol && c > 0 &&
+    if (!pSymbol && l > 0 && c > 0 &&
         rLocale.Language.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("zh")) &&
         (rLocale.Country.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("HK")) ||
          rLocale.Country.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MO"))))
