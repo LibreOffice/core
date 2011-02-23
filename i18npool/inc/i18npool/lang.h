@@ -515,6 +515,11 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_USER_GIKUYU                0x0655
 #define LANGUAGE_USER_RUSYN_UKRAINE         0x0656
 #define LANGUAGE_USER_RUSYN_SLOVAKIA        0x8256  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_USER_RUSYN_UKRAINE)) */
+#define LANGUAGE_USER_YIDDISH_US            0x083D  /* makeLangID( 0x20, getPrimaryLanguage( LANGUAGE_YIDDISH)) */
+#define LANGUAGE_USER_LIMBU                 0x0657
+#define LANGUAGE_USER_LOJBAN                0x0658  /* no locale */
+#define LANGUAGE_USER_KABYLE                0x0659
+#define LANGUAGE_USER_HAITIAN               0x065A
 
 
 #endif /* INCLUDED_I18NPOOL_LANG_H */

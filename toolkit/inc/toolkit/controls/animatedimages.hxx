@@ -57,7 +57,7 @@ namespace toolkit
     class AnimatedImagesControl : public AnimatedImagesControl_Base
     {
     public:
-                                    AnimatedImagesControl();
+                                    AnimatedImagesControl( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const & i_factory );
         ::rtl::OUString             GetComponentServiceName();
 
         // XAnimation
@@ -93,7 +93,7 @@ namespace toolkit
     class AnimatedImagesControlModel : public AnimatedImagesControlModel_Base
     {
     public:
-                                        AnimatedImagesControlModel();
+                                        AnimatedImagesControlModel( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const & i_factory );
                                         AnimatedImagesControlModel( const AnimatedImagesControlModel& i_copySource );
 
         virtual UnoControlModel*        Clone() const;
