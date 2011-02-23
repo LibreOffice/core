@@ -747,24 +747,20 @@ struct ConventionOOO_A1 : public Convention_A1
     static String MakeTabStr( const ScCompiler& rComp, SCTAB nTab, String& aDoc )
     {
         String aString;
-        rtl::OUString aTmp;
+        OUString aTmp;
         if (!rComp.GetDoc()->GetName( nTab, aTmp ))
             aString = ScGlobal::GetRscString(STR_NO_REF_TABLE);
         else
         {
             aString = aTmp;
-            if ( aString.GetChar(0) == '\'' )
-            {   // "'Doc'#Tab"
-                xub_StrLen nPos = ScGlobal::FindUnquoted( aString, SC_COMPILER_FILE_TAB_SEP);
-                if (nPos != STRING_NOTFOUND && nPos > 0 && aString.GetChar(nPos-1) == '\'')
-                {
-                    aDoc = aString.Copy( 0, nPos + 1 );
-                    aString.Erase( 0, nPos + 1 );
-                    aDoc = INetURLObject::decode( aDoc, INET_HEX_ESCAPE,
-                        INetURLObject::DECODE_UNAMBIGUOUS );
-                }
-                else
-                    aDoc.Erase();
+            // "'Doc'#Tab"
+            xub_StrLen nPos = ScCompiler::GetDocTabPos( aString );
+            if ( nPos != STRING_NOTFOUND )
+            {
+                aDoc = aString.Copy( 0, nPos + 1 );
+                aString.Erase( 0, nPos + 1 );
+                aDoc = INetURLObject::decode( aDoc, INET_HEX_ESCAPE,
+                                              INetURLObject::DECODE_UNAMBIGUOUS );
             }
             else
                 aDoc.Erase();
@@ -1091,18 +1087,15 @@ struct ConventionXL
         rTabName = aTmp;
 
         // Cheesy hack to unparse the OOO style "'Doc'#Tab"
-        if ( rTabName.GetChar(0) == '\'' )
+        xub_StrLen nPos = ScCompiler::GetDocTabPos( rTabName);
+        if (nPos != STRING_NOTFOUND)
         {
-            xub_StrLen nPos = ScGlobal::FindUnquoted( rTabName, SC_COMPILER_FILE_TAB_SEP);
-            if (nPos != STRING_NOTFOUND && nPos > 0 && rTabName.GetChar(nPos-1) == '\'')
-            {
-                rDocName = rTabName.Copy( 0, nPos );
-                // TODO : More research into how XL escapes the doc path
-                rDocName = INetURLObject::decode( rDocName, INET_HEX_ESCAPE,
+            rDocName = rTabName.Copy( 0, nPos );
+            // TODO : More research into how XL escapes the doc path
+            rDocName = INetURLObject::decode( rDocName, INET_HEX_ESCAPE,
                     INetURLObject::DECODE_UNAMBIGUOUS );
-                rTabName.Erase( 0, nPos + 1 );
-                bHasDoc = true;
-            }
+            rTabName.Erase( 0, nPos + 1 );
+            bHasDoc = true;
         }
 
         // XL uses the same sheet name quoting conventions in both modes
@@ -1767,6 +1760,18 @@ void ScCompiler::CheckTabQuotes( String& rString,
         rString.Insert( '\'', 0 );
         rString += '\'';
     }
+}
+
+
+xub_StrLen ScCompiler::GetDocTabPos( const String& rString )
+{
+    if (rString.GetChar(0) != '\'')
+        return STRING_NOTFOUND;
+    xub_StrLen nPos = ScGlobal::FindUnquoted( rString, SC_COMPILER_FILE_TAB_SEP);
+    // it must be 'Doc'#
+    if (nPos != STRING_NOTFOUND && rString.GetChar(nPos-1) != '\'')
+        nPos = STRING_NOTFOUND;
+    return nPos;
 }
 
 //---------------------------------------------------------------------------
