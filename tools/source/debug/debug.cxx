@@ -1717,7 +1717,6 @@ void DbgOut( const sal_Char* pMsg, sal_uInt16 nDbgOut, const sal_Char* pFile, sa
         if ( pData->pDbgAbort != NULL )
             pData->pDbgAbort( aBufOut );
         abort();
-        nOut = DBG_OUT_DEBUGGER;
     }
 
     if ( nOut == DBG_OUT_DEBUGGER )
