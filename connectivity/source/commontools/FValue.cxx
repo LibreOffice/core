@@ -787,11 +787,8 @@ sal_Bool operator==(const DateTime& _rLH,const DateTime& _rRH)
 
 bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
 {
-    if(m_eTypeKind != _rRH.m_eTypeKind)
-        return false;
-    if ( m_bSigned != _rRH.m_bSigned )
-        return false;
-    if(m_bNull != _rRH.isNull())
+    if ( m_eTypeKind != _rRH.m_eTypeKind ||
+         m_bNull != _rRH.isNull())
         return false;
     if(m_bNull && _rRH.isNull())
         return true;
@@ -802,16 +799,29 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
     {
         case DataType::VARCHAR:
         case DataType::CHAR:
-        case DataType::DECIMAL:
-        case DataType::NUMERIC:
         case DataType::LONGVARCHAR:
         {
             ::rtl::OUString aVal1(m_aValue.m_pString);
             ::rtl::OUString aVal2(_rRH.m_aValue.m_pString);
-            bRet = aVal1 == aVal2;
+            return aVal1 == aVal2;
             break;
         }
+        default:
+            if ( m_bSigned != _rRH.m_bSigned )
+                return false;
+            break;
+    }
 
+    switch(m_eTypeKind)
+    {
+        case DataType::DECIMAL:
+        case DataType::NUMERIC:
+            {
+                ::rtl::OUString aVal1(m_aValue.m_pString);
+                ::rtl::OUString aVal2(_rRH.m_aValue.m_pString);
+                bRet = aVal1 == aVal2;
+            }
+            break;
         case DataType::FLOAT:
             bRet = *(float*)m_aValue.m_pValue == *(float*)_rRH.m_aValue.m_pValue;
             break;
