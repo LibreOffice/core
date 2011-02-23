@@ -37,7 +37,6 @@
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <memory.h>
-#define t_print printf
 
 namespace rtl_alloc
 {
@@ -66,31 +65,25 @@ class Memory : public CppUnit::TestFixture
 
 public:
     Memory()
-            :m_pMemory(NULL),
-             m_nSizeOfMemory(50 * 1024 * 1024)
-        {
-        }
+        : m_pMemory(NULL)
+        , m_nSizeOfMemory(1024)
+    {
+    }
 
     // initialise your test code values here.
     void setUp()
     {
-            t_print("allocate memory\n");
-            m_pMemory = (char*) rtl_allocateMemory( m_nSizeOfMemory );
+        m_pMemory = (char*) rtl_allocateMemory( m_nSizeOfMemory );
     }
 
     void tearDown()
     {
-            t_print("free memory\n");
-            rtl_freeMemory(m_pMemory);
-            m_pMemory = NULL;
+        rtl_freeMemory(m_pMemory);
+        m_pMemory = NULL;
     }
 
-    // insert your test code here.
     void rtl_allocateMemory_001()
     {
-        // this is demonstration code
-        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
-
         CPPUNIT_ASSERT_MESSAGE( "Can get zero memory.", m_pMemory != NULL);
         memset(m_pMemory, 1, m_nSizeOfMemory);
         CPPUNIT_ASSERT_MESSAGE( "memory contains wrong value.", checkMemory(m_pMemory, m_nSizeOfMemory, 1) == true);
@@ -98,8 +91,7 @@ public:
 
     void rtl_reallocateMemory_001()
     {
-        t_print("reallocate memory\n");
-        sal_uInt32 nSize = 10 * 1024 * 1024;
+        sal_uInt32 nSize = 2 * 1024;
         m_pMemory = (char*)rtl_reallocateMemory(m_pMemory, nSize);
 
         CPPUNIT_ASSERT_MESSAGE( "Can reallocate memory.", m_pMemory != NULL);
@@ -107,19 +99,9 @@ public:
         CPPUNIT_ASSERT_MESSAGE( "memory contains wrong value.", checkMemory(m_pMemory, nSize, 2) == true);
     }
 
-    // void rtl_freeMemory_001()
-    //     {
-    //         // CPPUNIT_ASSERT_STUB();
-    //     }
-
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
-
     CPPUNIT_TEST_SUITE(Memory);
     CPPUNIT_TEST(rtl_allocateMemory_001);
     CPPUNIT_TEST(rtl_reallocateMemory_001);
-    // CPPUNIT_TEST(rtl_freeMemory_001);
     CPPUNIT_TEST_SUITE_END();
 }; // class test
 
@@ -131,45 +113,39 @@ class ZeroMemory : public CppUnit::TestFixture
 
 public:
     ZeroMemory()
-            :m_pZeroMemory(NULL),
-             m_nSizeOfZeroMemory( 50 * 1024 * 1024 )
-        {
-        }
+        : m_pZeroMemory(NULL)
+        , m_nSizeOfZeroMemory( 50 * 1024 * 1024 )
+    {
+    }
 
     // initialise your test code values here.
     void setUp()
-        {
-            t_print("allocate zero memory\n");
-            m_pZeroMemory = (char*) rtl_allocateZeroMemory( m_nSizeOfZeroMemory );
-        }
+    {
+        m_pZeroMemory = (char*) rtl_allocateZeroMemory( m_nSizeOfZeroMemory );
+    }
 
     void tearDown()
     {
-            t_print("free zero memory\n");
-            rtl_freeZeroMemory(m_pZeroMemory, m_nSizeOfZeroMemory);
-            // LLA: no check possible, may GPF if there is something wrong.
-            // CPPUNIT_ASSERT_MESSAGE( "Can get zero memory.", pZeroMemory != NULL);
+        rtl_freeZeroMemory(m_pZeroMemory, m_nSizeOfZeroMemory);
+        // LLA: no check possible, may GPF if there is something wrong.
+        // CPPUNIT_ASSERT_MESSAGE( "Can get zero memory.", pZeroMemory != NULL);
     }
 
     // insert your test code here.
 
     void rtl_allocateZeroMemory_001()
     {
-            CPPUNIT_ASSERT_MESSAGE( "Can get zero memory.", m_pZeroMemory != NULL);
-            CPPUNIT_ASSERT_MESSAGE( "memory contains wrong value.", checkMemory(m_pZeroMemory, m_nSizeOfZeroMemory, 0) == true);
+        CPPUNIT_ASSERT_MESSAGE( "Can get zero memory.", m_pZeroMemory != NULL);
+        CPPUNIT_ASSERT_MESSAGE( "memory contains wrong value.", checkMemory(m_pZeroMemory, m_nSizeOfZeroMemory, 0) == true);
 
-            memset(m_pZeroMemory, 3, m_nSizeOfZeroMemory);
-            CPPUNIT_ASSERT_MESSAGE( "memory contains wrong value.", checkMemory(m_pZeroMemory, m_nSizeOfZeroMemory, 3) == true);
+        memset(m_pZeroMemory, 3, m_nSizeOfZeroMemory);
+        CPPUNIT_ASSERT_MESSAGE( "memory contains wrong value.", checkMemory(m_pZeroMemory, m_nSizeOfZeroMemory, 3) == true);
     }
-
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(ZeroMemory);
     CPPUNIT_TEST(rtl_allocateZeroMemory_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class test
+};
 
 // -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_alloc::Memory);
@@ -177,10 +153,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_alloc::ZeroMemory);
 } // namespace rtl_alloc
 
 
-// -----------------------------------------------------------------------------
-
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
