@@ -139,7 +139,7 @@ typedef std::vector< const SmSym * >            SymbolPtrVec_t;
 
 struct lt_SmSymPtr : public std::binary_function< const SmSym *, const SmSym *, bool >
 {
-    bool operator() ( const SmSym *pSym1, const SmSym *pSym2 )
+    bool operator() ( const SmSym *pSym1, const SmSym *pSym2 ) const
     {
         return pSym1->GetCharacter() < pSym2->GetCharacter();
     }
