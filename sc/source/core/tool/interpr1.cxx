@@ -6417,9 +6417,27 @@ void ScInterpreter::ScAddressFunc()
     const ScAddress aAdr( nCol, nRow, 0);
     aAdr.Format( aRefStr, nFlags, pDok, aDetails );
 
-    if( nParamCount >= 5 )
+    if( nParamCount >= 5 && sTabStr.Len() )
     {
-        ScCompiler::CheckTabQuotes( sTabStr, eConv);
+        String aDoc;
+        if (eConv == FormulaGrammar::CONV_OOO)
+        {
+            // Isolate Tab from 'Doc'#Tab
+            xub_StrLen nPos = ScCompiler::GetDocTabPos( sTabStr);
+            if (nPos != STRING_NOTFOUND)
+            {
+                if (sTabStr.GetChar(nPos+1) == '$')
+                    ++nPos;     // also split 'Doc'#$Tab
+                aDoc = sTabStr.Copy( 0, nPos+1);
+                sTabStr.Erase( 0, nPos+1);
+            }
+        }
+        /* TODO: yet unsupported external reference in CONV_XL_R1C1 syntax may
+         * need some extra handling to isolate Tab from Doc. */
+        if (sTabStr.GetChar(0) != '\'' || sTabStr.GetChar(sTabStr.Len()-1) != '\'')
+            ScCompiler::CheckTabQuotes( sTabStr, eConv);
+        if (aDoc.Len())
+            sTabStr.Insert( aDoc, 0);
         sTabStr += static_cast<sal_Unicode>(eConv == FormulaGrammar::CONV_XL_R1C1 ? '!' : '.');
         sTabStr += aRefStr;
         PushString( sTabStr );
