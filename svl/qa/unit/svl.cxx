@@ -64,6 +64,11 @@
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
+#include <i18npool/lang.h>
+
+#include "svl/zforlist.hxx"
+#include "svl/zformat.hxx"
+
 #include <iostream>
 
 using namespace ::com::sun::star;
@@ -126,6 +131,7 @@ Test::~Test()
 
 void Test::testNumberFormat()
 {
+    SvNumberFormatter aFormatter(LANGUAGE_ENGLISH_US);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

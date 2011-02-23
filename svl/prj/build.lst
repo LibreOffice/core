@@ -18,5 +18,6 @@ sl	svl\source\uno					nmake	-	all	svl_uno svl_inc NULL
 sl  svl\util                        nmake   -   all svl_util svl_usdde.u svl_psdde.p svl_conf svl_filepick svl_file svl__item svl_mem svl__misc svl_not svl_num svl__dde svl_sql svl_undo svl_uno NULL
 sl	svl\source\fsstor				nmake	-	all	svl_fsstor svl_inc NULL
 sl	svl\source\passwordcontainer	nmake	-	all	svl_passcont svl_inc NULL
+sl	svl\qa\unit	nmake	-	all	svl_qa_cppunit svl_util NULL
 
 
