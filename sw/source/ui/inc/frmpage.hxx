@@ -54,6 +54,7 @@ struct SwPosition;
 class SwFrmPage: public SfxTabPage
 {
     // Size
+    FixedLine       aSizeFL;
     FixedText       aWidthFT;
     FixedText       aWidthAutoFT;
     PercentField    aWidthED;
@@ -66,11 +67,10 @@ class SwFrmPage: public SfxTabPage
     CheckBox        aAutoHeightCB;
     CheckBox        aFixedRatioCB;
     PushButton      aRealSizeBT;
-    FixedLine       aSizeFL;
 
     // Anker
-    FixedLine       aTypeFL;
     FixedLine       aTypeSepFL;
+    FixedLine       aTypeFL;
     RadioButton     aAnchorAtPageRB;
     RadioButton     aAnchorAtParaRB;
     RadioButton     aAnchorAtCharRB;
@@ -78,6 +78,7 @@ class SwFrmPage: public SfxTabPage
     RadioButton     aAnchorAtFrameRB;
 
     // Position
+    FixedLine       aPositionFL;
     FixedText       aHorizontalFT;
     ListBox         aHorizontalDLB;
     FixedText       aAtHorzPosFT;
@@ -93,7 +94,6 @@ class SwFrmPage: public SfxTabPage
     ListBox         aVertRelationLB;
     // OD 02.10.2003 #i18732# - check box for new option 'FollowTextFlow'
     CheckBox        aFollowTextFlowCB;
-    FixedLine       aPositionFL;
 
     // Example
     SvxSwFrameExample   aExampleWN;
@@ -109,6 +109,9 @@ class SwFrmPage: public SfxTabPage
     sal_Bool            bNoModifyHdl;
     sal_Bool            bVerticalChanged;  //check done whether frame is in vertical environment
     sal_Bool            bIsVerticalFrame;  //current frame is in vertical environment - strings are exchanged
+    // --> OD 2009-08-31 #mongolianlayou#
+    sal_Bool            bIsVerticalL2R;
+    // <--
     sal_Bool            bIsInRightToLeft; // current frame is in right-to-left environment - strings are exchanged
     sal_Bool            bHtmlMode;
     sal_uInt16          nHtmlMode;
@@ -286,6 +289,7 @@ public:
 
 class SwFrmAddPage : public SfxTabPage
 {
+      FixedLine   aNamesFL;
     FixedText   aNameFT;
     Edit        aNameED;
     FixedText   aAltNameFT;
@@ -294,19 +298,18 @@ class SwFrmAddPage : public SfxTabPage
     ListBox     aPrevLB;
     FixedText   aNextFT;
     ListBox     aNextLB;
-    FixedLine   aNamesFL;
+        FixedLine   aProtectFL;
 
     CheckBox    aProtectContentCB;
     CheckBox    aProtectFrameCB;
     CheckBox    aProtectSizeCB;
-    FixedLine   aProtectFL;
+    FixedLine   aExtFL;
 
     CheckBox    aEditInReadonlyCB;
     CheckBox    aPrintFrameCB;
     FixedText   aTextFlowFT;
     ListBox     aTextFlowLB;
 
-    FixedLine   aExtFL;
 
     SwWrtShell* pWrtSh;
 

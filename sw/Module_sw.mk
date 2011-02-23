@@ -39,12 +39,6 @@ $(eval $(call gb_Module_add_targets,sw,\
     Package_xml \
 ))
 
-ifeq ($(strip $(ENABLE_VBA)),YES)
-$(eval $(call gb_Module_add_targets,sw,\
-    Library_vbaswobj \
-))
-endif
-
 $(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
     JunitTest_sw_complex \
     JunitTest_sw_unoapi \

@@ -272,6 +272,7 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
     pNewDBMgr(NULL),
     aItem          ((const SwLabItem&) rSet.Get(FN_LABEL)),
 
+    aWritingFL     (this, SW_RES(FL_WRITING)),
     aWritingText   (this, SW_RES(TXT_WRITING)),
     aAddrBox       (this, SW_RES(BOX_ADDR   )),
     aWritingEdit   (this, SW_RES(EDT_WRITING)),
@@ -282,7 +283,7 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
     aInsertBT      (this, SW_RES(BTN_INSERT )),
     aDBFieldFT     (this, SW_RES(FT_DBFIELD )),
     aDBFieldLB     (this, SW_RES(LB_DBFIELD )),
-    aWritingFL     (this, SW_RES(FL_WRITING)),
+    aFormatFL      (this, SW_RES(FL_FORMAT )),
     aContButton    (this, SW_RES(BTN_CONT   )),
     aSheetButton   (this, SW_RES(BTN_SHEET  )),
     aMakeText      (this, SW_RES(TXT_MAKE   )),
@@ -290,9 +291,8 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
     aTypeText      (this, SW_RES(TXT_TYPE   )),
     aTypeBox       (this, SW_RES(BOX_TYPE   )),
     aHiddenSortTypeBox(this, WB_SORT|WB_HIDE),
-    aFormatInfo    (this, SW_RES(INF_FORMAT )),
-    aFormatFL      (this, SW_RES(FL_FORMAT ))
-{
+    aFormatInfo    (this, SW_RES(INF_FORMAT ))
+   {
     WaitObject aWait( pParent );
 
     FreeResource();
@@ -715,10 +715,10 @@ void SwVisitingCardPage::SetUserData( sal_uInt32 nCnt,
 
 SwVisitingCardPage::SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_VISITING_CARDS), rSet),
+    aContentFL(this,        SW_RES( FL_CONTENT           )),
     aAutoTextLB(this,       SW_RES( LB_AUTO_TEXT            )),
     aAutoTextGroupFT(this,  SW_RES( FT_AUTO_TEXT_GROUP  )),
     aAutoTextGroupLB(this,  SW_RES( LB_AUTO_TEXT_GROUP  )),
-    aContentFL(this,        SW_RES( FL_CONTENT           )),
     aExampleWIN(this,       SW_RES( WIN_EXAMPLE         )),
     sVisCardGroup(SW_RES(ST_VISCARD_GROUP)),
     pExampleFrame(0)

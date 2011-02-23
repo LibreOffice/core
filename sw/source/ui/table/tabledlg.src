@@ -786,4 +786,3 @@ InfoBox MSG_WRONG_TABLENAME
 {
     Message [ en-US ] = "The name of the table must not contain spaces." ;
 };
-

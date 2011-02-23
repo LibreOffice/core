@@ -152,9 +152,8 @@ void SwInsertBookmarkDlg::Apply()
 SwInsertBookmarkDlg::SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rS, SfxRequest& rRequest ) :
 
     SvxStandardDialog(pParent,SW_RES(DLG_INSERT_BOOKMARK)),
-
-    aBookmarkBox(this,SW_RES(CB_BOOKMARK)),
     aBookmarkFl(this,SW_RES(FL_BOOKMARK)),
+    aBookmarkBox(this,SW_RES(CB_BOOKMARK)),
     aOkBtn(this,SW_RES(BT_OK)),
     aCancelBtn(this,SW_RES(BT_CANCEL)),
     aDeleteBtn(this,SW_RES(BT_DELETE)),
