@@ -377,7 +377,7 @@ public:
 //  ----------------------------------------------------
 //  class VCLXDialog
 //  ----------------------------------------------------
-class VCLXDialog :  public ::com::sun::star::awt::XDialog2,
+class TOOLKIT_DLLPUBLIC VCLXDialog :    public ::com::sun::star::awt::XDialog2,
                     public VCLXTopWindow
 {
 public:

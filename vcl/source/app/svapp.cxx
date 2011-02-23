@@ -1760,9 +1760,12 @@ void Application::SetUnoWrapper( UnoWrapperBase* pWrapper )
     ImplSVData* pSVData = ImplGetSVData();
 
     if( !pSVData->mxDisplayConnection.is() )
+    {
         pSVData->mxDisplayConnection.set( new ::vcl::DisplayConnection );
+        pSVData->mxDisplayConnection->start();
+    }
 
-    return pSVData->mxDisplayConnection;
+    return pSVData->mxDisplayConnection.get();
 }
 
 // -----------------------------------------------------------------------

@@ -38,6 +38,7 @@
 #ifndef _RTL_STRINGBUF_HXX
 #include <rtl/strbuf.hxx>
 #endif
+#include "vcl/region.h"
 
 #ifndef __H_FT2LIB
 #include <wingdi.h>
@@ -217,38 +218,29 @@ void Os2SalGraphics::ResetClipRegion()
 
 // -----------------------------------------------------------------------
 
-void Os2SalGraphics::BeginSetClipRegion( ULONG nCount )
+bool Os2SalGraphics::setClipRegion( const Region& i_rClip )
 {
+    ULONG nCount = i_rClip.GetRectCount();
+
     mpClipRectlAry    = new RECTL[ nCount ];
     mnClipElementCount = 0;
-}
 
-// -----------------------------------------------------------------------
-
-BOOL Os2SalGraphics::unionClipRegion( long nX, long nY, long nWidth, long nHeight )
-{
-    RECTL* pClipRect = &mpClipRectlAry[ mnClipElementCount ];
-    pClipRect->xLeft   = nX;
-    pClipRect->yTop    = mnHeight - nY;
-    pClipRect->xRight  = nX + nWidth;
-    pClipRect->yBottom = mnHeight - (nY + nHeight);
-    mnClipElementCount++;
-
-    return TRUE;
-}
-
-// -----------------------------------------------------------------------
-
-bool Os2SalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& )
-{
-    // TODO: implement and advertise OutDevSupport_B2DClip support
-    return false;
-}
-
-// -----------------------------------------------------------------------
-
-void Os2SalGraphics::EndSetClipRegion()
-{
+    ImplRegionInfo aInfo;
+    long nX, nY, nW, nH;
+    bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
+    while( bRegionRect )
+    {
+        if ( nW && nH )
+        {
+            RECTL* pClipRect = &mpClipRectlAry[ mnClipElementCount ];
+            pClipRect->xLeft   = nX;
+            pClipRect->yTop    = mnHeight - nY;
+            pClipRect->xRight  = nX + nW;
+            pClipRect->yBottom = mnHeight - (nY + nH);
+            mnClipElementCount++;
+        }
+        bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
+    }
 #ifdef SAL_PRINTER_CLIPPATH
     if ( mbPrinter )
     {
@@ -287,6 +279,8 @@ void Os2SalGraphics::EndSetClipRegion()
     }
 
     delete [] mpClipRectlAry;
+
+    return true;
 }
 
 // -----------------------------------------------------------------------

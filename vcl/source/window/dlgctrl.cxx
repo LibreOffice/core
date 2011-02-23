@@ -1120,10 +1120,14 @@ static Window* ImplGetLabelFor( Window* pFrameWindow, WindowType nMyType, Window
     return pWindow;
 }
 
-Window* Window::GetLabelFor() const
+Window* Window::GetAccessibleRelationLabelFor() const
 {
     if ( mpWindowImpl->mbDisableAccessibleLabelForRelation )
         return NULL;
+
+    if ( mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pLabelForWindow )
+        return mpWindowImpl->mpAccessibleInfos->pLabelForWindow;
+
 
     Window* pWindow = NULL;
     Window* pFrameWindow = ImplGetFrameWindow();
@@ -1205,10 +1209,13 @@ static Window* ImplGetLabeledBy( Window* pFrameWindow, WindowType nMyType, Windo
     return pWindow;
 }
 
-Window* Window::GetLabeledBy() const
+Window* Window::GetAccessibleRelationLabeledBy() const
 {
     if ( mpWindowImpl->mbDisableAccessibleLabeledByRelation )
         return NULL;
+
+    if ( mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pLabeledByWindow )
+        return mpWindowImpl->mpAccessibleInfos->pLabeledByWindow;
 
     Window* pWindow = NULL;
     Window* pFrameWindow = ImplGetFrameWindow();
@@ -1238,6 +1245,62 @@ Window* Window::GetLabeledBy() const
     return pWindow;
 }
 
+Window* Window::GetAccessibleRelationMemberOf() const
+{
+    Window* pWindow = NULL;
+    Window* pFrameWindow = GetParent();
+    if ( !pFrameWindow )
+    {
+        pFrameWindow = ImplGetFrameWindow();
+    }
+    // if( ! ( GetType() == WINDOW_FIXEDTEXT        ||
+    if( !( GetType() == WINDOW_FIXEDLINE ||
+        GetType() == WINDOW_GROUPBOX ) )
+    {
+        // search for a control that makes member of this window
+        // it is considered the last fixed line or group box
+        // that comes before this control; with the exception of push buttons
+        // which are labeled only if the fixed line or group box
+        // is directly before the control
+        // get form start and form end and index of this control
+        sal_uInt16 nIndex, nFormStart, nFormEnd;
+        Window* pSWindow = ::ImplFindDlgCtrlWindow( pFrameWindow,
+            const_cast<Window*>(this),
+            nIndex,
+            nFormStart,
+            nFormEnd );
+        if( pSWindow && nIndex != nFormStart )
+        {
+            if( GetType() == WINDOW_PUSHBUTTON      ||
+                GetType() == WINDOW_HELPBUTTON      ||
+                GetType() == WINDOW_OKBUTTON        ||
+                GetType() == WINDOW_CANCELBUTTON )
+            {
+                nFormStart = nIndex-1;
+            }
+            for( sal_uInt16 nSearchIndex = nIndex-1; nSearchIndex >= nFormStart; nSearchIndex-- )
+            {
+                sal_uInt16 nFoundIndex = 0;
+                pSWindow = ::ImplGetChildWindow( pFrameWindow,
+                    nSearchIndex,
+                    nFoundIndex,
+                    sal_False );
+                if( pSWindow && pSWindow->IsVisible() &&
+                    ( pSWindow->GetType() == WINDOW_FIXEDLINE   ||
+                    pSWindow->GetType() == WINDOW_GROUPBOX ) )
+                {
+                    pWindow = pSWindow;
+                    break;
+                }
+                if( nFoundIndex > nSearchIndex || nSearchIndex == 0 )
+                    break;
+            }
+        }
+    }
+    return pWindow;
+}
+//-----IAccessibility2 Implementation 2009
+
 // -----------------------------------------------------------------------
 
 KeyEvent Window::GetActivationKey() const
@@ -1247,7 +1310,7 @@ KeyEvent Window::GetActivationKey() const
     sal_Unicode nAccel = getAccel( GetText() );
     if( ! nAccel )
     {
-        Window* pWindow = GetLabeledBy();
+        Window* pWindow = GetAccessibleRelationLabeledBy();
         if( pWindow )
             nAccel = getAccel( pWindow->GetText() );
     }
@@ -1260,6 +1323,10 @@ KeyEvent Window::GetActivationKey() const
             nCode = KEY_A + (nAccel-'A');
         else if( nAccel >= '0' && nAccel <= '9' )
             nCode = KEY_0 + (nAccel-'0');
+        else if( nAccel == '.' )
+            nCode = KEY_POINT;
+        else if( nAccel == '-' )
+            nCode = KEY_SUBTRACT;
         KeyCode aKeyCode( nCode, sal_False, sal_False, sal_True, sal_False );
         aKeyEvent = KeyEvent( nAccel, aKeyCode );
     }
