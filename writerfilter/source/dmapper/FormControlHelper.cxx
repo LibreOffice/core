@@ -166,7 +166,7 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRan
 
     uno::Reference<uno::XInterface> xInterface =
         xServiceFactory->createInstance
-        (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX)));
+        (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.CheckBox")));
 
     if (!xInterface.is())
         return false;
