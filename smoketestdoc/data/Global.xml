@@ -658,10 +658,11 @@ Function StartTestWithDefaultOptions
     component(cStJava) = &quot;Java&quot;
     component(cStDataBase) = &quot;Base&quot;
     component(cStExtension) = &quot;Extensions&quot;
-    dim action(2) as string
+    dim action(3) as string
     action(cDocNew) = &quot;new&quot;
     action(cDocSaveOpen8) = &quot;V8.0&quot;
     action(cDocSaveOpenXML) = &quot;XML&quot;
+    action(cDocClose) = &quot;close&quot;
     dim baseAction(5) as string
     baseAction(cDBService) = &quot;services&quot;
     baseAction(cDBOpen) = &quot;open&quot;
