@@ -9,8 +9,13 @@ SEND_MAIL=0
 NICE=
 OWNER=
 MACHINE=`uname`
-SMTP=
 TINDERNAME=
+
+SMTPPORT=25
+SMTPCRYPT=none
+SMTPHOST=
+SMTPUSER=
+SMTPPW=
 
 ## subroutines
 usage ()
@@ -23,6 +28,9 @@ usage ()
 	echo "-m <owner> mail errors to the committer, general errors to the <owner>"
 	echo "-n         run with nice, can be combined with -i"
 	echo "-s <host>  SMTP server"
+	echo "-c <type>  SMTP crypt to use - either none, tls or ssl"
+	echo "-u <user>  SMTP user name for auth login"
+	echo "-p <pass>  SMTP password for auth login"
 	echo "-t <name>  send tinderbox mails, identify self as <name>"
 	echo "-w <N>     specify timeout in secs between subsequent pull requests"
 }
@@ -43,6 +51,8 @@ sendMailMsg ()
 	perl -e "
 use MIME::Lite;
 use Net::SMTP;
+use Net::SMTP::SSL;
+use Net::SMTP::TLS;
 
 my \$text;
 while (<>) {
@@ -67,8 +77,24 @@ if ('$LOG' ne '' && -f '$LOG') {
     ) or die \"Error adding $LOG: \$!\n\";
 }
 
-MIME::Lite->send('smtp', '$SMTP', Timeout=>60);
-\$msg->send;
+my \$smtp_class = '$SMTPCRYPT' eq 'none' ? 
+    'Net::SMTP' : 
+    '$SMTPCRYPT' eq 'ssl' ? 'Net::SMTP::SSL' : 'Net::SMTP::TLS';
+my \$SMTP = \$smtp_class->new(
+	'$SMTPHOST',
+    Hello => 'documentfoundation.org',
+	Port => '$SMTPPORT',
+	User => '$SMTPUSER',
+	Password => '$SMTPPW' );
+die \"Cannot connect to SMTP server!\" unless defined \$SMTP;
+
+\$SMTP->mail('$OWNER');
+\$SMTP->to('$TO');
+\$SMTP->data();
+\$SMTP->datasend( \$msg->as_string() );
+\$SMTP->dataend();
+\$SMTP->quit();
+
 print 'Sent a mail to \"$TO\" with subject \"$SUBJECT\".' . \"\n\";
 "
 }
@@ -183,14 +209,17 @@ tinderbox: END
 }
 
 ## code
-while getopts hilm:ns:t:w: opt ; do
+while getopts hilm:ns:c:u:p:t:w: opt ; do
 	case "$opt" in
 		h) usage; exit ;;
 		i) NICE="$NICE ionice -c3" ;;
 		l) HTML_OUTPUT=1 ;;
 		m) SEND_MAIL=1 ; OWNER="$OPTARG" ;;
 		n) NICE="$NICE nice" ;;
-		s) SMTP="$OPTARG" ;;
+		s) SMTPHOST="$OPTARG" ;;
+		c) SMTPCRYPT="$OPTARG" ;;
+		u) SMTPUSER="$OPTARG" ;;
+		p) SMTPPW="$OPTARG" ;;
 		t) TINDERNAME="$OPTARG" ;;
 		w) PAUSE_SECONDS="$OPTARG" ;;
 		?) usage; exit ;;
@@ -208,7 +237,7 @@ if test "$SEND_MAIL" -eq 1 ; then
 		echo "Owner not set."
 		exit 1
 	fi
-	if test -z "$SMTP" ; then
+	if test -z "$SMTPHOST" ; then
 		echo "SMTP server not set."
 		exit 1
 	fi
