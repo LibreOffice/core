@@ -152,7 +152,7 @@ void lcl_UpdateAppBasicDocVars(  const Reference< XInterface >& _rxComponent, bo
                     pAppMgr->SetGlobalUNOConstant( pAscii, aProp.Value );
 
             }
-            catch( uno::Exception& e )
+            catch( const uno::Exception& )
             {
             }
         }
