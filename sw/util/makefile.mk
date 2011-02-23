@@ -160,8 +160,6 @@ SHL2OBJS=   $(SLO)$/swdetect.obj \
         $(SLO)$/iodetect.obj
 
 .IF "$(DBG_LEVEL)">="2"
-SHL2OBJS+=  \
-        $(SLO)$/errhdl.obj
 SHL2STDLIBS+= \
         $(LIBXML2LIB)
 .ENDIF

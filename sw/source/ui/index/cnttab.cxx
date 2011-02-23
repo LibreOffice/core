@@ -3318,7 +3318,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
     sMessage += String::CreateFromInt32(nSpace);
     sMessage += String::CreateFromAscii(" | ");
 
-    for (const_ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
+    for (ctrl_const_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
         long nDebugXPos = it->GetPosPixel().X();
         long nDebugWidth = it->GetSizePixel().Width();
