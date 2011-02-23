@@ -2848,7 +2848,9 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
                 pDoc->GetExternalRefManager()->updateAbsAfterLoad();
         }
 
-        if (pDoc && GetModel().is())
+        // If the stream contains cells outside of the current limits, the styles can't be re-created,
+        // so stream copying is disabled then.
+        if (pDoc && GetModel().is() && !pDoc->HasRangeOverflow())
         {
             // set "valid stream" flags after loading (before UpdateRowHeights, so changed formula results
             // in UpdateRowHeights can already clear the flags again)
