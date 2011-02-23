@@ -564,6 +564,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         }
         break;
         case  SW_SERVICE_ODF_FORM_LISTBOX:
+        case  SW_SERVICE_ODF_FORM_CHECKBOX:
         case  SW_SERVICE_TYPE_FORMFIELDMARK :
         {
             SwXFieldmark* pFieldmark = new SwXFieldmark(true);
@@ -837,12 +838,6 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         break;
         case SW_SERVICE_FIELDTYPE_METAFIELD:
             xRet = static_cast< ::cppu::OWeakObject* >(new SwXMetaField(pDoc));
-        break;
-        case SW_SERVICE_ODF_FORM_CHECKBOX:
-        {
-            SwXFieldmark* pFormCheckbox = new SwXODFCheckboxField();
-            xRet =  (cppu::OWeakObject*)pFormCheckbox;
-        }
         break;
         default:
             throw uno::RuntimeException();

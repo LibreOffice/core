@@ -46,7 +46,7 @@
 #include <comcore.hrc>
 #include <undobj.hxx>
 #include <docsh.hxx>
-
+#include <xmloff/odffields.hxx>
 
 using namespace ::sw::mark;
 using namespace ::com::sun::star;
@@ -679,12 +679,13 @@ SwXFieldmark::CreateXFieldmark(SwDoc & rDoc, ::sw::mark::IMark & rMark)
 }
 
 ::sw::mark::ICheckboxFieldmark*
-SwXODFCheckboxField::getCheckboxFieldmark()
+SwXFieldmark::getCheckboxFieldmark()
 {
-    // evil #TODO #FIXME can we get rid of the dynamic_cast
-    const ::sw::mark::ICheckboxFieldmark* pCheckboxFm = dynamic_cast< const ::sw::mark::ICheckboxFieldmark* >( GetBookmark());
-    // even evil-er #TODO #FIXME casting away the constness
-    return ((::sw::mark::ICheckboxFieldmark*)(pCheckboxFm));
+    ::sw::mark::ICheckboxFieldmark* pCheckboxFm = NULL;
+    if ( getFieldType() == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX) ) )
+        // evil #TODO #FIXME casting away the const-ness
+        pCheckboxFm = (::sw::mark::ICheckboxFieldmark*)(reinterpret_cast< const ::sw::mark::ICheckboxFieldmark* >( GetBookmark()));
+    return  pCheckboxFm;
 
 }
 
@@ -692,7 +693,7 @@ SwXODFCheckboxField::getCheckboxFieldmark()
 // docx import filter thus not published via PropertySet info )
 
 void SAL_CALL
-SwXODFCheckboxField::setPropertyValue(const OUString& PropertyName,
+SwXFieldmark::setPropertyValue(const OUString& PropertyName,
         const uno::Any& rValue)
 throw (beans::UnknownPropertyException, beans::PropertyVetoException,
     lang::IllegalArgumentException, lang::WrappedTargetException,
@@ -710,26 +711,26 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
 
     }
     else
-        SwXFieldmark::setPropertyValue( PropertyName, rValue );
+        SwXFieldmark_Base::setPropertyValue( PropertyName, rValue );
 }
 
 // support 'hidden' "Checked" property ( note: this property is just for convenience to support
 // docx import filter thus not published via PropertySet info )
 
-uno::Any SAL_CALL SwXODFCheckboxField::getPropertyValue(const OUString& rPropertyName)
+uno::Any SAL_CALL SwXFieldmark::getPropertyValue(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
         uno::RuntimeException)
 {
     SolarMutexGuard g;
-    if ( PropertyName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Checked") ) ) )
+    if ( rPropertyName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Checked") ) ) )
     {
         ::sw::mark::ICheckboxFieldmark* pCheckboxFm = getCheckboxFieldmark();
         if ( pCheckboxFm )
-            return uno::makeAny( pCheckboxFm->GetChecked() );
+            return uno::makeAny( pCheckboxFm->IsChecked() );
         else
             throw uno::RuntimeException();
     }
-    return SwXFieldmark::getPropertyValue( PropertyName );
+    return SwXFieldmark_Base::getPropertyValue( rPropertyName );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
