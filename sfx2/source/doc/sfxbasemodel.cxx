@@ -3793,10 +3793,10 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getAvailableViewCon
     SfxModelGuard aGuard( *this );
 
     const SfxObjectFactory& rDocumentFactory = GetObjectShell()->GetFactory();
-    const sal_Int32 nViewFactoryCount = rDocumentFactory.GetViewFactoryCount();
+    const sal_Int16 nViewFactoryCount = rDocumentFactory.GetViewFactoryCount();
 
     Sequence< ::rtl::OUString > aViewNames( nViewFactoryCount );
-    for ( sal_Int32 nViewNo = 0; nViewNo < nViewFactoryCount; ++nViewNo )
+    for ( sal_Int16 nViewNo = 0; nViewNo < nViewFactoryCount; ++nViewNo )
         aViewNames[nViewNo] = rDocumentFactory.GetViewFactory( nViewNo ).GetAPIViewName();
     return aViewNames;
 }
