@@ -420,7 +420,6 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
     uno::Reference< beans::XPropertySet >  xFirst;
     uno::Reference< beans::XPropertySet >  xSecond;
     sal_Int32 nOffsetFrom = (nValue & 0x00E0) >> 5;
-    //sal_Int32 bPageDepth = (nValue & 0x0018) >> 3; //unused infromation: 0 - in front 1 - in back
     //todo: negative spacing (from ww8par6.cxx)
     switch( nValue & 0x07)
     {
