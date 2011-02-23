@@ -2610,7 +2610,7 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
 
         sPlainCharsBuf.ReleaseBufferAccess( nEndUsed );
 
-        AddTextToParagraph(sPlainCharsBuf);
+        emulateMSWordAddTextToParagraph(sPlainCharsBuf);
         rPos += nL2;
         if (!maApos.back()) //a para end in apo doesn't count
             bWasParaEnd = false;            //kein CR
@@ -2622,20 +2622,40 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
     return nL2 >= nLen;
 }
 
-bool SwWW8ImplReader::AddTextToParagraph(const String& rAddString)
+//TODO: In writer we categorize text into CJK, CTL and "Western" for everything
+//else. Microsoft Word basically categorizes text into East Asian, Non-East
+//Asian and ASCII, with some shared characters and some properties to
+//to hint as to which way to bias those shared characters.
+//
+//Here we must find out "what would word do" to see what font/language
+//word would assign to characters based on the unicode range they fall
+//into, taking into account the idctHint property if it exists.
+//
+//Where this differs from the default category that writer would assign it to
+//we're then forced (because we don't have an equivalent hint) to mirror the
+//properties of the source MSWord category into the properties of the dest
+//Writer category for that range of text in order to get the right results.
+bool SwWW8ImplReader::emulateMSWordAddTextToParagraph(const String& rAddString)
+{
+    return simpleAddTextToParagraph(rAddString);
+}
+
+bool SwWW8ImplReader::simpleAddTextToParagraph(const String& rAddString)
 {
     const SwTxtNode* pNd = pPaM->GetCntntNode()->GetTxtNode();
     if (rAddString.Len())
     {
-/*
+
 #ifdef DEBUG
-//!! does not compile with debug=t -> unresolved external (dbg_out),
-//!! sommeone who knows what he wants to get should fix this
-//        ::std::clog << "<addTextToParagraph>" << dbg_out(rAddString)
-//        << "</addTextToParagraph>" << ::std::endl;
+        {
+            rtl::OString sText(rtl::OUStringToOString(rAddString, RTL_TEXTENCODING_UTF8));
+            ::std::clog <<
+                "<addTextToParagraph>" << sText.getStr() << "</addTextToParagraph>"
+                << ::std::endl;
+        }
 #endif
-*/
-        if ((pNd->GetTxt().Len() + rAddString.Len()) < STRING_MAXLEN -1)
+
+        if ((pNd->GetTxt().Len() + rAddString.Len()) < STRING_MAXLEN-1)
         {
             rDoc.InsertString(*pPaM, rAddString);
         }
@@ -2913,7 +2933,7 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
     {
         String sInsert = ByteString::ConvertToUnicode(cInsert,
             RTL_TEXTENCODING_MS_1252 );
-        AddTextToParagraph(sInsert);
+        emulateMSWordAddTextToParagraph(sInsert);
     }
     if (!maApos.back()) //a para end in apo doesn't count
         bWasParaEnd = bNewParaEnd;
