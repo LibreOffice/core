@@ -563,13 +563,16 @@ void ORowSetCache::updateNull(sal_Int32 columnIndex,ORowSetValueVector::Vector& 
     checkUpdateConditions(columnIndex);
 
     ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
-    rInsert[columnIndex].setBound(sal_True);
-    rInsert[columnIndex].setNull();
-    rInsert[columnIndex].setModified();
-    io_aRow[columnIndex].setNull();
+    if ( !rInsert[columnIndex].isNull() )
+    {
+        rInsert[columnIndex].setBound(sal_True);
+        rInsert[columnIndex].setNull();
+        rInsert[columnIndex].setModified();
+        io_aRow[columnIndex].setNull();
 
-    m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
-    impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
+        m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
+        impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
+    }
 }
 // -----------------------------------------------------------------------------
 void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x
@@ -580,13 +583,16 @@ void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x
     checkUpdateConditions(columnIndex);
 
     ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
-    rInsert[columnIndex].setBound(sal_True);
-    rInsert[columnIndex] = x;
-    rInsert[columnIndex].setModified();
-    io_aRow[columnIndex] = rInsert[columnIndex];
+    if ( rInsert[columnIndex] != x )
+    {
+        rInsert[columnIndex].setBound(sal_True);
+        rInsert[columnIndex] = x;
+        rInsert[columnIndex].setModified();
+        io_aRow[columnIndex] = rInsert[columnIndex];
 
-    m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
-    impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
+        m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
+        impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
+    }
 }
 // -------------------------------------------------------------------------
 void ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x
@@ -618,13 +624,18 @@ void ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x
     checkUpdateConditions(columnIndex);
 
     ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
-    rInsert[columnIndex].setBound(sal_True);
-    rInsert[columnIndex] = x;
-    rInsert[columnIndex].setModified();
-    io_aRow[columnIndex] = rInsert[columnIndex];
+    ORowSetValue aTemp;
+    aTemp.fill(x);
+    if ( rInsert[columnIndex] != aTemp )
+    {
+        rInsert[columnIndex].setBound(sal_True);
+        rInsert[columnIndex] = aTemp;
+        rInsert[columnIndex].setModified();
+        io_aRow[columnIndex] = rInsert[columnIndex];
 
-    m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
-    impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
+        m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
+        impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
+    }
 }
 // -------------------------------------------------------------------------
 void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 /*scale*/
@@ -635,13 +646,18 @@ void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal
     checkUpdateConditions(columnIndex);
 
     ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
-    rInsert[columnIndex].setBound(sal_True);
-    rInsert[columnIndex] = x;
-    rInsert[columnIndex].setModified();
-    io_aRow[columnIndex] = rInsert[columnIndex];
+    ORowSetValue aTemp;
+    aTemp.fill(x);
+    if ( rInsert[columnIndex] != aTemp )
+    {
+        rInsert[columnIndex].setBound(sal_True);
+        rInsert[columnIndex] = aTemp;
+        rInsert[columnIndex].setModified();
+        io_aRow[columnIndex] = rInsert[columnIndex];
 
-    m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
-    impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
+        m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
+        impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
+    }
 }
 // -------------------------------------------------------------------------
 // XResultSet
