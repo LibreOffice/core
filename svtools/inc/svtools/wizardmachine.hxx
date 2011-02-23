@@ -153,8 +153,8 @@ namespace svt
         // restrict access to some aspects of our base class
         SVT_DLLPRIVATE void             AddPage( TabPage* pPage ) { WizardDialog::AddPage(pPage); }
         SVT_DLLPRIVATE void             RemovePage( TabPage* pPage ) { WizardDialog::RemovePage(pPage); }
-        SVT_DLLPRIVATE void             SetPage( USHORT nLevel, TabPage* pPage ) { WizardDialog::SetPage(nLevel, pPage); }
-        //  TabPage*            GetPage( USHORT nLevel ) const { return WizardDialog::GetPage(nLevel); }
+        SVT_DLLPRIVATE void             SetPage( sal_uInt16 nLevel, TabPage* pPage ) { WizardDialog::SetPage(nLevel, pPage); }
+        //  TabPage*            GetPage( sal_uInt16 nLevel ) const { return WizardDialog::GetPage(nLevel); }
         // TODO: probably the complete page handling (next, previous etc.) should be prohibited ...
 
         // IMPORTANT:

@@ -43,16 +43,16 @@ class SVT_DLLPUBLIC SfxErrorContext : private ErrorContext
 {
 public:
     SfxErrorContext(
-            USHORT nCtxIdP, Window *pWin=0,
-            USHORT nResIdP=USHRT_MAX, ResMgr *pMgrP=0);
+            sal_uInt16 nCtxIdP, Window *pWin=0,
+            sal_uInt16 nResIdP=USHRT_MAX, ResMgr *pMgrP=0);
     SfxErrorContext(
-            USHORT nCtxIdP, const String &aArg1, Window *pWin=0,
-            USHORT nResIdP=USHRT_MAX, ResMgr *pMgrP=0);
-    virtual BOOL GetString(ULONG nErrId, String &rStr);
+            sal_uInt16 nCtxIdP, const String &aArg1, Window *pWin=0,
+            sal_uInt16 nResIdP=USHRT_MAX, ResMgr *pMgrP=0);
+    virtual sal_Bool GetString(sal_uLong nErrId, String &rStr);
 
 private:
-    USHORT nCtxId;
-    USHORT nResId;
+    sal_uInt16 nCtxId;
+    sal_uInt16 nResId;
     ResMgr *pMgr;
     String aArg1;
 };
@@ -60,26 +60,26 @@ private:
 class SVT_DLLPUBLIC SfxErrorHandler : private ErrorHandler
 {
 public:
-    SfxErrorHandler(USHORT nId, ULONG lStart, ULONG lEnd, ResMgr *pMgr=0);
+    SfxErrorHandler(sal_uInt16 nId, sal_uLong lStart, sal_uLong lEnd, ResMgr *pMgr=0);
     ~SfxErrorHandler();
 
 protected:
-    virtual BOOL     GetErrorString(ULONG lErrId, String &, USHORT&) const;
-    virtual BOOL     GetMessageString(ULONG lErrId, String &, USHORT&) const;
+    virtual sal_Bool     GetErrorString(sal_uLong lErrId, String &, sal_uInt16&) const;
+    virtual sal_Bool     GetMessageString(sal_uLong lErrId, String &, sal_uInt16&) const;
 
 private:
 
-    ULONG            lStart;
-    ULONG            lEnd;
-    USHORT           nId;
+    sal_uLong            lStart;
+    sal_uLong            lEnd;
+    sal_uInt16           nId;
     ResMgr          *pMgr;
     ResMgr          *pFreeMgr;
 
 //#if 0 // _SOLAR__PRIVATE
-    SVT_DLLPRIVATE BOOL             GetClassString(ULONG lErrId, String &) const;
+    SVT_DLLPRIVATE sal_Bool             GetClassString(sal_uLong lErrId, String &) const;
 //#endif
-    virtual BOOL     CreateString(
-                         const ErrorInfo *, String &, USHORT &) const;
+    virtual sal_Bool     CreateString(
+                         const ErrorInfo *, String &, sal_uInt16 &) const;
 };
 
 #endif

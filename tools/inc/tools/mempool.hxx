@@ -43,9 +43,9 @@ class TOOLS_DLLPUBLIC FixedMemPool
 
 public:
                     FixedMemPool( char const * pTypeName,
-                                  USHORT nTypeSize,
-                                  USHORT nInitSize = 512,
-                                  USHORT nGrowSize = 256 );
+                                  sal_uInt16 nTypeSize,
+                                  sal_uInt16 nInitSize = 512,
+                                  sal_uInt16 nGrowSize = 256 );
                     ~FixedMemPool();
 
     void*           Alloc();

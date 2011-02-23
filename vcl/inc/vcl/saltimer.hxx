@@ -42,7 +42,7 @@
  * this needed to be virtualized for the sal plugin migration
  */
 
-class VCL_DLLPUBLIC SalTimer
+class VCL_PLUGIN_PUBLIC SalTimer
 {
     SALTIMERPROC        m_pProc;
 public:
@@ -50,7 +50,7 @@ public:
     virtual ~SalTimer();
 
     // AutoRepeat and Restart
-    virtual void            Start( ULONG nMS ) = 0;
+    virtual void            Start( sal_uLong nMS ) = 0;
     virtual void            Stop() = 0;
 
     // Callbacks (indepen in \sv\source\app\timer.cxx)

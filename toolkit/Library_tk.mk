@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2009 by Sun Microsystems, Inc.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,12 +14,12 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.	If not, see
+# version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
@@ -35,11 +35,9 @@ $(eval $(call gb_Library_add_package_headers,tk,toolkit_inc))
 
 $(eval $(call gb_Library_set_include,tk,\
     $$(INCLUDE) \
-    -I$(WORKDIR)/inc/toolkit/ \
     -I$(SRCDIR)/toolkit/inc \
     -I$(SRCDIR)/toolkit/inc/pch \
     -I$(SRCDIR)/toolkit/source \
-    -I$(OUTDIR)/inc/toolkit \
     -I$(OUTDIR)/inc/offuh \
 ))
 
@@ -57,6 +55,7 @@ $(eval $(call gb_Library_add_linked_libs,tk,\
     tl \
     utl \
     vcl \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,tk,\
@@ -82,6 +81,8 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/awt/vclxsystemdependentwindow \
     toolkit/source/awt/vclxtabcontrol \
     toolkit/source/awt/vclxtabpage \
+    toolkit/source/awt/vclxtabpagecontainer \
+    toolkit/source/awt/animatedimagespeer \
     toolkit/source/awt/vclxtoolkit \
     toolkit/source/awt/vclxtopwindow \
     toolkit/source/awt/vclxwindow \
@@ -90,6 +91,7 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/awt/xsimpleanimation \
     toolkit/source/awt/xthrobber \
     toolkit/source/controls/accessiblecontrolcontext \
+    toolkit/source/controls/controlmodelcontainerbase \
     toolkit/source/controls/dialogcontrol \
     toolkit/source/controls/eventcontainer \
     toolkit/source/controls/formattedcontrol \
@@ -97,15 +99,21 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/grid/defaultgridcolumnmodel \
     toolkit/source/controls/grid/defaultgriddatamodel \
     toolkit/source/controls/grid/gridcolumn \
+    toolkit/source/controls/grid/grideventforwarder \
+    toolkit/source/controls/grid/sortablegriddatamodel \
     toolkit/source/controls/grid/gridcontrol \
     toolkit/source/controls/roadmapcontrol \
     toolkit/source/controls/roadmapentry \
+    toolkit/source/controls/tabpagecontainer \
+    toolkit/source/controls/tabpagemodel \
     toolkit/source/controls/stdtabcontroller \
     toolkit/source/controls/stdtabcontrollermodel \
     toolkit/source/controls/tkscrollbar \
     toolkit/source/controls/tksimpleanimation \
     toolkit/source/controls/tkspinbutton \
     toolkit/source/controls/tkthrobber \
+    toolkit/source/controls/animatedimages \
+    toolkit/source/controls/spinningprogress \
     toolkit/source/controls/tree/treecontrol \
     toolkit/source/controls/tree/treedatamodel \
     toolkit/source/controls/unocontrol \
@@ -123,7 +131,6 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/helper/property \
     toolkit/source/helper/registerservices \
     toolkit/source/helper/servicenames \
-    toolkit/source/helper/throbberimpl \
     toolkit/source/helper/tkresmgr \
     toolkit/source/helper/unomemorystream \
     toolkit/source/helper/unopropertyarrayhelper \
@@ -160,29 +167,7 @@ endif
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_linked_libs,tk,\
     X11 \
-    dl \
-    m \
-    pthread \
 ))
 endif
-ifeq ($(OS),WNT)
-ifneq ($(USE_MINGW),)
-$(eval $(call gb_Library_add_linked_libs,tk,\
-    mingwthrd \
-    $(gb_MINGW_LIBSTDCPP) \
-    mingw32 \
-    $(gb_MINGW_LIBGCC) \
-    uwinapi \
-    mingwex \
-    kernel32 \
-    msvcrt \
-))
-else
-$(eval $(call gb_Library_add_linked_libs,tk,\
-    kernel32 \
-    msvcrt \
-    uwinapi \
-))
-endif
-endif
+
 # vim: set noet sw=4 ts=4:

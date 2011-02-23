@@ -405,13 +405,13 @@ public:
         : maRoot(),
           mnCount(0),
           mpIgnorableItems( pIgnorableItems != 0
-                            ? pIgnorableItems->Clone( FALSE )
+                            ? pIgnorableItems->Clone( sal_False )
                             : 0 )
     {
         DBG_ASSERT( !pIgnorableItems || !pIgnorableItems->Count(),
                     "<StylePoolImpl::StylePoolImpl(..)> - misusage: item set for ignorable item should be empty. Please correct usage." );
         DBG_ASSERT( !mpIgnorableItems || !mpIgnorableItems->Count(),
-                    "<StylePoolImpl::StylePoolImpl(..)> - <SfxItemSet::Clone( FALSE )> does not work as excepted - <mpIgnorableItems> is not empty. Please inform OD." );
+                    "<StylePoolImpl::StylePoolImpl(..)> - <SfxItemSet::Clone( sal_False )> does not work as excepted - <mpIgnorableItems> is not empty. Please inform OD." );
     }
 
     ~StylePoolImpl()

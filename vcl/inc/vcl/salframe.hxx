@@ -65,55 +65,55 @@ struct SystemEnvData;
 // - SalFrameTypes -
 // -----------------
 
-#define SAL_FRAME_TOTOP_RESTOREWHENMIN      ((USHORT)0x0001)
-#define SAL_FRAME_TOTOP_FOREGROUNDTASK      ((USHORT)0x0002)
-#define SAL_FRAME_TOTOP_GRABFOCUS           ((USHORT)0x0004)
-#define SAL_FRAME_TOTOP_GRABFOCUS_ONLY       ((USHORT)0x0008)
+#define SAL_FRAME_TOTOP_RESTOREWHENMIN      ((sal_uInt16)0x0001)
+#define SAL_FRAME_TOTOP_FOREGROUNDTASK      ((sal_uInt16)0x0002)
+#define SAL_FRAME_TOTOP_GRABFOCUS           ((sal_uInt16)0x0004)
+#define SAL_FRAME_TOTOP_GRABFOCUS_ONLY       ((sal_uInt16)0x0008)
 
-#define SAL_FRAME_ENDEXTTEXTINPUT_COMPLETE  ((USHORT)0x0001)
-#define SAL_FRAME_ENDEXTTEXTINPUT_CANCEL    ((USHORT)0x0002)
+#define SAL_FRAME_ENDEXTTEXTINPUT_COMPLETE  ((sal_uInt16)0x0001)
+#define SAL_FRAME_ENDEXTTEXTINPUT_CANCEL    ((sal_uInt16)0x0002)
 
 
 // -----------------
 // - SalFrameStyle -
 // -----------------
 
-#define SAL_FRAME_STYLE_DEFAULT             ((ULONG)0x00000001)
-#define SAL_FRAME_STYLE_MOVEABLE            ((ULONG)0x00000002)
-#define SAL_FRAME_STYLE_SIZEABLE            ((ULONG)0x00000004)
-#define SAL_FRAME_STYLE_CLOSEABLE           ((ULONG)0x00000008)
+#define SAL_FRAME_STYLE_DEFAULT             ((sal_uLong)0x00000001)
+#define SAL_FRAME_STYLE_MOVEABLE            ((sal_uLong)0x00000002)
+#define SAL_FRAME_STYLE_SIZEABLE            ((sal_uLong)0x00000004)
+#define SAL_FRAME_STYLE_CLOSEABLE           ((sal_uLong)0x00000008)
 
 // no shadow effect on WindowsXP
-#define SAL_FRAME_STYLE_NOSHADOW            ((ULONG)0x00000010)
+#define SAL_FRAME_STYLE_NOSHADOW            ((sal_uLong)0x00000010)
 // indicate tooltip windows, so they can always be topmost
-#define SAL_FRAME_STYLE_TOOLTIP             ((ULONG)0x00000020)
+#define SAL_FRAME_STYLE_TOOLTIP             ((sal_uLong)0x00000020)
 // windows without windowmanager decoration, this typically only applies to floating windows
-#define SAL_FRAME_STYLE_OWNERDRAWDECORATION ((ULONG)0x00000040)
+#define SAL_FRAME_STYLE_OWNERDRAWDECORATION ((sal_uLong)0x00000040)
 // dialogs
-#define SAL_FRAME_STYLE_DIALOG              ((ULONG)0x00000080)
+#define SAL_FRAME_STYLE_DIALOG              ((sal_uLong)0x00000080)
 // partial fullscreen: fullscreen on one monitor of a multimonitor display
-#define SAL_FRAME_STYLE_PARTIAL_FULLSCREEN  ((ULONG)0x00800000)
+#define SAL_FRAME_STYLE_PARTIAL_FULLSCREEN  ((sal_uLong)0x00800000)
 // plugged system child window
-#define SAL_FRAME_STYLE_PLUG                ((ULONG)0x10000000)
+#define SAL_FRAME_STYLE_PLUG                ((sal_uLong)0x10000000)
 // system child window inside another SalFrame
-#define SAL_FRAME_STYLE_SYSTEMCHILD         ((ULONG)0x08000000)
+#define SAL_FRAME_STYLE_SYSTEMCHILD         ((sal_uLong)0x08000000)
 // floating window
-#define SAL_FRAME_STYLE_FLOAT               ((ULONG)0x20000000)
+#define SAL_FRAME_STYLE_FLOAT               ((sal_uLong)0x20000000)
 // floating window that needs to be focusable
-#define SAL_FRAME_STYLE_FLOAT_FOCUSABLE     ((ULONG)0x04000000)
+#define SAL_FRAME_STYLE_FLOAT_FOCUSABLE     ((sal_uLong)0x04000000)
 // toolwindows should be painted with a smaller decoration
-#define SAL_FRAME_STYLE_TOOLWINDOW          ((ULONG)0x40000000)
+#define SAL_FRAME_STYLE_TOOLWINDOW          ((sal_uLong)0x40000000)
 // the window containing the intro bitmap, aka splashscreen
-#define SAL_FRAME_STYLE_INTRO               ((ULONG)0x80000000)
+#define SAL_FRAME_STYLE_INTRO               ((sal_uLong)0x80000000)
 
 /*
-#define SAL_FRAME_STYLE_MINABLE             ((ULONG)0x00000008)
-#define SAL_FRAME_STYLE_MAXABLE             ((ULONG)0x00000010)
-#define SAL_FRAME_STYLE_BORDER              ((ULONG)0x00000040)
-#define SAL_FRAME_STYLE_DOC                 ((ULONG)0x00004000)
-#define SAL_FRAME_STYLE_DIALOG              ((ULONG)0x00008000)
-#define SAL_FRAME_STYLE_TOOL                ((ULONG)0x00010000)
-#define SAL_FRAME_STYLE_FULLSIZE            ((ULONG)0x00020000)
+#define SAL_FRAME_STYLE_MINABLE             ((sal_uLong)0x00000008)
+#define SAL_FRAME_STYLE_MAXABLE             ((sal_uLong)0x00000010)
+#define SAL_FRAME_STYLE_BORDER              ((sal_uLong)0x00000040)
+#define SAL_FRAME_STYLE_DOC                 ((sal_uLong)0x00004000)
+#define SAL_FRAME_STYLE_DIALOG              ((sal_uLong)0x00008000)
+#define SAL_FRAME_STYLE_TOOL                ((sal_uLong)0x00010000)
+#define SAL_FRAME_STYLE_FULLSIZE            ((sal_uLong)0x00020000)
 */
 
 // ----------------------------------------
@@ -128,10 +128,10 @@ typedef sal_uInt64 SalExtStyle;
 // - Flags for SetPosSize -
 // ------------------------
 
-#define SAL_FRAME_POSSIZE_X                 ((USHORT)0x0001)
-#define SAL_FRAME_POSSIZE_Y                 ((USHORT)0x0002)
-#define SAL_FRAME_POSSIZE_WIDTH             ((USHORT)0x0004)
-#define SAL_FRAME_POSSIZE_HEIGHT            ((USHORT)0x0008)
+#define SAL_FRAME_POSSIZE_X                 ((sal_uInt16)0x0001)
+#define SAL_FRAME_POSSIZE_Y                 ((sal_uInt16)0x0002)
+#define SAL_FRAME_POSSIZE_WIDTH             ((sal_uInt16)0x0004)
+#define SAL_FRAME_POSSIZE_HEIGHT            ((sal_uInt16)0x0008)
 
 #ifdef __cplusplus
 
@@ -143,7 +143,7 @@ using namespace rtl;
 
 struct SystemParentData;
 
-class VCL_DLLPUBLIC SalFrame : public vcl::DeletionNotifier
+class VCL_PLUGIN_PUBLIC SalFrame : public vcl::DeletionNotifier
 {
     // the VCL window corresponding to this frame
     Window*                 m_pWindow;
@@ -163,10 +163,10 @@ public:
 
     // Event must be destroyed, when Frame is destroyed
     // When Event is called, SalInstance::Yield() must be returned
-    virtual BOOL                PostEvent( void* pData ) = 0;
+    virtual sal_Bool                PostEvent( void* pData ) = 0;
 
     virtual void                SetTitle( const XubString& rTitle ) = 0;
-    virtual void                SetIcon( USHORT nIcon ) = 0;
+    virtual void                SetIcon( sal_uInt16 nIcon ) = 0;
     virtual void                SetRepresentedURL( const rtl::OUString& );
     virtual void                    SetMenu( SalMenu *pSalMenu ) = 0;
     virtual void                    DrawMenuBar() = 0;
@@ -175,13 +175,13 @@ public:
 
     // Before the window is visible, a resize event
     // must be sent with the correct size
-    virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE ) = 0;
-    virtual void                Enable( BOOL bEnable ) = 0;
+    virtual void                Show( sal_Bool bVisible, sal_Bool bNoActivate = sal_False ) = 0;
+    virtual void                Enable( sal_Bool bEnable ) = 0;
     // Set ClientSize and Center the Window to the desktop
     // and send/post a resize message
     virtual void                SetMinClientSize( long nWidth, long nHeight ) = 0;
     virtual void                SetMaxClientSize( long nWidth, long nHeight ) = 0;
-    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags ) = 0;
+    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags ) = 0;
     virtual void                GetClientSize( long& rWidth, long& rHeight ) = 0;
     virtual void                GetWorkArea( Rectangle& rRect ) = 0;
     virtual SalFrame*           GetParent() const = 0;
@@ -189,20 +189,20 @@ public:
     SalFrameGeometry            GetGeometry();
     const SalFrameGeometry&     GetUnmirroredGeometry() const { return maGeometry; }
     virtual void                SetWindowState( const SalFrameState* pState ) = 0;
-    virtual BOOL                GetWindowState( SalFrameState* pState ) = 0;
-    virtual void                ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay ) = 0;
+    virtual sal_Bool                GetWindowState( SalFrameState* pState ) = 0;
+    virtual void                ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay ) = 0;
     // Enable/Disable ScreenSaver, SystemAgents, ...
-    virtual void                StartPresentation( BOOL bStart ) = 0;
+    virtual void                StartPresentation( sal_Bool bStart ) = 0;
     // Show Window over all other Windows
-    virtual void                SetAlwaysOnTop( BOOL bOnTop ) = 0;
+    virtual void                SetAlwaysOnTop( sal_Bool bOnTop ) = 0;
 
     // Window to top and grab focus
-    virtual void                ToTop( USHORT nFlags ) = 0;
+    virtual void                ToTop( sal_uInt16 nFlags ) = 0;
 
     // this function can call with the same
     // pointer style
     virtual void                SetPointer( PointerStyle ePointerStyle ) = 0;
-    virtual void                CaptureMouse( BOOL bMouse ) = 0;
+    virtual void                CaptureMouse( sal_Bool bMouse ) = 0;
     virtual void                SetPointerPos( long nX, long nY ) = 0;
 
     // flush output buffer
@@ -212,15 +212,15 @@ public:
     virtual void                Sync() = 0;
 
     virtual void                SetInputContext( SalInputContext* pContext ) = 0;
-    virtual void                EndExtTextInput( USHORT nFlags ) = 0;
+    virtual void                EndExtTextInput( sal_uInt16 nFlags ) = 0;
 
-    virtual String              GetKeyName( USHORT nKeyCode ) = 0;
-    virtual String              GetSymbolKeyName( const XubString& rFontName, USHORT nKeyCode ) = 0;
+    virtual String              GetKeyName( sal_uInt16 nKeyCode ) = 0;
+    virtual String              GetSymbolKeyName( const XubString& rFontName, sal_uInt16 nKeyCode ) = 0;
 
     // returns in 'rKeyCode' the single keycode that translates to the given unicode when using a keyboard layout of language 'aLangType'
-    // returns FALSE if no mapping exists or function not supported
+    // returns sal_False if no mapping exists or function not supported
     // this is required for advanced menu support
-    virtual BOOL                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode ) = 0;
+    virtual sal_Bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode ) = 0;
 
     // returns the input language used for the last key stroke
     // may be LANGUAGE_DONTKNOW if not supported by the OS
@@ -244,7 +244,7 @@ public:
     // get current modifier, button mask and mouse position
     struct SalPointerState
     {
-        ULONG   mnState;
+        sal_uLong   mnState;
         Point   maPos;      // in frame coordinates
     };
 
@@ -264,7 +264,7 @@ public:
     // set clip region to none (-> rectangular windows, normal state)
     virtual void                    ResetClipRegion() = 0;
     // start setting the clipregion consisting of nRects rectangles
-    virtual void                    BeginSetClipRegion( ULONG nRects ) = 0;
+    virtual void                    BeginSetClipRegion( sal_uLong nRects ) = 0;
     // add a rectangle to the clip region
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) = 0;
     // done setting up the clipregion
@@ -281,7 +281,7 @@ public:
     // Call the callback set; this sometimes necessary for implementation classes
     // that should not now more than necessary about the SalFrame implementation
     // (e.g. input methods, printer update handlers).
-    long                        CallCallback( USHORT nEvent, const void* pEvent ) const
+    long                        CallCallback( sal_uInt16 nEvent, const void* pEvent ) const
     { return m_pProc ? m_pProc( m_pWindow, const_cast<SalFrame*>(this), nEvent, pEvent ) : 0; }
 };
 

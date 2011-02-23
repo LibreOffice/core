@@ -57,27 +57,27 @@ private:
     Region          maClip;
     VirtualDevice*  mpBackground;
     VirtualDevice*  mpRestore;
-    ULONG           mnActPos;
+    sal_uLong           mnActPos;
     Disposal        meLastDisposal;
-    BOOL            mbPause;
-    BOOL            mbFirst;
-    BOOL            mbMarked;
-    BOOL            mbHMirr;
-    BOOL            mbVMirr;
+    sal_Bool            mbPause;
+    sal_Bool            mbFirst;
+    sal_Bool            mbMarked;
+    sal_Bool            mbHMirr;
+    sal_Bool            mbVMirr;
 
     void            ImplGetPosSize( const AnimationBitmap& rAnm, Point& rPosPix, Size& rSizePix );
-    void            ImplDraw( ULONG nPos, VirtualDevice* pVDev );
+    void            ImplDraw( sal_uLong nPos, VirtualDevice* pVDev );
 
 public:
 
                     ImplAnimView( Animation* pParent, OutputDevice* pOut,
-                                  const Point& rPt, const Size& rSz, ULONG nExtraData,
+                                  const Point& rPt, const Size& rSz, sal_uLong nExtraData,
                                   OutputDevice* pFirstFrameOutDev = NULL );
                     ~ImplAnimView();
 
-    BOOL            ImplMatches( OutputDevice* pOut, long nExtraData ) const;
-    void            ImplDrawToPos( ULONG nPos );
-    void            ImplDraw( ULONG nPos );
+    sal_Bool            ImplMatches( OutputDevice* pOut, long nExtraData ) const;
+    void            ImplDrawToPos( sal_uLong nPos );
+    void            ImplDraw( sal_uLong nPos );
     void            ImplRepaint();
     AInfo*          ImplCreateAInfo() const;
 
@@ -86,11 +86,11 @@ public:
     const Size&     ImplGetOutSize() const { return maSz; }
     const Size&     ImplGetOutSizePix() const { return maSzPix; }
 
-    void            ImplPause( BOOL bPause ) { mbPause = bPause; }
-    BOOL            ImplIsPause() const { return mbPause; }
+    void            ImplPause( sal_Bool bPause ) { mbPause = bPause; }
+    sal_Bool            ImplIsPause() const { return mbPause; }
 
-    void            ImplSetMarked( BOOL bMarked ) { mbMarked = bMarked; }
-    BOOL            ImplIsMarked() const { return mbMarked; }
+    void            ImplSetMarked( sal_Bool bMarked ) { mbMarked = bMarked; }
+    sal_Bool            ImplIsMarked() const { return mbMarked; }
 };
 
 #endif

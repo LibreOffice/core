@@ -33,8 +33,8 @@
 class SvDbaseConverter
 {
 public:
-    SVL_DLLPUBLIC static INT32 ConvertPrecisionToDbase(INT32 _nLen, INT32 _nScale);
-    SVL_DLLPUBLIC static INT32 ConvertPrecisionToOdbc(INT32 _nLen, INT32 _nScale);
+    SVL_DLLPUBLIC static sal_Int32 ConvertPrecisionToDbase(sal_Int32 _nLen, sal_Int32 _nScale);
+    SVL_DLLPUBLIC static sal_Int32 ConvertPrecisionToOdbc(sal_Int32 _nLen, sal_Int32 _nScale);
 };
 
 #endif //_CONVERTER_HXX_

@@ -57,7 +57,7 @@ SfxPointItem::SfxPointItem()
 
 // -----------------------------------------------------------------------
 
-SfxPointItem::SfxPointItem( USHORT nW, const Point& rVal ) :
+SfxPointItem::SfxPointItem( sal_uInt16 nW, const Point& rVal ) :
     SfxPoolItem( nW ),
     aVal( rVal )
 {
@@ -66,7 +66,7 @@ SfxPointItem::SfxPointItem( USHORT nW, const Point& rVal ) :
 
 // -----------------------------------------------------------------------
 
-SfxPointItem::SfxPointItem( USHORT nW, SvStream &rStream ) :
+SfxPointItem::SfxPointItem( sal_uInt16 nW, SvStream &rStream ) :
     SfxPoolItem( nW )
 {
     DBG_CTOR(SfxPointItem, 0);
@@ -120,7 +120,7 @@ SfxPoolItem* SfxPointItem::Clone(SfxItemPool *) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SfxPointItem::Create(SvStream &rStream, USHORT ) const
+SfxPoolItem* SfxPointItem::Create(SvStream &rStream, sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxPointItem, 0);
     Point aStr;
@@ -130,7 +130,7 @@ SfxPoolItem* SfxPointItem::Create(SvStream &rStream, USHORT ) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SfxPointItem::Store(SvStream &rStream, USHORT ) const
+SvStream& SfxPointItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxPointItem, 0);
     rStream << aVal;
@@ -139,8 +139,8 @@ SvStream& SfxPointItem::Store(SvStream &rStream, USHORT ) const
 
 // -----------------------------------------------------------------------
 
-BOOL SfxPointItem::QueryValue( uno::Any& rVal,
-                               BYTE nMemberId ) const
+sal_Bool SfxPointItem::QueryValue( uno::Any& rVal,
+                               sal_uInt8 nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     awt::Point aTmp(aVal.X(), aVal.Y());
@@ -155,20 +155,20 @@ BOOL SfxPointItem::QueryValue( uno::Any& rVal,
         case 0: rVal <<= aTmp; break;
         case MID_X: rVal <<= aTmp.X; break;
         case MID_Y: rVal <<= aTmp.Y; break;
-        default: DBG_ERROR("Wrong MemberId!"); return FALSE;
+        default: DBG_ERROR("Wrong MemberId!"); return sal_False;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL SfxPointItem::PutValue( const uno::Any& rVal,
-                             BYTE nMemberId )
+sal_Bool SfxPointItem::PutValue( const uno::Any& rVal,
+                             sal_uInt8 nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     awt::Point aValue;
     sal_Int32 nVal = 0;
     if ( !nMemberId )
@@ -194,7 +194,7 @@ BOOL SfxPointItem::PutValue( const uno::Any& rVal,
             case 0: aVal.setX( aValue.X ); aVal.setY( aValue.Y ); break;
             case MID_X: aVal.setX( nVal ); break;
             case MID_Y: aVal.setY( nVal ); break;
-            default: DBG_ERROR("Wrong MemberId!"); return FALSE;
+            default: DBG_ERROR("Wrong MemberId!"); return sal_False;
         }
     }
 

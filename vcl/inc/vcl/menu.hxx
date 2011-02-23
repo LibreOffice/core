@@ -67,22 +67,22 @@ namespace vcl { struct MenuLayoutData; }
 // - Menu-Types -
 // --------------
 
-#define MENU_APPEND             ((USHORT)0xFFFF)
-#define MENU_ITEM_NOTFOUND      ((USHORT)0xFFFF)
+#define MENU_APPEND             ((sal_uInt16)0xFFFF)
+#define MENU_ITEM_NOTFOUND      ((sal_uInt16)0xFFFF)
 
-#define POPUPMENU_EXECUTE_DOWN  ((USHORT)0x0001)
-#define POPUPMENU_EXECUTE_UP    ((USHORT)0x0002)
-#define POPUPMENU_EXECUTE_LEFT  ((USHORT)0x0004)
-#define POPUPMENU_EXECUTE_RIGHT ((USHORT)0x0008)
+#define POPUPMENU_EXECUTE_DOWN  ((sal_uInt16)0x0001)
+#define POPUPMENU_EXECUTE_UP    ((sal_uInt16)0x0002)
+#define POPUPMENU_EXECUTE_LEFT  ((sal_uInt16)0x0004)
+#define POPUPMENU_EXECUTE_RIGHT ((sal_uInt16)0x0008)
 
-#define POPUPMENU_NOMOUSEUPCLOSE ((USHORT)0x0010)
+#define POPUPMENU_NOMOUSEUPCLOSE ((sal_uInt16)0x0010)
 
 // By changes you must also change: rsc/vclrsc.hxx
 enum MenuItemType { MENUITEM_DONTKNOW, MENUITEM_STRING, MENUITEM_IMAGE,
                     MENUITEM_STRINGIMAGE, MENUITEM_SEPARATOR };
 
 // By changes you must also change: rsc/vclrsc.hxx
-typedef USHORT MenuItemBits;
+typedef sal_uInt16 MenuItemBits;
 #define MIB_CHECKABLE           ((MenuItemBits)0x0001)
 #define MIB_RADIOCHECK          ((MenuItemBits)0x0002)
 #define MIB_AUTOCHECK           ((MenuItemBits)0x0004)
@@ -150,18 +150,18 @@ private:
 
     XubString           aTitleText;         // PopupMenu-Text
 
-    ULONG               nEventId;
-    USHORT              mnHighlightedItemPos; // for native menues: keeps track of the highlighted item
-    USHORT              nMenuFlags;
-    USHORT              nDefaultItem;       // Id vom Default-Item
-    USHORT              nSelectedId;
+    sal_uLong               nEventId;
+    sal_uInt16              mnHighlightedItemPos; // for native menues: keeps track of the highlighted item
+    sal_uInt16              nMenuFlags;
+    sal_uInt16              nDefaultItem;       // Id vom Default-Item
+    sal_uInt16              nSelectedId;
 
     // Fuer Ausgabe:
-    USHORT              nCheckPos;
-    USHORT              nImagePos;
-    USHORT              nTextPos;
+    sal_uInt16              nCheckPos;
+    sal_uInt16              nImagePos;
+    sal_uInt16              nTextPos;
 
-    BOOL                bIsMenuBar  : 1,        // Handelt es sich um den MenuBar
+    sal_Bool                bIsMenuBar  : 1,        // Handelt es sich um den MenuBar
                         bCanceled   : 1,        // Waehrend eines Callbacks abgebrochen
                         bInCallback : 1,        // In Activate/Deactivate
                         bKilled     : 1;        // Gekillt...
@@ -175,24 +175,24 @@ protected:
     SAL_DLLPRIVATE void             ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE Menu*            ImplGetStartMenu();
     SAL_DLLPRIVATE Menu*            ImplFindSelectMenu();
-    SAL_DLLPRIVATE Menu*            ImplFindMenu( USHORT nId );
+    SAL_DLLPRIVATE Menu*            ImplFindMenu( sal_uInt16 nId );
     SAL_DLLPRIVATE Size             ImplCalcSize( Window* pWin );
-    SAL_DLLPRIVATE BOOL             ImplIsVisible( USHORT nPos ) const;
-    SAL_DLLPRIVATE BOOL             ImplIsSelectable( USHORT nPos ) const;
-    SAL_DLLPRIVATE USHORT           ImplGetVisibleItemCount() const;
-    SAL_DLLPRIVATE USHORT           ImplGetFirstVisible() const;
-    SAL_DLLPRIVATE USHORT           ImplGetPrevVisible( USHORT nPos ) const;
-    SAL_DLLPRIVATE USHORT           ImplGetNextVisible( USHORT nPos ) const;
-    SAL_DLLPRIVATE void             ImplPaint( Window* pWin, USHORT nBorder, long nOffY = 0, MenuItemData* pThisDataOnly = 0, BOOL bHighlighted = FALSE, bool bLayout = false ) const;
+    SAL_DLLPRIVATE sal_Bool             ImplIsVisible( sal_uInt16 nPos ) const;
+    SAL_DLLPRIVATE sal_Bool             ImplIsSelectable( sal_uInt16 nPos ) const;
+    SAL_DLLPRIVATE sal_uInt16           ImplGetVisibleItemCount() const;
+    SAL_DLLPRIVATE sal_uInt16           ImplGetFirstVisible() const;
+    SAL_DLLPRIVATE sal_uInt16           ImplGetPrevVisible( sal_uInt16 nPos ) const;
+    SAL_DLLPRIVATE sal_uInt16           ImplGetNextVisible( sal_uInt16 nPos ) const;
+    SAL_DLLPRIVATE void             ImplPaint( Window* pWin, sal_uInt16 nBorder, long nOffY = 0, MenuItemData* pThisDataOnly = 0, sal_Bool bHighlighted = sal_False, bool bLayout = false ) const;
     SAL_DLLPRIVATE void             ImplSelect();
-    SAL_DLLPRIVATE void             ImplCallHighlight( USHORT nHighlightItem );
-    SAL_DLLPRIVATE void             ImplCallEventListeners( ULONG nEvent, USHORT nPos );
+    SAL_DLLPRIVATE void             ImplCallHighlight( sal_uInt16 nHighlightItem );
+    SAL_DLLPRIVATE void             ImplCallEventListeners( sal_uLong nEvent, sal_uInt16 nPos );
     DECL_DLLPRIVATE_LINK(           ImplCallSelect, Menu* );
 
     SAL_DLLPRIVATE void             ImplFillLayoutData() const;
     SAL_DLLPRIVATE SalMenu*         ImplGetSalMenu() { return mpSalMenu; }
     SAL_DLLPRIVATE void             ImplSetSalMenu( SalMenu *pMenu );
-    SAL_DLLPRIVATE const XubString& ImplGetHelpText( USHORT nItemId ) const;
+    SAL_DLLPRIVATE const XubString& ImplGetHelpText( sal_uInt16 nItemId ) const;
 
     // returns native check and option menu symbol height;
     // return value is Max( rCheckHeight, rRadioHeight )
@@ -205,7 +205,7 @@ public:
     SAL_DLLPRIVATE Menu*            ImplGetStartedFrom() const;
 
                             Menu();
-                            Menu( BOOL bMenuBar );
+                            Menu( sal_Bool bMenuBar );
     SAL_DLLPRIVATE Window*  ImplGetWindow() const { return pWindow; }
 
 
@@ -219,93 +219,93 @@ public:
     virtual void        Select();
     virtual void        RequestHelp( const HelpEvent& rHEvt );
 
-    void                InsertItem( USHORT nItemId, const XubString& rStr,
+    void                InsertItem( sal_uInt16 nItemId, const XubString& rStr,
                                     MenuItemBits nItemBits = 0,
-                                    USHORT nPos = MENU_APPEND );
-    void                InsertItem( USHORT nItemId, const Image& rImage,
+                                    sal_uInt16 nPos = MENU_APPEND );
+    void                InsertItem( sal_uInt16 nItemId, const Image& rImage,
                                     MenuItemBits nItemBits = 0,
-                                    USHORT nPos = MENU_APPEND );
-    void                InsertItem( USHORT nItemId,
+                                    sal_uInt16 nPos = MENU_APPEND );
+    void                InsertItem( sal_uInt16 nItemId,
                                     const XubString& rString, const Image& rImage,
                                     MenuItemBits nItemBits = 0,
-                                    USHORT nPos = MENU_APPEND );
-    void                InsertItem( const ResId& rResId, USHORT nPos = MENU_APPEND );
-    void                InsertSeparator( USHORT nPos = MENU_APPEND );
-    void                RemoveItem( USHORT nPos );
-    void                CopyItem( const Menu& rMenu, USHORT nPos,
-                                  USHORT nNewPos = MENU_APPEND );
+                                    sal_uInt16 nPos = MENU_APPEND );
+    void                InsertItem( const ResId& rResId, sal_uInt16 nPos = MENU_APPEND );
+    void                InsertSeparator( sal_uInt16 nPos = MENU_APPEND );
+    void                RemoveItem( sal_uInt16 nPos );
+    void                CopyItem( const Menu& rMenu, sal_uInt16 nPos,
+                                  sal_uInt16 nNewPos = MENU_APPEND );
     void                Clear();
 
     void                CreateAutoMnemonics();
 
-    void                SetMenuFlags( USHORT nFlags ) { nMenuFlags = nFlags; }
-    USHORT              GetMenuFlags() const { return nMenuFlags; }
+    void                SetMenuFlags( sal_uInt16 nFlags ) { nMenuFlags = nFlags; }
+    sal_uInt16              GetMenuFlags() const { return nMenuFlags; }
 
-    USHORT              GetItemCount() const;
-    USHORT              GetItemId( USHORT nPos ) const;
-    USHORT              GetItemPos( USHORT nItemId ) const;
-    MenuItemType        GetItemType( USHORT nPos ) const;
-    USHORT              GetCurItemId() const;
+    sal_uInt16              GetItemCount() const;
+    sal_uInt16              GetItemId( sal_uInt16 nPos ) const;
+    sal_uInt16              GetItemPos( sal_uInt16 nItemId ) const;
+    MenuItemType        GetItemType( sal_uInt16 nPos ) const;
+    sal_uInt16              GetCurItemId() const;
 
-    void                SetDefaultItem( USHORT nItemId )    { nDefaultItem = nItemId; }
-    USHORT              GetDefaultItem() const              { return nDefaultItem; }
+    void                SetDefaultItem( sal_uInt16 nItemId )    { nDefaultItem = nItemId; }
+    sal_uInt16              GetDefaultItem() const              { return nDefaultItem; }
 
-    void                SetItemBits( USHORT nItemId, MenuItemBits nBits );
-    MenuItemBits        GetItemBits( USHORT nItemId ) const;
+    void                SetItemBits( sal_uInt16 nItemId, MenuItemBits nBits );
+    MenuItemBits        GetItemBits( sal_uInt16 nItemId ) const;
 
-    void                SetUserValue( USHORT nItemId, ULONG nValue );
-    ULONG               GetUserValue( USHORT nItemId ) const;
+    void                SetUserValue( sal_uInt16 nItemId, sal_uLong nValue );
+    sal_uLong               GetUserValue( sal_uInt16 nItemId ) const;
 
-    void                SetPopupMenu( USHORT nItemId, PopupMenu* pMenu );
-    PopupMenu*          GetPopupMenu( USHORT nItemId ) const;
+    void                SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu );
+    PopupMenu*          GetPopupMenu( sal_uInt16 nItemId ) const;
 
-    void                SetAccelKey( USHORT nItemId, const KeyCode& rKeyCode );
-    KeyCode             GetAccelKey( USHORT nItemId ) const;
+    void                SetAccelKey( sal_uInt16 nItemId, const KeyCode& rKeyCode );
+    KeyCode             GetAccelKey( sal_uInt16 nItemId ) const;
 
-    void                CheckItem( USHORT nItemId, BOOL bCheck = TRUE );
-    BOOL                IsItemChecked( USHORT nItemId ) const;
+    void                CheckItem( sal_uInt16 nItemId, sal_Bool bCheck = sal_True );
+    sal_Bool                IsItemChecked( sal_uInt16 nItemId ) const;
 
-    void                SelectItem( USHORT nItemId );
+    void                SelectItem( sal_uInt16 nItemId );
     void                DeSelect() { SelectItem( 0xFFFF ); } // MENUITEMPOS_INVALID
 
-    void                EnableItem( USHORT nItemId, BOOL bEnable = TRUE );
-    BOOL                IsItemEnabled( USHORT nItemId ) const;
+    void                EnableItem( sal_uInt16 nItemId, sal_Bool bEnable = sal_True );
+    sal_Bool                IsItemEnabled( sal_uInt16 nItemId ) const;
 
-    void                ShowItem( USHORT nItemId, BOOL bVisible = TRUE );
-    void                HideItem( USHORT nItemId ) { ShowItem( nItemId, FALSE ); }
+    void                ShowItem( sal_uInt16 nItemId, sal_Bool bVisible = sal_True );
+    void                HideItem( sal_uInt16 nItemId ) { ShowItem( nItemId, sal_False ); }
 
-    BOOL                IsItemVisible( USHORT nItemId ) const;
-    BOOL                IsItemPosVisible( USHORT nItemPos ) const;
-    BOOL                IsMenuVisible() const;
-    BOOL                IsMenuBar() const { return bIsMenuBar; }
+    sal_Bool                IsItemVisible( sal_uInt16 nItemId ) const;
+    sal_Bool                IsItemPosVisible( sal_uInt16 nItemPos ) const;
+    sal_Bool                IsMenuVisible() const;
+    sal_Bool                IsMenuBar() const { return bIsMenuBar; }
 
-    void                RemoveDisabledEntries( BOOL bCheckPopups = TRUE, BOOL bRemoveEmptyPopups = FALSE );
-    BOOL                HasValidEntries( BOOL bCheckPopups = TRUE );
+    void                RemoveDisabledEntries( sal_Bool bCheckPopups = sal_True, sal_Bool bRemoveEmptyPopups = sal_False );
+    sal_Bool                HasValidEntries( sal_Bool bCheckPopups = sal_True );
 
-    void                SetItemText( USHORT nItemId, const XubString& rStr );
-    XubString           GetItemText( USHORT nItemId ) const;
+    void                SetItemText( sal_uInt16 nItemId, const XubString& rStr );
+    XubString           GetItemText( sal_uInt16 nItemId ) const;
 
-    void                SetItemImage( USHORT nItemId, const Image& rImage );
-    Image               GetItemImage( USHORT nItemId ) const;
-    void                SetItemImageAngle( USHORT nItemId, long nAngle10 );
-    long                GetItemImageAngle( USHORT nItemId ) const;
-    void                SetItemImageMirrorMode( USHORT nItemId, BOOL bMirror );
-    BOOL                GetItemImageMirrorMode( USHORT ) const;
+    void                SetItemImage( sal_uInt16 nItemId, const Image& rImage );
+    Image               GetItemImage( sal_uInt16 nItemId ) const;
+    void                SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 );
+    long                GetItemImageAngle( sal_uInt16 nItemId ) const;
+    void                SetItemImageMirrorMode( sal_uInt16 nItemId, sal_Bool bMirror );
+    sal_Bool                GetItemImageMirrorMode( sal_uInt16 ) const;
 
-    void                SetItemCommand( USHORT nItemId, const XubString& rCommand );
-    const XubString&    GetItemCommand( USHORT nItemId ) const;
+    void                SetItemCommand( sal_uInt16 nItemId, const XubString& rCommand );
+    const XubString&    GetItemCommand( sal_uInt16 nItemId ) const;
 
-    void                SetHelpText( USHORT nItemId, const XubString& rString );
-    const XubString&    GetHelpText( USHORT nItemId ) const;
+    void                SetHelpText( sal_uInt16 nItemId, const XubString& rString );
+    const XubString&    GetHelpText( sal_uInt16 nItemId ) const;
 
-    void                SetTipHelpText( USHORT nItemId, const XubString& rString );
-    const XubString&    GetTipHelpText( USHORT nItemId ) const;
+    void                SetTipHelpText( sal_uInt16 nItemId, const XubString& rString );
+    const XubString&    GetTipHelpText( sal_uInt16 nItemId ) const;
 
-    void                SetHelpCommand( USHORT nItemId, const XubString& rString );
-    const XubString&    GetHelpCommand( USHORT nItemId ) const;
+    void                SetHelpCommand( sal_uInt16 nItemId, const XubString& rString );
+    const XubString&    GetHelpCommand( sal_uInt16 nItemId ) const;
 
-    void                SetHelpId( USHORT nItemId, const rtl::OString& rHelpId );
-    rtl::OString        GetHelpId( USHORT nItemId ) const;
+    void                SetHelpId( sal_uInt16 nItemId, const rtl::OString& rHelpId );
+    rtl::OString        GetHelpId( sal_uInt16 nItemId ) const;
 
     void                SetActivateHdl( const Link& rLink )     { aActivateHdl = rLink; }
     const Link&         GetActivateHdl() const                  { return aActivateHdl; }
@@ -321,7 +321,7 @@ public:
 
     void                SetLogo( const MenuLogo& rLogo );
     void                SetLogo();
-    BOOL                HasLogo() const { return pLogo ? TRUE : FALSE; }
+    sal_Bool                HasLogo() const { return pLogo ? sal_True : sal_False; }
     MenuLogo            GetLogo() const;
 
     void                AddEventListener( const Link& rEventListener );
@@ -336,7 +336,7 @@ public:
 
     // returns the system's menu handle if native menues are supported
     // pData must point to a SystemMenuData structure
-    BOOL                GetSystemMenuData( SystemMenuData* pData ) const;
+    sal_Bool                GetSystemMenuData( SystemMenuData* pData ) const;
 
     // accessibility helpers
 
@@ -345,41 +345,41 @@ public:
     // returns the bounding box for the character at index nIndex
     // where nIndex is relative to the starting index of the item
     // with id nItemId (in coordinates of the displaying window)
-    Rectangle GetCharacterBounds( USHORT nItemId, long nIndex ) const;
+    Rectangle GetCharacterBounds( sal_uInt16 nItemId, long nIndex ) const;
     // -1 is returned if no character is at that point
     // if an index is found the corresponding item id is filled in (else 0)
-    long GetIndexForPoint( const Point& rPoint, USHORT& rItemID ) const;
+    long GetIndexForPoint( const Point& rPoint, sal_uInt16& rItemID ) const;
     // returns the number of lines in the result of GetDisplayText()
     long GetLineCount() const;
     // returns the interval [start,end] of line nLine
     // returns [-1,-1] for an invalid line
     Pair GetLineStartEnd( long nLine ) const;
     // like GetLineStartEnd but first finds the line number for the item
-    Pair GetItemStartEnd( USHORT nItemId ) const;
+    Pair GetItemStartEnd( sal_uInt16 nItemId ) const;
     // returns the item id for line nLine or 0 if nLine is invalid
-    USHORT GetDisplayItemId( long nLine ) const;
+    sal_uInt16 GetDisplayItemId( long nLine ) const;
     // returns the bounding rectangle for an item at pos nItemPos
-    Rectangle GetBoundingRectangle( USHORT nItemPos ) const;
-    BOOL ConvertPoint( Point& rPoint, Window* pReferenceWindow ) const;
+    Rectangle GetBoundingRectangle( sal_uInt16 nItemPos ) const;
+    sal_Bool ConvertPoint( Point& rPoint, Window* pReferenceWindow ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > GetAccessible();
     void SetAccessible( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible );
 
     // gets the activation key of the specified item
-    KeyEvent GetActivationKey( USHORT nItemId ) const;
+    KeyEvent GetActivationKey( sal_uInt16 nItemId ) const;
 
     Window*             GetWindow() const { return pWindow; }
 
-    void                SetAccessibleName( USHORT nItemId, const XubString& rStr );
-    XubString           GetAccessibleName( USHORT nItemId ) const;
+    void                SetAccessibleName( sal_uInt16 nItemId, const XubString& rStr );
+    XubString           GetAccessibleName( sal_uInt16 nItemId ) const;
 
-    void                SetAccessibleDescription( USHORT nItemId, const XubString& rStr );
-    XubString           GetAccessibleDescription( USHORT nItemId ) const;
+    void                SetAccessibleDescription( sal_uInt16 nItemId, const XubString& rStr );
+    XubString           GetAccessibleDescription( sal_uInt16 nItemId ) const;
 
     // returns whether the item a position nItemPos is highlighted or not.
-    bool  IsHighlighted( USHORT nItemPos ) const;
+    bool  IsHighlighted( sal_uInt16 nItemPos ) const;
 
-    void                HighlightItem( USHORT nItemPos );
+    void                HighlightItem( sal_uInt16 nItemPos );
     void                DeHighlight() { HighlightItem( 0xFFFF ); } // MENUITEMPOS_INVALID
 
 
@@ -395,10 +395,10 @@ class VCL_DLLPUBLIC MenuBar : public Menu
     Link                maCloserHdl;
     Link                maFloatHdl;
     Link                maHideHdl;
-    BOOL                mbCloserVisible;
-    BOOL                mbFloatBtnVisible;
-    BOOL                mbHideBtnVisible;
-    BOOL                mbDisplayable;
+    sal_Bool                mbCloserVisible;
+    sal_Bool                mbFloatBtnVisible;
+    sal_Bool                mbHideBtnVisible;
+    sal_Bool                mbDisplayable;
 
 //#if 0 // _SOLAR__PRIVATE
     friend class Application;
@@ -408,8 +408,8 @@ class VCL_DLLPUBLIC MenuBar : public Menu
     friend class SystemWindow;
 
     SAL_DLLPRIVATE static Window*   ImplCreate( Window* pParent, Window* pWindow, MenuBar* pMenu );
-    SAL_DLLPRIVATE static void      ImplDestroy( MenuBar* pMenu, BOOL bDelete );
-    SAL_DLLPRIVATE BOOL             ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu = TRUE );
+    SAL_DLLPRIVATE static void      ImplDestroy( MenuBar* pMenu, sal_Bool bDelete );
+    SAL_DLLPRIVATE sal_Bool             ImplHandleKeyEvent( const KeyEvent& rKEvent, sal_Bool bFromMenu = sal_True );
 //#endif
 
 public:
@@ -420,20 +420,20 @@ public:
 
     MenuBar&            operator =( const MenuBar& rMenu );
 
-    void                ShowCloser( BOOL bShow = TRUE );
-    BOOL                HasCloser() const { return mbCloserVisible; }
-    void                ShowFloatButton( BOOL bShow = TRUE );
-    BOOL                HasFloatButton() const { return mbFloatBtnVisible; }
-    void                ShowHideButton( BOOL bShow = TRUE );
-    BOOL                HasHideButton() const { return mbHideBtnVisible; }
-    void                ShowButtons( BOOL bClose, BOOL bFloat, BOOL bHide );
+    void                ShowCloser( sal_Bool bShow = sal_True );
+    sal_Bool                HasCloser() const { return mbCloserVisible; }
+    void                ShowFloatButton( sal_Bool bShow = sal_True );
+    sal_Bool                HasFloatButton() const { return mbFloatBtnVisible; }
+    void                ShowHideButton( sal_Bool bShow = sal_True );
+    sal_Bool                HasHideButton() const { return mbHideBtnVisible; }
+    void                ShowButtons( sal_Bool bClose, sal_Bool bFloat, sal_Bool bHide );
 
-    void                SelectEntry( USHORT nId );
-    BOOL                HandleMenuActivateEvent( Menu *pMenu ) const;
-    BOOL                HandleMenuDeActivateEvent( Menu *pMenu ) const;
-    BOOL                HandleMenuHighlightEvent( Menu *pMenu, USHORT nEventId ) const;
-    BOOL                HandleMenuCommandEvent( Menu *pMenu, USHORT nEventId ) const;
-    BOOL                HandleMenuButtonEvent( Menu *pMenu, USHORT nEventId ) const;
+    void                SelectEntry( sal_uInt16 nId );
+    sal_Bool                HandleMenuActivateEvent( Menu *pMenu ) const;
+    sal_Bool                HandleMenuDeActivateEvent( Menu *pMenu ) const;
+    sal_Bool                HandleMenuHighlightEvent( Menu *pMenu, sal_uInt16 nEventId ) const;
+    sal_Bool                HandleMenuCommandEvent( Menu *pMenu, sal_uInt16 nEventId ) const;
+    sal_Bool                HandleMenuButtonEvent( Menu *pMenu, sal_uInt16 nEventId ) const;
 
     void                SetCloserHdl( const Link& rLink )           { maCloserHdl = rLink; }
     const Link&         GetCloserHdl() const                        { return maCloserHdl; }
@@ -446,31 +446,31 @@ public:
     //  - if a menubar is not displayable, its MenuBarWindow will never be shown
     //    and it will be hidden if it was visible before
     //  - note: if a menubar is diplayable, this does not necessarily mean that it is currently visible
-    void                SetDisplayable( BOOL bDisplayable );
-    BOOL                IsDisplayable() const                       { return mbDisplayable; }
+    void                SetDisplayable( sal_Bool bDisplayable );
+    sal_Bool                IsDisplayable() const                       { return mbDisplayable; }
 
     struct MenuBarButtonCallbackArg
     {
-        USHORT      nId;             // Id of the button
+        sal_uInt16      nId;             // Id of the button
         bool        bHighlight;      // highlight on/off
         MenuBar*    pMenuBar;        // menubar the button belongs to
     };
     // add an arbitrary button to the menubar (will appear next to closer)
     // passed link will be call with a MenuBarButtonCallbackArg on press
-    USHORT              AddMenuBarButton( const Image&, const Link&, USHORT nPos = 0 );
+    sal_uInt16              AddMenuBarButton( const Image&, const Link&, sal_uInt16 nPos = 0 );
     // add an arbitrary button to the menubar (will appear next to closer)
     // passed link will be call with a MenuBarButtonCallbackArg on press
     // passed string will be set as tooltip
-    USHORT              AddMenuBarButton( const Image&, const Link&, const String&, USHORT nPos = 0 );
+    sal_uInt16              AddMenuBarButton( const Image&, const Link&, const String&, sal_uInt16 nPos = 0 );
     // set the highlight link for additional button with ID nId
     // highlight link will be called with a MenuBarButtonHighlightArg
     // the bHighlight member of that struct shall contain the new state
-    void                SetMenuBarButtonHighlightHdl( USHORT nId, const Link& );
+    void                SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link& );
     // returns the rectangle occupied by the additional button named nId
     // coordinates are relative to the systemwindiow the menubar is attached to
     // if the menubar is unattached an empty rectangle is returned
-    Rectangle           GetMenuBarButtonRectPixel( USHORT nId );
-    void                RemoveMenuBarButton( USHORT nId );
+    Rectangle           GetMenuBarButtonRectPixel( sal_uInt16 nId );
+    void                RemoveMenuBarButton( sal_uInt16 nId );
 };
 
 inline MenuBar& MenuBar::operator =( const MenuBar& rMenu )
@@ -497,9 +497,9 @@ private:
     SAL_DLLPRIVATE MenuFloatingWindow*   ImplGetFloatingWindow() const { return (MenuFloatingWindow*)Menu::ImplGetWindow(); }
 
 protected:
-    SAL_DLLPRIVATE USHORT                ImplExecute( Window* pWindow, const Rectangle& rRect, ULONG nPopupFlags, Menu* pStaredFrom, BOOL bPreSelectFirst );
-    SAL_DLLPRIVATE long                  ImplCalcHeight( USHORT nEntries ) const;
-    SAL_DLLPRIVATE USHORT                ImplCalcVisEntries( long nMaxHeight, USHORT nStartEntry = 0, USHORT* pLastVisible = NULL ) const;
+    SAL_DLLPRIVATE sal_uInt16                ImplExecute( Window* pWindow, const Rectangle& rRect, sal_uLong nPopupFlags, Menu* pStaredFrom, sal_Bool bPreSelectFirst );
+    SAL_DLLPRIVATE long                  ImplCalcHeight( sal_uInt16 nEntries ) const;
+    SAL_DLLPRIVATE sal_uInt16                ImplCalcVisEntries( long nMaxHeight, sal_uInt16 nStartEntry = 0, sal_uInt16* pLastVisible = NULL ) const;
 
 public:
                         PopupMenu();
@@ -510,15 +510,15 @@ public:
     void                SetText( const XubString& rTitle )  { aTitleText = rTitle; }
     const XubString&    GetText() const                     { return aTitleText; }
 
-    USHORT              Execute( Window* pWindow, const Point& rPopupPos );
-    USHORT              Execute( Window* pWindow, const Rectangle& rRect, USHORT nFlags = 0 );
+    sal_uInt16              Execute( Window* pWindow, const Point& rPopupPos );
+    sal_uInt16              Execute( Window* pWindow, const Rectangle& rRect, sal_uInt16 nFlags = 0 );
 
     // Fuer das TestTool
-    void                EndExecute( USHORT nSelect = 0 );
-    void                SelectEntry( USHORT nId );
-    void                SetSelectedEntry( USHORT nId ); // for use by native submenu only
+    void                EndExecute( sal_uInt16 nSelect = 0 );
+    void                SelectEntry( sal_uInt16 nId );
+    void                SetSelectedEntry( sal_uInt16 nId ); // for use by native submenu only
 
-    static BOOL         IsInExecute();
+    static sal_Bool         IsInExecute();
     static PopupMenu*   GetActivePopupMenu();
 
     PopupMenu&          operator =( const PopupMenu& rMenu );

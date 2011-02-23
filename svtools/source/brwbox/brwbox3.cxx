@@ -172,7 +172,7 @@ sal_Int32 BrowseBox::GetAccessibleControlCount() const
 
 Reference< XAccessible > BrowseBox::CreateAccessibleControl( sal_Int32 )
 {
-    DBG_ASSERT( FALSE, "BrowseBox::CreateAccessibleControl: to be overwritten!" );
+    DBG_ASSERT( sal_False, "BrowseBox::CreateAccessibleControl: to be overwritten!" );
     return NULL;
 }
 // -----------------------------------------------------------------------------
@@ -192,7 +192,7 @@ sal_Bool BrowseBox::ConvertPointToCellAddress(
 sal_Bool BrowseBox::ConvertPointToRowHeader( sal_Int32& rnRow, const Point& rPoint )
 {
     rnRow = GetRowAtYPosPixel(rPoint.Y());
-    //  USHORT nColumnId = GetColumnAtXPosPixel(rPoint.X());
+    //  sal_uInt16 nColumnId = GetColumnAtXPosPixel(rPoint.X());
     return rnRow != BROWSER_INVALIDID;// && nColumnId == 0;
 }
 // -----------------------------------------------------------------------------
@@ -397,7 +397,7 @@ void BrowseBox::GrabTableFocus()
     GrabFocus();
 }
 // -----------------------------------------------------------------------------
-String BrowseBox::GetCellText(long, USHORT ) const
+String BrowseBox::GetCellText(long, sal_uInt16 ) const
 {
     DBG_ASSERT(0,"This method has to be implemented by the derived classes! BUG!!");
     return String();
@@ -531,13 +531,13 @@ sal_Bool BrowseBox::IsCellVisible( sal_Int32 _nRow, sal_uInt16 _nColumnPos ) con
     return IsFieldVisible( _nRow, GetColumnId( _nColumnPos ) );
 }
 // -----------------------------------------------------------------------------
-String BrowseBox::GetAccessibleCellText(long _nRow, USHORT _nColPos) const
+String BrowseBox::GetAccessibleCellText(long _nRow, sal_uInt16 _nColPos) const
 {
     return GetCellText( _nRow, GetColumnId( _nColPos ) );
 }
 
 // -----------------------------------------------------------------------------
-BOOL BrowseBox::GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector )
+sal_Bool BrowseBox::GetGlyphBoundRects( const Point& rOrigin, const String& rStr, int nIndex, int nLen, int nBase, MetricVector& rVector )
 {
     return Control::GetGlyphBoundRects( rOrigin, rStr, nIndex, nLen, nBase, rVector );
 }
@@ -552,7 +552,7 @@ void BrowseBox::GrabFocus()
     Control::GrabFocus();
 }
 // -----------------------------------------------------------------------------
-Reference< XAccessible > BrowseBox::GetAccessible( BOOL bCreate )
+Reference< XAccessible > BrowseBox::GetAccessible( sal_Bool bCreate )
 {
     return Control::GetAccessible( bCreate );
 }

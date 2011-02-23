@@ -59,7 +59,7 @@ char const *LimitedPath[] = {
 
 /*****************************************************************************/
 SourceDirectory::SourceDirectory( const ByteString &rDirectoryName,
-    USHORT nOperatingSystem, SourceDirectory *pParentDirectory )
+    sal_uInt16 nOperatingSystem, SourceDirectory *pParentDirectory )
 /*****************************************************************************/
                 : ByteString( rDirectoryName ),
                 pParent( pParentDirectory ),
@@ -87,7 +87,7 @@ SourceDirectory::~SourceDirectory()
 
 /*****************************************************************************/
 CodedDependency *SourceDirectory::AddCodedDependency(
-    const ByteString &rCodedIdentifier, USHORT nOperatingSystems )
+    const ByteString &rCodedIdentifier, sal_uInt16 nOperatingSystems )
 /*****************************************************************************/
 {
     CodedDependency *pReturn = NULL;
@@ -98,7 +98,7 @@ CodedDependency *SourceDirectory::AddCodedDependency(
         pCodedDependencies->PutString(( ByteString * ) pReturn );
     }
     else {
-        ULONG nPos =
+        sal_uIntPtr nPos =
             pCodedDependencies->IsString( (ByteString *) (& rCodedIdentifier) );
         if ( nPos == NOT_THERE ) {
             pReturn =
@@ -116,7 +116,7 @@ CodedDependency *SourceDirectory::AddCodedDependency(
 
 /*****************************************************************************/
 CodedDependency *SourceDirectory::AddCodedIdentifier(
-    const ByteString &rCodedIdentifier, USHORT nOperatingSystems )
+    const ByteString &rCodedIdentifier, sal_uInt16 nOperatingSystems )
 /*****************************************************************************/
 {
     CodedDependency *pReturn = NULL;
@@ -127,7 +127,7 @@ CodedDependency *SourceDirectory::AddCodedIdentifier(
         pCodedIdentifier->PutString(( ByteString * ) pReturn );
     }
     else {
-        ULONG nPos =
+        sal_uIntPtr nPos =
             pCodedIdentifier->IsString( ( ByteString *) (& rCodedIdentifier) );
         if ( nPos == NOT_THERE ) {
             pReturn =
@@ -172,22 +172,22 @@ SourceDirectory *SourceDirectory::GetRootDirectory()
 
 /*****************************************************************************/
 SourceDirectory *SourceDirectory::GetSubDirectory(
-    const ByteString &rDirectoryPath, USHORT nOperatingSystem )
+    const ByteString &rDirectoryPath, sal_uInt16 nOperatingSystem )
 /*****************************************************************************/
 {
     ByteString sSearch;
 
-    BOOL bSubs = TRUE;
-    ULONG nIndex = 0;
+    sal_Bool bSubs = sal_True;
+    sal_uIntPtr nIndex = 0;
 
     while ( bSubs && ByteString( LimitedPath[ nIndex ]) != "EndOf_LimitedPath" ) {
         SourceDirectory *pActDir = this;
         ByteString sLimitation( LimitedPath[ nIndex ]);
 
-        BOOL bBreak = FALSE;
-        for ( ULONG i = sLimitation.GetTokenCount( '\\' ); i > 0 && !bBreak; i-- ) {
-            if (( !pActDir ) || ( *pActDir != sLimitation.GetToken(( USHORT )( i - 1 ), '\\' )))
-                bBreak = TRUE;
+        sal_Bool bBreak = sal_False;
+        for ( sal_uIntPtr i = sLimitation.GetTokenCount( '\\' ); i > 0 && !bBreak; i-- ) {
+            if (( !pActDir ) || ( *pActDir != sLimitation.GetToken(( sal_uInt16 )( i - 1 ), '\\' )))
+                bBreak = sal_True;
             else
                 pActDir = pActDir->pParent;
         }
@@ -223,7 +223,7 @@ SourceDirectory *SourceDirectory::GetSubDirectory(
 
 /*****************************************************************************/
 SourceDirectory *SourceDirectory::GetDirectory(
-    const ByteString &rDirectoryName, USHORT nOperatingSystem )
+    const ByteString &rDirectoryName, sal_uInt16 nOperatingSystem )
 /*****************************************************************************/
 {
     ByteString sDirectoryName( rDirectoryName );
@@ -249,7 +249,7 @@ SourceDirectory *SourceDirectory::GetDirectory(
 
 /*****************************************************************************/
 SourceDirectory *SourceDirectory::Insert( const ByteString &rDirectoryName,
-        USHORT nOperatingSystem )
+        sal_uInt16 nOperatingSystem )
 /*****************************************************************************/
 {
     SourceDirectory *pSubDirectory = NULL;
@@ -271,11 +271,11 @@ Dependency *SourceDirectory::ResolvesDependency(
     if ( !pCodedIdentifier )
         return NULL;
 
-    ULONG nPos = pCodedIdentifier->IsString( pCodedDependency );
+    sal_uIntPtr nPos = pCodedIdentifier->IsString( pCodedDependency );
     if ( nPos != NOT_THERE ) {
         CodedDependency *pIdentifier =
             ( CodedDependency * ) pCodedIdentifier->GetObject( nPos );
-        USHORT nResult =
+        sal_uInt16 nResult =
             pIdentifier->GetOperatingSystem() &
             pCodedDependency->GetOperatingSystem();
         Dependency *pReturn = new Dependency( *this, nResult );
@@ -294,7 +294,7 @@ void SourceDirectory::ResolveDependencies()
     if ( !pSubDirectories )
         return;
 
-    for ( ULONG i = 0; i < pSubDirectories->Count(); i++ ) {
+    for ( sal_uIntPtr i = 0; i < pSubDirectories->Count(); i++ ) {
         SourceDirectory *pActDirectory =
             ( SourceDirectory * ) pSubDirectories->GetObject( i );
         if ( pActDirectory->pSubDirectories )
@@ -304,10 +304,10 @@ void SourceDirectory::ResolveDependencies()
             while ( pActDirectory->pCodedDependencies->Count())
             {
                 CodedDependency *pCodedDependency = ( CodedDependency * )
-                    pActDirectory->pCodedDependencies->GetObject(( ULONG ) 0 );
+                    pActDirectory->pCodedDependencies->GetObject(( sal_uIntPtr ) 0 );
 
                 for (
-                    ULONG k = 0;
+                    sal_uIntPtr k = 0;
                     ( k < pSubDirectories->Count()) &&
                         ( pCodedDependency->GetOperatingSystem() != OS_NONE );
                     k++
@@ -329,7 +329,7 @@ void SourceDirectory::ResolveDependencies()
                 }
                 else
                     delete pCodedDependency;
-                pActDirectory->pCodedDependencies->Remove(( ULONG ) 0 );
+                pActDirectory->pCodedDependencies->Remove(( sal_uIntPtr ) 0 );
             }
         }
     }
@@ -344,7 +344,7 @@ ByteString SourceDirectory::GetTarget()
     if ( !pDependencies )
         return sReturn;
 
-    ULONG k = 0;
+    sal_uIntPtr k = 0;
     while ( k < pDependencies->Count()) {
         if ( *this == *pDependencies->GetObject( k ))
             delete pDependencies->Remove( k );
@@ -358,18 +358,18 @@ ByteString SourceDirectory::GetTarget()
         return sReturn;
     }
 
-    BOOL bDependsOnPlatform = FALSE;
-    for ( ULONG i = 0; i < pDependencies->Count(); i++ )
+    sal_Bool bDependsOnPlatform = sal_False;
+    for ( sal_uIntPtr i = 0; i < pDependencies->Count(); i++ )
         if ((( Dependency * ) pDependencies->GetObject( i ))->
             GetOperatingSystem() != OS_ALL )
-            bDependsOnPlatform = TRUE;
+            bDependsOnPlatform = sal_True;
 
     ByteString sTarget( *this );
     sTarget.SearchAndReplaceAll( "\\", "$/" );
     if ( !bDependsOnPlatform ) {
         sReturn = sTarget;
         sReturn += " :";
-        for ( ULONG i = 0; i < pDependencies->Count(); i++ ) {
+        for ( sal_uIntPtr i = 0; i < pDependencies->Count(); i++ ) {
             ByteString sDependency( *pDependencies->GetObject( i ));
             sDependency.SearchAndReplaceAll( "\\", "$/" );
             sReturn += " ";
@@ -380,19 +380,19 @@ ByteString SourceDirectory::GetTarget()
         ByteString sUNX( ".IF \"$(GUI)\" == \"UNX\"\n" );
         sUNX += sTarget;
         sUNX += " :";
-        BOOL bUNX = FALSE;
+        sal_Bool bUNX = sal_False;
 
         ByteString sWNT( ".IF \"$(GUI)\" == \"WNT\"\n" );
         sWNT += sTarget;
         sWNT += " :";
-        BOOL bWNT = FALSE;
+        sal_Bool bWNT = sal_False;
 
         ByteString sOS2( ".IF \"$(GUI)\" == \"OS2\"\n" );
         sOS2 += sTarget;
         sOS2 += " :";
-        BOOL bOS2 = FALSE;
+        sal_Bool bOS2 = sal_False;
 
-        for ( ULONG i = 0; i < pDependencies->Count(); i++ ) {
+        for ( sal_uIntPtr i = 0; i < pDependencies->Count(); i++ ) {
             Dependency *pDependency =
                 ( Dependency * ) pDependencies->GetObject( i );
             ByteString sDependency( *pDependency );
@@ -401,17 +401,17 @@ ByteString SourceDirectory::GetTarget()
             if ( pDependency->GetOperatingSystem() & OS_UNX ) {
                 sUNX += " ";
                 sUNX += sDependency;
-                bUNX = TRUE;
+                bUNX = sal_True;
             }
             if ( pDependency->GetOperatingSystem() & OS_WIN32 ) {
                 sWNT += " ";
                 sWNT += sDependency;
-                bWNT = TRUE;
+                bWNT = sal_True;
             }
             if ( pDependency->GetOperatingSystem() & OS_OS2 ) {
                 sOS2 += " ";
                 sOS2 += sDependency;
-                bOS2 = TRUE;
+                bOS2 = sal_True;
             }
         }
 
@@ -439,16 +439,16 @@ ByteString SourceDirectory::GetSubDirsTarget()
     ByteString sReturn;
 
     if ( pSubDirectories ) {
-        BOOL bDependsOnPlatform = FALSE;
-        for ( ULONG i = 0; i < pSubDirectories->Count(); i++ )
+        sal_Bool bDependsOnPlatform = sal_False;
+        for ( sal_uIntPtr i = 0; i < pSubDirectories->Count(); i++ )
             if ((( SourceDirectory * ) pSubDirectories->GetObject( i ))->
                 GetOperatingSystems() != OS_ALL )
-                bDependsOnPlatform = TRUE;
+                bDependsOnPlatform = sal_True;
 
         if ( !bDependsOnPlatform ) {
             sReturn = "RC_SUBDIRS = ";
 
-            for ( ULONG i = 0; i < pSubDirectories->Count(); i++ ) {
+            for ( sal_uIntPtr i = 0; i < pSubDirectories->Count(); i++ ) {
                 ByteString sSubDirectory( *pSubDirectories->GetObject( i ));
                 sSubDirectory.SearchAndReplaceAll( "\\", "$/" );
                 sReturn += " \\\n\t";
@@ -459,17 +459,17 @@ ByteString SourceDirectory::GetSubDirsTarget()
         else {
             ByteString sUNX( ".IF \"$(GUI)\" == \"UNX\"\n" );
             sUNX += "RC_SUBDIRS = ";
-            BOOL bUNX = FALSE;
+            sal_Bool bUNX = sal_False;
 
             ByteString sWNT( ".IF \"$(GUI)\" == \"WNT\"\n" );
             sWNT += "RC_SUBDIRS = ";
-            BOOL bWNT = FALSE;
+            sal_Bool bWNT = sal_False;
 
             ByteString sOS2( ".IF \"$(GUI)\" == \"OS2\"\n" );
             sOS2 += "RC_SUBDIRS = ";
-            BOOL bOS2 = FALSE;
+            sal_Bool bOS2 = sal_False;
 
-            for ( ULONG i = 0; i < pSubDirectories->Count(); i++ ) {
+            for ( sal_uIntPtr i = 0; i < pSubDirectories->Count(); i++ ) {
                 SourceDirectory *pDirectory =
                     ( SourceDirectory * ) pSubDirectories->GetObject( i );
                 ByteString sDirectory( *pDirectory );
@@ -478,17 +478,17 @@ ByteString SourceDirectory::GetSubDirsTarget()
                 if ( pDirectory->GetOperatingSystems() & OS_UNX ) {
                     sUNX += " \\\n\t";
                     sUNX += sDirectory;
-                    bUNX = TRUE;
+                    bUNX = sal_True;
                 }
                 if ( pDirectory->GetOperatingSystems() & OS_WIN32 ) {
                     sWNT += " \\\n\t";
                     sWNT += sDirectory;
-                    bWNT = TRUE;
+                    bWNT = sal_True;
                 }
                 if ( pDirectory->GetOperatingSystems() & OS_OS2 ) {
                     sOS2 += " \\\n\t";
                     sOS2 += sDirectory;
-                    bOS2 = TRUE;
+                    bOS2 = sal_True;
                 }
             }
             if ( bUNX ) {
@@ -509,10 +509,10 @@ ByteString SourceDirectory::GetSubDirsTarget()
 }
 
 /*****************************************************************************/
-USHORT SourceDirectory::GetOSType( const ByteString &sDependExt )
+sal_uInt16 SourceDirectory::GetOSType( const ByteString &sDependExt )
 /*****************************************************************************/
 {
-    USHORT nOSType = 0;
+    sal_uInt16 nOSType = 0;
     if ( sDependExt == "" )
         nOSType |= OS_ALL;
     else if ( sDependExt == "N" || sDependExt == "W" )
@@ -526,7 +526,7 @@ USHORT SourceDirectory::GetOSType( const ByteString &sDependExt )
 
 /*****************************************************************************/
 SourceDirectory *SourceDirectory::CreateRootDirectory(
-    const ByteString &rRoot, const ByteString &rVersion, BOOL bAll )
+    const ByteString &rRoot, const ByteString &rVersion, sal_Bool bAll )
 /*****************************************************************************/
 {
     IniManager aIniManager;
@@ -550,7 +550,7 @@ SourceDirectory *SourceDirectory::CreateRootDirectory(
 #endif
     ByteString sSolarList( _SOLARLIST );
 
-    GenericInformation *pInfo = pVerList->GetInfo( sPath, TRUE );
+    GenericInformation *pInfo = pVerList->GetInfo( sPath, sal_True );
     if ( pInfo ) {
         ByteString aIniRoot( GetIniRoot() );
         DirEntry aIniEntry( String( aIniRoot, RTL_TEXTENCODING_ASCII_US ));
@@ -564,18 +564,18 @@ SourceDirectory *SourceDirectory::CreateRootDirectory(
 */
 
     ByteString sVersion( rVersion );
-    Star aStar( pVerList, sVersion, TRUE, rRoot.GetBuffer());
+    Star aStar( pVerList, sVersion, sal_True, rRoot.GetBuffer());
 //  fprintf( stderr,
 //      "Creating virtual directory tree ...\n" );
 
 
     SourceDirectory *pSourceRoot = new SourceDirectory( rRoot, OS_ALL );
 
-    for ( ULONG i = 0; i < aStar.Count(); i++ ) {
+    for ( sal_uIntPtr i = 0; i < aStar.Count(); i++ ) {
         Prj *pPrj = aStar.GetObject( i );
 
-        BOOL bBuildable = TRUE;
-        ULONG nIndex = 0;
+        sal_Bool bBuildable = sal_True;
+        sal_uIntPtr nIndex = 0;
 
         while ( bBuildable && ByteString( NoBuildProject[ nIndex ]) != "EndOf_NoBuildProject" ) {
             bBuildable = ( ByteString( NoBuildProject[ nIndex ]) !=  pPrj->GetProjectName());
@@ -585,14 +585,14 @@ SourceDirectory *SourceDirectory::CreateRootDirectory(
         if ( bBuildable ) {
             SourceDirectory *pProject = pSourceRoot->Insert( pPrj->GetProjectName(), OS_ALL );
 
-            SByteStringList *pPrjDependencies = pPrj->GetDependencies( FALSE );
+            SByteStringList *pPrjDependencies = pPrj->GetDependencies( sal_False );
             if ( pPrjDependencies )
-                for ( ULONG x = 0; x < pPrjDependencies->Count(); x++ )
+                for ( sal_uIntPtr x = 0; x < pPrjDependencies->Count(); x++ )
                     pProject->AddCodedDependency( *pPrjDependencies->GetObject( x ), OS_ALL );
 
             pProject->AddCodedIdentifier( pPrj->GetProjectName(), OS_ALL );
 
-            for ( ULONG j = 0; j < pPrj->Count(); j++ ) {
+            for ( sal_uIntPtr j = 0; j < pPrj->Count(); j++ ) {
                 CommandData *pData = pPrj->GetObject( j );
                 if ( bAll || ( pData->GetCommandType() == COMMAND_NMAKE )) {
                     ByteString sDirPath( rRoot );
@@ -602,7 +602,7 @@ SourceDirectory *SourceDirectory::CreateRootDirectory(
                         pSourceRoot->InsertFull( sDirPath, pData->GetOSType());
                     SByteStringList *pDependencies = pData->GetDependencies();
                     if ( pDependencies ) {
-                        for ( ULONG k = 0; k < pDependencies->Count(); k++ ) {
+                        for ( sal_uIntPtr k = 0; k < pDependencies->Count(); k++ ) {
                             ByteString sDependency(*pDependencies->GetObject( k ));
                             ByteString sDependExt(sDependency.GetToken( 1, '.' ));
                             sDependExt.ToUpperAscii();
@@ -623,14 +623,14 @@ SourceDirectory *SourceDirectory::CreateRootDirectory(
 }
 
 /*****************************************************************************/
-BOOL SourceDirectory::RemoveDirectoryTreeAndAllDependencies()
+sal_Bool SourceDirectory::RemoveDirectoryTreeAndAllDependencies()
 /*****************************************************************************/
 {
     if ( !pParent )
-        return FALSE;
+        return sal_False;
 
     SourceDirectoryList *pParentContent = pParent->pSubDirectories;
-    ULONG i = 0;
+    sal_uIntPtr i = 0;
     while ( i < pParentContent->Count()) {
         SourceDirectory *pCandidate =
             ( SourceDirectory * )pParentContent->GetObject( i );
@@ -639,7 +639,7 @@ BOOL SourceDirectory::RemoveDirectoryTreeAndAllDependencies()
         }
         else {
             if ( pCandidate->pDependencies ) {
-                ULONG nPos = pCandidate->pDependencies->IsString( this );
+                sal_uIntPtr nPos = pCandidate->pDependencies->IsString( this );
                 if ( nPos != NOT_THERE )
                     delete pCandidate->pDependencies->Remove( nPos );
             }
@@ -647,15 +647,15 @@ BOOL SourceDirectory::RemoveDirectoryTreeAndAllDependencies()
         }
     }
     delete this;
-    return TRUE;
+    return sal_True;
 }
 
 /*****************************************************************************/
-BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
+sal_Bool SourceDirectory::CreateRecursiveMakefile( sal_Bool bAllChilds )
 /*****************************************************************************/
 {
     if ( !pSubDirectories )
-        return TRUE;
+        return sal_True;
 
     fprintf( stdout, "%s", GetFullPath().GetBuffer());
 
@@ -663,10 +663,10 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
     DirEntry aEntry( aTmpStr );
     if ( !aEntry.Exists()) {
         fprintf( stdout, " ... no directory!n" );
-        return FALSE;
+        return sal_False;
     }
 
-    ULONG j = 0;
+    sal_uIntPtr j = 0;
     while( j < pSubDirectories->Count()) {
         String sSubDirectory(
             (( SourceDirectory * ) pSubDirectories->GetObject( j ))->
@@ -689,20 +689,20 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
     DirEntry aMKEntry( aEntry );
     aMKEntry += aMKFile;
 
-    BOOL bMakefileMk = FALSE;
+    sal_Bool bMakefileMk = sal_False;
     if ( aMKEntry.Exists()) {
         if ( nDepth == 1 && *this == ByteString( "api" ))
             fprintf( stdout, " ... makefile.mk exists, ignoring (hack: prj == api)!" );
         else {
             fprintf( stdout, " ... makefile.mk exists, including!" );
-            bMakefileMk = TRUE;
+            bMakefileMk = sal_True;
         }
     }
 
     SvFileStream aMakefile( aRCEntry.GetFull(), STREAM_STD_WRITE | STREAM_TRUNC );
     if ( !aMakefile.IsOpen()) {
         fprintf( stdout, " ... failed!\n" );
-        return FALSE;
+        return sal_False;
     }
 
     ByteString sHeader(
@@ -866,7 +866,7 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
     );
     aMakefile.WriteLine( sComment );
 
-    for ( ULONG i = 0; i < pSubDirectories->Count(); i++ ) {
+    for ( sal_uIntPtr i = 0; i < pSubDirectories->Count(); i++ ) {
         ByteString sTarget(
             (( SourceDirectory * )pSubDirectories->GetObject( i ))->
             GetTarget()
@@ -908,12 +908,12 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
 
     fprintf( stdout, "\n" );
 
-    BOOL bSuccess = TRUE;
+    sal_Bool bSuccess = sal_True;
     if ( bAllChilds )
-        for ( ULONG k = 0; k < pSubDirectories->Count(); k++ )
+        for ( sal_uIntPtr k = 0; k < pSubDirectories->Count(); k++ )
             if  ( !(( SourceDirectory * ) pSubDirectories->GetObject( k ))->
-                CreateRecursiveMakefile( TRUE ))
-                bSuccess = FALSE;
+                CreateRecursiveMakefile( sal_True ))
+                bSuccess = sal_False;
 
     return bSuccess;
 }
@@ -926,7 +926,7 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
 SourceDirectoryList::~SourceDirectoryList()
 /*****************************************************************************/
 {
-    for ( ULONG i = 0; i < Count(); i++ )
+    for ( sal_uIntPtr i = 0; i < Count(); i++ )
         delete GetObject( i );
 }
 
@@ -935,7 +935,7 @@ SourceDirectory *SourceDirectoryList::Search(
     const ByteString &rDirectoryName )
 /*****************************************************************************/
 {
-    ULONG nPos = IsString( ( ByteString * ) (&rDirectoryName) );
+    sal_uIntPtr nPos = IsString( ( ByteString * ) (&rDirectoryName) );
     if ( nPos != LIST_ENTRY_NOTFOUND )
         return ( SourceDirectory * ) GetObject( nPos );
 

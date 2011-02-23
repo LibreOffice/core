@@ -59,20 +59,20 @@ class StreamData
 {
 public:
     HFILE   hFile;
-    BOOL    bIsEof;
+    sal_Bool    bIsEof;
 
             StreamData()
             {
                 hFile = 0;
-                bIsEof = TRUE;
+                bIsEof = sal_True;
             }
 };
 
 // -----------------------------------------------------------------------
 
-ULONG GetSvError( APIRET nPMError )
+sal_uIntPtr GetSvError( APIRET nPMError )
 {
-    static struct { APIRET pm; ULONG sv; } errArr[] =
+    static struct { APIRET pm; sal_uIntPtr sv; } errArr[] =
     {
         { ERROR_FILE_NOT_FOUND,         SVSTREAM_FILE_NOT_FOUND },
         { ERROR_PATH_NOT_FOUND,         SVSTREAM_PATH_NOT_FOUND },
@@ -93,7 +93,7 @@ ULONG GetSvError( APIRET nPMError )
         { 0xFFFF, SVSTREAM_GENERALERROR }
     };
 
-    ULONG nRetVal = SVSTREAM_GENERALERROR;    // Standardfehler
+    sal_uIntPtr nRetVal = SVSTREAM_GENERALERROR;    // Standardfehler
     int i=0;
     do
     {
@@ -120,9 +120,9 @@ ULONG GetSvError( APIRET nPMError )
 
 SvFileStream::SvFileStream( const String& rFileName, StreamMode nOpenMode )
 {
-    bIsOpen             = FALSE;
+    bIsOpen             = sal_False;
     nLockCounter        = 0;
-    bIsWritable         = FALSE;
+    bIsWritable         = sal_False;
     pInstanceData       = new StreamData;
 
     SetBufferSize( 8192 );
@@ -146,9 +146,9 @@ SvFileStream::SvFileStream( const String& rFileName, StreamMode nOpenMode )
 
 SvFileStream::SvFileStream()
 {
-    bIsOpen             = FALSE;
+    bIsOpen             = sal_False;
     nLockCounter        = 0;
-    bIsWritable         = FALSE;
+    bIsWritable         = sal_False;
     pInstanceData       = new StreamData;
     SetBufferSize( 8192 );
 }
@@ -180,9 +180,9 @@ SvFileStream::~SvFileStream()
 |*
 *************************************************************************/
 
-ULONG SvFileStream::GetFileHandle() const
+sal_uIntPtr SvFileStream::GetFileHandle() const
 {
-    return (ULONG)pInstanceData->hFile;
+    return (sal_uIntPtr)pInstanceData->hFile;
 }
 
 /*************************************************************************
@@ -195,7 +195,7 @@ ULONG SvFileStream::GetFileHandle() const
 |*
 *************************************************************************/
 
-USHORT SvFileStream::IsA() const
+sal_uInt16 SvFileStream::IsA() const
 {
     return ID_FILESTREAM;
 }
@@ -210,7 +210,7 @@ USHORT SvFileStream::IsA() const
 |*
 *************************************************************************/
 
-ULONG SvFileStream::GetData( void* pData, ULONG nSize )
+sal_uIntPtr SvFileStream::GetData( void* pData, sal_uIntPtr nSize )
 {
 #ifdef DBG_UTIL
     ByteString aTraceStr( "SvFileStream::GetData(): " );
@@ -220,7 +220,7 @@ ULONG SvFileStream::GetData( void* pData, ULONG nSize )
     DBG_TRACE( aTraceStr.GetBuffer() );
 #endif
 
-    ULONG nCount = 0L;
+    sal_uIntPtr nCount = 0L;
     if( IsOpen() )
     {
         APIRET nResult;
@@ -241,7 +241,7 @@ ULONG SvFileStream::GetData( void* pData, ULONG nSize )
 |*
 *************************************************************************/
 
-ULONG SvFileStream::PutData( const void* pData, ULONG nSize )
+sal_uIntPtr SvFileStream::PutData( const void* pData, sal_uIntPtr nSize )
 {
 #ifdef DBG_UTIL
     ByteString aTraceStr( "SvFileStrean::PutData: " );
@@ -251,7 +251,7 @@ ULONG SvFileStream::PutData( const void* pData, ULONG nSize )
     DBG_TRACE( aTraceStr.GetBuffer() );
 #endif
 
-    ULONG nCount = 0L;
+    sal_uIntPtr nCount = 0L;
     if( IsOpen() )
     {
         APIRET nResult;
@@ -274,9 +274,9 @@ ULONG SvFileStream::PutData( const void* pData, ULONG nSize )
 |*
 *************************************************************************/
 
-ULONG SvFileStream::SeekPos( ULONG nPos )
+sal_uIntPtr SvFileStream::SeekPos( sal_uIntPtr nPos )
 {
-    ULONG nNewPos = 0L;
+    sal_uIntPtr nNewPos = 0L;
     if( IsOpen() )
     {
         APIRET nResult;
@@ -306,9 +306,9 @@ ULONG SvFileStream::SeekPos( ULONG nPos )
 |*
 *************************************************************************/
 /*
-ULONG SvFileStream::Tell()
+sal_uIntPtr SvFileStream::Tell()
 {
-    ULONG nPos = 0L;
+    sal_uIntPtr nPos = 0L;
 
     if( IsOpen() )
     {
@@ -352,9 +352,9 @@ void SvFileStream::FlushData()
 |*
 *************************************************************************/
 
-sal_Bool SvFileStream::LockRange( ULONG nByteOffset, ULONG nBytes )
+sal_Bool SvFileStream::LockRange( sal_uIntPtr nByteOffset, sal_uIntPtr nBytes )
 {
-    sal_Bool bRetVal = FALSE;
+    sal_Bool bRetVal = sal_False;
     if( IsOpen() )
     {
         APIRET   nResult;
@@ -373,7 +373,7 @@ sal_Bool SvFileStream::LockRange( ULONG nByteOffset, ULONG nBytes )
         if( nResult )
             SetError(::GetSvError(nResult) );
         else
-            bRetVal = TRUE;
+            bRetVal = sal_True;
     }
     return bRetVal;
 }
@@ -388,9 +388,9 @@ sal_Bool SvFileStream::LockRange( ULONG nByteOffset, ULONG nBytes )
 |*
 *************************************************************************/
 
-sal_Bool SvFileStream::UnlockRange( ULONG nByteOffset, ULONG nBytes )
+sal_Bool SvFileStream::UnlockRange( sal_uIntPtr nByteOffset, sal_uIntPtr nBytes )
 {
-    sal_Bool bRetVal = FALSE;
+    sal_Bool bRetVal = sal_False;
     if( IsOpen() )
     {
         APIRET   nResult;
@@ -409,7 +409,7 @@ sal_Bool SvFileStream::UnlockRange( ULONG nByteOffset, ULONG nBytes )
         if( nResult )
             SetError(::GetSvError(nResult) );
         else
-            bRetVal = TRUE;
+            bRetVal = sal_True;
     }
     return bRetVal;
 }
@@ -426,19 +426,19 @@ sal_Bool SvFileStream::UnlockRange( ULONG nByteOffset, ULONG nBytes )
 
 sal_Bool SvFileStream::LockFile()
 {
-    sal_Bool bRetVal = FALSE;
+    sal_Bool bRetVal = sal_False;
     if( !nLockCounter )
     {
         if( LockRange( 0L, LONG_MAX ) )
         {
             nLockCounter = 1;
-            bRetVal = TRUE;
+            bRetVal = sal_True;
         }
     }
     else
     {
         nLockCounter++;
-        bRetVal = TRUE;
+        bRetVal = sal_True;
     }
     return bRetVal;
 }
@@ -455,7 +455,7 @@ sal_Bool SvFileStream::LockFile()
 
 sal_Bool SvFileStream::UnlockFile()
 {
-    sal_Bool bRetVal = FALSE;
+    sal_Bool bRetVal = sal_False;
     if( nLockCounter > 0)
     {
         if( nLockCounter == 1)
@@ -463,13 +463,13 @@ sal_Bool SvFileStream::UnlockFile()
             if( UnlockRange( 0L, LONG_MAX ) )
             {
                 nLockCounter = 0;
-                bRetVal = TRUE;
+                bRetVal = sal_True;
             }
         }
         else
         {
             nLockCounter--;
-            bRetVal = TRUE;
+            bRetVal = sal_True;
         }
     }
     return bRetVal;
@@ -486,7 +486,7 @@ sal_Bool SvFileStream::UnlockFile()
 *************************************************************************/
 
 #if 0
-BOOL createLongNameEA   ( const PCSZ pszPath, ULONG ulAttributes, const String& aLongName );
+sal_Bool createLongNameEA   ( const PCSZ pszPath, sal_uIntPtr ulAttributes, const String& aLongName );
 #endif
 
 void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
@@ -500,7 +500,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
                 String          aRealPart;
                 String          aVirtualPath;
                 ItemIDPath      aVirtualURL;
-                ULONG           nDivider = 0;
+                sal_uIntPtr           nDivider = 0;
 
                 String          aVirtualString(rFilename);
 
@@ -534,10 +534,10 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
     Close();
     SvStream::ClearBuffer();
 
-    ULONG   nActionTaken;
-    ULONG   nOpenAction     = 0L;
-    ULONG   nShareBits      = 0L;
-    ULONG   nReadWriteBits  = 0L;
+    sal_uIntPtr   nActionTaken;
+    sal_uIntPtr   nOpenAction     = 0L;
+    sal_uIntPtr   nShareBits      = 0L;
+    sal_uIntPtr   nReadWriteBits  = 0L;
 
     eStreamMode = nOpenMode;
     eStreamMode &= ~STREAM_TRUNC; // beim ReOpen nicht cutten
@@ -592,7 +592,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
     //
     // resolves long FAT names used by OS2
     //
-    BOOL bIsLongOS2=FALSE;
+    sal_Bool bIsLongOS2=sal_False;
     if (Folder::IsAvailable())
     {
         DirEntry aDirEntry(rFilename);
@@ -601,7 +601,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
             // in kurzen Pfad wandeln
             ItemIDPath      aItemIDPath(rFilename);
             aParsedFilename = aItemIDPath.GetHostNotationPath();
-            bIsLongOS2 = TRUE;
+            bIsLongOS2 = sal_True;
         }
     }
 #endif
@@ -623,7 +623,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
     if( nRet == ERROR_TOO_MANY_OPEN_FILES )
     {
         long nToAdd = 10;
-        ULONG nCurMaxFH;
+        sal_uIntPtr nCurMaxFH;
         nRet = DosSetRelMaxFH( &nToAdd, &nCurMaxFH );
         nRet = DosOpen( aFileNameA.GetBuffer(), &pInstanceData->hFile,
         &nActionTaken, 0L, FILE_NORMAL, nOpenAction,
@@ -641,15 +641,15 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
 
         if( nRet )
     {
-        bIsOpen = FALSE;
+        bIsOpen = sal_False;
         SetError(::GetSvError(nRet) );
     }
     else
     {
-        bIsOpen     = TRUE;
-        pInstanceData->bIsEof = FALSE;
+        bIsOpen     = sal_True;
+        pInstanceData->bIsEof = sal_False;
         if( nReadWriteBits != OPEN_ACCESS_READONLY )
-            bIsWritable = TRUE;
+            bIsWritable = sal_True;
     }
 
 #if 0
@@ -714,10 +714,10 @@ void SvFileStream::Close()
         DosClose( pInstanceData->hFile );
     }
 
-    bIsOpen     = FALSE;
+    bIsOpen     = sal_False;
     nLockCounter= 0;
-    bIsWritable = FALSE;
-    pInstanceData->bIsEof = TRUE;
+    bIsWritable = sal_False;
+    pInstanceData->bIsEof = sal_True;
     SvStream::ClearBuffer();
     SvStream::ClearError();
 }
@@ -747,7 +747,7 @@ void SvFileStream::ResetError()
 |*
 *************************************************************************/
 
-void SvFileStream::SetSize( ULONG nSize )
+void SvFileStream::SetSize( sal_uIntPtr nSize )
 {
     if( IsOpen() )
     {
@@ -756,5 +756,3 @@ void SvFileStream::SetSize( ULONG nSize )
             SetError( ::GetSvError( nRet ) );
     }
 }
-
-

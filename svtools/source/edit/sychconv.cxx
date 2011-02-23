@@ -30,14 +30,14 @@
 #include <svtools/sychconv.hxx>
 #include <vcl/outdev.hxx>
 
-BOOL SymCharConverter::Convert( Font& rFont, UniString& rString, OutputDevice* pDev )
+sal_Bool SymCharConverter::Convert( Font& rFont, UniString& rString, OutputDevice* pDev )
 {
     // hibyte 0 = exact matching
     //        1 = little differences,
     //        2 = the converted character does not look like the original but got the same meaning
     //        3 = the destination does not match looking and meaning of the original
 
-    static USHORT __READONLY_DATA aWingdingsToStarBatsTable[ 256 - 32 ] =
+    static sal_uInt16 __READONLY_DATA aWingdingsToStarBatsTable[ 256 - 32 ] =
     {
         0x0020, 0x0238, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0174, 0x02BA, 0x017B, 0x017C, 0x037C, 0x037C, 0x037C, 0x037C,
         0x0000, 0x0000, 0x0372, 0x0272, 0x0372, 0x0000, 0x0000, 0x0374, 0x0279, 0x0000, 0x027A, 0x0000, 0x0178, 0x0278, 0x0000, 0x0137,
@@ -55,7 +55,7 @@ BOOL SymCharConverter::Convert( Font& rFont, UniString& rString, OutputDevice* p
         0x01AF, 0x01B2, 0x01B0, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0150, 0x0032, 0x0033, 0x0034, 0x01C8
     };
 
-    static USHORT __READONLY_DATA aMonotypeSortsToStarBatsTable[ 256 - 32 ]=
+    static sal_uInt16 __READONLY_DATA aMonotypeSortsToStarBatsTable[ 256 - 32 ]=
     {
         0x0020, 0x00cb, 0x00cb, 0x00cb, 0x00cb, 0x0074, 0x00ba, 0x0021, 0x00cc, 0x007b, 0x0036, 0x007d, 0x007e, 0x0037, 0x0038, 0x0038,
         0x0039, 0x0038, 0x0038, 0x0039, 0x003a, 0x004f, 0x0050, 0x004f, 0x0050, 0x0051, 0x0052, 0x0053, 0x0054, 0x0086, 0x0086, 0x0086,
@@ -73,9 +73,9 @@ BOOL SymCharConverter::Convert( Font& rFont, UniString& rString, OutputDevice* p
         0x0000, 0x00af, 0x0035, 0x00dc, 0x00da, 0x00dc, 0x00db, 0x00da, 0x00dc, 0x00db, 0x00dc, 0x00dc, 0x00dc, 0x00dc, 0x00af, 0x0000
     };
 
-    const USHORT* pTransTable = NULL;
+    const sal_uInt16* pTransTable = NULL;
 
-    BOOL bIsAvailable = ( pDev ) ? pDev->IsFontAvailable( rFont.GetName() ) : FALSE;
+    sal_Bool bIsAvailable = ( pDev ) ? pDev->IsFontAvailable( rFont.GetName() ) : sal_False;
     if ( !bIsAvailable )
     {
         if ( rFont.GetName().CompareToAscii( RTL_CONSTASCII_STRINGPARAM( "Wingdings" ) ) == COMPARE_EQUAL )
@@ -86,18 +86,18 @@ BOOL SymCharConverter::Convert( Font& rFont, UniString& rString, OutputDevice* p
     if ( pTransTable )
     {
         sal_Unicode c;
-        for ( UINT16 i = rString.Len(); i--; )
+        for ( sal_uInt16 i = rString.Len(); i--; )
         {
             c = rString.GetChar( i );
             c -= 32;
-            c = ( ((UINT16)c) >= 224 ) ? 0 : (sal_Unicode) pTransTable[ c ];
+            c = ( ((sal_uInt16)c) >= 224 ) ? 0 : (sal_Unicode) pTransTable[ c ];
             if ( !c )               // if character is out of range or not matching
                 c = 0xA5;           // we will default a StarBats-Bullet
             rString.SetChar( i, c );
         }
         rFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
         rFont.SetName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarBats" ) ) );
-        return TRUE;
+        return sal_True;
     }
-    else return FALSE;
+    else return sal_False;
 };

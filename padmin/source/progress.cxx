@@ -41,7 +41,7 @@
 using namespace padmin;
 
 ProgressDialog::ProgressDialog( Window* pParent,
-                                BOOL bCancelable,
+                                sal_Bool bCancelable,
                                 int nMin, int nMax ) :
         ModelessDialog( pParent, PaResId( RID_PROGRESS_DLG ) ),
         maOperation( this, PaResId( RID_PROGRESS_OPERATION_TXT ) ),
@@ -51,7 +51,7 @@ ProgressDialog::ProgressDialog( Window* pParent,
         maProgressBar( this, PaResId( RID_PROGRESS_STATUSBAR ) ),
         mnMax( nMax ),
         mnMin( nMin ),
-        mbCanceled( FALSE )
+        mbCanceled( sal_False )
 {
     maFilename.SetStyle( maFilename.GetStyle() | WB_PATHELLIPSIS );
     if( ! bCancelable )
@@ -75,9 +75,9 @@ void ProgressDialog::startOperation( const String& rOperation )
 {
     maOperation.SetText( rOperation );
     maProgressBar.SetValue( 0 );
-    mbCanceled = FALSE;
+    mbCanceled = sal_False;
     if( ! IsVisible() )
-        Show( TRUE );
+        Show( sal_True );
 }
 
 void ProgressDialog::setValue( int nValue )
@@ -97,7 +97,7 @@ IMPL_LINK( ProgressDialog, ClickBtnHdl, Button*, pButton )
 {
     if( pButton == &maCancelButton )
     {
-        mbCanceled = TRUE;
+        mbCanceled = sal_True;
     }
     return 0;
 }

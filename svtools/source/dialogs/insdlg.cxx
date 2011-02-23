@@ -77,7 +77,7 @@ PRV_SV_IMPL_OWNER_LIST( SvObjectServerList, SvObjectServer )
 *************************************************************************/
 const SvObjectServer * SvObjectServerList::Get( const String & rHumanName ) const
 {
-    for( ULONG i = 0; i < Count(); i++ )
+    for( sal_uLong i = 0; i < Count(); i++ )
     {
         if( rHumanName == GetObject( i ).GetHumanName() )
             return &GetObject( i );
@@ -92,7 +92,7 @@ const SvObjectServer * SvObjectServerList::Get( const String & rHumanName ) cons
 *************************************************************************/
 const SvObjectServer * SvObjectServerList::Get( const SvGlobalName & rName ) const
 {
-    for( ULONG i = 0; i < Count(); i++ )
+    for( sal_uLong i = 0; i < Count(); i++ )
     {
         if( rName == GetObject( i ).GetClassName() )
             return &GetObject( i );
@@ -238,7 +238,7 @@ String SvPasteObjectHelper::GetSotFormatUIName( SotFormatStringId nId )
     struct SotResourcePair
     {
         SotFormatStringId   mnSotId;
-        USHORT              mnResId;
+        sal_uInt16              mnResId;
     };
 
     static const SotResourcePair aSotResourcePairs[] =
@@ -312,7 +312,7 @@ String SvPasteObjectHelper::GetSotFormatUIName( SotFormatStringId nId )
     };
 
     String aUIName;
-    USHORT nResId = 0;
+    sal_uInt16 nResId = 0;
 
     for( sal_uInt32 i = 0, nCount = sizeof( aSotResourcePairs ) / sizeof( aSotResourcePairs[ 0 ] ); ( i < nCount ) && !nResId; i++ )
     {

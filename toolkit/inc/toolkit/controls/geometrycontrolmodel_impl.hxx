@@ -32,11 +32,17 @@
 //====================================================================
 //--------------------------------------------------------------------
 template <class CONTROLMODEL>
-OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel()
-    :OGeometryControlModel_Base(new CONTROLMODEL)
+OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
+    :OGeometryControlModel_Base(new CONTROLMODEL( i_factory ) )
 {
 }
 
+//template <class CONTROLMODEL>
+//OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & i_xCompContext)
+//  :OGeometryControlModel_Base(new CONTROLMODEL(i_xCompContext))
+//{
+//}
+//
 //--------------------------------------------------------------------
 template <class CONTROLMODEL>
 OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel(::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance)

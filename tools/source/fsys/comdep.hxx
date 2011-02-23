@@ -74,16 +74,16 @@ struct DirReader_Impl
     DirEntry*   pParent;
     String      aPath;
     ByteString  aBypass;
-    BOOL        bReady;
-    BOOL        bInUse;
+    sal_Bool        bReady;
+    sal_Bool        bInUse;
 
                 DirReader_Impl( Dir &rDir )
                 :   pDir( &rDir ),
                     pDosEntry( 0 ),
                     pParent( 0 ),
                     aPath( GUI2FSYS(rDir.GetFull()) ),
-                    bReady ( FALSE ),
-                    bInUse( FALSE )
+                    bReady ( sal_False ),
+                    bInUse( sal_False )
                 {
 #ifndef BOOTSTRAP
                     // Redirection
@@ -111,8 +111,8 @@ struct DirReader_Impl
                 { if( pDosDir ) closedir( pDosDir ); }
 
                 // die folgenden sind systemabh"angig implementiert
-    USHORT      Init(); // initialisiert, liest ggf. devices
-    USHORT      Read(); // liest 1 Eintrag, F2ugt ein falls ok
+    sal_uInt16      Init(); // initialisiert, liest ggf. devices
+    sal_uInt16      Read(); // liest 1 Eintrag, F2ugt ein falls ok
 };
 
 //--------------------------------------------------------------------
@@ -145,9 +145,9 @@ struct FileCopier_Impl
 //--------------------------------------------------------------------
 
 #if defined WNT || defined OS2
-BOOL IsRedirectable_Impl( const ByteString &rPath );
+sal_Bool IsRedirectable_Impl( const ByteString &rPath );
 #else
-#define IsRedirectable_Impl( rPath )    TRUE
+#define IsRedirectable_Impl( rPath )    sal_True
 #endif
 
 //--------------------------------------------------------------------

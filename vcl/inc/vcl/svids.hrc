@@ -58,6 +58,8 @@
 #define SV_DISCLOSURE_PLUS_HC               1062
 #define SV_DISCLOSURE_MINUS_HC              1063
 
+#define RID_STR_PAPERNAMES                  1070
+
 #define SV_RESID_MENU_EDIT                  2000
 #define SV_MENU_EDIT_UNDO                   1
 #define SV_MENU_EDIT_CUT                    2
@@ -147,12 +149,12 @@
 #define SV_PRINT_LOCATION_TXT               21
 #define SV_PRINT_COMMENT_TXT                22
 #define SV_PRINT_DETAILS_BTN                23
+#define SV_PRINT_OPT_REVERSE                24
 
 #define SV_PRINT_TAB_OPT                    3
 #define SV_PRINT_OPT_PRINT_FL               1
 #define SV_PRINT_OPT_TOFILE                 2
 #define SV_PRINT_OPT_SINGLEJOBS             3
-#define SV_PRINT_OPT_REVERSE                4
 
 #define SV_DLG_PRINT_PROGRESS             2049
 #define SV_PRINT_PROGRESS_CANCEL            1

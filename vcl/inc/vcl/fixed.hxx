@@ -48,11 +48,11 @@ private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
-    SAL_DLLPRIVATE void    ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
-    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
+    SAL_DLLPRIVATE void    ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                               const Point& rPos, const Size& rSize, bool bFillLayout = false ) const;
 public:
-    SAL_DLLPRIVATE static USHORT   ImplGetTextStyle( WinBits nWinBits );
+    SAL_DLLPRIVATE static sal_uInt16   ImplGetTextStyle( WinBits nWinBits );
 //#endif
 protected:
     virtual void    FillLayoutData() const;
@@ -67,7 +67,7 @@ public:
                     FixedText( Window* pParent, const ResId& rResId, bool bDisableAccessibleLabelForRelation );
 
     virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void    Resize();
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
@@ -88,7 +88,7 @@ private:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
-    SAL_DLLPRIVATE void    ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+    SAL_DLLPRIVATE void    ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     SAL_DLLPRIVATE void    ImplDraw( bool bLayout = false );
 
 protected:
@@ -103,7 +103,7 @@ public:
                     FixedLine( Window* pParent, const ResId& rResId );
 
     virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void    Resize();
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
@@ -126,7 +126,7 @@ private:
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplInitSettings();
-    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
+    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                               const Point& rPos, const Size& rSize );
 
 protected:
@@ -138,7 +138,7 @@ public:
                     ~FixedBitmap();
 
     virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void    Resize();
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
@@ -146,7 +146,7 @@ public:
     void            SetBitmap( const Bitmap& rBitmap );
     using OutputDevice::GetBitmap;
     const Bitmap&   GetBitmap() const { return maBitmap; }
-    BOOL            SetModeBitmap( const Bitmap& rBitmap, BmpColorMode eMode = BMP_COLOR_NORMAL );
+    sal_Bool            SetModeBitmap( const Bitmap& rBitmap, BmpColorMode eMode = BMP_COLOR_NORMAL );
     const Bitmap&   GetModeBitmap( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
 };
 
@@ -159,7 +159,7 @@ class VCL_DLLPUBLIC FixedImage : public Control
 private:
     Image           maImage;
     Image           maImageHC;
-    BOOL            mbInUserDraw;
+    sal_Bool            mbInUserDraw;
 
 private:
     using Control::ImplInitSettings;
@@ -167,10 +167,10 @@ private:
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplInitSettings();
-    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
-                              const Point& rPos, const Size& rSize );
 
 protected:
+    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
+                              const Point& rPos, const Size& rSize );
     SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
 
 public:
@@ -179,7 +179,7 @@ public:
                     ~FixedImage();
 
     virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void    Resize();
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
@@ -189,7 +189,7 @@ public:
     void            SetImage( const Image& rImage );
     const Image&    GetImage() const { return maImage; }
 
-    BOOL            SetModeImage( const Image& rImage, BmpColorMode eMode = BMP_COLOR_NORMAL );
+    sal_Bool            SetModeImage( const Image& rImage, BmpColorMode eMode = BMP_COLOR_NORMAL );
     const Image&    GetModeImage( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
 
     Point           CalcImagePos( const Point& rPos,

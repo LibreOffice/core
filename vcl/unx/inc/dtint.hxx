@@ -31,18 +31,11 @@
 #include <tools/string.hxx>
 #include <tools/color.hxx>
 #include <vcl/font.hxx>
+#include "svunx.h"
 
 class SalBitmap;
 class SalDisplay;
 class AllSettings;
-
-#ifndef _XLIB_H_
-// forwards from X
-struct Display;
-struct XEvent;
-#define Atom UINT32
-#define XLIB_Window UINT32
-#endif
 
 enum DtType {
     DtGeneric,
