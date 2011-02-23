@@ -62,6 +62,15 @@
 #include <iterator>
 #include <string>
 
+#ifdef UNX
+#if defined( MACOSX )
+# include <crt_externs.h>
+# define environ (*_NSGetEnviron())
+# else
+    extern char** environ;
+# endif
+#endif
+
 #if defined(WNT) || defined(OS2)
     const rtl::OUString EXECUTABLE_NAME (RTL_CONSTASCII_USTRINGPARAM("osl_process_child.exe"));
 #else
@@ -365,7 +374,6 @@ private:
         FreeEnvironmentStrings(env);
     }
 #else
-    extern char** environ;
     void read_parent_environment(string_container_t* env_container)
     {
         for (int i = 0; NULL != environ[i]; i++)

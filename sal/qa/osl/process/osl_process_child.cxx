@@ -52,6 +52,15 @@
 
 #include <rtl/ustring.hxx>
 
+#ifdef UNX
+#if defined( MACOSX )
+# include <crt_externs.h>
+# define environ (*_NSGetEnviron())
+# else
+    extern char** environ;
+# endif
+#endif
+
 //########################################
 // defines
 
@@ -95,8 +104,6 @@ void w_to_a(LPCTSTR _strW, LPSTR strA, DWORD size)
         FreeEnvironmentStrings(env);
     }
 #else
-    extern char** environ;
-
     void dump_env(char* file_path)
     {
         std::ofstream file(file_path);
