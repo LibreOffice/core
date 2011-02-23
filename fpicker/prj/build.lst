@@ -1,4 +1,4 @@
-fp	fpicker	: LIBXSLT:libxslt l10n rdbmaker svtools NULL
+fp	fpicker	: LIBXSLT:libxslt L10N:l10n rdbmaker svtools NULL
 fp	fpicker\inc							nmake	-	all	fp_inc NULL
 fp	fpicker\source\generic				nmake	-	all	fp_generic fp_inc NULL
 fp	fpicker\source\office				nmake	-	all	fp_office fp_inc NULL

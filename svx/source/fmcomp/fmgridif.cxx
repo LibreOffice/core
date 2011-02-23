@@ -365,7 +365,8 @@ Reference< XInterface > SAL_CALL FmXGridControl_NewInstance_Impl(const Reference
 DBG_NAME(FmXGridControl )
 //------------------------------------------------------------------------------
 FmXGridControl::FmXGridControl(const Reference< XMultiServiceFactory >& _rxFactory)
-               :m_aModifyListeners(*this, GetMutex())
+               :UnoControl( _rxFactory)
+               ,m_aModifyListeners(*this, GetMutex())
                ,m_aUpdateListeners(*this, GetMutex())
                ,m_aContainerListeners(*this, GetMutex())
                ,m_aSelectionListeners(*this, GetMutex())

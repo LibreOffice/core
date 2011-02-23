@@ -24,40 +24,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- // include ---------------------------------------------------------------
- //#include "colrctrl.hrc"
-#include <svx/dialogs.hrc>
-#include "helpid.hrc"
- // pragma ----------------------------------------------------------------
+#ifndef _XML_CHART_ENUM_CONVERTER_HXX_
+#define _XML_CHART_ENUM_CONVERTER_HXX_
 
- // RID_SVXCTRL_COLOR -----------------------------------------------------
-DockingWindow RID_SVXCTRL_COLOR
+#include <xmloff/EnumPropertyHdl.hxx>
+
+class SchXMLEnumConverter
 {
-    HelpID = HID_CTRL_COLOR ;
-    Border = TRUE ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    Sizeable = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Dockable = TRUE ;
-    EnableResizing = TRUE ;
-    Size = MAP_APPFONT ( 150 , 22 ) ;
-    Text [ en-US ] = "Colors" ;
-    Control 1
-    {
-        HelpId = HID_COLOR_CTL_COLORS ;
-        Pos = MAP_APPFONT ( 2 , 2 ) ;
-        Size = MAP_APPFONT ( 146 , 18 ) ;
-        Border = FALSE ;
-    };
+public:
+    static XMLEnumPropertyHdl& getLegendPositionConverter();//returns a singleton
+    static XMLEnumPropertyHdl& getLegendExpansionConverter();//returns a singleton
 };
 
-// IAccessibility2 implementation 2009. ------
-String STR_COLORTABLE
-{
-    Text [ en-US ] = "Color Palette" ;
-};
-// ------ IAccessibility2 implementation 2009.
-
+#endif  // _XML_CHART_ENUM_CONVERTER_HXX_
