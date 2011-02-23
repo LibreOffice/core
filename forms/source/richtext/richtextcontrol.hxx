@@ -59,10 +59,6 @@ namespace frm
     class ORichTextControl  :public UnoEditControl
                             ,public ORichTextControl_Base
     {
-    private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        m_xORB;
-
     public:
         ORichTextControl(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB

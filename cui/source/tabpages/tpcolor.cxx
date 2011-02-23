@@ -173,6 +173,11 @@ SvxColorTabPage::SvxColorTabPage
     aValSetColorTable.SetExtraSpacing( 0 );
     aValSetColorTable.Show();
 
+    aLbColorModel.SetAccessibleName( String( CUI_RES(STR_CUI_COLORMODEL) ) );
+    aBtnAdd.SetAccessibleRelationMemberOf( &aFlProp );
+    aBtnModify.SetAccessibleRelationMemberOf( &aFlProp );
+    aBtnWorkOn.SetAccessibleRelationMemberOf( &aFlProp );
+    aBtnDelete.SetAccessibleRelationMemberOf( &aFlProp );
 }
 
 // -----------------------------------------------------------------------
@@ -1121,6 +1126,12 @@ IMPL_LINK( SvxColorTabPage, SelectColorModelHdl_Impl, void *, EMPTYARG )
         aMtrFldColorModel3.SetValue( ColorToPercent_Impl( aAktuellColor.GetBlue() ) );
         aMtrFldColorModel4.SetValue( ColorToPercent_Impl( aAktuellColor.GetTransparency() ) );
     }
+
+    aMtrFldColorModel1.SetAccessibleName( GetNonMnemonicString(aFtColorModel1.GetText()) );
+    aMtrFldColorModel2.SetAccessibleName( GetNonMnemonicString(aFtColorModel2.GetText()) );
+    aMtrFldColorModel3.SetAccessibleName( GetNonMnemonicString(aFtColorModel3.GetText()) );
+    aMtrFldColorModel4.SetAccessibleName( GetNonMnemonicString(aFtColorModel4.GetText()) );
+
     return( 0L );
 }
 

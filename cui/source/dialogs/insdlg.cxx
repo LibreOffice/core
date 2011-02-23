@@ -206,11 +206,11 @@ SvInsertOleDlg::SvInsertOleDlg
     : InsertObjectDialog_Impl( pParent, CUI_RES( MD_INSERT_OLEOBJECT ), xStorage ),
     aRbNewObject( this, CUI_RES( RB_NEW_OBJECT ) ),
     aRbObjectFromfile( this, CUI_RES( RB_OBJECT_FROMFILE ) ),
+    aGbObject( this, CUI_RES( GB_OBJECT ) ),
     aLbObjecttype( this, CUI_RES( LB_OBJECTTYPE ) ),
     aEdFilepath( this, CUI_RES( ED_FILEPATH ) ),
     aBtnFilepath( this, CUI_RES( BTN_FILEPATH ) ),
     aCbFilelink( this, CUI_RES( CB_FILELINK ) ),
-    aGbObject( this, CUI_RES( GB_OBJECT ) ),
     aOKButton1( this, CUI_RES( 1 ) ),
     aCancelButton1( this, CUI_RES( 1 ) ),
     aHelpButton1( this, CUI_RES( 1 ) ),
@@ -226,6 +226,7 @@ SvInsertOleDlg::SvInsertOleDlg
     aRbObjectFromfile.SetClickHdl( aLink );
     aRbNewObject.Check( sal_True );
     RadioHdl( NULL );
+    aBtnFilepath.SetAccessibleRelationMemberOf(&aGbObject);
 }
 
 short SvInsertOleDlg::Execute()
@@ -449,11 +450,11 @@ IMPL_LINK( SvInsertPlugInDialog, BrowseHdl, PushButton *, EMPTYARG )
 
 SvInsertPlugInDialog::SvInsertPlugInDialog( Window* pParent, const uno::Reference < embed::XStorage >& xStorage )
     : InsertObjectDialog_Impl( pParent, CUI_RES( MD_INSERT_OBJECT_PLUGIN ), xStorage ),
+    aGbFileurl( this, CUI_RES( GB_FILEURL ) ),
     aEdFileurl( this, CUI_RES( ED_FILEURL ) ),
     aBtnFileurl( this, CUI_RES( BTN_FILEURL ) ),
-    aGbFileurl( this, CUI_RES( GB_FILEURL ) ),
-    aEdPluginsOptions( this, CUI_RES( ED_PLUGINS_OPTIONS ) ),
     aGbPluginsOptions( this, CUI_RES( GB_PLUGINS_OPTIONS ) ),
+    aEdPluginsOptions( this, CUI_RES( ED_PLUGINS_OPTIONS ) ),
     aOKButton1( this, CUI_RES( 1 ) ),
     aCancelButton1( this, CUI_RES( 1 ) ),
     aHelpButton1( this, CUI_RES( 1 ) ),
@@ -739,22 +740,23 @@ SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( Window *pParent,
     , aFTURL ( this, CUI_RES( FT_URL ) )
     , aEDURL ( this, CUI_RES( ED_URL ) )
     , aBTOpen ( this, CUI_RES(BT_FILEOPEN ) )
+
+    , aFLScrolling ( this, CUI_RES( GB_SCROLLING ) )
     , aRBScrollingOn ( this, CUI_RES( RB_SCROLLINGON ) )
     , aRBScrollingOff ( this, CUI_RES( RB_SCROLLINGOFF ) )
     , aRBScrollingAuto ( this, CUI_RES( RB_SCROLLINGAUTO ) )
-    , aFLScrolling ( this, CUI_RES( GB_SCROLLING ) )
     , aFLSepLeft( this, CUI_RES( FL_SEP_LEFT ) )
+    , aFLFrameBorder( this, CUI_RES( GB_BORDER ) )
     , aRBFrameBorderOn ( this, CUI_RES( RB_FRMBORDER_ON ) )
     , aRBFrameBorderOff ( this, CUI_RES( RB_FRMBORDER_OFF ) )
-    , aFLFrameBorder( this, CUI_RES( GB_BORDER ) )
     , aFLSepRight( this, CUI_RES( FL_SEP_RIGHT ) )
+    , aFLMargin( this, CUI_RES( GB_MARGIN ) )
     , aFTMarginWidth ( this, CUI_RES( FT_MARGINWIDTH ) )
     , aNMMarginWidth ( this, CUI_RES( NM_MARGINWIDTH ) )
     , aCBMarginWidthDefault( this, CUI_RES( CB_MARGINHEIGHTDEFAULT ) )
     , aFTMarginHeight ( this, CUI_RES( FT_MARGINHEIGHT ) )
     , aNMMarginHeight ( this, CUI_RES( NM_MARGINHEIGHT ) )
     , aCBMarginHeightDefault( this, CUI_RES( CB_MARGINHEIGHTDEFAULT ) )
-    , aFLMargin( this, CUI_RES( GB_MARGIN ) )
     , aOKButton1( this, CUI_RES( 1 ) )
     , aCancelButton1( this, CUI_RES( 1 ) )
     , aHelpButton1( this, CUI_RES( 1 ) )
@@ -783,22 +785,25 @@ SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( Window *pParent, con
     , aFTURL ( this, CUI_RES( FT_URL ) )
     , aEDURL ( this, CUI_RES( ED_URL ) )
     , aBTOpen ( this, CUI_RES(BT_FILEOPEN ) )
+
+    , aFLScrolling ( this, CUI_RES( GB_SCROLLING ) )
     , aRBScrollingOn ( this, CUI_RES( RB_SCROLLINGON ) )
     , aRBScrollingOff ( this, CUI_RES( RB_SCROLLINGOFF ) )
     , aRBScrollingAuto ( this, CUI_RES( RB_SCROLLINGAUTO ) )
-    , aFLScrolling ( this, CUI_RES( GB_SCROLLING ) )
+
     , aFLSepLeft( this, CUI_RES( FL_SEP_LEFT ) )
+    , aFLFrameBorder( this, CUI_RES( GB_BORDER ) )
     , aRBFrameBorderOn ( this, CUI_RES( RB_FRMBORDER_ON ) )
     , aRBFrameBorderOff ( this, CUI_RES( RB_FRMBORDER_OFF ) )
-    , aFLFrameBorder( this, CUI_RES( GB_BORDER ) )
+
     , aFLSepRight( this, CUI_RES( FL_SEP_RIGHT ) )
+    , aFLMargin( this, CUI_RES( GB_MARGIN ) )
     , aFTMarginWidth ( this, CUI_RES( FT_MARGINWIDTH ) )
     , aNMMarginWidth ( this, CUI_RES( NM_MARGINWIDTH ) )
     , aCBMarginWidthDefault( this, CUI_RES( CB_MARGINHEIGHTDEFAULT ) )
     , aFTMarginHeight ( this, CUI_RES( FT_MARGINHEIGHT ) )
     , aNMMarginHeight ( this, CUI_RES( NM_MARGINHEIGHT ) )
     , aCBMarginHeightDefault( this, CUI_RES( CB_MARGINHEIGHTDEFAULT ) )
-    , aFLMargin( this, CUI_RES( GB_MARGIN ) )
     , aOKButton1( this, CUI_RES( 1 ) )
     , aCancelButton1( this, CUI_RES( 1 ) )
     , aHelpButton1( this, CUI_RES( 1 ) )

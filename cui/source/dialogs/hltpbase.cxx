@@ -356,6 +356,9 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
 
         mpBtScript->SetModeImage( Image( ResId( IMG_SCRIPT_HC, *m_pResMgr ) ), BMP_COLOR_HIGHCONTRAST );
         mpBtScript->EnableTextDisplay (sal_False);
+
+        mpBtScript->SetAccessibleRelationMemberOf( mpGrpMore );
+        mpBtScript->SetAccessibleRelationLabeledBy( mpFtForm );
     }
 
     mbStdControlsInit = sal_True;

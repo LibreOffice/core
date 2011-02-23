@@ -158,6 +158,24 @@ SvxTextAnimationPage::SvxTextAnimationPage( Window* pWindow, const SfxItemSet& r
     aBtnLeft.SetClickHdl( aLink );
     aBtnRight.SetClickHdl( aLink );
     aBtnDown.SetClickHdl( aLink );
+
+    aNumFldCount.SetAccessibleRelationLabeledBy( &aTsbEndless );
+    aMtrFldAmount.SetAccessibleRelationLabeledBy( &aTsbPixel );
+    aMtrFldDelay.SetAccessibleRelationLabeledBy( &aTsbAuto );
+
+    aBtnUp.SetAccessibleRelationLabeledBy( &aFtDirection );
+    aBtnLeft.SetAccessibleRelationLabeledBy( &aFtDirection );
+    aBtnRight.SetAccessibleRelationLabeledBy( &aFtDirection );
+    aBtnDown.SetAccessibleRelationLabeledBy( &aFtDirection );
+
+    aBtnUp.SetAccessibleRelationMemberOf( &aFlEffect );
+    aBtnLeft.SetAccessibleRelationMemberOf( &aFlEffect );
+    aBtnRight.SetAccessibleRelationMemberOf( &aFlEffect );
+    aBtnDown.SetAccessibleRelationMemberOf( &aFlEffect );
+
+    aTsbEndless.SetAccessibleRelationLabeledBy( &aFtCount );
+    aTsbPixel.SetAccessibleRelationLabeledBy( &aFtAmount );
+    aTsbAuto.SetAccessibleRelationLabeledBy( &aFtDelay );
 }
 
 /*************************************************************************

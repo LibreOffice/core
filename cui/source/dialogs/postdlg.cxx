@@ -159,6 +159,10 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
         SetText( CUI_RESSTR( STR_NOTIZ_INSERT ) );
 
     FreeResource();
+
+    aEditED.SetAccessibleRelationLabeledBy(&aEditFT);
+    aEditED.SetAccessibleRelationMemberOf(&aPostItFL);
+    aAuthorBtn.SetAccessibleRelationMemberOf(&aPostItFL);
 }
 
 // -----------------------------------------------------------------------
