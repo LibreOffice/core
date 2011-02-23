@@ -406,7 +406,11 @@ namespace dbtools
                 }
                 else
                 {
-                    pOdbcSpec->getChild(1)->parseNodeToStr(sReturn, m_xConnection, &m_aParser.getContext(), sal_False, sal_True);
+                    OSQLParseNode* pValueNode = pOdbcSpec->getChild(1);
+                    if ( SQL_NODE_STRING == pValueNode->getNodeType() )
+                        sReturn = pValueNode->getTokenValue();
+                    else
+                        pValueNode->parseNodeToStr(sReturn, m_xConnection, &m_aParser.getContext(), sal_False, sal_True);
                     // sReturn = pOdbcSpec->getChild(1)->getTokenValue();
                 }
             }
