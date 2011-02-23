@@ -114,21 +114,6 @@ enum SvxChartDataDescr
 
 #define CHDESCR_COUNT   (CHDESCR_TEXTANDVALUE + 1)
 
-enum SvxChartLegendPos
-{
-    CHLEGEND_NONE,
-    CHLEGEND_LEFT,
-    CHLEGEND_TOP,
-    CHLEGEND_RIGHT,
-    CHLEGEND_BOTTOM,
-    CHLEGEND_NONE_TOP,
-    CHLEGEND_NONE_LEFT,
-    CHLEGEND_NONE_RIGHT,
-    CHLEGEND_NONE_BOTTOM
-};
-
-#define CHLEGEND_COUNT  (CHLEGEND_BOTTOM + 1)
-
 enum SvxChartTextOrder
 {
     CHTXTORDER_SIDEBYSIDE,
@@ -239,25 +224,6 @@ public:
     sal_uInt16 GetValueCount() const { return CHDESCR_COUNT; }
     SvxChartDataDescr GetValue() const
         { return (SvxChartDataDescr)SfxEnumItem::GetValue(); }
-};
-
-//------------------------------------------------------------------
-
-class SVX_DLLPUBLIC SvxChartLegendPosItem : public SfxEnumItem
-{
-public:
-    TYPEINFO();
-    SvxChartLegendPosItem(SvxChartLegendPos eLegendPos /*= CHLEGEND_NONE*/,
-                          sal_uInt16 nId );
-    SvxChartLegendPosItem(SvStream& rIn,
-                          sal_uInt16 nId );
-
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = 0) const;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const;
-
-    sal_uInt16 GetValueCount() const { return CHLEGEND_COUNT; }
-    SvxChartLegendPos GetValue() const
-        { return (SvxChartLegendPos)SfxEnumItem::GetValue(); }
 };
 
 //------------------------------------------------------------------

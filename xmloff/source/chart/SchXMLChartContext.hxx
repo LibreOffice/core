@@ -171,19 +171,4 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 };
 
-// ----------------------------------------
-
-class SchXMLLegendContext : public SvXMLImportContext
-{
-private:
-    SchXMLImportHelper& mrImportHelper;
-
-public:
-    SchXMLLegendContext( SchXMLImportHelper& rImpHelper,
-                         SvXMLImport& rImport, const rtl::OUString& rLocalName );
-    virtual ~SchXMLLegendContext();
-
-    virtual void StartElement( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
-};
-
 #endif  // _SCH_XMLCHARTCONTEXT_HXX_

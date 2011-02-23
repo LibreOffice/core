@@ -127,14 +127,6 @@ enum SchXMLPlotAreaAttrTokenMap
     XML_TOK_PA_LIGHTING_MODE
 };
 
-enum SchXMLLegendAttrMap
-{
-    XML_TOK_LEGEND_POSITION,
-    XML_TOK_LEGEND_X,
-    XML_TOK_LEGEND_Y,
-    XML_TOK_LEGEND_STYLE_NAME
-};
-
 enum SchXMLAutoStyleAttrMap
 {
     XML_TOK_AS_FAMILY,
