@@ -43,9 +43,6 @@
 #include "vectdlg.hxx"
 #include "vectdlg.hrc"
 #include <tools/config.hxx>
-#ifndef _SV_OCTREE_HXX //autogen
- #include <vcl/octree.hxx>
-#endif
 #include <vcl/bmpacc.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/metaact.hxx>
