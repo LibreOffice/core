@@ -2237,7 +2237,7 @@ sub retrieve_build_list {
     my $old_fh = select(STDOUT);
 
     # Try to get global depencies from solver's build.lst if such exists
-    my $solver_inc_dir = "$ENV{SOLARVER}/common";
+    my $solver_inc_dir = "$ENV{SOLARVER}/$ENV{INPATH}";
     $solver_inc_dir .= $ENV{PROEXT} if (defined $ENV{PROEXT});
     $solver_inc_dir .= '/inc';
     $solver_inc_dir .= $ENV{UPDMINOREXT} if (defined $ENV{UPDMINOREXT});
@@ -2245,20 +2245,16 @@ sub retrieve_build_list {
     $solver_inc_dir = correct_path($solver_inc_dir);
     $dead_parents{$module}++;
     print "Fetching dependencies for module $module from solver...";
-    foreach (@possible_build_lists) {
-        my $possible_build_lst = "$solver_inc_dir/$_";
-        if (-e $possible_build_lst) {
+    foreach my $onelist (@possible_build_lists) {
+        my $build_list_candidate = "$solver_inc_dir/$onelist";
+        if (-e $build_list_candidate) {
             print " ok\n";
             select($old_fh);
-            return $possible_build_lst;
+            return $build_list_candidate;
         };
     }
-    print " failed\n";
-
-    if (!defined $dead_parents{$module}) {
-        print "WARNING: Cannot figure out CWS for $module. Forgot to set CWS?\n";
-    }
-    select($old_fh);
+    print(" failed\n");
+    print_error("incomplete dependencies!\n");
     return undef;
 };
 
