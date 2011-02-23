@@ -787,9 +787,32 @@ sal_Bool operator==(const DateTime& _rLH,const DateTime& _rRH)
 
 bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
 {
-    if ( m_eTypeKind != _rRH.m_eTypeKind ||
-         m_bNull != _rRH.isNull())
+    if ( m_eTypeKind != _rRH.m_eTypeKind )
+    {
+        switch(m_eTypeKind)
+        {
+            case DataType::FLOAT:
+            case DataType::DOUBLE:
+            case DataType::REAL:
+                return getDouble() == _rRH.getDouble();
+                break;
+            default:
+                switch(_rRH.m_eTypeKind)
+                {
+                    case DataType::FLOAT:
+                    case DataType::DOUBLE:
+                    case DataType::REAL:
+                            return getDouble() == _rRH.getDouble();
+                            break;
+                    default:
+                            break;
+                }
+                break;
+            }
         return false;
+    }
+    if ( m_bNull != _rRH.isNull() )
+            return false;
     if(m_bNull && _rRH.isNull())
         return true;
 
