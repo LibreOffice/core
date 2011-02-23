@@ -114,7 +114,15 @@ IDLFILES=\
     XDocumentRevisionListPersistence.idl\
     DocumentRevisionListPersistence.idl \
     XDocumentLanguages.idl \
-    XCodeNameQuery.idl
+    XCodeNameQuery.idl \
+    XUndoAction.idl \
+    XUndoManager.idl \
+    XUndoManagerListener.idl \
+    XUndoManagerSupplier.idl \
+    UndoManagerEvent.idl \
+    EmptyUndoStackException.idl \
+    UndoContextNotClosedException.idl \
+    UndoFailedException.idl \
 
 
 # ------------------------------------------------------------------

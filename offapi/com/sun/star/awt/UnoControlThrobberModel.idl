@@ -38,14 +38,10 @@
 
 //=============================================================================
 
-/** specifies the standard model of an <type>UnoControlThrobber</type>.
-
-    <p>The simple animation control displays a sequence of images.</p>
-
-    <p> </p>
-
-    @see UnoControlScrollBarModel
+/**
     @since OOo 2.2
+    @deprecatd
+        You should use <type>SpinningAnimationControlModel</type>.
  */
 
 published service UnoControlThrobberModel

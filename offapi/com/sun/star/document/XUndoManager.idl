@@ -1,0 +1,337 @@
+/*************************************************************************
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_document_XUndoManager_idl__
+#define __com_sun_star_document_XUndoManager_idl__
+
+#include <com/sun/star/document/EmptyUndoStackException.idl>
+#include <com/sun/star/document/UndoContextNotClosedException.idl>
+#include <com/sun/star/document/UndoFailedException.idl>
+#include <com/sun/star/util/InvalidStateException.idl>
+#include <com/sun/star/util/XLockable.idl>
+#include <com/sun/star/container/XChild.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/lang/WrappedTargetException.idl>
+
+//==================================================================================================================
+
+module com { module sun { module star { module document {
+
+interface XUndoAction;
+interface XUndoManagerListener;
+
+//==================================================================================================================
+
+/** provides access to the undo/redo stacks of a document
+
+    <h3>Undo</h3>
+    <p>Changes to a document usually result in recording of information how to undo those changes, if desired. A so-called
+    undo action records the information how to undo a single change. Undo actions are maintained in a stack, so that
+    the changes they represent can be undo in the reverse order they have originally been applied.</p>
+
+    <h3>Redo</h3>
+    <p>Additionally, the Undo manager manages a Redo stack: Actions which are undone are moved from the Undo to the Redo
+    stack, so it is possible to re-apply the changes to the document.</p>
+
+    <h3>Undo contexts</h3>
+    <p>For collecting multiple changes in a single undo action, so-called Undo contexts are provided. When an Undo
+    context is entered, all subsequently added Undo actions are not pushed onto the undo stack directly, but considered
+    a sub action of the Undo context. Once the Undo context is left, a single undo action is pushed onto the undo stack,
+    which comprises all those single Undo actions.<br/>
+    Undo contexts can be arbitrarily nested.</p>
+
+    <h3>Hidden Undo actions</h3>
+    <p>Hidden Undo actions are those which in no observable way contribute to the undo stack. That is,
+    any method retrieving information about the stack will behave as if the undo action does not exist. Nonetheless,
+    calling <member>undo</member> respectively <member>redo</member> will include those actions.<br/>
+    Hidden Undo actions can be created by calling <member>enterHiddenUndoContext</member>, following by
+    <member>leaveUndoContext</member>.</p>
+
+    <a name="locking"></a>
+    <h3>Locking</h3>
+    <p>An Undo manager can be locked and unlocked, using the <member>XLockable::lock</member> and
+    <member>XLockable::unlock</member> methods. When it is locked, then every attempt to add an undo action, or to
+    enter or leave an Undo context, will be silently ignored.</p>
+ */
+interface XUndoManager
+{
+    /** allows <a href="#locking">locking</a> the undo manager.
+    */
+    interface ::com::sun::star::util::XLockable;
+
+    /** allows accessing the component, usually a document, which the undo manager works for.
+
+        <p><member scope="com::sun::star::container">XChild::setParent</member> is not supported, and will throw
+        an <type scope="com::sun::star::lang">NoSupportException</type>.</p>
+    */
+    interface ::com::sun::star::container::XChild;
+
+    /** enters a new undo context.
+
+        <p>A new undo action will be added to the undo stack, with the title given as <code>i_title</code>. As long
+        as the context is not left, every undo action added to the stack will be treated as sub action. This means
+        it will not be directly accessible at the Undo manager, not appear in any user interface, and cannot be
+        separately undone or re-done.</p>
+
+        <p>Each call to <code>enterUndoContext</code> must be paired by a call to <member>leaveUndoContext</member>,
+        otherwise, the document's undo stack is left in an inconsistent state.</p>
+
+        <p>Undo contexts can be nested, i.e. it is legitimate to call <code>enterUndoContext</code> and
+        <member>enterHiddenUndoContext</member> multiple times without calling <member>leaveUndoContext</member> inbetween.</p>
+
+        @see leaveUndoContext
+    */
+    void    enterUndoContext(
+                [in] string i_title
+            );
+
+    /** enters a new undo context, creating a hidden undo action.
+
+        <p>A hidden undo action does not, in any visible way, contribute to the undo stack. This means
+        that
+        <ul><li>Calling <member>undo</member> when the top-element is a hidden undo action will transparently
+                undo this action, and also undo the new top element of the stack.</li>
+            <li>Calling <member>redo</member> when the top-element is a hidden action will transparently
+                redo this action, and also redo the new top element of the stack.</li>
+            <li>In any user interface presenting the current Undo or Redo actions to the user, a hidden
+                action will not be listed.</p>
+        </ul>
+
+        <p>A new undo action will be added to the undo stack. As long as the context is not left, every undo action
+        added to the stack will be treated as sub action. This means it will not be directly accessible at the undo
+        manager, not appear in any user interface, and cannot be separately undone or re-done.</p>
+
+        <p>Each call to <code>enterHiddenUndoContext</code> must be paired by a call to <member>leaveUndoContext</member>,
+        otherwise, the document's undo stack is left in an inconsistent state.</p>
+
+        <p>Undo contexts can be nested, i.e. it is legitimate to call <member>enterUndoContext</member> and
+        <code>enterHiddenUndoContext</code> multiple times without calling <member>leaveUndoContext</member> inbetween.</p>
+
+        @throws EmptyUndoStackException
+            if the undo stack is currently empty, in which case it is impossible to push a hidden undo action onto
+            it.
+
+        @see enterUndoContext
+        @see leaveUndoContext
+    */
+    void    enterHiddenUndoContext()
+        raises( EmptyUndoStackException );
+
+    /** leaves the undo context previously opened via <member>enterUndoContext</member> respectively
+        <member>enterHiddenUndoContext</member>.
+
+        <p>If no undo action has been added since the context has been opened, the context is not only left,
+        but silently removed, and does not contribute to the undo stack at all. In this case, possible
+        listeners will be notified via <member>XUndoManagerListener::cancelledContext</member>.</p>
+
+        <p>Otherwise, the undo context will be closed, and added to the Undo stack; the redo stack will be cleared,
+        and listeners will be notified via <member>XUndoManagerListener::leftContext</member> resp.
+        <member>XUndoManagerListener::leftHiddenContext</member></p>
+
+        @throws ::com::sun::star::util::InvalidStateException
+            if no undo context is currently open.
+
+        @see enterUndoContext
+        @see enterHiddenUndoContext
+    */
+    void    leaveUndoContext()
+        raises( ::com::sun::star::util::InvalidStateException );
+
+    /** adds the given undo action to the undo stack.
+
+        <p>The redo stack is cleared when a new action is pushed onto the undo stack.</p>
+
+        <p>The Undo manager takes ownership of any actions pushed onto the undo stack. This means that if the
+        action is finally removed from the Undo manager's control (e.g. by calling <member>clear</member> resp.
+        <member>clearRedo</member>), it will be disposed, as long as it supports the <member scope="com::sun::star::lang">XComponent</member>
+        interface.</p>
+
+        <p>If the Undo manager is <a href="#locking">locked</a> at the moment the method is called, the call will be ignored, and the undo action
+        will immediately be disposed, if applicable.</p>
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the given undo action is <NULL/>.
+    */
+    void    addUndoAction(
+                [in] XUndoAction i_action
+            )
+            raises( ::com::sun::star::lang::IllegalArgumentException );
+
+    /** reverts the most recent action on the document.
+
+        <p>Effectively, invoking this method will
+        <ul><li>invoke <member>XUndoAction::undo</member> on the top-most action of the undo stack</li>
+            <li>move this undo action from the undo stack to the redo stack</li>
+        </ul></p>
+
+        @throws EmptyUndoStackException
+            if the undo stack is currently empty
+
+        @throws UndoContextNotClosedException
+            if there currently is an open undo context
+
+        @throws UndoFailedException
+            if the invocation of <member>XUndoAction::undo</member> raised this exception. In this case, the undo stack
+            of the undo manager will have been cleared.
+
+        @see redo
+        @see enterUndoContext
+    */
+    void    undo()
+            raises( ::com::sun::star::document::EmptyUndoStackException,
+                    ::com::sun::star::document::UndoContextNotClosedException,
+                    ::com::sun::star::document::UndoFailedException );
+
+    /** replays the action on the document which has most recently been undone
+
+        <p>Effectively, invoking this method will
+        <ul><li>invoke <member>XUndoAction::redo</member> on the top-most action of the redo stack</li>
+            <li>move this action from the redo stack to the undo stack</li>
+        </ul></p>
+
+        @throws EmptyUndoStackException
+            when the Redo stack is currently empty
+
+        @throws UndoContextNotClosedException
+            if there currently is an open undo context
+
+        @throws UndoFailedException
+            if the invocation of <member>XUndoAction::redo</member> raised this exception. In this case, the redo stack
+            of the undo manager will have been cleared.
+
+        @see undo
+    */
+    void    redo()
+            raises( ::com::sun::star::document::EmptyUndoStackException,
+                    ::com::sun::star::document::UndoContextNotClosedException,
+                    ::com::sun::star::document::UndoFailedException );
+
+    /** determines whether <member>undo</member> can reasonably be expected to succeed.
+
+        @return
+            <FALSE/> if and only if the undo stack is currently empty, or there is an open and not-yet-closed
+            undo context.
+    */
+    boolean isUndoPossible();
+
+    /** determines whether <member>redo</member> can reasonably be expected to succeed.
+
+        @return
+            <FALSE/> if and only if the redo stack is currently empty, or there is an open and not-yet-closed
+            undo context.
+    */
+    boolean isRedoPossible();
+
+    /** returns the title of the top-most action on the undo stack
+
+        @throws EmptyUndoStackException
+            when the undo stack is currently empty
+
+        @see XUndoAction::Title
+    */
+    string  getCurrentUndoActionTitle()
+            raises( ::com::sun::star::document::EmptyUndoStackException );
+
+    /** returns the title of the top-most action on the Redo stack
+
+        @throws EmptyUndoStackException
+            when the Redo stack is currently empty
+        @see XUndoAction::Title
+    */
+    string  getCurrentRedoActionTitle()
+            raises( ::com::sun::star::document::EmptyUndoStackException );
+
+    /** returns the titles of all actions currently on the undo stack, from top to bottom
+        @see XUndoAction::Title
+    */
+    sequence< string >
+            getAllUndoActionTitles();
+
+    /** returns the titles of all actions currently on the Redo stack, from top to bottom
+
+        @see XUndoAction::Title
+    */
+    sequence< string >
+            getAllRedoActionTitles();
+
+    /** clears the undo and the redo stack.
+
+        <p>All actions will be removed from both the Undo and the Redo stack. Actions which implement the
+        <type scope="com::sun::star::lang">XComponent</type> interface will be disposed.</p>
+
+        @throws UndoContextNotClosedException
+            if the method is invoked while an undo context is still open
+    */
+    void    clear()
+            raises( ::com::sun::star::document::UndoContextNotClosedException );
+
+    /** clears the redo stack.
+
+        <p>All actions will be removed from the Redo stack. Actions which implement the <type scope="com::sun::star::lang">XComponent</type>
+        interface will be disposed.</p>
+
+        @throws UndoContextNotClosedException
+            if the method is invoked while an undo context is still open
+    */
+    void    clearRedo()
+            raises( ::com::sun::star::document::UndoContextNotClosedException );
+
+    /** resets the Undo manager
+
+        <p>In particular, this method will
+            <ul><li>remove all locks from the undo manager</li>
+                <li>close all open undo contexts</li>
+                <li>clear the undo stack</li>
+                <li>clear the redo stack</li>
+            </ul></p>
+
+        <p>Note that possible listeners will not get notifications for the single parts of the reset, i.e. there
+        will be no single <member>XUndoManagerListener::allActionsCleared</member>,
+        <member>XUndoManagerListener::leftContext</member>, etc., notifications. Instead, listeners will be
+        notified of the reset by calling their <member>XUndoManagerListener::resetAll</member> method.</p>
+    */
+    void    reset();
+
+    /** adds a listener to be notified of changes in the Undo/Redo stacks.
+    */
+    void    addUndoManagerListener(
+                [in] XUndoManagerListener i_listener
+            );
+
+    /** removes a previously added listener
+    */
+    void    removeUndoManagerListener(
+                [in] XUndoManagerListener i_listener
+            );
+};
+
+//==================================================================================================================
+
+}; }; }; };
+
+//==================================================================================================================
+
+#endif

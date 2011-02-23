@@ -52,7 +52,7 @@ interface XSubDocument
             or an <type scope="com::sun::star::frame">XController</type> if the sub document
             does not have an own model.
 
-        @raises ::com::sun::star::lang::WrappedTargetException
+        @throws ::com::sun::star::lang::WrappedTargetException
             if an error occurs during opening the document
     */
     ::com::sun::star::lang::XComponent
@@ -66,7 +66,7 @@ interface XSubDocument
             or an <type scope="com::sun::star::frame">XController</type> if the sub document
             does not have an own model.
 
-        @raises ::com::sun::star::lang::WrappedTargetException
+        @throws ::com::sun::star::lang::WrappedTargetException
             if an error occurs during opening the document
     */
     ::com::sun::star::lang::XComponent
@@ -75,7 +75,7 @@ interface XSubDocument
 
     /** stores the sub document, if it had previously been opened in either mode
 
-        @raises ::com::sun::star::lang::WrappedTargetException
+        @throws ::com::sun::star::lang::WrappedTargetException
             if an error occurs during storing the document
     */
     void    store()
@@ -86,7 +86,7 @@ interface XSubDocument
         @return <TRUE/> if and only if the document could be closed, <FALSE/> otherwise,
             e.g. if the closing has been vetoed by the user.
 
-        @raises ::com::sun::star::lang::WrappedTargetException
+        @throws ::com::sun::star::lang::WrappedTargetException
             if an error occurs during closing the document
     */
     boolean close()

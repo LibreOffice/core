@@ -42,6 +42,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssawt.db \
     $(UCR)$/cssawttree.db \
     $(UCR)$/cssawtgrid.db \
+    $(UCR)$/cssawttab.db \
     $(UCR)$/csschart.db \
     $(UCR)$/csschart2.db \
     $(UCR)$/csschart2data.db \
