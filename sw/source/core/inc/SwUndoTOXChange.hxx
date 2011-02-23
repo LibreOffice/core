@@ -24,8 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SW_UNDO_TOX_CHANGE_HXX
-#define _SW_UNDO_TOX_CHANGE_HXX
+#ifndef SW_UNDO_TOX_CHANGE_HXX
+#define SW_UNDO_TOX_CHANGE_HXX
+
 #include <undobj.hxx>
 #include <tox.hxx>
 
@@ -34,14 +35,15 @@ class SwUndoTOXChange : public SwUndo
     SwTOXBase * pTOX, aOld, aNew;
 
     void UpdateTOXBaseSection();
+    void DoImpl();
 
 public:
     SwUndoTOXChange(SwTOXBase * pTOX, const SwTOXBase & rNew);
     virtual ~SwUndoTOXChange();
 
-    virtual void Undo(SwUndoIter & rIter);
-    virtual void Redo(SwUndoIter & rIter);
-    virtual void Repeat(SwUndoIter & rIter);
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 };
 
-#endif //_SW_UNDO_TOX_CHANGE_HXX
+#endif // SW_UNDO_TOX_CHANGE_HXX

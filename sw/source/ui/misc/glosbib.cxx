@@ -76,9 +76,11 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
                         const SvStrings* pPathArr,
                         SwGlossaryHdl *pHdl) :
     SvxStandardDialog(pParent, SW_RES(DLG_BIB_BASE)),
-
+    aBibFT(     this, SW_RES(FT_BIB)),
     aNameED(    this, SW_RES(ED_NAME)),
+    aPathFT(     this, SW_RES(FT_PATH)),
     aPathLB(    this, SW_RES(LB_PATH)),
+    aSelectFT(   this, SW_RES(FT_SELECT)),
     aGroupTLB(  this, SW_RES(TLB_GROUPS)),
 
     aOkPB(      this, SW_RES(BT_OK)),
@@ -87,16 +89,13 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
     aNewPB(     this, SW_RES(PB_NEW)),
     aDelPB(     this, SW_RES(PB_DELETE)),
     aRenamePB(  this, SW_RES(PB_RENAME)),
-    aBibFT(     this, SW_RES(FT_BIB)),
-    aPathFT(     this, SW_RES(FT_PATH)),
-    aSelectFT(   this, SW_RES(FT_SELECT)),
 
     pRemovedArr(0),
     pInsertedArr(0),
     pRenamedArr(0),
     pGlosHdl(pHdl)
 {
-    USHORT i;
+    sal_uInt16 i;
 
     FreeResource();
 
@@ -121,7 +120,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
         INetURLObject aTempURL(sPath);
         sPath = aTempURL.GetMainURL(INetURLObject::DECODE_WITH_CHARSET );
         aPathLB.InsertEntry(sPath);
-        ULONG nCaseReadonly = 0;
+        sal_uLong nCaseReadonly = 0;
         utl::TempFile aTempFile(&sPath);
         aTempFile.EnableKillingFile();
         if(!aTempFile.IsValid())
@@ -131,9 +130,9 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
         aPathLB.SetEntryData(i, (void*)nCaseReadonly);
     }
     aPathLB.SelectEntryPos(0);
-    aPathLB.Enable(TRUE);
+    aPathLB.Enable(sal_True);
 
-    const USHORT nCount = pHdl->GetGroupCnt();
+    const sal_uInt16 nCount = pHdl->GetGroupCnt();
     for(i = 0; i < nCount; ++i)
     {
         String sTitle;
@@ -146,7 +145,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
         String sTemp(sTitle);
         //sGroup.GetToken(0, GLOS_DELIM)
         sTemp += '\t';
-        pData->sPath = aPathLB.GetEntry((USHORT)sGroup.GetToken(1, GLOS_DELIM).ToInt32());
+        pData->sPath = aPathLB.GetEntry((sal_uInt16)sGroup.GetToken(1, GLOS_DELIM).ToInt32());
         sTemp += pData->sPath;
         SvLBoxEntry* pEntry = aGroupTLB.InsertEntry(sTemp);
         pEntry->SetUserData(pData);
@@ -192,8 +191,8 @@ void __EXPORT SwGlossaryGroupDlg::Apply()
 
     if(pRemovedArr && pRemovedArr->Count())
     {
-        USHORT nCount = pRemovedArr->Count();
-        for(USHORT i = 0; i < nCount; ++i)
+        sal_uInt16 nCount = pRemovedArr->Count();
+        for(sal_uInt16 i = 0; i < nCount; ++i)
         {
             const String* pDelEntry = (*pRemovedArr)[i];
             const String sDelGroup = pDelEntry->GetToken(0, '\t');
@@ -224,8 +223,8 @@ void __EXPORT SwGlossaryGroupDlg::Apply()
     //erst umbenennen, falls es schon eins gab
     if(pRenamedArr && pRenamedArr->Count())
     {
-        USHORT nCount = pRenamedArr->Count();
-        for(USHORT i = 0; i < nCount; ++i)
+        sal_uInt16 nCount = pRenamedArr->Count();
+        for(sal_uInt16 i = 0; i < nCount; ++i)
         {
             String * pEntry = (*pRenamedArr)[i];
             xub_StrLen nStrSttPos = 0;
@@ -239,8 +238,8 @@ void __EXPORT SwGlossaryGroupDlg::Apply()
     }
     if(pInsertedArr && pInsertedArr->Count())
     {
-        USHORT nCount = pInsertedArr->Count();
-        for(USHORT i = 0; i < nCount; ++i)
+        sal_uInt16 nCount = pInsertedArr->Count();
+        for(sal_uInt16 i = 0; i < nCount; ++i)
         {
             String sNewGroup = *(*pInsertedArr)[i];
             String sNewTitle = sNewGroup.GetToken(0, GLOS_DELIM);
@@ -258,15 +257,15 @@ void __EXPORT SwGlossaryGroupDlg::Apply()
 --------------------------------------------------*/
 IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
 {
-    aNewPB.Enable(FALSE);
+    aNewPB.Enable(sal_False);
     SvLBoxEntry* pFirstEntry = aGroupTLB.FirstSelected();
     if(pFirstEntry)
     {
         GlosBibUserData* pUserData = (GlosBibUserData*)pFirstEntry->GetUserData();
         String sEntry(pUserData->sGroupName);
         String sName(aNameED.GetText());
-        BOOL bExists = FALSE;
-        ULONG nPos = aGroupTLB.GetEntryPos(sName, 0);
+        sal_Bool bExists = sal_False;
+        sal_uLong nPos = aGroupTLB.GetEntryPos(sName, 0);
         if( 0xffffffff > nPos)
         {
             SvLBoxEntry* pEntry = aGroupTLB.GetEntry(nPos);
@@ -318,24 +317,24 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     SvLBoxEntry* pEntry = aGroupTLB.FirstSelected();
     if(!pEntry)
     {
-        pButton->Enable(FALSE);
+        pButton->Enable(sal_False);
         return 0;
     }
     GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
     String sEntry(pUserData->sGroupName);
     // befindet sich der zu loeschende Name schon unter den
     // den neuen - dann weg damit
-    BOOL bDelete = TRUE;
+    sal_Bool bDelete = sal_True;
     if(pInsertedArr && pInsertedArr->Count())
     {
-        USHORT nCount = pInsertedArr->Count();
-        for(USHORT i = 0; i < nCount; ++i)
+        sal_uInt16 nCount = pInsertedArr->Count();
+        for(sal_uInt16 i = 0; i < nCount; ++i)
         {
             const String* pTemp = (*pInsertedArr)[i];
             if(*pTemp == sEntry)
             {
                 pInsertedArr->Remove(i);
-                bDelete = FALSE;
+                bDelete = sal_False;
                 break;
             }
 
@@ -346,15 +345,15 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     {
         if(pRenamedArr && pRenamedArr->Count())
         {
-            USHORT nCount = pRenamedArr->Count();
-            for(USHORT i = 0; i < nCount; ++i)
+            sal_uInt16 nCount = pRenamedArr->Count();
+            for(sal_uInt16 i = 0; i < nCount; ++i)
             {
                 const String* pTemp = (*pRenamedArr)[i];
                 String sTemp( pTemp->GetToken(0, RENAME_TOKEN_DELIM ));
                 if(sTemp == sEntry)
                 {
                     pRenamedArr->Remove(i);
-                    bDelete = FALSE;
+                    bDelete = sal_False;
                     break;
                 }
             }
@@ -372,7 +371,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
     delete pUserData;
     aGroupTLB.GetModel()->Remove(pEntry);
     if(!aGroupTLB.First())
-        pButton->Enable(FALSE);
+        pButton->Enable(sal_False);
     //the content must be deleted - otherwise the new handler would be called in Apply()
     aNameED.SetText(aEmptyStr);
     return 0;
@@ -397,18 +396,18 @@ IMPL_LINK( SwGlossaryGroupDlg, RenameHdl, Button *, EMPTYARG )
 
     // befindet sich der umzubenennende Name unter den
     // den neuen - dann austauschen
-    BOOL bDone = FALSE;
+    sal_Bool bDone = sal_False;
     if(pInsertedArr && pInsertedArr->Count())
     {
-        USHORT nCount = pInsertedArr->Count();
-        for(USHORT i = 0; i < nCount; ++i)
+        sal_uInt16 nCount = pInsertedArr->Count();
+        for(sal_uInt16 i = 0; i < nCount; ++i)
         {
             const String* pTemp = (*pInsertedArr)[i];
             if(*pTemp == sEntry)
             {
                 pInsertedArr->Remove(i);
                 pInsertedArr->Insert(new String(sNewName), pInsertedArr->Count());
-                bDone = TRUE;
+                bDone = sal_True;
                 break;
             }
         }
@@ -447,17 +446,17 @@ IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
 {
     String sEntry(aNameED.GetText());
 //  sEntry.ToLower();
-    BOOL bEnableNew = TRUE;
-    BOOL bEnableDel = FALSE;
-    ULONG nCaseReadonly =
-            (ULONG)aPathLB.GetEntryData(aPathLB.GetSelectEntryPos());
-    BOOL bDirReadonly = 0 != (nCaseReadonly&PATH_READONLY);
+    sal_Bool bEnableNew = sal_True;
+    sal_Bool bEnableDel = sal_False;
+    sal_uLong nCaseReadonly =
+            (sal_uLong)aPathLB.GetEntryData(aPathLB.GetSelectEntryPos());
+    sal_Bool bDirReadonly = 0 != (nCaseReadonly&PATH_READONLY);
 
     if(!sEntry.Len() || bDirReadonly)
-        bEnableNew = FALSE;
+        bEnableNew = sal_False;
     else if(sEntry.Len())
     {
-        ULONG nPos = 0xffffffff;
+        sal_uLong nPos = 0xffffffff;
 
 
         nPos = aGroupTLB.GetEntryPos(sEntry, 0);
@@ -465,12 +464,12 @@ IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
         if( 0xffffffff == nPos)
         {
             const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
-            for(USHORT i = 0; i < aGroupTLB.GetEntryCount(); i++)
+            for(sal_uInt16 i = 0; i < aGroupTLB.GetEntryCount(); i++)
             {
                 String sTemp = aGroupTLB.GetEntryText( i, 0 );
-                nCaseReadonly = (ULONG)aPathLB.GetEntryData(
+                nCaseReadonly = (sal_uLong)aPathLB.GetEntryData(
                     aPathLB.GetEntryPos(aGroupTLB.GetEntryText(i,1)));
-                BOOL bCase = 0 != (nCaseReadonly & PATH_CASE_SENSITIVE);
+                sal_Bool bCase = 0 != (nCaseReadonly & PATH_CASE_SENSITIVE);
 
                 if( !bCase && rSCmp.isEqual( sTemp, sEntry ))
                 {
@@ -481,7 +480,7 @@ IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
         }
         if( 0xffffffff > nPos)
         {
-            bEnableNew = FALSE;
+            bEnableNew = sal_False;
             aGroupTLB.Select(aGroupTLB.GetEntry( nPos ));
             aGroupTLB.MakeVisible(aGroupTLB.GetEntry( nPos ));
         }
@@ -508,23 +507,23 @@ IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
  Beschreibung:
 ------------------------------------------------------------------------*/
 
-BOOL SwGlossaryGroupDlg::IsDeleteAllowed(const String &rGroup)
+sal_Bool SwGlossaryGroupDlg::IsDeleteAllowed(const String &rGroup)
 {
-    BOOL bDel = (!pGlosHdl->IsReadOnly(&rGroup));
+    sal_Bool bDel = (!pGlosHdl->IsReadOnly(&rGroup));
 
     // OM: befindet sich der Name unter den den neuen Bereichsnamen,
     // dann ist er auch loeschbar! Bei noch nicht existenten Bereichsnamen
-    // liefert ReadOnly naemlich TRUE.
+    // liefert ReadOnly naemlich sal_True.
 
     if(pInsertedArr && pInsertedArr->Count())
     {
-        USHORT nCount = pInsertedArr->Count();
-        for(USHORT i = 0; i < nCount; ++i)
+        sal_uInt16 nCount = pInsertedArr->Count();
+        for(sal_uInt16 i = 0; i < nCount; ++i)
         {
             const String* pTemp = (*pInsertedArr)[i];
             if(*pTemp == rGroup)
             {
-                bDel = TRUE;
+                bDel = sal_True;
                 break;
             }
         }

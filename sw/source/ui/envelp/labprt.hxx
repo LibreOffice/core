@@ -45,6 +45,7 @@ class SwLabPrtPage : public SfxTabPage
 {
     Printer*      pPrinter;             //Fuer die Schachteinstellug - leider.
 
+    FixedLine     aFLDontKnow;
     RadioButton   aPageButton;
     RadioButton   aSingleButton;
     FixedText     aColText;
@@ -52,11 +53,10 @@ class SwLabPrtPage : public SfxTabPage
     FixedText     aRowText;
     NumericField  aRowField;
     CheckBox      aSynchronCB;
-    FixedLine     aFLDontKnow;
 
+    FixedLine     aFLPrinter;
     FixedInfo     aPrinterInfo;
     PushButton    aPrtSetup;
-    FixedLine     aFLPrinter;
 
      SwLabPrtPage(Window* pParent, const SfxItemSet& rSet);
     ~SwLabPrtPage();
@@ -76,7 +76,7 @@ public:
     virtual void ActivatePage(const SfxItemSet& rSet);
     virtual int  DeactivatePage(SfxItemSet* pSet = 0);
             void FillItem(SwLabItem& rItem);
-    virtual BOOL FillItemSet(SfxItemSet& rSet);
+    virtual sal_Bool FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
     inline Printer* GetPrt() { return (pPrinter); }
 };

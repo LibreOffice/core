@@ -57,21 +57,21 @@ namespace swui
 
 #define ROW_COL_PROD 16384
 
-void SwInsTableDlg::GetValues( String& rName, USHORT& rRow, USHORT& rCol,
+void SwInsTableDlg::GetValues( String& rName, sal_uInt16& rRow, sal_uInt16& rCol,
                                 SwInsertTableOptions& rInsTblOpts, String& rAutoName,
                                 SwTableAutoFmt *& prTAFmt )
 {
-    USHORT nInsMode = 0;
+    sal_uInt16 nInsMode = 0;
     rName = aNameEdit.GetText();
-    rRow = (USHORT)aRowEdit.GetValue();
-    rCol = (USHORT)aColEdit.GetValue();
+    rRow = (sal_uInt16)aRowEdit.GetValue();
+    rCol = (sal_uInt16)aColEdit.GetValue();
 
     if (aBorderCB.IsChecked())
         nInsMode |= tabopts::DEFAULT_BORDER;
     if (aHeaderCB.IsChecked())
         nInsMode |= tabopts::HEADLINE;
     if (aRepeatHeaderCB.IsEnabled() && aRepeatHeaderCB.IsChecked())
-        rInsTblOpts.mnRowsToRepeat = USHORT( aRepeatHeaderNF.GetValue() );
+        rInsTblOpts.mnRowsToRepeat = sal_uInt16( aRepeatHeaderNF.GetValue() );
     else
         rInsTblOpts.mnRowsToRepeat = 0;
     if (!aDontSplitCB.IsChecked())
@@ -130,11 +130,11 @@ SwInsTableDlg::SwInsTableDlg( SwView& rView )
     aColEdit.SetMax(ROW_COL_PROD/aRowEdit.GetValue());
     aAutoFmtBtn.SetClickHdl(LINK(this, SwInsTableDlg, AutoFmtHdl));
 
-    BOOL bHTMLMode = 0 != (::GetHtmlMode(rView.GetDocShell())&HTMLMODE_ON);
+    sal_Bool bHTMLMode = 0 != (::GetHtmlMode(rView.GetDocShell())&HTMLMODE_ON);
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTblFlags(bHTMLMode);
-    USHORT nInsTblFlags = aInsOpts.mnInsMode;
+    sal_uInt16 nInsTblFlags = aInsOpts.mnInsMode;
 
     aHeaderCB.Check( 0 != (nInsTblFlags & tabopts::HEADLINE) );
     aRepeatHeaderCB.Check(aInsOpts.mnRowsToRepeat > 0);
@@ -222,7 +222,7 @@ IMPL_LINK( SwInsTableDlg, AutoFmtHdl, PushButton*, pButton )
     SwAbstractDialogFactory* pFact = swui::GetFactory();
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
-    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton,pShell, DLG_AUTOFMT_TABLE, FALSE, pTAutoFmt );
+    AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(pButton,pShell, DLG_AUTOFMT_TABLE, sal_False, pTAutoFmt );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");
     if( RET_OK == pDlg->Execute())
         pDlg->FillAutoFmtOfIndex( pTAutoFmt );

@@ -63,12 +63,12 @@ class SwAutoFormatDlg : public SfxModalDialog
 {
     FixedLine       aFlFormat;
     ListBox         aLbFormat;
+    FixedLine       aFlFormats;
     CheckBox        aBtnNumFormat;
     CheckBox        aBtnBorder;
     CheckBox        aBtnFont;
     CheckBox        aBtnPattern;
     CheckBox        aBtnAlignment;
-    FixedLine       aFlFormats;
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
@@ -88,14 +88,14 @@ class SwAutoFormatDlg : public SfxModalDialog
     //------------------------
     SwWrtShell*             pShell;
     SwTableAutoFmtTbl*      pTableTbl;
-    BYTE                    nIndex;
-    BYTE                    nDfltStylePos;
-    BOOL                    bCoreDataChanged : 1;
-    BOOL                    bSetAutoFmt : 1;
+    sal_uInt8                   nIndex;
+    sal_uInt8                   nDfltStylePos;
+    sal_Bool                    bCoreDataChanged : 1;
+    sal_Bool                    bSetAutoFmt : 1;
 
 
     void Init( const SwTableAutoFmt* pSelFmt );
-    void UpdateChecks( const SwTableAutoFmt&, BOOL bEnableBtn );
+    void UpdateChecks( const SwTableAutoFmt&, sal_Bool bEnableBtn );
     //------------------------
     DECL_LINK( CheckHdl, Button * );
     DECL_LINK( OkHdl, Button * );
@@ -106,7 +106,7 @@ class SwAutoFormatDlg : public SfxModalDialog
 
 public:
     SwAutoFormatDlg( Window* pParent, SwWrtShell* pShell,
-                        BOOL bSetAutoFmt = TRUE,
+                        sal_Bool bSetAutoFmt = sal_True,
                         const SwTableAutoFmt* pSelFmt = 0 );
     virtual ~SwAutoFormatDlg();
 

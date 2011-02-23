@@ -49,7 +49,7 @@ using namespace ::com::sun::star;
  --------------------------------------------------------------------*/
 
 sw::DropDownFieldDialog::DropDownFieldDialog( Window *pParent, SwWrtShell &rS,
-                              SwField* pField, BOOL bNextButton ) :
+                              SwField* pField, sal_Bool bNextButton ) :
 
     SvxStandardDialog(pParent,  SW_RES(DLG_FLD_DROPDOWN)),
     aItemsFL(       this, SW_RES( FL_ITEMS       )),
@@ -93,7 +93,7 @@ sw::DropDownFieldDialog::DropDownFieldDialog( Window *pParent, SwWrtShell &rS,
         aListItemsLB.SelectEntry(pDropField->GetSelectedItem());
     }
 
-    BOOL bEnable = !rSh.IsCrsrReadonly();
+    sal_Bool bEnable = !rSh.IsCrsrReadonly();
     aOKPB.Enable( bEnable );
 
     aListItemsLB.GrabFocus();

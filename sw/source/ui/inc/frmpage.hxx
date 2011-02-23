@@ -54,6 +54,7 @@ struct SwPosition;
 class SwFrmPage: public SfxTabPage
 {
     // Size
+    FixedLine       aSizeFL;
     FixedText       aWidthFT;
     FixedText       aWidthAutoFT;
     PercentField    aWidthED;
@@ -66,11 +67,10 @@ class SwFrmPage: public SfxTabPage
     CheckBox        aAutoHeightCB;
     CheckBox        aFixedRatioCB;
     PushButton      aRealSizeBT;
-    FixedLine       aSizeFL;
 
     // Anker
-    FixedLine       aTypeFL;
     FixedLine       aTypeSepFL;
+    FixedLine       aTypeFL;
     RadioButton     aAnchorAtPageRB;
     RadioButton     aAnchorAtParaRB;
     RadioButton     aAnchorAtCharRB;
@@ -78,6 +78,7 @@ class SwFrmPage: public SfxTabPage
     RadioButton     aAnchorAtFrameRB;
 
     // Position
+    FixedLine       aPositionFL;
     FixedText       aHorizontalFT;
     ListBox         aHorizontalDLB;
     FixedText       aAtHorzPosFT;
@@ -93,7 +94,6 @@ class SwFrmPage: public SfxTabPage
     ListBox         aVertRelationLB;
     // OD 02.10.2003 #i18732# - check box for new option 'FollowTextFlow'
     CheckBox        aFollowTextFlowCB;
-    FixedLine       aPositionFL;
 
     // Example
     SvxSwFrameExample   aExampleWN;
@@ -101,18 +101,21 @@ class SwFrmPage: public SfxTabPage
     //'string provider'
     SvxSwFramePosString aFramePosString;
 
-    BOOL            bAtHorzPosModified;
-    BOOL            bAtVertPosModified;
+    sal_Bool            bAtHorzPosModified;
+    sal_Bool            bAtVertPosModified;
 
-    BOOL            bFormat;
-    BOOL            bNew;
-    BOOL            bNoModifyHdl;
-    BOOL            bVerticalChanged;  //check done whether frame is in vertical environment
-    BOOL            bIsVerticalFrame;  //current frame is in vertical environment - strings are exchanged
-    BOOL            bIsInRightToLeft; // current frame is in right-to-left environment - strings are exchanged
-    BOOL            bHtmlMode;
-    USHORT          nHtmlMode;
-    USHORT          nDlgType;
+    sal_Bool            bFormat;
+    sal_Bool            bNew;
+    sal_Bool            bNoModifyHdl;
+    sal_Bool            bVerticalChanged;  //check done whether frame is in vertical environment
+    sal_Bool            bIsVerticalFrame;  //current frame is in vertical environment - strings are exchanged
+    // --> OD 2009-08-31 #mongolianlayou#
+    sal_Bool            bIsVerticalL2R;
+    // <--
+    sal_Bool            bIsInRightToLeft; // current frame is in right-to-left environment - strings are exchanged
+    sal_Bool            bHtmlMode;
+    sal_uInt16          nHtmlMode;
+    sal_uInt16          nDlgType;
     Size            aGrfSize;
     Size            aWrap;
     SwTwips         nUpperBorder;
@@ -144,8 +147,8 @@ class SwFrmPage: public SfxTabPage
     DECL_LINK( AnchorTypeHdl, RadioButton * );
     DECL_LINK( PosHdl, ListBox * );
     DECL_LINK( RelHdl, ListBox * );
-    void            InitPos(RndStdIds eId, USHORT nH, USHORT nHRel,
-                            USHORT nV,  USHORT nVRel,
+    void            InitPos(RndStdIds eId, sal_uInt16 nH, sal_uInt16 nHRel,
+                            sal_uInt16 nV,  sal_uInt16 nVRel,
                             long   nX,  long   nY);
 
     DECL_LINK( RealSizeHdl, Button * );
@@ -159,23 +162,23 @@ class SwFrmPage: public SfxTabPage
     void            UpdateExample();
     DECL_LINK( ModifyHdl, Edit * );
 
-    void            Init(const SfxItemSet& rSet, BOOL bReset = FALSE);
+    void            Init(const SfxItemSet& rSet, sal_Bool bReset = sal_False);
     // OD 12.11.2003 #i22341# - adjustment to handle maps, that are ambigous
     //                          in the alignment.
-    USHORT          FillPosLB( const FrmMap* _pMap,
-                               const USHORT _nAlign,
-                               const USHORT _nRel,
+    sal_uInt16          FillPosLB( const FrmMap* _pMap,
+                               const sal_uInt16 _nAlign,
+                               const sal_uInt16 _nRel,
                                ListBox& _rLB );
     // OD 14.11.2003 #i22341# - adjustment to handle maps, that are ambigous
     //                          in their string entries.
-    ULONG           FillRelLB( const FrmMap* _pMap,
-                               const USHORT _nLBSelPos,
-                               const USHORT _nAlign,
-                               USHORT _nRel,
+    sal_uLong           FillRelLB( const FrmMap* _pMap,
+                               const sal_uInt16 _nLBSelPos,
+                               const sal_uInt16 _nAlign,
+                               sal_uInt16 _nRel,
                                ListBox& _rLB,
                                FixedText& _rFT );
-    USHORT          GetMapPos( const FrmMap *pMap, ListBox &rAlignLB );
-    short           GetAlignment(FrmMap *pMap, USHORT nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
+    sal_uInt16          GetMapPos( const FrmMap *pMap, ListBox &rAlignLB );
+    short           GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
     short           GetRelation(FrmMap *pMap, ListBox &rRelationLB);
     RndStdIds       GetAnchor();
 
@@ -190,15 +193,15 @@ class SwFrmPage: public SfxTabPage
 public:
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
-    static USHORT* GetRanges();
+    static sal_uInt16* GetRanges();
 
-    virtual BOOL FillItemSet(SfxItemSet &rSet);
+    virtual sal_Bool FillItemSet(SfxItemSet &rSet);
     virtual void Reset(const SfxItemSet &rSet);
 
-    void            SetNewFrame(BOOL bNewFrame) { bNew      = bNewFrame; }
-    void            SetFormatUsed(BOOL bFmt);
-    void            SetFrmType(USHORT nType)    { nDlgType  = nType;     }
-    inline BOOL     IsInGraficMode( void )      { return nDlgType == DLG_FRM_GRF || nDlgType == DLG_FRM_OLE; }
+    void            SetNewFrame(sal_Bool bNewFrame) { bNew      = bNewFrame; }
+    void            SetFormatUsed(sal_Bool bFmt);
+    void            SetFrmType(sal_uInt16 nType)    { nDlgType  = nType;     }
+    inline sal_Bool     IsInGraficMode( void )      { return nDlgType == DLG_FRM_GRF || nDlgType == DLG_FRM_OLE; }
     void            EnableVerticalPositioning( bool bEnable );
 };
 
@@ -223,7 +226,7 @@ class SwGrfExtPage: public SfxTabPage
 
     ::sfx2::FileDialogHelper*     pGrfDlg;
 
-    BOOL            bHtmlMode;
+    sal_Bool            bHtmlMode;
 
     // Handler fuer Spiegeln
     DECL_LINK( MirrorHdl, CheckBox * );
@@ -240,7 +243,7 @@ public:
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 
-    virtual BOOL FillItemSet(SfxItemSet &rSet);
+    virtual sal_Bool FillItemSet(SfxItemSet &rSet);
     virtual void Reset(const SfxItemSet &rSet);
     virtual int  DeactivatePage(SfxItemSet *pSet);
 };
@@ -276,7 +279,7 @@ public:
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 
-    virtual BOOL FillItemSet(SfxItemSet &rSet);
+    virtual sal_Bool FillItemSet(SfxItemSet &rSet);
     virtual void Reset(const SfxItemSet &rSet);
 };
 
@@ -286,6 +289,7 @@ public:
 
 class SwFrmAddPage : public SfxTabPage
 {
+      FixedLine   aNamesFL;
     FixedText   aNameFT;
     Edit        aNameED;
     FixedText   aAltNameFT;
@@ -294,26 +298,25 @@ class SwFrmAddPage : public SfxTabPage
     ListBox     aPrevLB;
     FixedText   aNextFT;
     ListBox     aNextLB;
-    FixedLine   aNamesFL;
+        FixedLine   aProtectFL;
 
     CheckBox    aProtectContentCB;
     CheckBox    aProtectFrameCB;
     CheckBox    aProtectSizeCB;
-    FixedLine   aProtectFL;
+    FixedLine   aExtFL;
 
     CheckBox    aEditInReadonlyCB;
     CheckBox    aPrintFrameCB;
     FixedText   aTextFlowFT;
     ListBox     aTextFlowLB;
 
-    FixedLine   aExtFL;
 
     SwWrtShell* pWrtSh;
 
-    USHORT      nDlgType;
-    BOOL        bHtmlMode;
-    BOOL        bFormat;
-    BOOL        bNew;
+    sal_uInt16      nDlgType;
+    sal_Bool        bHtmlMode;
+    sal_Bool        bFormat;
+    sal_Bool        bNew;
 
     DECL_LINK(EditModifyHdl, Edit*);
     DECL_LINK(ChainModifyHdl, ListBox*);
@@ -324,14 +327,14 @@ class SwFrmAddPage : public SfxTabPage
 public:
 
     static SfxTabPage*  Create(Window *pParent, const SfxItemSet &rSet);
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
-    virtual BOOL FillItemSet(SfxItemSet &rSet);
+    virtual sal_Bool FillItemSet(SfxItemSet &rSet);
     virtual void Reset(const SfxItemSet &rSet);
 
-    void            SetFormatUsed(BOOL bFmt);
-    void            SetFrmType(USHORT nType) { nDlgType = nType; }
-    void            SetNewFrame(BOOL bNewFrame) { bNew  = bNewFrame; }
+    void            SetFormatUsed(sal_Bool bFmt);
+    void            SetFrmType(sal_uInt16 nType) { nDlgType = nType; }
+    void            SetNewFrame(sal_Bool bNewFrame) { bNew  = bNewFrame; }
     void            SetShell(SwWrtShell* pSh) { pWrtSh  = pSh; }
 
 };

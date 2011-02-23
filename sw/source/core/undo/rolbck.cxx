@@ -28,9 +28,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <rolbck.hxx>
 
-#include <hintids.hxx>
+#include <tools/resid.hxx>
+
 #include <svl/itemiter.hxx>
+
+#include <editeng/brkitem.hxx>
+
+#include <hints.hxx>
+#include <hintids.hxx>
 #include <fmtftn.hxx>
 #include <fchrfmt.hxx>
 #include <fmtflcnt.hxx>
@@ -47,6 +54,7 @@
 #include <frmfmt.hxx>
 #include <ftnidx.hxx>
 #include <doc.hxx>              // SwDoc.GetNodes()
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>            // SwTxtNode
 #include <paratr.hxx>           //
@@ -54,19 +62,12 @@
 #include <fldbas.hxx>           // fuer Felder
 #include <pam.hxx>              // fuer SwPaM
 #include <swtable.hxx>
-#include <rolbck.hxx>
 #include <ndgrf.hxx>            // SwGrfNode
-#include <undobj.hxx>           // fuer UndoDelete
+#include <UndoCore.hxx>
 #include <IMark.hxx>            // fuer SwBookmark
 #include <charfmt.hxx> // #i27615#
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
-#include <tools/resid.hxx>
-#ifndef _UNDO_HRC
 #include <undo.hrc>
-#endif
-#include <editeng/brkitem.hxx>
 #include <bookmrk.hxx>
 
 SV_IMPL_PTRARR( SwpHstry, SwHistoryHintPtr)
@@ -77,7 +78,7 @@ String SwHistoryHint::GetDescription() const
 }
 
 
-SwHistorySetFmt::SwHistorySetFmt( const SfxPoolItem* pFmtHt, ULONG nNd )
+SwHistorySetFmt::SwHistorySetFmt( const SfxPoolItem* pFmtHt, sal_uLong nNd )
     :  SwHistoryHint( HSTRY_SETFMTHNT )
     ,  m_pAttr( pFmtHt->Clone() )
     ,  m_nNodeIndex( nNd )
@@ -121,7 +122,7 @@ String SwHistorySetFmt::GetDescription() const
 {
     String aResult ;
 
-    USHORT nWhich = m_pAttr->Which();
+    sal_uInt16 nWhich = m_pAttr->Which();
     switch (nWhich)
     {
     case RES_BREAK:
@@ -188,7 +189,7 @@ SwHistorySetFmt::~SwHistorySetFmt()
 
 
 // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
-SwHistoryResetFmt::SwHistoryResetFmt(const SfxPoolItem* pFmtHt, ULONG nNodeIdx)
+SwHistoryResetFmt::SwHistoryResetFmt(const SfxPoolItem* pFmtHt, sal_uLong nNodeIdx)
 // <--
     : SwHistoryHint( HSTRY_RESETFMTHNT )
     , m_nNodeIndex( nNodeIdx )
@@ -212,7 +213,7 @@ void SwHistoryResetFmt::SetInDoc( SwDoc* pDoc, bool )
 }
 
 
-SwHistorySetTxt::SwHistorySetTxt( SwTxtAttr* pTxtHt, ULONG nNodePos )
+SwHistorySetTxt::SwHistorySetTxt( SwTxtAttr* pTxtHt, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_SETTXTHNT )
     , m_nNodeIndex( nNodePos )
     , m_nStart( *pTxtHt->GetStart() )
@@ -224,7 +225,7 @@ SwHistorySetTxt::SwHistorySetTxt( SwTxtAttr* pTxtHt, ULONG nNodePos )
 
     // ein bisschen kompliziert, aber ist Ok so: erst vom default
     // eine Kopie und dann die Werte aus dem Text Attribut zuweisen
-    USHORT nWhich = pTxtHt->Which();
+    sal_uInt16 nWhich = pTxtHt->Which();
     if ( RES_TXTATR_CHARFMT == nWhich )
     {
         m_pAttr.reset( new SwFmtCharFmt( pTxtHt->GetCharFmt().GetCharFmt() ) );
@@ -266,7 +267,7 @@ void SwHistorySetTxt::SetInDoc( SwDoc* pDoc, bool )
 }
 
 
-SwHistorySetTxtFld::SwHistorySetTxtFld( SwTxtFld* pTxtFld, ULONG nNodePos )
+SwHistorySetTxtFld::SwHistorySetTxtFld( SwTxtFld* pTxtFld, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_SETTXTFLDHNT )
     , m_pFldType( 0 )
     , m_pFld( new SwFmtFld( *pTxtFld->GetFld().GetFld() ) )
@@ -328,7 +329,7 @@ void SwHistorySetTxtFld::SetInDoc( SwDoc* pDoc, bool )
 
 
 
-SwHistorySetRefMark::SwHistorySetRefMark( SwTxtRefMark* pTxtHt, ULONG nNodePos )
+SwHistorySetRefMark::SwHistorySetRefMark( SwTxtRefMark* pTxtHt, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_SETREFMARKHNT )
     , m_RefName( pTxtHt->GetRefMark().GetRefName() )
     , m_nNodeIndex( nNodePos )
@@ -357,7 +358,7 @@ void SwHistorySetRefMark::SetInDoc( SwDoc* pDoc, bool )
 }
 
 
-SwHistorySetTOXMark::SwHistorySetTOXMark( SwTxtTOXMark* pTxtHt, ULONG nNodePos )
+SwHistorySetTOXMark::SwHistorySetTOXMark( SwTxtTOXMark* pTxtHt, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_SETTOXMARKHNT )
     , m_TOXMark( pTxtHt->GetTOXMark() )
     , m_TOXName( m_TOXMark.GetTOXType()->GetTypeName() )
@@ -378,9 +379,9 @@ void SwHistorySetTOXMark::SetInDoc( SwDoc* pDoc, bool )
         return;
 
     // search for respective TOX type
-    USHORT nCnt = pDoc->GetTOXTypeCount( m_eTOXTypes );
+    sal_uInt16 nCnt = pDoc->GetTOXTypeCount( m_eTOXTypes );
     SwTOXType* pToxType = 0;
-    for ( USHORT n = 0; n < nCnt; ++n )
+    for ( sal_uInt16 n = 0; n < nCnt; ++n )
     {
         pToxType = const_cast<SwTOXType*>(pDoc->GetTOXType( m_eTOXTypes, n ));
         if ( pToxType->GetTypeName() == m_TOXName )
@@ -415,8 +416,8 @@ int SwHistorySetTOXMark::IsEqual( const SwTOXMark& rCmp ) const
 }
 
 
-SwHistoryResetTxt::SwHistoryResetTxt( USHORT nWhich,
-            xub_StrLen nAttrStart, xub_StrLen nAttrEnd, ULONG nNodePos )
+SwHistoryResetTxt::SwHistoryResetTxt( sal_uInt16 nWhich,
+            xub_StrLen nAttrStart, xub_StrLen nAttrEnd, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_RESETTXTHNT )
     , m_nNodeIndex( nNodePos ), m_nStart( nAttrStart ), m_nEnd( nAttrEnd )
     , m_nAttr( nWhich )
@@ -435,7 +436,7 @@ void SwHistoryResetTxt::SetInDoc( SwDoc* pDoc, bool )
 }
 
 
-SwHistorySetFootnote::SwHistorySetFootnote( SwTxtFtn* pTxtFtn, ULONG nNodePos )
+SwHistorySetFootnote::SwHistorySetFootnote( SwTxtFtn* pTxtFtn, sal_uLong nNodePos )
     : SwHistoryHint( HSTRY_SETFTNHNT )
     , m_pUndo( new SwUndoSaveSection )
     , m_FootnoteNumber( pTxtFtn->GetFtn().GetNumStr() )
@@ -454,7 +455,7 @@ SwHistorySetFootnote::SwHistorySetFootnote( SwTxtFtn* pTxtFtn, ULONG nNodePos )
     //Pointer auf StartNode der FtnSection merken und erstmal den Pointer im
     //Attribut zuruecksetzen -> Damit werden automatisch die Frms vernichtet.
     SwNodeIndex aSttIdx( *pTxtFtn->GetStartNode() );
-    pTxtFtn->SetStartNode( 0, FALSE );
+    pTxtFtn->SetStartNode( 0, sal_False );
 
     m_pUndo->SaveSection( pDoc, aSttIdx );
     m_nNodeIndex = pSaveNd->GetIndex();
@@ -529,8 +530,8 @@ void SwHistorySetFootnote::SetInDoc( SwDoc* pDoc, bool )
 }
 
 
-SwHistoryChangeFmtColl::SwHistoryChangeFmtColl( SwFmtColl* pFmtColl, ULONG nNd,
-                            BYTE nNodeWhich )
+SwHistoryChangeFmtColl::SwHistoryChangeFmtColl( SwFmtColl* pFmtColl, sal_uLong nNd,
+                            sal_uInt8 nNodeWhich )
     : SwHistoryHint( HSTRY_CHGFMTCOLL )
     , m_pColl( pFmtColl )
     , m_nNodeIndex( nNd )
@@ -569,7 +570,7 @@ SwHistoryTxtFlyCnt::SwHistoryTxtFlyCnt( SwFrmFmt* const pFlyFmt )
     , m_pUndo( new SwUndoDelLayFmt( pFlyFmt ) )
 {
     ASSERT( pFlyFmt, "SwHistoryTxtFlyCnt: no Format" );
-    m_pUndo->ChgShowSel( FALSE );
+    m_pUndo->ChgShowSel( sal_False );
 }
 
 
@@ -580,9 +581,10 @@ SwHistoryTxtFlyCnt::~SwHistoryTxtFlyCnt()
 
 void SwHistoryTxtFlyCnt::SetInDoc( SwDoc* pDoc, bool )
 {
-    SwPaM aPam( pDoc->GetNodes().GetEndOfPostIts() );
-    SwUndoIter aUndoIter( &aPam );
-    m_pUndo->Undo( aUndoIter );
+    ::sw::IShellCursorSupplier *const pISCS(pDoc->GetIShellCursorSupplier());
+    OSL_ASSERT(pISCS);
+    ::sw::UndoRedoContext context(*pDoc, *pISCS);
+    m_pUndo->UndoImpl(context);
 }
 
 
@@ -626,8 +628,7 @@ SwHistoryBookmark::SwHistoryBookmark(
 
 void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
 {
-    bool bDoesUndo = pDoc->DoesUndo();
-    pDoc->DoUndo(false);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     SwNodes& rNds = pDoc->GetNodes();
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
@@ -698,7 +699,6 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
             }
         }
     }
-    pDoc->DoUndo(bDoesUndo);
 }
 
 
@@ -718,7 +718,7 @@ const ::rtl::OUString& SwHistoryBookmark::GetName() const
 
 
 SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
-                        ULONG nNodePos, const SvUShortsSort& rSetArr )
+                        sal_uLong nNodePos, const SvUShortsSort& rSetArr )
     : SwHistoryHint( HSTRY_SETATTRSET )
     , m_OldSet( rSet )
     , m_ResetArray( 0, 4 )
@@ -788,13 +788,12 @@ SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
             break;
         pItem = aIter.NextItem();
         pOrigItem = aOrigIter.NextItem();
-    } while( TRUE );
+    } while( sal_True );
 }
 
 void SwHistorySetAttrSet::SetInDoc( SwDoc* pDoc, bool )
 {
-    BOOL bDoesUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     SwNode * pNode = pDoc->GetNodes()[ m_nNodeIndex ];
     if ( pNode->IsCntntNode() )
@@ -815,25 +814,23 @@ void SwHistorySetAttrSet::SetInDoc( SwDoc* pDoc, bool )
             rFmt.ResetFmtAttr( *m_ResetArray.GetData() );
         }
     }
-
-    pDoc->DoUndo( bDoesUndo );
 }
 
 /*************************************************************************/
 
 
 SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
-                    ULONG nNodePos, xub_StrLen nAttrStt, xub_StrLen nAttrEnd )
+                    sal_uLong nNodePos, xub_StrLen nAttrStt, xub_StrLen nAttrEnd )
     : SwHistoryHint( HSTRY_RESETATTRSET )
     , m_nNodeIndex( nNodePos ), m_nStart( nAttrStt ), m_nEnd( nAttrEnd )
-    , m_Array( (BYTE)rSet.Count() )
+    , m_Array( (sal_uInt8)rSet.Count() )
 {
     SfxItemIter aIter( rSet );
     bool bAutoStyle = false;
 
-    while( TRUE )
+    while( sal_True )
     {
-        const USHORT nWhich = aIter.GetCurItem()->Which();
+        const sal_uInt16 nWhich = aIter.GetCurItem()->Which();
 
 #ifndef PRODUCT
         switch (nWhich)
@@ -879,19 +876,18 @@ SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
 
 void SwHistoryResetAttrSet::SetInDoc( SwDoc* pDoc, bool )
 {
-    BOOL bDoesUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     SwCntntNode * pCntntNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetCntntNode();
     ASSERT( pCntntNd, "SwHistoryResetAttrSet: no CntntNode" );
 
     if (pCntntNd)
     {
-        const USHORT* pArr = m_Array.GetData();
+        const sal_uInt16* pArr = m_Array.GetData();
         if ( USHRT_MAX == m_nEnd && USHRT_MAX == m_nStart )
         {
             // no area: use ContentNode
-            for ( USHORT n = m_Array.Count(); n; --n, ++pArr )
+            for ( sal_uInt16 n = m_Array.Count(); n; --n, ++pArr )
             {
                 pCntntNd->ResetAttr( *pArr );
             }
@@ -899,15 +895,13 @@ void SwHistoryResetAttrSet::SetInDoc( SwDoc* pDoc, bool )
         else
         {
             // area: use TextNode
-            for ( USHORT n = m_Array.Count(); n; --n, ++pArr )
+            for ( sal_uInt16 n = m_Array.Count(); n; --n, ++pArr )
             {
                 static_cast<SwTxtNode*>(pCntntNd)->
                     DeleteAttributes( *pArr, m_nStart, m_nEnd );
             }
         }
     }
-
-    pDoc->DoUndo( bDoesUndo );
 }
 
 
@@ -927,10 +921,9 @@ SwHistoryChangeFlyAnchor::SwHistoryChangeFlyAnchor( SwFrmFmt& rFmt )
 
 void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
 {
-    BOOL bDoesUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
-    USHORT nPos = pDoc->GetSpzFrmFmts()->GetPos( &m_rFmt );
+    sal_uInt16 nPos = pDoc->GetSpzFrmFmts()->GetPos( &m_rFmt );
     if ( USHRT_MAX != nPos )    // Format does still exist
     {
         SwFmtAnchor aTmp( m_rFmt.GetAnchor() );
@@ -949,14 +942,13 @@ void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
         aTmp.SetAnchor( &aPos );
 
         // so the Layout does not get confused
-        if ( !pCNd || !pCNd->GetFrm( 0, 0, FALSE ) )
+        if ( !pCNd || !pCNd->GetFrm( 0, 0, sal_False ) )
         {
             m_rFmt.DelFrms();
         }
 
         m_rFmt.SetFmtAttr( aTmp );
     }
-    pDoc->DoUndo( bDoesUndo );
 }
 
 
@@ -1026,8 +1018,8 @@ void SwHistoryChangeCharFmt::SetInDoc(SwDoc * pDoc, bool )
 /*  */
 
 
-SwHistory::SwHistory( USHORT nInitSz, USHORT nGrowSz )
-    : m_SwpHstry( (BYTE)nInitSz, (BYTE)nGrowSz )
+SwHistory::SwHistory( sal_uInt16 nInitSz, sal_uInt16 nGrowSz )
+    : m_SwpHstry( (sal_uInt8)nInitSz, (sal_uInt8)nGrowSz )
     , m_nEndDiff( 0 )
 {}
 
@@ -1050,12 +1042,12 @@ SwHistory::~SwHistory()
 
 // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
 void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
-                     ULONG nNodeIdx )
+                     sal_uLong nNodeIdx )
 // <--
 {
     ASSERT( !m_nEndDiff, "History was not deleted after REDO" );
 
-    USHORT nWhich = pNewValue->Which();
+    sal_uInt16 nWhich = pNewValue->Which();
     if( (nWhich >= POOLATTR_END) || (nWhich == RES_TXTATR_FIELD) )
         return;
 
@@ -1073,12 +1065,12 @@ void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
 }
 
 
-void SwHistory::Add( SwTxtAttr* pHint, ULONG nNodeIdx, bool bNewAttr )
+void SwHistory::Add( SwTxtAttr* pHint, sal_uLong nNodeIdx, bool bNewAttr )
 {
     ASSERT( !m_nEndDiff, "History was not deleted after REDO" );
 
     SwHistoryHint * pHt;
-    USHORT nAttrWhich = pHint->Which();
+    sal_uInt16 nAttrWhich = pHint->Which();
 
     if( !bNewAttr )
     {
@@ -1118,7 +1110,7 @@ void SwHistory::Add( SwTxtAttr* pHint, ULONG nNodeIdx, bool bNewAttr )
 }
 
 
-void SwHistory::Add( SwFmtColl* pColl, ULONG nNodeIdx, BYTE nWhichNd )
+void SwHistory::Add( SwFmtColl* pColl, sal_uLong nNodeIdx, sal_uInt8 nWhichNd )
 {
     ASSERT( !m_nEndDiff, "History was not deleted after REDO" );
 
@@ -1143,19 +1135,19 @@ void SwHistory::Add( SwFrmFmt& rFmt )
     m_SwpHstry.Insert( pHt, Count() );
 }
 
-void SwHistory::Add( SwFlyFrmFmt& rFmt, USHORT& rSetPos )
+void SwHistory::Add( SwFlyFrmFmt& rFmt, sal_uInt16& rSetPos )
 {
     ASSERT( !m_nEndDiff, "History was not deleted after REDO" );
 
     SwHistoryHint * pHint;
-    const USHORT nWh = rFmt.Which();
+    const sal_uInt16 nWh = rFmt.Which();
     if( RES_FLYFRMFMT == nWh || RES_DRAWFRMFMT == nWh )
     {
         pHint = new SwHistoryTxtFlyCnt( &rFmt );
         m_SwpHstry.Insert( pHint, Count() );
 
         const SwFmtChain* pChainItem;
-        if( SFX_ITEM_SET == rFmt.GetItemState( RES_CHAIN, FALSE,
+        if( SFX_ITEM_SET == rFmt.GetItemState( RES_CHAIN, sal_False,
             (const SfxPoolItem**)&pChainItem ))
         {
             if( pChainItem->GetNext() || pChainItem->GetPrev() )
@@ -1196,7 +1188,7 @@ void SwHistory::Add(const SfxItemSet & rSet, const SwCharFmt & rFmt)
 
 /*************************************************************************
 |*
-|*    BOOL SwHistory::Rollback()
+|*    sal_Bool SwHistory::Rollback()
 |*
 |*    Beschreibung      Dokument 1.0
 |*    Ersterstellung    JP 18.02.91
@@ -1205,13 +1197,13 @@ void SwHistory::Add(const SfxItemSet & rSet, const SwCharFmt & rFmt)
 *************************************************************************/
 
 
-bool SwHistory::Rollback( SwDoc* pDoc, USHORT nStart )
+bool SwHistory::Rollback( SwDoc* pDoc, sal_uInt16 nStart )
 {
     if ( !Count() )
         return false;
 
     SwHistoryHint * pHHt;
-    USHORT i;
+    sal_uInt16 i;
     for ( i = Count(); i > nStart ; )
     {
         pHHt = m_SwpHstry[ --i ];
@@ -1225,9 +1217,9 @@ bool SwHistory::Rollback( SwDoc* pDoc, USHORT nStart )
 
 
 
-bool SwHistory::TmpRollback( SwDoc* pDoc, USHORT nStart, bool bToFirst )
+bool SwHistory::TmpRollback( SwDoc* pDoc, sal_uInt16 nStart, bool bToFirst )
 {
-    USHORT nEnd = Count() - m_nEndDiff;
+    sal_uInt16 nEnd = Count() - m_nEndDiff;
     if ( !Count() || !nEnd || nStart >= nEnd )
         return false;
 
@@ -1252,9 +1244,9 @@ bool SwHistory::TmpRollback( SwDoc* pDoc, USHORT nStart, bool bToFirst )
 }
 
 
-void SwHistory::Delete( USHORT nStart )
+void SwHistory::Delete( sal_uInt16 nStart )
 {
-    for ( USHORT n = Count(); n > nStart; )
+    for ( sal_uInt16 n = Count(); n > nStart; )
     {
         m_SwpHstry.DeleteAndDestroy( --n, 1 );
     }
@@ -1262,28 +1254,28 @@ void SwHistory::Delete( USHORT nStart )
 }
 
 
-USHORT SwHistory::SetTmpEnd( USHORT nNewTmpEnd )
+sal_uInt16 SwHistory::SetTmpEnd( sal_uInt16 nNewTmpEnd )
 {
     ASSERT( nNewTmpEnd <= Count(),  "SwHistory::SetTmpEnd: out of bounds" );
 
-    USHORT nOld = Count() - m_nEndDiff;
+    sal_uInt16 nOld = Count() - m_nEndDiff;
     m_nEndDiff = Count() - nNewTmpEnd;
 
     // for every SwHistoryFlyCnt, call the Redo of its UndoObject.
     // this saves the formats of the flys!
-    for ( USHORT n = nOld; n < nNewTmpEnd; n++ )
+    for ( sal_uInt16 n = nOld; n < nNewTmpEnd; n++ )
     {
         if ( HSTRY_FLYCNT == (*this)[ n ]->Which() )
         {
             static_cast<SwHistoryTxtFlyCnt*>((*this)[ n ])
-                ->GetUDelLFmt()->Redo();
+                ->GetUDelLFmt()->RedoForRollback();
         }
     }
 
     return nOld;
 }
 
-void SwHistory::CopyFmtAttr( const SfxItemSet& rSet, ULONG nNodeIdx )
+void SwHistory::CopyFmtAttr( const SfxItemSet& rSet, sal_uLong nNodeIdx )
 {
     if( rSet.Count() )
     {
@@ -1297,11 +1289,11 @@ void SwHistory::CopyFmtAttr( const SfxItemSet& rSet, ULONG nNodeIdx )
             if( aIter.IsAtEnd() )
                 break;
             aIter.NextItem();
-        } while( TRUE );
+        } while( sal_True );
     }
 }
 
-void SwHistory::CopyAttr( SwpHints* pHts, ULONG nNodeIdx,
+void SwHistory::CopyAttr( SwpHints* pHts, sal_uLong nNodeIdx,
                           xub_StrLen nStart, xub_StrLen nEnd, bool bFields )
 {
     if( !pHts  )
@@ -1311,7 +1303,7 @@ void SwHistory::CopyAttr( SwpHints* pHts, ULONG nNodeIdx,
     SwTxtAttr* pHt;
     xub_StrLen nAttrStt;
     const xub_StrLen * pEndIdx;
-    for( USHORT n = 0; n < pHts->Count(); n++ )
+    for( sal_uInt16 n = 0; n < pHts->Count(); n++ )
     {
         // BP: nAttrStt muss auch bei !pEndIdx gesetzt werden
         pHt = pHts->GetTextHint(n);
@@ -1322,17 +1314,17 @@ void SwHistory::CopyAttr( SwpHints* pHts, ULONG nNodeIdx,
             break;
 
         // Flys und Ftn nie kopieren !!
-        BOOL bNextAttr = FALSE;
+        sal_Bool bNextAttr = sal_False;
         switch( pHt->Which() )
         {
         case RES_TXTATR_FIELD:
             // keine Felder, .. kopieren ??
             if( !bFields )
-                bNextAttr = TRUE;
+                bNextAttr = sal_True;
             break;
         case RES_TXTATR_FLYCNT:
         case RES_TXTATR_FTN:
-            bNextAttr = TRUE;
+            bNextAttr = sal_True;
             break;
         }
 
@@ -1516,8 +1508,8 @@ void SwRegHistory::_MakeSetWhichIds()
         if( pSet && pSet->Count() )
         {
             SfxItemIter aIter( *pSet );
-            USHORT nW = aIter.FirstItem()->Which();
-            while( TRUE )
+            sal_uInt16 nW = aIter.FirstItem()->Which();
+            while( sal_True )
             {
                 m_WhichIdSet.Insert( nW );
                 if( aIter.IsAtEnd() )

@@ -63,7 +63,7 @@ using namespace ::com::sun::star;
  *************************************************************************/
 
 sal_Bool lcl_IsDropFlyInter( const SwTxtFormatInfo &rInf,
-                             USHORT nWidth, USHORT nHeight )
+                             sal_uInt16 nWidth, sal_uInt16 nHeight )
 {
     const SwTxtFly *pTxtFly = rInf.GetTxtFly();
     if( pTxtFly && pTxtFly->IsOn() )
@@ -168,7 +168,7 @@ MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
     {
         // find first word
         const SwAttrSet& rAttrSet = GetSwAttrSet();
-        const USHORT nTxtScript = pBreakIt->GetRealScriptOfText( GetTxt(), 0 );
+        const sal_uInt16 nTxtScript = pBreakIt->GetRealScriptOfText( GetTxt(), 0 );
 
         LanguageType eLanguage;
 
@@ -270,7 +270,7 @@ bool SwTxtNode::GetDropSize(int& rFontHeight, int& rDropHeight, int& rDropDescen
 
     if (rFontHeight==0 && rDropHeight==0 && rDropDescent==0)
     {
-        const USHORT nLines = rDrop.GetLines();
+        const sal_uInt16 nLines = rDrop.GetLines();
 
         const SvxFontHeightItem& rItem = (SvxFontHeightItem&)rSet.Get( RES_CHRATR_FONTSIZE );
         rFontHeight = rItem.GetHeight();
@@ -433,7 +433,7 @@ sal_Bool SwDropPortion::FormatTxt( SwTxtFormatInfo &rInf )
 
 SwPosSize SwDropPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 {
-    USHORT nMyX = 0;
+    sal_uInt16 nMyX = 0;
     xub_StrLen nIdx = 0;
 
     const SwDropPortionPart* pCurrPart = GetPart();
@@ -725,7 +725,7 @@ class SwDropCapCache
 {
     long aMagicNo[ DROP_CACHE_SIZE ];
     XubString aTxt[ DROP_CACHE_SIZE ];
-    USHORT aFactor[ DROP_CACHE_SIZE ];
+    sal_uInt16 aFactor[ DROP_CACHE_SIZE ];
     KSHORT aWishedHeight[ DROP_CACHE_SIZE ];
     short aDescent[ DROP_CACHE_SIZE ];
     MSHORT nIndex;
@@ -817,7 +817,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
             aTxt[ nTmpIdx ] = aStr;
             aWishedHeight[ nTmpIdx ] = KSHORT(nWishedHeight);
             // save initial scaling factor
-            aFactor[ nTmpIdx ] = (USHORT)nFactor;
+            aFactor[ nTmpIdx ] = (sal_uInt16)nFactor;
         }
 
         sal_Bool bGrow = ( pDrop->GetLen() != 0 );
@@ -853,11 +853,11 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                 SwFont& rFnt = pCurrPart->GetFont();
 
                 // Get height including proportion
-                const USHORT nCurrHeight =
-                         (USHORT)rFnt.GetHeight( rFnt.GetActual() );
+                const sal_uInt16 nCurrHeight =
+                         (sal_uInt16)rFnt.GetHeight( rFnt.GetActual() );
 
                 // Get without proportion
-                const BYTE nOldProp = rFnt.GetPropr();
+                const sal_uInt8 nOldProp = rFnt.GetPropr();
                 rFnt.SetProportion( 100 );
                 Size aOldSize = Size( 0, rFnt.GetHeight( rFnt.GetActual() ) );
 
@@ -950,7 +950,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                 else
                 {
                     if ( bUseCache )
-                        aFactor[ nTmpIdx ] = (USHORT)nFactor;
+                        aFactor[ nTmpIdx ] = (sal_uInt16)nFactor;
                     nMin = nFactor;
                 }
 
@@ -994,7 +994,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
         SwFont& rFnt = pCurrPart->GetFont();
         Size aNewSize( 0, ( nFactor * rFnt.GetHeight( rFnt.GetActual() ) ) / 1000 );
 
-        const BYTE nOldProp = rFnt.GetPropr();
+        const sal_uInt8 nOldProp = rFnt.GetPropr();
         rFnt.SetProportion( 100 );
         rFnt.SetSize( aNewSize, rFnt.GetActual() );
         rFnt.SetProportion( nOldProp );
@@ -1011,7 +1011,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
 sal_Bool SwDropPortion::Format( SwTxtFormatInfo &rInf )
 {
     sal_Bool bFull = sal_False;
-    Fix( (USHORT)rInf.X() );
+    Fix( (sal_uInt16)rInf.X() );
 
     SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
     aLayoutModeModifier.SetAuto();
@@ -1047,7 +1047,7 @@ sal_Bool SwDropPortion::Format( SwTxtFormatInfo &rInf )
                         Width();
 
                 // set values
-                pCurrPart->SetWidth( (USHORT)nTmpWidth );
+                pCurrPart->SetWidth( (sal_uInt16)nTmpWidth );
 
                 // Move
                 rInf.SetIdx( rInf.GetIdx() + pCurrPart->GetLen() );
@@ -1055,7 +1055,7 @@ sal_Bool SwDropPortion::Format( SwTxtFormatInfo &rInf )
                 pCurrPart = pCurrPart->GetFollow();
             }
 
-            Width( (USHORT)(rInf.X() - nOldX) );
+            Width( (sal_uInt16)(rInf.X() - nOldX) );
         }
 
         // reset my length
@@ -1093,7 +1093,7 @@ sal_Bool SwDropPortion::Format( SwTxtFormatInfo &rInf )
     else
     {
         const KSHORT nWant = Width() + GetDistance();
-        const KSHORT nRest = (USHORT)(rInf.Width() - rInf.X());
+        const KSHORT nRest = (sal_uInt16)(rInf.Width() - rInf.X());
         if( ( nWant > nRest ) ||
             lcl_IsDropFlyInter( rInf, Width() + GetDistance(), nDropHeight ) )
             nDistance = 0;

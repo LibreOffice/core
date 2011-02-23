@@ -63,7 +63,7 @@
 
 IMPL_LINK_INLINE_START( SwTableWidthDlg, LoseFocusHdl, Edit *, EMPTYARG )
 {
-    USHORT nId = (USHORT)aColEdit.GetValue()-1;
+    sal_uInt16 nId = (sal_uInt16)aColEdit.GetValue()-1;
     const SwTwips lWidth = rFnc.GetColWidth(nId);
     aWidthEdit.SetValue(aWidthEdit.Normalize(lWidth), FUNIT_TWIP);
     aWidthEdit.SetMax(aWidthEdit.Normalize(rFnc.GetMaxColWidth(nId)), FUNIT_TWIP);
@@ -76,12 +76,12 @@ IMPL_LINK_INLINE_END( SwTableWidthDlg, LoseFocusHdl, Edit *, EMPTYARG )
 SwTableWidthDlg::SwTableWidthDlg(Window *pParent, SwTableFUNC &rTableFnc ) :
 
     SvxStandardDialog( pParent, SW_RES(DLG_COL_WIDTH) ),
+    aWidthFL(this,     SW_RES(FL_WIDTH)),
 
     aColFT(this,        SW_RES(FT_COL)),
     aColEdit(this,      SW_RES(ED_COL)),
     aWidthFT(this,      SW_RES(FT_WIDTH)),
     aWidthEdit(this,    SW_RES(ED_WIDTH)),
-    aWidthFL(this,     SW_RES(FL_WIDTH)),
     aOKBtn(this,        SW_RES(BT_OK)),
     aCancelBtn(this,    SW_RES(BT_CANCEL)),
     aHelpBtn(this,      SW_RES(BT_HELP)),
@@ -89,10 +89,10 @@ SwTableWidthDlg::SwTableWidthDlg(Window *pParent, SwTableFUNC &rTableFnc ) :
 {
     FreeResource();
 
-    BOOL bIsWeb = rTableFnc.GetShell()
-                    ? static_cast< BOOL >(0 != PTR_CAST( SwWebDocShell,
+    sal_Bool bIsWeb = rTableFnc.GetShell()
+                    ? static_cast< sal_Bool >(0 != PTR_CAST( SwWebDocShell,
                             rTableFnc.GetShell()->GetView().GetDocShell()) )
-                    : FALSE;
+                    : sal_False;
     FieldUnit eFieldUnit = SW_MOD()->GetUsrPref( bIsWeb )->GetMetric();
     ::SetFieldUnit(aWidthEdit, eFieldUnit );
 
@@ -114,8 +114,8 @@ void SwTableWidthDlg::Apply()
 {
     rFnc.InitTabCols();
     rFnc.SetColWidth(
-            static_cast< USHORT >(aColEdit.GetValue() - 1),
-            static_cast< USHORT >(aWidthEdit.Denormalize(aWidthEdit.GetValue(FUNIT_TWIP))));
+            static_cast< sal_uInt16 >(aColEdit.GetValue() - 1),
+            static_cast< sal_uInt16 >(aWidthEdit.Denormalize(aWidthEdit.GetValue(FUNIT_TWIP))));
 }
 
 

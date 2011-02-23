@@ -113,7 +113,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
     m_aTableLB.SetSpaceBetweenEntries(3);
     m_aTableLB.SetSelectionMode( SINGLE_SELECTION );
     m_aTableLB.SetDragDropMode(   0 );
-    m_aTableLB.EnableAsyncDrag(FALSE);
+    m_aTableLB.EnableAsyncDrag(sal_False);
 
     m_aPreviewPB.SetClickHdl(LINK(this, SwSelectDBTableDialog, PreviewHdl));
 

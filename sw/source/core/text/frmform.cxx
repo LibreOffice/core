@@ -482,9 +482,17 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
         if ( IsVertical() )
         {
             ASSERT( ! IsSwapped(),"Swapped frame while calculating nRstHeight" );
-            nRstHeight = Frm().Left() + Frm().Width() -
-                         ( GetUpper()->Frm().Left() + GetUpper()->Prt().Left() );
-        }
+
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            if ( IsVertLR() )
+                    nRstHeight = GetUpper()->Frm().Left()
+                               + GetUpper()->Prt().Left()
+                               + GetUpper()->Prt().Width()
+                               - Frm().Left();
+            else
+                nRstHeight = Frm().Left() + Frm().Width() -
+                            ( GetUpper()->Frm().Left() + GetUpper()->Prt().Left() );
+         }
         else
             nRstHeight = GetUpper()->Frm().Top()
                        + GetUpper()->Prt().Top()
@@ -641,7 +649,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
         {
             SwFtnBossFrm *pFtnBoss = 0;
             SwFtnBossFrm *pEndBoss = 0;
-            for ( USHORT i = 0; i < pHints->Count(); ++i )
+            for ( sal_uInt16 i = 0; i < pHints->Count(); ++i )
             {
                 const SwTxtAttr *pHt = (*pHints)[i];
                 if( RES_TXTATR_FTN==pHt->Which() && *pHt->GetStart()>=nStart )
@@ -674,7 +682,7 @@ SwCntntFrm *SwTxtFrm::JoinFrm()
 #endif
 
     pFoll->MoveFlyInCnt( this, nStart, STRING_LEN );
-    pFoll->SetFtn( FALSE );
+    pFoll->SetFtn( sal_False );
     // --> OD 2005-12-01 #i27138#
     // notify accessibility paragraphs objects about changed CONTENT_FLOWS_FROM/_TO relation.
     // Relation CONTENT_FLOWS_FROM for current next paragraph will change
@@ -741,7 +749,7 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
         {
             SwFtnBossFrm *pFtnBoss = 0;
             SwFtnBossFrm *pEndBoss = 0;
-            for ( USHORT i = 0; i < pHints->Count(); ++i )
+            for ( sal_uInt16 i = 0; i < pHints->Count(); ++i )
             {
                 const SwTxtAttr *pHt = (*pHints)[i];
                 if( RES_TXTATR_FTN==pHt->Which() && *pHt->GetStart()>=nTxtPos )
@@ -1137,7 +1145,9 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
     // If the frame grows (or shirks) the repaint rectangle cannot simply
     // be rotated back after formatting, because we use the upper left point
     // of the frame for rotation. This point changes when growing/shrinking.
-    if ( IsVertical() && nChg )
+
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    if ( IsVertical() && !IsVertLR() && nChg )
     {
         SwRect &rRepaint = *(pPara->GetRepaint());
         rRepaint.Left( rRepaint.Left() - nChg );
@@ -1150,7 +1160,7 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
     // FME 16.07.2003 #i16930# - removed this code because it did not
     // work correctly. In SwCntntFrm::MakeAll, the frame did not move to the
     // next page, instead the print area was recalculated and
-    // Prepare( PREP_POS_CHGD, (const void*)&bFormatted, FALSE ) invalidated
+    // Prepare( PREP_POS_CHGD, (const void*)&bFormatted, sal_False ) invalidated
     // the other flags => loop
 
     // OD 04.04.2003 #108446# - handle special case:

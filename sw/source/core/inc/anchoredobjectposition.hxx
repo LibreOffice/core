@@ -83,12 +83,14 @@ namespace objectpositioning
             void _GetInfoAboutObj();
 
             // --> OD 2006-03-15 #i62875#
-            SwTwips _ImplAdjustVertRelPos( const SwTwips _nTopOfAnch,
-                                           const bool _bVert,
-                                           const SwFrm&  _rPageAlignLayFrm,
-                                           const SwTwips _nProposedRelPosY,
-                                           const bool _bFollowTextFlow,
-                                           const bool _bCheckBottom = true ) const;
+            // --> OD 2009-09-01 #mongolianlayout# - add parameter <bVertL2R>
+            SwTwips _ImplAdjustVertRelPos( const SwTwips nTopOfAnch,
+                                           const bool bVert,
+                                           const bool bVertL2R,
+                                           const SwFrm&  rPageAlignLayFrm,
+                                           const SwTwips nProposedRelPosY,
+                                           const bool bFollowTextFlow,
+                                           const bool bCheckBottom = true ) const;
             SwTwips _ImplAdjustHoriRelPos( const SwFrm&  _rPageAlignLayFrm,
                                            const SwTwips _nProposedRelPosX ) const;
             // <--
@@ -170,53 +172,59 @@ namespace objectpositioning
             /** adjust calculated vertical in order to keep object inside
                 'page' alignment layout frame.
 
-                OD 2004-07-22 #i31805# - add parameter <_bCheckBottom>
-                OD 2004-10-08 #i26945# - add parameter <_bFollowTextFlow>
+                OD 2004-07-22 #i31805# - add parameter <bCheckBottom>
+                OD 2004-10-08 #i26945# - add parameter <bFollowTextFlow>
                 OD 2006-03-15 #i62875# - made inline, intrinsic actions moved
                 to private method <_ImplAdjustVertRelPos>, which is only
                 called, if <mbDoNotCaptureAnchoredObj> not set.
+                OD 2009-09-01 #mongolianlayout# - add parameter <bVertL2R>
 
-                @param _nTopOfAnch
+                @param nTopOfAnch
                 input parameter - 'vertical' position, at which the relative
                 position of the object is calculated from.
 
-                @param _bVert
+                @param bVert
                 input parameter - boolean, indicating, if object is in vertical
                 layout.
 
-                @param _rPageAlignLayFrm
+                @param bVertL2R
+                input parameter - boolean, indicating, if object is in mongolian
+                layout (vertical left-to-right layout).
+
+                @param rPageAlignLayFrm
                 input parameter - layout frame, which determines the 'page area'
                 the object has to be vertical positioned in.
 
-                @param _nProposedRelPosY
+                @param nProposedRelPosY
                 input parameter - proposed relative vertical position, which
                 will be adjusted.
 
-                @param _bFollowTextFlow
+                @param bFollowTextFlow
                 input parameter - value of attribute 'Follow text flow' of the
                 anchored object.
 
-                @param _bCheckBottom
+                @param bCheckBottom
                 input parameter - boolean indicating, if bottom of anchored
                 object has to be checked and thus, (if needed) the proposed
                 relative position has to be adjusted. default value <true>
 
                 @author OD
             */
-            inline SwTwips _AdjustVertRelPos( const SwTwips _nTopOfAnch,
-                                              const bool _bVert,
-                                              const SwFrm&  _rPageAlignLayFrm,
-                                              const SwTwips _nProposedRelPosY,
-                                              const bool _bFollowTextFlow,
-                                              const bool _bCheckBottom = true ) const
+            inline SwTwips _AdjustVertRelPos( const SwTwips nTopOfAnch,
+                                              const bool bVert,
+                                              const bool bVertL2R,
+                                              const SwFrm& rPageAlignLayFrm,
+                                              const SwTwips nProposedRelPosY,
+                                              const bool bFollowTextFlow,
+                                              const bool bCheckBottom = true ) const
             {
                 return !mbDoNotCaptureAnchoredObj
-                       ? _ImplAdjustVertRelPos( _nTopOfAnch, _bVert,
-                                                _rPageAlignLayFrm,
-                                                _nProposedRelPosY,
-                                                _bFollowTextFlow,
-                                                _bCheckBottom )
-                       : _nProposedRelPosY;
+                       ? _ImplAdjustVertRelPos( nTopOfAnch, bVert, bVertL2R,
+                                                rPageAlignLayFrm,
+                                                nProposedRelPosY,
+                                                bFollowTextFlow,
+                                                bCheckBottom )
+                       : nProposedRelPosY;
             }
 
         // *********************************************************************
@@ -444,7 +452,7 @@ namespace objectpositioning
             bool _DrawAsideFly( const SwFlyFrm* _pFly,
                                 const SwRect&   _rObjRect,
                                 const SwFrm*    _pObjContext,
-                                const ULONG     _nObjIndex,
+                                const sal_uLong     _nObjIndex,
                                 const bool      _bEvenPage,
                                 const sal_Int16 _eHoriOrient,
                                 const sal_Int16 _eRelOrient

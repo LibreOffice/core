@@ -104,13 +104,22 @@ void SwTxtFrm::SwapWidthAndHeight()
     {
         const long nPrtOfstX = Prt().Pos().X();
         Prt().Pos().X() = Prt().Pos().Y();
-        Prt().Pos().Y() = Frm().Width() - ( nPrtOfstX + Prt().Width() );
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if( IsVertLR() )
+            Prt().Pos().Y() = nPrtOfstX;
+        else
+            Prt().Pos().Y() = Frm().Width() - ( nPrtOfstX + Prt().Width() );
+
     }
     else
     {
         const long nPrtOfstY = Prt().Pos().Y();
         Prt().Pos().Y() = Prt().Pos().X();
-        Prt().Pos().X() = Frm().Height() - ( nPrtOfstY + Prt().Height() );
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if( IsVertLR() )
+            Prt().Pos().X() = nPrtOfstY;
+        else
+            Prt().Pos().X() = Frm().Height() - ( nPrtOfstY + Prt().Height() );
     }
 
     const long nFrmWidth = Frm().Width();
@@ -128,16 +137,33 @@ void SwTxtFrm::SwapWidthAndHeight()
 void SwTxtFrm::SwitchHorizontalToVertical( SwRect& rRect ) const
 {
     // calc offset inside frame
-    const long nOfstX = rRect.Left() - Frm().Left();
-    const long nOfstY = rRect.Top() + rRect.Height() - Frm().Top();
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    long nOfstX, nOfstY;
+    if ( IsVertLR() )
+    {
+        nOfstX = rRect.Left() - Frm().Left();
+        nOfstY = rRect.Top() - Frm().Top();
+    }
+    else
+    {
+        nOfstX = rRect.Left() - Frm().Left();
+        nOfstY = rRect.Top() + rRect.Height() - Frm().Top();
+    }
+
     const long nWidth = rRect.Width();
     const long nHeight = rRect.Height();
 
-    if ( bIsSwapped )
-        rRect.Left( Frm().Left() + Frm().Height() - nOfstY );
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    if ( IsVertLR() )
+        rRect.Left(Frm().Left() + nOfstY);
     else
-        // frame is rotated
-        rRect.Left( Frm().Left() + Frm().Width() - nOfstY );
+    {
+        if ( bIsSwapped )
+            rRect.Left( Frm().Left() + Frm().Height() - nOfstY );
+        else
+            // frame is rotated
+            rRect.Left( Frm().Left() + Frm().Width() - nOfstY );
+    }
 
     rRect.Top( Frm().Top() + nOfstX );
     rRect.Width( nHeight );
@@ -151,12 +177,17 @@ void SwTxtFrm::SwitchHorizontalToVertical( Point& rPoint ) const
     // calc offset inside frame
     const long nOfstX = rPoint.X() - Frm().Left();
     const long nOfstY = rPoint.Y() - Frm().Top();
-
-    if ( bIsSwapped )
-        rPoint.X() = Frm().Left() + Frm().Height() - nOfstY;
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    if ( IsVertLR() )
+        rPoint.X() = Frm().Left() + nOfstY;
     else
-        // calc rotated coords
-        rPoint.X() = Frm().Left() + Frm().Width() - nOfstY;
+    {
+        if ( bIsSwapped )
+            rPoint.X() = Frm().Left() + Frm().Height() - nOfstY;
+        else
+            // calc rotated coords
+            rPoint.X() = Frm().Left() + Frm().Width() - nOfstY;
+    }
 
     rPoint.Y() = Frm().Top() + nOfstX;
 }
@@ -177,10 +208,17 @@ void SwTxtFrm::SwitchVerticalToHorizontal( SwRect& rRect ) const
     long nOfstX;
 
     // calc offset inside frame
-    if ( bIsSwapped )
-        nOfstX = Frm().Left() + Frm().Height() - ( rRect.Left() + rRect.Width() );
+
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    if ( IsVertLR() )
+        nOfstX = rRect.Left() - Frm().Left();
     else
-        nOfstX = Frm().Left() + Frm().Width() - ( rRect.Left() + rRect.Width() );
+    {
+        if ( bIsSwapped )
+            nOfstX = Frm().Left() + Frm().Height() - ( rRect.Left() + rRect.Width() );
+        else
+            nOfstX = Frm().Left() + Frm().Width() - ( rRect.Left() + rRect.Width() );
+    }
 
     const long nOfstY = rRect.Top() - Frm().Top();
     const long nWidth = rRect.Height();
@@ -200,10 +238,17 @@ void SwTxtFrm::SwitchVerticalToHorizontal( Point& rPoint ) const
     long nOfstX;
 
     // calc offset inside frame
-    if ( bIsSwapped )
-        nOfstX = Frm().Left() + Frm().Height() - rPoint.X();
+
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    if ( IsVertLR() )
+        nOfstX = rPoint.X() - Frm().Left();
     else
-        nOfstX = Frm().Left() + Frm().Width() - rPoint.X();
+    {
+        if ( bIsSwapped )
+            nOfstX = Frm().Left() + Frm().Height() - rPoint.X();
+        else
+            nOfstX = Frm().Left() + Frm().Width() - rPoint.X();
+    }
 
     const long nOfstY = rPoint.Y() - Frm().Top();
 
@@ -280,7 +325,7 @@ void SwLayoutModeModifier::Modify( sal_Bool bChgToRTL )
 
 void SwLayoutModeModifier::SetAuto()
 {
-    const ULONG nNewLayoutMode = nOldLayoutMode & ~TEXT_LAYOUT_BIDI_STRONG;
+    const sal_uLong nNewLayoutMode = nOldLayoutMode & ~TEXT_LAYOUT_BIDI_STRONG;
     ((OutputDevice&)rOut).SetLayoutMode( nNewLayoutMode );
 }
 
@@ -445,9 +490,9 @@ void SwTxtFrm::HideFootnotes( xub_StrLen nStart, xub_StrLen nEnd )
     const SwpHints *pHints = GetTxtNode()->GetpSwpHints();
     if( pHints )
     {
-        const USHORT nSize = pHints->Count();
+        const sal_uInt16 nSize = pHints->Count();
         SwPageFrm *pPage = 0;
-        for ( USHORT i = 0; i < nSize; ++i )
+        for ( sal_uInt16 i = 0; i < nSize; ++i )
         {
             const SwTxtAttr *pHt = (*pHints)[i];
             if ( pHt->Which() == RES_TXTATR_FTN )
@@ -844,13 +889,13 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt, bool bMove )
         if ( !pTxtNode->GetWrong() && !pTxtNode->IsWrongDirty() )
         {
             pTxtNode->SetWrong( new SwWrongList( WRONGLIST_SPELL ) );
-            pTxtNode->GetWrong()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) );
+            pTxtNode->GetWrong()->SetInvalid( nPos, nPos + (sal_uInt16)( nCnt > 0 ? nCnt : 1 ) );
         }
         if ( !pTxtNode->GetSmartTags() && !pTxtNode->IsSmartTagDirty() )
         {
             // SMARTTAGS
             pTxtNode->SetSmartTags( new SwWrongList( WRONGLIST_SMARTTAG ) );
-            pTxtNode->GetSmartTags()->SetInvalid( nPos, nPos + (USHORT)( nCnt > 0 ? nCnt : 1 ) );
+            pTxtNode->GetSmartTags()->SetInvalid( nPos, nPos + (sal_uInt16)( nCnt > 0 ? nCnt : 1 ) );
         }
         pTxtNode->SetWrongDirty( true );
         pTxtNode->SetGrammarCheckDirty( true );
@@ -863,7 +908,7 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt, bool bMove )
     SwRootFrm *pRootFrm = rFrm.FindRootFrm();
     if (pRootFrm)
     {
-        pRootFrm->SetNeedGrammarCheck( TRUE );
+        pRootFrm->SetNeedGrammarCheck( sal_True );
     }
 
     SwPageFrm *pPage = rFrm.FindPageFrm();
@@ -1487,7 +1532,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         switch ( ePrep )
         {
             case PREP_BOSS_CHGD:
-                SetInvalidVert( TRUE );  // Test
+                SetInvalidVert( sal_True );  // Test
             case PREP_WIDOWS_ORPHANS:
             case PREP_WIDOWS:
             case PREP_FTN_GONE :    return;
@@ -1533,7 +1578,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
 
     if( !HasPara() && PREP_MUST_FIT != ePrep )
     {
-        SetInvalidVert( TRUE );  // Test
+        SetInvalidVert( sal_True );  // Test
         ASSERT( !IsLocked(), "SwTxtFrm::Prepare: three of a perfect pair" );
         if ( bNotify )
             InvalidateSize();
@@ -1613,9 +1658,9 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         {
     // Test
             {
-                SetInvalidVert( FALSE );
-                BOOL bOld = IsVertical();
-                SetInvalidVert( TRUE );
+                SetInvalidVert( sal_False );
+                sal_Bool bOld = IsVertical();
+                SetInvalidVert( sal_True );
                 if( bOld != IsVertical() )
                     InvalidateRange( SwCharRange( GetOfst(), STRING_LEN ) );
             }
@@ -1640,10 +1685,10 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             SwpHints *pHints = GetTxtNode()->GetpSwpHints();
             if( pHints )
             {
-                const USHORT nSize = pHints->Count();
+                const sal_uInt16 nSize = pHints->Count();
                 const xub_StrLen nEnd = GetFollow() ?
                                     GetFollow()->GetOfst() : STRING_LEN;
-                for ( USHORT i = 0; i < nSize; ++i )
+                for ( sal_uInt16 i = 0; i < nSize; ++i )
                 {
                     const SwTxtAttr *pHt = (*pHints)[i];
                     const xub_StrLen nStart = *pHt->GetStart();
@@ -2197,7 +2242,7 @@ void SwTxtFrm::CalcAdditionalFirstLineOffset()
          pTxtNode->GetNumRule() )
     {
         const SwNumFmt& rNumFmt =
-                pTxtNode->GetNumRule()->Get( static_cast<USHORT>(pTxtNode->GetActualListLevel()) );
+                pTxtNode->GetNumRule()->Get( static_cast<sal_uInt16>(pTxtNode->GetActualListLevel()) );
         if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
             // keep current paragraph portion and apply dummy paragraph portion
@@ -2497,7 +2542,7 @@ void SwTxtFrm::ChgThisLines()
 {
     //not necassary to format here (GerFormatted etc.), because we have to come from there!
 
-    ULONG nNew = 0;
+    sal_uLong nNew = 0;
     const SwLineNumberInfo &rInf = GetNode()->getIDocumentLineNumberAccess()->GetLineNumberInfo();
     if ( GetTxt().Len() && HasPara() )
     {
@@ -2506,7 +2551,7 @@ void SwTxtFrm::ChgThisLines()
         if ( rInf.IsCountBlankLines() )
         {
             aLine.Bottom();
-            nNew = (ULONG)aLine.GetLineNr();
+            nNew = (sal_uLong)aLine.GetLineNr();
         }
         else
         {
@@ -2547,6 +2592,12 @@ void SwTxtFrm::ChgThisLines()
         else //Paragraphs which are not counted should not manipulate the AllLines.
             nThisLines = nNew;
     }
+
+    //mba: invalidating is not necessary; if mongolian script has a problem, it should be fixed at the ritgh place
+    //with invalidating we probably get too much flickering
+    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    //Ugly. How can we hack if better?
+    //InvalidatePage();
 }
 
 
@@ -2558,9 +2609,9 @@ void SwTxtFrm::RecalcAllLines()
 
     if ( !IsInTab() )
     {
-        const ULONG nOld = GetAllLines();
+        const sal_uLong nOld = GetAllLines();
         const SwFmtLineNumber &rLineNum = pAttrSet->GetLineNumber();
-        ULONG nNewNum;
+        sal_uLong nNewNum;
         const bool bRestart = GetTxtNode()->getIDocumentLineNumberAccess()->GetLineNumberInfo().IsRestartEachPage();
 
         if ( !IsFollow() && rLineNum.GetStartValue() && rLineNum.IsCount() )

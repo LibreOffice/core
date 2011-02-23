@@ -49,9 +49,9 @@ class SwWrtShell;
 
 class SwTableHeightDlg : public SvxStandardDialog
 {
+      FixedLine       aHeightFL;
     MetricField     aHeightEdit;
     CheckBox        aAutoHeightCB;
-    FixedLine       aHeightFL;
     OKButton        aOKBtn;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;

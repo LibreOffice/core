@@ -74,9 +74,11 @@ public:
 
 class SwGlossaryGroupDlg : public SvxStandardDialog
 {
-
+    FixedText           aBibFT;
     FEdit               aNameED;
+    FixedText           aPathFT;
     ListBox             aPathLB;
+    FixedText           aSelectFT;
     SwGlossaryGroupTLB  aGroupTLB;
 
     OKButton        aOkPB;
@@ -85,9 +87,6 @@ class SwGlossaryGroupDlg : public SvxStandardDialog
     PushButton      aNewPB;
     PushButton      aDelPB;
     PushButton      aRenamePB;
-    FixedText       aBibFT;
-    FixedText       aPathFT;
-    FixedText       aSelectFT;
 
     SvStrings*      pRemovedArr;
     SvStrings*      pInsertedArr;
@@ -97,7 +96,7 @@ class SwGlossaryGroupDlg : public SvxStandardDialog
 
     String          sCreatedGroup;
 
-    BOOL            IsDeleteAllowed(const String &rGroup);
+    sal_Bool            IsDeleteAllowed(const String &rGroup);
 
 protected:
     virtual void Apply();

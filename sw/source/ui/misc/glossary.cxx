@@ -91,6 +91,8 @@
 #include <swmodule.hxx>
 #include <sfx2/filedlghelper.hxx>
 
+#include "access.hrc"
+
 #define LONG_LENGTH 60
 #define SHORT_LENGTH 30
 
@@ -134,11 +136,11 @@ struct GroupUserData
 {
     String      sGroupName;
     sal_uInt16  nPathIdx;
-    BOOL        bReadonly;
+    sal_Bool        bReadonly;
 
     GroupUserData()
         : nPathIdx(0),
-          bReadonly(FALSE)  {}
+          bReadonly(sal_False)  {}
 };
 
 /*------------------------------------------------------------------------
@@ -152,11 +154,11 @@ class SwNewGlosNameDlg : public ModalDialog
     NoSpaceEdit     aNewShort;
     OKButton        aOk;
     CancelButton    aCancel;
-    FixedLine       aFL;
     FixedText       aONFT;
     Edit            aOldName;
     FixedText       aOSFT;
     Edit            aOldShort;
+    FixedLine       aFL;
 
 protected:
     DECL_LINK( Modify, Edit * );
@@ -181,11 +183,12 @@ SwNewGlosNameDlg::SwNewGlosNameDlg(Window* pParent,
     aNewShort(this,SW_RES( ED_NS    )),
     aOk     (this, SW_RES( BT_OKNEW)),
     aCancel (this, SW_RES( BT_CANCEL)),
-    aFL    (this, SW_RES( FL_NN    )),
     aONFT   (this, SW_RES( FT_ON    )),
     aOldName(this, SW_RES( ED_ON    )),
     aOSFT   (this, SW_RES( FT_OS    )),
-    aOldShort(this,SW_RES( ED_OS    ))
+    aOldShort(this,SW_RES( ED_OS    )),
+    aFL    (this, SW_RES( FL_NN    ))
+
 {
     FreeResource();
     aOldName.SetText( rOldName );
@@ -298,6 +301,8 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     aCategoryBox.GetModel()->SetSortMode(SortAscending);
     aCategoryBox.SetHighlightRange();   // ueber volle Breite selektieren
     aCategoryBox.SetNodeDefaultImages( );
+    aCategoryBox.SetAccessibleName(SW_RES(STR_ACCESS_SW_CATEGORY));
+    aCategoryBox.SetAccessibleRelationLabeledBy(&aInsertTipCB);
 
     Init();
 }
@@ -710,9 +715,9 @@ IMPL_LINK( SwGlossaryDlg, BibHdl, Button *, EMPTYARG )
         //check if at least one glossary path is write enabled
         SvtPathOptions aPathOpt;
         String sGlosPath( aPathOpt.GetAutoTextPath() );
-        USHORT nPaths = sGlosPath.GetTokenCount(';');
-        BOOL bIsWritable = FALSE;
-        for(USHORT nPath = 0; nPath < nPaths; nPath++)
+        sal_uInt16 nPaths = sGlosPath.GetTokenCount(';');
+        sal_Bool bIsWritable = sal_False;
+        for(sal_uInt16 nPath = 0; nPath < nPaths; nPath++)
         {
             String sPath = URIHelper::SmartRel2Abs(
                 INetURLObject(), sGlosPath.GetToken(nPath, ';'),
@@ -878,7 +883,7 @@ IMPL_LINK_INLINE_START( SwGlossaryDlg, EditHdl, Button *, EMPTYARG )
     if(aEditBtn.GetCurItemId() == FN_GL_EDIT )
     {
         SwTextBlocks *pGroup = ::GetGlossaries()->GetGroupDoc (  GetCurrGrpName () );
-        BOOL bRet = pGlossaryHdl->ConvertToNew ( *pGroup );
+        sal_Bool bRet = pGlossaryHdl->ConvertToNew ( *pGroup );
         delete pGroup;
         if ( bRet )
             EndDialog(RET_EDIT);
@@ -1073,7 +1078,7 @@ sal_Bool    SwGlTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry)
 sal_Bool  SwGlTreeListBox::NotifyMoving(   SvLBoxEntry*  pTarget,
                                     SvLBoxEntry*  pEntry,
                                     SvLBoxEntry*& /*rpNewParent*/,
-                                    ULONG&        /*rNewChildPos*/
+                                    sal_uLong&        /*rNewChildPos*/
                                 )
 {
     pDragEntry = 0;
@@ -1121,7 +1126,7 @@ sal_Bool  SwGlTreeListBox::NotifyMoving(   SvLBoxEntry*  pTarget,
 sal_Bool  SwGlTreeListBox::NotifyCopying(   SvLBoxEntry*  pTarget,
                                     SvLBoxEntry*  pEntry,
                                     SvLBoxEntry*& /*rpNewParent*/,
-                                    ULONG&        /*rNewChildPos*/
+                                    sal_uLong&        /*rNewChildPos*/
                                 )
 {
     pDragEntry = 0;
@@ -1230,7 +1235,7 @@ IMPL_LINK( SwGlossaryDlg, ShowPreviewHdl, CheckBox *, pBox )
         }
     }
 
-    BOOL bShow = pBox->IsChecked() && !bCreated;
+    sal_Bool bShow = pBox->IsChecked() && !bCreated;
     aExampleWIN.Show( bShow );
     aExampleDummyWIN.Show(!bShow);
     if( ::GetCurrGlosGroup() )
@@ -1243,7 +1248,7 @@ IMPL_LINK( SwGlossaryDlg, ShowPreviewHdl, CheckBox *, pBox )
  --------------------------------------------------*/
 IMPL_LINK( SwGlossaryDlg, PreviewLoadedHdl,  void *, EMPTYARG )
 {
-    BOOL bShow = aShowExampleCB.IsChecked();
+    sal_Bool bShow = aShowExampleCB.IsChecked();
     aExampleWIN.Show( bShow );
     aExampleDummyWIN.Show(!bShow);
     ResumeShowAutoText();
@@ -1259,7 +1264,7 @@ void SwGlossaryDlg::ShowAutoText(const String& rGroup, const String& rShortName)
     {
         SetResumeData(rGroup, rShortName);
         //try to make an Undo()
-        pExampleFrame->ClearDocument( TRUE );
+        pExampleFrame->ClearDocument( sal_True );
     }
 }
 /* -----------------------------21.12.00 11:33--------------------------------

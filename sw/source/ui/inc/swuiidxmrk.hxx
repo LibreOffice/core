@@ -71,6 +71,7 @@ class SwIndexMarkDlg : public Window
 {
     friend class SwIndexMarkFloatDlg;
     friend class SwIndexMarkModalDlg;
+    FixedLine       aIndexFL;
     FixedText       aTypeFT;
     ListBox         aTypeDCB;
     ImageButton     aNewBT;
@@ -97,7 +98,6 @@ class SwIndexMarkDlg : public Window
      CheckBox       aSearchCaseSensitiveCB;
      CheckBox       aSearchCaseWordOnlyCB;
 
-    FixedLine       aIndexFL;
 
     OKButton        aOKBT;
     CancelButton    aCancelBT;
@@ -116,11 +116,11 @@ class SwIndexMarkDlg : public Window
     sal_Bool            bNewMark;
     sal_Bool            bSelected;
 
-    BOOL            bPhoneticED0_ChangedByUser;
-    BOOL            bPhoneticED1_ChangedByUser;
-    BOOL            bPhoneticED2_ChangedByUser;
+    sal_Bool            bPhoneticED0_ChangedByUser;
+    sal_Bool            bPhoneticED1_ChangedByUser;
+    sal_Bool            bPhoneticED2_ChangedByUser;
     LanguageType    nLangForPhoneticReading; //Language of current text used for phonetic reading proposal
-    BOOL            bIsPhoneticReadingEnabled; //this value states wether phopentic reading is enabled in principle dependend of global cjk settings and language of current entry
+    sal_Bool            bIsPhoneticReadingEnabled; //this value states wether phopentic reading is enabled in principle dependend of global cjk settings and language of current entry
     com::sun::star::uno::Reference< com::sun::star::i18n::XExtendedIndexEntrySupplier >
                     xExtendedIndexEntrySupplier;
 

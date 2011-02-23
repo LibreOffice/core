@@ -67,7 +67,7 @@ SW_DLLPUBLIC SwGlossaries* GetGlossaries();
 
 class SwGlossaryList;
 
-BOOL HasGlossaryList();
+sal_Bool HasGlossaryList();
 SwGlossaryList* GetGlossaryList();
 
 extern  void _InitUI();

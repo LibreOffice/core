@@ -57,7 +57,7 @@ class SwTxtFormatter : public SwTxtPainter
     sal_Bool bChanges : 1; // Flag, fuer die Berechnung des Repaint-Rechtecks
     sal_Bool bTruncLines : 1; // Flag, Repaint-Rechtecks ggf. erweitern
     sal_Bool bUnclipped : 1; // Flag, ob Repaint groesser als feste Zeilenhoehe
-    USHORT m_nHintEndIndex; // HACK for TryNewNoLengthPortion
+    sal_uInt16 m_nHintEndIndex; // HACK for TryNewNoLengthPortion
     SwLinePortion *NewPortion( SwTxtFormatInfo &rInf );
     SwTxtPortion  *NewTxtPortion( SwTxtFormatInfo &rInf );
     SwLinePortion *NewExtraPortion( SwTxtFormatInfo &rInf );
@@ -77,7 +77,7 @@ class SwTxtFormatter : public SwTxtPainter
 
     // Das Herzstueck der Formatierung
     void BuildPortions( SwTxtFormatInfo &rInf );
-    BOOL BuildMultiPortion( SwTxtFormatInfo &rInf, SwMultiPortion& rMulti );
+    sal_Bool BuildMultiPortion( SwTxtFormatInfo &rInf, SwMultiPortion& rMulti );
 
     // Berechnung des emulierten rechten Rands
     void CalcFlyWidth( SwTxtFormatInfo &rInf );

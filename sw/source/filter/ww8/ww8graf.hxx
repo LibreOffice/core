@@ -36,11 +36,11 @@
 
 struct EscherShape
 {
-    ULONG mnEscherShapeOrder;
-    ULONG mnNoInlines;
+    sal_uLong mnEscherShapeOrder;
+    sal_uLong mnNoInlines;
     // --> OD 2004-12-13 #117915# - new member <mbInHeaderFooter>
     bool mbInHeaderFooter;
-    EscherShape( ULONG nEscherShapeOrder,
+    EscherShape( sal_uLong nEscherShapeOrder,
                  bool _bInHeaderFooter )
         : mnEscherShapeOrder(nEscherShapeOrder),
           mnNoInlines(0),
@@ -65,24 +65,24 @@ private:
     std::vector<short> maDrawHeight;
     typedef std::vector<short>::iterator myditer;
 
-    std::stack<USHORT> maIndexes;
+    std::stack<sal_uInt16> maIndexes;
 
     sw::util::SetLayer maSetLayer;
 
-    ULONG mnNoInitialObjects;
-    ULONG mnInlines;
+    sal_uLong mnNoInitialObjects;
+    sal_uLong mnInlines;
     SdrPage* mpDrawPg;
     const SvxMSDffShapeOrders *mpShapeOrders;
 
-    USHORT GetEscherObjectIdx(ULONG nSpId);
-    myeiter MapEscherIdxToIter(ULONG nIdx);
+    sal_uInt16 GetEscherObjectIdx(sal_uLong nSpId);
+    myeiter MapEscherIdxToIter(sal_uLong nIdx);
     // --> OD 2004-12-13 #117915# - new parameter <_bInHeaderFooter>, indicating
     // that object is in header or footer
-    ULONG GetEscherObjectPos( ULONG nSpId,
+    sal_uLong GetEscherObjectPos( sal_uLong nSpId,
                               const bool _bInHeaderFooter );
     // <--
-    ULONG GetDrawingObjectPos(short nWwHeight);
-    bool InsertObject(SdrObject *pObject, ULONG nPos);
+    sal_uLong GetDrawingObjectPos(short nWwHeight);
+    bool InsertObject(SdrObject *pObject, sal_uLong nPos);
 public:
     wwZOrderer(const sw::util::SetLayer &rSetLayer, SdrPage* pDrawPg,
         const SvxMSDffShapeOrders *pShapeOrders);
@@ -95,10 +95,10 @@ public:
     // --> OD 2004-12-13 #117915# - new parameter <_bInHeaderFooter>, indicating
     // that object is in header or footer
     void InsertEscherObject( SdrObject* pObject,
-                             ULONG nSpId,
+                             sal_uLong nSpId,
                              const bool _bInHeaderFooter );
     // <--
-    void InsideEscher(ULONG nIndex);
+    void InsideEscher(sal_uLong nIndex);
     void OutsideEscher();
 };
 

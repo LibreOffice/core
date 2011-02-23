@@ -48,18 +48,18 @@ class SwInsFootNoteDlg: public SvxStandardDialog
     String          aFontName;
     CharSet         eCharSet;
     char            cExtChar;
-    BOOL            bExtCharAvailable;
-    BOOL            bEdit;
+    sal_Bool        bExtCharAvailable;
+    sal_Bool        bEdit;
+    FixedLine       aNumberFL;
     RadioButton     aNumberAutoBtn;
     RadioButton     aNumberCharBtn;
     Edit            aNumberCharEdit;
     PushButton      aNumberExtChar;
-    FixedLine       aNumberFL;
 
     //Alles fuer die Auswahl Fussnote/Endnote
+    FixedLine        aTypeFL;
     RadioButton     aFtnBtn;
     RadioButton     aEndNoteBtn;
-    FixedLine        aTypeFL;
 
     OKButton        aOkBtn;
     CancelButton    aCancelBtn;
@@ -78,13 +78,13 @@ class SwInsFootNoteDlg: public SvxStandardDialog
     void            Init();
 
 public:
-    SwInsFootNoteDlg(Window * pParent, SwWrtShell &rSh, BOOL bEd = FALSE);
+    SwInsFootNoteDlg(Window * pParent, SwWrtShell &rSh, sal_Bool bEd = sal_False);
     ~SwInsFootNoteDlg();
 
     CharSet         GetCharSet() { return eCharSet; }
-    BOOL            IsExtCharAvailable() { return bExtCharAvailable; }
+    sal_Bool            IsExtCharAvailable() { return bExtCharAvailable; }
     String          GetFontName() { return aFontName; }
-    BOOL            IsEndNote() { return aEndNoteBtn.IsChecked(); }
+    sal_Bool            IsEndNote() { return aEndNoteBtn.IsChecked(); }
     String          GetStr()
                     {
                         if ( aNumberCharBtn.IsChecked() )

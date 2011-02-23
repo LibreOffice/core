@@ -375,7 +375,12 @@ SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
         break;
         case text::VertOrientation::TOP:
         {
-            nRelPosY += bVert ? _rLRSpacing.GetRight() : _rULSpacing.GetUpper();
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+              nRelPosY +=   bVert
+                            ? ( bVertL2R
+                                ? _rLRSpacing.GetLeft()
+                                : _rLRSpacing.GetRight() )
+                            : _rULSpacing.GetUpper();
         }
         break;
         case text::VertOrientation::CENTER:
@@ -385,8 +390,13 @@ SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
         break;
         case text::VertOrientation::BOTTOM:
         {
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
             nRelPosY += nAlignAreaHeight -
-                       ( nObjHeight + ( bVert ? _rLRSpacing.GetLeft() : _rULSpacing.GetLower() ) );
+                        ( nObjHeight + ( bVert
+                                         ? ( bVertL2R
+                                             ? _rLRSpacing.GetRight()
+                                             : _rLRSpacing.GetLeft() )
+                                         : _rULSpacing.GetLower() ) );
         }
         break;
         default:
@@ -405,21 +415,23 @@ SwTwips SwAnchoredObjectPosition::_GetVertRelPos(
 /** adjust calculated vertical in order to keep object inside
     'page' alignment layout frame.
 
-    OD 2004-07-01 #i28701# - parameter <_nTopOfAnch> and <_bVert> added
-    OD 2004-07-22 #i31805# - add parameter <_bCheckBottom>
-    OD 2004-10-08 #i26945# - add parameter <_bFollowTextFlow>
+    OD 2004-07-01 #i28701# - parameter <nTopOfAnch> and <bVert> added
+    OD 2004-07-22 #i31805# - add parameter <bCheckBottom>
+    OD 2004-10-08 #i26945# - add parameter <bFollowTextFlow>
     OD 2006-03-15 #i62875# - method now private and renamed.
+    OD 2009-09-01 #mongolianlayout# - add parameter <bVertL2R>
 
     @author OD
 */
-SwTwips SwAnchoredObjectPosition::_ImplAdjustVertRelPos( const SwTwips _nTopOfAnch,
-                                                         const bool _bVert,
-                                                         const SwFrm&  _rPageAlignLayFrm,
-                                                         const SwTwips _nProposedRelPosY,
-                                                         const bool _bFollowTextFlow,
-                                                         const bool _bCheckBottom ) const
+SwTwips SwAnchoredObjectPosition::_ImplAdjustVertRelPos( const SwTwips nTopOfAnch,
+                                                         const bool bVert,
+                                                         const bool bVertL2R,
+                                                         const SwFrm& rPageAlignLayFrm,
+                                                         const SwTwips nProposedRelPosY,
+                                                         const bool bFollowTextFlow,
+                                                         const bool bCheckBottom ) const
 {
-    SwTwips nAdjustedRelPosY = _nProposedRelPosY;
+    SwTwips nAdjustedRelPosY = nProposedRelPosY;
 
     const Size aObjSize( GetAnchoredObj().GetObjRect().SSize() );
 
@@ -436,57 +448,67 @@ SwTwips SwAnchoredObjectPosition::_ImplAdjustVertRelPos( const SwTwips _nTopOfAn
         // --> OD 2004-10-08 #i26945# - no extension of restricted area, if
         // object's attribute follow text flow is set and its inside a table
         if ( GetFrmFmt().getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
-             ( !_bFollowTextFlow ||
+             ( !bFollowTextFlow ||
                !GetAnchoredObj().GetAnchorFrm()->IsInTab() ) )
         {
-            aPgAlignArea = _rPageAlignLayFrm.FindPageFrm()->Frm();
+            aPgAlignArea = rPageAlignLayFrm.FindPageFrm()->Frm();
         }
         else
         {
-            aPgAlignArea = _rPageAlignLayFrm.Frm();
+            aPgAlignArea = rPageAlignLayFrm.Frm();
         }
     }
 
-    if ( _bVert )
+    if ( bVert )
     {
-        // OD 2004-07-22 #i31805# - consider value of <_bCheckBottom>
-        if ( _bCheckBottom &&
-             _nTopOfAnch - nAdjustedRelPosY - aObjSize.Width() <
-                aPgAlignArea.Left() )
+        // --> OD 2009-09-01 #mongolianlayout#
+        if ( !bVertL2R )
+        // <--
         {
-            nAdjustedRelPosY = aPgAlignArea.Left() +
-                               _nTopOfAnch -
-                               aObjSize.Width();
+            if ( bCheckBottom &&
+                 nTopOfAnch - nAdjustedRelPosY - aObjSize.Width() <
+                    aPgAlignArea.Left() )
+            {
+                nAdjustedRelPosY = aPgAlignArea.Left() +
+                                   nTopOfAnch -
+                                   aObjSize.Width();
+            }
+            if ( nTopOfAnch - nAdjustedRelPosY > aPgAlignArea.Right() )
+            {
+                nAdjustedRelPosY = nTopOfAnch - aPgAlignArea.Right();
+            }
         }
-        // --> OD 2004-08-13 #i32964# - correction
-        if ( _nTopOfAnch - nAdjustedRelPosY > aPgAlignArea.Right() )
+        // --> OD 2009-09-01 #mongolianlayout#
+        else
         {
-            nAdjustedRelPosY = _nTopOfAnch - aPgAlignArea.Right();
+            if ( bCheckBottom &&
+                 nTopOfAnch + nAdjustedRelPosY + aObjSize.Width() >
+                    aPgAlignArea.Right() )
+            {
+                nAdjustedRelPosY = aPgAlignArea.Right() -
+                                   nTopOfAnch -
+                                   aObjSize.Width();
+            }
+            if ( nTopOfAnch + nAdjustedRelPosY < aPgAlignArea.Left() )
+            {
+                nAdjustedRelPosY = aPgAlignArea.Left() - nTopOfAnch;
+            }
         }
         // <--
     }
     else
     {
-        // OD 2004-07-22 #i31805# - consider value of <_bCheckBottom>
-        if ( _bCheckBottom &&
-             _nTopOfAnch + nAdjustedRelPosY + aObjSize.Height() >
-                // --> OD 2006-01-13 #129959#
-                // Do not mix usage of <top + height> and <bottom>
-//                aPgAlignArea.Bottom() )
+        if ( bCheckBottom &&
+             nTopOfAnch + nAdjustedRelPosY + aObjSize.Height() >
                 aPgAlignArea.Top() + aPgAlignArea.Height() )
-                // <--
         {
-            // --> OD 2006-01-13 #129959#
-            // Do not mix usage of <top + height> and <bottom>
-//            nAdjustedRelPosY = aPgAlignArea.Bottom() -
             nAdjustedRelPosY = aPgAlignArea.Top() + aPgAlignArea.Height() -
-            // <--
-                               _nTopOfAnch -
+                               nTopOfAnch -
                                aObjSize.Height();
         }
-        if ( _nTopOfAnch + nAdjustedRelPosY <  aPgAlignArea.Top() )
+        if ( nTopOfAnch + nAdjustedRelPosY < aPgAlignArea.Top() )
         {
-            nAdjustedRelPosY = aPgAlignArea.Top() - _nTopOfAnch;
+            nAdjustedRelPosY = aPgAlignArea.Top() - nTopOfAnch;
         }
     }
 
@@ -953,11 +975,11 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
     }
     SwRect aTmpObjRect( aTmpPos, aObjBoundRect.SSize() );
 
-    const UINT32 nObjOrdNum = GetObject().GetOrdNum();
+    const sal_uInt32 nObjOrdNum = GetObject().GetOrdNum();
     const SwPageFrm* pObjPage = rFlyAtCntFrm.FindPageFrm();
     const SwFrm* pObjContext = ::FindKontext( &rAnchorTxtFrm, FRM_COLUMN );
-    ULONG nObjIndex = rAnchorTxtFrm.GetTxtNode()->GetIndex();
-    SwOrderIter aIter( pObjPage, TRUE );
+    sal_uLong nObjIndex = rAnchorTxtFrm.GetTxtNode()->GetIndex();
+    SwOrderIter aIter( pObjPage, sal_True );
     const SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)aIter.Bottom())->GetFlyFrm();
     while ( pFly && nObjOrdNum > pFly->GetVirtDrawObj()->GetOrdNumDirect() )
     {
@@ -1053,7 +1075,7 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
 bool SwAnchoredObjectPosition::_DrawAsideFly( const SwFlyFrm* _pFly,
                                               const SwRect&   _rObjRect,
                                               const SwFrm*    _pObjContext,
-                                              const ULONG     _nObjIndex,
+                                              const sal_uLong     _nObjIndex,
                                               const bool      _bEvenPage,
                                               const sal_Int16 _eHoriOrient,
                                               const sal_Int16 _eRelOrient
@@ -1068,7 +1090,7 @@ bool SwAnchoredObjectPosition::_DrawAsideFly( const SwFlyFrm* _pFly,
          (_rObjRect.*fnRect->fnBottomDist)( (_pFly->Frm().*fnRect->fnGetTop)() ) < 0 &&
          ::FindKontext( _pFly->GetAnchorFrm(), FRM_COLUMN ) == _pObjContext )
     {
-        ULONG nOtherIndex =
+        sal_uLong nOtherIndex =
             static_cast<const SwTxtFrm*>(_pFly->GetAnchorFrm())->GetTxtNode()->GetIndex();
         if( _nObjIndex >= nOtherIndex )
         {
@@ -1111,11 +1133,11 @@ bool SwAnchoredObjectPosition::_Minor( sal_Int16 _eRelOrient1,
 
     // draw aside order for left horizontal position
     //! one array entry for each value in text::RelOrientation
-    static USHORT __READONLY_DATA aLeft[ 10 ] =
+    static sal_uInt16 __READONLY_DATA aLeft[ 10 ] =
         { 5, 6, 0, 1, 8, 4, 7, 2, 3, 9 };
     // draw aside order for right horizontal position
     //! one array entry for each value in text::RelOrientation
-    static USHORT __READONLY_DATA aRight[ 10 ] =
+    static sal_uInt16 __READONLY_DATA aRight[ 10 ] =
         { 5, 6, 0, 8, 1, 7, 4, 2, 3, 9 };
 
     // decide depending on given order, which frame has to draw aside another frame

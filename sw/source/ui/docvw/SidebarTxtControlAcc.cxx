@@ -80,7 +80,7 @@ class SidebarTextEditSource : public SvxEditSource,
 SidebarTextEditSource::SidebarTextEditSource( SidebarTxtControl& rSidebarTxtControl )
     : SvxEditSource()
     , mrSidebarTxtControl( rSidebarTxtControl )
-    , mTextForwarder( *(rSidebarTxtControl.GetTextView()->GetOutliner()), FALSE )
+    , mTextForwarder( *(rSidebarTxtControl.GetTextView()->GetOutliner()), sal_False )
     , mViewForwarder( *(rSidebarTxtControl.GetTextView()) )
 {
     if ( mrSidebarTxtControl.GetTextView() )

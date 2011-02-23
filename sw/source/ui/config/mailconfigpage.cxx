@@ -198,7 +198,7 @@ SfxTabPage*  SwMailConfigPage::Create( Window* pParent, const SfxItemSet& rAttrS
 /*-- 06.05.2004 10:59:41---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-BOOL SwMailConfigPage::FillItemSet( SfxItemSet& /*rSet*/ )
+sal_Bool SwMailConfigPage::FillItemSet( SfxItemSet& /*rSet*/ )
 {
     if(m_aDisplayNameED.GetText() != m_aDisplayNameED.GetSavedValue())
         m_pConfigItem->SetMailDisplayName(m_aDisplayNameED.GetText());
