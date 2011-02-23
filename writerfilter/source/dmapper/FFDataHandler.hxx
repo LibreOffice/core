@@ -56,15 +56,12 @@ public:
 
     // member: entryMacro
     void setEntryMacro(const rtl::OUString & r_sEntryMacro);
-    const rtl::OUString & getEntryMacro() const;
 
     // member: exitMacro
     void setExitMacro(const rtl::OUString & r_sExitMacro);
-    const rtl::OUString & getExitMacro() const;
 
     // member: helpTextType
     void setHelpTextType(sal_uInt32 r_helpTextType);
-    sal_uInt32 getHelpTextType() const;
 
     // member: helpText
     void setHelpText(const rtl::OUString & r_sHelpText);
@@ -72,7 +69,6 @@ public:
 
     // member: statusTextType
     void setStatusTextType(sal_uInt32 r_statusTextType);
-    sal_uInt32 getStatusTextType() const;
 
     // member: statusText
     void setStatusText(const rtl::OUString & r_sStatusText);
@@ -111,7 +107,6 @@ public:
 
     // member: textMaxLength
     void setTextMaxLength(sal_uInt32 r_textMaxLength);
-    sal_uInt32 getTextMaxLength() const;
 
     // member: textDefault
     void setTextDefault(const rtl::OUString & r_sTextDefault);
@@ -119,7 +114,6 @@ public:
 
     // member: textFormat
     void setTextFormat(const rtl::OUString & r_sTextFormat);
-    const rtl::OUString & getTextFormat() const;
 
     // sprm
     void sprm(Sprm & r_sprm);

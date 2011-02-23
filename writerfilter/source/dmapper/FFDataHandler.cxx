@@ -92,31 +92,16 @@ void FFDataHandler::setEntryMacro(const rtl::OUString & r_sEntryMacro)
     m_sEntryMacro = r_sEntryMacro;
 }
 
-const rtl::OUString & FFDataHandler::getEntryMacro() const
-{
-    return m_sEntryMacro;
-}
-
 // member: FFDataHandler::exitMacro
 void FFDataHandler::setExitMacro(const rtl::OUString & r_sExitMacro)
 {
     m_sExitMacro = r_sExitMacro;
 }
 
-const rtl::OUString & FFDataHandler::getExitMacro() const
-{
-    return m_sExitMacro;
-}
-
 // member: FFDataHandler::helpTextType
 void FFDataHandler::setHelpTextType(sal_uInt32 r_helpTextType)
 {
     m_nHelpTextType = r_helpTextType;
-}
-
-sal_uInt32 FFDataHandler::getHelpTextType() const
-{
-    return m_nHelpTextType;
 }
 
 // member: FFDataHandler::helpText
@@ -134,11 +119,6 @@ const rtl::OUString & FFDataHandler::getHelpText() const
 void FFDataHandler::setStatusTextType(sal_uInt32 r_statusTextType)
 {
     m_nStatusTextType = r_statusTextType;
-}
-
-sal_uInt32 FFDataHandler::getStatusTextType() const
-{
-    return m_nStatusTextType;
 }
 
 // member: FFDataHandler::statusText
@@ -241,11 +221,6 @@ void FFDataHandler::setTextMaxLength(sal_uInt32 r_textMaxLength)
     m_nTextMaxLength = r_textMaxLength;
 }
 
-sal_uInt32 FFDataHandler::getTextMaxLength() const
-{
-    return m_nTextMaxLength;
-}
-
 // member: FFDataHandler::textDefault
 void FFDataHandler::setTextDefault(const rtl::OUString & r_sTextDefault)
 {
@@ -261,11 +236,6 @@ const rtl::OUString & FFDataHandler::getTextDefault() const
 void FFDataHandler::setTextFormat(const rtl::OUString & r_sTextFormat)
 {
     m_sTextFormat = r_sTextFormat;
-}
-
-const rtl::OUString & FFDataHandler::getTextFormat() const
-{
-    return m_sTextFormat;
 }
 
 
