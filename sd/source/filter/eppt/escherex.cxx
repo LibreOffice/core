@@ -52,7 +52,7 @@ sal_uInt32 PptEscherEx::DrawingGroupContainerSize()
 
 void PptEscherEx::WriteDrawingGroupContainer( SvStream& rSt )
 {
-    UINT32 nSize = DrawingGroupContainerSize();
+    sal_uInt32 nSize = DrawingGroupContainerSize();
     rSt << (sal_uInt32)( 0xf | ( 1035 << 16 ) )     // EPP_PPDrawingGroup
         << (sal_uInt32)( nSize - 8 );
 
@@ -63,7 +63,7 @@ void PptEscherEx::WriteDrawingGroupContainer( SvStream& rSt )
 
 sal_uInt32 PptEscherEx::ImplDggContainerSize()
 {
-    UINT32 nSize;
+    sal_uInt32 nSize;
 
     nSize  = mxGlobal->GetDggAtomSize();
     nSize += mxGlobal->GetBlibStoreContainerSize();
@@ -131,7 +131,7 @@ sal_uInt32 PptEscherEx::ImplSplitMenuColorsAtomSize()
 
 void PptEscherEx::ImplWriteSplitMenuColorsAtom( SvStream& rSt )
 {
-    UINT32 nSize = ImplSplitMenuColorsAtomSize();
+    sal_uInt32 nSize = ImplSplitMenuColorsAtomSize();
     if ( nSize )
     {
         rSt << (sal_uInt32)( ( ESCHER_SplitMenuColors << 16 ) | ( ESCHER_SPLIT_MENU_COLORS_COUNT << 4 ) )
@@ -152,9 +152,9 @@ PptEscherEx::~PptEscherEx()
 
 // ---------------------------------------------------------------------------------------------
 
-void PptEscherEx::OpenContainer( UINT16 n_EscherContainer, int nRecInstance )
+void PptEscherEx::OpenContainer( sal_uInt16 n_EscherContainer, int nRecInstance )
 {
-    *mpOutStrm << (UINT16)( ( nRecInstance << 4 ) | 0xf  ) << n_EscherContainer << (UINT32)0;
+    *mpOutStrm << (sal_uInt16)( ( nRecInstance << 4 ) | 0xf  ) << n_EscherContainer << (sal_uInt32)0;
     mOffsets.push_back( mpOutStrm->Tell() - 4 );
     mRecTypes.push_back( n_EscherContainer );
 
@@ -164,12 +164,12 @@ void PptEscherEx::OpenContainer( UINT16 n_EscherContainer, int nRecInstance )
         {
             if ( !mbEscherDg )
             {
-                mbEscherDg = TRUE;
+                mbEscherDg = sal_True;
                 mnCurrentDg = mxGlobal->GenerateDrawingId();
                 AddAtom( 8, ESCHER_Dg, 0, mnCurrentDg );
                 PtReplaceOrInsert( ESCHER_Persist_Dg | mnCurrentDg, mpOutStrm->Tell() );
-                *mpOutStrm << (UINT32)0     // The number of shapes in this drawing
-                           << (UINT32)0;    // The last MSOSPID given to an SP in this DG
+                *mpOutStrm << (sal_uInt32)0     // The number of shapes in this drawing
+                           << (sal_uInt32)0;    // The last MSOSPID given to an SP in this DG
             }
         }
         break;
@@ -178,7 +178,7 @@ void PptEscherEx::OpenContainer( UINT16 n_EscherContainer, int nRecInstance )
         {
             if ( mbEscherDg )
             {
-                mbEscherSpgr = TRUE;
+                mbEscherSpgr = sal_True;
             }
         }
         break;
@@ -203,7 +203,7 @@ void PptEscherEx::CloseContainer()
     */
     if ( ( mRecTypes.back() != ESCHER_SpgrContainer ) || ( mnGroupLevel < 12 ) )
     {
-        UINT32 nSize, nPos = mpOutStrm->Tell();
+        sal_uInt32 nSize, nPos = mpOutStrm->Tell();
         nSize = ( nPos - mOffsets.back() ) - 4;
         mpOutStrm->Seek( mOffsets.back() );
         *mpOutStrm << nSize;
@@ -214,7 +214,7 @@ void PptEscherEx::CloseContainer()
             {
                 if ( mbEscherDg )
                 {
-                    mbEscherDg = FALSE;
+                    mbEscherDg = sal_False;
                     if ( DoSeek( ESCHER_Persist_Dg | mnCurrentDg ) )
                         *mpOutStrm << mxGlobal->GetDrawingShapeCount( mnCurrentDg ) << mxGlobal->GetLastShapeId( mnCurrentDg );
                 }
@@ -225,7 +225,7 @@ void PptEscherEx::CloseContainer()
             {
                 if ( mbEscherSpgr )
                 {
-                    mbEscherSpgr = FALSE;
+                    mbEscherSpgr = sal_False;
 
                 }
             }
@@ -259,10 +259,10 @@ sal_uInt32 PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClie
         OpenContainer( ESCHER_SpContainer );
         AddAtom( 16, ESCHER_Spgr, 1 );
         PtReplaceOrInsert( ESCHER_Persist_Grouping_Snap | mnGroupLevel, mpOutStrm->Tell() );
-        *mpOutStrm  << (INT32)aRect.Left()  // Bounding box fuer die Gruppierten shapes an die sie attached werden
-                    << (INT32)aRect.Top()
-                    << (INT32)aRect.Right()
-                    << (INT32)aRect.Bottom();
+        *mpOutStrm  << (sal_Int32)aRect.Left()  // Bounding box fuer die Gruppierten shapes an die sie attached werden
+                    << (sal_Int32)aRect.Top()
+                    << (sal_Int32)aRect.Right()
+                    << (sal_Int32)aRect.Bottom();
 
         nShapeId = GenerateShapeId();
         if ( !mnGroupLevel )
@@ -274,7 +274,7 @@ sal_uInt32 PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClie
             {
                 AddAtom( 8, ESCHER_ClientAnchor );
                 PtReplaceOrInsert( ESCHER_Persist_Grouping_Logic | mnGroupLevel, mpOutStrm->Tell() );
-                *mpOutStrm << (INT16)aRect.Top() << (INT16)aRect.Left() << (INT16)aRect.Right() << (INT16)aRect.Bottom();
+                *mpOutStrm << (sal_Int16)aRect.Top() << (sal_Int16)aRect.Left() << (sal_Int16)aRect.Right() << (sal_Int16)aRect.Bottom();
             }
             else
             {

@@ -80,12 +80,12 @@ class ImageButtonHdl;
 
 // --------------------------------------------------------------------
 
-static USHORT gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
-static USHORT gButtonToolTips[] = { STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE, STR_INSERT_MOVIE };
+static sal_uInt16 gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
+static sal_uInt16 gButtonToolTips[] = { STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE, STR_INSERT_MOVIE };
 
 // --------------------------------------------------------------------
 
-static BitmapEx loadImageResource( USHORT nId )
+static BitmapEx loadImageResource( sal_uInt16 nId )
 {
     SdResId aResId( nId );
     aResId.SetRT( RSC_BITMAP );
@@ -152,10 +152,10 @@ private:
 class ImageButtonHdl : public SmartHdl
 {
 public:
-    ImageButtonHdl( const SmartTagReference& xTag, /* USHORT nSID, const Image& rImage, const Image& rImageMO, */ const Point& rPnt );
+    ImageButtonHdl( const SmartTagReference& xTag, /* sal_uInt16 nSID, const Image& rImage, const Image& rImageMO, */ const Point& rPnt );
     virtual ~ImageButtonHdl();
     virtual void CreateB2dIAObject();
-    virtual BOOL IsFocusHdl() const;
+    virtual sal_Bool IsFocusHdl() const;
     virtual Pointer GetPointer() const;
     virtual bool isMarkable() const;
 
@@ -171,12 +171,12 @@ private:
 
     int mnHighlightId;
     Size maImageSize;
-    ULONG mnTip;
+    sal_uLong mnTip;
 };
 
 // --------------------------------------------------------------------
 
-ImageButtonHdl::ImageButtonHdl( const SmartTagReference& xTag /*, USHORT nSID, const Image& rImage, const Image& rImageMO*/, const Point& rPnt )
+ImageButtonHdl::ImageButtonHdl( const SmartTagReference& xTag /*, sal_uInt16 nSID, const Image& rImage, const Image& rImageMO*/, const Point& rPnt )
 : SmartHdl( xTag, rPnt )
 , mxTag( dynamic_cast< ChangePlaceholderTag* >( xTag.get() ) )
 , mnHighlightId( -1 )
@@ -298,7 +298,7 @@ void ImageButtonHdl::CreateB2dIAObject()
 
 // --------------------------------------------------------------------
 
-BOOL ImageButtonHdl::IsFocusHdl() const
+sal_Bool ImageButtonHdl::IsFocusHdl() const
 {
     return false;
 }
@@ -340,7 +340,7 @@ bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHd
     int nHighlightId = static_cast< ImageButtonHdl& >(rHdl).getHighlightId();
     if( nHighlightId >= 0 )
     {
-        USHORT nSID = gButtonSlots[nHighlightId];
+        sal_uInt16 nSID = gButtonSlots[nHighlightId];
 
         if( mxPlaceholderObj.get() )
         {
@@ -349,7 +349,7 @@ bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHd
             {
                 SdrPageView* pPV = mrView.GetSdrPageView();
                 mrView.UnmarkAllObj(pPV );
-                mrView.MarkObj(mxPlaceholderObj.get(), pPV, FALSE);
+                mrView.MarkObj(mxPlaceholderObj.get(), pPV, sal_False);
             }
         }
 
@@ -363,7 +363,7 @@ bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHd
 /** returns true if the SmartTag consumes this event. */
 bool ChangePlaceholderTag::KeyInput( const KeyEvent& rKEvt )
 {
-    USHORT nCode = rKEvt.GetKeyCode().GetCode();
+    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
     switch( nCode )
     {
     case KEY_DOWN:
@@ -407,7 +407,7 @@ BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
         const Rectangle aRectSrc( Point( 0, 0 ), aSize );
 
         aRet = *(getButtonImage((nHighlight == 0) ? 4 : 0, bLarge));
-        aRet.Expand( aSize.Width(), aSize.Height(), NULL, TRUE );
+        aRet.Expand( aSize.Width(), aSize.Height(), NULL, sal_True );
 
         aRet.CopyPixel( Rectangle( Point( aSize.Width(), 0              ), aSize ), aRectSrc, getButtonImage((nHighlight == 1) ? 5 : 1, bLarge) );
         aRet.CopyPixel( Rectangle( Point( 0,             aSize.Height() ), aSize ), aRectSrc, getButtonImage((nHighlight == 2) ? 6 : 2, bLarge) );

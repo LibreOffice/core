@@ -64,13 +64,13 @@ public:
 class SdTbxCtlDiaPages : public SfxToolBoxControl
 {
 public:
-    virtual void        StateChanged( USHORT nSID, SfxItemState eState,
+    virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                       const SfxPoolItem* pState );
     virtual Window*     CreateItemWindow( Window *pParent );
 
     SFX_DECL_TOOLBOX_CONTROL();
 
-    SdTbxCtlDiaPages( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
+    SdTbxCtlDiaPages( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx );
     ~SdTbxCtlDiaPages();
 };
 

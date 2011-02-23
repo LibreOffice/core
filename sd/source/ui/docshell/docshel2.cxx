@@ -63,7 +63,7 @@ namespace sd {
 |*
 \************************************************************************/
 
-void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, USHORT nAspect)
+void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
 {
     if (nAspect == ASPECT_THUMBNAIL)
     {
@@ -74,11 +74,11 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, USHORT nAspect)
 
     ClientView* pView = new ClientView(this, pOut, NULL);
 
-    pView->SetHlplVisible(FALSE);
-    pView->SetGridVisible(FALSE);
-    pView->SetBordVisible(FALSE);
-    pView->SetPageVisible(FALSE);
-    pView->SetGlueVisible(FALSE);
+    pView->SetHlplVisible(sal_False);
+    pView->SetGridVisible(sal_False);
+    pView->SetBordVisible(sal_False);
+    pView->SetPageVisible(sal_False);
+    pView->SetGlueVisible(sal_False);
 
     SdPage* pSelectedPage = NULL;
 
@@ -88,7 +88,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, USHORT nAspect)
         FrameView* pFrameView = (FrameView*)pFrameViewList->GetObject(0);
         if( pFrameView && pFrameView->GetPageKind() == PK_STANDARD )
         {
-            USHORT nSelectedPage = pFrameView->GetSelectedPage();
+            sal_uInt16 nSelectedPage = pFrameView->GetSelectedPage();
             pSelectedPage = mpDoc->GetSdPage(nSelectedPage, PK_STANDARD);
         }
     }
@@ -96,10 +96,10 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, USHORT nAspect)
     if( NULL == pSelectedPage )
     {
         SdPage* pPage = NULL;
-        USHORT nSelectedPage = 0;
-        USHORT nPageCnt = (USHORT) mpDoc->GetSdPageCount(PK_STANDARD);
+        sal_uInt16 nSelectedPage = 0;
+        sal_uInt16 nPageCnt = (sal_uInt16) mpDoc->GetSdPageCount(PK_STANDARD);
 
-        for (USHORT i = 0; i < nPageCnt; i++)
+        for (sal_uInt16 i = 0; i < nPageCnt; i++)
         {
             pPage = mpDoc->GetSdPage(i, PK_STANDARD);
 
@@ -170,7 +170,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, USHORT nAspect)
 |*
 \************************************************************************/
 
-Rectangle DrawDocShell::GetVisArea(USHORT nAspect) const
+Rectangle DrawDocShell::GetVisArea(sal_uInt16 nAspect) const
 {
     Rectangle aVisArea;
 
@@ -263,7 +263,7 @@ Size DrawDocShell::GetFirstPageSize()
 |*
 \************************************************************************/
 
-Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
+Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, sal_uInt16 nMaxEdgePixel)
 {
     MapMode         aMapMode( MAP_100TH_MM );
     const Size      aSize( pPage->GetSize() );
@@ -273,7 +273,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
     aVDev.SetMapMode( aMapMode );
 
     const Size  aPixSize( aVDev.LogicToPixel( aSize ) );
-    const ULONG nMaxEdgePix = Max( aPixSize.Width(), aPixSize.Height() );
+    const sal_uLong nMaxEdgePix = Max( aPixSize.Width(), aPixSize.Height() );
     Fraction    aFrac( nMaxEdgePixel, nMaxEdgePix );
 
     aMapMode.SetScaleX( aFrac );
@@ -357,12 +357,12 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
 /*************************************************************************
 |*
 |* Pruefen, ob die Seite vorhanden ist und dann den Anwender zwingen einen
-|* noch nicht vorhandenen Namen einzugeben. Wird FALSE zurueckgegeben,
+|* noch nicht vorhandenen Namen einzugeben. Wird sal_False zurueckgegeben,
 |* wurde die Aktion vom Anwender abgebrochen.
 |*
 \************************************************************************/
 
-BOOL DrawDocShell::CheckPageName (::Window* pWin, String& rName )
+sal_Bool DrawDocShell::CheckPageName (::Window* pWin, String& rName )
 {
     const String aStrForDlg( rName );
     bool bIsNameValid = IsNewPageNameValid( rName, true );
@@ -392,7 +392,7 @@ BOOL DrawDocShell::CheckPageName (::Window* pWin, String& rName )
         }
     }
 
-    return ( bIsNameValid ? TRUE : FALSE );
+    return ( bIsNameValid ? sal_True : sal_False );
 }
 
 bool DrawDocShell::IsNewPageNameValid( String & rInOutPageName, bool bResetStringIfStandardName /* = false */ )
@@ -485,8 +485,8 @@ bool DrawDocShell::IsNewPageNameValid( String & rInOutPageName, bool bResetStrin
     {
         if( rInOutPageName.Len() > 0 )
         {
-            BOOL   bOutDummy;
-            USHORT nExistingPageNum = mpDoc->GetPageByName( rInOutPageName, bOutDummy );
+            sal_Bool   bOutDummy;
+            sal_uInt16 nExistingPageNum = mpDoc->GetPageByName( rInOutPageName, bOutDummy );
             bCanUseNewName = ( nExistingPageNum == SDRPAGE_NOTFOUND );
         }
         else

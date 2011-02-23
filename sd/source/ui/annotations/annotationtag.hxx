@@ -60,11 +60,11 @@ public:
     virtual bool Command( const CommandEvent& rCEvt );
 
     // callbacks from sdr view
-    virtual ULONG GetMarkablePointCount() const;
-    virtual ULONG GetMarkedPointCount() const;
-    virtual BOOL MarkPoint(SdrHdl& rHdl, BOOL bUnmark=FALSE);
+    virtual sal_uLong GetMarkablePointCount() const;
+    virtual sal_uLong GetMarkedPointCount() const;
+    virtual sal_Bool MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark=sal_False);
     virtual void CheckPossibilities();
-    virtual BOOL MarkPoints(const Rectangle* pRect, BOOL bUnmark);
+    virtual sal_Bool MarkPoints(const Rectangle* pRect, sal_Bool bUnmark);
 
     void Move( int nDX, int nDY );
     bool OnMove( const KeyEvent& rKEvt );
@@ -96,7 +96,7 @@ private:
     int                                             mnIndex;
     const Font&                                     mrFont;
     Size                                            maSize;
-    ULONG                                           mnClosePopupEvent;
+    sal_uLong                                           mnClosePopupEvent;
     ::Window*                                       mpListenWindow;
     Point                                           maMouseDownPos;
 };

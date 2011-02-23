@@ -110,7 +110,7 @@ public:
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 
 protected:
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
     virtual void    Resize();
     virtual void    FillInfo( SfxChildWinInfo& ) const;
 
@@ -124,21 +124,20 @@ private:
     NumericField    aNumFldBitmap;
     TimeField       aTimeField;
     ListBox         aLbLoopCount;
-
+    FixedLine       aGrpBitmap;
     ImageButton     aBtnGetOneObject;
     ImageButton     aBtnGetAllObjects;
     ImageButton     aBtnRemoveBitmap;
     ImageButton     aBtnRemoveAll;
     FixedText       aFtCount;
     FixedInfo       aFiCount;
-    FixedLine       aGrpBitmap;
+    FixedLine       aGrpAnimation;
 
     RadioButton     aRbtGroup;
     RadioButton     aRbtBitmap;
     FixedText       aFtAdjustment;
     ListBox         aLbAdjustment;
     PushButton      aBtnCreateGroup;
-    FixedLine       aGrpAnimation;
 
     ::Window*       pWin;
     List            aBmpExList;
@@ -150,8 +149,8 @@ private:
     Size            aFltWinSize;
     Size            aDisplaySize;
     Size            aBmpSize;
-    BOOL            bMovie;
-    BOOL            bAllObjects;
+    sal_Bool            bMovie;
+    sal_Bool            bAllObjects;
 
     SfxBindings*                pBindings;
     AnimationControllerItem*    pControllerItem;
@@ -170,9 +169,9 @@ private:
     DECL_LINK( ModifyBitmapHdl, void * );
     DECL_LINK( ModifyTimeHdl, void * );
 
-    void            UpdateControl( ULONG nPos, BOOL bDisableCtrls = FALSE );
+    void            UpdateControl( sal_uLong nPos, sal_Bool bDisableCtrls = sal_False );
     void            ResetAttrs();
-    void            WaitInEffect( ULONG nMilliSeconds, ULONG nTime,
+    void            WaitInEffect( sal_uLong nMilliSeconds, sal_uLong nTime,
                                         SfxProgress* pStbMgr ) const;
     Fraction        GetScale();
 };
@@ -187,10 +186,10 @@ class AnimationControllerItem : public SfxControllerItem
 {
 
 public:
-    AnimationControllerItem( USHORT, AnimationWindow*, SfxBindings* );
+    AnimationControllerItem( sal_uInt16, AnimationWindow*, SfxBindings* );
 
 protected:
-    virtual void StateChanged( USHORT nSId, SfxItemState eState,
+    virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
         const SfxPoolItem* pState );
 private:
     AnimationWindow* pAnimationWin;

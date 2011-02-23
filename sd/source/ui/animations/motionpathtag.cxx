@@ -135,7 +135,7 @@ bool PathDragMove::BeginSdrDrag()
         }
     }
     Show();
-    return TRUE;
+    return sal_True;
 }
 
 bool PathDragMove::EndSdrDrag(bool /*bCopy*/)
@@ -143,7 +143,7 @@ bool PathDragMove::EndSdrDrag(bool /*bCopy*/)
     Hide();
     if( mxTag.is() )
         mxTag->MovePath( DragStat().GetDX(), DragStat().GetDY() );
-    return TRUE;
+    return sal_True;
 }
 // --------------------------------------------------------------------
 
@@ -203,7 +203,7 @@ bool PathDragResize::EndSdrDrag(bool /*bCopy*/)
             pPathObj->SetPathPoly( aDragPoly );
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 // --------------------------------------------------------------------
@@ -266,7 +266,7 @@ public:
     SdPathHdl( const SmartTagReference& xTag, SdrPathObj* mpPathObj );
     virtual ~SdPathHdl();
     virtual void CreateB2dIAObject();
-    virtual BOOL IsFocusHdl() const;
+    virtual sal_Bool IsFocusHdl() const;
     virtual Pointer GetSdrDragPointer() const;
     virtual bool isMarkable() const;
 
@@ -331,9 +331,9 @@ void SdPathHdl::CreateB2dIAObject()
 
 // --------------------------------------------------------------------
 
-BOOL SdPathHdl::IsFocusHdl() const
+sal_Bool SdPathHdl::IsFocusHdl() const
 {
-    return FALSE;
+    return sal_False;
 }
 
 // --------------------------------------------------------------------
@@ -401,7 +401,7 @@ MotionPathTag::MotionPathTag( CustomAnimationPane& rPane, ::sd::View& rView, con
     aStartArrow.setClosed(true);
     mpPathObj->SetMergedItem(XLineStartItem(aEmpty,::basegfx::B2DPolyPolygon(aStartArrow)));
     mpPathObj->SetMergedItem(XLineStartWidthItem(400));
-    mpPathObj->SetMergedItem(XLineStartCenterItem(TRUE));
+    mpPathObj->SetMergedItem(XLineStartCenterItem(sal_True));
 
     updatePathAttributes();
 
@@ -449,7 +449,7 @@ void MotionPathTag::updatePathAttributes()
         aEndArrow.setClosed(true);
         mpPathObj->SetMergedItem(XLineEndItem(aEmpty,::basegfx::B2DPolyPolygon(aEndArrow)));
         mpPathObj->SetMergedItem(XLineEndWidthItem(400));
-        mpPathObj->SetMergedItem(XLineEndCenterItem(TRUE));
+        mpPathObj->SetMergedItem(XLineEndCenterItem(sal_True));
     }
     else
     {
@@ -584,7 +584,7 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
                 if( pHdl && !rMEvt.IsRight() )
                 {
                     mrView.BrkAction();
-                    const USHORT nDrgLog = (USHORT)pOut->PixelToLogic(Size(DRGPIX,0)).Width();
+                    const sal_uInt16 nDrgLog = (sal_uInt16)pOut->PixelToLogic(Size(DRGPIX,0)).Width();
 
                     rtl::Reference< MotionPathTag > xTag( this );
                     SdrDragMethod* pDragMethod;
@@ -625,7 +625,7 @@ bool MotionPathTag::KeyInput( const KeyEvent& rKEvt )
     if( !mpPathObj )
         return false;
 
-    USHORT nCode = rKEvt.GetKeyCode().GetCode();
+    sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
     switch( nCode )
     {
     case KEY_DELETE:
@@ -799,13 +799,13 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
             if(mrView.IsDragObj())
             {
                 FASTBOOL bWasNoSnap = mrView.GetDragStat().IsNoSnap();
-                BOOL bWasSnapEnabled = mrView.IsSnapEnabled();
+                sal_Bool bWasSnapEnabled = mrView.IsSnapEnabled();
 
                 // switch snapping off
                 if(!bWasNoSnap)
-                    ((SdrDragStat&)mrView.GetDragStat()).SetNoSnap(TRUE);
+                    ((SdrDragStat&)mrView.GetDragStat()).SetNoSnap(sal_True);
                 if(bWasSnapEnabled)
-                    mrView.SetSnapEnabled(FALSE);
+                    mrView.SetSnapEnabled(sal_False);
 
                 mrView.MovAction(aEndPoint);
                 mrView.EndDragObj();
@@ -829,7 +829,7 @@ bool MotionPathTag::OnMove( const KeyEvent& rKEvt )
 
 // --------------------------------------------------------------------
 
-ULONG MotionPathTag::GetMarkablePointCount() const
+sal_uLong MotionPathTag::GetMarkablePointCount() const
 {
     if( mpPathObj && isSelected() )
     {
@@ -843,7 +843,7 @@ ULONG MotionPathTag::GetMarkablePointCount() const
 
 // --------------------------------------------------------------------
 
-ULONG MotionPathTag::GetMarkedPointCount() const
+sal_uLong MotionPathTag::GetMarkedPointCount() const
 {
     if( mpMark )
     {
@@ -858,9 +858,9 @@ ULONG MotionPathTag::GetMarkedPointCount() const
 
 // --------------------------------------------------------------------
 
-BOOL MotionPathTag::MarkPoint(SdrHdl& rHdl, BOOL bUnmark )
+sal_Bool MotionPathTag::MarkPoint(SdrHdl& rHdl, sal_Bool bUnmark )
 {
-    BOOL bRet=FALSE;
+    sal_Bool bRet=sal_False;
     if( mpPathObj && mrView.IsPointMarkable( rHdl ) && (rHdl.GetKind() != HDL_SMARTTAG) )
     {
         SmartHdl* pSmartHdl = dynamic_cast< SmartHdl* >( &rHdl );
@@ -872,7 +872,7 @@ BOOL MotionPathTag::MarkPoint(SdrHdl& rHdl, BOOL bUnmark )
             {
                 pPts->ForceSort();
                 mrView.MarkListHasChanged();
-                bRet=TRUE;
+                bRet=sal_True;
             }
         }
     }
@@ -881,16 +881,16 @@ BOOL MotionPathTag::MarkPoint(SdrHdl& rHdl, BOOL bUnmark )
 
 // --------------------------------------------------------------------
 
-BOOL MotionPathTag::MarkPoints(const Rectangle* pRect, BOOL bUnmark )
+sal_Bool MotionPathTag::MarkPoints(const Rectangle* pRect, sal_Bool bUnmark )
 {
-    BOOL bChgd=FALSE;
+    sal_Bool bChgd=sal_False;
 
     if( mpPathObj && isSelected() )
     {
         sal_Int32 nHdlNum = mrView.GetHdlList().GetHdlCount() - 1;
         while( nHdlNum > 0 )
         {
-            SmartHdl* pHdl = dynamic_cast< SmartHdl* >( mrView.GetHdl( sal::static_int_cast< ULONG >( nHdlNum-- ) ) );
+            SmartHdl* pHdl = dynamic_cast< SmartHdl* >( mrView.GetHdl( sal::static_int_cast< sal_uLong >( nHdlNum-- ) ) );
 
             if( pHdl && (pHdl->getTag().get() == this) && mrView.IsPointMarkable(*pHdl) && pHdl->IsSelected()==bUnmark)
             {
@@ -898,7 +898,7 @@ BOOL MotionPathTag::MarkPoints(const Rectangle* pRect, BOOL bUnmark )
                 if( pRect==NULL || pRect->IsInside(aPos))
                 {
                     if( mrView.MarkPointHelper(pHdl,mpMark,bUnmark) )
-                        bChgd=TRUE;
+                        bChgd=sal_True;
                 }
             }
         }
@@ -981,7 +981,7 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
 
         if( isSelected() )
         {
-            mrView.GetSdrPageView()->SetHasMarkedObj(TRUE);
+            mrView.GetSdrPageView()->SetHasMarkedObj(sal_True);
 
             if( !mrView.IsFrameDragSingles() )
             {
@@ -1004,7 +1004,7 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
 
                     rHandlerList.AddHdl( pSmartHdl );
 
-                    const bool bSelected= pMrkPnts && pMrkPnts->Exist(sal::static_int_cast< USHORT >(nHandle));
+                    const bool bSelected= pMrkPnts && pMrkPnts->Exist(sal::static_int_cast< sal_uInt16 >(nHandle));
                     pSmartHdl->SetSelected(bSelected);
 
                     if( mrView.IsPlusHandlesAlwaysVisible() || bSelected )
@@ -1017,7 +1017,7 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
                             {
                                 pPlusHdl->SetObj(mpPathObj);
                                 pPlusHdl->SetPageView(mrView.GetSdrPageView());
-                                pPlusHdl->SetPlusHdl(TRUE);
+                                pPlusHdl->SetPlusHdl(sal_True);
                                 rHandlerList.AddHdl(pPlusHdl);
                             }
                         }
@@ -1030,10 +1030,10 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
 
                 if(!aRect.IsEmpty())
                 {
-                    ULONG nCount = rHandlerList.GetHdlCount();
+                    sal_uLong nCount = rHandlerList.GetHdlCount();
 
-                    BOOL bWdt0=aRect.Left()==aRect.Right();
-                    BOOL bHgt0=aRect.Top()==aRect.Bottom();
+                    sal_Bool bWdt0=aRect.Left()==aRect.Right();
+                    sal_Bool bHgt0=aRect.Top()==aRect.Bottom();
                     if (bWdt0 && bHgt0)
                     {
                         rHandlerList.AddHdl(new SmartHdl( xThis, mpPathObj, aRect.TopLeft(),HDL_UPLFT));
@@ -1115,7 +1115,7 @@ void MotionPathTag::selectionChanged()
     if( mrView.GetViewShell() && mrView.GetViewShell()->GetViewFrame() )
     {
         SfxBindings& rBindings = mrView.GetViewShell()->GetViewFrame()->GetBindings();
-        rBindings.InvalidateAll(TRUE);
+        rBindings.InvalidateAll(sal_True);
     }
 }
 // --------------------------------------------------------------------
@@ -1159,7 +1159,7 @@ void MotionPathTag::DeleteMarkedPoints()
     }
 }
 
-BOOL MotionPathTag::IsDeleteMarkedPointsPossible() const
+sal_Bool MotionPathTag::IsDeleteMarkedPointsPossible() const
 {
     return mpPathObj && isSelected() && (GetMarkedPointCount() != 0);
 }
@@ -1175,12 +1175,12 @@ bool MotionPathTag::IsRipUpAtMarkedPointsPossible() const
     return false;
 }
 
-BOOL MotionPathTag::IsSetMarkedSegmentsKindPossible() const
+sal_Bool MotionPathTag::IsSetMarkedSegmentsKindPossible() const
 {
     if( mpPathObj )
         return mrView.IsSetMarkedSegmentsKindPossible();
     else
-        return FALSE;
+        return sal_False;
 }
 
 SdrPathSegmentKind MotionPathTag::GetMarkedSegmentsKind() const
@@ -1210,12 +1210,12 @@ void MotionPathTag::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
     }
 }
 
-BOOL MotionPathTag::IsSetMarkedPointsSmoothPossible() const
+sal_Bool MotionPathTag::IsSetMarkedPointsSmoothPossible() const
 {
     if( mpPathObj )
         return mrView.IsSetMarkedPointsSmoothPossible();
     else
-        return FALSE;
+        return sal_False;
 }
 
 SdrPathSmoothKind MotionPathTag::GetMarkedPointsSmooth() const
@@ -1264,7 +1264,7 @@ void MotionPathTag::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
     }
 }
 
-void MotionPathTag::CloseMarkedObjects(BOOL /*bToggle*/, BOOL /*bOpen*/ )
+void MotionPathTag::CloseMarkedObjects(sal_Bool /*bToggle*/, sal_Bool /*bOpen*/ )
 {
     // not supported for motion path
 }

@@ -42,13 +42,13 @@ public:
                                 aCtn(16, 16, 16) {}
     virtual       ~SdUndoGroup();
 
-    virtual BOOL   Merge( SfxUndoAction* pNextAction );
+    virtual sal_Bool   Merge( SfxUndoAction* pNextAction );
 
     virtual void   Undo();
     virtual void   Redo();
 
     void           AddAction(SdUndoAction* pAction);
-    ULONG          Count() const { return aCtn.Count(); }
+    sal_uLong          Count() const { return aCtn.Count(); }
 
 };
 

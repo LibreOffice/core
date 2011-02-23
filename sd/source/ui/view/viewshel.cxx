@@ -85,6 +85,7 @@
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <svx/svdoutl.hxx>
+#include <tools/diagnose_ex.h>
 
 // #96090#
 #include <svl/slstitm.hxx>
@@ -136,7 +137,7 @@ namespace sd {
 
 static const int DELTA_ZOOM = 10;
 
-BOOL ViewShell::IsPageFlipMode(void) const
+sal_Bool ViewShell::IsPageFlipMode(void) const
 {
     return this->ISA(DrawViewShell) && mpContentWindow.get() != NULL &&
         mpContentWindow->GetVisibleHeight() >= 1.0;
@@ -202,7 +203,7 @@ void ViewShell::construct(void)
     mpView = 0;
     mpFrameView = 0;
     mpZoomList = 0;
-    mbStartShowWithDialog = FALSE;
+    mbStartShowWithDialog = sal_False;
     mnPrintedHandoutPageNum = 1;
     mnPrintedHandoutPageCount = 0;
     mpWindowUpdater.reset( new ::sd::WindowUpdater() );
@@ -235,7 +236,7 @@ void ViewShell::construct(void)
     {
         // Create scroll bars and the filler between the scroll bars.
         mpHorizontalScrollBar.reset (new ScrollBar(GetParentWindow(), WinBits(WB_HSCROLL | WB_DRAG)));
-        mpHorizontalScrollBar->EnableRTL (FALSE);
+        mpHorizontalScrollBar->EnableRTL (sal_False);
         mpHorizontalScrollBar->SetRange(Range(0, 32000));
         mpHorizontalScrollBar->SetScrollHdl(LINK(this, ViewShell, HScrollHdl));
         mpHorizontalScrollBar->Show();
@@ -255,7 +256,7 @@ void ViewShell::construct(void)
     String aName( RTL_CONSTASCII_USTRINGPARAM( "ViewShell" ));
     SetName (aName);
 
-    GetDoc()->StartOnlineSpelling(FALSE);
+    GetDoc()->StartOnlineSpelling(sal_False);
 
     mpWindowUpdater->SetViewShell (*this);
     mpWindowUpdater->SetDocument (GetDoc());
@@ -298,7 +299,7 @@ void ViewShell::Exit (void)
         pView->UnmarkAll();
     }
 
-    Deactivate (TRUE);
+    Deactivate (sal_True);
 
     if (IsMainViewShell())
     {
@@ -317,7 +318,7 @@ void ViewShell::Exit (void)
 |*
 \************************************************************************/
 
-void ViewShell::Activate(BOOL bIsMDIActivate)
+void ViewShell::Activate(sal_Bool bIsMDIActivate)
 {
     SfxShell::Activate(bIsMDIActivate);
 
@@ -328,14 +329,14 @@ void ViewShell::Activate(BOOL bIsMDIActivate)
     //GetViewFrame()->GetWindow().GrabFocus();
 
     if (mpHorizontalRuler.get() != NULL)
-        mpHorizontalRuler->SetActive(TRUE);
+        mpHorizontalRuler->SetActive(sal_True);
     if (mpVerticalRuler.get() != NULL)
-        mpVerticalRuler->SetActive(TRUE);
+        mpVerticalRuler->SetActive(sal_True);
 
     if (bIsMDIActivate)
     {
         // Damit der Navigator auch einen aktuellen Status bekommt
-        SfxBoolItem aItem( SID_NAVIGATOR_INIT, TRUE );
+        SfxBoolItem aItem( SID_NAVIGATOR_INIT, sal_True );
         if (GetDispatcher() != NULL)
             GetDispatcher()->Execute(
                 SID_NAVIGATOR_INIT,
@@ -346,7 +347,7 @@ void ViewShell::Activate(BOOL bIsMDIActivate)
         SfxViewShell* pViewShell = GetViewShell();
         OSL_ASSERT (pViewShell!=NULL);
         SfxBindings& rBindings = pViewShell->GetViewFrame()->GetBindings();
-        rBindings.Invalidate( SID_3D_STATE, TRUE, FALSE );
+        rBindings.Invalidate( SID_3D_STATE, sal_True, sal_False );
 
         rtl::Reference< SlideShow > xSlideShow( SlideShow::GetSlideShow( GetViewShellBase() ) );
         if(xSlideShow.is() && xSlideShow->isRunning() )
@@ -359,7 +360,7 @@ void ViewShell::Activate(BOOL bIsMDIActivate)
         }
 
         if(!GetDocSh()->IsUIActive())
-            UpdatePreview( GetActualPage(), TRUE );
+            UpdatePreview( GetActualPage(), sal_True );
 
         //HMH::sd::View* pView = GetView();
 
@@ -397,7 +398,7 @@ void ViewShell::UIDeactivated( SfxInPlaceClient*  )
 |*
 \************************************************************************/
 
-void ViewShell::Deactivate(BOOL bIsMDIActivate)
+void ViewShell::Deactivate(sal_Bool bIsMDIActivate)
 {
     // remove view from a still active drag'n'drop session
     SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
@@ -427,9 +428,9 @@ void ViewShell::Deactivate(BOOL bIsMDIActivate)
     }
 
     if (mpHorizontalRuler.get() != NULL)
-        mpHorizontalRuler->SetActive(FALSE);
+        mpHorizontalRuler->SetActive(sal_False);
     if (mpVerticalRuler.get() != NULL)
-        mpVerticalRuler->SetActive(FALSE);
+        mpVerticalRuler->SetActive(sal_False);
 
     SfxShell::Deactivate(bIsMDIActivate);
 }
@@ -451,9 +452,9 @@ void ViewShell::Shutdown (void)
 |*
 \************************************************************************/
 
-BOOL ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
+sal_Bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 {
-    BOOL bReturn(FALSE);
+    sal_Bool bReturn(sal_False);
 
     if(pWin)
     {
@@ -466,7 +467,7 @@ BOOL ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
         // give key input first to SfxViewShell to give CTRL+Key
         // (e.g. CTRL+SHIFT+'+', to front) priority.
         OSL_ASSERT (GetViewShell()!=NULL);
-        bReturn = (BOOL)GetViewShell()->KeyInput(rKEvt);
+        bReturn = (sal_Bool)GetViewShell()->KeyInput(rKEvt);
     }
 
     if(!bReturn)
@@ -493,7 +494,7 @@ BOOL ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
                 }
                 else
                 {
-                    bReturn = TRUE;
+                    bReturn = sal_True;
                 }
             }
         }
@@ -507,7 +508,7 @@ BOOL ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
             && aKeyCode.GetCode() == KEY_R)
         {
             InvalidateWindows();
-            bReturn = TRUE;
+            bReturn = sal_True;
         }
     }
 
@@ -644,7 +645,7 @@ void ViewShell::MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin)
 
 void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 {
-    BOOL bDone = HandleScrollCommand (rCEvt, pWin);
+    sal_Bool bDone = HandleScrollCommand (rCEvt, pWin);
 
     if( !bDone )
     {
@@ -673,7 +674,7 @@ void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 long ViewShell::Notify(NotifyEvent& rNEvt, ::sd::Window* pWin)
 {
     // handle scroll commands when they arrived at child windows
-    long nRet = FALSE;
+    long nRet = sal_False;
     if( rNEvt.GetType() == EVENT_COMMAND )
     {
         // note: dynamic_cast is not possible as GetData() returns a void*
@@ -743,7 +744,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                 {
                     if( mpContentWindow.get() == pWin )
                     {
-                        ULONG nScrollLines = pData->GetScrollLines();
+                        sal_uLong nScrollLines = pData->GetScrollLines();
                         if(IsPageFlipMode())
                             nScrollLines = COMMAND_WHEEL_PAGESCROLL;
                         CommandWheelData aWheelData( pData->GetDelta(),pData->GetNotchDelta(),
@@ -752,7 +753,7 @@ bool ViewShell::HandleScrollCommand(const CommandEvent& rCEvt, ::sd::Window* pWi
                             rCEvt.IsMouseEvent(),(const void *) &aWheelData );
                         bDone = pWin->HandleScrollCommand( aReWrite,
                             mpHorizontalScrollBar.get(),
-                            mpVerticalScrollBar.get()) == TRUE;
+                            mpVerticalScrollBar.get()) == sal_True;
                     }
                 }
             }
@@ -780,17 +781,17 @@ void ViewShell::SetupRulers (void)
             if ( mpVerticalRuler.get() != NULL )
             {
                 nHRulerOfs = mpVerticalRuler->GetSizePixel().Width();
-                mpVerticalRuler->SetActive(TRUE);
+                mpVerticalRuler->SetActive(sal_True);
                 mpVerticalRuler->Show();
             }
         }
         if ( mpHorizontalRuler.get() == NULL )
         {
-            mpHorizontalRuler.reset(CreateHRuler(GetActiveWindow(), TRUE));
+            mpHorizontalRuler.reset(CreateHRuler(GetActiveWindow(), sal_True));
             if ( mpHorizontalRuler.get() != NULL )
             {
                 mpHorizontalRuler->SetWinPos(nHRulerOfs);
-                mpHorizontalRuler->SetActive(TRUE);
+                mpHorizontalRuler->SetActive(sal_True);
                 mpHorizontalRuler->Show();
             }
         }
@@ -800,7 +801,7 @@ void ViewShell::SetupRulers (void)
 
 
 
-BOOL ViewShell::HasRuler (void)
+sal_Bool ViewShell::HasRuler (void)
 {
     return mbHasRulers;
 }
@@ -1007,7 +1008,7 @@ void ViewShell::SetUIUnit(FieldUnit eUnit)
 |* DefTab an den horizontalen Linealen setzen
 |*
 \************************************************************************/
-void ViewShell::SetDefTabHRuler( UINT16 nDefTab )
+void ViewShell::SetDefTabHRuler( sal_uInt16 nDefTab )
 {
     if (mpHorizontalRuler.get() != NULL)
         mpHorizontalRuler->SetDefTabDist( nDefTab );
@@ -1019,9 +1020,9 @@ void ViewShell::SetDefTabHRuler( UINT16 nDefTab )
 /** Tell the FmFormShell that the view shell is closing.  Give it the
     oportunity to prevent that.
 */
-USHORT ViewShell::PrepareClose (BOOL bUI, BOOL bForBrowsing)
+sal_uInt16 ViewShell::PrepareClose (sal_Bool bUI, sal_Bool bForBrowsing)
 {
-    USHORT nResult = TRUE;
+    sal_uInt16 nResult = sal_True;
 
     FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
     if (pFormShell != NULL)
@@ -1033,14 +1034,14 @@ USHORT ViewShell::PrepareClose (BOOL bUI, BOOL bForBrowsing)
 
 
 
-void ViewShell::UpdatePreview (SdPage*, BOOL )
+void ViewShell::UpdatePreview (SdPage*, sal_Bool )
 {
     // Do nothing.  After the actual preview has been removed,
     // OutlineViewShell::UpdatePreview() is the place where something
     // usefull is still done.
 }
 
-SfxUndoManager* ViewShell::ImpGetUndoManager (void) const
+::svl::IUndoManager* ViewShell::ImpGetUndoManager (void) const
 {
     const ViewShell* pMainViewShell = GetViewShellBase().GetMainViewShell().get();
 
@@ -1081,7 +1082,7 @@ SfxUndoManager* ViewShell::ImpGetUndoManager (void) const
 
 void ViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
 {
-    SfxUndoManager* pUndoManager = ImpGetUndoManager();
+    ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     if(pUndoManager)
     {
         sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
@@ -1116,7 +1117,7 @@ void ViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
 
 void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
 {
-    SfxUndoManager* pUndoManager = ImpGetUndoManager();
+    ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     if(pUndoManager)
     {
         sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
@@ -1149,9 +1150,9 @@ void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
 
 // -----------------------------------------------------------------------------
 
-void ViewShell::ImpSidUndo(BOOL, SfxRequest& rReq)
+void ViewShell::ImpSidUndo(sal_Bool, SfxRequest& rReq)
 {
-    SfxUndoManager* pUndoManager = ImpGetUndoManager();
+    ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     sal_uInt16 nNumber(1);
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
@@ -1166,11 +1167,19 @@ void ViewShell::ImpSidUndo(BOOL, SfxRequest& rReq)
         sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
         if(nCount >= nNumber)
         {
-            // #94637# when UndoStack is cleared by ModifyPageUndoAction
-            // the nCount may have changed, so test GetUndoActionCount()
-            while(nNumber-- && pUndoManager->GetUndoActionCount())
+            try
             {
-                pUndoManager->Undo();
+                // #94637# when UndoStack is cleared by ModifyPageUndoAction
+                // the nCount may have changed, so test GetUndoActionCount()
+                while(nNumber-- && pUndoManager->GetUndoActionCount())
+                {
+                    pUndoManager->Undo();
+                }
+            }
+            catch( const Exception& e )
+            {
+                // no need to handle. By definition, the UndoManager handled this by clearing the
+                // Undo/Redo stacks
             }
         }
 
@@ -1190,9 +1199,9 @@ void ViewShell::ImpSidUndo(BOOL, SfxRequest& rReq)
 
 // -----------------------------------------------------------------------------
 
-void ViewShell::ImpSidRedo(BOOL, SfxRequest& rReq)
+void ViewShell::ImpSidRedo(sal_Bool, SfxRequest& rReq)
 {
-    SfxUndoManager* pUndoManager = ImpGetUndoManager();
+    ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     sal_uInt16 nNumber(1);
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
@@ -1207,11 +1216,19 @@ void ViewShell::ImpSidRedo(BOOL, SfxRequest& rReq)
         sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
         if(nCount >= nNumber)
         {
-            // #94637# when UndoStack is cleared by ModifyPageRedoAction
-            // the nCount may have changed, so test GetRedoActionCount()
-            while(nNumber-- && pUndoManager->GetRedoActionCount())
+            try
             {
-                pUndoManager->Redo();
+                // #94637# when UndoStack is cleared by ModifyPageRedoAction
+                // the nCount may have changed, so test GetRedoActionCount()
+                while(nNumber-- && pUndoManager->GetRedoActionCount())
+                {
+                    pUndoManager->Redo();
+                }
+            }
+            catch( const Exception& e )
+            {
+                // no need to handle. By definition, the UndoManager handled this by clearing the
+                // Undo/Redo stacks
             }
         }
 
@@ -1233,7 +1250,7 @@ void ViewShell::ImpSidRedo(BOOL, SfxRequest& rReq)
 
 void ViewShell::ExecReq( SfxRequest& rReq )
 {
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     switch( nSlot )
     {
         case SID_MAIL_SCROLLBODY_PAGEDOWN:
@@ -1255,7 +1272,7 @@ void ViewShell::ExecReq( SfxRequest& rReq )
         case SID_OUTPUT_QUALITY_BLACKWHITE:
         case SID_OUTPUT_QUALITY_CONTRAST:
         {
-            ULONG nMode = OUTPUT_DRAWMODE_COLOR;
+            sal_uLong nMode = OUTPUT_DRAWMODE_COLOR;
 
             switch( nSlot )
             {

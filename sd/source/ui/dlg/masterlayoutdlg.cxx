@@ -76,7 +76,7 @@ MasterLayoutDialog::MasterLayoutDialog( Window* pParent, SdDrawDocument* pDoc, S
     case PK_STANDARD:
     {
         //      aTitle = String( SdResId( STR_MASTER_LAYOUT_TITLE ) );
-        maCBHeader.Enable( FALSE );
+        maCBHeader.Enable( sal_False );
     String aSlideNumberStr( SdResId( STR_SLIDE_NUMBER ) );
         maCBPageNumber.SetText( aSlideNumberStr );
         break;
@@ -170,7 +170,7 @@ void MasterLayoutDialog::remove( PresObjKind eKind )
         if( bUndo )
             mpDoc->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pObject));
         SdrObjList* pOL =pObject->GetObjList();
-        UINT32 nOrdNum=pObject->GetOrdNumDirect();
+        sal_uInt32 nOrdNum=pObject->GetOrdNumDirect();
         pOL->RemoveObject(nOrdNum);
 
         if( !bUndo )

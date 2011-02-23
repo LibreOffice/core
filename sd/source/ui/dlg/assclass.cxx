@@ -46,10 +46,10 @@ Assistent::Assistent(int nNoOfPages)
 
     mpPageStatus = new bool[mnPages];
 
-    for(UINT8 i=0;i<mnPages;i++)
+    for(sal_uInt8 i=0;i<mnPages;i++)
     {
         mpPages[i]=new List();
-        mpPageStatus[i] = TRUE;
+        mpPageStatus[i] = sal_True;
     }
     mnCurrentPage=1;
 }
