@@ -60,11 +60,15 @@ $(call gb_Jar_get_clean_target,%) : $(call gb_JavaClassSet_get_clean_target,$(ca
 		rm -f $(call gb_Jar_get_final_target,$*) && \
 		rm -f $(call gb_Jar_get_outdir_target,$*))
 
-# resets scoped variables
+$(call gb_Jar_get_final_target,%) : $(call gb_Jar_get_outdir_target,%)
+	$(call gb_Helper_abbreviate_dirs,\
+		touch $@)
+
+# resets scoped variables (see explanations where they are set)
 # creates a class set and a dependency to it 
 # registers target and clean target
-# creates a rule to move common jar files to solver when needed
-# adds jar files to DeliverTarget
+# adds jar files to DeliverLogTarget
+# creates a deliver rule
 define gb_Jar_Jar
 
 $(call gb_Jar_get_target,$(1)) : CLASSPATH := $(value XCLASSPATH)
@@ -75,10 +79,6 @@ $(call gb_Jar_get_target,$(1)) : PACKAGEROOTS :=
 $(call gb_JavaClassSet_JavaClassSet,$(call gb_Jar_get_classsetname,$(1)))
 $(call gb_Jar_get_target,$(1)) : $(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,$(1)))
 	$$(call gb_Jar__command,$(1),$$@,$$*,$$?)
-
-$(call gb_Jar_get_final_target,$(1)) : $(call gb_Jar_get_outdir_target,$(1))
-	$$(call gb_Helper_abbreviate_dirs,\
-		touch $$@)
 
 $(call gb_Jar_get_outdir_target,$(1)) : $(call gb_Jar_get_target,$(1))
 	$(call gb_Helper_abbreviate_dirs,\
@@ -95,6 +95,7 @@ define gb_Jar_add_sourcefile
 $(call gb_JavaClassSet_add_sourcefile,$(call gb_Jar_get_classsetname,$(1)),$(2))
 endef
 
+# PACKAGEROOTS is the list of all root folders to pack into the jar (without META-INF as this is added automatically)
 define gb_Jar_set_packageroot
 $(call gb_Jar_get_target,$(1)) : PACKAGEROOTS := $(2)
 endef

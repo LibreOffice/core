@@ -37,17 +37,24 @@ $(call gb_Zip_get_clean_target,%) :
 		rm -f $(call gb_Zip_get_final_target,$*) && \
 		rm -f $(call gb_Zip_get_outdir_target,$*))
 
+# the final target is a touch target; we use it as registered targets should be in workdir, not in outdir
+# the outdir target depends on the workdir target and is built by delivering the latter
+# the workdir target is created by cd'ing to the target directory and adding/updating the files
+# -FS makes sure that all files in the zip package will be removed that no longer are in $(FILES)
+$(call gb_Zip_get_final_target,%) : $(call gb_Zip_get_outdir_target,%)
+	touch $@
+
 # clear file list, set location (zipping uses relative paths)
 # register target and clean target
 # add deliverable
+# this zip package target requires that all added files have a common root directory (package location)
+# names of added files are relative to it; the zip will store them with their complete relative path name
+# the location can't be stored in a scoped variable as it is needed in the add_file macro (see below)
 define gb_Zip_Zip
 
 $(call gb_Zip_get_target,$(1)) : FILES :=
 $(call gb_Zip_get_target,$(1)) : LOCATION := $(2)
 gb_Package_Location_$(1) := $(2)
-
-$(call gb_Zip_get_final_target,$(1)) : $(call gb_Zip_get_outdir_target,$(1))
-	touch $$@
 
 $(call gb_Zip_get_outdir_target,$(1)) : $(call gb_Zip_get_target,$(1))
 	$(call gb_Helper_abbreviate_dirs,\
@@ -64,6 +71,9 @@ $(call gb_Deliver_add_deliverable,$(call gb_Zip_get_outdir_target,$(1)),$(call g
 
 endef
 
+# adding a file creates a dependency to it
+# the full path name of the file needs access to the package location
+# as scoped variables only exist in rules, we use a postfixed name to refer to the location
 define gb_Zip_add_file
 $(call gb_Zip_get_target,$(1)) : FILES += $(2)
 $(call gb_Zip_get_target,$(1)) : $(gb_Package_Location_$(1))/$(2)
