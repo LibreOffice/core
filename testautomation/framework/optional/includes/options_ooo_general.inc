@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'* owner : joerg.skottke@oracle.com
+'* owner : gregor.hartmann@oracle.com
 '*
 '* short description : 1. test for general group userdata
 '*
@@ -85,7 +85,8 @@ testcase tOOoGeneral
     hToolsOptions ( "StarOffice", "General" )
 
     if Zweistellig.GetText <> "1950" then
-        Warnlog "#i29810# - Year ( 2 digits ) => changes not saved: " + Zweistellig.GetText
+        '#i29810# 
+        Warnlog "Year ( 2 digits ) => changes not saved: " + Zweistellig.GetText
     endif
 
     if not Aktivieren.IsChecked then
@@ -116,7 +117,8 @@ testcase tOOoGeneral
     hToolsOptions ( "StarOffice", "General" )
 
     if ( Zweistellig.GetText <> "1800" ) then
-        Warnlog( "#i29810# - Year ( 2 digits ) => changes not saved : " & Zweistellig.GetText() )
+        '#i29810# 
+        Warnlog( "Year ( 2 digits ) => changes not saved : " & Zweistellig.GetText() )
     endif
 
     If DruckenStatus.IsChecked  then

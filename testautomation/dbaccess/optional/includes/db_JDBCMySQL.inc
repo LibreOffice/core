@@ -192,13 +192,13 @@ testcase db_JDBCMySQL
 
     dbok = fCreateMySQL_JDBC_Datasource(sFileName,aDatabaseProperties(3),aDatabaseProperties(2),aDatabaseProperties(4),aDatabaseProperties(5))
     if dbok = true then
-        'call fOpendatabase(sFileName,aDatabaseProperties(6))
-        'call fCreateTable( aFieldTypeContent(), sTableName)
-        'call fInsertIntoTable( aFieldContent(), sTableName)
-        'call fCloseDatabase
+        call fOpendatabase(sFileName,aDatabaseProperties(6))
+        call fCreateTable( aFieldTypeContent(), sTableName)
+        call fInsertIntoTable( aFieldContent(), sTableName)
+        call fCloseDatabase
 
-        'use "dbaccess/optional/includes/b_lvl1_Query.inc"
-        'call b_lvl1_Query(sFileName,"dbase")
+        use "dbaccess/optional/includes/db_Query.inc"
+        call db_Query(sFileName,"MYSQL_JDBC",aDatabaseProperties(6))
 
         call tRelation( sFileName, aDatabaseProperties(6), "rel1", "rel2" )
 
