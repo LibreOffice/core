@@ -257,7 +257,7 @@ while true; do
 	err_msg=""
 
 	# cleanup
-	$NICE make clean-local
+	$NICE make clean
 
 	# FIXME we need a more exact way to determine a 'good' date; this is not accurate
 	rough_checkout_date="`currentTime`"
