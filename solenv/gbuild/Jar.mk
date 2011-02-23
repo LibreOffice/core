@@ -60,33 +60,31 @@ $(call gb_Jar_get_clean_target,%) : $(call gb_JavaClassSet_get_clean_target,$(ca
 		rm -f $(call gb_Jar_get_final_target,$*) && \
 		rm -f $(call gb_Jar_get_outdir_target,$*))
 
+# the final target is a touch target; we use it as registered targets should be in workdir, not in outdir
+# the outdir target depends on the workdir target and is built by delivering the latter
+# the workdir target is created by cd'ing to the target directory and adding/updating the files
 $(call gb_Jar_get_final_target,%) : $(call gb_Jar_get_outdir_target,%)
 	$(call gb_Helper_abbreviate_dirs,\
 		touch $@)
+
+# rule for creating the jar file using the command defined above
+$(call gb_Jar_get_target,%) : $(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,%))
+	$(call gb_Jar__command,$*,$@,$*,$?)
 
 # resets scoped variables (see explanations where they are set)
 # creates a class set and a dependency to it 
 # registers target and clean target
 # adds jar files to DeliverLogTarget
-# creates a deliver rule
+# adds dependency for outdir target to workdir target (pattern rule for delivery is in Package.mk)
 define gb_Jar_Jar
-
 $(call gb_Jar_get_target,$(1)) : CLASSPATH := $(value XCLASSPATH)
 $(call gb_Jar_get_target,$(1)) : MANIFEST :=
 $(call gb_Jar_get_target,$(1)) : JARCLASSPATH :=
 $(call gb_Jar_get_target,$(1)) : PACKAGEROOTS :=
-
 $(call gb_JavaClassSet_JavaClassSet,$(call gb_Jar_get_classsetname,$(1)))
-$(call gb_Jar_get_target,$(1)) : $(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,$(1)))
-	$$(call gb_Jar__command,$(1),$$@,$$*,$$?)
-
-$(call gb_Jar_get_outdir_target,$(1)) : $(call gb_Jar_get_target,$(1))
-	$(call gb_Helper_abbreviate_dirs,\
-	$$(call gb_Deliver_deliver,$$<,$$@))
-
 $(eval $(call gb_Module_register_target,$(call gb_Jar_get_final_target,$(1)),$(call gb_Jar_get_clean_target,$(1))))
-
 $(call gb_Deliver_add_deliverable,$(call gb_Jar_get_outdir_target,$(1)),$(call gb_Jar_get_target,$(1)))
+$(call gb_Jar_get_outdir_target,$(1)) : $(call gb_Jar_get_target,$(1))
 
 endef
 

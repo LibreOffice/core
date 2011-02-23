@@ -37,37 +37,33 @@ $(call gb_Zip_get_clean_target,%) :
 		rm -f $(call gb_Zip_get_final_target,$*) && \
 		rm -f $(call gb_Zip_get_outdir_target,$*))
 
+# rule to create zip package in workdir
+# -FS makes sure that all files in the zip package will be removed that no longer are in $(FILES)
+$(call gb_Zip_get_target,%) :
+	$(call gb_Helper_abbreviate_dirs_native,\
+	mkdir -p $(dir $(call gb_Zip_get_target,$*)) && \
+	cd $(LOCATION) && $(gb_Zip_ZIPCOMMAND) -rX -FS $(call gb_Zip_get_target,$*) $(FILES) )
+
 # the final target is a touch target; we use it as registered targets should be in workdir, not in outdir
 # the outdir target depends on the workdir target and is built by delivering the latter
 # the workdir target is created by cd'ing to the target directory and adding/updating the files
-# -FS makes sure that all files in the zip package will be removed that no longer are in $(FILES)
 $(call gb_Zip_get_final_target,%) : $(call gb_Zip_get_outdir_target,%)
 	touch $@
 
 # clear file list, set location (zipping uses relative paths)
 # register target and clean target
 # add deliverable
-# this zip package target requires that all added files have a common root directory (package location)
+# add dependency for outdir target to workdir target (pattern rule for delivery is in Package.mk)
+# the zip package target requires that all added files have a common root directory (package location)
 # names of added files are relative to it; the zip will store them with their complete relative path name
-# the location can't be stored in a scoped variable as it is needed in the add_file macro (see below)
+# the location can't be stored in a scoped variable as it is needed in the add_file macro (see rule above)
 define gb_Zip_Zip
-
 $(call gb_Zip_get_target,$(1)) : FILES :=
 $(call gb_Zip_get_target,$(1)) : LOCATION := $(2)
 gb_Package_Location_$(1) := $(2)
-
-$(call gb_Zip_get_outdir_target,$(1)) : $(call gb_Zip_get_target,$(1))
-	$(call gb_Helper_abbreviate_dirs,\
-	$$(call gb_Deliver_deliver,$$<,$$@))
-
 $(eval $(call gb_Module_register_target,$(call gb_Zip_get_final_target,$(1)),$(call gb_Zip_get_clean_target,$(1))))
-
-$(call gb_Zip_get_target,$(1)) :
-	$(call gb_Helper_abbreviate_dirs_native,\
-	mkdir -p $$(dir $$(call gb_Zip_get_target,$(1))) && \
-	cd $$(LOCATION) && $$(gb_Zip_ZIPCOMMAND) -rX -FS $$(call gb_Zip_get_target,$(1)) $$(FILES) )
-
 $(call gb_Deliver_add_deliverable,$(call gb_Zip_get_outdir_target,$(1)),$(call gb_Zip_get_target,$(1)))
+$(call gb_Zip_get_outdir_target,$(1)) : $(call gb_Zip_get_target,$(1))
 
 endef
 
