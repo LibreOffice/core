@@ -35,6 +35,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     padmin \
     sfx2 \
     sot \
+    starmath \
     svl \
     svtools \
     svx \

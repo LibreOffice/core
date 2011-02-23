@@ -65,6 +65,8 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     sax \
     sb \
     sfx \
+    sm \
+    smd \
     sot \
     spa \
     svl \
