@@ -67,8 +67,6 @@ using namespace sd;
 
 namespace sd {
 
-//AF:unused #define TABCONTROL_INITIAL_SIZE     500
-
 /*************************************************************************
 |*
 |* SFX-Slotmap und Standardinterface deklarieren
