@@ -197,9 +197,7 @@ public:
     void write( SvStream& out );
 
     void addUI32( sal_uInt32 nValue );
-    //unused as of yet void addI32( sal_Int32 nValue );
     void addUI16( sal_uInt16 nValue );
-    //unused as of yet void addI16( sal_Int16 nValue );
     void addUI8( sal_uInt8 nValue );
     void addBits( BitStream& rIn );
 
