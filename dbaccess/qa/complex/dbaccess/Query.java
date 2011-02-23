@@ -90,23 +90,26 @@ public class Query extends TestCase {
 
             for ( int i = 0; i < queryNames.length; ++i )
             {
-                final XPropertySet query = UnoRuntime.queryInterface(
-                    XPropertySet.class, queries.getByName( queryNames[i] ) );
-
-                final XColumnsSupplier suppCols = UnoRuntime.queryInterface(
-                    XColumnsSupplier.class, query);
-                final XIndexAccess columns = UnoRuntime.queryInterface(
-                    XIndexAccess.class, suppCols.getColumns());
-
-                // check whether the columns supplied by the query match what we expected
-                assertTrue( "invalid column count (found " + columns.getCount() + ", expected: " + expectedColumnNames[i].length + ") for query \"" + queryNames[i] + "\"",
-                    columns.getCount() == expectedColumnNames[i].length );
-                for ( int col = 0; col < columns.getCount(); ++col )
+                if (queries.hasByName(queryNames[i]))
                 {
-                    final XNamed columnName = UnoRuntime.queryInterface(
-                        XNamed.class, columns.getByIndex(col) );
-                    assertTrue( "column no. " + col + " of query \"" + queryNames[i] + "\" not matching",
-                        columnName.getName().equals( expectedColumnNames[i][col] ) );
+                    final XPropertySet query = UnoRuntime.queryInterface(
+                        XPropertySet.class, queries.getByName( queryNames[i] ) );
+
+                    final XColumnsSupplier suppCols = UnoRuntime.queryInterface(
+                        XColumnsSupplier.class, query);
+                    final XIndexAccess columns = UnoRuntime.queryInterface(
+                                XIndexAccess.class, suppCols.getColumns());
+
+                    // check whether the columns supplied by the query match what we expected
+                    assertTrue( "invalid column count (found " + columns.getCount() + ", expected: " + expectedColumnNames[i].length + ") for query \"" + queryNames[i] + "\"",
+                        columns.getCount() == expectedColumnNames[i].length );
+                    for ( int col = 0; col < columns.getCount(); ++col )
+                    {
+                        final XNamed columnName = UnoRuntime.queryInterface(
+                            XNamed.class, columns.getByIndex(col) );
+                        assertTrue( "column no. " + col + " of query \"" + queryNames[i] + "\" not matching",
+                            columnName.getName().equals( expectedColumnNames[i][col] ) );
+                    }
                 }
             }
         }
