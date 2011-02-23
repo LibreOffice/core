@@ -26,33 +26,15 @@
 #*************************************************************************
 
 PRJ=..
+TARGET=prj
 
-PRJNAME=starmath
-TARGET=smslots
-SDI1EXPORT=smath
-SVSDIINC=$(PRJ)$/inc
+.INCLUDE : settings.mk
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-.IF "$(L10N_framework)"==""
-# --- Files --------------------------------------------------------
-
-
-SDI1NAME=$(TARGET)
-
-SVSDI1DEPEND= \
-        $(SOLARINCXDIR)$/sfx2/sfx.sdi \
-        $(SOLARINCXDIR)$/sfx2/sfxitems.sdi \
-        $(SOLARINCXDIR)$/svx/svx.sdi \
-        $(SOLARINCXDIR)$/svx/svxitems.sdi \
-        $(SOLARINCXDIR)$/svx/xoitems.sdi \
-        smath.sdi \
-    smslots.sdi \
-    $(SVSDIINC)$/starmath.hrc
-
-# --- Targets -------------------------------------------------------
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
 .ENDIF
 
-.INCLUDE :  target.mk
-
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

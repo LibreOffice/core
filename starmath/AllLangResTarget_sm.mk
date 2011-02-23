@@ -1,7 +1,8 @@
 #*************************************************************************
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -21,28 +22,27 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#***********************************************************************/
+#
+#*************************************************************************
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
+$(eval $(call gb_AllLangResTarget_AllLangResTarget,sm))
 
-PRJ = ../..
-PRJNAME = starmath
-TARGET = qa_unoapi
+$(eval $(call gb_AllLangResTarget_add_srs,sm,\
+	sm/res \
+))
 
-.IF "$(OOO_JUNIT_JAR)" != ""
-PACKAGE = org/openoffice/starmath/qa/unoapi
-JAVATESTFILES = Test.java
-JAVAFILES = $(JAVATESTFILES)
-JARFILES = OOoRunner.jar ridl.jar test.jar
-EXTRAJARFILES = $(OOO_JUNIT_JAR)
-.END
+$(eval $(call gb_AllLangResTarget_set_reslocation,sm,starmath))
 
-.INCLUDE: settings.mk
-.INCLUDE: target.mk
-.INCLUDE: installationtest.mk
+$(eval $(call gb_SrsTarget_SrsTarget,sm/res))
 
-ALLTAR : javatest
+$(eval $(call gb_SrsTarget_set_include,sm/res,\
+	$$(INCLUDE) \
+	-I$(SRCDIR)/starmath/inc \
+))
 
-.END
+$(eval $(call gb_SrsTarget_add_files,sm/res,\
+	starmath/source/commands.src \
+	starmath/source/smres.src \
+	starmath/source/symbol.src \
+	starmath/source/toolbox.src \
+))

@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -24,24 +24,29 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..
 
-PRJNAME=starmath
-TARGET=inc
+$(eval $(call gb_JunitTest_JunitTest,sm_unoapi))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_JunitTest_set_defs,sm_unoapi,\
+	$$(DEFS) \
+	-Dorg.openoffice.test.arg.sce=$(SRCDIR)/starmath/qa/unoapi/sm.sce \
+	-Dorg.openoffice.test.arg.xcl=$(SRCDIR)/starmath/qa/unoapi/knownissues.xcl \
+))
 
-.INCLUDE :  settings.mk
+$(eval $(call gb_JunitTest_add_jars,sm_unoapi,\
+	$(OUTDIR)/bin/OOoRunner.jar \
+	$(OUTDIR)/bin/ridl.jar \
+	$(OUTDIR)/bin/test.jar \
+	$(OUTDIR)/bin/unoil.jar \
+	$(OUTDIR)/bin/jurt.jar \
+))
 
-# --- Files --------------------------------------------------------
-# --- Targets -------------------------------------------------------
+$(eval $(call gb_JunitTest_add_sourcefiles,sm_unoapi,\
+	starmath/qa/unoapi/Test \
+))
 
-.INCLUDE :  target.mk
+$(eval $(call gb_JunitTest_add_classes,sw_unoapi,\
+	org.openoffice.sw.qa.unoapi.Test \
+))
 
-.IF "$(ENABLE_PCH)"!=""
-ALLTAR : \
-    $(SLO)$/precompiled.pch \
-    $(SLO)$/precompiled_ex.pch
-    
-.ENDIF			# "$(ENABLE_PCH)"!=""
-
+# vim: set noet sw=4 ts=4:
