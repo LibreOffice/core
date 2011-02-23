@@ -448,7 +448,9 @@ BOOL SvxAutoCorrect::FnCptlSttWrd( SvxAutoCorrDoc& rDoc, const String& rTxt,
                 SvxGetSpellChecker();
             Sequence< ::com::sun::star::beans::PropertyValue > aEmptySeq;
             // Check that word isn't correctly spelled before correcting
-            if(xSpeller->spell( sWord, eLang, aEmptySeq ) != NULL)
+            ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellAlternatives > xSpellAlt
+                = xSpeller->spell(sWord, eLang, aEmptySeq);
+            if(xSpellAlt.is())
             {
                 sal_Unicode cSave = rTxt.GetChar( nSttPos );
                 String sChar( cSave );
