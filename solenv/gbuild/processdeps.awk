@@ -47,7 +47,7 @@
 function mangle_path(path) {
     gsub("\\\\", "/", path);
     if( path ~ /^[a-zA-Z]:/ )
-        path = toupper(substr(path,0,1)) substr(path,2);
+        path = tolower(substr(path,0,1)) substr(path,2);
     gsub(WORKDIR, "$(WORKDIR)/", path);
     gsub(OUTDIR, "$(OUTDIR)/", path);
     gsub(SRCDIR, "$(SRCDIR)/", path);
@@ -58,11 +58,15 @@ function mangle_path(path) {
 }
 
 BEGIN {
+   WORKDIR = tolower(substr(WORKDIR,0,1)) substr(WORKDIR,2); 
+   OUTDIR = tolower(substr(OUTDIR,0,1)) substr(OUTDIR,2); 
+   SRCDIR = tolower(substr(SRCDIR,0,1)) substr(SRCDIR,2); 
+   REPODIR = tolower(substr(REPODIR,0,1)) substr(REPODIR,2); 
 #   print "# WORKDIR=" WORKDIR;
 #   print "# OUTDIR=" OUTDIR;
 #   print "# SRCDIR=" SRCDIR;
 #   print "# REPODIR=" REPODIR;
-    print mangle_path(OBJECTFILE) ": \\";
+   print mangle_path(OBJECTFILE) ": \\";
 }
 
 /^[^#]/ {

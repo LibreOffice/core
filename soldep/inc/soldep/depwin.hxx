@@ -43,7 +43,7 @@ private:
     ConnectorList   ConList;
 
     ObjectWin*      mpNewConWin;
-    BOOL            mbStartNewCon;
+    sal_Bool            mbStartNewCon;
     Point           maNewConStart;
     Point           maNewConEnd;
     ObjectWin*      mpSelectedProject;
@@ -64,7 +64,7 @@ public:
     virtual void    Command( const CommandEvent& rEvent);
 //  void            Resize();
     void            MouseMove( const MouseEvent& rMEvt );
-    BOOL            IsStartNewCon() { return mbStartNewCon; };
+    sal_Bool            IsStartNewCon() { return mbStartNewCon; };
     void            SetPopupHdl( void* pHdl );
     void            SetSelectedProject( ObjectWin* object ) { mpSelectedProject = object; };
     ObjectWin*      GetSelectedProject() { return mpSelectedProject; };
