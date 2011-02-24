@@ -60,9 +60,9 @@
 #include <tgrditem.hxx>
 #include <doc.hxx>          // SwDoc
 #include <pormulti.hxx>     // SwMultiPortion
-#define _SVSTDARR_LONGS
-#include <svl/svstdarr.hxx>
 #include <unotools/charclass.hxx>
+
+#include <vector>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <ndtxt.hxx>        // pSwpHints, Ausgabeoperator
@@ -71,7 +71,16 @@
 using namespace ::com::sun::star;
 
 extern sal_Bool IsUnderlineBreak( const SwLinePortion& rPor, const SwFont& rFnt );
-bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos );
+
+namespace {
+    //! Calculates and sets optimal repaint offset for the current line
+    static long lcl_CalcOptRepaint( SwTxtFormatter &rThis,
+                                    SwLineLayout &rCurr,
+                                    const xub_StrLen nOldLineEnd,
+                                    const std::vector<long> &rFlyStarts );
+    //! Determine if we need to build hidden portions
+    static bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos );
+}
 
 #define MAX_TXTPORLEN 300
 
@@ -1220,7 +1229,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
     if ( !pPor )
     {
         xub_StrLen nEnd = rInf.GetIdx();
-        if ( lcl_BuildHiddenPortion( rInf, nEnd ) )
+        if ( ::lcl_BuildHiddenPortion( rInf, nEnd ) )
             pPor = new SwHiddenTextPortion( nEnd - rInf.GetIdx() );
     }
 
@@ -1613,7 +1622,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
     // calculate optimal repaint rectangle
     if ( bOptimizeRepaint )
     {
-        GetInfo().SetPaintOfst( CalcOptRepaint( nOldLineEnd, flyStarts ) );
+        GetInfo().SetPaintOfst( ::lcl_CalcOptRepaint( *this, *pCurr, nOldLineEnd, flyStarts ) );
         flyStarts.clear();
     }
     else
@@ -2006,141 +2015,148 @@ sal_Bool SwTxtFormatter::AllowRepaintOpt() const
     return bOptimizeRepaint;
 }
 
-/*************************************************************************
- *                      SwTxtFormatter::CalcOptRepaint()
- *
- * calculates an optimal repaint offset for the current line
- *************************************************************************/
-long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
-                                     const std::vector<long> &rFlyStarts )
-{
-    if ( GetInfo().GetIdx() < GetInfo().GetReformatStart() )
-    // the reformat position is behind our new line, that means
-    // something of our text has moved to the next line
-        return 0;
-
-    xub_StrLen nReformat = Min( GetInfo().GetReformatStart(), nOldLineEnd );
-
-    // in case we do not have any fly in our line, our repaint position
-    // is the changed position - 1
-    if ( rFlyStarts.empty() && ! pCurr->IsFly() )
+namespace {
+    /*************************************************************************
+    *                      ::CalcOptRepaint()
+    *
+    * calculates and sets optimal repaint offset for the current line
+    *************************************************************************/
+    long lcl_CalcOptRepaint( SwTxtFormatter &rThis,
+                         SwLineLayout &rCurr,
+                         const xub_StrLen nOldLineEnd,
+                         const std::vector<long> &rFlyStarts )
     {
-        // this is the maximum repaint offset determined during formatting
-        // for example: the beginning of the first right tab stop
-        // if this value is 0, this means that we do not have an upper
-        // limit for the repaint offset
-        const long nFormatRepaint = GetInfo().GetPaintOfst();
-
-        if ( nReformat < GetInfo().GetLineStart() + 3 )
+        SwTxtFormatInfo txtFmtInfo = rThis.GetInfo();
+        if ( txtFmtInfo.GetIdx() < txtFmtInfo.GetReformatStart() )
+        // the reformat position is behind our new line, that means
+        // something of our text has moved to the next line
             return 0;
 
-        // step back two positions for smoother repaint
-        nReformat -= 2;
+        xub_StrLen nReformat = Min( txtFmtInfo.GetReformatStart(), nOldLineEnd );
 
-#ifndef QUARTZ
-#ifndef ENABLE_GRAPHITE
-        // --> FME 2004-09-27 #i28795#, #i34607#, #i38388#
-        // step back six(!) more characters for complex scripts
-        // this is required e.g., for Khmer (thank you, Javier!)
-        const SwScriptInfo& rSI = GetInfo().GetParaPortion()->GetScriptInfo();
-        xub_StrLen nMaxContext = 0;
-        if( ::i18n::ScriptType::COMPLEX == rSI.ScriptType( nReformat ) )
-            nMaxContext = 6;
-#else
-        // Some Graphite fonts need context for scripts not marked as complex
-        static const xub_StrLen nMaxContext = 10;
-#endif
-#else
-        // some fonts like Quartz's Zapfino need more context
-        // TODO: query FontInfo for maximum unicode context
-        static const xub_StrLen nMaxContext = 8;
-#endif
-        if( nMaxContext > 0 )
+        // in case we do not have any fly in our line, our repaint position
+        // is the changed position - 1
+        if ( rFlyStarts.empty() && ! rCurr.IsFly() )
         {
-            if ( nReformat > GetInfo().GetLineStart() + nMaxContext )
-                nReformat = nReformat - nMaxContext;
-            else
-                nReformat = GetInfo().GetLineStart();
-        }
-        // <--
+            // this is the maximum repaint offset determined during formatting
+            // for example: the beginning of the first right tab stop
+            // if this value is 0, this means that we do not have an upper
+            // limit for the repaint offset
+            const long nFormatRepaint = txtFmtInfo.GetPaintOfst();
 
-        // Weird situation: Our line used to end with a hole portion
-        // and we delete some characters at the end of our line. We have
-        // to take care for repainting the blanks which are not anymore
-        // covered by the hole portion
-        while ( nReformat > GetInfo().GetLineStart() &&
-                CH_BLANK == GetInfo().GetChar( nReformat ) )
-            --nReformat;
+            if ( nReformat < txtFmtInfo.GetLineStart() + 3 )
+                return 0;
 
-        OSL_ENSURE( nReformat < GetInfo().GetIdx(), "Reformat too small for me!" );
-        SwRect aRect;
+            // step back two positions for smoother repaint
+            nReformat -= 2;
 
-        // Note: GetChareRect is not const. It definitely changes the
-        // bMulti flag. We have to save and resore the old value.
-        sal_Bool bOldMulti = GetInfo().IsMulti();
-        GetCharRect( &aRect, nReformat );
-        GetInfo().SetMulti( bOldMulti );
-
-        return nFormatRepaint ? Min( aRect.Left(), nFormatRepaint ) :
-                                aRect.Left();
-    }
-    else
-    {
-        // nReformat may be wrong, if something around flys has changed:
-        // we compare the former and the new fly positions in this line
-        // if anything has changed, we carefully have to adjust the right
-        // repaint position
-        long nPOfst = 0;
-        USHORT nCnt = 0;
-        USHORT nX = 0;
-        USHORT nIdx = GetInfo().GetLineStart();
-        SwLinePortion* pPor = pCurr->GetFirstPortion();
-
-        while ( pPor )
-        {
-            if ( pPor->IsFlyPortion() )
+    #ifndef QUARTZ
+    #ifndef ENABLE_GRAPHITE
+            // --> FME 2004-09-27 #i28795#, #i34607#, #i38388#
+            // step back six(!) more characters for complex scripts
+            // this is required e.g., for Khmer (thank you, Javier!)
+            const SwScriptInfo& rSI = txtFmtInfo.GetParaPortion()->GetScriptInfo();
+            xub_StrLen nMaxContext = 0;
+            if( ::i18n::ScriptType::COMPLEX == rSI.ScriptType( nReformat ) )
+                nMaxContext = 6;
+    #else
+            // Some Graphite fonts need context for scripts not marked as complex
+            static const xub_StrLen nMaxContext = 10;
+    #endif
+    #else
+            // some fonts like Quartz's Zapfino need more context
+            // TODO: query FontInfo for maximum unicode context
+            static const xub_StrLen nMaxContext = 8;
+    #endif
+            if( nMaxContext > 0 )
             {
-                // compare start of fly with former start of fly
-                if (nCnt < rFlyStarts.size() &&
-                     nX == rFlyStarts[ nCnt ] &&
-                     nIdx < nReformat
-                   )
-                    // found fix position, nothing has changed left from nX
-                    nPOfst = nX + pPor->Width();
+                if ( nReformat > txtFmtInfo.GetLineStart() + nMaxContext )
+                    nReformat = nReformat - nMaxContext;
                 else
-                    break;
-
-                nCnt++;
+                    nReformat = txtFmtInfo.GetLineStart();
             }
-            nX = nX + pPor->Width();
-            nIdx = nIdx + pPor->GetLen();
-            pPor = pPor->GetPortion();
+            // <--
+
+            // Weird situation: Our line used to end with a hole portion
+            // and we delete some characters at the end of our line. We have
+            // to take care for repainting the blanks which are not anymore
+            // covered by the hole portion
+            while ( nReformat > txtFmtInfo.GetLineStart() &&
+                    CH_BLANK == txtFmtInfo.GetChar( nReformat ) )
+                --nReformat;
+
+            OSL_ENSURE( nReformat < txtFmtInfo.GetIdx(), "Reformat too small for me!" );
+            SwRect aRect;
+
+            // Note: GetChareRect is not const. It definitely changes the
+            // bMulti flag. We have to save and resore the old value.
+            sal_Bool bOldMulti = txtFmtInfo.IsMulti();
+            rThis.GetCharRect( &aRect, nReformat );
+            txtFmtInfo.SetMulti( bOldMulti );
+
+            return nFormatRepaint ? Min( aRect.Left(), nFormatRepaint ) :
+                                    aRect.Left();
+        }
+        else
+        {
+            // nReformat may be wrong, if something around flys has changed:
+            // we compare the former and the new fly positions in this line
+            // if anything has changed, we carefully have to adjust the right
+            // repaint position
+            long nPOfst = 0;
+            USHORT nCnt = 0;
+            USHORT nX = 0;
+            USHORT nIdx = txtFmtInfo.GetLineStart();
+            SwLinePortion* pPor = rCurr.GetFirstPortion();
+
+            while ( pPor )
+            {
+                if ( pPor->IsFlyPortion() )
+                {
+                    // compare start of fly with former start of fly
+                    if (nCnt < rFlyStarts.size() &&
+                        nX == rFlyStarts[ nCnt ] &&
+                        nIdx < nReformat
+                    )
+                        // found fix position, nothing has changed left from nX
+                        nPOfst = nX + pPor->Width();
+                    else
+                        break;
+
+                    nCnt++;
+                }
+                nX = nX + pPor->Width();
+                nIdx = nIdx + pPor->GetLen();
+                pPor = pPor->GetPortion();
+            }
+
+            return nPOfst + rThis.GetLeftMargin();
+        }
+    }
+
+    // Determine if we need to build hidden portions
+    bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos )
+    {
+        // Only if hidden text should not be shown:
+    //    if ( rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar() )
+        const bool bShowInDocView = rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar();
+        const bool bShowForPrinting = rInf.GetOpt().IsShowHiddenChar( TRUE ) && rInf.GetOpt().IsPrinting();
+        if (bShowInDocView || bShowForPrinting)
+            return false;
+
+        const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
+        xub_StrLen nHiddenStart;
+        xub_StrLen nHiddenEnd;
+        rSI.GetBoundsOfHiddenRange( rPos, nHiddenStart, nHiddenEnd );
+        if ( nHiddenEnd )
+        {
+            rPos = nHiddenEnd;
+            return true;
         }
 
-        return nPOfst + GetLeftMargin();
-    }
-}
-
-bool lcl_BuildHiddenPortion( const SwTxtSizeInfo& rInf, xub_StrLen &rPos )
-{
-    // Only if hidden text should not be shown:
-//    if ( rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar() )
-    const bool bShowInDocView = rInf.GetVsh() && rInf.GetVsh()->GetWin() && rInf.GetOpt().IsShowHiddenChar();
-    const bool bShowForPrinting = rInf.GetOpt().IsShowHiddenChar( TRUE ) && rInf.GetOpt().IsPrinting();
-    if (bShowInDocView || bShowForPrinting)
         return false;
-
-    const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
-    xub_StrLen nHiddenStart;
-    xub_StrLen nHiddenEnd;
-    rSI.GetBoundsOfHiddenRange( rPos, nHiddenStart, nHiddenEnd );
-    if ( nHiddenEnd )
-    {
-        rPos = nHiddenEnd;
-        return true;
     }
 
-    return false;
-}
+} //end unnamed namespace
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
