@@ -93,7 +93,6 @@ SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
     : SwFieldType( RES_AUTHORITY ),
     m_pDoc(pDoc),
     m_pDataArr(new SwAuthDataArr ),
-    m_pSequArr(new SvLongs(5, 5)),
     m_pSortKeyArr(new SortKeyArr(3, 3)),
     m_cPrefix('['),
     m_cSuffix(']'),
@@ -106,7 +105,6 @@ SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
 SwAuthorityFieldType::SwAuthorityFieldType( const SwAuthorityFieldType& rFType)
     : SwFieldType( RES_AUTHORITY ),
     m_pDataArr(new SwAuthDataArr ),
-    m_pSequArr(new SvLongs(5, 5)),
     m_pSortKeyArr(new SortKeyArr(3, 3)),
     m_cPrefix(rFType.m_cPrefix),
     m_cSuffix(rFType.m_cSuffix),
@@ -123,7 +121,7 @@ SwAuthorityFieldType::~SwAuthorityFieldType()
 {
     m_pSortKeyArr->DeleteAndDestroy(0, m_pSortKeyArr->Count());
     delete m_pSortKeyArr;
-    delete m_pSequArr;
+    m_SequArr.clear();
     delete m_pDataArr;
 }
 
@@ -314,9 +312,9 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
 #if OSL_DEBUG_LEVEL > 1
     sal_Bool bCurrentFieldWithoutTextNode = sal_False;
 #endif
-    if(m_pSequArr->Count() && m_pSequArr->Count() != m_pDataArr->Count())
+    if(!m_SequArr.empty() && m_SequArr.size() != m_pDataArr->Count())
         DelSequenceArray();
-    if(!m_pSequArr->Count())
+    if(m_SequArr.empty())
     {
         SwTOXSortTabBases aSortArr;
         SwClientIter aIter( *this );
@@ -387,15 +385,15 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
             const SwTOXSortTabBase& rBase = *aSortArr[i];
             SwFmtFld& rFmtFld = ((SwTOXAuthority&)rBase).GetFldFmt();
             SwAuthorityField* pAFld = (SwAuthorityField*)rFmtFld.GetFld();
-            m_pSequArr->Insert(pAFld->GetHandle(), i);
+            m_SequArr.push_back(pAFld->GetHandle());
         }
         aSortArr.DeleteAndDestroy(0, aSortArr.Count());
     }
     //find nHandle
     USHORT nRet = 0;
-    for(USHORT i = 0; i < m_pSequArr->Count(); i++)
+    for(USHORT i = 0; i < m_SequArr.size(); ++i)
     {
-        if((*m_pSequArr)[i] == nHandle)
+        if(m_SequArr[i] == nHandle)
         {
             nRet = i + 1;
             break;

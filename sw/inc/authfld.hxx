@@ -31,9 +31,7 @@
 #include "swdllapi.h"
 #include <fldbas.hxx>
 #include <toxe.hxx>
-
-#define _SVSTDARR_LONGS
-#include <svl/svstdarr.hxx>
+#include <vector>
 
 class SwAuthDataArr;
 
@@ -71,7 +69,7 @@ class SW_DLLPUBLIC SwAuthorityFieldType : public SwFieldType
 {
     SwDoc*          m_pDoc;
     SwAuthDataArr*  m_pDataArr;
-    SvLongs*        m_pSequArr;
+    std::vector<long> m_SequArr;
     SortKeyArr*     m_pSortKeyArr;
     sal_Unicode     m_cPrefix;
     sal_Unicode     m_cSuffix;
@@ -101,7 +99,7 @@ public:
     BOOL                AddField(long nHandle);
     void                DelSequenceArray()
                         {
-                            m_pSequArr->Remove(0, m_pSequArr->Count());
+                            m_SequArr.clear();
                         }
 
     const SwAuthEntry*  GetEntryByHandle(long nHandle) const;
