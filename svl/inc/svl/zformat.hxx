@@ -489,6 +489,18 @@ private:
                    xub_StrLen& nPos,
                    String& sSymbol );
 
+    struct LocaleType
+    {
+        sal_uInt8 mnNumeralShape;
+        sal_uInt8 mnCalendarType;
+        LanguageType meLanguage;
+
+        ::rtl::OUString generateCode() const;
+
+        LocaleType();
+        LocaleType(sal_uInt32 nRawCode);
+    };
+
     /**
      * Parse the content of '[$-xxx] or '[$-xxxxxxxx]' and extract the
      * language type from it.  Given the string, start parsing at position
@@ -502,11 +514,12 @@ private:
      * @param rString input string
      * @param nPos position (see above).
      *
-     * @return LCID that specifies language type.  See i18npool/lang.h for a
-     *         complete list of language types.  These numbers also correspond
-     *         with the numbers used by Microsoft Office.
+     * @return struct containing numeral shape, calendar type, and LCID that
+     *         specifies language type. See i18npool/lang.h for a complete
+     *         list of language types. These numbers also correspond with the
+     *         numbers used by Microsoft Office.
      */
-    SVL_DLLPRIVATE static LanguageType ImpGetLanguageType( const String& rString, xub_StrLen& nPos );
+    SVL_DLLPRIVATE static LocaleType ImpGetLocaleType( const String& rString, xub_StrLen& nPos );
 
     // standard number output
     SVL_DLLPRIVATE void ImpGetOutputStandard( double& fNumber, String& OutString );

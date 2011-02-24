@@ -242,6 +242,15 @@ void Test::testNumberFormat()
             CPPUNIT_ASSERT_MESSAGE("Unexpected number format code.", bEqual);
         }
     }
+
+    xub_StrLen nPos;
+    short nType = NUMBERFORMAT_DEFINED;
+    sal_uInt32 nKey;
+    String aCode(RTL_CONSTASCII_USTRINGPARAM("[$-1070000]d/mm/yyyy;@")); // Thai date format.
+    if (!aFormatter.PutEntry(aCode, nPos, nType, nKey))
+    {
+        CPPUNIT_ASSERT_MESSAGE("failed to insert format code '[$-1070000]d/mm/yyyy;@'", false);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

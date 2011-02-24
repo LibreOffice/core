@@ -798,17 +798,17 @@ SvNumberformat::SvNumberformat(String& rString,
                         else
                         {
                             xub_StrLen nTmp = 2;
-                            LanguageType eLang = ImpGetLanguageType( sStr, nTmp );
-                            if ( eLang == LANGUAGE_DONTKNOW )
+                            LocaleType aLocale = ImpGetLocaleType( sStr, nTmp );
+                            if (aLocale.meLanguage == LANGUAGE_DONTKNOW)
                             {
                                 bCancel = TRUE;         // break for
                                 nCheckPos = nPosOld;
                             }
                             else
                             {
-                                sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "$-" ) );
-                                sStr += String::CreateFromInt32( sal_Int32( eLang ), 16 ).ToUpperAscii();
-                                NumFor[nIndex].SetNatNumLang( eLang );
+                                sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM("$-") );
+                                sStr += String::CreateFromInt32(sal_Int32(aLocale.meLanguage), 16).ToUpperAscii();
+                                NumFor[nIndex].SetNatNumLang(aLocale.meLanguage);
                             }
                         }
                     }
@@ -1095,11 +1095,36 @@ xub_StrLen SvNumberformat::ImpGetNumber(String& rString,
     return nPos - nStartPos;
 }
 
-// static
-LanguageType SvNumberformat::ImpGetLanguageType( const String& rString,
-        xub_StrLen& nPos )
+::rtl::OUString SvNumberformat::LocaleType::generateCode() const
 {
-    sal_Int32 nNum = 0;
+    // TODO: to be worked on .....
+    return ::rtl::OUString();
+}
+
+SvNumberformat::LocaleType::LocaleType() :
+    mnNumeralShape(0),
+    mnCalendarType(0),
+    meLanguage(LANGUAGE_DONTKNOW)
+{
+}
+
+SvNumberformat::LocaleType::LocaleType(sal_uInt32 nRawNum) :
+    mnNumeralShape(0),
+    mnCalendarType(0),
+    meLanguage(LANGUAGE_DONTKNOW)
+{
+    meLanguage = static_cast<LanguageType>(nRawNum & 0x0000FFFF);
+    nRawNum = (nRawNum >> 16);
+    mnCalendarType = static_cast<sal_uInt8>(nRawNum & 0xFF);
+    nRawNum = (nRawNum >> 8);
+    mnNumeralShape = static_cast<sal_uInt8>(nRawNum & 0xFF);
+}
+
+// static
+SvNumberformat::LocaleType SvNumberformat::ImpGetLocaleType(
+    const String& rString, xub_StrLen& nPos )
+{
+    sal_uInt32 nNum = 0;
     sal_Unicode cToken = 0;
     xub_StrLen nLen = rString.Len();
     while ( nPos < nLen && ((cToken = rString.GetChar(nPos)) != ']') )
@@ -1123,8 +1148,8 @@ LanguageType SvNumberformat::ImpGetLanguageType( const String& rString,
             return LANGUAGE_DONTKNOW;
         ++nPos;
     }
-    return (nNum && (cToken == ']' || nPos == nLen)) ? (LanguageType)nNum :
-        LANGUAGE_DONTKNOW;
+
+    return (nNum && (cToken == ']' || nPos == nLen)) ? LocaleType(nNum) : LocaleType();
 }
 
 short SvNumberformat::ImpNextSymbol(String& rString,
