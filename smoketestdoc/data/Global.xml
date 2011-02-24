@@ -250,18 +250,19 @@ Sub CreateStatusTable
     xCursor.GoRight (1, False)
 
     table = aDoc.createInstance(&quot;com.sun.star.text.TextTable&quot;)
-    table.initialize(6,9)
+    table.initialize(5,9)
     table.Name = &quot;StTab1&quot;
   table.BackColor = cCoGrey
     xText.insertTextContent(xCursor, table, FALSE)
 
-    tableCursor = table.createCursorByCellName(table.CellNames(0))
-    tableCursor.gotoStart(FALSE)
-    tableCursor.goRight(1,FALSE)
-
     for i% = 0 to 7
         tableCell = table.getCellByPosition( i% + 1, 0 )
         tableCell.String = tableHeaders( i% )
+    next i%
+
+    for i% = LBound( tableRows ) to UBound( tableRows )
+        tableCell = table.getCellByPosition( 0, i% + 1 )
+      tableCell.String=tableRows(i%)
     next i%
 end Sub
 
@@ -335,7 +336,7 @@ Sub CreateDocState
     table = aDoc.TextTables.GetByIndex (1)
 
     for j% = 0 to 7
-        for i% = 0 to 4
+        for i% = 0 to 3
             sRangeName = GetRangeName(j%, i%+1)
 
             tableCursor = table.createCursorByCellName(sRangeName)
