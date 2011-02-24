@@ -2772,7 +2772,8 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const rtl::OUString& rAddS
         }
 
         nPos = nEnd;
-        nScript = lcl_getScriptType(xBI, rAddString, nPos);
+        if (nPos < nLen)
+            nScript = lcl_getScriptType(xBI, rAddString, nPos);
     }
 
 }
