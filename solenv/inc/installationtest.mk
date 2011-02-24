@@ -24,14 +24,20 @@
 #***********************************************************************/
 
 # relevant for non-product builds only, but built unconditionally
-DIAGNOSTICS_CONTROL_FILE=$(MISC)/$(TARGET)/dbgsvrc
-DBGSV_INIT:=$(MAKEDIR)/$(DIAGNOSTICS_CONTROL_FILE)
-.EXPORT: DBGSV_INIT
-
 .IF "$(ABORT_ON_ASSERTION)" != ""
-    SAL_DIAGNOSE_ABORT:=TRUE
+    DBGSV_ERROR_OUT=abort
+    SAL_DIAGNOSE_ABORT=TRUE
     .EXPORT: SAL_DIAGNOSE_ABORT
+.ELSE
+    DBGSV_ERROR_OUT=shell
 .ENDIF
+.EXPORT: DBGSV_ERROR_OUT
+
+# don't allow to overwrite DBGSV_ERROR_OUT with an INI file. Otherwise, people
+# might be tempted to put an DBGSV_INIT into their .bash_profile which points to a file
+# delcaring to ignore all assertions completely ...
+DBGSV_INIT=
+.EXPORT: DBGSV_INIT
 
 .IF "$(OS)" == "WNT"
 my_file = file:///
@@ -98,7 +104,7 @@ $(MISC)/$(TARGET)/installation.flag : $(shell \
     $(COMMAND_ECHO)echo "$(OOO_EXTRACT_TO)" > $@
 .END
 
-cpptest .PHONY : $(DIAGNOSTICS_CONTROL_FILE)
+cpptest .PHONY :
     $(COMMAND_ECHO)$(RM) -r $(MISC)/$(TARGET)/user
     $(COMMAND_ECHO)$(MKDIRHIER) $(MISC)/$(TARGET)/user
     $(CPPUNITTESTER) \
@@ -114,7 +120,7 @@ cpptest : $(MISC)/$(TARGET)/installation.flag
 .END
 
 .IF "$(SOLAR_JAVA)" == "TRUE" && "$(OOO_JUNIT_JAR)" != ""
-javatest_% .PHONY : $(JAVATARGET) $(DIAGNOSTICS_CONTROL_FILE)
+javatest_% .PHONY : $(JAVATARGET)
     $(COMMAND_ECHO)$(RM) -r $(MISC)/$(TARGET)/user
     $(COMMAND_ECHO)$(MKDIRHIER) $(MISC)/$(TARGET)/user
     $(COMMAND_ECHO)$(JAVAI) $(JAVAIFLAGS) $(JAVACPS) \
@@ -129,7 +135,7 @@ javatest_% .PHONY : $(JAVATARGET) $(DIAGNOSTICS_CONTROL_FILE)
     $(RM) -r $(installationtest_instpath) $(MISC)/$(TARGET)/installation.flag
 javatest : $(MISC)/$(TARGET)/installation.flag
 .END
-javatest .PHONY : $(JAVATARGET) $(DIAGNOSTICS_CONTROL_FILE)
+javatest .PHONY : $(JAVATARGET)
     $(COMMAND_ECHO)$(RM) -r $(MISC)/$(TARGET)/user
     $(COMMAND_ECHO)$(MKDIRHIER) $(MISC)/$(TARGET)/user
     $(COMMAND_ECHO)$(JAVAI) $(JAVAIFLAGS) $(JAVACPS) \
@@ -148,13 +154,3 @@ javatest : $(MISC)/$(TARGET)/installation.flag
 javatest .PHONY :
     @echo 'javatest needs SOLAR_JAVA=TRUE and OOO_JUNIT_JAR'
 .END
-
-# relevant for non-product builds only, but built unconditionally
-$(DIAGNOSTICS_CONTROL_FILE):
-    $(COMMAND_ECHO)$(MKDIRHIER) $(@:d)
-    $(COMMAND_ECHO)echo [output] > $@
-.IF "$(ABORT_ON_ASSERTION)" != ""
-    $(COMMAND_ECHO)echo error=abort >> $@
-.ELSE
-    $(COMMAND_ECHO)echo error=shell >> $@
-.ENDIF
