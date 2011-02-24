@@ -216,6 +216,8 @@ SwCharURLPage::SwCharURLPage(   Window* pParent,
 {
     FreeResource();
 
+    aEventPB.SetAccessibleRelationMemberOf(&aURLFL);
+
     const SfxPoolItem* pItem;
     SfxObjectShell* pShell;
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_HTML_MODE, sal_False, &pItem) ||

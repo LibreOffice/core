@@ -569,6 +569,7 @@ SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet) :
 
     SfxTabPage(pParent, SW_RES(TP_DROPCAPS), rSet),
 
+    aSettingsFL   (this, SW_RES(FL_SETTINGS)),
     aDropCapsBox  (this, SW_RES(CB_SWITCH   )),
     aWholeWordCB  (this, SW_RES(CB_WORD     )),
     aSwitchText   (this, SW_RES(FT_DROPCAPS )),
@@ -577,13 +578,12 @@ SwDropCapsPage::SwDropCapsPage(Window *pParent, const SfxItemSet &rSet) :
     aLinesField   (this, SW_RES(FLD_LINES   )),
     aDistanceText (this, SW_RES(TXT_DISTANCE)),
     aDistanceField(this, SW_RES(FLD_DISTANCE)),
-    aSettingsFL   (this, SW_RES(FL_SETTINGS)),
 
+    aContentFL    (this, SW_RES(FL_CONTENT )),
     aTextText     (this, SW_RES(TXT_TEXT    )),
     aTextEdit     (this, SW_RES(EDT_TEXT    )),
     aTemplateText (this, SW_RES(TXT_TEMPLATE)),
     aTemplateBox  (this, SW_RES(BOX_TEMPLATE)),
-    aContentFL    (this, SW_RES(FL_CONTENT )),
 
     pPict         (new SwDropCapsPict(this, SW_RES(CNT_PICT))),
 

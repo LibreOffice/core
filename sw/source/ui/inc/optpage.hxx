@@ -135,11 +135,11 @@ class SwAddPrinterTabPage : public SfxTabPage
 
     FixedLine       aSeparatorRFL;
 
+    FixedLine        aFL3;
     RadioButton     aNoRB;
     RadioButton     aOnlyRB;
     RadioButton     aEndRB;
     RadioButton     aEndPageRB;
-    FixedLine        aFL3;
     FixedLine        aFL4;
     CheckBox        aPrintEmptyPagesCB;
 //    CheckBox        aSingleJobsCB;
