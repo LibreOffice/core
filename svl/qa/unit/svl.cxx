@@ -26,18 +26,6 @@
  * instead of those above.
  */
 
-// TODO ...
-//    officecfg: can we move this into our skeleton ?
-//          Solve the Setup.xcu problem pleasantly [ custom version ? ]
-//    deliver.pl
-//          don't call regcomp if we don't have it.
-//              In an ideal world
-//              a) scp2 goes away and logic moved into the deliver d.lst
-//              b) install set gets built incrementally as the build progresses
-//              c) the new .xml component registration stuff then removes
-//                 the need for manually calling regcomp and knowing what
-//                 services we need, and in what .so they are implemented
-
 #include "precompiled_svl.hxx"
 
 #ifdef WNT
@@ -58,7 +46,6 @@
 
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/oslfile2streamwrap.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
@@ -69,21 +56,11 @@
 #include "svl/zforlist.hxx"
 #include "svl/zformat.hxx"
 
-#include <iostream>
-
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using ::std::cout;
-using ::std::endl;
 
 namespace {
-
-::std::ostream& operator<< (::std::ostream& os, const OUString& str)
-{
-    return os << ::rtl::OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr();
-}
-
 
 class Test : public CppUnit::TestFixture {
 public:

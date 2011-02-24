@@ -39,19 +39,19 @@ CFLAGSCXX += $(CPPUNIT_CFLAGS) -I../../inc
 SHL1TARGET = $(TARGET)
 SHL1OBJS = $(SLO)$/svl.obj
 SHL1STDLIBS= \
-    $(UNOTOOLSLIB)          \
-    $(TOOLSLIB)             \
-    $(I18NISOLANGLIB)   \
-    $(UCBHELPERLIB)         \
-    $(COMPHELPERLIB)        \
-    $(CPPUHELPERLIB)        \
-    $(CPPULIB)                      \
-    $(SOTLIB)     \
-    $(SALLIB) \
+    $(UNOTOOLSLIB)    \
+    $(SVLLIB)         \
+    $(TOOLSLIB)       \
+    $(I18NISOLANGLIB) \
+    $(UCBHELPERLIB)   \
+    $(COMPHELPERLIB)  \
+    $(CPPUHELPERLIB)  \
+    $(CPPULIB)        \
+    $(SOTLIB)         \
+    $(SALLIB)         \
     $(CPPUNITLIB)
 
 SHL1IMPLIB = i$(SHL1TARGET)
-SHL1LIBS=$(SLB)$/svl.lib
 DEF1NAME = $(SHL1TARGET)
 SHL1VERSIONMAP=version.map
 
@@ -88,7 +88,7 @@ test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb $(MISC)$/$(TARGET)$/t
     @echo - start unit test \#1 on library $(SHL1TARGETN)
     @echo In the environment: STAR_RESOURCEPATH=$$STAR_RESOURCEPATH
     @echo ----------------------------------------------------------
-    $(CPPUNITTESTER) $(SHL1TARGETN) -headless -invisible \
+    $(CPPUNITTESTER) $(SHL1TARGETN) \
         -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb \
         -env:UNO_TYPES="$(my_file)$(PWD)/$(MISC)/$(TARGET)/types.rdb $(my_file)$(PWD)/$(MISC)/$(TARGET)/udkapi.rdb" \
         -env:OOO_BASE_DIR="$(my_file)$(PWD)/$(MISC)/$(TARGET)" \
