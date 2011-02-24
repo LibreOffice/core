@@ -42,5 +42,7 @@
 #define BTN_LIGHT_6           8
 #define BTN_LIGHT_7           9
 #define BTN_LIGHT_8           10
-
+//IAccessibility2 Implementation 2009-----
+#define STR_LIGHT_PREVIEW     6000
+//-----IAccessibility2 Implementation 2009
 #define CTL_LIGHT_PREVIEW     1

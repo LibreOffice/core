@@ -767,6 +767,10 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
     aContentTimer.SetTimeout( SC_CONTENT_TIMEOUT );
 
     FreeResource();
+
+    aLbEntries.SetAccessibleRelationLabeledBy(&aLbEntries);
+    aTbxCmd.SetAccessibleRelationLabeledBy(&aTbxCmd);
+    aLbDocuments.SetAccessibleName(aStrActiveWin);
 }
 
 //------------------------------------------------------------------------
