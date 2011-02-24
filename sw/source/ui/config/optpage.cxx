@@ -60,7 +60,7 @@
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
 #include <uitool.hxx>
-#include <cfgitems.hxx> //Items fuer Sw-Seiten
+#include <cfgitems.hxx> //Items for Sw-pages
 #include <poolfmt.hxx>
 #include <uiitems.hxx>
 #include <initui.hxx>
@@ -151,7 +151,7 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
             case FUNIT_CHAR:    // add two units , 'character' and 'line' , their ticks are not fixed
             case FUNIT_LINE:
             {
-                // nur diese Metriken benutzen
+                // only use these metrics
                 // a horizontal ruler has not the 'line' unit
                 // there isn't 'line' unit in HTML format
                 if ( eFUnit != FUNIT_LINE )
@@ -264,7 +264,7 @@ BOOL SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     USHORT nGlobalMetricPos = nMPos;
     if ( nMPos != aMetricLB.GetSavedValue() )
     {
-        // Doppel-Cast fuer VA3.0
+        // Double-Cast for VA3.0
         USHORT nFieldUnit = (USHORT)(long)aMetricLB.GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, (UINT16)nFieldUnit ) );
         bRet = TRUE;
@@ -273,7 +273,7 @@ BOOL SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     nMPos = aHMetric.GetSelectEntryPos();
     if ( nMPos != aHMetric.GetSavedValue() || nMPos != nGlobalMetricPos )
     {
-        // Doppel-Cast fuer VA3.0
+        // Double-Cast for VA3.0
         USHORT nFieldUnit = (USHORT)(long)aHMetric.GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( FN_HSCROLL_METRIC, (UINT16)nFieldUnit ) );
         bRet = TRUE;
@@ -281,7 +281,7 @@ BOOL SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     nMPos = aVMetric.GetSelectEntryPos();
     if ( nMPos != aVMetric.GetSavedValue() || nMPos != nGlobalMetricPos )
     {
-        // Doppel-Cast fuer VA3.0
+        // Double-Cast for VA3.0
         USHORT nFieldUnit = (USHORT)(long)aVMetric.GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( FN_VSCROLL_METRIC, (UINT16)nFieldUnit ) );
         bRet = TRUE;
@@ -306,7 +306,7 @@ IMPL_LINK( SwContentOptPage, AnyRulerHdl, CheckBox*, pBox)
     return 0;
 }
 /*------------------------------------------------------
- TabPage Drucker Zusatzeinstellungen
+ TabPage Printer additional settings
 -------------------------------------------------------*/
 SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
                                       const SfxItemSet& rCoreSet) :
@@ -1213,8 +1213,8 @@ BOOL SwTableOptionsTabPage::FillItemSet( SfxItemSet& )
     if(eMode != pModOpt->GetTblMode())
     {
         pModOpt->SetTblMode(eMode);
-        // der Tabellen-Tastatur-Modus hat sich geaendert, das soll
-        // jetzt auch die aktuelle Tabelle erfahren
+        // the table-keyboard-mode has changed, now the current
+        // table should know about that too.
         if(pWrtShell && nsSelectionType::SEL_TBL & pWrtShell->GetSelectionType())
         {
             pWrtShell->SetTblChgMode(eMode);
@@ -1519,7 +1519,7 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet& rSet )
 }
 
 /*--------------------------------------------------
- TabPage fuer Redlining
+ TabPage for Redlining
 --------------------------------------------------*/
 struct CharAttr
 {
@@ -1527,7 +1527,7 @@ struct CharAttr
     USHORT nAttr;
 };
 
-// Editieren entspricht Einfuegen-Attributen
+// Edit corresponds to Paste-attributes
 static CharAttr aRedlineAttr[] =
 {
     { SID_ATTR_CHAR_CASEMAP,        SVX_CASEMAP_NOT_MAPPED },
@@ -1555,7 +1555,7 @@ static USHORT aDeletedAttrMap[] = { 0, 1, 2, 5, 6, 7, 8, 9, 10 };
 static USHORT aChangedAttrMap[] = { 0, 1, 2, 3, 4, 6, 7, 8, 9, 10 };
 
 /*-----------------------------------------------------------------------
-    Beschreibung: Markierungsvorschau
+    Description: Preview of selection
  -----------------------------------------------------------------------*/
 SwMarkPreview::SwMarkPreview( Window *pParent, const ResId& rResID ) :
 
@@ -1619,15 +1619,15 @@ void SwMarkPreview::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SwMarkPreview::Paint(const Rectangle &/*rRect*/)
 {
-    // Schatten zeichnen
+    // draw shadow
     Rectangle aShadow(aPage);
     aShadow += Point(3, 3);
     DrawRect( aShadow, m_aShadowCol, m_aTransCol );
 
-    // Seite zeichnen
+    // draw page
     DrawRect( aPage, m_aBgCol, m_aLineCol );
 
-    // Separator zeichnen
+    // draw separator
     Rectangle aPageSeparator(aPage);
     aPageSeparator.SetSize(Size(2, aPageSeparator.GetHeight()));
     aPageSeparator.Move(aPage.GetWidth() / 2 - 1, 0);
@@ -1667,10 +1667,10 @@ void SwMarkPreview::Paint(const Rectangle &/*rRect*/)
 
 void SwMarkPreview::PaintPage(const Rectangle &rRect)
 {
-    // PrintArea zeichnen
+    // draw PrintArea
     DrawRect(rRect, m_aTransCol, m_aPrintAreaCol );
 
-    // Testabsatz zeichnen
+    // draw Testparagraph
     ULONG nLTxtBorder = 4;
     ULONG nRTxtBorder = 4;
     ULONG nTTxtBorder = 4;
@@ -1687,8 +1687,7 @@ void SwMarkPreview::PaintPage(const Rectangle &rRect)
     nStep = aTextLine.GetHeight() + 2;
     nLines = (USHORT)(rRect.GetHeight() / (aTextLine.GetHeight() + 2)) - 1;
 
-    // Text simulieren
-    //
+    // simulate text
     for (USHORT i = 0; i < nLines; ++i)
     {
         if (i == (nLines - 1))
@@ -1918,7 +1917,7 @@ BOOL SwRedlineOptionsTabPage::FillItemSet( SfxItemSet& )
        nOldMarkColor != pOpt->GetMarkAlignColor().GetColor() ||
        nOldMarkMode != pOpt->GetMarkAlignMode())
     {
-        // Alle Dokumente aktualisieren
+        // update all documents
         TypeId aType(TYPE(SwDocShell));
         SwDocShell* pDocShell = (SwDocShell*)SfxObjectShell::GetFirst(&aType);
 
@@ -1945,7 +1944,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
     InitFontStyle(aDeletedPreviewWN);
     InitFontStyle(aChangedPreviewWN);
 
-    // initialisieren colour list box
+    // initialise colour list box
     String sColor;
     aInsertColorLB.SetUpdateMode(FALSE);
     aDeletedColorLB.SetUpdateMode(FALSE);
