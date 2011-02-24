@@ -164,9 +164,9 @@ Any SAL_CALL java_sql_CallableStatement::getObject( sal_Int32 columnIndex, const
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
-    /*jobject out = */callObjectMethodWithIntArg(t.pEnv,"getObject","(I)Ljava/lang/Object;", mID, columnIndex);
+    callObjectMethodWithIntArg(t.pEnv,"getObject","(I)Ljava/lang/Object;", mID, columnIndex);
     // WARNING: the caller becomes the owner of the returned pointer
-    return Any(); //out==0 ? 0 : new java_lang_Object( t.pEnv, out );
+    return Any();
 }
 
 sal_Int16 SAL_CALL java_sql_CallableStatement::getShort( sal_Int32 columnIndex ) throw(starsdbc::SQLException, RuntimeException)
