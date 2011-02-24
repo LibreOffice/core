@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <boost/ptr_container/ptr_vector.hpp>
 #include "vclxdialog.hxx"
 
 #include <com/sun/star/awt/PosSize.hpp>
