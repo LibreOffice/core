@@ -43,7 +43,7 @@ using rtl::OUString;
 using namespace com::sun::star::uno;
 
 /*--------------------------------------------------------------------
-     Beschreibung: Ctor
+     Description: Ctor
  --------------------------------------------------------------------*/
 
 const Sequence<OUString>& SwDBConfig::GetPropertyNames()
