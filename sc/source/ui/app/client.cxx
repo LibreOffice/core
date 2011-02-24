@@ -254,13 +254,3 @@ void __EXPORT ScClient::MakeVisible()
     }
 }
 
-void ScClient::DeactivateObj()
-{
-    DeactivateObject();
-
-    ScTabViewShell* pViewSh = dynamic_cast< ScTabViewShell* >( GetViewShell() );
-    if ( pViewSh )
-    {
-        pViewSh->UpdateInputHandler();
-    }
-}

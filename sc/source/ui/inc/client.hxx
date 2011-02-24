@@ -56,7 +56,6 @@ public:
     SdrGrafObj*     GetGrafEdit() const             { return pGrafEdit; }
     void            SetGrafEdit(SdrGrafObj* pNew)   { pGrafEdit = pNew; }
     SdrOle2Obj*     GetDrawObj();
-    void            DeactivateObj();
 };
 
 

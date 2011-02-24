@@ -415,9 +415,9 @@ void ScDrawView::MarkListHasChanged()
     if ( pClient && pClient->IsObjectInPlaceActive() && !bUnoRefDialog )
     {
         //  #41730# beim ViewShell::Activate aus dem Reset2Open nicht die Handles anzeigen
-        //HMHbDisableHdl = sal_True;
-        pClient->DeactivateObj();
-        //HMHbDisableHdl = sal_False;
+        //HMHbDisableHdl = TRUE;
+        pClient->DeactivateObject();
+        //HMHbDisableHdl = FALSE;
         //  Image-Ole wieder durch Grafik ersetzen passiert jetzt in ScClient::UIActivate
     }
 

@@ -287,7 +287,8 @@ void ScDLL::Init()
 
     //  Child-Windows
 
-    ScInputWindowWrapper        ::RegisterChildWindow( sal_True, pMod, SFX_CHILDWIN_TASK|SFX_CHILDWIN_FORCEDOCK|SFX_CHILDWIN_NEVERHIDEACTIVEOLE );
+    // Hack: Eingabezeile mit 42 registrieren, damit sie im PlugIn immer sichtbar ist
+    ScInputWindowWrapper        ::RegisterChildWindow(42, pMod, SFX_CHILDWIN_TASK|SFX_CHILDWIN_FORCEDOCK);
     ScNavigatorDialogWrapper    ::RegisterChildWindowContext(
             sal::static_int_cast<sal_uInt16>(ScTabViewShell::GetInterfaceId()), pMod);
     ScSolverDlgWrapper          ::RegisterChildWindow(sal_False, pMod);
