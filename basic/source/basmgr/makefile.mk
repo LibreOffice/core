@@ -39,7 +39,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES= \
         $(SLO)$/basmgr.obj \
-        $(SLO)$/basicmanagerrepository.obj
+        $(SLO)$/basicmanagerrepository.obj\
+        $(SLO)$/vbahelper.obj
 
 # --- Targets -------------------------------------------------------------
 

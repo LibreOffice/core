@@ -77,9 +77,9 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
     aFilterFt   ( this, SfxResId( FT_REGION ) ),
     aFilterLb   ( this, SfxResId( LB_REGION ) ),
 
+    aDescGb     ( this, SfxResId( GB_DESC ) ),
     aDescFt     ( this, SfxResId( FT_DESC ) ),
     aDescED     ( this, SfxResId( ED_DESC ) ),
-    aDescGb     ( this, SfxResId( GB_DESC ) ),
 
     pStyle( &( (SfxStyleDialog*)pParent->GetParent() )->GetStyleSheet() ),
 
