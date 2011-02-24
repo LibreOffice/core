@@ -56,8 +56,9 @@ const SCSIZE ASCIIDLG_MAXROWS                = MAXROWCOUNT;
 #endif
 
 
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // Defines - CSV Import Preserve Options
 #define FIXED_WIDTH         "FixedWidth"

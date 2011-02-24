@@ -40,8 +40,9 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include "miscuno.hxx"
 
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 
 

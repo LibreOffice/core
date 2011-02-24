@@ -34,8 +34,9 @@
 #include "XMLCodeNameProvider.hxx"
 #include "document.hxx"
 
-using namespace rtl;
 using namespace com::sun::star;
+
+using ::rtl::OUString;
 
 sal_Bool XMLCodeNameProvider::_getCodeName( const uno::Any& aAny, String& rCodeName )
 {
@@ -131,7 +132,7 @@ uno::Sequence< OUString > SAL_CALL XMLCodeNameProvider::getElementNames(  )
     throw (uno::RuntimeException)
 {
     SCTAB nCount = mpDoc->GetTableCount() + 1;
-    uno::Sequence< rtl::OUString > aNames( nCount );
+    uno::Sequence< OUString > aNames( nCount );
     sal_Int32 nRealCount = 0;
 
     if( mpDoc->GetCodeName().Len() )

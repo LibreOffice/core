@@ -47,8 +47,9 @@
 #include "miscuno.hxx"
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 //------------------------------------------------------------------
 
@@ -255,7 +256,7 @@ void ScInputCfg::Commit()
     PutProperties(aNames, aValues);
 }
 
-void ScInputCfg::Notify( const Sequence<rtl::OUString>& /* aPropertyNames */ )
+void ScInputCfg::Notify( const Sequence<OUString>& /* aPropertyNames */ )
 {
     DBG_ERROR("properties have been changed");
 }
