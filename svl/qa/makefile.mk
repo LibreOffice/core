@@ -46,7 +46,6 @@ SHL1STDLIBS=\
      $(SVLLIB) \
      $(TOOLSLIB) \
      $(UNOTOOLSLIB) \
-     $(TESTSHL2LIB)    \
      $(CPPUNITLIB)
 
 SHL1IMPLIB=i$(SHL1TARGET)
