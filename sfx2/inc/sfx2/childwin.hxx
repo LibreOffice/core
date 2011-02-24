@@ -60,7 +60,6 @@ class SfxChildWinContextArr_Impl;
 #define SFX_CHILDWIN_CANTGETFOCUS 0x20      // ChildWindow kann keinen Focus bekommen
 #define SFX_CHILDWIN_ALWAYSAVAILABLE 0x40   // ChildWindow is never disabled
 #define SFX_CHILDWIN_NEVERHIDE    0x80      // ChildWindow is can always made visible/is visible
-#define SFX_CHILDWIN_NEVERHIDEACTIVEOLE 0x0100 // ChildWindow is visible with active inplace client
 #define CHILDWIN_NOPOS            USHRT_MAX
 
 // Konfiguration eines ChildWindows
