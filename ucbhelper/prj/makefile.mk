@@ -26,50 +26,15 @@
 #*************************************************************************
 
 PRJ=..
+TARGET=prj
 
-PRJNAME=	ucbhelper
-TARGET=		ucbhelper
+.INCLUDE : settings.mk
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :	settings.mk
-.INCLUDE :	..$/version.mk
-
-# --- Files --------------------------------------------------------
-
-LIB1TARGET=	$(SLB)$/$(TARGET).lib
-LIB1FILES=	$(SLB)$/client.lib \
-            $(SLB)$/provider.lib
-
-SHL1TARGET=	$(TARGET)$(UCBHELPER_MAJOR)$(COMID)
-.IF "$(GUI)" == "OS2"
-SHL1TARGET=	ucbh$(UCBHELPER_MAJOR)
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
 .ENDIF
-SHL1STDLIBS = \
-    $(CPPUHELPERLIB) \
-    $(CPPULIB) \
-    $(SALHELPERLIB) \
-    $(SALLIB)
 
-SHL1DEPN=
-SHL1IMPLIB=	i$(TARGET)
-SHL1USE_EXPORTS=name
-SHL1LIBS=	$(LIB1TARGET)
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=	$(SHL1TARGET)
-DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
-DEFLIB1NAME=	$(TARGET)
-DEF1DES=	Universal Content Broker - Helpers
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	target.mk
-
-# --- Filter -----------------------------------------------------------
-
-$(MISC)$/$(SHL1TARGET).flt : ucbhelper.flt
-    @echo ------------------------------
-    @echo Making: $@
-    @$(TYPE) ucbhelper.flt > $@
-
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

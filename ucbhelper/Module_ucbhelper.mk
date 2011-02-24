@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -24,19 +24,15 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-UCBHELPER_TARGET=ucbhelper
 
-# the major
-UCBHELPER_MAJOR=4
-# the minor
-UCBHELPER_MINOR=0
-# the micro
-UCBHELPER_MICRO=0
+# replace ucbhelper by the name of the module you are creating
 
-# this is a c++ compatible library
-UCBHELPER_CPP=1
+$(eval $(call gb_Module_Module,ucbhelper))
 
-UCBHELPER=$(UCBHELPER_TARGET)_$(CMPEXT)
+# the targets to be inserted are their file names without .mk extension
+$(eval $(call gb_Module_add_targets,ucbhelper,\
+	Library_ucbhelper \
+	Package_inc \
+))
 
-LIBUCBHELPER_UNX=lib$(UCBHELPER).a.$(UCBHELPER_MAJOR)
-LIBUCBHELPER_WIN=$(UCBHELPER_TARGET)$(UCBHELPER_MAJOR)$(CMPEXT).dll
+# vim: set noet sw=4 ts=4:
