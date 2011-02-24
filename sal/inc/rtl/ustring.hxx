@@ -964,8 +964,7 @@ public:
     */
     OUString copy( sal_Int32 beginIndex, sal_Int32 count ) const SAL_THROW(())
     {
-        OSL_ASSERT(beginIndex >= 0 && beginIndex <= getLength()
-                   && count >= 0 && count <= getLength() - beginIndex);
+        OSL_ASSERT(beginIndex >= 0 && beginIndex <= getLength() && count >= 0);
         if ( (beginIndex == 0) && (count == getLength()) )
             return *this;
         else
