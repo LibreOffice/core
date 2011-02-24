@@ -64,25 +64,25 @@ private:
     NumericField        maNumFldCopies;
     ImageButton         maBtnSetViewData;
 
+    FixedLine           maGrpMovement;
     FixedText           maFtMoveX;
     MetricField         maMtrFldMoveX;
     FixedText           maFtMoveY;
     MetricField         maMtrFldMoveY;
     FixedText           maFtAngle;
     MetricField         maMtrFldAngle;
-    FixedLine           maGrpMovement;
+    FixedLine           maGrpEnlargement;
 
     FixedText           maFtWidth;
     MetricField         maMtrFldWidth;
     FixedText           maFtHeight;
     MetricField         maMtrFldHeight;
-    FixedLine           maGrpEnlargement;
 
+    FixedLine           maGrpColor;
     FixedText           maFtStartColor;
     ColorLB             maLbStartColor;
     FixedText           maFtEndColor;
     ColorLB             maLbEndColor;
-    FixedLine           maGrpColor;
 
     OKButton            maBtnOK;
     CancelButton        maBtnCancel;
