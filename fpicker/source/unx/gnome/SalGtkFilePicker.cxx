@@ -51,6 +51,7 @@
 #include <SalGtkFilePicker.hxx>
 
 #include <tools/string.hxx>
+#include <tools/urlobj.hxx>
 
 #include <algorithm>
 #include <set>
@@ -1002,13 +1003,39 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
                             CResourceProvider aResProvider;
                             GtkWidget *dlg;
 
+
+                            INetURLObject aFileObj( sFileName );
+
+                            OString baseName(
+                              OUStringToOString(
+                                aFileObj.getName(
+                                  INetURLObject::LAST_SEGMENT,
+                                  true,
+                                  INetURLObject::DECODE_WITH_CHARSET
+                                ),
+                                RTL_TEXTENCODING_UTF8
+                              )
+                            );
+                            OString aMsg(
+                              OUStringToOString(
+                                aResProvider.getResString( FILE_PICKER_OVERWRITE ),
+                                RTL_TEXTENCODING_UTF8
+                              )
+                            );
+                            OString toReplace( RTL_CONSTASCII_STRINGPARAM( "$filename$" ));
+
+                            aMsg = aMsg.replaceAt(
+                              aMsg.indexOf( toReplace ),
+                              toReplace.getLength(),
+                              baseName
+                            );
+
                             dlg = gtk_message_dialog_new( NULL,
                                 GTK_DIALOG_MODAL,
                                 GTK_MESSAGE_QUESTION,
                                 GTK_BUTTONS_YES_NO,
-                                  OUStringToOString(
-                                    aResProvider.getResString( FILE_PICKER_OVERWRITE ),
-                                    RTL_TEXTENCODING_UTF8 ).getStr() );
+                                aMsg.getStr()
+                            );
 
                             gtk_window_set_title( GTK_WINDOW( dlg ),
                                 OUStringToOString(aResProvider.getResString(FILE_PICKER_TITLE_SAVE ),
