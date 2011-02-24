@@ -1,0 +1,15 @@
+mkdir: %_DEST%\inc%_EXT%\external
+..\%__SRC%\inc\*.h %_DEST%\inc%_EXT%\external\*.h
+..\%__SRC%\lib\libasprintf.0.dylib %_DEST%\lib%_EXT%\libasprintf.0.dylib
+symlink: %_DEST%\lib%_EXT%\libasprintf.0.dylib %_DEST%\lib%_EXT%\libasprintf.dylib
+..\%__SRC%\lib\libgettextpo.0.dylib %_DEST%\lib%_EXT%\libgettextpo.0.dylib
+symlink: %_DEST%\lib%_EXT%\libgettextpo.0.dylib %_DEST%\lib%_EXT%\libgettextpo.dylib
+..\%__SRC%\lib\libgettextsrc-0.18.1.dylib %_DEST%\lib%_EXT%\libgettextsrc-0.18.1.dylib
+symlink: %_DEST%\lib%_EXT%\libgettextsrc-0.18.1.dylib %_DEST%\lib%_EXT%\libgettextsrc.dylib
+..\%__SRC%\lib\libintl.8.dylib %_DEST%\lib%_EXT%\libintl.8.dylib
+symlink: %_DEST%\lib%_EXT%\libintl.8.dylib %_DEST%\lib%_EXT%\libintl.dylib
+..\%__SRC%\lib\libgettextlib-0.18.1.dylib %_DEST%\lib%_EXT%\libgettextlib-0.18.1.dylib
+symlink: %_DEST%\lib%_EXT%\libgettextlib-0.18.1.dylib %_DEST%\lib%_EXT%\libgettextlib.dylib
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%
+..\%__SRC%\bin\msgfmt %_DEST%\bin%_EXT%
+
