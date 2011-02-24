@@ -1,6 +1,7 @@
 #*************************************************************************
-# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -21,28 +22,19 @@
 # version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#***********************************************************************/
+#
+#*************************************************************************
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
+PRJ=..
+TARGET=prj
+
+.INCLUDE : settings.mk
+
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
 .ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-PRJ = ../..
-PRJNAME = linguistic
-TARGET = qa_unoapi
-
-.IF "$(OOO_JUNIT_JAR)" != ""
-PACKAGE = org/openoffice/linguistic/qa/unoapi
-JAVATESTFILES = Test.java
-JAVAFILES = $(JAVATESTFILES)
-JARFILES = OOoRunner.jar ridl.jar test.jar
-EXTRAJARFILES = $(OOO_JUNIT_JAR)
-.END
-
-.INCLUDE: settings.mk
-.INCLUDE: target.mk
-.INCLUDE: installationtest.mk
-
-ALLTAR : javatest
-
-.END
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

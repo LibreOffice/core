@@ -28,15 +28,12 @@
 #ifndef _LINGUISTIC_HYPHDTA_HXX_
 #define _LINGUISTIC_HYPHDTA_HXX_
 
-
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <com/sun/star/linguistic2/XPossibleHyphens.hpp>
-
 #include <tools/solar.h>
-
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
 #include <cppuhelper/implbase1.hxx> // helper for implementations
-
+#include <linguistic/lngdllapi.h>
 
 namespace linguistic
 {
@@ -91,6 +88,9 @@ public:
     void            SetWord( ::rtl::OUString &rTxt )            { aWord = rTxt; }
     void            SetHyphenatedWord( ::rtl::OUString &rTxt )  { aHyphenatedWord = rTxt; }
     void            SetLanguage( sal_Int16 nLang )                  { nLanguage = nLang; }
+    static com::sun::star::uno::Reference <com::sun::star::linguistic2::XHyphenatedWord> LNG_DLLPUBLIC CreateHyphenatedWord(
+        const ::rtl::OUString &rWord, sal_Int16 nLang, sal_Int16 nHyphenationPos,
+        const ::rtl::OUString &rHyphenatedWord, sal_Int16 nHyphenPos );
 };
 
 
@@ -135,6 +135,11 @@ public:
     sal_Int16           GetLanguage()   { return nLanguage; }
     void            SetWord( ::rtl::OUString &rTxt )    { aWord = rTxt; }
     void            SetLanguage( sal_Int16 nLang )          { nLanguage = nLang; }
+
+    static com::sun::star::uno::Reference < com::sun::star::linguistic2::XPossibleHyphens > LNG_DLLPUBLIC CreatePossibleHyphens
+        (const ::rtl::OUString &rWord, sal_Int16 nLang,
+         const ::rtl::OUString &rHyphWord,
+         const ::com::sun::star::uno::Sequence< sal_Int16 > &rPositions);
 };
 
 

@@ -183,6 +183,22 @@ Sequence< sal_Int16 > SAL_CALL PossibleHyphens::getHyphenationPositions()
     return aOrigHyphenPos;
 }
 
+com::sun::star::uno::Reference <com::sun::star::linguistic2::XHyphenatedWord> HyphenatedWord::CreateHyphenatedWord(
+        const ::rtl::OUString &rWord, sal_Int16 nLang, sal_Int16 nHyphenationPos,
+        const ::rtl::OUString &rHyphenatedWord, sal_Int16 nHyphenPos )
+{
+    return new HyphenatedWord( rWord, nLang, nHyphenationPos, rHyphenatedWord, nHyphenPos );
+}
+
+com::sun::star::uno::Reference < com::sun::star::linguistic2::XPossibleHyphens > PossibleHyphens::CreatePossibleHyphens
+        (const ::rtl::OUString &rWord, sal_Int16 nLang,
+         const ::rtl::OUString &rHyphWord,
+         const ::com::sun::star::uno::Sequence< sal_Int16 > &rPositions)
+{
+    return new PossibleHyphens( rWord, nLang, rHyphWord, rPositions );
+}
+
+
 ///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic

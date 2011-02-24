@@ -28,7 +28,6 @@
 #ifndef _LINGUISTIC_MISC_HXX_
 #define _LINGUISTIC_MISC_HXX_
 
-
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -47,6 +46,7 @@
 #include <unotools/charclass.hxx>
 #include <osl/thread.h>
 #include <osl/mutex.hxx>
+#include <linguistic/lngdllapi.h>
 
 namespace com { namespace sun { namespace star { namespace beans {
     class XPropertySet;
@@ -95,7 +95,7 @@ namespace linguistic
 
 ///////////////////////////////////////////////////////////////////////////
 
-::osl::Mutex &  GetLinguMutex();
+LNG_DLLPUBLIC ::osl::Mutex& GetLinguMutex();
 
 LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang );
 
@@ -124,7 +124,7 @@ sal_Int32 LevDistance( const rtl::OUString &rTxt1, const rtl::OUString &rTxt2 );
 ::com::sun::star::lang::Locale
     CreateLocale( LanguageType eLang );
 
-LanguageType
+LNG_DLLPUBLIC LanguageType
      LocaleToLanguage( const ::com::sun::star::lang::Locale& rLocale );
 
 ::com::sun::star::lang::Locale&
@@ -162,7 +162,7 @@ String  GetModulePath( SvtPathOptions::Pathes ePath, sal_Bool bAddAccessDelim = 
 
 /// @returns an URL for a new and writable dictionary rDicName.
 ///     The URL will point to the path given by 'GetDictionaryWriteablePath'
-String  GetWritableDictionaryURL( const String &rDicName );
+LNG_DLLPUBLIC String  GetWritableDictionaryURL( const String &rDicName );
 
 // looks for the specified file in the list of paths.
 // In case of multiple occurences only the first found is returned.
@@ -171,7 +171,7 @@ String     SearchFileInPaths( const String &rFile, const ::com::sun::star::uno::
 
 ///////////////////////////////////////////////////////////////////////////
 
-sal_Int32       GetPosInWordToCheck( const rtl::OUString &rTxt, sal_Int32 nPos );
+LNG_DLLPUBLIC sal_Int32 GetPosInWordToCheck( const rtl::OUString &rTxt, sal_Int32 nPos );
 
 ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XHyphenatedWord >
@@ -181,8 +181,8 @@ sal_Int32       GetPosInWordToCheck( const rtl::OUString &rTxt, sal_Int32 nPos )
 
 ///////////////////////////////////////////////////////////////////////////
 
-sal_Bool        IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage );
-sal_Bool        IsLower( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage );
+LNG_DLLPUBLIC sal_Bool        IsUpper( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage );
+LNG_DLLPUBLIC sal_Bool        IsLower( const String &rText, xub_StrLen nPos, xub_StrLen nLen, sal_Int16 nLanguage );
 
 inline sal_Bool        IsUpper( const String &rText, sal_Int16 nLanguage )     { return IsUpper( rText, 0, rText.Len(), nLanguage ); }
 inline sal_Bool        IsLower( const String &rText, sal_Int16 nLanguage )     { return IsLower( rText, 0, rText.Len(), nLanguage ); }
@@ -192,13 +192,13 @@ String      ToUpper( const String &rText, sal_Int16 nLanguage );
 String      ToTitle( const String &rText, sal_Int16 nLanguage );
 sal_Unicode ToLower( const sal_Unicode cChar, sal_Int16 nLanguage );
 sal_Unicode ToUpper( const sal_Unicode cChar, sal_Int16 nLanguage );
-sal_Bool        HasDigits( const ::rtl::OUString &rText );
-sal_Bool        IsNumeric( const String &rText );
+LNG_DLLPUBLIC sal_Bool      HasDigits( const ::rtl::OUString &rText );
+LNG_DLLPUBLIC sal_Bool      IsNumeric( const String &rText );
 
 ///////////////////////////////////////////////////////////////////////////
 
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > GetOneInstanceService( const char *pServiceName );
-::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > GetLinguProperties();
+LNG_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > GetLinguProperties();
 ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSearchableDictionaryList > GetSearchableDictionaryList();
 ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionaryList > GetDictionaryList();
 ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary > GetIgnoreAllList();
@@ -220,13 +220,13 @@ sal_Bool IsIgnoreControlChars( const ::com::sun::star::beans::PropertyValues &rP
             const ::rtl::OUString& rWord, sal_Int16 nLanguage,
             sal_Bool bSearchPosDics, sal_Bool bSearchSpellEntry );
 
-sal_uInt8 AddEntryToDic(
+LNG_DLLPUBLIC sal_uInt8 AddEntryToDic(
     ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionary >  &rxDic,
     const ::rtl::OUString &rWord, sal_Bool bIsNeg,
     const ::rtl::OUString &rRplcTxt, sal_Int16 nRplcLang,
     sal_Bool bStripDot = sal_True );
 
-sal_Bool SaveDictionaries( const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionaryList > &xDicList );
+LNG_DLLPUBLIC sal_Bool SaveDictionaries( const ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XDictionaryList > &xDicList );
 
 ///////////////////////////////////////////////////////////////////////////
 //

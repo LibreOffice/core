@@ -711,6 +711,161 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
     }
 }
 
+PropertyHelper_Thesaurus::PropertyHelper_Thesaurus(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XInterface > &rxSource,
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet > &rxPropSet )
+{
+    pInst = new PropertyHelper_Thes( rxSource, rxPropSet );
+    xPropHelper = pInst;
+}
+
+PropertyHelper_Thesaurus::~PropertyHelper_Thesaurus()
+{
+}
+
+void PropertyHelper_Thesaurus::AddAsPropListener()
+{
+    pInst->AddAsPropListener();
+}
+
+void PropertyHelper_Thesaurus::RemoveAsPropListener()
+{
+    pInst->RemoveAsPropListener();
+}
+
+void PropertyHelper_Thesaurus::SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals )
+{
+    pInst->SetTmpPropVals( rPropVals );
+}
+
+PropertyHelper_Hyphenation::PropertyHelper_Hyphenation(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XInterface > &rxSource,
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet > &rxPropSet)
+{
+    pInst = new PropertyHelper_Hyphen( rxSource, rxPropSet );
+    xPropHelper = pInst;
+}
+
+PropertyHelper_Hyphenation::~PropertyHelper_Hyphenation()
+{
+}
+
+void PropertyHelper_Hyphenation::AddAsPropListener()
+{
+    pInst->AddAsPropListener();
+}
+
+void PropertyHelper_Hyphenation::RemoveAsPropListener()
+{
+    pInst->RemoveAsPropListener();
+}
+
+void PropertyHelper_Hyphenation::SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals )
+{
+    pInst->SetTmpPropVals( rPropVals );
+}
+
+sal_Int16 PropertyHelper_Hyphenation::GetMinLeading() const
+{
+    return pInst->GetMinLeading();
+}
+
+sal_Int16 PropertyHelper_Hyphenation::GetMinTrailing() const
+{
+    return pInst->GetMinTrailing();
+}
+
+sal_Int16 PropertyHelper_Hyphenation::GetMinWordLength() const
+{
+    return pInst->GetMinWordLength();
+}
+
+sal_Bool PropertyHelper_Hyphenation::addLinguServiceEventListener(
+                const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
+            throw(::com::sun::star::uno::RuntimeException)
+{
+    return pInst->addLinguServiceEventListener( rxListener );
+}
+
+sal_Bool PropertyHelper_Hyphenation::removeLinguServiceEventListener(
+                const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
+            throw(::com::sun::star::uno::RuntimeException)
+{
+    return pInst->removeLinguServiceEventListener( rxListener );
+}
+
+PropertyHelper_Spelling::PropertyHelper_Spelling(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XInterface > &rxSource,
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet > &rxPropSet )
+{
+    pInst = new PropertyHelper_Spell( rxSource, rxPropSet );
+    xPropHelper = pInst;
+}
+
+PropertyHelper_Spelling::~PropertyHelper_Spelling()
+{
+}
+
+void PropertyHelper_Spelling::AddAsPropListener()
+{
+    pInst->AddAsPropListener();
+}
+
+void PropertyHelper_Spelling::RemoveAsPropListener()
+{
+    pInst->RemoveAsPropListener();
+}
+
+void PropertyHelper_Spelling::SetTmpPropVals( const com::sun::star::beans::PropertyValues &rPropVals )
+{
+    pInst->SetTmpPropVals( rPropVals );
+}
+
+sal_Int16 PropertyHelper_Spelling::GetMaxNumberOfSuggestions() const
+{
+    return pInst->GetMaxNumberOfSuggestions();
+}
+
+sal_Bool PropertyHelper_Spelling::IsSpellUpperCase() const
+{
+    return pInst->IsSpellUpperCase();
+}
+
+sal_Bool PropertyHelper_Spelling::IsSpellWithDigits() const
+{
+    return pInst->IsSpellWithDigits();
+}
+
+sal_Bool PropertyHelper_Spelling::IsSpellCapitalization() const
+{
+    return pInst->IsSpellCapitalization();
+}
+
+sal_Bool PropertyHelper_Spelling::addLinguServiceEventListener(
+                const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
+            throw(::com::sun::star::uno::RuntimeException)
+{
+    return pInst->addLinguServiceEventListener( rxListener );
+}
+
+sal_Bool PropertyHelper_Spelling::removeLinguServiceEventListener(
+                const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::linguistic2::XLinguServiceEventListener >& rxListener )
+            throw(::com::sun::star::uno::RuntimeException)
+{
+    return pInst->removeLinguServiceEventListener( rxListener );
+}
+
+
 ///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic

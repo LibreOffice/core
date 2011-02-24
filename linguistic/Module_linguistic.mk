@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,37 +25,21 @@
 #
 #*************************************************************************
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
+$(eval $(call gb_Module_Module,linguistic))
 
-PRJ = ../../..
-PRJNAME = sc
-TARGET = qa_complex_linguistic
+$(eval $(call gb_Module_add_targets,linguistic,\
+	Library_lng \
+	Package_inc \
+))
 
-.IF "$(OOO_JUNIT_JAR)" != ""
-PACKAGE = complex/linguistic
+#$(eval $(call gb_Module_add_check_targets,linguistic,\
+#))
 
-# here store only Files which contain a @Test
-JAVATESTFILES = \
-    HangulHanjaConversion.java
+$(eval $(call gb_Module_add_subsequentcheck_targets,linguistic,\
+	JunitTest_linguistic_unoapi \
+))
 
-# put here all other files
-JAVAFILES = $(JAVATESTFILES) \
-    TestDocument.java
+# was disabled in old build system
+# JunitTest_linguistic_complex \
 
-JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
-EXTRAJARFILES = $(OOO_JUNIT_JAR)
-
-# Sample how to debug
-# JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
-
-.END
-
-.INCLUDE: settings.mk
-.INCLUDE: target.mk
-.INCLUDE: installationtest.mk
-
-ALLTAR : javatest
-
-.END
+# vim: set noet sw=4 ts=4:

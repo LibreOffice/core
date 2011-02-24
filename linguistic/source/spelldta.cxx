@@ -360,6 +360,16 @@ void SpellAlternatives::SetAlternatives( const Sequence< OUString > &rAlt )
 }
 
 
+com::sun::star::uno::Reference < com::sun::star::linguistic2::XSpellAlternatives > SpellAlternatives::CreateSpellAlternatives(
+        const ::rtl::OUString &rWord, sal_Int16 nLang, sal_Int16 nTypeP, const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rAlt )
+{
+    SpellAlternatives* pAlt = new SpellAlternatives;
+    pAlt->SetWordLanguage( rWord, nLang );
+    pAlt->SetFailureType( nTypeP );
+    pAlt->SetAlternatives( rAlt );
+    return Reference < XSpellAlternatives >(pAlt);
+}
+
 ///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic
