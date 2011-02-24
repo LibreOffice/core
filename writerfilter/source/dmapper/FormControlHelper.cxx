@@ -156,6 +156,8 @@ FormControlHelper::~FormControlHelper()
 bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRange,
                                        const ::rtl::OUString & rControlName)
 {
+    if ( !m_pFFData )
+        return false;
     uno::Reference<lang::XMultiServiceFactory>
         xServiceFactory(m_pImpl->getServiceFactory());
 
