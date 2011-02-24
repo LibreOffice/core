@@ -29,6 +29,8 @@
 #define _ITRFORM2_HXX
 #include "itrpaint.hxx"
 
+#include <vector>
+
 class SwFlyCntPortion;
 class SwInterHyphInfo;
 class SwDropPortion;
@@ -39,7 +41,6 @@ class SwErgoSumPortion;
 class SwExpandPortion;
 class SwMultiPortion;
 class SwFtnPortion;
-class SvLongs;
 
 /*************************************************************************
  *                      class SwTxtFormatter
@@ -102,7 +103,7 @@ class SwTxtFormatter : public SwTxtPainter
     sal_Bool AllowRepaintOpt() const;
 
     // calculates and sets the optimized repaint offset
-    long CalcOptRepaint( xub_StrLen nOldLineEnd, const SvLongs* pFlyStart );
+    long CalcOptRepaint( xub_StrLen nOldLineEnd, const std::vector<long> &rFlyStarts );
 
     // wird von FormatLine gerufen.
     void FormatReset( SwTxtFormatInfo &rInf );

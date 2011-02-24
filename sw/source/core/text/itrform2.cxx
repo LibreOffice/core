@@ -1511,21 +1511,18 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
     // before and after the BuildPortions call
     const sal_Bool bOptimizeRepaint = AllowRepaintOpt();
     const xub_StrLen nOldLineEnd = nStartPos + pCurr->GetLen();
-    SvLongs* pFlyStart = 0;
+    std::vector<long> flyStarts;
 
     // these are the conditions for a fly position comparison
     if ( bOptimizeRepaint && pCurr->IsFly() )
     {
-        pFlyStart = new SvLongs;
         SwLinePortion* pPor = pCurr->GetFirstPortion();
         long nPOfst = 0;
-        USHORT nCnt = 0;
-
         while ( pPor )
         {
             if ( pPor->IsFlyPortion() )
                 // insert start value of fly portion
-                pFlyStart->Insert( nPOfst, nCnt++ );
+                flyStarts.push_back( nPOfst );
 
             nPOfst += pPor->Width();
             pPor = pPor->GetPortion();
@@ -1616,9 +1613,8 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
     // calculate optimal repaint rectangle
     if ( bOptimizeRepaint )
     {
-        GetInfo().SetPaintOfst( CalcOptRepaint( nOldLineEnd, pFlyStart ) );
-        if ( pFlyStart )
-            delete pFlyStart;
+        GetInfo().SetPaintOfst( CalcOptRepaint( nOldLineEnd, flyStarts ) );
+        flyStarts.clear();
     }
     else
         // Special case: We do not allow an optimitation of the repaint
@@ -2016,7 +2012,7 @@ sal_Bool SwTxtFormatter::AllowRepaintOpt() const
  * calculates an optimal repaint offset for the current line
  *************************************************************************/
 long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
-                                     const SvLongs* pFlyStart )
+                                     const std::vector<long> &rFlyStarts )
 {
     if ( GetInfo().GetIdx() < GetInfo().GetReformatStart() )
     // the reformat position is behind our new line, that means
@@ -2027,7 +2023,7 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
 
     // in case we do not have any fly in our line, our repaint position
     // is the changed position - 1
-    if ( ! pFlyStart && ! pCurr->IsFly() )
+    if ( rFlyStarts.empty() && ! pCurr->IsFly() )
     {
         // this is the maximum repaint offset determined during formatting
         // for example: the beginning of the first right tab stop
@@ -2105,9 +2101,8 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
             if ( pPor->IsFlyPortion() )
             {
                 // compare start of fly with former start of fly
-                if ( pFlyStart &&
-                     nCnt < pFlyStart->Count() &&
-                     nX == (*pFlyStart)[ nCnt ] &&
+                if (nCnt < rFlyStarts.size() &&
+                     nX == rFlyStarts[ nCnt ] &&
                      nIdx < nReformat
                    )
                     // found fix position, nothing has changed left from nX
