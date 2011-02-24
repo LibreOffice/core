@@ -76,16 +76,15 @@ class SpellChecker :
     sal_Int32                          numdict;
 
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
-    Reference< XPropertyChangeListener >    xPropHelper;
-    linguistic::PropertyHelper_Spell *      pPropHelper;
+    linguistic::PropertyHelper_Spelling*      pPropHelper;
     sal_Bool                                    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     SpellChecker(const SpellChecker &);
     SpellChecker & operator = (const SpellChecker &);
 
-    linguistic::PropertyHelper_Spell &  GetPropHelper_Impl();
-    linguistic::PropertyHelper_Spell &  GetPropHelper()
+    linguistic::PropertyHelper_Spelling&  GetPropHelper_Impl();
+    linguistic::PropertyHelper_Spelling&  GetPropHelper()
     {
         return pPropHelper ? *pPropHelper : GetPropHelper_Impl();
     }

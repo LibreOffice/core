@@ -106,17 +106,17 @@ SpellChecker::~SpellChecker()
     aDNames = NULL;
     if (pPropHelper)
         pPropHelper->RemoveAsPropListener();
+    delete pPropHelper;
 }
 
 
-PropertyHelper_Spell & SpellChecker::GetPropHelper_Impl()
+PropertyHelper_Spelling & SpellChecker::GetPropHelper_Impl()
 {
     if (!pPropHelper)
     {
         Reference< XPropertySet >   xPropSet( GetLinguProperties(), UNO_QUERY );
 
-        pPropHelper = new PropertyHelper_Spell( (XSpellChecker *) this, xPropSet );
-        xPropHelper = pPropHelper;
+        pPropHelper = new PropertyHelper_Spelling( (XSpellChecker *) this, xPropSet );
         pPropHelper->AddAsPropListener();   //! after a reference is established
     }
     return *pPropHelper;
@@ -386,7 +386,7 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
     // You'll probably like to use a simplier solution than the provided
     // one using the PropertyHelper_Spell.
 
-    PropertyHelper_Spell &rHelper = GetPropHelper();
+    PropertyHelper_Spelling& rHelper = GetPropHelper();
     rHelper.SetTmpPropVals( rProperties );
 
     sal_Int16 nFailure = GetSpellFailure( rWord, rLocale );
@@ -475,12 +475,8 @@ Reference< XSpellAlternatives >
         }
 
         // now return an empty alternative for no suggestions or the list of alternatives if some found
-        SpellAlternatives *pAlt = new SpellAlternatives;
         String aTmp(rWord);
-        pAlt->SetWordLanguage( aTmp, nLang );
-        pAlt->SetFailureType( SpellFailure::SPELLING_ERROR );
-        pAlt->SetAlternatives( aStr );
-        xRes = pAlt;
+        xRes = SpellAlternatives::CreateSpellAlternatives( aTmp, nLang, SpellFailure::SPELLING_ERROR, aStr );
         return xRes;
     }
     return xRes;
@@ -547,7 +543,6 @@ sal_Bool SAL_CALL SpellChecker::removeLinguServiceEventListener(
     sal_Bool bRes = sal_False;
     if (!bDisposing && rxLstnr.is())
     {
-        DBG_ASSERT( xPropHelper.is(), "xPropHelper non existent" );
         bRes = GetPropHelper().removeLinguServiceEventListener( rxLstnr );
     }
     return bRes;
@@ -580,8 +575,7 @@ void SAL_CALL SpellChecker::initialize( const Sequence< Any >& rArguments )
             //! And the reference to the UNO-functions while increasing
             //! the ref-count and will implicitly free the memory
             //! when the object is not longer used.
-            pPropHelper = new PropertyHelper_Spell( (XSpellChecker *) this, xPropSet );
-            xPropHelper = pPropHelper;
+            pPropHelper = new PropertyHelper_Spelling( (XSpellChecker *) this, xPropSet );
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }
         else

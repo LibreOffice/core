@@ -85,8 +85,7 @@ class Thesaurus :
     Sequence< Locale >                      aSuppLocales;
 
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
-    Reference< XPropertyChangeListener >    xPropHelper;
-    linguistic::PropertyHelper_Thes *       pPropHelper;
+    linguistic::PropertyHelper_Thesaurus*       pPropHelper;
     sal_Bool                                    bDisposing;
     CharClass **                            aCharSetInfo;
     MyThes **                               aThes;
@@ -104,8 +103,8 @@ class Thesaurus :
     Thesaurus(const Thesaurus &);
     Thesaurus & operator = (const Thesaurus &);
 
-    linguistic::PropertyHelper_Thes &   GetPropHelper_Impl();
-    linguistic::PropertyHelper_Thes &   GetPropHelper()
+    linguistic::PropertyHelper_Thesaurus&   GetPropHelper_Impl();
+    linguistic::PropertyHelper_Thesaurus&   GetPropHelper()
     {
         return pPropHelper ? *pPropHelper : GetPropHelper_Impl();
     }

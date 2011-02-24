@@ -114,17 +114,17 @@ Hyphenator::~Hyphenator()
     if (aDicts) delete[] aDicts;
     aDicts = NULL;
     numdict = 0;
+    delete pPropHelper;
 }
 
 
-PropertyHelper_Hyphen & Hyphenator::GetPropHelper_Impl()
+PropertyHelper_Hyphenation& Hyphenator::GetPropHelper_Impl()
 {
     if (!pPropHelper)
     {
         Reference< XPropertySet >   xPropSet( GetLinguProperties(), UNO_QUERY );
 
-        pPropHelper = new PropertyHelper_Hyphen ((XHyphenator *) this, xPropSet );
-        xPropHelper = pPropHelper;
+        pPropHelper = new PropertyHelper_Hyphenation ((XHyphenator *) this, xPropSet );
         pPropHelper->AddAsPropListener();   //! after a reference is established
     }
     return *pPropHelper;
@@ -293,7 +293,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const ::rtl::OUStri
     char *lcword;
     int k = 0;
 
-    PropertyHelper_Hyphen & rHelper = GetPropHelper();
+    PropertyHelper_Hyphenation& rHelper = GetPropHelper();
     rHelper.SetTmpPropVals(aProperties);
     sal_Int16 minTrail = rHelper.GetMinTrailing();
     sal_Int16 minLead = rHelper.GetMinLeading();
@@ -506,13 +506,13 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const ::rtl::OUStri
                 sal_Int16 nPos = (sal_Int16) ((nHyphenationPosAltHyph < nHyphenationPos) ?
                 nHyphenationPosAltHyph : nHyphenationPos);
                 // dicretionary hyphenation
-                xRes = new HyphenatedWord( aWord, LocaleToLanguage( aLocale ), nPos,
+                xRes = HyphenatedWord::CreateHyphenatedWord( aWord, LocaleToLanguage( aLocale ), nPos,
                     aWord.replaceAt(nHyphenationPosAlt + 1, cut[nHyphenationPos], repHyph),
                     (sal_Int16) nHyphenationPosAltHyph);
             }
             else
             {
-                xRes = new HyphenatedWord( aWord, LocaleToLanguage( aLocale ),
+                xRes = HyphenatedWord::CreateHyphenatedWord( aWord, LocaleToLanguage( aLocale ),
                     (sal_Int16)nHyphenationPos, aWord, (sal_Int16) nHyphenationPos);
             }
         }
@@ -558,7 +558,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
     char *lcword;
     int k;
 
-    PropertyHelper_Hyphen & rHelper = GetPropHelper();
+    PropertyHelper_Hyphenation& rHelper = GetPropHelper();
     rHelper.SetTmpPropVals(aProperties);
     sal_Int16 minTrail = rHelper.GetMinTrailing();
     sal_Int16 minLead = rHelper.GetMinLeading();
@@ -715,7 +715,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         //fprintf(stderr,"result is %s\n",OU2A(hyphenatedWord));
         //fflush(stderr);
 
-        xRes = new PossibleHyphens( aWord, LocaleToLanguage( aLocale ),
+        xRes = PossibleHyphens::CreatePossibleHyphens( aWord, LocaleToLanguage( aLocale ),
                   hyphenatedWord, aHyphPos );
 
         delete[] hyphens;
@@ -826,7 +826,6 @@ sal_Bool SAL_CALL Hyphenator::removeLinguServiceEventListener(
     sal_Bool bRes = sal_False;
     if (!bDisposing && rxLstnr.is())
     {
-        DBG_ASSERT( xPropHelper.is(), "xPropHelper non existent" );
         bRes = GetPropHelper().removeLinguServiceEventListener( rxLstnr );
     }
     return bRes;
@@ -859,8 +858,7 @@ void SAL_CALL Hyphenator::initialize( const Sequence< Any >& rArguments )
             //! And the reference to the UNO-functions while increasing
             //! the ref-count and will implicitly free the memory
             //! when the object is not longer used.
-            pPropHelper = new PropertyHelper_Hyphen( (XHyphenator *) this, xPropSet );
-            xPropHelper = pPropHelper;
+            pPropHelper = new PropertyHelper_Hyphenation( (XHyphenator *) this, xPropSet );
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }
         else

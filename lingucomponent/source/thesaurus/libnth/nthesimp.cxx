@@ -137,17 +137,17 @@ Thesaurus::~Thesaurus()
 
     if (pPropHelper)
         pPropHelper->RemoveAsPropListener();
+    delete pPropHelper;
 }
 
 
-PropertyHelper_Thes & Thesaurus::GetPropHelper_Impl()
+PropertyHelper_Thesaurus& Thesaurus::GetPropHelper_Impl()
 {
     if (!pPropHelper)
     {
         Reference< XPropertySet >   xPropSet( GetLinguProperties(), UNO_QUERY );
 
-        pPropHelper = new PropertyHelper_Thes( (XThesaurus *) this, xPropSet );
-        xPropHelper = pPropHelper;
+        pPropHelper = new PropertyHelper_Thesaurus( (XThesaurus *) this, xPropSet );
         pPropHelper->AddAsPropListener();   //! after a reference is established
     }
     return *pPropHelper;
@@ -342,7 +342,7 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
     mentry * pmean = NULL;
     sal_Int32 nmean = 0;
 
-    PropertyHelper_Thes &rHelper = GetPropHelper();
+    PropertyHelper_Thesaurus &rHelper = GetPropHelper();
     rHelper.SetTmpPropVals( rProperties );
 
     MyThes * pTH = NULL;
@@ -601,8 +601,7 @@ void SAL_CALL Thesaurus::initialize( const Sequence< Any >& rArguments )
             //! And the reference to the UNO-functions while increasing
             //! the ref-count and will implicitly free the memory
             //! when the object is not longer used.
-            pPropHelper = new PropertyHelper_Thes( (XThesaurus *) this, xPropSet );
-            xPropHelper = pPropHelper;
+            pPropHelper = new PropertyHelper_Thesaurus( (XThesaurus *) this, xPropSet );
             pPropHelper->AddAsPropListener();   //! after a reference is established
         }
         else

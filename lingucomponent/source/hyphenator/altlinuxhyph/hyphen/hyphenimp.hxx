@@ -87,17 +87,16 @@ class Hyphenator :
     sal_Int32 numdict;
 
     ::cppu::OInterfaceContainerHelper       aEvtListeners;
-    Reference< XPropertyChangeListener >    xPropHelper;
     Reference< XMultiServiceFactory >       rSMgr;
-    linguistic::PropertyHelper_Hyphen *     pPropHelper;
+    linguistic::PropertyHelper_Hyphenation*     pPropHelper;
     sal_Bool                                    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     Hyphenator(const Hyphenator &);
     Hyphenator & operator = (const Hyphenator &);
 
-    linguistic::PropertyHelper_Hyphen & GetPropHelper_Impl();
-    linguistic::PropertyHelper_Hyphen & GetPropHelper()
+    linguistic::PropertyHelper_Hyphenation& GetPropHelper_Impl();
+    linguistic::PropertyHelper_Hyphenation& GetPropHelper()
     {
         return pPropHelper ? *pPropHelper : GetPropHelper_Impl();
     }
