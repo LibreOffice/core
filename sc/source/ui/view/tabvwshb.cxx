@@ -76,7 +76,6 @@
 #include "chartarr.hxx"
 #include "drawview.hxx"
 #include "ChartRangeSelectionListener.hxx"
-#include "inputhdl.hxx"
 
 using namespace com::sun::star;
 
@@ -180,12 +179,6 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
             bErrorShown = TRUE;
             // SfxViewShell::DoVerb zeigt seine Fehlermeldungen selber an
 
-            ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl( this );
-            if ( pInputHdl )
-            {
-                pInputHdl->NotifyChange( NULL );
-            }
-
             // attach listener to selection changes in chart that affect cell
             // ranges, so those can be highlighted
             // note: do that after DoVerb, so that the chart controller exists
@@ -270,7 +263,7 @@ void ScTabViewShell::DeactivateOle()
 
     ScClient* pClient = (ScClient*) GetIPClient();
     if ( pClient && pClient->IsObjectInPlaceActive() && !bUnoRefDialog )
-        pClient->DeactivateObj();
+        pClient->DeactivateObject();
 }
 
 void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
