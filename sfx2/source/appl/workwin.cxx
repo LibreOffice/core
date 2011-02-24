@@ -822,19 +822,7 @@ void SfxFrameWorkWin_Impl::ArrangeChilds_Impl( sal_Bool bForce )
     if ( pF && pF->GetViewShell() )
         pClient = pF->GetViewShell()->GetIPClient();
 
-    bool bForceArrange( false );
-    for ( sal_uInt16 n = 0; n < pChildWins->Count(); ++n )
-    {
-        SfxChildWin_Impl* pCW  = (*pChildWins)[ n ];
-        SfxChildWindow* pChild = pCW->pWin;
-        if ( pChild && ( pCW->aInfo.nFlags & SFX_CHILDWIN_NEVERHIDEACTIVEOLE ) && pCW->aInfo.bVisible )
-        {
-            bForceArrange = true;
-            break;
-        }
-    }
-
-    if ( pClient && !bForceArrange )
+    if ( pClient )
         return;
 
     aClientArea = GetTopRect_Impl();
@@ -844,7 +832,7 @@ void SfxFrameWorkWin_Impl::ArrangeChilds_Impl( sal_Bool bForce )
     SvBorder aBorder;
     if ( nChilds )
     {
-        if ( IsVisible_Impl() || bForceArrange )
+        if ( IsVisible_Impl() )
             aBorder = Arrange_Impl();
     }
 
@@ -1156,13 +1144,6 @@ void SfxWorkWindow::ShowChilds_Impl()
 
     bool bInvisible = ( !IsVisible_Impl() || ( !pWorkWin->IsReallyVisible() && !pWorkWin->IsReallyShown() ));
 
-    SfxInPlaceClient* pClient = 0;
-    SfxViewFrame* pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
-    if ( pViewFrame && pViewFrame->GetViewShell() )
-    {
-        pClient = pViewFrame->GetViewShell()->GetIPClient();
-    }
-
     SfxChild_Impl *pCli = 0;
     for ( sal_uInt16 nPos = 0; nPos < pChilds->Count(); ++nPos )
     {
@@ -1192,7 +1173,6 @@ void SfxWorkWindow::ShowChilds_Impl()
                 // visible.
                 sal_uInt16 nFlags = pCW->aInfo.nFlags;
                 bVisible = !bInvisible || ( bInvisible & (( nFlags & SFX_CHILDWIN_NEVERHIDE ) != 0 ));
-                bVisible = bVisible || ( pClient && ( nFlags & SFX_CHILDWIN_NEVERHIDEACTIVEOLE ) );
             }
 
             if ( CHILD_VISIBLE == (pCli->nVisible & CHILD_VISIBLE) && bVisible )
@@ -1665,7 +1645,8 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
 
 void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, sal_Bool bSetFocus )
 {
-    pCW->aInfo.bVisible = sal_True;
+    if ( pCW->aInfo.bVisible != 42 )
+        pCW->aInfo.bVisible = TRUE;
 
     SfxChildWindow *pChildWin = SfxChildWindow::CreateChildWindow( pCW->nId, pWorkWin, &GetBindings(), pCW->aInfo);
     if (pChildWin)

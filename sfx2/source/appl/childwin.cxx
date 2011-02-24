@@ -467,9 +467,12 @@ void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWin
             if ( nNextPos != STRING_NOTFOUND )
             {
                 // es gibt noch Extra-Information
+                rInfo.nFlags = (sal_uInt16)aWinData.Copy( nPos+1, nNextPos - nPos - 1 ).ToInt32();
                 aWinData.Erase( nPos, nNextPos-nPos+1 );
                 rInfo.aExtraString = aWinData;
             }
+            else
+                rInfo.nFlags = (sal_uInt16)aWinData.Copy( nPos+1 ).ToInt32();
         }
     }
 }
