@@ -194,9 +194,7 @@ class SwUnoCollection
 #define SW_SERVICE_VBAOBJECTPROVIDER                    110
 #define SW_SERVICE_VBACODENAMEPROVIDER                  111
 #define SW_SERVICE_VBAPROJECTNAMEPROVIDER               112
-#define SW_SERVICE_ODF_FORM_CHECKBOX                    113
-#define SW_SERVICE_ODF_FORM_LISTBOX                     114
-#define SW_SERVICE_VBAGLOBALS                           115
+#define SW_SERVICE_VBAGLOBALS                           113
 
 #define SW_SERVICE_LAST                 SW_SERVICE_VBAGLOBALS
 
