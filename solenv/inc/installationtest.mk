@@ -24,7 +24,7 @@
 #***********************************************************************/
 
 # relevant for non-product builds only, but built unconditionally
-DIAGNOSTICS_CONTROL_FILE=$(MISC)/dbgsvrc
+DIAGNOSTICS_CONTROL_FILE=$(MISC)/$(TARGET)/dbgsvrc
 DBGSV_INIT:=$(MAKEDIR)/$(DIAGNOSTICS_CONTROL_FILE)
 .EXPORT: DBGSV_INIT
 
@@ -151,6 +151,7 @@ javatest .PHONY :
 
 # relevant for non-product builds only, but built unconditionally
 $(DIAGNOSTICS_CONTROL_FILE):
+    $(COMMAND_ECHO)$(MKDIRHIER) $(@:d)
     $(COMMAND_ECHO)echo [output] > $@
 .IF "$(ABORT_ON_ASSERTION)" != ""
     $(COMMAND_ECHO)echo error=abort >> $@
