@@ -1729,8 +1729,17 @@ void Desktop::Main()
         bool bAbort = CheckExtensionDependencies();
         if ( bAbort )
             return;
+
+        {
+            ::comphelper::ComponentContext aContext( xSMgr );
+            xRestartManager.set( aContext.getSingleton( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.OfficeRestartManager" ) ) ), UNO_QUERY );
+        }
+
+        // check whether the shutdown is caused by restart
+        pExecGlobals->bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
+
         // First Start Wizard allowed ?
-        if ( ! pCmdLineArgs->IsNoFirstStartWizard())
+        if ( ! pCmdLineArgs->IsNoFirstStartWizard() && !pExecGlobals->bRestartRequested )
         {
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ FirstStartWizard" );
 
@@ -1781,14 +1790,6 @@ void Desktop::Main()
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ impl_checkRecoveryState" );
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} impl_checkRecoveryState" );
-
-        {
-            ::comphelper::ComponentContext aContext( xSMgr );
-            xRestartManager.set( aContext.getSingleton( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.OfficeRestartManager" ) ) ), UNO_QUERY );
-        }
-
-        // check whether the shutdown is caused by restart
-        pExecGlobals->bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
 
         if ( pCmdLineArgs->IsHeadless() )
         {
