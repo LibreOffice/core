@@ -1112,6 +1112,18 @@ const SfxPoolItem* SwWW8FltControlStack::GetFmtAttr(const SwPosition& rPos,
                     pItem = &(rReader.pCollA[rReader.nAktColl].maWordLR);
             }
 
+            /*
+            If we're hunting for a character property, try and exact position
+            within the text node for lookup
+            */
+            if (pNd->IsTxtNode())
+            {
+                xub_StrLen nPos = rPos.nContent.GetIndex();
+                SfxItemSet aSet(pDoc->GetAttrPool(), nWhich, nWhich);
+                if (static_cast<const SwTxtNode*>(pNd)->GetAttr(aSet, nPos, nPos))
+                    pItem = aSet.GetItem(nWhich);
+            }
+
             if (!pItem)
                 pItem = &pNd->GetAttr(nWhich);
         }
