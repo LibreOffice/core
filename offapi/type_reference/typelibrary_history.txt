@@ -161,3 +161,7 @@
 11/09/10 (JSC): TaskID=i114887
   remove drafts module from reference rdb. The odl drafts type are not used 
   and i cleaned up the module and the type library.
+
+01/28/11 (JSC): TaskID=116682
+  Update css.awt.UnoControlDialog to reflect the supported XDialog2 interface
+  additionally to XDialog

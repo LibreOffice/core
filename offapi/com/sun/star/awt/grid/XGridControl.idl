@@ -28,9 +28,6 @@
 #define __com_sun_star_awt_grid_XGridControl_idl__
 
 #include <com/sun/star/awt/grid/XGridSelection.idl>
-#include <com/sun/star/awt/grid/XGridColumnModel.idl>
-#include <com/sun/star/awt/grid/XGridDataModel.idl>
-#include <com/sun/star/awt/XMouseListener.idl>
 
 //=============================================================================
 
@@ -44,23 +41,43 @@ module com {  module sun {  module star {  module awt { module grid {
 
     @since OOo 3.3
  */
-interface XGridControl: XGridSelection
+interface XGridControl : XGridSelection
 {
-    /** Converting
+    /** retrieves the column which a given point belongs to
+
+        @param X
+            the ordinate of the point, in pixel coordinates.
+        @param Y
+            the abscissa of the point, in pixel coordinates.
+        @return
+            the index of the column which the point lies in, or -1 if no column is under the given point.
     */
+    long getColumnAtPoint( [in] long X, [in] long Y );
 
-    long getItemIndexAtPoint( [in] long x, [in] long y);
+    /** retrieves the row which a given point belongs to
 
-    /** Sets tooltip for row
-        @param textForTooltip
-            text, which will be shown as tooltip.
-            If only cell content should be displayed, leave sequence empty.
-        @param columnsForTooltip
-            column numbers, which define the cell content that should be shown in the tooltip.
-            If only text should be shown, leave this sequence empty.
+        @param X
+            the ordinate of the point, in pixel coordinates.
+        @param Y
+            the abscissa of the point, in pixel coordinates.
+        @return
+            the index of the row which the point lies in, or -1 if no row is under the given point.
     */
-    void setToolTip( [in] sequence< string > textForTooltip, [in] sequence< long > columnsForTooltip);
+    long getRowAtPoint( [in] long X, [in] long Y );
 
+    /** returns the column index of the currently active cell
+
+        <p>If the grid control's does not contain any cells (which happens if the grid column model does not contain any
+        columns, or if grid data model does not contain any rows), then <code>-1</code> is returned.</p>
+    */
+    long getCurrentColumn();
+
+    /** returns the row index of the currently active cell
+
+        <p>If the grid control's does not contain any cells (which happens if the grid column model does not contain any
+        columns, or if grid data model does not contain any rows), then <code>-1</code> is returned.</p>
+    */
+    long getCurrentRow();
 };
 
 //=============================================================================
