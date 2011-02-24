@@ -330,7 +330,7 @@ void OBookmarkContainer::implRemove(const ::rtl::OUString& _rName)
 
     if (m_aBookmarks.end() == aMapPos)
     {
-        DBG_ERROR("OBookmarkContainer::implRemove: inconsistence!");
+        OSL_ASSERT("OBookmarkContainer::implRemove: inconsistence!");
         return;
     }
 

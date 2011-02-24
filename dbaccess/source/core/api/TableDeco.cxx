@@ -561,7 +561,7 @@ void ODBTableDecorator::fillPrivileges() const
     catch(const SQLException& e)
     {
         (void)e;
-        DBG_ERROR("ODBTableDecorator::ODBTableDecorator : could not collect the privileges !");
+        OSL_ASSERT("ODBTableDecorator::ODBTableDecorator : could not collect the privileges !");
     }
 }
 

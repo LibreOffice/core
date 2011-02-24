@@ -558,7 +558,7 @@ void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Refer
     }
     catch(Exception&)
     {
-        DBG_ERROR("ODefinitionContainer::implAppend: caught something !");
+        OSL_ASSERT("ODefinitionContainer::implAppend: caught something !");
     }
 }
 

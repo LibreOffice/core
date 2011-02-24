@@ -650,7 +650,7 @@ DBG_NAME(OConnectionHelper)
             }
             catch(Exception&)
             {
-                DBG_ERROR("OConnectionHelper::getInstalledAdabasDBDirs: could not enumerate the adabas config files!");
+                OSL_ASSERT("OConnectionHelper::getInstalledAdabasDBDirs: could not enumerate the adabas config files!");
             }
         }
 

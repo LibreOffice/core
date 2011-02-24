@@ -138,7 +138,7 @@ namespace dbaui
         EntryType eEntryType = getEntryType( pHitEntry );
         if (!isContainer(eEntryType))
         {
-            DBG_ERROR("SbaTableQueryBrowser::executeDrop: what the hell did queryDrop do?");
+            OSL_ASSERT("SbaTableQueryBrowser::executeDrop: what the hell did queryDrop do?");
                 // queryDrop shoud not have allowed us to reach this situation ....
             return DND_ACTION_NONE;
         }

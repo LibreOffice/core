@@ -268,7 +268,7 @@ void OResultSet::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any&
             xSet->setPropertyValue(PROPERTY_FETCHSIZE, rValue);
             break;
         default:
-            DBG_ERROR("unknown Property");
+            OSL_ASSERT("unknown Property");
     }
 }
 

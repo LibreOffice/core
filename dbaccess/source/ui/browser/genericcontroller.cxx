@@ -270,7 +270,7 @@ sal_Bool OGenericUnoController::Construct(Window* /*pParent*/)
     }
     catch(Exception&)
     {
-        DBG_ERROR("OGenericUnoController::Construct: could not create (or start listening at) the database context!");
+        OSL_ASSERT("OGenericUnoController::Construct: could not create (or start listening at) the database context!");
     }
 
     if (!m_xDatabaseContext.is())

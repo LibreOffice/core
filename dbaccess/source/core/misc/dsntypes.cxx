@@ -359,7 +359,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const String& _rDsn) const
     if (STRING_NOTFOUND == nSeparator)
     {
         // there should be at least one such separator
-        DBG_ERROR("ODsnTypeCollection::implDetermineType : missing the colon !");
+        OSL_ASSERT("ODsnTypeCollection::implDetermineType : missing the colon !");
         return DST_UNKNOWN;
     }
     // find first :
@@ -382,7 +382,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const String& _rDsn) const
     if (STRING_NOTFOUND == nSeparator)
     {
         // at the moment only jdbc is allowed to have just one separator
-        DBG_ERROR("ODsnTypeCollection::implDetermineType : missing the second colon !");
+        OSL_ASSERT("ODsnTypeCollection::implDetermineType : missing the second colon !");
         return DST_UNKNOWN;
     }
 

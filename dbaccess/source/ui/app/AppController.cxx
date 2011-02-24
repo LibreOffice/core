@@ -473,7 +473,7 @@ sal_Bool OApplicationController::Construct(Window* _pParent)
     }
     catch(Exception&)
     {
-        DBG_ERROR("OApplicationController::Construct : the construction of UnoDataBrowserView failed !");
+        OSL_ASSERT("OApplicationController::Construct : the construction of UnoDataBrowserView failed !");
     }
 
     if ( !bSuccess )
@@ -2514,7 +2514,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     OApplicationView* pView = getContainer();
     if ( !pView || pView->getElementType() == E_NONE )
     {
-        DBG_ERROR("OApplicationController::executeDrop: what the hell did queryDrop do?");
+        OSL_ASSERT("OApplicationController::executeDrop: what the hell did queryDrop do?");
             // queryDrop shoud not have allowed us to reach this situation ....
         return DND_ACTION_NONE;
     }
@@ -2715,7 +2715,7 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
     Reference< XOfficeDatabaseDocument > xOfficeDoc( _rxModel, UNO_QUERY );
     if ( !xOfficeDoc.is() && _rxModel.is() )
     {
-        DBG_ERROR( "OApplicationController::attachModel: invalid model!" );
+        OSL_ASSERT( "OApplicationController::attachModel: invalid model!" );
         return sal_False;
     }
 

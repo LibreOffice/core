@@ -1985,7 +1985,7 @@ namespace
             Reference< XConnection> xConnection = rController.getConnection();
             if ( !xConnection.is() )
             {
-                DBG_ERROR( "InitFromParseNodeImpl: no connection? no connection!" );
+                OSL_ASSERT( "InitFromParseNodeImpl: no connection? no connection!" );
                 break;
             }
 
@@ -2297,7 +2297,7 @@ namespace
                     break;
                 }
 
-                DBG_ERROR( "InstallFields: don't know how to interpret this parse node!" );
+                OSL_ASSERT( "InstallFields: don't know how to interpret this parse node!" );
 
                 } while ( false );
             }

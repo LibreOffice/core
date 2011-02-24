@@ -374,7 +374,7 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
     }
     catch(Exception&)
     {
-        DBG_ERROR("SbaTableQueryBrowser::Construct: could not create (or start listening at) the database context!");
+        OSL_ASSERT("SbaTableQueryBrowser::Construct: could not create (or start listening at) the database context!");
     }
     // some help ids
     if (getBrowserView() && getBrowserView()->getVclControl())
@@ -468,7 +468,7 @@ sal_Bool SbaTableQueryBrowser::InitializeForm(const Reference< ::com::sun::star:
     }
     catch(Exception&)
     {
-        DBG_ERROR("SbaTableQueryBrowser::InitializeForm : something went wrong !");
+        OSL_ASSERT("SbaTableQueryBrowser::InitializeForm : something went wrong !");
         return sal_False;
     }
 
@@ -1144,7 +1144,7 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
                             }
                             catch(Exception&)
                             {
-                                DBG_ERROR("SbaTableQueryBrowser::populateTree: could not fill the tree");
+                                OSL_ASSERT("SbaTableQueryBrowser::populateTree: could not fill the tree");
                             }
                         }
                     }
@@ -1338,7 +1338,7 @@ void SbaTableQueryBrowser::implRemoveStatusListeners()
             }
             catch (Exception&)
             {
-                DBG_ERROR("SbaTableQueryBrowser::implRemoveStatusListeners: could not remove a status listener!");
+                OSL_ASSERT("SbaTableQueryBrowser::implRemoveStatusListeners: could not remove a status listener!");
             }
         }
     }
@@ -1900,7 +1900,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
                     }
                     catch(Exception&)
                     {
-                        DBG_ERROR("SbaTableQueryBrowser::Execute(ID_BROWSER_?): could not clone the cursor!");
+                        OSL_ASSERT("SbaTableQueryBrowser::Execute(ID_BROWSER_?): could not clone the cursor!");
                     }
 
                     Reference<XPropertySet> xProp(getRowSet(),UNO_QUERY);
@@ -2066,7 +2066,7 @@ void SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAcce
     }
     catch(Exception&)
     {
-        DBG_ERROR("SbaTableQueryBrowser::populateTree: could not fill the tree");
+        OSL_ASSERT("SbaTableQueryBrowser::populateTree: could not fill the tree");
     }
 }
 
@@ -2253,7 +2253,7 @@ sal_Bool SbaTableQueryBrowser::ensureEntryObject( SvLBoxEntry* _pEntry )
                             bSuccess = pEntryData->xContainer.is();
                         }
                         else {
-                            DBG_ERROR("SbaTableQueryBrowser::ensureEntryObject: no XQueryDefinitionsSupplier interface!");
+                            OSL_ASSERT("SbaTableQueryBrowser::ensureEntryObject: no XQueryDefinitionsSupplier interface!");
                         }
                     }
                     catch( const Exception& )
@@ -2826,7 +2826,7 @@ void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEve
     }
     else if (xNames.get() == m_xDatabaseContext.get())
     {   // a datasource has been replaced in the context
-        DBG_ERROR("SbaTableQueryBrowser::elementReplaced: no support for replaced data sources!");
+        OSL_ASSERT("SbaTableQueryBrowser::elementReplaced: no support for replaced data sources!");
             // very suspicious: the database context should not allow to replace data source, only to register
             // and revoke them
     }

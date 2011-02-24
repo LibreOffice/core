@@ -193,7 +193,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
     }
     catch(RuntimeException&)
     {
-        DBG_ERROR("OTableTreeListBox::UpdateTableList : caught an RuntimeException!");
+        OSL_ASSERT("OTableTreeListBox::UpdateTableList : caught an RuntimeException!");
     }
     catch ( const SQLException& )
     {

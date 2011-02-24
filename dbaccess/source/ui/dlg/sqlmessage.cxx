@@ -594,7 +594,7 @@ void OSQLMessageBox::impl_initImage( MessageType _eImage )
     switch (_eImage)
     {
         default:
-            DBG_ERROR( "OSQLMessageBox::impl_initImage: unsupported image type!" );
+            OSL_ASSERT( "OSQLMessageBox::impl_initImage: unsupported image type!" );
 
         case Info:
             m_aInfoImage.SetImage(InfoBox::GetStandardImage());

@@ -626,7 +626,7 @@ void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const ::rtl::OUStr
     catch( const Exception& e )
     {
         (void)e;
-        DBG_ERROR( "OSingleSelectQueryComposer::setElementaryQuery: there should be no error anymore for the additive statement!" );
+        OSL_ASSERT( "OSingleSelectQueryComposer::setElementaryQuery: there should be no error anymore for the additive statement!" );
         // every part of the additive statement should have passed other tests already, and should not
         // be able to cause any errors ... me thinks
     }
@@ -704,7 +704,7 @@ void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const 
     catch( const Exception& e )
     {
         (void)e;
-        DBG_ERROR( "OSingleSelectQueryComposer::setSingleAdditiveClause: there should be no error anymore for the additive statement!" );
+        OSL_ASSERT( "OSingleSelectQueryComposer::setSingleAdditiveClause: there should be no error anymore for the additive statement!" );
         // every part of the additive statement should have passed other tests already, and should not
         // be able to cause any errors ... me thinks
     }
@@ -1016,7 +1016,7 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
     if (SQL_ISRULE(pCondition,boolean_primary))
     {
         // this should not occur
-        DBG_ERROR("boolean_primary in And-Criteria");
+        OSL_ASSERT("boolean_primary in And-Criteria");
         return sal_False;
     }
     // Das erste Element ist (wieder) eine AND-Verknuepfung

@@ -1289,7 +1289,7 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
     }
     catch(Exception&)
     {
-        DBG_ERROR("SbaGridControl::DoColumnDrag : something went wrong while getting the column");
+        OSL_ASSERT("SbaGridControl::DoColumnDrag : something went wrong while getting the column");
     }
     if (0 == sField.getLength())
         return;
@@ -1372,7 +1372,7 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
     }
     catch(Exception&)
     {
-        DBG_ERROR("SbaGridControl::DoFieldDrag : could not retrieve the cell's contents !");
+        OSL_ASSERT("SbaGridControl::DoFieldDrag : could not retrieve the cell's contents !");
         return;
     }
 

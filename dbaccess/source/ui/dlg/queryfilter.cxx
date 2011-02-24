@@ -454,7 +454,7 @@ Reference< XPropertySet > DlgFilterCrit::getMatchingColumn( const Edit& _rValueI
         sField = aLB_WHEREFIELD3.GetSelectEntry();
     }
     else {
-        DBG_ERROR( "DlgFilterCrit::getMatchingColumn: invalid event source!" );
+        OSL_ASSERT( "DlgFilterCrit::getMatchingColumn: invalid event source!" );
     }
 
     // the field itself

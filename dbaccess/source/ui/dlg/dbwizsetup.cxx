@@ -388,7 +388,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
     }
     break;
     default:
-        DBG_ERROR( "ODbTypeWizDialogSetup::activateDatabasePath: unknown creation mode!" );
+        OSL_ASSERT( "ODbTypeWizDialogSetup::activateDatabasePath: unknown creation mode!" );
     }
 
     enableButtons( WZB_NEXT, m_pGeneralPage->GetDatabaseCreationMode() != OGeneralPage::eOpenExisting );
@@ -726,7 +726,7 @@ sal_Bool ODbTypeWizDialogSetup::leaveState(WizardState _nState)
 // -----------------------------------------------------------------------------
 void ODbTypeWizDialogSetup::setTitle(const ::rtl::OUString& /*_sTitle*/)
 {
-    DBG_ERROR( "ODbTypeWizDialogSetup::setTitle: not implemented!" );
+    OSL_ASSERT( "ODbTypeWizDialogSetup::setTitle: not implemented!" );
         // why?
 }
 

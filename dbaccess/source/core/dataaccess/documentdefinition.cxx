@@ -683,7 +683,7 @@ namespace
                 }
                 catch ( Exception& )
                 {
-                    DBG_ERROR( "PreserveVisualAreaSize::PreserveVisualAreaSize: caught an exception!" );
+                    OSL_ASSERT( "PreserveVisualAreaSize::PreserveVisualAreaSize: caught an exception!" );
                 }
             }
         }
@@ -698,7 +698,7 @@ namespace
                 }
                 catch ( Exception& )
                 {
-                    DBG_ERROR( "PreserveVisualAreaSize::~PreserveVisualAreaSize: caught an exception!" );
+                    OSL_ASSERT( "PreserveVisualAreaSize::~PreserveVisualAreaSize: caught an exception!" );
                 }
             }
         }
@@ -730,7 +730,7 @@ namespace
             }
             catch( Exception& )
             {
-                DBG_ERROR( "LayoutManagerLock::LayoutManagerLock: caught an exception!" );
+                OSL_ASSERT( "LayoutManagerLock::LayoutManagerLock: caught an exception!" );
             }
         }
 
@@ -935,7 +935,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
                                 sal_Int16( nOpenMode ) ) ),
                 _rxEnvironment );
         // Unreachable
-        DBG_ERROR( "unreachable" );
+        OSL_ASSERT( "unreachable" );
       }
 
     OSL_ENSURE( m_pImpl->m_aProps.sPersistentName.getLength(),

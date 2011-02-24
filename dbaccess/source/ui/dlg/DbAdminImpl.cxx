@@ -135,7 +135,7 @@ namespace
             ::rtl::OString sMessage("ODbAdminDialog::implTranslateProperty: could not set the property ");
             sMessage += ::rtl::OString(_rName.getStr(), _rName.getLength(), RTL_TEXTENCODING_ASCII_US);
             sMessage += ::rtl::OString("!");
-            DBG_ERROR(sMessage.getStr());
+            OSL_ASSERT(sMessage.getStr());
     #endif
         }
 
@@ -643,7 +643,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
                 ::rtl::OString aMessage("ODbDataSourceAdministrationHelper::translateProperties: could not extract the property ");
                 aMessage += ::rtl::OString(aDirect->second.getStr(), aDirect->second.getLength(), RTL_TEXTENCODING_ASCII_US);
                 aMessage += ::rtl::OString("!");
-                DBG_ERROR(aMessage.getStr());
+                OSL_ASSERT(aMessage.getStr());
 #endif
             }
             // transfer it into an item
@@ -949,7 +949,7 @@ Any ODbDataSourceAdministrationHelper::implTranslateProperty(const SfxPoolItem* 
     }
     else
     {
-        DBG_ERROR("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported item type!");
+        OSL_ASSERT("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported item type!");
         return aValue;
     }
 
@@ -997,7 +997,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 _rSet.Put(SfxStringItem(_nId, sValue.getStr()));
             }
             else {
-                DBG_ERROR(
+                OSL_ASSERT(
                     (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
                     +=  ::rtl::OString( translatePropertyId( _nId ) )
                     +=  ::rtl::OString( " should be no string)!" )
@@ -1027,7 +1027,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 _rSet.Put( aItem );
             }
             else {
-                DBG_ERROR(
+                OSL_ASSERT(
                     (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
                     +=  ::rtl::OString( translatePropertyId( _nId ) )
                     +=  ::rtl::OString( " should be no boolean)!" )
@@ -1044,7 +1044,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 _rSet.Put( SfxInt32Item( _nId, nValue ) );
             }
             else {
-                DBG_ERROR(
+                OSL_ASSERT(
                     (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
                     +=  ::rtl::OString( translatePropertyId( _nId ) )
                     +=  ::rtl::OString( " should be no int)!" )
@@ -1073,7 +1073,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                     }
                     break;
                     default:
-                        DBG_ERROR("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported property value type!");
+                        OSL_ASSERT("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported property value type!");
                 }
             }
             else {

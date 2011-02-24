@@ -126,7 +126,7 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
     }
     catch (Exception&)
     {
-        DBG_ERROR("PropBrw::PropBrw: could not create/initialize my frame!");
+        OSL_ASSERT("PropBrw::PropBrw: could not create/initialize my frame!");
         m_xMeAsFrame.clear();
     }
 
@@ -179,7 +179,7 @@ PropBrw::PropBrw(const Reference< XMultiServiceFactory >&   _xORB,Window* pParen
         }
         catch (Exception&)
         {
-            DBG_ERROR("PropBrw::PropBrw: could not create/initialize the browser controller!");
+            OSL_ASSERT("PropBrw::PropBrw: could not create/initialize the browser controller!");
             try
             {
                 ::comphelper::disposeComponent(m_xBrowserController);
@@ -562,7 +562,7 @@ void PropBrw::Update( OSectionView* pNewView )
     }
     catch ( Exception& )
     {
-        DBG_ERROR( "PropBrw::Update: Exception occurred!" );
+        OSL_ASSERT( "PropBrw::Update: Exception occurred!" );
     }
 }
 //----------------------------------------------------------------------------
@@ -584,7 +584,7 @@ void PropBrw::Update( const uno::Reference< uno::XInterface>& _xReportComponent)
         }
         catch ( Exception& )
         {
-            DBG_ERROR( "PropBrw::Update: Exception occurred!" );
+            OSL_ASSERT( "PropBrw::Update: Exception occurred!" );
         }
     }
 }
