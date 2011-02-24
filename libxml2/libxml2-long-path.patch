@@ -1,0 +1,34 @@
+--- misc/libxml2-2.7.6/uri.c	2009-10-02 17:28:55.000000000 +0200
++++ misc/build/libxml2-2.7.6/uri.c	2011-02-24 13:47:19.349299000 +0100
+@@ -2479,7 +2479,16 @@
+     if (path == NULL)
+ 	return(NULL);
+ 
+-    /* sanitize filename starting with // so it can be used as URI */
++#if defined(_WIN32) 	
++	//We must not change the backslashes to slashes if the the path starts with
++	// \\?\
++	//Those pathes can be up to 32k characters long.
++	len = xmlStrlen(path);
++	if ((len > 3) && (path[0] == '\\') && (path[1] == '\\') && (path[2] == '?') && (path[3] == '\\') )
++		return xmlStrdup((const xmlChar *) path);
++#endif
++
++	/* sanitize filename starting with // so it can be used as URI */
+     if ((path[0] == '/') && (path[1] == '/') && (path[2] != '/'))
+         path++;
+ 
+--- misc/libxml2-2.7.6/xmlIO.c	2009-09-24 17:32:00.000000000 +0200
++++ misc/build/libxml2-2.7.6/xmlIO.c	2011-02-24 13:47:26.163762000 +0100
+@@ -772,6 +772,11 @@
+ 
+ #ifdef HAVE_STAT
+ #if defined(_WIN32) || defined (__DJGPP__) && !defined (__CYGWIN__)
++	//On Windows stat and wstat do not work with long pathname, 
++	//which start with '\\?\'
++	if ((xmlStrlen(path) > 3) && (path[0] == '\\') && (path[1] == '\\') && (path[2] == '?') && (path[3] == '\\') )
++		return 1;
++
+     if (xmlWrapStat(path, &stat_buffer) == -1)
+         return 0;
+ #else
