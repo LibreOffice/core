@@ -43,7 +43,7 @@ java_util_Date::~java_util_Date()
 
 jclass java_util_Date::getMyClass() const
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched only once, therefore static
     if( !theClass )
         theClass = findMyClass("java/util/Date");
     return theClass;

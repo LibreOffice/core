@@ -40,7 +40,7 @@ java_lang_Boolean::~java_lang_Boolean()
 {}
 jclass java_lang_Boolean::st_getMyClass()
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched only once, therefore static
     if( !theClass )
         theClass = findMyClass("java/lang/Boolean");
     return theClass;

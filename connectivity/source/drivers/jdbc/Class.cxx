@@ -44,7 +44,7 @@ java_lang_Class::~java_lang_Class()
 
 jclass java_lang_Class::getMyClass() const
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched only once, therefore static
     if( !theClass )
         theClass = findMyClass("java/lang/Class");
     return theClass;
@@ -61,7 +61,7 @@ java_lang_Class * java_lang_Class::forName( const ::rtl::OUString& _par0 )
         out = t.pEnv->FindClass(sClassName);
         ThrowSQLException(t.pEnv,0);
     } //t.pEnv
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller becomes the owner of the returned pointer
     return out==0 ? NULL : new java_lang_Class( t.pEnv, out );
 }
 

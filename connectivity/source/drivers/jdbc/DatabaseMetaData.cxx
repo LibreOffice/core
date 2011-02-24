@@ -63,7 +63,7 @@ java_sql_DatabaseMetaData::~java_sql_DatabaseMetaData()
 
 jclass java_sql_DatabaseMetaData::getMyClass() const
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched only once, therefore static
     if( !theClass )
         theClass = findMyClass("java/sql/DatabaseMetaData");
     return theClass;
@@ -130,7 +130,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
 
     {
-        // Java-Call absetzen
+        // execute Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         OSL_VERIFY_RES( !isExceptionOccurred(t.pEnv,sal_True),"Exception occurred!");
@@ -359,11 +359,11 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getIndexInfo(
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
 
     {
-        // Java-Call absetzen
+        // execute Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         jvalue args[5];
-        // Parameter konvertieren
+        // convert Parameter
         args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
         args[1].l = schema.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schema);
         args[2].l = convertwchar_tToJavaString(t.pEnv,table);
@@ -371,7 +371,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getIndexInfo(
         args[4].z = approximate;
         out = t.pEnv->CallObjectMethod( object, mID, args[0].l,args[1].l,args[2].l,args[3].z,args[4].z );
 
-        // und aufraeumen
+        // and clean up
         if(catalog.hasValue())
             t.pEnv->DeleteLocalRef((jstring)args[0].l);
         if(args[1].l)
@@ -400,17 +400,17 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getBestRowIdentifier
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
 
     {
-        // Java-Call absetzen
+        // execute Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         jvalue args[3];
-        // Parameter konvertieren
+        // convert Parameter
         args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
         args[1].l = schema.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schema);
         args[2].l = convertwchar_tToJavaString(t.pEnv,table);
         out = t.pEnv->CallObjectMethod( object, mID, args[0].l,args[1].l,args[2].l,scope,nullable);
 
-        // und aufraeumen
+        // and cleanup
         if(catalog.hasValue())
             t.pEnv->DeleteLocalRef((jstring)args[0].l);
         if(args[1].l)
@@ -439,7 +439,6 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
     if ( xReturn.is() )
     {
         // we have to check the result columns for the tables privleges
-        // #106324#
         Reference< XResultSetMetaDataSupplier > xMetaSup(xReturn,UNO_QUERY);
         if ( xMetaSup.is() )
         {
@@ -517,11 +516,11 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCrossReference(
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
 
-        // Java-Call absetzen
+        // execute Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         jvalue args[6];
-        // Parameter konvertieren
+        // convert Parameter
         args[0].l = primaryCatalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(primaryCatalog)) : 0;
         args[1].l = primarySchema.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,primarySchema);
         args[2].l = convertwchar_tToJavaString(t.pEnv,primaryTable);
@@ -530,7 +529,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCrossReference(
         args[5].l = convertwchar_tToJavaString(t.pEnv,foreignTable);
         out = t.pEnv->CallObjectMethod( object, mID, args[0].l,args[2].l,args[2].l,args[3].l,args[4].l,args[5].l );
 
-        // und aufraeumen
+        // and clean up
         if(primaryCatalog.hasValue())
             t.pEnv->DeleteLocalRef((jstring)args[0].l);
         if(args[1].l)
@@ -1432,12 +1431,12 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getUDTs(
 
         static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[I)Ljava/sql/ResultSet;";
         static const char * cMethodName = "getUDTs";
-        // Java-Call absetzen
+        // dismiss Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         {
             jvalue args[4];
-            // temporaere Variable initialisieren
+            // initialize temporary Variable
             args[0].l = catalog.hasValue() ? convertwchar_tToJavaString(t.pEnv,comphelper::getString(catalog)) : 0;
             args[1].l = schemaPattern.toChar() == '%' ? NULL : convertwchar_tToJavaString(t.pEnv,schemaPattern);
             args[2].l = convertwchar_tToJavaString(t.pEnv,typeNamePattern);
