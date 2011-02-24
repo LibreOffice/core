@@ -30,6 +30,8 @@
 #include "precompiled_vcl.hxx"
 #include <string.h>
 
+#include <boost/ptr_container/ptr_vector.hpp>
+
 #include <svsys.h>
 #include <vcl/salinst.hxx>
 #include <vcl/salframe.hxx>
