@@ -146,7 +146,6 @@ SchXMLImportHelper::SchXMLImportHelper() :
 
         mpChartAttrTokenMap( 0 ),
         mpPlotAreaAttrTokenMap( 0 ),
-        mpLegendAttrTokenMap( 0 ),
         mpAutoStyleAttrTokenMap( 0 ),
         mpCellAttrTokenMap( 0 ),
         mpSeriesAttrTokenMap( 0 ),
@@ -172,8 +171,6 @@ SchXMLImportHelper::~SchXMLImportHelper()
         delete mpChartAttrTokenMap;
     if( mpPlotAreaAttrTokenMap )
         delete mpPlotAreaAttrTokenMap;
-    if( mpLegendAttrTokenMap )
-        delete mpLegendAttrTokenMap;
     if( mpAutoStyleAttrTokenMap )
         delete mpAutoStyleAttrTokenMap;
     if( mpCellAttrTokenMap )
@@ -369,25 +366,6 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPlotAreaAttrTokenMap()
     } // if( ! mpPlotAreaAttrTokenMap )
 
     return *mpPlotAreaAttrTokenMap;
-}
-
-const SvXMLTokenMap& SchXMLImportHelper::GetLegendAttrTokenMap()
-{
-    if( ! mpLegendAttrTokenMap )
-    {
-        static __FAR_DATA SvXMLTokenMapEntry aLegendAttrTokenMap[] =
-{
-    { XML_NAMESPACE_CHART,  XML_LEGEND_POSITION,        XML_TOK_LEGEND_POSITION     },
-    { XML_NAMESPACE_SVG,    XML_X,                      XML_TOK_LEGEND_X            },
-    { XML_NAMESPACE_SVG,    XML_Y,                      XML_TOK_LEGEND_Y            },
-    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_LEGEND_STYLE_NAME   },
-    XML_TOKEN_MAP_END
-};
-
-        mpLegendAttrTokenMap = new SvXMLTokenMap( aLegendAttrTokenMap );
-    } // if( ! mpLegendAttrTokenMap )
-
-    return *mpLegendAttrTokenMap;
 }
 
 const SvXMLTokenMap& SchXMLImportHelper::GetAutoStyleAttrTokenMap()

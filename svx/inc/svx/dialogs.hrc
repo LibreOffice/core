@@ -52,6 +52,14 @@
 #define RID_SVXSTR_LINESTYLE                (RID_SVX_START + 173)
 #define RID_SVXSTR_FIELDUNIT_TABLE          (RID_SVX_START + 311)
 #define RID_SVXSTR_COLOR_USER               (RID_SVX_START + 250)
+//IAccessibility2 Implementation 2009-----
+#define RID_SVXSTR_GALLERYPROPS_GALTHEME    (RID_SVX_START + 251)
+#define RID_SVXSTR_GALLERY_THEMEITEMS       (RID_SVX_START + 252)
+#define RID_SVXSTR_GALLERY_THEMENAME        (RID_SVX_START + 253)
+#define RID_SVXSTR_GALLERY_FILESFOUND       (RID_SVX_START + 254)
+#define RID_SVXSTR_GALLERY_PREVIEW          (RID_SVX_START + 255)
+//-----IAccessibility2 Implementation 2009
+
 
 // factory IDs of tabpages implemented in CUI
 #define RID_SVXPAGE_CHAR_TWOLINES           (RID_SVX_START + 242)
@@ -956,6 +964,9 @@
 
 #define RID_SVXSTR_NEXTFREE                                 (RID_SVX_START + 1191)
 
+//IAccessibility2 Implementation 2009-----
+#define RID_SVXSTR_TEXTCOLOR                                (RID_SVX_START + 1178)
+//-----IAccessibility2 Implementation 2009
 // ----------------------------------------------------------------------------
 // if we have _a_lot_ time, we should group the resource ids by type, instead
 // of grouping them by semantics. The reason is that resource ids have to be
@@ -1048,6 +1059,11 @@
 #define SID_SC_TP_MISC                  (RID_OFA_START + 239)
 #define OFA_TP_TABPROPERTIES_TEXT       (RID_OFA_START + 245)
 #define OFA_TP_HELPERPROG               (RID_OFA_START + 249)
+
+// IAccessibility2 implementation 2009. ------
+#define STR_COLORTABLE                  (RID_OFA_START + 257)
+#define STR_SWITCH                      (RID_OFA_START + 258)
+// ------ IAccessibility2 implementation 2009.
 
 #endif
 

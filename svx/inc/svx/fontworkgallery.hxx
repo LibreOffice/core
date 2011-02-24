@@ -91,8 +91,8 @@ public:
 
 class SVX_DLLPUBLIC FontWorkGalleryDialog : public ModalDialog
 {
-    ValueSet            maCtlFavorites;
     FixedLine           maFLFavorites;
+    ValueSet            maCtlFavorites;
     OKButton            maOKButton;
     CancelButton        maCancelButton;
     HelpButton          maHelpButton;

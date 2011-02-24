@@ -69,8 +69,10 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/chart/SchXMLAxisContext \
     xmloff/source/chart/SchXMLCalculationSettingsContext \
     xmloff/source/chart/SchXMLChartContext \
+    xmloff/source/chart/SchXMLEnumConverter \
     xmloff/source/chart/SchXMLExport \
     xmloff/source/chart/SchXMLImport \
+    xmloff/source/chart/SchXMLLegendContext \
     xmloff/source/chart/SchXMLParagraphContext \
     xmloff/source/chart/SchXMLPlotAreaContext \
     xmloff/source/chart/SchXMLSeries2Context \

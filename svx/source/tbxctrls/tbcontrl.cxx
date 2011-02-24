@@ -856,6 +856,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     {
         aColorSet.SetStyle( aColorSet.GetStyle() | WB_NONEFIELD );
         aColorSet.SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
+        aColorSet.SetAccessibleName( SVX_RESSTR( RID_SVXSTR_BACKGROUND ) );
     }
     else if ( SID_ATTR_CHAR_COLOR == theSlotId || SID_ATTR_CHAR_COLOR2 == theSlotId || SID_EXTRUSION_3D_COLOR == theSlotId )
     {
@@ -870,7 +871,12 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         {
             aColorSet.SetStyle( aColorSet.GetStyle() | WB_NONEFIELD );
             aColorSet.SetText( SVX_RESSTR( RID_SVXSTR_AUTOMATIC ) );
+            aColorSet.SetAccessibleName( SVX_RESSTR( RID_SVXSTR_TEXTCOLOR ) );
         }
+    }
+    else
+    {
+        aColorSet.SetAccessibleName( SVX_RESSTR( RID_SVXSTR_FRAME_COLOR ) );
     }
 
     if ( pColorTable )
@@ -1092,6 +1098,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( sal_uInt16 nId, const Reference< XFram
 
     SetHelpId( HID_POPUP_FRAME );
     SetText( SVX_RESSTR(RID_SVXSTR_FRAME) );
+    aFrameSet.SetAccessibleName( SVX_RESSTR(RID_SVXSTR_FRAME) );
     aFrameSet.Show();
 }
 /*-- 22.09.2004 12:27:50---------------------------------------------------
@@ -1348,6 +1355,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame 
     aLineSet.SetSelectHdl( LINK( this, SvxLineWindow_Impl, SelectHdl ) );
     aLineSet.SetText( SVX_RESSTR(STR_NONE) );
 
+    aLineSet.SetAccessibleName( SVX_RESSTR(RID_SVXSTR_FRAME_STYLE) );
     lcl_CalcSizeValueSet( *this, aLineSet, aBmpSize );
 
     SetHelpId( HID_POPUP_LINE );
