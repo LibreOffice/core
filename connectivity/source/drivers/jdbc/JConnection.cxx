@@ -427,9 +427,9 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL java_sql_Connecti
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(NULL);
-    /*jobject out = */callObjectMethod(t.pEnv,"getTypeMap","()Ljava/util/Map;", mID);
+    callObjectMethod(t.pEnv,"getTypeMap","()Ljava/util/Map;", mID);
     // WARNING: the caller becomes the owner of the returned pointer
-    return 0;// ? 0 : Map2XNameAccess( t.pEnv, out );
+    return 0;
 }
 // -------------------------------------------------------------------------
 void SAL_CALL java_sql_Connection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)

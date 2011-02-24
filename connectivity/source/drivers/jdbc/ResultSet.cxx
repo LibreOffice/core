@@ -893,7 +893,7 @@ void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, co
                 }
                 else
                     pBigDecimal.reset(new java_math_BigDecimal(::comphelper::getString(x)));
-                    //obj = convertwchar_tToJavaString(t.pEnv,::comphelper::getString(x));
+
                 t.pEnv->CallVoidMethod( object, mID, columnIndex,pBigDecimal->getJavaObject(),scale);
                 ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             }
