@@ -68,7 +68,6 @@ SHL1STDLIBS=\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPUNITLIB)		\
-        $(TESTSHL2LIB)           \
     $(ZLIB3RDLIB)	    \
     $(CPPULIB)			\
     $(SALLIB)
@@ -102,7 +101,6 @@ APP1STDLIBS=\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPUNITLIB)		\
-        $(TESTSHL2LIB)           \
     $(ZLIB3RDLIB)	    \
     $(CPPULIB)			\
     $(SALLIB)
@@ -131,7 +129,6 @@ APP2STDLIBS=\
       $(COMPHELPERLIB)	\
       $(CPPUHELPERLIB)	\
       $(CPPUNITLIB)		\
-        $(TESTSHL2LIB)           \
       $(ZLIB3RDLIB)	    \
       $(CPPULIB)			\
       $(SALLIB)
