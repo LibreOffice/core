@@ -32,6 +32,12 @@
 #include /*MSVC trouble: <cstring>*/ <string.h>
 #include <idlc/options.hxx>
 
+#ifdef SAL_UNX
+#define SEPARATOR '/'
+#else
+#define SEPARATOR '\\'
+#endif
+
 using namespace rtl;
 
 Options::Options(): m_stdin(false), m_verbose(false), m_quiet(false)
@@ -52,7 +58,9 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
     {
         bCmdFile = sal_True;
 
-        m_program = av[0];
+        OString name(av[0]);
+        sal_Int32 index = name.lastIndexOf(SEPARATOR);
+        m_program = name.copy((index > 0 ? index+1 : 0));
 
         if (ac < 2)
         {
@@ -335,7 +343,7 @@ OString Options::prepareHelp()
     help += "                  requirements.\n";
     help += "    -w          = display warning messages.\n";
     help += "    -we         = treat warnings as errors.\n";
-    help += "    -h|-?       = print this help message and exit.\n";
+    help += "    -h|-?       = print this help message and exit.\n\n";
     help += prepareVersion();
 
     return help;

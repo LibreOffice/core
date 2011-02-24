@@ -172,7 +172,9 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
     {
         bCmdFile = sal_True;
 
-        m_program = av[0];
+        OString name(av[0]);
+        sal_Int32 index = name.lastIndexOf(SEPARATOR);
+        m_program = name.copy((index > 0 ? index+1 : 0));
 
         if (ac < 2)
         {
@@ -397,7 +399,7 @@ OString Options::prepareHelp()
     help += "                incompatible to r1. But if a service in r2 supports more properties as\n";
     help += "                in r1 and the new properties are 'optonal' it is compatible.\n";
     help += "    -u|U      = additionally check types that are unpublished in registry 1.\n";
-    help += "    -h|-?     = print this help message and exit.\n";
+    help += "    -h|-?     = print this help message and exit.\n\n";
     help += prepareVersion();
 
     return help;
