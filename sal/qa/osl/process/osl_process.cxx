@@ -475,17 +475,31 @@ public:
         string_container_t parent_env;
         read_parent_environment(&parent_env);
 
+#if OSL_DEBUG_LEVEL > 1
+        for (string_container_t::const_iterator iter = parent_env.begin(), end = parent_env.end(); iter != end; ++iter)
+            std::cerr << "initially parent env: " << *iter << std::endl;
+#endif
+
         //remove the environment variables that we have changed
         //in the child environment from the read parent environment
         parent_env.erase(
             std::remove_if(parent_env.begin(), parent_env.end(), exclude(different_env_vars)),
             parent_env.end());
 
+#if OSL_DEBUG_LEVEL > 1
+        for (string_container_t::const_iterator iter = parent_env.begin(), end = parent_env.end(); iter != end; ++iter)
+            std::cerr << "stripped parent env: " << *iter << std::endl;
+#endif
+
         //read the child environment and exclude the variables that
         //are different
         string_container_t child_env;
         read_child_environment(&child_env);
 
+#if OSL_DEBUG_LEVEL > 1
+        for (string_container_t::const_iterator iter = child_env.begin(), end = child_env.end(); iter != end; ++iter)
+            std::cerr << "initial child env: " << *iter << std::endl;
+#endif
         //partition the child environment into the variables that
         //are different to the parent environment (they come first)
         //and the variables that should be equal between parent
@@ -495,6 +509,11 @@ public:
 
         string_container_t different_child_env_vars(child_env.begin(), iter_logical_end);
         child_env.erase(child_env.begin(), iter_logical_end);
+
+#if OSL_DEBUG_LEVEL > 1
+        for (string_container_t::const_iterator iter = child_env.begin(), end = child_env.end(); iter != end; ++iter)
+            std::cerr << "stripped child env: " << *iter << std::endl;
+#endif
 
         bool common_env_size_equals    = (parent_env.size() == child_env.size());
         bool common_env_content_equals = std::equal(child_env.begin(), child_env.end(), parent_env.begin());
