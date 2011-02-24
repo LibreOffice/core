@@ -64,6 +64,8 @@
 
 #include <envfmt.hrc>
 
+#include <vector>
+
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"
 
@@ -386,31 +388,29 @@ SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, BOOL bSender)
         }
 
         // Ranges kompaktieren
-        SvLongs aCompactedRanges( 0, 10 );
+        std::vector<USHORT> aCompactedRanges;
 
-        aCompactedRanges.Insert(aMergedRanges[0], aCompactedRanges.Count());
+        aCompactedRanges.push_back(aMergedRanges[0]);
 
-        for (i = 0; i < aMergedRanges.Count(); i++)
+        for (i = 0; i < aMergedRanges.Count(); ++i)
         {
             while (i + 1 < aMergedRanges.Count() &&
                 aMergedRanges[i+1] - aMergedRanges[i] == 1)
             {
                 i++;
             }
-            long nEnd = aMergedRanges[i];
-            aCompactedRanges.Insert(nEnd, aCompactedRanges.Count());
+            aCompactedRanges.push_back( aMergedRanges[i] );
 
             if (i + 1 < aMergedRanges.Count())
             {
-                long nStart = aMergedRanges[i+1];
-                aCompactedRanges.Insert(nStart, aCompactedRanges.Count());
+                aCompactedRanges.push_back( aMergedRanges[i+1] );
             }
         }
 
         // Neue Ranges erzeugen
-        USHORT *pNewRanges = new USHORT[aCompactedRanges.Count() + 1];
-        for (i = 0; i < aCompactedRanges.Count(); i++)
-            pNewRanges[i] = (USHORT)aCompactedRanges[i];
+        USHORT *pNewRanges = new USHORT[aCompactedRanges.size() + 1];
+        for (i = 0; i < aCompactedRanges.size(); ++i)
+            pNewRanges[i] = aCompactedRanges[i];
 
         pNewRanges[i] = 0;
 
