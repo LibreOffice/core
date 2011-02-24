@@ -32,6 +32,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
         editeng \
     framework \
     idl \
+	linguistic \
     padmin \
     sfx2 \
     sot \
