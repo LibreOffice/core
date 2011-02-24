@@ -50,7 +50,12 @@ LUCENE_ANALYZERS_JAR=lucene-analyzers-$(LUCENE_MAJOR).$(LUCENE_MINOR).jar
 
 TARFILE_NAME=$(LUCENE_NAME)
 TARFILE_MD5=48d8169acc35f97e05d8dcdfd45be7f2
-PATCH_FILES=lucene.patch
+PATCH_FILES=lucene.patch 
+
+.IF "$(OS)" == "WNT"
+PATCH_FILES+= long_path.patch
+.ENDIF
+
 
 BUILD_DIR=.
 BUILD_ACTION= ${ANT} -buildfile .$/contrib$/analyzers$/build.xml
