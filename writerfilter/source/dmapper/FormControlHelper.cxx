@@ -223,12 +223,14 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRan
 
 bool FormControlHelper::processField(uno::Reference<text::XFormField> xFormField)
 {
+    bool bRes = true;
     uno::Reference<container::XNameContainer> xNameCont = xFormField->getParameters();
-    if (m_pImpl->m_eFieldId == FIELD_FORMTEXT )
+    if ( m_pFFData && xNameCont.is() )
     {
-        xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT)));
-        if ( xNameCont.is() )
+
+        if (m_pImpl->m_eFieldId == FIELD_FORMTEXT )
         {
+            xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT)));
             if (  m_pFFData->getName().getLength() )
             {
                 if ( xNameCont->hasByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT_NAME)) ) )
@@ -244,22 +246,19 @@ bool FormControlHelper::processField(uno::Reference<text::XFormField> xFormField
                     xNameCont->insertByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT_DEFAULT)), uno::makeAny( m_pFFData->getTextDefault() ) );
             }
         }
-    }
-    else if (m_pImpl->m_eFieldId == FIELD_FORMCHECKBOX )
-    {
-        xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX)));
-        uno::Reference<beans::XPropertySet> xPropSet(xFormField, uno::UNO_QUERY);
-        uno::Any aAny;
-        aAny <<= m_pFFData->getCheckboxChecked();
-        if ( xPropSet.is() )
-            xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Checked")), aAny);
-        rtl::OUString sName;
-    }
-    else if (m_pImpl->m_eFieldId == FIELD_FORMDROPDOWN )
-    {
-        xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN)));
-        if ( xNameCont.is() )
+        else if (m_pImpl->m_eFieldId == FIELD_FORMCHECKBOX )
         {
+            xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX)));
+            uno::Reference<beans::XPropertySet> xPropSet(xFormField, uno::UNO_QUERY);
+            uno::Any aAny;
+            aAny <<= m_pFFData->getCheckboxChecked();
+            if ( xPropSet.is() )
+                xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Checked")), aAny);
+            rtl::OUString sName;
+        }
+        else if (m_pImpl->m_eFieldId == FIELD_FORMDROPDOWN )
+        {
+            xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN)));
             uno::Sequence< rtl::OUString > sItems;
             sItems.realloc( m_pFFData->getDropDownEntries().size() );
             ::std::copy( m_pFFData->getDropDownEntries().begin(), m_pFFData->getDropDownEntries().end(), ::comphelper::stl_begin(sItems));
@@ -281,13 +280,16 @@ bool FormControlHelper::processField(uno::Reference<text::XFormField> xFormField
             }
         }
     }
-    return false;
+    else
+        bRes = false;
+    return bRes;
 }
 
 bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> xTextRange)
 {
     bool bCreated = false;
-
+    if ( !m_pFFData )
+        return false;
     uno::Reference<container::XNameContainer> xFormCompsByName(m_pImpl->getForm(), uno::UNO_QUERY);
     uno::Reference<container::XIndexContainer> xFormComps(m_pImpl->getFormComps());
     if (! xFormComps.is())

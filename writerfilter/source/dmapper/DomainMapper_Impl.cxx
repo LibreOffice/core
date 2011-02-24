@@ -138,7 +138,7 @@ void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >& rxFie
 
 void lcl_handleTextField( const uno::Reference< beans::XPropertySet >& rxFieldProps, FFDataHandler::Pointer_t pFFDataHandler, PropertyNameSupplier& rPropNameSupplier )
 {
-    if ( rxFieldProps.is() )
+    if ( rxFieldProps.is() && pFFDataHandler )
     {
         rxFieldProps->setPropertyValue
             (rPropNameSupplier.GetName(PROP_HINT),
@@ -2897,7 +2897,7 @@ void DomainMapper_Impl::PopFieldContext()
                     else
                     {
                         FormControlHelper::Pointer_t pFormControlHelper(pContext->getFormControlHelper());
-                        if (pFormControlHelper.get() != NULL)
+                        if (pFormControlHelper.get() != NULL && pFormControlHelper->hasFFDataHandler() )
                         {
                             uno::Reference< text::XFormField > xFormField( pContext->GetFormField() );
                             xToInsert.set(xFormField, uno::UNO_QUERY);

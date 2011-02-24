@@ -50,7 +50,7 @@ public:
 
     bool insertControl(uno::Reference<text::XTextRange> xTextRange);
     bool processField(uno::Reference<text::XFormField> xFormField);
-
+    bool hasFFDataHandler() { return (m_pFFData != NULL); }
 private:
     FFDataHandler::Pointer_t m_pFFData;
     struct FormControlHelper_Impl;
