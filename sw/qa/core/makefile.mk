@@ -50,7 +50,6 @@ SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
 
-# DEF1EXPORTFILE= export.exp
 SHL1VERSIONMAP = export.map
 
 # 2nd test ------------------------------------------------------------------
