@@ -46,9 +46,9 @@
 #include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 
-using namespace rtl;
 using namespace com::sun::star;
 
+using ::rtl::OUString;
 
 // Forward declarations of the factories.
 

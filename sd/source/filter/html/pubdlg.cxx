@@ -68,9 +68,10 @@
 #include "buttonset.hxx"
 
 using namespace std;
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
+
+using ::rtl::OUString;
 
 extern void InterpolateFixedBitmap( FixedBitmap * pBitmap );
 
