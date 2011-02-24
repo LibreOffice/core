@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,7 +25,15 @@
 #
 #*************************************************************************
 
-# define UNOTOOLS_DLLIMPLEMENTATION (see @ unotoolsdllapi.h)
-CDEFS += -DUNOTOOLS_DLLIMPLEMENTATION
+$(eval $(call gb_Module_Module,unotools))
 
-VISIBILITY_HIDDEN=TRUE
+$(eval $(call gb_Module_add_targets,unotools,\
+	Library_utl \
+	Package_inc \
+))
+
+$(eval $(call gb_Module_add_subsequentcheck_targets,unotools,\
+	JunitTest_unotools_complex  \
+))
+
+# vim: set noet sw=4 ts=4:

@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,31 +25,31 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
-PRJINC=..$/..$/inc
-PRJNAME=unotools
-TARGET=misc
+$(eval $(call gb_JunitTest_JunitTest,unotools_complex))
 
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_JunitTest_set_defs,unotools_complex,\
+	$$(DEFS) \
+))
 
-# --- Settings ----------------------------------
+$(eval $(call gb_JunitTest_add_jars,unotools_complex,\
+	$(OUTDIR)/bin/OOoRunner.jar \
+	$(OUTDIR)/bin/ridl.jar \
+	$(OUTDIR)/bin/test.jar \
+	$(OUTDIR)/bin/test-tools.jar \
+	$(OUTDIR)/bin/unoil.jar \
+	$(OUTDIR)/bin/jurt.jar \
+))
 
-.INCLUDE : settings.mk
-.INCLUDE :      $(PRJ)$/util$/makefile.pmk
+$(eval $(call gb_JunitTest_add_sourcefiles,unotools_complex,\
+	unotools/qa/complex/tempfile/TempFileTest \
+	unotools/qa/complex/tempfile/TempFileUnitTest \
+	unotools/qa/complex/tempfile/Test01 \
+	unotools/qa/complex/tempfile/Test02 \
+	unotools/qa/complex/tempfile/TestHelper \
+))
 
-# --- Files -------------------------------------
+$(eval $(call gb_JunitTest_add_classes,unotools_complex,\
+	complex.tempfile.TempFileUnitTest \
+))
 
-SLOFILES=	$(SLO)$/atom.obj \
-            $(SLO)$/datetime.obj \
-            $(SLO)$/syslocale.obj \
-            $(SLO)$/eventlisteneradapter.obj \
-            $(SLO)$/fontcvt.obj \
-            $(SLO)$/fontdefs.obj \
-            $(SLO)$/desktopterminationobserver.obj \
-            $(SLO)$/sharedunocomponent.obj \
-            $(SLO)$/componentresmodule.obj
-
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
-
+# vim: set noet sw=4 ts=4:

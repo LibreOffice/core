@@ -25,26 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
-PRJINC=..$/..$/inc
-PRJNAME=unotools
-TARGET=procfact
-
-ENABLE_EXCEPTIONS=TRUE
-
-# --- Settings common for the whole project -----
-
-
-# --- Settings ----------------------------------
+PRJ=..
+TARGET=prj
 
 .INCLUDE : settings.mk
-.INCLUDE :      $(PRJ)$/util$/makefile.pmk
 
-# --- Files -------------------------------------
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-SLOFILES=	$(SLO)$/processfactory.obj
-
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
-
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog
