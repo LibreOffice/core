@@ -325,7 +325,7 @@ void java_sql_Connection::disposing()
 // -------------------------------------------------------------------------
 jclass java_sql_Connection::getMyClass() const
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched only once, therefore static
     if( !theClass )
         theClass = findMyClass("java/sql/Connection");
     return theClass;
@@ -428,7 +428,7 @@ Reference< ::com::sun::star::container::XNameAccess > SAL_CALL java_sql_Connecti
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(NULL);
     /*jobject out = */callObjectMethod(t.pEnv,"getTypeMap","()Ljava/util/Map;", mID);
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller becomes the owner of the returned pointer
     return 0;// ? 0 : Map2XNameAccess( t.pEnv, out );
 }
 // -------------------------------------------------------------------------
@@ -545,13 +545,13 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
 
-        // temporaere Variable initialisieren
+        // initialize temporary Variable
         static const char * cSignature = "(Ljava/lang/String;)Ljava/lang/String;";
         static const char * cMethodName = "nativeSQL";
-        // Java-Call absetzen
+        // Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
-        // Parameter konvertieren
+        // Convert Parameter
         jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,sql));
 
         jobject out = t.pEnv->CallObjectMethod( object, mID, str.get() );
@@ -578,7 +578,7 @@ Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeExc
     SDBThreadAttach t;
     static jmethodID mID(NULL);
     jobject out = callObjectMethod(t.pEnv,"getWarnings","()Ljava/sql/SQLWarning;", mID);
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller becomes the owner of the returned pointer
     if( out )
     {
         java_sql_SQLWarning_BASE        warn_base(t.pEnv, out);
@@ -819,17 +819,17 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
 
     if ( t.pEnv && m_Driver_theClass && m_pDriverobject )
     {
-        // temporaere Variable initialisieren
+        // initialize temporary Variable
         static const char * cSignature = "(Ljava/lang/String;Ljava/util/Properties;)Ljava/sql/Connection;";
         static const char * cMethodName = "connect";
-        // Java-Call absetzen
+        // Java-Call
         static jmethodID mID = NULL;
         if ( !mID  )
             mID  = t.pEnv->GetMethodID( m_Driver_theClass, cMethodName, cSignature );
         if ( mID )
         {
             jvalue args[2];
-            // Parameter konvertieren
+            // convert Parameter
             args[0].l = convertwchar_tToJavaString(t.pEnv,url);
             java_util_Properties* pProps = createStringPropertyArray(info);
             args[1].l = pProps->getJavaObject();

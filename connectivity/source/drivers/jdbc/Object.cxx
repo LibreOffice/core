@@ -104,7 +104,7 @@ void SDBThreadAttach::releaseRef()
     }
 }
 // -----------------------------------------------------------------------------
-// statische Variablen der Klasse:
+// static variables of the class
 jclass java_lang_Object::theClass = 0;
 
 jclass java_lang_Object::getMyClass() const
@@ -113,14 +113,14 @@ jclass java_lang_Object::getMyClass() const
         theClass = findMyClass("java/lang/Object");
     return theClass;
 }
-// der eigentliche Konstruktor
+// the actual constructor
 java_lang_Object::java_lang_Object(const Reference<XMultiServiceFactory >& _rxFactory)
             : m_xFactory(_rxFactory),object( 0 )
 {
     SDBThreadAttach::addRef();
 }
 
-// der protected-Konstruktor fuer abgeleitete Klassen
+// the protected-constructor for the derived classes
 java_lang_Object::java_lang_Object( JNIEnv * pXEnv, jobject myObj )
     : object( NULL )
 {
@@ -155,7 +155,7 @@ void java_lang_Object::clearObject()
         clearObject(*t.pEnv);
     }
 }
-// der protected-Konstruktor fuer abgeleitete Klassen
+// the protected-constructor for the derived classes
 void java_lang_Object::saveRef( JNIEnv * pXEnv, jobject myObj )
 {
     OSL_ENSURE( myObj, "object in c++ -> Java Wrapper" );
@@ -412,7 +412,7 @@ sal_Int32 java_lang_Object::callIntMethodWithStringArg( const char* _pMethodName
 // -----------------------------------------------------------------------------
 jclass java_lang_Object::findMyClass(const char* _pClassName)
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched only once, therefore static
     SDBThreadAttach t;
     jclass tempClass = t.pEnv->FindClass(_pClassName); OSL_ENSURE(tempClass,"Java : FindClass nicht erfolgreich!");
     if(!tempClass)

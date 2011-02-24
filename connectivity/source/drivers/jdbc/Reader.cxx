@@ -49,7 +49,7 @@ java_io_Reader::~java_io_Reader()
 
 jclass java_io_Reader::getMyClass() const
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched only once, therefore static
     if( !theClass )
         theClass = findMyClass("java/io/Reader");
     return theClass;
@@ -74,7 +74,7 @@ sal_Int32 SAL_CALL java_io_Reader::available(  ) throw(::com::sun::star::io::Not
     {
         static const char * cSignature = "()Z";
         static const char * cMethodName = "available";
-        // Java-Call absetzen
+        // Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallBooleanMethod( object, mID);
@@ -99,7 +99,7 @@ sal_Int32 SAL_CALL java_io_Reader::readBytes( ::com::sun::star::uno::Sequence< s
         jcharArray pCharArray = t.pEnv->NewCharArray(nBytesToRead);
         static const char * cSignature = "([CII)I";
         static const char * cMethodName = "read";
-        // Java-Call absetzen
+        // Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallIntMethod( object, mID, pCharArray, 0, nBytesToRead );

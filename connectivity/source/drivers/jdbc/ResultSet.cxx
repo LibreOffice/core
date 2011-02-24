@@ -104,7 +104,7 @@ java_sql_ResultSet::~java_sql_ResultSet()
 jclass java_sql_ResultSet::getMyClass() const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "jdbc", "Ocke.Janssen@sun.com", "java_sql_ResultSet::getMyClass" );
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched only once, therefore static
     if( !theClass )
         theClass = findMyClass("java/sql/ResultSet");
     return theClass;
@@ -161,7 +161,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_ResultSet::get
     static jmethodID mID(NULL);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getBinaryStream","(I)Ljava/io/InputStream;", mID, columnIndex);
 
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller becomes the owner of the returned pointer
     return out==0 ? 0 : new java_io_InputStream( t.pEnv, out );
 }
 // -------------------------------------------------------------------------
@@ -172,7 +172,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL java_sql_ResultSet::get
     static jmethodID mID(NULL);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getCharacterStream","(I)Ljava/io/Reader;", mID, columnIndex);
 
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller becomes the owner of the returned pointer
     return out==0 ? 0 : new java_io_Reader( t.pEnv, out );
 }
 // -------------------------------------------------------------------------
@@ -218,7 +218,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_ResultSet::getBytes( sal_Int32 columnInde
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(NULL);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getDate","(I)Ljava/sql/Date;", mID, columnIndex);
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller becomes the owner of the returned pointer
     return out ? static_cast <com::sun::star::util::Date> (java_sql_Date( t.pEnv, out )) : ::com::sun::star::util::Date();
 }
 // -------------------------------------------------------------------------
@@ -283,7 +283,7 @@ Reference< XArray > SAL_CALL java_sql_ResultSet::getArray( sal_Int32 columnIndex
     static jmethodID mID(NULL);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getArray","(I)Ljava/sql/Array;", mID, columnIndex);
 
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller becomes the owner of the returned pointer
     return out==0 ? 0 : new java_sql_Array( t.pEnv, out );
 }
 // -------------------------------------------------------------------------
@@ -294,7 +294,7 @@ Reference< XClob > SAL_CALL java_sql_ResultSet::getClob( sal_Int32 columnIndex )
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(NULL);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getClob","(I)Ljava/sql/Clob;", mID, columnIndex);
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller becomes the owner of the returned pointer
     return out==0 ? 0 : new java_sql_Clob( t.pEnv, out );
 }
 // -------------------------------------------------------------------------
@@ -304,7 +304,7 @@ Reference< XBlob > SAL_CALL java_sql_ResultSet::getBlob( sal_Int32 columnIndex )
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(NULL);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getBlob","(I)Ljava/sql/Blob;", mID, columnIndex);
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller becomes the owner of the returned pointer
     return out==0 ? 0 : new java_sql_Blob( t.pEnv, out );
 }
 // -------------------------------------------------------------------------
@@ -316,7 +316,7 @@ Reference< XRef > SAL_CALL java_sql_ResultSet::getRef( sal_Int32 columnIndex ) t
     static jmethodID mID(NULL);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getRef","(I)Ljava/sql/Ref;", mID, columnIndex);
 
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller becomes the owner of the returned pointer
     return out==0 ? 0 : new java_sql_Ref( t.pEnv, out );
 }
 // -------------------------------------------------------------------------
@@ -329,11 +329,11 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
         jvalue args[2];
-        // Parameter konvertieren
+        // convert parameter
         args[0].i = (sal_Int32)columnIndex;
         args[1].l = convertTypeMapToJavaMap(t.pEnv,typeMap);
-        // temporaere Variable initialisieren
-        // Java-Call absetzen
+        // initialize temporary Variable
+        // Java-Call
         static jmethodID mID(NULL);
         if ( !mID  )
         {
@@ -346,7 +346,7 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
         out = t.pEnv->CallObjectMethodA( object, mID, args);
         t.pEnv->DeleteLocalRef((jstring)args[1].l);
         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
-        // und aufraeumen
+        // and clean up
         if ( out )
         {
             if ( t.pEnv->IsInstanceOf(out,java_lang_String::st_getMyClass()) )
@@ -408,7 +408,7 @@ sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex ) throw(S
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(NULL);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getTime","(I)Ljava/sql/Time;", mID, columnIndex);
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller becomes the owner of the returned pointer
     return out ? static_cast <com::sun::star::util::Time> (java_sql_Time( t.pEnv, out )) : ::com::sun::star::util::Time();
 }
 // -------------------------------------------------------------------------
@@ -420,7 +420,7 @@ sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex ) throw(S
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(NULL);
     jobject out = callObjectMethodWithIntArg(t.pEnv,"getTimestamp","(I)Ljava/sql/Timestamp;", mID, columnIndex);
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller becomes the owner of the returned pointer
     return out ? static_cast <com::sun::star::util::DateTime> (java_sql_Timestamp( t.pEnv, out )) : ::com::sun::star::util::DateTime();
 }
 // -------------------------------------------------------------------------
@@ -578,7 +578,7 @@ void SAL_CALL java_sql_ResultSet::clearWarnings(  ) throw(::com::sun::star::sdbc
     SDBThreadAttach t;
     static jmethodID mID(NULL);
     jobject out = callObjectMethod(t.pEnv,"getWarnings","()Ljava/sql/SQLWarning;", mID);
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller becomes the owner of the returned pointer
     if( out )
     {
         java_sql_SQLWarning_BASE        warn_base( t.pEnv, out );
@@ -706,8 +706,8 @@ void SAL_CALL java_sql_ResultSet::updateString( sal_Int32 columnIndex, const ::r
 
     {
 
-        // temporaere Variable initialisieren
-        // Java-Call absetzen
+        // initialize temporary variable
+        // Java-Call
         static jmethodID mID(NULL);
         if ( !mID  )
         {
@@ -718,7 +718,7 @@ void SAL_CALL java_sql_ResultSet::updateString( sal_Int32 columnIndex, const ::r
         }
 
         {
-            // Parameter konvertieren
+            // convert parameter
             jdbc::LocalRef< jstring > str( t.env(),convertwchar_tToJavaString(t.pEnv,x));
             t.pEnv->CallVoidMethod( object, mID,columnIndex,str.get());
             ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
@@ -733,8 +733,8 @@ void SAL_CALL java_sql_ResultSet::updateBytes( sal_Int32 columnIndex, const ::co
     SDBThreadAttach t;
 
     {
-        // temporaere Variable initialisieren
-        // Java-Call absetzen
+        // initialize temporary variable
+        // Java-Call
         static jmethodID mID(NULL);
         if ( !mID  )
         {
@@ -747,7 +747,7 @@ void SAL_CALL java_sql_ResultSet::updateBytes( sal_Int32 columnIndex, const ::co
         {
             jbyteArray aArray = t.pEnv->NewByteArray(x.getLength());
             t.pEnv->SetByteArrayRegion(aArray,0,x.getLength(),(jbyte*)x.getConstArray());
-            // Parameter konvertieren
+            // convert parameter
             t.pEnv->CallVoidMethod( object, mID,columnIndex,aArray);
             t.pEnv->DeleteLocalRef(aArray);
             ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
@@ -791,8 +791,8 @@ void SAL_CALL java_sql_ResultSet::updateBinaryStream( sal_Int32 columnIndex, con
         SDBThreadAttach t;
         {
 
-            // temporaere Variable initialisieren
-            // Java-Call absetzen
+            // initialize temporary variable
+            // Java-Call
             static jmethodID mID(NULL);
             if ( !mID  )
             {
@@ -802,7 +802,7 @@ void SAL_CALL java_sql_ResultSet::updateBinaryStream( sal_Int32 columnIndex, con
             }
 
             {
-                // Parameter konvertieren
+                // convert Parameter
                 jobject obj = createByteInputStream(x,length);
                 t.pEnv->CallVoidMethod( object, mID, columnIndex,obj,length);
                 ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
@@ -823,8 +823,8 @@ void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 columnIndex, 
         SDBThreadAttach t;
         {
 
-            // temporaere Variable initialisieren
-            // Java-Call absetzen
+            // initialize temporary variable
+            // Java-Call
             static jmethodID mID(NULL);
             if ( !mID  )
             {
@@ -834,7 +834,7 @@ void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 columnIndex, 
             }
 
             {
-                // Parameter konvertieren
+                // convert Parameter
                 jobject obj = createCharArrayReader(x,length);
                 t.pEnv->CallVoidMethod( object, mID, columnIndex,obj,length);
                 ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
@@ -872,8 +872,8 @@ void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, co
 
         {
 
-            // temporaere Variable initialisieren
-            // Java-Call absetzen
+            // initialize temporary variable
+            // Java-Call
             static jmethodID mID(NULL);
             if ( !mID  )
             {
@@ -884,7 +884,7 @@ void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, co
             }
 
             {
-                // Parameter konvertieren
+                // convert parameter
                 double nTemp = 0.0;
                 ::std::auto_ptr<java_math_BigDecimal> pBigDecimal;
                 if ( x >>= nTemp)

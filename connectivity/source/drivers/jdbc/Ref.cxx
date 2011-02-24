@@ -48,7 +48,7 @@ java_sql_Ref::~java_sql_Ref()
 
 jclass java_sql_Ref::getMyClass() const
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched only once, therefore static
     if( !theClass )
         theClass = findMyClass("java/sql/Ref");
     return theClass;

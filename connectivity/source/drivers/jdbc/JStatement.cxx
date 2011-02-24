@@ -109,7 +109,7 @@ void SAL_CALL OStatement_BASE2::disposing()
 // -------------------------------------------------------------------------
 jclass java_sql_Statement_Base::getMyClass() const
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched only once, therefore static
     if( !theClass )
         theClass = findMyClass("java/sql/Statement");
     return theClass;
@@ -163,7 +163,7 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::getGeneratedValues(  )
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
-    // temporaere Variable initialisieren
+    // initialize temporary Variable
     try
     {
         static jmethodID mID(NULL);
@@ -240,13 +240,13 @@ sal_Bool SAL_CALL java_sql_Statement_Base::execute( const ::rtl::OUString& sql )
     {
         createStatement(t.pEnv);
         m_sSqlStatement = sql;
-        // temporaere Variable initialisieren
+        // initialize temporary Variable
         static const char * cSignature = "(Ljava/lang/String;)Z";
         static const char * cMethodName = "execute";
-        // Java-Call absetzen
+        // Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
-        // Parameter konvertieren
+        // convert Parameter
         jdbc::LocalRef< jstring > str( t.env(), convertwchar_tToJavaString( t.pEnv, sql ) );
         {
             jdbc::ContextClassLoaderScope ccl( t.env(),
@@ -275,13 +275,13 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const ::
     {
         createStatement(t.pEnv);
         m_sSqlStatement = sql;
-        // temporaere Variable initialisieren
+        // initialize temporary variable
         static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/ResultSet;";
         static const char * cMethodName = "executeQuery";
-        // Java-Call absetzen
+        // Java-Call
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
-        // Parameter konvertieren
+        // convert Parameter
         jdbc::LocalRef< jstring > str( t.env(), convertwchar_tToJavaString( t.pEnv, sql ) );
         {
             jdbc::ContextClassLoaderScope ccl( t.env(),
@@ -294,7 +294,7 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const ::
             ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
         }
     } //t.pEnv
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller becomes the owner of the returned pointer
     return out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out, m_aLogger, *m_pConnection,this );
 }
 // -------------------------------------------------------------------------
@@ -368,7 +368,7 @@ Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL java_sql_Statement_Base
     static jmethodID mID(NULL);
     jobject out = callResultSetMethod(t.env(),"getResultSet",mID);
 
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller becomes the owner of the returned pointer
     return out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out, m_aLogger, *m_pConnection,this );
 }
 // -------------------------------------------------------------------------
@@ -398,7 +398,7 @@ Any SAL_CALL java_sql_Statement_Base::getWarnings(  ) throw(::com::sun::star::sd
     createStatement(t.pEnv);
     static jmethodID mID(NULL);
     jobject out = callObjectMethod(t.pEnv,"getWarnings","()Ljava/sql/SQLWarning;", mID);
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    // WARNING: the caller becomes the owner of the returned pointer
     if( out )
     {
         java_sql_SQLWarning_BASE        warn_base( t.pEnv, out );
@@ -758,7 +758,7 @@ java_sql_Statement::~java_sql_Statement()
 
 jclass java_sql_Statement::getMyClass() const
 {
-    // die Klasse muss nur einmal geholt werden, daher statisch
+    // the class must be fetched only once, therefore static
     if( !theClass )
         theClass = findMyClass("java/sql/Statement");
     return theClass;
@@ -771,10 +771,10 @@ void java_sql_Statement::createStatement(JNIEnv* _pEnv)
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
 
     if( _pEnv && !object ){
-        // temporaere Variable initialisieren
+        // initialize temporary variable
         static const char * cSignature = "(II)Ljava/sql/Statement;";
         static const char * cMethodName = "createStatement";
-        // Java-Call absetzen
+        // Java-Call
         jobject out = NULL;
         static jmethodID mID(NULL);
         if ( !mID  )
