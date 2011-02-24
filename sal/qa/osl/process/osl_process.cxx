@@ -372,12 +372,14 @@ private:
             p += l + 1;
         }
         FreeEnvironmentStrings(env);
+        std::sort(env_container->begin(), env_container->end());
     }
 #else
     void read_parent_environment(string_container_t* env_container)
     {
         for (int i = 0; NULL != environ[i]; i++)
             env_container->push_back(std::string(environ[i]));
+        std::sort(env_container->begin(), env_container->end());
     }
 #endif
 
@@ -449,6 +451,7 @@ public:
         std::string line;
         while (std::getline(file, line, '\0'))
             env_container->push_back(line);
+        std::sort(env_container->begin(), env_container->end());
     }
 
     //------------------------------------------------
@@ -517,6 +520,17 @@ public:
 
         bool common_env_size_equals    = (parent_env.size() == child_env.size());
         bool common_env_content_equals = std::equal(child_env.begin(), child_env.end(), parent_env.begin());
+
+#if OSL_DEBUG_LEVEL > 1
+        for (string_container_t::const_iterator iter = different_env_vars.begin(), end = different_env_vars.end(); iter != end; ++iter)
+            std::cerr << "different should be: " << *iter << std::endl;
+#endif
+
+
+#if OSL_DEBUG_LEVEL > 1
+        for (string_container_t::const_iterator iter = different_child_env_vars.begin(), end = different_child_env_vars.end(); iter != end; ++iter)
+            std::cerr << "different are: " << *iter << std::endl;
+#endif
 
         bool different_env_size_equals    = (different_child_env_vars.size() == different_env_vars.size());
         bool different_env_content_equals =
