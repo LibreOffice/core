@@ -1,8 +1,8 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2009 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,12 +14,12 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.	If not, see
+# version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
@@ -28,39 +28,45 @@
 GUI := UNX
 COM := GCC
 
-gb_MKTEMP := TMPDIR= /usr/bin/mktemp -t
+# Darwin mktemp -t expects a prefix, not a pattern
+gb_MKTEMP := /usr/bin/mktemp -t gbuild.
 
-gb_CC := $(CC)
-gb_CXX := $(CXX)
-gb_GCCP := $(CC)
+gb_CC := cc
+gb_CXX := g++
+gb_GCCP := gcc
+gb_AR := ar
 gb_AWK := awk
+gb_CLASSPATHSEP := :
 
+# use CC/CXX if they are nondefaults
+ifneq ($(origin CC),default)
+gb_CC := $(CC)
+gb_GCCP := $(CC)
+endif
+ifneq ($(origin CXX),default)
+gb_CXX := $(CXX)
+endif
 
 gb_OSDEFS := \
     -D$(OS) \
-    -D$(GUI) \
-    -DUNIX \
     -D_PTHREADS \
+    -DUNIX \
+    -DUNX \
     -D_REENTRANT \
     -DNO_PTHREAD_PRIORITY \
     -DQUARTZ \
     $(EXTRA_CDEFS) \
-#	$(PTHREAD_CFLAGS) \
 
 gb_COMPILERDEFS := \
     -D$(COM) \
-    -DGLIBC=2 \
-    -D_USE_NAMESPACE=1 \
     -DHAVE_GCC_VISIBILITY_FEATURE \
     -DCPPU_ENV=gcc3 \
     -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
-#	-D$(CVER) \
-#	-DCVER=$(CVER) \
 
-ifeq ($(CPUNAME),INTEL)
-gb_CPUDEFS := -DX86
-else # ifeq ($(CPUNAME),POWERPC)
+ifeq ($(CPUNAME),POWERPC)
 gb_CPUDEFS := -DPOWERPC -DPPC
+else
+gb_CPUDEFS := -DX86
 endif
 
 ifeq ($(strip $(SYSBASE)),)
@@ -72,43 +78,43 @@ endif
 
 gb_CFLAGS := \
     -isysroot $(gb_SDKDIR) \
-    -fsigned-char \
-    -fmessage-length=0 \
-    -malign-natural \
     -Wall \
     -Wendif-labels \
-    -fno-strict-aliasing \
+    -Wextra \
+    -Wshadow \
     -fPIC \
+    -fmessage-length=0 \
     -fno-common \
+    -fno-strict-aliasing \
     -pipe \
-#	-fvisibility=hidden \
 
 gb_CXXFLAGS := \
     -isysroot $(gb_SDKDIR) \
-    -fsigned-char \
-    -fmessage-length=0 \
-    -malign-natural \
     -Wall \
     -Wendif-labels \
-    -Wno-long-double \
+    -Wextra \
     -Wno-ctor-dtor-privacy \
+    -Wno-long-double \
     -Wno-non-virtual-dtor \
-    -fno-strict-aliasing \
     -fPIC \
+    -fmessage-length=0 \
     -fno-common \
+    -fno-strict-aliasing \
+    -fsigned-char \
+    -malign-natural \
     -pipe \
-#	-fvisibility=hidden \
-#	-fvisibility-inlines-hidden \
+    #-Wshadow \ break in compiler headers already
+    #-fsigned-char \ might be removed?
+    #-malign-natural \ might be removed?
 
 # these are to get g++ to switch to Objective-C++ mode
 # (see toolkit module for a case where it is necessary to do it this way)
 gb_OBJCXXFLAGS := -x objective-c++ -fobjc-exceptions
 
-gb_CFLAGS_WERROR := \
-    -Werror \
-
-gb_CXXFLAGS_WERROR := \
-    -Werror \
+ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
+gb_CFLAGS_WERROR := -Werror
+gb_CXXFLAGS_WERROR := -Werror
+endif
 
 gb_LinkTarget_EXCEPTIONFLAGS := \
     -DEXCEPTIONS_ON \
@@ -130,6 +136,7 @@ else
 gb_COMPILEROPTFLAGS := -O2
 endif
 
+gb_COMPILERNOOPTFLAGS := -O0
 
 # Helper class
 
@@ -144,32 +151,32 @@ $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     mkdir -p $(dir $(call gb_CObject_get_dep_target,$(2))) && \
     $(gb_CC) \
-        $(4) $(5) \
+        $(DEFS) $(CFLAGS) \
         -c $(3) \
         -o $(1) \
         -MMD -MT $(call gb_CObject_get_target,$(2)) \
         -MF $(call gb_CObject_get_dep_target,$(2)) \
         -I$(dir $(3)) \
-        $(6))
+        $(INCLUDE))
 endef
 
 
 # CxxObject class
 
-# N.B: $(4) or $(5) may contain -x objective-c++, which must come before -c
+# N.B: $(CXXFLAGS) may contain -x objective-c++, which must come before -c
 define gb_CxxObject__command
 $(call gb_Output_announce,$(2),$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     mkdir -p $(dir $(call gb_CxxObject_get_dep_target,$(2))) && \
     $(gb_CXX) \
-        $(4) $(5) \
+        $(DEFS) $(CXXFLAGS) \
         -c $(3) \
         -o $(1) \
         -MMD -MT $(call gb_CxxObject_get_target,$(2)) \
         -MF $(call gb_CxxObject_get_dep_target,$(2)) \
         -I$(dir $(3)) \
-        $(6))
+        $(INCLUDE_STL) $(INCLUDE))
 endef
 
 
@@ -181,26 +188,26 @@ $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     mkdir -p $(dir $(call gb_ObjCxxObject_get_dep_target,$(2))) && \
     $(gb_CXX) \
-        $(4) $(5) \
+        $(DEFS) $(OBJCXXFLAGS) \
         -c $(3) \
         -o $(1) \
         -MMD -MT $(call gb_ObjCxxObject_get_target,$(2)) \
         -MF $(call gb_ObjCxxObject_get_dep_target,$(2)) \
         -I$(dir $(3)) \
-        $(6))
+        $(INCLUDE_STL) $(INCLUDE))
 endef
 
 
 # LinkTarget class
 
 define gb_LinkTarget__get_rpath_for_layer
-$(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget_RPATHS)))
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget__RPATHS)))
 endef
 
-gb_LinkTarget_RPATHS := \
+gb_LinkTarget__RPATHS := \
     URELIB:@__________________________________________________URELIB/ \
     UREBIN: \
-    OOOLIB:@__________________________________________________OOO/ \
+    OOO:@__________________________________________________OOO/ \
     BRAND: \
     SDKBIN: \
     NONEBIN: \
@@ -209,8 +216,8 @@ define gb_LinkTarget__get_installname
 $(if $(2),-install_name '$(2)$(1)',)
 endef
 
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
 gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_OBJCXXFLAGS) $(gb_COMPILEROPTFLAGS)
 
 ifeq ($(gb_DEBUGLEVEL),2)
@@ -222,28 +229,63 @@ endif
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
+# FIXME framework handling very hackish
+define gb_LinkTarget__get_liblinkflags
+$(patsubst lib%.dylib,-l%,$(foreach lib,$(filter-out $(gb_Library__FRAMEWORKS),$(1)),$(call gb_Library_get_filename,$(lib)))) \
+$(addprefix -framework ,$(filter $(gb_Library__FRAMEWORKS),$(1)))
+endef
+
+define gb_LinkTarget__get_layer
+$(if $(filter Executable,$(1)),\
+    $$(call gb_Executable_get_layer,$(2)),\
+    $$(call gb_Library_get_layer,$(2)))
+endef
+
 # FIXME the DYLIB_FILE mess is only necessary because
 # solver layout is different from installation layout
-# FIXME framework handling very hackish
-define gb_LinkTarget__command
-$(call gb_Output_announce,$(2),$(true),LNK,4)
+define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
-    DYLIB_FILE=`$(gb_MKTEMP) $(dir $(1))` && \
-    $(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl $(3) $(patsubst lib%.dylib,-l%,$(foreach lib,$(4),$(call gb_Library_get_filename,$(lib)))) > $${DYLIB_FILE} && \
+    DYLIB_FILE=`$(gb_MKTEMP)` && \
+    $(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
+        $(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
+        $(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+        $(subst \d,$$,$(RPATH)) $(LDFLAGS) \
+        $(patsubst lib%.dylib,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) > $${DYLIB_FILE} && \
     $(gb_CXX) \
-        $(3) \
-        $(patsubst lib%.dylib,-l%,$(foreach lib,$(filter-out $(gb_Library__FRAMEWORKS),$(4)),$(call gb_Library_get_filename,$(lib)))) \
-        $(addprefix -framework ,$(filter $(gb_Library__FRAMEWORKS),$(4))) \
-        $(foreach object,$(6),$(call gb_CObject_get_target,$(object))) \
-        $(foreach object,$(7),$(call gb_CxxObject_get_target,$(object))) \
-        $(foreach object,$(8),$(call gb_ObjCxxObject_get_target,$(object))) \
-        $(foreach lib,$(5),$(call gb_StaticLibrary_get_target,$(lib))) \
+        $(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
+        $(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
+        $(subst \d,$$,$(RPATH)) $(LDFLAGS) \
+        $(call gb_LinkTarget__get_liblinkflags,$(LINKED_LIBS)) \
+        $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+        $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+        $(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
+        $(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
+        $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
         -o $(1) \
         `cat $${DYLIB_FILE}` && \
-    $(if $(filter shl exe,$(TARGETTYPE)),$(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl $(TARGETTYPE) $(LAYER) $(1) &&,) \
-    $(if $(filter shl,$(TARGETTYPE)),macosx-create-bundle $(1) &&,) \
+    $(if $(filter Library CppunitTest,$(TARGETTYPE)),\
+        $(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Library $(LAYER) $(1) && \
+        ln -sf $(1) $(patsubst %.dylib,%.jnilib,$(1)) &&) \
     rm -f $${DYLIB_FILE})
+endef
+
+# parameters: 1-linktarget 2-cobjects 3-cxxobjects
+define gb_LinkTarget__command_staticlink
+$(call gb_Helper_abbreviate_dirs,\
+    mkdir -p $(dir $(1)) && \
+    $(gb_AR) -rsu $(1) \
+        $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+        $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+        $(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
+        $(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
+        2> /dev/null)
+endef
+
+define gb_LinkTarget__command
+$(call gb_Output_announce,$(2),$(true),LNK,4)
+$(if $(filter Library CppunitTest Executable,$(TARGETTYPE)),$(call gb_LinkTarget__command_dynamiclink,$(1),$(2)))
+$(if $(filter StaticLibrary,$(TARGETTYPE)),$(call gb_LinkTarget__command_staticlink,$(1)))
 endef
 
 
@@ -269,7 +311,7 @@ gb_Library_OOOEXT := mxp$(gb_Library_PLAINEXT)
 gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 endif
 
-gb_Library__FRAMEWORKS += \
+gb_Library__FRAMEWORKS := \
     Cocoa \
 
 gb_Library_PLAINLIBS_NONE += \
@@ -293,34 +335,31 @@ gb_Library_FILENAMES := \
     $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(gb_Library_UNOVERPRE)$(lib)$(gb_Library_PLAINEXT)) \
 
 
-# HACK
-# SUBSTITING OOOLIB with OOO to make the perl script happy
-define gb_Library_Library_platform
-$(call gb_LinkTarget_get_target,$(2)) : TARGETTYPE := shl
-$(call gb_LinkTarget_get_target,$(2)) : LAYER :=$(subst OOOLIB,OOO,$(call gb_Library_get_layer,$(1)))
-
-endef
+gb_Library_LAYER := \
+    $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
+    $(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
+    $(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
+    $(foreach lib,$(gb_Library_RTLIBS),$(lib):OOO) \
+    $(foreach lib,$(gb_Library_RTVERLIBS),$(lib):URELIB) \
+    $(foreach lib,$(gb_Library_STLLIBS),$(lib):URELIB) \
+    $(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):URELIB) \
+    $(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOO) \
+    $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
 
 define gb_Library_get_rpath
 $(call gb_LinkTarget__get_installname,$(call gb_Library_get_filename,$(1)),$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1))))
 endef
 
-gb_Library_LAYER := \
-    $(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):URELIB) \
-    $(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_RTLIBS),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_RTVERLIBS),$(lib):URELIB) \
-    $(foreach lib,$(gb_Library_STLLIBS),$(lib):URELIB) \
-    $(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):URELIB) \
-    $(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOOLIB) \
-    $(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
+define gb_Library_Library_platform
+$(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Library_get_rpath,$(1))
+$(call gb_LinkTarget_get_target,$(2)) : LAYER := $(call gb_Library_get_layer,$(1))
+
+endef
 
 
 # StaticLibrary class
 
 gb_StaticLibrary_DEFS :=
-gb_StaticLibrary_TARGETTYPEFLAGS := -static -nostdlib
 gb_StaticLibrary_SYSPRE := lib
 gb_StaticLibrary_PLAINEXT := .a
 gb_StaticLibrary_JPEGEXT := lib$(gb_StaticLibrary_PLAINEXT)
@@ -329,36 +368,56 @@ gb_StaticLibrary_FILENAMES := \
     $(foreach lib,$(gb_StaticLibrary_JPEGLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_JPEGEXT)) \
     $(foreach lib,$(gb_StaticLibrary_PLAINLIBS),$(lib):$(gb_StaticLibrary_SYSPRE)$(lib)$(gb_StaticLibrary_PLAINEXT)) \
 
-define gb_StaticLibrary_StaticLibrary_platform
-$(call gb_LinkTarget_get_target,$(2)) : TARGETTYPE := staticlib
-$(call gb_LinkTarget_get_target,$(2)) : LAYER :=
+gb_StaticLibrary_StaticLibrary_platform =
 
-endef
 
 # Executable class
 
 gb_Executable_EXT :=
 gb_Executable_TARGETTYPEFLAGS := -bind_at_load
 
-# HACK
-# SUBSTITING OOOLIB with OOO to make the perl script happy
-define gb_Executable_Library_platform
-$(call gb_LinkTarget_get_target,$(2)) : TARGETTYPE := exe
-$(call gb_LinkTarget_get_target,$(2)) : LAYER :=$(subst OOOLIB,OOO,$(call gb_Executable_get_layer,$(1)))
+gb_Executable_LAYER := \
+    $(foreach exe,$(gb_Executable_UREBIN),$(exe):UREBIN) \
+    $(foreach exe,$(gb_Executable_SDK),$(exe):SDKBIN) \
+    $(foreach exe,$(gb_Executable_OOO),$(exe):OOO) \
+    $(foreach exe,$(gb_Executable_BRAND),$(exe):BRAND) \
+    $(foreach exe,$(gb_Executable_NONE),$(exe):NONEBIN) \
 
-endef
 
 define gb_Executable_get_rpath
 $(call gb_LinkTarget__get_installname,$(1),$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1))))
 endef
 
-gb_Executable_LAYER := \
-    $(foreach exe,$(gb_Executable_UREBIN),$(exe):UREBIN) \
-    $(foreach exe,$(gb_Executable_SDK),$(exe):SDKBIN) \
-    $(foreach exe,$(gb_Executable_OOO),$(exe):OOOLIB) \
-    $(foreach exe,$(gb_Executable_BRAND),$(exe):BRAND) \
-    $(foreach exe,$(gb_Executable_NONE),$(exe):NONEBIN) \
+define gb_Executable_Executable_platform
+$(call gb_LinkTarget_get_target,$(2)) : RPATH := $(call gb_Executable_get_rpath,$(1))
+$(call gb_LinkTarget_get_target,$(2)) : LAYER := $(call gb_Executable_get_layer,$(1))
 
+endef
+
+
+# CppunitTest class
+
+gb_CppunitTest_CPPTESTPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_CppunitTest_SYSPRE := libtest_
+gb_CppunitTest_EXT := .dylib
+gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
+gb_CppunitTest_get_libfilename = $(gb_CppunitTest_get_filename)
+
+define gb_CppunitTest_CppunitTest_platform
+$(call gb_LinkTarget_get_target,$(2)) : RPATH :=
+$(call gb_LinkTarget_get_target,$(2)) : LAYER := NONE
+
+endef
+
+# JunitTest class
+
+define gb_JunitTest_JunitTest_platform
+$(call gb_JunitTest_get_target,$(1)) : DEFS := \
+    -Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(OUTDIR)/installation/opt/OpenOffice.org.app/Contents/MacOS/soffice}" \
+    -Dorg.openoffice.test.arg.env=DYLD_LIBRARY_PATH \
+    -Dorg.openoffice.test.arg.user=file://$(call gb_JunitTest_get_userdir,$(1)) \
+
+endef
 
 # SdiTarget class
 
@@ -377,15 +436,19 @@ define gb_SrsPartTarget__command_dep
 $(call gb_Helper_abbreviate_dirs,\
     $(gb_GCCP) \
         -MM -MT $(call gb_SrsPartTarget_get_target,$(1)) \
-        $(3) \
-        $(4) \
+        $(INCLUDE) \
+        $(DEFS) \
         -c -x c++-header $(2) \
         -o $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef
 
+
 # ComponentTarget
 
-gb_ComponentTarget_XSLTPROCPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
-gb_ComponentTarget_PREFIXBASISNATIVE := vnd.sun.star.expand:$$OOO_BASE_DIR/program/
+gb_XSLTPROCPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
+gb_Library_COMPONENTPREFIXES := \
+    OOO:vnd.sun.star.expand:\dOOO_BASE_DIR/program/ \
+    URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
+
 
 # vim: set noet sw=4 ts=4:

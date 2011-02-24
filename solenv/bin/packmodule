@@ -29,7 +29,12 @@ import os, os.path, sys, zipfile
 
 def paths_to_pack(loglines):
     """Returns a generator iterating the outdir fields (with platform) of gb_deliver.log lines."""
-    return (line.split()[2] for line in loglines)
+    lines=[]
+    for line in loglines:
+        fields = line.split()
+        if len(fields) >= 3:
+            lines.append(fields[2])
+    return lines
 
 def stripped_paths_to_pack(loglines):
     """returns a generator iterating the outdir fields (stripped of the platform) of gb_deliver.log lines."""

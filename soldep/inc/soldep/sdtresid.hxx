@@ -45,7 +45,7 @@ public:
 class DtSodResId : public ResId
 {
 public:
-    DtSodResId(USHORT nId);
+    DtSodResId(sal_uInt16 nId);
 };
 
 #endif

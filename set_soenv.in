@@ -78,7 +78,7 @@ my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV
 
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
-     $UPD, $WORK_STAMP, $SOURCE_ROOT_DIR ,
+     $UPD, $WORK_STAMP, $SOURCE_ROOT_DIR , $gb_REPOS,
      $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $WORKDIR, $OUTDIR, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
@@ -1496,6 +1496,14 @@ else
 
 #
 print "done\n";
+$gb_REPOS = $SRC_ROOT;
+my $BUILD_TYPE = "@BUILD_TYPE@";
+
+if ('@WITH_LANG@' ne "")
+{
+    $gb_REPOS .= " ".$SOURCE_ROOT_DIR."/l10n";
+    $BUILD_TYPE = "@BUILD_TYPE@ L10N";
+}
 
 #
 # F. Setting the different aliases.
@@ -1612,8 +1620,6 @@ ToFile( "DEFAULT_MOZILLA_TOOLKIT", $MOZILLA_TOOLKIT, "e" );
 ToFile( "ENABLE_NSS_MODULE",  "@ENABLE_NSS_MODULE@", "e" );
 ToFile( "MOZILLABUILD",  "@MOZILLABUILD@", "e" );
 ToFile( "BUILD_VER_STRING",  "@BUILD_VER_STRING@", "e" );
-ToFile( "ENABLE_VBA",  "@ENABLE_VBA@", "e" );
-ToFile( "VBA_EXTENSION",  "@VBA_EXTENSION@", "e" );
 if ($platform =~ m/linux/ && $platform =~ m/powerpc/) {
 ToFile( "JITC_PROCESSOR_TYPE","6",                 "e" );
 }
@@ -1833,7 +1839,7 @@ ToFile( "WITH_FONTS",        "@WITH_FONTS@",       "e" );
 ToFile( "WITHOUT_AFMS",      "@WITHOUT_AFMS@",     "e" );
 ToFile( "WITHOUT_PPDS",      "@WITHOUT_PPDS@",     "e" );
 ToFile( "WITH_BINFILTER",    "@WITH_BINFILTER@",   "e" );
-ToFile( "BUILD_TYPE",        "@BUILD_TYPE@",       "e" );
+ToFile( "BUILD_TYPE",        "$BUILD_TYPE",       "e" );
 ToFile( "VERBOSE",           "@VERBOSE@",          "e" );
 ToFile( "ENABLE_EVOAB2",     "@ENABLE_EVOAB2@",    "e" );
 ToFile( "GOBJECT_CFLAGS",    "@GOBJECT_CFLAGS@",   "e" );
@@ -1857,6 +1863,9 @@ if ($SYSTEM_PYTHON eq "NO") {
 ToFile( "HOME",              "@HOME@",             "e" );
 }
 ToFile( "SYSTEM_ICU",        "@SYSTEM_ICU@",       "e" );
+ToFile( "ICU_MAJOR",         "@ICU_MAJOR@",        "e" );
+ToFile( "ICU_MINOR",         "@ICU_MINOR@",        "e" );
+ToFile( "ICU_MICRO",         "@ICU_MICRO@",        "e" );
 ToFile( "SYSTEM_GENBRK",     "@SYSTEM_GENBRK@",    "e" );
 ToFile( "SYSTEM_GENCCODE",   "@SYSTEM_GENCCODE@",  "e" );
 ToFile( "SYSTEM_GENCMN",     "@SYSTEM_GENCMN@",    "e" );
@@ -1964,6 +1973,8 @@ if ($platform !~ m/cygwin|os2/) {
 }
 ToFile( "SOLARSRC",           $SOLARSRC,           "e" );
 ToFile( "SOURCE_ROOT_DIR",    $SOURCE_ROOT_DIR,    "e" );
+ToFile( "gb_REPOS",           $gb_REPOS,           "e" );
+
 if ( $platform =~ m/cygwin/ )
 {
    ToFile( "ILIB",              $ILIB,              "e" );
@@ -2045,8 +2056,8 @@ if ( $platform =~ m/cygwin/ ) {
 if ($platform =~ m/solaris|darwin|freebsd/)
 {
   ToFile( "GNUPATCH",   "@GNUPATCH@",	"e");
-  ToFile( "GNUCOPY",	"@GNUCP@",	"e");
 }
+ToFile( "GNUCOPY",	"@GNUCP@",	"e");
 # OS/2 define .pl as executable for 4os2
 # use - as switch char for dmake (os2/switchar.c)
 if ($platform =~ m/os2/)
