@@ -58,6 +58,8 @@
 #include <cmath>
 
 using namespace svt;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 namespace {
 struct Gregorian
@@ -807,7 +809,7 @@ SvNumberformat::SvNumberformat(String& rString,
                             else
                             {
                                 sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM("$-") );
-                                sStr += String::CreateFromInt32(sal_Int32(aLocale.meLanguage), 16).ToUpperAscii();
+                                sStr = sStr + aLocale.generateCode();
                                 NumFor[nIndex].SetNatNumLang(aLocale.meLanguage);
                             }
                         }
@@ -1095,10 +1097,54 @@ xub_StrLen SvNumberformat::ImpGetNumber(String& rString,
     return nPos - nStartPos;
 }
 
-::rtl::OUString SvNumberformat::LocaleType::generateCode() const
+namespace {
+
+sal_Unicode toUniChar(sal_uInt8 n)
 {
-    // TODO: to be worked on .....
-    return ::rtl::OUString();
+    sal_Char c;
+    if (n < 10)
+        c = '0' + n;
+    else
+        c = 'A' + n - 10;
+    return sal_Unicode(c);
+}
+
+}
+
+OUString SvNumberformat::LocaleType::generateCode() const
+{
+    OUStringBuffer aBuf;
+    if (mnNumeralShape)
+    {
+        sal_uInt8 nVal = mnNumeralShape;
+        for (sal_uInt8 i = 0; i < 2; ++i)
+        {
+            sal_uInt8 n = (nVal & 0xF0) >> 4;
+            aBuf.append(toUniChar(n));
+            nVal = nVal << 4;
+        }
+    }
+
+    if (mnNumeralShape || mnCalendarType)
+    {
+        sal_uInt8 nVal = mnCalendarType;
+        for (sal_uInt8 i = 0; i < 2; ++i)
+        {
+            sal_uInt8 n = (nVal & 0xF0) >> 4;
+            aBuf.append(toUniChar(n));
+            nVal = nVal << 4;
+        }
+    }
+
+    sal_uInt16 n16 = static_cast<sal_uInt16>(meLanguage);
+    for (sal_uInt8 i = 0; i < 4; ++i)
+    {
+        sal_uInt8 n = static_cast<sal_uInt8>((n16 & 0xF000) >> 12);
+        aBuf.append(toUniChar(n));
+        n16 = n16 << 4;
+    }
+
+    return aBuf.makeStringAndClear();
 }
 
 SvNumberformat::LocaleType::LocaleType() :
