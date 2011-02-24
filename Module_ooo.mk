@@ -43,8 +43,9 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     sw \
     toolkit \
     tools \
-    vcl \
+    unotools \
     unoxml \
+    vcl \
     xmloff \
     vbahelper \
 ))
