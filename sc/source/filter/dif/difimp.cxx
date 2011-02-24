@@ -263,8 +263,7 @@ DifParser::DifParser( SvStream& rNewIn, const sal_uInt32 nOption, ScDocument& rD
         DBG_ERRORFILE( "CharSet passed overrides and modifies StreamCharSet" );
         rIn.SetStreamCharSet( eCharSet );
     }
-    if ( eCharSet == RTL_TEXTENCODING_UNICODE )
-        rIn.StartReadingUnicodeText();
+    rIn.StartReadingUnicodeText( eCharSet );
 
     bPlain = ( nOption == SC_DIFOPT_PLAIN );
 

@@ -1711,24 +1711,22 @@ sal_uInt16 lcl_CountBits( sal_uInt16 nBits )
     return nCount;
 }
 
-SCSIZE lcl_FillOldFields( PivotField* pFields,
+void lcl_FillOldFields( ScPivotFieldVector& rFields,
                             const uno::Reference<sheet::XDimensionsSupplier>& xSource,
-                            sal_uInt16 nOrient, SCCOL nColAdd, sal_Bool bAddData )
+                            sal_uInt16 nOrient, SCCOL nColAdd, bool bAddData )
 {
-    SCSIZE nOutCount = 0;
-    sal_Bool bDataFound = sal_False;
-
-    SCSIZE nCount = (nOrient == sheet::DataPilotFieldOrientation_PAGE) ? PIVOT_MAXPAGEFIELD : PIVOT_MAXFIELD;
+    bool bDataFound = false;
+    rFields.clear();
 
     //! merge multiple occurences (data field with different functions)
     //! force data field in one dimension
 
-    std::vector< long > aPos( nCount, 0 );
+    std::vector< long > aPos;
 
     uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
     uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
     long nDimCount = xDims->getCount();
-    for (long nDim=0; nDim < nDimCount && nOutCount < nCount; nDim++)
+    for (long nDim=0; nDim < nDimCount; nDim++)
     {
         uno::Reference<uno::XInterface> xIntDim =
             ScUnoHelpFunctions::AnyToInterface( xDims->getByIndex(nDim) );
@@ -1775,7 +1773,7 @@ SCSIZE lcl_FillOldFields( PivotField* pFields,
                     nDupSource = lcl_FindName( xNameOrig->getName(), xDimsName );
             }
 
-            sal_Bool bDupUsed = sal_False;
+            bool bDupUsed = false;
             if ( nDupSource >= 0 )
             {
                 //  add function bit to previous entry
@@ -1786,77 +1784,76 @@ SCSIZE lcl_FillOldFields( PivotField* pFields,
                 else
                     nCompCol = static_cast<SCsCOL>(nDupSource)+nColAdd;     //! seek source column from name
 
-                for (SCSIZE nOld=0; nOld<nOutCount && !bDupUsed; nOld++)
-                    if ( pFields[nOld].nCol == nCompCol )
+                for (ScPivotFieldVector::iterator aIt = rFields.begin(), aEnd = rFields.end(); (aIt != aEnd) && !bDupUsed; ++aIt)
+                    if ( aIt->nCol == nCompCol )
                     {
                         //  add to previous column only if new bits aren't already set there
-                        if ( ( pFields[nOld].nFuncMask & nMask ) == 0 )
+                        if ( ( aIt->nFuncMask & nMask ) == 0 )
                         {
-                            pFields[nOld].nFuncMask |= nMask;
-                            pFields[nOld].nFuncCount = lcl_CountBits( pFields[nOld].nFuncMask );
-                            bDupUsed = sal_True;
+                            aIt->nFuncMask |= nMask;
+                            aIt->nFuncCount = lcl_CountBits( aIt->nFuncMask );
+                            bDupUsed = true;
                         }
                     }
             }
 
             if ( !bDupUsed )        // also for duplicated dim if original has different orientation
             {
+                rFields.resize( rFields.size() + 1 );
+                ScPivotField& rField = rFields.back();
+
                 if ( bDataLayout )
                 {
-                    pFields[nOutCount].nCol = PIVOT_DATA_FIELD;
-                    bDataFound = sal_True;
+                    rField.nCol = PIVOT_DATA_FIELD;
+                    bDataFound = true;
                 }
                 else if ( nDupSource >= 0 )     // if source was not found (different orientation)
-                    pFields[nOutCount].nCol = static_cast<SCsCOL>(nDupSource)+nColAdd;      //! seek from name
+                    rField.nCol = static_cast<SCsCOL>(nDupSource)+nColAdd;      //! seek from name
                 else
-                    pFields[nOutCount].nCol = static_cast<SCsCOL>(nDim)+nColAdd;    //! seek source column from name
+                    rField.nCol = static_cast<SCsCOL>(nDim)+nColAdd;    //! seek source column from name
 
-                pFields[nOutCount].nFuncMask = nMask;
-                pFields[nOutCount].nFuncCount = lcl_CountBits( nMask );
-                aPos[nOutCount] = ScUnoHelpFunctions::GetLongProperty( xDimProp,
-                                    rtl::OUString::createFromAscii(DP_PROP_POSITION) );
+                rField.nFuncMask = nMask;
+                rField.nFuncCount = lcl_CountBits( nMask );
+
+                aPos.push_back( ScUnoHelpFunctions::GetLongProperty( xDimProp,
+                                    rtl::OUString::createFromAscii(DP_PROP_POSITION) ) );
 
                 try
                 {
                     if( nOrient == sheet::DataPilotFieldOrientation_DATA )
                         xDimProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_REFVALUE ) ) )
-                            >>= pFields[nOutCount].maFieldRef;
+                            >>= rFields.back().maFieldRef;
                 }
                 catch( uno::Exception& )
                 {
                 }
-
-                ++nOutCount;
             }
         }
     }
 
     //  sort by getPosition() value
-
-    for (SCSIZE i=0; i+1<nOutCount; i++)
+    size_t nSize = aPos.size();
+    for (size_t i=0; i+1<nSize; i++)
     {
-        for (SCSIZE j=0; j+i+1<nOutCount; j++)
+        for (size_t j=0; j+i+1<nSize; j++)
             if ( aPos[j+1] < aPos[j] )
             {
                 std::swap( aPos[j], aPos[j+1] );
-                std::swap( pFields[j], pFields[j+1] );
+                std::swap( rFields[j], rFields[j+1] );
             }
     }
 
     if ( bAddData && !bDataFound )
     {
-        if ( nOutCount >= nCount )                //  space for data field?
-            --nOutCount;                                //! error?
-        pFields[nOutCount].nCol = PIVOT_DATA_FIELD;
-        pFields[nOutCount].nFuncMask = 0;
-        pFields[nOutCount].nFuncCount = 0;
-        ++nOutCount;
+        rFields.resize( rFields.size() + 1 );
+        ScPivotField& rField = rFields.back();
+        rField.nCol = PIVOT_DATA_FIELD;
+        rField.nFuncMask = 0;
+        rField.nFuncCount = 0;
     }
-
-    return nOutCount;
 }
 
-sal_Bool ScDPObject::FillOldParam(ScPivotParam& rParam, sal_Bool bForFile) const
+sal_Bool ScDPObject::FillOldParam(ScPivotParam& rParam) const
 {
     ((ScDPObject*)this)->CreateObjects();       // xSource is needed for field numbers
 
@@ -1866,23 +1863,11 @@ sal_Bool ScDPObject::FillOldParam(ScPivotParam& rParam, sal_Bool bForFile) const
     // ppLabelArr / nLabels is not changed
 
     SCCOL nColAdd = 0;
-    if ( bForFile )
-    {
-        // in old file format, columns are within document, not within source range
-
-        DBG_ASSERT( pSheetDesc, "FillOldParam: bForFile, !pSheetDesc" );
-        nColAdd = pSheetDesc->aSourceRange.aStart.Col();
-    }
-
-    sal_Bool bAddData = ( lcl_GetDataGetOrientation( xSource ) == sheet::DataPilotFieldOrientation_HIDDEN );
-    rParam.nPageCount = lcl_FillOldFields( rParam.aPageArr,
-                            xSource, sheet::DataPilotFieldOrientation_PAGE,   nColAdd, sal_False );
-    rParam.nColCount  = lcl_FillOldFields( rParam.aColArr,
-                            xSource, sheet::DataPilotFieldOrientation_COLUMN, nColAdd, bAddData );
-    rParam.nRowCount  = lcl_FillOldFields( rParam.aRowArr,
-                            xSource, sheet::DataPilotFieldOrientation_ROW,    nColAdd, sal_False );
-    rParam.nDataCount = lcl_FillOldFields( rParam.aDataArr,
-                            xSource, sheet::DataPilotFieldOrientation_DATA,   nColAdd, sal_False );
+    bool bAddData = ( lcl_GetDataGetOrientation( xSource ) == sheet::DataPilotFieldOrientation_HIDDEN );
+    lcl_FillOldFields( rParam.maPageArr, xSource, sheet::DataPilotFieldOrientation_PAGE,   nColAdd, false );
+    lcl_FillOldFields( rParam.maColArr,  xSource, sheet::DataPilotFieldOrientation_COLUMN, nColAdd, bAddData );
+    lcl_FillOldFields( rParam.maRowArr,  xSource, sheet::DataPilotFieldOrientation_ROW,    nColAdd, false );
+    lcl_FillOldFields( rParam.maDataArr, xSource, sheet::DataPilotFieldOrientation_DATA,   nColAdd, false );
 
     uno::Reference<beans::XPropertySet> xProp( xSource, uno::UNO_QUERY );
     if (xProp.is())
@@ -2003,14 +1988,14 @@ sal_Bool ScDPObject::FillLabelData(ScPivotParam& rParam)
                 SCsCOL nCol = static_cast< SCsCOL >( nDim );           //! ???
                 bool bIsValue = true;                               //! check
 
-                ScDPLabelDataRef pNewLabel(new ScDPLabelData(aFieldName, nCol, bIsValue));
-                pNewLabel->maLayoutName = aLayoutName;
-                GetHierarchies(nDim, pNewLabel->maHiers);
-                GetMembers(nDim, GetUsedHierarchy(nDim), pNewLabel->maMembers);
-                lcl_FillLabelData(*pNewLabel, xDimProp);
-                pNewLabel->mnFlags = ScUnoHelpFunctions::GetLongProperty( xDimProp,
+                ScDPLabelData aNewLabel(aFieldName, nCol, bIsValue);
+                aNewLabel.maLayoutName = aLayoutName;
+                GetHierarchies(nDim, aNewLabel.maHiers);
+                GetMembers(nDim, GetUsedHierarchy(nDim), aNewLabel.maMembers);
+                lcl_FillLabelData(aNewLabel, xDimProp);
+                aNewLabel.mnFlags = ScUnoHelpFunctions::GetLongProperty( xDimProp,
                                         rtl::OUString::createFromAscii(SC_UNO_FLAGS), 0 );
-                rParam.maLabelArray.push_back(pNewLabel);
+                rParam.maLabelArray.push_back(aNewLabel);
             }
         }
     }
@@ -2131,13 +2116,13 @@ String lcl_GetDimName( const uno::Reference<sheet::XDimensionsSupplier>& xSource
 
 // static
 void ScDPObject::ConvertOrientation( ScDPSaveData& rSaveData,
-                            PivotField* pFields, SCSIZE nCount, sal_uInt16 nOrient,
+                            const ScPivotFieldVector& rFields, sal_uInt16 nOrient,
                             ScDocument* pDoc, SCROW nRow, SCTAB nTab,
                             const uno::Reference<sheet::XDimensionsSupplier>& xSource,
-                            sal_Bool bOldDefaults,
-                            PivotField* pRefColFields, SCSIZE nRefColCount,
-                            PivotField* pRefRowFields, SCSIZE nRefRowCount,
-                            PivotField* pRefPageFields, SCSIZE nRefPageCount )
+                            bool bOldDefaults,
+                            const ScPivotFieldVector* pRefColFields,
+                            const ScPivotFieldVector* pRefRowFields,
+                            const ScPivotFieldVector* pRefPageFields )
 {
     //  pDoc or xSource must be set
     DBG_ASSERT( pDoc || xSource.is(), "missing string source" );
@@ -2145,11 +2130,11 @@ void ScDPObject::ConvertOrientation( ScDPSaveData& rSaveData,
     String aDocStr;
     ScDPSaveDimension* pDim;
 
-    for (SCSIZE i=0; i<nCount; i++)
+    for (ScPivotFieldVector::const_iterator aIt = rFields.begin(), aEnd = rFields.end(); aIt != aEnd; ++aIt)
     {
-        SCCOL nCol = pFields[i].nCol;
-        sal_uInt16 nFuncs = pFields[i].nFuncMask;
-        const sheet::DataPilotFieldReference& rFieldRef = pFields[i].maFieldRef;
+        SCCOL nCol = aIt->nCol;
+        sal_uInt16 nFuncs = aIt->nFuncMask;
+        const sheet::DataPilotFieldReference& rFieldRef = aIt->maFieldRef;
 
         if ( nCol == PIVOT_DATA_FIELD )
             pDim = rSaveData.GetDataLayoutDimension();
@@ -2171,28 +2156,28 @@ void ScDPObject::ConvertOrientation( ScDPSaveData& rSaveData,
             if ( nOrient == sheet::DataPilotFieldOrientation_DATA )     // set summary function
             {
                 //  generate an individual entry for each function
-                sal_Bool bFirst = sal_True;
+                bool bFirst = true;
 
                 //  if a dimension is used for column/row/page and data,
                 //  use duplicated dimensions for all data occurrences
                 if (pRefColFields)
-                    for (SCSIZE nRefCol=0; nRefCol<nRefColCount; nRefCol++)
-                        if (pRefColFields[nRefCol].nCol == nCol)
-                            bFirst = sal_False;
+                    for (ScPivotFieldVector::const_iterator aRefIt = pRefColFields->begin(), aRefEnd = pRefColFields->end(); bFirst && (aRefIt != aRefEnd); ++aRefIt)
+                        if (aRefIt->nCol == nCol)
+                            bFirst = false;
                 if (pRefRowFields)
-                    for (SCSIZE nRefRow=0; nRefRow<nRefRowCount; nRefRow++)
-                        if (pRefRowFields[nRefRow].nCol == nCol)
-                            bFirst = sal_False;
+                    for (ScPivotFieldVector::const_iterator aRefIt = pRefRowFields->begin(), aRefEnd = pRefRowFields->end(); bFirst && (aRefIt != aRefEnd); ++aRefIt)
+                        if (aRefIt->nCol == nCol)
+                            bFirst = false;
                 if (pRefPageFields)
-                    for (sal_uInt16 nRefPage=0; nRefPage<nRefPageCount; ++nRefPage)
-                        if (pRefPageFields[nRefPage].nCol == nCol)
-                            bFirst = sal_False;
+                    for (ScPivotFieldVector::const_iterator aRefIt = pRefPageFields->begin(), aRefEnd = pRefPageFields->end(); bFirst && (aRefIt != aRefEnd); ++aRefIt)
+                        if (aRefIt->nCol == nCol)
+                            bFirst = false;
 
                 //  if set via api, a data column may occur several times
                 //  (if the function hasn't been changed yet) -> also look for duplicate data column
-                for (SCSIZE nPrevData=0; nPrevData<i; nPrevData++)
-                    if (pFields[nPrevData].nCol == nCol)
-                        bFirst = sal_False;
+                for (ScPivotFieldVector::const_iterator aRefIt = rFields.begin(); bFirst && (aRefIt != aIt); ++aRefIt)
+                    if (aRefIt->nCol == nCol)
+                        bFirst = false;
 
                 sal_uInt16 nMask = 1;
                 for (sal_uInt16 nBit=0; nBit<16; nBit++)
@@ -2209,7 +2194,7 @@ void ScDPObject::ConvertOrientation( ScDPSaveData& rSaveData,
                         else
                             pCurrDim->SetReferenceValue( &rFieldRef );
 
-                        bFirst = sal_False;
+                        bFirst = false;
                     }
                     nMask *= 2;
                 }
@@ -2511,7 +2496,7 @@ ScDPObject* ScDPCollection::GetByName(const String& rName) const
 
 String ScDPCollection::CreateNewName( sal_uInt16 nMin ) const
 {
-    String aBase = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("DataPilot"));
+    String aBase( RTL_CONSTASCII_USTRINGPARAM( "Pivot" ) );
     //! from Resource?
 
     for (sal_uInt16 nAdd=0; nAdd<=nCount; nAdd++)   //  nCount+1 tries
