@@ -653,6 +653,7 @@ double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOp
     if ( !rComp.bEmpty[1] && rComp.bVal[1] && !::rtl::math::isFinite( rComp.nVal[1]))
         return rComp.nVal[1];
 
+    size_t nStringQuery = 0;    // 0:=no, 1:=0, 2:=1
     double fRes = 0;
     if ( rComp.bEmpty[ 0 ] )
     {
@@ -709,16 +710,22 @@ double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOp
             }
         }
         else
-            fRes = -1;  // number is less than string
+        {
+            fRes = -1;          // number is less than string
+            nStringQuery = 2;   // 1+1
+        }
     }
     else if( rComp.bVal[ 1 ] )
-        fRes = 1;   // number is less than string
+    {
+        fRes = 1;               // string is greater than number
+        nStringQuery = 1;       // 0+1
+    }
     else
     {
         // Both strings.
         if (pOptions)
         {
-            // All similar to Sctable::ValidQuery(), *rComp.pVal[1] actually
+            // All similar to ScTable::ValidQuery(), *rComp.pVal[1] actually
             // is/must be identical to *rEntry.pStr, which is essential for
             // regex to work through GetSearchTextPtr().
             ScQueryEntry& rEntry = pOptions->aQueryEntry;
@@ -767,6 +774,20 @@ double ScInterpreter::CompareFunc( const ScCompare& rComp, ScCompareOptions* pOp
         else
             fRes = (double) ScGlobal::GetCaseCollator()->compareString(
                 *rComp.pVal[ 0 ], *rComp.pVal[ 1 ] );
+    }
+    if (nStringQuery && pOptions)
+    {
+        const ScQueryEntry& rEntry = pOptions->aQueryEntry;
+        if (!rEntry.bQueryByString && rEntry.pStr->Len() &&
+                (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL))
+        {
+            // As in ScTable::ValidQuery() match a numeric string for a
+            // number query that originated from a string, e.g. in SUMIF
+            // and COUNTIF. Transliteration is not needed here.
+            bool bEqual = rComp.pVal[nStringQuery-1]->Equals( *rEntry.pStr);
+            // match => fRes=0, else fRes=1
+            fRes = (rEntry.eOp == SC_NOT_EQUAL) ? bEqual : !bEqual;
+        }
     }
     return fRes;
 }
