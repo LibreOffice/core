@@ -188,7 +188,6 @@ INCLUDETOPDIRLIST= \
     $(INCOUT)/uno \
     $(INCOUT)/cppu \
     $(INCOUT)/cppuhelper \
-    $(INCOUT)/bridges \
     $(INCOUT)/registry \
     $(INCOUT)/stl
 
