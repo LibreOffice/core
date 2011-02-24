@@ -44,7 +44,7 @@
 #include <tools/debug.hxx>
 #include "xmlfilter.hxx"
 #include "xmlHelper.hxx"
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #define XML_LINE_LEFT 0
 #define XML_LINE_RIGHT 1
@@ -151,7 +151,7 @@ void OControlStyleContext::SetDefaults()
 void OControlStyleContext::AddProperty(const sal_Int16 nContextID, const uno::Any& rValue)
 {
     sal_Int32 nIndex(static_cast<OReportStylesContext *>(pStyles)->GetIndex(nContextID));
-    DBG_ASSERT(nIndex != -1, "Property not found in Map");
+    OSL_ENSURE(nIndex != -1, "Property not found in Map");
     XMLPropertyState aPropState(nIndex, rValue);
     GetProperties().push_back(aPropState); // has to be insertes in a sort order later
 }

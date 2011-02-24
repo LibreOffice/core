@@ -138,9 +138,9 @@ sal_Int32 ReadThroughComponent(
     const uno::Reference< XDocumentHandler >& _xFilter,
     sal_Bool /*bEncrypted*/ )
 {
-    DBG_ASSERT(xInputStream.is(), "input stream missing");
-    DBG_ASSERT(xModelComponent.is(), "document missing");
-    DBG_ASSERT(rFactory.is(), "factory missing");
+    OSL_ENSURE(xInputStream.is(), "input stream missing");
+    OSL_ENSURE(xModelComponent.is(), "document missing");
+    OSL_ENSURE(rFactory.is(), "factory missing");
 
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "rptxml", "oj", "ReadThroughComponent" );
 
@@ -153,13 +153,13 @@ sal_Int32 ReadThroughComponent(
         rFactory->createInstance(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
         UNO_QUERY );
-    DBG_ASSERT( xParser.is(), "Can't create parser" );
+    OSL_ENSURE( xParser.is(), "Can't create parser" );
     if( !xParser.is() )
         return 1;
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
 
     // get filter
-    DBG_ASSERT( _xFilter.is(), "Can't instantiate filter component." );
+    OSL_ENSURE( _xFilter.is(), "Can't instantiate filter component." );
     if( !_xFilter.is() )
         return 1;
 
@@ -233,8 +233,8 @@ sal_Int32 ReadThroughComponent(
     const ::rtl::OUString& _sFilterName
     ,const uno::Reference<beans::XPropertySet>& _xProp)
 {
-    DBG_ASSERT( xStorage.is(), "Need storage!");
-    DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
+    OSL_ENSURE( xStorage.is(), "Need storage!");
+    OSL_ENSURE(NULL != pStreamName, "Please, please, give me a name!");
 
     if ( xStorage.is() )
     {
@@ -1054,7 +1054,7 @@ void SAL_CALL ORptFilter::startDocument( void )
 void ORptFilter::endDocument( void )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
-    DBG_ASSERT( GetModel().is(), "model missing; maybe startDocument wasn't called?" );
+    OSL_ENSURE( GetModel().is(), "model missing; maybe startDocument wasn't called?" );
     if( !GetModel().is() )
         return;
 

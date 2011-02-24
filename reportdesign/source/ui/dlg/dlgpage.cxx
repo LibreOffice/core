@@ -53,7 +53,7 @@ SfxTabDialog ( pParent, ModuleRes( _nPageId ), pAttr ),
         rOutAttrs           ( *pAttr )
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    OSL_ENSURE(pFact, "Dialogdiet fail!");
     switch( _nPageId )
     {
         case RID_PAGEDIALOG_BACKGROUND:

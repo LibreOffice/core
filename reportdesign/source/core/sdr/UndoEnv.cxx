@@ -245,7 +245,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     {
         AllProperties aNewEntry;
         aSetPos = m_pImpl->m_aPropertySetCache.insert(PropertySetInfoCache::value_type(xSet,aNewEntry)).first;
-        DBG_ASSERT(aSetPos != m_pImpl->m_aPropertySetCache.end(), "OXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
+        OSL_ENSURE(aSetPos != m_pImpl->m_aPropertySetCache.end(), "OXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
     }
     if ( aSetPos == m_pImpl->m_aPropertySetCache.end() )
         return;
@@ -262,7 +262,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
 
         // insert the new entry
         aPropertyPos = rPropInfos.insert( AllProperties::value_type( _rEvent.PropertyName, bTransReadOnly ) ).first;
-        DBG_ASSERT(aPropertyPos != rPropInfos.end(), "OXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
+        OSL_ENSURE(aPropertyPos != rPropInfos.end(), "OXUndoEnvironment::propertyChange : just inserted it ... why it's not there ?");
     }
 
     implSetModified();
