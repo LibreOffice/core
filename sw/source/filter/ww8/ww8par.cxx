@@ -1145,7 +1145,11 @@ const SfxPoolItem* SwWW8FltControlStack::GetStackAttr(const SwPosition& rPos,
         {
             if ( (pEntry->bLocked) || (
                 (pEntry->nMkNode <= aNode) && (pEntry->nPtNode >= aNode) &&
-                (pEntry->nMkCntnt <= nIdx) && (pEntry->nPtCntnt >= nIdx) ) )
+                (pEntry->nMkCntnt <= nIdx) && (pEntry->nPtCntnt > nIdx) ) )
+                /*
+                 * e.g. half-open range [0-3) so asking for properties at 3
+                 * means props that end at 3 are not included
+                 */
             {
                 return (const SfxPoolItem*)pEntry->pAttr;
             }
