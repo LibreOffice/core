@@ -223,9 +223,31 @@ bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRan
 
 bool FormControlHelper::processField(uno::Reference<text::XFormField> xFormField)
 {
-    if (m_pImpl->m_eFieldId == FIELD_FORMCHECKBOX )
+    uno::Reference<container::XNameContainer> xNameCont = xFormField->getParameters();
+    if (m_pImpl->m_eFieldId == FIELD_FORMTEXT )
     {
-        xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.oasis.opendocument.field.FORMCHECKBOX")));
+        xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT)));
+        if ( xNameCont.is() )
+        {
+            if (  m_pFFData->getName().getLength() )
+            {
+                if ( xNameCont->hasByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT_NAME)) ) )
+                    xNameCont->replaceByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT_NAME)), uno::makeAny( m_pFFData->getName() ) );
+                else
+                    xNameCont->insertByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT_NAME)), uno::makeAny( m_pFFData->getName() ) );
+            }
+            if (  m_pFFData->getTextDefault().getLength() )
+            {
+                if ( xNameCont->hasByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT_DEFAULT)) ) )
+                    xNameCont->replaceByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT_DEFAULT)), uno::makeAny( m_pFFData->getTextDefault() ) );
+                else
+                    xNameCont->insertByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT_DEFAULT)), uno::makeAny( m_pFFData->getTextDefault() ) );
+            }
+        }
+    }
+    else if (m_pImpl->m_eFieldId == FIELD_FORMCHECKBOX )
+    {
+        xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX)));
         uno::Reference<beans::XPropertySet> xPropSet(xFormField, uno::UNO_QUERY);
         uno::Any aAny;
         aAny <<= m_pFFData->getCheckboxChecked();
@@ -236,7 +258,6 @@ bool FormControlHelper::processField(uno::Reference<text::XFormField> xFormField
     else if (m_pImpl->m_eFieldId == FIELD_FORMDROPDOWN )
     {
         xFormField->setFieldType( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN)));
-        uno::Reference<container::XNameContainer> xNameCont = xFormField->getParameters();
         if ( xNameCont.is() )
         {
             uno::Sequence< rtl::OUString > sItems;

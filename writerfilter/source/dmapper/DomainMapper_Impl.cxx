@@ -136,6 +136,22 @@ void lcl_handleDropdownField( const uno::Reference< beans::XPropertySet >& rxFie
     }
 }
 
+void lcl_handleTextField( const uno::Reference< beans::XPropertySet >& rxFieldProps, FFDataHandler::Pointer_t pFFDataHandler, PropertyNameSupplier& rPropNameSupplier )
+{
+    if ( rxFieldProps.is() )
+    {
+        rxFieldProps->setPropertyValue
+            (rPropNameSupplier.GetName(PROP_HINT),
+            uno::makeAny(pFFDataHandler->getStatusText()));
+        rxFieldProps->setPropertyValue
+            (rPropNameSupplier.GetName(PROP_HELP),
+            uno::makeAny(pFFDataHandler->getHelpText()));
+        rxFieldProps->setPropertyValue
+            (rPropNameSupplier.GetName(PROP_CONTENT),
+            uno::makeAny(pFFDataHandler->getTextDefault()));
+    }
+}
+
 struct FieldConversion
 {
     ::rtl::OUString     sWordCommand;
@@ -1904,8 +1920,9 @@ const FieldConversionMap_t & lcl_GetEnhancedFieldConversion()
     {
         static const FieldConversion aEnhancedFields[] =
         {
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMCHECKBOX")),     "ODFFormCheckbox",                           "", FIELD_FORMCHECKBOX},
-            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMDROPDOWN")),     "ODFFormListbox",                           "", FIELD_FORMDROPDOWN},
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMCHECKBOX")),     "FormFieldmark",                           "", FIELD_FORMCHECKBOX},
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMDROPDOWN")),     "FormFieldmark",                           "", FIELD_FORMDROPDOWN},
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMTEXT")),     "Fieldmark", "", FIELD_FORMTEXT},
         };
 
         size_t nConversions = SAL_N_ELEMENTS(aEnhancedFields);
@@ -2350,20 +2367,22 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case FIELD_DOCPROPERTY:
                 case FIELD_TOC:
                 case FIELD_TC:
+                        bCreateField = false;
+                        break;
                 case FIELD_FORMCHECKBOX :
+                case FIELD_FORMTEXT :
                 case FIELD_FORMDROPDOWN :
                 {
-                    // If we use 'enhanced' fields then FIELD_FORMCHECKBOX
-                    // & FIELD_FORMDROPDOWN are treated specially
-                    if ( m_bUsingEnhancedFields  && ( aIt->second.eFieldId == FIELD_FORMCHECKBOX || aIt->second.eFieldId == FIELD_FORMDROPDOWN ) )
+                    // If we use 'enhanced' fields then FIELD_FORMCHECKBOX,
+                    // FIELD_FORMTEXT & FIELD_FORMDROPDOWN are treated specially
+                    if ( m_bUsingEnhancedFields  )
                     {
                         bCreateField = false;
                         bCreateEnhancedField = true;
                     }
-                    // if we aren't using enhanced fields and this is a
-                    // drown down then *don't* set bCreateField to false..
-                    // we want to create the field
-                    else if ( aIt->second.eFieldId != FIELD_FORMDROPDOWN )
+                    // for non enhanced fields checkboxes are displayed
+                    // as an awt control not a field
+                    else if ( aIt->second.eFieldId == FIELD_FORMCHECKBOX )
                         bCreateField = false;
                     break;
                 }
@@ -2377,7 +2396,6 @@ void DomainMapper_Impl::CloseFieldCommand()
                     OUString sServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text."));
                     if ( bCreateEnhancedField )
                     {
-                        sServiceName += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FormFieldmark."));
                         FieldConversionMap_t aEnhancedFieldConversionMap = lcl_GetEnhancedFieldConversion();
                         FieldConversionMap_t::iterator aEnhancedIt = aEnhancedFieldConversionMap.find(sCommand);
                         if ( aEnhancedIt != aEnhancedFieldConversionMap.end())
@@ -2478,6 +2496,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_FORMULA : break;
                     case FIELD_FORMCHECKBOX :
                     case FIELD_FORMDROPDOWN :
+                    case FIELD_FORMTEXT :
                         {
                             uno::Reference< text::XTextField > xTextField( xFieldInterface, uno::UNO_QUERY );
                             if ( !xTextField.is() )
@@ -2500,25 +2519,14 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 }
                             }
                             else
-                                lcl_handleDropdownField( xFieldProperties, pContext->getFFDataHandler() );
+                            {
+                                if ( aIt->second.eFieldId == FIELD_FORMDROPDOWN )
+                                    lcl_handleDropdownField( xFieldProperties, pContext->getFFDataHandler() );
+                                else
+                                    lcl_handleTextField( xFieldProperties, pContext->getFFDataHandler(), rPropNameSupplier );
+                            }
                         }
                         break;
-                    case FIELD_FORMTEXT :
-                    {
-                        FFDataHandler::Pointer_t pFFDataHandler
-                            (pContext->getFFDataHandler());
-
-                        xFieldProperties->setPropertyValue
-                            (rPropNameSupplier.GetName(PROP_HINT),
-                            uno::makeAny(pFFDataHandler->getStatusText()));
-                        xFieldProperties->setPropertyValue
-                            (rPropNameSupplier.GetName(PROP_HELP),
-                            uno::makeAny(pFFDataHandler->getHelpText()));
-                        xFieldProperties->setPropertyValue
-                            (rPropNameSupplier.GetName(PROP_CONTENT),
-                            uno::makeAny(pFFDataHandler->getTextDefault()));
-                    }
-                    break;
                     case FIELD_GOTOBUTTON   : break;
                     case FIELD_HYPERLINK:
                     {
@@ -2895,8 +2903,8 @@ void DomainMapper_Impl::PopFieldContext()
                             xToInsert.set(xFormField, uno::UNO_QUERY);
                             if ( xFormField.is() && xToInsert.is() )
                             {
-                                uno::Reference< text::XTextAppendAndConvert > xTextAppendAndConvert( xTextAppend, uno::UNO_QUERY_THROW );
-                                xTextAppendAndConvert->appendTextContent( xToInsert, uno::Sequence< beans::PropertyValue >() );
+                                xCrsr->gotoEnd( true );
+                                xToInsert->attach( uno::Reference< text::XTextRange >( xCrsr, uno::UNO_QUERY_THROW ));
                                 pFormControlHelper->processField( xFormField );
                             }
                             else
