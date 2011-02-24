@@ -74,7 +74,7 @@ Color SwViewOption::aPageBreakColor(COL_BLUE);
 Color SwViewOption::aScriptIndicatorColor(COL_GREEN);
 
 sal_Int32 SwViewOption::nAppearanceFlags = VIEWOPT_DOC_BOUNDARIES|VIEWOPT_OBJECT_BOUNDARIES;
-USHORT SwViewOption::nPixelTwips = 0;   //ein Pixel auf dem Bildschirm
+USHORT SwViewOption::nPixelTwips = 0;   // one pixel on the screen
 
 
 #define LINEBREAK_SIZE 12, 8
@@ -103,7 +103,7 @@ BOOL SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             && bShowPlaceHolderFields == rOpt.bShowPlaceHolderFields
             && bIdle == rOpt.bIdle
 #if OSL_DEBUG_LEVEL > 1
-            // korrespondieren zu den Angaben in ui/config/cfgvw.src
+            // correspond to the statements in ui/config/cfgvw.src
             && bTest1 == rOpt.IsTest1()
             && bTest2 == rOpt.IsTest2()
             && bTest3 == rOpt.IsTest3()
@@ -156,7 +156,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, sal_Bo
     {
             Color aOldLineColor( pOut->GetLineColor() );
         pOut->SetLineColor( Color(COL_GRAY ) );
-        // Wir ziehen ueberall zwei Pixel ab, damit es schick aussieht
+        // to make it look nice, we subtract two pixels everywhere
         USHORT nPix = GetPixelTwips() * 2;
         if( rRect.Width() <= 2 * nPix || rRect.Height() <= 2 * nPix )
             nPix = 0;
@@ -188,8 +188,8 @@ SwViewOption::SwViewOption() :
     eZoom( SVX_ZOOM_PERCENT ),
     nTblDest(TBL_DEST_CELL)
 {
-    // Initialisierung ist jetzt etwas einfacher
-    // alle Bits auf 0
+    // Initialisation is a little simpler now
+    // all Bits to 0
     nCoreOptions =  VIEWOPT_1_HARDBLANK | VIEWOPT_1_SOFTHYPH |
                     VIEWOPT_1_REF |
                     VIEWOPT_1_GRAPHIC |
@@ -210,7 +210,7 @@ SwViewOption::SwViewOption() :
     bIdle = true;
 
 #if OSL_DEBUG_LEVEL > 1
-    // korrespondieren zu den Angaben in ui/config/cfgvw.src
+    // correspond to the statements in ui/config/cfgvw.src
     bTest1 = bTest2 = bTest3 = bTest4 =
              bTest5 = bTest6 = bTest7 = bTest8 = bTest10 = FALSE;
 #endif
