@@ -1117,8 +1117,8 @@ private:
         pReffingStck = 0;
     }
     void DeleteAnchorStk()  { DeleteStk( pAnchorStck ); pAnchorStck = 0; }
-    bool emulateMSWordAddTextToParagraph(const String& sAddString);
-    bool simpleAddTextToParagraph(const String& sAddString);
+    void emulateMSWordAddTextToParagraph(const rtl::OUString& rAddString);
+    void simpleAddTextToParagraph(const String& rAddString);
     bool HandlePageBreakChar();
     bool ReadChar(long nPosCp, long nCpOfs);
     bool ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs);

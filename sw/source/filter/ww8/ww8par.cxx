@@ -56,6 +56,7 @@
 #include <editeng/langitem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/charhiddenitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
@@ -135,6 +136,8 @@
 #include <osl/file.hxx>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 
+#include <breakit.hxx>
+
 #ifdef DEBUG
 #include <iostream>
 #include <dbgoutsw.hxx>
@@ -154,6 +157,8 @@ using namespace nsHdFtFlags;
 
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/ScriptType.hdl>
 #include <com/sun/star/frame/XModel.hpp>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <unotools/pathoptions.hxx>
@@ -2638,29 +2643,144 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
     return nL2 >= nLen;
 }
 
-//TODO: In writer we categorize text into CJK, CTL and "Western" for everything
-//else. Microsoft Word basically categorizes text into East Asian, Non-East
-//Asian and ASCII, with some shared characters and some properties to
-//to hint as to which way to bias those shared characters.
-//
-//Here we must find out "what would word do" to see what font/language
-//word would assign to characters based on the unicode range they fall
-//into, taking into account the idctHint property if it exists.
-//
-//Where this differs from the default category that writer would assign it to
-//we're then forced (because we don't have an equivalent hint) to mirror the
-//properties of the source MSWord category into the properties of the dest
-//Writer category for that range of text in order to get the right results.
-bool SwWW8ImplReader::emulateMSWordAddTextToParagraph(const String& rAddString)
+#define MSASCII SAL_MAX_INT16
+
+namespace
 {
-    return simpleAddTextToParagraph(rAddString);
+    //We want to force weak chars inside 0x0020 to 0x007F to LATIN
+    sal_Int16 lcl_getScriptType(
+        const uno::Reference<i18n::XBreakIterator>& rBI,
+        const rtl::OUString &rString, sal_Int32 nPos)
+    {
+        sal_Int16 nScript = rBI->getScriptType(rString, nPos);
+        if (nScript == i18n::ScriptType::WEAK && rString[nPos] >= 0x0020 && rString[nPos] <= 0x007F)
+            nScript = MSASCII;
+        return nScript;
+    }
+
+    //We want to know about WEAK segments, so endOfScript isn't
+    //useful, and see lcl_getScriptType anyway
+    sal_Int32 lcl_endOfScript(
+        const uno::Reference<i18n::XBreakIterator>& rBI,
+        const rtl::OUString &rString, sal_Int32 nPos, sal_Int16 nScript)
+    {
+        while (nPos < rString.getLength())
+        {
+            sal_Int16 nNewScript = lcl_getScriptType(rBI, rString, nPos);
+            if (nScript != nNewScript)
+                break;
+            ++nPos;
+        }
+        return nPos;
+    }
 }
 
-bool SwWW8ImplReader::simpleAddTextToParagraph(const String& rAddString)
+//In writer we categorize text into CJK, CTL and "Western" for everything else.
+//Microsoft Word basically categorizes text into East Asian, Complex, ASCII,
+//NonEastAsian/HighAnsi, with some shared characters and some properties to to
+//hint as to which way to bias those shared characters.
+//
+//That's four categories, we however have three categories. Given that problem
+//here we would ideally find out "what would word do" to see what font/language
+//word would assign to characters based on the unicode range they fall into and
+//hack the word one onto the range we use. However it's unclear what word's
+//categorization is. So we don't do that here yet.
+//
+//Additional to the categorization, when word encounters weak text for ambigious
+//chars it uses idcthint to indicate which way to bias. We don't have a idcthint
+//feature in writer.
+//
+//So what we currently do here then is to split our text into non-weak/weak
+//sections and uses word's idcthint to determine what font it would use and
+//force that on for the segment. Following what we *do* know about word's
+//categorization, we know that the range 0x0020 and 0x007F is sprmCRgFtc0 in
+//word, something we map to LATIN, so we consider all weaks chars in that range
+//to auto-bias to LATIN.
+//
+//See https://bugs.freedesktop.org/show_bug.cgi?id=34319 for an example
+void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const rtl::OUString& rAddString)
 {
-    const SwTxtNode* pNd = pPaM->GetCntntNode()->GetTxtNode();
-    if (rAddString.Len())
+    if (!rAddString.getLength())
+        return;
+
+    uno::Reference<i18n::XBreakIterator> xBI(pBreakIt->GetBreakIter());
+    if (!xBI.is())
     {
+        simpleAddTextToParagraph(rAddString);
+        return;
+    }
+
+    sal_Int16 nScript = lcl_getScriptType(xBI, rAddString, 0);
+    sal_Int32 nLen = rAddString.getLength();
+
+    sal_Int32 nPos = 0;
+    while (nPos < nLen)
+    {
+        sal_Int32 nEnd = lcl_endOfScript(xBI, rAddString, nPos, nScript);
+        if (nEnd < 0)
+            break;
+
+        rtl::OUString sChunk(rAddString.copy(nPos, nEnd-nPos));
+        const sal_uInt16 aIds[] = {RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT};
+        bool aForced[] = {false, false, false};
+
+        int nLclIdctHint = 0xFF;
+        if (nScript == i18n::ScriptType::WEAK)
+            nLclIdctHint = nIdctHint;
+        else if (nScript == MSASCII) //Force weak chars in ascii range to use LATIN font
+            nLclIdctHint = 0;
+
+        if (nLclIdctHint != 0xFF)
+        {
+            sal_uInt16 nForceFromFontId = 0;
+            switch (nLclIdctHint)
+            {
+                case 0:
+                    nForceFromFontId = RES_CHRATR_FONT;
+                    break;
+                case 1:
+                    nForceFromFontId = RES_CHRATR_CJK_FONT;
+                    break;
+                case 2:
+                    nForceFromFontId = RES_CHRATR_CTL_FONT;
+                    break;
+                default:
+                    break;
+            }
+
+            const SvxFontItem *pSourceFont = (const SvxFontItem*)GetFmtAttr(nForceFromFontId);
+
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
+            {
+                const SvxFontItem *pDestFont = (const SvxFontItem*)GetFmtAttr(aIds[i]);
+                aForced[i] = aIds[i] != nForceFromFontId && *pSourceFont != *pDestFont;
+                if (aForced[i])
+                {
+                    SvxFontItem aForceFont(*pSourceFont);
+                    aForceFont.SetWhich(aIds[i]);
+                    pCtrlStck->NewAttr(*pPaM->GetPoint(), aForceFont);
+                }
+            }
+        }
+
+        simpleAddTextToParagraph(sChunk);
+
+        for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
+        {
+            if (aForced[i])
+                pCtrlStck->SetAttr(*pPaM->GetPoint(), aIds[i]);
+        }
+
+        nPos = nEnd;
+        nScript = lcl_getScriptType(xBI, rAddString, nPos);
+    }
+
+}
+
+void SwWW8ImplReader::simpleAddTextToParagraph(const String& rAddString)
+{
+    if (!rAddString.Len())
+        return;
 
 #ifdef DEBUG
         {
@@ -2670,35 +2790,33 @@ bool SwWW8ImplReader::simpleAddTextToParagraph(const String& rAddString)
                 << ::std::endl;
         }
 #endif
+    const SwTxtNode* pNd = pPaM->GetCntntNode()->GetTxtNode();
 
-        if ((pNd->GetTxt().Len() + rAddString.Len()) < STRING_MAXLEN-1)
+    if ((pNd->GetTxt().Len() + rAddString.Len()) < STRING_MAXLEN-1)
+    {
+        rDoc.InsertString(*pPaM, rAddString);
+    }
+    else
+    {
+
+        if (pNd->GetTxt().Len()< STRING_MAXLEN -1)
         {
-            rDoc.InsertString(*pPaM, rAddString);
+            String sTempStr (rAddString,0,
+                STRING_MAXLEN - pNd->GetTxt().Len() -1);
+            rDoc.InsertString(*pPaM, sTempStr);
+            sTempStr = rAddString.Copy(sTempStr.Len(),
+                rAddString.Len() - sTempStr.Len());
+            AppendTxtNode(*pPaM->GetPoint());
+            rDoc.InsertString(*pPaM, sTempStr);
         }
         else
         {
-
-            if (pNd->GetTxt().Len()< STRING_MAXLEN -1)
-            {
-                String sTempStr (rAddString,0,
-                    STRING_MAXLEN - pNd->GetTxt().Len() -1);
-                rDoc.InsertString(*pPaM, sTempStr);
-                sTempStr = rAddString.Copy(sTempStr.Len(),
-                    rAddString.Len() - sTempStr.Len());
-                AppendTxtNode(*pPaM->GetPoint());
-                rDoc.InsertString(*pPaM, sTempStr);
-            }
-            else
-            {
-                AppendTxtNode(*pPaM->GetPoint());
-                rDoc.InsertString(*pPaM, rAddString);
-            }
+            AppendTxtNode(*pPaM->GetPoint());
+            rDoc.InsertString(*pPaM, rAddString);
         }
-
-        bReadTable = false;
     }
 
-    return true;
+    bReadTable = false;
 }
 
 // Returnwert: true for para end
