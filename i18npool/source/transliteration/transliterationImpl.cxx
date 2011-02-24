@@ -43,6 +43,8 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <algorithm>
+
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
@@ -474,24 +476,25 @@ TransliterationImpl::equals(
 
     OUString tmpStr1 = folding(str1, pos1, nCount1, offset1);
     OUString tmpStr2 = folding(str2, pos2, nCount2, offset2);
+    // Length of offset1 and offset2 may still be 0 if there was no folding
+    // necessary!
 
     const sal_Unicode *p1 = tmpStr1.getStr();
     const sal_Unicode *p2 = tmpStr2.getStr();
-    sal_Int32 i, nLen = (tmpStr1.getLength() < tmpStr1.getLength() ?
-                        tmpStr1.getLength() : tmpStr2.getLength());
+    sal_Int32 i, nLen = ::std::min( tmpStr1.getLength(), tmpStr2.getLength());
     for (i = 0; i < nLen; ++i, ++p1, ++p2 ) {
         if (*p1 != *p2) {
             // return number of matched code points so far
-            nMatch1 = offset1[i];
-            nMatch2 = offset2[i];
+            nMatch1 = (i < offset1.getLength()) ? offset1[i] : i;
+            nMatch2 = (i < offset2.getLength()) ? offset2[i] : i;
             return sal_False;
         }
     }
     // i==nLen
     if ( tmpStr1.getLength() != tmpStr2.getLength() ) {
         // return number of matched code points so far
-        nMatch1 = offset1[i-1] + 1;
-        nMatch2 = offset2[i-1] + 1;
+        nMatch1 = (i <= offset1.getLength()) ? offset1[i-1] + 1 : i;
+        nMatch2 = (i <= offset2.getLength()) ? offset2[i-1] + 1 : i;
         return sal_False;
     } else {
         nMatch1 = nCount1;
