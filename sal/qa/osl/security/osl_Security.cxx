@@ -228,16 +228,12 @@ namespace osl_Security
 
         void getConfigDir_001( )
         {
-#if not defined( MACOSX )
-            // Note: on Mac OS, configuration information is kept at ~/Application%20Support and
-            // not in~/; thus, this test should always fail since strConfigDirectory is ~/
             ::osl::Security aSec;
             ::rtl::OUString strConfig;
             bRes = aSec.getConfigDir( strConfig );
 
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: getHomeDir and compare it with the info we get at the beginning.",
-                                     ( sal_True == strConfigDirectory.equals( strConfig ) ) && ( sal_True == bRes ) );
-#endif
+            CPPUNIT_ASSERT_MESSAGE( "failed to find a ConfigDir!",
+                                     ( sal_True == bRes ));
         }
 
         CPPUNIT_TEST_SUITE( getConfigDir );
