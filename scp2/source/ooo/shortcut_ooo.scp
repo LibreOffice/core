@@ -76,27 +76,28 @@ End
 
 #endif
 
+#ifndef SYSTEM_GRAPHITE
 Shortcut gid_Shortcut_Lib_Graphite_0
     FileID = gid_File_Lib_Graphite;
     Dir = gid_Dir_Program;
-    Name = STRING(CONCAT2(libgraphite,UNXSUFFIX));
+    Name = STRING(CONCAT2(libgraphite2,UNXSUFFIX));
     Styles = (NETWORK,RELATIVE);
 End
 
 Shortcut gid_Shortcut_Lib_Graphite_1
     FileID = gid_File_Lib_Graphite;
     Dir = gid_Dir_Program;
-    Name = STRING(CONCAT4(libgraphite,UNXSUFFIX,.,3));
+    Name = STRING(CONCAT4(libgraphite2,UNXSUFFIX,.,2));
     Styles = (NETWORK,RELATIVE);
 End
 
 Shortcut gid_Shortcut_Lib_Graphite_2
     FileID = gid_File_Lib_Graphite;
     Dir = gid_Dir_Program;
-    Name = STRING(CONCAT4(libgraphite,UNXSUFFIX,.,3.0));
+    Name = STRING(CONCAT4(libgraphite2,UNXSUFFIX,.,2.0));
     Styles = (NETWORK,RELATIVE);
 End
-
+#endif
 #endif
 
 #ifdef MACOSX

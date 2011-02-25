@@ -5218,11 +5218,15 @@ if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "z$enable_graphite" = "z" -
         test "$with_system_graphite" != "no"; then
         AC_MSG_RESULT([external])
         SYSTEM_GRAPHITE=YES
-        PKG_CHECK_MODULES( GRAPHITE, silgraphite )
+        PKG_CHECK_MODULES( GRAPHITE, graphite2 )
     else
         AC_MSG_RESULT([internal])
         SYSTEM_GRAPHITE=NO
         BUILD_TYPE="$BUILD_TYPE GRAPHITE"
+        AC_PATH_PROGS(CMAKE_CMD, [cmake]) 
+        if test -z "$CMAKE_CMD" ; then
+            AC_MSG_ERROR([Cmake not found, but needed for configuring Graphite2])
+        fi
     fi
 else
    AC_MSG_RESULT([no])
