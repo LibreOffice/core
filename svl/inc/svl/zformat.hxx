@@ -502,14 +502,18 @@ private:
     };
 
     /**
-     * Parse the content of '[$-xxx] or '[$-xxxxxxxx]' and extract the
-     * language type from it.  Given the string, start parsing at position
-     * specified by nPos, and store the end position with nPos when the
-     * parsing is complete.  The nPos should point to the '$' before the
-     * parsing, and to the closing bracket after the parsing.  When the
-     * content is [$-xxx], the xxx part represents the language type (aka
-     * LCID) in hex numerals.  When the content is [$-xxxxxxxx] the last 4
-     * digits is the LCID (again in hex).
+     * Parse the content of '[$-xxx] or '[$-xxxxxxxx]' and extract the locale
+     * type from it.  Given the string, start parsing at position specified by
+     * nPos, and store the end position with nPos when the parsing is
+     * complete.  The nPos should point to the '$' before the parsing, and to
+     * the closing bracket after the parsing.  When the content is [$-xxx],
+     * the xxx part represents the language type (aka LCID) in hex numerals.
+     * When the content is [$-xxxxxxxx] the last 4 digits represent the LCID
+     * (again in hex), the next 2 digits represent the calendar type, and the
+     * 2 highest digits (if exists) is the numeral shape.
+     *
+     * @reference
+     * http://office.microsoft.com/en-us/excel-help/creating-international-number-formats-HA001034635.aspx
      *
      * @param rString input string
      * @param nPos position (see above).
