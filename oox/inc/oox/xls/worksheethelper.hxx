@@ -28,6 +28,7 @@
 #ifndef OOX_XLS_WORKSHEETHELPER_HXX
 #define OOX_XLS_WORKSHEETHELPER_HXX
 
+#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/progressbar.hxx"
 #include "oox/ole/olehelper.hxx"
 #include "oox/xls/addressconverter.hxx"
@@ -56,6 +57,7 @@ class BiffSheetDrawing;
 class BinRangeList;
 class CommentsBuffer;
 class CondFormatBuffer;
+class Font;
 class PageSettings;
 class QueryTableBuffer;
 class RichString;
@@ -80,11 +82,10 @@ enum WorksheetType
 
 // ============================================================================
 
-/** Stores formatting data about a range of columns. */
+/** Stores settings and formatting data about a range of sheet columns. */
 struct ColumnModel
 {
-    sal_Int32           mnFirstCol;         /// 1-based (!) index of first column.
-    sal_Int32           mnLastCol;          /// 1-based (!) index of last column.
+    ValueRange          maRange;            /// 1-based (!) range of the described columns.
     double              mfWidth;            /// Column width in number of characters.
     sal_Int32           mnXfId;             /// Column default formatting.
     sal_Int32           mnLevel;            /// Column outline level.
@@ -94,17 +95,17 @@ struct ColumnModel
 
     explicit            ColumnModel();
 
-    /** Expands this entry with the passed column range, if column settings are equal. */
-    bool                tryExpand( const ColumnModel& rModel );
+    /** Returns true, if this entry can be merged with the passed column range (column settings are equal). */
+    bool                isMergeable( const ColumnModel& rModel ) const;
 };
 
 // ----------------------------------------------------------------------------
 
-/** Stores formatting data about a range of rows. */
+/** Stores settings and formatting data about a sheet row. */
 struct RowModel
 {
-    sal_Int32           mnFirstRow;         /// 1-based (!) index of first row.
-    sal_Int32           mnLastRow;          /// 1-based (!) index of last row.
+    sal_Int32           mnRow;              /// 1-based (!) index of the described row.
+    ValueRangeSet       maColSpans;         /// 0-based (!) column ranges of used cells.
     double              mfHeight;           /// Row height in points.
     sal_Int32           mnXfId;             /// Row default formatting (see mbIsFormatted).
     sal_Int32           mnLevel;            /// Row outline level.
@@ -118,8 +119,10 @@ struct RowModel
 
     explicit            RowModel();
 
-    /** Expands this entry with the passed row range, if row settings are equal. */
-    bool                tryExpand( const RowModel& rModel );
+    /** Inserts the passed column span into the row model. */
+    void                insertColSpan( const ValueRange& rColSpan );
+    /** Returns true, if this entry can be merged with the passed row range (row settings are equal). */
+    bool                isMergeable( const RowModel& rModel ) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -232,10 +235,10 @@ public:
 
     /** Returns the XTableColumns interface for a range of columns. */
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XTableColumns >
-                        getColumns( sal_Int32 nFirstCol, sal_Int32 nLastCol ) const;
+                        getColumns( const ValueRange& rColRange ) const;
     /** Returns the XTableRows interface for a range of rows. */
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XTableRows >
-                        getRows( sal_Int32 nFirstRow, sal_Int32 nLastRow ) const;
+                        getRows( const ValueRange& rRowRange ) const;
 
     /** Returns the XDrawPage interface of the draw page of the current sheet. */
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
@@ -314,6 +317,24 @@ public:
     void                setRowModel( const RowModel& rModel );
     /** Specifies that the passed row needs to set its height manually. */
     void                setManualRowHeight( sal_Int32 nRow );
+
+    /** Inserts a value cell directly into the Calc sheet. */
+    void                putValue(
+                            const ::com::sun::star::table::CellAddress& rAddress,
+                            double fValue ) const;
+    /** Inserts a string cell directly into the Calc sheet. */
+    void                putString(
+                            const ::com::sun::star::table::CellAddress& rAddress,
+                            const ::rtl::OUString& rText ) const;
+    /** Inserts a rich-string cell directly into the Calc sheet. */
+    void                putRichString(
+                            const ::com::sun::star::table::CellAddress& rAddress,
+                            const RichString& rString,
+                            const Font* pFirstPortionFont ) const;
+    /** Inserts a formula cell directly into the Calc sheet. */
+    void                putFormulaTokens(
+                            const ::com::sun::star::table::CellAddress& rAddress,
+                            const ApiTokenSequence& rTokens ) const;
 
     /** Initial conversion before importing the worksheet. */
     void                initializeWorksheetImport();

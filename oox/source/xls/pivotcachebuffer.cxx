@@ -936,8 +936,9 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
 
 void PivotCacheField::writeSourceHeaderCell( WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow ) const
 {
-    CellAddress aCellAddr( rSheetHelper.getSheetIndex(), nCol, nRow );
-    rSheetHelper.getSheetData().setStringCell( aCellAddr, maFieldModel.maName );
+    CellModel aModel;
+    aModel.maCellAddr = CellAddress( rSheetHelper.getSheetIndex(), nCol, nRow );
+    rSheetHelper.getSheetData().setStringCell( aModel, maFieldModel.maName );
 }
 
 void PivotCacheField::writeSourceDataCell( WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow, const PivotCacheItem& rItem ) const
@@ -983,16 +984,17 @@ void PivotCacheField::writeItemToSourceDataCell( WorksheetHelper& rSheetHelper,
 {
     if( rItem.getType() != XML_m )
     {
-        CellAddress aCellAddr( rSheetHelper.getSheetIndex(), nCol, nRow );
+        CellModel aModel;
+        aModel.maCellAddr = CellAddress( rSheetHelper.getSheetIndex(), nCol, nRow );
         SheetDataBuffer& rSheetData = rSheetHelper.getSheetData();
         switch( rItem.getType() )
         {
-            case XML_s: rSheetData.setStringCell( aCellAddr, rItem.getValue().get< OUString >() );                              break;
-            case XML_n: rSheetData.setValueCell( aCellAddr, rItem.getValue().get< double >() );                                 break;
-            case XML_i: rSheetData.setValueCell( aCellAddr, rItem.getValue().get< sal_Int16 >() );                              break;
-            case XML_d: rSheetData.setDateTimeCell( aCellAddr, rItem.getValue().get< DateTime >() );                            break;
-            case XML_b: rSheetData.setBooleanCell( aCellAddr, rItem.getValue().get< bool >() );                                 break;
-            case XML_e: rSheetData.setErrorCell( aCellAddr, static_cast< sal_uInt8 >( rItem.getValue().get< sal_Int32 >() ) );  break;
+            case XML_s: rSheetData.setStringCell( aModel, rItem.getValue().get< OUString >() );                             break;
+            case XML_n: rSheetData.setValueCell( aModel, rItem.getValue().get< double >() );                                break;
+            case XML_i: rSheetData.setValueCell( aModel, rItem.getValue().get< sal_Int16 >() );                             break;
+            case XML_d: rSheetData.setDateTimeCell( aModel, rItem.getValue().get< DateTime >() );                           break;
+            case XML_b: rSheetData.setBooleanCell( aModel, rItem.getValue().get< bool >() );                                break;
+            case XML_e: rSheetData.setErrorCell( aModel, static_cast< sal_uInt8 >( rItem.getValue().get< sal_Int32 >() ) ); break;
             default:    OSL_ENSURE( false, "PivotCacheField::writeItemToSourceDataCell - unexpected item data type" );
         }
     }
@@ -1044,6 +1046,7 @@ PCWorksheetSourceModel::PCWorksheetSourceModel()
 
 PivotCache::PivotCache( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
+    mnCurrRow( -1 ),
     mbValidSource( false ),
     mbDummySheet( false )
 {
@@ -1276,34 +1279,39 @@ void PivotCache::writeSourceHeaderCells( WorksheetHelper& rSheetHelper ) const
     sal_Int32 nCol = maSheetSrcModel.maRange.StartColumn;
     sal_Int32 nMaxCol = getAddressConverter().getMaxApiAddress().Column;
     sal_Int32 nRow = maSheetSrcModel.maRange.StartRow;
+    mnCurrRow = -1;
+    updateSourceDataRow( rSheetHelper, nRow );
     for( PivotCacheFieldVector::const_iterator aIt = maDatabaseFields.begin(), aEnd = maDatabaseFields.end(); (aIt != aEnd) && (nCol <= nMaxCol); ++aIt, ++nCol )
         (*aIt)->writeSourceHeaderCell( rSheetHelper, nCol, nRow );
 }
 
-void PivotCache::writeSourceDataCell( WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow, const PivotCacheItem& rItem ) const
+void PivotCache::writeSourceDataCell( WorksheetHelper& rSheetHelper, sal_Int32 nColIdx, sal_Int32 nRowIdx, const PivotCacheItem& rItem ) const
 {
-    OSL_ENSURE( (0 <= nCol) && (nCol <= maSheetSrcModel.maRange.EndColumn - maSheetSrcModel.maRange.StartColumn), "PivotCache::writeSourceDataCell - invalid column index" );
-    OSL_ENSURE( (0 < nRow) && (nRow <= maSheetSrcModel.maRange.EndRow - maSheetSrcModel.maRange.StartRow), "PivotCache::writeSourceDataCell - invalid row index" );
-    if( const PivotCacheField* pCacheField = maDatabaseFields.get( nCol ).get() )
-        pCacheField->writeSourceDataCell( rSheetHelper, maSheetSrcModel.maRange.StartColumn + nCol, maSheetSrcModel.maRange.StartRow + nRow, rItem );
+    sal_Int32 nCol = maSheetSrcModel.maRange.StartColumn + nColIdx;
+    OSL_ENSURE( (maSheetSrcModel.maRange.StartColumn <= nCol) && (nCol <= maSheetSrcModel.maRange.EndColumn), "PivotCache::writeSourceDataCell - invalid column index" );
+    sal_Int32 nRow = maSheetSrcModel.maRange.StartRow + nRowIdx;
+    OSL_ENSURE( (maSheetSrcModel.maRange.StartRow < nRow) && (nRow <= maSheetSrcModel.maRange.EndRow), "PivotCache::writeSourceDataCell - invalid row index" );
+    updateSourceDataRow( rSheetHelper, nRow );
+    if( const PivotCacheField* pCacheField = maDatabaseFields.get( nColIdx ).get() )
+        pCacheField->writeSourceDataCell( rSheetHelper, nCol, nRow, rItem );
 }
 
-void PivotCache::importPCRecord( SequenceInputStream& rStrm, WorksheetHelper& rSheetHelper, sal_Int32 nRow ) const
+void PivotCache::importPCRecord( SequenceInputStream& rStrm, WorksheetHelper& rSheetHelper, sal_Int32 nRowIdx ) const
 {
-    OSL_ENSURE( (0 < nRow) && (nRow <= maSheetSrcModel.maRange.EndRow - maSheetSrcModel.maRange.StartRow), "PivotCache::importPCRecord - invalid row index" );
+    sal_Int32 nRow = maSheetSrcModel.maRange.StartRow + nRowIdx;
+    OSL_ENSURE( (maSheetSrcModel.maRange.StartRow < nRow) && (nRow <= maSheetSrcModel.maRange.EndRow), "PivotCache::importPCRecord - invalid row index" );
     sal_Int32 nCol = maSheetSrcModel.maRange.StartColumn;
     sal_Int32 nMaxCol = getAddressConverter().getMaxApiAddress().Column;
-    nRow += maSheetSrcModel.maRange.StartRow;
     for( PivotCacheFieldVector::const_iterator aIt = maDatabaseFields.begin(), aEnd = maDatabaseFields.end(); !rStrm.isEof() && (aIt != aEnd) && (nCol <= nMaxCol); ++aIt, ++nCol )
         (*aIt)->importPCRecordItem( rStrm, rSheetHelper, nCol, nRow );
 }
 
-void PivotCache::importPCItemIndexList( BiffInputStream& rStrm, WorksheetHelper& rSheetHelper, sal_Int32 nRow ) const
+void PivotCache::importPCItemIndexList( BiffInputStream& rStrm, WorksheetHelper& rSheetHelper, sal_Int32 nRowIdx ) const
 {
-    OSL_ENSURE( (0 < nRow) && (nRow <= maSheetSrcModel.maRange.EndRow - maSheetSrcModel.maRange.StartRow), "PivotCache::importPCItemIndexList - invalid row index" );
+    sal_Int32 nRow = maSheetSrcModel.maRange.StartRow + nRowIdx;
+    OSL_ENSURE( (maSheetSrcModel.maRange.StartRow < nRow) && (nRow <= maSheetSrcModel.maRange.EndRow), "PivotCache::importPCItemIndexList - invalid row index" );
     sal_Int32 nCol = maSheetSrcModel.maRange.StartColumn;
     sal_Int32 nMaxCol = getAddressConverter().getMaxApiAddress().Column;
-    nRow += maSheetSrcModel.maRange.StartRow;
     for( PivotCacheFieldVector::const_iterator aIt = maDatabaseFields.begin(), aEnd = maDatabaseFields.end(); !rStrm.isEof() && (aIt != aEnd) && (nCol <= nMaxCol); ++aIt, ++nCol )
         if( (*aIt)->hasSharedItems() )
             (*aIt)->importPCItemIndex( rStrm, rSheetHelper, nCol, nRow );
@@ -1417,17 +1425,28 @@ void PivotCache::finalizeExternalSheetSource()
 
 void PivotCache::prepareSourceDataSheet()
 {
+    CellRangeAddress& rRange = maSheetSrcModel.maRange;
     // data will be inserted in top-left cell, sheet index is still set to 0 (will be set below)
-    maSheetSrcModel.maRange.EndColumn -= maSheetSrcModel.maRange.StartColumn;
-    maSheetSrcModel.maRange.StartColumn = 0;
-    maSheetSrcModel.maRange.EndRow -= maSheetSrcModel.maRange.StartRow;
-    maSheetSrcModel.maRange.StartRow = 0;
+    rRange.EndColumn -= rRange.StartColumn;
+    rRange.StartColumn = 0;
+    rRange.EndRow -= rRange.StartRow;
+    rRange.StartRow = 0;
     // check range location, do not allow ranges that overflow the sheet partly
-    if( getAddressConverter().checkCellRange( maSheetSrcModel.maRange, false, true ) )
+    if( getAddressConverter().checkCellRange( rRange, false, true ) )
     {
+        maColSpans.insert( ValueRange( rRange.StartColumn, rRange.EndColumn ) );
         OUString aSheetName = CREATE_OUSTRING( "DPCache_" ) + maSheetSrcModel.maSheet;
-        maSheetSrcModel.maRange.Sheet = getWorksheets().insertEmptySheet( aSheetName, false );
-        mbValidSource = mbDummySheet = maSheetSrcModel.maRange.Sheet >= 0;
+        rRange.Sheet = getWorksheets().insertEmptySheet( aSheetName, false );
+        mbValidSource = mbDummySheet = rRange.Sheet >= 0;
+    }
+}
+
+void PivotCache::updateSourceDataRow( WorksheetHelper& rSheetHelper, sal_Int32 nRow ) const
+{
+    if( mnCurrRow != nRow )
+    {
+        rSheetHelper.getSheetData().setColSpans( nRow, maColSpans );
+        mnCurrRow = nRow;
     }
 }
 

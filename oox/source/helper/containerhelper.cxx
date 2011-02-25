@@ -47,6 +47,59 @@ using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
+namespace {
+
+struct ValueRangeComp
+{
+    inline bool         operator()( const ValueRange& rRange, sal_Int32 nValue ) const { return rRange.mnLast < nValue; }
+};
+
+} // namespace
+
+// ----------------------------------------------------------------------------
+
+void ValueRangeSet::insert( const ValueRange& rRange )
+{
+    // find the first range that contains or follows the starting point of the passed range
+    ValueRangeVector::iterator aBeg = maRanges.begin();
+    ValueRangeVector::iterator aEnd = maRanges.end();
+    ValueRangeVector::iterator aIt = ::std::lower_bound( aBeg, aEnd, rRange.mnFirst, ValueRangeComp() );
+    // nothing to do if found range contains passed range
+    if( (aIt != aEnd) && aIt->contains( rRange ) ) return;
+    // check if previous range can be used to merge with the passed range
+    if( (aIt != aBeg) && ((aIt - 1)->mnLast + 1 == rRange.mnFirst) ) --aIt;
+    // check if current range (aIt) can be used to merge with passed range
+    if( (aIt != aEnd) && aIt->intersects( rRange ) )
+    {
+        // set new start value to existing range
+        aIt->mnFirst = ::std::min( aIt->mnFirst, rRange.mnFirst );
+        // search first range that cannot be merged anymore (aNext)
+        ValueRangeVector::iterator aNext = aIt + 1;
+        while( (aNext != aEnd) && aNext->intersects( rRange ) ) ++aNext;
+        // set new end value to existing range
+        aIt->mnLast = ::std::max( (aNext - 1)->mnLast, rRange.mnLast );
+        // remove ranges covered by new existing range (aIt)
+        maRanges.erase( aIt + 1, aNext );
+    }
+    else
+    {
+        // merging not possible: insert new range
+        maRanges.insert( aIt, rRange );
+    }
+}
+
+ValueRangeVector ValueRangeSet::getIntersection( const ValueRange& rRange ) const
+{
+    ValueRangeVector aRanges;
+    // find the range that contains nFirst or the first range that follows nFirst
+    ValueRangeVector::const_iterator aIt = ::std::lower_bound( maRanges.begin(), maRanges.end(), rRange.mnFirst, ValueRangeComp() );
+    for( ValueRangeVector::const_iterator aEnd = maRanges.end(); (aIt != aEnd) && (aIt->mnFirst <= rRange.mnLast); ++aIt )
+        aRanges.push_back( ValueRange( ::std::max( aIt->mnFirst, rRange.mnFirst ), ::std::min( aIt->mnLast, rRange.mnLast ) ) );
+    return aRanges;
+}
+
+// ============================================================================
+
 Reference< XIndexContainer > ContainerHelper::createIndexContainer( const Reference< XComponentContext >& rxContext )
 {
     Reference< XIndexContainer > xContainer;

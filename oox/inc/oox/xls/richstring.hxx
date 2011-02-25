@@ -70,11 +70,13 @@ public:
 
     /** Returns the text data of this portion. */
     inline const ::rtl::OUString& getText() const { return maText; }
+    /** Returns true, if the portion fontains font formatting. */
+    inline bool         hasFont() const { return mxFont.get() != 0; }
 
-    /** Converts the portion and appends it to the passed XText. */
+    /** Converts the portion and replaces or appends to the passed XText. */
     void                convert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& rxText,
-                            sal_Int32 nXfId, bool bReplaceOld = false );
+                            const Font* pFont, bool bReplace );
 
 private:
     ::rtl::OUString     maText;         /// Portion text.
@@ -256,10 +258,20 @@ public:
     /** Final processing after import of all strings. */
     void                finalizeImport();
 
-    /** Converts the string and writes it into the passed XText. */
+    /** Tries to extract a plain string from this object. Returns the string,
+        if there is only one unformatted portion. */
+    bool                extractPlainString(
+                            ::rtl::OUString& orString,
+                            const Font* pFirstPortionFont = 0 ) const;
+
+    /** Converts the string and writes it into the passed XText.
+        @param rxText  The XText interface of the target object.
+        @param bReplaceOld  True = replace old contents of the text object.
+        @param pFirstPortionFont  Optional font providing additional rich-text
+            formatting for the first text portion, e.g. font escapement. */
     void                convert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& rxText,
-                            sal_Int32 nXfId, bool bReplaceOld = false ) const;
+                            const Font* pFirstPortionFont = 0 ) const;
 
 private:
     /** Creates, appends, and returns a new empty string portion. */
@@ -268,19 +280,19 @@ private:
     RichStringPhoneticRef createPhonetic();
 
     /** Create base text portions from the passed string and character formatting. */
-    void                createFontPortions( const ::rtl::OString& rText, rtl_TextEncoding eTextEnc, FontPortionModelList& rPortions );
+    void                createTextPortions( const ::rtl::OString& rText, rtl_TextEncoding eTextEnc, FontPortionModelList& rPortions );
     /** Create base text portions from the passed string and character formatting. */
-    void                createFontPortions( const ::rtl::OUString& rText, FontPortionModelList& rPortions );
+    void                createTextPortions( const ::rtl::OUString& rText, FontPortionModelList& rPortions );
     /** Create phonetic text portions from the passed string and portion data. */
     void                createPhoneticPortions( const ::rtl::OUString& rText, PhoneticPortionModelList& rPortions, sal_Int32 nBaseLen );
 
 private:
-    typedef RefVector< RichStringPortion >  PortionVec;
-    typedef RefVector< RichStringPhonetic > PhoneticVec;
+    typedef RefVector< RichStringPortion >  PortionVector;
+    typedef RefVector< RichStringPhonetic > PhoneticVector;
 
-    PortionVec          maFontPortions; /// String portions with font data.
+    PortionVector       maTextPortions; /// String portions with font data.
     PhoneticSettings    maPhonSettings; /// Phonetic settings for this string.
-    PhoneticVec         maPhonPortions; /// Phonetic text portions.
+    PhoneticVector      maPhonPortions; /// Phonetic text portions.
 };
 
 typedef ::boost::shared_ptr< RichString > RichStringRef;

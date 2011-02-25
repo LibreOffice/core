@@ -144,7 +144,7 @@ private:
     void                importRow( BiffInputStream& rStrm );
 
     /** Reads an XF identifier and initializes a new cell. */
-    bool                readCellXfId( const BinAddress& rAddr, BiffInputStream& rStrm, bool bBiff2 );
+    bool                readCellXfId( BiffInputStream& rStrm, const BinAddress& rAddr, bool bBiff2 );
     /** Reads a BIFF cell address and the following XF identifier. */
     bool                readCellHeader( BiffInputStream& rStrm, bool bBiff2 );
     /** Reads the formula range used by shared formulas, arrays, and data tables. */

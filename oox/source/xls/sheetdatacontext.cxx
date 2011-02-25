@@ -176,23 +176,30 @@ void SheetDataContext::onEndElement()
         if( mbHasFormula ) switch( maFmlaData.mnFormulaType )
         {
             case XML_normal:
-                mrSheetData.setFormulaCell( maCellData.maCellAddr, maTokens );
+                mrSheetData.setFormulaCell( maCellData, maTokens );
             break;
             case XML_shared:
                 if( maFmlaData.mnSharedId >= 0 )
                 {
                     if( mbValidRange && maFmlaData.isValidSharedRef( maCellData.maCellAddr ) )
                         mrSheetData.createSharedFormula( maFmlaData.mnSharedId, maTokens );
-                    mrSheetData.setFormulaCell( maCellData.maCellAddr, maFmlaData.mnSharedId );
+                    mrSheetData.setFormulaCell( maCellData, maFmlaData.mnSharedId );
                 }
+                else
+                    // no success, set plain cell value and formatting below
+                    mbHasFormula = false;
             break;
             case XML_array:
                 if( mbValidRange && maFmlaData.isValidArrayRef( maCellData.maCellAddr ) )
                     mrSheetData.createArrayFormula( maFmlaData.maFormulaRef, maTokens );
+                // set cell formatting, but do not set result as cell value
+                mrSheetData.setBlankCell( maCellData );
             break;
             case XML_dataTable:
                 if( mbValidRange )
                     mrSheetData.createTableOperation( maFmlaData.maFormulaRef, maTableData );
+                // set cell formatting, but do not set result as cell value
+                mrSheetData.setBlankCell( maCellData );
             break;
             default:
                 OSL_ENSURE( maFmlaData.mnFormulaType == XML_TOKEN_INVALID, "SheetDataContext::onEndElement - unknown formula type" );
@@ -205,38 +212,33 @@ void SheetDataContext::onEndElement()
             if( maCellValue.getLength() > 0 ) switch( maCellData.mnCellType )
             {
                 case XML_n:
-                    mrSheetData.setValueCell( maCellData.maCellAddr, maCellValue.toDouble() );
+                    mrSheetData.setValueCell( maCellData, maCellValue.toDouble() );
                 break;
                 case XML_b:
-                    mrSheetData.setBooleanCell( maCellData.maCellAddr, maCellValue.toDouble() != 0.0 );
+                    mrSheetData.setBooleanCell( maCellData, maCellValue.toDouble() != 0.0 );
                 break;
                 case XML_e:
-                    mrSheetData.setErrorCell( maCellData.maCellAddr, maCellValue );
+                    mrSheetData.setErrorCell( maCellData, maCellValue );
                 break;
                 case XML_str:
-                    mrSheetData.setStringCell( maCellData.maCellAddr, maCellValue );
+                    mrSheetData.setStringCell( maCellData, maCellValue );
                 break;
                 case XML_s:
-                    mrSheetData.setStringCell( maCellData.maCellAddr, maCellValue.toInt32(), maCellData.mnXfId );
+                    mrSheetData.setStringCell( maCellData, maCellValue.toInt32() );
                 break;
             }
             else if( (maCellData.mnCellType == XML_inlineStr) && mxInlineStr.get() )
             {
                 mxInlineStr->finalizeImport();
-                mrSheetData.setStringCell( maCellData.maCellAddr, *mxInlineStr, maCellData.mnXfId );
+                mrSheetData.setStringCell( maCellData, mxInlineStr );
             }
             else
             {
                 // empty cell, update cell type
                 maCellData.mnCellType = XML_TOKEN_INVALID;
+                mrSheetData.setBlankCell( maCellData );
             }
         }
-
-        // #108770# set 'Standard' number format for all Boolean cells
-        bool bBoolCell = !mbHasFormula && (maCellData.mnCellType == XML_b);
-        sal_Int32 nNumFmtId = bBoolCell ? 0 : -1;
-        // store the cell formatting data
-        mrSheetData.setCellFormat( maCellData, nNumFmtId );
     }
 }
 
@@ -285,7 +287,7 @@ ContextHandlerRef SheetDataContext::onCreateRecordContext( sal_Int32 nRecId, Seq
 void SheetDataContext::importRow( const AttributeList& rAttribs )
 {
     RowModel aModel;
-    aModel.mnFirstRow     = aModel.mnLastRow = rAttribs.getInteger( XML_r, -1 );
+    aModel.mnRow          = rAttribs.getInteger( XML_r, -1 );
     aModel.mfHeight       = rAttribs.getDouble( XML_ht, -1.0 );
     aModel.mnXfId         = rAttribs.getInteger( XML_s, -1 );
     aModel.mnLevel        = rAttribs.getInteger( XML_outlineLevel, 0 );
@@ -296,6 +298,23 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
     aModel.mbCollapsed    = rAttribs.getBool( XML_collapsed, false );
     aModel.mbThickTop     = rAttribs.getBool( XML_thickTop, false );
     aModel.mbThickBottom  = rAttribs.getBool( XML_thickBot, false );
+
+    // decode the column spans (space-separated list of colon-separated integer pairs)
+    OUString aColSpansText = rAttribs.getString( XML_spans, OUString() );
+    sal_Int32 nMaxCol = mrAddressConv.getMaxApiAddress().Column;
+    sal_Int32 nIndex = 0;
+    while( nIndex >= 0 )
+    {
+        OUString aColSpanToken = aColSpansText.getToken( 0, ' ', nIndex );
+        sal_Int32 nSepPos = aColSpanToken.indexOf( ':' );
+        if( (0 < nSepPos) && (nSepPos + 1 < aColSpanToken.getLength()) )
+        {
+            // OOXML uses 1-based integer column indexes, row model expects 0-based colspans
+            sal_Int32 nLastCol = ::std::min( aColSpanToken.copy( nSepPos + 1 ).toInt32() - 1, nMaxCol );
+            aModel.insertColSpan( ValueRange( aColSpanToken.copy( 0, nSepPos ).toInt32() - 1, nLastCol ) );
+        }
+    }
+
     // set row properties in the current sheet
     setRowModel( aModel );
 }
@@ -345,12 +364,14 @@ void SheetDataContext::importFormula( const AttributeList& rAttribs )
 void SheetDataContext::importRow( SequenceInputStream& rStrm )
 {
     RowModel aModel;
+    sal_Int32 nSpanCount;
     sal_uInt16 nHeight, nFlags1;
     sal_uInt8 nFlags2;
-    rStrm >> maCurrPos.mnRow >> aModel.mnXfId >> nHeight >> nFlags1 >> nFlags2;
+    rStrm >> maCurrPos.mnRow >> aModel.mnXfId >> nHeight >> nFlags1 >> nFlags2 >> nSpanCount;
+    maCurrPos.mnCol = 0;
 
     // row index is 0-based in BIFF12, but RowModel expects 1-based
-    aModel.mnFirstRow     = aModel.mnLastRow = maCurrPos.mnRow + 1;
+    aModel.mnRow          = maCurrPos.mnRow + 1;
     // row height is in twips in BIFF12, convert to points
     aModel.mfHeight       = nHeight / 20.0;
     aModel.mnLevel        = extractValue< sal_Int32 >( nFlags1, 8, 3 );
@@ -361,6 +382,16 @@ void SheetDataContext::importRow( SequenceInputStream& rStrm )
     aModel.mbCollapsed    = getFlag( nFlags1, BIFF12_ROW_COLLAPSED );
     aModel.mbThickTop     = getFlag( nFlags1, BIFF12_ROW_THICKTOP );
     aModel.mbThickBottom  = getFlag( nFlags1, BIFF12_ROW_THICKBOTTOM );
+
+    // read the column spans
+    sal_Int32 nMaxCol = mrAddressConv.getMaxApiAddress().Column;
+    for( sal_Int32 nSpanIdx = 0; (nSpanIdx < nSpanCount) && !rStrm.isEof(); ++nSpanIdx )
+    {
+        sal_Int32 nFirstCol, nLastCol;
+        rStrm >> nFirstCol >> nLastCol;
+        aModel.insertColSpan( ValueRange( nFirstCol, ::std::min( nLastCol, nMaxCol ) ) );
+    }
+
     // set row properties in the current sheet
     setRowModel( aModel );
 }
@@ -407,12 +438,9 @@ void SheetDataContext::importCellBool( SequenceInputStream& rStrm, CellType eCel
         maCellData.mnCellType = XML_b;
         bool bValue = rStrm.readuInt8() != 0;
         if( eCellType == CELLTYPE_FORMULA )
-            mrSheetData.setFormulaCell( maCellData.maCellAddr, readCellFormula( rStrm ) );
+            mrSheetData.setFormulaCell( maCellData, readCellFormula( rStrm ) );
         else
-            mrSheetData.setBooleanCell( maCellData.maCellAddr, bValue );
-        // #108770# set 'Standard' number format for all Boolean cells
-        sal_Int32 nNumFmtId = (eCellType != CELLTYPE_FORMULA) ? 0 : -1;
-        mrSheetData.setCellFormat( maCellData, nNumFmtId );
+            mrSheetData.setBooleanCell( maCellData, bValue );
     }
 }
 
@@ -420,7 +448,7 @@ void SheetDataContext::importCellBlank( SequenceInputStream& rStrm, CellType eCe
 {
     OSL_ENSURE( eCellType != CELLTYPE_FORMULA, "SheetDataContext::importCellBlank - no formula cells supported" );
     if( readCellHeader( rStrm, eCellType ) )
-        mrSheetData.setCellFormat( maCellData );
+        mrSheetData.setBlankCell( maCellData );
 }
 
 void SheetDataContext::importCellDouble( SequenceInputStream& rStrm, CellType eCellType )
@@ -430,10 +458,9 @@ void SheetDataContext::importCellDouble( SequenceInputStream& rStrm, CellType eC
         maCellData.mnCellType = XML_n;
         double fValue = rStrm.readDouble();
         if( eCellType == CELLTYPE_FORMULA )
-            mrSheetData.setFormulaCell( maCellData.maCellAddr, readCellFormula( rStrm ) );
+            mrSheetData.setFormulaCell( maCellData, readCellFormula( rStrm ) );
         else
-            mrSheetData.setValueCell( maCellData.maCellAddr, fValue );
-        mrSheetData.setCellFormat( maCellData );
+            mrSheetData.setValueCell( maCellData, fValue );
     }
 }
 
@@ -444,10 +471,9 @@ void SheetDataContext::importCellError( SequenceInputStream& rStrm, CellType eCe
         maCellData.mnCellType = XML_e;
         sal_uInt8 nErrorCode = rStrm.readuInt8();
         if( eCellType == CELLTYPE_FORMULA )
-            mrSheetData.setFormulaCell( maCellData.maCellAddr, readCellFormula( rStrm ) );
+            mrSheetData.setFormulaCell( maCellData, readCellFormula( rStrm ) );
         else
-            mrSheetData.setErrorCell( maCellData.maCellAddr, nErrorCode );
-        mrSheetData.setCellFormat( maCellData );
+            mrSheetData.setErrorCell( maCellData, nErrorCode );
     }
 }
 
@@ -457,8 +483,7 @@ void SheetDataContext::importCellRk( SequenceInputStream& rStrm, CellType eCellT
     if( readCellHeader( rStrm, eCellType ) )
     {
         maCellData.mnCellType = XML_n;
-        mrSheetData.setValueCell( maCellData.maCellAddr, BiffHelper::calcDoubleFromRk( rStrm.readInt32() ) );
-        mrSheetData.setCellFormat( maCellData );
+        mrSheetData.setValueCell( maCellData, BiffHelper::calcDoubleFromRk( rStrm.readInt32() ) );
     }
 }
 
@@ -468,11 +493,10 @@ void SheetDataContext::importCellRString( SequenceInputStream& rStrm, CellType e
     if( readCellHeader( rStrm, eCellType ) )
     {
         maCellData.mnCellType = XML_inlineStr;
-        RichString aString( *this );
-        aString.importString( rStrm, true );
-        aString.finalizeImport();
-        mrSheetData.setStringCell( maCellData.maCellAddr, aString, maCellData.mnXfId );
-        mrSheetData.setCellFormat( maCellData );
+        RichStringRef xString( new RichString( *this ) );
+        xString->importString( rStrm, true );
+        xString->finalizeImport();
+        mrSheetData.setStringCell( maCellData, xString );
     }
 }
 
@@ -482,8 +506,7 @@ void SheetDataContext::importCellSi( SequenceInputStream& rStrm, CellType eCellT
     if( readCellHeader( rStrm, eCellType ) )
     {
         maCellData.mnCellType = XML_s;
-        mrSheetData.setStringCell( maCellData.maCellAddr, rStrm.readInt32(), maCellData.mnXfId );
-        mrSheetData.setCellFormat( maCellData );
+        mrSheetData.setStringCell( maCellData, rStrm.readInt32() );
     }
 }
 
@@ -493,14 +516,13 @@ void SheetDataContext::importCellString( SequenceInputStream& rStrm, CellType eC
     {
         maCellData.mnCellType = XML_inlineStr;
         // always import the string, stream will point to formula afterwards, if existing
-        RichString aString( *this );
-        aString.importString( rStrm, false );
-        aString.finalizeImport();
+        RichStringRef xString( new RichString( *this ) );
+        xString->importString( rStrm, false );
+        xString->finalizeImport();
         if( eCellType == CELLTYPE_FORMULA )
-            mrSheetData.setFormulaCell( maCellData.maCellAddr, readCellFormula( rStrm ) );
+            mrSheetData.setFormulaCell( maCellData, readCellFormula( rStrm ) );
         else
-            mrSheetData.setStringCell( maCellData.maCellAddr, aString, maCellData.mnXfId );
-        mrSheetData.setCellFormat( maCellData );
+            mrSheetData.setStringCell( maCellData, xString );
     }
 }
 
@@ -656,10 +678,8 @@ void BiffSheetDataContext::importRecord( BiffInputStream& rStrm )
 void BiffSheetDataContext::importRow( BiffInputStream& rStrm )
 {
     RowModel aModel;
-    sal_uInt16 nRow, nHeight;
-    rStrm >> nRow;
-    rStrm.skip( 4 );
-    rStrm >> nHeight;
+    sal_uInt16 nRow, nFirstUsedCol, nFirstFreeCol, nHeight;
+    rStrm >> nRow >> nFirstUsedCol >> nFirstFreeCol >> nHeight;
     if( getBiff() == BIFF2 )
     {
         rStrm.skip( 2 );
@@ -686,14 +706,21 @@ void BiffSheetDataContext::importRow( BiffInputStream& rStrm )
     }
 
     // row index is 0-based in BIFF, but RowModel expects 1-based
-    aModel.mnFirstRow = aModel.mnLastRow = nRow + 1;
+    aModel.mnRow = static_cast< sal_Int32 >( nRow ) + 1;
     // row height is in twips in BIFF, convert to points
     aModel.mfHeight = (nHeight & BIFF_ROW_HEIGHTMASK) / 20.0;
+    // set column spans
+    if( nFirstUsedCol < nFirstFreeCol )
+    {
+        sal_Int32 nLastCol = ::std::min< sal_Int32 >( nFirstFreeCol - 1, mrAddressConv.getMaxApiAddress().Column );
+        aModel.insertColSpan( ValueRange( nFirstUsedCol, nLastCol ) );
+    }
+
     // set row properties in the current sheet
     setRowModel( aModel );
 }
 
-bool BiffSheetDataContext::readCellXfId( const BinAddress& rAddr, BiffInputStream& rStrm, bool bBiff2 )
+bool BiffSheetDataContext::readCellXfId( BiffInputStream& rStrm, const BinAddress& rAddr, bool bBiff2 )
 {
     bool bValidAddr = mrAddressConv.convertToCellAddress( maCellData.maCellAddr, rAddr, mnSheet, true );
     if( bValidAddr )
@@ -746,7 +773,7 @@ bool BiffSheetDataContext::readCellHeader( BiffInputStream& rStrm, bool bBiff2 )
 {
     BinAddress aAddr;
     rStrm >> aAddr;
-    return readCellXfId( aAddr, rStrm, bBiff2 );
+    return readCellXfId( rStrm, aAddr, bBiff2 );
 }
 
 bool BiffSheetDataContext::readFormulaRef( BiffInputStream& rStrm )
@@ -759,7 +786,7 @@ bool BiffSheetDataContext::readFormulaRef( BiffInputStream& rStrm )
 void BiffSheetDataContext::importBlank( BiffInputStream& rStrm )
 {
     if( readCellHeader( rStrm, rStrm.getRecId() == BIFF2_ID_BLANK ) )
-        mrSheetData.setCellFormat( maCellData );
+        mrSheetData.setBlankCell( maCellData );
 }
 
 void BiffSheetDataContext::importBoolErr( BiffInputStream& rStrm )
@@ -772,18 +799,17 @@ void BiffSheetDataContext::importBoolErr( BiffInputStream& rStrm )
         {
             case BIFF_BOOLERR_BOOL:
                 maCellData.mnCellType = XML_b;
-                mrSheetData.setBooleanCell( maCellData.maCellAddr, nValue != 0 );
+                mrSheetData.setBooleanCell( maCellData, nValue != 0 );
             break;
             case BIFF_BOOLERR_ERROR:
                 maCellData.mnCellType = XML_e;
-                mrSheetData.setErrorCell( maCellData.maCellAddr, nValue );
+                mrSheetData.setErrorCell( maCellData, nValue );
             break;
             default:
                 OSL_ENSURE( false, "BiffSheetDataContext::importBoolErr - unknown cell type" );
+                maCellData.mnCellType = XML_TOKEN_INVALID;
+                mrSheetData.setBlankCell( maCellData );
         }
-        // #108770# set 'Standard' number format for all Boolean cells
-        sal_Int32 nNumFmtId = (nType == BIFF_BOOLERR_BOOL) ? 0 : -1;
-        mrSheetData.setCellFormat( maCellData, nNumFmtId );
     }
 }
 
@@ -794,8 +820,7 @@ void BiffSheetDataContext::importFormula( BiffInputStream& rStrm )
         maCellData.mnCellType = XML_n;
         rStrm.skip( mnFormulaSkipSize );
         ApiTokenSequence aTokens = mrFormulaParser.importFormula( maCellData.maCellAddr, FORMULATYPE_CELL, rStrm );
-        mrSheetData.setFormulaCell( maCellData.maCellAddr, aTokens );
-        mrSheetData.setCellFormat( maCellData );
+        mrSheetData.setFormulaCell( maCellData, aTokens );
     }
 }
 
@@ -804,8 +829,7 @@ void BiffSheetDataContext::importInteger( BiffInputStream& rStrm )
     if( readCellHeader( rStrm, true ) )
     {
         maCellData.mnCellType = XML_n;
-        mrSheetData.setValueCell( maCellData.maCellAddr, rStrm.readuInt16() );
-        mrSheetData.setCellFormat( maCellData );
+        mrSheetData.setValueCell( maCellData, rStrm.readuInt16() );
     }
 }
 
@@ -822,10 +846,13 @@ void BiffSheetDataContext::importLabel( BiffInputStream& rStrm )
     if( readCellHeader( rStrm, bBiff2Xf ) )
     {
         maCellData.mnCellType = XML_inlineStr;
-        RichString aString( *this );
         if( getBiff() == BIFF8 )
         {
-            aString.importUniString( rStrm );
+            // string may contain rich-text formatting
+            RichStringRef xString( new RichString( *this ) );
+            xString->importUniString( rStrm );
+            xString->finalizeImport();
+            mrSheetData.setStringCell( maCellData, xString );
         }
         else
         {
@@ -833,13 +860,24 @@ void BiffSheetDataContext::importLabel( BiffInputStream& rStrm )
             rtl_TextEncoding eTextEnc = getTextEncoding();
             if( const Font* pFont = getStyles().getFontFromCellXf( maCellData.mnXfId ).get() )
                 eTextEnc = pFont->getFontEncoding();
-            BiffStringFlags nFlags = bBiff2Xf ? BIFF_STR_8BITLENGTH : BIFF_STR_DEFAULT;
-            setFlag( nFlags, BIFF_STR_EXTRAFONTS, rStrm.getRecId() == BIFF_ID_RSTRING );
-            aString.importByteString( rStrm, eTextEnc, nFlags );
+            // RSTRING record contains rich-text formatting
+            if( rStrm.getRecId() == BIFF_ID_RSTRING )
+            {
+                BiffStringFlags nFlags = BIFF_STR_EXTRAFONTS;
+                // BIFF2 record identifier: 8-bit string length (see above)
+                setFlag( nFlags, BIFF_STR_8BITLENGTH, bBiff2Xf );
+                RichStringRef xString( new RichString( *this ) );
+                xString->importByteString( rStrm, eTextEnc, nFlags );
+                xString->finalizeImport();
+                mrSheetData.setStringCell( maCellData, xString );
+            }
+            else
+            {
+                // BIFF2 record identifier: 8-bit string length (see above)
+                OUString aText = rStrm.readByteStringUC( !bBiff2Xf, eTextEnc );
+                mrSheetData.setStringCell( maCellData, aText );
+            }
         }
-        aString.finalizeImport();
-        mrSheetData.setStringCell( maCellData.maCellAddr, aString, maCellData.mnXfId );
-        mrSheetData.setCellFormat( maCellData );
     }
 }
 
@@ -848,8 +886,7 @@ void BiffSheetDataContext::importLabelSst( BiffInputStream& rStrm )
     if( readCellHeader( rStrm, false ) )
     {
         maCellData.mnCellType = XML_s;
-        mrSheetData.setStringCell( maCellData.maCellAddr, rStrm.readInt32(), maCellData.mnXfId );
-        mrSheetData.setCellFormat( maCellData );
+        mrSheetData.setStringCell( maCellData, rStrm.readInt32() );
     }
 }
 
@@ -858,8 +895,8 @@ void BiffSheetDataContext::importMultBlank( BiffInputStream& rStrm )
     BinAddress aAddr;
     bool bValidAddr = true;
     for( rStrm >> aAddr; bValidAddr && (rStrm.getRemaining() > 2); ++aAddr.mnCol )
-        if( (bValidAddr = readCellXfId( aAddr, rStrm, false )) == true )
-            mrSheetData.setCellFormat( maCellData );
+        if( (bValidAddr = readCellXfId( rStrm, aAddr, false )) == true )
+            mrSheetData.setBlankCell( maCellData );
 }
 
 void BiffSheetDataContext::importMultRk( BiffInputStream& rStrm )
@@ -868,12 +905,11 @@ void BiffSheetDataContext::importMultRk( BiffInputStream& rStrm )
     bool bValidAddr = true;
     for( rStrm >> aAddr; bValidAddr && (rStrm.getRemaining() > 2); ++aAddr.mnCol )
     {
-        if( (bValidAddr = readCellXfId( aAddr, rStrm, false )) == true )
+        if( (bValidAddr = readCellXfId( rStrm, aAddr, false )) == true )
         {
             maCellData.mnCellType = XML_n;
             sal_Int32 nRkValue = rStrm.readInt32();
-            mrSheetData.setValueCell( maCellData.maCellAddr, BiffHelper::calcDoubleFromRk( nRkValue ) );
-            mrSheetData.setCellFormat( maCellData );
+            mrSheetData.setValueCell( maCellData, BiffHelper::calcDoubleFromRk( nRkValue ) );
         }
     }
 }
@@ -883,8 +919,7 @@ void BiffSheetDataContext::importNumber( BiffInputStream& rStrm )
     if( readCellHeader( rStrm, rStrm.getRecId() == BIFF2_ID_NUMBER ) )
     {
         maCellData.mnCellType = XML_n;
-        mrSheetData.setValueCell( maCellData.maCellAddr, rStrm.readDouble() );
-        mrSheetData.setCellFormat( maCellData );
+        mrSheetData.setValueCell( maCellData, rStrm.readDouble() );
     }
 }
 
@@ -893,8 +928,7 @@ void BiffSheetDataContext::importRk( BiffInputStream& rStrm )
     if( readCellHeader( rStrm, false ) )
     {
         maCellData.mnCellType = XML_n;
-        mrSheetData.setValueCell( maCellData.maCellAddr, BiffHelper::calcDoubleFromRk( rStrm.readInt32() ) );
-        mrSheetData.setCellFormat( maCellData );
+        mrSheetData.setValueCell( maCellData, BiffHelper::calcDoubleFromRk( rStrm.readInt32() ) );
     }
 }
 

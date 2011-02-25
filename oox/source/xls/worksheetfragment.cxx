@@ -525,14 +525,14 @@ void WorksheetFragment::importSheetFormatPr( const AttributeList& rAttribs )
 void WorksheetFragment::importCol( const AttributeList& rAttribs )
 {
     ColumnModel aModel;
-    aModel.mnFirstCol     = rAttribs.getInteger( XML_min, -1 );
-    aModel.mnLastCol      = rAttribs.getInteger( XML_max, -1 );
-    aModel.mfWidth        = rAttribs.getDouble( XML_width, 0.0 );
-    aModel.mnXfId         = rAttribs.getInteger( XML_style, -1 );
-    aModel.mnLevel        = rAttribs.getInteger( XML_outlineLevel, 0 );
-    aModel.mbShowPhonetic = rAttribs.getBool( XML_phonetic, false );
-    aModel.mbHidden       = rAttribs.getBool( XML_hidden, false );
-    aModel.mbCollapsed    = rAttribs.getBool( XML_collapsed, false );
+    aModel.maRange.mnFirst = rAttribs.getInteger( XML_min, -1 );
+    aModel.maRange.mnLast  = rAttribs.getInteger( XML_max, -1 );
+    aModel.mfWidth         = rAttribs.getDouble( XML_width, 0.0 );
+    aModel.mnXfId          = rAttribs.getInteger( XML_style, -1 );
+    aModel.mnLevel         = rAttribs.getInteger( XML_outlineLevel, 0 );
+    aModel.mbShowPhonetic  = rAttribs.getBool( XML_phonetic, false );
+    aModel.mbHidden        = rAttribs.getBool( XML_hidden, false );
+    aModel.mbCollapsed     = rAttribs.getBool( XML_collapsed, false );
     // set column properties in the current sheet
     setColumnModel( aModel );
 }
@@ -643,11 +643,11 @@ void WorksheetFragment::importCol( SequenceInputStream& rStrm )
 
     sal_Int32 nWidth;
     sal_uInt16 nFlags;
-    rStrm >> aModel.mnFirstCol >> aModel.mnLastCol >> nWidth >> aModel.mnXfId >> nFlags;
+    rStrm >> aModel.maRange.mnFirst >> aModel.maRange.mnLast >> nWidth >> aModel.mnXfId >> nFlags;
 
     // column indexes are 0-based in BIFF12, but ColumnModel expects 1-based
-    ++aModel.mnFirstCol;
-    ++aModel.mnLastCol;
+    ++aModel.maRange.mnFirst;
+    ++aModel.maRange.mnLast;
     // width is stored as 1/256th of a character in BIFF12, convert to entire character
     aModel.mfWidth        = static_cast< double >( nWidth ) / 256.0;
     // equal flags in all BIFFs
@@ -945,15 +945,15 @@ void BiffWorksheetFragment::importColInfo( BiffInputStream& rStrm )
 
     ColumnModel aModel;
     // column indexes are 0-based in BIFF, but ColumnModel expects 1-based
-    aModel.mnFirstCol     = static_cast< sal_Int32 >( nFirstCol ) + 1;
-    aModel.mnLastCol      = static_cast< sal_Int32 >( nLastCol ) + 1;
+    aModel.maRange.mnFirst = static_cast< sal_Int32 >( nFirstCol ) + 1;
+    aModel.maRange.mnLast  = static_cast< sal_Int32 >( nLastCol ) + 1;
     // width is stored as 1/256th of a character in BIFF, convert to entire character
-    aModel.mfWidth        = static_cast< double >( nWidth ) / 256.0;
-    aModel.mnXfId         = nXfId;
-    aModel.mnLevel        = extractValue< sal_Int32 >( nFlags, 8, 3 );
-    aModel.mbShowPhonetic = getFlag( nFlags, BIFF_COLINFO_SHOWPHONETIC );
-    aModel.mbHidden       = getFlag( nFlags, BIFF_COLINFO_HIDDEN );
-    aModel.mbCollapsed    = getFlag( nFlags, BIFF_COLINFO_COLLAPSED );
+    aModel.mfWidth         = static_cast< double >( nWidth ) / 256.0;
+    aModel.mnXfId          = nXfId;
+    aModel.mnLevel         = extractValue< sal_Int32 >( nFlags, 8, 3 );
+    aModel.mbShowPhonetic  = getFlag( nFlags, BIFF_COLINFO_SHOWPHONETIC );
+    aModel.mbHidden        = getFlag( nFlags, BIFF_COLINFO_HIDDEN );
+    aModel.mbCollapsed     = getFlag( nFlags, BIFF_COLINFO_COLLAPSED );
     // set column properties in the current sheet
     setColumnModel( aModel );
 }
@@ -973,8 +973,8 @@ void BiffWorksheetFragment::importColWidth( BiffInputStream& rStrm )
 
     ColumnModel aModel;
     // column indexes are 0-based in BIFF, but ColumnModel expects 1-based
-    aModel.mnFirstCol = static_cast< sal_Int32 >( nFirstCol ) + 1;
-    aModel.mnLastCol = static_cast< sal_Int32 >( nLastCol ) + 1;
+    aModel.maRange.mnFirst = static_cast< sal_Int32 >( nFirstCol ) + 1;
+    aModel.maRange.mnLast = static_cast< sal_Int32 >( nLastCol ) + 1;
     // width is stored as 1/256th of a character in BIFF, convert to entire character
     aModel.mfWidth = static_cast< double >( nWidth ) / 256.0;
     // set column properties in the current sheet

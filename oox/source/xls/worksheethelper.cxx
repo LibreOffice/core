@@ -51,7 +51,6 @@
 #include <com/sun/star/text/XText.hpp>
 #include <rtl/ustrbuf.hxx>
 #include "oox/core/filterbase.hxx"
-#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/autofilterbuffer.hxx"
@@ -109,84 +108,13 @@ void lclUpdateProgressBar( const ISegmentProgressBarRef& rxProgressBar, double f
         rxProgressBar->setPosition( fPosition );
 }
 
-// ----------------------------------------------------------------------------
-
-struct ValueRange
-{
-    sal_Int32           mnFirst;
-    sal_Int32           mnLast;
-
-    inline explicit     ValueRange( sal_Int32 nValue ) : mnFirst( nValue ), mnLast( nValue ) {}
-    inline explicit     ValueRange( sal_Int32 nFirst, sal_Int32 nLast ) : mnFirst( nFirst ), mnLast( nLast ) {}
-};
-
-typedef ::std::vector< ValueRange > ValueRangeVector;
-
-// ----------------------------------------------------------------------------
-
-struct ValueRangeComp
-{
-    inline bool         operator()( const ValueRange& rRange, sal_Int32 nValue ) const { return rRange.mnLast < nValue; }
-};
-
-// ----------------------------------------------------------------------------
-
-class ValueRangeSet
-{
-public:
-    inline explicit     ValueRangeSet() {}
-
-    void                insert( sal_Int32 nValue );
-    void                intersect( ValueRangeVector& orRanges, sal_Int32 nFirst, sal_Int32 nLast ) const;
-
-private:
-    ValueRangeVector    maData;
-};
-
-void ValueRangeSet::insert( sal_Int32 nValue )
-{
-    // find the first range that contains nValue or that follows nValue
-    ValueRangeVector::iterator aBeg = maData.begin();
-    ValueRangeVector::iterator aEnd = maData.end();
-    ValueRangeVector::iterator aNext = ::std::lower_bound( aBeg, aEnd, nValue, ValueRangeComp() );
-
-    // nothing to do if found range contains nValue
-    if( (aNext == aEnd) || (nValue < aNext->mnFirst) )
-    {
-        ValueRangeVector::iterator aPrev = (aNext == aBeg) ? aEnd : (aNext - 1);
-        bool bJoinPrev = (aPrev != aEnd) && (aPrev->mnLast + 1 == nValue);
-        bool bJoinNext = (aNext != aEnd) && (aNext->mnFirst - 1 == nValue);
-        if( bJoinPrev && bJoinNext )
-        {
-            aPrev->mnLast = aNext->mnLast;
-            maData.erase( aNext );
-        }
-        else if( bJoinPrev )
-            ++aPrev->mnLast;
-        else if( bJoinNext )
-            --aNext->mnFirst;
-        else
-            maData.insert( aNext, ValueRange( nValue ) );
-    }
-}
-
-void ValueRangeSet::intersect( ValueRangeVector& orRanges, sal_Int32 nFirst, sal_Int32 nLast ) const
-{
-    orRanges.clear();
-    // find the range that contains nFirst or the first range that follows nFirst
-    ValueRangeVector::const_iterator aIt = ::std::lower_bound( maData.begin(), maData.end(), nFirst, ValueRangeComp() );
-    for( ValueRangeVector::const_iterator aEnd = maData.end(); (aIt != aEnd) && (aIt->mnFirst <= nLast); ++aIt )
-        orRanges.push_back( ValueRange( ::std::max( aIt->mnFirst, nFirst ), ::std::min( aIt->mnLast, nLast ) ) );
-}
-
 } // namespace
 
 // ============================================================================
 // ============================================================================
 
 ColumnModel::ColumnModel() :
-    mnFirstCol( -1 ),
-    mnLastCol( -1 ),
+    maRange( -1 ),
     mfWidth( 0.0 ),
     mnXfId( -1 ),
     mnLevel( 0 ),
@@ -196,27 +124,22 @@ ColumnModel::ColumnModel() :
 {
 }
 
-bool ColumnModel::tryExpand( const ColumnModel& rModel )
+bool ColumnModel::isMergeable( const ColumnModel& rModel ) const
 {
-    bool bExpandable =
-        (mnFirstCol        <= rModel.mnFirstCol) &&
-        (rModel.mnFirstCol <= mnLastCol + 1) &&
-        (mfWidth           == rModel.mfWidth) &&
+    return
+        (maRange.mnFirst        <= rModel.maRange.mnFirst) &&
+        (rModel.maRange.mnFirst <= maRange.mnLast + 1) &&
+        (mfWidth                == rModel.mfWidth) &&
         // ignore mnXfId, cell formatting is always set directly
-        (mnLevel           == rModel.mnLevel) &&
-        (mbHidden          == rModel.mbHidden) &&
-        (mbCollapsed       == rModel.mbCollapsed);
-
-    if( bExpandable )
-        mnLastCol = rModel.mnLastCol;
-    return bExpandable;
+        (mnLevel                == rModel.mnLevel) &&
+        (mbHidden               == rModel.mbHidden) &&
+        (mbCollapsed            == rModel.mbCollapsed);
 }
 
 // ----------------------------------------------------------------------------
 
 RowModel::RowModel() :
-    mnFirstRow( -1 ),
-    mnLastRow( -1 ),
+    mnRow( -1 ),
     mfHeight( 0.0 ),
     mnXfId( -1 ),
     mnLevel( 0 ),
@@ -230,21 +153,22 @@ RowModel::RowModel() :
 {
 }
 
-bool RowModel::tryExpand( const RowModel& rModel )
+void RowModel::insertColSpan( const ValueRange& rColSpan )
 {
-    bool bExpandable =
-        (mnFirstRow        <= rModel.mnFirstRow) &&
-        (rModel.mnFirstRow <= mnLastRow + 1) &&
-        (mfHeight          == rModel.mfHeight) &&
-        // ignore mnXfId, mbCustomFormat, mbShowPhonetic - cell formatting is always set directly
-        (mnLevel           == rModel.mnLevel) &&
-        (mbCustomHeight    == rModel.mbCustomHeight) &&
-        (mbHidden          == rModel.mbHidden) &&
-        (mbCollapsed       == rModel.mbCollapsed);
+    if( (0 <= rColSpan.mnFirst) && (rColSpan.mnFirst <= rColSpan.mnLast) )
+        maColSpans.insert( rColSpan );
+}
 
-    if( bExpandable )
-        mnLastRow = rModel.mnLastRow;
-    return bExpandable;
+bool RowModel::isMergeable( const RowModel& rModel ) const
+{
+    return
+        // ignore maColSpans - is handled separately in SheetDataBuffer class
+        (mfHeight       == rModel.mfHeight) &&
+        // ignore mnXfId, mbCustomFormat, mbShowPhonetic - cell formatting is always set directly
+        (mnLevel        == rModel.mnLevel) &&
+        (mbCustomHeight == rModel.mbCustomHeight) &&
+        (mbHidden       == rModel.mbHidden) &&
+        (mbCollapsed    == rModel.mbCollapsed);
 }
 
 // ----------------------------------------------------------------------------
@@ -330,9 +254,9 @@ public:
     Reference< XCellRange > getRow( sal_Int32 nRow ) const;
 
     /** Returns the XTableColumns interface for a range of columns. */
-    Reference< XTableColumns > getColumns( sal_Int32 nFirstCol, sal_Int32 nLastCol ) const;
+    Reference< XTableColumns > getColumns( const ValueRange& rColRange ) const;
     /** Returns the XTableRows interface for a range of rows. */
-    Reference< XTableRows > getRows( sal_Int32 nFirstRow, sal_Int32 nLastRow ) const;
+    Reference< XTableRows > getRows( const ValueRange& rRowRange ) const;
 
     /** Returns the XDrawPage interface of the draw page of the current sheet. */
     Reference< XDrawPage > getDrawPage() const;
@@ -419,8 +343,10 @@ public:
 
 private:
     typedef ::std::vector< sal_Int32 >                  OutlineLevelVec;
-    typedef ::std::map< sal_Int32, ColumnModel >        ColumnModelMap;
-    typedef ::std::map< sal_Int32, RowModel >           RowModelMap;
+    typedef ::std::pair< ColumnModel, sal_Int32 >       ColumnModelRange;
+    typedef ::std::map< sal_Int32, ColumnModelRange >   ColumnModelRangeMap;
+    typedef ::std::pair< RowModel, sal_Int32 >          RowModelRange;
+    typedef ::std::map< sal_Int32, RowModelRange >      RowModelRangeMap;
     typedef ::std::list< HyperlinkModel >               HyperlinkModelList;
     typedef ::std::list< ValidationModel >              ValidationModelList;
 
@@ -437,12 +363,12 @@ private:
     /** Converts column properties for all columns in the sheet. */
     void                convertColumns();
     /** Converts column properties. */
-    void                convertColumns( OutlineLevelVec& orColLevels, sal_Int32 nFirstCol, sal_Int32 nLastCol, const ColumnModel& rModel );
+    void                convertColumns( OutlineLevelVec& orColLevels, const ValueRange& rColRange, const ColumnModel& rModel );
 
     /** Converts row properties for all rows in the sheet. */
     void                convertRows();
     /** Converts row properties. */
-    void                convertRows( OutlineLevelVec& orRowLevels, sal_Int32 nFirstRow, sal_Int32 nLastRow, const RowModel& rModel, double fDefHeight = -1.0 );
+    void                convertRows( OutlineLevelVec& orRowLevels, const ValueRange& rRowRange, const RowModel& rModel, double fDefHeight = -1.0 );
 
     /** Converts outline grouping for the passed column or row. */
     void                convertOutlines( OutlineLevelVec& orLevels, sal_Int32 nColRow, sal_Int32 nLevel, bool bCollapsed, bool bRows );
@@ -461,9 +387,9 @@ private:
     const CellAddress&  mrMaxApiPos;        /// Reference to maximum Calc cell address from address converter.
     CellRangeAddress    maUsedArea;         /// Used area of the sheet, and sheet index of the sheet.
     ColumnModel         maDefColModel;      /// Default column formatting.
-    ColumnModelMap      maColModels;        /// Columns sorted by first column index.
+    ColumnModelRangeMap maColModels;        /// Ranges of columns sorted by first column index.
     RowModel            maDefRowModel;      /// Default row formatting.
-    RowModelMap         maRowModels;        /// Rows sorted by row index.
+    RowModelRangeMap    maRowModels;        /// Ranges of rows sorted by first row index.
     HyperlinkModelList  maHyperlinks;       /// Cell ranges containing hyperlinks.
     ValidationModelList maValidations;      /// Cell ranges containing data validation settings.
     ValueRangeSet       maManualRowHeights; /// Rows that need manual height independent from own settings.
@@ -622,26 +548,26 @@ Reference< XCellRange > WorksheetGlobals::getRow( sal_Int32 nRow ) const
     return xRow;
 }
 
-Reference< XTableColumns > WorksheetGlobals::getColumns( sal_Int32 nFirstCol, sal_Int32 nLastCol ) const
+Reference< XTableColumns > WorksheetGlobals::getColumns( const ValueRange& rColRange ) const
 {
     Reference< XTableColumns > xColumns;
-    nLastCol = ::std::min( nLastCol, mrMaxApiPos.Column );
-    if( (0 <= nFirstCol) && (nFirstCol <= nLastCol) )
+    sal_Int32 nLastCol = ::std::min( rColRange.mnLast, mrMaxApiPos.Column );
+    if( (0 <= rColRange.mnFirst) && (rColRange.mnFirst <= nLastCol) )
     {
-        Reference< XColumnRowRange > xRange( getCellRange( CellRangeAddress( getSheetIndex(), nFirstCol, 0, nLastCol, 0 ) ), UNO_QUERY );
+        Reference< XColumnRowRange > xRange( getCellRange( CellRangeAddress( getSheetIndex(), rColRange.mnFirst, 0, nLastCol, 0 ) ), UNO_QUERY );
         if( xRange.is() )
             xColumns = xRange->getColumns();
     }
     return xColumns;
 }
 
-Reference< XTableRows > WorksheetGlobals::getRows( sal_Int32 nFirstRow, sal_Int32 nLastRow ) const
+Reference< XTableRows > WorksheetGlobals::getRows( const ValueRange& rRowRange ) const
 {
     Reference< XTableRows > xRows;
-    nLastRow = ::std::min( nLastRow, mrMaxApiPos.Row );
-    if( (0 <= nFirstRow) && (nFirstRow <= nLastRow) )
+    sal_Int32 nLastRow = ::std::min( rRowRange.mnLast, mrMaxApiPos.Row );
+    if( (0 <= rRowRange.mnFirst) && (rRowRange.mnFirst <= nLastRow) )
     {
-        Reference< XColumnRowRange > xRange( getCellRange( CellRangeAddress( getSheetIndex(), 0, nFirstRow, 0, nLastRow ) ), UNO_QUERY );
+        Reference< XColumnRowRange > xRange( getCellRange( CellRangeAddress( getSheetIndex(), 0, rRowRange.mnFirst, 0, nLastRow ) ), UNO_QUERY );
         if( xRange.is() )
             xRows = xRange->getRows();
     }
@@ -894,15 +820,48 @@ void WorksheetGlobals::setDefaultColumnWidth( double fWidth )
 void WorksheetGlobals::setColumnModel( const ColumnModel& rModel )
 {
     // convert 1-based OOXML column indexes to 0-based API column indexes
-    sal_Int32 nFirstCol = rModel.mnFirstCol - 1;
-    sal_Int32 nLastCol = rModel.mnLastCol - 1;
-    if( (0 <= nFirstCol) && (nFirstCol <= mrMaxApiPos.Column) )
+    sal_Int32 nFirstCol = rModel.maRange.mnFirst - 1;
+    sal_Int32 nLastCol = rModel.maRange.mnLast - 1;
+    if( getAddressConverter().checkCol( nFirstCol, true ) && (nFirstCol <= nLastCol) )
     {
-        // set column formatting directly, nLastCol is checked inside the function
-        convertColumnFormat( nFirstCol, nLastCol, rModel.mnXfId );
-        // expand last entry or add new entry
-        if( maColModels.empty() || !maColModels.rbegin()->second.tryExpand( rModel ) )
-            maColModels[ nFirstCol ] = rModel;
+        // validate last column index
+        if( !getAddressConverter().checkCol( nLastCol, true ) )
+            nLastCol = mrMaxApiPos.Column;
+        // try to find entry in column model map that is able to merge with the passed model
+        bool bInsertModel = true;
+        if( !maColModels.empty() )
+        {
+            // find first column model range following nFirstCol (nFirstCol < aIt->first), or end of map
+            ColumnModelRangeMap::iterator aIt = maColModels.upper_bound( nFirstCol );
+            OSL_ENSURE( aIt == maColModels.end(), "WorksheetGlobals::setColModel - columns are unsorted" );
+            // if inserting before another column model, get last free column
+            OSL_ENSURE( (aIt == maColModels.end()) || (nLastCol < aIt->first), "WorksheetGlobals::setColModel - multiple models of the same column" );
+            if( aIt != maColModels.end() )
+                nLastCol = ::std::min( nLastCol, aIt->first - 1 );
+            if( aIt != maColModels.begin() )
+            {
+                // go to previous map element (which may be able to merge with the passed model)
+                --aIt;
+                // the usage of upper_bound() above ensures that aIt->first is less than or equal to nFirstCol now
+                sal_Int32& rnLastMapCol = aIt->second.second;
+                OSL_ENSURE( rnLastMapCol < nFirstCol, "WorksheetGlobals::setColModel - multiple models of the same column" );
+                nFirstCol = ::std::max( rnLastMapCol + 1, nFirstCol );
+                if( (rnLastMapCol + 1 == nFirstCol) && (nFirstCol <= nLastCol) && aIt->second.first.isMergeable( rModel ) )
+                {
+                    // can merge with existing model, update last column index
+                    rnLastMapCol = nLastCol;
+                    bInsertModel = false;
+                }
+            }
+        }
+        if( nFirstCol <= nLastCol )
+        {
+            // insert the column model, if it has not been merged with another
+            if( bInsertModel )
+                maColModels[ nFirstCol ] = ColumnModelRange( rModel, nLastCol );
+            // set column formatting directly
+            convertColumnFormat( nFirstCol, nLastCol, rModel.mnXfId );
+        }
     }
 }
 
@@ -927,18 +886,46 @@ void WorksheetGlobals::setDefaultRowSettings( double fHeight, bool bCustomHeight
 
 void WorksheetGlobals::setRowModel( const RowModel& rModel )
 {
-    // convert 1-based OOXML row indexes to 0-based API row indexes
-    sal_Int32 nFirstRow = rModel.mnFirstRow - 1;
-    sal_Int32 nLastRow = rModel.mnLastRow - 1;
-    if( (0 <= nFirstRow) && (nFirstRow <= mrMaxApiPos.Row) )
+    // convert 1-based OOXML row index to 0-based API row index
+    sal_Int32 nRow = rModel.mnRow - 1;
+    if( getAddressConverter().checkRow( nRow, true ) )
     {
-        // set row formatting
-        maSheetData.setRowFormat( nFirstRow, nLastRow, rModel.mnXfId, rModel.mbCustomFormat );
-        // expand last entry or add new entry
-        if( maRowModels.empty() || !maRowModels.rbegin()->second.tryExpand( rModel ) )
-            maRowModels[ nFirstRow ] = rModel;
+        // try to find entry in row model map that is able to merge with the passed model
+        bool bInsertModel = true;
+        bool bUnusedRow = true;
+        if( !maRowModels.empty() )
+        {
+            // find first row model range following nRow (nRow < aIt->first), or end of map
+            RowModelRangeMap::iterator aIt = maRowModels.upper_bound( nRow );
+            OSL_ENSURE( aIt == maRowModels.end(), "WorksheetGlobals::setRowModel - rows are unsorted" );
+            if( aIt != maRowModels.begin() )
+            {
+                // go to previous map element (which may be able to merge with the passed model)
+                --aIt;
+                // the usage of upper_bound() above ensures that aIt->first is less than or equal to nRow now
+                sal_Int32& rnLastMapRow = aIt->second.second;
+                bUnusedRow = rnLastMapRow < nRow;
+                OSL_ENSURE( bUnusedRow, "WorksheetGlobals::setRowModel - multiple models of the same row" );
+                if( (rnLastMapRow + 1 == nRow) && aIt->second.first.isMergeable( rModel ) )
+                {
+                    // can merge with existing model, update last row index
+                    ++rnLastMapRow;
+                    bInsertModel = false;
+                }
+            }
+        }
+        if( bUnusedRow )
+        {
+            // insert the row model, if it has not been merged with another
+            if( bInsertModel )
+                maRowModels[ nRow ] = RowModelRange( rModel, nRow );
+            // set row formatting
+            maSheetData.setRowFormat( nRow, rModel.mnXfId, rModel.mbCustomFormat );
+            // set column spans
+            maSheetData.setColSpans( nRow, rModel.maColSpans );
+        }
     }
-    lclUpdateProgressBar( mxRowProgress, maUsedArea, nLastRow );
+    lclUpdateProgressBar( mxRowProgress, maUsedArea, nRow );
 }
 
 void WorksheetGlobals::setManualRowHeight( sal_Int32 nRow )
@@ -1160,32 +1147,29 @@ void WorksheetGlobals::convertColumns()
     // stores first grouped column index for each level
     OutlineLevelVec aColLevels;
 
-    for( ColumnModelMap::const_iterator aIt = maColModels.begin(), aEnd = maColModels.end(); aIt != aEnd; ++aIt )
+    for( ColumnModelRangeMap::iterator aIt = maColModels.begin(), aEnd = maColModels.end(); aIt != aEnd; ++aIt )
     {
-        // convert 1-based OOXML column indexes to 0-based API column indexes
-        sal_Int32 nFirstCol = ::std::max( aIt->second.mnFirstCol - 1, nNextCol );
-        sal_Int32 nLastCol = ::std::min( aIt->second.mnLastCol - 1, nMaxCol );
-
+        // column indexes are stored 0-based in maColModels
+        ValueRange aColRange( ::std::max( aIt->first, nNextCol ), ::std::min( aIt->second.second, nMaxCol ) );
         // process gap between two column models, use default column model
-        if( nNextCol < nFirstCol )
-            convertColumns( aColLevels, nNextCol, nFirstCol - 1, maDefColModel );
+        if( nNextCol < aColRange.mnFirst )
+            convertColumns( aColLevels, ValueRange( nNextCol, aColRange.mnFirst - 1 ), maDefColModel );
         // process the column model
-        convertColumns( aColLevels, nFirstCol, nLastCol, aIt->second );
-
+        convertColumns( aColLevels, aColRange, aIt->second.first );
         // cache next column to be processed
-        nNextCol = nLastCol + 1;
+        nNextCol = aColRange.mnLast + 1;
     }
 
     // remaining default columns to end of sheet
-    convertColumns( aColLevels, nNextCol, nMaxCol, maDefColModel );
+    convertColumns( aColLevels, ValueRange( nNextCol, nMaxCol ), maDefColModel );
     // close remaining column outlines spanning to end of sheet
     convertOutlines( aColLevels, nMaxCol + 1, 0, false, false );
 }
 
 void WorksheetGlobals::convertColumns( OutlineLevelVec& orColLevels,
-        sal_Int32 nFirstCol, sal_Int32 nLastCol, const ColumnModel& rModel )
+        const ValueRange& rColRange, const ColumnModel& rModel )
 {
-    PropertySet aPropSet( getColumns( nFirstCol, nLastCol ) );
+    PropertySet aPropSet( getColumns( rColRange ) );
 
     // column width: convert 'number of characters' to column width in 1/100 mm
     sal_Int32 nWidth = getUnitConverter().scaleToMm100( rModel.mfWidth, UNIT_DIGIT );
@@ -1200,7 +1184,7 @@ void WorksheetGlobals::convertColumns( OutlineLevelVec& orColLevels,
         aPropSet.setProperty( PROP_IsVisible, false );
 
     // outline settings for this column range
-    convertOutlines( orColLevels, nFirstCol, rModel.mnLevel, rModel.mbCollapsed, false );
+    convertOutlines( orColLevels, rColRange.mnFirst, rModel.mnLevel, rModel.mbCollapsed, false );
 }
 
 void WorksheetGlobals::convertRows()
@@ -1210,44 +1194,45 @@ void WorksheetGlobals::convertRows()
     // stores first grouped row index for each level
     OutlineLevelVec aRowLevels;
 
-    for( RowModelMap::const_iterator aIt = maRowModels.begin(), aEnd = maRowModels.end(); aIt != aEnd; ++aIt )
+    for( RowModelRangeMap::iterator aIt = maRowModels.begin(), aEnd = maRowModels.end(); aIt != aEnd; ++aIt )
     {
-        // convert 1-based OOXML row indexes to 0-based API row indexes
-        sal_Int32 nFirstRow = ::std::max( aIt->second.mnFirstRow - 1, nNextRow );
-        sal_Int32 nLastRow = ::std::min( aIt->second.mnLastRow - 1, nMaxRow );
-
+        // row indexes are stored 0-based in maRowModels
+        ValueRange aRowRange( ::std::max( aIt->first, nNextRow ), ::std::min( aIt->second.second, nMaxRow ) );
         // process gap between two row models, use default row model
-        if( nNextRow < nFirstRow )
-            convertRows( aRowLevels, nNextRow, nFirstRow - 1, maDefRowModel );
+        if( nNextRow < aRowRange.mnFirst )
+            convertRows( aRowLevels, ValueRange( nNextRow, aRowRange.mnFirst - 1 ), maDefRowModel );
         // process the row model
-        convertRows( aRowLevels, nFirstRow, nLastRow, aIt->second, maDefRowModel.mfHeight );
-
+        convertRows( aRowLevels, aRowRange, aIt->second.first, maDefRowModel.mfHeight );
         // cache next row to be processed
-        nNextRow = nLastRow + 1;
+        nNextRow = aRowRange.mnLast + 1;
     }
 
     // remaining default rows to end of sheet
-    convertRows( aRowLevels, nNextRow, nMaxRow, maDefRowModel );
+    convertRows( aRowLevels, ValueRange( nNextRow, nMaxRow ), maDefRowModel );
     // close remaining row outlines spanning to end of sheet
     convertOutlines( aRowLevels, nMaxRow + 1, 0, false, true );
 }
 
 void WorksheetGlobals::convertRows( OutlineLevelVec& orRowLevels,
-        sal_Int32 nFirstRow, sal_Int32 nLastRow, const RowModel& rModel, double fDefHeight )
+        const ValueRange& rRowRange, const RowModel& rModel, double fDefHeight )
 {
     // row height: convert points to row height in 1/100 mm
     double fHeight = (rModel.mfHeight >= 0.0) ? rModel.mfHeight : fDefHeight;
     sal_Int32 nHeight = getUnitConverter().scaleToMm100( fHeight, UNIT_POINT );
     if( nHeight > 0 )
     {
+        /*  Get all rows that have custom height inside the passed row model.
+            If the model has the custom height flag set, all its rows have
+            custom height, otherwise get all rows specified in the class member
+            maManualRowHeights that are inside the passed row model. */
         ValueRangeVector aManualRows;
         if( rModel.mbCustomHeight )
-            aManualRows.push_back( ValueRange( nFirstRow, nLastRow ) );
+            aManualRows.push_back( rRowRange );
         else
-            maManualRowHeights.intersect( aManualRows, nFirstRow, nLastRow );
+            aManualRows = maManualRowHeights.getIntersection( rRowRange );
         for( ValueRangeVector::const_iterator aIt = aManualRows.begin(), aEnd = aManualRows.end(); aIt != aEnd; ++aIt )
         {
-            PropertySet aPropSet( getRows( aIt->mnFirst, aIt->mnLast ) );
+            PropertySet aPropSet( getRows( *aIt ) );
             aPropSet.setProperty( PROP_Height, nHeight );
         }
     }
@@ -1255,12 +1240,12 @@ void WorksheetGlobals::convertRows( OutlineLevelVec& orRowLevels,
     // hidden rows: TODO: #108683# hide rows later?
     if( rModel.mbHidden )
     {
-        PropertySet aPropSet( getRows( nFirstRow, nLastRow ) );
+        PropertySet aPropSet( getRows( rRowRange ) );
         aPropSet.setProperty( PROP_IsVisible, false );
     }
 
     // outline settings for this row range
-    convertOutlines( orRowLevels, nFirstRow, rModel.mnLevel, rModel.mbCollapsed, true );
+    convertOutlines( orRowLevels, rRowRange.mnFirst, rModel.mnLevel, rModel.mbCollapsed, true );
 }
 
 void WorksheetGlobals::convertOutlines( OutlineLevelVec& orLevels,
@@ -1449,14 +1434,14 @@ Reference< XCellRange > WorksheetHelper::getRow( sal_Int32 nRow ) const
     return mrSheetGlob.getRow( nRow );
 }
 
-Reference< XTableColumns > WorksheetHelper::getColumns( sal_Int32 nFirstCol, sal_Int32 nLastCol ) const
+Reference< XTableColumns > WorksheetHelper::getColumns( const ValueRange& rColRange ) const
 {
-    return mrSheetGlob.getColumns( nFirstCol, nLastCol );
+    return mrSheetGlob.getColumns( rColRange );
 }
 
-Reference< XTableRows > WorksheetHelper::getRows( sal_Int32 nFirstRow, sal_Int32 nLastRow ) const
+Reference< XTableRows > WorksheetHelper::getRows( const ValueRange& rRowRange ) const
 {
-    return mrSheetGlob.getRows( nFirstRow, nLastRow );
+    return mrSheetGlob.getRows( rRowRange );
 }
 
 Reference< XDrawPage > WorksheetHelper::getDrawPage() const
@@ -1659,6 +1644,34 @@ void WorksheetHelper::setRowModel( const RowModel& rModel )
 void WorksheetHelper::setManualRowHeight( sal_Int32 nRow )
 {
     mrSheetGlob.setManualRowHeight( nRow );
+}
+
+void WorksheetHelper::putValue( const CellAddress& rAddress, double fValue ) const
+{
+    Reference< XCell > xCell = getCell( rAddress );
+    OSL_ENSURE( xCell.is(), "WorksheetHelper::putValue - missing cell interface" );
+    if( xCell.is() ) xCell->setValue( fValue );
+}
+
+void WorksheetHelper::putString( const CellAddress& rAddress, const OUString& rText ) const
+{
+    Reference< XText > xText( getCell( rAddress ), UNO_QUERY );
+    OSL_ENSURE( xText.is(), "WorksheetHelper::putString - missing text interface" );
+    if( xText.is() ) xText->setString( rText );
+}
+
+void WorksheetHelper::putRichString( const CellAddress& rAddress, const RichString& rString, const Font* pFirstPortionFont ) const
+{
+    Reference< XText > xText( getCell( rAddress ), UNO_QUERY );
+    OSL_ENSURE( xText.is(), "WorksheetHelper::putRichString - missing text interface" );
+    rString.convert( xText, pFirstPortionFont );
+}
+
+void WorksheetHelper::putFormulaTokens( const CellAddress& rAddress, const ApiTokenSequence& rTokens ) const
+{
+    Reference< XFormulaTokens > xTokens( getCell( rAddress ), UNO_QUERY );
+    OSL_ENSURE( xTokens.is(), "WorksheetHelper::putFormulaTokens - missing token interface" );
+    if( xTokens.is() ) xTokens->setTokens( rTokens );
 }
 
 void WorksheetHelper::initializeWorksheetImport()

@@ -97,8 +97,8 @@ private:
 
 private:
     const PivotCache&   mrPivotCache;
-    sal_Int32           mnCol;
-    sal_Int32           mnRow;
+    sal_Int32           mnColIdx;           /// Relative column index in source data.
+    sal_Int32           mnRowIdx;           /// Relative row index in source data.
     bool                mbInRecord;
 };
 
@@ -142,7 +142,7 @@ private:
     const PivotCache&   mrPivotCache;
     ColumnIndexVector   maUnsharedCols; /// Column indexes of all unshared cache fields.
     size_t              mnColIdx;       /// Current index into maUnsharedCols.
-    sal_Int32           mnRow;          /// Current row in source data (0-based).
+    sal_Int32           mnRowIdx;       /// Current row in source data (0-based).
     bool                mbHasShared;    /// True = pivot cache contains fields with shared items.
     bool                mbInRow;        /// True = a data row has been started.
 };

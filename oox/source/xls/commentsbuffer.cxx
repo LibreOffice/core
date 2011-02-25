@@ -170,7 +170,7 @@ void Comment::finalizeImport()
         // insert text and convert text formatting
         maModel.mxText->finalizeImport();
         Reference< XText > xAnnoText( xAnnoShape, UNO_QUERY_THROW );
-        maModel.mxText->convert( xAnnoText, -1, true );
+        maModel.mxText->convert( xAnnoText );
     }
     catch( Exception& )
     {

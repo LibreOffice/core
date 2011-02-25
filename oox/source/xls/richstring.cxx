@@ -52,6 +52,11 @@ namespace {
 const sal_uInt8 BIFF12_STRINGFLAG_FONTS         = 0x01;
 const sal_uInt8 BIFF12_STRINGFLAG_PHONETICS     = 0x02;
 
+inline bool lclNeedsRichTextFormat( const Font* pFont )
+{
+    return pFont && pFont->needsRichTextFormat();
+}
+
 } // namespace
 
 // ============================================================================
@@ -86,10 +91,10 @@ void RichStringPortion::finalizeImport()
         mxFont = getStyles().getFont( mnFontId );
 }
 
-void RichStringPortion::convert( const Reference< XText >& rxText, sal_Int32 nXfId, bool bReplaceOld )
+void RichStringPortion::convert( const Reference< XText >& rxText, const Font* pFont, bool bReplace )
 {
     Reference< XTextRange > xRange;
-    if( bReplaceOld )
+    if( bReplace )
         xRange.set( rxText, UNO_QUERY );
     else
         xRange = rxText->getEnd();
@@ -103,13 +108,13 @@ void RichStringPortion::convert( const Reference< XText >& rxText, sal_Int32 nXf
             PropertySet aPropSet( xRange );
             mxFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
         }
-        if( const Font* pFont = getStyles().getFontFromCellXf( nXfId ).get() )
+
+        /*  Some font attributes cannot be set to cell formattiing in Calc but
+            require to use rich formatting, e.g. font escapement. */
+        if( lclNeedsRichTextFormat( pFont ) )
         {
-            if( pFont->needsRichTextFormat() )
-            {
-                PropertySet aPropSet( xRange );
-                pFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
-            }
+            PropertySet aPropSet( xRange );
+            pFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
         }
     }
 }
@@ -400,7 +405,7 @@ void RichString::importString( SequenceInputStream& rStrm, bool bRich )
     {
         FontPortionModelList aPortions;
         aPortions.importPortions( rStrm );
-        createFontPortions( aBaseText, aPortions );
+        createTextPortions( aBaseText, aPortions );
     }
     else
     {
@@ -434,7 +439,7 @@ void RichString::importByteString( BiffInputStream& rStrm, rtl_TextEncoding eTex
     {
         FontPortionModelList aPortions;
         aPortions.importPortions( rStrm, false );
-        createFontPortions( aBaseText, eTextEnc, aPortions );
+        createTextPortions( aBaseText, eTextEnc, aPortions );
     }
     else
     {
@@ -468,7 +473,7 @@ void RichString::importUniString( BiffInputStream& rStrm, BiffStringFlags nFlags
     {
         FontPortionModelList aPortions;
         aPortions.importPortions( rStrm, nFontCount, BIFF_FONTPORTION_16BIT );
-        createFontPortions( aBaseText, aPortions );
+        createTextPortions( aBaseText, aPortions );
     }
     else
     {
@@ -502,16 +507,34 @@ void RichString::importUniString( BiffInputStream& rStrm, BiffStringFlags nFlags
 
 void RichString::finalizeImport()
 {
-    maFontPortions.forEachMem( &RichStringPortion::finalizeImport );
+    maTextPortions.forEachMem( &RichStringPortion::finalizeImport );
 }
 
-void RichString::convert( const Reference< XText >& rxText, sal_Int32 nXfId, bool bReplaceOld ) const
+bool RichString::extractPlainString( OUString& orString, const Font* pFirstPortionFont ) const
 {
-    for( PortionVec::const_iterator aIt = maFontPortions.begin(), aEnd = maFontPortions.end(); aIt != aEnd; ++aIt )
+    if( !maPhonPortions.empty() )
+        return false;
+    if( maTextPortions.empty() )
     {
-        (*aIt)->convert( rxText, nXfId, bReplaceOld );
-        nXfId = -1;             // use passed XF identifier for first portion only
-        bReplaceOld = false;    // do not replace first portion text with following portions
+        orString = OUString();
+        return true;
+    }
+    if( (maTextPortions.size() == 1) && !maTextPortions.front()->hasFont() && !lclNeedsRichTextFormat( pFirstPortionFont ) )
+    {
+        orString = maTextPortions.front()->getText();
+        return true;
+    }
+    return false;
+}
+
+void RichString::convert( const Reference< XText >& rxText, const Font* pFirstPortionFont ) const
+{
+    bool bReplace = true;
+    for( PortionVector::const_iterator aIt = maTextPortions.begin(), aEnd = maTextPortions.end(); aIt != aEnd; ++aIt )
+    {
+        (*aIt)->convert( rxText, pFirstPortionFont, bReplace );
+        pFirstPortionFont = 0;  // use passed font for first portion only
+        bReplace = false;       // do not replace first portion text with following portions
     }
 }
 
@@ -520,7 +543,7 @@ void RichString::convert( const Reference< XText >& rxText, sal_Int32 nXfId, boo
 RichStringPortionRef RichString::createPortion()
 {
     RichStringPortionRef xPortion( new RichStringPortion( *this ) );
-    maFontPortions.push_back( xPortion );
+    maTextPortions.push_back( xPortion );
     return xPortion;
 }
 
@@ -531,9 +554,9 @@ RichStringPhoneticRef RichString::createPhonetic()
     return xPhonetic;
 }
 
-void RichString::createFontPortions( const OString& rText, rtl_TextEncoding eTextEnc, FontPortionModelList& rPortions )
+void RichString::createTextPortions( const OString& rText, rtl_TextEncoding eTextEnc, FontPortionModelList& rPortions )
 {
-    maFontPortions.clear();
+    maTextPortions.clear();
     sal_Int32 nStrLen = rText.getLength();
     if( nStrLen > 0 )
     {
@@ -562,9 +585,9 @@ void RichString::createFontPortions( const OString& rText, rtl_TextEncoding eTex
     }
 }
 
-void RichString::createFontPortions( const OUString& rText, FontPortionModelList& rPortions )
+void RichString::createTextPortions( const OUString& rText, FontPortionModelList& rPortions )
 {
-    maFontPortions.clear();
+    maTextPortions.clear();
     sal_Int32 nStrLen = rText.getLength();
     if( nStrLen > 0 )
     {

@@ -110,73 +110,306 @@ DataTableModel::DataTableModel() :
 
 // ============================================================================
 
+namespace {
+
+const sal_Int32 CELLBLOCK_MAXROWS  = 16;    /// Number of rows in a cell block.
+
+} // namespace
+
+CellBlock::CellBlock( const WorksheetHelper& rHelper, const ValueRange& rColSpan, sal_Int32 nRow ) :
+    WorksheetHelper( rHelper ),
+    maRange( rHelper.getSheetIndex(), rColSpan.mnFirst, nRow, rColSpan.mnLast, nRow ),
+    mnRowLength( rColSpan.mnLast - rColSpan.mnFirst + 1 ),
+    mnFirstFreeIndex( 0 )
+{
+    maCellArray.realloc( 1 );
+    maCellArray[ 0 ].realloc( mnRowLength );
+    mpCurrCellRow = maCellArray[ 0 ].getArray();
+}
+
+bool CellBlock::isExpandable( const ValueRange& rColSpan ) const
+{
+    return (maRange.StartColumn == rColSpan.mnFirst) && (maRange.EndColumn == rColSpan.mnLast);
+}
+
+bool CellBlock::isBefore( const ValueRange& rColSpan ) const
+{
+    return (maRange.EndColumn < rColSpan.mnLast) ||
+        ((maRange.EndColumn == rColSpan.mnLast) && (maRange.StartColumn != rColSpan.mnFirst));
+}
+
+bool CellBlock::contains( sal_Int32 nCol ) const
+{
+    return (maRange.StartColumn <= nCol) && (nCol <= maRange.EndColumn);
+}
+
+void CellBlock::insertRichString( const CellAddress& rAddress, const RichStringRef& rxString, const Font* pFirstPortionFont )
+{
+    maRichStrings.push_back( RichStringCell( rAddress, rxString, pFirstPortionFont ) );
+}
+
+void CellBlock::startNextRow()
+{
+    // fill last cells in current row with empty strings (placeholder for empty cells)
+    fillUnusedCells( mnRowLength );
+    // flush if the cell block reaches maximum size
+    if( maCellArray.getLength() == CELLBLOCK_MAXROWS )
+    {
+        finalizeImport();
+        maRange.StartRow = ++maRange.EndRow;
+        maCellArray.realloc( 1 );
+        mpCurrCellRow = maCellArray[ 0 ].getArray();
+    }
+    else
+    {
+        // prepare next row
+        ++maRange.EndRow;
+        sal_Int32 nRowCount = maCellArray.getLength();
+        maCellArray.realloc( nRowCount + 1 );
+        maCellArray[ nRowCount ].realloc( mnRowLength );
+        mpCurrCellRow = maCellArray[ nRowCount ].getArray();
+    }
+    mnFirstFreeIndex = 0;
+}
+
+Any& CellBlock::getCellAny( sal_Int32 nCol )
+{
+    OSL_ENSURE( contains( nCol ), "CellBlock::getCellAny - invalid column" );
+    // fill cells before passed column with empty strings (the placeholder for empty cells)
+    sal_Int32 nIndex = nCol - maRange.StartColumn;
+    fillUnusedCells( nIndex );
+    mnFirstFreeIndex = nIndex + 1;
+    return mpCurrCellRow[ nIndex ];
+}
+
+void CellBlock::finalizeImport()
+{
+    // fill last cells in last row with empty strings (placeholder for empty cells)
+    fillUnusedCells( mnRowLength );
+    // insert all buffered cells into the Calc sheet
+    try
+    {
+        Reference< XCellRangeData > xRangeData( getCellRange( maRange ), UNO_QUERY_THROW );
+        xRangeData->setDataArray( maCellArray );
+    }
+    catch( Exception& )
+    {
+    }
+    // insert uncacheable cells separately
+    for( RichStringCellList::const_iterator aIt = maRichStrings.begin(), aEnd = maRichStrings.end(); aIt != aEnd; ++aIt )
+        putRichString( aIt->maCellAddr, *aIt->mxString, aIt->mpFirstPortionFont );
+}
+
+// private --------------------------------------------------------------------
+
+CellBlock::RichStringCell::RichStringCell( const CellAddress& rCellAddr, const RichStringRef& rxString, const Font* pFirstPortionFont ) :
+    maCellAddr( rCellAddr ),
+    mxString( rxString ),
+    mpFirstPortionFont( pFirstPortionFont )
+{
+}
+
+void CellBlock::fillUnusedCells( sal_Int32 nIndex )
+{
+    if( mnFirstFreeIndex < nIndex )
+    {
+        Any* pCellEnd = mpCurrCellRow + nIndex;
+        for( Any* pCell = mpCurrCellRow + mnFirstFreeIndex; pCell < pCellEnd; ++pCell )
+            *pCell <<= OUString();
+    }
+}
+
+// ============================================================================
+
+CellBlockBuffer::CellBlockBuffer( const WorksheetHelper& rHelper ) :
+    WorksheetHelper( rHelper ),
+    mnCurrRow( -1 )
+{
+    maCellBlockIt = maCellBlocks.end();
+}
+
+void CellBlockBuffer::setColSpans( sal_Int32 nRow, const ValueRangeSet& rColSpans )
+{
+    OSL_ENSURE( maColSpans.count( nRow ) == 0, "CellBlockBuffer::setColSpans - multiple column spans for the same row" );
+    OSL_ENSURE( (mnCurrRow < nRow) && (maColSpans.empty() || (maColSpans.rbegin()->first < nRow)), "CellBlockBuffer::setColSpans - rows are unsorted" );
+    if( (mnCurrRow < nRow) && (maColSpans.count( nRow ) == 0) )
+        maColSpans[ nRow ] = rColSpans.getRanges();
+}
+
+CellBlock* CellBlockBuffer::getCellBlock( const CellAddress& rCellAddr )
+{
+    OSL_ENSURE( rCellAddr.Row >= mnCurrRow, "CellBlockBuffer::getCellBlock - passed row out of order" );
+    // prepare cell blocks, if row changes
+    if( rCellAddr.Row != mnCurrRow )
+    {
+        // find colspans for the new row
+        ColSpanVectorMap::iterator aIt = maColSpans.find( rCellAddr.Row );
+
+        /*  Gap between rows, or rows out of order, or no colspan
+            information for the new row found: flush all open cell blocks. */
+        if( (aIt == maColSpans.end()) || (rCellAddr.Row != mnCurrRow + 1) )
+        {
+            finalizeImport();
+            maCellBlocks.clear();
+            maCellBlockIt = maCellBlocks.end();
+        }
+
+        /*  Prepare matching cell blocks, create new cell blocks, finalize
+            unmatching cell blocks, if colspan information is available. */
+        if( aIt != maColSpans.end() )
+        {
+            /*  The colspan vector aIt points to is sorted by columns, as well
+                as the cell block map. In the folloing, this vector and the
+                list of cell blocks can be iterated simultanously. */
+            CellBlockMap::iterator aMIt = maCellBlocks.begin();
+            const ValueRangeVector& rColRanges = aIt->second;
+            for( ValueRangeVector::const_iterator aVIt = rColRanges.begin(), aVEnd = rColRanges.end(); aVIt != aVEnd; ++aVIt, ++aMIt )
+            {
+                const ValueRange& rColSpan = *aVIt;
+                /*  Finalize and remove all cell blocks up to end of the column
+                    range (cell blocks are keyed by end column index).
+                    CellBlock::isBefore() returns true, if the end index of the
+                    passed colspan is greater than the column end index of the
+                    cell block, or if the passed range has the same end index
+                    but the start indexes do not match. */
+                while( (aMIt != maCellBlocks.end()) && aMIt->second->isBefore( rColSpan ) )
+                {
+                    aMIt->second->finalizeImport();
+                    maCellBlocks.erase( aMIt++ );
+                }
+                /*  If the current cell block (aMIt) fits to the colspan, start
+                    a new row there, otherwise create and insert a new cell block. */
+                if( (aMIt != maCellBlocks.end()) && aMIt->second->isExpandable( rColSpan ) )
+                    aMIt->second->startNextRow();
+                else
+                    aMIt = maCellBlocks.insert( aMIt, CellBlockMap::value_type( rColSpan.mnLast,
+                        CellBlockMap::mapped_type( new CellBlock( *this, rColSpan, rCellAddr.Row ) ) ) );
+            }
+            // finalize and remove all remaining cell blocks
+            CellBlockMap::iterator aMEnd = maCellBlocks.end();
+            for( CellBlockMap::iterator aMIt2 = aMIt; aMIt2 != aMEnd; ++aMIt2 )
+                aMIt2->second->finalizeImport();
+            maCellBlocks.erase( aMIt, aMEnd );
+
+            // remove cached colspan information (including current one aIt points to)
+            maColSpans.erase( maColSpans.begin(), ++aIt );
+        }
+        maCellBlockIt = maCellBlocks.begin();
+        mnCurrRow = rCellAddr.Row;
+    }
+
+    // try to find a valid cell block (update maCellBlockIt)
+    if( ((maCellBlockIt != maCellBlocks.end()) && maCellBlockIt->second->contains( rCellAddr.Column )) ||
+        (((maCellBlockIt = maCellBlocks.lower_bound( rCellAddr.Column )) != maCellBlocks.end()) && maCellBlockIt->second->contains( rCellAddr.Column )) )
+    {
+        // maCellBlockIt points to valid cell block
+        return maCellBlockIt->second.get();
+    }
+
+    // no valid cell block found
+    return 0;
+}
+
+void CellBlockBuffer::finalizeImport()
+{
+    maCellBlocks.forEachMem( &CellBlock::finalizeImport );
+}
+
+// ============================================================================
+
 SheetDataBuffer::SheetDataBuffer( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
+    maCellBlocks( rHelper ),
     mbPendingSharedFmla( false )
 {
 }
 
-void SheetDataBuffer::setValueCell( const CellAddress& rCellAddr, double fValue )
+void SheetDataBuffer::setColSpans( sal_Int32 nRow, const ValueRangeSet& rColSpans )
 {
-    Reference< XCell > xCell = getCell( rCellAddr );
-    OSL_ENSURE( xCell.is(), "SheetDataBuffer::setValueCell - missing cell interface" );
-    if( xCell.is() )
-        xCell->setValue( fValue );
+    maCellBlocks.setColSpans( nRow, rColSpans );
 }
 
-void SheetDataBuffer::setStringCell( const CellAddress& rCellAddr, const OUString& rText )
+void SheetDataBuffer::setBlankCell( const CellModel& rModel )
 {
-    Reference< XText > xText( getCell( rCellAddr ), UNO_QUERY );
-    OSL_ENSURE( xText.is(), "SheetDataBuffer::setStringCell - missing text interface" );
-    if( xText.is() )
-        xText->setString( rText );
+    setCellFormat( rModel );
 }
 
-void SheetDataBuffer::setStringCell( const CellAddress& rCellAddr, const RichString& rString, sal_Int32 nXfId )
+void SheetDataBuffer::setValueCell( const CellModel& rModel, double fValue )
 {
-    Reference< XText > xText( getCell( rCellAddr ), UNO_QUERY );
-    OSL_ENSURE( xText.is(), "SheetDataBuffer::setStringCell - missing text interface" );
-    rString.convert( xText, nXfId );
-    (void)rString;
-    (void)nXfId;
+    if( CellBlock* pCellBlock = maCellBlocks.getCellBlock( rModel.maCellAddr ) )
+        pCellBlock->getCellAny( rModel.maCellAddr.Column ) <<= fValue;
+    else
+        putValue( rModel.maCellAddr, fValue );
+    setCellFormat( rModel );
 }
 
-void SheetDataBuffer::setStringCell( const CellAddress& rCellAddr, sal_Int32 nStringId, sal_Int32 nXfId )
+void SheetDataBuffer::setStringCell( const CellModel& rModel, const OUString& rText )
 {
-    Reference< XText > xText( getCell( rCellAddr ), UNO_QUERY );
-    OSL_ENSURE( xText.is(), "SheetDataBuffer::setStringCell - missing text interface" );
-    getSharedStrings().convertString( xText, nStringId, nXfId );
-    (void)nStringId;
-    (void)nXfId;
+    if( CellBlock* pCellBlock = maCellBlocks.getCellBlock( rModel.maCellAddr ) )
+        pCellBlock->getCellAny( rModel.maCellAddr.Column ) <<= rText;
+    else
+        putString( rModel.maCellAddr, rText );
+    setCellFormat( rModel );
 }
 
-void SheetDataBuffer::setDateTimeCell( const CellAddress& rCellAddr, const DateTime& rDateTime )
+void SheetDataBuffer::setStringCell( const CellModel& rModel, const RichStringRef& rxString )
+{
+    OSL_ENSURE( rxString.get(), "SheetDataBuffer::setStringCell - missing rich string object" );
+    const Font* pFirstPortionFont = getStyles().getFontFromCellXf( rModel.mnXfId ).get();
+    OUString aText;
+    if( rxString->extractPlainString( aText, pFirstPortionFont ) )
+    {
+        setStringCell( rModel, aText );
+    }
+    else
+    {
+        if( CellBlock* pCellBlock = maCellBlocks.getCellBlock( rModel.maCellAddr ) )
+            pCellBlock->insertRichString( rModel.maCellAddr, rxString, pFirstPortionFont );
+        else
+            putRichString( rModel.maCellAddr, *rxString, pFirstPortionFont );
+        setCellFormat( rModel );
+    }
+}
+
+void SheetDataBuffer::setStringCell( const CellModel& rModel, sal_Int32 nStringId )
+{
+    RichStringRef xString = getSharedStrings().getString( nStringId );
+    if( xString.get() )
+        setStringCell( rModel, xString );
+    else
+        setBlankCell( rModel );
+}
+
+void SheetDataBuffer::setDateTimeCell( const CellModel& rModel, const DateTime& rDateTime )
 {
     // write serial date/time value into the cell
     double fSerial = getUnitConverter().calcSerialFromDateTime( rDateTime );
-    setValueCell( rCellAddr, fSerial );
+    setValueCell( rModel, fSerial );
     // set appropriate number format
     using namespace ::com::sun::star::util::NumberFormat;
     sal_Int16 nStdFmt = (fSerial < 1.0) ? TIME : (((rDateTime.Hours > 0) || (rDateTime.Minutes > 0) || (rDateTime.Seconds > 0)) ? DATETIME : DATE);
-    setStandardNumFmt( rCellAddr, nStdFmt );
+    setStandardNumFmt( rModel.maCellAddr, nStdFmt );
 }
 
-void SheetDataBuffer::setBooleanCell( const CellAddress& rCellAddr, bool bValue )
+void SheetDataBuffer::setBooleanCell( const CellModel& rModel, bool bValue )
 {
-    setFormulaCell( rCellAddr, getFormulaParser().convertBoolToFormula( bValue ) );
+    setCellFormula( rModel.maCellAddr, getFormulaParser().convertBoolToFormula( bValue ) );
+    // #108770# set 'Standard' number format for all Boolean cells
+    setCellFormat( rModel, 0 );
 }
 
-void SheetDataBuffer::setErrorCell( const CellAddress& rCellAddr, const OUString& rErrorCode )
+void SheetDataBuffer::setErrorCell( const CellModel& rModel, const OUString& rErrorCode )
 {
-    setErrorCell( rCellAddr, getUnitConverter().calcBiffErrorCode( rErrorCode ) );
+    setErrorCell( rModel, getUnitConverter().calcBiffErrorCode( rErrorCode ) );
 }
 
-void SheetDataBuffer::setErrorCell( const CellAddress& rCellAddr, sal_uInt8 nErrorCode )
+void SheetDataBuffer::setErrorCell( const CellModel& rModel, sal_uInt8 nErrorCode )
 {
-    setFormulaCell( rCellAddr, getFormulaParser().convertErrorToFormula( nErrorCode ) );
+    setCellFormula( rModel.maCellAddr, getFormulaParser().convertErrorToFormula( nErrorCode ) );
+    setCellFormat( rModel );
 }
 
-void SheetDataBuffer::setFormulaCell( const CellAddress& rCellAddr, const ApiTokenSequence& rTokens )
+void SheetDataBuffer::setFormulaCell( const CellModel& rModel, const ApiTokenSequence& rTokens )
 {
     mbPendingSharedFmla = false;
     ApiTokenSequence aTokens;
@@ -208,7 +441,7 @@ void SheetDataBuffer::setFormulaCell( const CellAddress& rCellAddr, const ApiTok
             aTokens = resolveSharedFormula( aBaseAddr );
             if( !aTokens.hasElements() )
             {
-                maSharedFmlaAddr = rCellAddr;
+                maSharedFmlaAddr = rModel.maCellAddr;
                 maSharedBaseAddr = aBaseAddr;
                 mbPendingSharedFmla = true;
             }
@@ -220,18 +453,14 @@ void SheetDataBuffer::setFormulaCell( const CellAddress& rCellAddr, const ApiTok
         aTokens = rTokens;
     }
 
-    if( aTokens.hasElements() )
-    {
-        Reference< XFormulaTokens > xTokens( getCell( rCellAddr ), UNO_QUERY );
-        OSL_ENSURE( xTokens.is(), "SheetDataBuffer::setFormulaCell - missing formula interface" );
-        if( xTokens.is() )
-            xTokens->setTokens( aTokens );
-    }
+    setCellFormula( rModel.maCellAddr, aTokens );
+    setCellFormat( rModel );
 }
 
-void SheetDataBuffer::setFormulaCell( const CellAddress& rCellAddr, sal_Int32 nSharedId )
+void SheetDataBuffer::setFormulaCell( const CellModel& rModel, sal_Int32 nSharedId )
 {
-    setFormulaCell( rCellAddr, resolveSharedFormula( BinAddress( nSharedId, 0 ) ) );
+    setCellFormula( rModel.maCellAddr, resolveSharedFormula( BinAddress( nSharedId, 0 ) ) );
+    setCellFormat( rModel );
 }
 
 void SheetDataBuffer::createArrayFormula( const CellRangeAddress& rRange, const ApiTokenSequence& rTokens )
@@ -260,73 +489,23 @@ void SheetDataBuffer::createSharedFormula( const CellAddress& rCellAddr, const A
     createSharedFormula( BinAddress( rCellAddr ), rTokens );
 }
 
-void SheetDataBuffer::setRowFormat( sal_Int32 nFirstRow, sal_Int32 nLastRow, sal_Int32 nXfId, bool bCustomFormat )
+void SheetDataBuffer::setRowFormat( sal_Int32 nRow, sal_Int32 nXfId, bool bCustomFormat )
 {
     // set row formatting
     if( bCustomFormat )
     {
         // try to expand cached row range, if formatting is equal
-        if( (maXfIdRowRange.mnLastRow < 0) || !maXfIdRowRange.tryExpand( nFirstRow, nLastRow, nXfId ) )
+        if( (maXfIdRowRange.maRowRange.mnLast < 0) || !maXfIdRowRange.tryExpand( nRow, nXfId ) )
         {
             writeXfIdRowRangeProperties( maXfIdRowRange );
-            maXfIdRowRange.set( nFirstRow, nLastRow, nXfId );
+            maXfIdRowRange.set( nRow, nXfId );
         }
     }
-    else if( maXfIdRowRange.mnLastRow >= 0 )
+    else if( maXfIdRowRange.maRowRange.mnLast >= 0 )
     {
         // finish last cached row range
         writeXfIdRowRangeProperties( maXfIdRowRange );
-        maXfIdRowRange.set( -1, -1, -1 );
-    }
-}
-
-void SheetDataBuffer::setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtId )
-{
-    if( (rModel.mnXfId >= 0) || (nNumFmtId >= 0) )
-    {
-        // try to merge existing ranges and to write some formatting properties
-        if( !maXfIdRanges.empty() )
-        {
-            // get row index of last inserted cell
-            sal_Int32 nLastRow = maXfIdRanges.rbegin()->second.maRange.StartRow;
-            // row changed - try to merge ranges of last row with existing ranges
-            if( rModel.maCellAddr.Row != nLastRow )
-            {
-                mergeXfIdRanges();
-                // write format properties of all ranges above last row and remove them
-                XfIdRangeMap::iterator aIt = maXfIdRanges.begin(), aEnd = maXfIdRanges.end();
-                while( aIt != aEnd )
-                {
-                    // check that range cannot be merged with current row, and that range is not in cached row range
-                    if( (aIt->second.maRange.EndRow < nLastRow) && !maXfIdRowRange.intersects( aIt->second.maRange ) )
-                    {
-                        writeXfIdRangeProperties( aIt->second );
-                        maXfIdRanges.erase( aIt++ );
-                    }
-                    else
-                        ++aIt;
-                }
-            }
-        }
-
-        // try to expand last existing range, or create new range entry
-        if( maXfIdRanges.empty() || !maXfIdRanges.rbegin()->second.tryExpand( rModel, nNumFmtId ) )
-            maXfIdRanges[ BinAddress( rModel.maCellAddr ) ].set( rModel, nNumFmtId );
-
-        // update merged ranges for 'center across selection' and 'fill'
-        if( const Xf* pXf = getStyles().getCellXf( rModel.mnXfId ).get() )
-        {
-            sal_Int32 nHorAlign = pXf->getAlignment().getModel().mnHorAlign;
-            if( (nHorAlign == XML_centerContinuous) || (nHorAlign == XML_fill) )
-            {
-                /*  start new merged range, if cell is not empty (#108781#),
-                    or try to expand last range with empty cell */
-                if( rModel.mnCellType != XML_TOKEN_INVALID )
-                    maCenterFillRanges.push_back( MergedRange( rModel.maCellAddr, nHorAlign ) );
-                else if( !maCenterFillRanges.empty() )
-                    maCenterFillRanges.rbegin()->tryExpand( rModel.maCellAddr, nHorAlign );
-            }
-        }
+        maXfIdRowRange.set( -1, -1 );
     }
 }
 
@@ -352,6 +531,9 @@ void SheetDataBuffer::setStandardNumFmt( const CellAddress& rCellAddr, sal_Int16
 
 void SheetDataBuffer::finalizeImport()
 {
+    // insert all cells of all open cell blocks
+    maCellBlocks.finalizeImport();
+
     // create all array formulas
     for( ArrayFormulaList::iterator aIt = maArrayFormulas.begin(), aEnd = maArrayFormulas.end(); aIt != aEnd; ++aIt )
         finalizeArrayFormula( aIt->first, aIt->second );
@@ -379,57 +561,55 @@ void SheetDataBuffer::finalizeImport()
 // private --------------------------------------------------------------------
 
 SheetDataBuffer::XfIdRowRange::XfIdRowRange() :
-    mnFirstRow( -1 ),
-    mnLastRow( -1 ),
+    maRowRange( -1 ),
     mnXfId( -1 )
 {
 }
 
 bool SheetDataBuffer::XfIdRowRange::intersects( const CellRangeAddress& rRange ) const
 {
-    return (rRange.StartRow <= mnLastRow) && (mnFirstRow <= rRange.EndRow);
+    return (rRange.StartRow <= maRowRange.mnLast) && (maRowRange.mnFirst <= rRange.EndRow);
 }
 
-void SheetDataBuffer::XfIdRowRange::set( sal_Int32 nFirstRow, sal_Int32 nLastRow, sal_Int32 nXfId )
+void SheetDataBuffer::XfIdRowRange::set( sal_Int32 nRow, sal_Int32 nXfId )
 {
-    mnFirstRow = nFirstRow;
-    mnLastRow = nLastRow;
+    maRowRange = ValueRange( nRow );
     mnXfId = nXfId;
 }
 
-bool SheetDataBuffer::XfIdRowRange::tryExpand( sal_Int32 nFirstRow, sal_Int32 nLastRow, sal_Int32 nXfId )
+bool SheetDataBuffer::XfIdRowRange::tryExpand( sal_Int32 nRow, sal_Int32 nXfId )
 {
     if( mnXfId == nXfId )
     {
-        if( mnLastRow + 1 == nFirstRow )
+        if( maRowRange.mnLast + 1 == nRow )
         {
-            mnLastRow = nLastRow;
+            ++maRowRange.mnLast;
             return true;
         }
-        if( mnFirstRow == nLastRow + 1 )
+        if( maRowRange.mnFirst == nRow + 1 )
         {
-            mnFirstRow = nFirstRow;
+            --maRowRange.mnFirst;
             return true;
         }
     }
     return false;
 }
 
-void SheetDataBuffer::XfIdRange::set( const CellModel& rModel, sal_Int32 nNumFmtId )
+void SheetDataBuffer::XfIdRange::set( const CellAddress& rCellAddr, sal_Int32 nXfId, sal_Int32 nNumFmtId )
 {
-    maRange.Sheet = rModel.maCellAddr.Sheet;
-    maRange.StartColumn = maRange.EndColumn = rModel.maCellAddr.Column;
-    maRange.StartRow = maRange.EndRow = rModel.maCellAddr.Row;
-    mnXfId = rModel.mnXfId;
+    maRange.Sheet = rCellAddr.Sheet;
+    maRange.StartColumn = maRange.EndColumn = rCellAddr.Column;
+    maRange.StartRow = maRange.EndRow = rCellAddr.Row;
+    mnXfId = nXfId;
     mnNumFmtId = nNumFmtId;
 }
 
-bool SheetDataBuffer::XfIdRange::tryExpand( const CellModel& rModel, sal_Int32 nNumFmtId )
+bool SheetDataBuffer::XfIdRange::tryExpand( const CellAddress& rCellAddr, sal_Int32 nXfId, sal_Int32 nNumFmtId )
 {
-    if( (mnXfId == rModel.mnXfId) && (mnNumFmtId == nNumFmtId) &&
-        (maRange.StartRow == rModel.maCellAddr.Row) &&
-        (maRange.EndRow == rModel.maCellAddr.Row) &&
-        (maRange.EndColumn + 1 == rModel.maCellAddr.Column) )
+    if( (mnXfId == nXfId) && (mnNumFmtId == nNumFmtId) &&
+        (maRange.StartRow == rCellAddr.Row) &&
+        (maRange.EndRow == rCellAddr.Row) &&
+        (maRange.EndColumn + 1 == rCellAddr.Column) )
     {
         ++maRange.EndColumn;
         return true;
@@ -475,7 +655,58 @@ bool SheetDataBuffer::MergedRange::tryExpand( const CellAddress& rAddress, sal_I
     return false;
 }
 
-void SheetDataBuffer::finalizeArrayFormula( const CellRangeAddress& rRange, const ApiTokenSequence& rTokens )
+// ----------------------------------------------------------------------------
+
+void SheetDataBuffer::setCellFormula( const CellAddress& rCellAddr, const ApiTokenSequence& rTokens )
+{
+    if( rTokens.hasElements() )
+    {
+        if( CellBlock* pCellBlock = maCellBlocks.getCellBlock( rCellAddr ) )
+            pCellBlock->getCellAny( rCellAddr.Column ) <<= rTokens;
+        else
+            putFormulaTokens( rCellAddr, rTokens );
+    }
+}
+
+void SheetDataBuffer::createSharedFormula( const BinAddress& rMapKey, const ApiTokenSequence& rTokens )
+{
+    // create the defined name that will represent the shared formula
+    OUString aName = OUStringBuffer().appendAscii( RTL_CONSTASCII_STRINGPARAM( "__shared_" ) ).
+        append( static_cast< sal_Int32 >( getSheetIndex() + 1 ) ).
+        append( sal_Unicode( '_' ) ).append( rMapKey.mnRow ).
+        append( sal_Unicode( '_' ) ).append( rMapKey.mnCol ).makeStringAndClear();
+    Reference< XNamedRange > xNamedRange = createNamedRangeObject( aName );
+    OSL_ENSURE( xNamedRange.is(), "SheetDataBuffer::createSharedFormula - cannot create shared formula" );
+    PropertySet aNameProps( xNamedRange );
+    aNameProps.setProperty( PROP_IsSharedFormula, true );
+
+    // get and store the token index of the defined name
+    OSL_ENSURE( maSharedFormulas.count( rMapKey ) == 0, "SheetDataBuffer::createSharedFormula - shared formula exists already" );
+    sal_Int32 nTokenIndex = 0;
+    if( aNameProps.getProperty( nTokenIndex, PROP_TokenIndex ) && (nTokenIndex >= 0) ) try
+    {
+        // store the token index in the map
+        maSharedFormulas[ rMapKey ] = nTokenIndex;
+        // set the formula definition
+        Reference< XFormulaTokens > xTokens( xNamedRange, UNO_QUERY_THROW );
+        xTokens->setTokens( rTokens );
+        // retry to insert a pending shared formula cell
+        if( mbPendingSharedFmla )
+            setCellFormula( maSharedFmlaAddr, resolveSharedFormula( maSharedBaseAddr ) );
+    }
+    catch( Exception& )
+    {
+    }
+    mbPendingSharedFmla = false;
+}
+
+ApiTokenSequence SheetDataBuffer::resolveSharedFormula( const BinAddress& rMapKey ) const
+{
+    sal_Int32 nTokenIndex = ContainerHelper::getMapElement( maSharedFormulas, rMapKey, -1 );
+    return (nTokenIndex >= 0) ? getFormulaParser().convertNameToFormula( nTokenIndex ) : ApiTokenSequence();
+}
+
+void SheetDataBuffer::finalizeArrayFormula( const CellRangeAddress& rRange, const ApiTokenSequence& rTokens ) const
 {
     Reference< XArrayFormulaTokens > xTokens( getCellRange( rRange ), UNO_QUERY );
     OSL_ENSURE( xTokens.is(), "SheetDataBuffer::finalizeArrayFormula - missing formula token interface" );
@@ -483,7 +714,7 @@ void SheetDataBuffer::finalizeArrayFormula( const CellRangeAddress& rRange, cons
         xTokens->setArrayTokens( rTokens );
 }
 
-void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, const DataTableModel& rModel )
+void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, const DataTableModel& rModel ) const
 {
     sal_Int16 nSheet = getSheetIndex();
     bool bOk = false;
@@ -551,53 +782,62 @@ void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, co
     }
 }
 
-void SheetDataBuffer::createSharedFormula( const BinAddress& rMapKey, const ApiTokenSequence& rTokens )
+void SheetDataBuffer::setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtId )
 {
-    // create the defined name that will represent the shared formula
-    OUString aName = OUStringBuffer().appendAscii( RTL_CONSTASCII_STRINGPARAM( "__shared_" ) ).
-        append( static_cast< sal_Int32 >( getSheetIndex() + 1 ) ).
-        append( sal_Unicode( '_' ) ).append( rMapKey.mnRow ).
-        append( sal_Unicode( '_' ) ).append( rMapKey.mnCol ).makeStringAndClear();
-    Reference< XNamedRange > xNamedRange = createNamedRangeObject( aName );
-    OSL_ENSURE( xNamedRange.is(), "SheetDataBuffer::createSharedFormula - cannot create shared formula" );
-    PropertySet aNameProps( xNamedRange );
-    aNameProps.setProperty( PROP_IsSharedFormula, true );
-
-    // get and store the token index of the defined name
-    OSL_ENSURE( maSharedFormulas.count( rMapKey ) == 0, "SheetDataBuffer::createSharedFormula - shared formula exists already" );
-    sal_Int32 nTokenIndex = 0;
-    if( aNameProps.getProperty( nTokenIndex, PROP_TokenIndex ) && (nTokenIndex >= 0) ) try
+    if( (rModel.mnXfId >= 0) || (nNumFmtId >= 0) )
     {
-        // store the token index in the map
-        maSharedFormulas[ rMapKey ] = nTokenIndex;
-        // set the formula definition
-        Reference< XFormulaTokens > xTokens( xNamedRange, UNO_QUERY_THROW );
-        xTokens->setTokens( rTokens );
-        // retry to insert a pending shared formula cell
-        if( mbPendingSharedFmla )
+        // try to merge existing ranges and to write some formatting properties
+        if( !maXfIdRanges.empty() )
         {
-            ApiTokenSequence aTokens = resolveSharedFormula( maSharedBaseAddr );
-            setFormulaCell( maSharedFmlaAddr, aTokens );
+            // get row index of last inserted cell
+            sal_Int32 nLastRow = maXfIdRanges.rbegin()->second.maRange.StartRow;
+            // row changed - try to merge ranges of last row with existing ranges
+            if( rModel.maCellAddr.Row != nLastRow )
+            {
+                mergeXfIdRanges();
+                // write format properties of all ranges above last row and remove them
+                XfIdRangeMap::iterator aIt = maXfIdRanges.begin(), aEnd = maXfIdRanges.end();
+                while( aIt != aEnd )
+                {
+                    // check that range cannot be merged with current row, and that range is not in cached row range
+                    if( (aIt->second.maRange.EndRow < nLastRow) && !maXfIdRowRange.intersects( aIt->second.maRange ) )
+                    {
+                        writeXfIdRangeProperties( aIt->second );
+                        maXfIdRanges.erase( aIt++ );
+                    }
+                    else
+                        ++aIt;
+                }
+            }
+        }
+
+        // try to expand last existing range, or create new range entry
+        if( maXfIdRanges.empty() || !maXfIdRanges.rbegin()->second.tryExpand( rModel.maCellAddr, rModel.mnXfId, nNumFmtId ) )
+            maXfIdRanges[ BinAddress( rModel.maCellAddr ) ].set( rModel.maCellAddr, rModel.mnXfId, nNumFmtId );
+
+        // update merged ranges for 'center across selection' and 'fill'
+        if( const Xf* pXf = getStyles().getCellXf( rModel.mnXfId ).get() )
+        {
+            sal_Int32 nHorAlign = pXf->getAlignment().getModel().mnHorAlign;
+            if( (nHorAlign == XML_centerContinuous) || (nHorAlign == XML_fill) )
+            {
+                /*  start new merged range, if cell is not empty (#108781#),
+                    or try to expand last range with empty cell */
+                if( rModel.mnCellType != XML_TOKEN_INVALID )
+                    maCenterFillRanges.push_back( MergedRange( rModel.maCellAddr, nHorAlign ) );
+                else if( !maCenterFillRanges.empty() )
+                    maCenterFillRanges.rbegin()->tryExpand( rModel.maCellAddr, nHorAlign );
+            }
         }
     }
-    catch( Exception& )
-    {
-    }
-    mbPendingSharedFmla = false;
-}
-
-ApiTokenSequence SheetDataBuffer::resolveSharedFormula( const BinAddress& rMapKey ) const
-{
-    sal_Int32 nTokenIndex = ContainerHelper::getMapElement( maSharedFormulas, rMapKey, -1 );
-    return (nTokenIndex >= 0) ? getFormulaParser().convertNameToFormula( nTokenIndex ) : ApiTokenSequence();
 }
 
 void SheetDataBuffer::writeXfIdRowRangeProperties( const XfIdRowRange& rXfIdRowRange ) const
 {
-    if( (rXfIdRowRange.mnLastRow >= 0) && (rXfIdRowRange.mnXfId >= 0) )
+    if( (rXfIdRowRange.maRowRange.mnLast >= 0) && (rXfIdRowRange.mnXfId >= 0) )
     {
         AddressConverter& rAddrConv = getAddressConverter();
-        CellRangeAddress aRange( getSheetIndex(), 0, rXfIdRowRange.mnFirstRow, rAddrConv.getMaxApiAddress().Column, rXfIdRowRange.mnLastRow );
+        CellRangeAddress aRange( getSheetIndex(), 0, rXfIdRowRange.maRowRange.mnFirst, rAddrConv.getMaxApiAddress().Column, rXfIdRowRange.maRowRange.mnLast );
         if( rAddrConv.validateCellRange( aRange, true, false ) )
         {
             PropertySet aPropSet( getCellRange( aRange ) );

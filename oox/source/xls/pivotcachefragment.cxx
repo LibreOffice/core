@@ -223,8 +223,8 @@ PivotCacheRecordsFragment::PivotCacheRecordsFragment( const WorksheetHelper& rHe
         const OUString& rFragmentPath, const PivotCache& rPivotCache ) :
     WorksheetFragmentBase( rHelper, rFragmentPath ),
     mrPivotCache( rPivotCache ),
-    mnCol( 0 ),
-    mnRow( 0 ),
+    mnColIdx( 0 ),
+    mnRowIdx( 0 ),
     mbInRecord( false )
 {
     // prepare sheet: insert column header names into top row
@@ -257,8 +257,8 @@ ContextHandlerRef PivotCacheRecordsFragment::onCreateContext( sal_Int32 nElement
                 case XLS_TOKEN( x ):    aItem.readIndex( rAttribs );                        break;
                 default:    OSL_ENSURE( false, "PivotCacheRecordsFragment::onCreateContext - unexpected element" );
             }
-            mrPivotCache.writeSourceDataCell( *this, mnCol, mnRow, aItem );
-            ++mnCol;
+            mrPivotCache.writeSourceDataCell( *this, mnColIdx, mnRowIdx, aItem );
+            ++mnColIdx;
         }
         break;
     }
@@ -299,15 +299,15 @@ const RecordInfo* PivotCacheRecordsFragment::getRecordInfos() const
 
 void PivotCacheRecordsFragment::startCacheRecord()
 {
-    mnCol = 0;
-    ++mnRow;
+    mnColIdx = 0;
+    ++mnRowIdx;
     mbInRecord = true;
 }
 
 void PivotCacheRecordsFragment::importPCRecord( SequenceInputStream& rStrm )
 {
     startCacheRecord();
-    mrPivotCache.importPCRecord( rStrm, *this, mnRow );
+    mrPivotCache.importPCRecord( rStrm, *this, mnRowIdx );
     mbInRecord = false;
 }
 
@@ -327,8 +327,8 @@ void PivotCacheRecordsFragment::importPCRecordItem( sal_Int32 nRecId, SequenceIn
             case BIFF12_ID_PCITEM_INDEX:    aItem.readIndex( rStrm );   break;
             default:    OSL_ENSURE( false, "PivotCacheRecordsFragment::importPCRecordItem - unexpected record" );
         }
-        mrPivotCache.writeSourceDataCell( *this, mnCol, mnRow, aItem );
-        ++mnCol;
+        mrPivotCache.writeSourceDataCell( *this, mnColIdx, mnRowIdx, aItem );
+        ++mnColIdx;
     }
 }
 
@@ -398,7 +398,7 @@ BiffPivotCacheRecordsContext::BiffPivotCacheRecordsContext( const WorksheetHelpe
     BiffWorksheetContextBase( rHelper ),
     mrPivotCache( rPivotCache ),
     mnColIdx( 0 ),
-    mnRow( 0 ),
+    mnRowIdx( 0 ),
     mbHasShared( false ),
     mbInRow( false )
 {
@@ -427,7 +427,7 @@ void BiffPivotCacheRecordsContext::importRecord( BiffInputStream& rStrm )
         OSL_ENSURE( mbHasShared, "BiffPivotCacheRecordsContext::importRecord - unexpected PCITEM_INDEXLIST record" );
         // PCITEM_INDEXLIST record always in front of a new data row
         startNextRow();
-        mrPivotCache.importPCItemIndexList( rStrm, *this, mnRow );
+        mrPivotCache.importPCItemIndexList( rStrm, *this, mnRowIdx );
         mbInRow = !maUnsharedCols.empty();  // mbInRow remains true, if unshared items are expected
         return;
     }
@@ -458,14 +458,14 @@ void BiffPivotCacheRecordsContext::importRecord( BiffInputStream& rStrm )
     // write the item data to the sheet cell
     OSL_ENSURE( mnColIdx < maUnsharedCols.size(), "BiffPivotCacheRecordsContext::importRecord - invalid column index" );
     if( mnColIdx < maUnsharedCols.size() )
-        mrPivotCache.writeSourceDataCell( *this, maUnsharedCols[ mnColIdx ], mnRow, aItem );
+        mrPivotCache.writeSourceDataCell( *this, maUnsharedCols[ mnColIdx ], mnRowIdx, aItem );
     ++mnColIdx;
 }
 
 void BiffPivotCacheRecordsContext::startNextRow()
 {
     mnColIdx = 0;
-    ++mnRow;
+    ++mnRowIdx;
     mbInRow = true;
 }
 
