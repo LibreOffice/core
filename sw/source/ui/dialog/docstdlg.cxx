@@ -102,7 +102,7 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet) :
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   ItemSet fuellen bei Aenderung
+    Description:    fill ItemSet when changed
  --------------------------------------------------------------------*/
 
 
@@ -115,7 +115,7 @@ void  SwDocStatPage::Reset(const SfxItemSet &/*rSet*/)
 {
 }
 /*------------------------------------------------------------------------
- Beschreibung:  Aktualisieren / Setzen der Daten
+ Description:   update / set data
 ------------------------------------------------------------------------*/
 
 
@@ -131,7 +131,7 @@ void SwDocStatPage::SetData(const SwDocStat &rStat)
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Aktualisieren der Statistik
+ Description:   update statistics
 ------------------------------------------------------------------------*/
 
 
@@ -156,7 +156,7 @@ void SwDocStatPage::Update()
 }
 
 /*-----------------19.06.97 16.37-------------------
-    Zeilennummer aktualisieren
+    upate line number
 --------------------------------------------------*/
 IMPL_LINK( SwDocStatPage, UpdateHdl, PushButton*, EMPTYARG)
 {

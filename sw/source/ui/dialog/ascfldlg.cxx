@@ -266,7 +266,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
         SetSizePixel( aSize );
     }
 
-    // initialisiere Zeichensatz
+    // initialise character set
     aCharSetLB.FillFromTextEncodingTable( pStream != NULL );
     aCharSetLB.SelectTextEncoding( aOpt.GetCharSet()  );
 

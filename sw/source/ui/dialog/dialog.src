@@ -28,7 +28,7 @@
 
 CheckBox CB_USE_PASSWD
 {
-    /* ### ACHTUNG: Neuer Text in Resource? ~Paßwort : ~Pa˜wort */
+    /* ### ATTENTION: New text in resource? ~password : ~password */
     Text [ en-US ] = "~Password" ;
 };
 CheckBox CB_READ_ONLY
@@ -37,7 +37,7 @@ CheckBox CB_READ_ONLY
 };
 String STR_LINKEDIT_TEXT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Verknüpfungen bearbeiten : Verkn³pfungen bearbeiten */
+    /* ### ATTENTION: New text in resource? edit links : edit links */
     Text [ en-US ] = "Edit links" ;
 };
 String STR_PATH_NOT_FOUND

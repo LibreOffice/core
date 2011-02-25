@@ -70,15 +70,15 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
 
     switch( eType )
     {
-    case MACASSGN_TEXTBAUST:            // Textbausteine
+    case MACASSGN_TEXTBAUST:            // text building blocks
         aItem.AddEvent( String( SW_RES(STR_EVENT_START_INS_GLOSSARY) ), String(),
                             SW_EVENT_START_INS_GLOSSARY );
         aItem.AddEvent( String( SW_RES(STR_EVENT_END_INS_GLOSSARY) ), String(),
                             SW_EVENT_END_INS_GLOSSARY);
-        // damit der neue Handler aktiv wird!
+        // in order for the new handler to become active!
         break;
     case MACASSGN_ALLFRM:
-    case MACASSGN_GRAPHIC:          // Grafiken
+    case MACASSGN_GRAPHIC:          // graphics
         {
             aItem.AddEvent( String( SW_RES(STR_EVENT_IMAGE_ERROR) ), String(),
                                 SVX_EVENT_IMAGE_ERROR);
@@ -87,8 +87,8 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
             aItem.AddEvent( String( SW_RES(STR_EVENT_IMAGE_LOAD) ), String(),
                                 SVX_EVENT_IMAGE_LOAD);
         }
-        // kein break;
-    case MACASSGN_FRMURL:           // Frm - URL-Attribute
+        // no break;
+    case MACASSGN_FRMURL:           // Frm - URL-Attributes
         {
             if( !bHtmlMode &&
                 (MACASSGN_FRMURL == eType || MACASSGN_ALLFRM == eType))
@@ -103,15 +103,15 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
                                 SW_EVENT_FRM_MOVE );
             }
         }
-        // kein break;
+        // no break;
     case MACASSGN_OLE:              // OLE
         {
             if( !bHtmlMode )
                 aItem.AddEvent( String( SW_RES(STR_EVENT_OBJECT_SELECT) ), String(),
                                 SW_EVENT_OBJECT_SELECT );
         }
-        // kein break;
-    case MACASSGN_INETFMT:          // INetFmt-Attribute
+        // no break;
+    case MACASSGN_INETFMT:          // INetFmt-Attributes
         {
             aItem.AddEvent( String( SW_RES(STR_EVENT_MOUSEOVER_OBJECT) ), String(),
                                 SFX_EVENT_MOUSEOVER_OBJECT );

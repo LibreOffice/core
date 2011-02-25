@@ -53,7 +53,7 @@
 #include <view.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
-#include <swundo.hxx>                   // fuer Undo-Ids
+#include <swundo.hxx>                   // for Undo-Ids
 #include <column.hxx>
 #include <fmtfsize.hxx>
 #include <swunodef.hxx>
@@ -91,7 +91,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         long nWidth = aRect.Width();
         aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
 
-        // Hoehe=Breite fuer konsistentere Vorschau (analog zu Bereich bearbeiten)
+        // height=width for more consistent preview (edit analog to region)
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialogdiet fail!");
@@ -202,7 +202,7 @@ IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData*, pSect )
         pThis->CalcBoundRect(aRect, FLY_AS_CHAR);
         long nWidth = aRect.Width();
         aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
-        // Hoehe=Breite fuer konsistentere Vorschau (analog zu Bereich bearbeiten)
+        // height=width for more consistent preview (edit analog to region)
         aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         OSL_ENSURE(pFact, "Dialogdiet fail!");

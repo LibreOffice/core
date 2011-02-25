@@ -34,9 +34,7 @@ ModalDialog DLG_INSERT_ABSTRACT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 239 , 68 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? AutoAbstract erzeugen : AutoAbstrakt erzeugen */
-    /* ### ACHTUNG: Neuer Text in Resource? AutoAbstract erzeugen : AutoAbstrakt erzeugen */
-    /* ### ACHTUNG: Neuer Text in Resource? AutoAbstract erzeugen : AutoAbstrakt erzeugen */
+    /* ### ATTENTION: New text in resource? create AutoAbstract : create AutoAbstract */
     Moveable = TRUE ;
     FixedLine FL_1
     {
@@ -70,7 +68,7 @@ ModalDialog DLG_INSERT_ABSTRACT
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Absätze je Kapitel : Absõtze je Kapitel */
+        /* ### ATTENTION: New text in resource? paragraphs per chapter : paragraphs per chapter */
         Text [ en-US ] = "Subpoints per level" ;
     };
     NumericField NF_PARA
@@ -92,7 +90,7 @@ ModalDialog DLG_INSERT_ABSTRACT
     {
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 165 , 16 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Im Abstrakt erscheint die ausgewählte Anzahl von Absätzen aus den einbezogenen Kapitelebenen. : Im Abstrakt erscheint die ausgewõhlte Anzahl von Absõtzen aus den einbezogenen Kapitelebenen. */
+        /* ### ATTENTION: New text in resource? The selected number of paragraphs from the included outline levels appears in the abstract. : The selected number of paragraphs from the included outline levels appears in the abstract. */
         WordBreak = TRUE ;
         Text [ en-US ] = "The abstract contains the selected number of paragraphs from the included outline levels." ;
     };
