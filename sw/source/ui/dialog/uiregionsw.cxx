@@ -376,7 +376,7 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aConditionFT        ( this, SW_RES( FT_CONDITION ) ),
     aConditionED        ( this, SW_RES( ED_CONDITION ) ),
 
-    // #114856# edit in readonly sections
+    // edit in readonly sections
     aPropertiesFL       ( this, SW_RES( FL_PROPERTIES ) ),
     aEditInReadonlyCB   ( this, SW_RES( CB_EDIT_IN_READONLY ) ),
 
