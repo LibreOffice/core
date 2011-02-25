@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,36 +25,11 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+$(eval $(call gb_Module_Module,cppcanvas))
 
-PRJNAME=cppcanvas
-TARGET=canvaswrapper
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_Module_add_targets,cppcanvas,\
+	Library_cppcanvas \
+	Package_inc \
+))
 
-
-# --- Settings -----------------------------------------------------------
-
-.INCLUDE :	settings.mk
-
-# --- Common ----------------------------------------------------------
-
-.IF "$(verbose)"!="" || "$(VERBOSE)"!=""
-CDEFS+= -DVERBOSE
-.ENDIF
-
-SLOFILES =	$(SLO)$/implbitmap.obj 			\
-            $(SLO)$/implcanvas.obj 			\
-            $(SLO)$/implcolor.obj 			\
-            $(SLO)$/implfont.obj 			\
-            $(SLO)$/vclfactory.obj 			\
-            $(SLO)$/basegfxfactory.obj 		\
-            $(SLO)$/impltext.obj			\
-            $(SLO)$/implpolypolygon.obj 	\
-            $(SLO)$/implbitmapcanvas.obj 	\
-            $(SLO)$/implspritecanvas.obj 	\
-            $(SLO)$/implsprite.obj 			\
-            $(SLO)$/implcustomsprite.obj 
-
-# ==========================================================================
-
-.INCLUDE :	target.mk
+# vim: set noet sw=4 ts=4:

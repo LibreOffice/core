@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -25,34 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=..
+TARGET=prj
 
-PRJNAME=cppcanvas
-TARGET=metafilerenderer
-ENABLE_EXCEPTIONS=TRUE
+.INCLUDE : settings.mk
 
-
-# --- Settings -----------------------------------------------------------
-
-.INCLUDE :	settings.mk
-
-# --- Common ----------------------------------------------------------
-
-.IF "$(verbose)"!="" || "$(VERBOSE)"!=""
-CDEFS+= -DVERBOSE
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
 .ENDIF
 
-SLOFILES =	$(SLO)$/cachedprimitivebase.obj \
-            $(SLO)$/bitmapaction.obj \
-            $(SLO)$/implrenderer.obj \
-            $(SLO)$/lineaction.obj \
-            $(SLO)$/pointaction.obj \
-            $(SLO)$/polypolyaction.obj \
-            $(SLO)$/rendergraphicaction.obj \
-            $(SLO)$/textaction.obj \
-            $(SLO)$/transparencygroupaction.obj \
-            $(SLO)$/mtftools.obj
-
-# ==========================================================================
-
-.INCLUDE :	target.mk
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog
