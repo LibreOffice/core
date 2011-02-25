@@ -30,9 +30,6 @@
 
 #include "rcid.hrc"
 
-// Default Bitmap fuer ToolBox
-#define BMP_FEHLT                       (RC_APP_BEGIN + 1)
-
 // Document-Icon
 #define RC_DOC_ICON                     (RC_APP_BEGIN + 2)
 

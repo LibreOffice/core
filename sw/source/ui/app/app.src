@@ -169,9 +169,6 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
 
 
 
-// Default Bitmap for Toolbox
-BITMAP BMP_FEHLT { FILE = "x.bmp" ; };
-
 // Bitmap for the NumberingTemplates in the Organizer
 Bitmap BMP_STYLES_FAMILY_NUM { File = "styfamnu.bmp" ; };
 
