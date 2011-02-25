@@ -48,7 +48,6 @@
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/util/URL.hpp"
 #include <preextstl.h>
-#include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
@@ -57,7 +56,6 @@
 #include <postextstl.h>
 #include "osl/conditn.hxx"
 #include "osl/diagnose.h"
-#include "rtl/strbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "test/gettestargument.hxx"
@@ -132,46 +130,23 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(runSmoketestDoc);
+    CPPUNIT_TEST(test);
     CPPUNIT_TEST_SUITE_END();
 
-    void runSmoketestDoc();
-
-    ::rtl::OString getFailMessage( sal_Char const * i_context, css::uno::Any const & i_exception );
+    void test();
 
     test::OfficeConnection connection_;
 };
 
-::rtl::OString Test::getFailMessage( sal_Char const * i_context, css::uno::Any const & i_exception )
-{
-    ::rtl::OStringBuffer failMessage;
-    failMessage.append( i_context );
-    failMessage.append( ": caught a " );
-    failMessage.append( ::rtl::OUStringToOString( i_exception.getValueTypeName(), RTL_TEXTENCODING_ASCII_US ) );
-    return failMessage.makeStringAndClear();
-}
-
 void Test::setUp() {
-    try {
-        connection_.setUp();
-    }
-    catch( css::uno::Exception const & ) {
-        CPPUNIT_FAIL( getFailMessage( "setting up the connection failed", ::cppu::getCaughtException() ).getStr() );
-    }
+    connection_.setUp();
 }
 
 void Test::tearDown() {
-    try {
-        connection_.tearDown();
-    }
-    catch( css::uno::Exception const & ) {
-        CPPUNIT_FAIL( getFailMessage( "tearing down the connection failed", ::cppu::getCaughtException() ).getStr() );
-    }
+    connection_.tearDown();
 }
 
-void Test::runSmoketestDoc() {
-    try
-    {
+void Test::test() {
     rtl::OUString doc;
     CPPUNIT_ASSERT(
         test::getTestArgument(
@@ -220,10 +195,6 @@ void Test::runSmoketestDoc() {
     result.condition.wait();
     CPPUNIT_ASSERT(result.success);
     CPPUNIT_ASSERT_EQUAL(rtl::OUString(), result.result);
-    }
-    catch( css::uno::Exception const & ) {
-        CPPUNIT_FAIL( getFailMessage( "executing the smoketest macro", ::cppu::getCaughtException() ).getStr() );
-    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

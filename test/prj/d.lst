@@ -1,9 +1,12 @@
 mkdir: %_DEST%\inc%_EXT%\test
 mkdir: %_DEST%\inc%_EXT%\test\detail
 ..\%__SRC%\bin\test.dll %_DEST%\bin%_EXT%\test.dll
+..\%__SRC%\bin\unoexceptionprotector.dll %_DEST%\bin%_EXT%\unoexceptionprotector.dll
 ..\%__SRC%\lib\itest.lib %_DEST%\lib%_EXT%\itest.lib
 ..\%__SRC%\lib\libtest.dylib %_DEST%\lib%_EXT%\libtest.dylib
 ..\%__SRC%\lib\libtest.so %_DEST%\lib%_EXT%\libtest.so
+..\%__SRC%\lib\unoexceptionprotector.dylib %_DEST%\lib%_EXT%\unoexceptionprotector.dylib
+..\%__SRC%\lib\unoexceptionprotector.so %_DEST%\lib%_EXT%\unoexceptionprotector.so
 ..\inc\test\detail\testdllapi.hxx %_DEST%\inc%_EXT%\test\detail\testdllapi.hxx
 ..\inc\test\gettestargument.hxx %_DEST%\inc%_EXT%\test\gettestargument.hxx
 ..\inc\test\officeconnection.hxx %_DEST%\inc%_EXT%\test\officeconnection.hxx
