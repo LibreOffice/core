@@ -43,6 +43,7 @@
 #include <boost/utility.hpp>
 #include <boost/bind.hpp>
 
+#include <canvas/canvastoolsdllapi.h>
 
 /* Definition of SpriteRedrawManager class */
 
@@ -66,7 +67,7 @@ namespace canvas
         there) will reside in a common sprite area and handled
         together in the forEachSpriteArea functor call.
      */
-    class SpriteRedrawManager : private ::boost::noncopyable
+    class CANVASTOOLS_DLLPUBLIC SpriteRedrawManager : private ::boost::noncopyable
     {
     public:
         /** Data container for the connected components list

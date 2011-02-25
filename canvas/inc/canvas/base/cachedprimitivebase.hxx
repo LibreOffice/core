@@ -36,6 +36,7 @@
 #include <cppuhelper/compbase2.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
+#include <canvas/canvastoolsdllapi.h>
 
 /* Definition of CachedPrimitiveBase class */
 
@@ -47,7 +48,7 @@ namespace canvas
     /** Base class, providing common functionality for implementers of
         the XCachedPrimitive interface.
      */
-    class CachedPrimitiveBase : public CachedPrimitiveBase_Base,
+    class CANVASTOOLS_DLLPUBLIC CachedPrimitiveBase : public CachedPrimitiveBase_Base,
                                 public ::comphelper::OBaseMutex
     {
     public:

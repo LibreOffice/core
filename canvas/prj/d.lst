@@ -25,6 +25,7 @@ mkdir: %_DEST%\inc%_EXT%\canvas\rendering
 
 mkdir: %_DEST%\inc%_EXT%\canvas
 ..\inc\canvas\*.hxx %_DEST%\inc%_EXT%\canvas\*.hxx
+..\inc\canvas\*.h %_DEST%\inc%_EXT%\canvas\*.h
 ..\%__SRC%\misc\canvasfactory.component %_DEST%\xml%_EXT%\canvasfactory.component
 ..\%__SRC%\misc\directx5canvas.component %_DEST%\xml%_EXT%\directx5canvas.component
 ..\%__SRC%\misc\directx9canvas.component %_DEST%\xml%_EXT%\directx9canvas.component

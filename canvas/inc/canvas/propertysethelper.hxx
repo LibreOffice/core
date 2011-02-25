@@ -36,6 +36,7 @@
 #include <vector>
 #include <memory>
 
+#include <canvas/canvastoolsdllapi.h>
 
 namespace canvas
 {
@@ -54,7 +55,7 @@ namespace canvas
         The core responsibility of this this class is the name/value
         mapping for property sets.
      */
-    class PropertySetHelper
+    class CANVASTOOLS_DLLPUBLIC PropertySetHelper
     {
     public:
         typedef boost::function0< ::com::sun::star::uno::Any >            GetterType;

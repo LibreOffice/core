@@ -38,6 +38,7 @@
 #include <boost/bind.hpp>
 #include <boost/current_function.hpp>
 
+#include <canvas/canvastoolsdllapi.h>
 
 namespace com { namespace sun { namespace star { namespace geometry
 {
@@ -95,7 +96,7 @@ namespace canvas
 
             @throws an lang::IllegalArgumentException, if anything is wrong
          */
-        void verifyInput( const ::com::sun::star::geometry::AffineMatrix2D& rMatrix,
+        CANVASTOOLS_DLLPUBLIC void verifyInput( const ::com::sun::star::geometry::AffineMatrix2D&   rMatrix,
                           const char*                                       pStr,
                           const ::com::sun::star::uno::Reference<
                               ::com::sun::star::uno::XInterface >&          xIf,
@@ -118,7 +119,7 @@ namespace canvas
 
             @throws an lang::IllegalArgumentException, if anything is wrong
          */
-        void verifyInput( const ::com::sun::star::geometry::Matrix2D&   rMatrix,
+        CANVASTOOLS_DLLPUBLIC void verifyInput( const ::com::sun::star::geometry::Matrix2D& rMatrix,
                           const char*                                   pStr,
                           const ::com::sun::star::uno::Reference<
                               ::com::sun::star::uno::XInterface >&      xIf,
@@ -141,7 +142,7 @@ namespace canvas
 
             @throws an lang::IllegalArgumentException, if anything is wrong
          */
-        void verifyInput( const ::com::sun::star::geometry::RealPoint2D&    rPoint,
+        CANVASTOOLS_DLLPUBLIC void verifyInput( const ::com::sun::star::geometry::RealPoint2D&  rPoint,
                           const char*                                       pStr,
                           const ::com::sun::star::uno::Reference<
                               ::com::sun::star::uno::XInterface >&          xIf,
@@ -164,7 +165,7 @@ namespace canvas
 
             @throws an lang::IllegalArgumentException, if anything is wrong
          */
-        void verifyInput( const ::com::sun::star::geometry::RealSize2D& rSize,
+        CANVASTOOLS_DLLPUBLIC void verifyInput( const ::com::sun::star::geometry::RealSize2D&   rSize,
                           const char*                                   pStr,
                           const ::com::sun::star::uno::Reference<
                               ::com::sun::star::uno::XInterface >&      xIf,
@@ -187,7 +188,7 @@ namespace canvas
 
             @throws an lang::IllegalArgumentException, if anything is wrong
          */
-        void verifyInput( const ::com::sun::star::geometry::RealBezierSegment2D&    rSegment,
+        CANVASTOOLS_DLLPUBLIC void verifyInput( const ::com::sun::star::geometry::RealBezierSegment2D&  rSegment,
                           const char*                                               pStr,
                           const ::com::sun::star::uno::Reference<
                               ::com::sun::star::uno::XInterface >&                  xIf,
@@ -210,7 +211,7 @@ namespace canvas
 
             @throws an lang::IllegalArgumentException, if anything is wrong
          */
-        void verifyInput( const ::com::sun::star::geometry::RealPoint2D&    rPoint,
+        CANVASTOOLS_DLLPUBLIC void verifyInput( const ::com::sun::star::geometry::RealPoint2D&  rPoint,
                           const char*                                       pStr,
                           const ::com::sun::star::uno::Reference<
                               ::com::sun::star::uno::XInterface >&          xIf,
@@ -233,7 +234,7 @@ namespace canvas
 
             @throws an lang::IllegalArgumentException, if anything is wrong
          */
-        void verifyInput( const ::com::sun::star::geometry::RealRectangle2D&    rRect,
+        CANVASTOOLS_DLLPUBLIC void verifyInput( const ::com::sun::star::geometry::RealRectangle2D&  rRect,
                           const char*                                           pStr,
                           const ::com::sun::star::uno::Reference<
                               ::com::sun::star::uno::XInterface >&              xIf,
@@ -255,7 +256,7 @@ namespace canvas
 
             @throws an lang::IllegalArgumentException, if anything is wrong
          */
-        void verifyInput( const ::com::sun::star::rendering::ViewState& viewState,
+        CANVASTOOLS_DLLPUBLIC void verifyInput( const ::com::sun::star::rendering::ViewState&   viewState,
                           const char*                                   pStr,
                           const ::com::sun::star::uno::Reference<
                                    ::com::sun::star::uno::XInterface >& xIf,
@@ -281,7 +282,7 @@ namespace canvas
 
             @throws an lang::IllegalArgumentException, if anything is wrong
          */
-        void verifyInput( const ::com::sun::star::rendering::RenderState&   renderState,
+        CANVASTOOLS_DLLPUBLIC void verifyInput( const ::com::sun::star::rendering::RenderState& renderState,
                           const char*                                       pStr,
                           const ::com::sun::star::uno::Reference<
                                    ::com::sun::star::uno::XInterface >&     xIf,
@@ -304,7 +305,7 @@ namespace canvas
 
             @throws an lang::IllegalArgumentException, if anything is wrong
          */
-        void verifyInput( const ::com::sun::star::rendering::StrokeAttributes&  strokeAttributes,
+        CANVASTOOLS_DLLPUBLIC void verifyInput( const ::com::sun::star::rendering::StrokeAttributes&    strokeAttributes,
                           const char*                                           pStr,
                           const ::com::sun::star::uno::Reference<
                                    ::com::sun::star::uno::XInterface >&         xIf,
@@ -326,7 +327,7 @@ namespace canvas
 
             @throws an lang::IllegalArgumentException, if anything is wrong
          */
-        void verifyInput( const ::com::sun::star::rendering::Texture&   texture,
+        CANVASTOOLS_DLLPUBLIC void verifyInput( const ::com::sun::star::rendering::Texture&     texture,
                           const char*                                   pStr,
                           const ::com::sun::star::uno::Reference<
                                    ::com::sun::star::uno::XInterface >& xIf,
@@ -348,7 +349,7 @@ namespace canvas
 
             @throws an lang::IllegalArgumentException, if anything is wrong
          */
-        void verifyInput( const ::com::sun::star::rendering::IntegerBitmapLayout&   bitmapLayout,
+        CANVASTOOLS_DLLPUBLIC void verifyInput( const ::com::sun::star::rendering::IntegerBitmapLayout&     bitmapLayout,
                           const char*                                               pStr,
                           const ::com::sun::star::uno::Reference<
                                    ::com::sun::star::uno::XInterface >&             xIf,
@@ -370,7 +371,7 @@ namespace canvas
 
             @throws an lang::IllegalArgumentException, if anything is wrong
          */
-        void verifyInput( const ::com::sun::star::rendering::FloatingPointBitmapLayout& bitmapLayout,
+        CANVASTOOLS_DLLPUBLIC void verifyInput( const ::com::sun::star::rendering::FloatingPointBitmapLayout& bitmapLayout,
                           const char*                                                   pStr,
                           const ::com::sun::star::uno::Reference<
                                    ::com::sun::star::uno::XInterface >&                 xIf,
@@ -392,7 +393,7 @@ namespace canvas
 
             @throws an lang::IllegalArgumentException, if anything is wrong
          */
-        void verifyInput( const ::com::sun::star::rendering::FontInfo&  fontInfo,
+        CANVASTOOLS_DLLPUBLIC void verifyInput( const ::com::sun::star::rendering::FontInfo&    fontInfo,
                           const char*                                   pStr,
                           const ::com::sun::star::uno::Reference<
                                    ::com::sun::star::uno::XInterface >& xIf,
@@ -414,7 +415,7 @@ namespace canvas
 
             @throws an lang::IllegalArgumentException, if anything is wrong
          */
-        void verifyInput( const ::com::sun::star::rendering::FontRequest&   fontRequest,
+        CANVASTOOLS_DLLPUBLIC void verifyInput( const ::com::sun::star::rendering::FontRequest& fontRequest,
                           const char*                                       pStr,
                           const ::com::sun::star::uno::Reference<
                                    ::com::sun::star::uno::XInterface >&     xIf,
@@ -677,7 +678,7 @@ namespace canvas
             @param size
             Given rectangle must be within ((0,0), (size.Width, size.Height))
          */
-        void verifyIndexRange( const ::com::sun::star::geometry::IntegerRectangle2D& rect,
+        CANVASTOOLS_DLLPUBLIC void verifyIndexRange( const ::com::sun::star::geometry::IntegerRectangle2D& rect,
                                const ::com::sun::star::geometry::IntegerSize2D&      size );
 
         /** Range checker, which throws ::com::sun::star::lang::IndexOutOfBounds exception, when
@@ -689,7 +690,7 @@ namespace canvas
             @param size
             Given position must be within ((0,0), (size.Width, size.Height))
          */
-        void verifyIndexRange( const ::com::sun::star::geometry::IntegerPoint2D& pos,
+        CANVASTOOLS_DLLPUBLIC void verifyIndexRange( const ::com::sun::star::geometry::IntegerPoint2D& pos,
                                const ::com::sun::star::geometry::IntegerSize2D&  size );
 
         /** Range checker, which throws ::com::sun::star::lang::IndexOutOfBounds exception, when
@@ -698,7 +699,7 @@ namespace canvas
             @param size
             Size to verify
          */
-        void verifyBitmapSize( const ::com::sun::star::geometry::IntegerSize2D& size,
+        CANVASTOOLS_DLLPUBLIC void verifyBitmapSize( const ::com::sun::star::geometry::IntegerSize2D& size,
                                const char*                                      pStr,
                                const ::com::sun::star::uno::Reference<
                                        ::com::sun::star::uno::XInterface >&     xIf );
@@ -709,7 +710,7 @@ namespace canvas
             @param size
             Size to verify
          */
-        void verifySpriteSize( const ::com::sun::star::geometry::RealSize2D& size,
+        CANVASTOOLS_DLLPUBLIC void verifySpriteSize( const ::com::sun::star::geometry::RealSize2D& size,
                                const char*                                   pStr,
                                const ::com::sun::star::uno::Reference<
                                        ::com::sun::star::uno::XInterface >&  xIf );

@@ -35,7 +35,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <canvas/base/spritesurface.hxx>
-
+#include <canvas/canvastoolsdllapi.h>
 
 namespace canvas
 {
@@ -44,7 +44,7 @@ namespace canvas
     /** Base class for an XSprite helper implementation - to be used
         in concert with CanvasCustomSpriteBase
      */
-    class CanvasCustomSpriteHelper
+    class CANVASTOOLS_DLLPUBLIC CanvasCustomSpriteHelper
     {
     public:
         CanvasCustomSpriteHelper();

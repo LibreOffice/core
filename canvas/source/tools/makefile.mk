@@ -30,6 +30,7 @@ PRJ=..$/..
 PRJNAME=canvas
 TARGET=canvastools
 ENABLE_EXCEPTIONS=TRUE
+LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------------
 
@@ -44,10 +45,23 @@ CDEFS+= -DVERBOSE
 CDEFS+= -DPROFILER
 .ENDIF
 
+CDEFS+= -DCANVASTOOLS_DLLIMPLEMENTATION
+
 #CFLAGS +:= /Ox /Ot					# THIS IS IMPORTANT
 
 
 .IF "$(L10N_framework)"==""
+
+SHL1TARGET= 	$(TARGET)$(DLLPOSTFIX)
+SHL1IMPLIB= 	i$(TARGET)
+SHL1STDLIBS=	$(SALLIB) $(CPPULIB) $(BASEGFXLIB) $(CPPUHELPERLIB) $(COMPHELPERLIB) $(VCLLIB) $(TKLIB) $(TOOLSLIB)
+.IF "$(GUI)" == "WNT"
+SHL1STDLIBS += $(WINMMLIB) $(KERNEL32LIB)
+.ENDIF
+SHL1USE_EXPORTS=name
+SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+DEF1NAME	=$(SHL1TARGET)
+
 SLOFILES =	\
     $(SLO)$/cachedprimitivebase.obj \
     $(SLO)$/canvascustomspritehelper.obj \
@@ -64,10 +78,6 @@ SLOFILES =	\
     $(SLO)$/page.obj \
     $(SLO)$/verifyinput.obj
 
-SHL1TARGET= 	$(TARGET)$(DLLPOSTFIX)
-SHL1IMPLIB= 	i$(TARGET)
-SHL1STDLIBS=	$(SALLIB) $(CPPULIB) $(BASEGFXLIB) $(CPPUHELPERLIB) $(COMPHELPERLIB) $(VCLLIB) $(TKLIB) $(TOOLSLIB)
-
 .IF "$(ENABLE_AGG)"=="YES"
     SLOFILES += $(SLO)$/bitmap.obj \
                 $(SLO)$/image.obj
@@ -78,24 +88,11 @@ SHL1STDLIBS=	$(SALLIB) $(CPPULIB) $(BASEGFXLIB) $(CPPUHELPERLIB) $(COMPHELPERLIB
     SHL1STDLIBS += $(AGGLIB)
 .ENDIF
 
-SHL1LIBS=		$(SLB)$/$(TARGET).lib
+SHL1OBJS=	$(SLOFILES)
 
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-DEF1NAME	=$(SHL1TARGET)
-DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt \
-        $(LIB1TARGET)
-
-DEF1DES		=Canvastools
-DEFLIB1NAME	=$(TARGET)
-
-.IF "$(GUI)" == "WNT"
-SHL1STDLIBS += $(WINMMLIB) $(KERNEL32LIB)
-.ENDIF
 .ENDIF
 
 # ==========================================================================
 
 .INCLUDE :	target.mk
 
-$(MISC)$/$(SHL1TARGET).flt : makefile.mk $(TARGET).flt
-    @$(TYPE) $(TARGET).flt > $@

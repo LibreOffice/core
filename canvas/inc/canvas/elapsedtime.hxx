@@ -31,6 +31,7 @@
 #include <sal/types.h>
 
 #include "boost/shared_ptr.hpp"
+#include <canvas/canvastoolsdllapi.h>
 
 namespace canvas
 {
@@ -42,7 +43,7 @@ namespace canvas
             -management functions. In its simplest use-case, it
             measures the time from its creation.
          */
-        class ElapsedTime
+        class CANVASTOOLS_DLLPUBLIC ElapsedTime
         {
         public:
             /** Create a new ElapsedTime object
