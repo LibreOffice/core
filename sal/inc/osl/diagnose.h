@@ -91,6 +91,7 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 #define OSL_TRACE           _OSL_TRACE
 #define OSL_ASSERT(c)       _OSL_ENSURE(c, OSL_THIS_FILE, __LINE__, 0)
 #define OSL_ENSURE(c, m)   _OSL_ENSURE(c, OSL_THIS_FILE, __LINE__, m)
+#define OSL_FAIL(m)        _OSL_ENSURE(0, OSL_THIS_FILE, __LINE__, m)
 
 #define OSL_VERIFY(c) do { if (!(c)) OSL_ASSERT(0); } while (0)
 #define OSL_PRECOND(c, m)   OSL_ENSURE(c, m)
