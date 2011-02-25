@@ -341,7 +341,6 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     m_image->fill(KApplication::palette().color(QPalette::Window).rgb());
 
-
     QRegion* clipRegion = NULL;
 
     if (type == CTRL_PUSHBUTTON)
@@ -374,17 +373,25 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             draw( QStyle::CE_MenuItem, &option, m_image,
                   vclStateValue2StateFlag(nControlState, value) );
         }
-        else if (part == PART_MENU_ITEM_CHECK_MARK && (nControlState & CTRL_STATE_PRESSED) )
+        else if (part == PART_MENU_ITEM_CHECK_MARK)
         {
-            QStyleOptionButton option;
-            draw( QStyle::PE_IndicatorMenuCheckMark, &option, m_image,
-                  vclStateValue2StateFlag(nControlState, value) );
+            m_image->fill(Qt::transparent);
+            if(nControlState & CTRL_STATE_PRESSED) // at least Oxygen paints always as checked
+            {
+                QStyleOptionButton option;
+                draw( QStyle::PE_IndicatorMenuCheckMark, &option, m_image,
+                      vclStateValue2StateFlag(nControlState, value));
+            }
         }
-        else if (part == PART_MENU_ITEM_RADIO_MARK && (nControlState & CTRL_STATE_PRESSED) )
+        else if (part == PART_MENU_ITEM_RADIO_MARK)
         {
+            m_image->fill(Qt::transparent);
             QStyleOptionButton option;
+            // we get always passed BUTTONVALUE_DONTKNOW in 'value', and the checked
+            // state is actually CTRL_STATE_PRESSED
+            QStyle::State set = ( nControlState & CTRL_STATE_PRESSED ) ? QStyle::State_On : QStyle::State_Off;
             draw( QStyle::PE_IndicatorRadioButton, &option, m_image,
-                  vclStateValue2StateFlag(nControlState, value) );
+                  vclStateValue2StateFlag(nControlState, value) | set );
         }
         else
         {
