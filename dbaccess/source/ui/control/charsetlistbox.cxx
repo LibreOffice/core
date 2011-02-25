@@ -74,7 +74,7 @@ namespace dbaui
         OCharsetDisplay::const_iterator aFind = m_aCharSets.findIanaName( _rIanaName );
         if (aFind == m_aCharSets.end())
         {
-            OSL_ASSERT( "CharSetListBox::SelectEntryByIanaName: unknown charset falling back to system language!" );
+            OSL_FAIL( "CharSetListBox::SelectEntryByIanaName: unknown charset falling back to system language!" );
             aFind = m_aCharSets.findEncoding( RTL_TEXTENCODING_DONTKNOW );
         }
 
@@ -90,7 +90,7 @@ namespace dbaui
                 // in our settings, there was an encoding selected which is not valid for the current
                 // data source type
                 // This is worth at least an assertion.
-                OSL_ASSERT( "CharSetListBox::SelectEntryByIanaName: invalid character set!" );
+                OSL_FAIL( "CharSetListBox::SelectEntryByIanaName: invalid character set!" );
                 sDisplayName = String();
             }
 

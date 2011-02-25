@@ -275,7 +275,7 @@ void OTableEditorCtrl::InitCellController()
     }
     catch(SQLException&)
     {
-        OSL_ASSERT(!"getMaxColumnNameLength");
+        OSL_FAIL("getMaxColumnNameLength");
     }
 
     pNameCell = new OSQLNameEdit( &GetDataWindow(), sExtraNameChars,WB_LEFT );

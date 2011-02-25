@@ -396,7 +396,7 @@ DBG_NAME(DbaIndexDialog)
         }
         if ((i>0x7FFFFFFF) || (i<0))
         {
-            OSL_ASSERT("DbaIndexDialog::OnNewIndex: no free index name found!");
+            OSL_FAIL("DbaIndexDialog::OnNewIndex: no free index name found!");
             // can't do anything ... of course we try another base, but this could end with the same result ...
             return;
         }

@@ -258,7 +258,7 @@ void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource ) thro
         }
         else
         {
-            OSL_ASSERT("OQuery::propertyChange : my CommandDefinition has more properties than I do !");
+            OSL_FAIL("OQuery::propertyChange : my CommandDefinition has more properties than I do !");
         }
     }
 

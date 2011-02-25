@@ -79,7 +79,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     }
     catch (const InvalidRegistryException& )
     {
-        OSL_ASSERT("sdbt::component_writeInfo: could not create a registry key (InvalidRegistryException) !");
+        OSL_FAIL("sdbt::component_writeInfo: could not create a registry key (InvalidRegistryException) !");
     }
 
     return sal_False;

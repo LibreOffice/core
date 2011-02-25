@@ -216,7 +216,7 @@ sal_Bool SAL_CALL OAuthenticationContinuation::canSetRealm(  ) throw(RuntimeExce
 
 void SAL_CALL OAuthenticationContinuation::setRealm( const ::rtl::OUString& /*Realm*/ ) throw(RuntimeException)
 {
-    OSL_ASSERT("OAuthenticationContinuation::setRealm: not supported!");
+    OSL_FAIL("OAuthenticationContinuation::setRealm: not supported!");
 }
 
 sal_Bool SAL_CALL OAuthenticationContinuation::canSetUserName(  ) throw(RuntimeException)
@@ -260,7 +260,7 @@ sal_Bool SAL_CALL OAuthenticationContinuation::canSetAccount(  ) throw(RuntimeEx
 
 void SAL_CALL OAuthenticationContinuation::setAccount( const ::rtl::OUString& ) throw(RuntimeException)
 {
-    OSL_ASSERT("OAuthenticationContinuation::setAccount: not supported!");
+    OSL_FAIL("OAuthenticationContinuation::setAccount: not supported!");
 }
 
 Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getRememberAccountModes( RememberAuthentication& _reDefault ) throw(RuntimeException)
@@ -698,7 +698,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
         }
         catch( const Exception& )
         {
-            OSL_ASSERT( "ODatabaseSource::buildLowLevelConnection: got a strange exception while analyzing the error!" );
+            OSL_FAIL( "ODatabaseSource::buildLowLevelConnection: got a strange exception while analyzing the error!" );
         }
         if ( !xDriver.is() || !xDriver->acceptsURL( m_pImpl->m_sConnectURL ) )
         {
@@ -859,7 +859,7 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
             }
             break;
             default:
-                OSL_ASSERT( "ODatabaseSource::convertFastPropertyValue: unknown or readonly Property!" );
+                OSL_FAIL( "ODatabaseSource::convertFastPropertyValue: unknown or readonly Property!" );
         }
     }
     return bModified;
@@ -1064,7 +1064,7 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
                 rValue <<= m_pImpl->m_aLayoutInformation;
                 break;
             default:
-                OSL_ASSERT("unknown Property");
+                OSL_FAIL("unknown Property");
         }
     }
 }
@@ -1116,7 +1116,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
 
     if (!_rxHandler.is())
     {
-        OSL_ASSERT("ODatabaseSource::connectWithCompletion: invalid interaction handler!");
+        OSL_FAIL("ODatabaseSource::connectWithCompletion: invalid interaction handler!");
         return getConnection(m_pImpl->m_sUser, m_pImpl->m_aPassword,_bIsolated);
     }
 

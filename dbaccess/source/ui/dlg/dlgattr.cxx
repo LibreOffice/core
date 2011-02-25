@@ -63,7 +63,7 @@ SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs, SvNumb
         SetText(aTitle);
     if( nFlags & TP_ATTR_CHAR )
     {
-        OSL_ASSERT( "found flag TP_ATTR_CHAR" );
+        OSL_FAIL( "found flag TP_ATTR_CHAR" );
     }
     if( nFlags & TP_ATTR_NUMBER )
         AddTabPage( RID_SVXPAGE_NUMBERFORMAT,String(ModuleRes(TP_ATTR_NUMBER)) );

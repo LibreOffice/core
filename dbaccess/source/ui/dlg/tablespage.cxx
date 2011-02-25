@@ -174,7 +174,7 @@ DBG_NAME(OTableSubscriptionPage)
         }
         catch(SQLException&)
         {
-            OSL_ASSERT("OTableSubscriptionPage::implCheckTables : could not retrieve the current connection's meta data!");
+            OSL_FAIL("OTableSubscriptionPage::implCheckTables : could not retrieve the current connection's meta data!");
         }
 
         // uncheck all

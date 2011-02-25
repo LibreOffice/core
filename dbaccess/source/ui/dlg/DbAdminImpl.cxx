@@ -135,7 +135,7 @@ namespace
             ::rtl::OString sMessage("ODbAdminDialog::implTranslateProperty: could not set the property ");
             sMessage += ::rtl::OString(_rName.getStr(), _rName.getLength(), RTL_TEXTENCODING_ASCII_US);
             sMessage += ::rtl::OString("!");
-            OSL_ASSERT(sMessage.getStr());
+            OSL_FAIL(sMessage.getStr());
     #endif
         }
 
@@ -643,7 +643,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
                 ::rtl::OString aMessage("ODbDataSourceAdministrationHelper::translateProperties: could not extract the property ");
                 aMessage += ::rtl::OString(aDirect->second.getStr(), aDirect->second.getLength(), RTL_TEXTENCODING_ASCII_US);
                 aMessage += ::rtl::OString("!");
-                OSL_ASSERT(aMessage.getStr());
+                OSL_FAIL(aMessage.getStr());
 #endif
             }
             // transfer it into an item
@@ -949,7 +949,7 @@ Any ODbDataSourceAdministrationHelper::implTranslateProperty(const SfxPoolItem* 
     }
     else
     {
-        OSL_ASSERT("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported item type!");
+        OSL_FAIL("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported item type!");
         return aValue;
     }
 
@@ -998,7 +998,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 _rSet.Put(SfxStringItem(_nId, sValue.getStr()));
             }
             else {
-                OSL_ASSERT(
+                OSL_FAIL(
                     (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
                     +=  ::rtl::OString( translatePropertyId( _nId ) )
                     +=  ::rtl::OString( " should be no string)!" )
@@ -1028,7 +1028,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 _rSet.Put( aItem );
             }
             else {
-                OSL_ASSERT(
+                OSL_FAIL(
                     (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
                     +=  ::rtl::OString( translatePropertyId( _nId ) )
                     +=  ::rtl::OString( " should be no boolean)!" )
@@ -1045,7 +1045,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 _rSet.Put( SfxInt32Item( _nId, nValue ) );
             }
             else {
-                OSL_ASSERT(
+                OSL_FAIL(
                     (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
                     +=  ::rtl::OString( translatePropertyId( _nId ) )
                     +=  ::rtl::OString( " should be no int)!" )
@@ -1074,11 +1074,11 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                     }
                     break;
                     default:
-                        OSL_ASSERT("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported property value type!");
+                        OSL_FAIL("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported property value type!");
                 }
             }
             else {
-                OSL_ENSURE(false,
+                OSL_FAIL(
                     (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
                     +=  ::rtl::OString( translatePropertyId( _nId ) )
                     +=  ::rtl::OString( " should be no string sequence)!" )
@@ -1092,7 +1092,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             break;
 
         default:
-            OSL_ENSURE(false, "ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported property value type!");
+            OSL_FAIL("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported property value type!");
     }
 }
 

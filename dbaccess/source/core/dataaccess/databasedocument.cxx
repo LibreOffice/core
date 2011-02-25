@@ -1292,18 +1292,18 @@ void SAL_CALL ODatabaseDocument::notifyDocumentEvent( const ::rtl::OUString& _Ev
 
 Sequence< PropertyValue > SAL_CALL ODatabaseDocument::getPrinter(  ) throw (RuntimeException)
 {
-    OSL_ASSERT( "ODatabaseDocument::getPrinter: not supported!" );
+    OSL_FAIL( "ODatabaseDocument::getPrinter: not supported!" );
     return Sequence< PropertyValue >();
 }
 
 void SAL_CALL ODatabaseDocument::setPrinter( const Sequence< PropertyValue >& /*aPrinter*/ ) throw (IllegalArgumentException, RuntimeException)
 {
-    OSL_ASSERT( "ODatabaseDocument::setPrinter: not supported!" );
+    OSL_FAIL( "ODatabaseDocument::setPrinter: not supported!" );
 }
 
 void SAL_CALL ODatabaseDocument::print( const Sequence< PropertyValue >& /*xOptions*/ ) throw (IllegalArgumentException, RuntimeException)
 {
-    OSL_ASSERT( "ODatabaseDocument::print: not supported!" );
+    OSL_FAIL( "ODatabaseDocument::print: not supported!" );
 }
 
 void ODatabaseDocument::impl_reparent_nothrow( const WeakReference< XNameAccess >& _rxContainer )

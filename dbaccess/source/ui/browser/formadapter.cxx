@@ -1079,7 +1079,7 @@ IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, form, SubmitListener, m_aSubm
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL SbaXFormAdapter::getGroupControl() throw( RuntimeException )
 {
-    OSL_ASSERT("SAL_CALL SbaXFormAdapter::getGroupControl : not supported !");
+    OSL_FAIL("SAL_CALL SbaXFormAdapter::getGroupControl : not supported !");
     return sal_False;
 }
 
@@ -1105,7 +1105,7 @@ Sequence< Reference< ::com::sun::star::awt::XControlModel > > SAL_CALL SbaXFormA
 // -------------------------------------------------------------------------
 void SAL_CALL SbaXFormAdapter::setGroup(const Sequence< Reference< ::com::sun::star::awt::XControlModel >  >& /*_rGroup*/, const ::rtl::OUString& /*GroupName*/) throw( RuntimeException )
 {
-    OSL_ASSERT("SAL_CALL SbaXFormAdapter::setGroup : not supported !");
+    OSL_FAIL("SAL_CALL SbaXFormAdapter::setGroup : not supported !");
 }
 
 // -------------------------------------------------------------------------
@@ -1118,13 +1118,13 @@ sal_Int32 SAL_CALL SbaXFormAdapter::getGroupCount() throw( RuntimeException )
 // -------------------------------------------------------------------------
 void SAL_CALL SbaXFormAdapter::getGroup(sal_Int32 /*nGroup*/, Sequence< Reference< ::com::sun::star::awt::XControlModel >  >& /*_rGroup*/, ::rtl::OUString& /*Name*/) throw( RuntimeException )
 {
-    OSL_ASSERT("SAL_CALL SbaXFormAdapter::getGroup : not supported !");
+    OSL_FAIL("SAL_CALL SbaXFormAdapter::getGroup : not supported !");
 }
 
 // -------------------------------------------------------------------------
 void SAL_CALL SbaXFormAdapter::getGroupByName(const ::rtl::OUString& /*Name*/, Sequence< Reference< ::com::sun::star::awt::XControlModel >  >& /*_rGroup*/) throw( RuntimeException )
 {
-    OSL_ASSERT("SAL_CALL SbaXFormAdapter::getGroupByName : not supported !");
+    OSL_FAIL("SAL_CALL SbaXFormAdapter::getGroupByName : not supported !");
 }
 
 // ::com::sun::star::lang::XComponent

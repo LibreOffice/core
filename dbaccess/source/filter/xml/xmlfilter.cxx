@@ -277,7 +277,7 @@ sal_Int32 ReadThroughComponent(
         aError += ',';
         aError += ByteString::CreateFromInt32( r.ColumnNumber );
 
-        OSL_ASSERT( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
         return 1;
     }
 #else

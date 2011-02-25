@@ -95,7 +95,7 @@ DBG_NAME(OParameterDialog)
             m_xFormatter = Reference< XNumberFormatter>(_rxORB->createInstance(
             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
         else {
-            OSL_ASSERT("OParameterDialog::OParameterDialog: need a service factory!");
+            OSL_FAIL("OParameterDialog::OParameterDialog: need a service factory!");
         }
 
         Reference< XNumberFormatsSupplier >  xNumberFormats = ::dbtools::getNumberFormats(m_xConnection, sal_True);

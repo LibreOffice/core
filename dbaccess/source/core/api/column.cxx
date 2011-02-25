@@ -147,7 +147,7 @@ void SAL_CALL OColumn::setName( const ::rtl::OUString& _rName ) throw(::com::sun
 
 void OColumn::fireValueChange(const ::connectivity::ORowSetValue& /*_rOldValue*/)
 {
-    OSL_ASSERT( "OColumn::fireValueChange: not implemented!" );
+    OSL_FAIL( "OColumn::fireValueChange: not implemented!" );
 }
 
 void OColumn::registerProperty( const ::rtl::OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, void* _pPointerToMember, const Type& _rMemberType )

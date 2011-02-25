@@ -307,12 +307,12 @@ void SAL_CALL OContentHelper::removePropertiesChangeListener( const Sequence< ::
 // XPropertyContainer
 void SAL_CALL OContentHelper::addProperty( const ::rtl::OUString& /*Name*/, sal_Int16 /*Attributes*/, const Any& /*DefaultValue*/ ) throw (PropertyExistException, IllegalTypeException, IllegalArgumentException, RuntimeException)
 {
-    OSL_ASSERT( "OContentHelper::addProperty: not implemented!" );
+    OSL_FAIL( "OContentHelper::addProperty: not implemented!" );
 }
 
 void SAL_CALL OContentHelper::removeProperty( const ::rtl::OUString& /*Name*/ ) throw (UnknownPropertyException, NotRemoveableException, RuntimeException)
 {
-    OSL_ASSERT( "OContentHelper::removeProperty: not implemented!" );
+    OSL_FAIL( "OContentHelper::removeProperty: not implemented!" );
 }
 
 // XInitialization

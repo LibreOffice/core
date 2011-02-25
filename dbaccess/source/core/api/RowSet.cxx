@@ -1483,7 +1483,7 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
     }
     catch(Exception&)
     {
-        OSL_ASSERT("ORowSet::executeWithCompletion: caught an unexpected exception type while filling in the parameters!");
+        OSL_FAIL("ORowSet::executeWithCompletion: caught an unexpected exception type while filling in the parameters!");
     }
 
     // we're done with the parameters, now for the real execution

@@ -83,7 +83,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
     }
     catch (InvalidRegistryException& )
     {
-        OSL_ASSERT("DBA::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
+        OSL_FAIL("DBA::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
     }
 
     return sal_False;

@@ -285,7 +285,7 @@ namespace dbaui
                 aValue = PTR_CAST( OptionalBoolItem, pItem )->GetFullValue();
             }
             else
-                OSL_ASSERT( "SpecialSettingsPage::implInitControls: unknown boolean item type!" );
+                OSL_FAIL( "SpecialSettingsPage::implInitControls: unknown boolean item type!" );
 
             if ( !aValue )
             {

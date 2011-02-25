@@ -667,7 +667,7 @@ PopupMenu* DBTreeListBox::CreateContextMenu( void )
                     break;
 
                 default:
-                    OSL_ASSERT( "DBTreeListBox::CreateContextMenu: unexpected return value of the interceptor call!" );
+                    OSL_FAIL( "DBTreeListBox::CreateContextMenu: unexpected return value of the interceptor call!" );
 
                 case ContextMenuInterceptorAction_IGNORED:
                     break;

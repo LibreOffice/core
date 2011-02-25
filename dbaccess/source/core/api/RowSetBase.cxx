@@ -1085,7 +1085,7 @@ sal_Bool SAL_CALL ORowSetBase::previous(  ) throw(SQLException, RuntimeException
         }
         else
         {
-            OSL_ASSERT( "ORowSetBase::previous: inconsistency!" );
+            OSL_FAIL( "ORowSetBase::previous: inconsistency!" );
                 // we should never reach this place, as we should not get into this whole branch if m_bBeforeFirst
                 // was |true| from the beginning
             movementFailed();

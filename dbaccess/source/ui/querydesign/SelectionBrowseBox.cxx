@@ -1448,7 +1448,7 @@ sal_Int8 OSelectionBrowseBox::ExecuteDrop( const BrowserExecuteDropEvent& _rEvt 
     TransferableDataHelper aDropped(_rEvt.maDropEvent.Transferable);
     if (!OJoinExchObj::isFormatAvailable(aDropped.GetDataFlavorExVector()))
     {
-        OSL_ASSERT("OSelectionBrowseBox::ExecuteDrop: this should never have passed AcceptDrop!");
+        OSL_FAIL("OSelectionBrowseBox::ExecuteDrop: this should never have passed AcceptDrop!");
         return DND_ACTION_NONE;
     }
 

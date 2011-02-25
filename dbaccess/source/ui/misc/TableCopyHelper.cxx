@@ -99,7 +99,7 @@ void OTableCopyHelper::insertTable( const ::rtl::OUString& i_rSourceDataSource, 
 {
     if ( CommandType::QUERY != i_nCommandType && CommandType::TABLE != i_nCommandType )
     {
-        OSL_ASSERT( "OTableCopyHelper::insertTable: invalid call (no supported format found)!" );
+        OSL_FAIL( "OTableCopyHelper::insertTable: invalid call (no supported format found)!" );
         return;
     }
 

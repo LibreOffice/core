@@ -586,7 +586,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                     bValidDescriptor = (0 != sCommand.getLength());
                 if (!bValidDescriptor)
                 {
-                    OSL_ASSERT("OApplicationController::paste: invalid descriptor!");
+                    OSL_FAIL("OApplicationController::paste: invalid descriptor!");
                     return sal_False;
                 }
 
@@ -637,7 +637,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
 
                     if (!bSuccess)
                     {
-                        OSL_ASSERT("OApplicationController::paste: could not extract the source query object!");
+                        OSL_FAIL("OApplicationController::paste: could not extract the source query object!");
                         // TODO: maybe this is worth an error message to be displayed to the user ....
                         return sal_False;
                     }
@@ -648,7 +648,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                 Reference< XSingleServiceFactory > xQueryFactory(xDestQueries, UNO_QUERY);
                 if (!xQueryFactory.is())
                 {
-                    OSL_ASSERT("OApplicationController::paste: invalid destination query container!");
+                    OSL_FAIL("OApplicationController::paste: invalid destination query container!");
                     return sal_False;
                 }
 

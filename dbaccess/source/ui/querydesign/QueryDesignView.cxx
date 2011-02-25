@@ -333,7 +333,7 @@ namespace
             }
             catch(SQLException&)
             {
-                OSL_ASSERT(!"Failure while building Join criteria!");
+                OSL_FAIL(!"Failure while building Join criteria!");
             }
         }
 
@@ -703,7 +703,7 @@ namespace
         }
         catch(SQLException&)
         {
-            OSL_ASSERT(!"Failure while building select list!");
+            OSL_FAIL(!"Failure while building select list!");
         }
         return aFieldListStr.makeStringAndClear();
     }
@@ -878,7 +878,7 @@ namespace
         }
         catch(SQLException&)
         {
-            OSL_ASSERT(!"Failure while building where clause!");
+            OSL_FAIL(!"Failure while building where clause!");
         }
         return sal_True;
     }
@@ -979,7 +979,7 @@ namespace
         }
         catch(SQLException&)
         {
-            OSL_ASSERT(!"Failure while building group by!");
+            OSL_FAIL(!"Failure while building group by!");
         }
 
         return eErrorCode;
@@ -1214,7 +1214,7 @@ namespace
         }
         catch(SQLException&)
         {
-            OSL_ASSERT(!"Failure while building group by!");
+            OSL_FAIL(!"Failure while building group by!");
         }
         return aGroupByStr;
     }
@@ -1985,7 +1985,7 @@ namespace
             Reference< XConnection> xConnection = rController.getConnection();
             if ( !xConnection.is() )
             {
-                OSL_ASSERT( "InitFromParseNodeImpl: no connection? no connection!" );
+                OSL_FAIL( "InitFromParseNodeImpl: no connection? no connection!" );
                 break;
             }
 
@@ -2092,7 +2092,7 @@ namespace
             }
             catch(SQLException&)
             {
-                OSL_ASSERT(!"getMaxTablesInSelect!");
+                OSL_FAIL("getMaxTablesInSelect!");
             }
         }
         while ( false );
@@ -2297,7 +2297,7 @@ namespace
                     break;
                 }
 
-                OSL_ASSERT( "InstallFields: don't know how to interpret this parse node!" );
+                OSL_FAIL( "InstallFields: don't know how to interpret this parse node!" );
 
                 } while ( false );
             }

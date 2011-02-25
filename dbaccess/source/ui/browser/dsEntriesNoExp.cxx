@@ -125,7 +125,7 @@ void SbaTableQueryBrowser::select(SvLBoxEntry* _pEntry, sal_Bool _bSelect)
         m_pTreeModel->InvalidateEntry(_pEntry);
     }
     else {
-        OSL_ASSERT("SbaTableQueryBrowser::select: invalid entry!");
+        OSL_FAIL("SbaTableQueryBrowser::select: invalid entry!");
     }
 }
 
@@ -145,7 +145,7 @@ sal_Bool SbaTableQueryBrowser::isSelected(SvLBoxEntry* _pEntry) const
     if (pTextItem)
         return static_cast<OBoldListboxString*>(pTextItem)->isEmphasized();
     else {
-        OSL_ASSERT("SbaTableQueryBrowser::isSelected: invalid entry!");
+        OSL_FAIL("SbaTableQueryBrowser::isSelected: invalid entry!");
     }
     return sal_False;
 }

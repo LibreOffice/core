@@ -233,7 +233,7 @@ namespace dbaui
                         break;}
 
                 default:
-                    OSL_ASSERT("OSQLParser::ShowParseTree: unzulaessiger NodeType");
+                    OSL_FAIL("OSQLParser::ShowParseTree: unzulaessiger NodeType");
                     rString += _pNode->getTokenValue();
                 }
                 _pBox->InsertEntry(rString,_pParent);

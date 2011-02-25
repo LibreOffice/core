@@ -134,7 +134,7 @@ using namespace ::svt;
         DBG_UNHANDLED_EXCEPTION();                                          \
     }                                                                       \
 
-#define DO_SAFE( action, message ) try { action; } catch(Exception&) { OSL_ASSERT(message); } ;
+#define DO_SAFE( action, message ) try { action; } catch(Exception&) { OSL_FAIL(message); } ;
 
 //..................................................................
 namespace dbaui
@@ -851,7 +851,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     }
     catch(Exception&)
     {
-        OSL_ASSERT("SbaXDataBrowserController::Construct : the construction of UnoDataBrowserView failed !");
+        OSL_FAIL("SbaXDataBrowserController::Construct : the construction of UnoDataBrowserView failed !");
     }
 
     if (!bSuccess)
@@ -1437,7 +1437,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
     if (aEvent.Source != getRowSet())
     {
         // not my data source -> allow anything
-        OSL_ASSERT("SbaXDataBrowserController::approveParameter : invalid event source !");
+        OSL_FAIL("SbaXDataBrowserController::approveParameter : invalid event source !");
         return sal_True;
     }
 
@@ -1475,7 +1475,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
         Sequence< PropertyValue > aFinalValues = pParamValues->getValues();
         if (aFinalValues.getLength() != aRequest.Parameters->getCount())
         {
-            OSL_ASSERT("SbaXDataBrowserController::approveParameter: the InteractionHandler returned nonsense!");
+            OSL_FAIL("SbaXDataBrowserController::approveParameter: the InteractionHandler returned nonsense!");
             setLoadingCancelled();
             return sal_False;
         }
@@ -1495,7 +1495,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
                 try { xParam->setPropertyValue(PROPERTY_VALUE, pFinalValues->Value); }
                 catch(Exception&)
                 {
-                    OSL_ASSERT("SbaXDataBrowserController::approveParameter: setting one of the properties failed!");
+                    OSL_FAIL("SbaXDataBrowserController::approveParameter: setting one of the properties failed!");
                 }
             }
         }
@@ -2356,7 +2356,7 @@ sal_Bool SbaXDataBrowserController::SaveModified(sal_Bool bAskFor)
     }
     catch(Exception&)
     {
-        OSL_ASSERT("SbaXDataBrowserController::SaveModified : could not save the current record !");
+        OSL_FAIL("SbaXDataBrowserController::SaveModified : could not save the current record !");
         bResult = sal_False;
     }
 
@@ -2886,7 +2886,7 @@ void SAL_CALL LoadFormHelper::loaded(const ::com::sun::star::lang::EventObject& 
 void SAL_CALL LoadFormHelper::unloaded(const ::com::sun::star::lang::EventObject& /*aEvent*/) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aAccessSafety);
-    OSL_ASSERT("LoadFormHelper::unloaded : shouldn't be called !");
+    OSL_FAIL("LoadFormHelper::unloaded : shouldn't be called !");
     implDispose();
 }
 

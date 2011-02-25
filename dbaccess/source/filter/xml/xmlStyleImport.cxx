@@ -120,7 +120,7 @@ void OTableStyleContext::FillPropertySet(
                         pStyle = PTR_CAST(SvXMLNumFormatContext,pMyStyles->
                             FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, sal_True));
                     else {
-                        OSL_ASSERT("not possible to get style");
+                        OSL_FAIL("not possible to get style");
                     }
                 }
                 if ( pStyle )

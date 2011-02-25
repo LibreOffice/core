@@ -318,7 +318,7 @@ void SAL_CALL OQueryContainer::disposing( const ::com::sun::star::lang::EventObj
 {
     if (_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinitions, UNO_QUERY).get())
     {   // our "master container" (with the command definitions) is being disposed
-        OSL_ASSERT("OQueryContainer::disposing : nobody should dispose the CommandDefinition container before disposing my connection !");
+        OSL_FAIL("OQueryContainer::disposing : nobody should dispose the CommandDefinition container before disposing my connection !");
         dispose();
     }
     else

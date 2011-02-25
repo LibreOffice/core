@@ -440,7 +440,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rTableName, const ::rtl:
     }
     catch(SQLException&)
     {
-        OSL_ASSERT(!"qualifiedNameComponents");
+        OSL_FAIL("qualifiedNameComponents");
     }
 }
 // -----------------------------------------------------------------------------
