@@ -57,6 +57,48 @@
 
 #include <cmath>
 
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
+
+namespace {
+
+class StackPrinter
+{
+public:
+    explicit StackPrinter(const char* msg) :
+        msMsg(msg)
+    {
+        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
+        mfStartTime = getTime();
+    }
+
+    ~StackPrinter()
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
+    }
+
+    void printTime(int line) const
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
+    }
+
+private:
+    double getTime() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string msMsg;
+    double mfStartTime;
+};
+
+}
+
 using namespace svt;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -605,6 +647,9 @@ SvNumberformat::SvNumberformat(String& rString,
         nNewStandardDefined(0),
         bStarFlag( FALSE )
 {
+    StackPrinter __stack_printer__("SvNumberformat::SvNumberformat");
+    fprintf(stdout, "SvNumberformat::SvNumberformat:   str = '%s'\n",
+            rtl::OUStringToOString(rString, RTL_TEXTENCODING_UTF8).getStr());
     // If the group (AKA thousand) separator is a Non-Breaking Space (French)
     // replace all occurrences by a simple space.
     // The tokens will be changed to the LocaleData separator again later on.
@@ -4245,6 +4290,8 @@ String SvNumberformat::GetMappedFormatstring(
         const NfKeywordTable& rKeywords, const LocaleDataWrapper& rLocWrp,
         BOOL bDontQuote ) const
 {
+    StackPrinter __stack_printer__("SvNumberformat::GetMappedFormatstring");
+
     String aStr;
     BOOL bDefault[4];
     // 1 subformat matches all if no condition specified,
@@ -4283,6 +4330,7 @@ String SvNumberformat::GetMappedFormatstring(
     int nSub = 0;       // subformats delimited so far
     for ( int n=0; n<4; n++ )
     {
+        fprintf(stdout, "SvNumberformat::GetMappedFormatstring:   n = %d\n", n);
         if ( n > 0 )
             nSem++;
 
@@ -4302,6 +4350,9 @@ String SvNumberformat::GetMappedFormatstring(
                 break;
             }
         }
+
+        fprintf(stdout, "SvNumberformat::GetMappedFormatstring:   str = '%s' (%d)\n",
+                rtl::OUStringToOString(aStr, RTL_TEXTENCODING_UTF8).getStr(), __LINE__);
 
         const String& rColorName = NumFor[n].GetColorName();
         if ( rColorName.Len() )
@@ -4329,6 +4380,9 @@ String SvNumberformat::GetMappedFormatstring(
             aPrefix += 't';     // must be lowercase, otherwise taken as literal
         }
 
+        fprintf(stdout, "SvNumberformat::GetMappedFormatstring:   str = '%s' (%d)\n",
+                rtl::OUStringToOString(aStr, RTL_TEXTENCODING_UTF8).getStr(), __LINE__);
+
         USHORT nAnz = NumFor[n].GetnAnz();
         if ( nSem && (nAnz || aPrefix.Len()) )
         {
@@ -4338,8 +4392,16 @@ String SvNumberformat::GetMappedFormatstring(
                 bDefault[nSub] = FALSE;
         }
 
+        fprintf(stdout, "SvNumberformat::GetMappedFormatstring:   prefix = '%s'\n",
+                rtl::OUStringToOString(aPrefix, RTL_TEXTENCODING_UTF8).getStr());
+
         if ( aPrefix.Len() )
+        {
             aStr += aPrefix;
+        }
+
+        fprintf(stdout, "SvNumberformat::GetMappedFormatstring:   str = '%s' (%d)\n",
+                rtl::OUStringToOString(aStr, RTL_TEXTENCODING_UTF8).getStr(), __LINE__);
 
         if ( nAnz )
         {
@@ -4350,29 +4412,41 @@ String SvNumberformat::GetMappedFormatstring(
                 if ( 0 <= pType[j] && pType[j] < NF_KEYWORD_ENTRIES_COUNT )
                 {
                     aStr += rKeywords[pType[j]];
+                    fprintf(stdout, "SvNumberformat::GetMappedFormatstring:   str = '%s' (%d)\n",
+                            rtl::OUStringToOString(aStr, RTL_TEXTENCODING_UTF8).getStr(), __LINE__);
                     if( NF_KEY_NNNN == pType[j] )
+                    {
                         aStr += rLocWrp.getLongDateDayOfWeekSep();
+                        fprintf(stdout, "SvNumberformat::GetMappedFormatstring:   str = '%s' (%d)\n",
+                                rtl::OUStringToOString(aStr, RTL_TEXTENCODING_UTF8).getStr(), __LINE__);
+                    }
                 }
                 else
                 {
                     switch ( pType[j] )
                     {
                         case NF_SYMBOLTYPE_DECSEP :
+                            fprintf(stdout, "SvNumberformat::GetMappedFormatstring:   decimal sep\n");
                             aStr += rLocWrp.getNumDecimalSep();
                         break;
                         case NF_SYMBOLTYPE_THSEP :
+                            fprintf(stdout, "SvNumberformat::GetMappedFormatstring:   thousand sep\n");
                             aStr += rLocWrp.getNumThousandSep();
                         break;
                         case NF_SYMBOLTYPE_DATESEP :
+                            fprintf(stdout, "SvNumberformat::GetMappedFormatstring:   date sep\n");
                             aStr += rLocWrp.getDateSep();
                         break;
                         case NF_SYMBOLTYPE_TIMESEP :
+                            fprintf(stdout, "SvNumberformat::GetMappedFormatstring:   time sep\n");
                             aStr += rLocWrp.getTimeSep();
                         break;
                         case NF_SYMBOLTYPE_TIME100SECSEP :
+                            fprintf(stdout, "SvNumberformat::GetMappedFormatstring:   time100sec sep\n");
                             aStr += rLocWrp.getTime100SecSep();
                         break;
                         case NF_SYMBOLTYPE_STRING :
+                            fprintf(stdout, "SvNumberformat::GetMappedFormatstring:   string\n");
                             if( bDontQuote )
                                 aStr += pStr[j];
                             else if ( pStr[j].Len() == 1 )
@@ -4388,17 +4462,22 @@ String SvNumberformat::GetMappedFormatstring(
                             }
                             break;
                         default:
+                            fprintf(stdout, "SvNumberformat::GetMappedFormatstring:   default\n");
                             aStr += pStr[j];
                     }
 
                 }
             }
         }
+        fprintf(stdout, "SvNumberformat::GetMappedFormatstring:   str = '%s' (%d)\n",
+                rtl::OUStringToOString(aStr, RTL_TEXTENCODING_UTF8).getStr(), __LINE__);
     }
     for ( ; nSub<4 && bDefault[nSub]; ++nSub )
     {   // append empty subformats
         aStr += ';';
     }
+    fprintf(stdout, "SvNumberformat::GetMappedFormatstring:   str = '%s'\n",
+            rtl::OUStringToOString(aStr, RTL_TEXTENCODING_UTF8).getStr());
     return aStr;
 }
 
