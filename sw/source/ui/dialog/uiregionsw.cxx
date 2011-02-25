@@ -348,7 +348,7 @@ String SectRepr::GetSubRegion() const
 }
 
 /*----------------------------------------------------------------------------
- Descriptino: dialog edit regions
+ Description: dialog edit regions
 ----------------------------------------------------------------------------*/
 SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     : SfxModalDialog( pParent, SW_RES(MD_EDIT_REGION) ),
@@ -406,7 +406,7 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aPasswdCB.SetClickHdl   ( LINK( this, SwEditRegionDlg, ChangePasswdHdl));
     aPasswdPB.SetClickHdl   ( LINK( this, SwEditRegionDlg, ChangePasswdHdl));
     aHideCB.SetClickHdl     ( LINK( this, SwEditRegionDlg, ChangeHideHdl));
-    //  #114856# edit in readonly sections
+    // edit in readonly sections
     aEditInReadonlyCB.SetClickHdl ( LINK( this, SwEditRegionDlg, ChangeEditInReadonlyHdl));
 
     aOptionsPB.Show();
@@ -441,7 +441,7 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     pCurrSect = rSh.GetCurrSection();
     RecurseList( 0, 0 );
     // if the cursor is not in a region
-    //the first one will always be selected
+    // the first one will always be selected
     if( !aTree.FirstSelected() && aTree.First() )
         aTree.Select( aTree.First() );
     aTree.Show();
@@ -494,7 +494,7 @@ BOOL SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
 }
 
 /*---------------------------------------------------------------------
-    Description: rekursively look for child-sections
+    Description: recursively look for child-sections
 ---------------------------------------------------------------------*/
 void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry )
 {
@@ -616,7 +616,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
     bDontCheckPasswd = sal_True;
     SvLBoxEntry* pEntry=pBox->FirstSelected();
     aHideCB     .Enable(TRUE);
-    // #114856# edit in readonly sections
+    // edit in readonly sections
     aEditInReadonlyCB.Enable(TRUE);
 
     aProtectCB  .Enable(TRUE);
@@ -626,7 +626,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
     {
         aHideCB.EnableTriState( TRUE );
         aProtectCB.EnableTriState( TRUE );
-        // #114856# edit in readonly sections
+        // edit in readonly sections
         aEditInReadonlyCB.EnableTriState ( TRUE );
 
         aFileCB.EnableTriState( TRUE );
@@ -634,7 +634,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         bool bHiddenValid       = true;
         bool bProtectValid      = true;
         bool bConditionValid    = true;
-        // #114856# edit in readonly sections
+        // edit in readonly sections
         bool bEditInReadonlyValid = true;
         bool bEditInReadonly    = true;
 
@@ -655,7 +655,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
                 sCondition      = rData.GetCondition();
                 bHidden         = rData.IsHidden();
                 bProtect        = rData.IsProtectFlag();
-                // #114856# edit in readonly sections
+                // edit in readonly sections
                 bEditInReadonly = rData.IsEditInReadonlyFlag();
 
                 bFile           = (rData.GetType() != CONTENT_SECTION);
@@ -668,7 +668,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
                     bConditionValid = FALSE;
                 bHiddenValid      = (bHidden == rData.IsHidden());
                 bProtectValid     = (bProtect == rData.IsProtectFlag());
-                // #114856# edit in readonly sections
+                // edit in readonly sections
                 bEditInReadonlyValid =
                     (bEditInReadonly == rData.IsEditInReadonlyFlag());
 
@@ -684,7 +684,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
                     bHidden ? STATE_CHECK : STATE_NOCHECK);
         aProtectCB.SetState( !bProtectValid ? STATE_DONTKNOW :
                     bProtect ? STATE_CHECK : STATE_NOCHECK);
-        // #114856# edit in readonly sections
+        // edit in readonly sections
         aEditInReadonlyCB.SetState( !bEditInReadonlyValid ? STATE_DONTKNOW :
                     bEditInReadonly ? STATE_CHECK : STATE_NOCHECK);
 
@@ -765,7 +765,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
                 ? STATE_CHECK : STATE_NOCHECK);
         aProtectCB.Enable();
 
-        // #114856# edit in readonly sections
+        // edit in readonly sections
         aEditInReadonlyCB.SetState((rData.IsEditInReadonlyFlag())
                 ? STATE_CHECK : STATE_NOCHECK);
         aEditInReadonlyCB.Enable();
@@ -784,7 +784,7 @@ IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox )
     {
         aHideCB     .Enable(FALSE);
         aProtectCB  .Enable(FALSE);
-        // #114856# edit in readonly sections
+        // edit in readonly sections
         aEditInReadonlyCB.Enable(FALSE);
 
         aPasswdCB   .Enable(FALSE);
@@ -813,13 +813,12 @@ IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox )
 ---------------------------------------------------------------------*/
 IMPL_LINK( SwEditRegionDlg, OkHdl, CheckBox *, EMPTYARG )
 {
-    // JP 13.03.96:
     // temp. Array because during changing of a region the position
     // inside of the "Core-Arrays" can be shifted:
     //  - at linked regions, when they have more SubRegions or get
     //    new ones.
-    // JP 30.05.97: StartUndo must certainly also happen not before
-    //              the formats are copied (ClearRedo!)
+    // StartUndo must certainly also happen not before the formats
+    // are copied (ClearRedo!)
 
     const SwSectionFmts& rDocFmts = rSh.GetDoc()->GetSections();
     SwSectionFmts aOrigArray( 0, 5 );
@@ -880,8 +879,8 @@ IMPL_LINK( SwEditRegionDlg, OkHdl, CheckBox *, EMPTYARG )
 
     aOrigArray.Remove( 0, aOrigArray.Count() );
 
-    //JP 21.05.97: EndDialog must be called ahead of EndAction's end,
-    //              otherwise ScrollError can occur.
+    // EndDialog must be called ahead of EndAction's end,
+    // otherwise ScrollError can occur.
     EndDialog(RET_OK);
 
     rSh.EndUndo();
@@ -1019,7 +1018,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeDismissHdl, CheckBox *, EMPTYARG )
         aProtectCB.     Enable(FALSE);
         aPasswdCB.      Enable(FALSE);
         aHideCB.        Enable(FALSE);
-        // #114856# edit in readonly sections
+        // edit in readonly sections
         aEditInReadonlyCB.Enable(FALSE);
         aEditInReadonlyCB.SetState(STATE_NOCHECK);
         aProtectCB.     SetState(STATE_NOCHECK);
@@ -1592,7 +1591,7 @@ short   SwInsertSectionTabDialog::Ok()
                     m_pSectionData->IsHidden()));
         aRequest.AppendItem(SfxBoolItem( FN_PARAM_REGION_PROTECT,
                     m_pSectionData->IsProtectFlag()));
-        // #114856# edit in readonly sections
+        // edit in readonly sections
         aRequest.AppendItem(SfxBoolItem( FN_PARAM_REGION_EDIT_IN_READONLY,
                     m_pSectionData->IsEditInReadonlyFlag()));
 
@@ -1629,7 +1628,7 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
     aHideCB             ( this, SW_RES( CB_HIDE ) ),
     aConditionFT             ( this, SW_RES( FT_CONDITION ) ),
     aConditionED        ( this, SW_RES( ED_CONDITION ) ),
-    // #114856# edit in readonly sections
+    // edit in readonly sections
     aPropertiesFL       ( this, SW_RES( FL_PROPERTIES ) ),
     aEditInReadonlyCB   ( this, SW_RES( CB_EDIT_IN_READONLY ) ),
 
@@ -1643,7 +1642,7 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
     aPasswdCB.SetClickHdl   ( LINK( this, SwInsertSectionTabPage, ChangePasswdHdl));
     aPasswdPB.SetClickHdl   ( LINK( this, SwInsertSectionTabPage, ChangePasswdHdl));
     aHideCB.SetClickHdl     ( LINK( this, SwInsertSectionTabPage, ChangeHideHdl));
-    // #114856# edit in readonly sections
+    // edit in readonly sections
     aEditInReadonlyCB.SetClickHdl       ( LINK( this, SwInsertSectionTabPage, ChangeEditInReadonlyHdl));
     aFileCB.SetClickHdl     ( LINK( this, SwInsertSectionTabPage, UseFileHdl ));
     aFilePB.SetClickHdl     ( LINK( this, SwInsertSectionTabPage, FileSearchHdl ));
@@ -1701,7 +1700,7 @@ BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
     BOOL bProtected = aProtectCB.IsChecked();
     aSection.SetProtectFlag(bProtected);
     aSection.SetHidden(aHideCB.IsChecked());
-    // #114856# edit in readonly sections
+    // edit in readonly sections
     aSection.SetEditInReadonlyFlag(aEditInReadonlyCB.IsChecked());
 
     if(bProtected)

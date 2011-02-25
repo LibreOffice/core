@@ -304,7 +304,7 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
     rOptions.SetLanguage( USHORT( nLng ) );
     rOptions.SetParaFlags( GetCRLF() );
 
-    // JP: Task #71802# save the user settings
+    // save the user settings
     String sData;
     rOptions.WriteUserData( sData );
     if( sData.Len() )
