@@ -264,14 +264,14 @@ void Test::testNumberFormat()
     xub_StrLen nPos;
     short nType = NUMBERFORMAT_DEFINED;
     sal_uInt32 nKey;
-    String aCode;
-    aCode = String(RTL_CONSTASCII_USTRINGPARAM("[$-1070000]d/mm/yyyy;@")); // Thai date format (implicit locale).
+    OUString aCode;
+    aCode = OUString(RTL_CONSTASCII_USTRINGPARAM("[$-1070000]d/mm/yyyy;@")); // Thai date format (implicit locale).
     if (!aFormatter.PutEntry(aCode, nPos, nType, nKey))
     {
         CPPUNIT_ASSERT_MESSAGE("failed to insert format code '[$-1070000]d/mm/yyyy;@'", false);
     }
 
-    aCode = String(RTL_CONSTASCII_USTRINGPARAM("[$-107041E]d/mm/yyyy;@")); // Thai date format (explicit locale)
+    aCode = OUString(RTL_CONSTASCII_USTRINGPARAM("[$-107041E]d/mm/yyyy;@")); // Thai date format (explicit locale)
     if (!aFormatter.PutEntry(aCode, nPos, nType, nKey))
     {
         CPPUNIT_ASSERT_MESSAGE("failed to insert format code '[$-1070000]d/mm/yyyy;@'", false);

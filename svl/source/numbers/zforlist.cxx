@@ -66,6 +66,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
+using ::rtl::OUString;
+
 
 // Constants for type offsets per Country/Language (CL)
 #define ZF_STANDARD              0
@@ -540,6 +542,17 @@ BOOL SvNumberFormatter::PutEntry(String& rString,
     else
         delete p_Entry;
     return bCheck;
+}
+
+bool SvNumberFormatter::PutEntry(
+    OUString& rString, xub_StrLen& nCheckPos, short& nType, sal_uInt32& nKey,
+    LanguageType eLnge)
+{
+    // Wrapper to allow rtl::OUString to be used.
+    String aStr(rString);
+    bool bRet = PutEntry(aStr, nCheckPos, nType, nKey, eLnge);
+    rString = aStr;
+    return bRet;
 }
 
 BOOL SvNumberFormatter::PutandConvertEntry(String& rString,
