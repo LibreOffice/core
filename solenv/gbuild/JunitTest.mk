@@ -30,6 +30,10 @@
 
 gb_JunitTest_JAVACOMMAND := $(JAVAINTERPRETER) $(JAVAIFLAGS)
 
+# in non-product builds, ensure that tools-based assertions do not pop up as message box, but are routed to the shell
+DBGSV_ERROR_OUT := shell
+export DBGSV_ERROR_OUT
+
 .PHONY : $(call gb_JunitTest_get_clean_target,%)
 $(call gb_JunitTest_get_clean_target,%) : $(call gb_JavaClassSet_get_clean_target,$(call gb_JunitTest_get_classsetname,%))
     $(call gb_Helper_abbreviate_dirs,\
