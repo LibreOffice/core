@@ -89,7 +89,7 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 
 #define OSL_DEBUG_ONLY(s)   _OSL_DEBUG_ONLY(s)
 #define OSL_TRACE           _OSL_TRACE
-#define OSL_ASSERT(c)       _OSL_ASSERT(c, OSL_THIS_FILE, __LINE__)
+#define OSL_ASSERT(c)       _OSL_ENSURE(c, OSL_THIS_FILE, __LINE__, 0)
 #define OSL_ENSURE(c, m)   _OSL_ENSURE(c, OSL_THIS_FILE, __LINE__, m)
 
 #define OSL_VERIFY(c) do { if (!(c)) OSL_ASSERT(0); } while (0)
@@ -106,13 +106,6 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 #if OSL_DEBUG_LEVEL > 0
 
 #define _OSL_DEBUG_ONLY(f)  (f)
-#define _OSL_ASSERT(c, f, l) \
-    do \
-    {  \
-        if (!(c) && _OSL_GLOBAL osl_assertFailedLine(f, l, 0)) \
-            _OSL_GLOBAL osl_breakDebug(); \
-    } while (0)
-
 #define _OSL_ENSURE(c, f, l, m) \
     do \
     {  \
@@ -123,7 +116,6 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 #else
 
 #define _OSL_DEBUG_ONLY(f)          ((void)0)
-#define _OSL_ASSERT(c, f, l)        ((void)0)
 #define _OSL_ENSURE(c, f, l, m)     ((void)0)
 
 #endif /* OSL_DEBUG_LEVEL */
