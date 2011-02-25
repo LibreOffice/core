@@ -23,6 +23,7 @@
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 
+#include "precompiled_test.hxx"
 #include "sal/config.h"
 
 #include <limits>
@@ -52,7 +53,8 @@ std::string convert(rtl::OUString const & s16) {
     rtl::OString s8(rtl::OUStringToOString(s16, osl_getThreadTextEncoding()));
     return std::string(
         s8.getStr(),
-        (s8.getLength() > std::numeric_limits< std::string::size_type >::max()
+        ((static_cast< sal_uInt32 >(s8.getLength())
+          > std::numeric_limits< std::string::size_type >::max())
          ? std::numeric_limits< std::string::size_type >::max()
          : static_cast< std::string::size_type >(s8.getLength())));
 }
@@ -85,6 +87,7 @@ bool Prot::protect(
                     + a.getValueTypeName()),
                 convert(e.Message)));
     }
+    return false;
 }
 
 }
