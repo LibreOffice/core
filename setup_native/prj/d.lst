@@ -59,5 +59,3 @@ mkdir: %_DEST%\bin%_EXT%\osolsmf
 
 ..\%__SRC%\lib\getuid.so %_DEST%\bin%_EXT%\getuid.so
 
-..\inc\setup_native\qswin32.h %_DEST%\inc%_EXT%\setup_native\qswin32.h
-
