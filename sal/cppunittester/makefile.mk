@@ -44,7 +44,7 @@ CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 OBJFILES = $(APP1OBJS)
 
-APP1OBJS = $(OBJ)/cppunittester.obj
+APP1OBJS = $(OBJ)/cast.obj $(OBJ)/cppunittester.obj
 APP1RPATH = NONE
 APP1STDLIBS = $(CPPUNITLIB) $(SALLIB)
 APP1TARGET = cppunittester
