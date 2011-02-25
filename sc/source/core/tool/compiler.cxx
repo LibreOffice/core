@@ -2918,7 +2918,6 @@ bool ScCompiler::IsExternalNamedRange( const String& rSymbol )
      * spec first. Until then don't pretend to support external names that
      * wouldn't survive a save and reload cycle, return false instead. */
 
-#if 1
     if (!pConv)
         return false;
 
@@ -2941,10 +2940,6 @@ bool ScCompiler::IsExternalNamedRange( const String& rSymbol )
     aToken.SetExternalName(nFileId, pRealName ? *pRealName : aName);
     pRawToken = aToken.Clone();
     return true;
-#else
-    (void)rSymbol;
-    return false;
-#endif
 }
 
 BOOL ScCompiler::IsDBRange( const String& rName )

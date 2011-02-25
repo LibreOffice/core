@@ -197,13 +197,12 @@ bool CTB::ImportCustomToolBar( CTBWrapper& rWrapper, CustomToolBarImportHelper& 
 
         helper.getCfgManager()->insertSettings( sToolBarName, xIndexAccess );
         helper.applyIcons();
-#if 1
+
         uno::Reference< ui::XUIConfigurationPersistence > xPersistence( helper.getCfgManager()->getImageManager(), uno::UNO_QUERY_THROW );
         xPersistence->store();
 
         xPersistence.set( helper.getCfgManager(), uno::UNO_QUERY_THROW );
         xPersistence->store();
-#endif
 
         bRes = true;
     }

@@ -338,7 +338,6 @@ void ImportExcel8::ReadBasic( void )
 
             if ( !bAsComment )
             {
-#if 1
                 // see if we have the XCB stream
                 SvStorageStreamRef xXCB = xRootStrg->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "XCB" ) ), STREAM_STD_READ | STREAM_NOCREATE  );
                 if ( xXCB.Is()|| SVSTREAM_OK == xXCB->GetError() )
@@ -352,8 +351,6 @@ void ImportExcel8::ReadBasic( void )
                         wrapper.ImportCustomToolBar( *pShell );
                     }
                 }
-#endif
-
             }
         }
         try

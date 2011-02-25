@@ -1572,8 +1572,6 @@ ScAutoFormatData* ScViewFunc::CreateAutoFormatData()
 
 void ScViewFunc::AutoFormat( USHORT nFormatNo, BOOL bRecord )
 {
-#if 1
-
     ScRange aRange;
     if (GetViewData()->GetSimpleArea(aRange) == SC_MARK_SIMPLE)
     {
@@ -1586,87 +1584,6 @@ void ScViewFunc::AutoFormat( USHORT nFormatNo, BOOL bRecord )
     }
     else
         ErrorMessage(STR_NOMULTISELECT);
-
-#else
-
-    // Not editable only due to a matrix? Attribute is ok anyhow
-    BOOL bOnlyNotBecauseOfMatrix;
-    if ( !SelectionEditable( &bOnlyNotBecauseOfMatrix ) && !bOnlyNotBecauseOfMatrix )
-    {
-        ErrorMessage(STR_PROTECTIONERR);
-        return;
-    }
-
-    SCCOL nStartCol;
-    SCROW nStartRow;
-    SCTAB nStartTab;
-    SCCOL nEndCol;
-    SCROW nEndRow;
-    SCTAB nEndTab;
-
-    if (GetViewData()->GetSimpleArea(nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab) == SC_MARK_SIMPLE)
-    {
-        ScDocShell* pDocSh = GetViewData()->GetDocShell();
-        ScDocument* pDoc = pDocSh->GetDocument();
-        ScMarkData& rMark = GetViewData()->GetMarkData();
-        BOOL bSize = (*ScGlobal::GetAutoFormat())[nFormatNo]->GetIncludeWidthHeight();
-        if (bRecord && !pDoc->IsUndoEnabled())
-            bRecord = FALSE;
-
-        ScDocument* pUndoDoc = NULL;
-        if ( bRecord )
-        {
-            pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pUndoDoc->InitUndo( pDoc, nStartTab, nEndTab, bSize, bSize );
-            pDoc->CopyToDocument( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab,
-                                    IDF_ATTRIB, FALSE, pUndoDoc );
-            if (bSize)
-            {
-                pDoc->CopyToDocument( nStartCol,0,nStartTab, nEndCol,MAXROW,nEndTab,
-                                                            IDF_NONE, FALSE, pUndoDoc );
-                pDoc->CopyToDocument( 0,nStartRow,nStartTab, MAXCOL,nEndRow,nEndTab,
-                                                            IDF_NONE, FALSE, pUndoDoc );
-            }
-            pDoc->BeginDrawUndo();
-        }
-
-        GetFrameWin()->EnterWait();
-        pDoc->AutoFormat( nStartCol, nStartRow, nEndCol, nEndRow, nFormatNo, rMark );
-        GetFrameWin()->LeaveWait();
-
-        if (bSize)
-        {
-            SetMarkedWidthOrHeight( TRUE, SC_SIZE_VISOPT, STD_EXTRA_WIDTH, FALSE, FALSE );
-            SetMarkedWidthOrHeight( FALSE, SC_SIZE_VISOPT, 0, FALSE, FALSE );
-            pDocSh->PostPaint( 0,0,nStartTab, MAXCOL,MAXROW,nStartTab,
-                                    PAINT_GRID | PAINT_LEFT | PAINT_TOP );
-        }
-        else
-        {
-            BOOL bAdj = AdjustBlockHeight( FALSE );
-            if (bAdj)
-                pDocSh->PostPaint( 0,nStartRow,nStartTab, MAXCOL,MAXROW,nStartTab,
-                                    PAINT_GRID | PAINT_LEFT );
-            else
-                pDocSh->PostPaint( nStartCol, nStartRow, nStartTab,
-                                    nEndCol, nEndRow, nEndTab, PAINT_GRID );
-        }
-
-        if ( bRecord )      // Draw-Undo isn't available until now
-        {
-            pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoAutoFormat( pDocSh,
-                        ScRange(nStartCol,nStartRow,nStartTab, nEndCol,nEndRow,nEndTab),
-                        pUndoDoc, rMark, bSize, nFormatNo ) );
-        }
-
-        pDocSh->UpdateOle(GetViewData());
-        pDocSh->SetDocumentModified();
-    }
-    else
-        ErrorMessage(STR_NOMULTISELECT);
-
-#endif
 }
 
 

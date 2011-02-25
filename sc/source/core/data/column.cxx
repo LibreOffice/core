@@ -969,9 +969,6 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         }
     }
 
-    //  mitsortiert werden nur noch relative Referenzen
-//  long dy = (long)nRow2 - (long)nRow1;
-
     /*  Create clone of pCell1 at position of pCell2 (pCell1 exists always, see
         variable swapping above). Do not clone the note, but move pointer of
         old note to new cell. */
