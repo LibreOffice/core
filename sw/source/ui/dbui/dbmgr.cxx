@@ -196,7 +196,7 @@ bool lcl_getCountFromResultSet( sal_Int32& rCount, const uno::Reference<XResultS
     }
     return false;
 }
-// #122799# copy compatibility options
+// copy compatibility options
 void lcl_CopyCompatibilityOptions( SwWrtShell& rSourceShell, SwWrtShell& rTargetShell)
 {
     IDocumentSettingAccess* pIDsa = rSourceShell.getIDocumentSettingAccess();
@@ -361,7 +361,7 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
         *pTemp = *pImpl->pMergeData;
     else
     {
-        //#94779# calls from the calculator may have added a connection with an invalid commandtype
+        // calls from the calculator may have added a connection with an invalid commandtype
         //"real" data base connections added here have to re-use the already available
         //DSData and set the correct CommandType
         SwDBData aTempData(aData);
@@ -932,7 +932,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 nStartingPageNo = pSourceShell->GetVirtPageNum();
                 sStartingPageDesc = sModifiedStartingPageDesc = pSourceShell->GetPageDesc(
                                             pSourceShell->GetCurPageDesc()).GetName();
-                // #122799# copy compatibility options
+                // copy compatibility options
                 lcl_CopyCompatibilityOptions( *pSourceShell, *pTargetShell);
                 // #72821# copy dynamic defaults
                 lcl_CopyDynamicDefaults( *pSourceShell->GetDoc(), *pTargetShell->GetDoc() );
@@ -1433,7 +1433,7 @@ ULONG SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
                         SvNumberFormatter* pNFmtr,
                         long nLanguage )
 {
-    //JP 12.01.99: set the NumberFormat in the doc if applicable
+    // set the NumberFormat in the doc if applicable
     ULONG nRet = 0;
 
     if(!xSource.is())
@@ -1951,7 +1951,7 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
             }
             catch(Exception&)
             {
-                //#98373# DB driver may not be ODBC 3.0 compliant
+                // DB driver may not be ODBC 3.0 compliant
                 pFound->bScrollable = TRUE;
             }
             pFound->xStatement = pFound->xConnection->createStatement();
@@ -2082,7 +2082,7 @@ SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, BOOL bCreate)
             (rData.nCommandType == -1 || rData.nCommandType == pParam->nCommandType ||
             (bCreate && pParam->nCommandType == -1)))
             {
-                //#94779# calls from the calculator may add a connection with an invalid commandtype
+                // calls from the calculator may add a connection with an invalid commandtype
                 //later added "real" data base connections have to re-use the already available
                 //DSData and set the correct CommandType
                 if(bCreate && pParam->nCommandType == -1)
@@ -2741,7 +2741,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                                         rMaster.GetFooter().IsActive();
 
 
-        // #122799# copy compatibility options
+        // copy compatibility options
         lcl_CopyCompatibilityOptions( rSourceShell, *pTargetShell);
         // #72821# copy dynamic defaults
         lcl_CopyDynamicDefaults( *rSourceShell.GetDoc(), *pTargetShell->GetDoc() );
