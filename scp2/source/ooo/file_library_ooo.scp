@@ -808,6 +808,21 @@ End
 
 #endif
 
+#ifndef SYSTEM_GRAPHITE
+
+File gid_File_Lib_Graphite
+    TXT_FILE_BODY;
+  #ifdef UNX
+    Name = STRING(CONCAT8(libgraphite2,UNXSUFFIX,.,2,.,0,.,0));
+  #else
+    Name = graphite2.dll;
+  #endif
+    Dir = SCP2_OOO_BIN_DIR;
+    Styles = (PACKED);
+End
+
+#endif
+
 #ifdef SOLAR_JAVA
 
 STD_UNO_LIB_FILE( gid_File_Lib_Jdbc, jdbc)
