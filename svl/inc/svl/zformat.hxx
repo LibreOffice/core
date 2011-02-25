@@ -175,6 +175,18 @@ private:
 
 class SVL_DLLPUBLIC SvNumberformat
 {
+    struct LocaleType
+    {
+        sal_uInt8 mnNumeralShape;
+        sal_uInt8 mnCalendarType;
+        LanguageType meLanguage;
+
+        ::rtl::OUString generateCode() const;
+
+        LocaleType();
+        LocaleType(sal_uInt32 nRawCode);
+    };
+
 public:
     // Ctor for Load
     SvNumberformat( ImpSvNumberformatScan& rSc, LanguageType eLge );
@@ -215,7 +227,7 @@ public:
     BOOL IsAdditionalStandardDefined() const
         { return nNewStandardDefined == SV_NUMBERFORMATTER_VERSION_ADDITIONAL_I18N_FORMATS; }
 
-    LanguageType GetLanguage() const            { return eLnge;}
+    LanguageType GetLanguage() const            { return maLocale.meLanguage;}
 
     const String& GetFormatstring() const   { return sFormatstring; }
 
@@ -456,7 +468,7 @@ private:
     double fLimit1;                 // Value for first condition
     double fLimit2;                 // Value for second condition
     ImpSvNumberformatScan& rScan;   // Format code scanner
-    LanguageType eLnge;             // Language/country of the format
+    LocaleType maLocale;            // Language/country of the format, numeral shape and calendar type from Excel.
     SvNumberformatLimitOps eOp1;    // Operator for first condition
     SvNumberformatLimitOps eOp2;    // Operator for second condition
     USHORT nNewStandardDefined;     // new builtin formats as of version 6
@@ -488,18 +500,6 @@ private:
     SVL_DLLPRIVATE static xub_StrLen ImpGetNumber( String& rString,
                    xub_StrLen& nPos,
                    String& sSymbol );
-
-    struct LocaleType
-    {
-        sal_uInt8 mnNumeralShape;
-        sal_uInt8 mnCalendarType;
-        LanguageType meLanguage;
-
-        ::rtl::OUString generateCode() const;
-
-        LocaleType();
-        LocaleType(sal_uInt32 nRawCode);
-    };
 
     /**
      * Parse the content of '[$-xxx] or '[$-xxxxxxxx]' and extract the locale

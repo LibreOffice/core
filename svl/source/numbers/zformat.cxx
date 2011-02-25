@@ -513,17 +513,17 @@ enum BracketFormatSymbolType
 SvNumberformat::SvNumberformat( ImpSvNumberformatScan& rSc, LanguageType eLge )
         :
         rScan(rSc),
-        eLnge(eLge),
         nNewStandardDefined(0),
         bStarFlag( FALSE )
 {
+    maLocale.meLanguage = eLge;
 }
 
 void SvNumberformat::ImpCopyNumberformat( const SvNumberformat& rFormat )
 {
     sFormatstring = rFormat.sFormatstring;
     eType         = rFormat.eType;
-    eLnge         = rFormat.eLnge;
+    maLocale      = rFormat.maLocale;
     fLimit1       = rFormat.fLimit1;
     fLimit2       = rFormat.fLimit2;
     eOp1          = rFormat.eOp1;
@@ -620,11 +620,11 @@ SvNumberformat::SvNumberformat(String& rString,
 
     if (rScan.GetConvertMode())
     {
-        eLnge = rScan.GetNewLnge();
-        eLan = eLnge;                   // Wechsel auch zurueckgeben
+        maLocale.meLanguage = rScan.GetNewLnge();
+        eLan = maLocale.meLanguage;      // Wechsel auch zurueckgeben
     }
     else
-        eLnge = eLan;
+        maLocale.meLanguage = eLan;
     bStandard = bStan;
     bIsUsed = FALSE;
     fLimit1 = 0.0;
@@ -800,8 +800,8 @@ SvNumberformat::SvNumberformat(String& rString,
                         else
                         {
                             xub_StrLen nTmp = 2;
-                            LocaleType aLocale = ImpGetLocaleType( sStr, nTmp );
-                            if (aLocale.meLanguage == LANGUAGE_DONTKNOW)
+                            maLocale = ImpGetLocaleType( sStr, nTmp );
+                            if (maLocale.meLanguage == LANGUAGE_DONTKNOW)
                             {
                                 bCancel = TRUE;         // break for
                                 nCheckPos = nPosOld;
@@ -809,8 +809,8 @@ SvNumberformat::SvNumberformat(String& rString,
                             else
                             {
                                 sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM("$-") );
-                                sStr = sStr + aLocale.generateCode();
-                                NumFor[nIndex].SetNatNumLang(aLocale.meLanguage);
+                                sStr = sStr + maLocale.generateCode();
+                                NumFor[nIndex].SetNatNumLang(maLocale.meLanguage);
                             }
                         }
                     }
@@ -1593,7 +1593,7 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
         String aStr( sFormatstring );
         xub_StrLen nCheckPos = 0;
         SvNumberformat* pFormat = new SvNumberformat( aStr, &rScan, &rISc,
-            nCheckPos, eLnge, bStandard );
+            nCheckPos, maLocale.meLanguage, bStandard );
         DBG_ASSERT( !nCheckPos, "SvNumberformat::Load: NewCurrencyRescan nCheckPos" );
         ImpCopyNumberformat( *pFormat );
         delete pFormat;
@@ -1643,7 +1643,7 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
         ImpCopyNumberformat( *pFormat );
         // aus Formatter/Scanner uebernommene Werte zuruecksetzen
         if ( bSystem )
-            eLnge = LANGUAGE_SYSTEM;
+            maLocale.meLanguage = LANGUAGE_SYSTEM;
         // pColor zeigt noch auf Tabelle in temporaerem Formatter/Scanner
         for ( USHORT i = 0; i < 4; i++ )
         {
