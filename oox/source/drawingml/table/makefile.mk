@@ -50,7 +50,6 @@ SLOFILES = \
     $(SLO)$/tablestylelist.obj \
     $(SLO)$/tablestylelistfragmenthandler.obj \
     $(SLO)$/tablestylecontext.obj \
-    $(SLO)$/tablestyle.obj \
     $(SLO)$/tablebackgroundstylecontext.obj \
     $(SLO)$/tablepartstylecontext.obj \
     $(SLO)$/tablestyletextstylecontext.obj \
