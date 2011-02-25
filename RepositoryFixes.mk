@@ -94,6 +94,7 @@ gb_Library_FILENAMES += $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):$(lib
 gb_Library_ILIBFILENAMES:=\
     unicows \
     uuid \
+	winmm \
 
 gb_Library_DLLFILENAMES := $(filter-out $(foreach lib,$(gb_Library_ILIBFILENAMES),$(lib):%),$(gb_Library_DLLFILENAMES))
 gb_Library_DLLFILENAMES += $(foreach lib,$(gb_Library_ILIBFILENAMES),$(lib):$(PSDK_HOME)/lib/$(lib)$(gb_Library_ILIBEXT))
@@ -132,6 +133,9 @@ gb_Library_FILENAMES := $(patsubst stl:istl%,stl:stlport_vc71_stldebug%,$(gb_Lib
 endif
 gb_Library_NOILIBFILENAMES:=\
     advapi32 \
+	d3d9 \
+	d3dx \
+	ddraw \
     gdi32 \
     gdiplus \
     graphite_dll \
@@ -152,6 +156,7 @@ gb_Library_NOILIBFILENAMES:=\
     user32 \
     uuid \
     uwinapi \
+	winmm \
     winspool \
 
 gb_Library_FILENAMES := $(filter-out $(foreach lib,$(gb_Library_NOILIBFILENAMES),$(lib):%),$(gb_Library_FILENAMES))
@@ -199,6 +204,11 @@ endif
 
 ifeq ($(SYSTEM_ICU),YES)
 gb_Library_TARGETS := $(filter-out icuuc,$(gb_Library_TARGETS))
+endif
+
+ifeq ($(SYSTEM_CAIRO),YES)
+gb_Library_TARGETS := $(filter-out cairo,$(gb_Library_TARGETS))
+gb_Library_TARGETS := $(filter-out pixman-1,$(gb_Library_TARGETS))
 endif
 
 # vim: set noet sw=4 ts=4:

@@ -481,6 +481,7 @@ gb_Library_PLAINLIBS_NONE += \
     user32 \
     uuid \
     uwinapi \
+	winmm \
     z \
 
 gb_Library_LAYER := \

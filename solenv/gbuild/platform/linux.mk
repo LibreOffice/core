@@ -276,6 +276,10 @@ gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
 endif
 
 gb_Library_PLAINLIBS_NONE += \
+	cairo \
+	fontconfig \
+	Xrender \
+	pixman-1 \
     dl \
     freetype \
     jpeg \
