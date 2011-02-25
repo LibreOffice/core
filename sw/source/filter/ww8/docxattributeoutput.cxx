@@ -547,7 +547,7 @@ void DocxAttributeOutput::EndRun()
     for ( std::vector<FieldInfos>::iterator pIt = m_Fields.begin(); pIt != m_Fields.end(); ++pIt )
     {
         // Add the fields starts for hyperlinks, TOCs and index marks
-        if ( pIt->bOpen )
+        if ( pIt->bOpen && !pIt->pField )
         {
             StartField_Impl( *pIt, sal_True );
 
