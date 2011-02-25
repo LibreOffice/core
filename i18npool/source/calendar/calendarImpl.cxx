@@ -35,8 +35,9 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::i18n;
 using namespace ::rtl;
+
+namespace com { namespace sun { namespace star { namespace i18n {
 
 #define ERROR RuntimeException()
 
@@ -322,5 +323,7 @@ CalendarImpl::getSupportedServiceNames(void) throw( RuntimeException )
     aRet[0] = OUString::createFromAscii(cCalendar);
     return aRet;
 }
+
+}}}}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
