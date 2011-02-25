@@ -77,24 +77,19 @@ SvxNumberFormatShell* SvxNumberFormatShell::Create( SvNumberFormatter* pNumForma
 
 // -----------------------------------------------------------------------
 
-#define _INIT \
-    pFormatter      ( pNumFormatter ),  \
-    pCurFmtTable    ( NULL ),           \
-    eValType        ( eNumValType ),    \
-    bUndoAddList    ( sal_True ),       \
-    nInitFormatKey  ( nFormatKey ),     \
-    nCurFormatKey   ( nFormatKey ),     \
-    pCurCurrencyEntry(NULL),            \
-    bBankingSymbol  (sal_False),            \
-    nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
-
-// -----------------------------------------------------------------------
-
 SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
                                             sal_uInt32              nFormatKey,
                                             SvxNumberValueType  eNumValType,
-                                            const String&       rNumStr )
-    :   _INIT
+                                            const String&       rNumStr ) :
+    pFormatter      ( pNumFormatter ),
+    pCurFmtTable    ( NULL ),
+    eValType        ( eNumValType ),
+    bUndoAddList    ( sal_True ),
+    nInitFormatKey  ( nFormatKey ),
+    nCurFormatKey   ( nFormatKey ),
+    pCurCurrencyEntry(NULL),
+    bBankingSymbol  (sal_False),
+    nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
 {
     nValNum = DEFAULT_NUMVALUE;
 
@@ -116,8 +111,16 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
                                             sal_uInt32              nFormatKey,
                                             SvxNumberValueType  eNumValType,
                                             double              nNumVal,
-                                            const String*       pNumStr )
-    :   _INIT
+                                            const String*       pNumStr ) :
+    pFormatter      ( pNumFormatter ),
+    pCurFmtTable    ( NULL ),
+    eValType        ( eNumValType ),
+    bUndoAddList    ( sal_True ),
+    nInitFormatKey  ( nFormatKey ),
+    nCurFormatKey   ( nFormatKey ),
+    pCurCurrencyEntry(NULL),
+    bBankingSymbol  (sal_False),
+    nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
 {
     //  #50441# When used in Writer, the SvxNumberInfoItem contains the
     //  original string in addition to the value
