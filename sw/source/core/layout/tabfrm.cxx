@@ -4768,7 +4768,8 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
         {
             SwTwips nHeight = (Frm().*fnRect->fnGetHeight)();
             (Frm().*fnRect->fnSetHeight)( nHeight - nReal );
-            if( IsVertical() && !bRev )
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            if( IsVertical() && !IsVertLR() && !bRev )
                 Frm().Pos().X() += nReal;
         }
 
@@ -4782,7 +4783,8 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
                 nReal -= nTmp;
                 SwTwips nHeight = (Frm().*fnRect->fnGetHeight)();
                 (Frm().*fnRect->fnSetHeight)( nHeight + nReal );
-                if( IsVertical() && !bRev )
+                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                if( IsVertical() && !IsVertLR() && !bRev )
                     Frm().Pos().X() -= nReal;
             }
             nReal = nTmp;

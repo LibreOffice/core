@@ -69,10 +69,10 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent,
     aOutlineStartFL         ( this, SW_RES( FL_OUTLINE_START )),
     aOutlineLvFT            ( this, SW_RES( FT_OUTLINE_LEVEL )),
     aOutlineLvLB            ( this, SW_RES( LB_OUTLINE_LEVEL )),
+    aNewStartFL             ( this, SW_RES( FL_NEW_START ) ),
     aNumberStyleFT          ( this, SW_RES( FT_NUMBER_STYLE ) ),
     aNumberStyleLB          ( this, SW_RES( LB_NUMBER_STYLE ) ),
-    aNewStartFL             ( this, SW_RES( FL_NEW_START ) ),
-    aNewStartCB             ( this, SW_RES( CB_NEW_START ) ),
+       aNewStartCB              ( this, SW_RES( CB_NEW_START ) ),
     aNewStartNumberCB       ( this, SW_RES( CB_NUMBER_NEW_START ) ),
     aNewStartNF             ( this, SW_RES( NF_NEW_START ) ),
     aCountParaFL            ( this, SW_RES( FL_COUNT_PARA        ) ),
@@ -111,6 +111,8 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent,
                     SwParagraphNumTabPage, LineCountHdl_Impl));
     aRestartParaCountCB.SetClickHdl(
                     LINK(this, SwParagraphNumTabPage, LineCountHdl_Impl));
+    aNewStartNF.SetAccessibleName(aNewStartNumberCB.GetText());
+    aNewStartNF.SetAccessibleRelationLabeledBy(&aNewStartNumberCB);
 }
 /*-----------------31.01.98 08:34-------------------
 

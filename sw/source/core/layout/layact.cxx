@@ -1651,13 +1651,21 @@ sal_Bool SwLayAction::FormatLayoutFly( SwFlyFrm* pFly )
         bChanged = aOldRect != pFly->Frm();
 
         if ( IsPaint() && (pFly->IsCompletePaint() || bChanged) &&
-             pFly->Frm().Top() > 0 && pFly->Frm().Left() > 0 )
+                    pFly->Frm().Top() > 0 && pFly->Frm().Left() > 0 )
             pImp->GetShell()->AddPaintRect( pFly->Frm() );
 
         if ( bChanged )
             pFly->Invalidate();
         else
             pFly->Validate();
+/*
+        //mba: it's unclear why we should invalidate always, so I remove it
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if ( IsPaint() && bAddRect && pFly->Frm().Top() > 0 && pFly->Frm().Left() > 0 )
+            pImp->GetShell()->AddPaintRect( pFly->Frm() );
+
+        pFly->Invalidate();
+*/
         bAddRect = false;
         pFly->ResetCompletePaint();
     }

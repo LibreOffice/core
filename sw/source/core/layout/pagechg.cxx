@@ -131,7 +131,8 @@ void SwBodyFrm::Format( const SwBorderAttrs * )
         if ( nHeight < 0 )
             nHeight = 0;
         Frm().Height( nHeight );
-        if( IsVertical() && !IsReverse() && nWidth != Frm().Width() )
+        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        if( IsVertical() && !IsVertLR() && !IsReverse() && nWidth != Frm().Width() )
             Frm().Pos().X() += Frm().Width() - nWidth;
         Frm().Width( nWidth );
     }
@@ -341,16 +342,32 @@ void SwPageFrm::CheckDirection( sal_Bool bVert )
     if( bVert )
     {
         if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir )
+        {
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            bVertLR = 0;
             bVertical = 0;
+        }
         else
         {
             const ViewShell *pSh = getRootFrm()->GetCurrShell();
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
-            bVertical = 0;
-        else
-            bVertical = 1;
+            {
+                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                bVertLR = 0;
+                bVertical = 0;
+            }
+            else
+            {
+                bVertical = 1;
+                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                if(FRMDIR_VERT_TOP_RIGHT == nDir)
+                    bVertLR = 0;
+                    else if(FRMDIR_VERT_TOP_LEFT==nDir)
+                       bVertLR = 1;
+            }
         }
-            bReverse = 0;
+
+        bReverse = 0;
         bInvalidVert = 0;
     }
     else

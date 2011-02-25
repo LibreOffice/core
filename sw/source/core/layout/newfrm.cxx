@@ -290,9 +290,67 @@ static SwRectFnCollection aVerticalRightToLeft = {
     &SwRect::SetBottomAndHeight,
     &SwRect::SetLeftAndWidth
 };
+//Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+static SwRectFnCollection aVerticalLeftToRight = {
+    /* fnRectGet      */
+    &SwRect::_Left,
+    &SwRect::_Right,
+    &SwRect::_Top,
+    &SwRect::_Bottom,
+    &SwRect::_Height,
+    &SwRect::_Width,
+    &SwRect::TopLeft,
+    &SwRect::SwappedSize,
+    /* fnRectSet      */
+    &SwRect::_Left,
+    &SwRect::_Right,
+    &SwRect::_Top,
+    &SwRect::_Bottom,
+    &SwRect::_Height,
+    &SwRect::_Width,
 
+    &SwRect::SubLeft,
+    &SwRect::AddRight,
+    &SwRect::SubTop,
+    &SwRect::AddBottom,
+    &SwRect::AddHeight,
+    &SwRect::AddWidth,
+
+    &SwRect::SetPosY,
+    &SwRect::SetPosX,
+
+    &SwFrm::GetLeftMargin,
+    &SwFrm::GetRightMargin,
+    &SwFrm::GetTopMargin,
+    &SwFrm::GetBottomMargin,
+    &SwFrm::SetTopBottomMargins,
+    &SwFrm::SetLeftRightMargins,
+    &SwFrm::GetPrtLeft,
+    &SwFrm::GetPrtRight,
+    &SwFrm::GetPrtTop,
+    &SwFrm::GetPrtBottom,
+    &SwRect::GetLeftDistance,
+    &SwRect::GetRightDistance,
+    &SwRect::GetTopDistance,
+    &SwRect::GetBottomDistance,
+    &SwFrm::SetMaxRight,
+    &SwRect::OverStepRight,
+
+    &SwRect::SetUpperLeftCorner,
+    &SwFrm::MakeRightPos,
+    &FirstMinusSecond,
+    &FirstMinusSecond,
+    &SwIncrement,
+    &SwIncrement,
+    &SwRect::SetTopAndHeight,
+    &SwRect::SetLeftAndWidth
+};
+//End of SCMS
 SwRectFn fnRectHori = &aHorizontal;
 SwRectFn fnRectVert = &aVertical;
+//Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+SwRectFn fnRectVertL2R = &aVerticalLeftToRight;
+//End of SCMS
 SwRectFn fnRectB2T = &aBottomToTop;
 SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 
@@ -449,7 +507,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     setRootFrm( this );
 }
 
-void SwRootFrm::Init( SwFrmFmt* pFmt, ViewShell* pSh )
+void SwRootFrm::Init( SwFrmFmt* pFmt )
 {
     InitCurrShells( this );
 

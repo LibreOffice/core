@@ -134,11 +134,12 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
             {
                 case FRMDIR_VERT_TOP_LEFT:
                 {
-                    // vertical from left-to-right - not supported yet
+                    // vertical from left-to-right - Badaa: supported now!
                     bVert = true;
                     bR2L = true;
-                    ASSERT( false,
-                            "<lcl_AdjustPositioningAttr(..)> - vertical from left-to-right not supported." );
+                    //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                    //ASSERT( false, "<lcl_AdjustPositioningAttr(..)> - vertical from left-to-right not supported." );
+                    //End
                 }
                 break;
                 case FRMDIR_VERT_TOP_RIGHT:
@@ -167,10 +168,18 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
         }
         // use geometry of drawing object
         const SwRect aObjRect = _rSdrObj.GetSnapRect();
+
         if ( bVert )
         {
-            nHoriRelPos = aObjRect.Top() - aAnchorPos.Y();
-            nVertRelPos = aAnchorPos.X() - aObjRect.Right();
+            if ( bR2L ) {
+                  //FRMDIR_VERT_TOP_LEFT
+                  nHoriRelPos = aObjRect.Left() - aAnchorPos.X();
+                  nVertRelPos = aObjRect.Top() - aAnchorPos.Y();
+            } else {
+                //FRMDIR_VERT_TOP_RIGHT
+                nHoriRelPos = aObjRect.Top() - aAnchorPos.Y();
+                nVertRelPos = aAnchorPos.X() - aObjRect.Right();
+            }
         }
         else if ( bR2L )
         {
@@ -182,6 +191,7 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
             nHoriRelPos = aObjRect.Left() - aAnchorPos.X();
             nVertRelPos = aObjRect.Top() - aAnchorPos.Y();
         }
+        //End of SCMS
     }
 
     _pFrmFmt->SetFmtAttr( SwFmtHoriOrient( nHoriRelPos, text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );

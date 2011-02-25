@@ -144,15 +144,31 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
         bDerivedVert = 0;
         bDerivedR2L = 0;
         if( FRMDIR_HORI_LEFT_TOP == nDir || FRMDIR_HORI_RIGHT_TOP == nDir )
+        {
+            //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+            bVertLR = 0;
             bVertical = 0;
+        }
         else
         {
             const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
             if( pSh && pSh->GetViewOptions()->getBrowseMode() )
-            bVertical = 0;
-        else
-            bVertical = 1;
+            {
+                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                bVertLR = 0;
+                bVertical = 0;
+            }
+            else
+            {
+                bVertical = 1;
+                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                if ( FRMDIR_VERT_TOP_LEFT == nDir )
+                    bVertLR = 1;
+                else
+                    bVertLR = 0;
+            }
         }
+
         bVert = bVertical;
         bInvalidR2L = 0;
         if( FRMDIR_HORI_RIGHT_TOP == nDir )
