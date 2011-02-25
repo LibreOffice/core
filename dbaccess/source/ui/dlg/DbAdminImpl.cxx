@@ -131,7 +131,7 @@ namespace
         }
         catch(Exception&)
         {
-    #ifdef DBG_UTIL
+    #if OSL_DEBUG_LEVEL > 0
             ::rtl::OString sMessage("ODbAdminDialog::implTranslateProperty: could not set the property ");
             sMessage += ::rtl::OString(_rName.getStr(), _rName.getLength(), RTL_TEXTENCODING_ASCII_US);
             sMessage += ::rtl::OString("!");
@@ -639,7 +639,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
             }
             catch(Exception&)
             {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                 ::rtl::OString aMessage("ODbDataSourceAdministrationHelper::translateProperties: could not extract the property ");
                 aMessage += ::rtl::OString(aDirect->second.getStr(), aDirect->second.getLength(), RTL_TEXTENCODING_ASCII_US);
                 aMessage += ::rtl::OString("!");
@@ -854,7 +854,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
         {
             if (aIndirectProps.end() != aIndirectProps.find(aPreserved->second))
             {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
                 const ::rtl::OUString sName = aPreserved->second;
 #endif
                 aRemoveIndexes.push_back(aPreserved->first - nPositionCorrector);
@@ -868,7 +868,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
                 ++aRemoveIndex
             )
             ::comphelper::removeElementAt(_rInfo, *aRemoveIndex);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         const PropertyValue* pWhatsLeft = _rInfo.getConstArray();
         const PropertyValue* pWhatsLeftEnd = pWhatsLeft + _rInfo.getLength();
         for (; pWhatsLeft != pWhatsLeftEnd; ++pWhatsLeft)
@@ -961,7 +961,8 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty(const Reference< X
     Any aValue = implTranslateProperty(_pItem);
     lcl_putProperty(_rxSet, _rName,aValue);
 }
-#ifdef DBG_UTIL
+
+#if OSL_DEBUG_LEVEL > 0
 //-------------------------------------------------------------------------
 ::rtl::OString ODbDataSourceAdministrationHelper::translatePropertyId( sal_Int32 _nId )
 {
@@ -1077,7 +1078,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                 }
             }
             else {
-                DBG_ERROR(
+                OSL_ENSURE(false,
                     (   ::rtl::OString( "ODbDataSourceAdministrationHelper::implTranslateProperty: invalid property value (" )
                     +=  ::rtl::OString( translatePropertyId( _nId ) )
                     +=  ::rtl::OString( " should be no string sequence)!" )
@@ -1091,7 +1092,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             break;
 
         default:
-            DBG_ERROR("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported property value type!");
+            OSL_ENSURE(false, "ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported property value type!");
     }
 }
 
