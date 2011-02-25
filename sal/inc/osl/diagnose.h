@@ -32,6 +32,50 @@
 
 #include <sal/types.h>
 
+/** provides simple diagnostic support
+
+    The functions defined in this header are not intended to be used directly,
+    but through defined macros. The macros can be divided into three categories:
+    assertions, traces and other stuff .-) Their usability depends on the value
+    of OSL_DEBUG_LEVEL macro: assertions are only active if OSL_DEBUG_LEVEL is 1
+    or greater, traces if OSL_DEBUG_LEVEL is 2 or greater.
+
+    Assertions (cond is bool, msg is char*):
+    OSL_ASSERT(cond)
+        If cond is false, reports an error.
+
+    OSL_ENSURE(cond, msg)
+        If cond is false, reports an error with message msg.
+
+    OSL_FAIL(msg)
+        Reports an error with message msg unconditionally.
+
+    OSL_PRECOND(cond, msg)
+    OSL_POSTCOND(cond, msg)
+        These two are functionally equivalent to OSL_ENSURE(cond, msg). They are
+        intended to be used for checking pre- and postconditions of functions.
+
+    Traces:
+    OSL_TRACE(fmt, args...)
+        Prints trace message. The arguments have the same meaning as the
+        arguments of printf.
+
+    Other:
+    OSL_VERIFY(expr)
+        Evaluates the expression and if it is false, reports an error. The
+        expression is evaluated once without regard of the value of
+        OSL_DEBUG_LEVEL.
+
+        Example:
+
+        void extractBool(Any const& rAny, bool& rBool)
+        {
+            OSL_VERIFY(rAny >>= rBool);
+        }
+
+    OSL_DEBUG_ONLY(expr)
+ */
+
 #ifdef __cplusplus
 extern "C" {
 #endif  /* __cplusplus */
