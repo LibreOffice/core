@@ -129,7 +129,7 @@ static void debug_i18n_cal_dump( const ::icu::Calendar & r )
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
