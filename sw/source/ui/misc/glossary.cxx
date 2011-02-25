@@ -590,7 +590,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
                 aItem.SetMacro( SW_EVENT_END_INS_GLOSSARY, aEnd );
 
             aSet.Put( aItem );
-            aSet.Put( SwMacroAssignDlg::AddEvents( MACASSGN_TEXTBAUST ) );
+            aSet.Put( SwMacroAssignDlg::AddEvents( MACASSGN_AUTOTEXT ) );
 
             const SfxPoolItem* pItem;
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();

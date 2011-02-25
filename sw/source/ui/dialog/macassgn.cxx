@@ -70,7 +70,7 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
 
     switch( eType )
     {
-    case MACASSGN_TEXTBAUST:            // text building blocks
+    case MACASSGN_AUTOTEXT:
         aItem.AddEvent( String( SW_RES(STR_EVENT_START_INS_GLOSSARY) ), String(),
                             SW_EVENT_START_INS_GLOSSARY );
         aItem.AddEvent( String( SW_RES(STR_EVENT_END_INS_GLOSSARY) ), String(),
