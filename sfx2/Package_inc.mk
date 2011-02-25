@@ -135,3 +135,4 @@ $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/userinputinterception.hxx,sf
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/viewfac.hxx,sfx2/viewfac.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/viewfrm.hxx,sfx2/viewfrm.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/viewsh.hxx,sfx2/viewsh.hxx))
+$(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/qswin32.h,sfx2/qswin32.h))

@@ -53,7 +53,7 @@
 #include <stdio.h>
 #include <io.h>
 #include <osl/thread.h>
-#include <setup_native/qswin32.h>
+#include <sfx2/qswin32.h>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Reference.h>
