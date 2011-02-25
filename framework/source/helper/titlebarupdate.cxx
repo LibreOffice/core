@@ -104,37 +104,15 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX
 #include <comphelper/sequenceashashmap.hxx>
-#endif
-
-#ifndef _UTL_CONFIGMGR_HXX
 #include <unotools/configmgr.hxx>
-#endif
-
-#ifndef _UTL_BOOTSTRAP_HXX
 #include <unotools/bootstrap.hxx>
-#endif
-
-#ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
-
-#ifndef _SV_SYSWIN_HXX
 #include <vcl/syswin.hxx>
-#endif
-
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
-
-#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
-#endif
-
-#ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
+#include <tools/diagnose_ex.h>
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -332,10 +310,14 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
     {
         try
         {
-            xSet->getPropertyValue( CONTROLLER_PROPNAME_ICONID ) >>= nIcon;
+            css::uno::Reference< css::beans::XPropertySetInfo > const xPSI( xSet->getPropertySetInfo(), css::uno::UNO_SET_THROW );
+            if ( xPSI->hasPropertyByName( CONTROLLER_PROPNAME_ICONID ) )
+                xSet->getPropertyValue( CONTROLLER_PROPNAME_ICONID ) >>= nIcon;
         }
         catch(const css::uno::Exception&)
-        {}
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 
     // c) if b) failed ... identify the used module and retrieve set icon from module config.
