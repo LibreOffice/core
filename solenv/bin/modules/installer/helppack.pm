@@ -211,7 +211,7 @@ sub determine_packagename
         my $fileextension = "rpm";
         my $rpmfiles = installer::systemactions::find_file_with_file_extension($fileextension, $installdir);
         if ( ! ( $#{$rpmfiles} > -1 )) { installer::exiter::exit_program("ERROR: Could not find package in directory $installdir!", "determine_packagename"); }
-        my $rpmsav = installer::converter::copy_array_from_references($rpmfiles);
+        my $rpmsav = [@{$rpmfiles}];
         for ( my $i = 0; $i <= $#{$rpmfiles}; $i++ ) { installer::pathanalyzer::make_absolute_filename_to_relative_filename(\${$rpmfiles}[$i]); }
 
         $packagename = get_packagename_from_packagelist($rpmfiles, $allvariables, $languagestringref);
@@ -233,7 +233,7 @@ sub determine_packagename
         my $alldirs = installer::systemactions::get_all_directories($installdir);
 
         if ( ! ( $#{$alldirs} > -1 )) { installer::exiter::exit_program("ERROR: Could not find package in directory $installdir!", "determine_packagename"); }
-        my $alldirssav = installer::converter::copy_array_from_references($alldirs);
+        my $alldirssav = [@{$alldirs}];
         for ( my $i = 0; $i <= $#{$alldirs}; $i++ ) { installer::pathanalyzer::make_absolute_filename_to_relative_filename(\${$alldirs}[$i]); }
 
         $packagename = get_packagename_from_packagelist($alldirs, $allvariables, $languagestringref);

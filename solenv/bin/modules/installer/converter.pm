@@ -39,16 +39,10 @@ sub convert_array_to_hash
 
     my %newhash = ();
 
-    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
+    for (@{$arrayref})
     {
-        my $line = ${$arrayref}[$i];
-
-        if ( $line =~ /^\s*([\w-]+?)\s+(.*?)\s*$/ )
-        {
-            my $key = $1;
-            my $value = $2;
-            $newhash{$key} = $value;
-        }
+        next unless /^\s*([\w-]+?)\s+(.*?)\s*$/;
+        $newhash{$1} = $2;
     }
 
     return \%newhash;
@@ -58,44 +52,7 @@ sub convert_hash_into_array
 {
     my ($hashref) = @_;
 
-    my @array = ();
-    my $key;
-
-    foreach $key (keys %{$hashref})
-    {
-        my $value = $hashref->{$key};
-        my $input = "$key = $value\n";
-        push(@array ,$input);
-    }
-
-    return \@array
-}
-
-#############################################################################
-# Converting a string list with separator $listseparator
-# into an array
-#############################################################################
-
-sub convert_stringlist_into_array_without_linebreak_and_quotes
-{
-    my ( $includestringref, $listseparator ) = @_;
-
-    my @newarray = ();
-    my $first;
-    my $last = ${$includestringref};
-
-    while ( $last =~ /^\s*(.+?)\Q$listseparator\E(.+)\s*$/) # "$" for minimal matching
-    {
-        $first = $1;
-        $last = $2;
-        $first =~ s/\"//g;
-        push(@newarray, $first);
-    }
-
-    $last =~ s/\"//g;
-    push(@newarray, $last);
-
-    return \@newarray;
+    return [map { "$_ = $hashref->{$_}\n" } keys %{$hashref}];
 }
 
 #############################################################################
@@ -107,22 +64,7 @@ sub convert_stringlist_into_array
 {
     my ( $includestringref, $listseparator ) = @_;
 
-    my @newarray = ();
-    my $first;
-    my $last = ${$includestringref};
-
-    while ( $last =~ /^\s*(.+?)\Q$listseparator\E(.+)\s*$/) # "$" for minimal matching
-    {
-        $first = $1;
-        $last = $2;
-        # Problem with two directly following listseparators. For example a path with two ";;" directly behind each other
-        $first =~ s/^$listseparator//;
-        push(@newarray, "$first\n");
-    }
-
-    push(@newarray, "$last\n");
-
-    return \@newarray;
+    return [map "$_\n", split /\Q$listseparator\E\s*/, ${$includestringref}];
 }
 
 #############################################################################
@@ -134,20 +76,7 @@ sub convert_stringlist_into_array_without_newline
 {
     my ( $includestringref, $listseparator ) = @_;
 
-    my @newarray = ();
-    my $first;
-    my $last = ${$includestringref};
-
-    while ( $last =~ /^\s*(.+?)\Q$listseparator\E(.+)\s*$/) # "$" for minimal matching
-    {
-        $first = $1;
-        $last = $2;
-        push(@newarray, "$first");
-    }
-
-    push(@newarray, "$last");
-
-    return \@newarray;
+    return [split /\Q$listseparator\E\s*/, ${$includestringref}];
 }
 
 #############################################################################
@@ -159,20 +88,7 @@ sub convert_stringlist_into_hash
 {
     my ( $includestringref, $listseparator ) = @_;
 
-    my %newhash = ();
-    my $first;
-    my $last = ${$includestringref};
-
-    while ( $last =~ /^\s*(.+?)\Q$listseparator\E(.+)\s*$/) # "$" for minimal matching
-    {
-        $first = $1;
-        $last = $2;
-        $newhash{$first} = 1;
-    }
-
-    $newhash{$last} = 1;
-
-    return \%newhash;
+    return {map {$_, 1} split /\Q$listseparator\E\s*/, ${$includestringref}};
 }
 
 #############################################################################
@@ -184,20 +100,11 @@ sub convert_whitespace_stringlist_into_array
 {
     my ( $includestringref ) = @_;
 
-    my @newarray = ();
-    my $first;
-    my $last = ${$includestringref};
+    my $tmp = ${$includestringref};
+    $tmp = s/^\s+//;
+    $tmp = s/\s+$//;
 
-    while ( $last =~ /^\s*(\S+?)\s+(\S+)\s*$/)  # "$" for minimal matching
-    {
-        $first = $1;
-        $last = $2;
-        push(@newarray, "$first\n");
-    }
-
-    push(@newarray, "$last\n");
-
-    return \@newarray;
+    return [map "$_\n", split /\s+/, $tmp];
 }
 
 #############################################################################
@@ -208,16 +115,13 @@ sub convert_array_to_comma_separated_string
 {
     my ( $arrayref ) = @_;
 
-    my $newstring = "";
-
-    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
-    {
-        my $arrayentry = ${$arrayref}[$i];
-        $arrayentry =~ s/\s*$//;
-        $newstring = $newstring . $arrayentry . ",";
+    my $newstring;
+    for (@{$arrayref}) {
+        my $tmp = $_;
+        $tmp =~ s/\s+$//;
+        $newstring .= "$tmp,";
     }
-
-    $newstring =~ s/\,\s*$//;
+    $newstring =~ s/\,$//;
 
     return $newstring;
 }
@@ -230,16 +134,13 @@ sub convert_array_to_space_separated_string
 {
     my ( $arrayref ) = @_;
 
-    my $newstring = "";
-
-    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
-    {
-        my $arrayentry = ${$arrayref}[$i];
-        $arrayentry =~ s/\s*$//;
-        $newstring = $newstring . $arrayentry . " ";
+    my $newstring;
+    for (@{$arrayref}) {
+        my $tmp = $_;
+        $tmp =~ s/\s+$//;
+        $newstring .= "$tmp ";
     }
-
-    $newstring =~ s/\s*$//;
+    $newstring =~ s/ $//;
 
     return $newstring;
 }
@@ -253,9 +154,8 @@ sub convert_slash_to_backslash
 {
     my ($filesarrayref) = @_;
 
-    for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
+    for my $onefile (@{$filesarrayref})
     {
-        my $onefile = ${$filesarrayref}[$i];
         if ( $onefile->{'Name'} ) { $onefile->{'Name'} =~ s/\//\\/g; }
     }
 }
@@ -269,11 +169,7 @@ sub copy_item_object
 {
     my ($olditemhashref, $newitemhashref) = @_;
 
-    foreach $key (keys %{$olditemhashref})
-    {
-        my $value = $olditemhashref->{$key};
-        $newitemhashref->{$key} = $value;
-    }
+    $newitemhashref = {%{$olditemhashref}};
 }
 
 #################################################################
@@ -286,18 +182,9 @@ sub copy_item_object
 sub make_path_conform
 {
     my ( $path ) = @_;
+    my $s = $installer::globals::separator;
 
-    my $oldpath = $path;
-
-    while ( $path =~ /(^.*)(\Q$installer::globals::separator\E.*?[^\.])(\Q$installer::globals::separator\E\.\.)(\Q$installer::globals::separator\E.*$)/ )
-    {
-        my $part1 = $1;
-        my $part2 = $4;
-
-        # $2 must not end with a "." ! Problem with "..\.."
-
-        $path = $part1 . $part2;
-    }
+    while ($path =~ s/[^\.\Q$s\E]+?\Q$s\E\.\.(?:\Q$s\E|$)//g) {}
 
     return $path;
 }
@@ -309,61 +196,7 @@ sub make_path_conform
 
 sub copy_collector
 {
-    my ( $oldcollector ) = @_;
-
-    my @newcollector = ();
-
-    for ( my $i = 0; $i <= $#{$oldcollector}; $i++ )
-    {
-        my %newhash = ();
-        my $key;
-
-        foreach $key (keys %{${$oldcollector}[$i]})
-        {
-            $newhash{$key} = ${$oldcollector}[$i]->{$key};
-        }
-
-        push(@newcollector, \%newhash);
-    }
-
-    return \@newcollector;
-}
-
-#################################################################
-# Copying an array
-#################################################################
-
-sub copy_array_from_references
-{
-    my ( $arrayref ) = @_;
-
-    my @newarray = ();
-
-    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
-    {
-        push(@newarray, ${$arrayref}[$i]);
-    }
-
-    return \@newarray;
-}
-
-###########################################################
-# Copying a hash
-###########################################################
-
-sub copy_hash_from_references
-{
-    my ($hashref) = @_;
-
-    my %newhash = ();
-    my $key;
-
-    foreach $key (keys %{$hashref})
-    {
-        $newhash{$key} = $hashref->{$key};
-    }
-
-    return \%newhash;
+    return [map { {%{$_}} } @{$_[0]}];
 }
 
 #################################################################
@@ -376,41 +209,11 @@ sub combine_arrays_from_references_first_win
 
     my $hashref1 = convert_array_to_hash($arrayref1);
     my $hashref2 = convert_array_to_hash($arrayref2);
-    my %commonhash = ();
-    my @newarray = ();
 
-    # starting with second hash
-    foreach my $key ( keys %{$hashref2} ) { $commonhash{$key} = $hashref2->{$key}; }
-    # overwriting with first hash
-    foreach my $key ( keys %{$hashref1} ) { $commonhash{$key} = $hashref1->{$key}; }
+    # add key-value pairs from hash1 to hash2 (overwrites existing keys)
+    @{$hashref2}{keys %{$hashref1}} = values %{$hashref1};
 
-    # Creating the new array
-    foreach my $key ( keys %commonhash ) { push(@newarray, "$key $commonhash{$key}\n"); }
-
-    return \@newarray;
-}
-
-#################################################################
-# Combining two arrays
-#################################################################
-
-sub combine_arrays_from_references
-{
-    my ( $arrayref1, $arrayref2 ) = @_;
-
-    my @newarray = ();
-
-    for ( my $i = 0; $i <= $#{$arrayref1}; $i++ )
-    {
-        push(@newarray, ${$arrayref1}[$i]);
-    }
-
-    for ( my $i = 0; $i <= $#{$arrayref2}; $i++ )
-    {
-        push(@newarray, ${$arrayref2}[$i]);
-    }
-
-    return \@newarray;
+    return [map { "$_ $hashref2->{$_}\n" } keys %{$hashref2}];
 }
 
 #################################################################
@@ -453,9 +256,9 @@ sub resolve_masked_separator
 {
     my ($arrayref, $separator, $replacementstring) = @_;
 
-    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
+    for (@{$arrayref})
     {
-        ${$arrayref}[$i] =~ s/$replacementstring/$separator/g
+        s/$replacementstring/$separator/g;
     }
 }
 
