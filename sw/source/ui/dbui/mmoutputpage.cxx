@@ -1156,7 +1156,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     pDlg->ShowDialog();
     //help to force painting the dialog
     //TODO/CLEANUP
-    //Sollbruchstelle
+    //predetermined breaking point
     for ( sal_Int16 i = 0; i < 25; i++)
         Application::Reschedule();
     for(sal_uInt32 nDoc = nBegin; nDoc < nEnd; ++nDoc)

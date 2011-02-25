@@ -325,7 +325,7 @@ BOOL lcl_GetColumnCnt(SwDSParam* pParam,
 };
 
 /*--------------------------------------------------------------------
-    Beschreibung: Daten importieren
+    Description: import data
  --------------------------------------------------------------------*/
 BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
 {
@@ -421,7 +421,7 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
 
     if (IsInitDBFields())
     {
-        // Bei Datenbankfeldern ohne DB-Name DB-Name von Dok einsetzen
+        // with database fields without DB-Name, use DB-Name from Doc
         SvStringsDtor aDBNames(1, 1);
         aDBNames.Insert( new String(), 0);
         SwDBData aInsertData = rMergeDesc.rSh.GetDBData();
@@ -438,7 +438,7 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
     switch(rMergeDesc.nMergeType)
     {
         case DBMGR_MERGE:
-            bRet = Merge(&rMergeDesc.rSh);   // Mischen
+            bRet = Merge(&rMergeDesc.rSh);
             break;
 
         case DBMGR_MERGE_MAILMERGE: // printing merge from 'old' merge dialog or from UNO-component
@@ -462,7 +462,7 @@ BOOL SwNewDBMgr::MergeNew(const SwMergeDescriptor& rMergeDesc )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Daten importieren
+    Description: import data
  --------------------------------------------------------------------*/
 BOOL SwNewDBMgr::Merge(SwWrtShell* pSh)
 {
@@ -579,7 +579,7 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
                 }
                 else
                 {
-                    // Spalte nicht gefunden -> Fehler anzeigen
+                    // column not found -> show error
                     String sInsert = '?';
                     sInsert += sColumn;
                     sInsert += '?';
@@ -606,13 +606,13 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
                     sStr += '\t';
             }
             pSh->SwEditShell::Insert2(sStr);
-            pSh->SwFEShell::SplitNode();    // Zeilenvorschub
+            pSh->SwFEShell::SplitNode();    // line feed
         }
     }
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Listbox mit Tabellenliste fuellen
+    Description: fill Listbox with tablelist
  --------------------------------------------------------------------*/
 BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
 {
@@ -662,7 +662,7 @@ BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: Listbox mit Spaltennamen einer Datenbank fuellen
+    Description: fill Listbox with column names of a database
  --------------------------------------------------------------------*/
 BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
             const String& rDBName, const String& rTableName, BOOL bAppend)
@@ -719,7 +719,7 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung: CTOR
+    Description: CTOR
  --------------------------------------------------------------------*/
 SwNewDBMgr::SwNewDBMgr() :
             nMergeType(DBMGR_INSERT),
@@ -755,7 +755,7 @@ SwNewDBMgr::~SwNewDBMgr()
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Serienbriefe als einzelne Dokumente speichern
+    Description:    save bulk letters as single documents
  --------------------------------------------------------------------*/
 String lcl_FindUniqueName(SwWrtShell* pTargetShell, const String& rStartingPageDesc, ULONG nDocNo )
 {
@@ -951,7 +951,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             if (!IsMergeSilent())
                 aPrtMonDlg.Show();
 
-            // Progress, um KeyInputs zu unterbinden
+            // Progress, to prohibit KeyInputs
             SfxProgress aProgress(pSourrceDocSh, ::aEmptyStr, 1);
 
             // lock all dispatchers
@@ -1019,7 +1019,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         sStat += String::CreateFromInt32( nDocNo );
                         aPrtMonDlg.aPrintInfo.SetText(sStat);
 
-                        // Rechenzeit fuer Save-Monitor:
+                        // computation time for Save-Monitor:
                         for (USHORT i = 0; i < 10; i++)
                             Application::Reschedule();
 
@@ -1344,8 +1344,8 @@ IMPL_LINK_INLINE_START( SwNewDBMgr, PrtCancelHdl, Button *, pButton )
 IMPL_LINK_INLINE_END( SwNewDBMgr, PrtCancelHdl, Button *, pButton )
 
 /*--------------------------------------------------------------------
-    Beschreibung: Numberformat der Spalte ermitteln und ggfs. in
-                    den uebergebenen Formatter uebertragen
+    Description: determine the column's Numberformat and transfer
+                    to the forwarded Formatter, if applicable.
   --------------------------------------------------------------------*/
 ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
                                 const String& rTableName,
@@ -1433,7 +1433,7 @@ ULONG SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
                         SvNumberFormatter* pNFmtr,
                         long nLanguage )
 {
-    //JP 12.01.99: ggfs. das NumberFormat im Doc setzen
+    //JP 12.01.99: set the NumberFormat in the doc if applicable
     ULONG nRet = 0;
 
     if(!xSource.is())
@@ -2450,7 +2450,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                 {
                     SfxViewFrame *pFrame = SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 );
                     SwView *pView = (SwView*) pFrame->GetViewShell();
-                    pView->AttrChangedNotify( &pView->GetWrtShell() );//Damit SelectShell gerufen wird.
+                    pView->AttrChangedNotify( &pView->GetWrtShell() );// in order for SelectShell to be called
                     //set the current DBMgr
                     SwDoc* pWorkDoc = pView->GetWrtShell().GetDoc();
                     SwNewDBMgr* pWorkDBMgr = pWorkDoc->GetNewDBMgr();
@@ -2782,7 +2782,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             //create a ViewFrame
             SwView* pWorkView = static_cast< SwView* >( SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 )->GetViewShell() );
             SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
-            pWorkView->AttrChangedNotify( &rWorkShell );//Damit SelectShell gerufen wird.
+            pWorkView->AttrChangedNotify( &rWorkShell );// in order for SelectShell to be called
 
                 // merge the data
                 SwDoc* pWorkDoc = rWorkShell.GetDoc();

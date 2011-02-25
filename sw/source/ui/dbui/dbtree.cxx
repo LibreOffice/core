@@ -217,7 +217,7 @@ void SwDBTreeList::InitTreeList()
         return;
     SetSelectionMode(SINGLE_SELECTION);
     SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
-    // Font nicht setzen, damit der Font des Controls uebernommen wird!
+    // don't set font, so that the Control's font is being applied!
     SetSpaceBetweenEntries(0);
     SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE),
                     aImageList.GetImage(IMG_EXPAND  ) );
@@ -417,7 +417,7 @@ IMPL_LINK( SwDBTreeList, DBCompare, SvSortData*, pData )
     if (GetParent(pRight) && GetParent(GetParent(pRight)))
         return COMPARE_GREATER; // don't sort column names
 
-    return DefaultCompare(pData);   // Sonst Basisklasse rufen
+    return DefaultCompare(pData);   // otherwise call base class
 }
 
 String  SwDBTreeList::GetDBName(String& rTableName, String& rColumnName, BOOL* pbIsTable)
@@ -443,7 +443,7 @@ String  SwDBTreeList::GetDBName(String& rTableName, String& rColumnName, BOOL* p
 }
 
 /*------------------------------------------------------------------------
- Beschreibung:  Format: Datenbank.Tabelle
+ Description:   Format: database.table
 ------------------------------------------------------------------------*/
 void SwDBTreeList::Select(const String& rDBName, const String& rTableName, const String& rColumnName)
 {
@@ -497,7 +497,7 @@ void SwDBTreeList::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
         STAR_REFERENCE( datatransfer::XTransferable ) xRef( pContainer );
         if( sColumnName.Len() )
         {
-            // Datenbankfeld draggen
+            // drag database field
             svx::OColumnTransferable aColTransfer(
                             sDBName
                             ,::rtl::OUString()
