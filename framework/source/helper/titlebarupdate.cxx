@@ -38,9 +38,7 @@
 #include <services.h>
 #include <properties.h>
 
-//_________________________________________________________________________________________________________________
 //  interface includes
-//_________________________________________________________________________________________________________________
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -51,9 +49,7 @@
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-//_________________________________________________________________________________________________________________
 //  other includes
-//_________________________________________________________________________________________________________________
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>
@@ -62,19 +58,15 @@
 #include <toolkit/unohlp.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
+#include <tools/diagnose_ex.h>
 
-//_________________________________________________________________________________________________________________
 //  namespace
-
 namespace framework{
 
-//_________________________________________________________________________________________________________________
 //  const
-
 static const ::sal_Int32 INVALID_ICON_ID = -1;
 static const ::sal_Int32 DEFAULT_ICON_ID =  0;
 
-//_________________________________________________________________________________________________________________
 //  definitions
 
 //*****************************************************************************************************************
@@ -338,10 +330,14 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
     {
         try
         {
-            xSet->getPropertyValue( DECLARE_ASCII("IconId") ) >>= nIcon;
+            css::uno::Reference< css::beans::XPropertySetInfo > const xPSI( xSet->getPropertySetInfo(), css::uno::UNO_SET_THROW );
+            if ( xPSI->hasPropertyByName( DECLARE_ASCII("IconId") ) )
+                xSet->getPropertyValue( DECLARE_ASCII("IconId") ) >>= nIcon;
         }
         catch(const css::uno::Exception&)
-        {}
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 
     // c) if b) failed ... identify the used module and retrieve set icon from module config.

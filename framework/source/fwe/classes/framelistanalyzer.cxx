@@ -47,6 +47,7 @@
 //  includes of other projects
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/diagnose_ex.h>
 
 //_______________________________________________
 //  namespace
@@ -152,7 +153,7 @@ void FrameListAnalyzer::impl_analyze()
 
     // check, if the reference frame includes the backing component.
     // But look, if this analyze step is realy needed.
-    if ((m_eDetectMode & E_BACKINGCOMPONENT) == E_BACKINGCOMPONENT)
+    if (((m_eDetectMode & E_BACKINGCOMPONENT) == E_BACKINGCOMPONENT) && m_xReferenceFrame.is() )
     {
         try
         {
@@ -161,8 +162,12 @@ void FrameListAnalyzer::impl_analyze()
             ::rtl::OUString sModule = xModuleMgr->identify(m_xReferenceFrame);
             m_bReferenceIsBacking = (sModule.equals(SERVICENAME_STARTMODULE));
         }
-        catch (const css::uno::Exception&)
+        catch(const css::frame::UnknownModuleException&)
         {
+        }
+        catch(const css::uno::Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 

@@ -33,6 +33,7 @@
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <svl/macitem.hxx>
 #include <sfx2/appuno.hxx>
 #include <sfx2/objsh.hxx>
@@ -821,14 +822,18 @@ void SfxGlobalEvents_Impl::implts_checkAndExecuteEventBindings(const css::docume
         // <- SAFE
 
         css::uno::Any aAny;
-        if (xEvents.is())
+        if ( xEvents.is() && xEvents->hasByName( aEvent.EventName ) )
             aAny = xEvents->getByName(aEvent.EventName);
         Execute(aAny, aEvent, 0);
     }
-    catch(const css::uno::RuntimeException&)
-        { throw; }
-    catch(const css::uno::Exception&)
-        {}
+    catch ( css::uno::RuntimeException const & )
+    {
+        throw;
+    }
+    catch ( css::uno::Exception const & )
+    {
+       DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 //-----------------------------------------------------------------------------

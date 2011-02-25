@@ -53,6 +53,8 @@
 //_________________________________________________________________________________________________________________
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
+#include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -213,11 +215,9 @@ throw (uno::Exception, uno::RuntimeException)
                     {
                         xWindow = xFactory->createInstanceWithArgumentsAndContext( Arguments, Context );
                     }
-                    catch ( const uno::RuntimeException& )
+                    catch ( uno::Exception& )
                     {
-                    }
-                    catch ( const uno::Exception& )
-                    {
+                        DBG_UNHANDLED_EXCEPTION();
                     }
                 }
             }
