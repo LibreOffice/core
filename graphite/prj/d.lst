@@ -1,6 +1,5 @@
-mkdir: %_DEST%\inc%_EXT%\graphite
-..\%__SRC%\inc\graphite\*.h %_DEST%\inc%_EXT%\graphite\*.h
-..\%__SRC%\inc\WinFont.h %_DEST%\inc%_EXT%\graphite\WinFont.h
+mkdir: %_DEST%\inc%_EXT%\graphite2
+..\%__SRC%\inc\graphite2\*.h %_DEST%\inc%_EXT%\graphite2\*.h
 
 ..\%__SRC%\lib\*.so.* %_DEST%\lib%_EXT%\*.so.*
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
@@ -8,8 +7,6 @@ mkdir: %_DEST%\inc%_EXT%\graphite
 ..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\bin\*.pdb %_DEST%\bin%_EXT%\*.pdb
-..\%__SRC%\lib\graphite.lib %_DEST%\lib%_EXT%\graphite.lib
 
-linklib: libgraphite.so.*.*.*
-linklib: libgraphite.dylib.*.*.*
-#linklib: graphite.*
+linklib: libgraphite2.so.*.*.*
+linklib: libgraphite2.dylib.*.*.*
