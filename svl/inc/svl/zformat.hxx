@@ -145,7 +145,7 @@ public:
     const ImpSvNumberformatInfo& Info() const { return aI; }
 
     // Get count of substrings (symbols)
-    USHORT GetnAnz() const { return nAnzStrings;}
+    USHORT GetCount() const { return nAnzStrings;}
 
     Color* GetColor() const { return pColor; }
     void SetColor( Color* pCol, String& rName )
@@ -263,7 +263,7 @@ public:
     // True if 4th subformat present
     BOOL HasTextFormat() const
         {
-            return (NumFor[3].GetnAnz() > 0) ||
+            return (NumFor[3].GetCount() > 0) ||
                 (NumFor[3].Info().eScannedType == NUMBERFORMAT_TEXT);
         }
 
@@ -311,7 +311,7 @@ public:
                 // strings of the format were matched and not just the starting
                 // sequence, so we don't have to check if GetnAnz() includes
                 // [modifiers] or anything else if both counts are equal.
-                USHORT nCnt = NumFor[nNumFor].GetnAnz();
+                USHORT nCnt = NumFor[nNumFor].GetCount();
                 if ( nAllCount == nCnt )
                     return TRUE;
                 if ( nAllCount < nCnt ) // check ignoring [modifiers] and so on
