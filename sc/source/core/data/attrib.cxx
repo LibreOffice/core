@@ -478,7 +478,7 @@ SfxItemPresentation ScRangeItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
         rText  = ScGlobal::GetRscString(STR_AREA);
         rText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
-//      break;// Durchfallen !!!
+        /* !!! fall-through !!! */
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
         {
@@ -988,7 +988,7 @@ SfxItemPresentation ScViewObjectModeItem::GetPresentation
             ePres = SFX_ITEM_PRESENTATION_NAMELESS;//das geht immer!
             break;
         }
-//      break; // DURCHFALLEN!!!
+        /* !!! fall-through !!! */
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
         rText += ScGlobal::GetRscString(STR_VOBJ_MODE_SHOW+GetValue());
