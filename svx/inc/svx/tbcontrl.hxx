@@ -287,6 +287,7 @@ public:
 class SVX_DLLPUBLIC SvxFontColorToolBoxControl : public SfxToolBoxControl
 {
     ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
+    Color                               mLastColor;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -314,6 +315,7 @@ class SVX_DLLPUBLIC SvxFontColorExtToolBoxControl : public SfxToolBoxControl
 
     //  SfxStatusForwarder          aForward;
     ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
+    Color                               mLastColor;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
@@ -338,6 +340,8 @@ public:
 class SVX_DLLPUBLIC SvxColorToolBoxControl : public SfxToolBoxControl
 {
     ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
+    Color                               mLastColor;
+
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxColorToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
@@ -398,6 +402,8 @@ public:
 class SVX_DLLPUBLIC SvxFrameLineColorToolBoxControl : public SfxToolBoxControl
 {
     ::svx::ToolboxButtonColorUpdater*   pBtnUpdater;
+    Color                               mLastColor;
+
 public:
     SFX_DECL_TOOLBOX_CONTROL();
     SvxFrameLineColorToolBoxControl( USHORT nSlotId,

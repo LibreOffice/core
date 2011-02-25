@@ -38,7 +38,8 @@ namespace svx {
 class SVX_DLLPUBLIC ExtrusionColorControl : public SfxToolBoxControl
 {
 private:
-    ToolboxButtonColorUpdater*  mpBtnUpdater;
+    ToolboxButtonColorUpdater* mpBtnUpdater;
+    Color                      mLastColor;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();

@@ -19,9 +19,10 @@ class SvxColorWindow_Impl : public SfxPopupWindow
     using FloatingWindow::StateChanged;
 
 private:
-    const USHORT                                                        theSlotId;
-    ValueSet                                                            aColorSet;
-    rtl::OUString                                                       maCommand;
+    const USHORT   theSlotId;
+    ValueSet       aColorSet;
+    rtl::OUString  maCommand;
+    const Color    mLastColor;
 
 #if _SOLAR__PRIVATE
     DECL_LINK( SelectHdl, void * );
@@ -36,7 +37,8 @@ public:
                          USHORT nSlotId,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                          const String& rWndTitle,
-                         Window* pParentWindow );
+                         Window* pParentWindow,
+                         const Color rLastColor = COL_AUTO);
     ~SvxColorWindow_Impl();
     void                StartSelection();
 
