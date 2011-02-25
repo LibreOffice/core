@@ -78,8 +78,7 @@
 #endif
 
 #ifdef ENABLE_GRAPHITE
-#include <graphite/GrClient.h>
-#include <graphite/WinFont.h>
+#include <graphite2/Font.h>
 #endif
 
 #include <vector>
@@ -1091,6 +1090,106 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 }
 
 // =======================================================================
+#ifdef ENABLE_GRAPHITE
+
+#ifdef DEBUG
+static FILE * grLogFile = NULL;
+static FILE * grLog()
+{
+#ifdef WNT
+    std::string logFileName(getenv("TEMP"));
+    logFileName.append("\\grface.log");
+    if (grLogFile == NULL) grLogFile = fopen(logFileName.c_str(),"w");
+    else fflush(grLogFile);
+    return grLogFile;
+#else
+    fflush(stdout);
+    return stdout;
+#endif
+}
+#undef NDEBUG
+#endif
+
+const void * getGrTable(const void* appFaceHandle, unsigned int name, size_t *len)
+{
+    const GrFontData * fontTables = reinterpret_cast<const GrFontData*>(appFaceHandle);
+    return fontTables->getTable(name, len);
+}
+
+GrFontData::GrFontData(HDC hDC) :
+    mhDC(hDC), mpFace(NULL), mnRefCount(1)
+{
+    // The face options ensure that the tables are all read at construction
+    // time so there is no need to keep the hDC uptodate
+    static const char* pGraphiteCacheStr = getenv( "SAL_GRAPHITE_CACHE_SIZE" );
+    unsigned long graphiteSegCacheSize = pGraphiteCacheStr ? (atoi(pGraphiteCacheStr)) : 0;
+    if (graphiteSegCacheSize > 500)
+        mpFace = gr_make_face_with_seg_cache(this, getGrTable,
+            graphiteSegCacheSize, gr_face_preloadGlyphs | gr_face_cacheCmap);
+    else
+        mpFace = gr_make_face(this, getGrTable,
+            gr_face_preloadGlyphs | gr_face_cacheCmap);
+#ifdef DEBUG
+        fprintf(grLog(), "gr_make_face %lx for WinFontData %lx\n", (unsigned long)mpFace,
+            (unsigned long)this);
+#endif
+    mhDC = NULL;
+}
+
+GrFontData::~GrFontData()
+{
+    if (mpFace)
+    {
+#ifdef DEBUG
+        fprintf(grLog(), "gr_face_destroy %lx for WinFontData %lx\n", (unsigned long)mpFace,
+            (unsigned long)this);
+#endif
+        gr_face_destroy(mpFace);
+        mpFace = NULL;
+    }
+    std::vector<RawFontData*>::iterator i = mvData.begin();
+    while (i != mvData.end())
+    {
+        delete *i;
+        ++i;
+    }
+    mvData.clear();
+}
+
+const void * GrFontData::getTable(unsigned int name, size_t *len) const
+{
+#ifdef DEBUG
+#undef NDEBUG
+#endif
+    assert(mhDC);
+    // swap the bytes
+    union TtfTag {
+        unsigned int i;
+        unsigned char c[4];
+    };
+    TtfTag littleEndianTag;
+    littleEndianTag.i = name;
+    TtfTag bigEndianTag;
+    bigEndianTag.c[0] = littleEndianTag.c[3];
+    bigEndianTag.c[1] = littleEndianTag.c[2];
+    bigEndianTag.c[2] = littleEndianTag.c[1];
+    bigEndianTag.c[3] = littleEndianTag.c[0];
+    mvData.push_back(new RawFontData(mhDC, bigEndianTag.i));
+    const RawFontData * data = mvData[mvData.size()-1];
+    if (data && (data->size() > 0))
+    {
+        if (len)
+            *len = data->size();
+        return reinterpret_cast<const void *>(data->get());
+    }
+    else
+    {
+        if (len)
+            *len = 0;
+        return NULL;
+    }
+}
+#endif
 
 ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
     int nHeight, WIN_BYTE eWinCharSet, WIN_BYTE nPitchAndFamily )
@@ -1112,6 +1211,9 @@ ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
     mbAliasSymbolsHigh( false ),
     mnId( 0 ),
     mpEncodingVector( NULL )
+#ifdef ENABLE_GRAPHITE
+    ,mpGraphiteData(NULL)
+#endif
 {
     SetBitmapSize( 0, nHeight );
 
@@ -1135,6 +1237,9 @@ ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
             mbAliasSymbolsHigh = true;
         }
     }
+#ifdef DEBUG
+    fprintf(grLog(), "ImplWinFontData::ImplWinFontData() %lx\n", (unsigned long)this);
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1145,6 +1250,13 @@ ImplWinFontData::~ImplWinFontData()
 
     if( mpUnicodeMap )
         mpUnicodeMap->DeReference();
+#ifdef ENABLE_GRAPHITE
+    if (mpGraphiteData)
+        mpGraphiteData->DeReference();
+#ifdef DEBUG
+    fprintf(grLog(), "ImplWinFontData::~ImplWinFontData %lx\n", (unsigned long)this);
+#endif
+#endif // ENABLE_GRAPHITE
     delete mpEncodingVector;
 }
 
@@ -1156,6 +1268,11 @@ sal_IntPtr ImplWinFontData::GetFontId() const
 }
 
 // -----------------------------------------------------------------------
+
+static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
+static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
+//static signed GetSShort( const unsigned char* p ){ return((short)((p[0]<<8)+p[1]));}
+static inline DWORD CalcTag( const char p[4]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
 
 void ImplWinFontData::UpdateFromHDC( HDC hDC ) const
 {
@@ -1169,7 +1286,26 @@ void ImplWinFontData::UpdateFromHDC( HDC hDC ) const
     static const char* pDisableGraphiteText = getenv( "SAL_DISABLE_GRAPHITE" );
     if( !pDisableGraphiteText || (pDisableGraphiteText[0] == '0') )
     {
-        mbHasGraphiteSupport = gr::WinFont::FontHasGraphiteTables(hDC);
+        const DWORD nSilfTag = CalcTag("Silf");
+        const RawFontData aRawFontData( hDC, nSilfTag );
+        mbHasGraphiteSupport = (aRawFontData.size() > 0);
+        if (mbHasGraphiteSupport)
+        {
+#ifdef DEBUG
+            fprintf(grLog(), "ImplWinFontData::UpdateFromHDC %lx\n",
+            (unsigned long)this);
+#endif
+            if (mpGraphiteData == NULL)
+            {
+                mpGraphiteData = new GrFontData(hDC);
+                if (!mpGraphiteData->getFace())
+                {
+                    mbHasGraphiteSupport = false;
+                    delete mpGraphiteData;
+                    mpGraphiteData = NULL;
+                }
+            }
+        }
     }
 #endif
 
@@ -1183,6 +1319,17 @@ void ImplWinFontData::UpdateFromHDC( HDC hDC ) const
 
 }
 
+#ifdef ENABLE_GRAPHITE
+const gr_face* ImplWinFontData::GraphiteFace() const
+{
+#ifdef DEBUG
+    fprintf(grLog(), "ImplWinFontData::GraphiteFace %lx has face %lx\n",
+        (unsigned long)this, mpGraphiteData? mpGraphiteData->getFace(): 0);
+#endif
+    assert((mpGraphiteData == NULL) || (mpGraphiteData->getFontData() == this));
+    return (mpGraphiteData)? mpGraphiteData->getFace() : NULL;
+}
+#endif
 // -----------------------------------------------------------------------
 
 bool ImplWinFontData::HasGSUBstitutions( HDC hDC ) const
@@ -1221,6 +1368,31 @@ static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)
 static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
 //static signed GetSShort( const unsigned char* p ){ return((short)((p[0]<<8)+p[1]));}
 static inline DWORD CalcTag( const char p[4]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
+
+void ImplWinFontData::ReadOs2Table( HDC hDC ) const
+{
+    const DWORD Os2Tag = CalcTag( "OS/2" );
+    DWORD nLength = ::GetFontData( hDC, Os2Tag, 0, NULL, 0 );
+    if( (nLength == GDI_ERROR) || !nLength )
+        return;
+    std::vector<unsigned char> aOS2map( nLength );
+    unsigned char* pOS2map = &aOS2map[0];
+    ::GetFontData( hDC, Os2Tag, 0, pOS2map, nLength );
+    sal_uInt32 nVersion = GetUShort( pOS2map );
+    if ( nVersion >= 0x0001 && nLength >= 58 )
+    {
+        // We need at least version 0x0001 (TrueType rev 1.66)
+        // to have access to the needed struct members.
+        sal_uInt32 ulUnicodeRange1 = GetUInt( pOS2map + 42 );
+        sal_uInt32 ulUnicodeRange2 = GetUInt( pOS2map + 46 );
+
+        // Check for CJK capabilities of the current font
+        mbHasCJKSupport = (ulUnicodeRange2 & 0x2DF00000);
+        mbHasKoreanRange= (ulUnicodeRange1 & 0x10000000)
+                        | (ulUnicodeRange2 & 0x01100000);
+        mbHasArabicSupport = (ulUnicodeRange1 & 0x00002000);
+   }
+}
 
 // -----------------------------------------------------------------------
 
@@ -1545,6 +1717,7 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
         // deselect still active font
         if( mhDefFont )
             ::SelectFont( mhDC, mhDefFont );
+        mfCurrentFontScale = mfFontScale[nFallbackLevel];
         // release no longer referenced font handles
         for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
         {
@@ -1561,7 +1734,8 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
     mpWinFontData[ nFallbackLevel ] = static_cast<const ImplWinFontData*>( pFont->mpFontData );
 
     HFONT hOldFont = 0;
-    HFONT hNewFont = ImplDoSetFont( pFont, mfFontScale, hOldFont );
+    HFONT hNewFont = ImplDoSetFont( pFont, mfFontScale[ nFallbackLevel ], hOldFont );
+    mfCurrentFontScale = mfFontScale[nFallbackLevel];
 
     if( !mhDefFont )
     {
@@ -1655,11 +1829,11 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
     }
 
     // transformation dependend font metrics
-    pMetric->mnWidth        = static_cast<int>( mfFontScale * aWinMetric.tmAveCharWidth );
-    pMetric->mnIntLeading   = static_cast<int>( mfFontScale * aWinMetric.tmInternalLeading );
-    pMetric->mnExtLeading   = static_cast<int>( mfFontScale * aWinMetric.tmExternalLeading );
-    pMetric->mnAscent       = static_cast<int>( mfFontScale * aWinMetric.tmAscent );
-    pMetric->mnDescent      = static_cast<int>( mfFontScale * aWinMetric.tmDescent );
+    pMetric->mnWidth        = static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmAveCharWidth );
+    pMetric->mnIntLeading   = static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmInternalLeading );
+    pMetric->mnExtLeading   = static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmExternalLeading );
+    pMetric->mnAscent       = static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmAscent );
+    pMetric->mnDescent      = static_cast<int>( mfFontScale[nFallbackLevel] * aWinMetric.tmDescent );
 
     // #107888# improved metric compatibility for Asian fonts...
     // TODO: assess workaround below for CWS >= extleading
@@ -2386,10 +2560,10 @@ BOOL WinSalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect )
 
     rRect = Rectangle( Point( +aGM.gmptGlyphOrigin.x, -aGM.gmptGlyphOrigin.y ),
         Size( aGM.gmBlackBoxX, aGM.gmBlackBoxY ) );
-    rRect.Left()    = static_cast<int>( mfFontScale * rRect.Left() );
-    rRect.Right()   = static_cast<int>( mfFontScale * rRect.Right() );
-    rRect.Top()     = static_cast<int>( mfFontScale * rRect.Top() );
-    rRect.Bottom()  = static_cast<int>( mfFontScale * rRect.Bottom() );
+    rRect.Left()    = static_cast<int>( mfCurrentFontScale * rRect.Left() );
+    rRect.Right()   = static_cast<int>( mfCurrentFontScale * rRect.Right() );
+    rRect.Top()     = static_cast<int>( mfCurrentFontScale * rRect.Top() );
+    rRect.Bottom()  = static_cast<int>( mfCurrentFontScale * rRect.Bottom() );
     return true;
 }
 
@@ -2575,7 +2749,7 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
     // rescaling needed for the PolyPolygon conversion
     if( rB2DPolyPoly.count() )
     {
-        const double fFactor(mfFontScale/256);
+        const double fFactor(mfCurrentFontScale/256);
         rB2DPolyPoly.transform(basegfx::tools::createScaleB2DHomMatrix(fFactor, fFactor));
     }
 

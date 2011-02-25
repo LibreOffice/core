@@ -39,6 +39,10 @@
 #include "boost/scoped_ptr.hpp"
 #include <boost/unordered_set.hpp>
 
+#ifdef ENABLE_GRAPHITE
+#include <graphite2/Font.h>
+#endif
+
 class ImplFontSelectData;
 class ImplWinFontEntry;
 class ImplFontAttrCache;
@@ -54,6 +58,26 @@ class ImplFontAttrCache;
 
 #define GCP_KERN_HACK
 #define GNG_VERT_HACK
+
+#ifdef ENABLE_GRAPHITE
+class RawFontData;
+class GrFontData
+{
+public:
+    GrFontData(HDC hDC);
+    ~GrFontData();
+    const void * getTable(unsigned int name, size_t *len) const;
+    const gr_face * getFace() const { return mpFace; }
+    void AddReference() { ++mnRefCount; }
+    void DeReference() { if (--mnRefCount == 0) delete this; }
+private:
+    GrFontData(GrFontData &) {};
+    HDC mhDC;
+    mutable std::vector<RawFontData*> mvData;
+    gr_face * mpFace;
+    unsigned int mnRefCount;
+};
+#endif
 
 // win32 specific physically available font face
 class ImplWinFontData : public ImplFontData
@@ -82,6 +106,7 @@ public:
     bool                    AliasSymbolsLow() const     { return mbAliasSymbolsLow; }
 #ifdef ENABLE_GRAPHITE
     bool                    SupportsGraphite() const    { return mbHasGraphiteSupport; }
+    const gr_face*          GraphiteFace() const;
 #endif
 
     ImplFontCharMap*        GetImplFontCharMap() const;
@@ -101,6 +126,7 @@ private:
     mutable bool                    mbHasKoreanRange;
     mutable bool                    mbHasCJKSupport;
 #ifdef ENABLE_GRAPHITE
+    mutable GrFontData*             mpGraphiteData;
     mutable bool                    mbHasGraphiteSupport;
 #endif
     mutable bool                    mbHasArabicSupport;
@@ -144,7 +170,8 @@ public:
     HFONT                   mhFonts[ MAX_FALLBACK ];        // Font + Fallbacks
     const ImplWinFontData*  mpWinFontData[ MAX_FALLBACK ];  // pointer to the most recent font face
     ImplWinFontEntry*       mpWinFontEntry[ MAX_FALLBACK ]; // pointer to the most recent font instance
-    float                   mfFontScale;        // allows metrics emulation of huge font sizes
+    float                   mfFontScale[ MAX_FALLBACK ];        // allows metrics emulation of huge font sizes
+    float                   mfCurrentFontScale;
     HPEN                    mhPen;              // Pen
     HBRUSH                  mhBrush;            // Brush
     HRGN                    mhRegion;           // Region Handle

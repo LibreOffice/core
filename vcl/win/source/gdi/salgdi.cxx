@@ -722,9 +722,10 @@ WinSalGraphics::WinSalGraphics()
         mhFonts[ i ] = 0;
         mpWinFontData[ i ]  = NULL;
         mpWinFontEntry[ i ] = NULL;
+        mfFontScale[ i ] = 1.0;
     }
 
-    mfFontScale = 1.0;
+    mfCurrentFontScale = 1.0;
 
     mhDC                = 0;
     mhPen               = 0;

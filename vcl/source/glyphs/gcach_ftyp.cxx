@@ -39,6 +39,10 @@
 #include "vcl/svapp.hxx"
 #include "vcl/outfont.hxx"
 #include "vcl/impfont.hxx"
+#ifdef ENABLE_GRAPHITE
+#include <graphite2/Font.h>
+#include "vcl/graphite_layout.hxx"
+#endif
 
 #include "tools/poly.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
@@ -290,6 +294,33 @@ void FtFontFile::Unmap()
     mpFileMap = NULL;
 }
 
+#ifdef ENABLE_GRAPHITE
+// wrap FtFontInfo's table function
+const void * graphiteFontTable(const void* appFaceHandle, unsigned int name, size_t *len)
+{
+    const FtFontInfo * pFontInfo = reinterpret_cast<const FtFontInfo*>(appFaceHandle);
+    typedef union {
+        char m_c[5];
+        unsigned int m_id;
+    } TableId;
+    TableId tableId;
+    tableId.m_id = name;
+#ifndef WORDS_BIGENDIAN
+    TableId swapped;
+    swapped.m_c[3] = tableId.m_c[0];
+    swapped.m_c[2] = tableId.m_c[1];
+    swapped.m_c[1] = tableId.m_c[2];
+    swapped.m_c[0] = tableId.m_c[3];
+    tableId.m_id = swapped.m_id;
+#endif
+    tableId.m_c[4] = '\0';
+    ULONG nLength = 0;
+    const void * pTable = static_cast<const void*>(pFontInfo->GetTable(tableId.m_c, &nLength));
+    if (len) *len = static_cast<size_t>(nLength);
+    return pTable;
+}
+#endif
+
 // =======================================================================
 
 FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
@@ -298,9 +329,15 @@ FtFontInfo::FtFontInfo( const ImplDevFontAttributes& rDevFontAttributes,
 :
     maFaceFT( NULL ),
     mpFontFile( FtFontFile::FindFontFile( rNativeFileName ) ),
+#ifdef ENABLE_GRAPHITE
+    mpGraphiteFace(NULL),
+#endif
     mnFaceNum( nFaceNum ),
     mnRefCount( 0 ),
     mnSynthetic( nSynthetic ),
+#ifdef ENABLE_GRAPHITE
+    mbCheckedGraphite(false),
+#endif
     mnFontId( nFontId ),
     maDevFontAttributes( rDevFontAttributes ),
     mpChar2Glyph( NULL ),
@@ -323,6 +360,10 @@ FtFontInfo::~FtFontInfo()
     delete mpExtraKernInfo;
     delete mpChar2Glyph;
     delete mpGlyph2Char;
+#ifdef ENABLE_GRAPHITE
+    if (mpGraphiteFace)
+        delete mpGraphiteFace;
+#endif
 }
 
 void FtFontInfo::InitHashes() const
@@ -350,6 +391,30 @@ FT_FaceRec_* FtFontInfo::GetFaceFT()
 
    return maFaceFT;
 }
+
+#ifdef ENABLE_GRAPHITE
+GraphiteFaceWrapper * FtFontInfo::GetGraphiteFace()
+{
+    if (mbCheckedGraphite)
+        return mpGraphiteFace;
+    // test for graphite here so that it is cached most efficiently
+    if (GetTable("Silf", 0))
+    {
+        int graphiteSegCacheSize = 10000;
+        static const char* pGraphiteCacheStr = getenv( "SAL_GRAPHITE_CACHE_SIZE" );
+        graphiteSegCacheSize = pGraphiteCacheStr ? (atoi(pGraphiteCacheStr)) : 0;
+        gr_face * pGraphiteFace;
+        if (graphiteSegCacheSize > 500)
+            pGraphiteFace = gr_make_face_with_seg_cache(this, graphiteFontTable, graphiteSegCacheSize, gr_face_cacheCmap);
+        else
+            pGraphiteFace = gr_make_face(this, graphiteFontTable, gr_face_cacheCmap);
+        if (pGraphiteFace)
+            mpGraphiteFace = new GraphiteFaceWrapper(pGraphiteFace);
+    }
+    mbCheckedGraphite = true;
+    return mpGraphiteFace;
+}
+#endif
 
 // -----------------------------------------------------------------------
 

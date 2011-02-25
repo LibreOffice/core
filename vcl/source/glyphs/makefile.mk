@@ -52,12 +52,11 @@ SLOFILES=\
 .IF "$(ENABLE_GRAPHITE)" != ""
 # Graphite support using the glyphcache infrastructure
 CFLAGS+=-DENABLE_GRAPHITE
-SLOFILES+=	$(SLO)$/graphite_adaptors.obj	\
+SLOFILES+=\
         $(SLO)$/graphite_features.obj	\
-        $(SLO)$/graphite_cache.obj	\
-        $(SLO)$/graphite_textsrc.obj	\
         $(SLO)$/graphite_serverfont.obj	\
         $(SLO)$/graphite_layout.obj
+
 .ENDIF
 
 .ELSE
@@ -65,10 +64,9 @@ SLOFILES+=	$(SLO)$/graphite_adaptors.obj	\
 .IF "$(ENABLE_GRAPHITE)" == "TRUE"
 # Graphite support on non-UNX platforms
 SLOFILES=\
-        $(SLO)$/graphite_textsrc.obj	\
-        $(SLO)$/graphite_cache.obj	\
         $(SLO)$/graphite_features.obj	\
         $(SLO)$/graphite_layout.obj
+
 .ENDIF
 .ENDIF
 

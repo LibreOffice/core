@@ -49,79 +49,107 @@ const char GrFeatureParser::FEAT_PREFIX = ':';
 const char GrFeatureParser::FEAT_SEPARATOR = '&';
 const char GrFeatureParser::FEAT_ID_VALUE_SEPARATOR = '=';
 
-GrFeatureParser::GrFeatureParser(gr::Font & font, const std::string lang)
-    : mnNumSettings(0), mbErrors(false)
+GrFeatureParser::GrFeatureParser(const gr_face * pFace, const ::rtl::OString lang)
+    : mnNumSettings(0), mbErrors(false), mpSettings(NULL)
 {
-    maLang.rgch[0] = maLang.rgch[1] = maLang.rgch[2] = maLang.rgch[3] = '\0';
-    setLang(font, lang);
+    maLang.label[0] = maLang.label[1] = maLang.label[2] = maLang.label[3] = '\0';
+    setLang(pFace, lang);
 }
 
-GrFeatureParser::GrFeatureParser(gr::Font & font, const std::string features, const std::string lang)
-    : mnNumSettings(0), mbErrors(false)
+GrFeatureParser::GrFeatureParser(const gr_face * pFace, const ::rtl::OString features, const ::rtl::OString lang)
+    : mnNumSettings(0), mbErrors(false), mpSettings(NULL)
 {
-    size_t nEquals = 0;
-    size_t nFeatEnd = 0;
-    size_t pos = 0;
-    maLang.rgch[0] = maLang.rgch[1] = maLang.rgch[2] = maLang.rgch[3] = '\0';
-    setLang(font, lang);
-    while (pos < features.length() && mnNumSettings < MAX_FEATURES)
+    sal_Int32 nEquals = 0;
+    sal_Int32 nFeatEnd = 0;
+    sal_Int32 pos = 0;
+    maLang.num = 0u;
+    setLang(pFace, lang);
+    while ((pos < features.getLength()) && (mnNumSettings < MAX_FEATURES))
     {
-        nEquals = features.find(FEAT_ID_VALUE_SEPARATOR,pos);
-        if (nEquals == std::string::npos)
+        nEquals = features.indexOf(FEAT_ID_VALUE_SEPARATOR, pos);
+        if (nEquals == -1)
         {
             mbErrors = true;
             break;
         }
         // check for a lang=xxx specification
-        if (features.compare(pos, nEquals - pos, "lang") == 0)
+        const ::rtl::OString aLangPrefix("lang");
+        if (features.match(aLangPrefix, pos ))
         {
             pos = nEquals + 1;
-            nFeatEnd = features.find(FEAT_SEPARATOR, pos);
-            if (nFeatEnd == std::string::npos)
+            nFeatEnd = features.indexOf(FEAT_SEPARATOR, pos);
+            if (nFeatEnd == -1)
             {
-                nFeatEnd = features.length();
+                nFeatEnd = features.getLength();
             }
             if (nFeatEnd - pos > 3)
                 mbErrors = true;
             else
             {
-                gr::isocode aLang = maLang;
-                for (size_t i = pos; i < nFeatEnd; i++)
-                    aLang.rgch[i-pos] = features[i];
-                std::pair<gr::LanguageIterator,gr::LanguageIterator> aSupported
-                    = font.getSupportedLanguages();
-                gr::LanguageIterator iL = aSupported.first;
-                while (iL != aSupported.second)
+                FeatId aLang = maLang;
+                aLang.num = 0;
+                for (sal_Int32 i = pos; i < nFeatEnd; i++)
+                    aLang.label[i-pos] = features[i];
+
+                //ext_std::pair<gr::LanguageIterator,gr::LanguageIterator> aSupported
+                //    = font.getSupportedLanguages();
+                //gr::LanguageIterator iL = aSupported.first;
+                unsigned short i = 0;
+                for (; i < gr_face_n_languages(pFace); i++)
                 {
-                    gr::isocode aSupportedLang = *iL;
+                    gr_uint32 nFaceLang = gr_face_lang_by_index(pFace, i);
+                    FeatId aSupportedLang;
+                    aSupportedLang.num = nFaceLang;
+#ifdef __BIG_ENDIAN__
                     // here we only expect full 3 letter codes
-                    if (aLang.rgch[0] == aSupportedLang.rgch[0] &&
-                        aLang.rgch[1] == aSupportedLang.rgch[1] &&
-                        aLang.rgch[2] == aSupportedLang.rgch[2] &&
-                        aLang.rgch[3] == aSupportedLang.rgch[3]) break;
-                    ++iL;
+                    if (aLang.label[0] == aSupportedLang.label[0] &&
+                        aLang.label[1] == aSupportedLang.label[1] &&
+                        aLang.label[2] == aSupportedLang.label[2] &&
+                        aLang.label[3] == aSupportedLang.label[3])
+#else
+                    if (aLang.label[0] == aSupportedLang.label[3] &&
+                        aLang.label[1] == aSupportedLang.label[2] &&
+                        aLang.label[2] == aSupportedLang.label[1] &&
+                        aLang.label[3] == aSupportedLang.label[0])
+#endif
+                    {
+                        maLang = aSupportedLang;
+                        break;
+                    }
                 }
-                if (iL == aSupported.second) mbErrors = true;
-                else maLang = aLang;
+                if (i == gr_face_n_languages(pFace)) mbErrors = true;
+                else
+                {
+                    mnHash = maLang.num;
+                    mpSettings = gr_face_featureval_for_lang(pFace, maLang.num);
+                }
             }
         }
         else
         {
+            sal_uInt32 featId = 0;
             if (isCharId(features, pos, nEquals - pos))
-                maSettings[mnNumSettings].id = getCharId(features, pos, nEquals - pos);
-            else maSettings[mnNumSettings].id = getIntValue(features, pos, nEquals - pos);
-            pos = nEquals + 1;
-            nFeatEnd = features.find(FEAT_SEPARATOR, pos);
-            if (nFeatEnd == std::string::npos)
             {
-                nFeatEnd = features.length();
+                featId = getCharId(features, pos, nEquals - pos);
             }
-            if (isCharId(features, pos, nFeatEnd - pos))
-                maSettings[mnNumSettings].value = getCharId(features, pos, nFeatEnd - pos);
             else
-                maSettings[mnNumSettings].value= getIntValue(features, pos, nFeatEnd - pos);
-            if (isValid(font, maSettings[mnNumSettings]))
+            {
+                featId = getIntValue(features, pos, nEquals - pos);
+            }
+            const gr_feature_ref * pFref = gr_face_find_fref(pFace, featId);
+            pos = nEquals + 1;
+            nFeatEnd = features.indexOf(FEAT_SEPARATOR, pos);
+            if (nFeatEnd == -1)
+            {
+                nFeatEnd = features.getLength();
+            }
+            sal_Int16 featValue = 0;
+            featValue = getIntValue(features, pos, nFeatEnd - pos);
+            if (pFref && gr_fref_set_feature_value(pFref, featValue, mpSettings))
+            {
+                mnHash = (mnHash << 16) ^ ((featId << 8) | featValue);
                 mnNumSettings++;
+            }
             else
                 mbErrors = true;
         }
@@ -129,89 +157,80 @@ GrFeatureParser::GrFeatureParser(gr::Font & font, const std::string features, co
     }
 }
 
-void GrFeatureParser::setLang(gr::Font & font, const std::string & lang)
+void GrFeatureParser::setLang(const gr_face * pFace, const rtl::OString & lang)
 {
-    gr::isocode aLang = {{0,0,0,0}};
-    if (lang.length() > 2)
+    FeatId aLang;
+    aLang.num = 0;
+    if (lang.getLength() > 2)
     {
-        for (size_t i = 0; i < lang.length() && i < 3; i++)
+        for (sal_Int32 i = 0; i < lang.getLength() && i < 3; i++)
         {
             if (lang[i] == '-') break;
-            aLang.rgch[i] = lang[i];
+            aLang.label[i] = lang[i];
         }
-        std::pair<gr::LanguageIterator,gr::LanguageIterator> aSupported
-                    = font.getSupportedLanguages();
-        gr::LanguageIterator iL = aSupported.first;
-        while (iL != aSupported.second)
+        unsigned short i = 0;
+        for (; i < gr_face_n_languages(pFace); i++)
         {
-            gr::isocode aSupportedLang = *iL;
-            if (aLang.rgch[0] == aSupportedLang.rgch[0] &&
-                aLang.rgch[1] == aSupportedLang.rgch[1] &&
-                aLang.rgch[2] == aSupportedLang.rgch[2] &&
-                aLang.rgch[3] == aSupportedLang.rgch[3]) break;
-            ++iL;
-        }
-        if (iL != aSupported.second)
-            maLang = aLang;
-#ifdef DEBUG
-        else
-            printf("%s has no features\n", aLang.rgch);
+            gr_uint32 nFaceLang = gr_face_lang_by_index(pFace, i);
+            FeatId aSupportedLang;
+            aSupportedLang.num = nFaceLang;
+            // here we only expect full 2 & 3 letter codes
+#ifdef __BIG_ENDIAN__
+            if (aLang.label[0] == aSupportedLang.label[0] &&
+                aLang.label[1] == aSupportedLang.label[1] &&
+                aLang.label[2] == aSupportedLang.label[2] &&
+                aLang.label[3] == aSupportedLang.label[3])
+#else
+            if (aLang.label[0] == aSupportedLang.label[3] &&
+                aLang.label[1] == aSupportedLang.label[2] &&
+                aLang.label[2] == aSupportedLang.label[1] &&
+                aLang.label[3] == aSupportedLang.label[0])
 #endif
+            {
+                maLang = aSupportedLang;
+                break;
+            }
+        }
+        if (i != gr_face_n_languages(pFace))
+        {
+            if (mpSettings)
+            {
+                gr_featureval_destroy(mpSettings);
+            }
+            mpSettings = gr_face_featureval_for_lang(pFace, maLang.num);
+            mnHash = maLang.num;
+        }
     }
-}
-
-GrFeatureParser::GrFeatureParser(const GrFeatureParser & aCopy)
- : maLang(aCopy.maLang), mbErrors(aCopy.mbErrors)
-{
-    mnNumSettings = aCopy.getFontFeatures(maSettings);
+    if (!mpSettings)
+    {
+        mpSettings = gr_face_featureval_for_lang(pFace, 0);
+    }
 }
 
 GrFeatureParser::~GrFeatureParser()
 {
+    if (mpSettings)
+    {
+        gr_featureval_destroy(mpSettings);
+        mpSettings = NULL;
+    }
 }
 
-size_t GrFeatureParser::getFontFeatures(gr::FeatureSetting settings[64]) const
-{
-    if (settings)
-    {
-        std::copy(maSettings, maSettings + mnNumSettings, settings);
-    }
-    return mnNumSettings;
-}
-
-bool GrFeatureParser::isValid(gr::Font & font, gr::FeatureSetting & setting)
-{
-    gr::FeatureIterator i = font.featureWithID(setting.id);
-    if (font.getFeatures().second == i)
-    {
-        return false;
-    }
-    std::pair< gr::FeatureSettingIterator, gr::FeatureSettingIterator >
-        validValues = font.getFeatureSettings(i);
-    gr::FeatureSettingIterator j = validValues.first;
-    while (j != validValues.second)
-    {
-        if (*j == setting.value) return true;
-        ++j;
-    }
-    return false;
-}
-
-bool GrFeatureParser::isCharId(const std::string & id, size_t offset, size_t length)
+bool GrFeatureParser::isCharId(const rtl::OString & id, size_t offset, size_t length)
 {
     if (length > 4) return false;
     for (size_t i = 0; i < length; i++)
     {
         if (i > 0 && id[offset+i] == '\0') continue;
-        if ((id[offset+i]) < 0x20 || (id[offset+i]) < 0)
+        if ((id[offset+i] < 0x20) || (id[offset+i] < 0))
             return false;
-        if (i==0 && id[offset+i] < 0x41)
+        if (i==0 && (id[offset+i] < 0x41))
             return false;
     }
     return true;
 }
 
-int GrFeatureParser::getCharId(const std::string & id, size_t offset, size_t length)
+gr_uint32 GrFeatureParser::getCharId(const rtl::OString & id, size_t offset, size_t length)
 {
     FeatId charId;
     charId.num = 0;
@@ -229,9 +248,9 @@ int GrFeatureParser::getCharId(const std::string & id, size_t offset, size_t len
     return charId.num;
 }
 
-int GrFeatureParser::getIntValue(const std::string & id, size_t offset, size_t length)
+short GrFeatureParser::getIntValue(const rtl::OString & id, size_t offset, size_t length)
 {
-    int value = 0;
+    short value = 0;
     int sign = 1;
     for (size_t i = 0; i < length; i++)
     {
@@ -269,20 +288,6 @@ int GrFeatureParser::getIntValue(const std::string & id, size_t offset, size_t l
         }
     }
     return value;
-}
-
-
-sal_Int32 GrFeatureParser::hashCode() const
-{
-    union IsoHash { sal_Int32 mInt; gr::isocode mCode; };
-    IsoHash isoHash;
-    isoHash.mCode = maLang;
-    sal_Int32 hash = isoHash.mInt;
-    for (size_t i = 0; i < mnNumSettings; i++)
-    {
-        hash = (hash << 16) ^ ((maSettings[i].id << 8) | maSettings[i].value);
-    }
-    return hash;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

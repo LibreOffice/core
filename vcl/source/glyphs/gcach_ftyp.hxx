@@ -36,6 +36,10 @@
 #include FT_FREETYPE_H
 
 class FreetypeServerFont;
+#ifdef ENABLE_GRAPHITE
+class GraphiteFaceWrapper;
+#endif
+
 struct FT_GlyphRec_;
 
 // -----------------------------------------------------------------------
@@ -81,6 +85,9 @@ public:
     const unsigned char*  GetTable( const char*, ULONG* pLength=0 ) const;
 
     FT_FaceRec_*          GetFaceFT();
+#ifdef ENABLE_GRAPHITE
+    GraphiteFaceWrapper*  GetGraphiteFace();
+#endif
     void                  ReleaseFaceFT( FT_FaceRec_* );
 
     const ::rtl::OString* GetFontFileName() const   { return mpFontFile->GetFileName(); }
@@ -105,7 +112,10 @@ private:
     const int       mnFaceNum;
     int             mnRefCount;
     const int       mnSynthetic;
-
+#ifdef ENABLE_GRAPHITE
+    bool            mbCheckedGraphite;
+    GraphiteFaceWrapper * mpGraphiteFace;
+#endif
     sal_IntPtr      mnFontId;
     ImplDevFontAttributes maDevFontAttributes;
 
@@ -198,6 +208,9 @@ public:
                                 { return mpFontInfo->GetTable( pName, pLength ); }
     int                         GetEmUnits() const;
     const FT_Size_Metrics&      GetMetricsFT() const { return maSizeFT->metrics; }
+#ifdef ENABLE_GRAPHITE
+    GraphiteFaceWrapper*        GetGraphiteFace() const { return mpFontInfo->GetGraphiteFace(); }
+#endif
 
 protected:
     friend class GlyphCache;

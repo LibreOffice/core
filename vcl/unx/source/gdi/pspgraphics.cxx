@@ -992,13 +992,9 @@ SalLayout* PspGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel
     {
 #ifdef ENABLE_GRAPHITE
         // Is this a Graphite font?
-        if (GraphiteFontAdaptor::IsGraphiteEnabledFont(*m_pServerFont[nFallbackLevel]))
+        if (GraphiteServerFontLayout::IsGraphiteEnabledFont(m_pServerFont[nFallbackLevel]))
         {
-            sal_Int32 xdpi, ydpi;
-            GetResolution(xdpi, ydpi);
-            GraphiteFontAdaptor * pGrfont = new GraphiteFontAdaptor( *m_pServerFont[nFallbackLevel], xdpi, ydpi);
-            if (!pGrfont) return NULL;
-            pLayout = new GraphiteServerFontLayout(pGrfont);
+            pLayout = new GraphiteServerFontLayout(*m_pServerFont[nFallbackLevel]);
         }
         else
 #endif

@@ -1823,16 +1823,9 @@ SalLayout* X11SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
 #ifdef ENABLE_GRAPHITE
         // Is this a Graphite font?
         if (!bDisableGraphite_ &&
-            GraphiteFontAdaptor::IsGraphiteEnabledFont(*mpServerFont[nFallbackLevel]))
+            GraphiteServerFontLayout::IsGraphiteEnabledFont(mpServerFont[nFallbackLevel]))
         {
-            sal_Int32 xdpi, ydpi;
-
-            xdpi = GetDisplay()->GetResolution().A();
-            ydpi = GetDisplay()->GetResolution().B();
-
-            GraphiteFontAdaptor * pGrfont = new GraphiteFontAdaptor( *mpServerFont[nFallbackLevel], xdpi, ydpi);
-            if (!pGrfont) return NULL;
-            pLayout = new GraphiteServerFontLayout(pGrfont);
+            pLayout = new GraphiteServerFontLayout(*mpServerFont[nFallbackLevel]);
         }
         else
 #endif

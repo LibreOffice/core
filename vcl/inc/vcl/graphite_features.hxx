@@ -30,12 +30,17 @@
 // Parse a string of features specified as ; separated pairs.
 // e.g.
 // 1001=1&2002=2&fav1=0
-#include <graphite/GrClient.h>
-#include <graphite/Font.h>
-#include <graphite/GrFeature.h>
+#include <sal/types.h>
+#include <rtl/ustring.hxx>
+#include <graphite2/Font.h>
 
 namespace grutils
 {
+    union FeatId
+    {
+        gr_uint32 num;
+        unsigned char label[5];
+    };
 
     class GrFeatureParser
     {
@@ -44,32 +49,30 @@ namespace grutils
         static const char FEAT_PREFIX;
         static const char FEAT_SEPARATOR;
         static const char FEAT_ID_VALUE_SEPARATOR;
-        GrFeatureParser(gr::Font & font, const std::string features, const std::string lang);
-        GrFeatureParser(gr::Font & font, const std::string lang);
-        GrFeatureParser(const GrFeatureParser & copy);
+        GrFeatureParser(const gr_face * face, const ::rtl::OString features, const ::rtl::OString lang);
+        GrFeatureParser(const gr_face * face, const ::rtl::OString lang);
         ~GrFeatureParser();
-        size_t getFontFeatures(gr::FeatureSetting settings[MAX_FEATURES]) const;
+        //size_t getFontFeatures(gr::FeatureSetting settings[MAX_FEATURES]) const;
         bool parseErrors() { return mbErrors; };
-        static bool isValid(gr::Font & font, gr::FeatureSetting & setting);
-        gr::isocode getLanguage() const { return maLang; };
-        bool hasLanguage() const { return (maLang.rgch[0] != '\0'); }
-        sal_Int32 hashCode() const;
+        //static bool isValid(gr::Font & font, gr::FeatureSetting & setting);
+        gr_uint32 getLanguage() const { return maLang.num; };
+        bool hasLanguage() const { return (maLang.label[0] != '\0'); }
+        sal_Int32 hashCode() const { return mnHash; }
+        size_t numFeatures() const { return mnNumSettings; }
+        gr_feature_val * values() const { return mpSettings; };
     private:
-        void setLang(gr::Font & font, const std::string & lang);
-        bool isCharId(const std::string & id, size_t offset, size_t length);
-        int getCharId(const std::string & id, size_t offset, size_t length);
-        int getIntValue(const std::string & id, size_t offset, size_t length);
+        GrFeatureParser(const GrFeatureParser & copy);
+        void setLang(const gr_face * face, const ::rtl::OString & lang);
+        bool isCharId(const ::rtl::OString & id, size_t offset, size_t length);
+        gr_uint32 getCharId(const ::rtl::OString & id, size_t offset, size_t length);
+        short getIntValue(const ::rtl::OString & id, size_t offset, size_t length);
         size_t mnNumSettings;
-        gr::isocode maLang;
+        FeatId maLang;
         bool mbErrors;
-        gr::FeatureSetting maSettings[64];
+        sal_uInt32 mnHash;
+        gr_feature_val * mpSettings;
     };
 
-    union FeatId
-    {
-        gr::featid num;
-        unsigned char label[5];
-    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
