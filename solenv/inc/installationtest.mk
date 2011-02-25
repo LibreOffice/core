@@ -111,7 +111,9 @@ cpptest .PHONY :
         -env:UNO_SERVICES=$(my_file)$(SOLARXMLDIR)/ure/services.rdb \
         -env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/types.rdb \
         -env:arg-soffice=$(my_soffice) -env:arg-user=$(MISC)/$(TARGET)/user \
-        $(my_cppenv) $(TEST_ARGUMENTS:^"-env:arg-testarg.") $(CPPTEST_LIBRARY)
+        $(my_cppenv) $(TEST_ARGUMENTS:^"-env:arg-testarg.") --protector \
+        $(SOLARSHAREDBIN)/unoexceptionprotector$(DLLPOST) \
+        unoexceptionprotector $(CPPTEST_LIBRARY)
 # As a workaround for #i111400#, ignore failure of $(RM):
     $(COMMAND_ECHO)- $(RM) -r $(MISC)/$(TARGET)/user
 .IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
