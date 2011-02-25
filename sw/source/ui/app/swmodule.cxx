@@ -130,6 +130,7 @@
 #include <editeng/acorrcfg.hxx>
 #include <unotools/moduleoptions.hxx>
 
+#include <avmedia/mediaplayer.hxx>
 #include <avmedia/mediatoolbox.hxx>
 
 #include <annotsh.hxx>
@@ -422,6 +423,7 @@ void SwDLL::RegisterControls()
     GalleryChildWindow::RegisterChildWindow(0, pMod);
 
     ::avmedia::MediaToolBoxControl::RegisterControl(SID_AVMEDIA_TOOLBOX, pMod);
+    ::avmedia::MediaPlayer::RegisterChildWindow(0, pMod);
 
     SvxSmartTagsControl::RegisterControl(SID_OPEN_SMARTTAGMENU, pMod);
     ::sfx2::TaskPaneWrapper::RegisterChildWindow( FALSE, pMod );
