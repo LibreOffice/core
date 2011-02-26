@@ -38,6 +38,13 @@
 #include <boost/noncopyable.hpp>
 #include <vector>
 
+#if defined BASEBMP_DLLIMPLEMENTATION
+#define BASEBMP_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+#else
+#define BASEBMP_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
+#endif
+#define BASEBMP_DLLPRIVATE SAL_DLLPRIVATE
+
 namespace basegfx
 {
     class B2IPoint;
@@ -71,7 +78,7 @@ struct ImplBitmapDevice;
     works best when given as an eight bit grey bitmap. Everything else
     is accepted, but potentially slow.
  */
-class BitmapDevice : public boost::enable_shared_from_this<BitmapDevice>,
+class BASEBMP_DLLPUBLIC BitmapDevice : public boost::enable_shared_from_this<BitmapDevice>,
                      private boost::noncopyable
 {
 public:

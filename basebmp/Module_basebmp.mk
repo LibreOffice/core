@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,42 +25,11 @@
 #
 #*************************************************************************
 
-PRJ=..
+$(eval $(call gb_Module_Module,basebmp))
 
-PRJNAME=basebmp
-TARGET=basebmp
+$(eval $(call gb_Module_add_targets,basebmp,\
+	Library_basebmp \
+	Package_inc \
+))
 
-# --- Settings ---------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-# --- Allgemein ---------------------------------------------------
-
-LIB1TARGET=$(SLB)$/basebmp.lib
-LIB1FILES=\
-    $(SLB)$/wrapper.lib
-
-SHL1TARGET= basebmp$(DLLPOSTFIX)
-SHL1IMPLIB= ibasebmp
-
-SHL1STDLIBS=\
-        $(SALLIB)	  \
-        $(BASEGFXLIB)
-
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-SHL1LIBS=	$(SLB)$/basebmp.lib
-
-DEF1NAME	=$(SHL1TARGET)
-DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt \
-        $(LIB1TARGET)
-
-DEF1DES		=BaseBMP
-DEFLIB1NAME	=basebmp
-
-# --- Targets -----------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-$(MISC)$/$(SHL1TARGET).flt : makefile.mk
-    @$(TYPE) $(TARGET).flt > $@
-
+# vim: set noet sw=4 ts=4:
