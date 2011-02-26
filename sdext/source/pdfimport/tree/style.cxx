@@ -37,8 +37,10 @@
 
 #include <algorithm>
 
-using namespace rtl;
 using namespace pdfi;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 #define USTR(x) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
 

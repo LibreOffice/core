@@ -57,8 +57,10 @@
 #endif
 
 using namespace boost::spirit;
-using namespace rtl;
 using namespace pdfparse;
+
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
 
 class StringEmitContext : public EmitContext
 {

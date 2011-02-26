@@ -39,8 +39,12 @@
 
 #include "pdfparse.hxx"
 
-using namespace rtl;
 using namespace pdfparse;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
+using ::rtl::OStringToOUString;
 
 void printHelp( const char* pExe )
 {

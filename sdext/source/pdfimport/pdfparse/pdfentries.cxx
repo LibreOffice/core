@@ -48,7 +48,11 @@
 
 #include <stdio.h>
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringHash;
+using ::rtl::OStringBuffer;
+
 
 namespace pdfparse
 {
