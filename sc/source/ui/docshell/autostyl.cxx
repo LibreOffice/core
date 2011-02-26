@@ -175,7 +175,7 @@ void ScAutoStyleList::StartTimer( ULONG nNow )      // Sekunden
 {
     // ersten Eintrag mit Timeout != 0 suchen
     boost::ptr_vector<ScAutoStyleData>::iterator iter = std::find_if(aEntries.begin(),aEntries.end(),
-                                                                     boost::bind(&ScAutoStyleData::nTimeout,_1) != 0);
+                                                                     boost::bind(&ScAutoStyleData::nTimeout,_1) != static_cast<unsigned>(0));
 
     if (iter != aEntries.end())
     {
