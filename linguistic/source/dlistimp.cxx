@@ -61,12 +61,13 @@
 #include "lngopt.hxx"
 
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
+
+using ::rtl::OUString;
 
 ///////////////////////////////////////////////////////////////////////////
 

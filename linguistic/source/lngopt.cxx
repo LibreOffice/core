@@ -50,7 +50,6 @@
 
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
@@ -60,6 +59,8 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 using namespace com::sun::star::registry;
+
+using ::rtl::OUString;
 
 ///////////////////////////////////////////////////////////////////////////
 
