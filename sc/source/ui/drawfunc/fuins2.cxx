@@ -441,7 +441,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
         }
         catch( uno::Exception& )
         {
-            OSL_ASSERT( "May need error handling here!\n" );
+            OSL_FAIL( "May need error handling here!\n" );
         }
     }
     else
@@ -763,7 +763,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                             }
                             catch( uno::Exception& )
                             {
-                                OSL_ASSERT( "Chart wizard couldn't be positioned automatically\n" );
+                                OSL_FAIL( "Chart wizard couldn't be positioned automatically\n" );
                             }
                         }
 

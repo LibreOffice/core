@@ -122,12 +122,12 @@ beans::PropertyState WrappedCharacterHeightProperty_Base::getPropertyState( cons
 
 Any WrappedCharacterHeightProperty_Base::convertInnerToOuterValue( const Any& rInnerValue ) const
 {
-    OSL_ASSERT("should not be used: WrappedCharacterHeightProperty_Base::convertInnerToOuterValue - check if you miss data");
+    OSL_FAIL("should not be used: WrappedCharacterHeightProperty_Base::convertInnerToOuterValue - check if you miss data");
     return rInnerValue;
 }
 Any WrappedCharacterHeightProperty_Base::convertOuterToInnerValue( const Any& rOuterValue ) const
 {
-    OSL_ASSERT("should not be used: WrappedCharacterHeightProperty_Base::convertOuterToInnerValue - check if you miss data");
+    OSL_FAIL("should not be used: WrappedCharacterHeightProperty_Base::convertOuterToInnerValue - check if you miss data");
     return rOuterValue;
 }
 
