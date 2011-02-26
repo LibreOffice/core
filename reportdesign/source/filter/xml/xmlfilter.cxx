@@ -196,7 +196,7 @@ r
         aError += ',';
         aError += ByteString::CreateFromInt32( r.ColumnNumber );
 
-        OSL_ASSERT( aError.GetBuffer() );
+        OSL_FAIL( aError.GetBuffer() );
 #endif
         return 1;
     }
