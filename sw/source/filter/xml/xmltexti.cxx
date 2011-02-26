@@ -153,7 +153,7 @@ static void lcl_setObjectVisualArea( const uno::Reference< embed::XEmbeddedObjec
         }
         catch( uno::Exception& )
         {
-            OSL_ASSERT( "Couldn't set visual area of the object!\n" );
+            OSL_FAIL( "Couldn't set visual area of the object!\n" );
         }
     }
 }
