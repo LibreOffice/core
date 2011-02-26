@@ -31,7 +31,6 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/io/IOException.hpp>
 #include <osl/process.h>
-using namespace rtl;
 
 #include <map>
 #include <list>
@@ -39,6 +38,9 @@ using namespace rtl;
 #if OSL_DEBUG_LEVEL > 0
 #include <stdio.h>
 #endif
+
+using ::rtl::OUString;
+using ::rtl::OString;
 
 struct ini_NameValue
 {
