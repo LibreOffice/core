@@ -581,6 +581,11 @@ void SchXMLSeries2Context::EndElement()
             aDomainInfos.push_back( aDomainInfo );
             m_rGlobalSeriesImportInfo.nCurrentDataIndex++;
         }
+        else if( m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress.getLength() )
+        {
+            DomainInfo aDomainInfo( OUString::createFromAscii("values-y"), m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress, m_rGlobalSeriesImportInfo.nFirstFirstDomainIndex ) ;
+            aDomainInfos.push_back( aDomainInfo );
+        }
     }
 
     if( bDeleteSeries )
