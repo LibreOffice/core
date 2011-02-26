@@ -635,46 +635,96 @@ sal_Int32 lcl_getMaxSequenceLength(
     return nResult;
 }
 
-double lcl_getValueFromSequence( const Reference< chart2::data::XDataSequence > & xSeq, sal_Int32 nIndex )
+uno::Sequence< rtl::OUString > lcl_DataSequenceToStringSequence(
+    const uno::Reference< chart2::data::XDataSequence >& xDataSequence )
 {
-    double fResult = 0.0;
-    ::rtl::math::setNan( &fResult );
-    Reference< chart2::data::XNumericalDataSequence > xNumSeq( xSeq, uno::UNO_QUERY );
-    if( xNumSeq.is())
+    uno::Sequence< rtl::OUString > aResult;
+    if(!xDataSequence.is())
+        return aResult;
+
+    uno::Reference< chart2::data::XTextualDataSequence > xTextualDataSequence( xDataSequence, uno::UNO_QUERY );
+    if( xTextualDataSequence.is() )
     {
-        Sequence< double > aValues( xNumSeq->getNumericalData());
-        if( nIndex < aValues.getLength() )
-            fResult = aValues[nIndex];
+        aResult = xTextualDataSequence->getTextualData();
     }
     else
     {
-        Sequence< uno::Any > aAnies( xSeq->getData());
-        if( nIndex < aAnies.getLength() )
-            aAnies[nIndex] >>= fResult;
-    }
-    return fResult;
-}
+        uno::Sequence< uno::Any > aValues = xDataSequence->getData();
+        aResult.realloc(aValues.getLength());
 
+        for(sal_Int32 nN=aValues.getLength();nN--;)
+            aValues[nN] >>= aResult[nN];
+    }
+
+    return aResult;
+}
 ::std::vector< double > lcl_getAllValuesFromSequence( const Reference< chart2::data::XDataSequence > & xSeq )
 {
     double fNan = 0.0;
     ::rtl::math::setNan( &fNan );
     ::std::vector< double > aResult;
+    if(!xSeq.is())
+        return aResult;
 
+    uno::Sequence< double > aValuesSequence;
     Reference< chart2::data::XNumericalDataSequence > xNumSeq( xSeq, uno::UNO_QUERY );
-    if( xNumSeq.is())
+    if( xNumSeq.is() )
     {
-        Sequence< double > aValues( xNumSeq->getNumericalData());
-        ::std::copy( aValues.getConstArray(), aValues.getConstArray() + aValues.getLength(),
-                     ::std::back_inserter( aResult ));
+        aValuesSequence = xNumSeq->getNumericalData();
     }
-    else if( xSeq.is())
+    else
     {
-        Sequence< uno::Any > aAnies( xSeq->getData());
-        aResult.resize( aAnies.getLength(), fNan );
+        Sequence< uno::Any > aAnies( xSeq->getData() );
+        aValuesSequence.realloc( aAnies.getLength() );
         for( sal_Int32 i=0; i<aAnies.getLength(); ++i )
-            aAnies[i] >>= aResult[i];
+            aAnies[i] >>= aValuesSequence[i];
     }
+
+    //special handling for x-values (if x-values do point to categories, indices are used instead )
+    Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY );
+    if( xProp.is() )
+    {
+        OUString aRole;
+        xProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Role") ) ) >>= aRole;
+        if( aRole.match( OUString( RTL_CONSTASCII_USTRINGPARAM( "values-x") ) ) )
+        {
+            //lcl_clearIfNoValuesButTextIsContained - replace by indices if the values are not appropriate
+            bool bHasValue=false;
+            bool bHasText=false;
+            sal_Int32 nCount = aValuesSequence.getLength();
+            for( sal_Int32 j = 0; j < nCount; ++j )
+            {
+                if( !::rtl::math::isNan( aValuesSequence[j] ) )
+                {
+                    bHasValue=true;
+                    break;
+                }
+            }
+            if(!bHasValue)
+            {
+                //no double value is countained
+                //is there any text?
+                uno::Sequence< rtl::OUString > aStrings( lcl_DataSequenceToStringSequence( xSeq ) );
+                sal_Int32 nTextCount = aStrings.getLength();
+                for( sal_Int32 j = 0; j < nTextCount; ++j )
+                {
+                    if( aStrings[j].getLength() )
+                    {
+                        bHasText=true;
+                        break;
+                    }
+                }
+            }
+            if( !bHasValue && bHasText )
+            {
+                for( sal_Int32 j = 0; j < nCount; ++j )
+                    aValuesSequence[j] = j+1;
+            }
+        }
+    }
+
+    ::std::copy( aValuesSequence.getConstArray(), aValuesSequence.getConstArray() + aValuesSequence.getLength(),
+                     ::std::back_inserter( aResult ));
     return aResult;
 }
 
