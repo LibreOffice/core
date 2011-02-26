@@ -45,10 +45,13 @@ using namespace CSS::uno;
 using namespace CSS::ucb;
 using namespace CSS::task;
 using namespace CSS::io;
-using namespace rtl;
 using namespace osl;
 using namespace ucbhelper;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::OStringToOUString;
+using ::rtl::OStringBuffer;
 
 
 CSubmissionGet::CSubmissionGet(const rtl::OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
