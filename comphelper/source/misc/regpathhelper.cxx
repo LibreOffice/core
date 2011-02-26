@@ -39,7 +39,10 @@
 #include <rtl/uri.hxx>
 
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
 
 #define PATH_DELEMITTER '/'
 
