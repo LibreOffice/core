@@ -300,7 +300,7 @@ static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
         }
         else {
             // Should never see this...
-            OSL_ASSERT("Unknown Expression Type!");
+            OSL_FAIL("Unknown Expression Type!");
             return( NS_ERROR_UNEXPECTED );
         }
     }

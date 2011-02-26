@@ -1245,7 +1245,7 @@ bool OSQLParseTreeIterator::traverseSelectionCriteria(const OSQLParseNode* pSele
         pWhereClause = pSelectNode->getChild(3);
     } else if (SQL_ISRULE(pSelectNode,delete_statement_positioned)) {
         // nyi
-        OSL_ASSERT("OSQLParseTreeIterator::getSelectionCriteria: positioned nyi");
+        OSL_FAIL("OSQLParseTreeIterator::getSelectionCriteria: positioned nyi");
     } else {
         // Anderes Statement. Keine Selektionskriterien.
         return false;
@@ -1487,7 +1487,7 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
     }
     else
     {
-        OSL_ASSERT("OSQLParseTreeIterator: error in parse tree!");
+        OSL_FAIL("OSQLParseTreeIterator: error in parse tree!");
     }
 
     // found a parameter

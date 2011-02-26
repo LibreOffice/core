@@ -153,7 +153,7 @@ sal_Int32 OSortIndex::GetValue(sal_Int32 nPos) const
 
     if (!m_bFrozen && m_aKeyType[0] != SQL_ORDERBYKEY_NONE)
     {
-        OSL_ASSERT("OSortIndex::GetValue: Invalid use of index!");
+        OSL_FAIL("OSortIndex::GetValue: Invalid use of index!");
         return 0;
     }
     return m_aKeyValues[nPos-1].first;

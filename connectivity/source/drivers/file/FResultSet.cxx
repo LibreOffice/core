@@ -1307,7 +1307,7 @@ void OResultSet::sortRows()
         // Other types aren't implemented (so they are always FALSE)
             default:
                 eKeyType[i] = SQL_ORDERBYKEY_NONE;
-                OSL_ASSERT("OFILECursor::Execute: Datentyp nicht implementiert");
+                OSL_FAIL("OFILECursor::Execute: Datentyp nicht implementiert");
                 break;
         }
         (m_aEvaluateRow->get())[*aOrderByIter]->setBound(sal_True);

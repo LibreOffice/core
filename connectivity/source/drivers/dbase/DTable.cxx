@@ -993,7 +993,7 @@ sal_Bool ODbaseTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols, s
                         (_rRow->get())[i]->setNull();
                 }   break;
                 default:
-                    OSL_ASSERT("Falscher Type");
+                    OSL_FAIL("Falscher Type");
             }
             (_rRow->get())[i]->setTypeKind(nType);
         }

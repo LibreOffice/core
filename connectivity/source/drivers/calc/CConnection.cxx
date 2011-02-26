@@ -141,7 +141,7 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), UNO_QUERY );
     if (!xDesktop.is())
     {
-        OSL_ASSERT("no desktop");
+        OSL_FAIL("no desktop");
         throw SQLException();
     }
     Reference< XComponent > xComponent;

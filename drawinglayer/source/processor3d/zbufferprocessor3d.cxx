@@ -765,7 +765,7 @@ namespace drawinglayer
 
             if(mpRasterPrimitive3Ds)
             {
-                OSL_ASSERT("ZBufferProcessor3D: destructed, but there are unrendered transparent geometries. Use ZBufferProcessor3D::finish() to render these (!)");
+                OSL_FAIL("ZBufferProcessor3D: destructed, but there are unrendered transparent geometries. Use ZBufferProcessor3D::finish() to render these (!)");
                 delete mpRasterPrimitive3Ds;
             }
         }

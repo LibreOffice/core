@@ -943,7 +943,7 @@ sal_Bool SfxLibraryContainer::init_Impl(
         catch( uno::Exception& )
         {
             // TODO: error handling?
-            OSL_ASSERT( "Cannot access extensions!" );
+            OSL_FAIL( "Cannot access extensions!" );
         }
     }
 

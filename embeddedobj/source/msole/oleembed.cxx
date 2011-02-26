@@ -427,7 +427,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                 if ( aStorageName.getLength() )
                     try {
                         m_xParentStorage->removeElement( aStorageName );
-                    } catch( uno::Exception& ) { OSL_ASSERT( "Can not remove temporary storage!" ); }
+                    } catch( uno::Exception& ) { OSL_FAIL( "Can not remove temporary storage!" ); }
                 break;
         }
     }

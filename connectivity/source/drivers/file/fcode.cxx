@@ -143,7 +143,7 @@ OOperandParam::OOperandParam(OSQLParseNode* pNode, sal_Int32 _nPos)
         aParameterName = pNode->getChild(1)->getTokenValue();
     else
     {
-        OSL_ASSERT("Fehler im Parse Tree");
+        OSL_FAIL("Fehler im Parse Tree");
     }
 
     // set up Parameter-Column with default type, can be specified more precisely later using Describe-Parameter
@@ -200,7 +200,7 @@ OOperandConst::OOperandConst(const OSQLParseNode& rColumnRef, const rtl::OUStrin
     }
     else
     {
-        OSL_ASSERT("Parse Error");
+        OSL_FAIL("Parse Error");
     }
     m_aValue.setBound(sal_True);
 }

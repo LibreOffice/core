@@ -411,7 +411,7 @@ const ORowSetValue& OResultSet::getValue(sal_Int32 cardNumber, sal_Int32 columnI
 {
     if ( fetchRow( cardNumber ) == sal_False )
     {
-        OSL_ASSERT("fetchRow() returned False" );
+        OSL_FAIL("fetchRow() returned False" );
         m_bWasNull = sal_True;
         return *ODatabaseMetaDataResultSet::getEmptyValue();
     }
@@ -836,7 +836,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
             queryExpression.setExpressionCondition( MQueryExpression::AND );
         }
         else {
-            OSL_ASSERT("analyseSQL: Error in Parse Tree");
+            OSL_FAIL("analyseSQL: Error in Parse Tree");
         }
     }
     else if (SQL_ISRULE(parseTree,comparison_predicate))
@@ -1267,7 +1267,7 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                     // FALSE)
                         default:
                             eKeyType[i] = SQL_ORDERBYKEY_NONE;
-                            OSL_ASSERT("MResultSet::executeQuery: Order By Data Type not implemented");
+                            OSL_FAIL("MResultSet::executeQuery: Order By Data Type not implemented");
                             break;
                     }
                 }

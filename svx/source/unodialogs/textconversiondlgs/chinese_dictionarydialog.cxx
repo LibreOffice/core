@@ -198,7 +198,7 @@ void DictionaryList::refillFromDictionary( sal_Int32 nTextConversionOptions )
 
         if(aRightList.getLength()!=1)
         {
-            OSL_ASSERT("The Chinese Translation Dictionary should have exactly one Mapping for each term.");
+            OSL_FAIL("The Chinese Translation Dictionary should have exactly one Mapping for each term.");
             continue;
         }
 

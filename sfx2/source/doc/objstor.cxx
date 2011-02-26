@@ -1605,7 +1605,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                         {
                             // it should not happen, the copies signature is invalid!
                             // throw the changes away
-                            OSL_ASSERT( "An invalid signature was copied!" );
+                            OSL_FAIL( "An invalid signature was copied!" );
                         }
                     }
                 }

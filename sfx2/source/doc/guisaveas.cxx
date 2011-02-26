@@ -230,7 +230,7 @@ public:
             }
             catch( uno::Exception& )
             {
-                OSL_ASSERT( "Unexpected exception!" );
+                OSL_FAIL( "Unexpected exception!" );
             }
         }
     }
