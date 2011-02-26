@@ -344,7 +344,7 @@ void SAL_CALL OOXMLDocPropHandler::startUnknownElement( const ::rtl::OUString& a
     aUnknown += aNamespace;
     aUnknown += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ":" ) );
     aUnknown += aName;
-    OSL_ASSERT( ::rtl::OUStringToOString( aUnknown, RTL_TEXTENCODING_UTF8 ).getStr() );
+    OSL_FAIL( ::rtl::OUStringToOString( aUnknown, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     if ( m_nInBlock == SAL_MAX_INT32 )
         throw uno::RuntimeException();
