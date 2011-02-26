@@ -80,10 +80,11 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::xml::sax;
 using namespace com::sun::star;
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
 
 using com::sun::star::uno::Reference;
+
+using ::rtl::OUString;
 
 //============================================================================
 // Implementation class SfxScriptLibraryContainer

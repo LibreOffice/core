@@ -35,8 +35,9 @@
 
 using namespace com::sun::star;
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
+
+using ::rtl::OUString;
 
 ModuleSizeExceeded::ModuleSizeExceeded( const uno::Sequence< ::rtl::OUString >& sModules )
 {

@@ -90,10 +90,14 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::deployment;
 using namespace com::sun::star;
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
 
 using com::sun::star::uno::Reference;
+
+using ::rtl::OUString;
+using ::rtl::OStringBuffer;
+using ::rtl::OUStringToOString;
+using ::rtl::Uri;
 
 // #i34411: Flag for error handling during migration
 static bool GbMigrationSuppressErrors = false;

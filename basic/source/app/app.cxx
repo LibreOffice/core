@@ -74,12 +74,14 @@
 
 using namespace comphelper;
 using namespace cppu;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::beans;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 #endif /* _USE_UNO */
 
