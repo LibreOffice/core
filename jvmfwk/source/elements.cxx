@@ -253,7 +253,7 @@ void NodeJava::load()
     }
     else
     {
-        OSL_ASSERT("[Java framework] Unknown enum used.");
+        OSL_FAIL("[Java framework] Unknown enum used.");
     }
 
 
@@ -381,7 +381,7 @@ void NodeJava::load()
     case INSTALL: ret = getInstallSettingsPath(); break;
     case SHARED: ret = getSharedSettingsPath(); break;
     default:
-        OSL_ASSERT("[Java framework] NodeJava::getSettingsPath()");
+        OSL_FAIL("[Java framework] NodeJava::getSettingsPath()");
     }
     return ret;
 }
@@ -395,7 +395,7 @@ void NodeJava::load()
     case INSTALL: ret = BootParams::getInstallData(); break;
     case SHARED: ret = BootParams::getSharedData(); break;
     default:
-        OSL_ASSERT("[Java framework] NodeJava::getSettingsURL()");
+        OSL_FAIL("[Java framework] NodeJava::getSettingsURL()");
     }
     return ret;
 }
