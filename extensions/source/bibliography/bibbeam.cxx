@@ -46,10 +46,11 @@
 #include "datman.hxx"
 #include "bibtools.hxx"
 
-using namespace rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 

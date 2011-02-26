@@ -43,8 +43,11 @@
 #include <tools/string.hxx>
 #include <osl/conditn.hxx>
 
-using namespace rtl;
 using namespace usr;
+
+using ::rtl::OUStringToString;
+using ::rtl::StringToOUString;
+
 
 #define PCHAR_TO_USTRING(x) StringToOUString(String(x),CHARSET_SYSTEM)
 

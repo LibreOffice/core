@@ -69,13 +69,14 @@
 using namespace std;
 using namespace boost;
 using namespace osl;
-using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::script;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::bridge::oleautomation;
 using namespace com::sun::star::bridge::ModelDependent;
+
+using ::rtl::OUString;
 
 #define JSCRIPT_ID_PROPERTY L"_environment"
 #define JSCRIPT_ID          L"jscript"

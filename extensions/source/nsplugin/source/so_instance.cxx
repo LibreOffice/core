@@ -64,8 +64,10 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::connection;
 using namespace cppu;
-using namespace rtl;
 using namespace com::sun::star;
+
+using ::rtl::OUString;
+using ::rtl::OString;
 
 char SoPluginInstance::sSO_Dir[] = {0};
 Reference< XMultiServiceFactory > SoPluginInstance::mxRemoteMSF = Reference< XMultiServiceFactory >(NULL);

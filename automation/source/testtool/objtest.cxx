@@ -61,8 +61,8 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::connection;
-using namespace rtl;
 
+using ::rtl::OUString;
 
 #include <svtools/svmedit.hxx>
 

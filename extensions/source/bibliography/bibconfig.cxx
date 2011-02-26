@@ -39,11 +39,12 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+
+using ::rtl::OUString;
 
 typedef Mapping* MappingPtr;
 SV_DECL_PTRARR_DEL(MappingArray, MappingPtr, 2, 2)

@@ -52,11 +52,12 @@
 
 using namespace comphelper;
 using namespace cppu;
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::ucb;
+
+using ::rtl::OUString;
 
 static ResMgr* pAppMgr = NULL;
 

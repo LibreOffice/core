@@ -91,10 +91,9 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::reflection;
 using namespace com::sun::star::beans;
 using namespace osl;
-using namespace rtl;
 using namespace std;
 
-
+using ::rtl::OUString;
 
 namespace ole_adapter
 {

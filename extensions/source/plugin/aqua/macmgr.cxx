@@ -33,10 +33,16 @@
 #include "osl/file.h"
 #include "osl/module.hxx"
 
-using namespace rtl;
 using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::plugin;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OStringBuffer;
+using ::rtl::OUStringToOString;
+using ::rtl::OStringToOUString;
 
 namespace plugstringhelper
 {

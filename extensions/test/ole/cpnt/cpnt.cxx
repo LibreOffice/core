@@ -62,13 +62,14 @@
 using namespace cppu;
 using namespace osl;
 using namespace oletest;
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::script;
 using namespace com::sun::star::reflection;
+
+using ::rtl::OUString;
 
 
 #define IMPL_NAME L"oletest.OleTestImpl"  // oletest.OleTestImpl in applicat.rdb

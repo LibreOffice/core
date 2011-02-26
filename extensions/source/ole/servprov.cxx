@@ -56,14 +56,13 @@ extern CComModule _Module;
 
 
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::bridge::ModelDependent;
 
-
+using ::rtl::OUString;
 
 namespace ole_adapter
 {

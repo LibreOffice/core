@@ -46,10 +46,14 @@
 #include <vcl/svapp.hxx>
 #include <plugin/impl.hxx>
 
-using namespace rtl;
 using namespace std;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::plugin;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
+using ::rtl::OStringToOUString;
 
 // Unix specific implementation
 static bool CheckPlugin( const ByteString& rPath, list< PluginDescription* >& rDescriptions )

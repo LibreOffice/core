@@ -54,7 +54,7 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::bridge::ModelDependent;
 using namespace cppu;
-using namespace rtl;
+
 HRESULT doTest();
 bool incrementMultidimensionalIndex(
     sal_Int32 dimensions,

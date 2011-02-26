@@ -84,8 +84,11 @@ void TRACES( char const* s, char const* s2 )
 #define TRACES(x,s)
 #endif
 
-using namespace rtl;
 using namespace com::sun::star::lang;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
 
 NPNetscapeFuncs aNPNFuncs =
 {

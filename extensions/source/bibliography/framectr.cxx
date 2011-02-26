@@ -65,11 +65,12 @@
 
 using namespace osl;
 using namespace cppu;
-using namespace rtl;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
+
+using ::rtl::OUString;
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
 

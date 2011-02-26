@@ -34,9 +34,10 @@
 #include "servprov.hxx"
 #include <rtl/ustring.hxx>
 #include <cppuhelper/factory.hxx>
-using namespace rtl;
 using namespace ole_adapter;
 using namespace cppu;
+
+using ::rtl::OUString;
 
 namespace ole_adapter
 {

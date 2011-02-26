@@ -51,7 +51,6 @@
 #include <usr/reflserv.hxx>  // for EXTERN_SERVICE_CALLTYPE
 
 using namespace std;
-using namespace rtl;
 using namespace usr;
 
 #define BUILD_ERROR(expr, Message)\

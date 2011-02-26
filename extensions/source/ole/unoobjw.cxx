@@ -66,7 +66,6 @@
 #include "servprov.hxx"
 
 using namespace std;
-using namespace rtl;
 using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
@@ -77,7 +76,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge::ModelDependent;
 using namespace com::sun::star::reflection;
 
-
+using ::rtl::OUString;
 
 #if _MSC_VER < 1200
 extern "C" const GUID IID_IDispatchEx;

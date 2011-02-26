@@ -60,8 +60,10 @@ using namespace com::sun::star;
 using namespace com::sun::star::io;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::plugin;
-using namespace rtl;
 using namespace osl;
+
+using ::rtl::OUString;
+using ::rtl::OString;
 
 class PluginDisposer : public salhelper::Timer
 {

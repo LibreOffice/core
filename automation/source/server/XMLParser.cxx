@@ -49,7 +49,8 @@ using namespace com::sun::star::xml::sax;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 class SVInputStream : public cppu::WeakImplHelper1< XInputStream >
 {

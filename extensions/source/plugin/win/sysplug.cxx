@@ -51,7 +51,9 @@ extern NPNetscapeFuncs aNPNFuncs;
 
 #include <tools/debug.hxx>
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringToOString;
 
 #if OSL_DEBUG_LEVEL > 1
 void TRACE( char const * s );
