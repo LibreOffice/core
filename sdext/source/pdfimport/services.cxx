@@ -147,7 +147,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, voi
         }
         catch( Exception& )
         {
-            OSL_ASSERT( "OModule::writeComponentInfos: something went wrong while creating the keys!" );
+            OSL_FAIL( "OModule::writeComponentInfos: something went wrong while creating the keys!" );
             return sal_False;
         }
         ++pComponents;
