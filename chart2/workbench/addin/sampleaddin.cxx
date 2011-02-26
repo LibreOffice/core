@@ -37,7 +37,8 @@
 #include <com/sun/star/chart/X3DDisplay.hpp>
 
 using namespace com::sun::star;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 // code for creating instances of SampleAddIn
 
