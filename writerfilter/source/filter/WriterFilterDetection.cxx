@@ -138,7 +138,7 @@ OUString WriterFilterDetection::detect( uno::Sequence< beans::PropertyValue >& r
     }
     catch(const uno::Exception&)
     {
-        OSL_ASSERT("exception while opening storage");
+        OSL_FAIL("exception while opening storage");
     }
     if( !bWord )
         sTypeName = ::rtl::OUString();

@@ -840,7 +840,7 @@ void DomainMapper::attribute(Id nName, Value & val)
         case NS_rtf::LN_cellLeftColor:
         case NS_rtf::LN_cellBottomColor:
         case NS_rtf::LN_cellRightColor:
-            OSL_ASSERT("handled by DomainMapperTableManager");
+            OSL_FAIL("handled by DomainMapperTableManager");
         break;
 
         case NS_rtf::LN_LISTTABLE:
