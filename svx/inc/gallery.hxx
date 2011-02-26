@@ -228,7 +228,7 @@ public:
     BOOL                        GetVCDrawModel( FmFormModel& rModel ) const;
     BOOL                        IsLinkage() const;
 
-    static BOOL                 FillThemeList( List& rThemeList );
+    static bool                 FillThemeList( std::vector<String>& rThemeList );
 
                                 // FillObjList is filling rObjList with Strings of the internal Gallery Object URL
     static BOOL                 FillObjList( const String& rThemeName, List& rObjList );
