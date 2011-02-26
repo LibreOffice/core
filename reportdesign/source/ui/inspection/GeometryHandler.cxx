@@ -2077,7 +2077,7 @@ void GeometryHandler::impl_initFieldList_nothrow( uno::Sequence< ::rtl::OUString
     }
     catch (uno::Exception&)
     {
-        OSL_ASSERT( "GeometryHandler::impl_initFieldList_nothrow: caught an exception!" );
+        OSL_FAIL( "GeometryHandler::impl_initFieldList_nothrow: caught an exception!" );
     }
 }
 // -----------------------------------------------------------------------------

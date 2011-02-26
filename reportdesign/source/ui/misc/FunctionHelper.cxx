@@ -194,7 +194,7 @@ xub_StrLen FunctionDescription::getSuppressedArgumentCount() const
     }
     catch(const uno::Exception&)
     {
-        OSL_ASSERT("Exception caught!");
+        OSL_FAIL("Exception caught!");
     }
     return sFormula;
 }
