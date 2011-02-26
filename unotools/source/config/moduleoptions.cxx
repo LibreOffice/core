@@ -680,7 +680,7 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
         case SvtModuleOptions::E_DATABASE     :  sShortName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdatabase"));
                                                   break;
         default:
-            OSL_ASSERT( "unknown factory" );
+            OSL_FAIL( "unknown factory" );
             break;
     }
 
@@ -745,7 +745,7 @@ sal_Bool SvtModuleOptions_Impl::IsModuleInstalled( SvtModuleOptions::EModule eMo
         case SvtModuleOptions::E_DATABASE     :  sURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sdatabase?Interactive"));
                                                   break;
         default:
-            OSL_ASSERT( "unknown factory" );
+            OSL_FAIL( "unknown factory" );
             break;
     }
     return sURL;
@@ -1329,7 +1329,7 @@ sal_uInt32 SvtModuleOptions::GetFeatures() const
         case SvtModuleOptions::E_SBASIC     :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Basic")); }
         case SvtModuleOptions::E_SDATABASE  :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Database")); }
         default:
-            OSL_ASSERT( "unknown module" );
+            OSL_FAIL( "unknown module" );
             break;
     }
 
@@ -1351,7 +1351,7 @@ sal_uInt32 SvtModuleOptions::GetFeatures() const
         case SvtModuleOptions::E_BASIC          :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Basic")); }
         case SvtModuleOptions::E_DATABASE       :   { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Database")); }
         default:
-            OSL_ASSERT( "unknown factory" );
+            OSL_FAIL( "unknown factory" );
             break;
     }
 

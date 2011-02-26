@@ -4231,7 +4231,7 @@ void lcl_SvNumberformat_AddLimitStringImpl( String& rStr,
                 rStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "[>=" ) );
             break;
             default:
-                OSL_ASSERT( "unsupported number format" );
+                OSL_FAIL( "unsupported number format" );
                 break;
         }
         rStr += String( ::rtl::math::doubleToUString( fLimit,

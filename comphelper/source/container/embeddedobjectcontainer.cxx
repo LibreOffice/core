@@ -204,7 +204,7 @@ void EmbeddedObjectContainer::ReleaseImageSubStorage()
         }
         catch( uno::Exception& )
         {
-            OSL_ASSERT( "Problems releasing image substorage!\n" );
+            OSL_FAIL( "Problems releasing image substorage!\n" );
         }
     }
 }

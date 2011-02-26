@@ -2394,7 +2394,7 @@ void SelectionManager::dropComplete( sal_Bool bSuccess, XLIB_Window aDropWindow,
         m_bDropWaitingForCompletion = false;
     }
     else
-        OSL_ASSERT( "dropComplete from invalid DropTargetDropContext" );
+        OSL_FAIL( "dropComplete from invalid DropTargetDropContext" );
 }
 
 /*
@@ -3970,7 +3970,7 @@ void SelectionManager::registerDropTarget( XLIB_Window aWindow, DropTarget* pTar
     ::boost::unordered_map< XLIB_Window, DropTargetEntry >::const_iterator it =
           m_aDropTargets.find( aWindow );
     if( it != m_aDropTargets.end() )
-        OSL_ASSERT( "attempt to register window as drop target twice" );
+        OSL_FAIL( "attempt to register window as drop target twice" );
     else if( aWindow && m_pDisplay )
     {
         DropTargetEntry aEntry( pTarget );
@@ -4001,7 +4001,7 @@ void SelectionManager::registerDropTarget( XLIB_Window aWindow, DropTarget* pTar
         m_aDropTargets[ aWindow ] = aEntry;
     }
     else
-        OSL_ASSERT( "attempt to register None as drop target" );
+        OSL_FAIL( "attempt to register None as drop target" );
 }
 
 // ------------------------------------------------------------------------

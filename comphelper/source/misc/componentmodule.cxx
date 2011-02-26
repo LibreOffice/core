@@ -185,7 +185,7 @@ namespace comphelper
             }
             catch( Exception& )
             {
-                OSL_ASSERT( "OModule::writeComponentInfos: something went wrong while creating the keys!" );
+                OSL_FAIL( "OModule::writeComponentInfos: something went wrong while creating the keys!" );
                 return sal_False;
             }
         }
