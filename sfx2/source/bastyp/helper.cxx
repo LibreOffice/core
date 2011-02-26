@@ -60,11 +60,14 @@
 #include <vector>
 
 using namespace com::sun::star;
-using namespace rtl;
 using namespace comphelper;
 using namespace osl;
 
 using ::std::vector;
+
+using ::rtl::OUString;
+using ::rtl::OStringBuffer;
+using ::rtl::OStringToOUString;
 
 typedef vector< OUString* > StringList_Impl;
 

@@ -51,7 +51,11 @@ namespace {
 
 namespace css = com::sun::star ;
 namespace uno = css::uno ;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
+using ::rtl::OUStringBuffer;
 
 GConfClient* getGconfClient()
 {

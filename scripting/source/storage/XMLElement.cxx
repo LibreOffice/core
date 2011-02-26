@@ -31,9 +31,11 @@
 #include "XMLElement.hxx"
 #include <osl/diagnose.h>
 
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 namespace scripting_impl
 {
