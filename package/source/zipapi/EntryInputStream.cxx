@@ -34,11 +34,12 @@
 #include <rtl/digest.h>
 #include <memory.h> // for memcpy
 
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::zip::ZipConstants;
+
+using ::rtl::OUString;
 
 /** Provides access to the compressed data in a zipfile.
  *

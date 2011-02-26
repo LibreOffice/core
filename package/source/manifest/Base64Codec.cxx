@@ -31,9 +31,10 @@
 #include "Base64Codec.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
-using namespace rtl;
 using namespace osl;
 using namespace com::sun::star;
+
+using ::rtl::OUStringBuffer;
 
 const
   sal_Char aBase64EncodeTable[] =

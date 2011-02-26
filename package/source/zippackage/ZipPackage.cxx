@@ -84,7 +84,6 @@
 #include <comphelper/ofopxmlhelper.hxx>
 #include <comphelper/documentconstants.hxx>
 
-using namespace rtl;
 using namespace std;
 using namespace osl;
 using namespace cppu;
@@ -102,6 +101,9 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::packages::zip;
 using namespace com::sun::star::packages::manifest;
 using namespace com::sun::star::packages::zip::ZipConstants;
+
+using ::rtl::OUString;
+using ::rtl::OString;
 
 #define LOGFILE_AUTHOR "mg115289"
 
