@@ -33,7 +33,7 @@
 #include <svl/svarray.hxx>
 #include "i18nmap.hxx"
 
-using namespace rtl;
+using ::rtl::OUString;
 
 class SvI18NMapEntry_Impl
 {

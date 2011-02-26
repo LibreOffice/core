@@ -38,10 +38,9 @@
 #include <osl/time.h>
 
 
-using namespace rtl;
 using namespace ftp;
 
-
+using ::rtl::OUString;
 typedef sal_uInt32 ULONG;
 
 

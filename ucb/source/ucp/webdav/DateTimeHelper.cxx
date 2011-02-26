@@ -35,9 +35,11 @@
 #include "DateTimeHelper.hxx"
 
 using namespace com::sun::star::util;
-using namespace rtl;
 
 using namespace webdav_ucp;
+
+using ::rtl::OUString;
+using ::rtl::OString;
 
 bool DateTimeHelper::ISO8601_To_DateTime (const OUString& s,
     DateTime& dateTime)

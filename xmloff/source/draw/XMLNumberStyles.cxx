@@ -39,8 +39,9 @@
 #include "sdxmlexp_impl.hxx"
 #include "sdxmlimp_impl.hxx"
 
-using namespace rtl;
 using namespace ::xmloff::token;
+
+using ::rtl::OUString;
 
 struct SdXMLDataStyleNumber
 {

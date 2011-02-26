@@ -40,11 +40,14 @@
 #include "LockEntrySequence.hxx"
 #include "UCBDeadPropertyValue.hxx"
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 using namespace std;
 using namespace webdav_ucp;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
 
 // -------------------------------------------------------------------
 namespace

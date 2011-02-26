@@ -43,8 +43,9 @@
 #include <uno/lbnames.h>
 #include "xmlreg.hxx"
 
-using namespace rtl;
 using namespace com::sun::star;
+
+using ::rtl::OUString;
 
 #define SERVICE( className )                                        \
 extern OUString SAL_CALL className##_getImplementationName() throw();   \
