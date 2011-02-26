@@ -47,7 +47,6 @@
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
 
-
 using namespace utl;
 using namespace osl;
 using namespace com::sun::star;
@@ -60,8 +59,8 @@ using namespace linguistic;
 using ::rtl::OUString;
 using ::rtl::OString;
 using ::rtl::OUStringBuffer;
-using ::rtl::OStringBuffer;
 using ::rtl::OUStringToOString;
+
 ///////////////////////////////////////////////////////////////////////////
 // dbg_dump for development
 #if OSL_DEBUG_LEVEL > 1
