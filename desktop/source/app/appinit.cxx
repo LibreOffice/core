@@ -82,13 +82,14 @@
 
 #define DESKTOP_TEMPDIRNAME                     "soffice.tmp"
 
-using namespace rtl;
 using namespace desktop;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::ucb;
+
+using ::rtl::OUString;
 
 namespace desktop
 {

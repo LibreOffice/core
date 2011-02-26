@@ -53,11 +53,14 @@
 #include "rtl/process.h"
 #include "tools/getprocessworkingdir.hxx"
 
-using namespace rtl;
 using namespace desktop;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
+
+using ::rtl::OString;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 const char  *OfficeIPCThread::sc_aTerminationSequence = "InternalIPC::TerminateThread";
 const int OfficeIPCThread::sc_nTSeqLength = 28;

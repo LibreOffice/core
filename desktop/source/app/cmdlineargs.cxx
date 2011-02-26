@@ -43,10 +43,11 @@
 
 #include <cstdio>
 
-using namespace rtl;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uri;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 namespace desktop
 {

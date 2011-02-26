@@ -43,13 +43,16 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::Bootstrap;
 
 namespace desktop{
 

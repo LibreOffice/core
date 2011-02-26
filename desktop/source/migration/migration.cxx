@@ -65,7 +65,6 @@
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 
-using namespace rtl;
 using namespace osl;
 using namespace std;
 using namespace com::sun::star::task;
@@ -75,6 +74,9 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::container;
 using com::sun::star::uno::Exception;
 using namespace com::sun::star;
+
+using ::rtl::OUString;
+using ::rtl::OString;
 
 namespace desktop {
 
