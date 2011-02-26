@@ -138,6 +138,5 @@ SAL_IMPLEMENT_MAIN() {
     result.addListener(&collector);
     runner.run(result);
     CppUnit::CompilerOutputter(&collector, CppUnit::stdCErr()).write();
-    fprintf( stderr, "-----\n" ); fflush( stderr );
     return collector.wasSuccessful() ? EXIT_SUCCESS : EXIT_FAILURE;
 }
