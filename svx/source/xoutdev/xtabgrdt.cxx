@@ -64,7 +64,8 @@
 #define GLOBALOVERFLOW
 
 using namespace com::sun::star;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 sal_Unicode const pszExtGradient[]  = {'s','o','g'};
 
