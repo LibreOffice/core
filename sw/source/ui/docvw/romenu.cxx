@@ -96,17 +96,9 @@ void GetPreferedExtension( String &rExt, const Graphic &rGrf )
 
 SwReadOnlyPopup::~SwReadOnlyPopup()
 {
-    String *pDel = (String*)aThemeList.First();
-    while ( pDel )
-    {
-        delete pDel;
-        pDel = (String*)aThemeList.Next();
-    }
     delete pImageMap;
     delete pTargetURL;
 }
-
-
 
 void SwReadOnlyPopup::Check( USHORT nMID, USHORT nSID, SfxDispatcher &rDis )
 {
@@ -180,22 +172,22 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
         }
     }
 
-    BOOL bEnableGraphicToGallery;
-    if ( TRUE == (bEnableGraphicToGallery = bLink) )
+    bool bEnableGraphicToGallery = bLink;
+    if ( bEnableGraphicToGallery )
     {
-        GalleryExplorer::FillThemeList( aThemeList );
-        if ( aThemeList.Count() )
+        if (GalleryExplorer::FillThemeList( aThemeList ))
         {
             PopupMenu *pMenu = GetPopupMenu(MN_READONLY_GRAPHICTOGALLERY);
             pMenu->CheckItem( MN_READONLY_TOGALLERYLINK,  bGrfToGalleryAsLnk );
             pMenu->CheckItem( MN_READONLY_TOGALLERYCOPY, !bGrfToGalleryAsLnk );
-            for ( USHORT i=0; i < aThemeList.Count(); ++i )
-                pMenu->InsertItem( MN_READONLY_GRAPHICTOGALLERY+i + 3,
-                                   *(String*)aThemeList.GetObject( i ) );
+
+            for (string_const_iterator_t it = aThemeList.begin(); it != aThemeList.end(); ++it)
+                pMenu->InsertItem( MN_READONLY_GRAPHICTOGALLERY+i + 3,*it);
         }
         else
-            bEnableGraphicToGallery = FALSE;
+            bEnableGraphicToGallery = false;
     }
+
     EnableItem( MN_READONLY_GRAPHICTOGALLERY, bEnableGraphicToGallery );
 
     SfxViewFrame * pVFrame = rV.GetViewFrame();
@@ -210,17 +202,18 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
         bEnableBack = TRUE;
         if ( pItem->GetGraphicLink() )
         {
-            if ( !aThemeList.Count() )
+            if ( aThemeList.empty() )
                 GalleryExplorer::FillThemeList( aThemeList );
-            if ( aThemeList.Count() )
+
+            if ( !aThemeList.empty() )
             {
                 PopupMenu *pMenu = GetPopupMenu(MN_READONLY_BACKGROUNDTOGALLERY);
                 pMenu->CheckItem( MN_READONLY_TOGALLERYLINK,  bGrfToGalleryAsLnk );
                 pMenu->CheckItem( MN_READONLY_TOGALLERYCOPY, !bGrfToGalleryAsLnk );
                 bEnableBackGallery = TRUE;
-                for ( USHORT i=0; i < aThemeList.Count(); ++i )
-                    pMenu->InsertItem( MN_READONLY_BACKGROUNDTOGALLERY+i + 3,
-                                       *(String*)aThemeList.GetObject( i ) );
+
+                for (string_const_iterator_t it = aThemeList.begin(); it != aThemeList.end(); ++it)
+                    pMenu->InsertItem( MN_READONLY_GRAPHICTOGALLERY+i + 3,*it);
             }
         }
     }
@@ -310,10 +303,8 @@ void SwReadOnlyPopup::Execute( Window* pWin, USHORT nId )
             sTmp = SaveGraphic( nSaveId );
 
         if ( sTmp.Len() )
-        {
-            String sThemeName( *(String*)aThemeList.GetObject( nId ));
-            GalleryExplorer::InsertURL( sThemeName, sTmp );
-        }
+            GalleryExplorer::InsertURL( aThemeList[nId], sTmp );
+
         return;
     }
 

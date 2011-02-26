@@ -41,6 +41,9 @@ class INetImage;
 
 class SwReadOnlyPopup : public PopupMenu
 {
+    typedef std::vector<String>::iterator theme_iterator_t;
+    typedef std::vector<String>::const_iterator theme_const_iterator_t;
+
           SwView &rView;
     const SvxBrushItem *pItem;
     const Point &rDocPos;
@@ -49,7 +52,7 @@ class SwReadOnlyPopup : public PopupMenu
                 sTargetFrameName,
                 sDescription,
                 sGrfName;
-    List        aThemeList;
+    std::vector<String> aThemeList;
     BOOL        bGrfToGalleryAsLnk;
     ImageMap*   pImageMap;
     INetImage*  pTargetURL;
