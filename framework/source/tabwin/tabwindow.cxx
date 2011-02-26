@@ -60,7 +60,7 @@
 //_________________________________________________________________________________________________________________
 //
 
-using namespace rtl;
+using ::rtl::OUString;
 using namespace com::sun::star;
 
 namespace framework
