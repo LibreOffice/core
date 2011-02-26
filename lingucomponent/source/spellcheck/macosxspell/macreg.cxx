@@ -35,7 +35,6 @@
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
-using namespace rtl;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 

@@ -50,13 +50,18 @@
 
 using namespace utl;
 using namespace osl;
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
+
+using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OStringBuffer;
+using ::rtl::OUStringToOString;
 ///////////////////////////////////////////////////////////////////////////
 // dbg_dump for development
 #if OSL_DEBUG_LEVEL > 1

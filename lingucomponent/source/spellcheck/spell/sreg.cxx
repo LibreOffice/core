@@ -35,14 +35,12 @@
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
-using namespace rtl;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::registry;
 
 ////////////////////////////////////////
 // declaration of external RegEntry-functions defined by the service objects
 //
-
 extern sal_Bool SAL_CALL SpellChecker_writeInfo(
     void * /*pServiceManager*/, XRegistryKey * pRegistryKey );
 
