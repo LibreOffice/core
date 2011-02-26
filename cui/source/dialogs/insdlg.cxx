@@ -364,7 +364,7 @@ short SvInsertOleDlg::Execute()
                 }
                 else
                 {
-                    OSL_ASSERT( "Can not get InteractionHandler!\n" );
+                    OSL_FAIL( "Can not get InteractionHandler!\n" );
                     aMedium.realloc( 1 );
                 }
 
