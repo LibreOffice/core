@@ -46,6 +46,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     AppleRemote \
 	agg \
     avmedia \
+	basebmp \
     basegfx \
     basebmp \
 	canvastools \
