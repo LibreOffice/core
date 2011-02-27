@@ -49,8 +49,9 @@
 #define HTMLCFG_NUMBERS_ENGLISH_US      0x100
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+
+using ::rtl::OUString;
 
 static SvxHtmlOptions* pOptions = 0;
 

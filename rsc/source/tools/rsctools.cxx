@@ -56,7 +56,8 @@
 #define ONLY_NEW
 #endif
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 /****************** C o d e **********************************************/
 /*************************************************************************

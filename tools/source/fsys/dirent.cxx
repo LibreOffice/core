@@ -63,7 +63,8 @@
 
 
 using namespace osl;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 int ApiRet2ToSolarError_Impl( int nApiRet );
 

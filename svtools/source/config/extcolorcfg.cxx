@@ -54,8 +54,9 @@
 
 //-----------------------------------------------------------------------------
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star;
+
+using ::rtl::OUString;
 
 namespace svtools
 {

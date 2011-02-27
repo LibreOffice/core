@@ -47,7 +47,7 @@
 #define DBG(x)
 #endif
 
-using namespace rtl;
+using ::rtl::OUString;
 
 //==================================================================
 

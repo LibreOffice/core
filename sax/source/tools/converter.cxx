@@ -37,11 +37,13 @@
 #include <rtl/math.hxx>
 #include "sax/tools/converter.hxx"
 
-using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 using namespace ::com::sun::star::i18n;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 namespace sax {
 

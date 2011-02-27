@@ -30,7 +30,8 @@
 #include "precompiled_rsc.hxx"
 #include <rschash.hxx>
 
-using namespace rtl;
+using ::rtl::OString;
+using ::rtl::OStringHash;
 
 AtomContainer::AtomContainer()
 {

@@ -39,8 +39,7 @@
 
 #include <comphelper/uieventslogger.hxx>
 
-using namespace rtl;
-
+using ::rtl::OUString;
 namespace tools
 {
     typedef void ( *pfunc_CreateRemoteControl)();

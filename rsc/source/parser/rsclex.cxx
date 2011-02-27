@@ -51,7 +51,9 @@
 #include <rtl/textenc.h>
 #include <tools/list.hxx>
 
-using namespace rtl;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
+using ::rtl::OStringHash;
 
 const char* StringContainer::putString( const char* pString )
 {
