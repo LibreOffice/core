@@ -41,7 +41,6 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sfx2_metadatable, \
 $(eval $(call gb_CppunitTest_set_include,sfx2_metadatable,\
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/offuh \
-    -I$(OUTDIR)/inc \
 ))
 
 # vim: set noet sw=4 ts=4:
