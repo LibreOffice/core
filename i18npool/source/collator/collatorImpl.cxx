@@ -36,7 +36,9 @@
 using namespace com::sun::star;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
-using namespace rtl;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 

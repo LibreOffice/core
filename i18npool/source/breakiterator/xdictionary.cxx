@@ -46,7 +46,8 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 

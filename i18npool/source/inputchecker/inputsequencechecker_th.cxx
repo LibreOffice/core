@@ -32,7 +32,7 @@
 #include <inputsequencechecker_th.hxx>
 #include <wtt.h>
 
-using namespace rtl;
+using ::rtl::OUString;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
