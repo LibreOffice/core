@@ -44,10 +44,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 
 
-// --------------
-// - Namespaces -
-// --------------
-
 using namespace ::com::sun::star;
 
 MSFilterTracer::MSFilterTracer( const ::rtl::OUString& rConfigPath, uno::Sequence< beans::PropertyValue >* pConfigData ) :

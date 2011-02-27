@@ -99,8 +99,6 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 
 
-// ---------------------------------------------------------------------------------------------
-
 EscherExContainer::EscherExContainer( SvStream& rSt, const sal_uInt16 nRecType, const sal_uInt16 nInstance ) :
     rStrm   ( rSt )
 {
@@ -137,8 +135,6 @@ EscherExAtom::~EscherExAtom()
     }
 }
 
-// ---------------------------------------------------------------------------------------------
-
 EscherExClientRecord_Base::~EscherExClientRecord_Base()
 {
 }
@@ -146,8 +142,6 @@ EscherExClientRecord_Base::~EscherExClientRecord_Base()
 EscherExClientAnchor_Base::~EscherExClientAnchor_Base()
 {
 }
-
-// ---------------------------------------------------------------------------------------------
 
 void EscherPropertyContainer::ImplInit()
 {
@@ -1940,8 +1934,6 @@ sal_Bool EscherPropertyContainer::CreateShadowProperties(
     return bHasShadow;
 }
 
-// ---------------------------------------------------------------------------------------------
-
 sal_Int32 GetValueForEnhancedCustomShapeParameter( const com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter, const std::vector< sal_Int32 >& rEquationOrder )
 {
     sal_Int32 nValue = 0;
@@ -3234,8 +3226,6 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
     }
 }
 
-// ---------------------------------------------------------------------------------------------
-
 MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawing::XShape > & rXShape, sal_uInt32& nMirrorFlags, rtl::OUString& rShapeType )
 {
     MSO_SPT eShapeType = mso_sptNil;
@@ -3287,21 +3277,15 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
     return GetCustomShapeType( rXShape, nMirrorFlags, aShapeType );
 }
 
-// ---------------------------------------------------------------------------------------------
-
 EscherPersistTable::EscherPersistTable()
 {
 }
-
-// ---------------------------------------------------------------------------------------------
 
 EscherPersistTable::~EscherPersistTable()
 {
     for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
         delete (EscherPersistEntry*)pPtr;
 }
-
-// ---------------------------------------------------------------------------------------------
 
 BOOL EscherPersistTable::PtIsID( UINT32 nID )
 {
@@ -3313,14 +3297,10 @@ BOOL EscherPersistTable::PtIsID( UINT32 nID )
     return FALSE;
 }
 
-// ---------------------------------------------------------------------------------------------
-
 void EscherPersistTable::PtInsert( UINT32 nID, UINT32 nOfs )
 {
     maPersistTable.Insert( new EscherPersistEntry( nID, nOfs ) );
 }
-
-// ---------------------------------------------------------------------------------------------
 
 UINT32 EscherPersistTable::PtDelete( UINT32 nID )
 {
@@ -3334,8 +3314,6 @@ UINT32 EscherPersistTable::PtDelete( UINT32 nID )
     return 0;
 }
 
-// ---------------------------------------------------------------------------------------------
-
 UINT32 EscherPersistTable::PtGetOffsetByID( UINT32 nID )
 {
     for ( void* pPtr = maPersistTable.First(); pPtr; pPtr = maPersistTable.Next() )
@@ -3345,8 +3323,6 @@ UINT32 EscherPersistTable::PtGetOffsetByID( UINT32 nID )
     }
     return 0;
 };
-
-// ---------------------------------------------------------------------------------------------
 
 UINT32 EscherPersistTable::PtReplace( UINT32 nID, UINT32 nOfs )
 {
@@ -3361,8 +3337,6 @@ UINT32 EscherPersistTable::PtReplace( UINT32 nID, UINT32 nOfs )
     }
     return 0;
 }
-
-// ---------------------------------------------------------------------------------------------
 
 UINT32 EscherPersistTable::PtReplaceOrInsert( UINT32 nID, UINT32 nOfs )
 {
@@ -3417,8 +3391,6 @@ sal_Bool EscherPropertyValueHelper::GetPropertyValue(
     return bRetValue;
 }
 
-// ---------------------------------------------------------------------------------------------
-
 ::com::sun::star::beans::PropertyState EscherPropertyValueHelper::GetPropertyState(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
         const String& rPropertyName )
@@ -3433,14 +3405,9 @@ sal_Bool EscherPropertyValueHelper::GetPropertyValue(
     }
     catch( ::com::sun::star::uno::Exception& )
     {
-        //...
     }
     return eRetValue;
 }
-
-// ---------------------------------------------------------------------------------------------
-// ---------------------------------------------------------------------------------------------
-// ---------------------------------------------------------------------------------------------
 
 EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject& rObject, const ByteString& rId,
                                         const GraphicAttr* pGraphicAttr ) :
@@ -3510,8 +3477,6 @@ EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject
     }
 };
 
-// ---------------------------------------------------------------------------------------------
-
 void EscherBlibEntry::WriteBlibEntry( SvStream& rSt, sal_Bool bWritePictureOffset, sal_uInt32 nResize )
 {
     sal_uInt32  nPictureOffset = ( bWritePictureOffset ) ? mnPictureOffset : 0;
@@ -3538,13 +3503,9 @@ void EscherBlibEntry::WriteBlibEntry( SvStream& rSt, sal_Bool bWritePictureOffse
         << (sal_uInt32)0;
 }
 
-// ---------------------------------------------------------------------------------------------
-
 EscherBlibEntry::~EscherBlibEntry()
 {
 };
-
-// ---------------------------------------------------------------------------------------------
 
 BOOL EscherBlibEntry::operator==( const EscherBlibEntry& rEscherBlibEntry ) const
 {
@@ -3555,10 +3516,6 @@ BOOL EscherBlibEntry::operator==( const EscherBlibEntry& rEscherBlibEntry ) cons
     }
     return TRUE;
 }
-
-// ---------------------------------------------------------------------------------------------
-// ---------------------------------------------------------------------------------------------
-// ---------------------------------------------------------------------------------------------
 
 EscherGraphicProvider::EscherGraphicProvider( sal_uInt32 nFlags ) :
     mnFlags         ( nFlags ),
@@ -3908,10 +3865,6 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
         delete p_EscherBlibEntry;
     return nBlibId;
 }
-
-// ---------------------------------------------------------------------------------------------
-// ---------------------------------------------------------------------------------------------
-// ---------------------------------------------------------------------------------------------
 
 struct EscherConnectorRule
 {
@@ -4269,8 +4222,6 @@ void EscherSolverContainer::WriteSolver( SvStream& rStrm )
     }
 }
 
-// ---------------------------------------------------------------------------------------------
-
 EscherExGlobal::EscherExGlobal( sal_uInt32 nGraphicProvFlags ) :
     EscherGraphicProvider( nGraphicProvFlags ),
     mpPicStrm( 0 ),
@@ -4395,10 +4346,6 @@ SvStream* EscherExGlobal::ImplQueryPictureStream()
     return 0;
 }
 
-// ---------------------------------------------------------------------------------------------
-// ---------------------------------------------------------------------------------------------
-// ---------------------------------------------------------------------------------------------
-
 EscherEx::EscherEx( const EscherExGlobalRef& rxGlobal, SvStream& rOutStrm ) :
     mxGlobal                ( rxGlobal ),
     mpOutStrm               ( &rOutStrm ),
@@ -4418,8 +4365,6 @@ EscherEx::EscherEx( const EscherExGlobalRef& rxGlobal, SvStream& rOutStrm ) :
 EscherEx::~EscherEx()
 {
 }
-
-// ---------------------------------------------------------------------------------------------
 
 void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )
 {
@@ -4455,8 +4400,6 @@ void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )
         mpOutStrm->Seek( PtGetOffsetByID( ESCHER_Persist_CurrentPosition ) );
     }
 }
-
-// ---------------------------------------------------------------------------------------------
 
 void EscherEx::InsertAtCurrentPos( UINT32 nBytes, bool bExpandEndOfAtom )
 {
@@ -4517,8 +4460,6 @@ void EscherEx::InsertAtCurrentPos( UINT32 nBytes, bool bExpandEndOfAtom )
     mpOutStrm->Seek( nCurPos );
 }
 
-// ---------------------------------------------------------------------------------------------
-
 BOOL EscherEx::SeekBehindRecHeader( UINT16 nRecType )
 {
     UINT32  nOldPos, nStreamEnd, nType, nSize;
@@ -4538,8 +4479,6 @@ BOOL EscherEx::SeekBehindRecHeader( UINT16 nRecType )
     return FALSE;
 }
 
-// ---------------------------------------------------------------------------------------------
-
 void EscherEx::InsertPersistOffset( UINT32 nKey, UINT32 nOffset )
 {
     PtInsert( ESCHER_Persist_PrivateEntry | nKey, nOffset );
@@ -4555,8 +4494,6 @@ UINT32 EscherEx::GetPersistOffset( UINT32 nKey )
     return PtGetOffsetByID( ESCHER_Persist_PrivateEntry | nKey );
 }
 
-// ---------------------------------------------------------------------------------------------
-
 BOOL EscherEx::DoSeek( UINT32 nKey )
 {
     UINT32 nPos = PtGetOffsetByID( nKey );
@@ -4571,14 +4508,10 @@ BOOL EscherEx::DoSeek( UINT32 nKey )
     return TRUE;
 }
 
-// ---------------------------------------------------------------------------------------------
-
 BOOL EscherEx::SeekToPersistOffset( UINT32 nKey )
 {
     return DoSeek( ESCHER_Persist_PrivateEntry | nKey );
 }
-
-// ---------------------------------------------------------------------------------------------
 
 BOOL EscherEx::InsertAtPersistOffset( UINT32 nKey, UINT32 nValue )
 {
@@ -4591,8 +4524,6 @@ BOOL EscherEx::InsertAtPersistOffset( UINT32 nKey, UINT32 nValue )
     }
     return bRetValue;
 }
-
-// ---------------------------------------------------------------------------------------------
 
 void EscherEx::OpenContainer( UINT16 nEscherContainer, int nRecInstance )
 {
@@ -4650,8 +4581,6 @@ void EscherEx::OpenContainer( UINT16 nEscherContainer, int nRecInstance )
     }
 }
 
-// ---------------------------------------------------------------------------------------------
-
 void EscherEx::CloseContainer()
 {
     sal_uInt32 nSize, nPos = mpOutStrm->Tell();
@@ -4690,15 +4619,11 @@ void EscherEx::CloseContainer()
     mpOutStrm->Seek( nPos );
 }
 
-// ---------------------------------------------------------------------------------------------
-
 void EscherEx::BeginAtom()
 {
     mnCountOfs = mpOutStrm->Tell();
     *mpOutStrm << (UINT32)0 << (UINT32)0;       // record header wird spaeter geschrieben
 }
-
-// ---------------------------------------------------------------------------------------------
 
 void EscherEx::EndAtom( UINT16 nRecType, int nRecVersion, int nRecInstance )
 {
@@ -4709,14 +4634,10 @@ void EscherEx::EndAtom( UINT16 nRecType, int nRecVersion, int nRecInstance )
     mpOutStrm->Seek( nOldPos );
 }
 
-// ---------------------------------------------------------------------------------------------
-
 void EscherEx::AddAtom( UINT32 nAtomSize, UINT16 nRecType, int nRecVersion, int nRecInstance )
 {
     *mpOutStrm << (UINT16)( ( nRecInstance << 4 ) | ( nRecVersion & 0xf ) ) << nRecType << nAtomSize;
 }
-
-// ---------------------------------------------------------------------------------------------
 
 void EscherEx::AddChildAnchor( const Rectangle& rRect )
 {
@@ -4727,8 +4648,6 @@ void EscherEx::AddChildAnchor( const Rectangle& rRect )
                 << (sal_Int32)rRect.Bottom();
 }
 
-// ---------------------------------------------------------------------------------------------
-
 void EscherEx::AddClientAnchor( const Rectangle& rRect )
 {
     AddAtom( 8, ESCHER_ClientAnchor );
@@ -4738,14 +4657,10 @@ void EscherEx::AddClientAnchor( const Rectangle& rRect )
                << (sal_Int16)( rRect.GetHeight() + rRect.Top() );
 }
 
-// ---------------------------------------------------------------------------------------------
-
 EscherExHostAppData* EscherEx::EnterAdditionalTextGroup()
 {
     return NULL;
 }
-
-// ---------------------------------------------------------------------------------------------
 
 UINT32 EscherEx::EnterGroup( const String& rShapeName, const Rectangle* pBoundRect )
 {
@@ -4800,8 +4715,6 @@ UINT32 EscherEx::EnterGroup( const Rectangle* pBoundRect )
     return EnterGroup( String::EmptyString(), pBoundRect );
 }
 
-// ---------------------------------------------------------------------------------------------
-
 BOOL EscherEx::SetGroupSnapRect( UINT32 nGroupLevel, const Rectangle& rRect )
 {
     BOOL bRetValue = FALSE;
@@ -4820,8 +4733,6 @@ BOOL EscherEx::SetGroupSnapRect( UINT32 nGroupLevel, const Rectangle& rRect )
     return bRetValue;
 }
 
-// ---------------------------------------------------------------------------------------------
-
 BOOL EscherEx::SetGroupLogicRect( UINT32 nGroupLevel, const Rectangle& rRect )
 {
     BOOL bRetValue = FALSE;
@@ -4837,8 +4748,6 @@ BOOL EscherEx::SetGroupLogicRect( UINT32 nGroupLevel, const Rectangle& rRect )
     return bRetValue;
 }
 
-// ---------------------------------------------------------------------------------------------
-
 void EscherEx::LeaveGroup()
 {
     --mnGroupLevel;
@@ -4846,8 +4755,6 @@ void EscherEx::LeaveGroup()
     PtDelete( ESCHER_Persist_Grouping_Logic | mnGroupLevel );
     CloseContainer();
 }
-
-// ---------------------------------------------------------------------------------------------
 
 void EscherEx::AddShape( UINT32 nShpInstance, UINT32 nFlags, UINT32 nShapeID )
 {
@@ -4864,14 +4771,10 @@ void EscherEx::AddShape( UINT32 nShpInstance, UINT32 nFlags, UINT32 nShapeID )
     *mpOutStrm << nShapeID << nFlags;
 }
 
-// ---------------------------------------------------------------------------------------------
-
 void EscherEx::Commit( EscherPropertyContainer& rProps, const Rectangle& )
 {
     rProps.Commit( GetStream() );
 }
-
-// ---------------------------------------------------------------------------------------------
 
 UINT32 EscherEx::GetColor( const UINT32 nSOColor, BOOL bSwap )
 {
@@ -4886,8 +4789,6 @@ UINT32 EscherEx::GetColor( const UINT32 nSOColor, BOOL bSwap )
         return nSOColor & 0xffffff;
 }
 
-// ---------------------------------------------------------------------------------------------
-
 UINT32 EscherEx::GetColor( const Color& rSOColor, BOOL bSwap )
 {
     UINT32 nColor = ( rSOColor.GetRed() << 16 );
@@ -4899,7 +4800,5 @@ UINT32 EscherEx::GetColor( const Color& rSOColor, BOOL bSwap )
 
     return nColor;
 }
-
-// ---------------------------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

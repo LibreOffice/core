@@ -68,8 +68,6 @@ using namespace ::com::sun::star::style;
 
 #define EES_MAP_FRACTION 1440   // 1440 dpi
 
-// ===================================================================
-
 ImplEESdrWriter::ImplEESdrWriter( EscherEx& rEx )
         :
         mpEscherEx              ( &rEx ),
@@ -87,15 +85,10 @@ ImplEESdrWriter::ImplEESdrWriter( EscherEx& rEx )
 }
 
 
-// -------------------------------------------------------------------
-
 Point ImplEESdrWriter::ImplMapPoint( const Point& rPoint )
 {
     return OutputDevice::LogicToLogic( rPoint, maMapModeSrc, maMapModeDest );
 }
-
-
-// -------------------------------------------------------------------
 
 Size ImplEESdrWriter::ImplMapSize( const Size& rSize )
 {
@@ -107,8 +100,6 @@ Size ImplEESdrWriter::ImplMapSize( const Size& rSize )
         aRetSize.Height()++;
     return aRetSize;
 }
-
-// -------------------------------------------------------------------
 
 void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt )
 {
@@ -781,8 +772,6 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
 }
 
 
-// -------------------------------------------------------------------
-
 UINT32 ImplEESdrWriter::ImplEnterAdditionalTextGroup( const Reference< XShape >& rShape,
             const Rectangle* pBoundRect )
 {
@@ -793,8 +782,6 @@ UINT32 ImplEESdrWriter::ImplEnterAdditionalTextGroup( const Reference< XShape >&
 }
 
 
-// -------------------------------------------------------------------
-
 BOOL ImplEESdrWriter::ImplInitPageValues()
 {
     mnIndices = 0;
@@ -804,9 +791,6 @@ BOOL ImplEESdrWriter::ImplInitPageValues()
 
     return TRUE;
 }
-
-
-// -------------------------------------------------------------------
 
 void ImplEESdrWriter::ImplWritePage(
             EscherSolverContainer& rSolverContainer,
@@ -838,8 +822,6 @@ void ImplEESdrWriter::ImplWritePage(
     mnPagesWritten++;
 }
 
-// ===================================================================
-
 ImplEscherExSdr::ImplEscherExSdr( EscherEx& rEx )
         :
         ImplEESdrWriter( rEx ),
@@ -849,16 +831,12 @@ ImplEscherExSdr::ImplEscherExSdr( EscherEx& rEx )
 }
 
 
-// -------------------------------------------------------------------
-
 ImplEscherExSdr::~ImplEscherExSdr()
 {
     DBG_ASSERT( !mpSolverContainer, "ImplEscherExSdr::~ImplEscherExSdr: unwritten SolverContainer" );
     delete mpSolverContainer;
 }
 
-
-// -------------------------------------------------------------------
 
 bool ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
 {
@@ -890,8 +868,6 @@ bool ImplEscherExSdr::ImplInitPage( const SdrPage& rPage )
     return false;
 }
 
-// -------------------------------------------------------------------
-
 bool ImplEscherExSdr::ImplInitUnoShapes( const Reference< XShapes >& rxShapes )
 {
     // eventually write SolverContainer of current page, deletes the Solver
@@ -911,8 +887,6 @@ bool ImplEscherExSdr::ImplInitUnoShapes( const Reference< XShapes >& rxShapes )
     return true;
 }
 
-// -------------------------------------------------------------------
-
 void ImplEscherExSdr::ImplExitPage()
 {
     // close all groups before the solver container is written
@@ -923,8 +897,6 @@ void ImplEscherExSdr::ImplExitPage()
     mpSdrPage = NULL;   // reset page for next init
 }
 
-
-// -------------------------------------------------------------------
 
 void ImplEscherExSdr::ImplFlushSolverContainer()
 {
@@ -937,8 +909,6 @@ void ImplEscherExSdr::ImplFlushSolverContainer()
 }
 
 
-// -------------------------------------------------------------------
-
 void ImplEscherExSdr::ImplWriteCurrentPage()
 {
     DBG_ASSERT( mpSolverContainer, "ImplEscherExSdr::ImplWriteCurrentPage: no SolverContainer" );
@@ -947,8 +917,6 @@ void ImplEscherExSdr::ImplWriteCurrentPage()
 }
 
 
-// -------------------------------------------------------------------
-
 UINT32 ImplEscherExSdr::ImplWriteTheShape( ImplEESdrObject& rObj )
 {
     DBG_ASSERT( mpSolverContainer, "ImplEscherExSdr::ImplWriteShape: no SolverContainer" );
@@ -956,23 +924,17 @@ UINT32 ImplEscherExSdr::ImplWriteTheShape( ImplEESdrObject& rObj )
 }
 
 
-// ===================================================================
-
 void EscherEx::AddSdrPage( const SdrPage& rPage )
 {
     if ( mpImplEscherExSdr->ImplInitPage( rPage ) )
         mpImplEscherExSdr->ImplWriteCurrentPage();
 }
 
-// -------------------------------------------------------------------
-
 void EscherEx::AddUnoShapes( const Reference< XShapes >& rxShapes )
 {
     if ( mpImplEscherExSdr->ImplInitUnoShapes( rxShapes ) )
         mpImplEscherExSdr->ImplWriteCurrentPage();
 }
-
-// -------------------------------------------------------------------
 
 UINT32 EscherEx::AddSdrObject( const SdrObject& rObj )
 {
@@ -983,34 +945,25 @@ UINT32 EscherEx::AddSdrObject( const SdrObject& rObj )
 }
 
 
-// -------------------------------------------------------------------
-
 void EscherEx::EndSdrObjectPage()
 {
     mpImplEscherExSdr->ImplExitPage();
 }
-
-// -------------------------------------------------------------------
 
 EscherExHostAppData* EscherEx::StartShape( const Reference< XShape >& /* rShape */, const Rectangle* /*pChildAnchor*/ )
 {
     return NULL;
 }
 
-// -------------------------------------------------------------------
-
 void EscherEx::EndShape( UINT16 /* nShapeType */, UINT32 /* nShapeID */ )
 {
 }
-
-// -------------------------------------------------------------------
 
 UINT32 EscherEx::QueryTextID( const Reference< XShape >&, UINT32 )
 {
     return 0;
 }
 
-// -------------------------------------------------------------------
 // add an dummy rectangle shape into the escher stream
 UINT32 EscherEx::AddDummyShape()
 {
@@ -1021,8 +974,6 @@ UINT32 EscherEx::AddDummyShape()
 
     return nShapeID;
 }
-
-// -------------------------------------------------------------------
 
 // static
 const SdrObject* EscherEx::GetSdrObject( const Reference< XShape >& rShape )
@@ -1038,8 +989,6 @@ const SdrObject* EscherEx::GetSdrObject( const Reference< XShape >& rShape )
     return pRet;
 }
 
-
-// -------------------------------------------------------------------
 
 ImplEESdrObject::ImplEESdrObject( ImplEscherExSdr& rEx,
                                     const SdrObject& rObj ) :

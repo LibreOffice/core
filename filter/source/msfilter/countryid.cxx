@@ -261,8 +261,6 @@ static const CountryEntry pTable[] =
 
 const CountryEntry * const pEnd = pTable + SAL_N_ELEMENTS( pTable );
 
-// ----------------------------------------------------------------------------
-
 /** Predicate comparing a country ID with the member of a CountryEntry. */
 struct CountryEntryPred_Country
 {
@@ -274,8 +272,6 @@ struct CountryEntryPred_Country
     inline bool                 operator()( const CountryEntry& rCmp ) const
                                     { return rCmp.meCountry == meCountry; }
 };
-
-// ----------------------------------------------------------------------------
 
 /** Predicate comparing a language type with the member of a CountryEntry.
 
@@ -298,8 +294,6 @@ inline bool CountryEntryPred_Language::operator()( const CountryEntry& rCmp ) co
     return rCmp.mbUseSubLang ? (meLanguage == rCmp.meLanguage) :
                 ((meLanguage & 0x03FF) == (rCmp.meLanguage & 0x03FF));
 }
-
-// ----------------------------------------------------------------------------
 
 } // namespace
 
@@ -336,10 +330,6 @@ LanguageType ConvertCountryToLanguage( CountryId eCountry )
     return (pEntry != pEnd) ? pEntry->meLanguage : LANGUAGE_DONTKNOW;
 }
 
-// ============================================================================
-
 } // namespace svx
-
-// ============================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

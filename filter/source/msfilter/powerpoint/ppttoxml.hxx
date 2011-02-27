@@ -31,10 +31,6 @@
 
 #include "pptcom.hxx"
 
-// ------------
-// - PptToXml -
-// ------------
-
 class PptToXml
 {
         REF( NMSP_SAX::XDocumentHandler ) xHdl;
