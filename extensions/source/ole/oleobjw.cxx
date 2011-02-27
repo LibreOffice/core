@@ -77,6 +77,8 @@ using namespace com::sun::star::bridge::oleautomation;
 using namespace com::sun::star::bridge::ModelDependent;
 
 using ::rtl::OUString;
+using ::rtl::OString;
+using ::rtl::OUStringBuffer;
 
 #define JSCRIPT_ID_PROPERTY L"_environment"
 #define JSCRIPT_ID          L"jscript"
