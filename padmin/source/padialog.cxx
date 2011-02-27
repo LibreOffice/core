@@ -63,12 +63,14 @@
 #include "com/sun/star/awt/Size.hpp"
 
 using namespace psp;
-using namespace rtl;
 using namespace padmin;
 using namespace osl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 PADialog* PADialog::Create( Window* pParent, BOOL bAdmin )
 {

@@ -36,8 +36,9 @@
 #include <prtsetup.hxx>
 
 using namespace psp;
-using namespace rtl;
 using namespace padmin;
+
+using ::rtl::OUString;
 
 #define PRINTER_PERSISTENCE_GROUP "KnownPrinterCommands"
 #define FAX_PERSISTENCE_GROUP "KnownFaxCommands"

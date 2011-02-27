@@ -38,9 +38,12 @@
 #define LSCAPE_STRING String( RTL_CONSTASCII_USTRINGPARAM( "Landscape" ) )
 #define PORTRAIT_STRING String( RTL_CONSTASCII_USTRINGPARAM( "Portrait" ) )
 
-using namespace rtl;
 using namespace psp;
 using namespace padmin;
+
+using ::rtl::OUString;
+using ::rtl::OUStringHash;
+using ::rtl::OString;
 
 void RTSDialog::insertAllPPDValues( ListBox& rBox, const PPDParser* pParser, const PPDKey* pKey )
 {

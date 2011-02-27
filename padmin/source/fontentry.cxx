@@ -40,8 +40,13 @@
 
 using namespace padmin;
 using namespace osl;
-using namespace rtl;
 using namespace psp;
+
+using ::rtl::OUString;
+using ::rtl::OUStringHash;
+using ::rtl::OUStringToOString;
+using ::rtl::OString;
+using ::rtl::OStringHash;
 
 FontNameDlg::FontNameDlg( Window *pParent ) :
         ModalDialog( pParent, PaResId( RID_FONTNAMEDIALOG ) ),

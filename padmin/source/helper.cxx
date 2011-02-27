@@ -47,11 +47,13 @@
 
 
 using namespace osl;
-using namespace rtl;
 using namespace padmin;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ui::dialogs;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 #define MAX_PATH 1024
 
@@ -65,7 +67,6 @@ ResId padmin::PaResId( sal_uInt32 nId )
     if( ! pPaResMgr )
     {
         ::com::sun::star::lang::Locale aLocale;
-//      LanguageType nLang = LANGUAGE_SYSTEM;
 
         utl::OConfigurationNode aNode =
             utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
@@ -77,9 +78,6 @@ ResId padmin::PaResId( sal_uInt32 nId )
             Any aValue = aNode.getNodeValue( OUString(RTL_CONSTASCII_USTRINGPARAM("ooLocale")) );
             if( aValue >>= aLoc )
             {
-//                LanguageType nTmpLang = MsLangId::convertIsoStringToLanguage( aLoc );
-//                if( nTmpLang != LANGUAGE_DONTKNOW )
-//                    nLang = nTmpLang;
                 sal_Int32 nIndex = 0;
                 aLocale.Language = aLoc.getToken( 0, '-', nIndex );
                 aLocale.Country = aLoc.getToken( 0, '-', nIndex );
@@ -88,7 +86,6 @@ ResId padmin::PaResId( sal_uInt32 nId )
         }
         pPaResMgr = ResMgr::SearchCreateResMgr( "spa", aLocale );
         AllSettings aSettings = Application::GetSettings();
-//        aSettings.SetUILanguage( nLang );
         aSettings.SetUILocale( aLocale );
         Application::SetSettings( aSettings );
     }

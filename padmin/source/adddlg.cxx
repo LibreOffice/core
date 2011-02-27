@@ -41,10 +41,14 @@
 #include <boost/unordered_set.hpp>
 
 
-using namespace rtl;
 using namespace psp;
 using namespace padmin;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::rtl::OUStringHash;
+
 
 APTabPage::APTabPage( AddPrinterDialog* pParent, const ResId& rResId )
             : TabPage( pParent, rResId ),
