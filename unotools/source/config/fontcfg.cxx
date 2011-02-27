@@ -51,12 +51,13 @@
 #define DEFAULTFONT_CONFIGNODE "VCL/DefaultFonts"
 #define SUBSTFONT_CONFIGNODE "VCL/FontSubstitutions"
 
-using namespace rtl;
 using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
+
+using ::rtl::OUString;
 
 static DefaultFontConfiguration* mpDefaultFontConfiguration = 0;
 

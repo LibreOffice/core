@@ -42,8 +42,8 @@
 #include "itemholder1.hxx"
 
 using namespace utl;
-using namespace rtl;
 using namespace com::sun::star::uno;
+using ::rtl::OUString;
 
 static SvtUndoOptions_Impl* pOptions = NULL;
 static sal_Int32           nRefCount = 0;

@@ -40,10 +40,11 @@
 #include <sal/macros.h>
 
 
-using namespace rtl;
 using namespace utl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::i18n;
+
+using ::rtl::OUString;
 
 #define MAX_FLAGS_OFFSET    25
 
