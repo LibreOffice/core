@@ -221,15 +221,11 @@ oslFileError oslTranslateFileError(sal_Bool bIsError, int Errno)
         case EILSEQ:
             osl_error = osl_File_E_ILSEQ;
             break;
-#endif /* MACOSX */
 
-#if !(defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD))
         case ENOLINK:
             osl_error = osl_File_E_NOLINK;
             break;
-#endif /* MACOSX */
 
-#if !(defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD))
         case EMULTIHOP:
             osl_error = osl_File_E_MULTIHOP;
             break;
