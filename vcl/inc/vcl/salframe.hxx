@@ -132,7 +132,8 @@ typedef sal_uInt64 SalExtStyle;
 
 #ifdef __cplusplus
 
-using namespace rtl;
+using ::rtl::OUString;
+using ::rtl::OString;
 
 // ------------
 // - SalFrame -

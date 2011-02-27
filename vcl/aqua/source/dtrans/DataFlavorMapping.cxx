@@ -47,11 +47,13 @@
 #include <postmac.h>
 
 using namespace ::com::sun::star::datatransfer;
-using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace cppu;
 using namespace std;
+
+using ::rtl::OUString;
+using ::rtl::OUStringToOString;
 
 namespace // private
 {

@@ -34,7 +34,6 @@
 
 #include "DataFlavorMapping.hxx"
 
-using namespace rtl;
 using namespace std;
 using namespace osl;
 using namespace cppu;
@@ -43,6 +42,8 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
+
+using ::rtl::OUString;
 
 const Type CPPUTYPE_SEQINT8  = getCppuType((Sequence<sal_Int8>*)0);
 const Type CPPUTYPE_OUSTRING = getCppuType((OUString*)0);

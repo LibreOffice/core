@@ -33,13 +33,14 @@
 #include <com/sun/star/container/XSet.hpp>
 #include <osl/diagnose.h>
 
-using namespace rtl;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::registry;
 using namespace cppu;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace aqua;
+
+using ::rtl::OUString;
 
 namespace aqua {
 

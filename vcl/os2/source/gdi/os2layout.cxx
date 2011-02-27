@@ -54,8 +54,6 @@ typedef boost::unordered_map<int,int> IntMap;
 
 #define DROPPED_OUTGLYPH 0xFFFF
 
-using namespace rtl;
-
 // =======================================================================
 
 // OS/2 specific physical font instance

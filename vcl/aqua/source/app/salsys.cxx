@@ -36,7 +36,7 @@
 #include "saldata.hxx"
 #include "rtl/ustrbuf.hxx"
 
-using namespace rtl;
+using ::rtl::OUString;
 
 // =======================================================================
 
