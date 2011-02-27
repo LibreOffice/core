@@ -34,6 +34,7 @@
 #include <basegfx/polygon/b2dpolypolygonfillrule.hxx>
 #include <vector>
 #include <utility>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -48,7 +49,7 @@ namespace basegfx
         @derive
         Overwrite span() with the render output method of your choice.
      */
-    class B2DPolyPolygonRasterConverter
+    class BASEGFX_DLLPUBLIC B2DPolyPolygonRasterConverter
     {
     public:
         /** Create raster-converter for given poly-polygon

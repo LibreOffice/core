@@ -29,12 +29,13 @@
 #define _BGFX_CURVE_B2DQUADRATICBEZIER_HXX
 
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
-    class B2DQuadraticBezier
+    class BASEGFX_DLLPUBLIC B2DQuadraticBezier
     {
         ::basegfx::B2DPoint                         maStartPoint;
         ::basegfx::B2DPoint                         maEndPoint;

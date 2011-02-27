@@ -29,11 +29,12 @@
 #define _BGFX_RANGE_B1IRANGE_HXX
 
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 
 namespace basegfx
 {
-    class B1IRange
+    class BASEGFX_DLLPUBLIC B1IRange
     {
         ::basegfx::BasicRange< sal_Int32, Int32Traits > maRange;
 

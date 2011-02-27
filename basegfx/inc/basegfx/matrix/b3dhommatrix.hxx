@@ -32,13 +32,14 @@
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 #include <o3tl/cow_wrapper.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
     class B3DTuple;
     class Impl3DHomMatrix;
 
-    class B3DHomMatrix
+    class BASEGFX_DLLPUBLIC B3DHomMatrix
     {
     public:
         typedef o3tl::cow_wrapper< Impl3DHomMatrix > ImplType;

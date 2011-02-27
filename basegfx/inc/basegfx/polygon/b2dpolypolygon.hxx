@@ -31,6 +31,7 @@
 #include <sal/types.h>
 #include <o3tl/cow_wrapper.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 // predeclarations
 class ImplB2DPolyPolygon;
@@ -45,7 +46,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class B2DPolyPolygon
+    class BASEGFX_DLLPUBLIC B2DPolyPolygon
     {
     public:
         typedef o3tl::cow_wrapper< ImplB2DPolyPolygon > ImplType;

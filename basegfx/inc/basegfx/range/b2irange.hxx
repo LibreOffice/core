@@ -34,11 +34,12 @@
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <vector>
+#include <basegfx/basegfxdllapi.h>
 
 
 namespace basegfx
 {
-    class B2IRange
+    class BASEGFX_DLLPUBLIC B2IRange
     {
     public:
         typedef sal_Int32       ValueType;
@@ -245,7 +246,7 @@ namespace basegfx
 
         @return the input vector
      */
-    ::std::vector< B2IRange >& computeSetDifference( ::std::vector< B2IRange >& o_rResult,
+    BASEGFX_DLLPUBLIC ::std::vector< B2IRange >& computeSetDifference( ::std::vector< B2IRange >&   o_rResult,
                                                      const B2IRange&            rFirst,
                                                      const B2IRange&            rSecond );
 

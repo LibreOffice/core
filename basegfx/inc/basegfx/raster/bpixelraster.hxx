@@ -32,6 +32,7 @@
 #include <sal/types.h>
 #include <basegfx/pixel/bpixel.hxx>
 #include <rtl/memory.h>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -40,7 +41,7 @@
 
 namespace basegfx
 {
-    class BPixelRaster
+    class BASEGFX_DLLPUBLIC BPixelRaster
     {
     private:
         // do not allow copy constructor and assignment operator

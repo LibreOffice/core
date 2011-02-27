@@ -29,7 +29,7 @@
 #define _BGFX_TUPLE_B2ITUPLE_HXX
 
 #include <sal/types.h>
-
+#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
@@ -41,7 +41,7 @@ namespace basegfx
         @derive Use this class to implement Points or Vectors
         which are based on two sal_Int32 values
     */
-    class B2ITuple
+    class BASEGFX_DLLPUBLIC B2ITuple
     {
     protected:
         sal_Int32                                       mnX;
@@ -204,33 +204,33 @@ namespace basegfx
 
     class B2DTuple;
 
-    B2ITuple minimum(const B2ITuple& rTupA, const B2ITuple& rTupB);
+    BASEGFX_DLLPUBLIC B2ITuple minimum(const B2ITuple& rTupA, const B2ITuple& rTupB);
 
-    B2ITuple maximum(const B2ITuple& rTupA, const B2ITuple& rTupB);
+    BASEGFX_DLLPUBLIC B2ITuple maximum(const B2ITuple& rTupA, const B2ITuple& rTupB);
 
-    B2ITuple absolute(const B2ITuple& rTup);
+    BASEGFX_DLLPUBLIC B2ITuple absolute(const B2ITuple& rTup);
 
-    B2DTuple interpolate(const B2ITuple& rOld1, const B2ITuple& rOld2, double t);
+    BASEGFX_DLLPUBLIC B2DTuple interpolate(const B2ITuple& rOld1, const B2ITuple& rOld2, double t);
 
-    B2DTuple average(const B2ITuple& rOld1, const B2ITuple& rOld2);
+    BASEGFX_DLLPUBLIC B2DTuple average(const B2ITuple& rOld1, const B2ITuple& rOld2);
 
-    B2DTuple average(const B2ITuple& rOld1, const B2ITuple& rOld2, const B2ITuple& rOld3);
+    BASEGFX_DLLPUBLIC B2DTuple average(const B2ITuple& rOld1, const B2ITuple& rOld2, const B2ITuple& rOld3);
 
-    B2ITuple operator+(const B2ITuple& rTupA, const B2ITuple& rTupB);
+    BASEGFX_DLLPUBLIC B2ITuple operator+(const B2ITuple& rTupA, const B2ITuple& rTupB);
 
-    B2ITuple operator-(const B2ITuple& rTupA, const B2ITuple& rTupB);
+    BASEGFX_DLLPUBLIC B2ITuple operator-(const B2ITuple& rTupA, const B2ITuple& rTupB);
 
-    B2ITuple operator/(const B2ITuple& rTupA, const B2ITuple& rTupB);
+    BASEGFX_DLLPUBLIC B2ITuple operator/(const B2ITuple& rTupA, const B2ITuple& rTupB);
 
-    B2ITuple operator*(const B2ITuple& rTupA, const B2ITuple& rTupB);
+    BASEGFX_DLLPUBLIC B2ITuple operator*(const B2ITuple& rTupA, const B2ITuple& rTupB);
 
-    B2ITuple operator*(const B2ITuple& rTup, sal_Int32 t);
+    BASEGFX_DLLPUBLIC B2ITuple operator*(const B2ITuple& rTup, sal_Int32 t);
 
-    B2ITuple operator*(sal_Int32 t, const B2ITuple& rTup);
+    BASEGFX_DLLPUBLIC B2ITuple operator*(sal_Int32 t, const B2ITuple& rTup);
 
-    B2ITuple operator/(const B2ITuple& rTup, sal_Int32 t);
+    BASEGFX_DLLPUBLIC B2ITuple operator/(const B2ITuple& rTup, sal_Int32 t);
 
-    B2ITuple operator/(sal_Int32 t, const B2ITuple& rTup);
+    BASEGFX_DLLPUBLIC B2ITuple operator/(sal_Int32 t, const B2ITuple& rTup);
 
 } // end of namespace basegfx
 

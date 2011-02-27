@@ -30,6 +30,7 @@
 
 #include <sal/types.h>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
@@ -44,7 +45,7 @@ namespace basegfx
         @derive Use this class to implement Points or Vectors
         which are based on two double values
     */
-    class B2DTuple
+    class BASEGFX_DLLPUBLIC B2DTuple
     {
     protected:
         double                                      mfX;
@@ -353,7 +354,7 @@ namespace basegfx
 
         @return the nearest integer for this tuple
     */
-    B2ITuple fround(const B2DTuple& rTup);
+    BASEGFX_DLLPUBLIC B2ITuple fround(const B2DTuple& rTup);
 } // end of namespace basegfx
 
 #endif /* _BGFX_TUPLE_B2DTUPLE_HXX */

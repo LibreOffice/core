@@ -32,6 +32,7 @@
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
@@ -39,7 +40,7 @@ namespace basegfx
     class B3IRange;
     class B3DHomMatrix;
 
-    class B3DRange
+    class BASEGFX_DLLPUBLIC B3DRange
     {
         typedef ::basegfx::BasicRange< double, DoubleTraits >   MyBasicRange;
 
@@ -295,7 +296,7 @@ namespace basegfx
 
         @return the nearest integer for this range
     */
-    B3IRange fround(const B3DRange& rRange);
+    BASEGFX_DLLPUBLIC B3IRange fround(const B3DRange& rRange);
 } // end of namespace basegfx
 
 

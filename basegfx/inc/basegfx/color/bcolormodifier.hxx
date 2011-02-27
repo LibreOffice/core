@@ -30,6 +30,7 @@
 
 #include <basegfx/color/bcolor.hxx>
 #include <vector>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -48,7 +49,7 @@ namespace basegfx
     /** Class to hold a color, value and mode for a color modification. Color modification is
         done calling the getModifiedColor() method
     */
-    class BColorModifier
+    class BASEGFX_DLLPUBLIC BColorModifier
     {
     protected:
         ::basegfx::BColor                           maBColor;
@@ -88,7 +89,7 @@ namespace basegfx
     /** Class to hold a stack of BColorModifiers and to get the modified color with
         applying all existing entry changes
     */
-    class BColorModifierStack
+    class BASEGFX_DLLPUBLIC BColorModifierStack
     {
     protected:
         ::std::vector< BColorModifier >             maBColorModifiers;

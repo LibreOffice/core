@@ -34,11 +34,12 @@
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/range/basicbox.hxx>
 #include <vector>
+#include <basegfx/basegfxdllapi.h>
 
 
 namespace basegfx
 {
-    class B2IBox
+    class BASEGFX_DLLPUBLIC B2IBox
     {
     public:
         typedef sal_Int32       ValueType;

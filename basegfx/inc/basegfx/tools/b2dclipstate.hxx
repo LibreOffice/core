@@ -33,6 +33,7 @@
 
 #include <sal/types.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -57,7 +58,7 @@ namespace basegfx
             a clip representation is requested, and using faster code
             paths for common special cases (like all-rectangle clips)
          */
-        class B2DClipState
+        class BASEGFX_DLLPUBLIC B2DClipState
         {
         public:
             typedef o3tl::cow_wrapper< ImplB2DClipState > ImplType;

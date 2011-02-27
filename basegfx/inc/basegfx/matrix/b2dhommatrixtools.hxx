@@ -31,6 +31,7 @@
 #include <sal/types.h>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/vector/b2dvector.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 namespace rtl { class OUString; }
 
@@ -48,16 +49,16 @@ namespace basegfx
             would introduce slight roundoff errors, instead of exactly
             mirroring the coordinate system)
          */
-        void createSinCosOrthogonal(double& o_rSin, double& rCos, double fRadiant);
+        BASEGFX_DLLPUBLIC void createSinCosOrthogonal(double& o_rSin, double& rCos, double fRadiant);
 
         /** Tooling methods for on-the-fly matrix generation e.g. for inline
             multiplications
          */
-        B2DHomMatrix createScaleB2DHomMatrix(double fScaleX, double fScaleY);
-        B2DHomMatrix createShearXB2DHomMatrix(double fShearX);
-        B2DHomMatrix createShearYB2DHomMatrix(double fShearY);
-        B2DHomMatrix createRotateB2DHomMatrix(double fRadiant);
-        B2DHomMatrix createTranslateB2DHomMatrix(double fTranslateX, double fTranslateY);
+        BASEGFX_DLLPUBLIC B2DHomMatrix createScaleB2DHomMatrix(double fScaleX, double fScaleY);
+        BASEGFX_DLLPUBLIC B2DHomMatrix createShearXB2DHomMatrix(double fShearX);
+        BASEGFX_DLLPUBLIC B2DHomMatrix createShearYB2DHomMatrix(double fShearY);
+        BASEGFX_DLLPUBLIC B2DHomMatrix createRotateB2DHomMatrix(double fRadiant);
+        BASEGFX_DLLPUBLIC B2DHomMatrix createTranslateB2DHomMatrix(double fTranslateX, double fTranslateY);
 
         /// inline versions for parameters as tuples
         inline B2DHomMatrix createScaleB2DHomMatrix(const B2DTuple& rScale)
@@ -77,7 +78,7 @@ namespace basegfx
             matrix multiplications.
             Inline versions for parameters as tuples added, too.
          */
-        B2DHomMatrix createScaleShearXRotateTranslateB2DHomMatrix(
+        BASEGFX_DLLPUBLIC B2DHomMatrix createScaleShearXRotateTranslateB2DHomMatrix(
             double fScaleX, double fScaleY,
             double fShearX,
             double fRadiant,
@@ -95,7 +96,7 @@ namespace basegfx
                 rTranslate.getX(), rTranslate.getY());
         }
 
-        B2DHomMatrix createShearXRotateTranslateB2DHomMatrix(
+        BASEGFX_DLLPUBLIC B2DHomMatrix createShearXRotateTranslateB2DHomMatrix(
             double fShearX,
             double fRadiant,
             double fTranslateX, double fTranslateY);
@@ -110,7 +111,7 @@ namespace basegfx
                 rTranslate.getX(), rTranslate.getY());
         }
 
-        B2DHomMatrix createScaleTranslateB2DHomMatrix(
+        BASEGFX_DLLPUBLIC B2DHomMatrix createScaleTranslateB2DHomMatrix(
             double fScaleX, double fScaleY,
             double fTranslateX, double fTranslateY);
         inline B2DHomMatrix createScaleTranslateB2DHomMatrix(
@@ -123,7 +124,7 @@ namespace basegfx
         }
 
         /// special for the often used case of rotation around a point
-        B2DHomMatrix createRotateAroundPoint(
+        BASEGFX_DLLPUBLIC B2DHomMatrix createRotateAroundPoint(
             double fPointX, double fPointY,
             double fRadiant);
         inline B2DHomMatrix createRotateAroundPoint(
@@ -144,7 +145,7 @@ namespace basegfx
 {
     namespace tools
     {
-        class B2DHomMatrixBufferedDecompose
+        class BASEGFX_DLLPUBLIC B2DHomMatrixBufferedDecompose
         {
         private:
             B2DVector              maScale;
@@ -183,7 +184,7 @@ namespace basegfx
 {
     namespace tools
     {
-        class B2DHomMatrixBufferedOnDemandDecompose
+        class BASEGFX_DLLPUBLIC B2DHomMatrixBufferedOnDemandDecompose
         {
         private:
             B2DHomMatrix           maB2DHomMatrix;

@@ -34,13 +34,14 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vector>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
     // class to hold a single trapezoid
-    class B2DTrapezoid
+    class BASEGFX_DLLPUBLIC B2DTrapezoid
     {
     private:
         // Geometry data. YValues are down-oriented, this means bottom should
@@ -96,13 +97,13 @@ namespace basegfx
         // lines have to be parallel to the X-Axis, thus this subdivision is NOT simply usable
         // for primitive decompositions. To use it, the shear and rotate parts of the
         // involved transformations HAVE to be taken into account.
-        void trapezoidSubdivide(
+        BASEGFX_DLLPUBLIC void trapezoidSubdivide(
             B2DTrapezoidVector& ro_Result,
             const B2DPolyPolygon& rSourcePolyPolygon);
 
         // directly create trapezoids from given edge. Depending on the given geometry,
         // none up to three trapezoids will be created
-        void createLineTrapezoidFromEdge(
+        BASEGFX_DLLPUBLIC void createLineTrapezoidFromEdge(
             B2DTrapezoidVector& ro_Result,
             const B2DPoint& rPointA,
             const B2DPoint& rPointB,
@@ -111,7 +112,7 @@ namespace basegfx
         // create trapezoids for all edges of the given polygon. The closed state of
         // the polygon is taken into account. If curves are contaned, the default
         // AdaptiveSubdivision will be used.
-        void createLineTrapezoidFromB2DPolygon(
+        BASEGFX_DLLPUBLIC void createLineTrapezoidFromB2DPolygon(
             B2DTrapezoidVector& ro_Result,
             const B2DPolygon& rPolygon,
             double fLineWidth = 1.0);
@@ -119,7 +120,7 @@ namespace basegfx
         // create trapezoids for all edges of the given polyPolygon. The closed state of
         // the PolyPolygon is taken into account. If curves are contaned, the default
         // AdaptiveSubdivision will be used.
-        void createLineTrapezoidFromB2DPolyPolygon(
+        BASEGFX_DLLPUBLIC void createLineTrapezoidFromB2DPolyPolygon(
             B2DTrapezoidVector& ro_Result,
             const B2DPolyPolygon& rPolyPolygon,
             double fLineWidth = 1.0);

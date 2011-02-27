@@ -29,6 +29,7 @@
 #define _BGFX_POLYGON_B2DPOLYPOLYGONCUTTER_HXX
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -43,18 +44,18 @@ namespace basegfx
         // Self crossovers of the contained sub-polygons are implicitely handled, but to not lose
         // the topological information, it may be necessary to remove self-intersections of the
         // contained sub-polygons in a preparing step and to explicitely correct their orientations.
-        B2DPolyPolygon solveCrossovers(const B2DPolyPolygon& rCandidate);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon solveCrossovers(const B2DPolyPolygon& rCandidate);
 
         // Version for single polygons. This is for solving self-intersections. Result will be free of
         // crossovers. When result contains multiple polygons, it may be necessary to rearrange their
         // orientations since holes may have been created (use correctOrientations eventually).
-        B2DPolyPolygon solveCrossovers(const B2DPolygon& rCandidate);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon solveCrossovers(const B2DPolygon& rCandidate);
 
         // Neutral polygons will be stripped. Neutral polygons are ones who's orientation is
         // neutral, so normally they have no volume -> just closed paths. A polygon with the same
         // positive and negative oriented volume is also neutral, so this may not be wanted. It is
         // safe to call with crossover-free polygons, though (that's where it's mostly used).
-        B2DPolyPolygon stripNeutralPolygons(const B2DPolyPolygon& rCandidate);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon stripNeutralPolygons(const B2DPolyPolygon& rCandidate);
 
         // Remove not necessary polygons. Works only correct with crossover-free polygons. For each
         // polygon, the depth for the PolyPolygon is calculated. The orientation is used to identify holes.
@@ -67,7 +68,7 @@ namespace basegfx
         // one polygon to another and use this mode -> only parts where two polygons overlapped will be kept.
         // In combination with correct orientation of the input orientations and the SolveCrossover calls this
         // can be combined for logical polygon operations or polygon clipping.
-        B2DPolyPolygon stripDispensablePolygons(const B2DPolyPolygon& rCandidate, bool bKeepAboveZero = false);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon stripDispensablePolygons(const B2DPolyPolygon& rCandidate, bool bKeepAboveZero = false);
 
         // For convenience: The four basic operations OR, XOR, AND and DIFF for
         // two PolyPolygons. These are combinations of the above methods. To not be forced
@@ -86,20 +87,20 @@ namespace basegfx
 
         // Preparations: solve self-intersections and intersections, remove neutral
         // parts and correct orientations.
-        B2DPolyPolygon prepareForPolygonOperation(const B2DPolygon& rCandidate);
-        B2DPolyPolygon prepareForPolygonOperation(const B2DPolyPolygon& rCandidate);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon prepareForPolygonOperation(const B2DPolygon& rCandidate);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon prepareForPolygonOperation(const B2DPolyPolygon& rCandidate);
 
         // OR: Return all areas where CandidateA or CandidateB exist
-        B2DPolyPolygon solvePolygonOperationOr(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon solvePolygonOperationOr(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB);
 
         // XOR: Return all areas where CandidateA or CandidateB exist, but not both
-        B2DPolyPolygon solvePolygonOperationXor(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon solvePolygonOperationXor(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB);
 
         // AND: Return all areas where CandidateA and CandidateB exist
-        B2DPolyPolygon solvePolygonOperationAnd(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon solvePolygonOperationAnd(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB);
 
         // DIFF: Return all areas where CandidateA is not covered by CandidateB (cut B out of A)
-        B2DPolyPolygon solvePolygonOperationDiff(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon solvePolygonOperationDiff(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB);
 
         /** merge all single PolyPolygons to a single, OR-ed PolyPolygon
 
@@ -108,7 +109,7 @@ namespace basegfx
 
             @return A single PolyPolygon containing the Or-merged result
         */
-        B2DPolyPolygon mergeToSinglePolyPolygon(const std::vector< basegfx::B2DPolyPolygon >& rInput);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon mergeToSinglePolyPolygon(const std::vector< basegfx::B2DPolyPolygon >& rInput);
 
     } // end of namespace tools
 } // end of namespace basegfx

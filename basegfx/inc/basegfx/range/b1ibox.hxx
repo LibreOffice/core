@@ -29,11 +29,12 @@
 #define _BGFX_RANGE_B1IBOX_HXX
 
 #include <basegfx/range/basicbox.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 
 namespace basegfx
 {
-    class B1IBox
+    class BASEGFX_DLLPUBLIC B1IBox
     {
         ::basegfx::BasicBox maRange;
 

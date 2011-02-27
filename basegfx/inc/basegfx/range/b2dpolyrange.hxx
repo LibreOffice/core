@@ -34,6 +34,7 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <boost/tuple/tuple.hpp>
 #include <basegfx/vector/b2enums.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
@@ -58,7 +59,7 @@ namespace basegfx
         contain 'holes' - this is encoded via polygon orientation at
         the poly-polygon, and via explicit flags for the poly-range.
      */
-    class B2DPolyRange
+    class BASEGFX_DLLPUBLIC B2DPolyRange
     {
     public:
         typedef boost::tuple<B2DRange,B2VectorOrientation> ElementType ;

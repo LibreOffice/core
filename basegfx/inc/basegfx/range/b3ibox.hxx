@@ -33,10 +33,11 @@
 #include <basegfx/tuple/b3ituple.hxx>
 #include <basegfx/tuple/b3i64tuple.hxx>
 #include <basegfx/range/basicbox.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
-    class B3IBox
+    class BASEGFX_DLLPUBLIC B3IBox
     {
         BasicBox            maRangeX;
         BasicBox            maRangeY;

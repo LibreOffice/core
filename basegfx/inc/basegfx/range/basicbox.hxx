@@ -29,6 +29,7 @@
 #define _BGFX_RANGE_BASICBOX_HXX
 
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 
 namespace basegfx
@@ -40,7 +41,7 @@ namespace basegfx
         <em>outside</em> of the range, in contrast to BasicRange,
         which considers them inside.
      */
-    class BasicBox : public BasicRange< sal_Int32, Int32Traits >
+    class BASEGFX_DLLPUBLIC BasicBox : public BasicRange< sal_Int32, Int32Traits >
     {
         typedef BasicRange< sal_Int32, Int32Traits > Base;
     public:

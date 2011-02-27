@@ -33,6 +33,7 @@
 
 #include <basegfx/range/b2dpolyrange.hxx>
 #include <vector>
+#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
@@ -45,7 +46,7 @@ namespace basegfx
             poly-polygon with the same topology, and encoding
             inside/outsidedness via polygon orientation and layering.
          */
-        B2DPolyPolygon solveCrossovers(const std::vector<B2DRange>& rRanges,
+        BASEGFX_DLLPUBLIC B2DPolyPolygon solveCrossovers(const std::vector<B2DRange>& rRanges,
                                        const std::vector<B2VectorOrientation>& rOrientations);
     }
 }

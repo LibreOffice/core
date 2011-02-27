@@ -33,6 +33,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/range/basicrange.hxx>
 #include <vector>
+#include <basegfx/basegfxdllapi.h>
 
 
 namespace basegfx
@@ -41,7 +42,7 @@ namespace basegfx
     class B2IRange;
     class B2DHomMatrix;
 
-    class B2DRange
+    class BASEGFX_DLLPUBLIC B2DRange
     {
     public:
         typedef double          ValueType;
@@ -264,7 +265,7 @@ namespace basegfx
 
         @return the nearest integer for this range
     */
-    B2IRange fround(const B2DRange& rRange);
+    BASEGFX_DLLPUBLIC B2IRange fround(const B2DRange& rRange);
 
     /** Compute the set difference of the two given ranges
 
@@ -285,7 +286,7 @@ namespace basegfx
 
         @return the input vector
      */
-    ::std::vector< B2DRange >& computeSetDifference( ::std::vector< B2DRange >& o_rResult,
+    BASEGFX_DLLPUBLIC ::std::vector< B2DRange >& computeSetDifference( ::std::vector< B2DRange >&   o_rResult,
                                                      const B2DRange&            rFirst,
                                                      const B2DRange&            rSecond );
 

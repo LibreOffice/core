@@ -30,6 +30,7 @@
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <vector>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -38,10 +39,10 @@ namespace basegfx
     namespace triangulator
     {
         // triangulate given polygon
-        ::basegfx::B2DPolygon triangulate(const ::basegfx::B2DPolygon& rCandidate);
+        BASEGFX_DLLPUBLIC ::basegfx::B2DPolygon triangulate(const ::basegfx::B2DPolygon& rCandidate);
 
         // triangulate given PolyPolygon
-        ::basegfx::B2DPolygon triangulate(const ::basegfx::B2DPolyPolygon& rCandidate);
+        BASEGFX_DLLPUBLIC ::basegfx::B2DPolygon triangulate(const ::basegfx::B2DPolyPolygon& rCandidate);
 
     } // end of namespace triangulator
 } // end of namespace basegfx

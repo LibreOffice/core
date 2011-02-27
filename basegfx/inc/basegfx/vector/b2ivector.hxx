@@ -30,6 +30,7 @@
 
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/vector/b2enums.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
@@ -44,7 +45,7 @@ namespace basegfx
 
         @see B2ITuple
     */
-    class B2IVector : public ::basegfx::B2ITuple
+    class BASEGFX_DLLPUBLIC B2IVector : public ::basegfx::B2ITuple
     {
     public:
         /** Create a 2D Vector
@@ -185,7 +186,7 @@ namespace basegfx
         @return
         The mathematical Orientation of the two involved 2D Vectors
     */
-    B2VectorOrientation getOrientation( const B2IVector& rVecA, const B2IVector& rVecB );
+    BASEGFX_DLLPUBLIC B2VectorOrientation getOrientation( const B2IVector& rVecA, const B2IVector& rVecB );
 
     /** Calculate a perpendicular 2D Vector to the given one
 
@@ -195,7 +196,7 @@ namespace basegfx
         @return
         A 2D Vector perpendicular to the one given in parameter rVec
     */
-    B2IVector getPerpendicular( const B2IVector& rVec );
+    BASEGFX_DLLPUBLIC B2IVector getPerpendicular( const B2IVector& rVec );
 
     /** Test two vectors which need not to be normalized for parallelism
 
@@ -209,21 +210,21 @@ namespace basegfx
         bool if the two values are parallel. Also true if
         one of the vectors is empty.
     */
-    bool areParallel( const B2IVector& rVecA, const B2IVector& rVecB );
+    BASEGFX_DLLPUBLIC bool areParallel( const B2IVector& rVecA, const B2IVector& rVecB );
 
     /** Transform vector by given transformation matrix.
 
         Since this is a vector, translational components of the
         matrix are disregarded.
     */
-    B2IVector operator*( const B2DHomMatrix& rMat, const B2IVector& rVec );
+    BASEGFX_DLLPUBLIC B2IVector operator*( const B2DHomMatrix& rMat, const B2IVector& rVec );
 
     /** Test continuity between given vectors.
 
         The two given vectors are assumed to describe control points on a
         common point. Calculate if there is a continuity between them.
     */
-    B2VectorContinuity getContinuity( const B2IVector& rBackVector, const B2IVector& rForwardVector );
+    BASEGFX_DLLPUBLIC B2VectorContinuity getContinuity( const B2IVector& rBackVector, const B2IVector& rForwardVector );
 
 } // end of namespace basegfx
 

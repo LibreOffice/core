@@ -29,6 +29,7 @@
 #define _BGFX_VECTOR_B3DVECTOR_HXX
 
 #include <basegfx/tuple/b3dtuple.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -45,7 +46,7 @@ namespace basegfx
 
         @see B3DTuple
     */
-    class B3DVector : public ::basegfx::B3DTuple
+    class BASEGFX_DLLPUBLIC B3DVector : public ::basegfx::B3DTuple
     {
     public:
         /** Create a 3D Vector
@@ -305,14 +306,14 @@ namespace basegfx
         bool if the two values are parallel. Also true if
         one of the vectors is empty.
     */
-    bool areParallel( const B3DVector& rVecA, const B3DVector& rVecB );
+    BASEGFX_DLLPUBLIC bool areParallel( const B3DVector& rVecA, const B3DVector& rVecB );
 
     /** Transform vector by given transformation matrix.
 
         Since this is a vector, translational components of the
         matrix are disregarded.
     */
-    B3DVector operator*( const B3DHomMatrix& rMat, const B3DVector& rVec );
+    BASEGFX_DLLPUBLIC B3DVector operator*( const B3DHomMatrix& rMat, const B3DVector& rVec );
 
     /** Calculate the Cross Product of two 3D Vectors
 

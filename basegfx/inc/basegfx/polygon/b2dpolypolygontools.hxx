@@ -33,6 +33,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <vector>
+#include <basegfx/basegfxdllapi.h>
 
 namespace rtl
 {
@@ -54,27 +55,27 @@ namespace basegfx
         // Check and evtl. correct orientations of all contained Polygons so that
         // the orientations of contained polygons will variate to express areas and
         // holes
-        B2DPolyPolygon correctOrientations(const B2DPolyPolygon& rCandidate);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon correctOrientations(const B2DPolyPolygon& rCandidate);
 
         // make sure polygon with index 0L is not a hole. This may evtl. change the
         // sequence of polygons, but allows to use polygon with index 0L to
         // get the correct normal for the whole polyPolygon
-        B2DPolyPolygon correctOutmostPolygon(const B2DPolyPolygon& rCandidate);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon correctOutmostPolygon(const B2DPolyPolygon& rCandidate);
 
         // Subdivide all contained curves. Use distanceBound value if given.
-        B2DPolyPolygon adaptiveSubdivideByDistance(const B2DPolyPolygon& rCandidate, double fDistanceBound = 0.0);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon adaptiveSubdivideByDistance(const B2DPolyPolygon& rCandidate, double fDistanceBound = 0.0);
 
         // Subdivide all contained curves. Use distanceBound value if given. Else, a convenient one
         // is created.
-        B2DPolyPolygon adaptiveSubdivideByAngle(const B2DPolyPolygon& rCandidate, double fAngleBound = 0.0);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon adaptiveSubdivideByAngle(const B2DPolyPolygon& rCandidate, double fAngleBound = 0.0);
 
         // Subdivide all contained curves. Use nCount divisions if given. Else, a convenient one
         // is created.
-        B2DPolyPolygon adaptiveSubdivideByCount(const B2DPolyPolygon& rCandidate, sal_uInt32 nCount = 0L);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon adaptiveSubdivideByCount(const B2DPolyPolygon& rCandidate, sal_uInt32 nCount = 0L);
 
         // isInside test for B2dPoint. On border is not inside as long as not true is given
         // in bWithBorder flag. It is assumed that the orientations of the given polygon are correct.
-        bool isInside(const B2DPolyPolygon& rCandidate, const B2DPoint& rPoint, bool bWithBorder = false);
+        BASEGFX_DLLPUBLIC bool isInside(const B2DPolyPolygon& rCandidate, const B2DPoint& rPoint, bool bWithBorder = false);
 
         /** get range of PolyPolygon. Control points are included.
 
@@ -87,7 +88,7 @@ namespace basegfx
             @return
             The outer range including control points
         */
-        B2DRange getRangeWithControlPoints(const B2DPolyPolygon& rCandidate);
+        BASEGFX_DLLPUBLIC B2DRange getRangeWithControlPoints(const B2DPolyPolygon& rCandidate);
 
         /** Get the range of a polyPolygon
 
@@ -100,13 +101,13 @@ namespace basegfx
             @return
             The outer range of the polygon
         */
-        B2DRange getRange(const B2DPolyPolygon& rCandidate);
+        BASEGFX_DLLPUBLIC B2DRange getRange(const B2DPolyPolygon& rCandidate);
 
         /** Apply given LineDashing to given polyPolygon
 
             For a description see applyLineDashing in b2dpolygontoos.hxx
         */
-        void applyLineDashing(
+        BASEGFX_DLLPUBLIC void applyLineDashing(
             const B2DPolyPolygon& rCandidate,
             const ::std::vector<double>& rDotDashArray,
             B2DPolyPolygon* pLineTarget,
@@ -116,7 +117,7 @@ namespace basegfx
         // test if point is inside epsilon-range around the given PolyPolygon. Can be used
         // for HitTesting. The epsilon-range is defined to be the tube around the PolyPolygon
         // with distance fDistance and rounded edges (start and end point).
-        bool isInEpsilonRange(const B2DPolyPolygon& rCandidate, const B2DPoint& rTestPosition, double fDistance);
+        BASEGFX_DLLPUBLIC bool isInEpsilonRange(const B2DPolyPolygon& rCandidate, const B2DPoint& rTestPosition, double fDistance);
 
         /** Read poly-polygon from SVG.
 
@@ -132,7 +133,7 @@ namespace basegfx
 
             @return true, if the string was successfully parsed
          */
-        bool importFromSvgD( B2DPolyPolygon&        o_rPolyPoly,
+        BASEGFX_DLLPUBLIC bool importFromSvgD( B2DPolyPolygon&        o_rPolyPoly,
                              const ::rtl::OUString& rSvgDAttribute );
 
         /** Read poly-polygon from SVG.
@@ -149,53 +150,53 @@ namespace basegfx
 
             @return true, if the string was successfully parsed
          */
-        bool importFromSvgPoints( B2DPolygon&            o_rPoly,
+        BASEGFX_DLLPUBLIC bool importFromSvgPoints( B2DPolygon&            o_rPoly,
                                   const ::rtl::OUString& rSvgPointsAttribute );
 
 
         // grow for polyPolygon. Move all geometry in each point in the direction of the normal in that point
         // with the given amount. Value may be negative.
-        B2DPolyPolygon growInNormalDirection(const B2DPolyPolygon& rCandidate, double fValue);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon growInNormalDirection(const B2DPolyPolygon& rCandidate, double fValue);
 
         // This method will correct a pair of polyPolygons where the goal is to keep same point count
         // to allow direct point association and also to remove self-intersections produced by shrinks.
         // This method will eventually change both polyPolygons to reach that goal because there are cases
         // where it is necessary to add new cut points to the original
-        void correctGrowShrinkPolygonPair(B2DPolyPolygon& rOriginal, B2DPolyPolygon& rGrown);
+        BASEGFX_DLLPUBLIC void correctGrowShrinkPolygonPair(B2DPolyPolygon& rOriginal, B2DPolyPolygon& rGrown);
 
         // force all sub-polygons to a point count of nSegments
-        B2DPolyPolygon reSegmentPolyPolygon(const B2DPolyPolygon& rCandidate, sal_uInt32 nSegments);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon reSegmentPolyPolygon(const B2DPolyPolygon& rCandidate, sal_uInt32 nSegments);
 
         // create polygon state at t from 0.0 to 1.0 between the two polygons. Both polygons must have the same
         // organisation, e.g. same amount of polygons
-        B2DPolyPolygon interpolate(const B2DPolyPolygon& rOld1, const B2DPolyPolygon& rOld2, double t);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon interpolate(const B2DPolyPolygon& rOld1, const B2DPolyPolygon& rOld2, double t);
 
         // create 3d PolyPolygon from given 2d PolyPolygon. The given fZCoordinate is used to expand the
         // third coordinate.
-        B3DPolyPolygon createB3DPolyPolygonFromB2DPolyPolygon(const B2DPolyPolygon& rCandidate, double fZCoordinate = 0.0);
+        BASEGFX_DLLPUBLIC B3DPolyPolygon createB3DPolyPolygonFromB2DPolyPolygon(const B2DPolyPolygon& rCandidate, double fZCoordinate = 0.0);
 
         // create 2d PolyPolygon from given 3d PolyPolygon. All coordinates are transformed using the given
         // matrix and the resulting x,y is used to form the new polygon.
-        B2DPolyPolygon createB2DPolyPolygonFromB3DPolyPolygon(const B3DPolyPolygon& rCandidate, const B3DHomMatrix& rMat);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon createB2DPolyPolygonFromB3DPolyPolygon(const B3DPolyPolygon& rCandidate, const B3DHomMatrix& rMat);
 
         // for each contained edge in each contained polygon calculate the smallest distance. Return the index to the smallest
         // edge in rEdgeIndex and the index to the polygon in rPolygonIndex. The relative position on the edge is returned in rCut.
         // If nothing was found (e.g. empty input plygon), DBL_MAX is returned.
-        double getSmallestDistancePointToPolyPolygon(const B2DPolyPolygon& rCandidate, const B2DPoint& rTestPoint, sal_uInt32& rPolygonIndex, sal_uInt32& rEdgeIndex, double& rCut);
+        BASEGFX_DLLPUBLIC double getSmallestDistancePointToPolyPolygon(const B2DPolyPolygon& rCandidate, const B2DPoint& rTestPoint, sal_uInt32& rPolygonIndex, sal_uInt32& rEdgeIndex, double& rCut);
 
         // distort PolyPolygon. rOriginal describes the original range, where the given points describe the distorted
         // corresponding points.
-        B2DPolyPolygon distort(const B2DPolyPolygon& rCandidate, const B2DRange& rOriginal, const B2DPoint& rTopLeft, const B2DPoint& rTopRight, const B2DPoint& rBottomLeft, const B2DPoint& rBottomRight);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon distort(const B2DPolyPolygon& rCandidate, const B2DRange& rOriginal, const B2DPoint& rTopLeft, const B2DPoint& rTopRight, const B2DPoint& rBottomLeft, const B2DPoint& rBottomRight);
 
         // rotate PolyPolygon around given point with given angle.
-        B2DPolyPolygon rotateAroundPoint(const B2DPolyPolygon& rCandidate, const B2DPoint& rCenter, double fAngle);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon rotateAroundPoint(const B2DPolyPolygon& rCandidate, const B2DPoint& rCenter, double fAngle);
 
         // expand all segments (which are not yet) to curve segments. This is done with setting the control
         // vectors on the 1/3 resp. 2/3 distances on each segment.
-        B2DPolyPolygon expandToCurve(const B2DPolyPolygon& rCandidate);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon expandToCurve(const B2DPolyPolygon& rCandidate);
 
         // set continuity for the whole curve. If not a curve, nothing will change. Non-curve points are not changed, too.
-        B2DPolyPolygon setContinuity(const B2DPolyPolygon& rCandidate, B2VectorContinuity eContinuity);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon setContinuity(const B2DPolyPolygon& rCandidate, B2VectorContinuity eContinuity);
 
         /** Predicate whether a given poly-polygon is a rectangle.
 
@@ -208,7 +209,7 @@ namespace basegfx
             vertices). Note that intermediate points and duplicate
             points are ignored.
          */
-        bool isRectangle( const B2DPolyPolygon& rPoly );
+        BASEGFX_DLLPUBLIC bool isRectangle( const B2DPolyPolygon& rPoly );
 
         /** Export poly-polygon to SVG.
 
@@ -233,12 +234,12 @@ namespace basegfx
             @return the generated SVG-D statement (the XML d attribute
             value alone, without any "<path ...>" or "d="...")
          */
-        ::rtl::OUString exportToSvgD( const B2DPolyPolygon& rPolyPoly,
+        BASEGFX_DLLPUBLIC ::rtl::OUString exportToSvgD( const B2DPolyPolygon& rPolyPoly,
                                       bool                  bUseRelativeCoordinates=true,
                                       bool                  bDetectQuadraticBeziers=true );
 
         // #i76891# Try to remove existing curve segments if they are simply edges
-        B2DPolyPolygon simplifyCurveSegments(const B2DPolyPolygon& rCandidate);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon simplifyCurveSegments(const B2DPolyPolygon& rCandidate);
 
         /** split each edge of a polyPolygon in exactly nSubEdges equidistant edges
 
@@ -252,12 +253,12 @@ namespace basegfx
             @param bHandleStraightEdges
             Please take a look at reSegmentPolygonEdges description, these are the same.
         */
-        B2DPolyPolygon reSegmentPolyPolygonEdges(const B2DPolyPolygon& rCandidate, sal_uInt32 nSubEdges, bool bHandleCurvedEdges, bool bHandleStraightEdges);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon reSegmentPolyPolygonEdges(const B2DPolyPolygon& rCandidate, sal_uInt32 nSubEdges, bool bHandleCurvedEdges, bool bHandleStraightEdges);
 
         //////////////////////////////////////////////////////////////////////
         // comparators with tolerance for 2D PolyPolygons
-        bool equal(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB, const double& rfSmallValue);
-        bool equal(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB);
+        BASEGFX_DLLPUBLIC bool equal(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB, const double& rfSmallValue);
+        BASEGFX_DLLPUBLIC bool equal(const B2DPolyPolygon& rCandidateA, const B2DPolyPolygon& rCandidateB);
 
         /** snap some polygon coordinates to discrete coordinates
 
@@ -271,7 +272,7 @@ namespace basegfx
             @return
             The modified version of the source polygon
         */
-        B2DPolyPolygon snapPointsOfHorizontalOrVerticalEdges(const B2DPolyPolygon& rCandidate);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon snapPointsOfHorizontalOrVerticalEdges(const B2DPolyPolygon& rCandidate);
 
     } // end of namespace tools
 } // end of namespace basegfx

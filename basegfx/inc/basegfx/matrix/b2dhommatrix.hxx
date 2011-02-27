@@ -30,13 +30,14 @@
 
 #include <sal/types.h>
 #include <o3tl/cow_wrapper.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
     class B2DTuple;
     class Impl2DHomMatrix;
 
-    class B2DHomMatrix
+    class BASEGFX_DLLPUBLIC B2DHomMatrix
     {
     public:
         typedef o3tl::cow_wrapper< Impl2DHomMatrix > ImplType;

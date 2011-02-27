@@ -30,6 +30,7 @@
 
 #include <sal/types.h>
 #include <basegfx/tuple/b2dtuple.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 
 namespace basegfx
@@ -42,7 +43,7 @@ namespace basegfx
         @derive Use this class to implement Points or Vectors
         which are based on two sal_Int64 values
     */
-    class B2I64Tuple
+    class BASEGFX_DLLPUBLIC B2I64Tuple
     {
     protected:
         sal_Int64                                       mnX;

@@ -29,6 +29,7 @@
 #define _BGFX_NUMERIC_FTOOLS_HXX
 
 #include <rtl/math.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // standard PI defines from solar.h, but we do not want to link against tools
@@ -144,7 +145,7 @@ namespace basegfx
     }
 
 
-    class fTools
+    class BASEGFX_DLLPUBLIC fTools
     {
         /// Threshold value for equalZero()
         static double                                   mfSmallValue;

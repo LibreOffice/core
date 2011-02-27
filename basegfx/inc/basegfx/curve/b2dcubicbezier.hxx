@@ -30,6 +30,7 @@
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -43,7 +44,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class B2DCubicBezier
+    class BASEGFX_DLLPUBLIC B2DCubicBezier
     {
         B2DPoint                                        maStartPoint;
         B2DPoint                                        maEndPoint;

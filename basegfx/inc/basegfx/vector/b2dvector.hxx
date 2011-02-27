@@ -31,6 +31,7 @@
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/vector/b2ivector.hxx>
 #include <basegfx/vector/b2enums.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
@@ -45,7 +46,7 @@ namespace basegfx
 
         @see B2DTuple
     */
-    class B2DVector : public ::basegfx::B2DTuple
+    class BASEGFX_DLLPUBLIC B2DVector : public ::basegfx::B2DTuple
     {
     public:
         /** Create a 2D Vector
@@ -209,7 +210,7 @@ namespace basegfx
         @return
         The mathematical Orientation of the two involved 2D Vectors
     */
-    B2VectorOrientation getOrientation( const B2DVector& rVecA, const B2DVector& rVecB );
+    BASEGFX_DLLPUBLIC B2VectorOrientation getOrientation( const B2DVector& rVecA, const B2DVector& rVecB );
 
     /** Calculate a perpendicular 2D Vector to the given one
 
@@ -221,7 +222,7 @@ namespace basegfx
         @return
         A 2D Vector perpendicular to the one given in parameter rVec
     */
-    B2DVector getPerpendicular( const B2DVector& rNormalizedVec );
+    BASEGFX_DLLPUBLIC B2DVector getPerpendicular( const B2DVector& rNormalizedVec );
 
     /** Calculate a perpendicular 2D Vector to the given one,
         normalize the given one as preparation
@@ -232,7 +233,7 @@ namespace basegfx
         @return
         A normalized 2D Vector perpendicular to the one given in parameter rVec
     */
-    B2DVector getNormalizedPerpendicular( const B2DVector& rVec );
+    BASEGFX_DLLPUBLIC B2DVector getNormalizedPerpendicular( const B2DVector& rVec );
 
     /** Test two vectors which need not to be normalized for parallelism
 
@@ -246,21 +247,21 @@ namespace basegfx
         bool if the two values are parallel. Also true if
         one of the vectors is empty.
     */
-    bool areParallel( const B2DVector& rVecA, const B2DVector& rVecB );
+    BASEGFX_DLLPUBLIC bool areParallel( const B2DVector& rVecA, const B2DVector& rVecB );
 
     /** Transform vector by given transformation matrix.
 
         Since this is a vector, translational components of the
         matrix are disregarded.
     */
-    B2DVector operator*( const B2DHomMatrix& rMat, const B2DVector& rVec );
+    BASEGFX_DLLPUBLIC B2DVector operator*( const B2DHomMatrix& rMat, const B2DVector& rVec );
 
     /** Test continuity between given vectors.
 
         The two given vectors are assumed to describe control points on a
         common point. Calculate if there is a continuity between them.
     */
-    B2VectorContinuity getContinuity( const B2DVector& rBackVector, const B2DVector& rForwardVector );
+    BASEGFX_DLLPUBLIC B2VectorContinuity getContinuity( const B2DVector& rBackVector, const B2DVector& rForwardVector );
 
 } // end of namespace basegfx
 

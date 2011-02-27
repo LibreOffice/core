@@ -29,6 +29,7 @@
 #define _BGFX_POINT_B2IPOINT_HXX
 
 #include <basegfx/tuple/b2ituple.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
@@ -43,7 +44,7 @@ namespace basegfx
 
         @see B2ITuple
     */
-    class B2IPoint : public ::basegfx::B2ITuple
+    class BASEGFX_DLLPUBLIC B2IPoint : public ::basegfx::B2ITuple
     {
     public:
         /** Create a 2D Point

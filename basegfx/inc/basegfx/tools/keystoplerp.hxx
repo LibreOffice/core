@@ -33,6 +33,7 @@
 
 #include <basegfx/numeric/ftools.hxx>
 #include <vector>
+#include <basegfx/basegfxdllapi.h>
 
 namespace com{ namespace sun{ namespace star{ namespace uno {
     template<typename T> class Sequence;
@@ -53,7 +54,7 @@ namespace basegfx
             then calculate the relative alpha between the two buckets
             found.
          */
-        class KeyStopLerp
+        class BASEGFX_DLLPUBLIC KeyStopLerp
         {
         public:
             typedef std::pair<std::ptrdiff_t,double> ResultType;

@@ -29,6 +29,7 @@
 #define _BGFX_POINT_B2DHOMPOINT_HXX
 
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
@@ -45,7 +46,7 @@ namespace basegfx
 
         @see B2DTuple
     */
-    class B2DHomPoint
+    class BASEGFX_DLLPUBLIC B2DHomPoint
     {
     protected:
         /// This member contains the coordinate part of the point
@@ -205,31 +206,31 @@ namespace basegfx
     // external operators
     //////////////////////////////////////////////////////////////////////////
 
-    B2DHomPoint minimum(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB);
+    BASEGFX_DLLPUBLIC B2DHomPoint minimum(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB);
 
-    B2DHomPoint maximum(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB);
+    BASEGFX_DLLPUBLIC B2DHomPoint maximum(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB);
 
-    B2DHomPoint absolute(const B2DHomPoint& rVec);
+    BASEGFX_DLLPUBLIC B2DHomPoint absolute(const B2DHomPoint& rVec);
 
-    B2DHomPoint interpolate(B2DHomPoint& rOld1, B2DHomPoint& rOld2, double t);
+    BASEGFX_DLLPUBLIC B2DHomPoint interpolate(B2DHomPoint& rOld1, B2DHomPoint& rOld2, double t);
 
-    B2DHomPoint average(B2DHomPoint& rOld1, B2DHomPoint& rOld2);
+    BASEGFX_DLLPUBLIC B2DHomPoint average(B2DHomPoint& rOld1, B2DHomPoint& rOld2);
 
-    B2DHomPoint average(B2DHomPoint& rOld1, B2DHomPoint& rOld2, B2DHomPoint& rOld3);
+    BASEGFX_DLLPUBLIC B2DHomPoint average(B2DHomPoint& rOld1, B2DHomPoint& rOld2, B2DHomPoint& rOld3);
 
-    B2DHomPoint operator+(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB);
+    BASEGFX_DLLPUBLIC B2DHomPoint operator+(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB);
 
-    B2DHomPoint operator-(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB);
+    BASEGFX_DLLPUBLIC B2DHomPoint operator-(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB);
 
-    B2DHomPoint operator*(const B2DHomPoint& rVec, double t);
+    BASEGFX_DLLPUBLIC B2DHomPoint operator*(const B2DHomPoint& rVec, double t);
 
-    B2DHomPoint operator*(double t, const B2DHomPoint& rVec);
+    BASEGFX_DLLPUBLIC B2DHomPoint operator*(double t, const B2DHomPoint& rVec);
 
-    B2DHomPoint operator*( const B2DHomMatrix& rMat, const B2DHomPoint& rPoint );
+    BASEGFX_DLLPUBLIC B2DHomPoint operator*( const B2DHomMatrix& rMat, const B2DHomPoint& rPoint );
 
-    B2DHomPoint operator/(const B2DHomPoint& rVec, double t);
+    BASEGFX_DLLPUBLIC B2DHomPoint operator/(const B2DHomPoint& rVec, double t);
 
-    B2DHomPoint operator/(double t, const B2DHomPoint& rVec);
+    BASEGFX_DLLPUBLIC B2DHomPoint operator/(double t, const B2DHomPoint& rVec);
 } // end of namespace basegfx
 
 #endif /* _BGFX_POINT_B2DHOMPOINT_HXX */

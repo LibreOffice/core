@@ -33,6 +33,7 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 #include <vector>
 #include <algorithm>
@@ -45,7 +46,7 @@ namespace basegfx
         1.2-compatible gradients. Use the createXXXODFGradientInfo()
         methods below for initializing from ODF attributes.
      */
-    struct ODFGradientInfo
+    struct BASEGFX_DLLPUBLIC ODFGradientInfo
     {
         /** transformation mapping from [0,1]^2 texture coordinate
            space to [0,1]^2 shape coordinate space
@@ -97,7 +98,7 @@ namespace basegfx
             @param fAngle
             Gradient angle (from ODF)
          */
-        ODFGradientInfo& createLinearODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
+        BASEGFX_DLLPUBLIC ODFGradientInfo& createLinearODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
                                                      const B2DRange&  rTargetArea,
                                                      sal_uInt32       nSteps,
                                                      double           fBorder,
@@ -156,7 +157,7 @@ namespace basegfx
             @param fAngle
             Gradient angle (from ODF)
          */
-        ODFGradientInfo& createAxialODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
+        BASEGFX_DLLPUBLIC ODFGradientInfo& createAxialODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
                                                     const B2DRange&  rTargetArea,
                                                     sal_uInt32       nSteps,
                                                     double           fBorder,
@@ -211,7 +212,7 @@ namespace basegfx
             @param fAngle
             Gradient angle (from ODF)
          */
-        ODFGradientInfo& createRadialODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
+        BASEGFX_DLLPUBLIC ODFGradientInfo& createRadialODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
                                                      const B2DRange&  rTargetArea,
                                                      const B2DVector& rOffset,
                                                      sal_uInt32       nSteps,
@@ -270,7 +271,7 @@ namespace basegfx
             @param fAngle
             Gradient angle (from ODF)
          */
-        ODFGradientInfo& createEllipticalODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
+        BASEGFX_DLLPUBLIC ODFGradientInfo& createEllipticalODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
                                                          const B2DRange&  rTargetArea,
                                                          const B2DVector& rOffset,
                                                          sal_uInt32       nSteps,
@@ -318,7 +319,7 @@ namespace basegfx
             @param fAngle
             Gradient angle (from ODF)
          */
-        ODFGradientInfo& createSquareODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
+        BASEGFX_DLLPUBLIC ODFGradientInfo& createSquareODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
                                                      const B2DRange&  rTargetArea,
                                                      const B2DVector& rOffset,
                                                      sal_uInt32       nSteps,
@@ -379,7 +380,7 @@ namespace basegfx
             @param fAngle
             Gradient angle (from ODF)
          */
-        ODFGradientInfo& createRectangularODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
+        BASEGFX_DLLPUBLIC ODFGradientInfo& createRectangularODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
                                                           const B2DRange&  rTargetArea,
                                                           const B2DVector& rOffset,
                                                           sal_uInt32       nSteps,

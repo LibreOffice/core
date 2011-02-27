@@ -33,10 +33,11 @@
 #include <basegfx/tuple/b3ituple.hxx>
 #include <basegfx/tuple/b3i64tuple.hxx>
 #include <basegfx/range/basicrange.hxx>
+#include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
 {
-    class B3IRange
+    class BASEGFX_DLLPUBLIC B3IRange
     {
         typedef ::basegfx::BasicRange< sal_Int32, Int32Traits > MyBasicRange;
 
