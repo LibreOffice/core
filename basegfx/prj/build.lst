@@ -1,18 +1,3 @@
 fx	basegfx	:	o3tl sal offuh cppuhelper cppu CPPUNIT:cppunit NULL
-fx	basegfx									usr1	-	all	fx_mkout NULL
-fx	basegfx\inc								nmake	-	all	fx_inc NULL
-fx	basegfx\prj								get		-	all	fx_prj NULL
-fx	basegfx\source\curve					nmake	-	all	fx_curve fx_inc NULL
-fx	basegfx\source\matrix					nmake	-	all	fx_matrix fx_inc NULL
-fx	basegfx\source\numeric					nmake	-	all	fx_numeric fx_inc NULL
-fx	basegfx\source\point					nmake	-	all	fx_point fx_inc NULL
-fx	basegfx\source\polygon					nmake	-	all	fx_polygon fx_inc NULL
-fx	basegfx\source\range					nmake	-	all	fx_range fx_inc NULL
-fx	basegfx\source\tuple					nmake	-	all	fx_tuple fx_inc NULL
-fx	basegfx\source\tools					nmake	-	all	fx_tools fx_inc NULL
-fx	basegfx\source\vector					nmake	-	all	fx_vector fx_inc NULL
-fx	basegfx\source\color					nmake	-	all	fx_color fx_inc NULL
-fx	basegfx\source\pixel					nmake	-	all	fx_pixel fx_inc NULL
-fx	basegfx\source\raster					nmake	-	all	fx_raster fx_inc NULL
-fx	basegfx\util							nmake	-	all	fx_util fx_curve fx_matrix fx_numeric fx_point fx_polygon fx_range fx_tuple fx_tools fx_vector fx_color fx_pixel fx_raster NULL
-fx	basegfx\test					        nmake	-	all	fx_tests fx_util NULL
+fx	basegfx\prj								nmake		-	all	fx_prj NULL
+

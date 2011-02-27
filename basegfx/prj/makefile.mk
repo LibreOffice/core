@@ -25,28 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
-PRJNAME=basegfx
-TARGET=tuple
+PRJ=..
+TARGET=prj
 
-#UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
-#ENABLE_EXCEPTIONS=FALSE
-#USE_DEFFILE=TRUE
+.INCLUDE : settings.mk
 
-# --- Settings ----------------------------------
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-.INCLUDE :  	settings.mk
-
-# --- Files -------------------------------------
-
-SLOFILES= \
-                $(SLO)$/b2dtuple.obj		\
-                $(SLO)$/b3dtuple.obj		\
-                $(SLO)$/b2ituple.obj		\
-                $(SLO)$/b3ituple.obj		\
-                $(SLO)$/b2i64tuple.obj		\
-                $(SLO)$/b3i64tuple.obj
-
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog
