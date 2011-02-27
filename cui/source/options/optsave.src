@@ -89,13 +89,13 @@ TabPage RID_SFXPAGE_SAVE
     CheckBox BTN_AUTOSAVE
     {
         Pos = MAP_APPFONT ( 12 , 63 ) ;
-        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Size = MAP_APPFONT ( 193 , 10 ) ;
         Text [ en-US ] = "Save ~AutoRecovery information every" ;
     };
     NumericField ED_AUTOSAVE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 180 , 62 ) ;
+        Pos = MAP_APPFONT ( 210 , 61 ) ;
         Size = MAP_APPFONT ( 21 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -110,7 +110,7 @@ TabPage RID_SFXPAGE_SAVE
     };
     FixedText FT_MINUTE
     {
-        Pos = MAP_APPFONT ( 204 , 63 ) ;
+        Pos = MAP_APPFONT ( 234 , 63 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
         Text [ en-US ] = "Minutes" ;
     };
