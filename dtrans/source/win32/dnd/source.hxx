@@ -45,10 +45,10 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
 
+using ::rtl::OUString;
 
 
 class SourceContext;

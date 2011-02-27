@@ -47,9 +47,9 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::script;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
 using namespace std;
 
+using ::rtl::OUString;
 
 namespace toolkit
 {

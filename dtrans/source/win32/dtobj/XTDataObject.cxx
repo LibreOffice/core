@@ -64,7 +64,8 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 //------------------------------------------------------------------------
 // a helper class that will be thrown by the function validateFormatEtc

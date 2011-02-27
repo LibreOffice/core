@@ -43,8 +43,9 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace cppu;
 using namespace osl;
-using namespace rtl;
 using namespace os2;
+
+using ::rtl::OUString;
 
 const Type CPPUTYPE_SEQINT8  = getCppuType( ( Sequence< sal_Int8 >* )0 );
 const Type CPPUTYPE_OUSTRING = getCppuType( (OUString*)0 );

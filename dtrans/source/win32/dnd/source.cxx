@@ -50,7 +50,6 @@
 #define __uuidof(I) IID_##I
 #endif
 
-using namespace rtl;
 using namespace cppu;
 using namespace osl;
 using namespace com::sun::star::datatransfer;
@@ -60,6 +59,8 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::awt::MouseButton;
 using namespace com::sun::star::awt;
 using namespace com::sun::star::lang;
+
+using ::rtl::OUString;
 
 extern rtl_StandardModuleCount g_moduleCount;
 
