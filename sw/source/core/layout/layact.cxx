@@ -1427,8 +1427,6 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
             if ( pLay->IsPageFrm() )
             {
                 SwPageFrm* pPageFrm = static_cast<SwPageFrm*>(pLay);
-                const int nBorderWidth =
-                        pImp->GetShell()->GetOut()->PixelToLogic( Size( pPageFrm->BorderPxWidth(), 0 ) ).Width();
                 const int nShadowWidth =
                         pImp->GetShell()->GetOut()->PixelToLogic( Size( pPageFrm->ShadowPxWidth(), 0 ) ).Width();
 
@@ -1439,22 +1437,20 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
                 {
                     case sw::sidebarwindows::SIDEBAR_LEFT:
                     {
-                        aPaint.Left( aPaint.Left() - nBorderWidth - nSidebarWidth);
-                        aPaint.Right( aPaint.Right() + nBorderWidth + nShadowWidth);
+                        aPaint.Left( aPaint.Left()  - nSidebarWidth);
+                        aPaint.Right( aPaint.Right() + nShadowWidth);
                     }
                     break;
                     case sw::sidebarwindows::SIDEBAR_RIGHT:
                     {
-                        aPaint.Left( aPaint.Left() - nBorderWidth );
-                        aPaint.Right( aPaint.Right() + nBorderWidth + nShadowWidth + nSidebarWidth);
+                        aPaint.Right( aPaint.Right() + nShadowWidth + nSidebarWidth);
                     }
                     break;
                     case sw::sidebarwindows::SIDEBAR_NONE:
                         // nothing to do
                     break;
                 }
-                aPaint.Top( aPaint.Top() - nBorderWidth );
-                aPaint.Bottom( aPaint.Bottom() + nBorderWidth + nShadowWidth);
+                aPaint.Bottom( aPaint.Bottom() + nShadowWidth);
             }
 
             if ( pLay->IsPageFrm() &&

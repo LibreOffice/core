@@ -1005,9 +1005,6 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
 
                 if ( aPageRect.IsOver( aBoth ) )
                 {
-                    // #i9719#, - consider new border and shadow width
-                    const SwTwips nBorderWidth =
-                            GetOut()->PixelToLogic( Size( pPage->BorderPxWidth(), 0 ) ).Width();
                     const SwTwips nShadowWidth =
                             GetOut()->PixelToLogic( Size( pPage->ShadowPxWidth(), 0 ) ).Width();
 
@@ -1017,14 +1014,14 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
                     {
                         case sw::sidebarwindows::SIDEBAR_LEFT:
                         {
-                            nPageLeft =  aPageRect.Left() - nBorderWidth - nSidebarWidth;
-                            nPageRight = aPageRect.Right() + nBorderWidth + nShadowWidth;
+                            nPageLeft =  aPageRect.Left() - nSidebarWidth;
+                            nPageRight = aPageRect.Right() + nShadowWidth;
                         }
                         break;
                         case sw::sidebarwindows::SIDEBAR_RIGHT:
                         {
-                            nPageLeft =  aPageRect.Left() - nBorderWidth;
-                            nPageRight = aPageRect.Right() + nBorderWidth + nShadowWidth + nSidebarWidth;
+                            nPageLeft =  aPageRect.Left();
+                            nPageRight = aPageRect.Right() + nShadowWidth + nSidebarWidth;
                         }
                         break;
                         case sw::sidebarwindows::SIDEBAR_NONE:

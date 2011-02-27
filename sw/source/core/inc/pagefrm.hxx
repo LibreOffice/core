@@ -87,8 +87,6 @@ class SwPageFrm: public SwFtnBossFrm
     // is in progress.
     bool mbLayoutInProgress;
 
-    // #i9719#
-    static const sal_Int8 mnBorderPxWidth;
     static const sal_Int8 mnShadowPxWidth;
 
     void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, BYTE &,
@@ -96,28 +94,6 @@ class SwPageFrm: public SwFtnBossFrm
 
     // Anpassen der max. Fussnotenhoehen in den einzelnen Spalten
     void SetColMaxFtnHeight();
-
-    /** determine rectangle for page border
-
-        #i9719#
-
-        @param _rPageRect
-        input parameter - constant instance reference of the page rectangle.
-        Generally, it's the frame area of the page, but for empty pages in print
-        preview, this parameter is useful.
-
-        @param _pViewShell
-        input parameter - instance of the view shell, for which the rectangle
-        has to be generated.
-
-        @param _orBorderRect
-        output parameter - instance reference of the border rectangle for
-        the given page rectangle
-    */
-    static void GetBorderRect( const SwRect& _rPageRect,
-                               ViewShell*    _pViewShell,
-                               SwRect& _orBorderRect,
-                               bool bRightSidebar );
 
     /** determine rectangle for right page shadow
 
@@ -376,11 +352,6 @@ public:
 
     virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
 
-    // #i9719#
-    inline sal_Int8 BorderPxWidth() const
-    {
-        return mnBorderPxWidth;
-    }
     inline sal_Int8 ShadowPxWidth() const
     {
         return mnShadowPxWidth;
