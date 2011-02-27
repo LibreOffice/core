@@ -1450,7 +1450,7 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
                         // nothing to do
                     break;
                 }
-                aPaint.Bottom( aPaint.Bottom() + nShadowWidth);
+                aPaint.Bottom( aPaint.Bottom() + nShadowWidth );
             }
 
             if ( pLay->IsPageFrm() &&
