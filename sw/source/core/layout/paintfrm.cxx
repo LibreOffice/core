@@ -5250,6 +5250,7 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 10;
                                                 SwRect&       _orBottomShadowRect,
                                                 bool bRightSidebar )
 {
+    const SwPostItMgr *pMgr = _pViewShell ? _pViewShell->GetPostItMgr() : 0;
     SwRect aAlignedPageRect( _rPageRect );
     ::SwAlignRect( aAlignedPageRect, _pViewShell );
     SwRect aPagePxRect =
@@ -5259,8 +5260,15 @@ const sal_Int8 SwPageFrm::mnShadowPxWidth = 10;
                     Point( aPagePxRect.Left() + 1 + mnShadowPxWidth, aPagePxRect.Bottom() + 1 ),
                     Size( aPagePxRect.Width() - 1 - mnShadowPxWidth, mnShadowPxWidth ) );
 
-    AddSidebarBorders( _orBottomShadowRect, _pViewShell, bRightSidebar, true);
-
+    if(pMgr && pMgr->ShowNotes() && pMgr->HasNotes())
+    {
+        // Notes are displayed, we've to extend borders
+        SwTwips aSidebarTotalWidth = pMgr->GetSidebarWidth(true) + pMgr->GetSidebarBorderWidth(true);
+        if(bRightSidebar)
+            _orBottomShadowRect.Right( _orBottomShadowRect.Right() + aSidebarTotalWidth );
+        else
+            _orBottomShadowRect.Left( _orBottomShadowRect.Left() - aSidebarTotalWidth );
+    }
 }
 
 /** paint page border and shadow
