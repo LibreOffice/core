@@ -62,7 +62,8 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
-using namespace rtl;
+
+using ::rtl::OUString;
 
 #define WM_CREATE_MTA_WND
 
