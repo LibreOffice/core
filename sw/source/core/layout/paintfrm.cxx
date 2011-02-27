@@ -2857,7 +2857,7 @@ void SwRootFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) con
     while ( pPage )
     // <--
     {
-        const bool bPaintRightShadow =  !bBookMode || (pPage == Lower()) || (!bLTR && !pPage->OnRightPage()) || (bLTR && pPage->OnRightPage());
+        const bool bPaintRightShadow =  !bBookMode || (!pPage->GetNext()) || (pPage == Lower()) || (!bLTR && !pPage->OnRightPage()) || (bLTR && pPage->OnRightPage());
         const bool bRightSidebar = pPage->SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT;
 
         if ( !pPage->IsEmptyPage() )
