@@ -314,7 +314,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
 
 void ScDocument::CopyStdStylesFrom( ScDocument* pSrcDoc )
 {
-    // #b5017505# number format exchange list has to be handled here, too
+    // number format exchange list has to be handled here, too
     NumFmtMergeHandler aNumFmtMergeHdl(this, pSrcDoc);
     xPoolHelper->GetStylePool()->CopyStdStylesFrom( pSrcDoc->xPoolHelper->GetStylePool() );
 }
@@ -699,7 +699,7 @@ BOOL ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
         {
             if (!pEngine)
             {
-                //  #71154# ScTabEditEngine is needed
+                //  ScTabEditEngine is needed
                 //  because MapMode must be set for some old documents
                 pEngine = new ScTabEditEngine( this );
                 pEngine->SetControlWord( pEngine->GetControlWord() |
@@ -762,7 +762,7 @@ BOOL ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
                 //  Paint
                 if (pShell)
                 {
-                    //  #47751# Seitenvorschau ist davon nicht betroffen
+                    //  Seitenvorschau ist davon nicht betroffen
                     //  (sollte jedenfalls nicht)
                     ScPaintHint aHint( ScRange( nCol, nRow, nTab ), PAINT_GRID );
                     aHint.SetPrintFlag( FALSE );
@@ -823,7 +823,7 @@ BOOL ScDocument::ContinueOnlineSpelling()
 
     //! use one EditEngine for both calls
 
-    //  #41504# first check visible range
+    //  first check visible range
     BOOL bResult = OnlineSpellInRange( aVisSpellRange, aVisSpellPos, SPELL_MAXTEST_VIS );
 
     //  during first pass through visible range, always continue
@@ -1048,7 +1048,7 @@ void ScDocument::UpdateDdeLinks()
         USHORT nCount = rLinks.Count();
         USHORT i;
 
-        //  #49226# falls das Updaten laenger dauert, erstmal alle Werte
+        //  falls das Updaten laenger dauert, erstmal alle Werte
         //  zuruecksetzen, damit nichts altes (falsches) stehen bleibt
         BOOL bAny = FALSE;
         for (i=0; i<nCount; i++)

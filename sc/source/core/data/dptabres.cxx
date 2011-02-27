@@ -1944,7 +1944,7 @@ BOOL ScDPDataMember::HasData( long nMeasure, const ScDPSubTotalState& rSubState 
                                                         rSubState.eColForce != rSubState.eRowForce )
         return FALSE;
 
-    //  #74542# HasData can be different between measures!
+    //  HasData can be different between measures!
 
     const ScDPAggData* pAgg = GetConstAggData( nMeasure, rSubState );
     if (!pAgg)

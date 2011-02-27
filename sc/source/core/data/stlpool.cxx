@@ -194,7 +194,7 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
         }
         else    // cell styles
         {
-            // #b5017505# number format exchange list has to be handled here, too
+            // number format exchange list has to be handled here, too
 
             if ( pDoc && pDoc->GetFormatExchangeList() &&
                  rSourceSet.GetItemState( ATTR_VALUE_FORMAT, FALSE, &pItem ) == SFX_ITEM_SET )
@@ -290,7 +290,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     LanguageType eLatin, eCjk, eCtl;
     pDoc->GetLanguage( eLatin, eCjk, eCtl );
 
-    //  #108374# / #107782#: If the UI language is Korean, the default Latin font has to
+    //  If the UI language is Korean, the default Latin font has to
     //  be queried for Korean, too (the Latin language from the document can't be Korean).
     //  This is the same logic as in SwDocShell::InitNew.
     LanguageType eUiLanguage = Application::GetSettings().GetUILanguage();

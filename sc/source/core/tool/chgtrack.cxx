@@ -421,7 +421,7 @@ void ScChangeAction::GetDescription( String& rStr, ScDocument* /* pDoc */,
 {
     if ( IsRejecting() && bWarning )
     {
-        // #112261# Add comment if rejection may have resulted in references
+        // Add comment if rejection may have resulted in references
         // not properly restored in formulas. See specification at
         // http://specs.openoffice.org/calc/ease-of-use/redlining_comment.sxw
         if (GetType() == SC_CAT_MOVE)

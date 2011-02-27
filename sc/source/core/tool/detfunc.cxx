@@ -87,7 +87,7 @@ using ::std::vector;
 
 //------------------------------------------------------------------------
 
-// #99319# line ends are now created with an empty name.
+// line ends are now created with an empty name.
 // The checkForUniqueItem method then finds a unique name for the item's value.
 #define SC_LINEEND_NAME     EMPTY_STRING
 
@@ -167,7 +167,7 @@ ScDetectiveData::ScDetectiveData( SdrModel* pModel ) :
     aBoxSet.Put( XLineColorItem( EMPTY_STRING, Color( ScDetectiveFunc::GetArrowColor() ) ) );
     aBoxSet.Put( XFillStyleItem( XFILL_NONE ) );
 
-    //  #66479# Standard-Linienenden (wie aus XLineEndList::Create) selber zusammenbasteln,
+    //  Standard-Linienenden (wie aus XLineEndList::Create) selber zusammenbasteln,
     //  um von den konfigurierten Linienenden unabhaengig zu sein
 
     basegfx::B2DPolygon aTriangle;
@@ -250,7 +250,7 @@ ScCommentData::ScCommentData( ScDocument& rDoc, SdrModel* pModel ) :
     aCaptionSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
     aCaptionSet.Put( SdrTextAutoGrowHeightItem( TRUE ) );
 
-    //  #78943# do use the default cell style, so the user has a chance to
+    //  do use the default cell style, so the user has a chance to
     //  modify the font for the annotations
     ((const ScPatternAttr&)rDoc.GetPool()->GetDefaultItem(ATTR_PATTERN)).
         FillEditItemSet( &aCaptionSet );

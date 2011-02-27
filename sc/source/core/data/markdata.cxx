@@ -121,7 +121,7 @@ void ScMarkData::SetMarkArea( const ScRange& rRange )
     aMarkRange.Justify();
     if ( !bMarked )
     {
-        // #77987# Upon creation of a document ScFormatShell GetTextAttrState
+        // Upon creation of a document ScFormatShell GetTextAttrState
         // may query (default) attributes although no sheet is marked yet.
         // => mark that one.
         if ( !GetSelectCount() )

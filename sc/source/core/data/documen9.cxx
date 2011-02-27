@@ -129,7 +129,7 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
         }
     }
 
-    //  #71726# make sure the data references of charts are adapted
+    //  make sure the data references of charts are adapted
     //  (this must be after InsertObject!)
     ScChartHelper::AdjustRangesOfChartsOnDestinationPage( pSrcDoc, this, nSrcPos, nDestPos );
 }
@@ -142,7 +142,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
     if (!pDrawLayer)
     {
         String aName;
-        if ( pShell && !pShell->IsLoading() )       // #88438# don't call GetTitle while loading
+        if ( pShell && !pShell->IsLoading() )       // don't call GetTitle while loading
             aName = pShell->GetTitle();
         pDrawLayer = new ScDrawLayer( this, aName );
         if (GetLinkManager())
@@ -167,7 +167,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
                 pTab[nTab]->GetName(aTabName);
                 pDrawLayer->ScRenamePage( nTab, aTabName );
 
-                pTab[nTab]->SetDrawPageSize(false,false);     // #54782# set the right size immediately
+                pTab[nTab]->SetDrawPageSize(false,false);     // set the right size immediately
             }
         }
 

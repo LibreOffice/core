@@ -2968,7 +2968,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
     DeQuote( aName );
     SCTAB nThisTab = aPos.Tab();
     for ( short jThisTab = 1; jThisTab >= 0 && !bInList; jThisTab-- )
-    {   // #50300# first check ranges on this sheet, in case of duplicated names
+    {   // first check ranges on this sheet, in case of duplicated names
         for ( short jRow=0; jRow<2 && !bInList; jRow++ )
         {
             ScRangePairList* pRL;
@@ -3051,7 +3051,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
         ScAutoNameCache* pNameCache = pDoc->GetAutoNameCache();
         if ( pNameCache )
         {
-            //  #b6355215# use GetNameOccurrences to collect all positions of aName on the sheet
+            //  use GetNameOccurrences to collect all positions of aName on the sheet
             //  (only once), similar to the outer part of the loop in the "else" branch.
 
             const ScAutoNameAddresses& rAddresses = pNameCache->GetNameOccurrences( aName, aPos.Tab() );
@@ -3515,7 +3515,7 @@ BOOL ScCompiler::NextNewToken( bool bInArray )
 
     if ( (cSymbol[0] == '#' || cSymbol[0] == '$') && cSymbol[1] == 0 &&
             !bAutoCorrect )
-    {   // #101100# special case to speed up broken [$]#REF documents
+    {   // special case to speed up broken [$]#REF documents
         /* FIXME: ISERROR(#REF!) would be valid and TRUE and the formula to
          * be processed as usual. That would need some special treatment,
          * also in NextSymbol() because of possible combinations of
@@ -3552,7 +3552,7 @@ BOOL ScCompiler::NextNewToken( bool bInArray )
         bMayBeFuncName = ( *p == '(' );
     }
 
-    // #42016# Italian ARCTAN.2 resulted in #REF! => IsOpcode() before
+    // Italian ARCTAN.2 resulted in #REF! => IsOpcode() before
     // IsReference().
 
     String aUpper;
@@ -3897,8 +3897,8 @@ BOOL ScCompiler::HandleRange()
         else if ( !bCompileForFAP )
         {
             ScTokenArray* pNew;
-            // #35168# put named formula into parentheses.
-            // #37680# But only if there aren't any yet, parenthetical
+            // put named formula into parentheses.
+            // But only if there aren't any yet, parenthetical
             // ocSep doesn't work, e.g. SUM((...;...))
             // or if not directly between ocSep/parenthesis,
             // e.g. SUM(...;(...;...)) no, SUM(...;(...)*3) yes,
@@ -4108,7 +4108,7 @@ ScRangeData* ScCompiler::UpdateReference(UpdateRefMode eUpdateRefMode,
     {   // Normally nothing has to be done here since RelRefs are used, also
         // SharedFormulas don't need any special handling, except if they
         // wrapped around sheet borders.
-        // #67383# But ColRowName tokens pointing to a ColRow header which was
+        // But ColRowName tokens pointing to a ColRow header which was
         // copied along with this formula need to be updated to point to the
         // copied header instead of the old position's new intersection.
         ScToken* t;

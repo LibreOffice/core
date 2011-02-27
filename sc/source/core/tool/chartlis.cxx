@@ -248,7 +248,7 @@ void ScChartListener::Notify( SvtBroadcaster&, const SfxHint& rHint )
 void ScChartListener::Update()
 {
     if ( pDoc->IsInInterpreter() )
-    {   // #73482# If interpreting do nothing and restart timer so we don't
+    {   // If interpreting do nothing and restart timer so we don't
         // interfere with interpreter and don't produce an Err522 or similar.
         // This may happen if we are rescheduled via Basic function.
         pDoc->GetChartListenerCollection()->StartTimer();
@@ -481,7 +481,7 @@ ScChartListenerCollection::ScChartListenerCollection(
 
 ScChartListenerCollection::~ScChartListenerCollection()
 {
-    //  #96783# remove ChartListener objects before aTimer dtor is called, because
+    //  remove ChartListener objects before aTimer dtor is called, because
     //  ScChartListener::EndListeningTo may cause ScChartListenerCollection::StartTimer
     //  to be called if an empty ScNoteCell is deleted
 

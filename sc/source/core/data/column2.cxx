@@ -287,7 +287,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
 
                     if ( bBreak && !rOptions.bTotalSize )
                     {
-                        //  #47744# limit size for line break
+                        //  limit size for line break
                         long nCmp = pDev->GetFont().GetSize().Height() * SC_ROT_BREAK_FACTOR;
                         if ( nHeight > nCmp )
                             nHeight = nCmp;
@@ -367,7 +367,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                 bool bTextWysiwyg = ( pDev->GetOutDevType() == OUTDEV_PRINTER );
                 if ( bTextWysiwyg )
                 {
-                    //  #95593# if text is formatted for printer, don't use PixelToLogic,
+                    //  if text is formatted for printer, don't use PixelToLogic,
                     //  to ensure the exact same paper width (and same line breaks) as in
                     //  ScEditUtil::GetEditArea, used for output.
 
@@ -458,7 +458,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
 
                     if ( bBreak && !rOptions.bTotalSize )
                     {
-                        //  #47744# limit size for line break
+                        //  limit size for line break
                         long nCmp = aOldFont.GetSize().Height() * SC_ROT_BREAK_FACTOR;
                         if ( nValue > nCmp )
                             nValue = nCmp;

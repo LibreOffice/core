@@ -1505,7 +1505,7 @@ void ScAttrArray::SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
 
             if (pItem->IsOverlapped() || pItem->HasAutoFilter())
             {
-                //  #108045# default-constructing a ScPatternAttr for DeleteArea doesn't work
+                //  default-constructing a ScPatternAttr for DeleteArea doesn't work
                 //  because it would have no cell style information.
                 //  Instead, the document's GetDefPattern is copied. Since it is passed as
                 //  pWantedPattern, no special treatment of default is needed here anymore.

@@ -940,7 +940,7 @@ void ScGlobal::OpenURL( const String& rURL, const String& rTarget )
     SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, FALSE );
     SfxBoolItem aBrowsing( SID_BROWSE, TRUE );
 
-    //  kein SID_SILENT mehr wegen Bug #42525# (war angeblich sowieso falsch)
+    //  kein SID_SILENT mehr
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (pViewFrm)

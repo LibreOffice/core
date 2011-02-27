@@ -398,7 +398,7 @@ BOOL ScDocument::InsertTab( SCTAB nPos, const String& rName,
                     pCondFormList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 if ( pValidationList )
                     pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
-                // #81844# sheet names of references are not valid until sheet is inserted
+                // sheet names of references are not valid until sheet is inserted
                 if ( pChartListenerCollection )
                     pChartListenerCollection->UpdateScheduledSeriesRanges();
 
@@ -488,7 +488,7 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
                             pTab[i]->StartAllListeners();
                     SetDirty();
                 }
-                // #81844# sheet names of references are not valid until sheet is deleted
+                // sheet names of references are not valid until sheet is deleted
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
 
                 SetAutoCalc( bOldAutoCalc );
@@ -895,7 +895,7 @@ BOOL ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
             if (pTab[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
                 pTab[i]->InsertRow( nStartCol, nEndCol, nStartRow, nSize );
 
-        //  #82991# UpdateRef for drawing layer must be after inserting,
+        //  UpdateRef for drawing layer must be after inserting,
         //  when the new row heights are known.
         for (i=nStartTab; i<=nEndTab; i++)
             if (pTab[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
@@ -914,7 +914,7 @@ BOOL ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
             for (i=0; i<=MAXTAB; i++)
                 if (pTab[i])
                     pTab[i]->StartNeededListeners();
-            // #69592# at least all cells using range names pointing relative
+            // at least all cells using range names pointing relative
             // to the moved range must recalculate
             for (i=0; i<=MAXTAB; i++)
                 if (pTab[i])
@@ -1003,7 +1003,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
         for (i=0; i<=MAXTAB; i++)
             if (pTab[i])
                 pTab[i]->StartNeededListeners();
-        // #69592# at least all cells using range names pointing relative to
+        // at least all cells using range names pointing relative to
         // the moved range must recalculate
         for (i=0; i<=MAXTAB; i++)
             if (pTab[i])
@@ -1106,7 +1106,7 @@ BOOL ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
             for (i=0; i<=MAXTAB; i++)
                 if (pTab[i])
                     pTab[i]->StartNeededListeners();
-            // #69592# at least all cells using range names pointing relative
+            // at least all cells using range names pointing relative
             // to the moved range must recalculate
             for (i=0; i<=MAXTAB; i++)
                 if (pTab[i])
@@ -1193,7 +1193,7 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
         for (i=0; i<=MAXTAB; i++)
             if (pTab[i])
                 pTab[i]->StartNeededListeners();
-        // #69592# at least all cells using range names pointing relative to
+        // at least all cells using range names pointing relative to
         // the moved range must recalculate
         for (i=0; i<=MAXTAB; i++)
             if (pTab[i])
@@ -2050,7 +2050,7 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
                 while (!ppClipTab[nClipTab]) nClipTab = (nClipTab+1) % (MAXTAB+1);
                 SCsTAB nDz = ((SCsTAB)i) - nClipTab;
 
-                //  #89081# ranges of consecutive selected tables (in clipboard and dest. doc)
+                //  ranges of consecutive selected tables (in clipboard and dest. doc)
                 //  must be handled in one UpdateReference call
                 SCTAB nFollow = 0;
                 while ( i + nFollow < nTabEnd
@@ -3135,7 +3135,7 @@ void ScDocument::CompileXML()
     ScProgress aProgress( GetDocumentShell(), ScGlobal::GetRscString(
                 STR_PROGRESS_CALCULATING ), GetXMLImportedFormulaCount() );
 
-    // #b6355215# set AutoNameCache to speed up automatic name lookup
+    // set AutoNameCache to speed up automatic name lookup
     DBG_ASSERT( !pAutoNameCache, "AutoNameCache already set" );
     pAutoNameCache = new ScAutoNameCache( this );
 

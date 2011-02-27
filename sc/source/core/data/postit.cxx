@@ -124,7 +124,7 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
     aTriangle.append( ::basegfx::B2DPoint(  0.0, 30.0 ) );
     aTriangle.append( ::basegfx::B2DPoint( 20.0, 30.0 ) );
     aTriangle.setClosed( true );
-    /*  #99319# Line ends are now created with an empty name. The
+    /*  Line ends are now created with an empty name. The
         checkForUniqueItem() method then finds a unique name for the item's
         value. */
     aItemSet.Put( XLineStartItem( String::EmptyString(), ::basegfx::B2DPolyPolygon( aTriangle ) ) );
@@ -149,7 +149,7 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
     aItemSet.Put( SdrTextLowerDistItem( 100 ) );
     aItemSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
     aItemSet.Put( SdrTextAutoGrowHeightItem( TRUE ) );
-    // #78943# use the default cell style to be able to modify the caption font
+    // use the default cell style to be able to modify the caption font
     const ScPatternAttr& rDefPattern = static_cast< const ScPatternAttr& >( rDoc.GetPool()->GetDefaultItem( ATTR_PATTERN ) );
     rDefPattern.FillEditItemSet( &aItemSet );
 

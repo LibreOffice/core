@@ -1375,7 +1375,7 @@ lcl_ScRange_Parse_OOo( ScRange &aRange, const String& r, ScDocument* pDoc, ScAdd
                     nRes2 |= SCA_TAB_ABSOLUTE;
             }
             else
-                nRes1 = 0;      // #38840# keine Tokens aus halben Sachen
+                nRes1 = 0;      // keine Tokens aus halben Sachen
         }
     }
     nRes1 = ( ( nRes1 | nRes2 ) & SCA_VALID )

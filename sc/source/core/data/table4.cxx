@@ -114,7 +114,7 @@ short lcl_DecompValueString( String& aValue, sal_Int32& nVal, USHORT* pMinDigits
     if ( nNum > nNeg && ( cNext == 0 || cNext == ' ' || !CharClass::isAsciiNumeric(cLast) ) )
     {   // number at the beginning
         nVal = aValue.Copy( 0, nNum ).ToInt32();
-        //  #60893# any number with a leading zero sets the minimum number of digits
+        //  any number with a leading zero sets the minimum number of digits
         if ( p[nNeg] == '0' && pMinDigits && ( nNum - nNeg > *pMinDigits ) )
             *pMinDigits = nNum - nNeg;
         aValue.Erase( 0, nNum );
@@ -134,7 +134,7 @@ short lcl_DecompValueString( String& aValue, sal_Int32& nVal, USHORT* pMinDigits
         if ( nNum < nEnd - nNeg )
         {   // number at the end
             nVal = aValue.Copy( nNum + 1 ).ToInt32();
-            //  #60893# any number with a leading zero sets the minimum number of digits
+            //  any number with a leading zero sets the minimum number of digits
             if ( p[nNum+1+nNeg] == '0' && pMinDigits && ( nEnd - nNum - nNeg > *pMinDigits ) )
                 *pMinDigits = nEnd - nNum - nNeg;
             aValue.Erase( nNum + 1 );
@@ -286,7 +286,7 @@ void ScTable::FillAnalyse( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             nRow = sal::static_int_cast<SCROW>( nRow + nAddY );
                         }
                         else
-                            bVal = FALSE;   // #50965# kein Datum passt auch nicht
+                            bVal = FALSE;   // kein Datum passt auch nicht
                     }
                     if (bVal)
                     {
@@ -1348,7 +1348,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         {
                             case FILL_LINEAR:
                                 {
-                                    //  #86365# use multiplication instead of repeated addition
+                                    //  use multiplication instead of repeated addition
                                     //  to avoid accumulating rounding errors
                                     nVal = nStartVal;
                                     double nAdd = nStepValue;
@@ -1442,7 +1442,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             {
                                 case FILL_LINEAR:
                                     {
-                                        //  #86365# use multiplication instead of repeated addition
+                                        //  use multiplication instead of repeated addition
                                         //  to avoid accumulating rounding errors
                                         nVal = nStartVal;
                                         double nAdd = nStepValue;

@@ -701,7 +701,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
 
     if ( aColorItem.GetValue().GetColor() == COL_AUTO )
     {
-        //  #108979# When cell attributes are converted to EditEngine paragraph attributes,
+        //  When cell attributes are converted to EditEngine paragraph attributes,
         //  don't create a hard item for automatic color, because that would be converted
         //  to black when the item's Store method is used in CreateTransferable/WriteBin.
         //  COL_AUTO is the EditEngine's pool default, so ClearItem will result in automatic
@@ -737,7 +737,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     rEditSet.Put( SfxBoolItem       ( EE_PARA_HYPHENATE, bHyphenate ) );
     rEditSet.Put( SvxFrameDirectionItem( eDirection, EE_PARA_WRITINGDIR ) );
 
-    // #111216# Script spacing is always off.
+    // Script spacing is always off.
     // The cell attribute isn't used here as long as there is no UI to set it
     // (don't evaluate attributes that can't be changed).
     // If a locale-dependent default is needed, it has to go into the cell
@@ -835,7 +835,7 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
         switch ( ((const SvxAdjustItem*)pItem)->GetAdjust() )
         {
             case SVX_ADJUST_LEFT:
-                // #30154# EditEngine Default ist bei dem GetAttribs() ItemSet
+                // EditEngine Default ist bei dem GetAttribs() ItemSet
                 // immer gesetzt!
                 // ob links oder rechts entscheiden wir selbst bei Text/Zahl
                 eVal = SVX_HOR_JUSTIFY_STANDARD;
@@ -965,7 +965,7 @@ SfxStyleSheetBase* lcl_CopyStyleToPool
         SfxItemSet& rDestSet = pDestStyle->GetItemSet();
         rDestSet.Put( rSrcSet );
 
-        // #b5017505# number format exchange list has to be handled here, too
+        // number format exchange list has to be handled here, too
         // (only called for cell styles)
 
         const SfxPoolItem* pSrcItem;

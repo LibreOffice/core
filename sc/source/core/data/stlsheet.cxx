@@ -292,7 +292,7 @@ void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 //------------------------------------------------------------------------
 
-//  #66123# schmutzige Tricks, um die Standard-Vorlage immer als "Standard" zu speichern,
+//  schmutzige Tricks, um die Standard-Vorlage immer als "Standard" zu speichern,
 //  obwohl der fuer den Benutzer sichtbare Name uebersetzt ist:
 
 const String& ScStyleSheet::GetName() const

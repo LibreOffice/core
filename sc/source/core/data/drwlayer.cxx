@@ -262,7 +262,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     rPool.SetPoolDefaultItem(SdrShadowXDistItem(300));
     rPool.SetPoolDefaultItem(SdrShadowYDistItem(300));
 
-    // #111216# default for script spacing depends on locale, see SdDrawDocument ctor in sd
+    // default for script spacing depends on locale, see SdDrawDocument ctor in sd
     LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
     if ( eOfficeLanguage == LANGUAGE_KOREAN || eOfficeLanguage == LANGUAGE_KOREAN_JOHAB ||
          eOfficeLanguage == LANGUAGE_JAPANESE )
@@ -289,7 +289,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     Outliner& rHitOutliner = GetHitTestOutliner();
     rHitOutliner.SetCalcFieldValueHdl( LINK( pScMod, ScModule, CalcFieldValueHdl ) );
 
-    // #95129# SJ: set FontHeight pool defaults without changing static SdrEngineDefaults
+    // set FontHeight pool defaults without changing static SdrEngineDefaults
     SfxItemPool* pOutlinerPool = rOutliner.GetEditTextObjectPool();
     if ( pOutlinerPool )
          pItemPool->SetPoolDefaultItem(SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ));           // 12Pt
@@ -362,7 +362,7 @@ void ScDrawLayer::UpdateBasic()
 
 SdrModel* ScDrawLayer::AllocModel() const
 {
-    //  #103849# Allocated model (for clipboard etc) must not have a pointer
+    //  Allocated model (for clipboard etc) must not have a pointer
     //  to the original model's document, pass NULL as document:
 
     return new ScDrawLayer( NULL, aName );
@@ -1560,7 +1560,7 @@ String ScDrawLayer::GetVisibleName( SdrObject* pObj )
     String aName = pObj->GetName();
     if ( pObj->GetObjIdentifier() == OBJ_OLE2 )
     {
-        //  #95575# For OLE, the user defined name (GetName) is used
+        //  For OLE, the user defined name (GetName) is used
         //  if it's not empty (accepting possibly duplicate names),
         //  otherwise the persist name is used so every object appears
         //  in the Navigator at all.
@@ -1646,7 +1646,7 @@ void ScDrawLayer::EnsureGraphicNames()
             SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
             SdrObject* pObject = aIter.Next();
 
-            /* #101799# The index passed to GetNewGraphicName() will be set to
+            /* The index passed to GetNewGraphicName() will be set to
                 the used index in each call. This prevents the repeated search
                 for all names from 1 to current index. */
             long nCounter = 0;

@@ -3281,7 +3281,7 @@ void ScInterpreter::ScPercentrank()
                 fRes = (double)nOldCount/(double)(nSize-1);
             else
             {
-                //  #75312# nOldCount is the count of smaller entries
+                //  nOldCount is the count of smaller entries
                 //  fNum is between pSortArray[nOldCount-1] and pSortArray[nOldCount]
                 //  use linear interpolation to find a position between the entries
 

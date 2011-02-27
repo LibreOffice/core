@@ -686,7 +686,7 @@ void ScTable::Sort(const ScSortParam& rSortParam, BOOL bKeepQuery)
             QuickSort( pArray, nRow1, nLastRow );
             SortReorder( pArray, aProgress );
             delete pArray;
-            // #158377# #i59745# update position of caption objects of cell notes
+            // #i59745# update position of caption objects of cell notes
             ScNoteUtil::UpdateCaptionPositions( *pDocument, ScRange( aSortParam.nCol1, nRow1, nTab, aSortParam.nCol2, nLastRow, nTab ) );
         }
     }
@@ -707,7 +707,7 @@ void ScTable::Sort(const ScSortParam& rSortParam, BOOL bKeepQuery)
             QuickSort( pArray, nCol1, nLastCol );
             SortReorder( pArray, aProgress );
             delete pArray;
-            // #158377# #i59745# update position of caption objects of cell notes
+            // #i59745# update position of caption objects of cell notes
             ScNoteUtil::UpdateCaptionPositions( *pDocument, ScRange( nCol1, aSortParam.nRow1, nTab, nLastCol, aSortParam.nRow2, nTab ) );
         }
     }
@@ -839,7 +839,7 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
     SCCOL*          nGroupCol = rParam.nField;  // Spalten nach denen
                                                 // gruppiert wird
 
-    //  #44444# Durch (leer) als eigene Kategorie muss immer auf
+    //  Durch (leer) als eigene Kategorie muss immer auf
     //  Teilergebniszeilen aus den anderen Spalten getestet werden
     //  (frueher nur, wenn eine Spalte mehrfach vorkam)
     BOOL bTestPrevSub = ( nLevelCount > 1 );
@@ -860,7 +860,7 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
 
     BOOL bSpaceLeft = TRUE;                                         // Erfolg beim Einfuegen?
 
-    // #90279# For performance reasons collect formula entries so their
+    // For performance reasons collect formula entries so their
     // references don't have to be tested for updates each time a new row is
     // inserted
     RowEntry aRowEntry;
@@ -905,7 +905,7 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
                             GetString( nGroupCol[i], nRow, aString );
                             if (bIgnoreCase)
                                 ScGlobal::pCharClass->toUpper( aString );
-                            //  #41427# wenn sortiert, ist "leer" eine eigene Gruppe
+                            //  wenn sortiert, ist "leer" eine eigene Gruppe
                             //  sonst sind leere Zellen unten erlaubt
                             bChanged = ( ( aString.Len() || rParam.bDoSort ) &&
                                             aString != *pCompString[i] );
@@ -1580,7 +1580,7 @@ static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPa
             }
             else
             {
-                // #58736# call from UNO or second call from autofilter
+                // call from UNO or second call from autofilter
                 if ( rEntry.nVal == SC_EMPTYFIELDS || rEntry.nVal == SC_NONEMPTYFIELDS )
                 {
                     pSpecial[i] = TRUE;

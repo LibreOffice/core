@@ -315,7 +315,7 @@ BOOL ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
         aMacroStr += pMethod->GetName();
         String aBasicStr;
 
-        //  #95867# the distinction between document- and app-basic has to be done
+        //  the distinction between document- and app-basic has to be done
         //  by checking the parent (as in ScInterpreter::ScMacro), not by looping
         //  over all open documents, because this may be called from within loading,
         //  when SfxObjectShell::GetFirst/GetNext won't find the document.
