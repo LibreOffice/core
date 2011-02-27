@@ -1,0 +1,27 @@
+#include "pagefrm.hrc"
+
+Bitmap BMP_PAGE_TOP_RIGHT_SHADOW
+{
+    File = "page-topright-shadow.png";
+};
+
+Bitmap BMP_PAGE_RIGHT_SHADOW
+{
+    File = "page-right-shadow.png";
+};
+
+Bitmap BMP_PAGE_BOTTOM_RIGHT_SHADOW
+{
+    File = "page-bottomright-shadow.png";
+};
+
+Bitmap BMP_PAGE_BOTTOM_SHADOW
+{
+    File = "page-bottom-shadow.png";
+};
+
+Bitmap BMP_PAGE_BOTTOM_LEFT_SHADOW
+{
+    File = "page-bottomleft-shadow.png";
+};
+

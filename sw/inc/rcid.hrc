@@ -79,6 +79,7 @@
 #define RC_SMARTTAG                    (RC_BASE + 3950)  // SMARTTAGS
 #define RC_UNOCORE                  (RC_BASE + 4050)
 #define RC_ANNOTATION               (RC_BASE + 4150)
+#define RC_PAGEFRM                  (RC_BASE + 4250)
 
 /*--------------------------------------------------------------------
     Beschreibung:   Bereiche ausspannen
@@ -99,6 +100,10 @@
 // Annotation
 #define RC_ANNOTATION_BEGIN             RC_ANNOTATION
 #define RC_ANNOTATION_END               (RC_ANNOTATION_BEGIN + 99)
+
+// Page frame
+#define RC_PAGEFRM_BEGIN            RC_PAGEFRM
+#define RC_PAGEFRM_EN               (RC_PAGEFRM + 99)
 
 // SW/Web
 #define RC_WEB_BEGIN                RC_WEB

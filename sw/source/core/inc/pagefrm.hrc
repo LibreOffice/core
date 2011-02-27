@@ -1,0 +1,49 @@
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License or as specified alternatively below. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Initial Developer of the Original Code is
+ *       Sébastien Le Ray <sebastien-libreoffice@orniz.org>
+ * Portions created by the Initial Developer are Copyright (C) 2010 the
+ * Initial Developer. All Rights Reserved.
+ *
+ * For minor contributions see the git repository.
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#ifndef _PAGEFRM_HRC
+#define _PAGEFRM_HRC
+
+#include "rcid.hrc"
+
+//  Bitmaps for page shadow
+#define BMP_PAGE_TOP_RIGHT_SHADOW      RC_PAGEFRM_BEGIN
+#define BMP_PAGE_RIGHT_SHADOW          RC_PAGEFRM_BEGIN + 1
+#define BMP_PAGE_BOTTOM_RIGHT_SHADOW   RC_PAGEFRM_BEGIN + 2
+#define BMP_PAGE_BOTTOM_SHADOW         RC_PAGEFRM_BEGIN + 3
+#define BMP_PAGE_BOTTOM_LEFT_SHADOW    RC_PAGEFRM_BEGIN + 4
+
+
+// If you add resources, don't forget to update this
+#define PAGEFRM_ACT_END           BMP_PAGE_BOTTOMLEFT_SHADOW
+
+// Sanity check
+#if PAGEFRM_ACT_END > RC_PAGEFRM_END
+#error Not enough room for pagefrm resource in #file:#line
+#endif
+
+#endif

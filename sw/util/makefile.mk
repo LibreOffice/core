@@ -53,6 +53,7 @@ sw_res_files= \
     $(SRS)$/frmdlg.srs       \
     $(SRS)$/globdoc.srs      \
     $(SRS)$/index.srs        \
+    $(SRS)$/layout.srs       \
     $(SRS)$/lingu.srs        \
     $(SRS)$/misc.srs         \
     $(SRS)$/ribbar.srs       \

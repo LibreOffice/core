@@ -89,6 +89,10 @@ SLOFILES =  \
     $(SLO)$/swselectionlist.obj \
     $(SLO)$/unusedf.obj
 
+SRS1NAME=$(TARGET)
+SRC1FILES =\
+    pagefrm.src
+
 .IF "$(DBG_LEVEL)">="2"
 SLOFILES +=  \
         $(SLO)$/dbg_lay.obj
