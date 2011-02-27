@@ -242,6 +242,7 @@
 #   include <netinet/tcp.h>
 #   include <machine/endian.h>
 #   define  IORESOURCE_TRANSFER_BSD
+#   define  IOCHANNEL_TRANSFER_BSD_RENO
 #endif
 
 #ifdef AIX

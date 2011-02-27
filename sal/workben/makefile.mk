@@ -102,7 +102,8 @@ APP4DEPN=$(SLB)$/sal.lib
 #
 # tgetpwnam
 #
-.IF "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD" || "$(OS)"=="OPENBSD"
+.IF "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD" || "$(OS)"=="OPENBSD" || \
+    "$(OS)"=="DRAGONFLY"
 OBJFILES+=\
     $(OBJ)$/tgetpwnam.obj
 

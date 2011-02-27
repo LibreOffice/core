@@ -42,7 +42,7 @@
 #endif
 
 
-#if defined(FREEBSD) || defined(NETBSD)
+#if defined(FREEBSD) || defined(NETBSD) || defined(DRAGONFLY)
 #include <machine/param.h>
 #endif
 

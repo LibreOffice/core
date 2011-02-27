@@ -217,7 +217,7 @@ oslFileError oslTranslateFileError(sal_Bool bIsError, int Errno)
             osl_error = osl_File_E_LOOP;
             break;
 
-#if !(defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD))
+#if !(defined(MACOSX) || defined(NETBSD) || defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY))
         case EILSEQ:
             osl_error = osl_File_E_ILSEQ;
             break;
