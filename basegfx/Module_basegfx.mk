@@ -33,6 +33,7 @@ $(eval $(call gb_Module_add_targets,basegfx,\
 ))
 
 $(eval $(call gb_Module_add_check_targets,basegfx,\
+	CppunitTest_basegfx \
 ))
 
 # vim: set noet sw=4 ts=4:

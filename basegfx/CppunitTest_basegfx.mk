@@ -25,17 +25,32 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,MODULE_NAME))
+$(eval $(call gb_CppunitTest_CppunitTest,basegfx_test))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,MODULE_NAME, \
+$(eval $(call gb_CppunitTest_add_exception_objects,basegfx_test, \
+	basegfx/test/basegfx1d \
+	basegfx/test/basegfx2d \
+	basegfx/test/basegfx3d \
+	basegfx/test/boxclipper \
+	basegfx/test/basegfxtools \
+	basegfx/test/clipstate \
+	basegfx/test/genericclipper \
+	basegfx/test/testtools \
 ))
 
-$(eval $(call gb_CppunitTest_add_linked_libs,MODULE_NAME, \
+$(eval $(call gb_CppunitTest_add_linked_libs,basegfx_test, \
+	basegfx \
+	sal \
+	cppuhelper \
+	cppunit \
+	cppu \
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,MODULE_NAME,\
+$(eval $(call gb_CppunitTest_set_include,basegfx_test,\
 	$$(INCLUDE) \
+	-I$(SRCDIR)/basegfx/inc/pch \
+	-I$(OUTDIR)/inc/offuh \
 ))
 
 # vim: set noet sw=4 ts=4:
