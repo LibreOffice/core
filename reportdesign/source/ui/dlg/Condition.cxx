@@ -220,7 +220,7 @@ IMPL_LINK( OColorPopup, SelectHdl, void *, EMPTYARG )
     USHORT nItemId = m_aColorSet.GetSelectItemId();
     Color aColor( nItemId == 0 ? Color( COL_TRANSPARENT ) : m_aColorSet.GetItemColor( nItemId ) );
 
-    /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() calls.
+    /*  #i33380# Moved the following line above the Dispatch() calls.
         This instance may be deleted in the meantime (i.e. when a dialog is opened
         while in Dispatch()), accessing members will crash in this case. */
     m_aColorSet.SetNoSelection();

@@ -1060,7 +1060,7 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
         String sDisplayName, sDataSourceId;
         bool bIsDataSourceURL = getDataSourceDisplayName_isURL( _rDataSource, sDisplayName, sDataSourceId );
             // the display name may differ from the URL for readability reasons
-            // #i33699# - 2004-09-24 - fs@openoffice.org
+            // #i33699#
 
         FilterByEntryDataId aFilter( sDataSourceId );
         SvLBoxEntry* pDataSource = m_pTreeView->getListBox().GetEntryPosByName( sDisplayName, NULL, &aFilter );
@@ -1683,7 +1683,6 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                     aReturn.bEnabled = aReturn.bEnabled && getBrowserView()->getVclControl()->GetSelectRowCount();
 
                 // disabled for native queries which are not saved within the database
-                // 67706 - 23.08.99 - FS
                 Reference< XPropertySet >  xDataSource(getRowSet(), UNO_QUERY);
                 try
                 {
@@ -1987,7 +1986,7 @@ void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDb
 
     // add the entry for the data source
     // special handling for data sources denoted by URLs - we do not want to display this ugly URL, do we?
-    // #i33699# - 2004-09-24 - fs@openoffice.org
+    // #i33699#
     String sDSDisplayName, sDataSourceId;
     getDataSourceDisplayName_isURL( _rDbName, sDSDisplayName, sDataSourceId );
 

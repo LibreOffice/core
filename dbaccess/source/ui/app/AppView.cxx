@@ -307,11 +307,11 @@ long OApplicationView::PreNotify( NotifyEvent& rNEvt )
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
             // give the pane the chance to intercept mnemonic accelerators
-            // #i34790# - 2004-09-30 - fs@openoffice.org
+            // #i34790#
             if ( getPanel() && getPanel()->interceptKeyInput( *pKeyEvent ) )
                 return 1L;
             // and ditto the detail view
-            // #i72799# - 2006-12-20 / frank.schoenheit@sun.com
+            // #i72799#
             if ( getDetailView() && getDetailView()->interceptKeyInput( *pKeyEvent ) )
                 return 1L;
         }

@@ -124,7 +124,7 @@ namespace dbaui
             if ( !xColumns.is() || !xColumns->hasElements() )
             {   // perhaps the composer can supply us with columns? This is necessary for cases
                 // where the dialog is invoked for a rowset which is not yet loaded
-                // #i22878# - 2003-12-16 - fs@openoffice.org
+                // #i22878#
                 xSuppColumns = xSuppColumns.query( m_xComposer );
                 if ( xSuppColumns.is() )
                     xColumns = xSuppColumns->getColumns();

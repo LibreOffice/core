@@ -1351,7 +1351,7 @@ void SAL_CALL ODatabaseSource::flushed( const EventObject& /*rEvent*/ ) throw (R
     // XFlushListener at the embedded connection (which needs to provide the XFlushable functionality).
     // Then, when the connection is flushed, we commit both the database storage and our main storage.
     //
-    // #i55274# / 2005-09-30 / frank.schoenheit@sun.com
+    // #i55274#
 
     OSL_ENSURE( m_pImpl->isEmbeddedDatabase(), "ODatabaseSource::flushed: no embedded database?!" );
     sal_Bool bWasModified = m_pImpl->m_bModified;

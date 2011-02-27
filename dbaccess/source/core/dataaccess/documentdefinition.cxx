@@ -874,7 +874,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
         // However, it is possible to programmatically load forms/reports, without actually
         // loading the database document into a frame. In this case, the user will be asked
         // here and now.
-        // #i87741# / 2008-05-05 / frank.schoenheit@sun.com
+        // #i87741#
 
     // allow the command arguments to downgrade the macro execution mode, but not to upgrade
     // it
@@ -1238,7 +1238,7 @@ void ODocumentDefinition::onCommandInsert( const ::rtl::OUString& _sURL, const R
                                                                                 ,aEmpty),UNO_QUERY);
 
                 lcl_resetFormsToEmptyDataSource( m_xEmbeddedObject );
-                // #i57669# / 2005-12-01 / frank.schoenheit@sun.com
+                // #i57669#
 
                 Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
                 if ( xPersist.is() )
@@ -1757,8 +1757,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
                 lcl_putLoadArgs( aExistentMediaDesc, optional_bool(), optional_bool() );
                     // don't put _bSuppressMacros and _bReadOnly here - if the document was already
                     // loaded, we should not tamper with its settings.
-                    // #i88977# / 2008-05-05 / frank.schoenheit@sun.com
-                    // #i86872# / 2008-03-13 / frank.schoenheit@sun.com
+                    // #i88977# #i86872#
 
                 xModel->attachResource( xModel->getURL(), aExistentMediaDesc.getPropertyValues() );
             }
@@ -1770,7 +1769,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& i_
     }
 
     // set the OfficeDatabaseDocument instance as parent of the embedded document
-    // #i40358# / 2005-01-19 / frank.schoenheit@sun.com
+    // #i40358#
     Reference< XChild > xDepdendDocAsChild( getComponent(), UNO_QUERY );
     if ( xDepdendDocAsChild.is() )
     {
@@ -2054,7 +2053,7 @@ bool ODocumentDefinition::prepareClose()
         // suspend the controller. Embedded objects are not allowed to raise
         // own UI at their own discretion, instead, this has always to be triggered
         // by the embedding component. Thus, we do the suspend call here.
-        // #i49370# / 2005-06-09 / frank.schoenheit@sun.com
+        // #i49370#
 
         Reference< util::XCloseable > xComponent( impl_getComponent_throw( false ) );
         if ( !xComponent.is() )

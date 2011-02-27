@@ -206,7 +206,7 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
         {
             // if the previous incarnation of the DatabaseDocument already had an URL, then creating this incarnation
             // here is effectively loading the document.
-            // #i105505# / 2009-10-01 / frank.schoenheit@sun.com
+            // #i105505#
             m_aViewMonitor.onLoadedDocument();
         }
     }
@@ -801,7 +801,7 @@ void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XControl
     if ( bLastControllerGone && !bIsClosing )
     {
         // if this was the last view, close the document as a whole
-        // #i51157# / 2006-03-16 / frank.schoenheit@sun.com
+        // #i51157#
         try
         {
             close( sal_True );

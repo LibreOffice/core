@@ -1005,7 +1005,7 @@ Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership( bool _b
             // However, in case that the document is implicitly created by asking the data source for the document,
             // then nobody would call the doc's attachResource. So, we do it here, to ensure it's in a proper
             // state, fires all events, and so on.
-            // #i105505# / 2009-10-02 / frank.schoenheit@sun.com
+            // #i105505#
             xModel->attachResource( xModel->getURL(), m_aMediaDescriptor.getPropertyValues() );
         }
 

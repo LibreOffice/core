@@ -403,8 +403,6 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
         // is used by the document will raise a similar bug once somebody discovers it.
         // If this is the case, we should discuss a real solution with the framework (SFX) and the
         // applications.
-        //
-        // 2002-12-02 - 105831 - fs@openoffice.org
     }
 
     if ( !bHandled )

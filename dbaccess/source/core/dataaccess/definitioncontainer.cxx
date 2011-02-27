@@ -536,7 +536,7 @@ void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Refer
             // Somebody could create an object with name "foo", and insert it as "bar"
             // into a container. In this case, we need to ensure that the object name
             // is also "bar"
-            // #i44786# / 2005-03-11 / frank.schoenheit@sun.com
+            // #i44786#
             lcl_ensureName( _rxNewObject, _rName );
 
             ::rtl::Reference< OContentHelper > pContent = OContentHelper::getImplementation( _rxNewObject );

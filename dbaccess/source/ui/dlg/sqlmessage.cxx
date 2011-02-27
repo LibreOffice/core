@@ -375,7 +375,7 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
     }
 
     // if the error has the code 22018, then add an additional explanation
-    // #i24021# / 2004-10-14 / frank.schoenheit@sun.com
+    // #i24021#
     if ( bHave22018 )
     {
         ProviderFactory aProviderFactory;

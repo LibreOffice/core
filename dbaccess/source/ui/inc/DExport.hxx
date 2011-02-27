@@ -94,10 +94,9 @@ namespace dbaui
 
         SvNumberFormatter*  m_pFormatter;
         SvStream&           m_rInputStream;
-        //dyf add 2006/06/01
         //for save the selected tablename
         ::rtl::OUString     m_sDefaultTableName;
-        //dyf add end
+
         String              m_sTextToken;       // Zellen Inhalt
         String              m_sNumToken;        /// SDNUM value
         String              m_sValToken;        /// SDVAL value

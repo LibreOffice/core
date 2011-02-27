@@ -790,7 +790,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         aSQL.append( STR_WHERE );
 
         // preserve the original WHERE clause
-        // #i102234# / 2009-06-02 / frank.schoenheit@sun.com
+        // #i102234#
         ::rtl::OUString sOriginalWhereClause = getSQLPart( Where, m_aSqlIterator, sal_False );
         if ( sOriginalWhereClause.getLength() )
         {

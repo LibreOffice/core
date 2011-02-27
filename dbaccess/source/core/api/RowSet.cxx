@@ -1579,7 +1579,7 @@ void ORowSet::setStatementResultSetType( const Reference< XPropertySet >& _rxSta
     sal_Int32 nResultSetConcurrency( _nDesiredResultSetConcurrency );
 
     // there *might* be a data source setting which tells use to be more defensive with those settings
-    // #i15113# / 2005-02-10 / frank.schoenheit@sun.com
+    // #i15113#
     sal_Bool bRespectDriverRST = sal_False;
     Any aSetting;
     if ( getDataSourceSetting( ::dbaccess::getDataSource( m_xActiveConnection ), "RespectDriverResultSetType", aSetting ) )

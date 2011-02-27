@@ -478,7 +478,6 @@ namespace
         // #i67882# is the bug which was caused by the real fix which we did in framework
         // #i68216# is the bug which requests to fix the code in Draw which relies on
         //          framework's implementation details
-        // 2006-08-07 / frank.schoenheit@sun.com
         if ( !!_rFeatureState.sTitle )
             _out_rStates.push_back( makeAny( *_rFeatureState.sTitle ) );
         if ( !!_rFeatureState.bChecked )
@@ -767,7 +766,7 @@ void OGenericUnoController::dispatch(const URL& _aURL, const Sequence< PropertyV
     // where it's needed, but a) this might turn out difficult, since we then also need to care
     // for locking in the proper order (SolarMutex and m_aMutex), and b) this would be too many places
     // for the time frame of the fix.
-    // #i52602# / frank.schoenheit@sun.com / 2005-07-29
+    // #i52602#
 
 #ifdef TIMELOG
     ::rtl::OString sLog( "OGenericUnoController::dispatch( '" );

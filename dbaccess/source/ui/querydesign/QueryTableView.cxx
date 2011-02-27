@@ -236,7 +236,6 @@ namespace
                 // automatically remove all connections adjacent to the win.
                 // (Because of this automatism we would have an ownerhsip ambiguity for
                 // the connection data if we would insert the conn-Undo-Action)
-                // FS - 21.10.99 - 69183
         }
     }
 }
