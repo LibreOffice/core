@@ -335,7 +335,7 @@ DBG_NAME(OTextConnectionHelper)
         String aErrorText;
         Control* pErrorWin = NULL;
         //  if (!m_aFieldSeparator.GetText().Len())
-            // bug (#42168) if this line is compiled under OS2 (in a product environent)
+            // if this line is compiled under OS2 (in a product environent)
             // -> use a temporary variable
         String aDelText(m_aFieldSeparator.GetText());
         if(!aDelText.Len())

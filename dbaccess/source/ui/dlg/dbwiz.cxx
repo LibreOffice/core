@@ -347,7 +347,7 @@ void ODbTypeWizDialog::enableConfirmSettings( bool _bEnable )
 {
     enableButtons( WZB_FINISH, _bEnable );
     // TODO:
-    // this is hacky. At the moment, this method is used in only one case (#b6532894#).
+    // this is hacky. At the moment, this method is used in only one case.
     // As soon as it is to be used more wide-spread, we should find a proper concept
     // for enabling both the Next and Finish buttons, depending on the current page state.
     // Plus, the concept must also care for the case where those pages are embedded into
