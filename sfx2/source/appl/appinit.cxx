@@ -144,7 +144,6 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
         xGlobalBroadcaster->notifyEvent(aEvent2);
     }
 
-    //pApp->Deinitialize();
     delete pApp;
     Application::Quit();
 }

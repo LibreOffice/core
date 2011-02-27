@@ -72,7 +72,6 @@
 namespace css = ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
-//long nOfficeDispatchCount = 0;
 
 enum URLTypeId
 {
@@ -342,24 +341,18 @@ sal_Int64 SAL_CALL SfxOfficeDispatch::getSomething( const ::com::sun::star::uno:
 
 SfxOfficeDispatch::SfxOfficeDispatch( SfxBindings& rBindings, SfxDispatcher* pDispat, const SfxSlot* pSlot, const ::com::sun::star::util::URL& rURL )
 {
-//    nOfficeDispatchCount++;
-
     // this object is an adapter that shows a ::com::sun::star::frame::XDispatch-Interface to the outside and uses a SfxControllerItem to monitor a state
     pControllerItem = new SfxDispatchController_Impl( this, &rBindings, pDispat, pSlot, rURL );
 }
 
 SfxOfficeDispatch::SfxOfficeDispatch( SfxDispatcher* pDispat, const SfxSlot* pSlot, const ::com::sun::star::util::URL& rURL )
 {
-//    nOfficeDispatchCount++;
-
     // this object is an adapter that shows a ::com::sun::star::frame::XDispatch-Interface to the outside and uses a SfxControllerItem to monitor a state
     pControllerItem = new SfxDispatchController_Impl( this, NULL, pDispat, pSlot, rURL );
 }
 
 SfxOfficeDispatch::~SfxOfficeDispatch()
 {
-//    --nOfficeDispatchCount;
-
     if ( pControllerItem )
     {
         // when dispatch object is released, destroy its connection to this object and destroy it
@@ -655,14 +648,6 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         )
        )
     {
-        /*
-        if ( !IsBound() && pBindings )
-        {
-            pBindings->ENTERREGISTRATIONS();
-            BindInternal_Impl( nSlot, pBindings );
-            pBindings->LEAVEREGISTRATIONS();
-        } */
-
         if ( !pDispatcher && pBindings )
             pDispatcher = GetBindings().GetDispatcher_Impl();
 
@@ -861,13 +846,6 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::st
     SolarMutexGuard aGuard;
     if ( !pDispatch )
         return;
-
-    /*if ( !IsBound() && pBindings )
-    {
-        pBindings->ENTERREGISTRATIONS();
-        BindInternal_Impl( nSlot, pBindings );
-        pBindings->LEAVEREGISTRATIONS();
-    } */
 
     // Use alternative QueryState call to have a valid UNO representation of the state.
     ::com::sun::star::uno::Any aState;

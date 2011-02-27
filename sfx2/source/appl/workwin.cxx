@@ -524,7 +524,6 @@ void SfxWorkWindow::Sort_Impl()
         {
             USHORT k;
             for (k=0; k<aSortedList.Count(); k++)
-//                              if ( (*pChilds)[aSortedList[k]]->eAlign > pCli->eAlign )
                 if (ChildAlignValue((*pChilds)[aSortedList[k]]->eAlign) >
                     ChildAlignValue(pCli->eAlign))
                     break;
@@ -570,7 +569,6 @@ SfxFrameWorkWin_Impl::SfxFrameWorkWin_Impl( Window *pWin, SfxFrame *pFrm, SfxFra
         pSplit[n] = pSplitWin;
     }
 
-    //nOrigMode = SFX_VISIBILITY_CLIENT;
     nOrigMode = SFX_VISIBILITY_STANDARD;
     nUpdateMode = SFX_VISIBILITY_STANDARD;
 }
@@ -729,12 +727,6 @@ void SfxWorkWindow::DeleteControllers_Impl()
            SfxChildWindow *pChild = pCW->pWin;
         if (pChild)
         {
-/*
-            USHORT nFlags = pCW->aInfo.nFlags;
-            pCW->aInfo = pChild->GetInfo();
-            pCW->aInfo.nFlags |= nFlags;
-            SaveStatus_Impl(pChild, pCW->aInfo);
-*/
             pChild->Hide();
 
             // If the child window is a direct child window and not in a
@@ -753,13 +745,9 @@ void SfxWorkWindow::DeleteControllers_Impl()
         // ATTENTION: The array itself is cleared after this loop!!
         // Therefore we have to set every array entry to zero as it could be
         // accessed by calling pChild->Destroy().
-        // See task 128307 (Windows)
         // Window::NotifyAllChilds() calls SfxWorkWindow::DataChanged_Impl for
         // 8-bit displays (WM_QUERYPALETTECHANGED message due to focus change)!!
-        //(*pChildWins)[n] = 0;
     }
-
-    //pChildWins->Remove((USHORT)0, nCount);
 
     Reference< com::sun::star::frame::XFrame > xFrame = GetFrameInterface();
     Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
@@ -1065,7 +1053,6 @@ void SfxWorkWindow::AlignChild_Impl( Window& rWindow,
                                             SfxChildAlignment eAlign )
 {
     DBG_CHKTHIS(SfxWorkWindow, 0);
-//  DBG_ASSERT( pChilds, "aligning unregistered child" );
     DBG_ASSERT( SfxChildAlignValid(eAlign), "invalid align" );
 
     SfxChild_Impl *pChild = FindChild_Impl(rWindow);
@@ -1088,7 +1075,6 @@ void SfxWorkWindow::AlignChild_Impl( Window& rWindow,
 void SfxWorkWindow::ReleaseChild_Impl( Window& rWindow )
 {
     DBG_CHKTHIS(SfxWorkWindow, 0);
-//  DBG_ASSERT( pChilds, "releasing unregistered child" );
 
     SfxChild_Impl *pChild = 0;
     USHORT nPos;
@@ -1350,7 +1336,6 @@ void SfxFrameWorkWin_Impl::UpdateObjectBars_Impl()
 
     SfxWorkWindow::UpdateObjectBars_Impl();
 
-//  if ( pTask->IsActive() )
     {
         pWork = pParent;
         while ( pWork )
@@ -1656,9 +1641,6 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, BOOL bSetFocus )
         pCW->aInfo.bVisible = aInfo.bVisible;
         pCW->aInfo.nFlags |= aInfo.nFlags;
 
-        // No! Otherwise, you could have disable any window stored (Partwindow!)
-//              pCW->aInfo.bVisible = TRUE;
-
         // The creation was successful
         GetBindings().Invalidate(pCW->nId);
 
@@ -1667,7 +1649,6 @@ void SfxWorkWindow::CreateChildWin_Impl( SfxChildWin_Impl *pCW, BOOL bSetFocus )
         {
             DBG_ASSERT(nPos < SFX_OBJECTBAR_MAX, "Illegal objectbar position!");
             if ((*pChilds)[TbxMatch(nPos)])// &&
-//       pChildWin->GetAlignment() == (*pChilds)[nPos]->eAlign )
             {
                 // ChildWindow replaces ObjectBar
                 (*pChilds)[TbxMatch(nPos)]->nVisible ^= CHILD_NOT_HIDDEN;
@@ -1711,20 +1692,6 @@ void SfxWorkWindow::RemoveChildWin_Impl( SfxChildWin_Impl *pCW )
 
     // existing window goes out of the context and is therefore removed
     USHORT nPos = pChildWin->GetPosition();
-    if (nPos != CHILDWIN_NOPOS)
-    {
-/*
-        // ChildWindow overloads a ObjectBar
-        DBG_ASSERT(nPos < SFX_OBJECTBAR_MAX, "Illegal objectbar position!");
-        if ((*pChilds)[TbxMatch(nPos)] &&
-            (aObjBars[nPos].nMode & nUpdateMode) ) //&&
-//                                                 pChildWin->GetAlignment() == (*pChilds)[nPos]->eAlign )
-        {
-            // ObjectBar was overloaded; now display it again
-            (*pChilds)[TbxMatch(nPos)]->nVisible ^= CHILD_NOT_HIDDEN;
-        }
-*/
-    }
 
     // Save the information in the INI file
     USHORT nFlags = pCW->aInfo.nFlags;
@@ -1824,22 +1791,6 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
             xLayoutManager->destroyElement( m_aStatusBarResName );
     }
 }
-
-//------------------------------------------------------------------------
-/*
-void SfxWorkWindow::SetObjectBarVisibility_Impl( USHORT nMask )
-{
-    switch( nMask )
-    {
-        case SFX_VISIBILITY_UNVISIBLE:
-        case SFX_VISIBILITY_STANDARD:
-        case SFX_VISIBILITY_CLIENT:
-        case SFX_VISIBILITY_SERVER:
-            nOrigMode = nMask;
-    }
-    if (nMask != nUpdateMode)
-        nUpdateMode = nMask;
-}*/
 
 void SfxWorkWindow::MakeVisible_Impl( BOOL bVis )
 {
@@ -1985,7 +1936,6 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             if ( nPos == USHRT_MAX )
                 return;
 
-//                      SfxChild_Impl *pChild = (*pChilds)[nPos];
             Rectangle aOuterRect( GetTopRect_Impl() );
             aOuterRect.SetPos( pWorkWin->OutputToScreenPixel( aOuterRect.TopLeft() ));
             Rectangle aInnerRect( aOuterRect );
@@ -2004,7 +1954,6 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                     {
                         case SFX_ALIGN_TOP:
                             // Objekt-Toolboxes come always last
-                            //if ( bTbx || i <= nPos)
                                 aInnerRect.Top() += pCli->aSize.Height();
                             break;
 
@@ -2027,7 +1976,6 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
                         case SFX_ALIGN_BOTTOM:
                             // Objekt-Toolboxes come always last
-                            //if ( bTbx || i <= nPos)
                                 aInnerRect.Bottom() -= pCli->aSize.Height();
                             break;
 
@@ -2050,7 +1998,6 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
                         case SFX_ALIGN_LEFT:
                             // Toolboxes come always last
-                            //if (bTbx || i <= nPos)
                                 aInnerRect.Left() += pCli->aSize.Width();
                             break;
 
@@ -2072,7 +2019,6 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
                         case SFX_ALIGN_RIGHT:
                             // Toolboxes come always last
-                            //if (bTbx || i <= nPos)
                                 aInnerRect.Right() -= pCli->aSize.Width();
                             break;
 
@@ -2149,7 +2095,6 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
         }
     }
 }
-
 
 //--------------------------------------------------------------------
 
@@ -2589,8 +2534,6 @@ SfxChildWindow* SfxWorkWindow::GetChildWindow_Impl(USHORT nId)
 
 void SfxWorkWindow::ResetChildWindows_Impl()
 {
-//      if ( pParent )
-//              pParent->ResetChildWindows_Impl();
 
     for ( USHORT n = 0; n < pChildWins->Count(); ++n )
     {
@@ -2699,11 +2642,6 @@ void SfxWorkWindow::InitializeChild_Impl(SfxChildWin_Impl *pCW)
         }
     }
 }
-/*
-SfxStatBar_Impl* SfxWorkWindow::GetStatusBar_Impl()
-{
-    return &aStatBar;
-} */
 
 SfxSplitWindow* SfxWorkWindow::GetSplitWindow_Impl( SfxChildAlignment eAlign )
 {

@@ -150,14 +150,6 @@ TypeId SfxSlotPool::GetSlotType( USHORT nId ) const
 {
     const SfxSlot* pSlot = (const_cast <SfxSlotPool*> (this))->GetSlot( nId );
     return pSlot ? pSlot->GetType()->Type() : 0;
-/*
-    for ( USHORT nPos = 0; nPos < _pTypes->Count(); ++nPos )
-    {
-        if ( _pTypes->GetObject(nPos)->nId == nId )
-            return _pTypes->GetObject(nPos)->nType;
-    }
-    return _pParentPool ? _pParentPool->GetSlotType( nId ) : 0;
- */
 }
 
 //====================================================================

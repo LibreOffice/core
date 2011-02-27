@@ -32,7 +32,6 @@
 #include <svl/inetdef.hxx>
 #include "svtools/htmlkywd.hxx"
 
-//!(dv) #include <chaos2/cntapi.hxx>
 #include <rtl/tencinfo.h>
 
 #include <unotools/configmgr.hxx>
@@ -65,17 +64,6 @@ static sal_Char const sHTML_SC_yes[] =  "YES";
 static sal_Char const sHTML_SC_no[] =       "NO";
 static sal_Char const sHTML_SC_auto[] = "AUTO";
 static sal_Char const sHTML_MIME_text_html[] =  "text/html; charset=";
-
-/* not used anymore?
-static HTMLOutEvent aFrameSetEventTable[] =
-{
-    { sHTML_O_SDonload,     sHTML_O_onload,     SFX_EVENT_OPENDOC   },
-    { sHTML_O_SDonunload,   sHTML_O_onunload,   SFX_EVENT_PREPARECLOSEDOC   },
-    { sHTML_O_SDonfocus,    sHTML_O_onfocus,    SFX_EVENT_ACTIVATEDOC   },
-    { sHTML_O_SDonblur,     sHTML_O_onblur,     SFX_EVENT_DEACTIVATEDOC },
-    { 0,                    0,                  0                   }
-};
-*/
 
 #if defined(UNX)
 const sal_Char SfxFrameHTMLWriter::sNewLine[] = "\012";
@@ -263,23 +251,6 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
         }
     }
 }
-/*
-void SfxFrameHTMLWriter::OutHeader( rtl_TextEncoding eDestEnc )
-{
-    // <HTML>
-    // <HEAD>
-    // <TITLE>Titel</TITLE>
-    // </HEAD>
-    HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_html ) << sNewLine;
-    HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_head );
-
-    Out_DocInfo( Strm(), &pDoc->GetDocInfo(), "\t", eDestEnc );
-    Strm() << sNewLine;
-    HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_head, FALSE ) << sNewLine;
-
-//!     OutScript();                    // Hear the scripts in the Header are still missing
-}
-*/
 
 void SfxFrameHTMLWriter::Out_FrameDescriptor(
     SvStream& rOut, const String& rBaseURL, const uno::Reference < beans::XPropertySet >& xSet,
@@ -344,19 +315,6 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
                 (((sOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_frameborder) += '=') += pStr;
             }
         }
-
-        // TODO/LATER: currently not supported attributes
-        // resize
-        //if( !pFrame->IsResizable() )
-        //    (sOut += ' ') += sHTML_O_noresize;
-        //
-        //if ( pFrame->GetWallpaper() )
-        //{
-        //    ((sOut += ' ') += sHTML_O_bordercolor) += '=';
-        //    rOut << sOut.GetBuffer();
-        //    HTMLOutFuncs::Out_Color( rOut, pFrame->GetWallpaper()->GetColor(), eDestEnc );
-        //}
-        //else
             rOut << sOut.GetBuffer();
     }
     catch ( uno::Exception& )
@@ -371,7 +329,6 @@ String SfxFrameHTMLWriter::CreateURL( SfxFrame* pFrame )
     if( !aRet.Len() && pShell )
     {
         aRet = pShell->GetMedium()->GetName();
-//!(dv)     CntAnchor::ToPresentationURL( aRet );
     }
 
     return aRet;

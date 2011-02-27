@@ -201,9 +201,6 @@ throw( uno::RuntimeException )
         pWin->SetBackground();
         pWin->Show();
 
-    //      aCmdList.Append( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "width" ) ), String( aPosSize.GetWidth() ) );
-    //      aCmdList.Append( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "height" ) ), String( aPosSize.GetHeight() ) );
-
         if( maName.getLength() )
             maCmdList.Append( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "name" ) ), maName );
 
@@ -286,12 +283,6 @@ void SAL_CALL AppletObject::setPropertyValue(const ::rtl::OUString& aPropertyNam
             aAny >>= maClass;
         break;
         case WID_APPLET_CODEBASE  :
-            //pImpl->aCodeBase = rURL.GetMainURL( INetURLObject::NO_DECODE );
-            //if( rURL.GetProtocol() == INET_PROT_FILE
-            //    && pImpl->aCodeBase.GetChar( 9 ) == INET_ENC_DELIM_TOKEN )
-            //    // Laufwerksbuchstabe auf ':' patchen
-            //    pImpl->aCodeBase.SetChar( 9, INET_DELIM_TOKEN );
-
             aAny >>= maCodeBase;
         break;
         case WID_APPLET_COMMANDS  :

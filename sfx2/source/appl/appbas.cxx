@@ -147,8 +147,6 @@ SbxVariable* MakeVariable( StarBASIC *pBas, SbxObject *pObject,
 
 BasicManager* SfxApplication::GetBasicManager()
 {
-//  DBG_ASSERT( pAppData_Impl->nBasicCallLevel != 0,
-//              "unnecessary call to GetBasicManager() - inefficient!" );
     if ( pAppData_Impl->nBasicCallLevel == 0 )
         // sicherheitshalber
         EnterBasicCall();
@@ -280,7 +278,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 //-------------------------------------------------------------------------
 void SfxApplication::PropState_Impl( SfxItemSet &rSet )
 {
-//  SfxViewFrame *pFrame = SfxViewFrame::Current();
     SfxWhichIter aIter(rSet);
     for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
     {

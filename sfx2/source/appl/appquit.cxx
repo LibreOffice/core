@@ -112,8 +112,6 @@ void SfxApplication::Deinitialize()
     // this method. Therefore this call makes no sense and is the source of
     // some stack traces, which we don't understand.
     // For more information see:
-    // #123501#
-    //SetViewFrame(0);
     pAppData_Impl->bDowning = FALSE;
     DBG_ASSERT( !SfxViewFrame::GetFirst(),
                 "existing SfxViewFrame after Execute" );

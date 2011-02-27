@@ -161,9 +161,6 @@ void lcl_UpdateAppBasicDocVars(  const Reference< XInterface >& _rxComponent, bo
 
 //=========================================================================
 
-
-//=========================================================================
-
 class SfxModelListener_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XCloseListener >
 {
     SfxObjectShell* mpDoc;
@@ -625,9 +622,6 @@ sal_uInt16 SfxObjectShell::PrepareClose
 
         // fragen, ob gespeichert werden soll
         short nRet = RET_YES;
-        //TODO/CLEANUP
-        //brauchen wir UI=2 noch?
-        //if( SfxApplication::IsPlugin() == sal_False || bUI == 2 )
         {
             //initiate help agent to inform about "print modifies the document"
             SvtPrintWarningOptions aPrintOptions;

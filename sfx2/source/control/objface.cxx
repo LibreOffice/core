@@ -174,10 +174,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, USHORT nSlotCount )
         USHORT nIter = 1;
         for ( pIter = pSlots; nIter <= nCount; ++pIter, ++nIter )
         {
-            //! hier bitte sinnvoll pruefen
-            //! DBG_ASSERT(!(pIter->IsMode(SFX_SLOT_CACHABLE) &&
-            //!                 pIter->IsMode(SFX_SLOT_VOLATILE)),
-            //!             "invalid Flags" );
+
             DBG_ASSERT( nIter == nCount ||
                         pIter->GetSlotId() != (pIter+1)->GetSlotId(),
                         "doppelte SID" );

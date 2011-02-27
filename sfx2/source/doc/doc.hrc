@@ -69,7 +69,6 @@
 #define STR_PRINT_STYLES_HEADER             (RID_SFX_DOC_START+ 21)
 #define MSG_PRINT_ERROR                     (RID_SFX_DOC_START+ 22)
 #define STR_BACKUP_COPY                     (RID_SFX_DOC_START+ 23)
-// #define MSG_WARNING_BACKUP                   (RID_SFX_DOC_START+ 24)
 #define MSG_CANT_OPEN_TEMPLATE              (RID_SFX_DOC_START+ 25)
 #define MSG_VIEW_OPEN_CANT_SAVE             (RID_SFX_DOC_START+ 26)
 #define STR_ERROR_SAVE                      (RID_SFX_DOC_START+ 27)
@@ -90,7 +89,6 @@
 #define MSG_TEMPLATE_DIR_NOT_EXIST          (RID_SFX_DOC_START+ 40)
 #define MSG_DOCINFO_CANTREAD                (RID_SFX_DOC_START+ 41)
 #define STR_ERROR_NOSTORAGE                 (RID_SFX_DOC_START+ 42)
-// #define STR_QUERY_SAVEOWNFORMAT             (RID_SFX_DOC_START+ 43)
 #define STR_QUERY_MUSTOWNFORMAT             (RID_SFX_DOC_START+ 44)
 #define STR_SAVEDOC                         (RID_SFX_DOC_START+ 45)
 #define STR_UPDATEDOC                       (RID_SFX_DOC_START+ 46)
@@ -163,18 +161,12 @@
 
 // some icons are commented out since they are removed
 #define BMP_SIGNATURE                       (RID_SFX_DOC_START+97)
-// #define BMP_128X128_BASE_DOC             (RID_SFX_DOC_START+98)
 #define BMP_128X128_CALC_DOC                (RID_SFX_DOC_START+99)
-// #define BMP_128X128_CALC_TEMP                (RID_SFX_DOC_START+100)
 #define BMP_128X128_CHART_DOC               (RID_SFX_DOC_START+101)
 #define BMP_128X128_DRAW_DOC                (RID_SFX_DOC_START+102)
-// #define BMP_128X128_DRAW_TEMP                (RID_SFX_DOC_START+103)
 #define BMP_128X128_IMPRESS_DOC             (RID_SFX_DOC_START+104)
-// #define BMP_128X128_IMPRESS_TEMP         (RID_SFX_DOC_START+105)
-// #define BMP_128X128_MASTER_DOC               (RID_SFX_DOC_START+106)
 #define BMP_128X128_MATH_DOC                (RID_SFX_DOC_START+107)
 #define BMP_128X128_WRITER_DOC              (RID_SFX_DOC_START+108)
-// #define BMP_128X128_WRITER_TEMP              (RID_SFX_DOC_START+109)
 
 #define STR_HIDDENINFO_CONTAINS             (RID_SFX_DOC_START+110)
 #define STR_HIDDENINFO_RECORDCHANGES        (RID_SFX_DOC_START+111)
@@ -187,9 +179,7 @@
 #define STR_HIDDENINFO_CONTINUE_SIGNING     (RID_SFX_DOC_START+118)
 #define STR_HIDDENINFO_CONTINUE_CREATEPDF   (RID_SFX_DOC_START+119)
 
-// #define MSG_WARNING_MACRO_ISDISABLED        (RID_SFX_DOC_START+120)
 #define STR_NEW_FILENAME_SAVE               (RID_SFX_DOC_START+121)
-// #define STR_MACROS_DISABLED                 (RID_SFX_DOC_START+122)
 #define STR_ERROR_DELETE_TEMPLATE_DIR       (RID_SFX_DOC_START+123)
 #define STR_DOCINFO_INFOFIELD               (RID_SFX_DOC_START+124)
 

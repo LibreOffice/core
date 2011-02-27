@@ -102,12 +102,6 @@
 
 #define RID_STR_NOWELCOMESCREEN             (RID_SFX_APP_START+91)
 
-// Option for 'recommend opening document read only' is not evaluated (#i33095#)
-/* obsolete
-#define STR_EDITOBJECT                      (RID_SFX_APP_START+92)
-#define STR_OPENOBJECT                      (RID_SFX_APP_START+93)
-*/
-
 #define STR_CORRUPT_INSTALLATION            (RID_SFX_APP_START+94)
 #define IDS_SBERR_STOREREF                  (RID_SFX_APP_START+97)
 
@@ -213,16 +207,10 @@
 #define RID_INVALID_URL_TITLE                   (RID_SFX_APP_START + 183)
 #define RID_DESKTOP                             (RID_SFX_APP_START + 184)
 
-// #define RID_XMLSEC_WARNING_BROKENSIGNATURE       (RID_SFX_APP_START + 185)
 #define RID_XMLSEC_QUERY_LOSINGSIGNATURE        (RID_SFX_APP_START + 186)
 #define RID_XMLSEC_QUERY_SAVEBEFORESIGN         (RID_SFX_APP_START + 187)
-    // FREE
-    // FREE
-#define RID_XMLSEC_INFO_WRONGDOCFORMAT          (RID_SFX_APP_START + 190)
 
-/* obsolete
-#define RID_WARNING_MACROSDISABLED              (RID_SFX_APP_START + 191)
-*/
+#define RID_XMLSEC_INFO_WRONGDOCFORMAT          (RID_SFX_APP_START + 190)
 
 #define STR_QUERY_UPDATE_LINKS                  (RID_SFX_APP_START + 192)
 #define STR_DDE_ERROR                           (RID_SFX_APP_START + 193)

@@ -259,18 +259,6 @@ void SfxPropertyHandler::Property( ApplicationProperty& rProp )
                 }
             }
             break;
-/*
-            case TT_PR_IMG:
-            {
-                SvDataMemberObjectRef aDataObject = new SvDataMemberObject();
-                SvData* pDataBmp = new SvData( FORMAT_BITMAP );
-                pDataBmp->SetData( pTTProperties->mpBmp );
-                aDataObject->Append( pDataBmp );
-                aDataObject->CopyClipboard();
-                pTTProperties->nActualPR = 0;
-            }
-            break;
-*/
             default:
             {
                 pTTProperties->nPropertyVersion = 0;
@@ -477,9 +465,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
 
         // DocWinActivate : both frames belong to the same TopWindow
         // TopWinActivate : both frames belong to different TopWindows
-// not used anymore!
-//      BOOL bDocWinActivate = pOldContainerFrame && pNewContainerFrame &&
-//                  pOldContainerFrame->GetTopViewFrame() == pNewContainerFrame->GetTopViewFrame();
+
         BOOL bTaskActivate = pOldContainerFrame != pNewContainerFrame;
 
         if ( pOldContainerFrame )
@@ -493,15 +479,6 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
         }
 
         pAppData_Impl->pViewFrame = pFrame;
-
-        //const SfxObjectShell* pSh = pViewFrame ? pViewFrame->GetObjectShell() : 0;
-        //if ( !pSh )
-        //{
-        //    // otherwise BaseURL is set in activation of document
-        //    INetURLObject aObject( SvtPathOptions().GetWorkPath() );
-        //    aObject.setFinalSlash();
-        //    INetURLObject::SetBaseURL( aObject.GetMainURL( INetURLObject::NO_DECODE ) );
-        //}
 
         if( pNewContainerFrame )
         {

@@ -745,24 +745,6 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
                 break;
             case WID_FROM :
             {
-                // QUESTION: do we still need this?
-                /*
-                // String aStrVal( sTemp );
-                if ( aStrVal.Len() > TIMESTAMP_MAXLENGTH )
-                {
-                    SvAddressParser aParser( aStrVal );
-                    if ( aParser.Count() > 0 )
-                    {
-                        String aEmail = aParser.GetEmailAddress(0);
-                        String aRealname = aParser.GetRealName(0);
-
-                        if ( aRealname.Len() <= TIMESTAMP_MAXLENGTH )
-                            aStrVal = aRealname;
-                        else if ( aEmail.Len() <= TIMESTAMP_MAXLENGTH )
-                            aStrVal = aEmail;
-                    }
-                } */
-
                 if ( _pImp->m_xDocProps->getAuthor() != sTemp )
                     _pImp->m_xDocProps->setAuthor(sTemp);
                 break;
@@ -811,7 +793,6 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
                 if ( _pImp->m_xDocProps->getDefaultTarget() != sTemp )
                     _pImp->m_xDocProps->setDefaultTarget(sTemp);
                 break;
-//            case WID_CONTENT_TYPE : // this is readonly!
                case MID_CATEGORY:
                case MID_MANAGER:
                case MID_COMPANY:
@@ -1074,9 +1055,6 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
 
 sal_Int16 SAL_CALL  SfxDocumentInfoObject::getUserFieldCount() throw( ::com::sun::star::uno::RuntimeException )
 {
-//    uno::Reference<beans::XPropertyAccess> xPropSet(
-//        _pImp->m_xDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
-//    return xPropSet->getPropertyValues().getLength();
     return FOUR;
 }
 
@@ -1219,7 +1197,6 @@ SfxStandaloneDocumentInfoObject::SfxStandaloneDocumentInfoObject( const ::com::s
     uno::Reference< lang::XInitialization > xDocProps(
         _xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "com.sun.star.document.DocumentProperties"))), uno::UNO_QUERY_THROW);
-//    xDocProps->initialize(uno::Sequence<uno::Any>());
     uno::Any a;
     a <<= xDocProps;
     uno::Sequence<uno::Any> args(1);
@@ -1299,8 +1276,6 @@ void SAL_CALL  SfxStandaloneDocumentInfoObject::loadFromURL(const ::rtl::OUStrin
     uno::Reference< document::XDocumentProperties > xDocProps(
         _xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "com.sun.star.document.DocumentProperties"))), uno::UNO_QUERY_THROW);
-//    uno::Reference< lang::XInitialization > xInit(xDocProps, uno::UNO_QUERY_THROW);
-//    xInit->initialize(uno::Sequence<uno::Any>());
     _pImp->Reset(xDocProps);
     aGuard.clear();
 

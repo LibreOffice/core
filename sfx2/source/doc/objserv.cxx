@@ -986,18 +986,6 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                     break;
                 }
-/*
-                const SfxFilter* pCombinedFilters = NULL;
-                SfxFilterContainer* pFilterContainer = GetFactory().GetFilterContainer();
-
-                if ( pFilterContainer )
-                {
-                    SfxFilterFlags    nMust    = SFX_FILTER_IMPORT | SFX_FILTER_EXPORT;
-                    SfxFilterFlags    nDont    = SFX_FILTER_NOTINSTALLED | SFX_FILTER_INTERNAL;
-
-                    pCombinedFilters = pFilterContainer->GetAnyFilter( nMust, nDont );
-                }
-*/
                 if ( /*!pCombinedFilters ||*/ !GetMedium() )
                     rSet.DisableItem( nWhich );
                 else
@@ -1008,25 +996,6 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
             case SID_EXPORTDOCASPDF:
             case SID_DIRECTEXPORTDOCASPDF:
             {
-                /*
-
-                 search for filter cant work correctly ...
-                 Because it's not clear, which export filter for which office module
-                 must be searched. On the other side it can be very expensive doing so.
-                 The best solution would be: on installation time we should know if pdf feature
-                 was installed or not!!! (e.g. by writing a bool inside cfg)
-
-                SfxFilterContainer* pFilterContainer = GetFactory().GetFilterContainer();
-                if ( pFilterContainer )
-                {
-                    String aPDFExtension = String::CreateFromAscii( "pdf" );
-                    const SfxFilter* pFilter = pFilterContainer->GetFilter4Extension( aPDFExtension, SFX_FILTER_EXPORT );
-                    if ( pFilter != NULL )
-                        break;
-                }
-
-                rSet.DisableItem( nWhich );
-                */
                 break;
             }
 

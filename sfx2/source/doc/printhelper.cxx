@@ -437,11 +437,11 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         }
     }
 
-    //os 12.11.98: die PaperSize darf nur gesetzt werden, wenn tatsaechlich
+    //die PaperSize darf nur gesetzt werden, wenn tatsaechlich
     //PAPER_USER gilt, sonst koennte vom Treiber ein falsches Format gewaehlt werden
     if(nPaperFormat == view::PaperFormat_USER && aSetPaperSize.Width())
     {
-        //JP 23.09.98 - Bug 56929 - MapMode von 100mm in die am
+        //MapMode von 100mm in die am
         //          Device gesetzten umrechnen. Zusaetzlich nur dann
         //          setzen, wenn sie wirklich veraendert wurden.
         aSetPaperSize = pPrinter->LogicToPixel( aSetPaperSize, MAP_100TH_MM );
@@ -452,7 +452,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         }
     }
 
-    // #96772#: wait until printing is done
+    //wait until printing is done
     SfxPrinter* pDocPrinter = pViewSh->GetPrinter();
     while ( pDocPrinter->IsPrinting() )
         Application::Yield();
@@ -595,8 +595,6 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     SfxViewShell* pView = pViewFrm->GetViewShell();
     if ( !pView )
         return;
-
-//  SfxAllItemSet aArgs( pView->GetPool() );
     sal_Bool bMonitor = sal_False;
     // We need this information at the end of this method, if we start the vcl printer
     // by executing the slot. Because if it is a ucb relevant URL we must wait for
@@ -800,81 +798,8 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
             {
                 if ( !m_xPrintJob.is() )
                     m_xPrintJob = new SfxPrintJob_Impl( this );
-/*
-                PrintDialog* pDlg = pPrintHint->GetPrintDialog();
-                Printer* pPrinter = pPrintHint->GetPrinter();
-                ::rtl::OUString aPrintFile ( ( pPrinter && pPrinter->IsPrintFileEnabled() ) ? pPrinter->GetPrintFile() : String() );
-                ::rtl::OUString aRangeText ( ( pDlg && pDlg->IsRangeChecked(PRINTDIALOG_RANGE) ) ? pDlg->GetRangeText() : String() );
-                sal_Bool bSelectionOnly = ( ( pDlg && pDlg->IsRangeChecked(PRINTDIALOG_SELECTION) ) ? sal_True : sal_False );
-
-                sal_Int32 nArgs = 2;
-                if ( aPrintFile.getLength() )
-                    nArgs++;
-                if ( aRangeText.getLength() )
-                    nArgs++;
-                else if ( bSelectionOnly )
-                    nArgs++;
-
-                m_aPrintOptions.realloc(nArgs);
-                m_aPrintOptions[0].Name = DEFINE_CONST_UNICODE("CopyCount");
-                m_aPrintOptions[0].Value <<= (sal_Int16) (pPrinter ? pPrinter->GetCopyCount() : 1 );
-                m_aPrintOptions[1].Name = DEFINE_CONST_UNICODE("Collate");
-                m_aPrintOptions[1].Value <<= (sal_Bool) (pDlg ? pDlg->IsCollateChecked() : sal_False );
-
-                if ( bSelectionOnly )
-                {
-                    m_aPrintOptions[2].Name = DEFINE_CONST_UNICODE("Selection");
-                    m_aPrintOptions[2].Value <<= bSelectionOnly;
-                }
-                else if ( aRangeText.getLength() )
-                {
-                    m_aPrintOptions[2].Name = DEFINE_CONST_UNICODE("Pages");
-                    m_aPrintOptions[2].Value <<= aRangeText;
-                }
-
-                if ( aPrintFile.getLength() )
-                {
-                    m_aPrintOptions[nArgs-1].Name = DEFINE_CONST_UNICODE("FileName");
-                    m_aPrintOptions[nArgs-1].Value <<= aPrintFile;
-                }
-*/
                 m_aPrintOptions = pPrintHint->GetOptions();
             }
-/*
-            else if ( pPrintHint->GetWhich() == -3 )    // -3 : AdditionalPrintOptions
-            {
-                    uno::Sequence < beans::PropertyValue >& lOldOpts = m_aPrintOptions;
-                    const uno::Sequence < beans::PropertyValue >& lNewOpts = pPrintHint->GetAdditionalOptions();
-                    sal_Int32 nOld = lOldOpts.getLength();
-                    sal_Int32 nAdd = lNewOpts.getLength();
-                    lOldOpts.realloc( nOld + nAdd );
-
-                    // assume that all new elements are overwriting old ones and so don't need to be added
-                    sal_Int32 nTotal = nOld;
-                    for ( sal_Int32 n=0; n<nAdd; n++ )
-                    {
-                        sal_Int32 m;
-                        for ( m=0; m<nOld; m++ )
-                            if ( lNewOpts[n].Name == lOldOpts[m].Name )
-                                // new option overwrites old one
-                                break;
-
-                        if ( m == nOld )
-                        {
-                            // this is a new option, so add it to the resulting sequence - counter must be incremented
-                            lOldOpts[nTotal].Name = lNewOpts[n].Name;
-                            lOldOpts[nTotal++].Value = lNewOpts[n].Value;
-                        }
-                        else
-                            // overwrite old option with new value, counter stays unmodified
-                            lOldOpts[m].Value = lNewOpts[n].Value;
-                    }
-
-                    if ( nTotal != lOldOpts.getLength() )
-                        // at least one new options has overwritten an old one, so we allocated too much
-                        lOldOpts.realloc(  nTotal );
-            }
-*/
             else if ( pPrintHint->GetWhich() != -2 )    // -2 : CancelPrintJob
             {
                 view::PrintJobEvent aEvent;

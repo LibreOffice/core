@@ -505,8 +505,6 @@ void LinkManager::CancelTransfers()
         if( 0 != ( pLnk = &(*rLnks[ --n ])) &&
             OBJECT_CLIENT_FILE == (OBJECT_CLIENT_FILE & pLnk->GetObjType()) &&
             0 != ( pFileObj = (SvFileObject*)pLnk->GetObj() ) )
-//          0 != ( pFileObj = (SvFileObject*)SvFileObject::ClassFactory()->
-//                                  CastAndAddRef( pLnk->GetObj() )) )
             pFileObj->CancelTransfers();
 }
     // For the purpose of sending Status information from the file object to

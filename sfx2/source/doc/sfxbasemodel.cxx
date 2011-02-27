@@ -790,8 +790,6 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
     {
         // as long as an SfxObjectShell is assigned to an SfxBaseModel it is still existing here
         // so we can't dispose the shared DocumentInfoObject here
-        // uno::Reference < lang::XComponent > xComp( m_pData->m_xDocumentInfo, uno::UNO_QUERY );
-        // xComp->dispose();
         m_pData->m_xDocumentInfo = 0;
     }
 
@@ -901,7 +899,6 @@ SfxBaseModel::getDocumentProperties()
             ::comphelper::getProcessServiceFactory()->createInstance(
                 DEFINE_CONST_UNICODE("com.sun.star.document.DocumentProperties") ),
             uno::UNO_QUERY_THROW);
-//        xDocProps->initialize(uno::Sequence<uno::Any>());
         m_pData->m_xDocumentProperties.set(xDocProps, uno::UNO_QUERY_THROW);
         uno::Reference<util::XModifyBroadcaster> xMB(m_pData->m_xDocumentProperties, uno::UNO_QUERY_THROW);
         xMB->addModifyListener(new SfxDocInfoListener_Impl(*m_pData->m_pObjectShell));
@@ -1770,22 +1767,8 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
             throw frame::IllegalArgumentIOException();
         }
 
-        // !TODO: currently not working
-        //SFX_ITEMSET_ARG( pParams, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE );
-        //if( pFrameItem && pFrameItem->GetFrame() )
-        //{
-        //  SfxFrame* pFrame = pFrameItem->GetFrame();
-        //  pMedium->SetLoadTargetFrame( pFrame );
-        //}
-
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
         sal_Bool bSalvage = pSalvageItem ? sal_True : sal_False;
-
-        // SFX_ITEMSET_ARG( pMedium->GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
-        // sal_Bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
-        //
-        // does already happen in DoLoad call
-        //m_pData->m_pObjectShell->SetActivateEvent_Impl( bTemplate ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC );
 
         // load document
         sal_uInt32 nError = ERRCODE_NONE;
@@ -2455,11 +2438,6 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             {
             case SFX_EVENT_STORAGECHANGED:
             {
-                // for now this event is sent only on creation of a new storage for new document
-                // and in case of reload of medium without document reload
-                // other events are used to detect storage change
-                // NotifyStorageListeners_Impl();
-
                 if ( m_pData->m_xUIConfigurationManager.is()
                   && m_pData->m_pObjectShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                 {

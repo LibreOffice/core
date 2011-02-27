@@ -133,7 +133,6 @@ static rtl::OUString HelpLocaleString()
         else
         {
             rtl::OUString aBaseInstallPath;
-            // utl::Bootstrap::PathStatus aBaseLocateResult =
             utl::Bootstrap::locateBaseInstallation(aBaseInstallPath);
             static const char *szHelpPath = "/help/";
 

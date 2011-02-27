@@ -342,30 +342,6 @@ static void addTaskbarIcon( HWND hWnd )
 
 // -------------------------------
 
-/*
-static void removeTaskbarIcon()
-{
-    ShutdownIcon *pShutdownIcon = ShutdownIcon::getInstance();
-    OSL_ENSURE( pShutdownIcon, "ShutdownIcon instance empty!");
-
-    if( !pShutdownIcon )
-        return;
-
-    if ( IsWindow( aListenerWindow ))
-    {
-        deleteSystrayMenu( popupMenu );
-
-        NOTIFYICONDATAA nid;
-        nid.cbSize=sizeof(NOTIFYICONDATA);
-        nid.hWnd = aListenerWindow;
-        nid.uID = ID_QUICKSTART;
-        Shell_NotifyIconA(NIM_DELETE, &nid);
-    }
-}
-*/
-
-// -------------------------------
-
 LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     static UINT s_uTaskbarRestart = 0;
@@ -429,7 +405,6 @@ LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 #endif
                     int m = TrackPopupMenuEx( popupMenu, TPM_RETURNCMD|TPM_LEFTALIGN|TPM_RIGHTBUTTON,
                                               pt.x, pt.y, hWnd, NULL );
-                    // BUGFIX: See Q135788 (PRB: Menus for Notification Icons Don't Work Correctly)
                     PostMessage( hWnd, NULL, 0, 0 );
                     switch( m )
                     {

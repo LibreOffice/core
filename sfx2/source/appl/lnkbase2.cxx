@@ -369,7 +369,6 @@ BOOL SvBaseLink::Update()
         if( xObj.Is() )
         {
             xObj->setStreamToLoadFrom(m_xInputStreamToLoadFrom,m_bIsReadOnly);
-            // m_xInputStreamToLoadFrom = 0;
             String sMimeType( SotExchange::GetFormatMimeType(
                             pImplData->ClientType.nCntntType ));
             Any aData;
@@ -377,8 +376,7 @@ BOOL SvBaseLink::Update()
             if( xObj->GetData( aData, sMimeType ) )
             {
                 DataChanged( sMimeType, aData );
-                //JP 13.07.00: Bug 76817 - for manual Updates there is no
-                //              need to hold the ServerObject
+                //for manual Updates there is no need to hold the ServerObject
                 if( OBJECT_CLIENT_DDE == nObjType &&
                     LINKUPDATE_ONCALL == GetUpdateMode() && xObj.Is() )
                     xObj->RemoveAllDataAdvise( this );

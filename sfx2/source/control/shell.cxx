@@ -81,7 +81,6 @@ struct SfxShell_Impl: public SfxBroadcaster
     SfxViewShell*               pViewSh;    // SfxViewShell falls Shell ViewFrame/ViewShell/SubShell ist
     SfxViewFrame*               pFrame;     // Frame, falls <UI-aktiv>
     SfxRepeatTarget*            pRepeatTarget;
-//    SbxObjectRef                xParent;
     BOOL                        bInAppBASIC;
     BOOL                        bActive;
     ULONG                       nDisableFlags;

@@ -196,9 +196,9 @@ static Image lcl_GetImageFromPngUrl( const ::rtl::OUString &rFileUrl )
 
 PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
 {
-    //
+
     // build thesaurus sub menu if look-up string is available
-    //
+
     PopupMenu* pThesSubMenu = 0;
     SfxPoolItem *pItem = 0;
     pBindings->QueryState( SID_THES, pItem );
@@ -288,7 +288,6 @@ void SfxMenuManager::UseDefault()
         ResId aResId(GetType(),*pResMgr);
         aResId.SetRT(RSC_MENU);
         Menu *pSVMenu = new PopupMenu( aResId );
-        //SfxMenuManager::EraseItemCmds( pSVMenu ); // Remove .uno cmds to be compatible with 6.0/src641
 
         if ( bAddClipboardFuncs )
         {

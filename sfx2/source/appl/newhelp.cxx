@@ -2919,7 +2919,6 @@ void SfxHelpWindow_Impl::MakeLayout()
             Some VCL-patches could not solve this problem so I've established the
             workaround: resize the help window if it's visible .-)
         */
-//      pScreenWin->Hide();
 
         ::com::sun::star::awt::Rectangle aRect = xWindow->getPosSize();
         sal_Int32 nOldWidth = bIndex ? nCollapseWidth : nExpandWidth;
@@ -2936,8 +2935,6 @@ void SfxHelpWindow_Impl::MakeLayout()
         }
         else if ( aWinPos.X() > 0 && aWinPos.Y() > 0 )
             pScreenWin->SetPosPixel( aWinPos );
-
-//      pScreenWin->Show();
     }
 
     Clear();
@@ -3085,9 +3082,6 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
         return 0;
 
     ::rtl::OUString sHelpURL;
-
-//  INetURLObject aObj(aEntry);
-//  BOOL bComplete = ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP );
 
     BOOL bComplete = rtl::OUString(aEntry).toAsciiLowerCase().match(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.help")),0);
 

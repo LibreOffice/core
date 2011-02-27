@@ -488,11 +488,7 @@ handleError( ucb::InteractiveAugmentedIOException const & i_rException,
         new ::comphelper::OInteractionApprove );
     ::rtl::Reference< ::comphelper::OInteractionAbort > pAbort(
         new ::comphelper::OInteractionAbort );
-    /* this does not seem to work
-    if (i_rException.Code != ucb::IOErrorCode_WRONG_FORMAT) {
-        pRequest->addContinuation( pRetry.get() );
-    }
-    */
+
     pRequest->addContinuation( pApprove.get() );
     pRequest->addContinuation( pAbort.get() );
     // actually call the handler
@@ -838,7 +834,6 @@ DocumentMetadataAccess::DocumentMetadataAccess(
 DocumentMetadataAccess::~DocumentMetadataAccess()
 {
 }
-
 
 // ::com::sun::star::rdf::XRepositorySupplier:
 uno::Reference< rdf::XRepository > SAL_CALL

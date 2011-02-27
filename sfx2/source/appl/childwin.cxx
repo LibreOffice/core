@@ -305,8 +305,6 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
     }
 
     SvtViewOptions aWinOpt( E_WINDOW, String::CreateFromInt32( nID ) );
-    // aWinOpt.SetPosition( rInfo.aPos.X(), rInfo.aPos.Y() );
-    // aWinOpt.SetSize( rInfo.aSize.Width(), rInfo.aSize.Height() );
     aWinOpt.SetWindowState( String( rInfo.aWinState, RTL_TEXTENCODING_UTF8 ) );
 
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq(1);
@@ -410,9 +408,6 @@ void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWin
             return;
 
         aWinData.Erase(0,nPos+1);
-
-        //aWinOpt.GetPosition( rInfo.aPos.X(), rInfo.aPos.Y() );
-        //aWinOpt.GetSize( rInfo.aSize.Width(), rInfo.aSize.Height() );
 
         // Sichtbarkeit laden: ist als ein char codiert
         rInfo.bVisible = (aWinData.GetChar(0) == 0x0056); // 'V' = 56h
@@ -734,20 +729,14 @@ void SfxChildWindow::SetWorkWindow_Impl( SfxWorkWindow* pWin )
         pImp->pWorkWin->SetActiveChild_Impl( pWindow );
 }
 
-//SfxWorkWindow* SfxChildWindow::GetWorkWindow_Impl() const
-//{
-//  return pImp->pWorkWin;
-//}
-
 void SfxChildWindow::Activate_Impl()
 {
-    if(pImp->pWorkWin!=NULL) //@#60568#
+    if(pImp->pWorkWin!=NULL)
         pImp->pWorkWin->SetActiveChild_Impl( pWindow );
 }
 
 void SfxChildWindow::Deactivate_Impl()
 {
-//  pImp->pWorkWin->SetActiveChild_Impl( NULL );
 }
 
 sal_Bool SfxChildWindow::QueryClose()

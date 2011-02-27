@@ -164,13 +164,6 @@ void SfxApplication::InitializeDisplayName_Impl()
     {
         osl::ClearableMutexGuard aGuard( osl::Mutex::getGlobalMutex() );
 
-        // create version string
-/*!!! (pb) don't show a version number at the moment
-        USHORT nProductVersion = ProductVersion::GetVersion().ToInt32();
-        String aVersion( String::CreateFromInt32( nProductVersion / 10 ) );
-        aVersion += 0x002E ; // 2Eh ^= '.'
-        aVersion += ( String::CreateFromInt32( nProductVersion % 10 ) );
-*/
         // load application title
         aTitle = String( ResId( RID_APPTITLE, *pAppData->pLabelResMgr ) );
         // merge version into title
@@ -322,7 +315,5 @@ SfxResourceManager& SfxApplication::GetResourceManager() const { return *pAppDat
 BOOL  SfxApplication::IsDowning() const { return pAppData_Impl->bDowning; }
 SfxDispatcher* SfxApplication::GetAppDispatcher_Impl() { return pAppData_Impl->pAppDispat; }
 SfxSlotPool& SfxApplication::GetAppSlotPool_Impl() const { return *pAppData_Impl->pSlotPool; }
-//SfxOptions&  SfxApplication::GetOptions() { return *pAppData_Impl->pOptions; }
-//const SfxOptions& SfxApplication::GetOptions() const { return *pAppData_Impl->pOptions; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

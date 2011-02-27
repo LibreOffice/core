@@ -416,7 +416,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
 {
     DBG_ASSERT( pThis->m_pFileDlg, "ShutdownIcon, DialogClosedHdl_Impl(): no file dialog" );
 
-    // use ctor for filling up filters automatically! #89169#
+    // use ctor for filling up filters automatically!
     if ( ERRCODE_NONE == pThis->m_pFileDlg->GetError() )
     {
         Reference< XFilePicker >    xPicker = pThis->m_pFileDlg->GetFilePicker();
@@ -451,7 +451,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                 aArgs[2].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("UpdateDocMode"));
                 aArgs[2].Value <<= nUpdateDoc;
 
-                // pb: #102643# use the filedlghelper to get the current filter name,
+                // use the filedlghelper to get the current filter name,
                 // because it removes the extensions before you get the filter name.
                 OUString aFilterName( pThis->m_pFileDlg->GetCurrentFilter() );
 
@@ -465,7 +465,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
 
                     xPickerControls->getValue( ExtendedFilePickerElementIds::CHECKBOX_READONLY, 0 ) >>= bReadOnly;
 
-                    // #95239#: Only set porperty if readonly is set to TRUE
+                    // Only set porperty if readonly is set to TRUE
 
                     if ( bReadOnly )
                     {
@@ -540,7 +540,7 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
     }
 
 #ifdef WNT
-    // #103346 Destroy dialog to prevent problems with custom controls
+    // Destroy dialog to prevent problems with custom controls
     // This fix is dependent on the dialog settings. Destroying the dialog here will
     // crash the non-native dialog implementation! Therefore make this dependent on
     // the settings.

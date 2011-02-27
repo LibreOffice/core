@@ -59,17 +59,13 @@ void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, SfxChildWinFacto
     if (!pAppData_Impl->pFactArr)
         pAppData_Impl->pFactArr = new SfxChildWinFactArr_Impl;
 
-//#ifdef DBG_UTIL
     for (USHORT nFactory=0; nFactory<pAppData_Impl->pFactArr->Count(); ++nFactory)
     {
         if (pFact->nId ==  (*pAppData_Impl->pFactArr)[nFactory]->nId)
         {
             pAppData_Impl->pFactArr->Remove( nFactory );
-//          DBG_ERROR("ChildWindow mehrfach registriert!");
-//          return;
         }
     }
-//#endif
 
     pAppData_Impl->pFactArr->C40_INSERT(
         SfxChildWinFactory, pFact, pAppData_Impl->pFactArr->Count() );

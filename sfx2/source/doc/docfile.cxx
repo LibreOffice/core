@@ -686,8 +686,6 @@ sal_Bool SfxMedium::CloseOutStream_Impl()
         //maybe we need a new flag when the storage was created from the outstream
         if ( pImp->xStorage.is() )
         {
-            //const SvStream *pStorage = aStorage->GetSvStream();
-            //if ( pStorage == pOutStream )
                 CloseStorage();
         }
 
@@ -1423,8 +1421,6 @@ uno::Reference< embed::XStorage > SfxMedium::GetZipStorageToSign_Impl( sal_Bool 
 {
     if ( !GetError() && !pImp->m_xZipStorage.is() )
     {
-        // very careful!!!
-        // if bReadOnly == sal_False and there is no temporary file the original file might be used
         GetMedium_Impl();
 
         try
@@ -2291,8 +2287,6 @@ void SfxMedium::GetMedium_Impl()
                 pImp->xInputStream->skipBytes(0);
                 if(m_bIsReadOnly)
                     GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
-
-                // m_xInputStreamToLoadFrom = 0;
             }
             else
             {
@@ -2648,27 +2642,6 @@ void SfxMedium::Close()
 {
     if ( pImp->xStorage.is() )
     {
-        // don't close the streams if they belong to the
-        // storage
-        //TODO/MBA: how to?! Do we need the flag?!
-        /*
-        const SvStream *pStream = aStorage->GetSvStream();
-        if ( pStream && pStream == pInStream )
-        {
-            CloseZipStorage_Impl();
-            pInStream = NULL;
-            pImp->xInputStream = Reference < XInputStream >();
-            pImp->xLockBytes.Clear();
-            if ( pSet )
-                pSet->ClearItem( SID_INPUTSTREAM );
-            aStorage->SetDeleteStream( TRUE );
-        }
-        else if ( pStream && pStream == pOutStream )
-        {
-            pOutStream = NULL;
-            aStorage->SetDeleteStream( TRUE );
-        } */
-
         CloseStorage();
     }
 
@@ -2681,27 +2654,6 @@ void SfxMedium::CloseAndRelease()
 {
     if ( pImp->xStorage.is() )
     {
-        // don't close the streams if they belong to the
-        // storage
-        //TODO/MBA: how to?! Do we need the flag?!
-        /*
-        const SvStream *pStream = aStorage->GetSvStream();
-        if ( pStream && pStream == pInStream )
-        {
-            CloseZipStorage_Impl();
-            pInStream = NULL;
-            pImp->xInputStream = Reference < XInputStream >();
-            pImp->xLockBytes.Clear();
-            if ( pSet )
-                pSet->ClearItem( SID_INPUTSTREAM );
-            aStorage->SetDeleteStream( TRUE );
-        }
-        else if ( pStream && pStream == pOutStream )
-        {
-            pOutStream = NULL;
-            aStorage->SetDeleteStream( TRUE );
-        } */
-
         CloseStorage();
     }
 
@@ -2809,7 +2761,6 @@ void SfxMedium::SetIsRemote_Impl()
         case INET_PROT_POP3:
         case INET_PROT_NEWS:
         case INET_PROT_IMAP:
-//        case INET_PROT_OUT:
         case INET_PROT_VIM:
             bRemote = TRUE; break;
         default:
@@ -3032,13 +2983,6 @@ SfxMedium::SfxMedium( const uno::Reference < embed::XStorage >& rStor, const Str
 
 SfxMedium::~SfxMedium()
 {
-    /* Attention
-        Don't enable CancelTransfers() till you know that the writer/web has changed his asynchronous load
-        behaviour. Otherwhise may StyleSheets inside a html file will be loaded at the right time.
-        => further the help will be empty then ... #100490#
-     */
-    //CancelTransfers();
-
     // if there is a requirement to clean the backup this is the last possibility to do it
     ClearBackup_Impl();
 

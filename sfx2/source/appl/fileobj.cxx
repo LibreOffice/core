@@ -127,13 +127,11 @@ BOOL SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
             {
                 Graphic aGrf;
 
-                //JP 15.07.98: Bug 52959
                 //      falls das Nativformat doch erwuenscht ist, muss am
                 //      Ende das Flag zurueckgesetzt werden.
 // wird einzig und allein im sw/ndgrf.cxx benutzt, wenn der Link vom
 // GraphicNode entfernt wird.
                 BOOL bOldNativFormat = bNativFormat;
-//!!??              bNativFormat = 0 != (ASPECT_ICON & pSvData->GetAspect());
 
                 // falls gedruckt werden soll, warten wir bis die
                 // Daten vorhanden sind
@@ -291,7 +289,6 @@ BOOL SvFileObject::LoadFile_Impl()
     xMed->setStreamToLoadFrom(
         aStreamToLoadFrom.m_xInputStreamToLoadFrom,
         aStreamToLoadFrom.m_bIsReadOnly);
-    // setStreamToLoadFrom(0,0);
     if( sReferer.Len() )
         xMed->SetReferer( sReferer );
 

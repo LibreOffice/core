@@ -107,7 +107,6 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
         SfxPoolItem *pItem=NULL;
         sal_uInt16 nId = pCache->GetId();
         SfxItemState eState = SFX_ITEM_DISABLED;
-        // pCache->Invalidate( sal_False );
         if ( !aStatus.IsEnabled )
         {
             // default
@@ -376,8 +375,6 @@ void SfxStateCache::SetState
 */
 
 {
-//    if ( pDispatch )
-//        return;
     SetState_Impl( eState, pState, bMaybeDirty );
 }
 

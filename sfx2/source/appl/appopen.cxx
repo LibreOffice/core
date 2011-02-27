@@ -288,7 +288,6 @@ private:
 
 sal_uInt32 CheckPasswd_Impl
 (
-    //Window *pWin,             // Parent des Dialogs
     SfxObjectShell*  pDoc,
     SfxItemPool&     /*rPool*/, // Pool, falls ein Set erzeugt werden mus
     SfxMedium*       pFile      // das Medium, dessen Passwort gfs. erfragt werden soll
@@ -322,9 +321,6 @@ sal_uInt32 CheckPasswd_Impl
                     // TODO/LATER:
                     // the storage either has no encrypted elements or it's just
                     // does not allow to detect it, probably it should be implemented laiter
-                    /*
-                    bIsEncrypted = ( aInfo.Load( xStorage ) && aInfo.IsPasswd() );
-                    */
                 }
 
                 if ( bIsEncrypted )
@@ -492,7 +488,6 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
         SfxItemSet* pNew = xDoc->GetMedium()->GetItemSet()->Clone();
         pNew->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
         pNew->ClearItem( SID_FILTER_NAME );
-        //pNew->Put( SfxStringItem( SID_FILTER_NAME, xDoc->GetFactory().GetFilter(0)->GetFilterName() ) );
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
         TransformItems( SID_OPENDOC, *pNew, aArgs );
         sal_Int32 nLength = aArgs.getLength();
@@ -904,13 +899,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             rReq.AppendItem( SfxBoolItem( SID_PREVIEW, TRUE ) );
         }
 
-        if ( STRING_NOTFOUND != aFileFlags.Search( 0x0053 ) )               // S = 53h
-        {
-            // not supported anymore
-            //rReq.RemoveItem( SID_SILENT );
-            //rReq.AppendItem( SfxBoolItem( SID_SILENT, TRUE ) );
-        }
-
         rReq.RemoveItem( SID_OPTIONS );
     }
 
@@ -934,41 +922,8 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             INetProtocol aINetProtocol = INetURLObject( aURL.Complete ).GetProtocol();
             SvtExtendedSecurityOptions aExtendedSecurityOptions;
             SvtExtendedSecurityOptions::OpenHyperlinkMode eMode = aExtendedSecurityOptions.GetOpenHyperlinkMode();
-            if ( eMode == SvtExtendedSecurityOptions::OPEN_WITHSECURITYCHECK )
-            {
-                if ( aINetProtocol == INET_PROT_FILE )
-                {
-/*!!! pb: #i49802# no security warning any longer
-                    // Check if file URL is a directory. This is not insecure!
-                    osl::Directory aDir( aURL.Main );
-                    sal_Bool bIsDir = ( aDir.open() == osl::Directory::E_None );
 
-                    if ( !bIsDir && !aExtendedSecurityOptions.IsSecureHyperlink( aURL.Complete ) )
-                    {
-                        // Security check for local files depending on the extension
-                        SolarMutexGuard aGuard;
-                        Window *pWindow = SFX_APP()->GetTopWindow();
-
-                        String aSecurityWarningBoxTitle( SfxResId( RID_SECURITY_WARNING_TITLE ));
-                        WarningBox  aSecurityWarningBox( pWindow, SfxResId( RID_SECURITY_WARNING_HYPERLINK ));
-                        aSecurityWarningBox.SetText( aSecurityWarningBoxTitle );
-
-                        // Replace %s with the real file name
-                        String aMsgText = aSecurityWarningBox.GetMessText();
-                        String aMainURL( aURL.Main );
-                        String aFileName;
-
-                        utl::LocalFileHelper::ConvertURLToPhysicalName( aMainURL, aFileName );
-                        aMsgText.SearchAndReplaceAscii( "%s", aFileName );
-                        aSecurityWarningBox.SetMessText( aMsgText );
-
-                        if( aSecurityWarningBox.Execute() == RET_NO )
-                            return;
-                    }
-*/
-                }
-            }
-            else if ( eMode == SvtExtendedSecurityOptions::OPEN_NEVER && aINetProtocol != INET_PROT_VND_SUN_STAR_HELP )
+            if ( eMode == SvtExtendedSecurityOptions::OPEN_NEVER && aINetProtocol != INET_PROT_VND_SUN_STAR_HELP )
             {
                 SolarMutexGuard aGuard;
                 Window *pWindow = SFX_APP()->GetTopWindow();
@@ -1212,8 +1167,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
     }
 
     Reference < XController > xController;
-//    if ( ( !bIsBlankTarget && pFrame ) || pLinkItem || !rReq.IsSynchronCall() )
-//    {
         // if a frame is given, it must be used for the starting point of the targetting mechanism
         // this code is also used if asynchronous loading is possible, because loadComponent always is synchron
         if ( !xTargetFrame.is() )
@@ -1250,15 +1203,11 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         {
             // if loading must be done synchron, we must wait for completion to get a return value
             // find frame by myself; I must konw the exact frame to get the controller for the return value from it
-            //if( aTarget.getLength() )
-            //    xTargetFrame = xTargetFrame->findFrame( aTarget, FrameSearchFlag::ALL );
             Reference < XComponent > xComp;
 
             try
             {
                 xComp = ::comphelper::SynchronousDispatch::dispatch( xTargetFrame, aFileName, aTarget, 0, aArgs );
-//                Reference < XComponentLoader > xLoader( xTargetFrame, UNO_QUERY );
-//                xComp = xLoader->loadComponentFromURL( aFileName, aTarget, 0, aArgs );
             }
             catch(const RuntimeException&)
             {
@@ -1288,37 +1237,6 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             if ( xDisp.is() )
                 xDisp->dispatch( aURL, aArgs );
         }
-    /*
-    }
-    else
-    {
-        // synchron loading without a given frame or as blank frame
-        SFX_REQUEST_ARG( rReq, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
-
-        // Desktop service must exists! dont catch() or check for problems here ...
-        // But loading of documents can fail by other reasons. Handle it more gracefully.
-        Reference < XComponentLoader > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), UNO_QUERY );
-        Reference < XComponent >       xComp;
-        try
-        {
-            xComp = xDesktop->loadComponentFromURL( pFileNameItem->GetValue(), aTarget, 0, aArgs );
-        }
-        catch(const RuntimeException&)
-        {
-            throw;
-        }
-        catch(const ::com::sun::star::uno::Exception&)
-        {
-            xDesktop.clear();
-            xComp.clear();
-        }
-
-        Reference < XModel > xModel( xComp, UNO_QUERY );
-        if ( xModel.is() )
-            xController = xModel->getCurrentController();
-        else
-            xController = Reference < XController >( xComp, UNO_QUERY );
-    }*/
 
     if ( xController.is() )
     {

@@ -311,8 +311,6 @@ static sal_Bool getTextProperty_Impl( Content& rContent,
                                       OUString& rPropValue );
 
 //========================================================================
-//========================================================================
-//========================================================================
 
 String SfxDocumentTemplates::GetFullRegionName
 (
@@ -758,25 +756,6 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
     else
         return String();
 
-/* dv! missing: create the directory, if it doesn't exists
-
-
-    DBG_ASSERT(aDirs.GetTokenCount(cDelim), "Keine Bereiche");
-    DirEntry aPath(aDirs.GetToken(0, cDelim));
-
-    // Verzeichnis anlegen
-    if(!aPath.MakeDir())
-        return String();
-
-    MakeFileName_Impl(aPath, rLongName, sal_True);
-    SfxTemplateDir  *pEntry = new SfxTemplateDir;
-    SfxTemplateDirEntryPtr pDirEntry =
-        new SfxTemplateDirEntry( String( '.' ), aPath.GetPath() );
-    pDirEntry->SetContent(new SfxTemplateDir(aPath.GetPath()));
-    pEntry->Insert(pDirEntry, pEntry->Count());
-    pDirs->Insert(pEntry, pDirs->Count());
-    return aPath.GetFull();
-*/
 }
 
 //------------------------------------------------------------------------
@@ -1774,7 +1753,6 @@ void SfxDocumentTemplates::Construct()
 //  verz"ogerter Aufbau der Verwaltungsdaten
 
 {
-//  pImp->Construct();
 }
 
 //------------------------------------------------------------------------
@@ -1861,8 +1839,6 @@ sal_Bool SfxDocumentTemplates::HasUserContents( sal_uInt16 nRegion, sal_uInt16 n
     return bResult;
 }
 
-// -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 DocTempl_EntryData_Impl::DocTempl_EntryData_Impl( RegionData_Impl* pParent,
                                 const OUString& rTitle )
@@ -2028,9 +2004,6 @@ const OUString& DocTempl_EntryData_Impl::GetTargetURL()
     return maTargetURL;
 }
 
-// -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 RegionData_Impl::RegionData_Impl( const SfxDocTemplate_Impl* pParent,
                                   const OUString& rTitle )
@@ -2246,8 +2219,6 @@ int RegionData_Impl::Compare( RegionData_Impl* pCompare ) const
     return nCompare;
 }
 
-// -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 
 SfxDocTemplate_Impl::SfxDocTemplate_Impl()
@@ -2670,8 +2641,6 @@ void SfxDocTemplate_Impl::Clear()
     maRegions.clear();
 }
 
-// -----------------------------------------------------------------------
-// -----------------------------------------------------------------------
 // -----------------------------------------------------------------------
 sal_Bool getTextProperty_Impl( Content& rContent,
                                const OUString& rPropName,

@@ -334,11 +334,8 @@ protected:
 
     /// check if we are initialized properly
     void SAL_CALL checkInit() const;
-    //    throw (css::uno::RuntimeException);
     /// initialize state from given DOM tree
     void SAL_CALL init(css::uno::Reference<css::xml::dom::XDocument> i_xDom);
-    //    throw (css::uno::RuntimeException, css::io::WrongFormatException,
-    //        css::uno::Exception);
     /// update element in DOM tree
     void SAL_CALL updateElement(const char *i_name,
         std::vector<std::pair<const char *, ::rtl::OUString> >* i_pAttrs = 0);
@@ -349,31 +346,24 @@ protected:
     /// extract base URL (necessary for converting relative links)
     css::uno::Reference<css::beans::XPropertySet> SAL_CALL getURLProperties(
         const css::uno::Sequence<css::beans::PropertyValue> & i_rMedium) const;
-    //    throw (css::uno::RuntimeException);
     /// get text of standard meta data element
     ::rtl::OUString SAL_CALL getMetaText(const char* i_name) const;
-    //    throw (css::uno::RuntimeException);
     /// set text of standard meta data element iff not equal to existing text
     bool SAL_CALL setMetaText(const char* i_name,
         const ::rtl::OUString & i_rValue);
-    //    throw (css::uno::RuntimeException);
     /// set text of standard meta data element iff not equal to existing text
     void SAL_CALL setMetaTextAndNotify(const char* i_name,
         const ::rtl::OUString & i_rValue);
-    //    throw (css::uno::RuntimeException);
     /// get text of standard meta data element's attribute
     ::rtl::OUString SAL_CALL getMetaAttr(const char* i_name,
         const char* i_attr) const;
-    //    throw (css::uno::RuntimeException);
     /// get text of a list of standard meta data elements (multiple occ.)
     css::uno::Sequence< ::rtl::OUString > SAL_CALL getMetaList(
         const char* i_name) const;
-    //    throw (css::uno::RuntimeException);
     /// set text of a list of standard meta data elements (multiple occ.)
     bool SAL_CALL setMetaList(const char* i_name,
         const css::uno::Sequence< ::rtl::OUString > & i_rValue,
         AttrVector const* = 0);
-    // throw (css::uno::RuntimeException);
     void createUserDefined();
 };
 
@@ -1176,8 +1166,6 @@ SfxDocumentMetaData::checkInit() const // throw (css::uno::RuntimeException)
 // initialize state from DOM tree
 void SAL_CALL SfxDocumentMetaData::init(
         css::uno::Reference<css::xml::dom::XDocument> i_xDoc)
-//        throw (css::uno::RuntimeException, css::io::WrongFormatException,
-//               css::uno::Exception)
 {
     if (!i_xDoc.is()) throw css::uno::RuntimeException(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
@@ -1217,8 +1205,6 @@ void SAL_CALL SfxDocumentMetaData::init(
     try {
         m_xParent = xPath->selectSingleNode(xDocNode, prefix);
     } catch (com::sun::star::uno::Exception &) {
-//        DBG_WARNING("SfxDocumentMetaData::init: "
-//            "caught RuntimeException from libxml!");
     }
 
     if (!m_xParent.is()) {
@@ -1985,7 +1971,6 @@ SfxDocumentMetaData::loadFromStorage(
                 " XML parsing exception")), *this);
     }
     // NB: the implementation of XMLOasisMetaImporter calls initialize
-//    init(xDocBuilder->getDocument());
     checkInit();
 }
 
@@ -2229,7 +2214,6 @@ SfxDocumentMetaData::createClone()
                     "SfxDocumentMetaData::createClone: exception")),
                 css::uno::Reference<css::uno::XInterface>(*this), a);
     }
-//    return static_cast< ::cppu::OWeakObject * > (pNew);
     return css::uno::Reference<css::util::XCloneable> (pNew);
 }
 

@@ -272,9 +272,6 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                     }
                     break;
                 case SID_ATTR_METRIC :
-//                    if(rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_ATTR_METRIC ),
-//                                pOptions->GetMetric() ) ) )
-//                        bRet = TRUE;
                     break;
                 case SID_HELPBALLOONS :
                     if(rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_HELPBALLOONS ),
@@ -624,7 +621,6 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_METRIC), TRUE, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxUInt16Item), "UInt16Item expected");
-//        pOptions->SetMetric((FieldUnit)((const SfxUInt16Item*)pItem)->GetValue());
     }
 
     // HelpBalloons
@@ -1000,18 +996,10 @@ SfxEventConfiguration* SfxApplication::GetEventConfig() const
 //--------------------------------------------------------------------
 void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron )
 {
-    //DBG_ASSERT(pAppData_Impl->pEventConfig,"Keine Events angemeldet!");
 
     SfxObjectShell *pDoc = rEventHint.GetObjShell();
     if ( pDoc && ( pDoc->IsPreview() || !pDoc->Get_Impl()->bInitialized ) )
         return;
-
-#ifdef DBG_UTIL
-    //::rtl::OUString aName = SfxEventConfiguration::GetEventName_Impl( rEventHint.GetEventId() );
-    //ByteString aTmp( "SfxEvent: ");
-    //aTmp += ByteString( String(aName), RTL_TEXTENCODING_UTF8 );
-    //DBG_TRACE( aTmp.GetBuffer() );
-#endif
 
     if ( bSynchron )
     {

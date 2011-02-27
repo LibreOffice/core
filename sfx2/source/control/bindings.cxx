@@ -1052,7 +1052,6 @@ void SfxBindings::Release( SfxControllerItem& rItem )
 {
     DBG_MEMTEST();
     DBG_ASSERT( pImp->pCaches != 0, "SfxBindings not initialized" );
-    //! DBG_ASSERT( nRegLevel > 0, "release without EnterRegistrations" );
     DBG_ASSERT( !pImp->bInNextJob, "SfxBindings::Release while status-updating" );
     ENTERREGISTRATIONS();
 

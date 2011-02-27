@@ -600,9 +600,6 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::TryInsertMetadatable(
                                 ::boost::bind( &Metadatable::IsInClipboard, _1 )
                 ) ) ) )
             {
-// ???  this is not undoable
-//                pList->clear();
-//                pList->push_back( &i_rObject );
                 pList->push_front( &i_rObject );
                 return true;
             }
@@ -1056,8 +1053,6 @@ XmlIdRegistryClipboard::XmlIdRegistry_Impl::TryInsertMetadatable(
     OSL_ENSURE(isContentFile(i_rStreamName) || isStylesFile(i_rStreamName),
         "invalid stream");
 
-    //wntmsci12 won't parse this:
-//    Metadatable ** ppEntry( LookupEntry(i_rStreamName, i_rIdref) );
     Metadatable ** ppEntry = LookupEntry(i_rStreamName, i_rIdref);
     if (ppEntry)
     {

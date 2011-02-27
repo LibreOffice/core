@@ -238,7 +238,7 @@ void SfxURLToolBoxControl_Impl::StateChanged
 {
     if ( nSID == SID_OPENURL )
     {
-        // Disable URL box if command is disabled #111014#
+        // Disable URL box if command is disabled
         GetURLBox()->Enable( SFX_ITEM_DISABLED != eState );
     }
 

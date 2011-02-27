@@ -317,7 +317,7 @@ static gboolean display_menu_cb( GtkWidget *,
 
 #ifdef ENABLE_GIO
 /*
- * See rhbz#610103. If the quickstarter is running, then LibreOffice is
+ * If the quickstarter is running, then LibreOffice is
  * upgraded, then the old quickstarter is still running, but is now unreliable
  * as the old install has been deleted. A fairly intractable problem but we
  * can avoid much of the pain if we turn off the quickstarter if we detect

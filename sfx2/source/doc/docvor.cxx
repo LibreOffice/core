@@ -750,7 +750,7 @@ BOOL SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
             }
             if(!bCopy && &aSourceDoc != &aTargetDoc)
             {
-                //#109566# pool styles that are moved produce
+                //pool styles that are moved produce
                 //an rIdx == INDEX_IGNORE
                 //the method has to return true to keep the box content consistent
                 bRemovedFromSource = aSourceDoc->Remove(aSource[nSLevel+1],
@@ -759,7 +759,6 @@ BOOL SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
             }
         }
     }
-//  rIdx++;
     return (((rIdx != INDEX_IGNORE)|| bRemovedFromSource) && bOk )
         ? bKeepExpansion? (BOOL)2: TRUE: FALSE;
 }
@@ -959,12 +958,7 @@ BOOL SfxOrganizeListBox_Impl::EditedEntry(SvLBoxEntry* pEntry, const String& rTe
         ErrorBox( this, aResId ).Execute();
         return FALSE;
     }
-/*
-    else
-    {
-        SfxTemplateOrganizeDlg* pDlg = (SfxTemplateOrganizeDlg*)Window::GetParent();
-    }
-*/
+
     return TRUE;
 }
 

@@ -74,8 +74,6 @@ DECL_PTRARRAY( SfxViewFactoryArr_Impl, SfxViewFactory*, 2, 2 )
 
 DBG_NAME(SfxObjectFactory)
 
-//static SfxObjectFactoryArr_Impl* pObjFac = 0;
-
 //========================================================================
 
 struct SfxObjectFactory_Impl
@@ -348,37 +346,6 @@ String SfxObjectFactory::GetStandardTemplate( const String& rServiceName )
 
     return sTemplate;
 }
-
-/*
-const SfxObjectFactory* SfxObjectFactory::GetFactory( const String& rFactoryURL )
-{
-    const SfxObjectFactory* pFactory = 0;
-    String aFact( rFactoryURL );
-    String aPrefix( DEFINE_CONST_UNICODE( "private:factory/" ) );
-    if ( aPrefix.Len() == aFact.Match( aPrefix ) )
-        // Aufruf m"oglich mit z.B. "swriter" oder "private:factory/swriter"
-        aFact.Erase( 0, aPrefix.Len() );
-    sal_uInt16 nPos = aFact.Search( '?' );
-
-    // Etwaige Parameter abschneiden
-    aFact.Erase( nPos, aFact.Len() );
-
-    SfxApplication *pApp = SFX_APP();
-
-    // "swriter4" durch "swriter" ersetzen, zum Vergleichen uppercase verwenden
-    WildCard aSearchedFac( aFact.EraseAllChars('4').ToUpperAscii() );
-    for( sal_uInt16 n = GetObjectFactoryCount_Impl(); !pFactory && n--; )
-    {
-        pFactory = &GetObjectFactory_Impl( n );
-        String aCompareTo = String::CreateFromAscii( pFactory->GetShortName() );
-        aCompareTo.ToUpperAscii();
-        if( !aSearchedFac.Matches( aCompareTo ) )
-            pFactory = 0;
-    }
-
-    return pFactory;
-}
-*/
 
 const SfxFilter* SfxObjectFactory::GetTemplateFilter() const
 {

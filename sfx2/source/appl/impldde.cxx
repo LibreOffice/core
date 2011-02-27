@@ -128,9 +128,6 @@ IMPL_STATIC_LINK( SvDDELinkEditDialog, EditHdl_Impl, Edit *, pEdit )
     return 0;
 }
 
-/*  */
-
-
 SvDDEObject::SvDDEObject()
     : pConnection( 0 ), pLink( 0 ), pRequest( 0 ), pGetData( 0 ), nError( 0 )
 {
@@ -190,7 +187,6 @@ BOOL SvDDEObject::GetData( ::com::sun::star::uno::Any & rData /*out param*/,
     else
     {
         // otherwise it will be executed asynchronously
-//              if( !pLink || !pLink->IsBusy() )
         {
             if( pRequest )
                 delete pRequest;

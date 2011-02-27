@@ -1026,7 +1026,7 @@ void SfxFilterContainer::ReadSingleFilter_Impl(
         {
             nClipboardId = SotExchange::RegisterFormatName( sHumanName );
 
-            // #100570# For external filters ignore clipboard IDs
+            // For external filters ignore clipboard IDs
             if((nFlags & SFX_FILTER_STARONEFILTER) == SFX_FILTER_STARONEFILTER)
             {
                 nClipboardId = 0;

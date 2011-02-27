@@ -74,7 +74,6 @@ IFrameWindow_Impl::IFrameWindow_Impl( Window *pParent, sal_Bool bHasBorder, WinB
         SetBorderStyle( WINDOW_BORDER_NOBORDER );
     else
         SetBorderStyle( WINDOW_BORDER_NORMAL );
-    //SetActivateMode( ACTIVATE_MODE_GRABFOCUS );
 }
 
 void IFrameWindow_Impl::SetBorder( sal_Bool bNewBorder )
