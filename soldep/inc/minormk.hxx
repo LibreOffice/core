@@ -41,7 +41,7 @@ private:
     ByteString sBUILD;
     ByteString sLAST_MINOR;
 
-    BOOL bExists;
+    sal_Bool bExists;
 
     void ReadMinorMk( const String &rFileName );
 
@@ -72,6 +72,6 @@ public:
     ByteString GetLastMinor()
         { return sLAST_MINOR; }
 
-    BOOL Exists()
+    sal_Bool Exists()
         { return bExists; }
 };

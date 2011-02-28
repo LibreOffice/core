@@ -28,14 +28,20 @@
 $(eval $(call gb_Module_Module,ooo))
 
 $(eval $(call gb_Module_add_moduledirs,ooo,\
+    comphelper \
+        editeng \
     framework \
+    padmin \
     sfx2 \
+    sot \
     svl \
     svtools \
+    svx \
     sw \
     toolkit \
     tools \
     xmloff \
+    vbahelper \
 ))
 
 # vim: set noet ts=4 sw=4:

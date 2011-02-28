@@ -1946,49 +1946,6 @@ fi
 AC_SUBST(LFS_CFLAGS)
 
 dnl ===================================================================
-dnl Check if we are to enable vba macro interoperability feature
-dnl ===================================================================
-AC_MSG_CHECKING([whether to disable vba feature])
-if test -n "$enable_vba" && test "$enable_vba" = "no"; then
-   AC_MSG_RESULT([yes])
-   ENABLE_VBA=NO
-else
-   AC_MSG_RESULT([no])
-   ENABLE_VBA=YES
-fi
-AC_SUBST(ENABLE_VBA)
-
-if test "$ENABLE_VBA" = "YES"; then
-   AC_MSG_CHECKING([how to package the vba compatibility api])
-   if test -n "$with_vba_package_format"; then
-      if test "$with_vba_package_format" = "extn"; then
-         VBA_EXTENSION=YES
-         AC_MSG_RESULT([uno extension])
-         AC_MSG_WARN([--with-vba-package-format=extn can cause problems])
-      else if test "$with_vba_package_format" = "builtin"; then
-            VBA_EXTENSION=NO
-            AC_MSG_RESULT([build into installset])
-         else
-            AC_MSG_ERROR([unknown packaging method])
-         fi
-      fi
- 
-   else
-      VBA_EXTENSION=NO
-      AC_MSG_RESULT([defaulting to build into installset])
-   fi
-else
-      VBA_EXTENSION=NO
-fi
-AC_SUBST(VBA_EXTENSION)
-
-dnl ===================================================================
-dnl Check the whether vba need to be delivered as an uno package or part
-dnl of the install
-dnl ===================================================================
-
-
-dnl ===================================================================
 dnl Check if cups/cups.h is available 
 dnl ===================================================================
 if test "$test_cups" = "yes" -a "$ENABLE_CUPS" = "TRUE" ; then
@@ -2211,14 +2168,23 @@ _ACEOF
       MINGW_GCCLIB_EH=YES
   fi
   AC_MSG_CHECKING([whether to use dynamic libstdc++])
+  MINGW_SHARED_LIBSTDCPP=
   if test -e "$MINGW_CLIB_DIR/libstdc++_s.a" ; then
+    MINGW_SHARED_LIBSTDCPP=stdc++_s
+  fi
+  if test -e "$MINGW_CLIB_DIR/libstdc++.dll.a" ; then
+    MINGW_SHARED_LIBSTDCPP=stdc++.dll
+  fi
+  if test -n "$MINGW_SHARED_LIBSTDCPP" ; then
     AC_MSG_CHECKING([dynamic libstdc++ name])
-    MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/libstdc++_s.a | sed -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | sed -e 's@_@?@g'`
+    MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/lib$MINGW_SHARED_LIBSTDCPP.a | sed -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | sed -e 's@_@?@g'`
     MINGW_GXXDLL=`cd $COMPATH/bin && ls $MINGW_GXXDLL_pattern 2>/dev/null`
     if test -n "$MINGW_GXXDLL"; then
+        MINGW_SHARED_LIBSTDCPP=-l$MINGW_SHARED_LIBSTDCPP
         MINGW_SHARED_GXXLIB=YES
         AC_MSG_RESULT([use $MINGW_GXXDLL])
     else
+        MINGW_SHARED_LIBSTDCPP=
         AC_MSG_RESULT([no])
     fi
   else
@@ -2229,6 +2195,7 @@ _ACEOF
   AC_SUBST(MINGW_SHARED_GCCLIB)
   AC_SUBST(MINGW_GCCLIB_EH)
   AC_SUBST(MINGW_SHARED_GXXLIB)
+  AC_SUBST(MINGW_SHARED_LIBSTDCPP)
   AC_SUBST(MINGW_GCCDLL)
   AC_SUBST(MINGW_GXXDLL)
 fi
@@ -4690,6 +4657,7 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
    AC_LANG_PUSH([C++])
    AC_MSG_CHECKING([for unicode/rbbi.h])
    AC_TRY_CPP(unicode/rbbi.h, AC_MSG_RESULT([checked.]), AC_MSG_ERROR([icu headers not found.]))
+   AC_LANG_POP([C++])
    AC_PATH_PROG(SYSTEM_GENBRK, genbrk, [], [$PATH:/usr/sbin:/sbin])
    if test -z "$SYSTEM_GENBRK"; then
       AC_MSG_ERROR([\"genbrk\" not found in \$PATH, install the icu development tool \"genbrk"\])
@@ -4702,18 +4670,20 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
    if test -z "$SYSTEM_GENCMN"; then
       AC_MSG_ERROR([\"gencmn\" not found in \$PATH, install the icu development tool \"gencmn"\])
    fi
-   AC_MSG_CHECKING([ICU version])
-      AC_TRY_RUN([
-#include <unicode/uversion.h>
 
-int main(int argc, char **argv) {
-      if(U_ICU_VERSION_MAJOR_NUM < 4)
-        return 1;
-      else
-        return 0;
-}
-      ], [AC_MSG_RESULT(OK)], [AC_MSG_ERROR([not suitable, only >= 4.0 supported currently])])
-      AC_LANG_POP([C++])
+   AC_PATH_PROG( ICUCONFIG, icu-config)
+   AC_MSG_CHECKING([ICU version])
+   ICU_VERSION=`$ICUCONFIG --version`
+   ICU_MAJOR=`$ICUCONFIG --version | cut -d"." -f1`
+   ICU_MINOR=`$ICUCONFIG --version | cut -d"." -f2`
+   ICU_MICRO=`$ICUCONFIG --version | cut -d"." -f3`
+
+   if test "$ICU_MAJOR" -ge "4"; then
+      AC_MSG_RESULT([OK])
+   else
+      AC_MSG_ERROR([not suitable, only >= 4.0 supported currently])
+   fi
+
 else
     AC_MSG_RESULT([internal])
     SYSTEM_ICU=NO
@@ -4723,6 +4693,9 @@ AC_SUBST(SYSTEM_ICU)
 AC_SUBST(SYSTEM_GENBRK)
 AC_SUBST(SYSTEM_GENCCODE)
 AC_SUBST(SYSTEM_GENCMN)
+AC_SUBST(ICU_MAJOR)
+AC_SUBST(ICU_MINOR)
+AC_SUBST(ICU_MICRO)
 
 dnl ===================================================================
 dnl Graphite
@@ -5469,19 +5442,19 @@ else
    fi
 fi
 
-AC_MSG_CHECKING([whether $GNUCP is GNU cp])
-if $GNUCP --version 2>/dev/null | grep "Free Software Foundation" >/dev/null 2>/dev/null; then
+AC_MSG_CHECKING([whether $GNUCP is GNU cp from coreutils with preserve= support])
+if $GNUCP --version 2>/dev/null | grep "coreutils" >/dev/null 2>/dev/null; then
    AC_MSG_RESULT([yes])
 else
-   if $GNUCP --version 2>/dev/null | grep "GNU fileutils" >/dev/null 2>/dev/null; then
-      AC_MSG_RESULT([yes])
+   AC_MSG_RESULT([no])
+   GNUCP=''
+fi
+
+if test -z "$GNUCP"; then
+   if test "$_os" = "SunOS" -o "$_os" = "FreeBSD"; then
+      AC_MSG_ERROR([no, GNU cp from coreutils is needed. install or specify with --with-gnu-cp=/path/to/it])
    else
-      if test "$_os" = "SunOS" -o "$_os" = "FreeBSD"; then
-         AC_MSG_ERROR([no, GNU cp needed. install or specify with --with-gnu-cp=/path/to/it])
-      else
-         GNUCP=''
-         AC_MSG_RESULT([no gnucp found - using the system's cp command])
-      fi
+      AC_MSG_RESULT([no GNU cp from coreutils found - using the system's cp command])
    fi
 fi
 

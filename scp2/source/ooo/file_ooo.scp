@@ -135,35 +135,6 @@ End
 #endif
 #endif
 
-File gid_File_Bin_Gengal
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-  #ifdef UNX
-    Name = "gengal.bin";
-  #else
-    Name = "gengal.exe";
-  #endif
-End
-
-#ifdef UNX
-
-File gid_File_Script_Gengal
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-    Name = "gengal";
-End
-
-#endif
-
-File gid_File_Profile_Gengal
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-    Name = PROFILENAME(gengal);
-End
-
 #if !defined(WITHOUT_MOZILLA) && defined(UNX) && !defined(QUARTZ)
 
 File gid_File_Bin_Pluginapp
@@ -926,9 +897,16 @@ File gid_File_Lm_Scots_Gaelic
     Styles = (PACKED);
 End
 
-File gid_File_Lm_Serbian_Ascii
+File gid_File_Lm_Serbian
     TXT_FILE_BODY;
-    Name = "serbian_ascii.lm";
+    Name = "serbian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Serbian_Latin
+    TXT_FILE_BODY;
+    Name = "serbian-latin.lm";
     Dir = gid_Dir_Share_Fingerprint;
     Styles = (PACKED);
 End
@@ -1183,23 +1161,12 @@ File gid_File_Rdb_Offapi
     Name = "offapi.rdb";
 End
 
-#if defined ENABLE_VBA
-#ifndef VBA_EXTENSION
 File gid_File_Rdb_TypesVba
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
     Styles = (PACKED, OVERWRITE);
     Name = "oovbaapi.rdb";
 End
-#else
-File gid_File_ExtnVba
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Styles = (PACKED, OVERWRITE);
-    Name = "vbaapi.oxt";
-End
-#endif
-#endif
 
 File gid_File_Registry_Lang
     Dir = gid_Dir_Share_Registry_Res;

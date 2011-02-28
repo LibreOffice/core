@@ -32,13 +32,12 @@
 # SdiTarget class
 
 gb_SdiTarget_SVIDLTARGET := $(call gb_Executable_get_target,svidl)
-gb_SdiTarget_SVIDLAUXDEPS := $(call gb_Library_get_target,tl) $(call gb_Library_get_target,sal)
 gb_SdiTarget_SVIDLCOMMAND := $(gb_SdiTarget_SVIDLPRECOMMAND) $(gb_SdiTarget_SVIDLTARGET)
 
-$(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi | $(gb_SdiTarget_SVIDLTARGET) $(gb_SdiTarget_SVIDLAUXDEPS)
+$(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi | $(gb_SdiTarget_SVIDLTARGET)
     $(call gb_Output_announce,$*,$(true),SDI,1)
     $(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $(WORKDIR)/inc/$*) $(dir $@))
+        mkdir -p $(dir $@))
     $(call gb_Helper_abbreviate_dirs_native,\
         cd $(dir $<) && \
         $(gb_SdiTarget_SVIDLCOMMAND) -quiet \
@@ -60,7 +59,7 @@ $(call gb_SdiTarget_get_clean_target,%) :
             $(call gb_SdiTarget_get_target,$*))
 
 define gb_SdiTarget_SdiTarget
-$(call gb_SdiTarget_get_target,$(1)) : INCLUDE := -I$(WORKDIR)/inc/ $$(subst -I. ,-I$$(dir $(SRCDIR)/$(1)) ,$$(SOLARINC))
+$(call gb_SdiTarget_get_target,$(1)) : INCLUDE := $$(subst -I. ,-I$$(dir $(SRCDIR)/$(1)) ,$$(SOLARINC))
 $(call gb_SdiTarget_get_target,$(1)) : EXPORTS := $(SRCDIR)/$(2).sdi
 endef
 
