@@ -43,18 +43,16 @@ include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
 COMPONENT_NAME=DocumentLoader
-COMPONENT_RDB_NAME = $(COMPONENT_NAME).rdb
-COMPONENT_RDB = $(OUT_BIN)/$(COMPONENT_RDB_NAME)
 
 OUT_COMP_INC = $(OUT_INC)/$(COMPONENT_NAME)
 OUT_COMP_GEN = $(OUT_MISC)/$(COMPONENT_NAME)
 OUT_COMP_OBJ=$(OUT_OBJ)/$(COMPONENT_NAME)
 
-COMPOENNT_ENV_FLAG = $(OUT_MISC)/cpp_$(COMPONENT_NAME)_prepare_env.flag
-
 CXXFILES = DocumentLoader.cxx
 
 OBJFILES = $(patsubst %.cxx,$(OUT_SLO_COMP)/%.$(OBJ_EXT),$(CXXFILES))
+
+ENV_OFFICE_TYPES=-env:URE_MORE_TYPES=file://$(OFFICE_TYPES)
 
 # Targets
 .PHONY: ALL
@@ -62,12 +60,6 @@ ALL : \
 	CppDocumentLoaderExample
 
 include $(SETTINGS)/stdtarget.mk
-
-# This example type library will be extended by the URE and office types
-$(OUT_BIN)/%.rdb :
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
-	$(REGMERGE) $@ / $(URE_TYPES) $(OFFICE_TYPES) 
 
 $(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(SDKTYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
@@ -87,41 +79,30 @@ ifeq "$(OS)" "MACOSX"
 endif
 endif
 
-$(COMPOENNT_ENV_FLAG) : $(COMPONENT_RDB)
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
-	@echo --------------------------------------------------------------------------------
-	@echo        Register necessary runtime components in the DocumentLoader.rdb 
-	@echo --------------------------------------------------------------------------------
-	$(REGCOMP) -register -r $(COMPONENT_RDB) -c connector.uno.$(SHAREDLIB_EXT)
-	$(REGCOMP) -register -r $(COMPONENT_RDB) -c remotebridge.uno.$(SHAREDLIB_EXT)
-	$(REGCOMP) -register -r $(COMPONENT_RDB) -c bridgefac.uno.$(SHAREDLIB_EXT)
-	$(REGCOMP) -register -r $(COMPONENT_RDB) -c uuresolver.uno.$(SHAREDLIB_EXT)
-	@echo bla > $@
-
-CppDocumentLoaderExample : $(OUT_BIN)/DocumentLoader$(EXE_EXT) $(COMPOENNT_ENV_FLAG)
+CppDocumentLoaderExample : $(OUT_BIN)/DocumentLoader$(EXE_EXT)
 	@echo --------------------------------------------------------------------------------
 	@echo The example loads the "$(QM)test.odt$(QM)" document in the DocumentLoader example directory.
-	@echo I you want to load your own document, please use: DocumentLoader "$(QM)filename$(QM)" [connection_url]
+	@echo If you want to load your own document, please use: 
+	@echo $(SQM)  $(SQM)DocumentLoader -env:URE_MORE_TYPES="$(QM)<fileurl_office_types_rdb>$(QM)" "$(QM)filename$(QM)" [connection_url]
 	@echo -
 	@echo Use the following command to execute the example!
 	@echo -
 	@echo $(MAKE) DocumentLoader.run
 	@echo -
 	@echo NOTE: This example does not use the new UNO bootstrap mechanism, it uses still a socket
-	@echo $(SQM)      $(SQM)connection. Before you can run this example you have to start your office in listening mode. 
+	@echo $(SQM)      $(SQM)connection. The example use the defaultBootstrap_InitialComponentContext method and provides 
+	@echo $(SQM)      $(SQM)the additional office types via the UNO environment variable -env:URE_MORE_TYPES=... 
+	@echo $(SQM)      $(SQM)Before you can run this example you have to start your office in listening mode.
 	@echo -
 	@echo $(SQM)  $(SQM)soffice "$(QM)-accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager$(QM)"
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_BIN)/DocumentLoader$(EXE_EXT)
-	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@) $(subst \\,/,$(subst /,$(PS),"$(OO_SDK_HOME)/examples/cpp/DocumentLoader/test.odt"))
+	cd $(subst /,$(PS),$(OUT_BIN)) && $(basename $@) $(ENV_OFFICE_TYPES) $(subst \\,/,$(subst /,$(PS),"$(OO_SDK_HOME)/examples/cpp/DocumentLoader/test.odt"))
 
 .PHONY: clean
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_INC))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_OBJ))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPOENNT_ENV_FLAG)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_RDB)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/DocumentLoader*))
