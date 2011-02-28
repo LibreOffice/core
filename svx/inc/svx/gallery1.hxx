@@ -31,12 +31,10 @@
 
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
-#include <tools/list.hxx>
 #include <svl/brdcst.hxx>
 #include "svx/svxdllapi.h"
 
 #include <cstdio>
-#include <list>
 #include <vector>
 
 // ---------------------
@@ -120,6 +118,7 @@ SvStream& operator>>( SvStream& rIn, GalleryImportThemeEntry& rEntry );
 
 class SfxListener;
 class GalleryTheme;
+class GalleryThemeCacheEntry;
 
 class Gallery : public SfxBroadcaster
 {
@@ -127,11 +126,13 @@ class Gallery : public SfxBroadcaster
     friend Gallery* createGallery( const rtl::OUString& );
     friend void disposeGallery( Gallery* );
 
+    typedef std::vector<GalleryThemeCacheEntry*> GalleryCacheThemeList;
+
 private:
 
     GalleryThemeList            aThemeList;
     GalleryImportThemeList      aImportList;
-    List                        aThemeCache;
+    GalleryCacheThemeList       aThemeCache;
     INetURLObject               aRelURL;
     INetURLObject               aUserURL;
     rtl_TextEncoding            nReadTextEncoding;

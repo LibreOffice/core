@@ -838,11 +838,14 @@ GalleryTheme* Gallery::ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry 
 
     if( pThemeEntry )
     {
-        GalleryThemeCacheEntry* pEntry;
-
-        for( pEntry = (GalleryThemeCacheEntry*) aThemeCache.First(); pEntry && !pTheme; pEntry = (GalleryThemeCacheEntry*) aThemeCache.Next() )
-            if( pThemeEntry == pEntry->GetThemeEntry() )
-                pTheme = pEntry->GetTheme();
+        for (GalleryCacheThemeList::const_iterator it = aThemeCache.begin(); it != aThemeCache.end(); ++it)
+        {
+            if (pThemeEntry == (*it)->GetThemeEntry())
+            {
+                pTheme = (*it)->GetTheme();
+                break;
+            }
+        }
 
         if( !pTheme )
         {
@@ -874,7 +877,7 @@ GalleryTheme* Gallery::ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry 
             }
 
             if( pTheme )
-                aThemeCache.Insert( new GalleryThemeCacheEntry( pThemeEntry, pTheme ), LIST_APPEND );
+                aThemeCache.push_back( new GalleryThemeCacheEntry( pThemeEntry, pTheme ));
         }
     }
 
@@ -885,15 +888,13 @@ GalleryTheme* Gallery::ImplGetCachedTheme( const GalleryThemeEntry* pThemeEntry 
 
 void Gallery::ImplDeleteCachedTheme( GalleryTheme* pTheme )
 {
-    GalleryThemeCacheEntry* pEntry;
-    BOOL                                    bDone = FALSE;
-
-    for( pEntry = (GalleryThemeCacheEntry*) aThemeCache.First(); pEntry && !bDone; pEntry = (GalleryThemeCacheEntry*) aThemeCache.Next() )
+    for (GalleryCacheThemeList::iterator it = aThemeCache.begin(); it != aThemeCache.end(); ++it)
     {
-        if( pTheme == pEntry->GetTheme() )
+        if (pTheme == (*it)->GetTheme())
         {
-            delete (GalleryThemeCacheEntry*) aThemeCache.Remove( pEntry );
-            bDone = TRUE;
+            delete *it;
+            aThemeCache.erase(it);
+            break;
         }
     }
 }
