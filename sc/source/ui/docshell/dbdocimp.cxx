@@ -137,7 +137,7 @@ sal_Bool ScDBDocFunc::DoImportUno( const ScAddress& rPos,
 
 // -----------------------------------------------------------------
 
-BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
+sal_Bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         const svx::ODataAccessDescriptor* pDescriptor, sal_Bool bRecord, sal_Bool bAddrInsert )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -350,7 +350,7 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                                 sal_Int32 nNextRow = 0;
                                 aSelection[nListPos] >>= nNextRow;
                                 if ( nRowsRead+1 < nNextRow )
-                                    bRealSelection = TRUE;
+                                    bRealSelection = sal_True;
                                 bEnd = !xRowSet->absolute(nRowsRead = nNextRow);
                             }
                             ++nListPos;

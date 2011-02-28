@@ -207,7 +207,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             {
                 const SfxPoolItem* pItem;
                 svx::ODataAccessDescriptor aDesc;
-                if ( pReqArgs->GetItemState( nSlot, TRUE, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET )
                 {
                     uno::Any aAny = static_cast<const SfxUsrAnyItem*>(pItem)->GetValue();
                     uno::Sequence<beans::PropertyValue> aProperties;

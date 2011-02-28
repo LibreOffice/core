@@ -1532,7 +1532,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                     const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
                     SfxItemSet* pDefaults = new SfxItemSet( pEngine->GetEmptyItemSet() );
                     pPattern->FillEditItemSet( pDefaults );
-                    pEngine->SetDefaults( pDefaults, TRUE );
+                    pEngine->SetDefaults( pDefaults, sal_True );
 
                     if ( eType == CELLTYPE_STRING )
                         pEngine->SetText( static_cast<const ScStringCell*>(pCell)->GetString() );
@@ -1543,7 +1543,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                     }
                     pEngine->ClearModifyFlag();
 
-                    USHORT nLastPar = pEngine->GetParagraphCount();
+                    sal_uInt16 nLastPar = pEngine->GetParagraphCount();
                     if (nLastPar)
                         --nLastPar;
                     xub_StrLen nTxtLen = pEngine->GetTextLen(nLastPar);
@@ -1558,7 +1558,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                         {
                             // remove defaults (paragraph attributes) before creating text object
                             SfxItemSet* pEmpty = new SfxItemSet( pEngine->GetEmptyItemSet() );
-                            pEngine->SetDefaults( pEmpty, TRUE );
+                            pEngine->SetDefaults( pEmpty, sal_True );
 
                             EditTextObject* pNewData = pEngine->CreateTextObject();
                             PutCell( nCol, nRow, nTab,

@@ -2723,7 +2723,7 @@ sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, rtl::OUString
                 if (pFCell->IsValue())
                 {
                     double fVal = pFCell->GetValue();
-                    ULONG nIndex = pFormatter->GetStandardFormat(
+                    sal_uInt32 nIndex = pFormatter->GetStandardFormat(
                                         NUMBERFORMAT_NUMBER,
                                         ScGlobal::eLnge);
                     pFormatter->GetInputLineString(fVal, nIndex, aStr);
@@ -2735,7 +2735,7 @@ sal_uInt16 ScDocument::GetStringForFormula( const ScAddress& rPos, rtl::OUString
             case CELLTYPE_VALUE:
             {
                 double fVal = static_cast<ScValueCell*>(pCell)->GetValue();
-                ULONG nIndex = pFormatter->GetStandardFormat(
+                sal_uInt32 nIndex = pFormatter->GetStandardFormat(
                                         NUMBERFORMAT_NUMBER,
                                         ScGlobal::eLnge);
                 pFormatter->GetInputLineString(fVal, nIndex, aStr);

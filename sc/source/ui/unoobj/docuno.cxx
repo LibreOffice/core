@@ -910,7 +910,7 @@ sal_Bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
                 if ( pExtOpt && pExtOpt->IsChanged() )
                 {
                     pViewSh->GetViewData()->ReadExtOptions(*pExtOpt);        // Excel view settings
-                    pViewSh->SetTabNo( pViewSh->GetViewData()->GetTabNo(), TRUE );
+                    pViewSh->SetTabNo( pViewSh->GetViewData()->GetTabNo(), sal_True );
                     pExtOpt->SetChanged( false );
                 }
 

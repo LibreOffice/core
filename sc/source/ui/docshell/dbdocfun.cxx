@@ -1475,7 +1475,7 @@ void ScDBDocFunc::UpdateImport( const String& rTarget, const svx::ODataAccessDes
     aImportParam.bSql       = ( nCommandType == sdb::CommandType::COMMAND );
     aImportParam.aStatement = sDBTable;
     aImportParam.bNative    = sal_False;
-    aImportParam.nType      = static_cast<BYTE>( ( nCommandType == sdb::CommandType::QUERY ) ? ScDbQuery : ScDbTable );
+    aImportParam.nType      = static_cast<sal_uInt8>( ( nCommandType == sdb::CommandType::QUERY ) ? ScDbQuery : ScDbTable );
     aImportParam.bImport    = sal_True;
 
     sal_Bool bContinue = DoImport( nTab, aImportParam, &rDescriptor, sal_True );

@@ -1908,10 +1908,10 @@ void ScOutputData::DrawStrings( sal_Bool bPixelToLogic )
 ScFieldEditEngine* ScOutputData::CreateOutputEditEngine()
 {
     ScFieldEditEngine* pEngine = new ScFieldEditEngine( pDoc->GetEnginePool() );
-    pEngine->SetUpdateMode( FALSE );
+    pEngine->SetUpdateMode( sal_False );
     // a RefDevice always has to be set, otherwise EditEngine would create a VirtualDevice
     pEngine->SetRefDevice( pFmtDevice );
-    ULONG nCtrl = pEngine->GetControlWord();
+    sal_uInt32 nCtrl = pEngine->GetControlWord();
     if ( bShowSpellErrors )
         nCtrl |= EE_CNTRL_ONLINESPELLING;
     if ( eType == OUTTYPE_PRINTER )

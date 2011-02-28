@@ -881,7 +881,7 @@ FltError ImportExcel8::Read( void )
                         case Biff8V:    // VB module
                         default:
                             // TODO: do not create a sheet in the Calc document
-                            pD->SetVisible( GetCurrScTab(), FALSE );
+                            pD->SetVisible( GetCurrScTab(), sal_False );
                             XclTools::SkipSubStream( maStrm );
                             IncCurrScTab();
                     }

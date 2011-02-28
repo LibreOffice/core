@@ -76,7 +76,7 @@ public:
     sal_Bool        DoImport( SCTAB nTab, const ScImportParam& rParam,
                         const svx::ODataAccessDescriptor* pDescriptor,      // used for selection and existing ResultSet
                         sal_Bool bRecord,
-                        sal_Bool bAddrInsert = FALSE );
+                        sal_Bool bAddrInsert = sal_False );
 
     sal_Bool        DoImportUno( const ScAddress& rPos,
                                 const com::sun::star::uno::Sequence<

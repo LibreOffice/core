@@ -375,11 +375,11 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
     long   nRightMargin = 0;
     long   nTopMargin = 0;
     long   nBottomMargin = 0;
-    BOOL   bHeaderOn = FALSE;
-    BOOL   bFooterOn = FALSE;
+    sal_Bool bHeaderOn = sal_False;
+    sal_Bool bFooterOn = sal_False;
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    BOOL   bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
     Size aLocalPageSize;
     if ( bValidPage )

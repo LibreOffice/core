@@ -1698,7 +1698,7 @@ void ScHorizontalCellIterator::SetTab( SCTAB nTabP )
     nTab = nTabP;
     nRow = nStartRow;
     nCol = nStartCol;
-    bMore = TRUE;
+    bMore = sal_True;
 
     for (SCCOL i=nStartCol; i<=nEndCol; i++)
     {
@@ -1837,7 +1837,7 @@ ScHorizontalValueIterator::~ScHorizontalValueIterator()
     delete pCellIter;
 }
 
-bool ScHorizontalValueIterator::GetNext( double& rValue, USHORT& rErr )
+bool ScHorizontalValueIterator::GetNext( double& rValue, sal_uInt16& rErr )
 {
     bool bFound = false;
     while ( !bFound )
@@ -1914,7 +1914,7 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, USHORT& rErr )
     return bFound;
 }
 
-void ScHorizontalValueIterator::GetCurNumFmtInfo( short& nType, ULONG& nIndex )
+void ScHorizontalValueIterator::GetCurNumFmtInfo( short& nType, sal_uInt32& nIndex )
 {
     if (!bNumValid)
     {

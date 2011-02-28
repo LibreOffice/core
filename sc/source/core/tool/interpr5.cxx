@@ -2348,7 +2348,7 @@ void ScInterpreter::ScRKP()
 
 void ScInterpreter::CalulateRGPRKP(bool _bRKP)
 {
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 1, 4 ) )
         return;
     bool bConstant, bStats;
@@ -2881,7 +2881,7 @@ void ScInterpreter::ScGrowth()
 
 void ScInterpreter::CalculateTrendGrowth(bool _bGrowth)
 {
-    BYTE nParamCount = GetByte();
+    sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 1, 4 ) )
         return;
 
