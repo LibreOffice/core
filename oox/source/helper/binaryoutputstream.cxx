@@ -52,7 +52,7 @@ BinaryXOutputStream::BinaryXOutputStream( const Reference< XOutputStream >& rxOu
     BinaryXSeekableStream( Reference< XSeekable >( rxOutStrm, UNO_QUERY ) ),
     maBuffer( OUTPUTSTREAM_BUFFERSIZE ),
     mxOutStrm( rxOutStrm ),
-    mbAutoClose( bAutoClose )
+    mbAutoClose( bAutoClose && rxOutStrm.is() )
 {
     mbEof = !mxOutStrm.is();
 }
@@ -64,7 +64,7 @@ BinaryXOutputStream::~BinaryXOutputStream()
 
 void BinaryXOutputStream::close()
 {
-    OSL_ENSURE( mxOutStrm.is(), "BinaryXOutputStream::close - invalid call" );
+    OSL_ENSURE( !mbAutoClose || mxOutStrm.is(), "BinaryXOutputStream::close - invalid call" );
     if( mxOutStrm.is() ) try
     {
         mxOutStrm->flush();
@@ -76,6 +76,7 @@ void BinaryXOutputStream::close()
         OSL_ENSURE( false, "BinaryXOutputStream::close - closing output stream failed" );
     }
     mxOutStrm.clear();
+    mbAutoClose = false;
     BinaryXSeekableStream::close();
 }
 
