@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,46 +25,11 @@
 #
 #*************************************************************************
 
-PRJ=..
+$(eval $(call gb_Module_Module,regexp))
 
-PRJNAME=regexp
-TARGET=i18nregexp
-LIBTARGET=NO
+$(eval $(call gb_Module_add_targets,regexp,\
+	Library_regexp \
+	Package_inc \
+))
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :	settings.mk
-
-# --- Files --------------------------------------------------------
-
-EXCEPTIONSFILES= \
-        $(SLO)$/reclass.obj
-
-SLOFILES= \
-        $(EXCEPTIONSFILES)
-
-SHL1TARGET=		$(TARGET)$(COMID)
-SHL1IMPLIB=     i$(TARGET)
-DEF1DEPN=		$(MISC)$/$(SHL1TARGET).flt
-SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=		$(SHL1TARGET)
-DEFLIB1NAME=	$(SHL1TARGET)
-
-SHL1OBJS=		$(SLOFILES)
-
-LIB1TARGET=		$(SLB)$/$(SHL1TARGET).lib
-LIB1OBJFILES=	$(SHL1OBJS)
-
-SHL1STDLIBS= \
-                $(SALLIB) \
-                $(I18NUTILLIB)
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	target.mk
-
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo CLEAR_THE_FILE > $@
-    @echo __CT >> $@
+# vim: set noet sw=4 ts=4:

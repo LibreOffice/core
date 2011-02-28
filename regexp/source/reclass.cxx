@@ -25,9 +25,6 @@
  *
  ************************************************************************/
 
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_regexp.hxx"
 /* Extended regular expression matching and search library,
    version 0.12.
    (Implements POSIX draft P1003.2/D11.2, except for some of the
@@ -53,6 +50,7 @@
     Modified for OpenOffice.org to use sal_Unicode and Transliteration service.
  */
 
+#include <regexp/reclass.hxx>
 
 #if 0
 /* If for any reason (porting, debug) we can't use alloca() use malloc()
@@ -73,9 +71,6 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
-
-#include "reclass.hxx"
-
 
 /* Maximum number of duplicates an interval can allow.  Some systems
    (erroneously) define this in other header files, but we want our

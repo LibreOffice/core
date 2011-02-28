@@ -1,4 +1,2 @@
 re  regexp : offapi comphelper i18nutil sal NULL
-re  regexp                                      usr1    -   all re_mkout NULL
-re  regexp\inc                                  nmake   -   all re_inc NULL
-re  regexp\source                               nmake   -   all re_source re_inc NULL
+re  regexp\prj                                  nmake   -   all re_prj NULL

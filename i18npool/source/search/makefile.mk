@@ -55,12 +55,6 @@ EXCEPTIONSNOOPTFILES= \
 SHL1TARGET= $(TARGET)
 SHL1OBJS=	$(SLOFILES)
 
-.IF ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
-I18NREGEXPLIB=-li18nregexp$(COMID)
-.ELSE
-I18NREGEXPLIB=ii18nregexp.lib
-.ENDIF
-
 SHL1STDLIBS= \
                 $(CPPULIB) \
                 $(CPPUHELPERLIB) \
