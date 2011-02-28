@@ -851,3 +851,18 @@
                  hash_float_combine(seed, part);
              }
  
+--- misc/boost_1_44_0/boost/dynamic_bitset.hpp	2011-02-28 17:10:13.892131527 +0000
++++ misc/build/boost_1_44_0/boost/dynamic_bitset/dynamic_bitset.hpp	2011-02-28 17:11:05.868726195 +0000
+@@ -1108,10 +1108,10 @@
+   // beyond the "allowed" positions
+   typedef unsigned long result_type;
+ 
+-  const size_type max_size =
++  const size_type max_size_ =
+             (std::min)(m_num_bits, static_cast<size_type>(ulong_width));
+ 
+-  const size_type last_block = block_index( max_size - 1 );
++  const size_type last_block = block_index( max_size_ - 1 );
+ 
+   assert((last_block * bits_per_block) < static_cast<size_type>(ulong_width));
+ 
