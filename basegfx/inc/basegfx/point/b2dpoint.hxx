@@ -47,7 +47,7 @@ namespace basegfx
 
         @see B2DTuple
     */
-    class BASEGFX_DLLPUBLIC B2DPoint : public ::basegfx::B2DTuple
+    class B2DPoint : public ::basegfx::B2DTuple
     {
     public:
         /** Create a 2D Point
@@ -121,14 +121,14 @@ namespace basegfx
         /** assignment operator to allow assigning the results
             of B2DTuple calculations
         */
-        B2DPoint& operator=( const ::basegfx::B2DTuple& rPoint );
+        BASEGFX_DLLPUBLIC B2DPoint& operator=( const ::basegfx::B2DTuple& rPoint );
 
         /** Transform point by given transformation matrix.
 
             The translational components of the matrix are, in
             contrast to B2DVector, applied.
         */
-        B2DPoint& operator*=( const ::basegfx::B2DHomMatrix& rMat );
+        BASEGFX_DLLPUBLIC B2DPoint& operator*=( const ::basegfx::B2DHomMatrix& rMat );
 
         static const B2DPoint& getEmptyPoint()
         {

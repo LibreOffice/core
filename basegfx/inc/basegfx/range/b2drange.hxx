@@ -42,7 +42,7 @@ namespace basegfx
     class B2IRange;
     class B2DHomMatrix;
 
-    class BASEGFX_DLLPUBLIC B2DRange
+    class B2DRange
     {
     public:
         typedef double          ValueType;
@@ -83,7 +83,7 @@ namespace basegfx
         {
         }
 
-        explicit B2DRange(const B2IRange& rRange);
+        BASEGFX_DLLPUBLIC explicit B2DRange(const B2IRange& rRange);
 
         bool isEmpty() const
         {
@@ -252,7 +252,7 @@ namespace basegfx
             maRangeY.grow(fValue);
         }
 
-        void transform(const B2DHomMatrix& rMatrix);
+        BASEGFX_DLLPUBLIC void transform(const B2DHomMatrix& rMatrix);
 
     private:
         typedef ::basegfx::BasicRange< ValueType, TraitsType >  MyBasicRange;
