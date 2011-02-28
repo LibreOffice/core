@@ -82,7 +82,7 @@
 // <--
 
 /*--------------------------------------------------------------------
-    Beschreibung:   KeyEvents
+    Description:    KeyEvents
  --------------------------------------------------------------------*/
 static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, BOOL bBalloon )
 {
@@ -313,7 +313,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                             {
                                 break;
                             }
-                        case RES_INPUTFLD:  // BubbleHelp, da der Hinweis ggf ziemlich lang sein kann
+                        case RES_INPUTFLD:  // BubbleHelp, because the suggestion could be quite long
                             bBalloon = TRUE;
                             /* no break */
                         case RES_JUMPEDITFLD:
@@ -381,7 +381,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     Help::ShowBalloon( this, rEvt.GetMousePosPixel(), sTxt );
                 else
                 {
-                    // dann zeige die Hilfe mal an:
+                    // the show the help
                     Rectangle aRect( aFldRect.SVRect() );
                     Point aPt( OutputToScreenPixel( LogicToPixel( aRect.TopLeft() )));
                     aRect.Left()   = aPt.X();
@@ -445,7 +445,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
         if ((pField = aVEvt.pURLField) != 0)
         {
-            // URL-Feld getroffen
+            // hit an URL field
             if (pField)
             {
                 pObj = aVEvt.pObj;
@@ -456,7 +456,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         }
         if (bWeiter && eHit == SDRHIT_TEXTEDIT)
         {
-            // URL-Feld in zum Editieren ge?ffneten DrawText-Objekt suchen
+            // look for URL field in DrawText object that is opened for editing
             OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
             const SvxFieldItem* pFieldItem;
 
@@ -519,15 +519,15 @@ void  SwEditWin::Paint(const Rectangle& rRect)
     if( pShadCrsr )
     {
         Rectangle aRect( pShadCrsr->GetRect());
-        // liegt vollstaendig drin?
+        // fully resides inside?
         if( rRect.IsInside( aRect ) )
             // dann aufheben
             delete pShadCrsr, pShadCrsr = 0;
         else if( rRect.IsOver( aRect ))
         {
-            // liegt irgendwie drueber, dann ist alles ausserhalb geclippt
-            // und wir muessen den "inneren Teil" am Ende vom Paint
-            // wieder sichtbar machen. Sonst kommt es zu Paintfehlern!
+            // resides somewhat above, then everything is clipped outside
+            // and we have to make the "inner part" at the end of the
+            // Paint visible again. Otherwise Paint errors occur!
             bPaintShadowCrsr = TRUE;
         }
     }

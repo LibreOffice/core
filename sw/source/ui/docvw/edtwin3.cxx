@@ -51,7 +51,7 @@
 
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Core-Notify
+    Description:    Core-Notify
  --------------------------------------------------------------------*/
 
 
@@ -65,7 +65,7 @@ void ScrollMDI( ViewShell* pVwSh, const SwRect &rRect,
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Docmdi - verschiebbar
+    Description:    Docmdi - movable
  --------------------------------------------------------------------*/
 
 
@@ -79,7 +79,7 @@ BOOL IsScrollMDI( ViewShell* pVwSh, const SwRect &rRect )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Notify fuer Groessen-Aenderung
+    Description:    Notify for size change
  --------------------------------------------------------------------*/
 
 
@@ -97,7 +97,7 @@ void SizeNotify(ViewShell* pVwSh, const Size &rSize)
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Notify fuer Seitenzahl-Update
+    Description:    Notify for page number update
  --------------------------------------------------------------------*/
 
 
@@ -112,8 +112,8 @@ void PageNumNotify( ViewShell* pVwSh, USHORT nPhyNum, USHORT nVirtNum,
 }
 
 /******************************************************************************
- *  Methode     :   void FrameNotify( DocMDIBase *pWin, FlyMode eMode )
- *  Beschreibung:
+ *  Method      :   void FrameNotify( DocMDIBase *pWin, FlyMode eMode )
+ *  Description:
  ******************************************************************************/
 
 
@@ -125,7 +125,7 @@ void FrameNotify( ViewShell* pVwSh, FlyMode eMode )
 }
 
 /*--------------------------------------------------------------------
-    Beschreibung:   Notify fuer Seitenzahl-Update
+    Description:    Notify for page number update
  --------------------------------------------------------------------*/
 BOOL SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, BOOL bVerticalMode)
 {
@@ -185,16 +185,16 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     switch( rDCEvt.GetType() )
     {
     case DATACHANGED_SETTINGS:
-        // ScrollBars neu anordnen bzw. Resize ausloesen, da sich
-        // ScrollBar-Groesse geaendert haben kann. Dazu muss dann im
-        // Resize-Handler aber auch die Groesse der ScrollBars aus
-        // den Settings abgefragt werden.
+        // rearrange ScrollBars, respectively trigger resize, because
+        // the ScrollBar size can have change. For that, in the reset
+        // handler, the size of the ScrollBars also has to be queried
+        // from the settings.
         if( rDCEvt.GetFlags() & SETTINGS_STYLE )
         {
             pSh->LockPaint();
             bUnlockPaint = TRUE;
             ViewShell::DeleteReplacementBitmaps();
-            GetView().InvalidateBorder();               //Scrollbarbreiten
+            GetView().InvalidateBorder();               //Scrollbar work
         }
         break;
 
@@ -204,7 +204,7 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     case DATACHANGED_FONTSUBSTITUTION:
         pSh->LockPaint();
         bUnlockPaint = TRUE;
-        GetView().GetDocShell()->UpdateFontList();  //z.B. Druckerwechsel
+        GetView().GetDocShell()->UpdateFontList();  //e.g. printer change
         break;
     }
     pSh->LockView( bViewWasLocked );
