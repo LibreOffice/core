@@ -138,6 +138,7 @@ class SwPageFrm: public SwFtnBossFrm
     static void GetBottomShadowRect( const SwRect& _rPageRect,
                                      ViewShell*    _pViewShell,
                                      SwRect&       _orBottomShadowRect,
+                                     bool bFullBottomShadow,
                                      bool bRightSidebar );
 
     /** adds the sidebar used for notes to right and left border
@@ -314,10 +315,22 @@ public:
         @param _pViewShell
         input parameter - instance of the view shell, on which the output
         has to be generated.
+
+        @param bPaintRightShadow
+        Should we paint shadow on the right or not (used in book mode)
+
+        @param bFullBottomShadow
+        Should we have a bottom shadow of the same size as the pages or
+        not (for right pages in book mode in a LTR environment).
+
+        @param bRightSidebar
+        Is the note sidebar on the right or not (used to adjust the
+        shadow with & position).
     */
     static void PaintBorderAndShadow( const SwRect& _rPageRect,
                                       ViewShell*    _pViewShell,
                                       bool bPaintRightShadow,
+                                      bool bFullBottomShadow,
                                       bool bRightSidebar );
 
     /** get bound rectangle of border and shadow for repaints

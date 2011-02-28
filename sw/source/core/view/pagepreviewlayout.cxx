@@ -1063,7 +1063,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
                 pOutputDev->SetFont( aOldFont );
                 // paint shadow and border for empty page
                 // use new method to paint page border and shadow
-                SwPageFrm::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, true );
+                SwPageFrm::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, false, true );
             }
             else
             {
@@ -1077,7 +1077,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
                     SwPageFrm::GetBorderAndShadowBoundRect( SwRect( aPageRect ), &mrParentViewShell, aPageBorderRect, true );
                     const Region aDLRegion(aPageBorderRect.SVRect());
                     mrParentViewShell.DLPrePaint2(aDLRegion);
-                    SwPageFrm::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, true );
+                    SwPageFrm::PaintBorderAndShadow( aPageRect, &mrParentViewShell, true, false, true );
                     mrParentViewShell.DLPostPaint2(true);
                 }
             }
