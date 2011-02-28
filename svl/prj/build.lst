@@ -1,4 +1,4 @@
-sl	svl	:	i18npool l10n rsc offuh ucbhelper unotools cppu cppuhelper comphelper sal sot NULL
+sl	svl	:	l10n rsc offuh ucbhelper unotools cppu cppuhelper comphelper sal sot NULL
 sl	svl								usr1	-	all	svl_mkout NULL
 sl	svl\inc							nmake	-	all	svl_inc NULL
 sl	svl\unx\source\svdde			nmake	-	u	svl_usdde svl_inc NULL
