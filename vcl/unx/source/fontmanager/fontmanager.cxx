@@ -87,6 +87,12 @@
 
 #define PRINTER_METRICDIR "fontmetric"
 
+namespace {
+
+namespace css = com::sun::star;
+
+}
+
 using namespace vcl;
 using namespace utl;
 using namespace psp;
@@ -3942,10 +3948,10 @@ bool PrintFontManager::readOverrideMetrics()
     if( ! m_aOverrideFonts.empty() )
         return false;
 
-    Reference< XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory() );
+    css::uno::Reference< XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory() );
     if( !xFact.is() )
         return false;
-    Reference< XMaterialHolder > xMat(
+    css::uno::Reference< XMaterialHolder > xMat(
                 xFact->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.psprint.CompatMetricOverride" ) ) ),
                 UNO_QUERY );
     if( !xMat.is() )

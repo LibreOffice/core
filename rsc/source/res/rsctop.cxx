@@ -180,12 +180,12 @@ ERRTYPE RscTop :: GetRef( const RSCINST & rInst, RscId * pRscId ){
 |*    Letzte Aenderung  MM 17.05.91
 |*
 *************************************************************************/
-BOOL RscTop::InHierarchy( RscTop * pClass ){
+sal_Bool RscTop::InHierarchy( RscTop * pClass ){
     if( this == pClass )
-        return( TRUE );
+        return( sal_True );
     if( pSuperClass )
         return( pSuperClass->InHierarchy( pClass ) );
-    return( FALSE );
+    return( sal_False );
 }
 
 /*************************************************************************
@@ -238,7 +238,7 @@ RSCINST RscTop::GetVariable
     const RSCINST & rInst,
     Atom nVarName,
     const RSCINST & rInitInst,
-    BOOL bInitDflt,
+    sal_Bool bInitDflt,
     RscTop * pCreateClass
 )
 {
@@ -342,7 +342,7 @@ ERRTYPE RscTop::GetArrayEle
 ERRTYPE RscTop::GetValueEle
 (
     const RSCINST & rInst,
-    INT32 lValue,
+    sal_Int32 lValue,
     RscTop * pCreateClass,
     RSCINST * pGetInst
 )
@@ -469,7 +469,7 @@ sal_uInt32  RscTop::GetCount( const RSCINST & rInst ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-ERRTYPE RscTop::SetNumber( const RSCINST & rInst, INT32 lValue ){
+ERRTYPE RscTop::SetNumber( const RSCINST & rInst, sal_Int32 lValue ){
     if( pSuperClass )
         return pSuperClass->
                     SetNumber( rInst, lValue );
@@ -486,7 +486,7 @@ ERRTYPE RscTop::SetNumber( const RSCINST & rInst, INT32 lValue ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-ERRTYPE RscTop::SetBool( const RSCINST & rInst, BOOL bValue ){
+ERRTYPE RscTop::SetBool( const RSCINST & rInst, sal_Bool bValue ){
     if( pSuperClass )
         return pSuperClass->
                     SetBool( rInst, bValue );
@@ -503,7 +503,7 @@ ERRTYPE RscTop::SetBool( const RSCINST & rInst, BOOL bValue ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-ERRTYPE RscTop::SetConst( const RSCINST & rInst, Atom nId, INT32 nVal )
+ERRTYPE RscTop::SetConst( const RSCINST & rInst, Atom nId, sal_Int32 nVal )
 {
     if( pSuperClass )
         return pSuperClass->SetConst( rInst, nId, nVal );
@@ -554,7 +554,7 @@ ERRTYPE RscTop::SetString( const RSCINST & rInst, const char * pStr ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-ERRTYPE RscTop::GetNumber( const RSCINST & rInst, INT32 * pN ){
+ERRTYPE RscTop::GetNumber( const RSCINST & rInst, sal_Int32 * pN ){
     if( pSuperClass )
         return pSuperClass->
                     GetNumber( rInst, pN );
@@ -571,7 +571,7 @@ ERRTYPE RscTop::GetNumber( const RSCINST & rInst, INT32 * pN ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-ERRTYPE RscTop::GetBool( const RSCINST & rInst, BOOL * pB ){
+ERRTYPE RscTop::GetBool( const RSCINST & rInst, sal_Bool * pB ){
  if( pSuperClass )
         return pSuperClass->
                     GetBool( rInst, pB );
@@ -622,7 +622,7 @@ ERRTYPE RscTop::GetString( const RSCINST & rInst, char ** ppStr ){
 |*    Letzte Aenderung  MM 17.07.91
 |*
 *************************************************************************/
-RSCINST RscTop::Create( RSCINST * pInst, const RSCINST & rDefInst, BOOL bOwnRange )
+RSCINST RscTop::Create( RSCINST * pInst, const RSCINST & rDefInst, sal_Bool bOwnRange )
 {
     if( pSuperClass )
         return pSuperClass->
@@ -657,13 +657,13 @@ void    RscTop::Destroy( const RSCINST & rInst ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-BOOL    RscTop::IsConsistent( const RSCINST & rInst,
+sal_Bool    RscTop::IsConsistent( const RSCINST & rInst,
                               RscInconsList * pList )
 {
     if( pSuperClass )
         return pSuperClass->IsConsistent( rInst, pList );
     else
-        return TRUE;
+        return sal_True;
 }
 
 /*************************************************************************
@@ -690,11 +690,11 @@ void    RscTop::SetToDefault( const RSCINST & rInst )
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-BOOL    RscTop::IsDefault( const RSCINST & rInst ){
+sal_Bool    RscTop::IsDefault( const RSCINST & rInst ){
     if( pSuperClass )
         return pSuperClass->IsDefault( rInst );
     else
-        return TRUE;
+        return sal_True;
 }
 
 /*************************************************************************
@@ -706,11 +706,11 @@ BOOL    RscTop::IsDefault( const RSCINST & rInst ){
 |*    Letzte Aenderung  MM 29.10.91
 |*
 *************************************************************************/
-BOOL    RscTop::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
+sal_Bool    RscTop::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef ){
     if( pSuperClass )
         return pSuperClass->IsValueDefault( rInst, pDef );
     else
-        return TRUE;
+        return sal_True;
 }
 
 /*************************************************************************
@@ -907,7 +907,7 @@ void RscTop::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 *************************************************************************/
 ERRTYPE RscTop::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
                                RscTypCont * pTC, const RscId & rId,
-                               sal_uInt32 nDeep, BOOL bExtra )
+                               sal_uInt32 nDeep, sal_Bool bExtra )
 {
     if( pSuperClass )
         return( pSuperClass->
@@ -926,7 +926,7 @@ ERRTYPE RscTop::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
 |*
 *************************************************************************/
 ERRTYPE RscTop::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                         RscTypCont * pTC, sal_uInt32 nDeep, BOOL bExtra )
+                         RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
 {
     if( pSuperClass )
         return( pSuperClass->

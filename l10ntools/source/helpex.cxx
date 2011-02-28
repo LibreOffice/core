@@ -51,10 +51,10 @@
 
 // set of global variables
 ByteString sInputFile;
-BOOL bEnableExport;
-BOOL bMergeMode;
-BOOL bErrorLog;
-BOOL bUTF8;
+sal_Bool bEnableExport;
+sal_Bool bMergeMode;
+sal_Bool bErrorLog;
+sal_Bool bUTF8;
 ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sOutputFile;
@@ -63,20 +63,20 @@ ByteString sOutputFileY;
 ByteString sSDFFile;
 
 /*****************************************************************************/
-BOOL ParseCommandLine( int argc, char* argv[])
+sal_Bool ParseCommandLine( int argc, char* argv[])
 /*****************************************************************************/
 {
-    bEnableExport = FALSE;
-    bMergeMode = FALSE;
-    bErrorLog = TRUE;
-    bUTF8 = TRUE;
+    bEnableExport = sal_False;
+    bMergeMode = sal_False;
+    bErrorLog = sal_True;
+    bUTF8 = sal_True;
     sPrj = "";
     sPrjRoot = "";
     Export::sLanguages = "";
     Export::sForcedLanguages = "";
 
-    USHORT nState = STATE_NON;
-    BOOL bInput = FALSE;
+    sal_uInt16 nState = STATE_NON;
+    sal_Bool bInput = sal_False;
 
     // parse command line
     for( int i = 1; i < argc; i++ ) {
@@ -107,15 +107,15 @@ BOOL ParseCommandLine( int argc, char* argv[])
         }
         else if ( ByteString( argv[ i ]).ToUpperAscii() == "-E" ) {
             nState = STATE_ERRORLOG;
-            bErrorLog = FALSE;
+            bErrorLog = sal_False;
         }
         else if ( ByteString( argv[ i ]).ToUpperAscii() == "-UTF8" ) {
             nState = STATE_UTF8;
-            bUTF8 = TRUE;
+            bUTF8 = sal_True;
         }
         else if ( ByteString( argv[ i ]).ToUpperAscii() == "-NOUTF8" ) {
             nState = STATE_UTF8;
-            bUTF8 = FALSE;
+            bUTF8 = sal_False;
         }
         else if ( ByteString( argv[ i ]).ToUpperAscii() == "-L" ) {
             nState = STATE_LANGUAGES;
@@ -123,12 +123,12 @@ BOOL ParseCommandLine( int argc, char* argv[])
         else {
             switch ( nState ) {
                 case STATE_NON: {
-                    return FALSE;   // no valid command line
+                    return sal_False;   // no valid command line
                 }
                 //break;
                 case STATE_INPUT: {
                     sInputFile = argv[ i ];
-                    bInput = TRUE; // source file found
+                    bInput = sal_True; // source file found
                 }
                 break;
                 case STATE_OUTPUT: {
@@ -154,7 +154,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
                 break;
                 case STATE_SDFFILE: {
                     sSDFFile = argv[ i ];
-                    bMergeMode = TRUE; // activate merge mode, cause merge database found
+                    bMergeMode = sal_True; // activate merge mode, cause merge database found
                 }
                 break;
                 case STATE_LANGUAGES: {
@@ -170,12 +170,12 @@ BOOL ParseCommandLine( int argc, char* argv[])
 
     if ( bInput ) {
         // command line is valid
-        bEnableExport = TRUE;
-        return TRUE;
+        bEnableExport = sal_True;
+        return sal_True;
     }
 
     // command line is not valid
-    return FALSE;
+    return sal_False;
 }
 
 
@@ -227,8 +227,8 @@ int _cdecl main( int argc, char *argv[] )
         {
 
             //sal_uInt64 startreadloc = Export::startMessure();
-            MergeDataFile aMergeDataFile( sSDFFile, sInputFile , FALSE, RTL_TEXTENCODING_MS_1252 );
-            //MergeDataFile aMergeDataFile( sSDFFile, sInputFile , FALSE, RTL_TEXTENCODING_MS_1252, false );
+            MergeDataFile aMergeDataFile( sSDFFile, sInputFile , sal_False, RTL_TEXTENCODING_MS_1252 );
+            //MergeDataFile aMergeDataFile( sSDFFile, sInputFile , sal_False, RTL_TEXTENCODING_MS_1252, false );
             //Export::stopMessure( ByteString("read localize.sdf") , startreadloc );
 
             hasNoError = aParser.Merge( sSDFFile, sOutputFile , Export::sLanguages , aMergeDataFile );
@@ -260,8 +260,8 @@ int _cdecl main( int argc, char *argv[] )
 
             aFStream.close();
             ByteString sHelpFile(""); // dummy
-            //MergeDataFile aMergeDataFile( sSDFFile, sHelpFile , FALSE, RTL_TEXTENCODING_MS_1252, false );
-            MergeDataFile aMergeDataFile( sSDFFile, sHelpFile , FALSE, RTL_TEXTENCODING_MS_1252 );
+            //MergeDataFile aMergeDataFile( sSDFFile, sHelpFile , sal_False, RTL_TEXTENCODING_MS_1252, false );
+            MergeDataFile aMergeDataFile( sSDFFile, sHelpFile , sal_False, RTL_TEXTENCODING_MS_1252 );
 
             //aMergeDataFile.Dump();
             std::vector<ByteString> aLanguages;

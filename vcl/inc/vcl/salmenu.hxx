@@ -40,7 +40,7 @@ class SalFrame;
 
 struct SalItemParams
 {
-    USHORT          nId;                    // item Id
+    sal_uInt16          nId;                    // item Id
     MenuItemType    eType;                  // MenuItem-Type
     MenuItemBits    nBits;                  // MenuItem-Bits
     Menu*           pMenu;                  // Pointer to Menu
@@ -51,49 +51,49 @@ struct SalItemParams
 
 struct SalMenuButtonItem
 {
-    USHORT              mnId;
+    sal_uInt16              mnId;
     Image               maImage;
     rtl::OUString       maToolTipText;
 
     SalMenuButtonItem() : mnId( 0 ) {}
-    SalMenuButtonItem( USHORT i_nId, const Image& rImg, const rtl::OUString& i_rTTText = rtl::OUString() )
+    SalMenuButtonItem( sal_uInt16 i_nId, const Image& rImg, const rtl::OUString& i_rTTText = rtl::OUString() )
     : mnId( i_nId ), maImage( rImg ), maToolTipText( i_rTTText ) {}
 };
 
-class VCL_DLLPUBLIC SalMenuItem
+class VCL_PLUGIN_PUBLIC SalMenuItem
 {
 public:
     SalMenuItem() {}
     virtual ~SalMenuItem();
 };
 
-class VCL_DLLPUBLIC SalMenu
+class VCL_PLUGIN_PUBLIC SalMenu
 {
 public:
     SalMenu() {}
     virtual ~SalMenu();
 
-    virtual BOOL VisibleMenuBar() = 0;  // must return TRUE to actually DISPLAY native menu bars
+    virtual sal_Bool VisibleMenuBar() = 0;  // must return sal_True to actually DISPLAY native menu bars
                             // otherwise only menu messages are processed (eg, OLE on Windows)
 
     virtual void InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos ) = 0;
     virtual void RemoveItem( unsigned nPos ) = 0;
     virtual void SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos ) = 0;
     virtual void SetFrame( const SalFrame* pFrame ) = 0;
-    virtual void CheckItem( unsigned nPos, BOOL bCheck ) = 0;
-    virtual void EnableItem( unsigned nPos, BOOL bEnable ) = 0;
+    virtual void CheckItem( unsigned nPos, sal_Bool bCheck ) = 0;
+    virtual void EnableItem( unsigned nPos, sal_Bool bEnable ) = 0;
     virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const XubString& rText )= 0;
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage ) = 0;
     virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const XubString& rKeyName ) = 0;
     virtual void GetSystemMenuData( SystemMenuData* pData ) = 0;
-    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, ULONG nFlags);
+    virtual bool ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags);
     virtual bool AddMenuBarButton( const SalMenuButtonItem& ); // return false if not implemented or failure
-    virtual void RemoveMenuBarButton( USHORT nId );
+    virtual void RemoveMenuBarButton( sal_uInt16 nId );
 
     // return an empty rectangle if not implemented
     // return Rectangle( Point( -1, -1 ), Size( 1, 1 ) ) if menu bar buttons implemented
     // but rectangle cannot be determined
-    virtual Rectangle GetMenuBarButtonRectPixel( USHORT i_nItemId, SalFrame* i_pReferenceFrame );
+    virtual Rectangle GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame* i_pReferenceFrame );
 };
 
 

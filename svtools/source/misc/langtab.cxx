@@ -51,7 +51,7 @@ using namespace ::com::sun::star;
 
 SVT_DLLPUBLIC const String ApplyLreOrRleEmbedding( const String &rText )
 {
-    const USHORT nLen = rText.Len();
+    const sal_uInt16 nLen = rText.Len();
     if (nLen == 0)
         return String();
 
@@ -77,7 +77,7 @@ SVT_DLLPUBLIC const String ApplyLreOrRleEmbedding( const String &rText )
     // Thus we can avoid to check every character of the text.
     bool bFound     = false;
     bool bIsRtlText = false;
-    for (USHORT i = 0;  i < nLen && !bFound;  ++i)
+    for (sal_uInt16 i = 0;  i < nLen && !bFound;  ++i)
     {
         sal_Int16 nDirection = rCharClass.getCharacterDirection( rText, i );
         switch (nDirection)

@@ -67,14 +67,14 @@ class KDESalFrame : public X11SalFrame
     GraphicsHolder m_aGraphics[ nMaxGraphics ];
 
 public:
-    KDESalFrame( SalFrame* pParent, ULONG nStyle );
+    KDESalFrame( SalFrame* pParent, sal_uLong );
     virtual ~KDESalFrame();
 
     virtual SalGraphics* GetGraphics();
     virtual void ReleaseGraphics( SalGraphics *pGraphics );
     virtual void updateGraphics( bool bClear );
     virtual void UpdateSettings( AllSettings& rSettings );
-    virtual void Show( BOOL bVisible, BOOL bNoActivate );
+    virtual void Show( sal_Bool bVisible, sal_Bool bNoActivate );
 };
 
 class KDESalInstance : public X11SalInstance
@@ -83,7 +83,7 @@ public:
     KDESalInstance( SalYieldMutex* pMutex )
             : X11SalInstance( pMutex ) {}
     virtual ~KDESalInstance() {}
-    virtual SalFrame* CreateFrame( SalFrame* pParent, ULONG nStyle );
+    virtual SalFrame* CreateFrame( SalFrame* pParent, sal_uLong nStyle );
 };
 
 class KDEXLib : public SalXLib

@@ -237,11 +237,11 @@ static List& InitFormats_Impl()
 |*
 |*    Beschreibung      CLIP.SDW
 *************************************************************************/
-ULONG SotExchange::RegisterFormatName( const String& rName )
+sal_uLong SotExchange::RegisterFormatName( const String& rName )
 {
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
     // teste zuerst die Standard - Name
-    ULONG i, nMax = SOT_FORMAT_FILE_LIST;
+    sal_uLong i, nMax = SOT_FORMAT_FILE_LIST;
     for( i = SOT_FORMAT_STRING; i <= nMax;  ++i )
         if( COMPARE_EQUAL == rName.CompareToAscii( pFormatArray_Impl[ i ].pName ) )
             return i;
@@ -277,11 +277,11 @@ ULONG SotExchange::RegisterFormatName( const String& rName )
     return nMax + SOT_FORMATSTR_ID_USER_END + 1;
 }
 
-ULONG SotExchange::RegisterFormatMimeType( const String& rMimeType )
+sal_uLong SotExchange::RegisterFormatMimeType( const String& rMimeType )
 {
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
     // teste zuerst die Standard - Name
-    ULONG i, nMax = SOT_FORMAT_FILE_LIST;
+    sal_uLong i, nMax = SOT_FORMAT_FILE_LIST;
     for( i = SOT_FORMAT_STRING; i <= nMax;  ++i )
         if( rMimeType.EqualsAscii( pFormatArray_Impl[ i ].pMimeType ) )
             return i;
@@ -318,9 +318,9 @@ ULONG SotExchange::RegisterFormatMimeType( const String& rMimeType )
 |*
 |*    Beschreibung      CLIP.SDW
 *************************************************************************/
-ULONG SotExchange::RegisterFormat( const DataFlavor& rFlavor )
+sal_uLong SotExchange::RegisterFormat( const DataFlavor& rFlavor )
 {
-    ULONG nRet = GetFormat( rFlavor );
+    sal_uLong nRet = GetFormat( rFlavor );
 
     if( !nRet )
     {
@@ -338,7 +338,7 @@ ULONG SotExchange::RegisterFormat( const DataFlavor& rFlavor )
 |*
 *************************************************************************/
 
-sal_Bool SotExchange::GetFormatDataFlavor( ULONG nFormat, DataFlavor& rFlavor )
+sal_Bool SotExchange::GetFormatDataFlavor( sal_uLong nFormat, DataFlavor& rFlavor )
 {
     sal_Bool bRet;
 
@@ -376,11 +376,11 @@ sal_Bool SotExchange::GetFormatDataFlavor( ULONG nFormat, DataFlavor& rFlavor )
 
 /*************************************************************************
 |*
-|*    SotExchange::GetFormatMimeType( ULONG nFormat )
+|*    SotExchange::GetFormatMimeType( sal_uLong nFormat )
 |*
 *************************************************************************/
 
-String SotExchange::GetFormatMimeType( ULONG nFormat )
+String SotExchange::GetFormatMimeType( sal_uLong nFormat )
 {
     String sMimeType;
     if( SOT_FORMATSTR_ID_USER_END >= nFormat )
@@ -406,10 +406,10 @@ String SotExchange::GetFormatMimeType( ULONG nFormat )
 |*
 *************************************************************************/
 
-ULONG SotExchange::GetFormatIdFromMimeType( const String& rMimeType )
+sal_uLong SotExchange::GetFormatIdFromMimeType( const String& rMimeType )
 {
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
-    ULONG i, nMax = SOT_FORMAT_FILE_LIST;
+    sal_uLong i, nMax = SOT_FORMAT_FILE_LIST;
     for( i = SOT_FORMAT_STRING; i <= nMax;  ++i )
         if( rMimeType.EqualsAscii( pFormatArray_Impl[ i ].pMimeType ) )
             return i;
@@ -443,12 +443,12 @@ ULONG SotExchange::GetFormatIdFromMimeType( const String& rMimeType )
 |*
 |*    Beschreibung      CLIP.SDW
 *************************************************************************/
-ULONG SotExchange::GetFormat( const DataFlavor& rFlavor )
+sal_uLong SotExchange::GetFormat( const DataFlavor& rFlavor )
 {
     // teste zuerst die Standard - Name
     const ::rtl::OUString& rMimeType = rFlavor.MimeType;
     const String aMimeType( rMimeType );
-    ULONG i, nMax = SOT_FORMAT_FILE_LIST;
+    sal_uLong i, nMax = SOT_FORMAT_FILE_LIST;
     const DataFlavorRepresentation *pFormatArray_Impl = FormatArray_Impl::get();
     for( i = SOT_FORMAT_STRING; i <= nMax;  ++i )
         if( aMimeType.EqualsAscii( pFormatArray_Impl[ i ].pMimeType ) )
@@ -482,7 +482,7 @@ ULONG SotExchange::GetFormat( const DataFlavor& rFlavor )
 |*
 |*    Beschreibung      CLIP.SDW
 *************************************************************************/
-String SotExchange::GetFormatName( ULONG nFormat )
+String SotExchange::GetFormatName( sal_uLong nFormat )
 {
     DataFlavor  aFlavor;
     String      aRet;
@@ -493,7 +493,7 @@ String SotExchange::GetFormatName( ULONG nFormat )
     return aRet;
 }
 
-BOOL SotExchange::IsInternal( const SvGlobalName& rName )
+sal_Bool SotExchange::IsInternal( const SvGlobalName& rName )
 {
     if ( rName == SvGlobalName(SO3_SW_CLASSID_60) ||
          rName == SvGlobalName(SO3_SC_CLASSID_60) ||
@@ -503,6 +503,6 @@ BOOL SotExchange::IsInternal( const SvGlobalName& rName )
          rName == SvGlobalName(SO3_SM_CLASSID_60) ||
          rName == SvGlobalName(SO3_SWWEB_CLASSID_60) ||
          rName == SvGlobalName(SO3_SWGLOB_CLASSID_60) )
-        return TRUE;
-    return FALSE;
+        return sal_True;
+    return sal_False;
 }

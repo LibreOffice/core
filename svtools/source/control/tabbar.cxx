@@ -38,7 +38,8 @@
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include "svtaccessiblefactory.hxx"
-
+#include <filectrl.hrc>
+#include <svtools/svtdata.hxx>
 #include <limits>
 
 // =======================================================================
@@ -48,37 +49,37 @@
 #define TABBAR_DRAG_SCROLLOFF   5
 #define TABBAR_MINSIZE          5
 
-const USHORT ADDNEWPAGE_AREAWIDTH = 10;
+const sal_uInt16 ADDNEWPAGE_AREAWIDTH = 10;
 
 // =======================================================================
 
 struct ImplTabBarItem
 {
-    USHORT          mnId;
+    sal_uInt16          mnId;
     TabBarPageBits  mnBits;
     XubString       maText;
     XubString       maHelpText;
     Rectangle       maRect;
     long            mnWidth;
     rtl::OString    maHelpId;
-    BOOL            mbShort;
-    BOOL            mbSelect;
-    BOOL            mbEnable;
+    sal_Bool            mbShort;
+    sal_Bool            mbSelect;
+    sal_Bool            mbEnable;
     Color           maTabBgColor;
-    bool            IsDefaultTabBgColor() const { return maTabBgColor == Color(COL_AUTO) ? TRUE : FALSE; };
+    bool            IsDefaultTabBgColor() const { return maTabBgColor == Color(COL_AUTO) ? sal_True : sal_False; };
     Color           maTabTextColor;
-    bool            IsDefaultTabTextColor() const { return maTabTextColor == Color(COL_AUTO) ? TRUE : FALSE; };
+    bool            IsDefaultTabTextColor() const { return maTabTextColor == Color(COL_AUTO) ? sal_True : sal_False; };
 
-                    ImplTabBarItem( USHORT nItemId, const XubString& rText,
+                    ImplTabBarItem( sal_uInt16 nItemId, const XubString& rText,
                                     TabBarPageBits nPageBits ) :
                         maText( rText )
                     {
                         mnId     = nItemId;
                         mnBits   = nPageBits;
                         mnWidth  = 0;
-                        mbShort  = FALSE;
-                        mbSelect = FALSE;
-                        mbEnable = TRUE;
+                        mbShort  = sal_False;
+                        mbSelect = sal_False;
+                        mbEnable = sal_True;
                         maTabBgColor = Color( COL_AUTO );
                         maTabTextColor = Color( COL_AUTO );
                     }
@@ -112,7 +113,7 @@ long ImplTabButton::PreNotify( NotifyEvent& rNEvt )
         if ( GetParent()->IsInEditMode() )
         {
             GetParent()->EndEditMode();
-            return TRUE;
+            return sal_True;
         }
     }
 
@@ -228,7 +229,7 @@ class TabBarEdit : public Edit
 {
 private:
     Timer           maLoseFocusTimer;
-    BOOL            mbPostEvt;
+    sal_Bool            mbPostEvt;
 
                     DECL_LINK( ImplEndEditHdl, void* );
                     DECL_LINK( ImplEndTimerHdl, void* );
@@ -238,8 +239,8 @@ public:
 
     TabBar*         GetParent() const { return (TabBar*)Window::GetParent(); }
 
-    void            SetPostEvent() { mbPostEvt = TRUE; }
-    void            ResetPostEvent() { mbPostEvt = FALSE; }
+    void            SetPostEvent() { mbPostEvt = sal_True; }
+    void            ResetPostEvent() { mbPostEvt = sal_False; }
 
     virtual long    PreNotify( NotifyEvent& rNEvt );
     virtual void    LoseFocus();
@@ -250,7 +251,7 @@ public:
 TabBarEdit::TabBarEdit( TabBar* pParent, WinBits nWinStyle ) :
     Edit( pParent, nWinStyle )
 {
-    mbPostEvt = FALSE;
+    mbPostEvt = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -266,19 +267,19 @@ long TabBarEdit::PreNotify( NotifyEvent& rNEvt )
             {
                 if ( !mbPostEvt )
                 {
-                    if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), (void*)FALSE ) )
-                        mbPostEvt = TRUE;
+                    if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), (void*)sal_False ) )
+                        mbPostEvt = sal_True;
                 }
-                return TRUE;
+                return sal_True;
             }
             else if ( pKEvt->GetKeyCode().GetCode() == KEY_ESCAPE )
             {
                 if ( !mbPostEvt )
                 {
-                    if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), (void*)TRUE ) )
-                        mbPostEvt = TRUE;
+                    if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), (void*)sal_True ) )
+                        mbPostEvt = sal_True;
                 }
-                return TRUE;
+                return sal_True;
             }
         }
     }
@@ -292,8 +293,8 @@ void TabBarEdit::LoseFocus()
 {
     if ( !mbPostEvt )
     {
-        if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), (void*)FALSE ) )
-            mbPostEvt = TRUE;
+        if ( PostUserEvent( LINK( this, TabBarEdit, ImplEndEditHdl ), (void*)sal_False ) )
+            mbPostEvt = sal_True;
     }
 
     Edit::LoseFocus();
@@ -308,7 +309,7 @@ IMPL_LINK( TabBarEdit, ImplEndEditHdl, void*, pCancel )
 
     // We need this query, because the edit get a losefous event,
     // when it shows the context menu or the insert symbol dialog
-    if ( !HasFocus() && HasChildPathFocus( TRUE ) )
+    if ( !HasFocus() && HasChildPathFocus( sal_True ) )
     {
         maLoseFocusTimer.SetTimeout( 30 );
         maLoseFocusTimer.SetTimeoutHdl( LINK( this, TabBarEdit, ImplEndTimerHdl ) );
@@ -329,10 +330,10 @@ IMPL_LINK( TabBarEdit, ImplEndTimerHdl, void*, EMPTYARG )
 
     // We need this query, because the edit get a losefous event,
     // when it shows the context menu or the insert symbol dialog
-    if ( HasChildPathFocus( TRUE ) )
+    if ( HasChildPathFocus( sal_True ) )
         maLoseFocusTimer.Start();
     else
-        GetParent()->EndEditMode( TRUE );
+        GetParent()->EndEditMode( sal_True );
 
     return 0;
 }
@@ -380,25 +381,35 @@ void TabBar::ImplInit( WinBits nWinStyle )
     mnDropPos       = 0;
     mnSwitchId      = 0;
     mnEditId        = 0;
-    mbFormat        = TRUE;
-    mbFirstFormat   = TRUE;
-    mbSizeFormat    = TRUE;
-    mbAutoMaxWidth  = TRUE;
-    mbInSwitching   = FALSE;
-    mbAutoEditMode  = FALSE;
-    mbEditCanceled  = FALSE;
-    mbDropPos       = FALSE;
-    mbInSelect      = FALSE;
-    mbSelColor      = FALSE;
-    mbSelTextColor  = FALSE;
-    mbMirrored      = FALSE;
+    mbFormat        = sal_True;
+    mbFirstFormat   = sal_True;
+    mbSizeFormat    = sal_True;
+    mbAutoMaxWidth  = sal_True;
+    mbInSwitching   = sal_False;
+    mbAutoEditMode  = sal_False;
+    mbEditCanceled  = sal_False;
+    mbDropPos       = sal_False;
+    mbInSelect      = sal_False;
+    mbSelColor      = sal_False;
+    mbSelTextColor  = sal_False;
+    mbMirrored      = sal_False;
 
     if ( nWinStyle & WB_3DTAB )
         mnOffY++;
 
     ImplInitControls();
+
+    if(mpFirstBtn)
+        mpFirstBtn->SetAccessibleName(String(SvtResId(STR_TABBAR_PUSHBUTTON_MOVET0HOME)));
+    if(mpPrevBtn)
+        mpPrevBtn->SetAccessibleName( String(SvtResId(STR_TABBAR_PUSHBUTTON_MOVELEFT)));
+    if(mpNextBtn)
+        mpNextBtn->SetAccessibleName(String(SvtResId(STR_TABBAR_PUSHBUTTON_MOVERIGHT)));
+    if(mpLastBtn)
+        mpLastBtn->SetAccessibleName( String(SvtResId(STR_TABBAR_PUSHBUTTON_MOVETOEND)));
+
     SetSizePixel( Size( 100, CalcWindowSizePixel().Height() ) );
-    ImplInitSettings( TRUE, TRUE );
+    ImplInitSettings( sal_True, sal_True );
 }
 
 // -----------------------------------------------------------------------
@@ -413,7 +424,7 @@ TabBar::TabBar( Window* pParent, WinBits nWinStyle ) :
 
 TabBar::~TabBar()
 {
-    EndEditMode( TRUE );
+    EndEditMode( sal_True );
 
     // Controls loeschen
     if ( mpPrevBtn )
@@ -440,7 +451,7 @@ TabBar::~TabBar()
 
 // -----------------------------------------------------------------------
 
-void TabBar::ImplInitSettings( BOOL bFont, BOOL bBackground )
+void TabBar::ImplInitSettings( sal_Bool bFont, sal_Bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -514,12 +525,12 @@ void TabBar::ImplGetColors( Color& rFaceColor, Color& rFaceTextColor,
 
 // -----------------------------------------------------------------------
 
-BOOL TabBar::ImplCalcWidth()
+sal_Bool TabBar::ImplCalcWidth()
 {
     // Groessen muessen nur ermittelt werden, wenn sich Text aendert oder
     // wenn der Font geaendert wurde
     if ( !mbSizeFormat )
-        return FALSE;
+        return sal_False;
 
     // Breiten der Tabs mit dem fetten Font ermitteln
     Font aFont = GetFont();
@@ -542,29 +553,29 @@ BOOL TabBar::ImplCalcWidth()
     else
         mnCurMaxWidth = 0;
 
-    BOOL            bChanged = FALSE;
+    sal_Bool            bChanged = sal_False;
     ImplTabBarItem* pItem = mpItemList->First();
     while ( pItem )
     {
         long nNewWidth = GetTextWidth( pItem->maText );
         if ( mnCurMaxWidth && (nNewWidth > mnCurMaxWidth) )
         {
-            pItem->mbShort = TRUE;
+            pItem->mbShort = sal_True;
             nNewWidth = mnCurMaxWidth;
         }
         else
-            pItem->mbShort = FALSE;
+            pItem->mbShort = sal_False;
         nNewWidth += TABBAR_OFFSET_X+TABBAR_OFFSET_X2;
         if ( pItem->mnWidth != nNewWidth )
         {
             pItem->mnWidth = nNewWidth;
             if ( !pItem->maRect.IsEmpty() )
-                bChanged = TRUE;
+                bChanged = sal_True;
         }
         pItem = mpItemList->Next();
     }
-    mbSizeFormat = FALSE;
-    mbFormat = TRUE;
+    mbSizeFormat = sal_False;
+    mbFormat = sal_True;
     return bChanged;
 }
 
@@ -577,7 +588,7 @@ void TabBar::ImplFormat()
     if ( !mbFormat )
         return;
 
-    USHORT n = 0;
+    sal_uInt16 n = 0;
     long x = mnOffX;
     ImplTabBarItem* pItem = mpItemList->First();
     while ( pItem )
@@ -612,7 +623,7 @@ void TabBar::ImplFormat()
         pItem = mpItemList->Next();
     }
 
-    mbFormat = FALSE;
+    mbFormat = sal_False;
 
     // Button enablen/disablen
     ImplEnableControls();
@@ -620,13 +631,13 @@ void TabBar::ImplFormat()
 
 // -----------------------------------------------------------------------
 
-USHORT TabBar::ImplGetLastFirstPos()
+sal_uInt16 TabBar::ImplGetLastFirstPos()
 {
-    USHORT  nCount = (USHORT)(mpItemList->Count());
+    sal_uInt16  nCount = (sal_uInt16)(mpItemList->Count());
     if ( !nCount || mbSizeFormat || mbFormat )
         return 0;
 
-    USHORT  nLastFirstPos = nCount-1;
+    sal_uInt16  nLastFirstPos = nCount-1;
     long    nWinWidth = mnLastOffX-mnOffX-TABBAR_OFFSET_X-ADDNEWPAGE_AREAWIDTH;
     long    nWidth = mpItemList->GetObject( nLastFirstPos )->mnWidth;
     while ( nLastFirstPos && (nWidth < nWinWidth) )
@@ -634,7 +645,7 @@ USHORT TabBar::ImplGetLastFirstPos()
         nLastFirstPos--;
         nWidth += mpItemList->GetObject( nLastFirstPos )->mnWidth;
     }
-    if ( (nLastFirstPos != (USHORT)(mpItemList->Count()-1)) &&
+    if ( (nLastFirstPos != (sal_uInt16)(mpItemList->Count()-1)) &&
          (nWidth > nWinWidth) )
         nLastFirstPos++;
     return nLastFirstPos;
@@ -714,7 +725,7 @@ void TabBar::ImplEnableControls()
         return;
 
     // Buttons enablen/disblen
-    BOOL bEnableBtn = mnFirstPos > 0;
+    sal_Bool bEnableBtn = mnFirstPos > 0;
     if ( mpFirstBtn )
         mpFirstBtn->Enable( bEnableBtn );
     if ( mpPrevBtn )
@@ -729,7 +740,7 @@ void TabBar::ImplEnableControls()
 
 // -----------------------------------------------------------------------
 
-void TabBar::ImplShowPage( USHORT nPos )
+void TabBar::ImplShowPage( sal_uInt16 nPos )
 {
     // Breite berechnen
     long nWidth = GetOutputSizePixel().Width();
@@ -742,7 +753,7 @@ void TabBar::ImplShowPage( USHORT nPos )
     {
         while ( pItem->maRect.Right() > nWidth )
         {
-            USHORT nNewPos = mnFirstPos+1;
+            sal_uInt16 nNewPos = mnFirstPos+1;
             SetFirstPageId( GetPageId( nNewPos ) );
             ImplFormat();
             if ( nNewPos != mnFirstPos )
@@ -757,7 +768,7 @@ IMPL_LINK( TabBar, ImplClickHdl, ImplTabButton*, pBtn )
 {
     EndEditMode();
 
-    USHORT nNewPos = mnFirstPos;
+    sal_uInt16 nNewPos = mnFirstPos;
 
     if ( pBtn == mpFirstBtn )
         nNewPos = 0;
@@ -768,13 +779,13 @@ IMPL_LINK( TabBar, ImplClickHdl, ImplTabButton*, pBtn )
     }
     else if ( pBtn == mpNextBtn )
     {
-        USHORT nCount = GetPageCount();
+        sal_uInt16 nCount = GetPageCount();
         if ( mnFirstPos <  nCount )
             nNewPos = mnFirstPos+1;
     }
     else
     {
-        USHORT nCount = GetPageCount();
+        sal_uInt16 nCount = GetPageCount();
         if ( nCount )
             nNewPos = nCount-1;
     }
@@ -789,7 +800,7 @@ IMPL_LINK( TabBar, ImplClickHdl, ImplTabButton*, pBtn )
 void TabBar::MouseMove( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeaveWindow() )
-        mbInSelect = FALSE;
+        mbInSelect = sal_False;
 
     Window::MouseMove( rMEvt );
 }
@@ -807,14 +818,14 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
     }
 
     ImplTabBarItem* pItem;
-    USHORT          nSelId = GetPageId( rMEvt.GetPosPixel() );
+    sal_uInt16          nSelId = GetPageId( rMEvt.GetPosPixel() );
 
     if ( !rMEvt.IsLeft() )
     {
         Window::MouseButtonDown( rMEvt );
         if ( (nSelId > 0) && (nSelId != mnCurPageId) )
         {
-            USHORT nPos = GetPagePos( nSelId );
+            sal_uInt16 nPos = GetPagePos( nSelId );
             pItem = mpItemList->GetObject( nPos );
 
             if ( pItem->mbEnable )
@@ -826,7 +837,7 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
                     ImplActivatePage();
                     ImplSelect();
                 }
-                mbInSelect = TRUE;
+                mbInSelect = sal_True;
             }
         }
         return;
@@ -842,8 +853,8 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
     {
         if ( nSelId )
         {
-            USHORT      nPos = GetPagePos( nSelId );
-            BOOL        bSelectTab = FALSE;
+            sal_uInt16      nPos = GetPagePos( nSelId );
+            sal_Bool        bSelectTab = sal_False;
             pItem = mpItemList->GetObject( nPos );
 
             if ( pItem->mbEnable )
@@ -853,15 +864,15 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
                     if ( nSelId != mnCurPageId )
                     {
                         SelectPage( nSelId, !IsPageSelected( nSelId ) );
-                        bSelectTab = TRUE;
+                        bSelectTab = sal_True;
                     }
                 }
                 else if ( mnWinStyle & (WB_MULTISELECT | WB_RANGESELECT) )
                 {
-                    bSelectTab = TRUE;
-                    USHORT n;
-                    BOOL   bSelect;
-                    USHORT nCurPos = GetPagePos( mnCurPageId );
+                    bSelectTab = sal_True;
+                    sal_uInt16 n;
+                    sal_Bool   bSelect;
+                    sal_uInt16 nCurPos = GetPagePos( mnCurPageId );
                     if ( nPos <= nCurPos )
                     {
                         // Alle Tabs bis zur angeklickten Tab deselektieren
@@ -872,9 +883,9 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
                         {
                             pItem = mpItemList->GetObject( n );
                             if ( n < nPos )
-                                bSelect = FALSE;
+                                bSelect = sal_False;
                             else
-                                bSelect = TRUE;
+                                bSelect = sal_True;
 
                             if ( pItem->mbSelect != bSelect )
                             {
@@ -892,16 +903,16 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
                         // Alle Tabs von der aktuellen bis zur angeklickten
                         // Tab selektieren und alle Tabs von der angeklickten
                         // Tab bis zur letzten Tab deselektieren
-                        USHORT nCount = (USHORT)mpItemList->Count();
+                        sal_uInt16 nCount = (sal_uInt16)mpItemList->Count();
                         n = nCurPos;
                         while ( n < nCount )
                         {
                             pItem = mpItemList->GetObject( n );
 
                             if ( n <= nPos )
-                                bSelect = TRUE;
+                                bSelect = sal_True;
                             else
-                                bSelect = FALSE;
+                                bSelect = sal_False;
 
                             if ( pItem->mbSelect != bSelect )
                             {
@@ -925,7 +936,7 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
             }
             else
                 ImplShowPage( nPos );
-            mbInSelect = TRUE;
+            mbInSelect = sal_True;
 
             return;
         }
@@ -935,7 +946,7 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
         // Gegebenenfalls den Double-Click-Handler rufen
         if ( !rMEvt.GetModifier() && (!nSelId || (nSelId == mnCurPageId)) )
         {
-            USHORT nOldCurId = mnCurPageId;
+            sal_uInt16 nOldCurId = mnCurPageId;
             mnCurPageId = nSelId;
             DoubleClick();
             // Abfrage, da im DoubleClick-Handler die aktuelle Seite
@@ -953,7 +964,7 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
             // Nur Select ausfuehren, wenn noch nicht aktuelle Page
             if ( nSelId != mnCurPageId )
             {
-                USHORT nPos = GetPagePos( nSelId );
+                sal_uInt16 nPos = GetPagePos( nSelId );
                 pItem = mpItemList->GetObject( nPos );
 
                 if ( pItem->mbEnable )
@@ -961,9 +972,9 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
                     if ( !pItem->mbSelect )
                     {
                         // Muss invalidiert werden
-                        BOOL bUpdate = FALSE;
+                        sal_Bool bUpdate = sal_False;
                         if ( IsReallyVisible() && IsUpdateMode() )
-                            bUpdate = TRUE;
+                            bUpdate = sal_True;
 
                         // Alle selektierten Items deselektieren
                         pItem = mpItemList->First();
@@ -971,7 +982,7 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
                         {
                             if ( pItem->mbSelect || (pItem->mnId == mnCurPageId) )
                             {
-                                pItem->mbSelect = FALSE;
+                                pItem->mbSelect = sal_False;
                                 if ( bUpdate )
                                     Invalidate( pItem->maRect );
                             }
@@ -990,7 +1001,7 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
                 }
                 else
                     ImplShowPage( nPos );
-                mbInSelect = TRUE;
+                mbInSelect = sal_True;
             }
 
             return;
@@ -1004,7 +1015,7 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
 
 void TabBar::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    mbInSelect = FALSE;
+    mbInSelect = sal_False;
     Window::MouseButtonUp( rMEvt );
 }
 
@@ -1013,7 +1024,7 @@ void TabBar::MouseButtonUp( const MouseEvent& rMEvt )
 void TabBar::Paint( const Rectangle& )
 {
     // Items berechnen und ausgeben
-    USHORT          nItemCount = (USHORT)mpItemList->Count();
+    sal_uInt16          nItemCount = (sal_uInt16)mpItemList->Count();
     ImplTabBarItem* pItem;
 
     // kein Item, dann auch nichts zu tun
@@ -1026,7 +1037,7 @@ void TabBar::Paint( const Rectangle& )
         // sichtbar wird
         if ( mbFirstFormat )
         {
-            mbFirstFormat = FALSE;
+            mbFirstFormat = sal_False;
 
             if ( mnCurPageId && (mnFirstPos == 0) && !mbDropPos )
             {
@@ -1035,9 +1046,9 @@ void TabBar::Paint( const Rectangle& )
                 {
                     // mbDropPos setzen (bzw. misbrauchen) um Invalidate()
                     // zu unterbinden
-                    mbDropPos = TRUE;
+                    mbDropPos = sal_True;
                     SetFirstPageId( mnCurPageId );
-                    mbDropPos = FALSE;
+                    mbDropPos = sal_False;
                     if ( mnFirstPos != 0 )
                         ImplFormat();
                 }
@@ -1086,7 +1097,7 @@ void TabBar::Paint( const Rectangle& )
     if ( nItemCount )
     {
         // letzten sichtbaren Eintrag suchen
-        USHORT n = mnFirstPos+1;
+        sal_uInt16 n = mnFirstPos+1;
         if ( n >= nItemCount )
             n = nItemCount-1;
         pItem = mpItemList->Seek( n );
@@ -1310,7 +1321,7 @@ void TabBar::Resize()
     // Scroll-Buttons anordnen
     long nHeight = aNewSize.Height();
     // Font in der groesse Anpassen?
-    ImplInitSettings( TRUE, FALSE );
+    ImplInitSettings( sal_True, sal_False );
 
     long nX = mbMirrored ? (aNewSize.Width()-nHeight) : 0;
     long nXDiff = mbMirrored ? -nHeight : nHeight;
@@ -1356,7 +1367,7 @@ void TabBar::Resize()
     }
 
     // Neu formatieren
-    mbSizeFormat = TRUE;
+    mbSizeFormat = sal_True;
     if ( IsReallyVisible() )
     {
         if ( ImplCalcWidth() )
@@ -1372,7 +1383,7 @@ void TabBar::Resize()
 
 void TabBar::RequestHelp( const HelpEvent& rHEvt )
 {
-    USHORT nItemId = GetPageId( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
+    sal_uInt16 nItemId = GetPageId( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
     if ( nItemId )
     {
         if ( rHEvt.GetMode() & HELPMODE_BALLOON )
@@ -1408,7 +1419,7 @@ void TabBar::RequestHelp( const HelpEvent& rHEvt )
         // wenn dieser abgeschnitten oder nicht voll sichtbar ist
         if ( rHEvt.GetMode() & (HELPMODE_QUICK | HELPMODE_BALLOON) )
         {
-            USHORT nPos = GetPagePos( nItemId );
+            sal_uInt16 nPos = GetPagePos( nItemId );
             ImplTabBarItem* pItem = mpItemList->GetObject( nPos );
             if ( pItem->mbShort ||
                 (pItem->maRect.Right()-TABBAR_OFFSET_X-5 > mnLastOffX) )
@@ -1450,14 +1461,14 @@ void TabBar::StateChanged( StateChangedType nType )
     else if ( (nType == STATE_CHANGE_ZOOM) ||
               (nType == STATE_CHANGE_CONTROLFONT) )
     {
-        ImplInitSettings( TRUE, FALSE );
+        ImplInitSettings( sal_True, sal_False );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_CONTROLFOREGROUND )
         Invalidate();
     else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
     {
-        ImplInitSettings( FALSE, TRUE );
+        ImplInitSettings( sal_False, sal_True );
         Invalidate();
     }
     else if ( nType == STATE_CHANGE_MIRRORING )
@@ -1483,7 +1494,7 @@ void TabBar::DataChanged( const DataChangedEvent& rDCEvt )
          ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
-        ImplInitSettings( TRUE, TRUE );
+        ImplInitSettings( sal_True, sal_True );
         Invalidate();
     }
 }
@@ -1552,7 +1563,7 @@ long TabBar::DeactivatePage()
     if ( maDeactivatePageHdl.IsSet() )
         return maDeactivatePageHdl.Call( this );
     else
-        return TRUE;
+        return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -1562,7 +1573,7 @@ long TabBar::StartRenaming()
     if ( maStartRenamingHdl.IsSet() )
         return maStartRenamingHdl.Call( this );
     else
-        return TRUE;
+        return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -1572,7 +1583,7 @@ long TabBar::AllowRenaming()
     if ( maAllowRenamingHdl.IsSet() )
         return maAllowRenamingHdl.Call( this );
     else
-        return TRUE;
+        return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -1591,8 +1602,8 @@ void TabBar::Mirror()
 
 // -----------------------------------------------------------------------
 
-void TabBar::InsertPage( USHORT nPageId, const XubString& rText,
-                         TabBarPageBits nBits, USHORT nPos )
+void TabBar::InsertPage( sal_uInt16 nPageId, const XubString& rText,
+                         TabBarPageBits nBits, sal_uInt16 nPos )
 {
     DBG_ASSERT( nPageId, "TabBar::InsertPage(): PageId == 0" );
     DBG_ASSERT( GetPagePos( nPageId ) == PAGE_NOT_FOUND,
@@ -1602,7 +1613,7 @@ void TabBar::InsertPage( USHORT nPageId, const XubString& rText,
     // PageItem anlegen und in die Item-Liste eintragen
     ImplTabBarItem* pItem = new ImplTabBarItem( nPageId, rText, nBits );
     mpItemList->Insert( pItem, nPos );
-    mbSizeFormat = TRUE;
+    mbSizeFormat = sal_True;
 
     // CurPageId gegebenenfalls setzen
     if ( !mnCurPageId )
@@ -1617,9 +1628,9 @@ void TabBar::InsertPage( USHORT nPageId, const XubString& rText,
 
 // -----------------------------------------------------------------------
 
-Color TabBar::GetTabBgColor( USHORT nPageId ) const
+Color TabBar::GetTabBgColor( sal_uInt16 nPageId ) const
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
 
     if ( nPos != PAGE_NOT_FOUND )
         return mpItemList->GetObject( nPos )->maTabBgColor;
@@ -1627,9 +1638,9 @@ Color TabBar::GetTabBgColor( USHORT nPageId ) const
         return Color( COL_AUTO );
 }
 
-void TabBar::SetTabBgColor( USHORT nPageId, const Color& aTabBgColor )
+void TabBar::SetTabBgColor( sal_uInt16 nPageId, const Color& aTabBgColor )
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
     ImplTabBarItem* pItem;
     if ( nPos != PAGE_NOT_FOUND )
     {
@@ -1652,9 +1663,9 @@ void TabBar::SetTabBgColor( USHORT nPageId, const Color& aTabBgColor )
 
 // -----------------------------------------------------------------------
 
-void TabBar::RemovePage( USHORT nPageId )
+void TabBar::RemovePage( sal_uInt16 nPageId )
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
 
     // Existiert Item
     if ( nPos != PAGE_NOT_FOUND )
@@ -1668,7 +1679,7 @@ void TabBar::RemovePage( USHORT nPageId )
 
         // Item-Daten loeschen
         delete mpItemList->Remove( nPos );
-        mbFormat = TRUE;
+        mbFormat = sal_True;
 
         // Leiste neu ausgeben
         if ( IsReallyVisible() && IsUpdateMode() )
@@ -1680,9 +1691,9 @@ void TabBar::RemovePage( USHORT nPageId )
 
 // -----------------------------------------------------------------------
 
-void TabBar::MovePage( USHORT nPageId, USHORT nNewPos )
+void TabBar::MovePage( sal_uInt16 nPageId, sal_uInt16 nNewPos )
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
     Pair aPair( nPos, nNewPos );
 
     if ( nPos < nNewPos )
@@ -1697,7 +1708,7 @@ void TabBar::MovePage( USHORT nPageId, USHORT nNewPos )
         // TabBar-Item in der Liste verschieben
         ImplTabBarItem* pItem = mpItemList->Remove( nPos );
         mpItemList->Insert( pItem, nNewPos );
-        mbFormat = TRUE;
+        mbFormat = sal_True;
 
         // Leiste neu ausgeben
         if ( IsReallyVisible() && IsUpdateMode() )
@@ -1722,7 +1733,7 @@ void TabBar::Clear()
 
     // Items aus der Liste loeschen
     mpItemList->Clear();
-    mbSizeFormat = TRUE;
+    mbSizeFormat = sal_True;
     mnCurPageId = 0;
     mnFirstPos = 0;
 
@@ -1735,9 +1746,9 @@ void TabBar::Clear()
 
 // -----------------------------------------------------------------------
 
-void TabBar::EnablePage( USHORT nPageId, BOOL bEnable )
+void TabBar::EnablePage( sal_uInt16 nPageId, sal_Bool bEnable )
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
 
     if ( nPos != PAGE_NOT_FOUND )
     {
@@ -1758,21 +1769,21 @@ void TabBar::EnablePage( USHORT nPageId, BOOL bEnable )
 
 // -----------------------------------------------------------------------
 
-BOOL TabBar::IsPageEnabled( USHORT nPageId ) const
+sal_Bool TabBar::IsPageEnabled( sal_uInt16 nPageId ) const
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
 
     if ( nPos != PAGE_NOT_FOUND )
         return mpItemList->GetObject( nPos )->mbEnable;
     else
-        return FALSE;
+        return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-void TabBar::SetPageBits( USHORT nPageId, TabBarPageBits nBits )
+void TabBar::SetPageBits( sal_uInt16 nPageId, TabBarPageBits nBits )
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
 
     if ( nPos != PAGE_NOT_FOUND )
     {
@@ -1791,26 +1802,26 @@ void TabBar::SetPageBits( USHORT nPageId, TabBarPageBits nBits )
 
 // -----------------------------------------------------------------------
 
-TabBarPageBits TabBar::GetPageBits( USHORT nPageId ) const
+TabBarPageBits TabBar::GetPageBits( sal_uInt16 nPageId ) const
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
 
     if ( nPos != PAGE_NOT_FOUND )
         return mpItemList->GetObject( nPos )->mnBits;
     else
-        return FALSE;
+        return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-USHORT TabBar::GetPageCount() const
+sal_uInt16 TabBar::GetPageCount() const
 {
-    return (USHORT)mpItemList->Count();
+    return (sal_uInt16)mpItemList->Count();
 }
 
 // -----------------------------------------------------------------------
 
-USHORT TabBar::GetPageId( USHORT nPos ) const
+sal_uInt16 TabBar::GetPageId( sal_uInt16 nPos ) const
 {
     ImplTabBarItem* pItem = mpItemList->GetObject( nPos );
     if ( pItem )
@@ -1821,13 +1832,13 @@ USHORT TabBar::GetPageId( USHORT nPos ) const
 
 // -----------------------------------------------------------------------
 
-USHORT TabBar::GetPagePos( USHORT nPageId ) const
+sal_uInt16 TabBar::GetPagePos( sal_uInt16 nPageId ) const
 {
     ImplTabBarItem* pItem = mpItemList->First();
     while ( pItem )
     {
         if ( pItem->mnId == nPageId )
-            return (USHORT)mpItemList->GetCurPos();
+            return (sal_uInt16)mpItemList->GetCurPos();
 
         pItem = mpItemList->Next();
     }
@@ -1837,7 +1848,7 @@ USHORT TabBar::GetPagePos( USHORT nPageId ) const
 
 // -----------------------------------------------------------------------
 
-USHORT TabBar::GetPageId( const Point& rPos ) const
+sal_uInt16 TabBar::GetPageId( const Point& rPos ) const
 {
     ImplTabBarItem* pItem = mpItemList->First();
     while ( pItem )
@@ -1853,9 +1864,9 @@ USHORT TabBar::GetPageId( const Point& rPos ) const
 
 // -----------------------------------------------------------------------
 
-Rectangle TabBar::GetPageRect( USHORT nPageId ) const
+Rectangle TabBar::GetPageRect( sal_uInt16 nPageId ) const
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
 
     if ( nPos != PAGE_NOT_FOUND )
         return mpItemList->GetObject( nPos )->maRect;
@@ -1865,9 +1876,9 @@ Rectangle TabBar::GetPageRect( USHORT nPageId ) const
 
 // -----------------------------------------------------------------------
 
-void TabBar::SetCurPageId( USHORT nPageId )
+void TabBar::SetCurPageId( sal_uInt16 nPageId )
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
 
     // Wenn Item nicht existiert, dann nichts machen
     if ( nPos != PAGE_NOT_FOUND )
@@ -1878,9 +1889,9 @@ void TabBar::SetCurPageId( USHORT nPageId )
             return;
 
         // Muss invalidiert werden
-        BOOL bUpdate = FALSE;
+        sal_Bool bUpdate = sal_False;
         if ( IsReallyVisible() && IsUpdateMode() )
-            bUpdate = TRUE;
+            bUpdate = sal_True;
 
         ImplTabBarItem* pItem = mpItemList->GetObject( nPos );
         ImplTabBarItem* pOldItem;
@@ -1894,14 +1905,14 @@ void TabBar::SetCurPageId( USHORT nPageId )
         // deselktieren, wenn dies die einzige selektierte Seite ist
         if ( !pItem->mbSelect && pOldItem )
         {
-            USHORT nSelPageCount = GetSelectPageCount();
+            sal_uInt16 nSelPageCount = GetSelectPageCount();
             if ( nSelPageCount == 1 )
-                pOldItem->mbSelect = FALSE;
-            pItem->mbSelect = TRUE;
+                pOldItem->mbSelect = sal_False;
+            pItem->mbSelect = sal_True;
         }
 
         mnCurPageId = nPageId;
-        mbFormat = TRUE;
+        mbFormat = sal_True;
 
         // Dafuer sorgen, das aktuelle Page sichtbar wird
         if ( IsReallyVisible() )
@@ -1923,7 +1934,7 @@ void TabBar::SetCurPageId( USHORT nPageId )
                 while ( (mbMirrored ? (pItem->maRect.Left() < mnOffX) : (pItem->maRect.Right() > nWidth)) ||
                         pItem->maRect.IsEmpty() )
                 {
-                    USHORT nNewPos = mnFirstPos+1;
+                    sal_uInt16 nNewPos = mnFirstPos+1;
                     // Dafuer sorgen, das min. die aktuelle TabPages als
                     // erste TabPage sichtbar ist
                     if ( nNewPos >= nPos )
@@ -1954,12 +1965,12 @@ void TabBar::SetCurPageId( USHORT nPageId )
 
 // -----------------------------------------------------------------------
 
-void TabBar::MakeVisible( USHORT nPageId )
+void TabBar::MakeVisible( sal_uInt16 nPageId )
 {
     if ( !IsReallyVisible() )
         return;
 
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
 
     // Wenn Item nicht existiert, dann nichts machen
     if ( nPos != PAGE_NOT_FOUND )
@@ -1977,14 +1988,14 @@ void TabBar::MakeVisible( USHORT nPageId )
 
             if ( mbFormat || pItem->maRect.IsEmpty() )
             {
-                mbFormat = TRUE;
+                mbFormat = sal_True;
                 ImplFormat();
             }
 
             while ( (pItem->maRect.Right() > nWidth) ||
                     pItem->maRect.IsEmpty() )
             {
-                USHORT nNewPos = mnFirstPos+1;
+                sal_uInt16 nNewPos = mnFirstPos+1;
                 // Dafuer sorgen, das min. die aktuelle TabPages als
                 // erste TabPage sichtbar ist
                 if ( nNewPos >= nPos )
@@ -2006,11 +2017,11 @@ void TabBar::MakeVisible( USHORT nPageId )
 
 // -----------------------------------------------------------------------
 
-void TabBar::SetFirstPageId( USHORT nPageId )
+void TabBar::SetFirstPageId( sal_uInt16 nPageId )
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
 
-    // Wenn Item nicht existiert, dann FALSE zurueckgeben
+    // Wenn Item nicht existiert, dann sal_False zurueckgeben
     if ( nPos != PAGE_NOT_FOUND )
     {
         if ( nPos != mnFirstPos )
@@ -2018,8 +2029,8 @@ void TabBar::SetFirstPageId( USHORT nPageId )
             // Dafuer sorgen, das nach Moeglichkteit soviele Pages wie
             // moeglich sichtbar sind
             ImplFormat();
-            USHORT nLastFirstPos = ImplGetLastFirstPos();
-            USHORT nNewPos;
+            sal_uInt16 nLastFirstPos = ImplGetLastFirstPos();
+            sal_uInt16 nNewPos;
             if ( nPos > nLastFirstPos )
                 nNewPos = nLastFirstPos;
             else
@@ -2028,7 +2039,7 @@ void TabBar::SetFirstPageId( USHORT nPageId )
             if ( nNewPos != mnFirstPos )
             {
                 mnFirstPos = nNewPos;
-                mbFormat = TRUE;
+                mbFormat = sal_True;
 
                 // Leiste neu ausgeben (Achtung: mbDropPos beachten, da wenn
                 // dieses Flag gesetzt ist, wird direkt gepaintet)
@@ -2041,9 +2052,9 @@ void TabBar::SetFirstPageId( USHORT nPageId )
 
 // -----------------------------------------------------------------------
 
-void TabBar::SelectPage( USHORT nPageId, BOOL bSelect )
+void TabBar::SelectPage( sal_uInt16 nPageId, sal_Bool bSelect )
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
 
     if ( nPos != PAGE_NOT_FOUND )
     {
@@ -2062,10 +2073,10 @@ void TabBar::SelectPage( USHORT nPageId, BOOL bSelect )
 
 // -----------------------------------------------------------------------
 
-void TabBar::SelectPageRange( BOOL bSelect, USHORT nStartPos, USHORT nEndPos )
+void TabBar::SelectPageRange( sal_Bool bSelect, sal_uInt16 nStartPos, sal_uInt16 nEndPos )
 {
     Rectangle       aPaintRect;
-    USHORT          nPos = nStartPos;
+    sal_uInt16          nPos = nStartPos;
     ImplTabBarItem* pItem = mpItemList->Seek( nPos );
     while ( pItem && (nPos <= nEndPos) )
     {
@@ -2086,9 +2097,9 @@ void TabBar::SelectPageRange( BOOL bSelect, USHORT nStartPos, USHORT nEndPos )
 
 // -----------------------------------------------------------------------
 
-USHORT TabBar::GetSelectPage( USHORT nSelIndex ) const
+sal_uInt16 TabBar::GetSelectPage( sal_uInt16 nSelIndex ) const
 {
-    USHORT          nSelected = 0;
+    sal_uInt16          nSelected = 0;
     ImplTabBarItem* pItem = mpItemList->First();
     while ( pItem )
     {
@@ -2106,9 +2117,9 @@ USHORT TabBar::GetSelectPage( USHORT nSelIndex ) const
 
 // -----------------------------------------------------------------------
 
-USHORT TabBar::GetSelectPageCount() const
+sal_uInt16 TabBar::GetSelectPageCount() const
 {
-    USHORT          nSelected = 0;
+    sal_uInt16          nSelected = 0;
     ImplTabBarItem* pItem = mpItemList->First();
     while ( pItem )
     {
@@ -2123,22 +2134,22 @@ USHORT TabBar::GetSelectPageCount() const
 
 // -----------------------------------------------------------------------
 
-BOOL TabBar::IsPageSelected( USHORT nPageId ) const
+sal_Bool TabBar::IsPageSelected( sal_uInt16 nPageId ) const
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
     if ( nPos != PAGE_NOT_FOUND )
         return mpItemList->GetObject( nPos )->mbSelect;
     else
-        return FALSE;
+        return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL TabBar::StartEditMode( USHORT nPageId )
+sal_Bool TabBar::StartEditMode( sal_uInt16 nPageId )
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
     if ( mpEdit || (nPos == PAGE_NOT_FOUND) || (mnLastOffX < 8) )
-        return FALSE;
+        return sal_False;
 
     mnEditId = nPageId;
     if ( StartRenaming() )
@@ -2190,23 +2201,23 @@ BOOL TabBar::StartEditMode( USHORT nPageId )
         mpEdit->GrabFocus();
         mpEdit->SetSelection( Selection( 0, mpEdit->GetText().Len() ) );
         mpEdit->Show();
-        return TRUE;
+        return sal_True;
     }
     else
     {
         mnEditId = 0;
-        return FALSE;
+        return sal_False;
     }
 }
 
 // -----------------------------------------------------------------------
 
-void TabBar::EndEditMode( BOOL bCancel )
+void TabBar::EndEditMode( sal_Bool bCancel )
 {
     if ( mpEdit )
     {
         // call hdl
-        BOOL bEnd = TRUE;
+        sal_Bool bEnd = sal_True;
         mbEditCanceled = bCancel;
         maEditText = mpEdit->GetText();
         mpEdit->SetPostEvent();
@@ -2216,9 +2227,9 @@ void TabBar::EndEditMode( BOOL bCancel )
             if ( nAllowRenaming == TABBAR_RENAMING_YES )
                 SetPageText( mnEditId, maEditText );
             else if ( nAllowRenaming == TABBAR_RENAMING_NO )
-                bEnd = FALSE;
+                bEnd = sal_False;
             else // nAllowRenaming == TABBAR_RENAMING_CANCEL
-                mbEditCanceled = TRUE;
+                mbEditCanceled = sal_True;
         }
 
         // renaming not allowed, than reset edit data
@@ -2238,30 +2249,30 @@ void TabBar::EndEditMode( BOOL bCancel )
 
         // reset
         maEditText.Erase();
-        mbEditCanceled = FALSE;
+        mbEditCanceled = sal_False;
     }
 }
 
 // -----------------------------------------------------------------------
 
-void TabBar::SetMirrored( BOOL bMirrored )
+void TabBar::SetMirrored( sal_Bool bMirrored )
 {
     if( mbMirrored != bMirrored )
     {
         mbMirrored = bMirrored;
-        mbSizeFormat = TRUE;
+        mbSizeFormat = sal_True;
         ImplInitControls();     // for button images
         Resize();               // recalculates control positions
         Mirror();
     }
 }
 
-void TabBar::SetEffectiveRTL( BOOL bRTL )
+void TabBar::SetEffectiveRTL( sal_Bool bRTL )
 {
     SetMirrored( bRTL != Application::GetSettings().GetLayoutRTL() );
 }
 
-BOOL TabBar::IsEffectiveRTL() const
+sal_Bool TabBar::IsEffectiveRTL() const
 {
     return IsMirrored() != Application::GetSettings().GetLayoutRTL();
 }
@@ -2273,7 +2284,7 @@ void TabBar::SetMaxPageWidth( long nMaxWidth )
     if ( mnMaxPageWidth != nMaxWidth )
     {
         mnMaxPageWidth = nMaxWidth;
-        mbSizeFormat = TRUE;
+        mbSizeFormat = sal_True;
 
         // Leiste neu ausgeben
         if ( IsReallyVisible() && IsUpdateMode() )
@@ -2288,7 +2299,7 @@ void TabBar::SetSelectColor()
     if ( mbSelColor )
     {
         maSelColor = Color( COL_TRANSPARENT );
-        mbSelColor = FALSE;
+        mbSelColor = sal_False;
         Invalidate();
     }
 }
@@ -2302,7 +2313,7 @@ void TabBar::SetSelectColor( const Color& rColor )
         if ( mbSelColor )
         {
             maSelColor = Color( COL_TRANSPARENT );
-            mbSelColor = FALSE;
+            mbSelColor = sal_False;
             Invalidate();
         }
     }
@@ -2311,7 +2322,7 @@ void TabBar::SetSelectColor( const Color& rColor )
         if ( maSelColor != rColor )
         {
             maSelColor = rColor;
-            mbSelColor = TRUE;
+            mbSelColor = sal_True;
             Invalidate();
         }
     }
@@ -2324,7 +2335,7 @@ void TabBar::SetSelectTextColor()
     if ( mbSelTextColor )
     {
         maSelTextColor = Color( COL_TRANSPARENT );
-        mbSelTextColor = FALSE;
+        mbSelTextColor = sal_False;
         Invalidate();
     }
 }
@@ -2338,7 +2349,7 @@ void TabBar::SetSelectTextColor( const Color& rColor )
         if ( mbSelTextColor )
         {
             maSelTextColor = Color( COL_TRANSPARENT );
-            mbSelTextColor = FALSE;
+            mbSelTextColor = sal_False;
             Invalidate();
         }
     }
@@ -2347,7 +2358,7 @@ void TabBar::SetSelectTextColor( const Color& rColor )
         if ( maSelTextColor != rColor )
         {
             maSelTextColor = rColor;
-            mbSelTextColor = TRUE;
+            mbSelTextColor = sal_True;
             Invalidate();
         }
     }
@@ -2355,13 +2366,13 @@ void TabBar::SetSelectTextColor( const Color& rColor )
 
 // -----------------------------------------------------------------------
 
-void TabBar::SetPageText( USHORT nPageId, const XubString& rText )
+void TabBar::SetPageText( sal_uInt16 nPageId, const XubString& rText )
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
     if ( nPos != PAGE_NOT_FOUND )
     {
         mpItemList->GetObject( nPos )->maText = rText;
-        mbSizeFormat = TRUE;
+        mbSizeFormat = sal_True;
 
         // Leiste neu ausgeben
         if ( IsReallyVisible() && IsUpdateMode() )
@@ -2373,9 +2384,9 @@ void TabBar::SetPageText( USHORT nPageId, const XubString& rText )
 
 // -----------------------------------------------------------------------
 
-XubString TabBar::GetPageText( USHORT nPageId ) const
+XubString TabBar::GetPageText( sal_uInt16 nPageId ) const
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
     if ( nPos != PAGE_NOT_FOUND )
         return mpItemList->GetObject( nPos )->maText;
     else
@@ -2384,18 +2395,18 @@ XubString TabBar::GetPageText( USHORT nPageId ) const
 
 // -----------------------------------------------------------------------
 
-void TabBar::SetHelpText( USHORT nPageId, const XubString& rText )
+void TabBar::SetHelpText( sal_uInt16 nPageId, const XubString& rText )
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
     if ( nPos != PAGE_NOT_FOUND )
         mpItemList->GetObject( nPos )->maHelpText = rText;
 }
 
 // -----------------------------------------------------------------------
 
-XubString TabBar::GetHelpText( USHORT nPageId ) const
+XubString TabBar::GetHelpText( sal_uInt16 nPageId ) const
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
     if ( nPos != PAGE_NOT_FOUND )
     {
         ImplTabBarItem* pItem = mpItemList->GetObject( nPos );
@@ -2414,18 +2425,18 @@ XubString TabBar::GetHelpText( USHORT nPageId ) const
 
 // -----------------------------------------------------------------------
 
-void TabBar::SetHelpId( USHORT nPageId, const rtl::OString& rHelpId )
+void TabBar::SetHelpId( sal_uInt16 nPageId, const rtl::OString& rHelpId )
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
     if ( nPos != PAGE_NOT_FOUND )
         mpItemList->GetObject( nPos )->maHelpId = rHelpId;
 }
 
 // -----------------------------------------------------------------------
 
-rtl::OString TabBar::GetHelpId( USHORT nPageId ) const
+rtl::OString TabBar::GetHelpId( sal_uInt16 nPageId ) const
 {
-    USHORT nPos = GetPagePos( nPageId );
+    sal_uInt16 nPos = GetPagePos( nPageId );
     rtl::OString aRet;
     if ( nPos != PAGE_NOT_FOUND )
         aRet = mpItemList->GetObject( nPos )->maHelpId;
@@ -2446,10 +2457,10 @@ long TabBar::GetMinSize() const
 
 // -----------------------------------------------------------------------
 
-BOOL TabBar::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
+sal_Bool TabBar::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
 {
     if ( !(mnWinStyle & WB_DRAG) || (rCEvt.GetCommand() != COMMAND_STARTDRAG) )
-        return FALSE;
+        return sal_False;
 
     // Testen, ob angeklickte Seite selektiert ist. Falls dies nicht
     // der Fall ist, setzen wir ihn als aktuellen Eintrag. Falls Drag and
@@ -2459,11 +2470,11 @@ BOOL TabBar::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
     // da der Select schon den Bereich gescrollt haben kann
     if ( rCEvt.IsMouseEvent() && !mbInSelect )
     {
-        USHORT nSelId = GetPageId( rCEvt.GetMousePosPixel() );
+        sal_uInt16 nSelId = GetPageId( rCEvt.GetMousePosPixel() );
 
         // Falls kein Eintrag angeklickt wurde, starten wir kein Dragging
         if ( !nSelId )
-            return FALSE;
+            return sal_False;
 
         // Testen, ob Seite selektiertiert ist. Falls nicht, als aktuelle
         // Seite setzen und Select rufen.
@@ -2477,34 +2488,34 @@ BOOL TabBar::StartDrag( const CommandEvent& rCEvt, Region& rRegion )
                 ImplSelect();
             }
             else
-                return FALSE;
+                return sal_False;
         }
     }
-    mbInSelect = FALSE;
+    mbInSelect = sal_False;
 
     Region aRegion;
 
     // Region zuweisen
     rRegion = aRegion;
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
 
-USHORT TabBar::ShowDropPos( const Point& rPos )
+sal_uInt16 TabBar::ShowDropPos( const Point& rPos )
 {
     ImplTabBarItem* pItem;
-    USHORT      nDropId;
-    USHORT      nNewDropPos;
-    USHORT      nItemCount = (USHORT)mpItemList->Count();
+    sal_uInt16      nDropId;
+    sal_uInt16      nNewDropPos;
+    sal_uInt16      nItemCount = (sal_uInt16)mpItemList->Count();
     short       nScroll = 0;
 
     if ( rPos.X() > mnLastOffX-TABBAR_DRAG_SCROLLOFF )
     {
         pItem = mpItemList->GetObject( mpItemList->Count()-1 );
         if ( !pItem->maRect.IsEmpty() && (rPos.X() > pItem->maRect.Right()) )
-            nNewDropPos = (USHORT)mpItemList->Count();
+            nNewDropPos = (sal_uInt16)mpItemList->Count();
         else
         {
             nNewDropPos = mnFirstPos+1;
@@ -2540,12 +2551,12 @@ USHORT TabBar::ShowDropPos( const Point& rPos )
 
     if ( mbDropPos )
         HideDropPos();
-    mbDropPos = TRUE;
+    mbDropPos = sal_True;
     mnDropPos = nNewDropPos;
 
     if ( nScroll )
     {
-        USHORT nOldFirstPos = mnFirstPos;
+        sal_uInt16 nOldFirstPos = mnFirstPos;
         SetFirstPageId( GetPageId( mnFirstPos+nScroll ) );
 
         // Direkt ausgeben, da kein Paint bei Drag and Drop moeglich
@@ -2562,7 +2573,7 @@ USHORT TabBar::ShowDropPos( const Point& rPos )
     Color       aBlackColor( COL_BLACK );
     long        nX;
     long        nY = (maWinSize.Height()/2)-1;
-    USHORT      nCurPos = GetPagePos( mnCurPageId );
+    sal_uInt16      nCurPos = GetPagePos( mnCurPageId );
 
     SetLineColor( aBlackColor );
     if ( mnDropPos < nItemCount )
@@ -2606,7 +2617,7 @@ void TabBar::HideDropPos()
         long        nX;
         long        nY1 = (maWinSize.Height()/2)-3;
         long        nY2 = nY1 + 5;
-        USHORT      nItemCount = (USHORT)mpItemList->Count();
+        sal_uInt16      nItemCount = (sal_uInt16)mpItemList->Count();
 
         if ( mnDropPos < nItemCount )
         {
@@ -2633,17 +2644,17 @@ void TabBar::HideDropPos()
             SetClipRegion();
         }
 
-        mbDropPos = FALSE;
+        mbDropPos = sal_False;
         mnDropPos = 0;
     }
 }
 
 // -----------------------------------------------------------------------
 
-BOOL TabBar::SwitchPage( const Point& rPos )
+sal_Bool TabBar::SwitchPage( const Point& rPos )
 {
-    BOOL    bSwitch = FALSE;
-    USHORT  nSwitchId = GetPageId( rPos );
+    sal_Bool    bSwitch = sal_False;
+    sal_uInt16  nSwitchId = GetPageId( rPos );
     if ( !nSwitchId )
         EndSwitchPage();
     else
@@ -2660,16 +2671,16 @@ BOOL TabBar::SwitchPage( const Point& rPos )
             {
                 if ( Time::GetSystemTicks() > mnSwitchTime+500 )
                 {
-                    mbInSwitching = TRUE;
+                    mbInSwitching = sal_True;
                     if ( ImplDeactivatePage() )
                     {
                         SetCurPageId( mnSwitchId );
                         Update();
                         ImplActivatePage();
                         ImplSelect();
-                        bSwitch = TRUE;
+                        bSwitch = sal_True;
                     }
-                    mbInSwitching = FALSE;
+                    mbInSwitching = sal_False;
                 }
             }
         }

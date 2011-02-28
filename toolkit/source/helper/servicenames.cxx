@@ -92,6 +92,9 @@ const sal_Char __FAR_DATA szServiceName_TreeControl[] = "com.sun.star.awt.tree.T
 const sal_Char __FAR_DATA szServiceName_TreeControlModel[] = "com.sun.star.awt.tree.TreeControlModel";
 const sal_Char __FAR_DATA szServiceName_MutableTreeDataModel[] = "com.sun.star.awt.tree.MutableTreeDataModel";
 const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControlModel[] = "com.sun.star.awt.UnoSimpleAnimationControlModel", szServiceName2_UnoSimpleAnimationControlModel[] = "com.sun.star.awt.UnoControlSimpleAnimationModel";
+const sal_Char __FAR_DATA szServiceName_AnimatedImagesControl[] = "com.sun.star.awt.AnimatedImagesControl";
+const sal_Char __FAR_DATA szServiceName_AnimatedImagesControlModel[] = "com.sun.star.awt.AnimatedImagesControlModel";
+const sal_Char __FAR_DATA szServiceName_SpinningProgressControlModel[] = "com.sun.star.awt.SpinningProgressControlModel";
 const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControl[] = "com.sun.star.awt.UnoSimpleAnimationControl", szServiceName2_UnoSimpleAnimationControl[] = "com.sun.star.awt.UnoControlSimpleAnimation";
 const sal_Char __FAR_DATA szServiceName_UnoThrobberControlModel[] = "com.sun.star.awt.UnoThrobberControlModel", szServiceName2_UnoThrobberControlModel[] = "com.sun.star.awt.UnoControlThrobberModel";
 const sal_Char __FAR_DATA szServiceName_UnoThrobberControl[] = "com.sun.star.awt.UnoThrobberControl", szServiceName2_UnoThrobberControl[] = "com.sun.star.awt.UnoControlThrobber";
@@ -102,3 +105,9 @@ const sal_Char __FAR_DATA szServiceName_GridControlModel[] = "com.sun.star.awt.g
 const sal_Char __FAR_DATA szServiceName_DefaultGridDataModel[] = "com.sun.star.awt.grid.DefaultGridDataModel";
 const sal_Char __FAR_DATA szServiceName_DefaultGridColumnModel[] = "com.sun.star.awt.grid.DefaultGridColumnModel";
 const sal_Char __FAR_DATA szServiceName_GridColumn[] = "com.sun.star.awt.grid.GridColumn";
+const sal_Char __FAR_DATA szServiceName_UnoControlTabPage[] = "com.sun.star.awt.tab.UnoControlTabPage";
+const sal_Char __FAR_DATA szServiceName_UnoControlTabPageModel[] = "com.sun.star.awt.tab.UnoControlTabPageModel";
+const sal_Char __FAR_DATA szServiceName_UnoControlTabPageContainerModel[] = "com.sun.star.awt.tab.UnoControlTabPageContainerModel";
+const sal_Char __FAR_DATA szServiceName_UnoControlTabPageContainer[] = "com.sun.star.awt.tab.UnoControlTabPageContainer";
+const sal_Char __FAR_DATA szServiceName_SortableGridDataModel[] = "com.sun.star.awt.grid.SortableGridDataModel";
+

@@ -45,7 +45,7 @@ public:
     RGNDATA*                mpClipRgnData;          // ClipRegion-Data
     RGNDATA*                mpStdClipRgnData;       // Cache Standard-ClipRegion-Data
     RECT*                   mpNextClipRect;         // Naechstes ClipRegion-Rect
-    BOOL                    mbFirstClipRect;        // Flag for first cliprect to insert
+    sal_Bool                mbFirstClipRect;        // Flag for first cliprect to insert
     sal_Bool                mbInterceptChildWindowKeyDown; // Intercept the KeyDown event sent to system child window
     WinSalObject*               mpNextObject;           // pointer to next object
 
@@ -54,13 +54,13 @@ public:
     virtual ~WinSalObject();
 
     virtual void                    ResetClipRegion();
-    virtual USHORT                  GetClipRegionType();
-    virtual void                    BeginSetClipRegion( ULONG nRects );
+    virtual sal_uInt16                  GetClipRegionType();
+    virtual void                    BeginSetClipRegion( sal_uIntPtr nRects );
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual void                    EndSetClipRegion();
     virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight );
-    virtual void                    Show( BOOL bVisible );
-    virtual void                    Enable( BOOL nEnable );
+    virtual void                    Show( sal_Bool bVisible );
+    virtual void                    Enable( sal_Bool nEnable );
     virtual void                    GrabFocus();
     virtual void                    SetBackground();
     virtual void                    SetBackground( SalColor nSalColor );

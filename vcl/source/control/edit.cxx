@@ -119,19 +119,19 @@ struct DDInfo
     Cursor          aCursor;
     Selection       aDndStartSel;
     xub_StrLen      nDropPos;
-    BOOL            bStarterOfDD;
-    BOOL            bDroppedInMe;
-    BOOL            bVisCursor;
-    BOOL            bIsStringSupported;
+    sal_Bool            bStarterOfDD;
+    sal_Bool            bDroppedInMe;
+    sal_Bool            bVisCursor;
+    sal_Bool            bIsStringSupported;
 
     DDInfo()
     {
         aCursor.SetStyle( CURSOR_SHADOW );
         nDropPos = 0;
-        bStarterOfDD = FALSE;
-        bDroppedInMe = FALSE;
-        bVisCursor = FALSE;
-        bIsStringSupported = FALSE;
+        bStarterOfDD = sal_False;
+        bDroppedInMe = sal_False;
+        bVisCursor = sal_False;
+        bIsStringSupported = sal_False;
     }
 };
 
@@ -140,11 +140,11 @@ struct DDInfo
 struct Impl_IMEInfos
 {
     String      aOldTextAfterStartPos;
-    USHORT*     pAttribs;
+    sal_uInt16*     pAttribs;
     xub_StrLen  nPos;
     xub_StrLen  nLen;
-    BOOL        bCursor;
-    BOOL        bWasCursorOverwrite;
+    sal_Bool        bCursor;
+    sal_Bool        bWasCursorOverwrite;
 
                 Impl_IMEInfos( xub_StrLen nPos, const String& rOldTextAfterStartPos );
                 ~Impl_IMEInfos();
@@ -160,9 +160,9 @@ Impl_IMEInfos::Impl_IMEInfos( xub_StrLen nP, const String& rOldTextAfterStartPos
 {
     nPos = nP;
     nLen = 0;
-    bCursor = TRUE;
+    bCursor = sal_True;
     pAttribs = NULL;
-    bWasCursorOverwrite = FALSE;
+    bWasCursorOverwrite = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -178,8 +178,8 @@ void Impl_IMEInfos::CopyAttribs( const xub_StrLen* pA, xub_StrLen nL )
 {
     nLen = nL;
     delete[] pAttribs;
-    pAttribs = new USHORT[ nL ];
-    rtl_copyMemory( pAttribs, pA, nL*sizeof(USHORT) );
+    pAttribs = new sal_uInt16[ nL ];
+    rtl_copyMemory( pAttribs, pA, nL*sizeof(sal_uInt16) );
 }
 
 // -----------------------------------------------------------------------
@@ -236,7 +236,7 @@ Edit::Edit( Window* pParent, const ResId& rResId, bool bDisableAccessibleLabeled
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
     if ( bDisableAccessibleLabeledByRelation )
-        ImplGetWindowImpl()->mbDisableAccessibleLabeledByRelation = TRUE;
+        ImplGetWindowImpl()->mbDisableAccessibleLabeledByRelation = sal_True;
 
     // Derived MultiLineEdit takes care to call Show only after MultiLineEdit
     // ctor has already started:
@@ -289,21 +289,21 @@ void Edit::ImplInitEditData()
     mnAlign                 = EDIT_ALIGN_LEFT;
     mnMaxTextLen            = EDIT_NOLIMIT;
     meAutocompleteAction    = AUTOCOMPLETE_KEYINPUT;
-    mbModified              = FALSE;
-    mbInternModified        = FALSE;
-    mbReadOnly              = FALSE;
-    mbInsertMode            = TRUE;
-    mbClickedInSelection    = FALSE;
-    mbActivePopup           = FALSE;
-    mbIsSubEdit             = FALSE;
-    mbInMBDown              = FALSE;
+    mbModified              = sal_False;
+    mbInternModified        = sal_False;
+    mbReadOnly              = sal_False;
+    mbInsertMode            = sal_True;
+    mbClickedInSelection    = sal_False;
+    mbActivePopup           = sal_False;
+    mbIsSubEdit             = sal_False;
+    mbInMBDown              = sal_False;
     mpDDInfo                = NULL;
     mpIMEInfos              = NULL;
     mcEchoChar              = 0;
 
     // --- RTL --- no default mirroring for Edit controls
     // note: controls that use a subedit will revert this (SpinField, ComboBox)
-    EnableRTL( FALSE );
+    EnableRTL( sal_False );
 
     vcl::unohelper::DragAndDropWrapper* pDnDWrapper = new vcl::unohelper::DragAndDropWrapper( this );
     mxDnDListener = pDnDWrapper;
@@ -350,7 +350,7 @@ void Edit::ImplInit( Window* pParent, WinBits nStyle )
     SetCursor( new Cursor );
 
     SetPointer( Pointer( POINTER_TEXT ) );
-    ImplInitSettings( TRUE, TRUE, TRUE );
+    ImplInitSettings( sal_True, sal_True, sal_True );
 
     uno::Reference< datatransfer::dnd::XDragGestureListener> xDGL( mxDnDListener, uno::UNO_QUERY );
     uno::Reference< datatransfer::dnd::XDragGestureRecognizer > xDGR = GetDragGestureRecognizer();
@@ -378,7 +378,7 @@ WinBits Edit::ImplInitStyle( WinBits nStyle )
 
 // -----------------------------------------------------------------------
 
-BOOL Edit::IsCharInput( const KeyEvent& rKeyEvent )
+sal_Bool Edit::IsCharInput( const KeyEvent& rKeyEvent )
 {
     // In the future we must use new Unicode functions for this
     xub_Unicode cCharCode = rKeyEvent.GetCharCode();
@@ -392,13 +392,13 @@ BOOL Edit::IsCharInput( const KeyEvent& rKeyEvent )
 
 void Edit::ImplModified()
 {
-    mbModified = TRUE;
+    mbModified = sal_True;
     Modify();
 }
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground )
+void Edit::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -545,7 +545,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
     }
 
     Cursor* pCursor = GetCursor();
-    BOOL bVisCursor = pCursor ? pCursor->IsVisible() : FALSE;
+    sal_Bool bVisCursor = pCursor ? pCursor->IsVisible() : sal_False;
     if ( pCursor )
         pCursor->Hide();
 
@@ -553,7 +553,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if ( IsEnabled() )
-        ImplInitSettings( FALSE, TRUE, FALSE );
+        ImplInitSettings( sal_False, sal_True, sal_False );
     else
         SetTextColor( rStyleSettings.GetDisableColor() );
 
@@ -574,7 +574,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
     else
         SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
 
-    BOOL bDrawSelection = maSelection.Len() && ( HasFocus() || ( GetStyle() & WB_NOHIDESELECTION ) || mbActivePopup );
+    sal_Bool bDrawSelection = maSelection.Len() && ( HasFocus() || ( GetStyle() & WB_NOHIDESELECTION ) || mbActivePopup );
 
     long nPos = nStart ? pDX[2*nStart] : 0;
     aPos.X() = nPos + mnXOffset + ImplGetExtraOffset();
@@ -664,7 +664,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
 
                 for( i = 0; i < mpIMEInfos->nLen; )
                 {
-                    USHORT nAttr = mpIMEInfos->pAttribs[i];
+                    sal_uInt16 nAttr = mpIMEInfos->pAttribs[i];
                     Region aClip;
                     int nIndex = i;
                     while( nIndex < mpIMEInfos->nLen && mpIMEInfos->pAttribs[nIndex] == nAttr)  // #112631# check nIndex before using it
@@ -720,7 +720,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplDelete( const Selection& rSelection, BYTE nDirection, BYTE nMode )
+void Edit::ImplDelete( const Selection& rSelection, sal_uInt8 nDirection, sal_uInt8 nMode )
 {
     XubString aText = ImplGetText();
 
@@ -780,7 +780,7 @@ void Edit::ImplDelete( const Selection& rSelection, BYTE nDirection, BYTE nMode 
     maSelection.Min() = aSelection.Min();
     maSelection.Max() = aSelection.Min();
     ImplAlignAndPaint();
-    mbInternModified = TRUE;
+    mbInternModified = sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -795,19 +795,19 @@ String Edit::ImplGetValidString( const String& rString ) const
 }
 
 // -----------------------------------------------------------------------
-Reference < i18n::XBreakIterator > Edit::ImplGetBreakIterator() const
+uno::Reference < i18n::XBreakIterator > Edit::ImplGetBreakIterator() const
 {
     //!! since we don't want to become incompatible in the next minor update
     //!! where this code will get integrated into, xISC will be a local
     //!! variable instead of a class member!
-    Reference < i18n::XBreakIterator > xBI;
+    uno::Reference < i18n::XBreakIterator > xBI;
 //    if ( !xBI.is() )
     {
-        Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        Reference < XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
+        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        uno::Reference < XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
         if ( xI.is() )
         {
-            Any x = xI->queryInterface( ::getCppuType((const Reference< i18n::XBreakIterator >*)0) );
+            Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XBreakIterator >*)0) );
             x >>= xBI;
         }
     }
@@ -815,19 +815,19 @@ Reference < i18n::XBreakIterator > Edit::ImplGetBreakIterator() const
 }
 // -----------------------------------------------------------------------
 
-Reference < i18n::XExtendedInputSequenceChecker > Edit::ImplGetInputSequenceChecker() const
+uno::Reference < i18n::XExtendedInputSequenceChecker > Edit::ImplGetInputSequenceChecker() const
 {
     //!! since we don't want to become incompatible in the next minor update
     //!! where this code will get integrated into, xISC will be a local
     //!! variable instead of a class member!
-    Reference < i18n::XExtendedInputSequenceChecker > xISC;
+    uno::Reference < i18n::XExtendedInputSequenceChecker > xISC;
 //    if ( !xISC.is() )
     {
-        Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        Reference < XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.InputSequenceChecker" ) );
+        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        uno::Reference < XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.i18n.InputSequenceChecker" ) );
         if ( xI.is() )
         {
-            Any x = xI->queryInterface( ::getCppuType((const Reference< i18n::XExtendedInputSequenceChecker >*)0) );
+            Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XExtendedInputSequenceChecker >*)0) );
             x >>= xISC;
         }
     }
@@ -902,8 +902,8 @@ void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel, sal_
         // get access to the configuration of this office module
         try
         {
-            Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-            Reference< container::XNameAccess > xModuleCfg( ::comphelper::ConfigurationHelper::openConfig(
+            uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+            uno::Reference< container::XNameAccess > xModuleCfg( ::comphelper::ConfigurationHelper::openConfig(
                                     xMSF,
                                     sModule,
                                     ::comphelper::ConfigurationHelper::E_READONLY ),
@@ -1003,7 +1003,7 @@ void Edit::ImplInsertText( const XubString& rStr, const Selection* pNewSel, sal_
     }
 
     ImplAlignAndPaint();
-    mbInternModified = TRUE;
+    mbInternModified = sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -1027,7 +1027,7 @@ void Edit::ImplSetText( const XubString& rText, const Selection* pNewSelection )
             ImplAlign();
 
             if ( pNewSelection )
-                ImplSetSelection( *pNewSelection, FALSE );
+                ImplSetSelection( *pNewSelection, sal_False );
 
             if ( mnXOffset && !pNewSelection )
                 maSelection.Max() = 0;
@@ -1165,7 +1165,7 @@ void Edit::ImplClearBackground( long nXStart, long nXEnd )
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
+void Edit::ImplShowCursor( sal_Bool bOnlyIfVisible )
 {
     if ( !IsUpdateMode() || ( bOnlyIfVisible && !IsReallyVisible() ) )
         return;
@@ -1358,7 +1358,7 @@ xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos ) const
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplSetCursorPos( xub_StrLen nChar, BOOL bSelect )
+void Edit::ImplSetCursorPos( xub_StrLen nChar, sal_Bool bSelect )
 {
     Selection aSelection( maSelection );
     aSelection.Max() = nChar;
@@ -1450,7 +1450,7 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
 
     if ( rMEvt.GetClicks() < 4 )
     {
-        mbClickedInSelection = FALSE;
+        mbClickedInSelection = sal_False;
         if ( rMEvt.GetClicks() == 3 )
         {
             ImplSetSelection( Selection( 0, 0xFFFF ) );
@@ -1465,7 +1465,7 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
             ImplCopyToSelectionClipboard();
         }
         else if ( !rMEvt.IsShift() && HasFocus() && aSelection.IsInside( nChar ) )
-            mbClickedInSelection = TRUE;
+            mbClickedInSelection = sal_True;
         else if ( rMEvt.IsLeft() )
             ImplSetCursorPos( nChar, rMEvt.IsShift() );
 
@@ -1473,9 +1473,9 @@ void Edit::MouseButtonDown( const MouseEvent& rMEvt )
             StartTracking( STARTTRACK_SCROLLREPEAT );
     }
 
-    mbInMBDown = TRUE;  // Dann im GetFocus nicht alles selektieren
+    mbInMBDown = sal_True;  // Dann im GetFocus nicht alles selektieren
     GrabFocus();
-    mbInMBDown = FALSE;
+    mbInMBDown = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -1485,8 +1485,8 @@ void Edit::MouseButtonUp( const MouseEvent& rMEvt )
     if ( mbClickedInSelection && rMEvt.IsLeft() )
     {
         xub_StrLen nChar = ImplGetCharPos( rMEvt.GetPosPixel() );
-        ImplSetCursorPos( nChar, FALSE );
-        mbClickedInSelection = FALSE;
+        ImplSetCursorPos( nChar, sal_False );
+        mbClickedInSelection = sal_False;
     }
     else if ( rMEvt.IsMiddle() && !mbReadOnly &&
               ( GetSettings().GetMouseSettings().GetMiddleButtonAction() == MOUSE_MIDDLE_PASTESELECTION ) )
@@ -1506,8 +1506,8 @@ void Edit::Tracking( const TrackingEvent& rTEvt )
         if ( mbClickedInSelection )
         {
             xub_StrLen nChar = ImplGetCharPos( rTEvt.GetMouseEvent().GetPosPixel() );
-            ImplSetCursorPos( nChar, FALSE );
-            mbClickedInSelection = FALSE;
+            ImplSetCursorPos( nChar, sal_False );
+            mbClickedInSelection = sal_False;
         }
         else if ( rTEvt.GetMouseEvent().IsLeft() )
         {
@@ -1519,7 +1519,7 @@ void Edit::Tracking( const TrackingEvent& rTEvt )
         if( !mbClickedInSelection )
         {
             xub_StrLen nChar = ImplGetCharPos( rTEvt.GetMouseEvent().GetPosPixel() );
-            ImplSetCursorPos( nChar, TRUE );
+            ImplSetCursorPos( nChar, sal_True );
         }
     }
 
@@ -1529,13 +1529,13 @@ void Edit::Tracking( const TrackingEvent& rTEvt )
 
 // -----------------------------------------------------------------------
 
-BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
+sal_Bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
 {
-    BOOL        bDone = FALSE;
-    USHORT      nCode = rKEvt.GetKeyCode().GetCode();
+    sal_Bool        bDone = sal_False;
+    sal_uInt16      nCode = rKEvt.GetKeyCode().GetCode();
     KeyFuncType eFunc = rKEvt.GetKeyCode().GetFunction();
 
-    mbInternModified = FALSE;
+    mbInternModified = sal_False;
 
     if ( eFunc != KEYFUNC_DONTKNOW )
     {
@@ -1547,7 +1547,7 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                 {
                     Cut();
                     ImplModified();
-                    bDone = TRUE;
+                    bDone = sal_True;
                 }
             }
             break;
@@ -1557,7 +1557,7 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                 if ( !(GetStyle() & WB_PASSWORD) )
                 {
                     Copy();
-                    bDone = TRUE;
+                    bDone = sal_True;
                 }
             }
             break;
@@ -1567,7 +1567,7 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                 if ( !mbReadOnly )
                 {
                     Paste();
-                    bDone = TRUE;
+                    bDone = sal_True;
                 }
             }
             break;
@@ -1577,7 +1577,7 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                 if ( !mbReadOnly )
                 {
                     Undo();
-                    bDone = TRUE;
+                    bDone = sal_True;
                 }
             }
             break;
@@ -1592,7 +1592,7 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
         if ( nCode == KEY_A )
         {
             ImplSetSelection( Selection( 0, maText.Len() ) );
-            bDone = TRUE;
+            bDone = sal_True;
         }
         else if ( rKEvt.GetKeyCode().IsShift() && (nCode == KEY_S) )
         {
@@ -1606,7 +1606,7 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     ImplInsertText( aChars );
                     ImplModified();
                 }
-                bDone = TRUE;
+                bDone = sal_True;
             }
         }
     }
@@ -1618,7 +1618,7 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             case com::sun::star::awt::Key::SELECT_ALL:
             {
                 ImplSetSelection( Selection( 0, maText.Len() ) );
-                bDone = TRUE;
+                bDone = sal_True;
             }
             break;
 
@@ -1744,7 +1744,7 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                         }
                     }
 
-                    bDone = TRUE;
+                    bDone = sal_True;
                 }
             }
             break;
@@ -1758,8 +1758,8 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             {
                 if ( !mbReadOnly && !rKEvt.GetKeyCode().IsMod2() )
                 {
-                    BYTE nDel = (nCode == KEY_DELETE) ? EDIT_DEL_RIGHT : EDIT_DEL_LEFT;
-                    BYTE nMode = rKEvt.GetKeyCode().IsMod1() ? EDIT_DELMODE_RESTOFWORD : EDIT_DELMODE_SIMPLE;
+                    sal_uInt8 nDel = (nCode == KEY_DELETE) ? EDIT_DEL_RIGHT : EDIT_DEL_LEFT;
+                    sal_uInt8 nMode = rKEvt.GetKeyCode().IsMod1() ? EDIT_DELMODE_RESTOFWORD : EDIT_DELMODE_SIMPLE;
                     if ( (nMode == EDIT_DELMODE_RESTOFWORD) && rKEvt.GetKeyCode().IsShift() )
                         nMode = EDIT_DELMODE_RESTOFCONTENT;
                     switch( nCode )
@@ -1786,7 +1786,7 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     ImplDelete( maSelection, nDel, nMode );
                     if ( maText.Len() != nOldLen )
                         ImplModified();
-                    bDone = TRUE;
+                    bDone = sal_True;
                 }
             }
             break;
@@ -1796,7 +1796,7 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                 if ( !mpIMEInfos && !mbReadOnly && !rKEvt.GetKeyCode().IsMod2() )
                 {
                     SetInsertMode( !mbInsertMode );
-                    bDone = TRUE;
+                    bDone = sal_True;
                 }
             }
             break;
@@ -1821,7 +1821,7 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
 
                     // Wurde nichts veraendert, dann TAB fuer DialogControl
                     if ( GetSelection().Len() )
-                        bDone = TRUE;
+                        bDone = sal_True;
                 }
             }
             break;
@@ -1831,7 +1831,7 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             {
                 if ( IsCharInput( rKEvt ) )
                 {
-                    bDone = TRUE;   // Auch bei ReadOnly die Zeichen schlucken.
+                    bDone = sal_True;   // Auch bei ReadOnly die Zeichen schlucken.
                     if ( !mbReadOnly )
                     {
                         ImplInsertText( rKEvt.GetCharCode(), 0, sal_True );
@@ -1899,9 +1899,9 @@ void Edit::Resize()
 
 // -----------------------------------------------------------------------
 
-void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags )
+void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
-    ImplInitSettings( TRUE, TRUE, TRUE );
+    ImplInitSettings( sal_True, sal_True, sal_True );
 
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
@@ -1916,8 +1916,8 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG
     // Border/Background
     pDev->SetLineColor();
     pDev->SetFillColor();
-    BOOL bBorder = !(nFlags & WINDOW_DRAW_NOBORDER ) && (GetStyle() & WB_BORDER);
-    BOOL bBackground = !(nFlags & WINDOW_DRAW_NOBACKGROUND) && IsControlBackground();
+    sal_Bool bBorder = !(nFlags & WINDOW_DRAW_NOBORDER ) && (GetStyle() & WB_BORDER);
+    sal_Bool bBackground = !(nFlags & WINDOW_DRAW_NOBACKGROUND) && IsControlBackground();
     if ( bBorder || bBackground )
     {
         Rectangle aRect( aPos, aSize );
@@ -2009,7 +2009,7 @@ void Edit::GetFocus()
     {
         maUndoText = maText;
 
-        ULONG nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
+        sal_uLong nSelOptions = GetSettings().GetStyleSettings().GetSelectionOptions();
         if ( !( GetStyle() & (WB_NOHIDESELECTION|WB_READONLY) )
                 && ( GetGetFocusFlags() & (GETFOCUS_INIT|GETFOCUS_TAB|GETFOCUS_CURSOR|GETFOCUS_MNEMONIC) ) )
         {
@@ -2106,22 +2106,22 @@ void Edit::Command( const CommandEvent& rCEvt )
 
         if ( !maSelection.Len() )
         {
-            pPopup->EnableItem( SV_MENU_EDIT_CUT, FALSE );
-            pPopup->EnableItem( SV_MENU_EDIT_COPY, FALSE );
-            pPopup->EnableItem( SV_MENU_EDIT_DELETE, FALSE );
+            pPopup->EnableItem( SV_MENU_EDIT_CUT, sal_False );
+            pPopup->EnableItem( SV_MENU_EDIT_COPY, sal_False );
+            pPopup->EnableItem( SV_MENU_EDIT_DELETE, sal_False );
         }
 
         if ( IsReadOnly() )
         {
-            pPopup->EnableItem( SV_MENU_EDIT_CUT, FALSE );
-            pPopup->EnableItem( SV_MENU_EDIT_PASTE, FALSE );
-            pPopup->EnableItem( SV_MENU_EDIT_DELETE, FALSE );
-            pPopup->EnableItem( SV_MENU_EDIT_INSERTSYMBOL, FALSE );
+            pPopup->EnableItem( SV_MENU_EDIT_CUT, sal_False );
+            pPopup->EnableItem( SV_MENU_EDIT_PASTE, sal_False );
+            pPopup->EnableItem( SV_MENU_EDIT_DELETE, sal_False );
+            pPopup->EnableItem( SV_MENU_EDIT_INSERTSYMBOL, sal_False );
         }
         else
         {
             // Paste nur, wenn Text im Clipboard
-            BOOL bData = FALSE;
+            sal_Bool bData = sal_False;
             uno::Reference< datatransfer::clipboard::XClipboard > xClipboard = GetClipboard();
             if ( xClipboard.is() )
             {
@@ -2139,17 +2139,17 @@ void Edit::Command( const CommandEvent& rCEvt )
         }
 
         if ( maUndoText == maText )
-            pPopup->EnableItem( SV_MENU_EDIT_UNDO, FALSE );
+            pPopup->EnableItem( SV_MENU_EDIT_UNDO, sal_False );
         if ( ( maSelection.Min() == 0 ) && ( maSelection.Max() == maText.Len() ) )
-            pPopup->EnableItem( SV_MENU_EDIT_SELECTALL, FALSE );
+            pPopup->EnableItem( SV_MENU_EDIT_SELECTALL, sal_False );
         if ( !pImplFncGetSpecialChars )
         {
-            USHORT nPos = pPopup->GetItemPos( SV_MENU_EDIT_INSERTSYMBOL );
+            sal_uInt16 nPos = pPopup->GetItemPos( SV_MENU_EDIT_INSERTSYMBOL );
             pPopup->RemoveItem( nPos );
             pPopup->RemoveItem( nPos-1 );
         }
 
-        mbActivePopup = TRUE;
+        mbActivePopup = sal_True;
         Selection aSaveSel = GetSelection();    // Falls jemand in Get/LoseFocus die Selektion verbiegt, z.B. URL-Zeile...
         Point aPos = rCEvt.GetMousePosPixel();
         if ( !rCEvt.IsMouseEvent() )
@@ -2158,7 +2158,7 @@ void Edit::Command( const CommandEvent& rCEvt )
             Size aSize = GetOutputSizePixel();
             aPos = Point( aSize.Width()/2, aSize.Height()/2 );
         }
-        USHORT n = pPopup->Execute( this, aPos );
+        sal_uInt16 n = pPopup->Execute( this, aPos );
         Edit::DeletePopupMenu( pPopup );
         SetSelection( aSaveSel );
         switch ( n )
@@ -2197,7 +2197,7 @@ void Edit::Command( const CommandEvent& rCEvt )
                 }
                 break;
         }
-        mbActivePopup = FALSE;
+        mbActivePopup = sal_False;
     }
     else if ( rCEvt.GetCommand() == COMMAND_VOICE )
     {
@@ -2245,12 +2245,12 @@ void Edit::Command( const CommandEvent& rCEvt )
     }
     else if ( rCEvt.GetCommand() == COMMAND_ENDEXTTEXTINPUT )
     {
-        BOOL bInsertMode = !mpIMEInfos->bWasCursorOverwrite;
+        sal_Bool bInsertMode = !mpIMEInfos->bWasCursorOverwrite;
         delete mpIMEInfos;
         mpIMEInfos = NULL;
         // Font wieder ohne Attribute einstellen, wird jetzt im Repaint nicht
         // mehr neu initialisiert
-        ImplInitSettings( TRUE, FALSE, FALSE );
+        ImplInitSettings( sal_True, sal_False, sal_False );
 
         SetInsertMode( bInsertMode );
 
@@ -2274,20 +2274,20 @@ void Edit::Command( const CommandEvent& rCEvt )
         maText.Insert( pData->GetText(), mpIMEInfos->nPos );
         if ( mpIMEInfos->bWasCursorOverwrite )
         {
-            USHORT nOldIMETextLen = mpIMEInfos->nLen;
-            USHORT nNewIMETextLen = pData->GetText().Len();
+            sal_uInt16 nOldIMETextLen = mpIMEInfos->nLen;
+            sal_uInt16 nNewIMETextLen = pData->GetText().Len();
             if ( ( nOldIMETextLen > nNewIMETextLen ) &&
                  ( nNewIMETextLen < mpIMEInfos->aOldTextAfterStartPos.Len() ) )
             {
                 // restore old characters
-                USHORT nRestore = nOldIMETextLen - nNewIMETextLen;
+                sal_uInt16 nRestore = nOldIMETextLen - nNewIMETextLen;
                 maText.Insert( mpIMEInfos->aOldTextAfterStartPos.Copy( nNewIMETextLen, nRestore ), mpIMEInfos->nPos + nNewIMETextLen );
             }
             else if ( ( nOldIMETextLen < nNewIMETextLen ) &&
                       ( nOldIMETextLen < mpIMEInfos->aOldTextAfterStartPos.Len() ) )
             {
                 // overwrite
-                USHORT nOverwrite = nNewIMETextLen - nOldIMETextLen;
+                sal_uInt16 nOverwrite = nNewIMETextLen - nOldIMETextLen;
                 if ( ( nOldIMETextLen + nOverwrite ) > mpIMEInfos->aOldTextAfterStartPos.Len() )
                     nOverwrite = mpIMEInfos->aOldTextAfterStartPos.Len() - nOldIMETextLen;
                 maText.Erase( mpIMEInfos->nPos + nNewIMETextLen, nOverwrite );
@@ -2319,7 +2319,7 @@ void Edit::Command( const CommandEvent& rCEvt )
     {
         if ( mpIMEInfos )
         {
-            xub_StrLen nCursorPos = (USHORT)GetSelection().Max();
+            xub_StrLen nCursorPos = (sal_uInt16)GetSelection().Max();
             SetCursorRect( NULL, GetTextWidth(
                 maText, nCursorPos, mpIMEInfos->nPos+mpIMEInfos->nLen-nCursorPos ) );
         }
@@ -2349,10 +2349,10 @@ void Edit::StateChanged( StateChangedType nType )
             mnXOffset = 0;  // Falls vorher GrabFocus, als Groesse noch falsch.
             ImplAlign();
             if ( !mpSubEdit )
-                ImplShowCursor( FALSE );
+                ImplShowCursor( sal_False );
         }
         // update background (eventual SetPaintTransparent)
-        ImplInitSettings( FALSE, FALSE, TRUE );
+        ImplInitSettings( sal_False, sal_False, sal_True );
     }
     else if ( nType == STATE_CHANGE_ENABLE )
     {
@@ -2371,7 +2371,7 @@ void Edit::StateChanged( StateChangedType nType )
             SetStyle( nStyle );
         }
 
-        USHORT nOldAlign = mnAlign;
+        sal_uInt16 nOldAlign = mnAlign;
         mnAlign = EDIT_ALIGN_LEFT;
 
         // --- RTL --- hack: right align until keyinput and cursor travelling works
@@ -2405,8 +2405,8 @@ void Edit::StateChanged( StateChangedType nType )
     {
         if ( !mpSubEdit )
         {
-            ImplInitSettings( TRUE, FALSE, FALSE );
-            ImplShowCursor( TRUE );
+            ImplInitSettings( sal_True, sal_False, sal_False );
+            ImplShowCursor( sal_True );
             Invalidate();
         }
     }
@@ -2414,7 +2414,7 @@ void Edit::StateChanged( StateChangedType nType )
     {
         if ( !mpSubEdit )
         {
-            ImplInitSettings( TRUE, FALSE, FALSE );
+            ImplInitSettings( sal_True, sal_False, sal_False );
             ImplShowCursor();
             Invalidate();
         }
@@ -2423,7 +2423,7 @@ void Edit::StateChanged( StateChangedType nType )
     {
         if ( !mpSubEdit )
         {
-            ImplInitSettings( FALSE, TRUE, FALSE );
+            ImplInitSettings( sal_False, sal_True, sal_False );
             Invalidate();
         }
     }
@@ -2431,7 +2431,7 @@ void Edit::StateChanged( StateChangedType nType )
     {
         if ( !mpSubEdit )
         {
-            ImplInitSettings( FALSE, FALSE, TRUE );
+            ImplInitSettings( sal_False, sal_False, sal_True );
             Invalidate();
         }
     }
@@ -2450,8 +2450,8 @@ void Edit::DataChanged( const DataChangedEvent& rDCEvt )
     {
         if ( !mpSubEdit )
         {
-            ImplInitSettings( TRUE, TRUE, TRUE );
-            ImplShowCursor( TRUE );
+            ImplInitSettings( sal_True, sal_True, sal_True );
+            ImplShowCursor( sal_True );
             Invalidate();
         }
     }
@@ -2472,7 +2472,7 @@ void Edit::ImplShowDDCursor()
         mpDDInfo->aCursor.SetPos( aCursorRect.TopLeft() );
         mpDDInfo->aCursor.SetSize( aCursorRect.GetSize() );
         mpDDInfo->aCursor.Show();
-        mpDDInfo->bVisCursor = TRUE;
+        mpDDInfo->bVisCursor = sal_True;
     }
 }
 
@@ -2483,7 +2483,7 @@ void Edit::ImplHideDDCursor()
     if ( mpDDInfo && mpDDInfo->bVisCursor )
     {
         mpDDInfo->aCursor.Hide();
-        mpDDInfo->bVisCursor = FALSE;
+        mpDDInfo->bVisCursor = sal_False;
     }
 }
 
@@ -2535,7 +2535,7 @@ IMPL_LINK( Edit, ImplUpdateDataHdl, Timer*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-void Edit::EnableUpdateData( ULONG nTimeout )
+void Edit::EnableUpdateData( sal_uLong nTimeout )
 {
     if ( !nTimeout )
         DisableUpdateData();
@@ -2562,7 +2562,7 @@ void Edit::SetEchoChar( xub_Unicode c )
 
 // -----------------------------------------------------------------------
 
-void Edit::SetReadOnly( BOOL bReadOnly )
+void Edit::SetReadOnly( sal_Bool bReadOnly )
 {
     if ( mbReadOnly != bReadOnly )
     {
@@ -2585,7 +2585,7 @@ void Edit::SetAutocompleteHdl( const Link& rHdl )
 
 // -----------------------------------------------------------------------
 
-void Edit::SetInsertMode( BOOL bInsert )
+void Edit::SetInsertMode( sal_Bool bInsert )
 {
     if ( bInsert != mbInsertMode )
     {
@@ -2599,7 +2599,7 @@ void Edit::SetInsertMode( BOOL bInsert )
 
 // -----------------------------------------------------------------------
 
-BOOL Edit::IsInsertMode() const
+sal_Bool Edit::IsInsertMode() const
 {
     if ( mpSubEdit )
         return mpSubEdit->IsInsertMode();
@@ -2638,7 +2638,7 @@ void Edit::SetSelection( const Selection& rSelection )
 
 // -----------------------------------------------------------------------
 
-void Edit::ImplSetSelection( const Selection& rSelection, BOOL bPaint )
+void Edit::ImplSetSelection( const Selection& rSelection, sal_Bool bPaint )
 {
     if ( mpSubEdit )
         mpSubEdit->ImplSetSelection( rSelection );
@@ -2809,9 +2809,9 @@ XubString Edit::GetText() const
 void Edit::SetModifyFlag()
 {
     if ( mpSubEdit )
-        mpSubEdit->mbModified = TRUE;
+        mpSubEdit->mbModified = sal_True;
     else
-        mbModified = TRUE;
+        mbModified = sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -2819,9 +2819,9 @@ void Edit::SetModifyFlag()
 void Edit::ClearModifyFlag()
 {
     if ( mpSubEdit )
-        mpSubEdit->mbModified = FALSE;
+        mpSubEdit->mbModified = sal_False;
     else
-        mbModified = FALSE;
+        mbModified = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -2832,7 +2832,7 @@ void Edit::SetSubEdit( Edit* pEdit )
     if ( mpSubEdit )
     {
         SetPointer( POINTER_ARROW );    // Nur das SubEdit hat den BEAM...
-        mpSubEdit->mbIsSubEdit = TRUE;
+        mpSubEdit->mbIsSubEdit = sal_True;
 
         mpSubEdit->SetReadOnly( mbReadOnly );
     }
@@ -2944,8 +2944,8 @@ PopupMenu* Edit::CreatePopupMenu()
     pPopup->SetAccelKey( SV_MENU_EDIT_COPY, KeyCode( KEYFUNC_COPY ) );
     pPopup->SetAccelKey( SV_MENU_EDIT_PASTE, KeyCode( KEYFUNC_PASTE ) );
     pPopup->SetAccelKey( SV_MENU_EDIT_DELETE, KeyCode( KEYFUNC_DELETE ) );
-    pPopup->SetAccelKey( SV_MENU_EDIT_SELECTALL, KeyCode( KEY_A, FALSE, TRUE, FALSE, FALSE ) );
-    pPopup->SetAccelKey( SV_MENU_EDIT_INSERTSYMBOL, KeyCode( KEY_S, TRUE, TRUE, FALSE, FALSE ) );
+    pPopup->SetAccelKey( SV_MENU_EDIT_SELECTALL, KeyCode( KEY_A, sal_False, sal_True, sal_False, sal_False ) );
+    pPopup->SetAccelKey( SV_MENU_EDIT_INSERTSYMBOL, KeyCode( KEY_S, sal_True, sal_True, sal_False, sal_False ) );
     return pPopup;
 }
 
@@ -2962,7 +2962,7 @@ void Edit::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::Dra
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
 
     if ( !IsTracking() && maSelection.Len() &&
-         !(GetStyle() & WB_PASSWORD) && (!mpDDInfo || mpDDInfo->bStarterOfDD == FALSE) ) // Kein Mehrfach D&D
+         !(GetStyle() & WB_PASSWORD) && (!mpDDInfo || mpDDInfo->bStarterOfDD == sal_False) ) // Kein Mehrfach D&D
     {
         Selection aSel( maSelection );
         aSel.Justify();
@@ -2975,7 +2975,7 @@ void Edit::dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::Dra
             if ( !mpDDInfo )
                 mpDDInfo = new DDInfo;
 
-            mpDDInfo->bStarterOfDD = TRUE;
+            mpDDInfo->bStarterOfDD = sal_True;
             mpDDInfo->aDndStartSel = aSel;
 
 
@@ -3025,7 +3025,7 @@ void Edit::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent&
 {
     vos::OGuard aVclGuard( Application::GetSolarMutex() );
 
-    BOOL bChanges = FALSE;
+    sal_Bool bChanges = sal_False;
     if ( !mbReadOnly && mpDDInfo )
     {
         ImplHideDDCursor();
@@ -3036,7 +3036,7 @@ void Edit::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent&
         if ( aSel.Len() && !mpDDInfo->bStarterOfDD )
             ImplDelete( aSel, EDIT_DEL_RIGHT, EDIT_DELMODE_SIMPLE );
 
-        mpDDInfo->bDroppedInMe = TRUE;
+        mpDDInfo->bDroppedInMe = sal_True;
 
         aSel.Min() = mpDDInfo->nDropPos;
         aSel.Max() = mpDDInfo->nDropPos;
@@ -3053,7 +3053,7 @@ void Edit::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent&
                 ::rtl::OUString aText;
                 aData >>= aText;
                 ImplInsertText( aText );
-                bChanges = TRUE;
+                bChanges = sal_True;
                 ImplModified();
             }
         }
@@ -3077,14 +3077,14 @@ void Edit::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragE
     // search for string data type
     const Sequence< com::sun::star::datatransfer::DataFlavor >& rFlavors( rDTDE.SupportedDataFlavors );
     sal_Int32 nEle = rFlavors.getLength();
-    mpDDInfo->bIsStringSupported = FALSE;
+    mpDDInfo->bIsStringSupported = sal_False;
     for( sal_Int32 i = 0; i < nEle; i++ )
     {
         sal_Int32 nIndex = 0;
         rtl::OUString aMimetype = rFlavors[i].MimeType.getToken( 0, ';', nIndex );
         if( aMimetype.equalsAscii( "text/plain" ) )
         {
-            mpDDInfo->bIsStringSupported = TRUE;
+            mpDDInfo->bIsStringSupported = sal_True;
             break;
         }
     }

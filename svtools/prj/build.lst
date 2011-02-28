@@ -1,3 +1,2 @@
-st	svtools	:	l10n svl offuh toolkit ucbhelper unotools JPEG:jpeg cppu cppuhelper comphelper sal sot jvmfwk LIBXSLT:libxslt NULL
+st	svtools	:	L10N:l10n svl offuh toolkit ucbhelper unotools JPEG:jpeg cppu cppuhelper comphelper sal sot jvmfwk LIBXSLT:libxslt NULL
 st	svtools\prj					        nmake	-	all	st_prj NULL
-

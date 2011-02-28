@@ -109,6 +109,6 @@
 
 #define SHL_COUNT       64
 
-TOOLS_DLLPUBLIC void** GetAppData( USHORT nSharedLib );
+TOOLS_DLLPUBLIC void** GetAppData( sal_uInt16 nSharedLib );
 
 #endif // _SHL_HXX
