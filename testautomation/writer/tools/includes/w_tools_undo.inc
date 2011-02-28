@@ -78,7 +78,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 			Select Case iSprache
 				Case 01: vTypeString = "Replace"
 				Case 34: vTypeString = "Reemplazar"
-				Case 86: vTypeString = "替换"
+				Case 86: vTypeString = "替�?�"
 				Case else: QAErrorlog "Please adapt tests for current language! (" & CurrentUndoString(0) & ")"
 			end select
 		' Delete
@@ -96,7 +96,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Replace: 14 occurrences of 'and'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 				                Case 34: if UndoStringFromUndoList <> "Reemplazar: 6 ocurrencias de 'and'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入自动图文集" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入自动图文集" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 			end select
@@ -105,7 +105,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 			Select Case iSprache
 				Case 01: if UndoStringFromUndoList <> "Sort text" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 				Case 34: if UndoStringFromUndoList <> "Ordenar texto" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-				Case 86: if UndoStringFromUndoList <> "排序文字" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+				Case 86: if UndoStringFromUndoList <> "排�?文字" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 				Case else: QAErrorlog "Please adapt test for this language: " & UndoStringFromUndoList
 			end select
 		' Convert text -> table
@@ -113,7 +113,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 			Select Case iSprache
 				Case 01: if UndoStringFromUndoList <> "Convert text -> table" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 				Case 34: if UndoStringFromUndoList <> "Convertir texto en tabla" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-				Case 86: if UndoStringFromUndoList <> "文字转换成表格" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+				Case 86: if UndoStringFromUndoList <> "文字转�?��?表格" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 				Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 			end select
 
@@ -124,7 +124,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "New Paragraph" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Párrafo nuevo" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "新建段落" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "新建段�?�" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -132,7 +132,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Delete paragraph" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Eliminar Párrafo" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "删除 段落" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "删除 段�?�" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 			end select
@@ -142,7 +142,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 			Select Case iSprache
 				Case 01: if UndoStringFromUndoList <> "Paste clipboard" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 				Case 34: if UndoStringFromUndoList <> "Pegar del portapapeles" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-				Case 86: if UndoStringFromUndoList <> "粘贴剪贴板" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+				Case 86: if UndoStringFromUndoList <> "粘贴剪贴�?�" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 				Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 			end select
 
@@ -152,7 +152,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Accept change: Insert 'This is a test'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Aplicar cambio: Insertar 'This is a test'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "接受修改：插入 'This is a test'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "接�?�修改：�?�入 'This is a test'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -160,19 +160,19 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
                                                 Case 01: if UndoStringFromUndoList <> "Reject change: Insert 'This is a test'" then 
                                                          elseif UndoStringFromUndoList = "Reject change: $1" then 
-                                                             QaErrorlog "#i94489# - Bug with Undo - Reject."
+                                                             QaErrorlog "#i97506# - Bug with Undo - Reject."
                                                          else
                                                              Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
                                                          end if
                                                 Case 34: if UndoStringFromUndoList = "Rechazar cambio: $1" then 
-                                                             QaErrorlog "#i94489# - Bug with Undo - Reject."
+                                                             QaErrorlog "#i97506# - Bug with Undo - Reject."
                                                          else
-                                                             Warnlog "Tell script-writer issue i94489 seems to be fixed, or that a string has to be set to: " & UndoStringFromUndoList
+                                                             Warnlog "Tell script-writer issue i97506 seems to be fixed, or that a string has to be set to: " & UndoStringFromUndoList
                                                          end if
-					        Case 86: if UndoStringFromUndoList = "拒绝修改：$1" then 
-                                                             QaErrorlog "#i94489# - Bug with Undo - Reject."
+                                                Case 86: if UndoStringFromUndoList = "拒�?修改：$1" then
+                                                             QaErrorlog "#i97506# - Bug with Undo - Reject."
                                                          else
-                                                             Warnlog "Tell script-writer issue i94489 seems to be fixed, or that a string has to be set to: " & UndoStringFromUndoList
+                                                             Warnlog "Tell script-writer issue i97506 seems to be fixed, or that a string has to be set to: " & UndoStringFromUndoList
                                                          end if
 			                        Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
@@ -181,7 +181,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Typing: 1 line break(s)" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Escritura: 1 salto(s) de línea" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "键入: 1 换行符" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "键入: 1 �?�行符" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -189,7 +189,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Delete 1 line break(s)" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Eliminar 1 salto(s) de línea" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "删除 1 换行符" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "删除 1 �?�行符" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -197,7 +197,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert column break" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar salto de columna" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入分栏符" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入分�?符" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -205,7 +205,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Delete paragraph" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Eliminar Párrafo" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "删除 段落" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "删除 段�?�" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -213,7 +213,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert page break" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar salto de página" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入分页符" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入分页符" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -221,7 +221,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Delete paragraph" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Eliminar Párrafo" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "删除 段落" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "删除 段�?�" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -229,7 +229,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert field" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar campo" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入 字段" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入 字段" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -237,7 +237,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Field changed" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Cambio modificado" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "字段已经被修改" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "字段已�?被修改" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -253,7 +253,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert special character" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar carácter especial" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入 特殊字符" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入 特殊字符" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -269,7 +269,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Apply Styles: AUndoHistory" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Aplicar estilos: AUndoHistory" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "应用样式: AUndoHistory" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "应用样�?: AUndoHistory" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -277,7 +277,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Change style: AUndoHistory" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
                                                 Case 34: if UndoStringFromUndoList <> "Cambiar estilo: AUndoHistory" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "修改样式：AUndoHistory" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "修改样�?：AUndoHistory" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -285,7 +285,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Promote/demote outline" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
                                                 Case 34: if UndoStringFromUndoList <> "Aumentar/Disminuir nivel" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "升级/降级外框" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�级/�?级外框" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -293,7 +293,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Promote/demote outline" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
                                                 Case 34: if UndoStringFromUndoList <> "Aumentar/Disminuir nivel" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "升级/降级外框" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�级/�?级外框" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -301,7 +301,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert section" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
                                                 Case 34: if UndoStringFromUndoList <> "Insertar área" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入区域" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入区域" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -325,7 +325,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert Hyperlink" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar hiperenlace" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入超链接" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入超链接" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -333,7 +333,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "insert URL button" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar botón URL" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入 URL 按钮" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入 URL 按钮" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -348,7 +348,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert footnote" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar nota al pie" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入脚注" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入脚注" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
         					Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -372,7 +372,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert caption: 'This capt...aracters'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar título: 'This capt...aracters'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入标题: 'This capt...aracters'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入标题: 'This capt...aracters'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -380,7 +380,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert AutoText" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar AutoTexto" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入自动图文集" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入自动图文集" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -388,7 +388,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert bookmark: I'm a bookmark" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar marcador: I'm a bookmark" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入书签: I'm a bookmark" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入书签: I'm a bookmark" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -396,7 +396,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Rename bookmark: 'I'm a bookmark' -> 'a book'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList & " -> #i33498"
 						Case 34: if UndoStringFromUndoList <> "marcador renombrado: 'I'm a bookmark' -> 'a book'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList & " -> #i33498"
-						Case 86: if UndoStringFromUndoList <> "重命名书签: 'I'm a bookmark' -> 'a book'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList & " -> #i33498"
+						Case 86: if UndoStringFromUndoList <> "�?命�??书签: 'I'm a bookmark' -> 'a book'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList & " -> #i33498"
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -412,7 +412,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert comment" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar nota" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入 批注" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入 批注" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -428,7 +428,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert script" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar secuencia de comandos" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入 脚本" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入 脚本" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -444,7 +444,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert index entry" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar entrada de índice" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入索引条目" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入索引�?�目" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -460,7 +460,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert bibliography entry" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar entrada de bibliografía" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入 文献目录条目" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入 文献目录�?�目" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -468,7 +468,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Delete bibliography entry" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Eliminar entrada de bibliografía" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "删除 文献目录条目" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "删除 文献目录�?�目" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -476,7 +476,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert frame" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar marco" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入 框架" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入 框架" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -484,7 +484,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Rename frame: 'MyFrame' -> 'MyRenamedFrame'" then QaErrorLog "#i94486# - Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if InStr(UndoStringFromUndoList, "renombrado") then QaErrorLog "#i94486# - Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入 框架" then QaErrorLog "#i94486# - Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入 框架" then QaErrorLog "#i94486# - Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: " & UndoStringFromUndoList
 					end select
 
@@ -500,7 +500,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert table: 'Table1'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar tabla: 'Tabla1'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入表格: '表格1'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入表格: '表格1'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -508,7 +508,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert Row" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar fila" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入行" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入行" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -516,7 +516,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert Column" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar columna" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入列" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入列" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -540,7 +540,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Format cell" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Formatear celda" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "格式化单元格" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "格�?化�?�元格" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -556,7 +556,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Merge table" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "unir tablas" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "合并表格" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�并表格" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -564,7 +564,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Convert text -> table" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Convertir texto en tabla" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "文字转换成表格" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "文字转�?��?表格" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -572,7 +572,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Sort table" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Ordenar tabla" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "排序表格" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "排�?表格" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -596,7 +596,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert horizontal ruler" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar regla horizontal" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入水平标尺" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入水平标尺" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -610,7 +610,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
                                                          else
                                                              Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
                                                          end if
-					        Case 86: if (UndoStringFromUndoList = "插入 图形") OR (UndoStringFromUndoList = "插入 图片") then
+					        Case 86: if (UndoStringFromUndoList = "�?�入 图形") OR (UndoStringFromUndoList = "�?�入 图片") then
                                                          else
                                                              Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
                                                          end if
@@ -629,7 +629,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Replace graphics" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Reemplazar imagen" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "替换图形" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "替�?�图形" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -637,7 +637,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert OLE-object" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar Objeto OLE" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入 OLE 对象" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入 OLE 对象" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -653,7 +653,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert OLE-object" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar Objeto OLE" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入 OLE 对象" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入 OLE 对象" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -669,7 +669,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert file" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar archivo" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入文件" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入文件" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -677,7 +677,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Asian Phonetic Guides Setting" then QaErrorLog "#i94534# - Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Aplicar símbolos fonéticos" then QaErrorLog "#i94534# - Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "加上拼音或注音符号" then QaErrorLog "#i94534# - Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "加上拼音或注音符�?�" then QaErrorLog "#i94534# - Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -693,7 +693,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "AutoFormat" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
                                                 Case 34: if UndoStringFromUndoList <> "Formateado automático" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "自动格式" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "自动格�?" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -713,8 +713,8 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
                                                          Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
                                                      end if
                                                  end if
-                                        Case 86: if UndoStringFromUndoList <> "插入 有 3 个角的折线" then
-                                                     if UndoStringFromUndoList = "插入 有 %2 个角的折线" then
+                                        Case 86: if UndoStringFromUndoList <> "�?�入 有 3 个角的折线" then
+                                                     if UndoStringFromUndoList = "�?�入 有 %2 个角的折线" then
                                                          QaErrorlog "#i94530# - Bug with Undo-History for Polygon-Line-tool. " + UndoStringFromUndoList
                                                      else
                                                          Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
@@ -727,7 +727,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Group draw objects" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
                                                 Case 34: if UndoStringFromUndoList <> "Agrupar objetos de dibujo" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "组合绘图对象" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "组�?�绘图对象" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -735,7 +735,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Ungroup drawing objects" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Resolver objeto de grupo" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "取消组合绘图对象" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�消组�?�绘图对象" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -743,7 +743,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Rename 2 Rectangles" then QaErrorLog "#i94486# - Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "" then QaErrorLog "#i94486# - Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "组合绘图对象" then QaErrorLog "#i94486# - Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "组�?�绘图对象" then QaErrorLog "#i94486# - Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -757,15 +757,15 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 
 				Case "Autocheck/Spellcheck"
 					Select Case iSprache
-						Case 01: if UndoStringFromUndoList <> "Replace: 'Testp' -> 'Test'" then QaErrorLog "#i94489# - Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 01: if UndoStringFromUndoList <> "Replace: 'Testp' -> 'Test'" then QaErrorLog "#i97506# - Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList = "Sobrescribir: $1" then
 						         elseif InStr(UndoStringFromUndoList, "'Testp'") then 
-							     QaErrorLog "#i94489# - Wrong text in Undo-List: " & UndoStringFromUndoList
+							     QaErrorLog "#i97506# - Wrong text in Undo-List: " & UndoStringFromUndoList
 							 end if
 						Case 86: if UndoStringFromUndoList = "覆盖: $1" then
-						             QaErrorLog "#i94489# - Wrong text in Undo-List: " & UndoStringFromUndoList
+						             QaErrorLog "#i97506# - Wrong text in Undo-List: " & UndoStringFromUndoList
 						         elseif InStr(UndoStringFromUndoList, "'Testp'") then 
-							     QaErrorlog "#i94489# - Bug fixed: " & UndoStringFromUndoList
+							     QaErrorlog "#i97506# - Bug fixed: " & UndoStringFromUndoList
 							 end if
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
@@ -774,7 +774,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Insert Control" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Insertar Campo de control" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "插入 控制" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "�?�入 控制" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -790,7 +790,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Resize Control" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Modificar el tamaño de Campo de control" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "更改大小 控制" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "更改大�? 控制" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -798,7 +798,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
 					Select Case iSprache
 						Case 01: if UndoStringFromUndoList <> "Replace Control" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case 34: if UndoStringFromUndoList <> "Reemplazar campo de control" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-						Case 86: if UndoStringFromUndoList <> "替换控制" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+						Case 86: if UndoStringFromUndoList <> "替�?�控制" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 						Case else: QAErrorlog "Please adapt test for this language: "  & UndoStringFromUndoList
 					end select
 
@@ -835,7 +835,7 @@ sub CheckUndoStringInUndoList(vType as integer, optional vShould as string)
             Select Case iSprache
 				Case 01: if UndoStringFromUndoList <> "Delete ' ###'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
                                 Case 34: if UndoStringFromUndoList <> "Eliminar 'g'" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
-				Case 86: if UndoStringFromUndoList <> "插入自动图文集" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
+				Case 86: if UndoStringFromUndoList <> "�?�入自动图文集" then Warnlog "Wrong text in Undo-List: " & UndoStringFromUndoList
 				Case else: QAErrorlog "Please adapt tests for current language! (" & CurrentUndoString(0) & ")"
 			end select
 

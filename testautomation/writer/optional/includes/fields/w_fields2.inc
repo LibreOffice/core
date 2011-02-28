@@ -955,7 +955,7 @@ testcase tDocumentTemplate
         if GetClipboard <> sResult(i-1) then
             select case i-1
                 case 0
-                    QAErrorlog "#i70342#Field 'Templates->Category' is empty"
+                    Warnlog "Field 'Templates->Category' is empty"
                 case else
                     Warnlog " - Should get " & sResult(i-1) & " but get " & GetClipboard
             end select
