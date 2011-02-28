@@ -24,10 +24,16 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
+
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
+
 PRJ := ..$/..$/..$/..$/..$/..$/..$/..
 PRJNAME := jurt
 TARGET := test_com_sun_star_lib_uno_protocols_urp
 
+.IF "$(OOO_JUNIT_JAR)" != ""
 PACKAGE := com$/sun$/star$/lib$/uno$/protocols$/urp
 JAVATESTFILES := \
     Cache_Test.java \
@@ -38,5 +44,8 @@ JAVAFILES := \
     TestObject.java
 JARFILES := ridl.jar
 IDLTESTFILES := interfaces.idl
+.END
 
 .INCLUDE: javaunittest.mk
+
+.END

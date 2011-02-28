@@ -602,6 +602,7 @@ UDK_3.11 { # OOo 3.4
     global:
         osl_setEnvironment;
         osl_clearEnvironment;
+        osl_setThreadName;
 } UDK_3.10;
 
 PRIVATE_1.0 {
