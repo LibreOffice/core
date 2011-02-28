@@ -83,22 +83,6 @@ namespace accessibility
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > m_xParent;
 
     private:
-    #ifdef ACCESSIBLE_EVENT_NOTIFICATION_ENABLED
-    // (the following method is unused currently. If you need it, simply remove the #ifdef thing here and
-    // in the cxx)
-        /** notifies all listeners that this object has changed
-            @param  _nEventId
-                is the event id
-            @param  _aOldValue
-                is the old value
-            @param  _aNewValue
-                is the new value
-        */
-        void    NotifyAccessibleEvent( sal_Int16 _nEventId,
-                                       const ::com::sun::star::uno::Any& _aOldValue,
-                                       const ::com::sun::star::uno::Any& _aNewValue );
-    #endif
-
         Rectangle               GetBoundingBox_Impl() const;
         Rectangle               GetBoundingBoxOnScreen_Impl() const;
         sal_Bool                IsAlive_Impl() const;
